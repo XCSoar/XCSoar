@@ -277,9 +277,9 @@ PlaneListWidget::NewClicked()
 
     if (File::Exists(path)) {
       StaticString<256> tmp;
-      tmp.Format(_("A plane \"%s\" already exists. "
+      tmp.Format(_("Plane \"%s\" already exists. "
                    "Overwrite it?"),
-                   filename.c_str());
+                   plane.registration.c_str());
       if (ShowMessageBox(tmp, _("Overwrite"), MB_YESNO) != IDYES)
         continue;
     }
@@ -320,9 +320,9 @@ PlaneListWidget::EditClicked()
 
       if (File::Exists(path)) {
         StaticString<256> tmp;
-        tmp.Format(_("A plane \"%s\" already exists. "
+        tmp.Format(_("Plane \"%s\" already exists. "
                      "Overwrite it?"),
-                     filename.c_str());
+                     plane.registration.c_str());
         if (ShowMessageBox(tmp, _("Overwrite"), MB_YESNO) != IDYES)
           continue;
       }
@@ -351,8 +351,12 @@ PlaneListWidget::DeleteClicked()
   assert(GetList().GetCursorIndex() < list.size());
 
   StaticString<256> tmp;
+  StaticString<256> tmp_name(list[GetList().GetCursorIndex()].name.c_str());
+  if (tmp_name.length() > 4)
+    tmp_name.Truncate(tmp_name.length() - 4);
+
   tmp.Format(_("Delete plane \"%s\"?"),
-             list[GetList().GetCursorIndex()].name.c_str());
+             tmp_name.c_str());
   if (ShowMessageBox(tmp, _("Delete"), MB_YESNO) != IDYES)
     return;
 
