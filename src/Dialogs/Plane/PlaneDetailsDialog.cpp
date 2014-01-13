@@ -35,9 +35,9 @@ class PlaneEditWidget final
   enum Controls {
     REGISTRATION,
     COMPETITION_ID,
+    POLAR,
     TYPE,
     HANDICAP,
-    POLAR,
     WING_AREA,
     MAX_BALLAST,
     DUMP_TIME,
@@ -110,12 +110,12 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddText(_("Registration"), nullptr, plane.registration, this);
   AddText(_("Comp. ID"), nullptr, plane.competition_id);
+  AddButton(_("Polar"), *this, POLAR);
   AddText(_("Type"), nullptr, plane.type);
   AddInteger(_("Handicap"), nullptr,
              _T("%u %%"), _T("%u"),
              50, 150, 1,
              plane.handicap);
-  AddButton(_("Polar"), *this, POLAR);
   AddFloat(_("Wing Area"), nullptr,
            _T("%.1f m²"), _T("%.1f"),
            fixed(0), fixed(40), fixed(0.1),
@@ -176,6 +176,8 @@ PlaneEditWidget::PolarButtonClicked()
 
   dlgPlanePolarShowModal(plane);
   UpdatePolarButton();
+  if (plane.polar_name != _T("Custom"))
+    LoadValue(TYPE, plane.polar_name.c_str());
 
   /* reload attributes that may have been modified */
   LoadValue(WING_AREA, plane.wing_area);
