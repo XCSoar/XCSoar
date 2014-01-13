@@ -9,6 +9,8 @@ Version 6.7.3 - not yet released
   - fix missing battery info in status panels
 * devices
   - LX: auto-retry after errors during IGC download
+* Kobo
+  - fix touch screen bug (#3195, #3211)
 
 Version 6.7.2 - 2013/12/19
 * user interface

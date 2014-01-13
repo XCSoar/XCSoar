@@ -61,7 +61,7 @@ LinuxInputDevice::Open(const char *path)
   io_loop.Add(fd.Get(), io_loop.READ, *this);
 
   down = false;
-  moving = moved = pressed = released = false;
+  moving = moved = pressing = releasing = pressed = released = false;
   return true;
 }
 
@@ -90,6 +90,10 @@ LinuxInputDevice::Read()
       if (e.code == SYN_REPORT) {
         /* commit the finger movement */
 
+        pressed = pressing;
+        released = releasing;
+        pressing = releasing = false;
+
         if (IsKobo() && released) {
           /* workaround: on the Kobo Touch N905B, releasing the touch
              screen reliably produces a finger position that is way
@@ -113,9 +117,9 @@ LinuxInputDevice::Read()
         if (new_down != down) {
           down = new_down;
           if (new_down)
-            pressed = true;
+            pressing = true;
           else
-            released = true;
+            releasing = true;
         }
       } else
         queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP,
