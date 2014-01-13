@@ -18,7 +18,12 @@ LIBPNG = y
 LIBJPEG = y
 FREETYPE = y
 
+ifeq ($(USE_SDL2),y)
+$(eval $(call pkg-config-library,SDL,sdl2))
+SDL_CPPFLAGS := $(patsubst -I%,-isystem %,$(SDL_CPPFLAGS))
+else
 $(eval $(call pkg-config-library,SDL,sdl))
+endif
 
 SDL_CPPFLAGS += -DENABLE_SDL
 

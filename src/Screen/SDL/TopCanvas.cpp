@@ -37,7 +37,11 @@ Copyright_License {
 #include "Screen/Memory/Dither.hpp"
 #endif
 
+#include <SDL_version.h>
 #include <SDL_video.h>
+#if defined(USE_MEMORY_CANVAS) && (SDL_MAJOR_VERSION >= 2)
+#include <SDL_render.h>
+#endif
 
 #include <assert.h>
 #include <stdio.h>
@@ -49,7 +53,13 @@ TopCanvas::GetRect() const
 {
   assert(IsDefined());
 
+#if SDL_MAJOR_VERSION >= 2
+  int width, height;
+  ::SDL_GetWindowSize(window, &width, &height);
+  return { 0, 0, width, height };
+#else
   return { 0, 0, surface->w, surface->h };
+#endif
 }
 
 #endif
@@ -58,11 +68,21 @@ gcc_const
 static Uint32
 MakeSDLFlags(bool full_screen, bool resizable)
 {
-  Uint32 flags = SDL_ANYFORMAT;
+  Uint32 flags = 0;
+#if SDL_MAJOR_VERSION < 2
+  flags = SDL_ANYFORMAT;
+#endif
 
 #ifdef ENABLE_OPENGL
+#if SDL_MAJOR_VERSION >= 2
+  flags |= SDL_WINDOW_OPENGL;
+#else
   flags |= SDL_OPENGL;
+#endif
 #else /* !ENABLE_OPENGL */
+#if SDL_MAJOR_VERSION >= 2
+  flags |= SDL_SWSURFACE;
+#else
   /* we need async screen updates as long as we don't have a global
      frame rate */
   flags |= SDL_ASYNCBLIT;
@@ -74,23 +94,76 @@ MakeSDLFlags(bool full_screen, bool resizable)
     flags |= SDL_HWSURFACE;
   else
     flags |= SDL_SWSURFACE;
+#endif /* !SDL_MAJOR_VERSION */
 #endif /* !ENABLE_OPENGL */
 
   if (full_screen)
+#if SDL_MAJOR_VERSION >= 2
+    flags |= SDL_WINDOW_FULLSCREEN;
+#else
     flags |= SDL_FULLSCREEN;
+#endif
 
   if (resizable)
+#if SDL_MAJOR_VERSION >= 2
+    flags |= SDL_WINDOW_RESIZABLE;
+#else
     flags |= SDL_RESIZABLE;
+#endif
 
   return flags;
 }
 
+#if SDL_MAJOR_VERSION >= 2
+void
+TopCanvas::Create(const char *text, PixelSize new_size,
+                  bool full_screen, bool resizable)
+#else
 void
 TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
+#endif
 {
   const Uint32 flags = MakeSDLFlags(full_screen, resizable);
 
+#if SDL_MAJOR_VERSION >= 2
+  window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED, new_size.cx,
+                              new_size.cy, flags);
+  if (window == nullptr) {
+    fprintf(stderr,
+            "SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
+            text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
+            (unsigned) SDL_WINDOWPOS_UNDEFINED, (unsigned) new_size.cx,
+            (unsigned) new_size.cy, (unsigned)flags,
+            ::SDL_GetError());
+    return;
+  }
+
+#ifdef USE_MEMORY_CANVAS
+  renderer = SDL_CreateRenderer(window, -1, 0);
+  if (renderer == nullptr) {
+    fprintf(stderr,
+            "SDL_CreateRenderer(%p, %d, %d) has failed: %s\n",
+            window, -1, 0, ::SDL_GetError());
+        return;
+  }
+  int width, height;
+  SDL_GetWindowSize(window, &width, &height);
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN,
+                              SDL_TEXTUREACCESS_STREAMING,
+                              width, height);
+  if (texture == nullptr) {
+      fprintf(stderr,
+              "SDL_CreateTexture(%p, %d, %d, %d, %d) has failed: %s\n",
+              renderer, (int) SDL_PIXELFORMAT_UNKNOWN,
+              (int) SDL_TEXTUREACCESS_STREAMING, width, height,
+              ::SDL_GetError());
+          return;
+    }
+#endif
+
+#else
   SDL_Surface *s = ::SDL_SetVideoMode(new_size.cx, new_size.cy, 0, flags);
   if (s == NULL) {
     fprintf(stderr, "SDL_SetVideoMode(%u, %u, 0, %#x) has failed: %s\n",
@@ -98,23 +171,32 @@ TopCanvas::Create(PixelSize new_size,
             ::SDL_GetError());
     return;
   }
+#endif
 
 #ifdef ENABLE_OPENGL
+#if SDL_MAJOR_VERSION >= 2
+  if (::SDL_GL_CreateContext(window) == nullptr) {
+    fprintf(stderr, "SDL_GL_CreateContext(%p) has failed: %s\n",
+            window, ::SDL_GetError());
+    return;
+  }
+#else
   if (full_screen)
     /* after a X11 mode switch to full-screen mode, the first
-       SDL_GL_SwapBuffers() call gets ignored; could be a SDL bug, and
+       SDL_GL_SwapBuffers() call gets ignored; could be a SDL 1.2 bug, and
        the following dummy call works around it: */
     ::SDL_GL_SwapBuffers();
+#endif
 
   OpenGL::SetupContext();
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
-#else
+#elif (SDL_MAJOR_VERSION < 2)
   surface = s;
+#endif
 
 #ifdef GREYSCALE
   buffer.Allocate(new_size.cx, new_size.cy);
-#endif
 #endif
 }
 
@@ -123,6 +205,10 @@ TopCanvas::Destroy()
 {
 #if !defined(ENABLE_OPENGL) && defined(GREYSCALE)
   buffer.Free();
+#endif
+
+#if defined(USE_MEMORY_CANVAS) && (SDL_MAJOR_VERSION >= 2)
+  SDL_DestroyTexture(texture);
 #endif
 }
 
@@ -133,13 +219,33 @@ TopCanvas::OnResize(PixelSize new_size)
   if (new_size == GetSize())
     return;
 
+#if SDL_MAJOR_VERSION < 2
   const SDL_Surface *old = ::SDL_GetVideoSurface();
+#endif
+#else
+#if SDL_MAJOR_VERSION >= 2
+  int texture_width, texture_height;
+  SDL_QueryTexture(texture, NULL, NULL, &texture_width, &texture_height);
+  if (new_size.cx == texture_width && new_size.cy == texture_height)
+    return;
 #else
   if (new_size.cx == surface->w && new_size.cy == surface->h)
     return;
+#endif
 
+#if SDL_MAJOR_VERSION >= 2
+  SDL_Texture *t = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN,
+                                     SDL_TEXTUREACCESS_STREAMING,
+                                     new_size.cx, new_size.cy);
+  if (t == nullptr)
+    return;
+
+#else
   const SDL_Surface *old = surface;
 #endif
+#endif
+
+#if SDL_MAJOR_VERSION < 2
   if (old == nullptr)
     return;
 
@@ -148,17 +254,24 @@ TopCanvas::OnResize(PixelSize new_size)
   SDL_Surface *s = ::SDL_SetVideoMode(new_size.cx, new_size.cy, 0, flags);
   if (s == NULL)
     return;
+#endif
 
 #ifdef ENABLE_OPENGL
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
 #else
+#if (SDL_MAJOR_VERSION >= 2)
+  if (texture != nullptr)
+      SDL_DestroyTexture(texture);
+  texture = t;
+#else
   surface = s;
+#endif
+#endif
 
 #ifdef GREYSCALE
   buffer.Free();
   buffer.Allocate(new_size.cx, new_size.cy);
-#endif
 #endif
 }
 
@@ -222,29 +335,56 @@ CopyFromGreyscale(
 #ifdef DITHER
                   Dither &dither,
 #endif
+#if SDL_MAJOR_VERSION >= 2
+                  SDL_Texture *dest,
+#else
                   SDL_Surface *dest,
+#endif
                   ConstImageBuffer<GreyscalePixelTraits> src)
 {
-  assert(dest->format->BytesPerPixel == 4 || dest->format->BytesPerPixel == 2);
+#if SDL_MAJOR_VERSION < 2
+  int bytes_per_pixel = dest->format->BytesPerPixel;
+#endif
 
+#if SDL_MAJOR_VERSION >= 2
+  uint8_t *dest_pixels;
+  int pitch_as_int, dest_with, dest_height;
+  SDL_QueryTexture(dest, NULL, NULL, &dest_with, &dest_height);
+  if (SDL_LockTexture(dest, NULL,
+                      reinterpret_cast<void**>(&dest_pixels),
+                      &pitch_as_int) != 0)
+    return;
+
+  int bytes_per_pixel = pitch_as_int / dest_with;
+#else
   if (SDL_LockSurface(dest) != 0)
     return;
+#endif
+
+  assert(bytes_per_pixel == 4 || bytes_per_pixel == 2);
 
   const uint8_t *src_pixels = reinterpret_cast<const uint8_t *>(src.data);
 
   const unsigned width = src.width, height = src.height;
 
+#if SDL_MAJOR_VERSION >= 2
+  const unsigned dest_pitch = (unsigned) pitch_as_int;
+#else
+  uint8_t *dest_pixels = (uint8_t *)dest->pixels;
+  const unsigned dest_pitch = dest->pitch;
+#endif
+
 #ifdef DITHER
 
   dither.DitherGreyscale(src_pixels, src.pitch,
-                         (uint8_t *)dest->pixels,
-                         dest->pitch / dest->format->BytesPerPixel,
+                         dest_pixels,
+                         dest_pitch / bytes_per_pixel,
                          width, height);
-  if (dest->format->BytesPerPixel == 4) {
-    const unsigned n_pixels = (dest->pitch / dest->format->BytesPerPixel)
+  if (bytes_per_pixel == 4) {
+    const unsigned n_pixels = (dest_pitch / bytes_per_pixel)
       * height;
-    int32_t *d = (int32_t *)dest->pixels + n_pixels;
-    const int8_t *end = (int8_t *)dest->pixels;
+    int32_t *d = (int32_t *)dest_pixels + n_pixels;
+    const int8_t *end = (int8_t *)dest_pixels;
     const int8_t *s = end + n_pixels;
 
     while (s != end)
@@ -253,11 +393,9 @@ CopyFromGreyscale(
 
 #else
 
-  uint8_t *dest_pixels = (uint8_t *)dest->pixels;
   const unsigned src_pitch = src.pitch;
-  const unsigned dest_pitch = dest->pitch;
 
-  if (dest->format->BytesPerPixel == 2) {
+  if (bytes_per_pixel == 2) {
     for (unsigned row = height; row > 0;
          --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
       CopyGreyscaleToRGB565((RGB565Color *)dest_pixels,
@@ -271,7 +409,11 @@ CopyFromGreyscale(
 
 #endif
 
+#if SDL_MAJOR_VERSION >= 2
+  ::SDL_UnlockTexture(dest);
+#else
   ::SDL_UnlockSurface(dest);
+#endif
 }
 
 #if defined(__clang__) || GCC_VERSION >= 40800
@@ -286,6 +428,18 @@ Canvas
 TopCanvas::Lock()
 {
 #ifndef GREYSCALE
+#if SDL_MAJOR_VERSION >= 2
+  WritableImageBuffer<SDLPixelTraits> buffer;
+  void* pixels;
+  int pitch, width, height;
+  SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+  if (SDL_LockTexture(texture, nullptr, &pixels, &pitch) != 0)
+    return Canvas();
+  buffer.data = (SDLPixelTraits::pointer_type)pixels;
+  buffer.pitch = (unsigned) pitch;
+  buffer.width = (unsigned) width;
+  buffer.height = (unsigned) height;
+#else
   if (SDL_LockSurface(surface) != 0)
     return Canvas();
 
@@ -295,6 +449,7 @@ TopCanvas::Lock()
   buffer.width = surface->w;
   buffer.height = surface->h;
 #endif
+#endif
 
   return Canvas(buffer);
 }
@@ -303,7 +458,11 @@ void
 TopCanvas::Unlock()
 {
 #ifndef GREYSCALE
+#if SDL_MAJOR_VERSION >= 2
+  SDL_UnlockTexture(texture);
+#else
   SDL_UnlockSurface(surface);
+#endif
 #endif
 }
 
@@ -313,7 +472,11 @@ void
 TopCanvas::Flip()
 {
 #ifdef ENABLE_OPENGL
+#if SDL_MAJOR_VERSION >= 2
+  ::SDL_GL_SwapWindow(window);
+#else
   ::SDL_GL_SwapBuffers();
+#endif
 #else
 
 #ifdef GREYSCALE
@@ -321,9 +484,20 @@ TopCanvas::Flip()
 #ifdef DITHER
                     dither,
 #endif
+#if SDL_MAJOR_VERSION >= 2
+                    texture, buffer);
+#else
                     surface, buffer);
 #endif
+#endif
 
+#if SDL_MAJOR_VERSION >= 2
+  ::SDL_RenderClear(renderer);
+  ::SDL_RenderCopy(renderer, texture, NULL, NULL);
+  ::SDL_RenderPresent(renderer);
+#else
   ::SDL_Flip(surface);
+#endif
+
 #endif
 }

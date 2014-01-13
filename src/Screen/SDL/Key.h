@@ -24,7 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_KEY_H
 #define XCSOAR_SCREEN_SDL_KEY_H
 
+#include <SDL_version.h>
+#if SDL_MAJOR_VERSION >= 2
+#include <SDL_keyboard.h>
+#else
 #include <SDL_keysym.h>
+#endif
 
 enum {
   KEY_SPACE = SDLK_SPACE,

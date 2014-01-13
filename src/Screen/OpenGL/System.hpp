@@ -27,7 +27,11 @@ Copyright_License {
 #include "Features.hpp"
 
 #ifdef ENABLE_SDL
+#if defined(HAVE_GLES) && (SDL_MAJOR_VERSION >= 2)
+#include <SDL_opengles.h>
+#else
 #include <SDL_opengl.h>
+#endif
 #elif defined(HAVE_GLES)
 #include <GLES/gl.h>
 #else

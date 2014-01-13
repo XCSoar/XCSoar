@@ -33,6 +33,13 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
+#ifdef ENABLE_SDL
+#include <SDL_version.h>
+#if SDL_MAJOR_VERSION >= 2
+#include <SDL_keycode.h>
+#endif
+#endif
+
 struct InputConfig {
   // Sensible maximums
 
@@ -64,6 +71,13 @@ struct InputConfig {
 
   // Key map to Event - Keys (per mode) mapped to events
   unsigned short Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+  /* In SDL2, keycodes without character representations are large values,
+  AND-ed with SDLK_SCANCODE_MASK (0x40000000). A seperate array is therefore
+  used here and the keycode is stored here with an index without
+  SDLK_SCANCODE_MASK. */
+  unsigned short Key2EventNonChar[MAX_MODE][MAX_KEY];
+#endif
 
   RadixTree<unsigned> Gesture2Event;
 
@@ -129,14 +143,23 @@ struct InputConfig {
   unsigned GetKeyEvent(unsigned mode, unsigned key_code) const {
     assert(mode < MAX_MODE);
 
-    if (key_code >= MAX_KEY)
+    unsigned key_code_idx = key_code;
+    auto key_2_event = Key2Event;
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+    if (key_code & SDLK_SCANCODE_MASK) {
+      key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
+      key_2_event = Key2EventNonChar;
+    }
+#endif
+
+    if (key_code_idx >= MAX_KEY)
       return 0;
 
-    if (mode > 0 && Key2Event[mode][key_code] != 0)
-      return Key2Event[mode][key_code];
+    if (mode > 0 && key_2_event[mode][key_code_idx] != 0)
+      return key_2_event[mode][key_code_idx];
 
     /* fall back to the default mode */
-    return Key2Event[0][key_code];
+    return key_2_event[0][key_code_idx];
   }
 
   gcc_pure

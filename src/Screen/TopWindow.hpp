@@ -48,6 +48,10 @@ union SDL_Event;
 
 #include <tchar.h>
 
+#ifdef ENABLE_SDL
+#include <SDL_version.h>
+#endif
+
 #ifndef USE_GDI
 class TopCanvas;
 #endif
@@ -204,7 +208,7 @@ public:
   void CheckResize() {}
 #endif
 
-#ifndef USE_GDI
+#if !defined(USE_GDI) && !(defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_VFB)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else

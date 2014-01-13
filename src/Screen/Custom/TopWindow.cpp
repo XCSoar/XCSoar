@@ -42,7 +42,11 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 
   delete screen;
   screen = new TopCanvas();
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+  screen->Create(text, size, style.GetFullScreen(), style.GetResizable());
+#else
   screen->Create(size, style.GetFullScreen(), style.GetResizable());
+#endif
 
   if (!screen->IsDefined()) {
     delete screen;
@@ -52,7 +56,9 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 
   ContainerWindow::Create(NULL, screen->GetRect(), style);
 
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION < 2)
   SetCaption(text);
+#endif
 }
 
 void

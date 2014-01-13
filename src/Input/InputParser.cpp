@@ -104,9 +104,17 @@ struct EventBuilder {
       if (type.equals(_T("key"))) {
         // Get the int key (eg: APP1 vs 'a')
         unsigned key = ParseKeyCode(data);
-        if (key > 0)
-          config.Key2Event[mode_id][key] = event_id;
-        else
+        if (key > 0) {
+          unsigned key_code_idx = key;
+          auto key_2_event = config.Key2Event;
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+          if (key_code_idx & SDLK_SCANCODE_MASK) {
+            key_2_event = config.Key2EventNonChar;
+            key_code_idx &= ~SDLK_SCANCODE_MASK;
+          }
+#endif
+          key_2_event[mode_id][key_code_idx] = event_id;
+        } else
           LogFormat(_T("Invalid key data: %s at %u"), data.c_str(), line);
 
         // Make gce (Glide Computer Event)

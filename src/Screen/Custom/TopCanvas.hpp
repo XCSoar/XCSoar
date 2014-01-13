@@ -43,7 +43,14 @@ Copyright_License {
 
 #include <stdint.h>
 
+#ifdef ENABLE_SDL
+#include <SDL_version.h>
+#endif
+
 struct SDL_Surface;
+struct SDL_Window;
+struct SDL_Renderer;
+struct SDL_Texture;
 class Canvas;
 struct PixelSize;
 struct PixelRect;
@@ -77,17 +84,26 @@ class TopCanvas
   EGLSurface surface;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
 #ifdef ENABLE_SDL
-  SDL_Surface *surface;
+#if SDL_MAJOR_VERSION >= 2
+  SDL_Window *window;
 #endif
 
-#ifdef GREYSCALE
+#ifdef USE_MEMORY_CANVAS
+#if SDL_MAJOR_VERSION >= 2
+  SDL_Renderer *renderer;
+  SDL_Texture *texture;
+#else
+  SDL_Surface *surface;
+#endif
+#endif
+#endif
+
+#if defined(USE_MEMORY_CANVAS) && defined(GREYSCALE)
   WritableImageBuffer<GreyscalePixelTraits> buffer;
 
 #ifdef DITHER
   Dither dither;
-#endif
 #endif
 #endif
 
@@ -144,7 +160,11 @@ public:
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
 #ifdef ENABLE_SDL
+#if SDL_MAJOR_VERSION >= 2
+    return window != nullptr;
+#else
     return surface != nullptr;
+#endif
 #elif defined(USE_VFB)
     return true;
 #else
@@ -156,8 +176,13 @@ public:
   PixelRect GetRect() const;
 #endif
 
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+  void Create(const char *text, PixelSize new_size,
+              bool full_screen, bool resizable);
+#else
   void Create(PixelSize new_size,
               bool full_screen, bool resizable);
+#endif
 
 #ifdef USE_FB
   /**

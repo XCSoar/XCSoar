@@ -28,6 +28,11 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
 
+#if SDL_MAJOR_VERSION >= 2
+#include "Util/UTF8.hpp"
+#endif
+
+#if SDL_MAJOR_VERSION < 2
 void
 TopWindow::SetCaption(const TCHAR *caption)
 {
@@ -35,6 +40,7 @@ TopWindow::SetCaption(const TCHAR *caption)
   if (caption2.IsValid())
     ::SDL_WM_SetCaption(caption2, nullptr);
 }
+#endif
 
 void
 TopWindow::Invalidate()
@@ -48,10 +54,12 @@ TopWindow::OnEvent(const SDL_Event &event)
   switch (event.type) {
     Window *w;
 
+#if SDL_MAJOR_VERSION < 2
   case SDL_VIDEOEXPOSE:
     invalidated = false;
     Expose();
     return true;
+#endif
 
   case SDL_KEYDOWN:
     w = GetFocusedWindow();
@@ -61,9 +69,34 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
+#if SDL_MAJOR_VERSION >= 2
+    return w->OnKeyDown(event.key.keysym.sym);
+#else
     return w->OnKeyDown(event.key.keysym.sym) ||
       (event.key.keysym.unicode != 0 &&
        w->OnCharacter(event.key.keysym.unicode));
+#endif
+
+#if SDL_MAJOR_VERSION >= 2
+  case SDL_TEXTINPUT:
+    w = GetFocusedWindow();
+    if (w == NULL)
+      w = this;
+
+    if (!w->IsEnabled())
+      return false;
+
+    if (event.text.text && *event.text.text) {
+      std::pair<unsigned, const char *> next = NextUTF8(event.text.text);
+      bool handled = w->OnCharacter(next.first);
+      while (next.second) {
+        next = NextUTF8(next.second);
+        handled = w->OnCharacter(next.first) || handled;
+      }
+      return handled;
+    } else
+      return false;
+#endif
 
   case SDL_KEYUP:
     w = GetFocusedWindow();
@@ -80,20 +113,24 @@ TopWindow::OnEvent(const SDL_Event &event)
     return OnMouseMove(event.motion.x, event.motion.y, 0);
 
   case SDL_MOUSEBUTTONDOWN:
+#if SDL_MAJOR_VERSION < 2
     if (event.button.button == SDL_BUTTON_WHEELUP)
       return OnMouseWheel(event.button.x, event.button.y, 1);
     else if (event.button.button == SDL_BUTTON_WHEELDOWN)
       return OnMouseWheel(event.button.x, event.button.y, -1);
+#endif
 
     return double_click.Check(RasterPoint(event.button.x, event.button.y))
       ? OnMouseDouble(event.button.x, event.button.y)
       : OnMouseDown(event.button.x, event.button.y);
 
   case SDL_MOUSEBUTTONUP:
+#if SDL_MAJOR_VERSION < 2
     if (event.button.button == SDL_BUTTON_WHEELUP ||
         event.button.button == SDL_BUTTON_WHEELDOWN)
       /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
       return false;
+#endif
 
     double_click.Moved(RasterPoint(event.button.x, event.button.y));
 
@@ -102,9 +139,31 @@ TopWindow::OnEvent(const SDL_Event &event)
   case SDL_QUIT:
     return OnClose();
 
+#if SDL_MAJOR_VERSION < 2
   case SDL_VIDEORESIZE:
     Resize(event.resize.w, event.resize.h);
     return true;
+#endif
+
+#if SDL_MAJOR_VERSION >= 2
+  case SDL_MOUSEWHEEL:
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    return OnMouseWheel(x, y, event.wheel.y);
+
+  case SDL_WINDOWEVENT:
+    switch (event.window.event) {
+
+    case SDL_WINDOWEVENT_RESIZED:
+      Resize(event.window.data1, event.window.data2);
+      return true;
+
+    case SDL_WINDOWEVENT_EXPOSED:
+      invalidated = false;
+      Expose();
+      return true;
+    }
+#endif
   }
 
   return false;

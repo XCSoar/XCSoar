@@ -27,6 +27,10 @@ Copyright_License {
 #include <SDL_version.h>
 #include <SDL_events.h>
 
+#if SDL_MAJOR_VERSION >= 2
+#include "Util/UTF8.hpp"
+#endif
+
 #include <assert.h>
 
 enum {
@@ -58,6 +62,22 @@ struct Event {
     return event.key.keysym.sym;
   }
 
+#if SDL_MAJOR_VERSION >= 2
+  size_t GetCharacterCount() const {
+    return event.type == SDL_TEXTINPUT && event.text.text &&
+      *event.text.text ?
+      LengthUTF8(event.text.text) : 0;
+  }
+
+  unsigned GetCharacter(size_t characterIdx) const {
+    assert(characterIdx < GetCharacterCount());
+
+    std::pair<unsigned, const char *> next = NextUTF8(event.text.text);
+    for (size_t i = 0; i < characterIdx; ++i)
+      next = NextUTF8(next.second);
+    return next.first;
+  }
+#else
   size_t GetCharacterCount() const {
     return (IsKeyDown() && event.key.keysym.unicode != 0) ? 1 : 0;
   }
@@ -68,6 +88,7 @@ struct Event {
 
     return event.key.keysym.unicode;
   }
+#endif
 
   bool IsMouseDown() const {
     return event.type == SDL_MOUSEBUTTONDOWN;

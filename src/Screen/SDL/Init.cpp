@@ -55,8 +55,10 @@ ScreenGlobalInit::ScreenGlobalInit()
   if (HasTouchScreen())
     SDL_ShowCursor (SDL_FALSE);
 
+#if SDL_MAJOR_VERSION < 2
   ::SDL_EnableKeyRepeat(250, 50);
   ::SDL_EnableUNICODE(true);
+#endif
 
 #if defined(ENABLE_OPENGL)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
