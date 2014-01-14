@@ -411,7 +411,7 @@ FindDataPath()
        build-in and an external SD card) */
     struct stat st;
     if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
-        (st.st_mode & S_IFDIR) != 0 &&
+        S_ISDIR(st.st_mode) &&
         fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " ", "tmpfs ")) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Enable Samsung hack, " XCSDATADIR " in "

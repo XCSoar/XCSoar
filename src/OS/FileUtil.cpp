@@ -60,7 +60,7 @@ Directory::Exists(const TCHAR* path)
   if (stat(narrow_path, &st) != 0)
     return false;
 
-  return (st.st_mode & S_IFDIR);
+  return S_ISDIR(st.st_mode);
 #else
   DWORD attributes = GetFileAttributes(path);
   return attributes != INVALID_FILE_ATTRIBUTES &&
