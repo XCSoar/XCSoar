@@ -44,6 +44,9 @@ class SocketDescriptor : public FileDescriptor {
 public:
   SocketDescriptor() {}
 
+  SocketDescriptor(SocketDescriptor &&) = default;
+  SocketDescriptor &operator=(SocketDescriptor &&) = default;
+
 #ifndef HAVE_POSIX
   ~SocketDescriptor() {
     Close();
