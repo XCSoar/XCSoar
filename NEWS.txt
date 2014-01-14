@@ -13,6 +13,8 @@ Version 6.7.3 - not yet released
 * devices
   - LX: improved logger handshake (#3199)
   - LX: auto-retry after errors during IGC download
+* Android
+  - load XCSoarData from external SD card if available (#3198)
 * Kobo
   - fix touch screen bug (#3195, #3211)
 
