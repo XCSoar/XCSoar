@@ -408,7 +408,7 @@ FindDataPath()
   if (IsAndroid()) {
 #ifdef ANDROID
     /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
-       build-in and an external SD card) */
+       built-in and an external SD card) */
     struct stat st;
     if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
         (st.st_mode & S_IFDIR) != 0 &&
