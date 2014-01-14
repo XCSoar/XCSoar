@@ -10,6 +10,7 @@ Version 6.7.3 - not yet released
 * map
   - fix disappearing observation zones at left/top screen border (#3212)
 * devices
+  - LX: improved logger handshake (#3199)
   - LX: auto-retry after errors during IGC download
 * Kobo
   - fix touch screen bug (#3195, #3211)
