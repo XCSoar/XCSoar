@@ -9,6 +9,7 @@ Version 6.7.3 - not yet released
   - fix missing battery info in status panels
 * map
   - fix disappearing observation zones at left/top screen border (#3212)
+  - fix RASP display
 * devices
   - LX: improved logger handshake (#3199)
   - LX: auto-retry after errors during IGC download
