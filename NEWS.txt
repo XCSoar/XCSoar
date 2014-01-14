@@ -16,7 +16,7 @@ Version 6.7.3 - not yet released
 * Android
   - load XCSoarData from external SD card if available (#3198)
 * Kobo
-  - fix touch screen bug (#3195, #3211)
+  - fix touch screen bug (#3195, #3204, #3211)
 
 Version 6.7.2 - 2013/12/19
 * user interface
