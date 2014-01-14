@@ -54,7 +54,7 @@ public:
   FileDescriptor():fd(-1) {}
 
 protected:
-  FileDescriptor(int _fd):fd(_fd) {
+  explicit FileDescriptor(int _fd):fd(_fd) {
     assert(IsDefined());
   }
 
