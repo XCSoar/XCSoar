@@ -16,6 +16,7 @@ Version 6.8 - not yet released
   - checklist remembers last opened list (#3110)
 * Kobo
   - add UI allowing the start of external scripts to KoboMenu (#3194)
+  - support Wifi with WEP (#3138)
 
 Version 6.7.2 - 2013/12/19
 * user interface
