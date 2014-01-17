@@ -344,6 +344,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       if (team_color != FlarmColor::NONE) {
         circle_pen = FlarmColorPen(look, team_color);
         circles = 1;
+      } else {
+        // unnecessary - prevents "may be used uninitialized" compiler warning
+        circle_pen = &look.default_pen;
       }
 
       if (!small && static_cast<unsigned> (selection) == i) {
