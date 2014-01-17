@@ -330,6 +330,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     circles = 2;
     break;
   case FlarmTraffic::AlarmType::NONE:
+  default:
     if (WarningMode()) {
       text_color = &look.passive_color;
       target_pen = &look.passive_pen;
