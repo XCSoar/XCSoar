@@ -107,6 +107,9 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   case SQUARE:
     logox = (width - logo_size.cx) / 2;
     logoy = (height - logo_size.cy) / 2;
+    // not needed - silence compiler "may be used uninitialized"
+    titlex = 0;
+    titley = 0;
     break;
   }
 
