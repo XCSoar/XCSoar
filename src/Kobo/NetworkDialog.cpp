@@ -45,6 +45,7 @@ class NetworkWidget final
     TOGGLE_WIFI,
     WIFI,
     TELNET,
+    FTP,
   };
 
   WndButton *toggle_wifi_button, *wifi_button;
@@ -82,6 +83,8 @@ NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddButton(_T("Telnet server"), *this, TELNET);
 
+  AddButton(_T("Ftp server"), *this, FTP);
+
   UpdateButtons();
 }
 
@@ -111,6 +114,10 @@ NetworkWidget::OnAction(int id)
 
   case TELNET:
     KoboRunTelnetd();
+    break;
+
+  case FTP:
+    KoboRunFtpd();
     break;
   }
 }

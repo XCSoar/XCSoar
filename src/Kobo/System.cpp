@@ -183,3 +183,12 @@ KoboRunTelnetd()
   Run("/usr/sbin/telnetd", "-l", "/bin/sh");
 #endif
 }
+
+void
+KoboRunFtpd()
+{
+#ifdef KOBO
+  /* ftpd needs to be fired through tcpsvd (or inetd) */
+  Start("/usr/bin/tcpsvd", "-E", "0.0.0.0", "21", "ftpd", "-w", "/mnt/onboard");
+#endif
+}
