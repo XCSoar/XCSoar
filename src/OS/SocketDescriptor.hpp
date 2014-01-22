@@ -39,10 +39,13 @@ class SocketAddress;
  * An OO wrapper for a UNIX socket descriptor.
  */
 class SocketDescriptor : public FileDescriptor {
-  SocketDescriptor(int _fd):FileDescriptor(_fd) {}
+  explicit SocketDescriptor(int _fd):FileDescriptor(_fd) {}
 
 public:
   SocketDescriptor() {}
+
+  SocketDescriptor(SocketDescriptor &&) = default;
+  SocketDescriptor &operator=(SocketDescriptor &&) = default;
 
 #ifndef HAVE_POSIX
   ~SocketDescriptor() {

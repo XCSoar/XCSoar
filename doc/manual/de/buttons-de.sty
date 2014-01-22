@@ -1,0 +1,40 @@
+% Einige Anpassungen fuer die deutsche Uebersetzung
+%
+\newcommand{\seite}[1]{\textsf{\fcolorbox{black}{blau}{\rule[-0.2em]{0em}{0.95em}\small{\textsc{ Seite #1 }}}}~}
+%
+%
+% Extra button Breite
+\setbuttonwidth{17} % 1.7cm menu buttons fuer die laengenen deutschen worte
+%
+\newcommand{\smenut}[2]{
+	\fcolorbox {black}{buttongray}{
+    \makebox[1.2cm][c]{
+    	\begin{tabular}{c}
+    	{\footnotesize\sf{#1}}\\
+    	{\footnotesize\sf{#2}}
+    	\end{tabular}
+    }
+  }
+}
+%
+\newcommand{\smenus}[1]{
+	\fcolorbox {black}{buttongray}{
+    \makebox[1.2cm][c]{
+      \begin{tabular}{c}
+%        {\footnotesize\sf{#1}}\\ % ich find das unten einfach hübscher ...
+          {\multirow{2}{*}{\footnotesize\sf{#1}}}   \\
+    	  \\
+    	\end{tabular}
+	  }
+	}
+}
+%
+\newcommand{\bmenud}{\bmenuth}
+%
+\newcommand{\mbutton}{\bmenug}
+%
+\newcommand{\ibox}[1]{%Spezialinfobox für die Auflistung in der Infoboxreferenz
+	\fcolorbox {black}{gray}{\makebox[3.1cm][c]{\sf\strut #1\rule[-1.5mm]{0mm}{5mm}}}
+}
+
+

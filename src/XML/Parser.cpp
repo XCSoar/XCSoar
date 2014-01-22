@@ -279,8 +279,7 @@ XML::GetNextToken(Parser *pXML)
 
     // If we failed to find a matching quote
     if (!found_match) {
-      pXML->nIndex = n - 1;
-      ch = GetNextChar(pXML);
+      pXML->nIndex = n;
       is_text = true;
       break;
     }

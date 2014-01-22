@@ -286,6 +286,38 @@ static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
           fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
 }
 
+gcc_pure
+static Angle
+CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
+                      const GeoPoint &location,
+                      const GeoPoint &start,
+                      const GeoPoint &previous,
+                      const GeoPoint &next)
+{
+    switch (turnpoint_infos.style) {
+    case SeeYouTurnpointInformation::FIXED:
+      return turnpoint_infos.angle12.Reciprocal();
+
+    case SeeYouTurnpointInformation::SYMMETRICAL:
+      break;
+
+    case SeeYouTurnpointInformation::TO_NEXT_POINT:
+      return next.Bearing(location);
+
+    case SeeYouTurnpointInformation::TO_PREVIOUS_POINT:
+      return previous.Bearing(location);
+
+    case SeeYouTurnpointInformation::TO_START_POINT:
+      return start.Bearing(location);
+    }
+
+    /* SYMMETRICAL is the fallback when the file contained an
+       invalid/unknown style */
+    const Angle ap = previous.Bearing(location);
+    const Angle an = next.Bearing(location);
+    return ap.HalfAngle(an).Reciprocal();
+}
+
 /**
  * Creates the correct XCSoar OZ type from the See You OZ options for the point
  * Note: there are several rules enforced here related to the combinations
@@ -339,35 +371,14 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
                                                     is_intermediate);
 
   } else if (is_intermediate) { //AAT intermediate point
-    Angle A12adj;
     assert(wps[pos + 1]);
     assert(wps[pos - 1]);
 
-    switch (turnpoint_infos.style) {
-    case SeeYouTurnpointInformation::FIXED: {
-      A12adj = turnpoint_infos.angle12.Reciprocal();
-      break;
-    }
-    case SeeYouTurnpointInformation::SYMMETRICAL: {
-      const Angle ap = wps[pos - 1]->location.Bearing(wp->location);
-      const Angle an = wps[pos + 1]->location.Bearing(wp->location);
-      A12adj = ap.HalfAngle(an).Reciprocal();
-      break;
-    }
-
-    case SeeYouTurnpointInformation::TO_NEXT_POINT: {
-      A12adj = wps[pos + 1]->location.Bearing(wp->location);
-      break;
-    }
-    case SeeYouTurnpointInformation::TO_PREVIOUS_POINT: {
-      A12adj = wps[pos - 1]->location.Bearing(wp->location);
-      break;
-    }
-    case SeeYouTurnpointInformation::TO_START_POINT: {
-      A12adj = wps[0]->location.Bearing(wp->location);
-      break;
-    }
-    }
+    const Angle A12adj = CalcIntermediateAngle(turnpoint_infos,
+                                               wp->location,
+                                               wps[pos - 1]->location,
+                                               wps[pos + 1]->location,
+                                               wps[0]->location);
 
     const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
     const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();

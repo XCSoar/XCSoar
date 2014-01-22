@@ -1,4 +1,4 @@
-\chapter{Configuration}\label{cha:configuration}
+\chapter{Configuration}\label{cha:configuration}\label{conf:configuration}
 XCSoar is a highly configurable glide computer and can be customised
 to suit a wide variety of preferences and user requirements.  This
 chapter describes the configuration settings and options.
@@ -29,7 +29,7 @@ through the XCSoar Wiki for more details.
 
 There is a large set of configuration settings that may be customised
 from the Settings dialogue accessible from the menu.
-\menulabel{\bmenu{Config 2}\blink\bmenus{System}}
+\menulabel{\bmenug{Config 2}\blink\bmenus{System}}
 The configuration can be accessed through a two layer structured menu 
 or just sequentially through the back and forward buttons.
 
@@ -217,7 +217,7 @@ This page provides options relating to the map display.
   {\bf First 3 letters}: The first 3 letters of the waypoint name are displayed. \\
   {\bf First 5 letters}: The first 5 letters of the waypoint name are displayed. \\
   {\bf None}: No name is displayed with the waypoint.
-\item[Arrival height*]  This enables the arrival height info shown additionally 
+\item[Arrival height*] \label{conf:arrivalheight} This enables the arrival height info shown additionally 
   for landables. \\
   {\bf None}: No arrival height is displayed. \\
   {\bf Straight glide}: Straight glide arrival height (no terrain is considered). \\
@@ -364,7 +364,7 @@ of the safety heights. \\
 \item[Polar degradation*]  A permanent polar degradation. 0\% means no degradation, 
   50\% indicates the glider's sink rate is doubled.
 \item[Safety MC*]  When safety MC is enabled, this MacCready setting is used for reach 
-  calculations, task abort, alternates and for determining arrival altitude at airfields. 
+  calculations, task abort, alternates and for determining arrival altitude at airfields.\label{conf:safetyMC} 
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
   speed to fly as the glider gets low, in order to compensate for
@@ -376,7 +376,7 @@ of the safety heights. \\
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Glide Computer / Glide Computer}\label{sec:final-glide}
+\section{Glide Computer / Glide Computer}\label{sec:final-glide}\label{conf:final-glide}	
 
 This page allows glide computer algorithms to be configured.
 
@@ -626,6 +626,7 @@ If customisation is disabled, default fonts will be used.
 
 %%%%%%%%%%%%%%%%%%
 \section{Look / Screen Layout}\label{sec:interface-appearance}
+\label{conf:interface-appearance}
 
 This page once more details the appearance of the graphical user interface of XCSoar.
 
@@ -655,7 +656,7 @@ This page once more details the appearance of the graphical user interface of XC
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Look / InfoBox Pages (or just Pages)}
+\section{Look / InfoBox Pages (or just Pages)}\label{conf:screenpages}
 
 This page allows the definition of the screen page ensemble. A typical setup 
 will contain three pages, the expert can pile up to eight possible pages.
@@ -677,6 +678,7 @@ and your custom InfoBox sets.
 
 %%%%%%%%%%
 \section{Look / InfoBox Modes (or InfoBox Sets)}\label{sec:infobox_sets}
+\label{conf:infobox_sets}
 
 This page shows and let you customise the available InfoBox sets.
 

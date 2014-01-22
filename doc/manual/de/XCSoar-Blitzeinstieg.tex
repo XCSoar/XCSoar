@@ -1,5 +1,97 @@
-\input{XCBlitzIIKonf.tex}%Konfiguration und Buttondefinitionen
+\documentclass[german,a4paper,12pt,utf8]{scrreprt}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[off]{flippdf}                %Spiegelverkehrte Ausgabe ganzer Seiten (sogar Bilder ..) -> Default OFF ..
+\usepackage{supertabular}
+\usepackage{array}
+\usepackage{wasysym}
+\usepackage{hhline}
+\usepackage{framed}               % Farbunterstützung
+\usepackage{color}               % Farbunterstützung
+\usepackage{graphicx}                      % Anleitung hierzu  in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+\usepackage{booktabs}
+\usepackage{paralist}
+\usepackage{fancyhdr}
+\usepackage{url}
+% Wir wollen einen Index:
+\usepackage{makeidx}\makeindex
+% Wir wollen aktive Links und einige Dokumentinformationen:
+\usepackage[colorlinks]{hyperref}
+\hypersetup{
+    bookmarks=true,
+    unicode=true,
+    pagebackref=true,
+    pdftoolbar=true,
+    pdfmenubar=true,
+    pdffitwindow=false,
+    pdfstartview={FitH},
+    pdftitle={XCSoar Blitzeinstieg},
+    pdfauthor={OH},
+    pdfsubject={Subject},
+    pdfcreator={HotteTeX},
+    pdfproducer={OH},
+    pdfkeywords={XCSoar}{Schnelleinstieg}{Segelflug}{Endanflug},
+    pdfnewwindow=true,
+    colorlinks=true,
+    linkcolor=red,
+    citecolor=green,
+    filecolor=magenta,
+    urlcolor=blue
+}
+\usepackage[right]{eurosym}% Eurosymbol, rechts neben Text mit \EUR{427,45}, symbol alleine mit\eur{}
+\parindent0mm%kein Einzug-häßlich
+\textwidth=170mm
+\rightmargin=0mm\leftmargin=-10mm\oddsidemargin=-10mm\evensidemargin=-10mm
+\setlength{\baselineskip}{1em}
+%
+%##############  Font selection ##############
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+%
+\fboxrule0.4mm                                                      % Breite des Fbox-Rahmens
+%
+%##############  Makros und  Menus ..##############
+%
+\input{buttons.sty}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+%
+\newcommand{\bmg}{\bmenug}
+\newcommand{\bmw}{\bmenuw}
+\newcommand{\bmt}{\bmenut}
+\newcommand{\bms}{\bmenus}
+\setcounter{mboxwidth}{16} % Etwas groesser als standard
+%
+%##############  Erweiterte Makros und  Menus ..##############
+\newcommand{\nav}[3]{\bmt{Nav}{#1/2}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%NavMenu
+\newcommand{\ansi}[3]{\bmt{Ansicht}{#1/2}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%AnsichtMenu
+\newcommand{\konf}[3]{\bmt{Konfig}{#1/3}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%KonfigNavMenu
+\newcommand{\info}[3]{\bmt{Info}{#1/3}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%InfoMenu
 
+\newcommand{\sk}[0]{%  Häufig benutzt .. konf-konf-system-einstellungen
+    \fcolorbox {black}{buttongray}{
+    \makebox[1.6cm][c]{
+        \begin{tabular}{c}
+        {\footnotesize\sf{Konfig}}\\
+        {\footnotesize\sf{2/3}}
+        \end{tabular} } }
+    {\LARGE$\triangleright$}\hspace{0.0075em}
+    \fcolorbox {black}{buttongray}{
+    \makebox[1.6cm][c]{
+        \begin{tabular}{c}
+        {\footnotesize\sf{System}}\\
+        {\footnotesize\sf{Einstellung}}
+        \end{tabular} } }
+}
+%Abkürzungen
+\newcommand{\xc}{{\textsf XCSoar}}
+%
+%##############  Titelseite des Blitzes .##############
+%
 \hyphenation{Kon-fi-gu-ra-tions-files Onkel-hotte}
 \setcounter{secnumdepth}{1}
 \renewcommand*{\thesection}{\textsf{\arabic{section}}}
@@ -19,8 +111,9 @@
 \end{center}
 
 \newpage
-\fancyhead[R]{\includegraphics[angle=0,width=0.15\linewidth,keepaspectratio='true']{figures/xcsoar-title.png}}
+\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
 \pagestyle{fancy}
+
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%

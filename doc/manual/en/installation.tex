@@ -1,8 +1,10 @@
 \chapter{Installation}\label{cha:installation}
 
-To run XCSoar, you need to obtain the following:
+\section{To run XCSoar}
+ you need to obtain the following:
 
 \begin{itemize}
+\itemsep0em
 \item a device to run XCSoar on
 \item XCSoar
 \item a GPS receiver
@@ -13,7 +15,72 @@ To run XCSoar, you need to obtain the following:
 
 \section{! Before you go out flying the first time with XCSoar !}
 
-After having installed XCSoar successfully, you might use it instantly.  XCSoar will launch with a ready-to-use pre-configuration. But be aware, that up to this point your new toy will give you a moving map display only.  \emph{Don't trust the computations.} You have to tell XCSoar which plane you are flying in advance.  This is done by specifying your plane's data as are polar, weight and some other data.  However it's always a good idea to study the manual and become familiar with XCSoar at home.
+After having installed XCSoar successfully, you might use it instantly. XCSoar 
+will launch with a ready-to-use pre-configuration. But be aware, that up to 
+this point your new toy will give you a moving map display only.
+\warning \emph{Don't trust the computations.} You have to tell XCSoar which 
+plane you are flying in advance.  This is done by specifying your plane's data 
+as are polar, weight and some other data.  However it's always a good idea to 
+study the manual and become familiar with XCSoar at home.
+
+\section{How to get the most from XCSoar}
+
+In order to achieve your maximum benefit from XCSoar, you are kindly asked to 
+do do some more after having installed the software and downloaded some data 
+files. ``Some more'' includes personal and plane data as well as configuration 
+of just a few features. Unless you are willing to tweak everything XCSoar 
+provides, this could be done in a rather short time. Necessary steps are 
+summarized in an \emph{XCSoar Checklist}, given in the next chapter.
+
+If you are planning to arrange a system with several components engaged in, 
+this manual will give you valuable advice on both, how to set up things and how 
+to use them.
+
+If you are a pilot in a hurry, the authors suggest to change to the short form 
+manual \texttt{XCSoar-in-a-Flash} going through the \emph{XCSoar Checklist} 
+step by step. The short form manual is available on \url{http://www.xcsoar.org/
+discover/manual.html}.
+
+
+
+\section{XCSoar Checklist}
+
+\subsection*{{Bring XCSoar into play}}
+\begin{itemize}
+\item get hardware and install XCSoar
+\item get appropriate data files of your flight district
+\item tell XCSoar which data files to use
+\item tell XCSoar about the glider's polar \& weight
+\item possibly connect to instruments
+\item finish setup and familiarize
+\item mount hardware
+\item add items listed underneath to your checklists
+\item make "home"
+\end{itemize}
+
+\subsection*{Conduct preflight check, including}
+\begin{itemize}
+\item setup polar and weight
+\item setup wind and flight parameters (MC, bugs, QNH)
+\item possibly setup a task
+\end{itemize}
+
+\subsection*{Conduct start check, including}
+\begin{itemize}
+\item Check wind and flight setup once more
+\end{itemize}
+\vspace{2em}
+
+\subsection*{Fly, enjoy}
+\vspace{4em}
+
+\subsection*{Conduct after flight check}
+\begin{itemize}
+\item Download flight logs from logger, upload to skylines and OLC
+\item Gather statistical data of flight.
+\end{itemize}
+\newpage
+
 
 
 
@@ -48,7 +115,8 @@ Android devices have a built-in GPS, but for several reasons it is favorable to
 connect to one or more external devices:
 
 \begin{itemize}
-\item a specialized GPS receiver gains much better reception providing much better data for measures and calclulations
+\item a specialized GPS receiver gains much better reception providing much 
+better data for measures and calculations
 \item an airspeed indicator allows quick and exact wind estimates
   without circling
 \item a vario improves the thermal assistant
@@ -56,7 +124,8 @@ connect to one or more external devices:
   flight log can be downloaded
 \item some varios allow synchronising the MacCready setting with
   XCSoar
-\item flarm (and even ADS-B input) provide informations and stati of others around you - and gives you collision detection
+\item flarm (and even ADS-B input) provide informations and stati of others 
+around you (- and of course Flarm gives you collision detection)
 \end{itemize}
 
 \subsection*{Supported external devices and features}
@@ -183,7 +252,7 @@ If \verb|~/.xcsoar| does not exist, it will be created the first time
 that \verb|xcsoar| is run.
 
 
-\section{Data files}
+\section{Data files}\label{sec:data files}
 
 To be able to use XCSoar's advanced features, additional data files, such as
 terrain, topography, special use airspace, waypoints etc.\ are needed. The files
@@ -276,13 +345,13 @@ Run \verb|xcsoar| from a command line, or create a shortcut on the
 desktop.  The location of the executable file may be found using
 \verb|which xcsoar|.  Only landscape mode is  supported for now.
 
-\subsection*{Loading data files}
+\subsection*{Loading data files}\label{sec:loaddatafiles}
 The first time that XCSoar is run, it does not automatically load the 
 data files that you placed in the \verb|XCSoarData| directory.  
 To tell XCSoar which files to load, double click/tap the map (the large,
 blank white part with the glider symbol in the center),
-choose the menu \bmenu{Config 2} (click/tap it twice), then select the item 
-\bmenu{System}.  The Configuration screen should be displayed:
+choose the menu \bmenug{Config 2} (click/tap it twice), then select the item 
+\bmenug{System}.  The Configuration screen should be displayed:
 \sketch{figures/config-basic.png}
 The first page allows you to choose the map, 
 waypoint and airspace files, by clicking/tapping on the text boxes.
@@ -303,24 +372,52 @@ can be useful for example in the following cases:
 \item Flying in different locations
 \item Different planes (with different polars)
 \end{itemize}
+Profiles also might be understood as preserving a backup of a certain 
+configuration. Virtually every of XCSoar's settings is stored in a profile 
+file with extension \texttt{.prf}. Once you are happy with all your settings, 
+make two copies of your profile file. One carrying extension \texttt{.prf}, 
+the second copy carrying extension \texttt{.bak}.
+Whereas the \texttt{.prf} file will show up on startup and reflect all of 
+your changes made whilst XCSoar is running for the next startup, the file 
+\texttt{.bak} will keep the settings, you judged being worth it to preserve. 
+As an example you might create a set of files as is:
+\begin{itemize}
+\item \texttt{buddiesinArcus.prf}
+\item \texttt{buddiesinArcus.bak}
+\item \texttt{johninKa6atwonderland.prf}
+\item \texttt{johninKa6atwonderland.bak}
+\end{itemize}
 
 \subsection*{SIM mode}
-The simulator contains a simple interface allowing the user to fly
-the glider about.  On the map screen, clicking/touching the glider symbol
-(with touchscreen or mouse) and dragging 
-causes the glider to move in the direction of the drag, the
-speed being proportional to the length of the drag.  
+XCSoar comes with a simple interface allowing for conducting a simulated 
+flight. Depending on the hardware platform, there are different 
+methods for altering values of bearing, speed, an height.  Simulation is 
+intended for your first familiarization with XCSoar in action. If you like the 
+idea simulating a more realistic thing at home, you should acquire a "true" 
+soaring simulator, to be connected to XCSoar.
 
-In the PC version and for embedded devices with buttons, the aircraft
-speed, altitude and direction may be changed using the \InfoBox es.
-These features are not available for touchscreen devices.
+On the map screen, clicking/touching the glider symbol
+with touchscreen or mouse and dragging 
+causes the glider to move in the direction of the drag, the
+speed being proportional to the length of the drag.
+
+With buttons, the aircraft
+speed, altitude and direction may be changed using the Infoboxes.
+The following may not be available in total on every hardware platform, but on 
+any of the platforms XCSoar supports, a full set of inputs needed for 
+simulation purposes is possible.
+
+By pushing an Infobox, you select a value to be altered by buttons, either 
+ hardware or menu buttons.
 The aircraft altitude can be adjusted by selecting the GPS altitude
-{\InfoBox} (marked \infobox{Alt GPS}), and pressing the up or down key.
-The airspeed  can be adjusted by selecting the ground speed
-{\InfoBox} (marked \infobox{V Gnd}), and pressing the up or down key.
-The glider's track  can be adjusted by selecting the track
-{\InfoBox} (marked \infobox{Track}), and pressing the up or down key.
-With either of the \InfoBox es \infobox{Alt GPS} or \infobox{V Gnd})
+InfoBox \bmenuw{Alt GPS}, and touching the up or down key or buttons on the 
+touchscreen.
+The airspeed can be adjusted by selecting the Infobox ground speed
+\bmenuw{V Gnd}, touching up or down key or menu buttons.
+The glider's track  can be adjusted by selecting the track InfoBox
+\bmenuw{Track}, and touching up/down buttons.
+
+With either of the \bmenuw{Alt GPS} or \bmenuw{V Gnd}
 selected, the glider's direction may be changed using the left/right keys.
 
 Other controls, buttons and menus work the same as in FLY mode.
@@ -338,7 +435,7 @@ This screen also displays the software version information.
 For PDA and PC versions, XCSoar is shut down from the menu. The menu can be
 opened by double-clicking on the map or the \InfoBox es.
 \begin{quote}
-\bmenu{QUIT}
+\bmenug{QUIT}
 \end{quote}
 
 For PC versions, XCSoar can also be shut down by clicking the close icon

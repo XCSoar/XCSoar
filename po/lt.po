@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-10-12 09:26+0000\n"
+"PO-Revision-Date: 2014-01-10 09:13+0000\n"
 "Last-Translator: Donatas <donatas.povilionis@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-13 15:08+0000\n"
-"X-Generator: Launchpad (build 16799)\n"
+"X-Launchpad-Export-Date: 2014-01-13 14:11+0000\n"
+"X-Generator: Launchpad (build 16890)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -30,37 +30,37 @@ msgstr ""
 #: Data/Input/default.xci:991 Data/Input/default.xci:1029
 #, no-c-format
 msgid "Task"
-msgstr ""
+msgstr "Užduotis"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "FAI ženkliukai/rekordai"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:86
 #, no-c-format
 msgid "FAI triangle"
-msgstr ""
+msgstr "FAI trikampis"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr ""
+msgstr "FAI į tikslą ir atgal"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr ""
+msgstr "FAI tikslas"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr ""
+msgstr "Lenktyninis"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "AAT"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
@@ -70,12 +70,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Mixed"
-msgstr ""
+msgstr "Mišrus"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Motorizuotas"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -83,6 +83,9 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI taisyklės, leidžia tiktai FAI startą, finišą ir posūkio punktų tipus, "
+"ženkliukams arba rekordams. Įjungia FAI finišo aukčio skaičiavimą finaliniam "
+"sklendimui."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
@@ -7868,31 +7871,31 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:247
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:279
 msgid "Task Browser"
-msgstr ""
+msgstr "Užduočių naršyklė"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:270
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr "Negalima ištrinti .CUP bylų"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:278
 msgid "Delete the selected task?"
-msgstr ""
+msgstr "Ištrinti pasirinktą užduotį?"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:316
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr "Negalima pervardinti .CUP bylų"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:316
 msgid "Rename Error"
-msgstr ""
+msgstr "Pervardinimo klaida"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:344
 msgid "Less"
-msgstr ""
+msgstr "Mažiau"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:178
 msgid "Set MacCready"
-msgstr ""
+msgstr "Nustatyti MacCready"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:179
 msgid ""
@@ -7918,19 +7921,19 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:194
 #: Data/Dialogs/dlgTarget_L.xml:31 Data/Dialogs/dlgTarget.xml:13
 msgid "Speed remaining"
-msgstr ""
+msgstr "Likęs greitis"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:197
 msgid "Achieved MacCready"
-msgstr ""
+msgstr "Pasiektas MacCreadis"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:202
 msgid "Achieved speed"
-msgstr ""
+msgstr "Pasiektas greitis"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:205
 msgid "Cruise efficiency"
-msgstr ""
+msgstr "Kreiserinis efektyvumas"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:206
 msgid ""
@@ -7952,28 +7955,28 @@ msgstr ""
 #: src/Dialogs/Weather/NOAADetails.cpp:117 Data/Dialogs/dlgTaskPoint_L.xml:11
 #: Data/Dialogs/dlgTaskPoint.xml:7
 msgid "Remove"
-msgstr ""
+msgstr "Ištrinti"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:151
 msgid "(Add Alternate Start)"
-msgstr ""
+msgstr "(Įdėti Alternatyvų Startą)"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:244
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "Alternatyvūs Starto Punktai"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:147
 msgid "Enable Alternate Starts"
-msgstr ""
+msgstr "Įjungti Alternatyvius Startus"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:150
 msgid "Edit Alternates"
-msgstr ""
+msgstr "Redaguoti  Alternatyvius"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:173
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
 msgid "Task point"
-msgstr ""
+msgstr "Užduoties punktas"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:178
 msgid "Assigned area point"
@@ -7981,31 +7984,31 @@ msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
 msgid "Remove task point?"
-msgstr ""
+msgstr "Pašalinti užduoties punktą?"
 
 #: src/Dialogs/Task/MutateTaskPointDialog.cpp:129
 msgid "Task Point Type"
-msgstr ""
+msgstr "Užduoties punkto tipas"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:68
 msgid "Goal"
-msgstr ""
+msgstr "Tikslas"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:75
 msgid "Out and return"
-msgstr ""
+msgstr "Į tikslą ir atgal"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:79
 msgid "Two legs"
-msgstr ""
+msgstr "Dvi atkarpos"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:84
 msgid "Three legs"
-msgstr ""
+msgstr "Trys atkarpos"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:90
 msgid "non-FAI triangle"
-msgstr ""
+msgstr "ne-FAI trikampis"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:94
 #, c-format
@@ -8019,7 +8022,7 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:135
 msgid "max."
-msgstr ""
+msgstr "maks."
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:139
 msgid "min."
@@ -8031,15 +8034,15 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:190
 msgid "Sector"
-msgstr ""
+msgstr "Sektorius"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:202
 msgid "Cylinder"
-msgstr ""
+msgstr "Cilindras"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 msgid "MAT cylinder"
-msgstr ""
+msgstr "MAT cilindras"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
 msgid "Keyhole"
@@ -8067,11 +8070,11 @@ msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:75 src/Dialogs/Weather/RASPDialog.cpp:70
 msgid "Now"
-msgstr ""
+msgstr "Dabar"
 
 #: src/Dialogs/Weather/RASPDialog.cpp:55
 msgid "Field"
-msgstr ""
+msgstr "Laukas"
 
 #: src/Dialogs/Weather/RASPDialog.cpp:97
 msgid "Weather Forecast"
@@ -8079,19 +8082,19 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
-msgstr ""
+msgstr "Variometro Audio"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:72
 msgid "Emulate the sound of an electronic vario."
-msgstr ""
+msgstr "Emuliuoti elektroninio variometro garsą"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:75
 msgid "Volume"
-msgstr ""
+msgstr "Garsumas"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:78
 msgid "Enable Deadband"
-msgstr ""
+msgstr "Įjungti diapazoną"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:79
 msgid ""
@@ -8101,31 +8104,31 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "Min. Frequency"
-msgstr ""
+msgstr "Min. Dažnis"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at maximum sink rate."
-msgstr ""
+msgstr "Tono dažnis prie maksimalaus žemėjimo"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "Zero Frequency"
-msgstr ""
+msgstr "Nulinis dažnis"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at zero climb rate."
-msgstr ""
+msgstr "Tono dažnis prie nulinio kilimo greičio"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "Max. Frequency"
-msgstr ""
+msgstr "Maks. dažnis"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:98
 msgid "The tone frequency that is played at maximum climb rate."
-msgstr ""
+msgstr "Tono dažnis prie maksimalaus kilimo greičio"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "Diapazonas min. kilimo"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:107
 msgid ""
@@ -8269,7 +8272,7 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
-msgstr ""
+msgstr "Matomumas"
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
@@ -8278,11 +8281,11 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:189
 msgid "Sky Conditions"
-msgstr ""
+msgstr "Oro sąlygos"
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:831
 msgid "Weather"
-msgstr ""
+msgstr "Oras"
 
 #: src/Weather/NOAAFormatter.cpp:251
 #, c-format
@@ -8291,11 +8294,11 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:277
 msgid "No METAR available!"
-msgstr ""
+msgstr "Nėra METAR'o!"
 
 #: src/Weather/NOAAFormatter.cpp:291
 msgid "No TAF available!"
-msgstr ""
+msgstr "Nėra TAF'o!"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
@@ -8335,7 +8338,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Žingsnis"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
@@ -8990,7 +8993,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:3 Data/Dialogs/dlgVario.xml:3
 msgid "Vario Configuration"
-msgstr ""
+msgstr "Variometro Konfiguracija"
 
 #: Data/Dialogs/dlgAnalysis_L.xml:9 Data/Dialogs/dlgAnalysis.xml:9
 msgid "Calc"
@@ -8999,38 +9002,38 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:6
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 msgid "Friends"
-msgstr ""
+msgstr "Draugai"
 
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4
 #: Data/Dialogs/dlgWaypointDetails.xml:10 Data/Input/default.xci:1037
 msgid "GoTo"
-msgstr ""
+msgstr "Eiti į"
 
 #: Data/Dialogs/dlgVario_L.xml:7 Data/Dialogs/dlgVario.xml:8
 msgid "Demo"
-msgstr ""
+msgstr "Demonstracija"
 
 #: Data/Dialogs/pnlTaskManagerClose.xml:6
 msgid "Revert Changes"
-msgstr ""
+msgstr "Pakeisti nustatymus"
 
 #: Data/Dialogs/dlgTarget_L.xml:36 Data/Dialogs/dlgTarget.xml:30
 msgid "Optimized"
-msgstr ""
+msgstr "Optimizuotas"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:4 Data/Dialogs/dlgConfiguration.xml:8
 msgid "Expert"
-msgstr ""
+msgstr "Ekspertas"
 
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 msgid "Waypoints Editor"
-msgstr ""
+msgstr "Punktų tvarkyklė"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 msgid "Callsign"
-msgstr ""
+msgstr "Šaukinys"
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
@@ -9039,7 +9042,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointDetails_L.xml:3
 #: Data/Dialogs/dlgWaypointDetails.xml:3
 msgid "Waypoint Info"
-msgstr ""
+msgstr "Punktų informacija"
 
 #: Data/Dialogs/dlgTarget_L.xml:26 Data/Dialogs/dlgTarget.xml:8
 msgid ""
@@ -9064,22 +9067,22 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:27
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:19 Data/Input/default.xci:596
 msgid "Plane"
-msgstr ""
+msgstr "Orlaivis"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:3 Data/Dialogs/dlgConfiguration.xml:3
 #: Data/Dialogs/dlgCredits.xml:3
 msgid "Configuration"
-msgstr ""
+msgstr "Nustatymai"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
 msgid "Change callsign"
-msgstr ""
+msgstr "Pakeisti šaukinį"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:24
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 msgid "Pilot"
-msgstr ""
+msgstr "Pilotas"
 
 #: Data/Dialogs/dlgTarget_L.xml:16 Data/Dialogs/dlgTarget.xml:23
 msgid ""
@@ -9090,30 +9093,30 @@ msgstr ""
 
 #: Data/Input/default.xci:1173
 msgid "Setup Plane"
-msgstr ""
+msgstr "Orlaivio nustatymai"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1101
 msgid "Topo."
-msgstr ""
+msgstr "Topografija"
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:1013
 msgid ""
 "Waypoint\n"
 "List"
-msgstr ""
+msgstr "Punktų sąrašas"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:580
 #: Data/Input/default.xci:630 Data/Input/default.xci:914
 msgid "Config"
-msgstr ""
+msgstr "Konfigūracija"
 
 #: Data/Input/default.xci:492 Data/Input/default.xci:1079
 msgid "Labels"
-msgstr ""
+msgstr "Pavadinimai"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
-msgstr ""
+msgstr "Žemiau dalioto"
 
 #: Data/Input/default.xci:748
 msgid ""
@@ -9140,7 +9143,7 @@ msgstr ""
 
 #: Data/Input/default.xci:500 Data/Input/default.xci:1087
 msgid "Trail"
-msgstr ""
+msgstr "Pėdsakas"
 
 #: Data/Input/default.xci:700
 msgid ""
@@ -9159,6 +9162,8 @@ msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"Kas\n"
+"Čia?"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1061
 msgid "Dropped marker"
@@ -9173,61 +9178,71 @@ msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
+"Konfigūracija\n"
+"Vėjo"
 
 #: Data/Input/default.xci:679
 msgid ""
 "Airframe\n"
 "Switches"
-msgstr ""
+msgstr "Kabinos jungikliai"
 
 #: Data/Input/default.xci:121
 msgid ""
 "Pan\n"
 "Off"
 msgstr ""
+"Tempimas\n"
+"Išjungti"
 
 #: Data/Input/default.xci:855 Data/Input/default.xci:1228
 msgid "Thermal Assistant"
-msgstr ""
+msgstr "Termiko padėjėjas"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr ""
+msgstr "Virš dalioto"
 
 #: Data/Input/default.xci:1196
 msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
+"Artimiausia \n"
+"Oro erdvė"
 
 #: Data/Input/default.xci:1118
 msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
+"Skrydžio\n"
+"Nustatymai"
 
 #: Data/Input/default.xci:1134
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"Sistemos\n"
+"Nustatymai"
 
 #: Data/Input/default.xci:686
 msgid "Setup Audio"
-msgstr ""
+msgstr "Audio nustatymai"
 
 #: Data/Input/default.xci:773 Data/Input/default.xci:1180
 msgid "FLARM Radar"
-msgstr ""
+msgstr "FLARMO Radaras"
 
 #: Data/Input/default.xci:459 Data/Input/default.xci:965
 #: Data/Input/default.xci:1054
 msgid "Zoom"
-msgstr ""
+msgstr "Pritraukti"
 
 #: Data/Input/default.xci:847
 msgid "Traffic List"
-msgstr ""
+msgstr "Eismo sąrašas"
 
 #: Data/Input/default.xci:725
 msgid "Vario ASI zeroed"
@@ -9242,14 +9257,16 @@ msgid ""
 "Pan\n"
 "On"
 msgstr ""
+"Tempimas\n"
+"Įjungtas"
 
 #: Data/Input/default.xci:48
 msgid "Takeoff"
-msgstr ""
+msgstr "Pakylimas"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "Daliotas per kliūtis"
 
 #: Data/Input/default.xci:726
 msgid ""
@@ -9280,7 +9297,7 @@ msgstr ""
 msgid ""
 "Zoom\n"
 "Out"
-msgstr ""
+msgstr "Atitraukti"
 
 #: Data/Input/default.xci:755
 msgid ""
@@ -9293,19 +9310,23 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"Žinutės\n"
+"Pakartojimas"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:444
 #: Data/Input/default.xci:951
 msgid ""
 "Zoom\n"
 "In"
-msgstr ""
+msgstr "Pritraukti"
 
 #: Data/Input/default.xci:1142
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"Nustatymai\n"
+"Erdvės"
 
 #: Data/Input/default.xci:979
 msgid "AVG/ALT"
@@ -9324,7 +9345,7 @@ msgstr ""
 msgid ""
 "Team\n"
 "Code"
-msgstr ""
+msgstr "Komandos Kodas"
 
 #: Data/Input/default.xci:781 Data/Input/default.xci:1188
 msgid ""

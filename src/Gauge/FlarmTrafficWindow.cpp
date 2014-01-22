@@ -237,6 +237,34 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
   canvas.DrawText(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
 }
 
+gcc_const
+static const Pen *
+FlarmColorPen(const FlarmTrafficLook &look, FlarmColor color)
+{
+  switch (color) {
+  case FlarmColor::NONE:
+    break;
+
+  case FlarmColor::GREEN:
+    return &look.team_pen_green;
+
+  case FlarmColor::BLUE:
+    return &look.team_pen_blue;
+
+  case FlarmColor::YELLOW:
+    return &look.team_pen_yellow;
+
+  case FlarmColor::MAGENTA:
+    return &look.team_pen_magenta;
+
+  case FlarmColor::COUNT:
+    assert(false);
+    gcc_unreachable();
+  }
+
+  return nullptr;
+}
+
 /**
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
@@ -313,23 +341,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
       // If team color found -> draw a colored circle around the target
       if (team_color != FlarmColor::NONE) {
-        switch (team_color) {
-        case FlarmColor::GREEN:
-          circle_pen = &look.team_pen_green;
-          break;
-        case FlarmColor::BLUE:
-          circle_pen = &look.team_pen_blue;
-          break;
-        case FlarmColor::YELLOW:
-          circle_pen = &look.team_pen_yellow;
-          break;
-        case FlarmColor::MAGENTA:
-          circle_pen = &look.team_pen_magenta;
-          break;
-        default:
-          break;
-        }
-
+        circle_pen = FlarmColorPen(look, team_color);
         circles = 1;
       }
 

@@ -24,19 +24,22 @@ Copyright_License {
 #include "Device/Driver/LX/Protocol.hpp"
 #include "Operation/Operation.hpp"
 
+#include <assert.h>
+
 bool
 LX::CommandMode(Port &port, OperationEnvironment &env)
 {
   /* switch to command mode, first attempt */
 
-  if (!SendSYN(port) || !port.FullFlush(env, 10, 20))
+  if (!SendSYN(port) || !port.FullFlush(env, 50, 200))
     return false;
 
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
   for (unsigned i = 0; i < 100 && !env.IsCancelled(); ++i)
     if (Connect(port, env))
-      return true;
+      /* make sure all remaining ACKs are flushed */
+      return port.FullFlush(env, 200, 500);
 
   return false;
 }
@@ -70,6 +73,27 @@ LX::ReceivePacket(Port &port, Command command,
   port.Flush();
   return SendCommand(port, command) &&
     ReadCRC(port, data, length, env, timeout_ms);
+}
+
+bool
+LX::ReceivePacketRetry(Port &port, Command command,
+                       void *data, size_t length, OperationEnvironment &env,
+                       unsigned timeout_ms, unsigned n_retries)
+{
+  assert(n_retries > 0);
+
+  while (true) {
+    if (ReceivePacket(port, command, data, length, env, timeout_ms))
+      return true;
+
+    if (n_retries-- == 0)
+      return false;
+
+    if (!CommandMode(port, env))
+      return false;
+
+    port.Flush();
+  }
 }
 
 uint8_t

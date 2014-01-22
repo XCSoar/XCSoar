@@ -137,6 +137,15 @@ MD5::Append(const void *data, size_t length)
     Append(*i++);
 }
 
+/**
+ * Workaround for gcc's strict-aliasing warning.
+ */
+static void
+WriteLE64(void *p, uint64_t value)
+{
+  *(uint64_t *)p = ToLE64(value);
+}
+
 void
 MD5::Finalize()
 {
@@ -175,7 +184,7 @@ MD5::Finalize()
 
   //append bit length (bit, not byte) of unpadded message as 64-bit little-endian integer to message
   // store 8 bytes of length into last 8 bytes of buffer (little endian least sig bytes first
-  *(uint64_t *)(void *)(buff512bits + 56) = ToLE64(message_length * 8);
+  WriteLE64(buff512bits + 56, message_length * 8);
 
   Process512(buff512bits);
 }

@@ -325,6 +325,27 @@ fgrep(const char *fname, const char *string, const char *string2 = NULL)
   return false;
 }
 
+/**
+ * See if the given mount point contains a writable directory called
+ * XCSoarData.  If so, it returns an allocated absolute path to that
+ * XCSoarData directory.
+ */
+static TCHAR *
+TryMountPoint(const TCHAR *mnt)
+{
+  TCHAR buffer[MAX_PATH];
+  _tcscpy(buffer, mnt);
+  _tcscat(buffer, _T(DIR_SEPARATOR_S XCSDATADIR));
+
+  __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                      "Try '%s' exists=%d access=%d",
+                      buffer, Directory::Exists(buffer), access(buffer, W_OK));
+
+  return Directory::Exists(buffer) && access(buffer, W_OK) == 0
+    ? _tcsdup(buffer)
+    : nullptr;
+}
+
 #endif /* ANDROID */
 
 /**
@@ -407,8 +428,15 @@ FindDataPath()
 
   if (IsAndroid()) {
 #ifdef ANDROID
+    /* on Samsung Galaxy S4 (and others), the "external" SD card is
+       mounted here */
+    char *result = TryMountPoint("/mnt/extSdCard");
+    if (result != nullptr)
+      /* found writable XCSoarData: use this SD card */
+      return result;
+
     /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
-       build-in and an external SD card) */
+       built-in and an external SD card) */
     struct stat st;
     if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
         S_ISDIR(st.st_mode) &&

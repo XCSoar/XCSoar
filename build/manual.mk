@@ -80,6 +80,7 @@ LATEX2HTML = latex2html
 LATEX2HTML_RUN = $(TEX_VARS) L2HINIT_NAME=$(DOC)/manual/latex2html.config $(LATEX2HTML) -local_icons -verbosity 0 -split 3
 
 MANUAL_PDF = \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
@@ -98,6 +99,13 @@ Handbuch: \
 # without the full XCSoar development chain to compile the XCSoar
 # manual.  It contains all generated files.
 manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
+
+
+$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.tex \
+	$(TEX_INCLUDES) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+	$(TEX_RUN) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
@@ -124,8 +132,8 @@ $(MANUAL_OUTPUT_DIR)/html/developer/index.html: $(DOC)/manual/en/XCSoar-develope
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/developer/dirstamp
 	$(LATEX2HTML_RUN) -dir $(@D) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex $(DOC)/manual/de/Blitz/XCBlitzIIKonf.tex \
-	$(TEX_INCLUDES_BLITZ_DE) $(FIGURES_BLITZ_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/XCSoar-Blitzeinstieg.tex \
+	$(TEX_INCLUDES_DE) $(FIGURES_DE) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -217,14 +225,11 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(T)/pl/.
 	##cp $(FIGURES_PL) $(T)/pl/figures/.
 	# Incl. both German translation
-	$(MKDIR) -p $(T)/de/figures $(T)/de/Blitz/figures
-	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
-	##cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
-	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/figures/.
+	$(MKDIR) -p $(T)/de/figures
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
-	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\$(MKDIR) -p output" > $(T)/generate_manuals.sh
+	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\n$(MKDIR) -p output" > $(T)/generate_manuals.sh
 	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
 	chmod +x $(T)/generate_manuals.sh
 	# Copy an example bat file to generate the manuals with MikTex on Windows

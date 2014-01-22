@@ -195,6 +195,16 @@ namespace LX {
                 void *data, size_t length, OperationEnvironment &env,
                 unsigned timeout_ms=5000);
 
+  /**
+   * Wrapper for ReceivePacket() which can retry on failure.  Before
+   * each retry, it performs a full handshake with the device to reset
+   * its command parser.
+   */
+  bool
+  ReceivePacketRetry(Port &port, Command command,
+                     void *data, size_t length, OperationEnvironment &env,
+                     unsigned timeout_ms, unsigned n_retries);
+
   gcc_const
   uint8_t
   calc_crc_char(uint8_t d, uint8_t crc);

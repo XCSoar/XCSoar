@@ -26,6 +26,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Hardware/Battery.hpp"
 
 enum Controls {
   GPS,
