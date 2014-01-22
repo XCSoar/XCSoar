@@ -294,7 +294,7 @@ WifiListWidget::Connect()
 
     StaticString<32> passphrase;
     passphrase.clear();
-    if (!TextEntryDialog(passphrase, caption))
+    if (!TextEntryDialog(passphrase, caption, false))
       return;
 
     if (!WifiConnect(info.security, wpa_supplicant, info.ssid, passphrase))
