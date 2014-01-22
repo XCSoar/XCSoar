@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_LINUX_TTY_KEYBOARD_HPP
 
 #include "IO/Async/FileEventHandler.hpp"
+#include "Compiler.h"
 
 #include <stdint.h>
 
