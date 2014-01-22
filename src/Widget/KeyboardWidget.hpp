@@ -62,8 +62,10 @@ protected:
 public:
   KeyboardWidget(const ButtonLook &_look,
                  OnCharacterCallback_t _on_character,
-                 bool _show_shift_button)
+                 bool _show_shift_button,
+                 bool _default_shift_state = true)
     :look(_look), on_character(_on_character), num_buttons(0),
+     shift_state(_default_shift_state),
      show_shift_button(_show_shift_button) {}
 
   /**
@@ -90,6 +92,9 @@ private:
   static bool IsLandscape(const PixelRect &rc) {
     return rc.right - rc.left >= rc.bottom - rc.top;
   }
+
+  /* updates UI based on value of shift_state property */
+  void UpdateShiftState();
 
   void AddButton(ContainerWindow &parent, const TCHAR *caption, unsigned ch);
 

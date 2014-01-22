@@ -134,7 +134,8 @@ ClearText()
 bool
 TouchTextEntry(TCHAR *text, size_t width,
                const TCHAR *caption,
-               AllowedCharacters accb)
+               AllowedCharacters accb,
+               bool default_shift_state)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;
@@ -214,7 +215,8 @@ TouchTextEntry(TCHAR *text, size_t width,
                              clear_right, button_bottom },
                          button_style, ClearText);
 
-  KeyboardWidget keyboard(look.button, FormCharacter, !accb);
+  KeyboardWidget keyboard(look.button, FormCharacter, !accb,
+                          default_shift_state);
 
   const PixelRect keyboard_rc = {
     padding, keyboard_top,

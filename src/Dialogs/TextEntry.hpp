@@ -35,16 +35,29 @@ typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharacters;
 bool
 TextEntryDialog(TCHAR *text, size_t size,
                 const TCHAR *caption=nullptr,
-                AllowedCharacters ac=AllowedCharacters());
+                AllowedCharacters ac=AllowedCharacters(),
+                bool default_shift_state = true);
 
 template<size_t N>
 static inline bool
 TextEntryDialog(StaticString<N> &text,
                 const TCHAR *caption=NULL,
-                AllowedCharacters accb=AllowedCharacters())
+                AllowedCharacters accb=AllowedCharacters(),
+                bool default_shift_state = true)
 {
   return TextEntryDialog(text.buffer(), text.MAX_SIZE,
-                         caption, accb);
+                         caption, accb, default_shift_state);
+}
+
+template<size_t N>
+static inline bool
+TextEntryDialog(StaticString<N> &text,
+                const TCHAR *caption,
+                bool default_shift_state)
+{
+  AllowedCharacters accb=AllowedCharacters();
+  return TextEntryDialog(text.buffer(), text.MAX_SIZE,
+                         caption, accb, default_shift_state);
 }
 
 void
@@ -54,6 +67,7 @@ KnobTextEntry(TCHAR *text, size_t width,
 bool
 TouchTextEntry(TCHAR *text, size_t size,
                const TCHAR *caption=nullptr,
-               AllowedCharacters ac=AllowedCharacters());
+               AllowedCharacters ac=AllowedCharacters(),
+               bool default_shift_state = true);
 
 #endif
