@@ -25,11 +25,15 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "Airspace/ActivePredicate.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
+#include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Geo/GeoPoint.hpp"
 
 struct NearestAirspace {
   const AbstractAirspace *airspace;
@@ -50,52 +54,6 @@ struct NearestAirspace {
 };
 
 gcc_pure
-static bool
-IsAcked(const AbstractAirspace &airspace)
-{
-  return glide_computer == NULL ||
-    glide_computer->GetAirspaceWarnings().GetAckDay(airspace);
-}
-
-gcc_pure
-static bool
-CheckAirspace(const AbstractAirspace &airspace)
-{
-  const AirspaceWarningConfig &config =
-    CommonInterface::GetComputerSettings().airspace.warnings;
-
-  return config.IsClassEnabled(airspace.GetType()) && !IsAcked(airspace);
-}
-
-class HorizontalAirspaceCondition : public AirspacePredicate {
-  GeoPoint location;
-  AltitudeState altitude;
-  bool altitude_available;
-
-public:
-  HorizontalAirspaceCondition(const MoreData &basic,
-                              const DerivedInfo &calculated)
-    :location(basic.location),
-     altitude_available(basic.NavAltitudeAvailable())
-  {
-    if (altitude_available) {
-      altitude.altitude = basic.nav_altitude;
-      altitude.altitude_agl = calculated.altitude_agl;
-    }
-  }
-
-  virtual bool operator()(const AbstractAirspace &airspace) const override {
-    return CheckAirspace(airspace) &&
-      /* skip airspaces that we already entered */
-      !airspace.Inside(location) &&
-      /* check altitude; hard-coded margin of 50m (for now) */
-      (!altitude_available ||
-       (airspace.GetBase().IsBelow(altitude, fixed(50)) &&
-        airspace.GetTop().IsAbove(altitude, fixed(50))));
-  }
-};
-
-gcc_pure
 static NearestAirspace
 FindNearestHorizontalAirspace()
 {
@@ -105,8 +63,22 @@ FindNearestHorizontalAirspace()
     return NearestAirspace();
 
   /* find the nearest airspace */
-  HorizontalAirspaceCondition condition(basic, CommonInterface::Calculated());
-  const Airspace *airspace = airspace_database.FindNearest(basic.location, condition);
+  //consider only active airspaces
+  const WrapAirspacePredicate<ActiveAirspacePredicate> active_predicate(&glide_computer->GetAirspaceWarnings());
+  const WrapAirspacePredicate<OutsideAirspacePredicate> outside_predicate(AGeoPoint(basic.location, RoughAltitude(0)));
+  const AndAirspacePredicate outside_and_active_predicate(active_predicate, outside_predicate);
+  const Airspace *airspace;
+
+  //if altitude is available, filter airspaces in same height as airplane
+  if (basic.NavAltitudeAvailable()) {
+    /* check altitude; hard-coded margin of 50m (for now) */
+    WrapAirspacePredicate<AirspacePredicateHeightRange> height_range_predicate(RoughAltitude(basic.nav_altitude-fixed(50)),
+                                                                               RoughAltitude(basic.nav_altitude+fixed(50)));
+     AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
+     airspace = airspace_database.FindNearest(basic.location, and_predicate);
+  } else //only filter outside and active
+    airspace = airspace_database.FindNearest(basic.location, outside_and_active_predicate);
+
   if (airspace == NULL)
     return NearestAirspace();
 
@@ -136,11 +108,15 @@ class VerticalAirspaceVisitor : public AirspaceVisitor {
 
   const AbstractAirspace *nearest;
   fixed nearest_delta;
+  const ActiveAirspacePredicate active_predicate;
 
 public:
   VerticalAirspaceVisitor(const MoreData &basic,
                           const DerivedInfo &calculated)
-    :nearest(NULL), nearest_delta(100000) {
+    :nearest(NULL),
+     nearest_delta(100000),
+     active_predicate(&glide_computer->GetAirspaceWarnings())
+  {
     assert(basic.baro_altitude_available || basic.gps_altitude_available);
     altitude.altitude = basic.nav_altitude;
     altitude.altitude_agl = calculated.altitude_agl;
@@ -148,7 +124,7 @@ public:
 
 protected:
   void Check(const AbstractAirspace &airspace) {
-    if (!CheckAirspace(airspace))
+    if (!active_predicate(airspace))
       return;
 
     /* check delta below */
