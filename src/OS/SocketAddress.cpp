@@ -39,8 +39,14 @@
 #include <sys/un.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
 #else
 #include <ws2tcpip.h>
+#endif
+
+#ifdef __GLIBC__
+#include <ifaddrs.h>
 #endif
 
 bool
@@ -67,6 +73,64 @@ SocketAddress::SetLocal(const char *path)
 
   /* note: Bionic doesn't provide SUN_LEN() */
   length = SUN_LEN(&sun);
+}
+
+#endif
+
+#ifdef __GLIBC__
+
+inline bool
+SocketAddress::GetIpAddressInner(const ifaddrs *ifaddr, const char *device,
+                                 char *ipaddress, const size_t ipaddress_size)
+{
+  /* iterate over all interfaces */
+  for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
+    /* is this the (droid) device we're looking for and it's IPv4? */
+    if (ifa->ifa_addr != nullptr && strcmp(ifa->ifa_name, device) == 0 &&
+        ifa->ifa_addr->sa_family == AF_INET)
+      /* use getnameinfo to lookup the numeric host for this device,
+         returns 0 on success */
+      return getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in),
+                         ipaddress, ipaddress_size, nullptr, 0,
+                         NI_NUMERICHOST) == 0;
+
+  return false;
+}
+
+SocketAddress
+SocketAddress::GetDeviceAddress(const char *device)
+{
+  /* intialize result to undefined SocketAddress */
+  SocketAddress address;
+  auto &sin = reinterpret_cast<struct sockaddr_in &>(address.address);
+  sin.sin_family = AF_UNSPEC;
+  sin.sin_port = 0;
+  sin.sin_addr.s_addr = 0;
+  std::fill_n(sin.sin_zero, ARRAY_SIZE(sin.sin_zero), 0);
+  address.length = sizeof(sin);
+
+  ifaddrs *ifaddr;
+  if (getifaddrs(&ifaddr) == -1)
+    return address;
+
+  char ipaddress[INET_ADDRSTRLEN + 1];
+  if (GetIpAddressInner(ifaddr, device, ipaddress, sizeof(ipaddress))) {
+    sin.sin_family = AF_INET; /* set valid */
+    inet_pton(AF_INET, ipaddress, &sin.sin_addr); /* to numeric */
+  }
+
+  freeifaddrs(ifaddr);
+  return address;
+}
+
+const char *
+SocketAddress::ToString(char *buffer, size_t buffer_size) const
+{
+  if (!IsDefined())
+    return nullptr;
+
+  const auto &sin = reinterpret_cast<const sockaddr_in &>(address);
+  return inet_ntop(AF_INET, &sin.sin_addr, buffer, buffer_size);
 }
 
 #endif

@@ -33,6 +33,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
+#include "OS/SocketAddress.hpp"
 
 class WifiListWidget final
   : public ListWidget, ActionListener, Timer {
@@ -178,8 +179,22 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   canvas.DrawText(x1, y2, info.bssid);
 
   const TCHAR *state = nullptr;
-  if (StringIsEqual(info.bssid, status.bssid))
+  StaticString<40> state_buffer;
+
+  /* found the currently connected wifi network? */
+  if (StringIsEqual(info.bssid, status.bssid)) {
     state = _("Connected");
+
+    /* look up ip address for eth0 */
+    SocketAddress addr = SocketAddress::GetDeviceAddress("eth0");
+    if (addr.IsDefined()) { /* valid address? */
+      StaticString<40> addr_str;
+      if (addr.ToString(addr_str.buffer(), addr_str.MAX_SIZE) != nullptr) {
+        state_buffer.Format(_T("%s (%s)"), state, addr_str.c_str());
+        state = state_buffer;
+      }
+    }
+  }
   else if (info.id >= 0)
     state = info.signal_level >= 0
       ? _("Saved and visible")
