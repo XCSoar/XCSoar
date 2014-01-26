@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/CharacterButton.hpp"
 #include "Look/ButtonLook.hpp"
+#include "Util/CharUtil.hpp"
 
 #ifndef _UNICODE
 #include "Util/UTF8.hpp"
@@ -43,6 +44,15 @@ CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
 
   ButtonWindow::Create(parent, text, rc, style);
   SetFont(*look.font);
+}
+
+unsigned
+CharacterButton::GetUpperCharacter() const
+{
+  unsigned result = character;
+  if (result < 0x80 && IsLowerAlphaASCII((TCHAR)result))
+    result -= 'a' - 'A';
+  return result;
 }
 
 void

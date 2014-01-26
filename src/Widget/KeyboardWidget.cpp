@@ -113,7 +113,7 @@ ButtonWindow *
 KeyboardWidget::FindButton(unsigned ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
-    if (buttons[i].GetCharacter() == ch)
+    if (buttons[i].GetUpperCharacter() == ch)
       return &buttons[i];
 
   return NULL;

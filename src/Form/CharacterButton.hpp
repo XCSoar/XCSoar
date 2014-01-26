@@ -49,6 +49,12 @@ public:
     return character;
   }
 
+  /**
+   * Convert GetCharacter() to upper case (ASCII only).
+   */
+  gcc_pure
+  unsigned GetUpperCharacter() const;
+
   void SetCharacter(unsigned character);
 
 protected:
