@@ -505,22 +505,23 @@ GetTaskData()
  * and loads the Task Point UI and initializes the pan mode on the map
  */
 static bool
-InitTargetPoints()
+InitTargetPoints(int _target_point)
 {
   if (!GetTaskData())
     return false;
 
-  if (task_size <= target_point)
+  if (_target_point >= 0) {
+    // Explicitly requested target point (e.g. via map item list)
+    target_point = _target_point;
+  } else if (target_point < initial_active_task_point ||
+             task_size <= target_point) {
+    // Use active task point if previous selected one already achieved or invalid
     target_point = initial_active_task_point;
-  else
-    target_point = std::max(target_point, initial_active_task_point);
+  }
 
   target_point = Clamp(int(target_point), 0, (int)task_size - 1);
 
-  if (task_size > target_point) {
-    SetTarget();
-  }
-
+  SetTarget();
   UpdateNameButton();
   return true;
 }
@@ -595,10 +596,7 @@ dlgTargetShowModal(int _target_point)
   SetDataAccessCallback(*wf, _T("prpRange"), OnRangeData);
   SetDataAccessCallback(*wf, _T("prpRadial"), OnRadialData);
 
-  if (_target_point >= 0)
-    target_point = _target_point;
-
-  if (!InitTargetPoints()) {
+  if (!InitTargetPoints(_target_point)) {
     delete wf;
     map = nullptr;
     return;
