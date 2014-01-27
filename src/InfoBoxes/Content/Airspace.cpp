@@ -30,11 +30,12 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"
+#include "Airspace/ActivePredicate.hpp"
 
 void
 UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
 {
-  NearestAirspace nearest = NearestAirspace::FindHorizontal(glide_computer->GetAirspaceWarnings(), CommonInterface::Basic());
+  NearestAirspace nearest = NearestAirspace::FindHorizontal(glide_computer->GetAirspaceWarnings(), airspace_database, CommonInterface::Basic());
   if (!nearest.IsDefined()) {
     data.SetInvalid();
     return;
