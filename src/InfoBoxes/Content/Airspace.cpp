@@ -35,7 +35,9 @@ Copyright_License {
 void
 UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
 {
-  NearestAirspace nearest = NearestAirspace::FindHorizontal(glide_computer->GetAirspaceWarnings(), airspace_database, CommonInterface::Basic());
+  NearestAirspace nearest = NearestAirspace::FindHorizontal(CommonInterface::Basic(),
+                                                            glide_computer->GetAirspaceWarnings(),
+                                                            airspace_database);
   if (!nearest.IsDefined()) {
     data.SetInvalid();
     return;
@@ -45,85 +47,13 @@ UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
   data.SetComment(nearest.airspace->GetName());
 }
 
-class VerticalAirspaceVisitor : public AirspaceVisitor {
-  AltitudeState altitude;
-
-  const AbstractAirspace *nearest;
-  fixed nearest_delta;
-  const ActiveAirspacePredicate active_predicate;
-
-public:
-  VerticalAirspaceVisitor(const MoreData &basic,
-                          const DerivedInfo &calculated)
-    :nearest(NULL),
-     nearest_delta(100000),
-     active_predicate(&glide_computer->GetAirspaceWarnings())
-  {
-    assert(basic.baro_altitude_available || basic.gps_altitude_available);
-    altitude.altitude = basic.nav_altitude;
-    altitude.altitude_agl = calculated.altitude_agl;
-  }
-
-protected:
-  void Check(const AbstractAirspace &airspace) {
-    if (!active_predicate(airspace))
-      return;
-
-    /* check delta below */
-    fixed base = airspace.GetBase().GetAltitude(altitude);
-    fixed base_delta = base - altitude.altitude;
-    if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
-      nearest = &airspace;
-      nearest_delta = base_delta;
-    }
-
-    /* check delta above */
-    fixed top = airspace.GetTop().GetAltitude(altitude);
-    fixed top_delta = altitude.altitude - top;
-    if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
-      nearest = &airspace;
-      nearest_delta = -top_delta;
-    }
-  }
-
-  virtual void Visit(const AbstractAirspace &as) override {
-    Check(as);
-  }
-
-public:
-  const AbstractAirspace *GetNearest() const {
-    return nearest;
-  }
-
-  fixed GetNearestDelta() const {
-    return nearest_delta;
-  }
-};
-
-gcc_pure
-static NearestAirspace
-FindNearestVerticalAirspace()
-{
-  const MoreData &basic = CommonInterface::Basic();
-  if (!basic.location_available ||
-      (!basic.baro_altitude_available && !basic.gps_altitude_available))
-    /* can't check for airspaces without a GPS fix and altitude
-       value */
-    return NearestAirspace();
-
-  /* find the nearest airspace */
-  VerticalAirspaceVisitor visitor(basic, CommonInterface::Calculated());
-  airspace_database.VisitInside(basic.location, visitor);
-  if (visitor.GetNearest() == NULL)
-    return NearestAirspace();
-
-  return NearestAirspace(*visitor.GetNearest(), visitor.GetNearestDelta());
-}
-
 void
 UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data)
 {
-  NearestAirspace nearest = FindNearestVerticalAirspace();
+  NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
+                                                          CommonInterface::Calculated(),
+                                                          glide_computer->GetAirspaceWarnings(),
+                                                          airspace_database);
   if (!nearest.IsDefined()) {
     data.SetInvalid();
     return;

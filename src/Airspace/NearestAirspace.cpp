@@ -27,13 +27,14 @@ Copyright_License {
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
 #include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 
 
 gcc_pure
 NearestAirspace
-NearestAirspace::FindHorizontal(const ProtectedAirspaceWarningManager &airspace_warnings,
-                                const Airspaces &airspace_database,
-                                const MoreData &basic)
+NearestAirspace::FindHorizontal(const MoreData &basic,
+                                const ProtectedAirspaceWarningManager &airspace_warnings,
+                                const Airspaces &airspace_database)
 {
   if (!basic.location_available)
     /* can't check for airspaces without a GPS fix */
@@ -65,4 +66,85 @@ NearestAirspace::FindHorizontal(const ProtectedAirspaceWarningManager &airspace_
   const GeoPoint closest = as.ClosestPoint(basic.location,
                                            airspace_database.GetProjection());
   return NearestAirspace(as, basic.location.Distance(closest));
+}
+
+/**
+ * This AirspaceVisitor extracts the vertical nearest airspace
+ */
+class VerticalAirspaceVisitor : public AirspaceVisitor {
+  AltitudeState altitude;
+
+  const AbstractAirspace *nearest;
+  fixed nearest_delta;
+  const ActiveAirspacePredicate active_predicate;
+
+public:
+  VerticalAirspaceVisitor(const MoreData &basic,
+                          const DerivedInfo &calculated,
+                          const ProtectedAirspaceWarningManager &airspace_warnings)
+    :nearest(NULL),
+     nearest_delta(100000),
+     active_predicate(&airspace_warnings)
+  {
+    assert(basic.baro_altitude_available || basic.gps_altitude_available);
+    altitude.altitude = basic.nav_altitude;
+    altitude.altitude_agl = calculated.altitude_agl;
+  }
+
+protected:
+  void Check(const AbstractAirspace &airspace) {
+    if (!active_predicate(airspace))
+      return;
+
+    /* check delta below */
+    fixed base = airspace.GetBase().GetAltitude(altitude);
+    fixed base_delta = base - altitude.altitude;
+    if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
+      nearest = &airspace;
+      nearest_delta = base_delta;
+    }
+
+    /* check delta above */
+    fixed top = airspace.GetTop().GetAltitude(altitude);
+    fixed top_delta = altitude.altitude - top;
+    if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
+      nearest = &airspace;
+      nearest_delta = -top_delta;
+    }
+  }
+
+  virtual void Visit(const AbstractAirspace &as) override {
+    Check(as);
+  }
+
+public:
+  const AbstractAirspace *GetNearest() const {
+    return nearest;
+  }
+
+  fixed GetNearestDelta() const {
+    return nearest_delta;
+  }
+};
+
+gcc_pure
+NearestAirspace
+NearestAirspace::FindVertical(const MoreData &basic,
+                      const DerivedInfo &calculated,
+                      const ProtectedAirspaceWarningManager &airspace_warnings,
+                      const Airspaces &airspace_database)
+{
+  if (!basic.location_available ||
+      (!basic.baro_altitude_available && !basic.gps_altitude_available))
+    /* can't check for airspaces without a GPS fix and altitude
+       value */
+    return NearestAirspace();
+
+  /* find the nearest airspace */
+  VerticalAirspaceVisitor visitor(basic, calculated, airspace_warnings);
+  airspace_database.VisitInside(basic.location, visitor);
+  if (visitor.GetNearest() == NULL)
+    return NearestAirspace();
+
+  return NearestAirspace(*visitor.GetNearest(), visitor.GetNearestDelta());
 }

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 
 class NearestAirspace {
 
@@ -51,9 +52,15 @@ public:
 
   gcc_pure
   static NearestAirspace
-  FindHorizontal(const ProtectedAirspaceWarningManager &airspace_warnings,
-                 const Airspaces &airspace_database,
-                 const MoreData &basic);
+  FindHorizontal(const MoreData &basic,
+                 const ProtectedAirspaceWarningManager &airspace_warnings,
+                 const Airspaces &airspace_database);
+
+  static NearestAirspace
+  FindVertical(const MoreData &basic,
+               const DerivedInfo &calculated,
+               const ProtectedAirspaceWarningManager &airspace_warnings,
+               const Airspaces &airspace_database);
 };
 
 #endif
