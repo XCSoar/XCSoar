@@ -232,7 +232,7 @@ RefreshCalculator()
 
     is_aat = ap != nullptr;
 
-    if (!is_aat) {
+    if (!is_aat || target_point < initial_active_task_point) {
       nodisplay = true;
       is_locked = false;
     } else {
@@ -321,7 +321,7 @@ OnNextClicked()
   if (target_point < (task_size - 1))
     target_point++;
   else
-    target_point = initial_active_task_point;
+    target_point = 0;
 
   UpdateNameButton();
   RefreshTargetPoint();
@@ -330,7 +330,7 @@ OnNextClicked()
 static void
 OnPrevClicked()
 {
-  if (target_point > initial_active_task_point)
+  if (target_point > 0)
     target_point--;
   else
     target_point = task_size - 1;
@@ -439,6 +439,9 @@ OnRadialData(DataField *sender)
 static void
 SetTarget()
 {
+  if (target_point >= task_size)
+    return;
+
   map->SetTarget(target_point);
 }
 
@@ -449,13 +452,11 @@ SetTarget()
 static void
 RefreshTargetPoint()
 {
-  if (target_point < task_size && target_point >= initial_active_task_point) {
-    SetTarget();
-
+  if (target_point < task_size && target_point >= initial_active_task_point)
     RefreshCalculator();
-  } else {
+  else
     range_and_radial = RangeAndRadial::Zero();
-  }
+  SetTarget();
 }
 
 static void
