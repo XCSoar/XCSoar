@@ -242,7 +242,8 @@ KeyboardWidget::AddButton(ContainerWindow &parent,
 void
 KeyboardWidget::UpdateShiftState()
 {
-  shift_button->SetCaption(shift_state ? _T("v") : _T("^"));
+  if (shift_button != nullptr)
+    shift_button->SetCaption(shift_state ? _T("v") : _T("^"));
 
   for (unsigned i = 0; i < num_buttons; ++i) {
     unsigned uch = buttons[i].GetCharacter();
