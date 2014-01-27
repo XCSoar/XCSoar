@@ -25,75 +25,16 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Airspace/ActivePredicate.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
-#include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
-#include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Geo/GeoPoint.hpp"
-
-struct NearestAirspace {
-  const AbstractAirspace *airspace;
-
-  /**
-   * The horizontal or vertical distance [m], depending on which
-   * function filled this object.
-   */
-  fixed distance;
-
-  NearestAirspace():airspace(NULL) {}
-  NearestAirspace(const AbstractAirspace &_airspace, fixed _distance)
-    :airspace(&_airspace), distance(_distance) {}
-
-  bool IsDefined() const {
-    return airspace != NULL;
-  }
-};
-
-gcc_pure
-static NearestAirspace
-FindNearestHorizontalAirspace()
-{
-  const MoreData &basic = CommonInterface::Basic();
-  if (!basic.location_available)
-    /* can't check for airspaces without a GPS fix */
-    return NearestAirspace();
-
-  /* find the nearest airspace */
-  //consider only active airspaces
-  const WrapAirspacePredicate<ActiveAirspacePredicate> active_predicate(&glide_computer->GetAirspaceWarnings());
-  const WrapAirspacePredicate<OutsideAirspacePredicate> outside_predicate(AGeoPoint(basic.location, RoughAltitude(0)));
-  const AndAirspacePredicate outside_and_active_predicate(active_predicate, outside_predicate);
-  const Airspace *airspace;
-
-  //if altitude is available, filter airspaces in same height as airplane
-  if (basic.NavAltitudeAvailable()) {
-    /* check altitude; hard-coded margin of 50m (for now) */
-    WrapAirspacePredicate<AirspacePredicateHeightRange> height_range_predicate(RoughAltitude(basic.nav_altitude-fixed(50)),
-                                                                               RoughAltitude(basic.nav_altitude+fixed(50)));
-     AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
-     airspace = airspace_database.FindNearest(basic.location, and_predicate);
-  } else //only filter outside and active
-    airspace = airspace_database.FindNearest(basic.location, outside_and_active_predicate);
-
-  if (airspace == NULL)
-    return NearestAirspace();
-
-  const AbstractAirspace &as = *airspace->GetAirspace();
-
-  /* calculate distance to the nearest point */
-  const GeoPoint closest = as.ClosestPoint(basic.location,
-                                           airspace_database.GetProjection());
-  return NearestAirspace(as, basic.location.Distance(closest));
-}
+#include "Airspace/NearestAirspace.hpp"
 
 void
 UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
 {
-  NearestAirspace nearest = FindNearestHorizontalAirspace();
+  NearestAirspace nearest = NearestAirspace::FindHorizontal(glide_computer->GetAirspaceWarnings(), CommonInterface::Basic());
   if (!nearest.IsDefined()) {
     data.SetInvalid();
     return;
