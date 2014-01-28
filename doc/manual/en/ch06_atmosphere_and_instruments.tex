@@ -375,10 +375,29 @@ The climb history and barograph pages, described in
 Section~\ref{sec:analysis-climb}, are also useful to determine
 trends in the soaring conditions.
 
-\section{Weather forecast}\label{sec:weather-forecast}
+\section{Weather, METAR / TAF}\label{sec:metar-taf}
+
+If the hardware hosting XCSoar is able to connect to the internet, weather 
+reports and forecasts can be downloaded. \menulabelr{\bmenug{Info}\blink
+\bmenug{METAR TAF}} Present actual informations available are depicted by a 
+little flag, pinned to the waypoint of the reporting station. 
+\menulabelr{\includegraphics[width=0.6cm]{icons/map_weather_station.pdf}} To 
+set up reports and forecasts, invoke the METAR and TAF dialogue. With 
+\bmenuw{Add} a filtering screen for ICAO codes comes up. After typing and 
+pushing \bmenuw{OK}another station is added to the list. Accessing the 
+information is either possible via selecting an airport and pushing 
+\bmenuw{Details} on the same screen or by touching the map invoking the ``Map 
+elements at this location'' dialogue. The dialogue will show airports, 
+airspaces... ...and weather data. If the flags are missing on the map, no 
+actual information is available. Invoke the info dialogue and touch 
+\bmenuw{Update}.
+
+\section{Weather forecast, RASP}\label{sec:weather-forecast}
 
 Weather forecasts, typically generated from RASP (Regional Atmospheric
-Soaring Prediction) forecasts, may be overlaid on the map.  The user
+Soaring Prediction)
+\menulabelr{\bmenug{Info 2/3}\blink\bmenug{Weather}}
+forecasts, may be overlaid on the map. The user
 must install a `xcsoar-rasp.dat' file, prepared by a RASP provider,
 into the XCSoarData directory for this function to be available.
 
@@ -387,15 +406,9 @@ functionality; the reader is referred to the RASP website
 \url{www.drjack.info} for more details on how RASP forecasts work, from where 
 they are available, and their use and limitations.
 
-The forecast overlays are accessed by the weather dialogue. 
-\menulabel{\bmenug{Info 2}\blink\bmenug{Weather}}
-
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-weather.png}
-\end{center}
-
 The Field setting determines which data field is displayed on the map.
 The Time setting determines at which forecast time the data field will
+\marginpar{\includegraphics[angle=0,width=0.95\linewidth,keepaspectratio='true']{figures/dialog-weather.png}}
 be displayed.  Upon entering the weather dialogue, the Time setting is
 advanced to the next nearest forecast time available in the RASP file.
 
