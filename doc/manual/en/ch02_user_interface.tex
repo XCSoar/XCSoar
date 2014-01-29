@@ -33,7 +33,7 @@ given in following chapters.
 
 \section{Display elements}
 \subsection*{Main screen and screen pages}
-Eyery screen page out of XCSoar's screen page's ensemble is composed of several 
+Every screen page out of XCSoar's screen pages' ensemble is composed of several 
 parts:
 \begin{description}
 \item[Main area] The bulk of the screen typically is dedicated to the GPS moving 
@@ -271,7 +271,7 @@ see
  & \bmenus{Replay} \\
 see
  & \ref{cha:configuration}
- & \ref{sec:wind-setup}
+ & \ref{sec:glidepolar}
  & \ref{conf:comdevices}
  & {}
  & \ref{sec:logger-replay} \\ \\
@@ -323,7 +323,7 @@ see
  & \ref{sec:weather-forecast}
  & \ref{sec:team-flying}
  & {}
- & \ref{sec:team-flying} \\ \\
+ & \ref{sec:thermal-assistant} \\ \\
 \bmenus{Info 3/3}
  & \bmenus{Credits}
  & \bmenus{Airspaces}
@@ -560,9 +560,12 @@ being connected to a Flarm receiver.
 Whatever you would like to display, take into account the use case and screen 
 pages concept.
 
-\gesturespec{right} 
+\gesturespec{left}
 To go through the various screen pages, use the left/right cursor 
-keys (Altair), or gesture left/right (touch-screen).
+keys (Altair), or gesture left/right (touch-screen), or via menu button in menu \bmenug{Display 1/2}, showing a dynamic label, changing accordingly to the screenpage's content to show up next:
+\gesturespec{right}
+
+\bmenut{Display}{1/2}\blink\bmenut{Info}{Circling}\blink\bmenut{Info}{Cruise}\blink\bmenut{Info}{FinalGlide}\blink\bmenut{Info}{...}
 
 
 \subsection*{Modifying InfoBox content}
@@ -573,11 +576,11 @@ Some InfoBox values can be changed by the user by selecting (i.e. long-pressing)
 InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue:
 
 \begin{description}
-\item[\bmenug{Edit}]  
+\item[\bmenuw{Edit}]  
   Allows the pilot to adjust the InfoBox setting (e.g. raise or lower the 
   MacCready setting)
 
-\item[\bmenug{Setup}]
+\item[\bmenuw{Setup}]
   Allows you to change the behaviour of the setting related to the InfoBox 
   (for example, changing from auto to manual MacCready mode); or 
   to change the InfoBox itself by pressing `{\it Switch InfoBox}', then 
@@ -594,7 +597,7 @@ be adjusted include MacCready setting, wind speed, and altitude (QNH).
 An entire set of InfoBox can be composed by the `{\it Setup System}' configuration 
 dialogues on the `{\it Look / InfoBox Modes}' and `{\it Look / InfoBox Pages}' 
 \ref{sec:infobox_sets} setup page. 
-The dialogues give a wide variety to setup the look and feel of the XCSoar pages.  
+The dialogues give a wide variety to set up the look and feel of the XCSoar pages.  
 
 
 \section{Status messages}
@@ -649,9 +652,9 @@ from a list.
 Dialogues are typically started from the button menu.  
 
 Many of the dialogue windows have multiple pages of information and are controlled
-in a consistent fashion. Press the \button{$<$} or \button{$>$} buttons to
-select the next or previous page of the dialogue and the \button{Close} button to
-make the dialogue disappear.
+in a consistent fashion. Press the \bmenuw{$<$} or \bmenuw{$>$} buttons to
+select the next or previous page of the dialogue and the \bmenuw{Close} button 
+to make the dialogue disappear.
 
 The escape key on a PC or the PWR/ESC button on Altair, can also be used to
 close dialogues.
@@ -682,12 +685,12 @@ of each airspace class
   code
 \item[Devices]  Selection of various external devices (e.g. smart variometers, 
   FLARM, etc.).
-\item[Setup Plane]  Easy reconfiguration of the plane-dependant settings (e.g. 
+\item[Setup Plane]  Easy reconfiguration of the plane-dependent settings (e.g. 
   polar, competition ID, etc.) by choosing from a list of previously-created 
   plane profiles.
 \end{description}
 
-These dialogues are described in later chapters. with the exception of the
+These dialogues are described in later chapters, with the exception of the
 check-list, status and text entry dialogues, which are described below.
 
 
@@ -695,16 +698,15 @@ check-list, status and text entry dialogues, which are described below.
 
 The checklist dialogue can display several pages of user-defined free text.
 Typically this is used for check-lists. It can be accessed via the menu.
-\begin{quote}
-\bmenus{Info 1}\blink\bmenut{Check}{List}
-\end{quote}
+
+\bmenut{Info}{1/3}\blink\bmenut{Check}{List}
+\sketch{figures/checklist.png}
 
 These check-lists may include: daily inspection, preflight, out-landing,
-\sketch{figures/checklist.png}
 pre-landing, radio procedures, and aircraft rigging and de-rigging
 instructions.  Since the check-lists may be long, the up/down keys (or rotary
 knob on Altair) may be used to scroll through the text. Clicking the
-\button{$<$} and \button{$>$} buttons selects the previous/next checklist.
+\bmenuw{$<$} and \bmenuw{$>$} buttons selects the previous/next checklist.
 
 
 \subsection*{Text entry} \label{sec:textentry}
@@ -757,8 +759,8 @@ The most noticeable of these is whether to display InfoBoxes and
 gauges in white on black (called inverse colours) or black on white.
 
 For Altair the control of the screen hardware 
-brightness can be controlled from the brightness dialogue.
 \sketch{figures/brightness.png}
+brightness can be controlled from the brightness dialogue.
 \begin{quote}
 \bmenug{Display 2}\blink\bmenug{Bright}
 \end{quote}
@@ -787,24 +789,48 @@ cursor in the four directions Up, Down, Left and Right. This means if
 you drag your finger down and afterwards to the right over the screen, 
 \gesture{dr} the gesture "DR" is detected, which stands for "Down-Right". 
 It will bring up the waypoint list. The manual indicates an available 
-gesture as shown here on the left side of the text body. Both the blue hand and pictograms of the movement are used to indicate a specific gesture. A list of generally available gestures is shown below. \gesturespec{dr}
-Most common gestures:
-\begin{itemize}
- \item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/du.png}}] DU, denoting a check mark: Show main menu 
- \item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/up.png}}] U: Zoom in 
- \item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/down.png}}] D: Zoom out 
- \item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/left.png}}] L: Turn screen page pro-grade (Normal, Aux., Full-screen...) 
- \item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/right.png}}] R: Turn screen page retrograde (Normal, Full-screen...) 
-\item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/urdl.png}}] URDL, denoting a P: \textbf{P}an-mode. Might also be invoked by moving two fingers apart on the screen.
-\end{itemize}
+gesture as shown here on the left side of the text body. Both the blue hand 
+and pictogram of the movement are used to indicate a specific gesture, in this 
+case move down then to the right. A list of generally available gestures is 
+shown below. \gesturespec{dr}
 \vspace{2em}
-More gestures available:
+
+\subsection*{Most common or basic gestures:}
 \begin{itemize}
 \item[\raisebox{-1em}
-{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dr.png}}] DR, denoting an L: Show the Select Waypoint dialogue similar to menu item Waypoint \textbf{L}ist
-\item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/rd.png}}] RD, denoting a T: opens the \textbf{T}ask Manager
-\item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dl.png}}] DL: show the Alternates List
-\item[\raisebox{-1em}{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/ud.png}}] UD: enables Auto-Zoom
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/du.png}}] DU, denoting a check mark: Show main menu 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/up.png}}] U: Zoom in 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/down.png}}] D: Zoom out 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/left.png}}] L: Turn screen page pro-grade (Normal, Aux., Full-screen...) 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/right.png}}] R: Turn screen page retrograde (Normal, Full-screen...) 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/urdl.png}}] URDL, denoting a P: \textbf{P}an-mode. Might also be invoked by 
+moving two fingers apart on the screen.
 \end{itemize}
+\vspace{2em}
 
+\subsection*{More gestures available:}
+\begin{itemize}
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dr.png}}] DR, denoting an L: Show the Select Waypoint dialogue similar to menu 
+item Waypoint \textbf{L}ist
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/rd.png}}] RD, denoting a T: opens the \textbf{T}ask Manager
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dl.png}}] DL: show the Alternates List
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/ud.png}}] UD: enables Auto-Zoom
+\end{itemize}
+\vspace{2em}
 
+\subsection*{Sophisticated dialogues:}
+\begin{itemize}
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/urd.png}}] URD, denoting an A: Show the \textbf{A}nalysis dialogue.
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/ldrdl.png}}] LDRDL, denoting an S: Open the \textbf{S}tatus dialogue
+\end{itemize}
