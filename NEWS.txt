@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.7.4 - not yet released
+
 Version 6.7.3 - 2014/01/22
 * tracking
   - changed host for DHV tracking server (#3208)
