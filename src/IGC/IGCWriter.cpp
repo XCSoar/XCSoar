@@ -142,7 +142,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
   if (!simulator)
     WriteLine(GetHFFXARecord());
 
-  WriteLine("HFPLTPILOT:", pilot_name);
+  WriteLine("HFPLTPILOTINCHARGE:", pilot_name);
   WriteLine("HFGTYGLIDERTYPE:", aircraft_model);
   WriteLine("HFGIDGLIDERID:", aircraft_registration);
   WriteLine("HFCIDCOMPETITIONID:", competition_id);
