@@ -36,7 +36,9 @@ MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
     LiveTrack24::VehicleType::GLIDER,
     LiveTrack24::VehicleType::PARAGLIDER,
     LiveTrack24::VehicleType::POWERED_AIRCRAFT,
-    LiveTrack24::VehicleType::HOT_AIR_BALLOON
+    LiveTrack24::VehicleType::HOT_AIR_BALLOON,
+    LiveTrack24::VehicleType::FLEX_WING_FAI1,
+    LiveTrack24::VehicleType::RIGID_WING_FAI5,
   };
 
   unsigned vti = (unsigned) vt;

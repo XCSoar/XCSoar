@@ -53,6 +53,8 @@ struct TrackingSettings {
     PARAGLIDER = 1,
     POWERED_AIRCRAFT = 2,
     HOT_AIR_BALLOON = 3,
+    HANGGLIDER_FLEX = 4,
+    HANGGLIDER_RIGID = 5,
   };
 
   /** Minimum time between two position updates (in seconds) */

@@ -144,6 +144,8 @@ static constexpr StaticEnumChoice vehicle_type_list[] = {
   { (unsigned) TrackingSettings::VehicleType::PARAGLIDER, N_("Paraglider") },
   { (unsigned) TrackingSettings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },
   { (unsigned) TrackingSettings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
+  { (unsigned) TrackingSettings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
+  { (unsigned) TrackingSettings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
   { 0 },
 };
 
