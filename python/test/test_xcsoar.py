@@ -79,12 +79,7 @@ del flight
 print
 print "Init xcsoar.Flight with a python sequence"
 
-flight = xcsoar.Flight([(flight_sequence[i][1],
-         flight_sequence[i][2]['latitude'],
-         flight_sequence[i][2]['longitude'],
-         flight_sequence[i][3],
-         flight_sequence[i][5],
-         None) for i in range(len(flight_sequence))])
+flight = xcsoar.Flight([fix[0:5] for fix in flight_sequence])
 
 for fix in flight.path():
   print fix

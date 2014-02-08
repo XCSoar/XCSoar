@@ -28,6 +28,7 @@
 #include "Flight/IGCFixEnhanced.hpp"
 
 #include "Geo/GeoPoint.hpp"
+#include "Math/Angle.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
 #include "Engine/Contest/ContestResult.hpp"
@@ -412,4 +413,68 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
     py_siu,
     py_elevation,
     fix.level);
+}
+
+bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
+  PyObject *py_datetime = NULL,
+           *py_location = NULL,
+           *py_enl = NULL,
+           *py_trt = NULL,
+           *py_gsp = NULL,
+           *py_tas = NULL,
+           *py_ias = NULL,
+           *py_siu = NULL,
+           *py_elevation = NULL,
+           *py_level = NULL;
+
+  fix.Clear();
+
+  if (!PyArg_ParseTuple(py_fix, "OiOii|OOOOOOOO",
+         &py_datetime, &fix.clock, &py_location,
+         &fix.gps_altitude, &fix.pressure_altitude,
+         &py_enl, &py_trt, &py_gsp, &py_tas, &py_ias,
+         &py_siu, &py_elevation, &py_level)) {
+    PyErr_SetString(PyExc_TypeError, "Failed to parse tuple.");
+    return false;
+  }
+
+  fix.date = PyToBrokenDateTime(py_datetime);
+  fix.time = PyToBrokenDateTime(py_datetime);
+
+  PyObject *py_latitude = PyDict_GetItemString(py_location, "latitude"),
+           *py_longitude = PyDict_GetItemString(py_location, "longitude");
+
+  if (!PyNumber_Check(py_latitude) || !PyNumber_Check(py_longitude)) {
+    PyErr_SetString(PyExc_TypeError, "Failed to parse location.");
+    return false;
+  }
+
+  fix.location.latitude = Angle::Degrees(PyFloat_AsDouble(py_latitude));
+  fix.location.longitude = Angle::Degrees(PyFloat_AsDouble(py_longitude));
+
+  if (PyNumber_Check(py_enl))
+    fix.enl = PyInt_AsLong(py_enl);
+
+  if (PyNumber_Check(py_trt))
+    fix.trt = PyInt_AsLong(py_trt);
+
+  if (PyNumber_Check(py_gsp))
+    fix.gsp = PyInt_AsLong(py_gsp);
+
+  if (PyNumber_Check(py_tas))
+    fix.tas = PyInt_AsLong(py_tas);
+
+  if (PyNumber_Check(py_ias))
+    fix.ias = PyInt_AsLong(py_ias);
+
+  if (PyNumber_Check(py_siu))
+    fix.siu = PyInt_AsLong(py_siu);
+
+  if (PyNumber_Check(py_elevation))
+    fix.elevation = PyInt_AsLong(py_elevation);
+
+  if (PyNumber_Check(py_level))
+    fix.level = PyInt_AsLong(py_level);
+
+  return true;
 }

@@ -78,6 +78,7 @@ namespace Python {
    * Convert a IGCFixEnhanced to a tuple
    */
   PyObject* IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix);
+  bool PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix);
 };
 
 #endif /* PYTHON_PYTHONCONVERTERS_HPP */

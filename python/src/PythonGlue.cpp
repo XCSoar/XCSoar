@@ -65,55 +65,16 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
     for (Py_ssize_t i = 0; i < num_items; ++i) {
       PyObject *py_item = PySequence_Fast_GET_ITEM(py_input_data, i);
 
-      if (PySequence_Fast_GET_SIZE(py_item) != 6) {
-        PyErr_SetString(PyExc_TypeError, "Expected a tuple of 6.");
+      if (PySequence_Fast_GET_SIZE(py_item) < 5) {
+        PyErr_SetString(PyExc_TypeError, "Expected a tuple of at least 5.");
         return 0;
       }
 
       IGCFixEnhanced fix;
       fix.Clear();
 
-      fix.date = BrokenDate::TodayUTC();
-
-      // read time
-      if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, 0))) {
-        PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+      if (!Python::PyTupleToIGCFixEnhanced(py_item, fix)) {
         return 0;
-      }
-      fix.clock = PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, 0));
-      fix.time = BrokenTime::FromSecondOfDayChecked(fix.clock);
-
-      // read location
-      if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, 1))) {
-        PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-        return 0;
-      }
-
-      if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, 2))) {
-        PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-        return 0;
-      }
-      fix.location.latitude = Angle::Degrees(PyFloat_AsDouble(PySequence_Fast_GET_ITEM(py_item, 1)));
-      fix.location.longitude = Angle::Degrees(PyFloat_AsDouble(PySequence_Fast_GET_ITEM(py_item, 2)));
-
-      // read altitude
-      if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, 3))) {
-        PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-        return 0;
-      }
-      fix.gps_altitude = fix.pressure_altitude = PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, 3));
-      fix.gps_valid = true;
-
-      // read enl
-      if (PySequence_Fast_GET_ITEM(py_item, 4) != Py_None
-          && PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, 4))) {
-        fix.enl = PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, 4));
-      }
-
-      // read terrain elevation
-      if (PySequence_Fast_GET_ITEM(py_item, 5) != Py_None
-          && PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, 5))) {
-        fix.elevation = PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, 5));
       }
 
       self->flight->AppendFix(fix);
