@@ -53,16 +53,9 @@ BrokenDateTime Python::PyToBrokenDateTime(PyObject *py_datetime) {
 };
 
 PyObject* Python::WriteLonLat(const GeoPoint &location) {
-  PyObject *py_location = PyDict_New();
-
-  PyObject *py_lon = PyFloat_FromDouble(location.longitude.Degrees());
-  PyObject *py_lat = PyFloat_FromDouble(location.latitude.Degrees());
-  PyDict_SetItemString(py_location, "longitude", py_lon);
-  PyDict_SetItemString(py_location, "latitude", py_lat);
-  Py_DECREF(py_lon);
-  Py_DECREF(py_lat);
-
-  return py_location;
+  return Py_BuildValue("{s:d,s:d}",
+    "longitude", location.longitude.Degrees(),
+    "latitude", location.latitude.Degrees());
 }
 
 PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
