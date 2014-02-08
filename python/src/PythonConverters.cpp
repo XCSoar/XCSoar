@@ -116,24 +116,6 @@ PyObject* Python::WritePoint(const ContestTracePoint &point,
 
 PyObject* Python::WriteContest(const ContestResult &result,
                                const ContestTraceVector &trace) {
-  PyObject *py_contest = PyDict_New();
-
-  PyObject *py_score = PyFloat_FromDouble(result.score);
-  PyDict_SetItemString(py_contest, "score", py_score);
-  Py_DECREF(py_score);
-
-  PyObject *py_distance = PyFloat_FromDouble(result.distance);
-  PyDict_SetItemString(py_contest, "distance", py_distance);
-  Py_DECREF(py_distance);
-
-  PyObject *py_duration = PyInt_FromLong((long)result.time);
-  PyDict_SetItemString(py_contest, "duration", py_duration);
-  Py_DECREF(py_duration);
-
-  PyObject *py_speed = PyFloat_FromDouble(result.GetSpeed());
-  PyDict_SetItemString(py_contest, "speed", py_speed);
-  Py_DECREF(py_speed);
-
   PyObject *py_trace = PyList_New(0);
 
   const ContestTracePoint *previous = NULL;
@@ -147,10 +129,12 @@ PyObject* Python::WriteContest(const ContestResult &result,
     previous = &*i;
   }
 
-  PyDict_SetItemString(py_contest, "turnpoints", py_trace);
-  Py_DECREF(py_trace);
-
-  return py_contest;
+  return Py_BuildValue("{s:d,s:d,s:i,s:d,s:N}",
+    "score", result.score,
+    "distance", result.distance,
+    "duration", (long)result.time,
+    "speed", result.GetSpeed(),
+    "turnpoints", py_trace);
 }
 
 static const char *
@@ -184,161 +168,55 @@ FormatCirclingDirection(Phase::CirclingDirection circling_direction)
 }
 
 PyObject* Python::WritePhase(const Phase &phase) {
-  PyObject *py_phase = PyDict_New();
-
-  PyObject *py_start = BrokenDateTimeToPy(phase.start_datetime);
-  PyObject *py_end = BrokenDateTimeToPy(phase.end_datetime);
-
-  PyDict_SetItemString(py_phase, "start_time", py_start);
-  PyDict_SetItemString(py_phase, "end_time", py_end);
-
-  Py_DECREF(py_start);
-  Py_DECREF(py_end);
-
-  PyObject *py_type = PyString_FromString(FormatPhaseType(phase.phase_type));
-  PyDict_SetItemString(py_phase, "type", py_type);
-  Py_DECREF(py_type);
-
-  PyObject *py_duration = PyInt_FromLong((long)phase.duration);
-  PyDict_SetItemString(py_phase, "duration", py_duration);
-  Py_DECREF(py_duration);
-
-  PyObject *py_circling_dir = PyString_FromString(
-    FormatCirclingDirection(phase.circling_direction));
-  PyDict_SetItemString(py_phase, "circling_direction", py_circling_dir);
-  Py_DECREF(py_circling_dir);
-
-  PyObject *py_alt_diff = PyInt_FromLong((long)phase.alt_diff);
-  PyDict_SetItemString(py_phase, "alt_diff", py_alt_diff);
-  Py_DECREF(py_alt_diff);
-
-  PyObject *py_distance = PyInt_FromLong((long)phase.distance);
-  PyDict_SetItemString(py_phase, "distance", py_distance);
-  Py_DECREF(py_distance);
-
-  PyObject *py_speed = PyFloat_FromDouble(phase.GetSpeed());
-  PyDict_SetItemString(py_phase, "speed", py_speed);
-  Py_DECREF(py_speed);
-
-  PyObject *py_vario = PyFloat_FromDouble(phase.GetVario());
-  PyDict_SetItemString(py_phase, "vario", py_vario);
-  Py_DECREF(py_vario);
-
-  PyObject *py_glide_rate = PyFloat_FromDouble(phase.GetGlideRate());
-  PyDict_SetItemString(py_phase, "glide_rate", py_glide_rate);
-  Py_DECREF(py_glide_rate);
-
-  return py_phase;
+  return Py_BuildValue("{s:N,s:N,s:s,s:i,s:s,s:i,s:i,s:d,s:d,s:d}",
+    "start_time", BrokenDateTimeToPy(phase.start_datetime),
+    "end_time", BrokenDateTimeToPy(phase.end_datetime),
+    "type", FormatPhaseType(phase.phase_type),
+    "duration", (long)phase.duration,
+    "circling_direction", FormatCirclingDirection(phase.circling_direction),
+    "alt_diff", (long)phase.alt_diff,
+    "distance", (long)phase.alt_diff,
+    "speed", phase.GetSpeed(),
+    "vario", phase.GetVario(),
+    "glide_rate", phase.GetGlideRate());
 }
 
 PyObject* Python::WriteCirclingStats(const Phase &stats) {
-  PyObject *py_stats = PyDict_New();
-
-  PyObject *py_alt_diff = PyInt_FromLong((long)stats.alt_diff);
-  PyDict_SetItemString(py_stats, "alt_diff", py_alt_diff);
-  Py_DECREF(py_alt_diff);
-
-  PyObject *py_duration = PyInt_FromLong((long)stats.duration);
-  PyDict_SetItemString(py_stats, "duration", py_duration);
-  Py_DECREF(py_duration);
-
-  PyObject *py_fraction = PyFloat_FromDouble(stats.fraction);
-  PyDict_SetItemString(py_stats, "fraction", py_fraction);
-  Py_DECREF(py_fraction);
-
-  PyObject *py_vario = PyFloat_FromDouble(stats.GetVario());
-  PyDict_SetItemString(py_stats, "vario", py_vario);
-  Py_DECREF(py_vario);
-
-  PyObject *py_count = PyInt_FromLong((long)stats.merges);
-  PyDict_SetItemString(py_stats, "count", py_count);
-  Py_DECREF(py_count);
-
-  return py_stats;
+  return Py_BuildValue("{s:i,s:i,s:d,s:d,s:i}",
+    "alt_diff", (long)stats.alt_diff,
+    "duration", (long)stats.duration,
+    "fraction", stats.fraction,
+    "vario", stats.GetVario(),
+    "count", (long)stats.merges);
 }
 
 PyObject* Python::WriteCruiseStats(const Phase &stats) {
-  PyObject *py_stats = PyDict_New();
-
-  PyObject *py_alt_diff = PyInt_FromLong((long)stats.alt_diff);
-  PyDict_SetItemString(py_stats, "alt_diff", py_alt_diff);
-  Py_DECREF(py_alt_diff);
-
-  PyObject *py_duration = PyInt_FromLong((long)stats.duration);
-  PyDict_SetItemString(py_stats, "duration", py_duration);
-  Py_DECREF(py_duration);
-
-  PyObject *py_fraction = PyFloat_FromDouble(stats.fraction);
-  PyDict_SetItemString(py_stats, "fraction", py_fraction);
-  Py_DECREF(py_fraction);
-
-  PyObject *py_distance = PyInt_FromLong((long)stats.distance);
-  PyDict_SetItemString(py_stats, "distance", py_distance);
-  Py_DECREF(py_distance);
-
-  PyObject *py_speed = PyFloat_FromDouble(stats.GetSpeed());
-  PyDict_SetItemString(py_stats, "speed", py_speed);
-  Py_DECREF(py_speed);
-
-  PyObject *py_vario = PyFloat_FromDouble(stats.GetVario());
-  PyDict_SetItemString(py_stats, "vario", py_vario);
-  Py_DECREF(py_vario);
-
-  PyObject *py_glide_rate = PyFloat_FromDouble(stats.GetGlideRate());
-  PyDict_SetItemString(py_stats, "glide_rate", py_glide_rate);
-  Py_DECREF(py_glide_rate);
-
-  PyObject *py_count = PyInt_FromLong((long)stats.merges);
-  PyDict_SetItemString(py_stats, "count", py_count);
-  Py_DECREF(py_count);
-
-  return py_stats;
+  return Py_BuildValue("{s:i,s:i,s:d,s:i,s:d,s:d,s:d,s:i}",
+    "alt_diff", (long)stats.alt_diff,
+    "duration", (long)stats.duration,
+    "fraction", stats.fraction,
+    "distance", (long)stats.distance,
+    "speed", stats.GetSpeed(),
+    "vario", stats.GetVario(),
+    "glide_rate", stats.GetGlideRate(),
+    "count", (long)stats.merges);
 }
 
 PyObject* Python::WritePerformanceStats(const PhaseTotals &totals) {
-  PyObject *py_totals = PyDict_New();
-
-  PyObject *py_circling_total = WriteCirclingStats(totals.total_circstats);
-  PyObject *py_circling_left = WriteCirclingStats(totals.left_circstats);
-  PyObject *py_circling_right = WriteCirclingStats(totals.right_circstats);
-  PyObject *py_circling_mixed = WriteCirclingStats(totals.mixed_circstats);
-  PyObject *py_cruise_total = WriteCruiseStats(totals.total_cruisestats);
-
-  PyDict_SetItemString(py_totals, "circling_total", py_circling_total);
-  PyDict_SetItemString(py_totals, "circling_left", py_circling_left);
-  PyDict_SetItemString(py_totals, "circling_right", py_circling_right);
-  PyDict_SetItemString(py_totals, "circling_mixed", py_circling_mixed);
-  PyDict_SetItemString(py_totals, "cruise_total", py_cruise_total);
-
-  Py_DECREF(py_circling_total);
-  Py_DECREF(py_circling_left);
-  Py_DECREF(py_circling_right);
-  Py_DECREF(py_circling_mixed);
-  Py_DECREF(py_cruise_total);
-
-  return py_totals;
+  return Py_BuildValue("{s:N,s:N,s:N,s:N,s:N}",
+    "circling_total", WriteCirclingStats(totals.total_circstats),
+    "circling_left", WriteCirclingStats(totals.left_circstats),
+    "circling_right", WriteCirclingStats(totals.right_circstats),
+    "circling_mixed", WriteCirclingStats(totals.mixed_circstats),
+    "cruise_total", WriteCruiseStats(totals.total_cruisestats));
 }
 
 PyObject* Python::WriteWindItem(const WindListItem &wind_item) {
-  PyObject *py_wind = PyDict_New();
-
-  PyObject *py_datetime = BrokenDateTimeToPy(wind_item.datetime);
-  PyDict_SetItemString(py_wind, "datetime", py_datetime);
-  Py_DECREF(py_datetime);
-
-  PyObject *py_altitude = PyInt_FromLong((long)wind_item.altitude);
-  PyDict_SetItemString(py_wind, "altitude", py_altitude);
-  Py_DECREF(py_altitude);
-
-  PyObject *py_speed = PyFloat_FromDouble(wind_item.wind.norm);
-  PyDict_SetItemString(py_wind, "speed", py_speed);
-  Py_DECREF(py_speed);
-
-  PyObject *py_direction = PyFloat_FromDouble(wind_item.wind.bearing.Degrees());
-  PyDict_SetItemString(py_wind, "direction", py_direction);
-  Py_DECREF(py_direction);
-
-  return py_wind;
+  return Py_BuildValue("{s:N,s:i,s:d,s:d}",
+    "datetime", BrokenDateTimeToPy(wind_item.datetime),
+    "altitude", (long)wind_item.altitude,
+    "speed", wind_item.wind.norm,
+    "direction", wind_item.wind.bearing.Degrees());
 }
 
 PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
