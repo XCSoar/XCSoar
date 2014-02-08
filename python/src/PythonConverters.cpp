@@ -25,6 +25,7 @@
 
 #include "PythonConverters.hpp"
 #include "Flight/AnalyseFlight.hpp"
+#include "Flight/IGCFixEnhanced.hpp"
 
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
@@ -346,3 +347,76 @@ PyObject* Python::WriteWindItem(const WindListItem &wind_item) {
   return py_wind;
 }
 
+PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
+  PyObject *py_enl,
+           *py_trt,
+           *py_gsp,
+           *py_tas,
+           *py_ias,
+           *py_siu,
+           *py_elevation;
+
+  if (fix.enl > -1) {
+    py_enl = PyInt_FromLong(fix.enl);
+  } else {
+    py_enl = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  if (fix.trt > -1) {
+    py_trt = PyInt_FromLong(fix.trt);
+  } else {
+    py_trt = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  if (fix.gsp > -1) {
+    py_gsp = PyInt_FromLong(fix.gsp);
+  } else {
+    py_gsp = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  if (fix.tas > -1) {
+    py_tas = PyInt_FromLong(fix.tas);
+  } else {
+    py_tas = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  if (fix.ias > -1) {
+    py_ias = PyInt_FromLong(fix.ias);
+  } else {
+    py_ias = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  if (fix.siu > -1) {
+    py_siu = PyInt_FromLong(fix.siu);
+  } else {
+    py_siu = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  if (fix.elevation > -999) {
+    py_elevation = PyInt_FromLong(fix.elevation);
+  } else {
+    py_elevation = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  return Py_BuildValue("(NiNiiNNNNNNNi)",
+    BrokenDateTimeToPy(BrokenDateTime(fix.date, fix.time)),
+    fix.clock,
+    WriteLonLat(fix.location),
+    fix.gps_altitude,
+    fix.pressure_altitude,
+    py_enl,
+    py_trt,
+    py_gsp,
+    py_tas,
+    py_ias,
+    py_siu,
+    py_elevation,
+    fix.level);
+}

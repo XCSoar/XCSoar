@@ -33,6 +33,7 @@ struct ContestTracePoint;
 struct Phase;
 struct PhaseTotals;
 struct WindListItem;
+struct IGCFixEnhanced;
 
 namespace Python {
 
@@ -72,6 +73,11 @@ namespace Python {
   PyObject* WritePerformanceStats(const PhaseTotals &totals);
 
   PyObject* WriteWindItem(const WindListItem &wind_item);
+
+  /**
+   * Convert a IGCFixEnhanced to a tuple
+   */
+  PyObject* IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix);
 };
 
 #endif /* PYTHON_PYTHONCONVERTERS_HPP */

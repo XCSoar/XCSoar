@@ -168,56 +168,16 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
 
     IGCFixEnhanced fix;
     fix.Apply(basic, replay->Calculated());
+    fix.level = replay->Level();
 
-    PyObject *py_fix_datetime = Python::BrokenDateTimeToPy(basic.date_time_utc);
-    PyObject *py_fix_time = PyInt_FromLong(basic.time);
-    PyObject *py_fix_location = Python::WriteLonLat(fix.location);
-    PyObject *py_fix_gps_altitude = PyInt_FromLong(fix.gps_altitude);
-    PyObject *py_fix_pressure_altitude = PyInt_FromLong(fix.pressure_altitude);
-    PyObject *py_fix_engine_noise_level = PyInt_FromLong(fix.enl);
-    PyObject *py_fix_track = PyInt_FromLong(fix.trt);
-    PyObject *py_fix_ground_speed = PyInt_FromLong(fix.gsp);
-    PyObject *py_fix_tas = PyInt_FromLong(fix.tas);
-    PyObject *py_fix_ias = PyInt_FromLong(fix.ias);
-    PyObject *py_fix_satellites = PyInt_FromLong(fix.siu);
-    PyObject *py_fix_level = PyInt_FromLong(replay->Level());
-    PyObject *py_fix_elevation = fix.elevation > -999 ? PyInt_FromLong(fix.elevation) : Py_None;
+    PyObject *py_fix = Python::IGCFixEnhancedToPyTuple(fix);
 
-    PyObject *py_fix = PyTuple_Pack(13,
-      py_fix_datetime,
-      py_fix_time,
-      py_fix_location,
-      py_fix_gps_altitude,
-      py_fix_pressure_altitude,
-      py_fix_engine_noise_level,
-      py_fix_track,
-      py_fix_ground_speed,
-      py_fix_tas,
-      py_fix_ias,
-      py_fix_satellites,
-      py_fix_level,
-      py_fix_elevation);
-
-    if (PyList_Append(py_fixes, py_fix))
+    if (PyList_Append(py_fixes, py_fix)) {
+      printf("pylist_append failed\n");
       Py_RETURN_NONE;
+    }
 
     Py_DECREF(py_fix);
-
-    Py_DECREF(py_fix_time);
-    Py_DECREF(py_fix_datetime);
-    Py_DECREF(py_fix_location);
-    Py_DECREF(py_fix_gps_altitude);
-    Py_DECREF(py_fix_pressure_altitude);
-    Py_DECREF(py_fix_engine_noise_level);
-    Py_DECREF(py_fix_track);
-    Py_DECREF(py_fix_ground_speed);
-    Py_DECREF(py_fix_tas);
-    Py_DECREF(py_fix_ias);
-    Py_DECREF(py_fix_satellites);
-    Py_DECREF(py_fix_level);
-
-    if (py_fix_elevation != Py_None)
-      Py_DECREF(py_fix_elevation);
   }
 
   delete replay;
