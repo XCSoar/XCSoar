@@ -3,8 +3,11 @@
 XCSoar provides a full task management system, in which tasks can be
 edited prior to flight and, when undertaking casual cross-country
 flying, modified during flight.  Waypoints are advanced automatically
-or may be cycled through manually.  This chapter also describes the
-use of IGC loggers with XCSoar.
+or may be cycled through manually. Many of XCSoar's computations relate to
+either turnpoints or the finish waypoint.
+Unless a "true" task is defined, XCSoar will provide a "go home" function, with 
+many of the task related functions referring to the location of takeoff.
+This chapter also describes the use of IGC loggers with XCSoar.
 
 There are three task modes available:
 \begin{description}
@@ -18,14 +21,6 @@ and a finish point.  The task points are to be flown in order.
 Note that in goto and abort modes, the ordered task is retained and may be resumed
 later, preserving any statistics about achievement in the task.
 
-\section{Goto tasks}
-
-Goto tasks may be established by selecting a waypoint from the map,
-the waypoint list, or any other mechanism e.g. the alternates dialogue,
-\gesture{Down - Left} and select ``Goto''.  In goto task mode, selecting
-\bmenug{Nav 2}\blink\bmenug{Task Resume} resumes the ordered task (if
-any).
-
 \subsection*{Automatic goto}
 
 If no ordered task is defined, then on takeoff, a goto task is automatically
@@ -35,12 +30,22 @@ if it was close to the takeoff point.
 Whether or not a task is defined, the takeoff point is always
 generated and appears in the waypoint list for later reference or use.
 
+After having defined an ordered task for the very first time, the automatic "goto takeoff" function is skipped. To resume a simple task, use goto.
+
+\section{Goto tasks}
+
+Goto tasks may be established by selecting a waypoint from the map,
+the waypoint list, or any other mechanism e.g. the alternates dialogue, 
+and select \bmenuw{Goto}. In goto task mode, selecting
+\bmenug{Nav 2}\blink\bmenug{Task Resume} resumes the ordered task (if
+any).
+
 \section{Editing tasks}
 
 You can edit tasks in several ways.  Some methods are more useful for
 editing prior to flight, and others allow tasks to be modified whilst
 in flight for casual cross-country touring.  Tasks can be saved to
-files and loaded later, and can be transferred between any XCSoar
+files and reloaded later, and can be transferred between any XCSoar
 platform (Pocket PC, Altair, PC).
 
 \tip It is also possible to save a `default' task and have this task loaded
@@ -71,10 +76,10 @@ The main ways of setting tasks are the following:
 
 Loading a task from file may be useful in competition or casual
 cross-country flying in groups, as one person can distribute the task
-file to others, thereby saving the group the job of editing the task
-themselves. \tip
+file to others, thereby saving effort on editing the task severalfold.
+\tip
 If no task is present at startup, a task is created automatically,
-containing one waypoint to home.
+containing one waypoint takeoff as ``goto home''.
 
 XCSoar saves the current task when shutting down and loads it at
 startup, thereby allowing the task to be entered early in the day,
@@ -97,45 +102,41 @@ for any waypoints that are missing in the new waypoint file.
 %\end{itemize}
 %The display will now show the waypoint details dialogue.
 
-The waypoint info. dialogue describes a waypoint in detail and has
+The waypoint info dialogue describes a waypoint in detail and has
 navigation functions such as GoTo, insert, append to the task, or set the 
 waypoint as the new home.
+This may be accessed in several ways:
 
-This may be accessed several ways:
-\begin{itemize}
-\item
-From the task manager, menu \bmenug{Nav 1}\blink\bmenug{Task} \todonum{descr. tabular "Turn Points"}
-and highligh a waypoint, then tap the highlighted waypoint again to display the 
-Task point dialogue, then press the \bmenug{Details} \InfoBox.
+\gesturespec{rd}or menu \bmenug{Nav 1/2}\blink\bmenug{Task},
+\todonum{descr. tabular "Turn Points"}
+highlight a waypoint, then tap the highlighted waypoint again to display the 
+task point dialogue, then push \bmenuw{Details}.
 
-\item 
-From the {\it What's here?} function to show the
-item list under the cross-hair, or your index finger on the map.
-
-\item
-From the menu \bmenug{Nav 1}\blink\bmenug{Alternates} to show the
+\gesturespec{dl}or menu \bmenug{Nav 1/2}\blink\bmenug{Alternates}
+to show the
 details of the landables nearest to the aircraft.
 
-\item
-From the waypoint selector, menu \bmenug{Nav 1}\blink\bmenug{Waypoint
-List} and select a waypoint to show the details of that waypoint.
+\gesturespec{dr}or menu \bmenug{Nav 1/2}\blink\bmenug{Waypoint List}
+, highlight and \bmenuw{select} a waypoint to show its details.
 
-\item
-If the waypoint is visible on the screen, touch its name or the waypoint symbol
+\gesturespec{urdl}or menu \bmenug{Display 1/2}\blink\bmenug{Pan On} to put the 
+map into pan mode, pan to the desired waypoint, touch its name or the waypoint 
+symbol.
 
-
-\end{itemize}
+\bmenug{Info 1/3}\blink\bmenug{What's here?}
+to show the
+item list under the cross-hair, or your index finger on the map.
 
 The waypoint details dialogue contains two major pages (accessed via the
-\button{$>$} and \button{$<$} buttons). Depending on the availability of further
-details to the waypoint they will by shown on extra pages.
+\bmenuw{$>$} and \bmenuw{$<$} buttons). Depending on the availability of further
+details of the waypoint they will by shown on extra pages.
 
 \subsection*{Waypoint details}\label{sec:waypointdetails}
 This page contains text describing the waypoint's location, radio frequency and 
 runway information (if this information is in the waypoint file) elevation, 
 local daylight time, bearing and distance to the waypoint, and the altitude required 
 to reach the waypoint as described below. In addition, there is a button 
-\button{GoTo} to directly initiate
+\bmenuw{GoTo} to directly initiate
 navigating to this waypoint. The button cancels the current task. 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
@@ -153,21 +154,21 @@ the corresponding waypoint:
 \end{description}
 
 From the main Waypoint Info screen, you can access the second page by using the 
-"$<$-" and "$-$>" buttons in the bottom left corner of the page.
+\bmenuw{$>$} and \bmenuw{$<$} buttons in the bottom left corner of the page.
 \subsection*{Task actions menu}  
 This page contains a column of buttons allowing various actions to be performed:
 \begin{description}
-\item[\button{Replace in task}] replaces the active waypoint in the task with 
+\item[\bmenuw{Replace in task}] replaces the active waypoint in the task with 
   the selected waypoint.
-\item[\button{Insert in task}] inserts the selected waypoint before the active 
+\item[\bmenuw{Insert in task}] inserts the selected waypoint before the active 
   waypoint in
   the task.
-\item[\button{Append to task}] adds the selected waypoint to the end of the task.
-\item[\button{Remove from task}] removes the selected waypoint from the task.  
+\item[\bmenuw{Append to task}] adds the selected waypoint to the end of the task.
+\item[\bmenuw{Remove from task}] removes the selected waypoint from the task.  
   Note that this option is only visible if the selected waypoint is included in 
   the active task.
-\item[\button{Set as new home}] sets the waypoint as the home airfield.
-\item[\button{Pan to waypoint}] switches to pan mode and pans to that waypoint.
+\item[\bmenuw{Set as new home}] sets the waypoint as the home airfield.
+\item[\bmenuw{Pan to waypoint}] switches to pan mode and pans to that waypoint.
 \end{description}
 
 It is a good idea to set your home waypoint from the waypoint details
@@ -192,24 +193,19 @@ This page shows a satellite image of the waypoint.
 How to set up the detailed waypoint information read section \ref{sec:airfield-details}
 
 \section{Waypoint selector dialogue}\label{sec:waypoint-selector-dialog}
+
 The waypoint selector is a dialogue that allows waypoints to be easily selected
-from a potentially large database.
+from a potentially large database. \gesturespec{dr}
 
-This may be accessed several ways:
-\begin{itemize}
-\item  From the menu \bmenug{Nav 1}\blink\bmenug{Waypoint List}
-\item  From the task editor, menu \bmenug{Nav 1}\blink\bmenug{Task} 
-  and selecting a waypoint and open the details.
-\item  Or just by gesture\gesture{Down - Right}.
-\end{itemize}
-
-The waypoint selector comprises a set of optional filters on the left
-side of the page, and a list of matching waypoints on the right.
+Invoking the selector brings up a filtering dialogue screen with a set of 
+\menulabelr{\bmenug{Nav 1/2}\blink\bmenug{Waypoint List}}
+optional filters on the left side of the page, and a list of waypoints on the
+right, matching all of the filtering conditions set.
 There are several filters available, which may be used together,
 individually or not at all.
 \begin{description}
-\item[Name] Filtering based on the matching the first letter in the waypoint name. 
-\item[Distance] Filters out waypoints further that a specified distance to the 
+\item[Name] Selects waypoints, starting with the string typed.
+\item[Distance] Filters out waypoints farther than a specified distance from the 
   aircraft.
 \item[Direction] Filters out waypoints that are not in a specified direction 
   from the aircraft. 
@@ -240,34 +236,29 @@ waypoint.
 \section{Task manager}\label{sec:task-manager-dialog}
 \begin{it}  The task manager has undergone significant redesign compared with 
 earlier versions of XC Soar.\end{it}
+\gesturespec{rd}
 
 The task manager is used to edit, view, load, save to file, and declare cross
-country tasks. It is accessed via the menu
-\begin{quote}
-\bmenug{Nav 1}\blink\bmenug{Task}
-\end{quote} 
+country tasks.
+\menulabelr{\bmenug{Nav 1/2}\blink\bmenug{Task}}
 
-The task manager's primary page is an calculator. It shows various calculations 
+The primary page is a calculator. It shows various calculations 
 related to the active task, as described in detail below.  In addition, there 
-are buttons for \button{Calculator}, \button{Turn Points}, \button{Manage}, 
-and \button{Rules}, as well as a button to \button{Close} the task manager.
+are buttons for invoking dialogues \bmenuw{Turn Points}, \bmenuw{Manage}, 
+and \bmenuw{Rules}, as well as a button to \bmenuw{Close} the task manager.
 
 \subsection*{Task calculator dialog}\label{sec:task-calc-dial}
 The task calculator dialogue allows the pilot to see the effect of
 various changes to the task on final performance.
+\menulabelr{\bmenuw{Calculator}}
 
-This may be accessed several ways: \gesture{Right - Down}
-\begin{itemize}
-\item From the menu 
-\begin{quote}
-\bmenug{Nav}\blink\bmenug{Task}
-\end{quote}
-\item From the analysis dialogue, menu \bmenug{Info}\blink\bmenug{Analysis} and select
- the button \button{Task Calc}
-\end{itemize}
+In flight the Task Calculator might also be accessed from the Analysis pages. 
+With pages Task, Climb, and TaskSpeed a button \bmenuw{Task Calc} comes up, 
+that directly changes to the Task Calculator screen.
+
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{en/figures/dialog-taskcalculator.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskcalculator.png}
 \end{center}
 
 \begin{description}
@@ -293,10 +284,10 @@ See Section~\ref{sec:task-speed-estim} for more details on task speed
 and achieved MacCready calculations.
 
 On closing the dialogue the entered MacCready value is used as the MacCready 
-setting. If the \button{Cancel} button is pressed, the MacCready setting is 
+setting. If the \bmenuw{Cancel} button is pushed, the MacCready setting is 
 unaffected.
 
-The \button{Target} button, for AAT tasks, adjusts the range
+The \bmenuw{Target} button, for AAT tasks, adjusts the range
 (increases or decreases) so that the estimated task time exceeds the
 assigned task time by less than five minutes.  The range is adjusted
 target-wise. In typical use, all targets are set to ``auto" that means the pilot 
@@ -304,44 +295,45 @@ does not have to manually adjust the range to find the course for arrival at
 the assigned task time, thereby reducing pilot workload.
 
 \subsection*{Turn Points}
-The \button{Turn Points} button displays an ordered list of the points in the 
-current active task.  If there are no waypoints in the active task, there 
+This page displays an ordered list of the points in the current active task.
+\menulabelr{\bmenuw{Turn Points}} 
+If there are no waypoints in the active task, there 
 will be only an option to "Add Turnpoint."  By highlighting (tapping) the 
 "Add Turnpoint" function, then tapping in the highlighted region, the waypoint 
 selector is displayed, as described above.  Highlighting a waypoint from the 
 list and then tapping on the highlighted region adds the waypoint to the task.
 
 \subsection*{Manage}
-Tapping on the \button{Manage} button displays the task manager's management 
-screen.  There are four options, each of which is accessed by tapping on the 
-relevant button:
+This page allows for invoking all operations needed to create new or manage 
+\menulabelr{\bmenuw{Manage}}already defined tasks.
+
 
 \begin{itemize}
-\item \button{New Task} Clears the current task and resets the task rules to 
+\item [\bmenuw{New Task}] Clears the current task and resets the task rules to 
   the default values.
-\item \button{Declare}  If an external logger is connected, this will allow 
+\item [\bmenuw{Declare}] If an external logger is connected, this will allow 
   uploading the  active task to the logger and declaring it.
-\item \button{Browse} Displays a list of all the saved tasks, allowing the 
+\item [\bmenuw{Browse}] Displays a list of all the saved tasks, allowing the 
   pilot to load a previously saved task.  Note that this option will overwrite 
   the current active task.
-\item \button{Save}  Saves the current active task.  Upon tapping the 
-  \button{Save} button the pilot will be prompted to enter a file name for the 
+\item [\bmenuw{Save}] Saves the current active task.  Upon tapping the 
+  \bmenuw{Save} button the pilot will be prompted to enter a file name for the 
   task to be saved.
 \end{itemize}
 
 \subsection*{Rules}
-The values in the \button{Rules} menu depend on the task type selected.  Clicking 
-any existing value will bring up another menu allowing the pilot to select a 
+The values in the menu depend on the task type selected. Clicking any existing 
+\menulabelr{\bmenuw{Rules}} value will bring up another menu allowing the pilot to select a 
 different value for this rule.  Task types are discussed in more detail below.
 
-Also, tapping on the \button{Rules} button again after it is highlighted allows 
+Also, tapping on the \bmenuw{Rules} button again after it is highlighted allows 
 toggling between a "thumbnail" view of the task map and a larger view of the task.
 
 \section{Task types}
 XC Soar currently defines three different task types: Racing, AAT, and FAI badges/records.
 
 A brief description of the task types is included below, but this manual does 
-not intend to rephrase FAI rules or contest task types.  The reader is encouraged 
+not intend to rephrase FAI rules or contest task types. The reader is encouraged 
 to become thoroughly familiar with each task type by referring to contest rules 
 or FAI rules, which are available at \url{http://www.fai.org}. 
 
@@ -349,65 +341,64 @@ or FAI rules, which are available at \url{http://www.fai.org}.
 \subsection*{Racing}
 (also known as an "assigned task").  The racing task involves flight 
 around each specified turnpoint in the specified order.  Selecting the racing task 
-type allows the pilot to enter the following parameters (note: if the option 
-"FAI start/finish rules" is set to "On" then none of the options are available: 
-\todonum[inline]{Why is this?}
-  \begin{itemize}
-  \item Start open time: This is the time when the start zone opens.
-  \item Start close time: This is the time when the start zone closes.
-  \item Start max. speed: This is the maximum speed allowed in the start observation 
+type allows the pilot to enter the following parameters.
+  \begin{description}
+  \item [Arm start manually] If set to ``On'', some extra buttons are presented 
+  in order to let you \bmenug{Arm start} as well as \bmenug{Disarm start} in 
+  menu \bmenug{Nav 1/2}, controlling  the detection of the start condition.
+  \item [Start open time] This is the time when the start zone opens.
+  \item [Start close time] This is the time when the start zone closes.
+  \item [Start max. speed] This is the maximum speed allowed in the start observation 
     zone.  This should be set to 0 if there is no limit.
-  \item Start max. height: This is the maximum height above the start height 
+  \item [Start max. height] This is the maximum height above the start height 
     reference (AGL or MSL) at which a task can be started.  This  should be set to 
     0 for no limit.
-  \item Start height reference: This specifies whether the maximum start height is 
-    referenced to ground level of the start point ("AGL") or Mean Sea Level ("MSL")
-  \item Finish Minimum Height: This is the minimum height based on the finish 
+  \item [Start height ref.] This specifies whether the maximum start height is 
+    referenced to ground level of the start point ("AGL") or Mean Sea Level ("MSL").
+  \item [Finish min. height] This is the minimum height based on the finish 
     reference (AGL or MSL) at which a task can be finished.  This should be set to 
     0 for no limit.
-  \item Finish height reference: This specifies whether the minimum finish height 
+  \item [Finish height ref.] This specifies whether the minimum finish height 
     is referenced to ground level of the finish point ("AGL") or Mean Sea Level ("MSL")
-  \item FAI start/finish rules: If enabled, this task type has no max. start height 
-    or max. start speed.  Finish height reference is set to AGL and finish height 
-    is 1000m below the start height \todonum[inline]{Is this description correct?}
-  \end{itemize}
-\subsection*{AAT}
+% \item [FAI start/finish rules] If enabled, this task type has no max. start height 
+%   or max. start speed.  Finish height reference is set to AGL and finish height 
+%   is 1000m below the start height \todonum[inline]{Is this description correct?}
+  \end{description}
+  
+\subsection*{Assigned area task (AAT) and Modified area task (MAT)}
 (also known as "Turn Area Task,"or TAT).  This is a task through assigned 
 areas (restricted to cylinder or sector observation zones).  A minimum task time 
 applies.  Rules options for this task type include:
-  \begin{itemize}
-  \item AAT minimum time:  This is the required minimum time for the task.  Refer 
+  \begin{description}
+  \item [AAT min. time]  This is the required minimum time for the task.  Refer 
     to contest rules or consult an expert for penalties associated with finishing 
     prior to the minimum time.  The time in this option is given in minutes.
-  \item Start open time: Same meaning as in the racing task type, above
-  \item Start close time: Same meaning as in the racing task type, above
-  \item Start maximum speed: Same meaning as in the racing task type, above
-  \item Start maximum height: Same meaning as in the racing task type, above
-  \item Start height reference: Same meaning as in the racing task type, above
-  \item Finish minimum height: Same meaning as in the racing task type, above
-  \item Finish height reference: Same meaning as in the racing task type, above
-  \item FAI start/finish rules: Same meaning as in the racing task type, above
- \end{itemize}
+  \item [other rules] All other rules stay the same as in case of task type 
+    ``racing''.
+  \end{description}
+
+
 \subsection*{FAI badges/records}
-Rules options for this task type include:
-  \begin{itemize}
-  \item Start open time: Same meaning as in the racing task type, above
-  \item Start close time: Same meaning as in the racing task type, above
-  \item FAI start/finish rules: Same meaning as in the racing task type, above
-  \end{itemize}
+  \begin{description}
+  \item [FAI start/finish rules] If set to ``On'', only start times might be set. 
+  If set to ``Off'', all other racing task rules might be altered from the FAI standard.
+  \end{description}
 
-Once the appropriate task type has been selected and start and finish rules have 
-been defined as described above, it is necessary to define the properties of each 
-waypoint in the task.  Waypoints can be start points, turnpoints, or finish points.
+Once the appropriate task type has been selected and start and finish rules 
+have been defined as described above, it is necessary to define the properties 
+of each waypoint in the task.  
 
-This is defined by tapping the \button{Turn Points} button from the Task Manager. 
-This brings up the list of waypoints in the task (if any).  Highlighting any waypoint 
-on the list and either tapping it again or pressing the \button{Edit Point} button 
-brings up the waypoint definition pressing the \button{Change type} button  will 
-bring up a menu of the various task point types available.  Definitions of each 
-point type are shown below the list.
+\section{Turn Points' task rules}\label{sec:task-rules}
 
-\section{Task rules}\label{sec:task-rules}
+The \bmenuw{Turn Points} dialogue brings up the list of waypoints in the task. 
+\menulabelr{\bmenuw{Turn Points}} If no waypoint is already defined, this screen 
+will show an empty list. With \bmenuw{(add Turnpoint)}, up and down arrows, and 
+\bmenuw{Make Finish} an ordered list of waypoints is created. 
+Waypoints can be start point, turnpoint, or finish point.
+Highlighting any waypoint on the list and either tapping it again or 
+touching the \bmenuw{Edit Point} button brings up the waypoint definition. 
+Touching \bmenuw{Change type} will bring up a menu of the various task point 
+types available.  Definitions of each point type are given below.
 
 A variety of task rules may be used when specifying tasks, including
 the common FAI triangles and Assigned Area Tasks (AAT).  Many aspects
@@ -421,13 +412,15 @@ Sector turn-points are 90 degree segments aligned to the bisection of
 the previous and next waypoints, as commonly used in FAI tasks.
 There is also support for British BGA, and German DAeC sectors.
 
-The conditions to meet for a valid start depending on the type of start:
+\subsection*{Start point types}
+The conditions to be met for a valid start depend on the type of start:
 \begin{description}
 \item[Start Cylinder] When the glider leaves the cylinder area.
 \item[Start Line] When the glider crosses the start line.
 \end{description}
 
-The conditions to meet for a valid intermediate waypoints depending on their
+\subsection*{Turnpoint types}
+The conditions to be met for a valid turnpoint pass depend on its
  type:
 \begin{description}
 \item[FAI Sector] When the glider has entered the observation zone (OZ), defined 
@@ -456,6 +449,7 @@ The observation zone also includes a cylinder of 500 m (British rules).
 defined by the radial distance from the waypoint, and segment for sector areas.
 \end{description}
 
+\subsection*{Finish point types}
 Task completion depends on the finish type:
 \begin{description}
 \item[Finish Cylinder] When the glider enters the cylinder area.
@@ -464,7 +458,6 @@ Task completion depends on the finish type:
 
 Automatic advancement is triggered whenever a condition is met. To start an AAT,
 mixed task, or Racing task the start has to be armed before. 
-
 
 \tip Competition rules may be defined in a profile file for
 distribution to a group of pilots or task-setters, so all competitors
@@ -491,37 +484,35 @@ navigation information, that is, the pilot is directed to fly towards
 the active waypoint (also referred to as the ``next waypoint'' in the
 description of InfoBoxes as in Chapter~\ref{cha:infobox}).
 
-During flight a continuous display of the bearing of the next turn
-point is shown.
+During flight a continuous display of the bearing to the next waypoint is shown.
 
-The altitude required to complete the task is calculated from the
-glider's position to the active waypoint through to the final
-waypoint.
+The altitude required to complete the task is calculated for the route starting
+from the glider's actual position going through the task's turnpoints to the 
+final waypoint.
 
 Changing the active waypoint is performed automatically, or may be performed manually.
 The start point of racing tasks, and AAT task points, are special cases that require
-the task point to be `armed' before the system will automatically advance to the next
-task point once that point has been achieved.  All other task points will automatically
-advance to the next point as soon as the point has been achieved.
+the task point to be ``armed'' before the system will automatically advance to the next
+task point once that point is reached.  All other task points will automatically
+advance to the next point as soon as the last point was reached.
 
-For non-racing tasks therefore, no user interaction is required to
+For non-racing tasks, no user interaction is required to
 advance through the task --- the system will automatically advance as
 each task point is achieved.  The user may still manually advance or retreat the active
 task point by selecting the menu items \bmenug{Nav}\blink\bmenug{Previous turnpoint} and
 \bmenug{Nav}\blink\bmenug{Next turnpoint} respectively.
 
-The menu items \bmenug{Nav}\blink\bmenug{Previous turnpoint} and
-\bmenug{Nav}\blink\bmenug{Next turnpoint} have dynamic labels that
+The menu items \bmenug{Previous turnpoint} and
+\bmenug{Next turnpoint} show dynamic labels that
 indicate the action that will be performed upon selecting the item.
 
-For task points requiring arming, \bmenug{Nav}\blink\bmenug{Next
-  turnpoint} becomes \bmenug{Arm turn} if the turn is not armed; if it
-is armed, then it becomes \bmenug{Next Turnpoint} allowing manual
-advance.   \bmenug{Nav}\blink\bmenug{Previous
-  turnpoint} becomes \bmenug{Disarm turn} if the turn is armed; if it
-is not armed, then it becomes \bmenug{Previous Turnpoint} allowing manual
-retreat.  Similarly, for racing tasks, these menu items update for arming
-start points. 
+For task points requiring arming, \bmenug{Next Turnpoint} becomes 
+\bmenug{Arm turn} if the turn is not armed; if it is armed, then it becomes 
+\bmenug{Next Turnpoint} allowing for manual advance. 
+\bmenug{Previous Turnpoint} changes to \bmenug{Disarm turn} if the turn is armed 
+and vice versa. Similarly, for racing tasks these menu items update for arming 
+start points. If the Next Turnpoint is the \bmenug{Finish Turnpoint}, the menu 
+label changes accordingly.
 
 Status messages are given for task points requiring arming, when
 inside the observation sector, as reminders to arm the turn when the
@@ -531,7 +522,7 @@ the start line, as a reminder to ``arm'' if necessary.
 
 For PC and Pocket PC with touchscreen versions only, the user may
 manually cycle through the waypoints by highlighting the waypoint
-{\InfoBox} and by pressing the up or down cursor key.
+{\InfoBox} and by pushing the up or down cursor key.
 
 See Section~\ref{sec:task-rules} for details on observation rules.
 
@@ -546,47 +537,57 @@ waypoints to the start.
 In all modes, if the glider re-enters the start zone or crosses the
 start of the previous start, the task will be automatically restarted. 
 
-When selecting \button{Previous turnpoint}, the trigger that detects
+When selecting \bmenug{Previous turnpoint}, the trigger that detects
 auto-advance for that waypoint is cleared; meaning that the task
-manager expects the aircraft wants to fly to that observation zone (OZ)
-again before continuing the task.  The pilot may still select \button{Next
+manager expects the aircraft to fly to that observation zone (OZ)
+again before continuing the task. The pilot may still select \bmenug{Next
 turnpoint} to advance to the next task waypoint.
 
 A system beep and message is given on task/waypoint advance.  The
 messages are given when the system advances the task waypoint
 automatically or, in manually arm mode, when the system is armed and the
 aircraft is in sector:
-\begin{itemize}
+\begin{description}
 \item[Task start]  appears when the aircraft has crossed the start line or
  exited the start sector. This can be repeated any time.
 \item[Next turnpoint]  appears when the aircraft has entered the observation
  sector for turnpoints. Turns with variable target advance as soon as
- \button{Arm Turn} is pressed.  For the manually arm mode, if the
- aircraft has already entered the observation sector and left, pressing arm will
+ \button{Arm Turn} is pushed.  For the manual arm mode, if the
+ aircraft has already entered the observation sector and left, pushing arm will
  cause the task manager to expect, that the turn is intended to approach
  another time.
 \item[Task finish]  appears when the aircraft has crossed the finish line
  or entered the finish cylinder.  This occurs in both advance modes. 
-\end{itemize}
+\end{description}
 
 
 \section{Alternate starts}\label{sec:alternate-starts}
 
-Alternate start points are skipped for XCsoar 6.0, but
-will potentially brought back in a next release. 
+%Alternate start points are skipped for XCsoar 6.0, but
+%will potentially brought back in a next release. 
 
 %\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
 %will potentially brought back in a next release. This section can thus be
 %treated as obsolete. }
 
-%The task system allows alternate start sectors to be defined.
-  
-%To use it, on the task edit page, select the start point, then turn on
-%the `Alternate start points' property.  Then press the button 'Edit
-%alternate start points'.
+The task system allows alternate start sectors to be defined:
+
+\blink\bmenuw{Turn Points} select start point, \menulabelr{\bmenug{Nav 1/2}\blink
+\bmenug{Task}}\bmenuw{Edit Point}\blink\bmenuw{Enable Alternate Starts}
+
+On the start point edit page of the Task Manager turn on the \bmenuw{Enable 
+Alternate Starts} property. Another screen is brought up for defining an 
+alternate start point. In case, alternate start points have been defined before, label \bmenuw{Enable Alternate Starts} changes to \bmenuw{Edit Alternates}. After selecting ``Add Alternate Start'' and touching 
+\bmenuw{Relocate} the ``Select Waypoint'' filtering dialogue is invoked.
+
+Having set up several alternate start points, the ``next waypoint'' scheme again will be extended. Before detection of a valid start and having armed start manually, the menu buttons stepping through all the waypoints will show label \bmenug{Next Start}.
+
+Summarizing, all dynamic menu labels in menu \bmenug{Nav 1/2} show commands to be 
+executed for selecting waypoints and conditions either consecutively or in reverse 
+order. 
 
 %\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint2.png}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/%dialog-startpoint2.png}
 %\end{center}
   
 %  To edit the start points, move the cursor to an item in the list on
@@ -603,11 +604,11 @@ will potentially brought back in a next release.
 %  start location list. 
 
 %\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint3.png}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/%dialog-startpoint3.png}
 %\end{center}
 
 %\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint4.png}
+%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/%dialog-startpoint4.png}
 %\end{center}
 
 %  In flight, any time you cross a start line (or exit a start
@@ -630,53 +631,44 @@ will potentially brought back in a next release.
 
 If atmospheric conditions change for the worse, you may make the
 judgement that it will be impossible to complete the task.  In this
-situation, XCSoar can be instructed to `abort' the task, and it will
-then help you reach a safe landing site.
+situation, XCSoar can be instructed to ``abort'' the task, and it will
+then help you reach a safe landing site. An ordered task can be aborted in 
+different ways. Either it is done by selecting a waypoint and execute the goto 
+command or by invoking the abort mode. In either case, the ordered task might be resumed.
 
 \subsection*{Task Abort}\label{sec:taskabort}
-The task is aborted by any of those actions:
-\begin{itemize}
-\item Pressing \bmenug{Nav 2}\blink\bmenug{Task Abort}
-\item Choosing an alternate from the list under  \gesture{Down - Left}
- \bmenug{Nav 1}\blink\bmenug{Alternates}
-\item Or selecting a waypoint from the map and start a `Goto task'.
-\end{itemize}
-
-Once aborted, whatever cross-country task was being flown is
-discarded.  The task waypoint list is then filled with nearby landing
-points. The landing points are ordered simply by their reachability.
-
-The configuration option `reach polar' determines whether
+Invoking the abort mode forces XCSoar to enter a special case of the final glide mode. \menulabelr{\bmenug{Nav 2/2}\blink\bmenug{Task Abort}} For a discussion on 
+flight modes refer to section \ref{sec:flightmodes}. In this flight mode
+the configuration option `reach polar' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
 to aborting the task, or if the safety MacCready value is used. \config{reachpolar}
 Default is to use the safety MacCready value.  When switching to
 abort mode, the MacCready setting is set to the safety value 
 if it is lower than the current setting.
 
-Always the nearest 10 landable points are shown, even if none 
-of them is reachable.
-
-The active waypoint, and in fact the list of nearby landable points in
-the task, is changed dynamically when in abort mode, so that at any
-time the pilot is presented with several landing options and any of
-these may be selected as the active waypoint.
-\sketch{figures/abort-low.png}
-
-If conditions improve, the task can be resumed (by selecting the same
-menu button that aborted the task).  The active waypoint, prior to
-aborting the task, is then restored along with all the other task
-details.
+With invoking abort mode the cross-country task is disabled. On the map radials 
+are drawn pointing to the nearest landables to instantly 
+support the pilot's decision. As is during the whole flight, the group of nearby 
+landables is maintained permanently. Radials and nearest landables may change 
+dynamically when in abort mode, so that at any time several landing options are 
+presented and any of these may be selected as the active waypoint. Even if no 
+landable is in reach, the radials are drawn.
+\sketch{figures/abort-low.png} 
+If conditions improve, the task can be resumed by selecting the same
+menu button that aborted the task, now denoting \bmenug{Resume Task}. The active 
+waypoint, prior to aborting the task, is then restored along with all the other 
+task details.
 
 \subsection*{Alternates} \label{sec:alternates}
-Alternates are maintained throughout the flight. In contrast to the abort mode 
-options is the idea to have continously an eye on possible alternates. Six landing 
-options are maintained. They are filtered by the configured `alternates mode' 
+Alternates are maintained throughout the flight, reflecting good airmenship by 
+always keeping an eye on possible alternates.\menulabelr{\bmenug{Nav 1/2}\blink
+\bmenug{Alternates}} Six landing 
+options are maintained. They are filtered by the configured ``alternates mode'' 
 criteria (Simple, Task, or Home). \config{alternatesmode} 
-One of those criterias should fit to your personal preference. 
+Choosing Task or Home puts some bias on the presentation of alternates to the 
+heading, you were taking whilst still task oriented.
 
-Besides the list including the distance, arrival height and frequency, there 
-is an InfoBox available for the first two items on the list. A good candidate 
-for an extra page with InfoBoxes besides the default.
+As is with every waypoint list, additional information might be called by tapping \bmenuw{Details} before deciding which final to go. Select a waypoint from the list and push \bmenuw{Goto}.
 \sketch{figures/alternates_list.png}
 
 Although the items on the alternate list obey different rules they interact 
@@ -688,19 +680,17 @@ mentioned button.
 
 \section{Task status}\label{sec:task-status}
 
-The status dialogue gives a
-summary of important task information.  It can be useful to give a
+The status dialogue gives a summary of important task information. 
+\gesturespec{ldrdl} It can be useful to give a
 good overview of the task status while freeing up InfoBoxes for other
 purposes.  The status dialogue can be referred to in order to confirm
 that a valid start was detected, as well as the progress against the
-task. This is accessed via the menu:
-\begin{quote}
-\bmenug{Info 2}\blink\bmenug{Status}
-\end{quote}
-the tabular `Task' and `Rules' are of interest.
+task.
+\menulabelr{\bmenug{Info 2}\blink\bmenug{Status}}
+The status dialogue can be invoked by menu or gesture left down right down left, denoting an S. The status tabs `Task' and `Rules' are of interest.
 
-The task tabular shows the AAT times, distances achieved and remaining and the 
-task speeds. And the rules tabular shows the validity of start/finish according 
+The task tab shows the AAT times, distances achieved and remaining and the 
+task speeds. The rules tab shows the validity of start/finish according 
 to the task rules.
 \begin{center}
 \begin{tabular}{c c}
@@ -726,7 +716,7 @@ to the target rather than the waypoint of the AAT area itself.
 Automatic task waypoint advancement does not trigger when entering an
 AAT area solely. The pilot has to arm the turn manually to advance to the next
 turn. When arming the AAT turn while flying through the OZ also the task
-optimiser is triggered to capture the realised AAT target and bring the target
+optimiser is triggered to capture the realized AAT target and bring the target
 optimisation for the rest of the task up to date. See Section~\ref{sec:advanc-rest-tasks} 
 for details.
 
@@ -780,7 +770,7 @@ order to be able to extend the planned task.
 be decreased and the pilot can see how much the task can be shortened and still 
 finish the task later than the assigned minimum time.
 \item What will happen if I leave the AAT area now?  By pressing \button{Arm
-turn} the take over of the current position into the optimisation can
+turn} the take over of the current position into the optimization can
 be forced. The repositioning of subsequent turns can be reviewed in the task calculation
 dialogue.
 \end{itemize}
@@ -874,7 +864,7 @@ used to show the optimal path and estimated score.  The configuration settings \
 (task rules page) allows the selection of which set of rules to be used for the
 OLC optimisation.
 
-The optimisation is done continuously in the background and can be retrieved at
+The optimization is done continuously in the background and can be retrieved at
 any time. The analysis page shows a graphical overview of the optimisation
 result besides distance and score. A InfoBox is available which gives the
 instant OLC distance and score as well.

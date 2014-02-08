@@ -31,8 +31,8 @@ It is also possible to have circling mode switched based on an external
 input (e.g.\ from a pilot-operated switch).
 
 Final glide becomes active when the glider is above final glide 
-altitude with respect to the last waypoint in the task and after the 
-last turnpoint has been passed. The altitude required depends most 
+path with respect to the given navigational task and safety margins. 
+The required altitude depends most 
 importantly on the adjusted MC value, but also the ground clearance 
 is considered. On entering a thermal while in final glide mode for 
 gaining some extra safety margin XCSoar will switch to the circling 
@@ -47,7 +47,7 @@ based on past thermals worked out successfully until final glide.
 Instantly MacReady is set to achive minimal arrival time or what you 
 set up for final glide (see section \ref{sec:auto-maccready}).
 \config{final-glide} Hence the switch to final glide mode is based on 
-a set of sophistically computed tactical conditions.
+a set of sophisticatedly computed tactical conditions.
 
 You might force XCSoar to enter final glide mode by skipping all 
 remaining turnpoints, if for example conditions get worse and you 
@@ -56,7 +56,7 @@ decided to just go home.
 Abort mode is invoked manually to give you full control in case of 
 emergency via menu.  No automatics - you decide.  The abort mode 
 might be understood technically as a special final glide mode with 
-instantsupport for choosing a different final instantly. However, in 
+concurrent support for multiple optional targets. However, in 
 perception the abort mode simply supports your urgent decision where 
 and how to go finally (see section \ref{sec:taskabort}).  In this case, 
 a safety MacReady value is set. \config{safetyMC} Hence the switch to 
@@ -137,17 +137,17 @@ In addition, an automatic MacCready mode is available as described in
 section~\ref{sec:auto-maccready}.
 
 
-\section{Glide polar}
+\section{Glide polar}\label{sec:glidepolar}
 
 The glide polar specifications of a wide selection of glider types,
 representing major classes of gliders, are built into XCSoar.
+\menulabelr{\bmenug{Config 2/3}\blink\bmenug{Plane}}
 If your glider type is not listed, these may be used as an approximation for  
 if no better glide polar can be found.  \config{polar} However, for most 
 accurate results, it is advisable to use the correct glide polar for your particular
 aircraft type. 
 Besides the aircraft type the correct over all mass of the glider is important for 
 accurate results. 
-\menulabel{\bmenug{Config 1}\blink\bmenug{Flight}}
 The preflight check of your tactical glide computer certainly 
 includes a check of the correct settings for water ballast, with regard to the 
 configured dry mass. Because XCSoar does not offer a setting for the pilots 
@@ -476,7 +476,7 @@ bar is coloured amber.
 At this point also must be mentioned, that the indicated height below the glide 
 path is not just a plain difference of glide path and current altitude. Depending 
 on the setting `predict wind drift' (On) the `Below' indicator 
-shows the required height to gain by thermaling. \config{predict-drift}
+shows the required height to gain by thermalling. \config{predict-drift}
 The required height might be quit a bit more with headwind, as well as a bit less 
 with tailwind. 
 Otherwise (predict wind drift set to Off) it is just the plain 

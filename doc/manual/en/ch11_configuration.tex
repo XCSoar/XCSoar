@@ -1,6 +1,9 @@
 \chapter{Configuration}\label{cha:configuration}\label{conf:configuration}
 XCSoar is a highly configurable glide computer and can be customised
-to suit a wide variety of preferences and user requirements.  This
+to suit a wide variety of preferences and user requirements. The entire 
+configuration is saved in a so-called profile file, reflecting all 
+configuration settings. Whenever a configuration is judged being worthy, a 
+backup of the profile file is advisable (see \ref{sec:profiles}. This
 chapter describes the configuration settings and options.
 
 \section{Scope of configuration}
@@ -20,17 +23,24 @@ There are several ways XCSoar can be customised:
 \item Defining how long status messages appear and sounds to be played
   when those messages occur.
 \end{itemize}
-Describing all of these in a detail level like a reference manual would 
-do is beyond the scope of this document. The user is referred to browse 
-through the XCSoar Wiki for more details. 
-\url{http://www.xcsoar.org/trac/wiki}
+%Describing all of these in a detail level like a reference manual would 
+%do is beyond the scope of this document. The user is referred to browse 
+%through the XCSoar Wiki for more details. 
+%\url{http://www.xcsoar.org/trac/wiki}
 
 \section{Modifying settings}
 
 There is a large set of configuration settings that may be customised
-from the Settings dialogue accessible from the menu.
-\menulabel{\bmenug{Config 2}\blink\bmenus{System}}
-The configuration can be accessed through a two layer structured menu 
+from the settings dialogues accessible from the menu:
+\begin{jspecs}
+\item[\bmenug{Config 2/3}\blink\bmenug{System}] Invokes the main configuration dialogue for rather static settings. It is in no way intended to be accessed during flight.
+\item[\bmenug{Config 2/3}\blink\bmenug{Plane}] Dialogue for specifying the plane's data, with polar and wing loading representing the most important ones. This dialogue is to be included in the preflight check if the XCSoar base system is used in different planes.
+\item[\bmenug{Config 2/3}\blink\bmenug{Devices}] Configuration of devices  connected to XCSoar. Although being a system setup dialogue, there might be rare occasions, this dialogue is required in-flight.  Whenever connections to devices are lost, this dialogue might be used to reconnect. This dialogue neither was nor will be intended for use in-flight. Unfortunately, buggy operating systems of host hardware create a demand for occasionally.
+\end{jspecs}
+
+\section{Configure System}
+The system configuration can be accessed through a two layer structured menu 
+\marginlabel{\bmenug{Config 2/3}\blink\bmenug{System}}
 or just sequentially through the back and forward buttons.
 
 \begin{center}
@@ -549,7 +559,7 @@ rules. \label{conf:taskrules}
   (AGL or MSL) while finishing the task.  Set to 0 for no limit.
 \item[Finish height ref.*]  Reference used for finish min. height rule, 
   correspondingly to the start rule height reference.
-\item[On-Line Contest]  Determines the rules used to optimize On-Line Contest 
+\item[On-Line Contest]  Determines the rules used to optimise On-Line Contest 
   paths.  The implementation  conforms to the official release 2010, Sept. 23. \\
   {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
   finish.  For tasks longer than
@@ -739,86 +749,6 @@ landscape and portait screen layout.
 \end{tabular}
 \end{multicols}
 
-%%%%%%%%%%%%%%%%%%
-\section{Setup / Devices} \label{conf:comdevices}
-
-The Devices page is used to specify the ports used to communicate with
-the GPS and other serial devices. The default settings are COM1 and
-4800 bits per second.  When connected to the Vega intelligent
-variometer, the settings should be COM1 and 38400.
-
-Four devices can be configured (device A through D). One, for
-example, can be connected to a GPS and another to a
-second device such as a variometer.  If there is no further device, 
-set the unused ports to `Disabled'.  XCSoar will then ignore those ports.
-\sketch{figures/config-devices.png}
-
-COM ports 0 to 10 may be used, including a TCP/IP connection.  
-Which COM port is appropriate for you
-depends on what brand of PDA you use, and the communications medium
-(serial cable, Bluetooth, virtual COM port, SD card or CF based GPS,
-internal GPS).  Detailing the various options for different devices is
-beyond the scope of this document.  If you have trouble identifying
-which COM port to set, please refer to the XCSoar website and mailing
-lists.
-
-\begin{description}
-\item[Port]  This setting maps an existing interface (port) of your 
-  glide computer to one of the available slots A to D.
-\item[Baudrate]  Set this to the communication speed of the connected device.
-\item[TCP Port]  This setting is useful to e.g. connect to the Condor flight
-  simulator and do some XCSoar training in winter time.
-\item[Bulk baud rate]  The baud rate used for bulk transfers, such 
-  as task declaration or flight download. The item is visible for those 
-  devices that support the feature.
-\item[Driver]  The specific type of device can be selected from a list in order
-  to enable support for devices with proprietary protocols or special
-  functions.
-\item[Sync. from device*]  This option lets you configure if XCSoar should use settings 
-  like the MacCready value, bugs and ballast from the device.
-\item[Sync. to device*]  This option lets you configure if XCSoar should send settings 
-  like the MacCready value, bugs and ballast to the device.
-\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
-  will allow it's data to be used anyway.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Setup / Polar}
-
-This page allows the glide polar to be defined. For a large variety of glider types 
-XCSoar provides a predefined glide polar, they could be modified if needed, or 
-you can load your own polar from a file. 
-The file format is based on the WinPilot polar file format (see section~\ref{sec:glide-polar}).
-
-\label{conf:polar} To configure the glide computer to the performance of a glider 
-type start with the selection of a type from the \button{List}. 
-Choose \button{Import} when you want to load an external polar file.
-Customise the three V/W points defining the parable curve and the reference 
-weight to your needs. 
-\tip Be aware that namely those four items are of crucial importance 
-for every glide performance relevant computation of XCSoar.   
-\button{Export} your efforts to a file is always a good idea.
-
-\begin{description}
-\item[Polar V/W]  Three pairs of corresponding horizontal and vertical speed of the glider. 
-  A good choice for the point triplet is one at the top most area of the polar, the second at a 
-  still very curved area and the third far out where the curvature seems to disappear.
-\item[Reference mass]  Reference weight at which the given polar is valid.
-\item[Dry mass]  The complete weight of the rigged glider including the pilots weight except the 
-  loaded water ballast. 
-  In the absence of a configurable pilot weight XCSoar expect you to include your own weight 
-  to the dry mass.
-\item[Wing area]  Optional specification of the wing area of the glider type.
-\item[V rough air] Optional the maximum manoeuvring speed can 
-  be entered on this page to prevent the glide computer from commanding 
-  unrealistic cruise speeds.
-\item[Handicap]  The handicap factor used for the On-Line Contest scoring.
-\item[Max. ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
-  Set to zero if it does not apply.
-\item[Dump time]  The time in seconds needed for dumping full ballast.
-\end{description}
-
 
 %%%%%%%%%%%%%%%%%%
 \section{Setup / Logger} \label{conf:logger}
@@ -910,14 +840,14 @@ Set the local time offset with respect to UTC.
 
 `{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
 network to send this position in real-time to a server, other people can see 
-your excact position and track presented in a map just in time.
+your exact position and track presented in a map just in time.
 The tracking option needs the capability to connect to mobile networking as offered by 
 your glide computer.
 
-Currently there are two tracking protocolls implemented. `{\em SkyLines}' as a spin 
+Currently there are two tracking protocols implemented. `{\em SkyLines}' as a spin 
 off project from XCSoar itself; for details on this service have a look at 
 \url{http://skylines.xcsoar.org}. 
-And also the `{\em LiveTrack24}' protocoll used e.g. by the tracking 
+And also the `{\em LiveTrack24}' protocol used e.g. by the tracking 
 portal on \url{http://www.livetrack24.com}.  
 Please consult the web pages of the service provider listed under `Server' 
 for details on this setup.
@@ -941,5 +871,88 @@ for details on this setup.
 \item[Username]  If you created an account you can enter those credentials here. 
   Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
 \item[Password]  The password to your tracking account.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Configure Plane}
+
+This dialogue allows the glide polar to be defined. For a large variety of glider
+\marginlabel{\bmenug{Config 2/3}\blink\bmenug{Plane}} 
+types XCSoar provides a predefined glide polar, they could be modified if 
+needed, or you can load your own polar from a file. 
+The file format is based on the WinPilot polar file format (see section~\ref{sec:glide-polar}).
+
+\label{conf:polar} To configure the glide computer to the performance of a glider 
+type start with the selection of a type from the \bmenuw{List}. 
+Choose \bmenuw{Import} when you want to load an external polar file.
+Customise the three V/W points defining the parable curve and the reference 
+weight to your needs. 
+\tip Be aware that namely those four items are of crucial importance 
+for every glide performance relevant computation of XCSoar.   
+\button{Export} your efforts to a file is always a good idea.
+
+\begin{description}
+\item[Polar V/W]  Three pairs of corresponding horizontal and vertical speed of the glider. 
+  A good choice for the point triplet is one at the top most area of the polar, the second at a 
+  still very curved area and the third far out where the curvature seems to disappear.
+\item[Reference mass]  Reference weight at which the given polar is valid.
+\item[Dry mass]  The complete weight of the rigged glider including the pilots weight except the 
+  loaded water ballast. 
+  In the absence of a configurable pilot weight XCSoar expect you to include your own weight 
+  to the dry mass.
+\item[Wing area]  Optional specification of the wing area of the glider type.
+\item[V rough air] Optional the maximum manoeuvring speed can 
+  be entered on this page to prevent the glide computer from commanding 
+  unrealistic cruise speeds.
+\item[Handicap]  The handicap factor used for the On-Line Contest scoring.
+\item[Max. ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
+  Set to zero if it does not apply.
+\item[Dump time]  The time in seconds needed for dumping full ballast.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Configure Devices} \label{conf:comdevices}
+
+The Devices page is used to specify the ports used to communicate with
+\marginlabel{\bmenug{Config 2/3}\blink\bmenug{Devices}}
+the GPS and other serial devices. The default settings are COM1 and
+4800 bits per second.  When connected to the Vega intelligent
+variometer, the settings should be COM1 and 38400.
+
+Four devices can be configured (device A through D). One, for
+example, can be connected to a GPS and another to a
+second device such as a variometer.  If there is no further device, 
+set the unused ports to `Disabled'.  XCSoar will then ignore those ports.
+\sketch{figures/config-devices.png}
+
+COM ports 0 to 10 may be used, including a TCP/IP connection.  
+Which COM port is appropriate for you
+depends on what brand of PDA you use, and the communications medium
+(serial cable, Bluetooth, virtual COM port, SD card or CF based GPS,
+internal GPS).  Detailing the various options for different devices is
+beyond the scope of this document.  If you have trouble identifying
+which COM port to set, please refer to the XCSoar website and mailing
+lists.
+
+\begin{description}
+\item[Port]  This setting maps an existing interface (port) of your 
+  glide computer to one of the available slots A to D.
+\item[Baudrate]  Set this to the communication speed of the connected device.
+\item[TCP Port]  This setting is useful to e.g. connect to the Condor flight
+  simulator and do some XCSoar training in winter time.
+\item[Bulk baud rate]  The baud rate used for bulk transfers, such 
+  as task declaration or flight download. The item is visible for those 
+  devices that support the feature.
+\item[Driver]  The specific type of device can be selected from a list in order
+  to enable support for devices with proprietary protocols or special
+  functions.
+\item[Sync. from device*]  This option lets you configure if XCSoar should use settings 
+  like the MacCready value, bugs and ballast from the device.
+\item[Sync. to device*]  This option lets you configure if XCSoar should send settings 
+  like the MacCready value, bugs and ballast to the device.
+\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
+  will allow it's data to be used anyway.
 \end{description}
 

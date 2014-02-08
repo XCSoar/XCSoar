@@ -117,7 +117,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
    * HFPLTPILOT:JOHN WHARINGTON
    * HFGTYGLIDERTYPE:LS 3
    * HFGIDGLIDERID:VH-WUE
-   * HFDTM100GPSDATUM:WGS84
+   * HFDTM100GPSDATUM:WGS-1984
    * HFRFWFIRMWAREVERSION:3.6
    * HFRHWHARDWAREVERSION:3.4
    * HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
@@ -142,14 +142,14 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
   if (!simulator)
     WriteLine(GetHFFXARecord());
 
-  WriteLine("HFPLTPILOT:", pilot_name);
+  WriteLine("HFPLTPILOTINCHARGE:", pilot_name);
   WriteLine("HFGTYGLIDERTYPE:", aircraft_model);
   WriteLine("HFGIDGLIDERID:", aircraft_registration);
   WriteLine("HFCIDCOMPETITIONID:", competition_id);
   WriteLine("HFFTYFRTYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
   WriteLine("HFGPS:", driver_name);
 
-  WriteLine("HFDTM100DATUM:WGS-84");
+  WriteLine("HFDTM100DATUM:WGS-1984");
 
   WriteLine(GetIRecord());
 }

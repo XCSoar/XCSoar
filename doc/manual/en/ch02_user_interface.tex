@@ -33,7 +33,7 @@ given in following chapters.
 
 \section{Display elements}
 \subsection*{Main screen and screen pages}
-Eyery screen page out of XCSoar's screen page's ensemble is composed of several 
+Every screen page out of XCSoar's screen pages' ensemble is composed of several 
 parts:
 \begin{description}
 \item[Main area] The bulk of the screen typically is dedicated to the GPS moving 
@@ -78,7 +78,7 @@ buttons, are used to present detailed data to the pilot regarding waypoint
 details, statistics and analysis etc.
 \item[Main menu] The main menu is accessible by double tapping the map area or
 InfoBoxes as well as through gesture. If the menu buttons are not pressed after
-\gesture{Down - Up} a specified time, they disappear again so as to not obscure 
+\gesturespec{du} a specified time, they disappear again so as to not obscure 
 the map area.
 \end{description}
 
@@ -183,45 +183,64 @@ related details.
 
 \subsection*{Navigation menu}
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.8\textwidth}{l|ccccc}
 
-Nav 1
- & \ref{cha:tasks}\bmenus{Task}
+\begin{tabularx}{1.44\textwidth}{c|ccccc}
+\bmenus{Nav 1/2}
+ & {\bmenus{Task}}
  & {\bmenut{Previous}{Turnpoint}}
  & {\bmenut{Next}{Turnpoint}}
- & \ref{sec:waypoint-selector-dialog}\bmenut{Waypoint}{List}
- & \ref{sec:alternates}\bmenus{Alternates} \\ \\
-Nav 2
- & \ref{sec:taskabort}\bmenut{Task}{Abort}
- & \ref{sec:markers}\bmenut{Mark}{Drop}
- & {}
+ & \bmenut{Waypoint}{List}
+ & \bmenus{Alternates} \\
+see
+ & \ref{cha:tasks}
+ & \ref{sec:advanc-rest-tasks}
+ & \ref{sec:advanc-rest-tasks}
+ & \ref{sec:waypoint-selector-dialog}
+ & \ref{sec:alternates} \\ \\
+\bmenus{Nav 2/2}
+ & \bmenut{Task}{Abort}
+ & \bmenut{Mark}{Drop}
  & \bmenus{Target}
- & \ref{sec:waypointdetails}\bmenut{Waypoint}{Details}
-
+ & {}
+ & {} \\
+see
+ & \ref{sec:taskabort}
+ & \ref{sec:markers}
+ & \ref{sec:waypointdetails}
 \end{tabularx}}
 
 You should not start using XCSoar without knowing about the `Alternates' feature. 
-Any `Task' related item in the navigation menu are used for planned cross 
+Any `Task' related item in the navigation menu is used for planned cross 
 country flight and certainly the second step.
 
 \subsection*{Display menu}
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.9\textwidth}{l|ccccc}
 
-Display 1
- & \ref{sec:zooming}\bmenut{Zoom}{In}
+\begin{tabularx}{1.44\textwidth}{c|ccccc}
+\bmenus{Display 1/2}
+ & \bmenut{Zoom}{In}
  & \bmenut{Zoom}{Out}
  & \bmenut{Zoom}{Auto}
- & \bmenus{Info Cruise}
- & \ref{sec:panning}\bmenut{Pan}{On} \\ \\
-Display 2
- & \ref{sec:maplabels}\bmenut{Labels}{All/...}
- & \ref{sec:trail}\bmenut{Trail}{Full/...}
- & \ref{sec:terrain_topo}\bmenut{Terrain}{On/Off}
- & \ref{sec:terrain_topo}\bmenut{Topo.}{On/Off}
- & \ref{sec:terrain_topo}\bmenut{Airspace}{On/Off}
- 
-
+ & \bmenut{Info}{Cruise/...}
+ & \bmenut{Pan}{On} \\
+see
+ & \ref{sec:zooming}
+ & \ref{sec:zooming}
+ & \ref{sec:zooming}
+ & \ref{sec:screenpages}
+ & \ref{sec:panning} \\ \\
+\bmenus{Display 2/2}
+ & \bmenut{Labels}{All/...}
+ & \bmenut{Trail}{Full/...}
+ & \bmenut{Terrain}{On/Off}
+ & \bmenut{Topo.}{On/Off}
+ & \bmenut{Airspace}{On/Off} \\
+see
+ & \ref{sec:maplabels}
+ & \ref{sec:trail}
+ & \ref{sec:terrain_topo}
+ & \ref{sec:terrain_topo}
+ & \ref{sec:terrain_topo}
 \end{tabularx}}
 
 Most of the display menu items are available on gestures, or special key 
@@ -230,25 +249,44 @@ will use those menu items less frequently.
 
 \subsection*{Configuration menu}
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.9\textwidth}{l|ccccc}
-Config 1
+
+\begin{tabularx}{1.44\textwidth}{c|ccccc}
+\bmenus{Config 1/3}
  & \bmenut{MacCready}{$+$}
- & \ref{sec:stf}\bmenut{MacCready}{$-$}
- & \ref{sec:auto-maccready}\bmenut{MacCready}{Auto}
- & \ref{sec:flight-setup}\bmenus{Flight}
- & \ref{sec:wind-setup}\bmenus{Wind} \\ \\
-Config 2 
- & \ref{cha:configuration}\bmenus{System}
+ & \bmenut{MacCready}{$-$}
+ & \bmenut{MacCready}{Auto}
+ & \bmenus{Flight}
+ & \bmenus{Wind} \\
+see
+ & \ref{sec:stf}
+ & \ref{sec:stf}
+ & \ref{sec:auto-maccready}
+ & \ref{sec:flight-setup}
+ & \ref{sec:wind-setup} \\ \\
+\bmenus{Config 2/3} 
+ & \bmenus{System}
  & \bmenus{Plane}
- & \ref{conf:comdevices}\bmenus{Devices}
+ & \bmenus{Devices}
  & \bmenut{File}{Manager}
- & \ref{sec:logger-replay}\bmenus{Replay} \\ \\
-Config 3 
- & \ref{sec:logger}\bmenut{Logger}{Start}
- & \ref{sec:raw-logger}\bmenus{Raw Logger}
- & \ref{sec:airspace-filter}\bmenus{Airspace}
+ & \bmenus{Replay} \\
+see
+ & \ref{cha:configuration}
+ & \ref{sec:glidepolar}
+ & \ref{conf:comdevices}
  & {}
- & \bmenus{Vega}
+ & \ref{sec:logger-replay} \\ \\
+\bmenus{Config 3/3} 
+ & \bmenut{Logger}{Start}
+ & \bmenus{Raw Logger}
+ & \bmenus{Airspace}
+ & {}
+ & \bmenus{Vega} \\
+see
+ & \ref{sec:logger}
+ & \ref{sec:raw-logger}
+ & \ref{sec:airspace-filter}
+ & {}
+ & {}
 \end{tabularx}}
 
 The configuration menu is typically part of the ground interaction with 
@@ -260,25 +298,44 @@ comprises a sub-menu.
 
 \subsection*{Information menu}
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.8\textwidth}{l|ccccc}
-Info 1 &
- \ref{sec:flarm-traffic}\bmenut{FLARM}{Radar}
+
+\begin{tabularx}{1.44\textwidth}{c|ccccc}
+\bmenus{Info 1/3}
+ & \bmenut{FLARM}{Radar}
  & \bmenut{METAR}{TAF}
  & \bmenut{What's}{here?}
- & \ref{sec:checklist}\bmenut{Check}{list}
- & \ref{sec:analysis-climb}\bmenus{Analysis} \\ \\
-Info 2
- & \ref{sec:flight-status}\bmenus{Status}
- & \ref{sec:weather-forecast}\bmenus{Weather}
- & \ref{sec:team-flying}\bmenut{Team}{Code}
+ & \bmenut{Check}{list}
+ & \bmenus{Analysis} \\
+see
+ & \ref{sec:flarm-traffic}
+ & \ref{sec:metar-taf}
+ & {}
+ & \ref{sec:checklist}
+ & \ref{sec:analysis-climb} \\ \\
+\bmenus{Info 2/3}
+ & \bmenus{Status}
+ & \bmenus{Weather}
+ & \bmenut{Team}{Code}
  & \bmenut{FLARM}{Details}
- & \ref{sec:team-flying}\bmenut{Thermal}{Assistant} \\ \\
-Info 3
- & \ref{sec:credits}\bmenus{Credits}
+ & \bmenut{Thermal}{Assistant} \\
+see
+ & \ref{sec:flight-status}
+ & \ref{sec:weather-forecast}
+ & \ref{sec:team-flying}
  & {}
- & {}
- & {}
+ & \ref{sec:thermal-assistant} \\ \\
+\bmenus{Info 3/3}
+ & \bmenus{Credits}
+ & \bmenus{Airspaces}
  & \bmenut{Message}{Repeat}
+ & {}
+ & {} \\
+see
+ & \ref{sec:credits}
+ & 
+ & 
+ & 
+ &
 \end{tabularx}}
 
 The information menu is always a good address, when not only a clue on 
@@ -287,16 +344,16 @@ larger scope tactical decision on your flight is requested.
 
 
 \subsection*{The Vega variometer sub-menu of the configuration menu}
-
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.8\textwidth}{l|ccccc}
-Vega 1
+
+\begin{tabularx}{1.44\textwidth}{c|ccccc}
+\bmenus{Vega 1}
  & \bmenut{Airframe}{Switches}
  & \bmenut{Setup}{Audio}
  & \bmenut{Manual}{Demo}
  & \bmenut{Setup}{Stall}
  & \bmenus{Accel} \\ \\
-Vega 2
+\bmenus{Vega 2}
  & \bmenut{ASI}{Zero}
  & \bmenut{Accel}{Zero}
  & \bmenus{Store}
@@ -310,12 +367,20 @@ The menu can only be accessed if `Vega' is selected as the connected device.
 \subsection*{The pan mode sub-menu of the Display menu}
 
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.6\textwidth}{l|ccccc}
-Pan
- & \ref{sec:panning}\bmenut{Pan}{Off}
+
+\begin{tabularx}{1.44\textwidth}{c|ccccc}
+\bmenus{Pan}
+ & \bmenut{Pan}{Off}
  & \bmenut{Zoom}{in}
  & \bmenut{Zoom}{out}
  & \bmenut{What's}{here?}
+ & {} \\
+see
+ & \ref{sec:panning}
+ & {}
+ & {}
+ & {}
+ & {}
 \end{tabularx}}
 
 This sub-menu unfortunately overlays the full-screen map view of the pan mode.
@@ -461,7 +526,7 @@ respectively.\config{infobox_sets}
 \end{description}  
 
 
-\subsection*{Screen pages with different InfoBox sets}
+\subsection*{Screen pages with different InfoBox sets}\label{sec:screenpages}
 
 XCSoar allows the pilot to define various sets of InfoBoxes that are 
 appropriate for "normal" states of flight.  Assuming circling, 
@@ -495,9 +560,12 @@ being connected to a Flarm receiver.
 Whatever you would like to display, take into account the use case and screen 
 pages concept.
 
-\gesture{Right or Left} 
+\gesturespec{left}
 To go through the various screen pages, use the left/right cursor 
-keys (Altair), or gesture left/right (touch-screen).
+keys (Altair), or gesture left/right (touch-screen), or via menu button in menu \bmenug{Display 1/2}, showing a dynamic label, changing accordingly to the screenpage's content to show up next:
+\gesturespec{right}
+
+\bmenut{Display}{1/2}\blink\bmenut{Info}{Circling}\blink\bmenut{Info}{Cruise}\blink\bmenut{Info}{FinalGlide}\blink\bmenut{Info}{...}
 
 
 \subsection*{Modifying InfoBox content}
@@ -508,11 +576,11 @@ Some InfoBox values can be changed by the user by selecting (i.e. long-pressing)
 InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue:
 
 \begin{description}
-\item[\bmenug{Edit}]  
+\item[\bmenuw{Edit}]  
   Allows the pilot to adjust the InfoBox setting (e.g. raise or lower the 
   MacCready setting)
 
-\item[\bmenug{Setup}]
+\item[\bmenuw{Setup}]
   Allows you to change the behaviour of the setting related to the InfoBox 
   (for example, changing from auto to manual MacCready mode); or 
   to change the InfoBox itself by pressing `{\it Switch InfoBox}', then 
@@ -529,7 +597,7 @@ be adjusted include MacCready setting, wind speed, and altitude (QNH).
 An entire set of InfoBox can be composed by the `{\it Setup System}' configuration 
 dialogues on the `{\it Look / InfoBox Modes}' and `{\it Look / InfoBox Pages}' 
 \ref{sec:infobox_sets} setup page. 
-The dialogues give a wide variety to setup the look and feel of the XCSoar pages.  
+The dialogues give a wide variety to set up the look and feel of the XCSoar pages.  
 
 
 \section{Status messages}
@@ -584,9 +652,9 @@ from a list.
 Dialogues are typically started from the button menu.  
 
 Many of the dialogue windows have multiple pages of information and are controlled
-in a consistent fashion. Press the \button{$<$} or \button{$>$} buttons to
-select the next or previous page of the dialogue and the \button{Close} button to
-make the dialogue disappear.
+in a consistent fashion. Press the \bmenuw{$<$} or \bmenuw{$>$} buttons to
+select the next or previous page of the dialogue and the \bmenuw{Close} button 
+to make the dialogue disappear.
 
 The escape key on a PC or the PWR/ESC button on Altair, can also be used to
 close dialogues.
@@ -617,12 +685,12 @@ of each airspace class
   code
 \item[Devices]  Selection of various external devices (e.g. smart variometers, 
   FLARM, etc.).
-\item[Setup Plane]  Easy reconfiguration of the plane-dependant settings (e.g. 
+\item[Setup Plane]  Easy reconfiguration of the plane-dependent settings (e.g. 
   polar, competition ID, etc.) by choosing from a list of previously-created 
   plane profiles.
 \end{description}
 
-These dialogues are described in later chapters. with the exception of the
+These dialogues are described in later chapters, with the exception of the
 check-list, status and text entry dialogues, which are described below.
 
 
@@ -630,16 +698,15 @@ check-list, status and text entry dialogues, which are described below.
 
 The checklist dialogue can display several pages of user-defined free text.
 Typically this is used for check-lists. It can be accessed via the menu.
-\begin{quote}
-\bmenus{Info 1}\blink\bmenut{Check}{List}
-\end{quote}
+
+\bmenut{Info}{1/3}\blink\bmenut{Check}{List}
+\sketch{figures/checklist.png}
 
 These check-lists may include: daily inspection, preflight, out-landing,
-\sketch{figures/checklist.png}
 pre-landing, radio procedures, and aircraft rigging and de-rigging
 instructions.  Since the check-lists may be long, the up/down keys (or rotary
 knob on Altair) may be used to scroll through the text. Clicking the
-\button{$<$} and \button{$>$} buttons selects the previous/next checklist.
+\bmenuw{$<$} and \bmenuw{$>$} buttons selects the previous/next checklist.
 
 
 \subsection*{Text entry} \label{sec:textentry}
@@ -692,8 +759,8 @@ The most noticeable of these is whether to display InfoBoxes and
 gauges in white on black (called inverse colours) or black on white.
 
 For Altair the control of the screen hardware 
-brightness can be controlled from the brightness dialogue.
 \sketch{figures/brightness.png}
+brightness can be controlled from the brightness dialogue.
 \begin{quote}
 \bmenug{Display 2}\blink\bmenug{Bright}
 \end{quote}
@@ -715,24 +782,55 @@ As of version 6.0, XCSoar supports so-called `gestures'.
 To use this feature hold down the finger on the 
 touch-screen (or mouse button at the PC), draw a certain figure and release 
 the touch-screen / mouse button. Depending on the figure that was drawn 
-a certain function is activated. A list of generally available gestures is 
-shown below. 
+a certain function is activated. \sketch{figures/gesture1.png}
 
-A figure is defined by movements of the 
+A specific gesture is defined by movements of the finger or the 
 cursor in the four directions Up, Down, Left and Right. This means if 
 you drag your finger down and afterwards to the right over the screen, 
-\gesture{down-right} the gesture "DR" is detected, which stands for "Down-Right". 
+\gesture{dr} the gesture "DR" is detected, which stands for "Down-Right". 
 It will bring up the waypoint list. The manual indicates an available 
-gesture as shown here on the left side of the text body.
+gesture as shown here on the left side of the text body. Both the blue hand 
+and pictogram of the movement are used to indicate a specific gesture, in this 
+case move down then to the right. A list of generally available gestures is 
+shown below. \gesturespec{dr}
+\vspace{2em}
 
-Generally available gestures on the map screen:
+\subsection*{Most common or basic gestures:}
 \begin{itemize}
-\item U: Zoom in
-\item D: Zoom out
-\item L: Toggle map mode pro-grade (Normal, Aux. InfoBoxes, Full-screen)
-\item R: Toggle map mode retrograde (Normal, Full-screen, Aux. InfoBoxes)
-\item DU: Show the menu
-\item DR: Show the Select Waypoint dialogue
-\item RD: `{\it T}' opens the task dialogue
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/du.png}}] DU, denoting a check mark: Show main menu 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/up.png}}] U: Zoom in 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/down.png}}] D: Zoom out 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/left.png}}] L: Turn screen page pro-grade (Normal, Aux., Full-screen...) 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/right.png}}] R: Turn screen page retrograde (Normal, Full-screen...) 
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/urdl.png}}] URDL, denoting a P: \textbf{P}an-mode. Might also be invoked by 
+moving two fingers apart on the screen.
 \end{itemize}
+\vspace{2em}
 
+\subsection*{More gestures available:}
+\begin{itemize}
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dr.png}}] DR, denoting an L: Show the Select Waypoint dialogue similar to menu 
+item Waypoint \textbf{L}ist
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/rd.png}}] RD, denoting a T: opens the \textbf{T}ask Manager
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dl.png}}] DL: show the Alternates List
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/ud.png}}] UD: enables Auto-Zoom
+\end{itemize}
+\vspace{2em}
+
+\subsection*{Sophisticated dialogues:}
+\begin{itemize}
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/urd.png}}] URD, denoting an A: Show the \textbf{A}nalysis dialogue.
+\item[\raisebox{-1em}
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/ldrdl.png}}] LDRDL, denoting an S: Open the \textbf{S}tatus dialogue
+\end{itemize}
