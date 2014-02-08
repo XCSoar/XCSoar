@@ -156,27 +156,10 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
   PyObject *py_times = PyList_New(0);
 
   for (auto times : results) {
-    PyObject *py_single_flight = PyDict_New();
-
-    PyObject *py_takeoff = Python::WriteEvent(
-      times.takeoff_time,
-      times.takeoff_location);
-
-    PyObject *py_release = Python::WriteEvent(
-      times.release_time,
-      times.release_location);
-
-    PyObject *py_landing = Python::WriteEvent(
-      times.landing_time,
-      times.landing_location);
-
-    PyDict_SetItemString(py_single_flight, "takeoff", py_takeoff);
-    PyDict_SetItemString(py_single_flight, "release", py_release);
-    PyDict_SetItemString(py_single_flight, "landing", py_landing);
-
-    Py_DECREF(py_takeoff);
-    Py_DECREF(py_release);
-    Py_DECREF(py_landing);
+    PyObject *py_single_flight = Py_BuildValue("{s:N,s:N,s:N}",
+      "takeoff", Python::WriteEvent(times.takeoff_time, times.takeoff_location),
+      "release", Python::WriteEvent(times.release_time, times.release_location),
+      "landing", Python::WriteEvent(times.landing_time, times.landing_location));
 
     if (PyList_Append(py_times, py_single_flight))
       Py_RETURN_NONE;
@@ -281,41 +264,20 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
     max_iterations, max_tree_size);
   Py_END_ALLOW_THREADS
 
-  PyObject *py_result = PyDict_New();
-
-  /* write contests */
-  PyObject *py_contests = PyDict_New();
-
   /* write olc_plus statistics */
-  PyObject *py_olc_plus = PyDict_New();
-
-  PyObject *py_classic = Python::WriteContest(olc_plus.result[0], olc_plus.solution[0]);
-  PyObject *py_triangle = Python::WriteContest(olc_plus.result[1], olc_plus.solution[1]);
-  PyObject *py_plus = Python::WriteContest(olc_plus.result[2], olc_plus.solution[2]);
-
-  PyDict_SetItemString(py_olc_plus, "classic", py_classic);
-  PyDict_SetItemString(py_olc_plus, "triangle", py_triangle);
-  PyDict_SetItemString(py_olc_plus, "plus", py_plus);
-
-  Py_DECREF(py_classic);
-  Py_DECREF(py_triangle);
-  Py_DECREF(py_plus);
-
-  PyDict_SetItemString(py_contests, "olc_plus", py_olc_plus);
-  Py_DECREF(py_olc_plus);
+  PyObject *py_olc_plus = Py_BuildValue("{s:N,s:N,s:N}",
+    "classic", Python::WriteContest(olc_plus.result[0], olc_plus.solution[0]),
+    "triangle", Python::WriteContest(olc_plus.result[1], olc_plus.solution[1]),
+    "plus", Python::WriteContest(olc_plus.result[2], olc_plus.solution[2]));
 
   /* write dmst statistics */
-  PyObject *py_dmst = PyDict_New();
+  PyObject *py_dmst = Py_BuildValue("{s:N}",
+    "quadrilateral", Python::WriteContest(dmst.result[0], dmst.solution[0]));
 
-  PyObject *py_quadrilateral = Python::WriteContest(dmst.result[0], dmst.solution[0]);
-  PyDict_SetItemString(py_dmst, "quadrilateral", py_quadrilateral);
-  Py_DECREF(py_quadrilateral);
-
-  PyDict_SetItemString(py_contests, "dmst", py_dmst);
-  Py_DECREF(py_dmst);
-
-  PyDict_SetItemString(py_result, "contests", py_contests);
-  Py_DECREF(py_contests);
+  /* write contests */
+  PyObject *py_contests = Py_BuildValue("{s:N,s:N}",
+    "olc_plus", py_olc_plus,
+    "dmst", py_dmst);
 
   /* write fligh phases */
   PyObject *py_phases = PyList_New(0);
@@ -328,14 +290,6 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
     Py_DECREF(py_phase);
   }
 
-  PyDict_SetItemString(py_result, "phases", py_phases);
-  Py_DECREF(py_phases);
-
-  /* write performance stats */
-  PyObject *py_performance = Python::WritePerformanceStats(phase_totals);
-  PyDict_SetItemString(py_result, "performance", py_performance);
-  Py_DECREF(py_performance);
-
   /* write wind list*/
   PyObject *py_wind_list = PyList_New(0);
 
@@ -347,8 +301,11 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
     Py_DECREF(py_wind);
   }
 
-  PyDict_SetItemString(py_result, "wind", py_wind_list);
-  Py_DECREF(py_wind_list);
+  PyObject *py_result = Py_BuildValue("{s:N,s:N,s:N,s:N}",
+    "contests", py_contests,
+    "phases", py_phases,
+    "performance", Python::WritePerformanceStats(phase_totals),
+    "wind", py_wind_list);
 
   return py_result;
 }
@@ -407,26 +364,13 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
 
   delete replay;
 
-  // prepare output
-  PyObject *py_locations = PyString_FromString(encoded_locations.asString()->c_str());
-  PyObject *py_levels = PyString_FromString(encoded_levels.asString()->c_str());
-  PyObject *py_times = PyString_FromString(encoded_times.asString()->c_str());
-  PyObject *py_altitude = PyString_FromString(encoded_altitude.asString()->c_str());
-  PyObject *py_enl = PyString_FromString(encoded_enl.asString()->c_str());
 
-  PyObject *py_result = PyDict_New();
-
-  PyDict_SetItemString(py_result, "locations", py_locations);
-  PyDict_SetItemString(py_result, "levels", py_levels);
-  PyDict_SetItemString(py_result, "times", py_times);
-  PyDict_SetItemString(py_result, "altitude", py_altitude);
-  PyDict_SetItemString(py_result, "enl", py_enl);
-
-  Py_DECREF(py_locations);
-  Py_DECREF(py_levels);
-  Py_DECREF(py_times);
-  Py_DECREF(py_altitude);
-  Py_DECREF(py_enl);
+  PyObject *py_result = Py_BuildValue("{s:s,s:s,s:s,s:s,s:s}",
+    "locations", encoded_locations.asString()->c_str(),
+    "levels", encoded_levels.asString()->c_str(),
+    "times", encoded_times.asString()->c_str(),
+    "altitude", encoded_altitude.asString()->c_str(),
+    "enl", encoded_enl.asString()->c_str());
 
   return py_result;
 }
