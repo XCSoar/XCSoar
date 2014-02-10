@@ -35,6 +35,24 @@ umask 022
 if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     -o -f /mnt/onboard/XCSoarData/kobo/start_nickel \
     -o ! -x /opt/xcsoar/bin/KoboMenu ]; then
+
+    # check the kernel
+    if [ -f /opt/xcsoar/lib/kernel/uImage.kobo ]; then
+        /bin/mkdir -p /proc /dev
+        /bin/mount -t proc none /proc
+
+        if zcat /proc/config.gz |grep -q ^CONFIG_USB_EHCI_ARC_OTG=y; then
+            # this is the USB-OTG kernel, but Nickel should better have
+            # the original Kobo kernel; install it and reboot
+            echo "Switch to Kobo kernel"
+            /bin/mount -t tmpfs none /dev
+            /bin/mknod /dev/mmcblk0 b 179 0
+            dd if=/opt/xcsoar/lib/kernel/uImage.kobo of=/dev/mmcblk0 bs=512 seek=2048 && sync && reboot
+        fi
+
+        umount /proc
+    fi
+
     rm -f /mnt/onboard/XCSoarData/kobo/start_nickel
     umount -l /mnt/onboard
     exec /etc/init.d/rcS
@@ -73,6 +91,15 @@ fi
 /bin/mknod /dev/mmcblk0p3 b 179 3
 
 /sbin/hwclock -s -u
+
+# check the kernel
+if [ -f /opt/xcsoar/lib/kernel/uImage.otg ]; then
+    if ! zcat /proc/config.gz |grep -q ^CONFIG_USB_EHCI_ARC_OTG=y; then
+        # install the USB-OTG kernel and reboot
+        echo "Switch to USB-OTG kernel"
+        dd if=/opt/xcsoar/lib/kernel/uImage.otg of=/dev/mmcblk0 bs=512 seek=2048 && sync && reboot
+    fi
+fi
 
 # workaround for kernel crash "scheduling while atomic"
 echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
