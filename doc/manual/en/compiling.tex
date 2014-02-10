@@ -288,6 +288,44 @@ Then compile using this command:
 make TARGET=KOBO output/KOBO/KoboRoot.tgz
 \end{verbatim*}
 
+\subsubsection{Building USB-OTG Kobo Kernel}
+
+To build a USB-OTG capable kernel for the Kobo, clone the git
+repository:
+
+\begin{verbatim*}
+git clone --branch kobo \
+  git://git.xcsoar.org/xcsoar/max/linux.git
+\end{verbatim*}
+
+Configure the kernel using the file \texttt{kobo/kernel/otg.config}
+from XCSoar's \texttt{git} repository.  Install a
+\href{http://openlinux.amlogic.com:8000/download/ARM/gnutools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2}{gcc
+  4.4 cross compiler}, for example in \texttt{/opt}.
+
+Now type:
+
+\begin{verbatim*}
+make CROSS_COMPILE=/opt/arm-2010q1/bin/arm-none-linux-gnueabi- \
+  ARCH=arm uImage
+\end{verbatim*}
+
+Copy \texttt{uImage} to the Kobo.  Kernel images can be installed with
+the following command:
+
+\begin{verbatim*}
+dd if=/path/to/uImage of=/dev/mmcblk0 bs=512 seek=2048
+\end{verbatim*}
+
+Note that XCSoar's \texttt{rcS} script may overwrite the kernel image
+automatically under certain conditions.  To use a new kernel
+permanently, install it in \texttt{/opt/xcsoar/lib/kernel}.  Read the
+file \texttt{kobo/rcS} to find out more about this.
+
+To include kernel images in \texttt{KoboRoot.tgz}, copy
+\texttt{uImage.otg} and \texttt{uImage.kobo} to
+\texttt{/opt/kobo/kernel}.
+
 \section{Options}
 
 \subsection{Parallel Build}
