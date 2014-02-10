@@ -22,7 +22,9 @@ Copyright_License {
 */
 
 #include "SystemDialog.hpp"
+#include "Kernel.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Form/ActionListener.hpp"
@@ -33,12 +35,15 @@ class SystemWidget final
   : public RowFormWidget, ActionListener {
   enum Buttons {
     REBOOT,
+    SWITCH_KERNEL,
   };
 
 public:
   SystemWidget(const DialogLook &look):RowFormWidget(look) {}
 
 private:
+  void SwitchKernel();
+
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
@@ -51,6 +56,28 @@ void
 SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddButton("Reboot", *this, REBOOT);
+  AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",
+            *this, SWITCH_KERNEL);
+}
+
+inline void
+SystemWidget::SwitchKernel()
+{
+#ifdef KOBO
+  const char *otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.otg";
+  const char *kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.kobo";
+
+  const char *kernel_image = IsKoboOTGKernel()
+    ? kobo_kernel_image
+    : otg_kernel_image;
+
+  if (!KoboInstallKernel(kernel_image)) {
+      ShowMessageBox(_T("Failed to activate kernel."), _("Error"), MB_OK);
+      return;
+  }
+
+  KoboReboot();
+#endif
 }
 
 void
@@ -59,6 +86,10 @@ SystemWidget::OnAction(int id)
   switch (id) {
   case REBOOT:
     KoboReboot();
+    break;
+
+  case SWITCH_KERNEL:
+    SwitchKernel();
     break;
   }
 }

@@ -92,15 +92,6 @@ fi
 
 /sbin/hwclock -s -u
 
-# check the kernel
-if [ -f /opt/xcsoar/lib/kernel/uImage.otg ]; then
-    if ! zcat /proc/config.gz |grep -q ^CONFIG_USB_EHCI_ARC_OTG=y; then
-        # install the USB-OTG kernel and reboot
-        echo "Switch to USB-OTG kernel"
-        dd if=/opt/xcsoar/lib/kernel/uImage.otg of=/dev/mmcblk0 bs=512 seek=2048 && sync && reboot
-    fi
-fi
-
 # workaround for kernel crash "scheduling while atomic"
 echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
 
