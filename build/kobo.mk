@@ -76,6 +76,8 @@ KOBO_SYS_LIB_NAMES = libc.so.6 libm.so.6 libpthread.so.0 librt.so.1 \
 	ld-linux-armhf.so.3
 KOBO_SYS_LIB_PATHS = $(addprefix $(SYSROOT)/lib/,$(KOBO_SYS_LIB_NAMES))
 
+KOBO_KERNEL_DIR = /opt/kobo/kernel
+
 # /mnt/onboard/.kobo/KoboRoot.tgz is a file that is picked up by
 # /etc/init.d/rcS, extracted to / on each boot; we can use it to
 # install XCSoar
@@ -85,9 +87,11 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(topdir)/kobo/inittab $(topdir)/kobo/rcS
 	@$(NQ)echo "  TAR     $@"
 	$(Q)rm -rf $(@D)/KoboRoot
-	$(Q)install -m 0755 -d $(@D)/KoboRoot/etc $(@D)/KoboRoot/opt/xcsoar/bin $(@D)/KoboRoot/opt/xcsoar/lib $(@D)/KoboRoot/opt/xcsoar/share/fonts
+	$(Q)install -m 0755 -d $(@D)/KoboRoot/etc $(@D)/KoboRoot/opt/xcsoar/bin $(@D)/KoboRoot/opt/xcsoar/lib/kernel $(@D)/KoboRoot/opt/xcsoar/share/fonts
 	$(Q)install -m 0755 $(XCSOAR_BIN) $(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) $(topdir)/kobo/rcS $(@D)/KoboRoot/opt/xcsoar/bin
 	$(Q)install -m 0755 $(KOBO_SYS_LIB_PATHS) $(@D)/KoboRoot/opt/xcsoar/lib
+	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.kobo; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.kobo $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
+	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
 	$(Q)install -m 0644 $(topdir)/kobo/inittab $(@D)/KoboRoot/etc
 	$(Q)install -m 0644 $(BITSTREAM_VERA_FILES) $(@D)/KoboRoot/opt/xcsoar/share/fonts
 	$(Q)fakeroot tar czfC $@ $(@D)/KoboRoot .
