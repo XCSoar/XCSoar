@@ -330,6 +330,8 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   fix.location.latitude = Angle::Degrees(PyFloat_AsDouble(py_latitude));
   fix.location.longitude = Angle::Degrees(PyFloat_AsDouble(py_longitude));
 
+  fix.gps_valid = true;
+
   if (PyNumber_Check(py_enl))
     fix.enl = PyInt_AsLong(py_enl);
 
