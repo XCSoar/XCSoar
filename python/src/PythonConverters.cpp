@@ -296,6 +296,8 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
 bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   PyObject *py_datetime = NULL,
            *py_location = NULL,
+           *py_gps_alt = NULL,
+           *py_pressure_alt = NULL,
            *py_enl = NULL,
            *py_trt = NULL,
            *py_gsp = NULL,
@@ -307,9 +309,9 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   fix.Clear();
 
-  if (!PyArg_ParseTuple(py_fix, "OiOii|OOOOOOOO",
+  if (!PyArg_ParseTuple(py_fix, "OiOO|OOOOOOOOO",
          &py_datetime, &fix.clock, &py_location,
-         &fix.gps_altitude, &fix.pressure_altitude,
+         &py_gps_alt, &py_pressure_alt,
          &py_enl, &py_trt, &py_gsp, &py_tas, &py_ias,
          &py_siu, &py_elevation, &py_level)) {
     PyErr_SetString(PyExc_TypeError, "Failed to parse tuple.");
@@ -329,6 +331,21 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   fix.location.latitude = Angle::Degrees(PyFloat_AsDouble(py_latitude));
   fix.location.longitude = Angle::Degrees(PyFloat_AsDouble(py_longitude));
+
+  if (!PyNumber_Check(py_gps_alt) && !PyNumber_Check(py_pressure_alt)) {
+    PyErr_SetString(PyExc_ValueError, "Need at least gps or pressure altitude");
+    return false;
+  }
+
+  if (PyNumber_Check(py_gps_alt))
+    fix.gps_altitude = PyInt_AsLong(py_gps_alt);
+  else
+    fix.gps_altitude = 0;
+
+  if (PyNumber_Check(py_pressure_alt))
+    fix.pressure_altitude = PyInt_AsLong(py_pressure_alt);
+  else
+    fix.pressure_altitude = 0;
 
   fix.gps_valid = true;
 

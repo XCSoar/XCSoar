@@ -65,8 +65,8 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
     for (Py_ssize_t i = 0; i < num_items; ++i) {
       PyObject *py_item = PySequence_Fast_GET_ITEM(py_input_data, i);
 
-      if (PySequence_Fast_GET_SIZE(py_item) < 5) {
-        PyErr_SetString(PyExc_TypeError, "Expected a tuple of at least 5.");
+      if (PySequence_Fast_GET_SIZE(py_item) < 4) {
+        PyErr_SetString(PyExc_TypeError, "Expected a tuple of at least 4.");
         return 0;
       }
 
