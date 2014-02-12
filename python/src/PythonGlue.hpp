@@ -24,17 +24,28 @@
 #define PYTHON_PYTHONGLUE_HPP
 
 #include <Python.h>
-#include "Flight.hpp"
+#include "Flight/Flight.hpp"
 
 /* xcsoar.Flight methods */
 struct Pyxcsoar_Flight {
   PyObject_HEAD Flight *flight;
 };
 
-static Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 static void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self);
 
+static PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args);
+static PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self);
+static PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args);
+
 static PyMethodDef xcsoar_Flight_methods[] = {
+  {"path", (PyCFunction)xcsoar_Flight_path, METH_VARARGS, "Get flight as list."},
+  {"times", (PyCFunction)xcsoar_Flight_times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
+  {"reduce", (PyCFunction)xcsoar_Flight_reduce, METH_VARARGS | METH_KEYWORDS, "Reduce flight."},
+  {"analyse", (PyCFunction)xcsoar_Flight_analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
+  {"encode", (PyCFunction)xcsoar_Flight_encode, METH_VARARGS, "Return encoded flight."},
   {NULL, NULL, 0, NULL}
 };
 
@@ -79,15 +90,19 @@ PyTypeObject xcsoar_Flight_Type = {
   0,                     /* tp_descr_get */
   0,                     /* tp_descr_set */
   0,                     /* tp_dictoffset */
-  (initproc)xcsoar_Flight_init, /* tp_init */
+  0,                     /* tp_init */
   0,                     /* tp_alloc */
-  PyType_GenericNew,     /* tp_new */
+  xcsoar_Flight_new,     /* tp_new */
 /* this could be extended even further...
    * http://starship.python.net/crew/arcege/extwriting/pyext.html
    */
 };
 
+/* xcsoar methods */
+static PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs);
+
 static PyMethodDef xcsoar_methods[] = {
+  {"encode", (PyCFunction)xcsoar_encode, METH_VARARGS | METH_KEYWORDS, "Encode a list of numbers."},
   {NULL, NULL, 0, NULL}
 };
 

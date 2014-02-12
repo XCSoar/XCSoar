@@ -67,6 +67,11 @@ public:
   virtual long Tell() const = 0;
   virtual bool Next() = 0;
 
+  /* Return a detail level for this fix - only used for skylines */
+  virtual int Level() const {
+    return 0;
+  }
+
   const MoreData &Basic() const {
     return computed_basic;
   }
@@ -82,6 +87,11 @@ public:
   DerivedInfo &SetCalculated() {
     return calculated;
   }
+
+  FlyingComputer &SetFlyingComputer() {
+    return flying_computer;
+  }
+
 
 protected:
   void Compute();

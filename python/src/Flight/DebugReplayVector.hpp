@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -20,22 +21,49 @@
 }
 */
 
-#ifndef PYTHON_FLIGHT_HPP
-#define PYTHON_FLIGHT_HPP
+#ifndef XCSOAR_DEBUG_REPLAY_VECTOR_HPP
+#define XCSOAR_DEBUG_REPLAY_VECTOR_HPP
 
+#include "DebugReplay.hpp"
 #include "IGCFixEnhanced.hpp"
+#include <assert.h>
 
-#include <vector>
 
-class Flight {
+class DebugReplayVector : public DebugReplay {
+  const std::vector<IGCFixEnhanced> fixes;
+  unsigned long position;
+
 private:
-  std::vector<IGCFixEnhanced> *fixes;
-  bool keep_flight;
-  const char *flight_file;
+  DebugReplayVector(const std::vector<IGCFixEnhanced> &_fixes)
+    : fixes(_fixes), position(0) {
+  }
+
+  ~DebugReplayVector() {
+  }
 
 public:
-  Flight(const char* _flight_file, bool _keep_flight);
-  ~Flight();
+  virtual bool Next();
+
+  long Size() const {
+    return fixes.size();
+  }
+
+  long Tell() const {
+    return position;
+  }
+
+  int Level() const {
+    assert(position > 0);
+    return fixes[position - 1].level;
+  }
+
+  static DebugReplay* Create(const std::vector<IGCFixEnhanced> &fixes) {
+    return new DebugReplayVector(fixes);
+  }
+
+protected:
+  void CopyFromFix(const IGCFixEnhanced &fix);
+  void Compute(const int elevation);
 };
 
-#endif /* PYTHON_FLIGHT_HPP */
+#endif /* XCSOAR_DEBUG_REPLAY_VECTOR_HPP */

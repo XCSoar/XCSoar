@@ -563,6 +563,8 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/IGC/IGCString.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \

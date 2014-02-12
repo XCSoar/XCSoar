@@ -20,34 +20,47 @@
 }
 */
 
-#include "Flight.hpp"
-#include "IGCFixEnhanced.hpp"
-#include "DebugReplay.hpp"
-#include "DebugReplayIGC.hpp"
+#ifndef PYTHON_IGC_FIX_ENHANCED_HPP
+#define PYTHON_IGC_FIX_ENHANCED_HPP
 
-#include <vector>
+#include "IGC/IGCFix.hpp"
+#include "Time/BrokenDate.hpp"
+#include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 
-Flight::Flight(const char* _flight_file, bool _keep_flight)
-  : fixes(nullptr), keep_flight(_keep_flight), flight_file(_flight_file) {
-  if (keep_flight) {
-    fixes = new std::vector<IGCFixEnhanced>;
+struct IGCFixEnhanced : public IGCFix
+{
+  BrokenDate date;
 
-    DebugReplay *replay = DebugReplayIGC::Create(flight_file);
+  unsigned clock;
 
-    if (replay) {
-      while (replay->Next()) {
-        IGCFixEnhanced fix;
-        if (fix.Apply(replay->Basic()))
-          fixes->push_back(fix);
-      }
+  /* The detail level of this fix. -1 is not visible at all, 0 is always visible. */
+  int level = 0;
 
-      delete replay;
+  /* Terrian elevation */
+  int elevation = -1000;
+
+  bool Apply(const NMEAInfo &basic, const DerivedInfo &calculated) {
+    if (IGCFix::Apply(basic)) {
+      date = basic.date_time_utc;
+      clock = basic.time;
+
+      if (calculated.terrain_valid)
+        elevation = calculated.terrain_altitude;
+      else
+        elevation = -1000;
+
+      return true;
+    } else {
+      return false;
     }
-  }
-}
+  };
 
-Flight::~Flight() {
-  if (keep_flight)
-    delete fixes;
-}
+  void Clear() {
+    time = BrokenTime::Invalid();
+    elevation = -1000;
+    ClearExtensions();
+  };
+};
 
+#endif /* PYTHON_IGC_FIX_ENHANCED_HPP */

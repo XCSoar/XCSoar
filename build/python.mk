@@ -66,9 +66,26 @@ endef
 python: $(call name-to-so,xcsoar)
 
 PYTHON_SOURCES = \
-        $(DEBUG_REPLAY_SOURCES) \
-        $(SRC)/IGC/IGCFix.cpp \
-        $(PYTHON_SRC)/Flight.cpp \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/IGC/IGCFix.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
+        $(SRC)/Computer/Wind/Settings.cpp \
+        $(SRC)/Computer/Wind/WindEKF.cpp \
+        $(SRC)/Computer/Wind/WindEKFGlue.cpp \
+        $(SRC)/Computer/Wind/CirclingWind.cpp \
+        $(SRC)/Computer/Wind/Computer.cpp \
+        $(SRC)/Computer/Wind/MeasurementList.cpp \
+        $(SRC)/Computer/Wind/Store.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
+	$(PYTHON_SRC)/Flight/Flight.cpp \
+	$(PYTHON_SRC)/Flight/DebugReplayVector.cpp \
+	$(PYTHON_SRC)/Flight/FlightTimes.cpp \
+	$(PYTHON_SRC)/Flight/DouglasPeuckerMod.cpp \
+	$(PYTHON_SRC)/Flight/AnalyseFlight.cpp \
+        $(PYTHON_SRC)/Tools/GoogleEncode.cpp \
+	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = -lpython2.7

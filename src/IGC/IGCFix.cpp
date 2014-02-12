@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "IGCFix.hpp"
 #include "NMEA/Info.hpp"
+#include "Units/System.hpp"
 
 bool
 IGCFix::Apply(const NMEAInfo &basic)
@@ -55,6 +56,29 @@ IGCFix::Apply(const NMEAInfo &basic)
        /* if all else fails, fall back to GPS altitude, to avoid
           application bugs (SeeYou is known for display errors) */
        : gps_altitude);
+
+  ClearExtensions();
+
+  enl = basic.engine_noise_level_available
+    ? (int16_t) basic.engine_noise_level
+    : -1;
+
+  trt = basic.track_available
+    ? (int16_t) basic.track.Degrees()
+    : -1;
+
+  gsp = basic.ground_speed_available
+    ? (int16_t) Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR)
+    : -1;
+
+  if (basic.airspeed_available) {
+    ias = (int16_t) Units::ToUserUnit(basic.indicated_airspeed, Unit::KILOMETER_PER_HOUR);
+    tas = (int16_t) Units::ToUserUnit(basic.true_airspeed, Unit::KILOMETER_PER_HOUR);
+  }
+
+  siu = basic.gps.satellites_used_available
+    ? (int16_t) basic.gps.satellites_used
+    : -1;
 
   return true;
 }
