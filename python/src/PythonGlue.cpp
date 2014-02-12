@@ -414,6 +414,10 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
 
   Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_list);
 
+  // return empty string if list has no elements
+  if (num_items == 0)
+    return PyString_FromString("");
+
   unsigned dimension;
   if (PySequence_Check(PySequence_Fast_GET_ITEM(py_list, 0))) {
     dimension = PySequence_Size(PySequence_Fast_GET_ITEM(py_list, 0));
