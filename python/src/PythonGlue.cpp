@@ -96,7 +96,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   int64_t begin = 0,
@@ -134,8 +134,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     PyObject *py_fix = Python::IGCFixEnhancedToPyTuple(fix);
 
     if (PyList_Append(py_fixes, py_fix)) {
-      printf("pylist_append failed\n");
-      Py_RETURN_NONE;
+      return NULL;
     }
 
     Py_DECREF(py_fix);
@@ -175,7 +174,7 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
       "power_states", py_power_states);
 
     if (PyList_Append(py_times, py_single_flight))
-      Py_RETURN_NONE;
+      return NULL;
 
     Py_DECREF(py_single_flight);
   }
@@ -204,7 +203,7 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
                                    &py_begin, &py_end, &num_levels, &zoom_factor,
                                    &max_delta_time, &threshold, &max_points, &py_force_endpoints)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   if (py_force_endpoints != NULL && !PyObject_IsTrue(py_force_endpoints))
@@ -249,12 +248,12 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
                                    &full, &triangle, &sprint,
                                    &max_iterations, &max_tree_size)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   if (!PyDateTime_Check(py_takeoff) || !PyDateTime_Check(py_release) || !PyDateTime_Check(py_landing)) {
     PyErr_SetString(PyExc_TypeError, "Expected a DateTime object for takeoff, release and landing.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   BrokenDateTime takeoff = Python::PyToBrokenDateTime(py_takeoff);
@@ -309,7 +308,7 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   for (WindListItem wind_item: wind_list) {
     PyObject *py_wind = Python::WriteWindItem(wind_item);
     if (PyList_Append(py_wind_list, py_wind))
-      Py_RETURN_NONE;
+      return NULL;
 
     Py_DECREF(py_wind);
   }
@@ -329,7 +328,7 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   int64_t begin = 0,
@@ -400,12 +399,12 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|idO", kwlist,
                                    &py_list, &delta, &floor_to, &py_method)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   if (!PySequence_Check(py_list)) {
     PyErr_SetString(PyExc_TypeError, "Expected a list.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_list);
@@ -429,7 +428,7 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
     method = UNSIGNED;
   else {
     PyErr_SetString(PyExc_TypeError, "Can't parse method.");
-    Py_RETURN_NONE;
+    return NULL;
   }
 
   GoogleEncode encoded(dimension, delta, floor_to);
@@ -443,19 +442,19 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
         if (method == UNSIGNED) {
           if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
             PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-            Py_RETURN_NONE;
+            return NULL;
           }
           encoded.addUnsignedNumber(PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, j)));
         } else if (method == SIGNED) {
           if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
             PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-            Py_RETURN_NONE;
+            return NULL;
           }
           encoded.addSignedNumber(PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, j)));
         } else if (method == DOUBLE) {
           if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
             PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-            Py_RETURN_NONE;
+            return NULL;
           }
           encoded.addDouble(PyFloat_AsDouble(PySequence_Fast_GET_ITEM(py_item, j)));
         }
@@ -466,19 +465,19 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
       if (method == UNSIGNED) {
         if (!PyNumber_Check(py_item)) {
           PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-          Py_RETURN_NONE;
+          return NULL;
         }
         encoded.addUnsignedNumber(PyInt_AsLong(py_item));
       } else if (method == SIGNED) {
         if (!PyNumber_Check(py_item)) {
           PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-          Py_RETURN_NONE;
+          return NULL;
         }
         encoded.addSignedNumber(PyInt_AsLong(py_item));
       } else if (method == DOUBLE) {
         if (!PyNumber_Check(py_item)) {
           PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-          Py_RETURN_NONE;
+          return NULL;
         }
         encoded.addDouble(PyFloat_AsDouble(py_item));
       }
