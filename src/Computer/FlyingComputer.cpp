@@ -221,7 +221,7 @@ FlyingComputer::CheckPowered(fixed dt, const NMEAInfo &basic, FlyingState &flyin
 
     unpowered_since = fixed(-1);
     unpowered_at.SetInvalid();
-  } else if (basic.engine_noise_level <= 500 &&
+  } else if (basic.engine_noise_level <= 350 &&
              negative(unpowered_since)) {
     unpowered_since = basic.time;
     unpowered_at = basic.location;
