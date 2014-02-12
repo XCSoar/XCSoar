@@ -164,7 +164,9 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
         "location", Python::WriteLonLat(power_state.location),
         "powered", power_state.state == PowerState::ON ? Py_True : Py_False);
 
-      PyList_Append(py_power_states, py_power_state);
+      if (PyList_Append(py_power_states, py_power_state) != 0)
+        return NULL;
+
       Py_DECREF(py_power_state);
     }
 
@@ -174,7 +176,7 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
       "landing", Python::WriteEvent(times.landing_time, times.landing_location),
       "power_states", py_power_states);
 
-    if (PyList_Append(py_times, py_single_flight))
+    if (PyList_Append(py_times, py_single_flight) != 0)
       return NULL;
 
     Py_DECREF(py_single_flight);
@@ -297,7 +299,7 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
 
   for (Phase phase : phase_list) {
     PyObject *py_phase = Python::WritePhase(phase);
-    if (PyList_Append(py_phases, py_phase))
+    if (PyList_Append(py_phases, py_phase) != 0)
       return NULL;
 
     Py_DECREF(py_phase);
@@ -308,7 +310,7 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
 
   for (WindListItem wind_item: wind_list) {
     PyObject *py_wind = Python::WriteWindItem(wind_item);
-    if (PyList_Append(py_wind_list, py_wind))
+    if (PyList_Append(py_wind_list, py_wind) != 0)
       return NULL;
 
     Py_DECREF(py_wind);
