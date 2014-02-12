@@ -133,7 +133,8 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
 
     PyObject *py_fix = Python::IGCFixEnhancedToPyTuple(fix);
 
-    if (PyList_Append(py_fixes, py_fix)) {
+    if (PyList_Append(py_fixes, py_fix) != 0) {
+      delete replay;
       return NULL;
     }
 
