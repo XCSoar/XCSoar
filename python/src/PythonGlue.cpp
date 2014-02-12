@@ -374,7 +374,9 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
     encoded_levels.addUnsignedNumber(replay->Level());
     encoded_times.addSignedNumber(basic.time);
     encoded_altitude.addSignedNumber(fix.gps_altitude);
-    encoded_enl.addSignedNumber(fix.enl);
+
+    if (fix.enl >= 0)
+        encoded_enl.addSignedNumber(fix.enl);
   }
 
   delete replay;
