@@ -156,10 +156,23 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
   PyObject *py_times = PyList_New(0);
 
   for (auto times : results) {
-    PyObject *py_single_flight = Py_BuildValue("{s:N,s:N,s:N}",
+    PyObject *py_power_states = PyList_New(0);
+
+    for (auto power_state : times.power_states) {
+      PyObject *py_power_state = Py_BuildValue("{s:N,s:N,s:O}",
+        "time", Python::BrokenDateTimeToPy(power_state.time),
+        "location", Python::WriteLonLat(power_state.location),
+        "powered", power_state.state == PowerState::ON ? Py_True : Py_False);
+
+      PyList_Append(py_power_states, py_power_state);
+      Py_DECREF(py_power_state);
+    }
+
+    PyObject *py_single_flight = Py_BuildValue("{s:N,s:N,s:N,s:N}",
       "takeoff", Python::WriteEvent(times.takeoff_time, times.takeoff_location),
       "release", Python::WriteEvent(times.release_time, times.release_location),
-      "landing", Python::WriteEvent(times.landing_time, times.landing_location));
+      "landing", Python::WriteEvent(times.landing_time, times.landing_location),
+      "power_states", py_power_states);
 
     if (PyList_Append(py_times, py_single_flight))
       Py_RETURN_NONE;

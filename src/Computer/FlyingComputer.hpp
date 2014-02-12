@@ -77,6 +77,22 @@ class FlyingComputer {
   fixed stationary_since;
   GeoPoint stationary_at;
 
+  /**
+   * If the aircraft is in powered flight, then this denotes
+   * the initial powered time stamp. If the aircraft is unpowered
+   * this is set to a negative value.
+   */
+  fixed powered_since;
+  GeoPoint powered_at;
+
+  /**
+   * If the aircraft is in unpowered flight, then this denotes
+   * the initial unpowered time stamp. If the aircraft is powered
+   * this is set to a negative value.
+   */
+  fixed unpowered_since;
+  GeoPoint unpowered_at;
+
   fixed climbing_altitude;
 
   fixed sinking_since;
@@ -126,6 +142,11 @@ protected:
    * seconds
    */
   bool CheckClimbing(fixed dt, fixed altitude);
+
+  /**
+   * Check for powered flight.
+   */
+  void CheckPowered(fixed dt, const NMEAInfo &basic, FlyingState &flying);
 
   void Check(FlyingState &state, fixed time);
 

@@ -74,6 +74,7 @@ bool
 Run(DebugReplay &replay, FlightTimeResult &result)
 {
   bool released = false;
+  bool powered = false;
 
   GeoPoint last_location = GeoPoint::Invalid();
   constexpr Angle max_longitude_change = Angle::Degrees(30);
@@ -104,6 +105,23 @@ Run(DebugReplay &replay, FlightTimeResult &result)
 
     if (!released && !negative(replay.Calculated().flight.release_time)) {
       released = true;
+    }
+
+    if (replay.Calculated().flight.powered != powered) {
+      powered = replay.Calculated().flight.powered;
+      PowerState power_state;
+
+      if (powered) {
+        power_state.time = basic.GetDateTimeAt(replay.Calculated().flight.power_on_time);
+        power_state.location = replay.Calculated().flight.power_on_location;
+        power_state.state = PowerState::ON;
+      } else {
+        power_state.time = basic.GetDateTimeAt(replay.Calculated().flight.power_off_time);
+        power_state.location = replay.Calculated().flight.power_off_location;
+        power_state.state = PowerState::OFF;
+      }
+
+      result.power_states.push_back(power_state);
     }
 
     if (released && !replay.Calculated().flight.flying)

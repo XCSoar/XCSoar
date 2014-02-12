@@ -38,6 +38,8 @@ struct FlyingState
   bool flying;
   /** Detects when glider is on ground for several seconds */
   bool on_ground;
+  /** True when in powered flight */
+  bool powered;
 
   /** Time of flight */
   fixed flight_time;
@@ -60,10 +62,25 @@ struct FlyingState
   fixed release_time;
 
   /**
+   * The time stamp of the last detected 'power-on' - e.g. the last start
+   * of the aircraft's engine.
+   */
+  fixed power_on_time;
+  fixed power_off_time;
+
+  /**
    * The location of the aircraft when it released from towing.
    * Always check GeoPoint::IsValid() before using this value.
    */
   GeoPoint release_location;
+
+  /**
+   * The location of the aircraft when it powered it's engine on
+   * for the last time.
+   * Always check GeoPoint::IsValid() before using this value.
+   */
+  GeoPoint power_on_location;
+  GeoPoint power_off_location;
 
   /**
    * The location that is most far away from the release location.

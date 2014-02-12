@@ -27,9 +27,23 @@
 #include "Geo/GeoPoint.hpp"
 #include <vector>
 
+struct PowerState {
+  BrokenDateTime time;
+  GeoPoint location;
+  enum { ON, OFF } state;
+
+  PowerState() {
+    time.Clear();
+    location.SetInvalid();
+    state = OFF;
+  }
+};
+
 struct FlightTimeResult {
   BrokenDateTime takeoff_time, release_time, landing_time;
   GeoPoint takeoff_location, release_location, landing_location;
+
+  std::vector<PowerState> power_states;
 
   FlightTimeResult() {
     takeoff_time.Clear();
