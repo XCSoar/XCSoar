@@ -80,6 +80,13 @@ LinuxInputDevice::Read()
 {
   struct input_event buffer[64];
   const ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
+  if (nbytes < 0) {
+    /* device has failed or was unplugged - bail out */
+    if (errno != EAGAIN && errno != EINTR)
+      Close();
+    return;
+  }
+
   unsigned n = size_t(nbytes) / sizeof(buffer[0]);
 
   for (unsigned i = 0; i < n; ++i) {
