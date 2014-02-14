@@ -29,9 +29,13 @@ EventQueue::EventQueue()
    thread(ThreadHandle::GetCurrent()),
    now_us(MonotonicClockUS()),
 #ifndef NON_INTERACTIVE
+#if !defined(USE_LINUX_INPUT) || defined(KOBO)
    keyboard(*this, io_loop),
+#endif
 #ifdef KOBO
    mouse(*this, io_loop),
+#elif defined(USE_LINUX_INPUT)
+   all_input(*this, io_loop),
 #else
    mouse(io_loop),
 #endif
@@ -50,6 +54,8 @@ EventQueue::EventQueue()
 
   /* Kobo touch screen */
   mouse.Open("/dev/input/event1");
+#elif defined(USE_LINUX_INPUT)
+  all_input.Open();
 #else
   mouse.Open();
 #endif
@@ -138,6 +144,11 @@ EventQueue::Generate(Event &event)
   }
 
 #ifndef NON_INTERACTIVE
+#if defined(USE_LINUX_INPUT) && !defined(KOBO)
+  event = all_input.Generate();
+  if (event.type != Event::Type::NOP)
+    return true;
+#else
   event = mouse.Generate();
   if (event.type != Event::Type::NOP) {
 #ifdef KOBO
@@ -146,6 +157,7 @@ EventQueue::Generate(Event &event)
 
     return true;
   }
+#endif
 #endif
 
   return false;

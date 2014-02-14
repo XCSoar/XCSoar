@@ -38,6 +38,8 @@ Copyright_License {
 #include "../Linux/Input.hpp"
 #include "../Shared/RotatePointer.hpp"
 #include "DisplaySettings.hpp"
+#elif defined(USE_LINUX_INPUT)
+#include "../Linux/AllInput.hpp"
 #else
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
@@ -66,8 +68,14 @@ class EventQueue final : private SignalListener {
   LinuxInputDevice mouse;
   RotatePointer rotate_mouse;
 #else
+
+#ifdef USE_LINUX_INPUT
+  AllLinuxInputDevices all_input;
+#else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
+#endif
+
 #endif
 #endif
 
@@ -91,6 +99,8 @@ public:
   void SetScreenSize(unsigned width, unsigned height) {
 #ifdef KOBO
     rotate_mouse.SetSize(width, height);
+#elif defined(USE_LINUX_INPUT)
+    // TODO
 #else
     mouse.SetScreenSize(width, height);
 #endif
@@ -107,7 +117,12 @@ public:
 
 #ifndef KOBO
   RasterPoint GetMousePosition() const {
+#ifdef USE_LINUX_INPUT
+    // TODO
+    return { 0, 0 };
+#else
     return { int(mouse.GetX()), int(mouse.GetY()) };
+#endif
   }
 #endif
 

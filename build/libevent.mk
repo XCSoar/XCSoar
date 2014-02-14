@@ -1,4 +1,6 @@
 USE_CONSOLE ?= $(call bool_or,$(EGL),$(USE_FB))
+
+# query /dev/input/event* instead of stdin and /dev/input/mice?
 USE_LINUX_INPUT ?= $(TARGET_IS_KOBO)
 
 EVENT_SOURCES = \
@@ -22,12 +24,20 @@ VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/SignalListener.cpp \
-	$(SRC)/Event/Linux/TTYKeyboard.cpp \
-	$(SRC)/Event/Linux/Mouse.cpp \
-	$(SRC)/Event/Linux/Input.cpp \
 	$(SRC)/Event/Console/Loop.cpp \
 	$(SRC)/Event/Console/Queue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
+
+ifeq ($(USE_LINUX_INPUT),y)
+EVENT_SOURCES += \
+	$(SRC)/Event/Linux/AllInput.cpp \
+	$(SRC)/Event/Linux/Input.cpp
+else
+EVENT_SOURCES += \
+	$(SRC)/Event/Linux/TTYKeyboard.cpp \
+	$(SRC)/Event/Linux/Mouse.cpp
+endif
+
 else ifeq ($(ENABLE_SDL),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/SDL/Loop.cpp \
