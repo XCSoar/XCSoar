@@ -2,7 +2,7 @@ TARGETS = PC WIN64 \
 	PPC2000 PPC2003 PPC2003X WM5 WM5X \
 	ALTAIR \
 	UNIX UNIX32 UNIX64 OPT \
-	PI KOBO NEON \
+	PI CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
 	WINE CYGWIN
@@ -219,6 +219,13 @@ ifeq ($(TARGET),PI)
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
   ARMV6 = y
+endif
+
+ifeq ($(TARGET),CUBIE)
+  # cross-crompiling for Cubieboard
+  override TARGET = NEON
+  CUBIE ?= /opt/cubie/root
+  TARGET_HAS_MALI = y
 endif
 
 ifeq ($(TARGET),KOBO)
@@ -454,6 +461,12 @@ ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf
 endif
 
+ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
+  # cross-crompiling for Cubieboard
+  TARGET_CPPFLAGS += --sysroot=$(CUBIE) -isystem $(CUBIE)/usr/include/arm-linux-gnueabihf
+  TARGET_CPPFLAGS += -isystem $(CUBIE)/usr/local/stow/sunxi-mali/include
+endif
+
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
   TARGET_CPPFLAGS += -isystem $(KOBO)/include
@@ -532,6 +545,14 @@ endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
+endif
+
+ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
+  # cross-crompiling for Cubieboard
+  TARGET_LDFLAGS += --sysroot=$(CUBIE)
+  TARGET_LDFLAGS += -L$(CUBIE)/lib/arm-linux-gnueabihf
+  TARGET_LDFLAGS += -L$(CUBIE)/usr/lib/arm-linux-gnueabihf
+  TARGET_LDFLAGS += -L$(CUBIE)/usr/local/stow/sunxi-mali/lib
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
