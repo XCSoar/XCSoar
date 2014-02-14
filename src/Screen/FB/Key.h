@@ -24,10 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CONSOLE_KEY_H
 #define XCSOAR_SCREEN_CONSOLE_KEY_H
 
-#ifdef KOBO
-#define USE_LINUX_INPUT
-#endif
-
 #ifdef USE_LINUX_INPUT
 #include <linux/input.h>
 

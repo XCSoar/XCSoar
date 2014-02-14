@@ -1,4 +1,5 @@
 USE_CONSOLE ?= $(call bool_or,$(EGL),$(USE_FB))
+USE_LINUX_INPUT ?= $(TARGET_IS_KOBO)
 
 EVENT_SOURCES = \
 	$(SRC)/Event/Shared/Timer.cpp \
@@ -38,7 +39,12 @@ EVENT_SOURCES += \
 	$(SRC)/Event/GDI/Queue.cpp
 endif
 
+ifeq ($(USE_LINUX_INPUT),y)
+LINUX_INPUT_CPPFLAGS = -DUSE_LINUX_INPUT
+endif
+
 EVENT_CPPFLAGS = \
+	$(LINUX_INPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
 	$(GDI_CPPFLAGS) \
 	$(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) \
