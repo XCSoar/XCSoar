@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Thread/Thread.hpp"
+#include "Name.hpp"
 
 #ifdef ANDROID
 #include "Java/Global.hpp"
@@ -141,6 +142,9 @@ Thread::ThreadProc(void *p)
      initialised "defined" yet */
   thread->defined = true;
 #endif
+
+  if (thread->name != nullptr)
+    SetThreadName(thread->name);
 
   thread->Run();
 

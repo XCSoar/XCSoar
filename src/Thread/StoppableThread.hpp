@@ -35,6 +35,8 @@ class StoppableThread : public Thread {
   Trigger stop_trigger;
 
 public:
+  StoppableThread(const char *_name):Thread(_name) {}
+
   bool Start() {
     stop_trigger.Reset();
     return Thread::Start();

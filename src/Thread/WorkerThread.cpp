@@ -25,9 +25,11 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "Time/PeriodClock.hpp"
 
-WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min,
+WorkerThread::WorkerThread(const char *_name,
+                           unsigned _period_min, unsigned _idle_min,
                            unsigned _delay)
-  :period_min(_period_min), idle_min(_idle_min), delay(_delay) {
+  :SuspensibleThread(_name),
+   period_min(_period_min), idle_min(_idle_min), delay(_delay) {
 }
 
 void

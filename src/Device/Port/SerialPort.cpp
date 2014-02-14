@@ -40,7 +40,7 @@ Copyright_License {
 #include <stdio.h>
 
 SerialPort::SerialPort(DataHandler &_handler)
-  :BufferedPort(_handler)
+  :BufferedPort(_handler), StoppableThread("SerialPort")
 {
 }
 

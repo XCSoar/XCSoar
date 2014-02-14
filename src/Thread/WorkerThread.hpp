@@ -46,7 +46,8 @@ public:
    * @param delay an artificial delay between Trigger() and Tick(), to
    * allow grouping consecutive Trigger() calls into one Tick()
    */
-  WorkerThread(unsigned period_min=0, unsigned idle_min=0,
+  WorkerThread(const char *_name,
+               unsigned period_min=0, unsigned idle_min=0,
                unsigned delay=0);
 
   /**

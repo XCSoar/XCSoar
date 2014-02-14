@@ -29,7 +29,7 @@ Copyright_License {
 #include "Device/All.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
-  :WorkerThread(150, 50, 20),
+  :WorkerThread("MergeThread", 150, 50, 20),
    device_blackboard(_device_blackboard)
 {
   last_fix.Reset();

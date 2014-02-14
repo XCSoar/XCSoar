@@ -86,7 +86,7 @@ private:
   bool stop;
 
 public:
-  StandbyThread();
+  StandbyThread(const char *_name);
 
   /**
    * This destructor verifies that the thread has been stopped.

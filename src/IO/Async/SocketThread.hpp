@@ -38,7 +38,7 @@ class SocketThread : public StoppableThread {
 
 public:
   SocketThread(SocketDescriptor &_socket, FileEventHandler &_handler)
-    :socket(_socket), handler(_handler) {}
+    :StoppableThread("SocketThread"), socket(_socket), handler(_handler) {}
 
 protected:
   /* virtual methods from class Thread */

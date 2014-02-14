@@ -21,35 +21,32 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_RECURSIVELY_SUSPENSIBLE_THREAD_HPP
-#define XCSOAR_THREAD_RECURSIVELY_SUSPENSIBLE_THREAD_HPP
+#ifndef XCSOAR_THREAD_NAME_HPP
+#define XCSOAR_THREAD_NAME_HPP
 
-#include "SuspensibleThread.hpp"
+#ifdef HAVE_POSIX
+/* Bionic supports pthread_setname_np() since API level 9*/
+#ifndef __BIONIC__
+#define HAVE_PTHREAD_SETNAME_NP
+#endif
+#endif
 
-/**
- * A version of SuspensibleThread that can be suspended recursively.
- * It will not be resumed until all calls to Suspend() have been
- * undone with as many calls to Resume().
- */
-class RecursivelySuspensibleThread : public SuspensibleThread {
-  /**
-   * The thread should be suspended as long as this value is non-zero.
-   * It is not protected the SuspensibleThread's mutex, because it may
-   * only be accessed from one thread.
-   */
-  unsigned suspend_count;
+#ifdef HAVE_PTHREAD_SETNAME_NP
+#include <pthread.h>
+#endif
 
-public:
-  RecursivelySuspensibleThread(const char *_name)
-    :SuspensibleThread(_name) {}
-
-  bool Start(bool suspended=false);
-
-  void BeginSuspend();
-
-  void Suspend();
-
-  void Resume();
-};
+static inline void
+SetThreadName(const char *name)
+{
+#ifdef HAVE_PTHREAD_SETNAME_NP
+#ifdef __APPLE__
+  pthread_setname_np(name);
+#else
+  pthread_setname_np(pthread_self(), name);
+#endif
+#else
+  (void)name;
+#endif
+}
 
 #endif

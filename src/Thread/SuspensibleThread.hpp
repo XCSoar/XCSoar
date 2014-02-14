@@ -51,6 +51,8 @@ class SuspensibleThread : public Thread {
 #endif
 
 public:
+  SuspensibleThread(const char *_name):Thread(_name) {}
+
   bool Start(bool suspended=false);
 
   /**

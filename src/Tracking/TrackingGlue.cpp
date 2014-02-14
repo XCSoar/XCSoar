@@ -52,7 +52,8 @@ MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
 
 TrackingGlue::TrackingGlue()
 #ifdef HAVE_LIVETRACK24
-  :last_timestamp(0),
+  :StandbyThread("Tracking"),
+   last_timestamp(0),
    flying(false)
 #endif
 {

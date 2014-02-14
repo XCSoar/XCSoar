@@ -152,7 +152,8 @@ class DownloadManagerThread final
 
 public:
   DownloadManagerThread()
-    :current_size(-1), current_position(-1) {}
+    :StandbyThread("DownloadMgr"),
+     current_size(-1), current_position(-1) {}
 
   void StopAsync() {
     ScopeLock protect(mutex);

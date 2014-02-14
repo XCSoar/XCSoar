@@ -46,6 +46,8 @@ public:
   static constexpr unsigned READ = IOLoop::READ;
   static constexpr unsigned WRITE = IOLoop::WRITE;
 
+  IOThread():Thread("IOThread") {}
+
   /**
    * Start the thread.  This method should be called after creating
    * this object.
