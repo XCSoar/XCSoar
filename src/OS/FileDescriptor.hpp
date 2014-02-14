@@ -41,6 +41,7 @@
 #ifdef __linux__
 #define HAVE_EVENTFD
 #define HAVE_SIGNALFD
+#define HAVE_INOTIFY
 #include <signal.h>
 #endif
 
@@ -135,6 +136,10 @@ public:
 
 #ifdef HAVE_SIGNALFD
   bool CreateSignalFD(const sigset_t *mask);
+#endif
+
+#ifdef HAVE_INOTIFY
+  bool CreateInotify();
 #endif
 
   /**

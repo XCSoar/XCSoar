@@ -48,6 +48,10 @@
 #include <sys/signalfd.h>
 #endif
 
+#ifdef HAVE_INOTIFY
+#include <sys/inotify.h>
+#endif
+
 #ifndef O_NOCTTY
 #define O_NOCTTY 0
 #endif
@@ -157,6 +161,30 @@ FileDescriptor::CreateSignalFD(const sigset_t *mask)
 #endif
   if (new_fd < 0)
     return false;
+
+  fd = new_fd;
+  return true;
+}
+
+#endif
+
+#ifdef HAVE_INOTIFY
+
+bool
+FileDescriptor::CreateInotify()
+{
+#ifdef __BIONIC__
+  /* Bionic doesn't have inotify_init1() */
+  int new_fd = inotify_init();
+#else
+  int new_fd = inotify_init1(IN_CLOEXEC|IN_NONBLOCK);
+#endif
+  if (new_fd < 0)
+    return false;
+
+#ifdef __BIONIC__
+  SetNonBlocking();
+#endif
 
   fd = new_fd;
   return true;
