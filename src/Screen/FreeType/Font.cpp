@@ -35,6 +35,12 @@ Copyright_License {
 #include "Util/UTF8.hpp"
 #endif
 
+#if defined(__clang__) && defined(__arm__)
+/* work around warning: 'register' storage class specifier is
+   deprecated */
+#define register
+#endif
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
