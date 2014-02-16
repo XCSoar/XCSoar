@@ -61,6 +61,7 @@ LinuxInputDevice::Open(const char *path)
   fd.SetNonBlocking();
   io_loop.Add(fd.Get(), io_loop.READ, *this);
 
+  rel_x = rel_y = 0;
   down = false;
   moving = pressing = releasing = false;
   return true;
@@ -120,6 +121,9 @@ LinuxInputDevice::Read()
           moving = false;
           public_position = edit_position;
           merge.MoveAbsolute(public_position.x, public_position.y);
+        } else if (rel_x != 0 || rel_y != 0) {
+          merge.MoveRelative(rel_x, rel_y);
+          rel_x = rel_y = 0;
         }
       }
 
@@ -151,6 +155,19 @@ LinuxInputDevice::Read()
 
       case ABS_Y:
         edit_position.y = e.value;
+        break;
+      }
+
+      break;
+
+    case EV_REL:
+      switch (e.code) {
+      case REL_X:
+        rel_x += e.value;
+        break;
+
+      case ABS_Y:
+        rel_y += e.value;
         break;
       }
 
