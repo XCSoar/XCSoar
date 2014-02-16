@@ -34,6 +34,7 @@ Copyright_License {
 #include "../Linux/SignalListener.hpp"
 
 #ifndef NON_INTERACTIVE
+#include "../Linux/MergeMouse.hpp"
 #ifdef KOBO
 #include "../Linux/Input.hpp"
 #include "../Shared/RotatePointer.hpp"
@@ -42,7 +43,6 @@ Copyright_License {
 #include "../Linux/AllInput.hpp"
 #else
 #include "../Linux/TTYKeyboard.hpp"
-#include "../Linux/MergeMouse.hpp"
 #include "../Linux/Mouse.hpp"
 #endif
 #endif
@@ -64,17 +64,16 @@ class EventQueue final : private SignalListener {
   IOLoop io_loop;
 
 #ifndef NON_INTERACTIVE
+  MergeMouse merge_mouse;
 #ifdef KOBO
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
   RotatePointer rotate_mouse;
 #else
-
 #ifdef USE_LINUX_INPUT
   AllLinuxInputDevices all_input;
 #else
   TTYKeyboard keyboard;
-  MergeMouse merge_mouse;
   LinuxMouse mouse;
 #endif
 
@@ -101,11 +100,8 @@ public:
   void SetScreenSize(unsigned width, unsigned height) {
 #ifdef KOBO
     rotate_mouse.SetSize(width, height);
-#elif defined(USE_LINUX_INPUT)
-    // TODO
-#else
-    merge_mouse.SetScreenSize(width, height);
 #endif
+    merge_mouse.SetScreenSize(width, height);
   }
 
 #ifdef KOBO
@@ -117,16 +113,9 @@ public:
   void SetMouseRotation(DisplaySettings::Orientation orientation);
 #endif
 
-#ifndef KOBO
   RasterPoint GetMousePosition() const {
-#ifdef USE_LINUX_INPUT
-    // TODO
-    return { 0, 0 };
-#else
     return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
-#endif
   }
-#endif
 
 #endif /* !NON_INTERACTIVE */
 

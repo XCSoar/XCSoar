@@ -31,8 +31,9 @@ Copyright_License {
 
 #include <list>
 
-class EventQueue;
 class IOLoop;
+class EventQueue;
+class MergeMouse;
 struct Event;
 
 /**
@@ -49,12 +50,14 @@ class AllLinuxInputDevices final
 
     LinuxInputDevice device;
 
-    Device(const char *_name, EventQueue &_queue, IOLoop &_io_loop)
-      :name(_name), device(_queue, _io_loop) {}
+    Device(const char *_name, IOLoop &_io_loop, EventQueue &_queue,
+           MergeMouse &_merge)
+      :name(_name), device(_io_loop, _queue, _merge) {}
   };
 
-  EventQueue &queue;
   IOLoop &io_loop;
+  EventQueue &queue;
+  MergeMouse &merge;
 
   std::list<Device> devices;
 
@@ -63,8 +66,9 @@ class AllLinuxInputDevices final
 #endif
 
 public:
-  explicit AllLinuxInputDevices(EventQueue &_queue, IOLoop &_io_loop)
-    :queue(_queue), io_loop(_io_loop) {}
+  explicit AllLinuxInputDevices(IOLoop &_io_loop, EventQueue &_queue,
+                                MergeMouse &_merge)
+    :io_loop(_io_loop), queue(_queue), merge(_merge) {}
 
   ~AllLinuxInputDevices() {
     Close();
@@ -72,8 +76,6 @@ public:
 
   bool Open();
   void Close();
-
-  Event Generate();
 
 private:
   gcc_pure

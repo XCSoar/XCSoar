@@ -24,6 +24,7 @@ VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/SignalListener.cpp \
+	$(SRC)/Event/Linux/MergeMouse.cpp \
 	$(SRC)/Event/Console/Loop.cpp \
 	$(SRC)/Event/Console/Queue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
@@ -35,7 +36,6 @@ EVENT_SOURCES += \
 else
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
-	$(SRC)/Event/Linux/MergeMouse.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp
 endif
 

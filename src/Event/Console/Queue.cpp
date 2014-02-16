@@ -29,13 +29,15 @@ EventQueue::EventQueue()
    thread(ThreadHandle::GetCurrent()),
    now_us(MonotonicClockUS()),
 #ifndef NON_INTERACTIVE
-#if !defined(USE_LINUX_INPUT) || defined(KOBO)
+#ifdef KOBO
+   keyboard(io_loop, *this, merge_mouse),
+#elif !defined(USE_LINUX_INPUT)
    keyboard(*this, io_loop),
 #endif
 #ifdef KOBO
-   mouse(*this, io_loop),
+   mouse(io_loop, *this, merge_mouse),
 #elif defined(USE_LINUX_INPUT)
-   all_input(*this, io_loop),
+   all_input(io_loop, *this, merge_mouse),
 #else
    mouse(io_loop, merge_mouse),
 #endif
@@ -144,11 +146,6 @@ EventQueue::Generate(Event &event)
   }
 
 #ifndef NON_INTERACTIVE
-#if defined(USE_LINUX_INPUT) && !defined(KOBO)
-  event = all_input.Generate();
-  if (event.type != Event::Type::NOP)
-    return true;
-#else
   event = merge_mouse.Generate();
   if (event.type != Event::Type::NOP) {
 #ifdef KOBO
@@ -157,7 +154,6 @@ EventQueue::Generate(Event &event)
 
     return true;
   }
-#endif
 #endif
 
   return false;

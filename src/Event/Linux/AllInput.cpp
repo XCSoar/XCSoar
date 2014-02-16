@@ -73,19 +73,6 @@ AllLinuxInputDevices::Close()
 #endif
 }
 
-Event
-AllLinuxInputDevices::Generate()
-{
-  Event event(Event::NOP);
-  for (auto &i : devices) {
-    event = i.device.Generate();
-    if (event.type != Event::Type::NOP)
-      break;
-  }
-
-  return event;
-}
-
 std::list<AllLinuxInputDevices::Device>::iterator
 AllLinuxInputDevices::FindByName(const char *name)
 {
@@ -119,7 +106,7 @@ AllLinuxInputDevices::Add(const char *name)
   StaticString<64> path;
   path.Format("/dev/input/%s", name);
 
-  devices.emplace_back(name, queue, io_loop);
+  devices.emplace_back(name, io_loop, queue, merge);
   if (!devices.back().device.Open(path))
     devices.pop_back();
 }

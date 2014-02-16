@@ -52,10 +52,9 @@ MergeMouse::SetDown(bool new_down)
 }
 
 void
-MergeMouse::MoveRelative(int dx, int dy)
+MergeMouse::MoveAbsolute(int new_x, int new_y)
 {
   if (screen_width > 0) {
-    int new_x = x + dx;
     if (new_x < 0)
       new_x = 0;
     else if (unsigned(new_x) > screen_width)
@@ -68,7 +67,6 @@ MergeMouse::MoveRelative(int dx, int dy)
   }
 
   if (screen_height > 0) {
-    int new_y = y - dy;
     if (new_y < 0)
       new_y = 0;
     else if (unsigned(new_y) > screen_height)
@@ -79,6 +77,12 @@ MergeMouse::MoveRelative(int dx, int dy)
       moved = true;
     }
   }
+}
+
+void
+MergeMouse::MoveRelative(int dx, int dy)
+{
+  MoveAbsolute(x + dx, y + dy);
 }
 
 Event

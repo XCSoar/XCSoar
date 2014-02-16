@@ -53,6 +53,7 @@ public:
   void SetScreenSize(unsigned width, unsigned height);
 
   void SetDown(bool new_down);
+  void MoveAbsolute(int new_x, int new_y);
   void MoveRelative(int dx, int dy);
 
   unsigned GetX() const {

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Input.hpp"
+#include "MergeMouse.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Event/Queue.hpp"
 #include "IO/Async/IOLoop.hpp"
@@ -61,7 +62,7 @@ LinuxInputDevice::Open(const char *path)
   io_loop.Add(fd.Get(), io_loop.READ, *this);
 
   down = false;
-  moving = moved = pressing = releasing = pressed = released = false;
+  moving = pressing = releasing = false;
   return true;
 }
 
@@ -97,9 +98,15 @@ LinuxInputDevice::Read()
       if (e.code == SYN_REPORT) {
         /* commit the finger movement */
 
-        pressed = pressing;
-        released = releasing;
+        const bool pressed = pressing;
+        const bool released = releasing;
         pressing = releasing = false;
+
+        if (pressed)
+          merge.SetDown(true);
+
+        if (released)
+          merge.SetDown(false);
 
         if (IsKobo() && released) {
           /* workaround: on the Kobo Touch N905B, releasing the touch
@@ -111,8 +118,8 @@ LinuxInputDevice::Read()
 
         if (moving) {
           moving = false;
-          moved = true;
           public_position = edit_position;
+          merge.MoveAbsolute(public_position.x, public_position.y);
         }
       }
 
@@ -150,30 +157,6 @@ LinuxInputDevice::Read()
       break;
     }
   }
-}
-
-Event
-LinuxInputDevice::Generate()
-{
-  if (!IsOpen())
-    return Event(Event::Type::NOP);
-
-  if (moved) {
-    moved = false;
-    return Event(Event::MOUSE_MOTION, public_position.x, public_position.y);
-  }
-
-  if (pressed) {
-    pressed = false;
-    return Event(Event::MOUSE_DOWN, public_position.x, public_position.y);
-  }
-
-  if (released) {
-    released = false;
-    return Event(Event::MOUSE_UP, public_position.x, public_position.y);
-  }
-
-  return Event(Event::Type::NOP);
 }
 
 bool
