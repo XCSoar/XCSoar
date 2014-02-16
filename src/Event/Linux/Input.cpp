@@ -119,7 +119,7 @@ LinuxInputDevice::Read()
       break;
 
     case EV_KEY:
-      if (e.code == BTN_TOUCH) {
+      if (e.code == BTN_TOUCH || e.code == BTN_MOUSE) {
         bool new_down = e.value;
         if (new_down != down) {
           down = new_down;
