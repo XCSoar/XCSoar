@@ -42,6 +42,7 @@ Copyright_License {
 #include "../Linux/AllInput.hpp"
 #else
 #include "../Linux/TTYKeyboard.hpp"
+#include "../Linux/MergeMouse.hpp"
 #include "../Linux/Mouse.hpp"
 #endif
 #endif
@@ -73,6 +74,7 @@ class EventQueue final : private SignalListener {
   AllLinuxInputDevices all_input;
 #else
   TTYKeyboard keyboard;
+  MergeMouse merge_mouse;
   LinuxMouse mouse;
 #endif
 
@@ -102,7 +104,7 @@ public:
 #elif defined(USE_LINUX_INPUT)
     // TODO
 #else
-    mouse.SetScreenSize(width, height);
+    merge_mouse.SetScreenSize(width, height);
 #endif
   }
 
@@ -121,7 +123,7 @@ public:
     // TODO
     return { 0, 0 };
 #else
-    return { int(mouse.GetX()), int(mouse.GetY()) };
+    return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
 #endif
   }
 #endif

@@ -37,7 +37,7 @@ EventQueue::EventQueue()
 #elif defined(USE_LINUX_INPUT)
    all_input(*this, io_loop),
 #else
-   mouse(io_loop),
+   mouse(io_loop, merge_mouse),
 #endif
 #endif
    running(true)
@@ -149,7 +149,7 @@ EventQueue::Generate(Event &event)
   if (event.type != Event::Type::NOP)
     return true;
 #else
-  event = mouse.Generate();
+  event = merge_mouse.Generate();
   if (event.type != Event::Type::NOP) {
 #ifdef KOBO
     rotate_mouse.Do(event.point);

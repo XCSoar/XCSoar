@@ -35,6 +35,7 @@ EVENT_SOURCES += \
 else
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
+	$(SRC)/Event/Linux/MergeMouse.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp
 endif
 

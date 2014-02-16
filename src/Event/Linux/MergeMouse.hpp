@@ -21,45 +21,49 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_LINUX_MOUSE_HPP
-#define XCSOAR_EVENT_LINUX_MOUSE_HPP
+#ifndef XCSOAR_EVENT_MERGE_MOUSE_HPP
+#define XCSOAR_EVENT_MERGE_MOUSE_HPP
 
 #include "OS/FileDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
 class IOLoop;
-class MergeMouse;
+struct Event;
 
 /**
- * A driver for the Linux mouse (/dev/input/mouse*, /dev/input/mice).
+ * This class keeps track of the current mouse position and generates
+ * movement events for the #EventQueue.  It is responsible for merging
+ * the input of multiple (hot-plugged) mouse devices.
  */
-class LinuxMouse final : private FileEventHandler {
-  IOLoop &io_loop;
+class MergeMouse final {
+  unsigned screen_width, screen_height;
+  unsigned x, y;
+  bool down;
 
-  MergeMouse &merge;
-
-  FileDescriptor fd;
+  bool moved, pressed, released;
 
 public:
-  explicit LinuxMouse(IOLoop &_io_loop, MergeMouse &_merge)
-    :io_loop(_io_loop), merge(_merge) {}
+  MergeMouse()
+    :screen_width(0), screen_height(0),
+     x(0), y(0),
+     down(false), moved(false), pressed(false), released(false){}
 
-  ~LinuxMouse() {
-    Close();
+  MergeMouse(const MergeMouse &) = delete;
+
+  void SetScreenSize(unsigned width, unsigned height);
+
+  void SetDown(bool new_down);
+  void MoveRelative(int dx, int dy);
+
+  unsigned GetX() const {
+    return x;
   }
 
-  bool Open(const char *path="/dev/input/mice");
-  void Close();
-
-  bool IsOpen() const {
-    return fd.IsDefined();
+  unsigned GetY() const {
+    return y;
   }
 
-private:
-  void Read();
-
-  /* virtual methods from FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override;
+  Event Generate();
 };
 
 #endif
