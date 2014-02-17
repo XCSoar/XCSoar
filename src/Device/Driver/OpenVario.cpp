@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 
 class OpenVarioDevice : public AbstractDevice {
@@ -57,6 +58,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
    * P: static pressure in hPa
    * Q: dynamic pressure in Pa
    * R: total pressure in hPa
+   * S: true airspeed in km/h
    * T: temperature in deg C
    */
 
@@ -83,6 +85,11 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case 'R': {
         AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
         info.ProvidePitotPressure(pressure);
+        break;
+      }
+      case 'S': {
+        value = Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR);
+        info.ProvideTrueAirspeed(value);
         break;
       }
       case 'T': {
