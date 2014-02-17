@@ -1209,6 +1209,12 @@ TestOpenVario()
   ok1(equals(nmea_info.pitot_pressure.GetHectoPascal(), 1025.17));
   nmea_info.Reset();
 
+  // Temperature is read
+  ok1(device->ParseNMEA("$POV,T,23.52*35", nmea_info));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature, 23.52 + 273.15));
+  nmea_info.Reset();
+
   delete device;
 }
 
@@ -1413,7 +1419,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(744);
+  plan_tests(747);
 
   TestGeneric();
   TestTasman();
