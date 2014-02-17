@@ -177,6 +177,12 @@ void DouglasPeuckerMod::Classify(std::vector<IGCFixEnhanced> &fixes,
     fixes[i].level = -1;
   }
 
+  // return early if start == end
+  if (start == end) {
+    fixes[start].level = 0;
+    return;
+  }
+
   unsigned i = force_endpoints ? 2 : 0;
   while (!dists.empty() && ++i < max_points) {
     std::pair<unsigned, double> fix_dist = dists.top();
