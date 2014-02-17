@@ -27,6 +27,8 @@ Copyright_License {
 #include "OS/FileDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
+#include <assert.h>
+
 class IOLoop;
 struct Event;
 
@@ -42,15 +44,39 @@ class MergeMouse final {
 
   bool moved, pressed, released;
 
+  /**
+   * The number of pointer input devices.
+   */
+  unsigned n_pointers;
+
 public:
   MergeMouse()
     :screen_width(0), screen_height(0),
      x(0), y(0),
-     down(false), moved(false), pressed(false), released(false){}
+     down(false), moved(false), pressed(false), released(false),
+     n_pointers(0) {}
 
   MergeMouse(const MergeMouse &) = delete;
 
+  ~MergeMouse() {
+    assert(n_pointers == 0);
+  }
+
   void SetScreenSize(unsigned width, unsigned height);
+
+  void AddPointer() {
+    ++n_pointers;
+  }
+
+  void RemovePointer() {
+    assert(n_pointers > 0);
+
+    --n_pointers;
+  }
+
+  bool HasPointer() const {
+    return n_pointers > 0;
+  }
 
   void SetDown(bool new_down);
   void MoveAbsolute(int new_x, int new_y);

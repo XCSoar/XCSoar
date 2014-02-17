@@ -76,6 +76,8 @@ class LinuxInputDevice final : private FileEventHandler {
    */
   bool pressing, releasing;
 
+  bool is_pointer;
+
   FileDescriptor fd;
 
 public:

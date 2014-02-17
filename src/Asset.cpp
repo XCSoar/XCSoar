@@ -28,6 +28,11 @@ Copyright_License {
 #include "IO/FileHandle.hpp"
 #include "Util/CharUtil.hpp"
 
+#ifdef USE_CONSOLE
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
+#endif
+
 #ifdef _WIN32_WCE
 #include "LogFile.hpp"
 
@@ -183,3 +188,13 @@ ReadAssetNumber()
   }
 #endif
 }
+
+#if defined(USE_CONSOLE) && !defined(KOBO)
+
+bool
+HasPointer()
+{
+  return event_queue->HasPointer();
+}
+
+#endif

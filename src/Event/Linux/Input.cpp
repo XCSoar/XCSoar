@@ -28,7 +28,10 @@ Copyright_License {
 #include "IO/Async/IOLoop.hpp"
 #include "Asset.hpp"
 
+#include <algorithm>
+
 #include <linux/input.h>
+#include <sys/ioctl.h>
 
 #ifdef KEY_DOWN
 #undef KEY_DOWN
@@ -52,6 +55,43 @@ TranslateKeyCode(unsigned key_code)
   return key_code;
 }
 
+template<typename T>
+static constexpr unsigned
+BitSize()
+{
+  return 8 * sizeof(T);
+}
+
+template<typename T>
+static constexpr size_t
+BitsToInts(unsigned n_bits)
+{
+  return (n_bits + BitSize<T>() - 1) / BitSize<T>();
+}
+
+template<typename T>
+static constexpr bool
+CheckBit(const T bits[], unsigned i)
+{
+  return bits[i / BitSize<T>()] & (T(1) << (i % BitSize<T>()));
+}
+
+/**
+ * Check if the EVDEV supports EV_ABS or EV_REL..
+ */
+gcc_pure
+static bool
+IsPointerDevice(int fd)
+{
+  assert(fd >= 0);
+
+  unsigned long features[BitsToInts<unsigned long>(std::max(EV_ABS, EV_REL))];
+  if (ioctl(fd, EVIOCGBIT(0, sizeof(features)), features) < 0)
+    return false;
+
+  return CheckBit(features, EV_ABS) || CheckBit(features, EV_REL);
+}
+
 bool
 LinuxInputDevice::Open(const char *path)
 {
@@ -60,6 +100,10 @@ LinuxInputDevice::Open(const char *path)
 
   fd.SetNonBlocking();
   io_loop.Add(fd.Get(), io_loop.READ, *this);
+
+  is_pointer = IsPointerDevice(fd.Get());
+  if (is_pointer)
+    merge.AddPointer();
 
   rel_x = rel_y = 0;
   down = false;
@@ -72,6 +116,9 @@ LinuxInputDevice::Close()
 {
   if (!IsOpen())
     return;
+
+  if (is_pointer)
+    merge.RemovePointer();
 
   io_loop.Remove(fd.Get());
   fd.Close();

@@ -113,6 +113,10 @@ public:
   void SetMouseRotation(DisplaySettings::Orientation orientation);
 #endif
 
+  bool HasPointer() const {
+    return merge_mouse.HasPointer();
+  }
+
   RasterPoint GetMousePosition() const {
     return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
   }

@@ -28,3 +28,13 @@ Copyright_License {
 ModelType global_model_type = ModelType::GENERIC;
 
 #endif
+
+#if defined(USE_CONSOLE) && !defined(KOBO)
+
+bool
+HasPointer()
+{
+  return !IsAltair();
+}
+
+#endif
