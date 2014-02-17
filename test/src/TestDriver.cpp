@@ -1186,6 +1186,11 @@ TestOpenVario()
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1018.35));
 
+  // Dynamic pressure is read
+  ok1(device->ParseNMEA("$POV,Q,23.3*04", nmea_info));
+  ok1(nmea_info.dyn_pressure_available);
+  ok1(equals(nmea_info.dyn_pressure.GetPascal(), 23.3));
+
   delete device;
 }
 
@@ -1390,7 +1395,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(731);
+  plan_tests(734);
 
   TestGeneric();
   TestTasman();
