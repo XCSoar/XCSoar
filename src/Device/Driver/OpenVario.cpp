@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 class OpenVarioDevice : public AbstractDevice {
 public:
@@ -56,6 +57,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
    * P: static pressure in hPa
    * Q: dynamic pressure in Pa
    * R: total pressure in hPa
+   * T: temperature in deg C
    */
 
   while (!line.IsEmpty()) {
@@ -81,6 +83,11 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case 'R': {
         AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
         info.ProvidePitotPressure(pressure);
+        break;
+      }
+      case 'T': {
+        info.temperature = CelsiusToKelvin(value);
+        info.temperature_available = true;
         break;
       }
     }
