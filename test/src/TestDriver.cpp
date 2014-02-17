@@ -41,6 +41,7 @@
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/IMI.hpp"
+#include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/Volkslogger.hpp"
@@ -1164,6 +1165,26 @@ TestVega()
 }
 
 static void
+TestOpenVario()
+{
+  NullPort null;
+  Device *device = open_vario_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  // Empty sentence is handled by device driver
+  ok1(device->ParseNMEA("$POV*49", nmea_info));
+
+  // Checksums are validated
+  ok1(!device->ParseNMEA("$POV*48", nmea_info));
+
+  delete device;
+}
+
+static void
 TestWesterboer()
 {
   NullPort null;
@@ -1364,7 +1385,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(725);
+  plan_tests(728);
 
   TestGeneric();
   TestTasman();
@@ -1384,6 +1405,7 @@ int main(int argc, char **argv)
   TestLX(condor_driver, true);
   TestLXV7();
   TestILEC();
+  TestOpenVario();
   TestVega();
   TestWesterboer();
   TestZander();
