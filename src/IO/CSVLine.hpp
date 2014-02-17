@@ -43,6 +43,10 @@ public:
     return Range<const char *>(data, end);
   }
 
+  bool IsEmpty() const {
+    return data >= end;
+  }
+
   /**
    * Skip the next column.
    *
