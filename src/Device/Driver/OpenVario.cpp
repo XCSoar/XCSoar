@@ -55,6 +55,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
    *
    * P: static pressure in hPa
    * Q: dynamic pressure in Pa
+   * R: total pressure in hPa
    */
 
   while (!line.IsEmpty()) {
@@ -75,6 +76,11 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case 'Q': {
         AtmosphericPressure pressure = AtmosphericPressure::Pascal(value);
         info.ProvideDynamicPressure(pressure);
+        break;
+      }
+      case 'R': {
+        AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
+        info.ProvidePitotPressure(pressure);
         break;
       }
     }
