@@ -50,6 +50,30 @@ OpenVarioDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 bool
 OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
 {
+  /*
+   * Type definitions:
+   *
+   * P: static pressure in hPa
+   */
+
+  while (!line.IsEmpty()) {
+    char type = line.ReadOneChar();
+    if (type == '\0')
+      break;
+
+    fixed value;
+    if (!line.ReadChecked(value))
+      break;
+
+    switch (type) {
+      case 'P': {
+        AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
+        info.ProvideStaticPressure(pressure);
+        break;
+      }
+    }
+  }
+
   return true;
 }
 
