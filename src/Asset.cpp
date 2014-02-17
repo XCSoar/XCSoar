@@ -23,13 +23,14 @@ Copyright_License {
 
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
-#include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileHandle.hpp"
 #include "Util/CharUtil.hpp"
 
-#if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
+#ifdef _WIN32_WCE
+#include "LogFile.hpp"
+
 #include <windows.h>
 #include <winioctl.h>
 #endif
@@ -61,12 +62,10 @@ SetAssetNumber(const TCHAR *p)
 
   return true;
 }
-#endif
 
 static bool
 ReadCompaqID()
 {
-#if defined(_WIN32_WCE)
   PROCESS_INFORMATION pi;
 
   if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
@@ -84,15 +83,12 @@ ReadCompaqID()
   size_t length = file.Read(buffer, ARRAY_SIZE(buffer) - 1, sizeof(buffer[0]));
   buffer[length] = _T('\0');
   return SetAssetNumber(buffer);
-#else
-  return false;
-#endif
 }
 
 static bool
 ReadUUID()
 {
-#if defined(_WIN32_WCE) && defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
+#if defined(IOCTL_HAL_GET_DEVICEID) && defined(FILE_DEVICE_HAL)
   BOOL fRes;
 
 #define GUIDBuffsize 100
@@ -169,15 +165,21 @@ ReadUUID()
 #endif
 }
 
+#endif
+
 void
 ReadAssetNumber()
 {
+#ifdef _WIN32_WCE
   if (ReadCompaqID()) {
     LogFormat(_T("Asset ID: %s (compaq)"), asset_number);
   } else if (ReadUUID()) {
     LogFormat(_T("Asset ID: %s (uuid)"), asset_number);
   } else {
+#endif
     _tcscpy(asset_number, _T("AAA"));
+#ifdef _WIN32_WCE
     LogFormat(_T("Asset ID: %s (fallback)"), asset_number);
   }
+#endif
 }
