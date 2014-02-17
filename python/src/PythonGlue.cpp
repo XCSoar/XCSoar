@@ -227,6 +227,11 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
        is about the year 2242, which is far enough in the future :-) */
     end = BrokenDateTime::FromUnixTimeUTC(int64_t(2)<<32);
 
+  if (end - begin < 0) {
+    PyErr_SetString(PyExc_ValueError, "Start time later then end time.");
+    return NULL;
+  }
+
   Py_BEGIN_ALLOW_THREADS
   self->flight->Reduce(begin, end, num_levels,
     zoom_factor, threshold, force_endpoints, max_delta_time, max_points);
