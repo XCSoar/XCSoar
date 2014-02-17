@@ -39,7 +39,7 @@ AllLinuxInputDevices::Open()
 
   /* watch /dev/input */
   int wd = inotify_add_watch(inotify_fd.Get(), "/dev/input",
-                             IN_CREATE|IN_DELETE|IN_MOVED_FROM|IN_MOVED_TO);
+                             IN_CREATE|IN_DELETE|IN_MOVED_FROM|IN_MOVED_TO|IN_ATTRIB);
   if (wd < 0) {
     inotify_fd.Close();
     return false;
@@ -141,7 +141,12 @@ AllLinuxInputDevices::Read()
       if ((e.mask & (IN_DELETE|IN_MOVED_FROM)) != 0)
         Remove(e.name);
 
-      if ((e.mask & (IN_CREATE|IN_MOVED_TO)) != 0)
+      /* when udev creates a new device node, it is owned by root, and
+         XCSoar may attempt to open it before the permissions had been
+         adjusted, therefore we try again on IN_ATTRIB to avoid this
+         race condition */
+
+      if ((e.mask & (IN_CREATE|IN_MOVED_TO|IN_ATTRIB)) != 0)
         Add(e.name);
     }
   }
