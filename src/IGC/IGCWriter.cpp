@@ -195,7 +195,7 @@ IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *id)
   char *p = c_record;
   *p++ = 'C';
   p = FormatIGCLocation(p, location);
-  CopyASCIIUppper(p, id);
+  CopyASCIIUpper(p, id);
 
   WriteLine(c_record);
 }

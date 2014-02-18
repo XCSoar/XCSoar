@@ -252,7 +252,7 @@ CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end)
 #endif
 
 void
-CopyASCIIUppper(char *dest, const char *src)
+CopyASCIIUpper(char *dest, const char *src)
 {
   do {
     char ch = *src;
@@ -268,7 +268,7 @@ CopyASCIIUppper(char *dest, const char *src)
 #ifdef _UNICODE
 
 void
-CopyASCIIUppper(char *dest, const TCHAR *src)
+CopyASCIIUpper(char *dest, const TCHAR *src)
 {
   do {
     TCHAR t = *src;

@@ -305,13 +305,13 @@ CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end);
  */
 gcc_nonnull_all
 void
-CopyASCIIUppper(char *dest, const char *src);
+CopyASCIIUpper(char *dest, const char *src);
 
 #ifdef _UNICODE
 
 gcc_nonnull_all
 void
-CopyASCIIUppper(char *dest, const TCHAR *src);
+CopyASCIIUpper(char *dest, const TCHAR *src);
 
 #endif
 
