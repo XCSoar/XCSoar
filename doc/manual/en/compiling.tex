@@ -245,8 +245,13 @@ You need an ARM toolchain.  For example, you can use this toolchain
 that was built for Debian Wheezy on AMD64:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-amd64-2013-12-11.tar.xz
+wget http://max.kellermann.name/download/xcsoar/devel/\
+x-tools/x-tools-arm-amd64-2013-12-11.tar.xz
+\end{verbatim*}
+\begin{verbatim*}
 tar xJfC x-tools-arm-amd64-2013-12-11.tar.xz $HOME
+\end{verbatim*}
+\begin{verbatim*}
 export PATH=$HOME/x-tools/arm-unknown-linux-gnueabi/bin:$PATH
 \end{verbatim*}
 
@@ -265,7 +270,10 @@ Download the
   libraries} and unpack in \texttt{/opt}:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz
+wget http://max.kellermann.name/download/xcsoar/devel/\
+kobo/kobo-libs-2013-12-11.tar.xz
+\end{verbatim*}
+\begin{verbatim*}
 tar xJfC kobo-libs-2013-12-11.tar.xz /opt
 \end{verbatim*}
 
