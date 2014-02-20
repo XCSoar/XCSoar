@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.4 - not yet released
 * map
   - fix topography rendering for polygon shapes (#3245)
+  - fix SDL clipped polygon rendering algorithm (#3250)
 
 Version 6.7.3 - 2014/01/22
 * tracking
