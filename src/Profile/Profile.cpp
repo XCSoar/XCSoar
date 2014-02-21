@@ -143,7 +143,7 @@ Profile::SetFiles(const TCHAR *override_path)
 
   if (IsAltair() && !File::Exists(startProfileFile)) {
     /* backwards compatibility with old Altair firmware */
-    LocalPath(startProfileFile, _T("config/")_T(OLDXCSPROFILE));
+    LocalPath(startProfileFile, _T("config/") _T(OLDXCSPROFILE));
     if (!File::Exists(startProfileFile))
       LocalPath(startProfileFile, _T(XCSPROFILE));
   }

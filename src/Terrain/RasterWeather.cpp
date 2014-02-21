@@ -393,7 +393,7 @@ RasterWeather::ValueToText(TCHAR* Buffer, short val) const
     _stprintf(Buffer, _T("%d%%"), Clamp(int(val), 0, 100));
     return;
   case 6: // sfctemp
-    _stprintf(Buffer, _T("%d")_T(DEG), val / 2 - 20);
+    _stprintf(Buffer, _T("%d") _T(DEG), val / 2 - 20);
     return;
   case 7: // hwcrit
     _stprintf(Buffer, _T("%.0f%s"), (double)
