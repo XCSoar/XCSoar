@@ -148,7 +148,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed(4));
 
-  RasterPoint last_point;
+  RasterPoint last_point = RasterPoint(0, 0);
   bool last_valid = false;
   for (auto it = trace.begin(), end = trace.end(); it != end; ++it) {
     const GeoPoint gp = enable_traildrift
