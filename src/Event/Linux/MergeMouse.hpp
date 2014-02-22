@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_MERGE_MOUSE_HPP
 #define XCSOAR_EVENT_MERGE_MOUSE_HPP
 
+#include "../Shared/RotatePointer.hpp"
 #include "OS/FileDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
@@ -38,7 +39,8 @@ struct Event;
  * the input of multiple (hot-plugged) mouse devices.
  */
 class MergeMouse final {
-  unsigned screen_width, screen_height;
+  RotatePointer rotate;
+
   unsigned x, y;
   bool down;
 
@@ -51,8 +53,7 @@ class MergeMouse final {
 
 public:
   MergeMouse()
-    :screen_width(0), screen_height(0),
-     x(0), y(0),
+    :x(0), y(0),
      down(false), moved(false), pressed(false), released(false),
      n_pointers(0) {}
 
@@ -63,6 +64,14 @@ public:
   }
 
   void SetScreenSize(unsigned width, unsigned height);
+
+  void SetSwap(bool _swap) {
+    rotate.SetSwap(_swap);
+  }
+
+  void SetInvert(bool _invert_x, bool _invert_y) {
+    rotate.SetInvert(_invert_x, _invert_y);
+  }
 
   void AddPointer() {
     ++n_pointers;

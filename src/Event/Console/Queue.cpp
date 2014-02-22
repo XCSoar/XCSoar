@@ -147,13 +147,8 @@ EventQueue::Generate(Event &event)
 
 #ifndef NON_INTERACTIVE
   event = merge_mouse.Generate();
-  if (event.type != Event::Type::NOP) {
-#ifdef KOBO
-    rotate_mouse.Do(event.point);
-#endif
-
+  if (event.type != Event::Type::NOP)
     return true;
-  }
 #endif
 
   return false;

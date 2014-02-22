@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_ROTATE_POINTER_HPP
 #define XCSOAR_EVENT_ROTATE_POINTER_HPP
 
+#include "Screen/Point.hpp"
+
 #include <algorithm>
 
 /**
@@ -47,6 +49,18 @@ class RotatePointer {
   unsigned width, height;
 
 public:
+  constexpr RotatePointer()
+    :swap(false), invert_x(false), invert_y(false),
+     width(0), height(0) {}
+
+  constexpr unsigned GetWidth() const {
+    return width;
+  }
+
+  constexpr unsigned GetHeight() const {
+    return height;
+  }
+
   void SetSize(unsigned _width, unsigned _height) {
     width = _width;
     height = _height;
@@ -59,6 +73,21 @@ public:
   void SetInvert(bool _invert_x, bool _invert_y) {
     invert_x = _invert_x;
     invert_y = _invert_y;
+  }
+
+  void DoRelative(int &x, int &y) {
+    if (swap)
+      std::swap(x, y);
+  }
+
+  void DoAbsolute(int &x, int &y) {
+    DoRelative(x, y);
+
+    if (invert_x)
+      x = width - x;
+
+    if (invert_y)
+      y = height - y;
   }
 
   void Do(RasterPoint &p) {

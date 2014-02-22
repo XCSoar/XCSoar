@@ -28,15 +28,13 @@ Copyright_License {
 void
 MergeMouse::SetScreenSize(unsigned width, unsigned height)
 {
-  if (width != screen_width) {
-    screen_width = width;
-    x = screen_width / 2;
-  }
+  if (width != rotate.GetWidth())
+    x = width / 2;
 
-  if (height != screen_height) {
-    screen_height = height;
-    y = screen_height / 2;
-  }
+  if (height != rotate.GetHeight())
+    y = height / 2;
+
+  rotate.SetSize(width, height);
 }
 
 void
@@ -54,6 +52,9 @@ MergeMouse::SetDown(bool new_down)
 void
 MergeMouse::MoveAbsolute(int new_x, int new_y)
 {
+  rotate.DoAbsolute(new_x, new_y);
+
+  const unsigned screen_width = rotate.GetWidth();
   if (screen_width > 0) {
     if (new_x < 0)
       new_x = 0;
@@ -66,6 +67,7 @@ MergeMouse::MoveAbsolute(int new_x, int new_y)
     }
   }
 
+  const unsigned screen_height = rotate.GetHeight();
   if (screen_height > 0) {
     if (new_y < 0)
       new_y = 0;
@@ -82,6 +84,8 @@ MergeMouse::MoveAbsolute(int new_x, int new_y)
 void
 MergeMouse::MoveRelative(int dx, int dy)
 {
+  rotate.DoRelative(dx, dy);
+
   MoveAbsolute(x + dx, y + dy);
 }
 

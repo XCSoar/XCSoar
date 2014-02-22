@@ -37,7 +37,6 @@ Copyright_License {
 #include "../Linux/MergeMouse.hpp"
 #ifdef KOBO
 #include "../Linux/Input.hpp"
-#include "../Shared/RotatePointer.hpp"
 #include "DisplaySettings.hpp"
 #elif defined(USE_LINUX_INPUT)
 #include "../Linux/AllInput.hpp"
@@ -68,7 +67,6 @@ class EventQueue final : private SignalListener {
 #ifdef KOBO
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
-  RotatePointer rotate_mouse;
 #else
 #ifdef USE_LINUX_INPUT
   AllLinuxInputDevices all_input;
@@ -98,20 +96,15 @@ public:
 #ifndef NON_INTERACTIVE
 
   void SetScreenSize(unsigned width, unsigned height) {
-#ifdef KOBO
-    rotate_mouse.SetSize(width, height);
-#endif
     merge_mouse.SetScreenSize(width, height);
   }
 
-#ifdef KOBO
   void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
-    rotate_mouse.SetSwap(swap);
-    rotate_mouse.SetInvert(invert_x, invert_y);
+    merge_mouse.SetSwap(swap);
+    merge_mouse.SetInvert(invert_x, invert_y);
   }
 
   void SetMouseRotation(DisplaySettings::Orientation orientation);
-#endif
 
   bool HasPointer() const {
     return merge_mouse.HasPointer();
