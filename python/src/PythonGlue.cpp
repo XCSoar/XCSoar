@@ -112,6 +112,12 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
   PyObject *py_fixes = PyList_New(0);
 
   DebugReplay *replay = self->flight->Replay();
+
+  if (replay == nullptr) {
+    PyErr_SetString(PyExc_IOError, "Can't start replay - file not found.");
+    return nullptr;
+  }
+
   while (replay->Next()) {
     if (replay->Level() == -1) continue;
 
@@ -281,13 +287,18 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
 
   WindList wind_list;
 
+  bool success;
+
   Py_BEGIN_ALLOW_THREADS
-  self->flight->Analyse(takeoff, release, landing,
+  success = self->flight->Analyse(takeoff, release, landing,
     olc_plus, dmst,
     phase_list, phase_totals, wind_list,
     full, triangle, sprint,
     max_iterations, max_tree_size);
   Py_END_ALLOW_THREADS
+
+  if (!success)
+    Py_RETURN_NONE;
 
   /* write olc_plus statistics */
   PyObject *py_olc_plus = Py_BuildValue("{s:N,s:N,s:N}",
@@ -360,6 +371,12 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
                encoded_enl;
 
   DebugReplay *replay = self->flight->Replay();
+
+  if (replay == nullptr) {
+    PyErr_SetString(PyExc_IOError, "Can't start replay - file not found.");
+    return nullptr;
+  }
+
   while (replay->Next()) {
     if (replay->Level() == -1) continue;
 

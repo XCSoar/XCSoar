@@ -71,6 +71,8 @@ public:
   /* Search for flights within the fixes */
   unsigned Times(std::vector<FlightTimeResult> &results) {
     DebugReplay *replay = Replay();
+    if (replay == nullptr) return 0;
+
     FlightTimes(*replay, results);
     delete replay;
 
@@ -88,7 +90,7 @@ public:
               const unsigned max_delta_time, const unsigned max_points);
 
   /* Analyse flight */
-  void Analyse(const BrokenDateTime takeoff_time,
+  bool Analyse(const BrokenDateTime takeoff_time,
                const BrokenDateTime release_time,
                const BrokenDateTime landing_time,
                ContestStatistics &olc_plus,
@@ -102,12 +104,15 @@ public:
                const unsigned max_iterations = 20e6,
                const unsigned max_tree_size = 5e6) {
     DebugReplay *replay = Replay();
+    if (replay == nullptr) return false;
+
     AnalyseFlight(*replay, takeoff_time, release_time, landing_time,
                   olc_plus, dmst,
                   phase_list, phase_totals, wind_list,
                   full, triangle, sprint,
                   max_iterations, max_tree_size);
     delete replay;
+    return true;
   };
 
   /**
