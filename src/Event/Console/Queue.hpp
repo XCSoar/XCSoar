@@ -32,12 +32,12 @@ Copyright_License {
 #include "IO/Async/IOLoop.hpp"
 #include "IO/Async/DiscardFileEventHandler.hpp"
 #include "../Linux/SignalListener.hpp"
+#include "DisplaySettings.hpp"
 
 #ifndef NON_INTERACTIVE
 #include "../Linux/MergeMouse.hpp"
 #ifdef KOBO
 #include "../Linux/Input.hpp"
-#include "DisplaySettings.hpp"
 #elif defined(USE_LINUX_INPUT)
 #include "../Linux/AllInput.hpp"
 #else
