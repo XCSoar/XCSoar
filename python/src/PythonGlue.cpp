@@ -134,6 +134,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
       continue;
 
     IGCFixEnhanced fix;
+    fix.Clear();
     fix.Apply(basic, replay->Calculated());
     fix.level = replay->Level();
 
@@ -393,6 +394,7 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
       continue;
 
     IGCFixEnhanced fix;
+    fix.Clear();
     fix.Apply(basic, replay->Calculated());
 
     encoded_locations.addDouble(fix.location.latitude.Degrees());

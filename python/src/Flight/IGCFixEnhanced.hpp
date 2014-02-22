@@ -35,10 +35,10 @@ struct IGCFixEnhanced : public IGCFix
   unsigned clock;
 
   /* The detail level of this fix. -1 is not visible at all, 0 is always visible. */
-  int level = 0;
+  int level;
 
   /* Terrian elevation */
-  int elevation = -1000;
+  int elevation;
 
   bool Apply(const NMEAInfo &basic, const DerivedInfo &calculated) {
     if (IGCFix::Apply(basic)) {
@@ -59,6 +59,7 @@ struct IGCFixEnhanced : public IGCFix
   void Clear() {
     time = BrokenTime::Invalid();
     elevation = -1000;
+    level = 0;
     ClearExtensions();
   };
 };

@@ -42,6 +42,7 @@ void Flight::ReadFlight() {
   if (replay) {
     while (replay->Next()) {
       IGCFixEnhanced fix;
+      fix.Clear();
       if (fix.Apply(replay->Basic(), replay->Calculated())) {
         fixes->push_back(fix);
       }
