@@ -170,11 +170,16 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
       Py_DECREF(py_power_state);
     }
 
-    PyObject *py_single_flight = Py_BuildValue("{s:N,s:N,s:N,s:N}",
+    PyObject *py_single_flight = Py_BuildValue("{s:N,s:N,s:N}",
       "takeoff", Python::WriteEvent(times.takeoff_time, times.takeoff_location),
-      "release", Python::WriteEvent(times.release_time, times.release_location),
       "landing", Python::WriteEvent(times.landing_time, times.landing_location),
       "power_states", py_power_states);
+
+    if (times.release_time.IsPlausible()) {
+      PyObject *py_release = Python::WriteEvent(times.release_time, times.release_location);
+      PyDict_SetItemString(py_single_flight, "release", py_release);
+      Py_DECREF(py_release);
+    }
 
     if (PyList_Append(py_times, py_single_flight) != 0)
       return NULL;

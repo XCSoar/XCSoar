@@ -149,10 +149,10 @@ void FlightTimes(DebugReplay &replay, std::vector<FlightTimeResult> &results)
     eof = Run(replay, result);
 
     if (result.takeoff_time.IsPlausible()
-        && result.release_time.IsPlausible()
         && result.landing_time.IsPlausible()) {
 
-      if (result.release_time.ToUnixTimeUTC() < result.takeoff_time.ToUnixTimeUTC())
+      if (result.release_time.IsPlausible() &&
+          result.release_time.ToUnixTimeUTC() < result.takeoff_time.ToUnixTimeUTC())
         result.release_time = result.takeoff_time;
 
       results.push_back(result);
