@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-09-16 02:46+0000\n"
+"PO-Revision-Date: 2014-02-20 10:29+0000\n"
 "Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-16 08:21+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2014-02-25 16:12+0000\n"
+"X-Generator: Launchpad (build 16926)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -92,18 +92,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "Reguły FAI, ścieżka od startu do dwóch punktów zwrotnych i powrót."
+msgstr "Reguły FAI, trasa od startu do dwóch punktów zwrotnych i powrót."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
-"Reguły FAI, ścieżka od startu do pojedynczego punktu zwrotnego i powrót."
+msgstr "Reguły FAI, trasa od startu do pojedynczego punktu zwrotnego i powrót."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "Reguły FAI, ścieżka od startu do punktu końcowego."
+msgstr "Reguły FAI, trasa od startu do punktu końcowego."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -279,7 +278,7 @@ msgstr "Cylinder+Sektor. Punktowany wg najdalszego punktu."
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr "FAI kwadrant startowy"
+msgstr "Kwadrant startowy FAI"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
@@ -1036,7 +1035,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
 msgid "Next Bearing"
-msgstr "PT KątDr"
+msgstr "PT KątDr: Kurs geogr. do nast. PT"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:101
@@ -1974,7 +1973,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:705
 #, no-c-format
 msgid "L/D vario"
-msgstr "DSK war"
+msgstr "DSK war: chwilowa doskonałość"
 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
@@ -2458,7 +2457,7 @@ msgstr "Barogram: Wykres wysokości lotu."
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
 msgid "Vario trace"
-msgstr "WARwykr"
+msgstr "WARwykr: wykres wariometru GPS lub TEC"
 
 #: src/InfoBoxes/Content/Factory.cpp:983
 #, no-c-format
@@ -2496,7 +2495,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1002
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr "WAR profil"
+msgstr "WAR profil: wykres śr.noszenia z okrążeń"
 
 #: src/InfoBoxes/Content/Factory.cpp:1003
 #, no-c-format
@@ -3975,8 +3974,8 @@ msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
-"Ta opcja pozwala Ci ustalić czy XCSoar powinien używać ustawień z urządzenia"
-"( takich jak wartość MacCready, muchy i balast.)."
+"Ta opcja pozwala Ci ustalić czy XCSoar powinien używać ustawień z "
+"urządzenia( takich jak wartość MacCready, muchy i balast.)."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Sync. to device"
@@ -4831,11 +4830,11 @@ msgid ""
 "75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
-"Balast szybowca. Zwiększ tą wartość jeżeli obciążenie pilot/kokpit jest "
-"większe niż referencyjna waga pilota z biegunowej szybowca(zwykle 75kg). "
-"Wciśnij ENTER na tym polu aby przełączać odmierzanie objętości balastu "
-"zależnie do wartości prędkości zrzutu określonej w ustawieniach "
-"konfiguracyjnych."
+"Balast szybowca. Zwiększ tą wartość jeżeli ciężar pilota i ładunku w "
+"kokpicie jest większy niż referencyjny dla podanej w instrukcji biegunowej "
+"szybowca(zwykle 75kg). Wciśnij ENTER na tym polu, aby zmieniać wartość "
+"objętości balastu w zależności od wartości prędkości zrzutu, określonej w "
+"ustawieniach konfiguracyjnych."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:298
 msgid "Bugs"
@@ -4847,14 +4846,14 @@ msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
-"Określ jak czysty jest szybowiec. Ustaw 0% dla gdy skrzydła są czyste. Podaj "
-"większe wartości, gdy skrzydła są zabrudzone przez owady lub zmoczone przez "
-"deszcz. 50% oznacza, że prędkość opadania szybowca jest podwojona, w "
+"Określ stopień zanieczyszczenia skrzydeł. Ustaw 0% gdy skrzydła są czyste. "
+"Podaj większe wartości, gdy skrzydła są zabrudzone przez owady lub zmoczone "
+"przez deszcz. 50% oznacza, że prędkość opadania szybowca jest podwojona, w "
 "porównaniu z wynikającej z przyjętej biegunowej szybowca."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:323
 msgid "Max. temp."
-msgstr "Max.temp."
+msgstr "Maks.temp."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:324
 msgid ""
@@ -4934,12 +4933,12 @@ msgstr "FLARM,inne"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:110
 #, no-c-format
 msgid "Audio Vario"
-msgstr "Wariometr Audio"
+msgstr "Audio wariometru"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:112
 #, no-c-format
 msgid "Task Rules"
-msgstr "Reguły"
+msgstr "Reguły Zadania"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
@@ -5017,7 +5016,7 @@ msgstr "Wklej"
 #: src/Dialogs/Traffic/TrafficList.cpp:329
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:216
 msgid "Competition ID"
-msgstr "Nr konk."
+msgstr "Znaki konk."
 
 #: src/Dialogs/Traffic/TrafficList.cpp:348
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:164
@@ -5039,7 +5038,7 @@ msgstr "FLARM: Informacje"
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:198
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr "Czy chcesz ustawić ten kontakt FLARM jako Twojego nowego kolegę?"
+msgstr "Czy chcesz ustawić ten kontakt FLARM jako pilota w zespole?"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:199
 msgid "New Teammate"
@@ -5063,11 +5062,11 @@ msgstr "Własny kod"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:99
 msgid "Mate code"
-msgstr "Kod kolegi"
+msgstr "Kod pilota w zespole"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:102
 msgid "Rel. bearing"
-msgstr "Rel. Kurs"
+msgstr "Kurs wzgl."
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:103
 msgid "Flarm lock"
@@ -5075,7 +5074,7 @@ msgstr "FLARM id"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:218
 msgid "Unknown Competition Number"
-msgstr "Nieznany numer boczny"
+msgstr "Nieznane Znaki konkurencyjne"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:219
 msgid "Not Found"
@@ -5083,7 +5082,7 @@ msgstr "Nie znaleziono"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:223
 msgid "Set new teammate"
-msgstr "Wprowadź nowego członka zespołu"
+msgstr "Wprowadź nowego pilota zespołu"
 
 #: src/Dialogs/dlgAnalysis.cpp:293
 msgid "Barograph"
@@ -5119,11 +5118,11 @@ msgstr "Wykres temperatury"
 
 #: src/Dialogs/dlgAnalysis.cpp:347
 msgid "Task Speed"
-msgstr "Prędkość na trasie"
+msgstr "Prędkość Zadania"
 
 #: src/Dialogs/dlgAnalysis.cpp:359
 msgid "Task calc"
-msgstr "Oblicz trasę"
+msgstr "Przelicz trasę"
 
 #: src/Dialogs/dlgAnalysis.cpp:377
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:206
@@ -5132,7 +5131,7 @@ msgstr "Ostrzeżenia"
 
 #: src/Dialogs/dlgBrightness.cpp:124
 msgid "Enables automatic backlight, responsive to light sensor."
-msgstr "Włącza automatyczne podświetlenie, na bazie czujnika oświetlenia"
+msgstr "Włącza automatyczne podświetlenie, sterowane czujnikiem"
 
 #: src/Dialogs/dlgBrightness.cpp:127
 msgid "Brightness"
@@ -5231,7 +5230,7 @@ msgstr "Szybowce"
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:83
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:192
 msgid "Plane Details"
-msgstr "Szczegóły szybowca"
+msgstr "Dane Szybowca"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:90
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:118
@@ -5317,8 +5316,8 @@ msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
-"Nazwa pliku powtórki. Może to być plik IGC(.igc), surowe dane NMEA(.nmea) "
-"lub jeśli pozostawiono puste uruchamia demo."
+"Nazwa pliku do odtworzenia. Może to być plik w formacie IGC(.igc), dane "
+"NMEA(.nmea), a jeśli pozostawisz puste, zostanie uruchomiony tryb demo."
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
@@ -5329,8 +5328,8 @@ msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
-"Przyspieszenie czasu podczas powtórki. Ustaw 0 aby spauzować, a 1 dla czasu "
-"rzeczywistego."
+"Przyspieszenie prędkości odtwarzania. Ustaw 0 aby wstrzymać odtwarzanie, a 1 "
+"dla czasu rzeczywistego."
 
 #: src/Dialogs/ReplayDialog.cpp:111
 msgid "Could not open IGC file!"
@@ -5401,7 +5400,7 @@ msgstr "Rozłączony"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:46
 #, no-c-format
 msgid "Fix invalid"
-msgstr "Błęny fix GPS"
+msgstr "Błędny fix GPS"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:48
 #, no-c-format
@@ -5687,7 +5686,7 @@ msgid ""
 "format."
 msgstr ""
 "Przepraszamy, edytor punktów zwrotnych nie jest jeszcze dostępny dla formatu "
-"koordynat UTM."
+"współrzędnych UTM."
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:119
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:126
@@ -7672,7 +7671,7 @@ msgstr "Pokaż na mapie obszary trójkąta FAI."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
-msgstr ""
+msgstr "Próg dla trójkąta FAI"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
@@ -8895,22 +8894,22 @@ msgstr "Dane TAF niedostępne!"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
 msgid "Gear on delay"
-msgstr ""
+msgstr "Opóźn.otwarcia podw."
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "Opóźn zamkn. podw."
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "Interw.;podw."
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr ""
+msgstr "Maks.opóźn.kom.rad."
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
 #, no-c-format
@@ -9133,19 +9132,19 @@ msgstr "Typ dźwięku"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
-msgstr ""
+msgstr "Rodzaj wzn."
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:111
 msgid "Pitch scale"
-msgstr ""
+msgstr "Skala wzn."
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
-msgstr ""
+msgstr "Rodzaj przerw."
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
 msgid "Period scale"
-msgstr ""
+msgstr "Skala przerw."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
@@ -9300,12 +9299,12 @@ msgstr "Podłączenie dajnika ciśnienia statycznego."
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Stall port"
-msgstr ""
+msgstr "Stall port"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr ""
+msgstr "Czy jest podłączony Stall port"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
@@ -9388,7 +9387,7 @@ msgstr "Prędkość nieprzekraczalna"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
 #, no-c-format
 msgid "V terrain"
-msgstr ""
+msgstr "V przelot"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
@@ -9398,17 +9397,17 @@ msgstr "Wysokość nad terenem"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
 msgid "V manoeuvering"
-msgstr ""
+msgstr "V manewrowa"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:40
 #, no-c-format
 msgid "V airbrake"
-msgstr ""
+msgstr "V hamulc"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:42
 #, no-c-format
 msgid "V flap"
-msgstr ""
+msgstr "V klap"
 
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
@@ -9438,7 +9437,7 @@ msgstr "Wyciszenie"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Speaker treshold"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
 #, no-c-format
@@ -11682,7 +11681,7 @@ msgstr ""
 #~ "if negative (expected arrival too early), or blue if in sector and can "
 #~ "turn now with estimated arrival time greater than AAT time plus 5 minutes."
 #~ msgstr ""
-#~ "Różnica pomiędzy szacowanym czasem trasy a minimalnym czasem obszarówki"
-#~ "(AAT) . Zabarwiona na czerwono jeśli ujemna (spodziewane przybycie zbyt "
-#~ "wcześnie). Zabarwiona na niebiesko jeśli w sektorze i można zakręcać "
-#~ "teraz aby czas przybycia był większy od czasu AAT+5minut."
+#~ "Różnica pomiędzy szacowanym czasem trasy a minimalnym czasem "
+#~ "obszarówki(AAT) . Zabarwiona na czerwono jeśli ujemna (spodziewane "
+#~ "przybycie zbyt wcześnie). Zabarwiona na niebiesko jeśli w sektorze i "
+#~ "można zakręcać teraz aby czas przybycia był większy od czasu AAT+5minut."
