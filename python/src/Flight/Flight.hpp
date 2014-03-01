@@ -91,7 +91,8 @@ public:
 
   /* Analyse flight */
   bool Analyse(const BrokenDateTime takeoff_time,
-               const BrokenDateTime release_time,
+               const BrokenDateTime scoring_start_time,
+               const BrokenDateTime scoring_end_time,
                const BrokenDateTime landing_time,
                ContestStatistics &olc_plus,
                ContestStatistics &dmst,
@@ -106,7 +107,7 @@ public:
     DebugReplay *replay = Replay();
     if (replay == nullptr) return false;
 
-    AnalyseFlight(*replay, takeoff_time, release_time, landing_time,
+    AnalyseFlight(*replay, takeoff_time, scoring_start_time, scoring_end_time, landing_time,
                   olc_plus, dmst,
                   phase_list, phase_totals, wind_list,
                   full, triangle, sprint,

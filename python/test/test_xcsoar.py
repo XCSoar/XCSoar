@@ -65,7 +65,10 @@ for dtime in times:
 
   flight_sequence = fixes
 
-  analysis = flight.analyse(takeoff['time'], release['time'], landing['time'])
+  analysis = flight.analyse(takeoff=takeoff['time'],
+                            scoring_start=release['time'],
+                            scoring_end=landing['time'],
+                            landing=landing['time'])
   pprint(analysis)
 
   fixes = flight.path(takeoff['time'], landing['time'])

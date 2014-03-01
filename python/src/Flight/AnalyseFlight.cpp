@@ -31,11 +31,14 @@
 #include "Computer/Settings.hpp"
 #include "FlightPhaseDetector.hpp"
 
+#include <limits>
+
 void
 Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
     WindList &wind_list,
     const BrokenDateTime &takeoff_time,
-    const BrokenDateTime &release_time,
+    const BrokenDateTime &scoring_start_time,
+    const BrokenDateTime &scoring_end_time,
     const BrokenDateTime &landing_time,
     Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace)
 {
@@ -59,8 +62,21 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   last_wind.Clear();
 
   const int64_t takeoff_unix = takeoff_time.ToUnixTimeUTC();
-  const int64_t release_unix = release_time.ToUnixTimeUTC();
   const int64_t landing_unix = landing_time.ToUnixTimeUTC();
+
+
+  int64_t scoring_start_unix, scoring_end_unix;
+
+  if (scoring_start_time.IsPlausible())
+    scoring_start_unix = scoring_start_time.ToUnixTimeUTC();
+  else
+    scoring_start_unix = std::numeric_limits<int64_t>::max();
+
+  if (scoring_end_time.IsPlausible())
+    scoring_end_unix = scoring_end_time.ToUnixTimeUTC();
+  else
+    scoring_end_unix = 0;
+
 
   while (replay.Next()) {
     const MoreData &basic = replay.Basic();
@@ -107,7 +123,7 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
 
     last_location = basic.location;
 
-    if (date_time_utc >= release_unix) {
+    if (date_time_utc >= scoring_start_unix && date_time_utc <= scoring_end_unix) {
       const TracePoint point(basic);
       full_trace.push_back(point);
       triangle_trace.push_back(point);
@@ -130,7 +146,8 @@ SolveContest(Contest contest,
 
 void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime &takeoff_time,
-             const BrokenDateTime &release_time,
+             const BrokenDateTime &scoring_start_time,
+             const BrokenDateTime &scoring_end_time,
              const BrokenDateTime &landing_time,
              ContestStatistics &olc_plus,
              ContestStatistics &dmst,
@@ -149,7 +166,7 @@ void AnalyseFlight(DebugReplay &replay,
   FlightPhaseDetector flight_phase_detector;
 
   Run(replay, flight_phase_detector, wind_list,
-      takeoff_time, release_time, landing_time,
+      takeoff_time, scoring_start_time, scoring_end_time, landing_time,
       full_trace, triangle_trace, sprint_trace);
 
   olc_plus = SolveContest(Contest::OLC_PLUS,

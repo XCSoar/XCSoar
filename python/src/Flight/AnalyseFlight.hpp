@@ -54,7 +54,8 @@ void
 Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
     WindList &wind_list,
     const BrokenDateTime &takeoff_time,
-    const BrokenDateTime &release_time,
+    const BrokenDateTime &scoring_start_time,
+    const BrokenDateTime &scoring_end_time,
     const BrokenDateTime &landing_time,
     Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
 
@@ -65,7 +66,8 @@ SolveContest(Contest contest,
 
 void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime &takeoff_time,
-             const BrokenDateTime &release_time,
+             const BrokenDateTime &scoring_start_time,
+             const BrokenDateTime &scoring_end_time,
              const BrokenDateTime &landing_time,
              ContestStatistics &olc_plus,
              ContestStatistics &dmst,

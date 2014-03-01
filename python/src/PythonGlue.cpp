@@ -253,32 +253,39 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
 }
 
 PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
-  static char *kwlist[] = {"takeoff", "release", "landing",
+  static char *kwlist[] = {"takeoff", "scoring_start", "scoring_end", "landing",
                            "full", "triangle", "sprint",
                            "max_iterations", "max_tree_size", NULL};
-  PyObject *py_takeoff, *py_release, *py_landing;
+  PyObject *py_takeoff, *py_scoring_start, *py_scoring_end, *py_landing;
   unsigned full = 512,
            triangle = 1024,
            sprint = 96,
            max_iterations = 20e6,
            max_tree_size = 5e6;
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOO|IIIII", kwlist,
-                                   &py_takeoff, &py_release, &py_landing,
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOOO|IIIII", kwlist,
+                                   &py_takeoff, &py_scoring_start, &py_scoring_end, &py_landing,
                                    &full, &triangle, &sprint,
                                    &max_iterations, &max_tree_size)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return NULL;
   }
 
-  if (!PyDateTime_Check(py_takeoff) || !PyDateTime_Check(py_release) || !PyDateTime_Check(py_landing)) {
-    PyErr_SetString(PyExc_TypeError, "Expected a DateTime object for takeoff, release and landing.");
+  if (!PyDateTime_Check(py_takeoff) || !PyDateTime_Check(py_landing)) {
+    PyErr_SetString(PyExc_TypeError, "Expected a DateTime object for takeoff and landing.");
     return NULL;
   }
 
   BrokenDateTime takeoff = Python::PyToBrokenDateTime(py_takeoff);
-  BrokenDateTime release = Python::PyToBrokenDateTime(py_release);
   BrokenDateTime landing = Python::PyToBrokenDateTime(py_landing);
+
+  BrokenDateTime scoring_start, scoring_end;
+
+  if (PyDateTime_Check(py_scoring_start))
+    scoring_start = Python::PyToBrokenDateTime(py_scoring_start);
+
+  if (PyDateTime_Check(py_scoring_end))
+    scoring_end = Python::PyToBrokenDateTime(py_scoring_end);
 
   ContestStatistics olc_plus;
   ContestStatistics dmst;
@@ -291,7 +298,7 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   bool success;
 
   Py_BEGIN_ALLOW_THREADS
-  success = self->flight->Analyse(takeoff, release, landing,
+  success = self->flight->Analyse(takeoff, scoring_start, scoring_end, landing,
     olc_plus, dmst,
     phase_list, phase_totals, wind_list,
     full, triangle, sprint,
