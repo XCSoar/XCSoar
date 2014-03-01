@@ -71,7 +71,7 @@ PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
 
   if (location.IsValid()) {
     PyObject *py_location = WriteLonLat(location);
-    PyDict_Merge(py_event, py_location, true);
+    PyDict_SetItemString(py_event, "location", py_location);
     Py_DECREF(py_location);
   }
 

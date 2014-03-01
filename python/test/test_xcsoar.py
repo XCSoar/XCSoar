@@ -22,9 +22,9 @@ for dtime in times:
   release = dtime['release']
   landing = dtime['landing']
 
-  print "Takeoff: {}, location {} {}".format(takeoff['time'], takeoff['longitude'], takeoff['latitude'])
-  print "Release: {}, location {} {}".format(release['time'], release['longitude'], release['latitude'])
-  print "Landing: {}, location {} {}".format(landing['time'], landing['longitude'], landing['latitude'])
+  print "Takeoff: {}, location {}".format(takeoff['time'], takeoff['location'])
+  print "Release: {}, location {}".format(release['time'], release['location'])
+  print "Landing: {}, location {}".format(landing['time'], landing['location'])
 
   print "Flight path from takeoff to release:"
   fixes = flight.path(takeoff['time'], release['time'])
@@ -47,9 +47,9 @@ for dtime in times:
   release = dtime['release']
   landing = dtime['landing']
 
-  print "Takeoff: {}, location {} {}".format(takeoff['time'], takeoff['longitude'], takeoff['latitude'])
-  print "Release: {}, location {} {}".format(release['time'], release['longitude'], release['latitude'])
-  print "Landing: {}, location {} {}".format(landing['time'], landing['longitude'], landing['latitude'])
+  print "Takeoff: {}, location {}".format(takeoff['time'], takeoff['location'])
+  print "Release: {}, location {}".format(release['time'], release['location'])
+  print "Landing: {}, location {}".format(landing['time'], landing['location'])
 
   print "Flight path from takeoff to release:"
   fixes = flight.path(takeoff['time'], release['time'])
