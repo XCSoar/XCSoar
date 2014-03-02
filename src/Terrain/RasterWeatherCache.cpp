@@ -101,7 +101,7 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
   last_weather_time = effective_weather_time;
 
   // scan forward to next valid time
-  while (!store.IsTimeAvailable(effective_weather_time)) {
+  while (!store.IsTimeAvailable(parameter, effective_weather_time)) {
     ++effective_weather_time;
 
     if (effective_weather_time >= RasterWeatherStore::MAX_WEATHER_TIMES)
@@ -113,9 +113,6 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
 
   weather_map = store.LoadItem(store.GetItemInfo(parameter).name,
                                effective_weather_time, operation);
-  if (weather_map == nullptr && parameter == 1)
-    weather_map = store.LoadItem(_T("wstar_bsratio"),
-                                 effective_weather_time, operation);
 }
 
 void

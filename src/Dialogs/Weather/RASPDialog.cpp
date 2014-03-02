@@ -45,20 +45,26 @@ class RASPSettingsPanel final : public RowFormWidget, DataFieldListener {
 
   RasterWeatherStore &rasp;
 
+  BrokenTime time;
+
 public:
   RASPSettingsPanel(RasterWeatherStore &_rasp)
     :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
 
 private:
   void UpdateTimeControl();
+  void OnTimeModified(const DataFieldEnum &df);
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(DataField &) override {
-    UpdateTimeControl();
+  void OnModified(DataField &df) override {
+    if (IsDataField(ITEM, df))
+      UpdateTimeControl();
+    else if (IsDataField(TIME, df))
+      OnTimeModified((const DataFieldEnum &)df);
   }
 };
 
@@ -66,47 +72,64 @@ void
 RASPSettingsPanel::UpdateTimeControl()
 {
   const DataFieldEnum &item = (const DataFieldEnum &)GetDataField(ITEM);
-  SetRowEnabled(TIME, item.GetValue() > 0);
+
+  const unsigned item_index = item.GetValue();
+  SetRowEnabled(TIME, item_index > 0);
+
+  if (item_index > 0) {
+    DataFieldEnum &time_df = (DataFieldEnum &)GetDataField(TIME);
+    time_df.ClearChoices();
+    time_df.addEnumText(_("Now"));
+
+    rasp.ForEachTime(item_index, [&time_df](BrokenTime t){
+        TCHAR timetext[10];
+        _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
+        time_df.addEnumText(timetext, t.GetMinuteOfDay());
+      });
+
+    if (time.IsPlausible())
+      time_df.Set(time.GetMinuteOfDay());
+    GetControl(TIME).RefreshDisplay();
+  }
+}
+
+inline void
+RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df)
+{
+  const unsigned value = df.GetValue();
+  time = value == 0
+    ? BrokenTime::Invalid()
+    : BrokenTime::FromMinuteOfDay(value);
 }
 
 void
 RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const WeatherUIState &state = CommonInterface::GetUIState().weather;
+  time = state.time;
 
   WndProperty *wp;
 
   wp = AddEnum(_("Field"), nullptr, this);
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
-  for (unsigned i = 0; i < RasterWeatherStore::MAX_WEATHER_MAP; i++) {
+  for (unsigned i = 0; i < rasp.GetItemCount(); i++) {
     const auto &mi = rasp.GetItemInfo(i);
     const TCHAR *label = mi.label;
-    if (label != nullptr) {
+    if (label != nullptr)
       label = gettext(label);
-      const TCHAR *help = mi.help;
-      if (help != nullptr)
-        help = gettext(help);
-      dfe->AddChoice(i, label, nullptr, help);
-    }
+
+    const TCHAR *help = mi.help;
+    if (help != nullptr)
+      help = gettext(help);
+
+    dfe->AddChoice(i, mi.name, label, help);
   }
 
   dfe->Set(state.map);
   wp->RefreshDisplay();
 
-  wp = AddEnum(_("Time"), nullptr);
-  dfe = (DataFieldEnum *)wp->GetDataField();
-  dfe->addEnumText(_("Now"));
-
-  rasp.ForEachTime([dfe](BrokenTime t){
-      TCHAR timetext[10];
-      _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
-      dfe->addEnumText(timetext, t.GetMinuteOfDay());
-    });
-
-  dfe->Set(state.time.IsPlausible() ? state.time.GetMinuteOfDay() : 0);
-  wp->RefreshDisplay();
-
+  AddEnum(_("Time"), nullptr, this);
   UpdateTimeControl();
 }
 
@@ -116,11 +139,7 @@ RASPSettingsPanel::Save(bool &_changed)
   WeatherUIState &state = CommonInterface::SetUIState().weather;
 
   state.map = GetValueInteger(ITEM);
-
-  unsigned t = GetValueInteger(TIME);
-  state.time = t == 0
-    ? BrokenTime::Invalid()
-    : BrokenTime::FromMinuteOfDay(t);
+  state.time = time;
 
   ActionInterface::SendUIState(true);
 

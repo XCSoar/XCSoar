@@ -40,7 +40,7 @@ Copyright_License {
 #define RASP_FILENAME "xcsoar-rasp.dat"
 #define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
 
-static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[RasterWeatherStore::MAX_WEATHER_MAP] = {
+static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[] = {
   {
     nullptr,
     N_("Terrain"),
@@ -48,6 +48,11 @@ static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[RasterWeatherSto
   },
   {
     _T("wstar"),
+    N_("W*"),
+    N_("Average dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."),
+  },
+  {
+    _T("wstar_bsratio"),
     N_("W*"),
     N_("Average dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."),
   },
@@ -93,9 +98,10 @@ static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[RasterWeatherSto
   },
 };
 
-RasterWeatherStore::RasterWeatherStore()
+RasterWeatherStore::MapItem::MapItem(const TCHAR *_name)
+  :name(_name)
 {
-  std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
+  std::fill_n(times, ARRAY_SIZE(times), false);
 }
 
 BrokenTime
@@ -161,6 +167,17 @@ RasterWeatherStore::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
   return zzip_dir_stat(dir, filename, &st, 0) == 0;
 }
 
+bool
+RasterWeatherStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
+{
+  bool found = false;
+  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
+    if (ExistsItem(dir, item.name, i))
+      found = item.times[i] = true;
+
+  return found;
+}
+
 void
 RasterWeatherStore::ScanAll(const GeoPoint &location,
                             OperationEnvironment &operation)
@@ -175,19 +192,31 @@ RasterWeatherStore::ScanAll(const GeoPoint &location,
     return;
 
   operation.SetProgressRange(MAX_WEATHER_TIMES);
-  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++) {
-    operation.SetProgressPosition(i);
-    weather_available[i] = ExistsItem(dir, _T("wstar"), i) ||
-      ExistsItem(dir, _T("wstar_bsratio"), i);
+
+  maps.clear();
+
+  for (const auto &i : WeatherDescriptors) {
+    if (i.name == nullptr) {
+      /* special case: 0 = terrain */
+      assert(maps.empty());
+
+      auto &m = maps.append();
+      m.name.clear();
+      m.label = i.label;
+      m.help = i.help;
+    } else {
+      if (maps.full())
+        break;
+
+      MapItem item(i.name);
+      item.label = i.label;
+      item.help = i.help;
+      if (ScanMapItem(dir, item))
+        maps.push_back(item);
+    }
   }
 
+  // TODO: scan the rest
+
   zzip_dir_close(dir);
-}
-
-const RasterWeatherStore::MapInfo &
-RasterWeatherStore::GetItemInfo(unsigned i)
-{
-  assert(i < MAX_WEATHER_MAP);
-
-  return WeatherDescriptors[i];
 }

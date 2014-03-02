@@ -24,9 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_WEATHER_STORE_HPP
 #define XCSOAR_TERRAIN_RASTER_WEATHER_STORE_HPP
 
+#include "Util/StaticArray.hpp"
+#include "Util/StaticString.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Compiler.h"
 
+#include <assert.h>
 #include <tchar.h>
 
 class RasterMap;
@@ -58,32 +61,66 @@ public:
     const TCHAR *help;
   };
 
+  struct MapItem {
+    StaticString<32> name;
+
+    /**
+     * Human-readable label.  Call gettext() for internationalization.
+     */
+    const TCHAR *label;
+
+    /**
+     * Human-readable help text.  Call gettext() for
+     * internationalization.
+     */
+    const TCHAR *help;
+
+    bool times[MAX_WEATHER_TIMES];
+
+    MapItem() = default;
+    explicit MapItem(const TCHAR *_name);
+  };
+
+  typedef StaticArray<MapItem, MAX_WEATHER_MAP> MapList;
+
 private:
   /**
    * Not protected by #lock because it's written only by ScanAll()
    * during startup.
    */
-  bool weather_available[MAX_WEATHER_TIMES];
+  MapList maps;
 
 public:
-  RasterWeatherStore();
+  gcc_const
+  unsigned GetItemCount() const {
+    return maps.size();
+  }
 
   gcc_const
-  static const MapInfo &GetItemInfo(unsigned i);
+  const MapItem &GetItemInfo(unsigned i) const {
+    return maps[i];
+  }
 
   /**
    * Load a list of RASP maps from the file "xcsoar-rasp.dat".
    */
   void ScanAll(const GeoPoint &location, OperationEnvironment &operation);
 
-  bool IsTimeAvailable(unsigned time_index) const {
-    return weather_available[time_index];
+  bool IsTimeAvailable(unsigned item_index, unsigned time_index) const {
+    assert(item_index < maps.size());
+    assert(time_index < MAX_WEATHER_TIMES);
+
+    return maps[item_index].times[time_index];
   }
 
   template<typename C>
-  void ForEachTime(C &&c) const {
+  void ForEachTime(unsigned item_index, C &&c) {
+    assert(item_index < maps.size());
+
+    const auto &mi = maps[item_index];
+
     for (unsigned i = 0; i < MAX_WEATHER_TIMES; ++i)
-      if (weather_available[i])
+      if (mi.times[i])
         c(IndexToTime(i));
   }
 
@@ -108,6 +145,8 @@ private:
   gcc_pure
   static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                          unsigned time_index);
+
+  static bool ScanMapItem(struct zzip_dir *dir, MapItem &item);
 };
 
 #endif
