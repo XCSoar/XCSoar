@@ -76,6 +76,11 @@ struct BrokenDate {
                               (month == other.month && day > other.day)));
   }
 
+  constexpr
+  bool operator<(const BrokenDate other) const {
+    return other > *this;
+  }
+
   /**
    * Clears the object, to make the Plausible() check returns false.
    */

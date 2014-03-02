@@ -72,6 +72,11 @@ struct BrokenTime {
   }
 
   constexpr
+  bool operator<(const BrokenTime other) const {
+    return other > *this;
+  }
+
+  constexpr
   static BrokenTime Midnight() {
     return BrokenTime(0, 0);
   }
