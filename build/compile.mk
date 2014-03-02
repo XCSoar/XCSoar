@@ -31,6 +31,8 @@ STRIP = strip$(EXE)
 WINDRES = wrc$(EXE)
 endif
 
+CXX_VERSION := $(shell $(CXX) -dumpversion)
+
 ####### paths
 
 ifeq ($(LLVM),y)
