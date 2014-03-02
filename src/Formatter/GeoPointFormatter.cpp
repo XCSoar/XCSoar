@@ -58,7 +58,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
       mm -= 60;
     }
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
+    StringFormat(buffer, size, _T("%03d" ) _T(DEG) _T("%02d'%02d\" %c"),
                  dd, mm, ss, sign);
     break;
 
@@ -71,7 +71,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
+    StringFormat(buffer, size, _T("%03d") _T(DEG) _T("%02d'%05.2f\" %c"),
                  dd, mm, mlong, sign);
     break;
 
@@ -81,7 +81,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     // Calculate minutes
     mlong = (mlong - dd) * 60.0;
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%03d")_T(DEG)_T("%06.3f' %c"),
+    StringFormat(buffer, size, _T("%03d") _T(DEG) _T("%06.3f' %c"),
                  dd, mlong, sign);
     break;
 
@@ -127,7 +127,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
       mm -= 60;
     }
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
+    StringFormat(buffer, size, _T("%02d") _T(DEG) _T("%02d'%02d\" %c"),
                  dd, mm, ss, sign);
     break;
 
@@ -140,7 +140,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
+    StringFormat(buffer, size, _T("%02d") _T(DEG) _T("%02d'%05.2f\" %c"),
                  dd, mm, mlat, sign);
     break;
 
@@ -150,7 +150,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
     // Calculate minutes
     mlat = (mlat - dd) * 60.0;
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%02d")_T(DEG)_T("%06.3f' %c"),
+    StringFormat(buffer, size, _T("%02d") _T(DEG) _T("%06.3f' %c"),
                  dd, mlat, sign);
     break;
 

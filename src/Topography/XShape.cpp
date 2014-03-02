@@ -48,7 +48,8 @@ import_label(const char *src)
 
   src = TrimLeft(src);
   if (strcmp(src, "RAILWAY STATION") == 0 ||
-      strcmp(src, "RAILROAD STATION") == 0)
+      strcmp(src, "RAILROAD STATION") == 0 ||
+      strcmp(src, "UNK") == 0)
     return NULL;
 
 #ifdef _UNICODE

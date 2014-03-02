@@ -31,3 +31,4 @@ build/local-config.mk
 
 *.pyc
 *.pyo
+*.bak

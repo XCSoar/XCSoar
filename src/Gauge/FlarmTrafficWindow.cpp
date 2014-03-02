@@ -330,6 +330,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     circles = 2;
     break;
   case FlarmTraffic::AlarmType::NONE:
+  default:
     if (WarningMode()) {
       text_color = &look.passive_color;
       target_pen = &look.passive_pen;
@@ -343,6 +344,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       if (team_color != FlarmColor::NONE) {
         circle_pen = FlarmColorPen(look, team_color);
         circles = 1;
+      } else {
+        // unnecessary - prevents "may be used uninitialized" compiler warning
+        circle_pen = &look.default_pen;
       }
 
       if (!small && static_cast<unsigned> (selection) == i) {
