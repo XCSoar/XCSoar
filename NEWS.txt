@@ -6,6 +6,8 @@ Version 6.7.4 - not yet released
 * map
   - fix topography rendering for polygon shapes (#3245)
   - fix SDL clipped polygon rendering algorithm (#3250)
+* devices
+  - Westerboer: ignore implausible values from buggy devices
 
 Version 6.7.3 - 2014/01/22
 * tracking
