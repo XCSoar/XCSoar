@@ -287,6 +287,9 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
     // Download chosen IGC file into temporary file
     TCHAR path[MAX_PATH];
+    LocalPath(path, _T("logs"));
+    Directory::Create(path);
+
     LocalPath(path, _T("logs"), _T("temp.igc"));
     switch (DoDownloadFlight(device, *flight, path)) {
     case TriStateJobResult::SUCCESS:
