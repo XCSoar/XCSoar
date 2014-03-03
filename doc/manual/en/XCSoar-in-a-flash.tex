@@ -1,13 +1,13 @@
 \documentclass[english,a4paper,12pt,utf8]{scrreprt}
 \usepackage[utf8]{inputenc}
-\usepackage[off]{flippdf}           % mirrored pages (even images ..) -> Default OFF ..
+\usepackage[off]{flippdf}    % mirrored pages (even images ..) -> Default OFF..
 \usepackage{supertabular}
 \usepackage{array}
 \usepackage{wasysym}
 \usepackage{hhline}
-\usepackage{framed}                 % colour support
-\usepackage{color}                  % colour support
-\usepackage{graphicx}               % see c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
+\usepackage{framed}          % colour support
+\usepackage[rgb]{xcolor}     % colour support, rgb = definite colour space
+\usepackage{graphicx}        % -> includegraphics
 \usepackage{wrapfig}
 \usepackage{fancyhdr}
 \usepackage{fancybox}
@@ -32,15 +32,15 @@
     pdfkeywords={XCSoar}{Quickstart}{Soaring}{Final Glide},
     pdfnewwindow=true,
     colorlinks=true,
-    linkcolor=red,
+    linkcolor=black,
     citecolor=green,
     filecolor=magenta,
     urlcolor=blue
 }
-\parindent0mm%no indent
-\textwidth=170mm
-\rightmargin=0mm\leftmargin=-10mm\oddsidemargin=-10mm\evensidemargin=-10mm
-\setlength{\headheight}{33pt} %increasing headheight for logo
+\parindent0mm                %no indent
+\textwidth=170mm             %match print and screen
+\oddsidemargin=-5mm          %match print and screen
+\setlength{\headheight}{33pt}%increasing headheight for logo
 \setlength{\baselineskip}{1em}
 % Font selection
 \usepackage{helvet}
@@ -53,37 +53,70 @@
 %
 %##############  Colour, Background, Border ##############
 %
-\fboxrule0.4mm                                                      % width Fbox-border
+\fboxrule0.4mm               % width Fbox-border
+\definecolor{flashyellow}{rgb}{.9,.85,0}
+\definecolor{flashblue}{rgb}{0,0,1}
 %
 %##############  advanced Makros and Menus ..##############
+%
 \newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
 \newcommand{\display}[3]{\bmenut{Display}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
 \newcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
 \newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
-
-
-
-
+%
+%
 %##############  Document start of flash ##############
 %
 \setcounter{secnumdepth}{1}
 \renewcommand*{\thesection}{\textsf{\arabic{section}}}
 \begin{document}
-
-%##############  Titelpage of flash ##############
+%
+%print-testchart 
+%\tiny
+%    \definecolor{mauve}{RGB}{224 176 255}
+%    \begin{testcolors}[rgb,RGB,cmyk,hsb,HSB,HTML,gray,Gray]
+%    \testcolor{black}
+%    \testcolor{white}
+%    \testcolor{darkgray}
+%    \testcolor{gray}
+%    \testcolor{lightgray}
+%    \testcolor{red}
+%    \testcolor{green}
+%    \testcolor{blue}
+%    \testcolor{cyan}
+%    \testcolor{magenta}
+%    \testcolor{yellow}
+%    \testcolor{brown}
+%    \testcolor{lime}
+%    \testcolor{olive}
+%    \testcolor{orange}
+%    \testcolor{pink}
+%    \testcolor{purple}
+%    \testcolor{teal}
+%    \testcolor{violet}
+%    \testcolor{mauve}
+%    \testcolor[cmyk]{0 0.5 1 0.42}
+%    \testcolor{flashblue}
+%    \testcolor{flashyellow}
+%    \end{testcolors}
+%\newpage
+%
+%
+%##############  Titlepage of flash ##############
 \pagestyle{empty}
-\vspace*{2em}
 \begin{center}
-{\Huge\textbf{XCSoar in a flash}}
-
+\fontsize{34}{0}
+\selectfont\textbf{XCSoar in a flash}
+\fontsize{12}{12}
 \vspace{0.1em}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/blitzlogo.png}
+\includegraphics[angle=0,width=0.58\linewidth,keepaspectratio='true']{figures/blitzlogo.png}
 
-\vspace{4em}
+\vspace{1em}
 {\Huge How To\\}
-\vspace{0.3em}
+\vspace{0.2em}
 {\tiny get your personal\\}
 {\Huge Tactical Soaring\\ Assistant\\}
+\vspace{0.2em}
 {\tiny ready for boarding}
 \end{center}
 
@@ -99,10 +132,10 @@
 \begin{center}
 {\Huge\textbf{XCSoar Checklist}}
 \end{center}
-\section*{Flash {\color[rgb]{.9,.85,0}On}}\label{ch:flashon}
+\section*{Flash \textcolor{flashyellow}{On}}\label{ch:flashon}
 %%%%%--------------------------------------------------------------------%%%%%
 
-\subsection{\textcolor{blue}{Bring XCSoar into play}}
+\subsection{\textcolor{flashblue}{Bring XCSoar into play}}
 \begin{compactitem}
 \item get hardware and install XCSoar
 \item get appropriate data files of your flight district
@@ -112,24 +145,24 @@
 \item finish setup and familiarize
 \item mount hardware
 \item add items listed underneath to your checklists
-\item make "home"
+\item make ``home''
 \end{compactitem}
 
-\subsection*{\textcolor{blue}{Conduct preflight check, including}}
+\subsection*{\textcolor{flashblue}{Conduct preflight check, including}}
 \begin{compactitem}
 \item setup polar and weight
 \item setup wind and flight parameters (MC, bugs, QNH)
 \item possibly setup a task
 \end{compactitem}
 
-\subsection*{\textcolor{blue}{Conduct start check, including}}
+\subsection*{\textcolor{flashblue}{Conduct start check, including}}
 \begin{compactitem}
 \item Check wind and flight setup once more
 \end{compactitem}
 
-\subsection*{\textcolor{blue}{Fly, enjoy}}
+\subsection*{\textcolor{flashblue}{Fly, enjoy}}
 
-\subsection*{\textcolor{blue}{Conduct after flight check}}
+\subsection*{\textcolor{flashblue}{Conduct after flight check}}
 \begin{compactitem}
 \item Download flight logs from logger, upload to skylines and OLC
 \item Gather statistical data of flight.
@@ -147,8 +180,6 @@
 %##############  Start of main body of flash ##############
 \setlength{\parskip}{0.3\baselineskip}
 \newpage
-\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
-\pagestyle{fancy}
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
@@ -156,6 +187,15 @@
 %%%%%--------------------------------------------------------------------%%%%%
 \section{XCSoar Installation}\label{ch:XCSinstall}
 %%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[10]{R}{0.23\textwidth}
+%\vspace{-5.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.17\textwidth]{figures/xy01.jpg}
+%    XY, ready for installation
+%  \end{flushright}
+%\end{wrapfigure}
+
 Identify the appropriate distribution of XCSoar for your hardware and 
 operating system \textsf{(Android, PC, Windows Mobile, PPC2000, PPC2003, Linux)} 
 on \url{http://www.xcsoar.org}.
@@ -183,7 +223,7 @@ internet explorer, disintegrating \texttt{.xcm}-files.)
 the link last mentioned.
 \end{compactitem}
 
-\subsection{\textcolor{blue}{Run XCSoar for the first time}}
+\subsection{\textcolor{flashblue}{Run XCSoar for the first time}}
 Run XCSoar. With startup, XCSoar asks you to enter either a real life (Fly) or 
 a simulation (Sim) mode. In Sim mode, you can input speed, heading, and height 
 manually in order to do some exercising on the ground. In Fly mode, instrument 
@@ -201,7 +241,7 @@ menu button Config.
 Choose appropriate files in dialogue. If no files show up, again make sure files 
 reside in subdirectory \texttt{/XCSoarData}.
 
-\subsection{\textcolor{blue}{File Manager}}\index{Filemanager}
+\subsection{\textcolor{flashblue}{File Manager}}\index{Filemanager}
 \textbf{please note:} XCSoar's File Manager on Android requires Android 2.2 
 and up!!!
 
@@ -225,7 +265,7 @@ some maps, e.g. depicting thermal spots and areas it might take some time to
 understand setups. For further info please refer to the main manual or 
 \url{http://www.glidinghotspots.eu/} 
 
-\subsection{\textcolor{blue}{Language ( Fonts, Sounds)}}
+\subsection{\textcolor{flashblue}{Language ( Fonts, Sounds)}}
 Typically, XCSoar follows the operation system's language setting. If you do 
 prefer another, there are 28 languages available as is with Dec. 2013 (sorry 
 Bavarian, Boston and other people, dialects are not to be included ever):
@@ -242,16 +282,27 @@ supposed to be the scope of a quick start manual, just an outlook.
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
-\newpage\section{Finish Configuration Setup}
+\newpage
+\section{Finish Configuration Setup}
 %%%%%--------------------------------------------------------------------%%%%%
-\subsection{\textcolor{blue}{Setup Polar}}
+
+\subsection{\textcolor{flashblue}{Setup Polar}}
+
+%\begin{wrapfigure}[7]{R}{0.22\textwidth}
+%\vspace{-9em}
+%  \begin{flushright}
+%    \includegraphics[width=0.27\textwidth]{figures/xy02.png}
+%    xy figuring out the missing colours of life without configuration.
+%  \end{flushright}
+%\end{wrapfigure}
+
 XCSoar comes with a comprehensive list of predefined polars.  To choose, edit, 
 or store your customized polar, invoke the plane configuration by 
-\begin{flushleft}\hspace*{1cm}\config{2}{Plane}{}\\ \end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{2}{Plane}{}\\\end{flushleft}
 The planes' indexes in this compilation are taken from the official DAEC list 
 of 2012.
 
-\subsection{\textcolor{blue}{Connect Logger, Flarm, Vario etc\dots NMEA setup}}
+\subsection{\textcolor{flashblue}{Connect Logger, Flarm, Vario etc\dots NMEA setup}}
 To run, XCSoar needs live data from a GPS receiver at least. You have to tell 
 XCSoar, which one to use, even built-in hardware. To connect to, use
 \begin{flushleft}\hspace*{1cm}\config{2}{Devices}{}\blink\bmenuw{edit}\\\end{flushleft}
@@ -271,14 +322,14 @@ flight log can be downloaded.
 around you - whereas XCSoar does NOT provide collision detection.
 \end{compactitem}
 
-\subsection{\textcolor{blue}{NMEA}}
+\subsection{\textcolor{flashblue}{NMEA}}
 Wondering?  NMEA stands for `National Marine Electronics Association', having 
 reached a status of a worldwide standard. The standard defines electrical 
 interfaces as well as protocols used for transmitting navigational data and 
 much more. As is with nautical mile, aviators adopted maritime things once 
 more. So do their instruments...
 
-\subsection{\textcolor{blue}{Internal GPS}}
+\subsection{\textcolor{flashblue}{Internal GPS}}
 The GPS receiver of your particular mobile device might be a really good one. 
 For several reasons carefully check, whether this holds true in-flight:
 
@@ -306,7 +357,7 @@ logs if hardware is enabled.
 With a Flarm connected you own an XCSoar `classic' system.  Integrating even 
 more hardware is a task of its own and not within scope of a quick start guide. 
 
-\subsection{\textcolor{blue}{Glueing things together}}
+\subsection{\textcolor{flashblue}{Glueing things together}}
 Up to date, there are three ways to connect to other instruments.  Use either 
 a serial wired, a wired serial-over-USB or radio connection via bluetooth. The 
 latter being the matter of choice with Android mobiles, still a so-called 
@@ -342,28 +393,28 @@ hardware for running XCSoar is Dell's Streak 5. On the hardware page of
 XCSoar's website you find several bluetooth adapters listed, known of as 
 gaining stable radio connections. 
 
-\subsection{\textcolor{blue}{Pilot's Name}}
+\subsection{\textcolor{flashblue}{Pilot's Name}}
 \begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Setup}\blink\bmenuw{Logger}\\\end{flushleft}
 
-\subsection{\textcolor{blue}{Time settings}}
+\subsection{\textcolor{flashblue}{Time settings}}
 \begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Setup}\blink\bmenuw{Time}\\\end{flushleft}
 
-\subsection{\textcolor{blue}{Moving the (Moving) Map manually}}
+\subsection{\textcolor{flashblue}{Moving the (Moving) Map manually}}
 Time to engage the map.  Navigate through by entering the pan mode.
 \begin{flushleft}\hspace*{1cm}\display{1}{Pan}{On}\\\end{flushleft}
 Depending on your hardware use buttons, dials, rockers of your hardware to 
 navigate, or even use your fingertip for dragging the map.
 
-\subsection{\textcolor{blue}{Make "home"}}\index{home waypoint}
-Whenever XCSoar starts up, the map display is centred on your "home" 
-waypoint. Unless you set up your first "true" task, XCSoar's route function will 
+\subsection{\textcolor{flashblue}{Make ``home''}}\index{home waypoint}
+Whenever XCSoar starts up, the map display is centred on your ``home'' 
+waypoint. Unless you set up your first ``true'' task, XCSoar's route function will 
 show you the way home. If you do not even define home, XCSoar will create a 
 waypoint automatically on location where it detects the takeoff condition - and 
 show you the way back.
 \begin{compactitem}
 \item Navigate to desired waypoint
 \item Klick/tap on (touch) screen in close proximity of desired waypoint.
-\item Dialogue ''Map Elements at this location'' appears.
+\item Dialogue ``Map Elements at this location'' appears.
 \item Choose waypoint.
 \item Push \bmenuw{Details}.
 \item Turn one page further by touching: \blink
@@ -387,7 +438,7 @@ XCSoar's simulation mode.
 
 ...with the best strategy ever going through both.
 
-\subsection{\textcolor{blue}{Action - watch XCSoar replay a flight}}
+\subsection{\textcolor{flashblue}{Action - watch XCSoar replay a flight}}
 Pick a flight log and let XCSoar step back in time.  Place the file in 
 subdirectory\verb+/XCSoarData+ \verb+/logs+ and start replay.
 
@@ -399,17 +450,17 @@ content respectively. You are kindly requested to go through following steps
 only, if you have developed a deep demand to do so.  XCSoar comes with a 
 pre-configuration quite useful.
 
-\subsection*{\textcolor{blue}{Screen Layout (portrait, landscape, etc.\dots)}} 
+\subsection*{\textcolor{flashblue}{Screen Layout (portrait, landscape, etc.\dots)}} 
 To change basic Screen Layouts:
 \begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Look}\blink
 \bmenuw{Screen Layout}\\\end{flushleft}
 
-\subsection*{\textcolor{blue}{Change InfoBox' Content}}
+\subsection*{\textcolor{flashblue}{Change InfoBox' Content}}
 To change Infobox sets and boxes' content:
 \begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Look}\blink
 \bmenuw{InfoBox Sets}\\\end{flushleft}
 
-\subsection{\textcolor{blue}{Configuration Files / Backup}}
+\subsection{\textcolor{flashblue}{Configuration Files / Backup}}
 For using XCSoar in different situations, environments, and gliders, you are 
 invited to use profiles. If XCSoar finds more than one on startup, 
 it will ask you which one to use. Here we are, recalling your profile is just a 
@@ -441,7 +492,7 @@ will include all configuration setups you will perform, with this file active.
 That is why a backup-file \verb+.bak+ is needed to preserve a standard, you 
 judged being worth it.
 
-\subsection{\textcolor{blue}{Mount Hardware}}
+\subsection{\textcolor{flashblue}{Mount Hardware}}
 Mounting the hardware of your choice might turn out to reach some level of 
 effort.  In any case, mount the hardware to even resist very rough conditions, 
 no matter, whether you use special holders and a suction mount or a 
@@ -462,32 +513,41 @@ Never hold complex machines in hand whilst flying.
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
-\newpage\section{Pre-flight Check}
+\newpage
+\section{Pre-flight Check}
 %%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[4]{R}{0.5\textwidth}
+%\vspace{-4.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.48\textwidth]{figures/xy03.jpg}
+%    xy preflight check
+%  \end{flushright}
+%\end{wrapfigure}
+
 To be included in your Checklist.
 
 If you use a single XCSoar hardware within several gliders, first setup your 
-planes polar. Otherwise you might skip the first step or step 1 and 2.
+planes polar. Otherwise you might proceed with Setup Flight.
 
-\subsection*{\textcolor{blue}{Setup Polar}}
+\subsection*{\textcolor{flashblue}{Setup Polar}}
 Invoke either
-\begin{flushleft}\hspace*{1cm}\config{2}{Plane}{}\\
+\begin{flushleft}\hspace*{1cm}\config{2}{Plane}{}\hspace{1em} or\\
 \end{flushleft}
-or
 
-\subsection*{\textcolor{blue}{Recall Setup}}
+\subsection*{\textcolor{flashblue}{Recall Setup}}
 Restart XCSoar and choose a different configuration, including correctly set 
 up polar and weight.
 
-\subsection*{\textcolor{blue}{Setup Flight}}
+\subsection*{\textcolor{flashblue}{Setup Flight}}
 \begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}\blink\bmenuw{Wing loading / 
 Bugs / QNH / Max temp}\\\end{flushleft}
 
-\subsection*{\textcolor{blue}{Setup Wind}}
+\subsection*{\textcolor{flashblue}{Setup Wind}}
 \begin{flushleft}\hspace*{1cm}\config{1}{Wind}{}\blink\bmenuw{Auto wind\dots / 
 Speed / Direction}\\\end{flushleft}
 
-\subsection*{\textcolor{blue}{Setup Task?}}
+\subsection*{\textcolor{flashblue}{Setup Task?}}
 After having made your``home'', XCSoar will always give you support on how to 
 come home, unless you have created a task. As you might have expected, XCSoar 
 will guide you through your task and home from that time on.
@@ -500,24 +560,37 @@ flash. Set up either a``Simple'' Task or a``True'' task.
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
-\newpage\section{Start Check}
+\newpage
+\section{Start Check}
 %%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[4]{R}{0.5\textwidth}
+%\vspace{-4.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.48\textwidth]{figures/xy04.jpg}
+%    xy checking wind
+%  \end{flushright}
+%\end{wrapfigure}
+
 To be included in your Checklist.
 
-\subsection{\textcolor{blue}{Check Flight}}
-\begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}\blink\bmenuw{Wing loading / 
-Bugs / QNH / Max temp}\\\end{flushleft}
+\subsection{\textcolor{flashblue}{Check Flight}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}
+%\blink\bmenuw{Wing loading / Bugs / QNH / Max temp}
+\\\end{flushleft}
 
-\subsection{\textcolor{blue}{Check Wind}}
-\begin{flushleft}\hspace*{1cm}\config{1}{Wind}{}\blink\bmenuw{Auto wind\dots / 
-Speed / Direction}\\\end{flushleft}
+\subsection{\textcolor{flashblue}{Check Wind}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Wind}{}
+%\blink\bmenuw{Auto wind\dots / Speed / Direction}
+\\\end{flushleft}
 
+\vspace{5em}
 \section*{Fly}
 During flight, there are two particular sets of info screens you might gather 
 data from.
-\subsection*{\textcolor{blue}{Flight Status}}
+\subsection*{\textcolor{flashblue}{Flight Status}}
 \begin{flushleft}\hspace*{1cm}\info{2}{Status}{}\blink\bmenuw{Times\dots}\\\end{flushleft}
-\subsection*{\textcolor{blue}{Flight Analysis}}
+\subsection*{\textcolor{flashblue}{Flight Analysis}}
 \begin{flushleft}\hspace*{1cm}\info{1}{Analysis}{}\bmenuw{\blink}\dots\\\end{flushleft}
 
 %%%%%--------------------------------------------------------------------%%%%%
@@ -525,10 +598,11 @@ data from.
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
-\newpage\section{After Flight Check}
+\newpage
+\section{After Flight Check}
 %%%%%--------------------------------------------------------------------%%%%%
 
-\subsection{\textcolor{blue}{Download Flight Log}}
+\subsection{\textcolor{flashblue}{Download Flight Log}}
 Download flight logs from your preferred \emph{connected} logger.
 \begin{flushleft}\hspace*{1cm}\config{2}{Devices}{}\\\end{flushleft}
 \begin{compactitem}
@@ -539,22 +613,37 @@ Choose one
 \item push \bmenuw{Select}
 \item wait.... this is an old fashioned serial line working
 \item choose another or push \bmenuw{No} to resume
-\item depending on logger, wait once more patiently. Logger possibly will reset and take its time to resume to normal operation.
+\item depending on logger, wait once more patiently. Logger possibly will reset 
+and take its time to resume to normal operation.
 \end{compactitem}
-\textbf{Please note:} In case you are facing difficulties, make sure, the driver you are using supports downloads from logger. 
-In case, you are using a cascaded system e.g. Flarm-Vario-XCsoar, it might be necessary to enable direct link or similar on vario and choose another driver in XCSoar in order to gain access to downloads from Flarm to Xcsoar.
 
-\subsection{\textcolor{blue}{Flight Analysis}}
+%\begin{wrapfigure}[8]{R}{0.4\textwidth}
+%\vspace{-3em}
+%  \begin{flushright}
+%    \includegraphics[width=0.39\textwidth]{figures/xy05.jpg}
+%    xy analyzing
+%  \end{flushright}
+%\end{wrapfigure}
+
+\vspace{2em}
+\textbf{Please note:} In case you are facing difficulties, make sure, the driver 
+you are using supports downloads from logger. In case, you are using a cascaded 
+system e.g. Flarm-Vario-XCsoar, it might be necessary to enable direct link or 
+similar on vario and choose another driver in XCSoar in order to gain access to 
+downloads from Flarm to Xcsoar.
+
+\subsection{\textcolor{flashblue}{Flight Analysis}}
 \begin{flushleft}\hspace*{1cm}\info{1}{Analysis}{}\\\end{flushleft}
-Use \bmenuw{\blink}  to go through several screens showing statistical data gained during flight as are estimated OLC result, a barograph of your flight...
+Use \bmenuw{\blink} to go through several screens showing statistical data 
+gained during flight as are estimated OLC result, a barograph of your flight...
    ...and even a glide polar analysis if you had connected an instrument 
 providing true airspeed measurement.
 
-\subsection{\textcolor{blue}{Flight Status}}
+\subsection{\textcolor{flashblue}{Flight Status}}
 \begin{flushleft}\hspace*{1cm}\info{2}{Status}{}\blink\bmenuw{Times\dots}\\\end{flushleft}
 to gain more statistical information.
 
-\subsection{\textcolor{blue}{Upload Flight}}
+\subsection{\textcolor{flashblue}{Upload Flight}}
 There are two portals waiting for your flight logs.
 Skylines \url{http://www.skylines-project.org} and
 OLC \url{http://www.onlinecontest.org}
@@ -563,7 +652,7 @@ gives you a 24 hours time frame for uploading logs. Using Skylines is
 somehow more relaxed and is your portal to online tracking and...
 log files are in subdirectory \texttt{logs}.
 
-\subsection*{\textcolor{blue}{Turn off Everything}}
+\subsection*{\textcolor{flashblue}{Turn off Everything}}
 Saving some current. Make sure, you have included \emph{everything}.
 
 %%%%%--------------------------------------------------------------------%%%%%
@@ -571,18 +660,18 @@ Saving some current. Make sure, you have included \emph{everything}.
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
-\newpage\section{Tasks}
+\section{Tasks}
 %%%%%--------------------------------------------------------------------%%%%%
 
-\subsection{\textcolor{blue}{Retrieve "home"-function, Goto-task}}
-Since having defined a "true" task for the first time, the very basic navigate-
+\subsection{\textcolor{flashblue}{Retrieve ``home''-function, Goto-task}}
+Since having defined a ``true'' task for the first time, the very basic navigate-
 home-function is shut down permanently. Use Goto function instead, providing 
-the most "simple" task. \textbf{Please note:} There are several functions as is 
-InfoBoxes relating to the "home" waypoint. They do operate unaffected still. 
+the most ``simple'' task. \textbf{Please note:} There are several functions as is 
+InfoBoxes relating to the ``home'' waypoint. They do operate unaffected still. 
 The only function shut down is just the \emph{surrogate} XCSoar uses with 
-finding no user defined "true" task - or: until the user actively defines his 
+finding no user defined ``true'' task - or: until the user actively defines his 
 very first task.
-\subsection{\textcolor{blue}{Simple Task: Goto-task}}
+\subsection{\textcolor{flashblue}{Simple Task: Goto-task}}
 There are several ways to create a simple task. In either case, choose a 
 waypoint and push \bmenuw{Goto}.
 
@@ -595,7 +684,7 @@ conditions might prevent from finding a target.
 \item Push \bmenuw{OK}.
 \item (select one) push \bmenuw{Select}, then \bmenuw{Goto}.
 \end{compactitem}
-Or use pan function of map, then proceed similar to case of "making" home.
+Or use pan function of map, then proceed similar to case of ``making'' home.
 \begin{compactitem}
 \item Navigate to desired waypoint
 \item Klick/tap on (touch) screen in close proximity of desired waypoint.
@@ -604,7 +693,7 @@ Or use pan function of map, then proceed similar to case of "making" home.
 \item Push \bmenuw{Goto}.
 \end{compactitem}
  
-\subsection{\textcolor{blue}{Task: create, save, load, declare}}
+\subsection{\textcolor{flashblue}{Task: create, save, load, declare}}
 Creating a new task:
 \begin{flushleft}\hspace*{1cm}\nav{1}{Task}{}\blink\bmenuw{Manage}\blink\bmenuw{New Task}\\\end{flushleft}
 \begin{compactitem}
@@ -619,12 +708,52 @@ screen \bmenuw{Select Waypoint} comes up. Edit your wayponts. Touching
 consecutively, then \bmenuw{Close}.
 \end{compactitem}
 
-\subsection*{\textcolor{blue}{Task: Start open time and close time}}
+\subsection*{\textcolor{flashblue}{Task: Start open time and close time}}
 Right now, the flashing time initially set up is supposed to end.
 Close time hit. Time to change to XCSoar's main manual.
 
 Thank you for your time and
 
+%\begin{wrapfigure}[4]{l}{0.5\textwidth}
+%\vspace{-1.3em}
+%  \begin{centering}
+%    \includegraphics[width=0.48\textwidth]{figures/xy06.jpg}
+%  \end{centering}
+%\end{wrapfigure}
+
 \section*{always happy landings}%no section at all, formatting reasons
+
+%##############  Indexes of flash ##############
+\normalsize
+\tableofcontents
+
+
+%##############  Closing page of flash ##############
+\newpage
+\pagestyle{empty}
+
+\normalsize{for further information see:\\}
+\vspace{0.5em}
+
+\begin{center}
+    \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/logo.png}
+    \vskip 0.5cm
+%   option 1: web release 
+%    \includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}\\
+%   option 2: print release
+    \fontsize{50}{0}
+    \selectfont\textbf{XCSoar}\\
+    \fontsize{12}{12}
+    \vspace{0.2em}
+    \LARGE{the open-source glide computer}\\
+    \vspace{1.2em}
+    \LARGE{User Manual}\\
+    
+\vspace{9em}
+
+\end{center}
+\begin{flushright}
+\normalsize available at: \url{http://www.xcsoar.org/discover/manual.html}\\
+\end{flushright}
 
 \end{document}
