@@ -273,6 +273,12 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
+  {
+    TCHAR path[MAX_PATH];
+    LocalPath(path, _T("logs"));
+    Directory::Create(path);
+  }
+
   while (true) {
     // Show list of the flights
     const RecordedFlightInfo *flight = ShowFlightList(flight_list);

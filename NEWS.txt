@@ -8,6 +8,8 @@ Version 6.7.4 - not yet released
   - fix SDL clipped polygon rendering algorithm (#3250)
 * devices
   - Westerboer: ignore implausible values from buggy devices
+* logger
+  - create "logs" directory automatically for external flight downloads
 
 Version 6.7.3 - 2014/01/22
 * tracking
