@@ -185,6 +185,19 @@ TopCanvas::OnResize(PixelSize new_size)
 }
 
 void
+TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
+{
+  GLint egl_width, egl_height;
+  if (!eglQuerySurface(display, surface, EGL_WIDTH, &egl_width) ||
+      !eglQuerySurface(display, surface, EGL_HEIGHT, &egl_height))
+    return;
+
+  Point2D<unsigned> new_size(egl_width, egl_height);
+  OpenGL::SetupViewport(new_size, orientation);
+  Canvas::Create(PixelSize(new_size.x, new_size.y));
+}
+
+void
 TopCanvas::Flip()
 {
   eglSwapBuffers(display, surface);

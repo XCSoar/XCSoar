@@ -34,6 +34,10 @@ Copyright_License {
 #include "Screen/Custom/DoubleClick.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "Screen/Features.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hpp"
@@ -50,6 +54,10 @@ union SDL_Event;
 
 #ifdef ENABLE_SDL
 #include <SDL_version.h>
+#endif
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+enum class DisplayOrientation : uint8_t;
 #endif
 
 #ifndef USE_GDI
@@ -317,6 +325,10 @@ public:
   }
 
   void RefreshSize() {}
+#endif
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void SetDisplayOrientation(DisplayOrientation orientation);
 #endif
 
 protected:

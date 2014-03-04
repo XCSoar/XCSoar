@@ -29,6 +29,11 @@ Copyright_License {
 #include "Util/DebugFlag.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include <stdint.h>
+enum class DisplayOrientation : uint8_t;
+#endif
+
 class GLTexture;
 class GLFrameBuffer;
 class GLRenderBuffer;
@@ -49,6 +54,10 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
 
   RasterPoint old_translate;
   Point2D<unsigned> old_size;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  DisplayOrientation old_orientation;
+#endif
 
   DebugFlag active;
 

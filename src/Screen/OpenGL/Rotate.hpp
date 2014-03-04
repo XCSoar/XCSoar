@@ -21,53 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_FEATURES_HPP
-#define XCSOAR_SCREEN_OPENGL_FEATURES_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_ROTATE_HPP
+#define XCSOAR_SCREEN_OPENGL_ROTATE_HPP
 
-#ifndef ENABLE_OPENGL
-#error No OpenGL
-#endif
+struct PixelRect;
 
-#define HAVE_TEXT_CACHE
-
-#ifdef ANDROID
-
-/**
- * The EGL API is available.  May require a runtime check
- * (OpenGL::egl).
- */
-#define HAVE_DYNAMIC_EGL
-
-/**
- * The OES_draw_texture extension is available.
- */
-#define HAVE_OES_DRAW_TEXTURE
-
-#endif
-
-#if defined(USE_VIDEOCORE) || defined(HAVE_MALI)
-#define DRAW_MOUSE_CURSOR
-#endif
-
-#ifdef USE_EGL
-/**
- * Support display rotation via glRotatef()?
- */
-#define SOFTWARE_ROTATE_DISPLAY
-#endif
-
-/**
- * Running on OpenGL/ES?
- */
-constexpr
-static inline bool
-HaveGLES()
-{
-#ifdef HAVE_GLES
-  return true;
-#else
-  return false;
-#endif
-}
+namespace OpenGL {
+  /**
+   * Map the specified rectangle from Canvas to viewport coordinates.
+   */
+  void ToViewport(PixelRect &rc);
+};
 
 #endif

@@ -45,6 +45,10 @@ namespace OpenGL {
 
   Point2D<unsigned> window_size, viewport_size;
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  DisplayOrientation display_orientation;
+#endif
+
   RasterPoint translate;
 
 #ifndef NDEBUG

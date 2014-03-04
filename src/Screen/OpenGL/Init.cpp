@@ -30,6 +30,7 @@ Copyright_License {
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
 #include "Asset.hpp"
+#include "DisplayOrientation.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -40,6 +41,9 @@ Copyright_License {
 #include "EGL.hpp"
 #endif
 
+#include <algorithm>
+
+#include <assert.h>
 #include <string.h>
 
 void
@@ -312,6 +316,78 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+}
+
+/**
+ * Determine the projection rotation angle (in degrees) of the
+ * specified orientation.
+ */
+gcc_const
+static GLfloat
+OrientationToRotation(DisplayOrientation orientation)
+{
+  switch (orientation) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+    return 0;
+
+  case DisplayOrientation::PORTRAIT:
+    return 90;
+
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    return 180;
+
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    return 270;
+  }
+
+  assert(false);
+  gcc_unreachable();
+}
+
+/**
+ * Swap x and y if the given orientation specifies it.
+ */
+static void
+OrientationSwap(Point2D<unsigned> &p, DisplayOrientation orientation)
+{
+  switch (orientation) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    break;
+
+  case DisplayOrientation::PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    std::swap(p.x, p.y);
+    break;
+  }
+}
+
+void
+OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
+{
+  window_size = size;
+
+  glViewport(0, 0, size.x, size.y);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glRotatef(OrientationToRotation(orientation), 0, 0, 1);
+  OrientationSwap(size, orientation);
+#ifdef HAVE_GLES
+  glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
+#else
+  glOrtho(0, size.x, size.y, 0, -1, 1);
+#endif
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  viewport_size = size;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  OpenGL::display_orientation = orientation;
+#endif
 }
 
 void

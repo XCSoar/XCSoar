@@ -39,6 +39,11 @@ Copyright_License {
 #include <pthread.h>
 #endif
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include <stdint.h>
+enum class DisplayOrientation : uint8_t;
+#endif
+
 namespace OpenGL {
 #ifdef HAVE_DYNAMIC_EGL
   /**
@@ -107,6 +112,10 @@ namespace OpenGL {
    * The dimensions of the OpenGL viewport in pixels.
    */
   extern Point2D<unsigned> viewport_size;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  extern DisplayOrientation display_orientation;
+#endif
 
   /**
    * The current SubCanvas translation in pixels.

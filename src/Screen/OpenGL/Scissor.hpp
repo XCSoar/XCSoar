@@ -28,6 +28,30 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/Canvas.hpp"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "Rotate.hpp"
+
+class GLCanvasScissor : public GLEnable {
+public:
+  explicit GLCanvasScissor(const Canvas &canvas)
+    :GLEnable(GL_SCISSOR_TEST) {
+    Scissor(PixelRect(0, 0, canvas.GetWidth(), canvas.GetHeight()));
+  }
+
+  explicit GLCanvasScissor(PixelRect rc)
+    :GLEnable(GL_SCISSOR_TEST) {
+    Scissor(rc);
+  }
+
+private:
+  void Scissor(PixelRect rc) {
+    OpenGL::ToViewport(rc);
+    ::glScissor(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  }
+};
+
+#else
+
 class GLCanvasScissor : public GLScissor {
 public:
   GLCanvasScissor(const Canvas &canvas)
@@ -40,5 +64,7 @@ public:
                OpenGL::viewport_size.y - OpenGL::translate.y - rc.bottom,
                rc.right - rc.top, rc.bottom - rc.top) {}
 };
+
+#endif
 
 #endif

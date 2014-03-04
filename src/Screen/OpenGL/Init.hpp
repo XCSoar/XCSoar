@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_INIT_HPP
 #define XCSOAR_SCREEN_OPENGL_INIT_HPP
 
+#include <stdint.h>
+
+enum class DisplayOrientation : uint8_t;
+
 template<typename T>
 struct Point2D;
 
@@ -43,6 +47,15 @@ namespace OpenGL {
    * Set up the viewport and the matrices for 2D drawing.
    */
   void SetupViewport(Point2D<unsigned> size);
+
+  /**
+   * Set up the viewport and the matrices for 2D drawing.  Apply the
+   * #DisplayOrientation via glRotatef() (OpenGL projection matrix).
+   *
+   * @param size the screen size in pixels; may be edited by the
+   * function to apply the #DisplayOrientation
+   */
+  void SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation);
 
   /**
    * Deinitialize our OpenGL library.  Call before shutdown.

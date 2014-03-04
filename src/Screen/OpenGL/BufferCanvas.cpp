@@ -30,6 +30,10 @@ Copyright_License {
 #include "RenderBuffer.hpp"
 #include "Init.hpp"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "DisplayOrientation.hpp"
+#endif
+
 #include <assert.h>
 
 BufferCanvas::BufferCanvas(const Canvas &canvas,
@@ -138,6 +142,11 @@ BufferCanvas::Begin(Canvas &other)
     old_translate = OpenGL::translate;
     old_size = OpenGL::viewport_size;
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+    old_orientation = OpenGL::display_orientation;
+    OpenGL::display_orientation = DisplayOrientation::DEFAULT;
+#endif
+
     /* configure a new viewport */
     OpenGL::SetupViewport({GetWidth(), GetHeight()});
     OpenGL::translate = {0, 0};
@@ -181,6 +190,11 @@ BufferCanvas::Commit(Canvas &other)
 
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;
+
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+    OpenGL::display_orientation = old_orientation;
+#endif
 
     /* copy frame buffer to screen */
     CopyTo(other);

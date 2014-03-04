@@ -34,6 +34,15 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Features.hpp"
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "Screen/OpenGL/Globals.hpp"
+#endif
+#endif
+
 #ifdef WIN32
 #include "Screen/RootDC.hpp"
 
@@ -106,6 +115,11 @@ Display::RotateSupported()
   return dm.dmDisplayOrientation != DMDO_0;
 #elif defined(ANDROID) || defined(KOBO)
   return true;
+#elif defined(SOFTWARE_ROTATE_DISPLAY)
+  /* rotate supported via glRotatef() (OpenGL projection matrix) */
+
+  /* we need FBO so BufferCanvas can avoid using Canvas::CopyToTexture() */
+  return OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil;
 #else
   return false;
 #endif
@@ -210,6 +224,12 @@ Display::Rotate(DisplayOrientation orientation)
   };
 
   return File::WriteExisting("/sys/class/graphics/fb0/rotate", rotate);
+#elif defined(SOFTWARE_ROTATE_DISPLAY)
+  if (!RotateSupported())
+    return false;
+
+  CommonInterface::main_window->SetDisplayOrientation(orientation);
+  return true;
 #else
   return false;
 #endif

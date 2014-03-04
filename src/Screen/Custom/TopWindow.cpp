@@ -61,6 +61,20 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 #endif
 }
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
+void
+TopWindow::SetDisplayOrientation(DisplayOrientation orientation)
+{
+  assert(screen != nullptr);
+  assert(screen->IsDefined());
+
+  screen->SetDisplayOrientation(orientation);
+  Resize(screen->GetWidth(), screen->GetHeight());
+}
+
+#endif
+
 void
 TopWindow::CancelMode()
 {
