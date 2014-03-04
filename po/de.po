@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-02-09 14:21+0000\n"
+"PO-Revision-Date: 2014-02-26 16:13+0000\n"
 "Last-Translator: Tobias Bannert <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-10 10:28+0000\n"
-"X-Generator: Launchpad (build 16916)\n"
+"X-Launchpad-Export-Date: 2014-03-04 21:01+0000\n"
+"X-Generator: Launchpad (build 16948)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2919,7 +2919,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
 msgid "Circle Diameter"
-msgstr "Thermikkreisdurchmesser"
+msgstr "Thermik - Kreisdurchmesser"
 
 #: src/InfoBoxes/Content/Factory.cpp:1245
 #, no-c-format
@@ -5119,16 +5119,16 @@ msgstr ""
 
 #: src/Dialogs/dlgBrightness.cpp:141
 msgid "Screen Brightness"
-msgstr "Bildschirm-Helligkeit"
+msgstr "Bildschirmhelligkeit"
 
 #: src/Dialogs/dlgChecklist.cpp:68 Data/Dialogs/dlgChecklist_L.xml:3
 #: Data/Dialogs/dlgChecklist.xml:3
 msgid "Checklist"
-msgstr "Checkliste"
+msgstr "Kontrollliste"
 
 #: src/Dialogs/dlgChecklist.cpp:150
 msgid "No checklist loaded"
-msgstr "Keine Checkliste geladen"
+msgstr "Keine Kontrollliste geladen"
 
 #: src/Dialogs/dlgChecklist.cpp:150
 msgid "Create xcsoar-checklist.txt"
