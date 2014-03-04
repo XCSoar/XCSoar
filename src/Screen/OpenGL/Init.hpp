@@ -24,6 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_INIT_HPP
 #define XCSOAR_SCREEN_OPENGL_INIT_HPP
 
+template<typename T>
+struct Point2D;
+
 namespace OpenGL {
   /**
    * Initialize our OpenGL library.  Call when XCSoar starts.
@@ -39,7 +42,7 @@ namespace OpenGL {
   /**
    * Set up the viewport and the matrices for 2D drawing.
    */
-  void SetupViewport(unsigned width, unsigned height);
+  void SetupViewport(Point2D<unsigned> size);
 
   /**
    * Deinitialize our OpenGL library.  Call before shutdown.

@@ -296,18 +296,17 @@ OpenGL::SetupContext()
 }
 
 void
-OpenGL::SetupViewport(unsigned width, unsigned height)
+OpenGL::SetupViewport(Point2D<unsigned> size)
 {
-  screen_width = width;
-  screen_height = height;
+  screen_size = size;
 
-  glViewport(0, 0, width, height);
+  glViewport(0, 0, size.x, size.y);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 #ifdef HAVE_GLES
-  glOrthox(0, width << 16, height << 16, 0, -(1<<16), 1<<16);
+  glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
 #else
-  glOrtho(0, width, height, 0, -1, 1);
+  glOrtho(0, size.x, size.y, 0, -1, 1);
 #endif
 
   glMatrixMode(GL_MODELVIEW);

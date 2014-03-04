@@ -123,12 +123,11 @@ BufferCanvas::Begin(Canvas &other)
 
     /* save the old viewport */
     old_translate = OpenGL::translate;
-    old_size.cx = OpenGL::screen_width;
-    old_size.cy = OpenGL::screen_height;
+    old_size = OpenGL::screen_size;
     glPushMatrix();
 
     /* configure a new viewport */
-    OpenGL::SetupViewport(GetWidth(), GetHeight());
+    OpenGL::SetupViewport({GetWidth(), GetHeight()});
     OpenGL::translate = {0, 0};
   } else {
     offset = other.offset;
@@ -152,7 +151,7 @@ BufferCanvas::Commit(Canvas &other)
 
     assert(OpenGL::translate == RasterPoint(0, 0));
 
-    OpenGL::SetupViewport(old_size.cx, old_size.cy);
+    OpenGL::SetupViewport(old_size);
 
     OpenGL::translate = old_translate;
 

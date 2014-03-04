@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "Math/Point2D.hpp"
 #else
 #include "Screen/Canvas.hpp"
 #endif
@@ -189,7 +190,7 @@ TopCanvas::Create(PixelSize new_size,
 #endif
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 #elif (SDL_MAJOR_VERSION < 2)
   surface = s;
@@ -257,7 +258,7 @@ TopCanvas::OnResize(PixelSize new_size)
 #endif
 
 #ifdef ENABLE_OPENGL
-  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 #else
 #if (SDL_MAJOR_VERSION >= 2)

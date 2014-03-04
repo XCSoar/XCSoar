@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_BUFFER_CANVAS_HPP
 
 #include "Canvas.hpp"
+#include "Math/Point2D.hpp"
 #include "Util/DebugFlag.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 
@@ -43,7 +44,7 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
   GLRenderBuffer *stencil_buffer;
 
   RasterPoint old_translate;
-  PixelSize old_size;
+  Point2D<unsigned> old_size;
 
   DebugFlag active;
 

@@ -803,7 +803,7 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
   texture.Bind();
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                       OpenGL::translate.x + src_rc.left,
-                      OpenGL::screen_height - OpenGL::translate.y - src_rc.bottom,
+                      OpenGL::screen_size.y - OpenGL::translate.y - src_rc.bottom,
                       src_rc.right - src_rc.left,
                       src_rc.bottom - src_rc.top);
 

@@ -156,7 +156,8 @@ TopCanvas::Create(PixelSize new_size,
   eglMakeCurrent(display, surface, surface, context);
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(effective_size.cx, effective_size.cy);
+  OpenGL::SetupViewport(Point2D<unsigned>(effective_size.cx,
+                                          effective_size.cy));
   Canvas::Create(effective_size);
 }
 
@@ -179,7 +180,7 @@ TopCanvas::OnResize(PixelSize new_size)
   if (new_size == size)
     return;
 
-  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 }
 

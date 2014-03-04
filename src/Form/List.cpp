@@ -150,7 +150,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 #ifdef ENABLE_OPENGL
   /* enable clipping */
   GLScissor scissor(OpenGL::translate.x,
-                    OpenGL::screen_height - OpenGL::translate.y - canvas.GetHeight(),
+                    OpenGL::screen_size.y - OpenGL::translate.y - canvas.GetHeight(),
                     scroll_bar.GetLeft(GetSize()), canvas.GetHeight());
 #endif
 

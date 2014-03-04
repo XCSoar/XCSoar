@@ -22,11 +22,12 @@ Copyright_License {
 */
 
 #include "Screen/Custom/TopCanvas.hpp"
+#include "Math/Point2D.hpp"
 #include "Init.hpp"
 
 void
 TopCanvas::Resume()
 {
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(size.cx, size.cy);
+  OpenGL::SetupViewport(Point2D<unsigned>(size.cx, size.cy));
 }

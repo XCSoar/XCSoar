@@ -43,7 +43,7 @@ namespace OpenGL {
 
   GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
-  UPixelScalar screen_width, screen_height;
+  Point2D<unsigned> screen_size;
 
   RasterPoint translate;
 

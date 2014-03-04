@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
-#include <type_traits>
-
 template<typename T>
 struct Point2D {
   T x, y;

@@ -33,6 +33,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Point.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "Math/Point2D.hpp"
 
 #ifndef NDEBUG
 #include <pthread.h>
@@ -100,7 +101,7 @@ namespace OpenGL {
   /**
    * The dimensions of the screen in pixels.
    */
-  extern UPixelScalar screen_width, screen_height;
+  extern Point2D<unsigned> screen_size;
 
   /**
    * The current SubCanvas translation in pixels.
