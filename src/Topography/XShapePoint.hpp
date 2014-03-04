@@ -25,24 +25,15 @@ Copyright_License {
 #ifndef TOPOGRAPHY_XSHAPE_POINT_HPP
 #define TOPOGRAPHY_XSHAPE_POINT_HPP
 
-#include "Screen/Point.hpp"
+#include "Math/Point2D.hpp"
 
 typedef int32_t ShapeScalar;
-struct ShapePoint {
+struct ShapePoint : Point2D<ShapeScalar> {
   /**
    * Type to be used by vector math, where a range of
    * max(ShapeScalar)*max(ShapeScalar) is needed.
    */
   typedef float SquareType;
-  ShapeScalar x, y;
-
-  bool operator==(const ShapePoint &other) const {
-    return x == other.x && y == other.y;
-  }
-
-  bool operator!=(const ShapePoint &other) const {
-    return !(*this == other);
-  }
 };
 
 static inline unsigned
