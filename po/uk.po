@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-02-17 15:54+0000\n"
+"PO-Revision-Date: 2014-02-28 16:00+0000\n"
 "Last-Translator: Iurii <yprymak@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-25 16:12+0000\n"
-"X-Generator: Launchpad (build 16926)\n"
+"X-Launchpad-Export-Date: 2014-03-04 21:01+0000\n"
+"X-Generator: Launchpad (build 16948)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1255,7 +1255,7 @@ msgstr "Наступна шляхова точка"
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Наст ППМ"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -1344,7 +1344,7 @@ msgstr "Висота ландшафту"
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Вис Ланд"
 
 #: src/InfoBoxes/Content/Factory.cpp:371
 #, no-c-format
@@ -1424,7 +1424,7 @@ msgstr "Швидкість вітру"
 #: src/InfoBoxes/Content/Factory.cpp:420
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "Шв Вітру"
 
 #: src/InfoBoxes/Content/Factory.cpp:421
 #: src/InfoBoxes/Content/Factory.cpp:1168
@@ -1567,7 +1567,7 @@ msgstr "Барометрична висота"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
 #, no-c-format
 msgid "Alt Baro"
-msgstr ""
+msgstr "Вис Баро"
 
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
@@ -2289,6 +2289,15 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"Співвідношення відстані, пройденої за вибраний при конфігурації час, до "
+"висоти, втраченої за цей же час. Негативні величини вказуються як ^^^ і "
+"свідчать про набір висоти на переході. Величини понад 200 вказуються як +++. "
+"Період, усереднення можна вибрати в налаштуваннях системи. Рекомендуємо "
+"вибирати 60, 90 або 120. Менші значення будуть ближчими до поточної якості "
+"GR Inst, тоді як більші - наближатимуться до GR Cruise. Зверніть увагу, що "
+"відстань НЕ є прямою лінією між старим і новим місцем знаходження, це та "
+"відстань яку ви пролетіли з урахуванням зигзагів. Ця величина не "
+"розраховується під час польоту по спіралі."
 
 #: src/InfoBoxes/Content/Factory.cpp:900
 #, no-c-format
@@ -2505,7 +2514,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1033
 #, no-c-format
 msgid "Start Height"
-msgstr ""
+msgstr "Висота старту"
 
 #: src/InfoBoxes/Content/Factory.cpp:1034
 #, no-c-format
@@ -3332,7 +3341,7 @@ msgstr "Увесь слід на екрані"
 
 #: src/Input/InputEventsSettings.cpp:198
 msgid "Bugs performance"
-msgstr ""
+msgstr "Жучки"
 
 #: src/Input/InputEventsSettings.cpp:241
 #, no-c-format
@@ -3380,7 +3389,7 @@ msgstr "Немає даних"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:101
 #: src/Dialogs/Waypoint/WaypointList.cpp:395
 msgid "Direction"
-msgstr ""
+msgstr "Напрямок"
 
 #: src/Renderer/MapItemListRenderer.cpp:139
 #: src/Renderer/MapItemListRenderer.cpp:141
@@ -3415,7 +3424,7 @@ msgstr "Недосяжний через ландшафт."
 
 #: src/Renderer/MapItemListRenderer.cpp:256
 msgid "Arrival altitude incl. safety height"
-msgstr "Висота прибуття, включаючи безпечну висоту"
+msgstr "Висота прибуття, вкл. безпечну висоту"
 
 #: src/Renderer/MapItemListRenderer.cpp:282
 msgid "Your Position"
@@ -3589,7 +3598,7 @@ msgid ""
 "Using LS8 polar instead!"
 msgstr ""
 "Поляра має не вірні коефіцієнти.\n"
-"Використання натомість поляри LS8!"
+"Використання LS8 замість поляри !"
 
 #: src/Polar/PolarGlue.cpp:107
 msgid "Warning"
@@ -3598,7 +3607,7 @@ msgstr "Застереження"
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr "Низький рівень заряду"
+msgstr "Заряд батареї низький"
 
 #: src/Startup.cpp:254
 msgid "Initialising"
@@ -3622,26 +3631,26 @@ msgstr ""
 #. Show progress dialog
 #: src/Startup.cpp:487 src/Startup.cpp:525 src/Startup.cpp:569
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "Вимкнення, зачекайте..."
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:505
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Вимкнення, збереження логів..."
 
 #. Save settings to profile
 #: src/Startup.cpp:518
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "Вимкнення, збереження профілю..."
 
 #. Save the task for the next time
 #: src/Startup.cpp:561
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Вимкнення, збереження завдання..."
 
 #: src/Device/Descriptor.cpp:406
 msgid "Unable to open port"
-msgstr ""
+msgstr "Неможливо відкрити порт"
 
 #: src/Device/Descriptor.cpp:917 src/Device/Descriptor.cpp:923
 msgid "Sending declaration"
@@ -3653,19 +3662,19 @@ msgstr ""
 
 #: src/Device/Descriptor.cpp:980
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Завантаження логу польоту"
 
 #: src/Device/Config.cpp:218 src/Dialogs/Device/DeviceEditWidget.cpp:67
 #: src/Dialogs/Device/DeviceListDialog.cpp:373
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: src/Device/Config.cpp:237 src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "Сервер Bluetooth"
 
 #: src/Device/Config.cpp:256 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
@@ -3675,7 +3684,7 @@ msgstr ""
 #: src/Device/Config.cpp:259 src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "Вбудований GPS і датчики"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:100 src/Dialogs/WidgetDialog.cpp:240
@@ -3692,21 +3701,21 @@ msgstr ""
 #: src/Dialogs/GeoPointEntry.cpp:81 src/Dialogs/Weather/RASPDialog.cpp:98
 #: src/Dialogs/Settings/FontEdit.cpp:193
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/Dialogs/Message.cpp:106
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:60
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: src/Dialogs/Message.cpp:110
 msgid "No"
-msgstr ""
+msgstr "Ні"
 
 #: src/Dialogs/Message.cpp:117
 msgid "Retry"
-msgstr ""
+msgstr "Повтор"
 
 #: src/Dialogs/Message.cpp:124 src/Dialogs/ListPicker.cpp:191
 #: src/Dialogs/JobDialog.cpp:110 src/Dialogs/WidgetDialog.cpp:241
@@ -3723,40 +3732,40 @@ msgstr ""
 #: src/Dialogs/GeoPointEntry.cpp:82 src/Dialogs/Settings/FontEdit.cpp:195
 #: Data/Input/default.xci:928
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: src/Dialogs/Message.cpp:133
 msgid "Ignore"
-msgstr ""
+msgstr "Нехтувати"
 
 #: src/Dialogs/ListPicker.cpp:186 src/Dialogs/HelpDialog.cpp:37
 msgid "Help"
-msgstr ""
+msgstr "Довідка"
 
 #: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:788
 #: src/Dialogs/Waypoint/WaypointList.cpp:235
 msgid "Select"
-msgstr ""
+msgstr "Вибрати"
 
 #: src/Dialogs/FileManager.cpp:407 src/Dialogs/Weather/NOAAList.cpp:186
 #: src/Dialogs/Weather/NOAAList.cpp:198
 #: src/Dialogs/Weather/NOAADetails.cpp:105
 msgid "Download"
-msgstr ""
+msgstr "Завантажити"
 
 #: src/Dialogs/FileManager.cpp:408
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:116
 #: src/Dialogs/Weather/NOAAList.cpp:109 src/Monitor/MatTaskMonitor.cpp:62
 msgid "Add"
-msgstr ""
+msgstr "Додати"
 
 #: src/Dialogs/FileManager.cpp:441
 msgid "Queued"
-msgstr ""
+msgstr "В черзі"
 
 #: src/Dialogs/FileManager.cpp:443 src/Dialogs/FileManager.cpp:449
 msgid "Downloading"
-msgstr ""
+msgstr "Завантаження"
 
 #: src/Dialogs/FileManager.cpp:455 src/Dialogs/FileManager.cpp:687
 #: src/Dialogs/Device/DeviceListDialog.cpp:394
@@ -3779,48 +3788,48 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:283
 #: src/Dialogs/Weather/NOAADetails.cpp:168
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: src/Dialogs/FileManager.cpp:547
 msgid "Select a file"
-msgstr ""
+msgstr "Обрати файл"
 
 #: src/Dialogs/FileManager.cpp:686
 msgid "Failed to download the repository index."
-msgstr ""
+msgstr "Помилка при завантаженні індексу архіву бази даних."
 
 #: src/Dialogs/FileManager.cpp:695 src/Dialogs/FileManager.cpp:722
 #: Data/Input/default.xci:612
 msgid "File Manager"
-msgstr ""
+msgstr "Файловий менеджер"
 
 #: src/Dialogs/FileManager.cpp:716
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "Файловий менеджер не доступний на цьому пристрої."
 
 #: src/Dialogs/FileManager.cpp:719
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "Файловий менеджер потребує Android 2.3."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "Ключі IOIO і Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr ""
+msgstr "Датчик тиску з i2c до IOIO"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:79
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "Датчик напруги IOIO"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "Клієнт ТСР"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3828,48 +3837,50 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:600
 #, no-c-format
 msgid "TCP Port"
-msgstr ""
+msgstr "Порт TCP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:87
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "Порт UDP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:578
 msgid "Port"
-msgstr ""
+msgstr "Порт"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:94
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:115
 msgid "Baud rate"
-msgstr ""
+msgstr "Швидкість передачі даних"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:589
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Швидкість передачі масивів даних"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:590
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"Швидкість передачі, що використовується для передачі великих масивів даних, "
+"таких як декларація завдання чи завантаження польоту."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
 msgid "IP Address"
-msgstr ""
+msgstr "Адреса ІР"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:605
 msgid "I2C Bus"
-msgstr ""
+msgstr "Шина I2C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:605
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "Виберіть опис або номер шини, що підходить конфігурації."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Addr"
-msgstr ""
+msgstr "Адреса I2C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid ""
@@ -3878,10 +3889,13 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"Адреса i2c, що підходить конфігурації. Це поле не використовується при "
+"виборі в полі «Шина I2C» іншого ніж номер шини i2c. Якщо ви не зрозуміли про "
+"що йдеться вище, можете вважати, що це поле не використовується."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:619
 msgid "Pressure use"
-msgstr ""
+msgstr "Використання датчика тиску"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:619
 msgid ""
@@ -3889,60 +3903,69 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr ""
+"Вибір призначення для цього датчика тиску. Цей датчик вимірює якийсь тиск. "
+"Тут ви повідомляєте системі, що це за тиск і для чого його слід "
+"використовувати."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:633
 msgid "Driver"
-msgstr ""
+msgstr "Драйвер"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:635
 msgid "Sync. from device"
-msgstr ""
+msgstr "Синхр. від пристрою"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:636
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
+"Ця опція дозволяє здійснити конфігурацію, якщо XCSoar повинна отримати такі "
+"налаштування, як значення MacCready, вплив жучків і баласту від пристрою."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Sync. to device"
-msgstr ""
+msgstr "Синхр. до пристрою"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:642
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
+"Ця опція дозволяє здійснити конфігурацію, якщо XCSoar повинна надіслатитакі "
+"налаштування, як значення MacCready, вплив жучків і баласту до пристрою."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:648
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr ""
+msgstr "Увімкніть, якщо ви  використовуєте K6Bt, щоб підключитись до пристрою."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:652
 msgid "Ignore checksum"
-msgstr ""
+msgstr "Знехтувати контрольною сумою"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:653
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
 msgstr ""
+"У разі, якщо дані від GPS містять не вірну контрольну суму, це дозволить "
+"використання таких даних."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:260
 #: src/Dialogs/Device/DeviceListDialog.cpp:279
 msgid "Disable"
-msgstr ""
+msgstr "Вимкнути"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:261
 #: src/Dialogs/Device/DeviceListDialog.cpp:454
 #: src/Dialogs/Device/DeviceListDialog.cpp:462
 #: src/Dialogs/Device/PortMonitor.cpp:143
 msgid "Reconnect"
-msgstr ""
+msgstr "З'єднати знову"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:262
 msgid "Flight download"
-msgstr ""
+msgstr "Завантажити політ"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:264
 #: src/Dialogs/Device/DeviceListDialog.cpp:485
@@ -3964,13 +3987,13 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:381
 #: src/Dialogs/Device/DeviceListDialog.cpp:625
 msgid "Debug"
-msgstr ""
+msgstr "Відлагодження"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:279
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:121
 msgid "Enable"
-msgstr ""
+msgstr "Увімкнути"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:326
 #, c-format
@@ -3979,82 +4002,84 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 msgid "GPS fix"
-msgstr ""
+msgstr "Є координати GPS"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/Device/DeviceListDialog.cpp:343
 msgid "Bad GPS"
-msgstr ""
+msgstr "Слабкий сигнал GPS"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:345
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
 msgid "Connected"
-msgstr ""
+msgstr "З'єднано"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:350
 msgid "Baro"
-msgstr ""
+msgstr "Баро"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:355
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "Airspeed"
-msgstr ""
+msgstr "Повітряна швидкість"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:389
 #: src/Dialogs/Device/DeviceListDialog.cpp:454
 msgid "Bluetooth is disabled"
-msgstr ""
+msgstr "Bluetooth вимкнено"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:392
 msgid "Duplicate"
-msgstr ""
+msgstr "Дублювати"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:396
 msgid "Not connected"
-msgstr ""
+msgstr "Не під’єднано"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:462
 #: src/Dialogs/Device/DeviceListDialog.cpp:491
 #: src/Dialogs/Device/DeviceListDialog.cpp:553
 #: src/Dialogs/Device/PortMonitor.cpp:151
 msgid "Device is occupied"
-msgstr ""
+msgstr "Пристрій зайнятий"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:485
 #: src/Dialogs/Device/DeviceListDialog.cpp:547
 msgid "Device is not connected"
-msgstr ""
+msgstr "Пристрій не підключено"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:511
 msgid "Edit device"
-msgstr ""
+msgstr "Редагувати пристрій"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:623
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
+"Обмін даними з цим пристроєм буде записано до журналу протягом наступних %u "
+"хвилин."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:675 Data/Input/default.xci:604
 #: Data/Input/default.xci:1165
 msgid "Devices"
-msgstr ""
+msgstr "Пристрої"
 
 #: src/Dialogs/Device/PortMonitor.cpp:144
 #: src/Dialogs/Device/PortMonitor.cpp:170
 msgid "Pause"
-msgstr ""
+msgstr "Пауза"
 
 #: src/Dialogs/Device/PortMonitor.cpp:188
 msgid "Port monitor"
-msgstr ""
+msgstr "Монітор порту"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:92
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
 #, no-c-format
 msgid "Units"
-msgstr ""
+msgstr "Одиниці"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:73
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:102
@@ -4063,20 +4088,20 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:94
 #, no-c-format
 msgid "Waypoints"
-msgstr ""
+msgstr "Маршрутні точки"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:76
 msgid "Delete all flights"
-msgstr ""
+msgstr "Видалити всі польоти"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:83
 msgid "Reboot"
-msgstr ""
+msgstr "Перезавантажити"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:137
 msgid "Do you really want to delete all flights from the device?"
-msgstr ""
+msgstr "Ви насправді хочете видалити всі польоти з пристрою?"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:53
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
@@ -4084,51 +4109,51 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:68
 #, no-c-format
 msgid "Temperature"
-msgstr ""
+msgstr "Температура"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:61
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
-msgstr ""
+msgstr "Тиск"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Failed to load file."
-msgstr ""
+msgstr "Помилка при завантаженні файлу"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:42
 msgid "Too many waypoints."
-msgstr ""
+msgstr "Забагато маршрутних точок"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Uploading Waypoints"
-msgstr ""
+msgstr "Завантаження маршрутних точок"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:52
 msgid "Failed to erase waypoints."
-msgstr ""
+msgstr "Помилка при стиранні маршрутних точок."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:58
 msgid "Failed to switch baud rate."
-msgstr ""
+msgstr "Помилка при перемиканні швидкості передаяі даних."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:72
 msgid "Failed to write waypoint."
-msgstr ""
+msgstr "Помилка при запису маршрутних точок."
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:66
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:81
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:63
 msgid "Hardware version"
-msgstr ""
+msgstr "Версія обладнання"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:87
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:81
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:68
 msgid "Firmware version"
-msgstr ""
+msgstr "Версія мікропрограми"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:69
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:63
@@ -4140,19 +4165,19 @@ msgstr ""
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:69
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:58
 msgid "Serial"
-msgstr ""
+msgstr "Серійний"
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:87
 msgid "GPS baud rate"
-msgstr ""
+msgstr "Швидкість передачі даних від GPS"
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:88
 msgid "PDA baud rate"
-msgstr ""
+msgstr "Швидкість передачі даних КПК"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:97
 msgid "Auto off"
-msgstr ""
+msgstr "Авто викл."
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:100
 msgid "Auto finish flight"
@@ -4164,11 +4189,11 @@ msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:106
 msgid "Enable NMEA"
-msgstr ""
+msgstr "Увімкнути NMEA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:109
 msgid "Recording interval"
-msgstr ""
+msgstr "Інтервал запису"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:95
 msgid "Set new audio scheme?  Old values will be lost."
@@ -4193,15 +4218,15 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
-msgstr ""
+msgstr "Це примусово переводить варіометр в режим набору чи в режим переходу"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:126
 msgid "Vario Demo"
-msgstr ""
+msgstr "Демо варіо"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:57
 msgid "Climb rate"
-msgstr ""
+msgstr "Швидкість набору висоти"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:58
 msgid "Enable voice read-back of the average climb rate when circling."
@@ -4209,11 +4234,11 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:62
 msgid "Enable warnings for final glide through terrain."
-msgstr ""
+msgstr "Включає попередження при дольоті через ландшафт"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:65
 msgid "Waypoint distance"
-msgstr ""
+msgstr "Відстань до маршрутної точки"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:66
 msgid ""
@@ -4232,7 +4257,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:73
 #: Data/Input/default.xci:539 Data/Input/default.xci:546
 msgid "MacCready"
-msgstr ""
+msgstr "MacCready"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:74
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -4240,21 +4265,23 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:77
 msgid "New waypoint"
-msgstr ""
+msgstr "Нова маршрутна точка"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:78
 msgid "Enable voice announcement that the task waypoint has changed."
-msgstr ""
+msgstr "Включає голосове повідомлення про зміну маршрутної точки завдання."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:81
 msgid "In sector"
-msgstr ""
+msgstr "В секторі"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:82
 msgid ""
 "Enable voice announcement that the glider is within the task observation "
 "sector."
 msgstr ""
+"Включає голосове повідомлення про те, що планер знаходиться в секторі "
+"спостереження завдання."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:85
 #: src/Dialogs/Airspace/dlgAirspace.cpp:171
@@ -4268,7 +4295,7 @@ msgstr "Повітряний простір"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:86
 msgid "Enable voice warnings for airspace incursions."
-msgstr ""
+msgstr "Включає голосове повідомлення про порушення повітряного простору."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:123
 msgid "Vega Voice Extensions"
@@ -4277,47 +4304,47 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
 #, no-c-format
 msgid "Positive"
-msgstr ""
+msgstr "Позитивне"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
 #, no-c-format
 msgid "Neutral"
-msgstr ""
+msgstr "Нейтральне"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
 #, no-c-format
 msgid "Negative"
-msgstr ""
+msgstr "Негативне"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:53
 #, no-c-format
 msgid "Landing"
-msgstr ""
+msgstr "Приземлення"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "Вгору"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
 msgid "Middle"
-msgstr ""
+msgstr "Посередині"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
 #, no-c-format
 msgid "Down"
-msgstr ""
+msgstr "Вниз"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Заблоковано"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, no-c-format
 msgid "Not locked"
-msgstr ""
+msgstr "Не заблоковано"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -4325,19 +4352,19 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
 msgid "Flaps"
-msgstr ""
+msgstr "Закрилки"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
-msgstr ""
+msgstr "Шасі випущено"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:75
 msgid "Acknowledge"
-msgstr ""
+msgstr "Підтвердити"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:76
 msgid "Repeat"
-msgstr ""
+msgstr "Повторити"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:77
 msgid "Speed command"
@@ -4345,15 +4372,15 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
 msgid "Switch"
-msgstr ""
+msgstr "Перемикач"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
-msgstr ""
+msgstr "Варіо в спіралі"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:152
 msgid "Switches"
-msgstr ""
+msgstr "Перемикачі"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Stealth mode"
@@ -4361,38 +4388,38 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:117
 msgid "Threshold"
-msgstr ""
+msgstr "Поріг"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:118
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:100
 msgid "Range"
-msgstr ""
+msgstr "Діапазон"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:121
 #, no-c-format
 msgid "Unkown"
-msgstr ""
+msgstr "Невідомо"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:122
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Планер"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #, no-c-format
 msgid "Tow plane"
-msgstr ""
+msgstr "Авіабуксирувальник"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
 msgid "Helicopter"
-msgstr ""
+msgstr "Гвинтокрил"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
 #, no-c-format
 msgid "Parachute"
-msgstr ""
+msgstr "Парашут"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 #, no-c-format
@@ -4402,24 +4429,24 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 #, no-c-format
 msgid "Hang glider"
-msgstr ""
+msgstr "Дельтаплан"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:144
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "Параплан"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:130
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:145
 #, no-c-format
 msgid "Powered aircraft"
-msgstr ""
+msgstr "Моторне ПС"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
 #, no-c-format
 msgid "Jet aircraft"
-msgstr ""
+msgstr "Реактивне ПС"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:133
 #, no-c-format
@@ -4429,22 +4456,22 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:134
 #, no-c-format
 msgid "Balloon"
-msgstr ""
+msgstr "Повітряна куля"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:135
 #, no-c-format
 msgid "Airship"
-msgstr ""
+msgstr "Повітряне судно"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:137
 #, no-c-format
 msgid "Unmanned aerial vehicle"
-msgstr ""
+msgstr "Безпілотне ПС"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:139
 #, no-c-format
 msgid "Static object"
-msgstr ""
+msgstr "Статичний об'єкт"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:143
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
@@ -4454,46 +4481,48 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointList.cpp:396
 #: Data/Dialogs/dlgTaskPoint_L.xml:16 Data/Dialogs/dlgTaskPoint.xml:12
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:144
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:40
 #, no-c-format
 msgid "Logger interval"
-msgstr ""
+msgstr "Інтервал запису в логгер"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:297
 #: src/Dialogs/dlgAnalysis.cpp:333 src/Dialogs/dlgAnalysis.cpp:342
 msgid "Settings"
-msgstr ""
+msgstr "Налаштування"
 
 #: src/Dialogs/MapItemListDialog.cpp:176
 #: src/Dialogs/Task/AlternatesListDialog.cpp:106
 msgid "Goto"
-msgstr ""
+msgstr "Перейти до"
 
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 msgid "Ack Day"
-msgstr ""
+msgstr "Підтвердити день"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
-msgstr ""
+msgstr "Список налаштувань елементів мапи"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
-msgstr ""
+msgstr "Показати послідовність місць"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
 msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
+"Якщо активовано, вгорі буде додано послідовність місць, з зазначенням "
+"відстані і курсу до місця, а також висоти."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
-msgstr ""
+msgstr "Показати висоту прибуття"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
 msgid ""
@@ -4503,18 +4532,18 @@ msgstr ""
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
-msgstr ""
+msgstr "Обрати колір"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:96
 #: src/Dialogs/Airspace/dlgAirspace.cpp:119
 msgid "Warn"
-msgstr ""
+msgstr "Попередити"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:97
 #: src/Dialogs/Airspace/dlgAirspace.cpp:123 Data/Input/default.xci:436
 #: Data/Input/default.xci:484 Data/Input/default.xci:907
 msgid "Display"
-msgstr ""
+msgstr "Показати"
 
 #: src/Dialogs/Airspace/dlgAirspacePatterns.cpp:65
 msgid "Select Pattern"
@@ -4522,7 +4551,7 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:72
 msgid "Radio"
-msgstr ""
+msgstr "Радіо"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 msgid "Top"
@@ -4530,11 +4559,11 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
-msgstr ""
+msgstr "База"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
-msgstr ""
+msgstr "Подробиці повітряного простору"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:292
 #: src/Dialogs/Waypoint/WaypointList.cpp:443
