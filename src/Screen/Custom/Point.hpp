@@ -24,45 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CUSTOM_POINT_HPP
 #define XCSOAR_SCREEN_CUSTOM_POINT_HPP
 
+#include "Math/Point2D.hpp"
+
 struct PixelSize;
 
-struct RasterPoint {
+struct RasterPoint : Point2D<PixelScalar> {
   /**
    * Type to be used by vector math, where a range of
    * max(GLvalue)*max(GLvalue) is needed.
    */
   typedef int SquareType;
-  PixelScalar x, y;
 
   RasterPoint() = default;
 
-  constexpr RasterPoint(int _x, int _y)
-    :x(_x), y(_y) {}
+  template<typename... Args>
+  constexpr RasterPoint(Args&&... args)
+    :Point2D<PixelScalar>(args...) {}
 
-  bool operator==(const RasterPoint &other) const {
-    return x == other.x && y == other.y;
-  }
-
-  bool operator!=(const RasterPoint &other) const {
-    return !(*this == other);
-  }
-
-  constexpr RasterPoint operator+(RasterPoint other) const {
-    return { x + other.x, y + other.y };
-  }
-
-  RasterPoint &operator+=(RasterPoint other) {
-    x += other.x;
-    y += other.y;
-    return *this;
-  }
-
-  RasterPoint &operator-=(RasterPoint other) {
-    x -= other.x;
-    y -= other.y;
-    return *this;
-  }
-
+  using Point2D<PixelScalar>::operator+;
   constexpr RasterPoint operator+(PixelSize size) const;
 };
 
