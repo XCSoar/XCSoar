@@ -43,7 +43,7 @@ struct Point2D {
   }
 
   constexpr Point2D<T> operator+(Point2D<T> other) const {
-    return { x + other.x, y + other.y };
+    return { T(x + other.x), T(y + other.y) };
   }
 
   Point2D<T> &operator+=(Point2D<T> other) {
