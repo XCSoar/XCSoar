@@ -26,8 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Math/Angle.hpp"
-
-#include <utility>
+#include "Point2D.hpp"
 
 /**
  * Rotate coordinates around the zero origin.
@@ -37,7 +36,7 @@ class FastRotation {
   fixed cost, sint;
 
 public:
-  typedef std::pair<fixed,fixed> Pair;
+  typedef Point2D<fixed> Point;
 
   FastRotation()
     :angle(Angle::Zero()), cost(1), sint(0) {}
@@ -67,11 +66,11 @@ public:
    * @return the rotated coordinates
    */
   gcc_pure
-  Pair Rotate(fixed x, fixed y) const;
+  Point Rotate(fixed x, fixed y) const;
 
   gcc_pure
-  Pair Rotate(const Pair p) const {
-    return Rotate(p.first, p.second);
+  Point Rotate(Point p) const {
+    return Rotate(p.x, p.y);
   }
 };
 
@@ -85,7 +84,7 @@ class FastIntegerRotation {
   friend class FastRowRotation;
 
 public:
-  typedef std::pair<int,int> Pair;
+  typedef Point2D<int> Point;
 
   FastIntegerRotation()
  :angle(Angle::Zero()), cost(1024), sint(0) {}
@@ -110,11 +109,11 @@ public:
    * @return the rotated coordinates
    */
   gcc_pure
-  Pair Rotate(int x, int y) const;
+  Point Rotate(int x, int y) const;
 
   gcc_pure
-  Pair Rotate(const Pair p) const {
-    return Rotate(p.first, p.second);
+  Point Rotate(Point p) const {
+    return Rotate(p.x, p.y);
   }
 };
 
@@ -126,16 +125,16 @@ class FastRowRotation {
   const int cost, sint, y_cost, y_sint;
 
 public:
-  typedef FastIntegerRotation::Pair Pair;
+  typedef Point2D<int> Point;
 
   FastRowRotation(const FastIntegerRotation &fir, int y)
     :cost(fir.cost), sint(fir.sint),
      y_cost(y * cost + 512), y_sint(y * sint - 512) {}
 
   gcc_pure
-  Pair Rotate(int x) const {
-    return Pair((x * cost - y_sint + 512) >> 10,
-                (y_cost + x * sint + 512) >> 10);
+  Point Rotate(int x) const {
+    return Point((x * cost - y_sint + 512) >> 10,
+                 (y_cost + x * sint + 512) >> 10);
   }
 };
 

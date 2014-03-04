@@ -21,44 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MATH_FAST_PIXEL_ROTATION_HPP
-#define XCSOAR_MATH_FAST_PIXEL_ROTATION_HPP
+#ifndef XCSOAR_POINT2D_HPP
+#define XCSOAR_POINT2D_HPP
 
-#include "Math/FastRotation.hpp"
+#include <type_traits>
 
-/**
- * Same as #FastIntegerRotation, but works with PixelScalar /
- * RasterPoint coordinates.
- */
-class FastPixelRotation {
-  FastIntegerRotation rotation;
+template<typename T>
+struct Point2D {
+  T x, y;
 
-public:
-  FastPixelRotation() = default;
-  FastPixelRotation(Angle angle):rotation(angle) {}
+  Point2D() = default;
 
-  Angle GetAngle() const {
-    return rotation.GetAngle();
+  constexpr Point2D(T _x, T _y):x(_x), y(_y) {}
+
+  constexpr bool operator==(const Point2D<T> &other) const {
+    return x == other.x && y == other.y;
   }
 
-  void SetAngle(Angle angle) {
-    rotation.SetAngle(angle);
+  constexpr bool operator!=(const Point2D<T> &other) const {
+    return !(*this == other);
   }
 
-  const FastPixelRotation &operator =(Angle angle) {
-    SetAngle(angle);
+  constexpr Point2D<T> operator+(Point2D<T> other) const {
+    return { x + other.x, y + other.y };
+  }
+
+  Point2D<T> &operator+=(Point2D<T> other) {
+    x += other.x;
+    y += other.y;
     return *this;
   }
 
-  gcc_pure
-  RasterPoint Rotate(int x, int y) const {
-    auto result = rotation.Rotate(x, y);
-    return RasterPoint{result.x, result.y};
-  }
-
-  gcc_pure
-  RasterPoint Rotate(const RasterPoint pt) const {
-    return Rotate(pt.x, pt.y);
+  Point2D<T> &operator-=(Point2D<T> other) {
+    x -= other.x;
+    y -= other.y;
+    return *this;
   }
 };
 

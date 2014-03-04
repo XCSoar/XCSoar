@@ -38,10 +38,10 @@ FastRotation::SetAngle(Angle _angle)
   sint = angle.fastsine();
 }
 
-FastRotation::Pair
+FastRotation::Point
 FastRotation::Rotate(fixed x, fixed y) const
 {
-  return Pair(x * cost - y * sint, y * cost + x * sint);
+  return Point(x * cost - y * sint, y * cost + x * sint);
 }
 
 void
@@ -56,9 +56,9 @@ FastIntegerRotation::SetAngle(Angle _angle)
   sint = angle.ifastsine();
 }
 
-FastIntegerRotation::Pair
+FastIntegerRotation::Point
 FastIntegerRotation::Rotate(int x, int y) const
 {
-  return Pair((x * cost - y * sint + 512) >> 10,
-              (y * cost + x * sint + 512) >> 10);
+  return Point((x * cost - y * sint + 512) >> 10,
+               (y * cost + x * sint + 512) >> 10);
 }

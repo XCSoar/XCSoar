@@ -36,14 +36,14 @@ DrawArrow(Canvas &canvas, RasterPoint point, const fixed mag, const Angle angle)
 {
   const FastRotation r(angle);
 
-  FastRotation::Pair p = r.Rotate(mag, fixed(0));
-  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
+  auto p = r.Rotate(mag, fixed(0));
+  canvas.DrawLine(point, point + RasterPoint((int)p.x, (int)p.y));
 
   p = r.Rotate(mag - fixed(5), fixed(-3));
-  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
+  canvas.DrawLine(point, point + RasterPoint((int)p.x, (int)p.y));
 
   p = r.Rotate(mag - fixed(5), fixed(3));
-  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
+  canvas.DrawLine(point, point + RasterPoint((int)p.x, (int)p.y));
 }
 
 void

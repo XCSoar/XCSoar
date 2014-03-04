@@ -275,8 +275,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      unsigned i)
 {
   // Save relative East/North
-  fixed x = traffic.relative_east;
-  fixed y = -traffic.relative_north;
+  Point2D<fixed> p(traffic.relative_east,
+                   -traffic.relative_north);
 
   // Calculate the distance in pixels
   fixed scale = RangeScale(traffic.distance);
@@ -287,23 +287,21 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
   if (!traffic.distance.IsZero()) {
-    x /= traffic.distance;
-    y /= traffic.distance;
+    p.x /= traffic.distance;
+    p.y /= traffic.distance;
   } else {
-    x = fixed(0);
-    y = fixed(0);
+    p.x = fixed(0);
+    p.y = fixed(0);
   }
 
   if (!enable_north_up) {
     // Rotate x and y to have a track up display
-    FastRotation::Pair p = fr.Rotate(x, y);
-    x = fixed(p.first);
-    y = fixed(p.second);
+    p = fr.Rotate(p);
   }
 
   // Calculate screen coordinates
-  sc[i].x = radar_mid.x + iround(x * scale);
-  sc[i].y = radar_mid.y + iround(y * scale);
+  sc[i].x = radar_mid.x + iround(p.x * scale);
+  sc[i].y = radar_mid.y + iround(p.y * scale);
 
   const Color *text_color;
   const Pen *target_pen, *circle_pen;
@@ -576,55 +574,40 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  PixelScalar x1 = Layout::FastScale(small ? 5 : 10);
-  PixelScalar y1 = -Layout::FastScale(small ? 1 : 2);
-  PixelScalar x2 = -x1;
-  PixelScalar y2 = y1;
+  Point2D<int> p1(Layout::FastScale(small ? 5 : 10),
+                  -Layout::FastScale(small ? 1 : 2));
+  Point2D<int> p2(-p1.x, p1.y);
 
   if (enable_north_up) {
-    FastIntegerRotation::Pair p = fir.Rotate(x1, y1);
-    x1 = p.first;
-    y1 = p.second;
-    p = fir.Rotate(x2, y2);
-    x2 = p.first;
-    y2 = p.second;
+    p1 = fir.Rotate(p1);
+    p2 = fir.Rotate(p2);
   }
 
-  canvas.DrawLine(radar_mid.x + x1, radar_mid.y + y1,
-              radar_mid.x + x2, radar_mid.y + y2);
+  canvas.DrawLine(radar_mid.x + p1.x, radar_mid.y + p1.y,
+                  radar_mid.x + p2.x, radar_mid.y + p2.y);
 
-  x1 = x2 = 0;
-  y2 = Layout::FastScale(small ? 3 : 6);
-  y1 = -y2;
+  p2 = { 0, Layout::FastScale(small ? 3 : 6) };
+  p1 = { 0, -p2.y };
 
   if (enable_north_up) {
-    FastIntegerRotation::Pair p = fir.Rotate(x1, y1);
-    x1 = p.first;
-    y1 = p.second;
-    p = fir.Rotate(x2, y2);
-    x2 = p.first;
-    y2 = p.second;
+    p1 = fir.Rotate(p1);
+    p2 = fir.Rotate(p2);
   }
 
-  canvas.DrawLine(radar_mid.x + x1, radar_mid.y + y1,
-              radar_mid.x + x2, radar_mid.y + y2);
+  canvas.DrawLine(radar_mid.x + p1.x, radar_mid.y + p1.y,
+                  radar_mid.x + p2.x, radar_mid.y + p2.y);
 
-  x1 = Layout::FastScale(small ? 2 : 4);
-  y1 = x1;
-  x2 = -x1;
-  y2 = y1;
+  p1.x = Layout::FastScale(small ? 2 : 4);
+  p1.y = p1.x;
+  p2 = { -p1.x, p1.y };
 
   if (enable_north_up) {
-    FastIntegerRotation::Pair p = fir.Rotate(x1, y1);
-    x1 = p.first;
-    y1 = p.second;
-    p = fir.Rotate(x2, y2);
-    x2 = p.first;
-    y2 = p.second;
+    p1 = fir.Rotate(p1);
+    p2 = fir.Rotate(p2);
   }
 
-  canvas.DrawLine(radar_mid.x + x1, radar_mid.y + y1,
-              radar_mid.x + x2, radar_mid.y + y2);
+  canvas.DrawLine(radar_mid.x + p1.x, radar_mid.y + p1.y,
+                  radar_mid.x + p2.x, radar_mid.y + p2.y);
 }
 
 /**
@@ -634,11 +617,9 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  fixed x = fixed(0), y = fixed(-1);
+  Point2D<fixed> p(fixed(0), fixed(-1));
   if (!enable_north_up) {
-    FastRotation::Pair p = fr.Rotate(x, y);
-    x = p.first;
-    y = p.second;
+    p = fr.Rotate(p);
   }
 
   canvas.SetTextColor(look.background_color);
@@ -648,10 +629,10 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
   canvas.Select(look.label_font);
 
   PixelSize s = canvas.CalcTextSize(_T("N"));
-  canvas.DrawCircle(radar_mid.x + iround(x * radius),
-                radar_mid.y + iround(y * radius), s.cy * 0.65);
-  canvas.DrawText(radar_mid.x + iround(x * radius) - s.cx / 2,
-                  radar_mid.y + iround(y * radius) - s.cy / 2, _T("N"));
+  canvas.DrawCircle(radar_mid.x + iround(p.x * radius),
+                radar_mid.y + iround(p.y * radius), s.cy * 0.65);
+  canvas.DrawText(radar_mid.x + iround(p.x * radius) - s.cx / 2,
+                  radar_mid.y + iround(p.y * radius) - s.cy / 2, _T("N"));
 }
 
 /**

@@ -41,10 +41,10 @@ Projection::ScreenToGeo(int x, int y) const
 {
   assert(IsValid());
 
-  const FastIntegerRotation::Pair p =
+  const auto p =
     screen_rotation.Rotate(x - screen_origin.x, y - screen_origin.y);
 
-  GeoPoint g(PixelsToAngle(p.first), PixelsToAngle(p.second));
+  GeoPoint g(PixelsToAngle(p.x), PixelsToAngle(p.y));
 
   g.latitude = geo_location.latitude - g.latitude;
 
@@ -66,14 +66,14 @@ Projection::GeoToScreen(const GeoPoint &g) const
 
   const GeoPoint d = geo_location-g;
 
-  const FastIntegerRotation::Pair p =
+  const auto p =
     screen_rotation.Rotate((int)fast_mult(g.latitude.fastcosine(),
                                          AngleToPixels(d.longitude), 16),
                           (int)AngleToPixels(d.latitude));
 
   RasterPoint sc;
-  sc.x = screen_origin.x - p.first;
-  sc.y = screen_origin.y + p.second;
+  sc.x = screen_origin.x - p.x;
+  sc.y = screen_origin.y + p.y;
   return sc;
 }
 
