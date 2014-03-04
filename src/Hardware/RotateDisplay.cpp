@@ -61,8 +61,8 @@ Display::RotateInitialize()
   DeviceMode.dmFields = DM_DISPLAYORIENTATION;
 
   // get current rotation
-  if (ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_TEST, NULL) ==
-      DISP_CHANGE_SUCCESSFUL)
+  if (ChangeDisplaySettingsEx(nullptr, &DeviceMode, nullptr,
+                              CDS_TEST, nullptr) == DISP_CHANGE_SUCCESSFUL)
     initial_orientation = DeviceMode.dmDisplayOrientation;
   else
     initial_orientation = DMDO_0;
@@ -98,7 +98,7 @@ Display::RotateSupported()
   dm.dmSize = sizeof(dm);
   dm.dmFields = DM_DISPLAYQUERYORIENTATION;
 
-  if (ChangeDisplaySettingsEx(NULL, &dm, NULL, CDS_TEST, NULL) !=
+  if (ChangeDisplaySettingsEx(nullptr, &dm, nullptr, CDS_TEST, nullptr) !=
       DISP_CHANGE_SUCCESSFUL)
     return false;
 
@@ -154,10 +154,10 @@ Display::Rotate(DisplaySettings::Orientation orientation)
 
   /* apply the new rotation */
 
-  return ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL,
-                                 CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
+  return ChangeDisplaySettingsEx(nullptr, &DeviceMode, nullptr,
+                                 CDS_RESET, nullptr) == DISP_CHANGE_SUCCESSFUL;
 #elif defined(ANDROID)
-  if (native_view == NULL)
+  if (native_view == nullptr)
     return false;
 
   NativeView::ScreenOrientation android_orientation;
@@ -224,8 +224,8 @@ Display::RotateRestore()
   dm.dmFields = DM_DISPLAYORIENTATION;
   dm.dmDisplayOrientation = initial_orientation;
 
-  return ChangeDisplaySettingsEx(NULL, &dm, NULL,
-                                 CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
+  return ChangeDisplaySettingsEx(nullptr, &dm, nullptr,
+                                 CDS_RESET, nullptr) == DISP_CHANGE_SUCCESSFUL;
 #elif defined(ANDROID)
   return native_view->setRequestedOrientation(NativeView::ScreenOrientation::SENSOR);
 #elif defined(KOBO)

@@ -33,13 +33,13 @@ Copyright_License {
 bool
 HaveVibrator()
 {
-  return vibrator != NULL;
+  return vibrator != nullptr;
 }
 
 void
 VibrateShort()
 {
-  if (vibrator != NULL) {
+  if (vibrator != nullptr) {
     const UISettings &ui_settings = CommonInterface::GetUISettings();
     if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
          (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&

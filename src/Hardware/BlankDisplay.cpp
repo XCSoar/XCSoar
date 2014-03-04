@@ -36,7 +36,7 @@ Display::BlankSupported()
   RootDC dc;
   int i = SETPOWERMANAGEMENT;
   return ExtEscape(dc, QUERYESCSUPPORT,
-                   sizeof(i), (LPCSTR)&i, 0, NULL) > 0;
+                   sizeof(i), (LPCSTR)&i, 0, nullptr) > 0;
 }
 
 bool
@@ -50,7 +50,7 @@ Display::Blank(bool blank)
   vpm.PowerState = blank ? VideoPowerOff : VideoPowerOn;
 
   return ExtEscape(dc, SETPOWERMANAGEMENT,
-                   sizeof(vpm), (LPCSTR)&vpm, 0, NULL) > 0;
+                   sizeof(vpm), (LPCSTR)&vpm, 0, nullptr) > 0;
 }
 
 #endif /* HAVE_HARDWARE_BLANK */

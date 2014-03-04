@@ -32,7 +32,7 @@ static constexpr DWORD IOCTL_TRA_SHORTBEEP = 5060;
 
 AltairControl::AltairControl()
  :handle(::CreateFile(_T("TRA1:"), GENERIC_READ|GENERIC_WRITE, 0,
-                      NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL))
+                      nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr))
 {
 }
 
@@ -49,7 +49,7 @@ AltairControl::ShortBeep()
     return false;
 
   return ::DeviceIoControl(handle, IOCTL_TRA_SHORTBEEP,
-                           NULL, 0, NULL, 0, NULL, NULL);
+                           nullptr, 0, nullptr, 0, nullptr, nullptr);
 }
 
 bool
@@ -60,7 +60,7 @@ AltairControl::GetBacklight(int &value_r)
 
   return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTGETVALUE,
                            &value_r, sizeof(value_r),
-                           NULL, 0, NULL, NULL);
+                           nullptr, 0, nullptr, nullptr);
 }
 
 bool
@@ -70,5 +70,5 @@ AltairControl::SetBacklight(int value)
     return false;
 
   return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTSETVALUE,
-                           &value, sizeof(value), NULL, 0, NULL, NULL);
+                           &value, sizeof(value), nullptr, 0, nullptr, nullptr);
 }
