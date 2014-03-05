@@ -91,19 +91,19 @@ ButtonPanel::AddKey(unsigned key_code)
   keys[buttons.size() - 1] = key_code;
 }
 
-UPixelScalar
+unsigned
 ButtonPanel::Width(unsigned i) const
 {
   return look.font->TextSize(buttons[i]->GetText().c_str()).cx +
     Layout::SmallScale(8);
 }
 
-UPixelScalar
+unsigned
 ButtonPanel::RangeMaxWidth(unsigned start, unsigned end) const
 {
-  UPixelScalar max_width = Layout::Scale(50);
+  unsigned max_width = Layout::Scale(50);
   for (unsigned i = start; i < end; ++i) {
-    UPixelScalar width = Width(i);
+    unsigned width = Width(i);
     if (width > max_width)
       max_width = width;
   }
@@ -117,10 +117,10 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end)
   const unsigned n = end - start;
   assert(n > 0);
 
-  const UPixelScalar width = RangeMaxWidth(start, end);
-  const UPixelScalar total_height = rc.bottom - rc.top;
-  const UPixelScalar max_height = n * Layout::GetMaximumControlHeight();
-  const UPixelScalar row_height = std::min(total_height, max_height) / n;
+  const unsigned width = RangeMaxWidth(start, end);
+  const unsigned total_height = rc.bottom - rc.top;
+  const unsigned max_height = n * Layout::GetMaximumControlHeight();
+  const unsigned row_height = std::min(total_height, max_height) / n;
 
   PixelRect button_rc(rc.left, rc.top, rc.left + width, rc.top + row_height);
   rc.left += width;
@@ -141,9 +141,9 @@ ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
   const unsigned n = end - start;
   assert(n > 0);
 
-  const UPixelScalar total_width = rc.right - rc.left;
-  const UPixelScalar row_height = Layout::GetMaximumControlHeight();
-  const UPixelScalar width = total_width / n;
+  const unsigned total_width = rc.right - rc.left;
+  const unsigned row_height = Layout::GetMaximumControlHeight();
+  const unsigned width = total_width / n;
   assert(width > 0);
 
   PixelRect button_rc(rc.left, rc.bottom - row_height,
@@ -179,16 +179,16 @@ ButtonPanel::BottomLayout(PixelRect rc)
 {
   assert(!buttons.empty());
 
-  const UPixelScalar total_width = rc.right - rc.left;
+  const unsigned total_width = rc.right - rc.left;
 
   unsigned end = buttons.size();
   while (end > 0) {
     unsigned start = end - 1;
-    UPixelScalar max_width = Width(start);
+    unsigned max_width = Width(start);
     while (start > 0) {
       --start;
-      UPixelScalar width = Width(start);
-      UPixelScalar new_width = std::max(width, max_width);
+      unsigned width = Width(start);
+      unsigned new_width = std::max(width, max_width);
       if ((end - start) * new_width > total_width) {
         ++start;
         break;
