@@ -62,7 +62,7 @@ class GaugeVario : public AntiFlickerWindow
   const UnitsLook &units_look;
 
 private:
-  const UPixelScalar nlength0, nlength1, nwidth, nline;
+  const unsigned nlength0, nlength1, nwidth, nline;
 
   Point2D<int> offset;
 
@@ -123,10 +123,10 @@ protected:
 
 private:
   void RenderZero(Canvas &canvas);
-  void RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
+  void RenderValue(Canvas &canvas, int x, int y,
                    DrawInfo *diValue, DrawInfo *diLabel,
                    fixed Value, const TCHAR *Label);
-  void RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y);
+  void RenderSpeedToFly(Canvas &canvas, int x, int y);
   void RenderBallast(Canvas &canvas);
   void RenderBugs(Canvas &canvas);
   int  ValueToNeedlePos(fixed Value);

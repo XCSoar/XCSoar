@@ -64,8 +64,8 @@ void
 GaugeVario::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
-  const UPixelScalar width = rc.right - rc.left;
-  const UPixelScalar height = rc.bottom - rc.top;
+  const unsigned width = rc.right - rc.left;
+  const unsigned height = rc.bottom - rc.top;
 
   if (!IsPersistent() || !layout_initialised) {
     unsigned value_height = 4 + look.value_font->GetCapitalHeight()
@@ -216,8 +216,8 @@ void
 GaugeVario::RenderClimb(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
-  PixelScalar x = rc.right - Layout::Scale(14);
-  PixelScalar y = rc.bottom - Layout::Scale(24);
+  int x = rc.right - Layout::Scale(14);
+  int y = rc.bottom - Layout::Scale(24);
 
   if (!dirty)
     return;
@@ -308,7 +308,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 
 // TODO code: Optimise vario rendering, this is slow
 void
-GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
+GaugeVario::RenderValue(Canvas &canvas, int x, int y,
                         DrawInfo *value_info, DrawInfo *label_info,
                         fixed value, const TCHAR *label)
 {
@@ -411,7 +411,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 }
 
 void
-GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
+GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 {
   if (!Basic().airspeed_available ||
       !Basic().total_energy_vario_available)
@@ -420,14 +420,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
   static fixed last_v_diff;
   fixed v_diff;
 
-  const UPixelScalar arrow_y_size = Layout::Scale(3);
-  const UPixelScalar arrow_x_size = Layout::Scale(7);
+  const unsigned arrow_y_size = Layout::Scale(3);
+  const unsigned arrow_x_size = Layout::Scale(7);
 
   const PixelRect rc = GetClientRect();
 
-  PixelScalar nary = NARROWS * arrow_y_size;
-  PixelScalar ytop = rc.top + YOFFSET + nary; // JMW
-  PixelScalar ybottom = rc.bottom - YOFFSET - nary - Layout::FastScale(1);
+  int nary = NARROWS * arrow_y_size;
+  int ytop = rc.top + YOFFSET + nary; // JMW
+  int ybottom = rc.bottom - YOFFSET - nary - Layout::FastScale(1);
 
   ytop += Layout::Scale(14);
   ybottom -= Layout::Scale(14);
