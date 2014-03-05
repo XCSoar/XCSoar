@@ -36,11 +36,11 @@ static const ComboList *ComboListPopup;
 
 class ComboPickerSupport : public ListItemRenderer {
   const ComboList &combo_list;
-  const UPixelScalar padding;
+  const unsigned padding;
 
 public:
   ComboPickerSupport(const ComboList &_combo_list,
-                     const UPixelScalar _padding)
+                     const unsigned _padding)
     :combo_list(_combo_list), padding(_padding) {}
 
 
@@ -69,16 +69,16 @@ ComboPicker(const TCHAR *caption,
 {
   ComboListPopup = &combo_list;
 
-  const UPixelScalar font_height =
+  const unsigned font_height =
     UIGlobals::GetDialogLook().text_font->GetHeight() + Layout::FastScale(2);
-  const UPixelScalar max_height = Layout::GetMaximumControlHeight();
-  const UPixelScalar row_height = font_height >= max_height
+  const unsigned max_height = Layout::GetMaximumControlHeight();
+  const unsigned row_height = font_height >= max_height
     ? font_height
     /* this formula is supposed to be a compromise between too small
        and too large: */
     : (font_height + max_height) / 2;
 
-  const UPixelScalar padding = (row_height - font_height) / 2;
+  const unsigned padding = (row_height - font_height) / 2;
 
   ComboPickerSupport support(combo_list, padding);
   return ListPicker(caption,
