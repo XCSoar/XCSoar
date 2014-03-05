@@ -68,10 +68,10 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   const UPixelScalar height = rc.bottom - rc.top;
 
   if (!IsPersistent() || !layout_initialised) {
-    UPixelScalar value_height = 4 + look.value_font->GetCapitalHeight()
+    unsigned value_height = 4 + look.value_font->GetCapitalHeight()
       + look.text_font->GetCapitalHeight();
 
-    middle_position.y = yoffset - value_height / 2;
+    middle_position.y = offset.y - value_height / 2;
     middle_position.x = rc.right;
     top_position.y = middle_position.y - value_height;
     top_position.x = rc.right;
@@ -174,9 +174,9 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
 gcc_const
 static RasterPoint
-TransformRotatedPoint(Point2D<int> pt, PixelScalar xoffset, PixelScalar yoffset)
+TransformRotatedPoint(Point2D<int> pt, Point2D<int> offset)
 {
-  return { pt.x + xoffset, (pt.y * 112 / 100) + yoffset + 1 };
+  return { pt.x + offset.x, (pt.y * 112 / 100) + offset.y + 1 };
 }
 
 void
@@ -187,15 +187,15 @@ GaugeVario::MakePolygon(const int i)
 
   const FastIntegerRotation r(Angle::Degrees(i));
 
-  bit[0] = TransformRotatedPoint(r.Rotate(-xoffset + nlength0, nwidth),
-                                 xoffset, yoffset);
-  bit[1] = TransformRotatedPoint(r.Rotate(-xoffset + nlength1, 0),
-                                 xoffset, yoffset);
-  bit[2] = TransformRotatedPoint(r.Rotate(-xoffset + nlength0, -nwidth),
-                                 xoffset, yoffset);
+  bit[0] = TransformRotatedPoint(r.Rotate(-offset.x + nlength0, nwidth),
+                                 offset);
+  bit[1] = TransformRotatedPoint(r.Rotate(-offset.x + nlength1, 0),
+                                 offset);
+  bit[2] = TransformRotatedPoint(r.Rotate(-offset.x + nlength0, -nwidth),
+                                 offset);
 
-  *bline = TransformRotatedPoint(r.Rotate(-xoffset + nline, 0),
-                                 xoffset, yoffset);
+  *bline = TransformRotatedPoint(r.Rotate(-offset.x + nline, 0),
+                                 offset);
 }
 
 RasterPoint *
@@ -237,8 +237,8 @@ GaugeVario::RenderZero(Canvas &canvas)
   else
     canvas.SelectBlackPen();
 
-  canvas.DrawLine(0, yoffset, Layout::Scale(17), yoffset);
-  canvas.DrawLine(0, yoffset + 1, Layout::Scale(17), yoffset + 1);
+  canvas.DrawLine(0, offset.y, Layout::Scale(17), offset.y);
+  canvas.DrawLine(0, offset.y + 1, Layout::Scale(17), offset.y + 1);
 }
 
 int
@@ -721,8 +721,8 @@ GaugeVario::OnResize(PixelSize new_size)
   AntiFlickerWindow::OnResize(new_size);
 
   /* trigger reinitialisation */
-  xoffset = new_size.cx;
-  yoffset = new_size.cy / 2;
+  offset.x = new_size.cx;
+  offset.y = new_size.cy / 2;
   layout_initialised = false;
   needle_initialised = false;
   ballast_initialised = false;

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/AntiFlickerWindow.hpp"
 #include "Blackboard/FullBlackboard.hpp"
+#include "Math/Point2D.hpp"
 
 struct VarioLook;
 struct UnitsLook;
@@ -62,8 +63,8 @@ class GaugeVario : public AntiFlickerWindow
 
 private:
   const UPixelScalar nlength0, nlength1, nwidth, nline;
-  PixelScalar xoffset;
-  PixelScalar yoffset;
+
+  Point2D<int> offset;
 
   bool dirty;
 
