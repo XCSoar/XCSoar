@@ -208,7 +208,7 @@ void
 GaugeVario::MakeAllPolygons()
 {
   if (polys && lines)
-    for (int i = -gmax; i <= gmax; i++)
+    for (int i = gmin; i <= gmax; i++)
       MakePolygon(i);
 }
 
@@ -244,7 +244,6 @@ GaugeVario::RenderZero(Canvas &canvas)
 int
 GaugeVario::ValueToNeedlePos(fixed Value)
 {
-  static fixed degrees_per_unit = fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
   int i;
 
   if (!needle_initialised){
@@ -252,7 +251,7 @@ GaugeVario::ValueToNeedlePos(fixed Value)
     needle_initialised = true;
   }
   i = iround(Value * degrees_per_unit);
-  i = Clamp(i, -int(gmax), int(gmax));
+  i = Clamp(i, int(gmin), int(gmax));
   return i;
 }
 

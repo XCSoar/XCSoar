@@ -34,18 +34,20 @@ class ContainerWindow;
 
 class GaugeVario : public AntiFlickerWindow
 {
-  enum {
-    NARROWS = 3,
-    YOFFSET = 36,
+  static constexpr unsigned NARROWS = 3;
+  static constexpr int YOFFSET = 36;
 
-    /** 5 m/s */
-    GAUGEVARIORANGE = 5,
+  /** 5 m/s */
+  static constexpr int GAUGEVARIORANGE = 5;
 
-    /** degrees total sweep */
-    GAUGEVARIOSWEEP = 90,
+  /** degrees total sweep */
+  static constexpr int GAUGEVARIOSWEEP = 90;
 
-    gmax = GAUGEVARIOSWEEP + 2,
-  };
+  static constexpr int gmax = GAUGEVARIOSWEEP + 2;
+  static constexpr int gmin = -gmax;
+
+  static constexpr fixed degrees_per_unit =
+    fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
 
   struct DrawInfo {
     bool initialised;
