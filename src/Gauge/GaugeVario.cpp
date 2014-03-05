@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/FastPixelRotation.hpp"
+#include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
 #include "Util/Clamp.hpp"
 
@@ -174,7 +174,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
 gcc_const
 static RasterPoint
-TransformRotatedPoint(RasterPoint pt, PixelScalar xoffset, PixelScalar yoffset)
+TransformRotatedPoint(Point2D<int> pt, PixelScalar xoffset, PixelScalar yoffset)
 {
   return { pt.x + xoffset, (pt.y * 112 / 100) + yoffset + 1 };
 }
@@ -185,7 +185,7 @@ GaugeVario::MakePolygon(const int i)
   RasterPoint *bit = getPolygon(i);
   RasterPoint *bline = &lines[i + gmax];
 
-  const FastPixelRotation r(Angle::Degrees(i));
+  const FastIntegerRotation r(Angle::Degrees(i));
 
   bit[0] = TransformRotatedPoint(r.Rotate(-xoffset + nlength0, nwidth),
                                  xoffset, yoffset);
