@@ -105,10 +105,10 @@ public:
 
 private:
   gcc_pure
-  UPixelScalar Width(unsigned i) const;
+  unsigned Width(unsigned i) const;
 
   gcc_pure
-  UPixelScalar RangeMaxWidth(unsigned start, unsigned end) const;
+  unsigned RangeMaxWidth(unsigned start, unsigned end) const;
 
   PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end);
 
