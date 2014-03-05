@@ -244,12 +244,17 @@ GaugeVario::RenderZero(Canvas &canvas)
 int
 GaugeVario::ValueToNeedlePos(fixed Value)
 {
+  constexpr fixed degrees_per_unit =
+    fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
+
   int i;
 
   if (!needle_initialised){
     MakeAllPolygons();
     needle_initialised = true;
   }
+
+
   i = iround(Value * degrees_per_unit);
   i = Clamp(i, int(gmin), int(gmax));
   return i;

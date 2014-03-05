@@ -46,9 +46,6 @@ class GaugeVario : public AntiFlickerWindow
   static constexpr int gmax = GAUGEVARIOSWEEP + 2;
   static constexpr int gmin = -gmax;
 
-  static constexpr fixed degrees_per_unit =
-    fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
-
   struct DrawInfo {
     bool initialised;
     PixelRect rc;
