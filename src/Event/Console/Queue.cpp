@@ -70,7 +70,6 @@ EventQueue::~EventQueue()
 }
 
 #ifndef NON_INTERACTIVE
-#ifdef KOBO
 
 void
 EventQueue::SetMouseRotation(DisplayOrientation orientation)
@@ -95,7 +94,6 @@ EventQueue::SetMouseRotation(DisplayOrientation orientation)
   }
 }
 
-#endif
 #endif
 
 void
