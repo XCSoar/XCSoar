@@ -42,7 +42,7 @@ Copyright_License {
 #endif
 
 enum ControlIndex {
-  DisplayOrientation,
+  MapOrientation,
   AppInfoBoxGeom,
   AppFlarmLocation,
   TabDialogStyle,
@@ -211,7 +211,7 @@ LayoutConfigPanel::Save(bool &_changed)
 
   if (Display::RotateSupported()) {
     orientation_changed =
-      SaveValueEnum(DisplayOrientation, ProfileKeys::DisplayOrientation,
+      SaveValueEnum(MapOrientation, ProfileKeys::MapOrientation,
                     ui_settings.display.orientation);
     changed |= orientation_changed;
   }

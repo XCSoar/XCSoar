@@ -42,7 +42,7 @@ void
 Profile::Load(DisplaySettings &settings)
 {
   Get(ProfileKeys::AutoBlank, settings.enable_auto_blank);
-  GetEnum(ProfileKeys::DisplayOrientation, settings.orientation);
+  GetEnum(ProfileKeys::MapOrientation, settings.orientation);
 }
 
 void

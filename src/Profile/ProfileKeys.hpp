@@ -222,7 +222,7 @@ extern const char FlarmAutoZoom[];
 extern const char FlarmNorthUp[];
 
 extern const char IgnoreNMEAChecksum[];
-extern const char DisplayOrientation[];
+extern const char MapOrientation[];
 
 extern const char ClimbMapScale[];
 extern const char CruiseMapScale[];

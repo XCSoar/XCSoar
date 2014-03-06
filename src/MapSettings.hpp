@@ -45,7 +45,7 @@ enum class AircraftSymbol : uint8_t {
   PARAGLIDER,
 };
 
-enum class DisplayOrientation : uint8_t {
+enum class MapOrientation : uint8_t {
   TRACK_UP,
   NORTH_UP,
   TARGET_UP,
@@ -148,8 +148,8 @@ struct MapSettings {
 
   int glider_screen_position;
   /** Orientation of the map (North up, Track up, etc.) */
-  DisplayOrientation cruise_orientation;
-  DisplayOrientation circling_orientation;
+  MapOrientation cruise_orientation;
+  MapOrientation circling_orientation;
 
   /** Map scale in cruise mode [px/m] */
   fixed cruise_scale;

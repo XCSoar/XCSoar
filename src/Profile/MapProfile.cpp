@@ -32,11 +32,11 @@ static bool
 IsValidMapOrientation(unsigned value)
 {
   switch (value) {
-  case (unsigned)DisplayOrientation::TRACK_UP:
-  case (unsigned)DisplayOrientation::NORTH_UP:
-  case (unsigned)DisplayOrientation::TARGET_UP:
-  case (unsigned)DisplayOrientation::HEADING_UP:
-  case (unsigned)DisplayOrientation::WIND_UP:
+  case (unsigned)MapOrientation::TRACK_UP:
+  case (unsigned)MapOrientation::NORTH_UP:
+  case (unsigned)MapOrientation::TARGET_UP:
+  case (unsigned)MapOrientation::HEADING_UP:
+  case (unsigned)MapOrientation::WIND_UP:
     return true;
   }
 
@@ -77,20 +77,20 @@ Profile::Load(MapSettings &settings)
 
   bool orientation_found = false;
 
-  unsigned Temp = (unsigned)DisplayOrientation::NORTH_UP;
+  unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
   if (Get(ProfileKeys::OrientationCircling, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
-      settings.circling_orientation = (DisplayOrientation)Temp;
+      settings.circling_orientation = (MapOrientation)Temp;
   }
 
-  Temp = (unsigned)DisplayOrientation::NORTH_UP;
+  Temp = (unsigned)MapOrientation::NORTH_UP;
   if (Get(ProfileKeys::OrientationCruise, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
-      settings.cruise_orientation = (DisplayOrientation)Temp;
+      settings.cruise_orientation = (MapOrientation)Temp;
   }
 
   if (!orientation_found) {
@@ -98,24 +98,24 @@ Profile::Load(MapSettings &settings)
     Get(ProfileKeys::DisplayUpValue, Temp);
     switch (Temp) {
     case 0:
-      settings.cruise_orientation = DisplayOrientation::TRACK_UP;
-      settings.circling_orientation = DisplayOrientation::TRACK_UP;
+      settings.cruise_orientation = MapOrientation::TRACK_UP;
+      settings.circling_orientation = MapOrientation::TRACK_UP;
       break;
     case 1:
-      settings.cruise_orientation = DisplayOrientation::NORTH_UP;
-      settings.circling_orientation = DisplayOrientation::NORTH_UP;
+      settings.cruise_orientation = MapOrientation::NORTH_UP;
+      settings.circling_orientation = MapOrientation::NORTH_UP;
       break;
     case 2:
-      settings.cruise_orientation = DisplayOrientation::TRACK_UP;
-      settings.circling_orientation = DisplayOrientation::NORTH_UP;
+      settings.cruise_orientation = MapOrientation::TRACK_UP;
+      settings.circling_orientation = MapOrientation::NORTH_UP;
       break;
     case 3:
-      settings.cruise_orientation = DisplayOrientation::TRACK_UP;
-      settings.circling_orientation = DisplayOrientation::TARGET_UP;
+      settings.cruise_orientation = MapOrientation::TRACK_UP;
+      settings.circling_orientation = MapOrientation::TARGET_UP;
       break;
     case 4:
-      settings.cruise_orientation = DisplayOrientation::NORTH_UP;
-      settings.circling_orientation = DisplayOrientation::TRACK_UP;
+      settings.cruise_orientation = MapOrientation::NORTH_UP;
+      settings.circling_orientation = MapOrientation::TRACK_UP;
       break;
     }
   }

@@ -366,23 +366,23 @@ InputEvents::eventOrientation(const TCHAR *misc)
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   if (StringIsEqual(misc, _T("northup"))) {
-    settings_map.cruise_orientation = DisplayOrientation::NORTH_UP;
-    settings_map.circling_orientation = DisplayOrientation::NORTH_UP;
+    settings_map.cruise_orientation = MapOrientation::NORTH_UP;
+    settings_map.circling_orientation = MapOrientation::NORTH_UP;
   } else if (StringIsEqual(misc, _T("northcircle"))) {
-    settings_map.cruise_orientation = DisplayOrientation::TRACK_UP;
-    settings_map.circling_orientation = DisplayOrientation::NORTH_UP;
+    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
+    settings_map.circling_orientation = MapOrientation::NORTH_UP;
   } else if (StringIsEqual(misc, _T("trackcircle"))) {
-    settings_map.cruise_orientation = DisplayOrientation::NORTH_UP;
-    settings_map.circling_orientation = DisplayOrientation::TRACK_UP;
+    settings_map.cruise_orientation = MapOrientation::NORTH_UP;
+    settings_map.circling_orientation = MapOrientation::TRACK_UP;
   } else if (StringIsEqual(misc, _T("trackup"))) {
-    settings_map.cruise_orientation = DisplayOrientation::TRACK_UP;
-    settings_map.circling_orientation = DisplayOrientation::TRACK_UP;
+    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
+    settings_map.circling_orientation = MapOrientation::TRACK_UP;
   } else if (StringIsEqual(misc, _T("northtrack"))) {
-    settings_map.cruise_orientation = DisplayOrientation::TRACK_UP;
-    settings_map.circling_orientation = DisplayOrientation::TARGET_UP;
+    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
+    settings_map.circling_orientation = MapOrientation::TARGET_UP;
   } else if (StringIsEqual(misc, _T("targetup"))) {
-    settings_map.cruise_orientation = DisplayOrientation::TARGET_UP;
-    settings_map.circling_orientation = DisplayOrientation::TARGET_UP;
+    settings_map.cruise_orientation = MapOrientation::TARGET_UP;
+    settings_map.circling_orientation = MapOrientation::TARGET_UP;
   }
 
   ActionInterface::SendMapSettings(true);
