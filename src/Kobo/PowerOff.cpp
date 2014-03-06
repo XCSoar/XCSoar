@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "../test/src/Fonts.hpp"
 #include "Hardware/RotateDisplay.hpp"
+#include "DisplayOrientation.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
   FreeType::Initialise();
 
   Font::Initialise();
-  Display::Rotate(DisplaySettings::Orientation::PORTRAIT);
+  Display::Rotate(DisplayOrientation::PORTRAIT);
 
   InitialiseFonts();
 

@@ -53,15 +53,15 @@ enum ControlIndex {
 };
 
 static constexpr StaticEnumChoice display_orientation_list[] = {
-  { (unsigned)DisplaySettings::Orientation::DEFAULT,
+  { (unsigned)DisplayOrientation::DEFAULT,
     N_("Default") },
-  { (unsigned)DisplaySettings::Orientation::PORTRAIT,
+  { (unsigned)DisplayOrientation::PORTRAIT,
     N_("Portrait") },
-  { (unsigned)DisplaySettings::Orientation::LANDSCAPE,
+  { (unsigned)DisplayOrientation::LANDSCAPE,
     N_("Landscape") },
-  { (unsigned)DisplaySettings::Orientation::REVERSE_PORTRAIT,
+  { (unsigned)DisplayOrientation::REVERSE_PORTRAIT,
     N_("Reverse Portrait") },
-  { (unsigned)DisplaySettings::Orientation::REVERSE_LANDSCAPE,
+  { (unsigned)DisplayOrientation::REVERSE_LANDSCAPE,
     N_("Reverse Landscape") },
   { 0 }
 };
@@ -249,7 +249,7 @@ LayoutConfigPanel::Save(bool &_changed)
   if (orientation_changed) {
     assert(Display::RotateSupported());
 
-    if (ui_settings.display.orientation == DisplaySettings::Orientation::DEFAULT)
+    if (ui_settings.display.orientation == DisplayOrientation::DEFAULT)
       Display::RotateRestore();
     else {
       if (!Display::Rotate(ui_settings.display.orientation))

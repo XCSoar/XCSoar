@@ -21,32 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
-#define XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
-
-#include "Compiler.h"
+#ifndef XCSOAR_DISPLAY_ORIENTATION_HPP
+#define XCSOAR_DISPLAY_ORIENTATION_HPP
 
 #include <stdint.h>
 
-enum class DisplayOrientation : uint8_t;
-
-namespace Display {
-  void RotateInitialize();
-
-  gcc_const
-  bool RotateSupported();
-
-  /**
-   * Change the orientation of the screen.
-   */
-  bool
-  Rotate(DisplayOrientation orientation);
-
-  /**
-   * Restores the display rotation setting.
-   */
-  bool
-  RotateRestore();
-}
+enum class DisplayOrientation : uint8_t {
+  DEFAULT,
+  PORTRAIT,
+  LANDSCAPE,
+  REVERSE_PORTRAIT,
+  REVERSE_LANDSCAPE,
+};
 
 #endif

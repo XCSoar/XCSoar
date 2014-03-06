@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "RotateDisplay.hpp"
+#include "DisplayOrientation.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -111,10 +112,10 @@ Display::RotateSupported()
 }
 
 bool
-Display::Rotate(DisplaySettings::Orientation orientation)
+Display::Rotate(DisplayOrientation orientation)
 {
 #if !defined(ANDROID) && !defined(KOBO)
-  if (orientation == DisplaySettings::Orientation::DEFAULT)
+  if (orientation == DisplayOrientation::DEFAULT)
     /* leave it as it is */
     return true;
 #endif
@@ -128,23 +129,23 @@ Display::Rotate(DisplaySettings::Orientation orientation)
   /* determine the new rotation */
 
   switch (orientation) {
-  case DisplaySettings::Orientation::PORTRAIT:
+  case DisplayOrientation::PORTRAIT:
     DeviceMode.dmDisplayOrientation = native_landscape
       ? DMDO_90
       : initial_orientation;
     break;
 
-  case DisplaySettings::Orientation::LANDSCAPE:
+  case DisplayOrientation::LANDSCAPE:
     DeviceMode.dmDisplayOrientation = native_landscape
       ? initial_orientation
       : DMDO_270;
     break;
 
-  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
     DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_270 : DMDO_180);
     break;
 
-  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
     DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_180 : DMDO_90);
     break;
 
@@ -162,21 +163,21 @@ Display::Rotate(DisplaySettings::Orientation orientation)
 
   NativeView::ScreenOrientation android_orientation;
   switch (orientation) {
-  case DisplaySettings::Orientation::PORTRAIT:
+  case DisplayOrientation::PORTRAIT:
     android_orientation = NativeView::ScreenOrientation::PORTRAIT;
     break;
 
-  case DisplaySettings::Orientation::LANDSCAPE:
+  case DisplayOrientation::LANDSCAPE:
     android_orientation = NativeView::ScreenOrientation::LANDSCAPE;
     break;
 
-  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
     android_orientation = IsGalaxyTab22() ?
                           NativeView::ScreenOrientation::REVERSE_PORTRAIT_GT :
                           NativeView::ScreenOrientation::REVERSE_PORTRAIT;
     break;
 
-  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
     android_orientation = IsGalaxyTab22() ?
                           NativeView::ScreenOrientation::REVERSE_LANDSCAPE_GT :
                           NativeView::ScreenOrientation::REVERSE_LANDSCAPE;
@@ -191,19 +192,19 @@ Display::Rotate(DisplaySettings::Orientation orientation)
   const char *rotate = "3";
 
   switch (orientation) {
-  case DisplaySettings::Orientation::DEFAULT:
-  case DisplaySettings::Orientation::PORTRAIT:
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::PORTRAIT:
     break;
 
-  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
     rotate = "1";
     break;
 
-  case DisplaySettings::Orientation::LANDSCAPE:
+  case DisplayOrientation::LANDSCAPE:
     rotate = "0";
     break;
 
-  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
     rotate = "2";
     break;
   };
@@ -229,7 +230,7 @@ Display::RotateRestore()
 #elif defined(ANDROID)
   return native_view->setRequestedOrientation(NativeView::ScreenOrientation::SENSOR);
 #elif defined(KOBO)
-  return Rotate(DisplaySettings::Orientation::DEFAULT);
+  return Rotate(DisplayOrientation::DEFAULT);
 #else
   return false;
 #endif

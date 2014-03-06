@@ -32,7 +32,6 @@ Copyright_License {
 #include "IO/Async/IOLoop.hpp"
 #include "IO/Async/DiscardFileEventHandler.hpp"
 #include "../Linux/SignalListener.hpp"
-#include "DisplaySettings.hpp"
 
 #ifndef NON_INTERACTIVE
 #include "../Linux/MergeMouse.hpp"
@@ -46,9 +45,12 @@ Copyright_License {
 #endif
 #endif
 
+#include <stdint.h>
+
 #include <queue>
 #include <set>
 
+enum class DisplayOrientation : uint8_t;
 class Window;
 class Timer;
 
@@ -104,7 +106,7 @@ public:
     merge_mouse.SetInvert(invert_x, invert_y);
   }
 
-  void SetMouseRotation(DisplaySettings::Orientation orientation);
+  void SetMouseRotation(DisplayOrientation orientation);
 
   bool HasPointer() const {
     return merge_mouse.HasPointer();

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Event/Queue.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
+#include "DisplayOrientation.hpp"
 #include "Asset.hpp"
 
 #ifdef KOBO
@@ -47,8 +48,8 @@ ScreenGlobalInit::ScreenGlobalInit()
   event_queue = new EventQueue();
 
 #ifdef KOBO
-  Display::Rotate(DisplaySettings::Orientation::DEFAULT);
-  event_queue->SetMouseRotation(DisplaySettings::Orientation::DEFAULT);
+  Display::Rotate(DisplayOrientation::DEFAULT);
+  event_queue->SetMouseRotation(DisplayOrientation::DEFAULT);
 #endif
 
   ScreenInitialized();

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Queue.hpp"
+#include "DisplayOrientation.hpp"
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
@@ -72,23 +73,23 @@ EventQueue::~EventQueue()
 #ifdef KOBO
 
 void
-EventQueue::SetMouseRotation(DisplaySettings::Orientation orientation)
+EventQueue::SetMouseRotation(DisplayOrientation orientation)
 {
   switch (orientation) {
-  case DisplaySettings::Orientation::DEFAULT:
-  case DisplaySettings::Orientation::PORTRAIT:
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::PORTRAIT:
     SetMouseRotation(true, true, false);
     break;
 
-  case DisplaySettings::Orientation::LANDSCAPE:
+  case DisplayOrientation::LANDSCAPE:
     SetMouseRotation(false, false, false);
     break;
 
-  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
     SetMouseRotation(true, false, true);
     break;
 
-  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
     SetMouseRotation(false, true, true);
     break;
   }

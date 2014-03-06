@@ -44,7 +44,7 @@
 #ifdef USE_FB
 #include "Hardware/RotateDisplay.hpp"
 bool
-Display::Rotate(DisplaySettings::Orientation orientation)
+Display::Rotate(DisplayOrientation orientation)
 {
   return false;
 }

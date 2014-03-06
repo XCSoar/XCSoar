@@ -27,5 +27,5 @@ void
 DisplaySettings::SetDefaults()
 {
   enable_auto_blank = false;
-  orientation = Orientation::DEFAULT;
+  orientation = DisplayOrientation::DEFAULT;
 }
