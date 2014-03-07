@@ -124,7 +124,6 @@ BufferCanvas::Begin(Canvas &other)
     /* save the old viewport */
     old_translate = OpenGL::translate;
     old_size = OpenGL::screen_size;
-    glPushMatrix();
 
     /* configure a new viewport */
     OpenGL::SetupViewport({GetWidth(), GetHeight()});
@@ -145,6 +144,9 @@ BufferCanvas::Commit(Canvas &other)
   assert(GetHeight() == other.GetHeight());
 
   if (frame_buffer != NULL) {
+    assert(OpenGL::translate.x == 0);
+    assert(OpenGL::translate.y == 0);
+
     frame_buffer->Unbind();
 
     /* restore the old viewport */
@@ -154,8 +156,6 @@ BufferCanvas::Commit(Canvas &other)
     OpenGL::SetupViewport(old_size);
 
     OpenGL::translate = old_translate;
-
-    glPopMatrix();
 
     /* copy frame buffer to screen */
     CopyTo(other);
