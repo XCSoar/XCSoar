@@ -36,6 +36,7 @@ MapLook::Initialise(const MapSettings &settings,
   task.Initialise();
   marker.Initialise();
   trail.Initialise(settings.trail);
+  wave.Initialise();
   wind.Initialise(bold_font);
 
 #ifdef HAVE_NOAA

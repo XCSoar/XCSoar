@@ -28,6 +28,7 @@ Copyright_License {
 #include "GlideRatioComputer.hpp"
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
+#include "WaveComputer.hpp"
 #include "ThermalBandComputer.hpp"
 #include "Wind/Computer.hpp"
 #include "LiftDatabaseComputer.hpp"
@@ -56,6 +57,7 @@ class GlideComputerAirData {
 
   FlyingComputer flying_computer;
   CirclingComputer circling_computer;
+  WaveComputer wave_computer;
   ThermalBandComputer thermal_band_computer;
   WindComputer wind_computer;
   LiftDatabaseComputer lift_database_computer;

@@ -44,6 +44,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Route.hpp"
+#include "Computer/WaveResult.hpp"
 #include "Util/TypeTraits.hpp"
 
 /** Derived terrain altitude information, including glide range */
@@ -154,6 +155,8 @@ struct DerivedInfo:
   Validity pressure_available;
 
   ClimbHistory climb_history;
+
+  WaveResult wave;
 
   /** Does #estimated_wind have a meaningful value? */
   Validity estimated_wind_available;

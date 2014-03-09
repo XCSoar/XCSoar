@@ -38,6 +38,7 @@ namespace Profile {
   static void Load(PlacesOfInterestSettings &settings);
   static void Load(FeaturesSettings &settings);
   static void Load(CirclingSettings &settings);
+  static void Load(WaveSettings &settings);
 };
 
 void
@@ -127,6 +128,12 @@ Profile::Load(CirclingSettings &settings)
       settings.external_trigger_cruise_enabled);
 }
 
+void
+Profile::Load(WaveSettings &settings)
+{
+  Get(ProfileKeys::WaveAssistant, settings.enabled);
+}
+
 static bool
 LoadUTCOffset(RoughTimeDelta &value_r)
 {
@@ -162,6 +169,7 @@ Profile::Load(ComputerSettings &settings)
   Load(settings.features);
   Load(settings.airspace);
   Load(settings.circling);
+  Load(settings.wave);
 
   GetEnum(ProfileKeys::AverEffTime, settings.average_eff_time);
 

@@ -37,6 +37,7 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "Wind/Settings.hpp"
 #include "Audio/VegaVoiceSettings.hpp"
+#include "WaveSettings.hpp"
 
 #include <type_traits>
 
@@ -172,6 +173,8 @@ struct ComputerSettings {
   FeaturesSettings features;
 
   CirclingSettings circling;
+
+  WaveSettings wave;
 
   AverageEffTime average_eff_time;
 

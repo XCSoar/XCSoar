@@ -694,6 +694,7 @@ DEBUG_PROGRAM_NAMES = \
 	FlightTable \
 	RunTrace \
 	RunOLCAnalysis \
+	RunWaveComputer \
 	FlightPath \
 	BenchmarkProjection \
 	BenchmarkFAITriangleSector \
@@ -1608,6 +1609,17 @@ RUN_OLC_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_OLC_DEPENDS = CONTEST UTIL GEO MATH TIME
 $(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
 
+RUN_WAVE_COMPUTER_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Computer/WaveComputer.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(TEST_SRC_DIR)/RunWaveComputer.cpp
+RUN_WAVE_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_WAVE_COMPUTER_DEPENDS = UTIL GEO MATH TIME
+$(eval $(call link-program,RunWaveComputer,RUN_WAVE_COMPUTER))
+
 ANALYSE_FLIGHT_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/NMEA/Aircraft.cpp \
@@ -1745,6 +1757,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointRendererSettings.cpp \
 	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
+	$(SRC)/Renderer/WaveRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -1766,6 +1779,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/NOAALook.cpp \
+	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
@@ -2213,6 +2227,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \
 	$(SRC)/Look/VarioBarLook.cpp \
+	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
@@ -2259,6 +2274,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/TaskComputer.cpp \
 	$(SRC)/Computer/RouteComputer.cpp \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
+	$(SRC)/Computer/WaveComputer.cpp \
 	$(SRC)/Computer/StatsComputer.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/Computer/LogComputer.cpp \

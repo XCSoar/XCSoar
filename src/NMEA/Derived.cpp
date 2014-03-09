@@ -67,6 +67,8 @@ DerivedInfo::Reset()
 
   climb_history.Clear();
 
+  wave.Clear();
+
   estimated_wind_available.Clear();
   wind_available.Clear();
   wind_source = WindSource::NONE;

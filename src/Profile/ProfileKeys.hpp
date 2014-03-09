@@ -262,6 +262,8 @@ extern const char VarioDeadBandMax[];
 
 extern const char PagesDistinctZoom[];
 
+extern const char WaveAssistant[];
+
 }
 
 #endif

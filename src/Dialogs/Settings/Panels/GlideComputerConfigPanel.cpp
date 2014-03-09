@@ -39,6 +39,7 @@ enum ControlIndex {
   EnableExternalTriggerCruise,
   AverEffTime,
   PredictWindDrift,
+  WaveAssistant,
 };
 
 class GlideComputerConfigPanel final : public RowFormWidget {
@@ -113,6 +114,9 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
              task_behaviour.glide.predict_wind_drift);
   SetExpertRow(PredictWindDrift);
+
+  AddBoolean(_("Wave assistant"), nullptr,
+             settings_computer.wave.enabled);
 }
 
 bool
@@ -140,6 +144,9 @@ GlideComputerConfigPanel::Save(bool &_changed)
 
   changed |= SaveValue(PredictWindDrift, ProfileKeys::PredictWindDrift,
                        task_behaviour.glide.predict_wind_drift);
+
+  changed |= SaveValue(WaveAssistant, ProfileKeys::WaveAssistant,
+                       settings_computer.wave.enabled);
 
   _changed |= changed;
 

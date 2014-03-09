@@ -26,6 +26,7 @@ Copyright_License {
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/MarkerRenderer.hpp"
+#include "Renderer/WaveRenderer.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -105,6 +106,13 @@ MapWindow::RenderNOAAStations(Canvas &canvas)
 #endif
 }
 
+inline void
+MapWindow::DrawWaves(Canvas &canvas)
+{
+  const WaveRenderer renderer(look.wave);
+  renderer.Draw(canvas, render_projection, Calculated().wave);
+}
+
 void
 MapWindow::RenderGlide(Canvas &canvas)
 {
@@ -171,6 +179,8 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   // Render the snail trail
   if (basic.location_available)
     RenderTrail(canvas, aircraft_pos);
+
+  DrawWaves(canvas);
 
   RenderMarkers(canvas);
 

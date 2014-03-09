@@ -30,6 +30,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "MarkerLook.hpp"
 #include "TrailLook.hpp"
+#include "WaveLook.hpp"
 #include "WindArrowLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Bitmap.hpp"
@@ -51,6 +52,7 @@ struct MapLook {
   TaskLook task;
   MarkerLook marker;
   TrailLook trail;
+  WaveLook wave;
   WindArrowLook wind;
 
 #ifdef HAVE_NOAA

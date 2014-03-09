@@ -265,4 +265,6 @@ const char VarioDeadBandMax[] = "VarioDeadBandMax";
 
 const char PagesDistinctZoom[] = "PagesDistinctZoom";
 
+const char WaveAssistant[] = "WaveAssistant";
+
 }

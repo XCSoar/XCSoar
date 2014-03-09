@@ -12,6 +12,7 @@ Version 6.8 - not yet released
   - LX: implement LXNAV Nano3 task declaration (#3295)
   - Volkslogger: support DAeC keyhole declaration
 * calculations
+  - wave assistant
   - use maximum speed configured in plane setup as limit for calculations
   - use WGS84 earth ellipsoid for distance calculations (#2809)
   - simplified EKF wind algorithm
