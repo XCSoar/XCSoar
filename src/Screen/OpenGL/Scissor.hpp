@@ -28,17 +28,16 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/Canvas.hpp"
 
-
 class GLCanvasScissor : public GLScissor {
 public:
   GLCanvasScissor(const Canvas &canvas)
     :GLScissor(OpenGL::translate.x,
-               OpenGL::screen_size.y - OpenGL::translate.y - canvas.GetHeight(),
+               OpenGL::viewport_size.y - OpenGL::translate.y - canvas.GetHeight(),
                canvas.GetWidth(), canvas.GetHeight()) {}
 
   explicit GLCanvasScissor(PixelRect rc)
     :GLScissor(OpenGL::translate.x + rc.left,
-               OpenGL::screen_size.y - OpenGL::translate.y - rc.bottom,
+               OpenGL::viewport_size.y - OpenGL::translate.y - rc.bottom,
                rc.right - rc.top, rc.bottom - rc.top) {}
 };
 

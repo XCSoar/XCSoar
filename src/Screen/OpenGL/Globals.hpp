@@ -99,9 +99,14 @@ namespace OpenGL {
   extern GLenum render_buffer_stencil;
 
   /**
-   * The dimensions of the screen in pixels.
+   * The dimensions of the OpenGL window in pixels.
    */
-  extern Point2D<unsigned> screen_size;
+  extern Point2D<unsigned> window_size;
+
+  /**
+   * The dimensions of the OpenGL viewport in pixels.
+   */
+  extern Point2D<unsigned> viewport_size;
 
   /**
    * The current SubCanvas translation in pixels.

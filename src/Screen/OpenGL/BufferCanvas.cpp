@@ -123,7 +123,7 @@ BufferCanvas::Begin(Canvas &other)
 
     /* save the old viewport */
     old_translate = OpenGL::translate;
-    old_size = OpenGL::screen_size;
+    old_size = OpenGL::viewport_size;
 
     /* configure a new viewport */
     OpenGL::SetupViewport({GetWidth(), GetHeight()});

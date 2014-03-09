@@ -298,7 +298,8 @@ OpenGL::SetupContext()
 void
 OpenGL::SetupViewport(Point2D<unsigned> size)
 {
-  screen_size = size;
+  window_size = size;
+  viewport_size = size;
 
   glViewport(0, 0, size.x, size.y);
   glMatrixMode(GL_PROJECTION);

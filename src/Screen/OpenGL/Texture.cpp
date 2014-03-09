@@ -184,7 +184,7 @@ GLTexture::DrawOES(PixelScalar dest_x, PixelScalar dest_y,
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
   glDrawTexiOES(OpenGL::translate.x + dest_x,
-                OpenGL::screen_size.y - OpenGL::translate.y - dest_y - dest_height,
+                OpenGL::viewport_size.y - OpenGL::translate.y - dest_y - dest_height,
                 0, dest_width, dest_height);
 }
 
@@ -244,7 +244,7 @@ GLTexture::DrawFlippedOES(PixelRect dest, PixelRect src) const
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
   glDrawTexiOES(OpenGL::translate.x + dest.left,
-                OpenGL::screen_size.y - OpenGL::translate.y - dest.bottom,
+                OpenGL::viewport_size.y - OpenGL::translate.y - dest.bottom,
                 0, dest.right - dest.left, dest.bottom - dest.top);
 }
 
