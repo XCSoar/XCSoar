@@ -133,6 +133,7 @@ BufferCanvas::Begin(Canvas &other)
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
 
     old_translate = OpenGL::translate;
     old_size = OpenGL::viewport_size;
@@ -176,6 +177,7 @@ BufferCanvas::Commit(Canvas &other)
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
 
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;
