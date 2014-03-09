@@ -30,7 +30,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Scissor.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #elif defined(USE_GDI)
 #include "Screen/WindowCanvas.hpp"
@@ -149,9 +149,9 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
-  GLScissor scissor(OpenGL::translate.x,
-                    OpenGL::screen_size.y - OpenGL::translate.y - canvas.GetHeight(),
-                    scroll_bar.GetLeft(GetSize()), canvas.GetHeight());
+  const PixelRect scissor_rc(0, 0, canvas.GetHeight(),
+                             scroll_bar.GetLeft(GetSize()));
+  GLCanvasScissor scissor(scissor_rc);
 #endif
 
   unsigned last_item = std::min(length, end);
