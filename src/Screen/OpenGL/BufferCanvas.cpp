@@ -122,6 +122,18 @@ BufferCanvas::Begin(Canvas &other)
     stencil_buffer->AttachFramebuffer(FBO::STENCIL_ATTACHMENT);
 
     /* save the old viewport */
+
+#ifdef HAVE_GLES
+    /* there's no glPushAttrib() on GL/ES; emulate it */
+    glGetIntegerv(GL_VIEWPORT, old_viewport);
+#else
+    glPushAttrib(GL_VIEWPORT_BIT);
+#endif
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+
     old_translate = OpenGL::translate;
     old_size = OpenGL::viewport_size;
 
@@ -153,9 +165,20 @@ BufferCanvas::Commit(Canvas &other)
 
     assert(OpenGL::translate == RasterPoint(0, 0));
 
-    OpenGL::SetupViewport(old_size);
+#ifdef HAVE_GLES
+    /* there's no glPopAttrib() on GL/ES; emulate it */
+    glViewport(old_viewport[0], old_viewport[1],
+               old_viewport[2], old_viewport[3]);
+#else
+    glPopAttrib();
+#endif
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
 
     OpenGL::translate = old_translate;
+    OpenGL::viewport_size = old_size;
 
     /* copy frame buffer to screen */
     CopyTo(other);

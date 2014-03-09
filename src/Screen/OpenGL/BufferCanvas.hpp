@@ -43,6 +43,10 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
 
   GLRenderBuffer *stencil_buffer;
 
+#ifdef HAVE_GLES
+  GLint old_viewport[4];
+#endif
+
   RasterPoint old_translate;
   Point2D<unsigned> old_size;
 
