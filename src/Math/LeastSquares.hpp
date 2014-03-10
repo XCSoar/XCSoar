@@ -138,6 +138,9 @@ public:
     return sum_n;
   }
 
+  /**
+   * Reset the LeastSquares calculator.
+   */
   void Reset();
 
   fixed GetGradient() const {
@@ -180,12 +183,42 @@ public:
     return slots;
   }
 
+  /**
+   * Add a new data point to the values and calculate least squares
+   * average (assumes x = sum_n + 1).
+   *
+   * @param y y-Value of the new data point
+   */
   void LeastSquaresUpdate(fixed y);
+
+  /**
+   * Add a new data point to the values and calculate least squares
+   * average.
+   *
+   * @param x x-Value of the new data point
+   * @param y y-Value of the new data point
+   * @param weight Weight of the new data point (optional)
+   */
   void LeastSquaresUpdate(fixed x, fixed y, fixed weight = fixed(1));
 
 private:
+  /**
+   * Calculate the least squares average.
+   */
   void LeastSquaresUpdate();
+
+  /**
+   * Calculates the LeastSquaresError.
+   */
   void LeastSquaresErrorUpdate();
+
+  /**
+   * Add a new data point to the values.
+   *
+   * @param x x-Value of the new data point
+   * @param y y-Value of the new data point
+   * @param weight Weight of the new data point (optional)
+   */
   void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed(1));
 };
 

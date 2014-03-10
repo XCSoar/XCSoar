@@ -76,9 +76,6 @@ return the maximum least squares error:
 
 */
 
-/**
- * Reset the LeastSquares calculator
- */
 void
 LeastSquares::Reset()
 {
@@ -99,9 +96,6 @@ LeastSquares::Reset()
   slots.clear();
 }
 
-/**
- * Calculate the least squares average
- */
 void
 LeastSquares::LeastSquaresUpdate()
 {
@@ -117,23 +111,12 @@ LeastSquares::LeastSquaresUpdate()
   y_ave = m * (x_max + x_min) / 2 + b;
 }
 
-/**
- * Add a new data point to the values and calculate least squares average
- * (assumes x = sum_n + 1)
- * @param y y-Value of the new data point
- */
 void
 LeastSquares::LeastSquaresUpdate(fixed y)
 {
   LeastSquaresUpdate(fixed(sum_n + 1), y);
 }
 
-/**
- * Add a new data point to the values and calculate least squares average
- * @param x x-Value of the new data point
- * @param y y-Value of the new data point
- * @param weight Weight of the new data point (optional)
- */
 void
 LeastSquares::LeastSquaresUpdate(fixed x, fixed y, fixed weight)
 {
@@ -149,21 +132,12 @@ LeastSquares::LeastSquaresUpdate(fixed x, fixed y, fixed weight)
     max_error = error;
 }
 
-/**
- * Calculates the LeastSquaresError
- */
 void
 LeastSquares::LeastSquaresErrorUpdate()
 {
   rms_error = sqrt(sum_error / sum_weights);
 }
 
-/**
- * Add a new data point to the values
- * @param x x-Value of the new data point
- * @param y y-Value of the new data point
- * @param weight Weight of the new data point (optional)
- */
 void
 LeastSquares::LeastSquaresAdd(fixed x, fixed y, fixed weight)
 {
