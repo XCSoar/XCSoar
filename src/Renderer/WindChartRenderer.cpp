@@ -65,8 +65,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   }
 
   for (unsigned i = 0; i < numsteps; i++) {
-    fixed h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * i /
-              (numsteps - 1) + fixed(fs.altitude_base.y_min);
+    fixed h = (fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * i /
+              (numsteps - 1) + fs.altitude_base.y_min;
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
     fixed mag = wind.Magnitude();
@@ -98,8 +98,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   fixed hfact;
   for (unsigned i = 0; i < numsteps; i++) {
     hfact = fixed(i + 1) / (numsteps + 1);
-    fixed h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * hfact +
-              fixed(fs.altitude_base.y_min);
+    fixed h = (fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * hfact +
+      fs.altitude_base.y_min;
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
     wind.x /= x_max;
