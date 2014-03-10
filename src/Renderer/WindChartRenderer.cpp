@@ -57,12 +57,15 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   bool found = true;
 
   LeastSquares windstats_mag;
+
   ChartRenderer chart(chart_look, canvas, rc);
 
   if (fs.altitude_ceiling.y_max - fs.altitude_ceiling.y_min <= fixed(10)) {
     chart.DrawNoData();
     return;
   }
+
+  windstats_mag.Reset();
 
   for (unsigned i = 0; i < numsteps; i++) {
     fixed h = (fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * i /

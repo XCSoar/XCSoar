@@ -48,8 +48,10 @@ Copyright_License {
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
-#include "Util/StaticArray.hpp"
+#include "Util/TrivialArray.hpp"
 #include "Math/fixed.hpp"
+
+#include <type_traits>
 
 /**
  * A solver for least squares problems
@@ -122,9 +124,7 @@ public:
     {}
   };
 
-  StaticArray<Slot, 1000> slots;
-
-  LeastSquares();
+  TrivialArray<Slot, 1000> slots;
 
   bool IsEmpty() const {
     return sum_n == 0;
@@ -140,5 +140,7 @@ public:
 
   void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed(1));
 };
+
+static_assert(std::is_trivial<LeastSquares>::value, "type is not trivial");
 
 #endif // _LEASTSQS_H
