@@ -438,7 +438,7 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
 
 PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
   PyObject *py_list,
-           *py_method = PyString_FromString("unsigned");
+           *py_method = nullptr;
   double floor_to = 1;
   bool delta = true;
 
@@ -470,14 +470,14 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
 
   enum Method { UNSIGNED, SIGNED, DOUBLE } method;
 
-  if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "unsigned") == 0)
+  if (py_method == nullptr)
+    method = UNSIGNED;
+  else if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "unsigned") == 0)
     method = UNSIGNED;
   else if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "signed") == 0)
     method = SIGNED;
   else if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "double") == 0)
     method = DOUBLE;
-  else if (!PyString_Check(py_method))
-    method = UNSIGNED;
   else {
     PyErr_SetString(PyExc_TypeError, "Can't parse method.");
     return NULL;
