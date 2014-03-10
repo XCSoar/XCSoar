@@ -108,7 +108,7 @@ LeastSquares::Compute()
   }
   b = (sum_yi - m * sum_xi) / sum_weights;
 
-  y_ave = m * (x_max + x_min) / 2 + b;
+  y_ave = GetYAt(Half(x_max + x_min));
 }
 
 void
@@ -126,7 +126,7 @@ LeastSquares::Update(fixed x, fixed y, fixed weight)
   Compute();
 
   // Calculate error
-  fixed error = fabs(y - (m * x + b));
+  fixed error = fabs(y - GetYAt(x));
   sum_error += sqr(error) * weight;
   if (error > max_error)
     max_error = error;
