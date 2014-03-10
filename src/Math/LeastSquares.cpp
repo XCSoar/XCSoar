@@ -103,6 +103,7 @@ LeastSquares::Reset()
   x_min = fixed(0);
   x_max = fixed(0);
   y_ave = fixed(0);
+  slots.clear();
 }
 
 /**
