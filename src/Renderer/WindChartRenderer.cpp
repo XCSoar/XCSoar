@@ -75,7 +75,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
     fixed mag = wind.Magnitude();
 
-    windstats_mag.LeastSquaresUpdate(mag, h);
+    windstats_mag.Update(mag, h);
   }
 
   chart.ScaleXFromData(windstats_mag);

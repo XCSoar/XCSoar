@@ -189,7 +189,7 @@ public:
    *
    * @param y y-Value of the new data point
    */
-  void LeastSquaresUpdate(fixed y);
+  void Update(fixed y);
 
   /**
    * Add a new data point to the values and calculate least squares
@@ -199,18 +199,18 @@ public:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void LeastSquaresUpdate(fixed x, fixed y, fixed weight = fixed(1));
+  void Update(fixed x, fixed y, fixed weight = fixed(1));
 
 private:
   /**
    * Calculate the least squares average.
    */
-  void LeastSquaresUpdate();
+  void Compute();
 
   /**
    * Calculates the LeastSquaresError.
    */
-  void LeastSquaresErrorUpdate();
+  void UpdateError();
 
   /**
    * Add a new data point to the values.
@@ -219,7 +219,7 @@ private:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed(1));
+  void Add(fixed x, fixed y, fixed weight = fixed(1));
 };
 
 static_assert(std::is_trivial<LeastSquares>::value, "type is not trivial");

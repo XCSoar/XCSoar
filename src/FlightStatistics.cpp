@@ -47,15 +47,15 @@ void
 FlightStatistics::AddAltitudeTerrain(const fixed tflight, const fixed terrainalt)
 {
   ScopeLock lock(mutex);
-  altitude_terrain.LeastSquaresUpdate(std::max(fixed(0), tflight / 3600),
-                                      terrainalt);
+  altitude_terrain.Update(std::max(fixed(0), tflight / 3600),
+                          terrainalt);
 }
 
 void
 FlightStatistics::AddAltitude(const fixed tflight, const fixed alt)
 {
   ScopeLock lock(mutex);
-  altitude.LeastSquaresUpdate(std::max(fixed(0), tflight / 3600), alt);
+  altitude.Update(std::max(fixed(0), tflight / 3600), alt);
 }
 
 fixed
@@ -82,7 +82,7 @@ void
 FlightStatistics::AddTaskSpeed(const fixed tflight, const fixed val)
 {
   ScopeLock lock(mutex);
-  task_speed.LeastSquaresUpdate(tflight / 3600, std::max(fixed(0),val));
+  task_speed.Update(tflight / 3600, std::max(fixed(0),val));
 }
 
 void
@@ -93,14 +93,14 @@ FlightStatistics::AddClimbBase(const fixed tflight, const fixed alt)
   if (!altitude_ceiling.IsEmpty())
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
-    altitude_base.LeastSquaresUpdate(std::max(fixed(0), tflight) / 3600, alt);
+    altitude_base.Update(std::max(fixed(0), tflight) / 3600, alt);
 }
 
 void
 FlightStatistics::AddClimbCeiling(const fixed tflight, const fixed alt)
 {
   ScopeLock lock(mutex);
-  altitude_ceiling.LeastSquaresUpdate(std::max(fixed(0), tflight) / 3600, alt);
+  altitude_ceiling.Update(std::max(fixed(0), tflight) / 3600, alt);
 }
 
 /**
@@ -111,5 +111,5 @@ void
 FlightStatistics::AddThermalAverage(const fixed v)
 {
   ScopeLock lock(mutex);
-  thermal_average.LeastSquaresUpdate(v);
+  thermal_average.Update(v);
 }

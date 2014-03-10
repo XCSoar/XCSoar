@@ -97,7 +97,7 @@ LeastSquares::Reset()
 }
 
 void
-LeastSquares::LeastSquaresUpdate()
+LeastSquares::Compute()
 {
   fixed denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
 
@@ -112,18 +112,18 @@ LeastSquares::LeastSquaresUpdate()
 }
 
 void
-LeastSquares::LeastSquaresUpdate(fixed y)
+LeastSquares::Update(fixed y)
 {
-  LeastSquaresUpdate(fixed(sum_n + 1), y);
+  Update(fixed(sum_n + 1), y);
 }
 
 void
-LeastSquares::LeastSquaresUpdate(fixed x, fixed y, fixed weight)
+LeastSquares::Update(fixed x, fixed y, fixed weight)
 {
   // Add new point
-  LeastSquaresAdd(x, y, weight);
+  Add(x, y, weight);
   // Update calculation
-  LeastSquaresUpdate();
+  Compute();
 
   // Calculate error
   fixed error = fabs(y - (m * x + b));
@@ -133,13 +133,13 @@ LeastSquares::LeastSquaresUpdate(fixed x, fixed y, fixed weight)
 }
 
 void
-LeastSquares::LeastSquaresErrorUpdate()
+LeastSquares::UpdateError()
 {
   rms_error = sqrt(sum_error / sum_weights);
 }
 
 void
-LeastSquares::LeastSquaresAdd(fixed x, fixed y, fixed weight)
+LeastSquares::Add(fixed x, fixed y, fixed weight)
 {
   // Update maximum/minimum values
   if (IsEmpty() || y > y_max)
