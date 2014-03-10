@@ -327,9 +327,8 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
   RasterPoint *points = point_buffer.get(n);
 
   RasterPoint *p = points;
-  for (auto i = lsdata.slots.begin(), end = lsdata.slots.end();
-       i != end; ++i)
-    *p++ = ToScreen(i->x, i->y);
+  for (const auto &i : lsdata.slots)
+    *p++ = ToScreen(i.x, i.y);
   const RasterPoint &last = p[-1];
   *p++ = RasterPoint{ last.x, rc.bottom - padding_bottom };
   *p++ = RasterPoint{ points[0].x, rc.bottom - padding_bottom };
@@ -348,9 +347,8 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
   RasterPoint *points = point_buffer.get(n);
 
   RasterPoint *p = points;
-  for (auto i = lsdata.slots.begin(), end = lsdata.slots.end();
-       i != end; ++i)
-    *p++ = ToScreen(i->x, i->y);
+  for (const auto &i : lsdata.slots)
+    *p++ = ToScreen(i.x, i.y);
   assert(p == points + n);
 
   canvas.Select(pen);
