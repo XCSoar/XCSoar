@@ -29,6 +29,7 @@
 /* xcsoar.Flight methods */
 struct Pyxcsoar_Flight {
   PyObject_HEAD Flight *flight;
+  char *filename;
 };
 
 static PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);

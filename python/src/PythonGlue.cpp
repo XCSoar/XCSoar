@@ -50,12 +50,16 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
 
   Pyxcsoar_Flight *self;
   self = (Pyxcsoar_Flight *)type->tp_alloc(type, 0);
+  self->filename = nullptr;
 
   if (PyString_Check(py_input_data) || PyUnicode_Check(py_input_data)) {
-    Py_INCREF(py_input_data);
+    Py_ssize_t length = PyString_Size(py_input_data);
+    // add one char for \0
+    self->filename = new char[length + 1];
+    strncpy(self->filename, PyString_AsString(py_input_data), length + 1);
 
     Py_BEGIN_ALLOW_THREADS
-    self->flight = new Flight(PyString_AsString(py_input_data), keep);
+    self->flight = new Flight(self->filename, keep);
     Py_END_ALLOW_THREADS
   } else if (PySequence_Check(py_input_data) == 1) {
     Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_input_data);
@@ -86,6 +90,9 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
 
 void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
   /* destructor */
+  if (self->filename != nullptr)
+    delete[] self->filename;
+
   delete self->flight;
   self->ob_type->tp_free((Pyxcsoar_Flight*)self);
 }
