@@ -93,6 +93,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   canvas.Select(chart_look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 
   // draw direction vectors
+  const fixed x_max = std::max(windstats_mag.x_max,
+                               fixed(1)); // prevent /0 problems
   fixed hfact;
   for (unsigned i = 0; i < numsteps; i++) {
     hfact = fixed(i + 1) / (numsteps + 1);
@@ -100,10 +102,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
               fixed(fs.altitude_base.y_min);
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
-    if (windstats_mag.x_max == fixed(0))
-      windstats_mag.x_max = fixed(1); // prevent /0 problems
-    wind.x /= fixed(windstats_mag.x_max);
-    wind.y /= fixed(windstats_mag.x_max);
+    wind.x /= x_max;
+    wind.y /= x_max;
     fixed mag = wind.Magnitude();
     if (negative(mag))
       continue;
