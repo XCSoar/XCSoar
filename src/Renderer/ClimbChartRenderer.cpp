@@ -38,18 +38,18 @@ ClimbChartCaption(TCHAR *sTmp,
   ScopeLock lock(fs.mutex);
   if (fs.thermal_average.IsEmpty()) {
     sTmp[0] = _T('\0');
-  } else if (fs.thermal_average.sum_n == 1) {
+  } else if (fs.thermal_average.GetCount() == 1) {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s"),
               _("Avg. climb"),
-              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
+              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.GetAverageY())),
               Units::GetVerticalSpeedName());
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
               _("Avg. climb"),
-              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
+              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.GetAverageY())),
               Units::GetVerticalSpeedName(),
               _("Climb trend"),
-              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.m)),
+              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.GetGradient())),
               Units::GetVerticalSpeedName());
   }
 }
@@ -74,18 +74,19 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(fixed(0));
 
   chart.ScaleXFromValue(fixed(-1));
-  chart.ScaleXFromValue(fixed(fs.thermal_average.sum_n));
+  chart.ScaleXFromValue(fixed(fs.thermal_average.GetCount()));
 
   chart.DrawYGrid(Units::ToSysVSpeed(fixed(1)),
                   ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
   chart.DrawBarChart(fs.thermal_average);
 
-  chart.DrawLine(fixed(0), MACCREADY, fixed(fs.thermal_average.sum_n), MACCREADY,
+  chart.DrawLine(fixed(0), MACCREADY,
+                 fixed(fs.thermal_average.GetCount()), MACCREADY,
                  ChartLook::STYLE_REDTHICK);
 
   chart.DrawLabel(_T("MC"),
                   std::max(fixed(0.5),
-                           fixed(fs.thermal_average.sum_n) - fixed(1)),
+                           fs.thermal_average.GetGradient() - fixed(1)),
                   MACCREADY);
 
   chart.DrawTrendN(fs.thermal_average, ChartLook::STYLE_BLUETHIN);

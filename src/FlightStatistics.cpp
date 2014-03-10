@@ -65,12 +65,12 @@ FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
   ScopeLock lock(mutex);
 
   fixed mc_stats;
-  if (thermal_average.y_ave > fixed(0)) {
+  if (positive(thermal_average.GetAverageY())) {
     if (mc_current > fixed(0) && circling)
-      mc_stats = (thermal_average.sum_n * thermal_average.y_ave + mc_current) /
-                 (thermal_average.sum_n + 1);
+      mc_stats = (thermal_average.GetCount() * thermal_average.GetAverageY() + mc_current) /
+        (thermal_average.GetCount() + 1);
     else
-      mc_stats = thermal_average.y_ave;
+      mc_stats = thermal_average.GetAverageY();
   } else {
     mc_stats = mc_current;
   }

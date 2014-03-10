@@ -76,7 +76,6 @@ Copyright_License {
  */
 class LeastSquares
 {
-public:
   fixed sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
 
   unsigned sum_n;
@@ -126,18 +125,67 @@ public:
 
   TrivialArray<Slot, 1000> slots;
 
+public:
   bool IsEmpty() const {
     return sum_n == 0;
   }
 
+  bool HasResult() const {
+    return sum_n >= 2;
+  }
+
+  unsigned GetCount() const {
+    return sum_n;
+  }
+
   void Reset();
 
-  void LeastSquaresUpdate();
+  fixed GetGradient() const {
+    return m;
+  }
+
+  fixed GetMinX() const {
+    return x_min;
+  }
+
+  fixed GetMaxX() const {
+    return x_max;
+  }
+
+  fixed GetMinY() const {
+    return y_min;
+  }
+
+  fixed GetMaxY() const {
+    return y_max;
+  }
+
+  fixed GetAverageY() const {
+    return y_ave;
+  }
+
+  fixed GetYAt(fixed x) const {
+    return x * m + b;
+  }
+
+  fixed GetYAtMinX() const {
+    return GetYAt(GetMinX());
+  }
+
+  fixed GetYAtMaxX() const {
+    return GetYAt(GetMaxX());
+  }
+
+  const TrivialArray<Slot, 1000> &GetSlots() const {
+    return slots;
+  }
+
   void LeastSquaresUpdate(fixed y);
   void LeastSquaresUpdate(fixed x, fixed y, fixed weight = fixed(1));
 
+private:
+  void LeastSquaresUpdate();
   void LeastSquaresErrorUpdate();
-
   void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed(1));
 };
 

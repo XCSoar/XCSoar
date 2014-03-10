@@ -38,22 +38,22 @@ void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
 {
   ScopeLock lock(fs.mutex);
-  if (fs.altitude_ceiling.sum_n < 2) {
+  if (!fs.altitude_ceiling.HasResult()) {
     sTmp[0] = _T('\0');
-  } else if (fs.altitude_ceiling.sum_n < 4) {
+  } else if (fs.altitude_ceiling.GetCount() < 4) {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
               _("Working band"),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_base.GetAverageY())),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.GetAverageY())),
               Units::GetAltitudeName());
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
               _("Working band"),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_base.GetAverageY())),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.GetAverageY())),
               Units::GetAltitudeName(),
               _("Ceiling trend"),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.m)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.GetGradient())),
               Units::GetAltitudeName());
   }
 }
@@ -123,7 +123,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   chart.padding_bottom = 0;
   chart.padding_left = 0;
 
-  if (fs.altitude.slots.size() < 2)
+  if (!fs.altitude.HasResult())
     return;
 
   chart.ScaleXFromData(fs.altitude);
@@ -156,7 +156,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.altitude.slots.size() < 2) {
+  if (!fs.altitude.HasResult()) {
     chart.DrawNoData();
     return;
   }
@@ -164,7 +164,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromData(fs.altitude);
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(fixed(0));
-  chart.ScaleXFromValue(fs.altitude.x_min);
+  chart.ScaleXFromValue(fs.altitude.GetMinX());
 
   if (_task != NULL) {
     ProtectedTaskManager::Lease task(*_task);
@@ -201,7 +201,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.task_speed.slots.size() < 2 || !task.CheckOrderedTask()) {
+  if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
     chart.DrawNoData();
     return;
   }
@@ -209,7 +209,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromData(fs.task_speed);
   chart.ScaleYFromData(fs.task_speed);
   chart.ScaleYFromValue(fixed(0));
-  chart.ScaleXFromValue(fs.task_speed.x_min);
+  chart.ScaleXFromValue(fs.task_speed.GetMinX());
 
   DrawLegs(chart, task, nmea_info, derived_info, true);
 

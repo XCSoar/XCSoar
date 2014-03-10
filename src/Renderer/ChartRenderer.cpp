@@ -69,18 +69,18 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
     return;
 
   if (y.unscaled) {
-    y.min = lsdata.y_min;
-    y.max = lsdata.y_max;
+    y.min = lsdata.GetMinY();
+    y.max = lsdata.GetMaxY();
     y.unscaled = false;
   } else {
-    y.min = std::min(y.min, lsdata.y_min);
-    y.max = std::max(y.max, lsdata.y_max);
+    y.min = std::min(y.min, lsdata.GetMinY());
+    y.max = std::max(y.max, lsdata.GetMaxY());
   }
 
-  if (lsdata.sum_n > 1) {
+  if (lsdata.HasResult()) {
     fixed y0, y1;
-    y0 = lsdata.x_min * lsdata.m + lsdata.b;
-    y1 = lsdata.x_max * lsdata.m + lsdata.b;
+    y0 = lsdata.GetYAtMinX();
+    y1 = lsdata.GetYAtMaxX();
     y.min = std::min({y.min, y0, y1});
     y.max = std::max({y.max, y0, y1});
   }
@@ -101,12 +101,12 @@ ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
     return;
 
   if (x.unscaled) {
-    x.min = lsdata.x_min;
-    x.max = lsdata.x_max;
+    x.min = lsdata.GetMinX();
+    x.max = lsdata.GetMaxX();
     x.unscaled = false;
   } else {
-    x.min = std::min(x.min, lsdata.x_min);
-    x.max = std::max(x.max, lsdata.x_max);
+    x.min = std::min(x.min, lsdata.GetMinX());
+    x.max = std::max(x.max, lsdata.GetMaxX());
   }
 
   x.scale = (x.max - x.min);
@@ -225,17 +225,17 @@ ChartRenderer::DrawYLabel(const TCHAR *text, const TCHAR *unit)
 void
 ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
 {
-  if (lsdata.sum_n < 2)
+  if (!lsdata.HasResult())
     return;
 
   if (x.unscaled || y.unscaled)
     return;
 
   fixed xmin, xmax, ymin, ymax;
-  xmin = lsdata.x_min;
-  xmax = lsdata.x_max;
-  ymin = lsdata.x_min * lsdata.m + lsdata.b;
-  ymax = lsdata.x_max * lsdata.m + lsdata.b;
+  xmin = lsdata.GetMinX();
+  xmax = lsdata.GetMaxX();
+  ymin = lsdata.GetYAtMinX();
+  ymax = lsdata.GetYAtMaxX();
 
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
@@ -243,7 +243,7 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
 void
 ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
 {
-  if (lsdata.sum_n < 2)
+  if (!lsdata.HasResult())
     return;
 
   if (x.unscaled || y.unscaled)
@@ -251,9 +251,9 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
 
   fixed xmin, xmax, ymin, ymax;
   xmin = fixed(0.5);
-  xmax = fixed(lsdata.sum_n) + fixed(0.5);
-  ymin = lsdata.x_min * lsdata.m + lsdata.b;
-  ymax = lsdata.x_max * lsdata.m + lsdata.b;
+  xmax = fixed(lsdata.GetCount()) + fixed(0.5);
+  ymin = lsdata.GetYAtMinX();
+  ymax = lsdata.GetYAtMaxX();
 
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
@@ -307,13 +307,14 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
   canvas.Select(look.bar_brush);
   canvas.SelectNullPen();
 
-  for (unsigned i = 0, n = lsdata.slots.size(); i != n; i++) {
+  const auto &slots = lsdata.GetSlots();
+  for (unsigned i = 0, n = slots.size(); i != n; i++) {
     PixelScalar xmin((fixed(i) + fixed(1.2)) * x.scale
                      + fixed(rc.left + padding_left));
     PixelScalar ymin = ScreenY(y.min);
     PixelScalar xmax((fixed(i) + fixed(1.8)) * x.scale
                      + fixed(rc.left + padding_left));
-    PixelScalar ymax = ScreenY(lsdata.slots[i].y);
+    PixelScalar ymax = ScreenY(slots[i].y);
     canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
 }
@@ -321,13 +322,14 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
 void
 ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 {
-  assert(lsdata.slots.size() >= 2);
+  const auto &slots = lsdata.GetSlots();
+  assert(slots.size() >= 2);
 
-  const unsigned n = lsdata.slots.size() + 2;
+  const unsigned n = slots.size() + 2;
   RasterPoint *points = point_buffer.get(n);
 
   RasterPoint *p = points;
-  for (const auto &i : lsdata.slots)
+  for (const auto &i : slots)
     *p++ = ToScreen(i.x, i.y);
   const RasterPoint &last = p[-1];
   *p++ = RasterPoint{ last.x, rc.bottom - padding_bottom };
@@ -341,13 +343,14 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 void
 ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 {
-  assert(lsdata.slots.size() >= 2);
+  const auto &slots = lsdata.GetSlots();
+  assert(slots.size() >= 2);
 
-  const unsigned n = lsdata.slots.size();
+  const unsigned n = slots.size();
   RasterPoint *points = point_buffer.get(n);
 
   RasterPoint *p = points;
-  for (const auto &i : lsdata.slots)
+  for (const auto &i : slots)
     *p++ = ToScreen(i.x, i.y);
   assert(p == points + n);
 
