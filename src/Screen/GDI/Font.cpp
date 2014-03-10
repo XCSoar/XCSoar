@@ -55,7 +55,7 @@ Font::Load(const LOGFONT &log_font)
   Destroy();
 
   font = ::CreateFontIndirect(&log_font);
-  if (font == NULL)
+  if (font == nullptr)
     return false;
 
   if (GetObjectType(font) != OBJ_FONT) {
@@ -129,7 +129,7 @@ Font::CalculateHeights()
 void
 Font::Destroy()
 {
-  if (font != NULL) {
+  if (font != nullptr) {
     assert(IsScreenInitialized());
 
 #ifndef NDEBUG
@@ -138,6 +138,6 @@ Font::Destroy()
       ::DeleteObject(font);
     assert(success);
 
-    font = NULL;
+    font = nullptr;
   }
 }

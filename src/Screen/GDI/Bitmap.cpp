@@ -42,7 +42,7 @@ imgdecmp_get_data(LPSTR szBuffer, DWORD dwBufferMax, LPARAM lParam)
 {
   HANDLE file = (HANDLE)lParam;
   DWORD nbytes = 0;
-  return ReadFile(file, szBuffer, dwBufferMax, &nbytes, NULL)
+  return ReadFile(file, szBuffer, dwBufferMax, &nbytes, nullptr)
     ? nbytes
     : 0;
 }
@@ -54,8 +54,8 @@ load_imgdecmp_file(const TCHAR *path)
   if (!imgdecmp_dll.IsDefined())
     return false;
 
-  HANDLE file = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
-                             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE file = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
+                             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
   if (file == INVALID_HANDLE_VALUE)
     return false;
 
@@ -69,7 +69,7 @@ load_imgdecmp_file(const TCHAR *path)
   dii.dwBufferMax = sizeof(buffer);
   dii.dwBufferCurrent = 0;
   dii.phBM = &bitmap;
-  dii.ppImageRender = NULL;
+  dii.ppImageRender = nullptr;
   dii.iBitDepth = GetDeviceCaps(dc, BITSPIXEL);
   dii.lParam = (LPARAM)file;
   dii.hdc = dc;
@@ -77,7 +77,7 @@ load_imgdecmp_file(const TCHAR *path)
   dii.iMaxWidth = 10000;
   dii.iMaxHeight = 10000;
   dii.pfnGetData = imgdecmp_get_data;
-  dii.pfnImageProgress = NULL;
+  dii.pfnImageProgress = nullptr;
   dii.crTransparentOverride = (UINT)-1;
 
   HRESULT result = imgdecmp_dll.DecompressImageIndirect(&dii);
@@ -85,7 +85,7 @@ load_imgdecmp_file(const TCHAR *path)
 
   return SUCCEEDED(result)
     ? bitmap
-    : NULL;
+    : nullptr;
 }
 
 #endif /* HAVE_IMGDECMP_DLL */
@@ -96,13 +96,13 @@ Bitmap::LoadFile(const TCHAR *path)
 #ifdef HAVE_AYGSHELL_DLL
   AYGShellDLL ayg;
   bitmap = ayg.SHLoadImageFile(path);
-  if (bitmap != NULL)
+  if (bitmap != nullptr)
     return true;
 #endif
 
 #ifdef HAVE_IMGDECMP_DLL
   bitmap = load_imgdecmp_file(path);
-  if (bitmap != NULL)
+  if (bitmap != nullptr)
     return true;
 #endif
 
@@ -112,7 +112,7 @@ Bitmap::LoadFile(const TCHAR *path)
 void
 Bitmap::Reset()
 {
-  if (bitmap != NULL) {
+  if (bitmap != nullptr) {
     assert(IsScreenInitialized());
 
 #ifndef NDEBUG
@@ -121,7 +121,7 @@ Bitmap::Reset()
       ::DeleteObject(bitmap);
     assert(success);
 
-    bitmap = NULL;
+    bitmap = nullptr;
   }
 }
 

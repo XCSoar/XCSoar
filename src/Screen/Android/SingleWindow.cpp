@@ -27,7 +27,7 @@ Copyright_License {
 bool
 SingleWindow::FilterEvent(const Event &event, Window *allowed) const
 {
-  assert(allowed != NULL);
+  assert(allowed != nullptr);
 
   switch (event.type) {
   case Event::MOUSE_MOTION:

@@ -72,14 +72,14 @@ public:
 #ifdef USE_GDI
 
   /** Base Constructor for the Pen class */
-  Pen() : pen(NULL) {}
+  Pen() : pen(nullptr) {}
   /**
    * Constructor that creates a Pen object, based on the given parameters
    * @param style Line style (SOLID, DASH, BLANK)
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  Pen(Style Style, unsigned width, const Color c):pen(NULL) {
+  Pen(Style Style, unsigned width, const Color c):pen(nullptr) {
     Set(Style, width, c);
   }
   /**
@@ -87,7 +87,7 @@ public:
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  Pen(unsigned width, Color c):pen(NULL) {
+  Pen(unsigned width, Color c):pen(nullptr) {
     Set(width, c);
   }
 
@@ -134,12 +134,12 @@ public:
    */
   void Set(unsigned width, const Color c);
   /**
-   * Resets the Pen to NULL
+   * Resets the Pen to nullptr
    */
   void Reset();
 
   /**
-   * Returns whether the Pen is defined (!= NULL)
+   * Returns whether the Pen is defined (!= nullptr)
    * @return True if the Pen is defined, False otherwise
    */
   bool

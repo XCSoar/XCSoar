@@ -77,7 +77,7 @@ public:
   constexpr
   static bool SupportsPartialRedraw() {
 #ifdef USE_GDI
-    /* we can use the GDI function InvalidateRect() with a non-NULL
+    /* we can use the GDI function InvalidateRect() with a non-nullptr
        RECT */
     return true;
 #else
@@ -97,7 +97,7 @@ public:
 #ifndef USE_GDI
     Window::Invalidate();
 #else
-    ::InvalidateRect(hWnd, NULL, false);
+    ::InvalidateRect(hWnd, nullptr, false);
 #endif
   }
 

@@ -76,7 +76,7 @@ ButtonWindow::OnKeyDown(unsigned key_code)
   case KEY_SPACE:
     SetDown(false);
 
-    if (!OnClicked() && id != 0 && parent != NULL)
+    if (!OnClicked() && id != 0 && parent != nullptr)
       parent->OnCommand(id, 0);
     return true;
 
@@ -121,7 +121,7 @@ ButtonWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
   SetDown(false);
 
-  if (!OnClicked() && id != 0 && parent != NULL)
+  if (!OnClicked() && id != 0 && parent != nullptr)
     parent->OnCommand(id, 0);
 
   return true;

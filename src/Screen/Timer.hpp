@@ -31,7 +31,6 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-#include <stddef.h>
 
 class Window;
 

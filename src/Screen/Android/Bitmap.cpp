@@ -37,11 +37,11 @@ Bitmap::Bitmap(ResourceId id)
 static const char *
 find_resource_name(unsigned id)
 {
-  for (unsigned i = 0; DrawableNames[i].name != NULL; ++i)
+  for (unsigned i = 0; DrawableNames[i].name != nullptr; ++i)
     if (DrawableNames[i].id == id)
       return DrawableNames[i].name;
 
-  return NULL;
+  return nullptr;
 }
 
 gcc_malloc
@@ -49,13 +49,13 @@ static GLTexture *
 LoadResourceTexture(ResourceId id, Bitmap::Type type)
 {
   const char *name = find_resource_name((unsigned)id);
-  if (name == NULL)
-    return NULL;
+  if (name == nullptr)
+    return nullptr;
 
   jint result[5];
   if (!native_view->loadResourceTexture(name, type == Bitmap::Type::MONO,
                                         result))
-    return NULL;
+    return nullptr;
 
   return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
 }
@@ -66,7 +66,7 @@ LoadFileTexture(const TCHAR *path)
 {
   jint result[5];
   if (!native_view->loadFileTexture(path, result))
-    return NULL;
+    return nullptr;
 
   return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
 }
@@ -75,12 +75,12 @@ bool
 Bitmap::Reload()
 {
   assert(id.IsDefined() || !pathName.empty());
-  assert(texture == NULL);
+  assert(texture == nullptr);
 
   texture = id.IsDefined()
     ? LoadResourceTexture(id, type)
     : LoadFileTexture(pathName.c_str());
-  if (texture == NULL)
+  if (texture == nullptr)
     return false;
 
   size.cx = texture->GetWidth();
@@ -117,7 +117,7 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {
-  assert(path != NULL && *path != _T('\0'));
+  assert(path != nullptr && *path != _T('\0'));
 
   Reset();
 
@@ -140,7 +140,7 @@ Bitmap::Reset()
   }
 
   delete texture;
-  texture = NULL;
+  texture = nullptr;
 }
 
 void
@@ -153,5 +153,5 @@ void
 Bitmap::SurfaceDestroyed()
 {
   delete texture;
-  texture = NULL;
+  texture = nullptr;
 }

@@ -29,8 +29,8 @@ IsAncestor(const Window *maybe_ancestor, const Window *w)
 {
   while (true) {
     const ContainerWindow *parent = w->GetParent();
-    if (parent == NULL)
-      return NULL;
+    if (parent == nullptr)
+      return nullptr;
 
     if (parent == maybe_ancestor)
       return parent;
@@ -47,7 +47,7 @@ SingleWindow::FilterMouseEvent(RasterPoint pt,
   while (true) {
     const Window *child =
       const_cast<ContainerWindow *>(container)->EventChildAt(pt.x, pt.y);
-    if (child == NULL)
+    if (child == nullptr)
       /* no receiver for the event */
       return false;
 
@@ -56,7 +56,7 @@ SingleWindow::FilterMouseEvent(RasterPoint pt,
       return true;
 
     const ContainerWindow *next = IsAncestor(allowed, child);
-    if (next == NULL)
+    if (next == nullptr)
       return false;
 
     container = next;

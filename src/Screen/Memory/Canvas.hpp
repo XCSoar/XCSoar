@@ -54,7 +54,6 @@ using SDLPixelTraits = BGRAPixelTraits;
 
 /**
  * Base drawable canvas class
- * 
  */
 class Canvas {
   friend class WindowCanvas;
@@ -76,11 +75,11 @@ protected:
 public:
   Canvas()
     :buffer(WritableImageBuffer<SDLPixelTraits>::Empty()),
-     font(NULL), background_mode(OPAQUE) {}
+     font(nullptr), background_mode(OPAQUE) {}
 
   explicit Canvas(WritableImageBuffer<SDLPixelTraits> _buffer)
     :buffer(_buffer),
-     font(NULL), background_mode(OPAQUE) {}
+     font(nullptr), background_mode(OPAQUE) {}
 
   void Create(WritableImageBuffer<SDLPixelTraits> _buffer) {
     buffer = _buffer;
@@ -327,7 +326,7 @@ public:
 
   gcc_pure
   unsigned GetFontHeight() const {
-    return font != NULL ? font->GetHeight() : 0;
+    return font != nullptr ? font->GetHeight() : 0;
   }
 
   void DrawText(int x, int y, const TCHAR *text);

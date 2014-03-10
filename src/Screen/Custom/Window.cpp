@@ -49,7 +49,7 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
   has_border = window_style.has_border;
   text_style = window_style.text_style;
 
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->AddChild(*this);
 
   OnCreate();
@@ -61,7 +61,7 @@ Window::ToScreen(PixelRect &rc) const
 {
   assert(IsDefined());
 
-  for (const Window *p = parent; p != NULL; p = p->parent) {
+  for (const Window *p = parent; p != nullptr; p = p->parent) {
     rc.left += p->position.x;
     rc.top += p->position.y;
     rc.right += p->position.x;
@@ -73,7 +73,7 @@ PixelRect
 Window::GetParentClientRect() const
 {
   assert(IsDefined());
-  assert(parent != NULL);
+  assert(parent != nullptr);
 
   return parent->GetClientRect();
 }
@@ -108,7 +108,7 @@ Window::GetFocusedWindow()
 {
   assert(IsDefined());
 
-  return focused ? this : NULL;
+  return focused ? this : nullptr;
 }
 
 void
@@ -116,7 +116,7 @@ Window::SetFocus()
 {
   assert(IsDefined());
 
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->SetActiveChild(*this);
 
   if (focused)
@@ -139,7 +139,7 @@ void
 Window::FocusParent()
 {
   AssertThread();
-  assert(parent != NULL);
+  assert(parent != nullptr);
 
   parent->SetFocus();
 }
@@ -150,7 +150,7 @@ Window::SetCapture()
   AssertNoneLocked();
   AssertThread();
 
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->SetChildCapture(this);
 
   capture = true;
@@ -164,7 +164,7 @@ Window::ReleaseCapture()
 
   capture = false;
 
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->ReleaseChildCapture(this);
 }
 
@@ -179,7 +179,7 @@ Window::Setup(Canvas &canvas)
 {
   assert(IsDefined());
 
-  if (font != NULL)
+  if (font != nullptr)
     canvas.Select(*font);
 }
 
@@ -189,7 +189,7 @@ Window::Invalidate()
   AssertThread();
   assert(IsDefined());
 
-  if (visible && parent != NULL)
+  if (visible && parent != nullptr)
     parent->InvalidateChild(*this);
 }
 

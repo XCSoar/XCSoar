@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 ContainerWindow::ContainerWindow()
-  :active_child(NULL), capture_child(NULL)
+  :active_child(nullptr), capture_child(nullptr)
 {
 }
 
@@ -41,21 +41,21 @@ ContainerWindow::~ContainerWindow()
 Window *
 ContainerWindow::FindNextControl(Window *reference)
 {
-  assert(reference != NULL);
+  assert(reference != nullptr);
 
   if (reference == this)
-    return NULL;
+    return nullptr;
 
   while (true) {
     ContainerWindow *container = reference->parent;
-    assert(container != NULL);
+    assert(container != nullptr);
 
     Window *control = container->children.FindNextChildControl(reference);
-    if (control != NULL)
+    if (control != nullptr)
       return control;
 
     if (container == this)
-      return NULL;
+      return nullptr;
 
     reference = container;
   }
@@ -64,21 +64,21 @@ ContainerWindow::FindNextControl(Window *reference)
 Window *
 ContainerWindow::FindPreviousControl(Window *reference)
 {
-  assert(reference != NULL);
+  assert(reference != nullptr);
 
   if (reference == this)
-    return NULL;
+    return nullptr;
 
   while (true) {
     ContainerWindow *container = reference->parent;
-    assert(container != NULL);
+    assert(container != nullptr);
 
     Window *control = container->children.FindPreviousChildControl(reference);
-    if (control != NULL)
+    if (control != nullptr)
       return control;
 
     if (container == this)
-      return NULL;
+      return nullptr;
 
     reference = container;
   }
@@ -88,7 +88,7 @@ bool
 ContainerWindow::FocusFirstControl()
 {
   Window *control = children.FindFirstControl();
-  if (control == NULL)
+  if (control == nullptr)
     return false;
 
   control->SetFocus();
@@ -99,9 +99,9 @@ bool
 ContainerWindow::FocusNextControl()
 {
   Window *focused = GetFocusedWindow();
-  if (focused != NULL) {
+  if (focused != nullptr) {
     Window *control = FindNextControl(focused);
-    if (control != NULL) {
+    if (control != nullptr) {
       control->SetFocus();
       return true;
     } else
@@ -114,12 +114,12 @@ bool
 ContainerWindow::FocusPreviousControl()
 {
   Window *focused = GetFocusedWindow();
-  Window *control = focused != NULL
+  Window *control = focused != nullptr
     ? FindPreviousControl(focused)
-    : NULL;
-  if (control == NULL) {
+    : nullptr;
+  if (control == nullptr) {
     control = children.FindLastControl();
-    if (control == NULL)
+    if (control == nullptr)
       return false;
   }
 
@@ -140,10 +140,10 @@ ContainerWindow::OnCancelMode()
 {
   Window::OnCancelMode();
 
-  if (active_child != NULL)
+  if (active_child != nullptr)
     active_child->OnCancelMode();
 
-  if (capture_child != NULL)
+  if (capture_child != nullptr)
     capture_child->OnCancelMode();
 }
 
@@ -151,7 +151,7 @@ bool
 ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL)
+  if (child != nullptr)
     return child->OnMouseMove(x - child->GetLeft(), y - child->GetTop(), keys);
 
   return PaintWindow::OnMouseMove(x, y, keys);
@@ -161,7 +161,7 @@ bool
 ContainerWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL)
+  if (child != nullptr)
     return child->OnMouseDown(x - child->GetLeft(), y - child->GetTop());
 
   return PaintWindow::OnMouseDown(x, y);
@@ -171,7 +171,7 @@ bool
 ContainerWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL)
+  if (child != nullptr)
     return child->OnMouseUp(x - child->GetLeft(), y - child->GetTop());
 
   return PaintWindow::OnMouseUp(x, y);
@@ -181,7 +181,7 @@ bool
 ContainerWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL)
+  if (child != nullptr)
     return child->OnMouseDouble(x - child->GetLeft(), y - child->GetTop());
 
   return PaintWindow::OnMouseDouble(x, y);
@@ -191,7 +191,7 @@ bool
 ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL)
+  if (child != nullptr)
     return child->OnMouseWheel(x - child->GetLeft(), y - child->GetTop(),
                                delta);
 
@@ -203,7 +203,7 @@ ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 bool
 ContainerWindow::OnMultiTouchDown()
 {
-  if (!capture && capture_child != NULL)
+  if (!capture && capture_child != nullptr)
     return capture_child->OnMultiTouchDown();
 
   return PaintWindow::OnMultiTouchDown();
@@ -212,7 +212,7 @@ ContainerWindow::OnMultiTouchDown()
 bool
 ContainerWindow::OnMultiTouchUp()
 {
-  if (!capture && capture_child != NULL)
+  if (!capture && capture_child != nullptr)
     return capture_child->OnMultiTouchUp();
 
   return PaintWindow::OnMultiTouchUp();
@@ -244,7 +244,7 @@ ContainerWindow::RemoveChild(Window &child) {
   children.Remove(child);
 
   if (active_child == &child)
-    active_child = NULL;
+    active_child = nullptr;
 }
 
 Window *
@@ -253,8 +253,8 @@ ContainerWindow::EventChildAt(PixelScalar x, PixelScalar y)
   if (capture)
     /* if this window is capturing the mouse, events must go exactly
        here */
-    return NULL;
-  else if (capture_child != NULL)
+    return nullptr;
+  else if (capture_child != nullptr)
     /* all mouse events go to the capturing child */
     return capture_child;
   else
@@ -281,7 +281,7 @@ ContainerWindow::SetActiveChild(Window &child)
 
   active_child = &child;
 
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->SetActiveChild(*this);
 }
 
@@ -298,11 +298,11 @@ ContainerWindow::SetFocus()
 void
 ContainerWindow::ClearFocus()
 {
-  if (active_child != NULL) {
+  if (active_child != nullptr) {
     /* clear the focus recursively, until the focused window is
        found */
     active_child->ClearFocus();
-    active_child = NULL;
+    active_child = nullptr;
   }
 
   Window::ClearFocus();
@@ -312,20 +312,20 @@ Window *
 ContainerWindow::GetFocusedWindow()
 {
   Window *window = PaintWindow::GetFocusedWindow();
-  if (window != NULL)
+  if (window != nullptr)
     return window;
 
-  if (active_child != NULL)
+  if (active_child != nullptr)
     return active_child->GetFocusedWindow();
 
-  return NULL;
+  return nullptr;
 }
 
 WindowReference
 ContainerWindow::GetFocusedWindowReference()
 {
   Window *focus = GetFocusedWindow();
-  return focus != NULL
+  return focus != nullptr
     ? WindowReference(*this, *focus)
     : WindowReference();
 }
@@ -333,32 +333,32 @@ ContainerWindow::GetFocusedWindowReference()
 void
 ContainerWindow::SetChildCapture(Window *window)
 {
-  assert(window != NULL);
+  assert(window != nullptr);
   assert(window->parent == this);
 
   if (capture_child == window)
     return;
 
-  if (capture_child != NULL)
+  if (capture_child != nullptr)
     ClearCapture();
 
   capture_child = window;
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->SetChildCapture(this);
 }
 
 void
 ContainerWindow::ReleaseChildCapture(Window *window)
 {
-  assert(window != NULL);
+  assert(window != nullptr);
   assert(window->parent == this);
 
   if (capture_child != window)
     return;
 
-  capture_child = NULL;
+  capture_child = nullptr;
 
-  if (parent != NULL)
+  if (parent != nullptr)
     parent->ReleaseChildCapture(this);
 }
 
@@ -367,8 +367,8 @@ ContainerWindow::ClearCapture()
 {
   Window::ClearCapture();
 
-  if (capture_child != NULL) {
+  if (capture_child != nullptr) {
     capture_child->ClearCapture();
-    capture_child = NULL;
+    capture_child = nullptr;
   }
 }

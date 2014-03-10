@@ -70,9 +70,9 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
   /* StretchDIBits() is bugged on PPC2002, workaround follows */
   VOID *pvBits;
-  HDC hDC = ::GetDC(NULL);
-  bitmap = CreateDIBSection(hDC, &bi, DIB_RGB_COLORS, &pvBits, NULL, 0);
-  ::ReleaseDC(NULL, hDC);
+  HDC hDC = ::GetDC(nullptr);
+  bitmap = CreateDIBSection(hDC, &bi, DIB_RGB_COLORS, &pvBits, nullptr, 0);
+  ::ReleaseDC(nullptr, hDC);
   buffer = (BGRColor *)pvBits;
 #else
   buffer = new BGRColor[corrected_width * height];

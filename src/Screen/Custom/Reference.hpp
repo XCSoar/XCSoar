@@ -41,7 +41,7 @@ public:
   /**
    * Construct an empty reference, that points to no Window.
    */
-  WindowReference():window(NULL) {}
+  WindowReference():window(nullptr) {}
 
   WindowReference(const ContainerWindow &root, Window &_window)
     :window(&_window) {
@@ -50,8 +50,8 @@ public:
       if (parent == &root)
         return;
 
-      if (parent == NULL || parents.full()) {
-        window = NULL;
+      if (parent == nullptr || parents.full()) {
+        window = nullptr;
         return;
       }
 
@@ -61,27 +61,27 @@ public:
   }
 
   bool Defined() const {
-    return window != NULL;
+    return window != nullptr;
   }
 
   /**
    * Check if the referenced Window still exists, and return it.
-   * Returns NULL if the referenced Window does not exist anymore.
+   * Returns nullptr if the referenced Window does not exist anymore.
    */
   Window *Get(const ContainerWindow &root) const {
-    assert(window != NULL);
+    assert(window != nullptr);
 
     const ContainerWindow *parent = &root;
     for (int i = parents.size() - 1; i >= 0; --i) {
       const ContainerWindow &current = *parents[i];
       if (!parent->HasChild(current))
-        return NULL;
+        return nullptr;
 
       parent = &current;
     }
 
     if (!parent->HasChild(*window))
-      return NULL;
+      return nullptr;
 
     return window;
   }

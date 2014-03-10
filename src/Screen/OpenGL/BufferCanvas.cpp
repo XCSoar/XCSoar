@@ -71,13 +71,13 @@ BufferCanvas::Destroy()
     RemoveSurfaceListener(*this);
 
     delete stencil_buffer;
-    stencil_buffer = NULL;
+    stencil_buffer = nullptr;
 
     delete frame_buffer;
-    frame_buffer = NULL;
+    frame_buffer = nullptr;
 
     delete texture;
-    texture = NULL;
+    texture = nullptr;
   }
 }
 
@@ -91,7 +91,7 @@ BufferCanvas::Resize(PixelSize new_size)
 
   texture->ResizeDiscard(new_size);
 
-  if (stencil_buffer != NULL) {
+  if (stencil_buffer != nullptr) {
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
     stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.cx, size.cy);
@@ -109,7 +109,7 @@ BufferCanvas::Begin(Canvas &other)
 
   Resize(other.GetSize());
 
-  if (frame_buffer != NULL) {
+  if (frame_buffer != nullptr) {
     /* activate the frame buffer */
     frame_buffer->Bind();
     texture->AttachFramebuffer(FBO::COLOR_ATTACHMENT0);
@@ -156,7 +156,7 @@ BufferCanvas::Commit(Canvas &other)
   assert(GetWidth() == other.GetWidth());
   assert(GetHeight() == other.GetHeight());
 
-  if (frame_buffer != NULL) {
+  if (frame_buffer != nullptr) {
     assert(OpenGL::translate.x == 0);
     assert(OpenGL::translate.y == 0);
 
@@ -198,7 +198,7 @@ void
 BufferCanvas::CopyTo(Canvas &other)
 {
   assert(IsDefined());
-  assert(!active || frame_buffer != NULL);
+  assert(!active || frame_buffer != nullptr);
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 

@@ -31,7 +31,7 @@ Copyright_License {
 bool
 SingleWindow::FilterEvent(const Event &_event, Window *allowed) const
 {
-  assert(allowed != NULL);
+  assert(allowed != nullptr);
 
   const SDL_Event &event = _event.event;
 

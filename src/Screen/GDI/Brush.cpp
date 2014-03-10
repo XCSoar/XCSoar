@@ -56,13 +56,13 @@ Brush::Reset()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
-  if (brush != NULL) {
+  if (brush != nullptr) {
 #ifndef NDEBUG
     bool success =
 #endif
       ::DeleteObject(brush);
     assert(success);
 
-    brush = NULL;
+    brush = nullptr;
   }
 }

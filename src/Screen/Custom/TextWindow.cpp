@@ -28,7 +28,7 @@ void
 TextWindow::Create(ContainerWindow &parent, const TCHAR *_text,
                    PixelRect rc, const TextWindowStyle style)
 {
-  if (_text != NULL)
+  if (_text != nullptr)
     text = _text;
   else
     text.clear();

@@ -33,8 +33,8 @@ PaintWindow::register_class(HINSTANCE hInstance)
   wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
-  wc.hIcon = (HICON)NULL;
-  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hIcon = (HICON)nullptr;
+  wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
   wc.lpszMenuName = 0;
   wc.lpszClassName = TEXT("PaintWindow");

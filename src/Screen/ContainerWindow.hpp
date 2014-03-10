@@ -49,7 +49,7 @@ protected:
 
   /**
    * The active child window is used to find the focused window.  If
-   * this attribute is NULL, then the focused window is not an
+   * this attribute is nullptr, then the focused window is not an
    * (indirect) child window of this one.
    */
   Window *active_child;

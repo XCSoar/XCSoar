@@ -129,14 +129,14 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::KEY_DOWN:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     return w->OnKeyDown(event.param);
 
   case Event::KEY_UP:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     return w->OnKeyUp(event.param);

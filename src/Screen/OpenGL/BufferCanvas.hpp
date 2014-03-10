@@ -54,7 +54,7 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
 
 public:
   BufferCanvas()
-    :texture(NULL), frame_buffer(NULL), stencil_buffer(NULL) {}
+    :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr) {}
   BufferCanvas(const Canvas &canvas,
                UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas() {
@@ -62,7 +62,7 @@ public:
   }
 
   bool IsDefined() const {
-    return texture != NULL;
+    return texture != nullptr;
   }
 
   void Create(PixelSize new_size);

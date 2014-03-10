@@ -71,10 +71,10 @@ protected:
 public:
   Canvas()
     :offset(0, 0), size(0, 0),
-     font(NULL), background_mode(OPAQUE) {}
+     font(nullptr), background_mode(OPAQUE) {}
   Canvas(PixelSize _size)
     :offset(0, 0), size(_size),
-     font(NULL), background_mode(OPAQUE) {}
+     font(nullptr), background_mode(OPAQUE) {}
 
   Canvas(const Canvas &other) = delete;
   Canvas &operator=(const Canvas &other) = delete;
@@ -331,7 +331,7 @@ public:
 
   gcc_pure
   unsigned GetFontHeight() const {
-    return font != NULL ? font->GetHeight() : 0;
+    return font != nullptr ? font->GetHeight() : 0;
   }
 
   void DrawText(int x, int y, const TCHAR *text);

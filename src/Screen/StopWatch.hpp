@@ -109,7 +109,7 @@ private:
 #else /* !HAVE_POSIX */
     FILETIME f_kernel_time, f_user_time;
 
-    if (!::GetThreadTimes(::GetCurrentThread(), NULL, NULL,
+    if (!::GetThreadTimes(::GetCurrentThread(), nullptr, nullptr,
                           &f_kernel_time, &f_user_time))
       return 0;
 
@@ -133,9 +133,9 @@ public:
       return;
 
     FlushScreen();
-    markers.append().Set(NULL);
+    markers.append().Set(nullptr);
 
-    for (unsigned i = 0; markers[i + 1].text != NULL; ++i) {
+    for (unsigned i = 0; markers[i + 1].text != nullptr; ++i) {
       const Marker &start = markers[i];
       const Marker &end = markers[i + 1];
 

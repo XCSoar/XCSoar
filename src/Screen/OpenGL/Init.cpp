@@ -74,7 +74,7 @@ SupportsNonPowerOfTwoTexturesGLES()
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 11, 11, 0,
-                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, NULL);
+                 GL_RGB, GL_UNSIGNED_SHORT_5_6_5, nullptr);
     glDeleteTextures(1, &id);
 
     /* see if there is a complaint */
@@ -167,7 +167,7 @@ EnableVBO()
      crashes instantly, see
      http://code.google.com/p/android/issues/detail?id=4273 */
   const char *version = (const char *)glGetString(GL_VERSION);
-  return version != NULL && strstr(version, "ES-CM 1.0") == NULL;
+  return version != nullptr && strstr(version, "ES-CM 1.0") == nullptr;
 }
 #endif
 

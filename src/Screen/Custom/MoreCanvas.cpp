@@ -64,7 +64,7 @@ Canvas::DrawButton(PixelRect rc, bool down)
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
-  assert(text != NULL);
+  assert(text != nullptr);
 
   TCHAR *duplicated = _tcsdup(text);
   duplicated[length] = 0;
@@ -82,12 +82,12 @@ Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 void
 Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
 {
-  assert(text != NULL);
+  assert(text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
 #endif
 
-  if (font == NULL)
+  if (font == nullptr)
     return;
 
   unsigned skip = font->GetLineSpacing();
@@ -124,11 +124,11 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
   if (format & DT_WORDBREAK) {
     for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
       PixelSize sz = CalcTextSize(duplicated + i);
-      TCHAR *prev_p = NULL;
+      TCHAR *prev_p = nullptr;
 
       // remove words from behind till line fits or no more space is found
       while (sz.cx > rc->right - rc->left &&
-             (p = _tcsrchr(duplicated + i, _T(' '))) != NULL) {
+             (p = _tcsrchr(duplicated + i, _T(' '))) != nullptr) {
         if (prev_p)
           *prev_p = _T(' ');
         *p = _T('\0');
@@ -182,7 +182,7 @@ void
 Canvas::DrawText(int x, int y,
                  const TCHAR *_text, size_t length)
 {
-  assert(_text != NULL);
+  assert(_text != nullptr);
 
   TCHAR copy[length + 1];
   std::copy(_text, _text + length, copy);
@@ -199,7 +199,7 @@ void
 Canvas::DrawOpaqueText(int x, int y, const PixelRect &rc,
                        const TCHAR *_text)
 {
-  assert(_text != NULL);
+  assert(_text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(_text));
 #endif

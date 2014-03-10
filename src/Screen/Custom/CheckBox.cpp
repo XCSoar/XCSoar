@@ -72,7 +72,7 @@ CheckBox::OnKeyDown(unsigned key_code)
     checked = !checked;
     Invalidate();
 
-    if (!OnClicked() && id != 0 && parent != NULL)
+    if (!OnClicked() && id != 0 && parent != nullptr)
       parent->OnCommand(id, 0);
     return true;
 
@@ -119,7 +119,7 @@ CheckBox::OnMouseUp(PixelScalar x, PixelScalar y)
   checked = !checked;
   Invalidate();
 
-  if (!OnClicked() && id != 0 && parent != NULL)
+  if (!OnClicked() && id != 0 && parent != nullptr)
     parent->OnCommand(id, 0);
 
   return true;

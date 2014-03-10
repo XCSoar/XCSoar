@@ -38,7 +38,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance)
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
   wc.hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE((unsigned)IDI_XCSOAR));
-  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
   wc.hbrBackground = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
   wc.lpszMenuName = 0;
   wc.lpszClassName = class_name;
@@ -49,7 +49,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance)
 bool
 SingleWindow::FilterEvent(const Event &event, Window *allowed) const
 {
-  assert(allowed != NULL);
+  assert(allowed != nullptr);
 
   if (event.IsUserInput()) {
     if (allowed->IdentifyDescendant(event.msg.hwnd))

@@ -55,13 +55,13 @@ public:
   explicit Brush(const Color _color):color(_color)  {}
 #else
   /** Base Constructor of the Brush class */
-  Brush():brush(NULL) {}
+  Brush():brush(nullptr) {}
 
   /**
    * Constructor (creates a Brush object of the given Color
    * @param c Color of the Brush
    */
-  explicit Brush(const Color c) : brush(NULL) { Set(c); }
+  explicit Brush(const Color c) : brush(nullptr) { Set(c); }
 
   /** Destructor */
   ~Brush() { Reset(); }
@@ -88,12 +88,12 @@ public:
 #endif
 
   /**
-   * Resets the Brush to NULL
+   * Resets the Brush to nullptr
    */
   void Reset();
 
   /**
-   * Returns whether the Brush is defined (!= NULL)
+   * Returns whether the Brush is defined (!= nullptr)
    * @return True if the Brush is defined, False otherwise
    */
   bool
@@ -102,7 +102,7 @@ public:
 #ifndef USE_GDI
     return !color.IsTransparent();
 #else
-    return brush != NULL;
+    return brush != nullptr;
 #endif
   }
 

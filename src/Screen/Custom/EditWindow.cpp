@@ -109,7 +109,7 @@ EditWindow::SetText(const TCHAR *text)
 {
   AssertNoneLocked();
 
-  if (text != NULL)
+  if (text != nullptr)
     value = text;
   else
     value.clear();

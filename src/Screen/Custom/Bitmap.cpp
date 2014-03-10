@@ -34,7 +34,7 @@ Bitmap::Bitmap(ConstBuffer<void> _buffer)
 #ifdef ANDROID
   id(0),
 #endif
-  texture(NULL), interpolation(false)
+  texture(nullptr), interpolation(false)
 #else
   buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
 #endif

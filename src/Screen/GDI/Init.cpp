@@ -42,7 +42,7 @@ ScreenGlobalInit::ScreenGlobalInit()
 
   event_queue = new EventQueue();
 
-  HINSTANCE hInstance = ::GetModuleHandle(NULL);
+  HINSTANCE hInstance = ::GetModuleHandle(nullptr);
   PaintWindow::register_class(hInstance);
   SingleWindow::RegisterClass(hInstance);
 

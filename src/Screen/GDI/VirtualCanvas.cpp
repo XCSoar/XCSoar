@@ -26,7 +26,7 @@ Copyright_License {
 #include <assert.h>
 
 VirtualCanvas::VirtualCanvas(PixelSize new_size)
-  :Canvas(::CreateCompatibleDC(NULL), new_size)
+  :Canvas(::CreateCompatibleDC(nullptr), new_size)
 {
 }
 
@@ -43,7 +43,7 @@ VirtualCanvas::Create(PixelSize new_size)
   assert((PixelScalar)new_size.cy >= 0);
 
   Destroy();
-  Canvas::Create(CreateCompatibleDC(NULL), new_size);
+  Canvas::Create(CreateCompatibleDC(nullptr), new_size);
 }
 
 void
@@ -59,6 +59,6 @@ void VirtualCanvas::Destroy()
 {
   Canvas::Destroy();
 
-  if (dc != NULL)
+  if (dc != nullptr)
     ::DeleteDC(dc);
 }

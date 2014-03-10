@@ -56,7 +56,7 @@ Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
   capital_height = text_util_object->get_capital_height();
   line_spacing = text_util_object->GetLineSpacing();
 
-  return text_util_object != NULL;
+  return text_util_object != nullptr;
 }
 
 void
@@ -65,13 +65,13 @@ Font::Destroy()
   assert(!IsDefined() || IsScreenInitialized());
 
   delete text_util_object;
-  text_util_object = NULL;
+  text_util_object = nullptr;
 }
 
 PixelSize
 Font::TextSize(const TCHAR *text) const
 {
-  if (text_util_object == NULL) {
+  if (text_util_object == nullptr) {
     PixelSize empty = { 0, 0 };
     return empty;
   }

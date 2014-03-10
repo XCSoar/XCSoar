@@ -54,7 +54,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
     return;
   }
 
-  ContainerWindow::Create(NULL, screen->GetRect(), style);
+  ContainerWindow::Create(nullptr, screen->GetRect(), style);
 
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION < 2)
   SetCaption(text);

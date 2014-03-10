@@ -51,7 +51,7 @@ AlphaBlendDeinit();
 static inline bool
 AlphaBlendAvailable()
 {
-  return alpha_blend_pointer != NULL;
+  return alpha_blend_pointer != nullptr;
 }
 
 #define AlphaBlendInvoke alpha_blend_pointer

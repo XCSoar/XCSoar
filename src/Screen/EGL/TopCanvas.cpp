@@ -109,7 +109,7 @@ TopCanvas::Create(PixelSize new_size,
     exit(EXIT_FAILURE);
   }
 
-  if (!eglInitialize(display, NULL, NULL)) {
+  if (!eglInitialize(display, nullptr, nullptr)) {
     fprintf(stderr, "eglInitialize() failed\n");
     exit(EXIT_FAILURE);
   }

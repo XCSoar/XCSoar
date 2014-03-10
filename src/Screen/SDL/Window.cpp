@@ -31,7 +31,7 @@ Window::SendUser(unsigned id)
   event.user.type = EVENT_USER;
   event.user.code = (int)id;
   event.user.data1 = this;
-  event.user.data2 = NULL;
+  event.user.data2 = nullptr;
 
   ::SDL_PushEvent(&event);
 }

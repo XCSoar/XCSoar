@@ -100,7 +100,7 @@ TopWindow::RefreshSize()
 void
 TopWindow::OnResize(PixelSize new_size)
 {
-  if (native_view != NULL) {
+  if (native_view != nullptr) {
     native_view->SetSize(new_size.cx, new_size.cy);
     screen->OnResize(new_size);
   }
@@ -150,7 +150,7 @@ match_pause_and_resume(const Event &event, void *ctx)
 void
 TopWindow::Pause()
 {
-  event_queue->Purge(match_pause_and_resume, NULL);
+  event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::PAUSE);
 
   paused_mutex.Lock();
@@ -162,7 +162,7 @@ TopWindow::Pause()
 void
 TopWindow::Resume()
 {
-  event_queue->Purge(match_pause_and_resume, NULL);
+  event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::RESUME);
 }
 
@@ -181,14 +181,14 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::KEY_DOWN:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     return w->OnKeyDown(event.param);
 
   case Event::KEY_UP:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     return w->OnKeyUp(event.param);

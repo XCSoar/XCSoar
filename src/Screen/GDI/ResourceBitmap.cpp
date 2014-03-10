@@ -39,7 +39,7 @@ Bitmap::Load(ResourceId id, Type type)
   Reset();
 
   bitmap = ResourceLoader::LoadBitmap2(id);
-  return bitmap != NULL;
+  return bitmap != nullptr;
 }
 
 bool
@@ -58,13 +58,13 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
   dest_size.cx = src_size.cx * zoom;
   dest_size.cy = src_size.cy * zoom;
 
-  HDC dc = ::GetDC(NULL), src_dc = ::CreateCompatibleDC(dc),
+  HDC dc = ::GetDC(nullptr), src_dc = ::CreateCompatibleDC(dc),
     dest_dc = ::CreateCompatibleDC(dc);
   HBITMAP dest_bitmap = ::CreateCompatibleBitmap(dc,
                                                  dest_size.cx, dest_size.cy);
-  ::ReleaseDC(NULL, dc);
+  ::ReleaseDC(nullptr, dc);
 
-  if (dest_bitmap == NULL) {
+  if (dest_bitmap == nullptr) {
     ::DeleteDC(src_dc);
     ::DeleteDC(dest_dc);
     return false;

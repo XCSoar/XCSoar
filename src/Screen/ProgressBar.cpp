@@ -53,7 +53,7 @@ ProgressBar::Create(ContainerWindow &parent, PixelRect rc,
 {
   Window::Create(&parent,
 #ifdef USE_GDI
-                 PROGRESS_CLASS, NULL,
+                 PROGRESS_CLASS, nullptr,
 #endif
                  rc, style);
 }

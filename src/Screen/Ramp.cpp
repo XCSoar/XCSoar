@@ -25,7 +25,6 @@ Copyright_License {
 #include "PortableColor.hpp"
 
 #include <assert.h>
-#include <stddef.h>
 
 RGB8Color
 ColorRampLookup(const short h,
@@ -33,7 +32,7 @@ ColorRampLookup(const short h,
                 const int numramp,
                 const unsigned char interp_levels)
 {
-  assert(ramp_colors != NULL);
+  assert(ramp_colors != nullptr);
   assert(numramp >= 2);
 
   unsigned short f, of;

@@ -31,7 +31,7 @@ bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
   HWND h = FindWindow(cls, text);
-  if (h != NULL) {
+  if (h != nullptr) {
 #ifdef _WIN32_WCE
     /* restore and reactivate the last active child window */
     /* On MSDN, this flag is only documented on Windows CE, and not in
@@ -46,7 +46,7 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
     SetForegroundWindow(h);
   }
 
-  return h != NULL;
+  return h != nullptr;
 }
 
 void
@@ -56,7 +56,7 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
   hSavedFocus = nullptr;
 
 #ifdef _WIN32_WCE
-  task_bar = NULL;
+  task_bar = nullptr;
 #endif
 
 #ifdef HAVE_AYGSHELL_DLL
@@ -71,7 +71,7 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
   const RasterPoint position(CW_USEDEFAULT, CW_USEDEFAULT);
 #endif
 
-  Window::Create(NULL, cls, text, PixelRect(position, size), style);
+  Window::Create(nullptr, cls, text, PixelRect(position, size), style);
 }
 
 #ifdef _WIN32_WCE
@@ -81,10 +81,10 @@ TopWindow::Destroy()
 {
   ContainerWindow::Destroy();
 
-  if (task_bar != NULL) {
+  if (task_bar != nullptr) {
     /* restore the task bar */
     ::ShowWindow(task_bar, SW_SHOW);
-    task_bar = NULL;
+    task_bar = nullptr;
   }
 }
 
@@ -94,7 +94,7 @@ void
 TopWindow::CancelMode()
 {
   HWND focus = ::GetFocus();
-  if (focus != NULL)
+  if (focus != nullptr)
     ::SendMessage(focus, WM_CANCELMODE, 0, 0);
 }
 
@@ -116,11 +116,11 @@ TopWindow::Fullscreen()
     /* hack: on Windows CE Core, there is no aygshell.dll; try to
        manually hide the task bar window */
     task_bar = ::FindWindow(_T("HHTaskBar"), _T(""));
-    if (task_bar != NULL) {
+    if (task_bar != nullptr) {
       if (::IsWindowVisible(task_bar))
         ::ShowWindow(task_bar, SW_HIDE);
       else
-        task_bar = NULL;
+        task_bar = nullptr;
     }
   }
 
@@ -140,7 +140,7 @@ TopWindow::Refresh()
 bool
 TopWindow::OnActivate()
 {
-  if (hSavedFocus != NULL && ::IsWindow(hSavedFocus) &&
+  if (hSavedFocus != nullptr && ::IsWindow(hSavedFocus) &&
       ::IsWindowVisible(hSavedFocus) && ::IsWindowEnabled(hSavedFocus)) {
     /* restore the keyboard focus to the control which was previously
        focused */
@@ -156,8 +156,8 @@ TopWindow::OnDeactivate()
 {
   /* remember the currently focused control */
   hSavedFocus = ::GetFocus();
-  if (hSavedFocus != NULL && !IdentifyDescendant(hSavedFocus))
-    hSavedFocus = NULL;
+  if (hSavedFocus != nullptr && !IdentifyDescendant(hSavedFocus))
+    hSavedFocus = nullptr;
 
   return false;
 }

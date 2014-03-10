@@ -35,7 +35,7 @@ protected:
   HBITMAP bitmap;
 
 public:
-  BufferCanvas():bitmap(NULL) {}
+  BufferCanvas():bitmap(nullptr) {}
   BufferCanvas(const Canvas &canvas, PixelSize new_size);
   ~BufferCanvas();
 

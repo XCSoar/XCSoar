@@ -58,7 +58,7 @@ static const char *const all_font_paths[] = {
   "/usr/share/fonts/unifont/unifont.ttf",
   "/usr/share/fonts/corefonts/tahoma.ttf",
 #endif
-  NULL
+  nullptr
 };
 
 static const char *const all_bold_font_paths[] = {
@@ -149,7 +149,7 @@ static const char *const all_monospace_font_paths[] = {
   "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
   "/usr/share/fonts/TTF/freefont/FreeMono.ttf",
 #endif
-  NULL
+  nullptr
 };
 
 gcc_const

@@ -56,11 +56,11 @@ struct TextCacheKey {
     :font(other.font),
      text(other.text), allocated(other.allocated),
      hash(other.hash) {
-    other.allocated = NULL;
+    other.allocated = nullptr;
   }
 
   TextCacheKey(const Font &_font, const char *_text)
-    :font(&_font), text(_text), allocated(NULL) {}
+    :font(&_font), text(_text), allocated(nullptr) {}
 
   ~TextCacheKey() {
     free(allocated);
@@ -71,7 +71,7 @@ struct TextCacheKey {
    * this key into the #Cache.
    */
   void Allocate() {
-    assert(allocated == NULL);
+    assert(allocated == nullptr);
 
     text = allocated = strdup(text);
   }
@@ -127,7 +127,7 @@ struct RenderedText {
 #ifdef ENABLE_OPENGL
   RenderedText(RenderedText &&other)
     :texture(other.texture) {
-    other.texture = NULL;
+    other.texture = nullptr;
   }
 
 #ifdef USE_FREETYPE
@@ -203,7 +203,7 @@ TextCache::GetSize(const Font &font, const char *text)
 
   TextCacheKey key(font, text);
   const PixelSize *cached = size_cache.Get(key);
-  if (cached != NULL)
+  if (cached != nullptr)
     return *cached;
 
   PixelSize size = font.TextSize(text);
@@ -227,7 +227,7 @@ TextCache::LookupSize(const Font &font, const char *text)
 
   TextCacheKey key(font, text);
   const RenderedText *cached = text_cache.Get(key);
-  if (cached == NULL)
+  if (cached == nullptr)
     return size;
 
 #ifdef ENABLE_OPENGL
@@ -244,7 +244,7 @@ TextCache::Get(const Font &font, const char *text)
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 #endif
   assert(font.IsDefined());
-  assert(text != NULL);
+  assert(text != nullptr);
 
   if (StringIsEmpty(text)) {
 #ifdef ENABLE_OPENGL
@@ -263,7 +263,7 @@ TextCache::Get(const Font &font, const char *text)
 #endif
 
   const RenderedText *cached = text_cache.Get(key);
-  if (cached != NULL)
+  if (cached != nullptr)
     return *cached;
 
   /* render the text into a OpenGL texture */
@@ -297,7 +297,7 @@ TextCache::Get(const Font &font, const char *text)
   PixelSize size, allocated_size;
   int texture_id = font.TextTextureGL(text, size, allocated_size);
   if (texture_id == 0)
-    return NULL;
+    return nullptr;
 
   RenderedText rt(texture_id, size.cx, size.cy,
                   allocated_size.cx, allocated_size.cy);

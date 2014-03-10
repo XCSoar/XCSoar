@@ -36,19 +36,19 @@ AlphaBlend_t alpha_blend_pointer;
 void
 AlphaBlendInit()
 {
-  assert(coredll == NULL);
+  assert(coredll == nullptr);
 
   coredll = new DynamicLibrary(_T("coredll"));
   if (!coredll->IsDefined()) {
     delete coredll;
-    coredll = NULL;
+    coredll = nullptr;
     return;
   }
 
   alpha_blend_pointer = (AlphaBlend_t)coredll->Lookup(_T("AlphaBlend"));
-  if (alpha_blend_pointer == NULL) {
+  if (alpha_blend_pointer == nullptr) {
     delete coredll;
-    coredll = NULL;
+    coredll = nullptr;
   }
 }
 

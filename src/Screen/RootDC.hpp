@@ -34,10 +34,10 @@ class RootDC {
 
 public:
   RootDC()
-    :dc(::GetDC(NULL)) {}
+    :dc(::GetDC(nullptr)) {}
 
   ~RootDC() {
-    ::ReleaseDC(NULL, dc);
+    ::ReleaseDC(nullptr, dc);
   }
 
   operator HDC() {

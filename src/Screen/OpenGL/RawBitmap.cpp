@@ -66,7 +66,7 @@ RawBitmap::~RawBitmap()
 void
 RawBitmap::SurfaceCreated()
 {
-  if (texture == NULL) {
+  if (texture == nullptr) {
     texture = new GLTexture(corrected_width, height);
     texture->EnableInterpolation();
   }
@@ -76,7 +76,7 @@ void
 RawBitmap::SurfaceDestroyed()
 {
   delete texture;
-  texture = NULL;
+  texture = nullptr;
 
   dirty = true;
 }

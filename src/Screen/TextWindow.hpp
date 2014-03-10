@@ -80,7 +80,7 @@ public:
     AssertThread();
 
 #ifndef USE_GDI
-    if (_text != NULL)
+    if (_text != nullptr)
       text = _text;
     else
       text.clear();

@@ -37,7 +37,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
   assert(IsDefined());
 
 #ifndef NOLINETO
-  ::MoveToEx(dc, ax, ay, NULL);
+  ::MoveToEx(dc, ax, ay, nullptr);
   ::LineTo(dc, bx, by);
 #else
   RasterPoint p[2] = {{ax, ay}, {bx, by}};
@@ -51,7 +51,7 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
   assert(IsDefined());
 
 #ifndef NOLINETO
-  ::MoveToEx(dc, ax, ay, NULL);
+  ::MoveToEx(dc, ax, ay, nullptr);
   ::LineTo(dc, bx, by);
   ::LineTo(dc, cx, cy);
 #else
@@ -129,7 +129,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, x, y, 0, NULL, text, _tcslen(text), NULL);
+  ::ExtTextOut(dc, x, y, 0, nullptr, text, _tcslen(text), nullptr);
 }
 
 void
@@ -138,7 +138,7 @@ Canvas::DrawText(int x, int y,
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, x, y, 0, NULL, text, length, NULL);
+  ::ExtTextOut(dc, x, y, 0, nullptr, text, length, nullptr);
 }
 
 void
@@ -147,7 +147,7 @@ Canvas::DrawOpaqueText(int x, int y, const PixelRect &rc,
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), NULL);
+  ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), nullptr);
 }
 
 void
@@ -156,7 +156,7 @@ Canvas::DrawClippedText(int x, int y, const PixelRect &rc,
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), NULL);
+  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
 void
@@ -177,7 +177,7 @@ Canvas::Copy(int dest_x, int dest_y,
              DWORD dwRop)
 {
   assert(IsDefined());
-  assert(src != NULL);
+  assert(src != nullptr);
 
   HDC virtual_dc = GetCompatibleDC();
   HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);
@@ -258,7 +258,7 @@ Canvas::Stretch(int dest_x, int dest_y,
                 DWORD dwRop)
 {
   assert(IsDefined());
-  assert(src != NULL);
+  assert(src != nullptr);
 
   HDC virtual_dc = GetCompatibleDC();
   HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);

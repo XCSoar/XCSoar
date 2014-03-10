@@ -46,13 +46,13 @@ Pen::Reset()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
-  if (pen != NULL) {
+  if (pen != nullptr) {
 #ifndef NDEBUG
     bool success =
 #endif
       ::DeleteObject(pen);
     assert(success);
 
-    pen = NULL;
+    pen = nullptr;
   }
 }

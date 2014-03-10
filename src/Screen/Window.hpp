@@ -220,12 +220,12 @@ private:
 public:
 #ifndef USE_GDI
   Window()
-    :parent(NULL), size(0, 0),
-     font(NULL),
+    :parent(nullptr), size(0, 0),
+     font(nullptr),
      visible(true), focused(false), capture(false), has_border(false),
      double_clicks(false) {}
 #else
-  Window():hWnd(NULL), prev_wndproc(NULL),
+  Window():hWnd(nullptr), prev_wndproc(nullptr),
            double_clicks(false), custom_painting(false) {}
 #endif
   virtual ~Window();
@@ -307,7 +307,7 @@ public:
 #ifndef USE_GDI
     return size.cx > 0;
 #else
-    return hWnd != NULL;
+    return hWnd != nullptr;
 #endif
   }
 
@@ -400,7 +400,7 @@ public:
     position = { left, top };
     Invalidate();
 #else
-    ::SetWindowPos(hWnd, NULL, left, top, 0, 0,
+    ::SetWindowPos(hWnd, nullptr, left, top, 0, 0,
                    SWP_NOSIZE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
@@ -415,7 +415,7 @@ public:
     Move(left, top);
     Resize(width, height);
 #else /* USE_GDI */
-    ::SetWindowPos(hWnd, NULL, left, top, width, height,
+    ::SetWindowPos(hWnd, nullptr, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
@@ -448,7 +448,7 @@ public:
 #ifndef USE_GDI
     Move(left, top, width, height);
 #else /* USE_GDI */
-    ::SetWindowPos(hWnd, NULL, left, top, width, height,
+    ::SetWindowPos(hWnd, nullptr, left, top, width, height,
                    SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
@@ -467,7 +467,7 @@ public:
     AssertThread();
 
 #ifdef USE_GDI
-    ::SetWindowPos(hWnd, NULL,
+    ::SetWindowPos(hWnd, nullptr,
                    rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
                    SWP_SHOWWINDOW | SWP_NOACTIVATE |
                    SWP_NOZORDER | SWP_NOOWNERZORDER);
@@ -490,7 +490,7 @@ public:
     Invalidate();
     OnResize(size);
 #else /* USE_GDI */
-    ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
+    ::SetWindowPos(hWnd, nullptr, 0, 0, width, height,
                    SWP_NOMOVE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
@@ -553,7 +553,7 @@ public:
 
   const Font &GetFont() const {
     AssertThread();
-    assert(font != NULL);
+    assert(font != nullptr);
 
     return *font;
   }
@@ -602,7 +602,7 @@ public:
 #ifndef USE_GDI
     Hide();
 #else
-    ::SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
+    ::SetWindowPos(hWnd, nullptr, 0, 0, 0, 0,
                    SWP_HIDEWINDOW |
                    SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
                    SWP_NOMOVE | SWP_NOSIZE |
@@ -774,7 +774,7 @@ public:
     PixelRect rc = GetScreenPosition();
 
     HWND parent = ::GetParent(hWnd);
-    if (parent != NULL) {
+    if (parent != nullptr) {
       POINT pt;
 
       pt.x = rc.left;
@@ -849,7 +849,7 @@ public:
     assert(IsDefined());
 
     HWND hParent = ::GetParent(hWnd);
-    assert(hParent != NULL);
+    assert(hParent != nullptr);
 
     PixelRect rc;
     ::GetClientRect(hParent, &rc);
@@ -880,7 +880,8 @@ public:
   void Scroll(PixelScalar dx, PixelScalar dy, const PixelRect &rc) {
     assert(IsDefined());
 
-    ::ScrollWindowEx(hWnd, dx, dy, &rc, NULL, NULL, NULL, SW_INVALIDATE);
+    ::ScrollWindowEx(hWnd, dx, dy, &rc, nullptr, nullptr, nullptr,
+                     SW_INVALIDATE);
   }
 
   /**
@@ -893,7 +894,7 @@ public:
   }
 
   /**
-   * Converts a #HWND into a #Window pointer.  Returns NULL if the
+   * Converts a #HWND into a #Window pointer.  Returns nullptr if the
    * HWND is not a Window peer.  This only works for windows which
    * have called InstallWndProc().
    */
@@ -909,7 +910,7 @@ public:
       || ((DWORD)wndproc & 0xffffff) == (DWORD)WndProc
 #endif
       ? GetUnchecked(hWnd)
-      : NULL;
+      : nullptr;
   }
 
   gcc_pure

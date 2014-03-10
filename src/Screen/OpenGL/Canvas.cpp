@@ -305,7 +305,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     /* draw a "small" circle with VBO */
 
     OpenGL::small_circle_buffer->Bind();
-    glVertexPointer(2, GL_SHORT, 0, NULL);
+    glVertexPointer(2, GL_SHORT, 0, nullptr);
 
     glPushMatrix();
 
@@ -335,7 +335,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     /* draw a "big" circle with VBO */
 
     OpenGL::circle_buffer->Bind();
-    glVertexPointer(2, GL_SHORT, 0, NULL);
+    glVertexPointer(2, GL_SHORT, 0, nullptr);
 
     glPushMatrix();
 
@@ -508,14 +508,14 @@ Canvas::DrawFocusRectangle(PixelRect rc)
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text) const
 {
-  assert(text != NULL);
+  assert(text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
 #endif
 
   PixelSize size = { 0, 0 };
 
-  if (font == NULL)
+  if (font == nullptr)
     return size;
 
   /* see if the TextCache can handle this request */
@@ -559,18 +559,18 @@ PrepareColoredAlphaTexture(Color color)
 void
 Canvas::DrawText(int x, int y, const TCHAR *text)
 {
-  assert(text != NULL);
+  assert(text != nullptr);
   assert(ValidateUTF8(text));
 
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
 #endif
 
-  if (font == NULL)
+  if (font == nullptr)
     return;
 
   GLTexture *texture = TextCache::Get(*font, text);
-  if (texture == NULL)
+  if (texture == nullptr)
     return;
 
   if (background_mode == OPAQUE)
@@ -590,18 +590,18 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
 void
 Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
 {
-  assert(text != NULL);
+  assert(text != nullptr);
   assert(ValidateUTF8(text));
 
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
 #endif
 
-  if (font == NULL)
+  if (font == nullptr)
     return;
 
   GLTexture *texture = TextCache::Get(*font, text);
-  if (texture == NULL)
+  if (texture == nullptr)
     return;
 
   PrepareColoredAlphaTexture(text_color);
@@ -618,18 +618,18 @@ Canvas::DrawClippedText(int x, int y,
                         unsigned width, unsigned height,
                         const TCHAR *text)
 {
-  assert(text != NULL);
+  assert(text != nullptr);
   assert(ValidateUTF8(text));
 
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
 #endif
 
-  if (font == NULL)
+  if (font == nullptr)
     return;
 
   GLTexture *texture = TextCache::Get(*font, text);
-  if (texture == NULL)
+  if (texture == nullptr)
     return;
 
   if (texture->GetHeight() < height)

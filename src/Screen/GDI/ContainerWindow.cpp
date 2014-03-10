@@ -30,7 +30,7 @@ bool
 ContainerWindow::FocusFirstControl()
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, nullptr, false);
-  if (hControl == NULL)
+  if (hControl == nullptr)
     return false;
 
   ::SetFocus(hControl);
@@ -41,7 +41,7 @@ bool
 ContainerWindow::FocusNextControl()
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
-  if (hControl == NULL)
+  if (hControl == nullptr)
     return false;
 
   if (IsAltair()) { // detect and block wraparound 
@@ -66,7 +66,7 @@ ContainerWindow::FocusPreviousControl()
   }
 
   HWND hControl = ::GetNextDlgTabItem(hWnd, hFocus, true);
-  if (hControl == NULL)
+  if (hControl == nullptr)
     return false;
 
   ::SetFocus(hControl);
@@ -76,7 +76,7 @@ ContainerWindow::FocusPreviousControl()
 const Brush *
 ContainerWindow::OnChildColor(Window &window, Canvas &canvas)
 {
-  return NULL;
+  return nullptr;
 }
 
 LRESULT
@@ -88,12 +88,12 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
   case WM_CTLCOLORBTN:
     {
       Window *window = Window::GetChecked((HWND)lParam);
-      if (window == NULL)
+      if (window == nullptr)
         break;
 
       Canvas canvas((HDC)wParam, {1, 1});
       const Brush *brush = OnChildColor(*window, canvas);
-      if (brush == NULL)
+      if (brush == nullptr)
         break;
 
       return (LRESULT)brush->Native();
@@ -106,7 +106,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
       const DRAWITEMSTRUCT *di = (const DRAWITEMSTRUCT *)lParam;
 
       Window *window = Window::GetChecked(di->hwndItem);
-      if (window == NULL)
+      if (window == nullptr)
         break;
 
       Canvas canvas(di->hDC, PixelRect(di->rcItem).GetSize());
@@ -118,7 +118,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
     if (wParam == MAKEWPARAM(BaseButtonWindow::COMMAND_BOUNCE_ID, BN_CLICKED)) {
       /* forward this message to ButtonWindow::OnClicked() */
       BaseButtonWindow *window = (BaseButtonWindow *)Window::GetChecked((HWND)lParam);
-      if (window != NULL && window->OnClicked())
+      if (window != nullptr && window->OnClicked())
         return true;
     }
     break;

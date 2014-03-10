@@ -89,7 +89,7 @@ MakeSDLFlags(bool full_screen, bool resizable)
   flags |= SDL_ASYNCBLIT;
 
   const SDL_VideoInfo *info = SDL_GetVideoInfo();
-  assert(info != NULL);
+  assert(info != nullptr);
 
   if (info->hw_available)
     flags |= SDL_HWSURFACE;
@@ -166,7 +166,7 @@ TopCanvas::Create(PixelSize new_size,
 
 #else
   SDL_Surface *s = ::SDL_SetVideoMode(new_size.cx, new_size.cy, 0, flags);
-  if (s == NULL) {
+  if (s == nullptr) {
     fprintf(stderr, "SDL_SetVideoMode(%u, %u, 0, %#x) has failed: %s\n",
             new_size.cx, new_size.cy, (unsigned)flags,
             ::SDL_GetError());
@@ -226,7 +226,7 @@ TopCanvas::OnResize(PixelSize new_size)
 #else
 #if SDL_MAJOR_VERSION >= 2
   int texture_width, texture_height;
-  SDL_QueryTexture(texture, NULL, NULL, &texture_width, &texture_height);
+  SDL_QueryTexture(texture, nullptr, nullptr, &texture_width, &texture_height);
   if (new_size.cx == texture_width && new_size.cy == texture_height)
     return;
 #else
@@ -253,7 +253,7 @@ TopCanvas::OnResize(PixelSize new_size)
   const Uint32 flags = old->flags;
 
   SDL_Surface *s = ::SDL_SetVideoMode(new_size.cx, new_size.cy, 0, flags);
-  if (s == NULL)
+  if (s == nullptr)
     return;
 #endif
 
@@ -350,8 +350,8 @@ CopyFromGreyscale(
 #if SDL_MAJOR_VERSION >= 2
   uint8_t *dest_pixels;
   int pitch_as_int, dest_with, dest_height;
-  SDL_QueryTexture(dest, NULL, NULL, &dest_with, &dest_height);
-  if (SDL_LockTexture(dest, NULL,
+  SDL_QueryTexture(dest, nullptr, nullptr, &dest_with, &dest_height);
+  if (SDL_LockTexture(dest, nullptr,
                       reinterpret_cast<void**>(&dest_pixels),
                       &pitch_as_int) != 0)
     return;
@@ -433,7 +433,7 @@ TopCanvas::Lock()
   WritableImageBuffer<SDLPixelTraits> buffer;
   void* pixels;
   int pitch, width, height;
-  SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+  SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
   if (SDL_LockTexture(texture, nullptr, &pixels, &pitch) != 0)
     return Canvas();
   buffer.data = (SDLPixelTraits::pointer_type)pixels;
@@ -494,7 +494,7 @@ TopCanvas::Flip()
 
 #if SDL_MAJOR_VERSION >= 2
   ::SDL_RenderClear(renderer);
-  ::SDL_RenderCopy(renderer, texture, NULL, NULL);
+  ::SDL_RenderCopy(renderer, texture, nullptr, nullptr);
   ::SDL_RenderPresent(renderer);
 #else
   ::SDL_Flip(surface);

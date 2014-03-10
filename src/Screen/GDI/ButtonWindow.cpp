@@ -62,7 +62,7 @@ ButtonWindow::SetText(const TCHAR *_text)
   AssertNoneLocked();
   AssertThread();
 
-  if (GetCustomPainting() || _tcschr(_text, _T('&')) == NULL) {
+  if (GetCustomPainting() || _tcschr(_text, _T('&')) == nullptr) {
     ::SetWindowText(hWnd, _text);
     return;
   }

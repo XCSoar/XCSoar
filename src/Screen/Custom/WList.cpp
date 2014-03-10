@@ -107,7 +107,7 @@ WindowList::FindAt(PixelScalar x, PixelScalar y)
     if (w->IsEnabled() && IsAt(*w, x, y))
       return w;
 
-  return NULL;
+  return nullptr;
 }
 
 gcc_pure
@@ -126,12 +126,12 @@ WindowList::FindControl(std::list<Window*>::const_iterator i,
     if (child.IsControlParent()) {
       ContainerWindow &container = (ContainerWindow &)child;
       Window *control = container.children.FindFirstControl();
-      if (control != NULL)
+      if (control != nullptr)
         return control;
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 gcc_pure
@@ -150,12 +150,12 @@ WindowList::FindControl(std::list<Window*>::const_reverse_iterator i,
     if (child.IsControlParent()) {
       ContainerWindow &container = (ContainerWindow &)child;
       Window *control = container.children.FindLastControl();
-      if (control != NULL)
+      if (control != nullptr)
         return control;
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 Window *
@@ -173,7 +173,7 @@ WindowList::FindLastControl()
 Window *
 WindowList::FindNextChildControl(Window *reference)
 {
-  assert(reference != NULL);
+  assert(reference != nullptr);
   assert(Contains(*reference));
 
   std::list<Window*>::const_iterator i =
@@ -186,7 +186,7 @@ WindowList::FindNextChildControl(Window *reference)
 Window *
 WindowList::FindPreviousChildControl(Window *reference)
 {
-  assert(reference != NULL);
+  assert(reference != nullptr);
   assert(Contains(*reference));
 
   std::list<Window*>::const_reverse_iterator i =

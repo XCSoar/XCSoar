@@ -63,7 +63,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_KEYDOWN:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     if (!w->IsEnabled())
@@ -80,7 +80,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 #if SDL_MAJOR_VERSION >= 2
   case SDL_TEXTINPUT:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     if (!w->IsEnabled())
@@ -100,7 +100,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_KEYUP:
     w = GetFocusedWindow();
-    if (w == NULL)
+    if (w == nullptr)
       w = this;
 
     if (!w->IsEnabled())

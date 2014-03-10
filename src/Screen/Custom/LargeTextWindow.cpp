@@ -51,7 +51,7 @@ LargeTextWindow::GetRowCount() const
 
   const TCHAR *str = value.c_str();
   unsigned row_count = 1;
-  while ((str = _tcschr(str, _T('\n'))) != NULL) {
+  while ((str = _tcschr(str, _T('\n'))) != nullptr) {
     str++;
     row_count++;
   }
@@ -158,7 +158,7 @@ LargeTextWindow::SetText(const TCHAR *text)
 {
   AssertNoneLocked();
 
-  if (text != NULL)
+  if (text != nullptr)
     value = text;
   else
     value.clear();

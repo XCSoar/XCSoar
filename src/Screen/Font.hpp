@@ -66,9 +66,9 @@ public:
 #ifdef USE_FREETYPE
   Font():face(nullptr) {}
 #elif defined(ANDROID)
-  Font():text_util_object(NULL) {}
+  Font():text_util_object(nullptr) {}
 #else
-  Font():font(NULL) {}
+  Font():font(nullptr) {}
 #endif
 
   ~Font() { Destroy(); }
@@ -87,9 +87,9 @@ public:
 #ifdef USE_FREETYPE
     return face != nullptr;
 #elif defined(ANDROID)
-    return text_util_object != NULL;
+    return text_util_object != nullptr;
     #else
-    return font != NULL;
+    return font != nullptr;
     #endif
   }
 

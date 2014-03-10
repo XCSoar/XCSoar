@@ -58,21 +58,21 @@ void
 BufferCanvas::Destroy()
 {
   VirtualCanvas::Destroy();
-  if (bitmap != NULL) {
+  if (bitmap != nullptr) {
 #ifndef NDEBUG
     bool success =
 #endif
       ::DeleteObject(bitmap);
     assert(success);
 
-    bitmap = NULL;
+    bitmap = nullptr;
   }
 }
 
 void
 BufferCanvas::Resize(PixelSize new_size)
 {
-  assert(dc != NULL);
+  assert(dc != nullptr);
 
   if (new_size == size)
     return;

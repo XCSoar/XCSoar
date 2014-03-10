@@ -27,7 +27,7 @@ Copyright_License {
 void
 WindowTimer::Schedule(unsigned ms)
 {
-  id = ::SetTimer(window, (UINT_PTR)this, ms, NULL);
+  id = ::SetTimer(window, (UINT_PTR)this, ms, nullptr);
 }
 
 void

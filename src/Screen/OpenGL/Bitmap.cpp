@@ -64,7 +64,7 @@ Bitmap::Reset()
   assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
 
   delete texture;
-  texture = NULL;
+  texture = nullptr;
 }
 
 #endif /* !ANDROID */

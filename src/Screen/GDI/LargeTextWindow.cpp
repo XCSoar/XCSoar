@@ -31,7 +31,7 @@ void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
                         const LargeTextWindowStyle style)
 {
-  Window::Create(&parent, WC_EDIT, NULL, rc, style);
+  Window::Create(&parent, WC_EDIT, nullptr, rc, style);
 }
 
 void

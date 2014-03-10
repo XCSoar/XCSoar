@@ -43,7 +43,7 @@ bool
 EGLInit()
 {
   void *egl = dlopen("libEGL.so", RTLD_NOW);
-  if (egl == NULL)
+  if (egl == nullptr)
     return false;
 
   _eglGetDisplay = (T_eglGetDisplay)dlsym(egl, "eglGetDisplay");
@@ -51,8 +51,8 @@ EGLInit()
     dlsym(egl, "eglGetCurrentSurface");
   _eglSwapBuffers = (T_eglSwapBuffers)dlsym(egl, "eglSwapBuffers");
 
-  if (_eglGetDisplay == NULL || _eglGetCurrentSurface == NULL ||
-      _eglSwapBuffers == NULL)
+  if (_eglGetDisplay == nullptr || _eglGetCurrentSurface == nullptr ||
+      _eglSwapBuffers == nullptr)
     return false;
 
   display = _eglGetDisplay(EGL_DEFAULT_DISPLAY);
@@ -66,7 +66,7 @@ EGLInit()
 void
 EGLSwapBuffers()
 {
-  assert(_eglSwapBuffers != NULL);
+  assert(_eglSwapBuffers != nullptr);
 
   _eglSwapBuffers(display, surface);
 }

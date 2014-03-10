@@ -91,7 +91,7 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
 
   png_read_update_info(png_ptr, info_ptr);
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
-               &color_type, &interlace_type, NULL, NULL);
+               &color_type, &interlace_type, nullptr, nullptr);
 
   /* check the color type */
 
