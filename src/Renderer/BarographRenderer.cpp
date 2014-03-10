@@ -164,7 +164,6 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromData(fs.altitude);
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(fixed(0));
-  chart.ScaleXFromValue(fs.altitude.x_min + fixed(1)); // in case no data
   chart.ScaleXFromValue(fs.altitude.x_min);
 
   if (_task != NULL) {
@@ -210,7 +209,6 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromData(fs.task_speed);
   chart.ScaleYFromData(fs.task_speed);
   chart.ScaleYFromValue(fixed(0));
-  chart.ScaleXFromValue(fs.task_speed.x_min + fixed(1)); // in case no data
   chart.ScaleXFromValue(fs.task_speed.x_min);
 
   DrawLegs(chart, task, nmea_info, derived_info, true);
