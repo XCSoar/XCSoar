@@ -537,8 +537,6 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
     }
   }
 
-  Py_DECREF(py_list);
-
   // prepare output
   PyObject *py_result = PyString_FromString(encoded.asString()->c_str());
 
