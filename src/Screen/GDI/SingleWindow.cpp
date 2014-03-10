@@ -39,7 +39,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance)
   wc.cbWndExtra = 0;
   wc.hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE((unsigned)IDI_XCSOAR));
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hbrBackground = nullptr;
+  wc.hbrBackground = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
   wc.lpszMenuName = 0;
   wc.lpszClassName = class_name;
 
