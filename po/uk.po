@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-03-07 16:09+0000\n"
+"PO-Revision-Date: 2014-03-11 14:09+0000\n"
 "Last-Translator: Iurii <yprymak@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-09 20:28+0000\n"
+"X-Launchpad-Export-Date: 2014-03-11 22:21+0000\n"
 "X-Generator: Launchpad (build 16948)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -60,12 +60,12 @@ msgstr "Гонка"
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "ААТ"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Модифіковане завдання в зоні (МАТ)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -491,7 +491,7 @@ msgstr "Невідомо"
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr ""
+msgstr "Пауза програмного забезпечення"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
@@ -1018,7 +1018,7 @@ msgstr "Підйом у терміку, останні 30 сек"
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "TC 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
@@ -1058,7 +1058,7 @@ msgstr "глісада в даний момент"
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "GR Inst"
-msgstr ""
+msgstr "GR митт"
 
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
@@ -1127,7 +1127,7 @@ msgstr "Середня швидкість набору висоти в оста�
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "TL сер"
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
@@ -1146,7 +1146,7 @@ msgstr "Виграш висоти в останньому терміку"
 #: src/InfoBoxes/Content/Factory.cpp:247
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "TL  виграш"
 
 #: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
@@ -1161,7 +1161,7 @@ msgstr "Час в останньому терміку"
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "TL  час"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -1198,7 +1198,7 @@ msgstr "Відстань до наступн."
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Task.cpp:201
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "WP Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
@@ -1310,7 +1310,7 @@ msgstr "Середня швидкість для завдання"
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "V Task Avg"
-msgstr ""
+msgstr "V ЗвдСер"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -1329,7 +1329,7 @@ msgstr "Відстань до фінішу"
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "Відст Фін"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -1363,7 +1363,7 @@ msgstr "Середня швидкість набору висоти в терм�
 #: src/InfoBoxes/Content/Factory.cpp:380
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "TC сер"
 
 #: src/InfoBoxes/Content/Factory.cpp:381
 #, no-c-format
@@ -1382,7 +1382,7 @@ msgstr "Виграш висоти"
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "TC вигр"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
@@ -1510,12 +1510,12 @@ msgstr "ААТ: мінімальна можлива відстань для ре
 #: src/InfoBoxes/Content/Factory.cpp:471
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr ""
+msgstr "ААТ швид. макс. відст."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "AAT Vmax"
-msgstr ""
+msgstr "AAT Vmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
@@ -1527,12 +1527,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr ""
+msgstr "ААТ швид. мін. відст."
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
 msgid "AAT Vmin"
-msgstr ""
+msgstr "AAT Vmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:483
 #, no-c-format
@@ -1549,7 +1549,7 @@ msgstr "Інструментальна повітряна швидкість IAS
 #: src/InfoBoxes/Content/Factory.cpp:492
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "V IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
@@ -1584,7 +1584,7 @@ msgstr "Швидкість MacCready"
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "V MC"
-msgstr ""
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
@@ -1605,7 +1605,7 @@ msgstr "Процент часу набору висоти"
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "% набору"
 
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
@@ -1653,12 +1653,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:552
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Наст GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:553
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "ППМ GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -1704,7 +1704,7 @@ msgstr "Час до завершення завдання"
 #: src/InfoBoxes/Content/Factory.cpp:584
 #, no-c-format
 msgid "Fin ETE"
-msgstr ""
+msgstr "Copy text \t Fin ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:585
 #, no-c-format
@@ -1723,7 +1723,7 @@ msgstr "Час до наступного ППМ"
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
 msgid "WP ETE"
-msgstr ""
+msgstr "ППМ ЕТЕ"
 
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
@@ -1742,7 +1742,7 @@ msgstr "Швидкість при польоті \"дельфіном\""
 #: src/InfoBoxes/Content/Factory.cpp:605
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "Vopt"
 
 #: src/InfoBoxes/Content/Factory.cpp:606
 #, no-c-format
@@ -1781,6 +1781,11 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"Поточна вертикальна швидкість повітряної маси, дорівнює показанням "
+"варіометра з урахуванням розрахункової швидкості зниження планера. Найкраще "
+"використовувати при підключених датчиках повітряної швидкості, акселерометрі "
+"і варіометрі, в іншому випадку розрахунки базуватимуться на даних GPS і "
+"розрахунку вітру."
 
 #: src/InfoBoxes/Content/Factory.cpp:624
 #, no-c-format
@@ -1790,7 +1795,7 @@ msgstr "Час завершення завдання"
 #: src/InfoBoxes/Content/Factory.cpp:625
 #, no-c-format
 msgid "Fin ETA"
-msgstr ""
+msgstr "Fin ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
@@ -1809,7 +1814,7 @@ msgstr "Час прибуття на наступний ППМ"
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
 msgid "WP ETA"
-msgstr ""
+msgstr "ППМ ЕТА"
 
 #: src/InfoBoxes/Content/Factory.cpp:636
 #, no-c-format
@@ -1823,12 +1828,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:645
 #, no-c-format
 msgid "Bearing difference"
-msgstr ""
+msgstr "Різниця курсів"
 
 #: src/InfoBoxes/Content/Factory.cpp:646
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "Brng D"
 
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
@@ -1858,7 +1863,7 @@ msgstr "Температура повітря за бортом"
 #: src/InfoBoxes/Content/Factory.cpp:656
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:657
 #, no-c-format
@@ -1877,7 +1882,7 @@ msgstr "Відносна вологість"
 #: src/InfoBoxes/Content/Factory.cpp:666
 #, no-c-format
 msgid "Rel Hum"
-msgstr ""
+msgstr "Відн Волог"
 
 #: src/InfoBoxes/Content/Factory.cpp:667
 #, no-c-format
@@ -1896,7 +1901,7 @@ msgstr "Прогноз температури"
 #: src/InfoBoxes/Content/Factory.cpp:676
 #, no-c-format
 msgid "Max Temp"
-msgstr ""
+msgstr "Макс Темп"
 
 #: src/InfoBoxes/Content/Factory.cpp:677
 #, no-c-format
@@ -1915,44 +1920,44 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:685
 #, no-c-format
 msgid "AAT distance around target"
-msgstr ""
+msgstr "Відстань ААТ навколо цілі"
 
 #: src/InfoBoxes/Content/Factory.cpp:686
 #, no-c-format
 msgid "AAT Dtgt"
-msgstr ""
+msgstr "AAT Dtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:687
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr ""
+msgstr "Відстань навколо цілей для залишку завдання ААТ."
 
 #: src/InfoBoxes/Content/Factory.cpp:695
 #, no-c-format
 msgid "AAT speed around target"
-msgstr ""
+msgstr "ААТ швидкість навколо цілі"
 
 #: src/InfoBoxes/Content/Factory.cpp:696
 #, no-c-format
 msgid "AAT Vtgt"
-msgstr ""
+msgstr "AAT Vtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:697
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
-msgstr ""
+msgstr "Середня швидкість, досяжна  за залишок цілей за мінімальний час ААТ."
 
 #: src/InfoBoxes/Content/Factory.cpp:705
 #, no-c-format
 msgid "L/D vario"
-msgstr ""
+msgstr "L/D варіо"
 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "L/D Vario"
-msgstr ""
+msgstr "L/D Варіо"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
@@ -1976,7 +1981,7 @@ msgstr "Істинна повітряна швидкість TAS"
 #: src/InfoBoxes/Content/Factory.cpp:716
 #, no-c-format
 msgid "V TAS"
-msgstr ""
+msgstr "V TAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:717
 #, no-c-format
@@ -2059,7 +2064,7 @@ msgstr "Поточна швидкість завдання"
 #: src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
 msgid "V Task Inst"
-msgstr ""
+msgstr "V Завд.Митт"
 
 #: src/InfoBoxes/Content/Factory.cpp:767
 #, no-c-format
@@ -2078,7 +2083,7 @@ msgstr "Відстань додому"
 #: src/InfoBoxes/Content/Factory.cpp:776
 #, no-c-format
 msgid "Home Dist"
-msgstr ""
+msgstr "Відст Додому"
 
 #: src/InfoBoxes/Content/Factory.cpp:777
 #, no-c-format
@@ -2101,6 +2106,8 @@ msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
+"Досягнута швидкість на маршруті  для поточного завдання, з компенсацією по "
+"висоті. Еквівалентна до залишку маршрутної швидкості Піркера."
 
 #: src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
@@ -2143,7 +2150,7 @@ msgstr "Тенденція щодо загальної висоти, необх�
 #: src/InfoBoxes/Content/Factory.cpp:816
 #, no-c-format
 msgid "RH Trend"
-msgstr ""
+msgstr "Тенд. RH"
 
 #: src/InfoBoxes/Content/Factory.cpp:817
 #, no-c-format
@@ -2151,6 +2158,8 @@ msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
 "the task."
 msgstr ""
+"Тенденція (або негативні відхилення) загальної висоти, потрібної для "
+"завершення завдання."
 
 #: src/InfoBoxes/Content/Factory.cpp:826
 #, no-c-format
@@ -2179,12 +2188,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
 msgid "Final GR"
-msgstr ""
+msgstr "Фінал GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:840
 #, no-c-format
 msgid "Fin GR"
-msgstr ""
+msgstr "Fin GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:841
 #, no-c-format
@@ -2257,7 +2266,7 @@ msgstr "Висота над точкою старту."
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "H T/O"
-msgstr ""
+msgstr "H T/O"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -2390,7 +2399,7 @@ msgstr "Ешелон"
 #: src/InfoBoxes/Content/Factory.cpp:962
 #, no-c-format
 msgid "FL"
-msgstr ""
+msgstr "FL"
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
@@ -2748,7 +2757,7 @@ msgstr "Ефективність на переході для завдання"
 #: src/InfoBoxes/Content/Factory.cpp:1156
 #, no-c-format
 msgid "Cruise Eff"
-msgstr ""
+msgstr "Ефективн. Перех."
 
 #: src/InfoBoxes/Content/Factory.cpp:1157
 #, no-c-format
@@ -2831,11 +2840,13 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"Показує час, що лишився до відкриття чи закриття точки старту, у порівнянні "
+"з розрахунковим часом досягнення."
 
 #: src/InfoBoxes/Content/Factory.cpp:1203
 #, no-c-format
 msgid "Next radial"
-msgstr ""
+msgstr "Наст. радіал"
 
 #: src/InfoBoxes/Content/Factory.cpp:1204 Data/Dialogs/dlgTarget_L.xml:16
 #: Data/Dialogs/dlgTarget.xml:23
@@ -2908,7 +2919,7 @@ msgstr "Діаметр спіралі"
 #: src/InfoBoxes/Content/Factory.cpp:1245
 #, no-c-format
 msgid "Circle D"
-msgstr ""
+msgstr "D спіралі"
 
 #: src/InfoBoxes/Content/Factory.cpp:1246
 #, no-c-format
@@ -2958,12 +2969,12 @@ msgstr ""
 #: Data/Input/default.xci:1021
 #, no-c-format
 msgid "Alternates"
-msgstr ""
+msgstr "Запасні"
 
 #: src/InfoBoxes/Content/Alternate.cpp:72
 #, c-format
 msgid "Altn %d"
-msgstr ""
+msgstr "Запас %d"
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:338
@@ -3052,7 +3063,7 @@ msgstr "Очікування"
 #: src/InfoBoxes/Content/Places.cpp:79
 #, no-c-format
 msgid "Reference"
-msgstr ""
+msgstr "Відносно"
 
 #: src/InfoBoxes/Content/Contest.cpp:55 src/InfoBoxes/Content/Trace.cpp:169
 #: src/Dialogs/dlgAnalysis.cpp:292 src/Dialogs/dlgAnalysis.cpp:301
@@ -3261,7 +3272,7 @@ msgstr "Навігація на ціль"
 
 #: src/Input/InputEventsTask.cpp:235
 msgid "Ordered task"
-msgstr ""
+msgstr "Призначене завдання"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:254
@@ -3416,7 +3427,7 @@ msgstr "MSL"
 
 #: src/Renderer/MapItemListRenderer.cpp:232
 msgid "around terrain"
-msgstr ""
+msgstr "навколо ландшафту"
 
 #: src/Renderer/MapItemListRenderer.cpp:251
 msgid "Unreachable due to terrain."
@@ -3446,7 +3457,7 @@ msgstr "Сер. шв. набору висоти"
 #: src/Renderer/MapItemListRenderer.cpp:407
 #, c-format
 msgid "left %s ago"
-msgstr ""
+msgstr "залишено %s назад"
 
 #: src/Renderer/MapItemListRenderer.cpp:486
 msgid "FLARM Traffic"
@@ -3497,13 +3508,13 @@ msgstr "Очки"
 #: src/Renderer/FlightStatisticsRenderer.cpp:169
 #: src/Renderer/FlightStatisticsRenderer.cpp:198
 msgid "pts"
-msgstr ""
+msgstr "очок"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:266
 #: src/Renderer/FlightStatisticsRenderer.cpp:275
 #: src/Renderer/FlightStatisticsRenderer.cpp:286
 msgid "Task to go"
-msgstr ""
+msgstr "Завдання до виконання"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:266
 #: src/Renderer/FlightStatisticsRenderer.cpp:275
@@ -3679,7 +3690,7 @@ msgstr "Сервер Bluetooth"
 #: src/Device/Config.cpp:256 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "Драйвер GPS"
 
 #: src/Device/Config.cpp:259 src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
@@ -3976,11 +3987,11 @@ msgstr "Завантажити політ"
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:216
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:230
 msgid "Manage"
-msgstr ""
+msgstr "Управління"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:265
 msgid "Monitor"
-msgstr ""
+msgstr "Монітор"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:266
 #: src/Dialogs/Device/DeviceListDialog.cpp:368
@@ -3998,7 +4009,7 @@ msgstr "Увімкнути"
 #: src/Dialogs/Device/DeviceListDialog.cpp:326
 #, c-format
 msgid "%s on %s"
-msgstr ""
+msgstr "%s на %s"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 msgid "GPS fix"
@@ -4185,7 +4196,7 @@ msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:103
 msgid "Always run"
-msgstr ""
+msgstr "Завжди запущено"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:106
 msgid "Enable NMEA"
@@ -4197,11 +4208,11 @@ msgstr "Інтервал запису"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:95
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr ""
+msgstr "Встановити новий шаблон для аудіо? Старі налаштування будуть втрачені."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:99
 msgid "TE vario"
-msgstr ""
+msgstr "ТЕ варіо"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid ""
@@ -4209,12 +4220,19 @@ msgid ""
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
+"Тим самим моделюється ТЕ-брутто показання варіометра. Можна використовувати "
+"в режимі набору висоти для демонстрації тональності аудіоваріо. Для режимів "
+"інших ніж набір висоти, встановіть на реальну негативну величину для того, "
+"щоб отримати командні тональності для швидкості."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:107
 msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
+"Тим самим моделюється повітряна швидкість. Для режимів інших ніж набір "
+"висоти, може бути використана для того, щоб отримати командні тональності "
+"для швидкості."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
@@ -4231,6 +4249,7 @@ msgstr "Швидкість набору висоти"
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:58
 msgid "Enable voice read-back of the average climb rate when circling."
 msgstr ""
+"Вмикає голосові зчитування середньої швидкості набору висоти в режимі набору."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:62
 msgid "Enable warnings for final glide through terrain."
@@ -4244,15 +4263,16 @@ msgstr "Відстань до маршрутної точки"
 msgid ""
 "Enable voice read-back of the distance to next waypoint when in cruise mode."
 msgstr ""
+"Вмикає голосові зчитування відстані до наступної ППМ в режимі переходу."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:69
 msgid "Task altitude difference"
-msgstr ""
+msgstr "Різниця висот завдання"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:70
 msgid ""
 "Enable voice read-back of height above/below final glide when in final glide."
-msgstr ""
+msgstr "Вмикає голосові зчитування висоти вище/нижче глісади в режимі дольоту."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:73
 #: Data/Input/default.xci:539 Data/Input/default.xci:546
@@ -4261,7 +4281,7 @@ msgstr "MacCready"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:74
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
-msgstr ""
+msgstr "Вмикає голосові зчитування чисел MacReady після їх налаштувань."
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:77
 msgid "New waypoint"
@@ -4299,7 +4319,7 @@ msgstr "Включає голосове повідомлення про пору
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:123
 msgid "Vega Voice Extensions"
-msgstr ""
+msgstr "Голосові додатки Vega"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
 #, no-c-format
@@ -4368,7 +4388,7 @@ msgstr "Повторити"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:77
 msgid "Speed command"
-msgstr ""
+msgstr "Командна швидкість"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
 msgid "Switch"
@@ -4384,7 +4404,7 @@ msgstr "Перемикачі"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Stealth mode"
-msgstr ""
+msgstr "Режим Stealth"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:117
 msgid "Threshold"
@@ -4529,6 +4549,8 @@ msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
 msgstr ""
+"Якщо активовано, показуватиме у верхньому рядку висоту прибуття для даного "
+"місця."
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
@@ -4555,7 +4577,7 @@ msgstr "Радіо"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 msgid "Top"
-msgstr ""
+msgstr "Вгорі"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
@@ -4568,7 +4590,7 @@ msgstr "Подробиці повітряного простору"
 #: src/Dialogs/Airspace/AirspaceList.cpp:292
 #: src/Dialogs/Waypoint/WaypointList.cpp:443
 msgid "No Match!"
-msgstr ""
+msgstr "Не підходить!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:315
 msgid "Heading"
@@ -5050,7 +5072,7 @@ msgstr "Встановити вітер"
 
 #: src/Dialogs/dlgAnalysis.cpp:328
 msgid "Glide Polar"
-msgstr ""
+msgstr "Поляра"
 
 #: src/Dialogs/dlgAnalysis.cpp:338
 msgid "Temp Trace"
@@ -5822,7 +5844,7 @@ msgstr "Режим заповнення повітряного простору"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:230
 msgid "Specifies the mode for filling the airspace area."
-msgstr ""
+msgstr "Визначає режим заповнення полігону авіаційного простору"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "Airspace transparency"
@@ -7309,6 +7331,9 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
+"Якщо ПС орієнтоване не на поточний ППМ, попереду ПС будуть зображені "
+"маркери. Числа біля кожного маркера - то додаткова дистанція, потрібна для "
+"досягнення точки в процентах до відстані до ППМ по прямій."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:182
 msgid "Aircraft symbol"
@@ -7379,7 +7404,7 @@ msgstr "Прив'язка висоти до середнього рівня мо
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
 #, no-c-format
 msgid "Reference is the height above the task point."
-msgstr ""
+msgstr "Прив'язка до висоти над точкою завдання."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:264
@@ -8171,11 +8196,11 @@ msgstr "Завантажити місцезнаходження друзів н�
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 msgid "Vehicle Type"
-msgstr ""
+msgstr "Тип ПС"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 msgid "Type of vehicle used."
-msgstr ""
+msgstr "Тип ПС, що використовується."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
 msgid "Server"
@@ -8498,19 +8523,19 @@ msgstr "Редагувати запасні"
 #: src/Dialogs/Task/TaskPointDialog.cpp:173
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
 msgid "Task point"
-msgstr ""
+msgstr "Точка завдання"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:178
 msgid "Assigned area point"
-msgstr ""
+msgstr "Точка ААТ"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
 msgid "Remove task point?"
-msgstr ""
+msgstr "Видалити точку завдання?"
 
 #: src/Dialogs/Task/MutateTaskPointDialog.cpp:129
 msgid "Task Point Type"
-msgstr ""
+msgstr "Тип точки завдання"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:68
 msgid "Goal"
@@ -8576,15 +8601,15 @@ msgstr "Замкова щілина DAeC"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:222
 msgid "BGA Fixed Course"
-msgstr ""
+msgstr "Фіксований курс BGA"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:226
 msgid "BGA Enhanced Option"
-msgstr ""
+msgstr "Розширені опції BGA"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:230
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "Стартовий сектор BGA"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
 msgid "Enter a task name"
@@ -8720,7 +8745,7 @@ msgstr ""
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48 src/Monitor/MatTaskMonitor.cpp:63
 msgid "Dismiss"
-msgstr ""
+msgstr "Відхилити"
 
 #: src/Monitor/MatTaskMonitor.cpp:54
 msgid "Add this turn point?"
@@ -8833,17 +8858,17 @@ msgstr "Дані TAF не доступні!"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
 msgid "Gear on delay"
-msgstr ""
+msgstr "Затримка випуску шасі"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "Затримка прибирання шасі"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "Інтервал; шасі"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
@@ -8984,95 +9009,100 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Climb averager scale"
-msgstr ""
+msgstr "Постійна часу усереднювача набору висоти"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Time scale used for vario averager."
-msgstr ""
+msgstr "Постійна часу, що застосовується для усереднювача варіо"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr ""
+msgstr "Час усереднання при переході"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
 msgid "Time scale used for cruise speed command averager."
-msgstr ""
+msgstr "Час, що застосовується для видачі команд швидкості в режимі переходу"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
 #, no-c-format
 msgid "Circling volume"
-msgstr ""
+msgstr "Гучність при наборі"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr ""
+msgstr "Середній рівень гучності в режимі набору висоти"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
 msgid "Cruise volume"
-msgstr ""
+msgstr "Гучність при переході"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
 #, no-c-format
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
+"Середній рівень гучності в режимі переходу. При установці в нуль, відповідає "
+"рівню повітряної швидкості."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
 #, no-c-format
 msgid "Base frequency"
-msgstr ""
+msgstr "Базова частота"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "Налаштування базової частоти тональності в усіх режимах"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
 msgid "Filter circling"
-msgstr ""
+msgstr "Фільтр при наборі висоти"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
 msgid "Variometer low pass filter time constant in circling mode."
 msgstr ""
+"Постійна часу фільтра низької частоти варіометра в режимі набору висоти."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
 #, no-c-format
 msgid "Filter cruise"
-msgstr ""
+msgstr "Фільтр при переході"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
 msgid "Variometer low pass filter time constant in cruise mode."
-msgstr ""
+msgstr "Постійна часу фільтра низької частоти варіометра в режимі переходу."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
 #, no-c-format
 msgid "Tone pitch scale"
-msgstr ""
+msgstr "Пропорційність тональності індикації тангажа"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:117
 #, no-c-format
 msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr ""
+"Налаштування до базової пропорційності тональності індикації тангажа в усіх "
+"режимах."
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
 msgid "Beep type"
-msgstr ""
+msgstr "Тип Бііп"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
-msgstr ""
+msgstr "Шаблон щодо тангажа"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:111
 msgid "Pitch scale"
-msgstr ""
+msgstr "Пропорційність тангажа"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
@@ -9093,6 +9123,8 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
+"Пропорційність показників датчика повної енергії показникам повної енергії "
+"Піто/статичного тиску в режимі змішаної повної енергії."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
 #, no-c-format
@@ -9104,6 +9136,8 @@ msgstr ""
 msgid ""
 "Calibration factor applied to measured airspeed to obtain indicated airspeed."
 msgstr ""
+"Коефіцієнт калібровки, що застосовується до виміряної повітряної швидкості "
+"для того, щоб отримати індикативну повітряну швидкість."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
 #, no-c-format
@@ -9116,6 +9150,8 @@ msgid ""
 "Calibration factor applied to static pressure used in total energy "
 "calculation."
 msgstr ""
+"Коефіцієнт калібровки, що застосовується до статичного тиску при розрахунку "
+"повної енергії."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
 #, no-c-format
@@ -9128,16 +9164,18 @@ msgid ""
 "Calibration factor applied to dynamic pressure used in total energy "
 "calculation."
 msgstr ""
+"Коефіцієнт калібровки, що застосовується до динамічного тиску при розрахунку "
+"повної енергії."
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
 #, no-c-format
 msgid "Needle gauge type"
-msgstr ""
+msgstr "Тип стрілки для шкали"
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
 #, no-c-format
 msgid "LED bright"
-msgstr ""
+msgstr "Яскравість світлодіода"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
 #, no-c-format
@@ -9152,12 +9190,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
 msgid "Flarm interface"
-msgstr ""
+msgstr "Інтерфейс FLARM"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
 #, no-c-format
 msgid "Disable circling"
-msgstr ""
+msgstr "Вимкнути режим набору висоти"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
@@ -9167,77 +9205,77 @@ msgstr ""
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
 #, no-c-format
 msgid "No aircraft type"
-msgstr ""
+msgstr "Не відомий тип ПС"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
 msgid "Privacy"
-msgstr ""
+msgstr "Приватність"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
 #, no-c-format
 msgid "Aircraft type"
-msgstr ""
+msgstr "Тип ПС"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
 #, no-c-format
 msgid "Interval; info"
-msgstr ""
+msgstr "Інтервал; інфо"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
 #, no-c-format
 msgid "Interval; caution"
-msgstr ""
+msgstr "Інтервал; попередження"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
 #, no-c-format
 msgid "Interval; warning"
-msgstr ""
+msgstr "Інтервал; увага"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "TE port"
-msgstr ""
+msgstr "Порт ТЕ"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr ""
+msgstr "Чи підключено до порту повної енергії."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Pitot port"
-msgstr ""
+msgstr "Порт Піто"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr ""
+msgstr "Чи підключено до порту Піто."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Static port"
-msgstr ""
+msgstr "Порт статики"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Whether the Static port is connected."
-msgstr ""
+msgstr "Чи підключено до порту статичного ттиску."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Stall port"
-msgstr ""
+msgstr "Порт зависання"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr ""
+msgstr "Чи підключено до порту тиску зависання (зриву повітряного потоку)."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
 msgid "Accelerometer"
-msgstr ""
+msgstr "Акселерометр"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
@@ -9246,6 +9284,9 @@ msgid ""
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
 msgstr ""
+"Чи застосовується вбудований акселерометр. Вносьте сюди зміни, тільки в "
+"разі, коли акселерометр працює не коректно, або не може бути встановлений з "
+"коректними налаштуваннями."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
 #, no-c-format
@@ -9254,11 +9295,14 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"Чи встановлено датчики температури і вологості. Встановіть 0, щоб вимкнути; "
+"255, щоб увімкнути автовизначення; в інших випадках може бути позначено як "
+"ідентифікатор пристрою з інтерфейсом 1Wire."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
 msgid "Baud rate Vega"
-msgstr ""
+msgstr "Швидкість передачі даних від Vega"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
 #, no-c-format
@@ -9268,11 +9312,16 @@ msgid ""
 "connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
 "be set to 19200."
 msgstr ""
+"Швидкість передачі даних від пристроїв, що під'єднані до порту X1 "
+"послідовного інтерфейса Vega. Скористайтесь при необхідності в разі "
+"підключення GPS чи дата-логерів від третіх фірм замість FLARM. Якщо FLARM "
+"підключено, швидкість передачі даних буде зафіксовано як 38400. Для OzFLARM "
+"ця величина може бути встановлена як 19200."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
 msgid "FLARM connected"
-msgstr ""
+msgstr "FLARM під'єднано"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -9280,11 +9329,13 @@ msgid ""
 "Enable detection of FLARM.  Disable only if FLARM is not used or "
 "disconnected."
 msgstr ""
+"Вмикає визначення наявності FLARM. Вимикайте опцію тільки коли FLARM не "
+"використовується чи від'єднано."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
 #, no-c-format
 msgid "PDA power"
-msgstr ""
+msgstr "Живлення КПК"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
 #, no-c-format
@@ -9292,11 +9343,14 @@ msgid ""
 "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
 "Vega is connected to Altair, this should be set to False."
 msgstr ""
+"Вмикає зовнішнє живлення +5V для КПК і інших пристроїв на роз'ємі ~X2 Vega. "
+"Якщо Vega  під'єднано до Altair, це налаштування має бути встановлено як "
+"False."
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
 msgid "VNE"
-msgstr ""
+msgstr "VNE"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
 #, no-c-format
@@ -9311,7 +9365,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
 msgid "V manoeuvering"
-msgstr ""
+msgstr "V маневрування"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:40
 #, no-c-format
@@ -9321,42 +9375,42 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:42
 #, no-c-format
 msgid "V flap"
-msgstr ""
+msgstr "V закрилки"
 
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
 msgid "IGC logging"
-msgstr ""
+msgstr "Запис IGC"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:32
 #, no-c-format
 msgid "Mute vario on voice"
-msgstr ""
+msgstr "Переключити варіо на голос"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:33
 #, no-c-format
 msgid "Mute vario on radio"
-msgstr ""
+msgstr "Переключити варіо на радіо"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr ""
+msgstr "Вимкнути звук варіо"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
 msgid "Voice muting"
-msgstr ""
+msgstr "Вимкнути голос"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Поріг гучномовця"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
 #, no-c-format
 msgid "Headset threshold"
-msgstr ""
+msgstr "Поріг гарнітури"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
@@ -9366,7 +9420,7 @@ msgstr ""
 #: src/Terrain/RasterWeather.cpp:51
 #, no-c-format
 msgid "Display terrain on map, no weather data displayed."
-msgstr ""
+msgstr "Зображувати ландшафт на мапі, без даних погоди."
 
 #: src/Terrain/RasterWeather.cpp:55
 #, no-c-format
@@ -9461,6 +9515,10 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
+"Температура на висоті 2 метри над поверхнею землі.Можна порівняти з реальною "
+"для оцінки точності моделювання погоди. Наприклад, якщо реальна температура "
+"поверхні значно нижче прогнозованої, умови щодо швидкості набору висоти "
+"будуть гіршими, ніж прогнозовані."
 
 #: src/Terrain/RasterWeather.cpp:85
 #, no-c-format
@@ -9504,7 +9562,7 @@ msgstr ""
 #. during startup, when the other threads aren't running yet
 #: src/Terrain/RasterWeather.cpp:220
 msgid "Scanning weather forecast"
-msgstr ""
+msgstr "Сканування прогнозу погоди"
 
 #: Data/Dialogs/dlgTarget_L.xml:31 Data/Dialogs/dlgTarget.xml:13
 msgid "V rem."
@@ -9513,7 +9571,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:4
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:4
 msgid "Team"
-msgstr ""
+msgstr "Команда"
 
 #: Data/Dialogs/dlgTarget_L.xml:26 Data/Dialogs/dlgTarget.xml:8
 msgid "Delta T"
@@ -9521,11 +9579,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:13 Data/Dialogs/dlgConfiguration.xml:13
 msgid "Configuration Menu"
-msgstr ""
+msgstr "Меню конфігурації"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:17 Data/Dialogs/dlgTaskPoint.xml:13
 msgid "Change Type"
-msgstr ""
+msgstr "Змінити тип"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:25 Data/Dialogs/dlgTaskPoint.xml:21
 msgid "Score exit"
@@ -9537,16 +9595,16 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:3 Data/Dialogs/dlgVario.xml:3
 msgid "Vario Configuration"
-msgstr ""
+msgstr "Конфігурація варіо"
 
 #: Data/Dialogs/dlgAnalysis_L.xml:9 Data/Dialogs/dlgAnalysis.xml:9
 msgid "Calc"
-msgstr ""
+msgstr "Підрах."
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:6
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 msgid "Friends"
-msgstr ""
+msgstr "Друзі"
 
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4
 #: Data/Dialogs/dlgWaypointDetails.xml:10 Data/Input/default.xci:1037
@@ -9555,29 +9613,29 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario_L.xml:7 Data/Dialogs/dlgVario.xml:8
 msgid "Demo"
-msgstr ""
+msgstr "Демо"
 
 #: Data/Dialogs/pnlTaskManagerClose.xml:6
 msgid "Revert Changes"
-msgstr ""
+msgstr "Скасувати зміни"
 
 #: Data/Dialogs/dlgTarget_L.xml:36 Data/Dialogs/dlgTarget.xml:30
 msgid "Optimized"
-msgstr ""
+msgstr "Оптимізовано"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:4 Data/Dialogs/dlgConfiguration.xml:8
 msgid "Expert"
-msgstr ""
+msgstr "Експерт"
 
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 msgid "Waypoints Editor"
-msgstr ""
+msgstr "Редактор шляхових точок"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 msgid "Callsign"
-msgstr ""
+msgstr "Позивний"
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
@@ -9586,7 +9644,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointDetails_L.xml:3
 #: Data/Dialogs/dlgWaypointDetails.xml:3
 msgid "Waypoint Info"
-msgstr ""
+msgstr "Інформація про шляхову точку"
 
 #: Data/Dialogs/dlgTarget_L.xml:26 Data/Dialogs/dlgTarget.xml:8
 msgid ""
@@ -9598,7 +9656,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTarget_L.xml:21
 msgid "Estimated time en-route to the next AAT target."
-msgstr ""
+msgstr "Очікуваний час на маршруті до наступної цілі ААТ."
 
 #: Data/Dialogs/dlgTarget_L.xml:11 Data/Dialogs/dlgTarget.xml:18
 msgid ""
@@ -9607,26 +9665,29 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
+"Для завдань ААТ можна використовувати це налаштування для вибору цілей в "
+"межах сектору ААТ. Більша величина пересуває цілі ААТ на більшу відстань, "
+"менша - наближує цілі і знижує дальність завдання ААТ."
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:27
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:19 Data/Input/default.xci:596
 msgid "Plane"
-msgstr ""
+msgstr "Планер"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:3 Data/Dialogs/dlgConfiguration.xml:3
 #: Data/Dialogs/dlgCredits.xml:3
 msgid "Configuration"
-msgstr ""
+msgstr "Конфігурація"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
 msgid "Change callsign"
-msgstr ""
+msgstr "Змінити позивний"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:24
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 msgid "Pilot"
-msgstr ""
+msgstr "Пілот"
 
 #: Data/Dialogs/dlgTarget_L.xml:16 Data/Dialogs/dlgTarget.xml:23
 msgid ""
@@ -9634,39 +9695,46 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
+"Для завдань ААТ можна використовувати це налаштування для вибору цілей в "
+"межах секторів ААТ. Позитивні величини  повертають лінію дальності за "
+"годинниковою стрілкою, негативні - проти годинникової стрілки."
 
 #: Data/Input/default.xci:1173
 msgid "Setup Plane"
-msgstr ""
+msgstr "Налаштування планера"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1101
 msgid "Topo."
-msgstr ""
+msgstr "Топо."
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:1013
 msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
+"Шл. точки\n"
+"Перелік"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:580
 #: Data/Input/default.xci:630 Data/Input/default.xci:914
 msgid "Config"
-msgstr ""
+msgstr "Конфіг"
 
 #: Data/Input/default.xci:492 Data/Input/default.xci:1079
 msgid "Labels"
-msgstr ""
+msgstr "Мітки"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
-msgstr ""
+msgstr "Нижче глісади дольоту"
 
 #: Data/Input/default.xci:748
 msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
+"Перехід\n"
+"Демо"
 
 #: Data/Input/default.xci:660 Data/Input/default.xci:671
 #: Data/Input/default.xci:718
@@ -9684,28 +9752,36 @@ msgid ""
 "Manual\n"
 "Demo"
 msgstr ""
+"Вручну\n"
+"Демо"
 
 #: Data/Input/default.xci:500 Data/Input/default.xci:1087
 msgid "Trail"
-msgstr ""
+msgstr "Слід"
 
 #: Data/Input/default.xci:700
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
+"Налаштувати\n"
+"Зрив потоку"
 
 #: Data/Input/default.xci:797 Data/Input/default.xci:1204
 msgid ""
 "Check\n"
 "list"
 msgstr ""
+"Чек\n"
+"Лист"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:789
 msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"Що \n"
+"тут?"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1061
 msgid "Dropped marker"
@@ -9713,13 +9789,15 @@ msgstr ""
 
 #: Data/Input/default.xci:645 Data/Input/default.xci:1157
 msgid "Raw Logger"
-msgstr ""
+msgstr "Raw  Логер"
 
 #: Data/Input/default.xci:1126
 msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
+"Встановити \n"
+"Вітер"
 
 #: Data/Input/default.xci:679
 msgid ""
@@ -9735,42 +9813,48 @@ msgstr ""
 
 #: Data/Input/default.xci:855 Data/Input/default.xci:1228
 msgid "Thermal Assistant"
-msgstr ""
+msgstr "Термік-асистент"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr ""
+msgstr "Вище глісади дольоту"
 
 #: Data/Input/default.xci:1196
 msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
+"Найближчий \n"
+"Повітряний простір"
 
 #: Data/Input/default.xci:1118
 msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
+"Політ\n"
+"Налашт"
 
 #: Data/Input/default.xci:1134
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"Налашт \n"
+"Системи"
 
 #: Data/Input/default.xci:686
 msgid "Setup Audio"
-msgstr ""
+msgstr "Налаштування аудіо"
 
 #: Data/Input/default.xci:773 Data/Input/default.xci:1180
 msgid "FLARM Radar"
-msgstr ""
+msgstr "Радар FLARM"
 
 #: Data/Input/default.xci:459 Data/Input/default.xci:965
 #: Data/Input/default.xci:1054
 msgid "Zoom"
-msgstr ""
+msgstr "Масштаб"
 
 #: Data/Input/default.xci:847
 msgid "Traffic List"
@@ -9782,7 +9866,7 @@ msgstr ""
 
 #: Data/Input/default.xci:732
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "Акселерометр вирівняно"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1071
 msgid ""
@@ -9792,31 +9876,35 @@ msgstr ""
 
 #: Data/Input/default.xci:48
 msgid "Takeoff"
-msgstr ""
+msgstr "Злет"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "Доліт над ландшафтом"
 
 #: Data/Input/default.xci:726
 msgid ""
 "ASI\n"
 "Zero"
 msgstr ""
+"ASI\n"
+"нуль"
 
 #: Data/Input/default.xci:417 Data/Input/default.xci:1064
 msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"Марк\n"
+"постав."
 
 #: Data/Input/default.xci:740
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Збережено до EEPROM"
 
 #: Data/Input/default.xci:707
 msgid "Accel"
-msgstr ""
+msgstr "Аксел"
 
 #: Data/Input/default.xci:874
 msgid "Credits"
@@ -9828,18 +9916,24 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
+"Зум\n"
+"мінус"
 
 #: Data/Input/default.xci:755
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Набір \n"
+"Демо"
 
 #: Data/Input/default.xci:889
 msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"Повідом\n"
+"Повтор"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:444
 #: Data/Input/default.xci:951
@@ -9847,12 +9941,16 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
+"Зум \n"
+"плюс"
 
 #: Data/Input/default.xci:1142
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"Налашт\n"
+"Пов. прост"
 
 #: Data/Input/default.xci:979
 msgid "AVG/ALT"
