@@ -16,6 +16,7 @@ Version 6.8 - not yet released
 * user interface 
   - checklist remembers last opened list (#3110)
   - display rotation for Raspberry Pi and Cubieboard (#3238)
+  - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
 * Kobo
   - add UI allowing the start of external scripts to KoboMenu (#3194)
   - support Wifi with WEP (#3138)

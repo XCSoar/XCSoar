@@ -1,7 +1,7 @@
 USE_CONSOLE ?= $(call bool_or,$(EGL),$(USE_FB))
 
 # query /dev/input/event* instead of stdin and /dev/input/mice?
-USE_LINUX_INPUT ?= $(TARGET_IS_KOBO)
+USE_LINUX_INPUT ?= $(call bool_and,$(TARGET_IS_LINUX),$(USE_CONSOLE))
 
 EVENT_SOURCES = \
 	$(SRC)/Event/Shared/Timer.cpp \

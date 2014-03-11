@@ -257,6 +257,22 @@ Install the Debian package as described above.  However, unlike on
 ``regular'' Linux, XCSoar will not use X11.  Instead, it runs
 full-screen on the Linux console.
 
+XCSoar requires access to your input devices
+(\texttt{/dev/input/event*}).  By default, only \texttt{root} is
+granted access.  To override this, create a \texttt{udev}
+configuration file, e.g. \texttt{/etc/udev/rules.d/99-input.rules}:
+
+\begin{verbatim*}
+KERNEL=="event*", NAME="input/%k", MODE="660", GROUP="input"
+\end{verbatim*}
+
+Create the group \texttt{input} and make your user a member:
+
+\begin{verbatim*}
+groupadd input
+adduser pi input
+\end{verbatim*}
+
 \section{Data files}\label{sec:data files}
 
 To be able to use XCSoar's advanced features, additional data files, such as
