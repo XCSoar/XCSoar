@@ -56,7 +56,9 @@ struct FlatPoint : Point2D<fixed>
    * @return Cross product
    */
   gcc_pure
-  fixed CrossProduct(const FlatPoint &p2) const;
+  fixed CrossProduct(const FlatPoint &p2) const {
+    return ::CrossProduct(*this, p2);
+  }
 
   /**
    * Multiply Y value of point
@@ -119,7 +121,7 @@ struct FlatPoint : Point2D<fixed>
    */
   gcc_pure
   fixed DotProduct(FlatPoint other) const {
-    return x*other.x+y*other.y;
+    return ::DotProduct(*this, other);
   }
 
   /**

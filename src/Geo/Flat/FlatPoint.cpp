@@ -23,12 +23,6 @@
 #include <algorithm>
 #include <math.h>
 
-fixed
-FlatPoint::CrossProduct(const FlatPoint &p2) const
-{
-  return x * p2.y - p2.x * y;
-}
-
 void
 FlatPoint::MultiplyY(const fixed a)
 {

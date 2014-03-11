@@ -59,4 +59,18 @@ struct Point2D {
   }
 };
 
+template<typename T>
+static inline T
+DotProduct(Point2D<T> a, Point2D<T> b)
+{
+  return a.x * b.x + a.y * b.y;
+}
+
+template<typename T>
+static inline T
+CrossProduct(Point2D<T> a, Point2D<T> b)
+{
+  return a.x * b.y - b.x * a.y;
+}
+
 #endif
