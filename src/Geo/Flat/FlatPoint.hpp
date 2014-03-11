@@ -24,18 +24,14 @@
 
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Point2D.hpp"
 #include "Compiler.h"
 
 /**
  * 2-d Cartesian projected real-valued point
  */
-struct FlatPoint 
+struct FlatPoint : Point2D<fixed>
 {
-  /** X location */
-  fixed x;
-  /** Y location */
-  fixed y;
-
   /**
    * Non-initialising default constructor.
    */
@@ -50,7 +46,7 @@ struct FlatPoint
    * @return Initialised object
    */
   constexpr
-  FlatPoint(const fixed _x, const fixed _y): x(_x), y(_y) {}
+  FlatPoint(const fixed _x, const fixed _y):Point2D<fixed>(_x, _y) {}
 
   /**
    * Calculate cross product of two points
@@ -115,18 +111,6 @@ struct FlatPoint
   fixed Magnitude() const;
 
   /**
-   * Test whether two points are co-located
-   *
-   * @param other Point to compare
-   *
-   * @return True if coincident
-   */
-  constexpr
-  bool operator== (const FlatPoint other) const {
-    return (x == other.x) && (y == other.y);
-  }
-
-  /**
    * Calculate dot product of one point with another
    *
    * @param other That point
@@ -161,21 +145,6 @@ struct FlatPoint
   constexpr FlatPoint operator+(FlatPoint other) const
   {
     return { x + other.x, y + other.y };
-  }
-
-  /**
-   * Add one point to self
-   *
-   * @param p2 Point to add
-   *
-   * @return Added value
-   */
-  FlatPoint
-  operator+= (const FlatPoint &p2)
-  {
-    x += p2.x;
-    y += p2.y;
-    return *this;
   }
 
   /**
