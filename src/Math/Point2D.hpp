@@ -26,11 +26,13 @@ Copyright_License {
 
 template<typename T>
 struct Point2D {
-  T x, y;
+  typedef T scalar_type;
+
+  scalar_type x, y;
 
   Point2D() = default;
 
-  constexpr Point2D(T _x, T _y):x(_x), y(_y) {}
+  constexpr Point2D(scalar_type _x, scalar_type _y):x(_x), y(_y) {}
 
   constexpr bool operator==(const Point2D<T> &other) const {
     return x == other.x && y == other.y;
@@ -41,7 +43,7 @@ struct Point2D {
   }
 
   constexpr Point2D<T> operator+(Point2D<T> other) const {
-    return { T(x + other.x), T(y + other.y) };
+    return { scalar_type(x + other.x), scalar_type(y + other.y) };
   }
 
   Point2D<T> &operator+=(Point2D<T> other) {
