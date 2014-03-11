@@ -25,15 +25,13 @@ Copyright_License {
 #define VECTOR_HPP
 
 #include "Math/fixed.hpp"
+#include "Point2D.hpp"
 #include "Geo/SpeedVector.hpp"
 
-struct Vector {
-  fixed x;
-  fixed y;
-
+struct Vector : Point2D<fixed> {
   Vector() = default;
 
-  constexpr Vector(fixed _x, fixed _y):x(_x), y(_y) {}
+  constexpr Vector(fixed _x, fixed _y):Point2D<fixed>(_x, _y) {}
 
   Vector(Angle bearing, fixed norm) {
     auto sc = bearing.SinCos();
