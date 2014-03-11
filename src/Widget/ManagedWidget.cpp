@@ -42,7 +42,7 @@ ManagedWidget::Clear()
   Unprepare();
 
   delete widget;
-  widget = NULL;
+  widget = nullptr;
 }
 
 void
@@ -63,7 +63,7 @@ ManagedWidget::Move(const PixelRect &_position)
   have_position = true;
 #endif
 
-  if (widget != NULL && prepared && visible)
+  if (widget != nullptr && prepared && visible)
     widget->Move(position);
 }
 
@@ -72,7 +72,7 @@ ManagedWidget::Prepare()
 {
   assert(have_position);
 
-  if (widget == NULL || prepared)
+  if (widget == nullptr || prepared)
     return;
 
   widget->Initialise(parent, position);
@@ -86,7 +86,7 @@ ManagedWidget::Show()
 {
   assert(have_position);
 
-  if (widget == NULL)
+  if (widget == nullptr)
     return;
 
   Prepare();
@@ -100,7 +100,7 @@ ManagedWidget::Show()
 void
 ManagedWidget::Hide()
 {
-  if (widget != NULL && prepared && visible) {
+  if (widget != nullptr && prepared && visible) {
     widget->Leave();
     visible = false;
     widget->Hide();

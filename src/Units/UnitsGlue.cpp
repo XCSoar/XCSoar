@@ -73,7 +73,7 @@ const struct language_unit_map language_table[] = {
   { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_UK), _T("en_UK"), 1 },
   { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), _T("en_US"), 2 },
   { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_AUS), _T("en_AU"), 3 },
-  { 0, NULL, 0 }
+  { 0, nullptr, 0 }
 };
 
 #endif
@@ -83,7 +83,7 @@ static unsigned
 FindLanguage(LANGID lang)
 {
   // Search for supported languages matching the language code
-  for (unsigned i = 0; language_table[i].region_code != NULL; ++i)
+  for (unsigned i = 0; language_table[i].region_code != nullptr; ++i)
     if (language_table[i].region_id == lang)
       return language_table[i].store_index;
 
@@ -94,7 +94,7 @@ static unsigned
 FindLanguage(const TCHAR* lang)
 {
   // Search for supported languages matching the language code
-  for (unsigned i = 0; language_table[i].region_code != NULL; ++i)
+  for (unsigned i = 0; language_table[i].region_code != nullptr; ++i)
     if (_tcscmp(language_table[i].region_code, lang) == 0)
       return language_table[i].store_index;
 
@@ -120,7 +120,7 @@ AutoDetect()
   GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
     (GetUserDefaultUILanguage_t)
     coreloc_dll.Lookup(_T("GetUserDefaultUILanguage"));
-  if (GetUserDefaultUILanguage == NULL) {
+  if (GetUserDefaultUILanguage == nullptr) {
     LogFormat("Units: GetUserDefaultUILanguage() not available");
     return 0;
   }
@@ -144,10 +144,10 @@ AutoDetect()
 
   jmethodID cid = env->GetStaticMethodID(cls, "getDefault",
                                          "()Ljava/util/Locale;");
-  assert(cid != NULL);
+  assert(cid != nullptr);
 
   jobject _obj = env->CallStaticObjectMethod(cls, cid);
-  if (_obj == NULL)
+  if (_obj == nullptr)
     return 0;
 
   Java::LocalObject obj(env, _obj);
@@ -156,15 +156,15 @@ AutoDetect()
   // returns a two-letter language string
 
   cid = env->GetMethodID(cls, "toString", "()Ljava/lang/String;");
-  assert(cid != NULL);
+  assert(cid != nullptr);
 
   jstring language = (jstring)env->CallObjectMethod(obj, cid);
-  if (language == NULL)
+  if (language == nullptr)
     return 0;
 
   // Convert the jstring to a char string
-  const char *language2 = env->GetStringUTFChars(language, NULL);
-  if (language2 == NULL) {
+  const char *language2 = env->GetStringUTFChars(language, nullptr);
+  if (language2 == nullptr) {
     env->DeleteLocalRef(language);
     return 0;
   }

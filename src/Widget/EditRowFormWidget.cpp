@@ -60,7 +60,7 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
                     style);
   edit->SetReadOnly(read_only);
 
-  if (help != NULL)
+  if (help != nullptr)
     edit->SetHelpText(help);
 
   return edit;
@@ -79,7 +79,7 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
                            const TCHAR *text)
 {
   WndProperty *control = Add(label, help, true);
-  if (text != NULL)
+  if (text != nullptr)
     control->SetText(text);
 }
 
@@ -173,12 +173,12 @@ RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value,
                        DataFieldListener *listener)
 {
-  assert(list != NULL);
+  assert(list != nullptr);
 
   WndProperty *edit = Add(label, help);
   DataFieldEnum *df = new DataFieldEnum(listener);
 
-  if (list[0].help != NULL)
+  if (list[0].help != nullptr)
     df->EnableItemHelp(true);
 
   df->AddChoices(list);
@@ -462,7 +462,7 @@ bool
 RowFormWidget::SaveValue(unsigned i, TCHAR *string, size_t max_size) const
 {
   const TCHAR *new_value = GetDataField(i).GetAsString();
-  assert(new_value != NULL);
+  assert(new_value != nullptr);
 
   if (_tcscmp(string, new_value) == 0)
     return false;

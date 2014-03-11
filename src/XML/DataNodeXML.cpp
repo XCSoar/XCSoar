@@ -32,7 +32,7 @@ DataNodeXML::Load(const TCHAR* path)
 {
   std::unique_ptr<XMLNode> child(XML::ParseFile(path));
   if (!child)
-    return NULL;
+    return nullptr;
 
   return new DataNodeXML(std::move(*child));
 }
@@ -59,8 +59,8 @@ DataNode *
 DataNodeXML::GetChildNamed(const TCHAR *name) const
 {
   const XMLNode *child = node.GetChildNode(name);
-  if (child == NULL)
-    return NULL;
+  if (child == nullptr)
+    return nullptr;
 
   return new DataNodeXML(*child);
 }

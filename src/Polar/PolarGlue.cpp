@@ -89,7 +89,7 @@ bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
   const char *polar_string = Profile::Get(ProfileKeys::Polar);
-  if (polar_string != NULL && !StringIsEmpty(polar_string) &&
+  if (polar_string != nullptr && !StringIsEmpty(polar_string) &&
       ParsePolar(polar, polar_string)) {
     return true;
   }

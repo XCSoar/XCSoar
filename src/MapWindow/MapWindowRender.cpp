@@ -49,21 +49,21 @@ MapWindow::RenderTerrain(Canvas &canvas)
 void
 MapWindow::RenderTopography(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
+  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, render_projection);
 }
 
 void
 MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
+  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, render_projection, label_block);
 }
 
 void
 MapWindow::RenderFinalGlideShading(Canvas &canvas)
 {
-  if (terrain != NULL &&
+  if (terrain != nullptr &&
       Calculated().terrain_valid)
       DrawTerrainAbove(canvas);
 }
@@ -85,7 +85,7 @@ MapWindow::RenderAirspace(Canvas &canvas)
 void
 MapWindow::RenderMarkers(Canvas &canvas)
 {
-  if (marks != NULL &&
+  if (marks != nullptr &&
       render_projection.GetMapScale() <= fixed(30000))
     ::RenderMarkers(canvas, render_projection, look.marker, *marks);
 }
@@ -94,7 +94,7 @@ void
 MapWindow::RenderNOAAStations(Canvas &canvas)
 {
 #ifdef HAVE_NOAA
-  if (noaa_store == NULL)
+  if (noaa_store == nullptr)
     return;
 
   RasterPoint pt;

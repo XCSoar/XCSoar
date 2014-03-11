@@ -45,7 +45,7 @@ namespace NMEALogger
 bool
 NMEALogger::Start()
 {
-  if (writer != NULL)
+  if (writer != nullptr)
     return true;
 
   BrokenDateTime dt = BrokenDateTime::NowUTC();
@@ -63,7 +63,7 @@ NMEALogger::Start()
   LocalPath(path, _T("logs"), name);
 
   writer = new TextWriter(path, false);
-  return writer != NULL;
+  return writer != nullptr;
 }
 
 void

@@ -32,7 +32,7 @@ Copyright_License {
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
-   logger(NULL),
+   logger(nullptr),
    idle_robin(-1),
 #ifdef ENABLE_OPENGL
    data_timer(*this),
@@ -128,7 +128,7 @@ void
 GlueMapWindow::SuspendThreads()
 {
 #ifndef ENABLE_OPENGL
-  if (draw_thread != NULL)
+  if (draw_thread != nullptr)
     draw_thread->Suspend();
 #endif
 }
@@ -137,7 +137,7 @@ void
 GlueMapWindow::ResumeThreads()
 {
 #ifndef ENABLE_OPENGL
-  if (draw_thread != NULL)
+  if (draw_thread != nullptr)
     draw_thread->Resume();
 #endif
 }

@@ -34,7 +34,6 @@
 #include "IO/FileLineReader.hpp"
 
 #include <assert.h>
-#include <stdio.h>
 
 namespace XML {
   /** Main structure used for parsing XML. */
@@ -108,7 +107,7 @@ namespace XML {
 static TCHAR *
 FromXMLString(const TCHAR *ss, size_t lo)
 {
-  assert(ss != NULL);
+  assert(ss != nullptr);
 
   const TCHAR *end = ss + lo;
 
@@ -145,7 +144,7 @@ FromXMLString(const TCHAR *ss, size_t lo)
         unsigned i = ParseUnsigned(ss, &endptr, 10);
         if (endptr == ss || endptr >= end || *endptr != ';') {
           free(result);
-          return NULL;
+          return nullptr;
         }
 
         // XXX convert to UTF-8 if !_UNICODE
@@ -157,7 +156,7 @@ FromXMLString(const TCHAR *ss, size_t lo)
         ss = endptr + 1;
       } else {
         free(result);
-        return NULL;
+        return nullptr;
       }
     } else {
       *(d++) = *ss;
@@ -169,7 +168,7 @@ FromXMLString(const TCHAR *ss, size_t lo)
   /* shrink the memory allocation just in case we allocated too
      much */
   d = (TCHAR *)realloc(result, (d + 1 - result) * sizeof(*d));
-  if (d != NULL)
+  if (d != nullptr)
     result = d;
 
   return result;
@@ -447,7 +446,7 @@ gcc_pure
 static size_t
 FindEndOfText(const TCHAR *token, size_t length)
 {
-  assert(token != NULL);
+  assert(token != nullptr);
 
   --length;
   while (1) {
@@ -465,7 +464,7 @@ static bool
 XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 {
   bool is_declaration;
-  const TCHAR *text = NULL;
+  const TCHAR *text = nullptr;
   XMLNode *pNew;
   enum Status status; // inside or outside a tag
   enum Attrib attrib = eAttribName;
@@ -503,7 +502,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
       case eTokenText:
       case eTokenQuotedText:
       case eTokenEquals:
-        if (text == NULL)
+        if (text == nullptr)
           text = token.pStr;
 
         break;
@@ -515,10 +514,10 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         is_declaration = token.type == eTokenDeclaration;
 
         // If we have node text then add this to the element
-        if (text != NULL) {
+        if (text != nullptr) {
           size_t length = FindEndOfText(text, token.pStr - text);
           node.AddText(text, length);
-          text = NULL;
+          text = nullptr;
         }
 
         // Find the name of the tag
@@ -554,7 +553,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
             if (pXML->cbEndTag) {
               // If we are back at the root node then we
               // have an unmatched end tag
-              if (node.GetName() == NULL) {
+              if (node.GetName() == nullptr) {
                 pXML->error = eXMLErrorUnmatchedEndTag;
                 return false;
               }
@@ -580,17 +579,17 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
       case eTokenTagEnd:
 
         // If we have node text then add this to the element
-        if (text != NULL) {
+        if (text != nullptr) {
           size_t length = FindEndOfText(text, token.pStr - text);
           TCHAR *text2 = FromXMLString(text, length);
-          if (text2 == NULL) {
+          if (text2 == nullptr) {
             pXML->error = eXMLErrorUnexpectedToken;
             return false;
           }
 
           node.AddText(text2);
           free(text2);
-          text = NULL;
+          text = nullptr;
         }
 
         // Find the name of the end tag
@@ -818,7 +817,7 @@ XMLNode *
 XML::ParseString(const TCHAR *xml_string, Results *pResults)
 {
   // If String is empty
-  if (xml_string == NULL) {
+  if (xml_string == nullptr) {
     // If XML::Results object exists
     if (pResults) {
       // -> Save the error type
@@ -828,12 +827,12 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
     }
 
     // -> Return empty XMLNode
-    return NULL;
+    return nullptr;
   }
 
   Error error;
   XMLNode xnode = XMLNode::Null();
-  Parser xml = { NULL, 0, eXMLErrorNone, NULL, 0, true, };
+  Parser xml = { nullptr, 0, eXMLErrorNone, nullptr, 0, true, };
 
   xml.lpXML = xml_string;
 
@@ -844,7 +843,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 
   // If the document node does not have childnodes
   XMLNode *child = xnode.GetFirstChild();
-  if (child == NULL) {
+  if (child == nullptr) {
     // If XML::Results object exists
     if (pResults) {
       // -> Save the error type
@@ -854,7 +853,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
     }
 
     // -> Return empty XMLNode
-    return NULL;
+    return nullptr;
   } else {
     // Set the document's first childnode as new main node
     xnode = std::move(*child);
@@ -865,7 +864,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
   if (xnode.IsDeclaration()) {
     // If the declaration does not have childnodes
     child = xnode.GetFirstChild();
-    if (child == NULL) {
+    if (child == nullptr) {
       // If XML::Results object exists
       if (pResults) {
         // -> Save the error type
@@ -875,7 +874,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
       }
 
       // -> Return empty XMLNode
-      return NULL;
+      return nullptr;
     } else {
       // Set the declaration's first childnode as new main node
       xnode = std::move(*child);
@@ -897,7 +896,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 
   // If error occurred -> set node to empty
   if (error != eXMLErrorNone)
-    return NULL;
+    return nullptr;
 
   // Return the node (empty, main or child of main that equals tag)
   return new XMLNode(std::move(xnode));
@@ -921,7 +920,7 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
   buffer.reserve(size);
 
   const TCHAR *line;
-  while ((line = reader.ReadLine()) != NULL) {
+  while ((line = reader.ReadLine()) != nullptr) {
     if (buffer.length() > 65536)
       /* too long */
       return false;
@@ -958,7 +957,7 @@ XML::ParseFile(const TCHAR *filename, Results *pResults)
     }
 
     // -> Return empty XMLNode
-    return NULL;
+    return nullptr;
   }
 
   // Parse the string and get the main XMLNode

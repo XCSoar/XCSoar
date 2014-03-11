@@ -103,8 +103,8 @@ void
 KeyboardWidget::SetAllowedCharacters(const TCHAR *allowed)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
-    buttons[i].SetVisible(allowed == NULL ||
-                          _tcschr(allowed, buttons[i].GetCharacter()) != NULL);
+    buttons[i].SetVisible(allowed == nullptr ||
+                          _tcschr(allowed, buttons[i].GetCharacter()) != nullptr);
 }
 
 ButtonWindow *
@@ -114,7 +114,7 @@ KeyboardWidget::FindButton(unsigned ch)
     if (buttons[i].GetUpperCharacter() == ch)
       return &buttons[i];
 
-  return NULL;
+  return nullptr;
 
 }
 

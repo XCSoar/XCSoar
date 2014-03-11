@@ -79,7 +79,7 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 }
 
 LoggerImpl::LoggerImpl()
-  :writer(NULL)
+  :writer(nullptr)
 {
   filename[0] = 0;
 }
@@ -93,7 +93,7 @@ void
 LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 {
   // Logger can't be switched off if already off -> cancel
-  if (writer == NULL)
+  if (writer == nullptr)
     return;
 
   writer->Flush();
@@ -105,7 +105,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 
   // Logger off
   delete writer;
-  writer = NULL;
+  writer = nullptr;
 
   // Make space for logger file, if unsuccessful -> cancel
   if (gps_info.gps.real && gps_info.date_time_utc.IsDatePlausible())
@@ -131,7 +131,7 @@ LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
   if (gps_info.location_available && !gps_info.gps.real)
     simulator = true;
 
-  if (writer != NULL)
+  if (writer != nullptr)
     writer->LogEvent(gps_info, event);
 }
 
@@ -141,7 +141,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
   if (!gps_info.alive || !gps_info.time_available)
     return;
 
-  if (writer == NULL) {
+  if (writer == nullptr) {
     LogPointToBuffer(gps_info);
     return;
   }
@@ -228,13 +228,13 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
                         const char *logger_id)
 {
-  assert(logger_id != NULL);
+  assert(logger_id != nullptr);
   assert(strlen(logger_id) == 3);
 
   /* finish the previous IGC file */
   StopLogger(gps_info);
 
-  assert(writer == NULL);
+  assert(writer == nullptr);
 
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
@@ -268,7 +268,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 void
 LoggerImpl::LoggerNote(const TCHAR *text)
 {
-  if (writer != NULL)
+  if (writer != nullptr)
     writer->LoggerNote(text);
 }
 

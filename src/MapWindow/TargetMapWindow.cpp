@@ -75,11 +75,11 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
                                  const AircraftLook &_aircraft_look)
   :task_look(_task_look),
    aircraft_look(_aircraft_look),
-   topography_renderer(NULL),
+   topography_renderer(nullptr),
    airspace_renderer(_airspace_look),
-   way_point_renderer(NULL, waypoint_look),
+   way_point_renderer(nullptr, waypoint_look),
    trail_renderer(_trail_look),
-   task(NULL)
+   task(nullptr)
 {
 }
 
@@ -108,14 +108,14 @@ TargetMapWindow::RenderTerrain(Canvas &canvas)
 void
 TargetMapWindow::RenderTopography(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
+  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, projection);
 }
 
 void
 TargetMapWindow::RenderTopographyLabels(Canvas &canvas)
 {
-  if (topography_renderer != NULL && GetMapSettings().topography_enabled)
+  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, projection, label_block);
 }
 
@@ -136,7 +136,7 @@ TargetMapWindow::RenderAirspace(Canvas &canvas)
 void
 TargetMapWindow::DrawTask(Canvas &canvas)
 {
-  if (task == NULL)
+  if (task == nullptr)
     return;
 
   ProtectedTaskManager::Lease task_manager(*task);
@@ -170,13 +170,13 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
                             GetComputerSettings().polar,
                             GetComputerSettings().task,
                             Basic(), Calculated(),
-                            task, NULL);
+                            task, nullptr);
 }
 
 void
 TargetMapWindow::RenderTrail(Canvas &canvas)
 {
-  if (glide_computer == NULL)
+  if (glide_computer == nullptr)
     return;
 
   unsigned min_time = std::max(0, (int)Basic().time - 600);
@@ -254,9 +254,9 @@ void
 TargetMapWindow::SetTopograpgy(TopographyStore *topography)
 {
   delete topography_renderer;
-  topography_renderer = topography != NULL
+  topography_renderer = topography != nullptr
     ? new TopographyRenderer(*topography)
-    : NULL;
+    : nullptr;
 }
 
 static fixed
@@ -345,10 +345,10 @@ TargetMapWindow::OnCreate()
 void
 TargetMapWindow::OnDestroy()
 {
-  SetTerrain(NULL);
-  SetTopograpgy(NULL);
-  SetAirspaces(NULL);
-  SetWaypoints(NULL);
+  SetTerrain(nullptr);
+  SetTopograpgy(nullptr);
+  SetAirspaces(nullptr);
+  SetWaypoints(nullptr);
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.Destroy();

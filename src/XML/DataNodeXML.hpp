@@ -35,11 +35,11 @@ class DataNodeXML:
   XMLNode node;
 
 protected:
-  /** 
+  /**
    * Construct a node from an XMLNode
-   * 
+   *
    * @param the_node XML node reflecting this node
-   * 
+   *
    * @return Initialised object
    */
   explicit DataNodeXML(const XMLNode &_node)
@@ -58,7 +58,7 @@ public:
    *
    * @param path Path to file to load
    *
-   * @return Root node (or NULL on failure)
+   * @return Root node (or nullptr on failure)
    */
   static DataNode *Load(const TCHAR* path);
 

@@ -38,7 +38,7 @@ Copyright_License {
 void
 MapWindow::DrawTask(Canvas &canvas)
 {
-  if (task == NULL)
+  if (task == nullptr)
     return;
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,

@@ -26,8 +26,6 @@
 #include "Util/NumberParser.hpp"
 #include "Time/RoughTime.hpp"
 
-#include <stdio.h>
-
 DataNode::~DataNode()
 {
 }
@@ -97,10 +95,10 @@ bool
 DataNode::GetAttribute(const TCHAR *name, fixed &value) const
 {
   const TCHAR *val = GetAttribute(name);
-  if (val == NULL)
+  if (val == nullptr)
     return false;
 
-  value = (fixed)_tcstod(val, NULL);
+  value = (fixed)_tcstod(val, nullptr);
   return true;
 }
 
@@ -108,7 +106,7 @@ bool
 DataNode::GetAttribute(const TCHAR *name, int &value) const
 {
   const TCHAR *val = GetAttribute(name);
-  if (val == NULL)
+  if (val == nullptr)
     return false;
 
   value = ParseInt(val);
@@ -119,7 +117,7 @@ bool
 DataNode::GetAttribute(const TCHAR *name, unsigned &value) const
 {
   const TCHAR *val = GetAttribute(name);
-  if (val == NULL)
+  if (val == nullptr)
     return false;
 
   value = ParseInt(val);
@@ -130,7 +128,7 @@ bool
 DataNode::GetAttribute(const TCHAR *name, bool &value) const
 {
   const TCHAR *val = GetAttribute(name);
-  if (val == NULL)
+  if (val == nullptr)
     return false;
 
   value = ParseInt(val) > 0;

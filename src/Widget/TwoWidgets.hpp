@@ -50,8 +50,8 @@ public:
 
   TwoWidgets(Widget *_first, Widget *_second, bool _vertical=true)
     :vertical(_vertical), first(_first), second(_second) {
-    assert(first != NULL);
-    assert(second != NULL);
+    assert(first != nullptr);
+    assert(second != nullptr);
   }
 
   virtual ~TwoWidgets();
@@ -72,8 +72,8 @@ protected:
     first = _first;
     second = _second;
 
-    assert(first != NULL);
-    assert(second != NULL);
+    assert(first != nullptr);
+    assert(second != nullptr);
   }
 
   Widget &GetFirst() {

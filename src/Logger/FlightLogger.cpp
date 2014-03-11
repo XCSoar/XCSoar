@@ -38,7 +38,7 @@ FlightLogger::Reset()
 void
 FlightLogger::LogEvent(const BrokenDateTime &date_time, const char *type)
 {
-  assert(type != NULL);
+  assert(type != nullptr);
 
   TextWriter writer(path.c_str(), true);
   if (!writer.IsOpen())

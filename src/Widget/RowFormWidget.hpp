@@ -137,7 +137,7 @@ class RowFormWidget : public WindowWidget {
       :type(_type), available(true), visible(true), expert(false),
        widget(nullptr), window(_window) {
       assert(_type != Type::DUMMY);
-      assert(_window != NULL);
+      assert(_window != nullptr);
     }
 
     Row(Widget *_widget)
@@ -145,7 +145,7 @@ class RowFormWidget : public WindowWidget {
        initialised(false), prepared(false), shown(false),
        available(true), visible(true), expert(false),
        widget(_widget), window(nullptr) {
-      assert(_widget != NULL);
+      assert(_widget != nullptr);
     }
 
     /**
@@ -213,14 +213,14 @@ class RowFormWidget : public WindowWidget {
 
     gcc_pure
     Window &GetWindow() {
-      assert(window != NULL);
+      assert(window != nullptr);
 
       return *window;
     }
 
     gcc_pure
     const Window &GetWindow() const {
-      assert(window != NULL);
+      assert(window != nullptr);
 
       return *window;
     }
@@ -228,7 +228,7 @@ class RowFormWidget : public WindowWidget {
     gcc_pure
     WndProperty &GetControl() {
       assert(type == Type::EDIT);
-      assert(window != NULL);
+      assert(window != nullptr);
 
       return *(WndProperty *)window;
     }
@@ -236,7 +236,7 @@ class RowFormWidget : public WindowWidget {
     gcc_pure
     const WndProperty &GetControl() const {
       assert(type == Type::EDIT);
-      assert(window != NULL);
+      assert(window != nullptr);
 
       return *(WndProperty *)window;
     }
@@ -292,7 +292,7 @@ protected:
 
   void Add(Row::Type type, Window *window);
 
-  WndProperty *CreateEdit(const TCHAR *label, const TCHAR *help=NULL,
+  WndProperty *CreateEdit(const TCHAR *label, const TCHAR *help=nullptr,
                           bool read_only=false);
 
 public:
@@ -324,15 +324,15 @@ public:
     Add(Row::Type::REMAINING, window);
   }
 
-  WndProperty *Add(const TCHAR *label, const TCHAR *help=NULL,
+  WndProperty *Add(const TCHAR *label, const TCHAR *help=nullptr,
                    bool read_only=false);
 
   /**
    * Add a read-only control.  You can use SetText() to update its
    * text.
    */
-  void AddReadOnly(const TCHAR *label, const TCHAR *help=NULL,
-                   const TCHAR *text=NULL);
+  void AddReadOnly(const TCHAR *label, const TCHAR *help=nullptr,
+                   const TCHAR *text=nullptr);
 
   /**
    * Add a read-only control displaying a floating-point value.  Use
@@ -495,10 +495,10 @@ public:
    * Update the text of a multi line control.
    */
   void SetText(unsigned i, const TCHAR *text) {
-    assert(text != NULL);
+    assert(text != nullptr);
 
     WndProperty &control = GetControl(i);
-    assert(control.GetDataField() == NULL);
+    assert(control.GetDataField() == nullptr);
     control.SetText(text);
   }
 
@@ -510,14 +510,14 @@ public:
   gcc_pure
   DataField &GetDataField(unsigned i) {
     DataField *df = GetControl(i).GetDataField();
-    assert(df != NULL);
+    assert(df != nullptr);
     return *df;
   }
 
   gcc_pure
   const DataField &GetDataField(unsigned i) const {
     const DataField *df = GetControl(i).GetDataField();
-    assert(df != NULL);
+    assert(df != nullptr);
     return *df;
   }
 

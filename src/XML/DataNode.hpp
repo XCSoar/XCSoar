@@ -67,7 +67,7 @@ public:
    *
    * @param name Name of child
    *
-   * @return Pointer to child if found, or NULL
+   * @return Pointer to child if found, or nullptr
    */
   virtual DataNode *GetChildNamed(const TCHAR *name) const = 0;
 
@@ -145,7 +145,7 @@ public:
    *
    * @param name Name of attribute
    *
-   * @return the value or NULL if it does not exist
+   * @return the value or nullptr if it does not exist
    */
   virtual const TCHAR *GetAttribute(const TCHAR *name) const = 0;
 

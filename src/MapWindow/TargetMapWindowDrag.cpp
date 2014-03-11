@@ -45,7 +45,7 @@ TargetMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 bool
 TargetMapWindow::TargetDragged(const int x, const int y)
 {
-  assert(task != NULL);
+  assert(task != nullptr);
 
   GeoPoint gp = projection.ScreenToGeo(x, y);
 
@@ -64,7 +64,7 @@ TargetMapWindow::TargetDragged(const int x, const int y)
 bool
 TargetMapWindow::isClickOnTarget(const RasterPoint pc) const
 {
-  if (task == NULL)
+  if (task == nullptr)
     return false;
 
   ProtectedTaskManager::Lease task_manager(*task);
@@ -82,7 +82,7 @@ TargetMapWindow::isClickOnTarget(const RasterPoint pc) const
 bool
 TargetMapWindow::isInSector(const int x, const int y)
 {
-  assert(task != NULL);
+  assert(task != nullptr);
 
   GeoPoint gp = projection.ScreenToGeo(x, y);
 

@@ -84,7 +84,7 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
     return false;
 
   const TCHAR *caption = dev.GetDisplayName();
-  if (caption == NULL)
+  if (caption == nullptr)
     caption = _("Declare task");
 
   auto result = DoDeviceDeclare(dev, declaration, home);
@@ -189,11 +189,11 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
   }
 
   char *line = reader.ReadLine();
-  if (line != NULL)
+  if (line != nullptr)
     IGCParseHeader(line, header);
 
   line = reader.ReadLine();
-  if (line == NULL || !IGCParseDateRecord(line, date))
+  if (line == nullptr || !IGCParseDateRecord(line, date))
     date = BrokenDate::TodayUTC();
 }
 
@@ -239,9 +239,9 @@ ShowFlightList(const RecordedFlightList &flight_list)
 
   // Show list of the flights
   int i = ComboPicker(_T("Choose a flight"),
-                      combo, NULL, false);
+                      combo, nullptr, false);
 
-  return (i < 0) ? NULL : &flight_list[i];
+  return i < 0 ? nullptr : &flight_list[i];
 }
 
 void

@@ -36,7 +36,7 @@ class DockWindow : public ContainerWindow {
   Widget *widget;
 
 public:
-  DockWindow():widget(NULL) {}
+  DockWindow():widget(nullptr) {}
 
   /**
    * Show the specified #Widget.  It will be deleted by this class in

@@ -56,7 +56,7 @@ GRecord::AppendRecordToBuffer(const char *in)
     return false;
 
   if (memcmp(in, "HFFTYFRTYPE:XCSOAR,XCSOAR ", 26) == 0 &&
-      strstr(in + 25, " 6.5 ") != NULL)
+      strstr(in + 25, " 6.5 ") != nullptr)
     /* this is XCSoar 6.5: enable the G record workaround */
     ignore_comma = false;
 
@@ -138,7 +138,7 @@ GRecord::LoadFileToBuffer(const TCHAR *filename)
 
   char *line;
 
-  while ((line = reader.ReadLine()) != NULL)
+  while ((line = reader.ReadLine()) != nullptr)
     AppendRecordToBuffer(line);
 
   return true;
@@ -182,7 +182,7 @@ GRecord::ReadGRecordFromFile(const TCHAR *filename,
 
   unsigned int digest_length = 0;
   char *data;
-  while ((data = reader.ReadLine()) != NULL) {
+  while ((data = reader.ReadLine()) != nullptr) {
     if (data[0] != 'G')
       continue;
 

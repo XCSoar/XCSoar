@@ -262,7 +262,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   if (!Basic().location_available
       || !Calculated().flight.flying
       || GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::OFF
-      || route_planner == NULL)
+      || route_planner == nullptr)
     return;
 
   // Create a visitor for the Reach code

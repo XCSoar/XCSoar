@@ -61,14 +61,14 @@ void
 MapWindow::OnDestroy()
 {
 #ifdef HAVE_NOAA
-  SetNOAAStore(NULL);
+  SetNOAAStore(nullptr);
 #endif
-  SetMarks(NULL);
+  SetMarks(nullptr);
   airspace_renderer.Clear();
-  SetWaypoints(NULL);
-  SetTopography(NULL);
-  SetTerrain(NULL);
-  SetWeather(NULL);
+  SetWaypoints(nullptr);
+  SetTopography(nullptr);
+  SetTerrain(nullptr);
+  SetWeather(nullptr);
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.Destroy();

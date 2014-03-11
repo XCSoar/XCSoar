@@ -70,7 +70,7 @@ XMLNode::XMLNode(const TCHAR *name, size_t name_length, bool is_declaration)
 XMLNode &
 XMLNode::AddChild(const TCHAR *name, bool is_declaration)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
 
   d->children.push_back(XMLNode(name, is_declaration));
   return d->children.back();
@@ -79,7 +79,7 @@ XMLNode::AddChild(const TCHAR *name, bool is_declaration)
 XMLNode &
 XMLNode::AddChild(const TCHAR *name, size_t name_length, bool is_declaration)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
 
   d->children.push_back(XMLNode(name, name_length, is_declaration));
   return d->children.back();
@@ -88,7 +88,7 @@ XMLNode::AddChild(const TCHAR *name, size_t name_length, bool is_declaration)
 void
 XMLNode::AddText(const TCHAR *value)
 {
-  assert(value != NULL);
+  assert(value != nullptr);
 
   d->text.append(value);
 }
@@ -96,7 +96,7 @@ XMLNode::AddText(const TCHAR *value)
 void
 XMLNode::AddText(const TCHAR *text, size_t length)
 {
-  assert(text != NULL);
+  assert(text != nullptr);
 
   d->text.append(text, length);
 }
@@ -127,7 +127,7 @@ const XMLNode *
 XMLNode::GetChildNode(const TCHAR *name) const
 {
   if (!d)
-    return NULL;
+    return nullptr;
 
   for (auto i = d->begin(), end = d->end(); i != end; ++i) {
     const XMLNode &node = *i;
@@ -135,19 +135,19 @@ XMLNode::GetChildNode(const TCHAR *name) const
       return &node;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 const TCHAR *
 XMLNode::GetAttribute(const TCHAR *name) const
 {
   if (!d)
-    return NULL;
+    return nullptr;
 
   for (auto i = d->attributes.begin(), end = d->attributes.end();
        i != end; ++i)
     if (StringIsEqualIgnoreCase(i->name.c_str(), name))
       return i->value.c_str();
 
-  return NULL;
+  return nullptr;
 }

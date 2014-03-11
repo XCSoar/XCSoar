@@ -148,7 +148,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
     vector.SetInvalid();
 
   short elevation;
-  if (terrain != NULL)
+  if (terrain != nullptr)
     elevation = terrain->GetTerrainHeight(location);
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
@@ -166,7 +166,7 @@ MapItemListBuilder::AddArrivalAltitudes(
 
   // Calculate terrain elevation if possible
   short elevation;
-  if (terrain != NULL)
+  if (terrain != nullptr)
     elevation = terrain->GetTerrainHeight(location);
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
@@ -214,7 +214,7 @@ MapItemListBuilder::AddVisibleAirspace(
     const MoreData &basic, const DerivedInfo &calculated)
 {
   AirspaceWarningList warnings;
-  if (warning_manager != NULL)
+  if (warning_manager != nullptr)
     warnings.Fill(*warning_manager);
 
   const AircraftState aircraft = ToAircraftState(basic, calculated);

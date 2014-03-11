@@ -34,7 +34,7 @@ XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
   style.Hide();
 
   Window *window = ::LoadWindow(callbacks, &form, parent, rc, resource, style);
-  assert(window != NULL);
+  assert(window != nullptr);
   SetWindow(window);
 }
 

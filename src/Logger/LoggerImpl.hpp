@@ -115,7 +115,7 @@ public:
   void LogEvent(const NMEAInfo &gps_info, const char* event);
 
   bool IsActive() const {
-    return writer != NULL;
+    return writer != nullptr;
   }
 
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
