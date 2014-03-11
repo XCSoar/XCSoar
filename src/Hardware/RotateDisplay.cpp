@@ -37,8 +37,8 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Features.hpp"
 #ifdef SOFTWARE_ROTATE_DISPLAY
-#include "Interface.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
+#include "Screen/SingleWindow.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #endif
 #endif
@@ -228,7 +228,7 @@ Display::Rotate(DisplayOrientation orientation)
   if (!RotateSupported())
     return false;
 
-  CommonInterface::main_window->SetDisplayOrientation(orientation);
+  UIGlobals::GetMainWindow().SetDisplayOrientation(orientation);
   return true;
 #else
   return false;
