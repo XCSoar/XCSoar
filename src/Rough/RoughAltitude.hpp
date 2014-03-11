@@ -48,8 +48,9 @@ public:
   explicit constexpr
   RoughAltitude(int _value):value((short)_value) {}
 
-  constexpr
-  RoughAltitude(fixed _value):value(_value) {}
+  RoughAltitude(fixed _value) {
+    value = iround(_value);
+  }
 
   /**
    * Create a representation of the largest possible value.
@@ -70,7 +71,7 @@ public:
   }
 
   RoughAltitude &operator=(fixed other) {
-    value = (short)other;
+    value = (short)iround(other);
     return *this;
   }
 
