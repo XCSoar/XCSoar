@@ -149,8 +149,8 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
-  const PixelRect scissor_rc(0, 0, canvas.GetHeight(),
-                             scroll_bar.GetLeft(GetSize()));
+  const PixelRect scissor_rc(0, 0, scroll_bar.GetLeft(GetSize()),
+                             canvas.GetHeight());
   GLCanvasScissor scissor(scissor_rc);
 #endif
 
