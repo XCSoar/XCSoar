@@ -155,6 +155,10 @@ public:
     return x_max;
   }
 
+  fixed GetMiddleX() const {
+    return Half(x_min + x_max);
+  }
+
   fixed GetMinY() const {
     return y_min;
   }

@@ -108,7 +108,7 @@ LeastSquares::Compute()
   }
   b = (sum_yi - m * sum_xi) / sum_weights;
 
-  y_ave = GetYAt(Half(x_max + x_min));
+  y_ave = GetYAt(GetMiddleX());
 }
 
 void
