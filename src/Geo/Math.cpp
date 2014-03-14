@@ -494,7 +494,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
 
   fixed sin_sigma, cos_sigma, cos_2_sigma_m;
 
-  while (fabs(sigma - sigmaP) > fixed(1e-7)) {
+  do {
     cos_2_sigma_m = cos(fixed(2) * sigma1 + sigma);
     sin_sigma = sin(sigma);
     cos_sigma = cos(sigma);
@@ -505,7 +505,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
 
     sigmaP = sigma;
     sigma = distance / (REARTH_B * A) + delta_sigma;
-  }
+  } while (fabs(sigma - sigmaP) > fixed(1e-7));
 
   const fixed tmp = sin_u1 * sin_sigma - cos_u1 * cos_sigma * cos_alpha1;
   const fixed lat2 = atan2(sin_u1 * cos_sigma + cos_u1 * sin_sigma * cos_alpha1,
