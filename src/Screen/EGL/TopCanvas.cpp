@@ -30,6 +30,28 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * Returns the EGL API to bind to using eglBindAPI().
+ */
+static constexpr EGLenum
+GetBindAPI()
+{
+  return HaveGLES()
+    ? EGL_OPENGL_ES_API
+    : EGL_OPENGL_API;
+}
+
+/**
+ * Returns the requested renderable type for EGL_RENDERABLE_TYPE.
+ */
+static constexpr EGLint
+GetRenderableType()
+{
+  return HaveGLES()
+    ? EGL_OPENGL_ES_BIT
+    : EGL_OPENGL_BIT;
+}
+
 void
 TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
@@ -114,7 +136,7 @@ TopCanvas::Create(PixelSize new_size,
     exit(EXIT_FAILURE);
   }
 
-  if (!eglBindAPI(HaveGLES() ? EGL_OPENGL_ES_API : EGL_OPENGL_API)) {
+  if (!eglBindAPI(GetBindAPI())) {
     fprintf(stderr, "eglBindAPI() failed\n");
     exit(EXIT_FAILURE);
   }
@@ -122,7 +144,7 @@ TopCanvas::Create(PixelSize new_size,
   static constexpr EGLint attributes[] = {
     EGL_STENCIL_SIZE, 1,
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-    EGL_RENDERABLE_TYPE, HaveGLES() ? EGL_OPENGL_ES_BIT : EGL_OPENGL_BIT,
+    EGL_RENDERABLE_TYPE, GetRenderableType(),
     EGL_NONE
   };
 
