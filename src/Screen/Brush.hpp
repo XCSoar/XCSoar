@@ -122,6 +122,11 @@ public:
   }
 #endif
 
+#ifdef HAVE_GLES2
+  // TODO: implement using shaders
+  void Set() const;
+#else
+
 #ifdef ENABLE_OPENGL
   /**
    * Configures this brush in the OpenGL context.
@@ -130,6 +135,7 @@ public:
     color.Set();
   }
 #endif /* OPENGL */
+#endif
 };
 
 #ifndef USE_GDI

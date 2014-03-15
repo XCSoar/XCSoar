@@ -28,11 +28,16 @@ OPENGL ?= n
 GLES = n
 endif
 
+GLES2 ?= n
+
 ifeq ($(OPENGL),y)
 OPENGL_CPPFLAGS = -DENABLE_OPENGL
 
 ifeq ($(TARGET_IS_DARWIN),y)
 OPENGL_LDLIBS = -framework OpenGL
+else ifeq ($(GLES2),y)
+OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
+OPENGL_LDLIBS = -lGLESv2 -ldl
 else ifeq ($(GLES),y)
 OPENGL_CPPFLAGS += -DHAVE_GLES
 OPENGL_LDLIBS = -lGLESv1_CM -ldl

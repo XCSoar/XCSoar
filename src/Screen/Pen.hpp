@@ -172,6 +172,12 @@ public:
   }
 #endif
 
+#ifdef HAVE_GLES2
+  // TODO: implement using shaders
+  void Bind() const;
+  void Unbind() const;
+#else
+
 #ifdef ENABLE_OPENGL
   /**
    * Configure the Pen in the OpenGL context.  Don't forget to call
@@ -203,6 +209,8 @@ public:
 #endif
   }
 #endif /* OPENGL */
+
+#endif /* !HAVE_GLES2 */
 
 #ifdef USE_MEMORY_CANVAS
   constexpr unsigned GetMask() const {

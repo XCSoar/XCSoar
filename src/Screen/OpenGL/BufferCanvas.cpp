@@ -23,12 +23,15 @@ Copyright_License {
 
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/Compatibility.hpp"
 #include "Globals.hpp"
 #include "Texture.hpp"
 #include "FrameBuffer.hpp"
 #include "RenderBuffer.hpp"
 #include "Init.hpp"
+
+#ifndef HAVE_GLES2
+#include "Compatibility.hpp"
+#endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "DisplayOrientation.hpp"
@@ -214,7 +217,9 @@ BufferCanvas::CopyTo(Canvas &other)
   assert(IsDefined());
   assert(!active || frame_buffer != nullptr);
 
+#ifndef HAVE_GLES2
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
 
   GLEnable scope(GL_TEXTURE_2D);
   texture->Bind();

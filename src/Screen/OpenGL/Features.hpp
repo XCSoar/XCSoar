@@ -70,4 +70,18 @@ HaveGLES()
 #endif
 }
 
+/**
+ * Running on OpenGL/ES 2.0?
+ */
+constexpr
+static inline bool
+HaveGLES2()
+{
+#ifdef HAVE_GLES2
+  return true;
+#else
+  return false;
+#endif
+}
+
 #endif

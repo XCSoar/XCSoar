@@ -48,7 +48,7 @@ static constexpr EGLint
 GetRenderableType()
 {
   return HaveGLES()
-    ? EGL_OPENGL_ES_BIT
+    ? (HaveGLES2() ? EGL_OPENGL_ES2_BIT : EGL_OPENGL_ES_BIT)
     : EGL_OPENGL_BIT;
 }
 

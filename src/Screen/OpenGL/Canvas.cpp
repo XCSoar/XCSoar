@@ -31,9 +31,12 @@ Copyright_License {
 #include "Screen/OpenGL/Shapes.hpp"
 #include "Screen/OpenGL/Buffer.hpp"
 #include "Screen/OpenGL/Features.hpp"
-#include "Screen/OpenGL/Compatibility.hpp"
 #include "Screen/Util.hpp"
 #include "Util/Macros.hpp"
+
+#ifndef HAVE_GLES2
+#include "Compatibility.hpp"
+#endif
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -535,6 +538,9 @@ PrepareColoredAlphaTexture(Color color)
 {
   color.Set();
 
+#ifdef HAVE_GLES2
+  // TODO: implement using shader
+#else
   if (color == COLOR_BLACK) {
     /* GL_ALPHA textures have black RGB - this is easy */
 
@@ -555,6 +561,7 @@ PrepareColoredAlphaTexture(Color color)
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
   }
+#endif
 }
 
 void

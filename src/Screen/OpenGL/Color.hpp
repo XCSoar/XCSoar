@@ -175,6 +175,11 @@ public:
                  Alpha());
   }
 
+#ifdef HAVE_GLES2
+  // TODO: implement using shaders
+  void Set() const;
+#else
+
   /**
    * Configures this color in the OpenGL context.
    */
@@ -188,6 +193,8 @@ public:
     glColor4ub(r, g, b, a);
 #endif
   }
+
+#endif
 
   /**
    * Compares two colors

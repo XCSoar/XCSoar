@@ -21,63 +21,69 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_SCOPE_HPP
-#define XCSOAR_SCREEN_OPENGL_SCOPE_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
+#define XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
 
-#include "Features.hpp"
 #include "System.hpp"
 
 /**
- * Enables and auto-disables an OpenGL capability.
+ * This class represents an OpenGL 3.0 / ES2.0 shader.
  */
-class GLEnable {
-  GLenum cap;
+class GLShader {
+  const GLuint id;
 
 public:
-  GLEnable(GLenum _cap):cap(_cap) {
-    ::glEnable(cap);
+  explicit GLShader(GLenum type):id(glCreateShader(type)) {}
+
+  ~GLShader() {
+    glDeleteShader(id);
   }
 
-  ~GLEnable() {
-    ::glDisable(cap);
+  GLuint GetId() const {
+    return id;
+  }
+
+  void Source(const char *_source) {
+    const GLchar *source = (const GLchar *)_source;
+    glShaderSource(id, 1, &source, nullptr);
+  }
+
+  void Compile() {
+    glCompileShader(id);
   }
 };
 
-#ifndef HAVE_GLES2
+/**
+ * This class represents an OpenGL 3.0 / ES2.0 program.
+ */
+class GLProgram {
+  const GLuint id;
 
-class GLLogicOp : public GLEnable {
 public:
-  GLLogicOp(GLenum opcode):GLEnable(GL_COLOR_LOGIC_OP) {
-    ::glLogicOp(opcode);
+  GLProgram():id(glCreateProgram()) {}
+
+  ~GLProgram() {
+    glDeleteProgram(id);
   }
 
-  void set(GLenum opcode) {
-    ::glLogicOp(opcode);
-  }
-};
-
-#endif
-
-class GLBlend : public GLEnable {
-public:
-  GLBlend(GLenum sfactor, GLenum dfactor):GLEnable(GL_BLEND) {
-    ::glBlendFunc(sfactor, dfactor);
+  GLuint GetId() const {
+    return id;
   }
 
-#ifndef HAVE_GLES
-  GLBlend(GLclampf alpha)
-    :GLEnable(GL_BLEND) {
-    ::glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
-    ::glBlendColor(0, 0, 0, alpha);
+  void AttachShader(const GLShader &shader) {
+    glAttachShader(id, shader.GetId());
   }
-#endif
-};
 
-class GLScissor : public GLEnable {
-public:
-  GLScissor(GLint x, GLint y, GLsizei width, GLsizei height)
-    :GLEnable(GL_SCISSOR_TEST) {
-    ::glScissor(x, y, width, height);
+  void Link() {
+    glLinkProgram(id);
+  }
+
+  void Validate() {
+    glValidateProgram(id);
+  }
+
+  void Use() {
+    glUseProgram(id);
   }
 };
 

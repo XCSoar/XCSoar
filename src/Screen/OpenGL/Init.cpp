@@ -210,7 +210,11 @@ CheckDepthStencil()
     return GL_DEPTH24_STENCIL8_OES;
 
   /* not supported */
+#ifdef HAVE_GLES2
+  return GL_NONE;
+#else
   return GL_NONE_OES;
+#endif
 
 #else
 
@@ -237,11 +241,20 @@ CheckStencil()
   if (OpenGL::IsExtensionSupported("GL_OES_stencil4"))
     return GL_STENCIL_INDEX4_OES;
 
-  if (OpenGL::IsExtensionSupported("GL_OES_stencil8"))
+  if (OpenGL::IsExtensionSupported("GL_OES_stencil8")) {
+#ifdef HAVE_GLES2
+    return GL_STENCIL_INDEX8;
+#else
     return GL_STENCIL_INDEX8_OES;
+#endif
+  }
 
   /* not supported */
+#ifdef HAVE_GLES2
+  return GL_NONE;
+#else
   return GL_NONE_OES;
+#endif
 
 #else
 
@@ -292,9 +305,11 @@ OpenGL::SetupContext()
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
+#ifndef HAVE_GLES2
   glDisable(GL_LIGHTING);
 
   glEnableClientState(GL_VERTEX_ARRAY);
+#endif
 
   InitShapes();
 }
@@ -306,6 +321,10 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
   viewport_size = size;
 
   glViewport(0, 0, size.x, size.y);
+
+#ifdef HAVE_GLES2
+  // TODO: set up matrix
+#else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 #ifdef HAVE_GLES
@@ -316,7 +335,10 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+#endif
 }
+
+#ifndef HAVE_GLES2
 
 /**
  * Determine the projection rotation angle (in degrees) of the
@@ -364,12 +386,18 @@ OrientationSwap(Point2D<unsigned> &p, DisplayOrientation orientation)
   }
 }
 
+#endif
+
 void
 OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 {
   window_size = size;
 
   glViewport(0, 0, size.x, size.y);
+
+#ifdef HAVE_GLES2
+  // TODO: set up matrix
+#else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glRotatef(OrientationToRotation(orientation), 0, 0, 1);
@@ -382,6 +410,7 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+#endif
 
   viewport_size = size;
 

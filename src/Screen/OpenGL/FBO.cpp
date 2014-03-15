@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "FBO.hpp"
 
-#ifdef HAVE_GLES
+#if defined(HAVE_GLES) && !defined(HAVE_GLES2)
 
 #include <assert.h>
 #include <dlfcn.h>

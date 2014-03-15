@@ -33,6 +33,8 @@ Copyright_License {
 #else
 #include <SDL_opengl.h>
 #endif
+#elif defined(HAVE_GLES2)
+#include <GLES2/gl2.h>
 #elif defined(HAVE_GLES)
 #include <GLES/gl.h>
 #else
