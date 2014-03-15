@@ -39,8 +39,11 @@ public:
   /* on Linux, enumerate /sys/class/tty/ which is faster than /dev/
      (searches only the TTY character devices) and shows only the
      ports that really exist */
+  /* but use /dev because there is no noticable downside, and it
+   * allows for custom port mapping using udev file
+   */
   TTYEnumerator()
-    :dir(opendir("/sys/class/tty")) {}
+    :dir(opendir("/dev")) {}
 #else
   TTYEnumerator()
     :dir(opendir("/dev")) {}
