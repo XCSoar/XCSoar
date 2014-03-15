@@ -27,6 +27,7 @@ Copyright_License {
 #include "Features.hpp"
 
 #ifdef ENABLE_SDL
+#include <SDL_version.h>
 #if defined(HAVE_GLES) && (SDL_MAJOR_VERSION >= 2)
 #include <SDL_opengles.h>
 #else
