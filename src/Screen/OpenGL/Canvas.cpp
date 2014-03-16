@@ -299,8 +299,9 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
     vertices.bind();
-    pen.Set();
+    pen.Bind();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
+    pen.Unbind();
   } else if (OpenGL::vertex_buffer_object && radius < 16) {
     /* draw a "small" circle with VBO */
 

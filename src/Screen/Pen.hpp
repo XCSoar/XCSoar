@@ -174,9 +174,10 @@ public:
 
 #ifdef ENABLE_OPENGL
   /**
-   * Configures this pen in the OpenGL context.
+   * Configure the Pen in the OpenGL context.  Don't forget to call
+   * UnbindStyle() when you're done with this Pen.
    */
-  void Set() const {
+  void Bind() const {
     color.Set();
 
 #ifdef HAVE_GLES
@@ -184,14 +185,6 @@ public:
 #else
     glLineWidth(width);
 #endif
-  }
-
-  /**
-   * Configure the Pen in the OpenGL context.  Don't forget to call
-   * UnbindStyle() when you're done with this Pen.
-   */
-  void Bind() const {
-    Set();
 
 #ifndef HAVE_GLES
     if (style == DASH) {
