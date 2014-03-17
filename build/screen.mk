@@ -76,6 +76,11 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
+
+ifeq ($(GLES2),y)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/OpenGL/Shaders.cpp
+endif
 endif
 
 ifeq ($(ENABLE_SDL),y)

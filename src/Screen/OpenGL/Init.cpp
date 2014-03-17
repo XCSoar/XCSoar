@@ -32,6 +32,10 @@ Copyright_License {
 #include "Asset.hpp"
 #include "DisplayOrientation.hpp"
 
+#ifdef HAVE_GLES2
+#include "Shaders.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
@@ -312,6 +316,10 @@ OpenGL::SetupContext()
 #endif
 
   InitShapes();
+
+#ifdef HAVE_GLES2
+  InitShaders();
+#endif
 }
 
 void
@@ -422,6 +430,10 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 void
 OpenGL::Deinitialise()
 {
+#ifdef HAVE_GLES2
+  DeinitShaders();
+#endif
+
   DeinitShapes();
 
   TextCache::Flush();
