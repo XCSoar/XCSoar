@@ -46,6 +46,27 @@ Copyright_License {
 
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
+struct ScopeVertexPointer {
+  ScopeVertexPointer() = default;
+
+  template<typename T>
+  ScopeVertexPointer(const T *p) {
+    Update(p);
+  }
+
+  ScopeVertexPointer(std::nullptr_t n) {
+    Update((const RasterPoint *)n);
+  }
+
+  void Update(const RasterPoint *p) {
+    glVertexPointer(2, GL_VALUE, 0, p);
+  }
+
+  void Update(const ExactRasterPoint *p) {
+    glVertexPointer(2, GL_EXACT, 0, p);
+  }
+};
+
 void
 Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                             const Color color)
@@ -60,7 +81,7 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
     { right, bottom },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 #else
   glRecti(left, top, right, bottom);
@@ -77,7 +98,7 @@ Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
     RasterPoint{left, bottom},
   };
 
-  glVertexPointer(2, GL_EXACT, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
   glDrawArrays(GL_LINE_LOOP, 0, 4);
 }
 
@@ -119,10 +140,11 @@ Canvas::DrawRaisedEdge(PixelRect &rc)
 void
 Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
 {
-  glVertexPointer(2, GL_VALUE, 0, points);
-
   pen.Bind();
+
+  const ScopeVertexPointer vp(points);
   glDrawArrays(GL_LINE_STRIP, 0, num_points);
+
   pen.Unbind();
 }
 
@@ -132,7 +154,7 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
-  glVertexPointer(2, GL_VALUE, 0, points);
+  ScopeVertexPointer vp(points);
 
   if (!brush.IsHollow() && num_points >= 3) {
     brush.Set();
@@ -154,7 +176,7 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
       unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
                                           pen.GetWidth(), true);
       if (vertices > 0) {
-        glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
+        vp.Update(vertex_buffer.begin());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
       }
     }
@@ -169,7 +191,7 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
-  glVertexPointer(2, GL_VALUE, 0, points);
+  ScopeVertexPointer vp(points);
 
   if (!brush.IsHollow() && num_points >= 3) {
     brush.Set();
@@ -185,7 +207,7 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
       unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
                                           pen.GetWidth(), true);
       if (vertices > 0) {
-        glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
+        vp.Update(vertex_buffer.begin());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
       }
     }
@@ -204,7 +226,7 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
     { GLvalue(x2), GLvalue(y) },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, v);
+  const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 }
 
@@ -218,7 +240,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
     { GLvalue(bx), GLvalue(by) },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, v);
+  const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
@@ -234,7 +256,7 @@ Canvas::DrawExactLine(int ax, int ay, int bx, int by)
     { ToGLexact(bx), ToGLexact(by) },
   };
 
-  glVertexPointer(2, GL_EXACT, 0, v);
+  const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
@@ -254,11 +276,11 @@ Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
-      glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
+      const ScopeVertexPointer vp(vertex_buffer.begin());
       glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
     }
   } else {
-    glVertexPointer(2, GL_VALUE, 0, &v[0].x);
+    const ScopeVertexPointer vp(v);
     glDrawArrays(GL_LINE_STRIP, 0, 2);
   }
 
@@ -276,7 +298,7 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
     { GLvalue(cx), GLvalue(cy) },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, v);
+  const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
@@ -293,7 +315,7 @@ Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
     { ToGLexact(cx), ToGLexact(cy) },
   };
 
-  glVertexPointer(2, GL_EXACT, 0, v);
+  const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
@@ -319,7 +341,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     /* draw a "small" circle with VBO */
 
     OpenGL::small_circle_buffer->Bind();
-    glVertexPointer(2, GL_SHORT, 0, nullptr);
+    const ScopeVertexPointer vp(nullptr);
 
     glPushMatrix();
 
@@ -349,7 +371,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     /* draw a "big" circle with VBO */
 
     OpenGL::circle_buffer->Bind();
-    glVertexPointer(2, GL_SHORT, 0, nullptr);
+    const ScopeVertexPointer vp(nullptr);
 
     glPushMatrix();
 
