@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
 
 #include "System.hpp"
+#include "Compiler.h"
 
 /**
  * This class represents an OpenGL 3.0 / ES2.0 shader.
@@ -84,6 +85,15 @@ public:
 
   void Use() {
     glUseProgram(id);
+  }
+
+  gcc_pure
+  GLint GetAttribLocation(const char *name) const {
+    return glGetAttribLocation(id, (const GLchar *)name);
+  }
+
+  void BindAttribLocation(GLuint index, const char *name) {
+    glBindAttribLocation(id, index, (const GLchar *)name);
   }
 };
 
