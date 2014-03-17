@@ -34,7 +34,10 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Util/Macros.hpp"
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+#include "Shaders.hpp"
+#include "Program.hpp"
+#else
 #include "Compatibility.hpp"
 #endif
 
@@ -47,28 +50,59 @@ Copyright_License {
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 struct ScopeVertexPointer {
+#ifdef HAVE_GLES2
+  ScopeVertexPointer() {
+    glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
+  }
+
+  ~ScopeVertexPointer() {
+    glDisableVertexAttribArray(OpenGL::Attribute::POSITION);
+  }
+#else
   ScopeVertexPointer() = default;
+#endif
 
   template<typename T>
   ScopeVertexPointer(const T *p) {
+#ifdef HAVE_GLES2
+    glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
+#endif
     Update(p);
   }
 
-  ScopeVertexPointer(std::nullptr_t n) {
-    Update(n);
+  ScopeVertexPointer(std::nullptr_t p) {
+#ifdef HAVE_GLES2
+    glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
+#endif
+    Update(p);
   }
 
   void Update(const RasterPoint *p) {
+#ifdef HAVE_GLES2
+    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, GL_VALUE,
+                          GL_FALSE, 0, p);
+#else
     glVertexPointer(2, GL_VALUE, 0, p);
+#endif
   }
 
   void Update(const ExactRasterPoint *p) {
+#ifdef HAVE_GLES2
+    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, GL_EXACT,
+                          GL_FALSE, 0, p);
+#else
     glVertexPointer(2, GL_EXACT, 0, p);
+#endif
   }
 
-  void Update(std::nullptr_t) {
+  void Update(std::nullptr_t p) {
     /* we initialise VBOs with GLshort, see Shapes.cpp */
-    glVertexPointer(2, GL_SHORT, 0, nullptr);
+#ifdef HAVE_GLES2
+    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, GL_SHORT,
+                          GL_FALSE, 0, p);
+#else
+    glVertexPointer(2, GL_SHORT, 0, p);
+#endif
   }
 };
 
