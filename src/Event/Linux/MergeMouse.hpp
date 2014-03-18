@@ -89,6 +89,8 @@ public:
 
   void SetDown(bool new_down);
   void MoveAbsolute(int new_x, int new_y);
+  void MoveAbsolute(int new_x, int new_y,
+                    int min_x, int max_x, int min_y, int max_y);
   void MoveRelative(int dx, int dy);
 
   unsigned GetX() const {

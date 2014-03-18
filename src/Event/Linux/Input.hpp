@@ -45,6 +45,8 @@ class LinuxInputDevice final : private FileEventHandler {
 
   MergeMouse &merge;
 
+  int min_x, max_x, min_y, max_y;
+
   /**
    * The position being edited.  Upon EV_SYN, it will be copied to
    * #moved_position if #moving is true.

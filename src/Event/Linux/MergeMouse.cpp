@@ -82,6 +82,26 @@ MergeMouse::MoveAbsolute(int new_x, int new_y)
 }
 
 void
+MergeMouse::MoveAbsolute(int new_x, int new_y,
+                         int min_x, int max_x, int min_y, int max_y)
+{
+  /* scale touschreen coordinates to screen size */
+
+  if (new_x < min_x)
+    new_x = 0;
+  else if (max_x > min_x)
+    new_x = new_x * int(rotate.GetWidth()) / (max_x - min_x);
+
+  if (new_y < min_y)
+    new_y = 0;
+  else if (max_y > min_y)
+    new_y = new_y * int(rotate.GetHeight()) / (max_y - min_y);
+
+  /* now call the "real" MoveAbsolute() */
+  MoveAbsolute(new_x, new_y);
+}
+
+void
 MergeMouse::MoveRelative(int dx, int dy)
 {
   rotate.DoRelative(dx, dy);
