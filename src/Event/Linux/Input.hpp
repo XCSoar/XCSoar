@@ -37,7 +37,7 @@ struct Event;
  */
 class LinuxInputDevice final : private FileEventHandler {
   struct Position {
-    unsigned x, y;
+    int x, y;
 
     static constexpr Position Zero() {
       return { 0, 0 };
