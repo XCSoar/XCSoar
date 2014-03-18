@@ -199,9 +199,13 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
 {
   color.Set();
 
-  const GLvalue v[] = { GLvalue(x1), GLvalue(y), GLvalue(x2), GLvalue(y) };
+  const RasterPoint v[] = {
+    { GLvalue(x1), GLvalue(y) },
+    { GLvalue(x2), GLvalue(y) },
+  };
+
   glVertexPointer(2, GL_VALUE, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 2);
+  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 }
 
 void
@@ -209,9 +213,13 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   pen.Bind();
 
-  const GLvalue v[] = { GLvalue(ax), GLvalue(ay), GLvalue(bx), GLvalue(by) };
+  const RasterPoint v[] = {
+    { GLvalue(ax), GLvalue(ay) },
+    { GLvalue(bx), GLvalue(by) },
+  };
+
   glVertexPointer(2, GL_VALUE, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 2);
+  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
 }
@@ -221,13 +229,13 @@ Canvas::DrawExactLine(int ax, int ay, int bx, int by)
 {
   pen.Bind();
 
-  const GLexact v[] = {
-    ToGLexact(ax), ToGLexact(ay),
-    ToGLexact(bx), ToGLexact(by),
+  const ExactRasterPoint v[] = {
+    { ToGLexact(ax), ToGLexact(ay) },
+    { ToGLexact(bx), ToGLexact(by) },
   };
 
   glVertexPointer(2, GL_EXACT, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 2);
+  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
 }
@@ -262,12 +270,14 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 {
   pen.Bind();
 
-  const GLvalue v[] = {
-    GLvalue(ax), GLvalue(ay), GLvalue(bx), GLvalue(by),
-    GLvalue(cx), GLvalue(cy),
+  const RasterPoint v[] = {
+    { GLvalue(ax), GLvalue(ay) },
+    { GLvalue(bx), GLvalue(by) },
+    { GLvalue(cx), GLvalue(cy) },
   };
+
   glVertexPointer(2, GL_VALUE, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 3);
+  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
 }
@@ -277,14 +287,14 @@ Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 {
   pen.Bind();
 
-  const GLexact v[] = {
-    ToGLexact(ax), ToGLexact(ay),
-    ToGLexact(bx), ToGLexact(by),
-    ToGLexact(cx), ToGLexact(cy),
+  const ExactRasterPoint v[] = {
+    { ToGLexact(ax), ToGLexact(ay) },
+    { ToGLexact(bx), ToGLexact(by) },
+    { ToGLexact(cx), ToGLexact(cy) },
   };
 
   glVertexPointer(2, GL_EXACT, 0, v);
-  glDrawArrays(GL_LINE_STRIP, 0, 3);
+  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
   pen.Unbind();
 }
