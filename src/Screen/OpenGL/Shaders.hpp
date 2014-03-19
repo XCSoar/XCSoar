@@ -34,12 +34,18 @@ namespace OpenGL {
     static constexpr GLuint POSITION = 1;
     static constexpr GLuint PROJECTION = 2;
     static constexpr GLuint MODELVIEW = 6;
+    static constexpr GLuint TEXCOORD = 10;
   };
 
   /**
    * A shader that draws a solid color (#Attribute::COLOR).
    */
   extern GLProgram *solid_shader;
+
+  /**
+   * A shader that copies the texture.
+   */
+  extern GLProgram *texture_shader;
 
   void InitShaders();
   void DeinitShaders();

@@ -26,6 +26,7 @@ Copyright_License {
 
 namespace OpenGL {
   GLProgram *solid_shader;
+  GLProgram *texture_shader;
 }
 
 static constexpr char solid_vertex_shader[] =
@@ -41,6 +42,25 @@ static constexpr char solid_fragment_shader[] =
   "uniform vec4 color;"
   "void main() {"
   "  gl_FragColor = color;"
+  "}";
+
+static constexpr char texture_vertex_shader[] =
+  "uniform mat4 projection;"
+  "uniform mat4 modelview;"
+  "attribute vec4 position;"
+  "attribute vec2 texcoord;"
+  "varying vec2 texcoordvar;"
+  "void main() {"
+  "  gl_Position = projection * modelview * position;"
+  "  texcoordvar = texcoord;"
+  "}";
+
+static constexpr char texture_fragment_shader[] =
+  "precision mediump float;"
+  "uniform sampler2D texture;"
+  "uniform vec2 texcoordvar;"
+  "void main() {"
+  "  gl_FragColor = texture2D(texture, texcoordvar);"
   "}";
 
 static void
@@ -71,6 +91,12 @@ OpenGL::InitShaders()
   solid_shader->BindAttribLocation(Attribute::COLOR, "color");
   solid_shader->BindAttribLocation(Attribute::POSITION, "position");
   solid_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
+
+  texture_shader = MakeProgram(texture_vertex_shader, texture_fragment_shader);
+  texture_shader->BindAttribLocation(Attribute::COLOR, "color");
+  texture_shader->BindAttribLocation(Attribute::POSITION, "position");
+  texture_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
+  texture_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
 }
 
 void
