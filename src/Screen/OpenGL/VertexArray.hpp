@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
 
 #include "Screen/OpenGL/Point.hpp"
+#include "VertexPointer.hpp"
 #include "Compiler.h"
 
 template<unsigned n>
@@ -33,14 +34,9 @@ struct GLVertexArray {
 
   RasterPoint v[SIZE];
 
-#ifdef HAVE_GLES2
-  // TODO: implement
-  void bind() const;
-#else
-  void bind() const {
-    glVertexPointer(2, GL_VALUE, 0, v);
+  void Bind(ScopeVertexPointer &vp) const {
+    vp.Update(v);
   }
-#endif
 };
 
 struct GLCircleVertices : public GLVertexArray<32> {
@@ -74,19 +70,13 @@ struct GLDonutVertices : public GLVertexArray<66> {
   GLDonutVertices(GLvalue center_x, GLvalue center_y,
                   GLvalue radius_inner, GLvalue radius_outer);
 
-#ifdef HAVE_GLES2
-  // TODO: implement
-  void bind_inner_circle() const;
-  void bind_outer_circle() const;
-#else
-  void bind_inner_circle() const {
-    glVertexPointer(2, GL_VALUE, sizeof(v[0]) * 2, v);
+  void BindInnerCircle(ScopeVertexPointer &vp) const {
+    vp.Update(GL_VALUE, sizeof(v[0]) * 2, v);
   }
 
-  void bind_outer_circle() const {
-    glVertexPointer(2, GL_VALUE, sizeof(v[0]) * 2, v + 1);
+  void BindOuterCircle(ScopeVertexPointer &vp) const {
+    vp.Update(GL_VALUE, sizeof(v[0]) * 2, v + 1);
   }
-#endif
 };
 
 #endif

@@ -311,15 +311,16 @@ void
 Canvas::DrawCircle(int x, int y, unsigned radius)
 {
   if (IsPenOverBrush() && pen.GetWidth() > 2) {
+    ScopeVertexPointer vp;
     GLDonutVertices vertices(x, y,
                              radius - pen.GetWidth() / 2,
                              radius + pen.GetWidth() / 2);
     if (!brush.IsHollow()) {
-      vertices.bind_inner_circle();
+      vertices.BindInnerCircle(vp);
       brush.Set();
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
-    vertices.bind();
+    vertices.Bind(vp);
     pen.Bind();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
     pen.Unbind();
@@ -407,8 +408,9 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     OpenGL::circle_buffer->Unbind();
 #ifndef HAVE_GLES2
   } else {
+    ScopeVertexPointer vp;
     GLCircleVertices vertices(x, y, radius);
-    vertices.bind();
+    vertices.Bind(vp);
 
     if (!brush.IsHollow()) {
       brush.Set();
@@ -482,6 +484,7 @@ Canvas::DrawAnnulus(int x, int y,
     return;
   }
 
+  ScopeVertexPointer vp;
   GLDonutVertices vertices(x, y, small_radius, big_radius);
 
   const std::pair<unsigned,unsigned> i = AngleToDonutVertices(start, end);
@@ -490,7 +493,7 @@ Canvas::DrawAnnulus(int x, int y,
 
   if (!brush.IsHollow()) {
     brush.Set();
-    vertices.bind();
+    vertices.Bind(vp);
 
     if (istart > iend) {
       glDrawArrays(GL_TRIANGLE_STRIP, istart,
@@ -506,7 +509,7 @@ Canvas::DrawAnnulus(int x, int y,
 
     if (istart != iend && iend != GLDonutVertices::MAX_ANGLE) {
       if (brush.IsHollow())
-        vertices.bind();
+        vertices.Bind(vp);
 
       glDrawArrays(GL_LINE_STRIP, istart, 2);
       glDrawArrays(GL_LINE_STRIP, iend, 2);
@@ -515,7 +518,7 @@ Canvas::DrawAnnulus(int x, int y,
     const unsigned pstart = istart / 2;
     const unsigned pend = iend / 2;
 
-    vertices.bind_inner_circle();
+    vertices.BindInnerCircle(vp);
     if (pstart < pend) {
       glDrawArrays(GL_LINE_STRIP, pstart, pend - pstart + 1);
     } else {
@@ -524,7 +527,7 @@ Canvas::DrawAnnulus(int x, int y,
       glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
     }
 
-    vertices.bind_outer_circle();
+    vertices.BindOuterCircle(vp);
     if (pstart < pend) {
       glDrawArrays(GL_LINE_STRIP, pstart, pend - pstart + 1);
     } else {
