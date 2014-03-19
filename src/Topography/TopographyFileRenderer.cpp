@@ -83,7 +83,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 
 #ifdef ENABLE_OPENGL
 
-void
+inline void
 TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
                                    const XShape &shape,
@@ -110,7 +110,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
 
 #else
 
-void
+inline void
 TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
                                    const unsigned short *lines,
