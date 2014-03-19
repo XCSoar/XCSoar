@@ -30,7 +30,10 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+
+#ifndef HAVE_GLES2
 #include "Screen/OpenGL/Compatibility.hpp"
+#endif
 #endif
 
 #include <assert.h>
@@ -369,7 +372,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
-				do_contour);
+                                do_contour);
 }
 
 /**
@@ -413,7 +416,9 @@ TerrainRenderer::Draw(Canvas &canvas,
     x1, y1,
   };
 
+#ifndef HAVE_GLES2
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
 
   GLEnable scope(GL_TEXTURE_2D);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
