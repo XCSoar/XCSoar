@@ -167,7 +167,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const unsigned min_distance = file.GetMinimumPointDistance(level)
     / Layout::Scale(1);
 
-#ifndef HAVE_GLES
+#ifdef HAVE_GLES
+  const float *const opengl_matrix = nullptr;
+#else
   float opengl_matrix[16];
   glGetFloatv(GL_MODELVIEW_MATRIX, opengl_matrix);
 #endif
@@ -229,11 +231,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
     case MS_SHAPE_POINT:
 #ifdef ENABLE_OPENGL
-#ifdef HAVE_GLES
-      PaintPoint(canvas, projection, shape, NULL);
-#else
       PaintPoint(canvas, projection, shape, opengl_matrix);
-#endif
 #else // !ENABLE_OPENGL
       PaintPoint(canvas, projection, lines, end_lines, points);
 #endif
