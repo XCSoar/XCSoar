@@ -41,6 +41,11 @@ Copyright_License {
 #include "Screen/OpenGL/VertexPointer.hpp"
 #endif
 
+#ifdef HAVE_GLES2
+#include "Screen/OpenGL/Matrix.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#endif
+
 #include <algorithm>
 #include <set>
 
@@ -174,10 +179,19 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glGetFloatv(GL_MODELVIEW_MATRIX, opengl_matrix);
 #endif
 
-  glPushMatrix();
   fixed angle = projection.GetScreenAngle().Degrees();
   fixed scale = projection.GetScale();
   const RasterPoint &screen_origin = projection.GetScreenOrigin();
+
+#ifdef HAVE_GLES2
+  glm::mat4 matrix = glm::translate(glm::rotate(glm::scale(glm::mat4(),
+                                                           glm::vec3(GLfloat(scale))),
+                                                GLfloat(angle),
+                                                glm::vec3(0, 0, 1)),
+                                    glm::vec3(screen_origin.x, screen_origin.y,
+                                              0));
+#else
+  glPushMatrix();
 #ifdef HAVE_GLES
 #ifdef FIXED_MATH
   GLfixed fixed_angle = angle.as_glfixed();
@@ -194,6 +208,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glRotatef((GLfloat)angle, 0., 0., -1.);
   glScalef((GLfloat)scale, (GLfloat)scale, 1.);
 #endif
+#endif /* !HAVE_GLES2 */
 #else // !ENABLE_OPENGL
   const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
   AllocatedArray<GeoPoint> geo_points;
@@ -213,11 +228,19 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
     const ShapePoint translation =
       shape.shape_translation(projection.GetGeoLocation());
+
+#ifdef HAVE_GLES2
+    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW,
+                       glm::translate(matrix,
+                                      glm::vec3(translation.x, translation.y,
+                                                0.)));
+#else
     glPushMatrix();
 #ifdef HAVE_GLES
     glTranslatex(translation.x, translation.y, 0);
 #else
     glTranslatef(translation.x, translation.y, 0.);
+#endif
 #endif
 #else // !ENABLE_OPENGL
     const unsigned short *lines = shape.get_lines();
@@ -327,11 +350,15 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       break;
     }
 #ifdef ENABLE_OPENGL
+#ifndef HAVE_GLES2
     glPopMatrix();
+#endif
 #endif
   }
 #ifdef ENABLE_OPENGL
+#ifndef HAVE_GLES2
   glPopMatrix();
+#endif
   pen.Unbind();
 #else
   shape_renderer.Commit();
