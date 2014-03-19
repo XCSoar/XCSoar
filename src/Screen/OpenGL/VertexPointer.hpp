@@ -68,13 +68,17 @@ struct ScopeVertexPointer {
     Update(p);
   }
 
-  void Update(GLenum type, const void *p) {
+  void Update(GLenum type, GLsizei stride, const void *p) {
 #ifdef HAVE_GLES2
     glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, type,
-                          GL_FALSE, 0, p);
+                          GL_FALSE, stride, p);
 #else
-    glVertexPointer(2, type, 0, p);
+    glVertexPointer(2, type, stride, p);
 #endif
+  }
+
+  void Update(GLenum type, const void *p) {
+    Update(type, 0, p);
   }
 
   void Update(const RasterPoint *p) {
