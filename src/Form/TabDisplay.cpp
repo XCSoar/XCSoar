@@ -33,7 +33,10 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+
+#ifndef HAVE_GLES2
 #include "Screen/OpenGL/Compatibility.hpp"
+#endif
 #endif
 
 #include <assert.h>
@@ -158,6 +161,9 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 
 #ifdef ENABLE_OPENGL
 
+#ifdef HAVE_GLES2
+    // TODO: implement
+#else
     if (inverse) {
       OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
@@ -173,6 +179,7 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
     } else
       /* simple copy */
       OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
 
     const GLEnable scope(GL_TEXTURE_2D);
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
