@@ -362,7 +362,11 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #endif
 
     OpenGL::small_circle_buffer->Unbind();
+#ifdef HAVE_GLES2
+  } else {
+#else
   } else if (OpenGL::vertex_buffer_object) {
+#endif
     /* draw a "big" circle with VBO */
 
     OpenGL::circle_buffer->Bind();
@@ -401,6 +405,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #endif
 
     OpenGL::circle_buffer->Unbind();
+#ifndef HAVE_GLES2
   } else {
     GLCircleVertices vertices(x, y, radius);
     vertices.bind();
@@ -415,6 +420,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
       pen.Unbind();
     }
+#endif
   }
 }
 
