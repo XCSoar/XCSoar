@@ -55,7 +55,7 @@ struct ScopeVertexPointer {
   }
 
   ScopeVertexPointer(std::nullptr_t n) {
-    Update((const RasterPoint *)n);
+    Update(n);
   }
 
   void Update(const RasterPoint *p) {
@@ -64,6 +64,11 @@ struct ScopeVertexPointer {
 
   void Update(const ExactRasterPoint *p) {
     glVertexPointer(2, GL_EXACT, 0, p);
+  }
+
+  void Update(std::nullptr_t) {
+    /* we initialise VBOs with GLshort, see Shapes.cpp */
+    glVertexPointer(2, GL_SHORT, 0, nullptr);
   }
 };
 
