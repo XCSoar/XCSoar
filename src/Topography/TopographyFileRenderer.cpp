@@ -87,7 +87,7 @@ void
 TopographyFileRenderer::PaintPoint(Canvas &canvas,
                                    const WindowProjection &projection,
                                    const XShape &shape,
-                                   float *opengl_matrix) const
+                                   const float *opengl_matrix) const
 {
   if (!icon.IsDefined())
     return;

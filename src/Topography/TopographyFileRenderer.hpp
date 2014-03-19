@@ -90,7 +90,7 @@ private:
 
 #ifdef ENABLE_OPENGL
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
-                  const XShape &shape, float *opengl_matrix) const;
+                  const XShape &shape, const float *opengl_matrix) const;
 #else
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
                   const unsigned short *lines, const unsigned short *end_lines,
