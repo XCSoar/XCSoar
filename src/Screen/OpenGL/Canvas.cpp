@@ -769,7 +769,12 @@ Canvas::StretchNot(const Bitmap &src)
 {
   assert(src.IsDefined());
 
+#ifdef HAVE_GLES2
+  // TODO: implement
+#else
   GLLogicOp invert(GL_COPY_INVERTED);
+#endif
+
   Stretch(src);
 }
 
@@ -784,7 +789,9 @@ Canvas::Stretch(int dest_x, int dest_y,
 #endif
   assert(src.IsDefined());
 
+#ifndef HAVE_GLES2
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
 
   GLTexture &texture = *src.GetNative();
   GLEnable scope(GL_TEXTURE_2D);
@@ -803,7 +810,9 @@ Canvas::Stretch(int dest_x, int dest_y,
 #endif
   assert(src.IsDefined());
 
+#ifndef HAVE_GLES2
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
 
   GLTexture &texture = *src.GetNative();
   GLEnable scope(GL_TEXTURE_2D);
@@ -826,6 +835,9 @@ Canvas::StretchMono(int dest_x, int dest_y,
      implementation will be faster when erasing the background
      again */
 
+#ifdef HAVE_GLES2
+  // TODO: implement
+#else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
   /* replace the texture color with the selected text color */
@@ -838,6 +850,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
 
   const GLEnable scope(GL_TEXTURE_2D);
   const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -855,7 +868,12 @@ Canvas::CopyNotOr(int dest_x, int dest_y,
 {
   assert(src.IsDefined());
 
+#ifdef HAVE_GLES2
+  // TODO: implement
+#else
   GLLogicOp logic_op(GL_OR_INVERTED);
+#endif
+
   Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
@@ -867,7 +885,12 @@ Canvas::CopyAnd(int dest_x, int dest_y,
 {
   assert(src.IsDefined());
 
+#ifdef HAVE_GLES2
+  // TODO: implement
+#else
   GLLogicOp logic_op(GL_AND);
+#endif
+
   Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
