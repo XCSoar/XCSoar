@@ -51,6 +51,10 @@ namespace OpenGL {
 
   RasterPoint translate;
 
+#ifdef HAVE_GLES2
+  glm::mat4 projection_matrix;
+#endif
+
 #ifndef NDEBUG
   pthread_t thread;
 #endif

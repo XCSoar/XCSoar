@@ -29,9 +29,11 @@ namespace OpenGL {
 }
 
 static constexpr char solid_vertex_shader[] =
+  "uniform mat4 projection;"
+  "uniform mat4 modelview;"
   "attribute vec4 position;"
   "void main() {"
-  "  gl_Position = position;"
+  "  gl_Position = projection * modelview * position;"
   "}";
 
 static constexpr char solid_fragment_shader[] =
@@ -68,6 +70,7 @@ OpenGL::InitShaders()
   solid_shader = MakeProgram(solid_vertex_shader, solid_fragment_shader);
   solid_shader->BindAttribLocation(Attribute::COLOR, "color");
   solid_shader->BindAttribLocation(Attribute::POSITION, "position");
+  solid_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
 }
 
 void

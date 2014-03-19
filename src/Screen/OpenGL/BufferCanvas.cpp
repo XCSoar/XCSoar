@@ -29,7 +29,10 @@ Copyright_License {
 #include "RenderBuffer.hpp"
 #include "Init.hpp"
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+#include "Shaders.hpp"
+#include "Matrix.hpp"
+#else
 #include "Compatibility.hpp"
 #endif
 
@@ -137,10 +140,17 @@ BufferCanvas::Begin(Canvas &other)
     glPushAttrib(GL_VIEWPORT_BIT);
 #endif
 
+#ifdef HAVE_GLES2
+    old_projection_matrix = OpenGL::projection_matrix;
+    OpenGL::projection_matrix = glm::mat4();
+    VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
+                       OpenGL::projection_matrix);
+#else
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
+#endif
 
     old_translate = OpenGL::translate;
     old_size = OpenGL::viewport_size;
@@ -186,10 +196,16 @@ BufferCanvas::Commit(Canvas &other)
     glPopAttrib();
 #endif
 
+#ifdef HAVE_GLES2
+    OpenGL::projection_matrix = old_projection_matrix;
+    VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
+                       OpenGL::projection_matrix);
+#else
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
+#endif
 
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;

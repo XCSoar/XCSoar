@@ -1,7 +1,7 @@
 /*
 Copyright_License {
 
-  XCSoar Glide Compute5r - http://www.xcsoar.org/
+  XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2014 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
@@ -21,28 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_SHADERS_HPP
-#define XCSOAR_SCREEN_OPENGL_SHADERS_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_MATRIX_HPP
+#define XCSOAR_SCREEN_OPENGL_MATRIX_HPP
+
+#ifndef HAVE_GLES2
+#error No GLES 2.0
+#endif
 
 #include "System.hpp"
 
-class GLProgram;
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-namespace OpenGL {
-  namespace Attribute {
-    static constexpr GLuint COLOR = 0;
-    static constexpr GLuint POSITION = 1;
-    static constexpr GLuint PROJECTION = 2;
-    static constexpr GLuint MODELVIEW = 6;
-  };
-
-  /**
-   * A shader that draws a solid color (#Attribute::COLOR).
-   */
-  extern GLProgram *solid_shader;
-
-  void InitShaders();
-  void DeinitShaders();
-};
+/**
+ * Wrapper for glVertexAttribPointer() that loads a matrix.
+ */
+static void
+VertexAttribMatrix(GLuint index, const glm::mat4 &matrix)
+{
+  const GLfloat *f = glm::value_ptr(matrix);
+  for (unsigned i = 0; i < 4; ++i, f += 4)
+    glVertexAttribPointer(index + i, 4, GL_FLOAT, GL_FALSE, 0, f);
+}
 
 #endif

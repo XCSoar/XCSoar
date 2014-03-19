@@ -37,6 +37,9 @@ Copyright_License {
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
 #include "Program.hpp"
+#include "Matrix.hpp"
+
+#include <glm/gtc/matrix_transform.hpp>
 #else
 #include "Compatibility.hpp"
 #endif
@@ -382,6 +385,12 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     OpenGL::small_circle_buffer->Bind();
     const ScopeVertexPointer vp(nullptr);
 
+#ifdef HAVE_GLES2
+    glm::mat4 matrix2 = glm::translate(glm::scale(glm::mat4(),
+                                                  glm::vec3(radius / 256.)),
+                                       glm::vec3(x, y, 0));
+    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, matrix2);
+#else
     glPushMatrix();
 
 #ifdef HAVE_GLES
@@ -390,6 +399,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #else
     glTranslatef(x, y, 0.);
     glScalef(radius / 256., radius / 256., 1.);
+#endif
 #endif
 
     if (!brush.IsHollow()) {
@@ -403,7 +413,9 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       pen.Unbind();
     }
 
+#ifndef HAVE_GLES2
     glPopMatrix();
+#endif
 
     OpenGL::small_circle_buffer->Unbind();
   } else if (OpenGL::vertex_buffer_object) {
@@ -412,6 +424,12 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     OpenGL::circle_buffer->Bind();
     const ScopeVertexPointer vp(nullptr);
 
+#ifdef HAVE_GLES2
+    glm::mat4 matrix2 = glm::translate(glm::scale(glm::mat4(),
+                                                  glm::vec3(radius / 256.)),
+                                       glm::vec3(x, y, 0));
+    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, matrix2);
+#else
     glPushMatrix();
 
 #ifdef HAVE_GLES
@@ -420,6 +438,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #else
     glTranslatef(x, y, 0.);
     glScalef(radius / 1024., radius / 1024., 1.);
+#endif
 #endif
 
     if (!brush.IsHollow()) {
@@ -433,7 +452,9 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       pen.Unbind();
     }
 
+#ifndef HAVE_GLES2
     glPopMatrix();
+#endif
 
     OpenGL::circle_buffer->Unbind();
   } else {

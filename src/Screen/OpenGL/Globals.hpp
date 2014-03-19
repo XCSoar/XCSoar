@@ -35,6 +35,10 @@ Copyright_License {
 #include "Screen/OpenGL/Features.hpp"
 #include "Math/Point2D.hpp"
 
+#ifdef HAVE_GLES2
+#include <glm/glm.hpp>
+#endif
+
 #ifndef NDEBUG
 #include <pthread.h>
 #endif
@@ -121,6 +125,10 @@ namespace OpenGL {
    * The current SubCanvas translation in pixels.
    */
   extern RasterPoint translate;
+
+#ifdef HAVE_GLES2
+  extern glm::mat4 projection_matrix;
+#endif
 };
 
 #endif

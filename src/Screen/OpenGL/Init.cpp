@@ -45,6 +45,10 @@ Copyright_License {
 #include "EGL.hpp"
 #endif
 
+#ifdef HAVE_GLES2
+#include <glm/gtc/matrix_transform.hpp>
+#endif
+
 #include <algorithm>
 
 #include <assert.h>
@@ -331,7 +335,7 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
   glViewport(0, 0, size.x, size.y);
 
 #ifdef HAVE_GLES2
-  // TODO: set up matrix
+  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -345,8 +349,6 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
   glLoadIdentity();
 #endif
 }
-
-#ifndef HAVE_GLES2
 
 /**
  * Determine the projection rotation angle (in degrees) of the
@@ -394,8 +396,6 @@ OrientationSwap(Point2D<unsigned> &p, DisplayOrientation orientation)
   }
 }
 
-#endif
-
 void
 OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 {
@@ -404,7 +404,11 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
   glViewport(0, 0, size.x, size.y);
 
 #ifdef HAVE_GLES2
-  // TODO: set up matrix
+  projection_matrix = glm::rotate(glm::mat4(),
+                                  OrientationToRotation(orientation),
+                                  glm::vec3(0, 0, 1));
+  OrientationSwap(size, orientation);
+  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

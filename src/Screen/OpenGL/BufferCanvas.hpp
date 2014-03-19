@@ -52,6 +52,10 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
   GLint old_viewport[4];
 #endif
 
+#ifdef HAVE_GLES2
+  glm::mat4 old_projection_matrix;
+#endif
+
   RasterPoint old_translate;
   Point2D<unsigned> old_size;
 

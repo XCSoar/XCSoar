@@ -37,6 +37,10 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
+#ifdef HAVE_GLES2
+#include <glm/glm.hpp>
+#endif
+
 #include <assert.h>
 #include <tchar.h>
 
@@ -55,6 +59,10 @@ protected:
   RasterPoint offset;
   PixelSize size;
 
+#ifdef HAVE_GLES2
+  glm::mat4 projection_matrix;
+#endif
+
   Pen pen;
   Brush brush;
   const Font *font;
@@ -72,6 +80,7 @@ public:
   Canvas()
     :offset(0, 0), size(0, 0),
      font(nullptr), background_mode(OPAQUE) {}
+
   Canvas(PixelSize _size)
     :offset(0, 0), size(_size),
      font(nullptr), background_mode(OPAQUE) {}
