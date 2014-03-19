@@ -439,13 +439,13 @@ static std::pair<unsigned,unsigned>
 AngleToDonutVertices(Angle start, Angle end)
 {
   static constexpr Angle epsilon = Angle::FullCircle()
-    / (GLDonutVertices::CIRCLE_SIZE * 4u);
+    / int(GLDonutVertices::CIRCLE_SIZE * 4u);
 
   const Angle delta = end - start;
 
   if (fabs(delta.AsDelta().Native()) <= epsilon.Native())
     /* full circle */
-    return std::make_pair(0, GLDonutVertices::MAX_ANGLE);
+    return std::make_pair(0u, unsigned(GLDonutVertices::MAX_ANGLE));
 
   const unsigned istart = AngleToDonutVertex(start);
   unsigned iend = AngleToDonutVertex(end);
