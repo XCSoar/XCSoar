@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "VertexPointer.hpp"
 #include "Asset.hpp"
 #include "Scope.hpp"
 #include "Compiler.h"
@@ -211,7 +212,7 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
     { dest_x + int(dest_width), dest_y + int(dest_height) },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
 
   const PixelSize allocated = GetAllocatedSize();
   GLfloat x0 = (GLfloat)src_x / allocated.cx;
@@ -267,7 +268,7 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
     dest.GetBottomRight(),
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
 
   const PixelSize allocated = GetAllocatedSize();
   GLfloat x0 = (GLfloat)src.left / allocated.cx;
