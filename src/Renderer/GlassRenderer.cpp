@@ -27,6 +27,7 @@ Copyright_License {
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
 
 #include "Screen/OpenGL/Scissor.hpp"
+#include "Screen/OpenGL/VertexPointer.hpp"
 #include "Util/Macros.hpp"
 
 #endif
@@ -55,7 +56,7 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
     { center.x - 1024 + size, center.y + 1024 + size },
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
 
   const Color colors[] = {
     shadow, color,

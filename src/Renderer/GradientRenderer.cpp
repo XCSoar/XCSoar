@@ -26,6 +26,7 @@ Copyright_License {
 
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
 
+#include "Screen/OpenGL/VertexPointer.hpp"
 #include "Util/Macros.hpp"
 
 #endif
@@ -42,7 +43,7 @@ DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
     rc.GetBottomRight(),
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
 
   const Color colors[] = {
     top_color,
