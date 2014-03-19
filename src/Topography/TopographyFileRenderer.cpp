@@ -38,6 +38,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/VertexPointer.hpp"
 #endif
 
 #include <algorithm>
@@ -242,9 +243,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       {
 #ifdef ENABLE_OPENGL
 #ifdef HAVE_GLES
-        glVertexPointer(2, GL_FIXED, 0, &points[0].x);
+        const ScopeVertexPointer vp(GL_FIXED, points);
 #else
-        glVertexPointer(2, GL_INT, 0, &points[0].x);
+        const ScopeVertexPointer vp(GL_INT, points);
 #endif
 
         const GLushort *indices, *count;
@@ -285,9 +286,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
                                                         index_count);
 
 #ifdef HAVE_GLES
-        glVertexPointer(2, GL_FIXED, 0, &points[0].x);
+        const ScopeVertexPointer vp(GL_FIXED, points);
 #else
-        glVertexPointer(2, GL_INT, 0, &points[0].x);
+        const ScopeVertexPointer vp(GL_INT, points);
 #endif
         if (!brush.GetColor().IsOpaque()) {
           const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
