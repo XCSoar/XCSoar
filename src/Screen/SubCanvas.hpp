@@ -30,6 +30,12 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/System.hpp"
+
+#ifdef HAVE_GLES2
+#include "Screen/OpenGL/Shaders.hpp"
+#include "Screen/OpenGL/Matrix.hpp"
+#include <glm/gtc/matrix_transform.hpp>
+#endif
 #endif
 
 #include <algorithm>
@@ -41,6 +47,10 @@ Copyright_License {
 class SubCanvas : public Canvas {
 #ifdef ENABLE_OPENGL
   RasterPoint relative;
+
+#ifdef HAVE_GLES2
+  glm::mat4 old_projection_matrix;
+#endif
 #endif
 
   static inline unsigned
@@ -63,12 +73,21 @@ public:
     if (relative.x != 0 || relative.y != 0) {
       OpenGL::translate += _offset;
 
+#ifdef HAVE_GLES2
+      old_projection_matrix = OpenGL::projection_matrix;
+      OpenGL::projection_matrix = glm::translate(old_projection_matrix,
+                                                 glm::vec3(relative.x,
+                                                           relative.y, 0));
+      VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
+                         OpenGL::projection_matrix);
+#else
       glPushMatrix();
 #ifdef HAVE_GLES
       glTranslatex((GLfixed)relative.x << 16, (GLfixed)relative.y << 16, 0);
 #else
       glTranslatef(relative.x, relative.y, 0);
 #endif
+#endif /* !HAVE_GLES2 */
     }
 #else
     buffer = canvas.buffer;
@@ -85,7 +104,13 @@ public:
     if (relative.x != 0 || relative.y != 0) {
       OpenGL::translate -= relative;
 
+#ifdef HAVE_GLES2
+      OpenGL::projection_matrix = old_projection_matrix;
+      VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
+                         OpenGL::projection_matrix);
+#else
       glPopMatrix();
+#endif
     }
 #endif
   }
