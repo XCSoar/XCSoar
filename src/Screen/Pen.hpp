@@ -172,12 +172,6 @@ public:
   }
 #endif
 
-#ifdef HAVE_GLES2
-  // TODO: implement using shaders
-  void Bind() const;
-  void Unbind() const;
-#else
-
 #ifdef ENABLE_OPENGL
   /**
    * Configure the Pen in the OpenGL context.  Don't forget to call
@@ -186,7 +180,7 @@ public:
   void Bind() const {
     color.Set();
 
-#ifdef HAVE_GLES
+#if defined(HAVE_GLES) && !defined(HAVE_GLES2)
     glLineWidthx(width << 16);
 #else
     glLineWidth(width);
@@ -209,8 +203,6 @@ public:
 #endif
   }
 #endif /* OPENGL */
-
-#endif /* !HAVE_GLES2 */
 
 #ifdef USE_MEMORY_CANVAS
   constexpr unsigned GetMask() const {
