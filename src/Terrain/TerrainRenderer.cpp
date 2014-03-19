@@ -30,6 +30,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/VertexPointer.hpp"
 
 #ifndef HAVE_GLES2
 #include "Screen/OpenGL/Compatibility.hpp"
@@ -396,7 +397,7 @@ TerrainRenderer::Draw(Canvas &canvas,
     map_projection.GeoToScreen(bounds.GetSouthEast()),
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  const ScopeVertexPointer vp(vertices);
 
   const GLTexture &texture = raster_renderer.BindAndGetTexture();
   const PixelSize allocated = texture.GetAllocatedSize();
