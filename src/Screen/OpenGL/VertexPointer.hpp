@@ -46,6 +46,13 @@ struct ScopeVertexPointer {
   ScopeVertexPointer() = default;
 #endif
 
+  ScopeVertexPointer(GLenum type, const void *p) {
+#ifdef HAVE_GLES2
+    glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
+#endif
+    Update(type, p);
+  }
+
   template<typename T>
   ScopeVertexPointer(const T *p) {
 #ifdef HAVE_GLES2
@@ -61,32 +68,26 @@ struct ScopeVertexPointer {
     Update(p);
   }
 
-  void Update(const RasterPoint *p) {
+  void Update(GLenum type, const void *p) {
 #ifdef HAVE_GLES2
-    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, GL_VALUE,
+    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, type,
                           GL_FALSE, 0, p);
 #else
-    glVertexPointer(2, GL_VALUE, 0, p);
+    glVertexPointer(2, type, 0, p);
 #endif
   }
 
+  void Update(const RasterPoint *p) {
+    Update(GL_VALUE, p);
+  }
+
   void Update(const ExactRasterPoint *p) {
-#ifdef HAVE_GLES2
-    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, GL_EXACT,
-                          GL_FALSE, 0, p);
-#else
-    glVertexPointer(2, GL_EXACT, 0, p);
-#endif
+    Update(GL_EXACT, p);
   }
 
   void Update(std::nullptr_t p) {
     /* we initialise VBOs with GLshort, see Shapes.cpp */
-#ifdef HAVE_GLES2
-    glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, GL_SHORT,
-                          GL_FALSE, 0, p);
-#else
-    glVertexPointer(2, GL_SHORT, 0, p);
-#endif
+    Update(GL_SHORT, p);
   }
 };
 
