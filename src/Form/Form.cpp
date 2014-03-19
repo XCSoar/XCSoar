@@ -38,6 +38,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/VertexPointer.hpp"
 #endif
 
 #ifdef ANDROID
@@ -541,7 +542,7 @@ WndForm::OnPaint(Canvas &canvas)
       { rc.left - size, rc.bottom + size },
     };
 
-    glVertexPointer(2, GL_VALUE, 0, vertices);
+    const ScopeVertexPointer vp(vertices);
 
     static constexpr Color inner_color = COLOR_BLACK.WithAlpha(192);
     static constexpr Color outer_color = COLOR_BLACK.WithAlpha(16);
