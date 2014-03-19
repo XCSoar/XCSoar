@@ -29,7 +29,7 @@ Copyright_License {
 
 template<unsigned n>
 struct GLVertexArray {
-  static constexpr size_t SIZE = n;
+  static constexpr unsigned SIZE = n;
 
   RasterPoint v[SIZE];
 
@@ -48,8 +48,8 @@ struct GLCircleVertices : public GLVertexArray<32> {
 };
 
 struct GLDonutVertices : public GLVertexArray<66> {
-  static constexpr size_t CIRCLE_SIZE = (SIZE - 2) / 2;
-  static constexpr size_t MAX_ANGLE = CIRCLE_SIZE * 2u;
+  static constexpr unsigned CIRCLE_SIZE = (SIZE - 2) / 2;
+  static constexpr unsigned MAX_ANGLE = CIRCLE_SIZE * 2u;
 
   gcc_const
   static unsigned FixAngle(unsigned angle) {
