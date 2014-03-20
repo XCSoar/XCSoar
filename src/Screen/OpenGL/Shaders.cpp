@@ -82,7 +82,7 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
 }
 
 static GLProgram *
-MakeProgram(const char *vertex_shader, const char *fragment_shader)
+CompileProgram(const char *vertex_shader, const char *fragment_shader)
 {
   GLProgram *program = new GLProgram();
   CompileAttachShader(*program, GL_VERTEX_SHADER, vertex_shader);
@@ -98,21 +98,35 @@ MakeProgram(const char *vertex_shader, const char *fragment_shader)
   return program;
 }
 
+static void
+LinkProgram(GLProgram &program)
+{
+  program.Link();
+
+  if (program.GetLinkStatus() != GL_TRUE) {
+    char log[4096];
+    program.GetInfoLog(log, sizeof(log));
+    fprintf(stderr, "Shader linker failed: %s\n", log);
+  }
+}
+
 void
 OpenGL::InitShaders()
 {
   DeinitShaders();
 
-  solid_shader = MakeProgram(solid_vertex_shader, solid_fragment_shader);
+  solid_shader = CompileProgram(solid_vertex_shader, solid_fragment_shader);
   solid_shader->BindAttribLocation(Attribute::COLOR, "color");
   solid_shader->BindAttribLocation(Attribute::POSITION, "position");
   solid_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
+  LinkProgram(*solid_shader);
 
-  texture_shader = MakeProgram(texture_vertex_shader, texture_fragment_shader);
+  texture_shader = CompileProgram(texture_vertex_shader, texture_fragment_shader);
   texture_shader->BindAttribLocation(Attribute::COLOR, "color");
   texture_shader->BindAttribLocation(Attribute::POSITION, "position");
   texture_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
   texture_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*texture_shader);
 }
 
 void
