@@ -32,6 +32,8 @@ Copyright_License {
 #ifdef HAVE_GLES2
 #include "Shapes.hpp"
 #include "Program.hpp"
+
+#include <glm/gtc/type_ptr.hpp>
 #endif
 
 #ifdef HAVE_OES_DRAW_TEXTURE
@@ -234,6 +236,9 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
 
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
+  glUniformMatrix4fv(OpenGL::texture_projection, 1, GL_FALSE,
+                     glm::value_ptr(OpenGL::projection_matrix));
+
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
@@ -304,6 +309,9 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
+  glUniformMatrix4fv(OpenGL::texture_projection, 1, GL_FALSE,
+                     glm::value_ptr(OpenGL::projection_matrix));
+
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
