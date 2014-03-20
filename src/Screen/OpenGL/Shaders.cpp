@@ -60,7 +60,7 @@ static constexpr char texture_vertex_shader[] =
 static constexpr char texture_fragment_shader[] =
   "precision mediump float;"
   "uniform sampler2D texture;"
-  "uniform vec2 texcoordvar;"
+  "varying vec2 texcoordvar;"
   "void main() {"
   "  gl_FragColor = texture2D(texture, texcoordvar);"
   "}";
