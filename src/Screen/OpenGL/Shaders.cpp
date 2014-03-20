@@ -24,6 +24,8 @@ Copyright_License {
 #include "Shaders.hpp"
 #include "Program.hpp"
 
+#include <stdio.h>
+
 namespace OpenGL {
   GLProgram *solid_shader;
   GLProgram *texture_shader;
@@ -69,6 +71,13 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
   GLShader shader(type);
   shader.Source(code);
   shader.Compile();
+
+  if (shader.GetCompileStatus() != GL_TRUE) {
+    char log[4096];
+    shader.GetInfoLog(log, sizeof(log));
+    fprintf(stderr, "Shader compiler failed: %s\n", log);
+  }
+
   program.AttachShader(shader);
 }
 
@@ -79,6 +88,13 @@ MakeProgram(const char *vertex_shader, const char *fragment_shader)
   CompileAttachShader(*program, GL_VERTEX_SHADER, vertex_shader);
   CompileAttachShader(*program, GL_FRAGMENT_SHADER, fragment_shader);
   program->Link();
+
+  if (program->GetLinkStatus() != GL_TRUE) {
+    char log[4096];
+    program->GetInfoLog(log, sizeof(log));
+    fprintf(stderr, "Shader linker failed: %s\n", log);
+  }
+
   return program;
 }
 

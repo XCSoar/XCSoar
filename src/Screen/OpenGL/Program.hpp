@@ -52,6 +52,24 @@ public:
   void Compile() {
     glCompileShader(id);
   }
+
+  gcc_pure
+  GLint GetCompileStatus() const {
+    GLint status;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &status);
+    return status;
+  }
+
+  gcc_pure
+  GLint GetInfoLogLength() const {
+    GLint length;
+    glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+    return length;
+  }
+
+  void GetInfoLog(char *buffer, GLsizei max_size) {
+    glGetShaderInfoLog(id, max_size, nullptr, (GLchar *)buffer);
+  }
 };
 
 /**
@@ -77,6 +95,24 @@ public:
 
   void Link() {
     glLinkProgram(id);
+  }
+
+  gcc_pure
+  GLint GetLinkStatus() const {
+    GLint status;
+    glGetProgramiv(id, GL_LINK_STATUS, &status);
+    return status;
+  }
+
+  gcc_pure
+  GLint GetInfoLogLength() const {
+    GLint length;
+    glGetProgramiv(id, GL_INFO_LOG_LENGTH, &length);
+    return length;
+  }
+
+  void GetInfoLog(char *buffer, GLsizei max_size) {
+    glGetProgramInfoLog(id, max_size, nullptr, (GLchar *)buffer);
   }
 
   void Validate() {
