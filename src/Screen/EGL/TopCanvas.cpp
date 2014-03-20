@@ -172,8 +172,17 @@ TopCanvas::Create(PixelSize new_size,
 
   const PixelSize effective_size = { egl_width, egl_height };
 
+#ifdef HAVE_GLES2
+  static constexpr EGLint context_attributes[] = {
+    EGL_CONTEXT_CLIENT_VERSION, 2,
+    EGL_NONE
+  };
+#else
+  const EGLint *context_attributes = nullptr;
+#endif
+
   context = eglCreateContext(display, chosen_config,
-                             EGL_NO_CONTEXT, nullptr);
+                             EGL_NO_CONTEXT, context_attributes);
 
   eglMakeCurrent(display, surface, surface, context);
 
