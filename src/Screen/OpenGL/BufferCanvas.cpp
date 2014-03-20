@@ -31,7 +31,6 @@ Copyright_License {
 
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
-#include "Matrix.hpp"
 #else
 #include "Compatibility.hpp"
 #endif
@@ -143,8 +142,6 @@ BufferCanvas::Begin(Canvas &other)
 #ifdef HAVE_GLES2
     old_projection_matrix = OpenGL::projection_matrix;
     OpenGL::projection_matrix = glm::mat4();
-    VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
-                       OpenGL::projection_matrix);
 #else
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -198,8 +195,6 @@ BufferCanvas::Commit(Canvas &other)
 
 #ifdef HAVE_GLES2
     OpenGL::projection_matrix = old_projection_matrix;
-    VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
-                       OpenGL::projection_matrix);
 #else
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();

@@ -30,22 +30,21 @@ class GLProgram;
 
 namespace OpenGL {
   namespace Attribute {
-    static constexpr GLuint COLOR = 0;
     static constexpr GLuint POSITION = 1;
-    static constexpr GLuint PROJECTION = 2;
-    static constexpr GLuint MODELVIEW = 6;
-    static constexpr GLuint TEXCOORD = 10;
+    static constexpr GLuint TEXCOORD = 2;
   };
 
   /**
    * A shader that draws a solid color (#Attribute::COLOR).
    */
   extern GLProgram *solid_shader;
+  extern GLint solid_projection, solid_modelview, solid_color;
 
   /**
    * A shader that copies the texture.
    */
   extern GLProgram *texture_shader;
+  extern GLint texture_projection, texture_modelview, texture_texture;
 
   void InitShaders();
   void DeinitShaders();

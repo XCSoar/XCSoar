@@ -38,9 +38,9 @@ Copyright_License {
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
 #include "Program.hpp"
-#include "Matrix.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #else
 #include "Compatibility.hpp"
 #endif
@@ -334,7 +334,9 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     glm::mat4 matrix2 = glm::translate(glm::scale(glm::mat4(),
                                                   glm::vec3(radius / 256.)),
                                        glm::vec3(x, y, 0));
-    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, matrix2);
+    OpenGL::solid_shader->Use();
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(matrix2));
 #else
     glPushMatrix();
 
@@ -358,7 +360,10 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       pen.Unbind();
     }
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(glm::mat4()));
+#else
     glPopMatrix();
 #endif
 
@@ -377,7 +382,9 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     glm::mat4 matrix2 = glm::translate(glm::scale(glm::mat4(),
                                                   glm::vec3(radius / 256.)),
                                        glm::vec3(x, y, 0));
-    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, matrix2);
+    OpenGL::solid_shader->Use();
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(matrix2));
 #else
     glPushMatrix();
 
@@ -401,7 +408,10 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       pen.Unbind();
     }
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(glm::mat4()));
+#else
     glPopMatrix();
 #endif
 

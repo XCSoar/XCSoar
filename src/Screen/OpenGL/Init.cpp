@@ -34,7 +34,6 @@ Copyright_License {
 
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
-#include "Matrix.hpp"
 #endif
 
 #ifdef ANDROID
@@ -337,11 +336,6 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
 
 #ifdef HAVE_GLES2
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
-
-  glEnableVertexAttribArray(OpenGL::Attribute::PROJECTION);
-  VertexAttribMatrix(OpenGL::Attribute::PROJECTION, projection_matrix);
-  glEnableVertexAttribArray(OpenGL::Attribute::MODELVIEW);
-  VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, glm::mat4());
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -415,11 +409,6 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
                                   glm::vec3(0, 0, 1));
   OrientationSwap(size, orientation);
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
-
-  glEnableVertexAttribArray(OpenGL::Attribute::PROJECTION);
-  VertexAttribMatrix(OpenGL::Attribute::PROJECTION, projection_matrix);
-  glEnableVertexAttribArray(OpenGL::Attribute::MODELVIEW);
-  VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, glm::mat4());
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

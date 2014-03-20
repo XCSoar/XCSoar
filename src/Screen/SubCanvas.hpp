@@ -33,7 +33,6 @@ Copyright_License {
 
 #ifdef HAVE_GLES2
 #include "Screen/OpenGL/Shaders.hpp"
-#include "Screen/OpenGL/Matrix.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #endif
 #endif
@@ -78,8 +77,6 @@ public:
       OpenGL::projection_matrix = glm::translate(old_projection_matrix,
                                                  glm::vec3(relative.x,
                                                            relative.y, 0));
-      VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
-                         OpenGL::projection_matrix);
 #else
       glPushMatrix();
 #ifdef HAVE_GLES
@@ -106,8 +103,6 @@ public:
 
 #ifdef HAVE_GLES2
       OpenGL::projection_matrix = old_projection_matrix;
-      VertexAttribMatrix(OpenGL::Attribute::PROJECTION,
-                         OpenGL::projection_matrix);
 #else
       glPopMatrix();
 #endif

@@ -24,11 +24,16 @@ Copyright_License {
 #include "Shaders.hpp"
 #include "Program.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <stdio.h>
 
 namespace OpenGL {
   GLProgram *solid_shader;
+  GLint solid_projection, solid_modelview, solid_color;
+
   GLProgram *texture_shader;
+  GLint texture_projection, texture_modelview, texture_texture;
 }
 
 static constexpr char solid_vertex_shader[] =
@@ -116,17 +121,30 @@ OpenGL::InitShaders()
   DeinitShaders();
 
   solid_shader = CompileProgram(solid_vertex_shader, solid_fragment_shader);
-  solid_shader->BindAttribLocation(Attribute::COLOR, "color");
   solid_shader->BindAttribLocation(Attribute::POSITION, "position");
-  solid_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
   LinkProgram(*solid_shader);
 
+  solid_projection = solid_shader->GetUniformLocation("projection");
+  solid_modelview = solid_shader->GetUniformLocation("modelview");
+  solid_color = solid_shader->GetUniformLocation("color");
+
+  solid_shader->Use();
+  glUniformMatrix4fv(solid_modelview, 1, GL_FALSE,
+                     glm::value_ptr(glm::mat4()));
+
   texture_shader = CompileProgram(texture_vertex_shader, texture_fragment_shader);
-  texture_shader->BindAttribLocation(Attribute::COLOR, "color");
   texture_shader->BindAttribLocation(Attribute::POSITION, "position");
-  texture_shader->BindAttribLocation(Attribute::PROJECTION, "projection");
   texture_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
   LinkProgram(*texture_shader);
+
+  texture_projection = texture_shader->GetUniformLocation("projection");
+  texture_modelview = texture_shader->GetUniformLocation("modelview");
+  texture_texture = texture_shader->GetUniformLocation("texture");
+
+  texture_shader->Use();
+  glUniformMatrix4fv(texture_modelview, 1, GL_FALSE,
+                     glm::value_ptr(glm::mat4()));
+  glUniform1i(texture_texture, 0);
 }
 
 void

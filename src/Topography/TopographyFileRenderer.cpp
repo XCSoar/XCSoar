@@ -42,8 +42,8 @@ Copyright_License {
 #endif
 
 #ifdef HAVE_GLES2
-#include "Screen/OpenGL/Matrix.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #endif
 
 #include <algorithm>
@@ -230,10 +230,10 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       shape.shape_translation(projection.GetGeoLocation());
 
 #ifdef HAVE_GLES2
-    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW,
-                       glm::translate(matrix,
-                                      glm::vec3(translation.x, translation.y,
-                                                0.)));
+    auto matrix2 = glm::translate(matrix, glm::vec3(translation.x,
+                                                    translation.y, 0.));
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(matrix2));
 #else
     glPushMatrix();
 #ifdef HAVE_GLES

@@ -31,8 +31,9 @@ Copyright_License {
 
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
-#include "Matrix.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #endif
 
 /**
@@ -51,7 +52,8 @@ public:
                                                   GLfloat(angle.Degrees()),
                                                   glm::vec3(0, 0, 1)),
                                       glm::vec3(pos.x, pos.y, 0));
-    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, matrix);
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(matrix));
 #else
     glPushMatrix();
 
@@ -84,7 +86,8 @@ public:
 
   ~CanvasRotateShift() {
 #ifdef HAVE_GLES2
-    VertexAttribMatrix(OpenGL::Attribute::MODELVIEW, glm::mat4());
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(glm::mat4()));
 #else
     glPopMatrix();
 #endif
