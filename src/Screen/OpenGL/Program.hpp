@@ -124,6 +124,11 @@ public:
   }
 
   gcc_pure
+  GLint GetUniformLocation(const char *name) const {
+    return glGetUniformLocation(id, (const GLchar *)name);
+  }
+
+  gcc_pure
   GLint GetAttribLocation(const char *name) const {
     return glGetAttribLocation(id, (const GLchar *)name);
   }
