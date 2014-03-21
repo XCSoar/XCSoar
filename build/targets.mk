@@ -292,10 +292,12 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_ABI2 = arm-linux-androideabi
   ANDROID_ABI3 = armeabi
   ANDROID_ABI4 = $(ANDROID_ABI2)
+  ANDROID_ABI5 = $(ANDROID_ABI3)
   ANDROID_GCC_VERSION = 4.8
 
   ifeq ($(ARMV7),y)
-    ANDROID_ABI3 = armeabi-v7a
+    ANDROID_ABI3 = armeabi-v7a-hard
+    ANDROID_ABI5 = armeabi-v7a
   endif
 
   ifeq ($(X86),y)
@@ -366,7 +368,7 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(ARMV7),y)
     LLVM_TRIPLE = armv7-none-linux-androideabi
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mthumb-interwork
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1
     HAVE_FPU := y
   endif
 
@@ -598,7 +600,15 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += -lc -lm
+  TARGET_LDLIBS += -lc
+
+  ifeq ($(ARMV7),y)
+    TARGET_LDLIBS += -lm_hard
+    TARGET_LDLIBS += -Wl,--no-warn-mismatch
+  else
+    TARGET_LDLIBS += -lm
+  endif
+
   TARGET_LDLIBS += -llog
   TARGET_LDLIBS += -lgcc
 endif
