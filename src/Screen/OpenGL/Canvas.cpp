@@ -633,6 +633,8 @@ PrepareColoredAlphaTexture(Color color)
   OpenGL::alpha_shader->Use();
   color.Uniform(OpenGL::alpha_color);
 #else
+  color.Set();
+
   if (color == COLOR_BLACK) {
     /* GL_ALPHA textures have black RGB - this is easy */
 
@@ -640,9 +642,6 @@ PrepareColoredAlphaTexture(Color color)
   } else {
     /* use GL_COMBINE to replace the texture color (black) with the
        specified one */
-
-    color.Set();
-
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
     /* replace the texture color with the selected text color */
