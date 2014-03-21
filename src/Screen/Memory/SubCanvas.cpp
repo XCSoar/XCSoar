@@ -21,38 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SUB_CANVAS_HPP
-#define XCSOAR_SCREEN_SUB_CANVAS_HPP
+#include "Screen/SubCanvas.hpp"
 
-#include "Screen/Canvas.hpp"
+#include <algorithm>
 
-#ifdef ENABLE_OPENGL
-#include "Screen/Point.hpp"
-#endif
+static unsigned
+ClipMax(unsigned limit, int offset, unsigned size) {
+  return std::min(unsigned(size),
+                  unsigned(std::max(int(limit - offset), 0)));
+}
 
-#ifdef HAVE_GLES2
-#include <glm/glm.hpp>
-#endif
-
-/**
- * A #Canvas implementation which maps into a part of an existing
- * #Canvas.
- */
-class SubCanvas : public Canvas {
-#ifdef ENABLE_OPENGL
-  RasterPoint relative;
-
-#ifdef HAVE_GLES2
-  glm::mat4 old_projection_matrix;
-#endif
-#endif
-
-public:
-  SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size);
-
-#ifdef ENABLE_OPENGL
-  ~SubCanvas();
-#endif
-};
-
-#endif
+SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
+{
+  buffer = canvas.buffer;
+  buffer.data = buffer.At(_offset.x, _offset.y);
+  buffer.width = ClipMax(buffer.width, _offset.x, _size.cx);
+  buffer.height = ClipMax(buffer.height, _offset.y, _size.cy);
+}
