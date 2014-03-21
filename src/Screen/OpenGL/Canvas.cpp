@@ -894,40 +894,6 @@ Canvas::StretchMono(int dest_x, int dest_y,
 }
 
 void
-Canvas::CopyNotOr(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  const Bitmap &src, int src_x, int src_y)
-{
-  assert(src.IsDefined());
-
-#ifdef HAVE_GLES2
-  // TODO: implement
-#else
-  GLLogicOp logic_op(GL_OR_INVERTED);
-#endif
-
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       src, src_x, src_y);
-}
-
-void
-Canvas::CopyAnd(int dest_x, int dest_y,
-                 unsigned dest_width, unsigned dest_height,
-                 const Bitmap &src, int src_x, int src_y)
-{
-  assert(src.IsDefined());
-
-#ifdef HAVE_GLES2
-  // TODO: implement
-#else
-  GLLogicOp logic_op(GL_AND);
-#endif
-
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       src, src_x, src_y);
-}
-
-void
 Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 {
 #ifdef HAVE_GLES

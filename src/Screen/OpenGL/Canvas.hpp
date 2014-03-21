@@ -429,18 +429,6 @@ public:
                    unsigned src_width, unsigned src_height,
                    Color fg_color, Color bg_color);
 
-  void CopyNotOr(int dest_x, int dest_y,
-                 unsigned dest_width, unsigned dest_height,
-                 const Bitmap &src, int src_x, int src_y);
-
-  void CopyAnd(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
-
-  void CopyAnd(const Bitmap &src) {
-    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
-  }
-
   void ScaleCopy(int dest_x, int dest_y,
                  const Bitmap &src,
                  int src_x, int src_y,
