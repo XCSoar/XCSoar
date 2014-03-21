@@ -439,7 +439,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 
 #ifdef HAVE_GLES2
     glm::mat4 matrix2 = glm::translate(glm::scale(glm::mat4(),
-                                                  glm::vec3(radius / 256.)),
+                                                  glm::vec3(radius / 1024.)),
                                        glm::vec3(x, y, 0));
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(matrix2));
