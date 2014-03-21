@@ -183,13 +183,24 @@ public:
                  Alpha());
   }
 
+#ifdef HAVE_GLES2
+  void Uniform(GLint location) const {
+    glUniform4f(location, ExportFloat(r), ExportFloat(g),
+                ExportFloat(b), ExportFloat(a));
+  }
+
+  void VertexAttrib(GLint index) const {
+    glVertexAttrib4f(index, ExportFloat(r), ExportFloat(g),
+                     ExportFloat(b), ExportFloat(a));
+  }
+#endif
+
   /**
    * Configures this color in the OpenGL context.
    */
   void Set() const {
 #ifdef HAVE_GLES2
-    glUniform4f(OpenGL::solid_color, ExportFloat(r),
-                ExportFloat(g), ExportFloat(b), ExportFloat(a));
+    Uniform(OpenGL::solid_color);
 #elif defined(HAVE_GLES)
     /* on Android, glColor4ub() is not implemented, and we're forced
        to use floating point math for something as trivial as
