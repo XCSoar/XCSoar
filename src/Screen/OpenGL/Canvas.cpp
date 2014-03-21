@@ -795,16 +795,27 @@ Canvas::StretchNot(const Bitmap &src)
 {
   assert(src.IsDefined());
 
+  GLEnable scope(GL_TEXTURE_2D);
+
 #ifdef HAVE_GLES2
   OpenGL::invert_shader->Use();
-  GLEnable scope(GL_TEXTURE_2D);
+#else
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+
+  /* invert the texture color */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_ONE_MINUS_SRC_COLOR);
+
+  /* copy the texture alpha */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
+#endif
+
   GLTexture &texture = *src.GetNative();
   texture.Draw(0, 0, GetWidth(), GetHeight(),
                0, 0, src.GetWidth(), src.GetHeight());
-#else
-  GLLogicOp invert(GL_COPY_INVERTED);
-  Stretch(src);
-#endif
 }
 
 void
