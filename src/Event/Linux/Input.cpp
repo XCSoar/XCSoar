@@ -234,7 +234,7 @@ LinuxInputDevice::Read()
         rel_x += e.value;
         break;
 
-      case ABS_Y:
+      case REL_Y:
         rel_y += e.value;
         break;
       }
