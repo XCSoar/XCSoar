@@ -797,12 +797,15 @@ Canvas::StretchNot(const Bitmap &src)
   assert(src.IsDefined());
 
 #ifdef HAVE_GLES2
-  // TODO: implement
+  OpenGL::invert_shader->Use();
+  GLEnable scope(GL_TEXTURE_2D);
+  GLTexture &texture = *src.GetNative();
+  texture.Draw(0, 0, GetWidth(), GetHeight(),
+               0, 0, src.GetWidth(), src.GetHeight());
 #else
   GLLogicOp invert(GL_COPY_INVERTED);
-#endif
-
   Stretch(src);
+#endif
 }
 
 void
