@@ -165,8 +165,10 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 #ifdef ENABLE_OPENGL
 
 #ifdef HAVE_GLES2
-    // TODO: implement
-    OpenGL::texture_shader->Use();
+    if (inverse)
+      OpenGL::invert_shader->Use();
+    else
+      OpenGL::texture_shader->Use();
 #else
     if (inverse) {
       OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);

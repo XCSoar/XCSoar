@@ -48,6 +48,12 @@ namespace OpenGL {
   extern GLint texture_projection, texture_texture;
 
   /**
+   * A shader that copies the inverted texture.
+   */
+  extern GLProgram *invert_shader;
+  extern GLint invert_projection, invert_texture;
+
+  /**
    * A shader that copies the texture's alpha channel, but replaces
    * the color.
    */
