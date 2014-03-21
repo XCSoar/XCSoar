@@ -48,6 +48,12 @@ struct Event {
     MOUSE_DOWN,
     MOUSE_UP,
 
+    /**
+     * The mouse wheel has moved.  The vertical mouse wheel's relative
+     * value is int(param).
+     */
+    MOUSE_WHEEL,
+
 #ifdef ANDROID
     POINTER_DOWN,
     POINTER_UP,
@@ -123,7 +129,8 @@ struct Event {
   }
 
   bool IsMouse() const {
-    return IsMouseDown() || type == MOUSE_UP || type == MOUSE_MOTION;
+    return IsMouseDown() || type == MOUSE_UP || type == MOUSE_MOTION ||
+      type == MOUSE_WHEEL;
   }
 
   bool IsUserInput() const {

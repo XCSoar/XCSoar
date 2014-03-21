@@ -42,6 +42,12 @@ class MergeMouse final {
   RotatePointer rotate;
 
   unsigned x, y;
+
+  /**
+   * Relative mouse wheel movement since last Generate() call.
+   */
+  int wheel;
+
   bool down;
 
   bool moved, pressed, released;
@@ -53,7 +59,7 @@ class MergeMouse final {
 
 public:
   MergeMouse()
-    :x(0), y(0),
+    :x(0), y(0), wheel(0),
      down(false), moved(false), pressed(false), released(false),
      n_pointers(0) {}
 
@@ -92,6 +98,10 @@ public:
   void MoveAbsolute(int new_x, int new_y,
                     int min_x, int max_x, int min_y, int max_y);
   void MoveRelative(int dx, int dy);
+
+  void MoveWheel(int d) {
+    wheel += d;
+  }
 
   unsigned GetX() const {
     return x;

@@ -58,7 +58,7 @@ class LinuxInputDevice final : private FileEventHandler {
    */
   Position public_position;
 
-  int rel_x, rel_y;
+  int rel_x, rel_y, rel_wheel;
 
   bool down;
 

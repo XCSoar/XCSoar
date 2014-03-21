@@ -159,6 +159,9 @@ TopWindow::OnEvent(const Event &event)
     double_click.Moved(event.point);
 
     return OnMouseUp(event.point.x, event.point.y);
+
+  case Event::MOUSE_WHEEL:
+    return OnMouseWheel(event.point.x, event.point.y, (int)event.param);
   }
 
   return false;

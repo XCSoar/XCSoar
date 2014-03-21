@@ -127,5 +127,12 @@ MergeMouse::Generate()
     return Event(Event::MOUSE_UP, x, y);
   }
 
+  if (wheel != 0) {
+    Event event(Event::MOUSE_WHEEL, x, y);
+    event.param = unsigned(wheel);
+    wheel = 0;
+    return event;
+  }
+
   return Event(Event::Type::NOP);
 }

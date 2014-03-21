@@ -125,7 +125,7 @@ LinuxInputDevice::Open(const char *path)
     }
   }
 
-  rel_x = rel_y = 0;
+  rel_x = rel_y = rel_wheel = 0;
   down = false;
   moving = pressing = releasing = false;
   return true;
@@ -193,6 +193,11 @@ LinuxInputDevice::Read()
           merge.MoveRelative(rel_x, rel_y);
           rel_x = rel_y = 0;
         }
+
+        if (rel_wheel != 0) {
+          merge.MoveWheel(rel_wheel);
+          rel_wheel = 0;
+        }
       }
 
       break;
@@ -236,6 +241,10 @@ LinuxInputDevice::Read()
 
       case REL_Y:
         rel_y += e.value;
+        break;
+
+      case REL_WHEEL:
+        rel_wheel += e.value;
         break;
       }
 

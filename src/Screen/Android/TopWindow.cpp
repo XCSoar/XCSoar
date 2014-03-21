@@ -207,6 +207,9 @@ TopWindow::OnEvent(const Event &event)
 
     return OnMouseUp(event.point.x, event.point.y);
 
+  case Event::MOUSE_WHEEL:
+    return OnMouseWheel(event.point.x, event.point.y, (int)event.param);
+
   case Event::POINTER_DOWN:
     return OnMultiTouchDown();
 
