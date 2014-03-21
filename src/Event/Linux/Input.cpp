@@ -144,7 +144,7 @@ LinuxInputDevice::Close()
   fd.Close();
 }
 
-void
+inline void
 LinuxInputDevice::Read()
 {
   struct input_event buffer[64];
