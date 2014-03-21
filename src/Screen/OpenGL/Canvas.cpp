@@ -633,6 +633,7 @@ PrepareColoredAlphaTexture(Color color)
 
 #ifdef HAVE_GLES2
   // TODO: implement using shader
+  OpenGL::texture_shader->Use();
 #else
   if (color == COLOR_BLACK) {
     /* GL_ALPHA textures have black RGB - this is easy */
@@ -758,6 +759,10 @@ Canvas::Stretch(int dest_x, int dest_y,
   assert(offset == OpenGL::translate);
 #endif
 
+#ifdef HAVE_GLES2
+  OpenGL::texture_shader->Use();
+#endif
+
   texture.Draw(dest_x, dest_y, dest_width, dest_height,
                src_x, src_y, src_width, src_height);
 }
@@ -811,7 +816,9 @@ Canvas::Stretch(int dest_x, int dest_y,
 #endif
   assert(src.IsDefined());
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+  OpenGL::texture_shader->Use();
+#else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
@@ -832,7 +839,9 @@ Canvas::Stretch(int dest_x, int dest_y,
 #endif
   assert(src.IsDefined());
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+  OpenGL::texture_shader->Use();
+#else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
@@ -859,6 +868,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
 
 #ifdef HAVE_GLES2
   // TODO: implement
+  OpenGL::texture_shader->Use();
 #else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 

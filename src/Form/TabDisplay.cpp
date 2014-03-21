@@ -34,7 +34,10 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+#include "Screen/OpenGL/Shaders.hpp"
+#include "Screen/OpenGL/Program.hpp"
+#else
 #include "Screen/OpenGL/Compatibility.hpp"
 #endif
 #endif
@@ -163,6 +166,7 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 
 #ifdef HAVE_GLES2
     // TODO: implement
+    OpenGL::texture_shader->Use();
 #else
     if (inverse) {
       OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);

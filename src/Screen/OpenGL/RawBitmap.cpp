@@ -26,7 +26,10 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Scope.hpp"
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+#include "Shaders.hpp"
+#include "Program.hpp"
+#else
 #include "Compatibility.hpp"
 #endif
 
@@ -113,10 +116,11 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
 {
   GLTexture &texture = BindAndGetTexture();
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+  OpenGL::texture_shader->Use();
+#else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
   GLEnable scope(GL_TEXTURE_2D);
-  dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                      texture, 0, 0, width, height);
+  texture.Draw(0, 0, dest_width, dest_height, 0, 0, width, height);
 }

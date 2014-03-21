@@ -31,6 +31,7 @@ Copyright_License {
 
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
+#include "Program.hpp"
 #else
 #include "Compatibility.hpp"
 #endif
@@ -238,7 +239,9 @@ BufferCanvas::CopyTo(Canvas &other)
   assert(IsDefined());
   assert(!active || frame_buffer != nullptr);
 
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+  OpenGL::texture_shader->Use();
+#else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
