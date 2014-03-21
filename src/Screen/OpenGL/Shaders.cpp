@@ -34,7 +34,7 @@ namespace OpenGL {
   GLint solid_projection, solid_modelview, solid_color;
 
   GLProgram *texture_shader;
-  GLint texture_projection, texture_modelview, texture_texture;
+  GLint texture_projection, texture_texture;
 }
 
 static constexpr char solid_vertex_shader[] =
@@ -55,13 +55,12 @@ static constexpr char solid_fragment_shader[] =
 
 static constexpr char texture_vertex_shader[] =
   "uniform mat4 projection;"
-  "uniform mat4 modelview;"
   "attribute vec4 translate;"
   "attribute vec4 position;"
   "attribute vec2 texcoord;"
   "varying vec2 texcoordvar;"
   "void main() {"
-  "  gl_Position = projection * (modelview * position + translate);"
+  "  gl_Position = projection * (position + translate);"
   "  texcoordvar = texcoord;"
   "}";
 
@@ -143,12 +142,9 @@ OpenGL::InitShaders()
   LinkProgram(*texture_shader);
 
   texture_projection = texture_shader->GetUniformLocation("projection");
-  texture_modelview = texture_shader->GetUniformLocation("modelview");
   texture_texture = texture_shader->GetUniformLocation("texture");
 
   texture_shader->Use();
-  glUniformMatrix4fv(texture_modelview, 1, GL_FALSE,
-                     glm::value_ptr(glm::mat4()));
   glUniform1i(texture_texture, 0);
 
   glVertexAttrib4f(Attribute::TRANSLATE, 0, 0, 0, 0);

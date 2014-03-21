@@ -45,7 +45,7 @@ namespace OpenGL {
    * A shader that copies the texture.
    */
   extern GLProgram *texture_shader;
-  extern GLint texture_projection, texture_modelview, texture_texture;
+  extern GLint texture_projection, texture_texture;
 
   void InitShaders();
   void DeinitShaders();
