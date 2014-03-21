@@ -30,6 +30,7 @@ class GLProgram;
 
 namespace OpenGL {
   namespace Attribute {
+    static constexpr GLuint TRANSLATE = 0;
     static constexpr GLuint POSITION = 1;
     static constexpr GLuint TEXCOORD = 2;
   };
@@ -48,6 +49,8 @@ namespace OpenGL {
 
   void InitShaders();
   void DeinitShaders();
+
+  void UpdateShaderProjectionMatrix();
 };
 
 #endif

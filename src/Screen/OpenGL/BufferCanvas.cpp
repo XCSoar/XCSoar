@@ -160,6 +160,11 @@ BufferCanvas::Begin(Canvas &other)
     /* configure a new viewport */
     OpenGL::SetupViewport({GetWidth(), GetHeight()});
     OpenGL::translate = {0, 0};
+
+#ifdef HAVE_GLES2
+    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
+                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
+#endif
   } else {
     offset = other.offset;
   }
@@ -195,6 +200,7 @@ BufferCanvas::Commit(Canvas &other)
 
 #ifdef HAVE_GLES2
     OpenGL::projection_matrix = old_projection_matrix;
+    OpenGL::UpdateShaderProjectionMatrix();
 #else
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -205,6 +211,10 @@ BufferCanvas::Commit(Canvas &other)
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;
 
+#ifdef HAVE_GLES2
+    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
+                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
+#endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
     OpenGL::display_orientation = old_orientation;

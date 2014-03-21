@@ -59,8 +59,6 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   color.Set();
@@ -134,8 +132,6 @@ Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   pen.Bind();
@@ -154,8 +150,6 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
 
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   ScopeVertexPointer vp(points);
@@ -197,8 +191,6 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
 
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   ScopeVertexPointer vp(points);
@@ -245,8 +237,6 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   pen.Bind();
@@ -267,8 +257,6 @@ Canvas::DrawExactLine(int ax, int ay, int bx, int by)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   pen.Bind();
@@ -293,8 +281,6 @@ Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   pen.Bind();
@@ -320,8 +306,6 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   pen.Bind();
@@ -343,8 +327,6 @@ Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   pen.Bind();
@@ -366,8 +348,6 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 {
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
-  glUniformMatrix4fv(OpenGL::solid_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 #endif
 
   if (IsPenOverBrush() && pen.GetWidth() > 2) {

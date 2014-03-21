@@ -30,10 +30,6 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #endif
 
-#ifdef HAVE_GLES2
-#include <glm/glm.hpp>
-#endif
-
 /**
  * A #Canvas implementation which maps into a part of an existing
  * #Canvas.
@@ -41,10 +37,6 @@ Copyright_License {
 class SubCanvas : public Canvas {
 #ifdef ENABLE_OPENGL
   RasterPoint relative;
-
-#ifdef HAVE_GLES2
-  glm::mat4 old_projection_matrix;
-#endif
 #endif
 
 public:

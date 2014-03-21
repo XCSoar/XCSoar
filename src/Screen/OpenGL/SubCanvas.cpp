@@ -26,7 +26,6 @@ Copyright_License {
 
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
-#include <glm/gtc/matrix_transform.hpp>
 #endif
 
 SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
@@ -40,10 +39,8 @@ SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
     OpenGL::translate += _offset;
 
 #ifdef HAVE_GLES2
-    old_projection_matrix = OpenGL::projection_matrix;
-    OpenGL::projection_matrix = glm::translate(old_projection_matrix,
-                                               glm::vec3(relative.x,
-                                                         relative.y, 0));
+    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
+                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
 #else
     glPushMatrix();
 #ifdef HAVE_GLES
@@ -63,7 +60,8 @@ SubCanvas::~SubCanvas()
     OpenGL::translate -= relative;
 
 #ifdef HAVE_GLES2
-    OpenGL::projection_matrix = old_projection_matrix;
+    glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
+                     OpenGL::translate.x, OpenGL::translate.y, 0, 0);
 #else
     glPopMatrix();
 #endif

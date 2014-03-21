@@ -336,6 +336,7 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
 
 #ifdef HAVE_GLES2
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
+  UpdateShaderProjectionMatrix();
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -409,6 +410,7 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
                                   glm::vec3(0, 0, 1));
   OrientationSwap(size, orientation);
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
+  UpdateShaderProjectionMatrix();
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

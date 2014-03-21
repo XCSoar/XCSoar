@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Shaders.hpp"
 #include "Program.hpp"
+#include "Globals.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -39,9 +40,10 @@ namespace OpenGL {
 static constexpr char solid_vertex_shader[] =
   "uniform mat4 projection;"
   "uniform mat4 modelview;"
+  "attribute vec4 translate;"
   "attribute vec4 position;"
   "void main() {"
-  "  gl_Position = projection * modelview * position;"
+  "  gl_Position = projection * (modelview * position + translate);"
   "}";
 
 static constexpr char solid_fragment_shader[] =
@@ -54,11 +56,12 @@ static constexpr char solid_fragment_shader[] =
 static constexpr char texture_vertex_shader[] =
   "uniform mat4 projection;"
   "uniform mat4 modelview;"
+  "attribute vec4 translate;"
   "attribute vec4 position;"
   "attribute vec2 texcoord;"
   "varying vec2 texcoordvar;"
   "void main() {"
-  "  gl_Position = projection * modelview * position;"
+  "  gl_Position = projection * (modelview * position + translate);"
   "  texcoordvar = texcoord;"
   "}";
 
@@ -121,6 +124,7 @@ OpenGL::InitShaders()
   DeinitShaders();
 
   solid_shader = CompileProgram(solid_vertex_shader, solid_fragment_shader);
+  solid_shader->BindAttribLocation(Attribute::TRANSLATE, "translate");
   solid_shader->BindAttribLocation(Attribute::POSITION, "position");
   LinkProgram(*solid_shader);
 
@@ -133,6 +137,7 @@ OpenGL::InitShaders()
                      glm::value_ptr(glm::mat4()));
 
   texture_shader = CompileProgram(texture_vertex_shader, texture_fragment_shader);
+  texture_shader->BindAttribLocation(Attribute::TRANSLATE, "translate");
   texture_shader->BindAttribLocation(Attribute::POSITION, "position");
   texture_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
   LinkProgram(*texture_shader);
@@ -145,6 +150,8 @@ OpenGL::InitShaders()
   glUniformMatrix4fv(texture_modelview, 1, GL_FALSE,
                      glm::value_ptr(glm::mat4()));
   glUniform1i(texture_texture, 0);
+
+  glVertexAttrib4f(Attribute::TRANSLATE, 0, 0, 0, 0);
 }
 
 void
@@ -152,4 +159,16 @@ OpenGL::DeinitShaders()
 {
   delete solid_shader;
   solid_shader = nullptr;
+}
+
+void
+OpenGL::UpdateShaderProjectionMatrix()
+{
+  texture_shader->Use();
+  glUniformMatrix4fv(texture_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  solid_shader->Use();
+  glUniformMatrix4fv(solid_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
 }

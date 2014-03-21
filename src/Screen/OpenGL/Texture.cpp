@@ -236,8 +236,6 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
 
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
-  glUniformMatrix4fv(OpenGL::texture_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
@@ -309,8 +307,6 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
-  glUniformMatrix4fv(OpenGL::texture_projection, 1, GL_FALSE,
-                     glm::value_ptr(OpenGL::projection_matrix));
 
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
