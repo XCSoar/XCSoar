@@ -47,6 +47,13 @@ namespace OpenGL {
   extern GLProgram *texture_shader;
   extern GLint texture_projection, texture_texture;
 
+  /**
+   * A shader that copies the texture's alpha channel, but replaces
+   * the color.
+   */
+  extern GLProgram *alpha_shader;
+  extern GLint alpha_projection, alpha_texture, alpha_color;
+
   void InitShaders();
   void DeinitShaders();
 

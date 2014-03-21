@@ -629,11 +629,9 @@ Canvas::CalcTextSize(const TCHAR *text) const
 static void
 PrepareColoredAlphaTexture(Color color)
 {
-  color.Set();
-
 #ifdef HAVE_GLES2
-  // TODO: implement using shader
-  OpenGL::texture_shader->Use();
+  OpenGL::alpha_shader->Use();
+  color.Uniform(OpenGL::alpha_color);
 #else
   if (color == COLOR_BLACK) {
     /* GL_ALPHA textures have black RGB - this is easy */
@@ -642,6 +640,8 @@ PrepareColoredAlphaTexture(Color color)
   } else {
     /* use GL_COMBINE to replace the texture color (black) with the
        specified one */
+
+    color.Set();
 
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
@@ -867,8 +867,8 @@ Canvas::StretchMono(int dest_x, int dest_y,
      again */
 
 #ifdef HAVE_GLES2
-  // TODO: implement
-  OpenGL::texture_shader->Use();
+  OpenGL::alpha_shader->Use();
+  fg_color.Uniform(OpenGL::alpha_color);
 #else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
