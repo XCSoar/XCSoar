@@ -315,6 +315,15 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
    * http://www.penguin.cz/~ondrap/algorithm.pdf
    */
 
+  // Return early if this tp-range can't beat the current best_d...
+  // Assume a maximum speed of 100 m/s
+  const unsigned fastskiprange = GetPoint(to).DeltaTime(GetPoint(from)) * 100;
+  const unsigned fastskiprange_flat =
+    trace_master.ProjectRange(GetPoint(from).GetLocation(), fixed(fastskiprange));
+
+  if (fastskiprange_flat < worst_d)
+    return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
+
   bool integral_feasible = false;
   unsigned best_d = 0,
            tp1 = 0,
