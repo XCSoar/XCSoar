@@ -207,7 +207,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
            relaxed->first <= closing_pair->first + relax &&
            relaxed->second <= closing_pair->second + relax;
            ++relaxed)
-        relax_last = relaxed->second;
+        relax_last = std::max(relax_last, relaxed->second);
 
       relaxed_pairs.insert(ClosingPair(relax_first, relax_last));
     }
