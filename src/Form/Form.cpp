@@ -529,7 +529,6 @@ WndForm::OnPaint(Canvas &canvas)
     // TODO: implement
 #else
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnableClientState(GL_COLOR_ARRAY);
 
     const PixelRect rc = GetClientRect();
     const PixelScalar size = Layout::SmallScale(4);
@@ -560,7 +559,7 @@ WndForm::OnPaint(Canvas &canvas)
       outer_color,
     };
 
-    glColorPointer(4, Color::TYPE, 0, colors);
+    const ScopeColorPointer cp(colors);
 
     static constexpr GLubyte indices[] = {
       0, 4, 1, 4, 5, 1,
@@ -571,8 +570,6 @@ WndForm::OnPaint(Canvas &canvas)
 
     glDrawElements(GL_TRIANGLES, ARRAY_SIZE(indices),
                    GL_UNSIGNED_BYTE, indices);
-
-    glDisableClientState(GL_COLOR_ARRAY);
 #endif
   }
 #endif

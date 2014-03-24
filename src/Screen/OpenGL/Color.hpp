@@ -244,4 +244,19 @@ public:
   }
 };
 
+#ifndef HAVE_GLES2
+
+struct ScopeColorPointer {
+  ScopeColorPointer(const Color *p) {
+    glEnableClientState(GL_COLOR_ARRAY);
+    glColorPointer(4, Color::TYPE, 0, p);
+  }
+
+  ~ScopeColorPointer() {
+    glDisableClientState(GL_COLOR_ARRAY);
+  }
+};
+
+#endif
+
 #endif
