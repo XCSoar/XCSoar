@@ -203,12 +203,13 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
   const glm::vec3 scale_vec(scale2, scale2, 1);
 
-  glm::mat4 matrix = glm::translate(glm::rotate(glm::scale(glm::mat4(),
-                                                           scale_vec),
-                                                GLfloat(angle),
-                                                glm::vec3(0, 0, 1)),
-                                    glm::vec3(screen_origin.x, screen_origin.y,
-                                              0));
+  glm::mat4 matrix = glm::scale(glm::rotate(glm::translate(glm::mat4(),
+                                                           glm::vec3(screen_origin.x,
+                                                                     screen_origin.y,
+                                                                     0)),
+                                            GLfloat(angle),
+                                            glm::vec3(0, 0, -1)),
+                                scale_vec);
 #else
   glPushMatrix();
 #ifdef HAVE_GLES
