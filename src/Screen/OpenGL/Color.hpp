@@ -244,19 +244,25 @@ public:
   }
 };
 
-#ifndef HAVE_GLES2
-
 struct ScopeColorPointer {
   ScopeColorPointer(const Color *p) {
+#ifdef HAVE_GLES2
+    glEnableVertexAttribArray(OpenGL::Attribute::COLOR);
+    glVertexAttribPointer(OpenGL::Attribute::COLOR, 4, Color::TYPE,
+                          GL_FALSE, 0, p);
+#else
     glEnableClientState(GL_COLOR_ARRAY);
     glColorPointer(4, Color::TYPE, 0, p);
+#endif
   }
 
   ~ScopeColorPointer() {
+#ifdef HAVE_GLES2
+    glDisableVertexAttribArray(OpenGL::Attribute::COLOR);
+#else
     glDisableClientState(GL_COLOR_ARRAY);
+#endif
   }
 };
-
-#endif
 
 #endif
