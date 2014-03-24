@@ -434,6 +434,24 @@ StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b, size_t size)
 }
 #endif
 
+gcc_pure
+static inline bool
+StringStartsWithIgnoreCase(const char *haystack, const char *needle)
+{
+  return StringIsEqualIgnoreCase(haystack, needle,
+                                 StringLength(needle) * sizeof(needle[0]));
+}
+
+#ifdef _UNICODE
+gcc_pure
+static inline bool
+StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
+{
+  return StringIsEqualIgnoreCase(haystack, needle,
+                                 StringLength(needle) * sizeof(needle[0]));
+}
+#endif
+
 /**
  * Copy the string to a new allocation.  The return value must be
  * freed with free().
