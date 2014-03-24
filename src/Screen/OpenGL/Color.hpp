@@ -90,6 +90,12 @@ public:
 
   Color() = default;
 
+#ifdef HAVE_GLES
+  static constexpr GLenum TYPE = GL_FIXED;
+#else
+  static constexpr GLenum TYPE = GL_UNSIGNED_BYTE;
+#endif
+
   /**
    * Returns the red part of the color
    * @return The red part of the color (0-255)

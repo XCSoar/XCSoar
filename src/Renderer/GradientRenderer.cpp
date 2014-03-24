@@ -53,12 +53,7 @@ DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
   };
 
   glEnableClientState(GL_COLOR_ARRAY);
-
-#ifdef HAVE_GLES
-  glColorPointer(4, GL_FIXED, 0, colors);
-#else
-  glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-#endif
+  glColorPointer(4, Color::TYPE, 0, colors);
 
   static_assert(ARRAY_SIZE(vertices) == ARRAY_SIZE(colors),
                 "Array size mismatch");

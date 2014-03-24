@@ -560,11 +560,7 @@ WndForm::OnPaint(Canvas &canvas)
       outer_color,
     };
 
-#ifdef HAVE_GLES
-    glColorPointer(4, GL_FIXED, 0, colors);
-#else
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-#endif
+    glColorPointer(4, Color::TYPE, 0, colors);
 
     static constexpr GLubyte indices[] = {
       0, 4, 1, 4, 5, 1,
