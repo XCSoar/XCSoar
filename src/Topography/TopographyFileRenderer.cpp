@@ -363,7 +363,10 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
   }
 #ifdef ENABLE_OPENGL
-#ifndef HAVE_GLES2
+#ifdef HAVE_GLES2
+  glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                     glm::value_ptr(glm::mat4()));
+#else
   glPopMatrix();
 #endif
   pen.Unbind();
