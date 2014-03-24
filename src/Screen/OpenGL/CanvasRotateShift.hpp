@@ -48,10 +48,10 @@ public:
   CanvasRotateShift(const RasterPoint pos, Angle angle,
                     const int scale = 100) {
 #ifdef HAVE_GLES2
-    glm::mat4 matrix = glm::translate(glm::rotate(glm::mat4(),
-                                                  GLfloat(angle.Degrees()),
-                                                  glm::vec3(0, 0, 1)),
-                                      glm::vec3(pos.x, pos.y, 0));
+    glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(),
+                                                  glm::vec3(pos.x, pos.y, 0)),
+                                   GLfloat(angle.Degrees()),
+                                   glm::vec3(0, 0, 1));
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(matrix));
 #else
