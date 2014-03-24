@@ -631,7 +631,7 @@ PrepareColoredAlphaTexture(Color color)
 {
 #ifdef HAVE_GLES2
   OpenGL::alpha_shader->Use();
-  color.Uniform(OpenGL::alpha_color);
+  color.Set();
 #else
   color.Set();
 
@@ -881,7 +881,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
 
 #ifdef HAVE_GLES2
   OpenGL::alpha_shader->Use();
-  fg_color.Uniform(OpenGL::alpha_color);
+  fg_color.Set();
 #else
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 

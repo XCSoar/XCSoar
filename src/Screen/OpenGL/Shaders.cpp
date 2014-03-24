@@ -31,7 +31,7 @@ Copyright_License {
 
 namespace OpenGL {
   GLProgram *solid_shader;
-  GLint solid_projection, solid_modelview, solid_color;
+  GLint solid_projection, solid_modelview;
 
   GLProgram *texture_shader;
   GLint texture_projection, texture_texture;
@@ -40,7 +40,7 @@ namespace OpenGL {
   GLint invert_projection, invert_texture;
 
   GLProgram *alpha_shader;
-  GLint alpha_projection, alpha_texture, alpha_color;
+  GLint alpha_projection, alpha_texture;
 }
 
 static constexpr char solid_vertex_shader[] =
@@ -48,15 +48,18 @@ static constexpr char solid_vertex_shader[] =
   "uniform mat4 modelview;"
   "attribute vec4 translate;"
   "attribute vec4 position;"
+  "attribute vec4 color;"
+  "varying vec4 colorvar;"
   "void main() {"
   "  gl_Position = projection * (modelview * position + translate);"
+  "  colorvar = color;"
   "}";
 
 static constexpr char solid_fragment_shader[] =
   "precision mediump float;"
-  "uniform vec4 color;"
+  "varying vec4 colorvar;"
   "void main() {"
-  "  gl_FragColor = color;"
+  "  gl_FragColor = colorvar;"
   "}";
 
 static constexpr char texture_vertex_shader[] =
@@ -65,9 +68,12 @@ static constexpr char texture_vertex_shader[] =
   "attribute vec4 position;"
   "attribute vec2 texcoord;"
   "varying vec2 texcoordvar;"
+  "attribute vec4 color;"
+  "varying vec4 colorvar;"
   "void main() {"
   "  gl_Position = projection * (position + translate);"
   "  texcoordvar = texcoord;"
+  "  colorvar = color;"
   "}";
 
 static constexpr char texture_fragment_shader[] =
@@ -91,11 +97,11 @@ static constexpr char invert_fragment_shader[] =
 static const char *const alpha_vertex_shader = texture_vertex_shader;
 static constexpr char alpha_fragment_shader[] =
   "precision mediump float;"
-  "uniform vec4 color;"
   "uniform sampler2D texture;"
+  "varying vec4 colorvar;"
   "varying vec2 texcoordvar;"
   "void main() {"
-  "  gl_FragColor = vec4(color.rgb, texture2D(texture, texcoordvar).a);"
+  "  gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);"
   "}";
 
 static void
@@ -151,11 +157,11 @@ OpenGL::InitShaders()
   solid_shader = CompileProgram(solid_vertex_shader, solid_fragment_shader);
   solid_shader->BindAttribLocation(Attribute::TRANSLATE, "translate");
   solid_shader->BindAttribLocation(Attribute::POSITION, "position");
+  solid_shader->BindAttribLocation(Attribute::COLOR, "color");
   LinkProgram(*solid_shader);
 
   solid_projection = solid_shader->GetUniformLocation("projection");
   solid_modelview = solid_shader->GetUniformLocation("modelview");
-  solid_color = solid_shader->GetUniformLocation("color");
 
   solid_shader->Use();
   glUniformMatrix4fv(solid_modelview, 1, GL_FALSE,
@@ -189,11 +195,11 @@ OpenGL::InitShaders()
   alpha_shader->BindAttribLocation(Attribute::TRANSLATE, "translate");
   alpha_shader->BindAttribLocation(Attribute::POSITION, "position");
   alpha_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  alpha_shader->BindAttribLocation(Attribute::COLOR, "color");
   LinkProgram(*alpha_shader);
 
   alpha_projection = alpha_shader->GetUniformLocation("projection");
   alpha_texture = alpha_shader->GetUniformLocation("texture");
-  alpha_color = alpha_shader->GetUniformLocation("color");
 
   alpha_shader->Use();
   glUniform1i(alpha_texture, 0);

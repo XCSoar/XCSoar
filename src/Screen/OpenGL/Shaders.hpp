@@ -33,13 +33,14 @@ namespace OpenGL {
     static constexpr GLuint TRANSLATE = 0;
     static constexpr GLuint POSITION = 1;
     static constexpr GLuint TEXCOORD = 2;
+    static constexpr GLuint COLOR = 3;
   };
 
   /**
    * A shader that draws a solid color (#Attribute::COLOR).
    */
   extern GLProgram *solid_shader;
-  extern GLint solid_projection, solid_modelview, solid_color;
+  extern GLint solid_projection, solid_modelview;
 
   /**
    * A shader that copies the texture.
@@ -55,10 +56,10 @@ namespace OpenGL {
 
   /**
    * A shader that copies the texture's alpha channel, but replaces
-   * the color.
+   * the color (#Attribute::COLOR).
    */
   extern GLProgram *alpha_shader;
-  extern GLint alpha_projection, alpha_texture, alpha_color;
+  extern GLint alpha_projection, alpha_texture;
 
   void InitShaders();
   void DeinitShaders();

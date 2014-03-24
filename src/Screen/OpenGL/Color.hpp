@@ -206,7 +206,7 @@ public:
    */
   void Set() const {
 #ifdef HAVE_GLES2
-    Uniform(OpenGL::solid_color);
+    VertexAttrib(OpenGL::Attribute::COLOR);
 #elif defined(HAVE_GLES)
     /* on Android, glColor4ub() is not implemented, and we're forced
        to use floating point math for something as trivial as
