@@ -12,6 +12,8 @@ Version 6.7.4 - not yet released
   - create "logs" directory automatically for external flight downloads
 * user interface
   - show status message when switching to next turnpoint (#3270)
+* airspace
+  - relax parsing of TNP airspace files (#3272)
 
 Version 6.7.3 - 2014/01/22
 * tracking

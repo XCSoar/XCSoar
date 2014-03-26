@@ -788,9 +788,9 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
 
   const TCHAR* parameter;
   if ((parameter = StringAfterPrefixCI(line, _T("INCLUDE="))) != NULL) {
-    if (StringIsEqualIgnoreCase(parameter, _T("YES")))
+    if (StringStartsWithIgnoreCase(parameter, _T("YES")))
       ignore = false;
-    else if (StringIsEqualIgnoreCase(parameter, _T("NO")))
+    else if (StringStartsWithIgnoreCase(parameter, _T("NO")))
       ignore = true;
 
     return true;
