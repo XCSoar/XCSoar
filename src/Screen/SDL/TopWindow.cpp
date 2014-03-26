@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Screen/Features.hpp"
 #include "Screen/TopWindow.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
@@ -107,6 +108,20 @@ TopWindow::OnEvent(const SDL_Event &event)
       return false;
 
     return w->OnKeyUp(event.key.keysym.sym);
+
+#ifdef HAVE_MULTI_TOUCH
+  case SDL_FINGERDOWN:
+    if (SDL_GetNumTouchFingers(event.tfinger.touchId) == 2)
+      return OnMultiTouchDown();
+    else
+      return false;
+
+  case SDL_FINGERUP:
+    if (SDL_GetNumTouchFingers(event.tfinger.touchId) == 1)
+      return OnMultiTouchUp();
+    else
+      return false;
+#endif
 
   case SDL_MOUSEMOTION:
     // XXX keys

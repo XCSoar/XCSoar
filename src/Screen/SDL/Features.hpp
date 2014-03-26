@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2014 The XCSoar Project
+  Copyright (C) 2000-2013 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,41 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FEATURES_HPP
-#define XCSOAR_SCREEN_FEATURES_HPP
+#ifndef XCSOAR_SCREEN_SDL_FEATURES_HPP
+#define XCSOAR_SCREEN_SDL_FEATURES_HPP
 
-#ifdef ANDROID
-#include "Screen/Android/Features.hpp"
-#endif
+#include <SDL_version.h>
 
-#ifdef USE_MEMORY_CANVAS
-#include "Screen/Memory/Features.hpp"
+#if SDL_MAJOR_VERSION >= 2
+#define HAVE_MULTI_TOUCH
 #endif
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
-#endif
-
-#ifdef USE_GDI
-#include "Screen/GDI/Features.hpp"
-#endif
-
-#ifdef ENABLE_SDL
-#include "Screen/SDL/Features.hpp"
-#endif
-
-/**
- * Return true when the Canvas implements clipping against its
- * siblings and children.
- */
-static constexpr inline bool
-HaveClipping()
-{
-#ifdef HAVE_CLIPPING
-  return true;
-#else
-  return false;
-#endif
-}
 
 #endif
