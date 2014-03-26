@@ -52,6 +52,10 @@ ScreenGlobalInit::ScreenGlobalInit()
     exit(EXIT_FAILURE);
   }
 
+#ifdef HAVE_GLES2
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#endif
   if (HasTouchScreen())
     SDL_ShowCursor (SDL_FALSE);
 
