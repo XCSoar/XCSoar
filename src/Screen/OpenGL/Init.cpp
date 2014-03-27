@@ -54,6 +54,10 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 void
 OpenGL::Initialise()
 {
@@ -184,11 +188,13 @@ static GLenum
 CheckStencil()
 {
 #ifdef HAVE_GLES
+#if !defined(__APPLE__) || !TARGET_OS_IPHONE
   if (OpenGL::IsExtensionSupported("GL_OES_stencil1"))
     return GL_STENCIL_INDEX1_OES;
 
   if (OpenGL::IsExtensionSupported("GL_OES_stencil4"))
     return GL_STENCIL_INDEX4_OES;
+#endif
 
   if (OpenGL::IsExtensionSupported("GL_OES_stencil8")) {
 #ifdef HAVE_GLES2
