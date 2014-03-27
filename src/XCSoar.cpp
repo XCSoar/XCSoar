@@ -57,6 +57,10 @@ Copyright_License {
 #include <SDL_main.h>
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #include <assert.h>
 
 static const char *const Usage = "\n"
@@ -157,6 +161,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Net::Deinitialise();
 
   assert(!ExistsAnyThread());
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  /* For some reason, the app process does not exit on iOS, but a black
+   * screen remains, if the process is not explicitly terminated */
+  exit(ret);
+#endif
 
   return ret;
 }
