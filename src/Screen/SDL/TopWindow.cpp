@@ -173,6 +173,22 @@ TopWindow::OnEvent(const SDL_Event &event)
       Resize(event.window.data1, event.window.data2);
       return true;
 
+    case SDL_WINDOWEVENT_RESTORED:
+    case SDL_WINDOWEVENT_MOVED:
+    case SDL_WINDOWEVENT_SHOWN:
+    case SDL_WINDOWEVENT_MAXIMIZED:
+      {
+        SDL_Window* event_window = SDL_GetWindowFromID(event.window.windowID);
+        if (event_window) {
+          int w, h;
+          SDL_GetWindowSize(event_window, &w, &h);
+          if ((w >= 0) && (h >= 0)) {
+            Resize(w, h);
+          }
+        }
+      }
+      return true;
+
     case SDL_WINDOWEVENT_EXPOSED:
       invalidated = false;
       Expose();
