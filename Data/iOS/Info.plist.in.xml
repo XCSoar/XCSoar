@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+        <key>CFBundleDisplayName</key>
+        <string>IOS_APP_DISPLAY_NAME_PLACEHOLDER</string>
+        <key>CFBundleExecutable</key>
+        <string>XCSoar</string>
+        <key>CFBundleIdentifier</key>
+        <string>IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER</string>
+        <key>CFBundleName</key>
+        <string>IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleVersion</key>
+        <string>VERSION_PLACEHOLDER</string>
+        <key>LSRequiresIPhoneOS</key>
+        <true />
+        <key>CFBundleIconFile</key>
+        <array>
+            <string>Icon.png</string>
+            <string>Icon@2x.png</string>
+            <string>Icon-72.png</string>
+        </array>
+    </dict>
+</plist>
+
