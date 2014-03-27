@@ -191,8 +191,20 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const RasterPoint &screen_origin = projection.GetScreenOrigin();
 
 #ifdef HAVE_GLES2
+
+#ifdef HAVE_GLES
+#ifdef FIXED_MATH
+  const GLfloat scale2(scale << 16);
+#else
+  const GLfloat scale2(scale * (1 << 16));
+#endif
+#else
+  const GLfloat scale2(scale);
+#endif
+  const glm::vec3 scale_vec(scale2, scale2, 1);
+
   glm::mat4 matrix = glm::translate(glm::rotate(glm::scale(glm::mat4(),
-                                                           glm::vec3(GLfloat(scale))),
+                                                           scale_vec),
                                                 GLfloat(angle),
                                                 glm::vec3(0, 0, 1)),
                                     glm::vec3(screen_origin.x, screen_origin.y,
@@ -237,8 +249,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       shape.shape_translation(projection.GetGeoLocation());
 
 #ifdef HAVE_GLES2
-    auto matrix2 = glm::translate(matrix, glm::vec3(translation.x,
-                                                    translation.y, 0.));
+
+#ifdef HAVE_GLES
+    const glm::vec3 translation_vec(translation.x / GLfloat(1 << 16),
+                                    translation.y / GLfloat(1 << 16),
+                                    0);
+#else
+    const glm::vec3 translation_vec(translation.x, translation.y, 0);
+#endif
+
+    auto matrix2 = glm::translate(matrix, translation_vec);
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(matrix2));
 #else
