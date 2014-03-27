@@ -30,11 +30,11 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
-#include "Math/Matrix2D.hpp"
 #include "shapelib/mapserver.h"
 #include "Util/AllocatedArray.hpp"
 #include "Util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
+#include "Geo/Constants.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -177,8 +177,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   const unsigned level = file.GetThinningLevel(map_scale);
-  const unsigned min_distance = file.GetMinimumPointDistance(level)
-    / Layout::Scale(1);
+  const ShapeScalar min_distance =
+    ShapeScalar(file.GetMinimumPointDistance(level))
+    / (Layout::Scale(1) * REARTH);
 
 #ifdef HAVE_GLES
   const float *const opengl_matrix = nullptr;
@@ -190,19 +191,15 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   fixed angle = projection.GetScreenAngle().Degrees();
   fixed scale = projection.GetScale();
   const RasterPoint &screen_origin = projection.GetScreenOrigin();
+  const GeoPoint &screen_location = projection.GetGeoLocation();
+  const GeoPoint projection_delta = file.GetCenter() - screen_location;
+
+  const fixed scale_r = scale * REARTH;
+  const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
+  const fixed scale_y = -scale_r;
 
 #ifdef HAVE_GLES2
-
-#ifdef HAVE_GLES
-#ifdef FIXED_MATH
-  const GLfloat scale2(scale << 16);
-#else
-  const GLfloat scale2(scale * (1 << 16));
-#endif
-#else
-  const GLfloat scale2(scale);
-#endif
-  const glm::vec3 scale_vec(scale2, scale2, 1);
+  const glm::vec3 scale_vec(GLfloat(scale_x), GLfloat(scale_y), 1);
 
   glm::mat4 matrix = glm::scale(glm::rotate(glm::translate(glm::mat4(),
                                                            glm::vec3(screen_origin.x,
@@ -211,24 +208,31 @@ TopographyFileRenderer::Paint(Canvas &canvas,
                                             GLfloat(angle),
                                             glm::vec3(0, 0, -1)),
                                 scale_vec);
+  matrix = glm::translate(matrix,
+                          glm::vec3(GLfloat(projection_delta.longitude.Native()),
+                                    GLfloat(projection_delta.latitude.Native()),
+                                    0.));
+  glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                     glm::value_ptr(matrix));
 #else
   glPushMatrix();
 #ifdef HAVE_GLES
 #ifdef FIXED_MATH
   GLfixed fixed_angle = angle.as_glfixed();
-  GLfixed fixed_scale = scale.as_glfixed_scale();
 #else
   GLfixed fixed_angle = angle * (1<<16);
-  GLfixed fixed_scale = scale * (1LL<<32);
 #endif
   glTranslatex((int)screen_origin.x << 16, (int)screen_origin.y << 16, 0);
   glRotatex(fixed_angle, 0, 0, -(1<<16));
-  glScalex(fixed_scale, fixed_scale, 1<<16);
 #else
   glTranslatef(screen_origin.x, screen_origin.y, 0.);
   glRotatef((GLfloat)angle, 0., 0., -1.);
-  glScalef((GLfloat)scale, (GLfloat)scale, 1.);
 #endif
+
+  glScalef(GLfloat(scale_x), GLfloat(scale_y), 1.);
+  glTranslatef(GLfloat(projection_delta.longitude.Native()),
+               GLfloat(projection_delta.latitude.Native()),
+               0.);
 #endif /* !HAVE_GLES2 */
 #else // !ENABLE_OPENGL
   const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
@@ -250,31 +254,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = shape.get_points();
-
-    const ShapePoint translation =
-      shape.shape_translation(projection.GetGeoLocation());
-
-#ifdef HAVE_GLES2
-
-#ifdef HAVE_GLES
-    const glm::vec3 translation_vec(translation.x / GLfloat(1 << 16),
-                                    translation.y / GLfloat(1 << 16),
-                                    0);
-#else
-    const glm::vec3 translation_vec(translation.x, translation.y, 0);
-#endif
-
-    auto matrix2 = glm::translate(matrix, translation_vec);
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(matrix2));
-#else
-    glPushMatrix();
-#ifdef HAVE_GLES
-    glTranslatex(translation.x, translation.y, 0);
-#else
-    glTranslatef(translation.x, translation.y, 0.);
-#endif
-#endif
 #else // !ENABLE_OPENGL
     const unsigned short *lines = shape.get_lines();
     const unsigned short *end_lines = lines + shape.get_number_of_lines();
@@ -308,11 +287,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_LINE:
       {
 #ifdef ENABLE_OPENGL
-#ifdef HAVE_GLES
-        vp.Update(GL_FIXED, points);
-#else
-        vp.Update(GL_INT, points);
-#endif
+        vp.Update(GL_FLOAT, points);
 
         const GLushort *indices, *count;
         if (level == 0 ||
@@ -351,11 +326,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         const GLushort *triangles = shape.get_indices(level, min_distance,
                                                         index_count);
 
-#ifdef HAVE_GLES
-        vp.Update(GL_FIXED, points);
-#else
-        vp.Update(GL_INT, points);
-#endif
+        vp.Update(GL_FLOAT, points);
         if (!pen.GetColor().IsOpaque()) {
           const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
           glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
@@ -394,11 +365,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
       break;
     }
-#ifdef ENABLE_OPENGL
-#ifndef HAVE_GLES2
-    glPopMatrix();
-#endif
-#endif
   }
 #ifdef ENABLE_OPENGL
 #ifdef HAVE_GLES2
@@ -445,13 +411,6 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 
   int iskip = file.GetSkipSteps(map_scale);
 
-#ifdef ENABLE_OPENGL
-  Matrix2D m1;
-  m1.Translate(projection.GetScreenOrigin());
-  m1.Rotate(projection.GetScreenAngle());
-  m1.Scale(projection.GetScale());
-#endif
-
   std::set<tstring> drawn_labels;
 
   // Iterate over all shapes in the file
@@ -471,9 +430,6 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     const unsigned short *end_lines = lines + shape.get_number_of_lines();
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = shape.get_points();
-
-    Matrix2D m2(m1);
-    m2.Translatex(shape.shape_translation(projection.GetGeoLocation()));
 #else
     const GeoPoint *points = shape.get_points();
 #endif
@@ -489,7 +445,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 #endif
       for (; points < end; points += iskip) {
 #ifdef ENABLE_OPENGL
-        RasterPoint pt = m2.Apply(*points);
+        RasterPoint pt = projection.GeoToScreen(file.ToGeoPoint(*points));
 #else
         RasterPoint pt = projection.GeoToScreen(*points);
 #endif

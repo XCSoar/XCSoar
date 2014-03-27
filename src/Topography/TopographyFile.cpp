@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
+#include "Convert.hpp"
 #include "Projection/WindowProjection.hpp"
 
 #include <zzip/lib.h>
@@ -53,6 +54,8 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
     msShapefileClose(&file);
     return;
   }
+
+  center = ImportRect(file.bounds).GetCenter();
 
   shapes.ResizeDiscard(file.numshapes);
   std::fill(shapes.begin(), shapes.end(), ShapeList(NULL));
@@ -144,7 +147,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
       // is inside the bounds
       if (it->shape == NULL)
         // shape isn't cached yet -> cache the shape
-        it->shape = new XShape(&file, i, label_field);
+        it->shape = new XShape(&file, center, i, label_field);
       // update list pointer
       *current = it;
       current = &it->next;
@@ -166,7 +169,7 @@ TopographyFile::LoadAll()
   for (int i = 0; i < file.numshapes; ++i, ++it) {
     if (it->shape == NULL)
       // shape isn't cached yet -> cache the shape
-      it->shape = new XShape(&file, i, label_field);
+      it->shape = new XShape(&file, center, i, label_field);
     // update list pointer
     *current = it;
     current = &it->next;

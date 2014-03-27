@@ -87,15 +87,17 @@ class XShape : private NonCopyable {
   TCHAR *label;
 
 public:
-  XShape(shapefileObj *shpfile, int i, int label_field=-1);
+  XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
+         int label_field=-1);
   ~XShape();
 
 #ifdef ENABLE_OPENGL
 protected:
-  bool BuildIndices(unsigned thinning_level, unsigned min_distance);
+  bool BuildIndices(unsigned thinning_level, ShapeScalar min_distance);
 
 public:
-  const unsigned short *get_indices(int thinning_level, unsigned min_distance,
+  const unsigned short *get_indices(int thinning_level,
+                                    ShapeScalar min_distance,
                                     const unsigned short *&count) const;
 #endif
 
@@ -132,27 +134,6 @@ public:
   const TCHAR *get_label() const {
     return label;
   }
-
-#ifdef ENABLE_OPENGL
-  /**
-   * Convert a GeoPoint into a ShapePoint.
-   */
-  ShapePoint geo_to_shape(const GeoPoint &location) const {
-    return geo_to_shape(center, location);
-  }
-
-  /**
-   * Get the offset of the shape center from the screen center in ShapePoint
-   * scale.
-   */
-  ShapePoint shape_translation(const GeoPoint &screen_center) const {
-    return geo_to_shape(screen_center, center);
-  }
-
-private:
-  gcc_pure
-  ShapePoint geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const;
-#endif
 };
 
 #endif

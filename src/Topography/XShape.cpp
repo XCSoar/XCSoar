@@ -94,7 +94,8 @@ min_points_for_type(int shapelib_type)
   }
 }
 
-XShape::XShape(shapefileObj *shpfile, int i, int label_field)
+XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
+               int label_field)
   :label(NULL)
 {
 #ifdef ENABLE_OPENGL
@@ -162,8 +163,8 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
     num_points = lines[l];
     for (unsigned j = 0; j < num_points; ++j, ++src)
 #ifdef ENABLE_OPENGL
-      *p++ = geo_to_shape(GeoPoint(Angle::Degrees(fixed(src->x)),
-                                   Angle::Degrees(fixed(src->y))));
+      *p++ = ShapePoint(ShapeScalar((Angle::Degrees(src->x) - file_center.longitude).Native()),
+                        ShapeScalar((Angle::Degrees(src->y) - file_center.latitude).Native()));
 #else
       *p++ = GeoPoint(Angle::Degrees(fixed(src->x)),
                       Angle::Degrees(fixed(src->y)));
@@ -192,7 +193,7 @@ XShape::~XShape()
 #ifdef ENABLE_OPENGL
 
 bool
-XShape::BuildIndices(unsigned thinning_level, unsigned min_distance)
+XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
 {
   assert(indices[thinning_level] == NULL);
 
@@ -262,7 +263,7 @@ XShape::BuildIndices(unsigned thinning_level, unsigned min_distance)
 }
 
 const unsigned short *
-XShape::get_indices(int thinning_level, unsigned min_distance,
+XShape::get_indices(int thinning_level, ShapeScalar min_distance,
                     const unsigned short *&count) const
 {
   if (indices[thinning_level] == NULL) {
@@ -273,18 +274,6 @@ XShape::get_indices(int thinning_level, unsigned min_distance,
 
   count = index_count[thinning_level];
   return indices[thinning_level];
-}
-
-ShapePoint
-XShape::geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const
-{
-  const GeoPoint d = point-origin;
-
-  ShapePoint pt;
-  pt.x = (ShapeScalar)fast_mult(point.latitude.fastcosine(),
-                                AngleToEarthDistance(d.longitude), 16);
-  pt.y = (ShapeScalar)-AngleToEarthDistance(d.latitude);
-  return pt;
 }
 
 #endif // ENABLE_OPENGL

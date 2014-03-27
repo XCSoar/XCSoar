@@ -27,19 +27,25 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-typedef int32_t ShapeScalar;
+#include <cmath>
+
+typedef float ShapeScalar;
 struct ShapePoint : Point2D<ShapeScalar> {
   /**
    * Type to be used by vector math, where a range of
    * max(ShapeScalar)*max(ShapeScalar) is needed.
    */
   typedef float SquareType;
+
+  ShapePoint() = default;
+  constexpr ShapePoint(ShapeScalar _x, ShapeScalar _y)
+    :Point2D<ShapeScalar>(_x, _y) {}
 };
 
-static inline unsigned
+static inline ShapeScalar
 manhattan_distance(ShapePoint a, ShapePoint b)
 {
-  return abs(a.x - b.x) + abs(a.y - b.y);
+  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 
 #endif

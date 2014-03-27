@@ -34,6 +34,10 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "ResourceId.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "XShapePoint.hpp"
+#endif
+
 #include <assert.h>
 
 class WindowProjection;
@@ -58,6 +62,11 @@ class TopographyFile : private NonCopyable {
   struct zzip_dir *dir;
 
   shapefileObj file;
+
+  /**
+   * The center of shapefileObj::bounds.
+   */
+  GeoPoint center;
 
   AllocatedArray<ShapeList> shapes;
   const ShapeList *first;
@@ -166,6 +175,10 @@ public:
     return serial;
   }
 
+  const GeoPoint &GetCenter() const {
+    return center;
+  }
+
   bool IsEmpty() const {
     return shapes.empty();
   }
@@ -210,6 +223,12 @@ public:
   unsigned GetSkipSteps(fixed map_scale) const;
 
 #ifdef ENABLE_OPENGL
+  gcc_pure
+  GeoPoint ToGeoPoint(const ShapePoint &p) const {
+    return GeoPoint(center.longitude + Angle::Native(fixed(p.x)),
+                    center.latitude + Angle::Native(fixed(p.y)));
+  }
+
   /**
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */

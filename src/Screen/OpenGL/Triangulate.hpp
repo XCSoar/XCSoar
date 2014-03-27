@@ -49,7 +49,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
                    unsigned min_distance=1);
 unsigned
 PolygonToTriangles(const ShapePoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance=1);
+                   GLushort *triangles, float min_distance=1);
 
 /**
  * Pack triangle indices into a triangle strip.

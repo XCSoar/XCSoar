@@ -119,7 +119,7 @@ Normalize(RasterPoint *v, float length)
 template <typename PT>
 static unsigned
 _PolygonToTriangles(const PT *points, unsigned num_points,
-                    GLushort *triangles, unsigned min_distance)
+                    GLushort *triangles, typename PT::scalar_type min_distance)
 {
   // no redundant start/end please
   if (num_points >= 1 && points[0] == points[num_points - 1])
@@ -152,10 +152,11 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
          a = b, b = c, c = next[c], heat++) {
       bool point_removeable = TriangleEmpty(points[a], points[b], points[c]);
       if (!point_removeable) {
-        unsigned distance = manhattan_distance(points[a], points[b]);
+        typename PT::scalar_type distance = manhattan_distance(points[a],
+                                                               points[b]);
         if (distance < min_distance) {
           point_removeable = true;
-          if (distance != 0) {
+          if (distance > 0) {
             for (unsigned p = next[c]; p != a; p = next[p]) {
               if (InsideTriangle(points[p], points[a], points[b], points[c])) {
                 point_removeable = false;
@@ -275,7 +276,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
 
 unsigned
 PolygonToTriangles(const ShapePoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance)
+                   GLushort *triangles, float min_distance)
 {
   return _PolygonToTriangles(points, num_points, triangles, min_distance);
 }
