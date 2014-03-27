@@ -25,13 +25,13 @@ Copyright_License {
 #define TOPOGRAPHY_FILE_RENDERER_HPP
 
 #include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/Serial.hpp"
 #include "Geo/GeoBounds.hpp"
 
 #ifndef ENABLE_OPENGL
+#include "Screen/Brush.hpp"
 #include "Topography/ShapeRenderer.hpp"
 #endif
 
@@ -55,7 +55,10 @@ class TopographyFileRenderer : private NonCopyable {
 #endif
 
   Pen pen;
+
+#ifndef ENABLE_OPENGL
   Brush brush;
+#endif
 
   MaskedIcon icon;
 

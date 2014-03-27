@@ -53,8 +53,10 @@ Copyright_License {
 #include <set>
 
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
-  :file(_file), pen(file.GetPenWidth(), file.GetColor()),
-   brush(file.GetColor())
+  :file(_file), pen(file.GetPenWidth(), file.GetColor())
+#ifndef ENABLE_OPENGL
+  , brush(file.GetColor())
+#endif
 {
   ResourceId icon_ID = file.GetIcon();
   if (icon_ID.IsDefined())
@@ -167,7 +169,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   pen.Bind();
-  brush.Set();
 #else
   shape_renderer.Configure(&pen, &brush);
 #endif
@@ -339,7 +340,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #else
         const ScopeVertexPointer vp(GL_INT, points);
 #endif
-        if (!brush.GetColor().IsOpaque()) {
+        if (!pen.GetColor().IsOpaque()) {
           const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
           glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
                          triangles);
