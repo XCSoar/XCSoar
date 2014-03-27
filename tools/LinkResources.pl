@@ -1,26 +1,22 @@
 #!/usr/bin/perl -w
 
 use strict;
-use vars qw($ld $ar);
+use lib './tools';
+use EmbedFileInObjectFile;
+use vars qw($as $ar);
 
 my $rc_path;
 my $output_path;
 
-($rc_path, $output_path, $ld, $ar) = @ARGV;
+($rc_path, $output_path, $as, $ar) = @ARGV;
 $output_path =~ m,^(.*)/,s;
 my $o_path = "$1/resources";
 
 sub to_o($$$) {
     my ($input, $output, $name) = @_;
 
-    my $name2 = "_binary_" . $input;
-    $name2 =~ s,[^_a-zA-Z0-9],_,sg;
-
-    system("${ld} -r -b binary -o ${output} ${input}"
-             . " --defsym=${name}=${name2}_start"
-               . " --defsym ${name}_end=${name2}_end"
-                 . " --defsym ${name}_size=${name2}_size"
-              ) == 0 or die;
+    EmbedFileInObjectFile::embed_file_in_object_file($input, $output,
+            ${name}, ${name}."_end", ${name}."_size", $as);
 }
 
 open RC, "<$rc_path" or die $!;
