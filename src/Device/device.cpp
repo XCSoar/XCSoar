@@ -130,7 +130,7 @@ devStartup()
   }
 
   if (none_available) {
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
     /* fall back to built-in GPS when no configured device is
        available on this platform */
     LogFormat("Falling back to built-in GPS");

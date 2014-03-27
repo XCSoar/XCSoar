@@ -58,7 +58,7 @@ DeviceConfig::IsAvailable() const
     return IsWindowsCE();
 
   case PortType::INTERNAL:
-    return IsAndroid();
+    return IsAndroid() || IsApple();
 
   case PortType::TCP_CLIENT:
     return !IsWindowsCE();
@@ -105,7 +105,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
     return false;
 
   case PortType::INTERNAL:
-    /* reopening the Android internal GPS doesn't help */
+    /* reopening the Android / Apple internal GPS doesn't help */
     return false;
 
   case PortType::TCP_LISTENER:

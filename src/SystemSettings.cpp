@@ -45,7 +45,7 @@ SystemSettings::SetDefaults()
     devices[2].path = _T("COM2:");
     devices[2].baud_rate = 38400;
     devices[2].driver_name = _T("NmeaOut");
-  } else if (IsAndroid()) {
+  } else if (IsAndroid() || IsApple()) {
     devices[0].port_type = DeviceConfig::PortType::INTERNAL;
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
