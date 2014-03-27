@@ -40,6 +40,10 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #if !defined(ANDROID) && !defined(_WIN32_WCE)
   static unsigned forced_x_dpi = 0;
   static unsigned forced_y_dpi = 0;
@@ -69,6 +73,9 @@ Display::GetXDPI()
 #elif defined(KOBO)
   /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
   return 200;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  /* Supported modern devices: 264 dpi or 326 dpi  */
+  return 300;
 #else
   return 96;
 #endif
@@ -89,6 +96,9 @@ Display::GetYDPI()
 #elif defined(KOBO)
   /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
   return 200;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  /* Supported modern devices: 264 dpi or 326 dpi  */
+  return 300;
 #else
   return 96;
 #endif
