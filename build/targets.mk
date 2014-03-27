@@ -6,7 +6,7 @@ TARGETS = PC WIN64 \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
 	WINE CYGWIN \
-	OSX32 OSX64
+	OSX32 OSX64 IOS
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
@@ -298,6 +298,28 @@ ifeq ($(TARGET),OSX64)
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
   ASFLAGS += -arch x86_64
+endif
+
+ifeq ($(TARGET),IOS)
+  override TARGET = UNIX
+  TARGET_IS_DARWIN = y
+  TARGET_IS_IOS = y
+  DARWIN_SDK_VERSION = 7.1
+  IOS_MIN_SUPPORTED_VERSION = 5.1
+  ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
+    TARGET_ARCH += -target armv7-apple-darwin9
+  else
+    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
+    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/iPhoneOS$(DARWIN_SDK_VERSION).sdk
+    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/armv7-iOS-$(IOS_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
+    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/armv7-apple-darwin9-
+    LLVM_PREFIX = $(TCPREFIX)
+  endif
+  LIBCXX = y
+  CLANG = y
+  TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION)
+  ASFLAGS += -arch armv7
 endif
 
 ifeq ($(TARGET),UNIX)
