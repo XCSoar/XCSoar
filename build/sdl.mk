@@ -27,14 +27,4 @@ endif
 
 SDL_CPPFLAGS += -DENABLE_SDL
 
-ifeq ($(TARGET_IS_DARWIN),y)
-# the pkg-config file on MacPorts is broken, we must convert all -l
-# flags to link static libraries instead
-SDL_LDADD := $(patsubst -l%,/opt/local/lib/lib%.a,$(filter -l%,$(SDL_LDLIBS)))
-SDL_LDLIBS := $(filter-out -l% -R% -L%,$(SDL_LDLIBS))
-
-SDL_LDADD += /opt/local/lib/libbz2.a /opt/local/lib/libz.a
-SDL_LDADD += /opt/local/lib/libfreetype.a
-SDL_LDADD += /opt/local/lib/libxcb.a /opt/local/lib/libXau.a /opt/local/lib/libXdmcp.a
-endif
 endif

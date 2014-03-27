@@ -5,11 +5,20 @@ TARGETS = PC WIN64 \
 	PI CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
-	WINE CYGWIN
+	WINE CYGWIN \
+	OSX32 OSX64
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
-    TARGET = UNIX
+    ifeq ($(HOST_IS_DARWIN),y)
+      ifeq ($(HOST_IS_X86_32),y)
+        TARGET = OSX32
+      else
+        TARGET = OSX64
+      endif
+    else
+      TARGET = UNIX
+    endif
   else
     TARGET = PC
   endif
@@ -247,6 +256,50 @@ ifeq ($(TARGET),NEON)
   NEON := y
 endif
 
+ifeq ($(TARGET),OSX32)
+  override TARGET = UNIX
+  TARGET_IS_DARWIN = y
+  TARGET_IS_OSX = y
+  DARWIN_SDK_VERSION = 10.9
+  OSX_MIN_SUPPORTED_VERSION = 10.7
+  ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
+    TARGET_ARCH += -target i386-apple-darwin9
+  else
+    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
+    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
+    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/i386-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
+    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/i386-apple-darwin9-
+    LLVM_PREFIX = $(TCPREFIX)
+  endif
+  LIBCXX = y
+  CLANG = y
+  TARGET_ARCH += -march=i686 -msse2 -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
+  ASFLAGS += -arch i386
+endif
+
+ifeq ($(TARGET),OSX64)
+  override TARGET = UNIX
+  TARGET_IS_DARWIN = y
+  TARGET_IS_OSX = y
+  DARWIN_SDK_VERSION = 10.9
+  OSX_MIN_SUPPORTED_VERSION = 10.7
+  ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
+    TARGET_ARCH += -target x86_64-apple-darwin9
+  else
+    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
+    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
+    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/x86_64-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
+    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/x86_64-apple-darwin9-
+    LLVM_PREFIX = $(TCPREFIX)
+  endif
+  LIBCXX = y
+  CLANG = y
+  TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
+  ASFLAGS += -arch x86_64
+endif
+
 ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
@@ -271,7 +324,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
-  ifeq ($(HOST_IS_LINUX),y)
+  ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
     TARGET_IS_LINUX := y
   endif
   ifeq ($(HOST_IS_DARWIN),y)
