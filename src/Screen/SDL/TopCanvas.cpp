@@ -38,10 +38,14 @@ Copyright_License {
 #include "Screen/Memory/Dither.hpp"
 #endif
 
+#include <SDL_platform.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
-#if defined(USE_MEMORY_CANVAS) && (SDL_MAJOR_VERSION >= 2)
+#if SDL_MAJOR_VERSION >= 2
+#include <SDL_hints.h>
+#ifdef USE_MEMORY_CANVAS
 #include <SDL_render.h>
+#endif
 #endif
 
 #include <assert.h>
@@ -110,6 +114,11 @@ MakeSDLFlags(bool full_screen, bool resizable)
     flags |= SDL_WINDOW_RESIZABLE;
 #else
     flags |= SDL_RESIZABLE;
+#endif
+
+#if defined(__IPHONEOS__) && __IPHONEOS__
+  /* Hide status bar on iOS devices */
+  flags |= SDL_WINDOW_BORDERLESS;
 #endif
 
   return flags;
