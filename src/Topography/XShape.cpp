@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Topography/XShape.hpp"
+#include "Convert.hpp"
 #include "Util/UTF8.hpp"
 #include "shapelib/mapserver.h"
 #ifdef ENABLE_OPENGL
@@ -105,10 +106,7 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
-  bounds = GeoBounds(GeoPoint(Angle::Degrees(fixed(shape.bounds.minx)),
-                              Angle::Degrees(fixed(shape.bounds.maxy))),
-                     GeoPoint(Angle::Degrees(fixed(shape.bounds.maxx)),
-                              Angle::Degrees(fixed(shape.bounds.miny))));
+  bounds = ImportRect(shape.bounds);
 
 #ifdef ENABLE_OPENGL
   center = bounds.GetCenter();
