@@ -237,6 +237,10 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   int iskip = file.GetSkipSteps(map_scale);
 #endif
 
+#ifdef ENABLE_OPENGL
+  ScopeVertexPointer vp;
+#endif
+
   for (auto it = visible_shapes.begin(), end = visible_shapes.end();
        it != end; ++it) {
     const XShape &shape = **it;
@@ -283,7 +287,19 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
     case MS_SHAPE_POINT:
 #ifdef ENABLE_OPENGL
+#ifdef HAVE_GLES2
+      /* disable the ScopeVertexPointer instance because PaintPoint()
+         uses that attribute */
+      glDisableVertexAttribArray(OpenGL::Attribute::POSITION);
+#endif
+
       PaintPoint(canvas, projection, shape, opengl_matrix);
+
+#ifdef HAVE_GLES2
+      /* reenable the ScopeVertexPointer instance because PaintPoint()
+         left it disabled */
+      glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
+#endif
 #else // !ENABLE_OPENGL
       PaintPoint(canvas, projection, lines, end_lines, points);
 #endif
@@ -293,9 +309,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       {
 #ifdef ENABLE_OPENGL
 #ifdef HAVE_GLES
-        const ScopeVertexPointer vp(GL_FIXED, points);
+        vp.Update(GL_FIXED, points);
 #else
-        const ScopeVertexPointer vp(GL_INT, points);
+        vp.Update(GL_INT, points);
 #endif
 
         const GLushort *indices, *count;
@@ -336,9 +352,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
                                                         index_count);
 
 #ifdef HAVE_GLES
-        const ScopeVertexPointer vp(GL_FIXED, points);
+        vp.Update(GL_FIXED, points);
 #else
-        const ScopeVertexPointer vp(GL_INT, points);
+        vp.Update(GL_INT, points);
 #endif
         if (!pen.GetColor().IsOpaque()) {
           const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
