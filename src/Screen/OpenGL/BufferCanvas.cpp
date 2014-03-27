@@ -242,10 +242,10 @@ BufferCanvas::CopyTo(Canvas &other)
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
 #else
+  GLEnable scope(GL_TEXTURE_2D);
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  GLEnable scope(GL_TEXTURE_2D);
   texture->Bind();
   texture->DrawFlipped(other.GetRect(), GetRect());
 }

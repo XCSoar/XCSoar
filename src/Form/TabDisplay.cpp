@@ -170,6 +170,8 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
     else
       OpenGL::texture_shader->Use();
 #else
+    const GLEnable scope(GL_TEXTURE_2D);
+
     if (inverse) {
       OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
@@ -187,7 +189,6 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
       OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-    const GLEnable scope(GL_TEXTURE_2D);
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     GLTexture &texture = *bmp->GetNative();

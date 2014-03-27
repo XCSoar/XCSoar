@@ -91,10 +91,10 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
 #else
+  const GLEnable scope(GL_TEXTURE_2D);
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  const GLEnable scope(GL_TEXTURE_2D);
   const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   GLTexture &texture = *bitmap.GetNative();

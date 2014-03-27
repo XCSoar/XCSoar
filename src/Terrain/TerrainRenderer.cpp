@@ -420,18 +420,15 @@ TerrainRenderer::Draw(Canvas &canvas,
     x1, y1,
   };
 
-#ifndef HAVE_GLES2
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
-
-  GLEnable scope(GL_TEXTURE_2D);
-
 #ifdef HAVE_GLES2
   OpenGL::texture_shader->Use();
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
 #else
+  const GLEnable scope(GL_TEXTURE_2D);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glTexCoordPointer(2, GL_FLOAT, 0, coord);
 #endif
