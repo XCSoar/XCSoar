@@ -30,6 +30,10 @@ Copyright_License {
 #include "Android/Product.hpp"
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #include <tchar.h>
 
 // asset/registration data
@@ -146,6 +150,48 @@ static inline bool
 IsAndroid()
 {
 #if defined(ANDROID)
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is running on an apple device
+ */
+constexpr
+static inline bool
+IsApple()
+{
+#if defined(__APPLE__)
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is running on a Mac OS X device
+ */
+constexpr
+static inline bool
+IsMacOSX()
+{
+#if defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is running on an iOS device
+ */
+constexpr
+static inline bool
+IsIOS()
+{
+#if defined(__APPLE__) && TARGET_OS_IPHONE
   return true;
 #else
   return false;

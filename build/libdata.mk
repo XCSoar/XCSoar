@@ -11,7 +11,7 @@ DATA_OBJS = $(foreach file,$(DATA_SOURCES),$(TARGET_OUTPUT_DIR)/data/$(notdir $(
 define add-data-file
 $$(TARGET_OUTPUT_DIR)/data/$(notdir $(1)): $(1) | $$(TARGET_OUTPUT_DIR)/data/dirstamp
 	@$$(NQ)echo "  GEN     $$@"
-	$$(Q)cd $$(<D) && $$(LD) -r -b binary -o $$(abspath $$@) $$(notdir $$<)
+	$(Q)$(PERL) $(topdir)/tools/EmbedFileInObjectFile.pl $$(abspath $$<) $$(abspath $$@) "$(AS) $(ASFLAGS)"
 endef
 
 $(foreach file,$(DATA_SOURCES),$(eval $(call add-data-file,$(file))))

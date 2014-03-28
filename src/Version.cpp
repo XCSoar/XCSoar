@@ -38,7 +38,12 @@ Copyright_License {
 #elif defined(__linux__)
   #define TARGET "Linux"
 #elif defined(__APPLE__)
-  #define TARGET "MacOSX"
+  #include <TargetConditionals.h>
+  #if TARGET_OS_IPHONE
+    #define TARGET "iOS"
+  #else
+    #define TARGET "MacOSX"
+  #endif
 #elif !defined(WIN32)
   #define TARGET "UNIX"
 #elif !defined(_WIN32_WCE)

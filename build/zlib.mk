@@ -2,13 +2,8 @@ ifeq ($(TARGET),UNIX)
 
 # use the native zlib on UNIX
 
-ifeq ($(TARGET_IS_DARWIN),y)
-ZLIB_LDADD = /opt/local/lib/libz.a
-ZLIB_LDLIBS =
-else
 ZLIB_LDADD =
 ZLIB_LDLIBS = -lz
-endif
 
 ZLIB_CPPFLAGS =
 

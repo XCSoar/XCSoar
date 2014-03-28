@@ -58,6 +58,10 @@ Copyright_License {
 #include "Android/VoltageDevice.hpp"
 #endif
 
+#ifdef __APPLE__
+#include "Apple/InternalSensors.hpp"
+#endif
+
 #include <assert.h>
 
 /**
@@ -97,8 +101,10 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    open_job(NULL),
    port(NULL), monitor(NULL), dispatcher(NULL),
    driver(NULL), device(NULL),
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
    internal_sensors(NULL),
+#endif
+#ifdef ANDROID
    droidsoar_v2(nullptr),
    nunchuck(nullptr),
    voltage(nullptr),
@@ -143,10 +149,12 @@ DeviceDescriptor::GetState() const
   if (port != nullptr)
     return port->GetState();
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
   if (internal_sensors != nullptr)
     return PortState::READY;
+#endif
 
+#ifdef ANDROID
   if (droidsoar_v2 != nullptr)
     return PortState::READY;
 
@@ -259,10 +267,11 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 bool
 DeviceDescriptor::OpenInternalSensors()
 {
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
   if (is_simulator())
     return true;
 
+#ifdef ANDROID
   internal_sensors =
       InternalSensors::create(Java::GetEnv(), context, GetIndex());
   if (internal_sensors) {
@@ -270,6 +279,10 @@ DeviceDescriptor::OpenInternalSensors()
     internal_sensors->subscribeToSensor(InternalSensors::TYPE_PRESSURE);
     return true;
   }
+#elif defined(__APPLE__)
+  internal_sensors = InternalSensors::create(GetIndex());
+  return (internal_sensors != nullptr);
+#endif
 #endif
   return false;
 }
@@ -455,10 +468,12 @@ DeviceDescriptor::Close()
 
   CancelAsync();
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
   delete internal_sensors;
-  internal_sensors = NULL;
+  internal_sensors = nullptr;
+#endif
 
+#ifdef ANDROID
   delete droidsoar_v2;
   droidsoar_v2 = nullptr;
 

@@ -138,6 +138,10 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   VoltageDevice *voltage;
 #endif
 
+#ifdef __APPLE__
+  InternalSensors *internal_sensors;
+#endif
+
   /**
    * This clock keeps track when we need to reopen the device next
    * time after a failure or after a timeout.  It gets updated each

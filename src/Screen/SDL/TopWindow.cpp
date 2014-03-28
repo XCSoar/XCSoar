@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Screen/Features.hpp"
 #include "Screen/TopWindow.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
@@ -108,6 +109,20 @@ TopWindow::OnEvent(const SDL_Event &event)
 
     return w->OnKeyUp(event.key.keysym.sym);
 
+#ifdef HAVE_MULTI_TOUCH
+  case SDL_FINGERDOWN:
+    if (SDL_GetNumTouchFingers(event.tfinger.touchId) == 2)
+      return OnMultiTouchDown();
+    else
+      return false;
+
+  case SDL_FINGERUP:
+    if (SDL_GetNumTouchFingers(event.tfinger.touchId) == 1)
+      return OnMultiTouchUp();
+    else
+      return false;
+#endif
+
   case SDL_MOUSEMOTION:
     // XXX keys
     return OnMouseMove(event.motion.x, event.motion.y, 0);
@@ -156,6 +171,22 @@ TopWindow::OnEvent(const SDL_Event &event)
 
     case SDL_WINDOWEVENT_RESIZED:
       Resize(event.window.data1, event.window.data2);
+      return true;
+
+    case SDL_WINDOWEVENT_RESTORED:
+    case SDL_WINDOWEVENT_MOVED:
+    case SDL_WINDOWEVENT_SHOWN:
+    case SDL_WINDOWEVENT_MAXIMIZED:
+      {
+        SDL_Window* event_window = SDL_GetWindowFromID(event.window.windowID);
+        if (event_window) {
+          int w, h;
+          SDL_GetWindowSize(event_window, &w, &h);
+          if ((w >= 0) && (h >= 0)) {
+            Resize(w, h);
+          }
+        }
+      }
       return true;
 
     case SDL_WINDOWEVENT_EXPOSED:

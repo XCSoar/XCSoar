@@ -43,7 +43,7 @@ OBJ_SUFFIX = .o
 endif
 
 # Converts a list of source file names to *.o
-SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1)))))
+SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(patsubst %.mm,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1))))))
 
 ####### dependency handling
 
@@ -86,3 +86,7 @@ $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
+
+$(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.mm $(TARGET_OUTPUT_DIR)/%/../dirstamp
+	@$(NQ)echo "  CXX     $@"
+	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)

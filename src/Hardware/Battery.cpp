@@ -165,4 +165,59 @@ UpdateBatteryInfo()
 
 #endif
 
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+
+#include <SDL_power.h>
+
+namespace Power
+{
+  namespace Battery{
+    unsigned Temperature = 0;
+    unsigned RemainingPercent = 0;
+    bool RemainingPercentValid = false;
+    batterystatus Status = UNKNOWN;
+  };
+
+  namespace External{
+    externalstatus Status = UNKNOWN;
+  };
+};
+
+void
+UpdateBatteryInfo()
+{
+  int remaining_percent;
+  SDL_PowerState power_state = SDL_GetPowerInfo(NULL, &remaining_percent);
+  if (remaining_percent >= 0) {
+    Power::Battery::RemainingPercent = remaining_percent;
+    Power::Battery::RemainingPercentValid = true;
+  } else {
+    Power::Battery::RemainingPercentValid = false;
+  }
+
+  switch (power_state) {
+  case SDL_POWERSTATE_CHARGING:
+  case SDL_POWERSTATE_CHARGED:
+    Power::External::Status = Power::External::ON;
+    Power::Battery::Status = Power::Battery::CHARGING;
+  case SDL_POWERSTATE_ON_BATTERY:
+    Power::External::Status = Power::External::OFF;
+    if (remaining_percent >= 0) {
+      if (remaining_percent > 30) {
+        Power::Battery::Status = Power::Battery::HIGH;
+      } else if (remaining_percent > 30) {
+        Power::Battery::Status = Power::Battery::LOW;
+      } else {
+        Power::Battery::Status = Power::Battery::CRITICAL;
+      }
+    } else {
+      Power::Battery::Status = Power::Battery::UNKNOWN;
+    }
+  default:
+    Power::External::Status = Power::External::UNKNOWN;
+  }
+}
+
+#endif
+
 #endif

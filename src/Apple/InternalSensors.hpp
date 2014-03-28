@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2014 The XCSoar Project
+  Copyright (C) 2000-2013 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,41 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FEATURES_HPP
-#define XCSOAR_SCREEN_FEATURES_HPP
+#ifndef XCSOAR_APPLE_INTERNAL_SENSORS_HPP
+#define XCSOAR_APPLE_INTERNAL_SENSORS_HPP
 
-#ifdef ANDROID
-#include "Screen/Android/Features.hpp"
-#endif
+#include "Compiler.h"
 
-#ifdef USE_MEMORY_CANVAS
-#include "Screen/Memory/Features.hpp"
-#endif
+//#include <pthread.h>
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
-#endif
+struct InternalSensorsPrivate;
 
-#ifdef USE_GDI
-#include "Screen/GDI/Features.hpp"
-#endif
+// InternalSensors implementation which uses the Apple CoreLocation API
+class InternalSensors {
+ private:
+  InternalSensorsPrivate* private_data;
 
-#ifdef ENABLE_SDL
-#include "Screen/SDL/Features.hpp"
-#endif
+  InternalSensors(unsigned int index);
 
-/**
- * Return true when the Canvas implements clipping against its
- * siblings and children.
- */
-static constexpr inline bool
-HaveClipping()
-{
-#ifdef HAVE_CLIPPING
-  return true;
-#else
-  return false;
-#endif
-}
+  void init();
+  void deinit();
+
+ public:
+  ~InternalSensors();
+  gcc_malloc
+  static InternalSensors *create(unsigned int index);
+};
 
 #endif

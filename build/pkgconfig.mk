@@ -1,7 +1,7 @@
 PKG_CONFIG = pkg-config
 
 ifeq ($(TARGET_IS_DARWIN),y)
-  PKG_CONFIG += --static
+  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(DARWIN_LIBS)/lib/pkgconfig $(PKG_CONFIG) --static
 endif
 
 ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE)$(call string_equals,WINE,$(TARGET)),nynn)

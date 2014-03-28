@@ -213,6 +213,6 @@ else
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/resources.a
 $(RESOURCE_BINARY): $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) tools/LinkResources.pl $< $@ "$(LD)" "$(AR) $(ARFLAGS)"
+	$(Q)$(PERL) tools/LinkResources.pl $< $@ "$(AS) $(ASFLAGS)" "$(AR) $(ARFLAGS)"
 
 endif

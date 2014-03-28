@@ -3,6 +3,7 @@ LIBPNG ?= n
 ifeq ($(LIBPNG),y)
 
 $(eval $(call pkg-config-library,LIBPNG,libpng))
+LIBPNG_CPPFLAGS := $(patsubst -I%,-isystem %,$(LIBPNG_CPPFLAGS))
 
 LIBPNG_LDADD += $(ZLIB_LDADD)
 LIBPNG_LDLIBS += $(ZLIB_LDLIBS)

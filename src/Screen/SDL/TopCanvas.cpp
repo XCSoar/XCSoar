@@ -38,10 +38,14 @@ Copyright_License {
 #include "Screen/Memory/Dither.hpp"
 #endif
 
+#include <SDL_platform.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
-#if defined(USE_MEMORY_CANVAS) && (SDL_MAJOR_VERSION >= 2)
+#if SDL_MAJOR_VERSION >= 2
+#include <SDL_hints.h>
+#ifdef USE_MEMORY_CANVAS
 #include <SDL_render.h>
+#endif
 #endif
 
 #include <assert.h>
@@ -112,6 +116,11 @@ MakeSDLFlags(bool full_screen, bool resizable)
     flags |= SDL_RESIZABLE;
 #endif
 
+#if defined(__IPHONEOS__) && __IPHONEOS__
+  /* Hide status bar on iOS devices */
+  flags |= SDL_WINDOW_BORDERLESS;
+#endif
+
   return flags;
 }
 
@@ -151,7 +160,7 @@ TopCanvas::Create(PixelSize new_size,
   }
   int width, height;
   SDL_GetWindowSize(window, &width, &height);
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN,
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,
                               SDL_TEXTUREACCESS_STREAMING,
                               width, height);
   if (texture == nullptr) {
@@ -226,7 +235,9 @@ TopCanvas::OnResize(PixelSize new_size)
 #else
 #if SDL_MAJOR_VERSION >= 2
   int texture_width, texture_height;
-  SDL_QueryTexture(texture, nullptr, nullptr, &texture_width, &texture_height);
+  Uint32 texture_format;
+  if (SDL_QueryTexture(texture, &texture_format, NULL, &texture_width, &texture_height) != 0)
+    return;
   if (new_size.cx == texture_width && new_size.cy == texture_height)
     return;
 #else
@@ -235,7 +246,7 @@ TopCanvas::OnResize(PixelSize new_size)
 #endif
 
 #if SDL_MAJOR_VERSION >= 2
-  SDL_Texture *t = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_UNKNOWN,
+  SDL_Texture *t = SDL_CreateTexture(renderer, texture_format,
                                      SDL_TEXTUREACCESS_STREAMING,
                                      new_size.cx, new_size.cy);
   if (t == nullptr)
