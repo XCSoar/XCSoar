@@ -302,13 +302,6 @@ public:
     return m_nVal >> (resolution_shift - 16);
   }
 
-  // TODO: be more generic
-  constexpr
-  long as_glfixed_scale() const {
-    //assert(resolution_shift <= 32);
-    return m_nVal << (32 - resolution_shift);
-  }
-
   fixed operator++() {
     m_nVal += resolution;
     return *this;
