@@ -105,13 +105,15 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   // TODO: for now i assume there is only one point for point-XShapes
 
   RasterPoint sc;
-  if (!projection.GeoToScreenIfVisible(shape.get_center(), sc))
+  if (!projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.get_points()[0]),
+                                       sc))
     return;
 
 #ifndef HAVE_GLES
   glPushMatrix();
   glLoadMatrixf(opengl_matrix);
 #endif
+
   icon.Draw(canvas, sc.x, sc.y);
 #ifndef HAVE_GLES
   glPopMatrix();
