@@ -44,9 +44,6 @@ class XShape : private NonCopyable {
 #endif
 
   GeoBounds bounds;
-#ifdef ENABLE_OPENGL
-  GeoPoint center;
-#endif
 
   unsigned char type;
 
@@ -104,12 +101,6 @@ public:
   const GeoBounds &get_bounds() const {
     return bounds;
   }
-
-#ifdef ENABLE_OPENGL
-  const GeoPoint &get_center() const {
-    return center;
-  }
-#endif
 
   MS_SHAPE_TYPE get_type() const {
     return (MS_SHAPE_TYPE)type;

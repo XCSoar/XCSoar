@@ -109,10 +109,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
   bounds = ImportRect(shape.bounds);
 
-#ifdef ENABLE_OPENGL
-  center = bounds.GetCenter();
-#endif
-
   type = shape.type;
 
   num_lines = 0;
