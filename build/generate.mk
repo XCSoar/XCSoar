@@ -63,7 +63,7 @@ ifeq ($(HAVE_WIN32),n)
 
 $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  CPP     $@"
-	$(Q)$(HOSTCPP) -o $@ $< -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS)
+	$(Q)cat $< | $(HOSTCC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) -
 
 $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(RESOURCE_FILES) \
@@ -74,7 +74,7 @@ $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 
 $(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  CPP     $@"
-	$(Q)$(HOSTCPP) -o $@ $< -I$(OUT)/include $(TARGET_CPPFLAGS) -DANDROID_DRAWABLE
+	$(Q)cat $< | $(HOSTCC) -o $@ $< -I$(OUT)/include $(TARGET_CPPFLAGS) -DANDROID_DRAWABLE -
 
 $(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc \
 	$(RESOURCE_FILES) \
