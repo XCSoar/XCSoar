@@ -107,7 +107,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
     /* the cache is still fresh */
     return false;
 
-  cache_bounds = map_projection.GetScreenBounds().Scale(fixed(2));
+  cache_bounds = screenRect.Scale(fixed(2));
 
   rectObj deg_bounds = ConvertRect(cache_bounds);
 
