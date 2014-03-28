@@ -175,7 +175,7 @@ PyObject* Python::WritePhase(const Phase &phase) {
     "duration", (long)phase.duration,
     "circling_direction", FormatCirclingDirection(phase.circling_direction),
     "alt_diff", (long)phase.alt_diff,
-    "distance", (long)phase.alt_diff,
+    "distance", (long)phase.distance,
     "speed", phase.GetSpeed(),
     "vario", phase.GetVario(),
     "glide_rate", phase.GetGlideRate());
