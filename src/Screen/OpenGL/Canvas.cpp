@@ -21,18 +21,20 @@ Copyright_License {
 }
 */
 
-#include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/OpenGL/Globals.hpp"
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/Custom/Cache.hpp"
-#include "Screen/OpenGL/VertexArray.hpp"
-#include "Screen/OpenGL/Shapes.hpp"
-#include "Screen/OpenGL/Buffer.hpp"
-#include "Screen/OpenGL/Features.hpp"
+#include "Canvas.hpp"
+#include "Triangulate.hpp"
+#include "Globals.hpp"
+#include "Texture.hpp"
+#include "Scope.hpp"
+#include "VertexArray.hpp"
+#include "Shapes.hpp"
+#include "Buffer.hpp"
+#include "Features.hpp"
 #include "VertexPointer.hpp"
+#include "Screen/Custom/Cache.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
+#include "Util/AllocatedArray.hpp"
 #include "Util/Macros.hpp"
 
 #ifdef HAVE_GLES2

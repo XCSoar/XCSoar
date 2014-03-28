@@ -24,28 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 #define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 
-#include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
+#include "Color.hpp"
+#include "Point.hpp"
+#include "Features.hpp"
+#include "System.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
-#include "Screen/OpenGL/Color.hpp"
-#include "Screen/OpenGL/Point.hpp"
-#include "Screen/OpenGL/Triangulate.hpp"
-#include "Screen/OpenGL/Features.hpp"
-#include "Screen/OpenGL/System.hpp"
-#include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
 #ifdef HAVE_GLES2
 #include <glm/glm.hpp>
 #endif
 
-#include <assert.h>
 #include <tchar.h>
 
+class Angle;
 class Bitmap;
 class GLTexture;
+template<class T> class AllocatedArray;
 
 /**
  * Base drawable canvas class

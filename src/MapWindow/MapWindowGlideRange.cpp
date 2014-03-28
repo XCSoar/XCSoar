@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
+#include "Screen/OpenGL/Triangulate.hpp"
 #endif
 
 #include <stdio.h>

@@ -30,6 +30,8 @@ Copyright_License {
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Util/Macros.hpp"
 
+#include <algorithm>
+
 #endif
 
 void
