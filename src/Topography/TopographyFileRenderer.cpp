@@ -251,9 +251,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
        it != end; ++it) {
     const XShape &shape = **it;
 
-    if (!projection.GetScreenBounds().Overlaps(shape.get_bounds()))
-      continue;
-
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = shape.get_points();
 #else // !ENABLE_OPENGL
@@ -420,13 +417,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
        it != end; ++it) {
     const XShape &shape = **it;
 
-    if (!projection.GetScreenBounds().Overlaps(shape.get_bounds()))
-      continue;
-
     // Skip shapes without a label
     const TCHAR *label = shape.get_label();
-    if (label == NULL)
-      continue;
+    assert(label != nullptr);
 
     const unsigned short *lines = shape.get_lines();
     const unsigned short *end_lines = lines + shape.get_number_of_lines();
