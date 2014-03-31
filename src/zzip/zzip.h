@@ -185,6 +185,10 @@ int	 	zzip_close(ZZIP_FILE * fp);
 _zzip_export
 zzip_ssize_t	zzip_read(ZZIP_FILE * fp, void * buf, zzip_size_t len);
 
+_zzip_export
+zzip_size_t
+zzip_pread(ZZIP_FILE *file, void *ptr, zzip_size_t size, zzip_off_t offset);
+
 /*
  * the stdc variant to open/read/close files. - Take note of the freopen()
  * call as it may reuse an existing preparsed copy of a zip central directory
