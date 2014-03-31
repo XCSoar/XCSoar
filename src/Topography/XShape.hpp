@@ -37,9 +37,9 @@ Copyright_License {
 struct GeoPoint;
 
 class XShape {
-  enum { MAX_LINES = 32 };
+  static constexpr unsigned MAX_LINES = 32;
 #ifdef ENABLE_OPENGL
-  enum { THINNING_LEVELS = 4 };
+  static constexpr unsigned THINNING_LEVELS = 4;
 #endif
 
   GeoBounds bounds;
