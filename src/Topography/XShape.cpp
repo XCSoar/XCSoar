@@ -134,16 +134,8 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   }
 
 #ifdef ENABLE_OPENGL
-  /* OpenGL:
-   * Convert all points of all lines to ShapePoints, using a projection
-   * that assumes the center of the screen is also the center of the shape.
-   * Resolution is set to 1m per pixel. This enables us to use a simple matrix
-   * multiplication to draw the shape.
-   * This approximation should work well with shapes of limited size
-   * (<< 400km). Perceivable distortion will only happen, when the latitude of
-   * the actual center of the screen is far away from the latitude of the
-   * center of the shape and the shape has a big vertical size.
-   */
+  /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
+     the map's boundary center */
 
   points = new ShapePoint[num_points];
   ShapePoint *p = points;
