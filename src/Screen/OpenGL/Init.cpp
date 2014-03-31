@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/OpenGL/Shapes.hpp"
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
+#include "Math/Point2D.hpp"
 #include "Asset.hpp"
 #include "DisplayOrientation.hpp"
 

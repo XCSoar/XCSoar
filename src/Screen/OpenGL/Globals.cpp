@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Debug.hpp"
+#include "Point.hpp"
 
 namespace OpenGL {
 #ifdef HAVE_DYNAMIC_EGL
