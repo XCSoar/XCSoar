@@ -98,8 +98,8 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   :label(nullptr)
 {
 #ifdef ENABLE_OPENGL
-  for (unsigned l=0; l < THINNING_LEVELS; l++)
-    index_count[l] = indices[l] = nullptr;
+  std::fill_n(index_count, THINNING_LEVELS, nullptr);
+  std::fill_n(indices, THINNING_LEVELS, nullptr);
 #endif
 
   shapeObj shape;
