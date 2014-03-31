@@ -25,7 +25,6 @@ Copyright_License {
 #ifndef TOPOGRAPHY_XSHAPE_HPP
 #define TOPOGRAPHY_XSHAPE_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"
@@ -37,7 +36,7 @@ Copyright_License {
 
 struct GeoPoint;
 
-class XShape : private NonCopyable {
+class XShape {
   enum { MAX_LINES = 32 };
 #ifdef ENABLE_OPENGL
   enum { THINNING_LEVELS = 4 };
@@ -86,6 +85,9 @@ class XShape : private NonCopyable {
 public:
   XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
          int label_field=-1);
+
+  XShape(const XShape &) = delete;
+
   ~XShape();
 
 #ifdef ENABLE_OPENGL
