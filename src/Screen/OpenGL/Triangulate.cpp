@@ -535,9 +535,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   if (!loop) {
     // add flat or triangle cap at beginning of line
-    RasterPoint ba;
-    ba.x = a->x - b->x;
-    ba.y = a->y - b->y;
+    RasterPoint ba = *a - *b;
     Normalize(&ba, half_line_width);
 
     if (tcap)
@@ -559,11 +557,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
       // skip zero or 180 degree bends
       // TODO: support 180 degree bends!
       if (!TriangleEmpty(*a, *b, *c)) {
-        RasterPoint g, h;
-        g.x = b->x - a->x;
-        g.y = b->y - a->y;
-        h.x = c->x - b->x;
-        h.y = c->y - b->y;
+        RasterPoint g = *b - *a, h = *c - *b;
         Normalize(&g, 1000.);
         Normalize(&h, 1000.);
         int bisector_x = -g.y - h.y;
@@ -610,9 +604,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
     }
   } else {
     // add flat or triangle cap at end of line
-    RasterPoint ab;
-    ab.x = b->x - a->x;
-    ab.y = b->y - a->y;
+    RasterPoint ab = *b - *a;
     Normalize(&ab, half_line_width);
 
     RasterPoint p;
