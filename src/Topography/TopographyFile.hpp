@@ -59,7 +59,7 @@ class TopographyFile : private NonCopyable {
    */
   Serial serial;
 
-  zzip_dir *dir;
+  zzip_dir *const dir;
 
   shapefileObj file;
 
@@ -71,32 +71,32 @@ class TopographyFile : private NonCopyable {
   AllocatedArray<ShapeList> shapes;
   const ShapeList *first;
 
-  int label_field;
+  const int label_field;
 
-  ResourceId icon, big_icon;
+  const ResourceId icon, big_icon;
 
-  unsigned pen_width;
+  const unsigned pen_width;
 
-  Color color;
+  const Color color;
 
   /**
    * The threshold value for the visibility check. If the current scale
    * is below this value the contents of this TopographyFile will be drawn.
    */
-  fixed scale_threshold;
+  const fixed scale_threshold;
 
   /**
    * The threshold value for label rendering. If the current scale
    * is below this value no labels of this TopographyFile will be drawn.
    */
-  fixed label_threshold;
+  const fixed label_threshold;
 
   /**
    * The threshold value for label rendering in important style . If the current
    * scale is below this value labels of this TopographyFile will be drawn
    * in standard style
    */
-  fixed important_label_threshold;
+  const fixed important_label_threshold;
 
   /**
    * The current scope of the shape cache.  If the screen exceeds this
