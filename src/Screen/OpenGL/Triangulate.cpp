@@ -130,7 +130,7 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
 
   assert(num_points < 65536);
   // next vertex pointer
-  GLushort *next = new GLushort[num_points];
+  auto next = new GLushort[num_points];
   // index of the first vertex
   GLushort start = 0;
 
@@ -185,7 +185,7 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
   }
 
   // triangulation
-  GLushort *t = triangles;
+  auto t = triangles;
   for (unsigned a = start, b = next[a], c = next[b], heat = 0;
        num_points > 2; a = b, b = c, c = next[c]) {
     typename PT::SquareType bendiness =
@@ -288,7 +288,7 @@ static void
 AddValueCounts(unsigned *counts, unsigned max_value,
                const GLushort *values, const GLushort *values_end)
 {
-  for (const GLushort *i = values; i != values_end; ++i) {
+  for (auto i = values; i != values_end; ++i) {
     const unsigned value = *i;
     assert(value < max_value);
     counts[value]++;
@@ -300,7 +300,7 @@ static GLushort *
 FindOne(const unsigned *counts, unsigned max_value,
         GLushort *values, const GLushort *values_end)
 {
-  for (GLushort *i = values; i != values_end; ++i) {
+  for (auto i = values; i != values_end; ++i) {
     const unsigned value = *i;
     assert(value < max_value);
     if (counts[value] == 1)
@@ -315,7 +315,7 @@ static GLushort *
 FindSharedEdge(const unsigned idx1, const unsigned idx2,
                GLushort *values, const GLushort *values_end)
 {
-  for (GLushort *v = values; v < values_end; v += 3)
+  for (auto v = values; v < values_end; v += 3)
     if ((idx1 == v[0] || idx1 == v[1] || idx1 == v[2]) &&
         (idx2 == v[0] || idx2 == v[1] || idx2 == v[2]))
       return v;
@@ -334,15 +334,15 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
     return 0;
 
   // count the number of occurrences for each vertex
-  unsigned *vcount = new unsigned[vertex_count]();
-  GLushort *t = triangles;
-  const GLushort * const t_end = triangles + index_count;
+  auto vcount = new unsigned[vertex_count]();
+  auto t = triangles;
+  const auto t_end = triangles + index_count;
 
   AddValueCounts(vcount, vertex_count, t, t_end);
 
   const unsigned triangle_buffer_size = index_count + 2 * (polygon_count - 1);
-  GLushort *triangle_strip = new GLushort[triangle_buffer_size];
-  GLushort *strip = triangle_strip;
+  const auto triangle_strip = new GLushort[triangle_buffer_size];
+  auto strip = triangle_strip;
 
   // search a start point with only one reference
   GLushort *v = FindOne(vcount, vertex_count, t, t_end);
@@ -498,7 +498,7 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   // pointer to the end of the original points array
   // used for faster loop conditions
-  const RasterPoint * const points_end = points + num_points;
+  const auto points_end = points + num_points;
 
   // initialize a, b and c vertices
   if (loop) {
