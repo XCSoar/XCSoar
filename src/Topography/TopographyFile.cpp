@@ -31,7 +31,7 @@ Copyright_License {
 #include <algorithm>
 #include <stdlib.h>
 
-TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
+TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                fixed _threshold,
                                fixed _label_threshold,
                                fixed _important_label_threshold,

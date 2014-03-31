@@ -59,7 +59,7 @@ class TopographyFile : private NonCopyable {
    */
   Serial serial;
 
-  struct zzip_dir *dir;
+  zzip_dir *dir;
 
   shapefileObj file;
 
@@ -157,7 +157,7 @@ public:
    * be rendered in default style
    * @return
    */
-  TopographyFile(struct zzip_dir *dir, const char *shpname,
+  TopographyFile(zzip_dir *dir, const char *shpname,
                  fixed threshold, fixed label_threshold,
                  fixed important_label_threshold,
                  const Color color,
