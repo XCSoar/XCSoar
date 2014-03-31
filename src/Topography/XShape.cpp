@@ -50,20 +50,20 @@ import_label(const char *src)
   if (strcmp(src, "RAILWAY STATION") == 0 ||
       strcmp(src, "RAILROAD STATION") == 0 ||
       strcmp(src, "UNK") == 0)
-    return NULL;
+    return nullptr;
 
 #ifdef _UNICODE
   size_t length = strlen(src);
   TCHAR *dest = new TCHAR[length + 1];
   if (::MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, length + 1) <= 0) {
     delete[] dest;
-    return NULL;
+    return nullptr;
   }
 
   return dest;
 #else
   if (!ValidateUTF8(src))
-    return NULL;
+    return nullptr;
 
   return strdup(src);
 #endif
@@ -95,11 +95,11 @@ min_points_for_type(int shapelib_type)
 
 XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
                int label_field)
-  :label(NULL)
+  :label(nullptr)
 {
 #ifdef ENABLE_OPENGL
   for (unsigned l=0; l < THINNING_LEVELS; l++)
-    index_count[l] = indices[l] = NULL;
+    index_count[l] = indices[l] = nullptr;
 #endif
 
   shapeObj shape;
@@ -115,7 +115,7 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   const int min_points = min_points_for_type(shape.type);
   if (min_points < 0) {
     /* not supported, leave an empty XShape object */
-    points = NULL;
+    points = nullptr;
     msFreeShape(&shape);
     return;
   }
@@ -190,7 +190,7 @@ XShape::~XShape()
 bool
 XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
 {
-  assert(indices[thinning_level] == NULL);
+  assert(indices[thinning_level] == nullptr);
 
   unsigned short *idx, *idx_count;
   unsigned num_points = 0;
@@ -261,10 +261,10 @@ const unsigned short *
 XShape::get_indices(int thinning_level, ShapeScalar min_distance,
                     const unsigned short *&count) const
 {
-  if (indices[thinning_level] == NULL) {
+  if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);
     if (!deconst.BuildIndices(thinning_level, min_distance))
-      return NULL;
+      return nullptr;
   }
 
   count = index_count[thinning_level];
