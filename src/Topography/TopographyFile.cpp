@@ -120,14 +120,20 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
   // Test which shapes are inside the given bounds and save the
   // status to file.status
-  msShapefileWhichShapes(&file, dir, deg_bounds, 0);
-
-  // If not a single shape is inside the bounds
-  if (!file.status) {
-    // ... clear the whole buffer
+  switch (msShapefileWhichShapes(&file, dir, deg_bounds, 0)) {
+  case MS_FAILURE:
     ClearCache();
     return false;
+
+  case MS_DONE:
+    /* screen is outside of map bounds */
+    return true;
+
+  case MS_SUCCESS:
+    break;
   }
+
+  assert(file.status != nullptr);
 
   // Iterate through the shapefile entries
   const ShapeList **current = &first;
