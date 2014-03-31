@@ -249,6 +249,10 @@ OpenGL::SetupContext()
   vertex_buffer_object = EnableVBO();
 #endif
 
+#ifdef HAVE_OES_MAPBUFFER
+  mapbuffer = IsExtensionSupported("GL_OES_mapbuffer");
+#endif
+
   frame_buffer_object = CheckFBO() && FBO::Initialise();
   if (frame_buffer_object) {
     render_buffer_depth_stencil = CheckDepthStencil();

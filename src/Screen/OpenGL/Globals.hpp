@@ -85,6 +85,16 @@ namespace OpenGL {
 #endif
 
   /**
+   * Is glMapBuffer() available?  May be implemented by the extension
+   * GL_OES_mapbuffer.
+   */
+#ifdef HAVE_OES_MAPBUFFER
+  extern bool mapbuffer;
+#else
+  static constexpr bool mapbuffer = true;
+#endif
+
+  /**
    * Is the extension GL_ARB_framebuffer_object or
    * GL_OES_framebuffer_object present?
    */

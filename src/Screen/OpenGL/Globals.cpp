@@ -40,6 +40,10 @@ namespace OpenGL {
   bool vertex_buffer_object;
 #endif
 
+#ifdef HAVE_OES_MAPBUFFER
+  bool mapbuffer;
+#endif
+
   bool frame_buffer_object;
 
   GLenum render_buffer_depth_stencil, render_buffer_stencil;
