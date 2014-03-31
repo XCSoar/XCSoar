@@ -74,9 +74,13 @@ public:
     glBindBuffer(target, 0);
   }
 
+  static void Data(GLsizeiptr size, const GLvoid *data) {
+    glBufferData(target, size, data, usage);
+  }
+
   void Load(GLsizeiptr size, const GLvoid *data) {
     Bind();
-    glBufferData(target, size, data, usage);
+    Data(size, data);
     Unbind();
   }
 };
