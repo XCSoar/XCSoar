@@ -46,6 +46,10 @@ struct Point2D {
     return { scalar_type(x + other.x), scalar_type(y + other.y) };
   }
 
+  constexpr Point2D<T> operator-(Point2D<T> other) const {
+    return { scalar_type(x - other.x), scalar_type(y - other.y) };
+  }
+
   Point2D<T> &operator+=(Point2D<T> other) {
     x += other.x;
     y += other.y;
