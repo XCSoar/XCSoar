@@ -39,7 +39,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
                                int _label_field,
                                ResourceId _icon, ResourceId _big_icon,
                                unsigned _pen_width)
-  :dir(_dir), first(NULL),
+  :dir(_dir), first(nullptr),
    label_field(_label_field), icon(_icon), big_icon(_big_icon),
    pen_width(_pen_width),
    color(_color), scale_threshold(_threshold),
@@ -58,9 +58,9 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
   center = ImportRect(file.bounds).GetCenter();
 
   shapes.ResizeDiscard(file.numshapes);
-  std::fill(shapes.begin(), shapes.end(), ShapeList(NULL));
+  std::fill(shapes.begin(), shapes.end(), ShapeList(nullptr));
 
-  if (dir != NULL)
+  if (dir != nullptr)
     ++dir->refcount;
 
   ++serial;
@@ -74,7 +74,7 @@ TopographyFile::~TopographyFile()
   ClearCache();
   msShapefileClose(&file);
 
-  if (dir != NULL) {
+  if (dir != nullptr) {
     --dir->refcount;
     zzip_dir_free(dir);
   }
@@ -85,10 +85,10 @@ TopographyFile::ClearCache()
 {
   for (auto i = shapes.begin(), end = shapes.end(); i != end; ++i) {
     delete i->shape;
-    i->shape = NULL;
+    i->shape = nullptr;
   }
 
-  first = NULL;
+  first = nullptr;
 }
 
 bool
@@ -130,10 +130,10 @@ TopographyFile::Update(const WindowProjection &map_projection)
       // If the shape is outside the bounds
       // delete the shape from the cache
       delete it->shape;
-      it->shape = NULL;
+      it->shape = nullptr;
     } else {
       // is inside the bounds
-      if (it->shape == NULL)
+      if (it->shape == nullptr)
         // shape isn't cached yet -> cache the shape
         it->shape = new XShape(&file, center, i, label_field);
       // update list pointer
@@ -142,7 +142,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
     }
   }
   // end of list marker
-  *current = NULL;
+  *current = nullptr;
 
   ++serial;
   return true;
@@ -155,7 +155,7 @@ TopographyFile::LoadAll()
   const ShapeList **current = &first;
   auto it = shapes.begin();
   for (int i = 0; i < file.numshapes; ++i, ++it) {
-    if (it->shape == NULL)
+    if (it->shape == nullptr)
       // shape isn't cached yet -> cache the shape
       it->shape = new XShape(&file, center, i, label_field);
     // update list pointer
@@ -163,7 +163,7 @@ TopographyFile::LoadAll()
     current = &it->next;
   }
   // end of list marker
-  *current = NULL;
+  *current = nullptr;
 
   ++serial;
 }

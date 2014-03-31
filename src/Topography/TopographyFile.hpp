@@ -114,21 +114,21 @@ public:
 
   public:
     const_iterator &operator++() {
-      assert(current != NULL);
+      assert(current != nullptr);
 
       current = current->next;
       return *this;
     }
 
     const XShape &operator*() const {
-      assert(current != NULL);
-      assert(current->shape != NULL);
+      assert(current != nullptr);
+      assert(current->shape != nullptr);
 
       return *current->shape;
     }
 
     const XShape *operator->() const {
-      assert(current != NULL);
+      assert(current != nullptr);
 
       return current->shape;
     }
@@ -216,7 +216,7 @@ public:
   }
 
   const_iterator end() const {
-    return const_iterator(NULL);
+    return const_iterator(nullptr);
   }
 
   gcc_pure
