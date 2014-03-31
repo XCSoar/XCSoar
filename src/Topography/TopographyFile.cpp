@@ -91,6 +91,13 @@ TopographyFile::ClearCache()
   first = nullptr;
 }
 
+static XShape *
+LoadShape(shapefileObj *file, const GeoPoint &center, int i,
+          int label_field)
+{
+  return new XShape(file, center, i, label_field);
+}
+
 bool
 TopographyFile::Update(const WindowProjection &map_projection)
 {
@@ -135,7 +142,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
       // is inside the bounds
       if (it->shape == nullptr)
         // shape isn't cached yet -> cache the shape
-        it->shape = new XShape(&file, center, i, label_field);
+        it->shape = LoadShape(&file, center, i, label_field);
       // update list pointer
       *current = it;
       current = &it->next;
@@ -157,7 +164,7 @@ TopographyFile::LoadAll()
   for (int i = 0; i < file.numshapes; ++i, ++it) {
     if (it->shape == nullptr)
       // shape isn't cached yet -> cache the shape
-      it->shape = new XShape(&file, center, i, label_field);
+      it->shape = LoadShape(&file, center, i, label_field);
     // update list pointer
     *current = it;
     current = &it->next;
