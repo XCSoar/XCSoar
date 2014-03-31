@@ -27,7 +27,6 @@ Copyright_License {
 
 #include "shapelib/mapserver.h"
 #include "Geo/GeoBounds.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Util/Serial.hpp"
 #include "Math/fixed.hpp"
@@ -44,7 +43,7 @@ class WindowProjection;
 class XShape;
 struct zzip_dir;
 
-class TopographyFile : private NonCopyable {
+class TopographyFile {
   struct ShapeList {
     const ShapeList *next;
 
@@ -165,6 +164,8 @@ public:
                  ResourceId icon=ResourceId::Null(),
                  ResourceId big_icon=ResourceId::Null(),
                  unsigned pen_width=1);
+
+  TopographyFile(const TopographyFile &) = delete;
 
   /**
    * The destructor clears the cache and closes the shapefile
