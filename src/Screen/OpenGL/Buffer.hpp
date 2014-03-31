@@ -54,6 +54,8 @@ public:
 #endif
   }
 
+  GLBuffer(const GLBuffer &) = delete;
+
   ~GLBuffer() {
 #ifndef NDEBUG
     assert(num_buffers > 0);
