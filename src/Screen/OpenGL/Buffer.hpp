@@ -35,6 +35,7 @@ extern unsigned num_buffers;
 /**
  * This class represents an OpenGL buffer object.
  */
+template<GLenum target, GLenum usage>
 class GLBuffer {
   GLuint id;
 
@@ -65,37 +66,22 @@ public:
     glDeleteBuffers(1, &id);
   }
 
-  void Bind(GLenum target) {
+  void Bind() {
     glBindBuffer(target, id);
   }
 
-  static void Unbind(GLenum target) {
+  static void Unbind() {
     glBindBuffer(target, 0);
   }
 
-  void Load(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage) {
-    Bind(target);
+  void Load(GLsizeiptr size, const GLvoid *data) {
+    Bind();
     glBufferData(target, size, data, usage);
-    Unbind(target);
+    Unbind();
   }
 };
 
-class GLArrayBuffer : private GLBuffer {
-public:
-  GLArrayBuffer() = default;
-  explicit GLArrayBuffer(GLuint _id):GLBuffer(_id) {}
-
-  void Bind() {
-    GLBuffer::Bind(GL_ARRAY_BUFFER);
-  }
-
-  static void Unbind() {
-    GLBuffer::Unbind(GL_ARRAY_BUFFER);
-  }
-
-  void Load(GLsizeiptr size, const GLvoid *data) {
-    GLBuffer::Load(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-  }
+class GLArrayBuffer : public GLBuffer<GL_ARRAY_BUFFER, GL_STATIC_DRAW> {
 };
 
 #endif
