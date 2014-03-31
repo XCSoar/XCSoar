@@ -26,16 +26,16 @@ Copyright_License {
 #define TOPOGRAPHY_XSHAPE_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Geo/GeoPoint.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"
 #ifdef ENABLE_OPENGL
-#include "Screen/Point.hpp"
 #include "Topography/XShapePoint.hpp"
 #endif
 
 #include <tchar.h>
+
+struct GeoPoint;
 
 class XShape : private NonCopyable {
   enum { MAX_LINES = 32 };

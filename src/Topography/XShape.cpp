@@ -24,7 +24,6 @@ Copyright_License {
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
 #include "Util/UTF8.hpp"
-#include "shapelib/mapserver.h"
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
