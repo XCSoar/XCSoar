@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 #define XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 
-#include "System.hpp"
+#include "SystemExt.hpp"
 
 #include <assert.h>
 
@@ -85,6 +85,22 @@ public:
     Bind();
     Data(size, data);
     Unbind();
+  }
+
+  static void *MapWrite() {
+#ifdef GL_OES_mapbuffer
+    return glMapBufferOES(target, GL_WRITE_ONLY_OES);
+#else
+    return glMapBuffer(target, GL_WRITE_ONLY);
+#endif
+  }
+
+  static void Unmap() {
+#ifdef GL_OES_mapbuffer
+    glUnmapBufferOES(target);
+#else
+    glUnmapBuffer(target);
+#endif
   }
 };
 
