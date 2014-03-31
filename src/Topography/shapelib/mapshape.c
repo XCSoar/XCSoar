@@ -1252,8 +1252,8 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
   /* -------------------------------------------------------------------- */
   /*      Read the record.                                                */
   /* -------------------------------------------------------------------- */
-  zzip_seek( psSHP->fpSHP, msSHXReadOffset(psSHP, hEntity), 0 );
-  zzip_fread( psSHP->pabyRec, nEntitySize, 1, psSHP->fpSHP );
+  zzip_pread(psSHP->fpSHP, psSHP->pabyRec, nEntitySize,
+             msSHXReadOffset(psSHP, hEntity));
 
   /* -------------------------------------------------------------------- */
   /*  Extract vertices for a Polygon or Arc.            */
@@ -1621,8 +1621,8 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
     }
 
     if( psSHP->nShapeType != SHP_POINT && psSHP->nShapeType != SHP_POINTZ && psSHP->nShapeType != SHP_POINTM) {
-      zzip_seek( psSHP->fpSHP, msSHXReadOffset(psSHP, hEntity) + 12, 0 );
-      zzip_fread( padBounds, sizeof(double)*4, 1, psSHP->fpSHP );
+      zzip_pread(psSHP->fpSHP, padBounds, sizeof(double) * 4,
+                 msSHXReadOffset(psSHP, hEntity) + 12);
 
       if( bBigEndian ) {
         SwapWord( 8, &(padBounds->minx) );
@@ -1641,8 +1641,8 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
       /*      minimum and maximum bound.                                      */
       /* -------------------------------------------------------------------- */
 
-      zzip_seek( psSHP->fpSHP, msSHXReadOffset(psSHP, hEntity) + 12, 0 );
-      zzip_fread( padBounds, sizeof(double)*2, 1, psSHP->fpSHP );
+      zzip_pread(psSHP->fpSHP, padBounds, sizeof(double) * 2,
+                 msSHXReadOffset(psSHP, hEntity) + 12);
 
       if( bBigEndian ) {
         SwapWord( 8, &(padBounds->minx) );

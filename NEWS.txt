@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.8 - not yet released
+* data files
+  - optimise the topography loader
 * calculations
   - use maximum speed configured in plane setup as limit for calculations
   - use WGS84 earth ellipsoid for distance calculations (#2809)

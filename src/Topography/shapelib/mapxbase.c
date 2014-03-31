@@ -531,8 +531,8 @@ static const char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
     nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
 
-    safe_fseek( psDBF->fp, nRecordOffset, 0 );
-    zzip_fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
+    zzip_pread(psDBF->fp, psDBF->pszCurrentRecord, psDBF->nRecordLength,
+               nRecordOffset);
 
     psDBF->nCurrentRecord = hEntity;
   }
