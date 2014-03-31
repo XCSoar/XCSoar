@@ -517,14 +517,34 @@ zzip_read(ZZIP_FILE * fp, void *buf, zzip_size_t len)
     }
 }
 
-zzip_size_t
-zzip_pread(ZZIP_FILE *file, void *ptr, zzip_size_t size, zzip_off_t offset)
+static zzip_size_t
+zzip_pread_fallback(ZZIP_FILE *file, void *ptr, zzip_size_t size,
+                    zzip_off_t offset)
 {
     zzip_off_t new_offset = zzip_seek(file, offset, SEEK_SET);
     if (new_offset < 0)
         return -1;
 
     return zzip_read(file, ptr, size);
+}
+
+zzip_size_t
+zzip_pread(ZZIP_FILE *file, void *ptr, zzip_size_t size, zzip_off_t offset)
+{
+   if (file->dir == NULL) {
+#ifdef __linux__
+       return pread(file->fd, ptr, size, offset);
+#else
+       return zzip_pread_fallback(file, ptr, size, offset);
+#endif
+#ifdef __linux__
+   } else if (file->method == 0) {
+       offset += file->dataoffset;
+       return pread(file->dir->fd, ptr, size, offset);
+#endif
+   } else {
+       return zzip_pread_fallback(file, ptr, size, offset);
+   }
 }
 
 /** => zzip_read
