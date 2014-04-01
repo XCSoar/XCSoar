@@ -21,8 +21,17 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Buffer.hpp"
+#ifndef XCSOAR_SCREEN_OPENGL_DYNAMIC_HPP
+#define XCSOAR_SCREEN_OPENGL_DYNAMIC_HPP
 
-#ifndef NDEBUG
-unsigned num_buffers;
+#include "SystemExt.hpp"
+#include "Features.hpp"
+
+namespace GLExt {
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+  extern PFNGLMAPBUFFEROESPROC map_buffer;
+  extern PFNGLUNMAPBUFFEROESPROC unmap_buffer;
+#endif
+};
+
 #endif

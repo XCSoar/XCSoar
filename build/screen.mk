@@ -60,6 +60,7 @@ ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/Dynamic.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Rotate.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Globals.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Extension.cpp \

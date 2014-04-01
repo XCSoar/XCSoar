@@ -21,8 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Buffer.hpp"
+#include "Dynamic.hpp"
 
-#ifndef NDEBUG
-unsigned num_buffers;
+namespace GLExt {
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+  PFNGLMAPBUFFEROESPROC map_buffer;
+  PFNGLUNMAPBUFFEROESPROC unmap_buffer;
 #endif
+}

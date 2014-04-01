@@ -27,15 +27,15 @@ Copyright_License {
 #include "Screen/OpenGL/Extension.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
+#include "Dynamic.hpp"
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
 #include "Math/Point2D.hpp"
 #include "Asset.hpp"
 #include "DisplayOrientation.hpp"
 
-#ifdef HAVE_DYNAMIC_MAPBUFFER
-#include "Buffer.hpp"
-#include <EGL/egl.h>
+#ifdef USE_EGL
+#include "Screen/EGL/System.hpp"
 #endif
 
 #ifdef HAVE_GLES2
@@ -260,11 +260,11 @@ OpenGL::SetupContext()
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
   if (mapbuffer) {
-    VBO::map_buffer = (PFNGLMAPBUFFEROESPROC)
+    GLExt::map_buffer = (PFNGLMAPBUFFEROESPROC)
       eglGetProcAddress("glMapBufferOES");
-    VBO::unmap_buffer = (PFNGLUNMAPBUFFEROESPROC)
+    GLExt::unmap_buffer = (PFNGLUNMAPBUFFEROESPROC)
       eglGetProcAddress("glUnmapBufferOES");
-    if (VBO::map_buffer == nullptr || VBO::unmap_buffer == nullptr)
+    if (GLExt::map_buffer == nullptr || GLExt::unmap_buffer == nullptr)
       mapbuffer = false;
   }
 #endif
