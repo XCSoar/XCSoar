@@ -40,7 +40,7 @@ class TopographyRenderer : private NonCopyable {
   StaticArray<TopographyFileRenderer *, TopographyStore::MAXTOPOGRAPHY> files;
 
 public:
-  TopographyRenderer(const TopographyStore &store);
+  explicit TopographyRenderer(const TopographyStore &store);
 
   TopographyRenderer(const TopographyRenderer &) = delete;
 

@@ -67,7 +67,7 @@ class TopographyFileRenderer {
   std::vector<const XShape *> visible_shapes, visible_labels;
 
 public:
-  TopographyFileRenderer(const TopographyFile &file);
+  explicit TopographyFileRenderer(const TopographyFile &file);
 
   TopographyFileRenderer(const TopographyFileRenderer &) = delete;
 
