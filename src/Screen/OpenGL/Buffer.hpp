@@ -25,8 +25,10 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 
 #include "SystemExt.hpp"
+#include "Globals.hpp"
 
 #include <assert.h>
+#include <stdlib.h>
 
 #ifndef NDEBUG
 extern unsigned num_buffers;
@@ -101,6 +103,28 @@ public:
 #else
     glUnmapBuffer(target);
 #endif
+  }
+
+  GLvoid *BeginWrite(size_t size) {
+    Bind();
+
+    if (OpenGL::mapbuffer) {
+      Data(GLsizeiptr(size), nullptr);
+      return MapWrite();
+    } else {
+      return malloc(size);
+    }
+  }
+
+  void CommitWrite(size_t size, GLvoid *data) {
+    if (OpenGL::mapbuffer) {
+      Unmap();
+    } else {
+      Data(GLsizeiptr(size), data);
+      free(data);
+    }
+
+    Unbind();
   }
 };
 
