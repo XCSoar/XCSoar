@@ -59,6 +59,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
+#include <dlfcn.h>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -267,6 +268,13 @@ OpenGL::SetupContext()
     if (GLExt::map_buffer == nullptr || GLExt::unmap_buffer == nullptr)
       mapbuffer = false;
   }
+#endif
+
+#ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
+  GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
+    dlsym(RTLD_DEFAULT, "glMultiDrawArraysEXT");
+  GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)
+    dlsym(RTLD_DEFAULT, "glMultiDrawElementsEXT");
 #endif
 
   frame_buffer_object = CheckFBO() && FBO::Initialise();

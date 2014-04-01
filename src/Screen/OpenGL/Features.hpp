@@ -47,6 +47,7 @@ Copyright_License {
 
 #ifdef HAVE_GLES
 #define HAVE_OES_MAPBUFFER
+#define HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
 #endif
 
 #ifdef HAVE_MALI

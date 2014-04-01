@@ -39,6 +39,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Screen/OpenGL/Buffer.hpp"
+#include "Screen/OpenGL/Dynamic.hpp"
 #endif
 
 #ifdef HAVE_GLES2
@@ -305,6 +306,11 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   ScopeVertexPointer vp;
+
+#ifdef GL_EXT_multi_draw_arrays
+  std::vector<GLsizei> polygon_counts;
+  std::vector<GLshort> polygon_indices;
+#endif
 #endif
 
   for (auto it = visible_shapes.begin(), end = visible_shapes.end();
@@ -388,9 +394,24 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         const GLushort *index_count;
         const GLushort *triangles = shape.get_indices(level, min_distance,
                                                         index_count);
+        const unsigned n = *index_count;
+
+#ifdef GL_EXT_multi_draw_arrays
+        const unsigned offset = shape.GetOffset();
+        if (GLExt::HaveMultiDrawElements() && offset + n < 0x10000) {
+          /* postpone, draw many polygons with a single
+             glMultiDrawElements() call */
+          polygon_counts.push_back(n);
+          const size_t size = polygon_indices.size();
+          polygon_indices.resize(size + n, offset);
+          for (unsigned i = 0; i < n; ++i)
+            polygon_indices[size + i] += triangles[i];
+          break;
+        }
+#endif
 
         vp.Update(GL_FLOAT, points);
-        glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+        glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_SHORT,
                        triangles);
       }
 #else // !ENABLE_OPENGL
@@ -425,6 +446,27 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     }
   }
 #ifdef ENABLE_OPENGL
+
+#ifdef GL_EXT_multi_draw_arrays
+  if (!polygon_indices.empty()) {
+    assert(GLExt::HaveMultiDrawElements());
+
+    std::vector<const GLshort *> polygon_pointers;
+    unsigned i = 0;
+    for (auto count : polygon_counts) {
+      polygon_pointers.push_back(polygon_indices.data() + i);
+      i += count;
+    }
+
+    vp.Update(GL_FLOAT, nullptr);
+
+    GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, polygon_counts.data(),
+                             GL_UNSIGNED_SHORT,
+                             (const GLvoid **)polygon_pointers.data(),
+                             polygon_counts.size());
+  }
+#endif
+
 #ifdef HAVE_GLES2
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(glm::mat4()));

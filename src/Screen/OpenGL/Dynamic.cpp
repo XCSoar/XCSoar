@@ -28,4 +28,9 @@ namespace GLExt {
   PFNGLMAPBUFFEROESPROC map_buffer;
   PFNGLUNMAPBUFFEROESPROC unmap_buffer;
 #endif
+
+#ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
+  PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
+  PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
+#endif
 }
