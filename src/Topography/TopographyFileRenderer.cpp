@@ -37,7 +37,6 @@ Copyright_License {
 #include "Geo/Constants.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Screen/OpenGL/Buffer.hpp"
 #endif
@@ -227,6 +226,11 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     array_buffer->Bind();
 
   pen.Bind();
+
+  if (!pen.GetColor().IsOpaque()) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
 #else
   shape_renderer.Configure(&pen, &brush);
 #endif
@@ -386,13 +390,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
                                                         index_count);
 
         vp.Update(GL_FLOAT, points);
-        if (!pen.GetColor().IsOpaque()) {
-          const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-          glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
-                         triangles);
-        } else
-          glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
-                         triangles);
+        glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+                       triangles);
       }
 #else // !ENABLE_OPENGL
       for (const GeoPoint *src = &points[0]; lines < end_lines;
@@ -432,6 +431,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #else
   glPopMatrix();
 #endif
+  if (!pen.GetColor().IsOpaque())
+    glDisable(GL_BLEND);
+
   pen.Unbind();
 
   if (use_vbo)
