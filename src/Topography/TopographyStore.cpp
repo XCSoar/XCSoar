@@ -91,7 +91,7 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { "mountain_pass", IDB_MOUNTAIN_PASS, IDB_MOUNTAIN_PASS_HD },
   { "weather_station", IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD },
   { "thermal_hotspot", IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD },
-  { NULL, ResourceId::Null(), ResourceId::Null() }
+  { nullptr, ResourceId::Null(), ResourceId::Null() }
 };
 
 unsigned
@@ -137,7 +137,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
   // Create buffer for the shape filenames
   // (shape_filename will be modified with the shape_filename_end pointer)
   char shape_filename[MAX_PATH];
-  if (directory != NULL) {
+  if (directory != nullptr) {
     const WideToACPConverter narrow_directory(directory);
     strcpy(shape_filename, narrow_directory);
     strcat(shape_filename, DIR_SEPARATOR_S);
@@ -155,7 +155,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
   // Iterate through shape files in the "topology.tpl" file until
   // end or max. file number reached
   char *line;
-  while (!files.full() && (line = reader.ReadLine()) != NULL) {
+  while (!files.full() && (line = reader.ReadLine()) != nullptr) {
     // .tpl Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range,alpha
 
     // Ignore comments (lines starting with *) and empty lines
@@ -164,7 +164,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 
     // Find first comma to extract shape filename
     char *p = strchr(line, ',');
-    if (p == NULL || p == line)
+    if (p == nullptr || p == line)
       // If no comma was found -> ignore this line/shapefile
       continue;
 
@@ -202,7 +202,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 
     if (strlen(icon_name) > 0) {
       const LOOKUP_ICON *ip = icon_list;
-      while (ip->name != NULL) {
+      while (ip->name != nullptr) {
         if (StringIsEqual(ip->name, icon_name)) {
           icon = ip->resource_id;
           big_icon = ip->big_resource_id;

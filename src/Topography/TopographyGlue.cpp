@@ -47,8 +47,8 @@ LoadConfiguredTopographyZip(TopographyStore &store,
     return false;
 
   const WideToACPConverter narrow_path(path);
-  ZZIP_DIR *dir = zzip_dir_open(narrow_path, NULL);
-  if (dir == NULL)
+  ZZIP_DIR *dir = zzip_dir_open(narrow_path, nullptr);
+  if (dir == nullptr)
     return false;
 
   ZipLineReaderA reader(dir, "topology.tpl");
@@ -58,7 +58,7 @@ LoadConfiguredTopographyZip(TopographyStore &store,
     return false;
   }
 
-  store.Load(operation, reader, NULL, dir);
+  store.Load(operation, reader, nullptr, dir);
   zzip_dir_close(dir);
   return true;
 }

@@ -86,7 +86,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
     if (shape.get_type() != MS_SHAPE_NULL)
       visible_shapes.push_back(&shape);
 
-    if (shape.get_label() != NULL)
+    if (shape.get_label() != nullptr)
       visible_labels.push_back(&shape);
   }
 }
@@ -290,7 +290,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
         const GLushort *indices, *count;
         if (level == 0 ||
-            (indices = shape.get_indices(level, min_distance, count)) == NULL) {
+            (indices = shape.get_indices(level, min_distance, count)) == nullptr) {
           count = shape.get_lines();
           const GLushort *end_count = count + shape.get_number_of_lines();
           for (int offset = 0; count < end_count; offset += *count++)

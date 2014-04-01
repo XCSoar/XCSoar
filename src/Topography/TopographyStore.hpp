@@ -86,7 +86,7 @@ public:
   void LoadAll();
 
   void Load(OperationEnvironment &operation, NLineReader &reader,
-            const TCHAR *directory, struct zzip_dir *zdir = NULL);
+            const TCHAR *directory, struct zzip_dir *zdir = nullptr);
   void Reset();
 };
 
