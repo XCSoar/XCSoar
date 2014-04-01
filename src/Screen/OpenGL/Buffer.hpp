@@ -74,6 +74,9 @@ public:
     glBindBuffer(target, 0);
   }
 
+  /**
+   * Allocates and initializes the buffer.
+   */
   static void Data(GLsizeiptr size, const GLvoid *data) {
     glBufferData(target, size, data, usage);
   }
