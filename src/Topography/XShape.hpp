@@ -76,6 +76,12 @@ class XShape {
    * level, which contains the number of points for each line.
    */
   unsigned short *index_count[THINNING_LEVELS];
+
+  /**
+   * The start offset in the #GLArrayBuffer (vertex buffer object).
+   * It is managed by #TopographyFileRenderer.
+   */
+  mutable unsigned offset;
 #else // !ENABLE_OPENGL
   GeoPoint *points;
 #endif
@@ -91,6 +97,14 @@ public:
   ~XShape();
 
 #ifdef ENABLE_OPENGL
+  void SetOffset(unsigned _offset) const {
+    offset = _offset;
+  }
+
+  unsigned GetOffset() const {
+    return offset;
+  }
+
 protected:
   bool BuildIndices(unsigned thinning_level, ShapeScalar min_distance);
 

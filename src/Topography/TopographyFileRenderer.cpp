@@ -39,6 +39,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
+#include "Screen/OpenGL/Buffer.hpp"
 #endif
 
 #ifdef HAVE_GLES2
@@ -50,17 +51,27 @@ Copyright_License {
 #endif
 
 #include <algorithm>
+#include <numeric>
 #include <set>
 
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
-  :file(_file), pen(file.GetPenWidth(), file.GetColor())
-#ifndef ENABLE_OPENGL
-  , brush(file.GetColor())
+  :file(_file), pen(file.GetPenWidth(), file.GetColor()),
+#ifdef ENABLE_OPENGL
+   array_buffer(nullptr)
+#else
+   brush(file.GetColor())
 #endif
 {
   ResourceId icon_ID = file.GetIcon();
   if (icon_ID.IsDefined())
     icon.LoadResource(icon_ID, file.GetBigIcon());
+}
+
+TopographyFileRenderer::~TopographyFileRenderer()
+{
+#ifdef ENABLE_OPENGL
+  delete array_buffer;
+#endif
 }
 
 void
@@ -92,6 +103,46 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 }
 
 #ifdef ENABLE_OPENGL
+
+inline bool
+TopographyFileRenderer::UpdateArrayBuffer()
+{
+  if (!OpenGL::vertex_buffer_object)
+    return false;
+
+  if (array_buffer == nullptr)
+    array_buffer = new GLArrayBuffer();
+  else if (file.GetSerial() == array_buffer_serial)
+    return true;
+
+  array_buffer_serial = file.GetSerial();
+
+  unsigned n = 0;
+  for (auto &shape : file) {
+    shape.SetOffset(n);
+    n = std::accumulate(shape.get_lines(),
+                        shape.get_lines() + shape.get_number_of_lines(),
+                        n);
+  }
+
+  ShapePoint *p = (ShapePoint *)
+    array_buffer->BeginWrite(n * sizeof(*p));
+
+  for (const auto &shape : file) {
+    const auto *lines = shape.get_lines();
+    const unsigned n_lines = shape.get_number_of_lines();
+    const ShapePoint *src = shape.get_points();
+    for (unsigned i = 0; i < n_lines; ++i) {
+      const unsigned n_points = lines[i];
+      p = std::copy_n(src, n_points, p);
+      src += n_points;
+    }
+  }
+
+  array_buffer->CommitWrite(n * sizeof(*p), p);
+
+  return true;
+}
 
 inline void
 TopographyFileRenderer::PaintPoint(Canvas &canvas,
@@ -170,6 +221,11 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 
 #ifdef ENABLE_OPENGL
+  const bool use_vbo = UpdateArrayBuffer();
+
+  if (use_vbo)
+    array_buffer->Bind();
+
   pen.Bind();
 #else
   shape_renderer.Configure(&pen, &brush);
@@ -252,7 +308,11 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     const XShape &shape = **it;
 
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = shape.get_points();
+    const ShapePoint *points = use_vbo
+      /* pointer relative to the VBO */
+      ? (const ShapePoint *)(shape.GetOffset() * sizeof(*points))
+      /* regular pointer */
+      : shape.get_points();
 #else // !ENABLE_OPENGL
     const unsigned short *lines = shape.get_lines();
     const unsigned short *end_lines = lines + shape.get_number_of_lines();
@@ -373,6 +433,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glPopMatrix();
 #endif
   pen.Unbind();
+
+  if (use_vbo)
+    array_buffer->Unbind();
 #else
   shape_renderer.Commit();
 #endif

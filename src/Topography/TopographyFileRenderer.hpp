@@ -38,6 +38,7 @@ Copyright_License {
 
 class TopographyFile;
 class Canvas;
+class GLArrayBuffer;
 class WindowProjection;
 class LabelBlock;
 class XShape;
@@ -66,10 +67,17 @@ class TopographyFileRenderer {
 
   std::vector<const XShape *> visible_shapes, visible_labels;
 
+#ifdef ENABLE_OPENGL
+  GLArrayBuffer *array_buffer;
+  Serial array_buffer_serial;
+#endif
+
 public:
   explicit TopographyFileRenderer(const TopographyFile &file);
 
   TopographyFileRenderer(const TopographyFileRenderer &) = delete;
+
+  ~TopographyFileRenderer();
 
   /**
    * Paints the polygons, lines and points/icons in the TopographyFile
@@ -93,6 +101,8 @@ private:
   void UpdateVisibleShapes(const WindowProjection &projection);
 
 #ifdef ENABLE_OPENGL
+  bool UpdateArrayBuffer();
+
   void PaintPoint(Canvas &canvas, const WindowProjection &projection,
                   const XShape &shape, const float *opengl_matrix) const;
 #else
