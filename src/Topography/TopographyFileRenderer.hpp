@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Screen/Pen.hpp"
 #include "Screen/Icon.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Util/Serial.hpp"
 #include "Geo/GeoBounds.hpp"
 
@@ -47,7 +46,7 @@ struct GeoPoint;
 /**
  * Class used to manage and render vector topography layers
  */
-class TopographyFileRenderer : private NonCopyable {
+class TopographyFileRenderer {
   const TopographyFile &file;
 
 #ifndef ENABLE_OPENGL
@@ -69,6 +68,8 @@ class TopographyFileRenderer : private NonCopyable {
 
 public:
   TopographyFileRenderer(const TopographyFile &file);
+
+  TopographyFileRenderer(const TopographyFileRenderer &) = delete;
 
   /**
    * Paints the polygons, lines and points/icons in the TopographyFile
