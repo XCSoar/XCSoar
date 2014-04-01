@@ -33,6 +33,11 @@ Copyright_License {
 #include "Asset.hpp"
 #include "DisplayOrientation.hpp"
 
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+#include "Buffer.hpp"
+#include <EGL/egl.h>
+#endif
+
 #ifdef HAVE_GLES2
 #include "Shaders.hpp"
 #endif
@@ -251,6 +256,17 @@ OpenGL::SetupContext()
 
 #ifdef HAVE_OES_MAPBUFFER
   mapbuffer = IsExtensionSupported("GL_OES_mapbuffer");
+#endif
+
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+  if (mapbuffer) {
+    VBO::map_buffer = (PFNGLMAPBUFFEROESPROC)
+      eglGetProcAddress("glMapBufferOES");
+    VBO::unmap_buffer = (PFNGLUNMAPBUFFEROESPROC)
+      eglGetProcAddress("glUnmapBufferOES");
+    if (VBO::map_buffer == nullptr || VBO::unmap_buffer == nullptr)
+      mapbuffer = false;
+  }
 #endif
 
   frame_buffer_object = CheckFBO() && FBO::Initialise();

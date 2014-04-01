@@ -26,3 +26,12 @@ Copyright_License {
 #ifndef NDEBUG
 unsigned num_buffers;
 #endif
+
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+
+namespace VBO {
+  PFNGLMAPBUFFEROESPROC map_buffer;
+  PFNGLUNMAPBUFFEROESPROC unmap_buffer;
+}
+
+#endif

@@ -49,6 +49,10 @@ Copyright_License {
 #define HAVE_OES_MAPBUFFER
 #endif
 
+#ifdef HAVE_MALI
+#define HAVE_DYNAMIC_MAPBUFFER
+#endif
+
 #if defined(USE_VIDEOCORE) || defined(HAVE_MALI)
 #define DRAW_MOUSE_CURSOR
 #endif

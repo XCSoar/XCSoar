@@ -26,12 +26,22 @@ Copyright_License {
 
 #include "SystemExt.hpp"
 #include "Globals.hpp"
+#include "Features.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
 
 #ifndef NDEBUG
 extern unsigned num_buffers;
+#endif
+
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+
+namespace VBO {
+  extern PFNGLMAPBUFFEROESPROC map_buffer;
+  extern PFNGLUNMAPBUFFEROESPROC unmap_buffer;
+}
+
 #endif
 
 /**
@@ -90,7 +100,9 @@ public:
   }
 
   static void *MapWrite() {
-#ifdef GL_OES_mapbuffer
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+    return VBO::map_buffer(target, GL_WRITE_ONLY_OES);
+#elif defined(GL_OES_mapbuffer)
     return glMapBufferOES(target, GL_WRITE_ONLY_OES);
 #else
     return glMapBuffer(target, GL_WRITE_ONLY);
@@ -98,7 +110,9 @@ public:
   }
 
   static void Unmap() {
-#ifdef GL_OES_mapbuffer
+#ifdef HAVE_DYNAMIC_MAPBUFFER
+    VBO::unmap_buffer(target);
+#elif defined(GL_OES_mapbuffer)
     glUnmapBufferOES(target);
 #else
     glUnmapBuffer(target);
