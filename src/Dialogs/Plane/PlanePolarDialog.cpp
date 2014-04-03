@@ -138,12 +138,12 @@ PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   Add(new PolarShapeEditWidget(plane.polar_shape, this));
 
-  AddFloat(_("Reference Mass"), nullptr,
+  AddFloat(_("Reference Mass"), _("Reference mass of the polar"),
            _T("%.0f kg"), _T("%.0f"),
            fixed(0), fixed(1000), fixed(5),
            false, plane.reference_mass);
 
-  AddFloat(_("Dry Mass"), nullptr,
+  AddFloat(_("Dry Mass"), _("Dry all-up flying mass of your plane"),
            _T("%.0f kg"), _T("%.0f"),
            fixed(0), fixed(1000), fixed(5),
            false, plane.dry_mass);
