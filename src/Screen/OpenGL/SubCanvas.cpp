@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/SubCanvas.hpp"
 #include "Globals.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #endif
 
@@ -38,7 +38,7 @@ SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
   if (relative.x != 0 || relative.y != 0) {
     OpenGL::translate += _offset;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
 #else
@@ -48,7 +48,7 @@ SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
 #else
     glTranslatef(relative.x, relative.y, 0);
 #endif
-#endif /* !HAVE_GLES2 */
+#endif /* !USE_GLSL */
   }
 }
 
@@ -59,7 +59,7 @@ SubCanvas::~SubCanvas()
   if (relative.x != 0 || relative.y != 0) {
     OpenGL::translate -= relative;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
 #else

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Scope.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #include "Program.hpp"
 #else
@@ -116,7 +116,7 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
 {
   GLTexture &texture = BindAndGetTexture();
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
   const GLEnable scope(GL_TEXTURE_2D);

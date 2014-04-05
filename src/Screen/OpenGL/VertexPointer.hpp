@@ -27,14 +27,14 @@ Copyright_License {
 #include "System.hpp"
 #include "Point.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #endif
 
 #include <cstddef>
 
 struct ScopeVertexPointer {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   ScopeVertexPointer() {
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
   }
@@ -47,7 +47,7 @@ struct ScopeVertexPointer {
 #endif
 
   ScopeVertexPointer(GLenum type, const void *p) {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
 #endif
     Update(type, p);
@@ -55,21 +55,21 @@ struct ScopeVertexPointer {
 
   template<typename T>
   ScopeVertexPointer(const T *p) {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
 #endif
     Update(p);
   }
 
   ScopeVertexPointer(std::nullptr_t p) {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
 #endif
     Update(p);
   }
 
   void Update(GLenum type, GLsizei stride, const void *p) {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, type,
                           GL_FALSE, stride, p);
 #else

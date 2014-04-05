@@ -29,7 +29,7 @@ Copyright_License {
 #include "Scope.hpp"
 #include "Compiler.h"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shapes.hpp"
 #include "Program.hpp"
 
@@ -234,7 +234,7 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
     x1, y1,
   };
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
@@ -245,7 +245,7 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   OpenGL::solid_shader->Use();
 #else
@@ -303,7 +303,7 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
     x1, y0,
   };
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
@@ -314,7 +314,7 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   OpenGL::solid_shader->Use();
 #else

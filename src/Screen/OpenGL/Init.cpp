@@ -38,7 +38,7 @@ Copyright_License {
 #include "Screen/EGL/System.hpp"
 #endif
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #endif
 
@@ -51,7 +51,7 @@ Copyright_License {
 #include "EGL.hpp"
 #endif
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include <glm/gtc/matrix_transform.hpp>
 #endif
 
@@ -291,13 +291,15 @@ OpenGL::SetupContext()
   glDisable(GL_DITHER);
 #ifndef HAVE_GLES2
   glDisable(GL_LIGHTING);
+#endif
 
+#ifndef USE_GLSL
   glEnableClientState(GL_VERTEX_ARRAY);
 #endif
 
   InitShapes();
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   InitShaders();
 #endif
 }
@@ -310,7 +312,7 @@ OpenGL::SetupViewport(Point2D<unsigned> size)
 
   glViewport(0, 0, size.x, size.y);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
   UpdateShaderProjectionMatrix();
 #else
@@ -380,7 +382,7 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 
   glViewport(0, 0, size.x, size.y);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   projection_matrix = glm::rotate(glm::mat4(),
                                   OrientationToRotation(orientation),
                                   glm::vec3(0, 0, 1));
@@ -412,7 +414,7 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 void
 OpenGL::Deinitialise()
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   DeinitShaders();
 #endif
 

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Program.hpp"
 #else
@@ -420,7 +420,7 @@ TerrainRenderer::Draw(Canvas &canvas,
     x1, y1,
   };
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
@@ -435,7 +435,7 @@ TerrainRenderer::Draw(Canvas &canvas,
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   OpenGL::solid_shader->Use();
 #else

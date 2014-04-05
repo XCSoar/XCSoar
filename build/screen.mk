@@ -79,7 +79,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
 
-ifeq ($(GLES2),y)
+ifeq ($(GLSL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Shaders.cpp
 endif

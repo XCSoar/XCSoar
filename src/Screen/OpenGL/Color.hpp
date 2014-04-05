@@ -28,7 +28,7 @@ Copyright_License {
 #include "Features.hpp"
 #include "System.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #endif
 
@@ -189,7 +189,7 @@ public:
                  Alpha());
   }
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   void Uniform(GLint location) const {
     glUniform4f(location, ExportFloat(r), ExportFloat(g),
                 ExportFloat(b), ExportFloat(a));
@@ -205,7 +205,7 @@ public:
    * Configures this color in the OpenGL context.
    */
   void Set() const {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     VertexAttrib(OpenGL::Attribute::COLOR);
 #elif defined(HAVE_GLES)
     /* on Android, glColor4ub() is not implemented, and we're forced
@@ -246,7 +246,7 @@ public:
 
 struct ScopeColorPointer {
   ScopeColorPointer(const Color *p) {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::COLOR);
     glVertexAttribPointer(OpenGL::Attribute::COLOR, 4, Color::TYPE,
                           GL_FALSE, 0, p);
@@ -257,7 +257,7 @@ struct ScopeColorPointer {
   }
 
   ~ScopeColorPointer() {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glDisableVertexAttribArray(OpenGL::Attribute::COLOR);
 #else
     glDisableClientState(GL_COLOR_ARRAY);

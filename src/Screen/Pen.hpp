@@ -200,7 +200,7 @@ public:
     BindStyle();
   }
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   void BindUniform(GLint location) const {
     color.Uniform(location);
     BindStyle();

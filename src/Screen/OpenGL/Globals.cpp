@@ -56,7 +56,7 @@ namespace OpenGL {
 
   RasterPoint translate;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glm::mat4 projection_matrix;
 #endif
 

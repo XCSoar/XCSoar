@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "System.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -47,7 +47,7 @@ class CanvasRotateShift
 public:
   CanvasRotateShift(const RasterPoint pos, Angle angle,
                     const int scale = 100) {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(),
                                                   glm::vec3(pos.x, pos.y, 0)),
                                    GLfloat(angle.Degrees()),
@@ -81,11 +81,11 @@ public:
       gl_scale *= Layout::scale_1024 / 1024.f;
     glScalef(gl_scale, gl_scale, 1.);
 #endif
-#endif /* HAVE_GLES2 */
+#endif /* USE_GLSL */
   };
 
   ~CanvasRotateShift() {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(glm::mat4()));
 #else

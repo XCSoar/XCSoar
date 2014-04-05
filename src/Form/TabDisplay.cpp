@@ -34,7 +34,7 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Screen/OpenGL/Shaders.hpp"
 #include "Screen/OpenGL/Program.hpp"
 #else
@@ -164,7 +164,7 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 
 #ifdef ENABLE_OPENGL
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     if (inverse)
       OpenGL::invert_shader->Use();
     else

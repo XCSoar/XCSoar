@@ -33,7 +33,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Compiler.h"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include <glm/glm.hpp>
 #endif
 
@@ -56,7 +56,7 @@ protected:
   RasterPoint offset;
   PixelSize size;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   glm::mat4 projection_matrix;
 #endif
 

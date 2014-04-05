@@ -34,7 +34,7 @@ Copyright_License {
 #include "Screen/OpenGL/Features.hpp"
 #include "System.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include <glm/glm.hpp>
 #endif
 
@@ -131,7 +131,7 @@ namespace OpenGL {
    */
   extern RasterPoint translate;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   extern glm::mat4 projection_matrix;
 #endif
 };

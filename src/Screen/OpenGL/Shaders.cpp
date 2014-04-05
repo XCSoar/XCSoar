@@ -43,7 +43,16 @@ namespace OpenGL {
   GLint alpha_projection, alpha_texture;
 }
 
+#ifdef HAVE_GLES
+#define GLSL_VERSION
+#define GLSL_PRECISION "precision mediump float;\n"
+#else
+#define GLSL_VERSION "#version 120\n"
+#define GLSL_PRECISION
+#endif
+
 static constexpr char solid_vertex_shader[] =
+  GLSL_VERSION
   "uniform mat4 projection;"
   "uniform mat4 modelview;"
   "attribute vec4 translate;"
@@ -56,13 +65,15 @@ static constexpr char solid_vertex_shader[] =
   "}";
 
 static constexpr char solid_fragment_shader[] =
-  "precision mediump float;"
+  GLSL_VERSION
+  GLSL_PRECISION
   "varying vec4 colorvar;"
   "void main() {"
   "  gl_FragColor = colorvar;"
   "}";
 
 static constexpr char texture_vertex_shader[] =
+  GLSL_VERSION
   "uniform mat4 projection;"
   "attribute vec4 translate;"
   "attribute vec4 position;"
@@ -77,7 +88,8 @@ static constexpr char texture_vertex_shader[] =
   "}";
 
 static constexpr char texture_fragment_shader[] =
-  "precision mediump float;"
+  GLSL_VERSION
+  GLSL_PRECISION
   "uniform sampler2D texture;"
   "varying vec2 texcoordvar;"
   "void main() {"
@@ -86,7 +98,8 @@ static constexpr char texture_fragment_shader[] =
 
 static const char *const invert_vertex_shader = texture_vertex_shader;
 static constexpr char invert_fragment_shader[] =
-  "precision mediump float;"
+  GLSL_VERSION
+  GLSL_PRECISION
   "uniform sampler2D texture;"
   "varying vec2 texcoordvar;"
   "void main() {"
@@ -96,7 +109,8 @@ static constexpr char invert_fragment_shader[] =
 
 static const char *const alpha_vertex_shader = texture_vertex_shader;
 static constexpr char alpha_fragment_shader[] =
-  "precision mediump float;"
+  GLSL_VERSION
+  GLSL_PRECISION
   "uniform sampler2D texture;"
   "varying vec4 colorvar;"
   "varying vec2 texcoordvar;"

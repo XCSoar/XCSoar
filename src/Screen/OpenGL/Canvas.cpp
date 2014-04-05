@@ -37,7 +37,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Util/Macros.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #include "Program.hpp"
 
@@ -59,7 +59,7 @@ void
 Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                             const Color color)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -132,7 +132,7 @@ Canvas::DrawRaisedEdge(PixelRect &rc)
 void
 Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -150,7 +150,7 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -191,7 +191,7 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -237,7 +237,7 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
 void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -257,7 +257,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 void
 Canvas::DrawExactLine(int ax, int ay, int bx, int by)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -281,7 +281,7 @@ Canvas::DrawExactLine(int ax, int ay, int bx, int by)
 void
 Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -306,7 +306,7 @@ Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
 void
 Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -327,7 +327,7 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 void
 Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -348,7 +348,7 @@ Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 void
 Canvas::DrawCircle(int x, int y, unsigned radius)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
@@ -372,7 +372,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     OpenGL::small_circle_buffer->Bind();
     const ScopeVertexPointer vp(nullptr);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(),
                                                   glm::vec3(x, y, 0)),
                                    glm::vec3(radius / 256.));
@@ -401,7 +401,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       pen.Unbind();
     }
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(glm::mat4()));
 #else
@@ -409,7 +409,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #endif
 
     OpenGL::small_circle_buffer->Unbind();
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   } else {
 #else
   } else if (OpenGL::vertex_buffer_object) {
@@ -419,7 +419,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     OpenGL::circle_buffer->Bind();
     const ScopeVertexPointer vp(nullptr);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(),
                                                   glm::vec3(x, y, 0)),
                                    glm::vec3(radius / 1024.));
@@ -448,7 +448,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       pen.Unbind();
     }
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(glm::mat4()));
 #else
@@ -456,7 +456,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #endif
 
     OpenGL::circle_buffer->Unbind();
-#ifndef HAVE_GLES2
+#ifndef USE_GLSL
   } else {
     ScopeVertexPointer vp;
     GLCircleVertices vertices(x, y, radius);
@@ -631,7 +631,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
 static void
 PrepareColoredAlphaTexture(Color color)
 {
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::alpha_shader->Use();
   color.Set();
 #else
@@ -683,7 +683,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
 
   PrepareColoredAlphaTexture(text_color);
 
-#ifndef HAVE_GLES2
+#ifndef USE_GLSL
   GLEnable scope(GL_TEXTURE_2D);
 #endif
 
@@ -712,7 +712,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
 
   PrepareColoredAlphaTexture(text_color);
 
-#ifndef HAVE_GLES2
+#ifndef USE_GLSL
   GLEnable scope(GL_TEXTURE_2D);
 #endif
 
@@ -748,7 +748,7 @@ Canvas::DrawClippedText(int x, int y,
 
   PrepareColoredAlphaTexture(text_color);
 
-#ifndef HAVE_GLES2
+#ifndef USE_GLSL
   GLEnable scope(GL_TEXTURE_2D);
 #endif
 
@@ -769,7 +769,7 @@ Canvas::Stretch(int dest_x, int dest_y,
   assert(offset == OpenGL::translate);
 #endif
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #endif
 
@@ -806,7 +806,7 @@ Canvas::StretchNot(const Bitmap &src)
 {
   assert(src.IsDefined());
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::invert_shader->Use();
 #else
   const GLEnable scope(GL_TEXTURE_2D);
@@ -840,7 +840,7 @@ Canvas::Stretch(int dest_x, int dest_y,
 #endif
   assert(src.IsDefined());
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
   const GLEnable scope(GL_TEXTURE_2D);
@@ -863,7 +863,7 @@ Canvas::Stretch(int dest_x, int dest_y,
 #endif
   assert(src.IsDefined());
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
   const GLEnable scope(GL_TEXTURE_2D);
@@ -890,7 +890,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
      implementation will be faster when erasing the background
      again */
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::alpha_shader->Use();
   fg_color.Set();
 #else

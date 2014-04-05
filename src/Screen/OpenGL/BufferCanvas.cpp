@@ -29,7 +29,7 @@ Copyright_License {
 #include "RenderBuffer.hpp"
 #include "Init.hpp"
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
 #include "Shaders.hpp"
 #include "Program.hpp"
 #else
@@ -140,7 +140,7 @@ BufferCanvas::Begin(Canvas &other)
     glPushAttrib(GL_VIEWPORT_BIT);
 #endif
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     old_projection_matrix = OpenGL::projection_matrix;
     OpenGL::projection_matrix = glm::mat4();
 #else
@@ -162,7 +162,7 @@ BufferCanvas::Begin(Canvas &other)
     OpenGL::SetupViewport({GetWidth(), GetHeight()});
     OpenGL::translate = {0, 0};
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
 #endif
@@ -199,7 +199,7 @@ BufferCanvas::Commit(Canvas &other)
     glPopAttrib();
 #endif
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     OpenGL::projection_matrix = old_projection_matrix;
     OpenGL::UpdateShaderProjectionMatrix();
 #else
@@ -212,7 +212,7 @@ BufferCanvas::Commit(Canvas &other)
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
 #endif
@@ -239,7 +239,7 @@ BufferCanvas::CopyTo(Canvas &other)
   assert(IsDefined());
   assert(!active || frame_buffer != nullptr);
 
-#ifdef HAVE_GLES2
+#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
   GLEnable scope(GL_TEXTURE_2D);
