@@ -175,7 +175,7 @@ public:
 #ifdef ENABLE_OPENGL
   /**
    * Configure the Pen in the OpenGL context.  Don't forget to call
-   * UnbindStyle() when you're done with this Pen.
+   * Unbind() when you're done with this Pen.
    */
   void Bind() const {
     color.Set();
