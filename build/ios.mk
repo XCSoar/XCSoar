@@ -75,7 +75,7 @@ ifeq ($(HOST_IS_DARWIN),y)
 	    -o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Info.plist \
 		$(TARGET_OUTPUT_DIR)/Info.plist.xml
 else
-	$(Q)plutil -i $(TARGET_OUTPUT_DIR)/Info.plist.xml \
+	$(Q)plistutil -i $(TARGET_OUTPUT_DIR)/Info.plist.xml \
 		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Info.plist
 endif
 	$(Q)$(MKDIR) $(DEB_TMPDIR)/DEBIAN
