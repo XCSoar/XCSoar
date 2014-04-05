@@ -34,6 +34,7 @@ GLES = n
 endif
 
 GLES2 ?= n
+GLSL ?= $(GLES2)
 
 ifeq ($(OPENGL),y)
 OPENGL_CPPFLAGS = -DENABLE_OPENGL
@@ -52,6 +53,10 @@ else ifeq ($(TARGET_IS_DARWIN),y)
 OPENGL_LDLIBS = -framework OpenGL
 else
 OPENGL_LDLIBS = -lGL
+endif
+
+ifeq ($(GLSL),y)
+OPENGL_CPPFLAGS += -DUSE_GLSL
 endif
 
 # Needed for native VBO support
