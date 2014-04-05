@@ -37,7 +37,7 @@ Copyright_License {
 #endif
 
 #include <SDL.h>
-#if SDL_MAJOR_VERSION > 2
+#if SDL_MAJOR_VERSION >= 2
 #include <SDL_hints.h>
 #endif
 
@@ -60,7 +60,7 @@ ScreenGlobalInit::ScreenGlobalInit()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #endif
 
-#if SDL_MAJOR_VERSION > 2
+#if SDL_MAJOR_VERSION >= 2
   // Keep screen on (works on iOS, and maybe for other platforms)
   SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1");
 #endif
