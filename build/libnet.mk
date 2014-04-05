@@ -11,9 +11,6 @@ LIBNET_SOURCES += \
 LIBNET_LDLIBS = -lwininet
 endif
 
-# don't link with CURL on Mac OS X, to keep the dynamic library
-# dependencies low
-ifeq ($(TARGET_IS_DARWIN),n)
 ifeq ($(TARGET),UNIX)
 HAVE_HTTP := y
 
@@ -23,6 +20,12 @@ LIBNET_SOURCES += \
 	$(SRC)/Net/CURL/Request.cpp \
 	$(SRC)/Net/CURL/Init.cpp
 
+ifeq ($(TARGET_IS_OSX),y)
+# We use the libcurl which is included in Mac OS X.
+# Mac OS X SDKs contain the required headers / library stubs,
+# but no pkg-config file.
+LIBNET_LDLIBS = -lcurl
+else
 $(eval $(call pkg-config-library,CURL,libcurl))
 
 LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
