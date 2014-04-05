@@ -173,13 +173,8 @@ public:
 #endif
 
 #ifdef ENABLE_OPENGL
-  /**
-   * Configure the Pen in the OpenGL context.  Don't forget to call
-   * Unbind() when you're done with this Pen.
-   */
-  void Bind() const {
-    color.Set();
-
+private:
+  void BindStyle() const {
 #if defined(HAVE_GLES) && !defined(HAVE_GLES2)
     glLineWidthx(width << 16);
 #else
@@ -194,6 +189,23 @@ public:
     }
 #endif
   }
+
+public:
+  /**
+   * Configure the Pen in the OpenGL context.  Don't forget to call
+   * Unbind() when you're done with this Pen.
+   */
+  void Bind() const {
+    color.Set();
+    BindStyle();
+  }
+
+#ifdef HAVE_GLES2
+  void BindUniform(GLint location) const {
+    color.Uniform(location);
+    BindStyle();
+  }
+#endif
 
   void Unbind() const {
 #ifndef HAVE_GLES
