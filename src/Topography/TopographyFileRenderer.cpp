@@ -211,11 +211,6 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (visible_shapes.empty())
     return;
 
-  // TODO code: only draw inside screen!
-  // this will save time with rendering pixmaps especially
-  // we already do an outer visibility test, but may need a test
-  // in screen coords
-
 #ifdef HAVE_GLES2
   OpenGL::solid_shader->Use();
 #endif
@@ -501,11 +496,6 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 
   if (visible_labels.empty())
     return;
-
-  // TODO code: only draw inside screen!
-  // this will save time with rendering pixmaps especially
-  // we already do an outer visibility test, but may need a test
-  // in screen coords
 
   canvas.Select(file.IsLabelImportant(map_scale) ?
                 Fonts::map_label_important : Fonts::map_label);
