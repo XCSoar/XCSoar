@@ -27,6 +27,10 @@ Copyright_License {
 #include "SystemExt.hpp"
 #include "Features.hpp"
 
+#if defined(GL_EXT_multi_draw_arrays) && defined(HAVE_GLES)
+#define HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
+#endif
+
 namespace GLExt {
 #ifdef HAVE_DYNAMIC_MAPBUFFER
   extern PFNGLMAPBUFFEROESPROC map_buffer;
