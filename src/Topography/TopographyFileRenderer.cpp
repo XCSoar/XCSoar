@@ -127,6 +127,7 @@ TopographyFileRenderer::UpdateArrayBuffer()
 
   ShapePoint *p = (ShapePoint *)
     array_buffer->BeginWrite(n * sizeof(*p));
+  assert (p != nullptr);
 
   for (const auto &shape : file) {
     const auto *lines = shape.get_lines();
@@ -139,7 +140,7 @@ TopographyFileRenderer::UpdateArrayBuffer()
     }
   }
 
-  array_buffer->CommitWrite(n * sizeof(*p), p);
+  array_buffer->CommitWrite(n * sizeof(*p), p - n);
 
   return true;
 }
