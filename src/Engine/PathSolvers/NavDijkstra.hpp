@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef NAV_DIJKSTRA_HPP
 #define NAV_DIJKSTRA_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
 #include "SolverResult.hpp"
@@ -41,9 +40,7 @@ Copyright_License {
  *
  * NavDijkstra<SearchPoint>
  */
-class NavDijkstra: 
-  private NonCopyable 
-{
+class NavDijkstra {
 protected:
   static constexpr unsigned MAX_STAGES = 32;
 
@@ -90,6 +87,8 @@ protected:
   {
     SetStageCount(_num_stages);
   }
+
+  NavDijkstra(const NavDijkstra &) = delete;
 
 protected:
   /** 
