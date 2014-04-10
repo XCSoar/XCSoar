@@ -13,7 +13,7 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
 
   for (const Airspace &airspace : vectors) {
     const AbstractAirspace *as = airspace.GetAirspace();
-    if (as != NULL) {
+    if (as != nullptr) {
       const AirspaceInterceptSolution ais =
         solve_intercept(*as, airspaces.GetProjection());
       const fixed value = metric(ais);
@@ -54,6 +54,6 @@ AirspaceNearestSort::find_nearest(const Airspaces &airspaces,
   if (!m_q.empty()) {
     return m_q.top().second.second;
   } else {
-    return NULL;
+    return nullptr;
   }
 }

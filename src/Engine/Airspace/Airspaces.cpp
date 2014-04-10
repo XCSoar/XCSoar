@@ -130,7 +130,7 @@ Airspaces::FindNearest(const GeoPoint &location,
                        const AirspacePredicate &condition) const
 {
   if (IsEmpty())
-    return NULL;
+    return nullptr;
 
   const Airspace bb_target(location, task_projection);
   const int projected_range =
@@ -140,7 +140,7 @@ Airspaces::FindNearest(const GeoPoint &location,
     airspace_tree.find_nearest_if(bb_target, BBDist(0, projected_range),
                                   predicate);
 
-  return found.first != airspace_tree.end() ? &*found.first : NULL;
+  return found.first != airspace_tree.end() ? &*found.first : nullptr;
 }
 
 const Airspaces::AirspaceVector

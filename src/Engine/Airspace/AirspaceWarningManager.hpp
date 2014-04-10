@@ -149,7 +149,7 @@ public:
    *
    * @param airspace Airspace to find warning for
    *
-   * @return Pointer to airspace warning item (or NULL if not found)
+   * @return Pointer to airspace warning item (or nullptr if not found)
    */
   AirspaceWarning* GetWarningPtr(const AbstractAirspace& airspace);
 
@@ -158,7 +158,7 @@ public:
    *
    * @param airspace Airspace for which to create warning for
    *
-   * @return Pointer to airspace warning item (or NULL if not found)
+   * @return Pointer to airspace warning item (or nullptr if not found)
    */
   AirspaceWarning* GetNewWarningPtr(const AbstractAirspace& airspace);
 
