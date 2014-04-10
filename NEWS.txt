@@ -8,6 +8,7 @@ Version 6.7.6 - not yet released
 * devices
   - LX: relax download timeout (#3199)
   - OpenVario: new device driver
+  - Vaulter: new device driver
 * replay
   - accept "$GNRMC" in replay of NMEA files
 * calculations
