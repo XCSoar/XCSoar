@@ -76,11 +76,11 @@ protected:
   unsigned solution[MAX_STAGES];
 
 protected:
-  /** 
+  /**
    * Constructor
-   * 
+   *
    * @param _num_stages Number of stages in search
-   * 
+   *
    * @return Initialised object
    */
   NavDijkstra(const unsigned _num_stages)
@@ -91,7 +91,7 @@ protected:
   NavDijkstra(const NavDijkstra &) = delete;
 
 protected:
-  /** 
+  /**
    * Set the number of stages to search for, and clear the solution
    * array
    */
@@ -100,20 +100,20 @@ protected:
     num_stages =_num_stages;
   }
 
-  /** 
+  /**
    * Determine whether a finished path is valid
-   * 
+   *
    * @param sp Point to check
-   * 
+   *
    * @return True if this terminal point completes a valid solution
    */
   bool IsFinishSatisfied(const ScanTaskPoint sp) const {
     return true;
   }
 
-  /** 
+  /**
    * Add edges from an origin node
-   * 
+   *
    * @param curNode Origin node to add edges from
    */
   virtual void AddEdges(const ScanTaskPoint curNode) = 0;
@@ -125,11 +125,11 @@ protected:
     return stage_number + 1 == num_stages;
   }
 
-  /** 
+  /**
    * Determine whether a point is terminal (no further edges)
-   * 
+   *
    * @param sp Point to test
-   * 
+   *
    * @return True if point is terminal
    */
   gcc_pure
@@ -148,12 +148,12 @@ protected:
     Link(node, node, value);
   }
 
-  /** 
+  /**
    * Iterate search algorithm
-   * 
+   *
    * @param dijkstra Dijkstra structure to iterate
    * @param max_steps Maximum number of steps to update
-   * 
+   *
    * @return True if algorithm returns a terminal path or no path found
    */
   SolverResult DistanceGeneral(unsigned max_steps = 0 - 1) {
@@ -210,13 +210,13 @@ protected:
     return FindStage(p, 0);
   }
 
-  /** 
+  /**
    * Determine optimal solution by backtracing the Dijkstra tree
-   * 
+   *
    * @param destination Terminal point to query
    */
   void FindSolution(const ScanTaskPoint destination) {
-    ScanTaskPoint p(destination); 
+    ScanTaskPoint p(destination);
     unsigned last_stage_number;
 
     do {

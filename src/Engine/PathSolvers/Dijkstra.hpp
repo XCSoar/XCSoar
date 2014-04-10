@@ -64,7 +64,7 @@ private:
 
   struct Rank : public std::binary_function<Value, Value, bool> {
     gcc_pure
-    bool operator()(const Value& x, const Value& y) const {
+    bool operator()(const Value &x, const Value &y) const {
       return x.edge_value > y.edge_value;
     }
   };
