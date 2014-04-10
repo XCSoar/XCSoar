@@ -195,10 +195,10 @@ public:
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void SetProperties(const tstring &_Name, const AirspaceClass _Type,
+  void SetProperties(tstring &&_name, const AirspaceClass _Type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) {
-    name = _Name;
+    name = std::move(_name);
     type = _Type;
     altitude_base = _base;
     altitude_top = _top;
