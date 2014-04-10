@@ -132,7 +132,7 @@ public:
    * @return true if aircraft is inside airspace boundaries
    */
   gcc_pure
-  virtual bool Inside(const AircraftState &state) const;
+  bool Inside(const AircraftState &state) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -355,7 +355,7 @@ public:
 
 protected:
   /** Project border */
-  virtual void Project(const TaskProjection &tp);
+  void Project(const TaskProjection &tp);
 
 private:
   /**
