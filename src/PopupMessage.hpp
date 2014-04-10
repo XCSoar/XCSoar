@@ -61,7 +61,7 @@ public:
   };
 
 private:
-  enum { MAXMESSAGES = 20 };
+  static constexpr unsigned MAXMESSAGES = 20;
 
   struct Message {
     Type type;
