@@ -163,6 +163,9 @@ struct TempAirspaceType
   void
   AddPolygon(Airspaces &airspace_database)
   {
+    if (points.empty())
+      return;
+
     AbstractAirspace *as = new AirspacePolygon(points);
     as->SetProperties(std::move(name), type, base, top);
     as->SetRadio(radio);
@@ -603,9 +606,7 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
       if (value == nullptr)
         break;
 
-      if (!temp_area.points.empty())
-        temp_area.AddPolygon(airspace_database);
-
+      temp_area.AddPolygon(airspace_database);
       temp_area.Reset();
 
       temp_area.type = ParseType(value);
@@ -823,16 +824,12 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
     if (!ParseArcTNP(parameter, temp_area))
       return false;
   } else if ((parameter = StringAfterPrefixCI(line, _T("TITLE="))) != nullptr) {
-    if (!temp_area.points.empty())
-      temp_area.AddPolygon(airspace_database);
-
+    temp_area.AddPolygon(airspace_database);
     temp_area.ResetTNP();
 
     temp_area.name = parameter;
   } else if ((parameter = StringAfterPrefixCI(line, _T("TYPE="))) != nullptr) {
-    if (!temp_area.points.empty())
-      temp_area.AddPolygon(airspace_database);
-
+    temp_area.AddPolygon(airspace_database);
     temp_area.ResetTNP();
 
     temp_area.type = ParseTypeTNP(parameter);
@@ -920,8 +917,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   }
 
   // Process final area (if any)
-  if (!temp_area.points.empty())
-    temp_area.AddPolygon(airspaces);
+  temp_area.AddPolygon(airspaces);
 
   return true;
 }
