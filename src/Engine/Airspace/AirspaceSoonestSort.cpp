@@ -2,7 +2,7 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "AbstractAirspace.hpp"
 
-AirspaceInterceptSolution 
+AirspaceInterceptSolution
 AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a,
                                      const TaskProjection &projection) const
 {
@@ -27,7 +27,7 @@ AirspaceSoonestSort::metric(const AirspaceInterceptSolution& sol) const
   return sol.elapsed_time;
 }
 
-const AbstractAirspace* 
+const AbstractAirspace *
 AirspaceSoonestSort::find_nearest(const Airspaces &airspaces)
 {
   const fixed range = m_perf.GetMaxSpeed()*m_max_time;

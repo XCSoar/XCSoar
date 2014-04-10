@@ -54,7 +54,7 @@ public:
 
 void
 Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
-                            AirspaceVisitor& visitor,
+                            AirspaceVisitor &visitor,
                             const AirspacePredicate &predicate) const
 {
   if (IsEmpty())
@@ -93,9 +93,9 @@ public:
   }
 };
 
-void 
+void
 Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
-                             AirspaceIntersectionVisitor& visitor) const
+                             AirspaceIntersectionVisitor &visitor) const
 {
   if (IsEmpty())
     // nothing to do
@@ -319,10 +319,10 @@ Airspaces::ClearClearances()
 
 
 bool
-Airspaces::SynchroniseInRange(const Airspaces& master,
-                                const GeoPoint &location,
-                                const fixed range,
-                                const AirspacePredicate &condition)
+Airspaces::SynchroniseInRange(const Airspaces &master,
+                              const GeoPoint &location,
+                              const fixed range,
+                              const AirspacePredicate &condition)
 {
   qnh = master.qnh;
   activity_mask = master.activity_mask;
@@ -383,8 +383,7 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
 }
 
 void
-Airspaces::VisitInside(const GeoPoint &loc,
-                        AirspaceVisitor& visitor) const
+Airspaces::VisitInside(const GeoPoint &loc, AirspaceVisitor &visitor) const
 {
   if (IsEmpty())
     // nothing to do

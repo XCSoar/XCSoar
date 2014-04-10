@@ -45,103 +45,101 @@ class TaskProjection;
  * idiom, in which the AbstractAirspace is the letter and this class
  * Airspace is an envelope, containing bounding box information for
  * use with high performance search structures.
- * 
  */
-class Airspace: 
-  public FlatBoundingBox
+class Airspace final : public FlatBoundingBox
 {
   AbstractAirspace *airspace;
 
 public:
 
-  /** 
-   * Constructor for actual airspaces.  
+  /**
+   * Constructor for actual airspaces.
    *
    * @param airspace actual concrete airspace to create an envelope for
    * @param tp task projection to be used for flat-earth representation
-   * 
+   *
    * @return airspace letter inside envelope suitable for insertion in a search structure
    */
-  Airspace(AbstractAirspace& airspace,
-           const TaskProjection& tp);
+  Airspace(AbstractAirspace &airspace,
+           const TaskProjection &tp);
 
-  /** 
+  /**
    * Constructor for virtual airspaces for use in range-based
    * intersection queries
-   * 
+   *
    * @param loc Location about which to create a virtual airspace envelope
    * @param task_projection projection to be used for flat-earth representation
    * @param range range in meters of virtual bounding box
-   * 
+   *
    * @return dummy airspace envelope
    */
-  Airspace(const GeoPoint&loc, const TaskProjection& task_projection,
+  Airspace(const GeoPoint&loc, const TaskProjection &task_projection,
            const fixed range=fixed(0));
 
-  /** 
+  /**
    * Constructor for virtual airspaces for use in bounding-box
    * specified intersection queries
-   * 
+   *
    * @param ll Lower left corner of bounding box
    * @param ur Upper right corner of bounding box
    * @param task_projection projection to be used for flat-earth representation
-   * 
+   *
    * @return dummy airspace envelope
    */
   Airspace(const GeoPoint &ll, const GeoPoint &ur,
            const TaskProjection &task_projection);
 
-  /** 
-   * Checks whether an aircraft is inside the airspace. 
+  /**
+   * Checks whether an aircraft is inside the airspace.
    *
    * @param loc Location to check for enclosure
-   * 
+   *
    * @return true if aircraft is inside airspace
    */
   gcc_pure
-  bool IsInside(const AircraftState &loc) const;
+    bool IsInside(const AircraftState &loc) const;
 
-  /** 
-   * Checks whether a point is inside the airspace lateral boundary. 
+  /**
+   * Checks whether a point is inside the airspace lateral boundary.
    *
    * @param loc Location to check for enclosure
-   * 
+   *
    * @return true if location is inside airspace
    */
   gcc_pure
-  bool IsInside(const GeoPoint &loc) const;
+    bool IsInside(const GeoPoint &loc) const;
 
-  /** 
+  /**
    * Checks whether a flat-earth ray intersects with the airspace
    * bounding box.
-   * 
+   *
    * @param ray Flat-earth ray to check for intersection
-   * 
+   *
    * @return true if ray intersects or wholly enclosed by airspace
    */
   gcc_pure
-  bool Intersects(const FlatRay& ray) const;
+    bool Intersects(const FlatRay &ray) const;
 
-  /** 
+  /**
    * Checks whether a line intersects with the airspace, by directing
    * the query to the enclosed concrete airspace.
-   * 
+   *
    * @param g1 Location of origin of search vector
    * @param end the end of the search vector
-   * 
+   *
    * @return true if the line intersects the airspace
    */
   gcc_pure
-  AirspaceIntersectionVector Intersects(const GeoPoint &g1,
-                                        const GeoPoint &end,
-                                        const TaskProjection &projection) const;
+    AirspaceIntersectionVector Intersects(const GeoPoint &g1,
+                                          const GeoPoint &end,
+                                          const TaskProjection &projection) const;
 
-  /** 
+  /**
    * Destroys concrete airspace enclosed by this instance if present.
    * Note that this should not be called by clients but only by the
    * master store.  Many copies of this airspace may point to the same
    * concrete airspace so have to be careful here.
-   * 
+   *
    */
   void Destroy();
 
@@ -154,9 +152,9 @@ public:
     return airspace;
   };
 
-  /** 
-   * Set terrain altitude for AGL-referenced airspace altitudes 
-   * 
+  /**
+   * Set terrain altitude for AGL-referenced airspace altitudes
+   *
    * @param alt Height above MSL of terrain (m) at center
    */
   void SetGroundLevel(const fixed alt) const;
@@ -166,9 +164,9 @@ public:
    */
   bool NeedGroundLevel() const;
 
-  /** 
-   * Set QNH pressure for FL-referenced airspace altitudes 
-   * 
+  /**
+   * Set QNH pressure for FL-referenced airspace altitudes
+   *
    * @param press Atmospheric pressure model and QNH
    */
   void SetFlightLevel(const AtmosphericPressure &press) const;
@@ -188,14 +186,14 @@ public:
   /**
    * Equality operator, matches if contained airspace is the same
    */
-  bool operator==(Airspace const& a) const {
+  bool operator==(Airspace const &a) const {
     return (GetAirspace() == a.GetAirspace());
   }
 
 public:
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& f, 
-                                   const Airspace& ts);
+  friend std::ostream &operator<<(std::ostream &f,
+                                  const Airspace &ts);
 #endif
 };
 

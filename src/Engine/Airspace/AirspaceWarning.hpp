@@ -52,7 +52,7 @@ public:
   };
 
 private:
-  const AbstractAirspace& airspace;
+  const AbstractAirspace &airspace;
   State state;
   State state_last;
   AirspaceInterceptSolution solution;
@@ -72,7 +72,7 @@ public:
    *
    * @param the_airspace Airspace that this object will manage warnings for
    */
-  explicit AirspaceWarning(const AbstractAirspace& the_airspace);
+  explicit AirspaceWarning(const AbstractAirspace &the_airspace);
 
   /**
    * Save warning state prior to performing update
@@ -113,7 +113,7 @@ public:
    *
    * @return Airspace
    */
-  const AbstractAirspace& GetAirspace() const {
+  const AbstractAirspace &GetAirspace() const {
     return airspace;
   }
 
@@ -142,7 +142,7 @@ public:
    *
    * @return Reference to solution
    */
-  const AirspaceInterceptSolution& GetSolution() const {
+  const AirspaceInterceptSolution &GetSolution() const {
     return solution;
   }
 
@@ -197,8 +197,8 @@ public:
 
 #ifdef DO_PRINT
 public:
-  friend std::ostream& operator<< (std::ostream& f, 
-                                   const AirspaceWarning& aw);
+  friend std::ostream &operator<<(std::ostream &f,
+                                  const AirspaceWarning &aw);
 #endif
 };
 

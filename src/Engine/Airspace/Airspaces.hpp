@@ -74,7 +74,7 @@ class Airspaces : public AirspacesInterface, private NonCopyable {
   std::deque<AbstractAirspace *> tmp_as;
 
 public:
-  /** 
+  /**
    * Constructor.
    * Note this class can't safely be copied (yet)
    *

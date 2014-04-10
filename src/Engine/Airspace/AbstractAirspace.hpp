@@ -91,15 +91,15 @@ public:
     return shape;
   }
 
-  /** 
+  /**
    * Compute bounding box enclosing the airspace.  Rounds up/down
    * so discretisation ensures bounding box is indeed enclosing.
-   * 
+   *
    * @param task_projection Projection used for flat-earth representation
-   * 
+   *
    * @return Enclosing bounding box
    */
-  const FlatBoundingBox GetBoundingBox(const TaskProjection& task_projection);
+  const FlatBoundingBox GetBoundingBox(const TaskProjection &task_projection);
 
   GeoBounds GetGeoBounds() const;
 
@@ -112,35 +112,35 @@ public:
   gcc_pure
   virtual const GeoPoint GetCenter() const = 0;
 
-  /** 
+  /**
    * Checks whether an observer is inside the airspace (no altitude taken into account)
    * This is slow because it uses geodesic calculations
-   * 
+   *
    * @param loc State about which to test inclusion
-   * 
+   *
    * @return true if observer is inside airspace boundary
    */
   gcc_pure
   virtual bool Inside(const GeoPoint &loc) const = 0;
 
-  /** 
+  /**
    * Checks whether an observer is inside the airspace (altitude is taken into account)
    * This calls inside(state.location) so can be slow.
-   * 
+   *
    * @param state State about which to test inclusion
-   * 
+   *
    * @return true if aircraft is inside airspace boundaries
    */
   gcc_pure
   bool Inside(const AircraftState &state) const;
 
-  /** 
+  /**
    * Checks whether a line intersects with the airspace.
    * Can be approximate by using flat-earth representation internally.
-   * 
+   *
    * @param g1 Location of origin of search vector
    * @param end the end of the search vector
-   * 
+   *
    * @return Vector of intersection pairs if the line intersects the airspace
    */
   gcc_pure
@@ -159,9 +159,9 @@ public:
   virtual GeoPoint ClosestPoint(const GeoPoint &loc,
                                 const TaskProjection &projection) const = 0;
 
-  /** 
-   * Set terrain altitude for AGL-referenced airspace altitudes 
-   * 
+  /**
+   * Set terrain altitude for AGL-referenced airspace altitudes
+   *
    * @param alt Height above MSL of terrain (m) at center
    */
   void SetGroundLevel(const fixed alt);
@@ -173,9 +173,9 @@ public:
     return altitude_base.NeedGroundLevel() || altitude_top.NeedGroundLevel();
   }
 
-  /** 
-   * Set QNH pressure for FL-referenced airspace altitudes 
-   * 
+  /**
+   * Set QNH pressure for FL-referenced airspace altitudes
+   *
    * @param press Atmospheric pressure model and QNH
    */
   void SetFlightLevel(const AtmosphericPressure &press);
@@ -301,8 +301,8 @@ public:
                  AirspaceInterceptSolution &solution) const;
 
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream &f,
-                                   const AbstractAirspace &as);
+  friend std::ostream &operator<<(std::ostream &f,
+                                  const AbstractAirspace &as);
 #endif
 
   gcc_pure

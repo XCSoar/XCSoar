@@ -27,17 +27,17 @@ Copyright_License {
 
 #include <assert.h>
 
-AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace):
-  airspace(_airspace),
-  state(WARNING_CLEAR),
-  state_last(WARNING_CLEAR),
-  solution(AirspaceInterceptSolution::Invalid()),
-  acktime_warning(0),
-  acktime_inside(0),
-  debounce_time(60),
-  ack_day(false),
-  expired(true),
-  expired_last(true)
+AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace)
+  :airspace(_airspace),
+   state(WARNING_CLEAR),
+   state_last(WARNING_CLEAR),
+   solution(AirspaceInterceptSolution::Invalid()),
+   acktime_warning(0),
+   acktime_inside(0),
+   debounce_time(60),
+   ack_day(false),
+   expired(true),
+   expired_last(true)
 {
 }
 
@@ -48,9 +48,9 @@ void AirspaceWarning::SaveState()
   expired_last = expired;
 }
 
-void 
+void
 AirspaceWarning::UpdateSolution(const State _state,
-                                 AirspaceInterceptSolution &_solution)
+                                AirspaceInterceptSolution &_solution)
 {
   if (IsStateAccepted(_state)) {
     state = _state;
@@ -69,8 +69,8 @@ AirspaceWarning::WarningLive(const unsigned ack_time, const unsigned dt)
   if (acktime_inside == null_acktime)
     acktime_inside = ack_time;
 
-  if ((state != WARNING_CLEAR) 
-      && (state < state_last) 
+  if ((state != WARNING_CLEAR)
+      && (state < state_last)
       && (state_last == WARNING_INSIDE))
     // if inside was acknowledged, consider warning to be acknowledged
     acktime_warning = std::max(acktime_warning, acktime_inside);
@@ -104,7 +104,7 @@ AirspaceWarning::ChangedState() const
   if (expired > expired_last)
     return true;
 
-  if ((state_last == WARNING_CLEAR) && (state > WARNING_CLEAR)) 
+  if ((state_last == WARNING_CLEAR) && (state > WARNING_CLEAR))
     return IsAckExpired();
 
   if ((state_last < WARNING_INSIDE) && (state == WARNING_INSIDE))
@@ -134,7 +134,7 @@ AirspaceWarning::IsAckExpired() const
   return true;
 }
 
-void 
+void
 AirspaceWarning::AcknowledgeInside(const bool set)
 {
   if (set)
@@ -143,7 +143,7 @@ AirspaceWarning::AcknowledgeInside(const bool set)
     acktime_inside = 0;
 }
 
-void 
+void
 AirspaceWarning::AcknowledgeWarning(const bool set)
 {
   if (set)
@@ -152,7 +152,7 @@ AirspaceWarning::AcknowledgeWarning(const bool set)
     acktime_warning = 0;
 }
 
-bool 
+bool
 AirspaceWarning::operator<(const AirspaceWarning &other) const
 {
   // compare bother.ack

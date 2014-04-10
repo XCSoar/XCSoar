@@ -43,36 +43,36 @@ AbstractAirspace::Inside(const AircraftState &state) const
          Inside(state.location);
 }
 
-void 
-AbstractAirspace::SetGroundLevel(const fixed alt) 
+void
+AbstractAirspace::SetGroundLevel(const fixed alt)
 {
   altitude_base.SetGroundLevel(alt);
   altitude_top.SetGroundLevel(alt);
 }
 
-void 
-AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press) 
+void
+AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press)
 {
   altitude_base.SetFlightLevel(press);
   altitude_top.SetFlightLevel(press);
 }
 
-AirspaceInterceptSolution 
+AirspaceInterceptSolution
 AbstractAirspace::InterceptVertical(const AircraftState &state,
                                     const AirspaceAircraftPerformance &perf,
                                     fixed distance) const
 {
   AirspaceInterceptSolution solution;
   solution.distance = distance;
-  solution.elapsed_time = perf.SolutionVertical(solution.distance, 
-                                                 state.altitude,
-                                                 altitude_base.GetAltitude(state),
-                                                 altitude_top.GetAltitude(state),
-                                                 solution.altitude);
+  solution.elapsed_time = perf.SolutionVertical(solution.distance,
+                                                state.altitude,
+                                                altitude_base.GetAltitude(state),
+                                                altitude_top.GetAltitude(state),
+                                                solution.altitude);
   return solution;
 }
 
-AirspaceInterceptSolution 
+AirspaceInterceptSolution
 AbstractAirspace::InterceptHorizontal(const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf,
                                       fixed distance_start,
@@ -84,16 +84,18 @@ AbstractAirspace::InterceptHorizontal(const AircraftState &state,
     return AirspaceInterceptSolution::Invalid();
 
   AirspaceInterceptSolution solution;
-  solution.altitude = lower? altitude_base.GetAltitude(state): altitude_top.GetAltitude(state);
-  solution.elapsed_time = perf.SolutionHorizontal(distance_start, 
-                                                   distance_end,
-                                                   state.altitude,
-                                                   solution.altitude,
-                                                   solution.distance);
+  solution.altitude = lower
+    ? altitude_base.GetAltitude(state)
+    : altitude_top.GetAltitude(state);
+  solution.elapsed_time = perf.SolutionHorizontal(distance_start,
+                                                  distance_end,
+                                                  state.altitude,
+                                                  solution.altitude,
+                                                  solution.distance);
   return solution;
 }
 
-bool 
+bool
 AbstractAirspace::Intercept(const AircraftState &state,
                             const AirspaceAircraftPerformance &perf,
                             AirspaceInterceptSolution &solution,
@@ -101,7 +103,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
                             const GeoPoint &loc_end) const
 {
   const bool only_vertical = (loc_start == loc_end) &&
-                             (loc_start == state.location);
+    (loc_start == state.location);
 
   const fixed distance_start = only_vertical ?
                                fixed(0) : state.location.Distance(loc_start);
@@ -122,7 +124,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
   if (!only_vertical) {
     solution_candidate = InterceptVertical(state, perf, distance_start);
     // search near wall
-    if (solution_candidate.IsValid() && 
+    if (solution_candidate.IsValid() &&
         ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
          negative(solution_this.elapsed_time)))
       solution_this = solution_candidate;
@@ -141,16 +143,16 @@ AbstractAirspace::Intercept(const AircraftState &state,
   solution_candidate = InterceptHorizontal(state, perf, distance_start,
                                            distance_end, false);
   // search top wall
-  if (solution_candidate.IsValid() && 
+  if (solution_candidate.IsValid() &&
       ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
        negative(solution_this.elapsed_time)))
     solution_this = solution_candidate;
-  
+
   // search bottom wall
   if (!altitude_base.IsTerrain()) {
     solution_candidate = InterceptHorizontal(state, perf, distance_start,
                                              distance_end, true);
-    if (solution_candidate.IsValid() && 
+    if (solution_candidate.IsValid() &&
         ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
          negative(solution_this.elapsed_time)))
       solution_this = solution_candidate;
@@ -164,7 +166,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
       solution.location = loc_end;
     else if (positive(distance_end))
       solution.location =
-          state.location.Interpolate(loc_end, solution.distance / distance_end);
+        state.location.Interpolate(loc_end, solution.distance / distance_end);
     else
       solution.location = loc_start;
 
@@ -177,8 +179,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
   return false;
 }
 
-
-bool 
+bool
 AbstractAirspace::Intercept(const AircraftState &state,
                             const GeoPoint &end,
                             const TaskProjection &projection,

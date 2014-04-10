@@ -30,20 +30,20 @@
 #endif
 
 /**
- * Airspace object defined by the area within a distance (radius) from a center point 
+ * Airspace object defined by the area within a distance (radius) from
+ * a center point.
  */
-class AirspaceCircle: public AbstractAirspace
-{
+class AirspaceCircle final : public AbstractAirspace {
   const GeoPoint m_center;
   const fixed m_radius;
 
 public:
-  /** 
+  /**
    * Constructor
-   * 
+   *
    * @param loc Center point of circle
    * @param _radius Radius in meters of airspace boundary
-   * 
+   *
    * @return Initialised airspace object
    */
   AirspaceCircle(const GeoPoint &loc, const fixed _radius);
@@ -71,8 +71,8 @@ public:
 
 public:
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& f, 
-                                   const AirspaceCircle& as);
+  friend std::ostream &operator<<(std::ostream &f,
+                                  const AirspaceCircle &as);
 #endif
 };
 

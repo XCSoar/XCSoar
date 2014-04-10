@@ -25,16 +25,16 @@
 #include "AirspaceIntersectionVector.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
-void 
+void
 Airspace::Destroy()
 {
   delete airspace;
 }
 
-Airspace::Airspace(AbstractAirspace& airspace,
-                   const TaskProjection& tp):
-  FlatBoundingBox(airspace.GetBoundingBox(tp)),
-  airspace(&airspace)
+Airspace::Airspace(AbstractAirspace &airspace,
+                   const TaskProjection &tp)
+  :FlatBoundingBox(airspace.GetBoundingBox(tp)),
+   airspace(&airspace)
 {
 }
 
@@ -54,7 +54,7 @@ Airspace::Airspace(const GeoPoint &ll, const GeoPoint &ur,
 {
 }
 
-bool 
+bool
 Airspace::IsInside(const AircraftState &loc) const
 {
   if (airspace) {
@@ -65,7 +65,7 @@ Airspace::IsInside(const AircraftState &loc) const
 }
 
 
-bool 
+bool
 Airspace::IsInside(const GeoPoint &loc) const
 {
   if (airspace) {
@@ -76,15 +76,15 @@ Airspace::IsInside(const GeoPoint &loc) const
 }
 
 
-bool 
-Airspace::Intersects(const FlatRay& ray) const
+bool
+Airspace::Intersects(const FlatRay &ray) const
 {
   return FlatBoundingBox::Intersects(ray);
 }
 
 
 AirspaceIntersectionVector
-Airspace::Intersects(const GeoPoint& g1, const GeoPoint &end,
+Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
                      const TaskProjection &projection) const
 {
   if (airspace) {
@@ -95,10 +95,10 @@ Airspace::Intersects(const GeoPoint& g1, const GeoPoint &end,
   }
 }
 
-void 
+void
 Airspace::SetGroundLevel(const fixed alt) const
 {
-  if (airspace) 
+  if (airspace)
     airspace->SetGroundLevel(alt);
   else
     assert(1);
@@ -113,10 +113,10 @@ Airspace::NeedGroundLevel() const
     return false;
 }
 
-void 
+void
 Airspace::SetFlightLevel(const AtmosphericPressure &press) const
 {
-  if (airspace) 
+  if (airspace)
     airspace->SetFlightLevel(press);
   else
     assert(1);

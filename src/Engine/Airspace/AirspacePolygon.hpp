@@ -31,11 +31,9 @@
 #endif
 
 /** General polygon form airspace */
-class AirspacePolygon: 
-  public AbstractAirspace 
-{
+class AirspacePolygon final : public AbstractAirspace {
 public:
-  /** 
+  /**
    * Constructor.  For testing, pts vector is a cloud of points,
    * and the airspace polygon becomes the convex hull border.
    *
@@ -57,8 +55,8 @@ public:
 
 public:
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& f, 
-                                   const AirspacePolygon& as);
+  friend std::ostream &operator<<(std::ostream &f,
+                                  const AirspacePolygon &as);
 #endif
 };
 

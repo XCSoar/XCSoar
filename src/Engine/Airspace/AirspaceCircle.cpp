@@ -44,7 +44,7 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
   }
 }
 
-bool 
+bool
 AirspaceCircle::Inside(const GeoPoint &loc) const
 {
   return (loc.Distance(m_center) <= m_radius);
