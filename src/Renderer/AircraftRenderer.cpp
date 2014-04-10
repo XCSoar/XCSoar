@@ -249,7 +249,7 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const AircraftLook &look,
                        const Angle angle, const RasterPoint aircraft_pos)
 {
-  const bool inverse = IsKobo() || !settings_map.terrain.enable;
+  const bool inverse = IsDithered() || !settings_map.terrain.enable;
 
   switch (settings_map.aircraft_symbol) {
   case AircraftSymbol::DETAILED:
