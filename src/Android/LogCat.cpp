@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/FileDescriptor.hpp"
 
 #include <atomic>
+#include <string>
 
 #include <assert.h>
 #include <unistd.h>
