@@ -115,13 +115,11 @@ protected:
   };
 
   struct CacheHeader {
-    enum {
 #ifdef FIXED_MATH
-      VERSION = 0xa,
+    static constexpr unsigned VERSION = 0xa;
 #else
-      VERSION = 0xb,
+    static constexpr unsigned VERSION = 0xb;
 #endif
-    };
 
     unsigned version;
     unsigned width, height;
