@@ -271,10 +271,15 @@ OpenGL::SetupContext()
 #endif
 
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-  GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
-    dlsym(RTLD_DEFAULT, "glMultiDrawArraysEXT");
-  GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)
-    dlsym(RTLD_DEFAULT, "glMultiDrawElementsEXT");
+  if (IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
+    GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
+      dlsym(RTLD_DEFAULT, "glMultiDrawArraysEXT");
+    GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)
+      dlsym(RTLD_DEFAULT, "glMultiDrawElementsEXT");
+  } else {
+    GLExt::multi_draw_arrays = nullptr;
+    GLExt::multi_draw_elements = nullptr;
+  }
 #endif
 
   frame_buffer_object = CheckFBO() && FBO::Initialise();
