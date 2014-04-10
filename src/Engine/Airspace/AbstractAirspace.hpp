@@ -202,7 +202,6 @@ public:
     type = _Type;
     altitude_base = _base;
     altitude_top = _top;
-    radio = _T("");
   }
 
   /**
