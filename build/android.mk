@@ -126,7 +126,7 @@ endif
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values $(@D)/res/xml
-	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoar $(ANDROID_BUILD)/src/ioio/lib
+	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoar $(ANDROID_BUILD)/src/ioio/lib/android
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
 	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoar
@@ -136,10 +136,7 @@ $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstam
 	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/impl $(ANDROID_BUILD)/src/ioio/lib/impl
 	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi2
 	$(Q)ln -s ../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/util/android/ContextWrapperDependent.java $(ANDROID_BUILD)/src/ioio/
-	$(Q)sed -e 's/com\.android\.future\.usb/android.hardware.usb/g' \
-		-e 's/UsbManager.getInstance(wrapper)/(UsbManager)wrapper.getSystemService(Context.USB_SERVICE)/' \
-		<android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
-		>$(ANDROID_BUILD)/src/AccessoryConnectionBootstrap.java
+	$(Q)ln -s ../../../../../../../android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory $(ANDROID_BUILD)/src/ioio/lib/android/accessory
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 	$(Q)ln -s ../../../../android/res/xml $(@D)/res/xml
 ifeq ($(HOST_IS_WIN32),y)
