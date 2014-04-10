@@ -35,6 +35,14 @@ Version 6.7.4 - not yet released
   - fix SDL clipped polygon rendering algorithm (#3250)
 * devices
   - Westerboer: ignore implausible values from buggy devices
+* logger
+  - create "logs" directory automatically for external flight downloads
+* user interface
+  - show status message when switching to next turnpoint (#3270)
+* airspace
+  - relax parsing of TNP airspace files (#3272)
+* infoboxes
+  - don't use depreciated content in default configuration (#3278)
 
 Version 6.7.3 - 2014/01/22
 * tracking

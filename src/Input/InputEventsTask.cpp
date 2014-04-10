@@ -337,7 +337,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
               _("Speed"), TempSpeed,
               _("Time"), TempTime);
     Message::AddMessage(_("Task start"), TempAll);
-  } else if (StringIsEqual(misc, _T("tp"))) {
+  } else if (StringIsEqual(misc, _T("next"))) {
     Message::AddMessage(_("Next turnpoint"));
   } else if (StringIsEqual(misc, _T("finish"))) {
     Message::AddMessage(_("Task finished"));
