@@ -322,7 +322,9 @@ public:
    * @return Text version of radio frequency
    */
   gcc_pure
-  const tstring GetRadioText() const;
+  const tstring &GetRadioText() const {
+    return radio;
+  }
 
   /**
    * Accessor for airspace shape

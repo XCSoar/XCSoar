@@ -209,12 +209,6 @@ AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
   return StringIsEqualIgnoreCase(name.c_str(), prefix, prefix_length);
 }
 
-const tstring 
-AbstractAirspace::GetRadioText() const
-{
-  return radio;
-}
-
 void
 AbstractAirspace::Project(const TaskProjection &task_projection)
 {
