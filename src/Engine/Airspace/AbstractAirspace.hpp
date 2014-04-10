@@ -56,10 +56,10 @@ public:
 private:
   const Shape shape;
 
-protected:
   /** Airspace class */
   AirspaceClass type;
 
+protected:
   bool m_is_convex;
   mutable bool active;
 
