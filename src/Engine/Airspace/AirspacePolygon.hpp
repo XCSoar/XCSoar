@@ -52,7 +52,7 @@ public:
    *
    * @return Location of reference point
    */
-  const GeoPoint GetCenter() const;
+  virtual const GeoPoint GetCenter() const override;
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -62,7 +62,7 @@ public:
    * 
    * @return true if aircraft is inside airspace boundary
    */
-  bool Inside(const GeoPoint &loc) const;
+  virtual bool Inside(const GeoPoint &loc) const override;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -74,10 +74,10 @@ public:
    */
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,
-                                                const TaskProjection &projection) const;
+                                                const TaskProjection &projection) const override;
 
   virtual GeoPoint ClosestPoint(const GeoPoint &loc,
-                                const TaskProjection &projection) const;
+                                const TaskProjection &projection) const override;
 
 public:
 #ifdef DO_PRINT
