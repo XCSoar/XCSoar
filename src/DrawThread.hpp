@@ -39,9 +39,7 @@ class GlueMapWindow;
  * 
  */
 class DrawThread final : public RecursivelySuspensibleThread {
-  enum {
-    MIN_WAIT_TIME = 100,
-  };
+  static constexpr unsigned MIN_WAIT_TIME = 100;
 
   /**
    * This triggers a redraw.
