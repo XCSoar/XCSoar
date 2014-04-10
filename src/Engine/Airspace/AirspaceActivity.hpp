@@ -104,4 +104,6 @@ public:
   }
 };
 
+static_assert(sizeof(AirspaceActivity) == 1, "Wrong size");
+
 #endif
