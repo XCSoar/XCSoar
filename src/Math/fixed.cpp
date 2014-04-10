@@ -7,9 +7,9 @@
 
 #ifdef FIXED_MATH
 
-static fixed::value_t const internal_pi=0x3243f6a8;
-static fixed::value_t const internal_two_pi=0x6487ed51;
-static fixed::value_t const internal_half_pi=0x1921fb54;
+static constexpr fixed::value_t internal_pi = 0x3243f6a8;
+static constexpr fixed::value_t internal_two_pi = 0x6487ed51;
+static constexpr fixed::value_t internal_half_pi = 0x1921fb54;
 
 fixed& fixed::operator%=(const fixed other)
 {
