@@ -57,24 +57,17 @@ Airspace::Airspace(const GeoPoint &ll, const GeoPoint &ur,
 bool
 Airspace::IsInside(const AircraftState &loc) const
 {
-  if (airspace) {
-    return airspace->Inside(loc);
-  } else {
-    return false;
-  }
+  assert(airspace != nullptr);
+  return airspace->Inside(loc);
 }
 
 
 bool
 Airspace::IsInside(const GeoPoint &loc) const
 {
-  if (airspace) {
-    return airspace->Inside(loc);
-  } else {
-    return false;
-  }
+  assert(airspace != nullptr);
+  return airspace->Inside(loc);
 }
-
 
 bool
 Airspace::Intersects(const FlatRay &ray) const
@@ -87,55 +80,41 @@ AirspaceIntersectionVector
 Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
                      const TaskProjection &projection) const
 {
-  if (airspace) {
-    return airspace->Intersects(g1, end, projection);
-  } else {
-    AirspaceIntersectionVector null;
-    return null;
-  }
+  assert(airspace != nullptr);
+  return airspace->Intersects(g1, end, projection);
 }
 
 void
 Airspace::SetGroundLevel(const fixed alt) const
 {
-  if (airspace)
-    airspace->SetGroundLevel(alt);
-  else
-    assert(1);
+  assert(airspace != nullptr);
+  airspace->SetGroundLevel(alt);
 }
 
 bool
 Airspace::NeedGroundLevel() const
 {
-  if (airspace)
-    return airspace->NeedGroundLevel();
-  else
-    return false;
+  assert(airspace != nullptr);
+  return airspace->NeedGroundLevel();
 }
 
 void
 Airspace::SetFlightLevel(const AtmosphericPressure &press) const
 {
-  if (airspace)
-    airspace->SetFlightLevel(press);
-  else
-    assert(1);
+  assert(airspace != nullptr);
+  airspace->SetFlightLevel(press);
 }
 
 void
 Airspace::SetActivity(const AirspaceActivity mask) const
 {
-  if (airspace)
-    airspace->SetActivity(mask);
-  else
-    assert(1);
+  assert(airspace != nullptr);
+  airspace->SetActivity(mask);
 }
 
 void
 Airspace::ClearClearance() const
 {
-  if (airspace)
-    airspace->ClearClearance();
-  else
-    assert(1);
+  assert(airspace != nullptr);
+  airspace->ClearClearance();
 }
