@@ -43,8 +43,9 @@ DeviceListInitialise()
 void
 DeviceListDeinitialise()
 {
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    delete device_list[i];
-    delete dispatchers[i];
-  }
+  for (DeviceDescriptor *i : device_list)
+    delete i;
+
+  for (DeviceDispatcher *i : dispatchers)
+    delete i;
 }

@@ -28,10 +28,8 @@ Copyright_License {
 void
 devTick()
 {
-  int i;
-
-  for (i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor &device = *device_list[i];
+  for (DeviceDescriptor *i : device_list) {
+    DeviceDescriptor &device = *i;
     device.OnSysTicker();
   }
 }
@@ -39,8 +37,8 @@ devTick()
 void
 AllDevicesAutoReopen(OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor &d = *device_list[i];
+  for (DeviceDescriptor *i : device_list) {
+    DeviceDescriptor &d = *i;
     d.AutoReopen(env);
   }
 }
@@ -48,30 +46,30 @@ AllDevicesAutoReopen(OperationEnvironment &env)
 void
 AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutMacCready(mac_cready, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutMacCready(mac_cready, env);
 }
 
 void
 AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutBugs(bugs, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutBugs(bugs, env);
 }
 
 void
 AllDevicesPutBallast(fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutBallast(fraction, overload, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutBallast(fraction, overload, env);
 }
 
 void
 AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutVolume(volume, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutVolume(volume, env);
 }
 
 void
@@ -79,8 +77,8 @@ AllDevicesPutActiveFrequency(RadioFrequency frequency,
                              const TCHAR *name,
                              OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutActiveFrequency(frequency, name, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutActiveFrequency(frequency, name, env);
 }
 
 void
@@ -88,29 +86,29 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency,
                               const TCHAR *name,
                               OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutStandbyFrequency(frequency, name, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutStandbyFrequency(frequency, name, env);
 }
 
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres,
                  OperationEnvironment &env)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutQNH(pres, env);
+  for (DeviceDescriptor *i : device_list)
+    i->PutQNH(pres, env);
 }
 
 void
 AllDevicesNotifySensorUpdate(const MoreData &basic)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->OnSensorUpdate(basic);
+  for (DeviceDescriptor *i : device_list)
+    i->OnSensorUpdate(basic);
 }
 
 void
 AllDevicesNotifyCalculatedUpdate(const MoreData &basic,
                                  const DerivedInfo &calculated)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->OnCalculatedUpdate(basic, calculated);
+  for (DeviceDescriptor *i : device_list)
+    i->OnCalculatedUpdate(basic, calculated);
 }

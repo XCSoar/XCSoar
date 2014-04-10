@@ -113,8 +113,8 @@ ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
 {
   bool found_logger = false;
 
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor &device = *device_list[i];
+  for (DeviceDescriptor *i : device_list) {
+    DeviceDescriptor &device = *i;
 
     if (device.CanDeclare() && device.GetState() == PortState::READY) {
       found_logger = true;

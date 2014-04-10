@@ -44,8 +44,8 @@ AllVegasSendSetting(const char *name, int value)
 {
   PopupOperationEnvironment env;
 
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    VegaDevice *vega = GetVegaDevice(*device_list[i]);
+  for (DeviceDescriptor *i : device_list) {
+    VegaDevice *vega = GetVegaDevice(*i);
     if (vega != NULL)
       vega->SendSetting(name, value, env);
   }
@@ -56,8 +56,8 @@ AllVegasRequestSetting(const char *name)
 {
   PopupOperationEnvironment env;
 
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    VegaDevice *vega = GetVegaDevice(*device_list[i]);
+  for (DeviceDescriptor *i : device_list) {
+    VegaDevice *vega = GetVegaDevice(*i);
     if (vega != NULL)
       vega->RequestSetting(name, env);
   }

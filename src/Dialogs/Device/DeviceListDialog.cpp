@@ -226,8 +226,8 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   CreateList(parent, look, rc, 3 * margin + font_height +
              look.small_font->GetHeight()).SetLength(NUMDEV);
 
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    items[i].Clear();
+  for (Item &i : items)
+    i.Clear();
 
   UpdateButtons();
 }
