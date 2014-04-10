@@ -46,36 +46,12 @@ public:
    */
   AirspacePolygon(const std::vector<GeoPoint> &pts, const bool prune = false);
 
-  /**
-   * Get arbitrary center or reference point for use in determining
-   * overall center location of all airspaces
-   *
-   * @return Location of reference point
-   */
+  /* virtual methods from class AbstractAirspace */
   virtual const GeoPoint GetCenter() const override;
-
-  /** 
-   * Checks whether an aircraft is inside the airspace.
-   * This is slow because it uses geodesic calculations
-   * 
-   * @param loc State about which to test inclusion
-   * 
-   * @return true if aircraft is inside airspace boundary
-   */
   virtual bool Inside(const GeoPoint &loc) const override;
-
-  /** 
-   * Checks whether a line intersects with the airspace.
-   * Can be approximate by using flat-earth representation internally.
-   * 
-   * @param g1 Location of origin of search vector
-   * 
-   * @return Vector of intersection pairs if the line intersects the airspace
-   */
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,
                                                 const TaskProjection &projection) const override;
-
   virtual GeoPoint ClosestPoint(const GeoPoint &loc,
                                 const TaskProjection &projection) const override;
 
