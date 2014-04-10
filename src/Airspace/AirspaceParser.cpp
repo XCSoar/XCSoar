@@ -163,7 +163,7 @@ struct TempAirspaceType
   void
   AddPolygon(Airspaces &airspace_database)
   {
-    if (points.empty())
+    if (points.size() < 3)
       return;
 
     AbstractAirspace *as = new AirspacePolygon(points);

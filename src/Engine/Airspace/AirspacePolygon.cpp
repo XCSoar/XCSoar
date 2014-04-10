@@ -30,36 +30,33 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
                                  const bool prune)
   :AbstractAirspace(Shape::POLYGON)
 {
-  if (pts.size() < 2) {
+  assert(pts.size() >= 3);
+
+  m_border.reserve(pts.size() + 1);
+
+  for (const GeoPoint &pt : pts)
+    m_border.emplace_back(pt);
+
+  // ensure airspace is closed
+  GeoPoint p_start = pts[0];
+  GeoPoint p_end = *(pts.end() - 1);
+  if (p_start != p_end)
+    m_border.emplace_back(p_start);
+
+
+  if (prune) {
+    // only for testing
+    m_border.PruneInterior();
     m_is_convex = true;
   } else {
-    m_border.reserve(pts.size() + 1);
-
-    for (const GeoPoint &pt : pts)
-      m_border.emplace_back(pt);
-
-    // ensure airspace is closed
-    GeoPoint p_start = pts[0];
-    GeoPoint p_end = *(pts.end() - 1);
-    if (p_start != p_end)
-      m_border.emplace_back(p_start);
-
-
-    if (prune) {
-      // only for testing
-      m_border.PruneInterior();
-      m_is_convex = true;
-    } else {
-      m_is_convex = m_border.IsConvex();
-    }
+    m_is_convex = m_border.IsConvex();
   }
 }
 
 const GeoPoint 
 AirspacePolygon::GetCenter() const
 {
-  if (m_border.empty())
-    return GeoPoint::Invalid();
+  assert(m_border.size() >= 3);
 
   return m_border[0].GetLocation();
 }
