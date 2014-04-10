@@ -29,13 +29,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_LIST_HPP
 #define XCSOAR_DEVICE_LIST_HPP
 
-enum {
 #ifdef WIN32
-  NUMDEV = 4,
+static constexpr unsigned NUMDEV = 4;
 #else
-  NUMDEV = 6,
+static constexpr unsigned NUMDEV = 6;
 #endif
-};
 
 class DeviceDescriptor;
 
