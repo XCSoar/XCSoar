@@ -10,7 +10,6 @@
 static fixed::value_t const internal_pi=0x3243f6a8;
 static fixed::value_t const internal_two_pi=0x6487ed51;
 static fixed::value_t const internal_half_pi=0x1921fb54;
-static fixed::value_t const internal_quarter_pi=0xc90fdaa;
 
 fixed& fixed::operator%=(const fixed other)
 {
