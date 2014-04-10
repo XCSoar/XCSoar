@@ -149,14 +149,12 @@ protected:
  */
 class BaseButtonWindow : public Window {
 public:
-  enum {
     /**
      * On WIN32, a WM_COMMAND/BN_CLICKED message with this id will be
      * bounced back to the originating child
      * ButtonWindow::OnClicked().
      */
-    COMMAND_BOUNCE_ID = 0xbeef,
-  };
+  static constexpr unsigned COMMAND_BOUNCE_ID = 0xbeef;
 
 public:
   void Create(ContainerWindow &parent, tstring::const_pointer text,
