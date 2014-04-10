@@ -30,6 +30,8 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
+static const TCHAR *const terrain_cache_name = _T("terrain");
+
 static char *
 ToNarrowPath(const TCHAR *src)
 {
@@ -43,7 +45,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   bool cache_loaded = false;
   if (cache != NULL) {
     /* load the cache file */
-    FILE *file = cache->Load(_T("terrain"), _path);
+    FILE *file = cache->Load(terrain_cache_name, _path);
     if (file != NULL) {
       cache_loaded = raster_tile_cache.LoadCache(file);
       fclose(file);
@@ -56,12 +58,12 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
 
     if (cache != NULL) {
       /* save the cache file */
-      FILE *file = cache->Save(_T("terrain"), _path);
+      FILE *file = cache->Save(terrain_cache_name, _path);
       if (file != NULL) {
         if (raster_tile_cache.SaveCache(file))
-          cache->Commit(_T("terrain"), file);
+          cache->Commit(terrain_cache_name, file);
         else
-          cache->Cancel(_T("terrain"), file);
+          cache->Cancel(terrain_cache_name, file);
       }
     }
   }
