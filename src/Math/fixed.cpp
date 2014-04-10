@@ -56,10 +56,8 @@ fixed& fixed::operator/=(fixed const divisor)
      The result is approximately the same, and for XCSoar, we can
      neglect the error. */
 
-  enum {
-    /** number of bits in a value_f */
-    bits = sizeof(value_t) * 8,
-  };
+  /** number of bits in a value_f */
+  constexpr unsigned bits = sizeof(value_t) * 8;
 
   unsigned shift = resolution_shift;
   value_t numerator = m_nVal, denominator = divisor.m_nVal;
