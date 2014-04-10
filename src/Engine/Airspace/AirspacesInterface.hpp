@@ -28,6 +28,8 @@
 
 #include <kdtree++/kdtree.hpp>
 
+#include <assert.h>
+
 /**
  * Abstract class for interface to #Airspaces database.
  * Allows references to the #Airspaces to be substituted for a
@@ -48,7 +50,7 @@ class AirspacesInterface {
      *
      * @return Coordinate value
      */
-    int operator() ( const FlatBoundingBox &d, const unsigned k) const {
+    int operator()(const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
         return d.GetLowerLeft().longitude;
@@ -58,8 +60,10 @@ class AirspacesInterface {
         return d.GetUpperRight().longitude;
       case 3:
         return d.GetUpperRight().latitude;
+      default:
+        assert(false);
+        gcc_unreachable();
       };
-      return 0;
     };
   };
 
