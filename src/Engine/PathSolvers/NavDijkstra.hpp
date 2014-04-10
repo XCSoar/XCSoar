@@ -45,9 +45,7 @@ class NavDijkstra:
   private NonCopyable 
 {
 protected:
-  enum {
-    MAX_STAGES = 32,
-  };
+  static constexpr unsigned MAX_STAGES = 32;
 
   struct DijkstraMap {
     struct Hash {
