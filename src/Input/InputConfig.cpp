@@ -35,9 +35,9 @@ InputConfig::SetDefaults()
   modes[2] = _T("infobox");
   modes[3] = _T("Menu");
 
-  std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
+  std::fill_n(&Key2Event[0][0], MAX_MODE*MAX_KEY, 0);
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
-  std::fill(&Key2EventNonChar[0][0], &Key2EventNonChar[MAX_MODE][MAX_KEY], 0);
+  std::fill_n(&Key2EventNonChar[0][0], MAX_MODE*MAX_KEY, 0);
 #endif
 
   Gesture2Event.Clear();
