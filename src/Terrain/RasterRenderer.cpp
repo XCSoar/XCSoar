@@ -35,6 +35,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdint.h>
 
+/**
+ * Interpolate between x and y with i/128, i.e. i/(1 << 7).
+ *
+ * i must be below or equal to 128.
+ */
 constexpr
 static inline unsigned
 MIX(unsigned x, unsigned y, unsigned i)
