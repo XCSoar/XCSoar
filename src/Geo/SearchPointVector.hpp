@@ -39,9 +39,6 @@ public:
 
   bool PruneInterior();
 
-  gcc_pure
-  bool IsConvex() const;
-
   /**
    * Apply convex pruning algorithm with increasing tolerance
    * until the trace is smaller than the given size

@@ -48,14 +48,6 @@ SearchPointVector::ThinToSize(const unsigned max_size)
   return retval;
 }
 
-bool 
-SearchPointVector::IsConvex() const
-{
-  SearchPointVector copy = *this;
-  GrahamScan gs(copy);
-  return !gs.PruneInterior();
-}
-
 void 
 SearchPointVector::Project(const TaskProjection& tp)
 {
