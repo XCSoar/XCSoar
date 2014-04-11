@@ -79,6 +79,9 @@ public:
   }
 
   /**
+   * The geographical distance in meters of the given amount
+   * of pixels multiplied by 256.
+   *
    * @see RasterProjection::CoarsePixelDistance()
    */
   gcc_pure fixed
