@@ -26,6 +26,23 @@ Copyright_License {
 
 #include <assert.h>
 
+static RGB8Color
+Interpolate(short h, const ColorRamp *c1, const ColorRamp *c2,
+            unsigned char interp_levels)
+{
+  if (interp_levels == 0)
+    return RGB8Color(c1->r, c1->g, c1->b);
+
+  unsigned short is =  1 << interp_levels;
+  unsigned short f = (unsigned short)(h - c1->h) * is
+                   / (unsigned short)(c2->h - c1->h);
+  unsigned short of = is - f;
+
+  return RGB8Color((f * c2->r + of * c1->r) >> interp_levels,
+                   (f * c2->g + of * c1->g) >> interp_levels,
+                   (f * c2->b + of * c1->b) >> interp_levels);
+}
+
 RGB8Color
 ColorRampLookup(const short h,
                 const ColorRamp* ramp_colors,
@@ -34,9 +51,6 @@ ColorRampLookup(const short h,
 {
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
-
-  unsigned short f, of;
-  unsigned short is = 1<<interp_levels;
 
   // gone past end, so use last color
   ColorRamp last = ramp_colors[numramp - 1];
@@ -49,18 +63,8 @@ ColorRampLookup(const short h,
   while (c1 >= ramp_colors) {
     assert(c1->h < c2->h);
 
-    if (h >= c1->h) {
-      if (interp_levels == 0)
-        return RGB8Color(c1->r, c1->g, c1->b);
-
-      f = (unsigned short)(h - c1->h) * is
-        / (unsigned short)(c2->h - c1->h);
-      of = is - f;
-
-      return RGB8Color((f * c2->r + of * c1->r) >> interp_levels,
-                       (f * c2->g + of * c1->g) >> interp_levels,
-                       (f * c2->b + of * c1->b) >> interp_levels);
-    }
+    if (h >= c1->h)
+      return Interpolate(h, c1, c2, interp_levels);
 
     c2 = c1;
     c1--;
