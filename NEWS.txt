@@ -29,7 +29,7 @@ Version 6.8 - not yet released
   - support Wifi with WEP (#3138)
   - support USB-OTG
 
-Version 6.7.4 - not yet released
+Version 6.7.4 - 2014/04/11
 * map
   - fix topography rendering for polygon shapes (#3245)
   - fix SDL clipped polygon rendering algorithm (#3250)
