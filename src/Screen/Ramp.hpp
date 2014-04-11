@@ -31,6 +31,8 @@ struct ColorRamp {
   unsigned char r;
   unsigned char g;
   unsigned char b;
+
+  RGB8Color ToRGB8Color() const;
 };
 
 RGB8Color

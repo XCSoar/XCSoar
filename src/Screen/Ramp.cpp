@@ -31,7 +31,7 @@ Interpolate(short h, const ColorRamp *c1, const ColorRamp *c2,
             unsigned char interp_levels)
 {
   if (interp_levels == 0)
-    return RGB8Color(c1->r, c1->g, c1->b);
+    return c1->ToRGB8Color();
 
   unsigned short is =  1 << interp_levels;
   unsigned short f = (unsigned short)(h - c1->h) * is
@@ -55,7 +55,7 @@ ColorRampLookup(const short h,
   // gone past end, so use last color
   ColorRamp last = ramp_colors[numramp - 1];
   if (h >= last.h)
-    return RGB8Color(last.r, last.g, last.b);
+    return last.ToRGB8Color();
 
   const ColorRamp *c1 = ramp_colors + numramp - 2;
   const ColorRamp *c2 = c1 + 1;
@@ -74,5 +74,11 @@ ColorRampLookup(const short h,
   ColorRamp first = ramp_colors[0];
   assert(h <= first.h);
 
-  return RGB8Color(first.r, first.g, first.b);
+  return first.ToRGB8Color();
+}
+
+RGB8Color
+ColorRamp::ToRGB8Color() const
+{
+  return RGB8Color(r, g, b);
 }
