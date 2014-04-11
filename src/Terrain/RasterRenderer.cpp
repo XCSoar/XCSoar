@@ -157,14 +157,14 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   // set resolution
 
   if (pixel_size < fixed(3000)) {
-    /* round down to reduce slope shading artefacts (caused by
-       RasterBuffer interpolation) */
-
     // Data point size of the (terrain) map in meters multiplied by 256
     fixed map_pixel_size = map.PixelDistance(center, 1);
 
     // How many screen pixels does one data point stretch?
     fixed q = map_pixel_size / pixel_size;
+
+    /* round down to reduce slope shading artefacts (caused by
+       RasterBuffer interpolation) */
     quantisation_effective = std::max(1, (int)q);
 
     /* disable slope shading when zoomed in very near (not enough
