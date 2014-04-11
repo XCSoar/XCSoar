@@ -35,8 +35,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdint.h>
 
-//#define FAST_RSQRT
-
 constexpr
 static inline unsigned
 MIX(unsigned x, unsigned y, unsigned i)
@@ -298,15 +296,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
-#ifdef FAST_RSQRT
-  const short szindex = sz*contrast/128;
-  const short sval_min = szindex-63;
-  const short sval_max = szindex+63;
-  const BGRColor *szColorBuf = color_table + (64- szindex) * 256;
-  const int sx_c = sx*contrast>>7;
-  const int sy_c = sy*contrast>>7;
-  const int sz_c = sz*contrast>>7;
-#endif
 
   BGRColor *dest = image->GetTopRow();
 
@@ -393,7 +382,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const int dd0 = p22 * int(p31);
         const int dd1 = int(p20) * p32;
         const unsigned dd2 = p20 * p31 * height_slope_factor;
-#ifndef FAST_RSQRT
         const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
         const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
 #ifdef FIXED_MATH
@@ -409,16 +397,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const int sval = num / int(mag|1);
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[h + 256 * Clamp(sindex, -63, 63)];
-#else
-        const int num = (dd2 * sz_c + dd0 * sx_c + dd1 * sy_c);
-        const int sval = i_normalise_mag3(num, dd0, dd1, dd2);
-        if (gcc_unlikely(sval<=sval_min))
-          *p++ = color_table[h + 256];
-        else if (gcc_unlikely(sval >= sval_max))
-          *p++ = color_table[h + 127*256];
-        else
-          *p++ = szColorBuf[h + (sval*256)];
-#endif
       } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
