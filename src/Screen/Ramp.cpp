@@ -43,24 +43,27 @@ ColorRampLookup(const short h,
   if (h >= last.h)
     return RGB8Color(last.r, last.g, last.b);
 
-  for (int i = numramp - 2; i >= 0; i--) {
-    ColorRamp c1 = ramp_colors[i];
-    ColorRamp c2 = ramp_colors[i + 1];
+  const ColorRamp *c1 = ramp_colors + numramp - 2;
+  const ColorRamp *c2 = c1 + 1;
 
-    assert(c1.h < c2.h);
+  while (c1 >= ramp_colors) {
+    assert(c1->h < c2->h);
 
-    if (h >= c1.h) {
+    if (h >= c1->h) {
       if (interp_levels == 0)
-        return RGB8Color(c1.r, c1.g, c1.b);
+        return RGB8Color(c1->r, c1->g, c1->b);
 
-      f = (unsigned short)(h - c1.h) * is
-        / (unsigned short)(c2.h - c1.h);
+      f = (unsigned short)(h - c1->h) * is
+        / (unsigned short)(c2->h - c1->h);
       of = is - f;
 
-      return RGB8Color((f * c2.r + of * c1.r) >> interp_levels,
-                       (f * c2.g + of * c1.g) >> interp_levels,
-                       (f * c2.b + of * c1.b) >> interp_levels);
+      return RGB8Color((f * c2->r + of * c1->r) >> interp_levels,
+                       (f * c2->g + of * c1->g) >> interp_levels,
+                       (f * c2->b + of * c1->b) >> interp_levels);
     }
+
+    c2 = c1;
+    c1--;
   }
 
   // check if h lower than lowest
