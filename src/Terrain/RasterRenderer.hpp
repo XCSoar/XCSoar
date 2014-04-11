@@ -116,7 +116,9 @@ public:
 #endif
 
   /**
-   * Generate the color table.
+   * Fills the color_table array with precomputed colors for 256 height and
+   * 64 illumination levels. This is used to speed up the rendering by
+   * preventing the same color calculations over and over again.
    */
   void PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
                          unsigned height_scale, int interp_levels);
