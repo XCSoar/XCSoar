@@ -22,6 +22,7 @@
 #ifndef ABSTRACTAIRSPACE_HPP
 #define ABSTRACTAIRSPACE_HPP
 
+#include "Util/TriState.hpp"
 #include "Util/tstring.hpp"
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
@@ -60,7 +61,7 @@ private:
   AirspaceClass type;
 
 protected:
-  bool m_is_convex;
+  mutable TriState is_convex;
   mutable bool active;
 
   /** Base of airspace */
