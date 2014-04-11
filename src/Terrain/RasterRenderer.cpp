@@ -146,13 +146,13 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   unsigned x = projection.GetScreenWidth() / 2;
   unsigned y = projection.GetScreenHeight() / 2;
   // GeoPoint corresponding to the MapWindow center
-  GeoPoint Gmid = projection.ScreenToGeo(x, y);
+  GeoPoint center = projection.ScreenToGeo(x, y);
   // GeoPoint "next to" Gmid (depends on terrain resolution)
-  GeoPoint Gneighbor = projection.ScreenToGeo(x + quantisation_pixels,
-                                              y + quantisation_pixels);
+  GeoPoint neighbor = projection.ScreenToGeo(x + quantisation_pixels,
+                                             y + quantisation_pixels);
 
   // Geographical edge length of pixel in the MapWindow center in meters
-  pixel_size = fixed_sqrt_half * Gmid.Distance(Gneighbor);
+  pixel_size = fixed_sqrt_half * center.Distance(neighbor);
 
   // set resolution
 
@@ -160,7 +160,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
     /* round down to reduce slope shading artefacts (caused by
        RasterBuffer interpolation) */
 
-    fixed map_pixel_size = map.PixelDistance(Gmid, 1);
+    fixed map_pixel_size = map.PixelDistance(center, 1);
     fixed q = map_pixel_size / pixel_size;
     quantisation_effective = std::max(1, (int)q);
 
