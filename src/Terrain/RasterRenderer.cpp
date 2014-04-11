@@ -47,6 +47,14 @@ MIX(unsigned x, unsigned y, unsigned i)
   return (x * i + y * ((1 << 7) - i)) >> 7;
 }
 
+/**
+ * Shade the given color according to the illumination value.
+ *
+ * illum = 64: Contour, mixed with 50% brown
+ * illum < 0:  Shadow, mixed with up to 50% dark blue
+ * illum > 0:  Highlight, mixed with up to 25% yellow
+ * illum = 0:  No shading
+ */
 gcc_const
 inline BGRColor
 TerrainShading(const int illum, RGB8Color color)
