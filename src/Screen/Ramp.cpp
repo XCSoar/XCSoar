@@ -44,19 +44,22 @@ ColorRampLookup(const short h,
     return RGB8Color(last.r, last.g, last.b);
 
   for (int i = numramp - 2; i >= 0; i--) {
-    assert(ramp_colors[i].h < ramp_colors[i + 1].h);
+    ColorRamp c1 = ramp_colors[i];
+    ColorRamp c2 = ramp_colors[i + 1];
 
-    if (h >= ramp_colors[i].h) {
+    assert(c1.h < c2.h);
+
+    if (h >= c1.h) {
       if (interp_levels) {
-        f = (unsigned short)(h - ramp_colors[i].h) * is
-          / (unsigned short)(ramp_colors[i + 1].h - ramp_colors[i].h);
+        f = (unsigned short)(h - c1.h) * is
+          / (unsigned short)(c2.h - c1.h);
         of = is - f;
 
-        return RGB8Color((f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels,
-                         (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels,
-                         (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels);
+        return RGB8Color((f * c2.r + of * c1.r) >> interp_levels,
+                         (f * c2.g + of * c1.g) >> interp_levels,
+                         (f * c2.b + of * c1.b) >> interp_levels);
       } else {
-        return RGB8Color(ramp_colors[i].r, ramp_colors[i].g, ramp_colors[i].b);
+        return RGB8Color(c1.r, c1.g, c1.b);
       }
     }
   }
