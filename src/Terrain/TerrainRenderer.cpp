@@ -290,9 +290,9 @@ static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
 TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain)
   :terrain(_terrain),
    last_sun_azimuth(Angle::Zero()),
-   last_color_ramp(NULL)
+   last_color_ramp(nullptr)
 {
-  assert(terrain != NULL);
+  assert(terrain != nullptr);
   settings.SetDefaults();
 }
 
