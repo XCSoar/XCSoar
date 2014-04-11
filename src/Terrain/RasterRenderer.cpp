@@ -183,8 +183,7 @@ RasterRenderer::GenerateImage(bool do_shading,
       height_matrix.GetWidth() > image->GetWidth() ||
       height_matrix.GetHeight() > image->GetHeight()) {
     delete image;
-    image = new RawBitmap(height_matrix.GetWidth(),
-                          height_matrix.GetHeight());
+    image = new RawBitmap(height_matrix.GetWidth(), height_matrix.GetHeight());
 
     delete[] contour_column_base;
     contour_column_base = new unsigned char[height_matrix.GetWidth()];
@@ -220,8 +219,7 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    unsigned contour_row_base = ContourInterval(*src,
-                                                contour_height_scale);
+    unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
     for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
@@ -237,7 +235,7 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
         if (gcc_unlikely((contour_interval != contour_row_base)
                          || (contour_interval != *contour_this_column_base))) {
 
-          *p++ = oColorBuf[h-64*256];
+          *p++ = oColorBuf[h - 64 * 256];
           *contour_this_column_base = contour_row_base = contour_interval;
         } else {
           *p++ = oColorBuf[h];
@@ -314,8 +312,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    unsigned contour_row_base = ContourInterval(*src,
-                                                contour_height_scale);
+    unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
     for (unsigned x = 0; x < height_matrix.GetWidth(); ++x, ++src) {
