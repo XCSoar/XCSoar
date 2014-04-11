@@ -79,7 +79,7 @@ EventQueue::Wait(Event &event)
       return true;
 
     ::SDL_PumpEvents();
-#if SDL_MAJOR_VERSION >= 2
+#if SDL_VERSION_ATLEAST(1,3,0)
     int result = ::SDL_PeepEvents(&event.event, 1,
                                  SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
 #else
@@ -101,7 +101,7 @@ EventQueue::Purge(Uint32 event,
                   void *ctx)
 {
   SDL_Event events[256]; // is that enough?
-#if SDL_MAJOR_VERSION >= 2
+#if SDL_VERSION_ATLEAST(1,3,0)
   int count = SDL_PeepEvents(events, 256, SDL_GETEVENT, event, event);
 #else
   int count = SDL_PeepEvents(events, 256, SDL_GETEVENT, SDL_EVENTMASK(event));
@@ -113,7 +113,7 @@ EventQueue::Purge(Uint32 event,
     if (!match(*src, ctx))
       *dest++ = *src;
 
-#if SDL_MAJOR_VERSION >= 2
+#if SDL_VERSION_ATLEAST(1,3,0)
   SDL_PeepEvents(events, dest - events, SDL_ADDEVENT, event, event);
 #else
   SDL_PeepEvents(events, dest - events, SDL_ADDEVENT, SDL_EVENTMASK(event));

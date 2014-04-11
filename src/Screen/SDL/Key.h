@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_SDL_KEY_H
 
 #include <SDL_version.h>
-#if SDL_MAJOR_VERSION >= 2
+#if SDL_VERSION_ATLEAST(1,3,0)
 #include <SDL_keyboard.h>
 #else
 #include <SDL_keysym.h>
