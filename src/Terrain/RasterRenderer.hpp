@@ -118,8 +118,8 @@ public:
   /**
    * Generate the color table.
    */
-  void ColorTable(const ColorRamp *color_ramp, bool do_water,
-                  unsigned height_scale, int interp_levels);
+  void PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
+                         unsigned height_scale, int interp_levels);
 
   /**
    * Scan the map and fill the height matrix.

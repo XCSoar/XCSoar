@@ -196,8 +196,8 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   }
 
   if (color_ramp != last_color_ramp) {
-    raster_renderer.ColorTable(color_ramp, do_water,
-                               height_scale, interp_levels);
+    raster_renderer.PrepareColorTable(color_ramp, do_water,
+                                      height_scale, interp_levels);
     last_color_ramp = color_ramp;
   }
 

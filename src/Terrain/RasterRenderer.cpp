@@ -442,8 +442,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 }
 
 void
-RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
-                           unsigned height_scale, int interp_levels)
+RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
+                                  unsigned height_scale, int interp_levels)
 {
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {

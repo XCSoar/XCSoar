@@ -363,8 +363,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 
   const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
   if (color_ramp != last_color_ramp) {
-    raster_renderer.ColorTable(color_ramp, do_water,
-                               height_scale, interp_levels);
+    raster_renderer.PrepareColorTable(color_ramp, do_water,
+                                      height_scale, interp_levels);
     last_color_ramp = color_ramp;
   }
 
