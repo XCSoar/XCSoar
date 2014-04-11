@@ -35,7 +35,7 @@ InputConfig::SetDefaults()
   modes[2] = _T("infobox");
   modes[3] = _T("Menu");
 
-  std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
+  std::fill_n(&Key2Event[0][0], MAX_MODE*MAX_KEY, 0);
 
   Gesture2Event.Clear();
 
