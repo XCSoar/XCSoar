@@ -52,28 +52,29 @@ ColorRampLookup(const short h,
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
 
-  // gone past end, so use last color
+  // Check if "h" is above the defined range
   ColorRamp last = ramp_colors[numramp - 1];
   if (h >= last.h)
     return last.ToRGB8Color();
 
+  // Iterate over color ramp control points and find the
+  // point above and below "h"
   const ColorRamp *c1 = ramp_colors + numramp - 2;
   const ColorRamp *c2 = c1 + 1;
-
   while (c1 >= ramp_colors) {
     assert(c1->h < c2->h);
 
     if (h >= c1->h)
+      // Found the two control points -> Interpolate and return the color
       return Interpolate(h, c1, c2, interp_levels);
 
     c2 = c1;
     c1--;
   }
 
-  // check if h lower than lowest
+  // Check if "h" is below the defined range
   ColorRamp first = ramp_colors[0];
   assert(h <= first.h);
-
   return first.ToRGB8Color();
 }
 
