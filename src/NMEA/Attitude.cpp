@@ -26,15 +26,11 @@ Copyright_License {
 void
 AttitudeState::Complement(const AttitudeState &add)
 {
-  if (!bank_angle_available && add.bank_angle_available) {
+  if (bank_angle_available.Complement(add.bank_angle_available))
     bank_angle = add.bank_angle;
-    bank_angle_available = add.bank_angle_available;
-  }
 
-  if (!pitch_angle_available && add.pitch_angle_available) {
+  if (pitch_angle_available.Complement(add.pitch_angle_available))
     pitch_angle = add.pitch_angle;
-    pitch_angle_available = add.pitch_angle_available;
-  }
 
   if (heading_available.Complement(add.heading_available))
     heading = add.heading;
@@ -43,5 +39,7 @@ AttitudeState::Complement(const AttitudeState &add)
 void
 AttitudeState::Expire(fixed now)
 {
+  bank_angle_available.Expire(now, fixed(5));
+  pitch_angle_available.Expire(now, fixed(5));
   heading_available.Expire(now, fixed(5));
 }

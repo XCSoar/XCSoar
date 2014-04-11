@@ -107,8 +107,8 @@ protected:
   virtual bool OnTimer(WindowTimer &_timer) override {
     if (_timer == timer) {
       AttitudeState attitude;
-      attitude.bank_angle_available = true;
-      attitude.pitch_angle_available = true;
+      attitude.bank_angle_computed = true;
+      attitude.pitch_angle_computed = true;
       attitude.bank_angle = Angle::Zero();
       attitude.pitch_angle = Angle::Zero();
 

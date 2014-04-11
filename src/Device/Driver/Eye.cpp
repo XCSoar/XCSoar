@@ -123,13 +123,13 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 
   // Roll respect to Earth system - Phi [°] (i.e. +110)
   if (line.ReadChecked(value)) {
-    info.attitude.bank_angle_available = true;
+    info.attitude.bank_angle_available.Update(info.clock);
     info.attitude.bank_angle = Angle::Degrees(value);
   }
 
   // Pitch angle respect to Earth system - Theta [°] (i.e.+020)
   if (line.ReadChecked(value)) {
-    info.attitude.pitch_angle_available = true;
+    info.attitude.pitch_angle_available.Update(info.clock);
     info.attitude.pitch_angle = Angle::Degrees(value);
   }
 

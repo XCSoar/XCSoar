@@ -168,8 +168,8 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 void
 InfoBoxContentHorizon::Update(InfoBoxData &data)
 {
-  if (!CommonInterface::Basic().attitude.bank_angle_available &&
-      !CommonInterface::Basic().attitude.pitch_angle_available) {
+  if (!CommonInterface::Basic().attitude.IsBankAngleUseable() &&
+      !CommonInterface::Basic().attitude.IsPitchAngleUseable()) {
     data.SetInvalid();
     return;
   }
