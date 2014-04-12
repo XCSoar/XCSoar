@@ -38,7 +38,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Buffer.hpp"
+#include "Screen/OpenGL/FallbackBuffer.hpp"
 #include "Screen/OpenGL/Dynamic.hpp"
 #endif
 
@@ -110,16 +110,13 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 
 #ifdef ENABLE_OPENGL
 
-inline bool
+inline void
 TopographyFileRenderer::UpdateArrayBuffer()
 {
-  if (!OpenGL::vertex_buffer_object)
-    return false;
-
   if (array_buffer == nullptr)
-    array_buffer = new GLArrayBuffer();
+    array_buffer = new GLFallbackArrayBuffer();
   else if (file.GetSerial() == array_buffer_serial)
-    return true;
+    return;
 
   array_buffer_serial = file.GetSerial();
 
@@ -147,8 +144,6 @@ TopographyFileRenderer::UpdateArrayBuffer()
   }
 
   array_buffer->CommitWrite(n * sizeof(*p), p - n);
-
-  return true;
 }
 
 inline void
@@ -223,10 +218,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 
 #ifdef ENABLE_OPENGL
-  const bool use_vbo = UpdateArrayBuffer();
-
-  if (use_vbo)
-    array_buffer->Bind();
+  UpdateArrayBuffer();
+  const ShapePoint *const buffer = (const ShapePoint *)
+    array_buffer->BeginRead();
 
   pen.Bind();
 
@@ -320,11 +314,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     const XShape &shape = **it;
 
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = use_vbo
-      /* pointer relative to the VBO */
-      ? (const ShapePoint *)(shape.GetOffset() * sizeof(*points))
-      /* regular pointer */
-      : shape.get_points();
+    const ShapePoint *points = buffer + shape.GetOffset();
 #else // !ENABLE_OPENGL
     const unsigned short *lines = shape.get_lines();
     const unsigned short *end_lines = lines + shape.get_number_of_lines();
@@ -480,8 +470,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
   pen.Unbind();
 
-  if (use_vbo)
-    array_buffer->Unbind();
+  array_buffer->EndRead();
 #else
   shape_renderer.Commit();
 #endif
