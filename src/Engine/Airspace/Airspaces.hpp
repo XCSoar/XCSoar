@@ -26,6 +26,7 @@
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
 #include "Predicate/AirspacePredicate.hpp"
+#include "Util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Compiler.h"
@@ -72,6 +73,12 @@ class Airspaces : public AirspacesInterface {
 
   std::deque<AbstractAirspace *> tmp_as;
 
+  /**
+   * This attribute keeps track of changes to this project.  It is
+   * used by the renderer cache.
+   */
+  Serial serial;
+
 public:
   /**
    * Constructor.
@@ -93,6 +100,10 @@ public:
    */
   ~Airspaces() {
     Clear();
+  }
+
+  const Serial &GetSerial() const {
+    return serial;
   }
 
   /**

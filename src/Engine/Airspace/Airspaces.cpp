@@ -225,6 +225,8 @@ Airspaces::Optimise()
     }
     airspace_tree.optimise();
   }
+
+  ++serial;
 }
 
 void
