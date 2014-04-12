@@ -38,8 +38,10 @@ struct ShapePoint : Point2D<ShapeScalar> {
   typedef float SquareType;
 
   ShapePoint() = default;
-  constexpr ShapePoint(ShapeScalar _x, ShapeScalar _y)
-    :Point2D<ShapeScalar>(_x, _y) {}
+
+  template<typename... Args>
+  constexpr ShapePoint(Args&&... args)
+    :Point2D<ShapeScalar>(args...) {}
 };
 
 static inline ShapeScalar
