@@ -85,4 +85,14 @@ CrossProduct(P a, P b)
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
 
+template<typename P>
+static constexpr inline P
+Normal(P a, P b)
+{
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
+  return P(a.y - b.y, b.x - a.x);
+}
+
 #endif
