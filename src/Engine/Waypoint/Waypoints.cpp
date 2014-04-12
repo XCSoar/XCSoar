@@ -28,9 +28,12 @@
 unsigned n_queries = 0;
 
 /**
- * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 
+ * Container accessor to allow a WaypointVisitor to visit
+ * WaypointEnvelopes.
  */
 class WaypointEnvelopeVisitor {
+  WaypointVisitor *const waypoint_visitor;
+
 public:
   /**
    * Constructor
@@ -58,9 +61,6 @@ public:
   {
     waypoint_visitor->Visit(wp);
   }
-
-private:
-  WaypointVisitor *waypoint_visitor;
 };
 
 struct VisitorAdapter {
@@ -116,9 +116,9 @@ Waypoints::WaypointNameTree::Remove(const Waypoint &wp)
   RadixTree<const Waypoint *>::Remove(normalized_name, &wp);
 }
 
-Waypoints::Waypoints():
-  next_id(1),
-  home(NULL)
+Waypoints::Waypoints()
+  :next_id(1),
+   home(NULL)
 {
 }
 
@@ -163,7 +163,7 @@ Waypoints::Append(Waypoint &&wp)
   return new_wp;
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
 {
   if (IsEmpty())
@@ -190,13 +190,13 @@ IsLandable(const Waypoint &wp)
   return wp.IsLandable();
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::GetNearestLandable(const GeoPoint &loc, fixed range) const
 {
   return GetNearestIf(loc, range, IsLandable);
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
                         bool (*predicate)(const Waypoint &)) const
 {
@@ -218,16 +218,16 @@ Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
   return &*found.first;
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::LookupName(const TCHAR *name) const
 {
   return name_tree.Get(name);
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::LookupLocation(const GeoPoint &loc, const fixed range) const
 {
-  const Waypoint* wp = GetNearest(loc, range);
+  const Waypoint *wp = GetNearest(loc, range);
   if (!wp)
     return NULL;
 
@@ -239,7 +239,7 @@ Waypoints::LookupLocation(const GeoPoint &loc, const fixed range) const
   return NULL;
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::FindHome()
 {
   for (const auto &wp : waypoint_tree) {
@@ -264,7 +264,7 @@ Waypoints::SetHome(const unsigned id)
   return true;
 }
 
-const Waypoint*
+const Waypoint *
 Waypoints::LookupId(const unsigned id) const
 {
   for (const auto &wp : waypoint_tree)
@@ -366,7 +366,7 @@ Waypoints::Create(const GeoPoint &location)
 const Waypoint &
 Waypoints::CheckExistsOrAppend(const Waypoint &waypoint)
 {
-  const Waypoint* found = LookupName(waypoint.name);
+  const Waypoint *found = LookupName(waypoint.name);
   if (found && found->IsCloseTo(waypoint.location, fixed(100))) {
     return *found;
   }
@@ -374,7 +374,7 @@ Waypoints::CheckExistsOrAppend(const Waypoint &waypoint)
   return Append(Waypoint(waypoint));
 }
 
-Waypoint 
+Waypoint
 Waypoints::GenerateTakeoffPoint(const GeoPoint& location,
                                   const fixed terrain_alt) const
 {
@@ -387,7 +387,7 @@ Waypoints::GenerateTakeoffPoint(const GeoPoint& location,
   return to_point;
 }
 
-void 
+void
 Waypoints::AddTakeoffPoint(const GeoPoint& location,
                              const fixed terrain_alt)
 {
