@@ -33,7 +33,7 @@ struct ShapePoint : Point2D<ShapeScalar> {
    * Type to be used by vector math, where a range of
    * max(ShapeScalar)*max(ShapeScalar) is needed.
    */
-  typedef float SquareType;
+  typedef float product_type;
 
   ShapePoint() = default;
 
