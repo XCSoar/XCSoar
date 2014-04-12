@@ -32,12 +32,56 @@
 
 #include "Compiler.h"
 
-#include <stddef.h>
+#include <cstddef>
+
+#ifndef NDEBUG
+#include <assert.h>
+#endif
+
+template<typename T>
+struct ConstBuffer;
+
+template<>
+struct ConstBuffer<void> {
+  typedef size_t size_type;
+  typedef const void *pointer_type;
+  typedef pointer_type const_pointer_type;
+  typedef pointer_type iterator;
+  typedef pointer_type const_iterator;
+
+  pointer_type data;
+  size_type size;
+
+  ConstBuffer() = default;
+
+  constexpr ConstBuffer(std::nullptr_t):data(nullptr), size(0) {}
+
+  constexpr ConstBuffer(pointer_type _data, size_type _size)
+    :data(_data), size(_size) {}
+
+  constexpr static ConstBuffer Null() {
+    return ConstBuffer(nullptr, 0);
+  }
+
+  constexpr static ConstBuffer<void> FromVoid(ConstBuffer<void> other) {
+    return other;
+  }
+
+  constexpr ConstBuffer<void> ToVoid() const {
+    return *this;
+  }
+
+  constexpr bool IsNull() const {
+    return data == nullptr;
+  }
+
+  constexpr bool IsEmpty() const {
+    return size == 0;
+  }
+};
 
 /**
  * A reference to a memory area that is read-only.
- *
- * @see WritableBuffer
  */
 template<typename T>
 struct ConstBuffer {
@@ -45,18 +89,43 @@ struct ConstBuffer {
   typedef const T *pointer_type;
   typedef pointer_type const_pointer_type;
   typedef pointer_type iterator;
-  typedef const_pointer_type const_iterator;
+  typedef pointer_type const_iterator;
 
   pointer_type data;
   size_type size;
 
   ConstBuffer() = default;
 
+  constexpr ConstBuffer(std::nullptr_t):data(nullptr), size(0) {}
+
   constexpr ConstBuffer(pointer_type _data, size_type _size)
     :data(_data), size(_size) {}
 
   constexpr static ConstBuffer Null() {
-    return { nullptr, 0 };
+    return ConstBuffer(nullptr, 0);
+  }
+
+  /**
+   * Cast a ConstBuffer<void> to a ConstBuffer<T>.  A "void"
+   * buffer records its size in bytes, and when casting to "T",
+   * the assertion below ensures that the size is a multiple of
+   * sizeof(T).
+   */
+#ifdef NDEBUG
+  constexpr
+#endif
+  static ConstBuffer<T> FromVoid(ConstBuffer<void> other) {
+    static_assert(sizeof(T) > 0, "Empty base type");
+#ifndef NDEBUG
+    assert(other.size % sizeof(T) == 0);
+#endif
+    return ConstBuffer<T>(pointer_type(other.data),
+                          other.size / sizeof(T));
+  }
+
+  constexpr ConstBuffer<void> ToVoid() const {
+    static_assert(sizeof(T) > 0, "Empty base type");
+    return ConstBuffer<void>(data, size * sizeof(T));
   }
 
   constexpr bool IsNull() const {
@@ -81,6 +150,17 @@ struct ConstBuffer {
 
   constexpr const_iterator cend() const {
     return data + size;
+  }
+
+#ifdef NDEBUG
+  constexpr
+#endif
+  const T &operator[](size_type i) const {
+#ifndef NDEBUG
+    assert(i < size);
+#endif
+
+    return data[i];
   }
 };
 

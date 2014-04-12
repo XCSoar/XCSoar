@@ -32,7 +32,45 @@
 
 #include "Compiler.h"
 
-#include <stddef.h>
+#include <cstddef>
+
+#ifndef NDEBUG
+#include <assert.h>
+#endif
+
+template<typename T>
+struct WritableBuffer;
+
+template<>
+struct WritableBuffer<void> {
+  typedef size_t size_type;
+  typedef void *pointer_type;
+  typedef const void *const_pointer_type;
+  typedef pointer_type iterator;
+  typedef const_pointer_type const_iterator;
+
+  pointer_type data;
+  size_type size;
+
+  WritableBuffer() = default;
+
+  constexpr WritableBuffer(std::nullptr_t):data(nullptr), size(0) {}
+
+  constexpr WritableBuffer(pointer_type _data, size_type _size)
+    :data(_data), size(_size) {}
+
+  constexpr static WritableBuffer Null() {
+    return { nullptr, 0 };
+  }
+
+  constexpr bool IsNull() const {
+    return data == nullptr;
+  }
+
+  constexpr bool IsEmpty() const {
+    return size == 0;
+  }
+};
 
 /**
  * A reference to a memory area that is writable.
@@ -52,11 +90,36 @@ struct WritableBuffer {
 
   WritableBuffer() = default;
 
+  constexpr WritableBuffer(std::nullptr_t):data(nullptr), size(0) {}
+
   constexpr WritableBuffer(pointer_type _data, size_type _size)
     :data(_data), size(_size) {}
 
   constexpr static WritableBuffer Null() {
     return { nullptr, 0 };
+  }
+
+  /**
+   * Cast a WritableBuffer<void> to a WritableBuffer<T>.  A "void"
+   * buffer records its size in bytes, and when casting to "T",
+   * the assertion below ensures that the size is a multiple of
+   * sizeof(T).
+   */
+#ifdef NDEBUG
+  constexpr
+#endif
+  static WritableBuffer<T> FromVoid(WritableBuffer<void> other) {
+    static_assert(sizeof(T) > 0, "Empty base type");
+#ifndef NDEBUG
+    assert(other.size % sizeof(T) == 0);
+#endif
+    return WritableBuffer<T>(pointer_type(other.data),
+                             other.size / sizeof(T));
+  }
+
+  constexpr WritableBuffer<void> ToVoid() const {
+    static_assert(sizeof(T) > 0, "Empty base type");
+    return WritableBuffer<void>(data, size * sizeof(T));
   }
 
   constexpr bool IsNull() const {
@@ -81,6 +144,17 @@ struct WritableBuffer {
 
   constexpr const_iterator cend() const {
     return data + size;
+  }
+
+#ifdef NDEBUG
+  constexpr
+#endif
+  T &operator[](size_type i) const {
+#ifndef NDEBUG
+    assert(i < size);
+#endif
+
+    return data[i];
   }
 };
 
