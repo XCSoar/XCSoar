@@ -26,5 +26,5 @@
 void
 AirspaceVisitor::Visit(const Airspace &as)
 {
-  Visit(*as.GetAirspace());
+  Visit(as.GetAirspace());
 }

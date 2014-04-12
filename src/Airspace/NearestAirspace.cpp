@@ -60,7 +60,7 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
   if (airspace == NULL)
     return NearestAirspace();
 
-  const AbstractAirspace &as = *airspace->GetAirspace();
+  const AbstractAirspace &as = airspace->GetAirspace();
 
   /* calculate distance to the nearest point */
   const GeoPoint closest = as.ClosestPoint(basic.location,

@@ -108,7 +108,7 @@ FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
     airspaces.VisitWithinRange(location, filter.distance, visitor);
   else
     for (const auto &i : airspaces)
-      visitor.Visit(*i.GetAirspace());
+      visitor.Visit(i.GetAirspace());
 
   if (negative(filter.direction.Native()) && negative(filter.distance))
     SortByName(visitor.result);

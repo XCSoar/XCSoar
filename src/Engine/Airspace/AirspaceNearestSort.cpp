@@ -12,16 +12,13 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
                         m_condition);
 
   for (const Airspace &airspace : vectors) {
-    const AbstractAirspace *as = airspace.GetAirspace();
-    if (as != nullptr) {
-      const AirspaceInterceptSolution ais =
-        solve_intercept(*as, airspaces.GetProjection());
-      const fixed value = metric(ais);
-      if (!negative(value)) {
-        m_q.push(std::make_pair(value,
-                                std::make_pair(ais, as)));
-      }
-    }
+    const AbstractAirspace &as = airspace.GetAirspace();
+    const AirspaceInterceptSolution ais =
+      solve_intercept(as, airspaces.GetProjection());
+    const fixed value = metric(ais);
+    if (!negative(value))
+      m_q.push(std::make_pair(value,
+                              std::make_pair(ais, &as)));
   }
 }
 
