@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
-#include "Util/AllocatedArray.hpp"
 #include "System.hpp"
 
 struct RasterPoint;
 struct FloatPoint;
+template<class T> class AllocatedArray;
 
 /**
  * cutting ears - simple algorithm, no support for holes
