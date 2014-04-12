@@ -39,8 +39,7 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
   typename PT::SquareType area = 0;
 
   for (unsigned a = num_points - 1, b = 0; b < num_points; a = b++)
-    area += points[a].x * (typename PT::SquareType)points[b].y -
-            points[a].y * (typename PT::SquareType)points[b].x;
+    area += CrossProduct<PT, typename PT::SquareType>(points[a], points[b]);
 
   // we actually calculated area * 2
   return area > 0;
@@ -56,14 +55,12 @@ static inline typename PT::SquareType
 PointLeftOfLine(const PT &p, const PT &a, const PT &b)
 {
   // normal vector of the line
-  typename PT::SquareType nx = a.y - b.y;
-  typename PT::SquareType ny = b.x - a.x;
+  const PT normal = Normal(a, b);
   // vector ap
-  typename PT::SquareType apx = p.x - a.x;
-  typename PT::SquareType apy = p.y - a.y;
+  const PT ap = p - a;
 
   // almost distance point from line (normal has to be normalized for that)
-  return nx * apx + ny * apy;
+  return DotProduct<PT, typename PT::SquareType>(normal, ap);
 }
 
 /**
@@ -88,8 +85,10 @@ template <typename PT>
 static inline typename PT::SquareType
 LeftBend(const PT &a, const PT &b, const PT &c)
 {
-  return (b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
-         (b.y - a.y) * (typename PT::SquareType)(c.x - b.x);
+  const PT ab = b - a;
+  const PT bc = c - b;
+
+  return CrossProduct<PT, typename PT::SquareType>(ab, bc);
 }
 
 /**
