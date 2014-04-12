@@ -188,7 +188,7 @@ public:
                          const fixed terrain_alt);
 
   /**
-   * Return the current home waypoint.  May be NULL if none is
+   * Return the current home waypoint.  May be nullptr if none is
    * configured.
    */
   const Waypoint *GetHome() const {
@@ -198,7 +198,7 @@ public:
   /**
    * Find first home waypoint
    *
-   * @return Pointer to waypoint if found (or NULL if not)
+   * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
   const Waypoint *FindHome();
@@ -216,7 +216,7 @@ public:
    *
    * @param id Id of waypoint to find in internal tree
    *
-   * @return Pointer to waypoint if found (or NULL if not)
+   * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
   const Waypoint *LookupId(const unsigned id) const;
@@ -227,7 +227,7 @@ public:
    * @param loc Location of waypoint to find in internal tree
    * @param range Threshold for range
    *
-   * @return Pointer to waypoint if found (or NULL if none found)
+   * @return Pointer to waypoint if found (or nullptr if none found)
    */
   gcc_pure
   const Waypoint *LookupLocation(const GeoPoint &loc,
@@ -238,7 +238,7 @@ public:
    *
    * @param name Name of waypoint to find in internal tree
    *
-   * @return Pointer to waypoint if found (or NULL if not)
+   * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
   const Waypoint *LookupName(const TCHAR *name) const;
