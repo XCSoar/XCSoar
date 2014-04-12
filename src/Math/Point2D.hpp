@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
+#include <type_traits>
+
 template<typename T>
 struct Point2D {
   typedef T scalar_type;
@@ -63,17 +65,23 @@ struct Point2D {
   }
 };
 
-template<typename T, typename RT=T>
+template<typename P, typename RT=typename P::scalar_type>
 static inline RT
-DotProduct(Point2D<T> a, Point2D<T> b)
+DotProduct(P a, P b)
 {
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
   return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
 
-template<typename T, typename RT=T>
+template<typename P, typename RT=typename P::scalar_type>
 static inline RT
-CrossProduct(Point2D<T> a, Point2D<T> b)
+CrossProduct(P a, P b)
 {
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
 
