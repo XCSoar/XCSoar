@@ -63,18 +63,18 @@ struct Point2D {
   }
 };
 
-template<typename T>
-static inline T
+template<typename T, typename RT=T>
+static inline RT
 DotProduct(Point2D<T> a, Point2D<T> b)
 {
-  return a.x * b.x + a.y * b.y;
+  return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
 
-template<typename T>
-static inline T
+template<typename T, typename RT=T>
+static inline RT
 CrossProduct(Point2D<T> a, Point2D<T> b)
 {
-  return a.x * b.y - b.x * a.y;
+  return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
 
 #endif
