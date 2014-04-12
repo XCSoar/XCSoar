@@ -22,7 +22,6 @@
 #ifndef WAYPOINTS_HPP
 #define WAYPOINTS_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/QuadTree.hpp"
@@ -36,7 +35,7 @@ class WaypointVisitor;
  * Container for waypoints using kd-tree representation internally for
  * fast geospatial lookups.
  */
-class Waypoints : private NonCopyable {
+class Waypoints {
   /**
    * Function object used to provide access to coordinate values by
    * QuadTree.
@@ -94,6 +93,8 @@ public:
    *
    */
   Waypoints();
+
+  Waypoints(const Waypoints &) = delete;
 
   const Serial &GetSerial() const {
     return serial;
