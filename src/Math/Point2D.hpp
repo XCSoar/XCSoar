@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_POINT2D_HPP
 
 #include <type_traits>
+#include <cmath>
+#include <cstdlib>
 
 template<typename T>
 struct Point2D {
@@ -93,6 +95,19 @@ Normal(P a, P b)
                 "Must be Point2D");
 
   return P(a.y - b.y, b.x - a.x);
+}
+
+/**
+ * Calculates the "manhattan distance" or "taxicab distance".
+ */
+template<typename P, typename RT=typename P::scalar_type>
+static inline RT
+ManhattanDistance(P a, P b)
+{
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
+  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 
 #endif

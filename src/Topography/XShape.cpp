@@ -209,11 +209,11 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
       const unsigned short *after_first_idx = idx;
       // add points if they are not too close to the previous point
       for (; p < end_p; p++, i++)
-        if (manhattan_distance(points[idx[-1]], *p) >= min_distance)
+        if (ManhattanDistance(points[idx[-1]], *p) >= min_distance)
           *idx++ = i;
       // remove points from behind if they are too close to the end point
       while (idx > after_first_idx &&
-             manhattan_distance(points[idx[-1]], *p) < min_distance)
+             ManhattanDistance(points[idx[-1]], *p) < min_distance)
         idx--;
       // always add last point
       *idx++ = i;

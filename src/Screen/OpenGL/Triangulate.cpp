@@ -152,8 +152,8 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
          a = b, b = c, c = next[c], heat++) {
       bool point_removeable = TriangleEmpty(points[a], points[b], points[c]);
       if (!point_removeable) {
-        typename PT::scalar_type distance = manhattan_distance(points[a],
-                                                               points[b]);
+        typename PT::scalar_type distance = ManhattanDistance(points[a],
+                                                              points[b]);
         if (distance < min_distance) {
           point_removeable = true;
           if (distance > 0) {

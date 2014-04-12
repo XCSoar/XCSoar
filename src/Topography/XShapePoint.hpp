@@ -27,8 +27,6 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-#include <cmath>
-
 typedef float ShapeScalar;
 struct ShapePoint : Point2D<ShapeScalar> {
   /**
@@ -43,11 +41,5 @@ struct ShapePoint : Point2D<ShapeScalar> {
   constexpr ShapePoint(Args&&... args)
     :Point2D<ShapeScalar>(args...) {}
 };
-
-static inline ShapeScalar
-manhattan_distance(ShapePoint a, ShapePoint b)
-{
-  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
-}
 
 #endif
