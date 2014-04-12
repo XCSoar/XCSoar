@@ -27,19 +27,13 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-typedef float ShapeScalar;
-struct ShapePoint : Point2D<ShapeScalar> {
-  /**
-   * Type to be used by vector math, where a range of
-   * max(ShapeScalar)*max(ShapeScalar) is needed.
-   */
-  typedef float product_type;
-
+struct ShapePoint : FloatPoint {
   ShapePoint() = default;
 
   template<typename... Args>
-  constexpr ShapePoint(Args&&... args)
-    :Point2D<ShapeScalar>(args...) {}
+  constexpr ShapePoint(Args&&... args):FloatPoint(args...) {}
 };
+
+typedef ShapePoint::scalar_type ShapeScalar;
 
 #endif

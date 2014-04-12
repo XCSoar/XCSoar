@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Screen/Point.hpp"
-#include "Topography/XShapePoint.hpp"
 
 #include <algorithm>
 #include <math.h>
@@ -274,7 +273,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
 }
 
 unsigned
-PolygonToTriangles(const ShapePoint *points, unsigned num_points,
+PolygonToTriangles(const FloatPoint *points, unsigned num_points,
                    GLushort *triangles, float min_distance)
 {
   return _PolygonToTriangles(points, num_points, triangles, min_distance);

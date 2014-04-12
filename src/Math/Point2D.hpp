@@ -67,6 +67,18 @@ struct Point2D {
   }
 };
 
+struct FloatPoint : Point2D<float> {
+  /**
+   * Type to be used by vector math.
+   */
+  typedef float product_type;
+
+  FloatPoint() = default;
+
+  template<typename... Args>
+  constexpr FloatPoint(Args&&... args):Point2D<float>(args...) {}
+};
+
 template<typename P, typename RT=typename P::scalar_type>
 static inline RT
 DotProduct(P a, P b)
