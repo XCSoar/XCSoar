@@ -24,25 +24,6 @@ Copyright_License {
 #include "Screen/OpenGL/VertexArray.hpp"
 #include "Math/FastTrig.hpp"
 
-GLCircleVertices::GLCircleVertices(GLvalue center_x, GLvalue center_y,
-                                   GLvalue radius)
-{
-  static_assert(4096 % SIZE == 0, "Wrong SIZE"); // implies: assert(SIZE % 2 == 0)
-  RasterPoint *p = v, *p2 = v + (SIZE/2);
-
-  for (unsigned i = 0; i < SIZE/2; ++i) {
-    int offset_x = ISINETABLE[(i * (4096 / SIZE) + 1024) & 0xfff] * (int)radius / 1024.;
-    int offset_y = ISINETABLE[i * (4096 / SIZE)] * (int)radius / 1024.;
-
-    p->x = center_x + offset_x;
-    p->y = center_y + offset_y;
-    ++p;
-    p2->x = center_x - offset_x;
-    p2->y = center_y - offset_y;
-    ++p2;
-  }
-}
-
 GLDonutVertices::GLDonutVertices(GLvalue center_x, GLvalue center_y,
                                  GLvalue radius_inner, GLvalue radius_outer)
 {

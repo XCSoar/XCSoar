@@ -22,62 +22,55 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Shapes.hpp"
-#include "Screen/OpenGL/Buffer.hpp"
-#include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/FallbackBuffer.hpp"
 #include "Math/FastTrig.hpp"
+#include "Math/Point2D.hpp"
 
-static GLshort circle_data[OpenGL::CIRCLE_SIZE * 2];
-static GLshort small_circle_data[OpenGL::SMALL_CIRCLE_SIZE * 2];
+#include <assert.h>
 
 namespace OpenGL {
-  GLArrayBuffer *circle_buffer, *small_circle_buffer;
+  GLFallbackArrayBuffer *circle_buffer, *small_circle_buffer;
+}
+
+static GLFallbackArrayBuffer *
+MakeCircleBuffer(unsigned n)
+{
+  assert(4096 % n == 0);
+
+  auto buffer = new GLFallbackArrayBuffer();
+
+  FloatPoint *const p0 = (FloatPoint *)buffer->BeginWrite(sizeof(*p0) * n);
+  FloatPoint *p = p0, *p2 = p + n / 2;
+
+  for (unsigned i = 0; i < n / 2; ++i, ++p, ++p2) {
+    float x = ISINETABLE[(i * (4096 / n) + 1024) & 0xfff] / 1024.;
+    float y = ISINETABLE[i * (4096 / n)] / 1024.;
+
+    p->x = x;
+    p->y = y;
+
+    p2->x = -x;
+    p2->y = -y;
+  }
+
+  buffer->CommitWrite(sizeof(*p0) * n, p);
+  return buffer;
 }
 
 void
 OpenGL::InitShapes()
 {
-  if (!OpenGL::vertex_buffer_object)
-    return;
-
   DeinitShapes();
 
   assert(4096 % CIRCLE_SIZE == 0);  // implies: assert(SIZE % 2 == 0)
 
-  GLshort *p = circle_data, *p2 = circle_data + CIRCLE_SIZE;
-  for (unsigned i = 0; i < CIRCLE_SIZE / 2; ++i) {
-    GLshort x = ISINETABLE[(i * (4096 / CIRCLE_SIZE) + 1024) & 0xfff];
-    GLshort y = ISINETABLE[i * (4096 / CIRCLE_SIZE)];
-
-    *p++ = x;
-    *p++ = y;
-
-    *p2++ = -x;
-    *p2++ = -y;
-  }
-
-  circle_buffer = new GLArrayBuffer();
-  circle_buffer->Load(GLsizeiptr(sizeof(circle_data)), circle_data);
-
-  p = small_circle_data;
-  p2 = circle_data;
-  for (unsigned i = 0; i < SMALL_CIRCLE_SIZE; ++i) {
-    *p++ = p2[0] >> 2;
-    *p++ = p2[1] >> 2;
-
-    p2 += 2 * CIRCLE_SIZE / SMALL_CIRCLE_SIZE;
-  }
-
-  small_circle_buffer = new GLArrayBuffer();
-  small_circle_buffer->Load(GLsizeiptr(sizeof(small_circle_data)),
-                            small_circle_data);
+  circle_buffer = MakeCircleBuffer(CIRCLE_SIZE);
+  small_circle_buffer = MakeCircleBuffer(SMALL_CIRCLE_SIZE);
 }
 
 void
 OpenGL::DeinitShapes()
 {
-  if (!OpenGL::vertex_buffer_object)
-    return;
-
   delete circle_buffer;
   circle_buffer = nullptr;
 

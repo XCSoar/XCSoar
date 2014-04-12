@@ -39,10 +39,6 @@ struct GLVertexArray {
   }
 };
 
-struct GLCircleVertices : public GLVertexArray<32> {
-  GLCircleVertices(GLvalue center_x, GLvalue center_y, GLvalue radius);
-};
-
 struct GLDonutVertices : public GLVertexArray<66> {
   static constexpr unsigned CIRCLE_SIZE = (SIZE - 2) / 2;
   static constexpr unsigned MAX_ANGLE = CIRCLE_SIZE * 2u;

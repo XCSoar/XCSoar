@@ -31,8 +31,6 @@ Copyright_License {
 #include "Shaders.hpp"
 #endif
 
-#include <cstddef>
-
 struct ScopeVertexPointer {
 #ifdef USE_GLSL
   ScopeVertexPointer() {
@@ -61,13 +59,6 @@ struct ScopeVertexPointer {
     Update(p);
   }
 
-  ScopeVertexPointer(std::nullptr_t p) {
-#ifdef USE_GLSL
-    glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
-#endif
-    Update(p);
-  }
-
   void Update(GLenum type, GLsizei stride, const void *p) {
 #ifdef USE_GLSL
     glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, type,
@@ -89,9 +80,8 @@ struct ScopeVertexPointer {
     Update(GL_EXACT, p);
   }
 
-  void Update(std::nullptr_t p) {
-    /* we initialise VBOs with GLshort, see Shapes.cpp */
-    Update(GL_SHORT, p);
+  void Update(const FloatPoint *p) {
+    Update(GL_FLOAT, p);
   }
 };
 
