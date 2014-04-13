@@ -22,13 +22,17 @@ Copyright_License {
 */
 
 #include "NearestAirspace.hpp"
+#include "ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/ActivePredicate.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
 #include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-
+#include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 
 gcc_pure
 NearestAirspace

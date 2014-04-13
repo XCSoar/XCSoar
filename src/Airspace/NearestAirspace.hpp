@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef NEAREST_AIRSPACE_HPP
 #define NEAREST_AIRSPACE_HPP
 
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Geo/GeoPoint.hpp"
-#include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
+#include "Math/fixed.hpp"
+#include "Compiler.h"
+
+struct MoreData;
+struct DerivedInfo;
+class Airspaces;
+class AbstractAirspace;
+class ProtectedAirspaceWarningManager;
 
 class NearestAirspace {
 
