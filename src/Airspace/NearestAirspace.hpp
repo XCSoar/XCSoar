@@ -42,12 +42,12 @@ public:
    */
   fixed distance;
 
-  NearestAirspace():airspace(NULL) {}
+  NearestAirspace():airspace(nullptr) {}
   NearestAirspace(const AbstractAirspace &_airspace, fixed _distance)
     :airspace(&_airspace), distance(_distance) {}
 
   bool IsDefined() const {
-    return airspace != NULL;
+    return airspace != nullptr;
   }
 
   gcc_pure
