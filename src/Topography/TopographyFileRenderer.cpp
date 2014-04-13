@@ -40,13 +40,13 @@ Copyright_License {
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Screen/OpenGL/FallbackBuffer.hpp"
 #include "Screen/OpenGL/Dynamic.hpp"
+#include "Screen/OpenGL/Geo.hpp"
 #endif
 
 #ifdef USE_GLSL
 #include "Screen/OpenGL/Program.hpp"
 #include "Screen/OpenGL/Shaders.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #endif
 
@@ -247,51 +247,12 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glGetFloatv(GL_MODELVIEW_MATRIX, opengl_matrix);
 #endif
 
-  fixed angle = projection.GetScreenAngle().Degrees();
-  fixed scale = projection.GetScale();
-  const RasterPoint &screen_origin = projection.GetScreenOrigin();
-  const GeoPoint &screen_location = projection.GetGeoLocation();
-  const GeoPoint projection_delta = file.GetCenter() - screen_location;
-
-  const fixed scale_r = scale * REARTH;
-  const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
-  const fixed scale_y = -scale_r;
-
 #ifdef USE_GLSL
-  const glm::vec3 scale_vec(GLfloat(scale_x), GLfloat(scale_y), 1);
-
-  glm::mat4 matrix = glm::scale(glm::rotate(glm::translate(glm::mat4(),
-                                                           glm::vec3(screen_origin.x,
-                                                                     screen_origin.y,
-                                                                     0)),
-                                            GLfloat(angle),
-                                            glm::vec3(0, 0, -1)),
-                                scale_vec);
-  matrix = glm::translate(matrix,
-                          glm::vec3(GLfloat(projection_delta.longitude.Native()),
-                                    GLfloat(projection_delta.latitude.Native()),
-                                    0.));
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                     glm::value_ptr(matrix));
+                     glm::value_ptr(ToGLM(projection, file.GetCenter())));
 #else
   glPushMatrix();
-#ifdef HAVE_GLES
-#ifdef FIXED_MATH
-  GLfixed fixed_angle = angle.as_glfixed();
-#else
-  GLfixed fixed_angle = angle * (1<<16);
-#endif
-  glTranslatex((int)screen_origin.x << 16, (int)screen_origin.y << 16, 0);
-  glRotatex(fixed_angle, 0, 0, -(1<<16));
-#else
-  glTranslatef(screen_origin.x, screen_origin.y, 0.);
-  glRotatef((GLfloat)angle, 0., 0., -1.);
-#endif
-
-  glScalef(GLfloat(scale_x), GLfloat(scale_y), 1.);
-  glTranslatef(GLfloat(projection_delta.longitude.Native()),
-               GLfloat(projection_delta.latitude.Native()),
-               0.);
+  ApplyProjection(projection, file.GetCenter());
 #endif /* !USE_GLSL */
 #else // !ENABLE_OPENGL
   const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
