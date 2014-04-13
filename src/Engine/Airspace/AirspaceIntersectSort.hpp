@@ -25,9 +25,11 @@
 
 #include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "AbstractAirspace.hpp"
 
 #include <queue>
+
+class AbstractAirspace;
+class AirspaceIntersectionVector;
 
 /**
  * Utility class to sort airspaces in ascending order of vector parameter (0,1)
