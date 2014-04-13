@@ -25,6 +25,7 @@
 
 #include "RoutePolars.hpp"
 #include "Route.hpp"
+#include "RouteLink.hpp"
 #include "AStar.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Geo/SearchPointVector.hpp"

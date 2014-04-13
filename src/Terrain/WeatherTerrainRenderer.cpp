@@ -123,7 +123,7 @@ WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
   :TerrainRenderer(_terrain),
   weather(_weather)
 {
-  assert(weather != NULL);
+  assert(weather != nullptr);
 }
 
 void
@@ -190,14 +190,14 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   }
 
   const RasterMap *map = weather->GetMap();
-  if (map == NULL) {
+  if (map == nullptr) {
     TerrainRenderer::Generate(projection, sunazimuth);
     return;
   }
 
   if (color_ramp != last_color_ramp) {
-    raster_renderer.ColorTable(color_ramp, do_water,
-                               height_scale, interp_levels);
+    raster_renderer.PrepareColorTable(color_ramp, do_water,
+                                      height_scale, interp_levels);
     last_color_ramp = color_ramp;
   }
 

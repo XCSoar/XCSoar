@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Screen/Point.hpp"
-#include "Topography/XShapePoint.hpp"
+#include "Util/AllocatedArray.hpp"
 
 #include <algorithm>
 #include <math.h>
@@ -36,11 +36,10 @@ template <typename PT>
 static inline bool
 PolygonRotatesLeft(const PT *points, unsigned num_points)
 {
-  typename PT::SquareType area = 0;
+  typename PT::product_type area = 0;
 
   for (unsigned a = num_points - 1, b = 0; b < num_points; a = b++)
-    area += points[a].x * (typename PT::SquareType)points[b].y -
-            points[a].y * (typename PT::SquareType)points[b].x;
+    area += CrossProduct<PT, typename PT::product_type>(points[a], points[b]);
 
   // we actually calculated area * 2
   return area > 0;
@@ -52,18 +51,16 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
  * @return: positive if p is left of a,b; zero if p is on a,b; else negative
  */
 template <typename PT>
-static inline typename PT::SquareType
+static inline typename PT::product_type
 PointLeftOfLine(const PT &p, const PT &a, const PT &b)
 {
   // normal vector of the line
-  typename PT::SquareType nx = a.y - b.y;
-  typename PT::SquareType ny = b.x - a.x;
+  const PT normal = Normal(a, b);
   // vector ap
-  typename PT::SquareType apx = p.x - a.x;
-  typename PT::SquareType apy = p.y - a.y;
+  const PT ap = p - a;
 
   // almost distance point from line (normal has to be normalized for that)
-  return nx * apx + ny * apy;
+  return DotProduct<PT, typename PT::product_type>(normal, ap);
 }
 
 /**
@@ -85,11 +82,13 @@ InsideTriangle(const PT &p, const PT &a, const PT &b, const PT &c)
  * @return: positive if a,b,c turns left, zero for a spike, negative otherwise
  */
 template <typename PT>
-static inline typename PT::SquareType
+static inline typename PT::product_type
 LeftBend(const PT &a, const PT &b, const PT &c)
 {
-  return (b.x - a.x) * (typename PT::SquareType)(c.y - b.y) -
-         (b.y - a.y) * (typename PT::SquareType)(c.x - b.x);
+  const PT ab = b - a;
+  const PT bc = c - b;
+
+  return CrossProduct<PT, typename PT::product_type>(ab, bc);
 }
 
 /**
@@ -109,8 +108,8 @@ static inline void
 Normalize(RasterPoint *v, float length)
 {
   // TODO: optimize!
-  double squared_length = v->x * (RasterPoint::SquareType)v->x +
-                          v->y * (RasterPoint::SquareType)v->y;
+  double squared_length = v->x * (RasterPoint::product_type)v->x +
+                          v->y * (RasterPoint::product_type)v->y;
   float scale = length / sqrt(squared_length);
   v->x = lround(v->x * scale);
   v->y = lround(v->y * scale);
@@ -152,8 +151,8 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
          a = b, b = c, c = next[c], heat++) {
       bool point_removeable = TriangleEmpty(points[a], points[b], points[c]);
       if (!point_removeable) {
-        typename PT::scalar_type distance = manhattan_distance(points[a],
-                                                               points[b]);
+        typename PT::scalar_type distance = ManhattanDistance(points[a],
+                                                              points[b]);
         if (distance < min_distance) {
           point_removeable = true;
           if (distance > 0) {
@@ -188,7 +187,7 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
   auto t = triangles;
   for (unsigned a = start, b = next[a], c = next[b], heat = 0;
        num_points > 2; a = b, b = c, c = next[c]) {
-    typename PT::SquareType bendiness =
+    typename PT::product_type bendiness =
       LeftBend(points[a], points[b], points[c]);
 
     // left bend, spike or line with a redundant point in the middle
@@ -198,12 +197,12 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
       // left bend
       for (unsigned prev_p = c, p = next[c]; p != a;
            prev_p = p, p = next[p]) {
-        typename PT::SquareType ab = PointLeftOfLine(points[p], points[a],
-                                                     points[b]);
-        typename PT::SquareType bc = PointLeftOfLine(points[p], points[b],
-                                                     points[c]);
-        typename PT::SquareType ca = PointLeftOfLine(points[p], points[c],
-                                                     points[a]);
+        typename PT::product_type ab = PointLeftOfLine(points[p], points[a],
+                                                       points[b]);
+        typename PT::product_type bc = PointLeftOfLine(points[p], points[b],
+                                                       points[c]);
+        typename PT::product_type ca = PointLeftOfLine(points[p], points[c],
+                                                       points[a]);
         if (ab > 0 && bc > 0 && ca > 0) {
           // p is inside a,b,c
           ear_cuttable = false;
@@ -275,7 +274,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
 }
 
 unsigned
-PolygonToTriangles(const ShapePoint *points, unsigned num_points,
+PolygonToTriangles(const FloatPoint *points, unsigned num_points,
                    GLushort *triangles, float min_distance)
 {
   return _PolygonToTriangles(points, num_points, triangles, min_distance);

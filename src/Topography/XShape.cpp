@@ -148,14 +148,18 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   for (unsigned l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
     num_points = lines[l];
-    for (unsigned j = 0; j < num_points; ++j, ++src)
+    for (unsigned j = 0; j < num_points; ++j, ++src) {
 #ifdef ENABLE_OPENGL
-      *p++ = ShapePoint(ShapeScalar((Angle::Degrees(src->x) - file_center.longitude).Native()),
-                        ShapeScalar((Angle::Degrees(src->y) - file_center.latitude).Native()));
+      const GeoPoint vertex(Angle::Degrees(src->x), Angle::Degrees(src->y));
+      const GeoPoint relative = vertex - file_center;
+
+      *p++ = ShapePoint(ShapeScalar(relative.longitude.Native()),
+                        ShapeScalar(relative.latitude.Native()));
 #else
       *p++ = GeoPoint(Angle::Degrees(fixed(src->x)),
                       Angle::Degrees(fixed(src->y)));
 #endif
+    }
   }
 
   if (label_field >= 0) {
@@ -209,11 +213,11 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
       const unsigned short *after_first_idx = idx;
       // add points if they are not too close to the previous point
       for (; p < end_p; p++, i++)
-        if (manhattan_distance(points[idx[-1]], *p) >= min_distance)
+        if (ManhattanDistance(points[idx[-1]], *p) >= min_distance)
           *idx++ = i;
       // remove points from behind if they are too close to the end point
       while (idx > after_first_idx &&
-             manhattan_distance(points[idx[-1]], *p) < min_distance)
+             ManhattanDistance(points[idx[-1]], *p) < min_distance)
         idx--;
       // always add last point
       *idx++ = i;

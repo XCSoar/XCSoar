@@ -22,7 +22,6 @@
 #ifndef AIRSPACE_WARNING_MANAGER_HPP
 #define AIRSPACE_WARNING_MANAGER_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningConfig.hpp"
 #include "Util/AircraftStateFilter.hpp"
@@ -47,9 +46,7 @@ class AirspaceAircraftPerformance;
  * - Task (longer range predicted warning based on current leg of task)
  *
  */
-class AirspaceWarningManager: 
-  public NonCopyable
-{
+class AirspaceWarningManager {
   AirspaceWarningConfig config;
 
   const Airspaces &airspaces;
@@ -80,6 +77,8 @@ public:
    * @return Initialised object
    */
   AirspaceWarningManager(const Airspaces &_airspaces);
+
+  AirspaceWarningManager(const AirspaceWarningManager &) = delete;
 
   gcc_pure
   const TaskProjection &GetProjection() const;

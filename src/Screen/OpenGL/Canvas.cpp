@@ -28,7 +28,7 @@ Copyright_License {
 #include "Scope.hpp"
 #include "VertexArray.hpp"
 #include "Shapes.hpp"
-#include "Buffer.hpp"
+#include "FallbackBuffer.hpp"
 #include "Features.hpp"
 #include "VertexPointer.hpp"
 #include "Screen/Custom/Cache.hpp"
@@ -366,16 +366,22 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     pen.Bind();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
     pen.Unbind();
-  } else if (OpenGL::vertex_buffer_object && radius < 16) {
-    /* draw a "small" circle with VBO */
+  } else {
+    GLFallbackArrayBuffer &buffer = radius < 16
+      ? *OpenGL::small_circle_buffer
+      : *OpenGL::circle_buffer;
+    const unsigned n = radius < 16
+      ? OpenGL::SMALL_CIRCLE_SIZE
+      : OpenGL::CIRCLE_SIZE;
 
-    OpenGL::small_circle_buffer->Bind();
-    const ScopeVertexPointer vp(nullptr);
+    const FloatPoint *const points = (const FloatPoint *)buffer.BeginRead();
+    const ScopeVertexPointer vp(points);
 
 #ifdef USE_GLSL
     glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(),
                                                   glm::vec3(x, y, 0)),
-                                   glm::vec3(radius / 256.));
+                                   glm::vec3(GLfloat(radius), GLfloat(radius),
+                                             1.));
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(matrix2));
 #else
@@ -383,21 +389,21 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 
 #ifdef HAVE_GLES
     glTranslatex((GLfixed)x << 16, (GLfixed)y << 16, 0);
-    glScalex((GLfixed)radius << 8, (GLfixed)radius << 8, (GLfixed)1 << 16);
+    glScalex((GLfixed)radius << 16, (GLfixed)radius << 16, (GLfixed)1 << 16);
 #else
     glTranslatef(x, y, 0.);
-    glScalef(radius / 256., radius / 256., 1.);
+    glScalef(radius, radius, 1.);
 #endif
 #endif
 
     if (!brush.IsHollow()) {
       brush.Set();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::SMALL_CIRCLE_SIZE);
+      glDrawArrays(GL_TRIANGLE_FAN, 0, n);
     }
 
     if (IsPenOverBrush()) {
       pen.Bind();
-      glDrawArrays(GL_LINE_LOOP, 0, OpenGL::SMALL_CIRCLE_SIZE);
+      glDrawArrays(GL_LINE_LOOP, 0, n);
       pen.Unbind();
     }
 
@@ -408,71 +414,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     glPopMatrix();
 #endif
 
-    OpenGL::small_circle_buffer->Unbind();
-#ifdef USE_GLSL
-  } else {
-#else
-  } else if (OpenGL::vertex_buffer_object) {
-#endif
-    /* draw a "big" circle with VBO */
-
-    OpenGL::circle_buffer->Bind();
-    const ScopeVertexPointer vp(nullptr);
-
-#ifdef USE_GLSL
-    glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(),
-                                                  glm::vec3(x, y, 0)),
-                                   glm::vec3(radius / 1024.));
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(matrix2));
-#else
-    glPushMatrix();
-
-#ifdef HAVE_GLES
-    glTranslatex((GLfixed)x << 16, (GLfixed)y << 16, 0);
-    glScalex((GLfixed)radius << 6, (GLfixed)radius << 6, (GLfixed)1 << 16);
-#else
-    glTranslatef(x, y, 0.);
-    glScalef(radius / 1024., radius / 1024., 1.);
-#endif
-#endif
-
-    if (!brush.IsHollow()) {
-      brush.Set();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::CIRCLE_SIZE);
-    }
-
-    if (IsPenOverBrush()) {
-      pen.Bind();
-      glDrawArrays(GL_LINE_LOOP, 0, OpenGL::CIRCLE_SIZE);
-      pen.Unbind();
-    }
-
-#ifdef USE_GLSL
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(glm::mat4()));
-#else
-    glPopMatrix();
-#endif
-
-    OpenGL::circle_buffer->Unbind();
-#ifndef USE_GLSL
-  } else {
-    ScopeVertexPointer vp;
-    GLCircleVertices vertices(x, y, radius);
-    vertices.Bind(vp);
-
-    if (!brush.IsHollow()) {
-      brush.Set();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
-    }
-
-    if (IsPenOverBrush()) {
-      pen.Bind();
-      glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
-      pen.Unbind();
-    }
-#endif
+    buffer.EndRead();
   }
 }
 

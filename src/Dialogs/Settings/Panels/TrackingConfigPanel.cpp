@@ -130,6 +130,30 @@ TrackingConfigPanel::OnModified(DataField &df)
 #endif
 }
 
+#ifdef HAVE_SKYLINES_TRACKING
+
+static constexpr StaticEnumChoice tracking_intervals[] = {
+  { 1, _T("1 sec") },
+  { 2, _T("2 sec") },
+  { 3, _T("3 sec") },
+  { 5, _T("5 sec") },
+  { 10, _T("10 sec") },
+  { 15, _T("15 sec") },
+  { 20, _T("20 sec") },
+  { 30, _T("30 sec") },
+  { 45, _T("45 sec") },
+  { 60, _T("1 min") },
+  { 120, _T("2 min") },
+  { 180, _T("3 min") },
+  { 300, _T("5 min") },
+  { 600, _T("10 min") },
+  { 900, _T("15 min") },
+  { 1200, _T("20 min") },
+  { 0 },
+};
+
+#endif
+
 #ifdef HAVE_LIVETRACK24
 
 static constexpr StaticEnumChoice server_list[] = {
@@ -161,7 +185,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 #ifdef HAVE_SKYLINES_TRACKING
   AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
-  AddTime(_("Tracking Interval"), NULL, 5, 1200, 5,
+  AddEnum(_("Tracking Interval"), NULL, tracking_intervals,
           settings.skylines.interval);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER

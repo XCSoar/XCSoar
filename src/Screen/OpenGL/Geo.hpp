@@ -1,7 +1,7 @@
 /*
 Copyright_License {
 
-  XCSoar Glide Compute5r - http://www.xcsoar.org/
+  XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2014 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
@@ -21,19 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_SHAPES_HPP
-#define XCSOAR_SCREEN_OPENGL_SHAPES_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_GEO_HPP
+#define XCSOAR_SCREEN_OPENGL_GEO_HPP
 
-class GLFallbackArrayBuffer;
+#include "Compiler.h"
 
-namespace OpenGL {
-  static constexpr unsigned CIRCLE_SIZE = 32;
-  static constexpr unsigned SMALL_CIRCLE_SIZE = 8;
+struct GeoPoint;
+class WindowProjection;
 
-  extern GLFallbackArrayBuffer *circle_buffer, *small_circle_buffer;
+#ifdef USE_GLSL
 
-  void InitShapes();
-  void DeinitShapes();
-};
+#include <glm/glm.hpp>
+
+gcc_pure
+glm::mat4
+ToGLM(const WindowProjection &projection, const GeoPoint &reference);
+
+#else
+
+void
+ApplyProjection(const WindowProjection &projection, const GeoPoint &reference);
+
+#endif
 
 #endif

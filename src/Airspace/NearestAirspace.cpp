@@ -22,13 +22,17 @@ Copyright_License {
 */
 
 #include "NearestAirspace.hpp"
+#include "ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/ActivePredicate.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
 #include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-
+#include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 
 gcc_pure
 NearestAirspace
@@ -57,10 +61,10 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
   } else //only filter outside and active
     airspace = airspace_database.FindNearest(basic.location, outside_and_active_predicate);
 
-  if (airspace == NULL)
+  if (airspace == nullptr)
     return NearestAirspace();
 
-  const AbstractAirspace &as = *airspace->GetAirspace();
+  const AbstractAirspace &as = airspace->GetAirspace();
 
   /* calculate distance to the nearest point */
   const GeoPoint closest = as.ClosestPoint(basic.location,
@@ -82,7 +86,7 @@ public:
   VerticalAirspaceVisitor(const MoreData &basic,
                           const DerivedInfo &calculated,
                           const ProtectedAirspaceWarningManager &airspace_warnings)
-    :nearest(NULL),
+    :nearest(nullptr),
      nearest_delta(100000),
      active_predicate(&airspace_warnings)
   {
@@ -143,7 +147,7 @@ NearestAirspace::FindVertical(const MoreData &basic,
   /* find the nearest airspace */
   VerticalAirspaceVisitor visitor(basic, calculated, airspace_warnings);
   airspace_database.VisitInside(basic.location, visitor);
-  if (visitor.GetNearest() == NULL)
+  if (visitor.GetNearest() == nullptr)
     return NearestAirspace();
 
   return NearestAirspace(*visitor.GetNearest(), visitor.GetNearestDelta());

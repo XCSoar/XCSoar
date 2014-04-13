@@ -27,25 +27,13 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-#include <cmath>
-
-typedef float ShapeScalar;
-struct ShapePoint : Point2D<ShapeScalar> {
-  /**
-   * Type to be used by vector math, where a range of
-   * max(ShapeScalar)*max(ShapeScalar) is needed.
-   */
-  typedef float SquareType;
-
+struct ShapePoint : FloatPoint {
   ShapePoint() = default;
-  constexpr ShapePoint(ShapeScalar _x, ShapeScalar _y)
-    :Point2D<ShapeScalar>(_x, _y) {}
+
+  template<typename... Args>
+  constexpr ShapePoint(Args&&... args):FloatPoint(args...) {}
 };
 
-static inline ShapeScalar
-manhattan_distance(ShapePoint a, ShapePoint b)
-{
-  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
-}
+typedef ShapePoint::scalar_type ShapeScalar;
 
 #endif

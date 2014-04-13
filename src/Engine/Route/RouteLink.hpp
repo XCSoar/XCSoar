@@ -19,13 +19,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ROUTELINK_HPP
 #define ROUTELINK_HPP
 
-#include "Config.hpp"
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
-#include "Rough/RoughAltitude.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
 
 class TaskProjection;

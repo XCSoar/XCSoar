@@ -148,8 +148,8 @@ public:
    *
    * @return Airspace letter
    */
-  AbstractAirspace *GetAirspace() const {
-    return airspace;
+  AbstractAirspace &GetAirspace() const {
+    return *airspace;
   };
 
   /**
@@ -187,7 +187,7 @@ public:
    * Equality operator, matches if contained airspace is the same
    */
   bool operator==(Airspace const &a) const {
-    return (GetAirspace() == a.GetAirspace());
+    return &GetAirspace() == &a.GetAirspace();
   }
 
 public:

@@ -21,6 +21,7 @@
  */
 
 #include "FlatTriangleFanTree.hpp"
+#include "RouteLink.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
 #include "Util/GlobalSliceAllocator.hpp"

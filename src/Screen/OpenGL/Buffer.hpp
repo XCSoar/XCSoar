@@ -55,13 +55,6 @@ public:
 #endif
   }
 
-  explicit GLBuffer(GLuint _id)
-    :id(_id) {
-#ifndef NDEBUG
-    ++num_buffers;
-#endif
-  }
-
   GLBuffer(const GLBuffer &) = delete;
 
   ~GLBuffer() {

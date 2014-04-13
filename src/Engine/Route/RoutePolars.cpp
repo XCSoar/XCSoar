@@ -21,6 +21,7 @@
  */
 
 #include "RoutePolars.hpp"
+#include "RouteLink.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Terrain/RasterMap.hpp"

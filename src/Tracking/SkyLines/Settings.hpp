@@ -49,7 +49,7 @@ namespace SkyLinesTracking {
     void SetDefaults() {
       enabled = false;
       traffic_enabled = false;
-      interval = 20;
+      interval = 5;
       key = 0;
     }
   };

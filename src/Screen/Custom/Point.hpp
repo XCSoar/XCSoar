@@ -33,7 +33,7 @@ struct RasterPoint : Point2D<PixelScalar> {
    * Type to be used by vector math, where a range of
    * max(GLvalue)*max(GLvalue) is needed.
    */
-  typedef int SquareType;
+  typedef int product_type;
 
   RasterPoint() = default;
 

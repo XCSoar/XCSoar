@@ -26,7 +26,6 @@
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
 #include "Predicate/AirspacePredicate.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Compiler.h"
@@ -62,7 +61,7 @@ class AirspaceIntersectionVisitor;
  *     O(n)
  */
 
-class Airspaces : public AirspacesInterface, private NonCopyable {
+class Airspaces : public AirspacesInterface {
   AtmosphericPressure qnh;
   AirspaceActivity activity_mask;
 
@@ -85,6 +84,8 @@ public:
    */
   Airspaces(bool _owns_children=true)
     :qnh(AtmosphericPressure::Zero()), owns_children(_owns_children) {}
+
+  Airspaces(const Airspaces &) = delete;
 
   /**
    * Destructor.

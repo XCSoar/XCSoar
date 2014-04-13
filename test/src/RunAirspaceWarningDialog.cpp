@@ -85,7 +85,7 @@ Main()
 
   AirspaceInterceptSolution ais;
   for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)
-    airspace_warning.GetWarning(*it->GetAirspace())
+    airspace_warning.GetWarning(it->GetAirspace())
       .UpdateSolution((AirspaceWarning::State)i, ais);
 
   SingleWindow main_window;

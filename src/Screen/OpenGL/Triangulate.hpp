@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
-#include "Util/AllocatedArray.hpp"
 #include "System.hpp"
 
 struct RasterPoint;
-struct ShapePoint;
+struct FloatPoint;
+template<class T> class AllocatedArray;
 
 /**
  * cutting ears - simple algorithm, no support for holes
@@ -48,7 +48,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
                    AllocatedArray<GLushort> &triangles,
                    unsigned min_distance=1);
 unsigned
-PolygonToTriangles(const ShapePoint *points, unsigned num_points,
+PolygonToTriangles(const FloatPoint *points, unsigned num_points,
                    GLushort *triangles, float min_distance=1);
 
 /**

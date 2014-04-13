@@ -35,8 +35,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdint.h>
 
-//#define FAST_RSQRT
-
+/**
+ * Interpolate between x and y with i/128, i.e. i/(1 << 7).
+ *
+ * i must be below or equal to 128.
+ */
 constexpr
 static inline unsigned
 MIX(unsigned x, unsigned y, unsigned i)
@@ -44,6 +47,14 @@ MIX(unsigned x, unsigned y, unsigned i)
   return (x * i + y * ((1 << 7) - i)) >> 7;
 }
 
+/**
+ * Shade the given color according to the illumination value.
+ *
+ * illum = 64: Contour, mixed with 50% brown
+ * illum < 0:  Shadow, mixed with up to 50% dark blue
+ * illum > 0:  Highlight, mixed with up to 25% yellow
+ * illum = 0:  No shading
+ */
 gcc_const
 inline BGRColor
 TerrainShading(const int illum, RGB8Color color)
@@ -135,28 +146,32 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
   unsigned x = projection.GetScreenWidth() / 2;
   unsigned y = projection.GetScreenHeight() / 2;
   // GeoPoint corresponding to the MapWindow center
-  GeoPoint Gmid = projection.ScreenToGeo(x, y);
+  GeoPoint center = projection.ScreenToGeo(x, y);
   // GeoPoint "next to" Gmid (depends on terrain resolution)
-  GeoPoint Gneighbor = projection.ScreenToGeo(x + quantisation_pixels,
-                                              y + quantisation_pixels);
+  GeoPoint neighbor = projection.ScreenToGeo(x + quantisation_pixels,
+                                             y + quantisation_pixels);
 
   // Geographical edge length of pixel in the MapWindow center in meters
-  pixel_size = fixed_sqrt_half * Gmid.Distance(Gneighbor);
+  pixel_size = fixed_sqrt_half * center.Distance(neighbor);
 
   // set resolution
 
   if (pixel_size < fixed(3000)) {
+    // Data point size of the (terrain) map in meters multiplied by 256
+    fixed map_pixel_size = map.PixelDistance(center, 1);
+
+    // How many screen pixels does one data point stretch?
+    fixed q = map_pixel_size / pixel_size;
+
     /* round down to reduce slope shading artefacts (caused by
        RasterBuffer interpolation) */
-
-    fixed map_pixel_size = map.PixelDistance(Gmid, 1);
-    fixed q = map_pixel_size / pixel_size;
     quantisation_effective = std::max(1, (int)q);
 
+    /* disable slope shading when zoomed in very near (not enough
+       terrain resolution to make a useful slope calculation) */
     if (quantisation_effective > 25)
-      /* disable slope shading when zoomed in very near (not enough
-         terrain resolution to make a useful slope calculation) */
       quantisation_effective = 0;
+
   } else
     /* disable slope shading when zoomed out very far (too tiny) */
     quantisation_effective = 0;
@@ -185,8 +200,7 @@ RasterRenderer::GenerateImage(bool do_shading,
       height_matrix.GetWidth() > image->GetWidth() ||
       height_matrix.GetHeight() > image->GetHeight()) {
     delete image;
-    image = new RawBitmap(height_matrix.GetWidth(),
-                          height_matrix.GetHeight());
+    image = new RawBitmap(height_matrix.GetWidth(), height_matrix.GetHeight());
 
     delete[] contour_column_base;
     contour_column_base = new unsigned char[height_matrix.GetWidth()];
@@ -222,8 +236,7 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    unsigned contour_row_base = ContourInterval(*src,
-                                                contour_height_scale);
+    unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
     for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
@@ -239,7 +252,7 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
         if (gcc_unlikely((contour_interval != contour_row_base)
                          || (contour_interval != *contour_this_column_base))) {
 
-          *p++ = oColorBuf[h-64*256];
+          *p++ = oColorBuf[h - 64 * 256];
           *contour_this_column_base = contour_row_base = contour_interval;
         } else {
           *p++ = oColorBuf[h];
@@ -298,15 +311,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
-#ifdef FAST_RSQRT
-  const short szindex = sz*contrast/128;
-  const short sval_min = szindex-63;
-  const short sval_max = szindex+63;
-  const BGRColor *szColorBuf = color_table + (64- szindex) * 256;
-  const int sx_c = sx*contrast>>7;
-  const int sy_c = sy*contrast>>7;
-  const int sz_c = sz*contrast>>7;
-#endif
 
   BGRColor *dest = image->GetTopRow();
 
@@ -325,8 +329,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    unsigned contour_row_base = ContourInterval(*src,
-                                                contour_height_scale);
+    unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
     for (unsigned x = 0; x < height_matrix.GetWidth(); ++x, ++src) {
@@ -393,7 +396,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const int dd0 = p22 * int(p31);
         const int dd1 = int(p20) * p32;
         const unsigned dd2 = p20 * p31 * height_slope_factor;
-#ifndef FAST_RSQRT
         const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
         const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
 #ifdef FIXED_MATH
@@ -409,16 +411,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const int sval = num / int(mag|1);
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[h + 256 * Clamp(sindex, -63, 63)];
-#else
-        const int num = (dd2 * sz_c + dd0 * sx_c + dd1 * sy_c);
-        const int sval = i_normalise_mag3(num, dd0, dd1, dd2);
-        if (gcc_unlikely(sval<=sval_min))
-          *p++ = color_table[h + 256];
-        else if (gcc_unlikely(sval >= sval_max))
-          *p++ = color_table[h + 127*256];
-        else
-          *p++ = szColorBuf[h + (sval*256)];
-#endif
       } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
@@ -450,8 +442,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 }
 
 void
-RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
-                           unsigned height_scale, int interp_levels)
+RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
+                                  unsigned height_scale, int interp_levels)
 {
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {

@@ -22,7 +22,6 @@
 #ifndef WAYPOINTS_HPP
 #define WAYPOINTS_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/QuadTree.hpp"
@@ -33,11 +32,10 @@
 class WaypointVisitor;
 
 /**
- * Container for waypoints using kd-tree representation internally for fast 
- * geospatial lookups.
+ * Container for waypoints using kd-tree representation internally for
+ * fast geospatial lookups.
  */
-class Waypoints: private NonCopyable 
-{
+class Waypoints {
   /**
    * Function object used to provide access to coordinate values by
    * QuadTree.
@@ -60,7 +58,7 @@ class Waypoints: private NonCopyable
   typedef QuadTree<Waypoint, WaypointAccessor,
                    SliceAllocator<Waypoint, 512u> > WaypointTree;
 
-  class WaypointNameTree : public RadixTree<const Waypoint*> {
+  class WaypointNameTree : public RadixTree<const Waypoint *> {
   public:
     const Waypoint *Get(const TCHAR *name) const;
     void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
@@ -95,6 +93,8 @@ public:
    *
    */
   Waypoints();
+
+  Waypoints(const Waypoints &) = delete;
 
   const Serial &GetSerial() const {
     return serial;
@@ -189,7 +189,7 @@ public:
                          const fixed terrain_alt);
 
   /**
-   * Return the current home waypoint.  May be NULL if none is
+   * Return the current home waypoint.  May be nullptr if none is
    * configured.
    */
   const Waypoint *GetHome() const {
@@ -199,7 +199,7 @@ public:
   /**
    * Find first home waypoint
    *
-   * @return Pointer to waypoint if found (or NULL if not)
+   * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
   const Waypoint *FindHome();
@@ -217,10 +217,10 @@ public:
    *
    * @param id Id of waypoint to find in internal tree
    *
-   * @return Pointer to waypoint if found (or NULL if not)
+   * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
-  const Waypoint* LookupId(const unsigned id) const;
+  const Waypoint *LookupId(const unsigned id) const;
 
   /**
    * Look up closest waypoint by location within range
@@ -228,10 +228,10 @@ public:
    * @param loc Location of waypoint to find in internal tree
    * @param range Threshold for range
    *
-   * @return Pointer to waypoint if found (or NULL if none found)
+   * @return Pointer to waypoint if found (or nullptr if none found)
    */
   gcc_pure
-  const Waypoint* LookupLocation(const GeoPoint &loc,
+  const Waypoint *LookupLocation(const GeoPoint &loc,
                                  const fixed range = fixed(0)) const;
 
   /**
@@ -239,24 +239,24 @@ public:
    *
    * @param name Name of waypoint to find in internal tree
    *
-   * @return Pointer to waypoint if found (or NULL if not)
+   * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
-  const Waypoint* LookupName(const TCHAR *name) const;
+  const Waypoint *LookupName(const TCHAR *name) const;
 
   gcc_pure
-  const Waypoint* LookupName(const tstring &name) const {
+  const Waypoint *LookupName(const tstring &name) const {
     return LookupName(name.c_str());
   }
 
- /** 
-  * Check if a waypoint with same name and approximate location
-  * is already in the database.  If not, is appended to the database.
-  * 
-  * @param waypoint Waypoint to check against (replaced)
-  * 
-  * @return reference to waypoint in tree (either existing or appended)
-  */
+  /**
+   * Check if a waypoint with same name and approximate location
+   * is already in the database.  If not, is appended to the database.
+   *
+   * @param waypoint Waypoint to check against (replaced)
+   *
+   * @return reference to waypoint in tree (either existing or appended)
+   */
   const Waypoint &CheckExistsOrAppend(const Waypoint &waypoint);
 
   /**

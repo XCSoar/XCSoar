@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
+#include <type_traits>
+#include <cmath>
+#include <cstdlib>
+
 template<typename T>
 struct Point2D {
   typedef T scalar_type;
@@ -63,18 +67,59 @@ struct Point2D {
   }
 };
 
-template<typename T>
-static inline T
-DotProduct(Point2D<T> a, Point2D<T> b)
+struct FloatPoint : Point2D<float> {
+  /**
+   * Type to be used by vector math.
+   */
+  typedef float product_type;
+
+  FloatPoint() = default;
+
+  template<typename... Args>
+  constexpr FloatPoint(Args&&... args):Point2D<float>(args...) {}
+};
+
+template<typename P, typename RT=typename P::scalar_type>
+static inline RT
+DotProduct(P a, P b)
 {
-  return a.x * b.x + a.y * b.y;
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
+  return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
 
-template<typename T>
-static inline T
-CrossProduct(Point2D<T> a, Point2D<T> b)
+template<typename P, typename RT=typename P::scalar_type>
+static inline RT
+CrossProduct(P a, P b)
 {
-  return a.x * b.y - b.x * a.y;
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
+  return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
+}
+
+template<typename P>
+static constexpr inline P
+Normal(P a, P b)
+{
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
+  return P(a.y - b.y, b.x - a.x);
+}
+
+/**
+ * Calculates the "manhattan distance" or "taxicab distance".
+ */
+template<typename P, typename RT=typename P::scalar_type>
+static inline RT
+ManhattanDistance(P a, P b)
+{
+  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
+                "Must be Point2D");
+
+  return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 
 #endif
