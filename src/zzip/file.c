@@ -1126,7 +1126,6 @@ zzip_seek(ZZIP_FILE * fp, zzip_off_t offset, int whence)
 
     if (fp->method == 0)
     {                           /* unstore, just lseek relatively */
-        ofs = fp->io->fd.tells(dir->fd);
         ofs = fp->io->fd.seeks(dir->fd, read_size, SEEK_CUR);
         if (ofs > 0)
         {                       /* readjust from beginning of file */
