@@ -34,6 +34,7 @@ Copyright_License {
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
 #include "Screen/Layout.hpp"
@@ -46,67 +47,6 @@ Copyright_License {
 #ifdef USE_GDI
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
-
-class AirspaceWarningCopy
-{
-private:
-  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
-  StaticArray<GeoPoint,32> locations;
-
-  unsigned serial;
-
-public:
-  unsigned GetSerial() const {
-    return serial;
-  }
-
-  void Visit(const AirspaceWarning& as) {
-    if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE) {
-      ids_inside.checked_append(&as.GetAirspace());
-    } else if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR) {
-      ids_warning.checked_append(&as.GetAirspace());
-      locations.checked_append(as.GetSolution().location);
-    }
-
-    if (!as.IsAckExpired())
-      ids_acked.checked_append(&as.GetAirspace());
-  }
-
-  void Visit(const AirspaceWarningManager &awm) {
-    serial = awm.GetSerial();
-
-    for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
-      Visit(*i);
-  }
-
-  void Visit(const ProtectedAirspaceWarningManager &awm) {
-    const ProtectedAirspaceWarningManager::Lease lease(awm);
-    Visit(lease);
-  }
-
-  const StaticArray<GeoPoint,32> &GetLocations() const {
-    return locations;
-  }
-
-  bool HasWarning(const AbstractAirspace &as) const {
-    return as.IsActive() && Find(as, ids_warning);
-  }
-
-  bool IsAcked(const AbstractAirspace &as) const {
-    return (!as.IsActive()) || Find(as, ids_acked);
-  }
-
-  bool IsInside(const AbstractAirspace &as) const {
-    return as.IsActive() && Find(as, ids_inside);
-  }
-
-private:
-  bool Find(const AbstractAirspace& as,
-            const StaticArray<const AbstractAirspace *,64> &list) const {
-    return list.contains(&as);
-  }
-};
-
 
 class AirspaceMapVisible : public AirspacePredicate
 {
