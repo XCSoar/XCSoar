@@ -1,0 +1,21 @@
+language: cpp
+compiler:
+  - gcc
+
+env:
+  global:
+    - secure: "GbNY3liQfzfjIP+3Wfteqej+kMeovzqtXAsPSeXXr8QLE7xudTxQNbB74xDAB9v4SVqdUmb6PR2mSWKf0NtoscqFhOhSvxBBq72lwwblX5TfnbS7nFJr3i7EMr4I/pzJwW28d7CZJQFftgZqeEWg4mbY3UiZq+sTgfJgneDiUro="
+
+addons:
+  coverity_scan:
+    project:
+      name: "badbadc0ffee/XCSoar"
+      description: "the open-source glide computer"
+    notification_email: florian@moesch.org
+    build_command_prepend: "sudo apt-get install libsdl1.2-dev xsltproc"
+    build_command: "make -j4"
+    branch_pattern: bugfix
+
+script:
+  - sudo apt-get install libsdl1.2-dev xsltproc
+  - make -j4
