@@ -181,8 +181,10 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir,  const char * pszFilename, const char
     }
   }
   free( pszDBFFilename );
-  if( psDBF->fp == NULL )
+  if( psDBF->fp == NULL ) {
+    free(psDBF);
     return( NULL );
+  }
 
 #ifdef SHAPELIB_DISABLED
   psDBF->bNoHeader = MS_FALSE;
