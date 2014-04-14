@@ -215,6 +215,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   int i;
   double dValue;
 
+  (void)pszAccess;
+#ifdef SHAPELIB_DISABLED
   /* -------------------------------------------------------------------- */
   /*      Ensure the access string is one of the legal ones.  We          */
   /*      ensure the result string indicates binary to avoid common       */
@@ -225,7 +227,6 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   else
     pszAccess = "rb";
 
-#ifdef SHAPELIB_DISABLED
   /* -------------------------------------------------------------------- */
   /*  Establish the byte order on this machine.         */
   /* -------------------------------------------------------------------- */
