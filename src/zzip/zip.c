@@ -565,9 +565,12 @@ __zzip_parse_root_directory(int fd,
     {
         *p_reclen = 0;          /* mark end of list */
 
-        if (hdr_return)
+        if (hdr_return) {
             *hdr_return = hdr0;
-    }                           /* else zero (sane) entries */
+            hdr0 = NULL;
+        }
+    }                       /* else zero (sane) entries */
+    free(hdr0);
 #  ifndef ZZIP_ALLOW_MODULO_ENTRIES
     return (entries != zz_entries ? ZZIP_CORRUPTED : 0);
 #  else
