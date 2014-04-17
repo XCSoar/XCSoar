@@ -685,7 +685,7 @@ ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Device/Windows/Enumerator.cpp
 endif
-	
+
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Apple/InternalSensors.mm
