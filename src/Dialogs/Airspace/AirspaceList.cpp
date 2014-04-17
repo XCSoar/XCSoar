@@ -61,11 +61,15 @@ enum Controls {
   TYPE,
 };
 
+enum Buttons {
+  DETAILS,
+};
+
 class AirspaceFilterWidget;
 
 class AirspaceListWidget final
   : public ListWidget, public DataFieldListener,
-    NullBlackboardListener {
+    public ActionListener, NullBlackboardListener {
   AirspaceFilterWidget &filter_widget;
 
   AirspaceSelectInfoVector items;
@@ -76,6 +80,7 @@ public:
 
   void UpdateList();
   void FilterMode(bool direction);
+  void OnAirspaceListEnter(unsigned index);
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -108,6 +113,9 @@ public:
 
   virtual void OnActivateItem(unsigned index) override;
 
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
+
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
 
@@ -139,13 +147,19 @@ public:
 
 class AirspaceListButtons final : public RowFormWidget {
   ActionListener &dialog;
+  ActionListener *list;
 
 public:
   AirspaceListButtons(const DialogLook &look, ActionListener &_dialog)
     :RowFormWidget(look), dialog(_dialog) {}
 
+  void SetList(ActionListener *_list) {
+    list = _list;
+  }
+
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
+    AddButton(_("Details"), *list, DETAILS);
     AddButton(_("Close"), dialog, mrCancel);
   }
 };
@@ -195,7 +209,7 @@ struct AirspaceListWidgetState
 static AirspaceListWidgetState dialog_state;
 
 void
-AirspaceListWidget::OnActivateItem(unsigned i)
+AirspaceListWidget::OnAirspaceListEnter(unsigned i)
 {
   if (items.empty()) {
     assert(i == 0);
@@ -205,6 +219,22 @@ AirspaceListWidget::OnActivateItem(unsigned i)
   assert(i < items.size());
 
   dlgAirspaceDetails(items[i].GetAirspace(), airspace_warnings);
+}
+
+void
+AirspaceListWidget::OnActivateItem(unsigned index)
+{
+  OnAirspaceListEnter(index);
+}
+
+void
+AirspaceListWidget::OnAction(int id)
+{
+  switch (Buttons(id)) {
+  case DETAILS:
+    OnAirspaceListEnter(GetList().GetCursorIndex());
+    break;
+  }
 }
 
 void
@@ -462,6 +492,7 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
     new AirspaceListWidget(*filter_widget);
 
   filter_widget->SetListener(list_widget);
+  buttons_widget->SetList(list_widget);
 
   TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
 
