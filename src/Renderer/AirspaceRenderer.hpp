@@ -91,8 +91,8 @@ public:
   }
 
   void Clear() {
-    airspaces = NULL;
-    warning_manager = NULL;
+    airspaces = nullptr;
+    warning_manager = nullptr;
   }
 
   void Flush() {

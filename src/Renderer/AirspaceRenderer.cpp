@@ -608,7 +608,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const AirspaceWarningCopy &awc,
                        const AirspacePredicate &visible)
 {
-  if (airspaces == NULL || airspaces->IsEmpty())
+  if (airspaces == nullptr || airspaces->IsEmpty())
     return;
 
 #ifdef ENABLE_OPENGL
@@ -644,11 +644,11 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const WindowProjection &projection,
                        const AirspaceRendererSettings &settings)
 {
-  if (airspaces == NULL)
+  if (airspaces == nullptr)
     return;
 
   AirspaceWarningCopy awc;
-  if (warning_manager != NULL)
+  if (warning_manager != nullptr)
     awc.Visit(*warning_manager);
 
   Draw(canvas,
@@ -669,11 +669,11 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const AirspaceComputerSettings &computer_settings,
                        const AirspaceRendererSettings &settings)
 {
-  if (airspaces == NULL)
+  if (airspaces == nullptr)
     return;
 
   AirspaceWarningCopy awc;
-  if (warning_manager != NULL)
+  if (warning_manager != nullptr)
     awc.Visit(*warning_manager);
 
   const AircraftState aircraft = ToAircraftState(basic, calculated);
