@@ -1699,6 +1699,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
+	$(SRC)/Renderer/AirspaceRendererGL.cpp \
+	$(SRC)/Renderer/AirspaceRendererOther.cpp \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \

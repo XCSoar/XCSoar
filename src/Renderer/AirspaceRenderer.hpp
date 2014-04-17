@@ -101,8 +101,8 @@ public:
 #endif
   }
 
-#ifndef ENABLE_OPENGL
 private:
+#ifndef ENABLE_OPENGL
   bool DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
                 const WindowProjection &projection,
                 const AirspaceRendererSettings &settings,
@@ -120,10 +120,18 @@ private:
                    const WindowProjection &projection,
                    const AirspaceRendererSettings &settings,
                    const AirspacePredicate &visible) const;
-
-public:
 #endif
 
+  void DrawInternal(Canvas &canvas,
+#ifndef ENABLE_OPENGL
+                    Canvas &stencil_canvas,
+#endif
+                    const WindowProjection &projection,
+                    const AirspaceRendererSettings &settings,
+                    const AirspaceWarningCopy &awc,
+                    const AirspacePredicate &visible);
+
+public:
   /**
    * Draw airspaces selected by the given #AirspacePredicate.
    */
