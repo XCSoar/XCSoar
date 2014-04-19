@@ -182,6 +182,17 @@ public:
     buffer.data = new_data;
     buffer.size = _size;
   }
+
+  /**
+   * Declare that the buffer has the specified size.  Must not be
+   * larger than the current size.  Excess elements are not used (but
+   * they are still allocated).
+   */
+  void SetSize(size_type _size) {
+    assert(_size <= buffer.size);
+
+    buffer.size = _size;
+  }
 };
 
 #endif
