@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.5 - not yet released
 * devices
   - fixed attitude data handling
+  - properly detect LXNAV Nano 3
 
 Version 6.7.4 - 2014/04/11
 * map
