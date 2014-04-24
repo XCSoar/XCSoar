@@ -113,18 +113,37 @@ For Android, you need:
 \item \href{http://developer.android.com/sdk/ndk/}{Android NDK r9d}
 \item \href{http://www.vorbis.com/}{Ogg Vorbis}
 \item \href{http://ant.apache.org/}{Apache Ant}
+\item {Java Native tools 
+\begin{verbatim*}
+sudo apt-get install gcj-native-helper ant vorbis-tools
+\end{verbatim*}}
 \end{itemize}
 
 The \texttt{Makefile} assumes that the Android SDK is installed in
-\verb|~/opt/android-sdk-linux_x86| and the NDK is installed in
+\verb|~/opt/android-sdk-linux| and the NDK is installed in
 \verb|~/opt/android-ndk-r9d|.  You can use the options
 \verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
+
+After installing Java you will have to install at least one Android Platform SDK using the Android SDK Manager:
+
+\begin{verbatim*}
+~/opt/android-sdk-linux/tools/android
+\end{verbatim*}
 
 Load/update the IOIO source code:
 
 \begin{verbatim*}
 git submodule init
 git submodule update
+\end{verbatim*}
+
+If you are using a 64-bit machine you might have a problem when you try to run the Android cross-compiler. 
+The cross-compiler is a 32bit version of the compiler and the build script might complain that the necessary 
+compiler is “not found”, which is obviously wrong since the file is there and accessible. Instead, the problem is
+that the supporting 32-bit libraries are missing, which can be fixed through the following command:
+
+\begin{verbatim*}
+sudo apt-get install ia32-libs
 \end{verbatim*}
 
 To compile, run:
@@ -346,6 +365,36 @@ To include kernel images in \texttt{KoboRoot.tgz}, copy
 \texttt{uImage.otg} and \texttt{uImage.kobo} to
 \texttt{/opt/kobo/kernel}.
 
+\subsection{Editing the Manuals}
+
+The XCSoar documententation, including the Developer Manual that you are 
+reading right now, is written using the TeX markup language. You can edit
+the source files with any text editor, although a specific TeX editor (e.g. LateXila) 
+makes it easier. 
+
+Source files are located in the en, fr, de, pl subdirectories of the doc/manual directory. 
+The Developer manual is in the doc/manual/en directory. The generated files are put into
+the output/manual directory.
+
+To generate the PDF manuals, you need the TexLive package, plus some European languages.
+
+The following command installs these on Debian:
+
+\begin{verbatim*}
+apt-get install texlive texlive-lang-french \
+  texlive-lang-polish texlive-lang-german \
+  texlive-extra-tools
+\end{verbatim*}
+
+The documentation is distributed as PDF files. Generating the PDFs from the 
+TeX files is done by typing:
+
+\begin{verbatim*}
+make manual
+\end{verbatim*}
+
+A lot of warnings are generated... this is normal. Check for the presence of PDF files 
+to ensure that the generation process was successful.
 \section{Options}
 
 \subsection{Parallel Build}
@@ -387,3 +436,16 @@ TARGET=UNIX DEBUG=n TARGET_OUTPUT_DIR=output/OPT
 
 It allows building both debug and non-debug incrementally, because two
 different output directories are used.
+
+\subsection{Compiling with ccache}
+
+To speed up the compilation of XCSoar we can use \texttt{ccache} to cache the 
+object files for us. All we have to do is install ccache and 
+add 
+\texttt{USE\_CCACHE=y} 
+to the make command line:
+
+\begin{verbatim*}
+sudo apt-get install ccache
+make TARGET=UNIX USE_CCACHE=y
+\end{verbatim*}
