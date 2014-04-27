@@ -6,6 +6,8 @@ Version 6.7.5 - not yet released
 * devices
   - fixed attitude data handling
   - properly detect LXNAV Nano 3
+* airspace
+  - assume all airspaces are active if day of week is not known
 
 Version 6.7.4 - 2014/04/11
 * map

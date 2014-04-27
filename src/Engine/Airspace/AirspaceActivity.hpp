@@ -76,6 +76,7 @@ public:
       mask.days.saturday = 1;
       break;
     default:
+      SetAll();
       break;
     }
   }
