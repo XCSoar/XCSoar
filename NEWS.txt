@@ -8,6 +8,7 @@ Version 6.7.5 - not yet released
   - properly detect LXNAV Nano 3
 * airspace
   - assume all airspaces are active if day of week is not known
+  - restore "Repetitive Sound" setting on startup (#3308)
 
 Version 6.7.4 - 2014/04/11
 * map

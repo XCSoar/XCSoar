@@ -129,6 +129,7 @@ Profile::Load(AirspaceComputerSettings &settings)
   Get(ProfileKeys::AltMargin, settings.warnings.altitude_warning_margin);
   Get(ProfileKeys::WarningTime, settings.warnings.warning_time);
   Get(ProfileKeys::AcknowledgementTime, settings.warnings.acknowledgement_time);
+  Get(ProfileKeys::RepetitiveSound, settings.warnings.repetitive_sound);
 
   char name[64];
   unsigned value;
