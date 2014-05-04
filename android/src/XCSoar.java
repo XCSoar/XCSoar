@@ -44,6 +44,7 @@ import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.util.Log;
 import android.provider.Settings;
+import android.view.View;
 
 public class XCSoar extends Activity {
   private static final String TAG = "XCSoar";
@@ -250,6 +251,19 @@ public class XCSoar extends Activity {
       return true;
     } else
       return super.onKeyUp(keyCode, event);
+  }
+
+  @Override public void onWindowFocusChanged(boolean hasFocus) {
+    // Set / Reset the System UI visibility flags for Immersive Full Screen Mode, if supported
+    if (android.os.Build.VERSION.SDK_INT >= 19) {
+      getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|
+                                                       View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
+                                                       View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|
+                                                       View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
+                                                       View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
+                                                       View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    }
+    super.onWindowFocusChanged(hasFocus);
   }
 
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
