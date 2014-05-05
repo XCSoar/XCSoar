@@ -1181,6 +1181,12 @@ TestOpenVario()
   // Checksums are validated
   ok1(!device->ParseNMEA("$POV*48", nmea_info));
 
+  // TE vario is read
+  ok1(device->ParseNMEA("$POV,E,2.15*14", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 2.15));
+  nmea_info.Reset();
+
   // Static pressure is read
   ok1(device->ParseNMEA("$POV,P,1018.35*39", nmea_info));
   ok1(nmea_info.static_pressure_available);
@@ -1426,7 +1432,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(751);
+  plan_tests(754);
 
   TestGeneric();
   TestTasman();
