@@ -33,6 +33,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
+#include "Language/Language.hpp"
 
 CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                            const AirspaceLook &_airspace_look,
@@ -69,7 +70,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   ChartRenderer chart(chart_look, canvas, rc);
 
   if (!vec.IsValid() || !start.IsValid()) {
-    chart.DrawNoData();
+    chart.DrawNoData(_("Not moving"));
     return;
   }
 
