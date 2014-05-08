@@ -160,12 +160,11 @@ ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 }
 
 void
-ChartRenderer::DrawNoData()
+ChartRenderer::DrawNoData(const TCHAR *text)
 {
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
-  const TCHAR *text = _("No data");
   PixelSize tsize = canvas.CalcTextSize(text);
 
   PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;

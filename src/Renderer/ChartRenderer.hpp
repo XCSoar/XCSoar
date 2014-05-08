@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Screen/Point.hpp"
 #include "Look/ChartLook.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -105,7 +106,7 @@ public:
   void DrawYLabel(const TCHAR *text, const TCHAR *unit);
 
   void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
-  void DrawNoData();
+  void DrawNoData(const TCHAR *text = _("No data"));
 
   fixed GetYMin() const { return y.min; }
   fixed GetYMax() const { return y.max; }
