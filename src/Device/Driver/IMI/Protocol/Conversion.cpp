@@ -138,6 +138,7 @@ IMI::ConvertOZ(const Declaration::TurnPoint &tp, bool is_start, bool is_finish,
     case Declaration::TurnPoint::LINE: // line
       imiWp.oz.line_only = 1;
       break;
+    case Declaration::TurnPoint::DAEC_KEYHOLE: //interpreted as fai sector
     case Declaration::TurnPoint::SECTOR: // fai sector
       imiWp.oz.A1 = 450;
       break;
@@ -153,6 +154,7 @@ IMI::ConvertOZ(const Declaration::TurnPoint &tp, bool is_start, bool is_finish,
     case Declaration::TurnPoint::LINE: // line
       imiWp.oz.line_only = 1;
       break;
+    case Declaration::TurnPoint::DAEC_KEYHOLE: //interpreted as fai sector
     case Declaration::TurnPoint::SECTOR: // fai sector
       imiWp.oz.A1 = 450;
       break;
@@ -166,6 +168,7 @@ IMI::ConvertOZ(const Declaration::TurnPoint &tp, bool is_start, bool is_finish,
       imiWp.oz.A1 = 1800;
       imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
       break;
+    case Declaration::TurnPoint::DAEC_KEYHOLE: //interpreted as fai sector
     case Declaration::TurnPoint::SECTOR: // sector
       imiWp.oz.A1 = 450;
       imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);

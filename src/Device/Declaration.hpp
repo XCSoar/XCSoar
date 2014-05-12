@@ -43,6 +43,7 @@ struct Declaration {
       CYLINDER,
       SECTOR,
       LINE,
+      DAEC_KEYHOLE
     };
 
     Waypoint waypoint;

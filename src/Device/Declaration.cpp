@@ -41,6 +41,8 @@ get_shape(const OrderedTaskPoint &tp)
   case ObservationZone::Shape::MAT_CYLINDER:
   case ObservationZone::Shape::CYLINDER:
     return Declaration::TurnPoint::CYLINDER;
+  case ObservationZone::Shape::DAEC_KEYHOLE:
+    return Declaration::TurnPoint::DAEC_KEYHOLE;
 
   default:
     return Declaration::TurnPoint::SECTOR;

@@ -75,6 +75,7 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
     dest.rs = 0;
     break;
 
+  case Declaration::TurnPoint::DAEC_KEYHOLE:
   case Declaration::TurnPoint::SECTOR:
     dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
     dest.rs = src.radius;
