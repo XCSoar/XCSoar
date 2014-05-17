@@ -54,6 +54,7 @@ struct DeviceRegister;
 class InternalSensors;
 class BMP085Device;
 class I2CbaroDevice;
+class BaroDevice;
 class NunchuckDevice;
 class VoltageDevice;
 class RecordedFlightList;
@@ -134,6 +135,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
 
   BMP085Device *droidsoar_v2;
   I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
+  BaroDevice *baro[3]; // static, pitot, tek, dynamic; in any order
   NunchuckDevice *nunchuck;
   VoltageDevice *voltage;
 #endif
@@ -298,6 +300,7 @@ private:
   bool OpenDroidSoarV2();
 
   bool OpenI2Cbaro();
+  bool OpenBaro();
 
   bool OpenNunchuck();
 

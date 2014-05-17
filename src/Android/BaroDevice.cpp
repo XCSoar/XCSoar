@@ -21,62 +21,66 @@ Copyright_License {
 }
 */
 
-#include "I2CbaroDevice.hpp"
-#include "NativeI2CbaroListener.hpp"
+#include "BaroDevice.hpp"
+#include "NativeBaroListener.hpp"
 #include "Java/Class.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "LogFile.hpp"
 
-static Java::TrivialClass i2cbaro_class;
-static jmethodID i2cbaro_ctor, close_method;
+static Java::TrivialClass baro_class;
+static jmethodID baro_ctor, close_method;
 
 void
-I2CbaroDevice::Initialise(JNIEnv *env)
+BaroDevice::Initialise(JNIEnv *env)
 {
-  i2cbaro_class.Find(env, "org/xcsoar/GlueI2Cbaro");
+  baro_class.Find(env, "org/xcsoar/GlueBaro");
 
-  i2cbaro_ctor = env->GetMethodID(i2cbaro_class, "<init>",
-                                 "(Lorg/xcsoar/IOIOConnectionHolder;IIIILorg/xcsoar/I2Cbaro$Listener;)V");
-  close_method = env->GetMethodID(i2cbaro_class, "close", "()V");
+  baro_ctor = env->GetMethodID(baro_class, "<init>",
+                                 "(Lorg/xcsoar/IOIOConnectionHolder;IIIIILorg/xcsoar/Baro$Listener;)V");
+  close_method = env->GetMethodID(baro_class, "close", "()V");
 }
 
 void
-I2CbaroDevice::Deinitialise(JNIEnv *env)
+BaroDevice::Deinitialise(JNIEnv *env)
 {
-  i2cbaro_class.Clear(env);
+  baro_class.Clear(env);
 }
 
 static jobject
-CreateI2CbaroDevice(JNIEnv *env, jobject holder,
-                   unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags,
-                   I2CbaroListener &listener)
+CreateBaroDevice(JNIEnv *env, jobject holder,
+                   DeviceConfig::PressureType type, unsigned bus, unsigned addr, unsigned sample_rate, unsigned flags,
+                   BaroListener &listener)
 {
-  jobject listener2 = NativeI2CbaroListener::Create(env, listener);
-  jobject device = env->NewObject(i2cbaro_class, i2cbaro_ctor, holder,
-                                  twi_num, i2c_addr, sample_rate, flags,
+  jobject listener2 = NativeBaroListener::Create(env, listener);
+  jobject device = env->NewObject(baro_class, baro_ctor, holder,
+                                  type, bus, addr, sample_rate, flags,
                                   listener2);
   env->DeleteLocalRef(listener2);
 
   return device;
 }
 
-I2CbaroDevice::I2CbaroDevice(unsigned _index,
+BaroDevice::BaroDevice(unsigned _index,
                            JNIEnv *env, jobject holder,
                            DeviceConfig::PressureUse use,
-                           fixed offset, unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags)
+                           fixed _offset, fixed _factor,
+                           DeviceConfig::PressureType type, unsigned bus, unsigned addr,
+                           unsigned sample_rate, unsigned flags)
   :index(_index),
-   obj(env, CreateI2CbaroDevice(env, holder,
-                               twi_num, i2c_addr, sample_rate, flags,
+   obj(env, CreateBaroDevice(env, holder,
+                             type, bus, addr, sample_rate, flags,
                                *this)),
+   press_type(type),
    press_use(use),
-   pitot_offset(offset),
+   offset(_offset),
+   factor(_factor),
    kalman_filter(fixed(5), fixed(0.3))
 {
 }
 
-I2CbaroDevice::~I2CbaroDevice()
+BaroDevice::~BaroDevice()
 {
   JNIEnv *env = Java::GetEnv();
   env->CallVoidMethod(obj.Get(), close_method);
@@ -97,29 +101,31 @@ fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
 static fixed static_p = fixed(0);
 
 void
-I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
+BaroDevice::onBaroValues(unsigned sensor, AtmosphericPressure pressure)
 {
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
 
-  if (pressure.IsPlausible()) {
+  if (pressure.IsPlausible() || (press_use == DeviceConfig::PressureUse::DYNAMIC && pressure.GetHectoPascal() > 0))
+  {
     fixed param;
 
     // Set filter properties depending on sensor type
-    if (sensor == 85 && press_use == DeviceConfig::PressureUse::STATIC_WITH_VARIO) {
+    if (press_type == DeviceConfig::PressureType::BMP085 &&
+        press_use == DeviceConfig::PressureUse::STATIC_WITH_VARIO)
+    {
        if (static_p == fixed(0)) kalman_filter.SetAccelerationVariance(fixed(0.0075));
        param = fixed(0.05);
     } else {
        param = fixed(0.5);
     }
 
-    kalman_filter.Update(pressure.GetHectoPascal(), param);
+    kalman_filter.Update(pressure.GetHectoPascal() * factor + offset, param);
 
     switch (press_use) {
       case DeviceConfig::PressureUse::NONE:
-      case DeviceConfig::PressureUse::DYNAMIC:
         break;
 
       case DeviceConfig::PressureUse::STATIC_ONLY:
@@ -141,15 +147,22 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
       case DeviceConfig::PressureUse::PITOT:
         if (static_p != fixed(0))
         {
-          fixed dyn = pressure.GetHectoPascal() - static_p - pitot_offset;
+          fixed dyn = pressure.GetHectoPascal() - static_p;
           if (dyn < fixed(0.31)) dyn = fixed(0);      // suppress speeds below ~25 km/h
           basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(dyn));
         }
         break;
 
       case DeviceConfig::PressureUse::PITOT_ZERO:
-        pitot_offset = kalman_filter.GetXAbs() - static_p;
-        basic.ProvideSensorCalibration(fixed (1), pitot_offset);
+        offset = kalman_filter.GetXAbs() - static_p;
+        basic.ProvideSensorCalibration(fixed (1), offset);
+        break;
+
+      case DeviceConfig::PressureUse::DYNAMIC:
+//        basic.ProvideDynamicPressure(pressure);
+//        basic.ProvideIndicatedAirspeed(sqrt(fixed(163.2653061) * pressure.GetHectoPascal()));
+        basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
+        basic.ProvideIndicatedAirspeed(sqrt(fixed(163.2653061) * kalman_filter.GetXAbs()));
         break;
     }
   }
@@ -158,7 +171,7 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 }
 
 void
-I2CbaroDevice::onI2CbaroError()
+BaroDevice::onBaroError()
 {
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);

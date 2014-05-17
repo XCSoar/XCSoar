@@ -64,7 +64,9 @@ Copyright_License {
 #include "NativeBMP085Listener.hpp"
 #include "BMP085Device.hpp"
 #include "NativeI2CbaroListener.hpp"
+#include "NativeBaroListener.hpp"
 #include "I2CbaroDevice.hpp"
+#include "BaroDevice.hpp"
 #include "NativeNunchuckListener.hpp"
 #include "NunchuckDevice.hpp"
 #include "NativeVoltageListener.hpp"
@@ -122,6 +124,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   BMP085Device::Initialise(env);
   NativeI2CbaroListener::Initialise(env);
   I2CbaroDevice::Initialise(env);
+  NativeBaroListener::Initialise(env);
+  BaroDevice::Initialise(env);
   NativeNunchuckListener::Initialise(env);
   NunchuckDevice::Initialise(env);
   NativeVoltageListener::Initialise(env);
@@ -231,6 +235,8 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeBMP085Listener::Deinitialise(env);
   I2CbaroDevice::Deinitialise(env);
   NativeI2CbaroListener::Deinitialise(env);
+  BaroDevice::Deinitialise(env);
+  NativeBaroListener::Deinitialise(env);
   NunchuckDevice::Deinitialise(env);
   NativeNunchuckListener::Deinitialise(env);
   VoltageDevice::Deinitialise(env);

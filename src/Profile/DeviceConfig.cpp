@@ -43,6 +43,7 @@ static const char *const port_type_strings[] = {
   "droidsoar_v2",
   "nunchuck",
   "i2c_baro",
+  "ioio_baro",
   "ioio_voltage",
   "auto",
   "internal",
@@ -195,6 +196,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   if (!Get(buffer, config.ignore_checksum))
     Get(ProfileKeys::IgnoreNMEAChecksum, config.ignore_checksum);
 
+  MakeDeviceSettingName(buffer, "Port", n, "PressureType");
+  GetEnum(buffer, config.press_type);
+
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
   Get(buffer, config.i2c_bus);
 
@@ -278,6 +282,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
   Set(buffer, config.ignore_checksum);
+
+  MakeDeviceSettingName(buffer, "Port", n, "PressureType");
+  SetEnum(buffer, config.press_type);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
   Set(buffer, config.i2c_bus);

@@ -66,6 +66,7 @@ struct DeviceConfig {
     DROIDSOAR_V2,
     NUNCHUCK,
     I2CPRESSURESENSOR,
+    IOIOPRESSURE,
     IOIOVOLTAGE,
 
     /**
@@ -149,6 +150,23 @@ struct DeviceConfig {
   unsigned i2c_addr;
 
   /**
+   * The IOIO UART ID.
+   */
+  unsigned press_bus;
+  unsigned press_addr;
+
+
+  /**
+   * What is the type of this pressure sensor.
+   */
+  enum class PressureType : unsigned {
+    NONE = 0,
+    ANALOG,
+    BMP085,
+    MS5611,
+  } press_type;
+
+  /**
    * What is the purpose of this pressure sensor.
    */
   enum class PressureUse : unsigned {
@@ -163,6 +181,8 @@ struct DeviceConfig {
     PITOT,
     /** Determine and then save the offset between static and pitot sensor */
     PITOT_ZERO,
+    /** Differential Pitot - Static */
+    DYNAMIC
   } press_use;
 
   /**
@@ -334,11 +354,21 @@ struct DeviceConfig {
   }
 
   static bool IsPressureSensor(PortType port_type) {
-    return port_type == PortType::I2CPRESSURESENSOR;
+    return port_type == PortType::I2CPRESSURESENSOR ||
+           port_type == PortType::IOIOPRESSURE;
   }
 
   bool IsPressureSensor() const {
     return IsPressureSensor(port_type);
+  }
+
+  static bool UsesAnalog(PortType port_type, PressureType pressure_type) {
+    return port_type == PortType::IOIOPRESSURE &&
+        pressure_type == PressureType::ANALOG;
+  }
+
+  bool UsesAnalog() const {
+    return UsesAnalog(port_type, press_type);
   }
 
   static bool UsesI2C(PortType port_type) {
@@ -346,12 +376,29 @@ struct DeviceConfig {
            port_type == PortType::I2CPRESSURESENSOR;
   }
 
+  static bool UsesI2C(PortType port_type, PressureType pressure_type) {
+    return port_type == PortType::NUNCHUCK ||
+        port_type == PortType::I2CPRESSURESENSOR ||
+        (port_type == PortType::IOIOPRESSURE &&
+          pressure_type != PressureType::ANALOG);
+  }
+
   bool UsesI2C() const {
-    return UsesI2C(port_type);
+    return UsesI2C(port_type, press_type);
+  }
+
+  static bool UsesSPI(PortType port_type, PressureType pressure_type) {
+    return port_type == PortType::IOIOPRESSURE &&
+        pressure_type == PressureType::MS5611;
+  }
+
+  bool UsesSPI() const {
+    return UsesSPI(port_type, press_type);
   }
 
   static bool UsesCalibration(PortType port_type) {
     return port_type == PortType::I2CPRESSURESENSOR ||
+           port_type == PortType::IOIOPRESSURE ||
            port_type == PortType::DROIDSOAR_V2;
   }
 

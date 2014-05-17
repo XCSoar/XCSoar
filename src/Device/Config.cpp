@@ -51,6 +51,7 @@ DeviceConfig::IsAvailable() const
   case PortType::DROIDSOAR_V2:
   case PortType::NUNCHUCK:
   case PortType::I2CPRESSURESENSOR:
+  case PortType::IOIOPRESSURE:
   case PortType::IOIOVOLTAGE:
     return HasIOIOLib();
 
@@ -99,6 +100,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
   case PortType::DROIDSOAR_V2:
   case PortType::NUNCHUCK:
   case PortType::I2CPRESSURESENSOR:
+  case PortType::IOIOPRESSURE:
   case PortType::IOIOVOLTAGE:
   case PortType::TCP_CLIENT:
     /* errors on these are detected automatically by the driver */
@@ -248,6 +250,9 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 
   case PortType::I2CPRESSURESENSOR:
     return _T("IOIO i2c pressure sensor");
+
+  case PortType::IOIOPRESSURE:
+    return _T("IOIO pressure sensor");
 
   case PortType::IOIOVOLTAGE:
     return _T("IOIO voltage sensor");

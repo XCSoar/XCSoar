@@ -54,6 +54,7 @@ Copyright_License {
 #include "Android/IOIOHelper.hpp"
 #include "Android/BMP085Device.hpp"
 #include "Android/I2CbaroDevice.hpp"
+#include "Android/BaroDevice.hpp"
 #include "Android/NunchuckDevice.hpp"
 #include "Android/VoltageDevice.hpp"
 #endif
@@ -117,6 +118,8 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
 #ifdef ANDROID
   for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++)
     i2cbaro[i] = nullptr;
+  for (unsigned i=0; i<sizeof baro/sizeof baro[0]; i++)
+    baro[i] = nullptr;
 #endif
 }
 
@@ -159,6 +162,9 @@ DeviceDescriptor::GetState() const
     return PortState::READY;
 
   if (i2cbaro[0] != nullptr)
+    return PortState::READY;
+
+  if (baro[0] != nullptr)
     return PortState::READY;
 
   if (nunchuck != nullptr)
@@ -276,7 +282,7 @@ DeviceDescriptor::OpenInternalSensors()
       InternalSensors::create(Java::GetEnv(), context, GetIndex());
   if (internal_sensors) {
     // TODO: Allow user to specify whether they want certain sensors.
-    internal_sensors->subscribeToSensor(InternalSensors::TYPE_PRESSURE);
+    internal_sensors->subscribeToSensor(InternalSensors::TYPE_MAGNETIC_FIELD);
     return true;
   }
 #elif defined(__APPLE__)
@@ -350,6 +356,35 @@ DeviceDescriptor::OpenI2Cbaro()
 }
 
 bool
+DeviceDescriptor::OpenBaro()
+{
+#ifdef ANDROID
+  if (is_simulator())
+    return true;
+
+  if (ioio_helper == nullptr)
+    return false;
+
+  for (unsigned i=0; i<sizeof baro/sizeof baro[0]; i++) {
+    if (baro[i] == NULL) {
+      baro[i] = new BaroDevice(GetIndex(), Java::GetEnv(),
+                       ioio_helper->GetHolder(),
+                       // needs calibration ?
+                       (config.sensor_factor == fixed(0) && config.press_use == DeviceConfig::PressureUse::PITOT) ?
+                                          DeviceConfig::PressureUse::PITOT_ZERO :
+                                          config.press_use,
+                       config.sensor_offset, config.sensor_factor,
+                       config.press_type, config.i2c_bus, config.i2c_addr,
+                       config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
+                       0); // called flags, actually reserved for future use.
+      return true;
+    }
+  }
+#endif
+  return false;
+}
+
+bool
 DeviceDescriptor::OpenNunchuck()
 {
 #ifdef ANDROID
@@ -401,6 +436,9 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   if (config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR)
     return OpenI2Cbaro();
+
+  if (config.port_type == DeviceConfig::PortType::IOIOPRESSURE)
+    return OpenBaro();
 
   if (config.port_type == DeviceConfig::PortType::NUNCHUCK)
     return OpenNunchuck();
@@ -480,6 +518,10 @@ DeviceDescriptor::Close()
   for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
     delete i2cbaro[i];
     i2cbaro[i] = nullptr;
+  }
+  for (unsigned i=0; i<sizeof baro/sizeof baro[0]; i++) {
+    delete baro[i];
+    baro[i] = nullptr;
   }
   delete nunchuck;
   nunchuck = nullptr;

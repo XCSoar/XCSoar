@@ -160,6 +160,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
+  case DeviceConfig::PortType::IOIOPRESSURE:
   case DeviceConfig::PortType::IOIOVOLTAGE:
     break;
 

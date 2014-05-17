@@ -721,7 +721,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/NativeBMP085Listener.cpp \
 	$(SRC)/Android/BMP085Device.cpp \
 	$(SRC)/Android/NativeI2CbaroListener.cpp \
+	$(SRC)/Android/NativeBaroListener.cpp \
 	$(SRC)/Android/I2CbaroDevice.cpp \
+	$(SRC)/Android/BaroDevice.cpp \
 	$(SRC)/Android/NativeNunchuckListener.cpp \
 	$(SRC)/Android/NunchuckDevice.cpp \
 	$(SRC)/Android/NativeVoltageListener.cpp \

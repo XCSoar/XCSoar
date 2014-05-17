@@ -69,6 +69,8 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
     return a.i2c_bus == b.i2c_bus && a.i2c_addr == b.i2c_addr;
+  case DeviceConfig::PortType::IOIOPRESSURE:
+    return a.press_type == b.press_type && a.i2c_bus == b.i2c_bus;
 
   case DeviceConfig::PortType::DISABLED:
   case DeviceConfig::PortType::AUTO:

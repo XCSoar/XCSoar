@@ -54,7 +54,7 @@ enum ControlIndex {
   Port, BaudRate, BulkBaudRate,
   IP_ADDRESS,
   TCPPort,
-  I2CBus, I2CAddr, PressureUsage, Driver,
+  PressureType, AnalogBus, I2CSPIBus, I2CBus, I2CAddr, SPIBus, SPIAddr, PressureUsage, Driver,
   SyncFromDevice, SyncToDevice,
   K6Bt,
   IgnoreCheckSum,
@@ -78,6 +78,7 @@ static constexpr struct {
   { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
 #endif
   { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO i2c pressure sensor") },
+  { DeviceConfig::PortType::IOIOPRESSURE, N_("IOIO pressure sensor") },
   { DeviceConfig::PortType::IOIOVOLTAGE, N_("IOIO voltage sensor") },
 #endif
 
@@ -319,11 +320,40 @@ FillTCPPorts(DataFieldEnum &dfe)
 }
 
 static void
-FillI2CBus(DataFieldEnum &dfe)
+FillPressType(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("Analog"), (unsigned)DeviceConfig::PressureType::ANALOG);
+  dfe.addEnumText(_T("BMP085"), (unsigned)DeviceConfig::PressureType::BMP085);
+  dfe.addEnumText(_T("MS5611"), (unsigned)DeviceConfig::PressureType::MS5611);
+}
+
+static void
+FillAnalogBus(DataFieldEnum &dfe)
 {
   dfe.addEnumText(_T("0"), 0u);
   dfe.addEnumText(_T("1"), 1u);
   dfe.addEnumText(_T("2"), 2u);
+  dfe.addEnumText(_T("3"), 3u);
+  dfe.addEnumText(_T("4"), 4u);
+  dfe.addEnumText(_T("5"), 5u);
+  dfe.addEnumText(_T("6"), 6u);
+  dfe.addEnumText(_T("7"), 7u);
+  dfe.addEnumText(_T("8"), 8u);
+  dfe.addEnumText(_T("9"), 9u);
+  dfe.addEnumText(_T("10"), 10u);
+  dfe.addEnumText(_T("11"), 11u);
+  dfe.addEnumText(_T("12"), 12u);
+  dfe.addEnumText(_T("13"), 13u);
+  dfe.addEnumText(_T("14"), 14u);
+  dfe.addEnumText(_T("15"), 15u);
+}
+
+static void
+FillI2CBus(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("I2C 0"), 0x00u);
+  dfe.addEnumText(_T("I2C 1"), 0x01u);
+  dfe.addEnumText(_T("I2C 2"), 0x02u);
 }
 
 /* Only lists possible addresses of supported devices */
@@ -338,6 +368,20 @@ FillI2CAddr(DataFieldEnum &dfe)
 }
 
 static void
+FillSPIBus(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("SPI 0"), 0x20u);
+  dfe.addEnumText(_T("SPI 1"), 0x21u);
+  dfe.addEnumText(_T("SPI 2"), 0x22u);
+}
+
+static void
+FillSPIAddr(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("0"), 0u);
+}
+
+static void
 FillPress(DataFieldEnum &dfe)
 {
   dfe.addEnumText(_T("Static & Vario"), (unsigned)DeviceConfig::PressureUse::STATIC_WITH_VARIO);
@@ -345,6 +389,7 @@ FillPress(DataFieldEnum &dfe)
   dfe.addEnumText(_T("TE probe (compensated vario)"), (unsigned)DeviceConfig::PressureUse::TEK_PRESSURE);
   dfe.addEnumText(_T("Pitot (airspeed)"), (unsigned)DeviceConfig::PressureUse::PITOT);
   dfe.addEnumText(_T("Pitot zero calibration"), (unsigned)DeviceConfig::PressureUse::PITOT_ZERO);
+  dfe.addEnumText(_T("Dynamic (net airspeed)"), (unsigned)DeviceConfig::PressureUse::DYNAMIC);
 }
 
 static void
@@ -357,6 +402,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
+  case DeviceConfig::PortType::IOIOPRESSURE:
   case DeviceConfig::PortType::IOIOVOLTAGE:
   case DeviceConfig::PortType::TCP_CLIENT:
   case DeviceConfig::PortType::TCP_LISTENER:
@@ -431,6 +477,24 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
   tcp_port_df.Set(config.tcp_port);
   tcp_port_control.RefreshDisplay();
 
+  WndProperty &press_type_control = GetControl(PressureType);
+  DataFieldEnum &press_type_df = *(DataFieldEnum *)
+    press_type_control.GetDataField();
+  press_type_df.Set((unsigned)config.press_type);
+  press_type_control.RefreshDisplay();
+
+  WndProperty &analog_addr_control = GetControl(AnalogBus);
+  DataFieldEnum &analog_addr_df = *(DataFieldEnum *)
+    analog_addr_control.GetDataField();
+  analog_addr_df.Set(config.i2c_addr);
+  analog_addr_control.RefreshDisplay();
+
+  WndProperty &i2cspi_bus_control = GetControl(I2CSPIBus);
+  DataFieldEnum &i2cspi_bus_df = *(DataFieldEnum *)
+    i2cspi_bus_control.GetDataField();
+  i2cspi_bus_df.Set(config.i2c_bus);
+  i2cspi_bus_control.RefreshDisplay();
+
   WndProperty &i2c_bus_control = GetControl(I2CBus);
   DataFieldEnum &i2c_bus_df = *(DataFieldEnum *)
     i2c_bus_control.GetDataField();
@@ -442,6 +506,18 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
     i2c_addr_control.GetDataField();
   i2c_addr_df.Set(config.i2c_addr);
   i2c_addr_control.RefreshDisplay();
+
+  WndProperty &spi_bus_control = GetControl(SPIBus);
+  DataFieldEnum &spi_bus_df = *(DataFieldEnum *)
+    spi_bus_control.GetDataField();
+  spi_bus_df.Set(config.i2c_bus);
+  spi_bus_control.RefreshDisplay();
+
+  WndProperty &spi_addr_control = GetControl(SPIAddr);
+  DataFieldEnum &spi_addr_df = *(DataFieldEnum *)
+    spi_addr_control.GetDataField();
+  spi_addr_df.Set(config.i2c_addr);
+  spi_addr_control.RefreshDisplay();
 
   WndProperty &press_control = GetControl(PressureUsage);
   DataFieldEnum &press_df = *(DataFieldEnum *)
@@ -543,6 +619,7 @@ void
 DeviceEditWidget::UpdateVisibilities()
 {
   const DeviceConfig::PortType type = GetPortType(GetDataField(Port));
+  const DeviceConfig::PressureType pressure = (DeviceConfig::PressureType)((const DataFieldEnum &)GetDataField(PressureType)).GetValue();
   const bool maybe_bluetooth =
     DeviceConfig::MaybeBluetooth(type, GetDataField(Port).GetAsString());
   const bool k6bt = maybe_bluetooth && GetValueBoolean(K6Bt);
@@ -556,9 +633,21 @@ DeviceEditWidget::UpdateVisibilities()
                 SupportsBulkBaudRate(GetDataField(Driver)));
   SetRowAvailable(IP_ADDRESS, DeviceConfig::UsesIPAddress(type));
   SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
-  SetRowAvailable(I2CBus, DeviceConfig::UsesI2C(type));
-  SetRowAvailable(I2CAddr, DeviceConfig::UsesI2C(type) &&
-                type != DeviceConfig::PortType::NUNCHUCK);
+  SetRowAvailable(PressureType, type == DeviceConfig::PortType::IOIOPRESSURE);
+  SetRowAvailable(AnalogBus, DeviceConfig::UsesAnalog(type, pressure));
+  SetRowAvailable(I2CSPIBus, DeviceConfig::UsesI2C(type, pressure) &&
+                  DeviceConfig::UsesSPI(type, pressure));
+  SetRowAvailable(I2CBus, DeviceConfig::UsesI2C(type, pressure) &&
+                  !DeviceConfig::UsesSPI(type, pressure));
+  SetRowAvailable(I2CAddr, DeviceConfig::UsesI2C(type, pressure) &&
+                  (!DeviceConfig::UsesSPI(type, pressure) ||
+                    (GetDataField(I2CSPIBus).GetAsInteger() & 0x20) != 0x20) &&
+                  type != DeviceConfig::PortType::NUNCHUCK);
+  SetRowAvailable(SPIBus, DeviceConfig::UsesSPI(type, pressure) &&
+                  !DeviceConfig::UsesI2C(type, pressure));
+  SetRowAvailable(SPIAddr, DeviceConfig::UsesSPI(type, pressure) &&
+                  (!DeviceConfig::UsesI2C(type, pressure) ||
+                    (GetDataField(I2CSPIBus).GetAsInteger() & 0x20) == 0x20));
   SetRowAvailable(PressureUsage, DeviceConfig::IsPressureSensor(type));
   SetRowVisible(Driver, DeviceConfig::UsesDriver(type));
   SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
@@ -601,11 +690,28 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   tcp_port_df->Set(config.tcp_port);
   Add(_("TCP Port"), NULL, tcp_port_df);
 
+  DataFieldEnum *press_type_df = new DataFieldEnum(this);
+  FillPressType(*press_type_df);
+  press_type_df->Set((unsigned)config.press_type);
+  Add(_("Pressure use"), _("Select Type of sensor."),
+                           press_type_df);
+
+  DataFieldEnum *analog_bus_df = new DataFieldEnum(this);
+  FillAnalogBus(*analog_bus_df);
+  analog_bus_df->Set(config.i2c_bus);
+  Add(_("Analog Input"), _("Select the sensor input that matches your configuration (0=pin31)."),
+      analog_bus_df);
+
+  DataFieldEnum *i2cspi_bus_df = new DataFieldEnum(this);
+  FillI2CBus(*i2cspi_bus_df);
+  FillSPIBus(*i2cspi_bus_df);
+  i2cspi_bus_df->Set(config.i2c_bus);
+  Add(_("Digital Bus"), _("The i2c or spi bus number that matches your configuration."), i2cspi_bus_df);
+
   DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
   FillI2CBus(*i2c_bus_df);
   i2c_bus_df->Set(config.i2c_bus);
-  Add(_("I2C Bus"), _("Select the description or bus number that matches your configuration."),
-                      i2c_bus_df);
+  Add(_("I2C Bus"), _("Select the description or bus number that matches your configuration."), i2c_bus_df);
 
   DataFieldEnum *i2c_addr_df = new DataFieldEnum(this);
   FillI2CAddr(*i2c_addr_df);
@@ -614,6 +720,16 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                         "This field is not used when your selection in the I2C Bus field is not an i2c bus number. "
                         "In case you do not understand the previous sentence you may assume that this field is not used."),
                         i2c_addr_df);
+
+  DataFieldEnum *spi_bus_df = new DataFieldEnum(this);
+  FillSPIBus(*spi_bus_df);
+  spi_bus_df->Set(config.i2c_bus);
+  Add(_("SPI Bus"), _("The bus number that matches your configuration."), spi_bus_df);
+
+  DataFieldEnum *spi_addr_df = new DataFieldEnum(this);
+  FillSPIAddr(*spi_addr_df);
+  spi_addr_df->Set(config.i2c_addr);
+  Add(_("SPI Addr"), _("The spi address that matches your configuration."), spi_addr_df);
 
   DataFieldEnum *press_df = new DataFieldEnum(this);
   FillPress(*press_df);
@@ -680,6 +796,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
+  case DeviceConfig::PortType::IOIOPRESSURE:
   case DeviceConfig::PortType::IOIOVOLTAGE:
   case DeviceConfig::PortType::TCP_CLIENT:
   case DeviceConfig::PortType::TCP_LISTENER:
@@ -750,9 +867,28 @@ DeviceEditWidget::Save(bool &_changed)
   if (config.UsesTCPPort())
     changed |= SaveValue(TCPPort, config.tcp_port);
 
-  if (config.UsesI2C()) {
-    changed |= SaveValue(I2CBus, config.i2c_bus);
-    changed |= SaveValue(I2CAddr, config.i2c_addr);
+  if (config.UsesI2C() || config.IsPressureSensor()) {
+    changed |= SaveValueEnum(PressureType, config.press_type);
+    if (config.UsesAnalog())
+      changed |= SaveValue(AnalogBus, config.i2c_bus);
+    else if (config.UsesI2C() && config.UsesSPI())
+    {
+      changed |= SaveValue(I2CSPIBus, config.i2c_bus);
+      if ((config.i2c_bus & 0x20) == 0x20)
+        changed |= SaveValue(SPIAddr, config.i2c_addr);
+      else
+        changed |= SaveValue(I2CAddr, config.i2c_addr);
+    }
+    else if (config.UsesI2C())
+    {
+      changed |= SaveValue(I2CBus, config.i2c_bus);
+      changed |= SaveValue(I2CAddr, config.i2c_addr);
+    }
+    else if (config.UsesSPI())
+    {
+      changed |= SaveValue(SPIBus, config.i2c_bus);
+      changed |= SaveValue(SPIAddr, config.i2c_addr);
+    }
     changed |= SaveValueEnum(PressureUsage, config.press_use);
   }
 
@@ -779,7 +915,7 @@ DeviceEditWidget::Save(bool &_changed)
 void
 DeviceEditWidget::OnModified(DataField &df)
 {
-  if (IsDataField(Port, df) || IsDataField(Driver, df) ||
+  if (IsDataField(Port, df) || IsDataField(PressureType, df) || IsDataField(I2CSPIBus, df) || IsDataField(Driver, df) ||
       IsDataField(K6Bt, df))
     UpdateVisibilities();
 
