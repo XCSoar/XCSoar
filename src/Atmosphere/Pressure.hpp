@@ -100,6 +100,16 @@ public:
   }
 
   /**
+   * Adjusts the pressure using factor and offset (used for calibration of sensors)
+   * value = value * factor + offset
+   *
+   * @param factor
+   * @param offset
+   */
+  void Adjust(const fixed factor,
+              const fixed offset);
+
+  /**
    * Calculates the current QNH by comparing a pressure value to a
    * known altitude of a certain location
    *

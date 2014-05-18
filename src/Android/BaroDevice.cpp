@@ -108,6 +108,7 @@ BaroDevice::onBaroValues(unsigned sensor, AtmosphericPressure pressure)
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
 
+  pressure.Adjust(factor, offset);
   if (pressure.IsPlausible() || (press_use == DeviceConfig::PressureUse::DYNAMIC && pressure.GetHectoPascal() > 0))
   {
     fixed param;
@@ -122,7 +123,7 @@ BaroDevice::onBaroValues(unsigned sensor, AtmosphericPressure pressure)
        param = fixed(0.5);
     }
 
-    kalman_filter.Update(pressure.GetHectoPascal() * factor + offset, param);
+    kalman_filter.Update(pressure.GetHectoPascal(), param);
 
     switch (press_use) {
       case DeviceConfig::PressureUse::NONE:
