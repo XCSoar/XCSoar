@@ -64,7 +64,6 @@ abstract class Baro extends Thread {
     sleep_time = 1000 / _sample_rate;
 	flags = _flags;
 	listener = _listener;
-    listener.onBaroValues(0, 100);
 	}
   public void close() {
     interrupt();
@@ -80,9 +79,7 @@ abstract class Baro extends Thread {
   
   @Override public void run() {
     try {
-      listener.onBaroValues(0, -500);
       if (!setup()) listener.onBaroError();
-      listener.onBaroValues(0, -600);
       while (true)
         loop();
 
@@ -264,18 +261,6 @@ class BaroBMP085 extends Baro
     mc = readS16BE(response085Parameters, 18);
     md = readS16BE(response085Parameters, 20);
 
-    File file = new File("/sdcard/XCSoarData/debug.log");
-    try {
-	    FileOutputStream stream = new FileOutputStream(file);
-	    try {
-	        stream.write(("085 " + ac1 + "," + ac2 + "," + ac3 + "," + ac4 + "," + ac5 + "," + ac6 + "," + b1 + "," + b2).getBytes());
-		} catch (IOException e) {
-	    } finally {
-	        stream.close();
-	    }
-	} catch (FileNotFoundException e) {
-	} catch (IOException e) {
-	}
    return true;
   }
 
@@ -410,7 +395,6 @@ class BaroMS5611 extends Baro
   private int C5s=0; private long C6=0;
 
 
-  private SpiMaster h_spi;
   private IOIOBus h_bus;
 
   public BaroMS5611(IOIO ioio, int bus, int addr, int _sample_rate, int _flags,
@@ -474,18 +458,6 @@ class BaroMS5611 extends Baro
       prom[i] = readU16BE(response5611, 0);
       if (prom[i] == 0 || prom[i] == 65535) zeros++;
     }
-/*    File file = new File("/sdcard/XCSoarData/debug.log");
-    try {
-	    FileOutputStream stream = new FileOutputStream(file);
-	    try {
-	        stream.write(("" + prom[0] + "," + prom[1] + "," + prom[2] + "," + prom[3] + "," + prom[4] + "," + prom[5] + "," + prom[6] + "," + prom[7]).getBytes());
-		} catch (IOException e) {
-	    } finally {
-	        stream.close();
-	    }
-	} catch (FileNotFoundException e) {
-	} catch (IOException e) {
-	}*/
 
     // TODO: checksum
     if (zeros > 2)

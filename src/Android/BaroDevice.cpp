@@ -159,10 +159,7 @@ BaroDevice::onBaroValues(unsigned sensor, AtmosphericPressure pressure)
         break;
 
       case DeviceConfig::PressureUse::DYNAMIC:
-//        basic.ProvideDynamicPressure(pressure);
-//        basic.ProvideIndicatedAirspeed(sqrt(fixed(163.2653061) * pressure.GetHectoPascal()));
         basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
-        basic.ProvideIndicatedAirspeed(sqrt(fixed(163.2653061) * kalman_filter.GetXAbs()));
         break;
     }
   }
