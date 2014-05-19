@@ -111,7 +111,8 @@ class DeviceListWidget final
       baro = basic.baro_altitude_available ||
         basic.pressure_altitude_available ||
         basic.static_pressure_available;
-      airspeed = basic.airspeed_available;
+      airspeed = basic.airspeed_available ||
+        basic.dyn_pressure_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
       debug = device.IsDumpEnabled();
