@@ -39,6 +39,10 @@ class BaroDevice final : public BaroListener {
   DeviceConfig::PressureUse press_use;
   fixed offset;
   fixed factor;
+
+  int calibrate_count;
+  fixed calibrate_sum;
+  fixed calibrate_value;
   /**
    * This Kalman filter is used to smooth the pressure input.
    */
@@ -56,6 +60,9 @@ public:
                unsigned sample_rate, unsigned flags);
 
   ~BaroDevice();
+
+  void Calibrate(fixed value);
+  bool IsCalibrating();
 
 private:
   /* virtual methods from class BaroListener */

@@ -79,7 +79,7 @@ class DeviceListWidget final
     bool duplicate:1;
     bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
-    bool debug:1;
+    bool debug:1, calibrate:1;
 
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
              const NMEAInfo &basic) {
@@ -116,6 +116,7 @@ class DeviceListWidget final
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
       debug = device.IsDumpEnabled();
+      calibrate = device.IsCalibrating();
     }
   };
 
@@ -294,7 +295,8 @@ DeviceListWidget::UpdateButtons()
 
     reconnect_button->SetEnabled(device.IsConfigured());
     flight_button->SetEnabled(device.IsLogger());
-    manage_button->SetEnabled(device.IsManageable());
+    manage_button->SetEnabled(device.IsManageable() ||
+                              device.IsCalibrable());
     monitor_button->SetEnabled(device.GetConfig().UsesPort());
     debug_button->SetEnabled(device.GetConfig().UsesPort() &&
                              device.GetState() == PortState::READY);
@@ -367,6 +369,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     if (flags.debug) {
       buffer.append(_T("; "));
       buffer.append(_("Debug"));
+    }
+
+    if (flags.calibrate) {
+      buffer.append(_T("; "));
+      buffer.append(_("Calibrate"));
     }
 
     status = buffer;
@@ -553,6 +560,14 @@ DeviceListWidget::ManageCurrent()
   if (!descriptor.Borrow()) {
     ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
     return;
+  }
+
+  if (descriptor.IsCalibrable()) {
+    if (descriptor.GetConfig().press_use == DeviceConfig::PressureUse::DYNAMIC) {
+      descriptor.Calibrate(0);
+      descriptor.Return();
+      return;
+    }
   }
 
   Device *device = descriptor.GetDevice();

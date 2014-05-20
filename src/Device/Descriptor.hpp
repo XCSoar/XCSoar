@@ -251,6 +251,18 @@ public:
   void EnableDumpTemporarily(unsigned duration_ms);
 
   /**
+   * @see BaroDevice::IsCalibrating()
+   */
+  gcc_pure
+  bool IsCalibrating() const;
+  bool IsCalibrable() const;
+
+  /**
+   * @see BaroDevice::Calibrate()
+   */
+  void Calibrate(fixed value);
+
+  /**
    * Wrapper for Driver::HasTimeout().  This method can't be inline
    * because the Driver struct is incomplete at this point.
    */

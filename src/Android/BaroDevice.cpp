@@ -76,6 +76,7 @@ BaroDevice::BaroDevice(unsigned _index,
    press_use(use),
    offset(_offset),
    factor(_factor),
+   calibrate_count(-1), calibrate_sum(0.0),
    kalman_filter(fixed(5), fixed(0.3))
 {
 }
@@ -84,6 +85,17 @@ BaroDevice::~BaroDevice()
 {
   JNIEnv *env = Java::GetEnv();
   env->CallVoidMethod(obj.Get(), close_method);
+}
+
+void BaroDevice::Calibrate(fixed value)
+{
+  calibrate_count = 0;
+  calibrate_sum = fixed(0);
+  calibrate_value = value;
+}
+bool BaroDevice::IsCalibrating()
+{
+  return calibrate_count > -1;
 }
 
 gcc_pure
@@ -108,8 +120,21 @@ BaroDevice::onBaroValues(unsigned sensor, AtmosphericPressure pressure)
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
 
+  // Gather values for calibration
+  if (calibrate_count > -1)
+  {
+    calibrate_sum += calibrate_value - pressure.GetHectoPascal();
+    calibrate_count++;
+    if (calibrate_count >= 100)
+    {
+      offset = calibrate_sum / calibrate_count;
+      basic.ProvideSensorCalibration(factor, offset);
+      calibrate_count = -1;
+    }
+  }
+
   pressure.Adjust(factor, offset);
-  if (pressure.IsPlausible() || (press_use == DeviceConfig::PressureUse::DYNAMIC && pressure.GetHectoPascal() > 0))
+  if (pressure.IsPlausible() || (press_use == DeviceConfig::PressureUse::DYNAMIC && pressure.GetHectoPascal() > fixed(0.2)))
   {
     fixed param;
 

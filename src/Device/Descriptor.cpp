@@ -198,6 +198,25 @@ DeviceDescriptor::EnableDumpTemporarily(unsigned duration_ms)
 }
 
 bool
+DeviceDescriptor::IsCalibrating() const
+{
+  return (baro[0] != nullptr && baro[0]->IsCalibrating());
+}
+
+bool
+DeviceDescriptor::IsCalibrable() const
+{
+  return (baro[0] != nullptr && !baro[0]->IsCalibrating());
+}
+
+void
+DeviceDescriptor::Calibrate(fixed value)
+{
+  if (baro[0] != nullptr)
+    baro[0]->Calibrate(value);
+}
+
+bool
 DeviceDescriptor::ShouldReopenDriverOnTimeout() const
 {
   return driver == NULL || driver->HasTimeout();
