@@ -61,11 +61,11 @@ FlarmDevice::SetStealthMode(bool enabled, OperationEnvironment &env)
 bool
 FlarmDevice::GetRange(unsigned &range, OperationEnvironment &env)
 {
-  TCHAR buffer[12];
+  char buffer[12];
   if (!GetConfig("RANGE", buffer, ARRAY_SIZE(buffer), env))
     return false;
 
-  TCHAR *end_ptr;
+  char *end_ptr;
   unsigned value = ParseUnsigned(buffer, &end_ptr, 10);
   if (end_ptr == buffer)
     return false;
@@ -85,11 +85,11 @@ FlarmDevice::SetRange(unsigned range, OperationEnvironment &env)
 bool
 FlarmDevice::GetBaudRate(unsigned &baud_id, OperationEnvironment &env)
 {
-  TCHAR buffer[12];
+  char buffer[12];
   if (!GetConfig("BAUD", buffer, ARRAY_SIZE(buffer), env))
     return false;
 
-  TCHAR *end_ptr;
+  char *end_ptr;
   unsigned value = ParseUnsigned(buffer, &end_ptr, 10);
   if (end_ptr == buffer)
     return false;

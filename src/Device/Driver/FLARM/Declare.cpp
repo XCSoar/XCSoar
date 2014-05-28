@@ -71,12 +71,12 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
 
   env.SetProgressPosition(3);
 
-  if (!SetConfig("NEWTASK", _T("Task"), env))
+  if (!SetConfig("NEWTASK", "Task", env))
     return false;
 
   env.SetProgressPosition(4);
 
-  if (!SetConfig("ADDWP", _T("0000000N,00000000E,TAKEOFF"), env))
+  if (!SetConfig("ADDWP", "0000000N,00000000E,TAKEOFF", env))
     return false;
 
   env.SetProgressPosition(5);
@@ -117,7 +117,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     env.SetProgressPosition(6 + i);
   }
 
-  if (!SetConfig("ADDWP", _T("0000000N,00000000E,LANDING"), env))
+  if (!SetConfig("ADDWP", "0000000N,00000000E,LANDING", env))
     return false;
 
   env.SetProgressPosition(6 + size);
