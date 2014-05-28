@@ -163,9 +163,14 @@ final class IOIOHelper implements IOIOConnectionHolder,
 
     agent.enable();
 
-    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
-      if (bootstrap instanceof ContextWrapperDependent)
-        ((ContextWrapperDependent) bootstrap).open();
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps()) {
+      try {
+        if (bootstrap instanceof ContextWrapperDependent)
+          ((ContextWrapperDependent) bootstrap).open();
+      } catch (Exception e) {
+        Log.e(TAG, "ContextWrapperDependent.open() failed", e);
+      }
+    }
   }
 
   @Override public synchronized void removeListener(IOIOConnectionListener l) {
