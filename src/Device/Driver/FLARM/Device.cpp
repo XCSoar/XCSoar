@@ -190,10 +190,10 @@ bool
 FlarmDevice::GetConfig(const char *setting, char *buffer, size_t length,
                        OperationEnvironment &env)
 {
-  NarrowString<256> request;
+  NarrowString<90> request;
   request.Format("PFLAC,R,%s", setting);
 
-  NarrowString<256> expected_answer(request);
+  NarrowString<90> expected_answer(request);
   expected_answer[6u] = 'A';
   expected_answer += ',';
 
@@ -220,10 +220,10 @@ bool
 FlarmDevice::SetConfig(const char *setting, const char *value,
                        OperationEnvironment &env)
 {
-  NarrowString<256> buffer;
+  NarrowString<90> buffer;
   buffer.Format("PFLAC,S,%s,%s", setting, value);
 
-  NarrowString<256> expected_answer(buffer);
+  NarrowString<90> expected_answer(buffer);
   expected_answer[6u] = 'A';
 
   Send(buffer, env);
@@ -237,8 +237,8 @@ bool
 FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length,
                        OperationEnvironment &env)
 {
-  char narrow_buffer[length * 2];
-  if (!GetConfig(setting, narrow_buffer, length * 2, env))
+  char narrow_buffer[90];
+  if (!GetConfig(setting, narrow_buffer, ARRAY_SIZE(narrow_buffer), env))
     return false;
 
   if (StringIsEmpty(narrow_buffer)) {

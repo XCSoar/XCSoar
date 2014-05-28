@@ -106,7 +106,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     DegLon = (int)tmp;
     MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    StaticString<256> buffer;
+    StaticString<90> buffer;
     buffer.Format(_T("%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
                   (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
                   declaration.GetName(i));
