@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-03-03 05:36+0000\n"
-"Last-Translator: nicolas hayes <nicolashayes@gmail.com>\n"
+"PO-Revision-Date: 2014-05-21 02:29+0000\n"
+"Last-Translator: Pablo Accossato <pablo5300@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-04 21:01+0000\n"
-"X-Generator: Launchpad (build 16948)\n"
+"X-Launchpad-Export-Date: 2014-05-28 16:24+0000\n"
+"X-Generator: Launchpad (build 17017)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -30,7 +30,7 @@ msgstr ""
 #: Data/Input/default.xci:991 Data/Input/default.xci:1029
 #, no-c-format
 msgid "Task"
-msgstr "Tarea"
+msgstr "Manga"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
@@ -2291,6 +2291,16 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"La distancia recorrida durante el periodo de tiempo configurado, dividido "
+"por la altitud perdida en el mismo tiempo. Valores negativos se muetran como "
+"^^^ e indican trayecto de ascenso (ganancia de altura). Cuando la tasa de "
+"planeo(GR) es mayor de 200 se muestra +++. Se puede configurarel tiempo a "
+"promediar en la configuración del sistema. Los valores sugeridos son 60, 90 "
+"o 120. Valores menores estaran cerca del planeo instantaneo (GR Inst) y "
+"valores mayores estaran cerca del planeo del trayecto (GR Cruise). Tenga en "
+"cuenta que la distancia NO es la linea recta entre su posicion anterior y la "
+"posicion actual, es toda la distancia recorrida aun haciendo zig zag. Este "
+"valor no se calcula durante el giro de termicas."
 
 #: src/InfoBoxes/Content/Factory.cpp:900
 #, no-c-format
@@ -2649,6 +2659,9 @@ msgid ""
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
 msgstr ""
+"La componente actual de viento de cara. El viento de cara se calcula a "
+"partir del TAS y la velocidad tierra de GPS si la velocidad aire esta "
+"disponible desde un dispositivo externo. Sino, se usa el viento calculado."
 
 #: src/InfoBoxes/Content/Factory.cpp:1115
 #, no-c-format
@@ -2667,6 +2680,9 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
+"La distancia a la proxima colision con el terreno siguiendo la pierna actual "
+"de la manga. En ese punto, la altura sera inferior a la cconfigurada en "
+"Altura de cruce de terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:1124
 #, no-c-format
@@ -2724,6 +2740,9 @@ msgid ""
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
 msgstr ""
+"La componente actual de viento de cara. El viento de cara simplificado se "
+"calcula restando la velocidad tierra de GPS al TAS si la velocidad aire esta "
+"disponible desde un dispositivo externo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1155
 #, no-c-format
@@ -2784,7 +2803,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1185
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "Cuenta atras del tiempo de Inicio/Final del Start"
 
 #: src/InfoBoxes/Content/Factory.cpp:1186
 #, no-c-format
@@ -2813,6 +2832,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"Muestra el tiempo faltante para que el Start abra o cierre, comparado con el "
+"tiempo calculado para alcanzarlo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1203
 #, no-c-format
@@ -3096,6 +3117,8 @@ msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
 "automatically if Vega connected."
 msgstr ""
+"Presion del area para calibrar el altimetro barometrico. Se ajusta "
+"automaticamente si el Vega esta conectado."
 
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:45
 msgid "MANUAL"
@@ -3341,7 +3364,7 @@ msgstr "Topografia/Terreno"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:318
 #, no-c-format
 msgid "FLARM radar"
-msgstr ""
+msgstr "Radar de FLARM"
 
 #: src/PageSettings.cpp:60
 msgid "Map and InfoBoxes"
@@ -3593,7 +3616,7 @@ msgstr "Inicializar"
 #. Start the device thread(s)
 #: src/Startup.cpp:377
 msgid "Starting devices"
-msgstr ""
+msgstr "Iniciando dispositivos"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3656,7 +3679,7 @@ msgstr "Servidor Bluetooth"
 #: src/Device/Config.cpp:256 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "Driver intermedio de GPS"
 
 #: src/Device/Config.cpp:259 src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
@@ -3833,13 +3856,15 @@ msgstr "Tasa de baudios"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:589
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Velocidad para transferencias masivas"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:590
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"La velocidad (en baudios) usada para transferencias masivas como declaracion "
+"de mangas o descarga de vuelos"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
 msgid "IP Address"
@@ -3852,6 +3877,7 @@ msgstr "I2C Bus"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:605
 msgid "Select the description or bus number that matches your configuration."
 msgstr ""
+"Seleccione la descripcion o nro de bus que coincide con su configuracion"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Addr"
@@ -3913,6 +3939,8 @@ msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
 msgstr ""
+"Si su GPS envia valores invalidos de checksum, esto permite que la "
+"informacion se use igualmente."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:260
 #: src/Dialogs/Device/DeviceListDialog.cpp:279
@@ -4020,6 +4048,8 @@ msgstr "Editar dispositivo"
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
+"La comunicacion con este dispositivo sera registrada durante los proximos %u "
+"minutos."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:675 Data/Input/default.xci:604
 #: Data/Input/default.xci:1165
@@ -4549,7 +4579,7 @@ msgstr "Seleccionar Espacio Aéreo"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
-msgstr ""
+msgstr "Configuracion del dibujado de espacios aereos"
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:79
@@ -4572,7 +4602,7 @@ msgstr "Ancho del borde"
 msgid ""
 "The width of the border drawn around each airspace. Set this value to zero "
 "to hide the border."
-msgstr ""
+msgstr "El ancho del borde de cada espacio aereo. Cero para ocultar el borde."
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:102
 #, no-c-format
@@ -4582,7 +4612,7 @@ msgstr "Relleno"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:103
 #, no-c-format
 msgid "Only padding"
-msgstr ""
+msgstr "Solo relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:104
 #, no-c-format
@@ -4651,7 +4681,7 @@ msgstr "Ambos"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
 #, no-c-format
 msgid "Use ZigZag and circling."
-msgstr ""
+msgstr "Usar zig zag y giros"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "Auto wind"
@@ -4670,6 +4700,8 @@ msgid ""
 "If enabled, then the wind vector received from external devices overrides "
 "XCSoar's internal wind calculation."
 msgstr ""
+"Si esta habilitado, el vector de viento recibido de dispositivos externos "
+"reemplaza el calculo interno de viento"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:75
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:159
@@ -4683,6 +4715,9 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
+"Determina si la trayectoria es desplazada por el viento cuando se esta "
+"mostrando en modo giro. Apagado, el trazo se dibuja sin compensar el "
+"desplazamiento del viento"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:86
 msgid "Source"
@@ -4842,7 +4877,7 @@ msgstr "Páginas"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr ""
+msgstr "Ajuste de las InfoBox(cajas de informacion)"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
@@ -4913,12 +4948,12 @@ msgstr "Tráfico"
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:3
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
 msgid "FLARM Traffic Details"
-msgstr ""
+msgstr "Detalles del trafico FLARM"
 
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:198
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr ""
+msgstr "Desea registrar este contacto FLARM como su nuevo compañero de equipo?"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:199
 msgid "New Teammate"
@@ -4950,7 +4985,7 @@ msgstr "Rel. Dirección"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:103
 msgid "Flarm lock"
-msgstr ""
+msgstr "Bloquear FLARM"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:218
 msgid "Unknown Competition Number"
@@ -4978,7 +5013,7 @@ msgstr "Calc. de Manga"
 
 #: src/Dialogs/dlgAnalysis.cpp:311
 msgid "Thermal Band"
-msgstr ""
+msgstr "Banda termica"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Wind At Altitude"
@@ -5023,6 +5058,8 @@ msgid ""
 "backlight algorithm. When the automatic backlight is disabled, this controls "
 "the backlight directly."
 msgstr ""
+"Ajustar Retroiluminacion. Cuando esta en automatico, se usa el algoritmo de "
+"retroiluminacion. Sino, controla la retroiluminacion directamente."
 
 #: src/Dialogs/dlgBrightness.cpp:141
 msgid "Screen Brightness"
@@ -5067,23 +5104,23 @@ msgstr "Activo"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
 #, c-format
 msgid "Activating plane profile \"%s\" failed!"
-msgstr ""
+msgstr "La activiación del pefil de avion \"%s\" falló!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:251
 #, c-format
 msgid "Plane profile \"%s\" activated."
-msgstr ""
+msgstr "Perfil de avion \"%s\" activado."
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:314
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "Por favor ingrese el registro del avion"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:287
 #: src/Dialogs/Plane/PlaneListDialog.cpp:330
 #, c-format
 msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Un perfil de avion \"%s\" ya existe. Desea sobreescribirlo?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:290
 #: src/Dialogs/Plane/PlaneListDialog.cpp:333
@@ -5093,12 +5130,12 @@ msgstr "Sobrescribir"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361
 #, c-format
 msgid "Do you really want to delete plane profile \"%s\"?"
-msgstr ""
+msgstr "Realmente desea borrarl el perfil de avion \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:398
 #, c-format
 msgid "Do you want to activate plane profile \"%s\"?"
-msgstr ""
+msgstr "Desea activar el perfil de avion \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:410
 msgid "Planes"
@@ -5193,6 +5230,8 @@ msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
+"Nombre del archivo a reproducir. Puede ser un archivo IGC(.igc), un registro "
+"NMEA crudo (.nmea), o si lo deja en blanco, arranca el modo demo."
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
@@ -5203,6 +5242,8 @@ msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
+"Aceleración del tiempo en la reproducción. Cero para pausar, 1 para "
+"reproduccion en tiempo real."
 
 #: src/Dialogs/ReplayDialog.cpp:111
 msgid "Could not open IGC file!"
@@ -5428,7 +5469,7 @@ msgstr "Alt. diff. MC current"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:122
 #, no-c-format
 msgid "Required glide ratio"
-msgstr ""
+msgstr "Tasa de planeo requerida"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:57
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
@@ -5439,7 +5480,7 @@ msgstr "No existe tarea definida"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:62
 msgid "No active task point."
-msgstr ""
+msgstr "No hay una baliza de manga activa."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:62
 msgid "Replace in task"
@@ -5450,12 +5491,12 @@ msgstr "Remplazar en la prueba"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:129
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:167
 msgid "Task would not be valid after the change."
-msgstr ""
+msgstr "La manga no sería válida despues del cambio."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
 msgid "Created Goto Task."
-msgstr ""
+msgstr "Manga \"Ir a\" creada."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
@@ -5467,11 +5508,11 @@ msgstr "Correcto"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:139
 msgid "Created 2-point task from Goto Task."
-msgstr ""
+msgstr "Manga de 2 balizas creada desde un \" Ir a\""
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:162
 msgid "Waypoint not in task."
-msgstr ""
+msgstr "La baliza no esta en la manga."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:162
 msgid "Remove from task"
@@ -5499,7 +5540,7 @@ msgstr "Fijar como nueva Base"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan To Waypoint"
-msgstr ""
+msgstr "Desplazarse a la baliza."
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
 msgid "Clear current task?"
@@ -5507,7 +5548,7 @@ msgstr "Limpiar tarea?"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:233
 msgid "Goto and clear task"
-msgstr ""
+msgstr "\"Ir a\" y borrar manga."
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:244
 msgid "Unknown error creating task."
@@ -5556,6 +5597,8 @@ msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."
 msgstr ""
+"Disculpe, el editor de balizas no esta disponible para el formato de "
+"coordenadas UTM."
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:119
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:126
@@ -5593,7 +5636,7 @@ msgstr "Muestra los espacios aéreos debajo del corte"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr ""
+msgstr "Mostrar espacios aereos dentro de los margenes del planeador."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
 #, no-c-format
@@ -5604,6 +5647,7 @@ msgstr "Todos debajo"
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
 msgstr ""
+"Mostrar espacios aereos por debajo del planeador o dentro de un margen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:70
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:199
@@ -5618,6 +5662,8 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
+"Esto selecciona la mejor opcion para su dispositivo. En general, se prefiere "
+"'Rellenar el area' excepto  en los sistemas PPC2000"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
 #, no-c-format
@@ -5627,12 +5673,12 @@ msgstr "Llenar todo"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:74
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+msgstr "Llenar con el color del espacio aereo sobre toda el area"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:75
 #, no-c-format
 msgid "Fill padding"
-msgstr ""
+msgstr "Rellenar el area"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:76
 #, no-c-format
@@ -5670,6 +5716,9 @@ msgid ""
 "filter button also allows filtering of display and warnings independently "
 "for each airspace class."
 msgstr ""
+"Controles para filtrar el dibujo y las alertas de espacio aereo. El boton de "
+"filtro de espacio aereo permite filtrar el dibujo y las alertas para cada "
+"clase de espacio aereo."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
@@ -5704,6 +5753,8 @@ msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
+"Este es el tiempo (estimado) antes de que se produzca la incursion en el "
+"espacio aereo en el que el sistema avisará al piloto."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Repetitive sound"
@@ -5714,6 +5765,8 @@ msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
+"Habilita/deshabilita repeticion de la alerta de sonido cuando se muestra la "
+"alerta de espacio aereo."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid "Acknowledge time"
@@ -5724,6 +5777,8 @@ msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
 msgstr ""
+"Este es el periodo de tiempo durante el cual no se repetirá una alerta de "
+"espacio aereo reconocido."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:224
 msgid "Use black outline"
@@ -5733,22 +5788,24 @@ msgstr "Emplear línea negra"
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
+"Dibuja una linea negra alrededor de cada espacio aereo en lugar del color "
+"del espacio."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:229
 msgid "Airspace fill mode"
-msgstr ""
+msgstr "Modo de rellenado de espacios aereos"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:230
 msgid "Specifies the mode for filling the airspace area."
-msgstr ""
+msgstr "Especifica el modo en el que se rellenan las areas de espacio aereo."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "Airspace transparency"
-msgstr ""
+msgstr "Transparencia de Espacio aereo"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
+msgstr "Si se habilita, los espacios aereos se rellenan con transparencia."
 
 #: src/Dialogs/Settings/Panels/ExperimentalConfigPanel.cpp:42
 #, no-c-format
