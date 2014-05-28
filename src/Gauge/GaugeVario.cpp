@@ -207,9 +207,8 @@ GaugeVario::getPolygon(int i)
 void
 GaugeVario::MakeAllPolygons()
 {
-  if (polys && lines)
-    for (int i = -gmax; i <= gmax; i++)
-      MakePolygon(i);
+  for (int i = -gmax; i <= gmax; i++)
+    MakePolygon(i);
 }
 
 void
