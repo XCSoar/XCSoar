@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/ConvertString.hpp"
 
 bool
 FlarmDevice::Declare(const Declaration &declaration,
@@ -106,10 +107,12 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     DegLon = (int)tmp;
     MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    StaticString<90> buffer;
-    buffer.Format(_T("%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
+    const WideToUTF8Converter name(declaration.GetName(i));
+
+    NarrowString<90> buffer;
+    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,%s", DegLat,
                   (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
-                  declaration.GetName(i));
+                  (const char *)name);
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;
