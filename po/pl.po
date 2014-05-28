@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-02-20 10:29+0000\n"
+"PO-Revision-Date: 2014-04-30 08:58+0000\n"
 "Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-25 16:12+0000\n"
-"X-Generator: Launchpad (build 16926)\n"
+"X-Launchpad-Export-Date: 2014-05-28 16:24+0000\n"
+"X-Generator: Launchpad (build 17017)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -57,27 +57,27 @@ msgstr "FAI docel"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr "Prędkościowe"
+msgstr "Konkurencja wyścigowa"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr "Obszarówka AAT"
+msgstr "Konk. obszarowa AAT"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Obszarówka MAT"
+msgstr "Konk. obszarowa MAT"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Mixed"
-msgstr "AAT+PZty"
+msgstr "Konkurencja AAT+PZty"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr "Treningowy"
+msgstr "Przelot Treningowy"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -110,9 +110,9 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Konkurencja prędkościowa wzdłuż trasy z Punktami Zwrotnymi (PZ). Można "
-"zadeklarować zadania do warunków na odznaki lub rekordów FAI. Dopuszcza "
-"wszystkie kształty stref PZ-tów."
+"Konkurencja wyściogowa, prędkościoiwa, wzdłuż trasy z Punktami Zwrotnymi "
+"(PZ). Można zadeklarować zadania do warunków na odznaki lub rekordów FAI. "
+"Dopuszcza wszystkie kształty stref PZ-tów."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -120,8 +120,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
-"Trasa przez zadane obszary, stosuje się minimalny czas oblotu. Ograniczenia "
-"kształtu obszarów do okręgu lub sektora."
+"Trasa przez zadane obszary (AAT), stosuje się minimalny czas oblotu. "
+"Ograniczenia kształtu obszarów do okręgu lub sektora."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -140,7 +140,7 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
-"Konkurencja szybkościowa z mieszanymi obszarami i punktami zwrotnymi; "
+"Konkurencja prędkościowa z mieszanymi obszarami i punktami zwrotnymi; "
 "stosuje się min. czas oblotu."
 
 #: src/Task/TypeStrings.cpp:63
@@ -149,7 +149,7 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Zwykły przelot, z cylindrami na starcie i mecie oraz sektorami FAI na PZ-"
+"Przelot treningowy, z cylindrami na starcie i mecie oraz sektorami FAI na PZ-"
 "tach."
 
 #: src/Task/TypeStrings.cpp:76
@@ -212,7 +212,9 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr "Cylinder. Jakikolwiek punkt w rejonie punktowany z centrum"
+msgstr ""
+"Cylinder. Jakikolwiek punkt w obszarze o podanym promieniu liczonym od "
+"centrum."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
@@ -298,7 +300,7 @@ msgstr "Kwadrant FAI"
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr "Sektor keyhole (DAeC)"
+msgstr "Sektor 'keyhole' (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
@@ -987,14 +989,14 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"H GPS: Wysokość nad średnim poziomem morza na podstawie GPS. Ekran dotykowy: "
-"W trybie symulacji można zmienić jej wartość strzałkami góra/dół oraz "
-"zmienić kierunek szybowca strzałkami lewo/prawo."
+"H GPS: Wysokość nad poziomem morza na podstawie danych GPS i korekty geoidy "
+"wzgl. elipsoidy WGS84. Ekran dotykowy: W trybie symulacji można zmienić H "
+"GPS strzałkami góra/dół oraz zmienić kierunek szybowca strzałkami lewo/prawo."
 
 #: src/InfoBoxes/Content/Factory.cpp:174
 #, no-c-format
 msgid "Height AGL"
-msgstr "H AGL: wysokość na terenem"
+msgstr "H AGL: wysokość nawig. na terenem"
 
 #: src/InfoBoxes/Content/Factory.cpp:175
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
@@ -1009,19 +1011,21 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"H AGL: Wysokość nawigacyjna minus poziom terenu uzyskany z pliku mapy "
-"terenu. Wartość wyświetlana w kolorze czerwonym, gdy szybowiec znajduje się "
-"poniżej bezpiecznej wysokości nad terenem."
+"H AGL: Wysokość nawigacyjna (AMSL lub GPS, w zależności od ustawienia "
+"XCSoar: Komputer > Nawig. wg H AMSL) minus wysokość n.p.m. (elewacja) terenu "
+"uzyskana z aktualnie wykorzystywanego pliku mapy terenu. Wartość wyświetlana "
+"w kolorze czerwonym, gdy szybowiec znajduje się poniżej bezpiecznej "
+"wysokości H bezp nad terenem."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "dH 30s: Zysk wysokości przez ostanie 30s"
+msgstr "WAR 30s: średnie noszenie w okresie 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
 msgid "TC 30s"
-msgstr "dH 30s"
+msgstr "WAR 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
@@ -1029,8 +1033,8 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
-"dH 30s: Wznoszenie przez ostatnie 30 sekund na podstawie wysokości GPS lub "
-"wariometru, jeśli jest podłączony."
+"WAR 30s: średnie noszenie w okresie ostatnich 30 sekund, na podstawie GPS "
+"lub wariometru, jeśli jest podłączony."
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -1211,12 +1215,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "Next altitude difference"
-msgstr "PT dHbzp: wzgl.wys.przylotu nad PT"
+msgstr "PTdHMcU: różnica wysok. H GPS i przyl. PT Hprzyl dla MC Ustaw"
 
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
 msgid "WP AltD"
-msgstr "PT dHbzp"
+msgstr "PTdHMcU"
 
 #: src/InfoBoxes/Content/Factory.cpp:289
 #, no-c-format
@@ -1224,13 +1228,15 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"PT dHbzp: względna wysokość przylotu nad PT z uwzgl. Bezpiecznej Wysokości "
-"Przylotu. W zadaniach AAT dotyczy punktu centralnego w sektorze AAT."
+"PTdHMcU: różnica wysokości bieżącej i przylotu nad następny punkt trasy PT "
+"Hprzyl, z uwzgl. zapasu bezpieczeństwa dHbezp przy bieżącej nastawie "
+"MacCready'ego w polu MC Ustaw . Dla konkurencji AAT celem jest punkt w "
+"sektorze AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
 msgid "Next altitude required"
-msgstr "PT Hwym: wysokość PT +  zapas"
+msgstr "PT Hwym: wysokość npm PT +  zapas"
 
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
@@ -1271,12 +1277,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:319
 #, no-c-format
 msgid "Final altitude difference"
-msgstr "DOL dH: wzgl. wys. przylotu"
+msgstr "DOLdHMc: różnica wysok. H GPS i przylotu do mety na Hbezp"
 
 #: src/InfoBoxes/Content/Factory.cpp:320
 #, no-c-format
 msgid "Fin AltD"
-msgstr "DOL dH"
+msgstr "DOL dHMc"
 
 #: src/InfoBoxes/Content/Factory.cpp:321
 #, no-c-format
@@ -1284,13 +1290,13 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
-"DOL dH: wzgl. wys. przylotu do Punktu Końcowego Trasy (Mety), względem "
-"Bezpiecznej Wysokości Przylotu."
+"DOL dHMc: różnica wysokości bieżącej i przylotu nad końcowy punkt trasy, z "
+"uwzgl. zapasu bezpieczeństwa dHbezp przy nastawie MacCready'ego MC Ustaw."
 
 #: src/InfoBoxes/Content/Factory.cpp:329
 #, no-c-format
 msgid "Final altitude required"
-msgstr "DOL Hwym"
+msgstr "DOL Hwym: wysokość wymagana do rozpoczęcia dolotu"
 
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
@@ -1571,13 +1577,13 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:501
 #, no-c-format
 msgid "Barometric altitude"
-msgstr "H Baro: wysokość barometryczna"
+msgstr "H AMSL: wysokość barometryczna AMSL"
 
 #: src/InfoBoxes/Content/Factory.cpp:502
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
 #, no-c-format
 msgid "Alt Baro"
-msgstr "H Baro"
+msgstr "H AMSL"
 
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
@@ -1585,8 +1591,8 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
-"H Baro: wysokość barometryczna AMSL na podstawie odczytu ciśnienia "
-"statycznego."
+"H AMSL: wysokość barometryczna AMSL na podstawie odczytu ciśnienia "
+"statycznego i ustawionej wartości ciśnienia QNH."
 
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
@@ -1648,12 +1654,12 @@ msgstr "T lotu: czas, który upłynął od wykrycia startu ziemnego."
 #: src/InfoBoxes/Content/Factory.cpp:542
 #, no-c-format
 msgid "G load"
-msgstr "Przec. G: aktualne przeciążenie"
+msgstr "Przec.G: aktualne przeciążenie"
 
 #: src/InfoBoxes/Content/Factory.cpp:543
 #, no-c-format
 msgid "G"
-msgstr "Przec. G"
+msgstr "Przec.G"
 
 #: src/InfoBoxes/Content/Factory.cpp:544
 #, no-c-format
@@ -1661,7 +1667,7 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
-"Przec. G: Wartość chwilowa aktualnego przeciążenia z obsługiwanego "
+"Przec.G: Wartość chwilowa aktualnego przeciążenia z obsługiwanego "
 "zewnętrznego wariometru inteligentnego. Wartość ujemna dla przeciążeń "
 "ujemnych."
 
@@ -1711,12 +1717,12 @@ msgstr "Godz. UTC"
 #: src/InfoBoxes/Content/Factory.cpp:575
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr "Czas UTC: Czas 'uniwersalny' wg GPS."
+msgstr "Godz. UTC: Czas 'uniwersalny' wg GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:583
 #, no-c-format
 msgid "Task time to go"
-msgstr "DOLdtMC: Pozostały czas trasy"
+msgstr "DOLdTMC: Pozostały czas trasy"
 
 #: src/InfoBoxes/Content/Factory.cpp:584
 #, no-c-format
@@ -1735,12 +1741,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:593
 #, no-c-format
 msgid "Next time to go"
-msgstr "PT dT MC: czas lotu do nast. PT"
+msgstr "PT dTMC: czas lotu do nast. PT"
 
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
 msgid "WP ETE"
-msgstr "PT dT MC"
+msgstr "PT dTMC"
 
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
@@ -1748,7 +1754,7 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"PT dT MC: Szacowany czas lotu do następnego Punktu Trasy przy założeniu "
+"PT dTMC: Szacowany czas lotu do następnego Punktu Trasy przy założeniu "
 "idealnego cyklu wznoszenia/przeskoku wg teorii MacCready'ego."
 
 #: src/InfoBoxes/Content/Factory.cpp:604
@@ -2304,7 +2310,7 @@ msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
 msgstr ""
-"H StartZ: Wysokość nad automatycznie przyjętym poziomem startu ziemnego "
+"H StartZ: Wysokość nad automatycznie wyznaczonym poziomem startu ziemnego "
 "(podobnie do QFE)."
 
 #: src/InfoBoxes/Content/Factory.cpp:890
@@ -2588,12 +2594,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1052
 #, no-c-format
 msgid "Next time to go (ground speed)"
-msgstr "PT dT W: czas lotu do nast. PT z prędk. W"
+msgstr "PTdTW: czas lotu do nast. PT z prędk. W"
 
 #: src/InfoBoxes/Content/Factory.cpp:1053
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr "PT dT W"
+msgstr "PTdTW"
 
 #: src/InfoBoxes/Content/Factory.cpp:1054
 #, no-c-format
@@ -2601,7 +2607,7 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
 msgstr ""
-"PT dT W: Szacowany czas potrzebny do osiągnięcia następne punktu zwrotnego, "
+"PTdTW: Szacowany czas potrzebny do osiągnięcia następne punktu zwrotnego, "
 "zakładając że będzie zachowana obecna prędkość względem ziemi ."
 
 #: src/InfoBoxes/Content/Factory.cpp:1063
@@ -2664,12 +2670,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1093
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "PT HMC0: wysk.przyl. nad PT dla MC=0"
+msgstr "PTdHMc0: różnica wysok. H GPS i przyl. PT Hprzyl dla MC=0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "PT HMC0"
+msgstr "PTdHMc0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
 #, no-c-format
@@ -2678,7 +2684,9 @@ msgid ""
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"PT HMC0: wysokość przylotu nad następny PT przy nastawie MacCready'ego = 0"
+"PTdHMc0: różnica wysokości bieżącej i przylotu nad następny punkt trasy PT "
+"Hprzyl, z uwzgl. zapasu bezpieczeństwa dHbezp przy nastawie MacCready'ego = "
+"0. Dla konkurencji AAT celem jest punkt w sektorze AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
 #, no-c-format
@@ -2731,7 +2739,7 @@ msgstr "H (Auto)"
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "Alt Auto"
-msgstr "H (Auto): Wysokość automat."
+msgstr "H (Auto): Wysokość auto.: AMSL lub GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
@@ -2740,9 +2748,9 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
-"H (Auto): Wysokość barometryczna z podłączonego urządzenia wyposażonego w "
-"czujnik ciśnienia statycznego lub wysokość GPS, jeżeli wysokość "
-"barometryczna nie jest dostępna."
+"H (Auto): Wysokość AMSL na podstawie podłączonego urządzenia wyposażonego w "
+"czujnik ciśnienia statycznego (pamiętaj o ustawieniu ciśnienia QNH!) lub "
+"wysokość GPS, jeżeli wysokość barometryczna AMSL nie jest dostępna."
 
 #: src/InfoBoxes/Content/Factory.cpp:1135
 #, no-c-format
@@ -3332,7 +3340,7 @@ msgstr "Brak trasy"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
 #, no-c-format
 msgid "Altitude"
-msgstr "Wysokość"
+msgstr "Wysokość nawig."
 
 #: src/Input/InputEventsTask.cpp:337
 #: src/Renderer/FlightStatisticsRenderer.cpp:147
@@ -3449,7 +3457,7 @@ msgstr "Kąt drogi"
 #: src/Renderer/WaypointListRenderer.cpp:54
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:140
 msgid "Elevation"
-msgstr "Wysokość"
+msgstr "Wysokość n.p.m."
 
 #: src/Renderer/MapItemListRenderer.cpp:216
 #: src/Renderer/MapItemListRenderer.cpp:241
@@ -5388,7 +5396,7 @@ msgstr "Max.przewyższenie"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:91
 msgid "Near"
-msgstr "W pobliżu"
+msgstr "W pobliżu:"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
@@ -6140,16 +6148,17 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:84
 msgid "Nav. by baro altitude"
-msgstr "Nawig.wg wys.baro"
+msgstr "Nawiguj wg H AMSL"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:85
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
 msgstr ""
-"Kiedy włączone i podłączony do wysokościomierza barometrycznego, wysokość "
-"barometryczna jest używana do wszystkich funkcji nawigacyjnych. W innym "
-"razie wysokość GPS jest używana."
+"Kiedy opcja ta jest włączona (Tak) i program pobiera dane z wysokościomierza "
+"barometrycznego, do wszystkich funkcji nawigacyjnych wykorzystywana jest H "
+"AMSL. W przypadku  wybrania opcji Nie, w obliczeniach wykorzystywana jest H "
+"GPS."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid "Flap forces cruise"
@@ -6947,7 +6956,7 @@ msgstr "Wyłącza pokazywanie obszaru zasięgu."
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:196
 #, no-c-format
 msgid "Line"
-msgstr "Obwiednia"
+msgstr "Linia"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
@@ -6971,7 +6980,7 @@ msgstr "Prezentacja obszaru zasięgu"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:126
 msgid "Arrival height"
-msgstr "Wysokość przylotu"
+msgstr "Wysokość przylotu Hbezp"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:66
 msgid ""
@@ -6982,7 +6991,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:71
 msgid "Terrain height"
-msgstr "H AGL min. na dolocie"
+msgstr "Min. H AGL na dolocie"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
 msgid "The height above terrain that the glider must clear during final glide."
@@ -7071,7 +7080,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
 msgid "STF risk factor"
-msgstr "Wsp.ryzyka MCread"
+msgstr "Wsp. ryzyka MCread"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:115
 msgid ""
@@ -7443,13 +7452,13 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr "Poziom odniesienia to wys.nad poziom morza."
+msgstr "Poziomem odniesienia jest elewacja poziomu morza."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
 #, no-c-format
 msgid "Reference is the height above the task point."
-msgstr "Poziom odniesienia to wysokość nad punktem trasy."
+msgstr "Poziomem odniesienia jest elewacja Pkt. trasy."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:264
@@ -7490,7 +7499,7 @@ msgstr "Poz.odn. użyto do wyznaczenia min.wys.przylotu."
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:196
 #, no-c-format
 msgid "Gate width"
-msgstr "Szerokość Linii startu"
+msgstr "szer. bramki"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:80
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
@@ -8413,7 +8422,7 @@ msgstr "Zadeklaruj"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 msgid "Browse"
-msgstr "Wybierz z listy"
+msgstr "Wybierz..."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:8
