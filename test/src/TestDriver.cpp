@@ -63,6 +63,8 @@
 #include "TestUtil.hpp"
 #include "Units/System.hpp"
 
+#include <memory>
+
 static const DeviceConfig dummy_config = DeviceConfig();
 
 /*
