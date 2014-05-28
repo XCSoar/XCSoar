@@ -11,6 +11,8 @@ Version 6.7.5 - not yet released
 * airspace
   - assume all airspaces are active if day of week is not known
   - restore "Repetitive Sound" setting on startup (#3308)
+* Android
+  - fix crash when opening IOIO port (#3309)
 
 Version 6.7.4 - 2014/04/11
 * map
