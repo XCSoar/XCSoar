@@ -57,7 +57,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
 
     fixed sin_pitch = -2 * (q[0] * q[2] - q[3] * q[1]);
     if (sin_pitch <= fixed(1) && sin_pitch >= fixed(-1)) {
-      info.attitude.pitch_angle_available = true;
+      info.attitude.pitch_angle_available.Update(info.clock);
       info.attitude.pitch_angle = Angle::asin(sin_pitch);
 
       Angle heading = Angle::HalfCircle() +
@@ -70,7 +70,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
       Angle roll = Angle::FromXY(sqr(q[3]) + sqr(q[0]) - sqr(q[1]) - sqr(q[2]),
                                  Double(q[0] * q[1] + q[3] * q[2]));
 
-      info.attitude.bank_angle_available = true;
+      info.attitude.bank_angle_available.Update(info.clock);
       info.attitude.bank_angle = roll;
     }
   }

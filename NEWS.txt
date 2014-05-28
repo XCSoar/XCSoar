@@ -29,6 +29,18 @@ Version 6.8 - not yet released
   - support Wifi with WEP (#3138)
   - support USB-OTG
 
+Version 6.7.5 - not yet released
+* fix crash in task manager (#3305)
+* devices
+  - fixed attitude data handling
+  - properly detect LXNAV Nano 3
+  - FLARM: fix declaration with asterisk in task point name (#3323)
+* airspace
+  - assume all airspaces are active if day of week is not known
+  - restore "Repetitive Sound" setting on startup (#3308)
+* Android
+  - fix crash when opening IOIO port (#3309)
+
 Version 6.7.4 - 2014/04/11
 * map
   - fix topography rendering for polygon shapes (#3245)

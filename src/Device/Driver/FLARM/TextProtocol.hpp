@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2014 The XCSoar Project
+  Copyright (C) 2000-2013 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,25 +21,18 @@ Copyright_License {
 }
 */
 
-#include "NMEA/Attitude.hpp"
+#ifndef XCSOAR_FLARM_TEXT_PROTOCOL_HPP
+#define XCSOAR_FLARM_TEXT_PROTOCOL_HPP
 
-void
-AttitudeState::Complement(const AttitudeState &add)
-{
-  if (bank_angle_available.Complement(add.bank_angle_available))
-    bank_angle = add.bank_angle;
+#include "Compiler.h"
 
-  if (pitch_angle_available.Complement(add.pitch_angle_available))
-    pitch_angle = add.pitch_angle;
+/**
+ * Copy a string, ignoring all characters that are illegal in a
+ * setting value.  There is no buffer overflow check; the destination
+ * buffer must be large enough to fit all of the source string
+ * (worst-case).
+ */
+char *
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src);
 
-  if (heading_available.Complement(add.heading_available))
-    heading = add.heading;
-}
-
-void
-AttitudeState::Expire(fixed now)
-{
-  bank_angle_available.Expire(now, fixed(5));
-  pitch_angle_available.Expire(now, fixed(5));
-  heading_available.Expire(now, fixed(5));
-}
+#endif

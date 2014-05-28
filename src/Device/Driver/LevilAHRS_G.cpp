@@ -91,10 +91,10 @@ ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
     error_reported = true;
   }
 
-  info.attitude.bank_angle_available = true;
+  info.attitude.bank_angle_available.Update(info.clock);
   info.attitude.bank_angle = Angle::Degrees(fixed(roll) / 10);
 
-  info.attitude.pitch_angle_available = true;
+  info.attitude.pitch_angle_available.Update(info.clock);
   info.attitude.pitch_angle = Angle::Degrees(fixed(pitch) / 10);
 
   info.attitude.heading_available.Update(info.clock);

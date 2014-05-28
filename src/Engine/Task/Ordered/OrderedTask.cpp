@@ -1464,6 +1464,7 @@ OrderedTask::RemoveAllPoints()
 
   optional_start_points.clear();
 
+  active_task_point = 0;
   taskpoint_start = nullptr;
   taskpoint_finish = nullptr;
   force_full_update = true;

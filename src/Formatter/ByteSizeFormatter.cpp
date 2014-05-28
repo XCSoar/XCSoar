@@ -40,7 +40,7 @@ FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
   fixed value = fixed(bytes);
 
   unsigned i = 0;
-  for (; value >= fixed(1024) && i < ARRAY_SIZE(units); i++, value /= 1024);
+  for (; value >= fixed(1024) && i < ARRAY_SIZE(units)-1; i++, value /= 1024);
 
   const TCHAR *unit = simple ? simple_units[i] : units[i];
 

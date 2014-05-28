@@ -22,9 +22,11 @@ Copyright_License {
 */
 
 #include "Device.hpp"
+#include "TextProtocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/ConvertString.hpp"
 
 bool
 FlarmDevice::Declare(const Declaration &declaration,
@@ -71,12 +73,12 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
 
   env.SetProgressPosition(3);
 
-  if (!SetConfig("NEWTASK", _T("Task"), env))
+  if (!SetConfig("NEWTASK", "Task", env))
     return false;
 
   env.SetProgressPosition(4);
 
-  if (!SetConfig("ADDWP", _T("0000000N,00000000E,TAKEOFF"), env))
+  if (!SetConfig("ADDWP", "0000000N,00000000E,TAKEOFF", env))
     return false;
 
   env.SetProgressPosition(5);
@@ -106,10 +108,13 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     DegLon = (int)tmp;
     MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    StaticString<256> buffer;
-    buffer.Format(_T("%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
-                  (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
-                  declaration.GetName(i));
+    const WideToUTF8Converter name(declaration.GetName(i));
+
+    NarrowString<90> buffer;
+    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
+                  DegLat, (double)MinLat, NoS,
+                  DegLon, (double)MinLon, EoW);
+    CopyCleanFlarmString(buffer.buffer() + buffer.length(), name);
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;
@@ -117,7 +122,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     env.SetProgressPosition(6 + i);
   }
 
-  if (!SetConfig("ADDWP", _T("0000000N,00000000E,LANDING"), env))
+  if (!SetConfig("ADDWP", "0000000N,00000000E,LANDING", env))
     return false;
 
   env.SetProgressPosition(6 + size);

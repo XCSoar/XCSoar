@@ -52,10 +52,10 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2
     - Layout::Scale(1);
 
-  fixed bank_degrees = attitude.bank_angle_available ?
+  fixed bank_degrees = attitude.IsBankAngleUseable() ?
                        attitude.bank_angle.Degrees() : fixed(0);
 
-  fixed pitch_degrees = attitude.pitch_angle_available ?
+  fixed pitch_degrees = attitude.IsPitchAngleUseable() ?
                         attitude.pitch_angle.Degrees() : fixed(0);
 
   fixed phi = Clamp(bank_degrees, fixed(-89), fixed(89));

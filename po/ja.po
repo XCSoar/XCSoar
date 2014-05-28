@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-12-30 12:29+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2014-05-23 00:07+0000\n"
+"Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-05 20:28+0000\n"
-"X-Generator: Launchpad (build 16877)\n"
+"X-Launchpad-Export-Date: 2014-05-28 16:24+0000\n"
+"X-Generator: Launchpad (build 17017)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -65,7 +65,7 @@ msgstr "AATタスク"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "変更エリアタスク"
+msgstr "エリアタスク"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -128,8 +128,8 @@ msgid ""
 msgstr ""
 "変更エリアタスク　\r\n"
 "スタート、フィニッシュ、最低１箇所の円筒（１マイル）を含む\r\n"
-"パイロットは追加のポイントを設定することができる。\r\n"
-"最低タスク時間が適用される"
+" パイロットは追加のポイントを設定することができる。\r\n"
+" 最小タスク時間が適用される"
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -173,7 +173,7 @@ msgstr "シリンダー（円筒）　エリアから出てた場合"
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
-msgstr "半径無制限の９０度扇形セクター内側から　任意のエッジを通過した場合"
+msgstr "半径無制限の９０度扇形セクター境を内側から　外に向かって通過した場合"
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -181,9 +181,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
-"（ドイツルール）\r\n"
-"ポイントから１/２ｋｍの円筒または　半径１０ｋｍの９０度セクター境を　内側から"
-"外に向かって通過した場合"
+"（ドイツルール）半径１０kmの90度セクターの場合、中心から半径１/２kmの範囲内の"
+"任意のポイントはその中心点より採点する"
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -208,7 +207,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr "シリンダー（円筒）　内側から任意の境界線を通過した場合"
+msgstr "シリンダー（円筒）　内側から外に向かって境界線を通過した場合"
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
@@ -232,7 +231,7 @@ msgstr "半径と角度とで指定されたセクター境界への到着"
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr "フィニッシュラインに接した半径１ｋｍ　９０度のセクター"
+msgstr "フィニッシュラインに接した半径１ｋｍ　９０度のセクター境界線"
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -242,13 +241,15 @@ msgstr "直線のフィニッシュゲートを通過した場合"
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr "円筒フィニッシュ　エリアに入った場合"
+msgstr "円筒フィニッシュ　エリア境界内に入った場合"
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
-msgstr "半径５ｋｍ　１８０度扇形セクター　エリアを任意の方向に出た場合"
+msgstr ""
+"半径５ｋｍ　１８０度扇形セクター　エリア境界内側から外に向かって任意の方向に"
+"出た場合"
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
@@ -4547,11 +4548,11 @@ msgstr "無線機"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 msgid "Top"
-msgstr "上"
+msgstr "上限高度"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
-msgstr "基地"
+msgstr "下限高度"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
