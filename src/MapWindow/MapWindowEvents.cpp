@@ -94,8 +94,8 @@ MapWindow::OnPaint(Canvas &canvas)
 
     /* do the projection */
 
-    const UPixelScalar buffer_width = buffer_projection.GetScreenWidth();
-    const UPixelScalar buffer_height = buffer_projection.GetScreenHeight();
+    const int buffer_width = buffer_projection.GetScreenWidth();
+    const int buffer_height = buffer_projection.GetScreenHeight();
 
     const RasterPoint top_left =
       visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(0, 0));
