@@ -7,6 +7,7 @@ Version 6.7.5 - not yet released
 * devices
   - fixed attitude data handling
   - properly detect LXNAV Nano 3
+  - FLARM: fix declaration with asterisk in task point name (#3323)
 * airspace
   - assume all airspaces are active if day of week is not known
   - restore "Repetitive Sound" setting on startup (#3308)

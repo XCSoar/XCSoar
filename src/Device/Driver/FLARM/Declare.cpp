@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device.hpp"
+#include "TextProtocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
@@ -110,9 +111,10 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     const WideToUTF8Converter name(declaration.GetName(i));
 
     NarrowString<90> buffer;
-    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,%s", DegLat,
-                  (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
-                  (const char *)name);
+    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
+                  DegLat, (double)MinLat, NoS,
+                  DegLon, (double)MinLon, EoW);
+    CopyCleanFlarmString(buffer.buffer() + buffer.length(), name);
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;

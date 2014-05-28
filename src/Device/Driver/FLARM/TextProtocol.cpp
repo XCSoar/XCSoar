@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "TextProtocol.hpp"
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
@@ -28,6 +29,32 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
+
+static constexpr bool
+IsForbiddenFlarmChar(unsigned char ch)
+{
+  return
+    /* don't allow ASCII control characters */
+    ch < 0x20 ||
+    /* don't allow NMEA control characters */
+    ch == '$' || ch == '*';
+}
+
+char *
+CopyCleanFlarmString(char *gcc_restrict dest, const char *gcc_restrict src)
+{
+  while (true) {
+    char ch = *src++;
+    if (ch == 0)
+      break;
+
+    if (!IsForbiddenFlarmChar(ch))
+      *dest++ = ch;
+  }
+
+  *dest = 0;
+  return dest;
+}
 
 bool
 FlarmDevice::TextMode(OperationEnvironment &env)
