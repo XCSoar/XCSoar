@@ -31,12 +31,9 @@
 
 #include "TrafficDialogs.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/Button.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"
@@ -52,23 +49,125 @@
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Blackboard/ScopeGPSListener.hpp"
+#include "Blackboard/LiveBlackboard.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "TeamActions.hpp"
 
 #include <math.h>
 #include <stdio.h>
 
-static WndForm *wf = NULL;
-static FlarmId target_id;
+class FlarmTrafficDetailsWidget final
+  : public RowFormWidget, ActionListener, NullBlackboardListener {
+  enum Controls {
+    CALLSIGN,
+    CHANGE_CALLSIGN_BUTTON,
+    SPACER1,
+    DISTANCE,
+    ALTITUDE,
+    VARIO,
+    SPACER2,
+    PILOT,
+    AIRPORT,
+    RADIO,
+    PLANE,
+  };
+
+  enum Buttons {
+    CHANGE_CALLSIGN,
+    TEAM,
+    CLEAR,
+    GREEN,
+    BLUE,
+    YELLOW,
+    MAGENTA,
+  };
+
+  WndForm &dialog;
+
+  const FlarmId target_id;
+
+public:
+  FlarmTrafficDetailsWidget(WndForm &_dialog, FlarmId _target_id)
+    :RowFormWidget(_dialog.GetLook()), dialog(_dialog),
+     target_id(_target_id) {}
+
+  void CreateButtons(WidgetDialog &buttons);
+
+  /* virtual methods from Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
+
+private:
+  void UpdateChanging(const MoreData &basic);
+  void Update();
+
+  void OnCallsignClicked();
+  void OnTeamClicked();
+  void OnFriendColorClicked(FlarmColor color);
+
+  /* virtual methods from ActionListener */
+  void OnAction(int id) override;
+
+  /* virtual methods from BlackboardListener */
+  void OnGPSUpdate(const MoreData &basic) override {
+    UpdateChanging(basic);
+  }
+};
+
+inline void
+FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
+{
+  buttons.AddSymbolButton(_T("#74FF00"), *this, GREEN);
+  buttons.AddSymbolButton(_T("#0090FF"), *this, BLUE);
+  buttons.AddSymbolButton(_T("#FFE800"), *this, YELLOW);
+  buttons.AddSymbolButton(_T("#FF00CB"), *this, MAGENTA);
+  buttons.AddButton(_("Clear"), *this, CLEAR);
+  buttons.AddButton(_("Team"), *this, TEAM);
+}
+
+void
+FlarmTrafficDetailsWidget::Prepare(ContainerWindow &parent,
+                                   const PixelRect &rc)
+{
+  AddReadOnly(_("Callsign"));
+  AddButton(_("Change callsign"), *this, CHANGE_CALLSIGN);
+  AddSpacer();
+  AddReadOnly(_("Distance"));
+  AddReadOnly(_("Altitude"));
+  AddReadOnly(_("Vario"));
+  AddSpacer();
+  AddReadOnly(_("Pilot"));
+  AddReadOnly(_("Airport"));
+  AddReadOnly(_("Radio frequency"));
+  AddReadOnly(_("Plane"));
+
+  Update();
+}
+
+void
+FlarmTrafficDetailsWidget::Show(const PixelRect &rc)
+{
+  RowFormWidget::Show(rc);
+  Update();
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
+}
+
+void
+FlarmTrafficDetailsWidget::Hide()
+{
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+  RowFormWidget::Hide();
+}
 
 /**
  * Updates all the dialogs fields, that are changing frequently.
  * e.g. climb speed, distance, height
  */
-static void
-UpdateChanging(const MoreData &basic)
+void
+FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 {
-  TCHAR tmp[20];
+  TCHAR tmp[40];
   const TCHAR *value;
 
   const FlarmTraffic* target =
@@ -76,39 +175,35 @@ UpdateChanging(const MoreData &basic)
 
   bool target_ok = target && target->IsDefined();
 
-  // Fill distance field
+  // Fill distance/direction field
   if (target_ok) {
     FormatUserDistanceSmart(target->distance, tmp, 20, fixed(1000));
+    TCHAR *p = tmp + _tcslen(tmp);
+    *p++ = _T(' ');
+    FormatAngleDelta(p, 20, target->Bearing() - basic.track);
     value = tmp;
   } else
     value = _T("--");
-  SetFormValue(*wf, _T("prpDistance"), value);
 
-  // Fill horizontal direction field
-  if (target_ok) {
-    FormatAngleDelta(tmp, ARRAY_SIZE(tmp),
-                     target->Bearing() - basic.track);
-    value = tmp;
-  } else
-    value = _T("--");
-  SetFormValue(*wf, _T("prpDirectionH"), value);
+  SetText(DISTANCE, value);
 
   // Fill altitude field
-  if (target_ok && target->altitude_available) {
-    FormatUserAltitude(target->altitude, tmp, 20);
-    value = tmp;
-  } else
-    value = _T("--");
-  SetFormValue(*wf, _T("prpAltitude"), value);
-
-  // Fill vertical direction field
   if (target_ok) {
+    TCHAR *p = tmp;
+    if (target->altitude_available) {
+      FormatUserAltitude(target->altitude, p, 20);
+      p += _tcslen(p);
+      *p++ = _T(' ');
+    }
+
     Angle dir = Angle::FromXY(target->distance, target->relative_altitude);
-    FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
+    FormatVerticalAngleDelta(p, 20, dir);
+
     value = tmp;
   } else
     value = _T("--");
-  SetFormValue(*wf, _T("prpDirectionV"), value);
+
+  SetText(ALTITUDE, value);
 
   // Fill climb speed field
   if (target_ok && target->climb_rate_avg30s_available) {
@@ -116,7 +211,8 @@ UpdateChanging(const MoreData &basic)
     value = tmp;
   } else
     value = _T("--");
-  SetFormValue(*wf, _T("prpVSpeed"), value);
+
+  SetText(VARIO, value);
 }
 
 /**
@@ -124,8 +220,8 @@ UpdateChanging(const MoreData &basic)
  * Should be called on dialog opening as it closes the dialog when the
  * target does not exist.
  */
-static void
-Update()
+void
+FlarmTrafficDetailsWidget::Update()
 {
   TCHAR tmp[200], tmp_id[7];
   const TCHAR *value;
@@ -133,14 +229,14 @@ Update()
   // Set the dialog caption
   _stprintf(tmp, _T("%s (%s)"),
             _("FLARM Traffic Details"), target_id.Format(tmp_id));
-  wf->SetCaption(tmp);
+  dialog.SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
   /// @todo: make this code a little more usable
   const FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
-    SetFormValue(*wf, _T("prpPilot"), record->pilot);
+    SetText(PILOT, record->pilot);
 
     // Fill the frequency field
     if (!StringIsEmpty(record->frequency)) {
@@ -149,22 +245,22 @@ Update()
       value = tmp;
     } else
       value = _T("--");
-    SetFormValue(*wf, _T("prpFrequency"), value);
+    SetText(RADIO, value);
 
     // Fill the home airfield field
-    SetFormValue(*wf, _T("prpAirport"), record->airfield);
+    SetText(AIRPORT, record->airfield);
 
     // Fill the plane type field
-    SetFormValue(*wf, _T("prpPlaneType"), record->plane_type);
+    SetText(PLANE, record->plane_type);
   } else {
     // Fill the pilot name field
-    SetFormValue(*wf, _T("prpPilot"), _T("--"));
+    SetText(PILOT, _T("--"));
 
     // Fill the frequency field
-    SetFormValue(*wf, _T("prpFrequency"), _T("--"));
+    SetText(RADIO, _T("--"));
 
     // Fill the home airfield field
-    SetFormValue(*wf, _T("prpAirport"), _T("--"));
+    SetText(AIRPORT, _T("--"));
 
     // Fill the plane type field
     const FlarmTraffic* target =
@@ -175,7 +271,7 @@ Update()
         (actype = FlarmTraffic::GetTypeString(target->type)) == NULL)
       actype = _T("--");
 
-    SetFormValue(*wf, _T("prpPlaneType"), actype);
+    SetText(PLANE, actype);
   }
 
   // Fill the callsign field (+ registration)
@@ -192,7 +288,7 @@ Update()
     value = tmp;
   } else
     value = _T("--");
-  SetFormValue(*wf, _T("prpCallsign"), value);
+  SetText(CALLSIGN, value);
 
   // Update the frequently changing fields too
   UpdateChanging(CommonInterface::Basic());
@@ -201,8 +297,8 @@ Update()
 /**
  * This event handler is called when the "Team" button is pressed
  */
-static void
-OnTeamClicked()
+inline void
+FlarmTrafficDetailsWidget::OnTeamClicked()
 {
   // Ask for confirmation
   if (ShowMessageBox(_("Do you want to set this FLARM contact as your new teammate?"),
@@ -212,14 +308,14 @@ OnTeamClicked()
   TeamActions::TrackFlarm(target_id);
 
   // Close the dialog
-  wf->SetModalResult(mrOK);
+  dialog.SetModalResult(mrOK);
 }
 
 /**
  * This event handler is called when the "Change Callsign" button is pressed
  */
-static void
-OnCallsignClicked()
+inline void
+FlarmTrafficDetailsWidget::OnCallsignClicked()
 {
   StaticString<21> newName;
   newName.clear();
@@ -230,51 +326,46 @@ OnCallsignClicked()
   Update();
 }
 
-static void
-OnFriendBlueClicked()
+void
+FlarmTrafficDetailsWidget::OnFriendColorClicked(FlarmColor color)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmColor::BLUE);
-  wf->SetModalResult(mrOK);
+  FlarmFriends::SetFriendColor(target_id, color);
+  dialog.SetModalResult(mrOK);
 }
 
-static void
-OnFriendGreenClicked()
+void
+FlarmTrafficDetailsWidget::OnAction(int id)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmColor::GREEN);
-  wf->SetModalResult(mrOK);
-}
+  switch (id) {
+  case CHANGE_CALLSIGN:
+    OnCallsignClicked();
+    break;
 
-static void
-OnFriendYellowClicked()
-{
-  FlarmFriends::SetFriendColor(target_id, FlarmColor::YELLOW);
-  wf->SetModalResult(mrOK);
-}
+  case TEAM:
+    OnTeamClicked();
+    break;
 
-static void
-OnFriendMagentaClicked()
-{
-  FlarmFriends::SetFriendColor(target_id, FlarmColor::MAGENTA);
-  wf->SetModalResult(mrOK);
-}
+  case CLEAR:
+    OnFriendColorClicked(FlarmColor::NONE);
+    break;
 
-static void
-OnFriendClearClicked()
-{
-  FlarmFriends::SetFriendColor(target_id, FlarmColor::NONE);
-  wf->SetModalResult(mrOK);
-}
+  case GREEN:
+    OnFriendColorClicked(FlarmColor::GREEN);
+    break;
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnTeamClicked),
-  DeclareCallBackEntry(OnCallsignClicked),
-  DeclareCallBackEntry(OnFriendGreenClicked),
-  DeclareCallBackEntry(OnFriendBlueClicked),
-  DeclareCallBackEntry(OnFriendYellowClicked),
-  DeclareCallBackEntry(OnFriendMagentaClicked),
-  DeclareCallBackEntry(OnFriendClearClicked),
-  DeclareCallBackEntry(NULL)
-};
+  case BLUE:
+    OnFriendColorClicked(FlarmColor::BLUE);
+    break;
+
+  case YELLOW:
+    OnFriendColorClicked(FlarmColor::YELLOW);
+    break;
+
+  case MAGENTA:
+    OnFriendColorClicked(FlarmColor::MAGENTA);
+    break;
+  }
+}
 
 /**
  * The function opens the FLARM Traffic Details dialog
@@ -282,26 +373,15 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 void
 dlgFlarmTrafficDetailsShowModal(FlarmId id)
 {
-  if (wf)
-    return;
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  target_id = id;
+  WidgetDialog dialog(look);
 
-  // Load dialog from XML
-  wf = LoadDialog(CallBackTable,
-      UIGlobals::GetMainWindow(), Layout::landscape ?
-      _T("IDR_XML_FLARMTRAFFICDETAILS_L") : _T("IDR_XML_FLARMTRAFFICDETAILS"));
-  assert(wf != NULL);
-
-  // Update fields for the first time
-  Update();
-
-  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(), UpdateChanging);
-
-  // Show the dialog
-  wf->ShowModal();
-
-  // After dialog closed -> delete it
-  delete wf;
-  wf = NULL;
+  FlarmTrafficDetailsWidget *widget =
+    new FlarmTrafficDetailsWidget(dialog, id);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("FLARM Traffic Details"),
+                    widget);
+  widget->CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrCancel);
+  dialog.ShowModal();
 }
