@@ -22,25 +22,55 @@ Copyright_License {
 */
 
 #include "WaypointDialogs.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
 #include "Screen/Layout.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-#include <assert.h>
+/* this macro exists in the WIN32 API */
+#ifdef DELETE
+#undef DELETE
+#endif
+
+class WaypointManagerWidget final
+  : public RowFormWidget, private ActionListener {
+  enum Buttons {
+    NEW,
+    EDIT,
+    SAVE,
+    DELETE,
+  };
+
+public:
+  WaypointManagerWidget(const DialogLook &look)
+    :RowFormWidget(look) {}
+
+  /* virtual methods from Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+
+private:
+  /* virtual methods from ActionListener */
+  void OnAction(int id) override;
+};
 
 static bool WaypointsNeedSave = false;
+
+void
+WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  AddButton(_("New"), *this, NEW);
+  AddButton(_("Edit"), *this, EDIT);
+  AddButton(_("Save"), *this, SAVE);
+  AddButton(_("Delete"), *this, DELETE);
+}
 
 static void
 OnWaypointNewClicked()
@@ -127,31 +157,42 @@ OnWaypointDeleteClicked()
   }
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnWaypointNewClicked),
-  DeclareCallBackEntry(OnWaypointDeleteClicked),
-  DeclareCallBackEntry(OnWaypointEditClicked),
-  DeclareCallBackEntry(OnWaypointSaveClicked),
-  DeclareCallBackEntry(nullptr)
-};
+void
+WaypointManagerWidget::OnAction(int id)
+{
+  switch (Buttons(id)) {
+  case NEW:
+    OnWaypointNewClicked();
+    break;
+
+  case EDIT:
+    OnWaypointEditClicked();
+    break;
+
+  case SAVE:
+    OnWaypointSaveClicked();
+    break;
+
+  case DELETE:
+    OnWaypointDeleteClicked();
+    break;
+  }
+}
 
 void
 dlgConfigWaypointsShowModal()
 {
-  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                           Layout::landscape
-                           ? _T("IDR_XML_CONFIG_WAYPOINTS_L")
-                           : _T("IDR_XML_CONFIG_WAYPOINTS"));
-  assert(wf != nullptr);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Waypoints Editor"),
+                    new WaypointManagerWidget(look));
+  dialog.AddButton(_("Close"), mrCancel);
 
   WaypointsNeedSave = false;
-
-  wf->ShowModal();
+  dialog.ShowModal();
 
   if (WaypointsNeedSave &&
       ShowMessageBox(_("Save changes to waypoint file?"), _("Waypoints edited"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
       SaveWaypoints();
-
-  delete wf;
 }
