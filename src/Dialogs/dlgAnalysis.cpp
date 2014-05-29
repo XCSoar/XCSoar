@@ -27,6 +27,8 @@ Copyright_License {
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/Widget.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
@@ -75,36 +77,34 @@ enum class AnalysisPage: uint8_t {
   COUNT
 };
 
-class ChartControl;
-
 static const Look *look;
 static const FullBlackboard *blackboard;
 static GlideComputer *glide_computer;
 static const ProtectedTaskManager *protected_task_manager;
-static const Airspaces *airspaces;
-static const RasterTerrain *terrain;
 
 static AnalysisPage page = AnalysisPage::BAROGRAPH;
-static WndForm *wf = NULL;
-static ChartControl *wGrid = NULL;
-static WndFrame *wInfo;
-static WndButton *wCalc = NULL;
+
+class AnalysisWidget;
 
 class ChartControl: public PaintWindow
 {
+  AnalysisWidget &analysis_widget;
+
   const ChartLook &chart_look;
   const ThermalBandLook &thermal_band_look;
   CrossSectionRenderer cross_section_renderer;
   GestureManager gestures;
 
 public:
-  ChartControl(const ChartLook &_chart_look,
+  ChartControl(AnalysisWidget &_analysis_widget,
+               const ChartLook &_chart_look,
                const ThermalBandLook &_thermal_band_look,
                const CrossSectionLook &cross_section_look,
                const AirspaceLook &airspace_look,
                const Airspaces *airspaces,
                const RasterTerrain *terrain)
-    :chart_look(_chart_look),
+    :analysis_widget(_analysis_widget),
+     chart_look(_chart_look),
      thermal_band_look(_thermal_band_look),
      cross_section_renderer(cross_section_look, airspace_look, chart_look) {
     cross_section_renderer.SetAirspaces(airspaces);
@@ -123,18 +123,185 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
 
-static void
-SetCalcVisibility(const bool visible)
+class AnalysisWidget final : public NullWidget, ActionListener {
+  enum Buttons {
+    PREVIOUS,
+    NEXT,
+    DETAILS,
+  };
+
+  struct Layout {
+    PixelRect info;
+    PixelRect details_button, previous_button, next_button, close_button;
+    PixelRect main;
+
+    explicit Layout(const PixelRect rc);
+  };
+
+  WndForm &dialog;
+
+  WndFrame info;
+  WndButton details_button, previous_button, next_button, close_button;
+  ChartControl chart;
+
+public:
+  AnalysisWidget(WndForm &_dialog, const Look &look,
+                 const Airspaces *airspaces,
+                 const RasterTerrain *terrain)
+    :dialog(_dialog),
+     info(look.dialog),
+     details_button(look.dialog.button),
+     previous_button(look.dialog.button), next_button(look.dialog.button),
+     close_button(look.dialog.button),
+     chart(*this, look.chart, look.thermal_band, look.cross_section,
+           look.map.airspace, airspaces, terrain) {
+  }
+
+  void SetCalcVisibility(bool visible);
+  void SetCalcCaption(const TCHAR *caption);
+
+  void NextPage(int step);
+  void Update();
+
+  void OnGesture(const TCHAR *gesture);
+
+private:
+  void OnCalcClicked();
+
+protected:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+
+  void Show(const PixelRect &rc) override {
+    const Layout layout(rc);
+
+    info.MoveAndShow(layout.info);
+    details_button.MoveAndShow(layout.details_button);
+    previous_button.MoveAndShow(layout.previous_button);
+    next_button.MoveAndShow(layout.next_button);
+    close_button.MoveAndShow(layout.close_button);
+    chart.MoveAndShow(layout.main);
+
+    Update();
+  }
+
+  void Hide() override {
+    info.Hide();
+    details_button.Hide();
+    previous_button.Hide();
+    next_button.Hide();
+    close_button.Hide();
+    chart.Hide();
+  }
+
+  bool SetFocus() override {
+    close_button.SetFocus();
+    return true;
+  }
+
+  bool KeyPress(unsigned key_code) override;
+
+private:
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case PREVIOUS:
+      NextPage(-1);
+      break;
+
+    case NEXT:
+      NextPage(1);
+      break;
+
+    case DETAILS:
+      OnCalcClicked();
+      break;
+    }
+  }
+};
+
+AnalysisWidget::Layout::Layout(const PixelRect rc)
 {
-  assert(wCalc != NULL);
-  wCalc->SetVisible(visible);
+  const unsigned width = rc.right - rc.left;
+  const unsigned height = rc.bottom - rc.top;
+  const unsigned button_height = ::Layout::GetMaximumControlHeight();
+
+  main = rc;
+
+  /* close button on the bottom left */
+
+  close_button.left = rc.left;
+  close_button.right = rc.left + ::Layout::Scale(70);
+  close_button.bottom = rc.bottom;
+  close_button.top = close_button.bottom - button_height;
+
+  /* previous/next buttons above the close button */
+
+  previous_button = close_button;
+  previous_button.bottom = previous_button.top;
+  previous_button.top = previous_button.bottom - button_height;
+  previous_button.right = (previous_button.left + previous_button.right) / 2;
+
+  next_button = previous_button;
+  next_button.left = next_button.right;
+  next_button.right = close_button.right;
+
+  /* "details" button above "previous/next" */
+
+  details_button = close_button;
+  details_button.bottom = previous_button.top;
+  details_button.top = details_button.bottom - button_height;
+
+  if (width > height) {
+    info = close_button;
+    info.top = rc.top;
+    info.bottom = details_button.top;
+
+    main.left = close_button.right;
+  } else {
+    main.bottom = details_button.top;
+    info.left = close_button.right;
+    info.right = rc.right;
+    info.top = main.bottom;
+    info.bottom = rc.bottom;
+  }
 }
 
-static void
-SetCalcCaption(const TCHAR* caption)
+void
+AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(wCalc != NULL);
-  wCalc->SetCaption(caption);
+  const Layout layout(rc);
+
+  ButtonWindowStyle button_style;
+  button_style.Hide();
+  button_style.TabStop();
+
+  info.Create(parent, layout.info);
+  details_button.Create(parent, _T("Calc"), layout.details_button,
+                        button_style, *this, DETAILS);
+  previous_button.Create(parent, _T("<"), layout.previous_button,
+                         button_style, *this, PREVIOUS);
+  next_button.Create(parent, _T(">"), layout.next_button,
+                     button_style, *this, NEXT);
+  close_button.Create(parent, _("Close"), layout.close_button,
+                      button_style, dialog, mrOK);
+
+  WindowStyle style;
+  style.Hide();
+
+  chart.Create(parent, layout.main, style);
+}
+
+void
+AnalysisWidget::SetCalcVisibility(bool visible)
+{
+  details_button.SetVisible(visible);
+}
+
+void
+AnalysisWidget::SetCalcCaption(const TCHAR *caption)
+{
+  details_button.SetCaption(caption);
   SetCalcVisibility(!StringIsEmpty(caption));
 }
 
@@ -262,14 +429,11 @@ ChartControl::UpdateCrossSection()
     cross_section_renderer.SetInvalid();
 }
 
-static void
-Update()
+void
+AnalysisWidget::Update()
 {
   TCHAR sTmp[1000];
 
-  assert(wf != NULL);
-  assert(wInfo != NULL);
-  assert(wGrid != NULL);
   assert(glide_computer != NULL);
 
   const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
@@ -279,35 +443,35 @@ Update()
   case AnalysisPage::BAROGRAPH:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Barograph"));
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     BarographCaption(sTmp, glide_computer->GetFlightStats());
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
 
   case AnalysisPage::CLIMB:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Climb"));
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
 
   case AnalysisPage::THERMAL_BAND:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Thermal Band"));
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     SetCalcCaption(_T(""));
     break;
 
   case AnalysisPage::WIND:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Wind at Altitude"));
-    wf->SetCaption(sTmp);
-    wInfo->SetCaption(_T(""));
+    dialog.SetCaption(sTmp);
+    info.SetText(_T(""));
     SetCalcCaption(_("Set Wind"));
     break;
 
@@ -315,53 +479,53 @@ Update()
     StringFormatUnsafe(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
                        _("Glide Polar"), _("Mass"),
                        (int)settings_computer.polar.glide_polar_task.GetTotalMass());
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
 
   case AnalysisPage::TEMPTRACE:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Temp Trace"));
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer->GetCuSonde());
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
 
   case AnalysisPage::TASK_SPEED:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Task Speed"));
-    wf->SetCaption(sTmp);
-    wInfo->SetCaption(_T(""));
+    dialog.SetCaption(sTmp);
+    info.SetText(_T(""));
     SetCalcCaption(_("Task Calc"));
     break;
 
   case AnalysisPage::TASK:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Task"));
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     SetCalcCaption(_("Task calc"));
     break;
 
   case AnalysisPage::OLC:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        ContestToString(settings_computer.contest.contest));
-    wf->SetCaption(sTmp);
+    dialog.SetCaption(sTmp);
     SetCalcCaption(_T(""));
     FlightStatisticsRenderer::CaptionOLC(sTmp, settings_computer.contest,
                                          calculated);
-    wInfo->SetCaption(sTmp);
+    info.SetText(sTmp);
     break;
 
   case AnalysisPage::AIRSPACE:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Airspace"));
-    wf->SetCaption(sTmp);
-    wInfo->SetCaption(_T(""));
+    dialog.SetCaption(sTmp);
+    info.SetText(_T(""));
     SetCalcCaption(_("Warnings"));
     break;
 
@@ -370,13 +534,13 @@ Update()
   }
 
   if (page == AnalysisPage::AIRSPACE)
-    wGrid->UpdateCrossSection();
+    chart.UpdateCrossSection();
 
-  wGrid->Invalidate();
+  chart.Invalidate();
 }
 
-static void
-NextPage(int Step)
+void
+AnalysisWidget::NextPage(int Step)
 {
   int new_page = (int)page + Step;
 
@@ -389,8 +553,8 @@ NextPage(int Step)
   Update();
 }
 
-static void
-OnGesture(const TCHAR* gesture)
+void
+AnalysisWidget::OnGesture(const TCHAR *gesture)
 {
   if (_tcscmp(gesture, _T("R")) == 0)
     NextPage(-1);
@@ -417,28 +581,14 @@ ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
-    OnGesture(gesture);
+    analysis_widget.OnGesture(gesture);
 
   return true;
 }
 
-static void
-OnNextClicked()
+bool
+AnalysisWidget::KeyPress(unsigned key_code)
 {
-  NextPage(+1);
-}
-
-static void
-OnPrevClicked()
-{
-  NextPage(-1);
-}
-
-static bool
-FormKeyDown(unsigned key_code)
-{
-  assert(wf != NULL);
-
   switch (key_code) {
   case KEY_LEFT:
 #ifdef GNAV
@@ -446,7 +596,7 @@ FormKeyDown(unsigned key_code)
     // Key F14 added in order to control the Analysis-Pages with the Altair RemoteStick
   case KEY_F14:
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
+    previous_button.SetFocus();
     NextPage(-1);
     return true;
 
@@ -456,7 +606,7 @@ FormKeyDown(unsigned key_code)
     // Key F13 added in order to control the Analysis-Pages with the Altair RemoteStick
   case KEY_F13:
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
+    next_button.SetFocus();
     NextPage(+1);
     return true;
 
@@ -465,11 +615,9 @@ FormKeyDown(unsigned key_code)
   }
 }
 
-static void
-OnCalcClicked()
+inline void
+AnalysisWidget::OnCalcClicked()
 {
-  assert(wf != NULL);
-
   switch (page) {
   case AnalysisPage::BAROGRAPH:
     dlgBasicSettingsShowModal();
@@ -494,7 +642,7 @@ OnCalcClicked()
     break;
 
   case AnalysisPage::AIRSPACE:
-    dlgAirspaceWarningsShowModal(wf->GetMainWindow(),
+    dlgAirspaceWarningsShowModal(dialog.GetMainWindow(),
                                  glide_computer->GetAirspaceWarnings());
     break;
 
@@ -507,63 +655,32 @@ OnCalcClicked()
   Update();
 }
 
-static Window *
-OnCreateChartControl(ContainerWindow &parent, PixelRect rc,
-                     const WindowStyle style)
-{
-  auto *w = new ChartControl(look->chart,
-                             look->thermal_band,
-                             look->cross_section, look->map.airspace,
-                             airspaces, terrain);
-  w->Create(parent, rc, style);
-  return w;
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCreateChartControl),
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnCalcClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
                      const FullBlackboard &_blackboard,
                      GlideComputer &_glide_computer,
                      const ProtectedTaskManager *_protected_task_manager,
-                     const Airspaces *_airspaces,
-                     const RasterTerrain *_terrain,
+                     const Airspaces *airspaces,
+                     const RasterTerrain *terrain,
                      int _page)
 {
   look = &_look;
   blackboard = &_blackboard;
   glide_computer = &_glide_computer;
   protected_task_manager = _protected_task_manager;
-  airspaces = _airspaces;
-  terrain = _terrain;
 
-  wf = LoadDialog(CallBackTable, parent,
-                  Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
-                                      _T("IDR_XML_ANALYSIS"));
-  assert(wf != NULL);
-
-  wf->SetKeyDownFunction(FormKeyDown);
-
-  wGrid = (ChartControl*)wf->FindByName(_T("frmGrid"));
-  wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));
-  wCalc = (WndButton *)wf->FindByName(_T("cmdCalc"));
+  WidgetDialog dialog(_look.dialog);
+  AnalysisWidget analysis(dialog, _look,
+                          airspaces, terrain);
+  dialog.CreateFull(parent, _("Analysis"), &analysis);
 
   if (_page >= 0)
     page = (AnalysisPage)_page;
 
-  Update();
-
-  auto update_timer = MakeLambdaTimer([](){ Update(); });
+  auto update_timer = MakeLambdaTimer([&analysis](){ analysis.Update(); });
   update_timer.Schedule(2500);
 
-  wf->ShowModal();
+  dialog.ShowModal();
+  dialog.StealWidget();
   update_timer.Cancel();
-
-  delete wf;
 }

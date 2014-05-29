@@ -2243,8 +2243,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/XML/Writer.cpp \
 	$(SRC)/XML/DataNode.cpp \
 	$(SRC)/XML/DataNodeXML.cpp \
-	$(SRC)/Dialogs/XML.cpp \
-	$(SRC)/Dialogs/Inflate.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Look/DialogLook.cpp \
