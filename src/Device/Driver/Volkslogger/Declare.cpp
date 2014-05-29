@@ -71,19 +71,19 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
   switch (src.shape) {
   case Declaration::TurnPoint::CYLINDER:
     dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    dest.lw = dest.rz = src.radius;
+    dest.rz = src.radius;
     dest.rs = 0;
     break;
 
   case Declaration::TurnPoint::SECTOR:
     dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_CYLSKT;
-    dest.lw = dest.rs = src.radius;
+    dest.rs = src.radius;
     dest.rz = 0;
     break;
 
   case Declaration::TurnPoint::LINE:
     dest.oztyp = VLAPI_DATA::DCLWPT::OZTYP_LINE;
-    dest.lw = src.radius;
+    dest.lw = (src.radius*2)/1000; //Linewidth is radius*2 unit for lw is km
     dest.rs = dest.rz = 0;
     break;
   }
