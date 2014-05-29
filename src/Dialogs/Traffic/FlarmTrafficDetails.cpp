@@ -69,47 +69,54 @@ static void
 UpdateChanging(const MoreData &basic)
 {
   TCHAR tmp[20];
+  const TCHAR *value;
+
   const FlarmTraffic* target =
     basic.flarm.traffic.FindTraffic(target_id);
 
   bool target_ok = target && target->IsDefined();
 
   // Fill distance field
-  if (target_ok)
+  if (target_ok) {
     FormatUserDistanceSmart(target->distance, tmp, 20, fixed(1000));
-  else
-    _tcscpy(tmp, _T("--"));
-  SetFormValue(*wf, _T("prpDistance"), tmp);
+    value = tmp;
+  } else
+    value = _T("--");
+  SetFormValue(*wf, _T("prpDistance"), value);
 
   // Fill horizontal direction field
-  if (target_ok)
+  if (target_ok) {
     FormatAngleDelta(tmp, ARRAY_SIZE(tmp),
                      target->Bearing() - basic.track);
-  else
-    _tcscpy(tmp, _T("--"));
-  SetFormValue(*wf, _T("prpDirectionH"), tmp);
+    value = tmp;
+  } else
+    value = _T("--");
+  SetFormValue(*wf, _T("prpDirectionH"), value);
 
   // Fill altitude field
-  if (target_ok && target->altitude_available)
+  if (target_ok && target->altitude_available) {
     FormatUserAltitude(target->altitude, tmp, 20);
-  else
-    _tcscpy(tmp, _T("--"));
-  SetFormValue(*wf, _T("prpAltitude"), tmp);
+    value = tmp;
+  } else
+    value = _T("--");
+  SetFormValue(*wf, _T("prpAltitude"), value);
 
   // Fill vertical direction field
   if (target_ok) {
     Angle dir = Angle::FromXY(target->distance, target->relative_altitude);
     FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
+    value = tmp;
   } else
-    _tcscpy(tmp, _T("--"));
-  SetFormValue(*wf, _T("prpDirectionV"), tmp);
+    value = _T("--");
+  SetFormValue(*wf, _T("prpDirectionV"), value);
 
   // Fill climb speed field
-  if (target_ok && target->climb_rate_avg30s_available)
+  if (target_ok && target->climb_rate_avg30s_available) {
     FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp, 20);
-  else
-    _tcscpy(tmp, _T("--"));
-  SetFormValue(*wf, _T("prpVSpeed"), tmp);
+    value = tmp;
+  } else
+    value = _T("--");
+  SetFormValue(*wf, _T("prpVSpeed"), value);
 }
 
 /**
@@ -121,6 +128,7 @@ static void
 Update()
 {
   TCHAR tmp[200], tmp_id[7];
+  const TCHAR *value;
 
   // Set the dialog caption
   _stprintf(tmp, _T("%s (%s)"),
@@ -138,9 +146,10 @@ Update()
     if (!StringIsEmpty(record->frequency)) {
       _tcscpy(tmp, record->frequency);
       _tcscat(tmp, _T(" MHz"));
-      SetFormValue(*wf, _T("prpFrequency"), tmp);
+      value = tmp;
     } else
-      SetFormValue(*wf, _T("prpFrequency"), _T("--"));
+      value = _T("--");
+    SetFormValue(*wf, _T("prpFrequency"), value);
 
     // Fill the home airfield field
     SetFormValue(*wf, _T("prpAirport"), record->airfield);
@@ -180,9 +189,10 @@ Update()
       _tcscat(tmp, record->registration);
       _tcscat(tmp, _T(")"));
     }
+    value = tmp;
   } else
-    _tcscpy(tmp, _T("--"));
-  SetFormValue(*wf, _T("prpCallsign"), tmp);
+    value = _T("--");
+  SetFormValue(*wf, _T("prpCallsign"), value);
 
   // Update the frequently changing fields too
   UpdateChanging(CommonInterface::Basic());
