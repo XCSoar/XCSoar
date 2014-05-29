@@ -13,6 +13,8 @@ Version 6.7.5 - not yet released
   - restore "Repetitive Sound" setting on startup (#3308)
 * Android
   - fix crash when opening IOIO port (#3309)
+* tasks
+  - fix loading of some tasks from .cup files
 
 Version 6.7.4 - 2014/04/11
 * map
