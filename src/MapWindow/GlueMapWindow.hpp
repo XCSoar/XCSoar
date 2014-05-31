@@ -39,6 +39,7 @@ Copyright_License {
 struct Look;
 struct GestureLook;
 class Logger;
+class TopographyThread;
 
 class OffsetHistory
 {
@@ -57,6 +58,12 @@ public:
 
 
 class GlueMapWindow : public MapWindow {
+  enum class Command {
+    INVALIDATE,
+  };
+
+  TopographyThread *topography_thread;
+
   const Logger *logger;
 
   unsigned idle_robin;
@@ -147,6 +154,8 @@ public:
   GlueMapWindow(const Look &look);
   virtual ~GlueMapWindow();
 
+  void SetTopography(TopographyStore *_topography);
+
   void SetLogger(Logger *_logger) {
     logger = _logger;
   }
@@ -215,6 +224,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
   virtual void OnPaintBuffer(Canvas& canvas) override;
   virtual bool OnTimer(WindowTimer &timer) override;
+  bool OnUser(unsigned id) override;
 
   /**
    * This event handler gets called when a gesture has
@@ -243,8 +253,13 @@ private:
 
   void SaveDisplayModeScales();
 
+  void OnProjectionModified();
+
   void UpdateScreenAngle();
   void UpdateProjection();
+
+public:
+  void SetLocation(const GeoPoint location);
 
   /**
    * Update the visible_projection location, but only if the new
@@ -254,7 +269,6 @@ private:
    */
   void SetLocationLazy(const GeoPoint location);
 
-public:
   void UpdateMapScale();
 
   /**

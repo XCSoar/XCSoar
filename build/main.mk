@@ -505,6 +505,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Topography/TopographyStore.cpp \
 	$(SRC)/Topography/TopographyFileRenderer.cpp \
 	$(SRC)/Topography/TopographyRenderer.cpp \
+	$(SRC)/Topography/Thread.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Topography/CachedTopographyRenderer.cpp \

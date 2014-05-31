@@ -29,9 +29,11 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Event/Idle.hpp"
+#include "Topography/Thread.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
+   topography_thread(nullptr),
    logger(nullptr),
    idle_robin(-1),
 #ifdef ENABLE_OPENGL
@@ -57,6 +59,25 @@ GlueMapWindow::GlueMapWindow(const Look &look)
 GlueMapWindow::~GlueMapWindow()
 {
   Destroy();
+}
+
+void
+GlueMapWindow::SetTopography(TopographyStore *_topography)
+{
+  if (topography_thread != nullptr) {
+    topography_thread->LockStop();
+    delete topography_thread;
+    topography_thread = nullptr;
+  }
+
+  MapWindow::SetTopography(_topography);
+
+  if (_topography != nullptr)
+    topography_thread =
+      new TopographyThread(*_topography,
+                           [this](){
+                             SendUser(unsigned(Command::INVALIDATE));
+                           });
 }
 
 void
@@ -213,7 +234,6 @@ GlueMapWindow::Idle()
   clock.Update();
 
   bool still_dirty;
-  bool topography_dirty = true; /* scan topography in every Idle() call */
   bool terrain_dirty = true;
   bool weather_dirty = true;
 
@@ -221,7 +241,6 @@ GlueMapWindow::Idle()
     idle_robin = (idle_robin + 1) % 3;
     switch (idle_robin) {
     case 0:
-      topography_dirty = UpdateTopography(1) > 0;
       break;
 
     case 1:
@@ -233,7 +252,7 @@ GlueMapWindow::Idle()
       break;
     }
 
-    still_dirty = terrain_dirty || topography_dirty || weather_dirty;
+    still_dirty = terrain_dirty || weather_dirty;
   } while (!clock.Check(700) && /* stop after 700ms */
 #ifndef ENABLE_OPENGL
            !draw_thread->IsTriggered() &&
@@ -242,4 +261,16 @@ GlueMapWindow::Idle()
            still_dirty);
 
   return still_dirty;
+}
+
+bool
+GlueMapWindow::OnUser(unsigned id)
+{
+  switch (Command(id)) {
+  case Command::INVALIDATE:
+    Invalidate();
+    return true;
+  }
+
+  return false;
 }

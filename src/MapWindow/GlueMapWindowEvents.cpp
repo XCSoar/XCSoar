@@ -33,6 +33,7 @@ Copyright_License {
 #include "Pan.hpp"
 #include "Util/Clamp.hpp"
 #include "Event/Idle.hpp"
+#include "Topography/Thread.hpp"
 
 #ifdef USE_X11
 #include "Event/Globals.hpp"
@@ -46,6 +47,9 @@ Copyright_License {
 void
 GlueMapWindow::OnDestroy()
 {
+  /* stop the TopographyThread */
+  SetTopography(nullptr);
+
 #ifdef ENABLE_OPENGL
   data_timer.Cancel();
 #endif

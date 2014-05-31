@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Topography/Thread.hpp"
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
@@ -110,9 +111,18 @@ GlueMapWindow::PanTo(const GeoPoint &location)
 }
 
 void
+GlueMapWindow::OnProjectionModified()
+{
+  if (topography_thread != nullptr &&
+      CommonInterface::GetMapSettings().topography_enabled)
+    topography_thread->Trigger(visible_projection);
+}
+
+void
 GlueMapWindow::SetMapScale(fixed scale)
 {
   MapWindow::SetMapScale(scale);
+  OnProjectionModified();
 
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
@@ -137,6 +147,7 @@ GlueMapWindow::RestoreMapScale()
   visible_projection.SetScale(settings.circle_zoom_enabled && circling
                               ? settings.circling_scale
                               : settings.cruise_scale);
+  OnProjectionModified();
 }
 
 inline void
@@ -209,6 +220,8 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(
       basic.track_available ? basic.track : Angle::Zero());
 
+  OnProjectionModified();
+
   compass_visible = orientation != MapOrientation::NORTH_UP;
 }
 
@@ -249,7 +262,16 @@ GlueMapWindow::UpdateMapScale()
 
     visible_projection.SetFreeMapScale(distance);
     settings.cruise_scale = visible_projection.GetScale();
+
+    OnProjectionModified();
   }
+}
+
+void
+GlueMapWindow::SetLocation(const GeoPoint location)
+{
+  MapWindow::SetLocation(location);
+  OnProjectionModified();
 }
 
 void
@@ -346,4 +368,6 @@ GlueMapWindow::UpdateProjection()
     SetLocation(terrain->GetTerrainCenter());
 
   visible_projection.UpdateScreenBounds();
+
+  OnProjectionModified();
 }
