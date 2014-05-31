@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Thread/Thread.hpp"
 #include "Name.hpp"
+#include "Util.hpp"
 
 #ifdef ANDROID
 #include "Java/Global.hpp"
@@ -46,6 +47,12 @@ static FastMutex all_threads_mutex;
  */
 static ListHead all_threads = ListHead(ListHead::empty());
 #endif
+
+void
+Thread::SetIdlePriority()
+{
+  ::SetThreadIdlePriority();
+}
 
 bool
 Thread::Start()

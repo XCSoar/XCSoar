@@ -115,6 +115,8 @@ public:
 #endif
   }
 
+  void SetIdlePriority();
+
   bool Start();
   void Join();
 
