@@ -125,6 +125,16 @@ protected:
   void Trigger();
 
   /**
+   * Same as Trigger(), but automatically lock and unlock the mutex.
+   *
+   * Caller must not lock the mutex.
+   */
+  void LockTrigger() {
+    ScopeLock protect(mutex);
+    Trigger();
+  }
+
+  /**
    * Is the thread currently working (i.e. inside Tick())?
    *
    * Caller must lock the mutex.
