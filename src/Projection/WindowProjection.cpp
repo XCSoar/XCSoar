@@ -45,8 +45,8 @@ WindowProjection::ScreenVisible(const RasterPoint &P) const
 {
   assert(screen_size_initialised);
 
-  return P.x >= 0 && (unsigned)P.x < screen_width &&
-    P.y >= 0 && (unsigned)P.y < screen_height;
+  return P.x >= 0 && (unsigned)P.x < screen_size.x &&
+    P.y >= 0 && (unsigned)P.y < screen_size.y;
 }
 
 void
@@ -82,9 +82,9 @@ WindowProjection::UpdateScreenBounds()
     return;
 
   GeoBounds sb(ScreenToGeo(0, 0));
-  sb.Extend(ScreenToGeo(screen_width, 0));
-  sb.Extend(ScreenToGeo(screen_width, screen_height));
-  sb.Extend(ScreenToGeo(0, screen_height));
+  sb.Extend(ScreenToGeo(screen_size.x, 0));
+  sb.Extend(ScreenToGeo(screen_size.x, screen_size.y));
+  sb.Extend(ScreenToGeo(0, screen_size.y));
 
   screen_bounds = sb;
 }
