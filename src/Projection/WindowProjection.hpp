@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Projection.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Util/DebugFlag.hpp"
 
 #include <algorithm>
 
@@ -36,7 +35,9 @@ Copyright_License {
 class WindowProjection:
   public Projection
 {
-  DebugFlag screen_size_initialised;
+#ifndef NDEBUG
+  bool screen_size_initialised;
+#endif
 
   unsigned screen_width, screen_height;
 
@@ -49,6 +50,10 @@ class WindowProjection:
   GeoBounds screenbounds_latlon;
 
 public:
+#ifndef NDEBUG
+  WindowProjection():screen_size_initialised(false) {}
+#endif
+
   /**
    * Converts a geographical location to a screen coordinate if the
    * location is within the visible bounds
@@ -80,7 +85,10 @@ public:
 
     screen_width = new_size.cx;
     screen_height = new_size.cy;
+
+#ifndef NDEBUG
     screen_size_initialised = true;
+#endif
   }
 
   void SetMapRect(const PixelRect &rc) {
