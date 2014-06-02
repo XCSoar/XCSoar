@@ -47,7 +47,7 @@ class WindowProjection:
    * This is a cached member that has to be updated manually by
    * calling UpdateScreenBounds()
    */
-  GeoBounds screenbounds_latlon;
+  GeoBounds screen_bounds;
 
 public:
 #ifndef NDEBUG
@@ -170,10 +170,10 @@ public:
   // used by terrain renderer, topography and airspace
   gcc_pure
   const GeoBounds &GetScreenBounds() const {
-    return screenbounds_latlon;
+    return screen_bounds;
   }
 
-  /** Updates the cached screenbounds_latlon member */
+  /** Updates the cached screen_bounds member */
   void UpdateScreenBounds();
 
 protected:
