@@ -103,7 +103,7 @@ void
 GlueMapWindow::PanTo(const GeoPoint &location)
 {
   follow_mode = FOLLOW_PAN;
-  visible_projection.SetGeoLocation(location);
+  SetLocation(location);
 
   UpdateProjection();
   FullRedraw();

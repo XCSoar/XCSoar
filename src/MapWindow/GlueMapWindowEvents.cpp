@@ -78,9 +78,9 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   case DRAG_MULTI_TOUCH_PAN:
 #endif
   case DRAG_PAN:
-    visible_projection.SetGeoLocation(drag_projection.GetGeoLocation()
-                                      + drag_start_geopoint
-                                      - drag_projection.ScreenToGeo(x, y));
+    SetLocation(drag_projection.GetGeoLocation()
+                + drag_start_geopoint
+                - drag_projection.ScreenToGeo(x, y));
     QuickRedraw();
 
 #ifdef ENABLE_OPENGL
@@ -422,7 +422,7 @@ GlueMapWindow::OnTimer(WindowTimer &timer)
       location = drag_projection.GetGeoLocation() +
           drag_start_geopoint - location;
 
-      visible_projection.SetGeoLocation(location);
+      SetLocation(location);
       QuickRedraw();
     }
 
