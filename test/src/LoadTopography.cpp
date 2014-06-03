@@ -44,6 +44,8 @@ Copyright_License {
 static void
 TriangulateAll(const TopographyFile &file)
 {
+  const ScopeLock protect(file.mutex);
+
   const unsigned short *count;
   for (const XShape &shape : file)
     if (shape.get_type() == MS_SHAPE_POLYGON)

@@ -142,22 +142,44 @@ TopographyFile::Update(const WindowProjection &map_projection)
     if (!msGetBit(file.status, i)) {
       // If the shape is outside the bounds
       // delete the shape from the cache
-      delete it->shape;
-      it->shape = nullptr;
+      if (it->shape != nullptr) {
+        assert(*current == it);
+
+        /* remove from linked list (protected) */
+        mutex.Lock();
+        *current = it->next;
+        mutex.Unlock();
+
+        /* now it's unreachable, and we can delete the XShape without
+           holding a lock */
+        delete it->shape;
+        it->shape = nullptr;
+      }
     } else {
       // is inside the bounds
-      if (it->shape == nullptr)
+      if (it->shape == nullptr) {
+        assert(*current != it);
+
         // shape isn't cached yet -> cache the shape
         it->shape = LoadShape(&file, center, i, label_field);
-      // update list pointer
-      *current = it;
+        it->next = *current;
+
+        /* insert into linked list (protected) */
+        mutex.Lock();
+        *current = it;
+        mutex.Unlock();
+      }
+
       current = &it->next;
     }
   }
   // end of list marker
-  *current = nullptr;
+  assert(*current == nullptr);
 
+  mutex.Lock();
   ++serial;
+  mutex.Unlock();
+
   return true;
 }
 

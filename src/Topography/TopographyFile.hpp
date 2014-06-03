@@ -32,6 +32,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
 #include "ResourceId.hpp"
+#include "Thread/Mutex.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "XShapePoint.hpp"
@@ -104,6 +105,12 @@ class TopographyFile {
   GeoBounds cache_bounds;
 
 public:
+  /**
+   * Protects #serial, #shapes, #first.
+   * The caller is responsible for locking it.
+   */
+  mutable Mutex mutex;
+
   class const_iterator {
     friend class TopographyFile;
 
@@ -173,6 +180,8 @@ public:
   ~TopographyFile();
 
   const Serial &GetSerial() const {
+    assert(mutex.IsLockedByCurrent());
+
     return serial;
   }
 
@@ -213,10 +222,14 @@ public:
   }
 
   const_iterator begin() const {
+    assert(mutex.IsLockedByCurrent());
+
     return const_iterator(first);
   }
 
   const_iterator end() const {
+    assert(mutex.IsLockedByCurrent());
+
     return const_iterator(nullptr);
   }
 
