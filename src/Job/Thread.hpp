@@ -62,9 +62,11 @@ public:
   using ThreadedOperationEnvironment::Cancel;
 
 protected:
-  virtual void Run();
+  /* virtual methods from class Thread */
+  void Run() override;
 
-  virtual void OnNotification();
+  /* virtual methods from class DelayedNotify */
+  void OnNotification() override;
 
   /**
    * Implement this method.  It is run in the main thread.
