@@ -114,7 +114,7 @@ public:
   virtual void SetProgressPosition(unsigned position) override;
 
 protected:
-  /* virtual methods from class Notify */
+  /* virtual methods from class DelayedNotify */
   virtual void OnNotification() override;
 };
 
