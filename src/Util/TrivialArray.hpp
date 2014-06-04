@@ -30,8 +30,10 @@
 #ifndef TRIVIAL_ARRAY_HPP
 #define TRIVIAL_ARRAY_HPP
 
-#include <assert.h>
+#include <array>
 #include <algorithm>
+
+#include <assert.h>
 
 /**
  * An array with a maximum size known at compile time.  It keeps track
@@ -40,15 +42,17 @@
  */
 template<class T, unsigned max>
 class TrivialArray {
+  typedef std::array<T, max> Array;
+
 public:
   typedef unsigned size_type;
   typedef T value_type;
-  typedef T *iterator;
-  typedef const T *const_iterator;
+  typedef typename Array::iterator iterator;
+  typedef typename Array::const_iterator const_iterator;
 
 protected:
   size_type the_size;
-  T data[max];
+  Array data;
 
   constexpr
   TrivialArray(size_type _size):the_size(_size) {}
@@ -140,19 +144,19 @@ public:
   }
 
   iterator begin() {
-    return data;
+    return data.begin();
   }
 
   const_iterator begin() const {
-    return data;
+    return data.begin();
   }
 
   iterator end() {
-    return data + the_size;
+    return std::next(data.begin(), the_size);
   }
 
   const_iterator end() const {
-    return data + the_size;
+    return std::next(data.begin(), the_size);
   }
 
   T &last() {
@@ -175,7 +179,7 @@ public:
    * Return address of start of data segment.
    */
   const T* raw() const {
-    return data;
+    return &data[0];
   }
 
   /**
@@ -216,7 +220,9 @@ public:
   void remove(size_type i) {
     assert(i < size());
 
-    std::move(data + i + 1, data + size(), data + i);
+    std::move(std::next(data.begin(), i + 1),
+              std::next(data.begin(), size()),
+              std::next(data.begin(), i));
 
     --the_size;
   }
@@ -242,13 +248,13 @@ public:
   T &front() {
     assert(the_size > 0);
 
-    return data[0];
+    return data.front();
   }
 
   const T &front() const {
     assert(the_size > 0);
 
-    return data[0];
+    return data.front();
   }
 
   T &back() {
