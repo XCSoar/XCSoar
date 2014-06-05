@@ -53,7 +53,7 @@ MakeCircleBuffer(unsigned n)
     p2->y = -y;
   }
 
-  buffer->CommitWrite(sizeof(*p0) * n, p);
+  buffer->CommitWrite(sizeof(*p0) * n, p0);
   return buffer;
 }
 
