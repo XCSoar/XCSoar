@@ -37,7 +37,6 @@ void
 StandbyThread::Trigger()
 {
   assert(!IsInside());
-  assert(!IsBusy());
   assert(mutex.IsLockedByCurrent());
 
   stop = false;
