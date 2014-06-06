@@ -202,6 +202,11 @@ protected:
     WaitStopped();
   }
 
+  void LockStop() {
+    ScopeLock protect(mutex);
+    Stop();
+  }
+
   /**
    * Implement this to do the actual work.  The mutex will be locked,
    * but you should unlock it while doing real work (and re-lock it
