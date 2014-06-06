@@ -188,6 +188,9 @@ final class I2Cbaro extends Thread {
   }
 
   public void close() {
+    if (h_eoc != null)
+      h_eoc.close();
+
     if (h_twi != null)
       h_twi.close();
 

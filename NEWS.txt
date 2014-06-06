@@ -13,6 +13,7 @@ Version 6.7.5 - not yet released
   - restore "Repetitive Sound" setting on startup (#3308)
 * Android
   - fix crash when opening IOIO port (#3309)
+  - allow reconnecting IOIO sensors
 * tasks
   - fix loading of some tasks from .cup files
 
