@@ -452,14 +452,20 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
   return true;
 }
 
+static Angle
+ParseBearingDegrees(const TCHAR *p, TCHAR **endptr=nullptr)
+{
+  return Angle::Degrees(_tcstod(p, endptr)).AsBearing();
+}
+
 static void
 ParseArcBearings(const TCHAR *buffer, TempAirspaceType &temp_area)
 {
   // Determine radius and start/end bearing
   TCHAR *endptr;
   temp_area.radius = Units::ToSysUnit(fixed(_tcstod(&buffer[2], &endptr)), Unit::NAUTICAL_MILES);
-  Angle start_bearing = Angle::Degrees(_tcstod(&endptr[1], &endptr)).AsBearing();
-  Angle end_bearing = Angle::Degrees(_tcstod(&endptr[1], &endptr)).AsBearing();
+  Angle start_bearing = ParseBearingDegrees(&endptr[1], &endptr);
+  Angle end_bearing = ParseBearingDegrees(&endptr[1], &endptr);
 
   temp_area.AppendArc(start_bearing, end_bearing);
 }
