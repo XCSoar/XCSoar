@@ -29,6 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
 #include "Geo/Math.hpp"
 #include "IO/LineReader.hpp"
@@ -285,7 +286,7 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
 
     if (IsDigitASCII(*p)) {
       TCHAR *endptr;
-      value = fixed(_tcstod(p, &endptr));
+      value = fixed(ParseDouble(p, &endptr));
       p = endptr;
     } else if (StringIsEqualIgnoreCase(p, _T("GND"), 3) ||
                StringIsEqualIgnoreCase(p, _T("AGL"), 3)) {
@@ -374,14 +375,14 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
 
   // ToDo, add more error checking and making it more tolerant/robust
 
-  double deg = _tcstod(buffer, &endptr);
+  double deg = ParseDouble(buffer, &endptr);
   if ((buffer == endptr) || (*endptr == '\0'))
     return false;
 
   if (*endptr == ':') {
     endptr++;
 
-    double min = _tcstod(endptr, &endptr);
+    double min = ParseDouble(endptr, &endptr);
     if (*endptr == '\0')
       return false;
 
@@ -390,7 +391,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
     if (*endptr == ':') {
       endptr++;
 
-      double sec = _tcstod(endptr, &endptr);
+      double sec = ParseDouble(endptr, &endptr);
       if (*endptr == '\0')
         return false;
 
@@ -413,14 +414,14 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
   if (*endptr == '\0')
     return false;
 
-  deg = _tcstod(endptr, &endptr);
+  deg = ParseDouble(endptr, &endptr);
   if ((buffer == endptr) || (*endptr == '\0'))
     return false;
 
   if (*endptr == ':') {
     endptr++;
 
-    double min = _tcstod(endptr, &endptr);
+    double min = ParseDouble(endptr, &endptr);
     if (*endptr == '\0')
       return false;
 
@@ -429,7 +430,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
     if (*endptr == ':') {
       endptr++;
 
-      double sec = _tcstod(endptr, &endptr);
+      double sec = ParseDouble(endptr, &endptr);
       if (*endptr == '\0')
         return false;
 
@@ -455,7 +456,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
 static Angle
 ParseBearingDegrees(const TCHAR *p, TCHAR **endptr=nullptr)
 {
-  return Angle::Degrees(_tcstod(p, endptr)).AsBearing();
+  return Angle::Degrees(ParseDouble(p, endptr)).AsBearing();
 }
 
 static void
@@ -463,7 +464,8 @@ ParseArcBearings(const TCHAR *buffer, TempAirspaceType &temp_area)
 {
   // Determine radius and start/end bearing
   TCHAR *endptr;
-  temp_area.radius = Units::ToSysUnit(fixed(_tcstod(&buffer[2], &endptr)), Unit::NAUTICAL_MILES);
+  temp_area.radius = Units::ToSysUnit(fixed(ParseDouble(&buffer[2], &endptr)),
+                                      Unit::NAUTICAL_MILES);
   Angle start_bearing = ParseBearingDegrees(&endptr[1], &endptr);
   Angle end_bearing = ParseBearingDegrees(&endptr[1], &endptr);
 
@@ -567,7 +569,7 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
 
     case _T('C'):
     case _T('c'):
-      temp_area.radius = Units::ToSysUnit(fixed(_tcstod(&line[2], NULL)),
+      temp_area.radius = Units::ToSysUnit(fixed(ParseDouble(&line[2], NULL)),
                                           Unit::NAUTICAL_MILES);
       temp_area.AddCircle(airspace_database);
       temp_area.Reset();
@@ -771,7 +773,7 @@ ParseCircleTNP(const TCHAR *buffer, TempAirspaceType &temp_area)
   const TCHAR* parameter;
   if ((parameter = StringAfterPrefixCI(buffer, _T("RADIUS="))) == NULL)
     return false;
-  temp_area.radius = Units::ToSysUnit(fixed(_tcstod(parameter, NULL)),
+  temp_area.radius = Units::ToSysUnit(fixed(ParseDouble(parameter)),
                                       Unit::NAUTICAL_MILES);
 
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
