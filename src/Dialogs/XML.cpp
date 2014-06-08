@@ -114,7 +114,7 @@ StringToFloatDflt(const TCHAR *string, double _default)
 {
   if (string == NULL || StringIsEmpty(string))
     return _default;
-  return _tcstod(string, NULL);
+  return ParseDouble(string);
 }
 
 /**
