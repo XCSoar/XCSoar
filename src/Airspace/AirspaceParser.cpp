@@ -569,7 +569,7 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
 
     case _T('C'):
     case _T('c'):
-      temp_area.radius = Units::ToSysUnit(fixed(ParseDouble(&line[2], NULL)),
+      temp_area.radius = Units::ToSysUnit(fixed(ParseDouble(&line[2])),
                                           Unit::NAUTICAL_MILES);
       temp_area.AddCircle(airspace_database);
       temp_area.Reset();
