@@ -42,12 +42,36 @@ ParseDouble(const char *p, char **endptr=nullptr)
 
 #ifdef _UNICODE
 static inline double
-ParseDouble(const TCHAR *p, TCHAR **endptr=nullptr)
+ParseDouble(const TCHAR *p, TCHAR **endptr)
 {
   assert(p != nullptr);
 
   return (double)wcstod(p, endptr);
 }
+
+#if defined(WIN32) && !defined(_WIN32_WCE)
+#include <windef.h>
+#ifdef __MINGW64_VERSION_MAJOR
+#if __MINGW64_VERSION_MAJOR == 3 && __MINGW64_VERSION_MINOR == 1
+#define BUGGY_WCSTOD
+#endif
+#endif
+#endif
+
+static inline double
+ParseDouble(const TCHAR *p)
+{
+  assert(p != nullptr);
+
+#ifdef BUGGY_WCSTOD
+  /* workaround for mingw64 3.1 bug to avoid nullptr dereference */
+  TCHAR *dummy;
+  return ParseDouble(p, &dummy);
+#else
+  return ParseDouble(p, nullptr);
+#endif
+}
+
 #endif
 
 static inline unsigned

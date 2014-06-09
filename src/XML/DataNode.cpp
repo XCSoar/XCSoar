@@ -98,7 +98,7 @@ DataNode::GetAttribute(const TCHAR *name, fixed &value) const
   if (val == nullptr)
     return false;
 
-  value = (fixed)_tcstod(val, nullptr);
+  value = (fixed)ParseDouble(val);
   return true;
 }
 

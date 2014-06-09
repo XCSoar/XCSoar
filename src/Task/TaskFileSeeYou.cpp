@@ -484,7 +484,19 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   TCHAR waypoints_buffer[1024];
   const TCHAR *wps[30];
   size_t n_waypoints = WaypointReaderBase::
-      ExtractParameters(line, waypoints_buffer, wps, 30, true, _T('"')) - 3;
+      ExtractParameters(line, waypoints_buffer, wps, 30, true, _T('"'));
+
+  // Some versions of StrePla append a trailing ',' without a following
+  // WP name resulting an empty last entry. Remove it from the results
+  if (n_waypoints > 0 && wps[n_waypoints - 1][0] == _T('\0'))
+    n_waypoints --;
+
+  // At least taskname and takeoff, start, finish and landing points are needed
+  if (n_waypoints < 5)
+    return NULL;
+
+  // Remove taskname, start point and landing point from count
+  n_waypoints -= 3;
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];

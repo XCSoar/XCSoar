@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-11-26 14:07+0000\n"
+"PO-Revision-Date: 2014-06-03 14:21+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-18 23:20+0000\n"
-"X-Generator: Launchpad (build 16872)\n"
+"X-Launchpad-Export-Date: 2014-06-09 12:20+0000\n"
+"X-Generator: Launchpad (build 17031)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1178,6 +1178,9 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Aktuálne MacCready nastavenie a MacCready mód ( manuálny alebo automatický). "
+"(Len dotykové zariadenie / PC ) Dá sa použiť aj na nastavenie MacCready "
+"hodnoty. Pri aktívnom info okne použitím kláves hore /dole."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
@@ -1214,6 +1217,8 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
+"Príletová výška nad ďalším otočným bodom, relatívna k bezpečnej výške "
+"príletu. Pre AAT úlohy je použitý cieľ v AAT sektore."
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
@@ -1231,6 +1236,8 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
+"Dodatočne potrebná výška na dosiahnutie ďalšieho otočného bodu. Pre AAT "
+"úlohy je použitý cieľ v AAT sektore."
 
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
@@ -1296,7 +1303,7 @@ msgstr "Priemerná rýchlosť v úlohe"
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "V Task Avg"
-msgstr ""
+msgstr "R Úlohy Priem."
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -1385,6 +1392,9 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Magnetický kurz podľa GPS.  (Len dotykové zariadenie / PC ) Dá sa použiť aj "
+"na nastavenie kurzu v simulačnom móde, pri aktívnom info okne použitím "
+"kláves hore /dole."
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -1434,6 +1444,8 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Smer vetra odhadovaný XCSoarom. Manuálne nastavenie je možné pri aktívnom "
+"info okne použitím kláves hore /dole (nastavenia), vľavo /pravo (hodnoty)"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1629,12 +1641,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:552
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Ďalší KĹZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:553
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "OB KĹZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -1643,6 +1655,8 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"Potrebná kĺzavosť nad terénom pre dosiahnutie ďalšieho otočného bodu, daná "
+"podielom vzdialenosti a výšky potrebnej k príletu v bezpečnej výške."
 
 #: src/InfoBoxes/Content/Factory.cpp:563
 #, no-c-format
@@ -1716,7 +1730,7 @@ msgstr "Rýchlosť pri delfínovaní"
 #: src/InfoBoxes/Content/Factory.cpp:605
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "R opt."
 
 #: src/InfoBoxes/Content/Factory.cpp:606
 #, no-c-format
@@ -1875,6 +1889,10 @@ msgid ""
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Predpovedaná teplota terénu na domácom letisku, použitá na stanovenie "
+"konvekčnej výšky a základne mrakov v spolupráci sondy teploty a relatívnej "
+"vlhkosti. (Len dotykový displej / PC) Stláčanie kláves hore /dole nastavuje "
+"túto predpovedanú teplotu."
 
 #: src/InfoBoxes/Content/Factory.cpp:685
 #, no-c-format
@@ -1929,6 +1947,10 @@ msgid ""
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
+"Okamžitý pomer vztlaku / odporu, daný indikovanou rýchlosťou delenou "
+"vertikálnou rýchlosťou totálnej energie, ak je pripojené inteligentné vário. "
+"Negatívne hodnoty indikujú stúpajúci let. Ak je vário rýchlosť totálnej "
+"energie blízko nule, zobrazí sa hodnota '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:715
 #, no-c-format
@@ -1973,7 +1995,7 @@ msgstr "Kurz k tímu"
 #: src/InfoBoxes/Content/Factory.cpp:736
 #, no-c-format
 msgid "Team Brng"
-msgstr ""
+msgstr "Týmový azimut"
 
 #: src/InfoBoxes/Content/Factory.cpp:737
 #, no-c-format
@@ -1988,7 +2010,7 @@ msgstr "Tým - delta kurzu"
 #: src/InfoBoxes/Content/Factory.cpp:746
 #, no-c-format
 msgid "Team BrngD"
-msgstr ""
+msgstr "Tým azimut rozdiel"
 
 #: src/InfoBoxes/Content/Factory.cpp:747
 #, no-c-format
@@ -2007,7 +2029,7 @@ msgstr "Vzdialenosť k tímu"
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
 msgid "Team Dist"
-msgstr ""
+msgstr "Tým vzdial."
 
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
@@ -2023,7 +2045,7 @@ msgstr "Okamžitá rýchlosť úlohy"
 #: src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
 msgid "V Task Inst"
-msgstr ""
+msgstr "R úlohy okamžitá"
 
 #: src/InfoBoxes/Content/Factory.cpp:767
 #, no-c-format
@@ -2042,7 +2064,7 @@ msgstr "Vzdialenosť domov"
 #: src/InfoBoxes/Content/Factory.cpp:776
 #, no-c-format
 msgid "Home Dist"
-msgstr ""
+msgstr "Vzdial dom"
 
 #: src/InfoBoxes/Content/Factory.cpp:777
 #, no-c-format
@@ -2057,7 +2079,7 @@ msgstr "Dosiahnutá rýchlosť úlohy"
 #: src/InfoBoxes/Content/Factory.cpp:786
 #, no-c-format
 msgid "V Task Ach"
-msgstr ""
+msgstr "R úloha dosiahnutá"
 
 #: src/InfoBoxes/Content/Factory.cpp:787
 #, no-c-format

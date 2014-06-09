@@ -31,8 +31,9 @@ Version 6.8 - not yet released
   - support Wifi with WEP (#3138)
   - support USB-OTG
 
-Version 6.7.5 - not yet released
+Version 6.7.5 - 2014/06/09
 * fix crash in task manager (#3305)
+* work around crash on Windows (PC) (#3284)
 * devices
   - fixed attitude data handling
   - properly detect LXNAV Nano 3
@@ -42,6 +43,9 @@ Version 6.7.5 - not yet released
   - restore "Repetitive Sound" setting on startup (#3308)
 * Android
   - fix crash when opening IOIO port (#3309)
+  - allow reconnecting IOIO sensors
+* tasks
+  - fix loading of some tasks from .cup files
 
 Version 6.7.4 - 2014/04/11
 * map

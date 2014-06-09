@@ -102,7 +102,7 @@ AngleDataField::SetAsInteger(int _value)
 void
 AngleDataField::SetAsString(const TCHAR *_value)
 {
-  ModifyValue(Angle::Degrees(ParseDouble(_value, nullptr)));
+  ModifyValue(Angle::Degrees(ParseDouble(_value)));
 }
 
 void
