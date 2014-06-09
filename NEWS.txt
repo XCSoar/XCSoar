@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.7.5 - not yet released
+Version 6.7.5 - 2014/06/09
 * fix crash in task manager (#3305)
 * work around crash on Windows (PC) (#3284)
 * devices
