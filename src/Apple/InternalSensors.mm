@@ -25,6 +25,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "Math/fixed.hpp"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -89,14 +90,14 @@ Copyright_License {
 
   basic.airspeed_available.Clear();
   if (location && (location.speed >= 0.0)) {
-    basic.ground_speed = location.speed;
+    basic.ground_speed = fixed(location.speed);
     basic.ground_speed_available.Update(basic.clock);
   } else {
     basic.ground_speed_available.Clear();
   }
 
   if (location && location.timestamp) {
-    basic.time = [self getSecondsOfDay: location.timestamp];
+    basic.time = fixed([self getSecondsOfDay: location.timestamp]);
     basic.time_available.Update(basic.clock);
     basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC([location.timestamp timeIntervalSince1970]);
   } else {
@@ -113,7 +114,7 @@ Copyright_License {
   }
 
   if (location) {
-    basic.gps_altitude = location.altitude;
+    basic.gps_altitude = fixed(location.altitude);
     basic.gps_altitude_available.Update(basic.clock);
   } else {
     basic.gps_altitude_available.Clear();
