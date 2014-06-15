@@ -104,7 +104,7 @@ Copyright_License {
     basic.time_available.Clear();
   }
 
-  if (location) {
+  if (location && (location.horizontalAccuracy >= 0.0)) {
     basic.gps.real = true;
     basic.location = GeoPoint(Angle::Degrees(location.coordinate.longitude),
                               Angle::Degrees(location.coordinate.latitude));
@@ -113,14 +113,14 @@ Copyright_License {
     basic.location_available.Clear();
   }
 
-  if (location) {
+  if (location && (location.verticalAccuracy >= 0.0)) {
     basic.gps_altitude = fixed(location.altitude);
     basic.gps_altitude_available.Update(basic.clock);
   } else {
     basic.gps_altitude_available.Clear();
   }
 
-  if (location) {
+  if (location && (location.course >= 0.0)) {
     basic.track = Angle::Degrees(location.course);
     basic.track_available.Update(basic.clock);
   } else {
