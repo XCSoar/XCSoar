@@ -105,6 +105,7 @@ Copyright_License {
   }
 
   if (location && (location.horizontalAccuracy >= 0.0)) {
+    basic.gps.hdop = fixed(location.horizontalAccuracy);
     basic.gps.real = true;
     basic.location = GeoPoint(Angle::Degrees(location.coordinate.longitude),
                               Angle::Degrees(location.coordinate.latitude));
