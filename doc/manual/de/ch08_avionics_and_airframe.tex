@@ -154,13 +154,13 @@ Im Unterpunkt \button{System} sind die entsprechenden Daten zu finden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Mehrere Verbindungen zu externen Geräten}\index{Externe Geräte}
 
-Es können bis zu zwei externe Geräte konfiguriert werden, welche parallel angeschlossen und betrieben werden (einige \textsf{PDA} haben zwei serielle Schnittstellen, Verbindungen per Bluetooth können prinzipiell mehrere unabhängige Verbindung etablieren)
+Es können mehrere externe Geräte konfiguriert werden, welche parallel angeschlossen und betrieben werden (einige \textsf{PDA} haben zwei serielle Schnittstellen, Bluetooth erlaubt mehrere unabhängige Verbindungen).
 
-Wenn  beide der Geräte GPS-Signale zur Verfügung stellen können, dann wird das primäre, erste Gerät von \xc ausgewählt und das zweite bleibt ignoriert. Sowie die erste GPS -Quelle aus irgendeinem Grunde versagt, wird automatisch auf die zweite Quelle umgeschaltet - solange, bis die erste Quelle wieder gültige GPS-Daten übermittelt. (fallback)
+Wenn mehrere Geräte GPS-Signale zur Verfügung stellen können, dann wird das, erste Gerät (A) von \xc ausgewählt und das zweite bleibt ignoriert. Sowie die erste GPS -Quelle aus irgendeinem Grunde versagt, wird automatisch auf die nächste Quelle (z.B. Gerät B) umgeschaltet - solange, bis die erste Quelle wieder gültige GPS-Daten übermittelt. (fallback)
 
 Das gleiche gilt für alle Werte wie z.B. barometrische Höhe, Vario, Geschwindigkeit etc:
 \xc bevorzugt grundsätzlich das primäre Gerät, und greift auf das sekundäre Gerät zurück, sowie das Primäre versagt.
 
 \textit{Beispielkonfiguration:}
-Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei \fl -- diese Kombination bietet von beiden Geräten das Beste.
+Primäres Gerät (A) ist Cambridge CAI 302, das sekundäre Gerät (B) sei \fl -- diese Kombination bietet von beiden Geräten das Beste.
 %%%%%%%%%%%%%%%%%%%%%%%%%%
