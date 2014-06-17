@@ -69,7 +69,7 @@ attempts to restart communication with the device and will then resume waiting.
 This method has shown to provide the most reliable way of recovering from 
 communication errors.
 
-XCSoar can handle up to two GPS sources and it uses them to provide redundancy. 
+XCSoar can handle multiple GPS sources and it uses them to provide redundancy.
 The sources are configured on the System Configuration screen, on the page 
 entitled "Devices".  Device A is the primary GPS data source and Device B is 
 the secondary source.
@@ -171,20 +171,19 @@ view) are updated continuously.
 
 \section{Multiple devices}
 
-You can configure up to two external devices, connected at the same
+You can configure multiple external devices, connected at the same
 time (few PDAs have two serial ports, but Bluetooth can handle any
 number of concurrent connections).
 
-When both provide a valid GPS fix, the first one is chosen by XCSoar,
-and the second GPS fix is ignored.  As soon as the first device fails,
-XCSoar switches to the second one automatically, until the first one
-recovers.
+When both provide a valid GPS fix, the first one (i.e. Device A) is chosen by
+XCSoar, and the second GPS fix is ignored.  As soon as the first device fails,
+XCSoar switches to the second one automatically, until the first one recovers.
 
 The same is true for all values (barometric altitude, vario, airspeed,
 traffic, ...): XCSoar prefers the first device, and uses the second
 device only for values that are not received from the first one.
 
-Example: first device is a CAI 302, and the second device is a FLARM.
+Example: Device A is a CAI 302, and Device B is a FLARM.
 That gives you the best of both: XCSoar has airspeed, vario and
 traffic data.
 
