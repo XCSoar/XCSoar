@@ -231,20 +231,39 @@ Use one of the following targets:
 
 \end{tabular}
 
-\subsection{Compiling for Mac OS X}
+\subsection{Compiling for iOS and Mac OS X}
 
-For Mac OS X, you need:
+For iOS and OS X, you need the
+\href{https://github.com/felixhaedicke/DarwinToolchainBuilder}{DarwinToolchainBuilder}
+toolset. This toolset is required regardless of whether compiling on OS X or on
+any other operaing system. The installation instructions for these the tools
+can be found in its
+\href{https://github.com/felixhaedicke/DarwinToolchainBuilder/blob/master/README.md}{README.md}.
 
-\begin{itemize}
-\item GCC 4.6.2 or newer (http://hpc.sourceforge.net/, or homebrew, or Macports)
-\item \href{http://www.zlib.net/}{zlib}
-\item \href{http://curl.haxx.se/}{CURL}
-\item \href{http://www.libsdl.org/}{SDL}
-\item \href{http://www.libsdl.org/projects/SDL\_ttf/}{SDL\_ttf}
-\item \href{http://www.libpng.org/}{libpng}
-\item \href{http://libjpeg.sourceforge.net/}{libjpeg}
-\item \href{http://icns.sourceforge.net/}{libicns}
-\end{itemize}
+To compile for iOS, run:
+
+\begin{verbatim*}
+make TARGET=IOS output/IOS/xcsoar-testing.deb
+\end{verbatim*}
+
+To compile for OS X / x86\_64, run:
+
+\begin{verbatim*}
+make TARGET=OSX64 output/OSX64/XCSoar.dmg
+\end{verbatim*}
+
+To compile for OS X / x86, run:
+
+\begin{verbatim*}
+make TARGET=OSX32 output/OSX32/XCSoar.dmg
+\end{verbatim*}
+
+The \texttt{Makefile} assumes that the Darwin toolchain is installed in
+\verb|~/opt/darwin-toolchain| (only relevant if you are not compiling on OS X).
+You can use the option \verb|DARWIN_TOOLCHAIN| to override this path.
+To compile on Mac OS X, the directory where the library set (built with
+DarwinToolchainBuilder) for the current target is installed needs to be
+specified using the \verb|DARWIN_LIBS| option.
 
 \subsection{Compiling for the Raspberry Pi}
 
