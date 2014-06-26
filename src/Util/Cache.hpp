@@ -31,6 +31,7 @@
 #define CACHE_HPP
 
 #include "ListHead.hpp"
+#include "Manual.hpp"
 #include "Compiler.h"
 
 #include <unordered_map>
@@ -42,76 +43,6 @@ template<typename Key, typename Data,
          typename Hash=std::hash<Key>,
          typename KeyEqual=std::equal_to<Key>>
 class Cache {
-
-  /**
-   * Wrapper that holds an uninitialised object, which be be
-   * initialised and deinitialised on demand.
-   */
-  template<typename T>
-  class Constructible {
-    char buffer[sizeof(T)];
-
-#ifndef NDEBUG
-    bool constructed;
-#endif
-
-  public:
-#ifndef NDEBUG
-    Constructible():constructed(false) {}
-
-    ~Constructible() {
-      assert(!constructed);
-    }
-#endif
-
-    const T &Get() const {
-      assert(constructed);
-
-      const void *p = static_cast<const void *>(buffer);
-      return *static_cast<const T *>(p);
-    }
-
-    T &Get() {
-      assert(constructed);
-
-      void *p = static_cast<void *>(buffer);
-      return *static_cast<T *>(p);
-    }
-
-    void Construct() {
-      assert(!constructed);
-
-      void *p = static_cast<void *>(buffer);
-      new (p) T();
-
-#ifndef NDEBUG
-      constructed = true;
-#endif
-    }
-
-    template<typename U>
-    void Construct(U &&value) {
-      assert(!constructed);
-
-      void *p = static_cast<void *>(buffer);
-      new (p) T(std::forward<U>(value));
-
-#ifndef NDEBUG
-      constructed = true;
-#endif
-    }
-
-    void Destruct() {
-      assert(constructed);
-
-      T &value = Get();
-      value.T::~T();
-
-#ifndef NDEBUG
-      constructed = false;
-#endif
-    }
-  };
 
   class Item;
 
@@ -128,7 +59,7 @@ class Cache {
      */
     typename KeyMap::iterator iterator;
 
-    Constructible<Data> data;
+    Manual<Data> data;
 
   public:
     typename KeyMap::iterator GetIterator() {
