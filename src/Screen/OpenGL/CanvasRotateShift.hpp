@@ -52,6 +52,10 @@ public:
                                                   glm::vec3(pos.x, pos.y, 0)),
                                    GLfloat(angle.Degrees()),
                                    glm::vec3(0, 0, 1));
+    float gl_scale = scale / 100.f;
+    if (Layout::ScaleSupported())
+      gl_scale *= Layout::scale_1024 / 1024.f;
+    matrix = glm::scale(matrix, glm::vec3(gl_scale));
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(matrix));
 #else
