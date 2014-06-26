@@ -30,9 +30,10 @@
 #ifndef CACHE_HPP
 #define CACHE_HPP
 
-#include "ListHead.hpp"
 #include "Manual.hpp"
 #include "Compiler.h"
+
+#include <boost/intrusive/list.hpp>
 
 #include <unordered_map>
 #include <limits>
@@ -51,7 +52,7 @@ class Cache {
      need to do a full lookup, and this class  */
   typedef std::unordered_multimap<Key, class Item *, Hash, KeyEqual> KeyMap;
 
-  class Item : public ListHead {
+  class Item : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
     /**
      * This iterator is stored to allow quick removal of outdated
      * cache items.  This is safe, because rehashing is disabled in
@@ -89,6 +90,9 @@ class Cache {
     }
   };
 
+  typedef boost::intrusive::list<Item,
+                                 boost::intrusive::constant_time_size<false>> ItemList;
+
   /**
    * The number of cached items.
    */
@@ -97,18 +101,18 @@ class Cache {
   /**
    * The list of unallocated items.
    */
-  ListHead unallocated_list;
+  ItemList unallocated_list;
 
-  ListHead chronological_list;
+  ItemList chronological_list;
 
   KeyMap map;
 
   Item buffer[capacity];
 
   Item &GetOldest() {
-    assert(!chronological_list.IsEmpty());
+    assert(!chronological_list.empty());
 
-    return *(Item *)chronological_list.GetPrevious();
+    return chronological_list.back();
   }
 
   /**
@@ -119,7 +123,7 @@ class Cache {
     Item &item = GetOldest();
 
     map.erase(item.GetIterator());
-    item.Remove();
+    chronological_list.erase(chronological_list.iterator_to(item));
 
 #ifndef NDEBUG
     --size;
@@ -132,16 +136,16 @@ class Cache {
    * Allocate an item from #unallocated_list, but do not construct it.
    */
   Item &Allocate() {
-    assert(!unallocated_list.IsEmpty());
+    assert(!unallocated_list.empty());
 
-    Item &item = *(Item *)unallocated_list.GetNext();
-    item.Remove();
+    Item &item = unallocated_list.front();
+    unallocated_list.erase(unallocated_list.iterator_to(item));
     return item;
   }
 
   template<typename U>
   Item &Make(U &&data) {
-    if (unallocated_list.IsEmpty()) {
+    if (unallocated_list.empty()) {
       /* cache is full: delete oldest */
       Item &item = RemoveOldest();
       item.Replace(std::forward<U>(data));
@@ -156,11 +160,9 @@ class Cache {
 
 public:
   Cache()
-    :size(0),
-     unallocated_list(ListHead::empty()),
-     chronological_list(ListHead::empty()) {
+    :size(0) {
     for (unsigned i = 0; i < capacity; ++i)
-      buffer[i].InsertAfter(unallocated_list);
+      unallocated_list.push_back(buffer[i]);
 
     /* allocate enough buckets for the whole lifetime of this
        object */
@@ -184,18 +186,15 @@ public:
   void Clear() {
     map.clear();
 
-    while (!chronological_list.IsEmpty()) {
+    chronological_list.clear_and_dispose([this](Item *item){
 #ifndef NDEBUG
-      assert(size > 0);
-      --size;
+        assert(size > 0);
+        --size;
 #endif
 
-      Item &item = *(Item *)chronological_list.GetNext();
-      item.Remove();
-
-      item.Destruct();
-      item.InsertAfter(unallocated_list);
-    }
+        item->Destruct();
+        unallocated_list.push_front(*item);
+      });
 
     assert(size == 0);
     size = 0;
@@ -210,8 +209,8 @@ public:
     assert(item.GetIterator() == i);
 
     /* move to the front of the chronological list */
-    item.Remove();
-    item.InsertAfter(chronological_list);
+    chronological_list.erase(chronological_list.iterator_to(item));
+    chronological_list.push_front(item);
 
     return &item.GetData();
   }
@@ -221,7 +220,7 @@ public:
     assert(map.find(key) == map.end());
 
     Item &item = Make(std::forward<U>(data));
-    item.InsertAfter(chronological_list);
+    chronological_list.push_front(item);
     auto iterator = map.insert(std::make_pair(std::forward<K>(key), &item));
     item.SetIterator(iterator);
 
