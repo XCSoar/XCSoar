@@ -71,6 +71,12 @@ $(ANDROID_BUILD)/res/drawable-hdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/
 $(ANDROID_BUILD)/res/drawable-xhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
+$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxhdpi/dirstamp
+	$(Q)rsvg-convert --width=144 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
+	$(Q)rsvg-convert --width=192 $< -o $@
+
 OGGENC = oggenc --quiet --quality 1
 
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
@@ -113,7 +119,9 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
 	$(ANDROID_BUILD)/res/drawable-ldpi/icon.png \
 	$(ANDROID_BUILD)/res/drawable/icon.png \
 	$(ANDROID_BUILD)/res/drawable-hdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png
+	$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png \
+	$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png \
+	$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png
 
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml
