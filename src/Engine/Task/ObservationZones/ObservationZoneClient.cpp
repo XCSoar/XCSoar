@@ -66,10 +66,10 @@ ObservationZoneClient::TransitionConstraint(const GeoPoint &location,
   return oz_point->TransitionConstraint(location, last_location);
 }
 
-void 
+void
 ObservationZoneClient::SetLegs(const TaskPoint *previous,
                                const TaskPoint *next)
 {
-  oz_point->SetLegs(previous != NULL ? &previous->GetLocation() : NULL,
-                    next != NULL ? &next->GetLocation() : NULL);
+  oz_point->SetLegs(previous != nullptr ? &previous->GetLocation() : nullptr,
+                    next != nullptr ? &next->GetLocation() : nullptr);
 }
