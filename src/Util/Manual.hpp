@@ -46,14 +46,6 @@
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
-#if defined(__clang__) || GCC_VERSION < 40700 || defined(ANDROID)
-#pragma GCC diagnostic push
-/* this warning is emitted by clang 3.2 and gcc 4.6, even though we
-   use alignas(T); TODO: check if this is a clang bug or a bug in this
-   class */
-#pragma GCC diagnostic ignored "-Wcast-align"
-#endif
-
 /**
  * Container for an object that gets constructed and destructed
  * manually.  The object is constructed in-place, and therefore
@@ -103,13 +95,15 @@ public:
   T &Get() {
     assert(initialized);
 
-    return *(T *)data;
+    void *p = static_cast<void *>(data);
+    return *static_cast<T *>(p);
   }
 
   const T &Get() const {
     assert(initialized);
 
-    return *(const T *)data;
+    const void *p = static_cast<const void *>(data);
+    return *static_cast<const T *>(p);
   }
 
   operator T &() {
@@ -128,10 +122,6 @@ public:
     return &Get();
   }
 };
-
-#if defined(__clang__) || GCC_VERSION < 40700 || defined(ANDROID)
-#pragma GCC diagnostic pop
-#endif
 
 #if defined(__clang__) || GCC_VERSION >= 40700
 #pragma GCC diagnostic pop
