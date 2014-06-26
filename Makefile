@@ -106,6 +106,9 @@ include $(topdir)/build/generate.mk
 include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk
 
+include $(topdir)/build/libboost.mk
+INCLUDES += $(BOOST_CPPFLAGS)
+
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libresource.mk
 include $(topdir)/build/libstdcxx.mk
