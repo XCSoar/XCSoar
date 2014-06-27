@@ -42,7 +42,7 @@ struct AStarPriorityValue
   /** Heuristic cost to goal */
   unsigned h;
 
-  AStarPriorityValue(unsigned _g = 0):g(_g), h(0) {}
+  explicit AStarPriorityValue(unsigned _g):g(_g), h(0) {}
   AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g), h(_h) {}
 
   template<bool is_min>
