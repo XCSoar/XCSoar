@@ -59,34 +59,6 @@ struct RouteLinkBase {
   }
 
   /**
-   * Ordering operator, used for set ordering.  Uses lexicographic comparison.
-   *
-   * @param o object to compare to
-   *
-   * @return true if lexicographically smaller
-   */
-  gcc_pure
-  bool
-  operator<(const RouteLinkBase &o) const
-  {
-    if (first.longitude != o.first.longitude)
-      return first.longitude < o.first.longitude;
-    if (first.latitude != o.first.latitude)
-      return first.latitude < o.first.latitude;
-    if (first.altitude != o.first.altitude)
-      return first.altitude < o.first.altitude;
-
-    if (second.longitude != o.second.longitude)
-      return second.longitude < o.second.longitude;
-    if (second.latitude != o.second.latitude)
-      return second.latitude < o.second.latitude;
-    if (second.altitude != o.second.altitude)
-      return second.altitude < o.second.altitude;
-
-    return false;
-   }
-
-  /**
    * Return 2d Distance of this link
    * @return distance in FlatGeoPoint units
    */
