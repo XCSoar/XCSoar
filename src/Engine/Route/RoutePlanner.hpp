@@ -43,31 +43,28 @@ class GlidePolar;
 #ifdef PLANNER_SET
 #include <set>
 #else
-#include <tr1/unordered_set>
+#include <unordered_set>
 
 namespace std
 {
-  namespace tr1
+  template <>
+  struct hash<RoutePoint> : public unary_function<RoutePoint, size_t>
   {
-    template <>
-    struct hash<RoutePoint> : public unary_function<RoutePoint, size_t>
-    {
-      gcc_const
-      result_type operator()(const argument_type p) const {
-        return p.longitude * result_type(104729) + p.latitude;
-      }
-    };
+    gcc_const
+    result_type operator()(const argument_type p) const {
+      return p.longitude * result_type(104729) + p.latitude;
+    }
+  };
 
-    template <>
-    struct hash<RouteLinkBase> : public unary_function<RouteLinkBase, size_t>
-    {
-      gcc_pure
-      size_t operator()(const RouteLinkBase& __val) const {
-        hash<RoutePoint> p;
-        return p(__val.first) * result_type(27644437) + p(__val.second);
-      }
-    };
-  }
+  template <>
+  struct hash<RouteLinkBase> : public unary_function<RouteLinkBase, size_t>
+  {
+    gcc_pure
+    size_t operator()(const RouteLinkBase& __val) const {
+      hash<RoutePoint> p;
+      return p(__val.first) * result_type(27644437) + p(__val.second);
+    }
+  };
 }
 
 #endif
@@ -154,7 +151,7 @@ private:
 #ifdef PLANNER_SET
   typedef std::set< RouteLinkBase> RouteLinkSet;
 #else
-  typedef std::tr1::unordered_set< RouteLinkBase > RouteLinkSet;
+  typedef std::unordered_set<RouteLinkBase> RouteLinkSet;
 #endif
   /** Links that have been visited during solution */
   RouteLinkSet unique_links;
