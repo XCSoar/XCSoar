@@ -278,10 +278,9 @@ RoutePlanner::LinkCleared(const RouteLink &e)
 bool
 RoutePlanner::IsSetUnique(const RouteLinkBase &e)
 {
-  if (unique_links.find(e) == unique_links.end()) {
-    unique_links.insert(e);
+  const bool inserted = unique_links.insert(e).second;
+  if (inserted)
     return true;
-  }
 
   count_supressed++;
   return false;
