@@ -269,7 +269,7 @@ RoutePlanner::LinkCleared(const RouteLink &e)
                        (is_final ? 0 : RoutePolars::RoundTime(h)));
   // add one to tie-break towards lower number of links
 
-  planner.Reserve(ASTAR_QUEUE_SIZE);
+  planner.Reserve(planner.DEFAULT_QUEUE_SIZE);
   planner.Link(e.second, e.first, v);
   return true;
 }

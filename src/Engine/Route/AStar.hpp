@@ -33,12 +33,10 @@ Copyright_License {
 extern long count_astar_links;
 #endif
 
-#define ASTAR_MINMAX_OFFSET 134217727
-
-#define ASTAR_QUEUE_SIZE 1024
-
 struct AStarPriorityValue
 {
+  static constexpr unsigned MINMAX_OFFSET = 134217727;
+
   /** Actual edge value */
   unsigned g;
   /** Heuristic cost to goal */
@@ -49,8 +47,8 @@ struct AStarPriorityValue
 
   gcc_pure
   AStarPriorityValue Adjust(const bool is_min) const {
-    return is_min ? *this : AStarPriorityValue(ASTAR_MINMAX_OFFSET - g,
-                                               ASTAR_MINMAX_OFFSET - h);
+    return is_min ? *this : AStarPriorityValue(MINMAX_OFFSET - g,
+                                               MINMAX_OFFSET - h);
   }
 
   gcc_pure
@@ -131,12 +129,14 @@ class AStar
   node_value_iterator cur;
 
 public:
+  static constexpr unsigned DEFAULT_QUEUE_SIZE = 1024;
+
   /**
    * Default constructor
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(unsigned reserve_default = ASTAR_QUEUE_SIZE)
+  AStar(unsigned reserve_default = DEFAULT_QUEUE_SIZE)
   {
     Reserve(reserve_default);
   }
@@ -147,7 +147,7 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(const Node &node, unsigned reserve_default = ASTAR_QUEUE_SIZE)
+  AStar(const Node &node, unsigned reserve_default = DEFAULT_QUEUE_SIZE)
   {
     Reserve(reserve_default);
     Push(node, node, AStarPriorityValue(0));
