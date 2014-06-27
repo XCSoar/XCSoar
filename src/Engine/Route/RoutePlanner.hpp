@@ -44,18 +44,27 @@ class GlidePolar;
 #include <set>
 #else
 #include <tr1/unordered_set>
-#include <tr1/unordered_map>
 
 namespace std
 {
   namespace tr1
   {
     template <>
+    struct hash<RoutePoint> : public unary_function<RoutePoint, size_t>
+    {
+      gcc_const
+      result_type operator()(const argument_type p) const {
+        return p.longitude * result_type(104729) + p.latitude;
+      }
+    };
+
+    template <>
     struct hash<RouteLinkBase> : public unary_function<RouteLinkBase, size_t>
     {
       gcc_pure
       size_t operator()(const RouteLinkBase& __val) const {
-        return std::tr1::_Fnv_hash<sizeof(size_t)>::hash ((const char*)&__val, sizeof(__val));
+        hash<RoutePoint> p;
+        return p(__val.first) * result_type(27644437) + p(__val.second);
       }
     };
   }

@@ -504,7 +504,6 @@ RoutePlanner::Intersection(const AGeoPoint& origin,
   - promote stable solutions with rounding of time value
   - adjustment to GlideSolution height/time in task manager according to path
     variation required for terrain/airspace avoidance
-  - tr1::hash function portability between compiler versions
   - AirspaceRoute synchronise method to disable/ignore airspaces that are
     acknowledged in the airspace warning manager.
   - more documentation
