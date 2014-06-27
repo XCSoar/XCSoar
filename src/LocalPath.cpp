@@ -378,7 +378,9 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
       _tcscat(buffer, _T("/Documents"));
 #else
       _tcscat(buffer, _T("/XCSoarData"));
-#endif#else
+#endif
+
+#else
     _tcscat(buffer, _T("/.xcsoar"));
 #endif
     return buffer;
