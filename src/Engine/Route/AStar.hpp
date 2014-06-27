@@ -25,7 +25,6 @@ Copyright_License {
 #define ASTAR_HPP
 
 #include "Util/ReservablePriorityQueue.hpp"
-#include <assert.h>
 #include "Compiler.h"
 
 //#define ASTAR_TR1
