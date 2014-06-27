@@ -104,7 +104,7 @@ class Trace : private NonCopyable
     unsigned elim_distance;
     unsigned delta_distance;
 
-    TraceDelta(const TracePoint &p)
+    explicit TraceDelta(const TracePoint &p)
       :point(p),
        elim_time(null_time), elim_distance(null_delta),
        delta_distance(0) {}
@@ -212,9 +212,9 @@ public:
    * @param max_time Time window size (seconds), null_time for unlimited
    * @param max_size Maximum number of points that can be stored
    */
-  Trace(const unsigned no_thin_time = 0,
-        const unsigned max_time = null_time,
-        const unsigned max_size = 1000);
+  explicit Trace(const unsigned no_thin_time = 0,
+                 const unsigned max_time = null_time,
+                 const unsigned max_size = 1000);
 
 protected:
   /**

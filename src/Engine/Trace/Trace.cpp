@@ -270,7 +270,7 @@ Trace::push_back(const TracePoint &point)
 
   assert(size() < max_size);
 
-  TraceDelta &td = Insert(point);
+  TraceDelta &td = Insert(TraceDelta(point));
   td.point.Project(task_projection);
   td.InsertBefore(chronological_list);
 
