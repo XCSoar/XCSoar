@@ -42,30 +42,28 @@ struct AStarPriorityValue
   /** Heuristic cost to goal */
   unsigned h;
 
-  explicit AStarPriorityValue(unsigned _g):g(_g), h(0) {}
-  AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g), h(_h) {}
+  explicit constexpr AStarPriorityValue(unsigned _g):g(_g), h(0) {}
+  constexpr AStarPriorityValue(const unsigned _g, const unsigned _h)
+    :g(_g), h(_h) {}
 
   template<bool is_min>
-  gcc_pure
+  constexpr
   AStarPriorityValue Adjust() const {
     return is_min ? *this : AStarPriorityValue(MINMAX_OFFSET - g,
                                                MINMAX_OFFSET - h);
   }
 
-  gcc_pure
+  constexpr
   unsigned f() const {
     return g + h;
   }
 
-  gcc_pure
+  constexpr
   AStarPriorityValue operator+(const AStarPriorityValue& other) const {
-    AStarPriorityValue n(*this);
-    n.g += other.g;
-    n.h = other.h;
-    return n;
+    return AStarPriorityValue(g + other.g, other.h);
   }
 
-  gcc_pure
+  constexpr
   bool operator>(const AStarPriorityValue& other) const {
     return g > other.g;
   }
