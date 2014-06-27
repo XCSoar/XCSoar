@@ -34,6 +34,7 @@
 #include "Compiler.h"
 
 #include <boost/intrusive/list.hpp>
+#include <boost/intrusive/unordered_set.hpp>
 
 #include <unordered_map>
 #include <limits>
@@ -42,52 +43,62 @@
 template<typename Key, typename Data,
          unsigned capacity,
          typename Hash=std::hash<Key>,
-         typename KeyEqual=std::equal_to<Key>>
+         typename Equal=std::equal_to<Key>>
 class Cache {
 
-  class Item;
+  class Item
+    : public boost::intrusive::unordered_set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
+      public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
 
-  /* This is a multimap, even though we use at most one cache item for
-     a key.  A multimap means less overhead, because insert() does not
-     need to do a full lookup, and this class will only insert new
-     items when it knows an item does not already exists */
-  typedef std::unordered_multimap<Key, class Item *, Hash, KeyEqual> KeyMap;
-
-  class Item : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
-    /**
-     * This iterator is stored to allow quick removal of outdated
-     * cache items.  This is safe, because rehashing is disabled in
-     * #KeyMap.
-     */
-    typename KeyMap::iterator iterator;
+    Manual<Key> key;
 
     Manual<Data> data;
 
   public:
-    typename KeyMap::iterator GetIterator() {
-      return iterator;
-    }
-
-    void SetIterator(typename KeyMap::iterator _iterator) {
-      iterator = _iterator;
+    const Key &GetKey() const {
+      return key.Get();
     }
 
     const Data &GetData() const {
       return data.Get();
     }
 
-    template<typename U>
-    void Construct(U &&value) {
+    template<typename K, typename U>
+    void Construct(K &&_key, U &&value) {
+      key.Construct(std::forward<K>(_key));
       data.Construct(std::forward<U>(value));
     }
 
     void Destruct() {
+      key.Destruct();
       data.Destruct();
     }
 
-    template<typename U>
-    void Replace(U &&value) {
+    template<typename K, typename U>
+    void Replace(K &&_key, U &&value) {
+      key.Get() = std::forward<K>(_key);
       data.Get() = std::forward<U>(value);
+    }
+  };
+
+  struct ItemHash : Hash {
+    using Hash::operator();
+
+    gcc_pure
+    std::size_t operator()(const Item &a) const {
+      return Hash::operator()(a.GetKey());
+    }
+  };
+
+  struct ItemEqual : Equal {
+    gcc_pure
+    bool operator()(const Item &a, const Item &b) const {
+      return Equal::operator()(a.GetKey(), b.GetKey());
+    }
+
+    gcc_pure
+    bool operator()(const Key &a, const Item &b) const {
+      return Equal::operator()(a, b.GetKey());
     }
   };
 
@@ -106,9 +117,20 @@ class Cache {
 
   ItemList chronological_list;
 
+  /* This is a multiset, even though we use at most one cache item for
+     a key.  A multiset means less overhead, because insert() does not
+     need to do a full lookup, and this class will only insert new
+     items when it knows an item does not already exists */
+  typedef boost::intrusive::unordered_multiset<Item,
+                                               boost::intrusive::hash<ItemHash>,
+                                               boost::intrusive::equal<ItemEqual>,
+                                               boost::intrusive::constant_time_size<false>> KeyMap;
   KeyMap map;
 
   Item buffer[capacity];
+
+  static constexpr unsigned N_BUCKETS = capacity;
+  typename KeyMap::bucket_type buckets[N_BUCKETS];
 
   Item &GetOldest() {
     assert(!chronological_list.empty());
@@ -123,7 +145,7 @@ class Cache {
   Item &RemoveOldest() {
     Item &item = GetOldest();
 
-    map.erase(item.GetIterator());
+    map.erase(map.iterator_to(item));
     chronological_list.erase(chronological_list.iterator_to(item));
 
 #ifndef NDEBUG
@@ -144,34 +166,27 @@ class Cache {
     return item;
   }
 
-  template<typename U>
-  Item &Make(U &&data) {
+  template<typename K, typename U>
+  Item &Make(K &&key, U &&data) {
     if (unallocated_list.empty()) {
       /* cache is full: delete oldest */
       Item &item = RemoveOldest();
-      item.Replace(std::forward<U>(data));
+      item.Replace(std::forward<K>(key), std::forward<U>(data));
       return item;
     } else {
       /* cache is not full: allocate new item */
       Item &item = Allocate();
-      item.Construct(std::forward<U>(data));
+      item.Construct(std::forward<K>(key), std::forward<U>(data));
       return item;
     }
   }
 
 public:
   Cache()
-    :size(0) {
+    :size(0),
+     map(typename KeyMap::bucket_traits(buckets, N_BUCKETS)) {
     for (unsigned i = 0; i < capacity; ++i)
       unallocated_list.push_back(buffer[i]);
-
-    /* allocate enough buckets for the whole lifetime of this
-       object */
-    map.rehash(capacity);
-
-    /* forcibly disable rehashing, as that would Invalidate existing
-       iterators */
-    map.max_load_factor(std::numeric_limits<decltype(map.max_load_factor())>::infinity());
   }
 
   ~Cache() {
@@ -202,12 +217,11 @@ public:
   }
 
   const Data *Get(const Key &key) {
-    typename KeyMap::iterator i = map.find(key);
+    auto i = map.find(key, map.hash_function(), map.key_eq());
     if (i == map.end())
       return nullptr;
 
-    Item &item = *i->second;
-    assert(item.GetIterator() == i);
+    Item &item = *i;
 
     /* move to the front of the chronological list */
     chronological_list.erase(chronological_list.iterator_to(item));
@@ -218,12 +232,11 @@ public:
 
   template<typename K, typename U>
   void Put(K &&key, U &&data) {
-    assert(map.find(key) == map.end());
+    assert(map.find(key, map.hash_function(), map.key_eq()) == map.end());
 
-    Item &item = Make(std::forward<U>(data));
+    Item &item = Make(std::forward<K>(key), std::forward<U>(data));
     chronological_list.push_front(item);
-    auto iterator = map.insert(std::make_pair(std::forward<K>(key), &item));
-    item.SetIterator(iterator);
+    map.insert(item);
 
 #ifndef NDEBUG
     ++size;
