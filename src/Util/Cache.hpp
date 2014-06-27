@@ -49,7 +49,8 @@ class Cache {
 
   /* This is a multimap, even though we use at most one cache item for
      a key.  A multimap means less overhead, because insert() does not
-     need to do a full lookup, and this class  */
+     need to do a full lookup, and this class will only insert new
+     items when it knows an item does not already exists */
   typedef std::unordered_multimap<Key, class Item *, Hash, KeyEqual> KeyMap;
 
   class Item : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
