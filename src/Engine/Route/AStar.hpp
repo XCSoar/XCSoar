@@ -307,16 +307,11 @@ private:
 
   void SetPredecessor(const Node &node, const Node &parent) {
     // Try to find the given node in the node_parent_map
-    node_parent_iterator it = node_parents.find(node);
-    if (it == node_parents.end())
-      // first entry
-      // If the node wasn't found
-      // -> Insert a new node into the node_parent_map
-      node_parents.insert(std::make_pair(node, parent));
-    else
+    auto result = node_parents.insert(std::make_pair(node, parent));
+    if (!result.second)
       // If the node was found
       // -> Replace the according parent node with the new one
-      it->second = parent;
+      result.first->second = parent;
   }
 };
 
