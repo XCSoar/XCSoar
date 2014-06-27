@@ -33,17 +33,9 @@
 
 #include <utility>
 #include <algorithm>
+#include <unordered_set>
 
 class GlidePolar;
-
-// define PLANNER_SET if STL tr1 extensions are not to be used
-// (with performance penalty)
-#define PLANNER_SET
-
-#ifdef PLANNER_SET
-#include <set>
-#else
-#include <unordered_set>
 
 namespace std
 {
@@ -66,8 +58,6 @@ namespace std
     }
   };
 }
-
-#endif
 
 /**
  * RoutePlanner is an abstract class for planning paths (routes) through
@@ -148,11 +138,8 @@ private:
    */
   SearchPointVector search_hull;
 
-#ifdef PLANNER_SET
-  typedef std::set< RouteLinkBase> RouteLinkSet;
-#else
   typedef std::unordered_set<RouteLinkBase> RouteLinkSet;
-#endif
+
   /** Links that have been visited during solution */
   RouteLinkSet unique_links;
   typedef std::queue< RouteLink> RouteLinkQueue;
