@@ -369,8 +369,18 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 #ifdef __APPLE__
     /* Mac OS X users are not used to dot-files in their home
        directory - make it a little bit easier for them to find the
-       files */
+       files.
+       If target is an iOS device, use the already existing "Documents" folder
+       inside the application's sandbox.
+       This folder can also be accessed via iTunes, if UIFileSharingEnabled is set
+       to YES in Info.plist
+    */
+#if (TARGET_OS_IPHONE)
+    _tcscat(buffer, _T("/Documents"));
+#else
     _tcscat(buffer, _T("/XCSoarData"));
+#endif
+
 #else
     _tcscat(buffer, _T("/.xcsoar"));
 #endif
