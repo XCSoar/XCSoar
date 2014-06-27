@@ -27,13 +27,7 @@ Copyright_License {
 #include "Util/ReservablePriorityQueue.hpp"
 #include "Compiler.h"
 
-//#define ASTAR_TR1
-
-#ifdef ASTAR_TR1
-#include <tr1/unordered_map>
-#else
-#include <map>
-#endif
+#include <unordered_map>
 
 #ifdef INSTRUMENT_TASK
 extern long count_astar_links;
@@ -83,23 +77,17 @@ struct AStarPriorityValue
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template <class Node, class CompareNode=std::less<Node>, bool m_min=true>
+template <class Node, class Hash=std::hash<Node>,
+          class KeyEqual=std::equal_to<Node>,
+          bool m_min=true>
 class AStar
 {
-#ifdef ASTAR_TR1
-  typedef std::tr1::unordered_map<Node, AStarPriorityValue> node_value_map;
-#else
-  typedef std::map<Node, AStarPriorityValue, CompareNode> node_value_map;
-#endif
+  typedef std::unordered_map<Node, AStarPriorityValue, Hash, KeyEqual> node_value_map;
 
   typedef typename node_value_map::iterator node_value_iterator;
   typedef typename node_value_map::const_iterator node_value_const_iterator;
 
-#ifdef ASTAR_TR1
-  typedef std::tr1::unordered_map<Node, Node> node_parent_map;
-#else
-  typedef std::map<Node, Node, CompareNode> node_parent_map;
-#endif
+  typedef std::unordered_map<Node, Node, Hash, KeyEqual> node_parent_map;
 
   typedef typename node_parent_map::iterator node_parent_iterator;
   typedef typename node_parent_map::const_iterator node_parent_const_iterator;
