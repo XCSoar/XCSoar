@@ -45,8 +45,9 @@ struct AStarPriorityValue
   AStarPriorityValue(unsigned _g = 0):g(_g), h(0) {}
   AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g), h(_h) {}
 
+  template<bool is_min>
   gcc_pure
-  AStarPriorityValue Adjust(const bool is_min) const {
+  AStarPriorityValue Adjust() const {
     return is_min ? *this : AStarPriorityValue(MINMAX_OFFSET - g,
                                                MINMAX_OFFSET - h);
   }
@@ -222,7 +223,7 @@ public:
 #ifdef INSTRUMENT_TASK
     count_astar_links++;
 #endif
-    Push(node, parent, GetNodeValue(parent) + edge_value.Adjust(m_min));
+    Push(node, parent, GetNodeValue(parent) + edge_value.Adjust<m_min>());
     // note order of + here is important!
   }
 
