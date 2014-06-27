@@ -37,28 +37,6 @@
 
 class GlidePolar;
 
-namespace std
-{
-  template <>
-  struct hash<RoutePoint> : public unary_function<RoutePoint, size_t>
-  {
-    gcc_const
-    result_type operator()(const argument_type p) const {
-      return p.longitude * result_type(104729) + p.latitude;
-    }
-  };
-
-  template <>
-  struct hash<RouteLinkBase> : public unary_function<RouteLinkBase, size_t>
-  {
-    gcc_pure
-    size_t operator()(const RouteLinkBase& __val) const {
-      hash<RoutePoint> p;
-      return p(__val.first) * result_type(27644437) + p(__val.second);
-    }
-  };
-}
-
 /**
  * RoutePlanner is an abstract class for planning paths (routes) through
  * an arbitrary environment, avoiding obstacles of different types.
@@ -103,6 +81,21 @@ namespace std
  * (RoutePlannerGlue) is responsible for locking the RasterMap on solve() calls.
  */
 class RoutePlanner {
+  struct RoutePointHasher : std::unary_function<RoutePoint, size_t> {
+    gcc_const
+    result_type operator()(const argument_type p) const {
+      return p.longitude * result_type(104729) + p.latitude;
+    }
+  };
+
+  struct RouteLinkBaseHasher : std::unary_function<RouteLinkBase, size_t> {
+    gcc_const
+    result_type operator()(const argument_type l) const {
+      RoutePointHasher p;
+      return p(l.first) * result_type(27644437) + p(l.second);
+    }
+  };
+
 protected:
   typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
 
@@ -138,7 +131,7 @@ private:
    */
   SearchPointVector search_hull;
 
-  typedef std::unordered_set<RouteLinkBase> RouteLinkSet;
+  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher> RouteLinkSet;
 
   /** Links that have been visited during solution */
   RouteLinkSet unique_links;
