@@ -45,7 +45,9 @@ static FastMutex all_threads_mutex;
  * This list keeps track of all active threads.  It is used to assert
  * that all threads have been cleaned up on shutdown.
  */
-static ListHead all_threads = ListHead(ListHead::empty());
+static boost::intrusive::list<Thread,
+                              boost::intrusive::member_hook<Thread, Thread::SiblingsHook, &Thread::siblings>,
+                              boost::intrusive::constant_time_size<false>> all_threads;
 #endif
 
 void
@@ -80,7 +82,7 @@ Thread::Start()
 #ifndef NDEBUG
   if (success) {
     all_threads_mutex.Lock();
-    siblings.InsertAfter(all_threads);
+    all_threads.push_back(*this);
     all_threads_mutex.Unlock();
   }
 #endif
@@ -105,7 +107,7 @@ Thread::Join()
 
 #ifndef NDEBUG
   all_threads_mutex.Lock();
-  siblings.Remove();
+  all_threads.erase(all_threads.iterator_to(*this));
   all_threads_mutex.Unlock();
 #endif
 }
@@ -125,7 +127,7 @@ Thread::Join(unsigned timeout_ms)
 #ifndef NDEBUG
     {
       all_threads_mutex.Lock();
-      siblings.Remove();
+      all_threads.erase(all_threads.iterator_to(*this));
       all_threads_mutex.Unlock();
     }
 #endif
@@ -181,7 +183,7 @@ bool
 ExistsAnyThread()
 {
   all_threads_mutex.Lock();
-  bool result = !all_threads.IsEmpty();
+  bool result = !all_threads.empty();
   all_threads_mutex.Unlock();
   return result;
 }

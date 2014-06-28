@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_THREAD_HPP
 #define XCSOAR_THREAD_THREAD_HPP
 
+#include "Compiler.h"
+
 #ifndef NDEBUG
-#include "Util/ListHead.hpp"
+#include <boost/intrusive/list.hpp>
 #endif
 
 #ifdef HAVE_POSIX
@@ -40,10 +42,6 @@ Copyright_License {
  * This class provides an OS independent view on a thread.
  */
 class Thread {
-#ifndef NDEBUG
-  ListHead siblings;
-#endif
-
   const char *const name;
 
 #ifdef HAVE_POSIX
@@ -65,6 +63,12 @@ class Thread {
 #endif
 
 public:
+
+#ifndef NDEBUG
+  typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> SiblingsHook;
+  SiblingsHook siblings;
+#endif
+
 #ifdef HAVE_POSIX
   Thread(const char *_name=nullptr):name(_name), defined(false) {
 #ifndef NDEBUG
