@@ -1,4 +1,3 @@
-#include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Computer/TraceComputer.hpp"
@@ -8,9 +7,9 @@
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "test_debug.hpp"
 
 #include <fstream>
 

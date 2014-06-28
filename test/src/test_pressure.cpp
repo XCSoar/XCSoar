@@ -20,10 +20,11 @@
 }
 */
 
-
-#include "test_debug.hpp"
 #include "Atmosphere/AirDensity.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "test_debug.hpp"
+
+#include <stdio.h>
 
 static bool
 test_find_qnh()

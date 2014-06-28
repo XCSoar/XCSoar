@@ -23,6 +23,7 @@
 #include "TaskEventsPrint.hpp"
 #include "harness_flight.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "test_debug.hpp"
 
 static bool
 test_abort(int n_wind)

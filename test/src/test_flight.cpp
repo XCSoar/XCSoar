@@ -22,8 +22,10 @@
 
 #include "harness_flight.hpp"
 #include "harness_wind.hpp"
+#include "test_debug.hpp"
 
-int main(int argc, char** argv) 
+int
+main(int argc, char** argv)
 {
   // default arguments
   autopilot_parms.SetIdeal();

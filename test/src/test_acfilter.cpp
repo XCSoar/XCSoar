@@ -21,8 +21,8 @@
 */
 
 #include "harness_flight.hpp"
-
 #include "Util/AircraftStateFilter.hpp"
+#include "test_debug.hpp"
 
 int main(int argc, char** argv) {
   // default arguments

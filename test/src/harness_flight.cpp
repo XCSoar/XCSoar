@@ -20,6 +20,7 @@
 }
 */
 
+#include "Printing.hpp"
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
 #include "harness_wind.hpp"
@@ -31,6 +32,7 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
 #include "OS/FileUtil.hpp"
+#include "test_debug.hpp"
 
 #include <fstream>
 

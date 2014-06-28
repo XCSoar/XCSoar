@@ -21,6 +21,7 @@
 */
 
 #include "harness_flight.hpp"
+#include "test_debug.hpp"
 
 static bool
 test_airspace(const unsigned n_airspaces)

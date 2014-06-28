@@ -21,7 +21,6 @@
 */
 
 #include "Printing.hpp"
-#define DO_PRINT
 #include "test_debug.hpp"
 #include "harness_airspace.hpp"
 #include "Route/AirspaceRoute.hpp"
@@ -35,6 +34,8 @@
 #include "OS/FileUtil.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
+
+#include <fstream>
 
 #include <string.h>
 

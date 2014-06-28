@@ -22,6 +22,7 @@
 
 #include "harness_flight.hpp"
 #include "harness_wind.hpp"
+#include "test_debug.hpp"
 
 static bool
 test_speed_factor(int test_num, int n_wind)

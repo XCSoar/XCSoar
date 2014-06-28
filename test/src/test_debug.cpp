@@ -20,13 +20,15 @@
 }
 */
 
-#include "test_debug.hpp"
 #include "harness_wind.hpp"
 #include "harness_task.hpp"
 #include "harness_flight.hpp"
 #include "Contest/Solvers/ContestDijkstra.hpp"
+#include "test_debug.hpp"
+
 #include <stdlib.h>
 #include <stdio.h>
+#include <getopt.h>
 
 int n_samples = 0;
 int interactive = 0;

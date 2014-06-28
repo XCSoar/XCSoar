@@ -24,11 +24,13 @@
 #include "harness_airspace.hpp"
 #include "test_debug.hpp"
 #include "OS/FileUtil.hpp"
-
-#define n_test 500
-
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "test_debug.hpp"
+
+#include <fstream>
+
+#define n_test 500
 
 class WaypointVisitorPrint: public WaypointVisitor {
 public:

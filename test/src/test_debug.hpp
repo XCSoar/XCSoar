@@ -24,16 +24,16 @@
 #define TEST_DEBUG_HPP
 
 #include "Printing.hpp"
-#include <fstream>
-#include <iostream>
-#include <getopt.h>
-#include <string>
+
+#include "Math/fixed.hpp"
+#include "Replay/TaskAutoPilot.hpp"
+
 extern "C" {
 #include "tap.h"
 }
 
-#include "Math/fixed.hpp"
-#include "Replay/TaskAutoPilot.hpp"
+#include <iosfwd>
+#include <string>
 
 extern int n_samples;
 void PrintDistanceCounts();
