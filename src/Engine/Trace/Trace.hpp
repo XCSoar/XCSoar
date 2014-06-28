@@ -60,6 +60,7 @@ class Trace : private NonCopyable
      * time delta.
      * This is like a modified Douglas-Peuker algorithm
      */
+    gcc_pure
     static bool DeltaRank(const TraceDelta &x, const TraceDelta &y) {
       // distance is king
       if (x.elim_distance < y.elim_distance)
@@ -86,7 +87,8 @@ class Trace : private NonCopyable
     }
 
     struct DeltaRankOp {
-      bool operator()(const TraceDelta &s1, const TraceDelta &s2) {
+      gcc_pure
+      bool operator()(const TraceDelta &s1, const TraceDelta &s2) const {
         return DeltaRank(s1, s2);
       }
     };
