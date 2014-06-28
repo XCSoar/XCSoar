@@ -32,8 +32,8 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <boost/intrusive/list.hpp>
+#include <boost/intrusive/set.hpp>
 
-#include <set>
 #include <assert.h>
 #include <stdlib.h>
 
@@ -53,7 +53,9 @@ class TracePointerVector;
 class Trace : private NonCopyable
 {
   struct TraceDelta
-    : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
+    : boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
+      boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
+
     /**
      * Function used to points for sorting by deltas.
      * Ranking is primarily by distance delta; for equal distances, rank by
@@ -164,14 +166,16 @@ class Trace : private NonCopyable
     }
   };
 
-  /* using std::multiset, not because we need multiple values (we
-     don't), but to avoid std::set's overhead for duplicate
-     elimination */
-  typedef std::multiset<TraceDelta, TraceDelta::DeltaRankOp,
-                        GlobalSliceAllocator<TraceDelta, 128u>> DeltaList;
+  /* using multiset, not because we need multiple values (we don't),
+     but to avoid set's overhead for duplicate elimination */
+  typedef boost::intrusive::multiset<TraceDelta,
+                                     boost::intrusive::compare<TraceDelta::DeltaRankOp>,
+                                     boost::intrusive::constant_time_size<false>> DeltaList;
 
   typedef boost::intrusive::list<TraceDelta,
                                  boost::intrusive::constant_time_size<false>> ChronologicalList;
+
+  SliceAllocator<TraceDelta, 128u> allocator;
 
   DeltaList delta_list;
   ChronologicalList chronological_list;
@@ -189,6 +193,25 @@ class Trace : private NonCopyable
 
   Serial append_serial, modify_serial;
 
+  template<typename Alloc>
+  struct Disposer {
+    Alloc &alloc;
+
+    void operator()(typename Alloc::pointer td) {
+      alloc.destroy(td);
+      alloc.deallocate(td, 1);
+    }
+  };
+
+  template<typename Alloc>
+  static Disposer<Alloc> MakeDisposer(Alloc &alloc) {
+    return {alloc};
+  }
+
+  Disposer<decltype(allocator)> MakeDisposer() {
+    return MakeDisposer(allocator);
+  }
+
 public:
   /**
    * Constructor.  Task projection is updated after first call to append().
@@ -201,6 +224,10 @@ public:
   explicit Trace(const unsigned no_thin_time = 0,
                  const unsigned max_time = null_time,
                  const unsigned max_size = 1000);
+
+  ~Trace() {
+    clear();
+  }
 
 protected:
   /**
@@ -268,8 +295,6 @@ protected:
    * work around slight time warps.
    */
   void EraseLaterThan(const unsigned min_time);
-
-  TraceDelta &Insert(const TraceDelta &td);
 
   /**
    * Update start node (and neighbour) after min time pruning
