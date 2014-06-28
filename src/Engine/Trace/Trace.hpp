@@ -91,14 +91,6 @@ class Trace : private NonCopyable
       }
     };
 
-    /* using std::multiset, not because we need multiple values (we
-       don't), but to avoid std::set's overhead for duplicate
-       elimination */
-    typedef std::multiset<TraceDelta, DeltaRankOp,
-                          GlobalSliceAllocator<TraceDelta, 128u> > List;
-    typedef List::iterator iterator;
-    typedef List::const_iterator const_iterator;
-
     TracePoint point;
 
     unsigned elim_time;
@@ -170,10 +162,16 @@ class Trace : private NonCopyable
     }
   };
 
+  /* using std::multiset, not because we need multiple values (we
+     don't), but to avoid std::set's overhead for duplicate
+     elimination */
+  typedef std::multiset<TraceDelta, TraceDelta::DeltaRankOp,
+                        GlobalSliceAllocator<TraceDelta, 128u>> DeltaList;
+
   typedef boost::intrusive::list<TraceDelta,
                                  boost::intrusive::constant_time_size<false>> ChronologicalList;
 
-  TraceDelta::List delta_list;
+  DeltaList delta_list;
   ChronologicalList chronological_list;
   unsigned cached_size;
 
@@ -233,7 +231,7 @@ protected:
    * @param tree Tree to remove from
    *
    */
-  void EraseInside(TraceDelta::iterator it);
+  void EraseInside(DeltaList::iterator it);
 
   /**
    * Erase elements based on delta metric until the size is

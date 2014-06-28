@@ -106,7 +106,7 @@ Trace::UpdateDelta(TraceDelta &td)
 }
 
 void
-Trace::EraseInside(TraceDelta::iterator it)
+Trace::EraseInside(DeltaList::iterator it)
 {
   assert(cached_size > 0);
   assert(cached_size == delta_list.size());
@@ -143,7 +143,7 @@ Trace::EraseDelta(const unsigned target_size, const unsigned recent)
 
   const unsigned recent_time = GetRecentTime(recent);
 
-  TraceDelta::iterator candidate = delta_list.begin();
+  auto candidate = delta_list.begin();
   while (size() > target_size) {
     const TraceDelta &td = *candidate;
     if (!td.IsEdge() && td.point.GetTime() < recent_time) {
@@ -213,8 +213,9 @@ Trace::EraseLaterThan(const unsigned min_time)
 }
 
 Trace::TraceDelta &
-Trace::Insert(const TraceDelta &td) {
-  TraceDelta::iterator it = delta_list.insert(td);
+Trace::Insert(const TraceDelta &td)
+{
+  auto it = delta_list.insert(td);
 
   /* std::set doesn't allow modification of an item, but we
      override that */
