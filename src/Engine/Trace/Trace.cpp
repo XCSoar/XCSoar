@@ -136,7 +136,7 @@ Trace::EraseDelta(const unsigned target_size, const unsigned recent)
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
 
-  if (size() < 2)
+  if (size() <= 2)
     return false;
 
   bool modified = false;
