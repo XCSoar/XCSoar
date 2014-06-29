@@ -42,9 +42,24 @@ sin_cos(const fixed thetha)
 #endif
 }
 
-#define positive(x) (x > 0)
-#define negative(x) (x < 0)
-#define sigmoid(x) (2.0 / (1.0 + exp(-x)) - 1.0)
+static inline constexpr bool
+positive(fixed x)
+{
+  return x > 0;
+}
+
+static inline constexpr bool
+negative(fixed x)
+{
+  return x < 0;
+}
+
+gcc_const
+static inline fixed
+sigmoid(fixed x)
+{
+  return 2.0 / (1.0 + exp(-x)) - 1.0;
+}
 
 constexpr
 static inline fixed
