@@ -42,7 +42,7 @@ private:
 
 public:
   ThreadLocal() {
-    ::pthread_key_create(&key, NULL);
+    ::pthread_key_create(&key, nullptr);
   }
 
   ~ThreadLocal() {

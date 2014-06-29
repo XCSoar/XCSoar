@@ -66,7 +66,7 @@ Thread::Start()
   creating = true;
 #endif
 
-  defined = pthread_create(&handle, NULL, ThreadProc, this) == 0;
+  defined = pthread_create(&handle, nullptr, ThreadProc, this) == 0;
 
 #ifndef NDEBUG
   creating = false;
@@ -74,9 +74,9 @@ Thread::Start()
 
   bool success = defined;
 #else
-  handle = ::CreateThread(NULL, 0, ThreadProc, this, 0, &id);
+  handle = ::CreateThread(nullptr, 0, ThreadProc, this, 0, &id);
 
-  bool success = handle != NULL;
+  bool success = handle != nullptr;
 #endif
 
 #ifndef NDEBUG
@@ -97,12 +97,12 @@ Thread::Join()
   assert(!IsInside());
 
 #ifdef HAVE_POSIX
-  pthread_join(handle, NULL);
+  pthread_join(handle, nullptr);
   defined = false;
 #else
   ::WaitForSingleObject(handle, INFINITE);
   ::CloseHandle(handle);
-  handle = NULL;
+  handle = nullptr;
 #endif
 
 #ifndef NDEBUG
@@ -122,7 +122,7 @@ Thread::Join(unsigned timeout_ms)
   bool result = ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;
   if (result) {
     ::CloseHandle(handle);
-    handle = NULL;
+    handle = nullptr;
 
 #ifndef NDEBUG
     {
@@ -161,7 +161,7 @@ Thread::ThreadProc(void *p)
   Java::DetachCurrentThread();
 #endif
 
-  return NULL;
+  return nullptr;
 }
 
 #else /* !HAVE_POSIX */

@@ -94,7 +94,7 @@ public:
 #ifdef HAVE_POSIX
     return defined;
 #else
-    return handle != NULL;
+    return handle != nullptr;
 #endif
   }
 

@@ -59,11 +59,11 @@ public:
 #ifdef HAVE_POSIX
   Trigger()
     :value(false) {
-    pthread_mutex_init(&mutex, NULL);
-    pthread_cond_init(&cond, NULL);
+    pthread_mutex_init(&mutex, nullptr);
+    pthread_cond_init(&cond, nullptr);
   }
 #else
-  Trigger():handle(::CreateEvent(NULL, true, false, NULL)) {}
+  Trigger():handle(::CreateEvent(nullptr, true, false, nullptr)) {}
 #endif
 
   /**
@@ -98,7 +98,7 @@ public:
 
     if (!value) {
       struct timeval now;
-      gettimeofday(&now, NULL);
+      gettimeofday(&now, nullptr);
       long future_us = now.tv_usec + timeout_ms * 1000;
 
       struct timespec timeout;

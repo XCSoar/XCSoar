@@ -71,7 +71,7 @@ public:
    */
   bool Wait(PosixMutex &mutex, unsigned timeout_ms) {
     struct timeval now;
-    gettimeofday(&now, NULL);
+    gettimeofday(&now, nullptr);
     long future_us = now.tv_usec + timeout_ms * 1000;
 
     struct timespec timeout;
