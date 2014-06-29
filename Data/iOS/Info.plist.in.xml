@@ -20,6 +20,13 @@
         <string>VERSION_PLACEHOLDER</string>
         <key>LSRequiresIPhoneOS</key>
         <true />
+        <key>UIRequiredDeviceCapabilities</key>
+        <dict>
+            <key>armv7</key>
+            <true/>
+            <key>opengles-2</key>
+            <true/>
+        </dict>
         <key>CFBundleIconFile</key>
         <array>
             <string>Icon.png</string>
