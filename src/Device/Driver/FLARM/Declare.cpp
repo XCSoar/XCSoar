@@ -78,7 +78,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
 
   env.SetProgressPosition(4);
 
-  if (!SetConfig("ADDWP", "0000000N,00000000E,TAKEOFF", env))
+  if (!SetConfig("ADDWP", "0000000N,00000000E,T", env))
     return false;
 
   env.SetProgressPosition(5);
@@ -108,13 +108,19 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     DegLon = (int)tmp;
     MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    const WideToUTF8Converter name(declaration.GetName(i));
-
+    /*
+     * We use the waypoint index here as name to get around the 192 byte
+     * task size limit of the FLARM devices.
+     *
+     * see Flarm DataPort Manual:
+     * "The total data size entered through this command may not surpass
+     * 192 bytes when calculated as follows: 7+(Number of Waypoints * 9) +
+     * (sum of length of all task and waypoint descriptions)"
+     */
     NarrowString<90> buffer;
-    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
+    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,%d",
                   DegLat, (double)MinLat, NoS,
-                  DegLon, (double)MinLon, EoW);
-    CopyCleanFlarmString(buffer.buffer() + buffer.length(), name);
+                  DegLon, (double)MinLon, EoW, i + 1);
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;
@@ -122,7 +128,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
     env.SetProgressPosition(6 + i);
   }
 
-  if (!SetConfig("ADDWP", "0000000N,00000000E,LANDING", env))
+  if (!SetConfig("ADDWP", "0000000N,00000000E,L", env))
     return false;
 
   env.SetProgressPosition(6 + size);
