@@ -26,8 +26,7 @@
 
 #ifndef FIXED_MATH
 #include <math.h>
-#define FIXED_DOUBLE(x) (x)
-#define FIXED_INT(x) ((int)x)
+
 typedef double fixed;
 
 gcc_const
@@ -110,8 +109,6 @@ inline fixed accurate_half_sin(fixed a) {
 }
 
 #else
-#define FIXED_DOUBLE(x) x.as_double()
-#define FIXED_INT(x) x.as_int()
 
 #include <type_traits>
 #include <climits>

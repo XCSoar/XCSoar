@@ -42,7 +42,7 @@ test_find_qnh2()
   AtmosphericPressure pres =
     AtmosphericPressure::FindQNHFromPressure(sp, fixed(120));
   if (verbose) {
-    printf("%g\n",FIXED_DOUBLE(pres.GetHectoPascal()));
+    printf("%g\n", double(pres.GetHectoPascal()));
   }
   return fabs(pres.GetHectoPascal() - fixed(1015.6)) < fixed(0.1);
   // example, QNH=1014, ps=100203
@@ -57,7 +57,7 @@ test_qnh_to_static()
   AtmosphericPressure pres = AtmosphericPressure::Standard();
   fixed p0 = pres.QNHAltitudeToStaticPressure(fixed(0)).GetPascal();
   if (verbose) {
-    printf("%g\n",FIXED_DOUBLE(p0));
+    printf("%g\n", double(p0));
   }
   return fabs(p0-fixed(101325))<fixed(0.1);
 }
@@ -70,7 +70,7 @@ test_qnh_round()
     AtmosphericPressure::FindQNHFromPressure(sp, fixed(120));
   fixed h0 = pres.PressureAltitudeToQNHAltitude(fixed(100));
   if (verbose) {
-    printf("%g\n",FIXED_DOUBLE(h0));
+    printf("%g\n", double(h0));
   }
   return fabs(h0-fixed(120))<fixed(1);
 }
@@ -83,7 +83,7 @@ test_qnh_round2()
     AtmosphericPressure::FindQNHFromPressure(sp, fixed(120));
   fixed h0 = pres.StaticPressureToQNHAltitude(pres);
   if (verbose) {
-    printf("%g %g\n", FIXED_DOUBLE(pres.GetPascal()), FIXED_DOUBLE(h0));
+    printf("%g %g\n", double(pres.GetPascal()), double(h0));
   }
   return fabs(h0)<fixed(1);
 }
@@ -94,7 +94,7 @@ test_isa_pressure(const fixed alt, const fixed prat)
   const AtmosphericPressure pres = AtmosphericPressure::Standard();
   fixed p0 = pres.QNHAltitudeToStaticPressure(alt).GetPascal();
   if (verbose) {
-    printf("%g\n",FIXED_DOUBLE(p0));
+    printf("%g\n", double(p0));
   }
   return fabs(p0/fixed(101325)-prat)<fixed(0.001);
 }
@@ -104,7 +104,7 @@ test_isa_density(const fixed alt, const fixed prat)
 {
   fixed p0 = AirDensity(alt);
   if (verbose) {
-    printf("%g\n",FIXED_DOUBLE(p0));
+    printf("%g\n", double(p0));
   }
   return fabs(p0/fixed(1.225)-prat)<fixed(0.001);
 }

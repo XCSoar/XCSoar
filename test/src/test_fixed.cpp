@@ -206,7 +206,7 @@ int main(int argc, char** argv) {
   fixed a(da);
   fixed sina(sin(a));
 
-  printf("a=%g, sin(a)=%g\n", FIXED_DOUBLE(a), FIXED_DOUBLE(sina));
+  printf("a=%g, sin(a)=%g\n", double(a), double(sina));
   printf("a=%g, sin(a)=%g\n", da, dsina);
 
   ok(fabs(sina - fixed(dsina)) < fixed(1.0e-5), "sin(a)", 0);
@@ -220,7 +220,7 @@ int main(int argc, char** argv) {
   fixed t(atan2(y, x));
 
   printf("x=%g, y=%g atan(y,x)=%g\n",
-         FIXED_DOUBLE(x), FIXED_DOUBLE(y), FIXED_DOUBLE(t));
+         double(x), double(y), double(t));
   printf("x=%g, y=%g atan(y,x)=%g\n", dx, dy, dt);
 
   ok(fabs(t - fixed(dt)) < fixed(1.0e-5), "atan(y,x)", 0);
