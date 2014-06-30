@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
-        <key>CFBundleDevelopmentRegion</key>
-        <string>English</string>
         <key>CFBundleDisplayName</key>
         <string>IOS_APP_DISPLAY_NAME_PLACEHOLDER</string>
         <key>CFBundleExecutable</key>
@@ -22,6 +20,20 @@
         <string>VERSION_PLACEHOLDER</string>
         <key>LSRequiresIPhoneOS</key>
         <true />
+        <key>UIRequiredDeviceCapabilities</key>
+        <dict>
+            <key>armv7</key>
+            <true/>
+            <key>opengles-2</key>
+            <true/>
+        </dict>
+        <key>LSMinimumSystemVersion</key>
+        <string>5.1.1</string>
+        <key>UIDeviceFamily</key>
+        <array>
+            <string>1</string>
+            <string>2</string>
+        </array>
         <key>CFBundleIconFile</key>
         <array>
             <string>Icon.png</string>

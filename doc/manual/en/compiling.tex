@@ -231,7 +231,7 @@ Use one of the following targets:
 
 \end{tabular}
 
-\subsection{Compiling for iOS and Mac OS X}
+\subsection{Compiling for iOS and OS X}
 
 For iOS and OS X, you need the
 \href{https://github.com/felixhaedicke/DarwinToolchainBuilder}{DarwinToolchainBuilder}
@@ -239,6 +239,14 @@ toolset. This toolset is required regardless of whether compiling on OS X or on
 any other operaing system. The installation instructions for these the tools
 can be found in its
 \href{https://github.com/felixhaedicke/DarwinToolchainBuilder/blob/master/README.md}{README.md}.
+
+Furthermore, the following tools are required:
+\begin{itemize}
+\item png2icns from \href{http://icns.sourceforge.net}{libicns} to build for
+  OS X
+\item \href{https://alioth.debian.org/projects/dpkg}{dpkg} to build the iOS
+  Cydia package
+\end{itemize}
 
 To compile for iOS, run:
 

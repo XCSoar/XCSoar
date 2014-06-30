@@ -84,7 +84,7 @@ endif
 		$(topdir)/Data/iOS/cydia-deb-control.in \
 		> $(DEB_TMPDIR)/DEBIAN/control
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/XCSoar
-	$(Q)dpkg-deb --deb-format=2.0 -Zbzip2 -b $(TARGET_OUTPUT_DIR)/deb $@ >$(NUL)
+	$(Q)dpkg-deb --deb-format=2.0 -Zgzip -b $(TARGET_OUTPUT_DIR)/deb $@ >$(NUL)
 	
 cydia-deb: $(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME)
 
