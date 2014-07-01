@@ -109,6 +109,14 @@ public class XCSoar extends Activity {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
                          WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+    /* Workaround for layout problems in Android KitKat with immersive full
+       screen mode: Sometimes the content view was not initialized with the
+       correct size, which caused graphics artifacts. */
+    if (android.os.Build.VERSION.SDK_INT >= 19) {
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
+                           WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    }
+
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
     setContentView(tv);
