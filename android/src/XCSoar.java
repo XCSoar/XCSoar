@@ -114,7 +114,9 @@ public class XCSoar extends Activity {
        correct size, which caused graphics artifacts. */
     if (android.os.Build.VERSION.SDK_INT >= 19) {
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
-                           WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                           WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
+                           WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
+                           WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
     TextView tv = new TextView(this);
