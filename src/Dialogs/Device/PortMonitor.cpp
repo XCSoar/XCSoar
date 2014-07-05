@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "PortMonitor.hpp"
 #include "Dialogs/Message.hpp"
-#include "Look/DialogLook.hpp"
+#include "Look/Look.hpp"
 #include "Screen/TerminalWindow.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
@@ -35,6 +35,7 @@ Copyright_License {
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
+#include "UIGlobals.hpp"
 
 enum Buttons {
   CLEAR = 100,
@@ -173,10 +174,10 @@ PortMonitorGlue::TogglePause()
 }
 
 void
-ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
-                const TerminalLook &terminal_look,
-                DeviceDescriptor &device)
+ShowPortMonitor(DeviceDescriptor &device)
 {
+  const Look &look = UIGlobals::GetLook();
+
   /* create the dialog */
 
   WindowStyle dialog_style;
@@ -188,14 +189,14 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device.GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  WndForm dialog(dialog_look);
-  dialog.Create(parent, caption, dialog_style);
+  WndForm dialog(look.dialog);
+  dialog.Create(UIGlobals::GetMainWindow(), caption, dialog_style);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
-  PortMonitorGlue glue(device, terminal_look);
+  PortMonitorGlue glue(device, look.terminal);
 
-  ButtonPanel buttons(client_area, dialog_look.button);
+  ButtonPanel buttons(client_area, look.dialog.button);
   buttons.Add(_("Close"), dialog, mrOK);
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());

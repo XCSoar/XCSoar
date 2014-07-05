@@ -24,14 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_PORT_MONITOR_DIALOG_HPP
 #define XCSOAR_PORT_MONITOR_DIALOG_HPP
 
-struct DialogLook;
-struct TerminalLook;
-class SingleWindow;
 class DeviceDescriptor;
 
 void
-ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
-                const TerminalLook &terminal_look,
-                DeviceDescriptor &device);
+ShowPortMonitor(DeviceDescriptor &device);
 
 #endif
