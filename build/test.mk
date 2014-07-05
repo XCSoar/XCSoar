@@ -92,6 +92,7 @@ TEST_NAMES = \
 	TestMathTables \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestProfile \
+	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestGRecord TestDriver TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
@@ -561,6 +562,12 @@ TEST_VALIDITY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestValidity.cpp
 $(eval $(call link-program,TestValidity,TEST_VALIDITY))
+
+TEST_ALLOCATED_GRID_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAllocatedGrid.cpp
+TEST_ALLOCATED_GRID_DEPENDS = UTIL
+$(eval $(call link-program,TestAllocatedGrid,TEST_ALLOCATED_GRID))
 
 TEST_RADIX_TREE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
