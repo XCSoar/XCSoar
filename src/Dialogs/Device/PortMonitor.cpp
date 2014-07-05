@@ -25,8 +25,8 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Look/Look.hpp"
 #include "Screen/TerminalWindow.hpp"
-#include "Form/Form.hpp"
-#include "Form/ButtonPanel.hpp"
+#include "Widget/WindowWidget.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Form/ActionListener.hpp"
 #include "Device/Descriptor.hpp"
 #include "Util/Macros.hpp"
@@ -90,7 +90,7 @@ private:
   }
 };
 
-class PortMonitorGlue : public ActionListener {
+class PortMonitorWidget final : public WindowWidget, public ActionListener {
   DeviceDescriptor &device;
   TerminalWindow terminal;
   PortTerminalBridge bridge;
@@ -99,19 +99,10 @@ class PortMonitorGlue : public ActionListener {
   bool paused;
 
 public:
-  PortMonitorGlue(DeviceDescriptor &_device, const TerminalLook &look)
+  PortMonitorWidget(DeviceDescriptor &_device, const TerminalLook &look)
     :device(_device), terminal(look), bridge(terminal), paused(false) {}
 
-  ~PortMonitorGlue() {
-    device.SetMonitor(nullptr);
-  }
-
-  void CreateButtons(ButtonPanel &buttons);
-
-  void CreateTerminal(ContainerWindow &parent, const PixelRect &rc) {
-    terminal.Create(parent, rc);
-    device.SetMonitor(&bridge);
-  }
+  void CreateButtons(WidgetDialog &dialog);
 
   void Clear() {
     terminal.Clear();
@@ -120,6 +111,21 @@ public:
   void Reconnect();
   void TogglePause();
 
+  /* virtual methods from class Widget */
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+    WindowStyle style;
+    style.Hide();
+    terminal.Create(parent, rc, style);
+    SetWindow(&terminal);
+    device.SetMonitor(&bridge);
+  }
+
+  void Unprepare() override {
+    device.SetMonitor(nullptr);
+  }
+
+  /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override {
     switch (id) {
     case CLEAR:
@@ -138,15 +144,15 @@ public:
 };
 
 void
-PortMonitorGlue::CreateButtons(ButtonPanel &buttons)
+PortMonitorWidget::CreateButtons(WidgetDialog &dialog)
 {
-  buttons.Add(_("Clear"), *this, CLEAR);
-  buttons.Add(_("Reconnect"), *this, RECONNECT);
-  pause_button = buttons.Add(_("Pause"), *this, PAUSE);
+  dialog.AddButton(_("Clear"), *this, CLEAR);
+  dialog.AddButton(_("Reconnect"), *this, RECONNECT);
+  pause_button = dialog.AddButton(_("Pause"), *this, PAUSE);
 }
 
 void
-PortMonitorGlue::Reconnect()
+PortMonitorWidget::Reconnect()
 {
   if (device.IsOccupied()) {
     ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
@@ -160,7 +166,7 @@ PortMonitorGlue::Reconnect()
 }
 
 void
-PortMonitorGlue::TogglePause()
+PortMonitorWidget::TogglePause()
 {
   paused = !paused;
 
@@ -178,30 +184,18 @@ ShowPortMonitor(DeviceDescriptor &device)
 {
   const Look &look = UIGlobals::GetLook();
 
-  /* create the dialog */
-
-  WindowStyle dialog_style;
-  dialog_style.Hide();
-  dialog_style.ControlParent();
-
   TCHAR buffer[64];
   StaticString<128> caption;
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device.GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  WndForm dialog(look.dialog);
-  dialog.Create(UIGlobals::GetMainWindow(), caption, dialog_style);
+  PortMonitorWidget widget(device, look.terminal);
 
-  ContainerWindow &client_area = dialog.GetClientAreaWindow();
-
-  PortMonitorGlue glue(device, look.terminal);
-
-  ButtonPanel buttons(client_area, look.dialog.button);
-  buttons.Add(_("Close"), dialog, mrOK);
-  glue.CreateButtons(buttons);
-  glue.CreateTerminal(client_area, buttons.UpdateLayout());
-
-  /* run it */
+  WidgetDialog dialog(look.dialog);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), caption, &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  widget.CreateButtons(dialog);
 
   dialog.ShowModal();
+  dialog.StealWidget();
 }
