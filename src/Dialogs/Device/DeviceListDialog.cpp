@@ -291,7 +291,7 @@ DeviceListWidget::UpdateButtons()
   } else {
     const DeviceDescriptor &device = *device_list[current];
 
-    reconnect_button->SetEnabled(device.IsConfigured());
+    reconnect_button->SetEnabled(!device.GetConfig().IsDisabled());
     flight_button->SetEnabled(device.IsLogger());
     manage_button->SetEnabled(device.IsManageable());
     monitor_button->SetEnabled(device.GetConfig().UsesPort());
