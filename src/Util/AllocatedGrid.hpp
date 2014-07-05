@@ -160,7 +160,7 @@ public:
 
       for (auto in = array.begin() + (h - 1) * width,
              out = array.begin() + (h - 1) * _width + width;
-           in < end; in -= width, out -= _width) {
+           in > end; in -= width, out -= _width) {
         std::move_backward(in, in + width, out);
         std::fill(out, out + _width - width, fill);
       }
