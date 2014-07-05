@@ -160,13 +160,14 @@ public:
     array.GrowPreserve(_width * _height, width * height);
 
     if (_width > width) {
+      const unsigned delta_w = _width - width;
       const auto end = array.begin();
 
       for (auto in = array.begin() + (h - 1) * width,
              out = array.begin() + (h - 1) * _width + width;
-           in > end; in -= width, out -= _width) {
-        std::move_backward(in, in + width, out);
-        std::fill(out, out + _width - width, fill);
+           in > end; in -= width, out -= delta_w) {
+        out = std::move_backward(in, in + width, out);
+        std::fill(out - delta_w, out, fill);
       }
 
       width = _width;
