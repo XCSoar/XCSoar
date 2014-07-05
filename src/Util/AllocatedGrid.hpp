@@ -152,10 +152,14 @@ public:
       width = _width;
     }
 
+    const unsigned h = std::min(height, _height);
+    const unsigned fill_start = h > 0
+      ? (h - 1) * _width + width
+      : 0;
+
     array.GrowPreserve(_width * _height, width * height);
 
     if (_width > width) {
-      const unsigned h = std::min(height, _height);
       const auto end = array.begin();
 
       for (auto in = array.begin() + (h - 1) * width,
@@ -168,9 +172,11 @@ public:
       width = _width;
     }
 
-    std::fill(array.begin() + width * height, array.end(), fill);
-
     height = _height;
+
+    unsigned new_size = GetSize();
+    if (fill_start < new_size)
+      std::fill(begin() + fill_start, begin() + new_size, fill);
   }
 };
 
