@@ -57,7 +57,6 @@ enum ControlIndex {
   I2CBus, I2CAddr, PressureUsage, Driver,
   SyncFromDevice, SyncToDevice,
   K6Bt,
-  IgnoreCheckSum,
 };
 
 static constexpr struct {
@@ -472,12 +471,6 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
   k6bt_df.Set(config.k6bt);
   k6bt_control.RefreshDisplay();
 
-  WndProperty &ignore_checksum_control = GetControl(IgnoreCheckSum);
-  DataFieldBoolean &ignore_checksum_df =
-      *(DataFieldBoolean *)ignore_checksum_control.GetDataField();
-  ignore_checksum_df.Set(config.ignore_checksum);
-  ignore_checksum_control.RefreshDisplay();
-
   UpdateVisibilities();
 }
 
@@ -566,8 +559,6 @@ DeviceEditWidget::UpdateVisibilities()
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 CanSendSettings(GetDataField(Driver)));
   SetRowAvailable(K6Bt, maybe_bluetooth);
-
-  SetRowVisible(IgnoreCheckSum, DeviceConfig::UsesDriver(type));
 }
 
 void
@@ -650,12 +641,6 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("Enable this if you use a K6Bt to connect the device."),
              config.k6bt, this);
   SetExpertRow(K6Bt);
-
-  AddBoolean(_("Ignore checksum"),
-             _("If your GPS device outputs invalid NMEA checksums, this will "
-               "allow it's data to be used anyway."),
-             config.ignore_checksum, this);
-  SetExpertRow(IgnoreCheckSum);
 
   UpdateVisibilities();
 }
@@ -765,8 +750,6 @@ DeviceEditWidget::Save(bool &_changed)
 
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
-
-    changed |= SaveValue(IgnoreCheckSum, config.ignore_checksum);
   }
 
   if (CommonInterface::Basic().sensor_calibration_available)

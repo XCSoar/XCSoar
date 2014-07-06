@@ -6,6 +6,7 @@ Version 6.8 - not yet released
 * data files
   - optimise the topography loader
 * devices
+  - remove option "Ignore checksum"
   - Volkslogger: support DAeC keyhole declaration
 * calculations
   - use maximum speed configured in plane setup as limit for calculations

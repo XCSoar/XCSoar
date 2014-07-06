@@ -207,7 +207,6 @@ DeviceConfig::Clear()
 #ifndef NDEBUG
   dump_port = false;
 #endif
-  ignore_checksum = false;
 }
 
 const TCHAR *

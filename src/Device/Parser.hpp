@@ -34,7 +34,6 @@ struct BrokenTime;
 
 class NMEAParser
 {
-  bool ignore_checksum;
   fixed last_time;
 
 public:
@@ -43,7 +42,7 @@ public:
   bool use_geoid;
 
 public:
-  NMEAParser(bool ignore_checksum = false);
+  NMEAParser();
 
   /**
    * Resets the NMEAParser
@@ -52,10 +51,6 @@ public:
 
   void SetReal(bool _real) {
     real = _real;
-  }
-
-  void SetIgnoreChecksum(bool _ignore_checksum) {
-    ignore_checksum = _ignore_checksum;
   }
 
   void DisableGeoid() {

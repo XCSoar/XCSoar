@@ -33,8 +33,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 
-NMEAParser::NMEAParser(bool _ignore_checksum)
-  :ignore_checksum(_ignore_checksum)
+NMEAParser::NMEAParser()
 {
   Reset();
 }
@@ -55,7 +54,7 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   if (string[0] != '$')
     return false;
 
-  if (!ignore_checksum && !NMEAChecksum(string))
+  if (!NMEAChecksum(string))
     return false;
 
   NMEAInputLine line(string);

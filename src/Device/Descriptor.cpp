@@ -239,7 +239,6 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
-  parser.SetIgnoreChecksum(config.ignore_checksum);
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 

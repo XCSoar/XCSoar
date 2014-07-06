@@ -37,7 +37,6 @@ NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
    device(NULL)
 {
   parser->SetReal(false);
-  parser->SetIgnoreChecksum(config.ignore_checksum);
 
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   assert(driver != NULL);

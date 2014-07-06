@@ -191,10 +191,6 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   Get(buffer, config.k6bt);
 
-  MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
-  if (!Get(buffer, config.ignore_checksum))
-    Get(ProfileKeys::IgnoreNMEAChecksum, config.ignore_checksum);
-
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
   Get(buffer, config.i2c_bus);
 
@@ -275,9 +271,6 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   Set(buffer, config.k6bt);
-
-  MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
-  Set(buffer, config.ignore_checksum);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
   Set(buffer, config.i2c_bus);
