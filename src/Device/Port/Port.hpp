@@ -31,6 +31,7 @@ Copyright_License {
 
 class OperationEnvironment;
 class DataHandler;
+class TimeoutClock;
 
 /**
  * Generic Port thread handler class
@@ -224,6 +225,22 @@ public:
    * operation
    */
   WaitResult WaitRead(OperationEnvironment &env, unsigned timeout_ms);
+
+  /**
+   * Combination of WaitRead() and Read().
+   *
+   * @return 0 on timeout/canceled/error or the number of bytes read
+   */
+  size_t WaitAndRead(void *buffer, size_t length,
+                     OperationEnvironment &env, unsigned timeout_ms);
+
+  /**
+   * Combination of WaitRead() and Read().
+   *
+   * @return 0 on timeout/canceled/error or the number of bytes read
+   */
+  size_t WaitAndRead(void *buffer, size_t length,
+                     OperationEnvironment &env, TimeoutClock timeout);
 
   gcc_nonnull_all
   bool ExpectString(const char *token, OperationEnvironment &env,

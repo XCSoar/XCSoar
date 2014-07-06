@@ -52,13 +52,8 @@ protected:
       /* already full */
       return false;
 
-    const Port::WaitResult wresult =
-      port.WaitRead(env, timeout.GetRemainingOrZero());
-    if (wresult != Port::WaitResult::READY)
-      return false;
-
-    const int nbytes = port.Read(dest.data, dest.length);
-    if (nbytes <= 0)
+    size_t nbytes = port.WaitAndRead(dest.data, dest.length, env, timeout);
+    if (nbytes == 0)
       return false;
 
     buffer.Append(nbytes);

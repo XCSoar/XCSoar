@@ -91,13 +91,10 @@ IMI::Receive(Port &port, OperationEnvironment &env,
 
   // wait for the message
   while (true) {
-    if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
-      return NULL;
-
     // read message
     IMIBYTE buffer[64];
-    int bytesRead = port.Read(buffer, sizeof(buffer));
-    if (bytesRead <= 0)
+    size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
+    if (bytesRead == 0)
       return NULL;
 
     // parse message

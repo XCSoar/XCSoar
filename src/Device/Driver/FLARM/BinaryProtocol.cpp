@@ -89,11 +89,8 @@ ReceiveSomeUnescape(Port &port, uint8_t *buffer, size_t length,
   /* read "length" bytes from the port, optimistically assuming that
      there are no escaped bytes */
 
-  if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
-    return NULL;
-
-  int nbytes = port.Read(buffer, length);
-  if (nbytes <= 0)
+  size_t nbytes = port.WaitAndRead(buffer, length, env, timeout);
+  if (nbytes == 0)
     return NULL;
 
   /* unescape in-place */

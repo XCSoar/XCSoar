@@ -101,16 +101,8 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
 
   char *p = (char *)buffer, *end = p + length;
   while (true) {
-    int remaining = timeout.GetRemainingSigned();
-    if (remaining < 0)
-      /* timeout */
-      return false;
-
-    if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
-      return false;
-
-    int nbytes = port.Read(p, end - p);
-    if (nbytes < 0)
+    size_t nbytes = port.WaitAndRead(p, end - p, env, timeout);
+    if (nbytes == 0)
       return false;
 
     char *q = (char *)memchr(p, '*', nbytes);
