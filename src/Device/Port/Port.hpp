@@ -206,9 +206,6 @@ public:
   /**
    * Read data from the serial port, take care for partial reads.
    *
-   * Note that this port's receive timeout is still in effect for each
-   * individual read operation.
-   *
    * @param env an OperationEnvironment that allows canceling the
    * operation
    * @param timeout_ms give up after this number of milliseconds
