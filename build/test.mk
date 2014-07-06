@@ -585,6 +585,7 @@ $(eval $(call link-program,TestGRecord,TEST_GRECORD))
 
 TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Port/NullPort.cpp \
+	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
