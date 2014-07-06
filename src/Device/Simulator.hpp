@@ -27,8 +27,6 @@ Copyright_License {
 struct NMEAInfo;
 
 class Simulator {
-  void GenerateFLARMTraffic(NMEAInfo &basic);
-
 public:
   void Init(NMEAInfo &basic);
 
