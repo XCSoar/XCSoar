@@ -209,6 +209,21 @@ public:
    *
    * @param env an OperationEnvironment that allows canceling the
    * operation
+   * @param first_timeout_ms timeout for the first read
+   * @param subsequent_timeout_ms timeout for the subsequent reads
+   * @param total_timeout_ms timeout for the whole operation
+   * @return true on success
+   */
+  gcc_nonnull_all
+  bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
+                unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
+                unsigned total_timeout_ms);
+
+  /**
+   * Read data from the serial port, take care for partial reads.
+   *
+   * @param env an OperationEnvironment that allows canceling the
+   * operation
    * @param timeout_ms give up after this number of milliseconds
    * @return true on success
    */
