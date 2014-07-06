@@ -116,32 +116,44 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
 
 bool
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
-               unsigned timeout_ms)
+               unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
+               unsigned total_timeout_ms)
 {
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock full_timeout(total_timeout_ms);
 
   char *p = (char *)buffer, *end = p + length;
+
+  size_t nbytes = WaitAndRead(buffer, length, env, first_timeout_ms);
+  if (nbytes <= 0)
+    return false;
+
+  p += nbytes;
+
   while (p < end) {
-    WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
-    if (wait_result != WaitResult::READY)
-      // Operation canceled, Timeout expired or I/O error occurred
+    const int ft = full_timeout.GetRemainingSigned();
+    if (ft < 0)
+      /* timeout */
       return false;
 
-    int nbytes = Read(p, end - p);
-    if (nbytes <= 0)
+    const unsigned t = std::min(unsigned(ft), subsequent_timeout_ms);
+
+    nbytes = WaitAndRead(p, end - p, env, t);
+    if (nbytes == 0)
       /*
        * Error occured, or no data read, which is also an error
        * when WaitRead returns READY
        */
       return false;
-
-    p += nbytes;
-
-    if (timeout.HasExpired())
-      return false;
   }
 
   return true;
+}
+
+bool
+Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
+               unsigned timeout_ms)
+{
+  return FullRead(buffer, length, env, timeout_ms, timeout_ms, timeout_ms);
 }
 
 Port::WaitResult
@@ -166,6 +178,33 @@ Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
   return WaitResult::TIMEOUT;
 }
 
+size_t
+Port::WaitAndRead(void *buffer, size_t length,
+                  OperationEnvironment &env, unsigned timeout_ms)
+{
+  WaitResult wait_result = WaitRead(env, timeout_ms);
+  if (wait_result != WaitResult::READY)
+    // Operation canceled, Timeout expired or I/O error occurred
+    return 0;
+
+  int nbytes = Read(buffer, length);
+  if (nbytes < 0)
+    return 0;
+
+  return (size_t)nbytes;
+}
+
+size_t
+Port::WaitAndRead(void *buffer, size_t length,
+                  OperationEnvironment &env, TimeoutClock timeout)
+{
+  int remaining = timeout.GetRemainingSigned();
+  if (remaining < 0)
+    return 0;
+
+  return WaitAndRead(buffer, length, env, remaining);
+}
+
 bool
 Port::ExpectString(const char *token, OperationEnvironment &env,
                    unsigned timeout_ms)
@@ -180,13 +219,10 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
 
   const char *p = token;
   while (true) {
-    WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
-    if (wait_result != WaitResult::READY)
-      // Operation canceled, Timeout expired or I/O error occurred
-      return false;
-
-    int nbytes = Read(buffer, std::min(sizeof(buffer), size_t(token_end - p)));
-    if (nbytes < 0 || env.IsCancelled())
+    size_t nbytes = WaitAndRead(buffer,
+                                std::min(sizeof(buffer), size_t(token_end - p)),
+                                env, timeout);
+    if (nbytes == 0 || env.IsCancelled())
       return false;
 
     for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {

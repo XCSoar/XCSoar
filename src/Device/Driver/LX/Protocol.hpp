@@ -193,7 +193,8 @@ namespace LX {
   bool
   ReceivePacket(Port &port, Command command,
                 void *data, size_t length, OperationEnvironment &env,
-                unsigned timeout_ms=5000);
+                unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
+                unsigned total_timeout_ms);
 
   /**
    * Wrapper for ReceivePacket() which can retry on failure.  Before
@@ -203,7 +204,9 @@ namespace LX {
   bool
   ReceivePacketRetry(Port &port, Command command,
                      void *data, size_t length, OperationEnvironment &env,
-                     unsigned timeout_ms, unsigned n_retries);
+                     unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
+                     unsigned total_timeout_ms,
+                     unsigned n_retries);
 
   gcc_const
   uint8_t
@@ -215,7 +218,8 @@ namespace LX {
 
   bool
   ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
-          unsigned timeout_ms = 5000);
+          unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
+          unsigned total_timeout_ms);
 
   /**
    * Writes data to a #Port, and keeps track of the CRC.

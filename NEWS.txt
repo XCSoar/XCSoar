@@ -31,6 +31,10 @@ Version 6.8 - not yet released
   - support Wifi with WEP (#3138)
   - support USB-OTG
 
+Version 6.7.6 - not yet released
+* devices
+  - LX: relax download timeout (#3199)
+
 Version 6.7.5 - 2014/06/09
 * fix crash in task manager (#3305)
 * work around crash on Windows (PC) (#3284)

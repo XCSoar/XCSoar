@@ -113,15 +113,10 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
   TimeoutClock timeout(8000);
 
   while (true) {
-    int remaining = timeout.GetRemainingSigned();
-    if (remaining < 0)
-      return false;
-
-    if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
-      return false;
-
-    int nbytes = port.Read(user_data + user_size, max_user_data - user_size);
-    if (nbytes < 0)
+    const size_t nbytes = port.WaitAndRead(user_data + user_size,
+                                           max_user_data - user_size,
+                                           env, timeout);
+    if (nbytes == 0)
       return false;
 
     if (user_size == 0) {

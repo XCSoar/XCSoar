@@ -119,7 +119,8 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
   bool success = false;
   while (!flight_list.full()) {
     LX::FlightInfo flight;
-    if (!LX::ReadCRC(port, &flight, sizeof(flight), env, 20000))
+    if (!LX::ReadCRC(port, &flight, sizeof(flight), env,
+                     20000, 2000, 180000))
       break;
 
     success = true;
@@ -184,7 +185,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   LX::MemorySection memory_section;
   if (!LX::ReceivePacketRetry(port, LX::READ_MEMORY_SECTION,
                               &memory_section, sizeof(memory_section), env,
-                              5000, 2))
+                              5000, 2000, 60000, 2))
       return false;
 
   unsigned lengths[LX::MemorySection::N];
@@ -199,7 +200,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   uint8_t *data = new uint8_t[total_length], *p = data;
   for (unsigned i = 0; i < LX::MemorySection::N && lengths[i] > 0; ++i) {
     if (!LX::ReceivePacketRetry(port, (LX::Command)(LX::READ_LOGGER_DATA + i),
-                                p, lengths[i], env, 60000, 2)) {
+                                p, lengths[i], env,
+                                20000, 2000, 300000, 2)) {
       delete [] data;
       return false;
     }
