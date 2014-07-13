@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Time/WrapClock.hpp"
 #include "OS/Args.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 
 class DebugReplay {
@@ -58,6 +59,8 @@ protected:
   DerivedInfo calculated;
 
   WrapClock wrap_clock;
+
+  AtmosphericPressure qnh;
 
 public:
   DebugReplay();
@@ -92,6 +95,9 @@ public:
     return flying_computer;
   }
 
+  void SetQNH(const AtmosphericPressure _qnh) {
+    qnh = _qnh;
+  }
 
 protected:
   void Compute();

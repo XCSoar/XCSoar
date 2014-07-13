@@ -73,8 +73,15 @@ public:
    * the replay after use.
    */
   DebugReplay *Replay() {
-    if (keep_flight) return DebugReplayVector::Create(*fixes);
-    else return DebugReplayIGC::Create(flight_file);
+    DebugReplay *replay;
+
+    if (keep_flight) replay = DebugReplayVector::Create(*fixes);
+    else replay = DebugReplayIGC::Create(flight_file);
+
+    if (qnh_available)
+      replay->SetQNH(qnh);
+
+    return replay;
   };
 
   /* Search for flights within the fixes */

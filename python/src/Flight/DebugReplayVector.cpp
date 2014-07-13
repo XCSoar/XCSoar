@@ -54,7 +54,7 @@ DebugReplayVector::Compute(const int elevation)
 
   FeaturesSettings features;
   features.nav_baro_altitude_enabled = true;
-  computer.Fill(computed_basic, AtmosphericPressure::Standard(), features);
+  computer.Fill(computed_basic, qnh, features);
   computer.Compute(computed_basic, last_basic, last_basic, calculated);
 
   if (elevation > -1000) {

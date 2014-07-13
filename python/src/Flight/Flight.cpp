@@ -43,6 +43,9 @@ void Flight::ReadFlight() {
   DebugReplay *replay = DebugReplayIGC::Create(flight_file);
 
   if (replay) {
+    if (qnh_available)
+      replay->SetQNH(qnh);
+
     while (replay->Next()) {
       IGCFixEnhanced fix;
       fix.Clear();
