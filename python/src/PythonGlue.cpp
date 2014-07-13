@@ -440,7 +440,7 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
 
     encoded_levels.addUnsignedNumber(replay->Level());
     encoded_times.addSignedNumber(basic.time);
-    encoded_altitude.addSignedNumber(fix.gps_altitude);
+    encoded_altitude.addSignedNumber(self->flight->qnh.PressureAltitudeToQNHAltitude(fix.pressure_altitude));
 
     if (fix.enl >= 0)
         encoded_enl.addSignedNumber(fix.enl);
