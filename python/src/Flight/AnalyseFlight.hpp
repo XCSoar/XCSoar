@@ -33,6 +33,7 @@
 class DebugReplay;
 class Trace;
 struct ContestStatistics;
+struct ComputerSettings;
 
 struct WindListItem {
   // Date and time of measurement
@@ -57,7 +58,8 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
     const BrokenDateTime &scoring_start_time,
     const BrokenDateTime &scoring_end_time,
     const BrokenDateTime &landing_time,
-    Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
+    Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace,
+    ComputerSettings &computer_settings);
 
 ContestStatistics
 SolveContest(Contest contest,
@@ -74,6 +76,7 @@ void AnalyseFlight(DebugReplay &replay,
              PhaseList &phase_list,
              PhaseTotals &phase_totals,
              WindList &wind_list,
+             ComputerSettings &computer_settings,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,
              const unsigned sprint_points = 96,

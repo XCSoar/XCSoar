@@ -86,10 +86,22 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/Flight/AnalyseFlight.cpp \
         $(PYTHON_SRC)/Tools/GoogleEncode.cpp \
 	$(PYTHON_SRC)/PythonConverters.cpp \
-	$(PYTHON_SRC)/PythonGlue.cpp
+	$(PYTHON_SRC)/PythonGlue.cpp \
+	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
+	$(SRC)/Logger/Settings.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
+	$(SRC)/Tracking/TrackingSettings.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Settings.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/StartConstraints.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/FinishConstraints.cpp \
+	$(SRC)/Computer/Settings.cpp \
+	$(SRC)/Computer/AutoQNH.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = -lpython2.7
-PYTHON_DEPENDS = CONTEST WAYPOINT UTIL GEO TIME MATH ZZIP
+PYTHON_DEPENDS = CONTEST WAYPOINT UTIL ZZIP GEO MATH TIME
 PYTHON_CPPFLAGS = -I/usr/include/python2.7 \
 	-I$(TEST_SRC_DIR) -Wno-write-strings
 PYTHON_FILTER_FLAGS = -Wwrite-strings

@@ -29,6 +29,9 @@
 #include "FlightTimes.hpp"
 #include "AnalyseFlight.hpp"
 
+#include "Atmosphere/Pressure.hpp"
+#include "Computer/Settings.hpp"
+
 #include <vector>
 
 class DebugReplay;
@@ -40,12 +43,18 @@ private:
   const char *flight_file;
 
 public:
+  AtmosphericPressure qnh;
+  Validity qnh_available;
+
+public:
   /**
    * Create a empty flight object, used to create a flight from in-memory data
    */
   Flight()
     : keep_flight(true), flight_file(nullptr) {
     fixes = new std::vector<IGCFixEnhanced>;
+    qnh = AtmosphericPressure::Standard();
+    qnh_available.Clear();
   };
 
   /**
@@ -107,12 +116,21 @@ public:
     DebugReplay *replay = Replay();
     if (replay == nullptr) return false;
 
+    ComputerSettings computer_settings;
+    computer_settings.SetDefaults();
+
     AnalyseFlight(*replay, takeoff_time, scoring_start_time, scoring_end_time, landing_time,
                   olc_plus, dmst,
-                  phase_list, phase_totals, wind_list,
+                  phase_list, phase_totals, wind_list, computer_settings,
                   full, triangle, sprint,
                   max_iterations, max_tree_size);
     delete replay;
+
+    if (!qnh_available && computer_settings.pressure_available) {
+      qnh = computer_settings.pressure;
+      qnh_available = computer_settings.pressure_available;
+    }
+
     return true;
   };
 

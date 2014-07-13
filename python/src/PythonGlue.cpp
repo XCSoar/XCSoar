@@ -352,11 +352,22 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
     Py_DECREF(py_wind);
   }
 
-  PyObject *py_result = Py_BuildValue("{s:N,s:N,s:N,s:N}",
+  /* write QNH */
+  PyObject *py_qnh;
+
+  if (self->flight->qnh_available) {
+    py_qnh = PyFloat_FromDouble(self->flight->qnh.GetHectoPascal());
+  } else {
+    py_qnh = Py_None;
+    Py_INCREF(Py_None);
+  }
+
+  PyObject *py_result = Py_BuildValue("{s:N,s:N,s:N,s:N,s:N}",
     "contests", py_contests,
     "phases", py_phases,
     "performance", Python::WritePerformanceStats(phase_totals),
-    "wind", py_wind_list);
+    "wind", py_wind_list,
+    "qnh", py_qnh);
 
   return py_result;
 }
