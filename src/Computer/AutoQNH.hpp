@@ -32,11 +32,15 @@ struct ComputerSettings;
 class Waypoints;
 
 class AutoQNH {
-  static constexpr unsigned QNH_TIME = 10;
+  const unsigned QNH_TIME;
 
   unsigned countdown_autoqnh;
 
 public:
+  constexpr AutoQNH(const unsigned qnh_time = 10)
+    : QNH_TIME(qnh_time), countdown_autoqnh(qnh_time)
+  {};
+
   void Process(const NMEAInfo &basic, DerivedInfo &calculated,
                const ComputerSettings &settings_computer,
                const Waypoints &way_points);

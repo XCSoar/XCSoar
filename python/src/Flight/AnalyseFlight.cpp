@@ -65,7 +65,7 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   last_wind.Clear();
 
   const Waypoints waypoints;
-  AutoQNH auto_qnh;
+  AutoQNH auto_qnh(5);
   auto_qnh.Reset();
 
   const int64_t takeoff_unix = takeoff_time.ToUnixTimeUTC();
