@@ -144,6 +144,8 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
        * when WaitRead returns READY
        */
       return false;
+
+    p += nbytes;
   }
 
   return true;
