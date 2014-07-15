@@ -85,6 +85,7 @@ PGCreateOnPort(const DeviceConfig &config, Port &com_port)
 const struct DeviceRegister posigraph_driver = {
   _T("PosiGraph Logger"),
   _T("PosiGraph Logger"),
-  DeviceRegister::DECLARE | DeviceRegister::BULK_BAUD_RATE,
+  DeviceRegister::DECLARE | DeviceRegister::BULK_BAUD_RATE |
+  DeviceRegister::LOGGER,
   PGCreateOnPort,
 };
