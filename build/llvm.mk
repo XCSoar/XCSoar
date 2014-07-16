@@ -20,10 +20,13 @@ ifeq ($(USE_CCACHE),y)
   CCACHE := export CCACHE_CPP2=yes && $(CCACHE)
 endif
 
+ifneq ($(LLVM_TARGET),)
+  TARGET_ARCH += -target $(LLVM_TARGET)
+endif
+
 ifeq ($(TARGET),ANDROID)
   TARGET_ARCH := $(filter-out -mthumb-interwork,$(TARGET_ARCH))
   TARGET_ARCH += -gcc-toolchain $(ANDROID_GCC_TOOLCHAIN)
-  TARGET_ARCH += -target $(LLVM_TARGET)
   TARGET_ARCH += -integrated-as
   TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM
   TARGET_LDLIBS += -latomic
