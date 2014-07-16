@@ -25,10 +25,15 @@ package org.xcsoar;
 
 import java.util.UUID;
 import java.util.Set;
+
 import android.util.Log;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.pm.PackageManager;
 
 /**
  * A library that constructs Bluetooth ports.  It is called by C++
@@ -107,7 +112,7 @@ final class BluetoothHelper {
     return addresses;
   }
 
-  public static AndroidPort connect(String address) {
+  public static AndroidPort connect(Context context, String address) {
     if (adapter == null)
       return null;
 
@@ -116,9 +121,22 @@ final class BluetoothHelper {
       if (device == null)
         return null;
 
-      BluetoothSocket socket =
-        device.createRfcommSocketToServiceRecord(THE_UUID);
-      return new BluetoothClientPort(socket);
+      if ((android.os.Build.VERSION.SDK_INT >= 18) &&
+          (BluetoothDevice.DEVICE_TYPE_LE == device.getType()) &&
+          (context.getPackageManager().hasSystemFeature(
+              PackageManager.FEATURE_BLUETOOTH_LE))) {
+        Log.d(TAG, String.format(
+            "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
+             device.getName(), device.getAddress()));
+        BluetoothGattClientPort gattClientPort = new BluetoothGattClientPort();
+        BluetoothGatt gatt = device.connectGatt(context, false, gattClientPort);
+        gattClientPort.startConnect(gatt);
+        return gattClientPort;
+      } else {
+        BluetoothSocket socket =
+            device.createRfcommSocketToServiceRecord(THE_UUID);
+        return new BluetoothClientPort(socket);
+      }
     } catch (Exception e) {
       Log.e(TAG, "Failed to connect to Bluetooth", e);
       return null;

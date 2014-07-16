@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "Android/BluetoothHelper.hpp"
+#include "Android/Context.hpp"
+#include "Android/Main.hpp"
 #include "PortBridge.hpp"
 #include "Java/String.hpp"
 #include "Java/Class.hpp"
@@ -53,7 +55,9 @@ BluetoothHelper::Initialise(JNIEnv *env)
                                                      "(Ljava/lang/String;)Ljava/lang/String;");
   list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
   connect_method = env->GetStaticMethodID(cls, "connect",
-                                          "(Ljava/lang/String;)Lorg/xcsoar/AndroidPort;");
+                                          "(Landroid/content/Context;"
+                                          "Ljava/lang/String;)"
+                                          "Lorg/xcsoar/AndroidPort;");
   createServer_method = env->GetStaticMethodID(cls, "createServer",
                                                "()Lorg/xcsoar/AndroidPort;");
   return true;
@@ -122,7 +126,7 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
 
   const Java::String address2(env, address);
   jobject obj = env->CallStaticObjectMethod(cls, connect_method,
-                                            address2.Get());
+                                            context->Get(), address2.Get());
   if (obj == NULL)
     return NULL;
 
