@@ -12,7 +12,7 @@ ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
   CFLAGS += -O0
   OPTIONS += DEBUG=y
 else
-  CFLAGS += -O2 -fno-strict-aliasing
+  CFLAGS += -O2
   OPTIONS += DEBUG=n
 endif
 
