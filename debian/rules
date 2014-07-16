@@ -16,6 +16,10 @@ else
   OPTIONS += DEBUG=n
 endif
 
+ifneq (,$(findstring clang,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += CLANG=y
+endif
+
 build-indep: debian/stamp-build-indep
 debian/stamp-build-indep:
 	dh_testdir
