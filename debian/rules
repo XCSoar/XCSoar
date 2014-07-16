@@ -1,7 +1,10 @@
 #!/usr/bin/make -f
 # -*- mode: makefile; coding: utf-8 -*-
 
-OPTIONS = TARGET=UNIX
+OPTIONS =
+
+TARGET = UNIX
+OPTIONS += TARGET=$(TARGET)
 
 # allow Debian builds in the same repository as normal builds
 TARGET_OUTPUT_DIR = output/DEBIAN
