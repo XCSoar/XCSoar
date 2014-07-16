@@ -334,7 +334,7 @@ ifeq ($(TARGET),UNIX)
 
   ifeq ($(ARMV7),y)
     ifeq ($(CLANG),y)
-      TARGET_ARCH += -target armv7-none-linux-gnueabihf -integrated-as
+      TARGET_ARCH += -target armv7a-none-linux-gnueabihf -integrated-as
     else
       TARGET_ARCH += -march=armv7-a
     endif
@@ -454,7 +454,7 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(ARMV7),y)
-    LLVM_TRIPLE = armv7-none-linux-androideabi
+    LLVM_TRIPLE = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1
     HAVE_FPU := y
   endif
