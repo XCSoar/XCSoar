@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 # -*- mode: makefile; coding: utf-8 -*-
 
-CFLAGS = -Wall -g
 OPTIONS = TARGET=UNIX
 
 # allow Debian builds in the same repository as normal builds
