@@ -264,7 +264,7 @@ ifeq ($(TARGET),OSX32)
   OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
-    TARGET_ARCH += -target i386-apple-darwin9
+    LLVM_TARGET = i386-apple-darwin9
   else
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
@@ -286,7 +286,7 @@ ifeq ($(TARGET),OSX64)
   OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
-    TARGET_ARCH += -target x86_64-apple-darwin9
+    LLVM_TARGET = x86_64-apple-darwin9
   else
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
@@ -308,7 +308,7 @@ ifeq ($(TARGET),IOS)
   IOS_MIN_SUPPORTED_VERSION = 5.1
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
-    TARGET_ARCH += -target armv7-apple-darwin9
+    LLVM_TARGET = armv7-apple-darwin9
   else
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/iPhoneOS$(DARWIN_SDK_VERSION).sdk
@@ -334,7 +334,8 @@ ifeq ($(TARGET),UNIX)
 
   ifeq ($(ARMV7),y)
     ifeq ($(CLANG),y)
-      TARGET_ARCH += -target armv7a-none-linux-gnueabihf -integrated-as
+      LLVM_TARGET = armv7a-none-linux-gnueabihf
+      TARGET_ARCH += -integrated-as
     else
       TARGET_ARCH += -march=armv7-a
     endif
@@ -556,6 +557,10 @@ endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf
+endif
+
+ifeq ($(TARGET_IS_PI),y)
+  LLVM_TARGET = armv6-none-linux-gnueabihf
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
