@@ -439,29 +439,29 @@ ifeq ($(TARGET),ANDROID)
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
 
   ifeq ($(X86),y)
-    LLVM_TRIPLE = i686-none-linux-android
+    LLVM_TARGET = i686-none-linux-android
     HAVE_FPU := y
   endif
 
   ifeq ($(MIPS),y)
-    LLVM_TRIPLE = mipsel-none-linux-android
+    LLVM_TARGET = mipsel-none-linux-android
     HAVE_FPU := y
   endif
 
   ifeq ($(ARMV5),y)
-    LLVM_TRIPLE = armv5te-none-linux-androideabi
+    LLVM_TARGET = armv5te-none-linux-androideabi
     TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
     HAVE_FPU := n
   endif
 
   ifeq ($(ARMV6),y)
-    LLVM_TRIPLE = armv6-none-linux-androideabi
+    LLVM_TARGET = armv6-none-linux-androideabi
     TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
     HAVE_FPU := n
   endif
 
   ifeq ($(ARMV7),y)
-    LLVM_TRIPLE = armv7a-none-linux-androideabi
+    LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1
     HAVE_FPU := y
   endif
