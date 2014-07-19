@@ -24,14 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 
 #include <tchar.h>
 
-class ComboList : private NonCopyable {
+class ComboList {
 public:
-  struct Item : private NonCopyable {
+  struct Item {
     enum {
       NEXT_PAGE = -800001,
       PREVIOUS_PAGE = -800002,
