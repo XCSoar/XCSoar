@@ -23,30 +23,11 @@ Copyright_License {
 
 #include "IGC/IGCWriter.hpp"
 #include "IGCString.hpp"
+#include "Generator.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 
 #include <assert.h>
-
-static char *
-FormatIGCLocation(char *buffer, const GeoPoint &location)
-{
-  char latitude_suffix = negative(location.latitude.Native())
-    ? 'S' : 'N';
-  unsigned latitude =
-    (unsigned)uround(fabs(location.latitude.Degrees() * 60000));
-
-  char longitude_suffix = negative(location.longitude.Native())
-    ? 'W' : 'E';
-  unsigned longitude =
-    (unsigned)uround(fabs(location.longitude.Degrees() * 60000));
-
-  sprintf(buffer, "%02u%05u%c%03u%05u%c",
-          latitude / 60000, latitude % 60000, latitude_suffix,
-          longitude / 60000, longitude % 60000, longitude_suffix);
-
-  return buffer + strlen(buffer);
-}
 
 IGCWriter::IGCWriter(const TCHAR *path)
   :file(path)
@@ -158,25 +139,11 @@ void
 IGCWriter::StartDeclaration(const BrokenDateTime &date_time,
                             const int number_of_turnpoints)
 {
-  assert(date_time.IsPlausible());
-
-  // IGC GNSS specification 3.6.1
   char buffer[64];
-  sprintf(buffer, "C%02u%02u%02u%02u%02u%02u0000000000%02d",
-          // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-          date_time.day,
-          date_time.month,
-          date_time.year % 100,
-          date_time.hour,
-          date_time.minute,
-          date_time.second,
-          number_of_turnpoints - 2);
-
+  FormatIGCTaskTimestamp(buffer, date_time, number_of_turnpoints);
   WriteLine(buffer);
 
-  // takeoff line
-  // IGC GNSS specification 3.6.3
-  WriteLine("C0000000N00000000ETAKEOFF");
+  WriteLine(IGCMakeTaskTakeoff());
 }
 
 void
@@ -184,19 +151,14 @@ IGCWriter::EndDeclaration()
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  WriteLine("C0000000N00000000ELANDING");
+  WriteLine(IGCMakeTaskLanding());
 }
 
 void
 IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *id)
 {
   char c_record[64];
-
-  char *p = c_record;
-  *p++ = 'C';
-  p = FormatIGCLocation(p, location);
-  CopyASCIIUpper(p, id);
-
+  FormatIGCTaskTurnPoint(c_record, location, id);
   WriteLine(c_record);
 }
 
