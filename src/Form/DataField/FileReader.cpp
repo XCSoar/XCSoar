@@ -88,7 +88,7 @@ DataFieldFileReader::Item::~Item()
 DataFieldFileReader::DataFieldFileReader(DataFieldListener *listener)
   :DataField(Type::FILE, true, listener),
    // Set selection to zero
-   mValue(0),
+   current_index(0),
    loaded(false), postponed_sort(false),
    postponed_value(_T("")) {}
 
@@ -98,17 +98,17 @@ DataFieldFileReader::GetAsInteger() const
   if (!postponed_value.empty())
     EnsureLoadedDeconst();
 
-  return mValue;
+  return current_index;
 }
 
 void
-DataFieldFileReader::SetAsInteger(int Value)
+DataFieldFileReader::SetAsInteger(int new_value)
 {
-  Set(Value);
+  Set(new_value);
 }
 
 void
-DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
+DataFieldFileReader::ScanDirectoryTop(const TCHAR *filter)
 {
   if (!loaded) {
     if (!postponed_patterns.full() &&
@@ -136,23 +136,23 @@ DataFieldFileReader::ScanMultiplePatterns(const TCHAR *patterns)
 }
 
 void
-DataFieldFileReader::Lookup(const TCHAR *Text)
+DataFieldFileReader::Lookup(const TCHAR *text)
 {
   if (!loaded) {
-    if (_tcslen(Text) < postponed_value.MAX_SIZE) {
-      postponed_value = Text;
+    if (_tcslen(text) < postponed_value.MAX_SIZE) {
+      postponed_value = text;
       return;
     } else
       EnsureLoaded();
   }
 
-  mValue = 0;
+  current_index = 0;
   // Iterate through the filelist
   for (unsigned i = 1; i < files.size(); i++) {
-    // If Text == pathfile
-    if (_tcscmp(Text, files[i].path) == 0) {
+    // If text == pathfile
+    if (_tcscmp(text, files[i].path) == 0) {
       // -> set selection to current element
-      mValue = i;
+      current_index = i;
     }
   }
 }
@@ -171,10 +171,10 @@ DataFieldFileReader::GetPathFile() const
   if (!loaded)
     return postponed_value;
 
-  if (mValue >= files.size())
+  if (current_index >= files.size())
     return _T("");
 
-  const TCHAR *path = files[mValue].path;
+  const TCHAR *path = files[current_index].path;
   assert(path != nullptr);
   return path;
 }
@@ -213,8 +213,8 @@ DataFieldFileReader::GetAsString() const
   if (!loaded)
     return postponed_value;
 
-  if (mValue < files.size())
-    return files[mValue].path;
+  if (current_index < files.size())
+    return files[current_index].path;
   else
     return _T("");
 }
@@ -231,22 +231,22 @@ DataFieldFileReader::GetAsDisplayString() const
     return p;
   }
 
-  if (mValue < files.size())
-    return files[mValue].filename;
+  if (current_index < files.size())
+    return files[current_index].filename;
   else
     return _T("");
 }
 
 void
-DataFieldFileReader::Set(unsigned Value)
+DataFieldFileReader::Set(unsigned new_value)
 {
-  if (Value > 0)
+  if (new_value > 0)
     EnsureLoaded();
   else
     postponed_value.clear();
 
-  if (Value < files.size()) {
-    mValue = Value;
+  if (new_value < files.size()) {
+    current_index = new_value;
     Modified();
   }
 }
@@ -256,8 +256,8 @@ DataFieldFileReader::Inc()
 {
   EnsureLoaded();
 
-  if (mValue < files.size() - 1) {
-    mValue++;
+  if (current_index < files.size() - 1) {
+    current_index++;
     Modified();
   }
 }
@@ -265,8 +265,8 @@ DataFieldFileReader::Inc()
 void
 DataFieldFileReader::Dec()
 {
-  if (mValue > 0) {
-    mValue--;
+  if (current_index > 0) {
+    current_index--;
     Modified();
   }
 }
@@ -325,10 +325,9 @@ DataFieldFileReader::CreateComboList(const TCHAR *reference) const
     }
 
     combo_list.Append(i, path);
-    if (i == mValue) {
-      combo_list.current_index = i;
-    }
   }
+
+  combo_list.current_index = current_index;
 
   return combo_list;
 }

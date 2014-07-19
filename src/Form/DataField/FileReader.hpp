@@ -78,7 +78,7 @@ private:
 #endif
 
   /** Index of the active file */
-  unsigned int mValue;
+  unsigned int current_index;
   /** FileList item array */
   StaticArray<Item, MAX_FILES> files;
 
@@ -137,7 +137,7 @@ public:
    * that item
    * @param text PathFile to search for
    */
-  void Lookup(const TCHAR* text);
+  void Lookup(const TCHAR *text);
 
   /**
    * Returns the PathFile of the currently selected item
@@ -150,7 +150,7 @@ public:
    * Sets the selection to the given index
    * @param Value The array index to select
    */
-  void Set(unsigned Value);
+  void Set(unsigned new_value);
 
   /** Sorts the filelist by filenames */
   void Sort();
