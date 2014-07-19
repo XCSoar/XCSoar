@@ -71,6 +71,8 @@ final class BluetoothServerPort extends MultiPort
     } catch (IOException e) {
       Log.e(TAG, "Failed to close Bluetooth server socket", e);
     }
+
+    stateChanged();
   }
 
   @Override public void run() {

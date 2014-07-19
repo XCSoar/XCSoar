@@ -95,6 +95,7 @@ class BluetoothClientPort extends ProxyAndroidPort implements Runnable {
     } finally {
       socket = null;
       thread = null;
+      stateChanged();
     }
   }
 }

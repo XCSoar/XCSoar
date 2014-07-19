@@ -68,6 +68,7 @@ TCPClientPort::Connect(const char *host, unsigned port)
   if (errno == EINPROGRESS) {
     connecting = std::move(s);
     io_thread->LockAdd(connecting.Get(), Poll::WRITE, *this);
+    StateChanged();
     return true;
   }
 #endif
@@ -112,6 +113,7 @@ TCPClientPort::OnFileEvent(int fd, unsigned mask)
   } else {
     /* there was a problem */
     connecting.Close();
+    StateChanged();
   }
 
   return true;

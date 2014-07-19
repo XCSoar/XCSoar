@@ -272,6 +272,13 @@ public:
    */
   WaitResult WaitForChar(const char token, OperationEnvironment &env,
                          unsigned timeout_ms);
+
+protected:
+  /**
+   * Implementations should call this method whenever the return value
+   * of GetState() would change.
+   */
+  void StateChanged();
 };
 
 #endif

@@ -60,6 +60,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
     input = new InputThread(name, inputListener, _input);
     output = new OutputThread(name, _output);
     output.setTimeout(5000);
+    stateChanged();
   }
 
   protected void setWriteTimeout(int timeout_ms) {
@@ -80,6 +81,8 @@ abstract class AbstractAndroidPort implements AndroidPort {
     OutputThread o = stealOutput();
     if (o != null)
       o.close();
+
+    stateChanged();
   }
 
   @Override public int getState() {
@@ -99,5 +102,9 @@ abstract class AbstractAndroidPort implements AndroidPort {
     return o != null
       ? o.write(data, length)
       : -1;
+  }
+
+  protected final void stateChanged() {
+    // TODO: implement
   }
 }

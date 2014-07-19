@@ -58,6 +58,8 @@ SocketPort::Close()
 #endif
 
   BufferedPort::EndClose();
+
+  StateChanged();
 }
 
 void
@@ -77,6 +79,8 @@ SocketPort::Set(SocketDescriptor &&_socket)
 #else
   thread.Start();
 #endif
+
+  StateChanged();
 }
 
 bool
@@ -136,6 +140,7 @@ SocketPort::OnFileEvent(int fd, unsigned mask)
   ssize_t nbytes = socket.Read(buffer, sizeof(buffer));
   if (nbytes <= 0) {
     socket.Close();
+    StateChanged();
     return false;
   }
 

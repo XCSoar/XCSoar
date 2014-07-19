@@ -56,6 +56,7 @@ TCPPort::Open(unsigned port)
 #else
   thread.Start();
 #endif
+  StateChanged();
   return true;
 }
 

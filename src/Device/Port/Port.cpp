@@ -261,3 +261,8 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
 
   return WaitResult::READY;
 }
+
+void
+Port::StateChanged()
+{
+}

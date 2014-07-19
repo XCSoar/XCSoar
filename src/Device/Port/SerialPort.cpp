@@ -142,6 +142,8 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   StoppableThread::Start();
 
+  StateChanged();
+
   return true;
 }
 

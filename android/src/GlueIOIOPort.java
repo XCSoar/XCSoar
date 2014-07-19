@@ -87,6 +87,8 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
         constructing = true;
       }
 
+      stateChanged();
+
       Uart uart;
       try {
         uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
@@ -102,11 +104,14 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
         constructing = false;
         notifyAll();
       }
+
+      stateChanged();
     }
   }
 
   @Override public void onIOIODisconnect(IOIO ioio) {
     connected = false;
+    stateChanged();
 
     super.close();
   }

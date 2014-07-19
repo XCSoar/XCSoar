@@ -168,6 +168,7 @@ public class BluetoothGattClientPort
       writeChunksSync.notifyAll();
     }
     portState = newPortState;
+    stateChanged();
     synchronized (gattStateSync) {
       gattState = newState;
       gattStateSync.notifyAll();
@@ -192,6 +193,7 @@ public class BluetoothGattClientPort
       Log.e(TAG, "Discovering GATT services failed");
       portState = STATE_FAILED;
     }
+    stateChanged();
   }
 
   @Override
@@ -335,5 +337,9 @@ public class BluetoothGattClientPort
 
       return lastChunkWriteError ? 0 : length;
     }
+  }
+
+  protected final void stateChanged() {
+    // TODO: implement
   }
 }

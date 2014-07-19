@@ -80,7 +80,9 @@ public:
     if (inject_port_fault == 0)
       return -1;
 
-    --inject_port_fault;
+    if (--inject_port_fault == 0)
+      StateChanged();
+
     char *p = (char *)Buffer;
     std::fill_n(p, Size, ' ');
     return Size;

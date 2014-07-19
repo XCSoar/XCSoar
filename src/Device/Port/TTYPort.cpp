@@ -83,6 +83,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   valid.store(true, std::memory_order_relaxed);
   io_thread->LockAdd(tty.Get(), Poll::READ, *this);
+  StateChanged();
   return true;
 }
 
@@ -94,6 +95,7 @@ TTYPort::OpenPseudo()
 
   valid.store(true, std::memory_order_relaxed);
   io_thread->LockAdd(tty.Get(), Poll::READ, *this);
+  StateChanged();
   return tty.GetSlaveName();
 }
 
@@ -265,6 +267,7 @@ TTYPort::OnFileEvent(int fd, unsigned mask)
   ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
   if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
     valid.store(false, std::memory_order_relaxed);
+    StateChanged();
     return false;
   }
 

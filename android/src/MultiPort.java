@@ -137,4 +137,8 @@ class MultiPort implements AndroidPort, InputListener {
     if (l != null)
       l.dataReceived(data, length);
   }
+
+  protected void stateChanged() {
+    // TODO: implement
+  }
 }
