@@ -46,7 +46,7 @@ Copyright_License {
 static bool
 IsInternalFile(const TCHAR* str)
 {
-  const TCHAR* const ifiles[] = {
+  static const TCHAR *const ifiles[] = {
     _T("xcsoar-checklist.txt"),
     _T("xcsoar-flarm.txt"),
     _T("xcsoar-marks.txt"),
