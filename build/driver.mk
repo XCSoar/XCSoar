@@ -40,6 +40,7 @@ IMI_SOURCES = \
 
 LX_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX/NanoLogger.cpp \
+	$(DRIVER_SRC_DIR)/LX/NanoDeclare.cpp \
 	$(DRIVER_SRC_DIR)/LX/Protocol.cpp \
 	$(DRIVER_SRC_DIR)/LX/Mode.cpp \
 	$(DRIVER_SRC_DIR)/LX/Parser.cpp \

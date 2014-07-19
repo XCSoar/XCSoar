@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "NanoDeclare.hpp"
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
@@ -216,6 +217,9 @@ LXDevice::Declare(const Declaration &declaration,
 {
   if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
+
+  if (IsNano())
+    return Nano::Declare(port, declaration, env);
 
   if (!EnableCommandMode(env))
     return false;

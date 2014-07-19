@@ -625,6 +625,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
@@ -786,6 +787,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
@@ -1215,6 +1217,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -1247,6 +1250,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
@@ -1283,6 +1287,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1378,6 +1383,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
@@ -1412,6 +1418,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \

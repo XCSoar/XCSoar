@@ -7,6 +7,7 @@ Version 6.8 - not yet released
   - optimise the topography loader
 * devices
   - remove option "Ignore checksum"
+  - LX: implement LXNAV Nano3 task declaration (#3295)
   - Volkslogger: support DAeC keyhole declaration
 * calculations
   - use maximum speed configured in plane setup as limit for calculations
