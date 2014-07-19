@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-05-21 02:29+0000\n"
-"Last-Translator: Pablo Accossato <pablo5300@gmail.com>\n"
+"PO-Revision-Date: 2014-07-05 19:29+0000\n"
+"Last-Translator: Jorge Calviño <jorge@zaringenio.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-05-28 16:24+0000\n"
-"X-Generator: Launchpad (build 17017)\n"
+"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
+"X-Generator: Launchpad (build 17114)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3829,7 +3829,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "TCP client"
-msgstr "TCP client"
+msgstr "Cliente TCP"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3890,6 +3890,9 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"Direccion i2c de su configuracion. Este dato no se usa cuando no corresponde "
+"a un numero de bus i2c. En caso de no comprender la frase anterior asuma que "
+"este dato no se utiliza."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:619
 msgid "Pressure use"
@@ -3928,11 +3931,11 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:648
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr ""
+msgstr "Habilitar cuando utilice un K6Bt para conectar el dispositivo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:652
 msgid "Ignore checksum"
-msgstr "Ignore checksum"
+msgstr "Ignorar cheksum"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:653
 msgid ""
@@ -4008,17 +4011,17 @@ msgstr "Conectado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:350
 msgid "Baro"
-msgstr "Copy text \t Baro"
+msgstr "Barometro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:355
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "Airspeed"
-msgstr "Veloccidad"
+msgstr "Velocidad del aire"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:389
 #: src/Dialogs/Device/DeviceListDialog.cpp:454
 msgid "Bluetooth is disabled"
-msgstr "El Bluetooth está desconectado"
+msgstr "Bluetooth está desactivado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:392
 msgid "Duplicate"
@@ -4063,7 +4066,7 @@ msgstr "Pausa"
 
 #: src/Dialogs/Device/PortMonitor.cpp:188
 msgid "Port monitor"
-msgstr "Monitor del puerto"
+msgstr "Monitor de puerto"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:92
@@ -4079,7 +4082,7 @@ msgstr "Unidades"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:94
 #, no-c-format
 msgid "Waypoints"
-msgstr "Balizas"
+msgstr "Waypoints"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:76
 msgid "Delete all flights"
