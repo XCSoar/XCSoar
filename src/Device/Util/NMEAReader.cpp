@@ -32,7 +32,7 @@
 #include <stdlib.h>
 
 inline bool
-PortNMEAReader::Fill(TimeoutClock &timeout)
+PortNMEAReader::Fill(TimeoutClock timeout)
 {
   const auto dest = buffer.Write();
   if (dest.IsEmpty())
@@ -95,7 +95,7 @@ PortNMEAReader::Flush()
 }
 
 char *
-PortNMEAReader::ReadLine(TimeoutClock &timeout)
+PortNMEAReader::ReadLine(TimeoutClock timeout)
 {
   while (true) {
     char *line = GetLine();
@@ -108,7 +108,7 @@ PortNMEAReader::ReadLine(TimeoutClock &timeout)
 }
 
 char *
-PortNMEAReader::ExpectLine(const char *prefix, TimeoutClock &timeout)
+PortNMEAReader::ExpectLine(const char *prefix, TimeoutClock timeout)
 {
   const size_t prefix_length = strlen(prefix);
 

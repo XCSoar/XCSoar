@@ -40,16 +40,16 @@ public:
     :port(_port), env(_env) {}
 
 protected:
-  bool Fill(TimeoutClock &timeout);
+  bool Fill(TimeoutClock timeout);
 
   char *GetLine();
 
 public:
   void Flush();
 
-  char *ReadLine(TimeoutClock &timeout);
+  char *ReadLine(TimeoutClock timeout);
 
-  char *ExpectLine(const char *prefix, TimeoutClock &timeout);
+  char *ExpectLine(const char *prefix, TimeoutClock timeout);
 };
 
 #endif
