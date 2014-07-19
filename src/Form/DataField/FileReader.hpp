@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_FILE_READER_HPP
 
 #include "Base.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/StaticString.hpp"
 
@@ -39,13 +38,16 @@ class DataFieldFileReader final : public DataField {
 
 public:
   /** FileList item */
-  struct Item : private NonCopyable {
+  struct Item {
     /** Filename */
     const TCHAR *filename;
     /** Path including Filename */
     TCHAR *path;
 
     Item():filename(nullptr), path(nullptr) {}
+
+    Item(const Item &) = delete;
+
     ~Item();
   };
 
