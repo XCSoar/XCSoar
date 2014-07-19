@@ -42,14 +42,14 @@ RequestLogbookInfo(Port &port, OperationEnvironment &env)
 }
 
 static char *
-ReadLogbookLine(PortNMEAReader &reader, TimeoutClock &timeout)
+ReadLogbookLine(PortNMEAReader &reader, TimeoutClock timeout)
 {
   return reader.ExpectLine("PLXVC,LOGBOOK,A,", timeout);
 }
 
 static int
 GetNumberOfFlights(Port &port, PortNMEAReader &reader,
-                   OperationEnvironment &env, TimeoutClock &timeout)
+                   OperationEnvironment &env, TimeoutClock timeout)
 {
   reader.Flush();
 
@@ -170,7 +170,7 @@ ParseLogbookContent(const char *_line, RecordedFlightInfo &info)
 
 static bool
 ReadLogbookContent(PortNMEAReader &reader, RecordedFlightInfo &info,
-                   TimeoutClock &timeout)
+                   TimeoutClock timeout)
 {
   while (true) {
     const char *line = ReadLogbookLine(reader, timeout);
@@ -184,7 +184,7 @@ ReadLogbookContent(PortNMEAReader &reader, RecordedFlightInfo &info,
 
 static bool
 ReadLogbookContents(PortNMEAReader &reader, RecordedFlightList &flight_list,
-                    unsigned n, TimeoutClock &timeout)
+                    unsigned n, TimeoutClock timeout)
 {
   while (n-- > 0) {
     if (!ReadLogbookContent(reader, flight_list.append(), timeout))
@@ -198,7 +198,7 @@ static bool
 GetLogbookContents(Port &port, PortNMEAReader &reader,
                    RecordedFlightList &flight_list,
                    unsigned start, unsigned n,
-                   OperationEnvironment &env, TimeoutClock &timeout)
+                   OperationEnvironment &env, TimeoutClock timeout)
 {
   reader.Flush();
 
