@@ -270,7 +270,7 @@ DataFieldEnum::CreateComboList(const TCHAR *reference_string) const
     combo_list.Append(i.GetId(), i.GetString(), i.GetDisplayString(),
                        i.GetHelp());
 
-  combo_list.ComboPopupItemSavedIndex = value;
+  combo_list.current_index = value;
   return combo_list;
 }
 

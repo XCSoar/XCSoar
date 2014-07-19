@@ -36,13 +36,13 @@ public:
       PREVIOUS_PAGE = -800002,
     };
 
-    int DataFieldIndex;
-    TCHAR *StringValue;
-    TCHAR *StringValueFormatted;
-    TCHAR *StringHelp;
+    int int_value;
+    TCHAR *string_value;
+    TCHAR *display_string;
+    TCHAR *help_text;
 
-    Item(int _DataFieldIndex, const TCHAR *_StringValue,
-         const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = NULL);
+    Item(int _int_value, const TCHAR *_string_value,
+         const TCHAR *_display_string, const TCHAR *_help_text = NULL);
     ~Item();
 
     Item(const Item &other) = delete;
@@ -55,14 +55,14 @@ public:
   static constexpr unsigned MAX_SIZE = 512;
 #endif
 
-  int ComboPopupItemSavedIndex;
+  int current_index;
 
 private:
   StaticArray<Item*, MAX_SIZE> items;
 
 public:
   ComboList()
-    :ComboPopupItemSavedIndex(0) {}
+    :current_index(0) {}
 
   ComboList(ComboList &&other);
 
@@ -85,20 +85,20 @@ public:
 
   unsigned Append(Item *item);
 
-  unsigned Append(int DataFieldIndex,
-                  const TCHAR *StringValue,
-                  const TCHAR *StringValueFormatted,
-                  const TCHAR *StringHelp = NULL) {
-    return Append(new Item(DataFieldIndex,
-                           StringValue, StringValueFormatted, StringHelp));
+  unsigned Append(int int_value,
+                  const TCHAR *string_value,
+                  const TCHAR *display_string,
+                  const TCHAR *help_text = NULL) {
+    return Append(new Item(int_value,
+                           string_value, display_string, help_text));
   }
 
-  unsigned Append(int DataFieldIndex, const TCHAR *StringValue) {
-    return Append(DataFieldIndex, StringValue, StringValue);
+  unsigned Append(int int_value, const TCHAR *string_value) {
+    return Append(int_value, string_value, string_value);
   }
 
   void Sort();
-  unsigned LookUp(int DataFieldIndex);
+  unsigned LookUp(int int_value);
 };
 
 #endif

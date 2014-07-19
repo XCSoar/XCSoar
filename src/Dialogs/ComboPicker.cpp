@@ -48,15 +48,15 @@ public:
                            unsigned i) override {
     canvas.DrawClippedText(rc.left + padding,
                            rc.top + padding, rc,
-                           combo_list[i].StringValueFormatted);
+                           combo_list[i].display_string);
   }
 };
 
 static const TCHAR*
 OnItemHelp(unsigned i)
 {
-  if ((*ComboListPopup)[i].StringHelp)
-    return (*ComboListPopup)[i].StringHelp;
+  if ((*ComboListPopup)[i].help_text)
+    return (*ComboListPopup)[i].help_text;
 
   return _T("");
 }
@@ -83,7 +83,7 @@ ComboPicker(const TCHAR *caption,
   ComboPickerSupport support(combo_list, padding);
   return ListPicker(caption,
                     combo_list.size(),
-                    combo_list.ComboPopupItemSavedIndex,
+                    combo_list.current_index,
                     row_height,
                     support, false,
                     help_text,
@@ -109,15 +109,15 @@ ComboPicker(const TCHAR *caption, DataField &df,
     const ComboList::Item &item = combo_list[idx];
 
     // OK/Select
-    if (item.DataFieldIndex == ComboList::Item::NEXT_PAGE) {
+    if (item.int_value == ComboList::Item::NEXT_PAGE) {
       // we're last in list and the want more past end of list so select last real list item and reopen
       // we'll reopen, so don't call xcsoar data changed routine yet
-      reference = buffer = combo_list[idx - 1].StringValue;
-    } else if (item.DataFieldIndex == ComboList::Item::PREVIOUS_PAGE) {
+      reference = buffer = combo_list[idx - 1].string_value;
+    } else if (item.int_value == ComboList::Item::PREVIOUS_PAGE) {
       // same as above but lower items needed
-      reference = buffer = combo_list[idx + 1].StringValue;
+      reference = buffer = combo_list[idx + 1].string_value;
     } else {
-      df.SetFromCombo(item.DataFieldIndex, item.StringValue);
+      df.SetFromCombo(item.int_value, item.string_value);
       return true;
     }
   } // loop reopen combo if <<More>>  or <<Less>> picked

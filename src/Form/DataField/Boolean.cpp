@@ -37,7 +37,7 @@ DataFieldBoolean::CreateComboList(const TCHAR *reference) const
   combo_list.Append(false, false_text);
   combo_list.Append(true, true_text);
 
-  combo_list.ComboPopupItemSavedIndex = GetAsInteger();
+  combo_list.current_index = GetAsInteger();
   return combo_list;
 }
 

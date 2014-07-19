@@ -272,7 +272,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   }
 
   list.Sort();
-  list.ComboPopupItemSavedIndex = list.LookUp(old_type);
+  list.current_index = list.LookUp(old_type);
 
   /* let the user select */
 
@@ -284,7 +284,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
 
   /* was there a modification? */
 
-  InfoBoxFactory::Type new_type = (InfoBoxFactory::Type)list[result].DataFieldIndex;
+  InfoBoxFactory::Type new_type = (InfoBoxFactory::Type)list[result].int_value;
   if (new_type == old_type)
     return;
 

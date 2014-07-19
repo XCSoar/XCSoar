@@ -326,7 +326,7 @@ DataFieldFileReader::CreateComboList(const TCHAR *reference) const
 
     combo_list.Append(i, path);
     if (i == mValue) {
-      combo_list.ComboPopupItemSavedIndex = i;
+      combo_list.current_index = i;
     }
   }
 

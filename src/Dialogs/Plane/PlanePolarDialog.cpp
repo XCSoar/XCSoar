@@ -191,7 +191,7 @@ PlanePolarWidget::ListClicked()
 
   assert((unsigned)result < len);
 
-  const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
+  const PolarStore::Item &item = PolarStore::GetItem(list[result].int_value);
 
   plane.reference_mass = fixed(item.reference_mass);
   plane.dry_mass = fixed(item.reference_mass);
@@ -205,7 +205,7 @@ PlanePolarWidget::ListClicked()
 
   plane.polar_shape = item.ToPolarShape();
 
-  plane.polar_name = list[result].StringValue;
+  plane.polar_name = list[result].string_value;
 
   if (item.contest_handicap > 0)
     plane.handicap = item.contest_handicap;
@@ -245,7 +245,7 @@ PlanePolarWidget::ImportClicked()
   assert((unsigned)result < list.size());
 
   PolarInfo polar;
-  const TCHAR* path = list[result].StringValue;
+  const TCHAR* path = list[result].string_value;
   PolarGlue::LoadFromFile(polar, path);
 
   plane.reference_mass = polar.reference_mass;
@@ -260,7 +260,7 @@ PlanePolarWidget::ImportClicked()
 
   plane.polar_shape = polar.shape;
 
-  plane.polar_name = list[result].StringValueFormatted;
+  plane.polar_name = list[result].display_string;
 
   Update();
 }

@@ -155,7 +155,7 @@ DataFieldInteger::CreateComboList(const TCHAR *reference_string) const
   bool found_current = false;
   for (int i = first; i <= last; i += step) {
     if (!found_current && reference <= i) {
-      combo_list.ComboPopupItemSavedIndex = combo_list.size();
+      combo_list.current_index = combo_list.size();
 
       if (reference < i)
         /* the current value is not listed - insert it here */
@@ -170,7 +170,7 @@ DataFieldInteger::CreateComboList(const TCHAR *reference_string) const
   if (reference > last) {
     /* the current value out of range - append it here */
     last = reference;
-    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    combo_list.current_index = combo_list.size();
     AppendComboValue(combo_list, reference);
   }
 

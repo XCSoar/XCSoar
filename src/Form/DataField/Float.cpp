@@ -208,7 +208,7 @@ DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
     }
 
     if (!found_current && reference <= i + epsilon) {
-      combo_list.ComboPopupItemSavedIndex = combo_list.size();
+      combo_list.current_index = combo_list.size();
 
       if (reference < i - epsilon)
         /* the current value is not listed - insert it here */
@@ -223,7 +223,7 @@ DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
   if (reference > last + epsilon) {
     /* the current value out of range - append it here */
     last = reference;
-    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    combo_list.current_index = combo_list.size();
     AppendComboValue(combo_list, reference);
   }
 

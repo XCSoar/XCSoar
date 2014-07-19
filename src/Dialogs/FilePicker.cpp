@@ -42,7 +42,7 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
     return false;
 
   const ComboList::Item &item = combo_list[i];
-  df.SetFromCombo(item.DataFieldIndex, item.StringValue);
+  df.SetFromCombo(item.int_value, item.string_value);
 
   _tcscpy(buffer, df.GetAsString());
   return true;

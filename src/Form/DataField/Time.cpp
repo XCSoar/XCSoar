@@ -132,7 +132,7 @@ DataFieldTime::CreateComboList(const TCHAR *reference_string) const
         /* the current value is not listed - insert it here */
         AppendComboValue(combo_list, reference);
 
-      combo_list.ComboPopupItemSavedIndex = combo_list.size();
+      combo_list.current_index = combo_list.size();
       found_current = true;
     }
 
@@ -143,7 +143,7 @@ DataFieldTime::CreateComboList(const TCHAR *reference_string) const
     /* the current value out of range - append it here */
     last = reference;
     AppendComboValue(combo_list, reference);
-    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    combo_list.current_index = combo_list.size();
   }
 
   if (last < max)
