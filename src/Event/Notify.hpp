@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_NOTIFY_HPP
 #define XCSOAR_EVENT_NOTIFY_HPP
 
-#include "Util/NonCopyable.hpp"
-
 #ifdef USE_GDI
 #include "Screen/Window.hpp"
 #endif
@@ -37,17 +35,17 @@ Copyright_License {
  * thread.  To use it, subclass it and implement the abstract method
  * OnNotification().
  */
-class Notify : private
-#ifndef USE_GDI
-               NonCopyable
-#else
-               Window
+class Notify
+#ifdef USE_GDI
+  : Window
 #endif
 {
   std::atomic<bool> pending;
 
 public:
   Notify();
+
+  Notify(const Notify &) = delete;
 
 #ifndef USE_GDI
   ~Notify() {
