@@ -43,7 +43,7 @@ DataField::DataField(Type _type, bool _supports_combolist,
 
 DataField::DataField(Type _type, bool _supports_combolist,
                      DataAccessCallback _data_access_callback)
-  :listener(NULL), data_access_callback(_data_access_callback),
+  :listener(nullptr), data_access_callback(_data_access_callback),
    supports_combolist(_supports_combolist), type(_type),
    item_help_enabled(false)
 {
@@ -52,16 +52,16 @@ DataField::DataField(Type _type, bool _supports_combolist,
 void
 DataField::Modified()
 {
-  if (listener != NULL)
+  if (listener != nullptr)
     listener->OnModified(*this);
-  else if (data_access_callback != NULL)
+  else if (data_access_callback != nullptr)
     data_access_callback(this);
 }
 
 void
 DataField::Special()
 {
-  if (listener != NULL)
+  if (listener != nullptr)
     listener->OnSpecial(*this);
 }
 
@@ -84,7 +84,7 @@ DataField::GetAsInteger() const
 const TCHAR *
 DataField::GetAsString() const
 {
-  return NULL;
+  return nullptr;
 }
 
 const TCHAR *

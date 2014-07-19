@@ -35,7 +35,7 @@ ComboList::Item::Item(int _int_value,
   :int_value(_int_value),
    string_value(_tcsdup(_string_value)),
    display_string(_tcsdup(_display_string)),
-   help_text(_help_text ? _tcsdup(_help_text) : NULL)
+   help_text(_help_text ? _tcsdup(_help_text) : nullptr)
 {
 }
 

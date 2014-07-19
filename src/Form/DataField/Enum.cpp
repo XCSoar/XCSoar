@@ -57,7 +57,7 @@ DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
   id = _id;
   SetString(_string);
 
-  if (_display_string != NULL)
+  if (_display_string != nullptr)
     display_string = _tcsdup(_display_string);
 
   free(help);
@@ -105,12 +105,12 @@ DataFieldEnum::AddChoice(unsigned id, const TCHAR *text,
 void
 DataFieldEnum::AddChoices(const StaticEnumChoice *p)
 {
-  while (p->display_string != NULL) {
+  while (p->display_string != nullptr) {
     const TCHAR *help = p->help;
-    if (help != NULL)
+    if (help != nullptr)
       help = gettext(help);
 
-    AddChoice(p->id, gettext(p->display_string), NULL, help);
+    AddChoice(p->id, gettext(p->display_string), nullptr, help);
     ++p;
   }
 }
@@ -131,7 +131,7 @@ DataFieldEnum::addEnumText(const TCHAR *Text, const TCHAR *display_string,
 void
 DataFieldEnum::addEnumTexts(const TCHAR *const*list)
 {
-  while (*list != NULL)
+  while (*list != nullptr)
     addEnumText(*list++);
 }
 
@@ -163,7 +163,7 @@ const TCHAR *
 DataFieldEnum::GetHelp() const
 {
   if (entries.empty()) {
-    return NULL;
+    return nullptr;
   } else {
     assert(value < entries.size());
     return entries[value].GetHelp();
@@ -277,7 +277,7 @@ DataFieldEnum::CreateComboList(const TCHAR *reference_string) const
 int
 DataFieldEnum::Find(const TCHAR *text) const
 {
-  assert(text != NULL);
+  assert(text != nullptr);
 
   for (unsigned int i = 0; i < entries.size(); i++)
     if (_tcscmp(text, entries[i].GetString()) == 0)

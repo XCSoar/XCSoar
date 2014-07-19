@@ -42,7 +42,7 @@ public:
     TCHAR *help_text;
 
     Item(int _int_value, const TCHAR *_string_value,
-         const TCHAR *_display_string, const TCHAR *_help_text = NULL);
+         const TCHAR *_display_string, const TCHAR *_help_text = nullptr);
     ~Item();
 
     Item(const Item &other) = delete;
@@ -109,7 +109,7 @@ public:
   unsigned Append(int int_value,
                   const TCHAR *string_value,
                   const TCHAR *display_string,
-                  const TCHAR *help_text = NULL) {
+                  const TCHAR *help_text = nullptr) {
     return Append(new Item(int_value,
                            string_value, display_string, help_text));
   }

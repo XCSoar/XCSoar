@@ -54,10 +54,10 @@ IsInternalFile(const TCHAR* str)
     _T("xcsoar-startup.log"),
     _T("xcsoar.log"),
     _T("xcsoar-rasp.dat"),
-    NULL
+    nullptr
   };
 
-  for (unsigned i = 0; ifiles[i] != NULL; i++)
+  for (unsigned i = 0; ifiles[i] != nullptr; i++)
     if (!_tcscmp(str, ifiles[i]))
       return true;
 
@@ -193,7 +193,7 @@ DataFieldFileReader::AddFile(const TCHAR *filename, const TCHAR *path)
   Item &item = files.append();
   item.path = _tcsdup(path);
   item.filename = BaseName(item.path);
-  if (item.filename == NULL)
+  if (item.filename == nullptr)
     item.filename = item.path;
 }
 
@@ -225,7 +225,7 @@ DataFieldFileReader::GetAsDisplayString() const
   if (!loaded) {
     /* get basename from postponed_value */
     const TCHAR *p = BaseName(postponed_value);
-    if (p == NULL)
+    if (p == nullptr)
       p = postponed_value;
 
     return p;
