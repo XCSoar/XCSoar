@@ -56,6 +56,7 @@ class StaticStringBase
 {
 public:
   typedef T value_type;
+  typedef T &reference;
   typedef T *pointer;
   typedef const T *const_pointer;
   typedef const_pointer const_iterator;
@@ -172,7 +173,7 @@ public:
   /**
    * Returns one writable character.  No bounds checking.
    */
-  value_type &operator[](size_type i) {
+  reference operator[](size_type i) {
     assert(i <= length());
 
     return data[i];
