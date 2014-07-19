@@ -31,10 +31,8 @@ Copyright_License {
 class ComboList {
 public:
   struct Item {
-    enum {
-      NEXT_PAGE = -800001,
-      PREVIOUS_PAGE = -800002,
-    };
+    static constexpr int NEXT_PAGE = -800001;
+    static constexpr int PREVIOUS_PAGE = -800002;
 
     int int_value;
     TCHAR *string_value;
