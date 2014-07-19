@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DISPATCHER_HPP
 #define XCSOAR_DEVICE_DISPATCHER_HPP
 
-#include "Port/LineHandler.hpp"
+#include "Device/Util/LineHandler.hpp"
 #include "Compiler.h"
 
 /**

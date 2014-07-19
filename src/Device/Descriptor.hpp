@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Config.hpp"
 #include "IO/DataHandler.hpp"
-#include "Port/LineSplitter.hpp"
+#include "Device/Util/LineSplitter.hpp"
 #include "Port/State.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"

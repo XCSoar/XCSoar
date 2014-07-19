@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_EMULATOR_HPP
 
 #include "DeviceEmulator.hpp"
-#include "Device/Port/LineSplitter.hpp"
+#include "Device/Util/LineSplitter.hpp"
 #include "Device/Driver/FLARM/BinaryProtocol.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/InputLine.hpp"
