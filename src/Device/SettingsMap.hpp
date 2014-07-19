@@ -111,7 +111,7 @@ public:
 
   template<typename K>
   const_iterator Wait(const K &key, OperationEnvironment &env,
-                      TimeoutClock &timeout) {
+                      TimeoutClock timeout) {
     while (true) {
       auto i = map.find(key);
       if (i != map.end() && !i->second.old)
