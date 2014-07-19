@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/LX/Internal.hpp"
+#include "Internal.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
 #include "LX1600.hpp"

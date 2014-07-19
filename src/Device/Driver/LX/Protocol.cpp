@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/LX/Protocol.hpp"
+#include "Protocol.hpp"
 #include "Operation/Operation.hpp"
 
 #include <assert.h>
