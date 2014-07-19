@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_ENUM_HPP
 
 #include "Base.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 
 #include <utility>
@@ -43,7 +42,7 @@ struct StaticEnumChoice {
 
 class DataFieldEnum final : public DataField {
 public:
-  class Entry : private NonCopyable {
+  class Entry {
     unsigned id;
     TCHAR *string;
     TCHAR *display_string;
@@ -52,6 +51,8 @@ public:
   public:
     Entry():string(nullptr), display_string(nullptr), help(nullptr) {}
     ~Entry();
+
+    Entry(const Entry &) = delete;
 
     Entry(Entry &&other)
       :id(other.id), string(other.string),
