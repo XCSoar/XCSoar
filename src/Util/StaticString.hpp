@@ -330,18 +330,25 @@ class NarrowString: public StaticStringBase<char, max>
   typedef StaticStringBase<char, max> Base;
 
 public:
-  NarrowString() = default;
-  explicit NarrowString(const char *value):Base(value) {}
+  typedef typename Base::value_type value_type;
+  typedef typename Base::reference reference;
+  typedef typename Base::pointer pointer;
+  typedef typename Base::const_pointer const_pointer;
+  typedef typename Base::const_iterator const_iterator;
+  typedef typename Base::size_type size_type;
 
-  NarrowString<max> &operator =(const char *new_value) {
+  NarrowString() = default;
+  explicit NarrowString(const_pointer value):Base(value) {}
+
+  NarrowString<max> &operator =(const_pointer new_value) {
     return (NarrowString<max> &)Base::operator =(new_value);
   }
 
-  NarrowString<max> &operator +=(const char *new_value) {
+  NarrowString<max> &operator +=(const_pointer new_value) {
     return (NarrowString<max> &)Base::operator +=(new_value);
   }
 
-  NarrowString<max> &operator +=(char ch) {
+  NarrowString<max> &operator +=(value_type ch) {
     return (NarrowString<max> &)Base::operator +=(ch);
   }
 
@@ -362,18 +369,25 @@ class StaticString: public StaticStringBase<TCHAR, max>
   typedef StaticStringBase<TCHAR, max> Base;
 
 public:
-  StaticString() = default;
-  explicit StaticString(const TCHAR *value):Base(value) {}
+  typedef typename Base::value_type value_type;
+  typedef typename Base::reference reference;
+  typedef typename Base::pointer pointer;
+  typedef typename Base::const_pointer const_pointer;
+  typedef typename Base::const_iterator const_iterator;
+  typedef typename Base::size_type size_type;
 
-  StaticString<max> &operator =(const TCHAR *new_value) {
+  StaticString() = default;
+  explicit StaticString(const_pointer value):Base(value) {}
+
+  StaticString<max> &operator =(const_pointer new_value) {
     return (StaticString<max> &)Base::operator =(new_value);
   }
 
-  StaticString<max> &operator +=(const TCHAR *new_value) {
+  StaticString<max> &operator +=(const_pointer new_value) {
     return (StaticString<max> &)Base::operator +=(new_value);
   }
 
-  StaticString<max> &operator +=(TCHAR ch) {
+  StaticString<max> &operator +=(value_type ch) {
     return (StaticString<max> &)Base::operator +=(ch);
   }
 
