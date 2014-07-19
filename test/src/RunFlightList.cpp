@@ -24,6 +24,7 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
+#include "Device/RecordedFlight.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"

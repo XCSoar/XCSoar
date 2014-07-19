@@ -48,6 +48,7 @@
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
+#include "Device/RecordedFlight.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
 #include "Device/Port/NullPort.hpp"

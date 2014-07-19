@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_HPP
 #define XCSOAR_DEVICE_DRIVER_HPP
 
-#include "Util/StaticArray.hpp"
 #include "Math/fixed.hpp"
 #include "FlightInfo.hpp"
 
+#include <stddef.h>
 #include <tchar.h>
-#include <stdint.h>
 
 struct NMEAInfo;
 struct MoreData;
@@ -41,52 +40,8 @@ class Port;
 class AtmosphericPressure;
 class RadioFrequency;
 class OperationEnvironment;
-
-struct RecordedFlightInfo : FlightInfo {
-  /**
-   * Optional driver specific data to address a flight.
-   */
-  union {
-    /**
-     * Flight number, used by the CAI302 driver.
-     */
-    uint8_t cai302;
-
-    /**
-     * Flight address, used by the IMI ERIXX driver.
-     */
-    uint32_t imi;
-
-    struct {
-      /**
-       * File name.  Only used by the LXNAV Nano sub-driver.  If this
-       * is empty, then the "classic" Colibri protocol is used.
-       */
-      char nano_filename[16];
-
-      uint8_t start_address[3];
-      uint8_t end_address[3];
-    } lx;
-
-    /**
-     * Flight number, used by the FLARM driver.
-     */
-    uint8_t flarm;
-
-    /**
-     * Flight number, used by Volkslogger driver
-     */
-    uint8_t volkslogger;
-
-    /**
-     * Flight number, used by the Flytec driver.
-     */
-    unsigned flytec;
-  } internal;
-};
-
-class RecordedFlightList : public StaticArray<RecordedFlightInfo, 128u> {
-};
+struct RecordedFlightInfo;
+class RecordedFlightList;
 
 /**
  * This is the interface for a device driver.

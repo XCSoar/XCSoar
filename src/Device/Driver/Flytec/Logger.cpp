@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/RecordedFlight.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"

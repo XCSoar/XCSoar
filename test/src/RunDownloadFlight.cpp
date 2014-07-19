@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Device/RecordedFlight.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"

@@ -29,6 +29,7 @@
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
 #include "Device/Driver.hpp"
+#include "Device/RecordedFlight.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
