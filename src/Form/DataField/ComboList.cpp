@@ -70,19 +70,12 @@ ComboList::Append(ComboList::Item *item)
   return i;
 }
 
-static int
-CompareByValue(const void *elem1, const void *elem2)
-{
-  const ComboList::Item *entry1 = *((const ComboList::Item *const*)elem1);
-  const ComboList::Item *entry2 = *((const ComboList::Item *const*)elem2);
-
-  return _tcscmp(entry1->display_string, entry2->display_string);
-}
-
 void
 ComboList::Sort()
 {
-  qsort(items.begin(), items.size(), sizeof(items[0]), CompareByValue);
+  std::sort(items.begin(), items.end(), [](const Item *a, const Item *b){
+      return _tcscmp(a->display_string, b->display_string) < 0;
+    });
 }
 
 unsigned

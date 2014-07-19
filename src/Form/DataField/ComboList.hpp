@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Util/StaticArray.hpp"
 
+#include <utility>
+
 #include <tchar.h>
 
 class ComboList {
@@ -45,6 +47,27 @@ public:
 
     Item(const Item &other) = delete;
     Item &operator=(const Item &other) = delete;
+
+    Item(Item &&src)
+      :int_value(src.int_value), string_value(src.string_value),
+       display_string(src.display_string), help_text(src.help_text) {
+      src.string_value = src.display_string = src.help_text = nullptr;
+    }
+
+    Item &operator=(Item &&src) {
+      int_value = src.int_value;
+      std::swap(string_value, src.string_value);
+      std::swap(display_string, src.display_string);
+      std::swap(help_text, src.help_text);
+      return *this;
+    }
+
+    friend void swap(Item &a, Item &b) {
+      std::swap(a.int_value, b.int_value);
+      std::swap(a.string_value, b.string_value);
+      std::swap(a.display_string, b.display_string);
+      std::swap(a.help_text, b.help_text);
+    }
   };
 
 #ifdef _WIN32_WCE
