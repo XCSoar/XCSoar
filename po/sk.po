@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2014-06-03 14:21+0000\n"
+"PO-Revision-Date: 2014-06-26 12:48+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-09 12:20+0000\n"
-"X-Generator: Launchpad (build 17031)\n"
+"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
+"X-Generator: Launchpad (build 17114)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1743,6 +1743,13 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"Okamžitá príkazová rýchlosť podľa MacCready teórie. Používa výpočet netto "
+"vária na stanovenie rýchlosti delfínieho letu v momentálnom kurze. V režime "
+"preskoku je táto príkazová rýchlosť počítaná na udržanie výšky. V režime "
+"doklzu je počítaná na zostup. V režime krúženia sa prepne na rýchlosť "
+"minimálneho opadania v momentálnom prevádzkovom zaťažení (Ak je pripojený "
+"akcelerometer). Ak je zvolená stála rýchlosť na preskoku toto info okno "
+"zobrazuje MacCready rýchlosť."
 
 #: src/InfoBoxes/Content/Factory.cpp:614
 #, no-c-format
@@ -1813,7 +1820,7 @@ msgstr "Kurzový rozdiel"
 #: src/InfoBoxes/Content/Factory.cpp:646
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "Azimut rozdiel"
 
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
@@ -2167,7 +2174,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
 msgid "Final GR"
-msgstr ""
+msgstr "Cieľ kĺzavosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:840
 #, no-c-format
@@ -2181,6 +2188,8 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
+"Kĺzavosť nad zemou potrebná pre dosiahnutie cieľa úlohy, daná podielom "
+"vzdialenosti a výšky pre prílet v bezpečnej výške."
 
 #: src/InfoBoxes/Content/Factory.cpp:849
 #, no-c-format
@@ -2848,12 +2857,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
 msgid "Circle Diameter"
-msgstr ""
+msgstr "Priemer kruhu"
 
 #: src/InfoBoxes/Content/Factory.cpp:1245
 #, no-c-format
 msgid "Circle D"
-msgstr ""
+msgstr "P kruhu"
 
 #: src/InfoBoxes/Content/Factory.cpp:1246
 #, no-c-format
@@ -2862,6 +2871,8 @@ msgid ""
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
+"Priemer kruhu. Ukazuje odhadovaný priemer a trvanie jedného kruhu. Výhodné "
+"pre stanovenie najvhodnejšieho režimu krúženia pri rôznom plošnom zaťažení."
 
 #: src/InfoBoxes/Content/Factory.cpp:1253
 #, no-c-format
@@ -2871,29 +2882,29 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1254
 #, no-c-format
 msgid "Takeoff Dist"
-msgstr ""
+msgstr "Vzlet vzdialenosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:1255
 #, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr ""
+msgstr "Vzdialenosť k miestu detekcie vzletu."
 
 #: src/InfoBoxes/Content/Factory.cpp:1263
 #, no-c-format
 msgid "On-Line Contest speed"
-msgstr ""
+msgstr "OLC  rýchlosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:1264
 #, no-c-format
 msgid "OLC Speed"
-msgstr ""
+msgstr "OLC rýchlosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:1265
 #, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
-msgstr ""
+msgstr "Okamžité vyhodnotenie rýchlosti letu podľa nastavených OLC pravidiel."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -2949,11 +2960,11 @@ msgstr "Upraviť"
 
 #: src/InfoBoxes/Content/MacCready.cpp:72
 msgid "MC AUTO"
-msgstr ""
+msgstr "MC auto"
 
 #: src/InfoBoxes/Content/MacCready.cpp:72
 msgid "MC MANUAL"
-msgstr ""
+msgstr "MC manuál"
 
 #: src/InfoBoxes/Content/Other.cpp:62 src/InfoBoxes/Content/Other.cpp:65
 msgid "AC Off"

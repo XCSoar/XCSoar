@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-03-03 18:49+0100\n"
+"PO-Revision-Date: 2014-07-18 21:50+0000\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-23 20:24+0000\n"
-"X-Generator: Launchpad (build 16179)\n"
+"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
+"X-Generator: Launchpad (build 17114)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -332,19 +332,19 @@ msgid "Area keyhole"
 msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "Validan start"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "Validan cilj"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "Zadatak objavljen"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
@@ -357,14 +357,14 @@ msgid "Incorrect number of turnpoints"
 msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "Sljedeća točka"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Sljedeća točka"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
@@ -382,9 +382,9 @@ msgid "non-FAI turn points"
 msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "Sljedeća točka"
+msgstr ""
 
 #: src/Airspace/AirspaceGlue.cpp:62
 msgid "Loading Airspace File..."
@@ -916,9 +916,9 @@ msgid "Task & Airfields"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Visina"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:102
@@ -971,9 +971,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:195
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Bearing"
-msgstr "Smjer"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:101
@@ -1357,9 +1357,9 @@ msgid "AAT time"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:442
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AAT Time"
-msgstr "AAT min vrijeme"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:443
 #, no-c-format
@@ -2576,9 +2576,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1186
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Točka starta"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1187
 #, no-c-format
@@ -2591,9 +2591,9 @@ msgid "Start open/close countdown at reaching"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1195
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Visina starta"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1196
 #, no-c-format
@@ -2603,9 +2603,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1203
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial"
-msgstr "Početni radijal"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1204 Data/Dialogs/dlgTarget_L.xml:16
 #: Data/Dialogs/dlgTarget.xml:23
@@ -2620,9 +2620,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1213
 #: src/InfoBoxes/Content/Factory.cpp:1214
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "ATC radial"
-msgstr "Početni radijal"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1215
 #, no-c-format
@@ -2637,9 +2637,9 @@ msgid "Speed task last hour"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task H"
-msgstr "Nema zadatka"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1226
 #, no-c-format
@@ -2671,9 +2671,9 @@ msgid "Circle Diameter"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1245
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circle D"
-msgstr "Kruženje"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1246
 #, no-c-format
@@ -2684,14 +2684,14 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1253
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance takeoff"
-msgstr "Udaljenost"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1254
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Takeoff Dist"
-msgstr "Poletio"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1255
 #, no-c-format
@@ -2699,14 +2699,14 @@ msgid "Distance to where take-off was detected."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1263
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "On-Line Contest speed"
-msgstr "OLC"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1264
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Speed"
-msgstr "Brz"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1265
 #, no-c-format
@@ -2808,9 +2808,8 @@ msgid "Open"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:882 src/InfoBoxes/Content/Task.cpp:927
-#, fuzzy
 msgid "Waiting"
-msgstr "Podešavanje vjetra"
+msgstr ""
 
 #: src/InfoBoxes/Content/Places.cpp:79
 #, no-c-format
@@ -3180,9 +3179,8 @@ msgid "around terrain"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:251
-#, fuzzy
 msgid "Unreachable due to terrain."
-msgstr "'Final Glide' kroz teren"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:256
 msgid "Arrival altitude incl. safety height"
@@ -3216,9 +3214,9 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:579
 #: src/Dialogs/Traffic/TrafficList.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "%u minutes ago"
-msgstr "2 minute"
+msgstr ""
 
 #: src/Renderer/WaypointListRenderer.cpp:120
 msgid "Arrival Alt"
@@ -3699,9 +3697,8 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:260
 #: src/Dialogs/Device/DeviceListDialog.cpp:279
-#, fuzzy
 msgid "Disable"
-msgstr "ONEMOGUĆEN"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:261
 #: src/Dialogs/Device/DeviceListDialog.cpp:454
@@ -3793,9 +3790,8 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:485
 #: src/Dialogs/Device/DeviceListDialog.cpp:547
-#, fuzzy
 msgid "Device is not connected"
-msgstr "Odspojen"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:511
 msgid "Edit device"
@@ -4086,9 +4082,9 @@ msgid "Locked"
 msgstr "Zaključan"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "Zaključan"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -4579,9 +4575,9 @@ msgid "Route"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:106
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Scoring"
-msgstr "Rez"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:107
 #, no-c-format
@@ -4619,9 +4615,9 @@ msgid "Pages"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "InfoBox nalepiti"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
@@ -4702,9 +4698,8 @@ msgid "New Teammate"
 msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:89
-#, fuzzy
 msgid "Set code"
-msgstr "kod tima"
+msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:90
 msgid "Set WP"
@@ -5014,9 +5009,8 @@ msgid "Status"
 msgstr "Status"
 
 #: src/Dialogs/dlgStatus.cpp:124 Data/Input/default.xci:562
-#, fuzzy
 msgid "Flight"
-msgstr "Vrijeme leta"
+msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:127 Data/Input/default.xci:588
 msgid "System"
@@ -5029,9 +5023,8 @@ msgid "Rules"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:136
-#, fuzzy
 msgid "Times"
-msgstr "Time"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:90
 msgid "Max. height gain"
@@ -5167,9 +5160,8 @@ msgstr "Sletio"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:118
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:153
-#, fuzzy
 msgid "Daylight time"
-msgstr "Vrijeme leta"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -5300,9 +5292,8 @@ msgid "Waypoints not editable"
 msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:120
-#, fuzzy
 msgid "Delete waypoint?"
-msgstr "Briši Točku?"
+msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:152
 msgid "Save changes to waypoint file?"
@@ -5313,9 +5304,9 @@ msgid "Waypoints edited"
 msgstr "Točka promjenjena"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint"
-msgstr "Sljedeća točka"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:25
@@ -5325,9 +5316,9 @@ msgid "Airport"
 msgstr "Aerodrom"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landpoint"
-msgstr "Sletio"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -5423,9 +5414,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No fill"
-msgstr "No Fix"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:78
 #, no-c-format
@@ -5546,14 +5537,14 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable final glide bar."
-msgstr "Iznad 'Final Glide' visine"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Always show final glide bar."
-msgstr "Ispod 'Final Glide' visine"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
@@ -5594,9 +5585,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
-#, fuzzy
 msgid "Final glide bar"
-msgstr "Final Glide"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
 msgid ""
@@ -5767,9 +5757,8 @@ msgid "Preferred period for gliders."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
-#, fuzzy
 msgid "GR average period"
-msgstr "Prosječni L/D period"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -6070,9 +6059,9 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:139
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
-msgstr "Sjena"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
@@ -6309,9 +6298,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "AutoZum ON"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6345,9 +6333,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:334
-#, fuzzy
 msgid "InfoBoxes"
-msgstr "InfoBox nalepiti"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -6360,9 +6347,9 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:350
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "Smjer"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
 msgid "Bottom area"
@@ -7211,9 +7198,9 @@ msgid "Sandstone"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pastel"
-msgstr "Zalijepi"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 #, no-c-format
@@ -7280,9 +7267,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
-#, fuzzy
 msgid "Contours"
-msgstr "Boje"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
@@ -7795,14 +7781,12 @@ msgid "Configure whether the start must be armed manually or automatically."
 msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:241
-#, fuzzy
 msgid "Start open time"
-msgstr "Vrijeme starta"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
-#, fuzzy
 msgid "Start close time"
-msgstr "Vrijeme starta"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:277
 msgid "FAI start / finish rules"
@@ -7970,14 +7954,12 @@ msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:173
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
-#, fuzzy
 msgid "Task point"
-msgstr "Točka Zadatka"
+msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:178
-#, fuzzy
 msgid "Assigned area point"
-msgstr "Propisano vrijeme zadatka"
+msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
 msgid "Remove task point?"
@@ -8038,9 +8020,8 @@ msgid "Cylinder"
 msgstr "Cilindar"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "Cilindar"
+msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
 msgid "Keyhole"
@@ -8063,14 +8044,12 @@ msgid "BGA Start Sector"
 msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "Proc.vrijeme zadatka"
+msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:75 src/Dialogs/Weather/RASPDialog.cpp:70
-#, fuzzy
 msgid "Now"
-msgstr "Ne"
+msgstr ""
 
 #: src/Dialogs/Weather/RASPDialog.cpp:55
 msgid "Field"
@@ -8193,9 +8172,8 @@ msgid "Dismiss"
 msgstr ""
 
 #: src/Monitor/MatTaskMonitor.cpp:54
-#, fuzzy
 msgid "Add this turn point?"
-msgstr "Sljedeća točka"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:205
 #, no-c-format
@@ -8208,9 +8186,9 @@ msgid "InfoBox titles"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox values"
-msgstr "InfoBox vrijedn."
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:213
 #, no-c-format
@@ -8286,9 +8264,7 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:831
 msgid "Weather"
-msgstr ""
-"VRIJEME\n"
-"(meteo)"
+msgstr "Vrijeme"
 
 #: src/Weather/NOAAFormatter.cpp:251
 #, c-format
@@ -8314,9 +8290,9 @@ msgid "Gear off delay"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Interval; gear"
-msgstr "Sučelje"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
@@ -8359,9 +8335,9 @@ msgid "Type of dead band used in circling mode."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling hi cutoff"
-msgstr "Zum kruženja OFF"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
 #, no-c-format
@@ -8369,9 +8345,9 @@ msgid "High limit of circling dead band"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling low cutoff"
-msgstr "Zum kruženja OFF"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
 #, no-c-format
@@ -8409,9 +8385,9 @@ msgid "Low limit of cruise dead band"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb fast trigger"
-msgstr "Trend penjanja"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
 #, no-c-format
@@ -8461,9 +8437,9 @@ msgid "Time scale used for cruise speed command averager."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling volume"
-msgstr "Zum kruženja"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
@@ -8471,9 +8447,9 @@ msgid "Mean volume level in circling modes."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise volume"
-msgstr "Preskok"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
 #, no-c-format
@@ -8492,9 +8468,9 @@ msgid "Adjustment to base frequency of tones in all modes."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filter circling"
-msgstr "Log interval kruženje"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
@@ -8502,9 +8478,9 @@ msgid "Variometer low pass filter time constant in circling mode."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filter cruise"
-msgstr "Log interval preskok"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
@@ -8522,9 +8498,8 @@ msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
-#, fuzzy
 msgid "Beep type"
-msgstr "Vrsta datoteke"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
@@ -8610,14 +8585,14 @@ msgid "Max. reported"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Flarm interface"
-msgstr "Sučelje"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable circling"
-msgstr "Log interval kruženje"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
@@ -8625,9 +8600,9 @@ msgid "No mode reports"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No aircraft type"
-msgstr "Tip zrakoplova"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
@@ -8730,9 +8705,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FLARM connected"
-msgstr "Odspojen"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -8759,14 +8734,14 @@ msgid "VNE"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V terrain"
-msgstr "Teren"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Height terrain"
-msgstr "Max prirast visine"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
@@ -8799,9 +8774,9 @@ msgid "Mute vario on radio"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario muting"
-msgstr "Podešavanje vjetra"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
@@ -8988,9 +8963,8 @@ msgid "Change Type"
 msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:25 Data/Dialogs/dlgTaskPoint.xml:21
-#, fuzzy
 msgid "Score exit"
-msgstr "Rez"
+msgstr ""
 
 #: Data/Dialogs/dlgTarget_L.xml:21
 msgid "ETE"
@@ -9234,9 +9208,8 @@ msgid "Zoom"
 msgstr "Zum"
 
 #: Data/Input/default.xci:847
-#, fuzzy
 msgid "Traffic List"
-msgstr "promet"
+msgstr ""
 
 #: Data/Input/default.xci:725
 msgid "Vario ASI zeroed"
@@ -9341,8 +9314,38 @@ msgid ""
 "TAF"
 msgstr ""
 
+#~ msgid "Delete Waypoint?"
+#~ msgstr "Briši Točku?"
+
+#~ msgid "Task Point"
+#~ msgstr "Točka Zadatka"
+
+#~ msgid "Weather parameters"
+#~ msgstr "Parametri vremena"
+
+#~ msgid "V rough air"
+#~ msgstr "Manevarska brzina"
+
+#~ msgid "Dump time"
+#~ msgstr "Vrijeme praž. balasta"
+
+#~ msgid "Sunset"
+#~ msgstr "Zalazak sunca"
+
+#~ msgid "Lookup"
+#~ msgstr "Pogledaj"
+
+#~ msgid "Short file name"
+#~ msgstr "Kratko ime datoteke"
+
 #~ msgid "Edit text"
 #~ msgstr "Uredi tekst"
+
+#~ msgid "L/D average period"
+#~ msgstr "Prosječni L/D period"
+
+#~ msgid "My Sample"
+#~ msgstr "Moj uzorak"
 
 #, fuzzy
 #~ msgid "Next radial ATC"
@@ -9351,27 +9354,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Radial ATC"
 #~ msgstr "Poluprečnik"
-
-#~ msgid "V rough air"
-#~ msgstr "Manevarska brzina"
-
-#~ msgid "Dump time"
-#~ msgstr "Vrijeme praž. balasta"
-
-#~ msgid "Lookup"
-#~ msgstr "Pogledaj"
-
-#~ msgid "Short file name"
-#~ msgstr "Kratko ime datoteke"
-
-#~ msgid "My Sample"
-#~ msgstr "Moj uzorak"
-
-#~ msgid "Sunset"
-#~ msgstr "Zalazak sunca"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Parametri vremena"
 
 #, fuzzy
 #~ msgid "Start open arr"

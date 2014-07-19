@@ -1,19 +1,23 @@
 #!/usr/bin/make -f
 # -*- mode: makefile; coding: utf-8 -*-
 
-CFLAGS = -Wall -g
-OPTIONS = TARGET=UNIX
+OPTIONS =
+
+TARGET = UNIX
+OPTIONS += TARGET=$(TARGET)
 
 # allow Debian builds in the same repository as normal builds
-TARGET_OUTPUT_DIR = output/DEBIAN
+TARGET_OUTPUT_DIR = output/DEBIAN-$(TARGET)
 OPTIONS += TARGET_OUTPUT_DIR=$(TARGET_OUTPUT_DIR)
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-  CFLAGS += -O0
   OPTIONS += DEBUG=y
 else
-  CFLAGS += -O2 -fno-strict-aliasing
   OPTIONS += DEBUG=n
+endif
+
+ifneq (,$(findstring clang,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += CLANG=y
 endif
 
 build-indep: debian/stamp-build-indep
