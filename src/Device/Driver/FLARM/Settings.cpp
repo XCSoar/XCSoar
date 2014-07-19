@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-#include "Device/Internal.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <stdio.h>

@@ -24,7 +24,7 @@
 #include "NanoLogger.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "Time/TimeoutClock.hpp"

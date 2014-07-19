@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Driver/CaiLNav.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Operation/Operation.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

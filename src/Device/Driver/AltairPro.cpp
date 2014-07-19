@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Checksum.hpp"

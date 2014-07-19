@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "LX1600.hpp"
 #include "V7.hpp"
 

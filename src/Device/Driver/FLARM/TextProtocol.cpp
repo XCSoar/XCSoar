@@ -24,7 +24,7 @@ Copyright_License {
 #include "TextProtocol.hpp"
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Time/TimeoutClock.hpp"
 
 #include <assert.h>

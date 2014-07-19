@@ -605,7 +605,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Parser.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Config.cpp \
@@ -780,7 +780,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1199,7 +1199,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
@@ -1231,7 +1231,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1266,7 +1266,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1296,7 +1296,7 @@ $(eval $(call link-program,RunEnableNMEA,RUN_ENABLE_NMEA))
 RUN_VEGA_SETTINGS_SOURCES = \
 	$(VEGA_SOURCES) \
 	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1315,7 +1315,7 @@ $(eval $(call link-program,RunVegaSettings,RUN_VEGA_SETTINGS))
 RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \
@@ -1333,7 +1333,7 @@ $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
 RUN_LX1600_UTILS_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \
@@ -1357,7 +1357,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1390,7 +1390,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -2429,7 +2429,7 @@ $(eval $(call link-program,FeedVega,FEED_VEGA))
 EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Util/LineSplitter.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Driver/FLARM/BinaryProtocol.cpp \
 	$(SRC)/Device/Driver/FLARM/CRC16.cpp \
 	$(SRC)/Device/Config.cpp \

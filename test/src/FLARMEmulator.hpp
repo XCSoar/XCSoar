@@ -27,7 +27,7 @@ Copyright_License {
 #include "DeviceEmulator.hpp"
 #include "Device/Util/LineSplitter.hpp"
 #include "Device/Driver/FLARM/BinaryProtocol.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Util/Macros.hpp"

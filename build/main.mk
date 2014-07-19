@@ -671,7 +671,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Util/LineSplitter.cpp \
-	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(DIALOG_SOURCES) \
 	\

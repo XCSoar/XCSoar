@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_LX_V7_HPP
 
 #include "Device/Port/Port.hpp"
-#include "Device/Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Units/System.hpp"
 
