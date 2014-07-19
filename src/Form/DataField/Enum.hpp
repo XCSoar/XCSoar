@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 
+#include <utility>
+
 #include <stdlib.h>
 
 /**
@@ -63,6 +65,13 @@ public:
       std::swap(display_string, other.display_string);
       std::swap(help, other.help);
       return *this;
+    }
+
+    friend void swap(Entry &a, Entry &b) {
+      std::swap(a.id, b.id);
+      std::swap(a.string, b.string);
+      std::swap(a.display_string, b.display_string);
+      std::swap(a.help, b.help);
     }
 
     unsigned GetId() const {
