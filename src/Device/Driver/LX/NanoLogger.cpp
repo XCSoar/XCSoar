@@ -25,109 +25,15 @@
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Util/NMEAWriter.hpp"
+#include "Device/Util/NMEAReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/FifoBuffer.hpp"
 #include "Time/TimeoutClock.hpp"
-#include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-class PortNMEAReader {
-  Port &port;
-  OperationEnvironment &env;
-  FifoBuffer<char, 256u> buffer;
-
-public:
-  PortNMEAReader(Port &_port, OperationEnvironment &_env)
-    :port(_port), env(_env) {}
-
-protected:
-  bool Fill(TimeoutClock &timeout) {
-    const auto dest = buffer.Write();
-    if (dest.IsEmpty())
-      /* already full */
-      return false;
-
-    size_t nbytes = port.WaitAndRead(dest.data, dest.size, env, timeout);
-    if (nbytes == 0)
-      return false;
-
-    buffer.Append(nbytes);
-    return true;
-  }
-
-  char *GetLine() {
-    const auto src = buffer.Read();
-    char *const end = src.data + src.size;
-
-    /* a NMEA line starts with a dollar symbol ... */
-    char *dollar = std::find(src.data, end, '$');
-    if (dollar == end) {
-      buffer.Clear();
-      return nullptr;
-    }
-
-    char *start = dollar + 1;
-
-    /* ... and ends with an asterisk */
-    char *asterisk = std::find(start, end, '*');
-    if (asterisk + 3 > end)
-      /* need more data */
-      return nullptr;
-
-    /* verify the checksum following the asterisk (two hex digits) */
-
-    const uint8_t calculated_checksum = NMEAChecksum(start, asterisk - start);
-
-    const char checksum_buffer[3] = { asterisk[1], asterisk[2], 0 };
-    char *endptr;
-    const uint8_t parsed_checksum = strtoul(checksum_buffer, &endptr, 16);
-    if (endptr != checksum_buffer + 2 ||
-        parsed_checksum != calculated_checksum) {
-      buffer.Clear();
-      return nullptr;
-    }
-
-    buffer.Consume(asterisk + 3 - src.data);
-
-    *asterisk = 0;
-    return start;
-  }
-
-public:
-  void Flush() {
-    port.Flush();
-    buffer.Clear();
-  }
-
-  char *ReadLine(TimeoutClock &timeout) {
-    while (true) {
-      char *line = GetLine();
-      if (line != nullptr)
-        return line;
-
-      if (!Fill(timeout))
-        return nullptr;
-    }
-  }
-
-  char *ExpectLine(const char *prefix, TimeoutClock &timeout) {
-    const size_t prefix_length = strlen(prefix);
-
-    while (true) {
-      char *line = ReadLine(timeout);
-      if (line == nullptr)
-        return nullptr;
-
-      if (memcmp(line, prefix, prefix_length) == 0)
-        return line + prefix_length;
-    }
-  }
-};
 
 static bool
 RequestLogbookInfo(Port &port, OperationEnvironment &env)
