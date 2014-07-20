@@ -56,18 +56,6 @@ SetFormControlEnabled(SubForm &form, const TCHAR *control_name, bool enabled)
 }
 
 void
-SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value)
-{
-  assert(control_name != NULL);
-  assert(value != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != NULL);
-
-  ctl->SetText(value);
-}
-
-void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value)
 {
   assert(control_name != NULL);
@@ -112,31 +100,4 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
 
   df.Set(value);
   ctl->RefreshDisplay();
-}
-
-int
-GetFormValueInteger(const SubForm &form, const TCHAR *control_name)
-{
-  assert(control_name != NULL);
-
-  const WndProperty *control =
-    (const WndProperty *)form.FindByName(control_name);
-  assert(control != NULL);
-
-  return control->GetDataField()->GetAsInteger();
-}
-
-const TCHAR *
-GetFormValueString(const SubForm &form, const TCHAR *control_name)
-{
-  assert(control_name != NULL);
-
-  const WndProperty *control =
-    (const WndProperty *)form.FindByName(control_name);
-  assert(control != NULL);
-
-  const DataFieldString &df = *(const DataFieldString *)control->GetDataField();
-  assert(df.GetType() == DataField::Type::STRING);
-
-  return df.GetAsString();
 }

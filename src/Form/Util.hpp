@@ -48,12 +48,6 @@ ShowOptionalFormControl(SubForm &form, const TCHAR *control_name,
 void SetFormControlEnabled(SubForm &form, const TCHAR *control_name,
                            bool enabled);
 
-/**
- * Set a form control to the specified value (without a DataField).
- */
-void
-SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value);
-
 void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value);
 
@@ -79,34 +73,5 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
 void
 LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const TCHAR *value);
-
-gcc_pure
-int
-GetFormValueInteger(const SubForm &form, const TCHAR *control_name);
-
-gcc_pure
-const TCHAR *
-GetFormValueString(const SubForm &form, const TCHAR *control_name);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
-
-/**
- * Saves a form value into a variable and into the registry.
- *
- * @param form the form
- * @param control_name the name of the control in the form
- * @param value the new value
- * @param registry_name the name of the registry key
- * @return true if the value has been modified
- */
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 bool &value, const char *profile_key);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field,
-                 const char *profile_key,
-                 bool &value);
 
 #endif
