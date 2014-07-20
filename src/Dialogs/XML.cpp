@@ -131,12 +131,8 @@ StringToStringDflt(const TCHAR *string, const TCHAR *_default)
 static int 
 ScaleWidth(const int x)
 {
-  const DialogStyle dialog_style = UIGlobals::GetDialogSettings().dialog_style;
-  if (dialog_style == dsFullWidth || dialog_style == dsScaledBottom)
-    // stretch width to fill screen horizontally
-    return x * dialog_width_scale / 1024;
-  else
-    return x;
+  // stretch width to fill screen horizontally
+  return x * dialog_width_scale / 1024;
 }
 
 static const TCHAR*
@@ -188,16 +184,6 @@ GetPosition(const XMLNode &node, const PixelRect rc, int bottom_most = -1)
   pt.x += rc.left;
   pt.y += rc.top;
 
-  return pt;
-}
-
-static ControlPosition
-SetPositionCentered(const ControlPosition original, const PixelRect rc,
-                    const ControlSize size)
-{
-  ControlPosition pt = original;
-  // center horizontally in parent PixelRect
-  pt.x = (rc.right + rc.left - size.cx) / 2;
   return pt;
 }
 
@@ -298,11 +284,7 @@ InitScaleWidth(const PixelSize size, const PixelRect rc)
   if (!Layout::ScaleSupported())
     return;
 
-  const DialogStyle dialog_style = UIGlobals::GetDialogSettings().dialog_style;
-  if (dialog_style == dsFullWidth || dialog_style == dsScaledBottom)
-    dialog_width_scale = (rc.right - rc.left) * 1024 / size.cx;
-  else
-    dialog_width_scale = 1024;
+  dialog_width_scale = (rc.right - rc.left) * 1024 / size.cx;
 }
 
 Window *
@@ -348,26 +330,10 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   InitScaleWidth(size, rc);
 
   // Correct dialog size and position for dialog style
-  switch (UIGlobals::GetDialogSettings().dialog_style) {
-  case dsFullWidth:
-    pos.x = rc.left;
-    pos.y = rc.top;
-    size.cx = rc.right - rc.left; // stretch form to full width of screen
-    size.cy = rc.bottom - rc.top;
-    break;
-  case dsScaledCentered:
-    pos = SetPositionCentered(pos, rc, size);
-    break;
-
-  case dsScaled:
-  case dsFixed:
-    break;
-
-  case dsScaledBottom:
-    size.cx = rc.right - rc.left; // stretch form to full width of screen
-    pos.y = rc.bottom - size.cy; // position at bottom of screen
-    break;
-  }
+  pos.x = rc.left;
+  pos.y = rc.top;
+  size.cx = rc.right - rc.left; // stretch form to full width of screen
+  size.cy = rc.bottom - rc.top;
 
   // Create the dialog
   WindowStyle style;

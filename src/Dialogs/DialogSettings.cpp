@@ -26,7 +26,6 @@ Copyright_License {
 void
 DialogSettings::SetDefaults()
 {
-  dialog_style = dsFullWidth;
   text_input_style = TextInputStyle::Default;
   tab_style = TabStyle::Text;
   expert = false;
