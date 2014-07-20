@@ -10,27 +10,27 @@
 
   <Edit Name="prpRange" Caption="Distance" X="-120" Y="-167" Height="22" CaptionWidth="50"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
-    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="-100" Max="100" Step="5"/>
+    <DataField DisplayFormat="%.0f %%" EditFormat="%.0f" Min="-100" Max="100" Step="5"/>
   </Edit>
 
   <Edit Name="prpRadial" Caption="Radial" X="-120" Y="-145" Height="22" CaptionWidth="50"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-90" Max="90" Step="5"/>
+    <DataField DisplayFormat="%.0f°" EditFormat="%.0f" Min="-90" Max="90" Step="5"/>
   </Edit>
 
   <Edit Name="prpAATEst" Caption="ETE" X="-120" Y="-123" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="600" step="10"
     Help="Estimated time en-route to the next AAT target.">
-    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
+    <DataField DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
   </Edit>
 
   <Edit Name="prpAATDelta" Caption="Delta T" X="-120" Y="-101" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="600" step="10"
     Help="AAT Delta Time - Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes.">
-    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
+    <DataField DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
   </Edit>
 
   <Edit Name="prpSpeedRemaining" Caption="V rem." X="-120" Y="-79" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="2000" step="10"
     Help="Speed remaining">
-    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
+    <DataField DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </Edit>
 
   <CheckBox Name="chkbOptimized" Caption="Optimized" X="-115" Y="-57" Height="22" OnClick="OnOptimized"/>

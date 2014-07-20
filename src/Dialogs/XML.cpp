@@ -395,8 +395,6 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 static DataField *
 LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
 {
-  const TCHAR *data_type =
-    StringToStringDflt(node.GetAttribute(_T("DataType")), _T(""));
   const TCHAR *display_format =
     StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T(""));
   const TCHAR *edit_format =
@@ -407,11 +405,8 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   fixed step = fixed(StringToFloatDflt(node.GetAttribute(_T("Step")), 1));
   const bool fine = false;
 
-  if (StringIsEqualIgnoreCase(data_type, _T("double")))
-    return new DataFieldFloat(edit_format, display_format, min, max,
-                              fixed(0), step, fine);
-
-  return NULL;
+  return new DataFieldFloat(edit_format, display_format, min, max,
+                            fixed(0), step, fine);
 }
 
 /**

@@ -7,22 +7,22 @@
 
   <Edit Name="prpAATDelta" Caption="Delta T" Y="27" Width="-120" Height="22" CaptionWidth="60" ReadOnly="1"
     Help="AAT Delta Time - Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes.">
-    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" />
+    <DataField DisplayFormat="%.0f min" EditFormat="%.0f" />
   </Edit>
 
   <Edit Name="prpSpeedRemaining" Caption="V rem." X="-120" Y="27" Height="22" CaptionWidth="60" ReadOnly="1"
     Help="Speed remaining">
-    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" />
+    <DataField DisplayFormat="%.0f %s" EditFormat="%.1f" />
   </Edit>
 
   <Edit Name="prpRange" Caption="Distance" Y="49" Width="-120" Height="22" CaptionWidth="60"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
-    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="-100" Max="100" Step="5"/>
+    <DataField DisplayFormat="%.0f %%" EditFormat="%.0f" Min="-100" Max="100" Step="5"/>
   </Edit>
 
   <Edit Name="prpRadial" Caption="Radial" X="-120" Y="49" Height="22" CaptionWidth="60"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-90" Max="90" Step="5"/>
+    <DataField DisplayFormat="%.0f°" EditFormat="%.0f" Min="-90" Max="90" Step="5"/>
   </Edit>
 
   <Custom Name="map" Y="71" Height="-35" Border="1" OnCreate="OnCreateMap" />
