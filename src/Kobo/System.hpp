@@ -32,6 +32,18 @@ KoboReboot();
 bool
 KoboPowerOff();
 
+bool
+KoboUmountData();
+
+bool
+KoboMountData();
+
+bool
+KoboExportUSBStorage();
+
+void
+KoboUnexportUSBStorage();
+
 gcc_pure
 bool
 IsKoboWifiOn();

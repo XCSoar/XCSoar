@@ -32,6 +32,7 @@ Version 6.8 - not yet released
   - add UI allowing the start of external scripts to KoboMenu (#3194)
   - support Wifi with WEP (#3138)
   - support USB-OTG
+  - export data partition via USB storage
 
 Version 6.7.6 - not yet released
 * devices

@@ -34,11 +34,13 @@ Copyright_License {
 #ifdef KOBO
 
 #include <sys/mount.h>
+#include <errno.h>
 
+template<typename... Args>
 static bool
-InsMod(const char *path)
+InsMod(const char *path, Args... args)
 {
-  return Run("/sbin/insmod", path);
+  return Run("/sbin/insmod", path, args...);
 }
 
 static bool
@@ -85,6 +87,54 @@ KoboPowerOff()
   return Run("/sbin/poweroff");
 #else
   return false;
+#endif
+}
+
+bool
+KoboUmountData()
+{
+#ifdef KOBO
+  return umount("/mnt/onboard") == 0 || errno == EINVAL;
+#else
+  return true;
+#endif
+}
+
+bool
+KoboMountData()
+{
+#ifdef KOBO
+  Run("/bin/dosfsck", "-a", "-w", "/dev/mmcblk0p3");
+  return mount("/dev/mmcblk0p3", "/mnt/onboard", "vfat",
+               MS_NOATIME|MS_NODEV|MS_NOEXEC|MS_NOSUID,
+               "iocharset=utf8");
+#else
+  return true;
+#endif
+}
+
+bool
+KoboExportUSBStorage()
+{
+#ifdef KOBO
+  RmMod("g_ether");
+  RmMod("g_file_storage");
+
+  InsMod("/drivers/ntx508/usb/gadget/arcotg_udc.ko");
+  return InsMod("/drivers/ntx508/usb/gadget/g_file_storage.ko",
+                "file=/dev/mmcblk0p3", "stall=0");
+#else
+  return true;
+#endif
+}
+
+void
+KoboUnexportUSBStorage()
+{
+#ifdef KOBO
+  RmMod("g_ether");
+  RmMod("g_file_storage");
+  RmMod("arcotg_udc");
 #endif
 }
 

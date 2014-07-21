@@ -36,6 +36,7 @@ class SystemWidget final
   enum Buttons {
     REBOOT,
     SWITCH_KERNEL,
+    USB_STORAGE,
   };
 
 public:
@@ -43,6 +44,7 @@ public:
 
 private:
   void SwitchKernel();
+  void ExportUSBStorage();
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -58,6 +60,9 @@ SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddButton("Reboot", *this, REBOOT);
   AddButton(IsKoboOTGKernel() ? "Disable USB-OTG" : "Enable USB-OTG",
             *this, SWITCH_KERNEL);
+
+  AddButton("Export USB storage", *this, USB_STORAGE);
+  SetRowEnabled(USB_STORAGE, !IsKoboOTGKernel());
 }
 
 inline void
@@ -80,6 +85,30 @@ SystemWidget::SwitchKernel()
 #endif
 }
 
+inline void
+SystemWidget::ExportUSBStorage()
+{
+  if (!KoboUmountData()) {
+      ShowMessageBox(_T("Failed to unmount data partition."), _("Error"),
+                     MB_OK);
+      return;
+  }
+
+  if (!KoboExportUSBStorage()) {
+      ShowMessageBox(_T("Failed to export data partition."), _("Error"),
+                     MB_OK);
+      KoboMountData();
+      return;
+  }
+
+  ShowMessageBox(_T("Your PC has now access to the data partition until you close this dialog."),
+                 _T("Export USB storage"),
+                 MB_OK);
+
+  KoboUnexportUSBStorage();
+  KoboMountData();
+}
+
 void
 SystemWidget::OnAction(int id)
 {
@@ -90,6 +119,10 @@ SystemWidget::OnAction(int id)
 
   case SWITCH_KERNEL:
     SwitchKernel();
+    break;
+
+  case USB_STORAGE:
+    ExportUSBStorage();
     break;
   }
 }
