@@ -37,9 +37,7 @@ template<class T>
 class Source {
 public:
   /**
-   * A portion of this object's buffer.  The first item is the start
-   * of the buffer, and the second item is the number of available
-   * words.
+   * A portion of this object's buffer.
    */
   typedef WritableBuffer<T> Range;
 
