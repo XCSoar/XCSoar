@@ -696,7 +696,7 @@ DEBUG_PROGRAM_NAMES = \
 	FlightPath \
 	BenchmarkProjection \
 	BenchmarkFAITriangleSector \
-	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
+	DumpTextFile DumpTextZip DumpTextInflate WriteTextFile RunTextWriter \
 	DumpHexColor \
 	RunXMLParser \
 	ReadMO \
@@ -873,6 +873,11 @@ DUMP_TEXT_ZIP_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextZip.cpp
 DUMP_TEXT_ZIP_DEPENDS = IO ZZIP UTIL
 $(eval $(call link-program,DumpTextZip,DUMP_TEXT_ZIP))
+
+DUMP_TEXT_INFLATE_SOURCES = \
+	$(TEST_SRC_DIR)/DumpTextInflate.cpp
+DUMP_TEXT_INFLATE_DEPENDS = IO OS ZLIB
+$(eval $(call link-program,DumpTextInflate,DUMP_TEXT_INFLATE))
 
 DUMP_HEX_COLOR_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
