@@ -37,13 +37,14 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "System.hpp"
 #include "NetworkDialog.hpp"
+#include "SystemDialog.hpp"
 #include "ToolsDialog.hpp"
 
 enum Buttons {
   LAUNCH_NICKEL = 100,
   TOOLS,
   NETWORK,
-  REBOOT,
+  SYSTEM,
   POWEROFF
 };
 
@@ -101,7 +102,7 @@ KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
   buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL);
   buttons.AddButton(("Tools"), *this, TOOLS);
   buttons.AddButton(_("Network"), *this, NETWORK);
-  buttons.AddButton(("Reboot"), dialog, REBOOT);
+  buttons.AddButton("System", *this, SYSTEM);
   buttons.AddButton(("Poweroff"), dialog, POWEROFF);
 }
 
@@ -139,8 +140,13 @@ KoboMenuWidget::OnAction(int id)
   case TOOLS:
     ShowToolsDialog();
     break;
+
   case NETWORK:
     ShowNetworkDialog();
+    break;
+
+  case SYSTEM:
+    ShowSystemDialog();
     break;
   }
 }
@@ -209,10 +215,6 @@ int main(int argc, char **argv)
       KoboRunXCSoar("-simulator");
       /* return to menu after XCSoar quits */
       break;
-
-    case REBOOT:
-      KoboReboot();
-      return EXIT_SUCCESS;
 
     case POWEROFF:
       KoboPowerOff();
