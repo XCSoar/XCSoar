@@ -337,17 +337,19 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
     return false;
   }
 
-  if (PyNumber_Check(py_gps_alt))
+  if (PyNumber_Check(py_gps_alt)) {
     fix.gps_altitude = PyInt_AsLong(py_gps_alt);
-  else
+    fix.gps_valid = true;
+  } else {
     fix.gps_altitude = 0;
+    fix.gps_valid = false;
+  }
 
   if (PyNumber_Check(py_pressure_alt))
     fix.pressure_altitude = PyInt_AsLong(py_pressure_alt);
   else
     fix.pressure_altitude = 0;
 
-  fix.gps_valid = true;
 
   if (PyNumber_Check(py_enl))
     fix.enl = PyInt_AsLong(py_enl);
