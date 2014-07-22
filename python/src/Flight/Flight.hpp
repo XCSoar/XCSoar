@@ -150,6 +150,14 @@ public:
     fixes->push_back(fix);
   };
 
+  /**
+   * Set the QNH for this flight
+   */
+  void SetQNH(const double _qnh) {
+    qnh = AtmosphericPressure::HectoPascal(_qnh);
+    qnh_available.Update(1);
+  };
+
 private:
   /* Read the flight into memory */
   void ReadFlight();

@@ -97,6 +97,19 @@ void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
   self->ob_type->tp_free((Pyxcsoar_Flight*)self);
 }
 
+PyObject* xcsoar_Flight_setQNH(Pyxcsoar_Flight *self, PyObject *args) {
+  double qnh;
+
+  if (!PyArg_ParseTuple(args, "d", &qnh)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse QNH.");
+    return nullptr;
+  }
+
+  self->flight->SetQNH(qnh);
+
+  Py_RETURN_TRUE;
+}
+
 PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
   PyObject *py_begin = NULL,
            *py_end = NULL;
