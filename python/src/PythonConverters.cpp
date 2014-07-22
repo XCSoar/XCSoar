@@ -348,7 +348,8 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   if (PyNumber_Check(py_pressure_alt))
     fix.pressure_altitude = PyInt_AsLong(py_pressure_alt);
   else
-    fix.pressure_altitude = 0;
+    /* fall back to GPS altitude - this is the same behaviour as in IGCFix::Apply() */
+    fix.pressure_altitude = fix.gps_altitude;
 
 
   if (PyNumber_Check(py_enl))
