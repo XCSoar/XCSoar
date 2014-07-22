@@ -102,9 +102,8 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
   }
 
   if (fix.pressure_altitude != 0) {
-    basic.pressure_altitude = basic.baro_altitude = fixed(fix.pressure_altitude);
+    basic.pressure_altitude = fixed(fix.pressure_altitude);
     basic.pressure_altitude_available.Update(basic.clock);
-    basic.baro_altitude_available.Update(basic.clock);
   }
 
   if (fix.enl >= 0) {
