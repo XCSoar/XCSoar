@@ -86,20 +86,14 @@ DebugReplayVector::CopyFromFix(const IGCFixEnhanced &fix)
   basic.alive.Update(basic.clock);
   basic.location = fix.location;
 
-  if (fix.gps_valid)
+  if (fix.gps_valid) {
     basic.location_available.Update(basic.clock);
-  else
-    basic.location_available.Clear();
-
-  if (fix.gps_altitude != 0) {
     basic.gps_altitude = fixed(fix.gps_altitude);
-
-    if (fix.gps_valid)
-      basic.gps_altitude_available.Update(basic.clock);
-    else
-      basic.gps_altitude_available.Clear();
-  } else
+    basic.gps_altitude_available.Update(basic.clock);
+  } else {
+    basic.location_available.Clear();
     basic.gps_altitude_available.Clear();
+  }
 
   if (fix.pressure_altitude != 0) {
     basic.pressure_altitude = basic.baro_altitude = fixed(fix.pressure_altitude);
