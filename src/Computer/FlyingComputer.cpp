@@ -197,7 +197,7 @@ CheckAltitudeAGL(const DerivedInfo &calculated)
 inline bool
 FlyingComputer::CheckClimbing(fixed dt, fixed altitude)
 {
-  if (altitude > climbing_altitude)
+  if (altitude > climbing_altitude + fixed(0.1))
     climbing_clock.Add(dt);
   else
     climbing_clock.Subtract(dt);
