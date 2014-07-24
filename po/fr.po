@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-04-10 16:07+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2014-07-23 04:27+0000\n"
+"Last-Translator: gregoiresailland <gregoiresailland@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-04-11 05:04+0000\n"
-"X-Generator: Launchpad (build 16976)\n"
+"X-Launchpad-Export-Date: 2014-07-24 06:01+0000\n"
+"X-Generator: Launchpad (build 17114)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -625,9 +625,8 @@ msgid "Loading Waypoints..."
 msgstr "Chargement des points de virage..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "Pas en spirale"
+msgstr "statique"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2996,23 +2995,21 @@ msgstr ""
 "choisie."
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Différence d'altitude en arrivée"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Fin AltD"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Altitude d'arrivée au point de virage final du circuit en tenant compte de "
-"l'altitude de sécurité."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5154,7 +5151,7 @@ msgstr "Profil d'ascendance"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Wind at Altitude"
-msgstr "Vent en Altitude"
+msgstr "vent d'altitude"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
 msgid "Set Wind"
@@ -5239,9 +5236,9 @@ msgid "Active"
 msgstr "Actif"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "L'activation du profil de planeur \"%s\" a échoué !"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5250,9 +5247,9 @@ msgstr "Veuillez entrer l'immatriculation du planeur!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "Le profil du planeur \"%s\" existe déjà. Voulez-vous l'écraser ?"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5265,9 +5262,9 @@ msgid "Delete plane \"%s\"?"
 msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Activate plane \"%s\"?"
-msgstr "L'activation du profil de planeur \"%s\" a échoué !"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:407
 msgid "Planes"
@@ -5646,27 +5643,27 @@ msgstr "Enlever du circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
 msgid "Replace in Task"
-msgstr "Remplacer dans le circuit"
+msgstr "remplacer la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
 msgid "Insert in Task"
-msgstr "Insérer dans le circuit"
+msgstr "insérer la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
 msgid "Append to Task"
-msgstr "Ajouter Au Circuit"
+msgstr "ajouter à la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
 msgid "Remove from Task"
-msgstr "Retirer du circuit"
+msgstr "retirer de la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
 msgid "Set as New Home"
-msgstr "Nouvelle Base"
+msgstr "définir comme nouveau point de départ"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan to Waypoint"
-msgstr "Panor. au WP"
+msgstr "aller au point de repère"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
 msgid "Clear current task?"
@@ -5707,9 +5704,9 @@ msgid "Turnpoint"
 msgstr "Point de virage"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Taille du champ vachable"
+msgstr "atterrissable"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6831,7 +6828,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr ""
+msgstr "plein écran (sans boites d'informations)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:353
@@ -6863,9 +6860,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "Paramètres InfoBox"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -8306,9 +8303,9 @@ msgid "Hot-air balloon"
 msgstr "Ballon"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr "Deltaplane"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
@@ -8436,9 +8433,8 @@ msgid "Make Finish"
 msgstr "Pt d'arrivée"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
-#, fuzzy
 msgid "Reverse"
-msgstr "Portrait inversé"
+msgstr "Inverser"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
 msgid "Clear All"
@@ -10106,47 +10102,6 @@ msgstr ""
 msgid "Stored to EEPROM"
 msgstr "Enregistré dans l'EEPROM"
 
-#~ msgid "Ignore checksum"
-#~ msgstr "Ignore vérif."
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "Si l'équippement GPS fournit des trames NMEA dont le test d'intégrité "
-#~ "échoue, ce réglage permet de forcer leur utilisation."
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "Profil du planeur \"%s\" activé."
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "Voulez-vous vraiment effacer le profil \"%s\" du planeur ?"
-
-#~ msgid "Do you want to activate plane profile \"%s\"?"
-#~ msgstr "Voulez-vous activer le profil de  planeur \"%s\" ?"
-
-#~ msgid "Landpoint"
-#~ msgstr "Point de poser"
-
-#~ msgid "Auto zoom"
-#~ msgstr "Zoom auto"
-
-#~ msgid ""
-#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
-#~ "a reasonable screen distance."
-#~ msgstr ""
-#~ "Zoom automatique en approchant d'un point de virage afin de maintenir le "
-#~ "point à une distance appropriée sur l'écran."
-
-#~ msgid "Configuration Menu"
-#~ msgstr "Menu de Configuration"
-
-#~ msgid "Friends"
-#~ msgstr "Amis"
-
-#~ msgid "XCSoar"
-#~ msgstr "XCSoar"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -10195,6 +10150,18 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "Edit text"
 #~ msgstr "Saisie texte"
 
+#~ msgid "Wind At Altitude"
+#~ msgstr "Vent en Altitude"
+
+#~ msgid "Remove From Task"
+#~ msgstr "Retirer du circuit"
+
+#~ msgid "Append To Task"
+#~ msgstr "Ajouter Au Circuit"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Remplacer dans le circuit"
+
 #~ msgid "H GPS"
 #~ msgstr "H GPS"
 
@@ -10238,6 +10205,9 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "Do you want to load plane profile \"%s\"?"
 #~ msgstr "Voulez vous charger le profil \"%s\" du planeur ?"
 
+#~ msgid "Do you really want to delete plane profile \"%s\"?"
+#~ msgstr "Voulez-vous vraiment effacer le profil \"%s\" du planeur ?"
+
 #~ msgid "Full width"
 #~ msgstr "Toute la largeur"
 
@@ -10256,6 +10226,9 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "OLC"
 #~ msgstr "OLC"
 
+#~ msgid "Plane profile \"%s\" activated."
+#~ msgstr "Profil du planeur \"%s\" activé."
+
 #~ msgid "Loading of plane profile \"%s\" failed!"
 #~ msgstr "Échec du chargement du profil du planeur \"%s\"!"
 
@@ -10264,6 +10237,9 @@ msgstr "Enregistré dans l'EEPROM"
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "Modes InfoBoxes"
+
+#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
+#~ msgstr "Le profil du planeur \"%s\" existe déjà. Voulez-vous l'écraser ?"
 
 #~ msgid ""
 #~ "Waypoint\n"
@@ -10412,8 +10388,14 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "Lon."
 #~ msgstr "Long."
 
+#~ msgid "Pan To Waypoint"
+#~ msgstr "Panor. au WP"
+
 #~ msgid "Dump time"
 #~ msgstr "Durée de vidange"
+
+#~ msgid "Ignore checksum"
+#~ msgstr "Ignore vérif."
 
 #~ msgid "Optional specification of the wing area."
 #~ msgstr "Précision optionnelle de la surface alaire."
@@ -10447,6 +10429,13 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgstr "Contenu des informations affichées sur les différentes pages."
 
 #~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway."
+#~ msgstr ""
+#~ "Si l'équippement GPS fournit des trames NMEA dont le test d'intégrité "
+#~ "échoue, ce réglage permet de forcer leur utilisation."
+
+#~ msgid ""
 #~ "The terrain can be shaded among slopes to indicate either wind direction, "
 #~ "sun position or a fixed shading from north-east."
 #~ msgstr ""
@@ -10473,6 +10462,9 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "InfoBox values, small"
 #~ msgstr "Valeurs en InfoBox, petites"
 
+#~ msgid "XCSoar"
+#~ msgstr "XCSoar"
+
 #~ msgid "InfoBox values, normal"
 #~ msgstr "Valeurs InfoBox, normal"
 
@@ -10482,8 +10474,14 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "Set Code"
 #~ msgstr "Définir code"
 
+#~ msgid "Configuration Menu"
+#~ msgstr "Menu de Configuration"
+
 #~ msgid "Dry mass"
 #~ msgstr "Masse  à vide"
+
+#~ msgid "Friends"
+#~ msgstr "Amis"
 
 #~ msgid "Set new teammate:"
 #~ msgstr "Définir nouvel équipier"
@@ -10602,6 +10600,9 @@ msgstr "Enregistré dans l'EEPROM"
 #~ msgid "4 Right (Landscape)"
 #~ msgstr "4 Droite (portrait)"
 
+#~ msgid "Insert In Task"
+#~ msgstr "Insérer dans le circuit"
+
 #~ msgid "This sets the task point for review."
 #~ msgstr "Définit le point de virage pour vérification."
 
@@ -10613,6 +10614,25 @@ msgstr "Enregistré dans l'EEPROM"
 
 #~ msgid "Scaled centered"
 #~ msgstr "A l'échelle centré"
+
+#~ msgid "Set As New Home"
+#~ msgstr "Nouvelle Base"
+
+#~ msgid "Do you want to activate plane profile \"%s\"?"
+#~ msgstr "Voulez-vous activer le profil de  planeur \"%s\" ?"
+
+#~ msgid "Landpoint"
+#~ msgstr "Point de poser"
+
+#~ msgid "Auto zoom"
+#~ msgstr "Zoom auto"
+
+#~ msgid ""
+#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
+#~ "a reasonable screen distance."
+#~ msgstr ""
+#~ "Zoom automatique en approchant d'un point de virage afin de maintenir le "
+#~ "point à une distance appropriée sur l'écran."
 
 #~ msgid " "
 #~ msgstr " "
