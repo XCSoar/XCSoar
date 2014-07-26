@@ -59,6 +59,26 @@ PyObject* Python::WriteLonLat(const GeoPoint &location) {
     "latitude", location.latitude.Degrees());
 }
 
+GeoPoint Python::ReadLonLat(PyObject *py_location) {
+  if (!PyDict_Check(py_location)) {
+    PyErr_SetString(PyExc_TypeError, "Location is not a dictionary.");
+    return GeoPoint::Invalid();
+  }
+
+  PyObject *py_latitude = PyDict_GetItemString(py_location, "latitude"),
+           *py_longitude = PyDict_GetItemString(py_location, "longitude");
+
+  if (!PyNumber_Check(py_latitude) || !PyNumber_Check(py_longitude)) {
+    PyErr_SetString(PyExc_TypeError, "Failed to parse location.");
+    return GeoPoint::Invalid();
+  }
+
+  GeoPoint location(Angle::Degrees(PyFloat_AsDouble(py_longitude)),
+                    Angle::Degrees(PyFloat_AsDouble(py_latitude)));
+
+  return location;
+}
+
 PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
                              const GeoPoint &location) {
   PyObject *py_event = PyDict_New();
@@ -321,16 +341,10 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   fix.date = PyToBrokenDateTime(py_datetime);
   fix.time = PyToBrokenDateTime(py_datetime);
 
-  PyObject *py_latitude = PyDict_GetItemString(py_location, "latitude"),
-           *py_longitude = PyDict_GetItemString(py_location, "longitude");
+  fix.location = ReadLonLat(py_location);
 
-  if (!PyNumber_Check(py_latitude) || !PyNumber_Check(py_longitude)) {
-    PyErr_SetString(PyExc_TypeError, "Failed to parse location.");
+  if (!fix.location.IsValid())
     return false;
-  }
-
-  fix.location.latitude = Angle::Degrees(PyFloat_AsDouble(py_latitude));
-  fix.location.longitude = Angle::Degrees(PyFloat_AsDouble(py_longitude));
 
   if (!PyNumber_Check(py_gps_alt) && !PyNumber_Check(py_pressure_alt)) {
     PyErr_SetString(PyExc_ValueError, "Need at least gps or pressure altitude");
