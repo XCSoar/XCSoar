@@ -191,8 +191,15 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
   Py_RETURN_NONE;
 }
 
+PyObject* xcsoar_Airspaces_optimise(Pyxcsoar_Airspaces *self) {
+  self->airspace_database->Optimise();
+
+  Py_RETURN_NONE;
+}
+
 PyMethodDef xcsoar_Airspaces_methods[] = {
   {"addPolygon", (PyCFunction)xcsoar_Airspaces_addPolygon, METH_VARARGS, "Add a airspace polygon."},
+  {"optimise", (PyCFunction)xcsoar_Airspaces_optimise, METH_NOARGS, "Optimise airspace database."},
   {NULL, NULL, 0, NULL}
 };
 
