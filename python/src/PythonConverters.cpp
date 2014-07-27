@@ -392,3 +392,17 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
 
   return true;
 }
+
+bool Python::PyStringToString(PyObject *py_string, tstring &string) {
+  if (PyUnicode_Check(py_string)) {
+    PyObject *py_string_utf8 = PyUnicode_AsUTF8String(py_string);
+    string.assign(PyString_AsString(py_string_utf8));
+    Py_DECREF(py_string_utf8);
+    return true;
+  } else if (PyString_Check(py_string)) {
+    string.assign(PyString_AsString(py_string));
+    return true;
+  }
+
+  return false;
+}
