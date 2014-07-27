@@ -24,6 +24,7 @@
 #include <structmember.h> /* required for PyMemberDef */
 
 #include "Airspaces.hpp"
+#include "Flight.hpp"
 
 #include "PythonConverters.hpp"
 
@@ -32,10 +33,13 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Engine/Airspace/AirspaceAltitude.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
+#include "NMEA/Aircraft.hpp"
 #include "Util/tstring.hpp"
 #include "Util/Macros.hpp"
 
 #include <vector>
+#include <algorithm>
 
 static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "CLASSA", CLASSA },
@@ -197,9 +201,83 @@ PyObject* xcsoar_Airspaces_optimise(Pyxcsoar_Airspaces *self) {
   Py_RETURN_NONE;
 }
 
+PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *args) {
+  PyObject *py_flight = nullptr;
+
+  if (!PyArg_ParseTuple(args, "O", &py_flight)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse argument.");
+    return nullptr;
+  }
+
+  DebugReplay *replay = ((Pyxcsoar_Flight*)py_flight)->flight->Replay();
+
+  if (replay == nullptr) {
+    PyErr_SetString(PyExc_IOError, "Can't start replay - file not found.");
+    return nullptr;
+  }
+
+  PyObject *py_result = PyDict_New();
+  Airspaces::AirspaceVector last_airspaces;
+
+  while (replay->Next()) {
+    const MoreData &basic = replay->Basic();
+
+    if (!basic.time_available || !basic.location_available ||
+        !basic.NavAltitudeAvailable())
+      continue;
+
+    Airspaces::AirspaceVector airspaces = self->airspace_database->FindInside(
+      ToAircraftState(basic, replay->Calculated())
+    );
+
+    for (auto it = airspaces.begin(); it != airspaces.end(); it++) {
+      PyObject *py_name = PyString_FromString((*it).GetAirspace().GetName());
+      PyObject *py_airspace = nullptr,
+               *py_period = nullptr;
+
+      if (PyDict_Contains(py_result, py_name) == 0) {
+        // this is the first fix inside this airspace
+        py_airspace = PyList_New(0);
+        PyDict_SetItem(py_result, py_name, py_airspace);
+
+        py_period = PyList_New(0);
+        PyList_Append(py_airspace, py_period);
+        Py_DECREF(py_period);
+
+      } else {
+        // this airspace was hit some time before...
+        py_airspace = PyDict_GetItem(py_result, py_name);
+
+        // check if the last fix was already inside this airspace
+        auto in_last = std::find(last_airspaces.begin(), last_airspaces.end(), *it);
+
+        if (in_last == last_airspaces.end()) {
+          // create a new period
+          py_period = PyList_New(0);
+          PyList_Append(py_airspace, py_period);
+          Py_DECREF(py_period);
+        } else {
+          py_period = PyList_GET_ITEM(py_airspace, PyList_GET_SIZE(py_airspace) - 1);
+        }
+      }
+
+      PyList_Append(py_period, Py_BuildValue("{s:N,s:N}",
+        "time", Python::BrokenDateTimeToPy(basic.date_time_utc),
+        "location", Python::WriteLonLat(basic.location)));
+    }
+
+    last_airspaces.swap(airspaces);
+  }
+
+  delete replay;
+
+  return py_result;
+}
+
 PyMethodDef xcsoar_Airspaces_methods[] = {
   {"addPolygon", (PyCFunction)xcsoar_Airspaces_addPolygon, METH_VARARGS, "Add a airspace polygon."},
   {"optimise", (PyCFunction)xcsoar_Airspaces_optimise, METH_NOARGS, "Optimise airspace database."},
+  {"findIntrusions", (PyCFunction)xcsoar_Airspaces_findIntrusions, METH_VARARGS, "Check flight for airspace intrusions."},
   {NULL, NULL, 0, NULL}
 };
 

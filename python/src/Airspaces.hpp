@@ -44,6 +44,7 @@ void xcsoar_Airspaces_dealloc(Pyxcsoar_Airspaces *self);
 
 PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args);
 PyObject* xcsoar_Airspaces_optimise(Pyxcsoar_Airspaces *self);
+PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *args);
 
 bool Airspaces_init(PyObject* m);
 
