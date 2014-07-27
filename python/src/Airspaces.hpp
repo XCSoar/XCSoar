@@ -20,36 +20,21 @@
 }
 */
 
+#ifndef PYTHON_AIRSPACES_HPP
+#define PYTHON_AIRSPACES_HPP
+
 #include <Python.h>
-#include <structmember.h> /* required for PyMemberDef */
-#include <datetime.h>
 
-#include "PythonGlue.hpp"
-#include "Flight.hpp"
-#include "Airspaces.hpp"
-#include "Util.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 
-
-PyMethodDef xcsoar_methods[] = {
-  {"encode", (PyCFunction)xcsoar_encode, METH_VARARGS | METH_KEYWORDS, "Encode a list of numbers."},
-  {NULL, NULL, 0, NULL}
+/* xcsoar.Airspaces methods */
+struct Pyxcsoar_Airspaces {
+  PyObject_HEAD Airspaces *airspace_database;
 };
 
-PyMODINIT_FUNC
-__attribute__ ((visibility("default")))
-initxcsoar() {
-  PyObject* m;
+PyObject* xcsoar_Airspaces_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
+void xcsoar_Airspaces_dealloc(Pyxcsoar_Airspaces *self);
 
-  m = Py_InitModule3("xcsoar", xcsoar_methods, "XCSoar Tools");
+bool Airspaces_init(PyObject* m);
 
-  if (m == NULL)
-    return;
-
-  PyDateTime_IMPORT;
-
-  if (!Flight_init(m))
-    return;
-
-  if (!Airspaces_init(m))
-    return;
-}
+#endif /* PYTHON_AIRSPACES_HPP */

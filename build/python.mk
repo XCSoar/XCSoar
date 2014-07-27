@@ -88,6 +88,7 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp \
 	$(PYTHON_SRC)/Flight.cpp \
+	$(PYTHON_SRC)/Airspaces.cpp \
 	$(PYTHON_SRC)/Util.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(SRC)/Logger/Settings.cpp \
@@ -100,7 +101,21 @@ PYTHON_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/Ordered/StartConstraints.cpp \
 	$(ENGINE_SRC_DIR)/Task/Ordered/FinishConstraints.cpp \
 	$(SRC)/Computer/Settings.cpp \
-	$(SRC)/Computer/AutoQNH.cpp
+	$(SRC)/Computer/AutoQNH.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AbstractAirspace.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceAltitude.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/Airspace.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceIntersectionVisitor.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceIntersectSort.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceNearestSort.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspacePolygon.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceSoonestSort.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceSorter.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceVisitor.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/AirspaceAircraftPerformance.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicate.cpp \
+	$(SRC)/NMEA/Aircraft.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = -lpython2.7
 PYTHON_DEPENDS = CONTEST WAYPOINT UTIL ZZIP GEO MATH TIME
