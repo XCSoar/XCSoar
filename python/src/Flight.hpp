@@ -20,32 +20,31 @@
 }
 */
 
+#ifndef PYTHON_FLIGHT_HPP
+#define PYTHON_FLIGHT_HPP
+
 #include <Python.h>
 #include <structmember.h> /* required for PyMemberDef */
-#include <datetime.h>
 
 #include "PythonGlue.hpp"
-#include "Flight.hpp"
-#include "Util.hpp"
+#include "Flight/Flight.hpp"
 
-
-PyMethodDef xcsoar_methods[] = {
-  {"encode", (PyCFunction)xcsoar_encode, METH_VARARGS | METH_KEYWORDS, "Encode a list of numbers."},
-  {NULL, NULL, 0, NULL}
+/* xcsoar.Flight methods */
+struct Pyxcsoar_Flight {
+  PyObject_HEAD Flight *flight;
+  char *filename;
 };
 
-PyMODINIT_FUNC
-__attribute__ ((visibility("default")))
-initxcsoar() {
-  PyObject* m;
+PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
+void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self);
 
-  m = Py_InitModule3("xcsoar", xcsoar_methods, "XCSoar Tools");
+PyObject* xcsoar_Flight_setQNH(Pyxcsoar_Flight *self, PyObject *args);
+PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args);
+PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self);
+PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args);
 
-  if (m == NULL)
-    return;
+bool Flight_init(PyObject* m);
 
-  PyDateTime_IMPORT;
-
-  if (!Flight_init(m))
-    return;
-}
+#endif /* PYTHON_FLIGHT_HPP */

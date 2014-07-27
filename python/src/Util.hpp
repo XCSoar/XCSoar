@@ -20,32 +20,12 @@
 }
 */
 
+#ifndef PYTHON_UTIL_HPP
+#define PYTHON_UTIL_HPP
+
 #include <Python.h>
-#include <structmember.h> /* required for PyMemberDef */
-#include <datetime.h>
 
-#include "PythonGlue.hpp"
-#include "Flight.hpp"
-#include "Util.hpp"
+/* xcsoar methods */
+PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs);
 
-
-PyMethodDef xcsoar_methods[] = {
-  {"encode", (PyCFunction)xcsoar_encode, METH_VARARGS | METH_KEYWORDS, "Encode a list of numbers."},
-  {NULL, NULL, 0, NULL}
-};
-
-PyMODINIT_FUNC
-__attribute__ ((visibility("default")))
-initxcsoar() {
-  PyObject* m;
-
-  m = Py_InitModule3("xcsoar", xcsoar_methods, "XCSoar Tools");
-
-  if (m == NULL)
-    return;
-
-  PyDateTime_IMPORT;
-
-  if (!Flight_init(m))
-    return;
-}
+#endif /* PYTHON_UTIL_HPP */

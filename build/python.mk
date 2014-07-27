@@ -87,6 +87,8 @@ PYTHON_SOURCES = \
         $(PYTHON_SRC)/Tools/GoogleEncode.cpp \
 	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp \
+	$(PYTHON_SRC)/Flight.cpp \
+	$(PYTHON_SRC)/Util.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Audio/VegaVoiceSettings.cpp \

@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef PYTHON_FLIGHT_HPP
-#define PYTHON_FLIGHT_HPP
+#ifndef PYTHON_FLIGHT_FLIGHT_HPP
+#define PYTHON_FLIGHT_FLIGHT_HPP
 
 #include "IGCFixEnhanced.hpp"
 #include "DebugReplayIGC.hpp"
@@ -163,4 +163,4 @@ private:
   void ReadFlight();
 };
 
-#endif /* PYTHON_FLIGHT_HPP */
+#endif /* PYTHON_FLIGHT_FLIGHT_HPP */
