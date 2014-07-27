@@ -34,17 +34,17 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
   double floor_to = 1;
   bool delta = true;
 
-  static char *kwlist[] = {"list", "delta", "floor", "method", NULL};
+  static char *kwlist[] = {"list", "delta", "floor", "method", nullptr};
 
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|idO", kwlist,
                                    &py_list, &delta, &floor_to, &py_method)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    return NULL;
+    return nullptr;
   }
 
   if (!PySequence_Check(py_list)) {
     PyErr_SetString(PyExc_TypeError, "Expected a list.");
-    return NULL;
+    return nullptr;
   }
 
   Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_list);
@@ -72,7 +72,7 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
     method = DOUBLE;
   else {
     PyErr_SetString(PyExc_TypeError, "Can't parse method.");
-    return NULL;
+    return nullptr;
   }
 
   GoogleEncode encoded(dimension, delta, floor_to);
@@ -86,19 +86,19 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
         if (method == UNSIGNED) {
           if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
             PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-            return NULL;
+            return nullptr;
           }
           encoded.addUnsignedNumber(PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, j)));
         } else if (method == SIGNED) {
           if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
             PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-            return NULL;
+            return nullptr;
           }
           encoded.addSignedNumber(PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, j)));
         } else if (method == DOUBLE) {
           if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
             PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-            return NULL;
+            return nullptr;
           }
           encoded.addDouble(PyFloat_AsDouble(PySequence_Fast_GET_ITEM(py_item, j)));
         }
@@ -109,19 +109,19 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
       if (method == UNSIGNED) {
         if (!PyNumber_Check(py_item)) {
           PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-          return NULL;
+          return nullptr;
         }
         encoded.addUnsignedNumber(PyInt_AsLong(py_item));
       } else if (method == SIGNED) {
         if (!PyNumber_Check(py_item)) {
           PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-          return NULL;
+          return nullptr;
         }
         encoded.addSignedNumber(PyInt_AsLong(py_item));
       } else if (method == DOUBLE) {
         if (!PyNumber_Check(py_item)) {
           PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
-          return NULL;
+          return nullptr;
         }
         encoded.addDouble(PyFloat_AsDouble(py_item));
       }

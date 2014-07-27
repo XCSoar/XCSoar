@@ -278,11 +278,11 @@ PyMethodDef xcsoar_Airspaces_methods[] = {
   {"addPolygon", (PyCFunction)xcsoar_Airspaces_addPolygon, METH_VARARGS, "Add a airspace polygon."},
   {"optimise", (PyCFunction)xcsoar_Airspaces_optimise, METH_NOARGS, "Optimise airspace database."},
   {"findIntrusions", (PyCFunction)xcsoar_Airspaces_findIntrusions, METH_VARARGS, "Check flight for airspace intrusions."},
-  {NULL, NULL, 0, NULL}
+  {nullptr, nullptr, 0, nullptr}
 };
 
 PyMemberDef xcsoar_Airspaces_members[] = {
-  {NULL}  /* Sentinel */
+  {nullptr}  /* Sentinel */
 };
 
 PyTypeObject xcsoar_Airspaces_Type = {

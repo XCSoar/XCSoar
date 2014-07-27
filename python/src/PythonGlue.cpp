@@ -32,7 +32,7 @@
 
 PyMethodDef xcsoar_methods[] = {
   {"encode", (PyCFunction)xcsoar_encode, METH_VARARGS | METH_KEYWORDS, "Encode a list of numbers."},
-  {NULL, NULL, 0, NULL}
+  {nullptr, nullptr, 0, nullptr}
 };
 
 PyMODINIT_FUNC
@@ -42,7 +42,7 @@ initxcsoar() {
 
   m = Py_InitModule3("xcsoar", xcsoar_methods, "XCSoar Tools");
 
-  if (m == NULL)
+  if (m == nullptr)
     return;
 
   PyDateTime_IMPORT;

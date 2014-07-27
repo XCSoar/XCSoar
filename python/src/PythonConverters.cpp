@@ -138,12 +138,12 @@ PyObject* Python::WriteContest(const ContestResult &result,
                                const ContestTraceVector &trace) {
   PyObject *py_trace = PyList_New(0);
 
-  const ContestTracePoint *previous = NULL;
+  const ContestTracePoint *previous = nullptr;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
     PyObject *py_point = WritePoint(*i, previous);
 
     if (PyList_Append(py_trace, py_point))
-      return NULL;
+      return nullptr;
 
     Py_DECREF(py_point);
     previous = &*i;
@@ -314,18 +314,18 @@ PyObject* Python::IGCFixEnhancedToPyTuple(const IGCFixEnhanced &fix) {
 }
 
 bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
-  PyObject *py_datetime = NULL,
-           *py_location = NULL,
-           *py_gps_alt = NULL,
-           *py_pressure_alt = NULL,
-           *py_enl = NULL,
-           *py_trt = NULL,
-           *py_gsp = NULL,
-           *py_tas = NULL,
-           *py_ias = NULL,
-           *py_siu = NULL,
-           *py_elevation = NULL,
-           *py_level = NULL;
+  PyObject *py_datetime = nullptr,
+           *py_location = nullptr,
+           *py_gps_alt = nullptr,
+           *py_pressure_alt = nullptr,
+           *py_enl = nullptr,
+           *py_trt = nullptr,
+           *py_gsp = nullptr,
+           *py_tas = nullptr,
+           *py_ias = nullptr,
+           *py_siu = nullptr,
+           *py_elevation = nullptr,
+           *py_level = nullptr;
 
   fix.Clear();
 

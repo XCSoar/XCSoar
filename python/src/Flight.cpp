@@ -39,8 +39,8 @@
 
 PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs) {
   /* constructor */
-  static char *kwlist[] = {"file", "keep", NULL};
-  PyObject *py_input_data = NULL;
+  static char *kwlist[] = {"file", "keep", nullptr};
+  PyObject *py_input_data = nullptr;
   bool keep = false;
 
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|b", kwlist,
@@ -112,21 +112,21 @@ PyObject* xcsoar_Flight_setQNH(Pyxcsoar_Flight *self, PyObject *args) {
 }
 
 PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
-  PyObject *py_begin = NULL,
-           *py_end = NULL;
+  PyObject *py_begin = nullptr,
+           *py_end = nullptr;
 
   if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    return NULL;
+    return nullptr;
   }
 
   int64_t begin = 0,
           end = std::numeric_limits<int64_t>::max();
 
-  if (py_begin != NULL && PyDateTime_Check(py_begin))
+  if (py_begin != nullptr && PyDateTime_Check(py_begin))
     begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
 
-  if (py_end != NULL && PyDateTime_Check(py_end))
+  if (py_end != nullptr && PyDateTime_Check(py_end))
     end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
 
   // prepare output
@@ -163,7 +163,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
 
     if (PyList_Append(py_fixes, py_fix) != 0) {
       delete replay;
-      return NULL;
+      return nullptr;
     }
 
     Py_DECREF(py_fix);
@@ -193,7 +193,7 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
         "powered", power_state.state == PowerState::ON ? Py_True : Py_False);
 
       if (PyList_Append(py_power_states, py_power_state) != 0)
-        return NULL;
+        return nullptr;
 
       Py_DECREF(py_power_state);
     }
@@ -210,7 +210,7 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
     }
 
     if (PyList_Append(py_times, py_single_flight) != 0)
-      return NULL;
+      return nullptr;
 
     Py_DECREF(py_single_flight);
   }
@@ -219,13 +219,13 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
 }
 
 PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
-  PyObject *py_begin = NULL,
-           *py_end = NULL,
-           *py_force_endpoints = NULL;
+  PyObject *py_begin = nullptr,
+           *py_end = nullptr,
+           *py_force_endpoints = nullptr;
 
   static char *kwlist[] = {"begin", "end", "num_levels", "zoom_factor",
                            "max_delta_time", "threshold", "max_points",
-                           "force_endpoints", NULL};
+                           "force_endpoints", nullptr};
 
   /* default values */
   unsigned num_levels = 4,
@@ -239,20 +239,20 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
                                    &py_begin, &py_end, &num_levels, &zoom_factor,
                                    &max_delta_time, &threshold, &max_points, &py_force_endpoints)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    return NULL;
+    return nullptr;
   }
 
-  if (py_force_endpoints != NULL && !PyObject_IsTrue(py_force_endpoints))
+  if (py_force_endpoints != nullptr && !PyObject_IsTrue(py_force_endpoints))
     force_endpoints = false;
 
   BrokenDateTime begin, end;
 
-  if (py_begin != NULL && PyDateTime_Check(py_begin))
+  if (py_begin != nullptr && PyDateTime_Check(py_begin))
     begin = Python::PyToBrokenDateTime(py_begin);
   else
     begin = BrokenDateTime::FromUnixTimeUTC(0);
 
-  if (py_end != NULL && PyDateTime_Check(py_end))
+  if (py_end != nullptr && PyDateTime_Check(py_end))
     end = Python::PyToBrokenDateTime(py_end);
   else
     /* numeric_limits<int64_t>::max() doesn't work here, because
@@ -262,7 +262,7 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
 
   if (end - begin < 0) {
     PyErr_SetString(PyExc_ValueError, "Start time later then end time.");
-    return NULL;
+    return nullptr;
   }
 
   Py_BEGIN_ALLOW_THREADS
@@ -276,7 +276,7 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
 PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
   static char *kwlist[] = {"takeoff", "scoring_start", "scoring_end", "landing",
                            "full", "triangle", "sprint",
-                           "max_iterations", "max_tree_size", NULL};
+                           "max_iterations", "max_tree_size", nullptr};
   PyObject *py_takeoff, *py_scoring_start, *py_scoring_end, *py_landing;
   unsigned full = 512,
            triangle = 1024,
@@ -289,12 +289,12 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
                                    &full, &triangle, &sprint,
                                    &max_iterations, &max_tree_size)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    return NULL;
+    return nullptr;
   }
 
   if (!PyDateTime_Check(py_takeoff) || !PyDateTime_Check(py_landing)) {
     PyErr_SetString(PyExc_TypeError, "Expected a DateTime object for takeoff and landing.");
-    return NULL;
+    return nullptr;
   }
 
   BrokenDateTime takeoff = Python::PyToBrokenDateTime(py_takeoff);
@@ -350,7 +350,7 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   for (Phase phase : phase_list) {
     PyObject *py_phase = Python::WritePhase(phase);
     if (PyList_Append(py_phases, py_phase) != 0)
-      return NULL;
+      return nullptr;
 
     Py_DECREF(py_phase);
   }
@@ -361,7 +361,7 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   for (WindListItem wind_item: wind_list) {
     PyObject *py_wind = Python::WriteWindItem(wind_item);
     if (PyList_Append(py_wind_list, py_wind) != 0)
-      return NULL;
+      return nullptr;
 
     Py_DECREF(py_wind);
   }
@@ -387,21 +387,21 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
 }
 
 PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
-  PyObject *py_begin = NULL,
-           *py_end = NULL;
+  PyObject *py_begin = nullptr,
+           *py_end = nullptr;
 
   if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
-    return NULL;
+    return nullptr;
   }
 
   int64_t begin = 0,
           end = std::numeric_limits<int64_t>::max();
 
-  if (py_begin != NULL && PyDateTime_Check(py_begin))
+  if (py_begin != nullptr && PyDateTime_Check(py_begin))
     begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
 
-  if (py_end != NULL && PyDateTime_Check(py_end))
+  if (py_end != nullptr && PyDateTime_Check(py_end))
     end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
 
   GoogleEncode encoded_locations(2, true, 1e5),
@@ -467,11 +467,11 @@ PyMethodDef xcsoar_Flight_methods[] = {
   {"reduce", (PyCFunction)xcsoar_Flight_reduce, METH_VARARGS | METH_KEYWORDS, "Reduce flight."},
   {"analyse", (PyCFunction)xcsoar_Flight_analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
   {"encode", (PyCFunction)xcsoar_Flight_encode, METH_VARARGS, "Return encoded flight."},
-  {NULL, NULL, 0, NULL}
+  {nullptr, nullptr, 0, nullptr}
 };
 
 PyMemberDef xcsoar_Flight_members[] = {
-  {NULL}  /* Sentinel */
+  {nullptr}  /* Sentinel */
 };
 
 PyTypeObject xcsoar_Flight_Type = {
