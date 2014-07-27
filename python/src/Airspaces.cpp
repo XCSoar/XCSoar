@@ -25,7 +25,37 @@
 
 #include "Airspaces.hpp"
 
+#include "PythonConverters.hpp"
+
 #include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Airspace/AirspacePolygon.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
+#include "Engine/Airspace/AirspaceClass.hpp"
+#include "Engine/Airspace/AirspaceAltitude.hpp"
+#include "Util/tstring.hpp"
+#include "Util/Macros.hpp"
+
+#include <vector>
+
+static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
+  { "CLASSA", CLASSA },
+  { "CLASSB", CLASSB },
+  { "CLASSC", CLASSC },
+  { "CLASSD", CLASSD },
+  { "CLASSE", CLASSE },
+  { "CLASSF", CLASSF },
+  { "CLASSG", CLASSG },
+  { "CTR", CTR },
+  { "TMZ", TMZ },
+  { "RESTRICT", RESTRICT },
+  { "PROHIBITED", PROHIBITED },
+  { "DANGER", DANGER },
+  { "NOGLIDER", NOGLIDER },
+  { "WAVE", WAVE },
+  { "MATZ", MATZ },
+  { "AATASK", AATASK },
+  { "OTHER", OTHER },
+};
 
 PyObject* xcsoar_Airspaces_new(PyTypeObject *type, PyObject *args, PyObject *kwargs) {
   /* constructor */
@@ -44,7 +74,125 @@ void xcsoar_Airspaces_dealloc(Pyxcsoar_Airspaces *self) {
   self->ob_type->tp_free((Pyxcsoar_Airspaces*)self);
 }
 
+PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) {
+  PyObject *py_points = nullptr,
+           *py_name = nullptr,
+           *py_as_class = nullptr,
+           *py_base_ref = nullptr,
+           *py_top_ref = nullptr;
+  double base_alt, top_alt;
+
+  if (!PyArg_ParseTuple(args, "OOOdOdO", &py_points, &py_name, &py_as_class,
+                                         &base_alt, &py_base_ref,
+                                         &top_alt, &py_top_ref)) {
+    PyErr_SetString(PyExc_AttributeError, "Error reading attributes.");
+    return nullptr;
+  }
+
+  /* Parse points */
+  std::vector<GeoPoint> points;
+
+  if (!PySequence_Check(py_points)) {
+    PyErr_SetString(PyExc_ValueError, "First argument is no sequence");
+    return nullptr;
+  }
+
+  Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_points);
+
+  for (Py_ssize_t i = 0; i < num_items; ++i) {
+    PyObject *py_location = PySequence_Fast_GET_ITEM(py_points, i);
+
+    GeoPoint location = Python::ReadLonLat(py_location);
+
+    if (!location.IsValid()) {
+      if (PyErr_Occurred() == nullptr)
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error while parsing location");
+
+      return nullptr;
+    }
+
+    points.push_back(location);
+  }
+
+  if (points.size() < 3) {
+    PyErr_SetString(PyExc_ValueError, "Polygon has not enough points");
+    return nullptr;
+  }
+
+  /* Parse airspace name */
+  tstring name;
+
+  if (!Python::PyStringToString(py_name, name)) {
+    PyErr_SetString(PyExc_ValueError, "Can't parse airspace name.");
+    return nullptr;
+  }
+
+  /* Parse airspace class */
+  tstring as_class;
+  AirspaceClass type = AirspaceClass::OTHER;
+
+  if (!Python::PyStringToString(py_as_class, as_class)) {
+    PyErr_SetString(PyExc_ValueError, "Can't parse airspace class.");
+    return nullptr;
+  }
+
+  for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++) {
+    if (as_class.compare(airspace_class_strings[i].string) == 0)
+      type = airspace_class_strings[i].type;
+  }
+
+  /* Parse airspace base and top */
+  tstring base_ref, top_ref;
+  AirspaceAltitude base, top;
+
+  if (!Python::PyStringToString(py_base_ref, base_ref)) {
+    PyErr_SetString(PyExc_ValueError, "Can't parse airspace base reference.");
+    return nullptr;
+  }
+
+  if (!Python::PyStringToString(py_top_ref, top_ref)) {
+    PyErr_SetString(PyExc_ValueError, "Can't parse airspace top reference.");
+    return nullptr;
+  }
+
+  if (base_ref.compare("MSL") == 0) {
+    base.reference = AltitudeReference::MSL;
+    base.altitude = base_alt;
+  } else if (base_ref.compare("FL") == 0) {
+    base.reference = AltitudeReference::STD;
+    base.flight_level = base_alt;
+  } else if (base_ref.compare("AGL") == 0) {
+    base.reference = AltitudeReference::AGL;
+    base.altitude_above_terrain = base_alt;
+  } else {
+    PyErr_SetString(PyExc_ValueError, "Can't parse airspace base.");
+    return nullptr;
+  }
+
+  if (top_ref.compare("MSL") == 0) {
+    top.reference = AltitudeReference::MSL;
+    top.altitude = top_alt;
+  } else if (top_ref.compare("FL") == 0) {
+    top.reference = AltitudeReference::STD;
+    top.flight_level = top_alt;
+  } else if (top_ref.compare("AGL") == 0) {
+    top.reference = AltitudeReference::AGL;
+    top.altitude_above_terrain = top_alt;
+  } else {
+    PyErr_SetString(PyExc_ValueError, "Can't parse airspace top.");
+    return nullptr;
+  }
+
+  /* Create airspace and save it into the database */
+  AbstractAirspace *as = new AirspacePolygon(points);
+  as->SetProperties(std::move(name), type, base, top);
+  self->airspace_database->Add(as);
+
+  Py_RETURN_NONE;
+}
+
 PyMethodDef xcsoar_Airspaces_methods[] = {
+  {"addPolygon", (PyCFunction)xcsoar_Airspaces_addPolygon, METH_VARARGS, "Add a airspace polygon."},
   {NULL, NULL, 0, NULL}
 };
 
