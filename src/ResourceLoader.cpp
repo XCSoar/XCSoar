@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef WIN32
+#ifdef USE_WIN32_RESOURCES
 
 #include <windows.h>
 
@@ -51,7 +51,7 @@ ResourceLoader::Init(HINSTANCE hInstance)
 ResourceLoader::Data
 ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 {
-#ifdef WIN32
+#ifdef USE_WIN32_RESOURCES
   assert(ResourceLoaderInstance != NULL);
 
   HRSRC resource = ::FindResource(ResourceLoaderInstance, name, type);
@@ -86,7 +86,7 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 ResourceLoader::Data
 ResourceLoader::Load(ResourceId id)
 {
-#ifdef WIN32
+#ifdef USE_WIN32_RESOURCES
   return Load(MAKEINTRESOURCE((unsigned)id), RT_BITMAP);
 #else
   return id;
@@ -95,7 +95,7 @@ ResourceLoader::Load(ResourceId id)
 
 #endif
 
-#ifdef WIN32
+#ifdef USE_WIN32_RESOURCES
 HBITMAP
 ResourceLoader::LoadBitmap2(ResourceId id)
 {

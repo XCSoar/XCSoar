@@ -107,7 +107,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
-#ifdef WIN32
+#ifdef USE_WIN32_RESOURCES
   ResourceLoader::Init(hInstance);
 #endif
 

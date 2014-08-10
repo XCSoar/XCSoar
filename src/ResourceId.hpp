@@ -31,7 +31,7 @@ Copyright_License {
  * ResourceLoader::Load() or other resource-loading functions.
  */
 class ResourceId {
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
   unsigned id;
 #else
   const void *begin, *size;
@@ -40,7 +40,7 @@ class ResourceId {
 public:
   ResourceId() = default;
 
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
   constexpr explicit ResourceId(unsigned _id)
     :id(_id) {}
 #else
@@ -49,7 +49,7 @@ public:
 #endif
 
   static constexpr ResourceId Null() {
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return ResourceId(0);
 #else
     return ResourceId(nullptr, nullptr);
@@ -57,14 +57,14 @@ public:
   }
 
   constexpr bool IsDefined() const {
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id != 0;
 #else
     return begin != nullptr;
 #endif
   }
 
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
   constexpr explicit operator unsigned() const {
     return id;
   }
@@ -76,7 +76,7 @@ public:
 #endif
 
   constexpr bool operator==(ResourceId other) const {
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id == other.id;
 #else
     return begin == other.begin;
@@ -84,7 +84,7 @@ public:
   }
 
   constexpr bool operator!=(ResourceId other) const {
-#if defined(WIN32) || defined(ANDROID)
+#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id != other.id;
 #else
     return begin != other.begin;

@@ -59,7 +59,7 @@ $(SM_OBJ): $(OUT)/include/Status_defaults.cpp
 
 # UNIX resources
 
-ifeq ($(HAVE_WIN32),n)
+ifeq ($(USE_WIN32_RESOURCES),n)
 
 $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  CPP     $@"
