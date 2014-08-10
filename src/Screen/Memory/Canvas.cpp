@@ -36,6 +36,10 @@ Copyright_License {
 #include "Util/UTF8.hpp"
 #endif
 
+#ifdef UNICODE
+#include "Util/ConvertString.hpp"
+#endif
+
 #include <algorithm>
 #include <assert.h>
 #include <string.h>
@@ -216,7 +220,10 @@ const PixelSize
 Canvas::CalcTextSize(const TCHAR *text) const
 {
   assert(text != nullptr);
-#ifndef UNICODE
+#ifdef UNICODE
+  const WideToUTF8Converter text2(text);
+#else
+  const char* text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -226,11 +233,11 @@ Canvas::CalcTextSize(const TCHAR *text) const
     return size;
 
   /* see if the TextCache can handle this request */
-  size = TextCache::LookupSize(*font, text);
+  size = TextCache::LookupSize(*font, text2);
   if (size.cy > 0)
     return size;
 
-  return TextCache::GetSize(*font, text);
+  return TextCache::GetSize(*font, text2);
 }
 
 static TextCache::Result
@@ -242,7 +249,11 @@ RenderText(const Font *font, const TCHAR *text)
   assert(font->IsDefined());
 
 #ifdef USE_FREETYPE
+#ifdef UNICODE
+  return TextCache::Get(*font, WideToUTF8Converter(text));
+#else
   return TextCache::Get(*font, text);
+#endif
 #endif
 }
 

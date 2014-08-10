@@ -62,9 +62,9 @@ struct JPEGErrorManager {
 };
 
 UncompressedImage
-LoadJPEGFile(const char *path)
+LoadJPEGFile(const TCHAR *path)
 {
-  FILE *file = fopen(path, "rb");
+  FILE *file = _tfopen(path, _T("rb"));
   if (file == nullptr)
     return UncompressedImage::Invalid();
 

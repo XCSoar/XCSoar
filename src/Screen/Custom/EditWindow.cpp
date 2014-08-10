@@ -95,7 +95,7 @@ EditWindow::OnCharacter(unsigned ch)
     // TODO: ignoring non-ASCII characters for now
     return false;
 
-  if (IsAlphaNumericASCII(ch) || ch == ' ') {
+  if (IsAlphaNumericASCII((TCHAR)ch) || ch == ' ') {
     value.push_back((TCHAR)ch);
     Invalidate();
     return true;

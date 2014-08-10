@@ -34,6 +34,10 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #endif
 
+#ifdef UNICODE
+#include "Util/ConvertString.hpp"
+#endif
+
 #include <assert.h>
 
 /**
@@ -206,7 +210,11 @@ TextCache::GetSize(const Font &font, const char *text)
   if (cached != nullptr)
     return *cached;
 
+#ifdef UNICODE
+  PixelSize size = font.TextSize(UTF8ToWideConverter(text));
+#else
   PixelSize size = font.TextSize(text);
+#endif
 
   key.Allocate();
   size_cache.Put(std::move(key), std::move(size));
@@ -269,7 +277,12 @@ TextCache::Get(const Font &font, const char *text)
   /* render the text into a OpenGL texture */
 
 #ifdef USE_FREETYPE
-  PixelSize size = font.TextSize(text);
+#if defined(USE_FREETYPE) && defined(UNICODE)
+  UTF8ToWideConverter text2(text);
+#else
+  const TCHAR* text2 = text;
+#endif
+  PixelSize size = font.TextSize(text2);
   size_t buffer_size = font.BufferSize(size);
   if (buffer_size == 0) {
 #ifdef ENABLE_OPENGL
@@ -288,7 +301,7 @@ TextCache::Get(const Font &font, const char *text)
 #endif
   }
 
-  font.Render(text, size, buffer);
+  font.Render(text2, size, buffer);
   RenderedText rt(size.cx, size.cy, buffer);
 #ifdef ENABLE_OPENGL
   delete[] buffer;

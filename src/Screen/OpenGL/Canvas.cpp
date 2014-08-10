@@ -47,6 +47,10 @@ Copyright_License {
 #include "Compatibility.hpp"
 #endif
 
+#ifdef UNICODE
+#include "Util/ConvertString.hpp"
+#endif
+
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
 #endif
@@ -550,7 +554,10 @@ const PixelSize
 Canvas::CalcTextSize(const TCHAR *text) const
 {
   assert(text != nullptr);
-#ifndef UNICODE
+#ifdef UNICODE
+  const WideToUTF8Converter text2(text);
+#else
+  const char* text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -560,11 +567,11 @@ Canvas::CalcTextSize(const TCHAR *text) const
     return size;
 
   /* see if the TextCache can handle this request */
-  size = TextCache::LookupSize(*font, text);
+  size = TextCache::LookupSize(*font, text2);
   if (size.cy > 0)
     return size;
 
-  return TextCache::GetSize(*font, text);
+  return TextCache::GetSize(*font, text2);
 }
 
 /**
@@ -605,7 +612,12 @@ void
 Canvas::DrawText(int x, int y, const TCHAR *text)
 {
   assert(text != nullptr);
+#ifdef UNICODE
+  const WideToUTF8Converter text2(text);
+#else
+  const char* text2 = text;
   assert(ValidateUTF8(text));
+#endif
 
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -614,7 +626,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  GLTexture *texture = TextCache::Get(*font, text);
+  GLTexture *texture = TextCache::Get(*font, text2);
   if (texture == nullptr)
     return;
 
@@ -639,7 +651,12 @@ void
 Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
 {
   assert(text != nullptr);
+#ifdef UNICODE
+  const WideToUTF8Converter text2(text);
+#else
+  const char* text2 = text;
   assert(ValidateUTF8(text));
+#endif
 
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -648,7 +665,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  GLTexture *texture = TextCache::Get(*font, text);
+  GLTexture *texture = TextCache::Get(*font, text2);
   if (texture == nullptr)
     return;
 
@@ -670,7 +687,12 @@ Canvas::DrawClippedText(int x, int y,
                         const TCHAR *text)
 {
   assert(text != nullptr);
+#ifdef UNICODE
+  const WideToUTF8Converter text2(text);
+#else
+  const char* text2 = text;
   assert(ValidateUTF8(text));
+#endif
 
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -679,7 +701,7 @@ Canvas::DrawClippedText(int x, int y,
   if (font == nullptr)
     return;
 
-  GLTexture *texture = TextCache::Get(*font, text);
+  GLTexture *texture = TextCache::Get(*font, text2);
   if (texture == nullptr)
     return;
 

@@ -29,6 +29,10 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
+#if defined(UNICODE) && SDL_MAJOR_VERSION >= 2
+#include "Util/ConvertString.hpp"
+#endif
+
 TopWindow::~TopWindow()
 {
   delete screen;
@@ -42,8 +46,14 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 
   delete screen;
   screen = new TopCanvas();
+
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
-  screen->Create(text, size, style.GetFullScreen(), style.GetResizable());
+#ifdef UNICODE
+  const WideToUTF8Converter text2(text);
+#else
+  const char* text2 = text;
+#endif
+  screen->Create(text2, size, style.GetFullScreen(), style.GetResizable());
 #else
   screen->Create(size, style.GetFullScreen(), style.GetResizable());
 #endif
