@@ -1,4 +1,13 @@
-ifeq ($(TARGET),UNIX)
+ifneq ($(ZLIB_PREFIX),)
+
+# a zlib prefix was explicitly specified
+
+ZLIB_LDADD =
+ZLIB_LDLIBS = -L$(ZLIB_PREFIX)/lib -lz
+
+ZLIB_CPPFLAGS = -isystem$(ZLIB_PREFIX)/include
+
+else ifeq ($(TARGET),UNIX)
 
 # use the native zlib on UNIX
 
