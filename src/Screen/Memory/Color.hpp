@@ -29,6 +29,18 @@ Copyright_License {
 
 #include <stdint.h>
 
+
+/* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
+ * defines. Undefine them to avoid name conflict. */
+#ifdef OPAQUE
+#undef OPAQUE
+#endif
+
+#ifdef TRANSPARENT
+#undef TRANSPARENT
+#endif
+
+
 /**
  * This class represents a color in the RGB color space.  This is used
  * for compile-time constant colors, or for colors loaded from the

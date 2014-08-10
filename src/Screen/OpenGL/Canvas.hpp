@@ -39,6 +39,18 @@ Copyright_License {
 
 #include <tchar.h>
 
+
+/* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
+ * defines. Undefine them to avoid name conflict. */
+#ifdef OPAQUE
+#undef OPAQUE
+#endif
+
+#ifdef TRANSPARENT
+#undef TRANSPARENT
+#endif
+
+
 class Angle;
 class Bitmap;
 class GLTexture;
