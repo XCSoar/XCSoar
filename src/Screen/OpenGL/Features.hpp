@@ -49,7 +49,7 @@ Copyright_License {
 #define HAVE_OES_MAPBUFFER
 #endif
 
-#ifdef HAVE_MALI
+#if defined(HAVE_MALI) || defined(WIN32)
 #define HAVE_DYNAMIC_MAPBUFFER
 #endif
 
