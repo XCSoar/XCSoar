@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.7.6 - not yet released
+* tracking
+  - updated SkyLines server IP
 * devices
   - LX: relax download timeout (#3199)
 * replay
