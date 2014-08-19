@@ -60,6 +60,28 @@ Copyright_License {
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 void
+Canvas::InvertRectangle(int left, int top, int right, int bottom){
+  /** Inverts rectangle using GL blending effects (hardware accelerated):
+   *
+   * Drawing white (Draw_color=1,1,1) rectangle over the image with GL_ONE_MINUS_DST_COLOR
+   * blending function yields New_DST_color= Draw_Color*(1-Old_DST_Color)
+   *
+   */
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE); // Make sure alpha channel is not damaged
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO); // DST is overwritten part of image = old_DST_color
+
+  const Color cwhite(0xff, 0xff, 0xff); // Draw color white (source channel of blender)
+
+  DrawFilledRectangle(left, top, right, bottom, cwhite);
+
+  glDisable(GL_BLEND);
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+}
+
+void
 Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                             const Color color)
 {
