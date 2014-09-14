@@ -119,6 +119,8 @@ public class XCSoar extends Activity {
                            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
+    enableImmersiveModeIfSupported();
+
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
     setContentView(tv);
