@@ -30,6 +30,7 @@ Copyright_License {
 enum WifiSecurity {
   WPA_SECURITY,
   WEP_SECURITY,
+  OPEN_SECURITY,
 };
 
 struct WifiStatus {
