@@ -93,6 +93,7 @@ Profile::Load(InfoBoxSettings &settings)
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
   case InfoBoxSettings::Geometry::RIGHT_5:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
+  case InfoBoxSettings::Geometry::RIGHT_16:
   case InfoBoxSettings::Geometry::RIGHT_24:
     break;
 
