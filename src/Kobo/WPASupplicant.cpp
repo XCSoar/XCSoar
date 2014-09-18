@@ -192,7 +192,7 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
   else if (strstr(src, "WEP") != NULL)
     dest.security = WEP_SECURITY;
   else
-    return false;
+    dest.security = OPEN_SECURITY;
 
   src = tab + 1;
 
