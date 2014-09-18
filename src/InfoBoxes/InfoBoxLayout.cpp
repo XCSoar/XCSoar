@@ -35,7 +35,7 @@ static constexpr unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
   12, 9, 8, 4, 4, 4, 4,
-  8,
+  8, 16,
 };
 
 namespace InfoBoxLayout
@@ -242,6 +242,13 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     }
     break;
 
+  case InfoBoxSettings::Geometry::RIGHT_16:
+    rc.right = MakeRightColumn(layout, layout.positions + 8, 8,
+                               rc.right, rc.top, rc.bottom);
+    rc.right = MakeRightColumn(layout, layout.positions, 8,
+                               rc.right, rc.top, rc.bottom);
+    break;
+
   case InfoBoxSettings::Geometry::RIGHT_24:
     rc.right = MakeRightColumn(layout, layout.positions + 16, 8,
                                rc.right, rc.top, rc.bottom);
@@ -315,6 +322,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
     case InfoBoxSettings::Geometry::RIGHT_5:
     case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
+    case InfoBoxSettings::Geometry::RIGHT_16:
     case InfoBoxSettings::Geometry::RIGHT_24:
     case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_12:
     case InfoBoxSettings::Geometry::TOP_LEFT_12:
@@ -354,6 +362,9 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::RIGHT_5:
     case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
       break;
+
+    case InfoBoxSettings::Geometry::RIGHT_16:
+      return InfoBoxSettings::Geometry::BOTTOM_RIGHT_12;
 
     case InfoBoxSettings::Geometry::RIGHT_24:
       return InfoBoxSettings::Geometry::BOTTOM_RIGHT_12;
@@ -458,6 +469,11 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     // calculate control dimensions
     layout.control_size.cx = screen_size.cx / 5;
     layout.control_size.cy = screen_size.cy / 5;
+    break;
+
+  case InfoBoxSettings::Geometry::RIGHT_16:
+    layout.control_size.cy = screen_size.cy / 8;
+    layout.control_size.cx = layout.control_size.cy * 1.44;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
@@ -591,6 +607,12 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
     border |= BORDERLEFT;
     if (i != 0)
       border |= BORDERTOP;
+    break;
+
+  case InfoBoxSettings::Geometry::RIGHT_16:
+    if (i % 8 != 0)
+      border |= BORDERTOP;
+    border |= BORDERLEFT;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
