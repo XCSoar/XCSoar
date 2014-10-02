@@ -49,7 +49,7 @@ Copyright_License {
 #define HAVE_OES_MAPBUFFER
 #endif
 
-#if defined(HAVE_MALI) || defined(WIN32)
+#if defined(HAVE_MALI) || defined(WIN32) || (defined(HAVE_GLES) && defined(MESA_KMS))
 #define HAVE_DYNAMIC_MAPBUFFER
 #endif
 
