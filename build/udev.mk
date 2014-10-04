@@ -1,4 +1,5 @@
-ENABLE_UDEV ?= n
+# for now, udev is only used for the libinput event driver
+ENABLE_UDEV ?= $(USE_LIBINPUT)
 
 ifeq ($(ENABLE_UDEV),y)
 

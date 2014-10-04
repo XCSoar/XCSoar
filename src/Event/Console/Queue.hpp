@@ -34,6 +34,9 @@ Copyright_License {
 #include "../Linux/SignalListener.hpp"
 
 #ifndef NON_INTERACTIVE
+#ifdef USE_LIBINPUT
+#include "../LibInput/LibInputHandler.hpp"
+#else
 #include "../Linux/MergeMouse.hpp"
 #ifdef KOBO
 #include "../Linux/Input.hpp"
@@ -42,6 +45,7 @@ Copyright_License {
 #else
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
+#endif
 #endif
 #endif
 
@@ -65,6 +69,9 @@ class EventQueue final : private SignalListener {
   IOLoop io_loop;
 
 #ifndef NON_INTERACTIVE
+#ifdef USE_LIBINPUT
+  LibInputHandler libinput_handler;
+#else
   MergeMouse merge_mouse;
 #ifdef KOBO
   LinuxInputDevice keyboard;
@@ -77,6 +84,7 @@ class EventQueue final : private SignalListener {
   LinuxMouse mouse;
 #endif
 
+#endif
 #endif
 #endif
 
@@ -98,9 +106,14 @@ public:
 #ifndef NON_INTERACTIVE
 
   void SetScreenSize(unsigned width, unsigned height) {
+  #ifdef USE_LIBINPUT
+    libinput_handler.SetScreenSize(width, height);
+  #else
     merge_mouse.SetScreenSize(width, height);
+  #endif
   }
 
+#ifndef USE_LIBINPUT
   void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
     merge_mouse.SetSwap(swap);
     merge_mouse.SetInvert(invert_x, invert_y);
@@ -111,9 +124,14 @@ public:
   bool HasPointer() const {
     return merge_mouse.HasPointer();
   }
+#endif
 
   RasterPoint GetMousePosition() const {
+#ifdef USE_LIBINPUT
+    return { int(libinput_handler.GetX()), int(libinput_handler.GetY()) };
+#else
     return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
+#endif
   }
 
 #endif /* !NON_INTERACTIVE */
