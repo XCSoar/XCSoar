@@ -72,7 +72,7 @@ Copyright_License {
   [components setMinute:0];
   [components setSecond:0];
   NSDate *midnight = [gregorian_calendar dateFromComponents:components];
-  return [midnight timeIntervalSinceDate: midnight];
+  return [date timeIntervalSinceDate: midnight];
 }
 
 -(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
