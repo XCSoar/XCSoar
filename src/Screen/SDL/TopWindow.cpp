@@ -87,7 +87,7 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
-    if (event.text.text && *event.text.text) {
+    if (*event.text.text) {
       std::pair<unsigned, const char *> next = NextUTF8(event.text.text);
       bool handled = w->OnCharacter(next.first);
       while (next.second) {

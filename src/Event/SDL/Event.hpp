@@ -64,8 +64,7 @@ struct Event {
 
 #if SDL_MAJOR_VERSION >= 2
   size_t GetCharacterCount() const {
-    return event.type == SDL_TEXTINPUT && event.text.text &&
-      *event.text.text ?
+    return event.type == SDL_TEXTINPUT && *event.text.text ?
       LengthUTF8(event.text.text) : 0;
   }
 
