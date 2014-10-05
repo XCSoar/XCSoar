@@ -30,6 +30,7 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <termios.h>
 #include <linux/input.h>
 #include <sys/ioctl.h>
 
@@ -212,9 +213,14 @@ LinuxInputDevice::Read()
           else
             releasing = true;
         }
-      } else
+      } else {
+        /* Discard all data on stdin to avoid that keyboard input data is read
+         * on the executing shell. This fixes #3403. */
+        tcflush(STDIN_FILENO, TCIFLUSH);
+
         queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP,
                          TranslateKeyCode(e.code)));
+      }
 
       break;
 
