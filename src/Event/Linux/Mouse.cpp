@@ -59,7 +59,7 @@ LinuxMouse::Read()
     const bool down = (mb[0] & 0x7) != 0;
     merge.SetDown(down);
 
-    const int dx = mb[1], dy = mb[2];
+    const int dx = mb[1], dy = -mb[2];
     merge.MoveRelative(dx, dy);
   }
 }
