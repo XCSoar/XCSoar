@@ -79,23 +79,58 @@ static const struct {
   { "foo\xe7", "foo", },
 };
 
+static size_t
+MyLengthUTF8(const char *p)
+{
+  for (size_t length = 0;; ++length) {
+    if (*p == 0)
+      return length;
+
+    size_t s = SequenceLengthUTF8(p);
+    assert(s > 0);
+    p += s;
+  }
+}
+
+static bool
+MyValidateUTF8(const char *p)
+{
+  for (size_t length = 0;; ++length) {
+    if (*p == 0)
+      return true;
+
+    size_t s = SequenceLengthUTF8(p);
+    if (s == 0)
+      return false;
+
+    p += s;
+  }
+}
+
 #include <stdio.h>
 int main(int argc, char **argv)
 {
-  plan_tests(ARRAY_SIZE(valid) + ARRAY_SIZE(invalid) +
-             ARRAY_SIZE(length) +
+  plan_tests(2 * ARRAY_SIZE(valid) +
+             2 * ARRAY_SIZE(invalid) +
+             2 * ARRAY_SIZE(length) +
              ARRAY_SIZE(crop) +
              ARRAY_SIZE(latin1_chars) +
              9 + 27);
 
-  for (auto i : valid)
+  for (auto i : valid) {
     ok1(ValidateUTF8(i));
+    ok1(LengthUTF8(i) == MyLengthUTF8(i));
+  }
 
-  for (auto i : invalid)
+  for (auto i : invalid) {
     ok1(!ValidateUTF8(i));
+    ok1(!MyValidateUTF8(i));
+  }
 
-  for (auto &l : length)
+  for (auto &l : length) {
     ok1(l.length == LengthUTF8(l.value));
+    ok1(l.length == MyLengthUTF8(l.value));
+  }
 
   char buffer[64];
 
