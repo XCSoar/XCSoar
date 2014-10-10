@@ -11,6 +11,8 @@ Version 6.7.6 - not yet released
   - accept "$GNRMC" in replay of NMEA files
 * calculations
   - improve circling detection when using some external NMEA devices (#3360, #3372)
+* configuration
+  - report missing plane configuration file in log file
 
 Version 6.7.5 - 2014/06/09
 * fix crash in task manager (#3305)

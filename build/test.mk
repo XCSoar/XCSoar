@@ -227,6 +227,7 @@ TEST_PLANES_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestPlanes.cpp
 TEST_PLANES_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestPlanes,TEST_PLANES))
