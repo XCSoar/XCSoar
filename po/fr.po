@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-07-23 04:27+0000\n"
-"Last-Translator: gregoiresailland <gregoiresailland@gmail.com>\n"
+"PO-Revision-Date: 2014-08-13 18:15+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-24 06:01+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2997,12 +2997,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1272
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr ""
+msgstr "Différence d'altitude en arrivée au calage 0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr ""
+msgstr "DAlt Arr MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
 #, no-c-format
@@ -3010,6 +3010,8 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Différence d'altitude au point d'arrivée avec un calage nul, par rapport à "
+"la hauteur de sécurité."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5238,7 +5240,7 @@ msgstr "Actif"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
 #, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr ""
+msgstr "L'activation du planeur \"%s\" a échoué."
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5249,7 +5251,7 @@ msgstr "Veuillez entrer l'immatriculation du planeur!"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
 #, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr ""
+msgstr "Le planeur \"%s\" existe déjà. Le remplacer ?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5259,12 +5261,12 @@ msgstr "Écraser"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:358
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "Effacer le planeur \"%s\" ?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:395
 #, c-format
 msgid "Activate plane \"%s\"?"
-msgstr ""
+msgstr "Activer le planeur \"%s\" ?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:407
 msgid "Planes"
@@ -6823,7 +6825,7 @@ msgstr "Définit ce qui doit être affiché dans la zone principale."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr ""
+msgstr "Affiche les InfoBoxes Spirale, Transition ou Arrivée."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
@@ -6845,12 +6847,16 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
+"Pour le mode transition. Affichée quand le mode 'Auto' est sélectionnée, et "
+"que le planeur est sous le plan d'arrivée."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
 msgstr ""
+"Pour le mode spirale. Affiché quand le mode 'Auto' est sélectionné, et que "
+"le planeur est en spirale."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
@@ -6858,11 +6864,13 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
+"Pour le mode arrivée. Affiché quand 'Auto' est sélectionné, et que le "
+"planeur est au-dessus du plan d'arrivée."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #, no-c-format
 msgid "A custom InfoBox set"
-msgstr ""
+msgstr "Un ensemble d'InfoBoxes personnalisé"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -8305,12 +8313,12 @@ msgstr "Ballon"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr ""
+msgstr "Deltaplane (Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "Deltaplane (Rigide/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:212
