@@ -128,9 +128,9 @@ final class BluetoothHelper {
         Log.d(TAG, String.format(
             "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
              device.getName(), device.getAddress()));
-        BluetoothGattClientPort gattClientPort = new BluetoothGattClientPort();
-        BluetoothGatt gatt = device.connectGatt(context, false, gattClientPort);
-        gattClientPort.startConnect(gatt);
+        BluetoothGattClientPort gattClientPort
+          = new BluetoothGattClientPort(device);
+        gattClientPort.startConnect(context);
         return gattClientPort;
       } else {
         BluetoothSocket socket =

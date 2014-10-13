@@ -119,6 +119,8 @@ public class XCSoar extends Activity {
                            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
+    enableImmersiveModeIfSupported();
+
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
     setContentView(tv);
@@ -204,6 +206,19 @@ public class XCSoar extends Activity {
       nativeView.setHapticFeedback(hapticFeedbackEnabled);
   }
 
+  private void enableImmersiveModeIfSupported() {
+    // Set / Reset the System UI visibility flags for Immersive Full Screen Mode, if supported
+    if (android.os.Build.VERSION.SDK_INT >= 19) {
+      getWindow().getDecorView().setSystemUiVisibility(
+          View.SYSTEM_UI_FLAG_FULLSCREEN|
+          View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
+          View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|
+          View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
+          View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
+          View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    }
+  }
+
   @Override protected void onResume() {
     super.onResume();
 
@@ -264,15 +279,7 @@ public class XCSoar extends Activity {
   }
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
-    // Set / Reset the System UI visibility flags for Immersive Full Screen Mode, if supported
-    if (android.os.Build.VERSION.SDK_INT >= 19) {
-      getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|
-                                                       View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
-                                                       View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY|
-                                                       View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
-                                                       View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
-                                                       View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-    }
+    enableImmersiveModeIfSupported();
     super.onWindowFocusChanged(hasFocus);
   }
 

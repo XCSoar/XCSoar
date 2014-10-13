@@ -30,6 +30,10 @@ Copyright_License {
 #define Window X11Window
 #define Display X11Display
 
+#ifdef MESA_KMS
+#include <gbm.h>
+#endif
+
 #include <EGL/egl.h>
 
 #undef Font
