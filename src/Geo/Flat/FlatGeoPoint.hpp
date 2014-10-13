@@ -27,6 +27,8 @@
 #include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
+#include <type_traits>
+
 /**
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
@@ -176,6 +178,7 @@ struct FlatGeoPoint {
   }
 };
 
+static_assert(std::is_trivial<FlatGeoPoint>::value, "type is not trivial");
 
 /**
  * Extension of FlatGeoPoint for altitude (3d location in flat-earth space)
