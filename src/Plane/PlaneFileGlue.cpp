@@ -29,6 +29,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Util/NumberParser.hpp"
+#include "LogFile.hpp"
 
 static bool
 ReadPolar(const char *string, Plane &plane)
@@ -140,6 +141,11 @@ bool
 PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
 {
   FileLineReaderA reader(path);
+  if (reader.error()) {
+    LogFormat(_T("Failed to open plane file: %s"), path);
+    return false;
+  }
+
   KeyValueFileReader kvreader(reader);
   return Read(plane, kvreader);
 }

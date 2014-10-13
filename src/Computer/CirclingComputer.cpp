@@ -59,6 +59,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate_heading = Angle::Zero();
     circling_info.turn_rate_smoothed = Angle::Zero();
     circling_info.turn_rate_heading_smoothed = Angle::Zero();
+    last_track = basic.track;
+    last_heading = basic.attitude.heading;
     return;
   }
 
@@ -69,6 +71,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate_heading = Angle::Zero();
     circling_info.turn_rate_smoothed = Angle::Zero();
     circling_info.turn_rate_heading_smoothed = Angle::Zero();
+    last_track = basic.track;
+    last_heading = basic.attitude.heading;
     return;
   }
 
@@ -95,10 +99,10 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     smoothed = LowPassFilter(circling_info.turn_rate_heading_smoothed.Native(),
                              turn_rate.Native(), fixed(0.3));
     circling_info.turn_rate_heading_smoothed = Angle::Native(smoothed);
-  }
 
-  last_track = basic.track;
-  last_heading = basic.attitude.heading;
+    last_track = basic.track;
+    last_heading = basic.attitude.heading;
+  }
 }
 
 void

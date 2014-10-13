@@ -79,7 +79,9 @@ NmeaReplay::ReadUntilRMC(NMEAInfo &data)
   while ((buffer = reader->ReadLine()) != NULL) {
     ParseLine(buffer, data);
 
-    if (StringStartsWith(buffer, "$GPRMC") ||
+    if ((StringLength(buffer) >= 6 &&
+         StringStartsWith(buffer, "$G") &&
+         StringStartsWith(buffer + 3, "RMC")) ||
         StringStartsWith(buffer, "$FLYSEN"))
       return true;
   }

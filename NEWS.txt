@@ -36,8 +36,16 @@ Version 6.8 - not yet released
   - export data partition via USB storage
 
 Version 6.7.6 - not yet released
+* tracking
+  - updated SkyLines server IP
 * devices
   - LX: relax download timeout (#3199)
+* replay
+  - accept "$GNRMC" in replay of NMEA files
+* calculations
+  - improve circling detection when using some external NMEA devices (#3360, #3372)
+* configuration
+  - report missing plane configuration file in log file
 
 Version 6.7.5 - 2014/06/09
 * fix crash in task manager (#3305)
