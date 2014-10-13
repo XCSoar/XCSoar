@@ -415,6 +415,7 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(CLANG),y)
     ANDROID_TOOLCHAIN_NAME = llvm-3.4
+    LIBCXX = y
   else
     ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
   endif
