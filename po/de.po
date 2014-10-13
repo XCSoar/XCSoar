@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-07-21 10:18+0000\n"
-"Last-Translator: Niklas Fischer <Unknown>\n"
+"PO-Revision-Date: 2014-10-03 03:05+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-24 06:01+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2976,7 +2976,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1272
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr ""
+msgstr "Endanflug MC0 Höhendifferenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
 #, no-c-format
@@ -2989,6 +2989,8 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Ankunftshöhe am Endanflug Wegpunkt bei MC0  relativ zur sicheren "
+"Ankunftshöhe."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5127,7 +5129,7 @@ msgstr "Thermikprofil"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Wind at Altitude"
-msgstr "Wind Über Höhe"
+msgstr "Wind in der Höhe"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
 msgid "Set Wind"
@@ -5619,7 +5621,7 @@ msgstr "Von Aufgabe entfernen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
 msgid "Replace in Task"
-msgstr "In Aufgabe ersetzen"
+msgstr "In der Aufgabe ersetzen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
 msgid "Insert in Task"
@@ -5627,7 +5629,7 @@ msgstr "Zur Aufgabe hinzufügen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
 msgid "Append to Task"
-msgstr "An Aufgabe hinzufügen"
+msgstr "Aufgabe erweitern"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
 msgid "Remove from Task"
@@ -5635,7 +5637,7 @@ msgstr "Von der Aufgabe entfernen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
 msgid "Set as New Home"
-msgstr "Setze als neuer Heimatplatz"
+msgstr "Als neue Heimat setzen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan to Waypoint"
@@ -5682,7 +5684,7 @@ msgstr "Wendepunkt"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Landable"
-msgstr ""
+msgstr "Landbar"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6795,7 +6797,7 @@ msgstr "Das soll zentral dargestellt werden."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr ""
+msgstr "Zeigt entweder die Kreisflug, Vorflug, oder Endanflug InfoBoxen an"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
@@ -6834,7 +6836,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #, no-c-format
 msgid "A custom InfoBox set"
-msgstr ""
+msgstr "Ein eigenes InfoBox Set"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -8268,12 +8270,12 @@ msgstr "Heißluftballon"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr ""
+msgstr "Drachenflieger (Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "Drachenflieger (Rigid/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:212
@@ -8397,7 +8399,7 @@ msgstr "Als Endpunkt"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
 msgid "Reverse"
-msgstr ""
+msgstr "Andersrum"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
 msgid "Clear All"
