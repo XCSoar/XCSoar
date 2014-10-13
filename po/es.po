@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-07-05 19:29+0000\n"
-"Last-Translator: Jorge Calviño <jorge@zaringenio.com>\n"
+"PO-Revision-Date: 2014-08-26 23:14+0000\n"
+"Last-Translator: Sergio Solfa <ssolfa@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -614,9 +614,8 @@ msgid "Loading Waypoints..."
 msgstr "Cargando waypoints..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "No Virando"
+msgstr ""
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2958,22 +2957,21 @@ msgid ""
 msgstr "Veloccidad de acuerdo la las reglas de la OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Diferencia de altitud final"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Diferencia de Altitud Final"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Altitud de llegada a la llegada relativa a la altura de seguridad de llegada."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -4480,7 +4478,7 @@ msgstr "aeronave"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:137
 #, no-c-format
 msgid "Unmanned aerial vehicle"
-msgstr ""
+msgstr "Vehículo aéreo no tripulado"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:139
 #, no-c-format
@@ -5161,9 +5159,9 @@ msgid "Active"
 msgstr "Activo"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "La activiación del pefil de avion \"%s\" falló!"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5172,9 +5170,9 @@ msgstr "Por favor ingrese el registro del avion"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "Un perfil de avion \"%s\" ya existe. Desea sobreescribirlo?"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5184,12 +5182,12 @@ msgstr "Sobrescribir"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:358
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "Borrar planeador \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Activate plane \"%s\"?"
-msgstr "La activiación del pefil de avion \"%s\" falló!"
+msgstr "Activar planeador \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:407
 msgid "Planes"
@@ -5568,27 +5566,27 @@ msgstr "Remover de la Manga"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
 msgid "Replace in Task"
-msgstr "Remplazar en la prueba"
+msgstr "Cambiar en tarea"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
 msgid "Insert in Task"
-msgstr "Insertar en Manga"
+msgstr "Insertar en tarea"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
 msgid "Append to Task"
-msgstr "Anexar a la Manga"
+msgstr "Agregar a tarea"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
 msgid "Remove from Task"
-msgstr "Remover de la Manga"
+msgstr "Remover de la tarea"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
 msgid "Set as New Home"
-msgstr "Fijar como nueva Base"
+msgstr "Setear nuevo Home"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan to Waypoint"
-msgstr "Desplazarse a la baliza."
+msgstr "Pan al Waypoint"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
 msgid "Clear current task?"
@@ -5629,9 +5627,9 @@ msgid "Turnpoint"
 msgstr "WP"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Habilitar"
+msgstr "Aterrizable"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6692,9 +6690,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "Ajuste de las InfoBox(cajas de informacion)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -7984,9 +7982,9 @@ msgid "Hot-air balloon"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr "Aladelta"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
@@ -9659,37 +9657,6 @@ msgstr ""
 msgid "Stored to EEPROM"
 msgstr "Grabado en la EEPROM"
 
-#~ msgid "Ignore checksum"
-#~ msgstr "Ignorar cheksum"
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "Si su GPS envia valores invalidos de checksum, esto permite que la "
-#~ "informacion se use igualmente."
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "Perfil de avion \"%s\" activado."
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "Realmente desea borrarl el perfil de avion \"%s\"?"
-
-#~ msgid "Do you want to activate plane profile \"%s\"?"
-#~ msgstr "Desea activar el perfil de avion \"%s\"?"
-
-#~ msgid "Landpoint"
-#~ msgstr "Punto de aterrizaje"
-
-#~ msgid "Auto zoom"
-#~ msgstr "Zoom automático"
-
-#~ msgid "Configuration Menu"
-#~ msgstr "Menu de Configuracion"
-
-#~ msgid "Friends"
-#~ msgstr "Amistades"
-
 #~ msgid "Line skipped."
 #~ msgstr "Linea omitida"
 
@@ -9729,8 +9696,26 @@ msgstr "Grabado en la EEPROM"
 #~ msgid "Edit text"
 #~ msgstr "Editar Texto"
 
+#~ msgid "Wind At Altitude"
+#~ msgstr "Viento a Altitud"
+
+#~ msgid "Set As New Home"
+#~ msgstr "Fijar como nueva Base"
+
+#~ msgid "Insert In Task"
+#~ msgstr "Insertar en Manga"
+
+#~ msgid "Remove From Task"
+#~ msgstr "Remover de la Manga"
+
 #~ msgid "Fly"
 #~ msgstr "Volar"
+
+#~ msgid "Append To Task"
+#~ msgstr "Anexar a la Manga"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Remplazar en la prueba"
 
 #~ msgid "L/D average period"
 #~ msgstr "Periodo Promedio de L/D"
@@ -9830,8 +9815,45 @@ msgstr "Grabado en la EEPROM"
 #~ msgid "Export"
 #~ msgstr "Exportar"
 
+#~ msgid "Friends"
+#~ msgstr "Amistades"
+
 #~ msgid "Scaled"
 #~ msgstr "Escalado"
+
+#~ msgid "Configuration Menu"
+#~ msgstr "Menu de Configuracion"
+
+#~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway."
+#~ msgstr ""
+#~ "Si su GPS envia valores invalidos de checksum, esto permite que la "
+#~ "informacion se use igualmente."
+
+#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
+#~ msgstr "Un perfil de avion \"%s\" ya existe. Desea sobreescribirlo?"
+
+#~ msgid "Plane profile \"%s\" activated."
+#~ msgstr "Perfil de avion \"%s\" activado."
+
+#~ msgid "Do you really want to delete plane profile \"%s\"?"
+#~ msgstr "Realmente desea borrarl el perfil de avion \"%s\"?"
+
+#~ msgid "Pan To Waypoint"
+#~ msgstr "Desplazarse a la baliza."
+
+#~ msgid "Ignore checksum"
+#~ msgstr "Ignorar cheksum"
+
+#~ msgid "Do you want to activate plane profile \"%s\"?"
+#~ msgstr "Desea activar el perfil de avion \"%s\"?"
+
+#~ msgid "Landpoint"
+#~ msgstr "Punto de aterrizaje"
+
+#~ msgid "Auto zoom"
+#~ msgstr "Zoom automático"
 
 #, fuzzy
 #~ msgid "Next radial ATC"
