@@ -26,6 +26,7 @@ Version 6.8 - not yet released
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard
   - scale touchscreen coordinates to screen size
+  - new translation: Simplified Chinese
 * Android
   - fix IOIO connection on Android 4.x (#2959, #3260)
 * Kobo

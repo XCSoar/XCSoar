@@ -68,6 +68,7 @@ static MOLoader *mo_loader;
  */
 enum {
   LANG_NULL,
+  LANG_CHINESE,
   LANG_CZECH,
   LANG_DANISH,
   LANG_GERMAN,
@@ -154,12 +155,15 @@ extern const uint8_t uk_start[] asm("_binary_uk_mo_start");
 extern const uint8_t uk_size[] asm("_binary_uk_mo_size");
 extern const uint8_t vi_start[] asm("_binary_vi_mo_start");
 extern const uint8_t vi_size[] asm("_binary_vi_mo_size");
+extern const uint8_t zh_CN_start[] asm("_binary_zh_CN_mo_start");
+extern const uint8_t zh_CN_size[] asm("_binary_zh_CN_mo_size");
 
 #ifdef __clang__
 /* gcc gives "redeclaration differs in 'constexpr'" */
 constexpr
 #endif
 const BuiltinLanguage language_table[] = {
+  { LANG_CHINESE, zh_CN_start, zh_CN_size, _T("zh_CN.mo"), _T("Simplified Chinese") },
   { LANG_CZECH, cs_start, cs_size, _T("cs.mo"), _T("Czech") },
   { LANG_DANISH, da_start, da_size, _T("da.mo"), _T("Danish") },
   { LANG_GERMAN, de_start, de_size, _T("de.mo"), _T("German") },
