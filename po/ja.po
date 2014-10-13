@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-05-23 00:07+0000\n"
-"Last-Translator: Masahiro Mori <Unknown>\n"
+"PO-Revision-Date: 2014-08-03 13:00+0000\n"
+"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-05-28 16:24+0000\n"
-"X-Generator: Launchpad (build 17017)\n"
+"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -609,9 +609,8 @@ msgid "Loading Waypoints..."
 msgstr "ウェイポイントをロード中..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "旋回していません"
+msgstr "停止"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2953,23 +2952,21 @@ msgid ""
 msgstr "オンライン　コンテスト規則によって算出された　現時点までの平均飛行速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "フィニッシュ地点到達高度差"
+msgstr "最終到達高度差　（MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Fin高度差"
+msgstr "到達高度D　（MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr ""
-"ファイナル高度\r\n"
-"ファイナル地点に到達する予想高度　安全高度を含む"
+msgstr "最終ポイント到達高度（　マージンゼロ　MC0）"
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5084,7 +5081,7 @@ msgstr "サーマル　バンド"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
 msgid "Wind at Altitude"
-msgstr "この標高の風向風速"
+msgstr "風および高度"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
 msgid "Set Wind"
@@ -5167,9 +5164,9 @@ msgid "Active"
 msgstr "有効"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "\"%s\"の有効化に失敗しました"
+msgstr "航空機 \"%s\" の読み込みに失敗しました"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5178,9 +5175,9 @@ msgstr "機体登録情報　入力"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "機体情報\"%s\"すでに存在します　上書きしますか"
+msgstr "航空機 \"%s\" はすでに存在します"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5190,12 +5187,12 @@ msgstr "上書き"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:358
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "航空機 \"%s\" 削除しますか？"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Activate plane \"%s\"?"
-msgstr "\"%s\"の有効化に失敗しました"
+msgstr "航空機 \"%s\" 設定しますか？"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:407
 msgid "Planes"
@@ -5573,11 +5570,11 @@ msgstr "タスクから削除"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
 msgid "Replace in Task"
-msgstr "タスク入れ替え"
+msgstr "タスクを再設定"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
 msgid "Insert in Task"
-msgstr "タスクに挿入"
+msgstr "タスクを挿入"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
 msgid "Append to Task"
@@ -5589,11 +5586,11 @@ msgstr "タスクから削除"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
 msgid "Set as New Home"
-msgstr "新しいホームに設定"
+msgstr "新しいホームベースを設定"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan to Waypoint"
-msgstr "ウエイポイントに　向かう"
+msgstr "ウエイポイントに向かう"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
 msgid "Clear current task?"
@@ -5634,9 +5631,9 @@ msgid "Turnpoint"
 msgstr "旋回点"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "着陸帯のサイズ"
+msgstr "着陸可能"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6730,12 +6727,12 @@ msgstr "メインエリアに表示されるアイテムの設定"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr ""
+msgstr "旋回　情報ボックスとファイナルグライドの情報ボックスを両方表示する"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr ""
+msgstr "フルスクリーン表示　（情報ボックスを隠す）"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:353
@@ -6752,12 +6749,14 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
+"巡航モード、表示が”自動”かつ　機体がファイナルグライドラインより低高度の場合"
+"に。表示される"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
-msgstr ""
+msgstr "旋回モード、表示が”自動”かつ機体が旋回している場合に。表示される"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
@@ -6765,11 +6764,13 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
+"ファイナルグライド　モード、表示”自動”かつファイナルグライ　ドラインより高い"
+"高度の場合に。表示される"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "インフォボックス　設定"
+msgstr "情報ボックス　カスタム設定"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -8158,14 +8159,14 @@ msgid "Hot-air balloon"
 msgstr "熱気球"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr "ハンググライダー"
+msgstr "ハンググライダー　（Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "ハンググライダー　（Rigid/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:212
@@ -8286,9 +8287,8 @@ msgid "Make Finish"
 msgstr "フィニッシュする"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
-#, fuzzy
 msgid "Reverse"
-msgstr "縦型表示を選択"
+msgstr "逆"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
 msgid "Clear All"
@@ -9921,44 +9921,6 @@ msgstr ""
 msgid "Stored to EEPROM"
 msgstr "EEPROM　に記録"
 
-#~ msgid "Ignore checksum"
-#~ msgstr "チェックサムしない"
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "NMEA信号　チェックが不適当であった場合は無視してデーターをそのまま使う"
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "機体情報\"%s\"読み込みました"
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "機体情報\"%s\"本当に削除してよろしいですか？"
-
-#~ msgid "Do you want to activate plane profile \"%s\"?"
-#~ msgstr "\"%s\"の機体を選択しますか"
-
-#~ msgid "Landpoint"
-#~ msgstr "着陸地点"
-
-#~ msgid "Auto zoom"
-#~ msgstr "自動ズーム"
-
-#~ msgid ""
-#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
-#~ "a reasonable screen distance."
-#~ msgstr "ウエイポイントに近づくと　適切な縮尺に自動的にズームする"
-
-#~ msgid "Configuration Menu"
-#~ msgstr "設定メニュー"
-
-#~ msgid "Friends"
-#~ msgstr "友人"
-
-#~ msgid "XCSoar"
-#~ msgstr "XCSoar"
-
 #~ msgid "English"
 #~ msgstr "英語"
 
@@ -9970,6 +9932,9 @@ msgstr "EEPROM　に記録"
 
 #~ msgid "Longitude"
 #~ msgstr "経度"
+
+#~ msgid "XCSoar"
+#~ msgstr "XCSoar"
 
 #~ msgid "Lon."
 #~ msgstr "経度"
@@ -10047,6 +10012,15 @@ msgstr "EEPROM　に記録"
 #~ "Enable this if you would like to log the communication with the device."
 #~ msgstr "他のデバイスに接続する場合　ON にする"
 
+#~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway."
+#~ msgstr ""
+#~ "NMEA信号　チェックが不適当であった場合は無視してデーターをそのまま使う"
+
+#~ msgid "Wind At Altitude"
+#~ msgstr "この標高の風向風速"
+
 #~ msgid "No further information"
 #~ msgstr "追加情報無し"
 
@@ -10058,6 +10032,24 @@ msgstr "EEPROM　に記録"
 
 #~ msgid "InfoBox Pages"
 #~ msgstr "インフォボックスのページ"
+
+#~ msgid "Replace In Task"
+#~ msgstr "タスク入れ替え"
+
+#~ msgid "Set As New Home"
+#~ msgstr "新しいホームに設定"
+
+#~ msgid "Pan To Waypoint"
+#~ msgstr "ウエイポイントに　向かう"
+
+#~ msgid "Insert In Task"
+#~ msgstr "タスクに挿入"
+
+#~ msgid "Append To Task"
+#~ msgstr "タスクに追加"
+
+#~ msgid "Remove From Task"
+#~ msgstr "タスクから削除"
 
 #~ msgid "L/D average period"
 #~ msgstr "平均滑空比演算時間"
@@ -10246,6 +10238,9 @@ msgstr "EEPROM　に記録"
 #~ "ジグザグに飛行した場合はその合計距離で計算される　また旋回中の距離は含まれ"
 #~ "ない"
 
+#~ msgid "Ignore checksum"
+#~ msgstr "チェックサムしない"
+
 #~ msgid "No valid finish.\n"
 #~ msgstr "フィニッシュ無効\n"
 
@@ -10348,8 +10343,14 @@ msgstr "EEPROM　に記録"
 #~ msgid "Export"
 #~ msgstr "エクスポート"
 
+#~ msgid "Configuration Menu"
+#~ msgstr "設定メニュー"
+
 #~ msgid "Dry mass"
 #~ msgstr "乾燥重量"
+
+#~ msgid "Friends"
+#~ msgstr "友人"
 
 #~ msgid "Optional specification of the wing area."
 #~ msgstr "翼面積オプション性能"
@@ -10379,8 +10380,17 @@ msgstr "EEPROM　に記録"
 #~ msgid "Return"
 #~ msgstr "Returnキー"
 
+#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
+#~ msgstr "機体情報\"%s\"すでに存在します　上書きしますか"
+
+#~ msgid "Plane profile \"%s\" activated."
+#~ msgstr "機体情報\"%s\"読み込みました"
+
 #~ msgid "Do you want to load plane profile \"%s\"?"
 #~ msgstr "機体情報\"%s\"読み込みますか？"
+
+#~ msgid "Do you really want to delete plane profile \"%s\"?"
+#~ msgstr "機体情報\"%s\"本当に削除してよろしいですか？"
 
 #~ msgid "Loading of plane profile \"%s\" failed!"
 #~ msgstr "機体情報%s の読み込み失敗！"
@@ -10419,6 +10429,20 @@ msgstr "EEPROM　に記録"
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "地形越しに到達不能"
+
+#~ msgid "Do you want to activate plane profile \"%s\"?"
+#~ msgstr "\"%s\"の機体を選択しますか"
+
+#~ msgid "Landpoint"
+#~ msgstr "着陸地点"
+
+#~ msgid "Auto zoom"
+#~ msgstr "自動ズーム"
+
+#~ msgid ""
+#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
+#~ "a reasonable screen distance."
+#~ msgstr "ウエイポイントに近づくと　適切な縮尺に自動的にズームする"
 
 #~ msgid " "
 #~ msgstr " "
