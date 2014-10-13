@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2013-10-02 15:20+0000\n"
-"Last-Translator: M Söderman <Unknown>\n"
+"PO-Revision-Date: 2014-08-05 11:26+0000\n"
+"Last-Translator: Magnus Olsson <Unknown>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-02 18:32+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -178,6 +178,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Tyska regler) Godtycklig punkt inom 1/2 km av centrum eller 10 km av en 90-"
+"graders sektor. Poängsatt från centrum."
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -185,6 +187,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Brittiska regler) Godtycklig punkt inom 1/2 km av centrum eller 20 km av en "
+"90-graders sektor. Poängsatt från centrum."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -192,6 +196,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Brittiska regler) Godtycklig punkt inom 1/2 km av centrum eller 10 km av en "
+"180-graders sektor. Poängsatt från centrum."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
@@ -601,9 +607,8 @@ msgid "Loading Waypoints..."
 msgstr "Laddar vägpunkter..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "Kurvar inte"
+msgstr ""
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2864,21 +2869,21 @@ msgid ""
 msgstr "Direkt beräkning av flugen hastighet enligt inställda OLC regler."
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Höjdskillnad för final"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Fin Hjd"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "Ankomsthöjd vid uppgiftens sista brytpunkt relativt säkerhetshöjden."
+msgstr ""
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5053,9 +5058,9 @@ msgid "Active"
 msgstr "Aktivt"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "Inläsning av flygplansprofil \"%s\" misslyckades!"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5064,10 +5069,9 @@ msgstr "Skriv in planets registering!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
 msgstr ""
-"En flygplansprofil  med namnet \"%s\" finns redan. Vill du skriva över?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5518,9 +5522,9 @@ msgid "Turnpoint"
 msgstr "Brytpunkt"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Aktivera"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6568,9 +6572,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "InfoBox set"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -7876,9 +7880,9 @@ msgid "Hot-air balloon"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr "Hängglidare"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
@@ -8004,9 +8008,8 @@ msgid "Make Finish"
 msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
-#, fuzzy
 msgid "Reverse"
-msgstr "Omvänt porträtt"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
 msgid "Clear All"
@@ -9533,35 +9536,6 @@ msgstr ""
 msgid "Stored to EEPROM"
 msgstr "Sparad i EEPROM"
 
-#~ msgid "Ignore checksum"
-#~ msgstr "Ignorera checksumman"
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "Om din GPS ger felaktiga NMEA checksummor, så tillåter detta att data "
-#~ "används ändå."
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "Flygplansprofil \"%s\" aktiverad"
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "Vill du ta bort flygplansprofil \"%s\"?"
-
-#~ msgid "Landpoint"
-#~ msgstr "Landningsbart"
-
-#~ msgid "Auto zoom"
-#~ msgstr "Auto. Zoom"
-
-#~ msgid ""
-#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
-#~ "a reasonable screen distance."
-#~ msgstr ""
-#~ "Zooma in automatiskt då man närmar sig en vägpunkt, för att hålla "
-#~ "vägpunkten på ett rimligt skärmavstånd."
-
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Radera Brytpunkt?"
 
@@ -9586,8 +9560,20 @@ msgstr "Sparad i EEPROM"
 #~ msgid "Edit text"
 #~ msgstr "Ändra text"
 
+#~ msgid "Wind At Altitude"
+#~ msgstr "Vind på höjd"
+
 #~ msgid "Auto. wind"
 #~ msgstr "Auto Vind"
+
+#~ msgid "Insert In Task"
+#~ msgstr "Infoga i Bana"
+
+#~ msgid "Remove From Task"
+#~ msgstr "Ta bort från Bana"
+
+#~ msgid "Append To Task"
+#~ msgstr "Lägg till i Bana"
 
 #~ msgid "Height GPS"
 #~ msgstr "GPS-höjd"
@@ -9595,8 +9581,14 @@ msgstr "Sparad i EEPROM"
 #~ msgid "H GPS"
 #~ msgstr "H GPS"
 
+#~ msgid "Set As New Home"
+#~ msgstr "Ange som HEM"
+
 #~ msgid "Fly"
 #~ msgstr "FLYG"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Ersätt i Bana"
 
 #~ msgid "Line skipped."
 #~ msgstr "Rad ignorerad."
@@ -9625,11 +9617,50 @@ msgstr "Sparad i EEPROM"
 #~ msgid "Create xcsoar-checklist.txt\n"
 #~ msgstr "Skapa xcsoar-checklist.txt\n"
 
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "Inläsning av flygplansprofil \"%s\" misslyckades!"
+
+#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
+#~ msgstr ""
+#~ "En flygplansprofil  med namnet \"%s\" finns redan. Vill du skriva över?"
+
+#~ msgid "Plane profile \"%s\" activated."
+#~ msgstr "Flygplansprofil \"%s\" aktiverad"
+
 #~ msgid "Do you want to load plane profile \"%s\"?"
 #~ msgstr "Vill du ladda flygplansprofil \"%s\"?"
 
+#~ msgid "Do you really want to delete plane profile \"%s\"?"
+#~ msgstr "Vill du ta bort flygplansprofil \"%s\"?"
+
 #~ msgid "H GND"
 #~ msgstr "H Ter"
+
+#~ msgid "Ignore checksum"
+#~ msgstr "Ignorera checksumman"
+
+#~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway."
+#~ msgstr ""
+#~ "Om din GPS ger felaktiga NMEA checksummor, så tillåter detta att data "
+#~ "används ändå."
+
+#~ msgid "Pan To Waypoint"
+#~ msgstr "Panorera till Vägpunkt"
+
+#~ msgid "Landpoint"
+#~ msgstr "Landningsbart"
+
+#~ msgid "Auto zoom"
+#~ msgstr "Auto. Zoom"
+
+#~ msgid ""
+#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
+#~ "a reasonable screen distance."
+#~ msgstr ""
+#~ "Zooma in automatiskt då man närmar sig en vägpunkt, för att hålla "
+#~ "vägpunkten på ett rimligt skärmavstånd."
 
 #~ msgid "Map labels on"
 #~ msgstr "Kartetiketter På"
