@@ -101,6 +101,7 @@ ParsePITV5(NMEAInputLine &line, NMEAInfo &info)
     // turbulence
   }
 
+  // climb/cruise switch
   switch (line.Read(-1)) {
   case 1:
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
@@ -110,6 +111,7 @@ ParsePITV5(NMEAInputLine &line, NMEAInfo &info)
     break;
   }
 
+  // mc value [m/s]
   if (line.ReadChecked(value)) {
     info.settings.ProvideMacCready(value, info.clock);
   }
