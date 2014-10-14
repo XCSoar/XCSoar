@@ -1,7 +1,14 @@
 USE_CONSOLE ?= $(call bool_or,$(EGL),$(USE_FB))
 
-# query /dev/input/event* instead of stdin and /dev/input/mice?
+# use Wayland's libinput for input device handling
+USE_LIBINPUT ?= n
+
+ifeq ($(USE_LIBINPUT),n)
+# query /dev/input/event* instead of stdin and /dev/input/mice or libinput?
 USE_LINUX_INPUT ?= $(call bool_and,$(TARGET_IS_LINUX),$(USE_CONSOLE))
+else
+USE_LINUX_INPUT = n
+endif
 
 EVENT_SOURCES = \
 	$(SRC)/Event/Shared/Timer.cpp \
@@ -24,11 +31,16 @@ VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/SignalListener.cpp \
-	$(SRC)/Event/Linux/MergeMouse.cpp \
 	$(SRC)/Event/Console/Loop.cpp \
 	$(SRC)/Event/Console/Queue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 
+ifeq ($(USE_LIBINPUT),y)
+EVENT_SOURCES += \
+	$(SRC)/Event/LibInput/LibInputHandler.cpp
+else ifeq ($(USE_CONSOLE),y)
+EVENT_SOURCES += \
+	$(SRC)/Event/Linux/MergeMouse.cpp
 ifeq ($(USE_LINUX_INPUT),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/AllInput.cpp \
@@ -37,6 +49,7 @@ else
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp
+endif
 endif
 
 else ifeq ($(ENABLE_SDL),y)
@@ -54,8 +67,17 @@ ifeq ($(USE_LINUX_INPUT),y)
 LINUX_INPUT_CPPFLAGS = -DUSE_LINUX_INPUT
 endif
 
+ifeq ($(USE_LIBINPUT),y)
+$(eval $(call pkg-config-library,LIBINPUT,libinput))
+LIBINPUT_CPPFLAGS := $(patsubst -I%,-isystem %,$(LIBINPUT_CPPFLAGS))
+LIBINPUT_CPPFLAGS += $(UDEV_CPPFLAGS)
+LIBINPUT_CPPFLAGS += -DUSE_LIBINPUT
+EVENT_LDLIBS += $(LIBINPUT_LDLIBS) $(UDEV_LDLIBS)
+endif
+
 EVENT_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
+	$(LIBINPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
 	$(GDI_CPPFLAGS) \
 	$(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) \

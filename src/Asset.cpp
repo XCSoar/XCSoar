@@ -189,7 +189,7 @@ ReadAssetNumber()
 #endif
 }
 
-#if defined(USE_CONSOLE) && !defined(KOBO)
+#if defined(USE_CONSOLE) && !defined(KOBO) && !defined(USE_LIBINPUT)
 
 bool
 HasPointer()

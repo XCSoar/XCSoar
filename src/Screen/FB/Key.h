@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CONSOLE_KEY_H
 #define XCSOAR_SCREEN_CONSOLE_KEY_H
 
-#ifdef USE_LINUX_INPUT
+#if defined(USE_LINUX_INPUT) || defined(USE_LIBINPUT)
 #include <linux/input.h>
 
 /* these macros conflict with Event::Type */
@@ -36,7 +36,7 @@ Copyright_License {
 #endif
 
 enum {
-#ifdef USE_LINUX_INPUT
+#if defined(USE_LINUX_INPUT) || defined(USE_LIBINPUT)
   KEY_RETURN = KEY_ENTER,
   KEY_ESCAPE = KEY_ESC,
   KEY_PRIOR = KEY_PAGEUP,

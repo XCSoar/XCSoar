@@ -253,7 +253,7 @@ HasIOIOLib()
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons
  */
-#if defined(USE_CONSOLE) && !defined(KOBO)
+#if defined(USE_CONSOLE) && !defined(KOBO) && !defined(USE_LIBINPUT)
 gcc_pure
 bool
 HasPointer();

@@ -21,20 +21,33 @@ Copyright_License {
 }
 */
 
-#include "Asset.hpp"
+#ifndef XCSOAR_UTIL_UDEVCONTEXT_HPP
+#define XCSOAR_UTIL_UDEVCONTEXT_HPP
 
-#ifdef HAVE_MODEL_TYPE
+static constexpr const char* UDEV_DEFAULT_SEAT = "seat0";
 
-ModelType global_model_type = ModelType::GENERIC;
+struct udev;
 
-#endif
-
-#if defined(USE_CONSOLE) && !defined(KOBO) && !defined(USE_LIBINPUT)
-
-bool
-HasPointer()
+/**
+ * Helper class for initialisation and (thread safe) access to the udev context.
+ */
+class UdevContext
 {
-  return !IsAltair();
-}
+  struct udev *ud;
+
+  explicit UdevContext(struct udev* _ud):ud(_ud) {}
+
+public:
+  UdevContext():ud(nullptr) {}
+  UdevContext(const UdevContext&);
+  UdevContext& operator=(const UdevContext&);
+  ~UdevContext();
+
+  struct udev * Get() {
+    return ud;
+  }
+
+  static UdevContext NewRef();
+};
 
 #endif

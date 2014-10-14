@@ -11,4 +11,8 @@ UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/StaticString.cpp \
 	$(UTIL_SRC_DIR)/StringUtil.cpp
 
+ifeq ($(ENABLE_UDEV),y)
+UTIL_SOURCES += $(UTIL_SRC_DIR)/UdevContext.cpp
+endif
+
 $(eval $(call link-library,util,UTIL))

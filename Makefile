@@ -85,6 +85,7 @@ include $(topdir)/build/fb.mk
 include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/sdl.mk
+include $(topdir)/build/udev.mk
 endif
 
 include $(topdir)/build/flags.mk

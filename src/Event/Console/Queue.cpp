@@ -30,6 +30,9 @@ EventQueue::EventQueue()
    thread(ThreadHandle::GetCurrent()),
    now_us(MonotonicClockUS()),
 #ifndef NON_INTERACTIVE
+#ifdef USE_LIBINPUT
+   libinput_handler(io_loop, *this),
+#else
 #ifdef KOBO
    keyboard(io_loop, *this, merge_mouse),
 #elif !defined(USE_LINUX_INPUT)
@@ -43,6 +46,7 @@ EventQueue::EventQueue()
    mouse(io_loop, merge_mouse),
 #endif
 #endif
+#endif
    running(true)
 {
   SignalListener::Create(SIGINT, SIGTERM);
@@ -51,6 +55,9 @@ EventQueue::EventQueue()
   io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, discard);
 
 #ifndef NON_INTERACTIVE
+#ifdef USE_LIBINPUT
+  libinput_handler.Open();
+#else
 #ifdef KOBO
   /* power button */
   keyboard.Open("/dev/input/event0");
@@ -63,13 +70,14 @@ EventQueue::EventQueue()
   mouse.Open();
 #endif
 #endif
+#endif
 }
 
 EventQueue::~EventQueue()
 {
 }
 
-#ifndef NON_INTERACTIVE
+#if !defined(NON_INTERACTIVE) && !defined(USE_LIBINPUT)
 
 void
 EventQueue::SetMouseRotation(DisplayOrientation orientation)
@@ -144,7 +152,7 @@ EventQueue::Generate(Event &event)
     return true;
   }
 
-#ifndef NON_INTERACTIVE
+#if !defined(NON_INTERACTIVE) && !defined(USE_LIBINPUT)
   event = merge_mouse.Generate();
   if (event.type != Event::Type::NOP)
     return true;
