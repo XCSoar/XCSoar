@@ -34,30 +34,31 @@ static bool
 ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
-  bool have; 
 
-  have = line.ReadChecked(value);
-  if (have) {
+  // bank angle [degrees, positive right]
+  if (line.ReadChecked(value)) {
     info.attitude.bank_angle_available.Update(info.clock);
     info.attitude.bank_angle = Angle::Degrees(value);
   }
 
-  have = line.ReadChecked(value);
-  if (have) {
+  // pitch angle [degrees, positive up]
+  if (line.ReadChecked(value)) {
     info.attitude.pitch_angle_available.Update(info.clock);
     info.attitude.pitch_angle = Angle::Degrees(value);
   }
 
-  have = line.ReadChecked(value);
-  if (have) {
+  // heading [degrees]
+  if (line.ReadChecked(value)) {
     info.attitude.heading_available.Update(info.clock);
     info.attitude.heading = Angle::Degrees(value);
   }
 
+  // IAS [m/s]
   if (line.ReadChecked(value)) {
     info.ProvideIndicatedAirspeed(value);
   }
 
+  // Load factor [g]
   if (line.ReadChecked(value)) {
     info.acceleration.ProvideGLoad(value, true);
   }
@@ -71,6 +72,7 @@ ParsePITV4(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
+  // TE vario [m/s]
   if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value);
 
@@ -81,13 +83,17 @@ static bool
 ParsePITV5(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
+  fixed norm, bearing;
 
-  if (line.ReadChecked(value)) {
-    // wind speed
+  // wind speed [m/s]
+  bool norm_valid = line.ReadChecked(norm);
+  // wind dir [degrees]
+  bool bearing_valid = line.ReadChecked(bearing);
+  if (norm_valid && bearing_valid) {
+    SpeedVector wind(Angle::Degrees(bearing), norm);
+    info.ProvideExternalWind(wind);
   }
-  if (line.ReadChecked(value)) {
-    // wind dir
-  }
+
   if (line.ReadChecked(value)) {
     // sqrt density ratio
   }
