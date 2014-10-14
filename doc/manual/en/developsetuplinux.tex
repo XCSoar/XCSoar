@@ -1,0 +1,257 @@
+This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It was last tested in Ubuntu 14.04 LTS in September 2014.
+
+\section{Install base system}
+The procedure uses the standard install, during/after which you should update all packages to the current level using
+
+\begin{verbatim}
+sudo apt-get update
+sudo apt-get upgrade
+\end{verbatim}
+
+\section{Platform-independent components}
+
+Components required for all platforms, plus git for downloading the source and uploading commits.
+
+\begin{verbatim}
+sudo apt-get install make \
+  librsvg2-bin xsltproc \
+  imagemagick gettext \
+  git
+\end{verbatim}
+
+\section{Download source code}
+
+Download the source code of \xc by executing /textt{git} in the following way in your project directory
+\begin{verbatim}
+git clone git://git.xcsoar.org/xcsoar/master/xcsoar.git
+
+# download submodule
+cd xcsoar
+git submodule init
+git submodule update
+\end{verbatim}
+
+
+\section{For Unix builds}
+\begin{verbatim}
+sudo apt-get install make g++ \
+  zlib1g-dev \
+  libsdl1.2-dev libfreetype6-dev \
+  libpng-dev libjpeg-dev \
+  libcurl4-openssl-dev \
+  libxml-parser-perl \
+  librsvg2-bin xsltproc \
+  imagemagick gettext \
+  ttf-dejavu
+\end{verbatim}
+
+\section{For Windows Mobile (Windows CE) builds}
+
+\xc requires a special version of mingw32 \texttt{cegcc} compiler which was patched to enable compilation of the source. Download at: \href{http://max.kellermann.name/projects/cegcc/}{http://max.kellermann.name/projects/cegcc/}. We are using \texttt{mingw32ce-mk-2013-04-03-i386.tar.xz}.
+
+The compiler is installed locally in the user directory:
+
+\begin{verbatim}
+cd ~/opt/
+unxz mingw32ce-mk-2013-04-03-i386.tar.xz 
+tar xvf mingw32ce-mk-2013-04-03-i386.tar
+ln -s  mingw32ce-mk-2013-04-03-i386 mingw32ce
+\end{verbatim}
+
+The compiler needs to be added to the path in \texttt{.profile} and \texttt{.bashrc} with \emph{absolute} path. (so do not use \texttt{~/opt/mingw32ce/bin}), otherwise \texttt{cegcc} is not executed by \texttt{make} for some reason.
+
+\begin{verbatim}
+export PATH="$PATH:/home/USERNAME/opt/mingw32ce/bin"
+\end{verbatim}
+
+We need  libmpc.2, which is no longer provided in some distributions, such as Ubuntu 14.04. So we need to go back one version:
+
+
+\hspace{-3cm}\begin{verbatim}
+wget 'http://ubuntu.mirrors.tds.net/ubuntu/pool/
+universe/m/mpclib/libmpc2_0.9-4build1_i386.deb'
+sudo dpkg -i libmpc2_0.9-4build1_i386.deb
+\end{verbatim}
+
+
+\section{For Android  builds}
+\subsection{Install JDK}
+First of all, we need Java to work with Android. Officially, Android requires the Oracle JDK. For licensing reasons, this is not included in linux distributions, therefore it needs to be installed seperately.  However, for \xc development OpenJDK seems to be working perfectly. We describe both methods in the following, you can only install one JDK.
+
+\subsubsection{Using OpenJDK}
+The OpenJDK alternative is easiest, as it is included in typical distributions, so we just install the package
+\begin{verbatim}
+sudo apt-get install openjdk-7-jdk
+sudo apt-get install vorbis-tools  ant
+\end{verbatim}
+
+\subsubsection{Using the official Oracle JDK}
+For the Oracle JDK alternative, we use a repository set up to provide the Oracle JDK installer, and need to protect the JDK in order to avoid dependencies in other packages (for example of Apache Ant) overriding the Oracle installation with OpenJDK.
+
+\begin{verbatim}
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java7-installer
+
+# To avoid Ant installation overriding the Oracle JDK
+
+sudo update-alternatives --install "/usr/bin/java" "java" \
+                "/usr/lib/jvm/java-7-oracle/bin/java" 2000
+sudo update-alternatives --install "/usr/bin/javac" "javac" \
+                "/usr/lib/jvm/java-7-oracle/bin/javac" 2000
+sudo update-alternatives --install "/usr/bin/javaws" "javaws"\
+                "/usr/lib/jvm/java-7-oracle/bin/javaws" 2000
+
+# Install Apache and and Vorbis tools
+sudo apt-get install vorbis-tools  ant
+\end{verbatim}
+
+
+\subsection{Install Android SDK and NDK}
+
+The SDK and NDK are installed in the user directory. The \texttt{Makefile} expects them in specific directories, therefore we make some symlinks.
+
+\begin{verbatim}
+cd ~/
+mkdir opt
+cd opt/
+
+# Download SDK
+wget 'http://dl.google.com/android/android-sdk_r23-linux.tgz'
+
+# Download NDK (BOTH 32bit and 64bit versions are required)
+# We are using the 32 bit host version here.
+wget 'http://dl.google.com/android/ndk/
+android-ndk32-r10b-linux-x86.tar.bz2'
+wget 'http://dl.google.com/android/ndk/
+android-ndk64-r10b-linux-x86.tar.bz2'
+        
+tar xvfz android-sdk_r23-linux.tgz
+mv android-sdk-linux/ android-sdk-linux_x86/
+
+tar --bzip2 -xvf android-ndk32-r10b-linux-x86.tar.bz2
+tar --bzip2 -xvf android-ndk64-r10b-linux-x86.tar.bz2
+
+ln -s android-ndk-r10b android-ndk-r10
+ln -s android-sdk-linux/ android-sdk-linux_x86
+\end{verbatim}
+
+We need to add the paths by appending the following lines to \texttt{\~/.profile} and \texttt{/~/.bashrc} --- here relative paths work.
+
+\begin{verbatim}
+# Android SDK
+export ANDROID_SDK_HOME="~/opt/android-sdk-linux_x86"
+export PATH="$PATH:$ANDROID_SDK_HOME/tools"
+export PATH="$PATH:$ANDROID_SDK_HOME/platform-tools"
+
+# Android NDK
+export ANDROID_NDK_HOME="~/opt/android-ndk-r10"
+export PATH="$PATH:$ANDROID_NDK_HOME"
+\end{verbatim}
+
+Now, you should start the Android manager with the \texttt{android} command, and install the required packages. Use the GUI to select and install SDK 19, and the (preselected) newest tools.
+
+Finally, for the \texttt{adb} debugger interface to work, most distributions require manual fixing of the \texttt{udev} rules. This can be done in the following way:
+
+\begin{addmargin}{-5 cm}
+\begin{verbatim}
+#Create etc/udev/rules.d/99-android.rules file
+
+echo "#Acer" > 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0502", MODE="0666"" >> 99-android.rules
+echo "#ASUS" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0b05", MODE="0666"" >> 99-android.rules
+echo "#Dell" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="413c", MODE="0666"" >> 99-android.rules
+echo "#Foxconn" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0489", MODE="0666"" >> 99-android.rules
+echo "#Garmin-Asus" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="091E", MODE="0666"" >> 99-android.rules
+echo "#Google" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="18d1", MODE="0666"" >> 99-android.rules
+echo "#HTC" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0bb4", MODE="0666"" >> 99-android.rules
+echo "#Huawei" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="12d1", MODE="0666"" >> 99-android.rules
+echo "#K-Touch" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="24e3", MODE="0666"" >> 99-android.rules
+echo "#KT Tech" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="2116", MODE="0666"" >> 99-android.rules
+echo "#Kyocera" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0482", MODE="0666"" >> 99-android.rules
+echo "#Lenevo" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="17EF", MODE="0666"" >> 99-android.rules
+echo "#LG" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="1004", MODE="0666"" >> 99-android.rules
+echo "#Motorola" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="22b8", MODE="0666"" >> 99-android.rules
+echo "#NEC" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0409", MODE="0666"" >> 99-android.rules
+echo "#Nook" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="2080", MODE="0666"" >> 99-android.rules
+echo "#Nvidia" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0955", MODE="0666"" >> 99-android.rules
+echo "#OTGV" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="2257", MODE="0666"" >> 99-android.rules
+echo "#Pantech" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="10A9", MODE="0666"" >> 99-android.rules
+echo "#Philips" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0471", MODE="0666"" >> 99-android.rules
+echo "#PMC-Sierra" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04da", MODE="0666"" >> 99-android.rules
+echo "#Qualcomm" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="05c6", MODE="0666"" >> 99-android.rules
+echo "#SK Telesys" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="1f53", MODE="0666"" >> 99-android.rules
+echo "#Samsung" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04e8", MODE="0666"" >> 99-android.rules
+echo "#Sharp" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04dd", MODE="0666"" >> 99-android.rules
+echo "#Sony Ericsson" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0fce", MODE="0666"" >> 99-android.rules
+echo "#Toshiba" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0930", MODE="0666"" >> 99-android.rules
+echo "#ZTE" >> 99-android.rules
+echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="19D2", MODE="0666"" >> 99-android.rules
+sudo mv -f 99-android.rules /etc/udev/rules.d/
+sudo chmod a+r /etc/udev/rules.d/99-android.rules
+\end{verbatim}
+\end{addmargin}
+
+\section{Optional: Eclipse IDE}
+The standard IDE for Android development (directly suppoerted by Google) is Eclipse. It is not limited to Android, and can be used for all targets, of course. It is not required for \xc, but its installation including the extensions for Android development is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
+
+First we install the base package
+
+\begin{verbatim}
+apt-get install eclipse
+\end{verbatim}
+
+Now install ADT Android plugin for Eclipse inside the eclipse thing, using the Google instructions:
+First downloadt the ADT Plugin from the Google website.
+
+To add the ADT plugin to Eclipse:
+\begin{itemize}
+\item    Start Eclipse, then select Help > Install New Software.
+\item    Click Add, in the top-right corner.
+\item    In the Add Repository dialog that appears, enter "ADT Plugin" for the Name and the following URL for the Location:\\
+   \texttt{ https://dl-ssl.google.com/android/eclipse/}\\
+   (Note: The Android Developer Tools update site requires an https connection. Make sure you do not omit the \texttt{https})
+\item    Click OK.
+\item    In the Available Software dialog, select the checkbox next to Developer Tools and click Next.
+\item    In the next window, you'll see a list of the tools to be downloaded. Click Next.
+\item    Accept license agreements, click Finish.
+\item    If there is a warning that the authenticity or validity of the software can not be established, click OK.
+\item    When the installation completes, restart Eclipse.
+\end{itemize}
+
+When Eclipse restarts, you configure the location of the Android SDK directory:
+
+\begin{itemize}
+\item In the "Welcome to Android Development" window that appears, select Use existing SDKs.
+\item Browse and select the location of the Android SDK directory you recently downloaded and unpacked.
+\item Click Next.
+\end{itemize}
+
+For easy \texttt{git} operation via the eclipse IDE, you can install the Eclipse GIT Team provider from the ''install new software'' menu.
+
