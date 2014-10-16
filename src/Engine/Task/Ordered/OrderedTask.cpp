@@ -1023,10 +1023,9 @@ OrderedTask::AllowIncrementalBoundaryStats(const AircraftState &aircraft) const
   if (task_points[active_task_point]->IsBoundaryScored())
     return true;
 
-  bool in_sector = task_points[active_task_point]->IsInSector(aircraft);
-  if (active_task_point>0) {
-    in_sector |= task_points[active_task_point-1]->IsInSector(aircraft);
-  }
+  bool in_sector = task_points[active_task_point]->IsInSector(aircraft) ||
+    task_points[active_task_point-1]->IsInSector(aircraft);
+
   return !in_sector;
 }
 
