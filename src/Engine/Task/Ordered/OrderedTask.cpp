@@ -929,7 +929,7 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
                                     GlideResult &total,
                                     GlideResult &leg)
 {
-  if (!aircraft.location.IsValid()) {
+  if (!aircraft.location.IsValid() || task_points.empty()) {
     total.Reset();
     leg.Reset();
     return;
@@ -948,7 +948,7 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                     GlideResult &total,
                                     GlideResult &leg)
 {
-  if (!aircraft.location.IsValid()) {
+  if (!aircraft.location.IsValid() || task_points.empty()) {
     total.Reset();
     leg.Reset();
     return;
@@ -970,6 +970,14 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
                                   const GlideResult &solution_remaining_total,
                                   const GlideResult &solution_remaining_leg)
 {
+  if (task_points.empty()) {
+    total.Reset();
+    leg.Reset();
+    total_remaining_effective.Reset();
+    leg_remaining_effective.Reset();
+    return;
+  }
+
   TaskMacCreadyTotal tm(task_points.cbegin(), task_points.cend(),
                         active_task_point,
                         task_behaviour.glide, glide_polar);
