@@ -23,20 +23,20 @@
 #include "GlideResult.hpp"
 #include "GlideState.hpp"
 
-GlideResult::GlideResult(const GlideState &task, const fixed V):
-  head_wind(task.head_wind),
-  v_opt(V),
+GlideResult::GlideResult(const GlideState &task, const fixed V)
+  :head_wind(task.head_wind),
+   v_opt(V),
 #ifndef NDEBUG
-  start_altitude(task.min_arrival_altitude + task.altitude_difference),
+   start_altitude(task.min_arrival_altitude + task.altitude_difference),
 #endif
-  min_arrival_altitude(task.min_arrival_altitude),
-  vector(task.vector),
-  pure_glide_min_arrival_altitude(task.min_arrival_altitude),
-  pure_glide_altitude_difference(task.altitude_difference),
-  altitude_difference(task.altitude_difference),
-  effective_wind_speed(task.wind.norm),
-  effective_wind_angle(task.effective_wind_angle),
-  validity(Validity::NO_SOLUTION)
+   min_arrival_altitude(task.min_arrival_altitude),
+   vector(task.vector),
+   pure_glide_min_arrival_altitude(task.min_arrival_altitude),
+   pure_glide_altitude_difference(task.altitude_difference),
+   altitude_difference(task.altitude_difference),
+   effective_wind_speed(task.wind.norm),
+   effective_wind_angle(task.effective_wind_angle),
+   validity(Validity::NO_SOLUTION)
 {
 }
 
@@ -65,7 +65,7 @@ GlideResult::CalcCruiseBearing()
 }
 
 void
-GlideResult::Add(const GlideResult &s2) 
+GlideResult::Add(const GlideResult &s2)
 {
   if ((unsigned)s2.validity > (unsigned)validity)
     /* downgrade the validity */
@@ -146,8 +146,8 @@ GlideResult::DestinationAngleGround() const
   return fixed(1000);
 }
 
-bool 
-GlideResult::IsFinalGlide() const 
+bool
+GlideResult::IsFinalGlide() const
 {
   return IsOk() && !negative(altitude_difference) && !positive(height_climb);
 }
