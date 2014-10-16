@@ -212,7 +212,7 @@ OrderedTask::ScanTotalStartTime()
 fixed
 OrderedTask::ScanLegStartTime()
 {
-  if (active_task_point)
+  if (active_task_point > 0)
     return task_points[active_task_point-1]->GetEnteredState().time;
 
   return fixed(-1);
@@ -1014,8 +1014,10 @@ OrderedTask::CalcBestMC(const AircraftState &aircraft,
 bool
 OrderedTask::AllowIncrementalBoundaryStats(const AircraftState &aircraft) const
 {
-  if (!active_task_point)
+  if (active_task_point == 0)
+    /* disabled for the start point */
     return false;
+
   assert(task_points[active_task_point]);
 
   if (task_points[active_task_point]->IsBoundaryScored())
