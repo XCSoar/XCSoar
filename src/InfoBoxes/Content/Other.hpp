@@ -33,9 +33,6 @@ void
 UpdateInfoBoxBattery(InfoBoxData &data);
 
 void
-UpdateInfoBoxExperimental1(InfoBoxData &data);
-
-void
 UpdateInfoBoxExperimental2(InfoBoxData &data);
 
 void

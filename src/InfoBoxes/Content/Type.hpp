@@ -107,7 +107,7 @@ namespace InfoBoxFactory
     /* 70..79 */
     e_H_QFE, /* Height on automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
     e_GR_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. */
-    e_Experimental1, /* Experimental1 */
+    e_Mag_Hdg, /* Experimental1 */
     e_OC_Distance, /* Online Contest Distance */
     e_Experimental2, /* Experimental2 */
     e_CPU_Load, /* CPU load consumed by XCSoar averaged over 5 seconds */

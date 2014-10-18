@@ -121,13 +121,6 @@ UpdateInfoBoxBattery(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxExperimental1(InfoBoxData &data)
-{
-  // Set Value
-  data.SetInvalid();
-}
-
-void
 UpdateInfoBoxExperimental2(InfoBoxData &data)
 {
   // Set Value

@@ -33,4 +33,11 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
 };
 
+// Compass Heading (True)
+class InfoBoxContentHeading : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxData &data) override;
+};
+
 #endif

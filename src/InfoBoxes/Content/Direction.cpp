@@ -39,6 +39,17 @@ InfoBoxContentTrack::Update(InfoBoxData &data)
   data.SetValue(CommonInterface::Basic().track);
 }
 
+// Display compass true heading
+void
+InfoBoxContentHeading::Update(InfoBoxData &data)
+{
+  if (!CommonInterface::Basic().heading_available) {
+    data.SetInvalid();
+    return;
+  }
+  data.SetValue((CommonInterface::Basic().heading) + (CommonInterface::Basic().variation));
+}
+
 bool
 InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
 {
