@@ -43,6 +43,7 @@
 #include "Device/Driver/IMI.hpp"
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/PosiGraph.hpp"
+#include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver/Westerboer.hpp"
@@ -1367,6 +1368,48 @@ TestZander()
 }
 
 static void
+TestVaulter()
+{
+  NullPort null;
+  Device *device = vaulter_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  ok1(device->ParseNMEA("$PITV3,-16.0,-23.9,147.9,23.03,1.01*1C", nmea_info));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, -16.0));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, -23.9));
+  ok1(nmea_info.attitude.heading_available);
+  ok1(equals(nmea_info.attitude.heading, 147.9));
+
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.indicated_airspeed, 23.03));
+
+  ok1(nmea_info.acceleration.available);
+  ok1(nmea_info.acceleration.real);
+  ok1(equals(nmea_info.acceleration.g_load, 1.01));
+
+  ok1(device->ParseNMEA("$PITV4,-0.04,0.57,-0.44,-102.0,-74.8,-73.7*3F", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, -0.04));
+
+  ok1(device->ParseNMEA("$PITV5,6.8,29.2,0.995,0.03,0,1.54*01", nmea_info));
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.bearing, 29.2));
+  ok1(equals(nmea_info.external_wind.norm, 6.8));
+
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
+  ok1(equals(nmea_info.settings.mac_cready, 1.54));
+
+  delete device;
+}
+
+
+static void
 TestDeclare(const struct DeviceRegister &driver)
 {
   FaultInjectionPort port(*(DataHandler *)NULL);
@@ -1435,7 +1478,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(754);
+  plan_tests(776);
 
   TestGeneric();
   TestTasman();
@@ -1460,6 +1503,7 @@ int main(int argc, char **argv)
   TestWesterboer();
   TestZander();
   TestFlyNet();
+  TestVaulter();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */

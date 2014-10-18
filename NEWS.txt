@@ -35,11 +35,15 @@ Version 6.8 - not yet released
   - support USB-OTG
   - export data partition via USB storage
 
-Version 6.7.6 - not yet released
+Version 6.7.6 - 2014/10/18
 * tracking
   - updated SkyLines server IP
+* user interface
+  - fix crash when switching pages with cross section (#3012, #3231, #3395)
 * devices
   - LX: relax download timeout (#3199)
+  - OpenVario: new device driver
+  - Vaulter: new device driver
 * replay
   - accept "$GNRMC" in replay of NMEA files
 * calculations

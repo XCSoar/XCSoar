@@ -106,7 +106,8 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/ILEC.cpp \
 	$(DRIVER_SRC_DIR)/Westerboer.cpp \
 	$(DRIVER_SRC_DIR)/WesterboerVW921.cpp \
-	$(DRIVER_SRC_DIR)/Zander.cpp
+	$(DRIVER_SRC_DIR)/Zander.cpp \
+	$(DRIVER_SRC_DIR)/Vaulter.cpp
 
 $(eval $(call link-library,driver,DRIVER))
 
