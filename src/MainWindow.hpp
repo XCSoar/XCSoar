@@ -159,6 +159,14 @@ protected:
    */
   void KillWidget();
 
+  bool HaveBottomWidget() const {
+    /* currently, the bottom widget is only visible below the map, but
+       not below a custom main widget */
+    /* TODO: eliminate this limitation; don't forget to remove the
+       "widget==nullptr" check from MainWindow::KillBottomWidget() */
+    return bottom_widget != nullptr && widget == nullptr;
+  }
+
   /**
    * Destroy the current "bottom" Widget, but don't resize the main
    * area.  The caller is responsible for doing that or installing a

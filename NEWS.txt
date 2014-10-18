@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.6 - not yet released
 * tracking
   - updated SkyLines server IP
+* user interface
+  - fix crash when switching pages with cross section (#3012, #3231, #3395)
 * devices
   - LX: relax download timeout (#3199)
   - OpenVario: new device driver
