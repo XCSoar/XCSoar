@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.7.6 - not yet released
+Version 6.7.6 - 2014/10/18
 * tracking
   - updated SkyLines server IP
 * user interface
