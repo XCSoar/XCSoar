@@ -89,8 +89,7 @@ roundshift(PixelPoint p) noexcept
 }
 
 void
-PolygonRotateShift(BulkPixelPoint *poly,
-                   const int n,
+PolygonRotateShift(std::span<BulkPixelPoint> poly,
                    const PixelPoint shift,
                    Angle angle,
                    int scale,
@@ -117,11 +116,6 @@ PolygonRotateShift(BulkPixelPoint *poly,
   FastIntegerRotation fr(angle);
   fr.Scale(scale / (100 >> SCALE_SHIFT));
 
-  BulkPixelPoint *p = poly;
-  const BulkPixelPoint *pe = poly + n;
-
-  while (p < pe) {
-    *p = roundshift<TOTAL_SHIFT>(fr.RotateRaw(*p)) + shift;
-    p++;
-  }
+  for (auto &p : poly)
+    p = roundshift<TOTAL_SHIFT>(fr.RotateRaw(p)) + shift;
 }

@@ -52,7 +52,7 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
     {  1, -40 },
   };
 
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos,
+  PolygonRotateShift(arrow, pos,
                      best_cruise_angle - screen_angle);
 #ifdef ENABLE_OPENGL
   const ScopeAlphaBlend alpha_blend;

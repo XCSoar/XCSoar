@@ -37,6 +37,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <cassert>
+#include <span>
 
 class RotatedPolygonRenderer {
 #ifdef ENABLE_OPENGL
@@ -47,18 +48,18 @@ class RotatedPolygonRenderer {
 #endif
 
 public:
-  RotatedPolygonRenderer(const BulkPixelPoint *src, unsigned n,
+  RotatedPolygonRenderer(std::span<const BulkPixelPoint> src,
                          const PixelPoint pos, const Angle angle,
                          const unsigned scale=100)
 #ifdef ENABLE_OPENGL
-    :points(src), rotate_shift(pos, angle, scale)
+    :points(src.data()), rotate_shift(pos, angle, scale)
 #endif
   {
 #ifndef ENABLE_OPENGL
-    assert(n <= ARRAY_SIZE(points));
+    assert(src.size() <= ARRAY_SIZE(points));
 
-    std::copy_n(src, n, points);
-    PolygonRotateShift(points, n, pos, angle, scale);
+    std::copy(src.begin(), src.end(), points);
+    PolygonRotateShift({points, src.size()}, pos, angle, scale);
 #endif
   }
 

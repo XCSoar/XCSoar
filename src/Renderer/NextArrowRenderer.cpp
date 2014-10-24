@@ -78,7 +78,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
    * argument.
    */
   const auto size = std::min(rc.GetWidth(), rc.GetHeight());
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow),
+  PolygonRotateShift(arrow,
                      rc.GetCenter(), angle,
                      size, false);
 

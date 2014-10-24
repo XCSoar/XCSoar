@@ -47,7 +47,7 @@ DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
 #ifdef ENABLE_OPENGL
   CanvasRotateShift rotate_shift(pos, angle, 50);
 #else
-  PolygonRotateShift(dst, 2 * points, pos, angle, 50);
+  PolygonRotateShift({dst, 2 * points}, pos, angle, 50);
 #endif
   canvas.DrawPolygon(dst, 2 * points);
 }
@@ -151,10 +151,10 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   static constexpr unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
 
   const auto *Aircraft = large ? AircraftLarge : AircraftSmall;
-  const unsigned AircraftPoints = large ?
+  const std::size_t AircraftPoints = large ?
                                   AIRCRAFT_POINTS_LARGE : AIRCRAFT_POINTS_SMALL;
 
-  const RotatedPolygonRenderer renderer(Aircraft, AircraftPoints,
+  const RotatedPolygonRenderer renderer({Aircraft, AircraftPoints},
                                         aircraft_pos, angle);
 
   canvas.SelectHollowBrush();
@@ -192,7 +192,7 @@ DrawHangGlider(Canvas &canvas, const AircraftLook &look,
     canvas.SelectBlackPen();
   }
 
-  const RotatedPolygonRenderer renderer(aircraft, ARRAY_SIZE(aircraft),
+  const RotatedPolygonRenderer renderer(aircraft,
                                         aircraft_pos, angle);
   renderer.Draw(canvas, 0, ARRAY_SIZE(aircraft));
 }
@@ -222,7 +222,7 @@ DrawParaGlider(Canvas &canvas, const AircraftLook &look,
     {0, -3},
    };
 
-  const RotatedPolygonRenderer renderer(aircraft, ARRAY_SIZE(aircraft),
+  const RotatedPolygonRenderer renderer(aircraft,
                                         aircraft_pos, angle);
 
   if (inverse) {
