@@ -102,13 +102,8 @@ PolygonRotateShift(RasterPoint *poly, const int n,
   if ((angle != lastangle) || (last_scale != scale)) {
     lastangle = angle;
     last_scale = scale;
-    if (scale == 100) {
-      cost = FastScale(angle.ifastcosine());
-      sint = FastScale(angle.ifastsine());
-    } else {
-      cost = FastScale(angle.ifastcosine() * scale) / 100;
-      sint = FastScale(angle.ifastsine() * scale) / 100;
-    }
+    cost = FastScale(angle.ifastcosine() * scale) / 100;
+    sint = FastScale(angle.ifastsine() * scale) / 100;
   }
 
   RasterPoint *p = poly;
