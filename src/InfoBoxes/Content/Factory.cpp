@@ -895,12 +895,11 @@ static constexpr MetaData meta_data[] = {
     e_LD, // LD Vario
   },
 
-  // e_Experimental
   {
-    N_("Experimental 1"),
-    N_("Exp1"),
-    NULL,
-    UpdateInfoBoxExperimental1,
+    N_("Compass Heading (True)"),
+    N_("Heading"),
+    N_("Magnetic heading from connected NMEA compass device corrected for local deviation."),
+    IBFHelper<InfoBoxContentHeading>::Create,
     e_Experimental2, // Exp2
     e_Experimental2, // Exp2
   },
@@ -921,8 +920,8 @@ static constexpr MetaData meta_data[] = {
     N_("Exp2"),
     NULL,
     UpdateInfoBoxExperimental2,
-    e_Experimental1, // Exp1
-    e_Experimental1, // Exp1
+    e_Experimental2, // Exp1
+    e_Experimental2, // Exp1
   },
 
   // e_CPU_Load
@@ -996,7 +995,7 @@ static constexpr MetaData meta_data[] = {
     e_CirclingAverage_spark, // TC trace
     e_Vario_spark, // Vario trace
   },
-  
+
   // e_CirclingAverage_spark
   {
     N_("Thermal climb trace"),
