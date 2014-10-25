@@ -30,8 +30,6 @@ Copyright_License {
 
 #include <algorithm>
 
-// note these use static vars! not thread-safe
-
 void
 ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
                    const RasterPoint &p3, RasterPoint *p4, int offset)
@@ -94,17 +92,10 @@ PolygonRotateShift(RasterPoint *poly, const int n,
                    const PixelScalar xs, const PixelScalar ys,
                    Angle angle, const int scale)
 {
-  static Angle lastangle = Angle::Native(fixed(-1));
-  static int cost = 1024, sint = 0;
-  static int last_scale = 0;
   angle = angle.AsBearing();
 
-  if ((angle != lastangle) || (last_scale != scale)) {
-    lastangle = angle;
-    last_scale = scale;
-    cost = FastScale(angle.ifastcosine() * scale) / 100;
-    sint = FastScale(angle.ifastsine() * scale) / 100;
-  }
+  const int cost = FastScale(angle.ifastcosine() * scale) / 100;
+  const int sint = FastScale(angle.ifastsine() * scale) / 100;
 
   RasterPoint *p = poly;
   const RasterPoint *pe = poly + n;
