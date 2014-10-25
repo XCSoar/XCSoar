@@ -143,6 +143,7 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
   value_r = Angle::Degrees(value).AsBearing();
   return true;
 }
+
 /**
  * Parses an angle in the form "DDDMM.SSS".  Minutes are 0..59, and
  * seconds are 0..999.
@@ -489,7 +490,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
     info.ground_speed_available.Update(info.clock);
   }
 
-    if (track_available && info.MovementDetected()) {
+  if (track_available && info.MovementDetected()) {
     // JMW don't update bearing unless we're moving
     info.track = track;
     info.track_available.Update(info.clock);
