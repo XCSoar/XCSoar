@@ -224,7 +224,7 @@ ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-unknown-linux-gnueabi-
   PI ?= /opt/pi/root
-  TARGET_ARCH += -march=armv6j -mfpu=vfp -mfloat-abi=hard
+  TARGET_ARCH += -mfpu=vfp -mfloat-abi=hard
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
   ARMV6 = y
