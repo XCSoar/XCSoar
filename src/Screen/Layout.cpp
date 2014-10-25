@@ -29,7 +29,7 @@ Copyright_License {
 namespace Layout
 {
   bool landscape = false;
-  int scale = 1;
+  unsigned scale = 1;
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;

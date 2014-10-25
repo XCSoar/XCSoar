@@ -413,7 +413,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(DrawListIndex <= ordered_task->TaskSize());
 
   const unsigned padding = Layout::GetTextPadding();
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
 
   TCHAR buffer[120];
 
@@ -479,9 +479,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
 
-  PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - Layout::FastScale(4)),
-                                Layout::FastScale(10));
+  const unsigned radius = std::min(line_height / 2 - Layout::FastScale(4u),
+                                   Layout::FastScale(10u));
 
   OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),
                           pt, radius, task_look,

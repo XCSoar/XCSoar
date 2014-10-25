@@ -451,9 +451,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
-  PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - 2 * text_padding),
-                                Layout::FastScale(10));
+  const unsigned radius = std::min(line_height / 2 - 2 * text_padding,
+                                   10u);
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
 

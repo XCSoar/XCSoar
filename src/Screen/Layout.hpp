@@ -37,7 +37,7 @@ namespace Layout
    * 1024).
    */
   extern unsigned scale_1024;
-  extern int scale;
+  extern unsigned scale;
 
   /**
    * Fixed-point scaling factor for on-screen objects which don't grow
@@ -121,14 +121,40 @@ namespace Layout
 #endif
 
   gcc_const
-  static inline PixelScalar
-  FastScale(PixelScalar x)
+  static inline int
+  FastScale(int x)
+  {
+    if (!ScaleSupported())
+      return x;
+
+    return x * int(scale);
+  }
+
+  gcc_const
+  static inline unsigned
+  FastScale(unsigned x)
   {
     if (!ScaleSupported())
       return x;
 
     return x * scale;
   }
+
+#ifdef USE_GDI
+  gcc_const
+  static inline int
+  FastScale(PixelScalar x)
+  {
+    return FastScale(int(x));
+  }
+
+  gcc_const
+  static inline int
+  FastScale(UPixelScalar x)
+  {
+    return FastScale(unsigned(x));
+  }
+#endif
 
   gcc_const
   static inline PixelScalar
