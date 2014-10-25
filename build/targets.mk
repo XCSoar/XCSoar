@@ -345,11 +345,7 @@ ifeq ($(TARGET),UNIX)
   endif
 
   ifeq ($(ARMV7),y)
-    ifeq ($(CLANG),y)
-      LLVM_TARGET = armv7a-none-linux-gnueabihf
-    else
-      TARGET_ARCH += -march=armv7-a
-    endif
+    TARGET_ARCH += -march=armv7-a
   endif
 
   ifeq ($(TARGET_IS_ARMHF),y)
@@ -362,6 +358,14 @@ ifeq ($(TARGET),UNIX)
     endif
 
     TARGET_ARCH += -mfloat-abi=hard
+  endif
+
+  ifeq ($(TARGET_IS_ARM)$(TARGET_IS_LINUX),yy)
+    ifeq ($(TARGET_IS_ARMHF),y)
+      LLVM_TARGET = arm-linux-gnueabihf
+    else
+      LLVM_TARGET = arm-linux-gnueabi
+    endif
   endif
 endif
 
@@ -568,10 +572,6 @@ endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf
-endif
-
-ifeq ($(TARGET_IS_PI),y)
-  LLVM_TARGET = armv6-none-linux-gnueabihf
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
