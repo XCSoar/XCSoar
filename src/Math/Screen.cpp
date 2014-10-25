@@ -92,8 +92,6 @@ PolygonRotateShift(RasterPoint *poly, const int n,
                    const PixelScalar xs, const PixelScalar ys,
                    Angle angle, const int scale)
 {
-  angle = angle.AsBearing();
-
   const int cost = FastScale(angle.ifastcosine() * scale) / 100;
   const int sint = FastScale(angle.ifastsine() * scale) / 100;
 
