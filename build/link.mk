@@ -134,14 +134,21 @@ endef
 #  _DEPENDS: a list of library names this executable depends on; it
 #  will use its CPPFLAGS, LDADD and LDFLAGS
 #
+#  _NO_LIB_PREFIX: if "y", then the output file will not be prefixed with "lib"
+#
 #  _STRIP: if "y", then the library will be stripped
 #
 define link-shared-library
 
-$(2)_BIN = $$(TARGET_BIN_DIR)/lib$(1).so
+$(2)_LIB_PREFIX = lib
+ifeq ($$($(2)_NO_LIB_PREFIX),y)
+$(2)_LIB_PREFIX =
+endif
+
+$(2)_BIN = $$(TARGET_BIN_DIR)/$$($(2)_LIB_PREFIX)$(1).so
 
 ifeq ($$($(2)_STRIP),y)
-$(2)_NOSTRIP = $$(TARGET_BIN_DIR)/lib$(1)-ns.so
+$(2)_NOSTRIP = $$(TARGET_BIN_DIR)/$$($(2)_LIB_PREFIX)$(1)-ns.so
 else
 $(2)_NOSTRIP = $$($(2)_BIN)
 endif
