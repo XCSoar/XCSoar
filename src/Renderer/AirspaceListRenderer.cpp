@@ -59,12 +59,13 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
+  const unsigned spacing = Layout::FastScale(4u);
 
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   // Y-Coordinate of the second row
-  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
+  const int top2 = rc.top + name_font.GetHeight() + spacing;
 
   canvas.Select(small_font);
 
@@ -72,7 +73,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
   unsigned altitude_width = canvas.CalcTextWidth(buffer);
-  canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4),
+  canvas.DrawClippedText(rc.right - altitude_width - spacing,
                          rc.top + name_font.GetHeight() -
                          small_font.GetHeight() + padding, rc,
                          buffer);
@@ -82,7 +83,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw lower airspace altitude limit
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
   altitude_width = canvas.CalcTextWidth(buffer);
-  canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4), top2,
+  canvas.DrawClippedText(rc.right - altitude_width - spacing, top2,
                          rc, buffer);
 
   if (altitude_width > max_altitude_width)
@@ -103,7 +104,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
-  const unsigned radius = std::min(line_height / 2 - Layout::FastScale(4u),
+  const unsigned radius = std::min(line_height / 2 - spacing,
                                    10u);
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
