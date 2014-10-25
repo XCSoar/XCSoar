@@ -38,6 +38,7 @@ HAVE_CE := n
 HAVE_FPU := y
 X64 := n
 TARGET_IS_ARM = n
+TARGET_IS_ARMHF = n
 XSCALE := n
 ARMV5 = n
 ARMV6 = n
@@ -94,6 +95,7 @@ endif
 
 ifeq ($(TARGET),ANDROID7)
   TARGET_IS_ARM = y
+  TARGET_IS_ARMHF = y
   ARMV7 := y
   override TARGET = ANDROID
 endif
@@ -224,9 +226,9 @@ ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-unknown-linux-gnueabi-
   PI ?= /opt/pi/root
-  TARGET_ARCH += -mfpu=vfp -mfloat-abi=hard
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
+  TARGET_IS_ARMHF = y
   ARMV6 = y
 endif
 
@@ -249,9 +251,10 @@ ifeq ($(TARGET),NEON)
   override TARGET = UNIX
   TCPREFIX = arm-unknown-linux-gnueabi-
   ifeq ($(CLANG),n)
-    TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
+    TARGET_ARCH += -mcpu=cortex-a8
   endif
   TARGET_IS_ARM = y
+  TARGET_IS_ARMHF = y
   ARMV7 := y
   NEON := y
 endif
@@ -340,8 +343,16 @@ ifeq ($(TARGET),UNIX)
     endif
   endif
 
-  ifeq ($(NEON),y)
-    TARGET_ARCH += -mfpu=neon
+  ifeq ($(TARGET_IS_ARMHF),y)
+    ifeq ($(ARMV6),y)
+      TARGET_ARCH += -mfpu=vfp
+    endif
+
+    ifeq ($(NEON),y)
+      TARGET_ARCH += -mfpu=neon
+    endif
+
+    TARGET_ARCH += -mfloat-abi=hard
   endif
 endif
 
