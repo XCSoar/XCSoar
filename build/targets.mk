@@ -325,6 +325,15 @@ ifeq ($(TARGET),IOS)
   ASFLAGS += -arch armv7
 endif
 
+ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
+  ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
+    TARGET_IS_LINUX := y
+  endif
+  ifeq ($(HOST_IS_DARWIN),y)
+    TARGET_IS_DARWIN := y
+  endif
+endif
+
 ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
@@ -353,15 +362,6 @@ ifeq ($(TARGET),UNIX)
     endif
 
     TARGET_ARCH += -mfloat-abi=hard
-  endif
-endif
-
-ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
-  ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
-    TARGET_IS_LINUX := y
-  endif
-  ifeq ($(HOST_IS_DARWIN),y)
-    TARGET_IS_DARWIN := y
   endif
 endif
 
