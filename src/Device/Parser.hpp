@@ -138,12 +138,18 @@ private:
   bool RMC(NMEAInputLine &line, NMEAInfo &info);
 
   /**
+   * Parses a HDM sentence
+   */
+  bool HDM(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
    * Parses a PGRMZ sentence (Garmin proprietary).
    *
    * @param line A NMEAInputLine instance that can be used for parsing
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
+
   bool RMZ(NMEAInputLine &line, NMEAInfo &info);
 
   /**

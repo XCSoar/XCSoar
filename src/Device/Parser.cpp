@@ -74,6 +74,9 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 
     if (StringIsEqual(type + 3, "GGA"))
       return GGA(line, info);
+
+    if (StringIsEqual(type + 3, "HDM"))
+      return HDM(line, info);
   }
 
   // if (proprietary sentence) ...
@@ -140,7 +143,6 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
   value_r = Angle::Degrees(value).AsBearing();
   return true;
 }
-
 /**
  * Parses an angle in the form "DDDMM.SSS".  Minutes are 0..59, and
  * seconds are 0..999.
@@ -409,6 +411,24 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
   time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
   return true;
 }
+/**
+ * Parses unsigned floating-point deviation angle value in degrees.
+ * and applies deviation sign from following E/W char
+ */
+static bool
+ReadVariation(NMEAInputLine &line, Angle &value_r)
+{
+  fixed value;
+  if (!line.ReadChecked(value))
+    return false;
+  char ch = line.ReadOneChar();
+  if (ch == 'W')
+    value = value * -1;
+  else if (ch != 'E')
+       return false;
+  value_r = Angle::Degrees(value).AsBearing();
+  return true;
+}
 
 bool
 NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
@@ -450,6 +470,9 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   // JMW get date info first so TimeModify is accurate
   ReadDate(line, info.date_time_utc);
 
+  Angle variation;
+  bool variation_available = ReadVariation(line, variation);
+
   if (!TimeHasAdvanced(this_time, info))
     return true;
 
@@ -466,10 +489,15 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
     info.ground_speed_available.Update(info.clock);
   }
 
-  if (track_available && info.MovementDetected()) {
+    if (track_available && info.MovementDetected()) {
     // JMW don't update bearing unless we're moving
     info.track = track;
     info.track_available.Update(info.clock);
+  }
+
+  if (variation_available) {
+    info.variation = variation;
+    info.variation_available.Update(info.clock);
   }
 
   info.gps.real = real;
@@ -477,6 +505,30 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   info.gps.android_internal_gps = false;
 #endif
 
+  return true;
+}
+/**
+ * Parse HDM NMEA sentence.
+ */
+bool
+NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
+{
+  /*
+   * $--GLL,llll.ll,a,yyyyy.yy,a,hhmmss.ss,a,m,*hh
+   * $HCHDM,238.5,M*hh/CR/LF
+   *
+   * Field Number:
+   *  1) Magnetic Heading to one decimal place
+   *  2) M (Magnetic)
+   *  3) Checksum
+   */
+  Angle heading;
+  bool heading_available = ReadBearing(line, heading);
+  if (heading_available) {
+    info.heading = heading;
+    info.heading_available.Update(info.clock);
+    }
+  info.gps.real = real;
   return true;
 }
 
