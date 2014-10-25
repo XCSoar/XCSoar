@@ -36,7 +36,7 @@ struct AirspaceRendererSettings;
 namespace AirspaceListRenderer
 {
   gcc_pure
-  UPixelScalar GetHeight(const DialogLook &dialog_look);
+  unsigned GetHeight(const DialogLook &dialog_look);
 
   /**
    * Draws an airspace list item.

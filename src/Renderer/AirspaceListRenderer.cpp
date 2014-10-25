@@ -43,10 +43,10 @@ namespace AirspaceListRenderer
             const AirspaceRendererSettings &renderer_settings);
 }
 
-UPixelScalar
+unsigned
 AirspaceListRenderer::GetHeight(const DialogLook &look)
 {
-  return look.list.font->GetHeight() + Layout::Scale(6) +
+  return look.list.font->GetHeight() + Layout::Scale(6u) +
          look.small_font->GetHeight();
 }
 
@@ -64,20 +64,20 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &small_font = *dialog_look.small_font;
 
   // Y-Coordinate of the second row
-  PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
+  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
   canvas.Select(small_font);
 
   // Draw upper airspace altitude limit
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-  UPixelScalar altitude_width = canvas.CalcTextWidth(buffer);
+  unsigned altitude_width = canvas.CalcTextWidth(buffer);
   canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4),
                          rc.top + name_font.GetHeight() -
                          small_font.GetHeight() + padding, rc,
                          buffer);
 
-  UPixelScalar max_altitude_width = altitude_width;
+  unsigned max_altitude_width = altitude_width;
 
   // Draw lower airspace altitude limit
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
@@ -88,12 +88,12 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   if (altitude_width > max_altitude_width)
     max_altitude_width = altitude_width;
 
-  UPixelScalar max_altitude_width_with_padding =
+  const unsigned max_altitude_width_with_padding =
     max_altitude_width + Layout::FastScale(10);
 
   // Draw comment line
-  PixelScalar left = rc.left + line_height + padding;
-  PixelScalar width = rc.right - max_altitude_width_with_padding - left;
+  const int left = rc.left + line_height + padding;
+  const unsigned width = rc.right - max_altitude_width_with_padding - left;
   canvas.DrawClippedText(left, top2, width, comment);
 
   // Draw airspace name
