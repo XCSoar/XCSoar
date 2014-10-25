@@ -362,6 +362,26 @@ struct NMEAInfo {
   fixed temperature;
 
   /**
+   * Is heading information available?
+   */
+  Validity heading_available;
+
+  /**
+   * Magnetic Heading (if available)
+   */
+  Angle heading;
+
+ /**
+   * Is Magnetic Variation information available?
+   */
+  Validity variation_available;
+
+  /**
+   * Magnetic Variation (if available)
+   */
+  Angle variation;
+
+  /**
    * Is humidity information available?
    * @see RelativeHumidity
    */
