@@ -35,7 +35,6 @@ endif # Android
 ifeq ($(TARGET_IS_PI),y)
   TARGET_LLVM_FLAGS = -march=arm -mcpu=arm1136jf-s -mattr=+vfp2 -float-abi=hard \
 	-enable-no-infs-fp-math -enable-no-nans-fp-math -enable-unsafe-fp-math
-  TARGET_ARCH += -integrated-as
 endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)

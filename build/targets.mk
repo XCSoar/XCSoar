@@ -335,7 +335,6 @@ ifeq ($(TARGET),UNIX)
   ifeq ($(ARMV7),y)
     ifeq ($(CLANG),y)
       LLVM_TARGET = armv7a-none-linux-gnueabihf
-      TARGET_ARCH += -integrated-as
     else
       TARGET_ARCH += -march=armv7-a
     endif
