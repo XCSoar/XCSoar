@@ -50,11 +50,11 @@ namespace Layout
   /**
    * Recommended padding from Window boundary to text.
    */
-  extern UPixelScalar text_padding;
+  extern unsigned text_padding;
 
-  extern UPixelScalar minimum_control_height, maximum_control_height;
+  extern unsigned minimum_control_height, maximum_control_height;
 
-  extern UPixelScalar hit_radius;
+  extern unsigned hit_radius;
 
   /**
    * Initializes the screen layout information provided by this
@@ -157,8 +157,8 @@ namespace Layout
 #endif
 
   gcc_const
-  static inline PixelScalar
-  SmallScale(PixelScalar x)
+  static inline int
+  SmallScale(int x)
   {
     if (!ScaleSupported())
       return x;
@@ -183,14 +183,14 @@ namespace Layout
    * circle.
    */
   gcc_const
-  static inline PixelScalar
-  ScaleY(PixelScalar y)
+  static inline int
+  ScaleY(int y)
   {
     return y;
   }
 
   gcc_const
-  static inline UPixelScalar
+  static inline unsigned
   GetTextPadding()
   {
     if (!ScaleSupported())
@@ -230,7 +230,7 @@ namespace Layout
    * items.
    */
   gcc_pure
-  static inline UPixelScalar
+  static inline unsigned
   GetHitRadius()
   {
     if (!HasPointer())
