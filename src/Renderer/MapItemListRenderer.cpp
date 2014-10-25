@@ -180,7 +180,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   };
 
   Angle arrow_angle = reachable ? Angle::HalfCircle() : Angle::Zero();
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, arrow_angle, 100);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, arrow_angle);
 
   if (reachable) {
     canvas.Select(look.brush_above);
