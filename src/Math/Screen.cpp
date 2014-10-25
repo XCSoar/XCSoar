@@ -89,9 +89,10 @@ FastScale(int x)
 
 void
 PolygonRotateShift(RasterPoint *poly, const int n,
-                   const PixelScalar xs, const PixelScalar ys,
+                   const RasterPoint shift,
                    Angle angle, const int scale)
 {
+  const int xs = shift.x, ys = shift.y;
   const int cost = FastScale(angle.ifastcosine() * scale) / 100;
   const int sint = FastScale(angle.ifastsine() * scale) / 100;
 

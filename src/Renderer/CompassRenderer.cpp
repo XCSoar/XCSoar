@@ -50,7 +50,7 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.Select(look.compass_brush);
 
   // North arrow
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y, -screen_angle);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos, -screen_angle);
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   canvas.Select(look.compass_triangle_pen);
@@ -58,6 +58,6 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
   RasterPoint black_triangle[4] = { { 0, -13 }, { 6, 10}, { 0, 4}, { 0, -13 } };
   PolygonRotateShift(black_triangle, ARRAY_SIZE(black_triangle),
-                     pos.x, pos.y, -screen_angle);
+                     pos, -screen_angle);
   canvas.DrawPolygon(black_triangle, ARRAY_SIZE(black_triangle));
 }

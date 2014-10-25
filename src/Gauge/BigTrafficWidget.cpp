@@ -288,7 +288,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   triangle[3].x = triangle[0].x;
   triangle[3].y = triangle[0].y;
 
-  PolygonRotateShift(triangle, 4, radar_mid.x, radar_mid.y,
+  PolygonRotateShift(triangle, 4, radar_mid,
                      task_direction - (enable_north_up ?
                                        Angle::Zero() : heading));
 

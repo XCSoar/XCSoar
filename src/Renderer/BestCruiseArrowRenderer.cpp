@@ -41,7 +41,7 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
   RasterPoint arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
                           {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y,
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos,
                      best_cruise_angle - screen_angle);
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 }

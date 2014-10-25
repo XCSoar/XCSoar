@@ -55,7 +55,7 @@ public:
     assert(n <= ARRAY_SIZE(points));
 
     std::copy(src, src + n, points);
-    PolygonRotateShift(points, n, pos.x, pos.y, angle);
+    PolygonRotateShift(points, n, pos, angle);
 #endif
   }
 
@@ -84,7 +84,7 @@ DrawMirroredPolygon(const RasterPoint *src, unsigned points,
 #ifdef ENABLE_OPENGL
   CanvasRotateShift rotate_shift(pos, angle, 50);
 #else
-  PolygonRotateShift(dst, 2 * points, pos.x, pos.y, angle, 50);
+  PolygonRotateShift(dst, 2 * points, pos, angle, 50);
 #endif
   canvas.DrawPolygon(dst, 2 * points);
 }

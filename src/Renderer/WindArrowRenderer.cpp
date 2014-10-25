@@ -49,7 +49,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
   };
 
   // Rotate the arrow
-  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y, angle);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos, angle);
 
   canvas.Select(look.arrow_pen);
   canvas.Select(look.arrow_brush);
@@ -64,7 +64,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
     };
 
     PolygonRotateShift(tail, ARRAY_SIZE(tail),
-                       pos.x, pos.y, angle);
+                       pos, angle);
 
     canvas.Select(look.tail_pen);
     canvas.DrawLine(tail[0], tail[1]);
@@ -94,7 +94,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
       { 18, (PixelScalar)(-26 - offset) },
   };
   PolygonRotateShift(label, ARRAY_SIZE(label),
-                     pos.x, pos.y, wind.bearing - screen_angle);
+                     pos, wind.bearing - screen_angle);
 
   TextInBoxMode style;
   style.align = TextInBoxMode::Alignment::CENTER;

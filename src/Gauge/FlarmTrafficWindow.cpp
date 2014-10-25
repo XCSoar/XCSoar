@@ -402,7 +402,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Rotate and shift the arrow
-  PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
+  PolygonRotateShift(Arrow, 5, sc[i],
                      traffic.track - (enable_north_up ?
                                              Angle::Zero() : heading));
 
