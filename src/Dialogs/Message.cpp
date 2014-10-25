@@ -42,11 +42,11 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   SingleWindow &main_window = UIGlobals::GetMainWindow();
 
-  UPixelScalar dialog_width = Layout::Scale(200);
-  UPixelScalar dialog_height = Layout::Scale(160);
+  const unsigned dialog_width = Layout::Scale(200u);
+  unsigned dialog_height = Layout::Scale(160u);
 
-  UPixelScalar button_width = Layout::Scale(60);
-  UPixelScalar button_height = Layout::Scale(32);
+  const unsigned button_width = Layout::Scale(60u);
+  const unsigned button_height = Layout::Scale(32u);
 
   // Create dialog
   WindowStyle style;
@@ -71,14 +71,14 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   text_frame->SetCaption(text);
   text_frame->SetAlignCenter();
 
-  UPixelScalar text_height = text_frame->GetTextHeight();
+  const unsigned text_height = text_frame->GetTextHeight();
   text_frame->Resize(dialog_width, text_height + Layout::GetTextPadding());
 
   const PixelSize root_size = main_window.GetSize();
 
   dialog_height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + button_height;
-  PixelScalar dialog_x = (root_size.cx - dialog_width) / 2;
-  PixelScalar dialog_y = (root_size.cy - dialog_height) / 2;
+  const int dialog_x = (root_size.cx - dialog_width) / 2;
+  const int dialog_y = (root_size.cy - dialog_height) / 2;
   wf.Move(dialog_x, dialog_y, dialog_width, dialog_height);
 
   PixelRect button_rc;
@@ -134,8 +134,8 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
                     button_style, wf, IDIGNORE);
   }
 
-  UPixelScalar max_button_width = dialog_width / buttons.size();
-  PixelScalar button_x = max_button_width / 2 - button_width / 2;
+  const unsigned max_button_width = dialog_width / buttons.size();
+  int button_x = max_button_width / 2 - button_width / 2;
 
   // Move buttons to the right positions
   for (unsigned i = 0; i < buttons.size(); i++) {
