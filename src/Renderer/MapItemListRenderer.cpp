@@ -153,7 +153,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const DialogLook &dialog_look,
                           const FinalGlideBarLook &look)
 {
-  const UPixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
 
   bool elevation_available =
       !RasterBuffer::IsSpecial((short)item.elevation);
@@ -173,8 +173,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   // Draw final glide arrow icon
 
-  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
-                     (PixelScalar)(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
   RasterPoint arrow[] = {
       { -7, -3 }, { 0, 4 }, { 7, -3 }
@@ -289,8 +288,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, buffer);
 
-  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
-                     (PixelScalar)(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 }
 
@@ -437,7 +436,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(small_font);
 
   // Draw details line
-  UPixelScalar left = rc.left + line_height + text_padding;
+  const int left = rc.left + line_height + text_padding;
   OrderedTaskPointRadiusLabel(*item.oz, buffer);
   if (!StringIsEmpty(buffer))
     canvas.DrawClippedText(left, top2, rc.right - left, buffer);
@@ -521,8 +520,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, info_string);
 
-  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
-                     (PixelScalar)(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
   // Render the representation of the traffic icon
   if (traffic != NULL)
