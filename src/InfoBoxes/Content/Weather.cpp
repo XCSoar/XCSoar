@@ -213,8 +213,8 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 
   const RasterPoint pt = rc.GetCenter();
 
-  UPixelScalar padding = Layout::FastScale(10);
-  UPixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top);
+  const unsigned padding = Layout::FastScale(10u);
+  unsigned size = std::min(rc.right - rc.left, rc.bottom - rc.top);
 
   if (size > padding)
     size -= padding;
@@ -225,10 +225,10 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
-  PixelScalar length =
-    std::min(size, (UPixelScalar)std::max(10, iround(Quadruple(info.wind.norm))));
+  const int length =
+    std::min(size, std::max(10u, uround(Quadruple(info.wind.norm))));
 
-  PixelScalar offset = -length / 2;
+  const int offset = -length / 2;
 
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
