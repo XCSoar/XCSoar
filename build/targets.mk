@@ -209,6 +209,7 @@ ifeq ($(TARGET),UNIX)
   ARMV6 = $(HOST_IS_ARMV6)
   ARMV7 = $(HOST_IS_ARMV7)
   NEON = $(HOST_HAS_NEON)
+  TARGET_IS_ARMHF := $(call bool_or,$(ARMV7),$(TARGET_IS_PI))
   TARGET_HAS_MALI = $(HOST_HAS_MALI)
 endif
 
