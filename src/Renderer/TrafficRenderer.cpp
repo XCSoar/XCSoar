@@ -34,19 +34,13 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmColor color, const RasterPoint pt)
 {
   // Create point array that will form that arrow polygon
-  RasterPoint Arrow[5];
-
-  // Fill the Arrow array with a normal arrow pointing north
-  Arrow[0].x = -4;
-  Arrow[0].y = 6;
-  Arrow[1].x = 0;
-  Arrow[1].y = -8;
-  Arrow[2].x = 4;
-  Arrow[2].y = 6;
-  Arrow[3].x = 0;
-  Arrow[3].y = 3;
-  Arrow[4].x = -4;
-  Arrow[4].y = 6;
+  RasterPoint Arrow[5] = {
+    { -4, 6 },
+    { 0, -8 },
+    { 4, 6 },
+    { 0, 3 },
+    { -4, 6 },
+  };
 
   // Select brush depending on AlarmLevel
   switch (traffic.alarm_level) {
