@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_WIND_ARROW_RENDERER_HPP
 #define XCSOAR_WIND_ARROW_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "MapSettings.hpp"
 
 class Canvas;
 class Angle;
+struct RasterPoint;
+struct PixelRect;
 struct WindArrowLook;
 struct SpeedVector;
 struct DerivedInfo;
@@ -47,8 +48,8 @@ public:
             const MapSettings &settings);
 
   void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
-                 PixelScalar length, WindArrowStyle arrow_style,
-                 PixelScalar offset = 23);
+                 unsigned length, WindArrowStyle arrow_style,
+                 int offset = 23);
 };
 
 #endif

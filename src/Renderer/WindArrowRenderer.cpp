@@ -36,16 +36,16 @@ Copyright_License {
 
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
-                             PixelScalar length, WindArrowStyle arrow_style,
-                             PixelScalar offset)
+                             unsigned length, WindArrowStyle arrow_style,
+                             int offset)
 {
   // Draw arrow
 
   RasterPoint arrow[] = {
-    { 0, (PixelScalar)(-offset + 3) },
-    { -6, (PixelScalar)(-offset - 3 - length) },
-    { 0, (PixelScalar)(-offset + 3 - length) },
-    { 6, (PixelScalar)(-offset - 3 - length) },
+    { 0, -offset + 3 },
+    { -6, -offset - 3 - int(length) },
+    { 0, -offset + 3 - int(length) },
+    { 6, -offset - 3 - int(length) },
   };
 
   // Rotate the arrow
@@ -59,8 +59,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
     RasterPoint tail[] = {
-      { 0, (PixelScalar)(-offset + 3) },
-      { 0, -offset - 3 - std::min(PixelScalar(20), length) * 3 },
+      { 0, -offset + 3 },
+      { 0, -offset - 3 - int(std::min(20u, length) * 3u) },
     };
 
     PolygonRotateShift(tail, ARRAY_SIZE(tail),
@@ -78,7 +78,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 {
   // Draw arrow (and tail)
 
-  PixelScalar length = iround(4 * wind.norm);
+  const unsigned length = uround(Quadruple(wind.norm));
   DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style);
 
   // Draw wind speed label
@@ -89,9 +89,9 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(*look.font);
 
-  PixelScalar offset = iround(fixed_sqrt_two * wind.norm);
+  const unsigned offset = uround(fixed_sqrt_two * wind.norm);
   RasterPoint label[] = {
-      { 18, (PixelScalar)(-26 - offset) },
+    { 18, -26 - int(offset) },
   };
   PolygonRotateShift(label, ARRAY_SIZE(label),
                      pos, wind.bearing - screen_angle);
