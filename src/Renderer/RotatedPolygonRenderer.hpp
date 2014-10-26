@@ -48,16 +48,17 @@ class RotatedPolygonRenderer {
 
 public:
   RotatedPolygonRenderer(const RasterPoint *src, unsigned n,
-                         const RasterPoint pos, const Angle angle)
+                         const RasterPoint pos, const Angle angle,
+                         const unsigned scale=100)
 #ifdef ENABLE_OPENGL
-    :points(src), rotate_shift(pos, angle)
+    :points(src), rotate_shift(pos, angle, scale)
 #endif
   {
 #ifndef ENABLE_OPENGL
     assert(n <= ARRAY_SIZE(points));
 
     std::copy_n(src, n, points);
-    PolygonRotateShift(points, n, pos, angle);
+    PolygonRotateShift(points, n, pos, angle, scale);
 #endif
   }
 
