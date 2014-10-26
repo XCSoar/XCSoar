@@ -27,6 +27,7 @@
 #include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"
 #include "Math/Screen.hpp"
+#include "Util/Macros.hpp"
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
@@ -34,7 +35,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmColor color, const RasterPoint pt)
 {
   // Create point array that will form that arrow polygon
-  RasterPoint Arrow[5] = {
+  RasterPoint arrow[] = {
     { -4, 6 },
     { 0, -8 },
     { 4, 6 },
@@ -61,10 +62,10 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.SelectBlackPen();
 
   // Rotate and shift the arrow to the right position and angle
-  PolygonRotateShift(Arrow, 5, pt, angle);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, angle);
 
   // Draw the arrow
-  canvas.DrawPolygon(Arrow, 5);
+  canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   switch (color) {
   case FlarmColor::GREEN:
