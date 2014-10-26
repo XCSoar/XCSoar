@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LIST_RENDERER_HPP
 #define XCSOAR_WAYPOINT_LIST_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
 class Canvas;
+struct PixelRect;
 struct Waypoint;
 struct GeoVector;
 struct DialogLook;
@@ -37,7 +37,7 @@ struct WaypointRendererSettings;
 namespace WaypointListRenderer
 {
   gcc_pure
-  UPixelScalar GetHeight(const DialogLook &dialog_look);
+  unsigned GetHeight(const DialogLook &dialog_look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
             const DialogLook &dialog_look, const WaypointLook &look,
