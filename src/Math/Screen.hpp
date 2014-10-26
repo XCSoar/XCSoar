@@ -48,13 +48,9 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
  *        (The scale value 100 preserves the size of the input polygon.)
  *        For best scaling precision, avoid 'scale' values smaller than
  *        the intended size of the polygon.
- * @param use_fast_scale If true, additional scaling via FastScale()
- *        will be applied. This flag is only intended for backwards
- *        compatibility as the use of FastScale() is deprecated.
  */
 void
 PolygonRotateShift(std::span<BulkPixelPoint> poly, PixelPoint shift,
-                   Angle angle, int scale = 100,
-                   bool use_fast_scale = true) noexcept;
+                   Angle angle, int scale = 100) noexcept;
 
 #endif

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Math/FastMath.hpp"
 #include "FastRotation.hpp"
-#include "Screen/Layout.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
@@ -91,12 +90,8 @@ void
 PolygonRotateShift(std::span<BulkPixelPoint> poly,
                    const PixelPoint shift,
                    Angle angle,
-                   int scale,
-                   const bool use_fast_scale) noexcept
+                   int scale) noexcept
 {
-  if (use_fast_scale)
-    scale = Layout::FastScale(scale);
-
   constexpr int SCALE_SHIFT = 2;
   constexpr int TOTAL_SHIFT = FastIntegerRotation::SHIFT + SCALE_SHIFT;
 

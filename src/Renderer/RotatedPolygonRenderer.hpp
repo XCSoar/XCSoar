@@ -30,6 +30,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/CanvasRotateShift.hpp"
 #else
+#include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include <array>
 #endif
@@ -60,7 +61,7 @@ public:
 
     std::copy(src.begin(), src.end(), points.begin());
     PolygonRotateShift(std::span{points}.first(src.size()),
-                       pos, angle, scale);
+                       pos, angle, Layout::Scale(scale));
 #endif
   }
 

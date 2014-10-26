@@ -80,7 +80,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
   const auto size = std::min(rc.GetWidth(), rc.GetHeight());
   PolygonRotateShift(arrow,
                      rc.GetCenter(), angle,
-                     size, false);
+                     size);
 
   // Draw the arrow.
   canvas.Select(look.arrow_pen);

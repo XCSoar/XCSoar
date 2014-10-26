@@ -28,10 +28,8 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "Math/Angle.hpp"
+#include "Screen/Layout.hpp"
 #include "util/Macros.hpp"
-
-#include <algorithm>
-#include <array>
 
 static void
 DrawMirroredPolygon(std::span<const BulkPixelPoint> src,
@@ -49,7 +47,7 @@ DrawMirroredPolygon(std::span<const BulkPixelPoint> src,
 #ifdef ENABLE_OPENGL
   CanvasRotateShift rotate_shift(pos, angle, 50);
 #else
-  PolygonRotateShift({dst.data(), 2 * src.size()}, pos, angle, 50);
+  PolygonRotateShift({dst.data(), 2 * src.size()}, pos, angle, Layout::Scale(50U));
 #endif
   canvas.DrawPolygon(dst.data(), 2 * src.size());
 }

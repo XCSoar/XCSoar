@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "BestCruiseArrowRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Look/TaskLook.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
@@ -53,7 +54,8 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
   };
 
   PolygonRotateShift(arrow, pos,
-                     best_cruise_angle - screen_angle);
+                     best_cruise_angle - screen_angle,
+                     Layout::Scale(100U));
 #ifdef ENABLE_OPENGL
   const ScopeAlphaBlend alpha_blend;
 #endif

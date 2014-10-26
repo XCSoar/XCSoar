@@ -123,7 +123,8 @@ Draw(Canvas &canvas, PixelRect rc,
   };
 
   Angle arrow_angle = reachable ? Angle::HalfCircle() : Angle::Zero();
-  PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pt, arrow_angle);
+  PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pt, arrow_angle,
+                     Layout::Scale(100U));
 
   if (reachable) {
     canvas.Select(look.brush_above);
