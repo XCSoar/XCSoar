@@ -54,7 +54,7 @@ public:
 #ifndef ENABLE_OPENGL
     assert(n <= ARRAY_SIZE(points));
 
-    std::copy(src, src + n, points);
+    std::copy_n(src, n, points);
     PolygonRotateShift(points, n, pos, angle);
 #endif
   }
@@ -76,7 +76,7 @@ DrawMirroredPolygon(const RasterPoint *src, unsigned points,
   RasterPoint dst[64];
   assert(2 * points <= ARRAY_SIZE(dst));
 
-  std::copy(src, src + points, dst);
+  std::copy_n(src, points, dst);
   for (unsigned i = 0; i < points; ++i) {
     dst[2 * points - i - 1].x = -dst[i].x;
     dst[2 * points - i - 1].y = dst[i].y;
