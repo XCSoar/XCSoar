@@ -149,7 +149,6 @@ private:
    * @param info NMEA_INFO struct to parse into
    * @return Parsing success
    */
-
   bool RMZ(NMEAInputLine &line, NMEAInfo &info);
 
   /**
