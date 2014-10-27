@@ -153,6 +153,10 @@ NMEAInfo::Reset()
   track = Angle::Zero();
   track_available.Clear();
 
+  heading_available.Clear();
+
+  variation_available.Clear();
+
   ground_speed_available.Clear();
   airspeed_available.Clear();
   ground_speed = true_airspeed = indicated_airspeed = fixed(0);
@@ -339,6 +343,16 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (!temperature_available && add.temperature_available) {
     temperature = add.temperature;
     temperature_available = add.temperature_available;
+  }
+
+  if (!heading_available && add.heading_available) {
+    heading = add.heading;
+    heading_available = add.heading_available;
+  }
+
+   if (!variation_available && add.variation_available) {
+    variation = add.variation;
+    variation_available = add.variation_available;
   }
 
   if (!humidity_available && add.humidity_available) {

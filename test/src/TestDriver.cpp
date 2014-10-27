@@ -107,11 +107,24 @@ TestGeneric()
   ok1(equals(nmea_info.location.longitude, 7.693));
   ok1(equals(nmea_info.location.latitude, 51.059));
   ok1(!nmea_info.baro_altitude_available);
+  ok1(nmea_info.variation_available);
+  ok1(equals(nmea_info.variation, -000.3));
 
   /* baro altitude (proprietary Garmin sentence) */
   ok1(parser.ParseLine("$PGRMZ,100,m,3*11", nmea_info));
   ok1(nmea_info.baro_altitude_available);
   ok1(equals(nmea_info.baro_altitude, 100));
+
+  /* Magnetic Heading ok */
+  ok1(parser.ParseLine("$HCHDM,182.7,M*25", nmea_info));
+  ok1(nmea_info.heading_available);
+  ok1(equals(nmea_info.heading, 182.7));
+
+  /* Magnetic Heading bad char */
+  ok1(!parser.ParseLine("$HCHDM,1x2.7,M*25", nmea_info));
+
+  /* Magnetic Heading bad checksum */
+  ok1(!parser.ParseLine("$HCHDM,182.7,M*26", nmea_info));
 }
 
 static void
@@ -1478,7 +1491,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(776);
+  plan_tests(783);
 
   TestGeneric();
   TestTasman();
