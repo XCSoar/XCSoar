@@ -412,6 +412,7 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
   time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
   return true;
 }
+
 /**
  * Parses unsigned floating-point deviation angle value in degrees.
  * and applies deviation sign from following E/W char
@@ -424,10 +425,11 @@ ReadVariation(NMEAInputLine &line, Angle &value_r)
     return false;
   char ch = line.ReadOneChar();
   if (ch == 'W')
-    value = value * -1;
+    value = -value;
   else if (ch != 'E')
        return false;
-  value_r = Angle::Degrees(value).AsBearing();
+
+  value_r = Angle::Degrees(value);
   return true;
 }
 
@@ -496,10 +498,13 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
     info.track_available.Update(info.clock);
   }
 
-  if (variation_available) {
-    info.variation = variation;
-    info.variation_available.Update(info.clock);
-  }
+  if (!variation_available)
+    info.variation_available.Clear();
+  else if (variation_available)
+       {
+       info.variation = variation;
+       info.variation_available.Update(info.clock);
+       }
 
   info.gps.real = real;
 #ifdef ANDROID
@@ -508,6 +513,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   return true;
 }
+
 /**
  * Parse HDM NMEA sentence.
  */
@@ -515,7 +521,6 @@ bool
 NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
-   * $--GLL,llll.ll,a,yyyyy.yy,a,hhmmss.ss,a,m,*hh
    * $HCHDM,238.5,M*hh/CR/LF
    *
    * Field Number:
@@ -525,11 +530,15 @@ NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
    */
   Angle heading;
   bool heading_available = ReadBearing(line, heading);
-  if (heading_available) {
-    info.heading = heading;
-    info.heading_available.Update(info.clock);
-    }
-  info.gps.real = real;
+
+  if (!heading_available)
+    info.heading_available.Clear();
+  else if (heading_available)
+       {
+       info.heading = heading;
+       info.heading_available.Update(info.clock);
+       }
+
   return true;
 }
 
