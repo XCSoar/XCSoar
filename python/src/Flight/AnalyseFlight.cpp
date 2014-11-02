@@ -52,6 +52,7 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   CirclingSettings circling_settings;
   circling_settings.SetDefaults();
   CirclingComputer circling_computer;
+  circling_computer.Reset();
 
   GlidePolar glide_polar(fixed(0));
 
