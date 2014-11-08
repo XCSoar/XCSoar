@@ -21,6 +21,20 @@ Copyright_License {
 }
 */
 
+/** \file GeoPointFormatter.cpp
+ * Provides string formatting for the differing coordinate formats 
+ * Precision differs between the formats.
+ * From http://en.wikipedia.org/wiki/Decimal_degrees 1 degree is 111.32km,
+ * this reduces for longitude as progress further north. Multiplying by
+ * square root of two as error could be in both axes gives us the worst
+ * cases of:
+ *
+ *   DD.ddddd   precision of  1.57 m
+ *   DD MM.mmm                2.62 m
+ *   DD MM SS                43.72 m
+ *   DD MM SS.s               4.37 m
+ */
+ 
 #include "GeoPointFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Math/Angle.hpp"
@@ -62,7 +76,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
                  dd, mm, ss, sign);
     break;
 
-  case CoordinateFormat::DDMMSS_SS:
+  case CoordinateFormat::DDMMSS_S:
     // Calculate degrees
     dd = (int)mlong;
     // Calculate minutes
@@ -71,7 +85,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%03d") _T(DEG) _T("%02d'%05.2f\" %c"),
+    StringFormat(buffer, size, _T("%03d") _T(DEG) _T("%02d'%04.1f\" %c"),
                  dd, mm, mlong, sign);
     break;
 
@@ -85,9 +99,9 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
                  dd, mlong, sign);
     break;
 
-  case CoordinateFormat::DD_DDDD:
+  case CoordinateFormat::DD_DDDDD:
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%08.4f" DEG " %c"), mlong, sign);
+    StringFormat(buffer, size, _T("%09.5f" DEG " %c"), mlong, sign);
     break;
 
   case CoordinateFormat::UTM:
@@ -131,7 +145,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
                  dd, mm, ss, sign);
     break;
 
-  case CoordinateFormat::DDMMSS_SS:
+  case CoordinateFormat::DDMMSS_S:
     // Calculate degrees
     dd = (int)mlat;
     // Calculate minutes
@@ -140,7 +154,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%02d") _T(DEG) _T("%02d'%05.2f\" %c"),
+    StringFormat(buffer, size, _T("%02d") _T(DEG) _T("%02d'%04.1f\" %c"),
                  dd, mm, mlat, sign);
     break;
 
@@ -154,9 +168,9 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
                  dd, mlat, sign);
     break;
 
-  case CoordinateFormat::DD_DDDD:
+  case CoordinateFormat::DD_DDDDD:
     // Save the string to the buffer
-    StringFormat(buffer, size, _T("%07.4f" DEG " %c"), mlat, sign);
+    StringFormat(buffer, size, _T("%08.5f" DEG " %c"), mlat, sign);
     break;
 
   case CoordinateFormat::UTM:

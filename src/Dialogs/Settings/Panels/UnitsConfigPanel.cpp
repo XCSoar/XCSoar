@@ -221,9 +221,9 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   static constexpr StaticEnumChoice units_lat_lon_list[] = {
     { (unsigned)CoordinateFormat::DDMMSS, _T("DDMMSS") },
-    { (unsigned)CoordinateFormat::DDMMSS_SS, _T("DDMMSS.ss") },
+    { (unsigned)CoordinateFormat::DDMMSS_S, _T("DDMMSS.s") },
     { (unsigned)CoordinateFormat::DDMM_MMM, _T("DDMM.mmm") },
-    { (unsigned)CoordinateFormat::DD_DDDD, _T("DD.dddd") },
+    { (unsigned)CoordinateFormat::DD_DDDDD, _T("DD.ddddd") },
     { (unsigned)CoordinateFormat::UTM, _T("UTM") },
     { 0 }
   };

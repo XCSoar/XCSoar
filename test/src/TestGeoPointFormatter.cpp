@@ -53,14 +53,14 @@ main(int argc, char **argv)
   GeoPoint location2(Angle::Degrees(-70.011667),
                      Angle::Degrees(-32.653333));
 
-  // Test DD.dddd
+  // Test DD.ddddd
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),
-                 CoordinateFormat::DD_DDDD);
-  ok1(StringIsEqual(buffer, _T("49.4872° N 008.4663° E")));
+                 CoordinateFormat::DD_DDDDD);
+  ok1(StringIsEqual(buffer, _T("49.48715° N 008.46632° E")));
 
   FormatGeoPoint(location2, buffer, ARRAY_SIZE(buffer),
-                 CoordinateFormat::DD_DDDD);
-  ok1(StringIsEqual(buffer, _T("32.6533° S 070.0117° W")));
+                 CoordinateFormat::DD_DDDDD);
+  ok1(StringIsEqual(buffer, _T("32.65333° S 070.01167° W")));
 
 
   // Test DDMM.mmm
@@ -83,16 +83,14 @@ main(int argc, char **argv)
   ok1(StringIsEqual(buffer, _T("32°39'12\" S 070°00'42\" W")));
 
 
-  // Test DDMMSS.ss
+  // Test DDMMSS.s
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),
-                 CoordinateFormat::DDMMSS_SS);
-  ok1(StringIsEqualWildcard(buffer, _T("49°29'1*.**\" N 008°27'5*.**\" E"),
-                            _T('*')));
+                 CoordinateFormat::DDMMSS_S);
+  ok1(StringIsEqual(buffer, _T("49°29'13.8\" N 008°27'58.8\" E")));
 
   FormatGeoPoint(location2, buffer, ARRAY_SIZE(buffer),
-                 CoordinateFormat::DDMMSS_SS);
-  ok1(StringIsEqualWildcard(buffer, _T("32°39'1*.**\" S 070°00'4*.**\" W"),
-                            _T('*')));
+                 CoordinateFormat::DDMMSS_S);
+  ok1(StringIsEqual(buffer, _T("32°39'12.0\" S 070°00'42.0\" W")));
 
   // Test UTM
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),

@@ -28,9 +28,9 @@ Copyright_License {
 
 enum class CoordinateFormat: uint8_t {
   DDMMSS = 0,
-  DDMMSS_SS,
+  DDMMSS_S,
   DDMM_MMM,
-  DD_DDDD,
+  DD_DDDDD,
   UTM,
 };
 
