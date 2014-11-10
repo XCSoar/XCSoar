@@ -105,7 +105,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
   const unsigned radius = std::min(line_height / 2 - spacing,
-                                   10u);
+                                   Layout::FastScale(10u));
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
 }
