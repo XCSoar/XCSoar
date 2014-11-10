@@ -46,7 +46,7 @@ struct WeatherDescriptor {
 
 static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
   {
-    NULL,
+    nullptr,
     N_("Terrain"),
     N_("Display terrain on map, no weather data displayed."),
   },
@@ -93,7 +93,7 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
   {
     _T("blcwbase"),
     N_("blcwbase"),
-    NULL,
+    nullptr,
   },
 };
 
@@ -102,7 +102,7 @@ RasterWeather::RasterWeather()
     _parameter(0),
    _weather_time(0), last_weather_time(0),
     reload(true),
-    weather_map(NULL)
+    weather_map(nullptr)
 {
   std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
@@ -188,7 +188,7 @@ RasterWeather::LoadItem(const TCHAR* name, unsigned time_index,
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
-  RasterMap *map = new RasterMap(rasp_filename, NULL, NULL, operation);
+  RasterMap *map = new RasterMap(rasp_filename, nullptr, nullptr, operation);
   if (!map->IsDefined()) {
     delete map;
     return false;
@@ -223,8 +223,8 @@ RasterWeather::ScanAll(const GeoPoint &location,
   LocalPath(fname, _T("xcsoar-rasp.dat"));
 
   const WideToACPConverter narrow_path(fname);
-  ZZIP_DIR *dir = zzip_dir_open(narrow_path, NULL);
-  if (dir == NULL)
+  ZZIP_DIR *dir = zzip_dir_open(narrow_path, nullptr);
+  if (dir == nullptr)
     return;
 
   operation.SetProgressRange(MAX_WEATHER_TIMES);
@@ -302,7 +302,7 @@ void
 RasterWeather::_Close()
 {
   delete weather_map;
-  weather_map = NULL;
+  weather_map = nullptr;
   center = GeoPoint::Invalid();
 }
 
@@ -343,8 +343,8 @@ RasterWeather::ItemLabel(unsigned i)
   assert(i < MAX_WEATHER_MAP);
 
   const TCHAR *label = WeatherDescriptors[i].label;
-  if (gcc_unlikely(label == NULL))
-    return NULL;
+  if (gcc_unlikely(label == nullptr))
+    return nullptr;
 
   return gettext(label);
 }
@@ -355,8 +355,8 @@ RasterWeather::ItemHelp(unsigned i)
   assert(i < MAX_WEATHER_MAP);
 
   const TCHAR *help = WeatherDescriptors[i].help;
-  if (gcc_unlikely(help == NULL))
-    return NULL;
+  if (gcc_unlikely(help == nullptr))
+    return nullptr;
 
   return gettext(help);
 }
