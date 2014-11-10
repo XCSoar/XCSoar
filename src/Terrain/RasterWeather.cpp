@@ -99,10 +99,10 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
 
 RasterWeather::RasterWeather()
   :center(GeoPoint::Invalid()),
-    _parameter(0),
-   _weather_time(0), last_weather_time(0),
-    reload(true),
-    weather_map(nullptr)
+   parameter(0),
+   weather_time(0), last_weather_time(0),
+   reload(true),
+   weather_map(nullptr)
 {
   std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
@@ -121,7 +121,7 @@ void
 RasterWeather::SetParameter(unsigned i)
 {
   Poco::ScopedRWLock protect(lock, true);
-  _parameter = i;
+  parameter = i;
   reload = true;
 }
 
@@ -129,7 +129,7 @@ void
 RasterWeather::SetTime(unsigned i)
 {
   Poco::ScopedRWLock protect(lock, true);
-  _weather_time = i;
+  weather_time = i;
   reload = true;
 }
 
@@ -145,14 +145,14 @@ unsigned
 RasterWeather::GetParameter() const
 {
   Poco::ScopedRWLock protect(lock, false);
-  return _parameter;
+  return parameter;
 }
 
 unsigned
 RasterWeather::GetTime() const
 {
   Poco::ScopedRWLock protect(lock, false);
-  return _weather_time;
+  return weather_time;
 }
 
 bool
@@ -173,7 +173,7 @@ RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
 }
 
 void
-RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
+RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                            unsigned time_index)
 {
   TCHAR fname[MAX_PATH];
@@ -183,7 +183,7 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
 }
 
 bool
-RasterWeather::LoadItem(const TCHAR* name, unsigned time_index,
+RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
                         OperationEnvironment &operation)
 {
   TCHAR rasp_filename[MAX_PATH];
@@ -200,7 +200,7 @@ RasterWeather::LoadItem(const TCHAR* name, unsigned time_index,
 }
 
 bool
-RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR* name,
+RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                           unsigned time_index) const
 {
   char filename[MAX_PATH];
@@ -242,12 +242,12 @@ RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
 {
   bool found = false;
 
-  if (_parameter == 0)
+  if (parameter == 0)
     // will be drawing terrain
     return;
 
   Poco::ScopedRWLock protect(lock, true);
-  unsigned effective_weather_time = _weather_time;
+  unsigned effective_weather_time = weather_time;
   if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
     unsigned half_hours = (day_time_local / 1800) % 48;
@@ -276,30 +276,30 @@ RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
     } else {
       found = true;
 
-      _Close();
+      CloseLocked();
 
-      if (!LoadItem(WeatherDescriptors[_parameter].name,
+      if (!LoadItem(WeatherDescriptors[parameter].name,
                     effective_weather_time,
                     operation) &&
-          _parameter == 1)
+          parameter == 1)
         LoadItem(_T("wstar_bsratio"), effective_weather_time, operation);
     }
   }
 
   // can't find valid time, so reset to zero
   if (!found)
-    _weather_time = 0;
+    weather_time = 0;
 }
 
 void
 RasterWeather::Close()
 {
   Poco::ScopedRWLock protect(lock, true);
-  _Close();
+  CloseLocked();
 }
 
 void
-RasterWeather::_Close()
+RasterWeather::CloseLocked()
 {
   delete weather_map;
   weather_map = nullptr;
@@ -309,7 +309,7 @@ RasterWeather::_Close()
 void
 RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
 {
-  if (_parameter == 0)
+  if (parameter == 0)
     // will be drawing terrain
     return;
 
@@ -329,7 +329,7 @@ RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
 bool
 RasterWeather::IsDirty() const
 {
-  if (_parameter == 0)
+  if (parameter == 0)
     // will be drawing terrain
     return false;
 
@@ -337,7 +337,7 @@ RasterWeather::IsDirty() const
   return weather_map != nullptr && weather_map->IsDirty();
 }
 
-const TCHAR*
+const TCHAR *
 RasterWeather::ItemLabel(unsigned i)
 {
   assert(i < MAX_WEATHER_MAP);
@@ -349,7 +349,7 @@ RasterWeather::ItemLabel(unsigned i)
   return gettext(label);
 }
 
-const TCHAR*
+const TCHAR *
 RasterWeather::ItemHelp(unsigned i)
 {
   assert(i < MAX_WEATHER_MAP);
@@ -362,54 +362,64 @@ RasterWeather::ItemHelp(unsigned i)
 }
 
 void
-RasterWeather::ValueToText(TCHAR* Buffer, short val) const
+RasterWeather::ValueToText(TCHAR *buffer, short val) const
 {
-  *Buffer = _T('\0');
+  *buffer = _T('\0');
 
-  switch (_parameter) {
+  switch (parameter) {
   case 0:
     return;
+
   case 1: // wstar
-    _stprintf(Buffer, _T("%.1f%s"), (double)
+    _stprintf(buffer, _T("%.1f%s"), (double)
               Units::ToUserVSpeed(fixed(val - 200) / 100),
               Units::GetVerticalSpeedName());
     return;
+
   case 2: // blwindspd
-    _stprintf(Buffer, _T("%.0f%s"), (double)
+    _stprintf(buffer, _T("%.0f%s"), (double)
               Units::ToUserSpeed(fixed(val) / 100),
               Units::GetSpeedName());
     return;
+
   case 3: // hbl
-    _stprintf(Buffer, _T("%.0f%s"), (double)
+    _stprintf(buffer, _T("%.0f%s"), (double)
               Units::ToUserAltitude(fixed(val)),
               Units::GetAltitudeName());
     return;
+
   case 4: // dwcrit
-    _stprintf(Buffer, _T("%.0f%s"), (double)
+    _stprintf(buffer, _T("%.0f%s"), (double)
               Units::ToUserAltitude(fixed(val)),
               Units::GetAltitudeName());
     return;
+
   case 5: // blcloudpct
-    _stprintf(Buffer, _T("%d%%"), Clamp(int(val), 0, 100));
+    _stprintf(buffer, _T("%d%%"), Clamp(int(val), 0, 100));
     return;
+
   case 6: // sfctemp
-    _stprintf(Buffer, _T("%d") _T(DEG), val / 2 - 20);
+    _stprintf(buffer, _T("%d") _T(DEG), val / 2 - 20);
     return;
+
   case 7: // hwcrit
-    _stprintf(Buffer, _T("%.0f%s"), (double)
+    _stprintf(buffer, _T("%.0f%s"), (double)
               Units::ToUserAltitude(fixed(val)),
               Units::GetAltitudeName());
     return;
+
   case 8: // wblmaxmin
-    _stprintf(Buffer, _T("%.1f%s"), (double)
+    _stprintf(buffer, _T("%.1f%s"), (double)
               Units::ToUserVSpeed(fixed(val - 200) / 100),
               Units::GetVerticalSpeedName());
     return;
+
   case 9: // blcwbase
-    _stprintf(Buffer, _T("%.0f%s"), (double)
+    _stprintf(buffer, _T("%.0f%s"), (double)
               Units::ToUserAltitude(fixed(val)),
               Units::GetAltitudeName());
     return;
+
   default:
     // error!
     break;

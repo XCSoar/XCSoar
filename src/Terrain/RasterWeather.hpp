@@ -45,8 +45,8 @@ public:
 private:
   GeoPoint center;
 
-  unsigned _parameter;
-  unsigned _weather_time;
+  unsigned parameter;
+  unsigned weather_time;
   unsigned last_weather_time;
 
   bool reload;
@@ -69,15 +69,18 @@ public:
   /** Close loaded data */
   void Close();
 
-  void ValueToText(TCHAR* Buffer, short val) const;
+  void ValueToText(TCHAR *buffer, short val) const;
 
   void SetViewCenter(const GeoPoint &location, fixed radius);
 
   gcc_pure
   bool IsDirty() const;
 
-  gcc_const static const TCHAR *ItemLabel(unsigned i);
-  gcc_const static const TCHAR *ItemHelp(unsigned i);
+  gcc_const
+  static const TCHAR *ItemLabel(unsigned i);
+
+  gcc_const
+  static const TCHAR *ItemHelp(unsigned i);
 
   gcc_pure
   const RasterMap *GetMap() const;
@@ -110,14 +113,14 @@ private:
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
 
-  bool LoadItem(const TCHAR* name, unsigned time_index,
+  bool LoadItem(const TCHAR *name, unsigned time_index,
                 OperationEnvironment &operation);
 
   gcc_pure
-  bool ExistsItem(struct zzip_dir *dir, const TCHAR* name,
+  bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                   unsigned time_index) const;
 
-  void _Close();
+  void CloseLocked();
 };
 
 #endif
