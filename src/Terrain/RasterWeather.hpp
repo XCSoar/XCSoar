@@ -69,8 +69,6 @@ public:
   /** Close loaded data */
   void Close();
 
-  void ValueToText(TCHAR *buffer, short val) const;
-
   void SetViewCenter(const GeoPoint &location, fixed radius);
 
   gcc_pure
