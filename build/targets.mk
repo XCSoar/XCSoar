@@ -375,9 +375,7 @@ ifeq ($(TARGET),ANDROID)
 
   ANDROID_PLATFORM = android-19
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
-
-  # NDK r8b has only android-14
-  ANDROID_NDK_PLATFORM = android-14
+  ANDROID_NDK_PLATFORM = $(ANDROID_PLATFORM)
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
