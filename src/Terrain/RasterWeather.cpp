@@ -109,7 +109,7 @@ RasterWeather::RasterWeather()
 }
 
 BrokenTime
-RasterWeather::IndexToTime(int index)
+RasterWeather::IndexToTime(unsigned index)
 {
   return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
 }
@@ -237,7 +237,7 @@ RasterWeather::ScanAll(const GeoPoint &location,
 }
 
 void
-RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
+RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
 {
   bool found = false;
 

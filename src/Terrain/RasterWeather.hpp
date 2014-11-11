@@ -108,7 +108,7 @@ public:
   /**
    * @param day_time the local time, in seconds since midnight
    */
-  void Reload(int day_time_local, OperationEnvironment &operation);
+  void Reload(unsigned day_time_local, OperationEnvironment &operation);
 
   /**
    * Load a list of RASP maps from the file "xcsoar-rasp.dat".
@@ -132,7 +132,7 @@ public:
    * "HHMM".
    */
   gcc_const
-  static BrokenTime IndexToTime(int index);
+  static BrokenTime IndexToTime(unsigned index);
 
 private:
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
