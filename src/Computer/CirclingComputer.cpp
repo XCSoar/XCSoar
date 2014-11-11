@@ -54,13 +54,18 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
                            const NMEAInfo &basic,
                            const FlyingState &flight)
 {
-  if (!basic.time_available || !flight.flying) {
+  if (!basic.time_available || !flight.flying || !turn_rate_delta_time.IsDefined()) {
     circling_info.turn_rate = Angle::Zero();
     circling_info.turn_rate_heading = Angle::Zero();
     circling_info.turn_rate_smoothed = Angle::Zero();
     circling_info.turn_rate_heading_smoothed = Angle::Zero();
     last_track = basic.track;
     last_heading = basic.attitude.heading;
+
+    // initialize turn_rate_delta_time on first call
+    if (basic.time_available)
+      turn_rate_delta_time.Update(basic.time,
+                                  fixed_third, fixed(10));
     return;
   }
 
