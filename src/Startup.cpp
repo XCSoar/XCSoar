@@ -364,7 +364,8 @@ Startup()
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  RASP.ScanAll(CommonInterface::Basic().location, operation);
+  rasp = new RasterWeather();
+  rasp->ScanAll(CommonInterface::Basic().location, operation);
 
   // Reads the airspace files
   ReadAirspace(airspace_database, terrain, computer_settings.pressure,
@@ -409,7 +410,7 @@ Startup()
 
     map_window->SetTopography(topography);
     map_window->SetTerrain(terrain);
-    map_window->SetWeather(&RASP);
+    map_window->SetWeather(rasp);
     map_window->SetMarks(protected_marks);
     map_window->SetLogger(logger);
 
@@ -581,7 +582,7 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Clear weather database
-  RASP.Close();
+  delete rasp;
 
   // Clear terrain database
 

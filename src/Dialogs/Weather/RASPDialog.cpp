@@ -39,8 +39,11 @@ class RASPSettingsPanel final : public RowFormWidget {
     TIME,
   };
 
+  RasterWeather &rasp;
+
 public:
-  RASPSettingsPanel():RowFormWidget(UIGlobals::GetDialogLook()) {}
+  RASPSettingsPanel(RasterWeather &_rasp)
+    :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -57,42 +60,42 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   dfe->EnableItemHelp(true);
   dfe->addEnumText(_("Terrain"));
   for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_MAP; i++) {
-    const TCHAR *label = RASP.ItemLabel(i);
+    const TCHAR *label = rasp.ItemLabel(i);
     if (label != NULL)
-      dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
+      dfe->AddChoice(i, label, nullptr, rasp.ItemHelp(i));
   }
 
-  dfe->Set(RASP.GetParameter());
+  dfe->Set(rasp.GetParameter());
   wp->RefreshDisplay();
 
   wp = AddEnum(_("Time"), nullptr);
   dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->addEnumText(_("Now"));
   for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
-    if (RASP.isWeatherAvailable(i)) {
+    if (rasp.isWeatherAvailable(i)) {
       TCHAR timetext[10];
-      const BrokenTime t = RASP.IndexToTime(i);
+      const BrokenTime t = rasp.IndexToTime(i);
       _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
       dfe->addEnumText(timetext, i);
     }
   }
 
-  dfe->Set(RASP.GetTime());
+  dfe->Set(rasp.GetTime());
   wp->RefreshDisplay();
 }
 
 bool
 RASPSettingsPanel::Save(bool &_changed)
 {
-  RASP.SetParameter(GetValueInteger(ITEM));
-  RASP.SetTime(GetValueInteger(TIME));
+  rasp.SetParameter(GetValueInteger(ITEM));
+  rasp.SetTime(GetValueInteger(TIME));
   return true;
 }
 
 void
 dlgWeatherShowModal()
 {
-  RASPSettingsPanel *widget = new RASPSettingsPanel();
+  RASPSettingsPanel *widget = new RASPSettingsPanel(*rasp);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Weather Forecast"), widget);

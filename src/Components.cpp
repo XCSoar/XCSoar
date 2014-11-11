@@ -36,7 +36,7 @@ FileCache *file_cache;
 ProtectedMarkers *protected_marks;
 TopographyStore *topography;
 RasterTerrain *terrain;
-RasterWeather RASP;
+RasterWeather *rasp;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;

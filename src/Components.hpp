@@ -55,7 +55,7 @@ extern Replay *replay;
 extern ProtectedMarkers *protected_marks;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
-extern RasterWeather RASP;
+extern RasterWeather *rasp;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
