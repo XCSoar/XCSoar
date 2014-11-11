@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
+#include "Time/BrokenTime.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Clamp.hpp"
 #include "Util/Macros.hpp"
@@ -107,14 +108,10 @@ RasterWeather::RasterWeather()
   std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
 
-int
+BrokenTime
 RasterWeather::IndexToTime(int index)
 {
-  if (index % 2 == 0) {
-    return (index / 2) * 100;
-  } else {
-    return (index / 2) * 100 + 30;
-  }
+  return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
 }
 
 void
@@ -168,8 +165,9 @@ RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
                                      unsigned time_index)
 {
   const WideToACPConverter narrow_name(name);
-  sprintf(filename, "%s.curr.%04dlst.d2.jp2",
-          (const char *)narrow_name, IndexToTime(time_index));
+  const BrokenTime t = IndexToTime(time_index);
+  sprintf(filename, "%s.curr.%02u%02ulst.d2.jp2",
+          (const char *)narrow_name, t.hour, t.minute);
 }
 
 void
@@ -177,8 +175,9 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                            unsigned time_index)
 {
   TCHAR fname[MAX_PATH];
-  _stprintf(fname, _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"), name,
-            IndexToTime(time_index));
+  const BrokenTime t = IndexToTime(time_index);
+  _stprintf(fname, _T("xcsoar-rasp.dat/%s.curr.%02u%02ulst.d2.jp2"),
+            name, t.hour, t.minute);
   LocalPath(rasp_filename, fname);
 }
 

@@ -71,7 +71,8 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
       TCHAR timetext[10];
-      _stprintf(timetext, _T("%04d"), RASP.IndexToTime(i));
+      const BrokenTime t = RASP.IndexToTime(i);
+      _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
       dfe->addEnumText(timetext, i);
     }
   }

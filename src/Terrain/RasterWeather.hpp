@@ -33,6 +33,7 @@ Copyright_License {
 class RasterMap;
 class OperationEnvironment;
 struct zzip_dir;
+struct BrokenTime;
 
 /**
  * Class to manage raster weather data.  Usually, these raster maps
@@ -131,7 +132,7 @@ public:
    * "HHMM".
    */
   gcc_const
-  static int IndexToTime(int index);
+  static BrokenTime IndexToTime(int index);
 
 private:
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
