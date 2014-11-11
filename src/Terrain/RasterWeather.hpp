@@ -128,8 +128,7 @@ public:
   void SetTime(unsigned i);
 
   /**
-   * Converts a time index to a decimal time of day in the form
-   * "HHMM".
+   * Converts a time index to a #BrokenTime.
    */
   gcc_const
   static BrokenTime IndexToTime(unsigned index);
