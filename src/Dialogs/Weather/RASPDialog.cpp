@@ -105,12 +105,7 @@ dlgWeatherShowModal()
 
 /*
   Todo:
-  - units conversion in routine
-  - load on demand
   - time based search
-  - fix dialog
-  - put label in map window as to what is displayed if not terrain
-      (next to AUX)
   - Draw a legend on screen?
   - Auto-advance time index of forecast if before current time
 */
