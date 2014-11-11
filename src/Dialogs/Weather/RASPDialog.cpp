@@ -61,7 +61,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   dfe->addEnumText(_("Terrain"));
   for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_MAP; i++) {
     const TCHAR *label = rasp.ItemLabel(i);
-    if (label != NULL)
+    if (label != nullptr)
       dfe->AddChoice(i, label, nullptr, rasp.ItemHelp(i));
   }
 
