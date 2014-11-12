@@ -101,6 +101,12 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
   },
 };
 
+static inline constexpr unsigned
+ToHalfHours(BrokenTime t)
+{
+  return t.hour * 2u + t.minute / 30;
+}
+
 RasterWeather::RasterWeather()
   :center(GeoPoint::Invalid()),
    parameter(0), last_parameter(0),
@@ -243,8 +249,10 @@ RasterWeather::ScanAll(const GeoPoint &location,
 }
 
 void
-RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
+RasterWeather::Reload(BrokenTime time_local, OperationEnvironment &operation)
 {
+  assert(time_local.IsPlausible());
+
   if (parameter == 0)
     // will be drawing terrain
     return;
@@ -253,8 +261,8 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
   unsigned effective_weather_time = weather_time;
   if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
-    unsigned half_hours = (day_time_local / 1800) % 48;
-    effective_weather_time = half_hours;
+    effective_weather_time = ToHalfHours(time_local);
+    assert(effective_weather_time < MAX_WEATHER_TIMES);
   }
 
   if (parameter == last_parameter && effective_weather_time == last_weather_time)

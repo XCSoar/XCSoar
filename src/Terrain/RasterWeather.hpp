@@ -106,7 +106,7 @@ public:
   /**
    * @param day_time the local time, in seconds since midnight
    */
-  void Reload(unsigned day_time_local, OperationEnvironment &operation);
+  void Reload(BrokenTime time_local, OperationEnvironment &operation);
 
   /**
    * Load a list of RASP maps from the file "xcsoar-rasp.dat".
