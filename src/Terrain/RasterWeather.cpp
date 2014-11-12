@@ -125,6 +125,8 @@ RasterWeather::SetParameter(unsigned i)
 void
 RasterWeather::SetTime(unsigned i)
 {
+  assert(i < MAX_WEATHER_TIMES);
+
   Poco::ScopedRWLock protect(lock, true);
   weather_time = i;
 }
@@ -248,9 +250,6 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
     effective_weather_time = half_hours;
   }
 
-  // limit values, for safety
-  effective_weather_time = std::min(MAX_WEATHER_TIMES - 1,
-                                    effective_weather_time);
   if (effective_weather_time != last_weather_time)
     reload = true;
 
