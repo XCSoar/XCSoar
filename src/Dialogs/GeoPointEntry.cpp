@@ -39,6 +39,7 @@ enum {
 
 bool
 GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
+                    const CoordinateFormat format,
                     bool nullable)
 {
   /* create the dialog */
@@ -58,19 +59,19 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
 
   DigitEntry latitude_entry(look);
   latitude_entry.CreateLatitude(client_area, client_area.GetClientRect(),
-                                control_style);
+                                control_style, format);
   latitude_entry.Resize(latitude_entry.GetRecommendedSize());
   latitude_entry.SetActionListener(dialog, mrOK);
 
   DigitEntry longitude_entry(look);
   longitude_entry.CreateLongitude(client_area, client_area.GetClientRect(),
-                                  control_style);
+                                  control_style, format);
   longitude_entry.Resize(longitude_entry.GetRecommendedSize());
   longitude_entry.SetActionListener(dialog, mrOK);
 
   if (value.IsValid()) {
-    latitude_entry.SetLatitude(value.latitude);
-    longitude_entry.SetLongitude(value.longitude);
+    latitude_entry.SetLatitude(value.latitude, format);
+    longitude_entry.SetLongitude(value.longitude, format);
   } else {
     latitude_entry.SetInvalid();
     longitude_entry.SetInvalid();
@@ -101,7 +102,7 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
   if (!result)
     return false;
 
-  value = GeoPoint(longitude_entry.GetLongitude(),
-                   latitude_entry.GetLatitude());
+  value = GeoPoint(longitude_entry.GetLongitude(format),
+                   latitude_entry.GetLatitude(format));
   return true;
 }

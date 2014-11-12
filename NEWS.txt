@@ -24,6 +24,7 @@ Version 6.8 - not yet released
   - show name of loaded/saved tasks in dialog title (#1924)
 * user interface 
   - checklist remembers last opened list (#3110)
+  - use configured coordinate format in waypoint editor
   - display rotation for Raspberry Pi and Cubieboard (#3238)
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard

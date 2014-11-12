@@ -32,13 +32,15 @@ Copyright_License {
 
 #include <stdio.h>
 
+static constexpr CoordinateFormat format = CoordinateFormat::DDMMSS;
+
 static void
 Main()
 {
   GeoPoint value = GeoPoint(Angle::Degrees(7.7061111111111114),
                             Angle::Degrees(51.051944444444445));
 
-  if (!GeoPointEntryDialog(_T("The caption"), value, true))
+  if (!GeoPointEntryDialog(_T("The caption"), value, format, true))
     return;
 
   if (value.IsValid()) {

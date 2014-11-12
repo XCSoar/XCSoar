@@ -31,6 +31,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdint.h>
 
+enum class CoordinateFormat : uint8_t;
 class RoughTime;
 class Angle;
 class ContainerWindow;
@@ -60,6 +61,7 @@ class DigitEntry : public PaintWindow {
       UNIT,
       DEGREES,
       APOSTROPHE,
+      QUOTE,
     };
 
     Type type;
@@ -160,10 +162,10 @@ public:
                    const WindowStyle style);
 
   void CreateLatitude(ContainerWindow &parent, const PixelRect &rc,
-                      const WindowStyle style);
+                      const WindowStyle style, CoordinateFormat format);
 
   void CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
-                       const WindowStyle style);
+                       const WindowStyle style, CoordinateFormat format);
 
   void CalculateLayout();
 
@@ -206,17 +208,17 @@ public:
   gcc_pure
   Angle GetAngleValue() const;
 
-  void SetLatitude(Angle value);
-  void SetLongitude(Angle value);
+  void SetLatitude(Angle value, CoordinateFormat format);
+  void SetLongitude(Angle value, CoordinateFormat format);
 
   gcc_pure
-  Angle GetGeoAngle() const;
+  Angle GetGeoAngle(CoordinateFormat format) const;
 
   gcc_pure
-  Angle GetLatitude() const;
+  Angle GetLatitude(CoordinateFormat format) const;
 
   gcc_pure
-  Angle GetLongitude() const;
+  Angle GetLongitude(CoordinateFormat format) const;
 
 protected:
   gcc_pure

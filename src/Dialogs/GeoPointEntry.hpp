@@ -25,11 +25,14 @@ Copyright_License {
 #define XCSOAR_DIALOGS_GEOPOINT_ENTRY_HPP
 
 #include <tchar.h>
+#include <stdint.h>
 
+enum class CoordinateFormat : uint8_t;
 struct GeoPoint;
 
 bool
 GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
+                    CoordinateFormat format,
                     bool nullable=false);
 
 #endif

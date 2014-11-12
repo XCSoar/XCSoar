@@ -49,7 +49,9 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
   } else if (df.GetType() == DataField::Type::GEOPOINT) {
     GeoPointDataField &gdf = (GeoPointDataField &)df;
     GeoPoint value = gdf.GetValue();
-    if (!GeoPointEntryDialog(caption, value, false))
+    if (!GeoPointEntryDialog(caption, value,
+                             gdf.GetFormat(),
+                             false))
       return true;
 
     gdf.ModifyValue(value);
