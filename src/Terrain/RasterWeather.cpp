@@ -158,7 +158,7 @@ RasterWeather::isWeatherAvailable(unsigned t) const
 {
   Poco::ScopedRWLock protect(lock, false);
   assert(t < MAX_WEATHER_TIMES);
-  return weather_available[std::min((unsigned)MAX_WEATHER_TIMES, t)];
+  return weather_available[t];
 }
 
 void
