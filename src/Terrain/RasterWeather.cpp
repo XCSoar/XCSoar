@@ -268,11 +268,9 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
   while (!weather_available[effective_weather_time]) {
     ++effective_weather_time;
 
-    if (effective_weather_time >= MAX_WEATHER_TIMES) {
-      // can't find valid time, so reset to zero
-      weather_time = 0;
+    if (effective_weather_time >= MAX_WEATHER_TIMES)
+      // can't find valid time
       return;
-    }
   }
 
   CloseLocked();
