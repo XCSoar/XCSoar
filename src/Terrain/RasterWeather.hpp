@@ -134,6 +134,8 @@ public:
   static BrokenTime IndexToTime(unsigned index);
 
 private:
+  static struct zzip_dir *OpenArchive();
+
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
                                     unsigned time_index);
 

@@ -197,6 +197,16 @@ RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
   return map;
 }
 
+struct zzip_dir *
+RasterWeather::OpenArchive()
+{
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("xcsoar-rasp.dat"));
+
+  const WideToACPConverter narrow_path(path);
+  return zzip_dir_open(narrow_path, nullptr);
+}
+
 bool
 RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                           unsigned time_index)
@@ -217,11 +227,7 @@ RasterWeather::ScanAll(const GeoPoint &location,
 
   operation.SetText(_("Scanning weather forecast"));
 
-  TCHAR fname[MAX_PATH];
-  LocalPath(fname, _T("xcsoar-rasp.dat"));
-
-  const WideToACPConverter narrow_path(fname);
-  ZZIP_DIR *dir = zzip_dir_open(narrow_path, nullptr);
+  ZZIP_DIR *dir = OpenArchive();
   if (dir == nullptr)
     return;
 
