@@ -127,7 +127,6 @@ RasterWeather::SetTime(unsigned i)
 {
   Poco::ScopedRWLock protect(lock, true);
   weather_time = i;
-  reload = true;
 }
 
 const RasterMap *
