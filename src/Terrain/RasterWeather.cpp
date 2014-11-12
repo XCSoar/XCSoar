@@ -199,7 +199,7 @@ RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
 
 bool
 RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
-                          unsigned time_index) const
+                          unsigned time_index)
 {
   char filename[MAX_PATH];
   NarrowWeatherFilename(filename, name, time_index);

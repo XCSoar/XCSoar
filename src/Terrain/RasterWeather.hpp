@@ -144,8 +144,8 @@ private:
                              OperationEnvironment &operation);
 
   gcc_pure
-  bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
-                  unsigned time_index) const;
+  static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
+                         unsigned time_index);
 
   void CloseLocked();
 };
