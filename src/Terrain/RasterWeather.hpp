@@ -68,9 +68,6 @@ public:
   ~RasterWeather() {
     Close();
   }
-  
-  /** Close loaded data */
-  void Close();
 
   void SetViewCenter(const GeoPoint &location, fixed radius);
 
@@ -150,7 +147,7 @@ private:
   static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                          unsigned time_index);
 
-  void CloseLocked();
+  void Close();
 };
 
 #endif

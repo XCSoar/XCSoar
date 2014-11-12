@@ -273,7 +273,7 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
       return;
   }
 
-  CloseLocked();
+  Close();
 
   weather_map = LoadItem(WeatherDescriptors[parameter].name,
                          effective_weather_time, operation);
@@ -284,13 +284,6 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
 
 void
 RasterWeather::Close()
-{
-  Poco::ScopedRWLock protect(lock, true);
-  CloseLocked();
-}
-
-void
-RasterWeather::CloseLocked()
 {
   delete weather_map;
   weather_map = nullptr;
