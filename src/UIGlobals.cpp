@@ -58,6 +58,12 @@ UIGlobals::GetDialogSettings()
   return CommonInterface::GetUISettings().dialog;
 }
 
+const FormatSettings &
+UIGlobals::GetFormatSettings()
+{
+  return CommonInterface::GetUISettings().format;
+}
+
 const Look &
 UIGlobals::GetLook()
 {
