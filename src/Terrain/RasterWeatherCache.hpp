@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Time/BrokenTime.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Poco/RWLock.h"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -53,8 +52,6 @@ class RasterWeatherCache {
 
   RasterMap *weather_map;
 
-  mutable Poco::RWLock lock;
-
 public:
   /** 
    * Default constructor
@@ -78,18 +75,24 @@ public:
   bool IsDirty() const;
 
   gcc_pure
-  const RasterMap *GetMap() const;
+  const RasterMap *GetMap() const {
+    return weather_map;
+  }
 
   /**
    * Returns the index of the weather map being displayed.
    */
   gcc_pure
-  unsigned GetParameter() const;
+  unsigned GetParameter() const {
+    return parameter;
+  }
 
   /**
    * Switches to another weather map.
    */
-  void SetParameter(unsigned i);
+  void SetParameter(unsigned i) {
+    parameter = i;
+  }
 
   /**
    * @param day_time the local time, in seconds since midnight

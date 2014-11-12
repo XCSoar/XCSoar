@@ -55,39 +55,15 @@ RasterWeatherCache::RasterWeatherCache(const RasterWeatherStore &_store)
 }
 
 void
-RasterWeatherCache::SetParameter(unsigned i)
-{
-  Poco::ScopedRWLock protect(lock, true);
-  parameter = i;
-}
-
-void
 RasterWeatherCache::SetTime(BrokenTime t)
 {
   unsigned i = t.IsPlausible() ? ToHalfHours(t) : 0;
-  Poco::ScopedRWLock protect(lock, true);
   weather_time = i;
-}
-
-const RasterMap *
-RasterWeatherCache::GetMap() const
-{
-  // JMW this is not safe in TerrainRenderer's use
-  Poco::ScopedRWLock protect(lock, false);
-  return weather_map;
-}
-
-unsigned
-RasterWeatherCache::GetParameter() const
-{
-  Poco::ScopedRWLock protect(lock, false);
-  return parameter;
 }
 
 BrokenTime
 RasterWeatherCache::GetTime() const
 {
-  Poco::ScopedRWLock protect(lock, false);
   return weather_time == 0
     ? BrokenTime::Invalid()
     : RasterWeatherStore::IndexToTime(weather_time);
@@ -102,7 +78,6 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
     // will be drawing terrain
     return;
 
-  Poco::ScopedRWLock protect(lock, true);
   unsigned effective_weather_time = weather_time;
   if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
@@ -150,7 +125,6 @@ RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
     // will be drawing terrain
     return;
 
-  Poco::ScopedRWLock protect(lock, true);
   if (weather_map == nullptr)
     return;
 
@@ -170,6 +144,5 @@ RasterWeatherCache::IsDirty() const
     // will be drawing terrain
     return false;
 
-  Poco::ScopedRWLock protect(lock, false);
   return weather_map != nullptr && weather_map->IsDirty();
 }
