@@ -140,8 +140,8 @@ private:
   static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                           unsigned time_index);
 
-  bool LoadItem(const TCHAR *name, unsigned time_index,
-                OperationEnvironment &operation);
+  RasterMap *LoadItem(const TCHAR *name, unsigned time_index,
+                      OperationEnvironment &operation);
 
   gcc_pure
   bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,

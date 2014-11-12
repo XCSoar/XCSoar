@@ -181,7 +181,7 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
   LocalPath(rasp_filename, fname);
 }
 
-bool
+RasterMap *
 RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
                         OperationEnvironment &operation)
 {
@@ -190,12 +190,10 @@ RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
   RasterMap *map = new RasterMap(rasp_filename, nullptr, nullptr, operation);
   if (!map->IsDefined()) {
     delete map;
-    return false;
+    return nullptr;
   }
 
-  delete weather_map;
-  weather_map = map;
-  return true;
+  return map;
 }
 
 bool
@@ -277,11 +275,11 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
 
       CloseLocked();
 
-      if (!LoadItem(WeatherDescriptors[parameter].name,
-                    effective_weather_time,
-                    operation) &&
-          parameter == 1)
-        LoadItem(_T("wstar_bsratio"), effective_weather_time, operation);
+      weather_map = LoadItem(WeatherDescriptors[parameter].name,
+                             effective_weather_time, operation);
+      if (weather_map == nullptr && parameter == 1)
+        weather_map = LoadItem(_T("wstar_bsratio"),
+                               effective_weather_time, operation);
     }
   }
 
