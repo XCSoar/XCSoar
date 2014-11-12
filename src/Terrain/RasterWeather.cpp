@@ -39,6 +39,9 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
+#define RASP_FILENAME "xcsoar-rasp.dat"
+#define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
+
 struct WeatherDescriptor {
   const TCHAR *name;
   const TCHAR *label;
@@ -167,7 +170,7 @@ RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
 {
   const WideToACPConverter narrow_name(name);
   const BrokenTime t = IndexToTime(time_index);
-  sprintf(filename, "%s.curr.%02u%02ulst.d2.jp2",
+  sprintf(filename, RASP_FORMAT,
           (const char *)narrow_name, t.hour, t.minute);
 }
 
@@ -177,7 +180,7 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
 {
   TCHAR fname[MAX_PATH];
   const BrokenTime t = IndexToTime(time_index);
-  _stprintf(fname, _T("xcsoar-rasp.dat/%s.curr.%02u%02ulst.d2.jp2"),
+  _stprintf(fname, _T(RASP_FILENAME "/" RASP_FORMAT),
             name, t.hour, t.minute);
   LocalPath(rasp_filename, fname);
 }
@@ -201,7 +204,7 @@ struct zzip_dir *
 RasterWeather::OpenArchive()
 {
   TCHAR path[MAX_PATH];
-  LocalPath(path, _T("xcsoar-rasp.dat"));
+  LocalPath(path, _T(RASP_FILENAME));
 
   const WideToACPConverter narrow_path(path);
   return zzip_dir_open(narrow_path, nullptr);
