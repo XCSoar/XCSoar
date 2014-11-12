@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-07-18 21:50+0000\n"
+"PO-Revision-Date: 2014-11-03 13:25+0000\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2014-11-12 14:41+0000\n"
+"X-Generator: Launchpad (build 17241)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -40,7 +40,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:86
 #, no-c-format
 msgid "FAI triangle"
-msgstr ""
+msgstr "FAI trokut"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
@@ -4094,7 +4094,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
 #, no-c-format
 msgid "Down"
-msgstr "Dole"
+msgstr "Dolje"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -5358,9 +5358,9 @@ msgid "Turnpoint"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Uključi"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6403,9 +6403,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "InfoBox nalepiti"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -9327,7 +9327,7 @@ msgstr ""
 
 #: Data/Input/default.xci:740
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Pohranjeno u EEPROM"
 
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Briši Točku?"
@@ -9355,6 +9355,24 @@ msgstr ""
 
 #~ msgid "Edit text"
 #~ msgstr "Uredi tekst"
+
+#~ msgid "Wind At Altitude"
+#~ msgstr "vjetar po visini"
+
+#~ msgid "Set As New Home"
+#~ msgstr "Set kao novi Home"
+
+#~ msgid "Insert In Task"
+#~ msgstr "Umetni u zadatak"
+
+#~ msgid "Remove From Task"
+#~ msgstr "Ukloni iz zadatka"
+
+#~ msgid "Append To Task"
+#~ msgstr "Dodaj na zadatk"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Zamjeni u zadatku"
 
 #~ msgid "L/D average period"
 #~ msgstr "Prosječni L/D period"
