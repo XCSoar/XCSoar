@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_CANVAS_HPP
 #define XCSOAR_SCREEN_GDI_CANVAS_HPP
 
-#include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Font.hpp"
@@ -35,6 +34,8 @@ Copyright_License {
 #include <assert.h>
 #include <windows.h>
 #include <tchar.h>
+
+class Angle;
 
 /**
  * Base drawable canvas class

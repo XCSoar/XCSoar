@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
-#include "Screen/BufferCanvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
 #include "Compatibility/gdi.h"
