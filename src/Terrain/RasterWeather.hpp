@@ -48,10 +48,11 @@ private:
   GeoPoint center;
 
   unsigned parameter;
+  unsigned last_parameter;
+
   unsigned weather_time;
   unsigned last_weather_time;
 
-  bool reload;
   RasterMap *weather_map;
 
   mutable Poco::RWLock lock;

@@ -103,9 +103,8 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
 
 RasterWeather::RasterWeather()
   :center(GeoPoint::Invalid()),
-   parameter(0),
+   parameter(0), last_parameter(0),
    weather_time(0), last_weather_time(0),
-   reload(true),
    weather_map(nullptr)
 {
   std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
@@ -122,7 +121,6 @@ RasterWeather::SetParameter(unsigned i)
 {
   Poco::ScopedRWLock protect(lock, true);
   parameter = i;
-  reload = true;
 }
 
 void
@@ -259,16 +257,11 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
     effective_weather_time = half_hours;
   }
 
-  if (effective_weather_time != last_weather_time)
-    reload = true;
-
-  if (!reload) {
+  if (parameter == last_parameter && effective_weather_time == last_weather_time)
     // no change, quick exit.
     return;
-  }
 
-  reload = false;
-
+  last_parameter = parameter;
   last_weather_time = effective_weather_time;
 
   // scan forward to next valid time
