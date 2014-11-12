@@ -237,8 +237,6 @@ RasterWeather::ScanAll(const GeoPoint &location,
 void
 RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
 {
-  bool found = false;
-
   if (parameter == 0)
     // will be drawing terrain
     return;
@@ -267,25 +265,23 @@ RasterWeather::Reload(unsigned day_time_local, OperationEnvironment &operation)
   last_weather_time = effective_weather_time;
 
   // scan forward to next valid time
-  while (effective_weather_time < MAX_WEATHER_TIMES && !found) {
-    if (!weather_available[effective_weather_time]) {
-      effective_weather_time++;
-    } else {
-      found = true;
+  while (!weather_available[effective_weather_time]) {
+    ++effective_weather_time;
 
-      CloseLocked();
-
-      weather_map = LoadItem(WeatherDescriptors[parameter].name,
-                             effective_weather_time, operation);
-      if (weather_map == nullptr && parameter == 1)
-        weather_map = LoadItem(_T("wstar_bsratio"),
-                               effective_weather_time, operation);
+    if (effective_weather_time >= MAX_WEATHER_TIMES) {
+      // can't find valid time, so reset to zero
+      weather_time = 0;
+      return;
     }
   }
 
-  // can't find valid time, so reset to zero
-  if (!found)
-    weather_time = 0;
+  CloseLocked();
+
+  weather_map = LoadItem(WeatherDescriptors[parameter].name,
+                         effective_weather_time, operation);
+  if (weather_map == nullptr && parameter == 1)
+    weather_map = LoadItem(_T("wstar_bsratio"),
+                           effective_weather_time, operation);
 }
 
 void
