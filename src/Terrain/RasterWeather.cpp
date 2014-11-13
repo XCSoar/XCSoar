@@ -324,11 +324,7 @@ RasterWeather::ItemLabel(unsigned i)
 {
   assert(i < MAX_WEATHER_MAP);
 
-  const TCHAR *label = WeatherDescriptors[i].label;
-  if (gcc_unlikely(label == nullptr))
-    return nullptr;
-
-  return gettext(label);
+  return WeatherDescriptors[i].label;
 }
 
 const TCHAR *
@@ -336,9 +332,5 @@ RasterWeather::ItemHelp(unsigned i)
 {
   assert(i < MAX_WEATHER_MAP);
 
-  const TCHAR *help = WeatherDescriptors[i].help;
-  if (gcc_unlikely(help == nullptr))
-    return nullptr;
-
-  return gettext(help);
+  return WeatherDescriptors[i].help;
 }

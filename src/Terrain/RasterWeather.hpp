@@ -82,13 +82,15 @@ public:
   bool IsDirty() const;
 
   /**
-   * Human-readable internationalized label for the given map index.
+   * Human-readable label for the given map index.  Call gettext() for
+   * internationalization.
    */
   gcc_const
   static const TCHAR *ItemLabel(unsigned i);
 
   /**
-   * Human-readable internationalized help text for the given map index.
+   * Human-readable help text for the given map index.  Call gettext()
+   * for internationalization.
    */
   gcc_const
   static const TCHAR *ItemHelp(unsigned i);
