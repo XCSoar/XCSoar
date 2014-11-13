@@ -57,6 +57,10 @@ private:
 
   mutable Poco::RWLock lock;
 
+  /**
+   * Not protected by #lock because it's written only by ScanAll()
+   * during startup.
+   */
   bool weather_available[MAX_WEATHER_TIMES];
 
 public:
