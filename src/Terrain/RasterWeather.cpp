@@ -125,7 +125,7 @@ RasterWeather::SetParameter(unsigned i)
 void
 RasterWeather::SetTime(BrokenTime t)
 {
-  unsigned i = ToHalfHours(t);
+  unsigned i = t.IsPlausible() ? ToHalfHours(t) : 0;
   Poco::ScopedRWLock protect(lock, true);
   weather_time = i;
 }
@@ -149,7 +149,9 @@ BrokenTime
 RasterWeather::GetTime() const
 {
   Poco::ScopedRWLock protect(lock, false);
-  return IndexToTime(weather_time);
+  return weather_time == 0
+    ? BrokenTime::Invalid()
+    : IndexToTime(weather_time);
 }
 
 void
