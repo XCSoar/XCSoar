@@ -41,13 +41,7 @@ Copyright_License {
 #define RASP_FILENAME "xcsoar-rasp.dat"
 #define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
 
-struct WeatherDescriptor {
-  const TCHAR *name;
-  const TCHAR *label;
-  const TCHAR *help;
-};
-
-static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
+static constexpr RasterWeather::MapInfo WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
   {
     nullptr,
     N_("Terrain"),

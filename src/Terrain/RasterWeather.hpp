@@ -44,6 +44,12 @@ public:
   static constexpr unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
   static constexpr unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
 
+  struct MapInfo {
+    const TCHAR *name;
+    const TCHAR *label;
+    const TCHAR *help;
+  };
+
 private:
   GeoPoint center;
 
