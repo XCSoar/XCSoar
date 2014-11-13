@@ -42,6 +42,20 @@ BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
 }
 
 BrokenTime
+BrokenTime::FromMinuteOfDay(unsigned minute_of_day)
+{
+  assert(minute_of_day < 60u * 24u);
+
+  return BrokenTime(minute_of_day / 60u, minute_of_day % 60u);
+}
+
+BrokenTime
+BrokenTime::FromMinuteOfDayChecked(unsigned minute_of_day)
+{
+  return FromMinuteOfDay(minute_of_day % (60u * 24u));
+}
+
+BrokenTime
 BrokenTime::operator+(unsigned seconds) const
 {
   assert(IsPlausible());

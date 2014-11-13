@@ -122,6 +122,30 @@ struct BrokenTime {
   static BrokenTime FromSecondOfDayChecked(unsigned second_of_day);
 
   /**
+   * Returns the number of minutes which have passed on this day.
+   */
+  constexpr
+  unsigned GetMinuteOfDay() const {
+    return hour * 60u + minute;
+  }
+
+  /**
+   * Construct a BrokenTime object from the specified number of
+   * minutes which have passed on this day.
+   *
+   * @param minute_of_day 0 .. 60*24-1
+   */
+  gcc_const
+  static BrokenTime FromMinuteOfDay(unsigned minute_of_day);
+
+  /**
+   * A wrapper for FromMinuteOfDay() which allows values bigger than
+   * or equal to 60*24.
+   */
+  gcc_const
+  static BrokenTime FromMinuteOfDayChecked(unsigned minute_of_day);
+
+  /**
    * Returns a BrokenTime that has the specified number of seconds
    * added to it.  It properly wraps around midnight.
    *
