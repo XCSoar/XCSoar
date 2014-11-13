@@ -46,7 +46,16 @@ public:
 
   struct MapInfo {
     const TCHAR *name;
+
+    /**
+     * Human-readable label.  Call gettext() for internationalization.
+     */
     const TCHAR *label;
+
+    /**
+     * Human-readable help text.  Call gettext() for
+     * internationalization.
+     */
     const TCHAR *help;
   };
 
@@ -87,19 +96,8 @@ public:
   gcc_pure
   bool IsDirty() const;
 
-  /**
-   * Human-readable label for the given map index.  Call gettext() for
-   * internationalization.
-   */
   gcc_const
-  static const TCHAR *ItemLabel(unsigned i);
-
-  /**
-   * Human-readable help text for the given map index.  Call gettext()
-   * for internationalization.
-   */
-  gcc_const
-  static const TCHAR *ItemHelp(unsigned i);
+  static const MapInfo &GetItemInfo(unsigned i);
 
   gcc_pure
   const RasterMap *GetMap() const;

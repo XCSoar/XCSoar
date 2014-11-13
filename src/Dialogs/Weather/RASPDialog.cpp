@@ -70,10 +70,11 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
   for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_MAP; i++) {
-    const TCHAR *label = rasp.ItemLabel(i);
+    const RasterWeather::MapInfo &mi = rasp.GetItemInfo(i);
+    const TCHAR *label = mi.label;
     if (label != nullptr) {
       label = gettext(label);
-      const TCHAR *help = rasp.ItemHelp(i);
+      const TCHAR *help = mi.help;
       if (help != nullptr)
         help = gettext(help);
       dfe->AddChoice(i, label, nullptr, help);

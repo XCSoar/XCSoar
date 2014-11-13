@@ -313,18 +313,10 @@ RasterWeather::IsDirty() const
   return weather_map != nullptr && weather_map->IsDirty();
 }
 
-const TCHAR *
-RasterWeather::ItemLabel(unsigned i)
+const RasterWeather::MapInfo &
+RasterWeather::GetItemInfo(unsigned i)
 {
   assert(i < MAX_WEATHER_MAP);
 
-  return WeatherDescriptors[i].label;
-}
-
-const TCHAR *
-RasterWeather::ItemHelp(unsigned i)
-{
-  assert(i < MAX_WEATHER_MAP);
-
-  return WeatherDescriptors[i].help;
+  return WeatherDescriptors[i];
 }
