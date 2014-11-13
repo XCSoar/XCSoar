@@ -347,7 +347,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (weather != nullptr && weather->GetParameter() > 0) {
     const TCHAR *label = weather->ItemLabel(weather->GetParameter());
     if (label != nullptr)
-      buffer += label;
+      buffer += gettext(label);
   }
 
   if (!buffer.empty()) {
