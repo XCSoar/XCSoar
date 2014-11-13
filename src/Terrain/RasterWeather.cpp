@@ -160,13 +160,6 @@ RasterWeather::GetTime() const
   return weather_time;
 }
 
-bool
-RasterWeather::isWeatherAvailable(unsigned t) const
-{
-  assert(t < MAX_WEATHER_TIMES);
-  return weather_available[t];
-}
-
 void
 RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
                                      unsigned time_index)

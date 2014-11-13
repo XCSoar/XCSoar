@@ -71,14 +71,13 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Time"), nullptr);
   dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->addEnumText(_("Now"));
-  for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
-    if (rasp.isWeatherAvailable(i)) {
+
+  rasp.ForEachTime([dfe](unsigned i){
       TCHAR timetext[10];
-      const BrokenTime t = rasp.IndexToTime(i);
+      const BrokenTime t = RasterWeather::IndexToTime(i);
       _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
       dfe->addEnumText(timetext, i);
-    }
-  }
+    });
 
   dfe->Set(rasp.GetTime());
   wp->RefreshDisplay();

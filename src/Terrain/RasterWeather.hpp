@@ -116,7 +116,13 @@ public:
    * Load a list of RASP maps from the file "xcsoar-rasp.dat".
    */
   void ScanAll(const GeoPoint &location, OperationEnvironment &operation);
-  bool isWeatherAvailable(unsigned t) const;
+
+  template<typename C>
+  void ForEachTime(C &&c) {
+    for (unsigned i = 0; i < MAX_WEATHER_TIMES; ++i)
+      if (weather_available[i])
+        c(i);
+  }
 
   /**
    * Returns the current time index.
