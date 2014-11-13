@@ -69,8 +69,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Field"), nullptr, this);
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
-  dfe->addEnumText(_("Terrain"));
-  for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_MAP; i++) {
+  for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_MAP; i++) {
     const TCHAR *label = rasp.ItemLabel(i);
     if (label != nullptr) {
       label = gettext(label);
