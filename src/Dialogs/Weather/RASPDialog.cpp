@@ -72,14 +72,14 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->addEnumText(_("Now"));
 
-  rasp.ForEachTime([dfe](unsigned i){
+  rasp.ForEachTime([dfe](BrokenTime t){
       TCHAR timetext[10];
-      const BrokenTime t = RasterWeather::IndexToTime(i);
       _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
-      dfe->addEnumText(timetext, i);
+      dfe->addEnumText(timetext, t.GetMinuteOfDay());
     });
 
-  dfe->Set(rasp.GetTime());
+  const BrokenTime t = rasp.GetTime();
+  dfe->Set(t.IsPlausible() ? t.GetMinuteOfDay() : 0);
   wp->RefreshDisplay();
 }
 
@@ -87,7 +87,11 @@ bool
 RASPSettingsPanel::Save(bool &_changed)
 {
   rasp.SetParameter(GetValueInteger(ITEM));
-  rasp.SetTime(GetValueInteger(TIME));
+
+  unsigned t = GetValueInteger(TIME);
+  rasp.SetTime(t == 0
+               ? BrokenTime::Invalid()
+               : BrokenTime::FromMinuteOfDay(t));
   return true;
 }
 

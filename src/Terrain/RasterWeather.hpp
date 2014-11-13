@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 #define XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 
+#include "Time/BrokenTime.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 #include "Compiler.h"
@@ -33,7 +34,6 @@ Copyright_License {
 class RasterMap;
 class OperationEnvironment;
 struct zzip_dir;
-struct BrokenTime;
 
 /**
  * Class to manage raster weather data.  Usually, these raster maps
@@ -121,27 +121,27 @@ public:
   void ForEachTime(C &&c) {
     for (unsigned i = 0; i < MAX_WEATHER_TIMES; ++i)
       if (weather_available[i])
-        c(i);
+        c(IndexToTime(i));
   }
 
   /**
    * Returns the current time index.
    */
   gcc_pure
-  unsigned GetTime() const;
+  BrokenTime GetTime() const;
 
   /**
    * Sets the current time index.
    */
-  void SetTime(unsigned i);
+  void SetTime(BrokenTime t);
 
+private:
   /**
    * Converts a time index to a #BrokenTime.
    */
   gcc_const
   static BrokenTime IndexToTime(unsigned index);
 
-private:
   static struct zzip_dir *OpenArchive();
 
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,

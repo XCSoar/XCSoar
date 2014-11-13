@@ -27,7 +27,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "Time/BrokenTime.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Clamp.hpp"
 #include "Util/Macros.hpp"
@@ -130,10 +129,9 @@ RasterWeather::SetParameter(unsigned i)
 }
 
 void
-RasterWeather::SetTime(unsigned i)
+RasterWeather::SetTime(BrokenTime t)
 {
-  assert(i < MAX_WEATHER_TIMES);
-
+  unsigned i = ToHalfHours(t);
   Poco::ScopedRWLock protect(lock, true);
   weather_time = i;
 }
@@ -153,11 +151,11 @@ RasterWeather::GetParameter() const
   return parameter;
 }
 
-unsigned
+BrokenTime
 RasterWeather::GetTime() const
 {
   Poco::ScopedRWLock protect(lock, false);
-  return weather_time;
+  return IndexToTime(weather_time);
 }
 
 void
