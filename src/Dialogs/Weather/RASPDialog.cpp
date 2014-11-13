@@ -27,13 +27,14 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Components.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
 
-class RASPSettingsPanel final : public RowFormWidget {
+class RASPSettingsPanel final : public RowFormWidget, DataFieldListener {
   enum Controls {
     ITEM,
     TIME,
@@ -45,9 +46,19 @@ public:
   RASPSettingsPanel(RasterWeather &_rasp)
     :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
 
+  void UpdateTimeControl() {
+    const DataFieldEnum &item = (const DataFieldEnum &)GetDataField(ITEM);
+    SetRowEnabled(TIME, item.GetValue() > 0);
+  }
+
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
+
+  /* virtual methods from DataFieldListener */
+  void OnModified(DataField &) override {
+    UpdateTimeControl();
+  }
 };
 
 void
@@ -55,7 +66,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WndProperty *wp;
 
-  wp = AddEnum(_("Field"), nullptr);
+  wp = AddEnum(_("Field"), nullptr, this);
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
   dfe->addEnumText(_("Terrain"));
@@ -86,6 +97,8 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const BrokenTime t = rasp.GetTime();
   dfe->Set(t.IsPlausible() ? t.GetMinuteOfDay() : 0);
   wp->RefreshDisplay();
+
+  UpdateTimeControl();
 }
 
 bool
