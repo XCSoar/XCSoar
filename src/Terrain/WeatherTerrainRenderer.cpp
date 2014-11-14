@@ -119,11 +119,10 @@ const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
 };
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
-                                               const RasterWeather *_weather)
+                                               const RasterWeather &_weather)
   :TerrainRenderer(_terrain),
-  weather(_weather)
+   weather(_weather)
 {
-  assert(weather != nullptr);
 }
 
 void
@@ -137,7 +136,7 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   const bool do_shading = is_terrain;
   const ColorRamp *color_ramp;
 
-  switch (weather->GetParameter()) {
+  switch (weather.GetParameter()) {
   case 1: // wstar
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
     color_ramp = weather_colors[0];
@@ -189,7 +188,7 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
     return;
   }
 
-  const RasterMap *map = weather->GetMap();
+  const RasterMap *map = weather.GetMap();
   if (map == nullptr) {
     TerrainRenderer::Generate(projection, sunazimuth);
     return;

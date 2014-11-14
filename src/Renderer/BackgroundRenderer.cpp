@@ -85,8 +85,8 @@ BackgroundRenderer::Draw(Canvas& canvas,
     // defer creation until first draw because
     // the buffer size, smoothing etc is set by the
     // loaded terrain properties
-    if (weather) {
-      renderer = new WeatherTerrainRenderer(*terrain, weather);
+    if (weather != nullptr) {
+      renderer = new WeatherTerrainRenderer(*terrain, *weather);
     } else {
       renderer = new TerrainRenderer(*terrain);
     }

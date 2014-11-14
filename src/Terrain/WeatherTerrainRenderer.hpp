@@ -29,11 +29,11 @@ Copyright_License {
 class RasterWeather;
 
 class WeatherTerrainRenderer: public TerrainRenderer {
-  const RasterWeather *weather;
+  const RasterWeather &weather;
 
 public:
   WeatherTerrainRenderer(const RasterTerrain &_terrain,
-                         const RasterWeather *_weather);
+                         const RasterWeather &_weather);
 
   virtual void Generate(const WindowProjection &map_projection,
                         const Angle sunazimuth);
