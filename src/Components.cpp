@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Components.hpp"
-#include "Terrain/RasterWeather.hpp"
+#include "Terrain/RasterWeatherStore.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -36,7 +36,7 @@ FileCache *file_cache;
 ProtectedMarkers *protected_marks;
 TopographyStore *topography;
 RasterTerrain *terrain;
-RasterWeather *rasp;
+RasterWeatherStore *rasp;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;

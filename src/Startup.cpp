@@ -30,7 +30,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeather.hpp"
+#include "Terrain/RasterWeatherStore.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
 #include "Dialogs/Dialogs.h"
@@ -364,7 +364,7 @@ Startup()
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  rasp = new RasterWeather();
+  rasp = new RasterWeatherStore();
   rasp->ScanAll(CommonInterface::Basic().location, operation);
 
   // Reads the airspace files

@@ -7,7 +7,8 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/Intersection.cpp \
 	$(SRC)/Terrain/ScanLine.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
-	$(SRC)/Terrain/RasterWeather.cpp \
+	$(SRC)/Terrain/RasterWeatherStore.cpp \
+	$(SRC)/Terrain/RasterWeatherCache.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \

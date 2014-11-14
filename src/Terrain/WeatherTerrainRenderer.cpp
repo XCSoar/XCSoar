@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Terrain/WeatherTerrainRenderer.hpp"
-#include "Terrain/RasterWeather.hpp"
+#include "Terrain/RasterWeatherCache.hpp"
 #include "Screen/Ramp.hpp"
 
 const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
@@ -119,7 +119,7 @@ const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
 };
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
-                                               const RasterWeather &_weather)
+                                               const RasterWeatherCache &_weather)
   :TerrainRenderer(_terrain),
    weather(_weather)
 {

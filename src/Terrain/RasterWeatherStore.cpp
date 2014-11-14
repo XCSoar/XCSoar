@@ -21,14 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Terrain/RasterWeather.hpp"
-#include "Terrain/RasterMap.hpp"
+#include "RasterWeatherStore.hpp"
+#include "RasterMap.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/ConvertString.hpp"
-#include "Util/Clamp.hpp"
 #include "Util/Macros.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
@@ -41,7 +40,7 @@ Copyright_License {
 #define RASP_FILENAME "xcsoar-rasp.dat"
 #define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
 
-static constexpr RasterWeather::MapInfo WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP] = {
+static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[RasterWeatherStore::MAX_WEATHER_MAP] = {
   {
     nullptr,
     N_("Terrain"),
@@ -94,69 +93,20 @@ static constexpr RasterWeather::MapInfo WeatherDescriptors[RasterWeather::MAX_WE
   },
 };
 
-static inline constexpr unsigned
-ToHalfHours(BrokenTime t)
-{
-  return t.hour * 2u + t.minute / 30;
-}
-
-RasterWeather::RasterWeather()
-  :center(GeoPoint::Invalid()),
-   parameter(0), last_parameter(0),
-   weather_time(0), last_weather_time(0),
-   weather_map(nullptr)
+RasterWeatherStore::RasterWeatherStore()
 {
   std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
 
 BrokenTime
-RasterWeather::IndexToTime(unsigned index)
+RasterWeatherStore::IndexToTime(unsigned index)
 {
   return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
 }
 
 void
-RasterWeather::SetParameter(unsigned i)
-{
-  Poco::ScopedRWLock protect(lock, true);
-  parameter = i;
-}
-
-void
-RasterWeather::SetTime(BrokenTime t)
-{
-  unsigned i = t.IsPlausible() ? ToHalfHours(t) : 0;
-  Poco::ScopedRWLock protect(lock, true);
-  weather_time = i;
-}
-
-const RasterMap *
-RasterWeather::GetMap() const
-{
-  // JMW this is not safe in TerrainRenderer's use
-  Poco::ScopedRWLock protect(lock, false);
-  return weather_map;
-}
-
-unsigned
-RasterWeather::GetParameter() const
-{
-  Poco::ScopedRWLock protect(lock, false);
-  return parameter;
-}
-
-BrokenTime
-RasterWeather::GetTime() const
-{
-  Poco::ScopedRWLock protect(lock, false);
-  return weather_time == 0
-    ? BrokenTime::Invalid()
-    : IndexToTime(weather_time);
-}
-
-void
-RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
-                                     unsigned time_index)
+RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
+                                          unsigned time_index)
 {
   const WideToACPConverter narrow_name(name);
   const BrokenTime t = IndexToTime(time_index);
@@ -165,8 +115,8 @@ RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
 }
 
 void
-RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
-                           unsigned time_index)
+RasterWeatherStore::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
+                                unsigned time_index)
 {
   TCHAR fname[MAX_PATH];
   const BrokenTime t = IndexToTime(time_index);
@@ -176,8 +126,8 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
 }
 
 RasterMap *
-RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
-                        OperationEnvironment &operation)
+RasterWeatherStore::LoadItem(const TCHAR *name, unsigned time_index,
+                             OperationEnvironment &operation)
 {
   TCHAR rasp_filename[MAX_PATH];
   GetFilename(rasp_filename, name, time_index);
@@ -191,7 +141,7 @@ RasterWeather::LoadItem(const TCHAR *name, unsigned time_index,
 }
 
 struct zzip_dir *
-RasterWeather::OpenArchive()
+RasterWeatherStore::OpenArchive()
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, _T(RASP_FILENAME));
@@ -201,8 +151,8 @@ RasterWeather::OpenArchive()
 }
 
 bool
-RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
-                          unsigned time_index)
+RasterWeatherStore::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
+                               unsigned time_index)
 {
   char filename[MAX_PATH];
   NarrowWeatherFilename(filename, name, time_index);
@@ -212,8 +162,8 @@ RasterWeather::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
 }
 
 void
-RasterWeather::ScanAll(const GeoPoint &location,
-                       OperationEnvironment &operation)
+RasterWeatherStore::ScanAll(const GeoPoint &location,
+                            OperationEnvironment &operation)
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
@@ -234,89 +184,8 @@ RasterWeather::ScanAll(const GeoPoint &location,
   zzip_dir_close(dir);
 }
 
-void
-RasterWeather::Reload(BrokenTime time_local, OperationEnvironment &operation)
-{
-  assert(time_local.IsPlausible());
-
-  if (parameter == 0)
-    // will be drawing terrain
-    return;
-
-  Poco::ScopedRWLock protect(lock, true);
-  unsigned effective_weather_time = weather_time;
-  if (effective_weather_time == 0) {
-    // "Now" time, so find time in half hours
-    effective_weather_time = ToHalfHours(time_local);
-    assert(effective_weather_time < MAX_WEATHER_TIMES);
-  }
-
-  if (parameter == last_parameter && effective_weather_time == last_weather_time)
-    // no change, quick exit.
-    return;
-
-  last_parameter = parameter;
-  last_weather_time = effective_weather_time;
-
-  // scan forward to next valid time
-  while (!weather_available[effective_weather_time]) {
-    ++effective_weather_time;
-
-    if (effective_weather_time >= MAX_WEATHER_TIMES)
-      // can't find valid time
-      return;
-  }
-
-  Close();
-
-  weather_map = LoadItem(WeatherDescriptors[parameter].name,
-                         effective_weather_time, operation);
-  if (weather_map == nullptr && parameter == 1)
-    weather_map = LoadItem(_T("wstar_bsratio"),
-                           effective_weather_time, operation);
-}
-
-void
-RasterWeather::Close()
-{
-  delete weather_map;
-  weather_map = nullptr;
-  center = GeoPoint::Invalid();
-}
-
-void
-RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
-{
-  if (parameter == 0)
-    // will be drawing terrain
-    return;
-
-  Poco::ScopedRWLock protect(lock, true);
-  if (weather_map == nullptr)
-    return;
-
-  /* only update the RasterMap if the center was moved far enough */
-  if (center.IsValid() && center.Distance(location) < fixed(1000))
-    return;
-
-  weather_map->SetViewCenter(location, radius);
-  if (!weather_map->IsDirty())
-    center = location;
-}
-
-bool
-RasterWeather::IsDirty() const
-{
-  if (parameter == 0)
-    // will be drawing terrain
-    return false;
-
-  Poco::ScopedRWLock protect(lock, false);
-  return weather_map != nullptr && weather_map->IsDirty();
-}
-
-const RasterWeather::MapInfo &
-RasterWeather::GetItemInfo(unsigned i)
+const RasterWeatherStore::MapInfo &
+RasterWeatherStore::GetItemInfo(unsigned i)
 {
   assert(i < MAX_WEATHER_MAP);
 

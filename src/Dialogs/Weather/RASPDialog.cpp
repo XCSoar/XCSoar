@@ -24,7 +24,8 @@ Copyright_License {
 #include "WeatherDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Terrain/RasterWeather.hpp"
+#include "Terrain/RasterWeatherCache.hpp"
+#include "Terrain/RasterWeatherStore.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -42,10 +43,10 @@ class RASPSettingsPanel final : public RowFormWidget, DataFieldListener {
     TIME,
   };
 
-  RasterWeather &rasp;
+  RasterWeatherStore &rasp;
 
 public:
-  RASPSettingsPanel(RasterWeather &_rasp)
+  RASPSettingsPanel(RasterWeatherStore &_rasp)
     :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
 
   void UpdateTimeControl() {
@@ -73,8 +74,8 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Field"), nullptr, this);
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
-  for (unsigned i = 0; i < RasterWeather::MAX_WEATHER_MAP; i++) {
-    const RasterWeather::MapInfo &mi = rasp.GetItemInfo(i);
+  for (unsigned i = 0; i < RasterWeatherStore::MAX_WEATHER_MAP; i++) {
+    const RasterWeatherStore::MapInfo &mi = rasp.GetItemInfo(i);
     const TCHAR *label = mi.label;
     if (label != nullptr) {
       label = gettext(label);

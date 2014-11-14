@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "TerrainRenderer.hpp"
 
-class RasterWeather;
+class RasterWeatherCache;
 
 class WeatherTerrainRenderer: public TerrainRenderer {
-  const RasterWeather &weather;
+  const RasterWeatherCache &weather;
 
 public:
   WeatherTerrainRenderer(const RasterTerrain &_terrain,
-                         const RasterWeather &_weather);
+                         const RasterWeatherCache &_weather);
 
   virtual void Generate(const WindowProjection &map_projection,
                         const Angle sunazimuth);

@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeather.hpp"
+#include "Terrain/RasterWeatherCache.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Operation/Operation.hpp"
 
@@ -67,6 +67,7 @@ MapWindow::MapWindow(const MapLook &_look,
 MapWindow::~MapWindow()
 {
   delete topography_renderer;
+  delete weather;
 }
 
 void
@@ -220,10 +221,13 @@ MapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-MapWindow::SetWeather(RasterWeather *_weather)
+MapWindow::SetWeather(const RasterWeatherStore *_weather)
 {
-  weather = _weather;
-  background.SetWeather(_weather);
+  delete weather;
+  weather = _weather != nullptr
+    ? new RasterWeatherCache(*_weather)
+    : nullptr;
+  background.SetWeather(weather);
 }
 
 void

@@ -31,7 +31,7 @@ class WindowProjection;
 struct TerrainRendererSettings;
 class TerrainRenderer;
 class RasterTerrain;
-class RasterWeather;
+class RasterWeatherCache;
 struct DerivedInfo;
 
 /**
@@ -39,7 +39,7 @@ struct DerivedInfo;
  */
 class BackgroundRenderer {
   const RasterTerrain *terrain;
-  const RasterWeather *weather;
+  const RasterWeatherCache *weather;
   TerrainRenderer *renderer;
   Angle shading_angle;
 
@@ -64,7 +64,7 @@ public:
                        const DerivedInfo &calculated);
   void Reset();
   void SetTerrain(const RasterTerrain *terrain);
-  void SetWeather(const RasterWeather *weather);
+  void SetWeather(const RasterWeatherCache *weather);
 
 private:
   void SetShadingAngle(const WindowProjection& proj, Angle angle);

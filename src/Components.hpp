@@ -30,7 +30,7 @@ class FileCache;
 class ProtectedMarkers;
 class TopographyStore;
 class RasterTerrain;
-class RasterWeather;
+class RasterWeatherStore;
 class GlideComputer;
 class DrawThread;
 class DeviceBlackboard;
@@ -55,7 +55,7 @@ extern Replay *replay;
 extern ProtectedMarkers *protected_marks;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
-extern RasterWeather *rasp;
+extern RasterWeatherStore *rasp;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;

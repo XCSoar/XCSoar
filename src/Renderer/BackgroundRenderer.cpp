@@ -59,7 +59,7 @@ BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 }
 
 void
-BackgroundRenderer::SetWeather(const RasterWeather *_weather)
+BackgroundRenderer::SetWeather(const RasterWeatherCache *_weather)
 {
   weather = _weather;
   Reset();
