@@ -32,7 +32,7 @@ class WeatherTerrainRenderer: public TerrainRenderer {
   const RasterWeather *weather;
 
 public:
-  WeatherTerrainRenderer(const RasterTerrain *_terrain,
+  WeatherTerrainRenderer(const RasterTerrain &_terrain,
                          const RasterWeather *_weather);
 
   virtual void Generate(const WindowProjection &map_projection,

@@ -39,7 +39,7 @@ class RasterTerrain;
 struct ColorRamp;
 
 class TerrainRenderer : private NonCopyable {
-  const RasterTerrain *terrain;
+  const RasterTerrain &terrain;
 
   Serial terrain_serial;
 
@@ -57,7 +57,7 @@ protected:
   RasterRenderer raster_renderer;
 
 public:
-  TerrainRenderer(const RasterTerrain *_terrain);
+  TerrainRenderer(const RasterTerrain &_terrain);
   virtual ~TerrainRenderer() {}
 
   /**

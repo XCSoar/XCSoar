@@ -118,7 +118,7 @@ const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   },
 };
 
-WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
+WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
                                                const RasterWeather *_weather)
   :TerrainRenderer(_terrain),
   weather(_weather)

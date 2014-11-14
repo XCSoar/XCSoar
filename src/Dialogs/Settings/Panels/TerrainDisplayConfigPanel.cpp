@@ -56,7 +56,7 @@ class TerrainPreviewWindow : public PaintWindow {
   TerrainRenderer renderer;
 
 public:
-  TerrainPreviewWindow(const RasterTerrain *terrain)
+  TerrainPreviewWindow(const RasterTerrain &terrain)
     :renderer(terrain) {}
 
   void SetSettings(const TerrainRendererSettings &settings) {
@@ -273,7 +273,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WindowStyle style;
     style.Border();
 
-    TerrainPreviewWindow *preview = new TerrainPreviewWindow(::terrain);
+    TerrainPreviewWindow *preview = new TerrainPreviewWindow(*::terrain);
     preview->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100}, style);
     AddRemaining(preview);
   }

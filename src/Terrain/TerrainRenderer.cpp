@@ -287,12 +287,11 @@ static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
 //  mapscale/7.5 terrain units/pixel
 //
 // this is for TerrainInfo.StepSize = 0.0025;
-TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain)
+TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
   :terrain(_terrain),
    last_sun_azimuth(Angle::Zero()),
    last_color_ramp(nullptr)
 {
-  assert(terrain != nullptr);
   settings.SetDefaults();
 }
 
@@ -332,7 +331,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 
   if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
-      terrain_serial == terrain->GetSerial() &&
+      terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth) &&
       !raster_renderer.UpdateQuantisation())
     /* no change since previous frame */
@@ -340,7 +339,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 
 #else
   if (compare_projection.Compare(map_projection) &&
-      terrain_serial == terrain->GetSerial() &&
+      terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth))
     /* no change since previous frame */
     return;
@@ -348,7 +347,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   compare_projection = CompareProjection(map_projection);
 #endif
 
-  terrain_serial = terrain->GetSerial();
+  terrain_serial = terrain.GetSerial();
 
   last_sun_azimuth = sunazimuth;
 
@@ -369,7 +368,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   }
 
   {
-    RasterTerrain::Lease map(*terrain);
+    RasterTerrain::Lease map(terrain);
     raster_renderer.ScanMap(map, map_projection);
   }
 
