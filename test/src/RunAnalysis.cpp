@@ -32,7 +32,6 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
-#include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Dialogs/XML.hpp"

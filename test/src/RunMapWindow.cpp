@@ -26,7 +26,6 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
-#include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ComputerProfile.hpp"
