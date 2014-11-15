@@ -124,7 +124,7 @@ public:
   void ScanAll(const GeoPoint &location, OperationEnvironment &operation);
 
   template<typename C>
-  void ForEachTime(C &&c) {
+  void ForEachTime(C &&c) const {
     for (unsigned i = 0; i < MAX_WEATHER_TIMES; ++i)
       if (weather_available[i])
         c(IndexToTime(i));
