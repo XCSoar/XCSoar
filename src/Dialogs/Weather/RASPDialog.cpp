@@ -30,6 +30,8 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Components.hpp"
 #include "UIGlobals.hpp"
+#include "UIState.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -64,6 +66,8 @@ public:
 void
 RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  const WeatherUIState &state = CommonInterface::GetUIState().weather;
+
   WndProperty *wp;
 
   wp = AddEnum(_("Field"), nullptr, this);
@@ -81,7 +85,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     }
   }
 
-  dfe->Set(rasp.GetParameter());
+  dfe->Set(state.map);
   wp->RefreshDisplay();
 
   wp = AddEnum(_("Time"), nullptr);
@@ -94,8 +98,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       dfe->addEnumText(timetext, t.GetMinuteOfDay());
     });
 
-  const BrokenTime t = rasp.GetTime();
-  dfe->Set(t.IsPlausible() ? t.GetMinuteOfDay() : 0);
+  dfe->Set(state.time.IsPlausible() ? state.time.GetMinuteOfDay() : 0);
   wp->RefreshDisplay();
 
   UpdateTimeControl();
@@ -104,12 +107,17 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 RASPSettingsPanel::Save(bool &_changed)
 {
-  rasp.SetParameter(GetValueInteger(ITEM));
+  WeatherUIState &state = CommonInterface::SetUIState().weather;
+
+  state.map = GetValueInteger(ITEM);
 
   unsigned t = GetValueInteger(TIME);
-  rasp.SetTime(t == 0
-               ? BrokenTime::Invalid()
-               : BrokenTime::FromMinuteOfDay(t));
+  state.time = t == 0
+    ? BrokenTime::Invalid()
+    : BrokenTime::FromMinuteOfDay(t);
+
+  ActionInterface::SendUIState(true);
+
   return true;
 }
 

@@ -21,17 +21,30 @@ Copyright_License {
 }
 */
 
-#include "UIState.hpp"
+#ifndef XCSOAR_WEATHER_UI_STATE_HPP
+#define XCSOAR_WEATHER_UI_STATE_HPP
 
-void
-UIState::Clear()
-{
-  screen_blanked = false;
-  force_display_mode = DisplayMode::NONE;
-  display_mode = DisplayMode::NONE;
-  auxiliary_enabled = false;
-  panel_index = 0;
-  panel_name.clear();
-  pages.Clear();
-  weather.Clear();
-}
+#include "Time/BrokenTime.hpp"
+
+/**
+ * The state of weather display on the user interface.
+ */
+struct WeatherUIState {
+  /**
+   * The map index being displayed.  0 means no weather map (normal
+   * terrain display).
+   */
+  unsigned map;
+
+  /**
+   * The weather forecast time that shall be displayed.
+   */
+  BrokenTime time;
+
+  void Clear() {
+    map = 0;
+    time = BrokenTime::Invalid();
+  }
+};
+
+#endif

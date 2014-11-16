@@ -163,6 +163,10 @@ MapWindow::UpdateWeather()
   if (weather == nullptr || !Calculated().date_time_local.IsTimePlausible())
     return false;
 
+  const WeatherUIState &state = GetUIState().weather;
+  weather->SetParameter(state.map);
+  weather->SetTime(state.time);
+
   QuietOperationEnvironment operation;
   weather->Reload(Calculated().date_time_local, operation);
   weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),

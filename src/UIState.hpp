@@ -27,6 +27,7 @@ Copyright_License {
 #include "DisplayMode.hpp"
 #include "Util/StaticString.hpp"
 #include "PageState.hpp"
+#include "Weather/WeatherUIState.hpp"
 
 /**
  * The state of the user interface.
@@ -74,6 +75,8 @@ struct UIState {
   StaticString<32u> panel_name;
 
   PagesState pages;
+
+  WeatherUIState weather;
 
   void Clear();
 };
