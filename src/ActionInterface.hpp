@@ -83,6 +83,16 @@ namespace ActionInterface {
   void SendMapSettings(const bool trigger_draw = false);
 
   /**
+   * Call this after #UIState has been modified with SetUIState().  It
+   * sends the new values to all sub systems, and optionally forces a
+   * redraw.
+   *
+   * @param trigger_draw triggers a map redraw immediately if true,
+   * rather than waiting for eventual redraw
+   */
+  void SendUIState(const bool trigger_draw);
+
+  /**
    * Update UIState::display_mode and other attributes related to it.
    * You may have to call SendUIState() after this.
    */

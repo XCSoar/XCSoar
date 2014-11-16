@@ -240,6 +240,15 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
   // TODO: trigger refresh if the settings are changed
 }
 
+void
+ActionInterface::SendUIState(const bool trigger_draw)
+{
+  main_window->SetUIState(GetUIState());
+
+  if (trigger_draw)
+    main_window->FullRedraw();
+}
+
 gcc_pure
 static unsigned
 GetPanelIndex(const UIState &ui_state)
