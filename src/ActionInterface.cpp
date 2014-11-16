@@ -221,9 +221,6 @@ ActionInterface::OffsetManualMacCready(fixed offset, bool to_devices)
 void
 ActionInterface::SendMapSettings(const bool trigger_draw)
 {
-  // trigger_draw: asks for an immediate exchange of blackboard data
-  // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
-
   if (trigger_draw) {
     main_window->UpdateGaugeVisibility();
     InfoBoxManager::ProcessTimer();
