@@ -29,8 +29,11 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
+#include "Util/tstring.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
+
+#include <set>
 
 #include <assert.h>
 #include <tchar.h>
@@ -195,6 +198,8 @@ RasterWeatherStore::ScanAll(const GeoPoint &location,
 
   maps.clear();
 
+  std::set<tstring> names;
+
   for (const auto &i : WeatherDescriptors) {
     if (i.name == nullptr) {
       /* special case: 0 = terrain */
@@ -213,7 +218,36 @@ RasterWeatherStore::ScanAll(const GeoPoint &location,
       item.help = i.help;
       if (ScanMapItem(dir, item))
         maps.push_back(item);
+
+      names.insert(i.name);
     }
+  }
+
+  ZZIP_DIRENT e;
+  while (zzip_dir_read(dir, &e)) {
+    if (maps.full())
+      break;
+
+    const char *filename = e.d_name;
+    if (!StringEndsWith(filename, ".jp2"))
+      continue;
+
+    MapItem item(_T(""));
+
+    const char *dot = strchr(filename, '.');
+    if (dot == nullptr || dot == filename ||
+        size_t(dot - filename) >= item.name.MAX_SIZE)
+      continue;
+
+    item.name.SetASCII(filename, dot);
+    item.label = nullptr;
+    item.help = nullptr;
+
+    if (!names.insert(item.name.c_str()).second)
+      continue;
+
+    if (ScanMapItem(dir, item))
+      maps.push_back(item);
   }
 
   // TODO: scan the rest
