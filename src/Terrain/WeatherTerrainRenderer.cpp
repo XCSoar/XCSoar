@@ -143,18 +143,18 @@ static constexpr WeatherTerrainStyle weather_terrain_styles[] = {
     1, // max range 256*(1**2) = 512 cm/s = 5.0 m/s
     false },
   { _T("blcwbase"), weather_colors[2], 4, false },
-  { nullptr, nullptr, 0, false }
+  { nullptr, weather_colors[0], 2, false }
 };
 
 gcc_pure
 static const WeatherTerrainStyle *
 LookupWeatherTerrainStyle(const TCHAR *name)
 {
-  for (const auto *i = weather_terrain_styles; i->name != nullptr; ++i)
-    if (StringIsEqual(i->name, name))
-      return i;
+  const auto *i = weather_terrain_styles;
+  while (i->name != nullptr && !StringIsEqual(i->name, name))
+    ++i;
 
-  return nullptr;
+  return i;
 }
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
@@ -176,7 +176,6 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   const WeatherTerrainStyle *style = LookupWeatherTerrainStyle(weather.GetMapName());
   if (style == nullptr) {
     /* unknown map name */
-    // TODO: use a fallback style?
     TerrainRenderer::Generate(projection, sunazimuth);
     return;
   }
