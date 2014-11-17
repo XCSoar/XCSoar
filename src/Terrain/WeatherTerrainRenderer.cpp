@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Util/StringUtil.hpp"
 
-const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed
     {   0,       0,     0,     255}, // -200
     { 100,       0,     195,   255}, // -100
