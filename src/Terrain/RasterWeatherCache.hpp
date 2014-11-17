@@ -80,6 +80,14 @@ public:
   }
 
   /**
+   * Are we currently displaying terrain instead of a RASP weather
+   * map?
+   */
+  bool IsTerrain() const {
+    return parameter == 0;
+  }
+
+  /**
    * Returns the index of the weather map being displayed.
    */
   gcc_pure

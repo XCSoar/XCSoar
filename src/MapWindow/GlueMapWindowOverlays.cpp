@@ -345,7 +345,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
         _T("BALLAST %d LITERS "),
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
 
-  if (weather != nullptr && weather->GetParameter() > 0) {
+  if (weather != nullptr && !weather->IsTerrain()) {
     const RasterWeatherStore &ws = weather->GetStore();
     const TCHAR *label = ws.GetItemInfo(weather->GetParameter()).label;
     if (label != nullptr)
