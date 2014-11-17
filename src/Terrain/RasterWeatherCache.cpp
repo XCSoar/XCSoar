@@ -54,6 +54,14 @@ RasterWeatherCache::RasterWeatherCache(const RasterWeatherStore &_store)
 {
 }
 
+const TCHAR *
+RasterWeatherCache::GetMapName() const
+{
+  assert(!IsTerrain());
+
+  return store.GetItemInfo(parameter).name;
+}
+
 void
 RasterWeatherCache::SetTime(BrokenTime t)
 {

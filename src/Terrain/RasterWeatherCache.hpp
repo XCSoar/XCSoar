@@ -88,6 +88,12 @@ public:
   }
 
   /**
+   * Returns the current map's name.
+   */
+  gcc_pure
+  const TCHAR *GetMapName() const;
+
+  /**
    * Returns the index of the weather map being displayed.
    */
   gcc_pure
