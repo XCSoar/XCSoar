@@ -24,6 +24,7 @@ Copyright_License {
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Terrain/RasterWeatherCache.hpp"
 #include "Screen/Ramp.hpp"
+#include "Util/StringUtil.hpp"
 
 const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed
@@ -118,6 +119,44 @@ const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   },
 };
 
+struct WeatherTerrainStyle {
+  const TCHAR *name;
+  const ColorRamp *color_ramp;
+  unsigned height_scale;
+  bool do_water;
+};
+
+static constexpr WeatherTerrainStyle weather_terrain_styles[] = {
+  { _T("wstar"), weather_colors[0],
+    2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
+    false },
+  { _T("wstar_bsratio"), weather_colors[0],
+    2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
+    false },
+  { _T("blwindspd"), weather_colors[1], 3, false },
+  { _T("hbl"), weather_colors[2], 4, false },
+  { _T("dwcrit"), weather_colors[2], 4, false },
+  { _T("blcloudpct"), weather_colors[3], 0, true },
+  { _T("sfctemp"), weather_colors[4], 0, false },
+  { _T("hwcrit"), weather_colors[2], 4, false },
+  { _T("wblmaxmin"), weather_colors[5],
+    1, // max range 256*(1**2) = 512 cm/s = 5.0 m/s
+    false },
+  { _T("blcwbase"), weather_colors[2], 4, false },
+  { nullptr, nullptr, 0, false }
+};
+
+gcc_pure
+static const WeatherTerrainStyle *
+LookupWeatherTerrainStyle(const TCHAR *name)
+{
+  for (const auto *i = weather_terrain_styles; i->name != nullptr; ++i)
+    if (StringIsEqual(i->name, name))
+      return i;
+
+  return nullptr;
+}
+
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
                                                const RasterWeatherCache &_weather)
   :TerrainRenderer(_terrain),
@@ -129,64 +168,25 @@ void
 WeatherTerrainRenderer::Generate(const WindowProjection &projection,
                                  const Angle sunazimuth)
 {
-  bool do_water = false;
-  unsigned height_scale;
-  const int interp_levels = 5;
-  const bool is_terrain = false;
-  const bool do_shading = is_terrain;
-  const ColorRamp *color_ramp;
-
-  switch (weather.GetParameter()) {
-  case 1: // wstar
-    height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    color_ramp = weather_colors[0];
-    break;
-
-  case 2: // bl wind spd
-    height_scale = 3;
-    color_ramp = weather_colors[1];
-    break;
-
-  case 3: // hbl
-    height_scale = 4;
-    color_ramp = weather_colors[2];
-    break;
-
-  case 4: // dwcrit
-    height_scale = 4;
-    color_ramp = weather_colors[2];
-    break;
-
-  case 5: // blcloudpct
-    do_water = true;
-    height_scale = 0;
-    color_ramp = weather_colors[3];
-    break;
-
-  case 6: // sfctemp
-    height_scale = 0;
-    color_ramp = weather_colors[4];
-    break;
-
-  case 7: // hwcrit
-    height_scale = 4;
-    color_ramp = weather_colors[2];
-    break;
-
-  case 8: // wblmaxmin
-    height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    color_ramp = weather_colors[5];
-    break;
-
-  case 9: // blcwbase
-    height_scale = 4;
-    color_ramp = weather_colors[2];
-    break;
-
-  default:
+  if (weather.IsTerrain()) {
     TerrainRenderer::Generate(projection, sunazimuth);
     return;
   }
+
+  const WeatherTerrainStyle *style = LookupWeatherTerrainStyle(weather.GetMapName());
+  if (style == nullptr) {
+    /* unknown map name */
+    // TODO: use a fallback style?
+    TerrainRenderer::Generate(projection, sunazimuth);
+    return;
+  }
+
+  const bool do_water = style->do_water;
+  const unsigned height_scale = style->height_scale;
+  const int interp_levels = 5;
+  const bool is_terrain = false;
+  const bool do_shading = is_terrain;
+  const ColorRamp *color_ramp = style->color_ramp;
 
   const RasterMap *map = weather.GetMap();
   if (map == nullptr) {
