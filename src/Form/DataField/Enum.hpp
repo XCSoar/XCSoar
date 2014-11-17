@@ -119,6 +119,15 @@ public:
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
 
+  /**
+   * Clear the list of choices.  This will not notify the
+   * DataFieldListener.
+   */
+  void ClearChoices() {
+    entries.clear();
+    value = 0;
+  }
+
   bool AddChoice(unsigned id, const TCHAR *text,
                  const TCHAR *display_string=nullptr,
                  const TCHAR *help=nullptr);
