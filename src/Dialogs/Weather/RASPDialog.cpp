@@ -75,7 +75,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
   for (unsigned i = 0; i < RasterWeatherStore::MAX_WEATHER_MAP; i++) {
-    const RasterWeatherStore::MapInfo &mi = rasp.GetItemInfo(i);
+    const auto &mi = rasp.GetItemInfo(i);
     const TCHAR *label = mi.label;
     if (label != nullptr) {
       label = gettext(label);
