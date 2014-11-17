@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.8 - not yet released
 * data files
   - optimise the topography loader
+  - faster RASP map change
 * devices
   - remove option "Ignore checksum"
   - LX: implement LXNAV Nano3 task declaration (#3295)
