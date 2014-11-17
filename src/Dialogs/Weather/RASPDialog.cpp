@@ -49,10 +49,8 @@ public:
   RASPSettingsPanel(RasterWeatherStore &_rasp)
     :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
 
-  void UpdateTimeControl() {
-    const DataFieldEnum &item = (const DataFieldEnum &)GetDataField(ITEM);
-    SetRowEnabled(TIME, item.GetValue() > 0);
-  }
+private:
+  void UpdateTimeControl();
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -63,6 +61,13 @@ public:
     UpdateTimeControl();
   }
 };
+
+void
+RASPSettingsPanel::UpdateTimeControl()
+{
+  const DataFieldEnum &item = (const DataFieldEnum &)GetDataField(ITEM);
+  SetRowEnabled(TIME, item.GetValue() > 0);
+}
 
 void
 RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
