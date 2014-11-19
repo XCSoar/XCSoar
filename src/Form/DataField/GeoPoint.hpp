@@ -34,7 +34,7 @@ Copyright_License {
 class GeoPointDataField final : public DataField {
   GeoPoint value;
 
-  CoordinateFormat format;
+  const CoordinateFormat format;
 
 public:
   GeoPointDataField(GeoPoint _value, CoordinateFormat _format,
