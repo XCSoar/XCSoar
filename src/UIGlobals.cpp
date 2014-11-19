@@ -29,7 +29,7 @@ Copyright_License {
 SingleWindow &
 UIGlobals::GetMainWindow()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return *CommonInterface::main_window;
 }
@@ -37,7 +37,7 @@ UIGlobals::GetMainWindow()
 GlueMapWindow *
 UIGlobals::GetMap()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::main_window->GetMap();
 }
@@ -45,7 +45,7 @@ UIGlobals::GetMap()
 GlueMapWindow *
 UIGlobals::GetMapIfActive()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::main_window->GetMapIfActive();
 }
@@ -53,7 +53,7 @@ UIGlobals::GetMapIfActive()
 const DialogSettings &
 UIGlobals::GetDialogSettings()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::GetUISettings().dialog;
 }
@@ -61,7 +61,7 @@ UIGlobals::GetDialogSettings()
 const Look &
 UIGlobals::GetLook()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::main_window->GetLook();
 }
@@ -69,7 +69,7 @@ UIGlobals::GetLook()
 const DialogLook &
 UIGlobals::GetDialogLook()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::main_window->GetLook().dialog;
 }
@@ -77,7 +77,7 @@ UIGlobals::GetDialogLook()
 const IconLook &
 UIGlobals::GetIconLook()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::main_window->GetLook().icon;
 }
@@ -85,7 +85,7 @@ UIGlobals::GetIconLook()
 const MapLook &
 UIGlobals::GetMapLook()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   return CommonInterface::main_window->GetLook().map;
 }
