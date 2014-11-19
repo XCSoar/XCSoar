@@ -42,6 +42,10 @@ public:
     :DataField(Type::GEOPOINT, false, listener),
      value(_value), format(_format) {}
 
+  CoordinateFormat GetFormat() const {
+    return format;
+  }
+
   GeoPoint GetValue() const {
     return value;
   }
