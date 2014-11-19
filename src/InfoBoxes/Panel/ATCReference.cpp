@@ -72,7 +72,7 @@ ATCReferencePanel::UpdateValues()
   TCHAR buffer[64];
   if (location.IsValid()) {
     FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer),
-                   CommonInterface::GetUISettings().coordinate_format);
+                   CommonInterface::GetUISettings().format.coordinate_format);
     location_string = buffer;
   } else
     location_string = _T("---");

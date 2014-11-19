@@ -31,6 +31,7 @@ Copyright_License {
 
 namespace Profile {
   static void Load(DisplaySettings &settings);
+  static void Load(FormatSettings &settings);
   static void Load(VarioSettings &settings);
   static void Load(TrafficSettings &settings);
   static void Load(DialogSettings &settings);
@@ -43,6 +44,13 @@ Profile::Load(DisplaySettings &settings)
 {
   Get(ProfileKeys::AutoBlank, settings.enable_auto_blank);
   GetEnum(ProfileKeys::MapOrientation, settings.orientation);
+}
+
+void
+Profile::Load(FormatSettings &settings)
+{
+  GetEnum(ProfileKeys::LatLonUnits, settings.coordinate_format);
+  LoadUnits(settings.units);
 }
 
 void
@@ -120,9 +128,7 @@ Profile::Load(UISettings &settings)
 
   GetEnum(ProfileKeys::HapticFeedback, settings.haptic_feedback);
 
-  GetEnum(ProfileKeys::LatLonUnits, settings.coordinate_format);
-
-  LoadUnits(settings.units);
+  Load(settings.format);
   Load(settings.map);
   Load(settings.info_boxes);
   Load(settings.vario);

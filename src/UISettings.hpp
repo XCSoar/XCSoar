@@ -24,14 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_UI_SETTINGS_HPP
 #define XCSOAR_UI_SETTINGS_HPP
 
-#include "Units/Settings.hpp"
+#include "FormatSettings.hpp"
 #include "MapSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Gauge/VarioSettings.hpp"
 #include "Gauge/TrafficSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
-#include "Geo/CoordinateFormat.hpp"
 #include "DisplaySettings.hpp"
 #include "Audio/Settings.hpp"
 
@@ -67,9 +66,7 @@ struct UISettings {
     ON,
   } haptic_feedback;
 
-  CoordinateFormat coordinate_format;
-
-  UnitSetting units;
+  FormatSettings format;
   MapSettings map;
   InfoBoxSettings info_boxes;
   VarioSettings vario;

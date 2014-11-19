@@ -112,7 +112,7 @@ WaypointEditWidget::Save(bool &_changed)
 bool
 dlgWaypointEditShowModal(Waypoint &way_point)
 {
-  if (CommonInterface::GetUISettings().coordinate_format ==
+  if (CommonInterface::GetUISettings().format.coordinate_format ==
       CoordinateFormat::UTM) {
     ShowMessageBox(
         _("Sorry, the waypoint editor is not yet available for the UTM coordinate format."),

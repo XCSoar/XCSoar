@@ -117,9 +117,9 @@ UnitsConfigPanel::OnModified(DataField &df)
 void
 UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const UnitSetting &config = CommonInterface::GetUISettings().units;
+  const UnitSetting &config = CommonInterface::GetUISettings().format.units;
   const CoordinateFormat coordinate_format =
-      CommonInterface::GetUISettings().coordinate_format;
+      CommonInterface::GetUISettings().format.coordinate_format;
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -238,9 +238,9 @@ UnitsConfigPanel::Save(bool &_changed)
 {
   bool changed = false;
 
-  UnitSetting &config = CommonInterface::SetUISettings().units;
+  UnitSetting &config = CommonInterface::SetUISettings().format.units;
   CoordinateFormat &coordinate_format =
-      CommonInterface::SetUISettings().coordinate_format;
+      CommonInterface::SetUISettings().format.coordinate_format;
 
   /* the Units settings affect how other form values are read and translated
    * so changes to Units settings should be processed after all other form settings

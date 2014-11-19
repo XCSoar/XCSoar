@@ -21,31 +21,29 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
+#ifndef XCSOAR_FORMAT_SETTINGS_HPP
+#define XCSOAR_FORMAT_SETTINGS_HPP
 
-void
-UISettings::SetDefaults()
-{
-  display.SetDefaults();
+#include "Units/Settings.hpp"
+#include "Geo/CoordinateFormat.hpp"
 
-  menu_timeout = 8 * 4;
+#include <type_traits>
 
-#ifndef GNAV
-  custom_fonts = false;
+/**
+ * Settings specifying the format in which values are displayed or
+ * entered.
+ */
+struct FormatSettings {
+  CoordinateFormat coordinate_format;
+
+  UnitSetting units;
+
+  void SetDefaults() {
+      coordinate_format = CoordinateFormat::DDMMSS;
+      units.SetDefaults();
+  }
+};
+
+static_assert(std::is_trivial<FormatSettings>::value, "type is not trivial");
+
 #endif
-
-  enable_thermal_assistant_gauge = true;
-
-  popup_message_position = PopupMessagePosition::CENTER;
-
-  haptic_feedback = HapticFeedback::DEFAULT;
-
-  format.SetDefaults();
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  traffic.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-  sound.SetDefaults();
-}

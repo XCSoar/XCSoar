@@ -190,8 +190,8 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  Units::SetConfig(ui_settings.units);
-  SetUserCoordinateFormat(ui_settings.coordinate_format);
+  Units::SetConfig(ui_settings.format.units);
+  SetUserCoordinateFormat(ui_settings.format.coordinate_format);
 
   const MapSettings &old_settings_map = old_ui_settings.map;
   const MapSettings &settings_map = ui_settings.map;

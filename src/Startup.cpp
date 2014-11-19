@@ -118,8 +118,8 @@ LoadProfile()
   Profile::Load();
   Profile::Use();
 
-  Units::SetConfig(CommonInterface::GetUISettings().units);
-  SetUserCoordinateFormat(CommonInterface::GetUISettings().coordinate_format);
+  Units::SetConfig(CommonInterface::GetUISettings().format.units);
+  SetUserCoordinateFormat(CommonInterface::GetUISettings().format.coordinate_format);
 
 #ifdef HAVE_MODEL_TYPE
   global_model_type = CommonInterface::GetSystemSettings().model_type;
