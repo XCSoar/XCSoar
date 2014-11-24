@@ -507,7 +507,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
 
   // Set columns according to specified format
   // Work out to an more decimal places than required for rounding
-  /// \todo support UTC format
+  /// \todo support UTM format
   switch (format) {
   case CoordinateFormat::DD_DDDDD: {
     // Check format is N99.99999°
@@ -616,7 +616,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
 
   // Set columns according to specified format
   // Work out to an more decimal places than required for rounding
-  /// \todo support UTC format
+  /// \todo support UTM format
   /// \todo refactor this code as very similar to SetLatitude (see GetLatitude)
   switch (format) {
   case CoordinateFormat::DD_DDDDD: {
@@ -723,7 +723,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
   fixed degrees = fixed(columns[1].value * 10 + columns[2].value);
 
   // Read columns according to specified format
-  /// \todo support UTC format
+  /// \todo support UTM format
   switch (format) {
   case CoordinateFormat::DD_DDDDD:
     // Check format is E*9.99999°
@@ -793,7 +793,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
 Angle
 DigitEntry::GetLatitude(CoordinateFormat format) const
 {
-  /// \todo support UTC format
+  /// \todo support UTM format
 
   assert(columns[0].type == Column::Type::NORTH_SOUTH);
   assert(columns[1].type == Column::Type::DIGIT);
@@ -804,7 +804,7 @@ DigitEntry::GetLatitude(CoordinateFormat format) const
 Angle
 DigitEntry::GetLongitude(CoordinateFormat format) const
 {
-  /// \todo support UTC format
+  /// \todo support UTM format
 
   assert(columns[0].type == Column::Type::EAST_WEST);
   assert(columns[1].type == Column::Type::DIGIT19);
