@@ -204,13 +204,13 @@ public:
 
 class AirspaceVisitorClosest final : public AirspaceVisitor {
   std::ofstream *fout;
-  const TaskProjection &projection;
+  const FlatProjection &projection;
   const AircraftState& state;
   const AirspaceAircraftPerformance &m_perf;
 
 public:
   AirspaceVisitorClosest(const char* fname,
-                         const TaskProjection &_projection,
+                         const FlatProjection &_projection,
                          const AircraftState &_state,
                          const AirspaceAircraftPerformance &perf):
     fout(NULL),

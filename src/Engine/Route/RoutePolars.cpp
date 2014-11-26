@@ -23,14 +23,14 @@
 #include "RoutePolars.hpp"
 #include "RouteLink.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Terrain/RasterMap.hpp"
 
 #define MC_CEILING_PENALTY_FACTOR 5.0
 
 GeoPoint
 RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
-                           const TaskProjection& proj) const
+                          const FlatProjection &proj) const
 {
   const unsigned safe_index = ((unsigned)index) % ROUTEPOLAR_POINTS;
   const FlatGeoPoint fp = proj.ProjectInteger(p);
@@ -109,7 +109,7 @@ RoutePolars::CalcVHeight(const RouteLink &link) const
 
 bool
 RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
-                             const TaskProjection &proj, RoutePoint& inp) const
+                            const FlatProjection &proj, RoutePoint& inp) const
 {
   if (!config.IsTerrainEnabled())
     return true;
@@ -134,7 +134,7 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
 RouteLink
 RoutePolars::GenerateIntermediate(const RoutePoint& _dest,
                                    const RoutePoint& _origin,
-                                   const TaskProjection& proj) const
+                                   const FlatProjection &proj) const
 {
   RouteLink link(_dest, _origin, proj);
   const RoughAltitude vh = CalcVHeight(link) + _dest.altitude;
@@ -147,7 +147,7 @@ RoutePolars::GenerateIntermediate(const RoutePoint& _dest,
 
 RouteLink
 RoutePolars::NeighbourLink(const RoutePoint &start, const RoutePoint &end,
-                            const TaskProjection &proj, const int sign) const
+                           const FlatProjection &proj, const int sign) const
 {
   const FlatGeoPoint d = end - start;
 
@@ -216,7 +216,7 @@ RoutePolars::CanClimb() const
 
 bool
 RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                          const RasterMap* map, const TaskProjection& proj,
+                          const RasterMap *map, const FlatProjection &proj,
                           GeoPoint& intx) const
 {
   if (map == nullptr || !map->IsDefined())
@@ -237,7 +237,7 @@ RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
 RoughAltitude
 RoutePolars::CalcGlideArrival(const AFlatGeoPoint& origin,
                                 const FlatGeoPoint& dest,
-                                const TaskProjection& proj) const
+                              const FlatProjection &proj) const
 {
   const RouteLink e(RoutePoint(dest, RoughAltitude(0)), origin, proj);
   return origin.altitude - CalcVHeight(e);
@@ -246,7 +246,7 @@ RoutePolars::CalcGlideArrival(const AFlatGeoPoint& origin,
 FlatGeoPoint
 RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
                              const RasterMap* map,
-                             const TaskProjection& proj) const
+                            const FlatProjection &proj) const
 {
   const bool valid = map && map->IsDefined();
   const RoughAltitude altitude = origin.altitude - GetSafetyHeight();

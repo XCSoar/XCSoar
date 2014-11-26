@@ -25,7 +25,7 @@
 #include "Util/Tolerances.hpp"
 
 AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
-                                     const TaskProjection &projection)
+                                     const FlatProjection &projection)
   :AATIsoline(ap, projection)
 {
   IsolineCrossingFinder icf_up(ap, ell, fixed(0), fixed(0.5));

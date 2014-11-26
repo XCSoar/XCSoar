@@ -81,7 +81,7 @@ public:
    */
   void find_best_start(const AircraftState &state,
                        const OrderedTaskPoint &next,
-                       const TaskProjection &projection);
+                       const FlatProjection &projection);
 
   /* virtual methods from class TaskPoint */
   virtual fixed GetElevation() const override;
@@ -97,7 +97,7 @@ public:
                              OrderedTaskPoint *next) override;
   virtual bool IsInSector(const AircraftState &ref) const override;
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                const TaskProjection &projection) override;
+                                const FlatProjection &projection) override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */

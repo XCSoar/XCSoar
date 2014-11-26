@@ -4,7 +4,7 @@
 
 AirspaceInterceptSolution
 AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a,
-                                     const TaskProjection &projection) const
+                                     const FlatProjection &projection) const
 {
   const GeoPoint loc = a.ClosestPoint(m_state.location, projection);
 

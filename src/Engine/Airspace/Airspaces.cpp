@@ -73,14 +73,14 @@ Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
 
 class IntersectingAirspaceVisitorAdapter {
   GeoPoint start, end;
-  const TaskProjection *projection;
+  const FlatProjection *projection;
   FlatRay ray;
   AirspaceIntersectionVisitor *visitor;
 
 public:
   IntersectingAirspaceVisitorAdapter(const GeoPoint &_loc,
                                      const GeoPoint &_end,
-                                     const TaskProjection &_projection,
+                                     const FlatProjection &_projection,
                                      AirspaceIntersectionVisitor &_visitor)
     :start(_loc), end(_end), projection(&_projection),
      ray(projection->ProjectInteger(start), projection->ProjectInteger(end)),

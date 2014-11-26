@@ -63,7 +63,7 @@ OrderedTaskPoint::UpdateGeometry()
 }
 
 void
-OrderedTaskPoint::UpdateOZ(const TaskProjection &projection)
+OrderedTaskPoint::UpdateOZ(const FlatProjection &projection)
 {
   UpdateGeometry();
 
@@ -108,7 +108,7 @@ OrderedTaskPoint::IsInSector(const AircraftState &ref) const
 
 bool
 OrderedTaskPoint::UpdateSampleNear(const AircraftState &state,
-                                   const TaskProjection &projection)
+                                   const FlatProjection &projection)
 {
   if (!IsInSector(state))
     // return false (no update required)
@@ -197,12 +197,12 @@ OrderedTaskPoint::ScanProjection(TaskProjection &task_projection) const
 }
 
 void
-OrderedTaskPoint::UpdateBoundingBox(const TaskProjection &task_projection)
+OrderedTaskPoint::UpdateBoundingBox(const FlatProjection &projection)
 {
-  flat_bb = FlatBoundingBox(task_projection.ProjectInteger(GetLocation()));
+  flat_bb = FlatBoundingBox(projection.ProjectInteger(GetLocation()));
 
   for (const auto &i : GetBoundary())
-    flat_bb.Expand(task_projection.ProjectInteger(i));
+    flat_bb.Expand(projection.ProjectInteger(i));
 
   flat_bb.ExpandByOne(); // add 1 to fix rounding
 }

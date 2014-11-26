@@ -12,7 +12,7 @@
 
 class AbstractAirspace;
 class Airspaces;
-class TaskProjection;
+class FlatProjection;
 
 /** Structure to hold Airspace sorting information */
 class AirspaceSelectInfo
@@ -35,7 +35,7 @@ public:
 
   gcc_pure
   const GeoVector &GetVector(const GeoPoint &location,
-                             const TaskProjection &projection) const;
+                             const FlatProjection &projection) const;
 };
 
 typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
@@ -74,7 +74,7 @@ struct AirspaceFilterData {
 
   gcc_pure
   bool Match(const GeoPoint &location,
-             const TaskProjection &projection,
+             const FlatProjection &projection,
              const AbstractAirspace &as) const;
 };
 

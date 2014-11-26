@@ -23,7 +23,7 @@
 #ifndef GEOELLIPSE_HPP
 #define GEOELLIPSE_HPP
 
-#include "Flat/TaskProjection.hpp"
+#include "Flat/FlatProjection.hpp"
 #include "Flat/FlatEllipse.hpp"
 #include "Compiler.h"
 
@@ -34,7 +34,7 @@
  */
 class GeoEllipse
 {
-  TaskProjection task_projection;
+  FlatProjection projection;
   FlatEllipse ell;
 
 public:
@@ -44,10 +44,10 @@ public:
    * @param f1 Focus 1
    * @param f2 Focus 2
    * @param p Point on ellipse
-   * @param _task_projection Task projection used for internal representation
+   * @param _projection projection used for internal representation
    */
   GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
-             const GeoPoint &p, const TaskProjection &_task_projection);
+             const GeoPoint &p, const FlatProjection &_projection);
 
   /**
    * Parametric form of ellipse border

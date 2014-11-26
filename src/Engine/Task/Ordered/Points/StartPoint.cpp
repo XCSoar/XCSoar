@@ -70,7 +70,7 @@ StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 
 bool
 StartPoint::UpdateSampleNear(const AircraftState& state,
-                             const TaskProjection &projection)
+                             const FlatProjection &projection)
 {
   /* TODO:
   if (IsInSector(state) && !constraints.CheckSpeed(state, margins))
@@ -83,7 +83,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
 void
 StartPoint::find_best_start(const AircraftState &state,
                             const OrderedTaskPoint &next,
-                            const TaskProjection &projection)
+                            const FlatProjection &projection)
 {
   /* check which boundary point results in the smallest distance to
      fly */

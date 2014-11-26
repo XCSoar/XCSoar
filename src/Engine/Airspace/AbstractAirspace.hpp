@@ -43,7 +43,7 @@ class AtmosphericPressure;
 class AirspaceAircraftPerformance;
 struct AirspaceInterceptSolution;
 class FlatBoundingBox;
-class TaskProjection;
+class FlatProjection;
 class AirspaceIntersectionVector;
 
 /** Abstract base class for airspace regions */
@@ -96,11 +96,11 @@ public:
    * Compute bounding box enclosing the airspace.  Rounds up/down
    * so discretisation ensures bounding box is indeed enclosing.
    *
-   * @param task_projection Projection used for flat-earth representation
+   * @param projection Projection used for flat-earth representation
    *
    * @return Enclosing bounding box
    */
-  const FlatBoundingBox GetBoundingBox(const TaskProjection &task_projection);
+  const FlatBoundingBox GetBoundingBox(const FlatProjection &projection);
 
   GeoBounds GetGeoBounds() const;
 
@@ -147,7 +147,7 @@ public:
   gcc_pure
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,
-                                                const TaskProjection &projection) const = 0;
+                                                const FlatProjection &projection) const = 0;
 
   /**
    * Find location of closest point on boundary to a reference
@@ -158,7 +158,7 @@ public:
    */
   gcc_pure
   virtual GeoPoint ClosestPoint(const GeoPoint &loc,
-                                const TaskProjection &projection) const = 0;
+                                const FlatProjection &projection) const = 0;
 
   /**
    * Set terrain altitude for AGL-referenced airspace altitudes
@@ -297,7 +297,7 @@ public:
    */
   bool Intercept(const AircraftState &state,
                  const GeoPoint &end,
-                 const TaskProjection &projection,
+                 const FlatProjection &projection,
                  const AirspaceAircraftPerformance &perf,
                  AirspaceInterceptSolution &solution) const;
 
@@ -346,7 +346,7 @@ public:
    * from within a visit method.
    */
   gcc_pure
-  const SearchPointVector &GetClearance(const TaskProjection &projection) const;
+  const SearchPointVector &GetClearance(const FlatProjection &projection) const;
   void ClearClearance() const;
 
   gcc_pure
@@ -356,7 +356,7 @@ public:
 
 protected:
   /** Project border */
-  void Project(const TaskProjection &tp);
+  void Project(const FlatProjection &tp);
 
 private:
   /**

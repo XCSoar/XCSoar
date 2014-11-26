@@ -34,7 +34,7 @@ Copyright_License {
 TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
                                      const WindowProjection &_projection,
                                      const TaskLook &_task_look,
-                                     const TaskProjection &_task_projection,
+                                     const FlatProjection &_flat_projection,
                                      OZRenderer &_ozv,
                                      bool _draw_bearing,
                                      TargetVisibility _target_visibility,
@@ -43,7 +43,7 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().Scale(fixed(1.1))),
    task_look(_task_look),
-   task_projection(_task_projection),
+   flat_projection(_flat_projection),
    draw_bearing(_draw_bearing),
    target_visibility(_target_visibility),
    index(0),
@@ -166,7 +166,7 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   if (!tp.valid() || !IsTargetVisible(tp))
     return;
 
-  AATIsolineSegment seg(tp, task_projection);
+  AATIsolineSegment seg(tp, flat_projection);
   if (!seg.IsValid())
     return;
 

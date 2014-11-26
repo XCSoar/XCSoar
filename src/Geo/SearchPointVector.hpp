@@ -47,7 +47,7 @@ public:
    */
   bool ThinToSize(const unsigned max_size);
 
-  void Project(const TaskProjection &tp);
+  void Project(const FlatProjection &tp);
 
   gcc_pure
   FlatGeoPoint NearestPoint(const FlatGeoPoint &p) const;

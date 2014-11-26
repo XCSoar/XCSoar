@@ -33,6 +33,8 @@
 
 struct TaskBehaviour;
 struct OrderedTaskSettings;
+class FlatProjection;
+class TaskProjection;
 
 /**
  * Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
@@ -219,12 +221,12 @@ public:
    */
   void ScanProjection(TaskProjection &task_projection) const;
 
-  void UpdateOZ(const TaskProjection &projection);
+  void UpdateOZ(const FlatProjection &projection);
 
   /**
    * Update the bounding box in flat projected coordinates
    */
-  void UpdateBoundingBox(const TaskProjection &task_projection);
+  void UpdateBoundingBox(const FlatProjection &projection);
 
   /**
    * Test whether a boundingbox overlaps with this oz
@@ -254,7 +256,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                const TaskProjection &projection);
+                                const FlatProjection &projection);
 
   /**
    * Perform updates to samples as required if known to be far from the OZ
@@ -265,7 +267,7 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleFar(const AircraftState &state,
-                               const TaskProjection &projection) {
+                               const FlatProjection &projection) {
     return false;
   }
 

@@ -23,7 +23,7 @@
 #include "Airspace.hpp"
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 
 void
 Airspace::Destroy()
@@ -32,13 +32,13 @@ Airspace::Destroy()
 }
 
 Airspace::Airspace(AbstractAirspace &airspace,
-                   const TaskProjection &tp)
+                   const FlatProjection &tp)
   :FlatBoundingBox(airspace.GetBoundingBox(tp)),
    airspace(&airspace)
 {
 }
 
-Airspace::Airspace(const GeoPoint &loc, const TaskProjection &task_projection,
+Airspace::Airspace(const GeoPoint &loc, const FlatProjection &task_projection,
                    const fixed range)
   :FlatBoundingBox(task_projection.ProjectInteger(loc),
                    task_projection.ProjectRangeInteger(loc, range)),
@@ -47,7 +47,7 @@ Airspace::Airspace(const GeoPoint &loc, const TaskProjection &task_projection,
 }
 
 Airspace::Airspace(const GeoPoint &ll, const GeoPoint &ur,
-                   const TaskProjection &task_projection)
+                   const FlatProjection &task_projection)
   :FlatBoundingBox(task_projection.ProjectInteger(ll),
                    task_projection.ProjectInteger(ur)),
    airspace(nullptr)
@@ -78,7 +78,7 @@ Airspace::Intersects(const FlatRay &ray) const
 
 AirspaceIntersectionVector
 Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
-                     const TaskProjection &projection) const
+                     const FlatProjection &projection) const
 {
   assert(airspace != nullptr);
   return airspace->Intersects(g1, end, projection);

@@ -25,12 +25,12 @@
 
 #include "Route/RoutePolars.hpp"
 
-class TaskProjection;
+class FlatProjection;
 class RasterMap;
 
 struct ReachFanParms {
   const RoutePolars &rpolars;
-  const TaskProjection& task_proj;
+  const FlatProjection &projection;
   const RasterMap* terrain;
   int terrain_base;
   unsigned terrain_counter;
@@ -39,10 +39,10 @@ struct ReachFanParms {
   unsigned char set_depth;
 
   ReachFanParms(const RoutePolars& _rpolars,
-                const TaskProjection& _task_proj,
+                const FlatProjection &_projection,
                 const short _terrain_base,
                 const RasterMap* _terrain=NULL):
-    rpolars(_rpolars), task_proj(_task_proj), terrain(_terrain),
+    rpolars(_rpolars), projection(_projection), terrain(_terrain),
     terrain_base(_terrain_base),
     terrain_counter(0),
     fan_counter(0),
@@ -50,7 +50,7 @@ struct ReachFanParms {
     set_depth(0) {};
 
   FlatGeoPoint reach_intercept(const int index, const AGeoPoint& ao) const {
-    return rpolars.ReachIntercept(index, ao, terrain, task_proj);
+    return rpolars.ReachIntercept(index, ao, terrain, projection);
   }
 };
 

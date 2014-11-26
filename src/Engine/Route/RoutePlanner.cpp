@@ -73,10 +73,10 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
                           h_ceiling);
 
   {
-    const AFlatGeoPoint s_origin(task_projection.ProjectInteger(origin),
+    const AFlatGeoPoint s_origin(projection.ProjectInteger(origin),
                                  origin.altitude);
 
-    const AFlatGeoPoint s_destination(task_projection.ProjectInteger(destination),
+    const AFlatGeoPoint s_destination(projection.ProjectInteger(destination),
                                       destination.altitude);
 
     if (!(s_origin == origin_last) || !(s_destination == destination_last))
@@ -101,12 +101,12 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
     return false; // trivial
 
   search_hull.clear();
-  search_hull.emplace_back(origin_last, task_projection);
+  search_hull.emplace_back(origin_last, projection);
 
   RoutePoint start = origin_last;
   astar_goal = destination_last;
 
-  RouteLink e_test(start, astar_goal, task_projection);
+  RouteLink e_test(start, astar_goal, projection);
   if (e_test.IsShort())
     return false;
   if (!rpolars_route.IsAchievable(e_test))
@@ -149,7 +149,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
       break; // want top solution only
 
     // shoot for final
-    RouteLink e(node, astar_goal, task_projection);
+    RouteLink e(node, astar_goal, projection);
     if (IsSetUnique(e))
       AddEdges(e);
 
@@ -166,7 +166,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
     // correct solution for rounding
     assert(solution_route.size()>=2);
     for (auto &i : solution_route) {
-      FlatGeoPoint p(task_projection.ProjectInteger(i));
+      FlatGeoPoint p(projection.ProjectInteger(i));
       if (p == origin_last) {
         i = AGeoPoint(origin, i.altitude);
       } else if (p == destination_last) {
@@ -197,7 +197,7 @@ RoutePlanner::FindSolution(const RoutePoint &final_point,
   bool finished = false;
 
   this_route.insert(this_route.begin(),
-                    AGeoPoint(task_projection.Unproject(p), p.altitude));
+                    AGeoPoint(projection.Unproject(p), p.altitude));
 
   do {
     p_last = p;
@@ -212,25 +212,25 @@ RoutePlanner::FindSolution(const RoutePoint &final_point,
         !((FlatGeoPoint)p == (FlatGeoPoint)p_last)) {
       // create intermediate point for part cruise, part glide
 
-      const RouteLink l(p, p_last, task_projection);
+      const RouteLink l(p, p_last, projection);
       const RoughAltitude vh = rpolars_route.CalcVHeight(l);
       assert(vh.IsPositive());
       if (vh > p_last.altitude - p.altitude) { // climb was cut off
         const fixed f = (p_last.altitude - p.altitude) / vh;
-        const GeoPoint gp(task_projection.Unproject(p));
-        const GeoPoint gp_last(task_projection.Unproject(p_last));
+        const GeoPoint gp(projection.Unproject(p));
+        const GeoPoint gp_last(projection.Unproject(p_last));
         const AGeoPoint gp_int(gp.Interpolate(gp_last, f), p_last.altitude);
         this_route.insert(this_route.begin(), gp_int);
         // @todo: assert check_clearance?
       }
     } else if (p.altitude > p_last.altitude) {
       // create intermediate point for jump at end
-      const AGeoPoint gp_int(task_projection.Unproject(p_last), p.altitude);
+      const AGeoPoint gp_int(projection.Unproject(p_last), p.altitude);
       this_route.insert(this_route.begin(), gp_int);
     }
 
     this_route.insert(this_route.begin(),
-                      AGeoPoint(task_projection.Unproject(p), p.altitude));
+                      AGeoPoint(projection.Unproject(p), p.altitude));
     // @todo: assert check_clearance
   } while (!finished);
 
@@ -253,7 +253,7 @@ RoutePlanner::LinkCleared(const RouteLink &e)
     // not achievable
     return false;
 
-  const RouteLink e_rem(e.second, astar_goal, task_projection);
+  const RouteLink e_rem(e.second, astar_goal, projection);
   if (!rpolars_route.IsAchievable(e_rem))
     return false;
 
@@ -294,7 +294,7 @@ RoutePlanner::AddCandidate(const RouteLinkBase& e)
     return;
 
   const RouteLink c_link =
-      rpolars_route.GenerateIntermediate(e.first, e.second, task_projection);
+      rpolars_route.GenerateIntermediate(e.first, e.second, projection);
 
   links.push(c_link);
 }
@@ -326,7 +326,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node)
     pre = pre_new;
   } while (ok);
 
-  RouteLink r_shortcut(pre, node, task_projection);
+  RouteLink r_shortcut(pre, node, projection);
   if (pre.altitude > node.altitude)
     return;
 
@@ -392,7 +392,7 @@ RoutePlanner::CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const
     return true;
 
   count_terrain++;
-  return rpolars_route.CheckClearance(e, terrain, task_projection, inp);
+  return rpolars_route.CheckClearance(e, terrain, projection, inp);
 }
 
 void
@@ -405,7 +405,7 @@ RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
 
   // make short link neighbouring last intercept
   RouteLink link_divert = rpolars_route.NeighbourLink(c_link.first, p,
-                                                       task_projection, sign);
+                                                      projection, sign);
 
   // dont add directions 90 degrees away from target
   if (link_divert.DotProduct(c_link) <= 0)
@@ -425,7 +425,7 @@ RoutePlanner::AddNearbyTerrainSweep(const RoutePoint& p,
 void
 RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
 {
-  RouteLink c_link(e.first, p, task_projection);
+  RouteLink c_link(e.first, p, projection);
 
   // dont process at all if too short
   if (c_link.IsShort())
@@ -469,8 +469,7 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
 void
 RoutePlanner::OnSolve(const AGeoPoint &origin, const AGeoPoint &destination)
 {
-  task_projection.Reset(origin);
-  task_projection.Update();
+  projection.SetCenter(origin);
 }
 
 bool
@@ -479,7 +478,7 @@ RoutePlanner::IsHullExtended(const RoutePoint &p)
   if (search_hull.IsInside(p))
     return false;
 
-  search_hull.emplace_back(p, task_projection);
+  search_hull.emplace_back(p, projection);
   search_hull.PruneInterior();
   return true;
 }

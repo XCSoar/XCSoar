@@ -32,7 +32,7 @@
 
 #include <forward_list>
 
-class TaskProjection;
+class FlatProjection;
 
 /**
  * Class for waypoints.  
@@ -217,9 +217,9 @@ struct Waypoint {
   /**
    * Project geolocation to flat location
    *
-   * @param task_projection Projection to apply
+   * @param projection the projection to apply
    */
-  void Project(const TaskProjection& task_projection);
+  void Project(const FlatProjection &projection);
 
   /**
    * Get distance in internal flat projected units (fast)

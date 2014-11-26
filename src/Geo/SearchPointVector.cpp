@@ -49,7 +49,7 @@ SearchPointVector::ThinToSize(const unsigned max_size)
 }
 
 void 
-SearchPointVector::Project(const TaskProjection& tp)
+SearchPointVector::Project(const FlatProjection &tp)
 {
   for (auto &i : *this)
     i.Project(tp);

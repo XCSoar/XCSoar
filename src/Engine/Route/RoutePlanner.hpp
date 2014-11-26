@@ -27,7 +27,7 @@
 #include "Route.hpp"
 #include "RouteLink.hpp"
 #include "AStar.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/SearchPointVector.hpp"
 #include "ReachFan.hpp"
 
@@ -102,7 +102,7 @@ protected:
   /** Whether an updated solution is required */
   bool dirty;
   /** Task projection used for flat-earth representation */
-  TaskProjection task_projection;
+  FlatProjection projection;
   /** Aircraft performance model */
   RoutePolars rpolars_route;
   /** Aircraft performance model */

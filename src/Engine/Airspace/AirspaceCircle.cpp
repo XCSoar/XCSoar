@@ -22,7 +22,7 @@
 
 #include "AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatLine.hpp"
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
@@ -52,7 +52,7 @@ AirspaceCircle::Inside(const GeoPoint &loc) const
 
 AirspaceIntersectionVector
 AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
-                           const TaskProjection &projection) const
+                           const FlatProjection &projection) const
 {
   const fixed f_radius = projection.ProjectRangeFloat(m_center, m_radius);
   const FlatPoint f_center = projection.ProjectFloat(m_center);
@@ -88,7 +88,7 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
 
 GeoPoint
 AirspaceCircle::ClosestPoint(const GeoPoint &loc,
-                             const TaskProjection &projection) const
+                             const FlatProjection &projection) const
 {
   // Calculate distance from center point
   const fixed d = loc.Distance(m_center);

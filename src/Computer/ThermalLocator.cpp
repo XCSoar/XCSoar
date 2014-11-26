@@ -24,7 +24,7 @@ Copyright_License {
 #include "ThermalLocator.hpp"
 #include "Geo/Math.hpp"
 #include "Geo/SpeedVector.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/ThermalLocator.hpp"
 
@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 inline void
-ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
+ThermalLocator::Point::Drift(fixed t, const FlatProjection &projection,
                              const GeoPoint& wind_drift)
 {
   const fixed dt = t - t_0;
@@ -82,9 +82,7 @@ ThermalLocator::Update(const fixed t_0,
 
   GeoPoint dloc = FindLatitudeLongitude(location_0, wind.bearing, wind.norm);
 
-  TaskProjection projection;
-  projection.Reset(location_0);
-  projection.Update();
+  const FlatProjection projection(location_0);
 
   // drift points 
   Drift(t_0, projection, location_0 - dloc);
@@ -135,7 +133,7 @@ ThermalLocator::glider_average()
 }
 
 inline void
-ThermalLocator::Drift(const fixed t_0, const TaskProjection& projection,
+ThermalLocator::Drift(const fixed t_0, const FlatProjection &projection,
                       const GeoPoint& traildrift)
 {
   for (unsigned i = 0; i < n_points; ++i)

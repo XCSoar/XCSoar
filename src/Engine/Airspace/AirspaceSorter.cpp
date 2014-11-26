@@ -15,7 +15,7 @@ AirspaceSelectInfo::ResetVector()
 
 const GeoVector &
 AirspaceSelectInfo::GetVector(const GeoPoint &location,
-                              const TaskProjection &projection) const
+                              const FlatProjection &projection) const
 {
   if (!vec.IsValid()) {
     const GeoPoint closest_loc = airspace->ClosestPoint(location, projection);
@@ -27,7 +27,7 @@ AirspaceSelectInfo::GetVector(const GeoPoint &location,
 
 bool
 AirspaceFilterData::Match(const GeoPoint &location,
-                          const TaskProjection &projection,
+                          const FlatProjection &projection,
                           const AbstractAirspace &as) const
 {
   if (cls != AirspaceClass::AIRSPACECLASSCOUNT && as.GetType() != cls)
@@ -56,14 +56,14 @@ AirspaceFilterData::Match(const GeoPoint &location,
 
 class AirspaceFilterVisitor final : public AirspaceVisitor {
   GeoPoint location;
-  const TaskProjection &projection;
+  const FlatProjection &projection;
   const AirspaceFilterData &filter;
 
 public:
   AirspaceSelectInfoVector result;
 
   AirspaceFilterVisitor(const GeoPoint &_location,
-                        const TaskProjection &_projection,
+                        const FlatProjection &_projection,
                         const AirspaceFilterData &_filter)
     :location(_location), projection(_projection), filter(_filter) {}
 
@@ -75,7 +75,7 @@ public:
 
 static void
 SortByDistance(AirspaceSelectInfoVector &vec, const GeoPoint &location,
-               const TaskProjection &projection)
+               const FlatProjection &projection)
 {
   auto compare = [&] (const AirspaceSelectInfo &elem1,
                       const AirspaceSelectInfo &elem2) {

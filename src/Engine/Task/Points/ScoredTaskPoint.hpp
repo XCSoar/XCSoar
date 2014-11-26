@@ -108,7 +108,7 @@ public:
    */
   bool TransitionExit(const AircraftState &ref_now,
                       const AircraftState &ref_last,
-                      const TaskProjection &projection);
+                      const FlatProjection &projection);
 
   /** Retrieve location to be used for the scored task. */
   gcc_pure

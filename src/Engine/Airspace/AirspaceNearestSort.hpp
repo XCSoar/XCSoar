@@ -8,7 +8,7 @@
 #include <queue>
 
 class Airspaces;
-class TaskProjection;
+class FlatProjection;
 
 /**
  *  Class to sort nearest airspaces by distance to closest point.
@@ -69,7 +69,7 @@ public:
    * @return Solution
    */
   virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a,
-                                                    const TaskProjection &projection) const;
+                                                    const FlatProjection &projection) const;
 
   /**
    * Metric defining sort criteria

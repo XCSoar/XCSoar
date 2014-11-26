@@ -70,7 +70,7 @@ public:
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
                 AATPoint& _tp_current,
-                const TaskProjection &projection,
+                const FlatProjection &projection,
                 StartPoint *_ts);
 
   virtual fixed f(const fixed p);

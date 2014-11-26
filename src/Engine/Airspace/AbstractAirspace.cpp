@@ -26,7 +26,7 @@
 #include "AirspaceInterceptSolution.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Geo/Flat/FlatRay.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "AirspaceIntersectionVector.hpp"
 #include "Util/StringUtil.hpp"
@@ -182,7 +182,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
 bool
 AbstractAirspace::Intercept(const AircraftState &state,
                             const GeoPoint &end,
-                            const TaskProjection &projection,
+                            const FlatProjection &projection,
                             const AirspaceAircraftPerformance &perf,
                             AirspaceInterceptSolution &solution) const
 {
@@ -211,15 +211,15 @@ AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
 }
 
 void
-AbstractAirspace::Project(const TaskProjection &task_projection)
+AbstractAirspace::Project(const FlatProjection &projection)
 {
-  m_border.Project(task_projection);
+  m_border.Project(projection);
 }
 
 const FlatBoundingBox
-AbstractAirspace::GetBoundingBox(const TaskProjection& task_projection)
+AbstractAirspace::GetBoundingBox(const FlatProjection &projection)
 {
-  Project(task_projection);
+  Project(projection);
   return m_border.CalculateBoundingbox();
 }
 
@@ -230,7 +230,7 @@ AbstractAirspace::GetGeoBounds() const
 }
 
 const SearchPointVector&
-AbstractAirspace::GetClearance(const TaskProjection &projection) const
+AbstractAirspace::GetClearance(const FlatProjection &projection) const
 {
   #define RADIUS 5
 

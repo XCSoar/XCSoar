@@ -43,7 +43,7 @@ ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
 bool 
 ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
                                 const AircraftState &ref_last,
-                                const TaskProjection &projection)
+                                const FlatProjection &projection)
 {
   if (!CheckExitTransition(ref_now, ref_last))
     return false;

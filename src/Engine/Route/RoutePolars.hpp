@@ -29,7 +29,7 @@
 
 class GlidePolar;
 struct GlideSettings;
-class TaskProjection;
+class FlatProjection;
 class RasterMap;
 struct SpeedVector;
 struct GeoPoint;
@@ -103,7 +103,7 @@ public:
    * @return True if intersect occurs
    */
   bool CheckClearance(const RouteLink &e, const RasterMap* map,
-                       const TaskProjection &proj, RoutePoint& inp) const;
+                      const FlatProjection &proj, RoutePoint &inp) const;
 
   /**
    * Rotate line from start to end either left or right
@@ -116,7 +116,7 @@ public:
    * @return Rotated link
    */
   RouteLink NeighbourLink(const RoutePoint &start, const RoutePoint &end,
-                          const TaskProjection &proj, const int sign) const;
+                          const FlatProjection &proj, const int sign) const;
 
   /** Whether climbs are possible/allowed */
   bool CanClimb() const;
@@ -143,7 +143,8 @@ public:
    */
   RouteLink GenerateIntermediate(const RoutePoint& _dest,
                                  const RoutePoint& _origin,
-                                 const TaskProjection& proj) const;
+                                 const FlatProjection &proj) const;
+
   /**
    * Test whether the specified link is achievable given climb potential and
    * climb ceiling limits.  If climbs are not possible, the destination must be
@@ -217,7 +218,7 @@ public:
    * @return true if terrain intersects
    */
   bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                    const RasterMap* map, const TaskProjection& proj,
+                    const RasterMap* map, const FlatProjection &proj,
                     GeoPoint& intx) const;
 
   /**
@@ -225,7 +226,7 @@ public:
    */
   RoughAltitude CalcGlideArrival(const AFlatGeoPoint& origin,
                                  const FlatGeoPoint& dest,
-                                 const TaskProjection& proj) const;
+                                 const FlatProjection &proj) const;
 
   RoughAltitude GetSafetyHeight() const {
     return RoughAltitude(config.safety_height_terrain);
@@ -233,11 +234,11 @@ public:
 
   FlatGeoPoint ReachIntercept(const int index, const AGeoPoint& p,
                               const RasterMap* map,
-                              const TaskProjection& proj) const;
+                              const FlatProjection &proj) const;
 
 private:
   GeoPoint MSLIntercept(const int index, const AGeoPoint &p,
-                        const TaskProjection &proj) const;
+                        const FlatProjection &proj) const;
 };
 
 #endif

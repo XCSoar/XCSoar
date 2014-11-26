@@ -35,7 +35,7 @@ class AtmosphericPressure;
 class AbstractAirspace;
 class AirspaceActivity;
 class AirspaceIntersectionVector;
-class TaskProjection;
+class FlatProjection;
 
 /**
  * Single object container for actual airspaces, to be stored in Airspaces object
@@ -56,24 +56,24 @@ public:
    * Constructor for actual airspaces.
    *
    * @param airspace actual concrete airspace to create an envelope for
-   * @param tp task projection to be used for flat-earth representation
+   * @param projection projection to be used for flat-earth representation
    *
    * @return airspace letter inside envelope suitable for insertion in a search structure
    */
   Airspace(AbstractAirspace &airspace,
-           const TaskProjection &tp);
+           const FlatProjection &projection);
 
   /**
    * Constructor for virtual airspaces for use in range-based
    * intersection queries
    *
    * @param loc Location about which to create a virtual airspace envelope
-   * @param task_projection projection to be used for flat-earth representation
+   * @param projection projection to be used for flat-earth representation
    * @param range range in meters of virtual bounding box
    *
    * @return dummy airspace envelope
    */
-  Airspace(const GeoPoint&loc, const TaskProjection &task_projection,
+  Airspace(const GeoPoint&loc, const FlatProjection &projection,
            const fixed range=fixed(0));
 
   /**
@@ -82,12 +82,12 @@ public:
    *
    * @param ll Lower left corner of bounding box
    * @param ur Upper right corner of bounding box
-   * @param task_projection projection to be used for flat-earth representation
+   * @param projection projection to be used for flat-earth representation
    *
    * @return dummy airspace envelope
    */
   Airspace(const GeoPoint &ll, const GeoPoint &ur,
-           const TaskProjection &task_projection);
+           const FlatProjection &projection);
 
   /**
    * Checks whether an aircraft is inside the airspace.
@@ -132,7 +132,7 @@ public:
   gcc_pure
     AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                           const GeoPoint &end,
-                                          const TaskProjection &projection) const;
+                                          const FlatProjection &projection) const;
 
   /**
    * Destroys concrete airspace enclosed by this instance if present.

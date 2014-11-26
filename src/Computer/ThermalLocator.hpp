@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/Flat/FlatPoint.hpp"
 
 struct SpeedVector;
-class TaskProjection;
+class FlatProjection;
 struct ThermalLocatorInfo;
 
 /**
@@ -53,7 +53,7 @@ private:
      * @param wind_drift Wind drift offset
      * @param decay decay factor for weighting
      */
-    void Drift(fixed t, const TaskProjection& projection,
+    void Drift(fixed t, const FlatProjection &projection,
                const GeoPoint& wind_drift);
 
     /** Actual location of sample */
@@ -106,7 +106,7 @@ private:
   void Update(const fixed t_0, const GeoPoint &location_0,
               const SpeedVector wind, ThermalLocatorInfo &therm);
 
-  void Drift(const fixed t_0, const TaskProjection& projection,
+  void Drift(const fixed t_0, const FlatProjection &projection,
              const GeoPoint& traildrift);
 };
 

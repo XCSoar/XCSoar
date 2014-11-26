@@ -35,7 +35,7 @@ SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
 
 bool
 SampledTaskPoint::AddInsideSample(const AircraftState& state,
-                                  const TaskProjection &projection)
+                                  const FlatProjection &projection)
 {
   assert(state.location.IsValid());
 
@@ -61,7 +61,7 @@ SampledTaskPoint::AddInsideSample(const AircraftState& state,
 
 void
 SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
-                                            const TaskProjection &projection)
+                                        const FlatProjection &projection)
 {
   if (HasSampled()) {
     sampled_points.clear();
@@ -73,7 +73,7 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 // BOUNDARY
 
 void
-SampledTaskPoint::UpdateOZ(const TaskProjection &projection,
+SampledTaskPoint::UpdateOZ(const FlatProjection &projection,
                            const OZBoundary &_boundary)
 {
   search_max = search_min = nominal_points.front();
@@ -88,7 +88,7 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection,
 // SAMPLES + BOUNDARY
 
 void
-SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
+SampledTaskPoint::UpdateProjection(const FlatProjection &projection)
 {
   search_max.Project(projection);
   search_min.Project(projection);

@@ -23,7 +23,7 @@
 #include "AATIsoline.hpp"
 #include "Points/AATPoint.hpp"
 
-AATIsoline::AATIsoline(const AATPoint& ap, const TaskProjection &projection)
+AATIsoline::AATIsoline(const AATPoint& ap, const FlatProjection &projection)
   :ell(ap.GetPrevious()->GetLocationRemaining(),
        ap.GetNext()->GetLocationRemaining(),
        ap.GetTargetLocation(), projection) {}

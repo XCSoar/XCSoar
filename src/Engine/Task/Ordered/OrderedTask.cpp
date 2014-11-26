@@ -134,10 +134,10 @@ OrderedTask::SetTaskBehaviour(const TaskBehaviour &tb)
 
 static void
 UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
-                       const TaskProjection &task_projection)
+                       const FlatProjection &projection)
 {
   for (auto i : points)
-    i->UpdateOZ(task_projection);
+    i->UpdateOZ(projection);
 }
 
 void

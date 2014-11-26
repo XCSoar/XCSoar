@@ -24,7 +24,7 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
 
 AirspaceInterceptSolution
 AirspaceNearestSort::solve_intercept(const AbstractAirspace &a,
-                                     const TaskProjection &projection) const
+                                     const FlatProjection &projection) const
 {
   if (a.Inside(m_location)) {
     return AirspaceInterceptSolution::Invalid();

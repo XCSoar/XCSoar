@@ -23,13 +23,9 @@
 #ifndef TASKPROJECTION_H
 #define TASKPROJECTION_H
 
+#include "FlatProjection.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
-
-struct FlatPoint;
-struct FlatGeoPoint;
-class FlatBoundingBox;
-class GeoBounds;
 
 /**
  * Class for performing Lambert Conformal Conic projections from
@@ -38,33 +34,13 @@ class GeoBounds;
  *
  * Needs to be initialized with reset() before first use.
  */
-class TaskProjection {
+class TaskProjection : public FlatProjection {
   /** Lower left corner found in scan */
   GeoPoint location_min;
   /** Upper right corner found in scan */
   GeoPoint location_max;
-  /** Midpoint of boundary, used as projection center point */
-  GeoPoint location_mid;
-  /** Cosine of the midpoint */
-  fixed cos_midloc;
-  /**< Reciprocal of cosine of the midpoint */
-  fixed r_cos_midloc;
-
-  /**< Approximate scale (m) of grid spacing at center */
-  fixed approx_scale;
-
-#ifndef NDEBUG
-  /**
-   * Was this object initialised by reset()?  Used in assertions.
-   */
-  bool initialised;
-#endif
 
 public:
-#ifndef NDEBUG
-  TaskProjection():initialised(false) {}
-#endif
-
   /**
    * Reset search bounds
    *
@@ -87,100 +63,6 @@ public:
    */
   bool Update();
 
-  /**
-   * Project a Geodetic point to an integer 2-d representation
-   *
-   * @param tp Point to project
-   *
-   * @return Projected point
-   */
-  gcc_pure
-  FlatGeoPoint ProjectInteger(const GeoPoint &tp) const;
-
-  /**
-   * Projects a GeoBounds to integer 2-d representation bounding box
-   *
-   * @param bb BB to project
-   *
-   * @return Projected bounds
-   */
-  gcc_pure
-  FlatBoundingBox Project(const GeoBounds &bb) const;
-
-  /**
-   * Projects an integer 2-d representation to a Geodetic point
-   *
-   * @param tp Point to project
-   *
-   * @return Projected point
-   */
-  gcc_pure
-  GeoPoint Unproject(const FlatGeoPoint &tp) const;
-
-  /**
-   * Projects a integer 2-d representation bounding box to a GeoBounds
-   *
-   * @param bb BB to project
-   *
-   * @return Projected bounds
-   */
-  gcc_pure
-  GeoBounds Unproject(const FlatBoundingBox &bb) const;
-
-  /**
-   * Project a Geodetic point to an floating point 2-d representation
-   *
-   * @param tp Point to project
-   *
-   * @return Projected point
-   */
-  gcc_pure
-  FlatPoint ProjectFloat(const GeoPoint &tp) const;
-
-  /**
-   * Projects an integer 2-d representation to a Geodetic point
-   *
-   * @param tp Point to project
-   *
-   * @return Projected point
-   */
-  gcc_pure
-  GeoPoint Unproject(const FlatPoint &tp) const;
-
-  /**
-   * Calculates the integer flat earth distance from an actual distance
-   * from a Geodetic point.  Note this is approximate.
-   *
-   * @param tp Point to project
-   * @param range Distance (m) from the Geodetic point
-   *
-   * @return Distance in flat earth projected units
-   */
-  gcc_pure
-  unsigned ProjectRangeInteger(const GeoPoint &tp, const fixed range) const;
-
-  /**
-   * Calculates the floating point flat earth distance from an actual distance
-   * from a Geodetic point.  Note this is approximate.
-   *
-   * @param tp Point to project
-   * @param range Distance (m) from the Geodetic point
-   *
-   * @return Distance in flat earth projected units
-   */
-  gcc_pure
-  fixed ProjectRangeFloat(const GeoPoint &tp, const fixed range) const;
-
-  /** 
-   * Return center point (projection reference)
-   * 
-   * @return Center point of task projection
-   */
-  gcc_pure
-  const GeoPoint &GetCenter() const {
-    return location_mid;
-  }
-  
   /** 
    * Calculate radius of points used in task projection
    * 
@@ -191,14 +73,6 @@ public:
    */
   gcc_pure
   fixed ApproxRadius() const; 
-
-  /**
-   * Return approximate grid to flat earth scale in meters
-   */
-  gcc_pure
-  fixed GetApproximateScale() const {
-    return approx_scale;
-  }
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

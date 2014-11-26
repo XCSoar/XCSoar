@@ -32,7 +32,7 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const GlideSettings &settings,
                              const GlidePolar &_gp,
                              AATPoint &_tp_current,
-                             const TaskProjection &projection,
+                             const FlatProjection &projection,
                              StartPoint *_ts)
   :ZeroFinder(fixed(0.02), fixed(0.98), fixed(TOLERANCE_OPT_TARGET)),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,

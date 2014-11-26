@@ -104,7 +104,7 @@ public:
    * referenced from the previous target
    * used by dlgTarget
    */
-  void SetTarget(RangeAndRadial rar, const TaskProjection &projection);
+  void SetTarget(RangeAndRadial rar, const FlatProjection &projection);
 
   /**
    * returns position of the target in signed range & radial as
@@ -217,9 +217,9 @@ public:
   /* virtual methods from class OrderedTaskPoint */
   virtual bool Equals(const OrderedTaskPoint &other) const override;
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                const TaskProjection &projection) override;
+                                const FlatProjection &projection) override;
   virtual bool UpdateSampleFar(const AircraftState &state,
-                               const TaskProjection &projection) override;
+                               const FlatProjection &projection) override;
 };
 
 #endif

@@ -21,7 +21,7 @@
  */
 
 #include "Waypoint.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 
 Waypoint::Waypoint(const GeoPoint &_location)
   :location(_location),
@@ -37,9 +37,9 @@ Waypoint::IsCloseTo(const GeoPoint &_location, const fixed range) const
 }
 
 void
-Waypoint::Project(const TaskProjection &task_projection)
+Waypoint::Project(const FlatProjection &projection)
 {
-  flat_location = task_projection.ProjectInteger(location);
+  flat_location = projection.ProjectInteger(location);
 
 #ifndef NDEBUG
   flat_location_initialised = true;

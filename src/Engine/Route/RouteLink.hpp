@@ -26,7 +26,7 @@
 #include "Math/fixed.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
 
-class TaskProjection;
+class FlatProjection;
 
 typedef AFlatGeoPoint RoutePoint;
 
@@ -118,9 +118,9 @@ public:
   /** Direction index to be used for RoutePolar lookups */
   unsigned polar_index;
 
-  RouteLink(const RouteLinkBase& link, const TaskProjection& proj);
+  RouteLink(const RouteLinkBase &link, const FlatProjection &proj);
   RouteLink (const RoutePoint& _first, const RoutePoint& _second,
-             const TaskProjection& proj);
+             const FlatProjection &proj);
 
   /**
    * Generate RouteLink projected flat such that the destination altitude equals
@@ -131,7 +131,7 @@ public:
   RouteLink Flat() const;
 
 private:
-  void CalcSpeedups(const TaskProjection& proj);
+  void CalcSpeedups(const FlatProjection &proj);
 };
 
 #endif

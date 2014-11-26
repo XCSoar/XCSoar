@@ -21,7 +21,7 @@
 */
 
 #include "AATPoint.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatLine.hpp"
 #include "Util/Clamp.hpp"
 
@@ -39,7 +39,7 @@ AATPoint::GetLocationRemaining() const
 
 bool
 AATPoint::UpdateSampleNear(const AircraftState& state,
-                           const TaskProjection &projection)
+                           const FlatProjection &projection)
 {
   bool retval = OrderedTaskPoint::UpdateSampleNear(state, projection);
   retval |= CheckTarget(state, false);
@@ -49,7 +49,7 @@ AATPoint::UpdateSampleNear(const AircraftState& state,
 
 bool
 AATPoint::UpdateSampleFar(const AircraftState& state,
-                          const TaskProjection &projection)
+                          const FlatProjection &projection)
 {
   /* the orderedtaskpoint::update_sample_far does nothing for now but
      we are calling this in case that changes */
@@ -166,7 +166,7 @@ AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock)
 }
 
 void
-AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
+AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
 {
   const FlatPoint fprev =
     proj.ProjectFloat(GetPrevious()->GetLocationRemaining());

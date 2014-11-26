@@ -28,7 +28,7 @@
 
 class AirspaceWarningManager;
 class AbstractAirspace;
-class TaskProjection;
+class FlatProjection;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
 public:
@@ -36,7 +36,7 @@ public:
     Guard<AirspaceWarningManager>(awm) {}
 
   gcc_pure
-  const TaskProjection &GetProjection() const;
+  const FlatProjection &GetProjection() const;
 
   void Clear();
   void AcknowledgeAll();

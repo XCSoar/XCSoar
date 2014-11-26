@@ -26,7 +26,7 @@
 #include "Geo/SearchPointVector.hpp"
 #include "Compiler.h"
 
-class TaskProjection;
+class FlatProjection;
 class OZBoundary;
 struct GeoPoint;
 struct AircraftState;
@@ -111,7 +111,7 @@ public:
    * Construct boundary polygon from internal representation of observation zone.
    * Also updates projection.
    */
-  void UpdateOZ(const TaskProjection &projection, const OZBoundary &boundary);
+  void UpdateOZ(const FlatProjection &projection, const OZBoundary &boundary);
 
 protected:
   /**
@@ -121,7 +121,7 @@ protected:
    * @return True if internal state changed
    */
   bool AddInsideSample(const AircraftState &state,
-                       const TaskProjection &projection);
+                       const FlatProjection &projection);
 
 public:
   /**
@@ -175,14 +175,14 @@ protected:
    * last sample prior to crossing the start.
    */
   void ClearSampleAllButLast(const AircraftState &state,
-                             const TaskProjection &projection);
+                             const FlatProjection &projection);
 
 private:
   /**
    * Re-project boundary and interior sample polygons.
    * Must be called if task_projection changes.
    */
-  void UpdateProjection(const TaskProjection &projection);
+  void UpdateProjection(const FlatProjection &projection);
 
 public:
   /**

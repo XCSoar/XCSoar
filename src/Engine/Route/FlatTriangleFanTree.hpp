@@ -29,7 +29,7 @@
 
 #include <list>
 
-class TaskProjection;
+class FlatProjection;
 struct GeoPoint;
 struct RouteLink;
 struct AFlatGeoPoint;
@@ -105,7 +105,7 @@ public:
                            RoughAltitude &arrival_height) const;
 
   void AcceptInRange(const FlatBoundingBox &bb,
-                     const TaskProjection &task_proj,
+                     const FlatProjection &projection,
                      TriangleFanVisitor &visitor) const;
 
   void UpdateTerrainBase(const FlatGeoPoint &origin, ReachFanParms &parms);

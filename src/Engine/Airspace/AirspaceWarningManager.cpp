@@ -38,7 +38,7 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces)
   config.warning_time = -1;
 }
 
-const TaskProjection &
+const FlatProjection &
 AirspaceWarningManager::GetProjection() const
 {
   return airspaces.GetProjection();

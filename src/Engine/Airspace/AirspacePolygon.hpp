@@ -49,9 +49,9 @@ public:
   virtual bool Inside(const GeoPoint &loc) const override;
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,
-                                                const TaskProjection &projection) const override;
+                                                const FlatProjection &projection) const override;
   virtual GeoPoint ClosestPoint(const GeoPoint &loc,
-                                const TaskProjection &projection) const override;
+                                const FlatProjection &projection) const override;
 
 public:
 #ifdef DO_PRINT

@@ -32,7 +32,7 @@
 class TaskStats;
 class GlidePolar;
 class Airspaces;
-class TaskProjection;
+class FlatProjection;
 class AirspaceAircraftPerformance;
 
 /**
@@ -81,7 +81,7 @@ public:
   AirspaceWarningManager(const AirspaceWarningManager &) = delete;
 
   gcc_pure
-  const TaskProjection &GetProjection() const;
+  const FlatProjection &GetProjection() const;
 
   const AirspaceWarningConfig &GetConfig() const {
     return config;

@@ -254,7 +254,7 @@ public:
     return airspace_tree.end();
   }
 
-  const TaskProjection &GetProjection() const {
+  const FlatProjection &GetProjection() const {
     return task_projection;
   }
 

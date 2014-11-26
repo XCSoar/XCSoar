@@ -48,7 +48,7 @@ public:
    *
    * @param ap The AAT point for which to calculate the Isoline
    */
-  AATIsoline(const AATPoint &ap, const TaskProjection &projection);
+  AATIsoline(const AATPoint &ap, const FlatProjection &projection);
 };
 
 

@@ -48,7 +48,7 @@ public:
    *
    * @return Initialised object
    */
-  AATIsolineSegment(const AATPoint &ap, const TaskProjection &projection);
+  AATIsolineSegment(const AATPoint &ap, const FlatProjection &projection);
 
   /**
    * Test whether segment is valid (nonzero length)

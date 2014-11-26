@@ -21,7 +21,7 @@
  */
 
 #include "AirspacePolygon.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatRay.hpp"
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
@@ -69,7 +69,7 @@ AirspacePolygon::Inside(const GeoPoint &loc) const
 
 AirspaceIntersectionVector
 AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
-                            const TaskProjection &projection) const
+                            const FlatProjection &projection) const
 {
   const FlatRay ray(projection.ProjectInteger(start),
                     projection.ProjectInteger(end));
@@ -89,7 +89,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
 
 GeoPoint 
 AirspacePolygon::ClosestPoint(const GeoPoint &loc,
-                              const TaskProjection &projection) const
+                              const FlatProjection &projection) const
 {
   const FlatGeoPoint p = projection.ProjectInteger(loc);
   const FlatGeoPoint pb = m_border.NearestPoint(p);
