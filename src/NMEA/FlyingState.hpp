@@ -107,6 +107,14 @@ struct FlyingState
   bool IsTowing() const {
     return flying && negative(release_time);
   }
+
+  /**
+   * Are we currently gliding?  That is, flying without engine and
+   * without being towed.
+   */
+  bool IsGliding() const {
+    return flying && !IsTowing();
+  }
 };
 
 static_assert(std::is_trivial<FlyingState>::value, "type is not trivial");
