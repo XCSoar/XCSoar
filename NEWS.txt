@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.7.7 - not yet released
+* airspace
+  - accept airspaces of class RMZ in OpenAir format files
 
 Version 6.7.6 - 2014/10/18
 * tracking

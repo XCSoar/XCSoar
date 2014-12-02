@@ -43,6 +43,7 @@ static const TCHAR *const airspace_class_names[] = {
   _T("Transponder Mandatory Zone"),
   _T("Class G"),
   _T("Military Aerodrome Traffic Zone"),
+  _T("Radio Mandatory Zone"),
 };
 
 static_assert(ARRAY_SIZE(airspace_class_names) ==
@@ -68,6 +69,7 @@ static const TCHAR *const airspace_class_short_names[] = {
   _T("TMZ"),
   _T("G"),
   _T("MATZ"),
+  _T("RMZ"),
 };
 
 static_assert(ARRAY_SIZE(airspace_class_short_names) ==

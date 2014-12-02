@@ -85,9 +85,10 @@ TestOpenAir()
     { _T("Class-F-Test"), CLASSF },
     { _T("Class-TMZ-Test"), TMZ },
     { _T("Class-G-Test"), CLASSG },
+    { _T("Class-RMZ-Test"), RMZ },
   };
 
-  ok1(airspaces.GetSize() == 23);
+  ok1(airspaces.GetSize() == 24);
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->GetAirspace();
@@ -276,7 +277,7 @@ TestTNP()
 
 int main(int argc, char **argv)
 {
-  plan_tests(103);
+  plan_tests(104);
 
   TestOpenAir();
   TestTNP();

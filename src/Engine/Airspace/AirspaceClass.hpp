@@ -46,6 +46,7 @@ enum AirspaceClass : uint8_t
   TMZ,
   CLASSG,
   MATZ,
+  RMZ,
   AIRSPACECLASSCOUNT
 };
 

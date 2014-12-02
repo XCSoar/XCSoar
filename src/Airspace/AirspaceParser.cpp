@@ -76,6 +76,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { _T("F"), CLASSF },
   { _T("TMZ"), TMZ },
   { _T("G"), CLASSG },
+  { _T("RMZ"), RMZ },
 };
 
 static constexpr AirspaceClassCharCouple airspace_tnp_class_chars[] = {
@@ -108,6 +109,7 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { _T("CYD"), DANGER },
   { _T("CYA"), CLASSF },
   { _T("MATZ"), MATZ },
+  { _T("RMZ"), RMZ },
 };
 
 // this can now be called multiple times to load several airspaces.
