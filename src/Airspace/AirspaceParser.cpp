@@ -498,7 +498,7 @@ static AirspaceClass
 ParseType(const TCHAR *buffer)
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
-    if (StringAfterPrefix(buffer, airspace_class_strings[i].string))
+    if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
       return airspace_class_strings[i].type;
 
   return OTHER;
