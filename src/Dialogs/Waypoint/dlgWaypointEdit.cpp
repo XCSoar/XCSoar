@@ -69,9 +69,7 @@ WaypointEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddText(_("Name"), nullptr, value.name.c_str());
   AddText(_("Comment"), nullptr, value.comment.c_str());
-  Add(_("Location"), nullptr, new GeoPointDataField(value.location,
-                                                    // TODO: use configured CoordinateFormat
-                                                    CoordinateFormat::DDMMSS));
+  Add(_("Location"), nullptr, new GeoPointDataField(value.location,UIGlobals::GetFormatSettings().coordinate_format));
   AddFloat(_("Altitude"), nullptr,
            _T("%.0f %s"), _T("%.0f"),
            fixed(0), fixed(30000), fixed(5), false,
