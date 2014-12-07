@@ -139,6 +139,14 @@ AH 2000 ft
 V X=01:05.5 N 000:05.5 E
 DC 5
 
+* Airspace to test airspace class RMZ
+AC RMZ
+AN Class-RMZ-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
 * Airspace to test airspace heights
 AC C
 AN Height-Test-1

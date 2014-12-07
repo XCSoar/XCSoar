@@ -20,7 +20,6 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-
 #include "AirspaceRendererSettings.hpp"
 #include "Asset.hpp"
 
@@ -67,6 +66,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[AATASK].brush = 3;
   classes[CLASSE].brush = 3;
   classes[CLASSF].brush = 3;
+  classes[RMZ].brush = 3;
 #endif
 
   classes[OTHER].SetColors(RGB8_CYAN);
@@ -79,4 +79,5 @@ AirspaceRendererSettings::SetDefaults()
   classes[AATASK].SetColors(HasColors() ? RGB8_YELLOW : RGB8_MAGENTA);
   classes[CLASSE].SetColors(RGB8_GREEN.Darken());
   classes[CLASSF].SetColors(RGB8_GREEN.Darken());
+  classes[RMZ].SetColors(RGB8_MAGENTA.Darken());
 }
