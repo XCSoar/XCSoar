@@ -233,12 +233,11 @@ ComputeWindVector(NMEAInfo &basic, const DerivedInfo &calculated)
   if(!basic.attitude.heading_available ||
      !basic.airspeed_available ||
      !basic.variation_available)
-    //no compass, airspeed sensor or NMEA variation information available
-    return;
+     //no NMEA compass, airspeed sensor or NMEA variation information available
+     return;
 
   fixed wind_speed = fixed(0);
   Angle wind_direction = Angle::Zero();
-  //wind_direction = Angle::Zero();
   fixed x0 = ((basic.attitude.heading + basic.variation).fastsine() * basic.true_airspeed) -
                                                    (basic.track.fastsine() * basic.ground_speed);
   fixed y0 = ((basic.attitude.heading + basic.variation).fastcosine() * basic.true_airspeed) -
