@@ -39,6 +39,12 @@ class UdevContext {
 public:
   UdevContext():ud(nullptr) {}
   UdevContext(const UdevContext &);
+
+  UdevContext(UdevContext &&other)
+    :ud(other.ud) {
+    other.ud = nullptr;
+  }
+
   UdevContext &operator=(const UdevContext &);
   ~UdevContext();
 
