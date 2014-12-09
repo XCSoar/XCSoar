@@ -58,7 +58,13 @@ WindComputer::Compute(const WindSettings &settings,
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
-
+/*
+ if (settings.CompassWindEnabled()) {
+    CirclingWind::Result result = circling_wind.NewSample(basic, calculated);
+    if (result.IsValid())
+      wind_store.SlotMeasurement(basic, result.wind, result.quality);
+  }
+*/
   if (settings.ZigZagWindEnabled() &&
       basic.airspeed_available && basic.airspeed_real &&
       basic.true_airspeed > GetVTakeoffFallback(glide_polar)) {
@@ -92,7 +98,15 @@ void
 WindComputer::Select(const WindSettings &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
-  if (basic.external_wind_available && settings.use_external_wind) {
+
+ //if (settings.use_external_wind) {
+  if (basic.attitude.heading_available && settings.use_external_wind) {
+    // manual wind overrides auto wind if available
+    calculated.wind = basic.external_wind;
+    calculated.wind_available = basic.external_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::COMPASS;
+
+  } else if ((basic.external_wind_available && settings.use_external_wind)) {
     // external wind available
     calculated.wind = basic.external_wind;
     calculated.wind_available = basic.external_wind_available;

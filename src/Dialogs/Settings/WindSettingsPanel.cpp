@@ -58,6 +58,8 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       N_("Requires GPS and an intelligent vario with airspeed output.") },
     { AUTOWIND_CIRCLING | AUTOWIND_ZIGZAG, N_("Both"),
       N_("Use ZigZag and circling.") },
+    //{ AUTOWIND_COMPASS, N_("Compass Pick"),
+    //  N_("Requires Compass and TAS") },
     { 0 }
   };
 
@@ -177,10 +179,12 @@ WindSettingsPanel::OnModified(DataField &df)
   const NMEAInfo &basic = CommonInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
 
-  if (&df == &GetDataField(ExternalWind)) {
+  if ((&df == &GetDataField(ExternalWind))) {
     DataFieldBoolean &dfb = (DataFieldBoolean &)df;
     settings.use_external_wind = dfb.GetAsBoolean();
-  } else if (&df == &GetDataField(Speed) || &df == &GetDataField(Direction)) {
+
+  }
+   else if (&df == &GetDataField(Speed) || &df == &GetDataField(Direction)) {
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));
     settings.manual_wind.bearing = GetValueAngle(Direction);
     settings.manual_wind_available.Update(basic.clock);
@@ -218,7 +222,11 @@ WindSettingsPanel::UpdateVector()
   case DerivedInfo::WindSource::EXTERNAL:
     source = _("External");
     break;
-  }
+
+  case DerivedInfo::WindSource::COMPASS:
+    source = _("NMEA Compass + TAS");
+    break;
+    }
 
   SetText(SOURCE, source);
 

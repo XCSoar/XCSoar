@@ -42,6 +42,8 @@ enum AutoWindModeBits
   /** 2: ZigZag */
   AUTOWIND_ZIGZAG,
   /** 3: Both */
+  //AUTOWIND_COMPASS,
+  /** 4: Compass */
 };
 
 /**
@@ -66,6 +68,11 @@ struct WindSettings {
   bool use_external_wind;
 
   /**
+   * If enabled external compass and TAS source are use to perform the wind calculation.
+   */
+  //bool compass_wind;
+
+  /**
    * This is the manual wind set by the pilot. Validity is set when
    * changeing manual wind but does not expire.
    */
@@ -85,6 +92,10 @@ struct WindSettings {
   bool ZigZagWindEnabled() const {
     return zig_zag_wind;
   }
+
+  //bool CompassWindEnabled() const {
+  //  return compass_wind;
+  //}
 
   unsigned GetLegacyAutoWindMode() const {
     return (circling_wind ? 0x1 : 0x0) | (zig_zag_wind ? 0x2 : 0x0);

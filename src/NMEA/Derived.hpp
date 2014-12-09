@@ -131,7 +131,7 @@ static_assert(std::is_trivial<AirspaceWarningsInfo>::value, "type is not trivial
  * A struct that holds all the calculated values derived from the data in the
  * NMEA_INFO struct
  */
-struct DerivedInfo: 
+struct DerivedInfo:
   public VarioInfo,
   public ClimbInfo,
   public CirclingInfo,
@@ -194,6 +194,12 @@ struct DerivedInfo:
      * The wind vector was received from an external device.
      */
     EXTERNAL,
+
+    /**
+     * XCSoar has calculated the wind vector from external compass and TAS source.
+     */
+    COMPASS,
+
   } wind_source;
 
   Validity head_wind_available;

@@ -29,5 +29,6 @@ WindSettings::SetDefaults()
   circling_wind = true;
   zig_zag_wind = true;
   use_external_wind = true;
+//  compass_wind = true;
   manual_wind_available.Clear();
 }

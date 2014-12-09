@@ -427,7 +427,7 @@ ReadVariation(NMEAInputLine &line, Angle &value_r)
   if (ch == 'W')
     value = -value;
   else if (ch != 'E')
-    return false;
+         return false;
 
   value_r = Angle::Degrees(value);
   return true;
@@ -500,10 +500,11 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   if (!variation_available)
     info.variation_available.Clear();
-  else if (variation_available) {
-    info.variation = variation;
-    info.variation_available.Update(info.clock);
-  }
+  else if (variation_available)
+       {
+       info.variation = variation;
+       info.variation_available.Update(info.clock);
+       }
 
   info.gps.real = real;
 #ifdef ANDROID
@@ -532,10 +533,11 @@ NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
 
   if (!heading_available)
     info.heading_available.Clear();
-  else if (heading_available) {
-    info.heading = heading;
-    info.heading_available.Update(info.clock);
-  }
+  else if (heading_available)
+       {
+       info.attitude.heading = heading;
+       info.attitude.heading_available.Update(info.clock);
+       }
 
   return true;
 }
