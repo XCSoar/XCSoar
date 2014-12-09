@@ -41,7 +41,7 @@
 
 #include <assert.h>
 
-#if defined(__clang__) || GCC_VERSION >= 40700
+#if CLANG_OR_GCC_VERSION(4,7)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
@@ -123,7 +123,7 @@ public:
   }
 };
 
-#if defined(__clang__) || GCC_VERSION >= 40700
+#if CLANG_OR_GCC_VERSION(4,7)
 #pragma GCC diagnostic pop
 #endif
 

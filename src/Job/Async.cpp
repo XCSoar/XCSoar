@@ -53,7 +53,7 @@ AsyncJobRunner::Cancel()
     notify->ClearNotification();
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
+#if CLANG_OR_GCC_VERSION(4,7)
 /* no, ThreadedOperationEnvironment really doesn't need a virtual
    destructor */
 #pragma GCC diagnostic push
@@ -72,7 +72,7 @@ AsyncJobRunner::Wait()
   return job;
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
+#if CLANG_OR_GCC_VERSION(4,7)
 #pragma GCC diagnostic pop
 #endif
 

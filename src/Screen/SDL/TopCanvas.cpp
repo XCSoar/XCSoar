@@ -337,7 +337,7 @@ CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
 
 #endif
 
-#if defined(__clang__) || GCC_VERSION >= 40800
+#if CLANG_OR_GCC_VERSION(4,8)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-align"
 #endif
@@ -428,7 +428,7 @@ CopyFromGreyscale(
 #endif
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40800
+#if CLANG_OR_GCC_VERSION(4,8)
 #pragma GCC diagnostic pop
 #endif
 
