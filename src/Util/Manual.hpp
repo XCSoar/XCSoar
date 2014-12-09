@@ -35,7 +35,7 @@
 #include <new>
 #include <utility>
 
-#if !defined(__clang__) && __GNUC__ && GCC_VERSION < 40800
+#if GCC_OLDER_THAN(4,8)
 #include <type_traits>
 #endif
 
