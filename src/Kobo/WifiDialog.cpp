@@ -259,13 +259,9 @@ WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const cha
     if (!success)
       return false;
 
-    if (security == WEP_SECURITY) {
-
-      success = wpa_supplicant.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
-      if (!success)
-        return false;
-
-    }
+    success = wpa_supplicant.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
+    if (!success)
+      return false;
   } else
     return false;
 
