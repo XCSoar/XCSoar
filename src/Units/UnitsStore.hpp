@@ -39,14 +39,17 @@ namespace Units
     gcc_const
     const TCHAR* GetName(unsigned i);
 
+    gcc_const
     const UnitSetting& Read(unsigned i);
 
+    gcc_const
     unsigned Count();
 
     /**
      * Only the units part of the structure is addressed.
      * @return Index + 1 if an equivalent set is found, else 0.
      */
+    gcc_pure
     unsigned EqualsPresetUnits(const UnitSetting &config);
   }
 }
