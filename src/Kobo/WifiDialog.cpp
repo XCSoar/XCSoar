@@ -169,7 +169,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   static char wifi_security[][20] = {
     "WPA",
-    "WEP"
+    "WEP",
   };
 
   canvas.Select(*look.text_font);
