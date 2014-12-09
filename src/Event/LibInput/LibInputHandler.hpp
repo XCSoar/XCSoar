@@ -25,12 +25,12 @@ Copyright_License {
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
 #include "IO/Async/FileEventHandler.hpp"
-#include "Util/UdevContext.hpp"
 
 #include <assert.h>
 
 class EventQueue;
 class IOLoop;
+class UdevContext;
 
 struct libinput;
 struct libinput_interface;
