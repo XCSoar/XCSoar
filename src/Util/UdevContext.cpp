@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Thread/Mutex.hpp"
 #include "Util/UdevContext.hpp"
-
-#include <assert.h>
+#include "Thread/Mutex.hpp"
 
 #include <libudev.h>
+
+#include <assert.h>
 
 static UdevContext* udev_root_context = nullptr;
 static Mutex udev_context_mutex;
