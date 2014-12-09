@@ -532,11 +532,10 @@ NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
 
   if (!heading_available)
     info.heading_available.Clear();
-  else if (heading_available)
-       {
-       info.attitude.heading = heading;
-       info.attitude.heading_available.Update(info.clock);
-       }
+  else if (heading_available) {
+    info.attitude.heading = heading;
+    info.attitude.heading_available.Update(info.clock);
+  }
 
   return true;
 }
