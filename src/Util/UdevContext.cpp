@@ -28,10 +28,10 @@ Copyright_License {
 
 #include <assert.h>
 
-static UdevContext* udev_root_context = nullptr;
+static UdevContext *udev_root_context = nullptr;
 static Mutex udev_context_mutex;
 
-UdevContext::UdevContext(const UdevContext& other)
+UdevContext::UdevContext(const UdevContext &other)
 {
   ScopeLock protect(udev_context_mutex);
   if (other.ud) {
@@ -49,17 +49,18 @@ UdevContext::~UdevContext()
     udev_unref(ud);
 }
 
-UdevContext&
-UdevContext::operator=(const UdevContext& other)
+UdevContext &
+UdevContext::operator=(const UdevContext &other)
 {
   if (this != &other) {
     ScopeLock protect(udev_context_mutex);
     struct udev *new_ud = (nullptr == other.ud) ? udev_ref(other.ud) : nullptr;
-    assert((nullptr == other.ud) || (nullptr != new_ud));
-    if (ud)
+    assert(nullptr == other.ud || nullptr != new_ud);
+    if (ud != nullptr)
       udev_unref(ud);
     ud = new_ud;
   }
+
   return *this;
 }
 

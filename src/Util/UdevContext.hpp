@@ -24,26 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_UTIL_UDEVCONTEXT_HPP
 #define XCSOAR_UTIL_UDEVCONTEXT_HPP
 
-static constexpr const char* UDEV_DEFAULT_SEAT = "seat0";
+static constexpr const char *UDEV_DEFAULT_SEAT = "seat0";
 
 struct udev;
 
 /**
  * Helper class for initialisation and (thread safe) access to the udev context.
  */
-class UdevContext
-{
+class UdevContext {
   struct udev *ud;
 
-  explicit UdevContext(struct udev* _ud):ud(_ud) {}
+  explicit UdevContext(struct udev *_ud):ud(_ud) {}
 
 public:
   UdevContext():ud(nullptr) {}
-  UdevContext(const UdevContext&);
-  UdevContext& operator=(const UdevContext&);
+  UdevContext(const UdevContext &);
+  UdevContext &operator=(const UdevContext &);
   ~UdevContext();
 
-  struct udev * Get() {
+  struct udev *Get() {
     return ud;
   }
 
