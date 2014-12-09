@@ -75,6 +75,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
       rc.top = rc.bottom;
     } else if (i < 5) {
       rc.top += hheight * (i - 1);
+      rc.left = rc.right - hwidth; // move the left buttons to the right
     } else {
       rc.left += hwidth * (i - 5);
       rc.top = rc.bottom - hheight;
