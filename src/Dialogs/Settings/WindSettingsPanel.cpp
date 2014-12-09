@@ -180,7 +180,6 @@ WindSettingsPanel::OnModified(DataField &df)
   if (&df == &GetDataField(ExternalWind)) {
     DataFieldBoolean &dfb = (DataFieldBoolean &)df;
     settings.use_external_wind = dfb.GetAsBoolean();
-
   } else if (&df == &GetDataField(Speed) || &df == &GetDataField(Direction)) {
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));
     settings.manual_wind.bearing = GetValueAngle(Direction);
