@@ -38,6 +38,9 @@ CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 ifeq ($(USE_LIBINPUT),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/LibInput/LibInputHandler.cpp
+ifeq ($(ENABLE_UDEV),y)
+EVENT_SOURCES += $(SRC)/Event/LibInput/UdevContext.cpp
+endif
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/MergeMouse.cpp

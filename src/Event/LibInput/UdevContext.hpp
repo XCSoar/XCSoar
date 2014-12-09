@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UTIL_UDEVCONTEXT_HPP
-#define XCSOAR_UTIL_UDEVCONTEXT_HPP
+#ifndef XCSOAR_EVENT_UDEVCONTEXT_HPP
+#define XCSOAR_EVENT_UDEVCONTEXT_HPP
 
 static constexpr const char *UDEV_DEFAULT_SEAT = "seat0";
 
