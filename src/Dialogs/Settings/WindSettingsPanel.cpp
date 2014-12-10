@@ -218,7 +218,11 @@ WindSettingsPanel::UpdateVector()
   case DerivedInfo::WindSource::EXTERNAL:
     source = _("External");
     break;
-  }
+
+  case DerivedInfo::WindSource::COMPASS:
+    source = _("NMEA Compass + TAS");
+    break;
+}
 
   SetText(SOURCE, source);
 
