@@ -42,14 +42,14 @@ RateLimitedBlackboardListener::OnCalculatedUpdate(const MoreData &_basic,
 void
 RateLimitedBlackboardListener::Run()
 {
-  if (basic != NULL) {
+  if (basic != nullptr) {
     next.OnGPSUpdate(*basic);
-    basic = NULL;
+    basic = nullptr;
   }
 
-  if (calculated != NULL){
+  if (calculated != nullptr){
     next.OnCalculatedUpdate(*basic2, *calculated);
-    basic2 = NULL;
-    calculated = NULL;
+    basic2 = nullptr;
+    calculated = nullptr;
   }
 }
