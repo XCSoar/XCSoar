@@ -95,7 +95,7 @@ XCSoarInterface::ExchangeDeviceBlackboard()
 void
 ActionInterface::SendGetComputerSettings()
 {
-  assert(calculation_thread != NULL);
+  assert(calculation_thread != nullptr);
 
   main_window->SetComputerSettings(GetComputerSettings());
 
@@ -111,10 +111,10 @@ ActionInterface::SetBallast(fixed ballast, bool to_devices)
   polar.SetBallast(ballast);
 
   // send to calculation thread and trigger recalculation
-  if (protected_task_manager != NULL)
+  if (protected_task_manager != nullptr)
     protected_task_manager->SetGlidePolar(polar);
 
-  if (calculation_thread != NULL) {
+  if (calculation_thread != nullptr) {
     calculation_thread->SetComputerSettings(GetComputerSettings());
     calculation_thread->ForceTrigger();
   }
@@ -140,10 +140,10 @@ ActionInterface::SetBugs(fixed bugs, bool to_devices)
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
 
   // send to calculation thread and trigger recalculation
-  if (protected_task_manager != NULL)
+  if (protected_task_manager != nullptr)
     protected_task_manager->SetGlidePolar(polar);
 
-  if (calculation_thread != NULL) {
+  if (calculation_thread != nullptr) {
     calculation_thread->SetComputerSettings(GetComputerSettings());
     calculation_thread->ForceTrigger();
   }
@@ -176,10 +176,10 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 
   /* send to calculation thread and trigger recalculation */
 
-  if (protected_task_manager != NULL)
+  if (protected_task_manager != nullptr)
     protected_task_manager->SetGlidePolar(polar);
 
-  if (calculation_thread != NULL) {
+  if (calculation_thread != nullptr) {
     calculation_thread->SetComputerSettings(GetComputerSettings());
     calculation_thread->ForceTrigger();
   }
