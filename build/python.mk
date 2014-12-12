@@ -1,3 +1,5 @@
+ifeq ($(MAKECMDGOALS),python)
+
 name-to-so = $(patsubst %,$(TARGET_BIN_DIR)/%.so,$(1))
 
 python: $(call name-to-so,xcsoar)
@@ -61,3 +63,5 @@ PYTHON_CPPFLAGS = $(shell python-config --includes) \
 PYTHON_FILTER_FLAGS = -Wwrite-strings
 PYTHON_NO_LIB_PREFIX = y
 $(eval $(call link-shared-library,xcsoar,PYTHON))
+
+endif
