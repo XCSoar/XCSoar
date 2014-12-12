@@ -40,6 +40,8 @@ Version 6.8 - not yet released
   - export data partition via USB storage
 
 Version 6.7.7 - not yet released
+* airspace
+  - accept airspaces of class RMZ in OpenAir format files
 
 Version 6.7.6 - 2014/10/18
 * tracking

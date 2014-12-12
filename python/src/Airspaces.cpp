@@ -59,6 +59,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "MATZ", MATZ },
   { "AATASK", AATASK },
   { "OTHER", OTHER },
+  { "RMZ", RMZ },
 };
 
 PyObject* xcsoar_Airspaces_new(PyTypeObject *type, PyObject *args, PyObject *kwargs) {
