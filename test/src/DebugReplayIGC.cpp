@@ -101,8 +101,10 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
     basic.gps_altitude_available.Clear();
   }
 
-  basic.pressure_altitude = fixed(fix.pressure_altitude);
-  basic.pressure_altitude_available.Update(basic.clock);
+  if (fix.pressure_altitude != 0) {
+    basic.pressure_altitude = fixed(fix.pressure_altitude);
+    basic.pressure_altitude_available.Update(basic.clock);
+  }
 
   if (fix.enl >= 0) {
     basic.engine_noise_level = fix.enl;
