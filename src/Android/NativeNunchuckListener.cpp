@@ -75,7 +75,7 @@ NativeNunchuckListener::Deinitialise(JNIEnv *env)
 jobject
 NativeNunchuckListener::Create(JNIEnv *env, NunchuckListener &listener)
 {
-  assert(cls != NULL);
+  assert(cls != nullptr);
 
   return env->NewObject(cls, ctor, (jlong)&listener);
 }

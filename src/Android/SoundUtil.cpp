@@ -34,7 +34,7 @@ void
 SoundUtil::Initialise(JNIEnv *env)
 {
   assert(!cls.IsDefined());
-  assert(env != NULL);
+  assert(env != nullptr);
 
   cls.Find(env, "org/xcsoar/SoundUtil");
   play_method = env->GetStaticMethodID(cls, "play",

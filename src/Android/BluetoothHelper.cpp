@@ -44,7 +44,7 @@ bool
 BluetoothHelper::Initialise(JNIEnv *env)
 {
   assert(!cls.IsDefined());
-  assert(env != NULL);
+  assert(env != nullptr);
 
   if (!cls.FindOptional(env, "org/xcsoar/BluetoothHelper"))
     /* Android < 2.0 doesn't have Bluetooth support */
@@ -109,7 +109,7 @@ jobjectArray
 BluetoothHelper::list(JNIEnv *env)
 {
   if (!cls.IsDefined())
-    return NULL;
+    return nullptr;
 
   /* call BluetoothHelper.connect() */
 
@@ -120,15 +120,15 @@ PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
 {
   if (!cls.IsDefined())
-    return NULL;
+    return nullptr;
 
   /* call BluetoothHelper.connect() */
 
   const Java::String address2(env, address);
   jobject obj = env->CallStaticObjectMethod(cls, connect_method,
                                             context->Get(), address2.Get());
-  if (obj == NULL)
-    return NULL;
+  if (obj == nullptr)
+    return nullptr;
 
   PortBridge *helper = new PortBridge(env, obj);
   env->DeleteLocalRef(obj);
@@ -140,11 +140,11 @@ PortBridge *
 BluetoothHelper::createServer(JNIEnv *env)
 {
   if (!cls.IsDefined())
-    return NULL;
+    return nullptr;
 
   jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
-  if (obj == NULL)
-    return NULL;
+  if (obj == nullptr)
+    return nullptr;
 
   PortBridge *helper = new PortBridge(env, obj);
   env->DeleteLocalRef(obj);

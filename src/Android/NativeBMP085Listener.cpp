@@ -79,7 +79,7 @@ NativeBMP085Listener::Deinitialise(JNIEnv *env)
 jobject
 NativeBMP085Listener::Create(JNIEnv *env, BMP085Listener &listener)
 {
-  assert(cls != NULL);
+  assert(cls != nullptr);
 
   return env->NewObject(cls, ctor, (jlong)&listener);
 }

@@ -75,7 +75,7 @@ NativeVoltageListener::Deinitialise(JNIEnv *env)
 jobject
 NativeVoltageListener::Create(JNIEnv *env, VoltageListener &listener)
 {
-  assert(cls != NULL);
+  assert(cls != nullptr);
 
   return env->NewObject(cls, ctor, (jlong)&listener);
 }

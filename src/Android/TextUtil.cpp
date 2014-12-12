@@ -100,7 +100,7 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
                                paramStyle, paramTextSize,
                                paint_flags);
   if (!localObject)
-    return NULL;
+    return nullptr;
 
   TextUtil *tu = new TextUtil(localObject);
 

@@ -28,8 +28,8 @@ Copyright_License {
 jobject
 Context::GetSystemService(JNIEnv *env, jstring name)
 {
-  assert(env != NULL);
-  assert(name != NULL);
+  assert(env != nullptr);
+  assert(name != nullptr);
 
   Java::Class cls(env, env->GetObjectClass(Get()));
   jmethodID method = env->GetMethodID(cls, "getSystemService",
@@ -42,8 +42,8 @@ Context::GetSystemService(JNIEnv *env, jstring name)
 jobject
 Context::GetSystemService(JNIEnv *env, const char *name)
 {
-  assert(env != NULL);
-  assert(name != NULL);
+  assert(env != nullptr);
+  assert(name != nullptr);
 
   Java::String name2(env, name);
   return GetSystemService(env, name2);

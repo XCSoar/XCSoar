@@ -45,7 +45,7 @@ Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
 
   DataHandler &handler = *(DataHandler *)(void *)ptr;
 
-  jbyte *data2 = env->GetByteArrayElements(data, NULL);
+  jbyte *data2 = env->GetByteArrayElements(data, nullptr);
   handler.DataReceived(data2, length);
   env->ReleaseByteArrayElements(data, data2, 0);
 }
@@ -68,7 +68,7 @@ NativeInputListener::Deinitialise(JNIEnv *env)
 jobject
 NativeInputListener::Create(JNIEnv *env, DataHandler &handler)
 {
-  assert(cls != NULL);
+  assert(cls != nullptr);
 
   return env->NewObject(cls, ctor, (jlong)&handler);
 }

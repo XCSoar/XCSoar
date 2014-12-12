@@ -45,7 +45,7 @@ Environment::Initialise(JNIEnv *env)
   getExternalStoragePublicDirectory_method =
     env->GetStaticMethodID(cls, "getExternalStoragePublicDirectory",
                            "(Ljava/lang/String;)Ljava/io/File;");
-  if (getExternalStoragePublicDirectory_method == NULL)
+  if (getExternalStoragePublicDirectory_method == nullptr)
     /* needs API level 8 */
     env->ExceptionClear();
 }
@@ -59,8 +59,8 @@ Environment::Deinitialise(JNIEnv *env)
 static jstring
 ToAbsolutePathChecked(JNIEnv *env, jobject file)
 {
-  if (file == NULL)
-    return NULL;
+  if (file == nullptr)
+    return nullptr;
 
   jstring path = Java::File::getAbsolutePath(env, file);
   env->DeleteLocalRef(file);
@@ -81,8 +81,8 @@ Environment::getExternalStorageDirectory(char *buffer, size_t max_size)
   JNIEnv *env = Java::GetEnv();
 
   jstring value = ::getExternalStorageDirectory(env);
-  if (value == NULL)
-    return NULL;
+  if (value == nullptr)
+    return nullptr;
 
   Java::String value2(env, value);
   value2.CopyTo(env, buffer, max_size);
@@ -92,9 +92,9 @@ Environment::getExternalStorageDirectory(char *buffer, size_t max_size)
 static jstring
 getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
 {
-  if (Environment::getExternalStoragePublicDirectory_method == NULL)
+  if (Environment::getExternalStoragePublicDirectory_method == nullptr)
     /* needs API level 8 */
-    return NULL;
+    return nullptr;
 
   Java::String type2(env, type);
   jobject file = env->CallStaticObjectMethod(Environment::cls,
@@ -109,8 +109,8 @@ Environment::getExternalStoragePublicDirectory(char *buffer, size_t max_size,
 {
   JNIEnv *env = Java::GetEnv();
   jstring path = ::getExternalStoragePublicDirectory(env, type);
-  if (path == NULL)
-    return NULL;
+  if (path == nullptr)
+    return nullptr;
 
   Java::String path2(env, path);
   path2.CopyTo(env, buffer, max_size);

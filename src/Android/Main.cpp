@@ -136,7 +136,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   OpenGL::Initialise();
   TextUtil::Initialise(env);
 
-  assert(native_view == NULL);
+  assert(native_view == nullptr);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                sdk_version, product);
 #ifdef __arm__
@@ -208,14 +208,14 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   Fonts::Deinitialize();
 
   delete ioio_helper;
-  ioio_helper = NULL;
+  ioio_helper = nullptr;
 
   delete vibrator;
-  vibrator = NULL;
+  vibrator = nullptr;
 
   SoundUtil::Deinitialise(env);
   delete event_queue;
-  event_queue = NULL;
+  event_queue = nullptr;
   delete native_view;
   native_view = nullptr;
 
@@ -250,7 +250,7 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint width, jint height)
 {
-  if (event_queue == NULL)
+  if (event_queue == nullptr)
     return;
 
   if (CommonInterface::main_window != nullptr)

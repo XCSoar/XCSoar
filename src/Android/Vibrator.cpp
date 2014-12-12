@@ -41,8 +41,8 @@ Vibrator *
 Vibrator::Create(JNIEnv *env, Context &context)
 {
   jobject obj = context.GetVibrator(env);
-  if (obj == NULL)
-    return NULL;
+  if (obj == nullptr)
+    return nullptr;
 
   Vibrator *vibrator = new Vibrator(env, obj);
   env->DeleteLocalRef(obj);

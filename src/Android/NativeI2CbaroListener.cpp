@@ -77,7 +77,7 @@ NativeI2CbaroListener::Deinitialise(JNIEnv *env)
 jobject
 NativeI2CbaroListener::Create(JNIEnv *env, I2CbaroListener &listener)
 {
-  assert(cls != NULL);
+  assert(cls != nullptr);
 
   return env->NewObject(cls, ctor, (jlong)&listener);
 }

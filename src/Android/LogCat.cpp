@@ -76,7 +76,7 @@ static void
 SaveCrash(int pid, const char *data, size_t length)
 {
   char name[64];
-  time_t t = time(NULL);
+  time_t t = time(nullptr);
   struct tm tm;
   strftime(name, sizeof(name),
            "crash/crash-%Y-%m-%d-%H-%M-%S", gmtime_r(&t, &tm));
@@ -209,7 +209,7 @@ CheckLogCat(IOThread &io_thread)
     w.Duplicate(1);
 
     execl("/system/bin/logcat", "logcat", "-v", "threadtime",
-          "-d", "-t", "1000", NULL);
+          "-d", "-t", "1000", nullptr);
     _exit(EXIT_FAILURE);
   }
 

@@ -58,13 +58,13 @@ PortBridge::PortBridge(JNIEnv *env, jobject obj)
 void
 PortBridge::setListener(JNIEnv *env, DataHandler *handler)
 {
-  jobject listener = handler != NULL
+  jobject listener = handler != nullptr
     ? NativeInputListener::Create(env, *handler)
-    : NULL;
+    : nullptr;
 
   env->CallVoidMethod(Get(), setListener_method, listener);
 
-  if (listener != NULL)
+  if (listener != nullptr)
     env->DeleteLocalRef(listener);
 }
 
@@ -74,7 +74,7 @@ PortBridge::write(JNIEnv *env, const void *data, size_t length)
   if (length > write_buffer_size)
     length = write_buffer_size;
 
-  jbyte *dest = env->GetByteArrayElements(write_buffer, NULL);
+  jbyte *dest = env->GetByteArrayElements(write_buffer, nullptr);
   memcpy(dest, data, length);
   env->ReleaseByteArrayElements(write_buffer, dest, 0);
 

@@ -34,7 +34,7 @@ bool
 IOIOHelper::Initialise(JNIEnv *env)
 {
   assert(!cls.IsDefined());
-  assert(env != NULL);
+  assert(env != nullptr);
 
   if (!cls.FindOptional(env, "org/xcsoar/IOIOHelper"))
     return false;
@@ -57,8 +57,8 @@ PortBridge *
 IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 {
   jobject obj = env->CallObjectMethod(Get(), openUart_method, ID, (int)baud);
-  if (obj == NULL)
-    return NULL;
+  if (obj == nullptr)
+    return nullptr;
 
   PortBridge *bridge = new PortBridge(env, obj);
   env->DeleteLocalRef(obj);
@@ -68,7 +68,7 @@ IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 IOIOHelper::IOIOHelper(JNIEnv *env)
 {
   jobject obj = env->NewObject(cls, ctor);
-  assert(obj != NULL);
+  assert(obj != nullptr);
 
   Set(env, obj);
 
