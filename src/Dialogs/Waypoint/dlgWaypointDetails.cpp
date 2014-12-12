@@ -195,59 +195,6 @@ OnGotoClicked()
   CommonInterface::main_window->FullRedraw();
 }
 
-#if 0
-// JMW disabled until 6.2 work, see #996
-static task_edit_result
-goto_and_clear_task(const Waypoint &wp)
-{
-  if (protected_task_manager == nullptr)
-    return INVALID;
-
-  protected_task_manager->DoGoto(wp);
-  TaskEvents task_events;
-  const OrderedTask blank(CommonInterface::GetComputerSettings().task);
-  protected_task_manager->task_commit(blank);
-
-  return SUCCESS;
-}
-
-static unsigned
-ordered_task_size()
-{
-  assert(protected_task_manager != nullptr);
-  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-  const OrderedTask &ot = task_manager->get_ordered_task();
-  if (ot.check_task())
-    return ot.TaskSize();
-
-  return 0;
-}
-
-static void
-OnGotoAndClearTaskClicked()
-{
-  if (protected_task_manager == nullptr)
-    return;
-
-  if ((ordered_task_size() > 2) && ShowMessageBox(_("Clear current task?"),
-                        _("Goto and clear task"), MB_YESNO | MB_ICONQUESTION) != IDYES)
-    return;
-
-  switch (goto_and_clear_task(*waypoint)) {
-  case SUCCESS:
-    protected_task_manager->TaskSaveDefault();
-    form->SetModalResult(mrOK);
-    break;
-  case NOTASK:
-  case UNMODIFIED:
-  case INVALID:
-    ShowMessageBox(_("Unknown error creating task."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  }
-}
-#endif
-
 static void
 OnImagePaint(gcc_unused WndOwnerDrawFrame *sender, Canvas &canvas)
 {
