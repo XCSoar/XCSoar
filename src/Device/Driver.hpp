@@ -154,7 +154,7 @@ public:
    * Declare a task.
    *
    * @param declaration the task declaration
-   * @param home the home waypoint, or NULL if not known/configured;
+   * @param home the home waypoint, or nullptr if not known/configured;
    * this is not part of the task declaration, but some drivers might
    * want to send it to the logger during the declaration process
    * @return true on success

@@ -31,11 +31,11 @@ Copyright_License {
 Port *
 OpenAndroidBluetoothPort(const TCHAR *address, DataHandler &handler)
 {
-  assert(address != NULL);
+  assert(address != nullptr);
 
   PortBridge *bridge = BluetoothHelper::connect(Java::GetEnv(), address);
-  if (bridge == NULL)
-    return NULL;
+  if (bridge == nullptr)
+    return nullptr;
 
   return new AndroidPort(handler, bridge);
 }
@@ -44,8 +44,8 @@ Port *
 OpenAndroidBluetoothServerPort(DataHandler &handler)
 {
   PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
-  if (bridge == NULL)
-    return NULL;
+  if (bridge == nullptr)
+    return nullptr;
 
   return new AndroidPort(handler, bridge);
 }

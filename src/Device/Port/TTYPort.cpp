@@ -90,7 +90,7 @@ const char *
 TTYPort::OpenPseudo()
 {
   if (!tty.OpenNonBlocking("/dev/ptmx") || !tty.Unlock())
-    return NULL;
+    return nullptr;
 
   valid.store(true, std::memory_order_relaxed);
   io_thread->LockAdd(tty.Get(), Poll::READ, *this);

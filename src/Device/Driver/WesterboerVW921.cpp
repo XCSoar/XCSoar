@@ -73,7 +73,7 @@ bool
 WesterboerVW921Device::DataReceived(const void *_data, size_t length,
                                     struct NMEAInfo &info)
 {
-  assert(_data != NULL);
+  assert(_data != nullptr);
   assert(length > 0);
 
   bool result = false;
@@ -102,7 +102,7 @@ WesterboerVW921Device::DataReceived(const void *_data, size_t length,
 
       // Search for the dollar sign (sync byte)
       char *dollar = (char *)memchr(range.data, '$', range.size);
-      if (dollar == NULL)
+      if (dollar == nullptr)
         // no dollar sign here: wait for more data
         break;
 

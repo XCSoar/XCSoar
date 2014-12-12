@@ -133,7 +133,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
 
   // Search for first separator
   char *p = strchr(record_info, '|');
-  if (p == NULL)
+  if (p == nullptr)
     return false;
 
   // Replace separator by \0
@@ -151,7 +151,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
 
     // Search for second separator
     p = strchr(record_info, '|');
-    if (p == NULL)
+    if (p == nullptr)
       return false;
 
     // Replace separator by \0
@@ -176,7 +176,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
 
   // Search for next separator
   p = strchr(record_info, '|');
-  if (p == NULL)
+  if (p == nullptr)
     return false;
 
   // Replace separator by \0
@@ -200,7 +200,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
 
   // Search for next separator
   p = strchr(record_info, '|');
-  if (p == NULL)
+  if (p == nullptr)
     return false;
 
   // Replace separator by \0

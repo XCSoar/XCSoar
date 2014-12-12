@@ -47,7 +47,7 @@ SanitiseLine(char *const begin, char *const end)
 void
 PortLineSplitter::DataReceived(const void *_data, size_t length)
 {
-  assert(_data != NULL);
+  assert(_data != nullptr);
   assert(length > 0);
 
   const char *data = (const char *)_data, *end = data + length;
@@ -74,7 +74,7 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
         break;
 
       char *newline = (char *)memchr(range.data, '\n', range.size);
-      if (newline == NULL)
+      if (newline == nullptr)
         /* no newline here: wait for more data */
         break;
 
@@ -93,7 +93,7 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
          one, to avoid conflicts with NUL terminated C strings due to
          binary garbage */
       const void *nul;
-      while ((nul = memchr(line, 0, end - line)) != NULL)
+      while ((nul = memchr(line, 0, end - line)) != nullptr)
         line = (const char *)nul + 1;
 
       LineReceived(line);

@@ -32,7 +32,7 @@ Copyright_License {
 bool
 PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
 {
-  assert(line != NULL);
+  assert(line != nullptr);
 
   /* reasonable hard-coded timeout; do we need to make this a
      parameter? */

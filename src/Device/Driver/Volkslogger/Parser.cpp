@@ -54,7 +54,7 @@ vl_PGCS1(NMEAInputLine &line, NMEAInfo &info)
   // ExtractParameter(String,ctemp,3);
   // four characters, hex, constant.  Value 1371 (dec)
 
-  // nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
+  // nSatellites = (int)(min(12,HexStrToDouble(ctemp, nullptr)));
 
   return false;
 }

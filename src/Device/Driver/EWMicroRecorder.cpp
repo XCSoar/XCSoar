@@ -121,7 +121,7 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
 
     if (user_size == 0) {
       const char *minus = (const char *)memchr(user_data, '-', nbytes);
-      if (minus == NULL)
+      if (minus == nullptr)
         continue;
 
       user_size = user_data + nbytes - minus;
@@ -130,7 +130,7 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
       user_size += nbytes;
 
     char *end = (char *)memchr(user_data, '\x13', user_size);
-    if (end != NULL) {
+    if (end != nullptr) {
       *end = 0;
       port.Write('\x16');
       return true;
@@ -284,7 +284,7 @@ DeclareInner(Port &port, const Declaration &declaration,
     return false;
 
   char *p = strstr(user_data, "USER DETAILS");
-  if (p != NULL)
+  if (p != nullptr)
     *p = 0;
 
   port.Write('\x18');         // start to upload file

@@ -135,7 +135,8 @@ namespace FLARM {
    */
   FrameHeader PrepareFrameHeader(unsigned sequence_number,
                                  MessageType message_type,
-                                 const void *data = NULL, size_t length = 0);
+                                 const void *data = nullptr,
+                                 size_t length = 0);
 
   /**
    * Sends the specified data stream to the FLARM using the escaping algorithm

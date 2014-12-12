@@ -83,7 +83,7 @@ K6BtPort::Write(const void *_data, size_t length)
   size_t total = 0;
 
   const uint8_t *p;
-  while ((p = (const uint8_t *)memchr(data, ESCAPE, length)) != NULL) {
+  while ((p = (const uint8_t *)memchr(data, ESCAPE, length)) != nullptr) {
     size_t chunk = p - data + 1;
     size_t nbytes = port->Write(data, chunk);
     total += nbytes;

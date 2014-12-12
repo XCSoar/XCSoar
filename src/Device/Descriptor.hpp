@@ -86,14 +86,14 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   AsyncJobRunner async;
 
   /**
-   * The #Job that currently opens the device.  NULL if the device is
+   * The #Job that currently opens the device.  nullptr if the device is
    * not currently being opened.
    */
   OpenDeviceJob *open_job;
 
   /**
    * The #Port used by this device.  This is not applicable to some
-   * devices, and is NULL in that case.
+   * devices, and is nullptr in that case.
    */
   DumpPort *port;
 
@@ -229,7 +229,7 @@ public:
    * Was there a failure on the #Port object?
    */
   bool HasPortFailed() const {
-    return config.IsAvailable() && config.UsesPort() && port == NULL;
+    return config.IsAvailable() && config.UsesPort() && port == nullptr;
   }
 
   /**
@@ -270,7 +270,7 @@ public:
   }
 
   /**
-   * Returns the Device object; may be NULL if the device is not open
+   * Returns the Device object; may be nullptr if the device is not open
    * or if the Device class is not applicable for this object.
    *
    * Should only be used by driver-specific code (such as the CAI 302
@@ -392,7 +392,8 @@ public:
   bool CanBorrow() const {
     assert(InMainThread());
 
-    return device != NULL && GetState() == PortState::READY && !IsOccupied();
+    return device != nullptr && GetState() == PortState::READY &&
+      !IsOccupied();
   }
 
   /**

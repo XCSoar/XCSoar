@@ -95,17 +95,17 @@ IMI::Receive(Port &port, OperationEnvironment &env,
     IMIBYTE buffer[64];
     size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
     if (bytesRead == 0)
-      return NULL;
+      return nullptr;
 
     // parse message
     const TMsg *msg = MessageParser::Parse(buffer, bytesRead);
-    if (msg != NULL) {
+    if (msg != nullptr) {
       // message received
       if (msg->msgID == MSG_ACK_NOTCONFIG) {
         Disconnect(port, env);
-        return NULL;
+        return nullptr;
       } else if (msg->msgID == MSG_CFG_KEEPCONFIG)
-        return NULL;
+        return nullptr;
       else
         return msg;
     }
@@ -136,7 +136,7 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static bool
@@ -193,7 +193,7 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
                              IMICOMM_BIGPARAM2(address),
                              size, 300, 2);
 
-  if (pMsg == NULL || size != pMsg->parameter3)
+  if (pMsg == nullptr || size != pMsg->parameter3)
     return false;
 
   return RLEDecompress((IMIBYTE*)buffer, pMsg->payload, pMsg->payloadSize, size);

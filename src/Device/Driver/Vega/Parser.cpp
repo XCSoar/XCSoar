@@ -201,7 +201,7 @@ static bool
 PDTSM(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   /*
-  int duration = (int)strtol(String, NULL, 10);
+  int duration = (int)strtol(String, nullptr, 10);
   */
   line.Skip();
 

@@ -133,7 +133,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   // 5 id, 6 digit hex
   char id_string[16];
   line.Read(id_string, 16);
-  traffic.id = FlarmId::Parse(id_string, NULL);
+  traffic.id = FlarmId::Parse(id_string, nullptr);
 
   Angle track;
   traffic.track_received = ReadBearing(line, track);
@@ -176,9 +176,9 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
     traffic.type = (FlarmTraffic::AircraftType)type;
 
   FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);
-  if (flarm_slot == NULL) {
+  if (flarm_slot == nullptr) {
     flarm_slot = flarm.AllocateTraffic();
-    if (flarm_slot == NULL)
+    if (flarm_slot == nullptr)
       // no more slots available
       return;
 

@@ -160,7 +160,7 @@ devVarioFindVega()
     if (i->IsVega())
       return i;
 
-  return NULL;
+  return nullptr;
 }
 
 void

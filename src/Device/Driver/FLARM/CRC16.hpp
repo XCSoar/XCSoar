@@ -40,7 +40,7 @@ namespace FLARM {
    * @return CRC value
    */
   gcc_pure
-  uint16_t CalculateCRC(const FrameHeader &header, const void *data = NULL,
+  uint16_t CalculateCRC(const FrameHeader &header, const void *data = nullptr,
                         size_t length = 0);
 };
 

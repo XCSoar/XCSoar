@@ -179,8 +179,8 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
    */
 
   if (declaration.Size() > 1) {
-    PutTurnPoint(_T("DeclTakeoff"), NULL, env);
-    PutTurnPoint(_T("DeclLanding"), NULL, env);
+    PutTurnPoint(_T("DeclTakeoff"), nullptr, env);
+    PutTurnPoint(_T("DeclLanding"), nullptr, env);
 
     PutTurnPoint(_T("DeclStart"), &declaration.GetFirstWaypoint(), env);
     PutTurnPoint(_T("DeclFinish"), &declaration.GetLastWaypoint(), env);
@@ -193,7 +193,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
         PutTurnPoint(TurnPointPropertyName, &declaration.GetWaypoint(index),
                      env);
       } else {
-        PutTurnPoint(TurnPointPropertyName, NULL, env);
+        PutTurnPoint(TurnPointPropertyName, nullptr, env);
       }
     }
   }
@@ -219,7 +219,7 @@ bool
 AltairProDevice::PropertySetGet(char *Buffer, size_t size,
                                 OperationEnvironment &env)
 {
-  assert(Buffer != NULL);
+  assert(Buffer != nullptr);
 
   port.Flush();
 
@@ -232,7 +232,7 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
   Buffer[6] = _T('A');
   char *comma = strchr(&Buffer[8], ',');
 
-  if (comma == NULL)
+  if (comma == nullptr)
     return false;
 
   comma[1] = '\0';
@@ -248,7 +248,7 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
       return false;
 
     char *asterisk = (char *)memchr(Buffer, '*', nbytes);
-    if (asterisk != NULL) {
+    if (asterisk != nullptr) {
       *asterisk = 0;
       return true;
     }
@@ -264,11 +264,11 @@ bool
 AltairProDevice::PropertySetGet(TCHAR *s, size_t size,
                                 OperationEnvironment &env)
 {
-  assert(s != NULL);
+  assert(s != nullptr);
 
   char buffer[_tcslen(s) * 4 + 1];
   if (::WideCharToMultiByte(CP_ACP, 0, s, -1, buffer, sizeof(buffer),
-                               NULL, NULL) <= 0)
+                               nullptr, nullptr) <= 0)
     return false;
 
   if (!PropertySetGet(buffer, _tcslen(s) * 4 + 1, env))
@@ -295,7 +295,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName,
   double tmp, MinLat, MinLon;
   char NoS, EoW;
 
-  if (waypoint != NULL){
+  if (waypoint != nullptr){
 
     CopyString(Name, waypoint->name.c_str(), ARRAY_SIZE(Name));
 

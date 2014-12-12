@@ -32,9 +32,9 @@ Copyright_License {
 void
 copy_padded(char *dest, size_t size, const char *src)
 {
-  assert(dest != NULL);
+  assert(dest != nullptr);
   assert(size > 0);
-  assert(src != NULL);
+  assert(src != nullptr);
 
   size_t src_length = strlen(src);
   if (src_length > size)
@@ -47,8 +47,8 @@ copy_padded(char *dest, size_t size, const char *src)
 static char *
 CopyUpper(char *dest, const char *src, const char *end)
 {
-  assert(dest != NULL);
-  assert(src != NULL);
+  assert(dest != nullptr);
+  assert(src != nullptr);
   assert(end >= src);
 
   while (src < end)
@@ -59,8 +59,8 @@ CopyUpper(char *dest, const char *src, const char *end)
 void
 CopyTerminatedUpper(char *dest, const char *src, size_t size)
 {
-  assert(dest != NULL);
-  assert(src != NULL);
+  assert(dest != nullptr);
+  assert(src != nullptr);
   assert(size > 0);
 
   const char *end = std::find(src, src + size, '\0');
@@ -71,9 +71,9 @@ CopyTerminatedUpper(char *dest, const char *src, size_t size)
 void
 CopyPaddedUpper(char *dest, size_t size, const char *src)
 {
-  assert(dest != NULL);
+  assert(dest != nullptr);
   assert(size > 0);
-  assert(src != NULL);
+  assert(src != nullptr);
 
   size_t src_length = strlen(src);
   if (src_length > size)

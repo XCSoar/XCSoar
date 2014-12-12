@@ -34,7 +34,7 @@ DeviceDispatcher::LineReceived(const char *line)
       continue;
 
     DeviceDescriptor *device = device_list[i];
-    if (device == NULL)
+    if (device == nullptr)
       continue;
 
     device->ForwardLine(line);

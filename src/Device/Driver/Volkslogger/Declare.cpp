@@ -46,7 +46,7 @@ CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 
   int dest_length = WideCharToMultiByte(CP_ACP, 0, src, src_length,
                                         dest, max_size - 1,
-                                        NULL, NULL);
+                                        nullptr, nullptr);
   if (dest_length < 0)
     dest_length = 0;
   dest[dest_length] = 0;
@@ -123,7 +123,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
                      sizeof(vl_declaration.flightinfo.glidertype),
                      declaration.aircraft_type);
 
-  if (home != NULL)
+  if (home != nullptr)
     CopyWaypoint(vl_declaration.flightinfo.homepoint, *home);
 
   // start..

@@ -144,7 +144,7 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
 
   // send declaration for current task
   return SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
-                 MSG_ACK_SUCCESS, 0, -1) != NULL;
+                 MSG_ACK_SUCCESS, 0, -1) != nullptr;
 }
 
 bool
@@ -161,9 +161,9 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 
   for (;; count++) {
     const TMsg *pMsg = SendRet(port, env,
-                               MSG_FLIGHT_INFO, NULL, 0, MSG_FLIGHT_INFO,
+                               MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
                                -1, totalCount, address, addressStop, 200, 6);
-    if (pMsg == NULL)
+    if (pMsg == nullptr)
       break;
 
     totalCount = pMsg->parameter1;
@@ -202,12 +202,12 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
     return false;
 
   FILE *fileIGC = _tfopen(path, _T("w+b"));
-  if (fileIGC == NULL)
+  if (fileIGC == nullptr)
     return false;
 
   unsigned fixesCount = COMM_MAX_PAYLOAD_SIZE / sizeof(Fix);
   Fix *fixBuffer = (Fix*)malloc(sizeof(Fix) * fixesCount);
-  if (fixBuffer == NULL)
+  if (fixBuffer == nullptr)
     return false;
 
   bool ok = true;

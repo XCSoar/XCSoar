@@ -50,7 +50,7 @@ IMI::WriteString(const char *buffer, size_t max_length, FILE *file)
 {
   size_t length = max_length;
   const char *zero = (const char *)memchr(buffer, '\0', max_length);
-  if (zero != NULL)
+  if (zero != nullptr)
     length = zero - buffer;
 
   fwrite(buffer, sizeof(char), length, file);

@@ -43,7 +43,7 @@ void
 IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
 {
 #ifdef _UNICODE
-  WideCharToMultiByte(CP_ACP, 0, unicode, -1, ascii, outSize, "?", NULL);
+  WideCharToMultiByte(CP_ACP, 0, unicode, -1, ascii, outSize, "?", nullptr);
 #else
   strncpy(ascii, unicode, outSize - 1);
   ascii[outSize - 1] = 0;

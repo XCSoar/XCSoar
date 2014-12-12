@@ -34,8 +34,8 @@ bool
 FlarmDevice::SendSetting(const char *name, const char *value,
                          OperationEnvironment &env)
 {
-  assert(name != NULL);
-  assert(value != NULL);
+  assert(name != nullptr);
+  assert(value != nullptr);
 
   /* erase the old value from the settings map, because we expect to
      receive the new one now */

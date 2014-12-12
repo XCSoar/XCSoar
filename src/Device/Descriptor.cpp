@@ -98,11 +98,11 @@ public:
 
 DeviceDescriptor::DeviceDescriptor(unsigned _index)
   :index(_index),
-   open_job(NULL),
-   port(NULL), monitor(NULL), dispatcher(NULL),
-   driver(NULL), device(NULL),
+   open_job(nullptr),
+   port(nullptr), monitor(nullptr), dispatcher(nullptr),
+   driver(nullptr), device(nullptr),
 #if defined(ANDROID) || defined(__APPLE__)
-   internal_sensors(NULL),
+   internal_sensors(nullptr),
 #endif
 #ifdef ANDROID
    droidsoar_v2(nullptr),
@@ -129,9 +129,9 @@ DeviceDescriptor::SetConfig(const DeviceConfig &_config)
 
   if (config.UsesDriver()) {
     driver = FindDriverByName(config.driver_name);
-    assert(driver != NULL);
+    assert(driver != nullptr);
   } else
-    driver = NULL;
+    driver = nullptr;
 }
 
 void
@@ -194,7 +194,7 @@ DeviceDescriptor::EnableDumpTemporarily(unsigned duration_ms)
 bool
 DeviceDescriptor::ShouldReopenDriverOnTimeout() const
 {
-  return driver == NULL || driver->HasTimeout();
+  return driver == nullptr || driver->HasTimeout();
 }
 
 void
@@ -205,22 +205,22 @@ DeviceDescriptor::CancelAsync()
   if (!async.IsBusy())
     return;
 
-  assert(open_job != NULL);
+  assert(open_job != nullptr);
 
   async.Cancel();
   async.Wait();
 
   delete open_job;
-  open_job = NULL;
+  open_job = nullptr;
 }
 
 bool
 DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 {
-  assert(_port != NULL);
-  assert(port == NULL);
-  assert(device == NULL);
-  assert(driver != NULL);
+  assert(_port != nullptr);
+  assert(port == nullptr);
+  assert(device == nullptr);
+  assert(driver != nullptr);
   assert(!ticker);
   assert(!IsBorrowed());
 
@@ -296,8 +296,8 @@ DeviceDescriptor::OpenDroidSoarV2()
   if (ioio_helper == nullptr)
     return false;
 
-  if (i2cbaro[0] == NULL) {
-    i2cbaro[0] = new I2CbaroDevice(GetIndex(), Java::GetEnv(), 
+  if (i2cbaro[0] == nullptr) {
+    i2cbaro[0] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                        ioio_helper->GetHolder(),
                        DeviceConfig::PressureUse::STATIC_WITH_VARIO,
                        config.sensor_offset,
@@ -330,7 +330,7 @@ DeviceDescriptor::OpenI2Cbaro()
     return false;
 
   for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
-    if (i2cbaro[i] == NULL) {
+    if (i2cbaro[i] == nullptr) {
       i2cbaro[i] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                        ioio_helper->GetHolder(),
                        // needs calibration ?
@@ -410,7 +410,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
   reopen_clock.Update();
 
   Port *port = OpenPort(config, *this);
-  if (port == NULL) {
+  if (port == nullptr) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);
 
@@ -439,8 +439,8 @@ void
 DeviceDescriptor::Open(OperationEnvironment &env)
 {
   assert(InMainThread());
-  assert(port == NULL);
-  assert(device == NULL);
+  assert(port == nullptr);
+  assert(device == nullptr);
   assert(!ticker);
   assert(!IsBorrowed());
 
@@ -450,7 +450,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   CancelAsync();
 
   assert(!IsOccupied());
-  assert(open_job == NULL);
+  assert(open_job == nullptr);
 
   TCHAR buffer[64];
   LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
@@ -502,7 +502,7 @@ DeviceDescriptor::Close()
   delete old_device;
 
   Port *old_port = port;
-  port = NULL;
+  port = nullptr;
   delete old_port;
 
   ticker = false;
@@ -569,12 +569,12 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 bool
 DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
 {
-  if (device == NULL)
+  if (device == nullptr)
     return true;
 
   bool success = device->EnableNMEA(env);
 
-  if (port != NULL)
+  if (port != nullptr)
     /* re-enable the NMEA handler if it has been disabled by the
        driver */
     port->StartRxThread();
@@ -585,13 +585,15 @@ DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
 const TCHAR *
 DeviceDescriptor::GetDisplayName() const
 {
-  return driver != NULL ? driver->display_name : NULL;
+  return driver != nullptr
+    ? driver->display_name
+    : nullptr;
 }
 
 bool
 DeviceDescriptor::IsDriver(const TCHAR *name) const
 {
-  return driver != NULL
+  return driver != nullptr
     ? _tcscmp(driver->name, name) == 0
     : false;
 }
@@ -599,7 +601,7 @@ DeviceDescriptor::IsDriver(const TCHAR *name) const
 bool
 DeviceDescriptor::CanDeclare() const
 {
-  return driver != NULL &&
+  return driver != nullptr &&
     (driver->CanDeclare() ||
      device_blackboard->IsFLARM(index));
 }
@@ -607,23 +609,23 @@ DeviceDescriptor::CanDeclare() const
 bool
 DeviceDescriptor::IsLogger() const
 {
-  return driver != NULL && driver->IsLogger();
+  return driver != nullptr && driver->IsLogger();
 }
 
 bool
 DeviceDescriptor::IsNMEAOut() const
 {
-  return driver != NULL && driver->IsNMEAOut();
+  return driver != nullptr && driver->IsNMEAOut();
 }
 
 bool
 DeviceDescriptor::IsManageable() const
 {
-  if (driver != NULL) {
+  if (driver != nullptr) {
     if (driver->IsManageable())
       return true;
 
-    if (_tcscmp(driver->name, _T("LX")) == 0 && device != NULL) {
+    if (_tcscmp(driver->name, _T("LX")) == 0 && device != nullptr) {
       const LXDevice &lx = *(const LXDevice *)device;
       return lx.IsV7() || lx.IsNano() || lx.IsLX16xx();
     }
@@ -670,13 +672,13 @@ DeviceDescriptor::IsAlive() const
 bool
 DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
 {
-  assert(line != NULL);
+  assert(line != nullptr);
 
   /* restore the driver's ExternalSettings */
   const ExternalSettings old_settings = info.settings;
   info.settings = settings_received;
 
-  if (device != NULL && device->ParseNMEA(line, info)) {
+  if (device != nullptr && device->ParseNMEA(line, info)) {
     info.alive.Update(info.clock);
 
     if (!config.sync_from_device)
@@ -710,7 +712,7 @@ DeviceDescriptor::ForwardLine(const char *line)
   /* XXX make this method thread-safe; this method can be called from
      any thread, and if the Port gets closed, bad things happen */
 
-  if (IsNMEAOut() && port != NULL) {
+  if (IsNMEAOut() && port != nullptr) {
     Port *p = port;
     p->Write(line);
     p->Write("\r\n");
@@ -720,23 +722,23 @@ DeviceDescriptor::ForwardLine(const char *line)
 bool
 DeviceDescriptor::WriteNMEA(const char *line, OperationEnvironment &env)
 {
-  assert(line != NULL);
+  assert(line != nullptr);
 
-  return port != NULL && PortWriteNMEA(*port, line, env);
+  return port != nullptr && PortWriteNMEA(*port, line, env);
 }
 
 #ifdef _UNICODE
 bool
 DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
 {
-  assert(line != NULL);
+  assert(line != nullptr);
 
-  if (port == NULL)
+  if (port == nullptr)
     return false;
 
   char buffer[_tcslen(line) * 4 + 1];
   if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
-                            NULL, NULL) <= 0)
+                            nullptr, nullptr) <= 0)
     return false;
 
   return WriteNMEA(buffer, env);
@@ -748,7 +750,7 @@ DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 {
   assert(InMainThread());
 
-  if (device == NULL || settings_sent.CompareMacCready(value) ||
+  if (device == nullptr || settings_sent.CompareMacCready(value) ||
       !config.sync_to_device)
     return true;
 
@@ -773,7 +775,7 @@ DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
 {
   assert(InMainThread());
 
-  if (device == NULL || settings_sent.CompareBugs(value) ||
+  if (device == nullptr || settings_sent.CompareBugs(value) ||
       !config.sync_to_device)
     return true;
 
@@ -799,7 +801,7 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
 {
   assert(InMainThread());
 
-  if (device == NULL || !config.sync_to_device ||
+  if (device == nullptr || !config.sync_to_device ||
       (settings_sent.CompareBallastFraction(fraction) &&
        settings_sent.CompareBallastOverload(overload)))
     return true;
@@ -827,7 +829,7 @@ DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   assert(InMainThread());
 
-  if (device == NULL || !config.sync_to_device)
+  if (device == nullptr || !config.sync_to_device)
     return true;
 
   if (!Borrow())
@@ -845,7 +847,7 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
 {
   assert(InMainThread());
 
-  if (device == NULL || !config.sync_to_device)
+  if (device == nullptr || !config.sync_to_device)
     return true;
 
   if (!Borrow())
@@ -863,7 +865,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
 {
   assert(InMainThread());
 
-  if (device == NULL || !config.sync_to_device)
+  if (device == nullptr || !config.sync_to_device)
     return true;
 
   if (!Borrow())
@@ -880,7 +882,7 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
 {
   assert(InMainThread());
 
-  if (device == NULL || settings_sent.CompareQNH(value) ||
+  if (device == nullptr || settings_sent.CompareQNH(value) ||
       !config.sync_to_device)
     return true;
 
@@ -914,7 +916,7 @@ DeclareToFLARM(const struct Declaration &declaration,
                OperationEnvironment &env)
 {
   /* enable pass-through mode in the "front" device */
-  if (driver.HasPassThrough() && device != NULL &&
+  if (driver.HasPassThrough() && device != nullptr &&
       !device->EnablePassThrough(env))
     return false;
 
@@ -931,7 +933,7 @@ DoDeclare(const struct Declaration &declaration,
   text.Format(_T("%s: %s."), _("Sending declaration"), driver.display_name);
   env.SetText(text);
 
-  bool result = device != NULL && device->Declare(declaration, home, env);
+  bool result = device != nullptr && device->Declare(declaration, home, env);
 
   if (flarm) {
     text.Format(_T("%s: FLARM."), _("Sending declaration"));
@@ -949,9 +951,9 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
                           OperationEnvironment &env)
 {
   assert(borrowed);
-  assert(port != NULL);
-  assert(driver != NULL);
-  assert(device != NULL);
+  assert(port != nullptr);
+  assert(driver != nullptr);
+  assert(device != nullptr);
 
   /* enable the "muxed FLARM" hack? */
   const bool flarm = device_blackboard->IsFLARM(index) &&
@@ -966,9 +968,9 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                                  OperationEnvironment &env)
 {
   assert(borrowed);
-  assert(port != NULL);
-  assert(driver != NULL);
-  assert(device != NULL);
+  assert(port != nullptr);
+  assert(driver != nullptr);
+  assert(device != nullptr);
 
   StaticString<60> text;
   text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
@@ -983,11 +985,11 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                                  OperationEnvironment &env)
 {
   assert(borrowed);
-  assert(port != NULL);
-  assert(driver != NULL);
-  assert(device != NULL);
+  assert(port != nullptr);
+  assert(driver != nullptr);
+  assert(device != nullptr);
 
-  if (port == NULL || driver == NULL || device == NULL)
+  if (port == nullptr || driver == nullptr || device == nullptr)
     return false;
 
   StaticString<60> text;
@@ -1002,10 +1004,10 @@ DeviceDescriptor::OnSysTicker()
 {
   assert(InMainThread());
 
-  if (port != NULL && port->GetState() == PortState::FAILED && !IsOccupied())
+  if (port != nullptr && port->GetState() == PortState::FAILED && !IsOccupied())
     Close();
 
-  if (device == NULL)
+  if (device == nullptr)
     return;
 
   const bool now_alive = IsAlive();
@@ -1064,22 +1066,22 @@ DeviceDescriptor::OnNotification()
   /* notification from AsyncJobRunner, the Job was finished */
 
   assert(InMainThread());
-  assert(open_job != NULL);
+  assert(open_job != nullptr);
 
   async.Wait();
 
   delete open_job;
-  open_job = NULL;
+  open_job = nullptr;
 }
 
 void
 DeviceDescriptor::DataReceived(const void *data, size_t length)
 {
-  if (monitor != NULL)
+  if (monitor != nullptr)
     monitor->DataReceived(data, length);
 
   // Pass data directly to drivers that use binary data protocols
-  if (driver != NULL && device != NULL && driver->UsesRawData()) {
+  if (driver != nullptr && device != nullptr && driver->UsesRawData()) {
     ScopeLock protect(device_blackboard->mutex);
     NMEAInfo &basic = device_blackboard->SetRealState(index);
     basic.UpdateClock();
@@ -1105,7 +1107,7 @@ DeviceDescriptor::LineReceived(const char *line)
 {
   NMEALogger::Log(line);
 
-  if (dispatcher != NULL)
+  if (dispatcher != nullptr)
     dispatcher->LineReceived(line);
 
   if (ParseLine(line))

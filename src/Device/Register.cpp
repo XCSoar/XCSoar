@@ -60,7 +60,7 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-/** NULL terminated array of available device drivers. */
+/** nullptr terminated array of available device drivers. */
 static const struct DeviceRegister *const driver_list[] = {
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   &generic_driver, // MUST BE FIRST
@@ -95,7 +95,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &cai_lnav_driver,
   &open_vario_driver,
   &vaulter_driver,
-  NULL
+  nullptr
 };
 
 const struct DeviceRegister *
@@ -109,7 +109,7 @@ GetDriverByIndex(unsigned i)
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name)
 {
-  for (auto i = driver_list; *i != NULL; ++i) {
+  for (auto i = driver_list; *i != nullptr; ++i) {
     const DeviceRegister &driver = **i;
     if (_tcscmp(driver.name, name) == 0)
       return &driver;
@@ -121,9 +121,9 @@ FindDriverByName(const TCHAR *name)
 const TCHAR *
 FindDriverDisplayName(const TCHAR *name)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
 
-  for (auto i = driver_list; *i != NULL; ++i) {
+  for (auto i = driver_list; *i != nullptr; ++i) {
     const DeviceRegister &driver = **i;
     if (_tcscmp(driver.name, name) == 0)
       return driver.display_name;

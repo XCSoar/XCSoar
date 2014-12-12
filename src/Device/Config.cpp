@@ -133,7 +133,7 @@ DeviceConfig::MaybeBluetooth(PortType port_type, const TCHAR *path)
     return true;
 
 #ifdef HAVE_POSIX
-  if (port_type == PortType::SERIAL && _tcsstr(path, _T("/rfcomm")) != NULL)
+  if (port_type == PortType::SERIAL && _tcsstr(path, _T("/rfcomm")) != nullptr)
     return true;
 #endif
 

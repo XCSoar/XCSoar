@@ -63,7 +63,7 @@ public:
    * Opens this object with a new pseudo-terminal.  This is only used
    * for debugging.
    *
-   * @return the path of the slave pseudo-terminal, NULL on error
+   * @return the path of the slave pseudo-terminal, nullptr on error
    */
   const char *OpenPseudo();
 

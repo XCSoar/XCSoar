@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdio.h>
 
 DumpPort::DumpPort(Port *_port)
-  :Port(*(DataHandler *)NULL), port(_port),
+  :Port(*(DataHandler *)nullptr), port(_port),
    until_ms(-1) {}
 
 DumpPort::~DumpPort()

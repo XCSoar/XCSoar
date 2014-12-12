@@ -45,7 +45,7 @@ convert_string(char *dest, size_t size, const TCHAR *src)
     length = size - 1;
 
   int length2 = ::WideCharToMultiByte(CP_ACP, 0, src, length, dest, size,
-                                      NULL, NULL);
+                                      nullptr, nullptr);
   if (length2 < 0)
     length2 = 0;
   dest[length2] = '\0';

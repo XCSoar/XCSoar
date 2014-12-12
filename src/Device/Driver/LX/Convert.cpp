@@ -57,7 +57,7 @@ struct Context {
 static bool
 ValidString(const char *p, size_t size)
 {
-  return memchr(p, 0, size) != NULL;
+  return memchr(p, 0, size) != nullptr;
 }
 
 static void

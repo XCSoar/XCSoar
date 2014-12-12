@@ -96,16 +96,16 @@ WrapPort(const DeviceConfig &config, DataHandler &handler, Port *port)
 static Port *
 OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 {
-  const TCHAR *path = NULL;
+  const TCHAR *path = nullptr;
   TCHAR buffer[MAX_PATH];
 
   switch (config.port_type) {
   case DeviceConfig::PortType::DISABLED:
-    return NULL;
+    return nullptr;
 
   case DeviceConfig::PortType::SERIAL:
     if (config.path.empty())
-      return NULL;
+      return nullptr;
 
     path = config.path.c_str();
     break;
@@ -114,13 +114,13 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 #ifdef ANDROID
     if (config.bluetooth_mac.empty()) {
       LogFormat("No Bluetooth MAC configured");
-      return NULL;
+      return nullptr;
     }
 
     return OpenAndroidBluetoothPort(config.bluetooth_mac, handler);
 #else
     LogFormat("Bluetooth not available on this platform");
-    return NULL;
+    return nullptr;
 #endif
 
   case DeviceConfig::PortType::RFCOMM_SERVER:
@@ -128,27 +128,27 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     return OpenAndroidBluetoothServerPort(handler);
 #else
     LogFormat("Bluetooth not available on this platform");
-    return NULL;
+    return nullptr;
 #endif
 
   case DeviceConfig::PortType::IOIOUART:
 #if defined(ANDROID)
     if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
       LogFormat("No IOIOUart configured in profile");
-      return NULL;
+      return nullptr;
     }
 
     return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
                                    handler);
 #else
     LogFormat("IOIO Uart not available on this platform or version");
-    return NULL;
+    return nullptr;
 #endif
 
   case DeviceConfig::PortType::AUTO:
     if (!DetectGPS(buffer, sizeof(buffer))) {
       LogFormat("no GPS detected");
-      return NULL;
+      return nullptr;
     }
 
     LogFormat(_T("GPS detected: %s"), buffer);
@@ -185,7 +185,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     TCPPort *port = new TCPPort(handler);
     if (!port->Open(config.tcp_port)) {
       delete port;
-      return NULL;
+      return nullptr;
     }
 
     return port;
@@ -195,7 +195,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     SocketPort *port = new SocketPort(handler);
     if (!port->OpenUDPListener(config.tcp_port)) {
       delete port;
-      return NULL;
+      return nullptr;
     }
 
     return port;
@@ -204,32 +204,32 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   case DeviceConfig::PortType::PTY: {
 #if defined(HAVE_POSIX) && !defined(ANDROID)
     if (config.path.empty())
-      return NULL;
+      return nullptr;
 
     if (unlink(config.path.c_str()) < 0 && errno != ENOENT)
-      return NULL;
+      return nullptr;
 
     TTYPort *port = new TTYPort(handler);
     const char *slave_path = port->OpenPseudo();
-    if (slave_path == NULL) {
+    if (slave_path == nullptr) {
       delete port;
-      return NULL;
+      return nullptr;
     }
 
     if (symlink(slave_path, config.path.c_str()) < 0) {
       delete port;
-      return NULL;
+      return nullptr;
     }
 
     return port;
 #else
-    return NULL;
+    return nullptr;
 #endif
   }
   }
 
-  if (path == NULL)
-    return NULL;
+  if (path == nullptr)
+    return nullptr;
 
 #ifdef HAVE_POSIX
   TTYPort *port = new TTYPort(handler);
@@ -238,7 +238,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 #endif
   if (!port->Open(path, config.baud_rate)) {
     delete port;
-    return NULL;
+    return nullptr;
   }
 
   return port;
@@ -248,7 +248,7 @@ Port *
 OpenPort(const DeviceConfig &config, DataHandler &handler)
 {
   Port *port = OpenPortInternal(config, handler);
-  if (port != NULL)
+  if (port != nullptr)
     port = WrapPort(config, handler, port);
   return port;
 }

@@ -73,7 +73,7 @@ FlarmDevice::TextMode(OperationEnvironment &env)
 bool
 FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
 {
-  assert(sentence != NULL);
+  assert(sentence != nullptr);
 
   /* workaround for a Garrecht TRX-1090 firmware bug: start with a new
      line, because the TRX-1090 expects the '$' to be the first
@@ -92,7 +92,7 @@ bool
 FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
                      OperationEnvironment &env, unsigned timeout_ms)
 {
-  assert(prefix != NULL);
+  assert(prefix != nullptr);
 
   TimeoutClock timeout(timeout_ms);
 
@@ -106,7 +106,7 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
       return false;
 
     char *q = (char *)memchr(p, '*', nbytes);
-    if (q != NULL) {
+    if (q != nullptr) {
       /* stop at checksum */
       *q = 0;
       return true;

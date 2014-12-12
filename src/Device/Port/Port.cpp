@@ -211,7 +211,7 @@ bool
 Port::ExpectString(const char *token, OperationEnvironment &env,
                    unsigned timeout_ms)
 {
-  assert(token != NULL);
+  assert(token != nullptr);
 
   const char *const token_end = token + strlen(token);
 

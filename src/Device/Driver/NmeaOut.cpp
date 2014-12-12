@@ -28,6 +28,6 @@ const struct DeviceRegister nmea_out_driver = {
   _T("NmeaOut"),
   _T("NMEA output"),
   DeviceRegister::NMEA_OUT|DeviceRegister::NO_TIMEOUT,
-  NULL,
+  nullptr,
 };
 

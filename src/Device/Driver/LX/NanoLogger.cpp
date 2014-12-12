@@ -345,7 +345,7 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
   port.StopRxThread();
 
   FILE *file = _tfopen(path, _T("wb"));
-  if (file == NULL)
+  if (file == nullptr)
     return false;
 
   bool success = DownloadFlightInner(port, flight.internal.lx.nano_filename,

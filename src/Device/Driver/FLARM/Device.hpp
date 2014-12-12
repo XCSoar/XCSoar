@@ -193,7 +193,7 @@ private:
    * @return An initialized FrameHeader instance
    */
   FLARM::FrameHeader PrepareFrameHeader(FLARM::MessageType message_type,
-                                        const void *data = NULL,
+                                        const void *data = nullptr,
                                         size_t length = 0);
 
   /**

@@ -235,7 +235,7 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   FILE *file = _tfopen(path, _T("wb"));
-  if (file == NULL)
+  if (file == nullptr)
     return false;
 
   assert(!busy);
