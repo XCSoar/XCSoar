@@ -524,8 +524,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
     columns[6].value = remainder / 1000u;    remainder %= 1000u;
     columns[7].value = remainder / 100u;     remainder %= 100u;
     columns[8].value = remainder / 10u;
-    if (remainder % 10u >= 5)
-      columns[8].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
 
@@ -544,8 +543,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
     columns[7].value = remainder / 1000u;   remainder %= 1000u;
     columns[8].value = remainder / 100u;    remainder %= 100u;
     columns[9].value = remainder / 10u;
-    if (remainder % 10u >= 5)
-      columns[9].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
 
@@ -566,8 +564,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
     columns[7].value = remainder / 1000;  remainder %= 1000;
     columns[8].value = remainder / 100;   remainder %= 100;
     columns[10].value = remainder / 10;   remainder %= 10;
-    if (remainder >= 5)
-      columns[10].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
 
@@ -587,8 +584,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
     unsigned remainder = full_hunseconds % 6000u;
     columns[7].value = remainder / 1000;  remainder %= 1000;
     columns[8].value = remainder / 100;   remainder %= 100;
-    if (remainder >= 50)
-      columns[8].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
   }
@@ -634,8 +630,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
     columns[6].value = remainder / 1000u;    remainder %= 1000u;
     columns[7].value = remainder / 100u;     remainder %= 100u;
     columns[8].value = remainder / 10u;
-    if ((remainder % 10u) >= 5)
-      columns[8].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
 
@@ -654,8 +649,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
    columns[7].value = remainder / 1000u;   remainder %= 1000u;
    columns[8].value = remainder / 100u;    remainder %= 100u;
    columns[9].value = remainder / 10u;
-   if ((remainder % 10u) >= 5)
-     columns[9].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
    break;
  }
 
@@ -676,8 +670,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
     columns[7].value = remainder / 1000;  remainder %= 1000;
     columns[8].value = remainder / 100;   remainder %= 100;
     columns[10].value = remainder / 10;   remainder %= 10;
-    if (remainder >= 5)
-      columns[10].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
 
@@ -697,8 +690,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
     unsigned remainder = full_hunseconds % 6000u;
     columns[7].value = remainder / 1000;  remainder %= 1000;
     columns[8].value = remainder / 100;   remainder %= 100;
-    if (remainder >= 50)
-      columns[8].value++;
+    ///\ todo We need to round, but previous method could give digit of 11
     break;
   }
   }
