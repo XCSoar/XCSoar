@@ -28,9 +28,9 @@
 void
 TaskProjection::Reset(const GeoPoint &ref)
 {
+  FlatProjection::SetInvalid();
   location_min = ref;
   location_max = ref;
-  SetCenterFast(ref);
 }
 
 void

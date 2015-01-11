@@ -79,12 +79,6 @@ public:
     center = GeoPoint::Invalid();
   }
 
-protected:
-  void SetCenterFast(const GeoPoint &_center) {
-    center = _center;
-  }
-
-public:
   /**
    * Sets the new projection center and initialises the projection.
    *
