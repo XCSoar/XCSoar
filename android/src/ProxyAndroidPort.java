@@ -38,7 +38,7 @@ abstract class ProxyAndroidPort implements AndroidPort {
       oldPort.close();
 
     if (port != null)
-      port.setListener(inputListener);
+      port.setInputListener(inputListener);
   }
 
   @Override public String toString() {
@@ -48,12 +48,12 @@ abstract class ProxyAndroidPort implements AndroidPort {
       : super.toString();
   }
 
-  @Override public void setListener(InputListener _listener) {
+  @Override public void setInputListener(InputListener _listener) {
     inputListener = _listener;
 
     AndroidPort port = this.port;
     if (port != null)
-      port.setListener(_listener);
+      port.setInputListener(_listener);
   }
 
   @Override public void close() {

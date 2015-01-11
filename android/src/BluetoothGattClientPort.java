@@ -236,7 +236,7 @@ public class BluetoothGattClientPort
   }
 
   @Override
-  public void setListener(InputListener _listener) {
+  public void setInputListener(InputListener _listener) {
     listener = _listener;
   }
 

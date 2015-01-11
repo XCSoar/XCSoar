@@ -31,7 +31,7 @@ interface AndroidPort {
   int STATE_FAILED = 1;
   int STATE_LIMBO = 2;
 
-  void setListener(InputListener listener);
+  void setInputListener(InputListener listener);
 
   void close();
 

@@ -80,10 +80,10 @@ class MultiPort implements AndroidPort, InputListener {
     checkValid();
 
     ports.add(port);
-    port.setListener(this);
+    port.setInputListener(this);
   }
 
-  @Override public void setListener(InputListener _listener) {
+  @Override public void setInputListener(InputListener _listener) {
     inputListener = _listener;
   }
 

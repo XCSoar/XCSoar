@@ -31,7 +31,7 @@ AndroidPort::AndroidPort(DataHandler &_handler, PortBridge *_bridge)
 {
   assert(bridge != nullptr);
 
-  bridge->setListener(Java::GetEnv(), this);
+  bridge->setInputListener(Java::GetEnv(), this);
 }
 
 AndroidPort::~AndroidPort()
