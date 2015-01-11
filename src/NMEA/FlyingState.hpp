@@ -113,7 +113,7 @@ struct FlyingState
    * without being towed.
    */
   bool IsGliding() const {
-    return flying && !IsTowing();
+    return flying && !powered && !IsTowing();
   }
 };
 
