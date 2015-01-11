@@ -24,10 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 
-#include "Port.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
+
+class Port;
+class DataHandler;
 
 gcc_malloc
 Port *
