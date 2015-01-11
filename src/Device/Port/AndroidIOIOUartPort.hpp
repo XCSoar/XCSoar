@@ -29,6 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 class Port;
+class PortListener;
 class DataHandler;
 
 namespace AndroidIOIOUartPort
@@ -54,6 +55,6 @@ namespace AndroidIOIOUartPort
 gcc_malloc
 Port *
 OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
-                        DataHandler &handler);
+                        PortListener *listener, DataHandler &handler);
 
 #endif

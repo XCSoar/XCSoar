@@ -66,7 +66,7 @@ class BufferedPort : public Port, protected DataHandler {
   bool closing;
 
 public:
-  BufferedPort(DataHandler &_handler);
+  BufferedPort(PortListener *_listener, DataHandler &_handler);
 
 #ifndef NDEBUG
   virtual ~BufferedPort();

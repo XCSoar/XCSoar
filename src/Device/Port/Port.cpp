@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Port.hpp"
+#include "Listener.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 
@@ -29,8 +30,8 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-Port::Port(DataHandler &_handler)
-  :handler(_handler) {}
+Port::Port(PortListener *_listener, DataHandler &_handler)
+  :listener(_listener), handler(_handler) {}
 
 Port::~Port() {}
 
@@ -265,4 +266,7 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
 void
 Port::StateChanged()
 {
+  PortListener *l = listener;
+  if (l != nullptr)
+    l->PortStateChanged();
 }

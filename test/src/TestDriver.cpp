@@ -1425,7 +1425,7 @@ TestVaulter()
 static void
 TestDeclare(const struct DeviceRegister &driver)
 {
-  FaultInjectionPort port(*(DataHandler *)NULL);
+  FaultInjectionPort port(nullptr, *(DataHandler *)nullptr);
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 
@@ -1467,7 +1467,7 @@ TestDeclare(const struct DeviceRegister &driver)
 static void
 TestFlightList(const struct DeviceRegister &driver)
 {
-  FaultInjectionPort port(*(DataHandler *)NULL);
+  FaultInjectionPort port(nullptr, *(DataHandler *)nullptr);
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 

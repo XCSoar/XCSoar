@@ -80,10 +80,11 @@ DetectGPS(TCHAR *path, size_t path_max_size)
 }
 
 static Port *
-WrapPort(const DeviceConfig &config, DataHandler &handler, Port *port)
+WrapPort(const DeviceConfig &config, PortListener *listener,
+         DataHandler &handler, Port *port)
 {
   if (config.k6bt && config.MaybeBluetooth())
-    port = new K6BtPort(port, config.baud_rate, handler);
+    port = new K6BtPort(port, config.baud_rate, listener, handler);
 
 #ifndef NDEBUG
   if (config.dump_port)
@@ -94,7 +95,8 @@ WrapPort(const DeviceConfig &config, DataHandler &handler, Port *port)
 }
 
 static Port *
-OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
+OpenPortInternal(const DeviceConfig &config, PortListener *listener,
+                 DataHandler &handler)
 {
   const TCHAR *path = nullptr;
   TCHAR buffer[MAX_PATH];
@@ -117,7 +119,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
       return nullptr;
     }
 
-    return OpenAndroidBluetoothPort(config.bluetooth_mac, handler);
+    return OpenAndroidBluetoothPort(config.bluetooth_mac, listener, handler);
 #else
     LogFormat("Bluetooth not available on this platform");
     return nullptr;
@@ -125,7 +127,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 
   case DeviceConfig::PortType::RFCOMM_SERVER:
 #ifdef ANDROID
-    return OpenAndroidBluetoothServerPort(handler);
+    return OpenAndroidBluetoothServerPort(listener, handler);
 #else
     LogFormat("Bluetooth not available on this platform");
     return nullptr;
@@ -139,7 +141,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     }
 
     return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
-                                   handler);
+                                   listener, handler);
 #else
     LogFormat("IOIO Uart not available on this platform or version");
     return nullptr;
@@ -171,7 +173,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     if (!ip_address.IsValid())
       return nullptr;
 
-    auto port = new TCPClientPort(handler);
+    auto port = new TCPClientPort(listener, handler);
     if (!port->Connect(ip_address, config.tcp_port)) {
       delete port;
       return nullptr;
@@ -182,7 +184,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   }
 
   case DeviceConfig::PortType::TCP_LISTENER: {
-    TCPPort *port = new TCPPort(handler);
+    TCPPort *port = new TCPPort(listener, handler);
     if (!port->Open(config.tcp_port)) {
       delete port;
       return nullptr;
@@ -192,7 +194,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   }
 
   case DeviceConfig::PortType::UDP_LISTENER: {
-    SocketPort *port = new SocketPort(handler);
+    SocketPort *port = new SocketPort(listener, handler);
     if (!port->OpenUDPListener(config.tcp_port)) {
       delete port;
       return nullptr;
@@ -209,7 +211,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     if (unlink(config.path.c_str()) < 0 && errno != ENOENT)
       return nullptr;
 
-    TTYPort *port = new TTYPort(handler);
+    TTYPort *port = new TTYPort(listener, handler);
     const char *slave_path = port->OpenPseudo();
     if (slave_path == nullptr) {
       delete port;
@@ -232,9 +234,9 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     return nullptr;
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(handler);
+  TTYPort *port = new TTYPort(listener, handler);
 #else
-  SerialPort *port = new SerialPort(handler);
+  SerialPort *port = new SerialPort(listener, handler);
 #endif
   if (!port->Open(path, config.baud_rate)) {
     delete port;
@@ -245,10 +247,11 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 }
 
 Port *
-OpenPort(const DeviceConfig &config, DataHandler &handler)
+OpenPort(const DeviceConfig &config, PortListener *listener,
+         DataHandler &handler)
 {
-  Port *port = OpenPortInternal(config, handler);
+  Port *port = OpenPortInternal(config, listener, handler);
   if (port != nullptr)
-    port = WrapPort(config, handler, port);
+    port = WrapPort(config, listener, handler, port);
   return port;
 }

@@ -29,6 +29,7 @@ package org.xcsoar;
  */
 abstract class ProxyAndroidPort implements AndroidPort {
   private volatile AndroidPort port;
+  private volatile PortListener portListener;
   private volatile InputListener inputListener;
 
   protected void setPort(AndroidPort _port) {
@@ -48,6 +49,14 @@ abstract class ProxyAndroidPort implements AndroidPort {
     return port != null
       ? port.toString()
       : super.toString();
+  }
+
+  @Override public void setListener(PortListener _listener) {
+    portListener = _listener;
+
+    AndroidPort port = this.port;
+    if (port != null)
+      port.setListener(_listener);
   }
 
   @Override public void setInputListener(InputListener _listener) {
@@ -97,6 +106,8 @@ abstract class ProxyAndroidPort implements AndroidPort {
   }
 
   protected void stateChanged() {
-    // TODO: implement
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portStateChanged();
   }
 }

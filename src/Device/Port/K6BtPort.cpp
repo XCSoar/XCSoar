@@ -33,8 +33,9 @@ Copyright_License {
 #include <stdio.h>
 #include <string.h>
 
-K6BtPort::K6BtPort(Port *_port, unsigned _baud_rate, DataHandler &_handler)
-  :Port(_handler), port(_port), baud_rate(_baud_rate)
+K6BtPort::K6BtPort(Port *_port, unsigned _baud_rate,
+                   PortListener *_listener, DataHandler &_handler)
+  :Port(_listener, _handler), port(_port), baud_rate(_baud_rate)
 {
 }
 
@@ -61,6 +62,8 @@ K6BtPort::WaitConnected(OperationEnvironment &env)
 {
   if (!port->WaitConnected(env))
     return false;
+
+  // TODO: wrap the PortHandler, move initialisation to PortStateChanged()
 
   /* ensure that the K6Bt is not in command mode */
   SendCommand(NOP);

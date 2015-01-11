@@ -39,8 +39,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-SerialPort::SerialPort(DataHandler &_handler)
-  :BufferedPort(_handler), StoppableThread("SerialPort")
+SerialPort::SerialPort(PortListener *_listener, DataHandler &_handler)
+  :BufferedPort(_listener, _handler), StoppableThread("SerialPort")
 {
 }
 

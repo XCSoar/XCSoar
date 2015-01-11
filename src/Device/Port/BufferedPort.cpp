@@ -28,8 +28,8 @@ Copyright_License {
 
 #include <assert.h>
 
-BufferedPort::BufferedPort(DataHandler &_handler)
-  :Port(_handler),
+BufferedPort::BufferedPort(PortListener *_listener, DataHandler &_handler)
+  :Port(_listener, _handler),
    running(false), closing(false)
 {
 }

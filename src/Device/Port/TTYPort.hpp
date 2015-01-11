@@ -49,7 +49,8 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(DataHandler &_handler):BufferedPort(_handler) {}
+  TTYPort(PortListener *_listener, DataHandler &_handler)
+    :BufferedPort(_listener, _handler) {}
 
   virtual ~TTYPort();
 

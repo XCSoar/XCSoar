@@ -21,39 +21,19 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+#ifndef XCSOAR_DEVICE_PORT_LISTENER_HPP
+#define XCSOAR_DEVICE_PORT_LISTENER_HPP
 
 /**
- * The Java interface of the C++ AndroidPort class.
+ * A listener for #Port objects.
  */
-interface AndroidPort {
-  int STATE_READY = 0;
-  int STATE_FAILED = 1;
-  int STATE_LIMBO = 2;
-
-  void setListener(PortListener listener);
-
-  void setInputListener(InputListener listener);
-
-  void close();
-
-  int getState();
-
+class PortListener {
+public:
   /**
-   * @see Port::Drain()
+   * The state has changed, and Port::GetState() will provide the new
+   * value.
    */
-  boolean drain();
+  virtual void PortStateChanged() = 0;
+};
 
-  int getBaudRate();
-  boolean setBaudRate(int baud);
-
-  /**
-   * Write data to the port.  Execution blocks until at least one
-   * bytes is written or an error occurs or until the timeout expires.
-   *
-   * @param data the data to be written
-   * @param length the number of bytes to be written
-   * @return the number of bytes that were written or -1 on error/timeout
-   */
-  int write(byte[] data, int length);
-}
+#endif

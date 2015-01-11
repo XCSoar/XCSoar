@@ -409,7 +409,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  Port *port = OpenPort(config, *this);
+  Port *port = OpenPort(config, nullptr, *this);
   if (port == nullptr) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);

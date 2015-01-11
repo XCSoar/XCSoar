@@ -30,6 +30,7 @@ Copyright_License {
 #include <stddef.h>
 
 class OperationEnvironment;
+class PortListener;
 class DataHandler;
 class TimeoutClock;
 
@@ -66,10 +67,12 @@ public:
   };
 
 protected:
+  PortListener *const listener;
+
   DataHandler &handler;
 
 public:
-  Port(DataHandler &_handler);
+  Port(PortListener *_listener, DataHandler &_handler);
   virtual ~Port();
 
   /**

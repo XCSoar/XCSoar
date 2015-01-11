@@ -712,6 +712,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \
 	$(SRC)/Android/EventBridge.cpp \
+	$(SRC)/Android/NativePortListener.cpp \
 	$(SRC)/Android/NativeInputListener.cpp \
 	$(SRC)/Android/PortBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \

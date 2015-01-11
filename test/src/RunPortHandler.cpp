@@ -50,7 +50,7 @@ int main(int argc, char **argv)
   InitialiseIOThread();
 
   MyHandler handler;
-  Port *port = OpenPort(config, handler);
+  Port *port = OpenPort(config, nullptr, handler);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

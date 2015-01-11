@@ -37,7 +37,8 @@ class AndroidPort : public BufferedPort
   PortBridge *bridge;
 
 public:
-  AndroidPort(DataHandler &_handler, PortBridge *bridge);
+  AndroidPort(PortListener *_listener, DataHandler &_handler,
+              PortBridge *bridge);
   virtual ~AndroidPort();
 
   /* virtual methods from class Port */

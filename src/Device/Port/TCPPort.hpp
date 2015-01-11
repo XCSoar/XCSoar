@@ -50,8 +50,8 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  TCPPort(DataHandler &handler)
-    :SocketPort(handler)
+  TCPPort(PortListener *_listener, DataHandler &_handler)
+    :SocketPort(_listener, _handler)
 #ifndef HAVE_POSIX
     , thread(listener, *this)
 #endif

@@ -29,14 +29,16 @@ Copyright_License {
 #include <tchar.h>
 
 class Port;
+class PortListener;
 class DataHandler;
 
 gcc_malloc
 Port *
-OpenAndroidBluetoothPort(const TCHAR *address, DataHandler &_handler);
+OpenAndroidBluetoothPort(const TCHAR *address, PortListener *_listener,
+                         DataHandler &_handler);
 
 gcc_malloc
 Port *
-OpenAndroidBluetoothServerPort(DataHandler &_handler);
+OpenAndroidBluetoothServerPort(PortListener *_listener, DataHandler &_handler);
 
 #endif

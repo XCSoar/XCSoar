@@ -51,8 +51,8 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  SocketPort(DataHandler &handler)
-    :BufferedPort(handler)
+  SocketPort(PortListener *_listener, DataHandler &_handler)
+    :BufferedPort(_listener, _handler)
 #ifndef HAVE_POSIX
     , thread(socket, *this)
 #endif

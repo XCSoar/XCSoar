@@ -26,11 +26,13 @@ Copyright_License {
 
 #include <assert.h>
 
-AndroidPort::AndroidPort(DataHandler &_handler, PortBridge *_bridge)
-  :BufferedPort(_handler), bridge(_bridge)
+AndroidPort::AndroidPort(PortListener *_listener, DataHandler &_handler,
+                         PortBridge *_bridge)
+  :BufferedPort(_listener, _handler), bridge(_bridge)
 {
   assert(bridge != nullptr);
 
+  bridge->setListener(Java::GetEnv(), _listener);
   bridge->setInputListener(Java::GetEnv(), this);
 }
 

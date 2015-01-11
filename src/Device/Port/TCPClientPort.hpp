@@ -41,8 +41,8 @@ class TCPClientPort final
 #endif
 
 public:
-  TCPClientPort(DataHandler &handler)
-    :SocketPort(handler) {}
+  TCPClientPort(PortListener *_listener, DataHandler &_handler)
+    :SocketPort(_listener, _handler) {}
 
 #ifdef HAVE_POSIX
   virtual ~TCPClientPort();

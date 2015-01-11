@@ -401,7 +401,7 @@ main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  Port *port = OpenPort(config, *(DataHandler *)NULL);
+  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

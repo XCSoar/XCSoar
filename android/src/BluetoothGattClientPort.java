@@ -59,6 +59,7 @@ public class BluetoothGattClientPort
      calling BluetoothGatt.disconnect() in close() */
   private static final int DISCONNECT_TIMEOUT = 500;
 
+  private PortListener portListener;
   private volatile InputListener listener;
 
   private BluetoothDevice device;
@@ -237,6 +238,10 @@ public class BluetoothGattClientPort
     }
   }
 
+  @Override public void setListener(PortListener _listener) {
+    portListener = _listener;
+  }
+
   @Override
   public void setInputListener(InputListener _listener) {
     listener = _listener;
@@ -340,6 +345,8 @@ public class BluetoothGattClientPort
   }
 
   protected final void stateChanged() {
-    // TODO: implement
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portStateChanged();
   }
 }

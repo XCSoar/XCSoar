@@ -342,7 +342,7 @@ main(int argc, char **argv)
   InitialiseIOThread();
 
   NullDataHandler handler;
-  std::unique_ptr<Port> port(OpenPort(config, handler));
+  std::unique_ptr<Port> port(OpenPort(config, nullptr, handler));
   if (!port) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

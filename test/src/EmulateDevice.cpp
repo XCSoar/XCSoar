@@ -65,7 +65,7 @@ main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  Port *port = OpenPort(config, *emulator->handler);
+  Port *port = OpenPort(config, nullptr, *emulator->handler);
   if (port == NULL) {
     delete emulator;
     fprintf(stderr, "Failed to open COM port\n");
