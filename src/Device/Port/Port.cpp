@@ -212,7 +212,10 @@ bool
 Port::ExpectString(const char *token, OperationEnvironment &env,
                    unsigned timeout_ms)
 {
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
   assert(token != nullptr);
+#endif
 
   const char *const token_end = token + strlen(token);
 
