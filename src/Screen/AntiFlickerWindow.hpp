@@ -46,7 +46,7 @@ protected:
    * Determines whether this class maintains a persistent buffer which
    * allows incremental drawing in each frame.
    */
-  static bool IsPersistent() {
+  static constexpr bool IsPersistent() {
     return false;
   }
 
