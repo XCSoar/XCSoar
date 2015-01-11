@@ -32,7 +32,7 @@ import java.io.OutputStream;
  */
 abstract class AbstractAndroidPort implements AndroidPort {
   private final String name;
-  private InputListener listener;
+  private InputListener inputListener;
   private InputThread input;
   private OutputThread output;
 
@@ -57,7 +57,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
   }
 
   protected synchronized void set(InputStream _input, OutputStream _output) {
-    input = new InputThread(name, listener, _input);
+    input = new InputThread(name, inputListener, _input);
     output = new OutputThread(name, _output);
     output.setTimeout(5000);
   }
@@ -67,7 +67,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
   }
 
   @Override public void setListener(InputListener _listener) {
-    listener = _listener;
+    inputListener = _listener;
     if (input != null)
       input.setListener(_listener);
   }
