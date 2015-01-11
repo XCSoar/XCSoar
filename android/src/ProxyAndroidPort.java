@@ -28,8 +28,8 @@ package org.xcsoar;
  * as a proxy for another #AndroidPort instance.
  */
 abstract class ProxyAndroidPort implements AndroidPort {
-  private AndroidPort port;
-  private InputListener listener;
+  private volatile AndroidPort port;
+  private volatile InputListener listener;
 
   protected void setPort(AndroidPort _port) {
     AndroidPort oldPort = this.port;
