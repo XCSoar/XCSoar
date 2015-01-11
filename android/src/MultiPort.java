@@ -33,7 +33,7 @@ import android.util.Log;
  * objects.
  */
 class MultiPort implements AndroidPort, InputListener {
-  private InputListener listener;
+  private InputListener inputListener;
 
   private static final String TAG = "XCSoar";
 
@@ -84,7 +84,7 @@ class MultiPort implements AndroidPort, InputListener {
   }
 
   @Override public void setListener(InputListener _listener) {
-    listener = _listener;
+    inputListener = _listener;
   }
 
   @Override public synchronized void close() {
@@ -133,7 +133,7 @@ class MultiPort implements AndroidPort, InputListener {
   }
 
   @Override public void dataReceived(byte[] data, int length) {
-    InputListener l = listener;
+    InputListener l = inputListener;
     if (l != null)
       l.dataReceived(data, length);
   }
