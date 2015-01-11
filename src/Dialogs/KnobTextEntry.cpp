@@ -139,10 +139,10 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnPaint(Canvas &canvas);
+  void OnPaint(Canvas &canvas) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) override;
 };
 
 void

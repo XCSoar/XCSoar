@@ -32,11 +32,11 @@ public:
   constexpr ConditionMonitorAATTime():ConditionMonitor(60 * 15, 10) {}
 
 protected:
-  virtual bool CheckCondition(const NMEAInfo &basic,
+  bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
                               const ComputerSettings &settings) override;
-  virtual void Notify();
-  virtual void SaveLast() {}
+  void Notify() override;
+  void SaveLast() override {}
 };
 
 #endif

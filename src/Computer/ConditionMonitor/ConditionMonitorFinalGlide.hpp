@@ -35,11 +35,11 @@ public:
     :ConditionMonitor(60 * 5, 1), tad(0), last_tad(0) {}
 
 protected:
-  virtual bool CheckCondition(const NMEAInfo &basic,
-                              const DerivedInfo &calculated,
-                              const ComputerSettings &settings) override;
-  virtual void Notify();
-  virtual void SaveLast();
+  bool CheckCondition(const NMEAInfo &basic,
+                      const DerivedInfo &calculated,
+                      const ComputerSettings &settings) override;
+  void Notify() override;
+  void SaveLast() override;
 };
 
 #endif

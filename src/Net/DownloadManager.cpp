@@ -236,21 +236,21 @@ public:
 
 protected:
   /* methods from class StandbyThread */
-  virtual void Tick();
+  void Tick() override;
 
 private:
   /* methods from class OperationEnvironment */
-  virtual bool IsCancelled() const {
+  bool IsCancelled() const override {
     ScopeLock protect(const_cast<Mutex &>(mutex));
     return StandbyThread::IsStopped();
   }
 
-  virtual void SetProgressRange(unsigned range) override {
+  void SetProgressRange(unsigned range) override {
     ScopeLock protect(mutex);
     current_size = range;
   }
 
-  virtual void SetProgressPosition(unsigned position) override {
+  void SetProgressPosition(unsigned position) override {
     ScopeLock protect(mutex);
     current_position = position;
   }

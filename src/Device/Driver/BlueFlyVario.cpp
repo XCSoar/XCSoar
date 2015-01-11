@@ -34,7 +34,7 @@ public:
 
   void LinkTimeout() override;
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
   
   bool ParseBAT(const char *content, NMEAInfo &info);
   bool ParsePRS(const char *content, NMEAInfo &info);

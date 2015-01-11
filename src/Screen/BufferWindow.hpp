@@ -40,7 +40,7 @@ class BufferWindow : public PaintWindow {
   bool dirty;
 
 public:
-  void Invalidate() {
+  void Invalidate() override {
     dirty = true;
     PaintWindow::Invalidate();
   }

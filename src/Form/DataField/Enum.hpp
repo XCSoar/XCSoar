@@ -136,7 +136,9 @@ public:
    * @param value True if display item help in text box below picker
    * Displays help strings associated with enums Items
    */
-  void EnableItemHelp(bool value) { item_help_enabled = value; }
+  void EnableItemHelp(bool value) override {
+    item_help_enabled = value;
+  }
 
   void Set(unsigned Value);
 

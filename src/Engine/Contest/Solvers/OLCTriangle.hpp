@@ -380,7 +380,7 @@ protected:
   std::tuple<unsigned, unsigned, unsigned, unsigned>
   RunBranchAndBound(unsigned from, unsigned to, unsigned best_d, bool exhaustive);
 
-  void UpdateTrace(bool force);
+  void UpdateTrace(bool force) override;
   void ResetBranchAndBound();
 
 public:

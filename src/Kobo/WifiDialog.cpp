@@ -86,16 +86,16 @@ public:
   }
 
   /* virtual methods from class ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) override;
 
   /* virtual methods from class ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) {
+  void OnCursorMoved(unsigned index) override {
     UpdateButtons();
   }
 
   /* virtual methods from class Timer */
-  virtual void OnTimer() {
+  void OnTimer() override {
     UpdateList();
   }
 
