@@ -69,7 +69,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
   @Override public void setListener(InputListener _listener) {
     listener = _listener;
     if (input != null)
-      input.setListener(listener);
+      input.setListener(_listener);
   }
 
   @Override public void close() {
