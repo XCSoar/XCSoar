@@ -108,8 +108,9 @@ class InputThread extends Thread {
         // close() was called
         break;
 
-      if (listener != null)
-        listener.dataReceived(buffer, n);
+      InputListener listener2 = listener;
+      if (listener2 != null)
+        listener2.dataReceived(buffer, n);
     }
   }
 }
