@@ -37,9 +37,9 @@ class InputThread extends Thread {
 
   final String name;
 
-  InputListener listener;
+  volatile InputListener listener;
 
-  InputStream is;
+  volatile InputStream is;
 
   InputThread(String _name, InputListener _listener, InputStream _is) {
     super("InputThread " + _name);
@@ -51,7 +51,7 @@ class InputThread extends Thread {
     start();
   }
 
-  synchronized void setListener(final InputListener _listener) {
+  void setListener(final InputListener _listener) {
     listener = _listener;
   }
 
