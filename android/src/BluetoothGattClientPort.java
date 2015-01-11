@@ -72,8 +72,9 @@ public class BluetoothGattClientPort
   private int nextWriteChunkIdx;
   private boolean lastChunkWriteError;
 
-  private final Object portStateSync = new Object();
   private volatile int portState = STATE_LIMBO;
+
+  private final Object gattStateSync = new Object();
   private int gattState = BluetoothGatt.STATE_DISCONNECTED;
 
   public BluetoothGattClientPort(BluetoothDevice _device) {
@@ -167,9 +168,9 @@ public class BluetoothGattClientPort
       writeChunksSync.notifyAll();
     }
     portState = newPortState;
-    synchronized (portStateSync) {
+    synchronized (gattStateSync) {
       gattState = newState;
-      portStateSync.notifyAll();
+      gattStateSync.notifyAll();
     }
   }
 
@@ -247,7 +248,7 @@ public class BluetoothGattClientPort
       writeChunksSync.notifyAll();
     }
     gatt.disconnect();
-    synchronized (portStateSync) {
+    synchronized (gattStateSync) {
       long waitUntil = System.currentTimeMillis() + DISCONNECT_TIMEOUT;
       while (gattState != BluetoothGatt.STATE_DISCONNECTED) {
         long timeToWait = waitUntil - System.currentTimeMillis();
@@ -255,7 +256,7 @@ public class BluetoothGattClientPort
           break;
         }
         try {
-          portStateSync.wait(timeToWait);
+          gattStateSync.wait(timeToWait);
         } catch (InterruptedException e) {
           break;
         }
