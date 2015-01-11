@@ -368,13 +368,11 @@ protected:
   }
 
 public:
-  void
-  Visit(const Waypoint& way_point)
-  {
+  void Visit(const Waypoint& way_point) override {
     AddWaypoint(way_point, way_point.IsTurnpoint() && is_mat);
   }
 
-  virtual void Visit(const TaskPoint &tp) override {
+  void Visit(const TaskPoint &tp) override {
     switch (tp.GetType()) {
     case TaskPointType::UNORDERED:
       AddWaypoint(((const UnorderedTaskPoint &)tp).GetWaypoint(), true);

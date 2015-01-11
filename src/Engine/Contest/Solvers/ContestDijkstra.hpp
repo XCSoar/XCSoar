@@ -157,7 +157,7 @@ protected:
    * @param force disable lazy updates, force the trace to be up to
    * date before returning
    */
-  virtual void UpdateTrace(bool force);
+  void UpdateTrace(bool force) override;
 
   /**
    * Perform actions required at start of new search

@@ -31,11 +31,11 @@ public:
   constexpr ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
 
 protected:
-  virtual bool CheckCondition(const NMEAInfo &basic,
-                              const DerivedInfo &calculated,
-                              const ComputerSettings &settings) override;
-  virtual void Notify();
-  virtual void SaveLast() {}
+  bool CheckCondition(const NMEAInfo &basic,
+                      const DerivedInfo &calculated,
+                      const ComputerSettings &settings) override;
+  void Notify() override;
+  void SaveLast() override {}
 };
 
 #endif

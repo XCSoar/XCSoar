@@ -36,11 +36,11 @@ public:
     last_reachable(false), now_reachable(false) {}
 
 protected:
-  virtual bool CheckCondition(const NMEAInfo &basic,
-                              const DerivedInfo &calculated,
-                              const ComputerSettings &settings) override;
-  virtual void Notify();
-  virtual void SaveLast();
+  bool CheckCondition(const NMEAInfo &basic,
+                      const DerivedInfo &calculated,
+                      const ComputerSettings &settings) override;
+  void Notify() override;
+  void SaveLast() override;
 };
 
 #endif

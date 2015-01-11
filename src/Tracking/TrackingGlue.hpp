@@ -114,7 +114,7 @@ public:
 
 #ifdef HAVE_LIVETRACK24
 protected:
-  virtual void Tick();
+  void Tick() override;
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER

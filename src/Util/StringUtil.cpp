@@ -78,8 +78,11 @@ StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
 const char *
 StringAfterPrefix(const char *string, const char *prefix)
 {
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
   assert(string != nullptr);
   assert(prefix != nullptr);
+#endif
 
   size_t prefix_length = strlen(prefix);
   return strncmp(string, prefix, prefix_length) == 0
@@ -90,8 +93,11 @@ StringAfterPrefix(const char *string, const char *prefix)
 const char *
 StringAfterPrefixCI(const char *string, const char *prefix)
 {
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
   assert(string != nullptr);
   assert(prefix != nullptr);
+#endif
 
   size_t prefix_length = StringLength(prefix);
   return strncasecmp(string, prefix, prefix_length) == 0
@@ -168,10 +174,13 @@ CopyASCII(char *dest, const char *src)
 char *
 CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
 {
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
   assert(dest != nullptr);
-  assert(dest_size > 0);
   assert(src != nullptr);
   assert(src_end != nullptr);
+#endif
+  assert(dest_size > 0);
   assert(src_end >= src);
 
   for (const char *const dest_end = dest + dest_size;

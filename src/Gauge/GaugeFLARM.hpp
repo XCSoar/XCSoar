@@ -50,7 +50,7 @@ public:
 private:
   void Update(const NMEAInfo &basic);
 
-  virtual void OnGPSUpdate(const MoreData &basic);
+  void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

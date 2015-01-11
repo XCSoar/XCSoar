@@ -38,10 +38,10 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual SolverResult Solve(bool exhaustive) override;
-  
+  SolverResult Solve(bool exhaustive) override;
+
   /* virtual methods from OLCTriangle */
-  virtual ContestResult CalculateResult() const;
+  ContestResult CalculateResult() const override;
 };
 
 #endif

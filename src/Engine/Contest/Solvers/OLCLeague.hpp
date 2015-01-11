@@ -51,7 +51,7 @@ public:
   }
 
 protected:
-  virtual ContestResult CalculateResult() const;
+  ContestResult CalculateResult() const override;
 
 public:
   /* virtual methods from class AbstractContest */

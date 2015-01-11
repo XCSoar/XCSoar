@@ -49,7 +49,7 @@ public:
 
   virtual ~FAITaskFactory() {};
 
-  virtual void UpdateOrderedTaskSettings(OrderedTaskSettings& to) override;
+  void UpdateOrderedTaskSettings(OrderedTaskSettings& to) override;
 
   /**
    * Check whether task is complete and valid according to factory rules
@@ -57,8 +57,7 @@ public:
    *
    * @return True if task is valid according to factory rules
    */
-  virtual bool Validate();
-
+  bool Validate() override;
 
   /**
    * swaps non FAI OZs with either FAI OZs
@@ -67,9 +66,7 @@ public:
    * @return: point type compatible with current factory, most
    * similar to type of tp
    */
-  virtual gcc_pure
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
-
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
 
   /**
    * @param start_radius: either fixed(-1) or a valid value
@@ -82,11 +79,10 @@ public:
    *
    * sets radiuses FAI defaults
    */
-  virtual gcc_pure
   void GetPointDefaultSizes(const TaskPointFactoryType type,
-                                            fixed &start_radius,
-                                            fixed &turnpoint_radius,
-                                            fixed &finish_radius) const;
+                            fixed &start_radius,
+                            fixed &turnpoint_radius,
+                            fixed &finish_radius) const override;
 };
 
 #endif
