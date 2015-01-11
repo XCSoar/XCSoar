@@ -64,6 +64,7 @@ class InputThread extends Thread {
       return;
 
     is = null;
+    listener = null;
 
     try {
       is2.close();
