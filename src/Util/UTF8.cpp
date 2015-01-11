@@ -307,7 +307,10 @@ FindLeading(gcc_unused char *const begin, char *i)
 void
 CropIncompleteUTF8(char *const p)
 {
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
   assert(p != nullptr);
+#endif
 
   char *const end = FindTerminator(p);
   if (end == p)
@@ -357,7 +360,10 @@ CropIncompleteUTF8(char *const p)
 std::pair<unsigned, const char *>
 NextUTF8(const char *p)
 {
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
   assert(p != nullptr);
+#endif
 
   unsigned char a = *p++;
   if (a == 0)
