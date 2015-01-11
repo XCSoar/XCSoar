@@ -41,6 +41,12 @@ class TaskProjection : public FlatProjection {
   GeoPoint location_max;
 
 public:
+#ifndef NDEBUG
+  TaskProjection()
+    :location_min(GeoPoint::Invalid()),
+     location_max(GeoPoint::Invalid()) {}
+#endif
+
   /**
    * Reset search bounds
    *

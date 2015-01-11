@@ -36,7 +36,8 @@ TaskProjection::Reset(const GeoPoint &ref)
 void
 TaskProjection::Scan(const GeoPoint &ref)
 {
-  assert(IsValid());
+  assert(location_min.IsValid());
+  assert(location_max.IsValid());
 
   if (!ref.IsValid())
     return;
@@ -50,7 +51,8 @@ TaskProjection::Scan(const GeoPoint &ref)
 bool
 TaskProjection::Update()
 {
-  assert(IsValid());
+  assert(location_min.IsValid());
+  assert(location_max.IsValid());
 
   GeoPoint old_center = GetCenter();
   GeoPoint new_center;
@@ -69,7 +71,8 @@ TaskProjection::Update()
 fixed
 TaskProjection::ApproxRadius() const
 {
-  assert(IsValid());
+  assert(location_min.IsValid());
+  assert(location_max.IsValid());
 
   return std::max(GetCenter().Distance(location_max),
                   GetCenter().Distance(location_min));
