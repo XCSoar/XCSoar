@@ -60,28 +60,36 @@ class FlatProjection {
   fixed approx_scale;
 
 public:
-#ifdef NDEBUG
   FlatProjection() = default;
-#else
-  FlatProjection():center(GeoPoint::Invalid()) {}
-#endif
 
   explicit FlatProjection(const GeoPoint &_center) {
     SetCenter(_center);
   }
 
-protected:
-#ifndef NDEBUG
   bool IsValid() const {
     return center.IsValid();
   }
-#endif
 
+  /**
+   * Marks this projection "invalid", i.e. IsValid() will return false
+   * and projection operations are illegal.  This is the opposite of
+   * SetCenter().
+   */
+  void SetInvalid() {
+    center = GeoPoint::Invalid();
+  }
+
+protected:
   void SetCenterFast(const GeoPoint &_center) {
     center = _center;
   }
 
 public:
+  /**
+   * Sets the new projection center and initialises the projection.
+   *
+   * After returning, IsValid() returns true.
+   */
   void SetCenter(const GeoPoint &_center);
 
   /**
