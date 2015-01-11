@@ -40,7 +40,11 @@ class BufferWindow : public PaintWindow {
   bool dirty;
 
 public:
-  void Invalidate() override {
+  void Invalidate()
+#ifndef USE_GDI
+    override
+#endif
+  {
     dirty = true;
     PaintWindow::Invalidate();
   }
