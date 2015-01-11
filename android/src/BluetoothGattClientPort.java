@@ -73,7 +73,7 @@ public class BluetoothGattClientPort
   private boolean lastChunkWriteError;
 
   private final Object portStateSync = new Object();
-  private int portState = STATE_LIMBO;
+  private volatile int portState = STATE_LIMBO;
   private int gattState = BluetoothGatt.STATE_DISCONNECTED;
 
   public BluetoothGattClientPort(BluetoothDevice _device) {
@@ -166,8 +166,8 @@ public class BluetoothGattClientPort
       pendingWriteChunks = null;
       writeChunksSync.notifyAll();
     }
+    portState = newPortState;
     synchronized (portStateSync) {
-      portState = newPortState;
       gattState = newState;
       portStateSync.notifyAll();
     }
@@ -175,24 +175,21 @@ public class BluetoothGattClientPort
 
   @Override
   public void onServicesDiscovered(BluetoothGatt gatt,
-      int status) {
-    synchronized (portStateSync) {
-      if (BluetoothGatt.GATT_SUCCESS == status) {
-        if (findCharacteristics()) {
-          if (gatt.setCharacteristicNotification(dataCharacteristic, true)) {
-            portState = STATE_READY;
-          } else {
-            Log.e(TAG, "Could not enable GATT characteristic notification");
-            portState = STATE_FAILED;
-          }
+                                   int status) {
+    if (BluetoothGatt.GATT_SUCCESS == status) {
+      if (findCharacteristics()) {
+        if (gatt.setCharacteristicNotification(dataCharacteristic, true)) {
+          portState = STATE_READY;
         } else {
+          Log.e(TAG, "Could not enable GATT characteristic notification");
           portState = STATE_FAILED;
         }
       } else {
-        Log.e(TAG, "Discovering GATT services failed");
         portState = STATE_FAILED;
       }
-      portStateSync.notifyAll();
+    } else {
+      Log.e(TAG, "Discovering GATT services failed");
+      portState = STATE_FAILED;
     }
   }
 
@@ -269,9 +266,7 @@ public class BluetoothGattClientPort
 
   @Override
   public int getState() {
-    synchronized (portStateSync) {
-      return portState;
-    }
+    return portState;
   }
 
   @Override
