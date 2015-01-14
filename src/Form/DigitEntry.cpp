@@ -489,8 +489,37 @@ DigitEntry::GetTimeValue() const
 }
 
 void
-DigitEntry::SetDigits(const fixed degrees, CoordinateFormat format, bool isLatitude)
+DigitEntry::SetDigits(fixed degrees, CoordinateFormat format, bool isLatitude)
 {
+  // Calculate half the last digit so that we round to the nearest
+  fixed roundingAdjustment = fixed(0);
+  switch (format) {
+  case CoordinateFormat::DD_DDDDD:
+    roundingAdjustment = fixed(0.5 * (1.0 / 100000));
+    break;
+
+  case CoordinateFormat::DDMM_MMM:
+    roundingAdjustment = fixed(0.5 * ( (1.0/60) / 1000));
+    break;
+
+  case CoordinateFormat::DDMMSS_S:
+    roundingAdjustment = fixed(0.5 * ( (1.0/3600) / 10));
+    break;
+
+  case CoordinateFormat::DDMMSS:
+    roundingAdjustment = fixed(0.5 * ( (1.0/3600) / 1));
+    break;
+
+  default:
+  case CoordinateFormat::UTM:
+    /// \todo support UTM format
+    break;
+  }
+
+  // Apply adjustment so we show rounding rather than truncation
+  degrees += roundingAdjustment;
+
+  // Handle whole degrees
   const unsigned i_degrees = std::min(unsigned(degrees), isLatitude ? 90u : 180u);
   columns[1].value = i_degrees / 10;
   columns[2].value = i_degrees % 10;

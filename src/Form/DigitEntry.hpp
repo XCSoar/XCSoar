@@ -268,8 +268,8 @@ protected:
   int FindColumnAt(unsigned x) const;
 
 private:
-  void SetDigits(const fixed degrees, CoordinateFormat format, bool isLatitude);
-  
+  void SetDigits(fixed degrees, CoordinateFormat format, bool isLatitude);
+
 protected:
   virtual void OnSetFocus() override;
   virtual void OnKillFocus() override;
