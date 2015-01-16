@@ -41,7 +41,7 @@ public:
   explicit DeviceDispatcher(unsigned _exclude):exclude(_exclude) {}
 
   /* virtual methods from DataHandler */
-  virtual void LineReceived(const char *line);
+  void LineReceived(const char *line) override;
 };
 
 #endif
