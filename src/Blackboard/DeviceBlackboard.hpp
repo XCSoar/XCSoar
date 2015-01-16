@@ -27,7 +27,7 @@ Copyright_License {
 #include "Blackboard/BaseBlackboard.hpp"
 #include "Blackboard/ComputerSettingsBlackboard.hpp"
 #include "Device/Simulator.hpp"
-#include "Device/List.hpp"
+#include "Device/Features.hpp"
 #include "Thread/Mutex.hpp"
 #include "Time/WrapClock.hpp"
 

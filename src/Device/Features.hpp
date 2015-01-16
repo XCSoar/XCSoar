@@ -21,26 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SYSTEM_SETTINGS_HPP
-#define XCSOAR_SYSTEM_SETTINGS_HPP
+#ifndef XCSOAR_DEVICE_FEATURES_HPP
+#define XCSOAR_DEVICE_FEATURES_HPP
 
-#include "Device/Config.hpp"
-#include "Device/Features.hpp"
-#include "Hardware/ModelType.hpp"
-
-#include <type_traits>
-#include <array>
-
-struct SystemSettings {
-  std::array<DeviceConfig, NUMDEV> devices;
-
-#ifdef HAVE_MODEL_TYPE
-  ModelType model_type;
+#ifdef WIN32
+static constexpr unsigned NUMDEV = 4;
+#else
+static constexpr unsigned NUMDEV = 6;
 #endif
-
-  void SetDefaults();
-};
-
-static_assert(std::is_trivial<SystemSettings>::value, "type is not trivial");
 
 #endif
