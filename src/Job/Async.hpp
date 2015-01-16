@@ -106,7 +106,7 @@ public:
 
 private:
   /* virtual methods from class Thread */
-  virtual void Run();
+  void Run() override;
 };
 
 #endif
