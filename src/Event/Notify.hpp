@@ -82,6 +82,7 @@ protected:
   virtual void OnNotification() = 0;
 
 #ifdef USE_GDI
+private:
   virtual bool OnUser(unsigned id) override;
 #endif
 };
