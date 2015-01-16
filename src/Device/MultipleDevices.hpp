@@ -21,31 +21,45 @@ Copyright_License {
 }
 */
 
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
-#include "Dispatcher.hpp"
+/** \file
+ *
+ * This library manages the list of configured devices.
+ */
 
-DeviceDescriptor *device_list[NUMDEV];
+#ifndef XCSOAR_DEVICE_LIST_HPP
+#define XCSOAR_DEVICE_LIST_HPP
 
-static DeviceDispatcher *dispatchers[NUMDEV];
+#include "Features.hpp"
 
-void
-DeviceListInitialise()
-{
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDispatcher *dispatcher = dispatchers[i] = new DeviceDispatcher(i);
+#include <array>
 
-    device_list[i] = new DeviceDescriptor(i, nullptr);
-    device_list[i]->SetDispatcher(dispatcher);
+class DeviceDescriptor;
+class DeviceDispatcher;
+
+/**
+ * Container for all (configured) devices.
+ */
+class MultipleDevices {
+  std::array<DeviceDescriptor *, NUMDEV> devices;
+  std::array<DeviceDispatcher *, NUMDEV> dispatchers;
+
+public:
+  MultipleDevices();
+  ~MultipleDevices();
+
+  DeviceDescriptor &operator[](unsigned i) const {
+    return *devices[i];
   }
-}
 
-void
-DeviceListDeinitialise()
-{
-  for (DeviceDescriptor *i : device_list)
-    delete i;
+  typedef typename std::array<DeviceDescriptor *, NUMDEV>::const_iterator const_iterator;
 
-  for (DeviceDispatcher *i : dispatchers)
-    delete i;
-}
+  const_iterator begin() {
+    return devices.begin();
+  }
+
+  const_iterator end() {
+    return devices.end();
+  }
+};
+
+#endif

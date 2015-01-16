@@ -24,8 +24,9 @@ Copyright_License {
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
 #include "device.hpp"
-#include "Device/List.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
+#include "Components.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
@@ -91,11 +92,10 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   gcc_unreachable();
 }
 
+template<typename I>
 gcc_pure
 static bool
-DeviceConfigOverlaps(const DeviceConfig &config,
-                     const DeviceDescriptor *const*begin,
-                     const DeviceDescriptor *const*const end)
+DeviceConfigOverlaps(const DeviceConfig &config, I begin, I end)
 {
   return ExistsIf(begin, end,
                   [&config](const DeviceDescriptor *d) {
@@ -112,7 +112,7 @@ devStartup()
 
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor &device = *device_list[i];
+    DeviceDescriptor &device = (*devices)[i];
     const DeviceConfig &config = settings.devices[i];
     if (!config.IsAvailable()) {
       device.ClearConfig();
@@ -121,7 +121,7 @@ devStartup()
 
     none_available = false;
 
-    if (DeviceConfigOverlaps(config, device_list, device_list + i)) {
+    if (DeviceConfigOverlaps(config, devices->begin(), devices->begin() + i)) {
       device.ClearConfig();
       continue;
     }
@@ -148,7 +148,7 @@ devStartup()
 void
 VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     if (i->IsVega())
       i->WriteNMEA(text, env);
 }
@@ -156,7 +156,7 @@ VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
 DeviceDescriptor *
 devVarioFindVega()
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     if (i->IsVega())
       return i;
 
@@ -169,7 +169,7 @@ devShutdown()
   // Stop COM devices
   LogFormat("Stop COM devices");
 
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->Close();
 }
 

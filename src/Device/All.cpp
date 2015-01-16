@@ -22,13 +22,14 @@ Copyright_License {
 */
 
 #include "Device/All.hpp"
-#include "Device/List.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
+#include "Components.hpp"
 
 void
 devTick()
 {
-  for (DeviceDescriptor *i : device_list) {
+  for (DeviceDescriptor *i : *devices) {
     DeviceDescriptor &device = *i;
     device.OnSysTicker();
   }
@@ -37,7 +38,7 @@ devTick()
 void
 AllDevicesAutoReopen(OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list) {
+  for (DeviceDescriptor *i : *devices) {
     DeviceDescriptor &d = *i;
     d.AutoReopen(env);
   }
@@ -46,14 +47,14 @@ AllDevicesAutoReopen(OperationEnvironment &env)
 void
 AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutMacCready(mac_cready, env);
 }
 
 void
 AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutBugs(bugs, env);
 }
 
@@ -61,14 +62,14 @@ void
 AllDevicesPutBallast(fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutBallast(fraction, overload, env);
 }
 
 void
 AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutVolume(volume, env);
 }
 
@@ -77,7 +78,7 @@ AllDevicesPutActiveFrequency(RadioFrequency frequency,
                              const TCHAR *name,
                              OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutActiveFrequency(frequency, name, env);
 }
 
@@ -86,7 +87,7 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency,
                               const TCHAR *name,
                               OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutStandbyFrequency(frequency, name, env);
 }
 
@@ -94,14 +95,14 @@ void
 AllDevicesPutQNH(const AtmosphericPressure &pres,
                  OperationEnvironment &env)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->PutQNH(pres, env);
 }
 
 void
 AllDevicesNotifySensorUpdate(const MoreData &basic)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->OnSensorUpdate(basic);
 }
 
@@ -109,6 +110,6 @@ void
 AllDevicesNotifyCalculatedUpdate(const MoreData &basic,
                                  const DerivedInfo &calculated)
 {
-  for (DeviceDescriptor *i : device_list)
+  for (DeviceDescriptor *i : *devices)
     i->OnCalculatedUpdate(basic, calculated);
 }

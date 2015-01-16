@@ -50,7 +50,7 @@ Copyright_License {
 #include "Markers/Markers.hpp"
 #include "Markers/ProtectedMarkers.hpp"
 #include "Device/device.hpp"
-#include "Device/List.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Audio/VarioGlue.hpp"
@@ -286,8 +286,7 @@ Startup()
 
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
-
-  DeviceListInitialise();
+  devices = new MultipleDevices();
 
   // Initialize Markers
   marks = new Markers();
@@ -600,8 +599,8 @@ Shutdown()
 
   delete replay;
 
-  DeviceListDeinitialise();
-
+  delete devices;
+  devices = nullptr;
   delete device_blackboard;
   device_blackboard = NULL;
 

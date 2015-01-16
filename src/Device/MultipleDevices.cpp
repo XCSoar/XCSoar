@@ -21,24 +21,26 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This library manages the list of configured devices.
- */
+#include "MultipleDevices.hpp"
+#include "Descriptor.hpp"
+#include "Dispatcher.hpp"
 
-#ifndef XCSOAR_DEVICE_LIST_HPP
-#define XCSOAR_DEVICE_LIST_HPP
+MultipleDevices::MultipleDevices()
+{
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    DeviceDispatcher *dispatcher = dispatchers[i] =
+      new DeviceDispatcher(*this, i);
 
-#include "Features.hpp"
+    devices[i] = new DeviceDescriptor(i, nullptr);
+    devices[i]->SetDispatcher(dispatcher);
+  }
+}
 
-class DeviceDescriptor;
+MultipleDevices::~MultipleDevices()
+{
+  for (DeviceDescriptor *i : devices)
+    delete i;
 
-extern DeviceDescriptor *device_list[NUMDEV];
-
-void
-DeviceListInitialise();
-
-void
-DeviceListDeinitialise();
-
-#endif
+  for (DeviceDispatcher *i : dispatchers)
+    delete i;
+}

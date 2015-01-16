@@ -42,6 +42,7 @@ RasterWeatherStore *rasp;
 DrawThread *draw_thread;
 #endif
 
+MultipleDevices *devices;
 DeviceBlackboard *device_blackboard;
 
 MergeThread *merge_thread;

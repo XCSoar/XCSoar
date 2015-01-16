@@ -27,10 +27,14 @@ Copyright_License {
 #include "Device/Util/LineHandler.hpp"
 #include "Compiler.h"
 
+class MultipleDevices;
+
 /**
  * A #DataHandler that dispatches incoming data to all NMEA outputs.
  */
 class DeviceDispatcher final : public PortLineHandler {
+  MultipleDevices &devices;
+
   /**
    * The device index that should be excluded.  It is this
    * dispatcher's own index.
@@ -38,7 +42,8 @@ class DeviceDispatcher final : public PortLineHandler {
   unsigned exclude;
 
 public:
-  explicit DeviceDispatcher(unsigned _exclude):exclude(_exclude) {}
+  DeviceDispatcher(MultipleDevices &_devices, unsigned _exclude)
+    :devices(_devices), exclude(_exclude) {}
 
   /* virtual methods from DataHandler */
   void LineReceived(const char *line) override;

@@ -27,9 +27,10 @@
 #include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
 #include "Device/Descriptor.hpp"
-#include "Device/List.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Device/Driver.hpp"
 #include "Device/RecordedFlight.hpp"
+#include "Components.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -114,7 +115,7 @@ ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
 {
   bool found_logger = false;
 
-  for (DeviceDescriptor *i : device_list) {
+  for (DeviceDescriptor *i : *devices) {
     DeviceDescriptor &device = *i;
 
     if (device.CanDeclare() && device.GetState() == PortState::READY) {

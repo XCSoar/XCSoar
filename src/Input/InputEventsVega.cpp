@@ -23,11 +23,12 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "Dialogs/Device/Vega/VegaDialogs.hpp"
-#include "Device/List.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
 #include "Util/StringUtil.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
 static VegaDevice *
@@ -44,7 +45,7 @@ AllVegasSendSetting(const char *name, int value)
 {
   PopupOperationEnvironment env;
 
-  for (DeviceDescriptor *i : device_list) {
+  for (DeviceDescriptor *i : *devices) {
     VegaDevice *vega = GetVegaDevice(*i);
     if (vega != NULL)
       vega->SendSetting(name, value, env);
@@ -56,7 +57,7 @@ AllVegasRequestSetting(const char *name)
 {
   PopupOperationEnvironment env;
 
-  for (DeviceDescriptor *i : device_list) {
+  for (DeviceDescriptor *i : *devices) {
     VegaDevice *vega = GetVegaDevice(*i);
     if (vega != NULL)
       vega->RequestSetting(name, env);

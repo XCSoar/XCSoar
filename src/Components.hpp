@@ -33,6 +33,7 @@ class RasterTerrain;
 class RasterWeatherStore;
 class GlideComputer;
 class DrawThread;
+class MultipleDevices;
 class DeviceBlackboard;
 class MergeThread;
 class CalculationThread;
@@ -60,6 +61,7 @@ extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
 #endif
+extern MultipleDevices *devices;
 extern DeviceBlackboard *device_blackboard;
 extern MergeThread *merge_thread;
 extern CalculationThread *calculation_thread;

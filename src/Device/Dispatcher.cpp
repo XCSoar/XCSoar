@@ -23,17 +23,17 @@ Copyright_License {
 
 #include "Dispatcher.hpp"
 #include "Descriptor.hpp"
-#include "List.hpp"
+#include "MultipleDevices.hpp"
 
 void
 DeviceDispatcher::LineReceived(const char *line)
 {
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    if (i == exclude)
+  unsigned i = 0;
+  for (DeviceDescriptor *device : devices) {
+    if (i++ == exclude)
       /* don't loop back a device's input to itself */
       continue;
 
-    DeviceDescriptor *device = device_list[i];
     if (device == nullptr)
       continue;
 
