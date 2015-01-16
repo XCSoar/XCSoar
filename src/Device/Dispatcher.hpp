@@ -38,7 +38,7 @@ class DeviceDispatcher final : public PortLineHandler {
   unsigned exclude;
 
 public:
-  DeviceDispatcher(unsigned _exclude):exclude(_exclude) {}
+  explicit DeviceDispatcher(unsigned _exclude):exclude(_exclude) {}
 
   /* virtual methods from DataHandler */
   virtual void LineReceived(const char *line);
