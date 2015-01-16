@@ -96,8 +96,10 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(unsigned _index)
+DeviceDescriptor::DeviceDescriptor(unsigned _index,
+                                   PortListener *_port_listener)
   :index(_index),
+   port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
    driver(nullptr), device(nullptr),
@@ -412,7 +414,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  Port *port = OpenPort(config, nullptr, *this);
+  Port *port = OpenPort(config, port_listener, *this);
   if (port == nullptr) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);

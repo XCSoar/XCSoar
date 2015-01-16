@@ -60,6 +60,7 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
+class PortListener;
 
 class DeviceDescriptor final : private Notify, private PortLineSplitter {
   /**
@@ -71,6 +72,8 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
 
   /** the index of this device in the global list */
   const unsigned index;
+
+  PortListener *const port_listener;
 
   /**
    * This device's configuration.  It may differ from the instance in
@@ -202,7 +205,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   bool borrowed;
 
 public:
-  DeviceDescriptor(unsigned index);
+  DeviceDescriptor(unsigned index, PortListener *port_listener);
   ~DeviceDescriptor() {
     assert(!IsOccupied());
   }

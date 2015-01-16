@@ -35,7 +35,7 @@ DeviceListInitialise()
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] = new DeviceDispatcher(i);
 
-    device_list[i] = new DeviceDescriptor(i);
+    device_list[i] = new DeviceDescriptor(i, nullptr);
     device_list[i]->SetDispatcher(dispatcher);
   }
 }
