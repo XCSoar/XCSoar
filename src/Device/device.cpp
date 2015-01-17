@@ -139,7 +139,7 @@ devStartup()
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
-    DeviceDescriptor &device = *device_list[0];
+    DeviceDescriptor &device = (*devices)[0];
     devInitOne(device, config);
 #endif
   }
