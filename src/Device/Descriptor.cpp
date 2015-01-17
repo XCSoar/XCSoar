@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Device/Descriptor.hpp"
-#include "Device/Driver.hpp"
-#include "Device/Parser.hpp"
+#include "Descriptor.hpp"
+#include "Driver.hpp"
+#include "Parser.hpp"
+#include "Util/NMEAWriter.hpp"
+#include "Register.hpp"
 #include "Driver/FLARM/Device.hpp"
 #include "Driver/LX/Internal.hpp"
-#include "Device/Util/NMEAWriter.hpp"
-#include "Device/Register.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Port/ConfiguredPort.hpp"
