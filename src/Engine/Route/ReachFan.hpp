@@ -34,7 +34,7 @@ struct ReachResult;
 
 class ReachFan
 {
-  TaskProjection task_proj;
+  TaskProjection projection;
   FlatTriangleFanTree root;
   RoughAltitude terrain_base;
 
