@@ -54,6 +54,10 @@ if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     fi
 
     rm -f /mnt/onboard/XCSoarData/kobo/start_nickel
+    # launch user script before nickel start
+    if [ -f /mnt/onboard/XCSoarData/kobo/init_nickel.sh ]; then
+        source /mnt/onboard/XCSoarData/kobo/init_nickel.sh
+    fi
     umount -l /mnt/onboard
     exec /etc/init.d/rcS
 fi
