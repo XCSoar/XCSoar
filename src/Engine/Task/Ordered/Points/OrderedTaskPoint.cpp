@@ -27,7 +27,8 @@
 #include "FinishPoint.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Task/ObservationZones/Boundary.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/GeoBounds.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Geo/Math.hpp"
 
@@ -188,12 +189,12 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
 }
 
 void
-OrderedTaskPoint::ScanProjection(TaskProjection &task_projection) const
+OrderedTaskPoint::ScanBounds(GeoBounds &bounds) const
 {
-  task_projection.Scan(GetLocation());
+  bounds.Extend(GetLocation());
 
   for (const auto &i : GetBoundary())
-    task_projection.Scan(i);
+    bounds.Extend(i);
 }
 
 void

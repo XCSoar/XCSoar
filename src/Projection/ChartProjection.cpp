@@ -52,12 +52,10 @@ void
 ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point,
                      const GeoPoint &fallback_loc)
 {
-  TaskProjection task_projection;
-  task_projection.Reset(fallback_loc);
-  point.ScanProjection(task_projection);
-  task_projection.Update();
+  GeoBounds bounds(fallback_loc);
+  point.ScanBounds(bounds);
 
-  Set(rc, task_projection, fixed(1.3));
+  Set(rc, TaskProjection(bounds), fixed(1.3));
 }
 
 void

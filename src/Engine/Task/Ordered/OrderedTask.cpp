@@ -162,16 +162,16 @@ OrderedTask::UpdateGeometry()
   taskpoint_start->ScanActive(*task_points[active_task_point]);
 
   // scan location of task points
-  task_projection.Reset(task_points[0]->GetLocation());
+  GeoBounds bounds(task_points[0]->GetLocation());
   for (const auto *tp : task_points)
-    tp->ScanProjection(task_projection);
+    tp->ScanBounds(bounds);
 
   // ... and optional start points
   for (const OrderedTaskPoint *tp : optional_start_points)
-    tp->ScanProjection(task_projection);
+    tp->ScanBounds(bounds);
 
   // projection can now be determined
-  task_projection.Update();
+  task_projection = TaskProjection(bounds);
 
   // update OZ's for items that depend on next-point geometry
   UpdateObservationZones(task_points, task_projection);
