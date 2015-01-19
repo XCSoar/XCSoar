@@ -100,19 +100,19 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  TaskProjection task_projection(trail_renderer.GetBounds(nmea_info.location));
+  GeoBounds bounds(nmea_info.location);
+  trail_renderer.ScanBounds(bounds);
 
   /* scan all solutions to make sure they are all visible */
   for (unsigned i = 0; i < 3; ++i) {
     if (contest.GetResult(i).IsDefined()) {
       const ContestTraceVector &solution = contest.GetSolution(i);
       for (auto j = solution.begin(), end = solution.end(); j != end; ++j)
-        task_projection.Scan(j->location);
+        bounds.Extend(j->location);
     }
   }
 
-
-  const ChartProjection proj(rc, task_projection);
+  const ChartProjection proj(rc, TaskProjection(bounds));
 
   {
     // draw place names found in the retrospective task

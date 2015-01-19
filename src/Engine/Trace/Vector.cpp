@@ -23,17 +23,11 @@ Copyright_License {
 
 #include "Vector.hpp"
 #include "Point.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/GeoBounds.hpp"
 
-TaskProjection
-TracePointVector::GetBounds(const GeoPoint &fallback_location) const
+void
+TracePointVector::ScanBounds(GeoBounds &bounds) const
 {
-  TaskProjection task_projection;
-
-  task_projection.Reset(fallback_location);
   for (const auto &i : *this)
-    task_projection.Scan(i.GetLocation());
-
-  task_projection.Update();
-  return task_projection;
+    bounds.Extend(i.GetLocation());
 }

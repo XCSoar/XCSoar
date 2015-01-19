@@ -60,8 +60,9 @@ public:
   bool LoadTrace(const TraceComputer &trace_computer, unsigned min_time,
                  const WindowProjection &projection);
 
-  gcc_pure
-  TaskProjection GetBounds(const GeoPoint fallback_location) const;
+  void ScanBounds(GeoBounds &bounds) const {
+    trace.ScanBounds(bounds);
+  }
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,

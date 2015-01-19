@@ -24,18 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_TRACE_VECTOR_HPP
 #define XCSOAR_TRACE_VECTOR_HPP
 
-#include "Compiler.h"
-
 #include <vector>
 
 struct GeoPoint;
+class GeoBounds;
 class TaskProjection;
 class TracePoint;
 
 class TracePointVector : public std::vector<TracePoint> {
 public:
-  gcc_pure
-  TaskProjection GetBounds(const GeoPoint &fallback_location) const;
+  void ScanBounds(GeoBounds &bounds) const;
 };
 
 /**

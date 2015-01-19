@@ -55,12 +55,6 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
   return !trace.empty();
 }
 
-TaskProjection
-TrailRenderer::GetBounds(const GeoPoint fallback_location) const
-{
-  return trace.GetBounds(fallback_location);
-}
-
 /**
  * This function returns the corresponding SnailTrail
  * color array index to the input
