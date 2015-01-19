@@ -41,27 +41,12 @@ static constexpr fixed inv_scale(1.0/fixed_scale);
 void
 TaskProjection::Reset(const GeoPoint &ref)
 {
-  location_min = ref;
-  location_max = ref;
+  bounds = GeoBounds(ref);
   location_mid = ref;
 
 #ifndef NDEBUG
   initialised = true;
 #endif
-}
-
-void
-TaskProjection::Scan(const GeoPoint &ref)
-{
-  assert(initialised);
-
-  if (!ref.IsValid())
-    return;
-
-  location_min.longitude = std::min(ref.longitude, location_min.longitude);
-  location_max.longitude = std::max(ref.longitude, location_max.longitude);
-  location_min.latitude = std::min(ref.latitude, location_min.latitude);
-  location_max.latitude = std::max(ref.latitude, location_max.latitude);
 }
 
 bool
@@ -71,10 +56,7 @@ TaskProjection::Update()
 
   GeoPoint old_loc = location_mid;
 
-  location_mid.longitude =
-    location_max.longitude.Fraction(location_min.longitude, fixed(0.5));
-  location_mid.latitude =
-    location_max.latitude.Fraction(location_min.latitude, fixed(0.5));
+  location_mid = bounds.GetCenter();
   cos_midloc = location_mid.latitude.fastcosine() * fixed_scale;
   r_cos_midloc = fixed(1)/cos_midloc;
   approx_scale = Unproject(FlatGeoPoint(0,-1)).Distance(Unproject(FlatGeoPoint(0,1))) / 2;
@@ -148,8 +130,8 @@ TaskProjection::ApproxRadius() const
 {
   assert(initialised);
 
-  return std::max(location_mid.Distance(location_max),
-                  location_mid.Distance(location_min));
+  return std::max(GetCenter().Distance(bounds.GetSouthWest()),
+                  GetCenter().Distance(bounds.GetNorthEast()));
 }
 
 GeoBounds

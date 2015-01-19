@@ -24,6 +24,7 @@
 #define TASKPROJECTION_H
 
 #include "Geo/GeoPoint.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Compiler.h"
 
 struct FlatPoint;
@@ -39,10 +40,7 @@ class GeoBounds;
  * Needs to be initialized with reset() before first use.
  */
 class TaskProjection {
-  /** Lower left corner found in scan */
-  GeoPoint location_min;
-  /** Upper right corner found in scan */
-  GeoPoint location_max;
+  GeoBounds bounds;
   /** Midpoint of boundary, used as projection center point */
   GeoPoint location_mid;
   /** Cosine of the midpoint */
@@ -78,7 +76,9 @@ public:
    *
    * @param ref Point to check against bounds
    */
-  void Scan(const GeoPoint &ref);
+  void Scan(const GeoPoint &ref) {
+    bounds.Extend(ref);
+  }
 
   /**
    * Update projection.
