@@ -29,38 +29,16 @@ void
 TaskProjection::Reset(const GeoPoint &ref)
 {
   FlatProjection::SetInvalid();
-  location_min = ref;
-  location_max = ref;
-}
-
-void
-TaskProjection::Scan(const GeoPoint &ref)
-{
-  assert(location_min.IsValid());
-  assert(location_max.IsValid());
-
-  if (!ref.IsValid())
-    return;
-
-  location_min.longitude = std::min(ref.longitude, location_min.longitude);
-  location_max.longitude = std::max(ref.longitude, location_max.longitude);
-  location_min.latitude = std::min(ref.latitude, location_min.latitude);
-  location_max.latitude = std::max(ref.latitude, location_max.latitude);
+  bounds = GeoBounds(ref);
 }
 
 bool
 TaskProjection::Update()
 {
-  assert(location_min.IsValid());
-  assert(location_max.IsValid());
+  assert(bounds.IsValid());
 
   GeoPoint old_center = GetCenter();
-  GeoPoint new_center;
-
-  new_center.longitude =
-    location_max.longitude.Fraction(location_min.longitude, fixed(0.5));
-  new_center.latitude =
-    location_max.latitude.Fraction(location_min.latitude, fixed(0.5));
+  GeoPoint new_center = bounds.GetCenter();
   if (new_center == old_center)
     return false;
 
@@ -71,9 +49,8 @@ TaskProjection::Update()
 fixed
 TaskProjection::ApproxRadius() const
 {
-  assert(location_min.IsValid());
-  assert(location_max.IsValid());
+  assert(bounds.IsValid());
 
-  return std::max(GetCenter().Distance(location_max),
-                  GetCenter().Distance(location_min));
+  return std::max(GetCenter().Distance(bounds.GetSouthWest()),
+                  GetCenter().Distance(bounds.GetNorthEast()));
 }

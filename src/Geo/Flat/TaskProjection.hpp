@@ -25,6 +25,7 @@
 
 #include "FlatProjection.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Compiler.h"
 
 /**
@@ -35,16 +36,11 @@
  * Needs to be initialized with reset() before first use.
  */
 class TaskProjection : public FlatProjection {
-  /** Lower left corner found in scan */
-  GeoPoint location_min;
-  /** Upper right corner found in scan */
-  GeoPoint location_max;
+  GeoBounds bounds;
 
 public:
 #ifndef NDEBUG
-  TaskProjection()
-    :location_min(GeoPoint::Invalid()),
-     location_max(GeoPoint::Invalid()) {}
+  TaskProjection():bounds(GeoBounds::Invalid()) {}
 #endif
 
   /**
@@ -60,7 +56,9 @@ public:
    *
    * @param ref Point to check against bounds
    */
-  void Scan(const GeoPoint &ref);
+  void Scan(const GeoPoint &ref) {
+    bounds.Extend(ref);
+  }
 
   /**
    * Update projection.
