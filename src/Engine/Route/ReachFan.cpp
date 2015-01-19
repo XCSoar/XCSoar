@@ -40,8 +40,7 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   Reset();
 
   // initialise projection
-  projection.Reset(origin);
-  projection.Update();
+  projection = FlatProjection(origin);
 
   const short h = terrain
     ? terrain->GetHeight(origin)

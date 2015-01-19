@@ -23,7 +23,7 @@
 #ifndef REACHFAN_HPP
 #define REACHFAN_HPP
 
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
 #include "Rough/RoughAltitude.hpp"
 
@@ -34,7 +34,7 @@ struct ReachResult;
 
 class ReachFan
 {
-  TaskProjection projection;
+  FlatProjection projection;
   FlatTriangleFanTree root;
   RoughAltitude terrain_base;
 
