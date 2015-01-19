@@ -40,8 +40,6 @@ class FlatBoundingBox
   FlatGeoPoint bb_ur;
 
 public:
-  friend class TaskProjection;
-
   /** Non-initialising constructor. */
   FlatBoundingBox() = default;
 
