@@ -25,6 +25,12 @@
 #include <algorithm>
 #include <cassert>
 
+TaskProjection::TaskProjection(const GeoBounds &_bounds)
+  :bounds(_bounds)
+{
+  SetCenter(bounds.GetCenter());
+}
+
 void
 TaskProjection::Reset(const GeoPoint &ref)
 {

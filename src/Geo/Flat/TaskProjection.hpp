@@ -41,7 +41,11 @@ class TaskProjection : public FlatProjection {
 public:
 #ifndef NDEBUG
   TaskProjection():bounds(GeoBounds::Invalid()) {}
+#else
+  TaskProjection() = default;
 #endif
+
+  explicit TaskProjection(const GeoBounds &bounds);
 
   /**
    * Reset search bounds
