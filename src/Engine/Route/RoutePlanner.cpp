@@ -22,7 +22,7 @@
 
 #include "RoutePlanner.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 
 RoutePlanner::RoutePlanner()
   :terrain(NULL), planner(0),
@@ -487,9 +487,7 @@ bool
 RoutePlanner::Intersection(const AGeoPoint& origin,
                            const AGeoPoint& destination, GeoPoint& intx) const
 {
-  TaskProjection proj;
-  proj.Reset(origin);
-  proj.Update();
+  const FlatProjection proj(origin);
   return rpolars_route.Intersection(origin, destination, terrain, proj, intx);
 }
 
