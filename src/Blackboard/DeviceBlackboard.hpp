@@ -43,9 +43,8 @@ class OperationEnvironment;
  * The DeviceBlackboard is used as the global ground truth-state
  * since it is accessed quickly with only one mutex
  */
-class DeviceBlackboard:
-  public BaseBlackboard,
-  public ComputerSettingsBlackboard
+class DeviceBlackboard
+  : public BaseBlackboard, public ComputerSettingsBlackboard
 {
   friend class MergeThread;
 
