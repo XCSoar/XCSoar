@@ -30,11 +30,19 @@ Copyright_License {
 #define XCSOAR_DEVICE_LIST_HPP
 
 #include "Features.hpp"
+#include "Math/fixed.hpp"
 
 #include <array>
 
+#include <tchar.h>
+
 class DeviceDescriptor;
 class DeviceDispatcher;
+struct MoreData;
+struct DerivedInfo;
+class AtmosphericPressure;
+class RadioFrequency;
+class OperationEnvironment;
 
 /**
  * Container for all (configured) devices.
@@ -60,6 +68,25 @@ public:
   const_iterator end() {
     return devices.end();
   }
+
+  /**
+   * Invoke Device::OnSysTicker() on all devices.
+   */
+  void Tick();
+
+  void AutoReopen(OperationEnvironment &env);;
+  void PutMacCready(fixed mac_cready, OperationEnvironment &env);
+  void PutBugs(fixed bugs, OperationEnvironment &env);
+  void PutBallast(fixed fraction, fixed overload, OperationEnvironment &env);
+  void PutVolume(unsigned volume, OperationEnvironment &env);
+  void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,
+                          OperationEnvironment &env);
+  void PutStandbyFrequency(RadioFrequency frequency, const TCHAR *name,
+                           OperationEnvironment &env);
+  void PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
+  void NotifySensorUpdate(const MoreData &basic);
+  void NotifyCalculatedUpdate(const MoreData &basic,
+                              const DerivedInfo &calculated);
 };
 
 #endif

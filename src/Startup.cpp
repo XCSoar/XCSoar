@@ -287,6 +287,7 @@ Startup()
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
   devices = new MultipleDevices();
+  device_blackboard->SetDevices(*devices);
 
   // Initialize Markers
   marks = new Markers();

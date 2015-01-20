@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "Device/All.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Simulator.hpp"
 
 #include <algorithm>
@@ -32,6 +32,7 @@ Copyright_License {
  * Initializes the DeviceBlackboard
  */
 DeviceBlackboard::DeviceBlackboard()
+  :devices(nullptr)
 {
   // Clear the gps_info and calculated_info
   gps_info.Reset();
@@ -260,23 +261,27 @@ void
 DeviceBlackboard::SetBallast(fixed fraction, fixed overload,
                              OperationEnvironment &env)
 {
-  AllDevicesPutBallast(fraction, overload, env);
+  if (devices != nullptr)
+    devices->PutBallast(fraction, overload, env);
 }
 
 void
 DeviceBlackboard::SetBugs(fixed bugs, OperationEnvironment &env)
 {
-  AllDevicesPutBugs(bugs, env);
+  if (devices != nullptr)
+    devices->PutBugs(bugs, env);
 }
 
 void
 DeviceBlackboard::SetQNH(AtmosphericPressure qnh, OperationEnvironment &env)
 {
-  AllDevicesPutQNH(qnh, env);
+  if (devices != nullptr)
+    devices->PutQNH(qnh, env);
 }
 
 void
 DeviceBlackboard::SetMC(fixed mc, OperationEnvironment &env)
 {
-  AllDevicesPutMacCready(mc, env);
+  if (devices != nullptr)
+    devices->PutMacCready(mc, env);
 }

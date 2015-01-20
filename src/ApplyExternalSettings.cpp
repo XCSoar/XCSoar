@@ -23,8 +23,9 @@ Copyright_License {
 
 #include "ApplyExternalSettings.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
 #include "ActionInterface.hpp"
-#include "Device/All.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
 static bool
@@ -95,7 +96,8 @@ QNHProcessTimer()
     settings_computer.pressure_available = calculated.pressure_available;
 
     MessageOperationEnvironment env;
-    AllDevicesPutQNH(settings_computer.pressure, env);
+    if (devices != nullptr)
+      devices->PutQNH(settings_computer.pressure, env);
 
     modified = true;
   }

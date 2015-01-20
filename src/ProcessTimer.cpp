@@ -28,7 +28,7 @@ Copyright_License {
 #include "Input/InputQueue.hpp"
 #include "Input/InputEvents.hpp"
 #include "Device/device.hpp"
-#include "Device/All.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -246,6 +246,9 @@ CommonProcessTimer()
 static void
 ConnectionProcessTimer()
 {
+  if (devices == nullptr)
+    return;
+
   static bool connected_last = false;
   static bool location_last = false;
   static bool wait_connect = false;
@@ -275,7 +278,7 @@ ConnectionProcessTimer()
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static QuietOperationEnvironment env;
-  AllDevicesAutoReopen(env);
+  devices->AutoReopen(env);
 }
 
 void
@@ -285,7 +288,8 @@ ProcessTimer()
 
   if (!is_simulator()) {
     // now check GPS status
-    devTick();
+    if (devices != nullptr)
+      devices->Tick();
 
     // also service replay logger
     if (replay && replay->IsActive()) {

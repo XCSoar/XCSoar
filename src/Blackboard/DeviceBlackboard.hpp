@@ -33,6 +33,7 @@ Copyright_License {
 
 #include <cassert>
 
+class MultipleDevices;
 class AtmosphericPressure;
 class OperationEnvironment;
 
@@ -49,6 +50,8 @@ class DeviceBlackboard
   friend class MergeThread;
 
   Simulator simulator;
+
+  MultipleDevices *devices;
 
   /**
    * Data from each physical device.
@@ -80,6 +83,13 @@ public:
 
 public:
   DeviceBlackboard();
+
+  void SetDevices(MultipleDevices &_devices) {
+    assert(devices == nullptr);
+
+    devices = &_devices;
+  }
+
   void ReadBlackboard(const DerivedInfo &derived_info);
   void ReadComputerSettings(const ComputerSettings &settings);
 

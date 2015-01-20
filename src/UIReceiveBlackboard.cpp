@@ -27,7 +27,7 @@ Copyright_License {
 #include "ApplyVegaSwitches.hpp"
 #include "ApplyExternalSettings.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Device/All.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Input/TaskEventObserver.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
@@ -63,8 +63,9 @@ UIReceiveCalculatedData()
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
 
-  AllDevicesNotifyCalculatedUpdate(CommonInterface::Basic(),
-                                   CommonInterface::Calculated());
+  if (devices != nullptr)
+    devices->NotifyCalculatedUpdate(CommonInterface::Basic(),
+                                    CommonInterface::Calculated());
 
   {
     const ProtectedTaskManager::Lease lease(*protected_task_manager);

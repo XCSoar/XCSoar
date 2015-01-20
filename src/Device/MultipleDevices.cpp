@@ -44,3 +44,87 @@ MultipleDevices::~MultipleDevices()
   for (DeviceDispatcher *i : dispatchers)
     delete i;
 }
+
+void
+MultipleDevices::Tick()
+{
+  for (DeviceDescriptor *i : devices)
+    i->OnSysTicker();
+}
+
+void
+MultipleDevices::AutoReopen(OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->AutoReopen(env);
+}
+
+void
+MultipleDevices::PutMacCready(fixed mac_cready, OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutMacCready(mac_cready, env);
+}
+
+void
+MultipleDevices::PutBugs(fixed bugs, OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutBugs(bugs, env);
+}
+
+void
+MultipleDevices::PutBallast(fixed fraction, fixed overload,
+                            OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutBallast(fraction, overload, env);
+}
+
+void
+MultipleDevices::PutVolume(unsigned volume, OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutVolume(volume, env);
+}
+
+void
+MultipleDevices::PutActiveFrequency(RadioFrequency frequency,
+                                    const TCHAR *name,
+                                    OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutActiveFrequency(frequency, name, env);
+}
+
+void
+MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
+                                     const TCHAR *name,
+                                     OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutStandbyFrequency(frequency, name, env);
+}
+
+void
+MultipleDevices::PutQNH(const AtmosphericPressure &pres,
+                        OperationEnvironment &env)
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutQNH(pres, env);
+}
+
+void
+MultipleDevices::NotifySensorUpdate(const MoreData &basic)
+{
+  for (DeviceDescriptor *i : devices)
+    i->OnSensorUpdate(basic);
+}
+
+void
+MultipleDevices::NotifyCalculatedUpdate(const MoreData &basic,
+                                        const DerivedInfo &calculated)
+{
+  for (DeviceDescriptor *i : devices)
+    i->OnCalculatedUpdate(basic, calculated);
+}
