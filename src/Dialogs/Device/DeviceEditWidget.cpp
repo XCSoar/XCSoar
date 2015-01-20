@@ -33,6 +33,7 @@
 #include "Form/DataField/String.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Features.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Interface.hpp"
 
@@ -67,7 +68,7 @@ static constexpr struct {
 #ifdef _WIN32_WCE
   { DeviceConfig::PortType::AUTO, N_("GPS Intermediate Driver") },
 #endif
-#if defined(ANDROID) || defined(__APPLE__)
+#ifdef HAVE_INTERNAL_GPS
   { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS & sensors") },
 #endif
 #ifdef ANDROID

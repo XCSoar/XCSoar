@@ -103,7 +103,7 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index,
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
    driver(nullptr), device(nullptr),
-#if defined(ANDROID) || defined(__APPLE__)
+#ifdef HAVE_INTERNAL_GPS
    internal_sensors(nullptr),
 #endif
 #ifdef ANDROID
@@ -151,7 +151,7 @@ DeviceDescriptor::GetState() const
   if (port != nullptr)
     return port->GetState();
 
-#if defined(ANDROID) || defined(__APPLE__)
+#ifdef HAVE_INTERNAL_GPS
   if (internal_sensors != nullptr)
     return PortState::READY;
 #endif
@@ -271,7 +271,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 bool
 DeviceDescriptor::OpenInternalSensors()
 {
-#if defined(ANDROID) || defined(__APPLE__)
+#ifdef HAVE_INTERNAL_GPS
   if (is_simulator())
     return true;
 
@@ -472,7 +472,7 @@ DeviceDescriptor::Close()
 
   CancelAsync();
 
-#if defined(ANDROID) || defined(__APPLE__)
+#ifdef HAVE_INTERNAL_GPS
   delete internal_sensors;
   internal_sensors = nullptr;
 #endif

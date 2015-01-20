@@ -24,6 +24,7 @@ Copyright_License {
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
 #include "device.hpp"
+#include "Features.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Components.hpp"
@@ -130,7 +131,7 @@ devStartup()
   }
 
   if (none_available) {
-#if defined(ANDROID) || defined(__APPLE__)
+#ifdef HAVE_INTERNAL_GPS
     /* fall back to built-in GPS when no configured device is
        available on this platform */
     LogFormat("Falling back to built-in GPS");
