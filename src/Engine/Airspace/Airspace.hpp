@@ -162,6 +162,7 @@ public:
   /**
    * Is it necessary to call SetGroundLevel() for this AbstractAirspace?
    */
+  gcc_pure
   bool NeedGroundLevel() const;
 
   /**
