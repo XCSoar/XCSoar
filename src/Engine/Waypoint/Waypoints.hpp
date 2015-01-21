@@ -148,6 +148,14 @@ public:
   void Optimise();
 
   /**
+   * Prepare and enable the next Optimise() call.
+   */
+  void ScheduleOptimise() {
+    waypoint_tree.Flatten();
+    waypoint_tree.ClearBounds();
+  }
+
+  /**
    * Clear the waypoint store
    */
   void Clear();

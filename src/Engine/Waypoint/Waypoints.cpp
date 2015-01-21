@@ -142,11 +142,8 @@ Waypoints::Append(Waypoint &&wp)
 {
   if (waypoint_tree.HaveBounds()) {
     wp.Project(task_projection);
-    if (!waypoint_tree.IsWithinBounds(wp)) {
-      /* schedule an Optimise() call */
-      waypoint_tree.Flatten();
-      waypoint_tree.ClearBounds();
-    }
+    if (!waypoint_tree.IsWithinBounds(wp))
+      ScheduleOptimise();
   } else if (IsEmpty())
     task_projection.Reset(wp.location);
 
@@ -337,11 +334,8 @@ Waypoints::Replace(const Waypoint &orig, const Waypoint &replacement)
 
   if (waypoint_tree.HaveBounds()) {
     new_waypoint.Project(task_projection);
-    if (!waypoint_tree.IsWithinBounds(new_waypoint)) {
-      /* schedule an Optimise() call */
-      waypoint_tree.Flatten();
-      waypoint_tree.ClearBounds();
-    }
+    if (!waypoint_tree.IsWithinBounds(new_waypoint))
+      ScheduleOptimise();
   }
 
   const auto it = waypoint_tree.FindPointer(&orig);
