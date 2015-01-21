@@ -39,6 +39,8 @@ public:
   AltairControl();
   ~AltairControl();
 
+  AltairControl(const AltairControl &) = delete;
+
   bool ShortBeep();
 
   /**
