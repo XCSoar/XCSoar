@@ -85,7 +85,7 @@ public:
   typedef WaypointTree::const_iterator const_iterator;
 
   /**
-   * Constructor.  Task projection is updated after call to optimise().
+   * Constructor.  Task projection is updated after call to Optimise().
    * As waypoints are added they are stored temporarily before applying
    * projection so that the bounds of the projection may be obtained.
    *
@@ -102,7 +102,7 @@ public:
 
   /**
    * Add waypoint to internal store.  Internal copy is made.
-   * optimise() must be called after inserting waypoints prior to
+   * Optimise() must be called after inserting waypoints prior to
    * performing any queries, but can be done in batches.
    *
    * @param wp Waypoint to add to internal store
@@ -110,7 +110,7 @@ public:
   const Waypoint &Append(Waypoint &&wp);
 
   /**
-   * Erase waypoint from the internal store.  Requires optimise() to
+   * Erase waypoint from the internal store.  Requires Optimise() to
    * be called afterwards
    *
    * @param wp Waypoint to erase from internal store
@@ -118,7 +118,7 @@ public:
   void Erase(const Waypoint& wp);
 
   /**
-   * Replace waypoint from the internal store.  Requires optimise() to
+   * Replace waypoint from the internal store.  Requires Optimise() to
    * be called afterwards.
    *
    * @param orig Waypoint that will be replaced
@@ -142,7 +142,7 @@ public:
    * This updates the task_projection.
    *
    * Note: currently this code doesn't check for task projections
-   * being modified from multiple calls to optimise() so it should
+   * being modified from multiple calls to Optimise() so it should
    * only be called once (until this is fixed).
    */
   void Optimise();
@@ -154,7 +154,7 @@ public:
 
   /**
    * Size of waypoints (in tree, not in temporary store) ---
-   * must call optimise() before this for it to be accurate.
+   * must call Optimise() before this for it to be accurate.
    *
    * @return Number of waypoints in tree
    */
