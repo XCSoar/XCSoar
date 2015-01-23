@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2014 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,13 +32,36 @@ Copyright_License {
 #define GCC_VERSION 0
 #endif
 
+/**
+ * Are we building with the specified version of gcc (not clang or any
+ * other compiler) or newer?
+ */
+#define GCC_CHECK_VERSION(major, minor) \
+  (defined(__GNUC__) && !defined(__clang__) && \
+   GCC_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
+
+/**
+ * Are we building with clang (any version) or at least the specified
+ * gcc version?
+ */
+#define CLANG_OR_GCC_VERSION(major, minor) \
+  (defined(__clang__) || GCC_CHECK_VERSION(major, minor))
+
+/**
+ * Are we building with gcc (not clang or any other compiler) and a
+ * version older than the specified one?
+ */
+#define GCC_OLDER_THAN(major, minor) \
+  (defined(__GNUC__) && !defined(__clang__) && \
+   GCC_VERSION < GCC_MAKE_VERSION(major, minor, 0))
+
 #ifdef __clang__
 #  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
 #  if __clang_major__ < 3
 #    error Sorry, your clang version is too old.  You need at least version 3.1.
 #  endif
 #elif defined(__GNUC__)
-#  if GCC_VERSION < 40600
+#  if GCC_OLDER_THAN(4,6)
 #    error Sorry, your gcc version is too old.  You need at least version 4.6.
 #  endif
 #else
@@ -52,7 +75,7 @@ Copyright_License {
 	(defined(__clang__) && \
 	 CLANG_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
 
-#if GCC_VERSION >= 30000
+#if CLANG_OR_GCC_VERSION(4,0)
 
 /* GCC 4.x */
 
@@ -81,7 +104,7 @@ Copyright_License {
 
 #define gcc_always_inline __attribute__((always_inline))
 
-#else /* ! GCC_VERSION >= 30000 */
+#else
 
 /* generic C compiler */
 
@@ -110,9 +133,9 @@ Copyright_License {
 
 #define gcc_always_inline inline
 
-#endif /* ! GCC_VERSION >= 30000 */
+#endif
 
-#if GCC_VERSION >= 40300
+#if CLANG_OR_GCC_VERSION(4,3)
 
 #define gcc_hot __attribute__((hot))
 #define gcc_cold __attribute__((cold))
@@ -124,7 +147,7 @@ Copyright_License {
 
 #endif /* ! GCC_UNUSED >= 40300 */
 
-#if GCC_VERSION >= 40600 && !defined(__clang__)
+#if GCC_CHECK_VERSION(4,6)
 #define gcc_flatten __attribute__((flatten))
 #else
 #define gcc_flatten
@@ -133,7 +156,7 @@ Copyright_License {
 #ifndef __cplusplus
 /* plain C99 has "restrict" */
 #define gcc_restrict restrict
-#elif GCC_VERSION >= 30000
+#elif CLANG_OR_GCC_VERSION(4,0)
 /* "__restrict__" is a GCC extension for C++ */
 #define gcc_restrict __restrict__
 #else
@@ -146,12 +169,12 @@ Copyright_License {
 #if defined(__cplusplus)
 
 /* support for C++11 "override" was added in gcc 4.7 */
-#if !defined(__clang__) && GCC_VERSION < 40700
+#if GCC_OLDER_THAN(4,7)
 #define override
 #define final
 #endif
 
-#if defined(__clang__) || GCC_VERSION >= 40800
+#if CLANG_OR_GCC_VERSION(4,8)
 #define gcc_alignas(T, fallback) alignas(T)
 #else
 #define gcc_alignas(T, fallback) gcc_aligned(fallback)
