@@ -58,7 +58,7 @@ static uint64_t
 Now()
 {
 #ifdef HAVE_POSIX
-  return time(NULL);
+  return time(nullptr);
 #else
   SYSTEMTIME system_time;
   GetSystemTime(&system_time);
@@ -156,26 +156,26 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
-    return NULL;
+    return nullptr;
 
   TCHAR path[PathBufferSize(name)];
   MakeCachePath(path, name);
 
   FileInfo cached_info;
   if (!GetRegularFileInfo(path, cached_info))
-    return NULL;
+    return nullptr;
 
   /* if the original file is newer than the cache, discard the cache -
      unless the system clock is skewed (origina file's modification
      time is in the future) */
   if (original_info.mtime > cached_info.mtime && !original_info.IsFuture()) {
     File::Delete(path);
-    return NULL;
+    return nullptr;
   }
 
   FILE *file = _tfopen(path, _T("rb"));
-  if (file == NULL)
-    return NULL;
+  if (file == nullptr)
+    return nullptr;
 
   unsigned magic;
   struct FileInfo old_info;
@@ -185,7 +185,7 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
       old_info != original_info) {
     fclose(file);
     File::Delete(path);
-    return NULL;
+    return nullptr;
   }
 
   return file;
@@ -196,7 +196,7 @@ FileCache::Save(const TCHAR *name, const TCHAR *original_path)
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
-    return NULL;
+    return nullptr;
 
   Directory::Create(cache_path);
 
@@ -205,14 +205,14 @@ FileCache::Save(const TCHAR *name, const TCHAR *original_path)
 
   File::Delete(path);
   FILE *file = _tfopen(path, _T("wb"));
-  if (file == NULL)
-    return NULL;
+  if (file == nullptr)
+    return nullptr;
 
   if (fwrite(&FILE_CACHE_MAGIC, sizeof(FILE_CACHE_MAGIC), 1, file) != 1 ||
       fwrite(&original_info, sizeof(original_info), 1, file) != 1) {
     fclose(file);
     File::Delete(path);
-    return NULL;
+    return nullptr;
   }
 
   return file;

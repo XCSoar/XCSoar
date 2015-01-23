@@ -29,12 +29,12 @@ bool
 KeyValueFileReader::Read(KeyValuePair &pair)
 {
   char *line;
-  while ((line = reader.ReadLine()) != NULL) {
+  while ((line = reader.ReadLine()) != nullptr) {
     if (StringIsEmpty(line) || *line == '#')
       continue;
 
     char *p = strchr(line, '=');
-    if (p == line || p == NULL)
+    if (p == line || p == nullptr)
       continue;
 
     *p = '\0';
@@ -43,7 +43,7 @@ KeyValueFileReader::Read(KeyValuePair &pair)
     if (*value == '"') {
       ++value;
       p = strchr(value, '"');
-      if (p == NULL)
+      if (p == nullptr)
         continue;
 
       *p = '\0';

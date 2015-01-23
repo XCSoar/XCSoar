@@ -35,11 +35,11 @@ Copyright_License {
 void
 KeyValueFileWriter::Write(const char *key, const char *value)
 {
-  assert(key != NULL);
-  assert(value != NULL);
+  assert(key != nullptr);
+  assert(value != nullptr);
 
   // does it contain invalid characters?
-  if (strpbrk(value, "\r\n\"") != NULL)
+  if (strpbrk(value, "\r\n\"") != nullptr)
     // -> write ="" to the output file an continue with the next subkey
     value = "";
 

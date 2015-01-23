@@ -68,19 +68,19 @@ WindowsFileSource::WindowsFileSource(const char *path)
     return;
   }
 
-  handle = ::CreateFile(tpath, GENERIC_READ, FILE_SHARE_READ, NULL,
-                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  handle = ::CreateFile(tpath, GENERIC_READ, FILE_SHARE_READ, nullptr,
+                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 #else
-  handle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL,
-                       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  handle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
+                       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 #endif
 }
 
 #ifdef _UNICODE
 WindowsFileSource::WindowsFileSource(const TCHAR *path)
 {
-  handle = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
-                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  handle = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
+                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 }
 #endif
 
@@ -114,7 +114,7 @@ unsigned
 WindowsFileSource::Read(char *p, unsigned n)
 {
   DWORD nbytes;
-  if (!::ReadFile(handle, p, n, &nbytes, NULL))
+  if (!::ReadFile(handle, p, n, &nbytes, nullptr))
     return 0;
   return nbytes;
 }

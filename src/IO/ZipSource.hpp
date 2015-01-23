@@ -45,7 +45,7 @@ public:
   virtual ~ZipSource();
 
   bool error() const {
-    return file == NULL;
+    return file == nullptr;
   }
 
 public:

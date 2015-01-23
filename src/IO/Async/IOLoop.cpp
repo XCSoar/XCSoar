@@ -100,7 +100,7 @@ IOLoop::Update()
 IOLoop::File *
 IOLoop::CollectReady()
 {
-  File *ready = NULL;
+  File *ready = nullptr;
   for (auto i = poll.begin(), end = poll.end(); i != end; ++i) {
     const int fd = *i;
     const unsigned mask = i.GetMask();
@@ -123,7 +123,7 @@ IOLoop::CollectReady()
 void
 IOLoop::HandleReady(File *ready)
 {
-  if (ready == NULL)
+  if (ready == nullptr)
     return;
 
   /* set the "running" flag so other threads calling LockRemove() know
@@ -153,7 +153,7 @@ IOLoop::HandleReady(File *ready)
     }
 
     ready = ready->next_ready;
-  } while (ready != NULL);
+  } while (ready != nullptr);
 
   /* clear the "running" flag and wake up threads waiting inside
      LockRemove() */

@@ -130,8 +130,8 @@ public:
    */
   bool Write(const char *s, size_t length) {
     assert(file.IsOpen());
-    assert(memchr(s, '\r', length) == NULL);
-    assert(memchr(s, '\n', length) == NULL);
+    assert(memchr(s, '\r', length) == nullptr);
+    assert(memchr(s, '\n', length) == nullptr);
 
     return file.Write(s, sizeof(*s), length) == length;
   }
@@ -141,8 +141,8 @@ public:
    */
   bool Write(const char *s) {
     assert(file.IsOpen());
-    assert(strchr(s, '\r') == NULL);
-    assert(strchr(s, '\n') == NULL);
+    assert(strchr(s, '\r') == nullptr);
+    assert(strchr(s, '\n') == nullptr);
 
     return file.Write(s) >= 0;
   }
@@ -167,8 +167,8 @@ public:
   template<typename... Args>
   void Format(const char *fmt, Args&&... args) {
     assert(file.IsOpen());
-    assert(strchr(fmt, '\r') == NULL);
-    assert(strchr(fmt, '\n') == NULL);
+    assert(strchr(fmt, '\r') == nullptr);
+    assert(strchr(fmt, '\n') == nullptr);
 
     file.WriteFormatted(fmt, args...);
   }
@@ -176,8 +176,8 @@ public:
   template<typename... Args>
   void FormatLine(const char *fmt, Args&&... args) {
     assert(file.IsOpen());
-    assert(strchr(fmt, '\r') == NULL);
-    assert(strchr(fmt, '\n') == NULL);
+    assert(strchr(fmt, '\r') == nullptr);
+    assert(strchr(fmt, '\n') == nullptr);
 
     file.WriteFormatted(fmt, args...);
     NewLine();

@@ -38,7 +38,7 @@ public:
    * (without the trailing line feed character).  The returned buffer
    * is writable, and may be modified by the caller while parsing it.
    * It is Invalidated by the next call.  After the last line has been
-   * read, this method returns NULL.
+   * read, this method returns nullptr.
    */
   virtual T *ReadLine() = 0;
 

@@ -53,8 +53,8 @@ ConvertLineReader::ReadLine()
 {
   char *narrow = source.ReadLine();
 
-  if (narrow == NULL)
-    return NULL;
+  if (narrow == nullptr)
+    return nullptr;
 
   // Check if there is byte order mark in front
   if (narrow[0] == (char)0xEF &&
@@ -76,8 +76,8 @@ ConvertLineReader::ReadLine()
   size_t narrow_length = strlen(narrow);
 
   TCHAR *t = tbuffer.get(narrow_length + 1);
-  if (t == NULL)
-    return NULL;
+  if (t == nullptr)
+    return nullptr;
 
   if (narrow_length == 0) {
     t[0] = _T('\0');
@@ -93,7 +93,7 @@ ConvertLineReader::ReadLine()
     int length = MultiByteToWideChar(CP_UTF8, 0, narrow, narrow_length,
                                      t, narrow_length);
     if (length == 0)
-      return NULL;
+      return nullptr;
 
     t[length] = _T('\0');
 
@@ -109,14 +109,14 @@ ConvertLineReader::ReadLine()
   case ISO_LATIN_1:
     buffer_size = strlen(narrow) * 2 + 1;
     utf8 = Latin1ToUTF8(narrow, tbuffer.get(buffer_size), buffer_size);
-    if (utf8 == NULL)
+    if (utf8 == nullptr)
       return narrow;
     return const_cast<char *>(utf8);
 
   case UTF8:
     if (!ValidateUTF8(narrow))
       /* abort on invalid UTF-8 sequence */
-      return NULL;
+      return nullptr;
 
     /* fall through ... */
 

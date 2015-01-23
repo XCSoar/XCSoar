@@ -30,11 +30,11 @@ Copyright_License {
 TLineReader *
 OpenTextFile(const TCHAR *path, ConvertLineReader::charset cs)
 {
-  assert(path != NULL);
+  assert(path != nullptr);
 
   FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == NULL)
-    return NULL;
+  if (reader == nullptr)
+    return nullptr;
 
   if (!reader->error())
     return reader;
@@ -42,13 +42,13 @@ OpenTextFile(const TCHAR *path, ConvertLineReader::charset cs)
   delete reader;
 
   ZipLineReader *zip_reader = new ZipLineReader(path, cs);
-  if (zip_reader == NULL)
-    return NULL;
+  if (zip_reader == nullptr)
+    return nullptr;
 
   if (!zip_reader->error())
     return zip_reader;
 
   delete zip_reader;
 
-  return NULL;
+  return nullptr;
 }

@@ -48,11 +48,11 @@ TextWriter::Write(const TCHAR *s, size_t src_length)
 
   size_t dest_size = src_length * 5;
   char *dest = convert_buffer.get(dest_size);
-  if (dest == NULL)
+  if (dest == nullptr)
     return false;
 
   int length = WideCharToMultiByte(CP_UTF8, 0, s, src_length,
-                                   dest, dest_size, NULL, NULL);
+                                   dest, dest_size, nullptr, nullptr);
   if (length == 0)
     return false;
 
@@ -62,8 +62,8 @@ TextWriter::Write(const TCHAR *s, size_t src_length)
 bool
 TextWriter::Write(const TCHAR *s)
 {
-  assert(_tcschr(s, _T('\r')) == NULL);
-  assert(_tcschr(s, _T('\n')) == NULL);
+  assert(_tcschr(s, _T('\r')) == nullptr);
+  assert(_tcschr(s, _T('\n')) == nullptr);
 
   return Write(s, _tcslen(s));
 }
@@ -72,14 +72,14 @@ bool
 TextWriter::Format(const TCHAR *fmt, ...)
 {
   assert(IsOpen());
-  assert(fmt != NULL);
-  assert(_tcschr(fmt, _T('\r')) == NULL);
-  assert(_tcschr(fmt, _T('\n')) == NULL);
+  assert(fmt != nullptr);
+  assert(_tcschr(fmt, _T('\r')) == nullptr);
+  assert(_tcschr(fmt, _T('\n')) == nullptr);
 
   /* assume 4 kB is enough for one line */
   size_t buffer_size = 4096;
   TCHAR *buffer = format_buffer.get(buffer_size);
-  if (buffer == NULL)
+  if (buffer == nullptr)
     return false;
 
   va_list ap;

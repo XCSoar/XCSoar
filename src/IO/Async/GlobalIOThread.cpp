@@ -29,7 +29,7 @@ IOThread *io_thread;
 void
 InitialiseIOThread()
 {
-  assert(io_thread == NULL);
+  assert(io_thread == nullptr);
 
   io_thread = new IOThread();
   io_thread->Start();

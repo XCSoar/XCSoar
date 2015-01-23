@@ -44,7 +44,7 @@ OpenConfiguredTextFileA(const char *profile_key);
  * @param profile_key the profile key which is used to read the
  * file name
  * @param cs the character set of the input file
- * @return a TLineReader which must be deleted by the caller; NULL if
+ * @return a TLineReader which must be deleted by the caller; nullptr if
  * there is no such setting, or if an error occurred opening the file
  */
 TLineReader *
@@ -60,7 +60,7 @@ OpenConfiguredTextFile(const char *profile_key,
  * @param in_map_file if no profile setting is found, attempt to open
  * this file from inside the map file
  * @param cs the character set of the input file
- * @return a TLineReader which must be deleted by the caller; NULL if
+ * @return a TLineReader which must be deleted by the caller; nullptr if
  * there is no such setting, or if an error occurred opening the file
  */
 TLineReader *

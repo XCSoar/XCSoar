@@ -31,20 +31,20 @@ Copyright_License {
 static void
 MakeTemporaryPath(TCHAR *path)
 {
-  assert(path != NULL);
+  assert(path != nullptr);
 
 #ifdef HAVE_POSIX
   _tcscat(path, _T(".tmp"));
 #else
   TCHAR *base = const_cast<TCHAR *>(BaseName(path));
-  if (base == NULL) {
+  if (base == nullptr) {
     /* dirty fallback */
     _tcscat(path, _T(DIR_SEPARATOR_S "tmp.tmp"));
     return;
   }
 
   TCHAR *dot = _tcsrchr(base, '.');
-  if (dot != NULL)
+  if (dot != nullptr)
     /* replace existing file name extension */
     _tcscpy(dot + 1, _T("tmp"));
   else
@@ -56,7 +56,7 @@ MakeTemporaryPath(TCHAR *path)
 FileTransaction::FileTransaction(const TCHAR *_path)
   :final_path(_path), temporary_path(_path)
 {
-  assert(_path != NULL);
+  assert(_path != nullptr);
 
   MakeTemporaryPath(temporary_path.buffer());
 

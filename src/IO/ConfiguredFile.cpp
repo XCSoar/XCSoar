@@ -50,19 +50,19 @@ OpenConfiguredTextFileA(const char *profile_key)
 TLineReader *
 OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
 {
-  assert(profile_key != NULL);
+  assert(profile_key != nullptr);
 
   TCHAR path[MAX_PATH];
   if (!Profile::GetPath(profile_key, path))
-    return NULL;
+    return nullptr;
 
   FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == NULL)
-    return NULL;
+  if (reader == nullptr)
+    return nullptr;
 
   if (reader->error()) {
     delete reader;
-    return NULL;
+    return nullptr;
   }
 
   return reader;
@@ -71,22 +71,22 @@ OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
 static TLineReader *
 OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
 {
-  assert(in_map_file != NULL);
+  assert(in_map_file != nullptr);
 
   TCHAR path[MAX_PATH];
   if (!Profile::GetPath(ProfileKeys::MapFile, path))
-    return NULL;
+    return nullptr;
 
   _tcscat(path, _T("/"));
   _tcscat(path, in_map_file);
 
   ZipLineReader *reader = new ZipLineReader(path, cs);
-  if (reader == NULL)
-    return NULL;
+  if (reader == nullptr)
+    return nullptr;
 
   if (reader->error()) {
     delete reader;
-    return NULL;
+    return nullptr;
   }
 
   return reader;
@@ -96,11 +96,11 @@ TLineReader *
 OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
                        ConvertLineReader::charset cs)
 {
-  assert(profile_key != NULL);
-  assert(in_map_file != NULL);
+  assert(profile_key != nullptr);
+  assert(in_map_file != nullptr);
 
   TLineReader *reader = OpenConfiguredTextFile(profile_key, cs);
-  if (reader == NULL)
+  if (reader == nullptr)
     reader = OpenMapTextFile(in_map_file, cs);
 
   return reader;

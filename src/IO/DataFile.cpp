@@ -33,19 +33,19 @@ Copyright_License {
 Source<char> *
 OpenDataFile(const TCHAR *name)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
 
   FileSource *source = new FileSource(path);
-  if (source == NULL)
-    return NULL;
+  if (source == nullptr)
+    return nullptr;
 
   if (source->error()) {
     delete source;
-    return NULL;
+    return nullptr;
   }
 
   return source;
@@ -54,19 +54,19 @@ OpenDataFile(const TCHAR *name)
 TLineReader *
 OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
 
   FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == NULL)
-    return NULL;
+  if (reader == nullptr)
+    return nullptr;
 
   if (reader->error()) {
     delete reader;
-    return NULL;
+    return nullptr;
   }
 
   return reader;
@@ -75,19 +75,19 @@ OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
 NLineReader *
 OpenDataTextFileA(const TCHAR *name)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
 
   FileLineReaderA *reader = new FileLineReaderA(path);
-  if (reader == NULL)
-    return NULL;
+  if (reader == nullptr)
+    return nullptr;
 
   if (reader->error()) {
     delete reader;
-    return NULL;
+    return nullptr;
   }
 
   return reader;
@@ -96,19 +96,19 @@ OpenDataTextFileA(const TCHAR *name)
 TextWriter *
 CreateDataTextFile(const TCHAR *name, bool append)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   TCHAR path[MAX_PATH];
   LocalPath(path, name);
 
   TextWriter *writer = new TextWriter(path, append);
-  if (writer == NULL)
-    return NULL;
+  if (writer == nullptr)
+    return nullptr;
 
   if (!writer->IsOpen()) {
     delete writer;
-    return NULL;
+    return nullptr;
   }
 
   return writer;

@@ -54,7 +54,7 @@ protected:
 
 public:
   LineSplitter(Source<char> &_source)
-    :source(_source), remaining((char *)NULL, 0) {}
+    :source(_source), remaining((char *)nullptr, 0) {}
 
   /**
    * Discards the buffer that holds the data after the last line.

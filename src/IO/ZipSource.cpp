@@ -41,12 +41,12 @@ ZipSource::ZipSource(const char *path)
 
 #ifdef _UNICODE
 ZipSource::ZipSource(const TCHAR *path)
-  :file(NULL)
+  :file(nullptr)
 {
   char narrow_path[4096];
 
   int length = WideCharToMultiByte(CP_ACP, 0, path, -1,
-                                   narrow_path, sizeof(narrow_path), NULL, NULL);
+                                   narrow_path, sizeof(narrow_path), nullptr, nullptr);
   if (length == 0)
     return;
 
@@ -56,7 +56,7 @@ ZipSource::ZipSource(const TCHAR *path)
 
 ZipSource::~ZipSource()
 {
-  if (file != NULL)
+  if (file != nullptr)
     zzip_fclose(file);
 }
 

@@ -31,7 +31,7 @@ Copyright_License {
  *
  * @param path the file path, either real or inside a zip file
  * @param cs the character set of the input file
- * @return a TLineReader which must be deleted by the caller; NULL if
+ * @return a TLineReader which must be deleted by the caller; nullptr if
  * an error occurred opening the file
  */
 TLineReader *

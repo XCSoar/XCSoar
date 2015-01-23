@@ -42,7 +42,7 @@ size_t
 CSVLine::Skip()
 {
   const char* _seperator = strchr(data, ',');
-  if (_seperator != NULL && _seperator < end) {
+  if (_seperator != nullptr && _seperator < end) {
     size_t length = _seperator - data;
     data = _seperator + 1;
     return length;

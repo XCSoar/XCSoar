@@ -33,7 +33,7 @@ class TextWriter;
  * Opens a file from the data directory.
  *
  * @param name the file name relative to the data directory
- * @return a Source which must be deleted by the caller; NULL if an
+ * @return a Source which must be deleted by the caller; nullptr if an
  * error occurred opening the file
  */
 Source<char> *
@@ -44,7 +44,7 @@ OpenDataFile(const TCHAR *name);
  *
  * @param name the file name relative to the data directory
  * @param cs the character set of the input file
- * @return a TLineReader which must be deleted by the caller; NULL if
+ * @return a TLineReader which must be deleted by the caller; nullptr if
  * an error occurred opening the file
  */
 TLineReader *
@@ -55,7 +55,7 @@ OpenDataTextFile(const TCHAR *name,
  * Opens a text file from the data directory.
  *
  * @param name the file name relative to the data directory
- * @return a TLineReader which must be deleted by the caller; NULL if
+ * @return a TLineReader which must be deleted by the caller; nullptr if
  * an error occurred opening the file
  */
 NLineReader *
