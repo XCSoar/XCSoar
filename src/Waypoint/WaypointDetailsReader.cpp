@@ -29,6 +29,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "IO/LineReader.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>
@@ -158,7 +159,7 @@ WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
 {
   std::unique_ptr<TLineReader>
   reader(OpenConfiguredTextFile(ProfileKeys::AirfieldFile, _T("airfields.txt"),
-                                ConvertLineReader::AUTO));
+                                Charset::AUTO));
   if (reader)
     ReadFile(*reader, way_points, operation);
 }

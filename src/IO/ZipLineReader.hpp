@@ -70,11 +70,11 @@ protected:
 
 public:
   ZipLineReader(const char *path,
-                ConvertLineReader::charset cs=ConvertLineReader::UTF8)
+                Charset cs=Charset::UTF8)
     :zip(path), splitter(zip), convert(splitter, cs) {}
 #ifdef _UNICODE
   ZipLineReader(const TCHAR *path,
-                ConvertLineReader::charset cs=ConvertLineReader::UTF8)
+                Charset cs=Charset::UTF8)
     :zip(path), splitter(zip), convert(splitter, cs) {}
 #endif
 

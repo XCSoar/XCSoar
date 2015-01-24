@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 TLineReader *
-OpenTextFile(const TCHAR *path, ConvertLineReader::charset cs)
+OpenTextFile(const TCHAR *path, Charset cs)
 {
   assert(path != nullptr);
 

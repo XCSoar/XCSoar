@@ -29,6 +29,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Util/StringUtil.hpp"
 #include "IO/DataFile.hpp"
+#include "IO/LineReader.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 

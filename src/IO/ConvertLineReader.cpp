@@ -30,7 +30,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
+ConvertLineReader::ConvertLineReader(LineReader<char> &_source, Charset cs)
   :source(_source),
    m_charset(cs)
 {
@@ -60,17 +60,17 @@ ConvertLineReader::ReadLine()
   if (narrow[0] == (char)0xEF &&
       narrow[1] == (char)0xBB &&
       narrow[2] == (char)0xBF &&
-      (m_charset == AUTO || m_charset == UTF8)) {
+      (m_charset == Charset::AUTO || m_charset == Charset::UTF8)) {
     // -> if so, skip it
     narrow += 3;
 
     /* if it was "AUTO", then explicitly switch to UTF-8 now */
-    m_charset = UTF8;
+    m_charset = Charset::UTF8;
   }
 
-  if (m_charset == AUTO && !ValidateUTF8(narrow))
+  if (m_charset == Charset::AUTO && !ValidateUTF8(narrow))
     /* invalid UTF-8 sequence detected: switch to ISO-Latin-1 */
-    m_charset = ISO_LATIN_1;
+    m_charset = Charset::ISO_LATIN_1;
 
 #ifdef _UNICODE
   size_t narrow_length = strlen(narrow);
@@ -85,7 +85,7 @@ ConvertLineReader::ReadLine()
   }
 
   switch (m_charset) {
-  case ISO_LATIN_1:
+  case Charset::ISO_LATIN_1:
     iso_latin_1_to_tchar(t, narrow);
     break;
 
@@ -106,21 +106,21 @@ ConvertLineReader::ReadLine()
     size_t buffer_size;
     const char *utf8;
 
-  case ISO_LATIN_1:
+  case Charset::ISO_LATIN_1:
     buffer_size = strlen(narrow) * 2 + 1;
     utf8 = Latin1ToUTF8(narrow, tbuffer.get(buffer_size), buffer_size);
     if (utf8 == nullptr)
       return narrow;
     return const_cast<char *>(utf8);
 
-  case UTF8:
+  case Charset::UTF8:
     if (!ValidateUTF8(narrow))
       /* abort on invalid UTF-8 sequence */
       return nullptr;
 
     /* fall through ... */
 
-  case AUTO:
+  case Charset::AUTO:
     return narrow;
   }
 

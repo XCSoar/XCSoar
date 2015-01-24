@@ -28,6 +28,7 @@ Copyright_License {
 #include "Parser.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "IO/LineReader.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 

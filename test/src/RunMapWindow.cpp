@@ -41,6 +41,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "IO/LineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
@@ -171,7 +172,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
                         NULL, false);
 
   std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
-                                                             ConvertLineReader::AUTO));
+                                                             Charset::AUTO));
   if (reader) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);

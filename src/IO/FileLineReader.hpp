@@ -79,12 +79,12 @@ protected:
 
 public:
   FileLineReader(const char *path,
-                 ConvertLineReader::charset cs=ConvertLineReader::UTF8)
+                 Charset cs=Charset::UTF8)
     :file(path), splitter(file), convert(splitter, cs) {}
 
 #ifdef _UNICODE
   FileLineReader(const TCHAR *path,
-                 ConvertLineReader::charset cs=ConvertLineReader::UTF8)
+                 Charset cs=Charset::UTF8)
     :file(path), splitter(file), convert(splitter, cs) {}
 #endif
 

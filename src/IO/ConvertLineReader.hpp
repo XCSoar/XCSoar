@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_CONVERT_LINE_READER_HPP
 
 #include "LineReader.hpp"
+#include "Charset.hpp"
 #include "Util/ReusableArray.hpp"
 
 /**
@@ -32,28 +33,14 @@ Copyright_License {
  * LineReader<TCHAR>.
  */
 class ConvertLineReader : public TLineReader {
-public:
-  enum charset {
-    /**
-     * Attempt to determine automatically.  Read UTF-8, but switch to
-     * ISO-Latin-1 as soon as the first invalid UTF-8 sequence is
-     * seen.
-     */
-    AUTO,
-
-    UTF8,
-    ISO_LATIN_1,
-  };
-
-protected:
   LineReader<char> &source;
 
-  charset m_charset;
+  Charset m_charset;
 
   ReusableArray<TCHAR> tbuffer;
 
 public:
-  ConvertLineReader(LineReader<char> &_source, charset cs=UTF8);
+  ConvertLineReader(LineReader<char> &_source, Charset cs=Charset::UTF8);
 
 public:
   /* virtual methods from class LineReader */

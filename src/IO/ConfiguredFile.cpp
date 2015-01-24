@@ -48,7 +48,7 @@ OpenConfiguredTextFileA(const char *profile_key)
 }
 
 TLineReader *
-OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
+OpenConfiguredTextFile(const char *profile_key, Charset cs)
 {
   assert(profile_key != nullptr);
 
@@ -69,7 +69,7 @@ OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
 }
 
 static TLineReader *
-OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
+OpenMapTextFile(const TCHAR *in_map_file, Charset cs)
 {
   assert(in_map_file != nullptr);
 
@@ -94,7 +94,7 @@ OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
 
 TLineReader *
 OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
-                       ConvertLineReader::charset cs)
+                       Charset cs)
 {
   assert(profile_key != nullptr);
   assert(in_map_file != nullptr);

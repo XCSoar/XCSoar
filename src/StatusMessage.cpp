@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/EscapeBackslash.hpp"
 #include "Util/NumberParser.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "IO/LineReader.hpp"
 
 #include <memory>
 

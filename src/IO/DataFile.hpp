@@ -25,8 +25,12 @@ Copyright_License {
 #define XCSOAR_IO_DATA_FILE_HPP
 
 #include "Source.hpp"
-#include "ConvertLineReader.hpp"
+#include "Charset.hpp"
 
+#include <tchar.h>
+
+class TLineReader;
+class NLineReader;
 class TextWriter;
 
 /**
@@ -49,7 +53,7 @@ OpenDataFile(const TCHAR *name);
  */
 TLineReader *
 OpenDataTextFile(const TCHAR *name,
-                 ConvertLineReader::charset cs=ConvertLineReader::UTF8);
+                 Charset cs=Charset::UTF8);
 
 /**
  * Opens a text file from the data directory.

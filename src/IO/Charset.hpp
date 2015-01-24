@@ -21,39 +21,22 @@ Copyright_License {
 }
 */
 
-#include "Airspace/AirspaceParser.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-#include "OS/Args.hpp"
-#include "IO/FileLineReader.hpp"
-#include "Operation/Operation.hpp"
+#ifndef XCSOAR_IO_CHARSET_HPP
+#define XCSOAR_IO_CHARSET_HPP
 
-#include <stdio.h>
-#include <tchar.h>
+/**
+ * A source character set for #ConvertLineReader.
+ */
+enum class Charset {
+  /**
+   * Attempt to determine automatically.  Read UTF-8, but switch to
+   * ISO-Latin-1 as soon as the first invalid UTF-8 sequence is
+   * seen.
+   */
+  AUTO,
 
-int main(int argc, char **argv)
-{
-  Args args(argc, argv, "PATH");
-  const char *path = args.ExpectNext();
-  args.ExpectEnd();
+  UTF8,
+  ISO_LATIN_1,
+};
 
-  FileLineReader reader(path, Charset::AUTO);
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open input file\n");
-    return 1;
-  }
-
-  Airspaces airspaces;
-  AirspaceParser parser(airspaces);
-
-  NullOperationEnvironment operation;
-  if (!parser.Parse(reader, operation)) {
-    fprintf(stderr, "Failed to parse input file\n");
-    return 1;
-  }
-
-  airspaces.Optimise();
-
-  printf("OK\n");
-
-  return 0;
-}
+#endif

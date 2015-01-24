@@ -29,6 +29,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "MergeThread.hpp"
 #include "IO/DataFile.hpp"
+#include "IO/LineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "Profile/FlarmProfile.hpp"
 #include "LogFile.hpp"

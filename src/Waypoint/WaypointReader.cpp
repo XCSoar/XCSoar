@@ -32,6 +32,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "IO/ZipSource.hpp"
 #include "IO/TextFile.hpp"
+#include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
 
 bool
@@ -40,7 +41,7 @@ WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
   if (reader == NULL)
     return false;
 
-  TLineReader *line_reader = OpenTextFile(path, ConvertLineReader::AUTO);
+  TLineReader *line_reader = OpenTextFile(path, Charset::AUTO);
   if (line_reader == nullptr)
     return false;
 

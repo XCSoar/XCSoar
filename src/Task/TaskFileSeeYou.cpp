@@ -458,7 +458,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 {
   // Create FileReader for reading the task
-  FileLineReader reader(path, ConvertLineReader::AUTO);
+  FileLineReader reader(path, Charset::AUTO);
   if (reader.error())
     return NULL;
 
@@ -577,7 +577,7 @@ TaskFileSeeYou::Count()
   namesuffixes.clear();
 
   // Open the CUP file
-  FileLineReader reader(path, ConvertLineReader::AUTO);
+  FileLineReader reader(path, Charset::AUTO);
   if (reader.error())
     return 0;
 

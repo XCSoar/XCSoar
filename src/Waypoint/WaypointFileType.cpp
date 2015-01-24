@@ -29,6 +29,7 @@ Copyright_License {
 
 #include "OS/PathName.hpp"
 #include "IO/TextFile.hpp"
+#include "IO/LineReader.hpp"
 
 #include <memory>
 

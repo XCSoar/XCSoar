@@ -26,11 +26,10 @@ Copyright_License {
 
 #include "InflateSource.hpp"
 #include "LineSplitter.hpp"
-#include "ConvertLineReader.hpp"
 
 /**
- * Glue class which combines InflateSource, LineSplitter and
- * ConvertLineReader, and provides a public TLineReader interface.
+ * Glue class which combines InflateSource, LineSplitter and provides
+ * a public TLineReader interface.
  */
 class InflateLineReader : public NLineReader {
 protected:

@@ -24,7 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_IO_CONFIGURED_FILE_HPP
 #define XCSOAR_IO_CONFIGURED_FILE_HPP
 
-#include "ConvertLineReader.hpp"
+#include "Charset.hpp"
+
+#include <tchar.h>
+
+class NLineReader;
+class TLineReader;
 
 /**
  * Opens a file whose name is configured in the profile.
@@ -49,7 +54,7 @@ OpenConfiguredTextFileA(const char *profile_key);
  */
 TLineReader *
 OpenConfiguredTextFile(const char *profile_key,
-                       ConvertLineReader::charset cs=ConvertLineReader::UTF8);
+                       Charset cs=Charset::UTF8);
 
 /**
  * Opens a file whose name is configured in the profile.  If there is
@@ -65,6 +70,6 @@ OpenConfiguredTextFile(const char *profile_key,
  */
 TLineReader *
 OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
-                       ConvertLineReader::charset cs=ConvertLineReader::UTF8);
+                       Charset cs=Charset::UTF8);
 
 #endif

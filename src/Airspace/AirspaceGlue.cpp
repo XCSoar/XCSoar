@@ -29,6 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "IO/TextFile.hpp"
+#include "IO/LineReader.hpp"
 #include "Profile/Profile.hpp"
 
 #include <windef.h> /* for MAX_PATH */
@@ -38,7 +39,7 @@ static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)
 {
-  std::unique_ptr<TLineReader> reader(OpenTextFile(path, ConvertLineReader::AUTO));
+  std::unique_ptr<TLineReader> reader(OpenTextFile(path, Charset::AUTO));
   if (!reader) {
     LogFormat(_T("Failed to open airspace file: %s"), path);
     return false;

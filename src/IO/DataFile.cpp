@@ -52,7 +52,7 @@ OpenDataFile(const TCHAR *name)
 }
 
 TLineReader *
-OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
+OpenDataTextFile(const TCHAR *name, Charset cs)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));

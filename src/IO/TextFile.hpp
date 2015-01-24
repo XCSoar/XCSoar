@@ -24,7 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_IO_TEXT_FILE_HPP
 #define XCSOAR_IO_TEXT_FILE_HPP
 
-#include "ConvertLineReader.hpp"
+#include "Charset.hpp"
+
+#include <tchar.h>
+
+class TLineReader;
 
 /**
  * Opens the specified file and returns a LineReader.
@@ -36,6 +40,6 @@ Copyright_License {
  */
 TLineReader *
 OpenTextFile(const TCHAR *path,
-             ConvertLineReader::charset cs = ConvertLineReader::UTF8);
+             Charset cs = Charset::UTF8);
 
 #endif

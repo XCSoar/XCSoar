@@ -33,7 +33,7 @@
 #include "Util/Macros.hpp"
 
 TLineReader*
-OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
+OpenConfiguredTextFile(const char *profile_key, Charset cs)
 {
   return NULL;
 }
