@@ -35,7 +35,7 @@ Copyright_License {
 class ConvertLineReader : public TLineReader {
   LineReader<char> &source;
 
-  Charset m_charset;
+  Charset charset;
 
   ReusableArray<TCHAR> tbuffer;
 

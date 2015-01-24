@@ -32,7 +32,7 @@ Copyright_License {
 
 ConvertLineReader::ConvertLineReader(LineReader<char> &_source, Charset cs)
   :source(_source),
-   m_charset(cs)
+   charset(cs)
 {
 }
 
@@ -60,17 +60,17 @@ ConvertLineReader::ReadLine()
   if (narrow[0] == (char)0xEF &&
       narrow[1] == (char)0xBB &&
       narrow[2] == (char)0xBF &&
-      (m_charset == Charset::AUTO || m_charset == Charset::UTF8)) {
+      (charset == Charset::AUTO || charset == Charset::UTF8)) {
     // -> if so, skip it
     narrow += 3;
 
     /* if it was "AUTO", then explicitly switch to UTF-8 now */
-    m_charset = Charset::UTF8;
+    charset = Charset::UTF8;
   }
 
-  if (m_charset == Charset::AUTO && !ValidateUTF8(narrow))
+  if (charset == Charset::AUTO && !ValidateUTF8(narrow))
     /* invalid UTF-8 sequence detected: switch to ISO-Latin-1 */
-    m_charset = Charset::ISO_LATIN_1;
+    charset = Charset::ISO_LATIN_1;
 
 #ifdef _UNICODE
   size_t narrow_length = strlen(narrow);
@@ -84,7 +84,7 @@ ConvertLineReader::ReadLine()
     return t;
   }
 
-  switch (m_charset) {
+  switch (charset) {
   case Charset::ISO_LATIN_1:
     iso_latin_1_to_tchar(t, narrow);
     break;
@@ -102,7 +102,7 @@ ConvertLineReader::ReadLine()
 
   return t;
 #else
-  switch (m_charset) {
+  switch (charset) {
     size_t buffer_size;
     const char *utf8;
 
