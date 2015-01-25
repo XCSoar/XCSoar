@@ -44,6 +44,7 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
 KOBO_POWER_OFF_LDADD = $(FAKE_LIBS)
