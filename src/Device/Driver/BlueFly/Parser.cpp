@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2012 The XCSoar Project
+  Copyright (C) 2000-2015 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,31 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/BlueFlyVario.hpp"
-#include "Device/Driver.hpp"
-#include "Math/KalmanFilter1d.hpp"
-#include "NMEA/Info.hpp"
-
-#include <stdlib.h>
-
-class BlueFlyDevice : public AbstractDevice {
-public:
-  BlueFlyDevice();
-
-  void LinkTimeout() override;
-
-  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  
-  bool ParseBAT(const char *content, NMEAInfo &info);
-  bool ParsePRS(const char *content, NMEAInfo &info);
-private:
-  KalmanFilter1d kalman_filter;
-};
-
-void
-BlueFlyDevice::LinkTimeout()
-{
-  kalman_filter.Reset();
-}
+#include "Internal.hpp"
 
 bool
 BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
@@ -56,7 +32,7 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
 
   char *endptr;
   int mV = (int)strtol(content, &endptr, 16);
-  if (endptr == content) return true; 
+  if (endptr == content) return true;
 
   do {
     // piecewise linear approximation
@@ -123,21 +99,3 @@ BlueFlyDevice::ParseNMEA(const char *line, NMEAInfo &info)
     return false;
 }
 
-BlueFlyDevice::BlueFlyDevice()
-{
-  kalman_filter.SetAccelerationVariance(fixed(0.3));
-}
-
-
-static Device *
-BlueFlyCreateOnPort(const DeviceConfig &config, Port &com_port)
-{
-  return new BlueFlyDevice();
-}
-
-const struct DeviceRegister bluefly_driver = {
-  _T("BlueFly"),
-  _T("BlueFly Vario"),
-  0,
-  BlueFlyCreateOnPort,
-};
