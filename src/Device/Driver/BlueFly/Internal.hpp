@@ -32,15 +32,14 @@ class BlueFlyDevice : public AbstractDevice {
 private:
   KalmanFilter1d kalman_filter;
 
+  bool ParseBAT(const char *content, NMEAInfo &info);
+  bool ParsePRS(const char *content, NMEAInfo &info);
+
 public:
   BlueFlyDevice();
 
-  void LinkTimeout() override;
-
-  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-
-  bool ParseBAT(const char *content, NMEAInfo &info);
-  bool ParsePRS(const char *content, NMEAInfo &info);
+  virtual void LinkTimeout() override;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
 
 #endif
