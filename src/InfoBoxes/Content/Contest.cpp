@@ -65,14 +65,19 @@ InfoBoxContentOLC::GetDialogContent()
 void
 InfoBoxContentOLC::Update(InfoBoxData &data)
 {
-  if (!CommonInterface::GetComputerSettings().contest.enable ||
-      !protected_task_manager) {
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+
+   if (!settings_computer.contest.enable || !protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
+  int result_index =
+    (settings_computer.contest.contest == Contest::OLC_LEAGUE) ? 0 : -1;
+
   const ContestResult& result_olc =
-    CommonInterface::Calculated().contest_stats.GetResult();
+    CommonInterface::Calculated().contest_stats.GetResult(result_index);
 
   if (result_olc.score < fixed(1)) {
     data.SetInvalid();
@@ -94,14 +99,19 @@ InfoBoxContentOLCSpeed::GetDialogContent()
 void
 InfoBoxContentOLCSpeed::Update(InfoBoxData &data)
 {
-  if (!CommonInterface::GetComputerSettings().contest.enable ||
-      !protected_task_manager) {
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+
+  if (!settings_computer.contest.enable || !protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
+  int result_index =
+    (settings_computer.contest.contest == Contest::OLC_LEAGUE) ? 0 : -1;
+
   const ContestResult& result_olc =
-    CommonInterface::Calculated().contest_stats.GetResult();
+    CommonInterface::Calculated().contest_stats.GetResult(result_index);
 
   if (result_olc.score < fixed(1)) {
     data.SetInvalid();
