@@ -4,7 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.7.7 - not yet released
 * airspace
-  - accept airspaces of class RMZ in OpenAir format files
+  - accept airspaces of class RMZ in OpenAir format files (#3437)
 * infoboxes
   - fix data for OLC infoboxes if "OLC League" is used (#3461)
 
