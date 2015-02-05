@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-//#include <pthread.h>
-
 struct InternalSensorsPrivate;
 
 // InternalSensors implementation which uses the Apple CoreLocation API
