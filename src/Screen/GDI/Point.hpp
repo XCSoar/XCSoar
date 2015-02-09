@@ -75,6 +75,14 @@ struct PixelSize : public tagSIZE {
 
 static_assert(sizeof(PixelSize) == sizeof(SIZE), "not same size");
 
+/**
+ * @brief PixelRect structure and operations
+ *
+ * Provides support for creating and manipulating PixelRect structures
+ *
+ * @note This structure follows the GDI convention of the {right, bottom} coordinates being
+ * immediately outside the rectangle being specified.
+ */
 struct PixelRect : public tagRECT {
   PixelRect() = default;
 

@@ -70,6 +70,14 @@ RasterPoint::operator+(PixelSize size) const {
   return { x + size.cx, y + size.cy };
 }
 
+/**
+ * @brief PixelRect structure and operations
+ *
+ * Provides support for creating and manipulating PixelRect structures
+ *
+ * @note This structure follows the GDI convention of the {right, bottom} coordinates being
+ * immediately outside the rectangle being specified.
+ */
 struct PixelRect {
   PixelScalar left, top, right, bottom;
 
