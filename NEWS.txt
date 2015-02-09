@@ -9,6 +9,8 @@ Version 6.7.7 - not yet released
   - fix data for OLC infoboxes if "OLC League" is used (#3461)
 * calculations
   - fix handicap factor for "OLC League" scores
+* input events
+  - allow '_' character in event identifiers (#3464)
 
 Version 6.7.6 - 2014/10/18
 * tracking
