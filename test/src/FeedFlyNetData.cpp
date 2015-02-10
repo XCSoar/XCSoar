@@ -24,8 +24,8 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "Time/PeriodClock.hpp"
-#include "OS/SocketDescriptor.hpp"
-#include "OS/SocketAddress.hpp"
+#include "Net/SocketDescriptor.hpp"
+#include "Net/SocketAddress.hpp"
 
 #include <fcntl.h>
 #include <unistd.h>

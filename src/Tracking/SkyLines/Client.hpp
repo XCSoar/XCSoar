@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
 #include "Handler.hpp"
-#include "OS/SocketAddress.hpp"
-#include "OS/SocketDescriptor.hpp"
+#include "Net/SocketAddress.hpp"
+#include "Net/SocketDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
 #include <stdint.h>

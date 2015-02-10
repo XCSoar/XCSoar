@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "SocketThread.hpp"
 #include "FileEventHandler.hpp"
-#include "OS/SocketDescriptor.hpp"
+#include "Net/SocketDescriptor.hpp"
 
 #include <assert.h>
 

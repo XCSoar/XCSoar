@@ -4,8 +4,6 @@ OS_SRC_DIR = $(SRC)/OS
 
 OS_SOURCES := \
 	$(OS_SRC_DIR)/Clock.cpp \
-	$(OS_SRC_DIR)/SocketAddress.cpp \
-	$(OS_SRC_DIR)/SocketDescriptor.cpp \
 	$(OS_SRC_DIR)/FileDescriptor.cpp \
 	$(OS_SRC_DIR)/FileMapping.cpp \
 	$(OS_SRC_DIR)/FileUtil.cpp \

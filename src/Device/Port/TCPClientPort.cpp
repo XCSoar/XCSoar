@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TCPClientPort.hpp"
 #include "Util/StaticString.hpp"
-#include "OS/SocketAddress.hpp"
+#include "Net/SocketAddress.hpp"
 
 #ifdef HAVE_POSIX
 #include "IO/Async/GlobalIOThread.hpp"

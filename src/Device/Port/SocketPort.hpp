@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_SOCKET_PORT_HPP
 
 #include "BufferedPort.hpp"
-#include "OS/SocketDescriptor.hpp"
+#include "Net/SocketDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
 #ifndef HAVE_POSIX

@@ -1,6 +1,9 @@
 # Build rules for the HTTP client library
 
-LIBNET_SOURCES =
+LIBNET_SOURCES = \
+	$(SRC)/Net/SocketAddress.cpp \
+	$(SRC)/Net/SocketDescriptor.cpp
+
 HAVE_HTTP := n
 
 ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
@@ -48,6 +51,6 @@ LIBNET_SOURCES += \
 	$(SRC)/Net/HTTP/ToFile.cpp \
 	$(SRC)/Net/HTTP/ToBuffer.cpp
 
-$(eval $(call link-library,libnet,LIBNET))
-
 endif
+
+$(eval $(call link-library,libnet,LIBNET))

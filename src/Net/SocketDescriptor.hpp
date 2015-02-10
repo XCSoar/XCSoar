@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
 #ifndef XCSOAR_SOCKET_DESCRIPTOR_HPP
 #define XCSOAR_SOCKET_DESCRIPTOR_HPP
 
-#include "FileDescriptor.hpp"
+#include "OS/FileDescriptor.hpp"
 #include "Compiler.h"
 
 class SocketAddress;
