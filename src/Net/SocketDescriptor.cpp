@@ -28,7 +28,8 @@
  */
 
 #include "SocketDescriptor.hpp"
-#include "Net/StaticSocketAddress.hpp"
+#include "SocketAddress.hpp"
+#include "StaticSocketAddress.hpp"
 
 #include <stdint.h>
 #include <string.h>
@@ -122,11 +123,11 @@ SocketDescriptor::Accept()
 #ifndef _WIN32_WCE
 
 bool
-SocketDescriptor::Connect(const StaticSocketAddress &address)
+SocketDescriptor::Connect(SocketAddress address)
 {
   assert(address.IsDefined());
 
-  return ::connect(Get(), address, address.GetLength()) >= 0;
+  return ::connect(Get(), address.GetAddress(), address.GetSize()) >= 0;
 }
 
 #endif
@@ -150,9 +151,9 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 }
 
 bool
-SocketDescriptor::Bind(const StaticSocketAddress &address)
+SocketDescriptor::Bind(SocketAddress address)
 {
-  return bind(Get(), address, address.GetLength()) == 0;
+  return bind(Get(), address.GetAddress(), address.GetSize()) == 0;
 }
 
 bool

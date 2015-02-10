@@ -33,6 +33,7 @@
 #include "OS/FileDescriptor.hpp"
 #include "Compiler.h"
 
+class SocketAddress;
 class StaticSocketAddress;
 
 /**
@@ -72,7 +73,7 @@ public:
    */
   bool Create(int domain, int type, int protocol);
 
-  bool Bind(const StaticSocketAddress &address);
+  bool Bind(SocketAddress address);
 
   /**
    * Binds the socket to the port on INADDR_ANY
@@ -97,7 +98,7 @@ public:
   SocketDescriptor Accept();
 
 #ifndef _WIN32_WCE
-  bool Connect(const StaticSocketAddress &address);
+  bool Connect(SocketAddress address);
 
   /**
    * Create a UDP socket and connect it to the specified host and

@@ -80,7 +80,7 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
-    bool Open(const StaticSocketAddress &_address);
+    bool Open(SocketAddress _address);
     void Close();
 
     bool SendFix(const NMEAInfo &basic);

@@ -30,6 +30,7 @@
 #ifndef STATIC_SOCKET_ADDRESS_HPP
 #define STATIC_SOCKET_ADDRESS_HPP
 
+#include "SocketAddress.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -52,6 +53,13 @@ class StaticSocketAddress {
 
 public:
   StaticSocketAddress() = default;
+
+  StaticSocketAddress &operator=(SocketAddress other);
+
+  operator SocketAddress() const {
+    return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
+                         length);
+  }
 
 #if defined(HAVE_POSIX) && !defined(__BIONIC__)
   /**

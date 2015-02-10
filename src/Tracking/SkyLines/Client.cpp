@@ -61,7 +61,7 @@ SkyLinesTracking::Client::SetHandler(Handler *_handler)
 #endif
 
 bool
-SkyLinesTracking::Client::Open(const StaticSocketAddress &_address)
+SkyLinesTracking::Client::Open(SocketAddress _address)
 {
   assert(_address.IsDefined());
 

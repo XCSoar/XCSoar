@@ -49,6 +49,14 @@
 #include <ifaddrs.h>
 #endif
 
+StaticSocketAddress &
+StaticSocketAddress::operator=(SocketAddress other)
+{
+  length = std::min(size_t(other.GetSize()), GetCapacity());
+  memcpy(&address, other.GetAddress(), length);
+  return *this;
+}
+
 bool
 StaticSocketAddress::operator==(const StaticSocketAddress &other) const
 {
