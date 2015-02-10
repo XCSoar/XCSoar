@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Net/Request.hpp"
+#include "../Request.hpp"
 #include "Version.hpp"
 #include "Java/Global.hpp"
 #include "Java/String.hpp"

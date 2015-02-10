@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Net/Init.hpp"
+#include "../Init.hpp"
 
 #include <curl/curl.h>
 

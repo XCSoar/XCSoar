@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NET_INIT_HPP
 #define XCSOAR_NET_INIT_HPP
 
-#include "Net/Features.hpp"
+#include "Features.hpp"
 
 namespace Net {
 #if defined(HAVE_HTTP) && !defined(WIN32)

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Net/Session.hpp"
+#include "../Session.hpp"
 
 Net::Session::Session() {}
 

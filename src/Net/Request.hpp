@@ -24,16 +24,16 @@ Copyright_License {
 #ifndef NET_REQUEST_HPP
 #define NET_REQUEST_HPP
 
-#include "Net/Features.hpp"
+#include "Features.hpp"
 
 #ifdef HAVE_WININET
 #include "Thread/Trigger.hpp"
-#include "Net/WinINet/WinINet.hpp"
+#include "WinINet/WinINet.hpp"
 #endif
 
 #ifdef HAVE_CURL
 #include "Util/FifoBuffer.hpp"
-#include "Net/CURL/Easy.hpp"
+#include "CURL/Easy.hpp"
 
 #include <curl/curl.h>
 #include <stdint.h>

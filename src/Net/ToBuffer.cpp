@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Net/ToBuffer.hpp"
-#include "Net/Features.hpp"
-#include "Net/Request.hpp"
+#include "ToBuffer.hpp"
+#include "Features.hpp"
+#include "Request.hpp"
 #include "Operation/Operation.hpp"
 
 #include <stdint.h>

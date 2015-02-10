@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Net/DownloadManager.hpp"
+#include "DownloadManager.hpp"
 
 #ifdef ANDROID
 

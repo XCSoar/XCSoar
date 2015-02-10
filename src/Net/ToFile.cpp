@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Net/ToFile.hpp"
-#include "Net/Features.hpp"
-#include "Net/Request.hpp"
+#include "ToFile.hpp"
+#include "Features.hpp"
+#include "Request.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/MD5.hpp"

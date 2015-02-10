@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Net/Request.hpp"
-#include "Net/Session.hpp"
+#include "../Request.hpp"
+#include "../Session.hpp"
 #include "Version.hpp"
 
 #include <assert.h>

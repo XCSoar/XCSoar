@@ -24,14 +24,14 @@ Copyright_License {
 #ifndef NET_SESSION_HPP
 #define NET_SESSION_HPP
 
-#include "Net/Features.hpp"
+#include "Features.hpp"
 
 #ifdef HAVE_WININET
-#include "Net/WinINet/WinINet.hpp"
+#include "WinINet/WinINet.hpp"
 #endif
 
 #ifdef HAVE_CURL
-#include "Net/CURL/Multi.hpp"
+#include "CURL/Multi.hpp"
 #endif
 
 namespace Net {
