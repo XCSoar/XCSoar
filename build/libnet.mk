@@ -6,8 +6,8 @@ HAVE_HTTP := n
 ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
 HAVE_HTTP := y
 LIBNET_SOURCES += \
-	$(SRC)/Net/WinINet/Session.cpp \
-	$(SRC)/Net/WinINet/Request.cpp
+	$(SRC)/Net/HTTP/WinINet/Session.cpp \
+	$(SRC)/Net/HTTP/WinINet/Request.cpp
 LIBNET_LDLIBS = -lwininet
 endif
 
@@ -15,10 +15,10 @@ ifeq ($(TARGET),UNIX)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/CURL/Multi.cpp \
-	$(SRC)/Net/CURL/Session.cpp \
-	$(SRC)/Net/CURL/Request.cpp \
-	$(SRC)/Net/CURL/Init.cpp
+	$(SRC)/Net/HTTP/CURL/Multi.cpp \
+	$(SRC)/Net/HTTP/CURL/Session.cpp \
+	$(SRC)/Net/HTTP/CURL/Request.cpp \
+	$(SRC)/Net/HTTP/CURL/Init.cpp
 
 ifeq ($(TARGET_IS_OSX),y)
 # We use the libcurl which is included in Mac OS X.
@@ -37,16 +37,16 @@ ifeq ($(TARGET),ANDROID)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/Java/Session.cpp \
-	$(SRC)/Net/Java/Request.cpp
+	$(SRC)/Net/HTTP/Java/Session.cpp \
+	$(SRC)/Net/HTTP/Java/Request.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/DownloadManager.cpp \
-	$(SRC)/Net/ToFile.cpp \
-	$(SRC)/Net/ToBuffer.cpp
+	$(SRC)/Net/HTTP/DownloadManager.cpp \
+	$(SRC)/Net/HTTP/ToFile.cpp \
+	$(SRC)/Net/HTTP/ToBuffer.cpp
 
 $(eval $(call link-library,libnet,LIBNET))
 

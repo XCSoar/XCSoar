@@ -38,7 +38,7 @@ Copyright_License {
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Net/Features.hpp"
+#include "Net/HTTP/Features.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
@@ -52,7 +52,7 @@ Copyright_License {
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "ListPicker.hpp"
 #include "Form/Button.hpp"
-#include "Net/DownloadManager.hpp"
+#include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Event/Timer.hpp"

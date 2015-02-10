@@ -67,7 +67,7 @@ Copyright_License {
 #include "Replay/Replay.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
-#include "Net/DownloadManager.hpp"
+#include "Net/HTTP/DownloadManager.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"

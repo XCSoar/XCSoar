@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Net/ToFile.hpp"
-#include "Net/Session.hpp"
+#include "Net/HTTP/ToFile.hpp"
+#include "Net/HTTP/Session.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 

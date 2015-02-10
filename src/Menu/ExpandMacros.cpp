@@ -38,7 +38,7 @@ Copyright_License {
 #include "PageActions.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
-#include "Net/Features.hpp"
+#include "Net/HTTP/Features.hpp"
 #include "UIState.hpp"
 
 #include <stdlib.h>

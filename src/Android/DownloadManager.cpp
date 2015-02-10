@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DownloadManager.hpp"
-#include "Net/DownloadManager.hpp"
+#include "Net/HTTP/DownloadManager.hpp"
 #include "Context.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"

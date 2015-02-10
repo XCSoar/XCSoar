@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Net/Session.hpp"
-#include "Net/Request.hpp"
-#include "Net/Init.hpp"
+#include "Net/HTTP/Session.hpp"
+#include "Net/HTTP/Request.hpp"
+#include "Net/HTTP/Init.hpp"
 #include "OS/ConvertPathName.hpp"
 
 #include <iostream>
