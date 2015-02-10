@@ -80,7 +80,7 @@ main(int argc, char *argv[])
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
 
-  SocketAddress address;
+  StaticSocketAddress address;
   if (!address.Lookup(host, "5597", SOCK_DGRAM)) {
     fprintf(stderr, "Failed to look up: %s\n", host);
     return EXIT_FAILURE;

@@ -61,7 +61,7 @@ SkyLinesTracking::Client::SetHandler(Handler *_handler)
 #endif
 
 bool
-SkyLinesTracking::Client::Open(const SocketAddress &_address)
+SkyLinesTracking::Client::Open(const StaticSocketAddress &_address)
 {
   assert(_address.IsDefined());
 
@@ -316,7 +316,7 @@ SkyLinesTracking::Client::OnFileEvent(int fd, unsigned mask)
 
   uint8_t buffer[4096];
   ssize_t nbytes;
-  SocketAddress source_address;
+  StaticSocketAddress source_address;
 
   while ((nbytes = socket.Read(buffer, sizeof(buffer), source_address)) > 0)
     if (source_address == address)

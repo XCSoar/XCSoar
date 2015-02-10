@@ -25,7 +25,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Net/SocketDescriptor.hpp"
-#include "Net/SocketAddress.hpp"
+#include "Net/StaticSocketAddress.hpp"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
   }
 
   // Convert IP address to binary form
-  SocketAddress server_address;
+  StaticSocketAddress server_address;
   if (!server_address.Lookup("127.0.0.1", tcp_port, AF_INET)) {
     fprintf(stderr, "Failed to look up address\n");
     exit(EXIT_FAILURE);

@@ -33,7 +33,7 @@
 #include "OS/FileDescriptor.hpp"
 #include "Compiler.h"
 
-class SocketAddress;
+class StaticSocketAddress;
 
 /**
  * An OO wrapper for a UNIX socket descriptor.
@@ -72,7 +72,7 @@ public:
    */
   bool Create(int domain, int type, int protocol);
 
-  bool Bind(const SocketAddress &address);
+  bool Bind(const StaticSocketAddress &address);
 
   /**
    * Binds the socket to the port on INADDR_ANY
@@ -97,7 +97,7 @@ public:
   SocketDescriptor Accept();
 
 #ifndef _WIN32_WCE
-  bool Connect(const SocketAddress &address);
+  bool Connect(const StaticSocketAddress &address);
 
   /**
    * Create a UDP socket and connect it to the specified host and
@@ -125,13 +125,13 @@ public:
    * Receive a datagram and return the source address.
    */
   ssize_t Read(void *buffer, size_t length,
-               SocketAddress &address);
+               StaticSocketAddress &address);
 
   /**
    * Send a datagram to the specified address.
    */
   ssize_t Write(const void *buffer, size_t length,
-                const SocketAddress &address);
+                const StaticSocketAddress &address);
 };
 
 #endif

@@ -1,7 +1,7 @@
 # Build rules for the HTTP client library
 
 LIBNET_SOURCES = \
-	$(SRC)/Net/SocketAddress.cpp \
+	$(SRC)/Net/StaticSocketAddress.cpp \
 	$(SRC)/Net/SocketDescriptor.cpp
 
 HAVE_HTTP := n

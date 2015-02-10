@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_SOCKET_ADDRESS_HPP
-#define XCSOAR_SOCKET_ADDRESS_HPP
+#ifndef STATIC_SOCKET_ADDRESS_HPP
+#define STATIC_SOCKET_ADDRESS_HPP
 
 #include "Compiler.h"
 
@@ -44,14 +44,14 @@
 struct ifaddrs;
 
 /**
- * An OO wrapper for a UNIX socket address.
+ * An OO wrapper for struct sockaddr_storage.
  */
-class SocketAddress {
+class StaticSocketAddress {
   size_t length;
   struct sockaddr_storage address;
 
 public:
-  SocketAddress() = default;
+  StaticSocketAddress() = default;
 
 #if defined(HAVE_POSIX) && !defined(__BIONIC__)
   /**
@@ -61,17 +61,17 @@ public:
 #endif
 
   /**
-   * Creates a #SocketAddress with the specified IPv4 address and
+   * Creates a #StaticSocketAddress with the specified IPv4 address and
    * port.
    *
    * @parm ip the IPv4 address in host byte order
    */
   gcc_const
-  static SocketAddress MakeIPv4Port(uint32_t ip, unsigned port);
+  static StaticSocketAddress MakeIPv4Port(uint32_t ip, unsigned port);
 
   gcc_const
-  static SocketAddress MakeIPv4Port(uint8_t a, uint8_t b, uint8_t c,
-                                    uint8_t d, unsigned port) {
+  static StaticSocketAddress MakeIPv4Port(uint8_t a, uint8_t b, uint8_t c,
+                                          uint8_t d, unsigned port) {
     uint32_t ip = (a << 24) | (b << 16) | (c << 8) | d;
     return MakeIPv4Port(ip, port);
   }
@@ -94,17 +94,17 @@ private:
 
 public:
   /**
-   * Returns a SocketAddress for the specified device. Caller
-   * should check for validity of returned SocketAddress.
+   * Returns a StaticSocketAddress for the specified device. Caller
+   * should check for validity of returned StaticSocketAddress.
    *
    * @param device is the device name f.i. "eth0"
-   * @return SocketAddress, use IsDefined() to check valid result
+   * @return StaticSocketAddress, use IsDefined() to check valid result
    */
   gcc_pure
-  static SocketAddress GetDeviceAddress(const char *device);
+  static StaticSocketAddress GetDeviceAddress(const char *device);
 
   /**
-   * Converts SocketAddress to human readable string
+   * Converts StaticSocketAddress to human readable string
    *
    * @param buffer is the result buffer
    * @param buffer_size is the buffer size
@@ -115,11 +115,11 @@ public:
 #endif
 
   /**
-   * Creates a #SocketAddress with the IPv4 a wildcard address and the
+   * Creates a #StaticSocketAddress with the IPv4 a wildcard address and the
    * specified port.
    */
   gcc_const
-  static SocketAddress MakePort4(unsigned port);
+  static StaticSocketAddress MakePort4(unsigned port);
 
   operator struct sockaddr *() {
     return reinterpret_cast<struct sockaddr *>(&address);
@@ -157,9 +157,9 @@ public:
   }
 
   gcc_pure
-  bool operator==(const SocketAddress &other) const;
+  bool operator==(const StaticSocketAddress &other) const;
 
-  bool operator!=(const SocketAddress &other) const {
+  bool operator!=(const StaticSocketAddress &other) const {
     return !(*this == other);
   }
 

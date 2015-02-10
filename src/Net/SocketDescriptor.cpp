@@ -28,7 +28,7 @@
  */
 
 #include "SocketDescriptor.hpp"
-#include "SocketAddress.hpp"
+#include "Net/StaticSocketAddress.hpp"
 
 #include <stdint.h>
 #include <string.h>
@@ -122,7 +122,7 @@ SocketDescriptor::Accept()
 #ifndef _WIN32_WCE
 
 bool
-SocketDescriptor::Connect(const SocketAddress &address)
+SocketDescriptor::Connect(const StaticSocketAddress &address)
 {
   assert(address.IsDefined());
 
@@ -150,7 +150,7 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 }
 
 bool
-SocketDescriptor::Bind(const SocketAddress &address)
+SocketDescriptor::Bind(const StaticSocketAddress &address)
 {
   return bind(Get(), address, address.GetLength()) == 0;
 }
@@ -158,7 +158,7 @@ SocketDescriptor::Bind(const SocketAddress &address)
 bool
 SocketDescriptor::BindPort(unsigned port)
 {
-  return Bind(SocketAddress::MakePort4(port));
+  return Bind(StaticSocketAddress::MakePort4(port));
 }
 
 #ifndef _WIN32_WCE
@@ -168,7 +168,7 @@ SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 {
   const int socktype = SOCK_DGRAM;
 
-  SocketAddress address;
+  StaticSocketAddress address;
   if (!address.Lookup(host, port, socktype))
     return false;
 
@@ -243,7 +243,7 @@ SocketDescriptor::WaitWritable(int timeout_ms) const
 
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length,
-                       SocketAddress &address)
+                       StaticSocketAddress &address)
 {
   int flags = 0;
 #ifdef HAVE_POSIX
@@ -261,7 +261,7 @@ SocketDescriptor::Read(void *buffer, size_t length,
 
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
-                        const SocketAddress &address)
+                        const StaticSocketAddress &address)
 {
   int flags = 0;
 #ifdef HAVE_POSIX

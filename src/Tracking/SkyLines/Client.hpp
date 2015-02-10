@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
 #include "Handler.hpp"
-#include "Net/SocketAddress.hpp"
+#include "Net/StaticSocketAddress.hpp"
 #include "Net/SocketDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
@@ -33,7 +33,6 @@ Copyright_License {
 
 struct NMEAInfo;
 class IOThread;
-class SocketAddress;
 
 namespace SkyLinesTracking {
   struct TrafficResponsePacket;
@@ -51,7 +50,7 @@ namespace SkyLinesTracking {
 
     uint64_t key;
 
-    SocketAddress address;
+    StaticSocketAddress address;
     SocketDescriptor socket;
 
   public:
@@ -81,7 +80,7 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
-    bool Open(const SocketAddress &_address);
+    bool Open(const StaticSocketAddress &_address);
     void Close();
 
     bool SendFix(const NMEAInfo &basic);

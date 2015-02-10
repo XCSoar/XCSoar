@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "SocketAddress.hpp"
+#include "StaticSocketAddress.hpp"
 #include "Util/Macros.hpp"
 
 #include <algorithm>
@@ -50,7 +50,7 @@
 #endif
 
 bool
-SocketAddress::operator==(const SocketAddress &other) const
+StaticSocketAddress::operator==(const StaticSocketAddress &other) const
 {
   return length == other.length &&
     memcmp(&address, &other.address, length) == 0;
@@ -59,7 +59,7 @@ SocketAddress::operator==(const SocketAddress &other) const
 #if defined(HAVE_POSIX) && !defined(__BIONIC__)
 
 void
-SocketAddress::SetLocal(const char *path)
+StaticSocketAddress::SetLocal(const char *path)
 {
   auto &sun = reinterpret_cast<struct sockaddr_un &>(address);
 
@@ -80,8 +80,10 @@ SocketAddress::SetLocal(const char *path)
 #ifdef __GLIBC__
 
 inline bool
-SocketAddress::GetIpAddressInner(const ifaddrs *ifaddr, const char *device,
-                                 char *ipaddress, const size_t ipaddress_size)
+StaticSocketAddress::GetIpAddressInner(const ifaddrs *ifaddr,
+                                       const char *device,
+                                       char *ipaddress,
+                                       const size_t ipaddress_size)
 {
   /* iterate over all interfaces */
   for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
@@ -97,11 +99,11 @@ SocketAddress::GetIpAddressInner(const ifaddrs *ifaddr, const char *device,
   return false;
 }
 
-SocketAddress
-SocketAddress::GetDeviceAddress(const char *device)
+StaticSocketAddress
+StaticSocketAddress::GetDeviceAddress(const char *device)
 {
-  /* intialize result to undefined SocketAddress */
-  SocketAddress address;
+  /* intialize result to undefined StaticSocketAddress */
+  StaticSocketAddress address;
   auto &sin = reinterpret_cast<struct sockaddr_in &>(address.address);
   sin.sin_family = AF_UNSPEC;
   sin.sin_port = 0;
@@ -124,7 +126,7 @@ SocketAddress::GetDeviceAddress(const char *device)
 }
 
 const char *
-SocketAddress::ToString(char *buffer, size_t buffer_size) const
+StaticSocketAddress::ToString(char *buffer, size_t buffer_size) const
 {
   if (!IsDefined())
     return nullptr;
@@ -135,10 +137,10 @@ SocketAddress::ToString(char *buffer, size_t buffer_size) const
 
 #endif
 
-SocketAddress
-SocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
+StaticSocketAddress
+StaticSocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
 {
-  SocketAddress address;
+  StaticSocketAddress address;
   auto &sin = reinterpret_cast<struct sockaddr_in &>(address.address);
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
@@ -148,8 +150,8 @@ SocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
   return address;
 }
 
-SocketAddress
-SocketAddress::MakePort4(unsigned port)
+StaticSocketAddress
+StaticSocketAddress::MakePort4(unsigned port)
 {
   return MakeIPv4Port(INADDR_ANY, port);
 }
@@ -157,7 +159,7 @@ SocketAddress::MakePort4(unsigned port)
 #ifndef _WIN32_WCE
 
 bool
-SocketAddress::Lookup(const char *host, const char *service, int socktype)
+StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
 {
   struct addrinfo hints;
   memset(&hints, 0, sizeof(hints));
