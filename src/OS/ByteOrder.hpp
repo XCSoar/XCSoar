@@ -60,6 +60,26 @@
 #endif
 #endif
 
+static inline constexpr uint16_t
+GenericByteSwap16(uint16_t value)
+{
+  return (value >> 8) | (value << 8);
+}
+
+static inline constexpr uint32_t
+GenericByteSwap32(uint32_t value)
+{
+  return (value >> 24) | ((value >> 8) & 0x0000ff00) |
+    ((value << 8) & 0x00ff0000) | (value << 24);
+}
+
+static inline constexpr uint64_t
+GenericByteSwap64(uint64_t value)
+{
+  return uint64_t(GenericByteSwap32(uint32_t(value >> 32)))
+    | (uint64_t(GenericByteSwap32(value)) << 32);
+}
+
 gcc_const
 static inline uint16_t
 ByteSwap16(uint16_t value)
@@ -67,7 +87,7 @@ ByteSwap16(uint16_t value)
 #ifdef HAVE_BYTESWAP_H
   return bswap_16(value);
 #else
-  return (value >> 8) | (value << 8);
+  return GenericByteSwap16(value);
 #endif
 }
 
@@ -78,8 +98,7 @@ ByteSwap32(uint32_t value)
 #ifdef HAVE_BYTESWAP_H
   return bswap_32(value);
 #else
-  return (value >> 24) | ((value >> 8) & 0x0000ff00) |
-    ((value << 8) & 0x00ff0000) | (value << 24);
+  return GenericByteSwap32(value);
 #endif
 }
 
@@ -90,8 +109,7 @@ ByteSwap64(uint64_t value)
 #ifdef HAVE_BYTESWAP_H
   return bswap_64(value);
 #else
-  return uint64_t(ByteSwap32(uint32_t(value >> 32)))
-    | (uint64_t(ByteSwap32(value)) << 32);
+  return GenericByteSwap64(value);
 #endif
 }
 
