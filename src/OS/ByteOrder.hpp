@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Max Kellermann <max@duempel.org>,
+ * Copyright (C) 2011-2015 Max Kellermann <max@duempel.org>,
  *                    Tobias Bieniek <Tobias.Bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -80,34 +80,31 @@ GenericByteSwap64(uint64_t value)
     | (uint64_t(GenericByteSwap32(value)) << 32);
 }
 
-gcc_const
-static inline uint16_t
+static inline constexpr uint16_t
 ByteSwap16(uint16_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return bswap_16(value);
+#if CLANG_OR_GCC_VERSION(4,8)
+  return __builtin_bswap16(value);
 #else
   return GenericByteSwap16(value);
 #endif
 }
 
-gcc_const
-static inline uint32_t
+static inline constexpr uint32_t
 ByteSwap32(uint32_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return bswap_32(value);
+#if CLANG_OR_GCC_VERSION(4,3)
+  return __builtin_bswap32(value);
 #else
   return GenericByteSwap32(value);
 #endif
 }
 
-gcc_const
-static inline uint64_t
+static inline constexpr uint64_t
 ByteSwap64(uint64_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return bswap_64(value);
+#if CLANG_OR_GCC_VERSION(4,3)
+  return __builtin_bswap64(value);
 #else
   return GenericByteSwap64(value);
 #endif
