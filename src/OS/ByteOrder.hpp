@@ -46,6 +46,36 @@
 #endif
 #endif /* !__linux__ */
 
+#if defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
+/* well-known little-endian */
+#  define IS_LITTLE_ENDIAN true
+#  define IS_BIG_ENDIAN false
+#elif defined(__MIPSEB__)
+/* well-known big-endian */
+#  define IS_LITTLE_ENDIAN false
+#  define IS_BIG_ENDIAN true
+#elif defined(__APPLE__)
+/* compile-time check for MacOS */
+#  include <machine/endian.h>
+#  if BYTE_ORDER == LITTLE_ENDIAN
+#    define IS_LITTLE_ENDIAN true
+#    define IS_BIG_ENDIAN false
+#  else
+#    define IS_LITTLE_ENDIAN false
+#    define IS_BIG_ENDIAN true
+#  endif
+#else
+/* generic compile-time check */
+#  include <endian.h>
+#  if __BYTE_ORDER == __LITTLE_ENDIAN
+#    define IS_LITTLE_ENDIAN true
+#    define IS_BIG_ENDIAN false
+#  else
+#    define IS_LITTLE_ENDIAN false
+#    define IS_BIG_ENDIAN true
+#  endif
+#endif
+
 /* x86 always allows unaligned access */
 #if defined(__i386__) || defined(__x86_64__) || \
   /* ARM has it from ARMv6 on */ \
@@ -59,6 +89,18 @@
 #define CAN_READ_WRITE_UNALIGNED
 #endif
 #endif
+
+static inline constexpr bool
+IsLittleEndian()
+{
+  return IS_LITTLE_ENDIAN;
+}
+
+static inline constexpr bool
+IsBigEndian()
+{
+  return IS_BIG_ENDIAN;
+}
 
 static inline constexpr uint16_t
 GenericByteSwap16(uint16_t value)
@@ -123,12 +165,8 @@ FromBE16(uint16_t value)
 #else
   return be16toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return ByteSwap16(value);
 #else
-  /* generic big-endian */
-  return value;
+  return IsBigEndian() ? value : ByteSwap16(value);
 #endif
 }
 
@@ -145,12 +183,8 @@ FromBE32(uint32_t value)
 #else
   return be32toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return ByteSwap32(value);
 #else
-  /* generic big-endian */
-  return value;
+  return IsBigEndian() ? value : ByteSwap32(value);
 #endif
 }
 
@@ -167,12 +201,8 @@ FromBE64(uint64_t value)
 #else
   return be64toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return ByteSwap64(value);
 #else
-  /* generic big-endian */
-  return value;
+  return IsBigEndian() ? value : ByteSwap64(value);
 #endif
 }
 
@@ -189,12 +219,8 @@ FromLE16(uint16_t value)
 #else
   return le16toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return value;
 #else
-  /* generic big-endian */
-  return ByteSwap16(value);
+  return IsLittleEndian() ? value : ByteSwap16(value);
 #endif
 }
 
@@ -211,12 +237,8 @@ FromLE32(uint32_t value)
 #else
   return le32toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return value;
 #else
-  /* generic big-endian */
-  return ByteSwap32(value);
+  return IsLittleEndian() ? value : ByteSwap32(value);
 #endif
 }
 
@@ -233,12 +255,8 @@ FromLE64(uint64_t value)
 #else
   return le64toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return value;
 #else
-  /* generic big-endian */
-  return ByteSwap64(value);
+  return IsLittleEndian() ? value : ByteSwap64(value);
 #endif
 }
 
@@ -251,12 +269,8 @@ ToBE16(uint16_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htobe16(value);
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return ByteSwap16(value);
 #else
-  /* generic big-endian */
-  return value;
+  return IsBigEndian() ? value : ByteSwap16(value);
 #endif
 }
 
@@ -269,12 +283,8 @@ ToBE32(uint32_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htobe32(value);
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return ByteSwap32(value);
 #else
-  /* generic big-endian */
-  return value;
+  return IsBigEndian() ? value : ByteSwap32(value);
 #endif
 }
 
@@ -287,12 +297,8 @@ ToBE64(uint64_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htobe64(value);
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return ByteSwap64(value);
 #else
-  /* generic big-endian */
-  return value;
+  return IsBigEndian() ? value : ByteSwap64(value);
 #endif
 }
 
@@ -305,12 +311,8 @@ ToLE16(uint16_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htole16(value);
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return value;
 #else
-  /* generic big-endian */
-  return ByteSwap16(value);
+  return IsLittleEndian() ? value : ByteSwap16(value);
 #endif
 }
 
@@ -323,12 +325,8 @@ ToLE32(uint32_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htole32(value);
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return value;
 #else
-  /* generic big-endian */
-  return ByteSwap32(value);
+  return IsLittleEndian() ? value : ByteSwap32(value);
 #endif
 }
 
@@ -341,12 +339,8 @@ ToLE64(uint64_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htole64(value);
-#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
-  /* generic little-endian */
-  return value;
 #else
-  /* generic big-endian */
-  return ByteSwap64(value);
+  return IsLittleEndian() ? value : ByteSwap64(value);
 #endif
 }
 
