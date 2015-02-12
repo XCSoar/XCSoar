@@ -35,17 +35,6 @@
 
 #include <stdint.h>
 
-#ifdef __linux__
-#include <features.h>
-
-#if defined(ANDROID) || (defined(__GLIBC__) && ((__GLIBC__ >= 2 && __GLIBC_MINOR__ >= 9) || __GLIBC__ >= 3))
-/* the byte swap macros were added in glibc 2.9 */
-#define HAVE_BYTESWAP_H
-#include <byteswap.h>
-#include <endian.h>
-#endif
-#endif /* !__linux__ */
-
 #if defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
 /* well-known little-endian */
 #  define IS_LITTLE_ENDIAN true
@@ -155,193 +144,109 @@ ByteSwap64(uint64_t value)
 /**
  * Converts a 16bit value from big endian to the system's byte order
  */
-gcc_const
-static inline uint16_t
+static inline constexpr uint16_t
 FromBE16(uint16_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-#ifdef __BIONIC__
-  return betoh16(value);
-#else
-  return be16toh(value);
-#endif
-#else
   return IsBigEndian() ? value : ByteSwap16(value);
-#endif
 }
 
 /**
  * Converts a 32bit value from big endian to the system's byte order
  */
-gcc_const
-static inline uint32_t
+static inline constexpr uint32_t
 FromBE32(uint32_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-#ifdef __BIONIC__
-  return betoh32(value);
-#else
-  return be32toh(value);
-#endif
-#else
   return IsBigEndian() ? value : ByteSwap32(value);
-#endif
 }
 
 /**
  * Converts a 64bit value from big endian to the system's byte order
  */
-gcc_const
-static inline uint64_t
+static inline constexpr uint64_t
 FromBE64(uint64_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-#ifdef __BIONIC__
-  return betoh64(value);
-#else
-  return be64toh(value);
-#endif
-#else
   return IsBigEndian() ? value : ByteSwap64(value);
-#endif
 }
 
 /**
  * Converts a 16bit value from little endian to the system's byte order
  */
-gcc_const
-static inline uint16_t
+static inline constexpr uint16_t
 FromLE16(uint16_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-#ifdef __BIONIC__
-  return letoh16(value);
-#else
-  return le16toh(value);
-#endif
-#else
   return IsLittleEndian() ? value : ByteSwap16(value);
-#endif
 }
 
 /**
  * Converts a 32bit value from little endian to the system's byte order
  */
-gcc_const
-static inline uint32_t
+static inline constexpr uint32_t
 FromLE32(uint32_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-#ifdef __BIONIC__
-  return letoh32(value);
-#else
-  return le32toh(value);
-#endif
-#else
   return IsLittleEndian() ? value : ByteSwap32(value);
-#endif
 }
 
 /**
  * Converts a 64bit value from little endian to the system's byte order
  */
-gcc_const
-static inline uint64_t
+static inline constexpr uint64_t
 FromLE64(uint64_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-#ifdef __BIONIC__
-  return letoh64(value);
-#else
-  return le64toh(value);
-#endif
-#else
   return IsLittleEndian() ? value : ByteSwap64(value);
-#endif
 }
 
 /**
  * Converts a 16bit value from the system's byte order to big endian
  */
-gcc_const
-static inline uint16_t
+static inline constexpr uint16_t
 ToBE16(uint16_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return htobe16(value);
-#else
   return IsBigEndian() ? value : ByteSwap16(value);
-#endif
 }
 
 /**
  * Converts a 32bit value from the system's byte order to big endian
  */
-gcc_const
-static inline uint32_t
+static inline constexpr uint32_t
 ToBE32(uint32_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return htobe32(value);
-#else
   return IsBigEndian() ? value : ByteSwap32(value);
-#endif
 }
 
 /**
  * Converts a 64bit value from the system's byte order to big endian
  */
-gcc_const
-static inline uint64_t
+static inline constexpr uint64_t
 ToBE64(uint64_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return htobe64(value);
-#else
   return IsBigEndian() ? value : ByteSwap64(value);
-#endif
 }
 
 /**
  * Converts a 16bit value from the system's byte order to little endian
  */
-gcc_const
-static inline uint16_t
+static inline constexpr uint16_t
 ToLE16(uint16_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return htole16(value);
-#else
   return IsLittleEndian() ? value : ByteSwap16(value);
-#endif
 }
 
 /**
  * Converts a 32bit value from the system's byte order to little endian
  */
-gcc_const
-static inline uint32_t
+static inline constexpr uint32_t
 ToLE32(uint32_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return htole32(value);
-#else
   return IsLittleEndian() ? value : ByteSwap32(value);
-#endif
 }
 
 /**
  * Converts a 64bit value from the system's byte order to little endian
  */
-gcc_const
-static inline uint64_t
+static inline constexpr uint64_t
 ToLE64(uint64_t value)
 {
-#ifdef HAVE_BYTESWAP_H
-  return htole64(value);
-#else
   return IsLittleEndian() ? value : ByteSwap64(value);
-#endif
 }
 
 gcc_pure
