@@ -52,16 +52,16 @@
 StaticSocketAddress &
 StaticSocketAddress::operator=(SocketAddress other)
 {
-  length = std::min(size_t(other.GetSize()), GetCapacity());
-  memcpy(&address, other.GetAddress(), length);
+  size = std::min(size_t(other.GetSize()), GetCapacity());
+  memcpy(&address, other.GetAddress(), size);
   return *this;
 }
 
 bool
 StaticSocketAddress::operator==(const StaticSocketAddress &other) const
 {
-  return length == other.length &&
-    memcmp(&address, &other.address, length) == 0;
+  return size == other.size &&
+    memcmp(&address, &other.address, size) == 0;
 }
 
 #if defined(HAVE_POSIX) && !defined(__BIONIC__)
@@ -80,7 +80,7 @@ StaticSocketAddress::SetLocal(const char *path)
   memcpy(sun.sun_path, path, path_length + 1);
 
   /* note: Bionic doesn't provide SUN_LEN() */
-  length = SUN_LEN(&sun);
+  size = SUN_LEN(&sun);
 }
 
 #endif
@@ -117,7 +117,7 @@ StaticSocketAddress::GetDeviceAddress(const char *device)
   sin.sin_port = 0;
   sin.sin_addr.s_addr = 0;
   std::fill_n(sin.sin_zero, ARRAY_SIZE(sin.sin_zero), 0);
-  address.length = sizeof(sin);
+  address.size = sizeof(sin);
 
   ifaddrs *ifaddr;
   if (getifaddrs(&ifaddr) == -1)
@@ -154,7 +154,7 @@ StaticSocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
   sin.sin_port = htons(port);
   sin.sin_addr.s_addr = htonl(ip);
   std::fill_n(sin.sin_zero, ARRAY_SIZE(sin.sin_zero), 0);
-  address.length = sizeof(sin);
+  address.size = sizeof(sin);
   return address;
 }
 
@@ -178,11 +178,11 @@ StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
   if (getaddrinfo(host, service, &hints, &ai) != 0)
     return false;
 
-  length = ai->ai_addrlen;
-  assert(length <= sizeof(address));
+  size = ai->ai_addrlen;
+  assert(size <= sizeof(address));
 
   memcpy(reinterpret_cast<void *>(&address),
-         reinterpret_cast<void *>(ai->ai_addr), length);
+         reinterpret_cast<void *>(ai->ai_addr), size);
   freeaddrinfo(ai);
   return true;
 }

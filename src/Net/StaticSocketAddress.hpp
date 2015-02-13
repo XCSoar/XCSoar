@@ -48,7 +48,7 @@ struct ifaddrs;
  * An OO wrapper for struct sockaddr_storage.
  */
 class StaticSocketAddress {
-  size_t length;
+  size_t size;
   struct sockaddr_storage address;
 
 public:
@@ -58,7 +58,7 @@ public:
 
   operator SocketAddress() const {
     return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
-                         length);
+                         size);
   }
 
 #if defined(HAVE_POSIX) && !defined(__BIONIC__)
@@ -141,15 +141,15 @@ public:
     return sizeof(address);
   }
 
-  size_t GetLength() const {
-    return length;
+  size_t GetSize() const {
+    return size;
   }
 
-  void SetLength(size_t _length) {
-    assert(_length > 0);
-    assert(_length <= sizeof(address));
+  void SetSize(size_t _size) {
+    assert(_size > 0);
+    assert(_size <= sizeof(address));
 
-    length = _length;
+    size = _size;
   }
 
   int GetFamily() const {

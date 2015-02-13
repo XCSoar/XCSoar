@@ -255,7 +255,7 @@ SocketDescriptor::Read(void *buffer, size_t length,
   ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length, flags,
                               address, &addrlen);
   if (nbytes > 0)
-    address.SetLength(addrlen);
+    address.SetSize(addrlen);
 
   return nbytes;
 }
@@ -273,5 +273,5 @@ SocketDescriptor::Write(const void *buffer, size_t length,
 #endif
 
   return ::sendto(Get(), (const char *)buffer, length, flags,
-                  address, address.GetLength());
+                  address, address.GetSize());
 }
