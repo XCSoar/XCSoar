@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_EVENT_MERGE_MOUSE_HPP
 
 #include "../Shared/RotatePointer.hpp"
-#include "OS/FileDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
 #include <assert.h>
