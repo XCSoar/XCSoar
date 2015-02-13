@@ -66,7 +66,7 @@ AllLinuxInputDevices::Close()
   devices.clear();
 
 #ifdef HAVE_INOTIFY
-  if (!inotify_fd.IsDefined()) {
+  if (inotify_fd.IsDefined()) {
     io_loop.Remove(inotify_fd.Get());
     inotify_fd.Close();
   }
