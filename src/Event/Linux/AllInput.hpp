@@ -68,7 +68,11 @@ class AllLinuxInputDevices final
 public:
   explicit AllLinuxInputDevices(IOLoop &_io_loop, EventQueue &_queue,
                                 MergeMouse &_merge)
-    :io_loop(_io_loop), queue(_queue), merge(_merge) {}
+    :io_loop(_io_loop), queue(_queue), merge(_merge)
+#ifdef HAVE_INOTIFY
+    , inotify_fd(FileDescriptor::Undefined())
+#endif
+    {}
 
   ~AllLinuxInputDevices() {
     Close();

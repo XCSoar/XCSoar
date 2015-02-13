@@ -51,8 +51,8 @@ class LogCatReader final : private FileEventHandler {
   std::string data;
 
 public:
-  LogCatReader(IOThread &_io_thread, FileDescriptor &&_fd, pid_t _pid)
-    :io_thread(_io_thread), fd(std::move(_fd)), pid(_pid) {
+  LogCatReader(IOThread &_io_thread, FileDescriptor _fd, pid_t _pid)
+    :io_thread(_io_thread), fd(_fd), pid(_pid) {
     io_thread.LockAdd(fd.Get(), IOThread::READ, *this);
   }
 
@@ -213,12 +213,15 @@ CheckLogCat(IOThread &io_thread)
     _exit(EXIT_FAILURE);
   }
 
+  w.Close();
+
   if (pid < 0) {
+    r.Close();
     LogFormat("Launching logcat has failed: %s", strerror(errno));
     return;
   }
 
-  log_cat_reader = new LogCatReader(io_thread, std::move(r), pid);
+  log_cat_reader = new LogCatReader(io_thread, r, pid);
 }
 
 void

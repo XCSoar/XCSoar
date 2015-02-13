@@ -81,7 +81,8 @@ public:
   explicit LinuxInputDevice(IOLoop &_io_loop, EventQueue &_queue,
                             MergeMouse &_merge)
     :io_loop(_io_loop), queue(_queue), merge(_merge),
-     edit_position(0, 0), public_position(0, 0) {}
+     edit_position(0, 0), public_position(0, 0),
+     fd(FileDescriptor::Undefined()) {}
 
   ~LinuxInputDevice() {
     Close();

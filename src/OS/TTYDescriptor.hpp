@@ -30,7 +30,7 @@
 #ifndef XCSOAR_TTY_DESCRIPTOR_HPP
 #define XCSOAR_TTY_DESCRIPTOR_HPP
 
-#include "FileDescriptor.hpp"
+#include "UniqueFileDescriptor.hpp"
 
 #include <stdlib.h>
 #include <termios.h>
@@ -38,7 +38,7 @@
 /**
  * An OO wrapper for a terminal file descriptor.
  */
-class TTYDescriptor : public FileDescriptor {
+class TTYDescriptor : public UniqueFileDescriptor {
 public:
   bool Unlock() {
     return unlockpt(Get()) >= 0;

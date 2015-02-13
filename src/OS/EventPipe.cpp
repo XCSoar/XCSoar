@@ -39,7 +39,7 @@ EventPipe::Create()
 #ifdef HAVE_EVENTFD
   return r.CreateEventFD();
 #else
-  if (!FileDescriptor::CreatePipe(r, w))
+  if (!UniqueFileDescriptor::CreatePipe(r, w))
     return false;
 
   r.SetNonBlocking();

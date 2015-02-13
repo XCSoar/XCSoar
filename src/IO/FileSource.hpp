@@ -28,11 +28,11 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 
-#include "OS/FileDescriptor.hpp"
+#include "OS/UniqueFileDescriptor.hpp"
 
 class PosixFileSource : public BufferedSource<char, 4096u> {
 private:
-  FileDescriptor fd;
+  UniqueFileDescriptor fd;
 
 public:
   PosixFileSource(const char *path);

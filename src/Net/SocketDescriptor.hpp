@@ -30,7 +30,7 @@
 #ifndef XCSOAR_SOCKET_DESCRIPTOR_HPP
 #define XCSOAR_SOCKET_DESCRIPTOR_HPP
 
-#include "OS/FileDescriptor.hpp"
+#include "OS/UniqueFileDescriptor.hpp"
 #include "Compiler.h"
 
 class SocketAddress;
@@ -39,8 +39,8 @@ class StaticSocketAddress;
 /**
  * An OO wrapper for a UNIX socket descriptor.
  */
-class SocketDescriptor : public FileDescriptor {
-  explicit SocketDescriptor(int _fd):FileDescriptor(_fd) {}
+class SocketDescriptor : public UniqueFileDescriptor {
+  explicit SocketDescriptor(int _fd):UniqueFileDescriptor(_fd) {}
 
 public:
   SocketDescriptor() {}
@@ -118,8 +118,8 @@ public:
   int WaitReadable(int timeout_ms) const;
   int WaitWritable(int timeout_ms) const;
 #else
-  using FileDescriptor::Read;
-  using FileDescriptor::Write;
+  using UniqueFileDescriptor::Read;
+  using UniqueFileDescriptor::Write;
 #endif
 
   /**

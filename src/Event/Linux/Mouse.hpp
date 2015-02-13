@@ -42,7 +42,7 @@ class LinuxMouse final : private FileEventHandler {
 
 public:
   explicit LinuxMouse(IOLoop &_io_loop, MergeMouse &_merge)
-    :io_loop(_io_loop), merge(_merge) {}
+    :io_loop(_io_loop), merge(_merge), fd(FileDescriptor::Undefined()) {}
 
   ~LinuxMouse() {
     Close();

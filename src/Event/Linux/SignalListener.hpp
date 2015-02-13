@@ -25,13 +25,13 @@ Copyright_License {
 #define XCSOAR_SIGNAL_LISTENER_HPP
 
 #include "IO/Async/FileEventHandler.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "OS/UniqueFileDescriptor.hpp"
 
 class IOLoop;
 
 class SignalListener : private FileEventHandler {
   IOLoop &io_loop;
-  FileDescriptor fd;
+  UniqueFileDescriptor fd;
 
 public:
   explicit SignalListener(IOLoop &_io_loop)
