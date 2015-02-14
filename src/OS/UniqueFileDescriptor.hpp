@@ -39,7 +39,7 @@
  */
 class UniqueFileDescriptor : protected FileDescriptor {
 public:
-  UniqueFileDescriptor():FileDescriptor(-1) {}
+  UniqueFileDescriptor():FileDescriptor(FileDescriptor::Undefined()) {}
 
 protected:
   explicit UniqueFileDescriptor(int _fd):FileDescriptor(_fd) {
@@ -51,9 +51,7 @@ public:
     :FileDescriptor(_fd) {}
 
   UniqueFileDescriptor(UniqueFileDescriptor &&other)
-    :FileDescriptor(other.Get()) {
-    other.SetUndefined();
-  }
+    :FileDescriptor(other.Steal()) {}
 
   ~UniqueFileDescriptor() {
     Close();
@@ -75,11 +73,7 @@ protected:
     FileDescriptor::Set(_fd);
   }
 
-  int Steal() {
-    assert(IsDefined());
-
-    return FileDescriptor::Steal();
-  }
+  using FileDescriptor::Steal;
 
 public:
   using FileDescriptor::Open;
