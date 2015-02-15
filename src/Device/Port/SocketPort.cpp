@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "SocketPort.hpp"
+#include "Net/SocketError.hpp"
 #include "IO/DataHandler.hpp"
 
 #ifdef HAVE_POSIX
@@ -116,6 +117,16 @@ SocketPort::Write(const void *data, size_t length)
     return 0;
 
   ssize_t nbytes = socket.Write((const char *)data, length);
+
+  if (nbytes < 0 && IsSocketBlockingError()) {
+    /* writing to the socket blocks; wait and retry */
+
+    if (socket.WaitWritable(1000) <= 0)
+      return 0;
+
+    nbytes = socket.Write(data, length);
+  }
+
   return nbytes < 0 ? 0 : nbytes;
 }
 
