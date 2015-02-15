@@ -57,9 +57,6 @@ TCPClientPort::Connect(const char *host, unsigned port)
 #endif
 
   if (s.Connect(address)) {
-#ifdef HAVE_POSIX
-    s.SetBlocking();
-#endif
     Set(std::move(s));
     return true;
   }
