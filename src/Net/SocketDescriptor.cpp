@@ -115,7 +115,7 @@ SocketDescriptor::Accept()
 #endif
   return fd >= 0
     ? SocketDescriptor(fd)
-    : SocketDescriptor();
+    : Undefined();
 }
 
 #ifndef _WIN32_WCE
