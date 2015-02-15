@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2003-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -59,7 +59,6 @@ public:
   constexpr
   StaticFifoBuffer():head(0), tail(0) {}
 
-protected:
   void Shift() {
     if (head == 0)
       return;
@@ -74,7 +73,6 @@ protected:
     head = 0;
   }
 
-public:
   void Clear() {
     head = tail = 0;
   }
