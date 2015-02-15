@@ -106,10 +106,8 @@ public:
 #endif
 
   void Close() {
-    if (IsDefined()) {
+    if (IsDefined())
       FileDescriptor::Close();
-      fd = -1;
-    }
   }
 
   using FileDescriptor::Rewind;
