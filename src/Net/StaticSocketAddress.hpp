@@ -66,51 +66,6 @@ public:
   void SetLocal(const char *path);
 #endif
 
-  /**
-   * Creates a #StaticSocketAddress with the specified IPv4 address and
-   * port.
-   *
-   * @parm ip the IPv4 address in host byte order
-   */
-  gcc_const
-  static StaticSocketAddress MakeIPv4Port(uint32_t ip, unsigned port);
-
-  gcc_const
-  static StaticSocketAddress MakeIPv4Port(uint8_t a, uint8_t b, uint8_t c,
-                                          uint8_t d, unsigned port) {
-    uint32_t ip = (a << 24) | (b << 16) | (c << 8) | d;
-    return MakeIPv4Port(ip, port);
-  }
-
-#ifdef __GLIBC__
-  /**
-   * Returns a StaticSocketAddress for the specified device. Caller
-   * should check for validity of returned StaticSocketAddress.
-   *
-   * @param device is the device name f.i. "eth0"
-   * @return StaticSocketAddress, use IsDefined() to check valid result
-   */
-  gcc_pure
-  static StaticSocketAddress GetDeviceAddress(const char *device);
-
-  /**
-   * Converts StaticSocketAddress to human readable string
-   *
-   * @param buffer is the result buffer
-   * @param buffer_size is the buffer size
-   * @return IP address on success, else NULL
-   */
-  gcc_pure
-  const char *ToString(char *buffer, size_t buffer_size) const;
-#endif
-
-  /**
-   * Creates a #StaticSocketAddress with the IPv4 a wildcard address and the
-   * specified port.
-   */
-  gcc_const
-  static StaticSocketAddress MakePort4(unsigned port);
-
   operator struct sockaddr *() {
     return reinterpret_cast<struct sockaddr *>(&address);
   }

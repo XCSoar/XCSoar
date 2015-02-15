@@ -24,6 +24,7 @@ Copyright_License {
 #include "Glue.hpp"
 #include "Settings.hpp"
 #include "NMEA/Info.hpp"
+#include "Net/IPv4Address.hpp"
 
 #ifdef HAVE_POSIX
 #include "IO/Async/GlobalIOThread.hpp"
@@ -80,8 +81,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
     client.Close();
   else if (!client.IsDefined())
     // TODO: fix hard-coded IP address:
-    client.Open(StaticSocketAddress::MakeIPv4Port(95, 128, 34, 172,
-                                                  Client::GetDefaultPort()));
+    client.Open(IPv4Address(95, 128, 34, 172, Client::GetDefaultPort()));
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;

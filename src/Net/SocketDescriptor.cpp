@@ -30,6 +30,7 @@
 #include "SocketDescriptor.hpp"
 #include "SocketAddress.hpp"
 #include "StaticSocketAddress.hpp"
+#include "IPv4Address.hpp"
 
 #ifdef HAVE_POSIX
 #include <sys/socket.h>
@@ -156,7 +157,7 @@ SocketDescriptor::Bind(SocketAddress address)
 bool
 SocketDescriptor::BindPort(unsigned port)
 {
-  return Bind(StaticSocketAddress::MakePort4(port));
+  return Bind(IPv4Address(port));
 }
 
 #ifndef _WIN32_WCE

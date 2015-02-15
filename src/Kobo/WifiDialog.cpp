@@ -33,7 +33,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
-#include "Net/StaticSocketAddress.hpp"
+#include "Net/IPv4Address.hpp"
 
 class WifiListWidget final
   : public ListWidget, ActionListener, Timer {
@@ -187,7 +187,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     state = _("Connected");
 
     /* look up ip address for eth0 */
-    StaticSocketAddress addr = StaticSocketAddress::GetDeviceAddress("eth0");
+    const auto addr = IPv4Address::GetDeviceAddress("eth0");
     if (addr.IsDefined()) { /* valid address? */
       StaticString<40> addr_str;
       if (addr.ToString(addr_str.buffer(), addr_str.MAX_SIZE) != nullptr) {
