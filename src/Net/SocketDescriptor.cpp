@@ -111,7 +111,7 @@ SocketDescriptor::Accept()
 #if defined(__linux__) && !defined(__BIONIC__) && !defined(KOBO)
   int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
 #else
-  int fd = ::accept(Get(), NULL, NULL);
+  int fd = ::accept(Get(), nullptr, nullptr);
 #endif
   return fd >= 0
     ? SocketDescriptor(fd)
@@ -209,14 +209,14 @@ SocketDescriptor::WaitReadable(int timeout_ms) const
   FD_ZERO(&rfds);
   FD_SET(Get(), &rfds);
 
-  struct timeval timeout, *timeout_p = NULL;
+  struct timeval timeout, *timeout_p = nullptr;
   if (timeout_ms >= 0) {
     timeout.tv_sec = unsigned(timeout_ms) / 1000;
     timeout.tv_usec = (unsigned(timeout_ms) % 1000) * 1000;
     timeout_p = &timeout;
   }
 
-  return select(Get() + 1, &rfds, NULL, NULL, timeout_p);
+  return select(Get() + 1, &rfds, nullptr, nullptr, timeout_p);
 }
 
 int
@@ -228,14 +228,14 @@ SocketDescriptor::WaitWritable(int timeout_ms) const
   FD_ZERO(&wfds);
   FD_SET(Get(), &wfds);
 
-  struct timeval timeout, *timeout_p = NULL;
+  struct timeval timeout, *timeout_p = nullptr;
   if (timeout_ms >= 0) {
     timeout.tv_sec = unsigned(timeout_ms) / 1000;
     timeout.tv_usec = (unsigned(timeout_ms) % 1000) * 1000;
     timeout_p = &timeout;
   }
 
-  return select(Get() + 1, NULL, &wfds, NULL, timeout_p);
+  return select(Get() + 1, nullptr, &wfds, nullptr, timeout_p);
 }
 
 #endif
