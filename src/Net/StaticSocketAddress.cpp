@@ -51,7 +51,7 @@
 StaticSocketAddress &
 StaticSocketAddress::operator=(SocketAddress other)
 {
-  size = std::min(size_t(other.GetSize()), GetCapacity());
+  size = std::min(other.GetSize(), GetCapacity());
   memcpy(&address, other.GetAddress(), size);
   return *this;
 }
@@ -99,7 +99,7 @@ StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
     return false;
 
   size = ai->ai_addrlen;
-  assert(size <= sizeof(address));
+  assert(size_t(size) <= sizeof(address));
 
   memcpy(reinterpret_cast<void *>(&address),
          reinterpret_cast<void *>(ai->ai_addr), size);
