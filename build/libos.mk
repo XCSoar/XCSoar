@@ -25,7 +25,7 @@ $(eval $(call link-library,libos,OS))
 
 ifeq ($(HAVE_POSIX),n)
 ifeq ($(HAVE_CE),y)
-OS_LDLIBS += -lwinsock
+OS_LDLIBS += -lws2
 else
 OS_LDLIBS += -lws2_32
 endif
