@@ -156,7 +156,7 @@ protected:
   fixed ApplyShiftedHandicap(const fixed unhandicapped_score) const {
     assert(handicap != 0);
 
-    return 200 * unhandicapped_score / (100 + handicap);
+    return 400 * unhandicapped_score / (3 * handicap + 100);
   }
 };
 

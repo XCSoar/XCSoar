@@ -42,7 +42,13 @@ Version 6.8 - not yet released
 
 Version 6.7.7 - not yet released
 * airspace
-  - accept airspaces of class RMZ in OpenAir format files
+  - accept airspaces of class RMZ in OpenAir format files (#3437)
+* infoboxes
+  - fix data for OLC infoboxes if "OLC League" is used (#3461)
+* calculations
+  - fix handicap factor for "OLC League" scores
+* input events
+  - allow '_' character in event identifiers (#3464)
 
 Version 6.7.6 - 2014/10/18
 * tracking
