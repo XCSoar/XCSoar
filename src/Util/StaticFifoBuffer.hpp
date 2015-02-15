@@ -44,7 +44,7 @@
  * buffer as needed.  It is not thread safe.
  */
 template<class T, size_t size>
-class FifoBuffer {
+class StaticFifoBuffer {
 public:
   typedef size_t size_type;
 
@@ -57,7 +57,7 @@ protected:
 
 public:
   constexpr
-  FifoBuffer():head(0), tail(0) {}
+  StaticFifoBuffer():head(0), tail(0) {}
 
 protected:
   void Shift() {

@@ -32,7 +32,7 @@ Copyright_License {
 #endif
 
 #ifdef HAVE_CURL
-#include "Util/FifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hpp"
 #include "CURL/Easy.hpp"
 
 #include <curl/curl.h>
@@ -74,7 +74,7 @@ namespace Net {
 
     CurlEasy handle;
 
-    typedef FifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
+    typedef StaticFifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
     Buffer buffer;
 #endif
 

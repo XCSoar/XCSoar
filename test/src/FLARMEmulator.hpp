@@ -31,7 +31,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Util/Macros.hpp"
-#include "Util/FifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hpp"
 #include "Util/StaticString.hpp"
 
 #include <string>
@@ -43,7 +43,7 @@ class FLARMEmulator : public Emulator, PortLineSplitter {
   std::map<std::string, std::string> settings;
 
   bool binary;
-  FifoBuffer<char, 256u> binary_buffer;
+  StaticFifoBuffer<char, 256u> binary_buffer;
 
 public:
   FLARMEmulator():binary(false) {

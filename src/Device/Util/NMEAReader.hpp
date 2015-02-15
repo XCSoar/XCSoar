@@ -24,7 +24,7 @@
 #ifndef XCSOAR_DEVICE_PORT_NMEA_READER_HPP
 #define XCSOAR_DEVICE_PORT_NMEA_READER_HPP
 
-#include "Util/FifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hpp"
 
 class Port;
 class OperationEnvironment;
@@ -33,7 +33,7 @@ class TimeoutClock;
 class PortNMEAReader {
   Port &port;
   OperationEnvironment &env;
-  FifoBuffer<char, 256u> buffer;
+  StaticFifoBuffer<char, 256u> buffer;
 
 public:
   PortNMEAReader(Port &_port, OperationEnvironment &_env)

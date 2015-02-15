@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Device/Descriptor.hpp"
 #include "Util/Macros.hpp"
-#include "Util/FifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/DelayedNotify.hpp"
@@ -50,7 +50,7 @@ enum Buttons {
 class PortTerminalBridge : public DataHandler, private DelayedNotify {
   TerminalWindow &terminal;
   Mutex mutex;
-  FifoBuffer<char, 1024> buffer;
+  StaticFifoBuffer<char, 1024> buffer;
 
 public:
   PortTerminalBridge(TerminalWindow &_terminal)

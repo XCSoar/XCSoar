@@ -27,7 +27,7 @@ Copyright_License {
 #include "Port.hpp"
 #include "IO/DataHandler.hpp"
 #include "Thread/Mutex.hpp"
-#include "Util/FifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hpp"
 
 #ifdef HAVE_POSIX
 #include "Thread/Cond.hpp"
@@ -59,7 +59,7 @@ class BufferedPort : public Port, protected DataHandler {
   Trigger data_trigger;
 #endif
 
-  FifoBuffer<uint8_t, 16384> buffer;
+  StaticFifoBuffer<uint8_t, 16384> buffer;
 
   bool running;
 

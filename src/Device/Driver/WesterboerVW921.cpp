@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Driver/WesterboerVW921.hpp"
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
-#include "Util/FifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Units/System.hpp"
 
@@ -37,7 +37,7 @@ Copyright_License {
  */
 class WesterboerVW921Device : public AbstractDevice
 {
-  FifoBuffer<char, 256u> buffer;
+  StaticFifoBuffer<char, 256u> buffer;
 
 public:
   virtual bool DataReceived(const void *data, size_t length,
