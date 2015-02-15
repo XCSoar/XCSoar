@@ -34,6 +34,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Terrain/RasterWeatherStore.hpp"
 #include "Device/device.hpp"
 #include "PageActions.hpp"
 #include "Util/StringUtil.hpp"
@@ -403,6 +404,12 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     if (!Basic().flarm.status.available)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckFLARM)"), _T(""), Size);
+  }
+
+  if (_tcsstr(OutBuffer, _T("$(CheckWeather)"))) {
+    if (rasp == nullptr || rasp->GetItemCount() == 0)
+      invalid = true;
+    ReplaceInString(OutBuffer, _T("$(CheckWeather)"), _T(""), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckCircling)"))) {

@@ -828,7 +828,7 @@ type=key
 data=7
 event=Setup Weather
 event=Mode default
-label=Weather
+label=Weather$(CheckWeather)
 location=6
 
 mode=Info2
