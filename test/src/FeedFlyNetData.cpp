@@ -21,52 +21,42 @@ Copyright_License {
 }
 */
 
+#include "DebugPort.hpp"
+#include "OS/Args.hpp"
+#include "Device/Port/Port.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
+#include "Device/Config.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 #include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "Time/PeriodClock.hpp"
-#include "Net/SocketDescriptor.hpp"
-#include "Net/StaticSocketAddress.hpp"
 
-#include <fcntl.h>
-#include <unistd.h>
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv)
 {
-  // Determine on which TCP port to connect to the server
-  const char *tcp_port;
-  if (argc < 2) {
-    fprintf(stderr, "This program opens a TCP connection to a server which is assumed ");
-    fprintf(stderr, "to be at 127.0.0.1, and sends artificial FlyNet vario data.\n\n");
-    fprintf(stderr, "Usage: %s PORT\n", argv[0]);
-    fprintf(stderr, "Defaulting to port 4353\n");
-    tcp_port = "4353";
-  } else {
-    tcp_port = argv[1];
+  Args args(argc, argv, "PORT");
+  const DeviceConfig config = ParsePortArgs(args);
+  args.ExpectEnd();
+
+  InitialiseIOThread();
+
+  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
+  if (port == nullptr) {
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to open port\n");
+    return EXIT_FAILURE;
   }
 
-  // Convert IP address to binary form
-  StaticSocketAddress server_address;
-  if (!server_address.Lookup("127.0.0.1", tcp_port, AF_INET)) {
-    fprintf(stderr, "Failed to look up address\n");
-    exit(EXIT_FAILURE);
-  }
+  ConsoleOperationEnvironment env;
 
-  // Create socket for the outgoing connection
-  SocketDescriptor sock;
-  if (!sock.CreateTCP()) {
-    perror("Socket");
-    exit(EXIT_FAILURE);
-  }
-
-  // Connect to the specified server
-  if (!sock.Connect(server_address))
-  {
-    perror("Connect");
-    exit(EXIT_FAILURE);
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
   }
 
   PeriodClock start_clock;
@@ -94,7 +84,7 @@ int main(int argc, char **argv)
       sentence.AppendFormat("%08X", uround(pressure));
       sentence += "\n";
 
-      sock.Write(sentence.c_str(), sentence.length());
+      port->Write(sentence.c_str(), sentence.length());
     }
 
     if (battery_clock.CheckUpdate(11000)) {
@@ -107,7 +97,7 @@ int main(int argc, char **argv)
         sentence += "*";
 
       sentence += "\n";
-      sock.Write(sentence.c_str(), sentence.length());
+      port->Write(sentence.c_str(), sentence.length());
 
       if (battery_level == 0)
         battery_level = 11;
@@ -115,6 +105,4 @@ int main(int argc, char **argv)
         battery_level--;
     }
   }
-
-  return EXIT_SUCCESS;
 }
