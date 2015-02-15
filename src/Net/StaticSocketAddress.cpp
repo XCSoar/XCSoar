@@ -98,23 +98,18 @@ StaticSocketAddress::SetLocal(const char *path)
  * @param ipaddress_size is the size of the ipaddress buffer
  * @return true on success
  */
-static bool
-GetIpAddressInner(const ifaddrs *ifaddr,
-                  const char *device,
-                  char *ipaddress, const size_t ipaddress_size)
+gcc_pure
+static const struct sockaddr_in *
+GetIpAddressInner(const ifaddrs *ifaddr, const char *device)
 {
   /* iterate over all interfaces */
   for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
     /* is this the (droid) device we're looking for and it's IPv4? */
     if (ifa->ifa_addr != nullptr && strcmp(ifa->ifa_name, device) == 0 &&
         ifa->ifa_addr->sa_family == AF_INET)
-      /* use getnameinfo to lookup the numeric host for this device,
-         returns 0 on success */
-      return getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in),
-                         ipaddress, ipaddress_size, nullptr, 0,
-                         NI_NUMERICHOST) == 0;
+      return reinterpret_cast<const struct sockaddr_in *>(ifa->ifa_addr);
 
-  return false;
+  return nullptr;
 }
 
 StaticSocketAddress
@@ -133,11 +128,9 @@ StaticSocketAddress::GetDeviceAddress(const char *device)
   if (getifaddrs(&ifaddr) == -1)
     return address;
 
-  char ipaddress[INET_ADDRSTRLEN + 1];
-  if (GetIpAddressInner(ifaddr, device, ipaddress, sizeof(ipaddress))) {
-    sin.sin_family = AF_INET; /* set valid */
-    inet_pton(AF_INET, ipaddress, &sin.sin_addr); /* to numeric */
-  }
+  const struct sockaddr_in *found = GetIpAddressInner(ifaddr, device);
+  if (found != nullptr)
+    sin = *found;
 
   freeifaddrs(ifaddr);
   return address;
