@@ -42,8 +42,6 @@
 #include <winsock2.h>
 #endif
 
-struct ifaddrs;
-
 /**
  * An OO wrapper for struct sockaddr_storage.
  */
@@ -85,22 +83,6 @@ public:
   }
 
 #ifdef __GLIBC__
-private:
-  /**
-   * helper to iterate over available devices, locate the
-   * passed through device name, if found write IP address in
-   * provided IP address buffer
-   *
-   * @param ifaddr is a properly initialized interface address list
-   * @param device is the name of the device we're looking for
-   * @param ipaddress is a pointer to the buffer to receive the IP address (if found)
-   * @param ipaddress_size is the size of the ipaddress buffer
-   * @return true on success
-   */
-  static bool GetIpAddressInner(const ifaddrs *ifaddr, const char *device,
-                                char *ipaddress, size_t ipaddress_size);
-
-public:
   /**
    * Returns a StaticSocketAddress for the specified device. Caller
    * should check for validity of returned StaticSocketAddress.

@@ -87,11 +87,21 @@ StaticSocketAddress::SetLocal(const char *path)
 
 #ifdef __GLIBC__
 
-inline bool
-StaticSocketAddress::GetIpAddressInner(const ifaddrs *ifaddr,
-                                       const char *device,
-                                       char *ipaddress,
-                                       const size_t ipaddress_size)
+/**
+ * helper to iterate over available devices, locate the
+ * passed through device name, if found write IP address in
+ * provided IP address buffer
+ *
+ * @param ifaddr is a properly initialized interface address list
+ * @param device is the name of the device we're looking for
+ * @param ipaddress is a pointer to the buffer to receive the IP address (if found)
+ * @param ipaddress_size is the size of the ipaddress buffer
+ * @return true on success
+ */
+static bool
+GetIpAddressInner(const ifaddrs *ifaddr,
+                  const char *device,
+                  char *ipaddress, const size_t ipaddress_size)
 {
   /* iterate over all interfaces */
   for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
