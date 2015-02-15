@@ -133,8 +133,7 @@ public:
    * to return false, and this object may be reused.
    */
   void Close() {
-    ::close(fd);
-    fd = -1;
+    ::close(Steal());
   }
 
   /**
