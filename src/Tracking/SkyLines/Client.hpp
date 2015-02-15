@@ -59,7 +59,8 @@ namespace SkyLinesTracking {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
       io_thread(nullptr), handler(nullptr),
 #endif
-      key(0) {}
+      key(0),
+      socket(SocketDescriptor::Undefined()) {}
     ~Client() { Close(); }
 
     constexpr

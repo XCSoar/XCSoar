@@ -62,6 +62,8 @@ class WPASupplicant {
   char local_path[32];
 
 public:
+  WPASupplicant():fd(SocketDescriptor::Undefined()) {}
+
   ~WPASupplicant() {
     Close();
   }

@@ -31,9 +31,6 @@
 #include "SocketAddress.hpp"
 #include "StaticSocketAddress.hpp"
 
-#include <stdint.h>
-#include <string.h>
-
 #ifdef HAVE_POSIX
 #include <sys/socket.h>
 #else

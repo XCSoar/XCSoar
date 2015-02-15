@@ -30,8 +30,9 @@
 #ifndef XCSOAR_SOCKET_DESCRIPTOR_HPP
 #define XCSOAR_SOCKET_DESCRIPTOR_HPP
 
-#include "OS/UniqueFileDescriptor.hpp"
-#include "Compiler.h"
+#include "OS/FileDescriptor.hpp"
+
+#include <type_traits>
 
 class SocketAddress;
 class StaticSocketAddress;
@@ -39,20 +40,32 @@ class StaticSocketAddress;
 /**
  * An OO wrapper for a UNIX socket descriptor.
  */
-class SocketDescriptor : public UniqueFileDescriptor {
-  explicit SocketDescriptor(int _fd):UniqueFileDescriptor(_fd) {}
+class SocketDescriptor : protected FileDescriptor {
+protected:
+  explicit constexpr SocketDescriptor(int _fd)
+    :FileDescriptor(_fd) {}
+
+  explicit constexpr SocketDescriptor(FileDescriptor _fd)
+    :FileDescriptor(_fd) {}
 
 public:
-  SocketDescriptor() {}
+  SocketDescriptor() = default;
 
-  SocketDescriptor(SocketDescriptor &&) = default;
-  SocketDescriptor &operator=(SocketDescriptor &&) = default;
+  using FileDescriptor::IsDefined;
+  using FileDescriptor::Get;
+  using FileDescriptor::Set;
+  using FileDescriptor::Steal;
+  using FileDescriptor::SetUndefined;
 
-#ifndef HAVE_POSIX
-  ~SocketDescriptor() {
-    Close();
+  static constexpr SocketDescriptor Undefined() {
+    return SocketDescriptor(FileDescriptor::Undefined());
   }
 
+#ifdef HAVE_POSIX
+  using FileDescriptor::SetNonBlocking;
+  using FileDescriptor::SetBlocking;
+  using FileDescriptor::Close;
+#else
   /**
    * This method replaces FileDescriptor::Close(), using closesocket()
    * on Windows.  FileDescriptor::Close() is not virtual, so be
@@ -118,8 +131,8 @@ public:
   int WaitReadable(int timeout_ms) const;
   int WaitWritable(int timeout_ms) const;
 #else
-  using UniqueFileDescriptor::Read;
-  using UniqueFileDescriptor::Write;
+  using FileDescriptor::WaitReadable;
+  using FileDescriptor::WaitWritable;
 #endif
 
   /**
@@ -134,5 +147,7 @@ public:
   ssize_t Write(const void *buffer, size_t length,
                 const StaticSocketAddress &address);
 };
+
+static_assert(std::is_trivial<SocketDescriptor>::value, "type is not trivial");
 
 #endif

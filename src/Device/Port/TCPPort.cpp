@@ -35,7 +35,7 @@ TCPPort::~TCPPort()
 
 #ifdef HAVE_POSIX
   if (listener.IsDefined())
-    io_thread->LockRemove(listener.Get());
+    io_thread->LockRemove(listener.Steal());
 #else
   if (thread.IsDefined()) {
     thread.BeginStop();

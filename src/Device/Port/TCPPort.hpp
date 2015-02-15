@@ -51,7 +51,8 @@ public:
    * port
    */
   TCPPort(PortListener *_listener, DataHandler &_handler)
-    :SocketPort(_listener, _handler)
+    :SocketPort(_listener, _handler),
+     listener(SocketDescriptor::Undefined())
 #ifndef HAVE_POSIX
     , thread(listener, *this)
 #endif

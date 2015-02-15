@@ -56,7 +56,8 @@ WPASupplicant::Close()
     local_path[0] = 0;
   }
 
-  fd.Close();
+  if (fd.IsDefined())
+    fd.Close();
 }
 
 bool

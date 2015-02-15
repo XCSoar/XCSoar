@@ -52,7 +52,8 @@ public:
    * port
    */
   SocketPort(PortListener *_listener, DataHandler &_handler)
-    :BufferedPort(_listener, _handler)
+    :BufferedPort(_listener, _handler),
+     socket(SocketDescriptor::Undefined())
 #ifndef HAVE_POSIX
     , thread(socket, *this)
 #endif
@@ -66,7 +67,7 @@ public:
   /**
    * Make the object use the specified socket.
    */
-  void Set(SocketDescriptor &&socket);
+  void Set(SocketDescriptor &&_socket);
 
 protected:
   /**
