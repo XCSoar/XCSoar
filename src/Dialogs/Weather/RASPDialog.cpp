@@ -149,6 +149,9 @@ RASPSettingsPanel::Save(bool &_changed)
 void
 dlgWeatherShowModal()
 {
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return;
+
   RASPSettingsPanel *widget = new RASPSettingsPanel(*rasp);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
