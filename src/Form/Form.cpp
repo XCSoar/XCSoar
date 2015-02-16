@@ -49,7 +49,7 @@ Copyright_License {
 #include "Event/SDL/Loop.hpp"
 #elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 #include "Event/Shared/Event.hpp"
-#include "Event/Console/Loop.hpp"
+#include "Event/Poll/Loop.hpp"
 #elif defined(USE_GDI)
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"

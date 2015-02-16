@@ -31,7 +31,7 @@
 #include "Event/Shared/Event.hpp"
 #elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 #include "Event/Shared/Event.hpp"
-#include "Event/Console/Loop.hpp"
+#include "Event/Poll/Loop.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"

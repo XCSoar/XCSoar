@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Android/Queue.hpp"
 #elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
-#include "Console/Queue.hpp"
+#include "Poll/Queue.hpp"
 #elif defined(ENABLE_SDL)
 #include "SDL/Queue.hpp"
 #elif defined(USE_GDI)

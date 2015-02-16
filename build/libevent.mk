@@ -24,34 +24,34 @@ EVENT_SOURCES += \
 	$(SRC)/Event/Android/Queue.cpp
 else ifeq ($(VFB),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Linux/SignalListener.cpp \
-	$(SRC)/Event/Console/Loop.cpp \
-	$(SRC)/Event/Console/Queue.cpp
+	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
+	$(SRC)/Event/Poll/Loop.cpp \
+	$(SRC)/Event/Poll/Queue.cpp
 VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Linux/SignalListener.cpp \
-	$(SRC)/Event/Console/Loop.cpp \
-	$(SRC)/Event/Console/Queue.cpp
+	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
+	$(SRC)/Event/Poll/Loop.cpp \
+	$(SRC)/Event/Poll/Queue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 
 ifeq ($(USE_LIBINPUT),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/LibInput/LibInputHandler.cpp
+	$(SRC)/Event/Poll/LibInput/LibInputHandler.cpp
 ifeq ($(ENABLE_UDEV),y)
-EVENT_SOURCES += $(SRC)/Event/LibInput/UdevContext.cpp
+EVENT_SOURCES += $(SRC)/Event/Poll/LibInput/UdevContext.cpp
 endif
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Linux/MergeMouse.cpp
+	$(SRC)/Event/Poll/Linux/MergeMouse.cpp
 ifeq ($(USE_LINUX_INPUT),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Linux/AllInput.cpp \
-	$(SRC)/Event/Linux/Input.cpp
+	$(SRC)/Event/Poll/Linux/AllInput.cpp \
+	$(SRC)/Event/Poll/Linux/Input.cpp
 else
 EVENT_SOURCES += \
-	$(SRC)/Event/Linux/TTYKeyboard.cpp \
-	$(SRC)/Event/Linux/Mouse.cpp
+	$(SRC)/Event/Poll/Linux/TTYKeyboard.cpp \
+	$(SRC)/Event/Poll/Linux/Mouse.cpp
 endif
 endif
 

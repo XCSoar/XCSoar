@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_CONSOLE_LOOP_HPP
-#define XCSOAR_EVENT_CONSOLE_LOOP_HPP
+#ifndef XCSOAR_EVENT_POLL_LOOP_HPP
+#define XCSOAR_EVENT_POLL_LOOP_HPP
 
 struct Event;
 class EventQueue;

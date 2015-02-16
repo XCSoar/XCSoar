@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_CONSOLE_QUEUE_HPP
-#define XCSOAR_EVENT_CONSOLE_QUEUE_HPP
+#ifndef XCSOAR_EVENT_POLL_QUEUE_HPP
+#define XCSOAR_EVENT_POLL_QUEUE_HPP
 
 #include "Thread/Handle.hpp"
 #include "../Shared/TimerQueue.hpp"
@@ -31,20 +31,20 @@ Copyright_License {
 #include "OS/EventPipe.hpp"
 #include "IO/Async/IOLoop.hpp"
 #include "IO/Async/DiscardFileEventHandler.hpp"
-#include "../Linux/SignalListener.hpp"
+#include "Linux/SignalListener.hpp"
 
 #ifndef NON_INTERACTIVE
 #ifdef USE_LIBINPUT
-#include "../LibInput/LibInputHandler.hpp"
+#include "LibInput/LibInputHandler.hpp"
 #else
-#include "../Linux/MergeMouse.hpp"
+#include "Linux/MergeMouse.hpp"
 #ifdef KOBO
-#include "../Linux/Input.hpp"
+#include "Linux/Input.hpp"
 #elif defined(USE_LINUX_INPUT)
-#include "../Linux/AllInput.hpp"
+#include "Linux/AllInput.hpp"
 #else
-#include "../Linux/TTYKeyboard.hpp"
-#include "../Linux/Mouse.hpp"
+#include "Linux/TTYKeyboard.hpp"
+#include "Linux/Mouse.hpp"
 #endif
 #endif
 #endif
