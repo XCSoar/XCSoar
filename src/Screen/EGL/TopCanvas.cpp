@@ -27,6 +27,11 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 
+#ifdef USE_X11
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -78,11 +83,8 @@ TopCanvas::Create(PixelSize new_size,
 #endif
 
 #ifdef USE_X11
-  X11Display *const x_display = XOpenDisplay(nullptr);
-  if (x_display == nullptr) {
-    fprintf(stderr, "XOpenDisplay() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  X11Display *const x_display = event_queue->GetDisplay();
+  assert(x_display != nullptr);
 
   const X11Window x_root = DefaultRootWindow(x_display);
   if (x_root == 0) {
@@ -91,7 +93,9 @@ TopCanvas::Create(PixelSize new_size,
   }
 
   XSetWindowAttributes swa;
-  swa.event_mask = ExposureMask | PointerMotionMask | KeyPressMask;
+  swa.event_mask = KeyPressMask | KeyReleaseMask |
+    ButtonPressMask | ButtonReleaseMask |
+    PointerMotionMask;
 
   x_window = XCreateWindow(x_display, x_root,
                            0, 0, 640, 480, 0,

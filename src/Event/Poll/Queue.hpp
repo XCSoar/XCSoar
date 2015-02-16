@@ -33,7 +33,9 @@ Copyright_License {
 #include "IO/Async/DiscardFileEventHandler.hpp"
 #include "Linux/SignalListener.hpp"
 
-#ifndef NON_INTERACTIVE
+#ifdef USE_X11
+#include "X11Queue.hpp"
+#elif !defined(NON_INTERACTIVE)
 #include "InputQueue.hpp"
 #endif
 
@@ -55,7 +57,9 @@ class EventQueue final : private SignalListener {
 
   IOLoop io_loop;
 
-#ifndef NON_INTERACTIVE
+#ifdef USE_X11
+  X11EventQueue input_queue;
+#elif !defined(NON_INTERACTIVE)
   InputEventQueue input_queue;
 #endif
 
@@ -74,7 +78,13 @@ public:
   EventQueue();
   ~EventQueue();
 
-#ifndef NON_INTERACTIVE
+#ifdef USE_X11
+  _XDisplay *GetDisplay() const {
+    return input_queue.GetDisplay();
+  }
+#endif
+
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11)
 
   void SetScreenSize(unsigned width, unsigned height) {
     input_queue.SetScreenSize(width, height);

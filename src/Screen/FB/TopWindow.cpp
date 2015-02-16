@@ -79,7 +79,7 @@ TopWindow::OnDestroy()
 void
 TopWindow::OnResize(PixelSize new_size)
 {
-#ifndef NON_INTERACTIVE
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11)
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
 #endif
 
