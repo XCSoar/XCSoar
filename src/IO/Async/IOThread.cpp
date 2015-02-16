@@ -51,6 +51,8 @@ IOThread::Stop()
 
   /* wait for the thread to finish */
   Join();
+
+  loop.Remove(pipe.GetReadFD());
 }
 
 void
