@@ -31,6 +31,7 @@ Copyright_License {
 #include "Point.hpp"
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
+#include "ActivePixelTraits.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -44,12 +45,6 @@ Copyright_License {
 
 class Angle;
 class Bitmap;
-
-#ifdef GREYSCALE
-using SDLPixelTraits = GreyscalePixelTraits;
-#else
-using SDLPixelTraits = BGRAPixelTraits;
-#endif
 
 /**
  * Base drawable canvas class
