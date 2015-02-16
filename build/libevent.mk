@@ -42,7 +42,7 @@ EVENT_SOURCES += \
 ifeq ($(ENABLE_UDEV),y)
 EVENT_SOURCES += $(SRC)/Event/Poll/LibInput/UdevContext.cpp
 endif
-else ifeq ($(USE_CONSOLE),y)
+else
 EVENT_SOURCES += \
 	$(SRC)/Event/Poll/Linux/MergeMouse.cpp
 ifeq ($(USE_LINUX_INPUT),y)
