@@ -32,6 +32,8 @@ Copyright_License {
 
 #include <boost/intrusive/set.hpp>
 
+#include <assert.h>
+
 class FileEventHandler;
 
 /**
@@ -58,6 +60,10 @@ class IOLoop final {
     File(FileDescriptor fd, unsigned mask, FileEventHandler &handler)
       :fd(fd), mask(mask), ready_mask(0),
        handler(&handler), modified(true) {}
+
+    ~File() {
+      assert(mask == 0);
+    }
 
     struct Compare {
       gcc_pure
