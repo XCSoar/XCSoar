@@ -31,10 +31,10 @@ IsAllowedIGCChar(char ch)
 {
   static constexpr char alphabet[] =
     " \"#%&\'()+-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_\140abcdefghijklmnopqrstuvwxyz{|}";
-  static constexpr int alphabet_l = ARRAY_SIZE(alphabet) - 1;
+  static constexpr size_t alphabet_l = ARRAY_SIZE(alphabet) - 1;
 
   bool found = false;
-  for(int j=0; j<alphabet_l; j++)
+  for(size_t j=0; j<alphabet_l; j++)
     if (ch == alphabet[j])
       found = true;
 
@@ -47,9 +47,8 @@ Filtern einer Zeile:
   - Entfernen von Leer- und Sonderzeichen am Ende
 */
 char *igc_filter(char *st) {
- int l = strlen(st);
- int i;
-  for(i=0; i<l; i++) {
+  const size_t l = strlen(st);
+  for(size_t i=0; i<l; i++) {
     if (!IsAllowedIGCChar(st[i])) st[i] = ' ';
   }
   StripRight(st);
@@ -61,15 +60,14 @@ void
 wordtoserno(char *Seriennummer, unsigned Binaer)
 {
  char SerNStr[4];
- int i,l;
   // limitation
   if (Binaer > 46655L)
     Binaer = 46655L;
   utoa(Binaer,SerNStr,36);
   sprintf(Seriennummer,"%3s",SerNStr);
   // generate leading zeroes
-  l = strlen(Seriennummer);
-  for (i=0; i<l; i++) {
+  const size_t l = strlen(Seriennummer);
+  for (size_t i=0; i<l; i++) {
     if (Seriennummer[i] == ' ')
       Seriennummer[i] = '0';
   };
