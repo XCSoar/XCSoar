@@ -36,7 +36,7 @@ ParseLine(char *line)
     return nullptr;
 
   char *p = separator;
-  while (p > separator && IsWhitespaceOrNull(p[-1]))
+  while (p > line && IsWhitespaceOrNull(p[-1]))
     --p;
 
   if (p == line)
