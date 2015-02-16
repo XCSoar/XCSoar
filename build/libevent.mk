@@ -1,3 +1,7 @@
+# use poll() based event loop
+USE_POLL_EVENT ?= n
+
+# read events from console (depends on USE_POLL_EVENT)
 USE_CONSOLE ?= n
 
 # use Wayland's libinput for input device handling
@@ -18,22 +22,23 @@ EVENT_SOURCES = \
 	$(SRC)/Event/DelayedNotify.cpp \
 	$(SRC)/Event/Notify.cpp
 
+ifeq ($(USE_POLL_EVENT),y)
+EVENT_SOURCES += \
+	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
+	$(SRC)/Event/Poll/Loop.cpp \
+	$(SRC)/Event/Poll/Queue.cpp
+POLL_EVENT_CPPFLAGS = -DUSE_POLL_EVENT
+endif
+
 ifeq ($(TARGET),ANDROID)
 EVENT_SOURCES += \
 	$(SRC)/Event/Android/Loop.cpp \
 	$(SRC)/Event/Android/Queue.cpp
 else ifeq ($(VFB),y)
-EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
-	$(SRC)/Event/Poll/Loop.cpp \
-	$(SRC)/Event/Poll/Queue.cpp
 VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
-	$(SRC)/Event/Poll/Loop.cpp \
-	$(SRC)/Event/Poll/InputQueue.cpp \
-	$(SRC)/Event/Poll/Queue.cpp
+	$(SRC)/Event/Poll/InputQueue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 
 ifeq ($(USE_LIBINPUT),y)
@@ -86,6 +91,7 @@ EVENT_CPPFLAGS = \
 	$(GDI_CPPFLAGS) \
 	$(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) \
 	$(MEMORY_CANVAS_CPPFLAGS) \
+	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
 $(eval $(call link-library,libevent,EVENT))

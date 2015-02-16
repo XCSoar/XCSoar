@@ -48,7 +48,7 @@ struct flat_event_map {
 #else
   unsigned short key;
 #endif
-#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#elif defined(USE_POLL_EVENT)
   uint16_t key;
 #else
   unsigned char key;

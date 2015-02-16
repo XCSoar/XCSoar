@@ -44,7 +44,7 @@ Copyright_License {
 
 struct Event;
 
-#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#elif defined(USE_POLL_EVENT)
 struct Event;
 #elif defined(ENABLE_SDL)
 union SDL_Event;
@@ -290,7 +290,7 @@ public:
 #endif
   }
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_POLL_EVENT)
   bool OnEvent(const Event &event);
 #elif defined(ENABLE_SDL)
   bool OnEvent(const SDL_Event &event);

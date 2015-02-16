@@ -33,7 +33,7 @@ struct Event {
     NOP,
     QUIT,
 
-#ifdef USE_CONSOLE
+#ifdef USE_POLL_EVENT
     CLOSE,
 #endif
 

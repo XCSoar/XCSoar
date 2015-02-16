@@ -69,7 +69,7 @@ public:
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
 
-#if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#ifdef USE_POLL_EVENT
     assert(!queued.load(std::memory_order_relaxed));
     assert(!enabled.load(std::memory_order_relaxed));
 #endif

@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Screen/Android/Key.h"
-#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#elif defined(USE_POLL_EVENT)
 #include "Screen/FB/Key.h"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Key.h"

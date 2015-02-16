@@ -5,6 +5,7 @@ VFB ?= n
 
 ifeq ($(VFB),y)
 USE_FB = n
+USE_POLL_EVENT = y
 USE_CONSOLE = n
 USE_MEMORY_CANVAS = y
 FREETYPE = y

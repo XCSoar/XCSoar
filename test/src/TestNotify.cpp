@@ -29,7 +29,7 @@
 #ifdef ANDROID
 #include "Event/Android/Loop.hpp"
 #include "Event/Shared/Event.hpp"
-#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#elif defined(USE_POLL_EVENT)
 #include "Event/Shared/Event.hpp"
 #include "Event/Poll/Loop.hpp"
 #include "Screen/TopWindow.hpp"
@@ -58,7 +58,7 @@ Display::Rotate(DisplayOrientation orientation)
 void TopWindow::Refresh() {}
 #endif
 
-#if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#ifdef USE_POLL_EVENT
 bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 

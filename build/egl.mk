@@ -28,8 +28,10 @@ EGL_CPPFLAGS += -DUSE_VIDEOCORE
 EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include -isystem $(PI)/opt/vc/include/interface/vcos/pthreads
 EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include/interface/vmcs_host/linux
 EGL_LDLIBS += -L$(PI)/opt/vc/lib -lvchostif -lvchiq_arm -lvcos -lbcm_host
+USE_CONSOLE = y
 else ifeq ($(TARGET_HAS_MALI),y)
 EGL_CPPFLAGS += -DHAVE_MALI
+USE_CONSOLE = y
 else ifeq ($(ENABLE_MESA_KMS),y)
 $(eval $(call pkg-config-library,DRM,libdrm))
 $(eval $(call pkg-config-library,GBM,gbm))
@@ -37,11 +39,13 @@ DRM_CPPFLAGS := $(patsubst -I%,-isystem %,$(DRM_CPPFLAGS))
 GBM_CPPFLAGS := $(patsubst -I%,-isystem %,$(GBM_CPPFLAGS))
 EGL_CPPFLAGS += -DMESA_KMS $(DRM_CPPFLAGS) $(GBM_CPPFLAGS)
 EGL_LDLIBS += $(DRM_LDLIBS) $(GBM_LDLIBS)
+USE_CONSOLE = y
 else
 EGL_CPPFLAGS += -DUSE_X11
 EGL_LDLIBS += -lX11
+USE_CONSOLE = n
 endif
 
-USE_CONSOLE = y
+USE_POLL_EVENT = y
 
 endif
