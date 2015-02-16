@@ -50,21 +50,18 @@ struct Event;
 class InputEventQueue final {
 #ifdef USE_LIBINPUT
   LibInputHandler libinput_handler;
-#else
+#else /* !USE_LIBINPUT */
   MergeMouse merge_mouse;
 #ifdef KOBO
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
-#else
-#ifdef USE_LINUX_INPUT
+#elif defined(USE_LINUX_INPUT)
   AllLinuxInputDevices all_input;
 #else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
 #endif
-
-#endif
-#endif
+#endif /* !USE_LIBINPUT */
 
 public:
   InputEventQueue(IOLoop &io_loop, EventQueue &queue);
