@@ -70,6 +70,10 @@ class IOLoop final {
         return a.fd.Get() < b.Get();
       }
     };
+
+    static void Dispose(File *f) {
+      delete f;
+    }
   };
 
   Poll poll;
@@ -94,6 +98,7 @@ public:
   static constexpr unsigned WRITE = Poll::WRITE;
 
   IOLoop():modified(false), running(false) {}
+  ~IOLoop();
 
   gcc_pure
   bool IsEmpty() const {

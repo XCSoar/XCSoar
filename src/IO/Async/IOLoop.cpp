@@ -24,6 +24,11 @@ Copyright_License {
 #include "IOLoop.hpp"
 #include "FileEventHandler.hpp"
 
+IOLoop::~IOLoop()
+{
+  files.clear_and_dispose(File::Dispose);
+}
+
 void
 IOLoop::Add(FileDescriptor fd, unsigned mask, FileEventHandler &handler)
 {
@@ -90,7 +95,7 @@ IOLoop::Update()
 
     poll.SetMask(file.fd.Get(), file.mask);
     if (file.mask == 0)
-      i = files.erase(i);
+      i = files.erase_and_dispose(i, File::Dispose);
     else
       ++i;
   }
