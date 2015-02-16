@@ -182,7 +182,7 @@ TeamCodeWidget::OnCodeClicked()
   if (!TextEntryDialog(newTeammateCode, 7))
     return;
 
-  TrimRight(newTeammateCode);
+  StripRight(newTeammateCode);
 
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;

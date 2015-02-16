@@ -264,7 +264,7 @@ KnobTextEntry(TCHAR *text, size_t width,
   widget.CreateButtons(dialog);
 
   if (dialog.ShowModal() == mrOK) {
-    TrimRight(widget.GetValue());
+    StripRight(widget.GetValue());
     CopyString(text, widget.GetValue(), width);
   }
 

@@ -45,8 +45,8 @@ ParseLine(char *line)
 
   *p = 0;
 
-  char *value = const_cast<char *>(TrimLeft(separator + 1));
-  TrimRight(value);
+  char *value = const_cast<char *>(StripLeft(separator + 1));
+  StripRight(value);
   return value;
 }
 
@@ -72,7 +72,7 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
 
   char *line;
   while ((line = reader.ReadLine()) != nullptr) {
-    line = const_cast<char *>(TrimLeft(line));
+    line = const_cast<char *>(StripLeft(line));
     if (*line == 0 || *line == '#')
       continue;
 

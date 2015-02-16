@@ -39,7 +39,7 @@ LoadFlarmNameFile(TLineReader &reader, FlarmNameDatabase &db)
 
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
-      TrimRight(Name);
+      StripRight(Name);
       if (!db.Set(id, Name))
         break; // cant add anymore items !
     }

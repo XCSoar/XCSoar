@@ -28,7 +28,7 @@
 /*
 Filtern einer Zeile:
   - Umwandeln von nicht-IGC-Zeichen in Leerzeichen
-  - Entfernen von Leer- und Sonderzeichen am Ende (TrimRight)
+  - Entfernen von Leer- und Sonderzeichen am Ende
 */
 char *igc_filter(char *st) {
  static constexpr char alphabet[] =
@@ -44,7 +44,7 @@ char *igc_filter(char *st) {
 	found = 1;
     if (!found) st[i] = ' ';
   }
-  TrimRight(st);
+  StripRight(st);
   return st;
 }
 

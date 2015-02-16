@@ -48,7 +48,7 @@ LogLastError(const TCHAR *fmt, ...)
   FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
                 FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL, error, 0, msg, ARRAY_SIZE(msg), NULL);
-  TrimRight(msg);
+  StripRight(msg);
 
   LogFormat(_T("%s: %s"), buffer, msg);
 }

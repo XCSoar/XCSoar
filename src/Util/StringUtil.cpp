@@ -294,7 +294,7 @@ CopyASCIIUpper(char *dest, const TCHAR *src)
 #endif
 
 const char *
-TrimLeft(const char *p)
+StripLeft(const char *p)
 {
   while (IsWhitespaceNotNull(*p))
     ++p;
@@ -303,7 +303,7 @@ TrimLeft(const char *p)
 
 #ifdef _UNICODE
 const TCHAR *
-TrimLeft(const TCHAR *p)
+StripLeft(const TCHAR *p)
 {
   while (IsWhitespaceNotNull(*p))
     ++p;
@@ -312,7 +312,7 @@ TrimLeft(const TCHAR *p)
 #endif
 
 void
-TrimRight(char *p)
+StripRight(char *p)
 {
   size_t length = strlen(p);
 
@@ -324,7 +324,7 @@ TrimRight(char *p)
 
 #ifdef _UNICODE
 void
-TrimRight(TCHAR *p)
+StripRight(TCHAR *p)
 {
   size_t length = _tcslen(p);
 

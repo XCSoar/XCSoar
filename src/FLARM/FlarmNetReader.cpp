@@ -84,7 +84,7 @@ LoadString(const char *bytes, size_t length, TCHAR *res, size_t res_size)
 #endif
 
   // Trim the string of any additional spaces
-  TrimRight(res);
+  StripRight(res);
 }
 
 template<size_t size>

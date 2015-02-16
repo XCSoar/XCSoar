@@ -229,8 +229,8 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   metar.decoded.SetASCII(buffer);
 
   // Trim the content strings
-  TrimRight(metar.content.buffer());
-  TrimRight(metar.decoded.buffer());
+  StripRight(metar.content.buffer());
+  StripRight(metar.decoded.buffer());
 
   return true;
 }
@@ -298,7 +298,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   taf.content.SetASCII(p);
 
   // Trim the content string
-  TrimRight(taf.content.buffer());
+  StripRight(taf.content.buffer());
 
   return true;
 }

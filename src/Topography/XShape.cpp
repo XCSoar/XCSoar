@@ -46,7 +46,7 @@ import_label(const char *src)
   if (src == nullptr)
     return nullptr;
 
-  src = TrimLeft(src);
+  src = StripLeft(src);
   if (strcmp(src, "RAILWAY STATION") == 0 ||
       strcmp(src, "RAILROAD STATION") == 0 ||
       strcmp(src, "UNK") == 0)

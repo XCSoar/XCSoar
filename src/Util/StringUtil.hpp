@@ -323,12 +323,12 @@ CopyASCIIUpper(char *dest, const TCHAR *src);
  */
 gcc_pure gcc_nonnull_all
 const char *
-TrimLeft(const char *p);
+StripLeft(const char *p);
 
 #ifdef _UNICODE
 gcc_pure gcc_nonnull_all
 const TCHAR *
-TrimLeft(const TCHAR *p);
+StripLeft(const TCHAR *p);
 #endif
 
 /**
@@ -336,12 +336,12 @@ TrimLeft(const TCHAR *p);
  */
 gcc_nonnull_all
 void
-TrimRight(char *p);
+StripRight(char *p);
 
 #ifdef _UNICODE
 gcc_nonnull_all
 void
-TrimRight(TCHAR *p);
+StripRight(TCHAR *p);
 #endif
 
 /**

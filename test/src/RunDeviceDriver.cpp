@@ -215,7 +215,7 @@ int main(int argc, char **argv)
 
   char buffer[1024];
   while (fgets(buffer, sizeof(buffer), stdin) != nullptr) {
-    TrimRight(buffer);
+    StripRight(buffer);
 
     if (device == nullptr || !device->ParseNMEA(buffer, data))
       parser.ParseLine(buffer, data);
