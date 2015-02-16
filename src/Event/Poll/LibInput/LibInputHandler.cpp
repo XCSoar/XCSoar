@@ -25,8 +25,7 @@ Copyright_License {
 #include "UdevContext.hpp"
 #include "Event/Queue.hpp"
 #include "Event/Shared/Event.hpp"
-
-#include <algorithm>
+#include "Util/Clamp.hpp"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -151,9 +150,9 @@ LibInputHandler::HandlePendingEvents()
         if (-1.0 == y)
           y = 0.0;
         x += libinput_event_pointer_get_dx(ptr_li_event);
-        x = std::max(std::min(x, (double) width), 0.0);
+        x = Clamp<double>(x, 0, width);
         y += libinput_event_pointer_get_dy(ptr_li_event);
-        y = std::max(std::min(y, (double) height), 0.0);
+        y = Clamp<double>(y, 0, height);
         queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
       }
       break;
