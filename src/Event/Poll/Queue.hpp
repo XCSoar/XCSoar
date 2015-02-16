@@ -52,7 +52,6 @@ Copyright_License {
 #include <stdint.h>
 
 #include <queue>
-#include <set>
 
 enum class DisplayOrientation : uint8_t;
 class Window;
