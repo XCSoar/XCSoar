@@ -42,4 +42,6 @@ EGL_CPPFLAGS += -DUSE_X11
 EGL_LDLIBS += -lX11
 endif
 
+USE_CONSOLE = y
+
 endif

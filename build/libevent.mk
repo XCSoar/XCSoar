@@ -1,4 +1,4 @@
-USE_CONSOLE ?= $(call bool_or,$(EGL),$(USE_FB))
+USE_CONSOLE ?= n
 
 # use Wayland's libinput for input device handling
 USE_LIBINPUT ?= n
