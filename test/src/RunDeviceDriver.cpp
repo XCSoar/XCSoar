@@ -184,7 +184,7 @@ int main(int argc, char **argv)
           "Where DRIVER is one of:";
   {
     const DeviceRegister *driver;
-    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
+    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != nullptr; ++i) {
       WideToUTF8Converter driver_name(driver->name);
       usage.AppendFormat("\n\t%s", (const char *)driver_name);
     }
@@ -195,7 +195,7 @@ int main(int argc, char **argv)
   args.ExpectEnd();
 
   driver = FindDriverByName(driver_name.c_str());
-  if (driver == NULL) {
+  if (driver == nullptr) {
     _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
     return 1;
   }
@@ -204,9 +204,9 @@ int main(int argc, char **argv)
   config.Clear();
 
   NullPort port;
-  Device *device = driver->CreateOnPort != NULL
+  Device *device = driver->CreateOnPort != nullptr
     ? driver->CreateOnPort(config, port)
-    : NULL;
+    : nullptr;
 
   NMEAParser parser;
 
@@ -214,10 +214,10 @@ int main(int argc, char **argv)
   data.Reset();
 
   char buffer[1024];
-  while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+  while (fgets(buffer, sizeof(buffer), stdin) != nullptr) {
     TrimRight(buffer);
 
-    if (device == NULL || !device->ParseNMEA(buffer, data))
+    if (device == nullptr || !device->ParseNMEA(buffer, data))
       parser.ParseLine(buffer, data);
   }
 
