@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_ANDROID_LOOP_HPP
 #define XCSOAR_EVENT_ANDROID_LOOP_HPP
 
-#include "Util/NonCopyable.hpp"
-
 struct Event;
 class EventQueue;
 class TopWindow;
 
-class EventLoop : private NonCopyable {
+class EventLoop {
   EventQueue &queue;
   TopWindow &top_window;
 
@@ -43,6 +41,8 @@ class EventLoop : private NonCopyable {
 public:
   EventLoop(EventQueue &_queue, TopWindow &_top_window)
     :queue(_queue), top_window(_top_window), bulk(true) {}
+
+  EventLoop(const EventLoop &) = delete;
 
   bool Get(Event &event);
   void Dispatch(const Event &event);

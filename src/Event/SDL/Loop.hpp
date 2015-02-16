@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_SDL_LOOP_HPP
 #define XCSOAR_EVENT_SDL_LOOP_HPP
 
-#include "Util/NonCopyable.hpp"
-
 class TopWindow;
 struct Event;
 class EventQueue;
 
-class EventLoop : private NonCopyable {
+class EventLoop {
   EventQueue &queue;
   TopWindow *top_window;
 
@@ -48,6 +46,8 @@ public:
 
   explicit EventLoop(EventQueue &_queue)
     :queue(_queue), top_window(nullptr), bulk(true) {}
+
+  EventLoop(const EventLoop &) = delete;
 
   bool Get(Event &event);
   void Dispatch(const Event &event);

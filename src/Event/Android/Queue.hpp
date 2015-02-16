@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hpp"
 
@@ -34,7 +33,7 @@ Copyright_License {
 
 class Window;
 
-class EventQueue : private NonCopyable {
+class EventQueue {
   std::queue<Event> events;
 
   /**
@@ -51,6 +50,8 @@ class EventQueue : private NonCopyable {
 
 public:
   EventQueue();
+
+  EventQueue(const EventQueue &) = delete;
 
   /**
    * Returns the monotonic clock in microseconds.  This method is only

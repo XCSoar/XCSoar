@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_GDI_LOOP_HPP
 #define XCSOAR_EVENT_GDI_LOOP_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #include <windows.h>
@@ -32,11 +31,13 @@ Copyright_License {
 struct Event;
 class EventQueue;
 
-class EventLoop : private NonCopyable {
+class EventLoop {
   EventQueue &queue;
 
 public:
   explicit EventLoop(EventQueue &_queue):queue(_queue) {}
+
+  EventLoop(const EventLoop &) = delete;
 
   bool Get(Event &msg);
   void Dispatch(const Event &msg);
