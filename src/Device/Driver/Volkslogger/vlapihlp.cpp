@@ -25,23 +25,32 @@
 #include <stdio.h>
 #include <math.h>
 
+gcc_const
+static bool
+IsAllowedIGCChar(char ch)
+{
+  static constexpr char alphabet[] =
+    " \"#%&\'()+-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_\140abcdefghijklmnopqrstuvwxyz{|}";
+  static constexpr int alphabet_l = ARRAY_SIZE(alphabet) - 1;
+
+  bool found = false;
+  for(int j=0; j<alphabet_l; j++)
+    if (ch == alphabet[j])
+      found = true;
+
+  return found;
+}
+
 /*
 Filtern einer Zeile:
   - Umwandeln von nicht-IGC-Zeichen in Leerzeichen
   - Entfernen von Leer- und Sonderzeichen am Ende
 */
 char *igc_filter(char *st) {
- static constexpr char alphabet[] =
-   " \"#%&\'()+-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_\140abcdefghijklmnopqrstuvwxyz{|}";
- static constexpr int alphabet_l = ARRAY_SIZE(alphabet) - 1;
  int l = strlen(st);
- int i,j;
+ int i;
   for(i=0; i<l; i++) {
-    bool found = false;
-    for(j=0; j<alphabet_l; j++)
-      if (st[i] == alphabet[j])
-        found = true;
-    if (!found) st[i] = ' ';
+    if (!IsAllowedIGCChar(st[i])) st[i] = ' ';
   }
   StripRight(st);
   return st;
