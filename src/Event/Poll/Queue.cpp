@@ -29,7 +29,9 @@ EventQueue::EventQueue()
   :SignalListener(io_loop),
    thread(ThreadHandle::GetCurrent()),
    now_us(MonotonicClockUS()),
+#ifndef NON_INTERACTIVE
    input_queue(io_loop, *this),
+#endif
    running(true)
 {
   SignalListener::Create(SIGINT, SIGTERM);
