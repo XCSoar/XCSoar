@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "LineSplitter.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <algorithm>
 
@@ -80,9 +80,7 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
 
       /* remove trailing whitespace, such as '\r' */
       char *end = newline;
-      while (end > range.data && IsWhitespaceOrNull(end[-1]))
-        --end;
-
+      end = StripRight(range.data, end);
       *end = '\0';
 
       SanitiseLine(range.data, end);

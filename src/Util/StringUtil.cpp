@@ -311,28 +311,60 @@ StripLeft(const TCHAR *p)
 }
 #endif
 
+const char *
+StripRight(const char *p, const char *end)
+{
+  while (end > p && IsWhitespaceOrNull(end[-1]))
+    --end;
+
+  return end;
+}
+
+size_t
+StripRight(const char *p, size_t length)
+{
+  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
+    --length;
+
+  return length;
+}
+
 void
 StripRight(char *p)
 {
-  size_t length = strlen(p);
-
-  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
-    --length;
-
-  p[length] = 0;
+  size_t old_length = strlen(p);
+  size_t new_length = StripRight(p, old_length);
+  p[new_length] = 0;
 }
 
 #ifdef _UNICODE
-void
-StripRight(TCHAR *p)
-{
-  size_t length = _tcslen(p);
 
+const TCHAR *
+StripRight(const TCHAR *p, const TCHAR *end)
+{
+  while (end > p && IsWhitespaceOrNull(end[-1]))
+    --end;
+
+  return end;
+}
+
+size_t
+StripRight(const TCHAR *p, size_t length)
+{
   while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
     --length;
 
-  p[length] = 0;
+  return length;
 }
+
+void
+StripRight(TCHAR *p)
+{
+  size_t old_length = _tcslen(p);
+  size_t new_length = StripRight(p, old_length);
+  p[new_length] = 0;
+}
+
 #endif
 
 char *

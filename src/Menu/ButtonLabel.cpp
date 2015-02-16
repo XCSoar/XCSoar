@@ -108,8 +108,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     /* backtrack until the first non-whitespace character, because we
        don't want to translate whitespace between the text and the
        macro */
-    while (macros > text && IsWhitespaceOrNull(macros[-1]))
-      --macros;
+    macros = StripRight(text, macros);
 
     TCHAR s[100];
     expanded.enabled = !ExpandMacros(text, s, ARRAY_SIZE(s));

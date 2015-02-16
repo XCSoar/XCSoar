@@ -25,7 +25,6 @@ Copyright_License {
 #include "FileRepository.hpp"
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/CharUtil.hpp"
 
 static const char *
 ParseLine(char *line)
@@ -35,10 +34,7 @@ ParseLine(char *line)
     /* malformed line */
     return nullptr;
 
-  char *p = separator;
-  while (p > line && IsWhitespaceOrNull(p[-1]))
-    --p;
-
+  char *p = StripRight(line, separator);
   if (p == line)
     /* empty name */
     return nullptr;

@@ -332,6 +332,59 @@ StripLeft(const TCHAR *p);
 #endif
 
 /**
+ * Determine the string's end as if it was stripped on the right side.
+ */
+gcc_pure
+const char *
+StripRight(const char *p, const char *end);
+
+/**
+ * Determine the string's end as if it was stripped on the right side.
+ */
+gcc_pure
+static inline char *
+StripRight(char *p, char *end)
+{
+  return const_cast<char *>(StripRight((const char *)p,
+                                       (const char *)end));
+}
+
+/**
+ * Determine the string's length as if it was stripped on the right
+ * side.
+ */
+gcc_pure
+size_t
+StripRight(const char *p, size_t length);
+
+#ifdef _UNICODE
+
+gcc_pure
+const TCHAR *
+StripRight(const TCHAR *p, const TCHAR *end);
+
+/**
+ * Determine the string's end as if it was stripped on the right side.
+ */
+gcc_pure
+static inline TCHAR *
+StripRight(TCHAR *p, TCHAR *end)
+{
+  return const_cast<TCHAR *>(StripRight((const TCHAR *)p,
+                                        (const TCHAR *)end));
+}
+
+/**
+ * Determine the string's length as if it was stripped on the right
+ * side.
+ */
+gcc_pure
+size_t
+StripRight(const TCHAR *p, size_t length);
+
+#endif
+
+/**
  * Strips trailing whitespace.
  */
 gcc_nonnull_all
