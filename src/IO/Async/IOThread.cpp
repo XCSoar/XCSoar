@@ -54,7 +54,7 @@ IOThread::Stop()
 }
 
 void
-IOThread::LockAdd(int fd, unsigned mask, FileEventHandler &handler)
+IOThread::LockAdd(FileDescriptor fd, unsigned mask, FileEventHandler &handler)
 {
   loop.Lock();
   const bool old_modified = loop.IsModified();
@@ -67,7 +67,7 @@ IOThread::LockAdd(int fd, unsigned mask, FileEventHandler &handler)
 }
 
 void
-IOThread::LockRemove(int fd)
+IOThread::LockRemove(FileDescriptor fd)
 {
   loop.Lock();
   const bool old_modified = loop.IsModified();
@@ -105,7 +105,7 @@ IOThread::Run()
 }
 
 bool
-IOThread::OnFileEvent(int fd, unsigned mask)
+IOThread::OnFileEvent(FileDescriptor fd, unsigned mask)
 {
   assert(fd == pipe.GetReadFD());
 

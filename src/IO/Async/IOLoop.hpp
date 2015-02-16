@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_LOOP_HPP
 
 #include "OS/Poll.hpp"
+#include "OS/FileDescriptor.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hpp"
 #include "FileEventHandler.hpp"
@@ -42,7 +43,7 @@ class IOLoop final {
 
     File *next_ready;
 
-    const int fd;
+    const FileDescriptor fd;
 
     unsigned mask, ready_mask;
 
@@ -54,19 +55,19 @@ class IOLoop final {
      */
     bool modified;
 
-    File(int fd, unsigned mask, FileEventHandler &handler)
+    File(FileDescriptor fd, unsigned mask, FileEventHandler &handler)
       :fd(fd), mask(mask), ready_mask(0),
        handler(&handler), modified(true) {}
 
     struct Compare {
       gcc_pure
-      bool operator()(int a, const File &b) const {
-        return a < b.fd;
+      bool operator()(FileDescriptor a, const File &b) const {
+        return a.Get() < b.fd.Get();
       }
 
       gcc_pure
-      bool operator()(const File &a, int b) const {
-        return a.fd < b;
+      bool operator()(const File &a, FileDescriptor b) const {
+        return a.fd.Get() < b.Get();
       }
     };
   };
@@ -109,7 +110,7 @@ public:
    * This method is not thread-safe, it may only be called from within
    * the thread.
    */
-  void Add(int fd, unsigned mask, FileEventHandler &handler);
+  void Add(FileDescriptor fd, unsigned mask, FileEventHandler &handler);
 
   /**
    * Remove a file descriptor from the I/O loop.
@@ -117,9 +118,9 @@ public:
    * This method is not thread-safe, it may only be called from within
    * the thread.
    */
-  void Remove(int fd);
+  void Remove(FileDescriptor fd);
 
-  void Set(int fd, unsigned mask, FileEventHandler &handler) {
+  void Set(FileDescriptor fd, unsigned mask, FileEventHandler &handler) {
     if (mask != 0)
       Add(fd, mask, handler);
     else

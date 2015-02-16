@@ -45,7 +45,7 @@ TTYPort::~TTYPort()
   BufferedPort::BeginClose();
 
   if (tty.IsDefined())
-    io_thread->LockRemove(tty.Get());
+    io_thread->LockRemove(tty.ToFileDescriptor());
 
   BufferedPort::EndClose();
 }
@@ -82,7 +82,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     return false;
 
   valid.store(true, std::memory_order_relaxed);
-  io_thread->LockAdd(tty.Get(), Poll::READ, *this);
+  io_thread->LockAdd(tty.ToFileDescriptor(), Poll::READ, *this);
   StateChanged();
   return true;
 }
@@ -94,7 +94,7 @@ TTYPort::OpenPseudo()
     return nullptr;
 
   valid.store(true, std::memory_order_relaxed);
-  io_thread->LockAdd(tty.Get(), Poll::READ, *this);
+  io_thread->LockAdd(tty.ToFileDescriptor(), Poll::READ, *this);
   StateChanged();
   return tty.GetSlaveName();
 }
@@ -260,7 +260,7 @@ TTYPort::SetBaudrate(unsigned BaudRate)
 }
 
 bool
-TTYPort::OnFileEvent(int fd, unsigned mask)
+TTYPort::OnFileEvent(gcc_unused FileDescriptor fd, unsigned mask)
 {
   char buffer[1024];
 

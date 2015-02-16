@@ -99,7 +99,7 @@ private:
   void Read();
 
   /* virtual methods from FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override;
+  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
 };
 
 #endif

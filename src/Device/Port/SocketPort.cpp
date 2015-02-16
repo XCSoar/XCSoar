@@ -43,7 +43,7 @@ SocketPort::Close()
 
 #ifdef HAVE_POSIX
   if (socket.IsDefined()) {
-    io_thread->LockRemove(socket.Get());
+    io_thread->LockRemove(socket.ToFileDescriptor());
     socket.Close();
   }
 #else
@@ -76,7 +76,7 @@ SocketPort::Set(SocketDescriptor &&_socket)
 
   /* register the socket in then IOThread or the SocketThread */
 #ifdef HAVE_POSIX
-  io_thread->LockAdd(socket.Get(), Poll::READ, *this);
+  io_thread->LockAdd(socket.ToFileDescriptor(), Poll::READ, *this);
 #else
   thread.Start();
 #endif

@@ -33,7 +33,7 @@ Copyright_License {
 TCPClientPort::~TCPClientPort()
 {
   if (connecting.IsDefined()) {
-    io_thread->LockRemove(connecting.Get());
+    io_thread->LockRemove(connecting.ToFileDescriptor());
     connecting.Close();
   }
 }
@@ -66,7 +66,7 @@ TCPClientPort::Connect(const char *host, unsigned port)
 #ifdef HAVE_POSIX
   if (errno == EINPROGRESS) {
     connecting = std::move(s);
-    io_thread->LockAdd(connecting.Get(), Poll::WRITE, *this);
+    io_thread->LockAdd(connecting.ToFileDescriptor(), Poll::WRITE, *this);
     StateChanged();
     return true;
   }
@@ -97,7 +97,7 @@ TCPClientPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
 
   assert(_socket == connecting);
 
-  io_thread->Remove(connecting.Get());
+  io_thread->Remove(connecting.ToFileDescriptor());
 
   int s_err = 0;
   socklen_t s_err_size = sizeof(s_err);

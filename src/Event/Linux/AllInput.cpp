@@ -45,7 +45,7 @@ AllLinuxInputDevices::Open()
     return false;
   }
 
-  io_loop.Add(inotify_fd.Get(), io_loop.READ, *this);
+  io_loop.Add(inotify_fd, io_loop.READ, *this);
 #endif
 
   DIR *dir = opendir("/dev/input");
@@ -67,7 +67,7 @@ AllLinuxInputDevices::Close()
 
 #ifdef HAVE_INOTIFY
   if (inotify_fd.IsDefined()) {
-    io_loop.Remove(inotify_fd.Get());
+    io_loop.Remove(inotify_fd);
     inotify_fd.Close();
   }
 #endif
@@ -153,7 +153,7 @@ AllLinuxInputDevices::Read()
 }
 
 bool
-AllLinuxInputDevices::OnFileEvent(int fd, unsigned mask)
+AllLinuxInputDevices::OnFileEvent(FileDescriptor fd, unsigned mask)
 {
   Read();
 

@@ -65,7 +65,7 @@ LinuxMouse::Read()
 }
 
 bool
-LinuxMouse::OnFileEvent(int fd, unsigned mask)
+LinuxMouse::OnFileEvent(FileDescriptor fd, unsigned mask)
 {
   Read();
 

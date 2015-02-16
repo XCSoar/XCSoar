@@ -33,7 +33,7 @@ Copyright_License {
  */
 class DiscardFileEventHandler final : public FileEventHandler {
 public:
-  virtual bool OnFileEvent(int fd, unsigned mask) override;
+  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
 };
 
 #endif

@@ -186,10 +186,10 @@ TTYKeyboard::HandleInputByte(char ch)
 }
 
 bool
-TTYKeyboard::OnFileEvent(int fd, unsigned mask)
+TTYKeyboard::OnFileEvent(FileDescriptor fd, unsigned mask)
 {
   char buffer[256];
-  const ssize_t nbytes = read(fd, buffer, sizeof(buffer));
+  const ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
   if (nbytes > 0) {
     for (ssize_t i = 0; i < nbytes; ++i)
       HandleInputByte(buffer[i]);

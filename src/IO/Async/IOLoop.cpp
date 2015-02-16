@@ -25,9 +25,9 @@ Copyright_License {
 #include "FileEventHandler.hpp"
 
 void
-IOLoop::Add(int fd, unsigned mask, FileEventHandler &handler)
+IOLoop::Add(FileDescriptor fd, unsigned mask, FileEventHandler &handler)
 {
-  assert(fd >= 0);
+  assert(fd.IsDefined());
   assert(mask != 0);
 
   FileSet::insert_commit_data hint;
@@ -56,9 +56,9 @@ IOLoop::Add(int fd, unsigned mask, FileEventHandler &handler)
 }
 
 void
-IOLoop::Remove(int fd)
+IOLoop::Remove(FileDescriptor fd)
 {
-  assert(fd >= 0);
+  assert(fd.IsDefined());
 
   auto i = files.find(fd, File::Compare());
   if (i == files.end())
@@ -88,7 +88,7 @@ IOLoop::Update()
 
     file.modified = false;
 
-    poll.SetMask(file.fd, file.mask);
+    poll.SetMask(file.fd.Get(), file.mask);
     if (file.mask == 0)
       i = files.erase(i);
     else
@@ -101,7 +101,7 @@ IOLoop::CollectReady()
 {
   File *ready = nullptr;
   for (auto i = poll.begin(), end = poll.end(); i != end; ++i) {
-    const int fd = *i;
+    const FileDescriptor fd(*i);
     const unsigned mask = i.GetMask();
     assert(mask != 0);
 

@@ -40,6 +40,15 @@
  */
 class TTYDescriptor : public UniqueFileDescriptor {
 public:
+  /**
+   * Conver this object to a #FileDescriptor instance.  This is only
+   * possible on operating systems where socket descriptors are the
+   * same as file descriptors (i.e. not on Windows).
+   */
+  const FileDescriptor &ToFileDescriptor() const {
+    return *this;
+  }
+
   bool Unlock() {
     return unlockpt(Get()) >= 0;
   }

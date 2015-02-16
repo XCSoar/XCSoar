@@ -100,7 +100,7 @@ LinuxInputDevice::Open(const char *path)
     return false;
 
   fd.SetNonBlocking();
-  io_loop.Add(fd.Get(), io_loop.READ, *this);
+  io_loop.Add(fd, io_loop.READ, *this);
 
   min_x = max_x = min_y = max_y = 0;
 
@@ -141,7 +141,7 @@ LinuxInputDevice::Close()
   if (is_pointer)
     merge.RemovePointer();
 
-  io_loop.Remove(fd.Get());
+  io_loop.Remove(fd);
   fd.Close();
 }
 
@@ -260,7 +260,7 @@ LinuxInputDevice::Read()
 }
 
 bool
-LinuxInputDevice::OnFileEvent(int fd, unsigned mask)
+LinuxInputDevice::OnFileEvent(FileDescriptor fd, unsigned mask)
 {
   Read();
 

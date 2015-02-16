@@ -66,7 +66,7 @@ public:
    * This method is not thread-safe, it may only be called from within
    * the thread.
    */
-  void Add(int fd, unsigned mask, FileEventHandler &handler) {
+  void Add(FileDescriptor fd, unsigned mask, FileEventHandler &handler) {
     loop.Add(fd, mask, handler);
   }
 
@@ -76,18 +76,18 @@ public:
    * This method is not thread-safe, it may only be called from within
    * the thread.
    */
-  void Remove(int fd) {
+  void Remove(FileDescriptor fd) {
     loop.Remove(fd);
   }
 
-  void Set(int fd, unsigned mask, FileEventHandler &handler) {
+  void Set(FileDescriptor fd, unsigned mask, FileEventHandler &handler) {
     loop.Set(fd, mask, handler);
   }
 
   /**
    * A thread-safe version of Add().
    */
-  void LockAdd(int fd, unsigned mask, FileEventHandler &handler);
+  void LockAdd(FileDescriptor fd, unsigned mask, FileEventHandler &handler);
 
   /**
    * A thread-safe version of Remove().
@@ -95,12 +95,12 @@ public:
    * This method is synchronous: after this call, the handler is
    * guaranteed to be not running.
    */
-  void LockRemove(int fd);
+  void LockRemove(FileDescriptor fd);
 
   /**
    * A thread-safe version of Set().
    */
-  void LockSet(int fd, unsigned mask, FileEventHandler &handler) {
+  void LockSet(FileDescriptor fd, unsigned mask, FileEventHandler &handler) {
     if (mask != 0)
       LockAdd(fd, mask, handler);
     else
@@ -112,7 +112,7 @@ protected:
   virtual void Run() override;
 
   /* virtual methods from FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override;
+  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
 };
 
 #endif

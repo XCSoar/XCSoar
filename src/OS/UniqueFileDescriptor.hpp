@@ -62,6 +62,13 @@ public:
     return *this;
   }
 
+  /**
+   * Convert this object to its #FileDescriptor base type.
+   */
+  const FileDescriptor &ToFileDescriptor() const {
+    return *this;
+  }
+
   using FileDescriptor::IsDefined;
   using FileDescriptor::Get;
 

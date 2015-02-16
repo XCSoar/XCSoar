@@ -38,24 +38,24 @@ void
 SkyLinesTracking::Client::SetIOThread(IOThread *_io_thread)
 {
   if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockRemove(socket.Get());
+    io_thread->LockRemove(socket.ToFileDescriptor());
 
   io_thread = _io_thread;
 
   if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockAdd(socket.Get(), IOThread::READ, *this);
+    io_thread->LockAdd(socket.ToFileDescriptor(), IOThread::READ, *this);
 }
 
 void
 SkyLinesTracking::Client::SetHandler(Handler *_handler)
 {
   if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockRemove(socket.Get());
+    io_thread->LockRemove(socket.ToFileDescriptor());
 
   handler = _handler;
 
   if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockAdd(socket.Get(), IOThread::READ, *this);
+    io_thread->LockAdd(socket.ToFileDescriptor(), IOThread::READ, *this);
 }
 
 #endif
@@ -73,7 +73,7 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   if (io_thread != nullptr && handler != nullptr)
-    io_thread->LockAdd(socket.Get(), IOThread::READ, *this);
+    io_thread->LockAdd(socket.ToFileDescriptor(), IOThread::READ, *this);
 #endif
 
   return true;
@@ -87,7 +87,7 @@ SkyLinesTracking::Client::Close()
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   if (io_thread != nullptr && handler != nullptr)
-    io_thread->LockRemove(socket.Get());
+    io_thread->LockRemove(socket.ToFileDescriptor());
 #endif
 
   socket.Close();

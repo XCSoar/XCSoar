@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FILE_EVENT_HANDLER_HPP
 #define XCSOAR_FILE_EVENT_HANDLER_HPP
 
+class FileDescriptor;
+
 /**
  * Handler for events on a file descriptor.
  */
@@ -34,7 +36,7 @@ public:
    *
    * @return false to unregister this file descriptor
    */
-  virtual bool OnFileEvent(int fd, unsigned mask) = 0;
+  virtual bool OnFileEvent(FileDescriptor fd, unsigned mask) = 0;
 };
 
 #endif

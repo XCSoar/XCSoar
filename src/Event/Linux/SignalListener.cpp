@@ -37,7 +37,7 @@ SignalListener::InternalCreate(const sigset_t &mask)
     return false;
   }
 
-  io_loop.Add(fd.Get(), io_loop.READ, *this);
+  io_loop.Add(fd.ToFileDescriptor(), io_loop.READ, *this);
   return true;
 }
 
@@ -47,12 +47,12 @@ SignalListener::Destroy()
   if (!fd.IsDefined())
     return;
 
-  io_loop.Remove(fd.Get());
+  io_loop.Remove(fd.ToFileDescriptor());
   fd.Close();
 }
 
 bool
-SignalListener::OnFileEvent(int _fd, unsigned mask)
+SignalListener::OnFileEvent(FileDescriptor _fd, unsigned mask)
 {
   signalfd_siginfo info;
   while (fd.Read(&info, sizeof(info)) > 0)

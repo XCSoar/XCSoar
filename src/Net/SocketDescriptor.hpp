@@ -62,8 +62,18 @@ public:
    * same as file descriptors (i.e. not on Windows).  Use this only
    * when you know what you're doing.
    */
-  static constexpr SocketDescriptor FromFileDescriptor(int fd) {
+  static constexpr SocketDescriptor FromFileDescriptor(FileDescriptor fd) {
     return SocketDescriptor(fd);
+  }
+
+  /**
+   * Convert this object to a #FileDescriptor instance.  This is only
+   * possible on operating systems where socket descriptors are the
+   * same as file descriptors (i.e. not on Windows).  Use this only
+   * when you know what you're doing.
+   */
+  constexpr const FileDescriptor &ToFileDescriptor() const {
+    return *this;
   }
 #endif
 

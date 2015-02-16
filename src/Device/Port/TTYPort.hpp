@@ -80,7 +80,7 @@ public:
 
 protected:
   /* virtual methods from class FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override;
+  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
 };
 
 #endif

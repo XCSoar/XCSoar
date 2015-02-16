@@ -42,7 +42,7 @@ class SocketEventHandler
 #endif
 {
 #ifndef WIN32
-  bool OnFileEvent(int fd, unsigned mask) final {
+  bool OnFileEvent(FileDescriptor fd, unsigned mask) final {
     return OnSocketEvent(SocketDescriptor::FromFileDescriptor(fd), mask);
   }
 #endif

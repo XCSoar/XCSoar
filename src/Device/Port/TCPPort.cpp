@@ -42,7 +42,7 @@ TCPPort::~TCPPort()
 
   if (listener.IsDefined()) {
 #ifdef HAVE_POSIX
-    io_thread->LockRemove(listener.Get());
+    io_thread->LockRemove(listener.ToFileDescriptor());
 #endif
     listener.Close();
   }
@@ -56,7 +56,7 @@ TCPPort::Open(unsigned port)
 
   /* register the socket in then IOThread or the SocketThread */
 #ifdef HAVE_POSIX
-  io_thread->LockAdd(listener.Get(), Poll::READ, *this);
+  io_thread->LockAdd(listener.ToFileDescriptor(), Poll::READ, *this);
 #else
   thread.Start();
 #endif
@@ -121,7 +121,7 @@ TCPPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
       /* close the connection, unregister the event, and reinstate the
          listener socket */
       SocketPort::Close();
-      io_thread->Add(listener.Get(), Poll::READ, *this);
+      io_thread->Add(listener.ToFileDescriptor(), Poll::READ, *this);
 #else
       /* we must not call SocketPort::Close() here because it may
          deadlock, waiting forever for this thread to finish; instead,

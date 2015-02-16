@@ -74,7 +74,7 @@ LibInputHandler::Open()
   li_fd = libinput_get_fd(li);
   if (li_fd < 0)
     return false;
-  io_loop.Add(li_fd, io_loop.READ, *this);
+  io_loop.Add(FileDescriptor(li_fd), io_loop.READ, *this);
 
   return true;
 }
@@ -83,7 +83,7 @@ void
 LibInputHandler::Close()
 {
   if (li_fd >= 0)
-    io_loop.Remove(li_fd);
+    io_loop.Remove(FileDescriptor(li_fd));
   li_fd = -1;
 
   if (nullptr != li)
@@ -220,7 +220,7 @@ LibInputHandler::HandlePendingEvents()
 }
 
 bool
-LibInputHandler::OnFileEvent(int fd, unsigned mask)
+LibInputHandler::OnFileEvent(FileDescriptor fd, unsigned mask)
 {
   HandlePendingEvents();
 
