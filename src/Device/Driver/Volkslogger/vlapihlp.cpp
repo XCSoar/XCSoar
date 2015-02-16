@@ -36,12 +36,11 @@ char *igc_filter(char *st) {
  static constexpr int alphabet_l = ARRAY_SIZE(alphabet) - 1;
  int l = strlen(st);
  int i,j;
- int found;
   for(i=0; i<l; i++) {
-    found = 0;
+    bool found = false;
     for(j=0; j<alphabet_l; j++)
       if (st[i] == alphabet[j])
-	found = 1;
+        found = true;
     if (!found) st[i] = ' ';
   }
   StripRight(st);
