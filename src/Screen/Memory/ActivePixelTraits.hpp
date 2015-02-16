@@ -27,9 +27,9 @@ Copyright_License {
 #include "PixelTraits.hpp"
 
 #ifdef GREYSCALE
-using SDLPixelTraits = GreyscalePixelTraits;
+using ActivePixelTraits = GreyscalePixelTraits;
 #else
-using SDLPixelTraits = BGRAPixelTraits;
+using ActivePixelTraits = BGRAPixelTraits;
 #endif
 
 #endif

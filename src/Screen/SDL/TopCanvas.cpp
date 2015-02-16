@@ -441,13 +441,13 @@ TopCanvas::Lock()
 {
 #ifndef GREYSCALE
 #if SDL_MAJOR_VERSION >= 2
-  WritableImageBuffer<SDLPixelTraits> buffer;
+  WritableImageBuffer<ActivePixelTraits> buffer;
   void* pixels;
   int pitch, width, height;
   SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
   if (SDL_LockTexture(texture, nullptr, &pixels, &pitch) != 0)
     return Canvas();
-  buffer.data = (SDLPixelTraits::pointer_type)pixels;
+  buffer.data = (ActivePixelTraits::pointer_type)pixels;
   buffer.pitch = (unsigned) pitch;
   buffer.width = (unsigned) width;
   buffer.height = (unsigned) height;
@@ -455,8 +455,8 @@ TopCanvas::Lock()
   if (SDL_LockSurface(surface) != 0)
     return Canvas();
 
-  WritableImageBuffer<SDLPixelTraits> buffer;
-  buffer.data = (SDLPixelTraits::pointer_type)surface->pixels;
+  WritableImageBuffer<ActivePixelTraits> buffer;
+  buffer.data = (ActivePixelTraits::pointer_type)surface->pixels;
   buffer.pitch = surface->pitch;
   buffer.width = surface->w;
   buffer.height = surface->h;

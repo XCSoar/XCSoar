@@ -53,10 +53,10 @@ class Canvas {
   friend class WindowCanvas;
   friend class SubCanvas;
 
-  using ConstImageBuffer = ::ConstImageBuffer<SDLPixelTraits>;
+  using ConstImageBuffer = ::ConstImageBuffer<ActivePixelTraits>;
 
 protected:
-  WritableImageBuffer<SDLPixelTraits> buffer;
+  WritableImageBuffer<ActivePixelTraits> buffer;
 
   Pen pen;
   Brush brush;
@@ -68,14 +68,14 @@ protected:
 
 public:
   Canvas()
-    :buffer(WritableImageBuffer<SDLPixelTraits>::Empty()),
+    :buffer(WritableImageBuffer<ActivePixelTraits>::Empty()),
      font(nullptr), background_mode(OPAQUE) {}
 
-  explicit Canvas(WritableImageBuffer<SDLPixelTraits> _buffer)
+  explicit Canvas(WritableImageBuffer<ActivePixelTraits> _buffer)
     :buffer(_buffer),
      font(nullptr), background_mode(OPAQUE) {}
 
-  void Create(WritableImageBuffer<SDLPixelTraits> _buffer) {
+  void Create(WritableImageBuffer<ActivePixelTraits> _buffer) {
     buffer = _buffer;
   }
 
