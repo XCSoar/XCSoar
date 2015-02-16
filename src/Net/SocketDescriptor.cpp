@@ -133,8 +133,6 @@ SocketDescriptor::Connect(SocketAddress address)
 bool
 SocketDescriptor::Create(int domain, int type, int protocol)
 {
-  assert(!IsDefined());
-
 #ifdef SOCK_CLOEXEC
   /* implemented since Linux 2.6.27 */
   type |= SOCK_CLOEXEC;
