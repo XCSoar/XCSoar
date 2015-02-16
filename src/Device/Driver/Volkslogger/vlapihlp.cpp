@@ -42,10 +42,9 @@ Filtern einer Zeile:
   - Entfernen von Leer- und Sonderzeichen am Ende
 */
 char *igc_filter(char *st) {
-  const size_t l = strlen(st);
-  for(size_t i=0; i<l; i++) {
-    if (!IsAllowedIGCChar(st[i])) st[i] = ' ';
-  }
+  for (char *p = st; *p != 0; ++p)
+    if (!IsAllowedIGCChar(*p))
+      *p = ' ';
   StripRight(st);
   return st;
 }
