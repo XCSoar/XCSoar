@@ -28,6 +28,7 @@ Copyright_License {
 
 #ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/PixelTraits.hpp"
+#include "Screen/Memory/ActivePixelTraits.hpp"
 #include "Screen/Memory/Buffer.hpp"
 #else
 #include "Screen/Canvas.hpp"
@@ -128,13 +129,19 @@ class TopCanvas
 #endif
 #endif
 
-#if defined(USE_MEMORY_CANVAS) && defined(GREYSCALE)
+#ifdef USE_MEMORY_CANVAS
+
+#ifdef GREYSCALE
   WritableImageBuffer<GreyscalePixelTraits> buffer;
 
 #ifdef DITHER
   Dither dither;
 #endif
-#endif
+
+#else /* !GREYSCALE */
+  WritableImageBuffer<ActivePixelTraits> buffer;
+#endif /* !GREYSCALE */
+#endif /* USE_MEMORY_CANVAS */
 
 #ifdef USE_TTY
   /**
