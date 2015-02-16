@@ -57,6 +57,10 @@ public:
   FileDescriptor() = default;
   explicit constexpr FileDescriptor(int _fd):fd(_fd) {}
 
+  constexpr bool operator==(FileDescriptor other) const {
+    return fd == other.fd;
+  }
+
   constexpr bool IsDefined() const {
     return fd >= 0;
   }
