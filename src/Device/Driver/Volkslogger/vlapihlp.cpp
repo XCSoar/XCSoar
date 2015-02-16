@@ -33,12 +33,7 @@ IsAllowedIGCChar(char ch)
     " \"#%&\'()+-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_\140abcdefghijklmnopqrstuvwxyz{|}";
   static constexpr size_t alphabet_l = ARRAY_SIZE(alphabet) - 1;
 
-  bool found = false;
-  for(size_t j=0; j<alphabet_l; j++)
-    if (ch == alphabet[j])
-      found = true;
-
-  return found;
+  return memchr(alphabet, ch, alphabet_l) != nullptr;
 }
 
 /*
