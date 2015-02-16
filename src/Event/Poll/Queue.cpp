@@ -29,80 +29,18 @@ EventQueue::EventQueue()
   :SignalListener(io_loop),
    thread(ThreadHandle::GetCurrent()),
    now_us(MonotonicClockUS()),
-#ifndef NON_INTERACTIVE
-#ifdef USE_LIBINPUT
-   libinput_handler(io_loop, *this),
-#else
-#ifdef KOBO
-   keyboard(io_loop, *this, merge_mouse),
-#elif !defined(USE_LINUX_INPUT)
-   keyboard(*this, io_loop),
-#endif
-#ifdef KOBO
-   mouse(io_loop, *this, merge_mouse),
-#elif defined(USE_LINUX_INPUT)
-   all_input(io_loop, *this, merge_mouse),
-#else
-   mouse(io_loop, merge_mouse),
-#endif
-#endif
-#endif
+   input_queue(io_loop, *this),
    running(true)
 {
   SignalListener::Create(SIGINT, SIGTERM);
 
   event_pipe.Create();
   io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, discard);
-
-#ifndef NON_INTERACTIVE
-#ifdef USE_LIBINPUT
-  libinput_handler.Open();
-#else
-#ifdef KOBO
-  /* power button */
-  keyboard.Open("/dev/input/event0");
-
-  /* Kobo touch screen */
-  mouse.Open("/dev/input/event1");
-#elif defined(USE_LINUX_INPUT)
-  all_input.Open();
-#else
-  mouse.Open();
-#endif
-#endif
-#endif
 }
 
 EventQueue::~EventQueue()
 {
 }
-
-#if !defined(NON_INTERACTIVE) && !defined(USE_LIBINPUT)
-
-void
-EventQueue::SetMouseRotation(DisplayOrientation orientation)
-{
-  switch (orientation) {
-  case DisplayOrientation::DEFAULT:
-  case DisplayOrientation::PORTRAIT:
-    SetMouseRotation(true, true, false);
-    break;
-
-  case DisplayOrientation::LANDSCAPE:
-    SetMouseRotation(false, false, false);
-    break;
-
-  case DisplayOrientation::REVERSE_PORTRAIT:
-    SetMouseRotation(true, false, true);
-    break;
-
-  case DisplayOrientation::REVERSE_LANDSCAPE:
-    SetMouseRotation(false, true, true);
-    break;
-  }
-}
-
-#endif
 
 void
 EventQueue::Push(const Event &event)
@@ -152,9 +90,8 @@ EventQueue::Generate(Event &event)
     return true;
   }
 
-#if !defined(NON_INTERACTIVE) && !defined(USE_LIBINPUT)
-  event = merge_mouse.Generate();
-  if (event.type != Event::Type::NOP)
+#ifndef NON_INTERACTIVE
+  if (input_queue.Generate(event))
     return true;
 #endif
 

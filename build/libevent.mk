@@ -32,6 +32,7 @@ else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
 	$(SRC)/Event/Poll/Loop.cpp \
+	$(SRC)/Event/Poll/InputQueue.cpp \
 	$(SRC)/Event/Poll/Queue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 

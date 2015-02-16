@@ -34,19 +34,7 @@ Copyright_License {
 #include "Linux/SignalListener.hpp"
 
 #ifndef NON_INTERACTIVE
-#ifdef USE_LIBINPUT
-#include "LibInput/LibInputHandler.hpp"
-#else
-#include "Linux/MergeMouse.hpp"
-#ifdef KOBO
-#include "Linux/Input.hpp"
-#elif defined(USE_LINUX_INPUT)
-#include "Linux/AllInput.hpp"
-#else
-#include "Linux/TTYKeyboard.hpp"
-#include "Linux/Mouse.hpp"
-#endif
-#endif
+#include "InputQueue.hpp"
 #endif
 
 #include <stdint.h>
@@ -68,23 +56,7 @@ class EventQueue final : private SignalListener {
   IOLoop io_loop;
 
 #ifndef NON_INTERACTIVE
-#ifdef USE_LIBINPUT
-  LibInputHandler libinput_handler;
-#else
-  MergeMouse merge_mouse;
-#ifdef KOBO
-  LinuxInputDevice keyboard;
-  LinuxInputDevice mouse;
-#else
-#ifdef USE_LINUX_INPUT
-  AllLinuxInputDevices all_input;
-#else
-  TTYKeyboard keyboard;
-  LinuxMouse mouse;
-#endif
-
-#endif
-#endif
+  InputEventQueue input_queue;
 #endif
 
   Mutex mutex;
@@ -105,32 +77,25 @@ public:
 #ifndef NON_INTERACTIVE
 
   void SetScreenSize(unsigned width, unsigned height) {
-  #ifdef USE_LIBINPUT
-    libinput_handler.SetScreenSize(width, height);
-  #else
-    merge_mouse.SetScreenSize(width, height);
-  #endif
+    input_queue.SetScreenSize(width, height);
   }
 
 #ifndef USE_LIBINPUT
   void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
-    merge_mouse.SetSwap(swap);
-    merge_mouse.SetInvert(invert_x, invert_y);
+    input_queue.SetMouseRotation(swap, invert_x, invert_y);
   }
 
-  void SetMouseRotation(DisplayOrientation orientation);
+  void SetMouseRotation(DisplayOrientation orientation) {
+    input_queue.SetMouseRotation(orientation);
+  }
 
   bool HasPointer() const {
-    return merge_mouse.HasPointer();
+    return input_queue.HasPointer();
   }
 #endif
 
   RasterPoint GetMousePosition() const {
-#ifdef USE_LIBINPUT
-    return { int(libinput_handler.GetX()), int(libinput_handler.GetY()) };
-#else
-    return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
-#endif
+    return input_queue.GetMousePosition();
   }
 
 #endif /* !NON_INTERACTIVE */
