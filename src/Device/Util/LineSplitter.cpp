@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "LineSplitter.hpp"
+#include "Util/TextFile.hxx"
 #include "Util/StringUtil.hpp"
 
 #include <algorithm>
@@ -69,34 +70,26 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
     while (true) {
       /* read data from the buffer, to see if there's a newline
          character */
-      range = buffer.Read();
-      if (range.IsEmpty())
-        break;
-
-      char *newline = (char *)memchr(range.data, '\n', range.size);
-      if (newline == nullptr)
+      char *line = ReadBufferedLine(buffer);
+      if (line == nullptr)
         /* no newline here: wait for more data */
         break;
 
+      char *end = line + strlen(line);
+
       /* remove trailing whitespace, such as '\r' */
-      char *end = newline;
-      end = StripRight(range.data, end);
-      *end = '\0';
+      end = StripRight(line, end);
 
-      SanitiseLine(range.data, end);
-
-      const char *line = range.data;
+      SanitiseLine(line, end);
 
       /* if there are NUL bytes in the line, skip to after the last
          one, to avoid conflicts with NUL terminated C strings due to
          binary garbage */
-      const void *nul;
+      void *nul;
       while ((nul = memchr(line, 0, end - line)) != nullptr)
-        line = (const char *)nul + 1;
+        line = (char *)nul + 1;
 
       LineReceived(line);
-
-      buffer.Consume(newline - range.data + 1);
     }
   } while (data < end);
 }
