@@ -33,15 +33,19 @@ TCPPort::~TCPPort()
 {
   SocketPort::Close();
 
-#ifdef HAVE_POSIX
-  if (listener.IsDefined())
-    io_thread->LockRemove(listener.Steal());
-#else
+#ifndef HAVE_POSIX
   if (thread.IsDefined()) {
     thread.BeginStop();
     thread.Join();
   }
 #endif
+
+  if (listener.IsDefined()) {
+#ifdef HAVE_POSIX
+    io_thread->LockRemove(listener.Get());
+#endif
+    listener.Close();
+  }
 }
 
 bool

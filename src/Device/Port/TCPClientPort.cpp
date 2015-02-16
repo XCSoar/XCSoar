@@ -32,8 +32,10 @@ Copyright_License {
 
 TCPClientPort::~TCPClientPort()
 {
-  if (connecting.IsDefined())
-    io_thread->LockRemove(connecting.Steal());
+  if (connecting.IsDefined()) {
+    io_thread->LockRemove(connecting.Get());
+    connecting.Close();
+  }
 }
 
 #endif
