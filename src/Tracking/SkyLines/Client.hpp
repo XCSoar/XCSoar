@@ -27,7 +27,7 @@ Copyright_License {
 #include "Handler.hpp"
 #include "Net/StaticSocketAddress.hpp"
 #include "Net/SocketDescriptor.hpp"
-#include "IO/Async/FileEventHandler.hpp"
+#include "IO/Async/SocketEventHandler.hpp"
 
 #include <stdint.h>
 
@@ -40,7 +40,7 @@ namespace SkyLinesTracking {
 
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    : private FileEventHandler
+    : private SocketEventHandler
 #endif
   {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -96,8 +96,8 @@ namespace SkyLinesTracking {
                             size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
-    /* virtual methods from FileEventHandler */
-    virtual bool OnFileEvent(int fd, unsigned mask) override;
+    /* virtual methods from SocketEventHandler */
+    bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
 #endif
   };
 }

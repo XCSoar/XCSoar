@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "SocketThread.hpp"
-#include "FileEventHandler.hpp"
+#include "SocketEventHandler.hpp"
 #include "Net/SocketDescriptor.hpp"
 
 #include <assert.h>
@@ -34,7 +34,7 @@ SocketThread::Run()
     assert(socket.IsDefined());
 
     int ret = socket.WaitReadable(500);
-    if ((ret > 0 && !handler.OnFileEvent(socket.Get(), 0)) ||
+    if ((ret > 0 && !handler.OnSocketEvent(socket, 0)) ||
         ret < 0)
       break;
   }

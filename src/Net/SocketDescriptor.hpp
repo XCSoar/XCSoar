@@ -55,6 +55,18 @@ public:
     return fd == other.fd;
   }
 
+#ifdef HAVE_POSIX
+  /**
+   * Convert a #FileDescriptor to a #SocketDescriptor.  This is only
+   * possible on operating systems where socket descriptors are the
+   * same as file descriptors (i.e. not on Windows).  Use this only
+   * when you know what you're doing.
+   */
+  static constexpr SocketDescriptor FromFileDescriptor(int fd) {
+    return SocketDescriptor(fd);
+  }
+#endif
+
   using FileDescriptor::IsDefined;
   using FileDescriptor::Get;
   using FileDescriptor::Set;

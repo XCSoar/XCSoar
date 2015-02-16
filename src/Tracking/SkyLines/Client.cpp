@@ -309,7 +309,7 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 }
 
 bool
-SkyLinesTracking::Client::OnFileEvent(int fd, unsigned mask)
+SkyLinesTracking::Client::OnSocketEvent(SocketDescriptor s, unsigned mask)
 {
   if (!socket.IsDefined())
     return false;

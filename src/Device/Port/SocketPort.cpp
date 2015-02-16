@@ -143,9 +143,9 @@ SocketPort::SetBaudrate(unsigned baud_rate)
 }
 
 bool
-SocketPort::OnFileEvent(int fd, unsigned mask)
+SocketPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
 {
-  assert(fd == socket.Get());
+  assert(_socket == socket);
 
   char buffer[1024];
   ssize_t nbytes = socket.Read(buffer, sizeof(buffer));

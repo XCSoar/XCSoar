@@ -77,11 +77,11 @@ TCPPort::GetState() const
 }
 
 bool
-TCPPort::OnFileEvent(int fd, unsigned mask)
+TCPPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
 {
   assert(listener.IsDefined());
 
-  if (fd == listener.Get()) {
+  if (_socket == listener) {
     /* connection should never be defined here */
     assert(SocketPort::GetState() == PortState::FAILED);
 
@@ -113,7 +113,7 @@ TCPPort::OnFileEvent(int fd, unsigned mask)
   } else {
     /* this event affects the connection socket */
 
-    if (!SocketPort::OnFileEvent(fd, mask)) {
+    if (!SocketPort::OnSocketEvent(_socket, mask)) {
       /* the connection was closed; continue listening on incoming
          connections */
 

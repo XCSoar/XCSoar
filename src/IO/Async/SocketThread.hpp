@@ -27,17 +27,17 @@ Copyright_License {
 #include "Thread/StoppableThread.hpp"
 #include "Net/SocketDescriptor.hpp"
 
-class FileEventHandler;
+class SocketEventHandler;
 
 /**
- * An adapter between a #SocketDescriptor and a #FileEventHandler.
+ * An adapter between a #SocketDescriptor and a #SocketEventHandler.
  */
 class SocketThread : public StoppableThread {
   SocketDescriptor socket;
-  FileEventHandler &handler;
+  SocketEventHandler &handler;
 
 public:
-  SocketThread(SocketDescriptor _socket, FileEventHandler &_handler)
+  SocketThread(SocketDescriptor _socket, SocketEventHandler &_handler)
     :StoppableThread("SocketThread"), socket(_socket), handler(_handler) {}
 
 protected:

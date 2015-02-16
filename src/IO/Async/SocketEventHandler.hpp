@@ -21,47 +21,39 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
-#define XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
+#ifndef XCSOAR_SOCKET_EVENT_HANDLER_HPP
+#define XCSOAR_SOCKET_EVENT_HANDLER_HPP
 
-#include "SocketPort.hpp"
+#include "Net/SocketDescriptor.hpp"
+
+#ifndef WIN32
+#include "FileEventHandler.hpp"
+#endif
 
 /**
- * A #Port implementation that connects to a TCP port.
+ * Handler for events on a #SocketDescriptor.
+ *
+ * On Windows, this is called by #SocketThread, and on all other
+ * operating systems, this is a wrapper for #FileEventHandler.
  */
-class TCPClientPort final
-  : public SocketPort
+class SocketEventHandler
+#ifndef WIN32
+  : protected FileEventHandler
+#endif
 {
-#ifdef HAVE_POSIX
-  /**
-   * The unconnected socket.  This will be moved to SocketPort::socket
-   * as soon as the connection has been established.
-   */
-  SocketDescriptor connecting;
+#ifndef WIN32
+  bool OnFileEvent(int fd, unsigned mask) final {
+    return OnSocketEvent(SocketDescriptor::FromFileDescriptor(fd), mask);
+  }
 #endif
 
 public:
-  TCPClientPort(PortListener *_listener, DataHandler &_handler)
-    :SocketPort(_listener, _handler)
-#ifdef HAVE_POSIX
-    , connecting(SocketDescriptor::Undefined())
-#endif
-  {}
-
-#ifdef HAVE_POSIX
-  virtual ~TCPClientPort();
-#endif
-
-  bool Connect(const char *host, unsigned port);
-
-#ifdef HAVE_POSIX
-  /* virtual methods from class Port */
-  virtual PortState GetState() const override;
-
-protected:
-  /* virtual methods from class SocketEventHandler */
-  bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
-#endif
+  /**
+   * Handle the event.
+   *
+   * @return false to unregister this SocketDescriptor
+   */
+  virtual bool OnSocketEvent(SocketDescriptor s, unsigned mask) = 0;
 };
 
 #endif

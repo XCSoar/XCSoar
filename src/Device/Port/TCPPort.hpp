@@ -73,8 +73,8 @@ public:
   virtual PortState GetState() const override;
 
 protected:
-  /* virtual methods from class FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override;
+  /* virtual methods from class SocketEventHandler */
+  bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
 };
 
 #endif

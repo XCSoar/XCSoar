@@ -86,16 +86,16 @@ TCPClientPort::GetState() const
 }
 
 bool
-TCPClientPort::OnFileEvent(int fd, unsigned mask)
+TCPClientPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
 {
   if (gcc_likely(!connecting.IsDefined()))
     /* connection already established: let SocketPort handle reading
        from the connection */
-    return SocketPort::OnFileEvent(fd, mask);
+    return SocketPort::OnSocketEvent(_socket, mask);
 
   /* connection ready: check connect error */
 
-  assert(fd == connecting.Get());
+  assert(_socket == connecting);
 
   io_thread->Remove(connecting.Get());
 
