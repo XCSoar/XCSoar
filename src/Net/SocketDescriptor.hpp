@@ -51,6 +51,10 @@ protected:
 public:
   SocketDescriptor() = default;
 
+  constexpr bool operator==(SocketDescriptor other) const {
+    return fd == other.fd;
+  }
+
   using FileDescriptor::IsDefined;
   using FileDescriptor::Get;
   using FileDescriptor::Set;
