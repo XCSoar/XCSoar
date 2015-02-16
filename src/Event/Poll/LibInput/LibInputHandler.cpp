@@ -94,8 +94,7 @@ LibInputHandler::Close()
     delete li_if;
   li_if = nullptr;
 
-  if (nullptr != udev_context)
-    delete udev_context;
+  delete udev_context;
   udev_context = nullptr;
 }
 
