@@ -44,7 +44,7 @@ public:
   EventLoop(EventQueue &_queue, TopWindow &_top_window)
     :queue(_queue), top_window(&_top_window), bulk(true) {}
 
-  EventLoop(EventQueue &_queue)
+  explicit EventLoop(EventQueue &_queue)
     :queue(_queue), top_window(nullptr), bulk(true) {}
 
   bool Get(Event &event);

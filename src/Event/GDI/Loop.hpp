@@ -36,7 +36,7 @@ class EventLoop : private NonCopyable {
   EventQueue &queue;
 
 public:
-  EventLoop(EventQueue &_queue):queue(_queue) {}
+  explicit EventLoop(EventQueue &_queue):queue(_queue) {}
 
   bool Get(Event &msg);
   void Dispatch(const Event &msg);
