@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
 #include "IO/Async/FileEventHandler.hpp"
+#include "OS/FileDescriptor.hpp"
 
 #include <assert.h>
 
@@ -47,7 +48,7 @@ class LibInputHandler final : private FileEventHandler {
   struct libinput* li = nullptr;
   struct libinput_interface* li_if = nullptr;
 
-  int li_fd = -1;
+  FileDescriptor fd = FileDescriptor::Undefined();
 
   double x = -1.0, y = -1.0;
   unsigned width = 0, height = 0;

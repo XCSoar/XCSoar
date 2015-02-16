@@ -42,7 +42,7 @@ LibInputHandler::Open()
   if ((nullptr != udev_context)
       || (nullptr != li_if)
       || (nullptr != li)
-      || (li_fd >= 0))
+      || fd.IsDefined())
     return false;
 
   if (nullptr == udev_context) {
@@ -71,10 +71,10 @@ LibInputHandler::Open()
   if (0 != assign_seat_ret)
     return false;
 
-  li_fd = libinput_get_fd(li);
-  if (li_fd < 0)
+  fd.Set(libinput_get_fd(li));
+  if (!fd.IsDefined())
     return false;
-  io_loop.Add(FileDescriptor(li_fd), io_loop.READ, *this);
+  io_loop.Add(fd, io_loop.READ, *this);
 
   return true;
 }
@@ -82,9 +82,10 @@ LibInputHandler::Open()
 void
 LibInputHandler::Close()
 {
-  if (li_fd >= 0)
-    io_loop.Remove(FileDescriptor(li_fd));
-  li_fd = -1;
+  if (fd.IsDefined()) {
+    io_loop.Remove(fd);
+    fd.SetUndefined();
+  }
 
   if (nullptr != li)
     libinput_unref(li);
