@@ -115,107 +115,110 @@ LibInputHandler::CloseDevice(int fd)
 }
 
 inline void
+LibInputHandler::HandleEvent(struct libinput_event *li_event)
+{
+  int type = libinput_event_get_type(li_event);
+  switch (type) {
+  case LIBINPUT_EVENT_KEYBOARD_KEY:
+    {
+      /* Discard all data on stdin to avoid that keyboard input data is read
+       * on the executing shell. */
+      tcflush(STDIN_FILENO, TCIFLUSH);
+
+      libinput_event_keyboard *kb_li_event =
+        libinput_event_get_keyboard_event(li_event);
+      uint32_t key_code = libinput_event_keyboard_get_key(kb_li_event);
+      libinput_key_state key_state =
+        libinput_event_keyboard_get_key_state(kb_li_event);
+      queue.Push(Event(key_state == LIBINPUT_KEY_STATE_PRESSED
+                       ? Event::KEY_DOWN
+                       : Event::KEY_UP,
+                       key_code));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_MOTION:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      if (-1.0 == x)
+        x = 0.0;
+      if (-1.0 == y)
+        y = 0.0;
+      x += libinput_event_pointer_get_dx(ptr_li_event);
+      x = Clamp<double>(x, 0, width);
+      y += libinput_event_pointer_get_dy(ptr_li_event);
+      y = Clamp<double>(y, 0, height);
+      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_MOTION_ABSOLUTE:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      x = libinput_event_pointer_get_absolute_x_transformed(ptr_li_event,
+                                                            width);
+      y = libinput_event_pointer_get_absolute_y_transformed(ptr_li_event,
+                                                            height);
+      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_BUTTON:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      libinput_button_state btn_state =
+        libinput_event_pointer_get_button_state(ptr_li_event);
+      queue.Push(Event(btn_state == LIBINPUT_BUTTON_STATE_PRESSED
+                       ? Event::MOUSE_DOWN
+                       : Event::MOUSE_UP,
+                       (unsigned) x, (unsigned) y));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_AXIS:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      double axis_value =
+        libinput_event_pointer_get_axis_value(ptr_li_event);
+      Event event(Event::MOUSE_WHEEL, (unsigned) x, (unsigned) y);
+      event.param = unsigned((int) axis_value);
+      queue.Push(event);
+    }
+    break;
+  case LIBINPUT_EVENT_TOUCH_DOWN:
+    {
+      libinput_event_touch *touch_li_event =
+        libinput_event_get_touch_event(li_event);
+      x = libinput_event_touch_get_x_transformed(touch_li_event, width);
+      y = libinput_event_touch_get_y_transformed(touch_li_event, height);
+      queue.Push(Event(Event::MOUSE_DOWN, (unsigned) x, (unsigned) y));
+    }
+    break;
+  case LIBINPUT_EVENT_TOUCH_UP:
+    {
+      queue.Push(Event(Event::MOUSE_UP, (unsigned) x, (unsigned) y));
+    }
+    break;
+  case LIBINPUT_EVENT_TOUCH_MOTION:
+    {
+      libinput_event_touch *touch_li_event =
+        libinput_event_get_touch_event(li_event);
+      x = libinput_event_touch_get_x_transformed(touch_li_event, width);
+      y = libinput_event_touch_get_y_transformed(touch_li_event, height);
+      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+    }
+    break;
+  }
+}
+
+inline void
 LibInputHandler::HandlePendingEvents()
 {
   libinput_dispatch(li);
   for (libinput_event *li_event = libinput_get_event(li);
        nullptr != li_event;
-       li_event = libinput_get_event(li)) {
-    int type = libinput_event_get_type(li_event);
-    switch (type) {
-    case LIBINPUT_EVENT_KEYBOARD_KEY:
-      {
-        /* Discard all data on stdin to avoid that keyboard input data is read
-         * on the executing shell. */
-        tcflush(STDIN_FILENO, TCIFLUSH);
-
-        libinput_event_keyboard *kb_li_event =
-            libinput_event_get_keyboard_event(li_event);
-        uint32_t key_code = libinput_event_keyboard_get_key(kb_li_event);
-        libinput_key_state key_state =
-            libinput_event_keyboard_get_key_state(kb_li_event);
-        queue.Push(Event(
-            key_state == LIBINPUT_KEY_STATE_PRESSED
-                ? Event::KEY_DOWN
-                : Event::KEY_UP,
-            key_code));
-      }
-      break;
-    case LIBINPUT_EVENT_POINTER_MOTION:
-      {
-        libinput_event_pointer *ptr_li_event =
-            libinput_event_get_pointer_event(li_event);
-        if (-1.0 == x)
-          x = 0.0;
-        if (-1.0 == y)
-          y = 0.0;
-        x += libinput_event_pointer_get_dx(ptr_li_event);
-        x = Clamp<double>(x, 0, width);
-        y += libinput_event_pointer_get_dy(ptr_li_event);
-        y = Clamp<double>(y, 0, height);
-        queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
-      }
-      break;
-    case LIBINPUT_EVENT_POINTER_MOTION_ABSOLUTE:
-      {
-        libinput_event_pointer *ptr_li_event =
-            libinput_event_get_pointer_event(li_event);
-        x = libinput_event_pointer_get_absolute_x_transformed(
-            ptr_li_event, width);
-        y = libinput_event_pointer_get_absolute_y_transformed(
-            ptr_li_event, height);
-        queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
-      }
-      break;
-    case LIBINPUT_EVENT_POINTER_BUTTON:
-      {
-        libinput_event_pointer *ptr_li_event =
-            libinput_event_get_pointer_event(li_event);
-        libinput_button_state btn_state =
-            libinput_event_pointer_get_button_state(ptr_li_event);
-        queue.Push(Event(
-            btn_state == LIBINPUT_BUTTON_STATE_PRESSED
-                ? Event::MOUSE_DOWN
-                : Event::MOUSE_UP,
-            (unsigned) x, (unsigned) y));
-      }
-      break;
-    case LIBINPUT_EVENT_POINTER_AXIS:
-      {
-        libinput_event_pointer *ptr_li_event =
-            libinput_event_get_pointer_event(li_event);
-        double axis_value =
-            libinput_event_pointer_get_axis_value(ptr_li_event);
-        Event event(Event::MOUSE_WHEEL, (unsigned) x, (unsigned) y);
-        event.param = unsigned((int) axis_value);
-        queue.Push(event);
-      }
-      break;
-    case LIBINPUT_EVENT_TOUCH_DOWN:
-      {
-        libinput_event_touch *touch_li_event =
-            libinput_event_get_touch_event(li_event);
-        x = libinput_event_touch_get_x_transformed(touch_li_event, width);
-        y = libinput_event_touch_get_y_transformed(touch_li_event, height);
-        queue.Push(Event(Event::MOUSE_DOWN, (unsigned) x, (unsigned) y));
-      }
-      break;
-    case LIBINPUT_EVENT_TOUCH_UP:
-      {
-        queue.Push(Event(Event::MOUSE_UP, (unsigned) x, (unsigned) y));
-      }
-      break;
-    case LIBINPUT_EVENT_TOUCH_MOTION:
-      {
-        libinput_event_touch *touch_li_event =
-            libinput_event_get_touch_event(li_event);
-        x = libinput_event_touch_get_x_transformed(touch_li_event, width);
-        y = libinput_event_touch_get_y_transformed(touch_li_event, height);
-        queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
-      }
-      break;
-    }
-  }
+       li_event = libinput_get_event(li))
+    HandleEvent(li_event);
 }
 
 bool

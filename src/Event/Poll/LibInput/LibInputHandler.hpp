@@ -90,6 +90,7 @@ private:
   int OpenDevice(const char *path, int flags);
   void CloseDevice(int fd);
 
+  void HandleEvent(struct libinput_event *li_event);
   void HandlePendingEvents();
 
   /* virtual methods from FileEventHandler */
