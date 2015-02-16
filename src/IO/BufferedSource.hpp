@@ -41,6 +41,7 @@ protected:
 
 public:
   virtual typename Source<T>::Range Read() override {
+    buffer.Shift();
     auto r = buffer.Write();
     if (!r.IsEmpty()) {
       unsigned n = Read(r.data, r.size);

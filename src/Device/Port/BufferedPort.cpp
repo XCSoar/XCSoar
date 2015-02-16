@@ -155,6 +155,7 @@ BufferedPort::DataReceived(const void *data, size_t length)
 
     ScopeLock protect(mutex);
 
+    buffer.Shift();
     auto r = buffer.Write();
     if (r.size == 0)
       /* the buffer is already full, discard excess data */

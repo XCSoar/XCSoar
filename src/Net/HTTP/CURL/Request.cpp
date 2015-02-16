@@ -64,9 +64,13 @@ size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {
   auto range = buffer.Write();
-  if ((size_t)range.size < size)
-    /* buffer is full, pause CURL */
-    return CURL_WRITEFUNC_PAUSE;
+  if (range.size < size) {
+    buffer.Shift();
+    range = buffer.Write();
+    if (range.size < size)
+      /* buffer is full, pause CURL */
+      return CURL_WRITEFUNC_PAUSE;
+  }
 
   std::copy(ptr, ptr + size, range.data);
   buffer.Append(size);

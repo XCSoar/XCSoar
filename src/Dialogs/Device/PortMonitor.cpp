@@ -59,6 +59,7 @@ public:
 
   virtual void DataReceived(const void *data, size_t length) {
     mutex.Lock();
+    buffer.Shift();
     auto range = buffer.Write();
     if (range.size < length)
       length = range.size;
