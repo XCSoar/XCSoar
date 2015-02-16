@@ -106,7 +106,7 @@ TCPClientPort::OnFileEvent(int fd, unsigned mask)
   if (s_err == 0) {
     /* connection has been established successfully */
     Set(std::move(connecting));
-    assert(!connecting.IsDefined());
+    connecting.SetUndefined();
   } else {
     /* there was a problem */
     connecting.Close();
