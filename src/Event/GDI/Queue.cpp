@@ -102,7 +102,7 @@ EventQueue::AddTimer(Timer &timer, unsigned ms)
   ScopeLock protect(mutex);
 
   const uint64_t due_us = MonotonicClockUS() + ms * 1000;
-  timers.Add(timer, MonotonicClockUS() + ms * 1000);
+  timers.Add(timer, due_us);
 
   if (timers.IsBefore(due_us))
     WakeUp();
