@@ -114,7 +114,7 @@ LibInputHandler::CloseDevice(int fd)
   close(fd);
 }
 
-void
+inline void
 LibInputHandler::HandlePendingEvents()
 {
   libinput_dispatch(li);
