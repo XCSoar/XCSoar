@@ -31,9 +31,9 @@ static const char *
 ParseLine(char *line)
 {
   char *separator = strchr(line, '=');
-  if (separator == NULL)
+  if (separator == nullptr)
     /* malformed line */
-    return NULL;
+    return nullptr;
 
   char *p = separator;
   while (p > separator && IsWhitespaceOrNull(p[-1]))
@@ -41,7 +41,7 @@ ParseLine(char *line)
 
   if (p == line)
     /* empty name */
-    return NULL;
+    return nullptr;
 
   *p = 0;
 
@@ -71,13 +71,13 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
   file.Clear();
 
   char *line;
-  while ((line = reader.ReadLine()) != NULL) {
+  while ((line = reader.ReadLine()) != nullptr) {
     line = const_cast<char *>(TrimLeft(line));
     if (*line == 0 || *line == '#')
       continue;
 
     const char *name = line, *value = ParseLine(line);
-    if (value == NULL)
+    if (value == nullptr)
       return false;
 
     if (StringIsEqual(name, "name")) {
