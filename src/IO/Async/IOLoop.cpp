@@ -30,12 +30,15 @@ IOLoop::Add(int fd, unsigned mask, FileEventHandler &handler)
   assert(fd >= 0);
   assert(mask != 0);
 
-  auto i = files.insert(std::make_pair(fd, File(fd, mask, handler)));
-  File &file = i.first->second;
-
-  if (!i.second) {
+  FileSet::insert_commit_data hint;
+  auto result = files.insert_check(fd, File::Compare(), hint);
+  if (result.second) {
+    File *file = new File(fd, mask, handler);
+    files.insert_commit(*file, hint);
+  } else {
     /* already exists; update it */
 
+    File &file = *result.first;
     assert(file.mask == 0 || file.handler == &handler);
 
     if (file.mask == mask)
@@ -45,9 +48,8 @@ IOLoop::Add(int fd, unsigned mask, FileEventHandler &handler)
     file.mask = mask;
     file.ready_mask &= mask;
     file.handler = &handler;
+    file.modified = true;
   }
-
-  file.modified = true;
 
   /* schedule an Update() call */
   modified = true;
@@ -58,13 +60,11 @@ IOLoop::Remove(int fd)
 {
   assert(fd >= 0);
 
-  auto i = files.find(fd);
+  auto i = files.find(fd, File::Compare());
   if (i == files.end())
     return;
 
-  assert(i->first == fd);
-
-  File &file = i->second;
+  File &file = *i;
   assert(file.fd == fd);
 
   if (file.mask != 0) {
@@ -79,8 +79,7 @@ void
 IOLoop::Update()
 {
   for (auto i = files.begin(), end = files.end(); i != end;) {
-    File &file = i->second;
-    assert(file.fd == i->first);
+    File &file = *i;
 
     if (!file.modified) {
       ++i;
@@ -106,10 +105,10 @@ IOLoop::CollectReady()
     const unsigned mask = i.GetMask();
     assert(mask != 0);
 
-    auto j = files.find(fd);
+    auto j = files.find(fd, File::Compare());
     assert(j != files.end());
 
-    File &file = j->second;
+    File &file = *j;
     assert(file.fd == fd);
 
     file.ready_mask = mask;

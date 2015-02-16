@@ -29,7 +29,7 @@ Copyright_License {
 #include "Thread/Cond.hpp"
 #include "FileEventHandler.hpp"
 
-#include <map>
+#include <boost/intrusive/set.hpp>
 
 class FileEventHandler;
 
@@ -37,7 +37,9 @@ class FileEventHandler;
  * A thread that is used for asynchronous (non-blocking) I/O.
  */
 class IOLoop final {
-  struct File {
+  struct File
+    : boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
+
     File *next_ready;
 
     const int fd;
@@ -52,15 +54,21 @@ class IOLoop final {
      */
     bool modified;
 
-    File(int fd):fd(fd) {}
-
     File(int fd, unsigned mask, FileEventHandler &handler)
       :fd(fd), mask(mask), ready_mask(0),
-       handler(&handler), modified(false) {}
+       handler(&handler), modified(true) {}
 
-    bool operator<(const File &other) const {
-      return fd < other.fd;
-    }
+    struct Compare {
+      gcc_pure
+      bool operator()(int a, const File &b) const {
+        return a < b.fd;
+      }
+
+      gcc_pure
+      bool operator()(const File &a, int b) const {
+        return a.fd < b;
+      }
+    };
   };
 
   Poll poll;
@@ -73,7 +81,10 @@ class IOLoop final {
    */
   Cond cond;
 
-  std::map<int, File> files;
+  typedef boost::intrusive::set<File,
+                                boost::intrusive::compare<File::Compare>,
+                                boost::intrusive::constant_time_size<false>> FileSet;
+  FileSet files;
 
   bool modified, running;
 
