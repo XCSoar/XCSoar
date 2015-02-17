@@ -234,6 +234,13 @@ TopCanvas::Create(PixelSize new_size,
   }
 #endif
 
+  CreateEGL(native_display, native_window);
+}
+
+void
+TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
+                     EGLNativeWindowType native_window)
+{
   display = eglGetDisplay(native_display);
   if (display == EGL_NO_DISPLAY) {
     fprintf(stderr, "eglGetDisplay(EGL_DEFAULT_DISPLAY) failed\n");

@@ -293,6 +293,11 @@ public:
 #endif
 
 private:
+#ifdef USE_EGL
+  void CreateEGL(EGLNativeDisplayType native_display,
+                 EGLNativeWindowType native_window);
+#endif
+
   void InitialiseTTY();
   void DeinitialiseTTY();
 };
