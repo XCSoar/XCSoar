@@ -35,13 +35,16 @@ TopWindow::IsVisible() const
 void
 TopWindow::EnableCapture()
 {
-  if (screen != nullptr)
-    screen->EnableCapture();
+  XGrabPointer(x_display, x_window, true,
+               ButtonPressMask |
+               ButtonReleaseMask |
+               PointerMotionMask,
+               GrabModeAsync, GrabModeAsync,
+               0, 0, CurrentTime);
 }
 
 void
 TopWindow::DisableCapture()
 {
-  if (screen != nullptr)
-    screen->DisableCapture();
+  XUngrabPointer(x_display, CurrentTime);
 }

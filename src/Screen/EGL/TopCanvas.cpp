@@ -74,6 +74,8 @@ GetRenderableType()
     : EGL_OPENGL_BIT;
 }
 
+#ifndef USE_X11
+
 void
 TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
@@ -82,43 +84,7 @@ TopCanvas::Create(PixelSize new_size,
   InitialiseTTY();
 #endif
 
-#ifdef USE_X11
-  x_display = event_queue->GetDisplay();
-  assert(x_display != nullptr);
-
-  const X11Window x_root = DefaultRootWindow(x_display);
-  if (x_root == 0) {
-    fprintf(stderr, "DefaultRootWindow() failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  XSetWindowAttributes swa;
-  swa.event_mask = KeyPressMask | KeyReleaseMask |
-    ButtonPressMask | ButtonReleaseMask |
-    PointerMotionMask |
-    VisibilityChangeMask |
-    ExposureMask | StructureNotifyMask;
-
-  x_window = XCreateWindow(x_display, x_root,
-                           0, 0, new_size.cx, new_size.cy, 0,
-                           CopyFromParent, InputOutput,
-                           CopyFromParent, CWEventMask,
-                           &swa);
-  if (x_window == 0) {
-    fprintf(stderr, "XCreateWindow() failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  XMapWindow(x_display, x_window);
-  XStoreName(x_display, x_window, "XCSoar");
-
-  /* receive "Close" button clicks from the window manager */
-  auto wm_delete_window = XInternAtom(x_display, "WM_DELETE_WINDOW", false);
-  XSetWMProtocols(x_display, x_window, &wm_delete_window, 1);
-
-  const EGLNativeDisplayType native_display = x_display;
-  const EGLNativeWindowType native_window = x_window;
-#elif defined(USE_VIDEOCORE)
+#ifdef USE_VIDEOCORE
   vc_display = vc_dispmanx_display_open(0);
   vc_update = vc_dispmanx_update_start(0);
 
@@ -236,6 +202,8 @@ TopCanvas::Create(PixelSize new_size,
 
   CreateEGL(native_display, native_window);
 }
+
+#endif
 
 void
 TopCanvas::CreateEGL(EGLNativeDisplayType native_display,

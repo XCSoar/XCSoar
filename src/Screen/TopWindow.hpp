@@ -64,6 +64,19 @@ enum class DisplayOrientation : uint8_t;
 class TopCanvas;
 #endif
 
+#ifdef USE_X11
+#define Font X11Font
+#define Window X11Window
+#define Display X11Display
+#include <X11/X.h>
+#undef Font
+#undef Window
+#undef Display
+#undef Expose
+#undef KeyPress
+struct _XDisplay;
+#endif
+
 class TopWindowStyle : public WindowStyle {
 #ifdef ENABLE_SDL
   bool full_screen;
@@ -124,6 +137,11 @@ public:
  * A top-level full-screen window.
  */
 class TopWindow : public ContainerWindow {
+#ifdef USE_X11
+  _XDisplay *x_display;
+  X11Window x_window;
+#endif
+
 #ifndef USE_GDI
   TopCanvas *screen;
 

@@ -83,8 +83,6 @@ class TopCanvas
 {
 #ifdef USE_EGL
 #ifdef USE_X11
-  X11Display *x_display;
-  X11Window x_window;
 #elif defined(USE_VIDEOCORE)
   /* for Raspberry Pi */
   DISPMANX_DISPLAY_HANDLE_T vc_display;
@@ -216,6 +214,10 @@ public:
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
   void Create(const char *text, PixelSize new_size,
               bool full_screen, bool resizable);
+#elif defined(USE_X11)
+  void Create(_XDisplay *x_display, X11Window x_window) {
+    CreateEGL(x_display, x_window);
+  }
 #else
   void Create(PixelSize new_size,
               bool full_screen, bool resizable);
@@ -275,21 +277,6 @@ public:
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   void SetDisplayOrientation(DisplayOrientation orientation);
-#endif
-
-#ifdef USE_X11
-  void EnableCapture() {
-    XGrabPointer(x_display, x_window, true,
-                 ButtonPressMask |
-                 ButtonReleaseMask |
-                 PointerMotionMask,
-                 GrabModeAsync, GrabModeAsync,
-                 0, 0, CurrentTime);
-  }
-
-  void DisableCapture() {
-    XUngrabPointer(x_display, CurrentTime);
-  }
 #endif
 
 private:
