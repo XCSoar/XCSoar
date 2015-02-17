@@ -82,6 +82,11 @@ struct Event {
      * The X11 window was resized.
      */
     RESIZE,
+
+    /**
+     * Redraw the screen.
+     */
+    EXPOSE,
 #endif
   };
 

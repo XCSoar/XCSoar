@@ -172,6 +172,10 @@ TopWindow::OnEvent(const Event &event)
 
     Resize(event.point.x, event.point.y);
     return true;
+
+  case Event::EXPOSE:
+    Invalidate();
+    return true;
 #endif
   }
 

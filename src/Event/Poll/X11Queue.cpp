@@ -92,6 +92,10 @@ X11EventQueue::HandleEvent(_XEvent &event)
       queue.Push(Event::CLOSE);
     break;
 
+  case Expose:
+      queue.Push(Event::EXPOSE);
+      break;
+
   case ConfigureNotify:
     queue.Push(Event(Event::RESIZE, event.xconfigure.width,
                      event.xconfigure.height));
