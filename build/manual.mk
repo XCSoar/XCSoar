@@ -45,6 +45,7 @@ SVG_TRANSLATABLES_LIST = \
 	figure_terrain
 SVG_TRANSLATE_DE = $(patsubst %,$(MANUAL_OUTPUT_DIR)/figures/%-de.pdf,$(SVG_TRANSLATABLES_LIST))
 SVG_TRANSLATE_FR = $(patsubst %,$(MANUAL_OUTPUT_DIR)/figures/%-fr.pdf,$(SVG_TRANSLATABLES_LIST))
+SVG_TRANSLATE_PT_BR = $(patsubst %,$(MANUAL_OUTPUT_DIR)/figures/%-pt_BR.pdf,$(SVG_TRANSLATABLES_LIST))
 
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/figures/*.svg)
 SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
@@ -70,6 +71,10 @@ TEX_FILES_PL = $(wildcard $(DOC)/manual/pl/*.tex)
 TEX_INCLUDES_PL = $(wildcard $(DOC)/manual/pl/*.sty)
 FIGURES_PL = $(wildcard $(DOC)/manual/pl/figures/*.png)
 
+TEX_FILES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/*.tex)
+TEX_INCLUDES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/*.sty)
+FIGURES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/figures/*.png)
+
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/en:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
@@ -87,7 +92,8 @@ MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf \
-	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf
 
 .PHONY: manual
 manual: $(MANUAL_PDF)
@@ -167,6 +173,13 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf: $(DOC)/manual/pl/XCSoar-manual-pl.tex
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf: $(DOC)/manual/pt_BR/XCSoar-manual-pt_BR.tex \
+	$(TEX_FILES_PT_BR) $(TEX_INCLUDES_PT_BR) $(TEX_INCLUDES) \
+	$(FIGURES_PT_BR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_PT_BR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+	$(TEX_RUN) $<
+
 $(SVG_ICONS): $(MANUAL_OUTPUT_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(MANUAL_OUTPUT_DIR)/icons/dirstamp
 	rsvg-convert -a -f pdf -w 32 $< -o $@
 
@@ -184,6 +197,10 @@ $(SVG_TRANSLATE_DE): $(MANUAL_OUTPUT_DIR)/figures/%-de.pdf: $(topdir)/doc/manual
 $(SVG_TRANSLATE_FR): $(MANUAL_OUTPUT_DIR)/figures/%-fr.pdf: $(topdir)/doc/manual/figures/%.svg \
 	$(topdir)/doc/manual/figures/fr.po
 	$(call svg-translate,./doc/manual/figures/fr.po,$@,$<)
+
+$(SVG_TRANSLATE_PT_BR): $(MANUAL_OUTPUT_DIR)/figures/%-pt_BR.pdf: $(topdir)/doc/manual/figures/%.svg \
+	$(topdir)/doc/manual/figures/pt_BR.po
+	$(call svg-translate,./doc/manual/figures/pt_BR.po,$@,$<)
 
 $(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures/%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
@@ -206,12 +223,13 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: T=$(MANUAL_OUTPUT_DIR)/XCSoar-manual
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) \
+	$(SVG_TRANSLATE_DE) $(SVG_TRANSLATE_FR) $(SVG_TRANSLATE_PT_BR) \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(FIGURES_FR)
 	rm -rf $(T)
 	$(MKDIR) -p $(T)/figures $(T)/en/figures
 	echo $(GIT_COMMIT_ID) >$(T)/git.txt
 	cp VERSION.txt $(TEX_INCLUDES) $(T)/.
-	cp $(SVG_FIGURES) $(SVG_LOGOS) $(T)/figures/.
+	cp $(MANUAL_OUTPUT_DIR)/figures/*.pdf $(T)/figures/.
 	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/.
 	# Incl. the English original 
 	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
@@ -224,12 +242,16 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	$(MKDIR) -p $(T)/pl/figures
 	cp $(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(T)/pl/.
 	##cp $(FIGURES_PL) $(T)/pl/figures/.
+	# Incl. the Portuguese (Brazilian) translation
+	$(MKDIR) -p $(T)/pt_BR/figures
+	cp $(TEX_FILES_PT_BR) $(TEX_INCLUDES_PT_BR) $(T)/pt_BR/.
+	##cp $(FIGURES_PT_BR) $(T)/pt_BR/figures/.
 	# Incl. both German translation
 	$(MKDIR) -p $(T)/de/figures
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
-	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\n$(MKDIR) -p output" > $(T)/generate_manuals.sh
+	echo -e "#!/bin/bash\n\n# This is an example how the manuals get generated\n\n$(MKDIR) -p output" > $(T)/generate_manuals.sh
 	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
 	chmod +x $(T)/generate_manuals.sh
 	# Copy an example bat file to generate the manuals with MikTex on Windows
