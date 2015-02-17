@@ -251,8 +251,6 @@ public:
 
   void OnResize(PixelSize new_size);
 
-  void Fullscreen() {}
-
 #ifdef USE_MEMORY_CANVAS
   Canvas Lock();
   void Unlock();

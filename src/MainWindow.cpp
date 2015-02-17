@@ -527,6 +527,8 @@ MainWindow::OnResize(PixelSize new_size)
   ProgressGlue::Move(rc);
 }
 
+#ifdef USE_GDI
+
 bool
 MainWindow::OnActivate()
 {
@@ -536,6 +538,8 @@ MainWindow::OnActivate()
 
   return true;
 }
+
+#endif
 
 void
 MainWindow::OnSetFocus()

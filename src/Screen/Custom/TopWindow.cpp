@@ -134,12 +134,6 @@ TopWindow::CancelMode()
 }
 
 void
-TopWindow::Fullscreen()
-{
-  screen->Fullscreen();
-}
-
-void
 TopWindow::Expose()
 {
 #ifdef HAVE_CPU_FREQUENCY
