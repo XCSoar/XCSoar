@@ -96,6 +96,7 @@ TopCanvas::Create(PixelSize new_size,
   swa.event_mask = KeyPressMask | KeyReleaseMask |
     ButtonPressMask | ButtonReleaseMask |
     PointerMotionMask |
+    VisibilityChangeMask |
     ExposureMask | StructureNotifyMask;
 
   x_window = XCreateWindow(x_display, x_root,

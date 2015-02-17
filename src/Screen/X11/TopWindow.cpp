@@ -23,6 +23,14 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
+#include "Event/Globals.hpp"
+#include "Event/Poll/Queue.hpp"
+
+bool
+TopWindow::IsVisible() const
+{
+  return event_queue->IsVisible();
+}
 
 void
 TopWindow::EnableCapture()

@@ -125,6 +125,13 @@ TopWindow::Refresh()
        OpenGL surface - ignore all drawing requests */
     return;
 
+#ifdef USE_X11
+  if (!IsVisible())
+    /* don't bother to invoke the renderer if we're not visible on the
+       X11 display */
+    return;
+#endif
+
   if (!invalidated)
     return;
 

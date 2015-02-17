@@ -56,6 +56,8 @@ class X11EventQueue final : FileEventHandler {
 
   Atom wm_delete_window;
 
+  bool mapped = true, visible = true;
+
 public:
   /**
    * @param io_loop the #IOLoop that shall be used to register the
@@ -68,6 +70,10 @@ public:
 
   _XDisplay *GetDisplay() const {
     return display;
+  }
+
+  bool IsVisible() const {
+    return mapped && visible;
   }
 
   bool Generate(Event &event) {

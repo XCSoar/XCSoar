@@ -82,6 +82,10 @@ public:
   _XDisplay *GetDisplay() const {
     return input_queue.GetDisplay();
   }
+
+  bool IsVisible() const {
+    return input_queue.IsVisible();
+  }
 #endif
 
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11)

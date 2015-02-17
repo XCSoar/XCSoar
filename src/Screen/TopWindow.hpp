@@ -301,6 +301,11 @@ public:
   bool OnEvent(const SDL_Event &event);
 #endif
 
+#ifdef USE_X11
+  gcc_pure
+  bool IsVisible() const;
+#endif
+
 #ifdef ANDROID
   /**
    * The Android OpenGL surface has been resized; notify the TopWindow

@@ -100,6 +100,18 @@ X11EventQueue::HandleEvent(_XEvent &event)
     queue.Push(Event(Event::RESIZE, event.xconfigure.width,
                      event.xconfigure.height));
     break;
+
+  case VisibilityNotify:
+    visible = event.xvisibility.state != VisibilityFullyObscured;
+    break;
+
+  case UnmapNotify:
+    mapped = false;
+    break;
+
+  case MapNotify:
+    mapped = true;
+    break;
   }
 }
 
