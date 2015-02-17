@@ -702,6 +702,18 @@ public:
   void SetCapture();
   void ReleaseCapture();
   virtual void ClearCapture();
+
+protected:
+#ifdef USE_X11
+  virtual void EnableCapture() {}
+  virtual void DisableCapture() {}
+#else
+  void EnableCapture() {}
+  void DisableCapture() {}
+#endif
+
+public:
+
 #else /* USE_GDI */
 
   void SetCapture() {

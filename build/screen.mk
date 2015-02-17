@@ -56,6 +56,11 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FreeType/Init.cpp
 endif
 
+ifeq ($(USE_X11),y)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/X11/TopWindow.cpp
+endif
+
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \

@@ -345,6 +345,8 @@ ContainerWindow::SetChildCapture(Window *window)
   capture_child = window;
   if (parent != nullptr)
     parent->SetChildCapture(this);
+  else
+    EnableCapture();
 }
 
 void
@@ -360,6 +362,8 @@ ContainerWindow::ReleaseChildCapture(Window *window)
 
   if (parent != nullptr)
     parent->ReleaseChildCapture(this);
+  else
+    DisableCapture();
 }
 
 void

@@ -271,6 +271,11 @@ public:
 protected:
   void Expose();
 
+#ifdef USE_X11
+  void EnableCapture() override;
+  void DisableCapture() override;
+#endif
+
 public:
 #endif /* !USE_GDI */
 

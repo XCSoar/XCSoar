@@ -83,6 +83,7 @@ class TopCanvas
 {
 #ifdef USE_EGL
 #ifdef USE_X11
+  X11Display *x_display;
   X11Window x_window;
 #elif defined(USE_VIDEOCORE)
   /* for Raspberry Pi */
@@ -274,6 +275,21 @@ public:
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   void SetDisplayOrientation(DisplayOrientation orientation);
+#endif
+
+#ifdef USE_X11
+  void EnableCapture() {
+    XGrabPointer(x_display, x_window, true,
+                 ButtonPressMask |
+                 ButtonReleaseMask |
+                 PointerMotionMask,
+                 GrabModeAsync, GrabModeAsync,
+                 0, 0, CurrentTime);
+  }
+
+  void DisableCapture() {
+    XUngrabPointer(x_display, CurrentTime);
+  }
 #endif
 
 private:

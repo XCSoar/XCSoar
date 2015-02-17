@@ -83,7 +83,7 @@ TopCanvas::Create(PixelSize new_size,
 #endif
 
 #ifdef USE_X11
-  X11Display *const x_display = event_queue->GetDisplay();
+  x_display = event_queue->GetDisplay();
   assert(x_display != nullptr);
 
   const X11Window x_root = DefaultRootWindow(x_display);

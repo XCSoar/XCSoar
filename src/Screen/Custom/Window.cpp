@@ -152,6 +152,8 @@ Window::SetCapture()
 
   if (parent != nullptr)
     parent->SetChildCapture(this);
+  else
+    EnableCapture();
 
   capture = true;
 }
@@ -166,6 +168,8 @@ Window::ReleaseCapture()
 
   if (parent != nullptr)
     parent->ReleaseChildCapture(this);
+  else
+    DisableCapture();
 }
 
 void
