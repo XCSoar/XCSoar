@@ -42,6 +42,7 @@ EventQueue::EventQueue()
 
 EventQueue::~EventQueue()
 {
+  SignalListener::Destroy();
 }
 
 void
