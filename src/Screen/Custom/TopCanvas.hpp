@@ -251,11 +251,7 @@ public:
 
   void OnResize(PixelSize new_size);
 
-#if defined(ANDROID) || defined(USE_EGL)
   void Fullscreen() {}
-#else
-  void Fullscreen();
-#endif
 
 #ifdef USE_MEMORY_CANVAS
   Canvas Lock();

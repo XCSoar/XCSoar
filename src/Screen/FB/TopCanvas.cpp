@@ -214,11 +214,6 @@ TopCanvas::OnResize(PixelSize new_size)
   // TODO: is this even possible?
 }
 
-void
-TopCanvas::Fullscreen()
-{
-}
-
 Canvas
 TopCanvas::Lock()
 {

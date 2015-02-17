@@ -287,11 +287,6 @@ TopCanvas::OnResize(PixelSize new_size)
 #endif
 }
 
-void
-TopCanvas::Fullscreen()
-{
-}
-
 #ifdef GREYSCALE
 
 #ifdef DITHER
