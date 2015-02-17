@@ -1,7 +1,7 @@
-ifeq ($(TARGET)$(TARGET_IS_PI),UNIXy)
+ifeq ($(TARGET_IS_PI),y)
 # auto-enable EGL on the Raspberry Pi.
 EGL ?= y
-else ifeq ($(TARGET)$(TARGET_HAS_MALI),UNIXy)
+else ifeq ($(TARGET_HAS_MALI),y)
 # auto-enable EGL on the Cubieboard.
 EGL ?= y
 else ifeq ($(ENABLE_MESA_KMS),y)
