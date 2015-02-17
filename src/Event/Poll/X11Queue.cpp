@@ -50,6 +50,8 @@ X11EventQueue::X11EventQueue(IOLoop &_io_loop, EventQueue &_queue)
     exit(EXIT_FAILURE);
   }
 
+  wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
+
   io_loop.Add(FileDescriptor(ConnectionNumber(display)), io_loop.READ, *this);
 }
 
@@ -83,6 +85,11 @@ X11EventQueue::HandleEvent(_XEvent &event)
 
   case MotionNotify:
     queue.Push(Event(Event::MOUSE_MOTION, event.xmotion.x, event.xmotion.y));
+    break;
+
+  case ClientMessage:
+    if ((Atom)event.xclient.data.l[0] == wm_delete_window)
+      queue.Push(Event::CLOSE);
     break;
   }
 }

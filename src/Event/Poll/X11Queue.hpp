@@ -26,6 +26,18 @@ Copyright_License {
 
 #include "IO/Async/FileEventHandler.hpp"
 
+/* kludges to work around namespace collisions with X11 headers */
+
+#define Font X11Font
+#define Window X11Window
+#define Display X11Display
+
+#include "X11/Xdefs.h"
+
+#undef Font
+#undef Window
+#undef Display
+
 class IOLoop;
 class EventQueue;
 struct Event;
@@ -41,6 +53,8 @@ class X11EventQueue final : FileEventHandler {
   EventQueue &queue;
 
   _XDisplay *const display;
+
+  Atom wm_delete_window;
 
 public:
   /**

@@ -110,6 +110,10 @@ TopCanvas::Create(PixelSize new_size,
   XMapWindow(x_display, x_window);
   XStoreName(x_display, x_window, "XCSoar");
 
+  /* receive "Close" button clicks from the window manager */
+  auto wm_delete_window = XInternAtom(x_display, "WM_DELETE_WINDOW", false);
+  XSetWMProtocols(x_display, x_window, &wm_delete_window, 1);
+
   const EGLNativeDisplayType native_display = x_display;
   const EGLNativeWindowType native_window = x_window;
 #elif defined(USE_VIDEOCORE)
