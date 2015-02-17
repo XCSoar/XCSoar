@@ -24,10 +24,12 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Hardware/CPU.hpp"
+#include "Util/Macros.hpp"
 
 #ifdef USE_X11
 #include "Event/Globals.hpp"
 #include "Event/Queue.hpp"
+#include <X11/Xatom.h>
 #endif
 
 #ifdef USE_MEMORY_CANVAS
@@ -78,6 +80,17 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 
   XMapWindow(x_display, x_window);
   XStoreName(x_display, x_window, text);
+
+  if (style.GetFullScreen()) {
+    /* tell the window manager we want full-screen */
+    const Atom atoms[] = {
+      XInternAtom(x_display, "_NET_WM_STATE_FULLSCREEN", false),
+    };
+    XChangeProperty(x_display, x_window,
+                    XInternAtom(x_display, "_NET_WM_STATE", false),
+                    XA_ATOM, 32, PropModeReplace,
+                    (const unsigned char *)atoms, ARRAY_SIZE(atoms));
+  }
 
   /* receive "Close" button clicks from the window manager */
   auto wm_delete_window = XInternAtom(x_display, "WM_DELETE_WINDOW", false);
