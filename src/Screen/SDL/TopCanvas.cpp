@@ -290,9 +290,6 @@ TopCanvas::OnResize(PixelSize new_size)
 void
 TopCanvas::Fullscreen()
 {
-#if 0 /* disabled for now, for easier development */
-  ::SDL_WM_ToggleFullScreen(surface);
-#endif
 }
 
 #ifdef GREYSCALE
