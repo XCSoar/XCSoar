@@ -98,7 +98,7 @@ TopCanvas::Create(PixelSize new_size,
     PointerMotionMask;
 
   x_window = XCreateWindow(x_display, x_root,
-                           0, 0, 640, 480, 0,
+                           0, 0, new_size.cx, new_size.cy, 0,
                            CopyFromParent, InputOutput,
                            CopyFromParent, CWEventMask,
                            &swa);
