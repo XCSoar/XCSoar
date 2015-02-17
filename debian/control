@@ -3,7 +3,8 @@ Section: misc
 Priority: extra
 Maintainer: Max Kellermann <max@duempel.org>
 Build-Depends: debhelper (>= 5), g++ (>= 4.6),
- libsdl1.2-dev, libfreetype6-dev,
+ libraspberrypi-dev | libegl1-mesa-dev | libsdl1.2-dev,
+ libfreetype6-dev,
  libgl-dev,
  libpng-dev, libjpeg-dev,
  libcurl-dev,

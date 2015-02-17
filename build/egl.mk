@@ -7,8 +7,24 @@ EGL ?= y
 else ifeq ($(ENABLE_MESA_KMS),y)
 # if Mesa KMS is explicitly enabled, we also need to enable EGL
 EGL ?= y
+else ifneq ($(HAVE_WIN32)$(TARGET_IS_DARWIN)$(TARGET_IS_ANDROID)$(TARGET_IS_KOBO),nnnn)
+# Windows uses GDI
+# Mac OS X and iOS use SDL
+# Android uses Java-EGL
+# Kobo uses software renderer on /dev/fb0
+EGL = n
+else ifeq ($(OPENGL),n)
+# no EGL if OpenGL was disabled explicitly
+EGL = n
+else ifeq ($(ENABLE_SDL),y)
+# no EGL if SDL was enabled explicitly
+EGL = n
+else ifeq ($(USE_SDL2),y)
+# no EGL if SDL was enabled explicitly
+EGL = n
 else
-EGL ?= n
+# default to EGL/X11
+EGL ?= y
 endif
 
 ifeq ($(EGL),y)
