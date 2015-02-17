@@ -53,7 +53,7 @@ struct BGRColor
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
-#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL) || defined(USE_EGL)
 
 #if IS_BIG_ENDIAN
   /* big-endian */
