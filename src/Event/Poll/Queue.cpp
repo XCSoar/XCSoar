@@ -42,6 +42,7 @@ EventQueue::EventQueue()
 
 EventQueue::~EventQueue()
 {
+  io_loop.Remove(event_pipe.GetReadFD());
   SignalListener::Destroy();
 }
 
