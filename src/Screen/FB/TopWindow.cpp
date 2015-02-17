@@ -162,6 +162,17 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::MOUSE_WHEEL:
     return OnMouseWheel(event.point.x, event.point.y, (int)event.param);
+
+#ifdef USE_X11
+  case Event::RESIZE:
+    if (unsigned(event.point.x) == GetWidth() &&
+        unsigned(event.point.y) == GetHeight())
+      /* no-op */
+      return true;
+
+    Resize(event.point.x, event.point.y);
+    return true;
+#endif
   }
 
   return false;

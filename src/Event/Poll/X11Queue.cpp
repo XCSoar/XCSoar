@@ -91,6 +91,11 @@ X11EventQueue::HandleEvent(_XEvent &event)
     if ((Atom)event.xclient.data.l[0] == wm_delete_window)
       queue.Push(Event::CLOSE);
     break;
+
+  case ConfigureNotify:
+    queue.Push(Event(Event::RESIZE, event.xconfigure.width,
+                     event.xconfigure.height));
+    break;
   }
 }
 

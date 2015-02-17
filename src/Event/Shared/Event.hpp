@@ -76,6 +76,13 @@ struct Event {
      */
     RESUME,
 #endif
+
+#ifdef USE_X11
+    /**
+     * The X11 window was resized.
+     */
+    RESIZE,
+#endif
   };
 
   typedef void (*Callback)(void *ctx);
