@@ -27,11 +27,6 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 
-#ifdef USE_X11
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 
