@@ -25,6 +25,58 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Event/Globals.hpp"
 #include "Event/Poll/Queue.hpp"
+#include "Util/Macros.hpp"
+
+#include <X11/Xatom.h>
+
+void
+TopWindow::CreateNative(const TCHAR *text, PixelSize size,
+                        TopWindowStyle style)
+{
+  x_display = event_queue->GetDisplay();
+  assert(x_display != nullptr);
+
+  const X11Window x_root = DefaultRootWindow(x_display);
+  if (x_root == 0) {
+    fprintf(stderr, "DefaultRootWindow() failed\n");
+    exit(EXIT_FAILURE);
+  }
+
+  XSetWindowAttributes swa;
+  swa.event_mask = KeyPressMask | KeyReleaseMask |
+    ButtonPressMask | ButtonReleaseMask |
+    PointerMotionMask |
+    VisibilityChangeMask |
+    ExposureMask | StructureNotifyMask;
+
+  x_window = XCreateWindow(x_display, x_root,
+                           0, 0, size.cx, size.cy, 0,
+                           CopyFromParent, InputOutput,
+                           CopyFromParent, CWEventMask,
+                           &swa);
+  if (x_window == 0) {
+    fprintf(stderr, "XCreateWindow() failed\n");
+    exit(EXIT_FAILURE);
+  }
+
+  XMapWindow(x_display, x_window);
+  XStoreName(x_display, x_window, text);
+
+  if (style.GetFullScreen()) {
+    /* tell the window manager we want full-screen */
+    const Atom atoms[] = {
+      XInternAtom(x_display, "_NET_WM_STATE_FULLSCREEN", false),
+    };
+    XChangeProperty(x_display, x_window,
+                    XInternAtom(x_display, "_NET_WM_STATE", false),
+                    XA_ATOM, 32, PropModeReplace,
+                    (const unsigned char *)atoms, ARRAY_SIZE(atoms));
+  }
+
+  /* receive "Close" button clicks from the window manager */
+  auto wm_delete_window = XInternAtom(x_display, "WM_DELETE_WINDOW", false);
+  XSetWMProtocols(x_display, x_window, &wm_delete_window, 1);
+}
 
 bool
 TopWindow::IsVisible() const

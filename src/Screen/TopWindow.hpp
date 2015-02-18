@@ -229,6 +229,13 @@ public:
               TopWindowStyle style=TopWindowStyle());
 #endif
 
+#ifdef USE_X11
+private:
+  void CreateNative(const TCHAR *text, PixelSize size, TopWindowStyle style);
+
+public:
+#endif
+
 #ifdef _WIN32_WCE
   void Destroy();
 #endif
