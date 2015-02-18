@@ -215,8 +215,9 @@ public:
   void Create(const char *text, PixelSize new_size,
               bool full_screen, bool resizable);
 #elif defined(USE_X11)
-  void Create(_XDisplay *x_display, X11Window x_window) {
-    CreateEGL(x_display, x_window);
+  void Create(EGLNativeDisplayType native_display,
+              EGLNativeWindowType native_window) {
+    CreateEGL(native_display, native_window);
   }
 #else
   void Create(PixelSize new_size,
