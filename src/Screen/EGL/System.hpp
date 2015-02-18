@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_EGL_SYSTEM_HPP
 #define XCSOAR_SCREEN_EGL_SYSTEM_HPP
 
+#ifdef USE_X11
 /* kludges to work around namespace collisions with X11 headers */
-
 #define Font X11Font
 #define Window X11Window
 #define Display X11Display
+#endif
 
 #ifdef MESA_KMS
 #include <gbm.h>
@@ -36,6 +37,7 @@ Copyright_License {
 
 #include <EGL/egl.h>
 
+#ifdef USE_X11
 #undef Font
 #undef Window
 #undef Display
@@ -50,6 +52,7 @@ Copyright_License {
 
 #ifdef None
 #undef None
+#endif
 #endif
 
 #endif
