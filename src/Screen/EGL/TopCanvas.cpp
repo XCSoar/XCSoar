@@ -269,7 +269,10 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);
 
-  eglMakeCurrent(display, surface, surface, context);
+  if (!eglMakeCurrent(display, surface, surface, context)) {
+    fprintf(stderr, "eglMakeCurrent() failed\n");
+    exit(EXIT_FAILURE);
+  }
 
   OpenGL::SetupContext();
   OpenGL::SetupViewport(Point2D<unsigned>(effective_size.cx,
@@ -326,7 +329,10 @@ TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
 void
 TopCanvas::Flip()
 {
-  eglSwapBuffers(display, surface);
+  if (!eglSwapBuffers(display, surface)) {
+    fprintf(stderr, "eglSwapBuffers() failed\n");
+    exit(EXIT_FAILURE);
+  }
 
 #ifdef MESA_KMS
   gbm_bo *new_bo = gbm_surface_lock_front_buffer(native_window);
