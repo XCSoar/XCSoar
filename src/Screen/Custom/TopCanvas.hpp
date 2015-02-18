@@ -82,7 +82,7 @@ class TopCanvas
 #endif
 {
 #ifdef USE_EGL
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
 #elif defined(USE_VIDEOCORE)
   /* for Raspberry Pi */
   DISPMANX_DISPLAY_HANDLE_T vc_display;
@@ -214,7 +214,7 @@ public:
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
   void Create(const char *text, PixelSize new_size,
               bool full_screen, bool resizable);
-#elif defined(USE_X11)
+#elif defined(USE_X11) || defined(USE_WAYLAND)
   void Create(EGLNativeDisplayType native_display,
               EGLNativeWindowType native_window) {
     CreateEGL(native_display, native_window);

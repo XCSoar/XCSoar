@@ -35,6 +35,8 @@ Copyright_License {
 
 #ifdef USE_X11
 #include "X11Queue.hpp"
+#elif defined(USE_WAYLAND)
+#include "WaylandQueue.hpp"
 #elif !defined(NON_INTERACTIVE)
 #include "InputQueue.hpp"
 #endif
@@ -59,6 +61,8 @@ class EventQueue final : private SignalListener {
 
 #ifdef USE_X11
   X11EventQueue input_queue;
+#elif defined(USE_WAYLAND)
+  WaylandEventQueue input_queue;
 #elif !defined(NON_INTERACTIVE)
   InputEventQueue input_queue;
 #endif
@@ -82,13 +86,29 @@ public:
   _XDisplay *GetDisplay() const {
     return input_queue.GetDisplay();
   }
+#endif
 
+#ifdef USE_WAYLAND
+  struct wl_display *GetDisplay() {
+    return input_queue.GetDisplay();
+  }
+
+  struct wl_compositor *GetCompositor() {
+    return input_queue.GetCompositor();
+  }
+
+  struct wl_shell *GetShell() {
+    return input_queue.GetShell();
+  }
+#endif
+
+#if defined(USE_X11) || defined(USE_WAYLAND)
   bool IsVisible() const {
     return input_queue.IsVisible();
   }
 #endif
 
-#if !defined(NON_INTERACTIVE) && !defined(USE_X11)
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
 
   void SetScreenSize(unsigned width, unsigned height) {
     input_queue.SetScreenSize(width, height);

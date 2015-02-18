@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_EGL_SYSTEM_HPP
 #define XCSOAR_SCREEN_EGL_SYSTEM_HPP
 
+#ifdef USE_WAYLAND
+#include <wayland-egl.h>
+#endif
+
 #ifdef USE_X11
 /* kludges to work around namespace collisions with X11 headers */
 #define Font X11Font

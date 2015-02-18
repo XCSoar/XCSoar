@@ -2,6 +2,7 @@ TARGETS = PC WIN64 \
 	PPC2000 PPC2003 PPC2003X WM5 WM5X \
 	ALTAIR \
 	UNIX UNIX32 UNIX64 OPT \
+	WAYLAND \
 	PI CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
@@ -198,6 +199,12 @@ endif
 ifeq ($(TARGET),OPT)
   override TARGET = UNIX
   DEBUG = n
+endif
+
+ifeq ($(TARGET),WAYLAND)
+  # experimental target for the Wayland display server
+  override TARGET = UNIX
+  USE_WAYLAND = y
 endif
 
 ifeq ($(TARGET),UNIX)

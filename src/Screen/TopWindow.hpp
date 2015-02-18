@@ -148,6 +148,9 @@ class TopWindow : public ContainerWindow {
 #ifdef USE_X11
   _XDisplay *x_display;
   X11Window x_window;
+#elif defined(USE_WAYLAND)
+  struct wl_display *native_display;
+  struct wl_egl_window *native_window;
 #endif
 
 #ifndef USE_GDI
@@ -229,7 +232,7 @@ public:
               TopWindowStyle style=TopWindowStyle());
 #endif
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
 private:
   void CreateNative(const TCHAR *text, PixelSize size, TopWindowStyle style);
 
@@ -306,7 +309,7 @@ public:
 protected:
   void Expose();
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   void EnableCapture() override;
   void DisableCapture() override;
 #endif
@@ -336,7 +339,7 @@ public:
   bool OnEvent(const SDL_Event &event);
 #endif
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   gcc_pure
   bool IsVisible() const;
 #endif

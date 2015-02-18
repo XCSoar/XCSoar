@@ -69,7 +69,7 @@ GetRenderableType()
     : EGL_OPENGL_BIT;
 }
 
-#ifndef USE_X11
+#if !defined(USE_X11) && !defined(USE_WAYLAND)
 
 void
 TopCanvas::Create(PixelSize new_size,

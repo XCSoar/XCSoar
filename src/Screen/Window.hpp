@@ -704,7 +704,7 @@ public:
   virtual void ClearCapture();
 
 protected:
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   virtual void EnableCapture() {}
   virtual void DisableCapture() {}
 #else

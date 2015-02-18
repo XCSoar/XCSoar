@@ -44,7 +44,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 {
   invalidated = true;
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   CreateNative(text, size, style);
 #endif
 
@@ -60,6 +60,8 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen->Create(text2, size, style.GetFullScreen(), style.GetResizable());
 #elif defined(USE_X11)
   screen->Create(x_display, x_window);
+#elif defined(USE_WAYLAND)
+  screen->Create(native_display, native_window);
 #else
   screen->Create(size, style.GetFullScreen(), style.GetResizable());
 #endif

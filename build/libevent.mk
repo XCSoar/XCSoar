@@ -41,6 +41,8 @@ else ifeq ($(VFB),y)
 VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_X11),y)
 EVENT_SOURCES += $(SRC)/Event/Poll/X11Queue.cpp
+else ifeq ($(USE_WAYLAND),y)
+EVENT_SOURCES += $(SRC)/Event/Poll/WaylandQueue.cpp
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Poll/InputQueue.cpp

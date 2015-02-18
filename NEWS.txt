@@ -31,6 +31,8 @@ Version 6.8 - not yet released
   - support mouse wheel on Raspberry Pi and Cubieboard
   - scale touchscreen coordinates to screen size
   - new translation: Simplified Chinese
+* Linux
+  - Wayland support
 * Android
   - fix IOIO connection on Android 4.x (#2959, #3260)
 * Kobo
