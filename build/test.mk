@@ -81,7 +81,8 @@ TEST_NAMES = \
 	TestOverwritingRingBuffer \
 	TestDateTime TestRoughTime TestWrapClock \
 	TestMathTables \
-	TestAngle TestUnits TestEarth TestSunEphemeris \
+	TestAngle TestARange \
+	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestProfile \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestGRecord TestDriver TestClimbAvCalc \
@@ -337,6 +338,12 @@ TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAngle.cpp
 TEST_ANGLE_DEPENDS = MATH
 $(eval $(call link-program,TestAngle,TEST_ANGLE))
+
+TEST_ARANGE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestARange.cpp
+TEST_ARANGE_DEPENDS = MATH
+$(eval $(call link-program,TestARange,TEST_ARANGE))
 
 TEST_CSV_LINE_SOURCES = \
 	$(SRC)/IO/CSVLine.cpp \
