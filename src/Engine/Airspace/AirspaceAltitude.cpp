@@ -60,6 +60,7 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
 fixed
 AirspaceAltitude::GetAltitude(const AltitudeState &state) const
 {
+  // TODO: check if state.altitude_agl is valid
   return reference == AltitudeReference::AGL
     ? altitude_above_terrain + (state.altitude - state.altitude_agl)
     : altitude;
