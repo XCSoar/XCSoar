@@ -145,6 +145,7 @@ struct TempAirspaceType
     days_of_operation.SetAll();
     radio = _T("");
     type = OTHER;
+    base = top = AirspaceAltitude();
     points.clear();
     center.longitude = Angle::Zero();
     center.latitude = Angle::Zero();
