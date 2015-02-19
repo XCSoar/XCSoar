@@ -78,6 +78,24 @@ public:
     return lease->GetHeight(location);
   }
 
+  /**
+   * Wrapper for GetTerrainHeight() that replaces "special" values
+   * with 0.  This is used when we need some "valid" value (and not
+   * some "magic" special value).  Sometimes, 0 is the best we can do.
+   *
+   * Use this function with care.  "0" is just a random value like any
+   * other.  Don't use it for calculations where the altitude matters
+   * (e.g. glide path calculations).
+   */
+  gcc_pure
+  short GetTerrainHeightOr0(const GeoPoint location) const {
+    short h = GetTerrainHeight(location);
+    if (RasterBuffer::IsSpecial(h))
+      /* apply fallback */
+      h = 0;
+    return h;
+  }
+
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }
