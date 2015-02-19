@@ -348,6 +348,12 @@ public:
   gcc_pure
   Angle HalfAngle(const Angle end) const;
 
+  /**
+   * Computes a certain fraction between the two angles.
+   *
+   * @param fraction a fraction between 0 and 1
+   * @return the resulting Angle, not normalized
+   */
   gcc_pure
   Angle Fraction(const Angle end, const fixed fraction) const;
 

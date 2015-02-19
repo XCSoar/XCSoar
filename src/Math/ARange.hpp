@@ -52,6 +52,10 @@ struct AngleRange {
     return (end - start).AsBearing();
   }
 
+  /**
+   * Returns the middle of the range.  The return value is not
+   * normalized.
+   */
   gcc_pure
   Angle GetMiddle() const {
     return start.Fraction(end, fixed(0.5));
