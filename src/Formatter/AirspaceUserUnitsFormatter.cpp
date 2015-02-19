@@ -44,7 +44,7 @@ AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
     break;
 
   case AltitudeReference::STD:
-    _stprintf(buffer, _T("FL%d"), (int)altitude.flight_level);
+    _stprintf(buffer, _T("FL%d"), iround(altitude.flight_level));
     break;
 
   case AltitudeReference::MSL:
