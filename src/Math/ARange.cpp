@@ -26,11 +26,20 @@ Copyright_License {
 void
 AngleRange::Extend(Angle value)
 {
-  // @TODO: this code is not safe against wraparound!
+  const Angle length = GetLength();
 
-  if (value < start)
+  /* check if value is nearer to start or to end, and extend that
+     side */
+
+  Angle start_delta = (start - value).AsBearing();
+  if (start_delta + length >= Angle::FullCircle())
+    /* it's inside, no change required */
+    return;
+
+  Angle end_delta = (value - end).AsBearing();
+  if (start_delta < end_delta)
     start = value;
-  else if (value > end)
+  else
     end = value;
 }
 
