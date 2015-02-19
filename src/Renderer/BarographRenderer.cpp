@@ -41,20 +41,20 @@ BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
   if (fs.altitude_ceiling.sum_n < 2) {
     sTmp[0] = _T('\0');
   } else if (fs.altitude_ceiling.sum_n < 4) {
-    _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
-              _("Working band"),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
-              Units::GetAltitudeName());
+    StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
+                       _("Working band"),
+                       (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
+                       (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
+                       Units::GetAltitudeName());
   } else {
-    _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
-              _("Working band"),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
-              Units::GetAltitudeName(),
-              _("Ceiling trend"),
-              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.m)),
-              Units::GetAltitudeName());
+    StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
+                       _("Working band"),
+                       (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
+                       (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
+                       Units::GetAltitudeName(),
+                       _("Ceiling trend"),
+                       (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.m)),
+                       Units::GetAltitudeName());
   }
 }
 

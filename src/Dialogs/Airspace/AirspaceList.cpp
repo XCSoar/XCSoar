@@ -312,7 +312,7 @@ GetHeadingString(TCHAR *buffer)
   FormatBearing(heading, ARRAY_SIZE(heading),
                 CommonInterface::Basic().attitude.heading);
 
-  _stprintf(buffer, _T("%s (%s)"), _("Heading"), heading);
+  StringFormatUnsafe(buffer, _T("%s (%s)"), _("Heading"), heading);
   return buffer;
 }
 
@@ -380,7 +380,7 @@ FillDistanceEnum(DataFieldEnum &df)
   TCHAR buffer[64];
   const TCHAR *unit = Units::GetDistanceName();
   for (unsigned i = 0; i < ARRAY_SIZE(distances); ++i) {
-    _stprintf(buffer, _T("%u %s"), distances[i], unit);
+    StringFormatUnsafe(buffer, _T("%u %s"), distances[i], unit);
     df.AddChoice(distances[i], buffer);
   }
 

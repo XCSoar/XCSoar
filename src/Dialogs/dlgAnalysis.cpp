@@ -289,8 +289,8 @@ Update()
 
   switch (page) {
   case AnalysisPage::BAROGRAPH:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Barograph"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Barograph"));
     wf->SetCaption(sTmp);
     BarographCaption(sTmp, glide_computer->GetFlightStats());
     wInfo->SetCaption(sTmp);
@@ -298,8 +298,8 @@ Update()
     break;
 
   case AnalysisPage::CLIMB:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Climb"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Climb"));
     wf->SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
     wInfo->SetCaption(sTmp);
@@ -307,8 +307,8 @@ Update()
     break;
 
   case AnalysisPage::THERMAL_BAND:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Thermal Band"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Thermal Band"));
     wf->SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
     wInfo->SetCaption(sTmp);
@@ -316,26 +316,26 @@ Update()
     break;
 
   case AnalysisPage::WIND:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Wind At Altitude"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Wind At Altitude"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Set Wind"));
     break;
 
   case AnalysisPage::POLAR:
-    _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
-              _("Glide Polar"), _("Mass"),
-              (int)settings_computer.polar.glide_polar_task.GetTotalMass());
+    StringFormatUnsafe(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
+                       _("Glide Polar"), _("Mass"),
+                       (int)settings_computer.polar.glide_polar_task.GetTotalMass());
     wf->SetCaption(sTmp);
     GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
-   break;
+    break;
 
   case AnalysisPage::TEMPTRACE:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Temp Trace"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Temp Trace"));
     wf->SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer->GetCuSonde());
     wInfo->SetCaption(sTmp);
@@ -343,16 +343,16 @@ Update()
     break;
 
   case AnalysisPage::TASK_SPEED:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Task Speed"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Task Speed"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Task Calc"));
     break;
 
   case AnalysisPage::TASK:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Task"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Task"));
     wf->SetCaption(sTmp);
     FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
     wInfo->SetCaption(sTmp);
@@ -360,8 +360,8 @@ Update()
     break;
 
   case AnalysisPage::OLC:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              ContestToString(settings_computer.contest.contest));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       ContestToString(settings_computer.contest.contest));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
     FlightStatisticsRenderer::CaptionOLC(sTmp, settings_computer.contest,
@@ -370,8 +370,8 @@ Update()
     break;
 
   case AnalysisPage::AIRSPACE:
-    _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Airspace"));
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Airspace"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Warnings"));

@@ -28,8 +28,7 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-
-#include <stdio.h>
+#include "Util/StringUtil.hpp"
 
 void
 ClimbChartCaption(TCHAR *sTmp,
@@ -39,18 +38,18 @@ ClimbChartCaption(TCHAR *sTmp,
   if (fs.thermal_average.IsEmpty()) {
     sTmp[0] = _T('\0');
   } else if (fs.thermal_average.sum_n == 1) {
-    _stprintf(sTmp, _T("%s:\r\n  %3.1f %s"),
-              _("Avg. climb"),
-              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
-              Units::GetVerticalSpeedName());
+    StringFormatUnsafe(sTmp, _T("%s:\r\n  %3.1f %s"),
+                       _("Avg. climb"),
+                       (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
+                       Units::GetVerticalSpeedName());
   } else {
-    _stprintf(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
-              _("Avg. climb"),
-              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
-              Units::GetVerticalSpeedName(),
-              _("Climb trend"),
-              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.m)),
-              Units::GetVerticalSpeedName());
+    StringFormatUnsafe(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
+                       _("Avg. climb"),
+                       (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
+                       Units::GetVerticalSpeedName(),
+                       _("Climb trend"),
+                       (double)Units::ToUserVSpeed(fixed(fs.thermal_average.m)),
+                       Units::GetVerticalSpeedName());
   }
 }
 

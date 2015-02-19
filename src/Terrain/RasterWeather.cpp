@@ -30,12 +30,12 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #include "Util/Clamp.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringUtil.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
 
 #include <assert.h>
 #include <tchar.h>
-#include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
 struct WeatherDescriptor {
@@ -177,8 +177,8 @@ RasterWeather::GetFilename(TCHAR *rasp_filename, const TCHAR* name,
                            unsigned time_index)
 {
   TCHAR fname[MAX_PATH];
-  _stprintf(fname, _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"), name,
-            IndexToTime(time_index));
+  StringFormatUnsafe(fname, _T("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"), name,
+                     IndexToTime(time_index));
   LocalPath(rasp_filename, fname);
 }
 
@@ -370,45 +370,45 @@ RasterWeather::ValueToText(TCHAR* Buffer, short val) const
   case 0:
     return;
   case 1: // wstar
-    _stprintf(Buffer, _T("%.1f%s"), (double)
-              Units::ToUserVSpeed(fixed(val - 200) / 100),
-              Units::GetVerticalSpeedName());
+    StringFormatUnsafe(Buffer, _T("%.1f%s"), (double)
+                       Units::ToUserVSpeed(fixed(val - 200) / 100),
+                       Units::GetVerticalSpeedName());
     return;
   case 2: // blwindspd
-    _stprintf(Buffer, _T("%.0f%s"), (double)
-              Units::ToUserSpeed(fixed(val) / 100),
-              Units::GetSpeedName());
+    StringFormatUnsafe(Buffer, _T("%.0f%s"), (double)
+                       Units::ToUserSpeed(fixed(val) / 100),
+                       Units::GetSpeedName());
     return;
   case 3: // hbl
-    _stprintf(Buffer, _T("%.0f%s"), (double)
-              Units::ToUserAltitude(fixed(val)),
-              Units::GetAltitudeName());
+    StringFormatUnsafe(Buffer, _T("%.0f%s"), (double)
+                       Units::ToUserAltitude(fixed(val)),
+                       Units::GetAltitudeName());
     return;
   case 4: // dwcrit
-    _stprintf(Buffer, _T("%.0f%s"), (double)
-              Units::ToUserAltitude(fixed(val)),
-              Units::GetAltitudeName());
+    StringFormatUnsafe(Buffer, _T("%.0f%s"), (double)
+                       Units::ToUserAltitude(fixed(val)),
+                       Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, _T("%d%%"), Clamp(int(val), 0, 100));
+    StringFormatUnsafe(Buffer, _T("%d%%"), Clamp(int(val), 0, 100));
     return;
   case 6: // sfctemp
-    _stprintf(Buffer, _T("%d") _T(DEG), val / 2 - 20);
+    StringFormatUnsafe(Buffer, _T("%d") _T(DEG), val / 2 - 20);
     return;
   case 7: // hwcrit
-    _stprintf(Buffer, _T("%.0f%s"), (double)
-              Units::ToUserAltitude(fixed(val)),
-              Units::GetAltitudeName());
+    StringFormatUnsafe(Buffer, _T("%.0f%s"), (double)
+                       Units::ToUserAltitude(fixed(val)),
+                       Units::GetAltitudeName());
     return;
   case 8: // wblmaxmin
-    _stprintf(Buffer, _T("%.1f%s"), (double)
-              Units::ToUserVSpeed(fixed(val - 200) / 100),
-              Units::GetVerticalSpeedName());
+    StringFormatUnsafe(Buffer, _T("%.1f%s"), (double)
+                       Units::ToUserVSpeed(fixed(val - 200) / 100),
+                       Units::GetVerticalSpeedName());
     return;
   case 9: // blcwbase
-    _stprintf(Buffer, _T("%.0f%s"), (double)
-              Units::ToUserAltitude(fixed(val)),
-              Units::GetAltitudeName());
+    StringFormatUnsafe(Buffer, _T("%.0f%s"), (double)
+                       Units::ToUserAltitude(fixed(val)),
+                       Units::GetAltitudeName());
     return;
   default:
     // error!
