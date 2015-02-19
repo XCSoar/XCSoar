@@ -328,6 +328,9 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
   case FL:
     altitude.reference = AltitudeReference::STD;
     altitude.flight_level = value;
+
+    /* prepare fallback, just in case we have no terrain */
+    altitude.altitude = Units::ToSysUnit(value, Unit::FLIGHT_LEVEL);
     return;
 
   case UNLIMITED:
@@ -338,6 +341,9 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
   case SFC:
     altitude.reference = AltitudeReference::AGL;
     altitude.altitude_above_terrain = fixed(-1);
+
+    /* prepare fallback, just in case we have no terrain */
+    altitude.altitude = fixed(0);
     return;
 
   default:
@@ -355,11 +361,17 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
   case AGL:
     altitude.reference = AltitudeReference::AGL;
     altitude.altitude_above_terrain = value;
+
+    /* prepare fallback, just in case we have no terrain */
+    altitude.altitude = value;
     return;
 
   case STD:
     altitude.reference = AltitudeReference::STD;
     altitude.flight_level = Units::ToUserUnit(value, Unit::FLIGHT_LEVEL);
+
+    /* prepare fallback, just in case we have no QNH */
+    altitude.altitude = value;
     return;
 
   default:
