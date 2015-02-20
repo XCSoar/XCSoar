@@ -76,7 +76,7 @@ class EventQueue final : private SignalListener {
   EventPipe event_pipe;
   DiscardFileEventHandler discard;
 
-  bool running;
+  bool quit;
 
 public:
   EventQueue();
@@ -150,11 +150,11 @@ public:
   }
 
   bool IsQuit() const {
-    return !running;
+    return quit;
   }
 
   void Quit() {
-    running = false;
+    quit = true;
   }
 
   void WakeUp() {

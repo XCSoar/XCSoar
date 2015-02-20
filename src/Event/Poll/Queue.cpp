@@ -32,7 +32,7 @@ EventQueue::EventQueue()
 #ifndef NON_INTERACTIVE
    input_queue(io_loop, *this),
 #endif
-   running(true)
+   quit(false)
 {
   SignalListener::Create(SIGINT, SIGTERM);
 
@@ -50,7 +50,7 @@ void
 EventQueue::Push(const Event &event)
 {
   ScopeLock protect(mutex);
-  if (!running)
+  if (quit)
     return;
 
   events.push(event);
@@ -106,7 +106,7 @@ bool
 EventQueue::Pop(Event &event)
 {
   ScopeLock protect(mutex);
-  if (!running || events.empty())
+  if (quit || events.empty())
     return false;
 
   if (events.empty()) {
@@ -124,7 +124,7 @@ bool
 EventQueue::Wait(Event &event)
 {
   ScopeLock protect(mutex);
-  if (!running)
+  if (quit)
     return false;
 
   if (events.empty()) {
@@ -132,7 +132,7 @@ EventQueue::Wait(Event &event)
       return true;
 
     while (events.empty()) {
-      if (!running)
+      if (quit)
         return false;
 
       mutex.Unlock();
