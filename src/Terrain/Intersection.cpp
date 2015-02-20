@@ -54,7 +54,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
                                    const bool can_climb) const
 {
   RasterLocation location(x0, y0);
-  if (location.x >= width || location.y >= height)
+  if (!IsInside(location))
     // origin is outside overall bounds
     return false;
 
@@ -123,7 +123,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
 
     if (!step_counter) {
 
-      if (location.x >= width || location.y >= height)
+      if (!IsInside(location))
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
@@ -270,7 +270,7 @@ RasterTileCache::Intersection(const int x0, const int y0,
 {
   RasterLocation location(x0, y0);
 
-  if (location.x >= width || location.y >= height)
+  if (!IsInside(location))
     // origin is outside overall bounds
     return location;
 
@@ -311,7 +311,7 @@ RasterTileCache::Intersection(const int x0, const int y0,
 
     if (!step_counter) {
 
-      if (location.x >= width || location.y >= height)
+      if (!IsInside(location))
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
