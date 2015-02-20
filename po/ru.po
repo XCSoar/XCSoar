@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-07-06 10:13+0000\n"
-"Last-Translator: Alexey Milko <alexm@mov.ru>\n"
+"PO-Revision-Date: 2015-02-17 04:31+0000\n"
+"Last-Translator: Aleksander Kharchuk <Aleks22006@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2015-02-20 18:36+0000\n"
+"X-Generator: Launchpad (build 17355)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -614,9 +614,8 @@ msgid "Loading Waypoints..."
 msgstr "Загрузка путевых точек..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "Нет спирали"
+msgstr ""
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2957,23 +2956,21 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Разность высот на Финише"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Фин. Выс."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Высота прибытия к финальной точке поворота задания относительно безопасной "
-"высоты прибытия."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5021,7 +5018,7 @@ msgstr "Частота радио"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:143 Data/Input/default.xci:596
 msgid "Plane"
-msgstr ""
+msgstr "Планер"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:231
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:382
@@ -5180,9 +5177,9 @@ msgid "Active"
 msgstr "АКТИВНО"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "Активировать полётный профиль \"%s\" не удалось!"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5191,9 +5188,9 @@ msgstr "Пожалуйста, введите регитрационный ном
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "Полётный профиль \"%s\" уже существует. Хотите перезаписать его?"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5206,18 +5203,18 @@ msgid "Delete plane \"%s\"?"
 msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Activate plane \"%s\"?"
-msgstr "Активировать полётный профиль \"%s\" не удалось!"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:407
 msgid "Planes"
-msgstr ""
+msgstr "Полетные профили"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:83
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:194
 msgid "Plane Details"
-msgstr ""
+msgstr "Детали полётных профилей"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:90
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
@@ -5648,9 +5645,9 @@ msgid "Turnpoint"
 msgstr "Поворотная точка"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Размер посадки"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6770,9 +6767,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "Настройки ИнфоБоксов"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -8201,9 +8198,9 @@ msgid "Hot-air balloon"
 msgstr "Воздушный шар"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr "Дельтаплан"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
@@ -8331,9 +8328,8 @@ msgid "Make Finish"
 msgstr "Обозначьте финиш"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
-#, fuzzy
 msgid "Reverse"
-msgstr "Перевёрнутая книжная"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
 msgid "Clear All"
@@ -9958,47 +9954,6 @@ msgstr "Повторить сообщение"
 msgid "Stored to EEPROM"
 msgstr "Сохранено в памяти"
 
-#~ msgid "Ignore checksum"
-#~ msgstr "Игнорировать контрольную сумму"
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "Позволять использовать данные NMEA GPS от устройства даже в случае "
-#~ "неверно контрольной суммы"
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "Полётный профиль \"%s\" активирован"
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "Вы действительно хотите удалить полётный профиль \"%s\"?"
-
-#~ msgid "Do you want to activate plane profile \"%s\"?"
-#~ msgstr "Вы хотите активировать полётный профиль  \"%s\"?"
-
-#~ msgid "Landpoint"
-#~ msgstr "Точка на местности"
-
-#~ msgid "Auto zoom"
-#~ msgstr "Автоматический зум"
-
-#~ msgid ""
-#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
-#~ "a reasonable screen distance."
-#~ msgstr ""
-#~ "Автоматическое увеличение масштаба при приближении к путевой точки, чтобы "
-#~ "отобразить маршрутную точку на приемлемом расстоянии экрана."
-
-#~ msgid "Configuration Menu"
-#~ msgstr "Меню конфигурации"
-
-#~ msgid "Friends"
-#~ msgstr "Друзья"
-
-#~ msgid "XCSoar"
-#~ msgstr "XCSoar"
-
 #~ msgid "Height GPS"
 #~ msgstr "Высота GPS"
 
@@ -10027,6 +9982,9 @@ msgstr "Сохранено в памяти"
 #~ msgid "No help available on this item"
 #~ msgstr "Нет подсказки для этого..."
 
+#~ msgid "Wind At Altitude"
+#~ msgstr "Ветер по высотам"
+
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Удалить точку?"
 
@@ -10039,11 +9997,17 @@ msgstr "Сохранено в памяти"
 #~ msgid "Dump time"
 #~ msgstr "Сброс времени"
 
+#~ msgid "Set As New Home"
+#~ msgstr "Устан как Дом"
+
 #~ msgid "Latitude"
 #~ msgstr "Широта"
 
 #~ msgid "Sunset"
 #~ msgstr "Закат"
+
+#~ msgid "Insert In Task"
+#~ msgstr "Вставить в задачу"
 
 #~ msgid "Lookup"
 #~ msgstr "Уточнить"
@@ -10054,6 +10018,9 @@ msgstr "Сохранено в памяти"
 #~ msgid "Longitude"
 #~ msgstr "Долгота"
 
+#~ msgid "Remove From Task"
+#~ msgstr "Удалить из задачи"
+
 #~ msgid "Short file name"
 #~ msgstr "Короткое имя файла"
 
@@ -10062,6 +10029,15 @@ msgstr "Сохранено в памяти"
 
 #~ msgid "Fly"
 #~ msgstr "ПОЛЕТ"
+
+#~ msgid "Append To Task"
+#~ msgstr "Добавить к задаче"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Заменить в задаче"
+
+#~ msgid "Pan To Waypoint"
+#~ msgstr "Перейти к точке"
 
 #~ msgid "Auto. wind"
 #~ msgstr "Авто. высчитывать снос"
@@ -10098,11 +10074,20 @@ msgstr "Сохранено в памяти"
 #~ msgid "Show details:"
 #~ msgstr "Показать детали:"
 
+#~ msgid "Ignore checksum"
+#~ msgstr "Игнорировать контрольную сумму"
+
 #~ msgid "Max. ballast"
 #~ msgstr "Макс. балласт"
 
+#~ msgid "XCSoar"
+#~ msgstr "XCSoar"
+
 #~ msgid "Wing area"
 #~ msgstr "Площадь крыла"
+
+#~ msgid "Friends"
+#~ msgstr "Друзья"
 
 #~ msgid "The time in seconds to dump full ballast."
 #~ msgstr "Время в сек до сброса полного/всего балласта"
@@ -10133,8 +10118,43 @@ msgstr "Сохранено в памяти"
 #~ "Enable this if you would like to log the communication with the device."
 #~ msgstr "Включите если вы хотите иметь историю общения с устройством"
 
+#~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway."
+#~ msgstr ""
+#~ "Позволять использовать данные NMEA GPS от устройства даже в случае "
+#~ "неверно контрольной суммы"
+
 #~ msgid "English"
 #~ msgstr "Английский"
+
+#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
+#~ msgstr "Полётный профиль \"%s\" уже существует. Хотите перезаписать его?"
+
+#~ msgid "Plane profile \"%s\" activated."
+#~ msgstr "Полётный профиль \"%s\" активирован"
+
+#~ msgid "Do you really want to delete plane profile \"%s\"?"
+#~ msgstr "Вы действительно хотите удалить полётный профиль \"%s\"?"
+
+#~ msgid "Configuration Menu"
+#~ msgstr "Меню конфигурации"
+
+#~ msgid "Do you want to activate plane profile \"%s\"?"
+#~ msgstr "Вы хотите активировать полётный профиль  \"%s\"?"
+
+#~ msgid "Landpoint"
+#~ msgstr "Точка на местности"
+
+#~ msgid "Auto zoom"
+#~ msgstr "Автоматический зум"
+
+#~ msgid ""
+#~ "Automatically zoom in when approaching a waypoint to keep the waypoint at "
+#~ "a reasonable screen distance."
+#~ msgstr ""
+#~ "Автоматическое увеличение масштаба при приближении к путевой точки, чтобы "
+#~ "отобразить маршрутную точку на приемлемом расстоянии экрана."
 
 #, fuzzy
 #~ msgid "Next radial ATC"
