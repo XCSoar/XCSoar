@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_RASTERTILE_CACHE_HPP
 
 #include "RasterTile.hpp"
+#include "RasterLocation.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
@@ -38,7 +39,6 @@ Copyright_License {
 
 #define RASTER_SLOPE_FACT 12
 
-struct RasterLocation;
 struct GridLocation;
 class OperationEnvironment;
 
@@ -221,7 +221,7 @@ public:
                          RasterLocation &_location, int &h_int,
                          const bool can_climb) const;
 
-  gcc_pure RasterLocation
+  gcc_pure SignedRasterLocation
   Intersection(int origin_x, int origin_y,
                int destination_x, int destination_y,
                int h_origin, const int slope_fact) const;
@@ -315,6 +315,13 @@ protected:
 public:
   short GetMaxElevation() const {
     return overview.GetMaximum();
+  }
+
+  /**
+   * Is the given point inside the map?
+   */
+  bool IsInside(RasterLocation p) const {
+    return p.x < width && p.y < height;
   }
 
   unsigned int GetWidth() const { return width; }

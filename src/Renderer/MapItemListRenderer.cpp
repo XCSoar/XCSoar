@@ -120,12 +120,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     FormatUserDistanceSmart(item.vector.distance, distance_buffer, 32);
     FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
                   item.vector.bearing);
-    _stprintf(info_buffer, _T("%s: %s, %s: %s"),
-              _("Distance"), distance_buffer,
-              _("Direction"), direction_buffer);
+    StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
+                       _("Distance"), distance_buffer,
+                       _("Direction"), direction_buffer);
   } else {
-    _stprintf(info_buffer, _T("%s: %s, %s: %s"),
-              _("Distance"), _T("???"), _("Direction"), _T("???"));
+    StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
+                       _("Distance"), _T("???"), _("Direction"), _T("???"));
   }
 
   canvas.Select(name_font);
@@ -136,9 +136,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR elevation_buffer[32];
   if (!RasterBuffer::IsSpecial(item.elevation)) {
     FormatUserAltitude(fixed(item.elevation), elevation_buffer, 32);
-    _stprintf(info_buffer, _T("%s: %s"), _("Elevation"), elevation_buffer);
+    StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
+                       elevation_buffer);
   } else {
-    _stprintf(info_buffer, _T("%s: %s"), _("Elevation"), _T("???"));
+    StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
+                       _T("???"));
   }
 
   canvas.Select(small_font);

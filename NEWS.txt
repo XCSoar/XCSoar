@@ -15,7 +15,6 @@ Version 6.8 - not yet released
   - wave assistant
   - use maximum speed configured in plane setup as limit for calculations
   - use WGS84 earth ellipsoid for distance calculations (#2809)
-  - simplified EKF wind algorithm
 * airspace cross-section
   - sync map & cross-section view zoom setting (#2913)
 * infoboxes
@@ -42,15 +41,20 @@ Version 6.8 - not yet released
   - support USB-OTG
   - export data partition via USB storage
 
-Version 6.7.7 - not yet released
+Version 6.7.7 - 2015/02/20
 * airspace
   - accept airspaces of class RMZ in OpenAir format files (#3437)
+  - fix wrong AGL height due to longitude east/west wraparound (#3468)
 * infoboxes
   - fix data for OLC infoboxes if "OLC League" is used (#3461)
 * calculations
   - fix handicap factor for "OLC League" scores
+  - fix reach calculation problems at border of map (#3239)
+  - simplified EKF wind algorithm (#3062)
 * input events
   - allow '_' character in event identifiers (#3464)
+* replay
+  - fix replay progress while replay is paused (#3446)
 
 Version 6.7.6 - 2014/10/18
 * tracking

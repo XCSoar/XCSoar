@@ -60,4 +60,39 @@ struct RasterLocation {
   }
 };
 
+struct SignedRasterLocation {
+  int x, y;
+
+  SignedRasterLocation() = default;
+  constexpr SignedRasterLocation(int _x, int _y):x(_x), y(_y) {}
+
+  constexpr SignedRasterLocation(RasterLocation other)
+    :x(other.x), y(other.y) {}
+
+  constexpr operator RasterLocation() const {
+    return RasterLocation(x, y);
+  }
+
+  constexpr bool operator==(SignedRasterLocation other) const {
+    return x == other.x && y == other.y;
+  }
+
+  constexpr bool operator!=(SignedRasterLocation other) const {
+    return !(*this == other);
+  }
+
+  constexpr SignedRasterLocation operator>>(int bits) const {
+    return SignedRasterLocation(x >> bits, y >> bits);
+  }
+
+  constexpr SignedRasterLocation operator<<(int bits) const {
+    return SignedRasterLocation(x << bits, y << bits);
+  }
+
+  gcc_pure
+  unsigned ManhattanDistance(SignedRasterLocation other) const {
+    return std::abs(x - other.x) + std::abs(y - other.y);
+  }
+};
+
 #endif

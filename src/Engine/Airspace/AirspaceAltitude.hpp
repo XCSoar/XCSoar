@@ -34,13 +34,6 @@ struct AltitudeState;
 /** Structure to hold airspace altitude boundary data */
 struct AirspaceAltitude
 {
-  enum class Type: uint8_t {
-    UNDEFINED,
-    MSL,
-    AGL,
-    FL
-  };
-
   /** Altitude AMSL (m) resolved from type */
   fixed altitude;
   /** Flight level (100ft) for FL-referenced boundary */

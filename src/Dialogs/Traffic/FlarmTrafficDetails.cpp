@@ -227,8 +227,8 @@ FlarmTrafficDetailsWidget::Update()
   const TCHAR *value;
 
   // Set the dialog caption
-  _stprintf(tmp, _T("%s (%s)"),
-            _("FLARM Traffic Details"), target_id.Format(tmp_id));
+  StringFormatUnsafe(tmp, _T("%s (%s)"),
+                     _("FLARM Traffic Details"), target_id.Format(tmp_id));
   dialog.SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database

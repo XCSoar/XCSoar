@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
+#include "Util/StringUtil.hpp"
 
-#include <stdio.h>
 #include <assert.h>
 #include <string.h>
 
@@ -54,9 +54,9 @@ FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
   TCHAR cday = NumToIGCChar(date.day);
   TCHAR cflight = NumToIGCChar(flight_number);
 
-  _stprintf(buffer, _T("%c%c%c%c%s%c.igc"),
-            cyear, cmonth, cday,
-            manufacturer, logger_id, cflight);
+  StringFormatUnsafe(buffer, _T("%c%c%c%c%s%c.igc"),
+                     cyear, cmonth, cday,
+                     manufacturer, logger_id, cflight);
 }
 
 void
@@ -74,9 +74,9 @@ FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
   assert(logger_id != NULL);
   assert(_tcslen(logger_id) == 3);
 
-  _stprintf(buffer, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
-            date.year, date.month, date.day,
-            manufacturer, logger_id, flight_number);
+  StringFormatUnsafe(buffer, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
+                     date.year, date.month, date.day,
+                     manufacturer, logger_id, flight_number);
 }
 
 #ifdef _UNICODE

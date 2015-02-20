@@ -50,7 +50,7 @@ GeoBounds::GetCenter() const
   if (!IsValid())
     return GeoPoint::Invalid();
 
-  return GeoPoint(longitude.GetMiddle(), latitude.GetMiddle());
+  return GeoPoint(longitude.GetMiddle().AsDelta(), latitude.GetMiddle());
 }
 
 GeoBounds

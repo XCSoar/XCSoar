@@ -69,30 +69,30 @@ public:
     return (int)(angle.Native() * y_scale);
   }
 
-  gcc_pure RasterLocation
+  gcc_pure SignedRasterLocation
   ProjectFine(const GeoPoint &location) const {
-    const unsigned x = AngleToWidth(location.longitude) - left;
-    const unsigned y = top - AngleToHeight(location.latitude);
+    const int x = AngleToWidth(location.longitude) - left;
+    const int y = top - AngleToHeight(location.latitude);
 
-    return RasterLocation(x, y);
+    return {x, y};
   }
 
   gcc_pure
   GeoPoint
-  UnprojectFine(const RasterLocation &coords) const {
+  UnprojectFine(SignedRasterLocation coords) const {
     const Angle x = WidthToAngle(fixed((int)coords.x + left));
     const Angle y = HeightToAngle(fixed(top - (int)coords.y));
     return GeoPoint(x, y);
   }
 
-  gcc_pure RasterLocation
+  gcc_pure SignedRasterLocation
   ProjectCoarse(const GeoPoint &location) const {
     return ProjectFine(location) >> 8;
   }
 
   gcc_pure
   GeoPoint
-  UnprojectCoarse(const RasterLocation &coords) const {
+  UnprojectCoarse(SignedRasterLocation coords) const {
     return UnprojectFine(coords << 8);
   }
 

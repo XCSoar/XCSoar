@@ -154,10 +154,6 @@ Angle::Fraction(const Angle end, const fixed fraction) const
     return Angle(value);
 
   const Angle diff = Angle(end.value - value).AsDelta();
-
-  // Note: do not return with AsBearing() since this will produce incorrect
-  // results for latitude values!
-
   return Angle(value + diff.value * fraction);
 }
 

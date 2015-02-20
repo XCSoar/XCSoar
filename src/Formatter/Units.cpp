@@ -25,8 +25,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Units/Descriptor.hpp"
 #include "Atmosphere/Pressure.hpp"
-
-#include <stdio.h>
+#include "Util/StringUtil.hpp"
 
 static void
 FormatInteger(TCHAR *buffer,
@@ -37,10 +36,10 @@ FormatInteger(TCHAR *buffer,
   const int ivalue = iround(uvalue);
 
   if (include_unit)
-    _stprintf(buffer, include_sign ? _T("%+d %s") : _T("%d %s"), ivalue,
-               Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer, include_sign ? _T("%+d %s") : _T("%d %s"),
+                       ivalue, Units::GetUnitName(unit));
   else
-    _stprintf(buffer, include_sign ? _T("%+d") : _T("%d"), ivalue);
+    StringFormatUnsafe(buffer, include_sign ? _T("%+d") : _T("%d"), ivalue);
 }
 
 void
@@ -64,10 +63,10 @@ FormatDistance(TCHAR *buffer, fixed value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    _stprintf(buffer, _T("%.*f %s"), precision, (double)value,
-              Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer, _T("%.*f %s"), precision, (double)value,
+                       Units::GetUnitName(unit));
   else
-    _stprintf(buffer, _T("%.*f"), precision, (double)value);
+    StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
 }
 
 gcc_const
@@ -95,10 +94,10 @@ FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    _stprintf(buffer, _T("%.*f %s"), precision, (double)value,
-               Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer, _T("%.*f %s"), precision, (double)value,
+                       Units::GetUnitName(unit));
   else
-    _stprintf(buffer, _T("%.*f"), precision, (double)value);
+    StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
 
   return unit;
 }
@@ -146,10 +145,10 @@ FormatSpeed(TCHAR *buffer,
 
   const int prec = precision && value < fixed(100);
   if (include_unit)
-    _stprintf(buffer, _T("%.*f %s"), prec, (double)value,
-               Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer, _T("%.*f %s"), prec, (double)value,
+                       Units::GetUnitName(unit));
   else
-    _stprintf(buffer, _T("%.*f"), prec, (double)value);
+    StringFormatUnsafe(buffer, _T("%.*f"), prec, (double)value);
 }
 
 const TCHAR*
@@ -187,36 +186,41 @@ FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit, include_sign),
-              (double)value, Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer,
+                       GetVerticalSpeedFormat(unit, include_unit, include_sign),
+                       (double)value, Units::GetUnitName(unit));
   else
-    _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit, include_sign),
-              (double)value);
+    StringFormatUnsafe(buffer,
+                       GetVerticalSpeedFormat(unit, include_unit, include_sign),
+                       (double)value);
 }
 
 void
 FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
-                         bool include_unit)
+                  bool include_unit)
 {
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    _stprintf(buffer, _T("%.0f %s"), (double)value, Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer, _T("%.0f %s"),
+                       (double)value, Units::GetUnitName(unit));
   else
-    _stprintf(buffer, _T("%.0f"), (double)value);
+    StringFormatUnsafe(buffer, _T("%.0f"), (double)value);
 }
 
 void
 FormatPressure(TCHAR *buffer, AtmosphericPressure pressure,
-                      Unit unit, bool include_unit)
+               Unit unit, bool include_unit)
 {
   fixed _pressure = Units::ToUserUnit(pressure.GetHectoPascal(), unit);
 
   if (include_unit)
-    _stprintf(buffer, GetPressureFormat(unit, include_unit), (double)_pressure,
-              Units::GetUnitName(unit));
+    StringFormatUnsafe(buffer, GetPressureFormat(unit, include_unit),
+                       (double)_pressure,
+                       Units::GetUnitName(unit));
   else
-    _stprintf(buffer, GetPressureFormat(unit, include_unit), (double)_pressure);
+    StringFormatUnsafe(buffer, GetPressureFormat(unit, include_unit),
+                       (double)_pressure);
 }
 
 const TCHAR*

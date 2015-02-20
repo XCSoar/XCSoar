@@ -191,7 +191,7 @@ ContractLocalPath(TCHAR* filein)
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
-  _stprintf(output, _T("%s%s"), local_path_code, relative);
+  StringFormatUnsafe(output, _T("%s%s"), local_path_code, relative);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
@@ -242,7 +242,7 @@ InFlash(const TCHAR *path, TCHAR *buffer)
   while ((name = enumerator.Next()) != NULL) {
     if (InFlashNamed(path, name)) {
       buffer[0] = DIR_SEPARATOR;
-      _stprintf(buffer, _T(DIR_SEPARATOR_S"%s"), name);
+      StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S"%s"), name);
       return buffer;
     }
   }
@@ -270,7 +270,8 @@ ExistingDataOnFlash(TCHAR *buffer)
   FlashCardEnumerator enumerator;
   const TCHAR *name;
   while ((name = enumerator.Next()) != NULL) {
-    _stprintf(buffer, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR), name);
+    StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
+                       name);
     if (Directory::Exists(buffer))
       return buffer;
   }
@@ -524,8 +525,8 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   FlashCardEnumerator enumerator;
   const TCHAR *flash_name;
   while ((flash_name = enumerator.Next()) != NULL) {
-    _stprintf(flash_path, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
-              flash_name);
+    StringFormatUnsafe(flash_path, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
+                       flash_name);
     if (_tcscmp(data_path, flash_path) == 0)
       /* don't scan primary data path twice */
       continue;

@@ -110,8 +110,14 @@ Replay::Update()
   if (replay == nullptr)
     return false;
 
-  if (!positive(time_scale))
+  if (!positive(time_scale)) {
+    /* replay is paused */
+    /* to avoid a big fast-forward with the next
+       PeriodClock::ElapsedUpdate() call below after unpausing, update
+       the clock each time we're called while paused */
+    clock.Update();
     return true;
+  }
 
   const fixed old_virtual_time = virtual_time;
 

@@ -169,7 +169,18 @@ template<typename... Args>
 static inline void
 StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
 {
+#if defined(WIN32) && !defined(_WIN32_WCE) && GCC_CHECK_VERSION(4,8) && defined(__GLIBCXX__)
+  /* work around a problem in mingw-w64/libstdc++: libstdc++ defines
+     __USE_MINGW_ANSI_STDIO=1 and forces mingw to expose the
+     POSIX-compatible stdio functions instead of the
+     Microsoft-compatible ones, but those have a major problem for us:
+     "%s" denotes a "narrow" string, not a "wide" string, and we'd
+     need to use "%ls"; this workaround explicitly selects the
+     Microsoft-compatible implementation */
+  _swprintf(buffer, fmt, args...);
+#else
   _stprintf(buffer, fmt, args...);
+#endif
 }
 #endif
 

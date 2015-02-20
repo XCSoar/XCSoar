@@ -26,9 +26,9 @@ Copyright_License {
 #include "Atmosphere/CuSonde.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <algorithm>
-#include <stdio.h>
 
 using std::min;
 using std::max;
@@ -120,11 +120,11 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 void
 TemperatureChartCaption(TCHAR *sTmp, const CuSonde &cu_sonde)
 {
-  _stprintf(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
-            _("Thermal height"),
-            (double)Units::ToUserAltitude(cu_sonde.thermalHeight),
-            Units::GetAltitudeName(),
-            _("Cloud base"),
-            (double)Units::ToUserAltitude(cu_sonde.cloudBase),
-            Units::GetAltitudeName());
+  StringFormatUnsafe(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
+                     _("Thermal height"),
+                     (double)Units::ToUserAltitude(cu_sonde.thermalHeight),
+                     Units::GetAltitudeName(),
+                     _("Cloud base"),
+                     (double)Units::ToUserAltitude(cu_sonde.cloudBase),
+                     Units::GetAltitudeName());
 }

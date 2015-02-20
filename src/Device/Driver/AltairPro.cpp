@@ -157,15 +157,18 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
 {
   TCHAR Buffer[256];
 
-  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.pilot_name.c_str());
+  StringFormatUnsafe(Buffer, _T("PDVSC,S,Pilot,%s"),
+                     declaration.pilot_name.c_str());
   if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.aircraft_registration.c_str());
+  StringFormatUnsafe(Buffer, _T("PDVSC,S,GliderID,%s"),
+                     declaration.aircraft_registration.c_str());
   if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.aircraft_type.c_str());
+  StringFormatUnsafe(Buffer, _T("PDVSC,S,GliderType,%s"),
+                     declaration.aircraft_type.c_str());
   if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
@@ -187,7 +190,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
 
     for (unsigned int index=1; index <= 10; index++){
       TCHAR TurnPointPropertyName[32];
-      _stprintf(TurnPointPropertyName, _T("DeclTurnPoint%d"), index);
+      StringFormatUnsafe(TurnPointPropertyName, _T("DeclTurnPoint%d"), index);
 
       if (index < declaration.Size() - 1) {
         PutTurnPoint(TurnPointPropertyName, &declaration.GetWaypoint(index),
@@ -198,7 +201,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
     }
   }
 
-  _stprintf(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
+  UnsafeCopyString(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
   if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
@@ -334,10 +337,9 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName,
     EoW = 'E';
   }
 
-  _stprintf(Buffer, _T("PDVSC,S,%s,%02d%05.0f%c%03d%05.0f%c%s"),
-            propertyName,
-            DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name
-  );
+  StringFormatUnsafe(Buffer, _T("PDVSC,S,%s,%02d%05.0f%c%03d%05.0f%c%s"),
+                     propertyName,
+                     DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name);
 
   PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env);
 

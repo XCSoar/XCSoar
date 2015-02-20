@@ -91,7 +91,7 @@ TaskSummaryShape(const OrderedTask *task, TCHAR *text)
     break;
 
   default:
-    _stprintf(text, _("%d legs"), task->TaskSize() - 1);
+    StringFormatUnsafe(text, _("%d legs"), task->TaskSize() - 1);
     break;
   }
   return FAIShape;
@@ -122,32 +122,32 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
   }
 
   if (!task->TaskSize()) {
-    _stprintf(text, _("Task is empty (%s)"),
-             OrderedTaskFactoryName(task->GetFactoryType()));
+    StringFormatUnsafe(text, _("Task is empty (%s)"),
+                       OrderedTaskFactoryName(task->GetFactoryType()));
   } else {
     if (task->HasTargets())
-      _stprintf(text, _T("%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
-                summary_shape,
-                linebreak,
-                (double)Units::ToUserDistance(stats.distance_nominal),
-                Units::GetDistanceName(),
-                linebreak,
-                _("max."),
-                (double)Units::ToUserDistance(stats.distance_max),
-                Units::GetDistanceName(),
-                linebreak,
-                _("min."),
-                (double)Units::ToUserDistance(stats.distance_min),
-                Units::GetDistanceName(),
-                OrderedTaskFactoryName(task->GetFactoryType()));
+      StringFormatUnsafe(text, _T("%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
+                         summary_shape,
+                         linebreak,
+                         (double)Units::ToUserDistance(stats.distance_nominal),
+                         Units::GetDistanceName(),
+                         linebreak,
+                         _("max."),
+                         (double)Units::ToUserDistance(stats.distance_max),
+                         Units::GetDistanceName(),
+                         linebreak,
+                         _("min."),
+                         (double)Units::ToUserDistance(stats.distance_min),
+                         Units::GetDistanceName(),
+                         OrderedTaskFactoryName(task->GetFactoryType()));
     else
-      _stprintf(text, _T("%s%s%s %.0f %s (%s)"),
-                summary_shape,
-                linebreak,
-                _("dist."),
-                (double)Units::ToUserDistance(stats.distance_nominal),
-                Units::GetDistanceName(),
-                OrderedTaskFactoryName(task->GetFactoryType()));
+      StringFormatUnsafe(text, _T("%s%s%s %.0f %s (%s)"),
+                         summary_shape,
+                         linebreak,
+                         _("dist."),
+                         (double)Units::ToUserDistance(stats.distance_nominal),
+                         Units::GetDistanceName(),
+                         OrderedTaskFactoryName(task->GetFactoryType()));
   }
 }
 
@@ -157,19 +157,19 @@ OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
 {
   switch (type) {
   case TaskPointType::START:
-    _stprintf(buffer, _T("S: %s"), name);
+    StringFormatUnsafe(buffer, _T("S: %s"), name);
     break;
 
   case TaskPointType::AST:
-    _stprintf(buffer, _T("T%d: %s"), index, name);
+    StringFormatUnsafe(buffer, _T("T%d: %s"), index, name);
     break;
 
   case TaskPointType::AAT:
-    _stprintf(buffer, _T("A%d: %s"), index, name);
+    StringFormatUnsafe(buffer, _T("A%d: %s"), index, name);
     break;
 
   case TaskPointType::FINISH:
-    _stprintf(buffer, _T("F: %s"), name);
+    StringFormatUnsafe(buffer, _T("F: %s"), name);
     break;
 
   default:
@@ -187,21 +187,21 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 
   case ObservationZone::Shape::SECTOR:
   case ObservationZone::Shape::ANNULAR_SECTOR:
-    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Sector"), _("Radius"),
-              (double)Units::ToUserDistance(((const SectorZone &)ozp).GetRadius()),
-              Units::GetDistanceName());
+    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Sector"), _("Radius"),
+                       (double)Units::ToUserDistance(((const SectorZone &)ozp).GetRadius()),
+                       Units::GetDistanceName());
     return;
 
   case ObservationZone::Shape::LINE:
-    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate width"),
-              (double)Units::ToUserDistance(((const LineSectorZone &)ozp).GetLength()),
-              Units::GetDistanceName());
+    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate width"),
+                       (double)Units::ToUserDistance(((const LineSectorZone &)ozp).GetLength()),
+                       Units::GetDistanceName());
     return;
 
   case ObservationZone::Shape::CYLINDER:
-    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Cylinder"), _("Radius"),
-              (double)Units::ToUserDistance(((const CylinderZone &)ozp).GetRadius()),
-              Units::GetDistanceName());
+    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Cylinder"), _("Radius"),
+                       (double)Units::ToUserDistance(((const CylinderZone &)ozp).GetRadius()),
+                       Units::GetDistanceName());
     return;
 
   case ObservationZone::Shape::MAT_CYLINDER:
@@ -209,9 +209,9 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     return;
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
-    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Keyhole"), _("Radius"),
-              (double)Units::ToUserDistance(((const KeyholeZone &)ozp).GetRadius()),
-              Units::GetDistanceName());
+    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Keyhole"), _("Radius"),
+                       (double)Units::ToUserDistance(((const KeyholeZone &)ozp).GetRadius()),
+                       Units::GetDistanceName());
     return;
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
