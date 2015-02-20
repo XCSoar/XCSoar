@@ -745,7 +745,7 @@ bool MainWindow::OnClose() {
     return SingleWindow::OnClose();
 
   if (UIActions::CheckShutdown()) {
-    Shutdown();
+    PostQuit();
   }
   return true;
 }

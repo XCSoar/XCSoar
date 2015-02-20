@@ -146,10 +146,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (Startup())
     ret = CommonInterface::main_window->RunEventLoop();
 
-  if (CommonInterface::main_window != nullptr) {
-    CommonInterface::main_window->Destroy();
-    delete CommonInterface::main_window;
-  }
+  Shutdown();
 
   DeinitialiseIOThread();
 
