@@ -58,6 +58,8 @@ class X11EventQueue final : FileEventHandler {
 
   bool mapped = true, visible = true;
 
+  bool ctrl_click;
+
 public:
   /**
    * @param io_loop the #IOLoop that shall be used to register the
@@ -74,6 +76,16 @@ public:
 
   bool IsVisible() const {
     return mapped && visible;
+  }
+
+  /**
+   * Was the Ctrl key down during the last MOUSE_DOWN event?
+   *
+   * TODO: this is a kludge, and we should move this flag into an
+   * event struct passed to Window::OnMouseDown().q
+   */
+  bool WasCtrlClick() const {
+    return ctrl_click;
   }
 
   bool Generate(Event &event) {

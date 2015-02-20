@@ -86,6 +86,10 @@ public:
   _XDisplay *GetDisplay() const {
     return input_queue.GetDisplay();
   }
+
+  bool WasCtrlClick() const {
+    return input_queue.WasCtrlClick();
+  }
 #endif
 
 #ifdef USE_WAYLAND

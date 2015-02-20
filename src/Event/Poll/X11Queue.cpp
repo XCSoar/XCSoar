@@ -80,6 +80,7 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button1:
     case Button2:
     case Button3:
+      ctrl_click = event.xbutton.state & ControlMask;
       queue.Push(Event(Event::MOUSE_DOWN, event.xbutton.x, event.xbutton.y));
       break;
 
