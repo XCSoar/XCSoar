@@ -26,6 +26,7 @@ Copyright_License {
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
 
@@ -216,9 +217,7 @@ TopWindow::RunEventLoop()
 void
 TopWindow::PostQuit()
 {
-  SDL_Event event;
-  event.type = SDL_QUIT;
-  ::SDL_PushEvent(&event);
+  event_queue->Quit();
 }
 
 void

@@ -28,7 +28,8 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :now_us(MonotonicClockUS()) {}
+  :now_us(MonotonicClockUS()),
+   quit(false) {}
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
@@ -64,7 +65,7 @@ EventQueue::Generate(Event &event)
 bool
 EventQueue::Pop(Event &event)
 {
-  return Generate(event) || ::SDL_PollEvent(&event.event);
+  return !quit && (Generate(event) || ::SDL_PollEvent(&event.event));
 }
 
 bool
@@ -73,6 +74,9 @@ EventQueue::Wait(Event &event)
   /* this busy loop is ugly, and I wish we could do better than that,
      but SDL_WaitEvent() is just as bad; however copying this busy
      loop allows us to plug in more event sources */
+
+  if (quit)
+    return false;
 
   while (true) {
     if (Generate(event))

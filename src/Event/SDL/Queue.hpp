@@ -42,6 +42,8 @@ class EventQueue {
   Mutex mutex;
   TimerQueue timers;
 
+  bool quit;
+
 public:
   EventQueue();
 
@@ -52,6 +54,14 @@ public:
   gcc_pure
   uint64_t ClockUS() const {
     return now_us;
+  }
+
+  bool IsQuit() const {
+    return quit;
+  }
+
+  void Quit() {
+    quit = true;
   }
 
   void Push(EventLoop::Callback callback, void *ctx);
