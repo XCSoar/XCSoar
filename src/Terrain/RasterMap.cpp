@@ -102,14 +102,14 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 short
 RasterMap::GetHeight(const GeoPoint &location) const
 {
-  RasterLocation pt = projection.ProjectCoarse(location);
+  const auto pt = projection.ProjectCoarse(location);
   return raster_tile_cache.GetHeight(pt.x, pt.y);
 }
 
 short
 RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 {
-  RasterLocation pt = projection.ProjectFine(location);
+  const auto pt = projection.ProjectFine(location);
   return raster_tile_cache.GetInterpolatedHeight(pt.x, pt.y);
 }
 
@@ -193,8 +193,8 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
                              const int h_safety,
                              GeoPoint &intx, int &h) const
 {
-  const RasterLocation c_origin = projection.ProjectCoarse(origin);
-  const RasterLocation c_destination = projection.ProjectCoarse(destination);
+  const auto c_origin = projection.ProjectCoarse(origin);
+  const auto c_destination = projection.ProjectCoarse(destination);
   const int c_diff = c_origin.ManhattanDistance(c_destination);
   const bool can_climb = (h_destination< h_virt);
 
@@ -232,15 +232,15 @@ RasterMap::Intersection(const GeoPoint& origin,
                         const int h_origin, const int h_glide,
                         const GeoPoint& destination) const
 {
-  const RasterLocation c_origin = projection.ProjectCoarse(origin);
-  const RasterLocation c_destination = projection.ProjectCoarse(destination);
+  const auto c_origin = projection.ProjectCoarse(origin);
+  const auto c_destination = projection.ProjectCoarse(destination);
   const int c_diff = c_origin.ManhattanDistance(c_destination);
   if (c_diff==0) {
     return destination; // no distance
   }
   const int slope_fact = (((int)h_glide) << RASTER_SLOPE_FACT) / c_diff;
 
-  RasterLocation c_int =
+  auto c_int =
     raster_tile_cache.Intersection(c_origin.x, c_origin.y,
                                    c_destination.x, c_destination.y,
                                    h_origin, slope_fact);
