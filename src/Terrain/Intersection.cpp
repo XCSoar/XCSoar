@@ -262,13 +262,13 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
   return std::make_pair(overview.Get(x_overview, y_overview), false);
 }
 
-RasterLocation
+SignedRasterLocation
 RasterTileCache::Intersection(const int x0, const int y0,
                               const int x1, const int y1,
                               const int h_origin,
                               const int slope_fact) const
 {
-  RasterLocation location(x0, y0);
+  SignedRasterLocation location(x0, y0);
 
   if (!IsInside(location))
     // origin is outside overall bounds
@@ -364,5 +364,5 @@ RasterTileCache::Intersection(const int x0, const int y0,
   }
 
   // if we reached invalid terrain, assume we can hit MSL
-  return RasterLocation(x1, y1);
+  return {x1, y1};
 }
