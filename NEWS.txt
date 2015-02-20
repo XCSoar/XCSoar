@@ -12,6 +12,8 @@ Version 6.7.7 - not yet released
   - fix handicap factor for "OLC League" scores
 * input events
   - allow '_' character in event identifiers (#3464)
+* replay
+  - fix replay progress while replay is paused (#3446)
 
 Version 6.7.6 - 2014/10/18
 * tracking
