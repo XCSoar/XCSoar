@@ -131,7 +131,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     return true;
 
   if (is_simulator() && IsCtrlKeyPressed() && visible_projection.IsValid()) {
-    /* clicking with Alt key held moves the simulator to the click
+    /* clicking with Ctrl key held moves the simulator to the click
        location instantly */
     const GeoPoint location = visible_projection.ScreenToGeo(x, y);
     device_blackboard->SetSimulatorLocation(location);
