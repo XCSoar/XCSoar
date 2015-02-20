@@ -31,7 +31,6 @@ Copyright_License {
 struct Event {
   enum Type {
     NOP,
-    QUIT,
 
 #ifdef USE_POLL_EVENT
     CLOSE,

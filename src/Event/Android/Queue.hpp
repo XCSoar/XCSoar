@@ -62,6 +62,10 @@ public:
     return now_us;
   }
 
+  bool IsQuit() const {
+    return !running;
+  }
+
   void Quit() {
     running = false;
   }

@@ -117,9 +117,6 @@ EventQueue::Pop(Event &event)
   event = events.front();
   events.pop();
 
-  if (event.type == Event::QUIT)
-    Quit();
-
   return true;
 }
 
@@ -149,9 +146,6 @@ EventQueue::Wait(Event &event)
 
   event = events.front();
   events.pop();
-
-  if (event.type == Event::QUIT)
-    Quit();
 
   return true;
 }

@@ -173,7 +173,6 @@ TopWindow::OnEvent(const Event &event)
     Window *w;
 
   case Event::NOP:
-  case Event::QUIT:
   case Event::TIMER:
   case Event::USER:
   case Event::CALLBACK:
@@ -265,5 +264,5 @@ TopWindow::RunEventLoop()
 void
 TopWindow::PostQuit()
 {
-  event_queue->Push(Event::QUIT);
+  event_queue->Quit();
 }

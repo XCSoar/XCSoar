@@ -30,9 +30,12 @@ Copyright_License {
 bool
 EventLoop::Get(Event &event)
 {
+  if (queue.IsQuit())
+    return false;
+
   if (bulk) {
     if (queue.Pop(event))
-      return event.type != Event::QUIT;
+      return true;
 
     /* that was the last event for now, refresh the screen now */
     top_window.Refresh();
@@ -41,7 +44,7 @@ EventLoop::Get(Event &event)
 
   if (queue.Wait(event)) {
     bulk = true;
-    return event.type != Event::QUIT;
+    return true;
   }
 
   return false;
