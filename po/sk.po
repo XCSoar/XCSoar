@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-06-26 12:48+0000\n"
+"PO-Revision-Date: 2014-12-17 15:20+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2015-02-20 18:36+0000\n"
+"X-Generator: Launchpad (build 17355)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -612,9 +612,8 @@ msgid "Loading Waypoints..."
 msgstr "Nahrávam otočné body..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "Nekrúži sa"
+msgstr "Bez pohybu"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2303,7 +2302,7 @@ msgstr "OLC vzdialenosť"
 #: src/InfoBoxes/Content/Factory.cpp:911
 #, no-c-format
 msgid "OLC Dist"
-msgstr ""
+msgstr "OLC Vzdial."
 
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
@@ -2484,6 +2483,8 @@ msgid ""
 "Clock-like display of distance remaining along task, showing achieved task "
 "points."
 msgstr ""
+"\"Hodinové\" zobrazenie vzdialenosti v priebehu úlohy, ukazujúce dosiahnuté "
+"body."
 
 #: src/InfoBoxes/Content/Factory.cpp:1032
 #, no-c-format
@@ -2754,7 +2755,7 @@ msgstr "Pomocník ustreď."
 #: src/Renderer/MapItemListRenderer.cpp:392
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Stupák"
 
 #: src/InfoBoxes/Content/Factory.cpp:1177
 #, no-c-format
@@ -2762,6 +2763,8 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
+"Kruhový termický asistent zobrazujúci rozloženie sily stúpania v každej "
+"časti kruhu."
 
 #: src/InfoBoxes/Content/Factory.cpp:1185
 #, no-c-format
@@ -2911,23 +2914,21 @@ msgid ""
 msgstr "Okamžité vyhodnotenie rýchlosti letu podľa nastavených OLC pravidiel."
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Výškový rozdiel do cieľa"
+msgstr "Doklzový výškový rozdiel pri MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Ciel vyskR"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Príletová výška na posledný otočný bod relatívna k bezpečnej príletovej "
-"výške."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5562,9 +5563,9 @@ msgid "Turnpoint"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Povol varov."
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6642,9 +6643,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "Vlož informačné okná"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -9650,9 +9651,6 @@ msgstr ""
 msgid "Stored to EEPROM"
 msgstr ""
 
-#~ msgid "Ignore checksum"
-#~ msgstr "Ignorovať kontrolný súčet"
-
 #~ msgid "Height GPS"
 #~ msgstr "Výška GPS"
 
@@ -9836,11 +9834,29 @@ msgstr ""
 #~ msgid "V rough air"
 #~ msgstr "Manévrovacia rýchl."
 
+#~ msgid "Wind At Altitude"
+#~ msgstr "Vietor vo výške"
+
 #~ msgid "12 Right (Landscape)"
 #~ msgstr "12 Vpravo (na šírku)"
 
+#~ msgid "Set As New Home"
+#~ msgstr "Nastav ako nový domov"
+
+#~ msgid "Insert In Task"
+#~ msgstr "Vložiť do úlohy"
+
 #~ msgid "My Sample"
 #~ msgstr "Moja vzorka"
+
+#~ msgid "Remove From Task"
+#~ msgstr "Odobrať z úlohy"
+
+#~ msgid "Append To Task"
+#~ msgstr "Pridať k úlohe"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Nahradiť v úlohe"
 
 #~ msgid ""
 #~ "Graph of average circling climb rate (horizontal axis) as a function of "
@@ -9851,6 +9867,9 @@ msgstr ""
 
 #~ msgid "Delete Error"
 #~ msgstr "Chyba pri mazaní"
+
+#~ msgid "Ignore checksum"
+#~ msgstr "Ignorovať kontrolný súčet"
 
 #~ msgid "L/D average period"
 #~ msgstr "Doba priemerovania kĺzavosti"
