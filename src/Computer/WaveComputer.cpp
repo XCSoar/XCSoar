@@ -46,6 +46,36 @@ WaveComputer::ResetCurrent()
 }
 
 /**
+ * Obtain the #Validity instance that applies to
+ * #NMEAInfo::netto_vario_available.
+ *
+ * TODO: this is a kludge that duplicates code from #BasicComputer.
+ * We should have new attributes in #NMEAInfo to get that piece of
+ * information right away without this ugly code duplication.
+ */
+gcc_pure
+static Validity
+GetNettoVarioAvailable(const NMEAInfo &basic)
+{
+  if (basic.netto_vario_available)
+    return basic.netto_vario_available;
+
+  if (basic.total_energy_vario_available)
+    return basic.total_energy_vario_available;
+
+  if (basic.noncomp_vario_available)
+    return basic.noncomp_vario_available;
+
+  if (basic.pressure_altitude_available)
+    return basic.pressure_altitude_available;
+
+  if (basic.baro_altitude_available)
+    return basic.baro_altitude_available;
+
+  return basic.gps_altitude_available;
+}
+
+/**
  * Convert a #LeastSquares to a #WaveInfo.  Returns
  * WaveInfo::Undefined() if there is no valid result in the
  * #LeastSquares instance.
@@ -102,8 +132,9 @@ WaveComputer::Compute(const NMEAInfo &basic,
     return;
   }
 
+  const auto netto_vario_available = GetNettoVarioAvailable(basic);
   if (!basic.location_available.Modified(last_location_available) ||
-      !basic.netto_vario_available.Modified(last_netto_vario_available))
+      !netto_vario_available.Modified(last_netto_vario_available))
     /* no new data since the last call; need both a new GPS location
        and a vario value */
     return;
@@ -171,5 +202,5 @@ WaveComputer::Compute(const NMEAInfo &basic,
 
   /* remember some data for the next iteration */
   last_location_available = basic.location_available;
-  last_netto_vario_available = basic.netto_vario_available;
+  last_netto_vario_available = netto_vario_available;
 }
