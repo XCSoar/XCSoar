@@ -198,7 +198,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
     }
   }
 
-  _stprintf(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
+  UnsafeCopyString(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
   if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
