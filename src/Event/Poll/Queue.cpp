@@ -50,9 +50,6 @@ void
 EventQueue::Push(const Event &event)
 {
   ScopeLock protect(mutex);
-  if (quit)
-    return;
-
   events.push(event);
   WakeUp();
 }
@@ -105,8 +102,11 @@ EventQueue::Generate(Event &event)
 bool
 EventQueue::Pop(Event &event)
 {
+  if (quit)
+    return false;
+
   ScopeLock protect(mutex);
-  if (quit || events.empty())
+  if (events.empty())
     return false;
 
   if (events.empty()) {
@@ -123,21 +123,21 @@ EventQueue::Pop(Event &event)
 bool
 EventQueue::Wait(Event &event)
 {
-  ScopeLock protect(mutex);
   if (quit)
     return false;
+
+  ScopeLock protect(mutex);
 
   if (events.empty()) {
     if (Generate(event))
       return true;
 
     while (events.empty()) {
-      if (quit)
-        return false;
-
       mutex.Unlock();
       Poll();
       mutex.Lock();
+      if (quit)
+        return false;
 
       if (Generate(event))
         return true;
