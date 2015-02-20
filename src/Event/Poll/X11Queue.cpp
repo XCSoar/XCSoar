@@ -76,11 +76,22 @@ X11EventQueue::HandleEvent(_XEvent &event)
     break;
 
   case ButtonPress:
-    queue.Push(Event(Event::MOUSE_DOWN, event.xbutton.x, event.xbutton.y));
+    switch (event.xbutton.button) {
+    case Button1:
+    case Button2:
+    case Button3:
+      queue.Push(Event(Event::MOUSE_DOWN, event.xbutton.x, event.xbutton.y));
+      break;
+    }
     break;
 
   case ButtonRelease:
-    queue.Push(Event(Event::MOUSE_UP, event.xbutton.x, event.xbutton.y));
+    switch (event.xbutton.button) {
+    case Button1:
+    case Button2:
+    case Button3:
+      queue.Push(Event(Event::MOUSE_UP, event.xbutton.x, event.xbutton.y));
+    }
     break;
 
   case MotionNotify:
