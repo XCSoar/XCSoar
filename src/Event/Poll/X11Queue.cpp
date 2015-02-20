@@ -82,6 +82,16 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button3:
       queue.Push(Event(Event::MOUSE_DOWN, event.xbutton.x, event.xbutton.y));
       break;
+
+    case Button4:
+    case Button5:
+      /* mouse wheel */
+      {
+        Event e(Event::MOUSE_WHEEL, event.xbutton.x, event.xbutton.y);
+        e.param = event.xbutton.button == Button4 ? 1u : unsigned(-1);
+        queue.Push(e);
+      }
+      break;
     }
     break;
 
