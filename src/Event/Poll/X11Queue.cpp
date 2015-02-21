@@ -33,6 +33,7 @@ Copyright_License {
 #define Display X11Display
 
 #include <X11/Xlib.h>
+#include <X11/Xutil.h> // for XLookupString()
 
 #undef Font
 #undef Window
@@ -65,9 +66,22 @@ inline void
 X11EventQueue::HandleEvent(_XEvent &event)
 {
   switch (event.type) {
+  case KeymapNotify:
+    XRefreshKeyboardMapping(&event.xmapping);
+    break;
+
   case KeyPress:
-    queue.Push(Event(Event::KEY_DOWN,
-                     XLookupKeysym(&event.xkey, 0)));
+    {
+      Event e(Event::KEY_DOWN, XLookupKeysym(&event.xkey, 0));
+
+      // this is ISO-Latin-1 only; TODO: switch to XwcTextEscapement()
+      char ch;
+      KeySym keysym;
+      int n = XLookupString(&event.xkey, &ch, 1, &keysym, nullptr);
+      e.ch = n > 0 ? ch : 0;
+
+      queue.Push(e);
+    }
     break;
 
   case KeyRelease:

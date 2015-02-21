@@ -43,7 +43,7 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
   }
 
   XSetWindowAttributes swa;
-  swa.event_mask = KeyPressMask | KeyReleaseMask |
+  swa.event_mask = KeyPressMask | KeyReleaseMask | KeymapStateMask |
     ButtonPressMask | ButtonReleaseMask |
     PointerMotionMask |
     VisibilityChangeMask |

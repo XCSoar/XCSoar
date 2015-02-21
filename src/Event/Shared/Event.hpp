@@ -101,6 +101,10 @@ struct Event {
 
   RasterPoint point;
 
+#ifdef USE_X11
+  unsigned ch;
+#endif
+
   Event() = default;
   Event(Type _type):type(_type) {}
   Event(Type _type, unsigned _param):type(_type), param(_param) {}
@@ -127,12 +131,23 @@ struct Event {
   }
 
   size_t GetCharacterCount() const {
+#ifdef USE_X11
+    return type == KEY_DOWN && ch != 0;
+#else
     return 0;
+#endif
   }
 
   unsigned GetCharacter(size_t characterIdx) const {
+#ifdef USE_X11
+    assert(characterIdx == 0);
+    assert(ch != 0);
+
+    return ch;
+#else
     assert(false);
     return 0;
+#endif
   }
 
   bool IsMouseDown() const {
