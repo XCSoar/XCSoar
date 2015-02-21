@@ -1,0 +1,100 @@
+\chapter{Integração}\label{cha:Integration}
+
+\section{Construindo um sistema XCSoar }
+\emph{A integração} reúne todas os objetos e ações em uma entidade construindo um sistema que forneça as funcionalidades desejadas.  Os objetos são componentes de hardware, software, banco de dados, configurações, fonte de energia e componentes integradores.  Como você deve esperar, este capítulo trata da integração do XCSoar, com os componentes de interesse:
+\begin{itemize} 
+\item A integração reúne todas os objetos e ações em uma entidade construindo um sistema que forneça as funcionalidades desejadas.  Os objetos são componentes de hardware, software, banco de dados, configurações, fonte de energia e componentes integradores.  Como você deve esperar, este capítulo trata da integração do XCSoar, com os componentes de interesse:
+\item software XCSoar  
+\item banco de dados de informações de vôo: terreno, waypoint, metereologia, polar, rede FLARM, detalhes de aeródromos, etc.
+\item Instrumentos: barômetro, variômetro, FLARM, registrador, horizonte
+\item componentes de reserva: segunda unidade com XCSoar.
+\item Montagem
+\item Configuração: internamente no XCSoar e suas conexões.
+\item Treinamento do usuário
+\end{itemize}
+Nenhum sistema roda sem usar alguns componentes para fornecer funções secundárias, mas precisamos de alguma ‘cola’ para agrupar todos os componentes juntos.  Igualmente, seu sistema XCSoar precisa de um ou mais componentes ‘cola’, como cabeamento, dados, sinais, conversor de força e multiplexador de sinais.
+
+O piloto não deve imaginar quando terá que fazer estas integrações.  Todavia, se você quer tirar o máximo do seu sistema XCSoar, faça a interação com outros sistemas através das \emph{interfaces}.
+\begin{itemize}
+\item Servidor de monitoramento remoto / rede de celular com recepção e cobertura.
+\item Rede GPS de satélite / recepção de satélite
+\item Servidores remotos de banco de dados / tradutor de dados
+\item XCSoar.org / canais de contato fornecidos na introdução deste manual
+\end{itemize}
+Para tanto, é tempo de parar com as teorias de sistema e mergulhar na realidade. Com um número incontável de ajustes do sistema, fornecemos alguns poucos exemplos do sistema do XCSoar - é o ponto inicial para um piloto curioso.  De forma alguma, este manual representa um guia totalmente desenvolvido para todas as funcionalidades do XCSoar. Os cinco exemplos descritos irão seguir o caminho da integração dos componentes restantes, iniciando com o sistema básico, consistindo de uma única peça de hardware. 
+
+\section{Ajuste exemplar do sistema do XCSoar}
+Devido a este fato, este manual não tem a intenção de ser uma publicação de propaganda portanto, diversos termos de componentes são usados para suportar uma classe de dispositivos. Para conseguir mais informações sobre os produtos de hardware, por gentileza consulte o site 
+\url{http://www.xcsoar.org/hardware/}, e o fórum do  \url{http://
+forum.xcsoar.org/} ou pergunte ao Google. Com termos compreendidos você estará equipado para procurar e fazer as descobertas. 
+
+\subsection*{XCSoar Básico}
+\subsubsection*{Ajuste} Tenha em mãos o XCSoar, um receptor de GPS e um estoque básico de dados fornecidos pelo site do XCSoar e se possível, o banco de dados de espaço aéreo de seu país, fornecido pela agência nacional de seu país.
+
+\subsubsection*{Funcionamento} Um ajuste básico do XCSoar lhe fornecerá um mapa quase perfeito com grande quantidade de informações básicas de vôo e funcionalidades. Se a configuração da polar da sua aeronave estiver correta, o computador de planeio irá lhe dar todos os dados táticos e estatísticos do seu vôo.  Observe que os cálculos em tempo real, como subida ou taxa de afundamento podem sofrer drasticamente pela má recepção de sinais de GPS, como os receptores internos de GPS que são instalados quando há orçamento apertado para construir um dispositivo barato.  Alguns destes dispositivos receptores de GPS baratos vêm com antenas receptoras ruins e algumas vezes dependem muito da informação local da sua rede de celular.  Este modo de localização é conhecido como aGPS (GPS assistido).  Assim que a cobertura da rede de celular fica fraca no ar, a localização de seu dispositivo também.  Se o seu dispositivo móvel mostra uma recepção estável, você adquiriu um bom dispositivo.
+
+\subsubsection*{Aplicação} O sistema XCSoar clássico também é amigável para ser integrado a um clube.  Sem nenhum hardware adicional necessário, você tem um sistema valioso sem ter que se filiar a nenhum clube de planadores.  O sistema básico pode ser útil se todos os seus amigos são orientados para pensar no convencional ou se você é um paraquedista com muito pouco espaço para instrumentos.  
+
+\subsection*{XCSoar Clássico}
+\subsubsection*{Setup} O XCSoar clássico é o sistema básico conectado a um FLARM.  Assim como a família de dispositivos FLARM usam portas seriais de comunicação, a primeira peça (hardware) de ‘cola’ pode parecer necessária em muitos casos.  Existem vários hardwares disponíveis, convertendo sinais FLARM de portas seriais para USB ou até rádio ou bluetooth.
+
+\subsubsection*{Funcionamento} Como deve ter esperado, o FLARM sozinho lhe fornece um sistema detector de colisões.  Primeiramente, deve-se ter integrado ao sistema, um bom receptor de GPS.  Com dados precisos do satélite, a leitura atual do XCSoar melhora muito.  Portanto, a recepção de satélite depende muito de onde o piloto monta a antena de GPS.  Coloque a antena em um lugar de maneira profissional e verifique a recepção.
+
+Os dispositivos FLARM que fornecem medidas de pressão de ar são mais valiosos.  Isto permite que o XCSoar compute a altura QNH.  É muito mais precisa que a altura derivada dos cálculos do GPS devido ao fato de que o a altura do GPS é o valor de pior precisão de todas as medições feitas pelo GPS.  A incerteza de altura pode ser de 50 metros.
+
+Adicionalmente, o XCSoar pega os dados de posição de outros em volta de você através do FLARM e desenha os alvos FLARM no seu mapa, mostrando também taxas de subida dos outros.  Um sistema clássico de XCSoar ajuda a equipe a voar.  Se a recepção for boa, não precisará achar seus colegas para reunirem esforços em achar termais mais fortes, perguntando uns aos outros.  Por fim, o FLARM irá fazer um registro do vôo de acordo com o IGC.  Você precisará deste registro para participar de várias competições e o registro tem que ser aprovado e selado.
+
+
+\subsubsection*{Aplicação} O sistema XCSoar clássico também é amigável para ser integrado a um clube.  Se os outros integrantes estão esquipados com um plug para gerenciar ou baixar dados de dispositivos FLARM, você pode conectar sem invasão, com a maioria das estruturas de instrumentos da aeronave.  Não importa o que esteja integrado ao sistema do XCSoar, as funcionalidades de um sistema clássico se transformam em um sistema muito valioso com alta taxa de integração.  
+
+\subsection*{XCSoar Clássico+}
+\subsubsection*{Ajuste} Montando um receptor ADS-B.  Com a rápida penetração no mercado do FLARM, consegue-se uma cobertura de detecção de colisão no cenário do vôo planado.  Todavia, este não é o caso de aeronaves motorizadas.  Se você deseja ter alvos para voar com motor mostrado no seu mapa, considere um receptor ADS-B na integração do seu sistema.  O primeiro exemplo de integração de duas fontes de dado é a junção do o FLARM com o receptor ADS-B.  Possivelmente irá necessitar de um multiplexador de dados para acoplar no seu hardware que está rodando o XCSoar, já que há somente uma porta de comunicação disponível, mas há a possibilidade de adquirir um multiplexador ou usar a função de bluetooth.  A maioria dos smartphones vem com o bluetooth incluso.  Outra forma é conseguir um dispositivo FLARM já equipado com um multiplexador para os dados FLARM e ADS-B.
+
+\subsubsection*{Funcionamento} A plataforma ADS-B é um sistema de previsão automática de vigilância.  Este sistema baseado em radar prevê a posição de aeronaves equipadas com este equipamento mesmo quando não encontrados no radar primário no solo.  Se você planeja usar este dispositivo, pense em fazer um ajuste muito cauteloso.  As aeronaves comerciais navegam em níveis de vôo mais alto (talvez não esteja interessado), portanto não necessitará destas informações em seu mapa.  Os radares transponders também são feitos para terem um longo alcance.  Ajuste os diversos filtros do seu sistema para que não tenha uma aglomeração de aeronaves detectadas no seu mapa.
+
+\subsubsection*{Aplicação} Aumento do apoio à situação de prevenção.  Porém, muitos pilotos julgam as informações do ADS-B exageradas pois mostram muito controle das organizações representativas do vôo como um todo.  Por gentileza, dispense algum tempo lendo as discussões sobre o uso do ADS-B em planadores antes de comprar o hardware.  Falando tecnicamente, o ADS-B é brilhante se usado como FLARM.
+
+\subsection*{XCSoar Táctico}
+\subsubsection*{Setup} Integre um variômetro eletrônico com o seu sistema clássico, chamado de eVario.  O eVario é a segunda peça do seu hardware a ser conectado, portanto você deve necessitar também de um multiplexador de dados para conectar ambos FLARM e eVario ao seu hardware que abriga o XCSoar.  Dispenda tempo estudando as características de interesse do seu eVario.  Há alguns modelos à venda que trazem consigo um multiplexador que mescla os dados do GPS e outros dados FLARM com suas próprias medições.  Também deve ser incluso um conversor de energia na porta de saída, deixando uma saída de força e dados prontos para o seu XCSoar. 
+
+\subsubsection*{Funcionamento} Os cálculos táticos do XCSoar irão lhe fornecer estimativas valiosas da posição ao alcance, mostrando a direção e informações sofisticadas atualizadas para alcançar estes pontos e muito mais.... mas como os vários cálculos dependem do vetor de vento e são de grande relevância, um eVario pode incrementar a estimativa de vento do XCSoar, tornando o valor de vento estimado um valor real (mas o vetor de vento continua como estimado).  Obviamente, o eVario também irá fornecer uma medição precisa de sustentação e afundamento.
+
+Sendo os cálculos táticos dependentes de sua estimativa atual de MacCready e degradação da polar, você pode achar útil ter a sincronização do eVario com o XCSoar.  É só uma questão de ajustar os dispositivos para fazerem esta sincronização.
+
+
+\subsubsection*{Aplicação} Consiga os melhores dados táticos em vôo que um piloto pode conseguir. :-))
+
+\subsection*{XCSoar de Competição}
+\subsubsection*{Setup} Adicione arquivos de dados no seu sistema tático, como provas e waypoints entre outros.  Para entrar com os vários formatos de arquivos pode ser necessário envolver um conversor de dados.  Pode ser necessário também ajustar uma página extra de tela, mostrando as medições relativas às competições.
+
+Neste caso, há chances de que a organização das regras da prova possa ter um item a ser melhorado pelos desenvolvedores do XCSoar.  Assim que introduzidas algumas regras e verificar que existem algumas divergências, poderá necessitar de apoio dos desenvolvedores.  Desta forma, o desenvolvimento do XCSoar pode ser visto como sendo parte do seu sistema XCSoar.
+
+Por gentileza, faça a comunicação das informações que julga importantes à comunidade do XCSoar.  Todos os desenvolvedores farão os seus melhores para manter as alterações e regras das competições atualizadas.  Mas tenha em mente que o XCSoar é um projeto de fonte aberta, desempenhado por voluntários.  Quanto mais cedo você fornecer as informações das alterações, melhores as chances de ter suporte pela comunidade XCSoar.  Isto vale também para questões comerciais também.  
+
+
+\subsubsection*{Funcionamento} A entrada de arquivos de prova irá garantir que você esteja equipado com dados precisos da prova. Não tenha a propensão de entrar os dados manualmente.
+ 
+As páginas adicionais irão lhe fornecer as leituras das infoboxes relacionadas com diversas fases da competição.  Para lhe dar algumas dicas, a infobox “Timer de Start aberto / fechado” aparece como sendo inútil em todos as situações de vôo?  Coloque outra página com outro conjunto de infoboxes.
+
+
+\subsubsection*{Aplicação}
+Sem comentários.
+
+\subsection*{Referência do XCSoar / Desenvolvedor}
+\subsubsection*{Ajuste} Coloque outro componente não mencionado nos ajustes do seu XCSoar, mas tenha cuidado de que o projeto do XCSoar tem como objetivo ter o melhor suporte possível de vôo tipo VFR (Visual Flight Reference – Referência Visual de Vôo).  Entrando com outras funcionalidades, você provavelmente entrará em funções experimentais e atrairá a atenção da comunidade XCSoar, especialmente quando integrar um sistema AHRS – você está lidando com componentes não certificados.   \tip \emph{ALL TODAS AS COISAS, TUDO O QUE FIZER} com o software XCSoar é por sua conta e risco.  Com algumas integrações podendo ser exóticas, você deixa longe o campo do objetivo primário.  Devem haver alguns poucos usuários que se dispões a fazer testes seguros para características exóticas.  Todavia, toda vez que o código do XCSoar é feito para ser estável, você estará sendo envolvido neste novo código. involving \emph{released} 
+code.
+
+AHRS é um sistema de referência de direção e altitude (AHRS -for Altitude Heading Reference System).
+
+\subsubsection*{Funcionamento} Não sendo o foco principal de todo o usuário do XCSoar, você de seguir o processo de desenvolvimento para que seja atualizado sobre as funções adicionais.  Há uma chance de receber por isso, como nos exemplos:
+\begin{itemize}
+\item Com um dispositivo AHRS você pode estar apto a usar o horizonte artificial.
+\item Dados RASP são para pilotos de ondas (sotavento).
+\item Arquivos adicionais de espaço aéreo, com foco na necessidade do piloto. 
+\item Dispositivos de comandos de entrada, fornecidos por entusiastas desenvolvedores de hardware (há casos de pilotos com controle de jogos!)
+\item sobre coisas futuras possíveis: na classe de componentes poderão ser integradas como transceptores, gerenciamento de motor, transponders, etc. (como em Janeiro de 2014).
+\end{itemize}
+
+\subsubsection*{Aplicação} Toda vez que pensar em uma característica fundamental para ser integrada ou configurada, entre em contato com o sistema desenvolvedor do XCSoar.  Sinta-se imensamente encorajado a testar versões de estreia ou versões alfa/beta após ter experiência com o comportamento do XCSoar.  A ajuda melhora a atualização da estabilidade do software ou fornece algum código novo.  Em outras palavras:
+
+\textsl{Pense no projeto do XCSoar como sendo parte de sua paixão pelo vôo e contribua.  Não siga somente sua paixão pelo vôo planado.  Envolva-se no desenvolvimento do XCSoar e descubra uma grande simpatia.   O sistema de referência/desenvolvimento é uma ferramenta muito valiosa para se tornar um membro do projeto.}
