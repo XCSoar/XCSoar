@@ -59,7 +59,7 @@ public:
     return { 0 };
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const {
     return value != 0;
   }
 
@@ -70,8 +70,13 @@ public:
     value = 0;
   }
 
+#ifdef NDEBUG
+  constexpr
+#endif
   unsigned GetKiloHertz() const {
+#ifndef NDEBUG
     assert(IsDefined());
+#endif
 
     return BASE_KHZ + value;
   }
