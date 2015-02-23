@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
+#include "Net/IPv4Address.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/GlobalIOThread.hpp"
@@ -99,8 +100,9 @@ main(int argc, char *argv[])
   client.SetHandler(&handler);
 #endif
 
+  IPv4Address address2(1,2,3,4,1234);
   client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(address)) {
+  if (!client.Open(address2)) {
     fprintf(stderr, "Failed to create client\n");
     return EXIT_FAILURE;
   }

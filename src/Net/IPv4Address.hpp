@@ -75,7 +75,7 @@ class IPv4Address {
 
   static constexpr struct in_addr ConstructInAddr(uint8_t a, uint8_t b,
                                                   uint8_t c, uint8_t d) {
-    return ConstructInAddr(ConstructInAddrT(a, b, c, d));
+    return { ConstructInAddrT(a, b, c, d) };
   }
 #endif
 
