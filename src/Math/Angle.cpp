@@ -46,7 +46,7 @@ Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
 {
   is_positive = !negative(value);
 
-  unsigned value = (unsigned) (AbsoluteDegrees() * (fixed) 60000);
+  unsigned value = (unsigned) (AbsoluteDegrees() * 60000);
   dd = value / 60000;
   value %= 60000;
   mm = value / 1000;
