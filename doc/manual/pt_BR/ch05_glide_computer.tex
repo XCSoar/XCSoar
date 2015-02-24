@@ -1,0 +1,430 @@
+\chapter{Computador de Planeio}\label{cha:glide}
+Este capítulo foca no funcionamento do computador de planeio do XCSoar e a sua leitura é recomendada para entender como os detalhes dos cálculos são realizados e como usar o software adequadamente.  É assumido que o piloto conheça o básico do vôo de cross-country, mas também sua leitura é muito útil para os pilotos de competição e cross-country.
+
+
+\section{Modos de vôo} \label{sec:flightmodes}
+
+Para reduzir o trabalho do piloto, o XCSoar é capaz de realizar várias coisas, dependendo do vôo do piloto.  O XCSoar pode fazer isto sem intervenções do piloto.  As diferenças podem ser vistas em telas diferentes, cálculos e informações de vôo, entre outras.  As quatro condições usadas pelo XCSoar são chamadas 
+\emph{Modos de vôo}, que são:
+\begin{itemize}
+\item Modo de cruzeiro
+\item Modo de Giro (Girando)
+\item Modo de planeio final
+\item Modo de Aborto
+\end{itemize}
+O XCSoar detecta automaticamente as diferenças entre Girando, em vôo e modo de cruzeiro.  O modo Girando é ativo quando a aeronave vira (geralmente três quartos de curva).  Depois de 30 segundos voando em linha reta, o software irá do o modo Girando para o modo de cruzeiro.  Esta alternância é baseada em uma condição simples.
+
+É possível ter um a mudança para o modo de giro baseado em uma entrada externa (ex. por um interruptor acionado pelo piloto).
+
+O modo de planeio final é ativado quando a aeronave está acima do caminho do planeio final, relativo à navegação na prova e margens de segurança.  A altura necessária depende muito do valor ajustado de MacCready, mas também é considerada a desobstrução (abertura) do relevo.  Quando se entra em uma termal enquanto estiver em modo de planeio final para ganhar mais altura e margem de segurança, o XCSoar alternará para o modo de giro e novamente de volta para o modo de planeio final, uma vez que as condições foram alcançadas (ex. a aeronave está acima do planeio final para fechar a prova, considerando o ajuste de MacCready e relevo).
+
+Uma característica importante é o modo de vôo sendo alterado por diferentes ajustes estratégicos de MacCready.  Se você decidir deixar o XCSoar gerenciar automaticamente os ajustes, ele manterá o valor baseado nas térmicas passadas até o planeio final.  
+Instantaneamente, o valor de MacCready é ajustado para conseguir o tempo mínimo de chegada ou o que o piloto ajustou como valor para planeio final (veja seção \ref{sec:auto-maccready}).
+\config{final-glide} Hence the switch to final glide mode is based on 
+a set of sophisticatedly computed tactical conditions.
+
+You might force XCSoar to enter final glide mode by skipping all 
+remaining turnpoints, if for example conditions get worse and you 
+decided to just go home.
+
+Abort mode is invoked manually to give you full control in case of 
+emergency via menu.  No automatics - you decide.  The abort mode 
+might be understood technically as a special final glide mode with 
+concurrent support for multiple optional targets. However, in 
+perception the abort mode simply supports your urgent decision where 
+and how to go finally (see section \ref{sec:taskabort}).  Neste caso, há um ajuste de segurança de MacCready.  Portanto, a alternância para o modo de aborto é baseada no conhecimento do piloto.
+
+Devido a este fato, os diferentes tipos de vôo refletem normalmente em informações diferentes sendo mostradas.  O usuário do XCSoar tem que estar acostumado a estes modos de exibição.  É o padrão notado na tela \emph{perceived} após o XCSoar ter sido instalado sem qualquer configuração avançada.  Como tudo no XCSoar, o comportamento da tela pode ser alterado pela adição de valores por usuários avançados. .  Alterando estas exibições não influenciam as condições para entrar em modo de vôo.
+
+Para se tirar vantagem máxima dos conceitos de modos de vôo, o XCSoar irá sempre \emph{sempre} mostrar qual modo está ativo.  Um pequeno símbolo é desenhado no canto inferior direito da área do mapa, indicando qual modo de vôo o computador está no momento.
+
+\begin{tabular}{c c c c}%{c c c c}
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_cruise.pdf} &
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_climb.pdf} &
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_finalglide.pdf} &
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_abort.pdf}\\
+(a) & (b) & (c) & (d)
+\end{tabular}
+
+\begin{description}
+\item[Cruzeiro (a)]   a aeronave não está girando e não há prova ativa ou waypoint da prova não é o ponto final.
+\item[Girando (b)]  a aeronave está girando (mas pode não estar subindo).
+\item[Planeio final (c)]  a aeronave não está circulando e o waypoint ativo é o final da prova.
+
+\item[Aborto (d)]  é manualmente acionado e indica as opções de pouso imediatamente ao usuário. (veja seção ~\ref{sec:taskabort})
+\end{description}
+
+O conceito de modos diferentes de vôo ativam muito mais características que são automáticas:
+\begin{itemize}
+\item \config{screenpages} as Infoboxes podem ser configuradas de modo diferente para cada tipo de vôo (veja seção \ref{sec:infoboxandpages})
+\item \config{circlingzoom} Muda o nível de zoom entre Girando e outros modos de vôo (chamado de zoom girando, veja seção \ref{sec:zooming}).
+\item \config{variogauge} Muda o indicador do variômetro (taxa bruta de subida) e a massa de ar subindo ao redor (taxa líquida) enquanto em cruzeiro (veja seção \ref{sec:variometer}).
+\item \config{thermalassistant} Quando em modo girando, aciona o ‘assistente de termal’, um pequeno diagrama polar mostrando a ascendente sobre um curso circular  (veja seção \ref{sec:thermal-assistant}).
+\item \config{traildrift} SMudar para um compensador de deriva, mostrando uma trilha compensada pelo vento dos círculos, para você voar melhor mostrando o cisalhamento do vento (veja seção\ref{sec:trail}). 
+\end{itemize}
+
+Mudar para um compensador de deriva, mostrando uma trilha compensada pelo vento dos círculos, para você voar melhor mostrando o cisalhamento do vento (veja seção
+\ref{sec:infoboxandpages} “Infoboxes and Páginas de telas”.\config{screenpages}
+
+
+\section{Ajustes de MacCready}
+
+O ajuste de MacCready pode ser feito das seguintes maneiras:
+\begin{itemize}
+\item With \bmenug{Config 1}\blink\bmenug{MC $+$/$-$}
+\item para telas de toque/mouse, selecione o MacCready nas infoboxes usando as teclas acimar/abaixo.
+\item quando estiver conectado a um variômetro inteligente, se ajustar o valor de MacCready no variômetro, automaticamente será alterado no XCSoar, de acordo com sincronização configurada (veja seção \ref{conf:comdevices})
+\end{itemize}
+Há também um modo automático de MacCready disponível, como descrito na seção ~\ref{sec:auto-maccready}.
+
+
+\section{Polar do planador}\label{sec:glidepolar}
+
+As especificações da maioria dos planadores estão na lista do XCSoar.  
+\menulabelr{\bmenug{Config 2/3}\blink\bmenug{Planador}}
+Se o seu planador não está listado, pode ser usado um equipamento aproximado se não achar uma curva polar melhor.  Todavia, para resultados mais precisos, é recomendado que se use a curva polar de sua própria aeronave.  Determinador também a massa correta da aeronave também é muito importante para resultados precisos.  A verificação antes do vôo do seu computador tático inclui também verificar os ajustes para o lastro de água e peso seco.    O XCSoar não oferece ajuste do peso do piloto, portanto você tem a liberdade de incluir o ajuste de massa seca e água. 
+
+No topo da polar e configuração de massa, a polar é ajustável para voar levando-se em conta o decréscimo de desempenho devido a gotículas de água ou insetos.
+
+Os insetos no bordo de ataque da asa, bem como gotas de chuva na asa afetam o desempenho aerodinâmico.  É de responsabilidade do piloto julgar e atualizar o valor de insetos durante o vôo.  O valor de insetos é expresso como uma porcentagem da degradação comparada com o desempenho da aeronave limpa.  Por exemplo, com um valor em 0%, a aeronave desempenha como limpa, em 50%, a taxa de afundamento é dobrada se comparada com o 0%.  A escala de cálculo é linear e pode ser intermediária a estes valores acima citados.
+
+\menulabel{\bmenug{Info 1}\blink\bmenug{Análise}}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/cut-clean-dirty-polar.png}
+\end{center}
+Sabendo disso, ajustando para valor péssimo de poluição por insetos, pode-se abaixar em 30% a curva polar.  Alguns experimentos devem ser feitos para determinar o ajuste mais apropriado de insetos, pois o desempenho pode se alterar para cada tipo de aeronave.
+
+Também pode ajustar “Auto bugs” que irá adicionar 1% de insetos para cada hora voada, ajustado da seguinte forma:
+
+\button{Config 2}\blink\button{System}\blink\button{Glide Computer}
+\\*
+\blink\button{Safety Factors}\blink\button{Auto bugs}\\
+
+O lastro é expresso em litros de água.  Dependendo do que foi ajustado de massa seca da aeronave, isto pode incluir opcionalmente uma margem de peso para o piloto.  Quando se voar sem lastro, pode-se ajustar para um piloto pesado, um lastro de 15 litros e a polar é ajustada para incluir este peso no cockpit.
+
+\begin{center}
+\menulabel{\bmenug{Info 1}\blink\bmenug{Analysis}}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/overlay-non-balasted-polar.png}
+\end{center}
+
+
+\section{Janela de ajuste de vôo}\label{sec:flight-setup}
+Use a janela de ajuste de vôo para modificar todo o peso do planador antes e durante o vôo, bem como ajustar a pressão QNH.
+
+\menulabel{\bmenug{Config 1}\blink\bmenug{Flight}}
+\begin{center}
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
+\end{center}
+
+O ‘Bugs’ determina a quantidade de degradação da polar devido à contaminação durante o vôo.  O valor de 0% irá fazer o software deixar a polar limpa.  Um ajuste de 50% fará a degradação da polar e dobrar a taxa de afundamento para a mesma velocidade.
+
+O ajuste de lastro é usado para modificar a polar na quantidade de água carregada durante o vôo.  O lastro é especificado em litros e deve ser correspondente à quantidade de água adicionado antes do vôo.  O ajuste de lastro modifica a polar levando em consideração a carga alar.
+
+Use esta janela antes e após o vôo para gravar a pressão barométrica média, conhecida como pressão QNH.  O software usa este valor para converter os níveis de vôo em altitudes.  Se estiver conectado a um variômetro inteligente com altímetro, a altitude é atualizada nesta janela.  Fica mais fácil ajustar a QNH se soubermos qual a elevação do aeródromo.
+
+A temperatura máxima prevista no chão é usada pelo algoritmo de previsão de convecção (veja seção ~\ref{sec:convection-forecast}) para determinar a altura estimada de convecção e base das nuvens.
+
+\tip É possível configurar o XCSoar para mostrar as janelas básicas quando se inicia o software.
+
+No início do sistema, após encontrado sinal de GPS, se um dispositivo barométrico externo está conectado (ex. Vega, AltairPro, FLARM), o valor de QNH é ajustado automaticamente.  Este ajuste corrige QNH, bem como todas as altitudes barométricas e a altitude do terreno (solo).
+
+O valor de QHN é atualizado somente se a aeronave está no chão por mais de 10 segundos.  Se o XCSoar for reiniciado durante o vôo, QNH são será ajustada.   A atualização só ocorre se a base de dados do terreno é válida na posição atual da aeronave.
+
+\section{Mostrador de comando de velocidade}
+
+Quando usado em conjunto com um variômetro inteligente que indica medições de velocidade do ar, uma barra de indicação de velocidade é mostrada no lado direito do mapa.  Se a aeronave está voando mais lenta do que a velocidade ideal, as barras serão vermelhas e apontarão para baixo.  Se a aeronave estiver voando mais rápido do que a velocidade ideal, as barras serão verdes e apontam para cima.  Se a velocidade atual é próxima da ideal, não serão mostradas barras.
+
+%{\it DIAGRAM SHOWING SPEED COMMAND CHEVRONS}
+
+Dependendo da configuração, as barras de velocidade podem ser mostradas do lado direito do mapa ou no indicador do variômetro. 
+
+\section{Speed to fly}\label{sec:stf}
+
+O XCSoar calcula continuamente dois tipos de velocidades para voar:
+\begin{description}
+\item[Velocidade MacCready]  é a melhor velocidade para se voar em cruzeiro em ar estável, ajustando o vento se estiver no planeio final.
+\item[Velocidade Golfinho]  esta é a melhor velocidade instantânea para se voar em ascendentes ou descendentes, ajustando o vento se estiver em planeio final.
+\end{description}  
+
+O piloto pode especificar a velocidade máxima de manobras no ajuste de configurações, cujos limites cálculos de Speed-to-Fly e MacCready serão valores reais.
+
+Pilotos diferentes tem preferências pessoais e podem escolher voar em um modo chamado ‘MacCready travado’ e podem voar em velocidades constantes entre termais, de acordo com a velocidade MacCready: ou voar em modo golfinho, cujo vôo tem velocidade variável de acordo com o valor mutante de velocidade de golfinho. 
+
+\begin{maxipage}
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_speed_to_fly-pt_BR.pdf}
+\end{center}
+\end{maxipage}
+
+A opção de configuração “travar velocidade” (veja seção~\ref{sec:final-glide}) pode ser usada para especificar tanto as velocidades de golfinho como a velocidade travada.  A infobox ‘V Opt’ mostra a velocidade ideal de acordo com o modo selecionado. Quando conectado com o variômetro inteligente Vega, o som do comando de velocidade é baseado no valor ideal de velocidade.
+
+
+\section{Speed to fly com risco}\label{sec:safety-factor}
+
+ O sistema speed to fly pode sem compensado por risco, cujo ajuste de MacCready usado para cálculo da velocidade de vôo (ambos os modo travado e golfinho) é reduzido quando a aeronave estiver baixa.
+
+Muitos pilotos normalmente abaixo o MacCready quando estão baixos – esta característica é desempenhada automaticamente.  A teoria principal de como isto é implementado no XCSoar é baseada somente no texto de John Cochrane, “MacCready Theory with Uncertain Lift and Limited Al- titude” Technical Soaring 23 (3) (July 1999) 88-96.
+
+\url{http://download.xcsoar.org/papers/john.cochrane/safety_glides.pdf}
+
+O parâmetro de configuração $\gamma$ (‘STF fator de risco’, nas configuração, sob e menu “Computador de Planeio”) controla como o valor de risco de MacCready é calculado.  O fator $\gamma$  determina a fração do valor atual de MacCready como uma função da fração de altura.  A fração de altura usada neste cálculo é a média da altura acima do terreno (h) com a altura da subida máxima (normalmente a altura da base da nuvem) acima do térreo  ($h_{top}$).  O ajuste $\gamma$ também representa a fração da subida total disponível (base da nuvem menos o solo) na qual você deseja abandonar a prova e iniciar a preparação para pousar.  Porém, um baixo valor de $\gamma$ indica uma tolerância alta para risco de pouso e um valor alto indica baixo risco.
+
+  Para valor padrão, $\gamma=0.0$, não há compensação ---
+o risco de MC é o mesmo do ajuste de MC.  Para $\gamma=1.0$,  o risco de MC é escalado linearmente com a fração da altura $h/h_{top}$.
+  Para valores intermediários de $\gamma$, o risco de MacCready varia suavemente com a fração da altura, até que seja pequeno quando estiver voando baixo.
+
+ Baixos valores de $\gamma$  são melhores quando os pilotos não querem diminuir sua velocidade em baixa altura (mas há risco de pousar);  altos valores de $\gamma$ podem ser usados por pilotos cautelosos, mas resultará em velocidades médias mais baixas.
+
+  Valor recomendado de$\gamma=0.3$.
+
+\begin{center}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/riskmc.png}
+\end{center}
+
+
+\section{Alturas de segurança}\label{sec:safety-heights}
+
+Três alturas de segurança são definidas para fornecer uma margem de segurança nos cálculos do computador de planeio:
+As alturas de segurança são:
+
+\begin{description}
+\item[Altura de chegada]  é a elevação acima do chão necessária para a aeronave chegar.  Normalmente você deseja incluir a altura de segurança para se fazer um pouso seguro, mais uma margem de erro nas ascendentes e descendentes e erros nos cálculos da rota e velocidade.  Este valor é usado nos cálculos de planeio final e também na determinação de possíveis campos de pouso.  
+\item[Abertura do terreno]
+ esta elevação acima do chão, acima de qualquer caminho computado da aeronave é considerada para fornecer qualquer terreno inadequado.  O valor de liberação do terreno afeta o planeio e se o planeio final estiver abaixo da liberação do terreno, um marcador de alerta (grande cruz vermelha) será desenhado na tela.  Se a elevação do terreno é inválida ou fora do alcance, o marcador de planeio e também o alerta serão desativados.
+\item[Desativação da altura]  esta elevação acima do solo, abaixo do que é recomendado para os pilotos considerarem a prova cancelada e concentrarem em achar um campo apropriado para pouso.  Esta altura não afeta o XCSoar de nenhuma forma, mas é citada neste manual.
+\end{description}
+
+\begin{maxipage}
+\begin{center}
+\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/figure_terrain-pt_BR.pdf}
+\end{center}
+\end{maxipage}
+
+\warning
+A altura de segurança pode ser ajustada para zero, mas não é recomendada, uma vez que todos os cálculos de planeio, instrumentos, fonte de dados (como elevação do terreno) estão sujeitos a algum grau de erro e a atmosfera na qual está a aeronave é imprevisível.
+
+ O XCSoar determina a elevação acima do nível do mar de qualquer pilão ou pouso do arquivo de waypoint e caso não seja especificada a altura no arquivo de waypoints, através do arquivo de terreno.
+
+\textbf{A altura de chegada estimada mostrada perto dos pontos pousáveis é calculada de forma padrão para o melhor ângulo de planeio com ajuste de MacCready igual a zero, corrigida pelo vento.  Porém, o ajuste de segurança de MacCready deve ser configuração para modificar o valor de MacCready usado nestes cálculos, como descrito anteriormente.}
+
+Os campos pousáveis são marcados somente como no alcance se a elevação estimada de chegada está acima da altitude de segurança de chegada e o caminho do planeio não intercepta nenhuma altitude de segurança de obstrução do terreno.
+
+A todo momento, se o planeio final através do marcador de terreno (cruz vermelha) está sendo mostrado na tela, a aeronave deve subir para manter a segurança de alcance do destino.
+
+Quando é calculada a altura de chegada nos campos pousáveis (para a visualização do mapa no modo de aborto), o valor de MacCready de segurança pode ser especificado nos ajustes das configurações.  Este valor de segurança é zero por padrão.  Valores maiores fazem os cálculos de altura de chegada mais conservadores.
+
+\section{Calculadora de planeio final}
+
+A calculadora de planeio final usa várias fontes de informação quando determina a altitude necessária para alcançar o gol ou o próximo waypoint.  São eles:
+
+\begin{itemize}
+\item Os dados de curva polar da aeronave;
+\item A velocidade e direção do vento;
+\item A distância e direção do gol ou do waypoint;
+\item O ajuste de MacCready;
+\item A altitude do waypoint ou gol;
+\item A margem de segurança especificada pelo piloto (altura de chegada e abertura do terreno);
+\item A energia total da aeronave se o XCSoar estiver conectado a um instrumento com indicador de velocidade do ar.
+\end{itemize}
+
+Através dos parâmetros mostrados acima, duas altitudes são derivadas:
+\begin{description}
+\item[Altitude necessária]
+este cálculo é a altitude total necessária para a aeronave atingir o gol mais a altura de segurança do usuário.
+\item[Diferença de Altitude]
+este cálculo é a altitude necessária para planar até o gol juntamente com qualquer altitude do gol, menos a altitude acima do nível médio do mar da aeronave.  O resultado representa sua altura acima do declive da aeronave ou sua altura acima do gol.  Se não houver alguma altitude do gol fornecida, o XCSoar irá usar a altitude do arquivo de terreno no gol.
+\end{description}
+
+O cálculo de planeio final é estendido para calcular as altitudes necessárias e a diferença para completar toda prova.  Esta capacidade é algumas vezes referenciada como planeio final ao redor de múltiplos pilões.  
+The altitude difference to complete the task is displayed continuously
+as an arrow and in numeric form on the left hand side of the map area
+of the screen.
+
+A diferença de altitude para completar a prova é mostrada continualmente como uma seta e em forma numérica no lado esquerdo da área do mapa na tela.
+
+A altitude necessária é ajustada para energia, compensando o fato de que a energia cinética do planar pode ser convertida em altura (energia potencial).  A energia cinética que é convertida em altura é calculada pela diferença da velocidade real do ar no melhor planeio.  Esta compensação é mais precisa quando dados da velocidade do ar estão disponíveis para o XCSoar, caso contrário a velocidade verdadeira do ar é estimada da velocidade do vento e velocidade solo.
+
+
+\section{Exibição da altitude necessária}
+
+Do lado esquerdo do mapa, há a visualização da diferença de altitude calculada necessária para a aeronave finalizar a prova ou alcançar o ponto final.  Se a aeronave estiver acima da altitude mínima necessária, é desenhada uma seta verde acima indicando o excedente de altura.
+
+Se a aeronave estiver abaixo da altitude mínima necessária, é desenhada uma seta vermelha indicando a altura necessária.  Porém, se houver waypoints pousáveis dentro do planeio, mas a aeronave está abaixo da altura mínima necessária para completar a prova, a barra terá cor âmbar.
+
+\begin{center}
+\begin{tabular}{c c}
+{\it Acima} & {\it Abaixo} \\
+\includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-above.png} &
+\includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-below.png} \\
+\multicolumn{2}{l}{A escala do planeio final é $+/-$ 500 metros.} \\
+\multicolumn{2}{l}{A barra atrás da escala é indicada com a ponta cortada.}
+\end{tabular}
+\end{center}
+\tip
+Neste ponto também deve ser mencionada que a altura abaixo do planeio indicada não é uma diferença plana do planeio e altura atual.  Depende também do ajuste do ‘Deriva do vento prevista (Ligado)’ o indicador ‘Abaixo’ mostra a altura necessária para se ganhar em uma térmica.  \config{predict-drift}
+A altura necessária deve ser um pouco mais se houver vento de frente, bem como menos se houver vento de cauda.  Portanto (prever derivado do vento ajustado para ‘Desligado’) só irá planeja a diferença de altura.
+ 
+
+
+\subsection*{Barra de duas altitudes necessárias}
+
+A barra de planeio final foi aumentada para mostrar o efeito do ajuste de MacCready na diferença de altitude para completar a prova.  O mostrador indica uma seta fina brilhante a diferença de altitude calculada com MacCready zero, bem como a diferença de altitude calculada com o MacCready atual.  
+
+O número mostrado na caixa perto da barra de planeio final mostra a diferença de altitude com o ajuste atual de MacCready.
+
+Os exemplos de aparências nas diversas configurações da barra com MacCready =0 são mostrados abaixo:
+
+\begin{description}
+\item[Acima do planeio final] (atual MC=0.7)
+\smallsketch{figures/fig-finalglide-allabove.png}
+ (atual MC=0,7).  Aqui é mostrado que com o atual ajuste de MacCready, a aeronave está acima do planeio final (seta preenchida).  A seta bipartida mostra o excesso de altura.
+
+\item[Acima/abaixo do planeio final] (MC=1.8)
+  Aqui é mostrado que no ajuste atual de MacCready, a aeronave está abaixo do planeio final (seta preenchida âmbar).  A seta fina verde mostra que com MacCready$=0$, a aeronave está acima do planeio final. 
+
+\smallsketch{figures/fig-finalglide-halfabove.png}
+ Neste caso, a aeronave está subindo, o piloto pode decidir quando deixar a termal mais cedo e iniciar um planeio final e configurar MacCready para um valor menor ou continuar subindo.  É útil para alterar o valor de MacCready para um valor mais preciso – tornando simples para o piloto compara a taxa alcançada de subida com o valor de MacCready.  Quando a taxa de subida cair abaixo do valor de MacCready, o piloto poderá deixar a termal.
+
+\item[Abaixo do planeio final] (MC=2.5 and with less heigth)
+\smallsketch{figures/fig-finalglide-littlebelow.png}
+  Here the display shows that at the current MacCready setting, the aircraft
+  is below final glide (filled red arrow).  The tip of the red arrow is chopped off
+  to show that the altitude undercut the 500 meter limit the arrow can scale on.
+  The split slightly brighter red arrow shows that by reducing the MacCready 
+  setting to zero, the aircraft still is far from final glide.
+
+\item[Below final glide] 
+ (MC=2,5 e com menos altura) aqui é mostrado que no valor atual de MacCready, a aeronave está abaixo do planeio final.  A seta mais fina
+\smallsketch{figures/fig-finalglide-allbelow.png}
+ mostra que mesmo com MacCready=0, a aeronave está muito abaixo do planeio final.
+\end{description}
+
+
+\section{Estimativa da velocidade de prova}\label{sec:task-speed-estim}
+
+Alguns dos cálculos internos fazem uso das estimativas do tempo necessário para alcançar cada waypoint da prova.  Esta informação é usada em alguma infobox mostradas, cálculos AAT e alertas de nascer e pôr do sol.
+
+O computador de planeio assume que a média velocidade de planeio do cross-country é igual à média alcançada sob a teoria clássica de MacCready levando em consideração o vento com o ajuste atual de MacCready.  Este método é usado para estimar o tempo de chegada e hora final da prova.  
+
+
+As medições das velocidades de prova são definidas:
+\begin{description}
+\item[Velocidade de prova atingida]  velocidade da prova atual, compensada pela diferença de altitude do início da prova.
+\item[Velocidade média da prova]  é a velocidade da prova atual, compensada pela altitude necessária para completar a prova.
+\item[Velocidade da prova restante] velocidade da prova estimada para o restante da prova, de acordo com a teoria de MacCready.
+\item[Velocidade instantânea da prova]  velocidade instantânea estimada ao longo da prova.  Quando se está subindo com o ajuste de MacCready, este número será similar à velocidade da prova.  Quando se está subindo devagar ou voando fora da rota, este número será menor que a velocidade estimada da prova.  Em cruzeiro com velocidade ideal sem subida, este número será similar à velocidade estimada da prova.
+
+Esta medição, disponível como uma infobox é útil para indicar continuamente o desempenho do cross-country.  Não é utilizada em nenhum cálculo interno.
+\end{description}
+
+Para provas de áreas definidas (AAT), ao mesmo tempo que é \tip calculado o novo tempo da prova, a posição do alvo é otimizada.  Para cada alvo variável ajustado como “auto”, faz com que o XCSoar mude a posição para que a AAT seja completada em um tempo não superior a cinco minutos do que o tempo estabelecido para a prova.
+
+Além disso, uma medição chamada MacCready alcançado também é calculada.  É computada achando-se o ajuste ideal de vôo de MacCready sob condição clássica que produzirá a mesma velocidade da prova como sendo alcançada.  Este valor é maior do que o ajuste de MacCready quando a aeronave subiu mais rápido do que o ajuste de MacCready ou quando a aeronave vou em ‘cloud streets’.  O MacCready alcançado é usado na janela calculadora de prova.
+
+A velocidade da prova estima que, para a velocidade alcançada, há a compensação da variação da altitude e efeitos de subidas, que são levadas em consideração para o cálculo da velocidade média da prova.  Considerando duas aeronaves A e B voando a mesma prova, a aeronave A voa mais rápido, trocando altitude por velocidade.  A aeronave B está atrás da A, mais alta, e economizará tempo posteriormente, sendo que não terá que subir tanto para terminar a prova.
+
+Quando se voa provas AAT, a medição da velocidade da prova pode variar quando a aeronave estiver dentro de uma área AAT ou quando o alcance AAT ou alvo são ajustados pelo piloto, quando estes eventos ocorrem, devido à distância alcançada da prova e velocidade restante.
+
+
+\section{Trilha otimizada de cruzeiro}
+
+Para ajudar a reduzir o erro na trilha de cross-country quando não se está voando em waypoint finais, o XCSoar calcula um ajuste da trilha, chamada de ‘otimização da trilha de cruzeiro’.    Esta trilha é ajustada para compensar a deriva do vento quando se está girando e é útil para determinar o tempo gasto girando de acordo com a teoria clássica de MacCready.
+
+\begin{center}
+\begin{maxipage}
+\centering
+\def\svgwidth{0.8\linewidth}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_optimal_cruise-pt_BR.pdf}
+\end{maxipage}
+\end{center}
+
+A trilha ideal de cruzeiro é mostrada na área do mapa como uma seta grande azul e recomenda que a aeronave vira para que alinhe a trilha com a seta azul durante o cruzeiro.  Por exemplo, se a tela está orientada ‘Rota acima’, a seta azul irá apontar diretamente para cima.
+
+O computador de planeio considera a deriva do vento durante o giro para fornecer um vetor de ‘trilha otimizada de cruzeiro’ que indica a trilha que a aeronave deverá seguir para que chegue no waypoint no tempo mínimo possível.  Este vetor é mostrado no mapa como uma seta azul.  Quando o vento é desprezível ou quando o computador está em planeio final, esta seta irá apontar ao longo da linha preta que indica a trilha para o próximo waypoint.
+
+Os cálculos e visualização da trilha otimizada de cruzeiro são características únicas do XCSoar.  Normalmente, quando em transição de termais, o sistema de navegação direciona a aeronave para virar para que a aeronave aponte diretamente para o alvo.  A trilha da aeronave é colinear com a linha do waypoint anterior com o próximo, para que o erro seja menor e conseqüentemente a aeronave faça a distância mínima entre os waypoints.
+
+Porém, a aeronave geralmente não pára o vôo de cruzeiro para subir em termais, enquanto circula, a aeronave deriva com o vento e o erro da trilha pode aumentar.  Após alguns giros subindo, a trilha geral se torna curva. 
+%
+%{\it DIAGRAM SHOWING CRUISE TRACK NOT ADJUSTED FOR WIND}
+Para o caso onde o waypoint final está ativo e está acima do planeio final, girar não é necessário, já que este esquema é otimizado.
+
+
+\section{Auto MacCready}\label{sec:auto-maccready}
+
+O XCSoar pode ajustar o anel de MacCready automaticamente para aliviar o trabalho do piloto.  Estão disponíveis dois métodos de atualizar o anel de MacCready:
+\begin{description}
+\item[Planeio final]  durante o planeio final, o valor de MacCready é ajustado para chegar no ponto final no tempo mínimo.  Para provas de velocidade OLC, o MacCready é ajustado para que cubra maior distância no tempo restante e alcance a altura final.
+\item[Tendência de subida média] When not in final glide, MacCready is adjustedquando não está no planeio final, o MacCready é ajustado para fazer a tendência média de subida, baseada em todas as termais.
+\end{description}
+Ambos os métodos podem ser usados para que, antes de alcançar o planeio final, o ajuste de MacCready é feito para a taxa média de subida e durante o planeio final é ajustado para fornecer o mínimo tempo até a chegada.
+
+O método usado é definido nos ajustes de configurações como campo ‘Modo auto MC’.  O ajuste padrão é “Ambos”.  Para habilitar/desabilitar o Auto MC, use o menu.  
+
+\menulabel{\bmenug{Config 1}\blink\bmenut{MacCready}{Auto}}
+
+Quando o Auto MacCready é ativado, a infobox do MacCready mostra ‘MC auto” ao invés de ‘MC manual’ e o indicador de MacCready no mostrador do variômetro mostra “Auto MC’ ao invés de ‘MC’.  Para se tirar o maior benefício do ajuste automático de MacCready, o XCSoar divulga o valor de MacCready no variômetro inteligente (se conectado).
+
+O método Auto MacCready é descrito em detalhes abaixo.  
+
+\subsection*{Planeio Final}
+
+Quando se está acima da altitude de planeio final, o ajuste do anel de MacCready deve ser aumentado, resultando em um comando para aumentar a velocidade.  Por causa do aumento do anel, também haverá um aumento da potência da termal que poderá ser útil girar.
+
+Igualmente, quando abaixo da altitude de planeio final, resulta em uma velocidade menor.  Como o anel foi diminuído, o piloto deve estar preparado para girar em termais mais fracas.
+
+O Auto MacCready desempenha este ajuste automaticamente e continuamente.  Normalmente, fica sem sentido ativar este movo antes de alcançar a altitude final de planeio, estando ainda no início do vôo, a aeronave estará bem abaixo da altitude final de planeio e o Auto MacCready irá fazer o ajuste do anel para zero.  
+
+
+\begin{maxipage}
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_auto_maccready-pt_BR.pdf}
+\end{center}
+\end{maxipage}
+
+
+\subsection*{Média de subida}
+
+Este método ajusta o MacCready para a taxa média de subida alcançada através de todas as termais no vôo atual.  Leva em consideração o tempo gasto centrando a termal.  O valor é atualizado após deixar a térmica.
+
+Sendo a teoria de MacCready ideal, se o ajuste de MacCready é a taxa média de subida da próxima subida esperada, este método pode fornecer um desempenho abaixo do esperado (comandando para abaixar a velocidade) se as condições melhorarem; e igualmente pode não ser muito conservador se as condições piorarem (comandando para aumentar a velocidade).  Também, se o piloto continua a subir em termais fracas, irá reduzir a média e poderá encorajar o piloto a continuar selecionando termais fracas.
+
+Como resultado destas limitações, o piloto deverá estar atento de como o sistema opera e ajustar seu ‘tomador de decisões’ apropriadamente.
+
+
+\section{Janela de Análise}
+
+The analysis dialogue can be used to check the glide polar.  
+\menulabel{\bmenug{Info 1}\blink\bmenug{Análise}}
+
+A janela de análise pode ser utilizada para verificar a polar da aeronave.
+
+A página da polar mostra um gráfico da curva bolar no ajuste atual de lastro e insetos.  Também mostra o melhor L/D calculado e qual velocidade ocorre, a taxa mínima de afundamento e a velocidade em que ocorre.  O peso atual da aeronave é mostrado no título.  
+
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
+\end{center}
+
+Nesta página, o botão ‘Configurações’ abre a janela de ajustes de vôo (ajuste de insetos – bugs – e lastro).
+
+A página da curva polar da janela de análise mostra a média total da taxa de afundamento para cada velocidade alcançada no vôo, quando conectado a um variômetro inteligente (ex. Vega).  Esta facilidade permite ao piloto desempenhar vôos de teste em condições atmosféricas estáveis, em dias calmos sem vento e comparar a polar medida com a do modelo da aeronave e ver se a aeronave está voando com flaps ideais e também investigar os benefícios da otimização do desempenho, como por exemplo selando as superfícies de controle, etc.
+
+Os dados são coletados somente quando em modo de cruzeiro e carga G entre 0,9 e 1,1, portanto, os pilotos que foram fazer testes devem tentar voar suavemente com as asas niveladas.
+
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-glidepolar.png}
+\end{center}
+
+
+\section{Notificações de vôo}
+
+As notificações aparecem como mensagens de estado, quando as condições são detectadas:
+\begin{itemize}
+\item Tempo estimado da prova muito cedo para prova AAT
+\item Tempo estimado para chegada após o pôr do sol
+\item Mudança significativa de vento
+\item Transição acima/abaixo do planeio final 
+\end{itemize}
+% JMW more detail here
