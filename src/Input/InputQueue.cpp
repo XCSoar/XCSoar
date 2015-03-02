@@ -72,8 +72,8 @@ InputEvents::DoQueuedEvents()
 
   // copy the queue first, blocking
   mutexEventQueue.Lock();
-  std::copy(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, GCE_Queue_copy);
-  std::fill(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, -1);
+  std::copy_n(GCE_Queue, MAX_GCE_QUEUE, GCE_Queue_copy);
+  std::fill_n(GCE_Queue, MAX_GCE_QUEUE, -1);
   mutexEventQueue.Unlock();
 
   // process each item in the queue

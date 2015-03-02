@@ -92,7 +92,7 @@ FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
   TCHAR logger_id_t[4];
   /* poor man's char->TCHAR converted; this works because we know
      we're dealing with ASCII only */
-  std::copy(logger_id, logger_id + 4, logger_id_t);
+  std::copy_n(logger_id, 4, logger_id_t);
 
   FormatIGCFilename(buffer, date, (TCHAR)manufacturer, logger_id_t,
                     flight_number);
@@ -112,8 +112,8 @@ FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
   TCHAR manufacturer_t[4], logger_id_t[4];
   /* poor man's char->TCHAR converted; this works because we know
      we're dealing with ASCII only */
-  std::copy(manufacturer, manufacturer + 4, manufacturer_t);
-  std::copy(logger_id, logger_id + 4, logger_id_t);
+  std::copy_n(manufacturer, 4, manufacturer_t);
+  std::copy_n(logger_id, 4, logger_id_t);
 
   FormatIGCFilenameLong(buffer, date, manufacturer_t, logger_id_t,
                         flight_number);

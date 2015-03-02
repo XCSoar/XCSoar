@@ -185,8 +185,7 @@ Canvas::DrawText(int x, int y,
   assert(_text != nullptr);
 
   TCHAR copy[length + 1];
-  std::copy(_text, _text + length, copy);
-  copy[length] = _T('\0');
+  *std::copy_n(_text, length, copy) = _T('\0');
 
 #ifndef UNICODE
   assert(ValidateUTF8(copy));

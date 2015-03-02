@@ -117,7 +117,7 @@ LoadJPEGFile(const TCHAR *path)
   while (cinfo.output_scanline < height) {
     jpeg_read_scanlines(&cinfo, rowptr, (JDIMENSION)1);
 
-    p = std::copy(row, row + row_size, p);
+    p = std::copy_n(row, row_size, p);
   }
 
   assert(p == image_buffer + image_buffer_size);

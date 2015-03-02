@@ -113,7 +113,7 @@ BufferedPort::Read(void *dest, size_t length)
     return -1;
 
   size_t nbytes = std::min(length, r.size);
-  std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
+  std::copy_n(r.data, nbytes, (uint8_t *)dest);
   buffer.Consume(nbytes);
   return nbytes;
 }
@@ -164,7 +164,7 @@ BufferedPort::DataReceived(const void *data, size_t length)
     /* discard excess data */
     size_t nbytes = std::min(length, r.size);
 
-    std::copy(p, p + nbytes, r.data);
+    std::copy_n(p, nbytes, r.data);
     buffer.Append(nbytes);
 
 #ifdef HAVE_POSIX

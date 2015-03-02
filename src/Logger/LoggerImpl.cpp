@@ -71,9 +71,7 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 
   satellite_ids_available = src.gps.satellite_ids_available;
   if (satellite_ids_available)
-    std::copy(src.gps.satellite_ids,
-              src.gps.satellite_ids + GPSState::MAXSATELLITES,
-              satellite_ids);
+    std::copy_n(src.gps.satellite_ids, GPSState::MAXSATELLITES, satellite_ids);
 
   return *this;
 }

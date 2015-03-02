@@ -72,7 +72,7 @@ Net::Request::ResponseData(const uint8_t *ptr, size_t size)
       return CURL_WRITEFUNC_PAUSE;
   }
 
-  std::copy(ptr, ptr + size, range.data);
+  std::copy_n(ptr, size, range.data);
   buffer.Append(size);
   return size;
 }
@@ -149,7 +149,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
     buffer_size = range.size;
 
   uint8_t *p = (uint8_t *)_buffer;
-  std::copy(range.data, range.data + buffer_size, p);
+  std::copy_n(range.data, buffer_size, p);
   p[buffer_size] = 0;
 
   buffer.Consume(buffer_size);

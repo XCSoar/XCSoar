@@ -37,7 +37,7 @@ NOAAStore::LoadFromString(const char *string)
     const char *next = strchr(s, _T(','));
     if ((next != NULL && next - s == 4) || (next == NULL && strlen(s) == 4)) {
       char code[5];
-      std::copy(s, s+4, code);
+      std::copy_n(s, 4, code);
       code[4] = '\0';
       if (IsValidCode(code))
         AddStation(code);
@@ -63,7 +63,7 @@ NOAAStore::SaveToProfile()
   char buffer[120], *p = buffer;
   for (auto i = begin(), e = end(); i != e; ++i) {
     const char *code = i->code;
-    p = std::copy(code, code + strlen(code), p);
+    p = std::copy_n(code, strlen(code), p);
     *p++ = _T(',');
   }
 

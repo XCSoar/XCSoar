@@ -329,7 +329,7 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
   for (const uint8_t *end = src + height * pitch;
        src != end; src += pitch, buffer += buffer_width)
     // TODO: mix with previous character?
-    std::copy(src, src + width, buffer);
+    std::copy_n(src, width, buffer);
 }
 
 static void

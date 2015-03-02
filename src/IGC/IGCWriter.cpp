@@ -77,7 +77,7 @@ IGCWriter::WriteLine(const char *a, const TCHAR *b)
 
   char *const end = dest + MAX_IGC_BUFF - 1, *p = dest;
 
-  p = std::copy(a, a + a_length, p);
+  p = std::copy_n(a, a_length, p);
   p = CopyIGCString(p, end, b);
   *p = '\0';
 

@@ -101,8 +101,8 @@ apply_defaults(InputConfig &input_config,
     input_config.AppendMode(*default_modes++);
 
   input_config.events.resize(num_default_events + 1);
-  std::copy(default_events, default_events + num_default_events,
-            input_config.events.begin() + 1);
+  std::copy_n(default_events, num_default_events,
+              input_config.events.begin() + 1);
 
   while (default_gesture2event->event > 0) {
     input_config.Gesture2Event.Add(default_gesture2event->data,

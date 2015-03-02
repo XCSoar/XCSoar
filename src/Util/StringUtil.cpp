@@ -140,7 +140,7 @@ CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
   if (length >= size)
     length = size - 1;
 
-  char *p = std::copy(src, src + length, dest);
+  char *p = std::copy_n(src, length, dest);
   *p = '\0';
   return p;
 }
@@ -155,7 +155,7 @@ CopyString(TCHAR *gcc_restrict dest, const TCHAR *gcc_restrict src,
   if (length >= size)
     length = size - 1;
 
-  TCHAR *p = std::copy(src, src + length, dest);
+  TCHAR *p = std::copy_n(src, length, dest);
   *p = _T('\0');
   return p;
 }
@@ -404,7 +404,7 @@ DuplicateString(const char *p, size_t length)
 {
   char *q = (char *)malloc((length + 1) * sizeof(*p));
   if (q != nullptr)
-    *std::copy(p, p + length, q) = '\0';
+    *std::copy_n(p, length, q) = '\0';
   return q;
 }
 
@@ -414,7 +414,7 @@ DuplicateString(const TCHAR *p, size_t length)
 {
   TCHAR *q = (TCHAR *)malloc((length + 1) * sizeof(*p));
   if (q != nullptr)
-    *std::copy(p, p + length, q) = _T('\0');
+    *std::copy_n(p, length, q) = _T('\0');
   return q;
 }
 #endif
