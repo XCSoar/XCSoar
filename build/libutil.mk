@@ -11,4 +11,8 @@ UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/StaticString.cpp \
 	$(UTIL_SRC_DIR)/StringUtil.cpp
 
+ifeq ($(HAVE_MSVCRT),y)
+UTIL_SOURCES += $(UTIL_SRC_DIR)/WStringUtil.cpp
+endif
+
 $(eval $(call link-library,util,UTIL))
