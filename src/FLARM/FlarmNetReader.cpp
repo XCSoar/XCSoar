@@ -116,7 +116,7 @@ LoadRecord(FlarmNetRecord &record, const char *line)
 
   // Terminate callsign string on first whitespace
   for (TCHAR *i = record.callsign.buffer(); *i != _T('\0'); ++i)
-    if (IsWhitespaceOrNull(*i))
+    if (IsWhitespaceFast(*i))
       *i = _T('\0');
 
   return true;
