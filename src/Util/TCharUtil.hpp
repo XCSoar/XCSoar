@@ -43,12 +43,14 @@ IsASCII(const TCHAR ch)
   return (ch & ~0x7f) == 0;
 }
 
+constexpr
 static inline bool
 IsWhitespaceOrNull(const TCHAR ch)
 {
   return (unsigned)ch <= 0x20;
 }
 
+constexpr
 static inline bool
 IsWhitespaceNotNull(const TCHAR ch)
 {
