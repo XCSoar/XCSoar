@@ -115,4 +115,17 @@ ToUpperASCII(char ch)
     : ch;
 }
 
+/**
+ * Convert the specified ASCII character (0x00..0x7f) to lower case.
+ * Unlike tolower(), it ignores the system locale.
+ */
+constexpr
+static inline char
+ToLowerASCII(char ch)
+{
+  return ch >= 'A' && ch <= 'Z'
+    ? (ch + ('a' - 'A'))
+    : ch;
+}
+
 #endif
