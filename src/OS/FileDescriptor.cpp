@@ -63,8 +63,6 @@
 bool
 FileDescriptor::Open(const char *pathname, int flags)
 {
-  assert(!IsDefined());
-
   fd = ::open(pathname, flags);
   return IsDefined();
 }
@@ -134,8 +132,6 @@ FileDescriptor::SetBlocking()
 bool
 FileDescriptor::CreateEventFD(unsigned initval)
 {
-  assert(!IsDefined());
-
 #ifdef __BIONIC__
   /* Bionic provides the eventfd() function only since Android 2.3,
      therefore we must roll our own system call here */
