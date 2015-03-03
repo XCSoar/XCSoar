@@ -93,7 +93,7 @@ public:
     return FileDescriptor(-1);
   }
 
-  bool Open(const char *pathname, int flags);
+  bool Open(const char *pathname, int flags, mode_t mode=0666);
   bool OpenReadOnly(const char *pathname);
 
 #ifdef HAVE_POSIX
