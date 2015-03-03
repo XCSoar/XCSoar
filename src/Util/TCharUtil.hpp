@@ -99,4 +99,30 @@ IsAlphaNumericASCII(TCHAR ch)
   return IsAlphaASCII(ch) || IsDigitASCII(ch);
 }
 
+/**
+ * Convert the specified ASCII character (0x00..0x7f) to upper case.
+ * Unlike toupper(), it ignores the system locale.
+ */
+constexpr
+static inline TCHAR
+ToUpperASCII(TCHAR ch)
+{
+  return ch >= 'a' && ch <= 'z'
+    ? (ch - ('a' - 'A'))
+    : ch;
+}
+
+/**
+ * Convert the specified ASCII character (0x00..0x7f) to lower case.
+ * Unlike tolower(), it ignores the system locale.
+ */
+constexpr
+static inline TCHAR
+ToLowerASCII(TCHAR ch)
+{
+  return ch >= 'A' && ch <= 'Z'
+    ? (ch + ('a' - 'A'))
+    : ch;
+}
+
 #endif
