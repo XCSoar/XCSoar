@@ -49,7 +49,7 @@ void
 ButtonLabel::Destroy()
 {
   delete bar;
-  bar = NULL;
+  bar = nullptr;
 }
 
 /**
@@ -74,15 +74,15 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
   Expanded expanded;
   const TCHAR *dollar;
 
-  if ((text == NULL) || (*text == _T('\0')) || (*text == _T(' '))) {
+  if ((text == nullptr) || (*text == _T('\0')) || (*text == _T(' '))) {
     expanded.visible = false;
     return expanded;
-  } else if ((dollar = _tcschr(text, '$')) == NULL) {
+  } else if ((dollar = _tcschr(text, '$')) == nullptr) {
     /* no macro, we can just translate the text */
     expanded.visible = true;
     expanded.enabled = true;
     const TCHAR *nl;
-    if (((nl = _tcschr(text, '\n')) != NULL) && LacksAlphaASCII(nl + 1)) {
+    if (((nl = _tcschr(text, '\n')) != nullptr) && LacksAlphaASCII(nl + 1)) {
       /* Quick hack for skipping the translation for second line of a two line
          label with only digits and punctuation in the second line, e.g.
          for menu labels like "Config\n2/3" */
@@ -151,7 +151,7 @@ void
 ButtonLabel::Set(const Menu &menu, const Menu *overlay, bool full)
 {
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
-    const MenuItem &item = overlay != NULL && (*overlay)[i].IsDefined()
+    const MenuItem &item = overlay != nullptr && (*overlay)[i].IsDefined()
       ? (*overlay)[i]
       : menu[i];
 
@@ -169,6 +169,6 @@ ButtonLabel::IsEnabled(unsigned i)
 void
 ButtonLabel::OnResize(const PixelRect &rc)
 {
-  if (bar != NULL)
+  if (bar != nullptr)
     bar->OnResize(rc);
 }

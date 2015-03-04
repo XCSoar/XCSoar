@@ -60,7 +60,7 @@ namespace ButtonLabel {
    * @param full do a full update; if false, then only dynamic buttons
    * are updated (to reduce flickering)
    */
-  void Set(const Menu &menu, const Menu *overlay=NULL, bool full=true);
+  void Set(const Menu &menu, const Menu *overlay=nullptr, bool full=true);
 };
 
 #endif
