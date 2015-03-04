@@ -405,7 +405,7 @@ Startup()
   operation.SetText(_("Initialising display"));
 
   GlueMapWindow *map_window = main_window->GetMap();
-  if (map_window != NULL) {
+  if (map_window != nullptr) {
     map_window->SetWaypoints(&way_points);
     map_window->SetTask(protected_task_manager);
     map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
@@ -515,7 +515,7 @@ Shutdown()
   global_running = false;
 
 #ifdef HAVE_TRACKING
-  if (tracking != NULL)
+  if (tracking != nullptr)
     tracking->StopAsync();
 #endif
 
@@ -524,7 +524,7 @@ Shutdown()
   logger->GUIStopLogger(CommonInterface::Basic(), true);
 
   delete flight_logger;
-  flight_logger = NULL;
+  flight_logger = nullptr;
 
   delete all_monitors;
   live_blackboard.RemoveListener(*glide_computer_events);
@@ -554,11 +554,11 @@ Shutdown()
 
   merge_thread->Join();
   delete merge_thread;
-  merge_thread = NULL;
+  merge_thread = nullptr;
 
   calculation_thread->Join();
   delete calculation_thread;
-  calculation_thread = NULL;
+  calculation_thread = nullptr;
 
   //  Wait for the drawing thread to finish
 #ifndef ENABLE_OPENGL
@@ -606,9 +606,9 @@ Shutdown()
   delete devices;
   devices = nullptr;
   delete device_blackboard;
-  device_blackboard = NULL;
+  device_blackboard = nullptr;
 
-  protected_task_manager->SetRoutePlanner(NULL);
+  protected_task_manager->SetRoutePlanner(nullptr);
 
   delete protected_task_manager;
   delete task_manager;
@@ -618,7 +618,7 @@ Shutdown()
 #endif
 
 #ifdef HAVE_TRACKING
-  if (tracking != NULL) {
+  if (tracking != nullptr) {
     tracking->WaitStopped();
     delete tracking;
   }
