@@ -201,16 +201,16 @@ FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
     return FormatUTM(location, buffer, size, seperator);
 
   if (!FormatLatitude(location.latitude, buffer, size, format))
-    return NULL;
+    return nullptr;
 
   TCHAR *end = buffer + size, *p = buffer + _tcslen(buffer);
   if (p >= end)
-    return NULL;
+    return nullptr;
 
   *p++ = seperator;
 
   if (!FormatLongitude(location.longitude, p, end - p, format))
-    return NULL;
+    return nullptr;
 
   return buffer;
 }
