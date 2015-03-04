@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "GlideRatioFormatter.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 
 void
 FormatGlideRatio(TCHAR *buffer, size_t size, fixed gr)

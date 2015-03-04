@@ -26,7 +26,7 @@ Copyright_License {
 #include "Atmosphere/CuSonde.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 
 #include <algorithm>
 

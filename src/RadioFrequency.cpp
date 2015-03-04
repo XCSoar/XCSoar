@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "RadioFrequency.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 #include "Util/NumberParser.hpp"
 
 TCHAR *

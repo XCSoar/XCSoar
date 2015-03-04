@@ -24,7 +24,7 @@ Copyright_License {
 #include "Time.hpp"
 #include "ComboList.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 #include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 

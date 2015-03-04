@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 
 #include <assert.h>
 #include <string.h>

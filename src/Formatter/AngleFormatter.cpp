@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AngleFormatter.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 
 #include <string.h>
 

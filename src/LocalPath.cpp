@@ -24,6 +24,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Compatibility/path.h"
 #include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 #include "Asset.hpp"
 
 #include "OS/FileUtil.hpp"

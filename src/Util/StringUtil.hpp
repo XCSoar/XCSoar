@@ -27,7 +27,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <string.h>
-#include <stdio.h>
 #include <assert.h>
 
 #ifdef _UNICODE
@@ -73,20 +72,6 @@ static inline char *
 StringToken(char *str, const char *delim)
 {
   return strtok(str, delim);
-}
-
-template<typename... Args>
-static inline void
-StringFormat(char *buffer, size_t size, const char *fmt, Args&&... args)
-{
-  snprintf(buffer, size, fmt, args...);
-}
-
-template<typename... Args>
-static inline void
-StringFormatUnsafe(char *buffer, const char *fmt, Args&&... args)
-{
-  sprintf(buffer, fmt, args...);
 }
 
 /**

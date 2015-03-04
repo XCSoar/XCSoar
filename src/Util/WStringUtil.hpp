@@ -75,45 +75,6 @@ StringToken(TCHAR *str, const TCHAR *delim)
   return _tcstok(str, delim);
 }
 
-template<typename... Args>
-static inline void
-StringFormat(TCHAR *buffer, size_t size, const TCHAR *fmt, Args&&... args)
-{
-  /* unlike snprintf(), _sntprintf() does not guarantee that the
-     destination buffer is terminated */
-
-  /* usually, it would be enough to clear the last byte in the output
-     buffer after the _sntprintf() call, but unfortunately WINE 1.4.1
-     has a bug that applies the wrong limit in the overflow branch
-     (confuses number of characters with number of bytes), therefore
-     we must clear the whole buffer and pass an even number of
-     characters; this terminates the string at half the buffer size,
-     but is better than exposing undefined bytes */
-  size &= ~decltype(size)(sizeof(TCHAR) - 1);
-  memset(buffer, 0, size * sizeof(TCHAR));
-  --size;
-
-  _sntprintf(buffer, size, fmt, args...);
-}
-
-template<typename... Args>
-static inline void
-StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
-{
-#if defined(WIN32) && !defined(_WIN32_WCE) && GCC_CHECK_VERSION(4,8) && defined(__GLIBCXX__)
-  /* work around a problem in mingw-w64/libstdc++: libstdc++ defines
-     __USE_MINGW_ANSI_STDIO=1 and forces mingw to expose the
-     POSIX-compatible stdio functions instead of the
-     Microsoft-compatible ones, but those have a major problem for us:
-     "%s" denotes a "narrow" string, not a "wide" string, and we'd
-     need to use "%ls"; this workaround explicitly selects the
-     Microsoft-compatible implementation */
-  _swprintf(buffer, fmt, args...);
-#else
-  _stprintf(buffer, fmt, args...);
-#endif
-}
-
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns

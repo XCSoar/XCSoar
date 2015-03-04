@@ -27,6 +27,8 @@ Copyright_License {
 #include "FlightInfo.hpp"
 #include "Time/BrokenDateTime.hpp"
 
+#include <stdio.h>
+
 bool
 FlightParser::Read(FlightInfo &flight)
 {

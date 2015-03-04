@@ -24,7 +24,7 @@ Copyright_License {
 #include "ByteSizeFormatter.hpp"
 #include "Math/fixed.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 
 #include <assert.h>
 

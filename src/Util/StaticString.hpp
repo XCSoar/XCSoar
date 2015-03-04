@@ -31,6 +31,7 @@
 #define STATIC_STRING_HPP
 
 #include "StringUtil.hpp"
+#include "StringFormat.hpp"
 #include "UTF8.hpp"
 
 #include <assert.h>

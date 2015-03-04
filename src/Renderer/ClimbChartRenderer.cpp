@@ -28,7 +28,7 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringFormat.hpp"
 
 void
 ClimbChartCaption(TCHAR *sTmp,
