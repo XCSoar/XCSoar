@@ -47,11 +47,8 @@ StringLength(const char *p)
 }
 
 gcc_pure
-static inline bool
-StringStartsWith(const char *haystack, const char *needle)
-{
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
+bool
+StringStartsWith(const char *haystack, const char *needle);
 
 gcc_pure
 bool
@@ -232,12 +229,8 @@ StringIsEqualIgnoreCase(const char *a, const char *b, size_t size)
 }
 
 gcc_pure
-static inline bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle)
-{
-  return StringIsEqualIgnoreCase(haystack, needle,
-                                 StringLength(needle) * sizeof(needle[0]));
-}
+bool
+StringStartsWithIgnoreCase(const char *haystack, const char *needle);
 
 /**
  * Copy the string to a new allocation.  The return value must be

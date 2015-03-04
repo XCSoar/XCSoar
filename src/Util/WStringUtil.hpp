@@ -48,11 +48,8 @@ StringLength(const TCHAR *p)
 }
 
 gcc_pure
-static inline bool
-StringStartsWith(const TCHAR *haystack, const TCHAR *needle)
-{
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
+bool
+StringStartsWith(const TCHAR *haystack, const TCHAR *needle);
 
 gcc_pure
 bool
@@ -206,12 +203,8 @@ StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b, size_t size)
 }
 
 gcc_pure
-static inline bool
-StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
-{
-  return StringIsEqualIgnoreCase(haystack, needle,
-                                 StringLength(needle) * sizeof(needle[0]));
-}
+bool
+StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
 
 gcc_malloc
 static inline TCHAR *

@@ -30,6 +30,12 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
+StringStartsWith(const TCHAR *haystack, const TCHAR *needle)
+{
+  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
+}
+
+bool
 StringEndsWith(const TCHAR *haystack, const TCHAR *needle)
 {
   const size_t haystack_length = StringLength(haystack);
@@ -215,6 +221,13 @@ NormalizeSearchString(TCHAR *gcc_restrict dest,
   *dest = _T('\0');
 
   return retval;
+}
+
+bool
+StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
+{
+  return StringIsEqualIgnoreCase(haystack, needle,
+                                 StringLength(needle) * sizeof(needle[0]));
 }
 
 TCHAR *
