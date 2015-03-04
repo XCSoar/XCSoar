@@ -32,34 +32,33 @@
 
 #include "Compiler.h"
 
-#include <string.h>
-#include <tchar.h>
+#include <wchar.h>
 #include <assert.h>
 
 gcc_pure
 static inline size_t
-StringLength(const TCHAR *p)
+StringLength(const wchar_t *p)
 {
-  return _tcslen(p);
+  return wcslen(p);
 }
 
 gcc_pure
-static inline const TCHAR *
-StringFind(const TCHAR *haystack, const TCHAR *needle)
+static inline const wchar_t *
+StringFind(const wchar_t *haystack, const wchar_t *needle)
 {
-  return _tcsstr(haystack, needle);
+  return wcsstr(haystack, needle);
 }
 
-static inline TCHAR *
-StringToken(TCHAR *str, const TCHAR *delim)
+static inline wchar_t *
+StringToken(wchar_t *str, const wchar_t *delim)
 {
-  return _tcstok(str, delim);
+  return wcstok(str, delim);
 }
 
 static inline void
-UnsafeCopyString(TCHAR *dest, const TCHAR *src)
+UnsafeCopyString(wchar_t *dest, const wchar_t *src)
 {
-  _tcscpy(dest, src);
+  wcscpy(dest, src);
 }
 
 /**
@@ -69,49 +68,49 @@ UnsafeCopyString(TCHAR *dest, const TCHAR *src)
  * @return True if equal, False otherwise
  */
 static inline bool
-StringIsEqual(const TCHAR *str1, const TCHAR *str2)
+StringIsEqual(const wchar_t *str1, const wchar_t *str2)
 {
   assert(str1 != nullptr);
   assert(str2 != nullptr);
 
-  return _tcscmp(str1, str2) == 0;
+  return wcscmp(str1, str2) == 0;
 }
 
 /**
  * Checks whether #a and #b are equal.
  */
 static inline bool
-StringIsEqual(const TCHAR *a, const TCHAR *b, size_t length)
+StringIsEqual(const wchar_t *a, const wchar_t *b, size_t length)
 {
   assert(a != nullptr);
   assert(a != nullptr);
 
-  return _tcsncmp(a, b, length) == 0;
+  return wcsncmp(a, b, length) == 0;
 }
 
 static inline bool
-StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b)
+StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b)
 {
   assert(a != nullptr);
   assert(b != nullptr);
 
-  return _tcsicmp(a, b) == 0;
+  return _wcsicmp(a, b) == 0;
 }
 
 static inline bool
-StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b, size_t size)
+StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b, size_t size)
 {
   assert(a != nullptr);
   assert(b != nullptr);
 
-  return _tcsnicmp(a, b, size) == 0;
+  return _wcsnicmp(a, b, size) == 0;
 }
 
 gcc_malloc
-static inline TCHAR *
-DuplicateString(const TCHAR *p)
+static inline wchar_t *
+DuplicateString(const wchar_t *p)
 {
-  return _tcsdup(p);
+  return wcsdup(p);
 }
 
 #endif
