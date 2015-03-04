@@ -178,7 +178,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   // Find next space delimiter, skip shortname
   const TCHAR *name = line;
   const TCHAR *space = _tcsstr(line, _T(" "));
-  if (space == NULL)
+  if (space == nullptr)
     return false;
 
   unsigned name_length = space - line;
@@ -201,14 +201,14 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Skip unused date field
   line = _tcsstr(line, _T(" "));
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   line++;
 
   // Skip unused time field
   line = _tcsstr(line, _T(" "));
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   line++;
@@ -239,12 +239,12 @@ bool
 WaypointReaderCompeGPS::VerifyFormat(TLineReader &reader)
 {
   const TCHAR *line = reader.ReadLine();
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   // Ignore optional line with encoding information
   if (StringStartsWith(line, _T("B ")))
-    if ((line = reader.ReadLine()) == NULL)
+    if ((line = reader.ReadLine()) == nullptr)
       return false;
 
   return StringStartsWith(line, _T("G  WGS 84"));

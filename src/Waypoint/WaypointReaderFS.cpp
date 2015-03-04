@@ -208,7 +208,7 @@ bool
 WaypointReaderFS::VerifyFormat(TLineReader &reader)
 {
   const TCHAR *line = reader.ReadLine();
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   return StringStartsWith(line, _T("$FormatUTM")) ||

@@ -34,12 +34,12 @@ WaypointGlue::FindHomeId(Waypoints &waypoints,
                          PlacesOfInterestSettings &settings)
 {
   if (settings.home_waypoint < 0)
-    return NULL;
+    return nullptr;
 
   const Waypoint *wp = waypoints.LookupId(settings.home_waypoint);
-  if (wp == NULL) {
+  if (wp == nullptr) {
     settings.home_waypoint = -1;
-    return NULL;
+    return nullptr;
   }
 
   settings.home_location = wp->location;
@@ -53,13 +53,13 @@ WaypointGlue::FindHomeLocation(Waypoints &waypoints,
                                PlacesOfInterestSettings &settings)
 {
   if (!settings.home_location_available)
-    return NULL;
+    return nullptr;
 
   const Waypoint *wp = waypoints.LookupLocation(settings.home_location,
                                                 fixed(100));
-  if (wp == NULL || !wp->IsAirport()) {
+  if (wp == nullptr || !wp->IsAirport()) {
     settings.home_location_available = false;
-    return NULL;
+    return nullptr;
   }
 
   settings.home_waypoint = wp->id;
@@ -72,8 +72,8 @@ WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
                               PlacesOfInterestSettings &settings)
 {
   const Waypoint *wp = waypoints.FindHome();
-  if (wp == NULL)
-    return NULL;
+  if (wp == nullptr)
+    return nullptr;
 
   settings.SetHome(*wp);
   return wp;
@@ -91,16 +91,16 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // check invalid home waypoint or forced reset due to file change
   const Waypoint *wp = FindHomeId(way_points, poi_settings);
-  if (wp == NULL) {
+  if (wp == nullptr) {
     /* fall back to HomeLocation, try to find it in the waypoint
        database */
     wp = FindHomeLocation(way_points, poi_settings);
-    if (wp == NULL)
+    if (wp == nullptr)
       // search for home in waypoint list, if we don't have a home
       wp = FindFlaggedHome(way_points, poi_settings);
   }
 
-  if (wp != NULL)
+  if (wp != nullptr)
     LastUsedWaypoints::Add(*wp);
 
   // check invalid task ref waypoint or forced reset due to file change
@@ -109,12 +109,12 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     // set team code reference waypoint if we don't have one
     team_code_settings.team_code_reference_waypoint = poi_settings.home_waypoint;
 
-  if (device_blackboard != NULL) {
-    if (wp != NULL) {
+  if (device_blackboard != nullptr) {
+    if (wp != nullptr) {
       // OK, passed all checks now
       LogFormat("Start at home waypoint");
       device_blackboard->SetStartupLocation(wp->location, wp->elevation);
-    } else if (terrain != NULL) {
+    } else if (terrain != nullptr) {
       // no home at all, so set it from center of terrain if available
       GeoPoint loc = terrain->GetTerrainCenter();
       LogFormat("Start at terrain center");

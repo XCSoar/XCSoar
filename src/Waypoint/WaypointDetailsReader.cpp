@@ -38,7 +38,7 @@ static const Waypoint *
 FindWaypoint(Waypoints &way_points, const TCHAR *name)
 {
   const Waypoint *wp = way_points.LookupName(name);
-  if (wp != NULL)
+  if (wp != nullptr)
     return wp;
 
   // TODO: Comments please! What is this supposed to do? Why do we need it?
@@ -47,15 +47,15 @@ FindWaypoint(Waypoints &way_points, const TCHAR *name)
   _tcscpy(buffer, name);
   _tcscpy(buffer + name_length, _T(" AF"));
   wp = way_points.LookupName(buffer);
-  if (wp != NULL)
+  if (wp != nullptr)
     return wp;
 
   _tcscpy(buffer + name_length, _T(" AD"));
   wp = way_points.LookupName(buffer);
-  if (wp != NULL)
+  if (wp != nullptr)
     return wp;
 
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -65,7 +65,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const std::vector<tstring> &files_embed)
 {
   const Waypoint *wp = FindWaypoint(way_points, name);
-  if (wp == NULL)
+  if (wp == nullptr)
     return;
 
   Waypoint new_wp(*wp);
@@ -99,7 +99,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   operation.SetProgressRange(100);
 
   TCHAR *line;
-  while ((line = reader.ReadLine()) != NULL) {
+  while ((line = reader.ReadLine()) != nullptr) {
     if (line[0] == _T('[')) { // Look for start
       if (in_details)
         SetAirfieldDetails(way_points, name, details, files_external,
@@ -122,10 +122,10 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
       operation.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
-                StringAfterPrefixCI(line, _T("image="))) != NULL) {
+                StringAfterPrefixCI(line, _T("image="))) != nullptr) {
       files_embed.emplace_back(filename);
     } else if ((filename =
-                StringAfterPrefixCI(line, _T("file="))) != NULL) {
+                StringAfterPrefixCI(line, _T("file="))) != nullptr) {
 #ifdef ANDROID
       files_external.emplace_back(filename);
 #endif

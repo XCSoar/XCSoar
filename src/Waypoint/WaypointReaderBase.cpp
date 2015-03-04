@@ -33,7 +33,7 @@ Copyright_License {
 WaypointReaderBase::WaypointReaderBase(const int _file_num,
                            bool _compressed):
   file_num(_file_num),
-  terrain(NULL),
+  terrain(nullptr),
   compressed(_compressed)
 {
 }
@@ -57,9 +57,9 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
                                 const TCHAR **arr, size_t sz,
                                 const bool trim, const TCHAR quote_char)
 {
-  assert(src != NULL);
-  assert(dst != NULL);
-  assert(arr != NULL);
+  assert(src != nullptr);
+  assert(dst != nullptr);
+  assert(arr != nullptr);
   assert(sz > 0);
 
   TCHAR *d = dst;
@@ -71,8 +71,8 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
   arr[i] = d;
 
   // pointer to last character of d after which ' ' might be discarded for
-  // trimming. NULL can be used to test for start of field condition.
-  TCHAR *last_non_discardable_char = NULL;
+  // trimming. nullptr can be used to test for start of field condition.
+  TCHAR *last_non_discardable_char = nullptr;
 
   do {
     if (quote_char && *s == quote_char) {
@@ -81,7 +81,7 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
         // If currently in quoted string leave quote handling depending on
         // look-ahead performed in is_closing_quote_char()
         in_quote = false;
-      } else if (!in_quote && last_non_discardable_char == NULL) {
+      } else if (!in_quote && last_non_discardable_char == nullptr) {
         // Quote start detected at beginning of new field
         in_quote = true;
       } else {
@@ -97,7 +97,7 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
     } else if (*s == _T('\0') || ((*s == _T(',') && !in_quote))) {
       // end of src or field separator (',') outside quoted part detected
       // field content is already completely copied but may contain trailing spaces
-      if (trim && (last_non_discardable_char != NULL))
+      if (trim && (last_non_discardable_char != nullptr))
         // remove trailing unquoted whitespace from dst field
         d = last_non_discardable_char+1;
 
@@ -108,14 +108,14 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
         arr[i] = d;
 
       // start processing of next field
-      last_non_discardable_char = NULL;
+      last_non_discardable_char = nullptr;
     } else {
       // main part copying from src to dst
       if (trim && !in_quote) {
         // we are not inside a quoted string and therefore need to trim
         // leading and trailing spaces. Drop whitespace if dst is still empty
         if (*s == _T(' ')) {
-          if (last_non_discardable_char != NULL)
+          if (last_non_discardable_char != nullptr)
             // dst field is not empty - append ' '
             *d++ = *s;
         } else {
@@ -140,7 +140,7 @@ bool
 WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint,
                                   const RasterTerrain *terrain)
 {
-  if (terrain == NULL)
+  if (terrain == nullptr)
     return false;
 
   // Load waypoint altitude from terrain
@@ -167,7 +167,7 @@ WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
 
   // Read through the lines of the file
   TCHAR *line;
-  for (unsigned i = 0; (line = reader.ReadLine()) != NULL; i++) {
+  for (unsigned i = 0; (line = reader.ReadLine()) != nullptr; i++) {
     // and parse them
     ParseLine(line, i, way_points);
 

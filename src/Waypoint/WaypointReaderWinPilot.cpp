@@ -206,7 +206,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   // If comment
   if (line[0] == _T('*')) {
     if (linenum == 0)
-      welt2000_format = (_tcsstr(line, _T("WRITTEN BY WELT2000")) != NULL);
+      welt2000_format = (_tcsstr(line, _T("WRITTEN BY WELT2000")) != nullptr);
     // -> return without error condition
     return true;
   }
@@ -233,7 +233,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 
   Waypoint new_waypoint(location);
   new_waypoint.file_num = file_num;
-  new_waypoint.original_id = ParseUnsigned(params[0], NULL, 0);
+  new_waypoint.original_id = ParseUnsigned(params[0], nullptr, 0);
 
   // Name (e.g. KAMPLI)
   if (*params[5] == _T('\0'))

@@ -43,7 +43,7 @@ namespace WaypointGlue {
    * #PlacesOfInterestSettings.  Will not update the profile, because
    * that should only be done on user action.
    *
-   * @return the home #Waypoint, or NULL if it not found
+   * @return the home #Waypoint, or nullptr if it not found
    */
   const Waypoint *FindHomeId(Waypoints &waypoints,
                              PlacesOfInterestSettings &settings);
@@ -54,7 +54,7 @@ namespace WaypointGlue {
    * the home location in #PlacesOfInterestSettings.  Will not update
    * the profile, because that should only be done on user action.
    *
-   * @return the home #Waypoint, or NULL if it not found
+   * @return the home #Waypoint, or nullptr if it not found
    */
   const Waypoint *FindHomeLocation(Waypoints &waypoints,
                                    PlacesOfInterestSettings &settings);
@@ -64,7 +64,7 @@ namespace WaypointGlue {
    * and configures it in #PlacesOfInterestSettings.  Will not update
    * the profile, because that should only be done on user action.
    *
-   * @return the home #Waypoint, or NULL if it not found
+   * @return the home #Waypoint, or nullptr if it not found
    */
   const Waypoint *FindFlaggedHome(Waypoints &waypoints,
                                   PlacesOfInterestSettings &settings);

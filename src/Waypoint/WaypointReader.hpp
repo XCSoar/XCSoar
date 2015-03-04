@@ -44,11 +44,11 @@ class WaypointReader
 
 public:
   /** Non-initializing constructor */
-  WaypointReader():reader(NULL) {}
+  WaypointReader():reader(nullptr) {}
 
   /** Initializing constructor. Loads the specified waypoint file */
   WaypointReader(const TCHAR* filename, int filenum = 0)
-    :reader(NULL) {
+    :reader(nullptr) {
     Open(filename, filenum);
   }
 
@@ -56,7 +56,7 @@ public:
 
   WaypointReader(WaypointReader &&other)
     :reader(other.reader) {
-    other.reader = NULL;
+    other.reader = nullptr;
   }
 
   /** Destroys the internal reader */
@@ -95,7 +95,7 @@ public:
    * @return True if Parse() can be used
    */
   bool Error() const {
-    return reader == NULL;
+    return reader == nullptr;
   }
 };
 
