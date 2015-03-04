@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "WStringUtil.hpp"
+#include "WStringAPI.hpp"
 #include "TCharUtil.hpp"
 
 #include <algorithm>

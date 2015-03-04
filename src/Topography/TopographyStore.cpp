@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyFile.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "IO/LineReader.hpp"

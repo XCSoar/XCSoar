@@ -32,19 +32,11 @@ Copyright_License {
 
 #include <assert.h>
 #include <tchar.h>
-#include <string.h>
 
 static inline bool
 StringIsEmpty(const TCHAR *string)
 {
   return *string == 0;
-}
-
-gcc_pure
-static inline size_t
-StringLength(const TCHAR *p)
-{
-  return _tcslen(p);
 }
 
 gcc_pure
@@ -58,19 +50,6 @@ StringEndsWith(const TCHAR *haystack, const TCHAR *needle);
 gcc_pure
 bool
 StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
-
-gcc_pure
-static inline const TCHAR *
-StringFind(const TCHAR *haystack, const TCHAR *needle)
-{
-  return _tcsstr(haystack, needle);
-}
-
-static inline TCHAR *
-StringToken(TCHAR *str, const TCHAR *delim)
-{
-  return _tcstok(str, delim);
-}
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -90,12 +69,6 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
 gcc_nonnull_all
 const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
-
-static inline void
-UnsafeCopyString(TCHAR *dest, const TCHAR *src)
-{
-  _tcscpy(dest, src);
-}
 
 /**
  * Copy a string.  If the buffer is too small, then the string is
@@ -169,49 +142,9 @@ gcc_nonnull_all
 TCHAR *
 NormalizeSearchString(TCHAR *dest, const TCHAR *src);
 
-/**
- * Checks whether str1 and str2 are equal.
- * @param str1 String 1
- * @param str2 String 2
- * @return True if equal, False otherwise
- */
-static inline bool
-StringIsEqual(const TCHAR *str1, const TCHAR *str2)
-{
-  assert(str1 != nullptr);
-  assert(str2 != nullptr);
-
-  return _tcscmp(str1, str2) == 0;
-}
-
-static inline bool
-StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b)
-{
-  assert(a != nullptr);
-  assert(b != nullptr);
-
-  return _tcsicmp(a, b) == 0;
-}
-
-static inline bool
-StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b, size_t size)
-{
-  assert(a != nullptr);
-  assert(b != nullptr);
-
-  return _tcsnicmp(a, b, size) == 0;
-}
-
 gcc_pure
 bool
 StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
-
-gcc_malloc
-static inline TCHAR *
-DuplicateString(const TCHAR *p)
-{
-  return _tcsdup(p);
-}
 
 gcc_malloc gcc_nonnull_all
 TCHAR *

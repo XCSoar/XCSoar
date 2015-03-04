@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
+#include "StringAPI.hpp"
 #include "CharUtil.hpp"
 
 #include <algorithm>

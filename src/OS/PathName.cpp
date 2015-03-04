@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <assert.h>
 #include <string.h>

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Util/Cache.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"

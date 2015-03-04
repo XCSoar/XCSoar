@@ -21,9 +21,9 @@
  */
 
 #include "DataNodeXML.hpp"
-#include "Util/StringUtil.hpp"
 #include "IO/TextWriter.hpp"
 #include "XML/Parser.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <memory>
 

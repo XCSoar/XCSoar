@@ -26,7 +26,7 @@ Copyright_License {
 #include "OS/LogError.hpp"
 #include "OS/Sleep.h"
 #include "IO/Async/GlobalIOThread.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <time.h>
 #include <fcntl.h>

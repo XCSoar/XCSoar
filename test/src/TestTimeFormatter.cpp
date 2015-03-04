@@ -22,7 +22,7 @@
 
 #include "Formatter/TimeFormatter.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "TestUtil.hpp"
 
 static void

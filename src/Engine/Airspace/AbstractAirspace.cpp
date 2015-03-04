@@ -29,7 +29,7 @@
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "AirspaceIntersectionVector.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <assert.h>
 

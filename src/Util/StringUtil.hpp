@@ -40,36 +40,15 @@ StringIsEmpty(const char *string)
 }
 
 gcc_pure
-static inline size_t
-StringLength(const char *p)
-{
-  return strlen(p);
-}
-
-gcc_pure
 bool
 StringStartsWith(const char *haystack, const char *needle);
 
-gcc_pure
 bool
 StringEndsWith(const char *haystack, const char *needle);
 
 gcc_pure
 bool
 StringEndsWithIgnoreCase(const char *haystack, const char *needle);
-
-gcc_pure
-static inline const char *
-StringFind(const char *haystack, const char *needle)
-{
-  return strstr(haystack, needle);
-}
-
-static inline char *
-StringToken(char *str, const char *delim)
-{
-  return strtok(str, delim);
-}
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -89,12 +68,6 @@ StringAfterPrefix(const char *string, const char *prefix);
 gcc_nonnull_all
 const char *
 StringAfterPrefixCI(const char *string, const char *prefix);
-
-static inline void
-UnsafeCopyString(char *dest, const char *src)
-{
-  strcpy(dest, src);
-}
 
 /**
  * Copy a string.  If the buffer is too small, then the string is
@@ -195,53 +168,9 @@ gcc_nonnull_all
 char *
 NormalizeSearchString(char *dest, const char *src);
 
-/**
- * Checks whether str1 and str2 are equal.
- * @param str1 String 1
- * @param str2 String 2
- * @return True if equal, False otherwise
- */
-static inline bool
-StringIsEqual(const char *str1, const char *str2)
-{
-  assert(str1 != nullptr);
-  assert(str2 != nullptr);
-
-  return strcmp(str1, str2) == 0;
-}
-
-static inline bool
-StringIsEqualIgnoreCase(const char *a, const char *b)
-{
-  assert(a != nullptr);
-  assert(b != nullptr);
-
-  return strcasecmp(a, b) == 0;
-}
-
-static inline bool
-StringIsEqualIgnoreCase(const char *a, const char *b, size_t size)
-{
-  assert(a != nullptr);
-  assert(b != nullptr);
-
-  return strncasecmp(a, b, size) == 0;
-}
-
 gcc_pure
 bool
 StringStartsWithIgnoreCase(const char *haystack, const char *needle);
-
-/**
- * Copy the string to a new allocation.  The return value must be
- * freed with free().
- */
-gcc_malloc
-static inline char *
-DuplicateString(const char *p)
-{
-  return strdup(p);
-}
 
 /**
  * Copy a portion of the string to a new allocation.  The given length

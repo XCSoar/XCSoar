@@ -24,7 +24,7 @@
 #include "Units/System.hpp"
 #include "Units/Units.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "TestUtil.hpp"
 
