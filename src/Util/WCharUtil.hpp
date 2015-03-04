@@ -53,6 +53,19 @@ IsWhitespaceNotNull(const wchar_t ch)
   return ch > 0 && ch <= 0x20;
 }
 
+/**
+ * Is the given character whitespace?  This calls the faster one of
+ * IsWhitespaceOrNull() or IsWhitespaceNotNull().  Use this if you
+ * want the fastest implementation, and you don't care if a null byte
+ * matches.
+ */
+constexpr
+static inline bool
+IsWhitespaceFast(const wchar_t ch)
+{
+  return IsWhitespaceOrNull(ch);
+}
+
 constexpr
 static inline bool
 IsPrintableASCII(wchar_t ch)
