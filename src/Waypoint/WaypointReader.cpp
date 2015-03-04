@@ -35,6 +35,8 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
 
+#include <string.h>
+
 bool
 WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
 {

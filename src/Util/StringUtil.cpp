@@ -27,6 +27,7 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -147,6 +148,7 @@ StripLeft(const char *p)
 {
   while (IsWhitespaceNotNull(*p))
     ++p;
+
   return p;
 }
 

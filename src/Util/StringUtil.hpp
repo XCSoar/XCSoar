@@ -26,8 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#include <string.h>
-#include <assert.h>
+#include <stddef.h>
 
 #ifdef _UNICODE
 #include "WStringUtil.hpp"
