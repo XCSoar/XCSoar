@@ -27,74 +27,70 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_TCHAR_UTIL_HPP
-#define XCSOAR_TCHAR_UTIL_HPP
+#ifndef WCHAR_UTIL_HPP
+#define WCHAR_UTIL_HPP
 
-#ifndef _UNICODE
-#error Cannot use this header without _UNICODE
-#endif
-
-#include <tchar.h>
+#include <wchar.h>
 
 constexpr
 static inline bool
-IsASCII(const TCHAR ch)
+IsASCII(const wchar_t ch)
 {
   return (ch & ~0x7f) == 0;
 }
 
 constexpr
 static inline bool
-IsWhitespaceOrNull(const TCHAR ch)
+IsWhitespaceOrNull(const wchar_t ch)
 {
   return (unsigned)ch <= 0x20;
 }
 
 constexpr
 static inline bool
-IsWhitespaceNotNull(const TCHAR ch)
+IsWhitespaceNotNull(const wchar_t ch)
 {
   return ch > 0 && ch <= 0x20;
 }
 
 constexpr
 static inline bool
-IsPrintableASCII(TCHAR ch)
+IsPrintableASCII(wchar_t ch)
 {
   return IsASCII(ch) && ch >= 0x20;
 }
 
 constexpr
 static inline bool
-IsDigitASCII(TCHAR ch)
+IsDigitASCII(wchar_t ch)
 {
-  return ch >= _T('0') && ch <= _T('9');
+  return ch >= '0' && ch <= '9';
 }
 
 constexpr
 static inline bool
-IsUpperAlphaASCII(TCHAR ch)
+IsUpperAlphaASCII(wchar_t ch)
 {
-  return ch >= _T('A') && ch <= _T('Z');
+  return ch >= 'A' && ch <= 'Z';
 }
 
 constexpr
 static inline bool
-IsLowerAlphaASCII(TCHAR ch)
+IsLowerAlphaASCII(wchar_t ch)
 {
-  return ch >= _T('a') && ch <= _T('z');
+  return ch >= 'a' && ch <= 'z';
 }
 
 constexpr
 static inline bool
-IsAlphaASCII(TCHAR ch)
+IsAlphaASCII(wchar_t ch)
 {
   return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
 }
 
 constexpr
 static inline bool
-IsAlphaNumericASCII(TCHAR ch)
+IsAlphaNumericASCII(wchar_t ch)
 {
   return IsAlphaASCII(ch) || IsDigitASCII(ch);
 }
@@ -104,8 +100,8 @@ IsAlphaNumericASCII(TCHAR ch)
  * Unlike toupper(), it ignores the system locale.
  */
 constexpr
-static inline TCHAR
-ToUpperASCII(TCHAR ch)
+static inline wchar_t
+ToUpperASCII(wchar_t ch)
 {
   return ch >= 'a' && ch <= 'z'
     ? (ch - ('a' - 'A'))
@@ -117,8 +113,8 @@ ToUpperASCII(TCHAR ch)
  * Unlike tolower(), it ignores the system locale.
  */
 constexpr
-static inline TCHAR
-ToLowerASCII(TCHAR ch)
+static inline wchar_t
+ToLowerASCII(wchar_t ch)
 {
   return ch >= 'A' && ch <= 'Z'
     ? (ch + ('a' - 'A'))

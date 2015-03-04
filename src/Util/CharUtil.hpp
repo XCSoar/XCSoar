@@ -31,7 +31,7 @@
 #define CHAR_UTIL_HPP
 
 #ifdef _UNICODE
-#include "TCharUtil.hpp"
+#include "WCharUtil.hpp"
 #endif
 
 constexpr
