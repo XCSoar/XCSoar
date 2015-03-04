@@ -114,7 +114,7 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
 }
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
-  :look(NULL),
+  :look(nullptr),
    map(nullptr), bottom_widget(nullptr), widget(nullptr), vario(*this),
    traffic_gauge(*this),
    suppress_traffic_gauge(false), force_traffic_gauge(false),
@@ -162,10 +162,10 @@ FatalError(const TCHAR *msg)
 
   /* now try to get a GUI error message out to the user */
 #ifdef WIN32
-  MessageBox(NULL, msg, _T("XCSoar"), MB_ICONEXCLAMATION|MB_OK);
+  MessageBox(nullptr, msg, _T("XCSoar"), MB_ICONEXCLAMATION|MB_OK);
 #elif !defined(ANDROID) && !defined(KOBO)
-  execl("/usr/bin/xmessage", "xmessage", msg, NULL);
-  execl("/usr/X11/bin/xmessage", "xmessage", msg, NULL);
+  execl("/usr/bin/xmessage", "xmessage", msg, nullptr);
+  execl("/usr/X11/bin/xmessage", "xmessage", msg, nullptr);
 #endif
   exit(EXIT_FAILURE);
 }
@@ -188,7 +188,7 @@ MainWindow::Initialise()
     NoFontsAvailable();
   }
 
-  if (look == NULL)
+  if (look == nullptr)
     look = new Look();
 
   look->Initialise(Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small,
@@ -226,7 +226,7 @@ MainWindow::InitialiseConfigured()
 
   Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
 
-  assert(look != NULL);
+  assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::dialog, Fonts::dialog_bold,
                              Fonts::dialog_small,
@@ -273,9 +273,9 @@ MainWindow::Deinitialise()
 
   // During destruction of GlueMapWindow WM_SETFOCUS gets called for
   // MainWindow which tries to set the focus to GlueMapWindow. Prevent
-  // this issue by setting map to NULL before calling delete.
+  // this issue by setting map to nullptr before calling delete.
   GlueMapWindow *temp_map = map;
-  map = NULL;
+  map = nullptr;
   delete temp_map;
 
   vario.Clear();
@@ -283,7 +283,7 @@ MainWindow::Deinitialise()
   thermal_assistant.Clear();
 
   delete look;
-  look = NULL;
+  look = nullptr;
 }
 
 void
@@ -327,7 +327,7 @@ MainWindow::ReinitialiseLayout()
   const PixelRect rc = GetClientRect();
 
 #ifndef ENABLE_OPENGL
-  if (draw_thread == NULL)
+  if (draw_thread == nullptr)
     /* no layout changes during startup */
     return;
 #endif
@@ -354,7 +354,7 @@ MainWindow::ReinitialiseLayout()
 
   ReinitialiseLayoutTA(rc, ib_layout);
 
-  if (map != NULL) {
+  if (map != nullptr) {
     if (FullScreen)
       InfoBoxManager::Hide();
     else
@@ -371,10 +371,10 @@ MainWindow::ReinitialiseLayout()
     map->FullRedraw();
   }
 
-  if (widget != NULL)
+  if (widget != nullptr)
     widget->Move(GetMainRect(rc));
 
-  if (map != NULL)
+  if (map != nullptr)
     map->BringToBottom();
 }
 
@@ -470,23 +470,23 @@ MainWindow::BeginShutdown()
 void
 MainWindow::SuspendThreads()
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->SuspendThreads();
 }
 
 void
 MainWindow::ResumeThreads()
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->ResumeThreads();
 }
 
 void
 MainWindow::SetDefaultFocus()
 {
-  if (map != NULL && widget == NULL)
+  if (map != nullptr && widget == nullptr)
     map->SetFocus();
-  else if (widget == NULL || !widget->SetFocus())
+  else if (widget == nullptr || !widget->SetFocus())
     SetFocus();
 }
 
@@ -500,7 +500,7 @@ MainWindow::FlushRendererCaches()
 void
 MainWindow::FullRedraw()
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->FullRedraw();
 }
 
@@ -515,7 +515,7 @@ MainWindow::OnResize(PixelSize new_size)
 
   ReinitialiseLayout();
 
-  if (map != NULL) {
+  if (map != nullptr) {
     /* the map being created already is an indicator that XCSoar is
        running already, and so we assume the menu buttons have been
        created, too */
@@ -550,9 +550,9 @@ MainWindow::OnSetFocus()
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
-    if (map != NULL && widget == NULL)
+    if (map != nullptr && widget == nullptr)
       map->SetFocus();
-    else if (widget != NULL)
+    else if (widget != nullptr)
       widget->SetFocus();
   } else
     /* recover the dialog focus if it got lost */
@@ -684,7 +684,7 @@ MainWindow::OnUser(unsigned id)
   switch ((Command)id) {
   case Command::AIRSPACE_WARNING:
     airspace_warnings = GetAirspaceWarnings();
-    if (!airspace_warning_pending || airspace_warnings == NULL)
+    if (!airspace_warning_pending || airspace_warnings == nullptr)
       return true;
 
     airspace_warning_pending = false;
@@ -777,10 +777,10 @@ MainWindow::SetFullScreen(bool _full_screen)
   else
     InfoBoxManager::Show();
 
-  if (widget != NULL)
+  if (widget != nullptr)
     widget->Move(GetMainRect());
 
-  if (map != NULL)
+  if (map != nullptr)
     map->FastMove(GetMainRect());
 
   // the repaint will be triggered by the DrawThread
@@ -791,35 +791,35 @@ MainWindow::SetFullScreen(bool _full_screen)
 void
 MainWindow::SetTerrain(RasterTerrain *terrain)
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->SetTerrain(terrain);
 }
 
 void
 MainWindow::SetTopography(TopographyStore *topography)
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->SetTopography(topography);
 }
 
 void
 MainWindow::SetComputerSettings(const ComputerSettings &settings_computer)
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->SetComputerSettings(settings_computer);
 }
 
 void
 MainWindow::SetMapSettings(const MapSettings &settings_map)
 {
-  if (map != NULL)
+  if (map != nullptr)
     map->SetMapSettings(settings_map);
 }
 
 void
 MainWindow::SetUIState(const UIState &ui_state)
 {
-  if (map != NULL) {
+  if (map != nullptr) {
     map->SetUIState(ui_state);
     map->FullRedraw();
   }
@@ -828,7 +828,7 @@ MainWindow::SetUIState(const UIState &ui_state)
 GlueMapWindow *
 MainWindow::GetMapIfActive()
 {
-  return IsMapActive() ? map : NULL;
+  return IsMapActive() ? map : nullptr;
 }
 
 GlueMapWindow *
@@ -836,10 +836,10 @@ MainWindow::ActivateMap()
 {
   restore_page_pending = false;
 
-  if (map == NULL)
-    return NULL;
+  if (map == nullptr)
+    return nullptr;
 
-  if (widget != NULL) {
+  if (widget != nullptr) {
     KillWidget();
     map->Show();
     map->SetFocus();
@@ -874,16 +874,16 @@ MainWindow::DeferredRestorePage()
 void
 MainWindow::KillWidget()
 {
-  if (widget == NULL)
+  if (widget == nullptr)
     return;
 
   widget->Leave();
   widget->Hide();
   widget->Unprepare();
   delete widget;
-  widget = NULL;
+  widget = nullptr;
 
-  InputEvents::SetFlavour(NULL);
+  InputEvents::SetFlavour(nullptr);
 }
 
 void
@@ -939,7 +939,7 @@ MainWindow::SetBottomWidget(Widget *_widget)
 void
 MainWindow::SetWidget(Widget *_widget)
 {
-  assert(_widget != NULL);
+  assert(_widget != nullptr);
 
   restore_page_pending = false;
 
@@ -949,7 +949,7 @@ MainWindow::SetWidget(Widget *_widget)
   KillWidget();
 
   /* hide the map (might be hidden already) */
-  if (map != NULL) {
+  if (map != nullptr) {
     map->FastHide();
 
 #ifndef ENABLE_OPENGL
@@ -1042,7 +1042,7 @@ const MapWindowProjection &
 MainWindow::GetProjection() const
 {
   AssertThread();
-  assert(map != NULL);
+  assert(map != nullptr);
 
   return map->VisibleProjection();
 }
