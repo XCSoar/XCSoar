@@ -87,7 +87,7 @@ static size_t data_path_length;
 const TCHAR *
 GetPrimaryDataPath()
 {
-  assert(data_path != NULL);
+  assert(data_path != nullptr);
 
   return data_path;
 }
@@ -95,7 +95,7 @@ GetPrimaryDataPath()
 void
 SetPrimaryDataPath(const TCHAR *path)
 {
-  assert(path != NULL);
+  assert(path != nullptr);
   assert(!StringIsEmpty(path));
 
   free(data_path);
@@ -106,7 +106,7 @@ SetPrimaryDataPath(const TCHAR *path)
 void
 LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
 {
-  assert(data_path != NULL);
+  assert(data_path != nullptr);
 
   memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
   buffer[data_path_length] = _T(DIR_SEPARATOR);
@@ -117,10 +117,10 @@ TCHAR *
 LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
           const TCHAR *gcc_restrict name)
 {
-  assert(data_path != NULL);
-  assert(subdir != NULL);
+  assert(data_path != nullptr);
+  assert(subdir != nullptr);
   assert(!StringIsEmpty(subdir));
-  assert(name != NULL);
+  assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
@@ -135,12 +135,12 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
 const TCHAR *
 RelativePath(const TCHAR *path)
 {
-  assert(data_path != NULL);
+  assert(data_path != nullptr);
 
   const TCHAR *p = StringAfterPrefix(path, data_path);
-  return p != NULL && IsDirSeparator(*p)
+  return p != nullptr && IsDirSeparator(*p)
     ? p + 1
-    : NULL;
+    : nullptr;
 }
 
 /**
@@ -151,7 +151,7 @@ static void
 NormalizeBackslashes(TCHAR *p)
 {
 #if !defined(_WIN32) || defined(__WINE__)
-  while ((p = _tcschr(p, '\\')) != NULL)
+  while ((p = _tcschr(p, '\\')) != nullptr)
     *p++ = '/';
 #endif
 }
@@ -163,7 +163,7 @@ ExpandLocalPath(TCHAR *dest, const TCHAR *src)
 {
   // Get the relative file name and location (ptr)
   const TCHAR *ptr = StringAfterPrefix(src, local_path_code);
-  if (ptr == NULL) {
+  if (ptr == nullptr) {
     _tcscpy(dest, src);
     return;
   }
@@ -188,7 +188,7 @@ ContractLocalPath(TCHAR* filein)
 
   // Get the relative file name and location (ptr)
   const TCHAR *relative = RelativePath(filein);
-  if (relative == NULL)
+  if (relative == nullptr)
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
@@ -206,12 +206,12 @@ static const TCHAR *
 FindDataPathAtModule(HMODULE hModule, TCHAR *buffer)
 {
   if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
-    return NULL;
+    return nullptr;
 
   ReplaceBaseName(buffer, _T(XCSDATADIR));
   return Directory::Exists(buffer)
     ? buffer
-    : NULL;
+    : nullptr;
 }
 
 #endif
@@ -235,12 +235,12 @@ InFlashNamed(const TCHAR *path, const TCHAR *name)
 static const TCHAR *
 InFlash(const TCHAR *path, TCHAR *buffer)
 {
-  assert(path != NULL);
-  assert(buffer != NULL);
+  assert(path != nullptr);
+  assert(buffer != nullptr);
 
   FlashCardEnumerator enumerator;
   const TCHAR *name;
-  while ((name = enumerator.Next()) != NULL) {
+  while ((name = enumerator.Next()) != nullptr) {
     if (InFlashNamed(path, name)) {
       buffer[0] = DIR_SEPARATOR;
       StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S"%s"), name);
@@ -248,14 +248,14 @@ InFlash(const TCHAR *path, TCHAR *buffer)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static const TCHAR *
 ModuleInFlash(HMODULE hModule, TCHAR *buffer)
 {
   if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
-    return NULL;
+    return nullptr;
 
   return InFlash(buffer, buffer);
 }
@@ -266,18 +266,18 @@ ModuleInFlash(HMODULE hModule, TCHAR *buffer)
 static const TCHAR *
 ExistingDataOnFlash(TCHAR *buffer)
 {
-  assert(buffer != NULL);
+  assert(buffer != nullptr);
 
   FlashCardEnumerator enumerator;
   const TCHAR *name;
-  while ((name = enumerator.Next()) != NULL) {
+  while ((name = enumerator.Next()) != nullptr) {
     StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
                        name);
     if (Directory::Exists(buffer))
       return buffer;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 #elif defined(WIN32)
@@ -286,13 +286,13 @@ static const TCHAR *
 ModuleInFlash(HMODULE module, TCHAR *buffer)
 {
   if (GetModuleFileName(module, buffer, MAX_PATH) <= 0)
-    return NULL;
+    return nullptr;
 
   // At least "C:\"
   if (_tcslen(buffer) < 3 ||
       buffer[1] != _T(':') ||
       buffer[2] != _T('\\'))
-    return NULL;
+    return nullptr;
 
   // Trim the module path to the drive letter plus colon
   buffer[2] = _T('\0');
@@ -310,16 +310,16 @@ ModuleInFlash(HMODULE module, TCHAR *buffer)
  * as no-match for the given line (i.e. string1 AND !string2).
  */
 static bool
-fgrep(const char *fname, const char *string, const char *string2 = NULL)
+fgrep(const char *fname, const char *string, const char *string2 = nullptr)
 {
   char line[100];
   FILE *fp;
 
-  if ((fp = fopen(fname, "r")) == NULL)
+  if ((fp = fopen(fname, "r")) == nullptr)
     return false;
-  while (fgets(line, sizeof(line), fp) != NULL)
-    if (strstr(line, string) != NULL &&
-        (string2 == NULL || strstr(line, string2) == NULL)) {
+  while (fgets(line, sizeof(line), fp) != nullptr)
+    if (strstr(line, string) != nullptr &&
+        (string2 == nullptr || strstr(line, string2) == nullptr)) {
         fclose(fp);
         return true;
     }
@@ -361,12 +361,12 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 {
   if (IsAndroid() || IsKobo())
     /* hard-coded path for Android */
-    return NULL;
+    return nullptr;
 
 #ifdef HAVE_POSIX
   /* on Unix or WINE, use ~/.xcsoar */
   const TCHAR *home = getenv("HOME");
-  if (home != NULL) {
+  if (home != nullptr) {
     _tcscpy(buffer, home);
 #ifdef __APPLE__
     /* Mac OS X users are not used to dot-files in their home
@@ -385,16 +385,17 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
        SHGetSpecialFolderPath() failure, see below */
     buffer[0] = _T('\0');
 
-  bool success = SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, create);
+  bool success = SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
+                                        create);
   if (IsWindowsCE() && !success && !StringIsEmpty(buffer))
     /* MSDN: "If you are using the AYGShell extensions, then this
        function returns FALSE even if successful. If the folder
        represented by the CSIDL does not exist and is not created, a
-       NULL string is returned indicating that the directory does not
+       nullptr string is returned indicating that the directory does not
        exist." */
     success = true;
   if (!success)
-    return NULL;
+    return nullptr;
 
   _tcscat(buffer, _T(DIR_SEPARATOR_S));
   _tcscat(buffer, _T(XCSDATADIR));
@@ -419,8 +420,8 @@ FindDataPath()
 #ifdef WIN32
   {
     TCHAR buffer[MAX_PATH];
-    const TCHAR *path = FindDataPathAtModule(NULL, buffer);
-    if (path != NULL)
+    const TCHAR *path = FindDataPathAtModule(nullptr, buffer);
+    if (path != nullptr)
       return _tcsdup(path);
   }
 #endif
@@ -452,7 +453,7 @@ FindDataPath()
     /* try Context.getExternalStoragePublicDirectory() */
     char buffer[MAX_PATH];
     if (Environment::getExternalStoragePublicDirectory(buffer, sizeof(buffer),
-                                                       "XCSoarData") != NULL) {
+                                                       "XCSoarData") != nullptr) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStoragePublicDirectory()='%s'",
                           buffer);
@@ -462,7 +463,7 @@ FindDataPath()
     /* now try Context.getExternalStorageDirectory(), because
        getExternalStoragePublicDirectory() needs API level 8 */
     if (Environment::getExternalStorageDirectory(buffer,
-                                                 sizeof(buffer) - 32) != NULL) {
+                                                 sizeof(buffer) - 32) != nullptr) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStorageDirectory()='%s'",
                           buffer);
@@ -483,7 +484,7 @@ FindDataPath()
      it, too */
   {
     TCHAR buffer[MAX_PATH];
-    if (ModuleInFlash(NULL, buffer) != NULL) {
+    if (ModuleInFlash(nullptr, buffer) != nullptr) {
       _tcscat(buffer, _T(DIR_SEPARATOR_S));
       _tcscat(buffer, _T(XCSDATADIR));
       if (Directory::Exists(buffer))
@@ -492,7 +493,7 @@ FindDataPath()
 
 #ifdef _WIN32_WCE
     /* if a flash disk with XCSoarData exists, use it */
-    if (ExistingDataOnFlash(buffer) != NULL)
+    if (ExistingDataOnFlash(buffer) != nullptr)
       return _tcsdup(buffer);
 #endif
   }
@@ -501,11 +502,11 @@ FindDataPath()
   {
     TCHAR buffer[MAX_PATH];
     const TCHAR *path = GetHomeDataPath(buffer, true);
-    if (path != NULL)
+    if (path != nullptr)
       return _tcsdup(path);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -517,7 +518,7 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   {
     TCHAR buffer[MAX_PATH];
     const TCHAR *home_path = GetHomeDataPath(buffer);
-    if (home_path != NULL && _tcscmp(data_path, home_path) != 0)
+    if (home_path != nullptr && _tcscmp(data_path, home_path) != 0)
       Directory::VisitSpecificFiles(home_path, filter, visitor, true);
   }
 
@@ -525,7 +526,7 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
   TCHAR flash_path[MAX_PATH];
   FlashCardEnumerator enumerator;
   const TCHAR *flash_name;
-  while ((flash_name = enumerator.Next()) != NULL) {
+  while ((flash_name = enumerator.Next()) != nullptr) {
     StringFormatUnsafe(flash_path, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
                        flash_name);
     if (_tcscmp(data_path, flash_path) == 0)
@@ -548,7 +549,7 @@ RealPath(char *path)
 {
   char buffer[4096];
   char *result = realpath(path, buffer);
-  if (result == NULL)
+  if (result == nullptr)
     return path;
 
   free(path);
@@ -560,7 +561,7 @@ bool
 InitialiseDataPath()
 {
   data_path = FindDataPath();
-  if (data_path == NULL)
+  if (data_path == nullptr)
     return false;
 
 #ifdef ANDROID
