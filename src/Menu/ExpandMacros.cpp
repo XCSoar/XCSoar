@@ -59,7 +59,7 @@ ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
   size_t iR = _tcslen(ToReplace);
   TCHAR *pC;
 
-  while ((pC = _tcsstr(String, ToReplace)) != NULL) {
+  while ((pC = _tcsstr(String, ToReplace)) != nullptr) {
     _tcscpy(TmpBuf, pC + iR);
     _tcscpy(pC, ReplaceWith);
     _tcscat(pC, TmpBuf);
@@ -112,13 +112,13 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
   }
 
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return true;
 
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
 
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task == NULL || !task_stats.task_valid ||
+  if (task == nullptr || !task_stats.task_valid ||
       common_stats.task_type == TaskType::GOTO) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
@@ -201,7 +201,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                           _T("$(WaypointNext)"),
                           _("Finish Turnpoint"),
                           _("Next Turnpoint"), Size);
-      
+
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
 
       if (has_optional_starts && !common_stats.active_has_previous) {
@@ -272,38 +272,38 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
         ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm turn"), Size);
         break;
       }
-    } 
+    }
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
     switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
     case TaskAdvance::MANUAL:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
+      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
                       _("Advance\n(manual)"), Size);
       invalid = true;
       break;
     case TaskAdvance::AUTO:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
+      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
                       _("Advance\n(auto)"), Size);
       invalid = true;
       break;
     case TaskAdvance::START_ARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
+      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
                       _("Abort\nStart"), Size);
       invalid = false;
       break;
     case TaskAdvance::START_DISARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
+      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
                       _("Arm\nStart"), Size);
       invalid = false;
       break;
     case TaskAdvance::TURN_ARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
+      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
                       _("Abort\nTurn"), Size);
       invalid = false;
       break;
     case TaskAdvance::TURN_DISARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
+      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
                       _("Arm\nTurn"), Size);
       invalid = false;
       break;
@@ -323,7 +323,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       CondReplaceInString(ordered_task_stats.task_valid,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
-    } else 
+    } else
       CondReplaceInString(common_stats.task_type == TaskType::ABORT,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
@@ -385,7 +385,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   bool invalid = false;
   CopyString(OutBuffer, In, Size);
 
-  if (_tcsstr(OutBuffer, _T("$(")) == NULL)
+  if (_tcsstr(OutBuffer, _T("$(")) == nullptr)
     return false;
 
   if (_tcsstr(OutBuffer, _T("$(CheckAirspace)"))) {
@@ -419,7 +419,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckVega)"))) {
-    if (devVarioFindVega()== NULL)
+    if (devVarioFindVega() == nullptr)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckVega)"), _T(""), Size);
   }
@@ -541,8 +541,8 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _T("$(FullScreenToggleActionName)"),
                       _("Off"), _("On"), Size);
   CondReplaceInString(GetMapSettings().auto_zoom_enabled, OutBuffer,
-		                  _T("$(ZoomAutoToggleActionName)"),
-		                  _("Manual"), _("Auto"), Size);
+                      _T("$(ZoomAutoToggleActionName)"),
+                      _("Manual"), _("Auto"), Size);
   CondReplaceInString(GetMapSettings().topography_enabled, OutBuffer,
                       _T("$(TopologyToggleActionName)"),
                       _("Off"), _("On"), Size);
