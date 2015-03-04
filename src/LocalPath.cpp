@@ -25,6 +25,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Util/StringUtil.hpp"
 #include "Util/StringFormat.hpp"
+#include "Util/StringAPI.hpp"
 #include "Asset.hpp"
 
 #include "OS/FileUtil.hpp"
@@ -99,8 +100,8 @@ SetPrimaryDataPath(const TCHAR *path)
   assert(!StringIsEmpty(path));
 
   free(data_path);
-  data_path = _tcsdup(path);
-  data_path_length = _tcslen(data_path);
+  data_path = DuplicateString(path);
+  data_path_length = StringLength(data_path);
 }
 
 void
@@ -221,7 +222,7 @@ FindDataPathAtModule(HMODULE hModule, TCHAR *buffer)
 static bool
 InFlashNamed(const TCHAR *path, const TCHAR *name)
 {
-  size_t name_length = _tcslen(name);
+  size_t name_length = StringLength(name);
 
   return IsDirSeparator(path[0]) &&
     memcmp(path + 1, name, name_length * sizeof(name[0])) == 0 &&
@@ -289,7 +290,7 @@ ModuleInFlash(HMODULE module, TCHAR *buffer)
     return nullptr;
 
   // At least "C:\"
-  if (_tcslen(buffer) < 3 ||
+  if (StringLength(buffer) < 3 ||
       buffer[1] != _T(':') ||
       buffer[2] != _T('\\'))
     return nullptr;
@@ -344,7 +345,7 @@ TryMountPoint(const TCHAR *mnt)
                       buffer, Directory::Exists(buffer), access(buffer, W_OK));
 
   return Directory::Exists(buffer) && access(buffer, W_OK) == 0
-    ? _tcsdup(buffer)
+    ? DuplicateString(buffer)
     : nullptr;
 }
 
@@ -411,10 +412,10 @@ FindDataPath()
        internal memory is extremely small */
     const TCHAR *usb = _T("\\USB HD\\" XCSDATADIR);
     if (Directory::Exists(usb))
-      return _tcsdup(usb);
+      return DuplicateString(usb);
 
     /* hard-coded path for Altair */
-    return _tcsdup(_T("\\NOR Flash"));
+    return DuplicateString(_T("\\NOR Flash"));
   }
 
 #ifdef WIN32
@@ -422,12 +423,12 @@ FindDataPath()
     TCHAR buffer[MAX_PATH];
     const TCHAR *path = FindDataPathAtModule(nullptr, buffer);
     if (path != nullptr)
-      return _tcsdup(path);
+      return DuplicateString(path);
   }
 #endif
 
   if (IsKobo())
-    return _tcsdup(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
+    return DuplicateString(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
 
   if (IsAndroid()) {
 #ifdef ANDROID
@@ -476,7 +477,7 @@ FindDataPath()
     __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                         "Fallback " XCSDATADIR " in " ANDROID_SDCARD);
 #endif
-    return _tcsdup(_T(ANDROID_SDCARD "/" XCSDATADIR));
+    return DuplicateString(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
 #ifdef WIN32
@@ -488,13 +489,13 @@ FindDataPath()
       _tcscat(buffer, _T(DIR_SEPARATOR_S));
       _tcscat(buffer, _T(XCSDATADIR));
       if (Directory::Exists(buffer))
-        return _tcsdup(buffer);
+        return DuplicateString(buffer);
     }
 
 #ifdef _WIN32_WCE
     /* if a flash disk with XCSoarData exists, use it */
     if (ExistingDataOnFlash(buffer) != nullptr)
-      return _tcsdup(buffer);
+      return DuplicateString(buffer);
 #endif
   }
 #endif
@@ -503,7 +504,7 @@ FindDataPath()
     TCHAR buffer[MAX_PATH];
     const TCHAR *path = GetHomeDataPath(buffer, true);
     if (path != nullptr)
-      return _tcsdup(path);
+      return DuplicateString(path);
   }
 
   return nullptr;
@@ -573,7 +574,7 @@ InitialiseDataPath()
   data_path = RealPath(data_path);
 #endif
 
-  data_path_length = _tcslen(data_path);
+  data_path_length = StringLength(data_path);
   return true;
 }
 
