@@ -66,7 +66,7 @@ UnsafeCopyString(char *dest, const char *src)
 }
 
 /**
- * Checks whether str1 and str2 are equal.
+ * Checks whether #a and #b are equal.
  */
 static inline bool
 StringIsEqual(const char *a, const char *b)
