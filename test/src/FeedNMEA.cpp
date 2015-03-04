@@ -88,7 +88,7 @@ main(int argc, char **argv)
         (memcmp(line + 3, "GGA", 3) == 0 ||
          memcmp(line + 3, "RMC", 3) == 0) &&
         line[6] == ',' &&
-        strncmp(stamp, line + 7, sizeof(stamp)) != 0) {
+        !StringIsEqual(stamp, line + 7, sizeof(stamp))) {
       /* the time stamp has changed - sleep for one second */
       Sleep(1000);
       strncpy(stamp, line + 7, sizeof(stamp));

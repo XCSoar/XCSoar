@@ -42,8 +42,8 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
 
     ok1(*expect != NULL);
 
-    if (strncmp(*expect, "HFFTYFRTYPE:", 12) == 0) {
-      ok1(strncmp(line, "HFFTYFRTYPE:", 12) == 0);
+    if (StringIsEqual(*expect, "HFFTYFRTYPE:", 12)) {
+      ok1(StringIsEqual(line, "HFFTYFRTYPE:", 12));
     } else {
       if (strcmp(line, *expect)) {
         printf("# \"%s\" fails to match with \"%s\"\n", line, *expect);

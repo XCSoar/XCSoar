@@ -64,7 +64,7 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
   assert(prefix != nullptr);
 
   size_t prefix_length = _tcslen(prefix);
-  return _tcsncmp(string, prefix, prefix_length) == 0
+  return StringIsEqual(string, prefix, prefix_length)
     ? string + prefix_length
     : nullptr;
 }

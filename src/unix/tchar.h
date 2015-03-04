@@ -42,7 +42,6 @@ typedef char TCHAR;
 #define _tcsdup strdup
 #define _tcscpy strcpy
 #define _tcscmp strcmp
-#define _tcsncmp strncmp
 #define _tcslen strlen
 #define _tcsclen strlen
 #define _tcsstr strstr

@@ -77,6 +77,18 @@ StringIsEqual(const TCHAR *str1, const TCHAR *str2)
   return _tcscmp(str1, str2) == 0;
 }
 
+/**
+ * Checks whether #a and #b are equal.
+ */
+static inline bool
+StringIsEqual(const TCHAR *a, const TCHAR *b, size_t length)
+{
+  assert(a != nullptr);
+  assert(a != nullptr);
+
+  return _tcsncmp(a, b, length) == 0;
+}
+
 static inline bool
 StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b)
 {

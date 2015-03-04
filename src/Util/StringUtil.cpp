@@ -67,7 +67,7 @@ StringAfterPrefix(const char *string, const char *prefix)
 #endif
 
   size_t prefix_length = strlen(prefix);
-  return strncmp(string, prefix, prefix_length) == 0
+  return StringIsEqual(string, prefix, prefix_length)
     ? string + prefix_length
     : nullptr;
 }

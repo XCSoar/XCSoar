@@ -356,7 +356,7 @@ InputEvents::eventLogger(const TCHAR *misc)
     } else {
       Message::AddMessage(_("Logger off"));
     }
-  else if (_tcsncmp(misc, _T("note"), 4))
+  else if (StringIsEqual(misc, _T("note"), 4))
     // add note to logger file if available..
     logger->LoggerNote(misc + 4);
 }

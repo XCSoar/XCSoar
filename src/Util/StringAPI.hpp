@@ -77,6 +77,18 @@ StringIsEqual(const char *a, const char *b)
   return strcmp(a, b) == 0;
 }
 
+/**
+ * Checks whether #a and #b are equal.
+ */
+static inline bool
+StringIsEqual(const char *a, const char *b, size_t length)
+{
+  assert(a != nullptr);
+  assert(a != nullptr);
+
+  return strncmp(a, b, length) == 0;
+}
+
 static inline bool
 StringIsEqualIgnoreCase(const char *a, const char *b)
 {

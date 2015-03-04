@@ -29,6 +29,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
 #include "Util/CharUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
@@ -65,11 +66,11 @@ CommandLine::Parse(Args &args)
     if (s[1] == '-')
       s++;
 
-    if (strncmp(s, "-profile=", 9) == 0) {
+    if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;
       PathName convert(s);
       Profile::SetFiles(convert);
-    } else if (strncmp(s, "-datapath=", 10) == 0) {
+    } else if (StringIsEqual(s, "-datapath=", 10)) {
       s += 10;
       PathName convert(s);
       SetPrimaryDataPath(convert);
@@ -120,7 +121,7 @@ CommandLine::Parse(Args &args)
     }
 #endif
 #if !defined(ANDROID) && !defined(_WIN32_WCE)
-    else if (strncmp(s, "-dpi=", 5) == 0) {
+    else if (StringIsEqual(s, "-dpi=", 5)) {
       unsigned x_dpi, y_dpi;
       char *p;
       x_dpi = ParseUnsigned(s + 5, &p);
