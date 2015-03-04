@@ -59,12 +59,10 @@ gcc_pure
 static bool
 LacksAlphaASCII(const TCHAR *s)
 {
-  while (*s) {
+  for (; *s != 0; ++s)
     if (IsAlphaASCII(*s))
       return false;
 
-    s++;
-  }
   return true;
 }
 
