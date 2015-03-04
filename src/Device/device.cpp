@@ -167,6 +167,9 @@ devVarioFindVega()
 void
 devShutdown()
 {
+  if (devices == nullptr)
+    return;
+
   // Stop COM devices
   LogFormat("Stop COM devices");
 

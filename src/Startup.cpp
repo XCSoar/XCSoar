@@ -521,14 +521,20 @@ Shutdown()
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  logger->GUIStopLogger(CommonInterface::Basic(), true);
+  if (logger != nullptr)
+    logger->GUIStopLogger(CommonInterface::Basic(), true);
 
   delete flight_logger;
   flight_logger = nullptr;
 
   delete all_monitors;
-  live_blackboard.RemoveListener(*glide_computer_events);
-  delete glide_computer_events;
+  all_monitors = nullptr;
+
+  if (glide_computer_events != nullptr) {
+    live_blackboard.RemoveListener(*glide_computer_events);
+    delete glide_computer_events;
+    glide_computer_events = nullptr;
+  }
 
   SaveFlarmColors();
 
@@ -544,28 +550,40 @@ Shutdown()
   Net::DownloadManager::BeginDeinitialise();
 #endif
 #ifndef ENABLE_OPENGL
-  draw_thread->BeginStop();
+  if (draw_thread != nullptr)
+    draw_thread->BeginStop();
 #endif
-  calculation_thread->BeginStop();
-  merge_thread->BeginStop();
+
+  if (calculation_thread != nullptr)
+    calculation_thread->BeginStop();
+
+  if (merge_thread != nullptr)
+    merge_thread->BeginStop();
 
   // Wait for the calculations thread to finish
   LogFormat("Waiting for calculation thread");
 
-  merge_thread->Join();
-  delete merge_thread;
-  merge_thread = nullptr;
+  if (merge_thread != nullptr) {
+    merge_thread->Join();
+    delete merge_thread;
+    merge_thread = nullptr;
+  }
 
-  calculation_thread->Join();
-  delete calculation_thread;
-  calculation_thread = nullptr;
+  if (calculation_thread != nullptr) {
+    calculation_thread->Join();
+    delete calculation_thread;
+    calculation_thread = nullptr;
+  }
 
   //  Wait for the drawing thread to finish
 #ifndef ENABLE_OPENGL
   LogFormat("Waiting for draw thread");
 
-  draw_thread->Join();
-  delete draw_thread;
+  if (draw_thread != nullptr) {
+    draw_thread->Join();
+    delete draw_thread;
+    draw_thread = nullptr;
+  }
 #endif
 
   LogFormat("delete MapWindow");
@@ -578,7 +596,8 @@ Shutdown()
   operation.SetText(_("Shutdown, saving task..."));
 
   LogFormat("Save default task");
-  protected_task_manager->TaskSaveDefault();
+  if (protected_task_manager != nullptr)
+    protected_task_manager->TaskSaveDefault();
 
   // Clear waypoint database
   way_points.Clear();
@@ -587,14 +606,19 @@ Shutdown()
 
   // Clear weather database
   delete rasp;
+  rasp = nullptr;
 
   // Clear terrain database
 
   delete terrain;
+  terrain = nullptr;
   delete topography;
+  topography = nullptr;
 
   delete protected_marks;
+  protected_marks = nullptr;
   delete marks;
+  marks = nullptr;
 
   // Close any device connections
   devShutdown();
@@ -602,25 +626,32 @@ Shutdown()
   NMEALogger::Shutdown();
 
   delete replay;
+  replay = nullptr;
 
   delete devices;
   devices = nullptr;
   delete device_blackboard;
   device_blackboard = nullptr;
 
-  protected_task_manager->SetRoutePlanner(nullptr);
+  if (protected_task_manager != nullptr) {
+    protected_task_manager->SetRoutePlanner(nullptr);
+    delete protected_task_manager;
+    protected_task_manager = nullptr;
+  }
 
-  delete protected_task_manager;
   delete task_manager;
+  task_manager = nullptr;
 
 #ifdef HAVE_NOAA
   delete noaa_store;
+  noaa_store = nullptr;
 #endif
 
 #ifdef HAVE_TRACKING
   if (tracking != nullptr) {
     tracking->WaitStopped();
     delete tracking;
+    tracking = nullptr;
   }
 #endif
 
@@ -633,8 +664,11 @@ Shutdown()
   operation.Hide();
 
   delete glide_computer;
+  glide_computer = nullptr;
   delete task_events;
+  task_events = nullptr;
   delete logger;
+  logger = nullptr;
 
   // Clear airspace database
   airspace_database.Clear();
@@ -643,6 +677,7 @@ Shutdown()
   DeinitTrafficGlobals();
 
   delete file_cache;
+  file_cache = nullptr;
 
   LogFormat("Close Windows - main");
   main_window->Destroy();
