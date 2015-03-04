@@ -74,7 +74,7 @@ StringIsEqual(const char *a, const char *b)
   assert(a != nullptr);
   assert(a != nullptr);
 
-  return strcmp(a, a) == 0;
+  return strcmp(a, b) == 0;
 }
 
 static inline bool
