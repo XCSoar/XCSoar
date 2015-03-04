@@ -21,35 +21,31 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WSTRING_UTIL_HPP
-#define XCSOAR_WSTRING_UTIL_HPP
-
-#ifndef _UNICODE
-#error Cannot use this header without _UNICODE
-#endif
+#ifndef WSTRING_UTIL_HPP
+#define WSTRING_UTIL_HPP
 
 #include "Compiler.h"
 
 #include <assert.h>
-#include <tchar.h>
+#include <wchar.h>
 
 static inline bool
-StringIsEmpty(const TCHAR *string)
+StringIsEmpty(const wchar_t *string)
 {
   return *string == 0;
 }
 
 gcc_pure
 bool
-StringStartsWith(const TCHAR *haystack, const TCHAR *needle);
+StringStartsWith(const wchar_t *haystack, const wchar_t *needle);
 
 gcc_pure
 bool
-StringEndsWith(const TCHAR *haystack, const TCHAR *needle);
+StringEndsWith(const wchar_t *haystack, const wchar_t *needle);
 
 gcc_pure
 bool
-StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
+StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -57,8 +53,8 @@ StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
  * nullptr.
  */
 gcc_nonnull_all
-const TCHAR *
-StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
+const wchar_t *
+StringAfterPrefix(const wchar_t *string, const wchar_t *prefix);
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -67,8 +63,8 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
  * This function is case-independent.
  */
 gcc_nonnull_all
-const TCHAR *
-StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
+const wchar_t *
+StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix);
 
 /**
  * Copy a string.  If the buffer is too small, then the string is
@@ -79,51 +75,51 @@ StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
  * @return a pointer to the null terminator
  */
 gcc_nonnull_all
-TCHAR *
-CopyString(TCHAR *dest, const TCHAR *src, size_t size);
+wchar_t *
+CopyString(wchar_t *dest, const wchar_t *src, size_t size);
 
 gcc_nonnull_all
 void
-CopyASCII(TCHAR *dest, const TCHAR *src);
+CopyASCII(wchar_t *dest, const wchar_t *src);
 
 gcc_nonnull_all
-TCHAR *
-CopyASCII(TCHAR *dest, size_t dest_size,
-          const TCHAR *src, const TCHAR *src_end);
+wchar_t *
+CopyASCII(wchar_t *dest, size_t dest_size,
+          const wchar_t *src, const wchar_t *src_end);
 
 gcc_nonnull_all
 void
-CopyASCII(TCHAR *dest, const char *src);
+CopyASCII(wchar_t *dest, const char *src);
 
 gcc_nonnull_all
-TCHAR *
-CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end);
+wchar_t *
+CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end);
 
 gcc_nonnull_all
 char *
-CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end);
+CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end);
 
 gcc_nonnull_all
 void
-CopyASCIIUpper(char *dest, const TCHAR *src);
+CopyASCIIUpper(char *dest, const wchar_t *src);
 
 gcc_pure gcc_nonnull_all
-const TCHAR *
-StripLeft(const TCHAR *p);
+const wchar_t *
+StripLeft(const wchar_t *p);
 
 gcc_pure
-const TCHAR *
-StripRight(const TCHAR *p, const TCHAR *end);
+const wchar_t *
+StripRight(const wchar_t *p, const wchar_t *end);
 
 /**
  * Determine the string's end as if it was stripped on the right side.
  */
 gcc_pure
-static inline TCHAR *
-StripRight(TCHAR *p, TCHAR *end)
+static inline wchar_t *
+StripRight(wchar_t *p, wchar_t *end)
 {
-  return const_cast<TCHAR *>(StripRight((const TCHAR *)p,
-                                        (const TCHAR *)end));
+  return const_cast<wchar_t *>(StripRight((const wchar_t *)p,
+                                        (const wchar_t *)end));
 }
 
 /**
@@ -132,22 +128,22 @@ StripRight(TCHAR *p, TCHAR *end)
  */
 gcc_pure
 size_t
-StripRight(const TCHAR *p, size_t length);
+StripRight(const wchar_t *p, size_t length);
 
 gcc_nonnull_all
 void
-StripRight(TCHAR *p);
+StripRight(wchar_t *p);
 
 gcc_nonnull_all
-TCHAR *
-NormalizeSearchString(TCHAR *dest, const TCHAR *src);
+wchar_t *
+NormalizeSearchString(wchar_t *dest, const wchar_t *src);
 
 gcc_pure
 bool
-StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
+StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
 
 gcc_malloc gcc_nonnull_all
-TCHAR *
-DuplicateString(const TCHAR *p, size_t length);
+wchar_t *
+DuplicateString(const wchar_t *p, size_t length);
 
 #endif

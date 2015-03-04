@@ -31,13 +31,13 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-StringStartsWith(const TCHAR *haystack, const TCHAR *needle)
+StringStartsWith(const wchar_t *haystack, const wchar_t *needle)
 {
   return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
 }
 
 bool
-StringEndsWith(const TCHAR *haystack, const TCHAR *needle)
+StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
 {
   const size_t haystack_length = StringLength(haystack);
   const size_t needle_length = StringLength(needle);
@@ -47,7 +47,7 @@ StringEndsWith(const TCHAR *haystack, const TCHAR *needle)
 }
 
 bool
-StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
+StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
 {
   const size_t haystack_length = StringLength(haystack);
   const size_t needle_length = StringLength(needle);
@@ -57,55 +57,55 @@ StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
                             needle);
 }
 
-const TCHAR *
-StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
+const wchar_t *
+StringAfterPrefix(const wchar_t *string, const wchar_t *prefix)
 {
   assert(string != nullptr);
   assert(prefix != nullptr);
 
-  size_t prefix_length = _tcslen(prefix);
+  size_t prefix_length = StringLength(prefix);
   return StringIsEqual(string, prefix, prefix_length)
     ? string + prefix_length
     : nullptr;
 }
 
-const TCHAR *
-StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix)
+const wchar_t *
+StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix)
 {
   assert(string != nullptr);
   assert(prefix != nullptr);
 
-  size_t prefix_length = _tcslen(prefix);
-  return _tcsnicmp(string, prefix, prefix_length) == 0
+  size_t prefix_length = StringLength(prefix);
+  return StringIsEqual(string, prefix, prefix_length)
     ? string + prefix_length
     : nullptr;
 }
 
-TCHAR *
-CopyString(TCHAR *gcc_restrict dest, const TCHAR *gcc_restrict src,
+wchar_t *
+CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
            size_t size)
 {
-  size_t length = _tcslen(src);
+  size_t length = StringLength(src);
   if (length >= size)
     length = size - 1;
 
-  TCHAR *p = std::copy_n(src, length, dest);
-  *p = _T('\0');
+  wchar_t *p = std::copy_n(src, length, dest);
+  *p = L'\0';
   return p;
 }
 
 void
-CopyASCII(TCHAR *dest, const TCHAR *src)
+CopyASCII(wchar_t *dest, const wchar_t *src)
 {
   do {
     if (IsASCII(*src))
       *dest++ = *src;
-  } while (*src++ != _T('\0'));
+  } while (*src++ != L'\0');
 }
 
-TCHAR *
-CopyASCII(TCHAR *dest, size_t dest_size,
-          const TCHAR *src, const TCHAR *src_end)
+wchar_t *
+CopyASCII(wchar_t *dest, size_t dest_size,
+          const wchar_t *src, const wchar_t *src_end)
 {
   assert(dest != nullptr);
   assert(dest_size > 0);
@@ -113,7 +113,7 @@ CopyASCII(TCHAR *dest, size_t dest_size,
   assert(src_end != nullptr);
   assert(src_end >= src);
 
-  const TCHAR *const dest_end = dest + dest_size;
+  const wchar_t *const dest_end = dest + dest_size;
   for (; dest != dest_end && src != src_end; ++src)
     if (IsASCII(*src))
       *dest++ = *src;
@@ -122,11 +122,11 @@ CopyASCII(TCHAR *dest, size_t dest_size,
 }
 
 void
-CopyASCII(TCHAR *dest, const char *src)
+CopyASCII(wchar_t *dest, const char *src)
 {
   do {
     if (IsASCII(*src))
-      *dest++ = (TCHAR)*src;
+      *dest++ = (wchar_t)*src;
   } while (*src++ != '\0');
 }
 
@@ -148,23 +148,23 @@ TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
   return dest;
 }
 
-TCHAR *
-CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end)
+wchar_t *
+CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end)
 {
   return TemplateCopyASCII(dest, dest_size, src, src_end);
 }
 
 char *
-CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end)
+CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end)
 {
   return TemplateCopyASCII(dest, dest_size, src, src_end);
 }
 
 void
-CopyASCIIUpper(char *dest, const TCHAR *src)
+CopyASCIIUpper(char *dest, const wchar_t *src)
 {
   do {
-    TCHAR t = *src;
+    wchar_t t = *src;
     if (IsASCII(t)) {
       char ch = (char)t;
       if (IsLowerAlphaASCII(ch))
@@ -175,16 +175,16 @@ CopyASCIIUpper(char *dest, const TCHAR *src)
   } while (*src++ != '\0');
 }
 
-const TCHAR *
-StripLeft(const TCHAR *p)
+const wchar_t *
+StripLeft(const wchar_t *p)
 {
   while (IsWhitespaceNotNull(*p))
     ++p;
   return p;
 }
 
-const TCHAR *
-StripRight(const TCHAR *p, const TCHAR *end)
+const wchar_t *
+StripRight(const wchar_t *p, const wchar_t *end)
 {
   while (end > p && IsWhitespaceOrNull(end[-1]))
     --end;
@@ -193,7 +193,7 @@ StripRight(const TCHAR *p, const TCHAR *end)
 }
 
 size_t
-StripRight(const TCHAR *p, size_t length)
+StripRight(const wchar_t *p, size_t length)
 {
   while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
     --length;
@@ -202,40 +202,40 @@ StripRight(const TCHAR *p, size_t length)
 }
 
 void
-StripRight(TCHAR *p)
+StripRight(wchar_t *p)
 {
-  size_t old_length = _tcslen(p);
+  size_t old_length = StringLength(p);
   size_t new_length = StripRight(p, old_length);
   p[new_length] = 0;
 }
 
-TCHAR *
-NormalizeSearchString(TCHAR *gcc_restrict dest,
-                      const TCHAR *gcc_restrict src)
+wchar_t *
+NormalizeSearchString(wchar_t *gcc_restrict dest,
+                      const wchar_t *gcc_restrict src)
 {
-  TCHAR *retval = dest;
+  wchar_t *retval = dest;
 
   for (; !StringIsEmpty(src); ++src)
     if (IsAlphaNumericASCII(*src))
       *dest++ = ToUpperASCII(*src);
 
-  *dest = _T('\0');
+  *dest = L'\0';
 
   return retval;
 }
 
 bool
-StringStartsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
+StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
 {
   return StringIsEqualIgnoreCase(haystack, needle,
                                  StringLength(needle) * sizeof(needle[0]));
 }
 
-TCHAR *
-DuplicateString(const TCHAR *p, size_t length)
+wchar_t *
+DuplicateString(const wchar_t *p, size_t length)
 {
-  TCHAR *q = (TCHAR *)malloc((length + 1) * sizeof(*p));
+  wchar_t *q = (wchar_t *)malloc((length + 1) * sizeof(*p));
   if (q != nullptr)
-    *std::copy_n(p, length, q) = _T('\0');
+    *std::copy_n(p, length, q) = L'\0';
   return q;
 }
