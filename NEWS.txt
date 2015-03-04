@@ -35,6 +35,7 @@ Version 6.8 - not yet released
 * Android
   - fix IOIO connection on Android 4.x (#2959, #3260)
 * Kobo
+  - menu button
   - add UI allowing the start of external scripts to KoboMenu (#3194)
   - support Wifi with WEP (#3138)
   - support open Wifi networks (#3391)

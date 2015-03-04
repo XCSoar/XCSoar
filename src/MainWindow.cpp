@@ -75,6 +75,22 @@ Copyright_License {
 
 static constexpr unsigned separator_height = 2;
 
+#ifdef HAVE_SHOW_MENU_BUTTON
+gcc_pure
+static PixelRect
+GetShowMenuButtonRect(const PixelRect rc)
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned size = Layout::GetMaximumControlHeight();
+  const int right = rc.right - padding;
+  const int left = right - size;
+  const int top = rc.top + padding;
+  const int bottom = top + size;
+
+  return PixelRect(left, top, right, bottom);
+}
+#endif
+
 gcc_pure
 static PixelRect
 GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
@@ -115,6 +131,9 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(nullptr),
+#ifdef HAVE_SHOW_MENU_BUTTON
+   show_menu_button(nullptr),
+#endif
    map(nullptr), bottom_widget(nullptr), widget(nullptr), vario(*this),
    traffic_gauge(*this),
    suppress_traffic_gauge(false), force_traffic_gauge(false),
@@ -254,6 +273,11 @@ MainWindow::InitialiseConfigured()
 
   ReinitialiseLayout_flarm(rc, ib_layout);
 
+#ifdef HAVE_SHOW_MENU_BUTTON
+  show_menu_button = new ShowMenuButton();
+  show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
+#endif
+
   map = new GlueMapWindow(*look);
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetMapSettings(CommonInterface::GetMapSettings());
@@ -277,6 +301,11 @@ MainWindow::Deinitialise()
   GlueMapWindow *temp_map = map;
   map = nullptr;
   delete temp_map;
+
+#ifdef HAVE_SHOW_MENU_BUTTON
+  delete show_menu_button;
+  show_menu_button = nullptr;
+#endif
 
   vario.Clear();
   traffic_gauge.Clear();
@@ -373,6 +402,11 @@ MainWindow::ReinitialiseLayout()
 
   if (widget != nullptr)
     widget->Move(GetMainRect(rc));
+
+#ifdef HAVE_SHOW_MENU_BUTTON
+  if (show_menu_button != nullptr)
+    show_menu_button->Move(GetShowMenuButtonRect(GetMainRect()));
+#endif
 
   if (map != nullptr)
     map->BringToBottom();

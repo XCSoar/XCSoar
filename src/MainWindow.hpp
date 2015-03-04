@@ -35,6 +35,11 @@ Copyright_License {
 #include <stdint.h>
 #include <assert.h>
 
+#ifdef KOBO
+#define HAVE_SHOW_MENU_BUTTON
+#include "Menu/ShowMenuButton.hpp"
+#endif
+
 struct ComputerSettings;
 struct MapSettings;
 struct UIState;
@@ -85,6 +90,10 @@ class MainWindow : public SingleWindow {
   static constexpr const TCHAR *title = _T("XCSoar");
 
   Look *look;
+
+#ifdef HAVE_SHOW_MENU_BUTTON
+  ShowMenuButton *show_menu_button;
+#endif
 
   GlueMapWindow *map;
 
