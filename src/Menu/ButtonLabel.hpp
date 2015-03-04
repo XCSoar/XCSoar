@@ -48,6 +48,8 @@ namespace ButtonLabel {
   Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
 
   void SetLabelText(unsigned i, const TCHAR *text, unsigned event);
+
+  gcc_pure
   bool IsEnabled(unsigned i);
 
   bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
