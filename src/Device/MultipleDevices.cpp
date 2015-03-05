@@ -31,7 +31,7 @@ MultipleDevices::MultipleDevices()
     DeviceDispatcher *dispatcher = dispatchers[i] =
       new DeviceDispatcher(*this, i);
 
-    devices[i] = new DeviceDescriptor(i, nullptr);
+    devices[i] = new DeviceDescriptor(i, this);
     devices[i]->SetDispatcher(dispatcher);
   }
 }
@@ -127,4 +127,31 @@ MultipleDevices::NotifyCalculatedUpdate(const MoreData &basic,
 {
   for (DeviceDescriptor *i : devices)
     i->OnCalculatedUpdate(basic, calculated);
+}
+
+void
+MultipleDevices::AddPortListener(PortListener &listener)
+{
+  const ScopeLock protect(listeners_mutex);
+  assert(std::find(listeners.begin(), listeners.end(),
+                   &listener) == listeners.end());
+  listeners.push_back(&listener);
+}
+
+void
+MultipleDevices::RemovePortListener(PortListener &listener)
+{
+  const ScopeLock protect(listeners_mutex);
+  assert(std::find(listeners.begin(), listeners.end(),
+                   &listener) != listeners.end());
+  listeners.remove(&listener);
+}
+
+void
+MultipleDevices::PortStateChanged()
+{
+  const ScopeLock protect(listeners_mutex);
+
+  for (auto *listener : listeners)
+    listener->PortStateChanged();
 }

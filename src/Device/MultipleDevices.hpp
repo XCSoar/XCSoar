@@ -31,8 +31,11 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "Math/fixed.hpp"
+#include "Device/Port/Listener.hpp"
+#include "Thread/Mutex.hpp"
 
 #include <array>
+#include <list>
 
 #include <tchar.h>
 
@@ -47,9 +50,12 @@ class OperationEnvironment;
 /**
  * Container for all (configured) devices.
  */
-class MultipleDevices {
+class MultipleDevices final : PortListener {
   std::array<DeviceDescriptor *, NUMDEV> devices;
   std::array<DeviceDispatcher *, NUMDEV> dispatchers;
+
+  Mutex listeners_mutex;
+  std::list<PortListener *> listeners;
 
 public:
   MultipleDevices();
@@ -87,6 +93,13 @@ public:
   void NotifySensorUpdate(const MoreData &basic);
   void NotifyCalculatedUpdate(const MoreData &basic,
                               const DerivedInfo &calculated);
+
+  void AddPortListener(PortListener &listener);
+  void RemovePortListener(PortListener &listener);
+
+private:
+  /* virtual methods from class PortListener */
+  void PortStateChanged() override;
 };
 
 #endif
