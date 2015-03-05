@@ -39,7 +39,9 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
+#include "Device/Port/Listener.hpp"
 #include "Device/Driver/LX/Internal.hpp"
+#include "Event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"
@@ -63,7 +65,7 @@ Copyright_License {
 
 class DeviceListWidget final
   : public ListWidget, private ActionListener,
-    private NullBlackboardListener {
+    NullBlackboardListener, PortListener, Notify {
   enum Buttons {
     DISABLE,
     RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
@@ -191,6 +193,7 @@ public:
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
 
+    devices->AddPortListener(*this);
     CommonInterface::GetLiveBlackboard().AddListener(*this);
 
     RefreshList();
@@ -201,6 +204,7 @@ public:
     ListWidget::Hide();
 
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+    devices->RemovePortListener(*this);
   }
 
   /* virtual methods from class List::Handler */
@@ -214,6 +218,17 @@ private:
 
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;
+
+  /* virtual methods from class PortListener */
+  void PortStateChanged() override {
+    Notify::SendNotification();
+  }
+
+  /* virtual methods from class Notify */
+  void OnNotification() override {
+    if (RefreshList())
+      UpdateButtons();
+  }
 };
 
 void
