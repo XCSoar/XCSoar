@@ -243,7 +243,8 @@ TTYPort::SetBaudrate(unsigned BaudRate)
   if (!tty.GetAttr(attr))
     return false;
 
-  attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+  attr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+  attr.c_iflag |= (IGNPAR | IGNBRK);
   attr.c_oflag &= ~OPOST;
   attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
   attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS);
