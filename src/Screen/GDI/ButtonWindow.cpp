@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/ButtonWindow.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/Macros.hpp"
 
 #include <commctrl.h>
@@ -62,7 +63,7 @@ ButtonWindow::SetText(const TCHAR *_text)
   AssertNoneLocked();
   AssertThread();
 
-  if (GetCustomPainting() || _tcschr(_text, _T('&')) == nullptr) {
+  if (GetCustomPainting() || StringFind(_text, _T('&')) == nullptr) {
     ::SetWindowText(hWnd, _text);
     return;
   }

@@ -27,6 +27,7 @@ Copyright_License {
 #include "InputLookup.hpp"
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/EscapeBackslash.hpp"
 #include "Util/NumberParser.hpp"
@@ -39,7 +40,7 @@ Copyright_License {
 static bool
 parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
 {
-  TCHAR *separator = _tcschr(buffer, '=');
+  TCHAR *separator = StringFind(buffer, '=');
   if (separator == NULL || separator == buffer)
     return false;
 
@@ -220,7 +221,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
           #if defined(__BORLANDC__)
           memset(d_event, 0, sizeof(d_event));
           memset(d_misc, 0, sizeof(d_event));
-          if (_tcschr(value, ' ') == NULL) {
+          if (StringFind(value, ' ') == nullptr) {
             _tcscpy(d_event, value);
           } else {
           #endif

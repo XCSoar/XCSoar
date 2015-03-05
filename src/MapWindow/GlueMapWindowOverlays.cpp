@@ -39,6 +39,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"
+#include "Util/StringAPI.hpp"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 
@@ -130,7 +131,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
   TCHAR *start = buffer;
   while (true) {
-    TCHAR *newline = _tcschr(start, _T('\n'));
+    auto *newline = StringFind(start, _T('\n'));
     if (newline != nullptr)
       *newline = _T('\0');
 

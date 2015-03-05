@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaypointReaderWinPilot.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
 
@@ -88,7 +89,7 @@ ParseRunwayDirection(const TCHAR* src, Runway &dest)
   // WELT2000 written files contain a 4-digit runway direction specification
   // at the end of the comment, e.g. "123.50 0927"
 
-  TCHAR const *start = _tcsrchr(src, _T(' '));
+  const auto *start = StringFindLast(src, _T(' '));
   if (start)
     start++;
   else

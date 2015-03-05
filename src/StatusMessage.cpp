@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "StatusMessage.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/EscapeBackslash.hpp"
 #include "Util/NumberParser.hpp"
 #include "IO/ConfiguredFile.hpp"
@@ -65,7 +66,7 @@ StatusMessageList::LoadFile()
 static bool
 parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
 {
-  TCHAR *separator = _tcschr(buffer, '=');
+  auto *separator = StringFind(buffer, '=');
   if (separator == NULL || separator == buffer)
     return false;
 

@@ -152,7 +152,7 @@ static void
 NormalizeBackslashes(TCHAR *p)
 {
 #if !defined(_WIN32) || defined(__WINE__)
-  while ((p = _tcschr(p, '\\')) != nullptr)
+  while ((p = StringFind(p, '\\')) != nullptr)
     *p++ = '/';
 #endif
 }

@@ -24,6 +24,7 @@ Copyright_License {
 #include "TextWriter.hpp"
 
 #ifdef _UNICODE
+#include "Util/StringAPI.hpp"
 #include <windows.h>
 #endif
 
@@ -62,8 +63,8 @@ TextWriter::Write(const TCHAR *s, size_t src_length)
 bool
 TextWriter::Write(const TCHAR *s)
 {
-  assert(_tcschr(s, _T('\r')) == nullptr);
-  assert(_tcschr(s, _T('\n')) == nullptr);
+  assert(StringFind(s, _T('\r')) == nullptr);
+  assert(StringFind(s, _T('\n')) == nullptr);
 
   return Write(s, _tcslen(s));
 }
@@ -73,8 +74,8 @@ TextWriter::Format(const TCHAR *fmt, ...)
 {
   assert(IsOpen());
   assert(fmt != nullptr);
-  assert(_tcschr(fmt, _T('\r')) == nullptr);
-  assert(_tcschr(fmt, _T('\n')) == nullptr);
+  assert(StringFind(fmt, _T('\r')) == nullptr);
+  assert(StringFind(fmt, _T('\n')) == nullptr);
 
   /* assume 4 kB is enough for one line */
   size_t buffer_size = 4096;

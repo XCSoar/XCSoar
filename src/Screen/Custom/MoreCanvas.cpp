@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Asset.hpp"
+#include "Util/StringAPI.hpp"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -128,7 +129,7 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
 
       // remove words from behind till line fits or no more space is found
       while (sz.cx > rc->right - rc->left &&
-             (p = _tcsrchr(duplicated + i, _T(' '))) != nullptr) {
+             (p = StringFindLast(duplicated + i, _T(' '))) != nullptr) {
         if (prev_p)
           *prev_p = _T(' ');
         *p = _T('\0');

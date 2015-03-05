@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Util/CharUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/NumberParser.hpp"
 
 #include <tchar.h>
@@ -66,7 +67,7 @@ public:
 
     const TCHAR *start = data;
 
-    TCHAR *seperator = _tcschr(data, _T(' '));
+    auto *seperator = StringFind(data, _T(' '));
     if (seperator != NULL && seperator < end) {
       *seperator = _T('\0');
       data = seperator + 1;
@@ -549,9 +550,9 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
 
   const TCHAR *start = decoded.begin();
   const TCHAR *end = start + _tcslen(start);
-  const TCHAR *opening_brace = _tcschr(start, _T('('));
-  const TCHAR *closing_brace = _tcschr(start, _T(')'));
-  const TCHAR *line_break = _tcschr(start, _T('\n'));
+  const auto *opening_brace = StringFind(start, _T('('));
+  const auto *closing_brace = StringFind(start, _T(')'));
+  const auto *line_break = StringFind(start, _T('\n'));
 
   if (line_break == NULL || line_break >= end ||
       opening_brace == NULL || opening_brace >= line_break ||

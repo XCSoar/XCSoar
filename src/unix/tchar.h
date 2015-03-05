@@ -45,8 +45,6 @@ typedef char TCHAR;
 #define _tcslen strlen
 #define _tcsclen strlen
 #define _tcsstr strstr
-#define _tcschr strchr
-#define _tcsrchr strrchr
 #define _tcspbrk strpbrk
 #define _tcscat strcat
 #define _T(x) x

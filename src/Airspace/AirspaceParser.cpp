@@ -29,6 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
 #include "Geo/Math.hpp"
@@ -499,7 +500,7 @@ ParseArcPoints(const TCHAR *buffer, TempAirspaceType &temp_area)
     return false;
 
   // Skip comma character
-  const TCHAR* comma = _tcschr(buffer, ',');
+  const auto *comma = StringFind(buffer, ',');
   if (!comma)
     return false;
 
@@ -561,7 +562,7 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
   const TCHAR *value;
 
   // Strip comments
-  TCHAR *comment = _tcschr(line, _T('*'));
+  auto *comment = StringFind(line, _T('*'));
   if (comment != nullptr)
     *comment = _T('\0');
 
@@ -806,7 +807,7 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
              TempAirspaceType &temp_area, bool &ignore)
 {
   // Strip comments
-  TCHAR *comment = _tcschr(line, _T('*'));
+  auto *comment = StringFind(line, _T('*'));
   if (comment != nullptr)
     *comment = _T('\0');
 

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Util/StringAPI.hpp"
 
 #include <string.h>
 
@@ -51,7 +52,7 @@ LargeTextWindow::GetRowCount() const
 
   const TCHAR *str = value.c_str();
   unsigned row_count = 1;
-  while ((str = _tcschr(str, _T('\n'))) != nullptr) {
+  while ((str = StringFind(str, _T('\n'))) != nullptr) {
     str++;
     row_count++;
   }

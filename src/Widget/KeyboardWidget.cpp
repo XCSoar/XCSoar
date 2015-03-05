@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "KeyboardWidget.hpp"
 #include "Look/ButtonLook.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "Screen/Canvas.hpp"
@@ -104,7 +105,7 @@ KeyboardWidget::SetAllowedCharacters(const TCHAR *allowed)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].SetVisible(allowed == nullptr ||
-                          _tcschr(allowed, buttons[i].GetCharacter()) != nullptr);
+                          StringFind(allowed, buttons[i].GetCharacter()) != nullptr);
 }
 
 ButtonWindow *

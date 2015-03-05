@@ -25,6 +25,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/Macros.hpp"
 
 class LineSplitter
@@ -46,7 +47,7 @@ public:
     const TCHAR *line_start = start;
 
     // Search for next line break
-    const TCHAR *line_break = _tcschr(line_start, _T('\n'));
+    const auto *line_break = StringFind(line_start, _T('\n'));
     if (!line_break) {
       // if no line break was found
       start = NULL;

@@ -26,6 +26,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "IO/KeyValueFileReader.hpp"
@@ -131,7 +132,7 @@ Profile::SetFiles(const TCHAR *override_path)
     if (IsBaseName(override_path)) {
       LocalPath(startProfileFile, override_path);
 
-      if (_tcschr(override_path, '.') == NULL)
+      if (StringFind(override_path, '.') == nullptr)
         _tcscat(startProfileFile, _T(".prf"));
     } else
       CopyString(startProfileFile, override_path, MAX_PATH);
@@ -182,7 +183,7 @@ Profile::GetPathBase(const char *key)
 
   const TCHAR *p = buffer;
   if (DIR_SEPARATOR != '\\') {
-    const TCHAR *backslash = _tcsrchr(p, _T('\\'));
+    const auto *backslash = StringFindLast(p, _T('\\'));
     if (backslash != NULL)
       p = backslash + 1;
   }

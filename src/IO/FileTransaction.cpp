@@ -25,6 +25,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
+#include "Util/StringAPI.hpp"
 
 #include <assert.h>
 
@@ -43,7 +44,7 @@ MakeTemporaryPath(TCHAR *path)
     return;
   }
 
-  TCHAR *dot = _tcsrchr(base, '.');
+  auto *dot = StringFindLast(base, '.');
   if (dot != nullptr)
     /* replace existing file name extension */
     _tcscpy(dot + 1, _T("tmp"));

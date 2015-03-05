@@ -48,6 +48,48 @@ StringFind(const wchar_t *haystack, const wchar_t *needle)
   return wcsstr(haystack, needle);
 }
 
+gcc_pure gcc_nonnull_all
+static inline const wchar_t *
+StringFind(const wchar_t *haystack, wchar_t needle, size_t size)
+{
+  return wmemchr(haystack, needle, size);
+}
+
+gcc_pure gcc_nonnull_all
+static inline wchar_t *
+StringFind(wchar_t *haystack, wchar_t needle, size_t size)
+{
+  return wmemchr(haystack, needle, size);
+}
+
+gcc_pure gcc_nonnull_all
+static inline const wchar_t *
+StringFind(const wchar_t *haystack, wchar_t needle)
+{
+  return wcschr(haystack, needle);
+}
+
+gcc_pure gcc_nonnull_all
+static inline wchar_t *
+StringFind(wchar_t *haystack, wchar_t needle)
+{
+  return wcschr(haystack, needle);
+}
+
+gcc_pure gcc_nonnull_all
+static inline const wchar_t *
+StringFindLast(const wchar_t *haystack, wchar_t needle)
+{
+  return wcsrchr(haystack, needle);
+}
+
+gcc_pure gcc_nonnull_all
+static inline wchar_t *
+StringFindLast(wchar_t *haystack, wchar_t needle)
+{
+  return wcsrchr(haystack, needle);
+}
+
 static inline wchar_t *
 StringToken(wchar_t *str, const wchar_t *delim)
 {

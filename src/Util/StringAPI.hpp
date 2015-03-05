@@ -52,6 +52,48 @@ StringFind(const char *haystack, const char *needle)
   return strstr(haystack, needle);
 }
 
+gcc_pure gcc_nonnull_all
+static inline char *
+StringFind(char *haystack, char needle, size_t size)
+{
+  return (char *)memchr(haystack, needle, size);
+}
+
+gcc_pure gcc_nonnull_all
+static inline const char *
+StringFind(const char *haystack, char needle, size_t size)
+{
+  return (const char *)memchr(haystack, needle, size);
+}
+
+gcc_pure gcc_nonnull_all
+static inline const char *
+StringFind(const char *haystack, char needle)
+{
+  return strchr(haystack, needle);
+}
+
+gcc_pure gcc_nonnull_all
+static inline char *
+StringFind(char *haystack, char needle)
+{
+  return strchr(haystack, needle);
+}
+
+gcc_pure gcc_nonnull_all
+static inline const char *
+StringFindLast(const char *haystack, char needle)
+{
+  return strrchr(haystack, needle);
+}
+
+gcc_pure gcc_nonnull_all
+static inline char *
+StringFindLast(char *haystack, char needle)
+{
+  return strrchr(haystack, needle);
+}
+
 static inline char *
 StringToken(char *str, const char *delim)
 {

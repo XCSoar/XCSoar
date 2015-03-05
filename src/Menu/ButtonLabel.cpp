@@ -25,6 +25,7 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "MenuData.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/Macros.hpp"
@@ -75,12 +76,13 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
   if ((text == nullptr) || (*text == _T('\0')) || (*text == _T(' '))) {
     expanded.visible = false;
     return expanded;
-  } else if ((dollar = _tcschr(text, '$')) == nullptr) {
+  } else if ((dollar = StringFind(text, '$')) == nullptr) {
     /* no macro, we can just translate the text */
     expanded.visible = true;
     expanded.enabled = true;
     const TCHAR *nl;
-    if (((nl = _tcschr(text, '\n')) != nullptr) && LacksAlphaASCII(nl + 1)) {
+    if (((nl = StringFind(text, '\n')) != nullptr) &&
+        LacksAlphaASCII(nl + 1)) {
       /* Quick hack for skipping the translation for second line of a two line
          label with only digits and punctuation in the second line, e.g.
          for menu labels like "Config\n2/3" */
