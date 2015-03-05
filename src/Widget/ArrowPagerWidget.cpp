@@ -34,6 +34,7 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
 {
   const unsigned width = rc.right - rc.left;
   const unsigned height = rc.bottom - rc.top;
+  const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;
 
@@ -47,13 +48,13 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
     close_button.left = rc.left;
     close_button.right = main.left;
     close_button.bottom = rc.bottom;
-    close_button.top = close_button.bottom - ::Layout::GetMaximumControlHeight();
+    close_button.top = close_button.bottom - button_height;
 
     /* previous/next buttons above the close button */
 
     previous_button = close_button;
     previous_button.bottom = previous_button.top;
-    previous_button.top = previous_button.bottom - ::Layout::GetMaximumControlHeight();
+    previous_button.top = previous_button.bottom - button_height;
     previous_button.right = (previous_button.left + previous_button.right) / 2;
 
     next_button = previous_button;
@@ -69,7 +70,7 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   } else {
     /* portrait */
 
-    main.bottom -= ::Layout::GetMaximumControlHeight();
+    main.bottom -= button_height;
 
     /* buttons distributed on the bottom line */
 
@@ -93,7 +94,7 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
       extra.left = main.left;
       extra.right = main.right;
       extra.bottom = main.bottom;
-      extra.top = main.bottom -= ::Layout::GetMaximumControlHeight();
+      extra.top = main.bottom -= button_height;
     }
   }
 }
