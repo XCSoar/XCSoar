@@ -33,16 +33,15 @@
 #include "Compiler.h"
 
 #include <wchar.h>
-#include <assert.h>
 
-gcc_pure
+gcc_pure gcc_nonnull_all
 static inline size_t
 StringLength(const wchar_t *p)
 {
   return wcslen(p);
 }
 
-gcc_pure
+gcc_pure gcc_nonnull_all
 static inline const wchar_t *
 StringFind(const wchar_t *haystack, const wchar_t *needle)
 {
@@ -55,6 +54,7 @@ StringToken(wchar_t *str, const wchar_t *delim)
   return wcstok(str, delim);
 }
 
+gcc_nonnull_all
 static inline void
 UnsafeCopyString(wchar_t *dest, const wchar_t *src)
 {
@@ -67,46 +67,38 @@ UnsafeCopyString(wchar_t *dest, const wchar_t *src)
  * @param str2 String 2
  * @return True if equal, False otherwise
  */
+gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqual(const wchar_t *str1, const wchar_t *str2)
 {
-  assert(str1 != nullptr);
-  assert(str2 != nullptr);
-
   return wcscmp(str1, str2) == 0;
 }
 
 /**
  * Checks whether #a and #b are equal.
  */
+gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqual(const wchar_t *a, const wchar_t *b, size_t length)
 {
-  assert(a != nullptr);
-  assert(a != nullptr);
-
   return wcsncmp(a, b, length) == 0;
 }
 
+gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b)
 {
-  assert(a != nullptr);
-  assert(b != nullptr);
-
   return _wcsicmp(a, b) == 0;
 }
 
+gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b, size_t size)
 {
-  assert(a != nullptr);
-  assert(b != nullptr);
-
   return _wcsnicmp(a, b, size) == 0;
 }
 
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 static inline wchar_t *
 DuplicateString(const wchar_t *p)
 {
