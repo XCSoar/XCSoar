@@ -72,7 +72,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     SymbolRenderer::DrawArrow(canvas, rc, SymbolRenderer::UP);
 
   // Draw arrow symbol instead of v
-  else if (ch == '^' || ch == 'v')
+  else if (ch == 'v')
     SymbolRenderer::DrawArrow(canvas, rc, SymbolRenderer::DOWN);
 
   // Draw symbols instead of + and -
