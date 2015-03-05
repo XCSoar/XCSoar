@@ -29,6 +29,7 @@
 #include "Operation/Operation.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
+#include "OS/Sleep.h"
 
 #include <algorithm>
 #include <stdio.h>
@@ -308,21 +309,36 @@ DownloadFlightInner(Port &port, const char *filename, FILE *file,
 
     const unsigned start = i;
     const unsigned end = start + nrequest;
-
-    /* send request to Nano */
-
-    reader.Flush();
-    if (!RequestFlight(port, filename, start, end, env))
-      return false;
+    unsigned request_retry_count = 0;
 
     /* read the requested lines and save to file */
 
-    TimeoutClock timeout(2000);
     while (i != end) {
+      if (i == start) {
+        /* send request range to Nano */
+        reader.Flush();
+        if (!RequestFlight(port, filename, start, end, env))
+          return false;
+        request_retry_count++;
+      }
+
+      TimeoutClock timeout(2000);
       const char *line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
-      if (line == nullptr ||
-          !HandleFlightLine(line, file, i, row_count))
-        return false;
+      if (line == nullptr || !HandleFlightLine(line, file, i, row_count)) {
+        if (request_retry_count > 5)
+          return false;
+
+        /* Discard data which might still be in-transit, e.g. buffered
+           inside a bluetooth dongle */
+        port.FullFlush(env, 200, 2000);
+
+        /* If we already received parts of the request range correctly break
+           out of the loop to calculate new request range */
+        if (i != start)
+          break;
+
+        /* No valid reply received (i==start) - request same range again */
+      }
     }
 
     if (i > row_count)
