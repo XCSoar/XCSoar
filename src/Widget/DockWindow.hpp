@@ -66,8 +66,8 @@ public:
 protected:
   void DeleteWidget();
 
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnDestroy() override;
+  void OnResize(PixelSize new_size) override;
+  void OnDestroy() override;
 };
 
 #endif

@@ -164,20 +164,18 @@ class NullWidget : public Widget {
 public:
   virtual ~NullWidget();
 
-  virtual PixelSize GetMinimumSize() const override;
-  virtual PixelSize GetMaximumSize() const override;
-  virtual void Initialise(ContainerWindow &parent, const PixelRect &rc)
-    override;
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc)
-    override;
-  virtual void Unprepare() override;
-  virtual bool Save(bool &changed) override;
-  virtual bool Click() override;
-  virtual void ReClick() override;
-  virtual bool Leave() override;
-  virtual void Move(const PixelRect &rc) override;
-  virtual bool SetFocus() override;
-  virtual bool KeyPress(unsigned key_code) override;
+  PixelSize GetMinimumSize() const override;
+  PixelSize GetMaximumSize() const override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
+  bool Save(bool &changed) override;
+  bool Click() override;
+  void ReClick() override;
+  bool Leave() override;
+  void Move(const PixelRect &rc) override;
+  bool SetFocus() override;
+  bool KeyPress(unsigned key_code) override;
 };
 
 #endif

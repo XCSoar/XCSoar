@@ -55,7 +55,7 @@ public:
     buttons.append({caption, id});
   }
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 };
 
 #endif

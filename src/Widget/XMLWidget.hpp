@@ -42,15 +42,17 @@ protected:
                   ContainerWindow &parent, const PixelRect &rc,
                   const TCHAR *resource);
 
+  /* virtual methods from class Widget */
+
   /**
    * Clears and deletes the windows created by LoadWindow
    * during Prepare() associated with the WindowWidget
    */
-  virtual void Unprepare() override {
+  void Unprepare() override {
     form.Clear();
   }
 
-  virtual bool SetFocus() override;
+  bool SetFocus() override;
 };
 
 #endif

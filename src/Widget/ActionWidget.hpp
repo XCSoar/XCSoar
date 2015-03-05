@@ -57,12 +57,12 @@ public:
     :listener(_listener), id(_id) {}
 
 public:
-  virtual bool Click() override;
-  virtual void ReClick() override;
+  bool Click() override;
+  void ReClick() override;
 
 #ifndef HAVE_CLIPPING
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
 #endif
 };
 

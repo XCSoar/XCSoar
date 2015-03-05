@@ -44,10 +44,9 @@ public:
   void SetText(const TCHAR *text);
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Unprepare() override;
-  virtual bool KeyPress(unsigned key_code) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
+  bool KeyPress(unsigned key_code) override;
 };
 
 #endif

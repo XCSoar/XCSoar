@@ -76,9 +76,10 @@ protected:
   }
 
 public:
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-  virtual void Move(const PixelRect &rc) override;
+  /* virtual methods from class Widget */
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
+  void Move(const PixelRect &rc) override;
 };
 
 #endif

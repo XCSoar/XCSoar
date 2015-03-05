@@ -39,12 +39,11 @@ public:
   void SetColor(Color _color);
 
   /* virtual methods from class Widget */
-  virtual PixelSize GetMinimumSize() const override;
-  virtual PixelSize GetMaximumSize() const override;
+  PixelSize GetMinimumSize() const override;
+  PixelSize GetMaximumSize() const override;
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
 };
 
 #endif

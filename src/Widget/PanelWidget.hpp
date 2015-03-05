@@ -33,11 +33,9 @@ Copyright_License {
  * Panel is accessed via WindowWidget's GetWindow().
  */
 class PanelWidget : public WindowWidget {
-protected:
-
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
+  void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  void Unprepare();
 };
 
 #endif
