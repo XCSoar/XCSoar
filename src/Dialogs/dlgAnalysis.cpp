@@ -115,8 +115,12 @@ class ChartControl: public PaintWindow
 public:
   ChartControl(ContainerWindow &parent, PixelRect rc,
                const WindowStyle style,
-               const ChartLook &chart_look,
-               const ThermalBandLook &thermal_band_look);
+               const ChartLook &_chart_look,
+               const ThermalBandLook &_thermal_band_look)
+    :chart_look(_chart_look),
+     thermal_band_look(_thermal_band_look) {
+    Create(parent, rc, style);
+  }
 
 protected:
   /* virtual methods from class Window */
@@ -127,16 +131,6 @@ protected:
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;
 };
-
-ChartControl::ChartControl(ContainerWindow &parent, PixelRect rc,
-                           const WindowStyle style,
-                           const ChartLook &_chart_look,
-                           const ThermalBandLook &_thermal_band_look)
-  :chart_look(_chart_look),
-   thermal_band_look(_thermal_band_look)
-{
-  Create(parent, rc, style);
-}
 
 static void
 SetCalcVisibility(const bool visible)
