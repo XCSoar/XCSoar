@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
-#include "CrossSection/CrossSectionWindow.hpp"
+#include "CrossSection/CrossSectionRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Computer/Settings.hpp"
 #include "Screen/Canvas.hpp"
@@ -89,38 +89,32 @@ static WndForm *wf = NULL;
 static ChartControl *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
-static CrossSectionWindow *csw = NULL;
 static GestureManager gestures;
-
-class CrossSectionControl: public CrossSectionWindow
-{
-public:
-  CrossSectionControl(const CrossSectionLook &look,
-                      const AirspaceLook &airspace_look,
-                      const ChartLook &chart_look)
-    :CrossSectionWindow(look, airspace_look, chart_look) {}
-
-protected:
-  /* virtual methods from class Window */
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-};
 
 class ChartControl: public PaintWindow
 {
   const ChartLook &chart_look;
   const ThermalBandLook &thermal_band_look;
+  CrossSectionRenderer cross_section_renderer;
 
 public:
   ChartControl(ContainerWindow &parent, PixelRect rc,
                const WindowStyle style,
                const ChartLook &_chart_look,
-               const ThermalBandLook &_thermal_band_look)
+               const ThermalBandLook &_thermal_band_look,
+               const CrossSectionLook &cross_section_look,
+               const AirspaceLook &airspace_look,
+               const Airspaces *airspaces,
+               const RasterTerrain *terrain)
     :chart_look(_chart_look),
-     thermal_band_look(_thermal_band_look) {
+     thermal_band_look(_thermal_band_look),
+     cross_section_renderer(cross_section_look, airspace_look, chart_look) {
     Create(parent, rc, style);
+    cross_section_renderer.SetAirspaces(airspaces);
+    cross_section_renderer.SetTerrain(terrain);
   }
+
+  void UpdateCrossSection();
 
 protected:
   /* virtual methods from class Window */
@@ -242,29 +236,33 @@ ChartControl::OnPaint(Canvas &canvas)
                   basic, calculated, task);
     }
     break;
+
+  case AnalysisPage::AIRSPACE:
+    cross_section_renderer.Paint(canvas, rcgfx);
+    break;
+
   default:
     // should never get here!
     break;
   }
 }
 
-static void
-UpdateCrossSection()
+void
+ChartControl::UpdateCrossSection()
 {
   const MoreData &basic = blackboard->Basic();
   const DerivedInfo &calculated = blackboard->Calculated();
 
-  assert(csw != NULL);
-  csw->ReadBlackboard(basic, calculated,
-                      blackboard->GetComputerSettings().task.glide,
-                      blackboard->GetComputerSettings().polar.glide_polar_task,
-                      blackboard->GetMapSettings());
+  cross_section_renderer.ReadBlackboard(basic, calculated,
+                                        blackboard->GetComputerSettings().task.glide,
+                                        blackboard->GetComputerSettings().polar.glide_polar_task,
+                                        blackboard->GetMapSettings());
 
   if (basic.location_available && basic.track_available) {
-    csw->SetDirection(basic.track);
-    csw->SetStart(basic.location);
+    cross_section_renderer.SetDirection(basic.track);
+    cross_section_renderer.SetStart(basic.location);
   } else
-    csw->SetInvalid();
+    cross_section_renderer.SetInvalid();
 }
 
 static void
@@ -275,7 +273,6 @@ Update()
   assert(wf != NULL);
   assert(wInfo != NULL);
   assert(wGrid != NULL);
-  assert(csw != NULL);
   assert(glide_computer != NULL);
 
   const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
@@ -375,20 +372,10 @@ Update()
     gcc_unreachable();
   }
 
-  switch (page) {
-  case AnalysisPage::AIRSPACE:
-    UpdateCrossSection();
-    csw->Invalidate();
-    csw->Show();
-    wGrid->Hide();
-    break;
+  if (page == AnalysisPage::AIRSPACE)
+    wGrid->UpdateCrossSection();
 
-  default:
-    csw->Hide();
-    wGrid->Show();
-    wGrid->Invalidate();
-    break;
-  }
+  wGrid->Invalidate();
 }
 
 static void
@@ -430,30 +417,6 @@ ChartControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
 bool
 ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
-{
-  const TCHAR* gesture = gestures.Finish();
-  if (gesture != NULL)
-    OnGesture(gesture);
-
-  return true;
-}
-
-bool
-CrossSectionControl::OnMouseDown(PixelScalar x, PixelScalar y)
-{
-  gestures.Start(x, y, Layout::Scale(20));
-  return true;
-}
-
-bool
-CrossSectionControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
-{
-  gestures.Update(x, y);
-  return true;
-}
-
-bool
-CrossSectionControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
@@ -542,29 +505,17 @@ OnCalcClicked()
 }
 
 static Window *
-OnCreateCrossSectionControl(ContainerWindow &parent, PixelRect rc,
-                            const WindowStyle style)
-{
-  csw = new CrossSectionControl(look->cross_section, look->map.airspace,
-                                look->chart);
-  csw->Create(parent, rc, style);
-  csw->SetAirspaces(airspaces);
-  csw->SetTerrain(terrain);
-  UpdateCrossSection();
-  return csw;
-}
-
-static Window *
 OnCreateChartControl(ContainerWindow &parent, PixelRect rc,
                      const WindowStyle style)
 {
   return new ChartControl(parent, rc, style,
                           look->chart,
-                          look->thermal_band);
+                          look->thermal_band,
+                          look->cross_section, look->map.airspace,
+                          airspaces, terrain);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCreateCrossSectionControl),
   DeclareCallBackEntry(OnCreateChartControl),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),

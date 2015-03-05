@@ -2,7 +2,6 @@
 
 <Form Caption="Analysis">
   <Custom Name="frmGrid" X="80" Y="0" Border="1" OnCreate="OnCreateChartControl" />
-  <Custom Name="frmCrossSection" X="80" Y="0" Border="1" OnCreate="OnCreateCrossSectionControl" />
 
   <Label Name="frmInfo" X="2" Y="2" Width="76" Height="120"/>
 
