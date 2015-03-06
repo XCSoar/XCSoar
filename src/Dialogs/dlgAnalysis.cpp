@@ -77,11 +77,6 @@ enum class AnalysisPage: uint8_t {
   COUNT
 };
 
-static const Look *look;
-static const FullBlackboard *blackboard;
-static GlideComputer *glide_computer;
-static const ProtectedTaskManager *protected_task_manager;
-
 static AnalysisPage page = AnalysisPage::BAROGRAPH;
 
 class AnalysisWidget;
@@ -91,29 +86,43 @@ class ChartControl: public PaintWindow
   AnalysisWidget &analysis_widget;
 
   const ChartLook &chart_look;
+  const CrossSectionLook &cross_section_look;
   ThermalBandRenderer thermal_band_renderer;
   FlightStatisticsRenderer fs_renderer;
   CrossSectionRenderer cross_section_renderer;
   GestureManager gestures;
 
+  const FullBlackboard &blackboard;
+  const GlideComputer &glide_computer;
+
 public:
   ChartControl(AnalysisWidget &_analysis_widget,
                const ChartLook &_chart_look,
+               const MapLook &map_look,
+               const CrossSectionLook &_cross_section_look,
                const ThermalBandLook &_thermal_band_look,
                const CrossSectionLook &cross_section_look,
                const AirspaceLook &airspace_look,
                const Airspaces *airspaces,
-               const RasterTerrain *terrain)
+               const RasterTerrain *terrain,
+               const FullBlackboard &_blackboard,
+               const GlideComputer &_glide_computer)
     :analysis_widget(_analysis_widget),
      chart_look(_chart_look),
+     cross_section_look(_cross_section_look),
      thermal_band_renderer(_thermal_band_look, chart_look),
-     fs_renderer(chart_look, look->map),
-     cross_section_renderer(cross_section_look, airspace_look, chart_look) {
+     fs_renderer(chart_look, map_look),
+     cross_section_renderer(cross_section_look, airspace_look, chart_look),
+     blackboard(_blackboard), glide_computer(_glide_computer) {
     cross_section_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetTerrain(terrain);
   }
 
-  void UpdateCrossSection();
+  void UpdateCrossSection(const MoreData &basic,
+                          const DerivedInfo &calculated,
+                          const GlideSettings &glide_settings,
+                          const GlidePolar &glide_polar,
+                          const MapSettings &map_settings);
 
 protected:
   /* virtual methods from class Window */
@@ -140,6 +149,9 @@ class AnalysisWidget final : public NullWidget, ActionListener {
     explicit Layout(const PixelRect rc);
   };
 
+  const FullBlackboard &blackboard;
+  GlideComputer &glide_computer;
+
   WndForm &dialog;
 
   WndFrame info;
@@ -149,14 +161,19 @@ class AnalysisWidget final : public NullWidget, ActionListener {
 public:
   AnalysisWidget(WndForm &_dialog, const Look &look,
                  const Airspaces *airspaces,
-                 const RasterTerrain *terrain)
-    :dialog(_dialog),
+                 const RasterTerrain *terrain,
+                 const FullBlackboard &_blackboard,
+                 GlideComputer &_glide_computer)
+    :blackboard(_blackboard), glide_computer(_glide_computer),
+     dialog(_dialog),
      info(look.dialog),
      details_button(look.dialog.button),
      previous_button(look.dialog.button), next_button(look.dialog.button),
      close_button(look.dialog.button),
-     chart(*this, look.chart, look.thermal_band, look.cross_section,
-           look.map.airspace, airspaces, terrain) {
+     chart(*this, look.chart, look.map, look.cross_section,
+           look.thermal_band, look.cross_section,
+           look.map.airspace, airspaces, terrain,
+           _blackboard, _glide_computer) {
   }
 
   void SetCalcVisibility(bool visible);
@@ -310,12 +327,13 @@ AnalysisWidget::SetCalcCaption(const TCHAR *caption)
 void
 ChartControl::OnPaint(Canvas &canvas)
 {
-  assert(glide_computer != NULL);
+  const ComputerSettings &settings_computer = blackboard.GetComputerSettings();
+  const MapSettings &settings_map = blackboard.GetMapSettings();
+  const MoreData &basic = blackboard.Basic();
+  const DerivedInfo &calculated = blackboard.Calculated();
 
-  const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
-  const MapSettings &settings_map = blackboard->GetMapSettings();
-  const MoreData &basic = blackboard->Basic();
-  const DerivedInfo &calculated = blackboard->Calculated();
+  const ProtectedTaskManager *const protected_task_manager =
+    &glide_computer.GetProtectedTaskManager();
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
@@ -331,13 +349,13 @@ ChartControl::OnPaint(Canvas &canvas)
 
   switch (page) {
   case AnalysisPage::BAROGRAPH:
-    RenderBarograph(canvas, rcgfx, chart_look, look->cross_section,
-                    glide_computer->GetFlightStats(),
+    RenderBarograph(canvas, rcgfx, chart_look, cross_section_look,
+                    glide_computer.GetFlightStats(),
                     basic, calculated, protected_task_manager);
     break;
   case AnalysisPage::CLIMB:
     RenderClimbChart(canvas, rcgfx, chart_look,
-                     glide_computer->GetFlightStats(),
+                     glide_computer.GetFlightStats(),
                      settings_computer.polar.glide_polar_task);
     break;
   case AnalysisPage::THERMAL_BAND:
@@ -358,40 +376,41 @@ ChartControl::OnPaint(Canvas &canvas)
     break;
   case AnalysisPage::WIND:
     RenderWindChart(canvas, rcgfx, chart_look,
-                    glide_computer->GetFlightStats(),
-                    basic, glide_computer->GetWindStore());
+                    glide_computer.GetFlightStats(),
+                    basic, glide_computer.GetWindStore());
     break;
   case AnalysisPage::POLAR:
-    RenderGlidePolar(canvas, rcgfx, look->chart,
+    RenderGlidePolar(canvas, rcgfx, chart_look,
                      calculated.climb_history,
                      settings_computer,
                      settings_computer.polar.glide_polar_task);
     break;
   case AnalysisPage::TEMPTRACE:
     RenderTemperatureChart(canvas, rcgfx, chart_look,
-                           glide_computer->GetCuSonde());
+                           glide_computer.GetCuSonde());
     break;
   case AnalysisPage::TASK:
     if (protected_task_manager != NULL) {
-      const auto &trace_computer = glide_computer->GetTraceComputer();
+      const auto &trace_computer = glide_computer.GetTraceComputer();
       fs_renderer.RenderTask(canvas, rcgfx, basic,
                              settings_computer, settings_map,
                              *protected_task_manager,
                              &trace_computer);
     }
     break;
+
   case AnalysisPage::OLC:
     fs_renderer.RenderOLC(canvas, rcgfx, basic,
                           settings_computer, settings_map,
                           calculated.contest_stats,
-                          glide_computer->GetTraceComputer(),
-                          glide_computer->GetRetrospective());
+                          glide_computer.GetTraceComputer(),
+                          glide_computer.GetRetrospective());
     break;
   case AnalysisPage::TASK_SPEED:
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
       RenderSpeed(canvas, rcgfx, chart_look,
-                  glide_computer->GetFlightStats(),
+                  glide_computer.GetFlightStats(),
                   basic, calculated, task);
     }
     break;
@@ -406,16 +425,15 @@ ChartControl::OnPaint(Canvas &canvas)
   }
 }
 
-void
-ChartControl::UpdateCrossSection()
+inline void
+ChartControl::UpdateCrossSection(const MoreData &basic,
+                                 const DerivedInfo &calculated,
+                                 const GlideSettings &glide_settings,
+                                 const GlidePolar &glide_polar,
+                                 const MapSettings &map_settings)
 {
-  const MoreData &basic = blackboard->Basic();
-  const DerivedInfo &calculated = blackboard->Calculated();
-
-  cross_section_renderer.ReadBlackboard(basic, calculated,
-                                        blackboard->GetComputerSettings().task.glide,
-                                        blackboard->GetComputerSettings().polar.glide_polar_task,
-                                        blackboard->GetMapSettings());
+  cross_section_renderer.ReadBlackboard(basic, calculated, glide_settings,
+                                        glide_polar, map_settings);
 
   if (basic.location_available && basic.track_available) {
     cross_section_renderer.SetDirection(basic.track);
@@ -429,17 +447,15 @@ AnalysisWidget::Update()
 {
   TCHAR sTmp[1000];
 
-  assert(glide_computer != NULL);
-
-  const ComputerSettings &settings_computer = blackboard->GetComputerSettings();
-  const DerivedInfo &calculated = blackboard->Calculated();
+  const ComputerSettings &settings_computer = blackboard.GetComputerSettings();
+  const DerivedInfo &calculated = blackboard.Calculated();
 
   switch (page) {
   case AnalysisPage::BAROGRAPH:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Barograph"));
     dialog.SetCaption(sTmp);
-    BarographCaption(sTmp, glide_computer->GetFlightStats());
+    BarographCaption(sTmp, glide_computer.GetFlightStats());
     info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
@@ -448,7 +464,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Climb"));
     dialog.SetCaption(sTmp);
-    ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
+    ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
     info.SetText(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
@@ -457,7 +473,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Thermal Band"));
     dialog.SetCaption(sTmp);
-    ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
+    ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
     info.SetText(sTmp);
     SetCalcCaption(_T(""));
     break;
@@ -484,7 +500,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Temp Trace"));
     dialog.SetCaption(sTmp);
-    TemperatureChartCaption(sTmp, glide_computer->GetCuSonde());
+    TemperatureChartCaption(sTmp, glide_computer.GetCuSonde());
     info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
@@ -529,7 +545,11 @@ AnalysisWidget::Update()
   }
 
   if (page == AnalysisPage::AIRSPACE)
-    chart.UpdateCrossSection();
+    chart.UpdateCrossSection(blackboard.Basic(), calculated,
+                             settings_computer.task.glide,
+                             settings_computer.polar.glide_polar_task,
+                             blackboard.GetMapSettings());
+
 
   chart.Invalidate();
 }
@@ -638,7 +658,7 @@ AnalysisWidget::OnCalcClicked()
 
   case AnalysisPage::AIRSPACE:
     dlgAirspaceWarningsShowModal(dialog.GetMainWindow(),
-                                 glide_computer->GetAirspaceWarnings());
+                                 glide_computer.GetAirspaceWarnings());
     break;
 
   case AnalysisPage::THERMAL_BAND:
@@ -651,21 +671,17 @@ AnalysisWidget::OnCalcClicked()
 }
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
-                     const FullBlackboard &_blackboard,
-                     GlideComputer &_glide_computer,
+dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
+                     const FullBlackboard &blackboard,
+                     GlideComputer &glide_computer,
                      const Airspaces *airspaces,
                      const RasterTerrain *terrain,
                      int _page)
 {
-  look = &_look;
-  blackboard = &_blackboard;
-  glide_computer = &_glide_computer;
-  protected_task_manager = &_glide_computer.GetProtectedTaskManager();
-
-  WidgetDialog dialog(_look.dialog);
-  AnalysisWidget analysis(dialog, _look,
-                          airspaces, terrain);
+  WidgetDialog dialog(look.dialog);
+  AnalysisWidget analysis(dialog, look,
+                          airspaces, terrain,
+                          blackboard, glide_computer);
   dialog.CreateFull(parent, _("Analysis"), &analysis);
 
   if (_page >= 0)
