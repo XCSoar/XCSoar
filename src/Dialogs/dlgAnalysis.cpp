@@ -470,29 +470,39 @@ OnCalcClicked()
 {
   assert(wf != NULL);
 
-  if (page == AnalysisPage::BAROGRAPH)
+  switch (page) {
+  case AnalysisPage::BAROGRAPH:
     dlgBasicSettingsShowModal();
+    break;
 
-  if (page == AnalysisPage::CLIMB) {
+  case AnalysisPage::CLIMB:
+  case AnalysisPage::TASK:
+  case AnalysisPage::TASK_SPEED:
     dlgTaskManagerShowModal();
-  }
+    break;
 
-  if (page == AnalysisPage::WIND)
+  case AnalysisPage::WIND:
     ShowWindSettingsDialog();
+    break;
 
-  if (page == AnalysisPage::POLAR)
+  case AnalysisPage::POLAR:
     dlgBasicSettingsShowModal();
+    break;
 
-  if (page == AnalysisPage::TEMPTRACE)
+  case AnalysisPage::TEMPTRACE:
     dlgBasicSettingsShowModal();
+    break;
 
-  if ((page == AnalysisPage::TASK) || (page == AnalysisPage::TASK_SPEED)) {
-    dlgTaskManagerShowModal();
-  }
-
-  if (page == AnalysisPage::AIRSPACE)
+  case AnalysisPage::AIRSPACE:
     dlgAirspaceWarningsShowModal(wf->GetMainWindow(),
                                  glide_computer->GetAirspaceWarnings());
+    break;
+
+  case AnalysisPage::THERMAL_BAND:
+  case AnalysisPage::OLC:
+  case AnalysisPage::COUNT:
+    break;
+  }
 
   Update();
 }
