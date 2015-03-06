@@ -56,6 +56,10 @@ public:
                const Airspaces &airspace_database,
                const ProtectedAirspaceWarningManager *warnings);
 
+  const ProtectedTaskManager &GetProtectedTaskManager() const {
+    return task;
+  }
+
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return route.GetProtectedRoutePlanner();
   }

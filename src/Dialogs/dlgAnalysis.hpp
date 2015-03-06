@@ -28,7 +28,6 @@ struct Look;
 class SingleWindow;
 class FullBlackboard;
 class GlideComputer;
-class ProtectedTaskManager;
 class Airspaces;
 class RasterTerrain;
 
@@ -36,7 +35,6 @@ void
 dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const FullBlackboard &blackboard,
                      GlideComputer &glide_computer,
-                     const ProtectedTaskManager *protected_task_manager,
                      const Airspaces *airspaces,
                      const RasterTerrain *terrain,
                      int page=-1);

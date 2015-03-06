@@ -153,7 +153,6 @@ ShowAnalysis0()
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(), *glide_computer,
-                       protected_task_manager,
                        &airspace_database,
                        terrain, 0);
 }

@@ -125,6 +125,10 @@ public:
     return task_computer.GetTraceComputer();
   }
 
+  const ProtectedTaskManager &GetProtectedTaskManager() const {
+    return task_computer.GetProtectedTaskManager();
+  }
+
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return task_computer.GetProtectedRoutePlanner();
   }

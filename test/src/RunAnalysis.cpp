@@ -195,7 +195,6 @@ Main()
                      {640, 480});
 
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
-                       &protected_task_manager,
                        &airspace_database,
                        terrain);
 

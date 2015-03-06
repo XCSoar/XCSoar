@@ -654,7 +654,6 @@ void
 dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
                      const FullBlackboard &_blackboard,
                      GlideComputer &_glide_computer,
-                     const ProtectedTaskManager *_protected_task_manager,
                      const Airspaces *airspaces,
                      const RasterTerrain *terrain,
                      int _page)
@@ -662,7 +661,7 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
   look = &_look;
   blackboard = &_blackboard;
   glide_computer = &_glide_computer;
-  protected_task_manager = _protected_task_manager;
+  protected_task_manager = &_glide_computer.GetProtectedTaskManager();
 
   WidgetDialog dialog(_look.dialog);
   AnalysisWidget analysis(dialog, _look,
