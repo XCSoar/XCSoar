@@ -28,6 +28,14 @@ Copyright_License {
 
 #include <winuser.h>
 
+WndFrame::WndFrame(const DialogLook &_look)
+  :look(_look),
+   caption_color(look.text_color),
+   mCaptionStyle(DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+{
+  text.clear();
+}
+
 WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    PixelRect rc,
                    const WindowStyle style)

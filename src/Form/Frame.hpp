@@ -43,6 +43,8 @@ class WndFrame : public PaintWindow {
   StaticString<300> text;
 
 public:
+  explicit WndFrame(const DialogLook &look);
+
   WndFrame(ContainerWindow &parent, const DialogLook &look,
            PixelRect rc,
            const WindowStyle style=WindowStyle());
