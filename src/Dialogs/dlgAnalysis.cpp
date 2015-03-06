@@ -89,13 +89,13 @@ static WndForm *wf = NULL;
 static ChartControl *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
-static GestureManager gestures;
 
 class ChartControl: public PaintWindow
 {
   const ChartLook &chart_look;
   const ThermalBandLook &thermal_band_look;
   CrossSectionRenderer cross_section_renderer;
+  GestureManager gestures;
 
 public:
   ChartControl(const ChartLook &_chart_look,
