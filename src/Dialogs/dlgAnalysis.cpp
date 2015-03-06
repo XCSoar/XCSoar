@@ -474,9 +474,7 @@ OnCalcClicked()
     dlgBasicSettingsShowModal();
 
   if (page == AnalysisPage::CLIMB) {
-    wf->Hide();
     dlgTaskManagerShowModal();
-    wf->Show();
   }
 
   if (page == AnalysisPage::WIND)
@@ -489,9 +487,7 @@ OnCalcClicked()
     dlgBasicSettingsShowModal();
 
   if ((page == AnalysisPage::TASK) || (page == AnalysisPage::TASK_SPEED)) {
-    wf->Hide();
     dlgTaskManagerShowModal();
-    wf->Show();
   }
 
   if (page == AnalysisPage::AIRSPACE)
