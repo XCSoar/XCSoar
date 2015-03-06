@@ -98,9 +98,7 @@ class ChartControl: public PaintWindow
   CrossSectionRenderer cross_section_renderer;
 
 public:
-  ChartControl(ContainerWindow &parent, PixelRect rc,
-               const WindowStyle style,
-               const ChartLook &_chart_look,
+  ChartControl(const ChartLook &_chart_look,
                const ThermalBandLook &_thermal_band_look,
                const CrossSectionLook &cross_section_look,
                const AirspaceLook &airspace_look,
@@ -109,7 +107,6 @@ public:
     :chart_look(_chart_look),
      thermal_band_look(_thermal_band_look),
      cross_section_renderer(cross_section_look, airspace_look, chart_look) {
-    Create(parent, rc, style);
     cross_section_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetTerrain(terrain);
   }
@@ -508,11 +505,12 @@ static Window *
 OnCreateChartControl(ContainerWindow &parent, PixelRect rc,
                      const WindowStyle style)
 {
-  return new ChartControl(parent, rc, style,
-                          look->chart,
-                          look->thermal_band,
-                          look->cross_section, look->map.airspace,
-                          airspaces, terrain);
+  auto *w = new ChartControl(look->chart,
+                             look->thermal_band,
+                             look->cross_section, look->map.airspace,
+                             airspaces, terrain);
+  w->Create(parent, rc, style);
+  return w;
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
