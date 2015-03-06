@@ -137,7 +137,7 @@ public:
     return stats_computer.GetFlightStats();
   }
 
-  const Retrospective &GetRetrospective() {
+  const Retrospective &GetRetrospective() const {
     return retrospective;
   }
 
