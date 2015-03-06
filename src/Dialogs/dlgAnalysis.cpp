@@ -55,7 +55,7 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
-#include "Event/LambdaTimer.hpp"
+#include "Event/Timer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -134,7 +134,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
 
-class AnalysisWidget final : public NullWidget, ActionListener {
+class AnalysisWidget final : public NullWidget, ActionListener, Timer {
   enum Buttons {
     PREVIOUS,
     NEXT,
@@ -202,9 +202,12 @@ protected:
     chart.MoveAndShow(layout.main);
 
     Update();
+    Timer::Schedule(2500);
   }
 
   void Hide() override {
+    Timer::Cancel();
+
     info.Hide();
     details_button.Hide();
     previous_button.Hide();
@@ -236,6 +239,11 @@ private:
       OnCalcClicked();
       break;
     }
+  }
+
+  /* virtual methods from class Timer */
+  void OnTimer() override {
+    Update();
   }
 };
 
@@ -687,10 +695,6 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
   if (_page >= 0)
     page = (AnalysisPage)_page;
 
-  auto update_timer = MakeLambdaTimer([&analysis](){ analysis.Update(); });
-  update_timer.Schedule(2500);
-
   dialog.ShowModal();
   dialog.StealWidget();
-  update_timer.Cancel();
 }
