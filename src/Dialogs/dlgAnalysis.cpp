@@ -91,7 +91,8 @@ class ChartControl: public PaintWindow
   AnalysisWidget &analysis_widget;
 
   const ChartLook &chart_look;
-  const ThermalBandLook &thermal_band_look;
+  ThermalBandRenderer thermal_band_renderer;
+  FlightStatisticsRenderer fs_renderer;
   CrossSectionRenderer cross_section_renderer;
   GestureManager gestures;
 
@@ -105,7 +106,8 @@ public:
                const RasterTerrain *terrain)
     :analysis_widget(_analysis_widget),
      chart_look(_chart_look),
-     thermal_band_look(_thermal_band_look),
+     thermal_band_renderer(_thermal_band_look, chart_look),
+     fs_renderer(chart_look, look->map),
      cross_section_renderer(cross_section_look, airspace_look, chart_look) {
     cross_section_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetTerrain(terrain);
@@ -345,14 +347,13 @@ ChartControl::OnPaint(Canvas &canvas)
       otb = protected_task_manager->GetOrderedTaskSettings();
     }
 
-    ThermalBandRenderer renderer(thermal_band_look, chart_look);
-    renderer.DrawThermalBand(basic,
-                             calculated,
-                             settings_computer,
-                             canvas, rcgfx,
-                             settings_computer.task,
-                             false,
-                             &otb);
+    thermal_band_renderer.DrawThermalBand(basic,
+                                          calculated,
+                                          settings_computer,
+                                          canvas, rcgfx,
+                                          settings_computer.task,
+                                          false,
+                                          &otb);
   }
     break;
   case AnalysisPage::WIND:
@@ -375,21 +376,19 @@ ChartControl::OnPaint(Canvas &canvas)
       const TraceComputer *trace_computer = glide_computer != NULL
         ? &glide_computer->GetTraceComputer()
         : NULL;
-      const FlightStatisticsRenderer fs(chart_look, look->map);
-      fs.RenderTask(canvas, rcgfx, basic,
-                    settings_computer, settings_map,
-                    *protected_task_manager,
-                    trace_computer);
+      fs_renderer.RenderTask(canvas, rcgfx, basic,
+                             settings_computer, settings_map,
+                             *protected_task_manager,
+                             trace_computer);
     }
     break;
   case AnalysisPage::OLC:
     if (glide_computer != NULL) {
-      const FlightStatisticsRenderer fs(chart_look, look->map);
-      fs.RenderOLC(canvas, rcgfx, basic,
-                   settings_computer, settings_map,
-                   calculated.contest_stats,
-                   glide_computer->GetTraceComputer(),
-		   glide_computer->GetRetrospective());
+      fs_renderer.RenderOLC(canvas, rcgfx, basic,
+                            settings_computer, settings_map,
+                            calculated.contest_stats,
+                            glide_computer->GetTraceComputer(),
+                            glide_computer->GetRetrospective());
     }
     break;
   case AnalysisPage::TASK_SPEED:
