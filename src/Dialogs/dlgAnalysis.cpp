@@ -373,23 +373,19 @@ ChartControl::OnPaint(Canvas &canvas)
     break;
   case AnalysisPage::TASK:
     if (protected_task_manager != NULL) {
-      const TraceComputer *trace_computer = glide_computer != NULL
-        ? &glide_computer->GetTraceComputer()
-        : NULL;
+      const auto &trace_computer = glide_computer->GetTraceComputer();
       fs_renderer.RenderTask(canvas, rcgfx, basic,
                              settings_computer, settings_map,
                              *protected_task_manager,
-                             trace_computer);
+                             &trace_computer);
     }
     break;
   case AnalysisPage::OLC:
-    if (glide_computer != NULL) {
-      fs_renderer.RenderOLC(canvas, rcgfx, basic,
-                            settings_computer, settings_map,
-                            calculated.contest_stats,
-                            glide_computer->GetTraceComputer(),
-                            glide_computer->GetRetrospective());
-    }
+    fs_renderer.RenderOLC(canvas, rcgfx, basic,
+                          settings_computer, settings_map,
+                          calculated.contest_stats,
+                          glide_computer->GetTraceComputer(),
+                          glide_computer->GetRetrospective());
     break;
   case AnalysisPage::TASK_SPEED:
     if (protected_task_manager != NULL) {
