@@ -115,6 +115,9 @@ private:
   }
 
 protected:
+  using Thread::SetLowPriority;
+  using Thread::SetIdlePriority;
+
   /**
    * Wakes up the thread to do work, calls Tick().  If the thread is
    * not already running, it is launched.  Must not be called while
