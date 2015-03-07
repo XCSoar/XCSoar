@@ -68,10 +68,6 @@ protected:
   RasterPoint offset;
   PixelSize size;
 
-#ifdef USE_GLSL
-  glm::mat4 projection_matrix;
-#endif
-
   Pen pen;
   Brush brush;
   const Font *font;
