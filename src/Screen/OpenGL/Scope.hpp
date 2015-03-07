@@ -30,11 +30,10 @@ Copyright_License {
 /**
  * Enables and auto-disables an OpenGL capability.
  */
+template<GLenum cap>
 class GLEnable {
-  GLenum cap;
-
 public:
-  GLEnable(GLenum _cap):cap(_cap) {
+  GLEnable() {
     ::glEnable(cap);
   }
 
@@ -43,25 +42,23 @@ public:
   }
 };
 
-class GLBlend : public GLEnable {
+class GLBlend : public GLEnable<GL_BLEND> {
 public:
-  GLBlend(GLenum sfactor, GLenum dfactor):GLEnable(GL_BLEND) {
+  GLBlend(GLenum sfactor, GLenum dfactor) {
     ::glBlendFunc(sfactor, dfactor);
   }
 
 #ifndef HAVE_GLES
-  GLBlend(GLclampf alpha)
-    :GLEnable(GL_BLEND) {
+  GLBlend(GLclampf alpha) {
     ::glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
     ::glBlendColor(0, 0, 0, alpha);
   }
 #endif
 };
 
-class GLScissor : public GLEnable {
+class GLScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
-  GLScissor(GLint x, GLint y, GLsizei width, GLsizei height)
-    :GLEnable(GL_SCISSOR_TEST) {
+  GLScissor(GLint x, GLint y, GLsizei width, GLsizei height) {
     ::glScissor(x, y, width, height);
   }
 };

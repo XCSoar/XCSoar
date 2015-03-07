@@ -242,7 +242,7 @@ BufferCanvas::CopyTo(Canvas &other)
 #ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
-  GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 

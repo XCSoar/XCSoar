@@ -638,7 +638,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   PrepareColoredAlphaTexture(text_color);
 
 #ifndef USE_GLSL
-  GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
 #endif
 
   const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -672,7 +672,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   PrepareColoredAlphaTexture(text_color);
 
 #ifndef USE_GLSL
-  GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
 #endif
 
   const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -713,7 +713,7 @@ Canvas::DrawClippedText(int x, int y,
   PrepareColoredAlphaTexture(text_color);
 
 #ifndef USE_GLSL
-  GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
 #endif
 
   const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -773,7 +773,7 @@ Canvas::StretchNot(const Bitmap &src)
 #ifdef USE_GLSL
   OpenGL::invert_shader->Use();
 #else
-  const GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
@@ -807,7 +807,7 @@ Canvas::Stretch(int dest_x, int dest_y,
 #ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
-  const GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
@@ -830,7 +830,7 @@ Canvas::Stretch(int dest_x, int dest_y,
 #ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
-  const GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
@@ -858,7 +858,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
   OpenGL::alpha_shader->Use();
   fg_color.Bind();
 #else
-  const GLEnable scope(GL_TEXTURE_2D);
+  const GLEnable<GL_TEXTURE_2D> scope;
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 

@@ -31,15 +31,13 @@ Copyright_License {
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "Rotate.hpp"
 
-class GLCanvasScissor : public GLEnable {
+class GLCanvasScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
-  explicit GLCanvasScissor(const Canvas &canvas)
-    :GLEnable(GL_SCISSOR_TEST) {
+  explicit GLCanvasScissor(const Canvas &canvas) {
     Scissor(PixelRect(0, 0, canvas.GetWidth(), canvas.GetHeight()));
   }
 
-  explicit GLCanvasScissor(PixelRect rc)
-    :GLEnable(GL_SCISSOR_TEST) {
+  explicit GLCanvasScissor(PixelRect rc) {
     Scissor(rc);
   }
 

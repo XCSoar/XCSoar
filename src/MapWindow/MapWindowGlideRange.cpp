@@ -283,7 +283,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     const ScopeVertexPointer vp(&visitor.fans.points[0]);
 
-    const GLEnable stencil_test(GL_STENCIL_TEST);
+    const GLEnable<GL_STENCIL_TEST> stencil_test;
     glClear(GL_STENCIL_BUFFER_BIT);
 
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);

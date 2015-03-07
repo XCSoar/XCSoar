@@ -74,8 +74,8 @@ private:
     if (!warning_manager.IsAcked(airspace) &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
-      GLEnable stencil(GL_STENCIL_TEST);
-      GLEnable blend(GL_BLEND);
+      const GLEnable<GL_STENCIL_TEST> stencil;
+      const GLEnable<GL_BLEND> blend;
       SetupInterior(airspace);
       if (warning_manager.HasWarning(airspace) ||
           warning_manager.IsInside(airspace) ||
@@ -115,7 +115,7 @@ private:
     if (!warning_manager.IsAcked(airspace) &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
-      GLEnable stencil(GL_STENCIL_TEST);
+      const GLEnable<GL_STENCIL_TEST> stencil;
 
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
@@ -127,7 +127,7 @@ private:
       // fill interior without overpainting any previous outlines
       {
         SetupInterior(airspace, !fill_airspace);
-        GLEnable blend(GL_BLEND);
+        const GLEnable<GL_BLEND> blend;
         DrawPrepared();
       }
 
@@ -240,7 +240,7 @@ private:
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
 
     if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
-      GLEnable blend(GL_BLEND);
+      const GLEnable<GL_BLEND> blend;
       canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
     }
 
@@ -255,7 +255,7 @@ private:
 
     if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
       // fill interior without overpainting any previous outlines
-      GLEnable blend(GL_BLEND);
+      GLEnable<GL_BLEND> blend;
       DrawPrepared();
     }
 
