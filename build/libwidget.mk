@@ -20,7 +20,6 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/PagerWidget.cpp \
 	$(SRC)/Widget/ArrowPagerWidget.cpp \
 	$(SRC)/Widget/OffsetButtonsWidget.cpp \
-	$(SRC)/Widget/XMLWidget.cpp \
 	$(SRC)/Widget/ButtonPanelWidget.cpp \
 	$(SRC)/Widget/QuestionWidget.cpp \
 	$(SRC)/Widget/KeyboardWidget.cpp \
