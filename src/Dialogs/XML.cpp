@@ -86,7 +86,7 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
 
 /**
  * Converts a String into an Integer and returns
- * the default value if String = NULL
+ * the default value if String = nullptr
  * @param String The String to parse
  * @param Default The default return value
  * @return The parsed Integer value
@@ -94,14 +94,14 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
 static int
 StringToIntDflt(const TCHAR *string, int _default)
 {
-  if (string == NULL || StringIsEmpty(string))
+  if (string == nullptr || StringIsEmpty(string))
     return _default;
-  return ParseInt(string, NULL, 0);
+  return ParseInt(string, nullptr, 0);
 }
 
 /**
  * Converts a String into a Float and returns
- * the default value if String = NULL
+ * the default value if String = nullptr
  * @param String The String to parse
  * @param Default The default return value
  * @return The parsed Float value
@@ -109,13 +109,13 @@ StringToIntDflt(const TCHAR *string, int _default)
 static double
 StringToFloatDflt(const TCHAR *string, double _default)
 {
-  if (string == NULL || StringIsEmpty(string))
+  if (string == nullptr || StringIsEmpty(string))
     return _default;
   return ParseDouble(string);
 }
 
 /**
- * Returns the default value if String = NULL
+ * Returns the default value if String = nullptr
  * @param String The String to parse
  * @param Default The default return value
  * @return The output String
@@ -123,7 +123,7 @@ StringToFloatDflt(const TCHAR *string, double _default)
 static const TCHAR *
 StringToStringDflt(const TCHAR *string, const TCHAR *_default)
 {
-  if (string == NULL || StringIsEmpty(string))
+  if (string == nullptr || StringIsEmpty(string))
     return _default;
   return string;
 }
@@ -218,13 +218,13 @@ GetSize(const XMLNode &node, const PixelRect rc, const RasterPoint &pos)
 static void *
 CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   assert(!StringIsEmpty(name));
-  assert(lookup_table != NULL);
+  assert(lookup_table != nullptr);
 
   for (const CallBackTableEntry *p = lookup_table;; ++p) {
-    assert(p->name != NULL);
-    assert(p->callback != NULL);
+    assert(p->name != nullptr);
+    assert(p->callback != nullptr);
 
     if (StringIsEqual(p->name, name))
       return p->callback;
@@ -236,8 +236,8 @@ GetCallBack(const CallBackTableEntry *lookup_table,
             const XMLNode &node, const TCHAR* attribute)
 {
   const TCHAR *name = node.GetAttribute(attribute);
-  if (name == NULL)
-    return NULL;
+  if (name == nullptr)
+    return nullptr;
 
   assert(!StringIsEmpty(name));
 
@@ -293,10 +293,10 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
            const TCHAR *resource, WindowStyle style)
 {
   if (!form)
-    return NULL;
+    return nullptr;
 
   XMLNode *node = LoadXMLFromResource(resource);
-  assert(node != NULL);
+  assert(node != nullptr);
 
   // load only one top-level control.
   Window *window = LoadChild(*form, parent, rc, lookup_table, *node, 0, style);
@@ -309,14 +309,14 @@ WndForm *
 LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
            const TCHAR *resource, const PixelRect *target_rc)
 {
-  WndForm *form = NULL;
+  WndForm *form = nullptr;
 
   // Find XML file or resource and load XML data out of it
   XMLNode *node = LoadXMLFromResource(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
-  assert(node != NULL);
+  assert(node != nullptr);
 
   // If the main XMLNode is of type "Form"
   assert(StringIsEqual(node->GetName(), _T("Form")));
@@ -389,7 +389,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
           int bottom_most,
           WindowStyle style)
 {
-  Window *window = NULL;
+  Window *window = nullptr;
 
   // Determine name, coordinates, width, height
   // and caption of the control
@@ -440,16 +440,16 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     // Load the help text
     property->SetHelpText(StringToStringDflt(node.GetAttribute(_T("Help")),
-                                             NULL));
+                                             nullptr));
 
     // If the control has (at least) one DataField child control
     const XMLNode *data_field_node = node.GetChildNode(_T("DataField"));
-    if (data_field_node != NULL) {
+    if (data_field_node != nullptr) {
       // -> Load the first DataField control
       DataField *data_field =
         LoadDataField(*data_field_node, lookup_table);
 
-      if (data_field != NULL)
+      if (data_field != nullptr)
         // Tell the Property control about the DataField control
         property->SetDataField(data_field);
     }
@@ -590,8 +590,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     // Create a custom Window object with a callback
     CreateWindowCallback_t create_callback =
         (CreateWindowCallback_t)GetCallBack(lookup_table, node, _T("OnCreate"));
-    if (create_callback == NULL)
-      return NULL;
+    if (create_callback == nullptr)
+      return nullptr;
 
     window = create_callback(parent, rc, style);
   } else if (StringIsEqual(node.GetName(), _T("Widget"))) {
@@ -601,7 +601,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     window = dock;
   }
 
-  if (window != NULL) {
+  if (window != nullptr) {
     if (!StringIsEmpty(name))
       form.AddNamed(name, window);
 
@@ -631,7 +631,7 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
     // Load each child control from the child nodes
     Window *window = LoadChild(form, parent, parent.GetClientRect(),
                                lookup_table, *i, bottom_most);
-    if (window == NULL)
+    if (window == nullptr)
       continue;
 
     bottom_most = window->GetPosition().bottom;
