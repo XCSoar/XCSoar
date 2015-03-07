@@ -55,6 +55,7 @@ Copyright_License {
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/Vaulter.hpp"
+#include "Device/Driver/KRT2.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -95,6 +96,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &cai_lnav_driver,
   &open_vario_driver,
   &vaulter_driver,
+  &krt2_driver,
   nullptr
 };
 
