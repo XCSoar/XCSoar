@@ -24,36 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_XML_HPP
 #define XCSOAR_DIALOGS_XML_HPP
 
-#include "Screen/Window.hpp"
-
 #include <tchar.h>
 
 struct CallBackTableEntry;
-class SubForm;
+struct PixelRect;
 class WndForm;
 class SingleWindow;
-class ContainerWindow;
-
-/**
- * Loads a stand-alone XML file as a single top-level XML node
- * into an existing SubForm object and sets its parent to the parent parameter
- * Ignores additional top-level XML nodes.
- * Scales based on the DialogStyle of the last XML form loaded by XCSoar.
- * The Window is destroyed by its Form's destructor
- *
- * @param LookUpTable The CallBackTable
- * @param form The WndForm into which the Window is added
- * @param parent The parent window of the control being created
- *    set parent to "form-GetClientRect()" to make top level control
- *    or to a PanelControl to add it to a tab window
- * @param rc the rectangle within the parent for relative coordinates
- * @param FileName The XML filename
- * @return the pointer to the Window added to the form
- */
-Window *
-LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
-           ContainerWindow &parent, const PixelRect &rc,
-           const TCHAR *resource, WindowStyle style=WindowStyle());
 
 /**
  * This function returns a WndForm created either from the ressources or
