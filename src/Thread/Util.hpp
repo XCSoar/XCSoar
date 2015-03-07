@@ -67,6 +67,12 @@ static inline void
 SetThreadIdlePriority()
 {
 #ifdef __linux__
+#if defined(__BIONIC__) && !defined(SCHED_IDLE)
+/* Bionic supports SCHED_IDLE() since API level 21, but we build with
+   API level 8 */
+#define SCHED_IDLE 5
+#endif
+
 #ifdef SCHED_IDLE
   static struct sched_param sched_param;
   sched_setscheduler(0, SCHED_IDLE, &sched_param);
