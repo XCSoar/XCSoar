@@ -291,7 +291,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glStencilFunc(GL_ALWAYS, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    COLOR_WHITE.Set();
+    COLOR_WHITE.Bind();
     visitor.fans.DrawFill(canvas);
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -383,7 +383,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_ALWAYS, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-  COLOR_WHITE.Set();
+  COLOR_WHITE.Bind();
   visitor.fans.DrawFill(canvas);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);

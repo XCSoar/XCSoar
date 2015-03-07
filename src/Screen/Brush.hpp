@@ -126,8 +126,8 @@ public:
   /**
    * Configures this brush in the OpenGL context.
    */
-  void Set() const {
-    color.Set();
+  void Bind() const {
+    color.Bind();
   }
 #endif /* OPENGL */
 };

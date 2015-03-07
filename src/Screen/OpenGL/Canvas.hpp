@@ -234,7 +234,7 @@ public:
 
   void DrawOutlineRectangle(int left, int top, int right, int bottom,
                             Color color) {
-    color.Set();
+    color.Bind();
 #if defined(HAVE_GLES) && !defined(HAVE_GLES2)
     glLineWidthx(1 << 16);
 #else

@@ -204,7 +204,7 @@ public:
   /**
    * Configures this color in the OpenGL context.
    */
-  void Set() const {
+  void Bind() const {
 #ifdef USE_GLSL
     VertexAttrib(OpenGL::Attribute::COLOR);
 #elif defined(HAVE_GLES)

@@ -196,7 +196,7 @@ public:
    * Unbind() when you're done with this Pen.
    */
   void Bind() const {
-    color.Set();
+    color.Bind();
     BindStyle();
   }
 

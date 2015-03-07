@@ -67,7 +67,7 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
   OpenGL::solid_shader->Use();
 #endif
 
-  color.Set();
+  color.Bind();
 
 #ifdef HAVE_GLES
   const RasterPoint vertices[] = {
@@ -161,7 +161,7 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
   ScopeVertexPointer vp(points);
 
   if (!brush.IsHollow() && num_points >= 3) {
-    brush.Set();
+    brush.Bind();
 
     static AllocatedArray<GLushort> triangle_buffer;
     unsigned idx_count = PolygonToTriangles(points, num_points,
@@ -202,7 +202,7 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
   ScopeVertexPointer vp(points);
 
   if (!brush.IsHollow() && num_points >= 3) {
-    brush.Set();
+    brush.Bind();
     glDrawArrays(GL_TRIANGLE_FAN, 0, num_points);
   }
 
@@ -227,7 +227,7 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
 void
 Canvas::DrawHLine(int x1, int x2, int y, Color color)
 {
-  color.Set();
+  color.Bind();
 
   const RasterPoint v[] = {
     { GLvalue(x1), GLvalue(y) },
@@ -363,7 +363,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
                              radius + pen.GetWidth() / 2);
     if (!brush.IsHollow()) {
       vertices.BindInnerCircle(vp);
-      brush.Set();
+      brush.Bind();
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
     }
     vertices.Bind(vp);
@@ -401,7 +401,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 #endif
 
     if (!brush.IsHollow()) {
-      brush.Set();
+      brush.Bind();
       glDrawArrays(GL_TRIANGLE_FAN, 0, n);
     }
 
@@ -488,7 +488,7 @@ Canvas::DrawAnnulus(int x, int y,
   const unsigned iend = i.second;
 
   if (!brush.IsHollow()) {
-    brush.Set();
+    brush.Bind();
     vertices.Bind(vp);
 
     if (istart > iend) {
@@ -582,9 +582,9 @@ PrepareColoredAlphaTexture(Color color)
 {
 #ifdef USE_GLSL
   OpenGL::alpha_shader->Use();
-  color.Set();
+  color.Bind();
 #else
-  color.Set();
+  color.Bind();
 
   if (color == COLOR_BLACK) {
     /* GL_ALPHA textures have black RGB - this is easy */
@@ -856,7 +856,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
 
 #ifdef USE_GLSL
   OpenGL::alpha_shader->Use();
-  fg_color.Set();
+  fg_color.Bind();
 #else
   const GLEnable scope(GL_TEXTURE_2D);
 
