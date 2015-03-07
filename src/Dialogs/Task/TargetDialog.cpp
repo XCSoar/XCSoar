@@ -92,96 +92,6 @@ OnCreateMap(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
 
 static void RefreshTargetPoint();
 
-#ifdef GNAV
-
-static void
-MoveTarget(gcc_unused double adjust_angle)
-{
-  /*
-  if (!task.getSettings().AATEnabled) return;
-  if (target_point==0) return;
-  if (!task.ValidTaskPoint(target_point)) return;
-  if (!task.ValidTaskPoint(target_point+1)) return;
-  if (target_point < task.getActiveIndex()) return;
-
-  GeoPoint target_location;
-  double bearing, distance;
-
-  TASK_POINT tp = task.getTaskPoint(target_point);
-
-  distance = 500;
-  if (tp.AATType == AAT_SECTOR) {
-    distance = std::max(tp.AATSectorRadius/20.0,distance);
-  } else {
-    distance = std::max(tp.AATCircleRadius/20.0,distance);
-  }
-
-  // JMW illegal
-  bearing = AngleLimit360(CommonInterface::main_window.map.GetDisplayAngle()
-                          + adjust_angle);
-
-  FindLatitudeLongitude (tp.AATTargetLocation,
-                         bearing, distance,
-                         &target_location);
-
-  if (task.InAATTurnSector(target_location,
-                           target_point)) {
-    if (CommonInterface::Calculated().IsInSector
-        && (target_point == task.getActiveIndex())) {
-      // set range/radial for inside sector
-      double course_bearing, target_bearing;
-      DistanceBearing(task.getTargetLocation(target_point-1),
-                      CommonInterface::Basic().Location,
-                      nullptr, &course_bearing);
-
-      DistanceBearing(CommonInterface::Basic().Location,
-                      target_location,
-                      &distance, &target_bearing);
-      bearing = AngleLimit180(target_bearing-course_bearing);
-
-      if (fabs(bearing)<90.0) {
-        tp.AATTargetLocation = target_location;
-        Radial = bearing;
-        tp.AATTargetOffsetRadial = Radial;
-        Range =
-          task.FindInsideAATSectorRange(CommonInterface::Basic().Location,
-                                        target_point,
-                                        target_bearing,
-                                        distance);
-        tp.AATTargetOffsetRadius = Range;
-        task.setTaskPoint(target_point, tp);
-        task.SetTargetModified();
-      }
-    } else {
-      // OK to change it..
-      tp.AATTargetLocation = target_location;
-
-      // set range/radial for outside sector
-      DistanceBearing(task.getTaskPointLocation(target_point),
-                      tp.AATTargetLocation,
-                      &distance, &bearing);
-      bearing = AngleLimit180(bearing-tp.Bisector);
-      if (tp.AATType == AAT_SECTOR) {
-        Range = (fabs(distance)/tp.AATSectorRadius)*2-1;
-      } else {
-        if (fabs(bearing)>90.0) {
-          distance = -distance;
-          bearing = AngleLimit180(bearing+180);
-        }
-        Range = distance/tp.AATCircleRadius;
-      }
-      tp.AATTargetOffsetRadius = Range;
-      tp.AATTargetOffsetRadial = bearing;
-      Radial = bearing;
-      task.setTaskPoint(target_point, tp);
-      task.SetTargetModified();
-    }
-  }
-  */
-}
-
-#endif /* GNAV */
-
 /**
  * Locks target fields if turnpoint does not have adjustable target
  */
@@ -540,24 +450,6 @@ static bool
 FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  case KEY_APP2:
-    MoveTarget(0);
-    return true;
-
-  case KEY_APP3:
-    MoveTarget(180);
-    return true;
-
-  case '6':
-    MoveTarget(270);
-    return true;
-
-  case '7':
-    MoveTarget(90);
-    return true;
-#endif
-
   case KEY_LEFT:
     OnPrevClicked();
     return true;
@@ -621,7 +513,6 @@ dlgTargetShowModal(int _target_point)
   RateLimitedBlackboardListener rate_limited_bl(blackboard_listener,
                                                 1800, 300);
 
-  //WindowBlackboardListener
   CommonInterface::GetLiveBlackboard().AddListener(rate_limited_bl);
 
   wf->ShowModal();
