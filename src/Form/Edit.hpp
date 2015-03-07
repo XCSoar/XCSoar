@@ -65,8 +65,15 @@ public:
               const PixelRect &rc, int CaptionWidth,
               const WindowStyle style);
 
+  WndProperty(const DialogLook &_look);
+
   /** Destructor */
   ~WndProperty();
+
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              const TCHAR *_caption,
+              unsigned _caption_width,
+              const WindowStyle style);
 
 protected:
   int CallSpecial();

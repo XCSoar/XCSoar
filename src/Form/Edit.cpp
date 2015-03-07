@@ -128,18 +128,35 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          int CaptionWidth,
                          const WindowStyle style)
   :look(_look),
-   caption_width(CaptionWidth),
    mDataField(NULL),
    read_only(false),
    dragging(false), pressed(false)
 {
-  caption = Caption;
-
-  Create(parent, rc, style);
+  Create(parent, rc, Caption, CaptionWidth, style);
 
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
+}
+
+WndProperty::WndProperty(const DialogLook &_look)
+  :look(_look),
+   mDataField(nullptr),
+   read_only(false),
+   dragging(false), pressed(false)
+{
+}
+
+void
+WndProperty::Create(ContainerWindow &parent, const PixelRect &rc,
+                    const TCHAR *_caption,
+                    unsigned _caption_width,
+                    const WindowStyle style=WindowStyle())
+{
+  caption = _caption;
+  caption_width = _caption_width;
+
+  WindowControl::Create(parent, rc, style);
 }
 
 WndProperty::~WndProperty()
