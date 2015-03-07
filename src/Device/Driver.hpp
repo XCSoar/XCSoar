@@ -184,8 +184,6 @@ public:
 
   /**
    * Called periodically each second
-   *
-   * @param calculated the current set of calculation results
    */
   virtual void OnSysTicker() = 0;
 
