@@ -28,13 +28,11 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "XML/Node.hpp"
 #include "XML/Parser.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
-#include "Form/Edit.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
@@ -91,21 +89,6 @@ StringToIntDflt(const TCHAR *string, int _default)
   if (string == nullptr || StringIsEmpty(string))
     return _default;
   return ParseInt(string, nullptr, 0);
-}
-
-/**
- * Converts a String into a Float and returns
- * the default value if String = nullptr
- * @param String The String to parse
- * @param Default The default return value
- * @return The parsed Float value
- */
-static double
-StringToFloatDflt(const TCHAR *string, double _default)
-{
-  if (string == nullptr || StringIsEmpty(string))
-    return _default;
-  return ParseDouble(string);
 }
 
 /**
@@ -334,23 +317,6 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   return form;
 }
 
-static DataField *
-LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
-{
-  const TCHAR *display_format =
-    StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T(""));
-  const TCHAR *edit_format =
-    StringToStringDflt(node.GetAttribute(_T("EditFormat")), _T(""));
-
-  fixed min = fixed(StringToFloatDflt(node.GetAttribute(_T("Min")), INT_MIN));
-  fixed max = fixed(StringToFloatDflt(node.GetAttribute(_T("Max")), INT_MAX));
-  fixed step = fixed(StringToFloatDflt(node.GetAttribute(_T("Step")), 1));
-  const bool fine = false;
-
-  return new DataFieldFloat(edit_format, display_format, min, max,
-                            fixed(0), step, fine);
-}
-
 /**
  * Creates a control from the given XMLNode as a child of the given
  * parent.
@@ -391,47 +357,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   rc.right = rc.left + size.cx;
   rc.bottom = rc.top + size.cy;
 
-  // PropertyControl (WndProperty)
-  if (StringIsEqual(node.GetName(), _T("Edit"))) {
-    // Determine the width of the caption field
-    int caption_width = StringToIntDflt(node.GetAttribute(_T("CaptionWidth")), 0);
-
-    if (Layout::ScaleSupported())
-      caption_width = Layout::Scale(caption_width);
-
-    caption_width = ScaleWidth(caption_width);
-
-    // Determine whether the control is multiline or readonly
-    bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
-
-    // Create the Property Control
-    if (!read_only)
-      style.TabStop();
-
-    WndProperty *property;
-    window = property = new WndProperty(parent, UIGlobals::GetDialogLook(),
-                                        caption, rc,
-                                        caption_width, style);
-    property->SetReadOnly(read_only);
-
-    // Load the help text
-    property->SetHelpText(StringToStringDflt(node.GetAttribute(_T("Help")),
-                                             nullptr));
-
-    // If the control has (at least) one DataField child control
-    const XMLNode *data_field_node = node.GetChildNode(_T("DataField"));
-    if (data_field_node != nullptr) {
-      // -> Load the first DataField control
-      DataField *data_field =
-        LoadDataField(*data_field_node, lookup_table);
-
-      if (data_field != nullptr)
-        // Tell the Property control about the DataField control
-        property->SetDataField(data_field);
-    }
-
   // ButtonControl (WndButton)
-  } else if (StringIsEqual(node.GetName(), _T("Button"))) {
+  if (StringIsEqual(node.GetName(), _T("Button"))) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback click_callback =
       (WndButton::ClickNotifyCallback)
@@ -562,14 +489,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     window = new ListControl(parent, UIGlobals::GetDialogLook(),
                              rc, style, item_height);
 
-  } else if (StringIsEqual(node.GetName(), _T("Custom"))) {
-    // Create a custom Window object with a callback
-    CreateWindowCallback_t create_callback =
-        (CreateWindowCallback_t)GetCallBack(lookup_table, node, _T("OnCreate"));
-    if (create_callback == nullptr)
-      return nullptr;
-
-    window = create_callback(parent, rc, style);
   } else if (StringIsEqual(node.GetName(), _T("Widget"))) {
     style.ControlParent();
     DockWindow *dock = new DockWindow();
