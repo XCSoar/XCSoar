@@ -23,29 +23,9 @@ Copyright_License {
 
 #include "Form/Util.hpp"
 #include "Form/SubForm.hpp"
-#include "Form/Edit.hpp"
-#include "DataField/Base.hpp"
-#include "DataField/Float.hpp"
-#include "DataField/String.hpp"
+#include "Screen/Window.hpp"
 
 #include <assert.h>
-
-void
-ShowFormControl(SubForm &form, const TCHAR *control_name, bool visible)
-{
-  Window *window = form.FindByName(control_name);
-  assert(window != NULL);
-  window->SetVisible(visible);
-}
-
-void
-ShowOptionalFormControl(SubForm &form, const TCHAR *control_name,
-                        bool visible)
-{
-  Window *window = form.FindByName(control_name);
-  if (window != NULL)
-    window->SetVisible(visible);
-}
 
 void
 SetFormControlEnabled(SubForm &form, const TCHAR *control_name, bool enabled)
@@ -53,51 +33,4 @@ SetFormControlEnabled(SubForm &form, const TCHAR *control_name, bool enabled)
   Window *window = form.FindByName(control_name);
   assert(window != NULL);
   window->SetEnabled(enabled);
-}
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != NULL);
-
-  DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::REAL);
-  df.Set(value);
-  ctl->RefreshDisplay();
-}
-
-void
-LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
-                         fixed value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
-
-  DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::REAL);
-  df.Set(value);
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 const TCHAR *value)
-{
-  assert(control_name != NULL);
-  assert(value != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != NULL);
-
-  DataFieldString &df = *(DataFieldString *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::STRING);
-
-  df.Set(value);
-  ctl->RefreshDisplay();
 }

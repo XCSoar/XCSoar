@@ -25,53 +25,12 @@ Copyright_License {
 #define XCSOAR_FORM_UTIL_HPP
 
 #include "Units/Group.hpp"
-#include "Math/fixed.hpp"
-#include "Compiler.h"
 
 #include <tchar.h>
 
 class SubForm;
 
-/**
- * Show or hide a named form control.
- */
-void
-ShowFormControl(SubForm &form, const TCHAR *control_name, bool visible);
-
-/**
- * Show or hide a named form control that may not exist in some layouts.
- */
-void
-ShowOptionalFormControl(SubForm &form, const TCHAR *control_name,
-                        bool visible);
-
 void SetFormControlEnabled(SubForm &form, const TCHAR *control_name,
                            bool enabled);
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value);
-
-void
-LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
-                         fixed value);
-
-void
-LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
-                         UnitGroup unit_group, fixed value);
-
-static inline void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, unsigned value)
-{
-  LoadFormProperty(form, control_name, unit_group, (int)value);
-}
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, fixed value);
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 const TCHAR *value);
 
 #endif
