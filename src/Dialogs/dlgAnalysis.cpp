@@ -202,6 +202,17 @@ protected:
     chart.Hide();
   }
 
+  void Move(const PixelRect &rc) override {
+    const Layout layout(rc);
+
+    info.Move(layout.info);
+    details_button.Move(layout.details_button);
+    previous_button.Move(layout.previous_button);
+    next_button.Move(layout.next_button);
+    close_button.Move(layout.close_button);
+    chart.Move(layout.main);
+  }
+
   bool SetFocus() override {
     close_button.SetFocus();
     return true;
