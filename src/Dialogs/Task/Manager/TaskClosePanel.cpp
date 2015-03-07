@@ -23,29 +23,51 @@ Copyright_License {
 
 #include "TaskClosePanel.hpp"
 #include "Internal.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Font.hpp"
+#include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Language/Language.hpp"
 
-#include <assert.h>
-#include <stdio.h> //debug
+TaskClosePanel::Layout::Layout(PixelRect rc, const DialogLook &look)
+{
+  const unsigned padding = ::Layout::GetMinimumControlHeight();
+  const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskClosePanel *instance;
+  close_button.left = rc.left + padding;
+  close_button.right = rc.right - padding;
+  close_button.top = rc.top + padding;
+  close_button.bottom = close_button.top + button_height;
+
+  message.left = close_button.left;
+  message.right = close_button.right;
+  message.top = close_button.bottom + padding;
+  message.bottom = message.top + look.text_font->GetHeight();
+
+  revert_button.left = close_button.left;
+  revert_button.right = close_button.right;
+  revert_button.top = message.bottom + padding;
+  revert_button.bottom = revert_button.top + button_height;
+}
+
+TaskClosePanel::TaskClosePanel(TaskManagerDialog &_dialog,
+                               bool *_task_modified,
+                               const DialogLook &_look)
+  :dialog(_dialog), task_modified(_task_modified),
+   look(_look),
+   close_button(look.button), message(look), revert_button(look.button) {}
 
 void
 TaskClosePanel::RefreshStatus()
 {
-  wStatus->SetText(*task_modified ?
-                   _("Task has been modified") : _("Task unchanged"));
+  message.SetText(*task_modified ?
+                  _("Task has been modified") : _("Task unchanged"));
 
-  cmdRevert->SetVisible(*task_modified);
+  revert_button.SetVisible(*task_modified);
 }
 
 void
@@ -55,43 +77,43 @@ TaskClosePanel::CommitAndClose()
     dialog.SetModalResult(mrOK);
 }
 
-static void
-OnCloseClicked()
+void
+TaskClosePanel::OnAction(int id)
 {
-  instance->CommitAndClose();
+  switch (id) {
+  case CLOSE:
+    CommitAndClose();
+    break;
+
+  case REVERT:
+    dialog.Revert();
+    RefreshStatus();
+    break;
+  }
 }
-
-static void
-OnRevertClicked()
-{
-  instance->dialog.Revert();
-  instance->RefreshStatus();
-}
-
-static constexpr CallBackTableEntry task_close_callbacks[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnRevertClicked),
-
-  DeclareCallBackEntry(nullptr)
-};
 
 void
 TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
+  const Layout layout(rc, look);
 
-  LoadWindow(task_close_callbacks, parent, rc, _T("IDR_XML_TASKMANAGERCLOSE"));
+  ButtonWindowStyle button_style;
+  button_style.Hide();
+  button_style.TabStop();
 
-  wStatus = (WndFrame *)form.FindByName(_T("frmStatus"));
-  assert(wStatus);
+  WindowStyle style;
+  style.Hide();
 
-  cmdRevert = (WndButton *)form.FindByName(_T("cmdRevert"));
-  assert(cmdRevert);
+  close_button.Create(parent, _("Close"), layout.close_button, button_style,
+                      *this, CLOSE);
 
-  cmdClose = (WndButton *)form.FindByName(_T("cmdClose"));
-  assert(cmdClose);
+  message.Create(parent, layout.message, style);
+  message.SetAlignCenter();
+  message.SetVAlignCenter();
 
-  wStatus->SetAlignCenter();
+  revert_button.Create(parent, _("Revert Changes"),
+                       layout.revert_button, button_style,
+                       *this, REVERT);
 }
 
 bool
@@ -118,7 +140,10 @@ TaskClosePanel::Show(const PixelRect &rc)
 
   RefreshStatus();
 
-  XMLWidget::Show(rc);
+  const Layout layout(rc, look);
+  close_button.MoveAndShow(layout.close_button);
+  message.MoveAndShow(layout.message);
+  revert_button.MoveAndShow(layout.revert_button);
 }
 
 void
@@ -126,12 +151,23 @@ TaskClosePanel::Hide()
 {
   dialog.ResetTaskView();
 
-  XMLWidget::Hide();
+  close_button.Hide();
+  message.Hide();
+  revert_button.Hide();
+}
+
+void
+TaskClosePanel::Move(const PixelRect &rc)
+{
+  const Layout layout(rc, look);
+  close_button.Move(layout.close_button);
+  message.Move(layout.message);
+  revert_button.Move(layout.revert_button);
 }
 
 bool
 TaskClosePanel::SetFocus()
 {
-  cmdClose->SetFocus();
+  close_button.SetFocus();
   return true;
 }

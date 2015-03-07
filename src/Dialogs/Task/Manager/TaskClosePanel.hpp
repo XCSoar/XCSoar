@@ -24,26 +24,40 @@ Copyright_License {
 #ifndef XCSOAR_TASK_CLOSE_PANEL_HPP
 #define XCSOAR_TASK_CLOSE_PANEL_HPP
 
-#include "Widget/XMLWidget.hpp"
+#include "Widget/Widget.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 
 class TaskManagerDialog;
-class OrderedTask;
-class WndFrame;
-class WndButton;
 
-class TaskClosePanel final : public XMLWidget {
+class TaskClosePanel final : public NullWidget, ActionListener {
+  enum Buttons {
+    CLOSE,
+    REVERT,
+  };
+
+  struct Layout {
+    PixelRect close_button, message, revert_button;
+
+    Layout(PixelRect rc, const DialogLook &look);
+  };
+
 public:
   TaskManagerDialog &dialog;
 
 private:
   bool *task_modified;
 
-  WndFrame *wStatus;
-  WndButton *cmdRevert, *cmdClose;
+  const DialogLook &look;
+
+  WndButton close_button;
+  WndFrame message;
+  WndButton revert_button;
 
 public:
-  TaskClosePanel(TaskManagerDialog &_dialog, bool *_task_modified)
-    :dialog(_dialog), task_modified(_task_modified) {}
+  TaskClosePanel(TaskManagerDialog &_dialog, bool *_task_modified,
+                 const DialogLook &_look);
 
   void CommitAndClose();
   void RefreshStatus();
@@ -53,7 +67,12 @@ public:
   void ReClick() override;
   void Show(const PixelRect &rc) override;
   void Hide() override;
+  void Move(const PixelRect &rc) override;
   bool SetFocus() override;
+
+private:
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override;
 };
 
 #endif

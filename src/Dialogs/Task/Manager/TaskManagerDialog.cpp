@@ -186,7 +186,8 @@ TaskManagerDialog::Create(SingleWindow &parent)
   TaskPropertiesPanel *wProps =
     new TaskPropertiesPanel(*this, &task, &modified);
 
-  TaskClosePanel *wClose = new TaskClosePanel(*this, &modified);
+  TaskClosePanel *wClose = new TaskClosePanel(*this, &modified,
+                                              UIGlobals::GetDialogLook());
 
   TaskCalculatorPanel *wCalculator =
     new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &modified);

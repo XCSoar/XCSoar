@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel>
-  <Button Name="cmdClose" Caption="Close" X="40" Y="40" Width="-40" Height="40" OnClick="OnCloseClicked"/>
-  <Label Name="frmStatus" X="20" Y="95" Width="-20" Height="20"/>
-  <Button Name="cmdRevert" Caption="Revert Changes" X="40" Y="120" Width="-40" Height="35" OnClick="OnRevertClicked"/>
-</Panel>
