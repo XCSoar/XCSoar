@@ -34,6 +34,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Pan.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 
 enum Commands {
   REPLACE_IN_TASK,
@@ -42,6 +44,8 @@ enum Commands {
   REMOVE_FROM_TASK,
   SET_HOME,
   PAN,
+  SET_ACTIVE_FREQUENCY,
+  SET_STANDBY_FREQUENCY,
 };
 
 static bool
@@ -200,6 +204,8 @@ ActivatePan(const Waypoint &waypoint)
 void
 WaypointCommandsWidget::OnAction(int id)
 {
+  MessageOperationEnvironment env;
+
   switch (id) {
   case REPLACE_IN_TASK:
     if (ReplaceInTask(*task_manager, waypoint) && form != nullptr)
@@ -231,6 +237,16 @@ WaypointCommandsWidget::OnAction(int id)
     if (ActivatePan(waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
+
+  case SET_ACTIVE_FREQUENCY:
+    device_blackboard->SetActiveFrequency(waypoint.radio_frequency,
+                                          waypoint.name.c_str(), env);
+    break;
+
+  case SET_STANDBY_FREQUENCY:
+    device_blackboard->SetStandbyFrequency(waypoint.radio_frequency,
+                                           waypoint.name.c_str(), env);
+    break;
   }
 }
 
@@ -250,4 +266,6 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddButton(_("Set as New Home"), *this, SET_HOME);
   AddButton(_("Pan to Waypoint"), *this, PAN);
+  AddButton(_("Set Active Frequency"), *this, SET_ACTIVE_FREQUENCY);
+  AddButton(_("Set Standby Frequency"), *this, SET_STANDBY_FREQUENCY);
 }

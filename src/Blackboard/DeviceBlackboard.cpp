@@ -25,6 +25,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Simulator.hpp"
+#include "RadioFrequency.hpp"
 
 #include <algorithm>
 
@@ -284,4 +285,22 @@ DeviceBlackboard::SetMC(fixed mc, OperationEnvironment &env)
 {
   if (devices != nullptr)
     devices->PutMacCready(mc, env);
+}
+
+void
+DeviceBlackboard::SetActiveFrequency(RadioFrequency frequency,
+                                     const TCHAR *name,
+                                     OperationEnvironment &env)
+{
+  if (devices != nullptr)
+    devices->PutActiveFrequency(frequency, name, env);
+}
+
+void
+DeviceBlackboard::SetStandbyFrequency(RadioFrequency frequency,
+                                      const TCHAR *name,
+                                      OperationEnvironment &env)
+{
+  if (devices != nullptr)
+    devices->PutStandbyFrequency(frequency, name, env);
 }

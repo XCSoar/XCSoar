@@ -36,6 +36,7 @@ Copyright_License {
 class MultipleDevices;
 class AtmosphericPressure;
 class OperationEnvironment;
+class RadioFrequency;
 
 /**
  * Blackboard used by com devices: can write NMEA_INFO, reads DERIVED_INFO.
@@ -140,6 +141,13 @@ public:
   void SetBugs(fixed bugs, OperationEnvironment &env);
   void SetQNH(AtmosphericPressure qnh, OperationEnvironment &env);
   void SetMC(fixed mc, OperationEnvironment &env);
+
+  void SetActiveFrequency(RadioFrequency frequency,
+                          const TCHAR *name,
+                          OperationEnvironment &env);
+  void SetStandbyFrequency(RadioFrequency frequency,
+                           const TCHAR *name,
+                           OperationEnvironment &env);
 
   /**
    * Check the expiry time of the device connection with the wall
