@@ -31,12 +31,26 @@ class GlideComputer;
 class Airspaces;
 class RasterTerrain;
 
+enum class AnalysisPage {
+  BAROGRAPH,
+  CLIMB,
+  THERMAL_BAND,
+  TASK_SPEED,
+  WIND,
+  POLAR,
+  TEMPTRACE,
+  TASK,
+  OLC,
+  AIRSPACE,
+  COUNT
+};
+
 void
 dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const FullBlackboard &blackboard,
                      GlideComputer &glide_computer,
                      const Airspaces *airspaces,
                      const RasterTerrain *terrain,
-                     int page=-1);
+                     AnalysisPage page=AnalysisPage::COUNT);
 
 #endif

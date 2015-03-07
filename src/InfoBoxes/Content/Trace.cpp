@@ -148,31 +148,31 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 static void
-ShowAnalysis0()
+ShowAnalysisBarograph()
 {
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(), *glide_computer,
                        &airspace_database,
-                       terrain, 0);
+                       terrain, AnalysisPage::BAROGRAPH);
 }
 
 static Widget *
-LoadAnalysis0Panel(unsigned id)
+LoadAnalysisBarographPanel(unsigned id)
 {
-  return new CallbackWidget(ShowAnalysis0);
+  return new CallbackWidget(ShowAnalysisBarograph);
 }
 
 static constexpr
-InfoBoxPanel analysis0_infobox_panels[] = {
-  { N_("Analysis"), LoadAnalysis0Panel },
+InfoBoxPanel analysis_barograph_infobox_panels[] = {
+  { N_("Analysis"), LoadAnalysisBarographPanel },
   { nullptr, nullptr }
 };
 
 const InfoBoxPanel *
 InfoBoxContentBarogram::GetDialogContent()
 {
-  return analysis0_infobox_panels;
+  return analysis_barograph_infobox_panels;
 }
 
 void

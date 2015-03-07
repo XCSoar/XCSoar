@@ -63,20 +63,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-enum class AnalysisPage: uint8_t {
-  BAROGRAPH,
-  CLIMB,
-  THERMAL_BAND,
-  TASK_SPEED,
-  WIND,
-  POLAR,
-  TEMPTRACE,
-  TASK,
-  OLC,
-  AIRSPACE,
-  COUNT
-};
-
 static AnalysisPage page = AnalysisPage::BAROGRAPH;
 
 class AnalysisWidget;
@@ -684,7 +670,7 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      GlideComputer &glide_computer,
                      const Airspaces *airspaces,
                      const RasterTerrain *terrain,
-                     int _page)
+                     AnalysisPage _page)
 {
   WidgetDialog dialog(look.dialog);
   AnalysisWidget analysis(dialog, look,
@@ -692,7 +678,7 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                           blackboard, glide_computer);
   dialog.CreateFull(parent, _("Analysis"), &analysis);
 
-  if (_page >= 0)
+  if (_page != AnalysisPage::COUNT)
     page = (AnalysisPage)_page;
 
   dialog.ShowModal();

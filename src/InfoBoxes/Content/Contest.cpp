@@ -40,7 +40,7 @@ ShowAnalysis8()
                        UIGlobals::GetLook(),
                        CommonInterface::Full(), *glide_computer,
                        &airspace_database,
-                       terrain, 8);
+                       terrain, AnalysisPage::OLC);
 }
 
 static Widget *
