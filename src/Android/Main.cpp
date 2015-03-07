@@ -203,6 +203,8 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
+  Shutdown();
+
   if (IsNookSimpleTouch()) {
     Nook::ExitFastMode();
   }
