@@ -41,7 +41,9 @@ Copyright_License {
 /**
  * The OES_draw_texture extension is available.
  */
+#ifndef HAVE_GLES2
 #define HAVE_OES_DRAW_TEXTURE
+#endif
 
 #endif
 
