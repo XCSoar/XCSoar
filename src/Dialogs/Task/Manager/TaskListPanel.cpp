@@ -113,10 +113,10 @@ public:
 
   void OnMoreClicked();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
 
 protected:
   const OrderedTask *get_cursor_task();
@@ -126,21 +126,20 @@ protected:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) override;
 
   /* virtual methods from class ListControl::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
 
-  virtual void OnCursorMoved(unsigned index) override {
+  void OnCursorMoved(unsigned index) override {
     RefreshView();
   }
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const override {
       return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override {
+  void OnActivateItem(unsigned index) override {
     LoadTask();
   }
 };

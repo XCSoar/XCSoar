@@ -77,7 +77,7 @@ static unsigned active_index = 0;
 class TPOZListener : public ObservationZoneEditWidget::Listener {
 public:
   /* virtual methods from class ObservationZoneEditWidget::Listener */
-  virtual void OnModified(ObservationZoneEditWidget &widget) override;
+  void OnModified(ObservationZoneEditWidget &widget) override;
 };
 
 static TPOZListener listener;

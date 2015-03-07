@@ -57,14 +57,13 @@ private:
   void OnDeclareClicked();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void ReClick() override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void ReClick() override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) override;
 };
 
 #endif

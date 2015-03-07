@@ -60,7 +60,7 @@ public:
                      task_look, aircraft_look) {}
 
 protected:
-  virtual void OnTaskModified() override;
+  void OnTaskModified() override;
 };
 
 static WndForm *wf = nullptr;
@@ -610,8 +610,8 @@ dlgTargetShowModal(int _target_point)
   wf->SetKeyDownFunction(FormKeyDown);
 
   struct TargetDialogUpdateListener : public NullBlackboardListener {
-    virtual void OnCalculatedUpdate(const MoreData &basic,
-                                    const DerivedInfo &calculated) {
+    void OnCalculatedUpdate(const MoreData &basic,
+                            const DerivedInfo &calculated) {
       map->Invalidate();
       RefreshCalculator();
     }

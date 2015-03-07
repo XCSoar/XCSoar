@@ -86,14 +86,14 @@ public:
   void Revert();
 
   /* virtual methods from class Window */
-  virtual void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) override;
 
   /* virtual methods from class WndForm */
-  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
-  virtual bool OnAnyKeyDown(unsigned key_code) override;
+  void ReinitialiseLayout(const PixelRect &parent_rc) override;
+  bool OnAnyKeyDown(unsigned key_code) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */

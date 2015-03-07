@@ -48,12 +48,12 @@ public:
   void CommitAndClose();
   void RefreshStatus();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Click() override;
-  virtual void ReClick() override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-  virtual bool SetFocus() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  bool Click() override;
+  void ReClick() override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
+  bool SetFocus() override;
 };
 
 #endif

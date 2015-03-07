@@ -68,18 +68,18 @@ public:
   void Refresh();
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
-  virtual void OnSpecial(DataField &df) override;
+  void OnModified(DataField &df) override;
+  void OnSpecial(DataField &df) override;
 
   /* virtual methods from NullBlackboardListener */
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override {
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override {
     Refresh();
   }
 };

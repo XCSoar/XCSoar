@@ -34,8 +34,9 @@ public:
   TaskMiscPanel(TaskManagerDialog &dialog,
                 OrderedTask **_active_task, bool *_task_modified);
 
-  virtual void ReClick() override;
-  virtual void Show(const PixelRect &rc) override;
+  /* virtual methods from class Widget */
+  void ReClick() override;
+  void Show(const PixelRect &rc) override;
 };
 
 #endif

@@ -42,9 +42,8 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  bool Save(bool &changed) override;
 };
 
 #endif
