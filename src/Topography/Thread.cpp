@@ -27,7 +27,7 @@ Copyright_License {
 
 TopographyThread::TopographyThread(TopographyStore &_store,
                                    std::function<void()> &&_callback)
-  :StandbyThread("Topograpghy"),
+  :StandbyThread("Topography"),
    store(_store),
    callback(_callback),
    last_bounds(GeoBounds::Invalid()) {}
