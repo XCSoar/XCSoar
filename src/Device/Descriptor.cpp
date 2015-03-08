@@ -704,7 +704,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
 
   // Additional "if" to find GPS strings
   if (parser.ParseLine(line, info)) {
-    info.alive.Update(fixed(MonotonicClockMS()) / 1000);
+    info.alive.Update(info.clock);
     return true;
   }
 
