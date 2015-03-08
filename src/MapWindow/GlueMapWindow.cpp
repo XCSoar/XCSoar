@@ -274,7 +274,8 @@ GlueMapWindow::OnUser(unsigned id)
     draw_thread->TriggerRedraw();
 #endif
     return true;
-  }
 
-  return false;
+  default:
+    return MapWindow::OnUser(id);
+  }
 }
