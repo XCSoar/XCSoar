@@ -383,8 +383,7 @@ public:
   void CalculateRoute(const ProtectedRoutePlanner &route_planner) {
     const ProtectedRoutePlanner::Lease lease(route_planner);
 
-    for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it) {
-      VisibleWaypoint &vwp = *it;
+    for (VisibleWaypoint &vwp : waypoints) {
       const Waypoint &way_point = *vwp.waypoint;
 
       if (way_point.IsLandable() || way_point.flags.watched)
@@ -404,8 +403,7 @@ public:
       : calculated.glide_polar_safety;
     const MacCready mac_cready(task_behaviour.glide, glide_polar);
 
-    for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it) {
-      VisibleWaypoint &vwp = *it;
+    for (VisibleWaypoint &vwp : waypoints) {
       const Waypoint &way_point = *vwp.waypoint;
 
       if (way_point.IsLandable() || way_point.flags.watched)
@@ -425,8 +423,8 @@ public:
   }
 
   void Draw(Canvas &canvas) {
-    for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it)
-      DrawWaypoint(canvas, *it);
+    for (const VisibleWaypoint &vwp : waypoints)
+      DrawWaypoint(canvas, vwp);
   }
 };
 
