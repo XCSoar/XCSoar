@@ -66,8 +66,6 @@ class GlueMapWindow : public MapWindow {
 
   const Logger *logger;
 
-  unsigned idle_robin;
-
 #ifdef ENABLE_OPENGL
   /**
    * A timer that triggers a redraw periodically until all data files

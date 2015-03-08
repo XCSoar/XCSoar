@@ -217,7 +217,6 @@ GlueMapWindow::Idle()
     /* draw the first frame as quickly as possible, so the user can
        start interacting with XCSoar immediately */
     skip_idle = false;
-    idle_robin = 0;
     return true;
   }
 
@@ -235,22 +234,9 @@ GlueMapWindow::Idle()
   clock.Update();
 
   bool still_dirty;
-  bool terrain_dirty = true;
-  bool weather_dirty = true;
 
   do {
-    idle_robin = (idle_robin + 1) % 2;
-    switch (idle_robin) {
-    case 0:
-      terrain_dirty = UpdateTerrain();
-      break;
-
-    case 1:
-      weather_dirty = UpdateWeather();
-      break;
-    }
-
-    still_dirty = terrain_dirty || weather_dirty;
+    still_dirty = UpdateWeather() || UpdateTerrain();
   } while (!clock.Check(700) && /* stop after 700ms */
 #ifndef ENABLE_OPENGL
            !draw_thread->IsTriggered() &&
