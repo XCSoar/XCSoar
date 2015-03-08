@@ -268,7 +268,11 @@ GlueMapWindow::OnUser(unsigned id)
 {
   switch (Command(id)) {
   case Command::INVALIDATE:
+#ifdef ENABLE_OPENGL
     Invalidate();
+#else
+    draw_thread->TriggerRedraw();
+#endif
     return true;
   }
 
