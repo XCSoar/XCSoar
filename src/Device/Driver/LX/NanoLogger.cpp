@@ -29,7 +29,6 @@
 #include "Operation/Operation.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
-#include "OS/Sleep.h"
 
 #include <algorithm>
 #include <stdio.h>
