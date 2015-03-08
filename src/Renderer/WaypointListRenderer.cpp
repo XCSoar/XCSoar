@@ -78,7 +78,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const WaypointLook &look,
                            const WaypointRendererSettings &renderer_settings)
 {
-  Draw(canvas, rc, waypoint, NULL, dialog_look, look, renderer_settings);
+  Draw(canvas, rc, waypoint, nullptr, dialog_look, look, renderer_settings);
 }
 
 void

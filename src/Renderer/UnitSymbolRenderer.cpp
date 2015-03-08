@@ -37,23 +37,23 @@ struct UnitSymbolStrings {
 };
 
 static constexpr UnitSymbolStrings symbol_strings[] = {
-  { NULL, NULL },
-  { NULL, _T("km"), false },
-  { NULL, _T("NM"), false },
-  { NULL, _T("mi"), false },
+  { nullptr, nullptr },
+  { nullptr, _T("km"), false },
+  { nullptr, _T("NM"), false },
+  { nullptr, _T("mi"), false },
   { _T("km"), _T("h"), true },
-  { NULL, _T("kt"), false },
+  { nullptr, _T("kt"), false },
   { _T("mp"), _T("h"), false },
   { _T("m"), _T("s"), true },
   { _T("ft"), _T("min"), true },
-  { NULL, _T("m"), false },
-  { NULL, _T("ft"), false },
-  { NULL, _T("FL"), false },
-  { NULL, _T("K"), false },
+  { nullptr, _T("m"), false },
+  { nullptr, _T("ft"), false },
+  { nullptr, _T("FL"), false },
+  { nullptr, _T("K"), false },
   { _T(DEG), _T("C"), false },
   { _T(DEG), _T("F"), false },
   { _T("h"), _T("Pa"), false },
-  { NULL, _T("mb"), false },
+  { nullptr, _T("mb"), false },
   { _T("mm"), _T("Hg"), false },
   { _T("in"), _T("Hg"), false },
 };
@@ -74,7 +74,7 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
   if (!strings.line1 && !strings.line2)
     return {0, 0};
 
-  assert(strings.line2 != NULL);
+  assert(strings.line2 != nullptr);
 
   if (!strings.line1)
     return canvas.CalcTextSize(strings.line2);
@@ -102,7 +102,7 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
   if (!strings.line1 && !strings.line2)
     return 0;
 
-  assert(strings.line2 != NULL);
+  assert(strings.line2 != nullptr);
 
   if (!strings.line1)
     return font.GetAscentHeight();
@@ -124,7 +124,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
   if (!strings.line1 && !strings.line2)
     return;
 
-  assert(strings.line2 != NULL);
+  assert(strings.line2 != nullptr);
 
   if (!strings.line1) {
     canvas.DrawText(pos.x, pos.y, strings.line2);

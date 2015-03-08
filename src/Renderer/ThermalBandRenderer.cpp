@@ -127,7 +127,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     // but do draw if start height needs to be drawn
     return;
 
-  const Pen *fpen = is_infobox ? NULL : &look.pen;
+  const Pen *fpen = is_infobox ? nullptr : &look.pen;
 
   // position of thermal band
   if (numtherm > 1) {
@@ -161,11 +161,11 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 }
 
-void 
+void
 ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const DerivedInfo& calculated,
                                      const ComputerSettings &settings_computer,
-                                     Canvas &canvas, 
+                                     Canvas &canvas,
                                      const PixelRect &rc,
                                      const TaskBehaviour& task_props,
                                      const bool is_map,
@@ -191,11 +191,11 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
   }
 }
 
-void 
+void
 ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const DerivedInfo& calculated,
                                           const ComputerSettings &settings_computer,
-                                          Canvas &canvas, 
+                                          Canvas &canvas,
                                           const PixelRect &rc,
                                           const TaskBehaviour &task_props) const
 {
@@ -204,5 +204,5 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
   chart.padding_left = Layout::Scale(3);
   ScaleChart(calculated, settings_computer, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
-                   chart, task_props, true, NULL);
+                   chart, task_props, true, nullptr);
 }

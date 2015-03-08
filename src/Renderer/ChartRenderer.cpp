@@ -189,8 +189,8 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
 void
 ChartRenderer::DrawXLabel(const TCHAR *text, const TCHAR *unit)
 {
-  assert(text != NULL);
-  assert(unit != NULL);
+  assert(text != nullptr);
+  assert(unit != nullptr);
 
   StaticString<64> buffer;
   buffer.UnsafeFormat(_T("%s [%s]"), text, unit);
@@ -213,8 +213,8 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
 void
 ChartRenderer::DrawYLabel(const TCHAR *text, const TCHAR *unit)
 {
-  assert(text != NULL);
-  assert(unit != NULL);
+  assert(text != nullptr);
+  assert(unit != nullptr);
 
   StaticString<64> buffer;
   buffer.UnsafeFormat(_T("%s [%s]"), text, unit);
@@ -488,7 +488,7 @@ ChartRenderer::ScreenY(fixed _y) const
   return rc.bottom - padding_bottom - y.ToScreen(_y);
 }
 
-void 
+void
 ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
                            const Brush &brush, const Pen* pen)
 {
@@ -504,9 +504,9 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
   line[0].y = line[fsize-1].y;
   line[1].x = rc.left + padding_left;
   line[1].y = line[2].y;
-  
+
   canvas.Select(brush);
-  if (pen == NULL) {
+  if (pen == nullptr) {
     canvas.SelectNullPen();
   } else {
     canvas.Select(*pen);

@@ -286,7 +286,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     dv.Draw(task);
   }
 
-  if (trace_computer != NULL)
+  if (trace_computer != nullptr)
     trail_renderer.Draw(canvas, *trace_computer, proj, 0);
 
   if (nmea_info.location_available) {

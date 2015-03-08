@@ -198,7 +198,7 @@ protected:
       _tcscpy(Buffer, way_point.name.c_str());
       TCHAR *tmp;
       tmp = _tcsstr(Buffer, _T(" "));
-      if (tmp != NULL)
+      if (tmp != nullptr)
         tmp[0] = '\0';
       break;
 
@@ -418,7 +418,7 @@ public:
                  const PolarSettings &polar_settings,
                  const TaskBehaviour &task_behaviour,
                  const DerivedInfo &calculated) {
-    if (route_planner != NULL && !route_planner->IsReachEmpty())
+    if (route_planner != nullptr && !route_planner->IsReachEmpty())
       CalculateRoute(*route_planner);
     else
       CalculateDirect(polar_settings, task_behaviour, calculated);
@@ -456,12 +456,12 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const ProtectedTaskManager *task,
                          const ProtectedRoutePlanner *route_planner)
 {
-  if ((way_points == NULL) || way_points->IsEmpty())
+  if (way_points == nullptr || way_points->IsEmpty())
     return;
 
   WaypointVisitorMap v(projection, settings, look, task_behaviour, basic);
 
-  if (task != NULL) {
+  if (task != nullptr) {
     ProtectedTaskManager::Lease task_manager(*task);
 
     const TaskStats &task_stats = task_manager->GetStats();
@@ -472,7 +472,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
       v.set_task_valid();
 
     const AbstractTask *atask = task_manager->GetActiveTask();
-    if (atask != NULL)
+    if (atask != nullptr)
       atask->AcceptTaskPointVisitor(v);
   }
 

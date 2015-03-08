@@ -79,7 +79,7 @@ public:
                       const fixed xmax, const fixed ymax,
                       const Brush &brush);
   void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
-                   const Pen* pen= NULL);
+                   const Pen *pen=nullptr);
   void DrawDot(const fixed x, const fixed y, const PixelScalar width);
 
   void ScaleYFromData(const LeastSquares &lsdata);

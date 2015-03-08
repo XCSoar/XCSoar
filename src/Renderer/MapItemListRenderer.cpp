@@ -469,8 +469,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
 
-  const FlarmTraffic *traffic = traffic_list == NULL ? NULL :
-      traffic_list->FindTraffic(item.id);
+  const FlarmTraffic *traffic = traffic_list == nullptr
+    ? nullptr
+    : traffic_list->FindTraffic(item.id);
 
   // Now render the text information
   const Font &name_font = *dialog_look.list.font_bold;
@@ -487,7 +488,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   // Append name to the title, if it exists
   const TCHAR *callsign = FlarmDetails::LookupCallsign(item.id);
-  if (callsign != NULL && !StringIsEmpty(callsign)) {
+  if (callsign != nullptr && !StringIsEmpty(callsign)) {
     title_string.append(_T(", "));
     title_string.append(callsign);
   }
@@ -499,13 +500,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   StaticString<256> info_string;
   if (record && !StringIsEmpty(record->plane_type))
     info_string = record->plane_type;
-  else if (traffic != NULL)
+  else if (traffic != nullptr)
     info_string = FlarmTraffic::GetTypeString(traffic->type);
   else
     info_string = _("Unknown");
 
   // Generate the line of info about the target, if it's available
-  if (traffic != NULL) {
+  if (traffic != nullptr) {
     if (traffic->altitude_available) {
       TCHAR tmp[15];
       FormatUserAltitude(traffic->altitude, tmp, 15);
@@ -525,7 +526,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
   // Render the representation of the traffic icon
-  if (traffic != NULL)
+  if (traffic != nullptr)
     TrafficRenderer::Draw(canvas, traffic_look, *traffic, traffic->track,
                           item.color, pt);
 }

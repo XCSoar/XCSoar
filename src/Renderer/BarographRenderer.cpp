@@ -130,7 +130,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(fixed(0));
 
-  if (_task != NULL) {
+  if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
     canvas.SelectHollowBrush();
     DrawLegs(chart, task, nmea_info, derived_info, false);
@@ -166,7 +166,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(fixed(0));
   chart.ScaleXFromValue(fs.altitude.GetMinX());
 
-  if (_task != NULL) {
+  if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
     DrawLegs(chart, task, nmea_info, derived_info, false);
   }

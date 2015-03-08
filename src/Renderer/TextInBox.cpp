@@ -122,7 +122,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
     y += offset.y;
   }
 
-  if (label_block != NULL && !label_block->check(rc))
+  if (label_block != nullptr && !label_block->check(rc))
     return false;
 
   if (mode.shape == LabelShape::ROUNDED_BLACK ||
