@@ -102,6 +102,13 @@ class GlueMapWindow : public MapWindow {
   TrackingGestureManager gestures;
   bool ignore_single_click;
 
+  /**
+   * Skip the next Idle() call?  This is set to true when a new frame
+   * shall be rendered quickly without I/O delay, e.g. to display the
+   * first frame quickly.
+   */
+  bool skip_idle;
+
 #ifdef ENABLE_OPENGL
   KineticManager kinetic_x, kinetic_y;
   WindowTimer kinetic_timer;

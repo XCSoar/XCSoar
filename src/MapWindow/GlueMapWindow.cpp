@@ -35,12 +35,12 @@ GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
    topography_thread(nullptr),
    logger(nullptr),
-   idle_robin(-1),
 #ifdef ENABLE_OPENGL
    data_timer(*this),
 #endif
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
+   skip_idle(true),
 #ifdef ENABLE_OPENGL
    kinetic_x(700),
    kinetic_y(700),
@@ -213,9 +213,10 @@ GlueMapWindow::Idle()
   if (!render_projection.IsValid())
     return false;
 
-  if (idle_robin == unsigned(-1)) {
+  if (skip_idle) {
     /* draw the first frame as quickly as possible, so the user can
        start interacting with XCSoar immediately */
+    skip_idle = false;
     idle_robin = 0;
     return true;
   }
