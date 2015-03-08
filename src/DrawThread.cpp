@@ -44,8 +44,8 @@ DrawThread::Run()
   if (CheckStoppedOrSuspended())
     return;
 
-  // Get data from the DeviceBlackboard
-  map.ExchangeBlackboard();
+  /* trigger the first draw immediately */
+  trigger.Signal();
 
   bool bounds_dirty = true;
 
