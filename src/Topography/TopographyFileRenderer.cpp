@@ -94,9 +94,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
   visible_shapes.clear();
   visible_labels.clear();
 
-  for (auto it = file.begin(), end = file.end(); it != end; ++it) {
-    const XShape &shape = *it;
-
+  for (const XShape &shape : file) {
     if (!visible_bounds.Overlaps(shape.get_bounds()))
       continue;
 
@@ -272,9 +270,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 #endif
 
-  for (auto it = visible_shapes.begin(), end = visible_shapes.end();
-       it != end; ++it) {
-    const XShape &shape = **it;
+  for (const XShape *shape_p : visible_shapes) {
+    const XShape &shape = *shape_p;
 
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = buffer + shape.GetOffset();
@@ -471,9 +468,8 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   std::set<tstring> drawn_labels;
 
   // Iterate over all shapes in the file
-  for (auto it = visible_labels.begin(), end = visible_labels.end();
-       it != end; ++it) {
-    const XShape &shape = **it;
+  for (const XShape *shape_p : visible_labels) {
+    const XShape &shape = *shape_p;
 
     // Skip shapes without a label
     const TCHAR *label = shape.get_label();
