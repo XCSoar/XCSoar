@@ -216,7 +216,7 @@ GlueMapWindow::Idle()
   if (idle_robin == unsigned(-1)) {
     /* draw the first frame as quickly as possible, so the user can
        start interacting with XCSoar immediately */
-    idle_robin = 2;
+    idle_robin = 0;
     return true;
   }
 
@@ -238,16 +238,13 @@ GlueMapWindow::Idle()
   bool weather_dirty = true;
 
   do {
-    idle_robin = (idle_robin + 1) % 3;
+    idle_robin = (idle_robin + 1) % 2;
     switch (idle_robin) {
     case 0:
-      break;
-
-    case 1:
       terrain_dirty = UpdateTerrain();
       break;
 
-    case 2:
+    case 1:
       weather_dirty = UpdateWeather();
       break;
     }
