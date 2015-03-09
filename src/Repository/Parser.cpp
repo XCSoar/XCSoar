@@ -89,13 +89,13 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
       file.area = value;
     } else if (StringIsEqual(name, "type")) {
       if (StringIsEqual(value, "airspace"))
-        file.type = AvailableFile::Type::AIRSPACE;
+        file.type = FileType::AIRSPACE;
       else if (StringIsEqual(value, "waypoint"))
-        file.type = AvailableFile::Type::WAYPOINT;
+        file.type = FileType::WAYPOINT;
       else if (StringIsEqual(value, "map"))
-        file.type = AvailableFile::Type::MAP;
+        file.type = FileType::MAP;
       else if (StringIsEqual(value, "flarmnet"))
-        file.type = AvailableFile::Type::FLARMNET;
+        file.type = FileType::FLARMNET;
     }
   }
 

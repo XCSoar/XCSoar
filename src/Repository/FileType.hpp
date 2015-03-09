@@ -21,62 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AVAILABLE_FILE_HPP
-#define XCSOAR_AVAILABLE_FILE_HPP
+#ifndef XCSOAR_FILE_TYPE_HPP
+#define XCSOAR_FILE_TYPE_HPP
 
-#include "Util/StaticString.hpp"
-#include "FileType.hpp"
+#include <stdint.h>
 
-#include <string>
-
-/**
- * The description of a file that is available in a remote repository.
- */
-struct AvailableFile {
-  /**
-   * Base name of the file.
-   */
-  std::string name;
-
-  /**
-   * Absolute HTTP URI.
-   */
-  std::string uri;
-
-  /**
-   * A short symbolic name for the area.  Empty means this file is
-   * global.
-   */
-  NarrowString<8> area;
-
-  FileType type;
-
-  bool IsEmpty() const {
-    return name.empty();
-  }
-
-  bool IsValid() const {
-    return !name.empty() && !uri.empty();
-  }
-
-  void Clear() {
-    name.clear();
-    uri.clear();
-    area.clear();
-    type = FileType::UNKNOWN;
-  }
-
-  const char *GetName() const {
-    return name.c_str();
-  }
-
-  const char *GetURI() const {
-    return uri.c_str();
-  }
-
-  const char *GetArea() const {
-    return area;
-  }
+enum class FileType : uint8_t {
+  UNKNOWN,
+  AIRSPACE,
+  WAYPOINT,
+  MAP,
+  FLARMNET,
 };
 
 #endif
