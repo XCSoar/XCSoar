@@ -28,6 +28,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Process.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <vector>
 #include <windef.h> /* for MAX_PATH */
@@ -38,7 +39,7 @@ struct ListItem
   StaticString<MAX_PATH> path;
 
   bool operator<(const ListItem &i2) const {
-    return _tcscmp(name, i2.name) < 0;
+    return StringCollate(name, i2.name) < 0;
   }
 };
 

@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "ComboList.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <algorithm>
 
 #include <stdlib.h>
-#include <string.h>
 
 ComboList::Item::Item(int _int_value,
                       const TCHAR *_string_value,
@@ -74,7 +74,7 @@ void
 ComboList::Sort()
 {
   std::sort(items.begin(), items.end(), [](const Item *a, const Item *b){
-      return _tcscmp(a->display_string, b->display_string) < 0;
+      return StringCollate(a->display_string, b->display_string) < 0;
     });
 }
 

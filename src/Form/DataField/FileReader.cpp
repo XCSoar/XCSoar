@@ -25,6 +25,7 @@ Copyright_License {
 #include "ComboList.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 
@@ -282,7 +283,7 @@ DataFieldFileReader::Sort()
   std::sort(files.begin(), files.end(), [](const Item &a,
                                            const Item &b) {
               // Compare by filename
-              return _tcscmp(a.filename, b.filename) < 0;
+              return StringCollate(a.filename, b.filename) < 0;
             });
 }
 

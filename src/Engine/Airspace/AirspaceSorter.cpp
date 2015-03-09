@@ -3,8 +3,8 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceVisitor.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Util/StringAPI.hpp"
 
-#include <string.h>
 #include <algorithm>
 
 void
@@ -91,8 +91,8 @@ SortByName(AirspaceSelectInfoVector &vec)
 {
   auto compare = [&] (const AirspaceSelectInfo &elem1,
                       const AirspaceSelectInfo &elem2) {
-    return _tcscmp(elem1.GetAirspace().GetName(),
-                   elem2.GetAirspace().GetName()) < 0;
+    return StringCollate(elem1.GetAirspace().GetName(),
+                         elem2.GetAirspace().GetName()) < 0;
   };
 
   std::sort(vec.begin(), vec.end(), compare);
