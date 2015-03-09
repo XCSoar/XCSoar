@@ -49,6 +49,7 @@ struct NOAAListItem
   StaticString<5> code;
   NOAAStore::iterator iterator;
 
+  gcc_pure
   bool operator<(const NOAAListItem &i2) const {
     return _tcscmp(code, i2.code) < 0;
   }
