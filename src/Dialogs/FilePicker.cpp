@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "FilePicker.hpp"
 #include "ComboPicker.hpp"
-#include "Form/DataField/FileReader.hpp"
+#include "Form/DataField/File.hpp"
 #include "Form/DataField/ComboList.hpp"
 
 bool
@@ -31,7 +31,7 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
 {
   assert(patterns != NULL);
 
-  DataFieldFileReader df;
+  FileDataField df;
   df.ScanMultiplePatterns(patterns);
   const ComboList combo_list = df.CreateComboList(nullptr);
   if (combo_list.size() == 0)

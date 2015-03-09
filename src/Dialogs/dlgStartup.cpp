@@ -32,7 +32,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/DataField/FileReader.hpp"
+#include "Form/DataField/File.hpp"
 #include "Language/Language.hpp"
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
@@ -171,8 +171,7 @@ SelectProfile(const TCHAR *path)
 bool
 StartupWidget::Save(bool &changed)
 {
-  const DataFieldFileReader &dff =
-    (const DataFieldFileReader &)GetDataField(PROFILE);
+  const auto &dff = (const FileDataField &)GetDataField(PROFILE);
   SelectProfile(dff.GetPathFile());
   changed = true;
 
@@ -185,23 +184,23 @@ dlgStartupShowModal()
   LogFormat("Startup dialog");
 
   /* scan all profile files */
-  DataFieldFileReader *dfe = new DataFieldFileReader();
-  dfe->ScanDirectoryTop(_T("*.prf"));
+  auto *dff = new FileDataField();
+  dff->ScanDirectoryTop(_T("*.prf"));
 
   /* skip this dialog if there is only one (or none) */
-  if (dfe->GetNumFiles() <= 1) {
-    SelectProfile(dfe->GetPathFile());
-    delete dfe;
+  if (dff->GetNumFiles() <= 1) {
+    SelectProfile(dff->GetPathFile());
+    delete dff;
     return true;
   }
 
   /* preselect the most recently used profile */
   unsigned best_index = 0;
   uint64_t best_timestamp = 0;
-  unsigned length = dfe->size();
+  unsigned length = dff->size();
 
   for (unsigned i = 0; i < length; ++i) {
-    const TCHAR *path = dfe->GetItem(i);
+    const TCHAR *path = dff->GetItem(i);
     uint64_t timestamp = File::GetLastModification(path);
     if (timestamp > best_timestamp) {
       best_timestamp = timestamp;
@@ -209,13 +208,13 @@ dlgStartupShowModal()
     }
   }
 
-  dfe->Set(best_index);
+  dff->Set(best_index);
 
   /* show the dialog */
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
   TwoWidgets widget(new LogoQuitWidget(look.button, dialog),
-                    new StartupWidget(look, dialog, dfe));
+                    new StartupWidget(look, dialog, dff));
 
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
 

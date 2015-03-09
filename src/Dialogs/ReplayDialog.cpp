@@ -30,7 +30,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
-#include "Form/DataField/FileReader.hpp"
+#include "Form/DataField/File.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Language/Language.hpp"
 
@@ -84,7 +84,7 @@ ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                   nullptr,
                   _T("*.nmea\0*.igc\0"),
                   true);
-  ((DataFieldFileReader *)file->GetDataField())->Lookup(replay->GetFilename());
+  ((FileDataField *)file->GetDataField())->Lookup(replay->GetFilename());
   file->RefreshDisplay();
 
   AddFloat(_("Rate"),
@@ -104,8 +104,7 @@ ReplayControlWidget::OnStopClicked()
 inline void
 ReplayControlWidget::OnStartClicked()
 {
-  const DataFieldFileReader &df = (const DataFieldFileReader &)
-    GetDataField(FILE);
+  const auto &df = (const FileDataField &)GetDataField(FILE);
   const TCHAR *path = df.GetPathFile();
   if (!replay->Start(path))
     ShowMessageBox(_("Could not open IGC file!"),

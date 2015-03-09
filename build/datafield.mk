@@ -7,7 +7,7 @@ DATA_FIELD_SOURCES = \
 	$(DATA_FIELD_SRC_DIR)/Boolean.cpp \
 	$(DATA_FIELD_SRC_DIR)/ComboList.cpp \
 	$(DATA_FIELD_SRC_DIR)/Enum.cpp \
-	$(DATA_FIELD_SRC_DIR)/FileReader.cpp \
+	$(DATA_FIELD_SRC_DIR)/File.cpp \
 	$(DATA_FIELD_SRC_DIR)/Number.cpp \
 	$(DATA_FIELD_SRC_DIR)/Float.cpp \
 	$(DATA_FIELD_SRC_DIR)/Angle.cpp \

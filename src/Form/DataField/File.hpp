@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_FILE_READER_HPP
-#define XCSOAR_DATA_FIELD_FILE_READER_HPP
+#ifndef XCSOAR_FILE_DATA_FIELD_HPP
+#define XCSOAR_FILE_DATA_FIELD_HPP
 
 #include "Base.hpp"
 #include "Util/StaticArray.hpp"
@@ -35,7 +35,7 @@ Copyright_License {
  * files matching a suffix.  First entry is always blank for null entry.
  * 
  */
-class DataFieldFileReader final : public DataField {
+class FileDataField final : public DataField {
   typedef StaticArray<StaticString<32>, 8> PatternList;
 
 public:
@@ -107,10 +107,10 @@ private:
 
 public:
   /**
-   * Constructor of the DataFieldFileReader class
+   * Constructor of the FileDataField class
    * @param OnDataAccess
    */
-  DataFieldFileReader(DataFieldListener *listener=nullptr);
+  FileDataField(DataFieldListener *listener=nullptr);
 
   /**
    * Adds a filename/filepath couple to the filelist
@@ -185,7 +185,7 @@ protected:
    * Hack for our "const" methods, to allow them to load on demand.
    */
   void EnsureLoadedDeconst() const {
-    const_cast<DataFieldFileReader *>(this)->EnsureLoaded();
+    const_cast<FileDataField *>(this)->EnsureLoaded();
   }
 };
 

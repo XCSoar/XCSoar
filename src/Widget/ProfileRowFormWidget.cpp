@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "RowFormWidget.hpp"
 #include "Form/Edit.hpp"
-#include "Form/DataField/FileReader.hpp"
+#include "Form/DataField/File.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "Math/Angle.hpp"
@@ -38,7 +38,7 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
                              bool nullable)
 {
   WndProperty *edit = Add(label, help);
-  DataFieldFileReader *df = new DataFieldFileReader();
+  auto *df = new FileDataField();
   edit->SetDataField(df);
 
   if (nullable)
@@ -126,8 +126,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 bool
 RowFormWidget::SaveValueFileReader(unsigned i, const char *registry_key)
 {
-  const DataFieldFileReader *dfe =
-    (const DataFieldFileReader *)GetControl(i).GetDataField();
+  const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
   TCHAR new_value[MAX_PATH];
   _tcscpy(new_value, dfe->GetPathFile());
   ContractLocalPath(new_value);
