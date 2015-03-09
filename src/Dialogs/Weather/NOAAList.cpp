@@ -50,7 +50,7 @@ struct NOAAListItem
   NOAAStore::iterator iterator;
 
   bool operator<(const NOAAListItem &i2) const {
-    return _tcscmp(code, i2.code) == -1;
+    return _tcscmp(code, i2.code) < 0;
   }
 };
 
