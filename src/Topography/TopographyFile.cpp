@@ -127,7 +127,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
   case MS_DONE:
     /* screen is outside of map bounds */
-    return true;
+    return false;
 
   case MS_SUCCESS:
     break;
