@@ -105,10 +105,8 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
   // we will make sure we update at least one cache per call
   // to make sure eventually everything gets refreshed
   unsigned num_updated = 0;
-  for (auto it = files.begin(), end = files.end(); it != end; ++it) {
-    TopographyFile &file = **it;
-
-    if (file.Update(m_projection)) {
+  for (auto *file : files) {
+    if (file->Update(m_projection)) {
       ++num_updated;
       if (num_updated >= max_update)
         break;
@@ -297,10 +295,8 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 void
 TopographyStore::Reset()
 {
-  for (auto it = files.begin(), end = files.end(); it != end; ++it) {
-    TopographyFile *file = *it;
+  for (auto *file : files)
     delete file;
-  }
 
   files.clear();
 }
