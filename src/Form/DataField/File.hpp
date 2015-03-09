@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FILE_DATA_FIELD_HPP
 
 #include "Base.hpp"
+#include "Repository/FileType.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/StaticString.hpp"
 
@@ -77,6 +78,8 @@ private:
   /** FileList item array */
   StaticArray<Item, MAX_FILES> files;
 
+  FileType file_type;
+
   /**
    * Has the file list already been loaded?  This class tries to
    * postpone disk access for as long as possible, to reduce UI
@@ -106,6 +109,14 @@ public:
    * @param OnDataAccess
    */
   FileDataField(DataFieldListener *listener=nullptr);
+
+  FileType GetFileType() const {
+    return file_type;
+  }
+
+  void SetFileType(FileType _file_type) {
+    file_type = _file_type;
+  }
 
   /**
    * Adds a filename/filepath couple to the filelist
