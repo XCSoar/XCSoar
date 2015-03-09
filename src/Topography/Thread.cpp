@@ -40,11 +40,19 @@ void
 TopographyThread::Trigger(const WindowProjection &_projection)
 {
   const GeoBounds new_bounds = _projection.GetScreenBounds();
-  if (last_bounds.IsValid() && last_bounds.IsInside(new_bounds))
-    /* the cache is still fresh */
-    return;
+  if (last_bounds.IsValid() && last_bounds.IsInside(new_bounds)) {
+    /* still inside cache bounds - now check if we crossed a scale
+       threshold for at least one file, which would mean we have to
+       update a file which was not updated for the current cache
+       bounds */
+    if (negative(scale_threshold) ||
+        _projection.GetMapScale() >= scale_threshold)
+      /* the cache is still fresh */
+      return;
+  }
 
   last_bounds = new_bounds.Scale(fixed(1.1));
+  scale_threshold = store.GetNextScaleThreshold(_projection.GetMapScale());
 
   {
     const ScopeLock protect(mutex);

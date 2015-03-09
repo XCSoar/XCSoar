@@ -201,6 +201,28 @@ public:
     return map_scale <= label_threshold;
   }
 
+  /**
+   * Returns the map scale threshold that will be reached next by
+   * zooming in.  This is used to decide when to rescan shapes that
+   * must be loaded.  A negative value is returned when all thresholds
+   * have been reached already.
+   */
+  gcc_pure
+  fixed GetNextScaleThreshold(fixed map_scale) const {
+    return map_scale <= scale_threshold
+      ? (map_scale <= label_threshold
+         /* both thresholds reached: not relevant */
+         ? fixed(-1)
+         /* only label_threshold not yet reached */
+         : label_threshold)
+      /* scale_threshold not yet reached */
+      : (map_scale <= label_threshold
+         /* only scale_threshold not yet reached */
+         ? scale_threshold
+         /* choose the bigger threshold, that will trigger next */
+         : std::max(scale_threshold, label_threshold));
+  }
+
   bool IsLabelImportant(fixed map_scale) const {
     return map_scale <= important_label_threshold;
   }

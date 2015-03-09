@@ -95,6 +95,19 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { nullptr, ResourceId::Null(), ResourceId::Null() }
 };
 
+fixed
+TopographyStore::GetNextScaleThreshold(fixed map_scale) const
+{
+  fixed result(-1);
+  for (auto *file : files) {
+    fixed threshold = file->GetNextScaleThreshold(map_scale);
+    if (threshold > result)
+      result = threshold;
+  }
+
+  return result;
+}
+
 unsigned
 TopographyStore::ScanVisibility(const WindowProjection &m_projection,
                               unsigned max_update)

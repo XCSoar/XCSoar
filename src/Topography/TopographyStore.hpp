@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef TOPOGRAPHY_STORE_HPP
 #define TOPOGRAPHY_STORE_HPP
 
+#include "Math/fixed.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -70,6 +72,12 @@ public:
   const TopographyFile &operator [](unsigned i) const {
     return *files[i];
   }
+
+  /**
+   * @see TopographyFile::GetNextScaleThreshold()
+   */
+  gcc_pure
+  fixed GetNextScaleThreshold(fixed map_scale) const;
 
   /**
    * @param max_update the maximum number of files updated in this
