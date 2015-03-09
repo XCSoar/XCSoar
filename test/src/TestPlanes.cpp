@@ -27,6 +27,7 @@
 #include "IO/KeyValueFileWriter.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 static void
 TestReader()
@@ -91,29 +92,29 @@ TestWriter()
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != NULL) {
-    if (_tcscmp(line, _T("Registration=\"D-4449\"")) == 0)
+    if (StringIsEqual(line, _T("Registration=\"D-4449\"")))
       found1 = true;
-    if (_tcscmp(line, _T("CompetitionID=\"TH\"")) == 0)
+    if (StringIsEqual(line, _T("CompetitionID=\"TH\"")))
       found2 = true;
-    if (_tcscmp(line, _T("Type=\"Hornet\"")) == 0)
+    if (StringIsEqual(line, _T("Type=\"Hornet\"")))
       found3 = true;
-    if (_tcscmp(line, _T("Handicap=\"100\"")) == 0)
+    if (StringIsEqual(line, _T("Handicap=\"100\"")))
       found4 = true;
-    if (_tcscmp(line, _T("PolarName=\"Hornet\"")) == 0)
+    if (StringIsEqual(line, _T("PolarName=\"Hornet\"")))
       found5 = true;
-    if (_tcscmp(line, _T("PolarInformation=\"80.000,-0.606,120.000,-0.990,160.000,-1.918\"")) == 0)
+    if (StringIsEqual(line, _T("PolarInformation=\"80.000,-0.606,120.000,-0.990,160.000,-1.918\"")))
       found6 = true;
-    if (_tcscmp(line, _T("PolarReferenceMass=\"318.000000\"")) == 0)
+    if (StringIsEqual(line, _T("PolarReferenceMass=\"318.000000\"")))
       found7 = true;
-    if (_tcscmp(line, _T("PolarDryMass=\"302.000000\"")) == 0)
+    if (StringIsEqual(line, _T("PolarDryMass=\"302.000000\"")))
       found8 = true;
-    if (_tcscmp(line, _T("MaxBallast=\"100.000000\"")) == 0)
+    if (StringIsEqual(line, _T("MaxBallast=\"100.000000\"")))
       found9 = true;
-    if (_tcscmp(line, _T("DumpTime=\"90.000000\"")) == 0)
+    if (StringIsEqual(line, _T("DumpTime=\"90.000000\"")))
       found10 = true;
-    if (_tcscmp(line, _T("MaxSpeed=\"41.666000\"")) == 0)
+    if (StringIsEqual(line, _T("MaxSpeed=\"41.666000\"")))
       found11 = true;
-    if (_tcscmp(line, _T("WingArea=\"9.800000\"")) == 0)
+    if (StringIsEqual(line, _T("WingArea=\"9.800000\"")))
       found12 = true;
 
     count++;

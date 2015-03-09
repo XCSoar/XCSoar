@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <stdlib.h>
 
@@ -115,9 +116,9 @@ PZAN5(NMEAInputLine &line, NMEAInfo &info)
   char state[3];
   line.Read(state, 3);
 
-  if (strcmp(state, "SF") == 0)
+  if (StringIsEqual(state, "SF"))
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
-  else if (strcmp(state, "VA") == 0)
+  else if (StringIsEqual(state, "VA"))
     info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
   else
     info.switch_state.flight_mode = SwitchState::FlightMode::UNKNOWN;

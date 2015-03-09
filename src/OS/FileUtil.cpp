@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "OS/FileUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Compatibility/path.h"
@@ -77,7 +78,7 @@ Directory::Exists(const TCHAR* path)
 static bool
 IsDots(const TCHAR* str)
 {
-  return !(_tcscmp(str, _T(".")) && _tcscmp(str, _T("..")));
+  return StringIsEqual(str, _T(".")) || StringIsEqual(str, _T(".."));
 }
 #endif
 

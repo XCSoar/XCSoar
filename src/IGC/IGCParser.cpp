@@ -29,8 +29,8 @@ Copyright_License {
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Util/CharUtil.hpp"
+#include "Util/StringAPI.hpp"
 
-#include <string.h>
 #include <stdlib.h>
 
 /**
@@ -263,25 +263,25 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
     const char *start = buffer + extension.start - 1;
     const char *finish = buffer + extension.finish;
 
-    if (strcmp(extension.code, "ENL") == 0)
+    if (StringIsEqual(extension.code, "ENL"))
       ParseExtensionValue(start, finish, fix.enl);
-    else if (strcmp(extension.code, "RPM") == 0)
+    else if (StringIsEqual(extension.code, "RPM"))
       ParseExtensionValue(start, finish, fix.rpm);
-    else if (strcmp(extension.code, "HDM") == 0)
+    else if (StringIsEqual(extension.code, "HDM"))
       ParseExtensionValue(start, finish, fix.hdm);
-    else if (strcmp(extension.code, "HDT") == 0)
+    else if (StringIsEqual(extension.code, "HDT"))
       ParseExtensionValue(start, finish, fix.hdt);
-    else if (strcmp(extension.code, "TRM") == 0)
+    else if (StringIsEqual(extension.code, "TRM"))
       ParseExtensionValue(start, finish, fix.trm);
-    else if (strcmp(extension.code, "TRT") == 0)
+    else if (StringIsEqual(extension.code, "TRT"))
       ParseExtensionValue(start, finish, fix.trt);
-    else if (strcmp(extension.code, "GSP") == 0)
+    else if (StringIsEqual(extension.code, "GSP"))
       ParseExtensionValueN(start, finish, 3, fix.gsp);
-    else if (strcmp(extension.code, "IAS") == 0)
+    else if (StringIsEqual(extension.code, "IAS"))
       ParseExtensionValueN(start, finish, 3, fix.ias);
-    else if (strcmp(extension.code, "TAS") == 0)
+    else if (StringIsEqual(extension.code, "TAS"))
       ParseExtensionValueN(start, finish, 3, fix.tas);
-    else if (strcmp(extension.code, "SIU") == 0)
+    else if (StringIsEqual(extension.code, "SIU"))
       ParseExtensionValue(start, finish, fix.siu);
   }
 

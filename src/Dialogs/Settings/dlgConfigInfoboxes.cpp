@@ -39,6 +39,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -403,7 +404,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
     for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i)
       if (data.contents[i] != data_r.contents[i])
         changed = true;
-    changed |= (_tcscmp(data.name, data_r.name) != 0);
+    changed |= !StringIsEqual(data.name, data_r.name);
 
     if (changed)
       data_r = data;

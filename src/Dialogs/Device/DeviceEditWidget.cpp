@@ -681,7 +681,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::PTY:
     /* Serial Port */
     if (new_type == config.port_type &&
-        _tcscmp(config.path, df.GetAsString()) == 0)
+        StringIsEqual(config.path, df.GetAsString()))
       return false;
 
     config.port_type = new_type;
@@ -691,7 +691,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::RFCOMM:
     /* Bluetooth */
     if (new_type == config.port_type &&
-        _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
+        StringIsEqual(config.bluetooth_mac, df.GetAsString()))
       return false;
 
     config.port_type = new_type;

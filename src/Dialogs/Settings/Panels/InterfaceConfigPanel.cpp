@@ -261,8 +261,8 @@ InterfaceConfigPanel::Save(bool &_changed)
       break;
     }
 
-    if (_tcscmp(old_value, new_value) != 0 &&
-        _tcscmp(old_base, new_base) != 0) {
+    if (!StringIsEqual(old_value, new_value) &&
+        !StringIsEqual(old_base, new_base)) {
       Profile::Set(ProfileKeys::LanguageFile, new_value);
       LanguageChanged = changed = true;
     }

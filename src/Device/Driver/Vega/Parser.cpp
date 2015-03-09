@@ -112,15 +112,15 @@ VegaDevice::PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   char name[80];
   line.Read(name, 80);
 
-  if (strcmp(name, "ERROR") == 0)
+  if (StringIsEqual(name, "ERROR"))
     // ignore error responses...
     return true;
 
   int value = line.Read(0);
 
-  if (strcmp(name, "ToneDeadbandCruiseLow") == 0)
+  if (StringIsEqual(name, "ToneDeadbandCruiseLow"))
     value = std::max(value, -value);
-  if (strcmp(name, "ToneDeadbandCirclingLow") == 0)
+  if (StringIsEqual(name, "ToneDeadbandCirclingLow"))
     value = std::max(value, -value);
 
   settings.Lock();
@@ -226,25 +226,25 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (memcmp(type, "$PD", 3) == 0)
     detected = true;
 
-  if (strcmp(type, "$PDSWC") == 0)
+  if (StringIsEqual(type, "$PDSWC"))
     return PDSWC(line, info, volatile_data);
-  else if (strcmp(type, "$PDAAV") == 0)
+  else if (StringIsEqual(type, "$PDAAV"))
     return PDAAV(line, info);
-  else if (strcmp(type, "$PDVSC") == 0)
+  else if (StringIsEqual(type, "$PDVSC"))
     return PDVSC(line, info);
-  else if (strcmp(type, "$PDVDV") == 0)
+  else if (StringIsEqual(type, "$PDVDV"))
     return PDVDV(line, info);
-  else if (strcmp(type, "$PDVDS") == 0)
+  else if (StringIsEqual(type, "$PDVDS"))
     return PDVDS(line, info);
-  else if (strcmp(type, "$PDVVT") == 0)
+  else if (StringIsEqual(type, "$PDVVT"))
     return PDVVT(line, info);
-  else if (strcmp(type, "$PDVSD") == 0) {
+  else if (StringIsEqual(type, "$PDVSD")) {
     const auto message = line.Rest();
     StaticString<256> buffer;
     buffer.SetASCII(message.begin(), message.end());
     Message::AddMessage(buffer);
     return true;
-  } else if (strcmp(type, "$PDTSM") == 0)
+  } else if (StringIsEqual(type, "$PDTSM"))
     return PDTSM(line, info);
   else
     return false;

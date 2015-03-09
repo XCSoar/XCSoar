@@ -28,13 +28,14 @@ Copyright_License {
 #include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringAPI.hpp"
 
 void
 ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock)
 {
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
-  if (strcmp(type, "A") != 0)
+  if (!StringIsEqual(type, "A"))
     return;
 
   error.severity = (FlarmError::Severity)
@@ -49,7 +50,7 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
 {
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
-  if (strcmp(type, "A") != 0)
+  if (!StringIsEqual(type, "A"))
     return;
 
   line.Read(version.hardware_version.buffer(),

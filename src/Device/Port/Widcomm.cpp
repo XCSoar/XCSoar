@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Widcomm.hpp"
 #include "Config/Registry.hpp"
+#include "Util/StringAPI.hpp"
 
 static bool
 FindDevice(const TCHAR *name, TCHAR *result, size_t result_size)
@@ -35,7 +36,7 @@ FindDevice(const TCHAR *name, TCHAR *result, size_t result_size)
   for (unsigned i = 0; drivers_active.EnumKey(i, key_name, 64); ++i) {
     RegistryKey device(drivers_active, key_name, true);
     if (!device.error() && device.GetValue(_T("Name"), value, 64) &&
-        _tcscmp(name, value) == 0)
+        StringIsEqual(name, value))
       return device.GetValue(_T("Key"), result, result_size);
   }
 
@@ -55,6 +56,6 @@ IsWidcommDevice(const TCHAR *name)
 
   TCHAR dll[64];
   return registry.GetValue(_T("Dll"), dll, 64) &&
-    _tcscmp(dll, _T("btcedrivers.dll"));
+    StringIsEqual(dll, _T("btcedrivers.dll"));
 }
 

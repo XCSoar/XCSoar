@@ -25,6 +25,7 @@
 #include <iostream>
 
 #include "Util/RadixTree.hpp"
+#include "Util/StringAPI.hpp"
 #include "TestUtil.hpp"
 
 struct Sum {
@@ -96,15 +97,15 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T(""), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("f")) == 0);
+  ok1(StringIsEqual(suggest, _T("f")));
 
   suggest = irt.Suggest(_T("f"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("o")) == 0);
+  ok1(StringIsEqual(suggest, _T("o")));
 
   suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("")) == 0);
+  ok1(StringIsEqual(suggest, _T("")));
 
   irt.Add(_T("bar"), 1);
   ok1(all_sum(irt) == 43);
@@ -113,11 +114,11 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T(""), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("bf")) == 0);
+  ok1(StringIsEqual(suggest, _T("bf")));
 
   suggest = irt.Suggest(_T("ba"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("r")) == 0);
+  ok1(StringIsEqual(suggest, _T("r")));
 
   irt.Add(_T("foo"), 2);
   ok1(all_sum(irt) == 45);
@@ -134,7 +135,7 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("")) == 0);
+  ok1(StringIsEqual(suggest, _T("")));
 
   irt.Add(_T("baz"), 3);
   ok1(all_sum(irt) == 48);
@@ -145,11 +146,11 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T(""), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("bf")) == 0);
+  ok1(StringIsEqual(suggest, _T("bf")));
 
   suggest = irt.Suggest(_T("ba"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("rz")) == 0);
+  ok1(StringIsEqual(suggest, _T("rz")));
 
   irt.Add(_T("foobar"), 4);
   ok1(all_sum(irt) == 52);
@@ -160,7 +161,7 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("b")) == 0);
+  ok1(StringIsEqual(suggest, _T("b")));
 
   irt.Add(_T("fo"), 5);
   ok1(all_sum(irt) == 57);
@@ -177,7 +178,7 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("bz")) == 0);
+  ok1(StringIsEqual(suggest, _T("bz")));
 
   irt.Add(_T("fooy"), 7);
   ok1(all_sum(irt) == 70);
@@ -187,7 +188,7 @@ int main(int argc, char **argv)
 
   suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
-  ok1(_tcscmp(suggest, _T("byz")) == 0);
+  ok1(StringIsEqual(suggest, _T("byz")));
 
   irt.Add(_T("foo"), 8);
   ok1(all_sum(irt) == 78);

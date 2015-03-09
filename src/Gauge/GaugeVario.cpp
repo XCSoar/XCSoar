@@ -364,7 +364,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 
   canvas.SetBackgroundTransparent();
 
-  if (!IsPersistent() || (dirty && _tcscmp(label_info->last_text, label) != 0)) {
+  if (!IsPersistent() || (dirty && !StringIsEqual(label_info->last_text, label))) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
     tsize = canvas.CalcTextSize(label);

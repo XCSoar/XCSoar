@@ -57,6 +57,7 @@ Copyright_License {
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/KRT2.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -113,7 +114,7 @@ FindDriverByName(const TCHAR *name)
 {
   for (auto i = driver_list; *i != nullptr; ++i) {
     const DeviceRegister &driver = **i;
-    if (_tcscmp(driver.name, name) == 0)
+    if (StringIsEqual(driver.name, name))
       return &driver;
   }
 
@@ -127,7 +128,7 @@ FindDriverDisplayName(const TCHAR *name)
 
   for (auto i = driver_list; *i != nullptr; ++i) {
     const DeviceRegister &driver = **i;
-    if (_tcscmp(driver.name, name) == 0)
+    if (StringIsEqual(driver.name, name))
       return driver.display_name;
   }
 

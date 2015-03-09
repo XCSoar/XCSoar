@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/UTF8.hpp"
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
@@ -47,9 +48,9 @@ import_label(const char *src)
     return nullptr;
 
   src = StripLeft(src);
-  if (strcmp(src, "RAILWAY STATION") == 0 ||
-      strcmp(src, "RAILROAD STATION") == 0 ||
-      strcmp(src, "UNK") == 0)
+  if (StringIsEqual(src, "RAILWAY STATION") ||
+      StringIsEqual(src, "RAILROAD STATION") ||
+      StringIsEqual(src, "UNK"))
     return nullptr;
 
 #ifdef _UNICODE

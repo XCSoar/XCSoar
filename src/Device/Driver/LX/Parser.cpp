@@ -241,7 +241,7 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
 
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
-  if (strcmp(key, "SET") == 0 && type[0] == 'A') {
+  if (StringIsEqual(key, "SET") && type[0] == 'A') {
     char name[64];
     line.Read(name, ARRAY_SIZE(name));
 
@@ -251,18 +251,18 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
       settings.Set(name, std::string(value.begin(), value.end()));
       settings.Unlock();
     }
-  } else if (strcmp(key, "INFO") == 0 && type[0] == 'A') {
+  } else if (StringIsEqual(key, "INFO") && type[0] == 'A') {
     ParseNanoInfo(line, device);
-  } else if (strcmp(key, "GPSINFO") == 0 && type[0] == 'A') {
+  } else if (StringIsEqual(key, "GPSINFO") && type[0] == 'A') {
     /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
        sentence with the "GPS" prefix */
 
     char name[64];
     line.Read(name, ARRAY_SIZE(name));
 
-    if (strcmp(name, "LXWP1") == 0) {
+    if (StringIsEqual(name, "LXWP1")) {
       LXWP1(line, secondary_device);
-    } else if (strcmp(name, "INFO") == 0) {
+    } else if (StringIsEqual(name, "INFO")) {
       line.Read(type, ARRAY_SIZE(type));
       if (type[0] == 'A')
         ParseNanoInfo(line, secondary_device);

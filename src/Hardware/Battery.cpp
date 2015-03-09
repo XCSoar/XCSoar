@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Battery.hpp"
+#include "Util/StringAPI.hpp"
 
 #ifdef HAVE_BATTERY
 
@@ -138,13 +139,14 @@ UpdateBatteryInfo()
   char* ptr = line;
   while (sscanf(ptr, "%[^=]=%[^\n]\n%n", field, value, &n)==2) {
     ptr += n;
-    if (!strcmp(field,"POWER_SUPPLY_STATUS")) {
-      if (!strcmp(value,"Not charging") || !strcmp(value,"Charging")) {
+    if (StringIsEqual(field,"POWER_SUPPLY_STATUS")) {
+      if (StringIsEqual(value,"Not charging") ||
+          StringIsEqual(value,"Charging")) {
 	Power::External::Status = Power::External::ON;
-      } else if (!strcmp(value,"Discharging")) {
+      } else if (StringIsEqual(value,"Discharging")) {
 	Power::External::Status = Power::External::OFF;
       }
-    } else if (!strcmp(field,"POWER_SUPPLY_CAPACITY")) {
+    } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
       int rem = atoi(value);
       Power::Battery::RemainingPercentValid = true;
       Power::Battery::RemainingPercent = rem;

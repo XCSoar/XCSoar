@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Config/Registry.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <windows.h>
 #include <tchar.h>
@@ -64,11 +65,11 @@ Disable()
 static bool
 Do(LPCTSTR cmd)
 {
-  if (_tcscmp(cmd, _T("uninstall")) == 0)
+  if (StringIsEqual(cmd, _T("uninstall")))
     return Disable() && Uninstall();
-  else if (_tcscmp(cmd, _T("enable")) == 0)
+  else if (StringIsEqual(cmd, _T("enable")))
     return Enable();
-  else if (_tcscmp(cmd, _T("disable")) == 0)
+  else if (StringIsEqual(cmd, _T("disable")))
     return Disable();
   else
     return Install();

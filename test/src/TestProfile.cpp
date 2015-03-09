@@ -23,6 +23,7 @@
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 static void
 TestMap()
@@ -95,9 +96,9 @@ TestWriter()
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != NULL) {
-    if (_tcscmp(line, _T("key1=\"4\"")) == 0)
+    if (StringIsEqual(line, _T("key1=\"4\"")))
       found1 = true;
-    if (_tcscmp(line, _T("key2=\"value2\"")) == 0)
+    if (StringIsEqual(line, _T("key2=\"value2\"")))
       found2 = true;
 
     count++;

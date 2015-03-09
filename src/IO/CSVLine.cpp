@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "NMEA/InputLine.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <algorithm>
 
 #include <assert.h>
-#include <string.h>
 #include <stdlib.h>
 
 static const char *
@@ -83,7 +83,7 @@ CSVLine::ReadCompare(const char *value)
   size_t length = strlen(value);
   char buffer[length + 2];
   Read(buffer, length + 2);
-  return strcmp(buffer, value) == 0;
+  return StringIsEqual(buffer, value);
 }
 
 long

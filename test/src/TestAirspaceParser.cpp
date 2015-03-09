@@ -28,12 +28,12 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringAPI.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
 
 #include <tchar.h>
-#include <string.h>
 
 struct AirspaceClassTestCouple
 {
@@ -92,7 +92,7 @@ TestOpenAir()
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = it->GetAirspace();
-    if (_tcscmp(_T("Circle-Test"), airspace.GetName()) == 0) {
+    if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
 
@@ -100,7 +100,7 @@ TestOpenAir()
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetCenter(), 
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
-    } else if (_tcscmp(_T("Polygon-Test"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
@@ -125,35 +125,35 @@ TestOpenAir()
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30).Flipped()));
-    } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
-      ok1(_tcscmp(_T("130.125 MHz"), airspace.GetRadioText().c_str()) == 0);
-    } else if (_tcscmp(_T("Height-Test-1"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
+      ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+    } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude,
                  Units::ToSysUnit(fixed(2000), Unit::FEET)));
-    } else if (_tcscmp(_T("Height-Test-2"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-2"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 0));
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 65));
-    } else if (_tcscmp(_T("Height-Test-3"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-3"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(fixed(100), Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
-    } else if (_tcscmp(_T("Height-Test-4"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-4"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
-    } else if (_tcscmp(_T("Height-Test-5"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-5"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude, 450));
-    } else if (_tcscmp(_T("Height-Test-6"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-6"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(fixed(50), Unit::FEET)));
@@ -161,7 +161,7 @@ TestOpenAir()
       ok1(equals(airspace.GetTop().flight_level, 50));
     } else {
       for (unsigned i = 0; i < ARRAY_SIZE(classes); ++i) {
-        if (_tcscmp(classes[i].name, airspace.GetName()) == 0)
+        if (StringIsEqual(classes[i].name, airspace.GetName()))
           ok1(airspace.GetType() == classes[i].type);
       }
     }
@@ -199,7 +199,7 @@ TestTNP()
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = it->GetAirspace();
-    if (_tcscmp(_T("Circle-Test"), airspace.GetName()) == 0) {
+    if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
 
@@ -207,7 +207,7 @@ TestTNP()
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetCenter(), 
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
-    } else if (_tcscmp(_T("Polygon-Test"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
@@ -232,35 +232,35 @@ TestTNP()
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30).Flipped()));
-    } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
-      ok1(_tcscmp(_T("130.125 MHz"), airspace.GetRadioText().c_str()) == 0);
-    } else if (_tcscmp(_T("Height-Test-1"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
+      ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+    } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude,
                  Units::ToSysUnit(fixed(2000), Unit::FEET)));
-    } else if (_tcscmp(_T("Height-Test-2"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-2"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 0));
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 65));
-    } else if (_tcscmp(_T("Height-Test-3"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-3"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(fixed(100), Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
-    } else if (_tcscmp(_T("Height-Test-4"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-4"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
-    } else if (_tcscmp(_T("Height-Test-5"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-5"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude, 450));
-    } else if (_tcscmp(_T("Height-Test-6"), airspace.GetName()) == 0) {
+    } else if (StringIsEqual(_T("Height-Test-6"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(fixed(50), Unit::FEET)));
@@ -268,7 +268,7 @@ TestTNP()
       ok1(equals(airspace.GetTop().flight_level, 50));
     } else {
       for (unsigned i = 0; i < ARRAY_SIZE(classes); ++i) {
-        if (_tcscmp(classes[i].name, airspace.GetName()) == 0)
+        if (StringIsEqual(classes[i].name, airspace.GetName()))
           ok1(airspace.GetType() == classes[i].type);
       }
     }

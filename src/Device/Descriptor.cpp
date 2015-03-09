@@ -35,6 +35,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
@@ -243,7 +244,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
   port = _port;
 
   parser.Reset();
-  parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
+  parser.SetReal(!StringIsEqual(driver->name, _T("Condor")));
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
@@ -599,7 +600,7 @@ bool
 DeviceDescriptor::IsDriver(const TCHAR *name) const
 {
   return driver != nullptr
-    ? _tcscmp(driver->name, name) == 0
+    ? StringIsEqual(driver->name, name)
     : false;
 }
 
@@ -630,7 +631,7 @@ DeviceDescriptor::IsManageable() const
     if (driver->IsManageable())
       return true;
 
-    if (_tcscmp(driver->name, _T("LX")) == 0 && device != nullptr) {
+    if (StringIsEqual(driver->name, _T("LX")) && device != nullptr) {
       const LXDevice &lx = *(const LXDevice *)device;
       return lx.IsV7() || lx.IsNano() || lx.IsLX16xx();
     }

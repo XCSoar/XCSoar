@@ -25,6 +25,7 @@ Copyright_License {
 #include "Queue.hpp"
 #include "../Shared/Event.hpp"
 #include "IO/Async/IOLoop.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <wayland-client.h>
 
@@ -177,14 +178,14 @@ inline void
 WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
                                    const char *interface)
 {
-  if (strcmp(interface, "wl_compositor") == 0)
+  if (StringIsEqual(interface, "wl_compositor"))
     compositor = (wl_compositor *)
       wl_registry_bind(registry, id, &wl_compositor_interface, 1);
-  else if (strcmp(interface, "wl_seat") == 0) {
+  else if (StringIsEqual(interface, "wl_seat")) {
     seat = (wl_seat *)wl_registry_bind(registry, id,
                                          &wl_seat_interface, 1);
     wl_seat_add_listener(seat, &seat_listener, this);
-  } else if (strcmp(interface, "wl_shell") == 0)
+  } else if (StringIsEqual(interface, "wl_shell"))
     shell = (wl_shell *)wl_registry_bind(registry, id,
                                          &wl_shell_interface, 1);
 }

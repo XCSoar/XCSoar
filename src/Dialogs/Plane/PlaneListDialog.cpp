@@ -42,6 +42,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <vector>
 #include <assert.h>

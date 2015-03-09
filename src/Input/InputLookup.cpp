@@ -24,8 +24,7 @@ Copyright_License {
 #include "InputLookup.hpp"
 #include "InputEvents.hpp"
 #include "InputQueue.hpp"
-
-#include <string.h>
+#include "Util/StringAPI.hpp"
 
 // Mapping text names of events to the real thing
 struct Text2EventSTRUCT {
@@ -54,7 +53,7 @@ pt2Event
 InputEvents::findEvent(const TCHAR *data)
 {
   for (unsigned i = 0; Text2Event[i].text != nullptr; ++i)
-    if (_tcscmp(data, Text2Event[i].text) == 0)
+    if (StringIsEqual(data, Text2Event[i].text))
       return Text2Event[i].event;
 
   return nullptr;
@@ -65,7 +64,7 @@ InputEvents::findGCE(const TCHAR *data)
 {
   int i;
   for (i = 0; i < GCE_COUNT; i++) {
-    if (_tcscmp(data, Text2GCE[i]) == 0)
+    if (StringIsEqual(data, Text2GCE[i]))
       return i;
   }
 
@@ -77,7 +76,7 @@ InputEvents::findNE(const TCHAR *data)
 {
   int i;
   for (i = 0; i < NE_COUNT; i++) {
-    if (_tcscmp(data, Text2NE[i]) == 0)
+    if (StringIsEqual(data, Text2NE[i]))
       return i;
   }
 

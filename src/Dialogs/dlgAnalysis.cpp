@@ -576,9 +576,9 @@ AnalysisWidget::NextPage(int Step)
 void
 AnalysisWidget::OnGesture(const TCHAR *gesture)
 {
-  if (_tcscmp(gesture, _T("R")) == 0)
+  if (StringIsEqual(gesture, _T("R")))
     NextPage(-1);
-  else if (_tcscmp(gesture, _T("L")) == 0)
+  else if (StringIsEqual(gesture, _T("L")))
     NextPage(+1);
 }
 

@@ -24,9 +24,9 @@ Copyright_License {
 #include "Product.hpp"
 #include "Main.hpp"
 #include "NativeView.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <assert.h>
-#include <string.h>
 
 bool has_cursor_keys;
 
@@ -40,8 +40,8 @@ IsGalaxyTab22()
   assert(native_view);
 
   return native_view->GetAPILevel() == 8 &&
-    (strcmp(native_view->GetProduct(), "GT-P1000") == 0 ||
-     strcmp(native_view->GetProduct(), "GT-P1010") == 0);
+    (StringIsEqual(native_view->GetProduct(), "GT-P1000") ||
+     StringIsEqual(native_view->GetProduct(), "GT-P1010"));
 }
 
 #endif

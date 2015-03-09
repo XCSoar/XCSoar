@@ -32,7 +32,6 @@ Copyright_License {
 #include <memory>
 
 #include <stdio.h>
-#include <string.h>
 
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
@@ -100,19 +99,19 @@ StatusMessageList::LoadFile(TLineReader &reader)
           break;
       }
     } else {
-      if (_tcscmp(key, _T("key")) == 0) {
+      if (StringIsEqual(key, _T("key"))) {
         if (current.key == NULL)
           current.key = UnescapeBackslash(value);
-      } else if (_tcscmp(key, _T("sound")) == 0) {
+      } else if (StringIsEqual(key, _T("sound"))) {
         if (current.sound == NULL)
           current.sound = UnescapeBackslash(value);
-      } else if (_tcscmp(key, _T("delay")) == 0) {
+      } else if (StringIsEqual(key, _T("delay"))) {
         TCHAR *endptr;
         unsigned ms = ParseUnsigned(value, &endptr);
         if (endptr > value)
           current.delay_ms = ms;
-      } else if (_tcscmp(key, _T("hide")) == 0) {
-        if (_tcscmp(value, _T("yes")) == 0)
+      } else if (StringIsEqual(key, _T("hide"))) {
+        if (StringIsEqual(value, _T("yes")))
           current.visible = false;
       }
     }
@@ -138,7 +137,7 @@ const StatusMessage *
 StatusMessageList::Find(const TCHAR *key) const
 {
   for (int i = list.size() - 1; i > 0; i--)
-    if (_tcscmp(key, list[i].key) == 0)
+    if (StringIsEqual(key, list[i].key))
       return &list[i];
 
   return NULL;

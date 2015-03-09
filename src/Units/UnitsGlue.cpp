@@ -24,9 +24,9 @@ Copyright_License {
 #include "Units/UnitsGlue.hpp"
 #include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <tchar.h>
-#include <string.h>
 
 #ifndef HAVE_POSIX
 #include <windows.h>
@@ -95,7 +95,7 @@ FindLanguage(const TCHAR* lang)
 {
   // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].region_code != nullptr; ++i)
-    if (_tcscmp(language_table[i].region_code, lang) == 0)
+    if (StringIsEqual(language_table[i].region_code, lang))
       return language_table[i].store_index;
 
   return 0;

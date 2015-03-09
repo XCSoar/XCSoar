@@ -58,7 +58,7 @@ IsInternalFile(const TCHAR* str)
   };
 
   for (unsigned i = 0; ifiles[i] != nullptr; i++)
-    if (!_tcscmp(str, ifiles[i]))
+    if (StringIsEqual(str, ifiles[i]))
       return true;
 
   return false;
@@ -150,10 +150,9 @@ DataFieldFileReader::Lookup(const TCHAR *text)
   // Iterate through the filelist
   for (unsigned i = 1; i < files.size(); i++) {
     // If text == pathfile
-    if (_tcscmp(text, files[i].path) == 0) {
+    if (StringIsEqual(text, files[i].path))
       // -> set selection to current element
       current_index = i;
-    }
   }
 }
 
@@ -308,7 +307,7 @@ DataFieldFileReader::CreateComboList(const TCHAR *reference) const
 
     bool found = false;
     for (unsigned j = 1; j < files.size(); j++) {
-      if (j != i && _tcscmp(path, files[j].filename) == 0) {
+      if (j != i && StringIsEqual(path, files[j].filename)) {
         found = true;
         break;
       }

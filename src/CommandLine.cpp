@@ -76,11 +76,11 @@ CommandLine::Parse(Args &args)
       SetPrimaryDataPath(convert);
     }
 #ifdef SIMULATOR_AVAILABLE
-    else if (strcmp(s, "-simulator") == 0) {
+    else if (StringIsEqual(s, "-simulator")) {
       global_simulator_flag = true;
       sim_set_in_cmd_line_flag = true;
     }
-    else if (strcmp(s, "-fly") == 0) {
+    else if (StringIsEqual(s, "-fly")) {
       global_simulator_flag=false;
       sim_set_in_cmd_line_flag=true;
     }
@@ -96,26 +96,26 @@ CommandLine::Parse(Args &args)
       if (*p != '\0')
         args.UsageError();
     }
-    else if (strcmp(s, "-portrait") == 0) {
+    else if (StringIsEqual(s, "-portrait")) {
       width = 480;
       height = 640;
     }
-    else if (strcmp(s, "-square") == 0) {
+    else if (StringIsEqual(s, "-square")) {
       width = 480;
       height = 480;
     }
-    else if (strcmp(s, "-small") == 0) {
+    else if (StringIsEqual(s, "-small")) {
       width = 320;
       height = 240;
     }
 #endif
 #ifdef HAVE_CMDLINE_FULLSCREEN
-    else if (strcmp(s, "-fullscreen") == 0) {
+    else if (StringIsEqual(s, "-fullscreen")) {
       full_screen = true;
     }
 #endif
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
-    else if (strcmp(s, "-console") == 0) {
+    else if (StringIsEqual(s, "-console")) {
       AllocConsole();
       freopen("CONOUT$", "wb", stdout);
     }

@@ -205,7 +205,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration,
   if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
-  if (_tcscmp(&Buffer[9], _T("LOCKED")) == 0)
+  if (StringIsEqual(&Buffer[9], _T("LOCKED")))
     // FAILED! try to declare a task on a airborn recorder
     return false;
 

@@ -43,8 +43,7 @@ ResourceLoader::Init(HINSTANCE hInstance)
 #else /* !WIN32 */
 
 #include "resource_data.h"
-
-#include <string.h>
+#include "Util/StringAPI.hpp"
 
 #endif /* !WIN32 */
 
@@ -74,7 +73,7 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 #else
 
   for (unsigned i = 0; !named_resources[i].data.IsNull(); ++i)
-    if (_tcscmp(named_resources[i].name, name) == 0)
+    if (StringIsEqual(named_resources[i].name, name))
       return named_resources[i].data;
 
   return Data::Null();

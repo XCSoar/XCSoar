@@ -22,6 +22,7 @@
  */
 
 #include "Task/TaskFileSeeYou.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/Macros.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -245,7 +246,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
     const size_t n_params = WaypointReaderBase::
         ExtractParameters(line, params_buffer, params, max_params, true);
 
-    if (_tcscmp(params[0], _T("Options")) == 0) {
+    if (StringIsEqual(params[0], _T("Options"))) {
       // Options line found
       ParseOptions(task_info, params, n_params);
 

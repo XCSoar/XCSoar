@@ -24,10 +24,9 @@ Copyright_License {
 #include "Enum.hpp"
 #include "ComboList.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
 
 #include <algorithm>
-
-#include <string.h>
 
 DataFieldEnum::Entry::~Entry()
 {
@@ -280,7 +279,7 @@ DataFieldEnum::Find(const TCHAR *text) const
   assert(text != nullptr);
 
   for (unsigned int i = 0; i < entries.size(); i++)
-    if (_tcscmp(text, entries[i].GetString()) == 0)
+    if (StringIsEqual(text, entries[i].GetString()))
       return i;
 
   return -1;
