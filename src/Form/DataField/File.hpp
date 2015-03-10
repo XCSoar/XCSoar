@@ -138,6 +138,13 @@ public:
   void Lookup(const TCHAR *text);
 
   /**
+   * Force the value to the given path.  If the path is not in the
+   * file list, add it.  This method does not check whether the file
+   * really exists.
+   */
+  void ForceModify(const TCHAR *path);
+
+  /**
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */

@@ -172,6 +172,25 @@ FileDataField::Lookup(const TCHAR *text)
     current_index = i;
 }
 
+void
+FileDataField::ForceModify(const TCHAR *path)
+{
+  EnsureLoaded();
+
+  auto i = Find(path);
+  if (i >= 0) {
+    if (unsigned(i) == current_index)
+      return;
+  } else {
+    auto &item = files.full() ? files.back() : files.append();
+    item.Set(path);
+    i = files.size() - 1;
+  }
+
+  current_index = i;
+  Modified();
+}
+
 unsigned
 FileDataField::GetNumFiles() const
 {
