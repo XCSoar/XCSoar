@@ -27,12 +27,8 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 
 bool
-FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
+FilePicker(const TCHAR *caption, FileDataField &df)
 {
-  assert(patterns != nullptr);
-
-  FileDataField df;
-  df.ScanMultiplePatterns(patterns);
   const ComboList combo_list = df.CreateComboList(nullptr);
   if (combo_list.size() == 0)
     return false;
@@ -43,6 +39,18 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
 
   const ComboList::Item &item = combo_list[i];
   df.SetFromCombo(item.int_value, item.string_value);
+  return true;
+}
+
+bool
+FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
+{
+  assert(patterns != nullptr);
+
+  FileDataField df;
+  df.ScanMultiplePatterns(patterns);
+  if (!FilePicker(caption, df))
+    return false;
 
   _tcscpy(buffer, df.GetAsString());
   return true;
