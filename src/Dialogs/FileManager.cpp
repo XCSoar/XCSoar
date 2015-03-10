@@ -50,6 +50,7 @@ Copyright_License {
 #endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER
+#include "Repository/Glue.hpp"
 #include "ListPicker.hpp"
 #include "Form/Button.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
@@ -64,8 +65,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
-
-#define REPOSITORY_URI "http://download.xcsoar.org/repository"
 
 static bool
 LocalPath(TCHAR *buffer, const AvailableFile &file)
@@ -317,7 +316,7 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     Net::DownloadManager::AddListener(*this);
     Net::DownloadManager::Enumerate(*this);
 
-    Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
+    EnqueueRepositoryDownload();
   }
 #endif
 }
