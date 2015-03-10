@@ -27,13 +27,14 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 
 bool
-FilePicker(const TCHAR *caption, FileDataField &df)
+FilePicker(const TCHAR *caption, FileDataField &df,
+           const TCHAR *help_text)
 {
   const ComboList combo_list = df.CreateComboList(nullptr);
   if (combo_list.size() == 0)
     return false;
 
-  int i = ComboPicker(caption, combo_list, nullptr);
+  int i = ComboPicker(caption, combo_list, help_text);
   if (i < 0)
     return false;
 
