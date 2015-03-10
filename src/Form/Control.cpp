@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/Control.hpp"
-#include "Form/Internal.hpp"
 #include "Screen/Key.h"
 #include "Dialogs/HelpDialog.hpp"
 
@@ -68,12 +67,4 @@ WindowControl::OnHelp()
   }
 
   return false;
-}
-
-bool
-WindowControl::OnKeyDown(unsigned key_code)
-{
-  KeyTimer(true, key_code);
-
-  return PaintWindow::OnKeyDown(key_code);
 }

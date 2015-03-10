@@ -6,7 +6,6 @@ FORM_SOURCES = \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Renderer/ButtonRenderer.cpp \
 	$(SRC)/Renderer/SymbolRenderer.cpp \
-	$(FORM_SRC_DIR)/Internal.cpp \
 	$(FORM_SRC_DIR)/Control.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
 	$(FORM_SRC_DIR)/SubForm.cpp \

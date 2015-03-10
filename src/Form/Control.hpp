@@ -54,13 +54,6 @@ public:
   virtual ~WindowControl();
 
   /**
-   * The OnKeyDown event is called when a key is pressed while the
-   * control is focused
-   * (derived from Window)
-   */
-  virtual bool OnKeyDown(unsigned key_code) override;
-
-  /**
    * Does this control have a help text?
    */
   bool HasHelp() const {

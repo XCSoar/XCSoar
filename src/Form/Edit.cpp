@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/Edit.hpp"
-#include "Form/Internal.hpp"
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
 #include "Screen/Canvas.hpp"
@@ -71,7 +70,6 @@ WndProperty::OnKeyDown(unsigned key_code)
     return true;
   }
 
-  KeyTimer(true, key_code);
   return WindowControl::OnKeyDown(key_code);
 }
 
@@ -91,8 +89,6 @@ WndProperty::OnSetFocus()
 {
   WindowControl::OnSetFocus();
 
-  KeyTimer(true, 0);
-
   Invalidate();
 }
 
@@ -100,8 +96,6 @@ void
 WndProperty::OnKillFocus()
 {
   WindowControl::OnKillFocus();
-
-  KeyTimer(true, 0);
 
   Invalidate();
 }
