@@ -33,22 +33,12 @@ Copyright_License {
 
 #include <assert.h>
 
-static bool
-CanEditInPlace()
-{
-  /* disabled for now, because we don't handle this yet properly:
-     return HasKeyboard(); */
-  return false;
-}
-
 bool
 WndProperty::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
-    return IsReadOnly() ||
-      (mDataField != NULL && mDataField->supports_combolist) ||
-      !CanEditInPlace() || HasHelp();
+    return true;
 
   case KEY_LEFT:
   case KEY_RIGHT:
@@ -192,9 +182,6 @@ WndProperty::BeginEditing()
       return false;
 
     RefreshDisplay();
-    return true;
-  } else if (CanEditInPlace()) {
-    // TODO: implement
     return true;
   } else
     return false;
@@ -425,9 +412,7 @@ WndProperty::RefreshDisplay()
   if (!mDataField)
     return;
 
-  SetText(HasFocus() && CanEditInPlace()
-          ? mDataField->GetAsString()
-          : mDataField->GetAsDisplayString());
+  SetText(mDataField->GetAsDisplayString());
 }
 
 void
