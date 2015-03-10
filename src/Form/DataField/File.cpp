@@ -136,6 +136,16 @@ FileDataField::ScanMultiplePatterns(const TCHAR *patterns)
   }
 }
 
+int
+FileDataField::Find(const TCHAR *text) const
+{
+  for (unsigned i = 0, n = files.size(); i < n; i++)
+    if (StringIsEqual(text, files[i].path))
+      return i;
+
+  return -1;
+}
+
 void
 FileDataField::Lookup(const TCHAR *text)
 {
@@ -147,14 +157,9 @@ FileDataField::Lookup(const TCHAR *text)
       EnsureLoaded();
   }
 
-  current_index = 0;
-  // Iterate through the filelist
-  for (unsigned i = 1; i < files.size(); i++) {
-    // If text == pathfile
-    if (StringIsEqual(text, files[i].path))
-      // -> set selection to current element
-      current_index = i;
-  }
+  auto i = Find(text);
+  if (i >= 0)
+    current_index = i;
 }
 
 unsigned

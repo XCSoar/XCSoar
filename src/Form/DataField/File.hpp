@@ -131,6 +131,9 @@ public:
   gcc_pure
   unsigned GetNumFiles() const;
 
+  gcc_pure
+  int Find(const TCHAR *text) const;
+
   /**
    * Iterates through the file list and tries to find an item where the path
    * is equal to the given text, if found the selection is changed to
