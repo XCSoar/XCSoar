@@ -27,6 +27,7 @@ Copyright_License {
 #include "WindowWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
+#include "Repository/FileType.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/EnumCast.hpp"
 #include "Units/Group.hpp"
@@ -421,7 +422,15 @@ public:
 
   WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
                        const char *profile_key, const TCHAR *filters,
+                       FileType file_type,
                        bool nullable = true);
+
+  WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
+                       const char *profile_key, const TCHAR *filters,
+                       bool nullable = true) {
+    return AddFile(label, help, profile_key, filters, FileType::UNKNOWN,
+                   nullable);
+  }
 
   /**
    * Add a read-only multi-line control.  You can use

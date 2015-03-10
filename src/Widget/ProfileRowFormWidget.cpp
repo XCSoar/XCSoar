@@ -35,10 +35,12 @@ Copyright_License {
 WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
                        const char *registry_key, const TCHAR *filters,
+                       FileType file_type,
                        bool nullable)
 {
   WndProperty *edit = Add(label, help);
   auto *df = new FileDataField();
+  df->SetFileType(file_type);
   edit->SetDataField(df);
 
   if (nullable)
