@@ -98,7 +98,7 @@ class ThreadedOperationEnvironment
   Trigger cancelled;
 
 public:
-  ThreadedOperationEnvironment(OperationEnvironment &_other);
+  explicit ThreadedOperationEnvironment(OperationEnvironment &_other);
 
   void Cancel() {
     cancelled.Signal();
