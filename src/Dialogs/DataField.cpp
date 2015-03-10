@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataField.hpp"
+#include "FilePicker.hpp"
 #include "Form/DataField/GeoPoint.hpp"
 #include "Form/DataField/RoughTime.hpp"
 #include "Form/DataField/Prefix.hpp"
@@ -35,7 +36,9 @@ bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
 {
-  if (df.supports_combolist) {
+  if (df.GetType() == DataField::Type::FILE) {
+    return FilePicker(caption, (FileDataField &)df, help_text);
+  } else if (df.supports_combolist) {
     return ComboPicker(caption, df, help_text);
   } else if (df.GetType() == DataField::Type::ROUGH_TIME) {
     RoughTimeDataField &tdf = (RoughTimeDataField &)df;
