@@ -69,7 +69,7 @@ Copyright_License {
 static bool
 LocalPath(TCHAR *buffer, const AvailableFile &file)
 {
-  ACPToWideConverter base(file.GetName());
+  const UTF8ToWideConverter base(file.GetName());
   if (!base.IsValid())
     return false;
 
@@ -91,7 +91,7 @@ gcc_pure
 static const AvailableFile *
 FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 {
-  WideToACPConverter name2(name);
+  const WideToUTF8Converter name2(name);
   if (!name2.IsValid())
     return nullptr;
 
@@ -487,7 +487,7 @@ ManagedFileListWidget::Download()
     return;
 
   const AvailableFile &remote_file = *remote_file_p;
-  ACPToWideConverter base(remote_file.GetName());
+  const UTF8ToWideConverter base(remote_file.GetName());
   if (!base.IsValid())
     return;
 
@@ -507,7 +507,7 @@ OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   const AvailableFile &file = (*add_list)[i];
 
-  ACPToWideConverter name(file.GetName());
+  const UTF8ToWideConverter name(file.GetName());
   if (name.IsValid())
     canvas.DrawText(rc.left + Layout::GetTextPadding(),
                     rc.top + Layout::GetTextPadding(), name);
@@ -529,7 +529,7 @@ ManagedFileListWidget::Add()
       /* already downloading this file */
       continue;
 
-    ACPToWideConverter name(remote_file.GetName());
+    const UTF8ToWideConverter name(remote_file.GetName());
     if (!name.IsValid())
       continue;
 
@@ -553,7 +553,7 @@ ManagedFileListWidget::Add()
   assert((unsigned)i < list.size());
 
   const AvailableFile &remote_file = list[i];
-  ACPToWideConverter base(remote_file.GetName());
+  const UTF8ToWideConverter base(remote_file.GetName());
   if (!base.IsValid())
     return;
 
@@ -621,7 +621,7 @@ ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
   if (name == nullptr)
     return;
 
-  WideToACPConverter name2(name);
+  const WideToUTF8Converter name2(name);
   if (!name2.IsValid())
     return;
 
@@ -643,7 +643,7 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
   if (name == nullptr)
     return;
 
-  WideToACPConverter name2(name);
+  const WideToUTF8Converter name2(name);
   if (!name2.IsValid())
     return;
 
