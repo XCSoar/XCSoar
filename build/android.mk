@@ -4,8 +4,8 @@
 
 ifeq ($(TARGET),ANDROID)
 
-ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
-ANDROID_KEY_ALIAS = mk
+ANDROID_KEYSTORE ?= $(HOME)/.android/mk.keystore
+ANDROID_KEY_ALIAS ?= mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
 
