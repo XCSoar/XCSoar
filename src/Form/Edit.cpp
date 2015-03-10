@@ -173,18 +173,17 @@ WndProperty::SetCaptionWidth(PixelScalar _caption_width)
 bool
 WndProperty::BeginEditing()
 {
-  if (IsReadOnly()) {
+  if (IsReadOnly() || mDataField == nullptr) {
     /* this would display xml file help on a read-only wndproperty if
        it exists */
     return OnHelp();
-  } else if (mDataField != NULL) {
+  } else {
     if (!EditDataFieldDialog(GetCaption(), *mDataField, GetHelpText()))
       return false;
 
     RefreshDisplay();
     return true;
-  } else
-    return false;
+  }
 }
 
 void
