@@ -2148,6 +2148,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \

@@ -9,6 +9,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \

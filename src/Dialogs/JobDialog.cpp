@@ -21,48 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/JobDialog.hpp"
+#include "JobDialog.hpp"
+#include "ProgressDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "ProgressWindow.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
-#include "Screen/Layout.hpp"
-#include "Operation/Operation.hpp"
 #include "Job/Thread.hpp"
 #include "Language/Language.hpp"
-
-class ProgressWindowOperation
-  : public ProgressWindow, public QuietOperationEnvironment {
-public:
-  ProgressWindowOperation(ContainerWindow &parent)
-    :ProgressWindow(parent) {}
-
-  virtual void SetText(const TCHAR *text) {
-    SetMessage(text);
-  }
-
-  virtual void SetProgressRange(unsigned range) {
-    SetRange(0, range);
-  }
-
-  virtual void SetProgressPosition(unsigned position) {
-    SetValue(position);
-  }
-};
-
-class JobCancelButton : public ButtonWindow {
-  JobThread &thread;
-
-public:
-  JobCancelButton(JobThread &_thread)
-    :thread(_thread) {}
-
-  virtual bool OnClicked() {
-    thread.Cancel();
-    return true;
-  }
-};
 
 class DialogJobThread : public JobThread {
   WndForm &form;
@@ -85,32 +50,13 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
           const TCHAR *caption,
           Job &job, bool cancellable)
 {
-  WindowStyle form_style;
-  form_style.Hide();
-  WndForm form(parent, dialog_look,
-               parent.GetClientRect(),
-               caption);
+  ProgressDialog form(parent, dialog_look, caption);
 
-  ContainerWindow &client_area = form.GetClientAreaWindow();
-
-  ProgressWindowOperation progress(client_area);
-  DialogJobThread thread(progress, job, form);
+  DialogJobThread thread(form, job, form);
   thread.Start();
 
-  JobCancelButton cancel_button(thread);
-  if (cancellable) {
-    ButtonWindowStyle style;
-    style.TabStop();
-
-    PixelRect rc = client_area.GetClientRect();
-    rc.right -= Layout::Scale(2);
-    rc.left = rc.right - Layout::Scale(78);
-    rc.top += Layout::Scale(2);
-    rc.bottom = rc.top + Layout::Scale(35);
-    cancel_button.Create(client_area, _("Cancel"), rc, style);
-    cancel_button.SetFont(*dialog_look.button.font);
-    cancel_button.BringToTop();
-  }
+  if (cancellable)
+    form.AddCancelButton([&thread](){ thread.Cancel(); });
 
   int result = form.ShowModal();
 
