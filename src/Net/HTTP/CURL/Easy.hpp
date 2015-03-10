@@ -102,7 +102,7 @@ namespace Net {
     gcc_pure
     int64_t GetContentLength() const {
       double value;
-      return GetInfo(CURLINFO_CONTENT_LENGTH_DOWNLOAD, &value) == CURLE_OK
+      return GetInfo(CURLINFO_CONTENT_LENGTH_DOWNLOAD, &value)
         ? (int64_t)value
         : -1;
     }
