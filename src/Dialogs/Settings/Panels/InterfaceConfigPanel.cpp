@@ -122,10 +122,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings.display.enable_auto_blank);
 #endif
 
-  AddFileReader(_("Events"),
-                _("The Input Events file defines the menu system and how XCSoar responds to "
-                    "button presses and events from external devices."),
-                ProfileKeys::InputFile, _T("*.xci\0"));
+  AddFile(_("Events"),
+          _("The Input Events file defines the menu system and how XCSoar responds to "
+            "button presses and events from external devices."),
+          ProfileKeys::InputFile, _T("*.xci\0"));
   SetExpertRow(InputFile);
 
 #ifndef HAVE_NATIVE_GETTEXT
@@ -168,10 +168,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 #endif /* !HAVE_NATIVE_GETTEXT */
 
-  AddFileReader(_("Status message"),
-                _("The status file can be used to define sounds to be played when certain "
-                    "events occur, and how long various status messages will appear on screen."),
-                ProfileKeys::StatusFile, _T("*.xcs\0"));
+  AddFile(_("Status message"),
+          _("The status file can be used to define sounds to be played when certain "
+            "events occur, and how long various status messages will appear on screen."),
+          ProfileKeys::StatusFile, _T("*.xcs\0"));
   SetExpertRow(StatusFile);
 
   AddTime(_("Menu timeout"),

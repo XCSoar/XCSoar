@@ -33,9 +33,9 @@ Copyright_License {
 #include <assert.h>
 
 WndProperty *
-RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
-                             const char *registry_key, const TCHAR *filters,
-                             bool nullable)
+RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
+                       const char *registry_key, const TCHAR *filters,
+                       bool nullable)
 {
   WndProperty *edit = Add(label, help);
   auto *df = new FileDataField();

@@ -79,11 +79,11 @@ void
 ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   auto *file =
-    AddFileReader(_("File"),
-                  _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
-                  nullptr,
-                  _T("*.nmea\0*.igc\0"),
-                  true);
+    AddFile(_("File"),
+            _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
+            nullptr,
+            _T("*.nmea\0*.igc\0"),
+            true);
   ((FileDataField *)file->GetDataField())->Lookup(replay->GetFilename());
   file->RefreshDisplay();
 

@@ -419,9 +419,9 @@ public:
 
   void AddSpacer();
 
-  WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
-                             const char *profile_key, const TCHAR *filters,
-                             bool nullable = true);
+  WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
+                       const char *profile_key, const TCHAR *filters,
+                       bool nullable = true);
 
   /**
    * Add a read-only multi-line control.  You can use
