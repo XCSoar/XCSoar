@@ -7,7 +7,7 @@ THIRDPARTY_DLLS =
 dist: $(XCSOAR_BIN) $(VALI_XCS_BIN)
 	rm -rf $(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)
 	$(MKDIR) -p $(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)
-	cp $^ gpl.txt installmsg.txt \
+	cp $^ COPYING \
 		$(addprefix $(THIRDPARTY_DLL_DIR)/,$(THIRDPARTY_DLLS)) \
 		$(TARGET_DIST_DIR)/$(TARGET_DIST_NAME)/
 	cd $(TARGET_DIST_DIR) && zip -qr $(TARGET_DIST_NAME).zip $(TARGET_DIST_NAME)
