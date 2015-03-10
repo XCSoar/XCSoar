@@ -94,7 +94,7 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 {
   WideToACPConverter name2(name);
   if (!name2.IsValid())
-    return NULL;
+    return nullptr;
 
   return FindRemoteFile(repository, name2);
 }
@@ -104,7 +104,7 @@ gcc_pure
 static bool
 CanDownload(const FileRepository &repository, const TCHAR *name)
 {
-  return FindRemoteFile(repository, name) != NULL;
+  return FindRemoteFile(repository, name) != nullptr;
 }
 
 #endif
@@ -156,7 +156,7 @@ class ManagedFileListWidget
         last_modified.clear();
       }
 
-      downloading = _download_status != NULL;
+      downloading = _download_status != nullptr;
       if (downloading)
         download_status = *_download_status;
 
@@ -384,7 +384,7 @@ ManagedFileListWidget::RefreshList()
         (is_downloading || File::Exists(path))) {
       download_active |= is_downloading;
       items.append().Set(BaseName(path),
-                         is_downloading ? &download_status : NULL,
+                         is_downloading ? &download_status : nullptr,
                          HasFailed(remote_file));
     }
   }
@@ -484,7 +484,7 @@ ManagedFileListWidget::Download()
 
   const FileItem &item = items[current];
   const AvailableFile *remote_file_p = FindRemoteFile(repository, item.name);
-  if (remote_file_p == NULL)
+  if (remote_file_p == nullptr)
     return;
 
   const AvailableFile &remote_file = *remote_file_p;
@@ -503,7 +503,7 @@ static const std::vector<AvailableFile> *add_list;
 static void
 OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  assert(add_list != NULL);
+  assert(add_list != nullptr);
   assert(i < add_list->size());
 
   const AvailableFile &file = (*add_list)[i];
@@ -547,7 +547,7 @@ ManagedFileListWidget::Add()
   int i = ListPicker(_("Select a file"),
                      list.size(), 0, Layout::FastScale(18),
                      item_renderer);
-  add_list = NULL;
+  add_list = nullptr;
   if (i < 0)
     return;
 
@@ -619,7 +619,7 @@ ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
                                        int64_t size, int64_t position)
 {
   const TCHAR *name = BaseName(path_relative);
-  if (name == NULL)
+  if (name == nullptr)
     return;
 
   WideToACPConverter name2(name);
@@ -641,7 +641,7 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
                                           bool success)
 {
   const TCHAR *name = BaseName(path_relative);
-  if (name == NULL)
+  if (name == nullptr)
     return;
 
   WideToACPConverter name2(name);
