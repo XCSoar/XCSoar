@@ -61,6 +61,8 @@ public:
       std::swap(path, src.path);
       return *this;
     }
+
+    void Set(const TCHAR *_path);
   };
 
 private:

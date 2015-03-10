@@ -86,6 +86,16 @@ FileDataField::Item::~Item()
   free(path);
 }
 
+inline void
+FileDataField::Item::Set(const TCHAR *_path)
+{
+  free(path);
+  path = _tcsdup(_path);
+  filename = BaseName(path);
+  if (filename == nullptr)
+    filename = path;
+}
+
 FileDataField::FileDataField(DataFieldListener *listener)
   :DataField(Type::FILE, true, listener),
    // Set selection to zero
@@ -196,10 +206,7 @@ FileDataField::AddFile(const TCHAR *filename, const TCHAR *path)
     return;
 
   Item &item = files.append();
-  item.path = _tcsdup(path);
-  item.filename = BaseName(item.path);
-  if (item.filename == nullptr)
-    item.filename = item.path;
+  item.Set(path);
 }
 
 void
