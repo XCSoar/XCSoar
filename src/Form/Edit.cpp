@@ -52,8 +52,10 @@ bool
 WndProperty::OnKeyDown(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
-  if (key_code == KEY_RETURN && BeginEditing())
+  if (key_code == KEY_RETURN) {
+    BeginEditing();
     return true;
+  }
 
   switch (key_code) {
   case KEY_RIGHT:
@@ -164,7 +166,8 @@ WndProperty::BeginEditing()
   if (IsReadOnly() || mDataField == nullptr) {
     /* this would display xml file help on a read-only wndproperty if
        it exists */
-    return OnHelp();
+    OnHelp();
+    return false;
   } else {
     if (!EditDataFieldDialog(GetCaption(), *mDataField, GetHelpText()))
       return false;

@@ -31,7 +31,7 @@ class DataField;
 /**
  * Show a dialog to edit the value of a #DataField.
  *
- * @return false if no dialog is available for this value type
+ * @return true if the value has been modified
  */
 bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,

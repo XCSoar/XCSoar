@@ -36,13 +36,12 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
 {
   if (df.supports_combolist) {
-    ComboPicker(caption, df, help_text);
-    return true;
+    return ComboPicker(caption, df, help_text);
   } else if (df.GetType() == DataField::Type::ROUGH_TIME) {
     RoughTimeDataField &tdf = (RoughTimeDataField &)df;
     RoughTime value = tdf.GetValue();
     if (!TimeEntryDialog(caption, value, tdf.GetTimeZone(), true))
-      return true;
+      return false;
 
     tdf.ModifyValue(value);
     return true;
@@ -52,7 +51,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     if (!GeoPointEntryDialog(caption, value,
                              gdf.GetFormat(),
                              false))
-      return true;
+      return false;
 
     gdf.ModifyValue(value);
     return true;
@@ -68,7 +67,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       acf = ((PrefixDataField &)df).GetAllowedCharactersFunction();
 
     if (!TextEntryDialog(buffer, caption, acf))
-      return true;
+      return false;
 
     df.SetAsString(buffer);
     return true;

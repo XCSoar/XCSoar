@@ -104,7 +104,7 @@ public:
    * available, then the ComboPicker  will be launched, otherwise, the
    * focus and cursor is set to the control.
    *
-   * @return false on failure
+   * @return true if the value has been modified
    */
   bool BeginEditing();
 
