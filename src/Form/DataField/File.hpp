@@ -62,12 +62,6 @@ public:
       src.filename = src.path = nullptr;
       return *this;
     }
-
-    friend void swap(Item &a, Item &b) {
-      using std::swap;
-      swap(a.filename, b.filename);
-      swap(a.path, b.path);
-    }
   };
 
 private:
