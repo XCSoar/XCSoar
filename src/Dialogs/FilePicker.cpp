@@ -29,7 +29,7 @@ Copyright_License {
 bool
 FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
 {
-  assert(patterns != NULL);
+  assert(patterns != nullptr);
 
   FileDataField df;
   df.ScanMultiplePatterns(patterns);
