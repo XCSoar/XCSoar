@@ -23,6 +23,7 @@ Version 6.8 - not yet released
   - added one-click task reversal (#1730)
   - show name of loaded/saved tasks in dialog title (#1924)
 * user interface 
+  - download data files from site configuration
   - checklist remembers last opened list (#3110)
   - use configured coordinate format in waypoint editor
   - display rotation for Raspberry Pi and Cubieboard (#3238)

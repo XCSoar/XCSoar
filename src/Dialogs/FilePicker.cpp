@@ -25,20 +25,45 @@ Copyright_License {
 #include "ComboPicker.hpp"
 #include "Form/DataField/File.hpp"
 #include "Form/DataField/ComboList.hpp"
+#include "Language/Language.hpp"
+#include "Net/HTTP/Features.hpp"
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Net/HTTP/DownloadManager.hpp"
+#include "DownloadFilePicker.hpp"
+#endif
 
 bool
 FilePicker(const TCHAR *caption, FileDataField &df,
            const TCHAR *help_text)
 {
-  const ComboList combo_list = df.CreateComboList(nullptr);
+  ComboList combo_list = df.CreateComboList(nullptr);
   if (combo_list.size() == 0)
     return false;
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (df.GetFileType() != FileType::UNKNOWN &&
+      Net::DownloadManager::IsAvailable())
+    combo_list.Append(ComboList::Item::DOWNLOAD, _("Download"));
+#endif
 
   int i = ComboPicker(caption, combo_list, help_text);
   if (i < 0)
     return false;
 
   const ComboList::Item &item = combo_list[i];
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (item.int_value == ComboList::Item::DOWNLOAD) {
+    const auto path = DownloadFilePicker(df.GetFileType());
+    if (path.empty())
+      return false;
+
+    df.ForceModify(path.c_str());
+    return true;
+  }
+#endif
+
   df.SetFromCombo(item.int_value, item.string_value);
   return true;
 }

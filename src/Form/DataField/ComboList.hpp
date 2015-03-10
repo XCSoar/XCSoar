@@ -35,6 +35,7 @@ public:
   struct Item {
     static constexpr int NEXT_PAGE = -800001;
     static constexpr int PREVIOUS_PAGE = -800002;
+    static constexpr int DOWNLOAD = -800003;
 
     int int_value;
     TCHAR *string_value;
