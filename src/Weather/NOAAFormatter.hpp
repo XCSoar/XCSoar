@@ -29,7 +29,7 @@ Copyright_License {
 
 namespace NOAAFormatter
 {
-  void Format(NOAAStore::Item &station, tstring &output);
+  void Format(const NOAAStore::Item &station, tstring &output);
 };
 
 #endif

@@ -71,7 +71,7 @@ CheckTitle(const TCHAR *title, unsigned title_length, const TCHAR *check)
 
 static bool
 FormatDecodedMETARLine(const TCHAR *line, unsigned length,
-                       ParsedMETAR &parsed, tstring &output)
+                       const ParsedMETAR &parsed, tstring &output)
 {
   const TCHAR *end = line + length;
 
@@ -227,7 +227,8 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
 }
 
 static void
-FormatDecodedMETAR(METAR &metar, ParsedMETAR &parsed, tstring &output)
+FormatDecodedMETAR(const METAR &metar, const ParsedMETAR &parsed,
+                   tstring &output)
 {
   /*
   00 ## Hamburg-Fuhlsbuettel, Germany (EDDH) 53-38N 010-00E 15M ##
@@ -270,7 +271,7 @@ FormatDecodedMETAR(METAR &metar, ParsedMETAR &parsed, tstring &output)
 }
 
 void
-NOAAFormatter::Format(NOAAStore::Item &station, tstring &output)
+NOAAFormatter::Format(const NOAAStore::Item &station, tstring &output)
 {
   output.reserve(2048);
 
