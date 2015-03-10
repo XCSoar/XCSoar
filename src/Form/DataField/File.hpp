@@ -57,9 +57,8 @@ public:
     ~Item();
 
     Item &operator=(Item &&src) {
-      filename = src.filename;
-      path = src.path;
-      src.filename = src.path = nullptr;
+      std::swap(filename, src.filename);
+      std::swap(path, src.path);
       return *this;
     }
   };
