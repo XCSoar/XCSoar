@@ -26,8 +26,11 @@ Copyright_License {
 
 /**
  * Download the repository file.
+ *
+ * @param force if true, then download it even when this library
+ * believes it is still fresh
  */
 void
-EnqueueRepositoryDownload();
+EnqueueRepositoryDownload(bool force=false);
 
 #endif

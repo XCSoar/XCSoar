@@ -26,8 +26,14 @@ Copyright_License {
 
 #define REPOSITORY_URI "http://download.xcsoar.org/repository"
 
+static bool repository_downloaded = false;
+
 void
-EnqueueRepositoryDownload()
+EnqueueRepositoryDownload(bool force)
 {
+  if (repository_downloaded && !force)
+    return;
+
+  repository_downloaded = true;
   Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
 }
