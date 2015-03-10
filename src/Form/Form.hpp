@@ -28,7 +28,6 @@ Copyright_License {
 #include "SubForm.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticString.hpp"
-#include "Util/tstring.hpp"
 
 #include <functional>
 
