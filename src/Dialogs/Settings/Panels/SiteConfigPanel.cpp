@@ -32,6 +32,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Patterns.hpp"
+#include "Form/DataField/File.hpp"
 
 enum ControlIndex {
   DataPath,
@@ -80,30 +81,35 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFile(_("Map database"),
           _("The name of the file (.xcm) containing terrain, topography, and optionally "
             "waypoints, their details and airspaces."),
-          ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"));
+          ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"), FileType::MAP);
 
   AddFile(_("Waypoints"),
           _("Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), "
             "Zander files (.wpz) or SeeYou files (.cup)."),
-          ProfileKeys::WaypointFile, WAYPOINT_FILE_PATTERNS);
+          ProfileKeys::WaypointFile, WAYPOINT_FILE_PATTERNS,
+          FileType::WAYPOINT);
 
   AddFile(_("More waypoints"),
           _("Secondary waypoints file.  This may be used to add waypoints for a competition."),
-          ProfileKeys::AdditionalWaypointFile, WAYPOINT_FILE_PATTERNS);
+          ProfileKeys::AdditionalWaypointFile, WAYPOINT_FILE_PATTERNS,
+          FileType::WAYPOINT);
   SetExpertRow(AdditionalWaypointFile);
 
   AddFile(_("Watched waypoints"),
           _("Waypoint file containing special waypoints for which additional computations like "
             "calculation of arrival height in map display always takes place. Useful for "
             "waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."),
-          ProfileKeys::WatchedWaypointFile, WAYPOINT_FILE_PATTERNS);
+          ProfileKeys::WatchedWaypointFile, WAYPOINT_FILE_PATTERNS,
+          FileType::WAYPOINT);
   SetExpertRow(WatchedWaypointFile);
 
   AddFile(_("Airspaces"), _("The file name of the primary airspace file."),
-          ProfileKeys::AirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+          ProfileKeys::AirspaceFile, _T("*.txt\0*.air\0*.sua\0"),
+          FileType::AIRSPACE);
 
   AddFile(_("More airspaces"), _("The file name of the secondary airspace file."),
-          ProfileKeys::AdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+          ProfileKeys::AdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"),
+          FileType::AIRSPACE);
   SetExpertRow(AdditionalAirspaceFile);
 
   AddFile(_("Waypoint details"),
