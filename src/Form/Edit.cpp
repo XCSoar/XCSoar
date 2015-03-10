@@ -78,13 +78,7 @@ WndProperty::OnKeyDown(unsigned key_code)
 bool
 WndProperty::OnKeyUp(unsigned key_code)
 {
-  if (KeyTimer(false, key_code)) {
-    // activate tool tips if hit return for long time
-    if (key_code == KEY_RETURN) {
-      if (OnHelp())
-        return true;
-    }
-  } else if (key_code == KEY_RETURN) {
+  if (key_code == KEY_RETURN) {
     if (CallSpecial())
       return true;
   }

@@ -77,15 +77,3 @@ WindowControl::OnKeyDown(unsigned key_code)
 
   return PaintWindow::OnKeyDown(key_code);
 }
-
-bool
-WindowControl::OnKeyUp(unsigned key_code)
-{
-  // JMW: detect long enter release
-  // VENTA4: PNAs don't have Enter, so it should be better to find an alternate solution
-  // activate tool tips if hit return for long time
-  if (KeyTimer(false, key_code) && key_code == KEY_RETURN && OnHelp())
-    return true;
-
-  return PaintWindow::OnKeyUp(key_code);
-}
