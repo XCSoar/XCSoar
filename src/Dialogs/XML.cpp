@@ -32,12 +32,9 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "Form/Form.hpp"
-#include "Form/Frame.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Form/Draw.hpp"
-#include "Form/List.hpp"
 #include "Form/Panel.hpp"
-#include "Form/CheckBox.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
@@ -63,13 +60,6 @@ struct ControlPosition: public RasterPoint
 {
   bool no_scaling;
 };
-
-/**
- * Callback type for the "Custom" element, attribute "OnCreate".
- */
-typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
-                                          PixelRect rc,
-                                          const WindowStyle style);
 
 static void
 LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
@@ -381,15 +371,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     window = new WndButton(parent, UIGlobals::GetDialogLook().button,
                            _("Close"), rc,
                            button_style, (WndForm &)form, mrOK);
-  } else if (StringIsEqual(node.GetName(), _T("CheckBox"))) {
-    // Create the CheckBoxControl
-
-    style.TabStop();
-
-    window = new CheckBoxControl(parent, UIGlobals::GetDialogLook(),
-                                 caption, rc,
-                                 style);
-
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (StringIsEqual(node.GetName(), _T("SymbolButton"))) {
     // Determine ClickCallback function
@@ -437,17 +418,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     window = canvas;
 
-  // FrameControl (WndFrame)
-  } else if (StringIsEqual(node.GetName(), _T("Label"))){
-    // Create the FrameControl
-    WndFrame* frame = new WndFrame(parent, UIGlobals::GetDialogLook(),
-                                   rc, style);
-
-    // Set the caption
-    frame->SetCaption(caption);
-
-    window = frame;
-
   } else if (StringIsEqual(node.GetName(), _T("LargeText"))){
     if (IsEmbedded() || Layout::scale_1024 < 2048)
       /* sunken edge doesn't fit well on the tiny screen of an
@@ -461,28 +431,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     ltw->SetFont(*UIGlobals::GetDialogLook().text_font);
 
     window = ltw;
-
-  // ListBoxControl (ListControl)
-  } else if (StringIsEqual(node.GetName(), _T("List"))){
-    // Determine ItemHeight of the list items
-    UPixelScalar item_height =
-      Layout::Scale(StringToIntDflt(node.GetAttribute(_T("ItemHeight")), 18));
-
-    // Create the ListBoxControl
-
-    style.TabStop();
-
-    if (IsEmbedded() || Layout::scale_1024 < 2048)
-      /* sunken edge doesn't fit well on the tiny screen of an
-         embedded device */
-      style.Border();
-    else
-      style.SunkenEdge();
-
-    const PixelRect rc(pos.x, pos.y, pos.x + size.cx, pos.y + size.cy);
-
-    window = new ListControl(parent, UIGlobals::GetDialogLook(),
-                             rc, style, item_height);
 
   } else if (StringIsEqual(node.GetName(), _T("Widget"))) {
     style.ControlParent();
