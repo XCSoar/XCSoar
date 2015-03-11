@@ -382,18 +382,13 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
                            _("Close"), rc,
                            button_style, (WndForm &)form, mrOK);
   } else if (StringIsEqual(node.GetName(), _T("CheckBox"))) {
-    // Determine click_callback function
-    CheckBoxControl::ClickNotifyCallback click_callback =
-      (CheckBoxControl::ClickNotifyCallback)
-      GetCallBack(lookup_table, node, _T("OnClick"));
-
     // Create the CheckBoxControl
 
     style.TabStop();
 
     window = new CheckBoxControl(parent, UIGlobals::GetDialogLook(),
                                  caption, rc,
-                                 style, click_callback);
+                                 style);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (StringIsEqual(node.GetName(), _T("SymbolButton"))) {
