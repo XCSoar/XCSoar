@@ -42,6 +42,7 @@ struct JPEGErrorManager {
   jmp_buf setjmp_buffer;
 
   JPEGErrorManager() {
+    jpeg_std_error(&base);
     base.error_exit = ErrorExit;
   }
 
@@ -67,7 +68,7 @@ LoadJPEGFile(const TCHAR *path)
   struct jpeg_decompress_struct cinfo;
 
   JPEGErrorManager err;
-  cinfo.err = jpeg_std_error(&err.base);
+  cinfo.err = &err.base;
   if (setjmp(err.setjmp_buffer)) {
     jpeg_destroy_decompress(&cinfo);
     fclose(file);
