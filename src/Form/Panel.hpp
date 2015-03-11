@@ -47,13 +47,21 @@ class PanelControl :
 #endif
 {
 public:
+  PanelControl() = default;
+
   /**
    * Constructor of the PanelControl class
    * @param owner Parent ContainerControl
    */
   PanelControl(ContainerWindow &parent, const DialogLook &look,
                const PixelRect &rc,
-               const WindowStyle style=WindowStyle());
+               const WindowStyle style=WindowStyle()) {
+    Create(parent, look, rc, style);
+  }
+
+  void Create(ContainerWindow &parent, const DialogLook &look,
+              const PixelRect &rc,
+              const WindowStyle style=WindowStyle());
 };
 
 #endif
