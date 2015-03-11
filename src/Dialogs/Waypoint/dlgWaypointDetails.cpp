@@ -24,14 +24,18 @@ Copyright_License {
 #include "WaypointDialogs.hpp"
 #include "WaypointInfoWidget.hpp"
 #include "WaypointCommandsWidget.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
+#include "Form/Panel.hpp"
 #include "Form/List.hpp"
+#include "Form/Draw.hpp"
 #include "Form/Button.hpp"
+#include "Form/SymbolButton.hpp"
 #include "Widget/DockWindow.hpp"
+#include "Widget/Widget.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Canvas.hpp"
@@ -54,45 +58,458 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
 
-static int page = 0;
-static int last_page = 0;
+#ifdef HAVE_RUN_FILE
 
-static WndForm *form = nullptr;
-static Window *details_panel = nullptr;
-static DockWindow *info_widget = nullptr;
-static DockWindow *commands_widget = nullptr;
-static PaintWindow *image_window = nullptr;
-static WndButton *magnify_button = nullptr;
-static WndButton *shrink_button = nullptr;
-static const Waypoint *waypoint = nullptr;
+class WaypointExternalFileListHandler final
+  : public ListItemRenderer, public ListCursorHandler {
+  const Waypoint &waypoint;
 
-static StaticArray<Bitmap, 5> images;
-static int zoom = 0;
+public:
+  explicit WaypointExternalFileListHandler(const Waypoint &_waypoint)
+    :waypoint(_waypoint) {}
 
-static void
-UpdatePage()
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) override;
+
+  virtual bool CanActivateItem(unsigned index) const override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) override;
+};
+
+void
+WaypointExternalFileListHandler::OnActivateItem(unsigned i)
 {
-  info_widget->SetVisible(page == 0);
-  details_panel->SetVisible(page == 1);
-  commands_widget->SetVisible(page == 2);
+  auto file = waypoint.files_external.begin();
+  std::advance(file, i);
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, file->c_str());
+
+  RunFile(path);
+}
+
+void
+WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
+                                             const PixelRect paint_rc,
+                                             unsigned i)
+{
+  auto file = waypoint.files_external.begin();
+  std::advance(file, i);
+  canvas.DrawText(paint_rc.left + Layout::GetTextPadding(),
+                  paint_rc.top + Layout::GetTextPadding(),
+                  file->c_str());
+}
+#endif
+
+class WaypointDetailsWidget final
+  : public NullWidget,
+    ActionListener {
+  enum Buttons {
+    GOTO,
+    MAGNIFY, SHRINK,
+    PREVIOUS, NEXT,
+  };
+
+  struct Layout {
+    PixelRect goto_button;
+    PixelRect magnify_button, shrink_button;
+    PixelRect previous_button, next_button;
+    PixelRect close_button;
+    PixelRect main;
+
+    PixelRect details_text;
+
+#ifdef HAVE_RUN_FILE
+    unsigned file_list_item_height;
+    PixelRect file_list;
+#endif
+
+    explicit Layout(const PixelRect &rc, const Waypoint &waypoint);
+  };
+
+  WidgetDialog &dialog;
+  const DialogLook &look;
+
+  const Waypoint &waypoint;
+  const bool allow_navigation;
+
+  WndButton goto_button;
+  WndSymbolButton magnify_button, shrink_button;
+  WndSymbolButton previous_button, next_button;
+  WndButton close_button;
+
+  int page, last_page;
+
+  DockWindow info_dock;
+  WaypointInfoWidget info_widget;
+  PanelControl details_panel;
+  DockWindow commands_dock;
+  WaypointCommandsWidget commands_widget;
+  WndOwnerDrawFrame image_window;
+
+#ifdef HAVE_RUN_FILE
+  ListControl file_list;
+  WaypointExternalFileListHandler file_list_handler;
+#endif
+
+  LargeTextWindow details_text;
+
+  StaticArray<Bitmap, 5> images;
+  int zoom;
+
+public:
+  WaypointDetailsWidget(WidgetDialog &_dialog, const Waypoint &_waypoint,
+                        bool _allow_navigation,
+                        ProtectedTaskManager *_task_manager)
+    :dialog(_dialog), look(dialog.GetLook()),
+     waypoint(_waypoint),
+     allow_navigation(_allow_navigation),
+     goto_button(look.button),
+     magnify_button(look.button), shrink_button(look.button),
+     previous_button(look.button), next_button(look.button),
+     close_button(look.button),
+     page(0), last_page(0),
+     info_widget(look, _waypoint),
+     commands_widget(look, &_dialog, _waypoint, _task_manager),
+#ifdef HAVE_RUN_FILE
+     file_list(look), file_list_handler(_waypoint),
+#endif
+     zoom(0) {}
+
+  void UpdatePage();
+  void UpdateZoomControls();
+
+  void NextPage(int step);
+
+  void OnNextClicked() {
+    NextPage(+1);
+  }
+
+  void OnPrevClicked() {
+    NextPage(-1);
+  }
+
+  void OnMagnifyClicked();
+  void OnShrinkClicked();
+
+  void OnGotoClicked();
+
+  void OnImagePaint(Canvas &canvas, const PixelRect &rc);
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+
+  void Show(const PixelRect &rc) override {
+    const Layout layout(rc, waypoint);
+
+    if (allow_navigation)
+      goto_button.MoveAndShow(layout.goto_button);
+
+    if (!images.empty()) {
+      magnify_button.MoveAndShow(layout.magnify_button);
+      shrink_button.MoveAndShow(layout.shrink_button);
+    }
+
+    if (allow_navigation) {
+      previous_button.MoveAndShow(layout.previous_button);
+      next_button.MoveAndShow(layout.next_button);
+    }
+
+    close_button.MoveAndShow(layout.close_button);
+
+    info_dock.Move(layout.main);
+    details_panel.Move(layout.main);
+    details_text.Move(layout.details_text);
+#ifdef HAVE_RUN_FILE
+    if (!waypoint.files_external.empty())
+      file_list.Move(layout.file_list);
+#endif
+
+    commands_dock.Move(layout.main);
+
+    if (!images.empty())
+      image_window.Move(layout.main);
+
+    UpdatePage();
+  }
+
+  void Hide() override {
+    if (allow_navigation)
+      goto_button.Hide();
+
+    if (!images.empty()) {
+      magnify_button.Hide();
+      shrink_button.Hide();
+    }
+
+    if (allow_navigation) {
+      previous_button.Hide();
+      next_button.Hide();
+    }
+
+    close_button.Hide();
+
+    info_dock.Hide();
+    details_panel.Hide();
+    commands_dock.Hide();
+
+    if (!images.empty())
+      image_window.Hide();
+  }
+
+  void Move(const PixelRect &rc) override {
+    const Layout layout(rc, waypoint);
+
+    if (allow_navigation)
+      goto_button.Move(layout.goto_button);
+
+    if (!images.empty()) {
+      magnify_button.Move(layout.magnify_button);
+      shrink_button.Move(layout.shrink_button);
+    }
+
+    if (allow_navigation) {
+      previous_button.Move(layout.previous_button);
+      next_button.Move(layout.next_button);
+    }
+
+    close_button.Move(layout.close_button);
+
+    info_dock.Move(layout.main);
+    details_panel.Move(layout.main);
+    details_text.Move(layout.details_text);
+#ifdef HAVE_RUN_FILE
+    if (!waypoint.files_external.empty())
+      file_list.Move(layout.file_list);
+#endif
+    commands_dock.Move(layout.main);
+
+    if (!images.empty())
+      image_window.Move(layout.main);
+  }
+
+  bool SetFocus() override {
+    if (allow_navigation)
+      goto_button.SetFocus();
+    return true;
+  }
+
+  bool KeyPress(unsigned key_code) override;
+
+private:
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case GOTO:
+      OnGotoClicked();
+      break;
+
+    case MAGNIFY:
+      OnMagnifyClicked();
+      break;
+
+    case SHRINK:
+      OnShrinkClicked();
+      break;
+
+    case PREVIOUS:
+      NextPage(-1);
+      break;
+
+    case NEXT:
+      NextPage(1);
+      break;
+    }
+  }
+};
+
+WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
+                                      const Waypoint &waypoint)
+{
+  const unsigned width = rc.right - rc.left;
+  const unsigned height = rc.bottom - rc.top;
+  const unsigned button_height = ::Layout::GetMaximumControlHeight();
+
+  main = rc;
+
+  if (width > height) {
+    main.left += ::Layout::Scale(70);
+
+    PixelRect buttons = rc;
+    buttons.right = main.left;
+
+    goto_button = buttons;
+    goto_button.bottom = buttons.top += button_height;
+
+    magnify_button = buttons;
+    magnify_button.bottom = buttons.top += button_height;
+
+    shrink_button = magnify_button;
+    magnify_button.right = shrink_button.left =
+      (buttons.left + buttons.right) / 2;
+
+    close_button = buttons;
+    close_button.top = buttons.bottom -= button_height;
+
+    previous_button = buttons;
+    previous_button.top = buttons.bottom -= button_height;
+    next_button = previous_button;
+    previous_button.right = next_button.left =
+      (buttons.left + buttons.right) / 2;
+  } else {
+    main.bottom -= button_height;
+
+    PixelRect buttons = rc;
+    buttons.top = main.bottom;
+
+    const unsigned one_third = (2 * buttons.left + buttons.right) / 3;
+    const unsigned two_thirds = (buttons.left + 2 * buttons.right) / 3;
+
+    goto_button = buttons;
+    goto_button.right = one_third;
+
+    close_button = buttons;
+    close_button.left = two_thirds;
+
+    previous_button = buttons;
+    previous_button.left = one_third;
+    next_button = buttons;
+    next_button.right = two_thirds;
+    previous_button.right = next_button.left = (one_third + two_thirds) / 2;
+
+    const unsigned padding = ::Layout::GetTextPadding();
+    shrink_button.left = main.left + padding;
+    shrink_button.top = main.top + padding;
+    shrink_button.right = shrink_button.left + button_height;
+    shrink_button.bottom = shrink_button.top + button_height;
+
+    magnify_button.right = main.right - padding;
+    magnify_button.top = main.top + padding;
+    magnify_button.left = magnify_button.right - button_height;
+    magnify_button.bottom = magnify_button.top + button_height;
+  }
+
+  details_text.left = 0;
+  details_text.top = 0;
+  details_text.right = main.right - main.left;
+  details_text.bottom = main.bottom - main.top;
+
+#ifdef HAVE_RUN_FILE
+  const unsigned num_files = std::distance(waypoint.files_external.begin(),
+                                           waypoint.files_external.end());
+  if (num_files > 0) {
+    file_list_item_height = ::Layout::Scale(18);
+    file_list = details_text;
+
+    unsigned list_height = file_list_item_height * std::min(num_files, 5u);
+    file_list.bottom = details_text.top += list_height;
+  }
+#endif
+}
+
+void
+WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  for (const auto &i : waypoint.files_embed) {
+    if (images.full())
+      break;
+
+    TCHAR path[MAX_PATH];
+    LocalPath(path, i.c_str());
+    if (!images.append().LoadFile(path))
+      images.shrink(images.size() - 1);
+  }
+
+  const Layout layout(rc, waypoint);
+
+  WindowStyle dock_style;
+  dock_style.Hide();
+  dock_style.ControlParent();
+
+  ButtonWindowStyle button_style;
+  button_style.Hide();
+  button_style.TabStop();
+
+  if (allow_navigation)
+    goto_button.Create(parent, _("GoTo"), layout.goto_button,
+                       button_style, *this, GOTO);
+
+  if (!images.empty()) {
+    magnify_button.Create(parent, _T("+"), layout.magnify_button,
+                          button_style, *this, MAGNIFY);
+    shrink_button.Create(parent, _T("-"), layout.shrink_button,
+                         button_style, *this, SHRINK);
+  }
+
+  if (allow_navigation) {
+    previous_button.Create(parent, _T("<"), layout.previous_button,
+                           button_style, *this, PREVIOUS);
+    next_button.Create(parent, _T(">"), layout.next_button,
+                       button_style, *this, NEXT);
+  }
+
+  close_button.Create(parent, _("Close"), layout.close_button,
+                      button_style, dialog, mrOK);
+
+  info_dock.Create(parent, layout.main, dock_style);
+  info_dock.SetWidget(&info_widget);
+
+  details_panel.Create(parent, look, layout.main, dock_style);
+  details_text.Create(details_panel, layout.details_text);
+  details_text.SetFont(*look.text_font);
+  details_text.SetText(waypoint.details.c_str());
+
+#ifdef HAVE_RUN_FILE
+  const unsigned num_files = std::distance(waypoint.files_external.begin(),
+                                           waypoint.files_external.end());
+  if (num_files > 0) {
+    file_list.Create(details_panel, layout.file_list,
+                     WindowStyle(), layout.file_list_item_height);
+    file_list.SetItemRenderer(&file_list_handler);
+    file_list.SetCursorHandler(&file_list_handler);
+    file_list.SetLength(num_files);
+  }
+#endif
+
+  commands_dock.Create(parent, layout.main, dock_style);
+  commands_dock.SetWidget(&commands_widget);
+
+  if (!images.empty())
+    image_window.Create(parent, layout.main, dock_style,
+                        [this](Canvas &canvas, const PixelRect &rc){
+                          OnImagePaint(canvas, rc);
+                        });
+
+  last_page = 2 + images.size();
+}
+
+void
+WaypointDetailsWidget::UpdatePage()
+{
+  info_dock.SetVisible(page == 0);
+  details_panel.SetVisible(page == 1);
+  commands_dock.SetVisible(page == 2);
 
   bool image_page = page >= 3;
-  image_window->SetVisible(image_page);
-  magnify_button->SetVisible(image_page);
-  shrink_button->SetVisible(image_page);
+  if (!images.empty()) {
+    image_window.SetVisible(image_page);
+    magnify_button.SetVisible(image_page);
+    shrink_button.SetVisible(image_page);
+  }
 }
 
-static void
-UpdateZoomControls()
+void
+WaypointDetailsWidget::UpdateZoomControls()
 {
-  magnify_button->SetEnabled(zoom < 5);
-  shrink_button->SetEnabled(zoom > 0);
+  magnify_button.SetEnabled(zoom < 5);
+  shrink_button.SetEnabled(zoom > 0);
 }
 
-static void
-NextPage(int step)
+void
+WaypointDetailsWidget::NextPage(int step)
 {
-  assert(waypoint);
   assert(last_page > 0);
 
   do {
@@ -104,9 +521,9 @@ NextPage(int step)
     // skip wDetails frame, if there are no details
   } while (page == 1 &&
 #ifdef HAVE_RUN_FILE
-           waypoint->files_external.empty() &&
+           waypoint.files_external.empty() &&
 #endif
-           waypoint->details.empty());
+           waypoint.details.empty());
 
   UpdatePage();
 
@@ -116,49 +533,37 @@ NextPage(int step)
   }
 }
 
-static void
-OnMagnifyClicked()
+void
+WaypointDetailsWidget::OnMagnifyClicked()
 {
   if (zoom >= 5)
     return;
   zoom++;
 
   UpdateZoomControls();
-  image_window->Invalidate();
+  image_window.Invalidate();
 }
 
-static void
-OnShrinkClicked()
+void
+WaypointDetailsWidget::OnShrinkClicked()
 {
   if (zoom <= 0)
     return;
   zoom--;
 
   UpdateZoomControls();
-  image_window->Invalidate();
+  image_window.Invalidate();
 }
 
-static void
-OnNextClicked()
-{
-  NextPage(+1);
-}
-
-static void
-OnPrevClicked()
-{
-  NextPage(-1);
-}
-
-static bool
-FormKeyDown(unsigned key_code)
+bool
+WaypointDetailsWidget::KeyPress(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
 #ifdef GNAV
   case '6':
 #endif
-    ((WndButton *)form->FindByName(_T("cmdPrev")))->SetFocus();
+    previous_button.SetFocus();
     NextPage(-1);
     return true;
 
@@ -166,7 +571,7 @@ FormKeyDown(unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    ((WndButton *)form->FindByName(_T("cmdNext")))->SetFocus();
+    next_button.SetFocus();
     NextPage(+1);
     return true;
 
@@ -175,22 +580,20 @@ FormKeyDown(unsigned key_code)
   }
 }
 
-static void
-OnGotoClicked()
+void
+WaypointDetailsWidget::OnGotoClicked()
 {
   if (protected_task_manager == nullptr)
     return;
 
-  assert(waypoint != nullptr);
-
-  protected_task_manager->DoGoto(*waypoint);
-  form->SetModalResult(mrOK);
+  protected_task_manager->DoGoto(waypoint);
+  dialog.SetModalResult(mrOK);
 
   CommonInterface::main_window->FullRedraw();
 }
 
-static void
-OnImagePaint(Canvas &canvas, const PixelRect &rc)
+void
+WaypointDetailsWidget::OnImagePaint(Canvas &canvas, const PixelRect &rc)
 {
   canvas.ClearWhite();
   if (page >= 3 && page < 3 + (int)images.size()) {
@@ -233,58 +636,8 @@ OnImagePaint(Canvas &canvas, const PixelRect &rc)
   }
 }
 
-#ifdef HAVE_RUN_FILE
-
-class WaypointExternalFileListHandler final
-  : public ListItemRenderer, public ListCursorHandler {
-public:
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
-
-  virtual bool CanActivateItem(unsigned index) const override {
-    return true;
-  }
-
-  virtual void OnActivateItem(unsigned index) override;
-};
-
-void
-WaypointExternalFileListHandler::OnActivateItem(unsigned i)
-{
-  auto file = waypoint->files_external.begin();
-  std::advance(file, i);
-
-  TCHAR path[MAX_PATH];
-  LocalPath(path, file->c_str());
-
-  RunFile(path);
-}
-
-void
-WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
-                                             const PixelRect paint_rc,
-                                             unsigned i)
-{
-  auto file = waypoint->files_external.begin();
-  std::advance(file, i);
-  canvas.DrawText(paint_rc.left + Layout::GetTextPadding(),
-                  paint_rc.top + Layout::GetTextPadding(),
-                  file->c_str());
-}
-#endif
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-    DeclareCallBackEntry(OnMagnifyClicked),
-    DeclareCallBackEntry(OnShrinkClicked),
-    DeclareCallBackEntry(OnNextClicked),
-    DeclareCallBackEntry(OnPrevClicked),
-    DeclareCallBackEntry(OnGotoClicked),
-    DeclareCallBackEntry(OnImagePaint),
-    DeclareCallBackEntry(nullptr)
-};
-
 static void
-UpdateCaption()
+UpdateCaption(WndForm *form, const Waypoint *waypoint)
 {
   StaticString<256> buffer;
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
@@ -315,97 +668,16 @@ void
 dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
                             bool allow_navigation)
 {
-  waypoint = &_waypoint;
-
-  form = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
-                                      _T("IDR_XML_WAYPOINTDETAILS"));
-  assert(form != nullptr);
-
   LastUsedWaypoints::Add(_waypoint);
 
-  UpdateCaption();
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  WaypointDetailsWidget widget(dialog, _waypoint, allow_navigation,
+                               protected_task_manager);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
 
-  form->SetKeyDownFunction(FormKeyDown);
+  UpdateCaption(&dialog, &_waypoint);
 
-  info_widget = (DockWindow *)form->FindByName(_T("info"));
-  assert(info_widget != nullptr);
-  info_widget->SetWidget(new WaypointInfoWidget(UIGlobals::GetDialogLook(),
-                                          _waypoint));
-
-  commands_widget = (DockWindow *)form->FindByName(_T("commands"));
-  assert(commands_widget != nullptr);
-  commands_widget->SetWidget(new WaypointCommandsWidget(UIGlobals::GetDialogLook(),
-                                                 form, _waypoint,
-                                                 protected_task_manager));
-  commands_widget->Hide();
-
-  details_panel = form->FindByName(_T("frmDetails"));
-  assert(details_panel != nullptr);
-
-  ListControl *wFilesList = (ListControl *)form->FindByName(_T("Files"));
-  assert(wFilesList != nullptr);
-
-  LargeTextWindow *wDetailsText = (LargeTextWindow *)
-    form->FindByName(_T("Details"));
-  assert(wDetailsText != nullptr);
-  wDetailsText->SetText(waypoint->details.c_str());
-
-#ifdef HAVE_RUN_FILE
-  WaypointExternalFileListHandler handler;
-  int num_files = std::distance(waypoint->files_external.begin(),
-                                waypoint->files_external.end());
-  if (num_files > 0) {
-    wFilesList->SetItemRenderer(&handler);
-    wFilesList->SetCursorHandler(&handler);
-
-    unsigned list_height = wFilesList->GetItemHeight() * std::min(num_files, 5);
-    wFilesList->Resize(wFilesList->GetWidth(), list_height);
-    wFilesList->SetLength(num_files);
-
-    PixelRect rc = wDetailsText->GetPosition();
-    rc.top += list_height;
-    wDetailsText->Move(rc);
-  } else
-#endif
-    wFilesList->Hide();
-
-  image_window = (PaintWindow *)form->FindByName(_T("frmImage"));
-  assert(image_window != nullptr);
-  magnify_button = (WndButton *)form->FindByName(_T("cmdMagnify"));
-  assert(magnify_button != nullptr);
-  shrink_button = (WndButton *)form->FindByName(_T("cmdShrink"));
-  assert(shrink_button != nullptr);
-
-  if (!allow_navigation) {
-    for (const TCHAR *button_name :
-         { _T("cmdPrev"), _T("cmdNext"), _T("cmdGoto") }) {
-      Window *button = form->FindByName(button_name);
-      assert(button != nullptr);
-      button->Hide();
-    }
-  }
-
-  for (auto it = waypoint->files_embed.begin(),
-       it_end = waypoint->files_embed.end();
-       it != it_end && !images.full(); it++) {
-    TCHAR path[MAX_PATH];
-    LocalPath(path, it->c_str());
-    if (!images.append().LoadFile(path))
-      images.shrink(images.size() - 1);
-  }
-
-  last_page = 2 + images.size();
-
-  page = 0;
-  UpdatePage();
-
-  form->ShowModal();
-
-  delete form;
-
-  for (auto image = images.begin(); image < images.end(); image++)
-    image->Reset();
-
-  images.clear();
+  dialog.ShowModal();
+  dialog.StealWidget();
 }

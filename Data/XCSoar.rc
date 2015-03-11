@@ -227,7 +227,3 @@ SOUND(IDR_WAV_BEEPBWEEP, "beep_bweep")
 SOUND(IDR_WAV_CLEAR, "beep_clear")
 SOUND(IDR_WAV_DRIP, "beep_drip")
 #endif
-
-// --- XML Dialogs ---
-XMLDIALOG(IDR_XML_WAYPOINTDETAILS, "dlgWaypointDetails")
-XMLDIALOG(IDR_XML_WAYPOINTDETAILS_L, "dlgWaypointDetails_L")
