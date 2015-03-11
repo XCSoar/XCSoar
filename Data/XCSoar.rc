@@ -231,7 +231,3 @@ SOUND(IDR_WAV_DRIP, "beep_drip")
 // --- XML Dialogs ---
 XMLDIALOG(IDR_XML_WAYPOINTDETAILS, "dlgWaypointDetails")
 XMLDIALOG(IDR_XML_WAYPOINTDETAILS_L, "dlgWaypointDetails_L")
-
-// new task editor
-XMLDIALOG(IDR_XML_TASKPOINT, "dlgTaskPoint")
-XMLDIALOG(IDR_XML_TASKPOINT_L, "dlgTaskPoint_L")
