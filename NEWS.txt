@@ -11,6 +11,7 @@ Version 6.8 - not yet released
   - remove option "Ignore checksum"
   - LX: implement LXNAV Nano3 task declaration (#3295)
   - Volkslogger: support DAeC keyhole declaration
+  - added TCP port 2000 to portlist (part of #3326)
 * calculations
   - wave assistant
   - use maximum speed configured in plane setup as limit for calculations
