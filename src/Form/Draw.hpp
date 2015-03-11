@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
+#include <functional>
+
 class ContainerWindow;
 
 /**
@@ -37,10 +39,11 @@ public:
   typedef void (*OnPaintCallback_t)(Canvas &canvas, const PixelRect &rc);
 
 public:
+  template<typename CB>
   void Create(ContainerWindow &parent,
               PixelRect rc, const WindowStyle style,
-              OnPaintCallback_t _paint) {
-    mOnPaintCallback = _paint;
+              CB &&_paint) {
+    mOnPaintCallback = std::move(_paint);
     PaintWindow::Create(parent, rc, style);
   }
 
@@ -49,7 +52,7 @@ protected:
    * The callback function for painting the content of the control
    * @see SetOnPaintNotify()
    */
-  OnPaintCallback_t mOnPaintCallback;
+  std::function<void(Canvas &canvas, const PixelRect &rc)> mOnPaintCallback;
 
   /** from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;
