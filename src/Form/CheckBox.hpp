@@ -34,36 +34,23 @@ class ActionListener;
  * This class is used for creating buttons.
  */
 class CheckBoxControl : public CheckBox {
-public:
-  typedef void (*ClickNotifyCallback)(CheckBoxControl &button);
-
-private:
   ActionListener *listener;
 #ifdef USE_GDI
   int id;
 #endif
 
-  /**
-   * The callback-function that should be called when the button is pressed
-   * @see SetOnClickNotify()
-   */
-  ClickNotifyCallback click_notify_callback;
-
 public:
   CheckBoxControl()
-    :listener(nullptr), click_notify_callback(nullptr) {}
+    :listener(nullptr) {}
 
   /**
    * @param parent Parent window/ContainerControl
    * @param caption Text on the button
-   * @param click_notify_callback The function that should be called
-   * when the button is clicked
    */
   CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
                   tstring::const_pointer caption,
                   const PixelRect &rc,
-                  const CheckBoxStyle style,
-                  ClickNotifyCallback click_notify_callback = NULL);
+                  const CheckBoxStyle style);
 
   void Create(ContainerWindow &parent, const DialogLook &look,
               tstring::const_pointer caption,
@@ -78,18 +65,6 @@ public:
     assert(listener == nullptr);
 
     listener = _listener;
-  }
-
-  /**
-   * Sets the function that should be called when the button is pressed
-   * @param Function Pointer to the function to be called
-   */
-  void
-  SetOnClickNotify(ClickNotifyCallback _click_notify_callback)
-  {
-    assert(listener == nullptr);
-
-    click_notify_callback = _click_notify_callback;
   }
 
   virtual bool OnClicked() override;
