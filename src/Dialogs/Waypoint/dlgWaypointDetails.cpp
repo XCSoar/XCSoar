@@ -58,8 +58,6 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
 
-class WndOwnerDrawFrame;
-
 static int page = 0;
 static int last_page = 0;
 
@@ -196,7 +194,7 @@ OnGotoClicked()
 }
 
 static void
-OnImagePaint(gcc_unused WndOwnerDrawFrame *sender, Canvas &canvas)
+OnImagePaint(Canvas &canvas, const PixelRect &rc)
 {
   canvas.ClearWhite();
   if (page >= 3 && page < 3 + (int)images.size()) {
