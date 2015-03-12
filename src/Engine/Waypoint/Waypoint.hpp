@@ -29,6 +29,7 @@
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"
+#include "OS/RunFile.hpp"
 
 #include <forward_list>
 
@@ -123,7 +124,7 @@ struct Waypoint {
   tstring details;
   /** Additional files to be displayed in the WayointDetails dialog */
   std::forward_list<tstring> files_embed;
-#ifdef ANDROID
+#ifdef HAVE_RUN_FILE
   /** Additional files to be opened by external programs */
   std::forward_list<tstring> files_external;
 #endif

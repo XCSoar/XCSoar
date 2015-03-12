@@ -71,7 +71,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
   Waypoint new_wp(*wp);
   new_wp.details = Details.c_str();
   new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
-#ifdef ANDROID
+#ifdef HAVE_RUN_FILE
   new_wp.files_external.assign(files_external.begin(), files_external.end());
 #endif
   way_points.Replace(*wp, new_wp);
@@ -126,7 +126,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
       files_embed.emplace_back(filename);
     } else if ((filename =
                 StringAfterPrefixCI(line, _T("file="))) != nullptr) {
-#ifdef ANDROID
+#ifdef HAVE_RUN_FILE
       files_external.emplace_back(filename);
 #endif
     } else {

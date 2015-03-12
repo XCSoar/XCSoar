@@ -48,11 +48,7 @@ Copyright_License {
 #include "Waypoint/LastUsed.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
-
-#ifdef ANDROID
-#include "Android/NativeView.hpp"
-#include "Android/Main.hpp"
-#endif
+#include "OS/RunFile.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -107,7 +103,7 @@ NextPage(int step)
       page = 0;
     // skip wDetails frame, if there are no details
   } while (page == 1 &&
-#ifdef ANDROID
+#ifdef HAVE_RUN_FILE
            waypoint->files_external.empty() &&
 #endif
            waypoint->details.empty());
@@ -237,9 +233,7 @@ OnImagePaint(Canvas &canvas, const PixelRect &rc)
   }
 }
 
-#ifdef ANDROID
-
-// TODO: support other platforms
+#ifdef HAVE_RUN_FILE
 
 class WaypointExternalFileListHandler final
   : public ListItemRenderer, public ListCursorHandler {
@@ -263,7 +257,7 @@ WaypointExternalFileListHandler::OnActivateItem(unsigned i)
   TCHAR path[MAX_PATH];
   LocalPath(path, file->c_str());
 
-  native_view->openFile(path);
+  RunFile(path);
 }
 
 void
@@ -357,7 +351,7 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
   assert(wDetailsText != nullptr);
   wDetailsText->SetText(waypoint->details.c_str());
 
-#ifdef ANDROID
+#ifdef HAVE_RUN_FILE
   WaypointExternalFileListHandler handler;
   int num_files = std::distance(waypoint->files_external.begin(),
                                 waypoint->files_external.end());

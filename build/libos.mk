@@ -7,6 +7,7 @@ OS_SOURCES := \
 	$(OS_SRC_DIR)/FileDescriptor.cpp \
 	$(OS_SRC_DIR)/FileMapping.cpp \
 	$(OS_SRC_DIR)/FileUtil.cpp \
+	$(OS_SRC_DIR)/RunFile.cpp \
 	$(OS_SRC_DIR)/PathName.cpp \
 	$(OS_SRC_DIR)/Process.cpp \
 	$(OS_SRC_DIR)/SystemLoad.cpp
