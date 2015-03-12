@@ -27,7 +27,10 @@ Copyright_License {
 #include "Java/Object.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
+
+#ifndef NO_SCREEN
 #include "Screen/Point.hpp"
+#endif
 
 #include <assert.h>
 
@@ -92,9 +95,11 @@ public:
   unsigned GetWidth() const { return width; }
   unsigned GetHeight() const { return height; }
 
+#ifndef NO_SCREEN
   PixelSize GetSize() const {
     return { width, height };
   }
+#endif
 
   unsigned GetXDPI() const {
     return xdpi;
