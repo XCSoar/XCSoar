@@ -10,8 +10,8 @@ Build-Depends: debhelper (>= 5), g++ (>= 4.6),
  librsvg2-bin, imagemagick (>= 7:6.4), xsltproc,
  gettext,
  texlive, texlive-latex-extra,
- texlive-lang-english, texlive-lang-german, texlive-lang-french,
- texlive-lang-polish,
+ texlive-lang-english | texlive-lang-ukenglish, texlive-lang-german,
+ texlive-lang-french, texlive-lang-polish,
  latex-xcolor, pgf, liblocale-po-perl, libio-captureoutput-perl
 Standards-Version: 3.9.1.0
 Homepage: http://www.xcsoar.org/
