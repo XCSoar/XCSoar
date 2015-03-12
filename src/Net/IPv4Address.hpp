@@ -84,10 +84,20 @@ public:
 
   constexpr IPv4Address(uint8_t a, uint8_t b, uint8_t c,
                         uint8_t d, uint16_t port)
+#if defined(__APPLE__)
+    :address{sizeof(struct sockaddr_in), AF_INET, ToBE16(port),
+      ConstructInAddr(a, b, c, d), {}} {}
+#else
     :address{AF_INET, ToBE16(port), ConstructInAddr(a, b, c, d), {}} {}
+#endif
 
   constexpr IPv4Address(uint16_t port)
+#if defined(__APPLE__)
+    :address{sizeof(struct sockaddr_in), AF_INET, ToBE16(port),
+      ConstructInAddr(INADDR_ANY), {}} {}
+#else
     :address{AF_INET, ToBE16(port), ConstructInAddr(INADDR_ANY), {}} {}
+#endif
 
   operator SocketAddress() const {
     return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
