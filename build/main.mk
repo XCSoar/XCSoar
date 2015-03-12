@@ -5,7 +5,6 @@ PROGRAM_NAME = XCSoar
 endif
 
 DIALOG_SOURCES = \
-	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \

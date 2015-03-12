@@ -12,12 +12,6 @@
 #define USAGE "-WxH"
 #endif
 
-#ifdef ENABLE_XML_DIALOG
-#include "Dialogs/XML.hpp"
-#define ENABLE_DIALOG
-#define ENABLE_RESOURCE_LOADER
-#endif
-
 #if defined(ENABLE_RESOURCE_LOADER) && defined(USE_GDI)
 #include "ResourceLoader.hpp"
 #endif

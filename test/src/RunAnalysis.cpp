@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #define ENABLE_LOOK
-#define ENABLE_XML_DIALOG
+#define ENABLE_DIALOG
 #define ENABLE_CMDLINE
 #define ENABLE_PROFILE
 #define USAGE "DRIVER FILE"
@@ -34,7 +34,6 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointGlue.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Dialogs.h"

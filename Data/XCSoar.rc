@@ -33,8 +33,6 @@ HI_RES_AWARE CEUX {1}
 #define HATCH_BITMAP(name, file)
 #endif
 
-#define XMLDIALOG(name, path) name XMLDIALOG DISCARDABLE "../output/data/dialogs/" path ".xml.gz"
-
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
 
 // --- Icons ---

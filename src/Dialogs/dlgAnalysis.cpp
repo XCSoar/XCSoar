@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgAnalysis.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/Widget.hpp"
 #include "Form/Form.hpp"

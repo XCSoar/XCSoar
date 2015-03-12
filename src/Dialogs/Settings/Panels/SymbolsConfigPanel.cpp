@@ -30,7 +30,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 #include "MapSettings.hpp"
 
