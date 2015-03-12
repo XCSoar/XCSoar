@@ -52,11 +52,23 @@ UsePixelPan()
   return !HasEPaper();
 }
 
+ListControl::ListControl(const DialogLook &_look)
+  :look(_look),
+   length(0),
+   origin(0), pixel_pan(0),
+   cursor(0),
+   drag_mode(DragMode::NONE),
+   item_renderer(nullptr), cursor_handler(nullptr)
+#ifndef _WIN32_WCE
+  , kinetic_timer(*this)
+#endif
+{
+}
+
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
                          UPixelScalar _item_height)
   :look(_look),
-   item_height(_item_height),
    length(0),
    origin(0), pixel_pan(0),
    cursor(0),
@@ -66,7 +78,16 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    , kinetic_timer(*this)
 #endif
 {
-  Create(parent, rc, style);
+  Create(parent, rc, style, _item_height);
+}
+
+void
+ListControl::Create(ContainerWindow &parent,
+                    PixelRect rc, const WindowStyle style,
+                    unsigned _item_height)
+{
+  item_height = _item_height;
+  PaintWindow::Create(parent, rc, style);
 }
 
 bool

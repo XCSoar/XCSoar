@@ -164,6 +164,8 @@ protected:
 #endif
 
 public:
+  ListControl(const DialogLook &_look);
+
   /**
    * @param parent the parent window
    * @param _item_height Height of an item of the ListFrameControl
@@ -171,6 +173,10 @@ public:
   ListControl(ContainerWindow &parent, const DialogLook &look,
               PixelRect rc, const WindowStyle style,
               UPixelScalar _item_height);
+
+  void Create(ContainerWindow &parent,
+              PixelRect rc, const WindowStyle style,
+              unsigned _item_height);
 
   void SetItemRenderer(ListItemRenderer *_item_renderer) {
     assert(_item_renderer != nullptr);
