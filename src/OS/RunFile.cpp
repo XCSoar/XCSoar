@@ -36,4 +36,14 @@ RunFile(const TCHAR *path)
   return true;
 }
 
+#elif defined(HAVE_POSIX) && !defined(WIN32) && !defined(KOBO)
+
+#include "Process.hpp"
+
+bool
+RunFile(const TCHAR *path)
+{
+  return Start("/usr/bin/xdg-open", path);
+}
+
 #endif
