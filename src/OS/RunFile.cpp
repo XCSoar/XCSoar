@@ -43,7 +43,11 @@ RunFile(const TCHAR *path)
 bool
 RunFile(const TCHAR *path)
 {
+#if defined(__APPLE__)
+  return Start("/usr/bin/open", path);
+#else
   return Start("/usr/bin/xdg-open", path);
+#endif
 }
 
 #endif
