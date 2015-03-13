@@ -33,7 +33,7 @@ WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      ButtonWindowStyle style,
                      ClickNotifyCallback _click_callback)
   :renderer(look),
-   listener(NULL),
+   listener(nullptr),
    click_callback(nullptr)
 {
   Create(parent, Caption, rc, style, _click_callback);
@@ -86,7 +86,7 @@ WndButton::Create(ContainerWindow &parent,
 bool
 WndButton::OnClicked()
 {
-  if (listener != NULL) {
+  if (listener != nullptr) {
 #ifndef USE_GDI
     unsigned id = GetID();
 #endif
@@ -95,7 +95,7 @@ WndButton::OnClicked()
   }
 
   // Call the OnClick function
-  if (click_callback != NULL) {
+  if (click_callback != nullptr) {
     click_callback();
     return true;
   }
@@ -113,7 +113,7 @@ WndButton::OnSetFocus()
   /* GDI's "BUTTON" class on Windows CE Core (e.g. Altair) does not
      repaint when the window gets focus, but our custom style requires
      it */
-  ::InvalidateRect(hWnd, NULL, false);
+  ::InvalidateRect(hWnd, nullptr, false);
 }
 
 void
@@ -123,7 +123,7 @@ WndButton::OnKillFocus()
 
   /* GDI's "BUTTON" class does not repaint when the window loses
      focus, but our custom style requires it */
-  ::InvalidateRect(hWnd, NULL, false);
+  ::InvalidateRect(hWnd, nullptr, false);
 }
 
 #endif

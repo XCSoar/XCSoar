@@ -44,7 +44,7 @@ public:
   WndSymbolButton(ContainerWindow &Parent, const ButtonLook &look,
                   tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
-                  ClickNotifyCallback Function = NULL)
+                  ClickNotifyCallback Function = nullptr)
     :WndButton(Parent, look, Caption, rc,
                style, Function) {}
 

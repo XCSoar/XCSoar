@@ -26,7 +26,7 @@ Copyright_License {
 void
 WndOwnerDrawFrame::OnPaint(Canvas &canvas)
 {
-  if (mOnPaintCallback == NULL)
+  if (mOnPaintCallback == nullptr)
     return;
 
   mOnPaintCallback(canvas, GetClientRect());

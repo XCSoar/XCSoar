@@ -68,7 +68,7 @@ public:
   WndButton(ContainerWindow &parent, const ButtonLook &look,
             tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
-            ClickNotifyCallback click_callback = NULL);
+            ClickNotifyCallback click_callback = nullptr);
 
   WndButton(ContainerWindow &parent, const ButtonLook &look,
             tstring::const_pointer caption, const PixelRect &rc,
@@ -91,7 +91,7 @@ public:
    * Set the object that will receive click events.
    */
   void SetListener(ActionListener *_listener, int _id) {
-    assert(click_callback == NULL);
+    assert(click_callback == nullptr);
 
 #ifdef USE_GDI
     id = _id;
@@ -108,7 +108,7 @@ public:
   void
   SetOnClickNotify(ClickNotifyCallback _click_callback)
   {
-    assert(listener == NULL);
+    assert(listener == nullptr);
 
     click_callback = _click_callback;
   }

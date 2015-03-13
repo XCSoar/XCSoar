@@ -110,7 +110,7 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
    modeless(false),
    dragging(false),
    client_area(_look),
-   default_focus(NULL)
+   default_focus(nullptr)
 {
   Create(main_window, rc, Caption, AddBorder(style));
 }
@@ -332,7 +332,7 @@ CheckKey(ContainerWindow *container, const Event &event)
   return (r & DLGC_WANTMESSAGE) != 0;
 #else
   Window *focused = container->GetFocusedWindow();
-  if (focused == NULL)
+  if (focused == nullptr)
     return false;
 
   return focused->OnKeyCheck(event.GetKeyCode());
@@ -430,12 +430,12 @@ WndForm::ShowModal()
       if (event.GetKeyCode() == SDLK_TAB) {
         /* the Tab key moves the keyboard focus */
 #if SDL_MAJOR_VERSION >= 2
-        const Uint8 *keystate = ::SDL_GetKeyboardState(NULL);
+        const Uint8 *keystate = ::SDL_GetKeyboardState(nullptr);
         event.event.key.keysym.sym =
             keystate[SDL_SCANCODE_LSHIFT] || keystate[SDL_SCANCODE_RSHIFT]
           ? SDLK_UP : SDLK_DOWN;
 #else
-        const Uint8 *keystate = ::SDL_GetKeyState(NULL);
+        const Uint8 *keystate = ::SDL_GetKeyState(nullptr);
         event.event.key.keysym.sym =
           keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
           ? SDLK_UP : SDLK_DOWN;
@@ -507,7 +507,7 @@ WndForm::ShowModal()
 #else
   if (old_focus_reference.Defined()) {
     Window *old_focus = old_focus_reference.Get(*root);
-    if (old_focus != NULL)
+    if (old_focus != nullptr)
       old_focus->SetFocus();
   }
 #endif /* !USE_GDI */
@@ -634,7 +634,7 @@ WndForm::OnPaint(Canvas &canvas)
 void
 WndForm::SetCaption(const TCHAR *_caption)
 {
-  if (_caption == NULL)
+  if (_caption == nullptr)
     _caption = _T("");
 
   if (!caption.equals(_caption)) {

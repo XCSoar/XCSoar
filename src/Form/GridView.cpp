@@ -192,7 +192,7 @@ GridView::ShowNextPage(Direction direction)
     } else if (focusPos != -1) {
 #ifdef USE_GDI
       HWND oldFocusHwnd = ::GetFocus();
-      if (oldFocusHwnd != NULL)
+      if (oldFocusHwnd != nullptr)
         ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #else
       items[focusPos]->ClearFocus();

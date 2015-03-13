@@ -96,7 +96,7 @@ ListControl::CanActivateItem() const
   if (IsEmpty())
     return false;
 
-  return cursor_handler != NULL &&
+  return cursor_handler != nullptr &&
     cursor_handler->CanActivateItem(GetCursorIndex());
 }
 
@@ -107,7 +107,7 @@ ListControl::ActivateItem()
 
   unsigned index = GetCursorIndex();
   assert(index < GetLength());
-  if (cursor_handler != NULL)
+  if (cursor_handler != nullptr)
     cursor_handler->OnActivateItem(index);
 }
 

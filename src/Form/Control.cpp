@@ -43,13 +43,13 @@ void
 WindowControl::SetHelpText(const TCHAR *Value)
 {
   free(help_text);
-  help_text = Value != NULL ? _tcsdup(Value) : NULL;
+  help_text = Value != nullptr ? _tcsdup(Value) : nullptr;
 }
 
 void
 WindowControl::SetCaption(const TCHAR *Value)
 {
-  if (Value == NULL)
+  if (Value == nullptr)
     Value = _T("");
 
   if (!caption.equals(Value)) {

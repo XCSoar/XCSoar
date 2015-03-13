@@ -108,7 +108,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          int CaptionWidth,
                          const WindowStyle style)
   :look(_look),
-   mDataField(NULL),
+   mDataField(nullptr),
    read_only(false),
    dragging(false), pressed(false)
 {
@@ -273,7 +273,7 @@ WndProperty::OnCancelMode()
 int
 WndProperty::CallSpecial()
 {
-  if (mDataField != NULL) {
+  if (mDataField != nullptr) {
     mDataField->Special();
     RefreshDisplay();
   }
@@ -283,7 +283,7 @@ WndProperty::CallSpecial()
 int
 WndProperty::IncValue()
 {
-  if (mDataField != NULL) {
+  if (mDataField != nullptr) {
     mDataField->Inc();
     RefreshDisplay();
   }
@@ -293,7 +293,7 @@ WndProperty::IncValue()
 int
 WndProperty::DecValue()
 {
-  if (mDataField != NULL) {
+  if (mDataField != nullptr) {
     mDataField->Dec();
     RefreshDisplay();
   }
@@ -408,7 +408,7 @@ WndProperty::RefreshDisplay()
 void
 WndProperty::SetDataField(DataField *Value)
 {
-  assert(mDataField == NULL || mDataField != Value);
+  assert(mDataField == nullptr || mDataField != Value);
 
   delete mDataField;
   mDataField = Value;
