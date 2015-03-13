@@ -36,9 +36,6 @@ struct DialogLook;
  * including the forms/windows itself, using the ContainerControl.
  */
 class WindowControl : public PaintWindow {
-public:
-  typedef void (*HelpCallback)(WindowControl *Sender);
-
 protected:
   /** Caption/Text of the Control */
   StaticString<254> caption;
@@ -61,9 +58,7 @@ public:
   }
 
   /**
-   * Opens up a help dialog if a help text exists, or otherwise calls the
-   * function defined by mOnHelpCallback
-   * @return
+   * Opens up a help dialog if a help text exists
    */
   bool OnHelp();
 
