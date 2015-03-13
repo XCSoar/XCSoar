@@ -30,7 +30,6 @@ Copyright_License {
 #include "Look/GlobalFonts.hpp"
 #include "Look/FontSettings.hpp"
 #include "Form/Form.hpp"
-#include "Form/Util.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
