@@ -36,6 +36,7 @@ static const char *const flarm_setting_names[] = {
   "RANGE",
   "ACFT",
   "LOGINT",
+  "NOTRACK",
   NULL
 };
 
@@ -102,6 +103,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   range = GetUnsignedValue(device, "RANGE", 3000);
   acft = GetUnsignedValue(device, "ACFT", 0);
   log_int = GetUnsignedValue(device, "LOGINT", 2);
+  notrack = GetUnsignedValue(device, "NOTRACK", 0);
 
   static constexpr StaticEnumChoice baud_list[] = {
     { 0, _T("4800"), NULL },
@@ -143,6 +145,8 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Type"), NULL, acft_list, acft);
   AddInteger(_("Logger interval"), NULL, _T("%d s"), _T("%d"),
              1, 8, 1, log_int);
+  AddBoolean(_("No tracking mode"), NULL, notrack == 1);
+
 }
 
 bool
@@ -185,6 +189,12 @@ FLARMConfigWidget::Save(bool &_changed)
   if (SaveValue(LogInt, log_int)) {
     buffer.UnsafeFormat("%u", log_int);
     device.SendSetting("LOGINT", buffer, env);
+    changed = true;
+  }
+
+  if (SaveValue(NoTrack, notrack)) {
+    buffer.UnsafeFormat("%u", notrack);
+    device.SendSetting("NOTRACK", buffer, env);
     changed = true;
   }
 

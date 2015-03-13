@@ -36,11 +36,12 @@ class FLARMConfigWidget final : public RowFormWidget {
     Range,
     Acft,
     LogInt,
+    NoTrack,
   };
 
   FlarmDevice &device;
 
-  unsigned baud, priv, thre, range, acft, log_int;
+  unsigned baud, priv, thre, range, acft, log_int, notrack;
 
 public:
   FLARMConfigWidget(const DialogLook &look, FlarmDevice &_device)
