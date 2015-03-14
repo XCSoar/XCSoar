@@ -38,9 +38,6 @@ class ActionListener;
  * It is based on the WindowControl class.
  */
 class WndButton : public ButtonWindow {
-public:
-  typedef void (*ClickNotifyCallback)();
-
 protected:
   ButtonRenderer renderer;
 
@@ -51,25 +48,7 @@ private:
 
   ActionListener *listener;
 
-  /**
-   * The callback-function that should be called when the button is pressed
-   * @see SetOnClickNotify()
-   */
-  ClickNotifyCallback click_callback;
-
 public:
-  /**
-   * Constructor of the WndButton class
-   * @param Parent Parent window/ContainerControl
-   * @param Caption Text on the button
-   * @param Function The function that should be called
-   * when the button is clicked
-   */
-  WndButton(ContainerWindow &parent, const ButtonLook &look,
-            tstring::const_pointer caption, const PixelRect &rc,
-            ButtonWindowStyle style,
-            ClickNotifyCallback click_callback = nullptr);
-
   WndButton(ContainerWindow &parent, const ButtonLook &look,
             tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
@@ -79,8 +58,7 @@ public:
 
   void Create(ContainerWindow &parent,
               tstring::const_pointer caption, const PixelRect &rc,
-              ButtonWindowStyle style,
-              ClickNotifyCallback click_callback=nullptr);
+              ButtonWindowStyle style);
 
   void Create(ContainerWindow &parent,
               tstring::const_pointer caption, const PixelRect &rc,
@@ -91,26 +69,12 @@ public:
    * Set the object that will receive click events.
    */
   void SetListener(ActionListener *_listener, int _id) {
-    assert(click_callback == nullptr);
-
 #ifdef USE_GDI
     id = _id;
 #else
     SetID(_id);
 #endif
     listener = _listener;
-  }
-
-  /**
-   * Sets the function that should be called when the button is pressed
-   * @param Function Pointer to the function to be called
-   */
-  void
-  SetOnClickNotify(ClickNotifyCallback _click_callback)
-  {
-    assert(listener == nullptr);
-
-    click_callback = _click_callback;
   }
 
   /**

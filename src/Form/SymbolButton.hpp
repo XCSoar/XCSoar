@@ -33,21 +33,6 @@ Copyright_License {
 class WndSymbolButton final : public WndButton
 {
 public:
-  /**
-   * Constructor of the WndSymbolButton class
-   * @param Parent Parent window/ContainerControl
-   * @param Name Name of the button
-   * @param Caption Text on the button
-   * @param Function The function that should be called
-   * when the button is clicked
-   */
-  WndSymbolButton(ContainerWindow &Parent, const ButtonLook &look,
-                  tstring::const_pointer Caption,
-                  const PixelRect &rc, const ButtonWindowStyle style,
-                  ClickNotifyCallback Function = nullptr)
-    :WndButton(Parent, look, Caption, rc,
-               style, Function) {}
-
   WndSymbolButton(ContainerWindow &Parent, const ButtonLook &look,
                   tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,

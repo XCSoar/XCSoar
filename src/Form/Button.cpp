@@ -29,37 +29,22 @@ Copyright_License {
 #include "Asset.hpp"
 
 WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
-                     const TCHAR *Caption, const PixelRect &rc,
-                     ButtonWindowStyle style,
-                     ClickNotifyCallback _click_callback)
-  :renderer(look),
-   listener(nullptr),
-   click_callback(nullptr)
-{
-  Create(parent, Caption, rc, style, _click_callback);
-}
-
-WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ActionListener &_listener, int _id)
-  :renderer(look), listener(nullptr), click_callback(nullptr)
+  :renderer(look), listener(nullptr)
 {
   Create(parent, caption, rc, style, _listener, _id);
 }
 
 WndButton::WndButton(const ButtonLook &_look)
-  :renderer(_look), listener(nullptr), click_callback(nullptr) {}
+  :renderer(_look), listener(nullptr) {}
 
 void
 WndButton::Create(ContainerWindow &parent,
                   tstring::const_pointer caption, const PixelRect &rc,
-                  ButtonWindowStyle style,
-                  ClickNotifyCallback _click_callback)
+                  ButtonWindowStyle style)
 {
-  click_callback = _click_callback;
-
-  style.EnableCustomPainting();
   ButtonWindow::Create(parent, caption, rc, style);
 }
 
@@ -68,8 +53,6 @@ WndButton::Create(ContainerWindow &parent,
                   tstring::const_pointer caption, const PixelRect &rc,
                   ButtonWindowStyle style,
                   ActionListener &_listener, int _id) {
-  assert(click_callback == nullptr);
-
   listener = &_listener;
 
   style.EnableCustomPainting();
@@ -91,12 +74,6 @@ WndButton::OnClicked()
     unsigned id = GetID();
 #endif
     listener->OnAction(id);
-    return true;
-  }
-
-  // Call the OnClick function
-  if (click_callback != nullptr) {
-    click_callback();
     return true;
   }
 
