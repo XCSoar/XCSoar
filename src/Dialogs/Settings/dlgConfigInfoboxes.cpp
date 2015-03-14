@@ -22,8 +22,10 @@ Copyright_License {
 */
 
 #include "dlgConfigInfoboxes.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Look/DialogLook.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
@@ -34,17 +36,33 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/String.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/StaticArray.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
 
+static InfoBoxSettings::Panel clipboard;
+static unsigned clipboard_size;
+
+class InfoBoxesConfigWidget;
+
 class InfoBoxPreview : public PaintWindow {
+  InfoBoxesConfigWidget *parent;
+  unsigned i;
+
+public:
+  void SetParent(InfoBoxesConfigWidget &_parent, unsigned _i) {
+    parent = &_parent;
+    i = _i;
+  }
+
 protected:
   /* virtual methods from class Window */
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
@@ -54,46 +72,281 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
 
-static const InfoBoxLook *look;
-static InfoBoxSettings::Panel data;
-static WndForm *wf = NULL;
-static InfoBoxSettings::Panel clipboard;
-static unsigned clipboard_size;
-static InfoBoxLayout::Layout info_box_layout;
-static InfoBoxPreview previews[InfoBoxSettings::Panel::MAX_CONTENTS];
-static unsigned current_preview;
+class InfoBoxesConfigWidget final
+  : public RowFormWidget, DataFieldListener, ActionListener {
 
-static WndProperty *edit_name;
-static WndProperty *edit_select;
-static WndProperty *edit_content;
-static WndButton *buttonPaste;
-static WndFrame *edit_content_description;
+  enum Controls {
+    NAME, INFOBOX, CONTENT, DESCRIPTION
+  };
 
-static void
-RefreshPasteButton()
+  enum Buttons {
+    COPY, PASTE,
+  };
+
+  struct Layout {
+    InfoBoxLayout::Layout info_boxes;
+
+    PixelRect form;
+
+    PixelRect copy_button, paste_button, close_button;
+
+    Layout(PixelRect rc, InfoBoxSettings::Geometry geometry);
+  };
+
+  ActionListener &dialog;
+  const InfoBoxLook &look;
+
+  InfoBoxSettings::Panel &data;
+  const bool allow_name_change;
+  bool changed;
+
+  const InfoBoxSettings::Geometry geometry;
+
+  StaticArray<InfoBoxPreview, InfoBoxSettings::Panel::MAX_CONTENTS> previews;
+  unsigned current_preview;
+
+  WndButton copy_button, paste_button, close_button;
+
+public:
+  InfoBoxesConfigWidget(ActionListener &_dialog,
+                        const DialogLook &dialog_look,
+                        const InfoBoxLook &_look,
+                        InfoBoxSettings::Panel &_data,
+                        bool _allow_name_change,
+                        InfoBoxSettings::Geometry _geometry)
+    :RowFormWidget(dialog_look),
+     dialog(_dialog),
+     look(_look),
+     data(_data),
+     allow_name_change(_allow_name_change),
+     changed(false),
+     geometry(_geometry),
+     copy_button(dialog_look.button), paste_button(dialog_look.button),
+     close_button(dialog_look.button) {}
+
+  const InfoBoxLook &GetInfoBoxLook() const {
+    return look;
+  }
+
+  const InfoBoxSettings::Panel &GetData() const {
+    return data;
+  }
+
+  void RefreshPasteButton() {
+    paste_button.SetEnabled(clipboard_size > 0);
+  }
+
+  void RefreshEditContentDescription();
+  void RefreshEditContent();
+
+  void OnCopy();
+  void OnPaste();
+
+  void SetCurrentInfoBox(unsigned _current_preview);
+
+  unsigned GetCurrentInfoBox() const {
+    return current_preview;
+  }
+
+  InfoBoxFactory::Type GetContents(unsigned i) const {
+    return data.contents[i];
+  }
+
+  void BeginEditing() {
+    GetControl(CONTENT).BeginEditing();
+  }
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+
+  bool Save(bool &changed) override;
+
+  void Show(const PixelRect &rc) override {
+    const Layout layout(rc, geometry);
+
+    RowFormWidget::Show(layout.form);
+
+    copy_button.MoveAndShow(layout.copy_button);
+    paste_button.MoveAndShow(layout.paste_button);
+    close_button.MoveAndShow(layout.close_button);
+
+    for (unsigned i = 0; i < previews.size(); ++i)
+      previews[i].MoveAndShow(layout.info_boxes.positions[i]);
+  }
+
+  void Hide() override {
+    RowFormWidget::Hide();
+
+    copy_button.Hide();
+    paste_button.Hide();
+    close_button.Hide();
+
+    for (auto &i : previews)
+      i.Hide();
+  }
+
+  void Move(const PixelRect &rc) override {
+    const Layout layout(rc, geometry);
+
+    RowFormWidget::Move(layout.form);
+
+    copy_button.Move(layout.copy_button);
+    paste_button.Move(layout.paste_button);
+    close_button.Move(layout.close_button);
+  }
+
+  bool SetFocus() override {
+    GetGeneric(INFOBOX).SetFocus();
+    return true;
+  }
+
+#ifdef GNAV
+  bool KeyPress(unsigned key_code) override;
+#endif
+
+private:
+  /* virtual methods from class DataFieldListener */
+
+  void OnModified(DataField &df) override {
+    if (IsDataField(INFOBOX, df)) {
+      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+      SetCurrentInfoBox(dfe.GetValue());
+    } else if (IsDataField(CONTENT, df)) {
+      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+
+      auto new_value = (InfoBoxFactory::Type)dfe.GetValue();
+      if (new_value == data.contents[current_preview])
+        return;
+
+      changed = true;
+      data.contents[current_preview] = new_value;
+      previews[current_preview].Invalidate();
+      RefreshEditContentDescription();
+    }
+  }
+
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case COPY:
+      OnCopy();
+      break;
+
+    case PASTE:
+      OnPaste();
+      break;
+    }
+  }
+};
+
+InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
+                                      InfoBoxSettings::Geometry geometry)
 {
-  buttonPaste->SetEnabled(clipboard_size > 0);
+  info_boxes = InfoBoxLayout::Calculate(rc, geometry);
+
+  form = info_boxes.remaining;
+  PixelRect buttons = form;
+  buttons.top = form.bottom -= ::Layout::GetMaximumControlHeight();
+
+  copy_button = paste_button = close_button = buttons;
+  copy_button.right = paste_button.left =
+    (2 * buttons.left + buttons.right) / 3;
+  paste_button.right = close_button.left =
+    (buttons.left + 2 * buttons.right) / 3;
 }
 
-static void
-RefreshEditContentDescription()
+void
+InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
+                               const PixelRect &rc)
 {
-  DataFieldEnum &df = *(DataFieldEnum *)edit_content->GetDataField();
-  edit_content_description->SetText(df.GetHelp() != NULL ? df.GetHelp() :
-                                                           _T(""));
+  const Layout layout(rc, geometry);
+
+  AddText(_("Name"), nullptr,
+          allow_name_change ? (const TCHAR *)data.name : gettext(data.name));
+  SetReadOnly(NAME, !allow_name_change);
+
+  DataFieldEnum *dfe = new DataFieldEnum(this);
+  for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
+    TCHAR label[32];
+    _stprintf(label, _T("%u"), i + 1);
+    dfe->addEnumText(label, i);
+  }
+
+  Add(_("InfoBox"), nullptr, dfe);
+
+  dfe = new DataFieldEnum(this);
+  for (unsigned i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {
+    const TCHAR *name = InfoBoxFactory::GetName((InfoBoxFactory::Type) i);
+    const TCHAR *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type) i);
+    if (name != NULL)
+      dfe->addEnumText(gettext(name), i, desc != NULL ? gettext(desc) : NULL);
+  }
+
+  dfe->EnableItemHelp(true);
+  dfe->Sort(0);
+
+  Add(_("Content"), nullptr, dfe);
+
+  ContainerWindow &form_parent = (ContainerWindow &)RowFormWidget::GetWindow();
+  AddRemaining(new WndFrame(form_parent, GetLook(), rc));
+
+  ButtonWindowStyle button_style;
+  button_style.Hide();
+  button_style.TabStop();
+
+  copy_button.Create(parent, _("Copy"), layout.copy_button,
+                     button_style, *this, COPY);
+  paste_button.Create(parent, _("Paste"), layout.paste_button,
+                      button_style, *this, PASTE);
+  close_button.Create(parent, _("Close"), layout.close_button,
+                      button_style, dialog, mrOK);
+
+  WindowStyle preview_style;
+  preview_style.EnableDoubleClicks();
+  preview_style.Hide();
+
+  previews.resize(layout.info_boxes.count);
+  for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
+    previews[i].SetParent(*this, i);
+    previews[i].Create(parent, layout.info_boxes.positions[i],
+                       preview_style);
+  }
+
+  RefreshEditContent();
+  RefreshPasteButton();
 }
 
-static void
-RefreshEditContent()
+bool
+InfoBoxesConfigWidget::Save(bool &changed_r)
 {
-  DataFieldEnum &df = *(DataFieldEnum *)edit_content->GetDataField();
-  df.Set(data.contents[current_preview]);
-  edit_content->RefreshDisplay();
-  RefreshEditContentDescription();
+  if (allow_name_change) {
+    const auto *new_name = GetValueString(InfoBoxesConfigWidget::NAME);
+    if (!StringIsEqual(new_name, data.name)) {
+      data.name = new_name;
+      changed = true;
+    }
+  }
+
+  changed_r = changed;
+  return true;
 }
 
-static void
-OnCopy()
+void
+InfoBoxesConfigWidget::RefreshEditContentDescription()
+{
+  DataFieldEnum &df = (DataFieldEnum &)GetDataField(CONTENT);
+  WndFrame &description = (WndFrame &)GetRow(DESCRIPTION);
+  description.SetText(df.GetHelp() != nullptr ? df.GetHelp() : _T(""));
+}
+
+void
+InfoBoxesConfigWidget::RefreshEditContent()
+{
+  LoadValueEnum(CONTENT, data.contents[current_preview]);
+}
+
+void
+InfoBoxesConfigWidget::OnCopy()
 {
   clipboard = data;
   clipboard_size = InfoBoxSettings::Panel::MAX_CONTENTS;
@@ -101,8 +354,8 @@ OnCopy()
   RefreshPasteButton();
 }
 
-static void
-OnPaste()
+void
+InfoBoxesConfigWidget::OnPaste()
 {
   if (clipboard_size == 0)
     return;
@@ -118,17 +371,17 @@ OnPaste()
 
     data.contents[item] = content;
 
-    if (item < info_box_layout.count)
+    if (item < previews.size())
       previews[item].Invalidate();
   }
 
   RefreshEditContent();
 }
 
-static void
-SetCurrentInfoBox(unsigned _current_preview)
+void
+InfoBoxesConfigWidget::SetCurrentInfoBox(unsigned _current_preview)
 {
-  assert(_current_preview < info_box_layout.count);
+  assert(_current_preview < previews.size());
 
   if (_current_preview == current_preview)
     return;
@@ -137,50 +390,29 @@ SetCurrentInfoBox(unsigned _current_preview)
   current_preview = _current_preview;
   previews[current_preview].Invalidate();
 
-  DataFieldEnum &df = *(DataFieldEnum *)edit_select->GetDataField();
-  df.Set(current_preview);
-  edit_select->RefreshDisplay();
+  LoadValueEnum(INFOBOX, current_preview);
 
   RefreshEditContent();
-}
-
-static void
-OnSelectAccess(DataField *Sender)
-{
-  const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
-
-  SetCurrentInfoBox(dfe.GetValue());
-}
-
-static void
-OnContentAccess(DataField *Sender)
-{
-  const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
-
-  data.contents[current_preview] = (InfoBoxFactory::Type)dfe.GetValue();
-  previews[current_preview].Invalidate();
-  RefreshEditContentDescription();
 }
 
 bool
 InfoBoxPreview::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  SetCurrentInfoBox(this - previews);
+  parent->SetCurrentInfoBox(i);
   return true;
 }
 
 bool
 InfoBoxPreview::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-  edit_content->BeginEditing();
+  parent->BeginEditing();
   return true;
 }
 
 void
 InfoBoxPreview::OnPaint(Canvas &canvas)
 {
-  const unsigned i = this - previews;
-  const bool is_current = i == current_preview;
+  const bool is_current = i == parent->GetCurrentInfoBox();
 
   if (is_current)
     canvas.Clear(COLOR_BLACK);
@@ -191,7 +423,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   canvas.SelectBlackPen();
   canvas.Rectangle(0, 0, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
 
-  InfoBoxFactory::Type type = data.contents[i];
+  InfoBoxFactory::Type type = parent->GetContents(i);
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
     ? InfoBoxFactory::GetCaption(type)
     : NULL;
@@ -200,51 +432,45 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   else
     caption = gettext(caption);
 
-  canvas.Select(*look->title.font);
+  canvas.Select(*parent->GetInfoBoxLook().title.font);
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(2, 2, caption);
 }
 
-#ifdef _WIN32_WCE
+#ifdef GNAV
 
-static bool
-OnKeyDown(unsigned key_code)
+bool
+InfoBoxesConfigWidget::KeyPress(unsigned key_code)
 {
-  DataFieldEnum *dfe;
-
   /* map the Altair hardware buttons */
   switch (key_code){
   case KEY_UP:
-    dfe = (DataFieldEnum *)edit_select->GetDataField();
-    dfe->Dec();
-    edit_select->RefreshDisplay();
+    ((DataFieldEnum &)GetDataField(INFOBOX)).Dec();
+    GetControl(INFOBOX).RefreshDisplay();
     return true;
 
   case KEY_DOWN:
-    dfe = (DataFieldEnum *)edit_select->GetDataField();
-    dfe->Inc();
-    edit_select->RefreshDisplay();
+    ((DataFieldEnum &)GetDataField(INFOBOX)).Inc();
+    GetControl(INFOBOX).RefreshDisplay();
     return true;
 
   case KEY_LEFT:
-    dfe = (DataFieldEnum *)edit_content->GetDataField();
-    dfe->Dec();
-    edit_content->RefreshDisplay();
+    ((DataFieldEnum &)GetDataField(CONTENT)).Dec();
+    GetControl(CONTENT).RefreshDisplay();
     return true;
 
   case KEY_RIGHT:
-    dfe = (DataFieldEnum *)edit_content->GetDataField();
-    dfe->Inc();
-    edit_content->RefreshDisplay();
+    ((DataFieldEnum &)GetDataField(CONTENT)).Inc();
+    GetControl(CONTENT).RefreshDisplay();
     return true;
 
   case KEY_APP1:
-    edit_name->BeginEditing();
+    GetControl(NAME).BeginEditing();
     return true;
 
   case '6':
-    wf->SetModalResult(mrOK);
+    dialog.OnAction(mrOK);
     return true;
 
   case '7':
@@ -270,145 +496,13 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             InfoBoxSettings::Panel &data_r,
                             bool allow_name_change)
 {
-  current_preview = 0;
-  look = &_look;
-  data = data_r;
+  WidgetDialog dialog(dialog_look);
+  InfoBoxesConfigWidget widget(dialog, dialog_look, _look,
+                               data_r, allow_name_change, geometry);
+  dialog.CreateFull(parent, nullptr, &widget);
 
-  PixelRect rc = parent.GetClientRect();
-  wf = new WndForm(parent, dialog_look, rc);
+  dialog.ShowModal();
+  dialog.StealWidget();
 
-#ifdef _WIN32_WCE
-  if (IsAltair())
-    wf->SetKeyDownFunction(OnKeyDown);
-#endif
-
-  ContainerWindow &client_area = wf->GetClientAreaWindow();
-  rc = client_area.GetClientRect();
-  rc.Grow(Layout::FastScale(-2));
-  info_box_layout = InfoBoxLayout::Calculate(rc, geometry);
-
-  WindowStyle preview_style;
-  preview_style.EnableDoubleClicks();
-  for (unsigned i = 0; i < info_box_layout.count; ++i) {
-    rc = info_box_layout.positions[i];
-    previews[i].Create(client_area, rc, preview_style);
-  }
-
-  rc = info_box_layout.remaining;
-
-  WindowStyle style;
-  style.TabStop();
-
-  PixelRect control_rc = rc;
-  control_rc.right -= Layout::FastScale(2);
-
-  const UPixelScalar height = Layout::Scale(22);
-  const UPixelScalar caption_width = Layout::Scale(60);
-
-  ButtonWindowStyle button_style;
-  button_style.TabStop();
-
-  control_rc.bottom = control_rc.top + height;
-  edit_name = new WndProperty(client_area, dialog_look, _("Name"),
-                              control_rc, caption_width,
-                              style);
-  DataFieldString *dfs = new DataFieldString(allow_name_change
-                                             ? (const TCHAR *)data.name
-                                             : gettext(data.name));
-  edit_name->SetDataField(dfs);
-  edit_name->SetReadOnly(!allow_name_change);
-
-  control_rc.top = control_rc.bottom;
-  control_rc.bottom = control_rc.top + height;
-
-  edit_select = new WndProperty(client_area, dialog_look, _("InfoBox"),
-                                control_rc, caption_width,
-                                style);
-
-  DataFieldEnum *dfe = new DataFieldEnum(OnSelectAccess);
-  for (unsigned i = 0; i < info_box_layout.count; ++i) {
-    TCHAR label[32];
-    _stprintf(label, _T("%u"), i + 1);
-    dfe->addEnumText(label, i);
-  }
-
-  edit_select->SetDataField(dfe);
-
-  control_rc.top += height;
-  control_rc.bottom += height;
-
-  edit_content = new WndProperty(client_area, dialog_look, _("Content"),
-                                 control_rc, caption_width,
-                                 style);
-
-  dfe = new DataFieldEnum(OnContentAccess);
-  for (unsigned i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {
-    const TCHAR *name = InfoBoxFactory::GetName((InfoBoxFactory::Type) i);
-    const TCHAR *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type) i);
-    if (name != NULL)
-      dfe->addEnumText(gettext(name), i, desc != NULL ? gettext(desc) : NULL);
-  }
-
-  dfe->EnableItemHelp(true);
-  dfe->Sort(0);
-
-  edit_content->SetDataField(dfe);
-
-  control_rc.top += height;
-  control_rc.bottom += height * 5;
-  edit_content_description = new WndFrame(client_area, dialog_look,
-                                          control_rc, style);
-
-  RefreshEditContent();
-
-  const UPixelScalar button_width = Layout::Scale(60);
-  const UPixelScalar button_height = Layout::Scale(28);
-
-  PixelRect button_rc = rc;
-  button_rc.right = button_rc.left + button_width;
-  button_rc.top = button_rc.bottom - button_height;
-
-  WndButton *close_button =
-    new WndButton(client_area, dialog_look.button, _("Close"),
-                  button_rc, button_style, *wf, mrOK);
-
-  button_rc.left += button_width + Layout::Scale(2);
-  button_rc.right += button_width + Layout::Scale(2);
-  WndButton *copy_button =
-    new WndButton(client_area, dialog_look.button, _("Copy"),
-                  button_rc, button_style, OnCopy);
-
-  button_rc.left += button_width + Layout::Scale(2);
-  button_rc.right += button_width + Layout::Scale(2);
-  buttonPaste =
-    new WndButton(client_area, dialog_look.button, _("Paste"),
-                  button_rc, button_style, OnPaste);
-
-  RefreshPasteButton();
-
-  int result = wf->ShowModal();
-
-  if (result == mrOK && allow_name_change)
-    data.name = edit_name->GetDataField()->GetAsString();
-
-  delete wf;
-  delete edit_name;
-  delete edit_select;
-  delete edit_content;
-  delete close_button;
-  delete copy_button;
-  delete buttonPaste;
-
-  bool changed = false;
-  if (result == mrOK) {
-    for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i)
-      if (data.contents[i] != data_r.contents[i])
-        changed = true;
-    changed |= !StringIsEqual(data.name, data_r.name);
-
-    if (changed)
-      data_r = data;
-  }
-
-  return changed;
+  return dialog.GetChanged();
 }
