@@ -32,6 +32,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Patterns.hpp"
+#include "Form/ActionListener.hpp"
 #include "Form/DataField/File.hpp"
 
 enum ControlIndex {
@@ -45,7 +46,11 @@ enum ControlIndex {
   AirfieldFile
 };
 
-class SiteConfigPanel final : public RowFormWidget {
+class SiteConfigPanel final : public RowFormWidget, ActionListener {
+  enum Buttons {
+    WAYPOINT_EDITOR,
+  };
+
 public:
   SiteConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -55,12 +60,18 @@ public:
   virtual bool Save(bool &changed) override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
+
+private:
+  /* methods from ActionListener */
+  void OnAction(int id) override {
+    dlgConfigWaypointsShowModal();
+  }
 };
 
 void
 SiteConfigPanel::Show(const PixelRect &rc)
 {
-  ConfigPanel::BorrowExtraButton(1, _("Waypts."), dlgConfigWaypointsShowModal);
+  ConfigPanel::BorrowExtraButton(1, _("Waypts."), *this, WAYPOINT_EDITOR);
   RowFormWidget::Show(rc);
 }
 

@@ -27,9 +27,11 @@ Copyright_License {
 #include <tchar.h>
 
 class WndButton;
+class ActionListener;
 
 namespace ConfigPanel {
-  void BorrowExtraButton(unsigned i, const TCHAR *caption, void (*callback)());
+  void BorrowExtraButton(unsigned i, const TCHAR *caption,
+                         ActionListener &listener, int id);
   void ReturnExtraButton(unsigned i);
 };
 

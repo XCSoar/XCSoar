@@ -246,13 +246,13 @@ private:
 
 void
 ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
-                               void (*callback)())
+                               ActionListener &listener, int id)
 {
   ConfigurationExtraButtons &extra =
     (ConfigurationExtraButtons &)pager->GetExtra();
   WndButton &button = extra.GetButton(i);
   button.SetCaption(caption);
-  button.SetOnClickNotify(callback);
+  button.SetListener(&listener, id);
   button.Show();
 }
 

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "AirspaceConfigPanel.hpp"
 #include "ConfigPanel.hpp"
+#include "Form/ActionListener.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -79,7 +80,13 @@ static constexpr StaticEnumChoice as_fill_mode_list[] = {
 };
 
 class AirspaceConfigPanel final
-  : public RowFormWidget, DataFieldListener {
+  : public RowFormWidget, DataFieldListener, ActionListener {
+
+  enum Button {
+    COLOURS,
+    FILTER,
+  };
+
 public:
   AirspaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -96,19 +103,20 @@ public:
 private:
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
+
+  /* methods from ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case COLOURS:
+      dlgAirspaceShowModal(true);
+      break;
+
+    case FILTER:
+      dlgAirspaceShowModal(false);
+      break;
+    }
+  }
 };
-
-static void
-OnAirspaceColoursClicked()
-{
-  dlgAirspaceShowModal(true);
-}
-
-static void
-OnAirspaceModeClicked()
-{
-  dlgAirspaceShowModal(false);
-}
 
 void
 AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode mode)
@@ -132,10 +140,8 @@ AirspaceConfigPanel::ShowWarningControls(bool visible)
 void
 AirspaceConfigPanel::Show(const PixelRect &rc)
 {
-  ConfigPanel::BorrowExtraButton(1, _("Colours"),
-                                 OnAirspaceColoursClicked);
-  ConfigPanel::BorrowExtraButton(2, _("Filter"),
-                                 OnAirspaceModeClicked);
+  ConfigPanel::BorrowExtraButton(1, _("Colours"), *this, COLOURS);
+  ConfigPanel::BorrowExtraButton(2, _("Filter"), *this, FILTER);
   RowFormWidget::Show(rc);
 }
 
