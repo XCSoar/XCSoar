@@ -56,7 +56,11 @@ enum ControlIndex {
   HapticFeedback
 };
 
-class InterfaceConfigPanel final : public RowFormWidget, ActionListener {
+class InterfaceConfigPanel final : public RowFormWidget
+#ifndef GNAV
+  , ActionListener
+#endif
+{
   enum Buttons {
     FONTS,
   };
@@ -71,11 +75,13 @@ public:
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
 
- private:
+#ifndef GNAV
+private:
   /* methods from ActionListener */
   void OnAction(int id) override {
     dlgConfigFontsShowModal();
   }
+#endif
 };
 
 void
