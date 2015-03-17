@@ -93,6 +93,7 @@ MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash-pt_BR.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf
 
 .PHONY: manual
@@ -169,6 +170,12 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf: $(DOC)/manual/pl/XCSoar-manual-pl.tex \
 	$(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(TEX_INCLUDES) \
 	$(FIGURES_PL) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+	$(TEX_RUN) $<
+
+$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash-pt_BR.pdf: $(DOC)/manual/pt_BR/XCSoar-in-a-flash-pt_BR.tex \
+	$(TEX_INCLUDES) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
