@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class WndButton;
 class ActionListener;
 
 namespace ConfigPanel {
