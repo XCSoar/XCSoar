@@ -117,7 +117,7 @@ public:
   void
   Visit(const TCHAR *path, const TCHAR *filename)
   {
-    if (filename != NULL && !df.Exists(filename))
+    if (filename != nullptr && !df.Exists(filename))
       df.addEnumText(filename);
   }
 };
@@ -150,14 +150,14 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                _("The language options selects translations for English texts to other "
                    "languages. Select English for a native interface or Automatic to localise "
                    "XCSoar according to the system settings."));
-  if (wp != NULL) {
+  if (wp != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
     df.addEnumText(_("Automatic"));
     df.addEnumText(_T("English"));
 
 #ifdef HAVE_BUILTIN_LANGUAGES
     for (const BuiltinLanguage *l = language_table;
-         l->resource != NULL; ++l) {
+         l->resource != nullptr; ++l) {
       StaticString<100> display_string;
       display_string.Format(_T("%s (%s)"), l->name, l->resource);
       df.addEnumText(l->resource, display_string);
@@ -177,7 +177,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       df.Set(1);
     else if (!StringIsEmpty(value) && !StringIsEqual(value, _T("auto"))) {
       const TCHAR *base = BaseName(value);
-      if (base != NULL)
+      if (base != nullptr)
         df.Set(base);
     }
     wp->RefreshDisplay();
@@ -244,7 +244,7 @@ InterfaceConfigPanel::Save(bool &_changed)
 
 #ifndef HAVE_NATIVE_GETTEXT
   WndProperty *wp = (WndProperty *)&GetControl(LanguageFile);
-  if (wp != NULL) {
+  if (wp != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
     TCHAR old_value[MAX_PATH];
@@ -252,7 +252,7 @@ InterfaceConfigPanel::Save(bool &_changed)
       old_value[0] = _T('\0');
 
     const TCHAR *old_base = BaseName(old_value);
-    if (old_base == NULL)
+    if (old_base == nullptr)
       old_base = old_value;
 
     TCHAR buffer[MAX_PATH];
@@ -272,7 +272,7 @@ InterfaceConfigPanel::Save(bool &_changed)
       ContractLocalPath(buffer);
       new_value = buffer;
       new_base = BaseName(new_value);
-      if (new_base == NULL)
+      if (new_base == nullptr)
         new_base = new_value;
       break;
     }

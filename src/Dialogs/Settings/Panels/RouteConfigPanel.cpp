@@ -111,7 +111,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  AddEnum(_("Route mode"), NULL, route_mode_list,
+  AddEnum(_("Route mode"), nullptr, route_mode_list,
           (unsigned)route_planner.mode, this);
 
   AddBoolean(_("Route climb"),
@@ -167,7 +167,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  AddEnum(_("Reach display"), NULL, final_glide_terrain_list,
+  AddEnum(_("Reach display"), nullptr, final_glide_terrain_list,
           (unsigned)settings_computer.features.final_glide_terrain);
 
   ShowRouteControls(route_planner.mode != RoutePlannerConfig::Mode::NONE);

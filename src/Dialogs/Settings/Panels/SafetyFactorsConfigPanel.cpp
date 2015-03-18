@@ -143,7 +143,7 @@ SafetyFactorsConfigPanel::Save(bool &_changed)
     settings_computer.polar.SetDegradationFactor(fixed(1) - degradation / 100);
     Profile::Set(ProfileKeys::PolarDegradation,
                  settings_computer.polar.degradation_factor);
-    if (protected_task_manager != NULL)
+    if (protected_task_manager != nullptr)
       protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
     changed = true;
   }

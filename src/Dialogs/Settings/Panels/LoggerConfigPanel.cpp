@@ -52,9 +52,9 @@ public:
 };
 
 static constexpr StaticEnumChoice auto_logger_list[] = {
-  { (unsigned)LoggerSettings::AutoLogger::ON, N_("On"), NULL },
-  { (unsigned)LoggerSettings::AutoLogger::START_ONLY, N_("Start only"), NULL },
-  { (unsigned)LoggerSettings::AutoLogger::OFF, N_("Off"), NULL },
+  { (unsigned)LoggerSettings::AutoLogger::ON, N_("On"), nullptr },
+  { (unsigned)LoggerSettings::AutoLogger::START_ONLY, N_("Start only"), nullptr },
+  { (unsigned)LoggerSettings::AutoLogger::OFF, N_("Off"), nullptr },
   { 0 }
 };
 
@@ -65,7 +65,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const LoggerSettings &logger = settings_computer.logger;
 
   RowFormWidget::Prepare(parent, rc);
-  AddText(_("Pilot name"), NULL, logger.pilot_name);
+  AddText(_("Pilot name"), nullptr, logger.pilot_name);
 
   AddTime(_("Time step cruise"),
           _("This is the time interval between logged points when not circling."),
@@ -93,7 +93,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              logger.enable_flight_logger);
   SetExpertRow(EnableFlightLogger);
 
-  AddText(_("Logger ID"), NULL, logger.logger_id);
+  AddText(_("Logger ID"), nullptr, logger.logger_id);
   SetExpertRow(LoggerID);
 }
 

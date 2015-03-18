@@ -105,7 +105,7 @@ TerrainDisplayConfigPanel::ShowTerrainControls()
   SetRowVisible(TerrainContrast, show);
   SetRowVisible(TerrainBrightness, show);
   SetRowVisible(TerrainContours, show);
-  if (terrain != NULL)
+  if (terrain != nullptr)
     SetRowVisible(TerrainPreview, show);
 }
 
@@ -134,7 +134,7 @@ TerrainDisplayConfigPanel::UpdateTerrainPreview()
     GetValueInteger(TerrainContours);
 
   // Invalidate terrain preview
-  if (terrain != NULL)
+  if (terrain != nullptr)
     ((TerrainPreviewWindow &)GetRow(TerrainPreview)).SetSettings(terrain_settings);
 }
 
@@ -154,7 +154,7 @@ void
 TerrainPreviewWindow::OnPaint(Canvas &canvas)
 {
   const GlueMapWindow *map = UIGlobals::GetMap();
-  if (map == NULL)
+  if (map == nullptr)
     return;
 
   MapWindowProjection projection = map->VisibleProjection();
@@ -269,7 +269,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   GetDataField(TerrainContours).SetListener(this);
   SetExpertRow(TerrainContours);
 
-  if (::terrain != NULL) {
+  if (::terrain != nullptr) {
     WindowStyle style;
     style.Border();
 

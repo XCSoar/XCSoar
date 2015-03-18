@@ -184,8 +184,8 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
 #ifdef HAVE_SKYLINES_TRACKING
-  AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
-  AddEnum(_("Tracking Interval"), NULL, tracking_intervals,
+  AddBoolean(_T("SkyLines"), nullptr, settings.skylines.enabled, this);
+  AddEnum(_("Tracking Interval"), nullptr, tracking_intervals,
           settings.skylines.interval);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -199,7 +199,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     buffer.UnsafeFormat(_T("%llX"), (unsigned long long)settings.skylines.key);
   else
     buffer.clear();
-  AddText(_T("Key"), NULL, buffer);
+  AddText(_T("Key"), nullptr, buffer);
 #endif
 
 #if defined(HAVE_SKYLINES_TRACKING) && defined(HAVE_LIVETRACK24)
@@ -237,7 +237,7 @@ SaveKey(const RowFormWidget &form, unsigned idx, const char *profile_key,
         uint64_t &value_r)
 {
   const TCHAR *const s = form.GetValueString(idx);
-  uint64_t value = ParseUint64(s, NULL, 16);
+  uint64_t value = ParseUint64(s, nullptr, 16);
   if (value == value_r)
     return false;
 

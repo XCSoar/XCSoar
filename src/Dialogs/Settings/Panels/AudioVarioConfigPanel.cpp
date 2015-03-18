@@ -72,7 +72,7 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("Emulate the sound of an electronic vario."),
              settings.enabled);
 
-  AddInteger(_("Volume"), NULL, _T("%u %%"), _T("%u"),
+  AddInteger(_("Volume"), nullptr, _T("%u %%"), _T("%u"),
              0, 100, 1, settings.volume);
 
   AddBoolean(_("Enable Deadband"),

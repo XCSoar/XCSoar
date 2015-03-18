@@ -133,7 +133,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
     { 0 }
   };
 
-  AddEnum(_("Label style"), NULL, wp_label_list,
+  AddEnum(_("Label style"), nullptr, wp_label_list,
           (unsigned)settings.landable_render_mode);
   SetExpertRow(WaypointLabelStyle);
 

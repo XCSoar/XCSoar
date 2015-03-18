@@ -178,7 +178,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.detour_cost_markers_enabled);
   SetExpertRow(ENABLE_DETOUR_COST_MARKERS);
 
-  AddEnum(_("Aircraft symbol"), NULL, aircraft_symbol_list,
+  AddEnum(_("Aircraft symbol"), nullptr, aircraft_symbol_list,
           (unsigned)settings_map.aircraft_symbol);
   SetExpertRow(AIRCRAFT_SYMBOL);
 

@@ -175,10 +175,10 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)ui_settings.traffic.gauge_location);
   SetExpertRow(AppFlarmLocation);
 
-  AddEnum(_("Tab dialog style"), NULL,
+  AddEnum(_("Tab dialog style"), nullptr,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
-  AddEnum(_("Message display"), NULL,
+  AddEnum(_("Message display"), nullptr,
           popup_msg_position_list,
           (unsigned)ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
