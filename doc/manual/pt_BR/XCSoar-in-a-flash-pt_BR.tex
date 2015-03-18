@@ -1,4 +1,5 @@
-\documentclass[english,a4paper,12pt,utf8]{scrreprt}
+\documentclass[a4paper,12pt,utf8]{scrreprt}
+\usepackage[portuguese]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[off]{flippdf}    % mirrored pages (even images ..) -> Default OFF..
 \usepackage{supertabular}
@@ -60,7 +61,7 @@
 %##############  advanced Makros and Menus ..##############
 %
 \newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
-\newcommand{\display}[3]{\bmenut{Display}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
+\newcommand{\display}[3]{\bmenut{Mostrar}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
 \newcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
 \newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
 %
@@ -115,7 +116,7 @@
 {\Huge Como ter\\}
 \vspace{0.2em}
 {\tiny o seu\\}
-{\Assistente Tático de Planeio\\}
+{Assistente Tático de Planeio\\}
 \vspace{0.2em}
 {\tiny pronto para operação }
 \end{center}
@@ -232,7 +233,7 @@ Se o seu dispositivo tem acesso à internet, você pode baixar facilmente e gere
 Aparecerá uma lista de arquivos baixados.  Se fizer isso pela primeira vez, poderá resultar em uma lista vazia.  Clique em  \blink Adicionar.
 
 Aparecerá uma grande lista.  Caso não apareça, verifique a conexão com a internet.  O time do XCSoar gerencia esta lista de arquivos e endereços correspondentes.  Clique em  \blink Adicionar para lhe mostrar a lista completa de todos os downloads possíveis.   Selecione o arquivo e o download irá começar imediatamente.  Para adicionar mais arquivos, repita o procedimento com a tecla \blink Adicionar.
-A atualização dos arquivos é feita através da tecla ⊲Baixar no mesmo menu.  Baixe o arquivo de terreno, espaço aéreo e waypoints um de cada vez.  Com alguns mapas como o mapa termal, será necessário ter um tempo de sobra para entender os ajustes.  Para mais informações, por gentileza veja o manual do usuário ou \url{http://www.glidinghotspots.eu/} 
+A atualização dos arquivos é feita através da tecla \blink Baixar no mesmo menu.  Baixe o arquivo de terreno, espaço aéreo e waypoints um de cada vez.  Com alguns mapas como o mapa termal, será necessário ter um tempo de sobra para entender os ajustes.  Para mais informações, por gentileza veja o manual do usuário ou \url{http://www.glidinghotspots.eu/} 
 
 \subsection{\textcolor{flashblue}{Idioma (Fontes, Sons)}}
 Geralmente, o XCSoar segue o ajuste do idioma do sistema.  Se você prefere outro, há 28 idiomas disponíveis desde Dezembro de 2013 (desculpem-nos os Bavarianos, usuários de Boston e outros usuários, mas os dialetos não serão incluídos):
@@ -320,7 +321,7 @@ Tudo fica mais fácil se usar os ajustes de hardware já aprovados.  Um disposit
 
 \subsection{\textcolor{flashblue}{Movendo o Mapa (móvel) manualmente}}
 Tempo para se ocupar com o mapa. Navegue através dele entrando em modo panorâmico.
-\begin{flushleft}\hspace*{1cm}\Mostrar{1}{Pan}{On}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\display{1}{Pan}{On} \\\end{flushleft}
 Faça uso dos tipos de botões de seu hardware para navegar ou mesmo usar seus dedos para arrastar o mapa.
 
 \subsection{\textcolor{flashblue}{Faça ``Casa''}}\index{home waypoint}
@@ -412,7 +413,7 @@ Para ser incluso em sua Checklist.
 Se você é um usuário único do hardware do XCSoar com diversos planadores, primeiramente configure as curvas polares de seus planadores.  Depois proceda com o ajuste de vôo.
 
 
-\subsection*{\textcolor{flashblue}{Ajuste da Polar}
+\subsection*{\textcolor{flashblue}{Ajuste da Polar}}
 Acione ambos
 \begin{flushleft}\hspace*{1cm}\config{2}{Planador}{}\hspace{1em} ou\\
 \end{flushleft}
@@ -597,15 +598,15 @@ Obrigado pelo seu tempo e
     \selectfont\textbf{XCSoar}\\
     \fontsize{12}{12}
     \vspace{0.2em}
-    \LARGE{the open-source glide computer}\\
+    \LARGE{O computador de vôo de código aberto}\\
     \vspace{1.2em}
-    \LARGE{User Manual}\\
+    \LARGE{Manual do Usuário}\\
     
 \vspace{9em}
 
 \end{center}
 \begin{flushright}
-\normalsize available at: \url{http://www.xcsoar.org/discover/manual.html}\\
+\normalsize Disponível em: \url{http://www.xcsoar.org/discover/manual.html}\\
 \end{flushright}
 
 \end{document}
