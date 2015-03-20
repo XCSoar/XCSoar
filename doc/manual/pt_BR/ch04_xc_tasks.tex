@@ -1,13 +1,13 @@
 \chapter{Provas de Cross Country}\label{cha:tasks}
 
-O XCSoar fornece um sistema completo de gerenciamento de provas, no qual as provas podem ser editadas priorizando o vôo e quando se voa cross-country casual, podem ser modificados durante o vôo.  Os waypoints podem ser avançados automaticamente ou manualmente.  Muitos cálculos do XCSoar são relativos aos pilões ou ao waypoint final.  A menos que uma prova real seja definida, o XCSoar irá criar uma função ‘casa’ com muitas das funções da prova, referindo-se à localização da decolagem.  Este capítulo também descreve o uso do registrador IGC com o XCSoar.
+O XCSoar fornece um sistema completo de gerenciamento de provas, no qual as provas podem ser editadas priorizando o vôo e quando se voa cross-country casual, podem ser modificadas durante o vôo.  Os waypoints podem ser avançados automaticamente ou manualmente.  Muitos cálculos do XCSoar são relativos aos pilões ou ao waypoint final.  A menos que uma prova real seja definida, o XCSoar irá criar uma função ‘casa’ com muitas das funções da prova, referindo-se à localização da decolagem.  Este capítulo também descreve o uso do registrador IGC com o XCSoar.
 
 Existem três modos de provas disponíveis:
 
 \begin{description}
 \item[Prova ordenada] esta é a prova tradicional de cross-country, na qual consiste em um ponto de início, zero ou mais waypoints e um waypoint final.  Os pontos da prova têm que ser voados em ordem.
-\item[Goto task] voa-se para um único destino.
-\item[Abort task] fornece opção para se voar ao próximo ponto pousável.
+\item[Prova 'Ir Para'] voa-se para um único destino.
+\item[Abortar prova] fornece opção para se voar ao próximo ponto pousável.
 \end{description}
 
 Observe que nos modos Ir para e Abortar Prova, a prova ordenada é retida e pode ser retomada posteriormente, preservando todas as estatísticas sobre as realizações na prova.
@@ -23,8 +23,8 @@ Após a prova ordenada ter sido definida pela primeira vez, a função “ir par
 
 \section{Provas “Ir Para”}
 
-As provas ‘Ir Para’ podem ser definidas selecionando um waypoint no mapa, pela lista de waypoints ou outro mecanismo, como por exemplo uma caixa de diálogo, e selecione  \bmenuw{Goto}. No modo de prova, selecione
-\bmenug{Nav 2} e então \blink\bmenug{Task Resume} e a prova será retomada (se houver alguma).
+As provas ‘Ir Para’ podem ser definidas selecionando um waypoint no mapa, pela lista de waypoints ou outro mecanismo, como por exemplo uma caixa de diálogo, e selecione  \bmenuw{Vá Para}. No modo de prova, selecione
+\bmenug{Nav 2} e então \blink\bmenug{Prova} {Retomar} e a prova será retomada (se houver alguma).
  
 
 \section{Editando provas}
@@ -52,11 +52,11 @@ As principais maneiras de configurar uma prova são:
 %{\it DIAGRAM SHOWING TASK DIALOG EDITING, WITH LABELED ARROWS POINTING
 %TO THE USER INTERFACE ELEMENTS?}
 
-Carregar uma prova através de um arquivo talvez seja útil em competição ou cross-country quando voado em grupo, já que um só piloto pode distribuir o arquivo aos outros, economizando tempo de todos para editar a prova.  \tip Se não houver prova ativa no início, o XCSoar criará automaticamente uma prova contendo o waypoint ‘casa’.
+Carregar uma prova através de um arquivo talvez seja útil em competição ou cross-country quando voado em grupo, já que um só piloto pode distribuir o arquivo aos outros, economizando tempo de todos para editar a prova.  Se não houver prova ativa no início, o XCSoar criará automaticamente uma prova contendo o waypoint ‘casa’.
 
 O XCSoar salva a prova atual quando é desligado e carrega-a assim que ligado, permitindo que se possa desligar o XCSoar até voar novamente.
 
-Os pontos da prova são preservados mesmo que o waypoint seja alterado.  Isto significa que, se você tem uma prova e alterar um arquivo de waypoint e carregar a prova novamente, novos waypoints serão gerados para os pontos que estão faltando no novo arquivo de waypoint.
+Os pontos da prova são preservados mesmo que o waypoint seja alterado.  Isto significa que, se você tem uma prova e altera um arquivo de waypoint e carregar a prova novamente, novos waypoints serão gerados para os pontos que estão faltando no novo arquivo de waypoint.
 
 
 
@@ -82,7 +82,7 @@ selecione um waypoint, clique novamente no waypoint para mostrar a janela de di�
 para mostrar os detalhes dos pontos pousáveis perto da aeronave.
 
 \gesturespec{dr}ou menu \bmenug{Nav 1/2}\blink\bmenug{Lista Waypoint}
-, selecione e\bmenuw{select} para selecionar o waypoint e mostrar os detalhes.
+, selecione e\bmenuw{Selec} para selecionar o waypoint e mostrar os detalhes.
 
 \gesturespec{urdl}or menu \bmenug{Display 1/2}\blink\bmenug{Pan On} para colocar o mapa em modo panorâmico, arrastando até o ponto desejado do waypoint, tocando seu nome ou seu símbolo
 
@@ -114,7 +114,7 @@ Através da janela principal de waypoint, você pode acessar a segunda página u
 \subsection*{Menu de ações da prova}  
 Esta página contém uma coluna de botões que permite várias ações:
 \begin{description}
-\item[\bmenuw{Substituir na prova}] :  substitui o waypoint ativo na prova pelo waypoint selecionado.
+\item[\bmenuw{Substituir na prova}] substitui o waypoint ativo na prova pelo waypoint selecionado.
 \item[\bmenuw{Inserir na prova}] insere o waypoint selecionado antes do waypoint ativo na prova.
 \item[\bmenuw{Anexar à prova}] adiciona o waypoint selecionado ao final da prova.
 \item[\bmenuw{Remover da prova}] remove o waypoint selecionado da prova.  Esta opção só estará visíviel se o waypoint selecionado está incluso na prova.
@@ -125,7 +125,7 @@ Esta página contém uma coluna de botões que permite várias ações:
 É uma boa idéia ajustar seu waypoint ‘casa’ na janela de diálogo de waypoints.  Isto faz o XCSoar iniciar sempre neste ponto, mesmo quando o XCSoar ainda não obteve sua posição de GPS.  Se não for fixada nenhuma posição 'casa', o XCSoar irá centrar no meio do mapa.
 
 \subsection*{Informação do Aeródromo}
-TEsta página pode conter texto relevante sobre o aeródromo, incluindo pistas, frequências de rádio, padrões de tráfego e contatos.
+Esta página pode conter texto relevante sobre o aeródromo, incluindo pistas, frequências de rádio, padrões de tráfego e contatos.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails1.png}
 \end{center}
@@ -159,7 +159,7 @@ Quando filtrados por nome e tipo, a listra é mostrada em ordem alfabética.  Qu
 
 A lista pode ser rolada se houver mais de uma tela cheia de waypoints.  Para rolar a lista, simplesmente arraste com o dedo ou mova para baixo (ou para cima) a lista com o cursor. 
 
-SSelecionar um item irá resultar em um comportamento diferente, dependendo de qual função abriu o seletor de waypoints.  No uso normal, mostrará os detalhes do waypoint.
+Selecionar um item irá resultar em um comportamento diferente, dependendo de qual função abriu o seletor de waypoints.  No uso normal, mostrará os detalhes do waypoint.
 
 \section{Gerenciador de Tarefas}\label{sec:task-manager-dialog}
 \begin{it}  O gerenciador de tarefas foi redesenhado se comparado com as versões anteriores do XCSoar.\end{it}
@@ -168,12 +168,12 @@ SSelecionar um item irá resultar em um comportamento diferente, dependendo de q
 O gerenciador de tarefas é usado para editar, visualizar, carregar, salvar em arquivo e declarar as provas de cross-country.
 \menulabelr{\bmenug{Nav 1/2}\blink\bmenug{Prova}}
 
-A primeira página é uma calculadora.  Mostra vários cálculos relativos à prova ativa, como descrito em detalhes abaixo:  Há botões para acionar os diálogos \bmenuw{Turn Points}, \bmenuw{Manage}, 
-e \bmenuw{Rules}, bem como o botão \bmenuw{Close} .
+A primeira página é uma calculadora.  Mostra vários cálculos relativos à prova ativa, como descrito em detalhes abaixo:  Há botões para acionar os diálogos \bmenuw{Pilões}, \bmenuw{Gerenciar}, 
+e \bmenuw{Regras}, bem como o botão \bmenuw{Fechar} .
 
 \subsection*{Janela de Calculadora de Prova}\label{sec:task-calc-dial}
 A janela calculadora de prova permite que o piloto veja o efeito de suas várias mudanças da prova no desempenho final.
-\menulabelr{\bmenuw{Calculatora}}
+\menulabelr{\bmenuw{Calculadora}}
 
 Em vôo, a Calculadora de Prova também pode ser acessada da página de Análise.  Com as páginas Prova, Subida e Velocidade da Prova, aparece um botão chamado  \bmenuw{Calculadora} que vai diretamente à esta janela.
  
@@ -194,7 +194,7 @@ Em vôo, a Calculadora de Prova também pode ser acessada da página de Análise
 \item[MacCready Atingido]  este campo mostra o valor de MacCready atingido.
 \item[Veloc Atingida] mostra a velocidade atingida.
  % at the achieved MacCready setting???
-\item[Eficiência planeio]  100% indica um desempenho perfeito de MacCready, maior que 100 indica que o desempenho de MacCready é superado voando em estradas de nuvens.  Menor que 100 é apropriado se você voa consideravelmente fora da rota.  Este valor estima sua eficiência de cruzeiro de acordo com o histórico atual de vôo com o valor de MacCready.    Os cálculos iniciam após a prova iniciada.
+\item[Eficiência planeio]  100\% indica um desempenho perfeito de MacCready, maior que 100\% indica que o desempenho de MacCready é superado voando em estradas de nuvens.  Menor que 100\% é apropriado se você voa consideravelmente fora da rota.  Este valor estima sua eficiência de cruzeiro de acordo com o histórico atual de vôo com o valor de MacCready.    Os cálculos iniciam após a prova iniciada.
 \end{description}
 Veja seção ~\ref{sec:task-speed-estim} para mais detalhes da velocidade da prova e cálculos de MacCready realizados.
 

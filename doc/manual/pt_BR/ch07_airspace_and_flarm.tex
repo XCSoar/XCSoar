@@ -3,7 +3,7 @@ Um arquivo de dados de uso especial de espaço aéreo (Special Use Airspace - SU
 
 Dois arquivos podem ser encontrados de espaço aéreo nos ajustes das configurações.  O primeiro é usado para banco de dados primários SUA e o segundo é para ser utilizado com as alterações de espaços aéreos, como áreas definidas por NOTAMs.
 
-É de responsabilidade do piloto se assegurar que o banco de dados USA está atualizado.
+É de responsabilidade do piloto se assegurar que o banco de dados SUA está atualizado.
 
 Através de um dispositivo FLARM conectado, o computador pode também mostrar a relação entre o tráfego aéreo equipados também com FLARM e ameaças de obstáculos.
 
@@ -15,9 +15,8 @@ O código de time permite aos pilotos trocarem informações sobre suas informa�
 As regiões locais de uso especial do espaço aéreo são mostradas no mapa como áreas sombreadas com bordas finas.  As cores e padrões das áreas são específicas para categorias diferentes de espaço aéreo e podem ser configuradas pelo usuário.  Dependendo dos ajustes, o usuário pode escolher mostrar todos os espaços aéreos, somente espaços aéreos abaixo de certa altitude, somente espaços aéreos com uma separação de altura específica ou somente espaços aéreos abaixo da aeronave.
 \sketch{figures/airspace.png}
 
-Os padrões usados para mostrar as áreas de espaço aéreo incluem opaco, transparente (vazia) e vários padrões sombreados e pontilhados.  Os padrões não opacos são praticamente transparentes respeitando a topografia do terreno sobrepondo o espaço aéreo.  Porém, quando esta sobreposição aparece, todas as bordas são visíveis.  Mesmo quando os padrões de espaço aéreo não são mutualmente transparentes, todas as bordas dos espaços aéreos são mostradas no topo das áreas do espaço aéreo.
-A tela e os alertas de espaço aéreo podem ser individualmente ligados ou desligados pelo usuário, como descrito na seção
-~\ref{sec:airspace-filter}.
+Os padrões usados para mostrar as áreas de espaço aéreo incluem opaco, transparente (vazio) e vários padrões sombreados e pontilhados.  Os padrões não opacos são praticamente transparentes respeitando a topografia do terreno sobrepondo o espaço aéreo.  Porém, quando esta sobreposição aparece, todas as bordas são visíveis.  Mesmo quando os padrões de espaço aéreo não são mutualmente transparentes, todas as bordas dos espaços aéreos são mostradas no topo das áreas do espaço aéreo.
+A tela e os alertas de espaço aéreo podem ser individualmente ligados ou desligados pelo usuário, como descrito na seção~\ref{sec:airspace-filter}.
 
 O padrão de cores dos espaços aéreos classes C, D, E e F são conforme as cartas ICAO. 
 
@@ -37,7 +36,7 @@ O uso de uma trilha longa nestes cálculos significa que o sistema pode prever i
 \item[Entrando] este evento ocorre quando a aeronave entra em uma região de espaço aéreo.
 \item[Saindo] este evento ocorre quando a aeronave deixa a região de espaço aéreo.
 \end{description}
-Em todos os casos, a divisa da região é definida pelas altitudes mínima e máxima para os níveis de vôo, especificadas no arquivo de espaço aéreo.
+Em todos os casos, a borda da região é definida pelas altitudes mínima e máxima para os níveis de vôo, especificadas no arquivo de espaço aéreo.
 
 Os alertas de espaço aéreo continuarão mesmo que a área invadida estiver fora da tela.
 
@@ -56,7 +55,7 @@ O conceito de alertas de espaço aéreo é graduado em níveis:
 
 A todo instante, o XCSoar monitora a aeronave relativa ao espaço aéreo e mantém níveis de alertas para cada posição.  Os alertas de espaço aéreo são filtrados de acordo com as preferências, mas algumas categorias de espaço aéreo podem ter sido desativadas.  
 \sketch{figures/airspacewarning.png}
-TA sequência de eventos quando se invade um espaço aéreo resulta em dois tipos de alertas: quando perto (nível 1) e quando dentro (nível 2).
+A sequência de eventos quando se invade um espaço aéreo resulta em dois tipos de alertas: quando perto (nível 1) e quando dentro (nível 2).
 
 Toda vez que o nível de alerta aumenta (acima do nível 0) para qualquer espaço aéreo, a janela de alerta aparece, acompanhada de um bip do sistema para o Altair no PDA.  Quando não houver mais regiões de espaço aéreo com níveis abaixo de 0, a janela é fechada automaticamente. 
 
@@ -65,14 +64,13 @@ Toda vez que o nível de alerta aumenta (acima do nível 0) para qualquer espaç
 
 A janela de alerta de espaço aéreo contém uma lista de até 4 alertas individuais.  O estado da aeronave tem cor vermelha se está dentro da área e amarelo se está perto.  Se o alerta for reconhecido, o texto é acinzentado.
 
-Each list item occupies two rows, and includes the following details:\\
-\verb+<NOME e Classe>               <TOP>   <Posição>+
-\verb+<Tempo e distância> <BASE>+
+Cada item listado ocupa duas colunas e incluem os detalhes:\\
+\verb+<NOME e Classe>  <TOP>  <Posição>+ \verb+<Tempo e distância> <BASE>+
 
 The values in the list are continuously updated. 
 Veja exemplo abaixo:\\
-\verb+Bern TMA Class D                FL100     +\colorbox{AirspaceYellow}{near}
-\verb+35 sec horizontal dist 1300     1750m+
+\verb+Bern TMA Class D  FL100 +\colorbox{AirspaceYellow}{near} 
+\verb+35 sec horiz dist 1300 1750m+
 
 Significa que a aeronave está a 1300m separada horizontalmente do espaço aéreo Classe D `Bern TMA', com a base em 1750m e teto a FL100.
 Outro exemplo:\\
@@ -94,8 +92,8 @@ O significado dos botões de reconhecimento são:
 \begin{description}
 \item[Rec Espaço]  reconhecimento de todos os níveis de alertas e futuros, desta região de espaço aéreo específica enquanto a aeronave estiver a 2,5km de separação horizontal e 500m de separação vertical (tecla F5 no Altair).
 \item[Rec Dia]  reconhecimento de todos os níveis de alerta e futuros desta região de espaço aéreo especifica para o restante do vôo (até que o Altair/XCSoar for reiniciado).  (Tecla F6 no Altair). 
-\item[Fechar]  fechar a janela de alerta de espaço aéreo sem reconhecimento do espaço aéreo.  A janela se abrirá automaticamente se o nível de alerta do espaço aéreo aumentar.  (Tecla F7 no Altair).
-  The dialogue will re-open automatically if the airspace warning level increases.
+\item[Fechar]  fechar a janela de alerta de espaço aéreo sem reconhecimento do espaço aéreo.  A janela se abrirá novamente se o nível de alerta do espaço aéreo aumentar.  (Tecla F7 no Altair).
+
 \end{description}
 
 Note que nem todos os botões de reconhecimento podem estar visíveis para todos os níveis de alerta.  Particularmente, dentro da SUA, você não tem opção de fazer o reconhecimento do alerta (Rec Alerta), sendo que neste ponto nenhum alerta iminente de invasão de espaço aéreo será ativado, pois foi constatado que você já está dentro deste espaço aéreo.
@@ -128,7 +126,7 @@ Simultaneamente, os alertas de espaço aéreo podem ocorrer se a aeronave (ou su
 
 Para dispositivos com tela de toque ou mouse, quando uma área de espaço aéreo é visível no mapa, pode ser consultada tocando a região do mapa.  O item listado do mapa irá aparecer e fornecer uma visão geral dos waypoints, espaços aéreos, etc., abaixo da ponta do dedo ou mouse.  As áreas SUA listadas tem detalhes similares aos fornecidos quando um nível de alerta é aumentado.  A consulta mostra todas as áreas de espaço aéreo quando houver espaço aéreo sobrepostos na área consultada.  
 \sketch{figures/airspace_mapelements.png}
-Selecionando SUA na lista e teclando  \button{Details} ou apertando a tecla ENTER, mostra todos os detalhes do espaço aéreo.
+Selecionando SUA na lista e teclando  \button{Detalhes} ou apertando a tecla ENTER, mostra todos os detalhes do espaço aéreo.
 
 \tip Para usuários Altair: este tipo de consulta de detalhes do espaço aéreo também pode ser acessado através do modo panorâmico.  Mova o cursor até a localização desejada e clique no botão \button{Oque aqui?}.  A lista do item do mapa aparecerá e lhe mostrará os detalhes sob a posição do cursor.
 
@@ -170,7 +168,7 @@ Uma vez que o espaço aéreo foi localizado, você deve reconhecê-lo durante es
 \section{Janela de Análise}
 
 A janela de análise contém uma página que mostra um corte (seção) do espaço aéreo.
-\menulabel{\bmenug{Info 1}\blink\bmenug{Analysis}}
+\menulabel{\bmenug{Info 1}\blink\bmenug{Análise}}
 
 TA tela mostra ao longo da direção horizontal, a distância da aeronave até 50km na direção da trilha da aeronave.  Na direção vertical está a altitude.  A altitude da aeronave é indicada por uma seta branca.  Esta página é útil para visualizar as camadas mais complexas do espaço aéreo.
 
@@ -192,7 +190,7 @@ Observe que, se somente uma aeronave está girando, o nível de zoom normal é t
 
 \subsection*{Visualização do mapa FLARM}
 
-Os alvos FLARM no mapa são desenhados como uma seta vermelha para indicar a direção que o alvo FLARM está indo, bem como o risco de colisão.  \config{flarm-on-map} Observe que as pontas destas setas são orientadas de acordo com a orientação da tela.  Por exemplo, se a orientação está ‘Rota acima’, a seta irá mostrar a direção da aeronave alvo com relação a sua aeronave.  Se a orientação da tela está ‘Norte acima’, a seta irá mostrar a rota absoluta da direção de aeronave alvo. 
+Os alvos FLARM no mapa são desenhados como uma seta vermelha para indicar a direção que o alvo FLARM está indo, bem como o risco de colisão.  Observe que as pontas destas setas são orientadas de acordo com a orientação da tela.  Por exemplo, se a orientação está ‘Rota acima’, a seta irá mostrar a direção da aeronave alvo com relação a sua aeronave.  Se a orientação da tela está ‘Norte acima’, a seta irá mostrar a rota absoluta da direção de aeronave alvo. 
 \sketch{figures/flarmmap.png}
 
 O registro da aeronave FLARM ou o nome do piloto pode ser visível no mapa através da localização da identificação ICAO da aeronave de tráfego FLARM no arquivo.  Veja seção ~\ref{sec:flarm-ident-file} para mais detalhes do formato do arquivo.  As aeronaves com privacidade FLARM não terão qualquer identificação mostrada. 
@@ -209,7 +207,7 @@ Todo o mostrador FLARM mostra o tráfego FLARM em cores, de acordo com o nível 
 \definecolor{warning}{rgb}{1,0.64,0}
 \definecolor{teammate}{rgb}{0.45,1,0}
 \item \textcolor{black} {Sem cor, se o nível for zero, sem ameaça.} 
-\item \textcolor{warning} { Amarelo para nível 1, alerta.}
+\item \textcolor{warning} { Amarelo para nível 1, aviso.}
 \item \textcolor{red} {Vermelho para nível 2 e 3, alerta.}
 \item \textcolor{teammate} {Verde para colegas do mesmo time.}
 \item \textcolor{blue} {Azul para o alvo selecionado.}
@@ -235,11 +233,11 @@ sobre o tráfego FLARM e dependendo dos ajustes, pode se fechar automaticamente,
 Somente alguns controles da tela, de cima para baixo:
 \begin{description}
 \item[Norte acima]  se ativado, a tela será orientada ‘norte acima’, caso contrário a orientação será ‘rota acima’.
-\item[A. Zoom]  \gesture{Up - Down} : ajusta o radar automaticamente na tela para que os alvos sejam perfeitamente visíveis.  Se não ativado, a tela terá zoom manual.  O gesto Cima-Baixo ativa o zoom automático.
-\item[Avg/Alt]  \gesture{Right - Left} o botão alterna entre o variômetro médio e a altitude mostrada próximo ao alvo.
-\item[Detalhes]  \gesture{Down - Right} : através deste botão, é acessado um diálogo separado com todos os detalhes do alvo.
-\item[+/-]  \gesture{Up/Down} muda o zoom manualmente do alcance do radar de 500 até 1.000 metros.  O gesto para zoom também se aplica.
-\item[$\triangleleft$/$\triangleright$]  \gesture{Left/Right} seleciona entre o alvo anterior e posterior no radar, os gestos funcionam da mesma maneira
+\item[A. Zoom]  \gesture{Cima-Baixo} : ajusta o radar automaticamente na tela para que os alvos sejam perfeitamente visíveis.  Se não ativado, a tela terá zoom manual.  O gesto Cima-Baixo ativa o zoom automático.
+\item[Avg/Alt]  \gesture{Direita-Esquerda} o botão alterna entre o variômetro médio e a altitude mostrada próximo ao alvo.
+\item[Detalhes]  \gesture{Baixo-Direita} : através deste botão, é acessado um diálogo separado com todos os detalhes do alvo.
+\item[+/-]  \gesture{Cima/Baixo} muda o zoom manualmente do alcance do radar de 500 até 1.000 metros.  O gesto para zoom também se aplica.
+\item[$\triangleleft$/$\triangleright$]  \gesture{Esquerda/Direita} seleciona entre o alvo anterior e posterior no radar, os gestos funcionam da mesma maneira
 \end{description}
 
 \begin{center}
@@ -264,8 +262,8 @@ Da primeira até a segunda tela do FLARM, se passaram 15 segundos.  O alvo selec
 O código de vôo é um sistema que permite aos pilotos que voam no mesmo time comunicarem suas posições uns aos outros de uma maneira concisa e precisa.  O princípio do sistema é que cada piloto use seu computador para determinar um código de 5 dígitos que descrevem suas posições relativas a um waypoint comum.  Os pilotos podem chamar uns aos outros reportando estes códigos e entrando com estes códigos no computador permite que o computador localize precisamente seus colegas.
 
 Para usar o código de time, todos os pilotos do time devem selecionar o mesmo waypoint de referência. .  Isto é feito na janela de configuração de código. 
-\menulabel{\bmenug{Info 2}\blink\bmenut{Team}{Code}}
-O waypoint de referência é definido através do botão “Ajuste WP”.  Selecione um waypoint através da janela e será a referência do time.
+\menulabel{\bmenug{Info 2}\blink\bmenut{Time}{Código}}
+O waypoint de referência é definido através do botão \button{Ajuste WP}   Selecione um waypoint através da janela e será a referência do time.
 
 Durante o vôo, o piloto pode ler seu próprio código através da janela de código de time, para reportar sua posição ao outro colega do time.  Quando o piloto escuta um código reportado por outro colega, e clica em \button{Set Code} 
 para abrir a janela de entrada de texto e permitir a entrada do código do seu colega.

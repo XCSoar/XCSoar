@@ -1,10 +1,10 @@
 \chapter{Aviônicos e Fuselagem}\label{cha:avionics-airframe}
 
-Este capítulo descreve o XCSoar como um subsistema da aeronave.  Cobre a integração do XCSoar com os dispositivos externos, incluindo GPS, interruptores, sensores, transceptores de rádio da aeronave e outros dispositivos.  A integração com o FLARM é descrita no Capítulo ~\ref{cha:airspace}, e a integração com variômetros é descrita no Capítulo ~\ref{cha:atmosph}.
+Este capítulo descreve o XCSoar como um subsistema da aeronave.  Cobre a integração do XCSoar com os dispositivos externos, incluindo GPS, interruptores, sensores, transceptores de rádio da aeronave e outros dispositivos.  A integração com o FLARM é descrita no Capítulo ~\ref{cha:airspace}, e a integração com variômetros é descrita no Capítulo~\ref{cha:atmosph}.
 
 \section{Duração da bateria}
 
-A maioria dos PDAs modernos são projetados para uso por período curto e não tem uma boa capacidade da bateria quando se considera a duração o vôo de cross-country.  É recomendado que o PDA tenha uma fonte de energia externa, com voltagem apropriada conectada a bateria do planador.  A instalação deve ser feita de forma apropriada por pessoal qualificado e deve conter fusíveis e interruptores isolados.
+A maioria dos PDAs modernos são projetados para uso por período curto e não tem uma boa capacidade da bateria quando se considera a duração o vôo de cross-country.  É recomendado que o PDA tenha uma fonte de energia externa, com voltagem apropriada conectada à bateria do planador.  A instalação deve ser feita de forma apropriada por pessoal qualificado e deve conter fusíveis e interruptores isolados.
 
 A grande causa de drenagem da energia pelos PDAs é a luz de fundo da tela, pois os PDAs domésticos não têm brilho apropriado e tem que manter a luz de fundo em potência máxima.  Porém, os sistemas EFIS como o Altair, é recomendado usar o ajuste baixo da luz de fundo para ter mais conforto.
 
@@ -12,10 +12,9 @@ Quando se opera os PDAs com a bateria interna, o XCSoar detecta a condição de 
 
 Outra forma de conservar a energia da bateria é reduzir a carga de cálculos desligando algumas funções.  O desenho do terreno e do rastro contribuem significativamente para diminuir a carga da CPU.
 
-Para os sistemas Altair/Vega, a voltagem externa da fonte é mostrada na janela de estado do sistema (veja seção 
-~\ref{sec:system-status}).
+Para os sistemas Altair/Vega, a voltagem externa da fonte é mostrada na janela de estado do sistema (veja seção~\ref{sec:system-status}).
 
-Para outras plataformas incorporadas, a infobox BATERIA está disponível e mostra o tempo restante de bateria, bem como o estado de carga (carregando AC ou AC-OFF quando se opera com a bateria interna).  
+Para outras plataformas incorporadas, a infobox \bmenuw{Bateria} está disponível e mostra o tempo restante de bateria, bem como o estado de carga (carregando AC ou AC-OFF quando se opera com a bateria interna).  
 
 \section{Conexão de GPS}
 
@@ -92,7 +91,7 @@ Como um exemplo onde dois Altairs estão conectados entre si, no escravo, o prim
 
 \section{Estado do sistema}\label{sec:system-status}
 
-usada primariamente como um verificador do sistema, para ver como o computador e os dispositivos conectados estão funcionando.  É acessado através do menu e selecionada a aba SISTEMA. {\bf Sistema}.
+Usada primariamente como um verificador do sistema, para ver como o computador e os dispositivos conectados estão funcionando.  É acessado através do menu e selecionada a aba {\bf Sistema}.
 \sketch{figures/status-system.png}
 
 Todos os valores dinâmicos (voltagem da bateria, números de satélites capturados) são atualizados continuamente.  

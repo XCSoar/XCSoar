@@ -31,7 +31,7 @@ SD Card/XCSoarData
 IPAQ File Store/XCSoarData
 \end{verbatim}
 
-Se não se sentir seguro, instale o XCSoar e crie o diretório  \verb|XCSoarData|
+Caso não se senta seguro, instale o XCSoar e crie o diretório  \verb|XCSoarData|
 no local correto. 
  
 
@@ -74,8 +74,7 @@ Se a elevação de qualquer waypoint é configurada para zero no arquivo de wayp
 
 \section{Espaço Aéreo}
 
-O XCSoar suporta arquivos de espaço aéreo (extensão .txt) usando uma subconfiguração largamente distribuída no formato OpenAir, bem como arquivo de formato Tim Newport-Pearce  (extensão \verb|.sua|). Files are available from the
-Special Use Airspace section of the soaring web site:
+O XCSoar suporta arquivos de espaço aéreo (extensão \verb|.txt|) usando uma subconfiguração largamente distribuída no formato OpenAir, bem como arquivo de formato Tim Newport-Pearce  (extensão \verb|.sua|). Os arquivos estão disponíveis no site abaixo (Uso Especial de Espaço Aéreo – SUA):
 
 \url{http://soaringweb.org/Airspace}
 
@@ -83,9 +82,9 @@ A seguinte lista de tipos de espaço aéreo é suportada: Class A-G, Proibidos, 
 
 \section{Detalhe de aeródromos}\label{sec:airfield-details}
 
-O arquivo de detalhes do aeródromo (extensão .txt) é um arquivo de formato simples de texto, contendo informações de cada aeródromo, marcado em colchetes seguidos pelo texto a ser mostrado na janela Detalhes do Waypoint daquele arquivo.  O texto deve ter uma pequena margem por causa da janela de detalhes do waypoint que não pode separar palavras.
+O arquivo de detalhes do aeródromo (extensão \verb|.txt|) é um arquivo de formato simples de texto, contendo informações de cada aeródromo, marcado em colchetes seguidos pelo texto a ser mostrado na janela Detalhes do Waypoint daquele arquivo.  O texto deve ter uma pequena margem por causa da janela de detalhes do waypoint que não pode separar palavras.
 
-O texto também pode especificar imagens para os aeródromos ou waypoints.  Para mostrar uma imagem no XCSoar, use image= seguido do nome do arquivo (não é suportado na versão PC/Windows).  Tenha certeza de não ter espaços em branco ao redor do sinal de igual ou em frente à palavra.  Quais arquivos são suportados dependem do seu sistema operacional e aplicativos que estão instalados.  O sistema Android suporte arquivos JPG e outros tipos, alguns outros sistemas somente imagens BMP.
+O texto também pode especificar imagens para os aeródromos ou waypoints.  Para mostrar uma imagem no XCSoar, use image=seguido do nome do arquivo (não é suportado na versão PC/Windows).  Tenha certeza de não ter espaços em branco ao redor do sinal de igual ou em frente à palavra.  Quais arquivos são suportados dependem do seu sistema operacional e aplicativos que estão instalados.  O sistema Android suporte arquivos JPG e outros tipos, alguns outros sistemas somente imagens BMP.
 
 Os nomes dos aeródromos usadas no arquivo devem corresponder exatamente o nome no arquivo de waypoint com exceção da conversão de letras maiúsculas (permitidas).
 
@@ -158,7 +157,7 @@ Exemplo para o planador LS-3:
 
 \section{Perfis}
 
-Os arquivos de perfis (extensões \verb|.prf|) podem ser usados para armazenar ajustes das configurações usadas pelo XCSoar.  O formato do arquivo é de texto simples contendo \verb|<label>=<value>| pairs.  podem ser usados para armazenar ajustes das configurações usadas pelo XCSoar.  O formato do arquivo é de texto simples contendo
+Os arquivos de perfis (extensões \verb|.prf|) podem ser usados para armazenar ajustes das configurações usadas pelo XCSoar.  O formato do arquivo é de texto simples contendo pares \verb|<label>=<value>|.  Podem ser usados para armazenar ajustes das configurações usadas pelo XCSoar.  O formato do arquivo é de texto simples contendo
 \begin{verbatim}
 PilotName="Barão Vermelho"
 \end{verbatim}
@@ -186,16 +185,16 @@ Exemplo:
 
 \begin{verbatim}
 [Preflight]
-Controls
-Harness, secure objects
-Airbrakes and flaps
-Outside
-Trim and ballast
-Instruments
-Canopy
+Controles
+Cockpit, objetos seguros
+Freios aerodinâmicos e flaps
+Externo
+Lastro
+Instrumentos
+Fuselagem
 
 [Derigging]
-Remove tape from wings and tail
+Remover fita da asa e cauda
 ...
 \end{verbatim}
 

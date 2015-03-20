@@ -4,7 +4,7 @@
 \caption{Layout mais comum da tela do XCSoar}
 \end{figure}
 
-Este capítulo descreve de um modo geral, os conceitos fundamentais da interface do usuário usados pelos XCSoar.  A tela principal mostra a maioria das informações necessárias para o vôo normal.   Geralmente a tela principal é composta de um mapa móvel e infoboxes.  Por várias razoes – não é o escopo da introdução – você tem a oportunidade de utilizar várias telas principais, chamadas de páginas de telas.
+Este capítulo descreve de um modo geral, os conceitos fundamentais da interface do usuário usados pelos XCSoar.  A tela principal mostra a maioria das informações necessárias para o vôo normal.   Geralmente a tela principal é composta de um mapa móvel e infoboxes.  Por várias razões – não é o escopo da introdução – você tem a oportunidade de utilizar várias telas principais, chamadas de páginas de telas.
 
 As páginas de telas são facilmente acessadas por um gesto de deslizamento horizontal, como se tivesse virando páginas de um livro ou por um apertar de botão, dependendo do hardware que estiver usando.  Com a página de telas você estará apto a compor várias telas principais para tirar vantagem da sua utilização em diversas situações de vôo.  Simplificando, você poderá usar a informação apropriada em diferentes casos, podem ser acessadas muito facilmente e rapidamente.
 
@@ -27,7 +27,7 @@ Cada página de tela do conjunto de páginas do XCSoar é composta de várias pa
 \begin{description}
 \item[Instrumentos]  os instrumentos mostram as medições dos sensores.  Todos os instrumentos são opcionais e alguns só poderão mostrar seus dados quando conectados aos dispositivos externos.  A sobreposição do instrumento na tela principal é permanentemente mostrada ou é somente mostrada em algumas condições críticas.  Ex. o assistente de termal é mostrado somente quando o XCSoar entra em modo de giro.  O radar FLARM é mostrado toda vez que há a possibilidade de colisão.  Os instrumentos permanentemente mostrados são a barra de planeio final, bem como a barra de variômetro, entre outros.
 
-\item[Rótulos de Botões e Menus] Os botões do dispositivo que está rodando o XCSoar podem ser usados para navegar pequenos menus na tela e são normalmente sobrepostos aos menus e podem ser selecionados apertando o botão deste item.  Se o dispositivo tem tela de toque, o item de menu pode ser selecionado clicando sobre o mesmo.  Estes botões são desenhados com texto preto em fundo cinza. 
+\item[Rótulos de Botões e Menus] Os botões do dispositivo que está rodando o XCSoar podem ser usados para navegar em pequenos menus na tela e são normalmente sobrepostos aos menus e podem ser selecionados apertando o botão deste item.  Se o dispositivo possui tela de toque, o item de menu pode ser selecionado clicando sobre o mesmo.  Estes botões são desenhados com texto preto em fundo cinza. 
 
 \item[Mensagem de condição (estado)]o texto é mostrado sobre a tela em uma caixa de mensagens.  Este texto é utilizado para mostrar informações detalhados ao piloto quando alguns eventos ocorrem.
 
@@ -44,7 +44,7 @@ Existem várias maneiras de interagir com o XCSoar:
 \begin{itemize}
 \item Tocando certos elementos no mapa
 \item Tocando nas infoboxes e nos botões dos menus da tela.
-\item `Gesticulando, como por exemplo, desenhando um traço da esquerda para a direita na tela (veja seção\ref{sec:gestures} abaixo).
+\item 'Gesticulando', como por exemplo, desenhando um traço da esquerda para a direita na tela (veja seção  \ref{sec:gestures} abaixo).
 \item ‘Arrastando’ a tela (tocando a tela e movendo antes de soltar).
 \item Apertando os botões de função do dispositivo.
 \item Apertando as teclas de cursor do dispositivo.
@@ -61,11 +61,12 @@ Como o Altair não tem uma tela de toque, todas as interações do usuário são
 \section{O menu principal de botões}
 O menu de botões é um conjunto de botões mostrado na tela e ativado por toque ou botões físicos (quando houver no dispositivo).  Esta é a forma primária de interagir com o XCSoar.
 
-\subsection*{O básico da interface}
+\subsection*{A interface básica}
 O menu é organizado em quatro grupos diferentes de funções, geralmente em forma de hierarquia.  O layout do menu depende da configuração de botões do hardware e plataforma, e podem também serem personalizados pelo usuário.
 
 O XCSoar pode também aceitar entradas de teclados externos, gamepads, joysticks, etc.  Podem ser atribuídas às estas entradas uma grande variedade de funções.
-Para Altair, há quatro menus principais, ativados por um dos botões físicos verticais do lado esquerdo da tela.  Quando um menu é ativado, uma faixa de botões aparece na parte inferior da tela.  Apertando um botão do menu específico da tecla, irá entrar em várias páginas deste item.  Apertando o botão horizontal correspondente irá ativar o item.  Na última página, apertando o botão de menu novamente, irá desativar este menu e a faixa apresentada na tela desaparece.
+\sketch{figures/buttonmenu.png}
+Para o Altair, há quatro menus principais, ativados por um dos botões físicos verticais do lado esquerdo da tela.  Quando um menu é ativado, uma faixa de botões aparece na parte inferior da tela.  Apertando um botão do menu específico da tecla, irá entrar em várias páginas deste item.  Apertando o botão horizontal correspondente irá ativar o item.  Na última página, apertando o botão de menu novamente, irá desativar este menu e a faixa apresentada na tela desaparece.
 Para a versão de PC, estes botões de modo são ativados pelas teclas 1, 2, 3 e 4.  As teclas 6, 7, 8, 9 e 0 correspondem à faixa horizontal de botões.
 
 Na versão PDA, os botões de modo são ativados pelas teclas laterais do joystick.
@@ -83,7 +84,7 @@ Os botões primários são ativados pelos botões na faixa vertical no Altair, d
 
 \begin{jspecs}
 \item[\bmenug{Nav}] Ações para controle de navegação, provas simples de vôos de cross-country.
-\item[\bmenug{Display}]Ações para controle da tela.
+\item[\bmenug{Mostrar}]Ações para controle da tela.
 \item[\bmenug{Config}] Configuração do XCSoar, dispositivos conectados e ajustes de vôo.
 \item[\bmenug{Info}] Ativa várias janelas de diálogo de informações.
 \end{jspecs}
@@ -97,11 +98,11 @@ Na versão para PC, as teclas 1, 2 3 e 4 ativam os menus correspondentes.  A lis
 
 \begin{tabularx}{1.44\textwidth}{c|ccccc}
 \bmenus{Nav 1/2}
- & \bmenus{Task}
- & \bmenut{Previous}{Turnpoint}
- & \bmenut{Next}{Turnpoint}
- & \bmenut{Waypoint}{List}
- & \bmenus{Alternates} \\
+ & \bmenus{Prova}
+ & \bmenut{Pto. virada}{Anterior}
+ & \bmenut{Próx. Pto.}{Virada}
+ & \bmenut{Lista}{Waypoint}
+ & \bmenus{Alternativos} \\
 see
  & \ref{cha:tasks}
  & \ref{sec:advanc-rest-tasks}
@@ -109,9 +110,9 @@ see
  & \ref{sec:waypoint-selector-dialog}
  & \ref{sec:alternates} \\ \\
 \bmenus{Nav 2/2}
- & \bmenut{Task}{Abort}
- & \bmenut{Mark}{Drop}
- & \bmenus{Target}
+ & \bmenut{Prova}{Abortar}
+ & \bmenut{Marcar}{Ponto}
+ & \bmenus{Alvo}
  & {}
  & {} \\
 see
@@ -126,11 +127,11 @@ Você não deve iniciar o uso do XCSoar sem antes saber sobre todas as caracter�
 \noindent\makebox[\textwidth]{%
 
 \begin{tabularx}{1.44\textwidth}{c|ccccc}
-\bmenus{Display 1/2}
+\bmenus{Mostrar 1/2}
  & \bmenut{Zoom}{In}
  & \bmenut{Zoom}{Out}
  & \bmenut{Zoom}{Auto}
- & \bmenut{Info}{Cruise/...}
+ & \bmenut{Info}{Planeio/...}
  & \bmenut{Pan}{On} \\
 see
  & \ref{sec:zooming}
@@ -138,12 +139,12 @@ see
  & \ref{sec:zooming}
  & \ref{sec:screenpages}
  & \ref{sec:panning} \\ \\
-\bmenus{Display 2/2}
- & \bmenut{Labels}{All/...}
- & \bmenut{Trail}{Full/...}
- & \bmenut{Terrain}{On/Off}
- & \bmenut{Topo.}{On/Off}
- & \bmenut{Airspace}{On/Off} \\
+\bmenus{Mostrar 2/2}
+ & \bmenut{Rótulos}{All/...}
+ & \bmenut{Trilha}{Completo/...}
+ & \bmenut{Terreno}{Desligado/...}
+ & \bmenut{Topo.}{Desligado/...}
+ & \bmenut{Espaço Aéreo}{Desligado/...} \\
 see
  & \ref{sec:maplabels}
  & \ref{sec:trail}
@@ -163,7 +164,7 @@ A maioria dos menus mostrados estão disponíveis também com gestos ou atalhos 
  & \bmenut{MacCready}{$-$}
  & \bmenut{MacCready}{Auto}
  & \bmenus{Flight}
- & \bmenus{Wind} \\
+ & \bmenus{Vento} \\
 see
  & \ref{sec:stf}
  & \ref{sec:stf}
@@ -171,9 +172,9 @@ see
  & \ref{sec:flight-setup}
  & \ref{sec:wind-setup} \\ \\
 \bmenus{Config 2/3} 
- & \bmenus{System}
- & \bmenus{Plane}
- & \bmenus{Devices}
+ & \bmenus{SISTEMA}
+ & \bmenus{Planador}
+ & \bmenus{Dispositivos}
  & \bmenut{File}{Manager}
  & \bmenus{Replay} \\
 see
@@ -183,9 +184,9 @@ see
  & {}
  & \ref{sec:logger-replay} \\ \\
 \bmenus{Config 3/3} 
- & \bmenut{Logger}{Start}
+ & \bmenut{Registrador}{Iniciar}
  & \bmenus{Raw Logger}
- & \bmenus{Airspace}
+ & \bmenus{Espaço Aéreo}
  & {}
  & \bmenus{Vega} \\
 see
@@ -196,7 +197,7 @@ see
  & {}
 \end{tabularx}}
 
-O menu de configuração é geralmente parte da interação básica com o XCSoar.  Você não espera perder muito tempo em vôo fazendo ajustes na configuração, com exceção de ajustes de vento ou MacCready.  O item “Vega” fornece controle sobre o variômetro inteligente Vega.  Isto compreende um sub-menu.
+O menu de configuração é geralmente parte da interação básica com o XCSoar.  Você não espera perder muito tempo em vôo fazendo ajustes na configuração, com exceção de ajustes de vento ou MacCready.  O item “Vega” fornece controle sobre o variômetro inteligente Vega.  Abrirá um sub-menu.
 
 
 \subsection*{Menus de Informação}
@@ -206,9 +207,9 @@ O menu de configuração é geralmente parte da interação básica com o XCSoar
 \bmenus{Info 1/3}
  & \bmenut{FLARM}{Radar}
  & \bmenut{METAR}{TAF}
- & \bmenut{What's}{here?}
+ & \bmenut{Oque}{aqui?}
  & \bmenut{Check}{list}
- & \bmenus{Analysis} \\
+ & \bmenus{Análise} \\
 see
  & \ref{sec:flarm-traffic}
  & \ref{sec:metar-taf}
@@ -216,11 +217,11 @@ see
  & \ref{sec:checklist}
  & \ref{sec:analysis-climb} \\ \\
 \bmenus{Info 2/3}
- & \bmenus{Status}
- & \bmenus{Weather}
- & \bmenut{Team}{Code}
- & \bmenut{FLARM}{Details}
- & \bmenut{Thermal}{Assistant} \\
+ & \bmenus{Estado}
+ & \bmenus{Meteoro}
+ & \bmenut{Time}{Código}
+ & \bmenut{Traffic}{List}
+ & \bmenut{Assistente}{Termal} \\
 see
  & \ref{sec:flight-status}
  & \ref{sec:weather-forecast}
@@ -229,7 +230,7 @@ see
  & \ref{sec:thermal-assistant} \\ \\
 \bmenus{Info 3/3}
  & \bmenus{Credits}
- & \bmenus{Airspaces}
+ & \bmenus{Espaços} {Aéreos}
  & \bmenut{Message}{Repeat}
  & {}
  & {} \\
@@ -273,7 +274,7 @@ As funções deste sub-menu requerem o variômetro inteligente Vega.  O menu pod
  & \bmenut{Pan}{Off}
  & \bmenut{Zoom}{in}
  & \bmenut{Zoom}{out}
- & \bmenut{What's}{here?}
+ & \bmenut{Oque}{aqui?}
  & {} \\
 see
  & \ref{sec:panning}
@@ -283,7 +284,7 @@ see
  & {}
 \end{tabularx}}
 
-TEste sub-menu infelizmente se sobrepõe à tela principal no modo Panorâmico.  Suas funções são evidentes, todavia o menu pode ser reposicionado por tecnologia multi-toque ou botões (como no Altair).  Porém, juntamente com o botão “Pan Off” também há o botão “O que aqui?” que oferece um ótimo acesso à variedade de informações do mapa.
+Este sub-menu infelizmente se sobrepõe à tela principal no modo Panorâmico.  Suas funções são evidentes, todavia o menu pode ser reposicionado por tecnologia multi-toque ou botões (como no Altair).  Porém, juntamente com o botão “Pan Off” também há o botão “O que aqui?” que oferece um ótimo acesso à variedade de informações do mapa.
 
 \section{Botões de Menu padrões}
 
@@ -293,7 +294,7 @@ Quando não há menu ativo (chamado de modo padrão), uma linha de botões no Al
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
  Altair: & F5 & F6 & F7 & F8 & F9 \\
-& \bmenus{Flight} & \bmenut{Task}{Manager} & {} & \bmenus{Target} & \bmenut{Drop}{Mark} \\
+& \bmenus{Flight} & \bmenut{Task}{Manager} & {} & \bmenus{Alvo} & \bmenut{Marcar}{Ponto} \\
 \end{tabular}	
 \end{center}
 
@@ -301,32 +302,32 @@ Teclando ESC no Altair mostra os rótulos para estes botões.
 Para outras versões no modo padrão, o cursor faz as seguintes funções:
 
 \begin{jspecs}
-\item[Up key] Zoom +
-\item[Down key] Zoom -
-\item[Left key] Marcar ponto
-\item[Right key] alterna entre as infoboxes normais e auxiliares e tela cheia
+\item[Tecla Acima] Zoom +
+\item[Tecla Abaixo] Zoom -
+\item[Tecla esquerda] Marcar ponto
+\item[Tecla direita] alterna entre as infoboxes normais e auxiliares e tela cheia
 \item[Enter] Limpa a mensagem de estado ou suprimi o mostrador FLARM se estiver aberto e se nenhuma mensagem de alerta estiver ativa.  
 \end{jspecs}
 
 Para a versão Altair em modo padrão, o botão rotativo desempenha as seguintes funções:
 \begin{jspecs}
-\item[Outer knob counter-clockwise] Zoom +
-\item[Outer knob clockwise] Zoom -
-\item[Inner knob counter-clockwise] (Sem função atribuída)
-\item[Outer knob clockwise] (Sem função atribuída)
-\item[Knob button press] Limpa a mensagem do estado ou alerta de espaço aéreo.
+\item[Botão rotativo externo sentido anti-horário] Zoom +
+\item[Botão rotativo externo sentido horário] Zoom -
+\item[Botão rotativo interno sentido anti-horário] (Sem função atribuída)
+\item[Botão rotativo interno sentido horário] (Sem função atribuída)
+\item[Aperta botão rotativo] Limpa a mensagem do estado ou alerta de espaço aéreo.
 \end{jspecs}
 
 Nos formulários de diálogo, o botão rotativo no Altair desempenha as seguintes funções:
 \begin{jspecs}
-\item[Outer knob counter-clockwise] Cursor para cima
-\item[Outer knob clockwise] Cursor para baixo
-\item[Inner knob counter-clockwise] Cursor esquerdo
-\item[Inner knob clockwise] Cursor direito
-\item[Knob button press] Tecla Enter
+\item[Botão rotativo externo sentido anti-horário] Cursor para cima
+\item[Botão rotativo externo sentido horário] Cursor para baixo
+\item[Botão rotativo interno sentido anti-horário] Cursor esquerdo
+\item[Aperta botão rotativo] Cursor direito
+\item[Aperta botão rotativo] Tecla Enter
 \end{jspecs}
 
-Para Altair, os botões ao longo da borda da tela podem ser usados como formas alternativas de navegação nos diálogos.  A tecla F4 (diretamente acima do botão rotativo) pode ser usada com um ENTER alternativo (ao invés de pressionar o botão rotativo) nos diálogos.  As teclas F6 e F7 (à direita do botão rotativo) podem ser usadas para selecionar a próxima página ou a anterior nos diálogos multi-páginas.
+Para o Altair, os botões ao longo da borda da tela podem ser usados como formas alternativas de navegação nos diálogos.  A tecla F4 (diretamente acima do botão rotativo) pode ser usada com um ENTER alternativo (ao invés de pressionar o botão rotativo) nos diálogos.  As teclas F6 e F7 (à direita do botão rotativo) podem ser usadas para selecionar a próxima página ou a anterior nos diálogos multi-páginas.
 
 \subsection*{Rótulos dinâmicos de menu}
 Certos menus têm rótulos dinâmicos para tornarem mais claro o que ocorre quando um menu for selecionado.  Além disso, itens que não estão disponíveis estão acinzentados para indicar que esta seleção não terá efeito algum.
@@ -336,13 +337,13 @@ A convenção usada para rótulos dinâmicos de menus é para rótulos que mostr
 Uma seleção de teclas de menus dinâmicos é mostrada abaixo:
 
 \begin{description}
-\item[\bmenug{Next Turnpoint}]  
+\item[\bmenug{Próx. Pto. Virada}]  
  Se acinzentado, a prova foi limpa ou se o ponto ativo foi finalizado.  Se estiver ativo, é o ponto principal para o final, e estará indicando “Waypoint finish”.
-\item[\bmenug{Previous Turnpoint}]  
+\item[\bmenug{Pto. virada anterior}]  
   Acinzentado se a prova foi limpa, ou se o ponto ativo é o início (start) e não há mais pontos de início.  Se houver múltiplos pontos de início e o pilão é o “start”, então aparecerá descrito “Cycle Start” para permitir a seleção entre os vários pontos de início.  Se o pilão ativo é o primeiro ponto após o início, aparecerá descrito “Waypoint Start”. 
-\item[\bmenug{Labels All}]  
+\item[\bmenug{Rótulos Todos}]  
  Desta forma irá mostrar todos os rótulos disponíveis no mapa.  Há mais opções de visualização que mostrarão um pequeno número de rótulos como “Rótulos Prova”, não poluindo demais a tela.
-\item[\bmenug{Target}]  
+\item[\bmenug{Alvo}]  
   Acinzentado se a prova foi limpa ou a prova abortada.
 
 \end{description}
@@ -350,12 +351,13 @@ Uma seleção de teclas de menus dinâmicos é mostrada abaixo:
 
 \section{InfoBoxes e páginas de telas}\label{sec:infoboxandpages}
 
-A informação indicada nos campos da infobox podem ser selecionadas em uma grande variedade de opções (listadas no capítulo 12).  Estes campos podem também ser utilizados por exemplo, para ajustes de MacCready.
+A informação indicada nos campos da infobox podem ser selecionadas em uma grande variedade de opções (listadas no Capítulo 12).  Estes campos podem também ser utilizados por exemplo, para ajustes de MacCready.
 
 O número específico e layout da grade da infobox depende da orientação da tela e do tamanho da tela do dispositivo.
 Para uma tela de 320x240 de um Pocket PC em modo retrato, há quatro Infoboxes acima e quatro abaixo da tela de mapa.
 
 Um layout normal de paisagem tem 9 infoboxes e o mostrador do variômetro do lado direito da tela.  Para telas maiores, podemos ter até 24 infoboxes mostrados simultaneamente.
+\sketch{figures/infoboxes.png}
 
 Para se ganhar clareza, quanto menos infoboxes você escolher para serem visualizados, mais fácil será a leitura dos mesmos.  Por outro lado, há muitas e muitas opções de infoboxes que o piloto não rejeitaria.  A quantidade de números possíveis de opções para Infoboxes excede 100 opções.  Por este motivo que o XCSoar oferece duas maneiras de gerenciar ainda mais opções do que o número de infoboxes.
 
@@ -387,13 +389,13 @@ Há grande chance de achar lá.
 \item[No chão] Como um gerenciador, você deve usar uma página de tela mostrando o “Radar FLARM” somente.  Pode acontecer na tela do PC rodando o XCSoar conectado a um receptor FLARM.
 \end{description}
 
-WQualquer que seja o que gostaria de mostrar, leve em conta o momento de uso e o conceito de página de telas.
+Qualquer que seja o que gostaria de mostrar, leve em conta o momento de uso e o conceito de página de telas.
 
 \gesturespec{left}
-Para ir através de várias páginas de telas, use as teclas esquerda/direita (Altair) ou gestos esquerda/direita (tela de toque) através do botão de menu \bmenug{Display 1/2}, mostrando um rótulo dinâmico, mudando de acordo com o conteúdo da página de tela para mostrar o próximo:
+Para ir através de várias páginas de telas, use as teclas esquerda/direita (Altair) ou gestos esquerda/direita (tela de toque) através do botão de menu \bmenug{Mostrar 1/2}, mostrando um rótulo dinâmico, mudando de acordo com o conteúdo da página de tela para mostrar o próximo:
 \gesturespec{right}
 
-\bmenut{Display}{1/2}\blink\bmenut{Info}{Circling}\blink\bmenut{Info}{Cruise}\blink\bmenut{Info}{FinalGlide}\blink\bmenut{Info}{...}
+\bmenut{Mostrar}{1/2}\blink\bmenut{Assistente de}{Térmica}\blink\bmenut{Info}{Planeio}\blink\bmenut{Info Planeio}{Final}\blink\bmenut{Info}{...}
 
 
 \subsection*{Modificando o conteúdo da InfoBox }
@@ -403,10 +405,10 @@ Para ir através de várias páginas de telas, use as teclas esquerda/direita (A
 S(Esta seção somente se aplica se houver tela de toque ou mouse presente).  Alguns valores de infobox podem ser alterados pelo usuário selecionando (ex. longo pressionamento) o dado no infobox na tela de toque ou mouse.  Aparecerá uma caixa de diálogo pequena:
 
 \begin{description}
-\item[\bmenuw{Edit}]  
+\item[\bmenuw{Editar}]  
 Permite ao piloto ajustar a infobox (ex. aumentar ou diminuir o ajuste de MacCready)
 
-\item[\bmenuw{Setup}]
+\item[\bmenuw{Config}]
  Permite que se mude o comportamento do ajuste da infobox (ex. alterando de “auto” para “manual” o modo de MacCready); ou alterando a própria infobox teclando “Mudar Infobox” e então escolhendo uma lista de infoboxes disponíveis.
 
 \end{description}
@@ -414,8 +416,9 @@ Permite ao piloto ajustar a infobox (ex. aumentar ou diminuir o ajuste de MacCre
 Os exemplos de infoboxes podem ser ajustados incluindo o ajuste de MacCready, velocidade do vento e altitude (QNH).
 
 
-\subsection*{Mudando o conjunto de Infobox}
+\subsection*{Modificando o conjunto de Infobox}
 
+(Esta seção só se aplica quando há uma tela de toque ou mouse.)
 Um conjunto inteiro de infobox pode ser composto pela configuração do sistema em “Aparência” e “Pages”, também na seção 13.22.  As caixas de diálogo fornecem uma grande variedade de ajustes e configurações para as páginas do XCSoar.
 
 
@@ -447,7 +450,7 @@ Um cursor aparecerá sobre o botão ativo ou o campo de dado.  Teclando nas seta
 Para PDAs e versões para PC, os itens listados podem ser selecionados tocando o item (ou clicando com o mouse).  Quando um item na lista é selecionado, outro toque (ou clique) é equivalente a pressionar a tecla ENTER.
 Teclando as setas direita/esquerda (ou rotacionando o botão rotativo interno no Altair), o valor do campo de dados sob o cursor pode ser modificado.  Teclando ENTER (ou apertando o botão rotatório no Altair), ativa o botão ou faz a seleção da lista.
 As janelas de diálogo normalmente se iniciam através do botão Menu.
-A maioria das janelas de diálogo têm múltiplas página de informações e são controladas de uma forma consistente.  Tecle > ou < para selecionar a página próximo ou prévia do diálogo e CLOSE para fechar.
+A maioria das janelas de diálogo têm múltiplas página de informações e são controladas de uma forma consistente.  Tecle \bmenuw{$<$}> ou \bmenuw{$>$} para selecionar a página próximo ou prévia do diálogo e CLOSE para fechar.
 A tecla ESC no PC ou PWR/ESC no Altair também podem ser usada para fechar as janelas de diálogo.
 O usuário deve fechar as janelas de diálogo para retornar a visualização do mapa.  Quando um diálogo for aberto, o botão principal de menu é desativado até que o diálogo seja fechado.
 Em alguns diálogos, os itens que não relevantes ou inválidos (como detalhes AAT quando se voa uma prova não-AAT) não são mostrados.
@@ -459,7 +462,7 @@ Em alguns diálogos, os itens que não relevantes ou inválidos (como detalhes A
 \item[Detalhes de Waypoint] Descreve o detalhe do waypoints e tem a função de “Ir Para” e “Inserir na Prova”
 \item[Lista de Waypoint] usado para selecionar um waypoint do banco de dados de waypoints
 \item[Gerenciador de Prova]Use-o para criar, modificar e visualizar as provas de cross country
-\item[Análise] SUse-o para criar, modificar e visualizar as provas de cross country
+\item[Análise] Use-o para criar, modificar e visualizar as provas de cross country
 \item[Estado] A janela de estado fornece um resumo da situação da aeronave, sistema, prova, inícios e tempos.
 \item[Configuração] Permite a configuração do XCSoar e certos dispositivos conectados.
 \item[Filtro de espaço aéreo] Controla a ativação e desativação das notificações e alertas de cada classe de espaço aéreo.
@@ -468,7 +471,7 @@ Em alguns diálogos, os itens que não relevantes ou inválidos (como detalhes A
 \item[Ajuste Planador]  Fácil reconfiguração dos ajustes da aeronave (ex. polar, ID do competidor, etc.) escolhendo de uma lista de aeronaves previamente criadas
 \end{description}
 
-TEstes diálogos são descritos em capítulos posteriores, com exceção da checklist, estado e caixas de diálogo com estrada de textos, que são descritas abaixo.
+Estes diálogos são descritos em capítulos posteriores, com exceção da checklist, estado e caixas de diálogo com estrada de textos, que são descritas abaixo.
 
 
 \subsection*{Check-list (exemplo de diálogo}\label{sec:checklist}
@@ -478,8 +481,8 @@ A janela de checklist pode ser mostrada em diversas páginas definidas pelo usu�
 \bmenut{Info}{1/3}\blink\bmenut{Check}{List}
 \sketch{figures/checklist.png}
 
-Esta checklists pode incluir: inspeções diárias, pré-vôo, pós-pouso, pré-pouso, procedimentos de rádio, ancoragem e desancoragem da aeronave.
-Se a check list for longa, as teclas acima/abaixo (ou botão rotativo no Altair) podem ser usados para rolar através do texto.  Clicando em < e > seleciona a próxima ou prévia checklist.
+Esta checklist pode incluir: inspeções diárias, pré-vôo, pós-pouso, pré-pouso, procedimentos de rádio, ancoragem e desancoragem da aeronave.
+Se a check list for longa, as teclas acima/abaixo (ou botão rotativo no Altair) podem ser usados para rolar através do texto.  Clicando em \bmenuw{$<$} e \bmenuw{$>$} seleciona a próxima ou prévia checklist.
 
 
 
@@ -491,12 +494,12 @@ Duas formas de entradas de texto são permitidas.
 
 Para alterar o tamanho do texto, use os botões 
 \sketch{figures/textentry.png}
-para ajustar o caratere sobre o cursor. Clicando nos botões the \button{$<$} 
+para ajustar o caractere sobre o cursor. Clicando nos botões the \button{$<$} 
 e \button{$>$} move o cursor para esquerda/direita.  
 
-Para entrar um texto com a tela de toque, aperte as letras uma após outra.  Em algumas janelas (ex. edição de waypoints) somente as letras que coincidem com uma entrada no banco de dados será mostrada.  Para apagar a última letra, use \sketch{figures/textentry_keyboard.png}. A tecla CLEAR apaga toda a entrada.
+Para entrar um texto com a tela de toque, aperte as letras uma após outra.  Em algumas janelas (ex. edição de waypoints) somente as letras que coincidem com uma entrada no banco de dados será mostrada.  Para apagar a última letra, use\button{$<-$} \sketch{figures/textentry_keyboard.png}. A tecla \button{$CLEAR$} apaga toda a entrada.
 
-Pressione OK para finalizar ou CANCEL para sair. 
+Pressione \button{$OK$} para finalizar ou \button{$CANCEL$} para sair. 
 
 
 
@@ -528,15 +531,15 @@ For Altair the control of the screen hardware
 \sketch{figures/brightness.png}
 brightness can be controlled from the brightness dialogue.
 \begin{quote}
-\bmenug{Display 2}\blink\bmenug{Bright}
+\bmenug{Mostrar 2}\blink\bmenug{Brilho}
 \end{quote}
 
-Consulte {\em Altair User's Manual} para detalhes da janela de brilho
+Consulte {\em Altair Manual do Usuário's Manual} para detalhes da janela de brilho.
 
 
 \section{Sistema de ajuda}
 
-Um sistema de ajuda fornece um texto descritivo das propriedades para a maioria dos comandos.  Quando há a seleção de uma propriedade, para o Altair, aperte e segure o botão ENTER por 2 segundos e solte. Abrirá uma janela com um texto de ajuda descrevendo a propriedade.  
+Um sistema de ajuda fornece um texto descritivo das propriedades para a maioria dos comandos.  Quando há a seleção de uma propriedade, para o Altair, aperte e segure o botão \button{$ENTER$} por 2 segundos e solte. Abrirá uma janela com um texto de ajuda descrevendo a propriedade.  
 
 \section{Interfacing with gestures}\label{sec:gestures}
 A partir da versão 6.0, o XCSoar aceita “gestos”
@@ -578,7 +581,7 @@ item Waypoint \textbf{L}ist
 \item[\raisebox{-1em}
 {\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/rd.png}}] DB, escrevendo um “T”: abre o gerenciador de provas
 \item[\raisebox{-1em}
-{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dl.png}}] DBE: mostra a lista alternativa
+{\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dl.png}}] BE: mostra a lista alternativa
 \item[\raisebox{-1em}
 {\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/ud.png}}]CB: ativa o Auto Zoom
 \end{itemize}

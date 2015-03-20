@@ -1,7 +1,7 @@
 \chapter{Referência da InfoBox}\label{cha:infobox}
 Os tipos de infobox estão agrupados em categorias lógicas.
 
-Todas as visualizações das infoboxes mudam seus dados e unidades especificadas pelo usuário.  Toda vez que um conteúdo é inválido, aparecerá no mostrador ‘—’ e o texto será acinzentado.  Isto acontece, por exemplo, quando não há elevação do terreno encontrada na infobox ‘Terr Elev’ ou da mesma forma para a infobox ‘A AGL’.
+Todas as visualizações das infoboxes mudam seus dados e unidades especificadas pelo usuário.  Toda vez que um conteúdo é inválido, aparecerá no mostrador ‘—’ e o texto ficará acinzentado.  Isto acontece, por exemplo, quando não há elevação do terreno encontrada na infobox ‘Terr Elev’ ou da mesma forma para a infobox ‘A AGL’.
 
 Algumas das infoboxes tem seus valores de modificação complexa, como ‘Ajuste MC’ ou ‘Vento’.  A maioria destes valores são acessíveis através da janela Infobox.  É um atalho mudar rapidamente a maioria dos itens.  A janela de Infobox é aberta por um toque longo na Infobox (dispositivos com tela de toque) ou ‘SELEC’ e ENTER (PC, Altair).
 
@@ -34,7 +34,7 @@ Nas descrições seguintes dos tipos de infoboxes, o primeiro título é como ap
 \ibi{Altitude (Auto)}{Alt $<$auto$>$}{Esta é altitude barométrica obtida por um dispositivo equipado com sensor de pressão ou altitude do GPS se a altitude barométrica não está disponível.}
 \ibi{Altura AGL}{A AGL}{Esta é a altitude de navegação menos a elevação do terreno, obtida através do arquivo do terreno.  O valor é colorido em vermelho quando a aeronave está abaixo da altura de abertura de segurança do terreno.\footnotemark[1]}  
 \ibi{Elevação do terreno}{Terr Elev}{Esta é a elevação do terreno acima do nível médio do mar obtida através do arquivo de terreno e a localização por GPS.}
-\ibi{Altura acima da decolagem}{H T/O}{Altura baseada em referência automática de elevação (como a referência QFE)).\footnotemark[1]}
+\ibi{Altura acima da decolagem}{H T/O}{Altura baseada em referência automática de elevação (como a referência QFE).\footnotemark[1]}
 \ibi{Nível de vôo}{FL}{Pressão em altitude é fornecida como nível de vôo.  Só estará disponível se houver um sensor barométrico e ajuste correto da QNH.\footnotemark[1]}
 \ibi{Barograma}{Barograma}{Traça a altitude durante o vôo.}
 
@@ -59,7 +59,7 @@ Nas descrições seguintes dos tipos de infoboxes, o primeiro título é como ap
 \ibi{GR instantaneous}{GR Inst}{Taxa de planeio instantânea sobre o solo, fornecida pela velocidade de solo dividida pela velocidade vertical (velocidade GPS) nos últimos 20 segundos.  Valores negativos indicam subida.  Se a velocidade vertical estiver próxima de zero, será mostrado '---'.}
 \ibi{Planeio de cruzeiro}{GR Cruise}{Distância do topo da última termal, divida pela altitude perdida desde o topo da última termal.  Valores negativos indicam subida (valor ganho desde que saiu da última termal).  Se a velocidade vertical é próxima de zero, o valor mostrado será '---'.}
 \ibi{Grad Final}{Grad Fin}{TPlaneio final necessário acima do solo para finalizar a prova, fornecido pela distância dividida pela altura necessária para chegar com a altura de segurança.  Não é possível ajustar a energia total.} 
-\ibi{Próximo RP}{WP GR}{A taxa de planeio necessária acima do solo para atingir o próximo wp, fornecido pela distância ao próximo waypoint dividida pela altura necessária para se chegar com a altura de chegada de segurança.  Valores negativos indicam que é necessário subir para alcançar o waypoint.  Se a altura necessária for próxima de zero, será mostrado '---'.}
+\ibi{Próximo RP}{WP RP}{A taxa de planeio necessária acima do solo para atingir o próximo wp, fornecido pela distância ao próximo waypoint dividida pela altura necessária para se chegar com a altura de chegada de segurança.  Valores negativos indicam que é necessário subir para alcançar o waypoint.  Se a altura necessária for próxima de zero, será mostrado '---'.}
 \ibi{L/D vario}{L/D Vario}{A taxa de planeio necessária acima do solo para atingir o próximo wp, fornecido pela distância ao próximo waypoint dividida pela altura necessária para se chegar com a altura de chegada de segurança.  Valores negativos indicam que é necessário subir para alcançar o waypoint.  Se a altura necessária for próxima de zero, será mostrado '---'.}
 \ibi{Planeio médio}{GR Avg}{A distância configura em um período de tempo, dividida pela altitude perdida neste mesmo período de tempo.  Valores negativos são mostrados como \^{ }\^{ }\^{ } e indicam subida (ganho de altura).  Acima de 200 de GR o valor é indicado +++.  Você pode configurar o período da média.  Valores sugeridos de 60, 90 ou 120.  Valores mais baixos irão ficar próximos de GR Inst e valores mais altos serão próximos de GR Cruize.  Observe que a distância não é uma linha reta entre sua posição anterior e atual, é exatamente a distância que voou mesmo que seja em zigzag.  Este valor não é calculado quando se gira.}
 
@@ -68,8 +68,8 @@ Nas descrições seguintes dos tipos de infoboxes, o primeiro título é como ap
 
 \ibi{Média última térmica}{TL Avg}{Altitude total ganha/perdida na última termal, dividida pelo tempo gasto circulando.} 
 \ibi{Último ganho térmico}{TL Ganho}{Altitude total ganha/perdida na última térmica.}
-\ibi{Tempo da última térmica}{TL Tempo}{Tempo gasto circulando na última térmica.}
-\ibi{Subida térmica, últimos 30ss}{TC 30s}{A 30 second rolling average climb rate based
+\ibi{Hora da última térmica}{TL Tempo}{Tempo gasto circulando na última térmica.}
+\ibi{Subida térmica, últimos 30s}{TC 30s}{A 30 second rolling average climb rate based
 of the reported GPS altitude, or vario if available.}
 \ibi{Média térmica}{TC Avg}{Altitude ganha/perdida na termal atual, dividida pelo tempo gasto na termal.}
 \ibi{Ganho Térmico}{TC Ganho}{Altitude ganha/perdida na térmica atual..}
@@ -88,8 +88,8 @@ of the reported GPS altitude, or vario if available.}
 {figures/infobox-dialog-wind1.png}
 \ibi{Direção do vento}{Wind Brng}{Direção do vento estimada pelo XCSoar.  Ajustável da mesma maneira que a seta do vento.}
 \ibi{Velocidade do vento}{V Vento}{Velocidade do vento estimada pelo XCSoar. Ajustável da mesma maneira que a seta de vento.}
-\ibi{Componente de vento de proa}{Head Wind}{Componente de vento de proa atual.  É calculado pelo TAS e velocidade solo do GPS se a velocidade do vento for disponível por dispositivo externo.  Caso contrário, o vento estimado será usado para o cálculo.}
-\ibi{Head wind component (simplified)}{Head Wind *}{Componente de vento de proa atual.  É calculado pela subtração da velocidade de solo do GPS pelo TAS, se houver velocidade do ar fornecida por dispositivo externo.}
+\ibi{Componente de vento de cabeça}{Head Wind}{Componente de vento de proa atual.  É calculado pelo TAS e velocidade solo do GPS se a velocidade do vento for disponível por dispositivo externo.  Caso contrário, o vento estimado será usado para o cálculo.}
+\ibi{Head wind component (simplified)}{Head Wind*}{Componente de vento de proa atual.  É calculado pela subtração da velocidade de solo do GPS pelo TAS, se houver velocidade do ar fornecida por dispositivo externo.}
 \ibi{Temperatura do ar externo}{OAT}{Temperatura do ar externo medido por sensor se conectado a um variômetro inteligente.}
 \ibi{Umidade relativa}{Hum Rel}{Umidade relativa do ar em percentual.  Medida se houver um sensor conectado a um variômetro inteligente.}
 \ibi{Temperatura prevista}{Temp Max}{Temperatura prevista no chão no aeródromo, usada na estimativa da altura convectiva e base da nuvem em conjunto com os sensores de temperatura e umidade relativa. (Somente tela de toque/PC) Apertando as teclas acima/abaixo, ajusta a temperatura prevista.}
@@ -100,7 +100,7 @@ of the reported GPS altitude, or vario if available.}
 \ibi{Configuração MacCready }{MC $<$modo$>$}{O ajuste atual de MacCready, o modo do MacCready (manual ou auto) e a velocidade ideal recomendada.  (Somente tela de toque/PC).  Também usado para ajustar o MacCready se a infobox estiver ativa, usando as teclas acima/abaixo.  Apertando a tecla alterna para ‘Auto MacCready’.  Abrirá uma janela}
 \ibi{Velocidade de MacCready}{V MC}{A velocidade ideal de MacCready para vôo otimizado para o próximo waypoint.  Em modo de vôo de cruzeiro, esta velocidade ideal é calculada mantendo altitude.  No modo de planeio final, esta velocidade ideal é calculada para descendente.}
 \ibi{Percentual de subida}{\% Subida}{Percentual de tempo gasto em modo de subida.  Estas estatísticas são zeradas no início da prova.}
-\ibi{Velocidade de golfinho}{V opt.}{Velocidade ideal instantânea de MacCready, fazendo uso dos cálculos do vario netto para determinar a velocidade golfinho de cruzeiro na direção atual do planador.  Em modo de cruzeiro a velocidade ideal é calculada mantendo-se altitude.  No modo de planeio final, esta velocidade ideal é calculada para descendente.  Em modo de subida, alterna para a velocidade de mínimo afundamento com o mesmo fator de carga (se usado um acelerômetro).  Quando o modo ‘Block’ é usado na velocidade ideal, a infobox mostra a velocidade MacCready.}
+\ibi{Velocidade de golfinho}{Vopt}{Velocidade ideal instantânea de MacCready, fazendo uso dos cálculos do vario netto para determinar a velocidade golfinho de cruzeiro na direção atual do planador.  Em modo de cruzeiro a velocidade ideal é calculada mantendo-se altitude.  No modo de planeio final, esta velocidade ideal é calculada para descendente.  Em modo de subida, alterna para a velocidade de mínimo afundamento com o mesmo fator de carga (se usado um acelerômetro).  Quando o modo ‘Block’ é usado na velocidade ideal, a infobox mostra a velocidade MacCready.}
 \ibi{Thermal next leg equivalent}{T Next Leg}{A taxa de subida da termal na próxima perna que é equivalente a termal igual ao ajuste de MacCready na perna atual.}
 \ibi{Task cruise efficiency}{Cruise Eff}{Eficiência do cruzeiro.  100 indica desempenho perfeito de MacCready.  Este valor estima a sua eficiência de cruzeiro de acordo com o histórico atual de vôo com o ajuste de MacCready.  Os cálculos são feitos após a prova ter sido iniciada.}
 
@@ -111,7 +111,7 @@ of the reported GPS altitude, or vario if available.}
 \ibi{Next radial}{Radial}{Direção verdadeira do próximo waypoint até a sua posição.}
 \ibi{Próxima distância}{WP Dist}{A distância do waypoint atualmente selecionado.  Para provas AAT, esta é a distância ao alvo dentro da área AAT.}
 \ibi{Diferença na próxima altitude}{WP AltD}{Altitude de chegada ao próximo waypoint relativo à altura de chegada de segurança.  Para provas AAT, os alvos dentro do setor AAT são usados.}
-\ibi{Próximo MC0 diferença de altitude}{WP MC0 AltD}{Altitude de chegada ao próximo waypoint com ajuste zero de MacCready relativo à altitude de chegada de segurança.  Para provas AAT, o alvo dentro do setor AAT é usado.}
+\ibi{Próximo MC0 diferença de altitude}{WP MC0 AltD}{Altitude de chegada ao próximo waypoint com ajuste zero de MacCready relativo à altitude de chegada de segurança.  Para provas AAT, o alvo dentro do setor AAT é usado.}   
 \ibi{Altitude de chegada próximo ponto}{WP AltA}{Altitude absoluta de chegada no próximo waypoint no planeio final.  Para provas AAT, o alvor dentro do setor AAT é usado.}
 \ibi{Próxima altitude necessária}{WP AltR}{Altitude necessária para alcançar o próximo pilão.  Para provas AAT, o alvo dentro do setor AAT é usado.}
 \ibi{Diferença de altitude final}{Fin AltD}{Altitude de chegada ao final da prova relativa à altura de segurança de chegada.}
@@ -149,7 +149,7 @@ of the reported GPS altitude, or vario if available.}
 \ibi{Tempo restante da prova}{Fin ETE}{Tempo estimado para completar a prova, assumindo a performance ideal de MacCready em ciclos de subida e cruzeiro.}
 \ibi{Tempo p fim prova (vel. solo)}{Fin ETE VMS}{Tempo estimado para completar a prova, assumindo que a velocidade solo é mantida.}
 \ibi{Tempo até próx. ponto}{WP ETE}{Tempo até próx. ponto.}
-\ibi{Tempo p próx. ponto (vel. solo)}{WP ETE VMS}{Tempo estimado para o próximo ponto, assumindo que a velocidade no solo é mantida.}
+\ibi{Tempo p próx. ponto (vel. solo)}{ETE PV VMS}{Tempo estimado para o próximo ponto, assumindo que a velocidade no solo é mantida.}
 \ibi{Hora ao término da prova}{Fin ETA}{Hora estimada local para completar a prova, assumindo desempenho ideal de MacCready em modo de subida e cruzeiro.}
 \ibi{Hora no próx. ponto}{WP ETA}{Hora local estimada no próximo waypoint, assumindo desempenho ideal de MacCready em modo de subida/cruzeiro.}
 \ibi{Tend alt req compl prova}{Tendência RH}{Tendência da altura total necessária para completar a prova.}

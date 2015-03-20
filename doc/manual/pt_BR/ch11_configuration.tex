@@ -54,11 +54,10 @@ A janela especifica os arquivos mais importantes que devem ser configurados quan
 \begin{description}
 \item[Caminho dos dados do XCSoar]  a localização de todos os seus dados do XCSoar no seu disco rígido, cartão SD ou memória estática do PDA.
 \item[Base de dados do Mapa]  o nome do arquivo de mapa contento elevação digital, dados do terreno, topografia e opcionalmente, waypoints, espaço aéreo, etc.  Um bom arquivo de banco de dados cobre todas as necessidades para esta página.
-\item[Waypoints]  arquivo primário de waypoint.  Se deixado em brando, os waypoints serão carregados do mapa (se houverem).
+\item[Waypoints]  arquivo primário de waypoint.  Se deixado em branco, os waypoints serão carregados do mapa (se houverem).
 \item[Mais waypoints*]  arquivo secundário de waypoints.  Deve ser usado para adicionar waypoints para competições.
 \item[Waypoints observados*]  arquivo de waypoints contendo waypoints especiais para os quais os podem substituir os cálculos adicionais de altura de chegada no mapa.  Útil para waypoints como fontes de térmicas conhecidas (ex, usinas) ou passagens por montanhas.
 \item[Espaço aéreo]  arquivo de espaço aéreo primário.  Se deixado em branco, os espaços aéreos serão carregados do arquivo de mapa (se disponíveis).
-\item[More airspaces*]  The file name of the secondary airspace file.
 \item[Mais espaços aéreos*] arquivo secundário de espaço aéreo.
 \item[Detalhes de Waypoint] o aeródromo pode conter suplementos de rotas ou outras informações sobre aeródromos individuais
 \end{description}
@@ -70,7 +69,7 @@ O conceito da base de dados do mapa do XCM é para ajustar um local para voar.  
 
 O arquivo de mapa XCM contém todos estes três arquivos: terreno, topografia e opcionalmente waypoints e espaço aéreos.  Se o último contiver por exemplo o arquivo primário de waypoint, deve ser deixado em branco e o sistema irá carregar os waypoints do arquivo do mapa.  Porém, o usuário pode especificar outros arquivos e estes serão usados ao invés dos dados do arquivo de mapa.
 
-Veja Seção ~\ref{sec:map} para mais detalhes sobre o arquivo de mapas.  
+Veja Seção~\ref{sec:map} para mais detalhes sobre o arquivo de mapas.  
 
 
 %%%%%%%%%%%%%%%%%%
@@ -79,7 +78,7 @@ Veja Seção ~\ref{sec:map} para mais detalhes sobre o arquivo de mapas.
 Esta página permite você especificar a orientação preferida do mapa e visualização.
 
 \begin{description}
-\item[Cruise/Circling orientation]  \label{conf:orientation} determina como a tela é rotacionada com o planador, dependendo do modo de visualização da tela.  \\
+\item[Orientação Cruzeiro/Girando]  \label{conf:orientation} determina como a tela é rotacionada com o planador, dependendo do modo de visualização da tela.  \\
   {\bf Rota acima}: a exibição do mapa será rotacionada para que a rota do planador seja orientada para cima.  A seta de símbolo de norte aponta para o norte verdadeiro.  O símbolo da aeronave pode ser mostrado rotacionando de acordo com a direção computada da aeronave, levando em consideração o vento. \\
   \sketch{figures/config-map_projection.png}
   {\bf Heading up}: a exibição do mapa será rotacionada e a aeronave é orientada para cima. \\
@@ -103,14 +102,14 @@ Esta página fornece opções relativas aos elementos da tela sobrepostos à exi
 
 \begin{description}
 \item[Rastro no chão]  mostra o rastro no chão (projeção) no mapa.  O ajuste ‘Auto” mostra o rastro se somente houver diferença significante para a direção da aeronave.
-\item[Tráfeto FLARM]  \label{conf:flarm-on-map} ativa a exibição do tráfego FLARM no mapa.
+\item[Tráfego FLARM]  \label{conf:flarm-on-map} ativa a exibição do tráfego FLARM no mapa.
 \item[Comprimento da trilha*] \label{conf:snailtrail} determina o tamanho da trilha desenhada atrás do planador. \\
 \sketch{figures/config-map_elements.png}
   {\bf Desligado}: nenhuma trilha é desenhada. \\
   {\bf Longo}: é desenhada trilha longa (aprox. 60 minutos). \\
   {\bf Curto}: É desenha trilha curta (aprox. 10 minutos). \\
   {\bf Completo}: desenhada a trilha para o vôo todo.
-\item[Deriva da trilhat*] \label{conf:traildrift} determina quando a trilha é derivada com o vento quando mostrado em modo girando.  Desligado, a trilha permanece sem compensação de deriva.
+\item[Deriva da trilha*] \label{conf:traildrift} determina quando a trilha é derivada com o vento quando mostrado em modo girando.  Desligado, a trilha permanece sem compensação de deriva.
 \item[Tipo de rastro*] \label{conf:snailtype} ajusta o tipo de exibição da trilha. \\
   {\bf Vario \#1}: dentro de áreas de ascensão, a linha é verde e fina, na descendente a linha é marrom e fina.  Vôo reto, a linha é cinza. \\
   {\bf Vario \#1 (com pontos)}: o mesmo padrão do anterior, mas com linhas pontilhas enquanto afunda. \\
@@ -140,17 +139,15 @@ Esta página fornece opções relativas aos elementos da tela sobrepostos à exi
 Esta página mostra as opções relativas à exibição do mapa.
 
 \begin{description}
-\item[Formato do rótulot]  este ajuste  \label{conf:labels} determina o rótulo mostrado 
+\item[Formato do rótulo]  este ajuste  \label{conf:labels} determina o rótulo mostrado 
   para cada waypoint, com cinco opções diferentes: \\
   {\bf Nome completo}: o nome completo de cada waypoint é mostrado. \\
-  {\bf Primeira palavra do nome}: somente a primeira palavra (até o primeiro espaço) 
-  do nome do waypoint é mostrada.
+  {\bf Primeira palavra do nome}: somente a primeira palavra (até o primeiro espaço) do nome do waypoint é mostrada.
 \sketch{figures/config-map_waypoint.png} \\
   {\bf Primeiras 3 letras}: as primeiras 3 letras do nome do waypoint são mostradas. \\
   {\bf Primeiras 5 letras}: primeiras 5 letras do nome do waypoint são mostradas. \\
   {\bf Nenhum}: nenhum nome do waypoint é mostrado.
-\item[Altura de chegada*] \label{conf:arrivalheight} ativa a informação mostrada da 
-  altura de chegada para locais pousáveis. \\
+\item[Altura de chegada*] \label{conf:arrivalheight} ativa a informação mostrada da altura de chegada para locais pousáveis. \\
   {\bf Nenhum}: Não é mostrada altura de chegada. \\
   {\bf Planeio direto}: altura de chegada com planeio direto (não é considerada a topografia do terreno). \\
   {\bf Planeio evitando terreno}:altura de chegada considerando evitar possíveis obstáculos do terreno.  \\
@@ -244,8 +241,8 @@ Esta página permite definir as alturas de segurança e comportamentos para os p
 
 \begin{description}
 \item[Altura de chegada]  a altura acima do terreno que o planador deverá chegar para pousar com segurança.
-\item[Altura do terreno]  \label{conf:safetyterrain} altura acima do terreno que o planador deve planar no planeio final.  Veja seção \\
-~\ref{sec:safety-heights} para mais detalhes dos significados de altura de segurança. \\
+\item[Altura do terreno]  \label{conf:safetyterrain} altura acima do terreno que o planador deve planar no planeio final.  Veja seção
+  ~\ref{sec:safety-heights} para mais detalhes dos significados de altura de segurança. \\
 \item[Modo alternativo]  \label{conf:alternatesmode} determina o tipo de pousos alternativos conforme abaixo: \\
   {\bf Simples}: os alternativos irão ser ordenados pela altura de chegada.  O primeiro waypoint na lista é o que está mais ao alcance.   \\
   {\bf Prova}: a ordem irá levar em conta a direção da prova atual mostrará de acordo com a distância mínima extra navegada ao respeito campo e adiante na prova. \\
@@ -259,7 +256,7 @@ Esta página permite definir as alturas de segurança e comportamentos para os p
 
 
 %%%%%%%%%%%%%%%%%%
-\section{omputador de Planeio / Computador de Planeio}\label{sec:final-glide}\label{conf:final-glide}	
+\section{Computador de Planeio / Computador de Planeio}\label{sec:final-glide}\label{conf:final-glide}	
 
 Esta página permite configurar os algoritmos do computador de planeio.
 
@@ -273,22 +270,22 @@ Esta página permite configurar os algoritmos do computador de planeio.
 \item[Nav. por altitude baro*]  quando ativo e se conectado a um altímetro barométrico, a altitude barométrica é usada para todas as funções de navegações.  Caso contrário, a altitude GPS será usada.
 \item[Flap força cruzeiro*]
  quando ativo, faz os interruptores dos flaps no Vega a forçarem o modo de cruzeiro quando o flap não está positivo. Significa que, quando sai de uma termal, alternar para flap neutro ou negativo irá imediatamente alternar o modo do XCSoar para modo de cruzeiro.  Igualmente, para o sistema Borgelt B50, o comando de velocidade força o XCSoar a alternar para modo de subida ou cruzeiro.
-\item[GR Average period*]  eficiência média é sempre calculada em tempo real.  Neste campo você pode decidir em quantos segundos de vôo este cálculo deve ser feito.  A distância real coberta segundo a segundo neste período é dividida pela distância final ou altitude.  Se, por exemplo, você for e retornar ao mesmo ponto depois de 2 minutos e você tem um ajuste de 2 minutos como período, a média da taxa de planeio irá considerar a distância total coberta nestes dois minutos e não a distância de sua posição 2 minutos atrás e sua posição atual, que neste caso pode ser quase zero!  Normalmente para planadores, um valor razoável é de 90 a 120 segundos e para paragliders, 15 segundos.  Valores baixos irá fornecer resultados muito semelhantes à taxa de planeio instantânea (GR Inst) e valores altos irão se assemelhar a taxa de planeio em cruzeiro (GR Cruize).  Outros instrumentos comerciais e softwares usam 2 minutos.
-\item[Deriva do vento prevista*]  \label{conf:predict-drift}conta para deriva do vento com a duração prevista do modo girando.  Isto reduz a altura de chegada com vento de nariz (padrão).
+\item[GR Average period*]  eficiência média é sempre calculada em tempo real.  Neste campo você pode decidir em quantos segundos de vôo este cálculo deve ser feito.  A distância real coberta segundo a segundo neste período é dividida pela distância final ou altitude.  Se, por exemplo, você for e retornar ao mesmo ponto depois de 2 minutos e você tem um ajuste de 2 minutos como período, a média da taxa de planeio irá considerar a distância total coberta nestes dois minutos e não a distância de sua posição 2 minutos atrás e sua posição atual, que neste caso pode ser quase zero!  Normalmente para planadores, um valor razoável é de 90 a 120 segundos e para paragliders, 15 segundos.  Valores baixos irão fornecer resultados muito semelhantes à taxa de planeio instantânea (GR Inst) e valores altos irão se assemelhar a taxa de planeio em cruzeiro (GR Cruize).  Outros instrumentos comerciais e softwares usam 2 minutos.
+\item[Deriva do vento prevista*]  \label{conf:predict-drift}cálculo para deriva do vento com a duração prevista do modo girando.  Isto reduz a altura de chegada com vento de nariz (padrão).
 \end{description}
 
 
 %%%%%%%%%%%%%%%%%%
 \section{Computador de Planeio / Vento} \label{sec:wind}
 
-Esta página ajuste a base de cálculo para o vento.
+Esta página configura a base de cálculo para o vento.
 
 \begin{description}
-\item[Vento aut]  \label{conf:autowind} permite ativar/desativa o algoritmo de vento automático. \\
+\item[Vento aut]  \label{conf:autowind} permite ativar/desativar o algoritmo de vento automático. \\
   {\bf Manual}: o algoritmo é desligado e o piloto é responsável pelo ajuste de estimativa de vento. \\
   {\bf Girando}: este modo necessita somente de uma fonte de GPS. \\
   {\bf ZigZag}: necessita de um variômetro inteligente com saída para velocidade do vento. \\
-  {\bf Ambos}:  Usa  Circling e ZigZag.
+  {\bf Ambos}:  Usa  Girando e ZigZag.
 \item[Prefere external wind]  se ativo, o vetor de vento recebido pelos dispositivos externos se sobrepõe ao cálculo interno de vento do XCSoar.
 \end{description}
 
@@ -296,19 +293,18 @@ Esta página ajuste a base de cálculo para o vento.
 %%%%%%%%%%%%%%%%%%
 \section{Computador de Planeio / Rota}
 
-Esta página permite controlar sobre cálculos de planeio e otimizações de rota.
+Esta página permite controlar os cálculos de planeio e otimizações de rota.
 
 \begin{description}
-\item[Modo rota]  \label{conf:routemode} qual tipo de obstáculos são usados no planejamento da rota.  Veja a seção ~\ref{sec:route} 
+\item[Modo rota]  \label{conf:routemode} quais tipos de obstáculos são usados no planejamento da rota.  Veja a seção ~\ref{sec:route} 
 para as descrições detalhadas.
 \item[Modo de chegada]  \label{conf:turningreach} como os cálculos são feitos para o alcance do planeio respeitando o terreno. \\
   {\bf Desligado}: cálculos de alcance desligado. \\
   {\bf Direto}: o alcance é uma linha reta. \\
   {\bf Virando}: o alcance é calculado permitindo curvas ao redor dos obstáculos do terreno.
 \item[Polar de chegada*]  \label{conf:reachpolar} determina o desempenho do planeio usado no alcance nos cálculos de chegada de pousável, aborto e alternativos. \\
-  {\bf Prova}: Uses task MacCready value; \\
+  {\bf Prova}: usa o valor de MacCready da prova. \\
   {\bf MC de Segurança}: usa o valor de MacCready de segurança.
-%\item[Exibir chegada] \label{conf:arrivaldisplay} determina se o alcance é desenhado no mapa como uma linha ou uma sombra.
 \end{description}
 
 %%%%%%%%%%%%%%%%%%
@@ -337,7 +333,7 @@ Esta página explica todos os detalhes do indicador do variômetro e é inteiram
 \item[Mostrar  bugs*]  mostra a porcentagem de insetos.
 \item[Mostrar lastro*] mostra a porcentagem de lastro.
 \item[Mostrar bruto*]  mostra o valor do variômetro bruto.
-\item[Medidor agulha*] se verdadeiro, o indicador do variômetro irá mostrar uma agulha mediadora vazada.  
+\item[Medidor agulha*] se verdadeiro, o indicador do variômetro irá mostrar uma agulha vazada.  
 Durante cruzeiro, a agulha mostra a média líquida.
 Durante o giro, a agulha mostra média bruta.
 
@@ -373,7 +369,7 @@ As regras da prova podem ser definidas para ter starts limitados de acordo com a
 \item[Ref altura largada*]  referência usada para altura máxima de largada. \\
   {\bf MSL}: a altitude é acima do nível do mar. \\
   {\bf AGL}: a altura é acima do ponto de start.
-\item[Altura mín chegada*]  altura mínima para chegada, baseada na referência (AGL ou ML) para terminar a prova.  Ajuste para 0 se não houver limite.
+\item[Altura mín chegada*]  altura mínima para chegada, baseada na referência (AGL ou MSL) para terminar a prova.  Ajuste para 0 se não houver limite.
 \item[Altura final de refer*]  referência de altura mínima usada para finalizar a prova, correspondente à regra de referência de start.
 \end{description}
 
@@ -410,7 +406,7 @@ Esta página permite a personalização das fontes nos vários campos do program
 
 \sketch{figures/config-fonts.png}
 
-Uma vez que a personalização esteja ativa, o botão  \button{Edit} permite alterar alguns parâmetros (fontes, altura, negrito e itálico) das fontes escolhidas.
+Uma vez que a personalização esteja ativa, o botão  \button{Editar} permite alterar alguns parâmetros (fontes, altura, negrito e itálico) das fontes escolhidas.
 
 Se a personalização for desabilitada, as fontes padrão serão usadas.
 
@@ -422,7 +418,7 @@ Se a personalização for desabilitada, as fontes padrão serão usadas.
 Esta página permite configurar a aparência da interface gráfica do XCSoar.
 
 \begin{description}
-\item[Orientação do display] é possível configurar entre padrão, retrato, Paisagem, retrato inverso e paisagem inverso, de acordo com a preferência.
+\item[Orientação do display] é possível configurar entre padrão, retrato, paisagem, retrato inverso e paisagem inverso, de acordo com a preferência.
 \item[Disposição Caixas Info]  lista os layouts possíveis para as infoboxes.  Faça alguns testes para achar o melhor para sua tela.  O número anterior refere-se ao número total de infoboxes na geometria.
 \item[FLARM display*]  \label{conf:flarmradar-place}
  se a exibição do FLARM estiver ativa, esta opção é para configurar o seu local na tela onde o pequeno radar aprece.  Como padrão, o ajuste ‘Auto’ é possível e significa que a janela do radar irá se sobrepor às infoboxes e não na parte do mapa.
@@ -441,7 +437,7 @@ Esta página permite configurar a aparência da interface gráfica do XCSoar.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Aparência / Pages)}\label{conf:screenpages}
+\section{Aparência / Pages}\label{conf:screenpages}
 
 Esta página permite a definição dos conjuntos de telas.  A configuração normal possui três páginas, mas um piloto experiente pode ter até oito páginas possíveis.
 
@@ -479,11 +475,9 @@ Selecionando um dos conjuntos abrirá uma janela que fornecerá todos os nomes e
 
 O lado direito da janela sempre mostra uma visão geral do conjunto.  Quando compondo no seu PC, você pode usar o mouse para selecionar uma caixa através da visão geral.
 
-Veja seção~\ref{cha:infobox} para descrição dos tipos de infoboxes e seus significados.
+Veja na seção~\ref{cha:infobox} a descrição dos tipos de infoboxes e seus significados.
 
 Para mudar um conjunto, tecle em uma das infoboxes rotuladas com o conteúdo atual.  As infoboxes são numeradas e a sua localização depende do layout da tela.  A tabela abaixo mostra a numeração para o layout da tela em paisagem e retrato. 
-
-
 
 \begin{multicols}{2}
 \begin{tabular}{|c|c|}
@@ -550,7 +544,7 @@ Há seleções separada para todos os itens.  Uma vez alterado alguma pré-confi
 
 
 %%%%%%%%%%%%%%%%%%
-\section{SConfig / Tempo}
+\section{Config / Tempo}
 
 Ajusta a hora local compensada relativa ao fuso horário.
 
@@ -564,12 +558,12 @@ Ajusta a hora local compensada relativa ao fuso horário.
 %%%%%%%%%%%%%%%%%%
 \section{Config / Rastro}
 
-`{\it Live}'-Tracking significar usar o GPS para determinar sua posição e a rede móvel para enviar sua posição em tempo real para sum servidor.  Outras pessoas podem ver sua posição exata e o rastro mostrado no mapa imediatamente.  Esta opção de rastreamento oferecida pelo seu computador de planeio, necessita da capacidade de conexão à rede.  
+`{\it Live}'-Tracking significar usar o GPS para determinar sua posição e a rede móvel para enviar sua posição em tempo real para um servidor.  Outras pessoas podem ver sua posição exata e o rastro mostrado no mapa imediatamente.  Esta opção de rastreamento oferecida pelo seu computador de planeio, necessita da capacidade de conexão à rede.  
 
 Atualmente existem dois protocolos implementados. O ‘Sky-Lines’, como um projeto subsidiário do XCSoar – para detalhes deste serviço, consulte
 \url{http://skylines.xcsoar.org}. 
-Também é usado o protocolo  `{\em LiveTrack24}' protocol used consultado no portal  \url{http://www.livetrack24.com}.  
-PPor gentileza consulte as páginas da internet sobre os serviços fornecidos na lista ‘Server’ para detalhes das configurações.
+Também é usado o protocolo  `{\em LiveTrack24}' consultado no portal  \url{http://www.livetrack24.com}.  
+Por gentileza consulte as páginas da internet sobre os serviços fornecidos na lista ‘Server’ para detalhes das configurações.
 
 \begin{description}
 \item[SkyLines]  alterne para ‘Ligado’ para ativar o seu posicionamento ao vivo para o `{\em SkyLines}'.
@@ -600,7 +594,7 @@ Personalize os três pontos Vpolar e Polar W definindo uma curva parabólica e a
 \item[Polar V/W]  estes três pares de números correspondem às velocidades verticais e horizontais.  O primeiro ponto é o mais alto da polar, o segundo é no meio da curva e o terceiro onde a curvatura tende a desaparecer.
 \item[Massa de referência]  peso de referência no qual a polar é válida.
 \item[Massa seca]  o peso completo da aeronave incluindo o peso do piloto, com exceção do lastro de água.  Na ausência de configuração do peso do piloto, o XCSoar espera que você incluía seu próprio peso à massa seca.
-\item[Lastro]  Optional the amount of water ballast XCSoar refers to as 100quantidade opcional de água de lastro que o XCSoar se refere a 100\% de lastro.  Zero é quando não se aplica.
+\item[Lastro] quantidade opcional de água de lastro que o XCSoar se refere a 100\% de lastro.  Zero é quando não se aplica.
 \item[Tempo para descarregar]  tempo em segundos para descarregar o lastro.
 \item[Velocidade Máx. Cruzeiro] velocidade máxima alcançada pelo planador quando em vôo de cruzeiro.
 \end{description}
@@ -617,7 +611,7 @@ Quatro dispositivos podem ser configurados (A até o D), como o exemplo, pode se
 
 \sketch{figures/config-devices.png}
 
-Portas com de 0 a 10 poderão ser usadas, incluindo conexão TCP/IP.  Qual porta é mais apropriada irá depender de qual marca é o seu PDA e o meio de comunicação (cabo serial, bluetooth, porta virtual COM, cartão SD ou GPS baseado em CF, GPS interno, etc.).  O detalhamento destas inúmeras opções para os vários dispositivos está além do escopo deste manual.  Se você tiver problema em identificar qual porta COM deverá configurar, por gentileza consulte o site do XCSoar e listas de discussão.  
+Portas com de 0 a 10 poderão ser usadas, incluindo conexão TCP/IP.   Qual porta é mais apropriada irá depender de qual marca é o seu PDA e o meio de comunicação (cabo serial, bluetooth, porta virtual COM, cartão SD ou GPS baseado em CF, GPS interno, etc.).  O detalhamento destas inúmeras opções para os vários dispositivos está além do escopo deste manual.  Se você tiver problema em identificar qual porta COM deverá configurar, por gentileza consulte o site do XCSoar e listas de discussão.  
 
 \begin{description}
 \item[Porta] este ajuste mapeia uma interface existente (porta) de seu computador para um dos slots disponíveis de A a D.
