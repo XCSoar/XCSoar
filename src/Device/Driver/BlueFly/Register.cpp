@@ -27,7 +27,7 @@ Copyright_License {
 static Device *
 BlueFlyCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new BlueFlyDevice();
+  return new BlueFlyDevice(com_port);
 }
 
 const struct DeviceRegister bluefly_driver = {

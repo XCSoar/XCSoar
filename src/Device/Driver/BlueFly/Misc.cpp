@@ -30,8 +30,9 @@ BlueFlyDevice::LinkTimeout()
   kalman_filter.Reset();
 }
 
-BlueFlyDevice::BlueFlyDevice()
-    :settings({0}),
+BlueFlyDevice::BlueFlyDevice(Port &_port)
+    :port(_port),
+     settings({0}),
      settings_keys(nullptr)
 {
   kalman_filter.SetAccelerationVariance(fixed(0.3));

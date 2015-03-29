@@ -22,6 +22,10 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "Device/Util/NMEAWriter.hpp"
+#include "NMEA/Derived.hpp"
+
+#include <stdio.h>
 
 const char BlueFlyDevice::BlueFlySettings::VOLUME_NAME[] = "BVL";
 const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
@@ -38,4 +42,55 @@ BlueFlyDevice::BlueFlySettings::Parse(const char *name, unsigned long value)
     volume = (fixed)value / VOLUME_MULTIPLIER;
   else if (StringIsEqual(name, OUTPUT_MODE_NAME))
     output_mode = value;
+}
+
+bool
+BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
+                                  OperationEnvironment &env)
+{
+  char buffer[64];
+
+  assert(strlen(name) == 3);
+
+  sprintf(buffer, "%s %d", name, value);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+BlueFlyDevice::RequestSettings(OperationEnvironment &env)
+{
+  trigger_settings_ready.Reset();
+  return PortWriteNMEA(port, "BST", env);
+}
+
+bool
+BlueFlyDevice::WaitForSettings(unsigned int timeout)
+{
+  return trigger_settings_ready.Wait(timeout);
+}
+
+void
+BlueFlyDevice::GetSettings(BlueFlySettings &settings_r)
+{
+  mutex_settings.Lock();
+  settings_r = settings;
+  mutex_settings.Unlock();
+}
+
+void
+BlueFlyDevice::WriteDeviceSettings(const BlueFlySettings &new_settings,
+                                   OperationEnvironment &env)
+{
+  // TODO: unprotected read access to settings
+  if (new_settings.volume != settings.volume)
+    WriteDeviceSetting(settings.VOLUME_NAME, new_settings.ExportVolume(), env);
+  if (new_settings.output_mode != settings.output_mode)
+    WriteDeviceSetting(settings.OUTPUT_MODE_NAME,
+                       new_settings.ExportOutputMode(), env);
+
+  /* update the old values from the new settings.
+   * The BlueFly Vario does not send back any ACK. */
+  mutex_settings.Lock();
+  settings = new_settings;
+  mutex_settings.Unlock();
 }

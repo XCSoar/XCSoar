@@ -160,10 +160,14 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
   if (!ParseUlong(&values, value))
     return true;
 
+  mutex_settings.Lock();
   while (token && ParseUlong(&values, value)) {
     settings.Parse(token, value);
     token = StringToken(nullptr, " ");
   }
+  mutex_settings.Unlock();
+
+  trigger_settings_ready.Signal();
 
   return true;
 }
