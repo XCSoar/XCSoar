@@ -19,6 +19,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/CAI302/UnitsEditor.cpp \
 	$(SRC)/Dialogs/Device/CAI302/WaypointUploader.cpp \
 	$(SRC)/Dialogs/Device/ManageFlarmDialog.cpp \
+	$(SRC)/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageV7Dialog.cpp \
 	$(SRC)/Dialogs/Device/LX/V7ConfigWidget.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageNanoDialog.cpp \

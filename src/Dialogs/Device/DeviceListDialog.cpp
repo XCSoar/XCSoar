@@ -24,6 +24,7 @@ Copyright_License {
 #include "DeviceListDialog.hpp"
 #include "DeviceEditWidget.hpp"
 #include "Vega/VegaDialogs.hpp"
+#include "BlueFly/BlueFlyDialogs.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
 #include "LX/ManageV7Dialog.hpp"
@@ -599,6 +600,8 @@ DeviceListWidget::ManageCurrent()
       ManageLX16xxDialog(lx_device, info);
   } else if (descriptor.IsDriver(_T("Vega")))
     dlgConfigurationVarioShowModal(*device);
+  else if (descriptor.IsDriver(_T("BlueFly")))
+    dlgConfigurationBlueFlyVarioShowModal(*device);
 
   MessageOperationEnvironment env;
   descriptor.EnableNMEA(env);
