@@ -315,7 +315,7 @@ ifeq ($(TARGET),IOS)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  DARWIN_SDK_VERSION = 7.1
+  DARWIN_SDK_VERSION = 8.2
   IOS_MIN_SUPPORTED_VERSION = 5.1
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
