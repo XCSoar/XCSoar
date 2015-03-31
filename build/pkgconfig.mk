@@ -4,7 +4,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
   ifeq ($(DARWIN_LIBS),)
     PKG_CONFIG := $(PKG_CONFIG) --static
   else
-    PKG_CONFIG := PKG_CONFIG_LIBDIR=$(DARWIN_LIBS)/lib/pkgconfig $(PKG_CONFIG) --static
+    PKG_CONFIG := PKG_CONFIG_LIBDIR=$(DARWIN_LIBS)/lib/pkgconfig $(PKG_CONFIG) --static --define-variable=prefix=$(DARWIN_LIBS)
   endif
 endif
 
