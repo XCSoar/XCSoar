@@ -23,8 +23,12 @@ else
 USE_SDL2 ?= n
 endif
 
+ifeq ($(TARGET_IS_DARWIN),y)
+COREGRAPHICS = y
+else
 LIBPNG = y
 LIBJPEG = y
+endif
 FREETYPE = y
 
 ifeq ($(USE_SDL2),y)

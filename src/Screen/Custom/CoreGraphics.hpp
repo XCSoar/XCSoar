@@ -21,43 +21,18 @@ Copyright_License {
 }
 */
 
-#include "Screen/Bitmap.hpp"
-#include "Screen/Debug.hpp"
+#ifndef XCSOAR_COREGRAPHICS_HPP
+#define XCSOAR_COREGRAPHICS_HPP
 
-#ifdef ENABLE_COREGRAPHICS
-#include "CoreGraphics.hpp"
-#else
-#include "LibPNG.hpp"
-#include "LibJPEG.hpp"
+#include <stddef.h>
+#include <tchar.h>
+
+class UncompressedImage;
+
+UncompressedImage
+LoadJPEGFile(const TCHAR *path);
+
+UncompressedImage
+LoadPNG(const void *data, size_t size);
+
 #endif
-
-#include "UncompressedImage.hpp"
-#include "Util/ConstBuffer.hpp"
-
-Bitmap::Bitmap(ConstBuffer<void> _buffer)
-  :
-#ifdef ENABLE_OPENGL
-#ifdef ANDROID
-  id(0),
-#endif
-  texture(nullptr), interpolation(false)
-#else
-  buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
-#endif
-{
-  Load(_buffer);
-}
-
-bool
-Bitmap::Load(ConstBuffer<void> buffer, Type type)
-{
-  const UncompressedImage uncompressed = LoadPNG(buffer.data, buffer.size);
-  return Load(uncompressed, type);
-}
-
-bool
-Bitmap::LoadFile(const TCHAR *path)
-{
-  const UncompressedImage uncompressed = LoadJPEGFile(path);
-  return Load(uncompressed);
-}
