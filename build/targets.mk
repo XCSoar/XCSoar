@@ -286,7 +286,6 @@ ifeq ($(TARGET),OSX32)
   LIBCXX = y
   CLANG = y
   TARGET_ARCH += -march=i686 -msse2 -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
-  ASFLAGS += -arch i386
 endif
 
 ifeq ($(TARGET),OSX64)
@@ -308,7 +307,6 @@ ifeq ($(TARGET),OSX64)
   LIBCXX = y
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
-  ASFLAGS += -arch x86_64
 endif
 
 ifeq ($(TARGET),IOS)
@@ -330,7 +328,6 @@ ifeq ($(TARGET),IOS)
   LIBCXX = y
   CLANG = y
   TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION)
-  ASFLAGS += -arch armv7
 endif
 
 ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
