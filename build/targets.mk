@@ -275,12 +275,12 @@ ifeq ($(TARGET),OSX32)
   OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
-    LLVM_TARGET = i386-apple-darwin9
+    LLVM_TARGET = i386-apple-darwin
   else
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
     DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/i386-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/i386-apple-darwin9-
+    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/i386-apple-darwin-
     LLVM_PREFIX = $(TCPREFIX)
   endif
   LIBCXX = y
@@ -297,12 +297,12 @@ ifeq ($(TARGET),OSX64)
   OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
-    LLVM_TARGET = x86_64-apple-darwin9
+    LLVM_TARGET = x86_64-apple-darwin
   else
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
     DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/x86_64-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/x86_64-apple-darwin9-
+    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/x86_64-apple-darwin-
     LLVM_PREFIX = $(TCPREFIX)
   endif
   LIBCXX = y
@@ -319,12 +319,12 @@ ifeq ($(TARGET),IOS)
   IOS_MIN_SUPPORTED_VERSION = 5.1
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
-    LLVM_TARGET = armv7-apple-darwin9
+    LLVM_TARGET = armv7-apple-darwin
   else
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/iPhoneOS$(DARWIN_SDK_VERSION).sdk
     DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/armv7-iOS-$(IOS_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/armv7-apple-darwin9-
+    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/armv7-apple-darwin-
     LLVM_PREFIX = $(TCPREFIX)
   endif
   LIBCXX = y
