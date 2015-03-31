@@ -26,7 +26,7 @@ sub embed_file_in_object_file($$$$$$) {
     $asm_echo =~ s,\n,\\n,g;
     $asm_echo =~ s,\",\\",g;
 
-    system("printf \"${asm_echo}\" | ${as} -o ${output}"
+    system("printf \"${asm_echo}\" | ${as} -o ${output} -"
               ) == 0 or die;
 }
 
