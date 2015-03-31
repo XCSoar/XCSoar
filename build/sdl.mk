@@ -15,8 +15,9 @@ endif
 ifeq ($(ENABLE_SDL),y)
 
 # Currently the default is not to use SDL2, but SDL 1.2, except for iOS,
-# where no official SDL 1.2 release is available
-ifeq ($(TARGET_IS_IOS),y)
+# where no official SDL 1.2 release is available. And for OS X, because
+# SDL 1.2 has compatibility issues with recent OSX SDK versions.
+ifeq ($(TARGET_IS_DARWIN),y)
 USE_SDL2 ?= y
 else
 USE_SDL2 ?= n
