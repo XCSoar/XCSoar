@@ -52,7 +52,8 @@ Copyright_License {
     self = [super init];
     if (self) {
         self->index = index_;
-        gregorian_calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        gregorian_calendar = [NSCalendar alloc];
+        [gregorian_calendar initWithCalendarIdentifier:NSGregorianCalendar];
     }
     return self;
 }
@@ -75,7 +76,8 @@ Copyright_License {
   return [date timeIntervalSinceDate: midnight];
 }
 
--(void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+-(void) locationManager:(CLLocationManager *)manager
+    didUpdateLocations:(NSArray *)locations
 {
   CLLocation *location = locations.lastObject;
 
@@ -99,7 +101,8 @@ Copyright_License {
   if (location && location.timestamp) {
     basic.time = fixed([self getSecondsOfDay: location.timestamp]);
     basic.time_available.Update(basic.clock);
-    basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC([location.timestamp timeIntervalSince1970]);
+    basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC(
+        [location.timestamp timeIntervalSince1970]);
   } else {
     basic.time_available.Clear();
   }
@@ -170,8 +173,10 @@ InternalSensors::~InternalSensors()
 void InternalSensors::init()
 {
   private_data->locationManager = [[CLLocationManager alloc] init];
-  private_data->locationDelegate = [[LocationDelegate alloc] init: private_data->index];
-  private_data->locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+  private_data->locationDelegate = [[LocationDelegate alloc]
+      init: private_data->index];
+  private_data->locationManager.desiredAccuracy =
+      kCLLocationAccuracyBestForNavigation;
   private_data->locationManager.delegate = private_data->locationDelegate;
   [private_data->locationManager startUpdatingLocation];
 }
