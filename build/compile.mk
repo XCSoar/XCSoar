@@ -7,7 +7,12 @@ endif
 
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPREFIX)ar$(EXE)
-AS = $(TCPREFIX)as$(EXE)
+ifeq ($(CLANG),y)
+  AS = $(TCPREFIX)clang$(EXE)
+  ASFLAGS += -c -xassembler $(TARGET_ARCH)
+else
+  AS = $(TCPREFIX)as$(EXE)
+endif
 ifneq ($(ANALYZER),y)
   ifeq ($(CLANG),y)
     CXX = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)$(EXE)
