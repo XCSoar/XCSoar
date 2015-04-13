@@ -20,7 +20,12 @@ endif
 
 ifeq ($(CLANG),y)
   AS = $(CC)
-  ASFLAGS += -c -xassembler $(TARGET_ARCH)
+  ASFLAGS += -c -xassembler
+  ifneq ($(LLVM_TARGET),)
+    ASFLAGS += -target $(LLVM_TARGET)
+  else
+    ASFLAGS += $(TARGET_ARCH)
+  endif
 else
   AS = $(TCPREFIX)as$(EXE)
 endif
