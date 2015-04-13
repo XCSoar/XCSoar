@@ -22,29 +22,20 @@ Copyright_License {
 */
 
 #include "Profile.hpp"
-#include "Current.hpp"
 #include "Map.hpp"
-#include "IO/KeyValueFileWriter.hpp"
+#include "File.hpp"
+#include "Current.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
-#include "IO/KeyValueFileReader.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
-#include "IO/FileTransaction.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 
-#include <string.h>
 #include <windef.h> /* for MAX_PATH */
 
 #define XCSPROFILE "default.prf"
 #define OLDXCSPROFILE "xcsoar-registry.prf"
-
-namespace Profile {
-  static bool SaveFile(const FileTransaction &transaction);
-}
 
 static TCHAR startProfileFile[MAX_PATH];
 
@@ -68,20 +59,8 @@ Profile::LoadFile(const TCHAR *szFile)
   if (StringIsEmpty(szFile))
     return;
 
-  FileLineReaderA reader(szFile);
-  if (reader.error())
-    return;
-
-  LogFormat(_T("Loading profile from %s"), szFile);
-
-  KeyValueFileReader kvreader(reader);
-  KeyValuePair pair;
-  while (kvreader.Read(pair))
-    /* ignore the "Vega*" values; the Vega driver used to abuse the
-       profile to pass messages between the driver and the user
-       interface */
-    if (!StringIsEqual(pair.key, "Vega", 4))
-      Set(pair.key, pair.value);
+  if (LoadFile(map, szFile))
+    LogFormat(_T("Loaded profile from %s"), szFile);
 }
 
 void
@@ -96,20 +75,6 @@ Profile::Save()
   SaveFile(startProfileFile);
 }
 
-bool
-Profile::SaveFile(const FileTransaction &transaction)
-{
-  TextWriter writer(transaction.GetTemporaryPath());
-  // ... on error -> return
-  if (!writer.IsOpen())
-    return false;
-
-  KeyValueFileWriter kvwriter(writer);
-  Export(kvwriter);
-
-  return writer.Flush();
-}
-
 void
 Profile::SaveFile(const TCHAR *szFile)
 {
@@ -117,11 +82,7 @@ Profile::SaveFile(const TCHAR *szFile)
     return;
 
   LogFormat(_T("Saving profile to %s"), szFile);
-
-  // Try to open the file for writing
-  FileTransaction transaction(szFile);
-  if (SaveFile(transaction))
-    transaction.Commit();
+  SaveFile(map, szFile);
 }
 
 void

@@ -1,6 +1,7 @@
 # Build rules for the profile library
 
 PROFILE_SOURCES = \
+	$(SRC)/Profile/File.cpp \
 	$(SRC)/Profile/Current.cpp \
 	$(SRC)/Profile/Map.cpp \
 	$(SRC)/Profile/StringValue.cpp \

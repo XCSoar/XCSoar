@@ -119,8 +119,6 @@ namespace Profile {
 
   bool Exists(const char *key);
   void Clear();
-
-  void Export(KeyValueFileWriter &writer);
 }
 
 #endif

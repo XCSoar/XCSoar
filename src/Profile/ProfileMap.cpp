@@ -140,14 +140,6 @@ Profile::Exists(const char *key)
 }
 
 void
-Profile::Export(KeyValueFileWriter &writer)
-{
-  // Iterate through the profile maps
-  for (const auto &i : map)
-    writer.Write(i.first.c_str(), i.second.c_str());
-}
-
-void
 Profile::Clear()
 {
   map.clear();
