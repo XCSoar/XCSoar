@@ -33,7 +33,7 @@
 #include <stdint.h>
 
 #ifdef WIN32
-#include <windef.h>
+#include <windows.h>
 /* those are WIN32 macros - undefine */
 #undef TRUE
 #undef FALSE
