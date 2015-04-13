@@ -44,6 +44,14 @@
 
 #ifdef __GLIBC__
 
+static const struct sockaddr_in *
+CastToIPv4(const struct sockaddr *p)
+{
+  /* cast through void to work around the bogus alignment warning */
+  const void *q = reinterpret_cast<const void *>(p);
+  return reinterpret_cast<const struct sockaddr_in *>(q);
+}
+
 /**
  * helper to iterate over available devices, locate the
  * passed through device name, if found write IP address in
@@ -64,7 +72,7 @@ GetIpAddressInner(const ifaddrs *ifaddr, const char *device)
     /* is this the (droid) device we're looking for and it's IPv4? */
     if (ifa->ifa_addr != nullptr && strcmp(ifa->ifa_name, device) == 0 &&
         ifa->ifa_addr->sa_family == AF_INET)
-      return reinterpret_cast<const struct sockaddr_in *>(ifa->ifa_addr);
+      return CastToIPv4(ifa->ifa_addr);
 
   return nullptr;
 }
