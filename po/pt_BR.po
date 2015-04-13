@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-12-18 00:47+0000\n"
-"Last-Translator: Rafael Metring <rametring@hotmail.com>\n"
+"PO-Revision-Date: 2015-03-17 22:47+0000\n"
+"Last-Translator: Rene Villa <renesampaio@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-02-20 18:36+0000\n"
-"X-Generator: Launchpad (build 17355)\n"
+"X-Launchpad-Export-Date: 2015-04-13 19:04+0000\n"
+"X-Generator: Launchpad (build 17423)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -213,6 +213,7 @@ msgstr "Um cilindro. Qualquer ponto dentro da área pontuando do centro."
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Um cilindro de 1 milha. Pontuação por ponto mais distante alcançado na área."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
@@ -263,7 +264,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Um quadrante simétrico com um raio personalizado."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
@@ -313,7 +314,7 @@ msgstr "Pilão cilindro"
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cilindro com 1 milha de raio."
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
@@ -353,7 +354,7 @@ msgstr "Área setor com raio interno"
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:234
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Quadrante simétrico"
 
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
@@ -363,7 +364,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Inicio inválido"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
@@ -373,12 +374,12 @@ msgstr "Final inválido"
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Tarefa não encerrada"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Todos os turnpoints não são do mesmo tipo"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
@@ -526,7 +527,7 @@ msgstr "Transdutor de pressão"
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:78
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Banco de dados de obstáculo"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
@@ -612,7 +613,7 @@ msgstr "Carregando Waypoints..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
-msgstr ""
+msgstr "Sem se mover"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -1000,6 +1001,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Esta é a altitude de navegação menos a elevação do terreno obtido a partir "
+"do arquivo de terreno. O valor é de cor vermelha quando o planador está "
+"abaixo da altura de segurança do terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -1044,12 +1048,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "GR instantaneous"
-msgstr ""
+msgstr "GT Instantâneo"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "GR Inst"
-msgstr ""
+msgstr "GR Inst"
 
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
@@ -1063,12 +1067,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
 msgid "GR cruise"
-msgstr ""
+msgstr "GR cruzeiro"
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
 msgid "GR Cruise"
-msgstr ""
+msgstr "GR Cruzeiro"
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
