@@ -522,9 +522,7 @@ ManagedFileListWidget::Add()
   assert(Net::DownloadManager::IsAvailable());
 
   std::vector<AvailableFile> list;
-  for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
-    const AvailableFile &remote_file = *i;
-
+  for (const auto &remote_file : repository) {
     if (IsDownloading(remote_file.GetName()))
       /* already downloading this file */
       continue;
