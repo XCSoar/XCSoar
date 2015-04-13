@@ -19,7 +19,7 @@ ifneq ($(ANALYZER),y)
 endif
 
 ifeq ($(CLANG),y)
-  AS = $(TCPREFIX)clang$(EXE)
+  AS = $(CC)
   ASFLAGS += -c -xassembler $(TARGET_ARCH)
 else
   AS = $(TCPREFIX)as$(EXE)
