@@ -26,12 +26,6 @@ Copyright_License {
 #include "Map.hpp"
 #include "IO/KeyValueFileWriter.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/NumberParser.hpp"
-#include "Util/Macros.hpp"
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
 
 bool
 Profile::IsModified()
@@ -48,163 +42,61 @@ Profile::SetModified(bool _modified)
 const char *
 Profile::Get(const char *key, const char *default_value)
 {
-  const auto it = map.find(key);
-  if (it == map.end())
-    return default_value;
-
-  return it->second.c_str();
+  return map.Get(key, default_value);
 }
 
 bool
 Profile::Get(const char *key, TCHAR *value, size_t max_size)
 {
-  const auto it = map.find(key);
-  if (it == map.end()) {
-    value[0] = _T('\0');
-    return false;
-  }
-
-  const char *src = it->second.c_str();
-
-#ifdef _UNICODE
-  int result = MultiByteToWideChar(CP_UTF8, 0, src, -1,
-                                   value, max_size);
-  return result > 0;
-#else
-  if (!ValidateUTF8(src))
-    return false;
-
-  CopyString(value, src, max_size);
-  return true;
-#endif
+  return map.Get(key, value, max_size);
 }
 
 bool
 Profile::Get(const char *key, int &value)
 {
-  // Try to read the profile map
-  const char *str = Get(key);
-  if (str == NULL)
-    return false;
-
-  // Parse the string for a number
-  char *endptr;
-  int tmp = ParseInt(str, &endptr, 0);
-  if (endptr == str)
-    return false;
-
-  // Save parsed value to output parameter value and return success
-  value = tmp;
-  return true;
+  return map.Get(key, value);
 }
 
 bool
 Profile::Get(const char *key, short &value)
 {
-  // Try to read the profile map
-  const char *str = Get(key);
-  if (str == NULL)
-    return false;
-
-  // Parse the string for a number
-  char *endptr;
-  short tmp = ParseInt(str, &endptr, 0);
-  if (endptr == str)
-    return false;
-
-  // Save parsed value to output parameter value and return success
-  value = tmp;
-  return true;
+  return map.Get(key, value);
 }
 
 bool
 Profile::Get(const char *key, bool &value)
 {
-  // Try to read the profile map
-  const char *str = Get(key);
-  if (str == NULL)
-    return false;
-
-  // Save value to output parameter value and return success
-  value = (str[0] != '0');
-  return true;
+  return map.Get(key, value);
 }
 
 bool
 Profile::Get(const char *key, unsigned &value)
 {
-  // Try to read the profile map
-  const char *str = Get(key);
-  if (str == NULL)
-    return false;
-
-  // Parse the string for a unsigned number
-  char *endptr;
-  unsigned tmp = ParseUnsigned(str, &endptr, 0);
-  if (endptr == str)
-    return false;
-
-  // Save parsed value to output parameter value and return success
-  value = tmp;
-  return true;
+  return map.Get(key, value);
 }
 
 bool
 Profile::Get(const char *key, uint16_t &value)
 {
-  unsigned value32;
-  if (!Get(key, value32) || value32 >= 0x10000)
-    return false;
-
-  value = (uint16_t)value32;
-  return true;
+  return map.Get(key, value);
 }
 
 bool
 Profile::Get(const char *key, uint8_t &value)
 {
-  unsigned value32;
-  if (!Get(key, value32) || value32 >= 0x100)
-    return false;
-
-  value = (uint8_t)value32;
-  return true;
+  return map.Get(key, value);
 }
 
 bool
 Profile::Get(const char *key, fixed &value)
 {
-  // Try to read the profile map
-  const char *str = Get(key);
-  if (str == nullptr)
-    return false;
-
-  // Parse the string for a floating point number
-  char *endptr;
-  double tmp = ParseDouble(str, &endptr);
-  if (endptr == str)
-    return false;
-
-  // Save parsed value to output parameter value and return success
-  value = fixed(tmp);
-  return true;
+  return map.Get(key, value);
 }
 
 void
 Profile::Set(const char *key, const char *value)
 {
-  auto i = map.insert(std::make_pair(key, value));
-  if (!i.second) {
-    /* exists already */
-
-    if (i.first->second.compare(value) == 0)
-      /* not modified, don't set the "modified" flag */
-      return;
-
-    i.first->second.assign(value);
-  }
-
-  map.SetModified();
+  map.Set(key, value);
 }
 
 #ifdef _UNICODE
@@ -212,14 +104,7 @@ Profile::Set(const char *key, const char *value)
 void
 Profile::Set(const char *key, const TCHAR *value)
 {
-  char buffer[MAX_PATH];
-  int length = WideCharToMultiByte(CP_UTF8, 0, value, -1,
-                                   buffer, ARRAY_SIZE(buffer),
-                                   nullptr, nullptr);
-  if (length <= 0)
-    return;
-
-  Set(key, buffer);
+  map.Set(key, value);
 }
 
 #endif
@@ -227,39 +112,31 @@ Profile::Set(const char *key, const TCHAR *value)
 void
 Profile::Set(const char *key, int value)
 {
-  char tmp[50];
-  sprintf(tmp, "%d", value);
-  return Set(key, tmp);
+  map.Set(key, value);
 }
 
 void
 Profile::Set(const char *key, long value)
 {
-  char tmp[50];
-  sprintf(tmp, "%ld", value);
-  return Set(key, tmp);
+  map.Set(key, value);
 }
 
 void
 Profile::Set(const char *key, unsigned value)
 {
-  char tmp[50];
-  sprintf(tmp, "%u", value);
-  return Set(key, tmp);
+  map.Set(key, value);
 }
 
 void
 Profile::Set(const char *key, fixed value)
 {
-  char tmp[50];
-  sprintf(tmp, "%f", (double)value);
-  return Set(key, tmp);
+  map.Set(key, value);
 }
 
 bool
 Profile::Exists(const char *key)
 {
-  return map.find(key) != map.end();
+  return map.Exists(key);
 }
 
 void

@@ -21,21 +21,20 @@ Copyright_License {
 }
 */
 
-#include "Profile/Profile.hpp"
+#include "Profile.hpp"
+#include "Current.hpp"
+#include "Map.hpp"
 #include "IO/KeyValueFileWriter.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
-#include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/Macros.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/FileTransaction.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 
 #include <string.h>
 #include <windef.h> /* for MAX_PATH */
@@ -153,55 +152,23 @@ Profile::SetFiles(const TCHAR *override_path)
 bool
 Profile::GetPath(const char *key, TCHAR *value)
 {
-  TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
-      return false;
-
-  if (StringIsEmpty(buffer))
-    return false;
-
-  ExpandLocalPath(value, buffer);
-  return true;
+  return map.GetPath(key, value);
 }
 
 bool
 Profile::GetPathIsEqual(const char *key, const TCHAR *value)
 {
-  TCHAR saved[MAX_PATH];
-  if (!GetPath(key, saved))
-    return false;
-
-  return StringIsEqual(saved, value);
+  return map.GetPathIsEqual(key, value);
 }
 
 const TCHAR *
 Profile::GetPathBase(const char *key)
 {
-  TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
-      return nullptr;
-
-  const TCHAR *p = buffer;
-  if (DIR_SEPARATOR != '\\') {
-    const auto *backslash = StringFindLast(p, _T('\\'));
-    if (backslash != NULL)
-      p = backslash + 1;
-  }
-
-  return BaseName(p);
+  return map.GetPathBase(key);
 }
 
 void
 Profile::SetPath(const char *key, const TCHAR *value)
 {
-  TCHAR path[MAX_PATH];
-
-  if (StringIsEmpty(value))
-    path[0] = '\0';
-  else {
-    CopyString(path, value, MAX_PATH);
-    ContractLocalPath(path);
-  }
-
-  Set(key, path);
+  map.SetPath(key, value);
 }

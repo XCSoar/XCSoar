@@ -24,20 +24,126 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP2_HPP
 #define XCSOAR_PROFILE_MAP2_HPP
 
+#include "Math/fixed.hpp"
+#include "Compiler.h"
+
 #include <map>
 #include <string>
+
+#include <stdint.h>
+#include <tchar.h>
 
 class ProfileMap : public std::map<std::string, std::string> {
   bool modified;
 
 public:
+  ProfileMap():modified(false) {}
+
+  /**
+   * Has the profile been modified since the last SetModified(false)
+   * call?
+   */
   bool IsModified() const {
     return modified;
   }
 
+  /**
+   * Set the "modified" flag.
+   */
   void SetModified(bool _modified=true) {
     modified = _modified;
   }
+
+  gcc_pure
+  bool Exists(const char *key) const {
+    return find(key) != end();
+  }
+
+  // basic string values
+
+  /**
+   * Look up a string value in the profile.
+   *
+   * @param key name of the value
+   * @param default_value a value to be returned when the key does not exist
+   * @return the value (gets Invalidated by any write access to the
+   * profile), or default_value if the key does not exist
+   */
+  gcc_pure
+  const char *Get(const char *key, const char *default_value=nullptr) const {
+    const auto i = find(key);
+    if (i == end())
+      return default_value;
+
+    return i->second.c_str();
+  }
+
+  void Set(const char *key, const char *value);
+
+  // TCHAR string values
+
+  /**
+   * Reads a value from the profile map
+   *
+   * @param key name of the value that should be read
+   * @param value Pointer to the output buffer
+   * @param max_size maximum size of the output buffer
+   */
+  bool Get(const char *key, TCHAR *value, size_t max_size) const;
+
+#ifdef _UNICODE
+  void Set(const char *key, const TCHAR *value);
+#endif
+
+  // numeric values
+
+  bool Get(const char *key, int &value) const;
+  bool Get(const char *key, short &value) const;
+  bool Get(const char *key, bool &value) const;
+  bool Get(const char *key, unsigned &value) const;
+  bool Get(const char *key, uint16_t &value) const;
+  bool Get(const char *key, uint8_t &value) const;
+  bool Get(const char *key, fixed &value) const;
+
+  void Set(const char *key, bool value) {
+    Set(key, value ? "1" : "0");
+  }
+
+  void Set(const char *key, int value);
+  void Set(const char *key, long value);
+  void Set(const char *key, unsigned value);
+  void Set(const char *key, fixed value);
+
+  // enum values
+
+  template<typename T>
+  bool GetEnum(const char *key, T &value) const {
+    int i;
+    bool success = Get(key, i);
+    if (success)
+      value = T(i);
+    return success;
+  }
+
+  template<typename T>
+  void SetEnum(const char *key, T value) {
+    Set(key, (int)value);
+  }
+
+  // path values
+
+  bool GetPath(const char *key, TCHAR *value) const;
+
+  gcc_pure
+  bool GetPathIsEqual(const char *key, const TCHAR *value) const;
+
+  /**
+   * Gets a path from the profile and return its base name only.
+   */
+  gcc_pure
+  const TCHAR *GetPathBase(const char *key) const;
+
+  void SetPath(const char *key, const TCHAR *value);
 };
 
 #endif
