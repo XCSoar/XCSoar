@@ -24,7 +24,8 @@ Copyright_License {
 #include "PlaneGlue.hpp"
 #include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
-#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
+#include "Profile/Map.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
@@ -33,19 +34,19 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 void
-PlaneGlue::FromProfile(Plane &plane)
+PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 {
   StaticString<MAX_PATH> plane_path;
-  if (Profile::GetPath("PlanePath", plane_path.buffer()) &&
+  if (profile.GetPath("PlanePath", plane_path.buffer()) &&
       PlaneGlue::ReadFile(plane, plane_path.c_str()))
     return;
 
   /* the following is just here to load a pre-6.7 profile */
 
-  plane.registration.SetUTF8(Profile::Get(ProfileKeys::AircraftReg, ""));
-  plane.competition_id.SetUTF8(Profile::Get(ProfileKeys::CompetitionId, ""));
-  plane.type.SetUTF8(Profile::Get(ProfileKeys::AircraftType, ""));
-  plane.polar_name.SetUTF8(Profile::Get(ProfileKeys::PolarName, ""));
+  plane.registration.SetUTF8(profile.Get(ProfileKeys::AircraftReg, ""));
+  plane.competition_id.SetUTF8(profile.Get(ProfileKeys::CompetitionId, ""));
+  plane.type.SetUTF8(profile.Get(ProfileKeys::AircraftType, ""));
+  plane.polar_name.SetUTF8(profile.Get(ProfileKeys::PolarName, ""));
 
   PolarInfo polar = PolarGlue::LoadFromProfile();
   plane.polar_shape = polar.shape;
@@ -55,16 +56,16 @@ PlaneGlue::FromProfile(Plane &plane)
 
   if (positive(polar.v_no))
     plane.max_speed = polar.v_no;
-  else if (!Profile::Get(ProfileKeys::SafteySpeed, plane.max_speed))
+  else if (!profile.Get(ProfileKeys::SafteySpeed, plane.max_speed))
     plane.max_speed = fixed(0);
 
-  if (!Profile::Get(ProfileKeys::DryMass, plane.dry_mass))
+  if (!profile.Get(ProfileKeys::DryMass, plane.dry_mass))
     plane.dry_mass = plane.reference_mass;
 
-  if (!Profile::Get(ProfileKeys::BallastSecsToEmpty, plane.dump_time))
+  if (!profile.Get(ProfileKeys::BallastSecsToEmpty, plane.dump_time))
     plane.dump_time = 120;
 
-  if (!Profile::Get(ProfileKeys::Handicap, plane.handicap))
+  if (!profile.Get(ProfileKeys::Handicap, plane.handicap))
     plane.handicap = 100;
 }
 

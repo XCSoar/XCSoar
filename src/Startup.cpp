@@ -26,6 +26,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Profile/Current.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -341,7 +342,8 @@ Startup()
   gp = GlidePolar(fixed(0));
   gp.SetMC(computer_settings.task.safety_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
-  PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane);
+  PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
+                         Profile::map);
   PlaneGlue::Synchronize(computer_settings.plane,
                          CommonInterface::SetComputerSettings(), gp);
   task_manager->SetGlidePolar(gp);

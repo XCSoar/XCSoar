@@ -27,10 +27,11 @@ Copyright_License {
 struct Plane;
 struct ComputerSettings;
 class GlidePolar;
+class ProfileMap;
 
 namespace PlaneGlue
 {
-  void FromProfile(Plane &plane);
+  void FromProfile(Plane &plane, const ProfileMap &profile);
 
   void Synchronize(const Plane &plane, ComputerSettings &settings,
                    GlidePolar &gp);
