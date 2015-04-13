@@ -28,6 +28,16 @@ Copyright_License {
 #include <string>
 
 class ProfileMap : public std::map<std::string, std::string> {
+  bool modified;
+
+public:
+  bool IsModified() const {
+    return modified;
+  }
+
+  void SetModified(bool _modified=true) {
+    modified = _modified;
+  }
 };
 
 #endif

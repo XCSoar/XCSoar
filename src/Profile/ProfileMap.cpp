@@ -34,19 +34,18 @@ Copyright_License {
 
 namespace Profile {
   static ProfileMap map;
-  static bool modified;
 }
 
 bool
 Profile::IsModified()
 {
-  return modified;
+  return map.IsModified();
 }
 
 void
 Profile::SetModified(bool _modified)
 {
-  modified = _modified;
+  map.SetModified(_modified);
 }
 
 const char *
@@ -208,7 +207,7 @@ Profile::Set(const char *key, const char *value)
     i.first->second.assign(value);
   }
 
-  modified = true;
+  map.SetModified();
 }
 
 #ifdef _UNICODE
