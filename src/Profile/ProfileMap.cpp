@@ -56,7 +56,7 @@ Profile::SetModified(bool _modified)
 const char *
 Profile::Get(const char *key, const char *default_value)
 {
-  map_t::const_iterator it = map.find(key);
+  const auto it = map.find(key);
   if (it == map.end())
     return default_value;
 
@@ -66,7 +66,7 @@ Profile::Get(const char *key, const char *default_value)
 bool
 Profile::Get(const char *key, TCHAR *value, size_t max_size)
 {
-  map_t::const_iterator it = map.find(key);
+  const auto it = map.find(key);
   if (it == map.end()) {
     value[0] = _T('\0');
     return false;
