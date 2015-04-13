@@ -273,9 +273,9 @@ DownloadFilePickerWidget::RefreshList()
 
   ParseFileRepository(repository, reader);
 
-  for (const auto &i : repository)
+  for (auto &i : repository)
     if (i.type == file_type)
-      items.push_back(i);
+      items.emplace_back(std::move(i));
 
   ListControl &list = GetList();
   list.SetLength(items.size());
