@@ -199,11 +199,10 @@ $(eval $(call link-program,TestWrapClock,TEST_WRAP_CLOCK))
 TEST_PROFILE_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileMap.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestProfile.cpp
-TEST_PROFILE_DEPENDS = MATH IO OS UTIL
+TEST_PROFILE_DEPENDS = PROFILE MATH IO OS UTIL
 $(eval $(call link-program,TestProfile,TEST_PROFILE))
 
 TEST_MAC_CREADY_SOURCES = \
