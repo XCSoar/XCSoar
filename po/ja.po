@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2015-02-22 16:15+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2015-04-05 01:41+0000\n"
+"Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-03-07 11:16+0000\n"
-"X-Generator: Launchpad (build 17383)\n"
+"X-Launchpad-Export-Date: 2015-04-13 19:04+0000\n"
+"X-Generator: Launchpad (build 17423)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1454,7 +1454,7 @@ msgstr "AAT時間"
 #: src/InfoBoxes/Content/Factory.cpp:442
 #, no-c-format
 msgid "AAT Time"
-msgstr "ATT時間"
+msgstr "AAT時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:443
 #, no-c-format
