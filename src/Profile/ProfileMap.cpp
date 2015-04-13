@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ProfileMap.hpp"
+#include "Current.hpp"
 #include "Map.hpp"
 #include "IO/KeyValueFileWriter.hpp"
 #include "Util/StringUtil.hpp"
@@ -31,10 +32,6 @@ Copyright_License {
 #ifdef _UNICODE
 #include <windows.h>
 #endif
-
-namespace Profile {
-  static ProfileMap map;
-}
 
 bool
 Profile::IsModified()
