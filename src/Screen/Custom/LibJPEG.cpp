@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
+#include "Util/ContainerCast.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
@@ -53,8 +54,9 @@ struct JPEGErrorManager {
 
   gcc_noreturn
   static void ErrorExit(j_common_ptr _cinfo) {
-    JPEGErrorManager *err = reinterpret_cast<JPEGErrorManager *>(_cinfo->err);
-    err->ErrorExit();
+    JPEGErrorManager &err = ContainerCast(*_cinfo->err,
+                                          &JPEGErrorManager::base);
+    err.ErrorExit();
   }
 };
 
