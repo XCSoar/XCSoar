@@ -21,23 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Profile/ProfileMap.hpp"
+#include "ProfileMap.hpp"
+#include "Map.hpp"
 #include "IO/KeyValueFileWriter.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
-
-#include <map>
-#include <string>
 
 #ifdef _UNICODE
 #include <windows.h>
 #endif
 
 namespace Profile {
-  typedef std::map<std::string, std::string> map_t;
-
-  static map_t map;
+  static ProfileMap map;
   static bool modified;
 }
 
