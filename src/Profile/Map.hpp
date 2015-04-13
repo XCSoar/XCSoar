@@ -27,6 +27,7 @@ Copyright_License {
 #include <map>
 #include <string>
 
-typedef std::map<std::string, std::string> ProfileMap;
+class ProfileMap : public std::map<std::string, std::string> {
+};
 
 #endif
