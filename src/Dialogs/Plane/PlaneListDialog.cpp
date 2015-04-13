@@ -53,6 +53,9 @@ struct ListItem
   StaticString<32> name;
   StaticString<MAX_PATH> path;
 
+  ListItem(const TCHAR *_name, const TCHAR *_path)
+    :name(_name), path(_path) {}
+
   bool operator<(const ListItem &i2) const {
     return StringCollate(name, i2.name) < 0;
   }
@@ -66,10 +69,7 @@ public:
   PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
   void Visit(const TCHAR* path, const TCHAR* filename) {
-    ListItem item;
-    item.name = filename;
-    item.path = path;
-    list.push_back(item);
+    list.emplace_back(filename, path);
   }
 };
 
