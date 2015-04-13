@@ -27,6 +27,8 @@ Copyright_License {
 #include "Profile/TrackingProfile.hpp"
 #include "Profile/Profile.hpp"
 #include "ContestProfile.hpp"
+#include "Current.hpp"
+#include "Map.hpp"
 #include "Computer/Settings.hpp"
 
 namespace Profile {
@@ -110,7 +112,7 @@ Profile::Load(PlacesOfInterestSettings &settings)
 {
   Get(ProfileKeys::HomeWaypoint, settings.home_waypoint);
   settings.home_location_available =
-    GetGeoPoint(ProfileKeys::HomeLocation, settings.home_location);
+    map.GetGeoPoint(ProfileKeys::HomeLocation, settings.home_location);
 }
 
 void

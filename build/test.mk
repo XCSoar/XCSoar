@@ -1821,7 +1821,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
-	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \
 	$(SRC)/Profile/RouteProfile.cpp \

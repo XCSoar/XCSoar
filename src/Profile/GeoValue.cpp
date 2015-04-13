@@ -21,12 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Profile/Profile.hpp"
+#include "Map.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/StaticString.hpp"
 
 bool
-Profile::GetGeoPoint(const char *key, GeoPoint &value)
+ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const
 {
   const char *p = Get(key);
   if (p == nullptr)
@@ -50,7 +51,7 @@ Profile::GetGeoPoint(const char *key, GeoPoint &value)
 }
 
 void
-Profile::SetGeoPoint(const char *key, const GeoPoint &value)
+ProfileMap::SetGeoPoint(const char *key, const GeoPoint &value)
 {
   NarrowString<128> buffer;
   buffer.UnsafeFormat("%f %f",

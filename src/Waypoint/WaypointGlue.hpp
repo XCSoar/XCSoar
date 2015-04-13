@@ -31,6 +31,7 @@ class OperationEnvironment;
 struct PlacesOfInterestSettings;
 struct TeamCodeSettings;
 class DeviceBlackboard;
+class ProfileMap;
 
 /**
  * This class is used to parse different waypoint files
@@ -90,7 +91,8 @@ namespace WaypointGlue {
    * Save the home waypoint and the teamcode reference location to the
    * profile.
    */
-  void SaveHome(const PlacesOfInterestSettings &poi_settings,
+  void SaveHome(ProfileMap &profile,
+                const PlacesOfInterestSettings &poi_settings,
                 const TeamCodeSettings &team_code_settings);
 
   /**

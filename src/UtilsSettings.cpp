@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "UtilsSettings.hpp"
+#include "Profile/Current.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -161,7 +162,8 @@ SettingsLeave(const UISettings &old_ui_settings)
                           CommonInterface::SetComputerSettings().poi,
                           CommonInterface::SetComputerSettings().team_code,
                           device_blackboard, WaypointFileChanged);
-    WaypointGlue::SaveHome(CommonInterface::GetComputerSettings().poi,
+    WaypointGlue::SaveHome(Profile::map,
+                           CommonInterface::GetComputerSettings().poi,
                            CommonInterface::GetComputerSettings().team_code);
   }
 

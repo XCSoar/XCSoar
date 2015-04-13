@@ -33,6 +33,8 @@ Copyright_License {
 #include <stdint.h>
 #include <tchar.h>
 
+struct GeoPoint;
+
 class ProfileMap : public std::map<std::string, std::string> {
   bool modified;
 
@@ -144,6 +146,20 @@ public:
   const TCHAR *GetPathBase(const char *key) const;
 
   void SetPath(const char *key, const TCHAR *value);
+
+  // geo value
+
+  /**
+   * Load a GeoPoint from the profile.
+   */
+  bool GetGeoPoint(const char *key, GeoPoint &value) const;
+
+  /**
+   * Save a GeoPoint to the profile.  It is stored as a string,
+   * longitude and latitude formatted in degrees separated by a space
+   * character.
+   */
+  void SetGeoPoint(const char *key, const GeoPoint &value);
 };
 
 #endif

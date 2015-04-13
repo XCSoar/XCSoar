@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "WaypointGlue.hpp"
-#include "Profile/Profile.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -125,13 +126,14 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 void
-WaypointGlue::SaveHome(const PlacesOfInterestSettings &poi_settings,
+WaypointGlue::SaveHome(ProfileMap &profile,
+                       const PlacesOfInterestSettings &poi_settings,
                        const TeamCodeSettings &team_code_settings)
 {
-  Profile::Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint);
+  profile.Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint);
   if (poi_settings.home_location_available)
-    Profile::SetGeoPoint(ProfileKeys::HomeLocation, poi_settings.home_location);
+    profile.SetGeoPoint(ProfileKeys::HomeLocation, poi_settings.home_location);
 
-  Profile::Set(ProfileKeys::TeamcodeRefWaypoint,
-               team_code_settings.team_code_reference_waypoint);
+  profile.Set(ProfileKeys::TeamcodeRefWaypoint,
+              team_code_settings.team_code_reference_waypoint);
 }

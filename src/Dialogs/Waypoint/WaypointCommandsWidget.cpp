@@ -36,6 +36,7 @@ Copyright_License {
 #include "Pan.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
+#include "Profile/Current.hpp"
 
 enum Commands {
   REPLACE_IN_TASK,
@@ -191,7 +192,8 @@ SetHome(const Waypoint &waypoint)
     WaypointGlue::SetHome(way_points, terrain,
                           settings_computer.poi, settings_computer.team_code,
                           device_blackboard, false);
-    WaypointGlue::SaveHome(settings_computer.poi, settings_computer.team_code);
+    WaypointGlue::SaveHome(Profile::map,
+                           settings_computer.poi, settings_computer.team_code);
   }
 }
 

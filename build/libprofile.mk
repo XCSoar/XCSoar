@@ -7,6 +7,7 @@ PROFILE_SOURCES = \
 	$(SRC)/Profile/StringValue.cpp \
 	$(SRC)/Profile/NumericValue.cpp \
 	$(SRC)/Profile/PathValue.cpp \
+	$(SRC)/Profile/GeoValue.cpp \
 	$(SRC)/Profile/ProfileMap.cpp
 
 $(eval $(call link-library,profile,PROFILE))
