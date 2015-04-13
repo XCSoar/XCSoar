@@ -144,10 +144,7 @@ Profile::Export(KeyValueFileWriter &writer)
 {
   // Iterate through the profile maps
   for (const auto &i : map)
-    /* ignore the "Vega*" values; the Vega driver abuses the profile
-       to pass messages between the driver and the user interface */
-    if (!StringIsEqual(i.first.c_str(), "Vega", 4))
-      writer.Write(i.first.c_str(), i.second.c_str());
+    writer.Write(i.first.c_str(), i.second.c_str());
 }
 
 void

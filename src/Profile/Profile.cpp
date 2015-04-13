@@ -77,7 +77,11 @@ Profile::LoadFile(const TCHAR *szFile)
   KeyValueFileReader kvreader(reader);
   KeyValuePair pair;
   while (kvreader.Read(pair))
-    Set(pair.key, pair.value);
+    /* ignore the "Vega*" values; the Vega driver used to abuse the
+       profile to pass messages between the driver and the user
+       interface */
+    if (!StringIsEqual(pair.key, "Vega", 4))
+      Set(pair.key, pair.value);
 }
 
 void
