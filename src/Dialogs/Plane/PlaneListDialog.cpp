@@ -48,31 +48,6 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
-struct ListItem
-{
-  StaticString<32> name;
-  StaticString<MAX_PATH> path;
-
-  ListItem(const TCHAR *_name, const TCHAR *_path)
-    :name(_name), path(_path) {}
-
-  bool operator<(const ListItem &i2) const {
-    return StringCollate(name, i2.name) < 0;
-  }
-};
-
-class PlaneFileVisitor: public File::Visitor
-{
-  std::vector<ListItem> &list;
-
-public:
-  PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
-
-  void Visit(const TCHAR* path, const TCHAR* filename) {
-    list.emplace_back(filename, path);
-  }
-};
-
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
 #undef DELETE
@@ -80,6 +55,31 @@ public:
 
 class PlaneListWidget final
   : public ListWidget, private ActionListener {
+
+  struct ListItem {
+    StaticString<32> name;
+    StaticString<MAX_PATH> path;
+
+    ListItem(const TCHAR *_name, const TCHAR *_path)
+      :name(_name), path(_path) {}
+
+    bool operator<(const ListItem &i2) const {
+      return StringCollate(name, i2.name) < 0;
+    }
+  };
+
+  class PlaneFileVisitor: public File::Visitor
+  {
+    std::vector<ListItem> &list;
+
+  public:
+    PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
+
+    void Visit(const TCHAR* path, const TCHAR* filename) {
+      list.emplace_back(filename, path);
+    }
+  };
+
   enum Buttons {
     NEW,
     EDIT,
