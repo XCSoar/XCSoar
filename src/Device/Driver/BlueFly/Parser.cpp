@@ -91,9 +91,9 @@ BlueFlyDevice::ParsePRS(const char *content, NMEAInfo &info)
 bool
 BlueFlyDevice::ParseNMEA(const char *line, NMEAInfo &info)
 {
-  if (memcmp(line, "PRS ", 4) == 0)
+  if (StringIsEqual(line, "PRS ", 4))
     return ParsePRS(line + 4, info);
-  else if (memcmp(line, "BAT ", 4) == 0)
+  else if (StringIsEqual(line, "BAT ", 4))
     return ParseBAT(line + 4, info);
   else
     return false;
