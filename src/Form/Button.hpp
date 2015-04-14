@@ -35,7 +35,6 @@ class ActionListener;
 
 /**
  * This class is used for creating buttons.
- * It is based on the WindowControl class.
  */
 class WndButton : public ButtonWindow {
 protected:
@@ -77,11 +76,6 @@ public:
     listener = _listener;
   }
 
-  /**
-   * Sets the Caption/Text of the Control and resets the cached text height
-   * (derived from WindowControl)
-   * @param Value The new Caption/Text of the Control
-   */
   void SetCaption(tstring::const_pointer caption) {
     SetText(caption);
   }
