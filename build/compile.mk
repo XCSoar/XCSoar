@@ -26,6 +26,11 @@ ifeq ($(CLANG),y)
   else
     ASFLAGS += $(TARGET_ARCH)
   endif
+
+  ifeq ($(MIPS),y)
+    # work around "Fatal error: invalid -march= option: `mips32'"
+    ASFLAGS += -integrated-as
+  endif
 else
   AS = $(TCPREFIX)as$(EXE)
 endif
