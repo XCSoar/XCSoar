@@ -655,10 +655,18 @@ location=7
 
 mode=Config3
 type=key
-data=0
+data=9
 event=Mode Vario1
 label=Vega$(CheckVega)
 location=8
+
+mode=Config3
+type=key
+data=0
+event=Setup Profile
+event=Mode default
+label=Profiles
+location=9
 
 # -------------
 # mode=Vario1

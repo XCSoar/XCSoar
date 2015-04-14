@@ -745,6 +745,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunJobDialog \
 	RunAnalysis \
 	RunAirspaceWarningDialog \
+	RunProfileListDialog \
 	TestNotify \
 	FeedNMEA \
 	FeedVega EmulateDevice \
@@ -2343,6 +2344,26 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = $(FAKE_LIBS)
 RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
+
+RUN_PROFILE_LIST_DIALOG_SOURCES = \
+	$(SRC)/Dialogs/ProfileListDialog.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Dialogs/TextEntry.cpp \
+	$(SRC)/Dialogs/KnobTextEntry.cpp \
+	$(SRC)/Dialogs/TouchTextEntry.cpp \
+	$(SRC)/Dialogs/Message.cpp \
+	$(SRC)/Dialogs/HelpDialog.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunProfileListDialog.cpp
+RUN_PROFILE_LIST_DIALOG_LDADD = $(FAKE_LIBS)
+RUN_PROFILE_LIST_DIALOG_DEPENDS = PROFILE FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL
+$(eval $(call link-program,RunProfileListDialog,RUN_PROFILE_LIST_DIALOG))
 
 PLAY_TONE_SOURCES = \
 	$(TEST_SRC_DIR)/PlayTone.cpp

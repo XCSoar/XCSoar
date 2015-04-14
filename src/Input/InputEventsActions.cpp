@@ -57,6 +57,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Weather/WeatherDialogs.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
+#include "Dialogs/ProfileListDialog.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
@@ -465,6 +466,8 @@ InputEvents::eventSetup(const TCHAR *misc)
     dlgTargetShowModal();
   else if (StringIsEqual(misc, _T("Plane")))
     dlgPlanesShowModal();
+  else if (StringIsEqual(misc, _T("Profile")))
+    ProfileListDialog();
   else if (StringIsEqual(misc, _T("Alternates")))
     dlgAlternatesListShowModal();
 
