@@ -29,14 +29,37 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 
 class BlueFlyDevice : public AbstractDevice {
+public:
+  struct BlueFlySettings {
+    unsigned version;
+
+    fixed volume;
+    static constexpr const char *VOLUME_NAME = "BVL";
+    static constexpr unsigned VOLUME_MAX = 1000;
+    static constexpr unsigned VOLUME_MULTIPLIER = 1000;
+
+    unsigned output_mode;
+    static constexpr const char *OUTPUT_MODE_NAME = "BOM";
+    static constexpr unsigned OUTPUT_MODE_MAX = 3;
+
+    void Parse(const char *name, unsigned long value);
+};
+
 private:
+  BlueFlySettings settings;
+  char *settings_keys;
+
   KalmanFilter1d kalman_filter;
 
   bool ParseBAT(const char *content, NMEAInfo &info);
   bool ParsePRS(const char *content, NMEAInfo &info);
+  bool ParseBFV(const char *content, NMEAInfo &info);
+  bool ParseBST(const char *content, NMEAInfo &info);
+  bool ParseSET(const char *content, NMEAInfo &info);
 
 public:
   BlueFlyDevice();
+  ~BlueFlyDevice();
 
   virtual void LinkTimeout() override;
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;

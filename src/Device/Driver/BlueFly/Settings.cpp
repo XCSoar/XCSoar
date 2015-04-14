@@ -21,23 +21,18 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
 
+/**
+ * Parse the given BlueFly Vario setting identified by its name.
+ */
 void
-BlueFlyDevice::LinkTimeout()
+BlueFlyDevice::BlueFlySettings::Parse(const char *name, unsigned long value)
 {
-  kalman_filter.Reset();
-}
+  assert(value <= UINT_MAX);
 
-BlueFlyDevice::BlueFlyDevice()
-    :settings({0}),
-     settings_keys(nullptr)
-{
-  kalman_filter.SetAccelerationVariance(fixed(0.3));
-}
-
-BlueFlyDevice::~BlueFlyDevice()
-{
-  free(settings_keys);
+  if (StringIsEqual(name, VOLUME_NAME))
+    volume = (fixed)value / VOLUME_MULTIPLIER;
+  else if (StringIsEqual(name, OUTPUT_MODE_NAME))
+    output_mode = value;
 }

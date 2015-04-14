@@ -79,6 +79,7 @@ VEGA_SOURCES = \
 BLUEFLY_SOURCES = \
 	$(DRIVER_SRC_DIR)/BlueFly/Misc.cpp \
 	$(DRIVER_SRC_DIR)/BlueFly/Parser.cpp \
+	$(DRIVER_SRC_DIR)/BlueFly/Settings.cpp \
 	$(DRIVER_SRC_DIR)/BlueFly/Register.cpp
 
 DRIVER_SOURCES = \
