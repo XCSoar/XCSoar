@@ -312,6 +312,8 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
                        preview_style);
   }
 
+  current_preview = 0;
+
   RefreshEditContent();
   RefreshPasteButton();
 }
