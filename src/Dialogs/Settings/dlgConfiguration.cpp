@@ -252,7 +252,7 @@ ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
     (ConfigurationExtraButtons &)pager->GetExtra();
   WndButton &button = extra.GetButton(i);
   button.SetCaption(caption);
-  button.SetListener(&listener, id);
+  button.SetListener(listener, id);
   button.Show();
 }
 

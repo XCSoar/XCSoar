@@ -61,10 +61,10 @@ public:
   /**
    * Set the object that will receive click events.
    */
-  void SetListener(ActionListener *_listener) {
+  void SetListener(ActionListener &_listener) {
     assert(listener == nullptr);
 
-    listener = _listener;
+    listener = &_listener;
   }
 
   virtual bool OnClicked() override;

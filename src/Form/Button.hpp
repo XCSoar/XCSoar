@@ -67,13 +67,13 @@ public:
   /**
    * Set the object that will receive click events.
    */
-  void SetListener(ActionListener *_listener, int _id) {
+  void SetListener(ActionListener &_listener, int _id) {
 #ifdef USE_GDI
     id = _id;
 #else
     SetID(_id);
 #endif
-    listener = _listener;
+    listener = &_listener;
   }
 
   void SetCaption(tstring::const_pointer caption) {
