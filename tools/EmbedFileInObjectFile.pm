@@ -19,8 +19,8 @@ sub embed_file_in_object_file($$$$$$) {
     $asm .= ".set _${start_sym_name}, ${start_sym_name}\n";
     $asm .= ".globl _${end_sym_name}\n";
     $asm .= ".set _${end_sym_name}, ${end_sym_name}\n";
-    $asm .= ".globl _${size_sym_name}\\n";
-    $asm .= ".set _${size_sym_name}\, ${size_sym_name}\\n";
+    $asm .= ".globl _${size_sym_name}\n";
+    $asm .= ".set _${size_sym_name}\, ${size_sym_name}\n";
 
     my $asm_echo = $asm;
     $asm_echo =~ s,\n,\\n,g;
