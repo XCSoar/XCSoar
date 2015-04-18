@@ -26,10 +26,10 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/Widget.hpp"
 #include "Form/Edit.hpp"
-#include "Form/SymbolButton.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Screen/Layout.hpp"
@@ -103,8 +103,8 @@ class TargetWidget
 
   WndButton name_button;
 #ifndef GNAV
-  WndSymbolButton previous_button;
-  WndSymbolButton next_button;
+  WndButton previous_button;
+  WndButton next_button;
 #endif
 
   WndProperty range, radial, ete, delta_t, speed_remaining, speed_achieved;
@@ -128,18 +128,12 @@ public:
      map(*this,
          map_look.waypoint, map_look.airspace,
          map_look.trail, map_look.task, map_look.aircraft),
-     name_button(dialog_look.button),
-#ifndef GNAV
-     previous_button(dialog_look.button),
-     next_button(dialog_look.button),
-#endif
      range(dialog_look),
      radial(dialog_look),
      ete(dialog_look),
      delta_t(dialog_look),
      speed_remaining(dialog_look),
-     speed_achieved(dialog_look),
-     close_button(dialog_look.button) {
+     speed_achieved(dialog_look) {
     map.SetTerrain(terrain);
     map.SetTopograpgy(topography);
     map.SetAirspaces(&airspace_database);
@@ -418,14 +412,19 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   map.Create(parent, layout.map, style);
 
-  name_button.Create(parent, _T(""), layout.name_button,
+  const auto &button_look = UIGlobals::GetDialogLook().button;
+
+  name_button.Create(parent, button_look, _T(""), layout.name_button,
                      button_style, *this, NAME);
 
 #ifndef GNAV
-  previous_button.Create(parent, _T("<"), layout.previous_button,
-                         button_style, *this, PREVIOUS);
-  next_button.Create(parent, _T(">"), layout.next_button,
-                     button_style, *this, NEXT);
+  previous_button.Create(parent, layout.previous_button, button_style,
+                         new SymbolButtonRenderer(button_look,
+                                                  _T("<")),
+                         *this, PREVIOUS);
+  next_button.Create(parent, layout.next_button, button_style,
+                     new SymbolButtonRenderer(button_look, _T(">")),
+                     *this, NEXT);
 #endif
 
   const unsigned caption_width = ::Layout::Scale(50);
@@ -464,7 +463,8 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
                    layout.optimized, cb_style, *this, OPTIMIZED);
 
-  close_button.Create(parent, _("Close"), layout.close_button,
+  close_button.Create(parent, button_look, _("Close"),
+                      layout.close_button,
                       button_style, dialog, mrOK);
 }
 

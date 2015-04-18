@@ -5,14 +5,15 @@ FORM_SRC_DIR = $(SRC)/Form
 FORM_SOURCES = \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Renderer/ButtonRenderer.cpp \
+	$(SRC)/Renderer/TextButtonRenderer.cpp \
 	$(SRC)/Renderer/SymbolRenderer.cpp \
+	$(SRC)/Renderer/SymbolButtonRenderer.cpp \
 	$(FORM_SRC_DIR)/Control.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
 	$(FORM_SRC_DIR)/Form.cpp \
 	$(FORM_SRC_DIR)/Button.cpp \
 	$(FORM_SRC_DIR)/ButtonPanel.cpp \
 	$(FORM_SRC_DIR)/CheckBox.cpp \
-	$(FORM_SRC_DIR)/SymbolButton.cpp \
 	$(FORM_SRC_DIR)/Frame.cpp \
 	$(FORM_SRC_DIR)/Draw.cpp \
 	$(FORM_SRC_DIR)/List.cpp \

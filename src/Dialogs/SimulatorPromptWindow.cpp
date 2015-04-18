@@ -26,12 +26,12 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 #include "Look/DialogLook.hpp"
-#include "Form/SymbolButton.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "Simulator.hpp"
 
 class WndButton;
@@ -46,13 +46,15 @@ SimulatorPromptWindow::OnCreate()
   ButtonWindowStyle style;
   style.TabStop();
 
-  fly_button.Create(*this, _T("Fly"), rc, style,
+  fly_button.Create(*this, rc, style,
+                    new SymbolButtonRenderer(look.button, _T("Fly")),
                     action_listener, FLY);
-  sim_button.Create(*this, _T("Simulator"), rc, style,
+  sim_button.Create(*this, rc, style,
+                    new SymbolButtonRenderer(look.button, _T("Simulator")),
                     action_listener, SIMULATOR);
 
   if (have_quit_button)
-    quit_button.Create(*this, _("Quit"), rc, style,
+    quit_button.Create(*this, look.button, _("Quit"), rc, style,
                        action_listener, QUIT);
 }
 

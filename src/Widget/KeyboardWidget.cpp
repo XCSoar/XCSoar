@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "KeyboardWidget.hpp"
 #include "Look/ButtonLook.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
@@ -56,8 +57,8 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (show_shift_button) {
     ButtonWindowStyle style;
     style.Hide();
-    shift_button.Create(parent, _T("v"),
-                        { 0, 0, 16, 16 }, style,
+    shift_button.Create(parent, { 0, 0, 16, 16 }, style,
+                        new SymbolButtonRenderer(look, _T("v")),
                         *this, SHIFT);
   }
   UpdateShiftState();

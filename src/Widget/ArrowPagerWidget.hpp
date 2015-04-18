@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ARROW_PAGER_WIDGET_HPP
 
 #include "PagerWidget.hpp"
-#include "Form/SymbolButton.hpp"
+#include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 
 #include <assert.h>
@@ -52,6 +52,7 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
   };
 
   ActionListener &action_listener;
+  const ButtonLook &look;
 
   /**
    * An optional #Widget that is shown in the remaining area in the
@@ -59,16 +60,15 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
    */
   Widget *const extra;
 
-  WndSymbolButton previous_button, next_button;
+  WndButton previous_button, next_button;
   WndButton close_button;
 
 public:
   ArrowPagerWidget(ActionListener &_action_listener,
-                   const ButtonLook &look,
+                   const ButtonLook &_look,
                    Widget *const _extra=nullptr)
-    :action_listener(_action_listener),
-     extra(_extra),
-     previous_button(look), next_button(look), close_button(look) {}
+    :action_listener(_action_listener), look(_look),
+     extra(_extra) {}
 
   virtual ~ArrowPagerWidget();
 

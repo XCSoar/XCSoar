@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/ButtonPanel.hpp"
-#include "SymbolButton.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -74,8 +74,9 @@ WndButton *
 ButtonPanel::AddSymbol(tstring::const_pointer caption,
                        ActionListener &listener, int id)
 {
-  WndButton *button = new WndSymbolButton(parent, look, caption,
-                                          dummy_rc, style, listener, id);
+  auto *button = new WndButton(parent, dummy_rc, style,
+                               new SymbolButtonRenderer(look, caption),
+                               listener, id);
   keys[buttons.size()] = 0;
   buttons.append(button);
 

@@ -59,7 +59,7 @@ TaskClosePanel::TaskClosePanel(TaskManagerDialog &_dialog,
                                const DialogLook &_look)
   :dialog(_dialog), task_modified(_task_modified),
    look(_look),
-   close_button(look.button), message(look), revert_button(look.button) {}
+   message(look) {}
 
 void
 TaskClosePanel::RefreshStatus()
@@ -104,14 +104,15 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle style;
   style.Hide();
 
-  close_button.Create(parent, _("Close"), layout.close_button, button_style,
+  close_button.Create(parent, look.button, _("Close"),
+                      layout.close_button, button_style,
                       *this, CLOSE);
 
   message.Create(parent, layout.message, style);
   message.SetAlignCenter();
   message.SetVAlignCenter();
 
-  revert_button.Create(parent, _("Revert Changes"),
+  revert_button.Create(parent, look.button, _("Revert Changes"),
                        layout.revert_button, button_style,
                        *this, REVERT);
 }

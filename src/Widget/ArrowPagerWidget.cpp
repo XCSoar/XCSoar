@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 
 #include <assert.h>
 
@@ -145,10 +146,13 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  previous_button.Create(parent, _T("<"), layout.previous_button,
-                         style, *this, PREVIOUS);
-  next_button.Create(parent, _T(">"), layout.next_button, style, *this, NEXT);
-  close_button.Create(parent, _("Close"), layout.close_button,
+  previous_button.Create(parent, layout.previous_button, style,
+                         new SymbolButtonRenderer(look, _T("<")),
+                         *this, PREVIOUS);
+  next_button.Create(parent, layout.next_button, style,
+                     new SymbolButtonRenderer(look, _T(">")),
+                     *this, NEXT);
+  close_button.Create(parent, look, _("Close"), layout.close_button,
                       style, action_listener, mrOK);
 }
 

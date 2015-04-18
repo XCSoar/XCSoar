@@ -30,7 +30,6 @@
 #include "Compiler.h"
 
 class WndButton;
-class WndSymbolButton;
 class FlarmTrafficControl;
 
 class TrafficWidget : public ContainerWidget,
@@ -48,8 +47,8 @@ class TrafficWidget : public ContainerWidget,
     DETAILS,
   };
 
-  WndSymbolButton *zoom_in_button, *zoom_out_button;
-  WndSymbolButton *previous_item_button, *next_item_button;
+  WndButton *zoom_in_button, *zoom_out_button;
+  WndButton *previous_item_button, *next_item_button;
   WndButton *details_button;
   WndButton *close_button;
 #endif

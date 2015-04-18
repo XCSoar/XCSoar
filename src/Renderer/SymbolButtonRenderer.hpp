@@ -21,34 +21,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_BUTTON_RENDERER_HPP
-#define XCSOAR_BUTTON_RENDERER_HPP
+#ifndef XCSOAR_SYMBOL_BUTTON_RENDERER_HPP
+#define XCSOAR_SYMBOL_BUTTON_RENDERER_HPP
 
-struct PixelRect;
-struct ButtonLook;
-class Canvas;
+#include "ButtonRenderer.hpp"
+#include "Util/StaticString.hpp"
 
-class ButtonFrameRenderer {
-  const ButtonLook &look;
+/**
+ * A #ButtonRenderer instance that renders a regular button frame and
+ * a symbol.
+ */
+class SymbolButtonRenderer : public ButtonRenderer {
+  ButtonFrameRenderer frame_renderer;
+
+  const StaticString<16> caption;
 
 public:
-  explicit ButtonFrameRenderer(const ButtonLook &_look):look(_look) {}
+  SymbolButtonRenderer(const ButtonLook &_look,
+                       StaticString<64>::const_pointer _caption)
+    :frame_renderer(_look), caption(_caption) {}
 
   const ButtonLook &GetLook() const {
-    return look;
+    return frame_renderer.GetLook();
   }
 
-  void DrawButton(Canvas &canvas, PixelRect rc,
-                  bool focused, bool pressed) const;
-  PixelRect GetDrawingRect(PixelRect rc, bool pressed) const;
-};
+  StaticString<64>::const_pointer GetCaption() const {
+    return caption;
+  }
 
-class ButtonRenderer {
-public:
-  virtual ~ButtonRenderer() {}
+  void DrawButton(Canvas &canvas, const PixelRect &rc,
+                  bool enabled, bool focused, bool pressed) const override;
 
-  virtual void DrawButton(Canvas &canvas, const PixelRect &rc,
-                          bool enabled, bool focused, bool pressed) const = 0;
+private:
+  void DrawSymbol(Canvas &canvas, PixelRect rc,
+                  bool enabled, bool focused, bool pressed) const;
 };
 
 #endif

@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Look/DialogLook.hpp"
-#include "Form/SymbolButton.hpp"
+#include "Form/Button.hpp"
 
 class ActionListener;
 
@@ -44,7 +44,7 @@ class SimulatorPromptWindow final : public ContainerWindow {
   PixelRect logo_rect;
 
   WndButton quit_button;
-  WndSymbolButton fly_button, sim_button;
+  WndButton fly_button, sim_button;
   RasterPoint label_position;
 
 public:
@@ -58,9 +58,7 @@ public:
                         ActionListener &_action_listener,
                         bool _quit)
     :look(_look), action_listener(_action_listener),
-     have_quit_button(_quit),
-     quit_button(look.button),
-     fly_button(look.button), sim_button(look.button) {}
+     have_quit_button(_quit) {}
 
 protected:
   /* virtual methods from class Window */

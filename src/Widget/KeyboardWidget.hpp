@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget.hpp"
 #include "Form/CharacterButton.hpp"
 #include "Form/ActionListener.hpp"
-#include "Form/SymbolButton.hpp"
+#include "Form/Button.hpp"
 
 #include <tchar.h>
 
@@ -55,7 +55,7 @@ protected:
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
 
-  WndSymbolButton shift_button;
+  WndButton shift_button;
   bool shift_state;
 
   const bool show_shift_button;
@@ -66,7 +66,6 @@ public:
                  bool _show_shift_button,
                  bool _default_shift_state = true)
     :look(_look), on_character(_on_character), num_buttons(0),
-     shift_button(_look),
      shift_state(_default_shift_state),
      show_shift_button(_show_shift_button) {}
 

@@ -120,9 +120,7 @@ public:
      data(_data),
      allow_name_change(_allow_name_change),
      changed(false),
-     geometry(_geometry),
-     copy_button(dialog_look.button), paste_button(dialog_look.button),
-     close_button(dialog_look.button) {}
+     geometry(_geometry) {}
 
   const InfoBoxLook &GetInfoBoxLook() const {
     return look;
@@ -294,11 +292,12 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   button_style.Hide();
   button_style.TabStop();
 
-  copy_button.Create(parent, _("Copy"), layout.copy_button,
+  const auto &button_look = GetLook().button;
+  copy_button.Create(parent, button_look, _("Copy"), layout.copy_button,
                      button_style, *this, COPY);
-  paste_button.Create(parent, _("Paste"), layout.paste_button,
+  paste_button.Create(parent, button_look, _("Paste"), layout.paste_button,
                       button_style, *this, PASTE);
-  close_button.Create(parent, _("Close"), layout.close_button,
+  close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog, mrOK);
 
   WindowStyle preview_style;

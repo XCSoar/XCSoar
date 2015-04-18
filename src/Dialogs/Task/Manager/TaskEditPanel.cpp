@@ -33,7 +33,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Button.hpp"
-#include "Form/SymbolButton.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TextWidget.hpp"
@@ -48,6 +47,7 @@ Copyright_License {
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "Util/Macros.hpp"
 #include "UIGlobals.hpp"
 
@@ -72,7 +72,7 @@ class TaskEditButtons final : public NullWidget {
   ActionListener *listener;
 
   WndButton edit_button, mutate_button;
-  WndSymbolButton down_button, up_button;
+  WndButton down_button, up_button;
   WndButton reverse_button, clear_all_button;
   bool visible;
 
@@ -83,11 +83,8 @@ class TaskEditButtons final : public NullWidget {
   };
 
 public:
-  TaskEditButtons(const ButtonLook &look)
-    :edit_button(look), mutate_button(look),
-     down_button(look), up_button(look),
-     reverse_button(look), clear_all_button(look),
-     visible(false), show_edit(false), show_mutate(false),
+  TaskEditButtons()
+    :visible(false), show_edit(false), show_mutate(false),
      show_down(false), show_up(false), show_reverse(false) {}
 
   void SetListener(ActionListener &_listener) {
@@ -163,23 +160,25 @@ public:
     style.Hide();
     style.TabStop();
 
+    const ButtonLook &look = UIGlobals::GetDialogLook().button;
+
     const Layout layout = CalculateLayout(rc);
-    edit_button.Create(parent, _("Edit Point"),
+    edit_button.Create(parent, look, _("Edit Point"),
                        layout.edit, style,
                        *listener, EDIT);
-    mutate_button.Create(parent, _("Make Finish"),
+    mutate_button.Create(parent, look, _("Make Finish"),
                          layout.down, style,
                          *listener, MUTATE);
-    down_button.Create(parent, _T("v"),
-                       layout.down, style,
+    down_button.Create(parent, layout.down, style,
+                       new SymbolButtonRenderer(look, _T("v")),
                        *listener, DOWN);
-    up_button.Create(parent, _T("^"),
-                     layout.down, style,
+    up_button.Create(parent, layout.down, style,
+                     new SymbolButtonRenderer(look, _T("^")),
                      *listener, UP);
-    reverse_button.Create(parent, _("Reverse"),
+    reverse_button.Create(parent, look, _("Reverse"),
                           layout.reverse, style,
                           *listener, REVERSE);
-    clear_all_button.Create(parent, _("Clear All"),
+    clear_all_button.Create(parent, look, _("Clear All"),
                             layout.clear_all, style,
                             *listener, CLEAR_ALL);
   }
@@ -663,7 +662,7 @@ CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const AirspaceLook &airspace_look,
                     OrderedTask **active_task, bool *task_modified)
 {
-  TaskEditButtons *buttons = new TaskEditButtons(UIGlobals::GetDialogLook().button);
+  TaskEditButtons *buttons = new TaskEditButtons();
   TextWidget *summary = new TextWidget();
   TaskEditPanel *widget = new TaskEditPanel(dialog, task_look, airspace_look,
                                             active_task, task_modified,

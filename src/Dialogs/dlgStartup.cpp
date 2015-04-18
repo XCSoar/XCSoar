@@ -55,14 +55,15 @@ protected:
 };
 
 class LogoQuitWidget final : public NullWidget {
+  const ButtonLook &look;
   ActionListener &action_listener;
 
   LogoWindow logo;
   WndButton quit;
 
 public:
-  LogoQuitWidget(const ButtonLook &look, ActionListener &_action_listener)
-    :action_listener(_action_listener), quit(look) {}
+  LogoQuitWidget(const ButtonLook &_look, ActionListener &_action_listener)
+    :look(_look), action_listener(_action_listener) {}
 
 private:
   PixelRect GetButtonRect(PixelRect rc) {
@@ -90,7 +91,7 @@ public:
     ButtonWindowStyle button_style(style);
     button_style.TabStop();
 
-    quit.Create(parent, _("Quit"), rc,
+    quit.Create(parent, look, _("Quit"), rc,
                 style, action_listener, mrCancel);
     logo.Create(parent, rc, style);
   }

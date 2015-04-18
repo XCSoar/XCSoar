@@ -22,9 +22,7 @@ Copyright_License {
 */
 
 #include "ButtonRenderer.hpp"
-#include "Screen/Color.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Pen.hpp"
 #include "Look/ButtonLook.hpp"
 
 void

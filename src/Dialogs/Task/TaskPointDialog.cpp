@@ -117,10 +117,8 @@ public:
                   OrderedTask *_task, unsigned _index)
     :ordered_task(_task), task_modified(false), active_index(_index),
      dialog(_dialog), look(dialog.GetLook()),
-     waypoint_name(look), waypoint_details(look.button),
-     waypoint_remove(look.button), waypoint_relocate(look.button),
-     type_label(look), change_type(look.button),
-     optional_starts(look.button) {}
+     waypoint_name(look),
+     type_label(look) {}
 
   OrderedTask *GetTask() {
     return ordered_task;
@@ -275,27 +273,28 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   waypoint_panel.Create(parent, look, layout.waypoint_panel, panel_style);
   waypoint_name.Create(waypoint_panel, layout.waypoint_name);
-  waypoint_details.Create(waypoint_panel, _("Details"),
+  waypoint_details.Create(waypoint_panel, look.button, _("Details"),
                           layout.waypoint_details,
                           button_style, *this, DETAILS);
-  waypoint_remove.Create(waypoint_panel, _("Remove"),
+  waypoint_remove.Create(waypoint_panel, look.button, _("Remove"),
                          layout.waypoint_remove,
                          button_style, *this, REMOVE);
-  waypoint_relocate.Create(waypoint_panel, _("Relocate"),
+  waypoint_relocate.Create(waypoint_panel, look.button, _("Relocate"),
                            layout.waypoint_relocate,
                            button_style, *this, RELOCATE);
 
   tp_panel.Create(parent, look, layout.tp_panel, panel_style);
 
   type_label.Create(tp_panel, layout.type_label);
-  change_type.Create(tp_panel, _("Change Type"), layout.change_type,
+  change_type.Create(tp_panel, look.button, _("Change Type"),
+                     layout.change_type,
                      button_style, *this, CHANGE_TYPE);
   map.Create(tp_panel, layout.map, WindowStyle(),
              [this](Canvas &canvas, const PixelRect &rc){
                PaintMap(canvas, rc);
              });
   properties_dock.Create(tp_panel, layout.properties, dock_style);
-  optional_starts.Create(tp_panel, _("Enable Alternate Starts"),
+  optional_starts.Create(tp_panel, look.button, _("Enable Alternate Starts"),
                          layout.optional_starts, button_style,
                          *this, OPTIONAL_STARTS);
   score_exit.Create(tp_panel, look, _("Score exit"),

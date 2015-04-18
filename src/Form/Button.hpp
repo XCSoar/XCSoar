@@ -25,18 +25,17 @@ Copyright_License {
 #define XCSOAR_FORM_BUTTON_HPP
 
 #include "Screen/ButtonWindow.hpp"
-#include "Renderer/ButtonRenderer.hpp"
 
 struct ButtonLook;
 class ContainerWindow;
 class ActionListener;
+class ButtonRenderer;
 
 /**
  * This class is used for creating buttons.
  */
 class WndButton : public ButtonWindow {
-protected:
-  ButtonFrameRenderer renderer;
+  ButtonRenderer *renderer;
 
 private:
 #ifdef USE_GDI
@@ -46,18 +45,33 @@ private:
   ActionListener *listener;
 
 public:
+  WndButton(ContainerWindow &parent, const PixelRect &rc,
+            ButtonWindowStyle style, ButtonRenderer *_renderer,
+            ActionListener &_listener, int _id) {
+    Create(parent, rc, style, _renderer, _listener, _id);
+  }
+
   WndButton(ContainerWindow &parent, const ButtonLook &look,
             tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
-            ActionListener &listener, int id);
+            ActionListener &_listener, int _id) {
+    Create(parent, look, caption, rc, style, _listener, _id);
+  }
 
-  WndButton(const ButtonLook &_look);
+  WndButton():listener(nullptr) {}
 
-  void Create(ContainerWindow &parent,
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              ButtonWindowStyle style, ButtonRenderer *_renderer);
+
+  void Create(ContainerWindow &parent, const ButtonLook &look,
               tstring::const_pointer caption, const PixelRect &rc,
               ButtonWindowStyle style);
 
-  void Create(ContainerWindow &parent,
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              ButtonWindowStyle style, ButtonRenderer *_renderer,
+              ActionListener &listener, int id);
+
+  void Create(ContainerWindow &parent, const ButtonLook &look,
               tstring::const_pointer caption, const PixelRect &rc,
               ButtonWindowStyle style,
               ActionListener &listener, int id);
@@ -74,9 +88,12 @@ public:
     listener = &_listener;
   }
 
-  void SetCaption(tstring::const_pointer caption) {
-    SetText(caption);
-  }
+  /**
+   * Set a new caption.  This method is a wrapper for
+   * #TextButtonRenderer and may only be used if created with a
+   * #TextButtonRenderer instance.
+   */
+  void SetCaption(tstring::const_pointer caption);
 
   /**
    * Called when the button is clicked (either by mouse or by
@@ -86,6 +103,8 @@ public:
   virtual bool OnClicked() override;
 
 protected:
+  void OnDestroy() override;
+
 #ifdef USE_GDI
   virtual void OnSetFocus() override;
   virtual void OnKillFocus() override;

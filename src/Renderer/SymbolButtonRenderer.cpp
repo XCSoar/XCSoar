@@ -21,41 +21,29 @@ Copyright_License {
 }
 */
 
-#include "Form/SymbolButton.hpp"
-#include "Formatter/HexColor.hpp"
-#include "Look/DialogLook.hpp"
+#include "SymbolButtonRenderer.hpp"
+#include "SymbolRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Renderer/SymbolRenderer.hpp"
+#include "Look/ButtonLook.hpp"
+#include "Formatter/HexColor.hpp"
 #include "Resources.hpp"
-#include "Asset.hpp"
 
-void
-WndSymbolButton::OnPaint(Canvas &canvas)
+inline void
+SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
+                                 bool focused, bool pressed) const
 {
-  const ButtonLook &look = renderer.GetLook();
-
-  const bool pressed = IsDown();
-  const bool focused = HasCursorKeys() ? HasFocus() : pressed;
-
-  PixelRect rc = canvas.GetRect();
-  renderer.DrawButton(canvas, rc, focused, pressed);
-  // If button has text on it
-  const tstring caption = GetText();
-  if (caption.empty())
-    return;
-
-  rc = renderer.GetDrawingRect(rc, pressed);
+  const ButtonLook &look = GetLook();
 
   canvas.SelectNullPen();
-  if (!IsEnabled())
+  if (!enabled)
     canvas.Select(look.disabled.brush);
   else if (focused)
     canvas.Select(look.focused.foreground_brush);
   else
     canvas.Select(look.standard.foreground_brush);
 
-  const char ch = (char)caption[0];
+  const char ch = (char)caption[0u];
 
   RGB8Color color;
 
@@ -105,4 +93,16 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     rc.Grow(-3);
     canvas.DrawFilledRectangle(rc, Color(color));
   }
+}
+
+void
+SymbolButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
+                                 bool enabled,
+                                 bool focused, bool pressed) const
+{
+  frame_renderer.DrawButton(canvas, rc, focused, pressed);
+
+  if (!caption.empty())
+    DrawSymbol(canvas, frame_renderer.GetDrawingRect(rc, pressed),
+               enabled, focused, pressed);
 }

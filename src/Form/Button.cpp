@@ -25,35 +25,55 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Screen/Key.h"
-#include "Screen/Canvas.hpp"
 #include "Asset.hpp"
-
-WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
-                     const TCHAR *caption, const PixelRect &rc,
-                     ButtonWindowStyle style,
-                     ActionListener &_listener, int _id)
-  :renderer(look)
-{
-  Create(parent, caption, rc, style, _listener, _id);
-}
-
-WndButton::WndButton(const ButtonLook &_look)
-  :renderer(_look), listener(nullptr) {}
+#include "Renderer/TextButtonRenderer.hpp"
 
 void
 WndButton::Create(ContainerWindow &parent,
+                  const PixelRect &rc,
+                  ButtonWindowStyle style,
+                  ButtonRenderer *_renderer)
+{
+  renderer = _renderer;
+
+  style.EnableCustomPainting();
+  ButtonWindow::Create(parent, _T(""), rc, style);
+}
+
+void
+WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
                   tstring::const_pointer caption, const PixelRect &rc,
                   ButtonWindowStyle style)
 {
-  style.EnableCustomPainting();
-  ButtonWindow::Create(parent, caption, rc, style);
+  Create(parent, rc, style, new TextButtonRenderer(look, caption));
 }
 
 void
-WndButton::Create(ContainerWindow &parent,
+WndButton::Create(ContainerWindow &parent, const PixelRect &rc,
+                  ButtonWindowStyle style, ButtonRenderer *_renderer,
+                  ActionListener &_listener, int _id)
+{
+  renderer = _renderer;
+  listener = &_listener;
+
+  style.EnableCustomPainting();
+#ifdef USE_GDI
+  /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
+  id = _id;
+  ButtonWindow::Create(parent, _T(""), rc, style);
+#else
+  /* our custom SDL/OpenGL button doesn't need this hack */
+  ButtonWindow::Create(parent, _T(""), _id, rc, style);
+#endif
+}
+
+void
+WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
                   tstring::const_pointer caption, const PixelRect &rc,
                   ButtonWindowStyle style,
                   ActionListener &_listener, int _id) {
+  renderer = new TextButtonRenderer(look, caption);
+
   listener = &_listener;
 
   style.EnableCustomPainting();
@@ -65,6 +85,15 @@ WndButton::Create(ContainerWindow &parent,
   /* our custom SDL/OpenGL button doesn't need this hack */
   ButtonWindow::Create(parent, caption, _id, rc, style);
 #endif
+}
+
+void
+WndButton::SetCaption(tstring::const_pointer caption)
+{
+  assert(caption != nullptr);
+
+  TextButtonRenderer &r = *(TextButtonRenderer *)renderer;
+  r.SetCaption(caption);
 }
 
 bool
@@ -79,6 +108,16 @@ WndButton::OnClicked()
   }
 
   return ButtonWindow::OnClicked();
+}
+
+void
+WndButton::OnDestroy()
+{
+  assert(renderer != nullptr);
+
+  delete renderer;
+
+  ButtonWindow::OnDestroy();
 }
 
 #ifdef USE_GDI
@@ -109,52 +148,11 @@ WndButton::OnKillFocus()
 void
 WndButton::OnPaint(Canvas &canvas)
 {
-  const ButtonLook &look = renderer.GetLook();
+  assert(renderer != nullptr);
 
   const bool pressed = IsDown();
   const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
-  PixelRect rc = canvas.GetRect();
-  renderer.DrawButton(canvas, rc, focused, pressed);
-
-  // If button has text on it
-  const tstring caption = GetText();
-  if (caption.empty())
-    return;
-
-  rc = renderer.GetDrawingRect(rc, pressed);
-
-  canvas.SetBackgroundTransparent();
-  if (!IsEnabled())
-    canvas.SetTextColor(look.disabled.color);
-  else if (focused)
-    canvas.SetTextColor(look.focused.foreground_color);
-  else
-    canvas.SetTextColor(look.standard.foreground_color);
-
-  canvas.Select(*look.font);
-
-#ifndef USE_GDI
-  unsigned style = GetTextStyle();
-
-  if (IsDithered())
-    style |= DT_UNDERLINE;
-
-  canvas.DrawFormattedText(&rc, caption.c_str(), style);
-#else
-  unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-
-  PixelRect text_rc = rc;
-  canvas.DrawFormattedText(&text_rc, caption.c_str(), style | DT_CALCRECT);
-  text_rc.right = rc.right;
-
-  PixelScalar offset = rc.bottom - text_rc.bottom;
-  if (offset > 0) {
-    offset /= 2;
-    text_rc.top += offset;
-    text_rc.bottom += offset;
-  }
-
-  canvas.DrawFormattedText(&text_rc, caption.c_str(), style);
-#endif
+  renderer->DrawButton(canvas, GetClientRect(),
+                       IsEnabled(), focused, pressed);
 }

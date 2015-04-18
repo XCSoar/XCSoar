@@ -33,7 +33,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
-#include "Form/SymbolButton.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Widget/Widget.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -136,8 +136,8 @@ class WaypointDetailsWidget final
   const bool allow_navigation;
 
   WndButton goto_button;
-  WndSymbolButton magnify_button, shrink_button;
-  WndSymbolButton previous_button, next_button;
+  WndButton magnify_button, shrink_button;
+  WndButton previous_button, next_button;
   WndButton close_button;
 
   int page, last_page;
@@ -166,10 +166,6 @@ public:
     :dialog(_dialog), look(dialog.GetLook()),
      waypoint(_waypoint),
      allow_navigation(_allow_navigation),
-     goto_button(look.button),
-     magnify_button(look.button), shrink_button(look.button),
-     previous_button(look.button), next_button(look.button),
-     close_button(look.button),
      page(0), last_page(0),
      info_widget(look, _waypoint),
      commands_widget(look, &_dialog, _waypoint, _task_manager),
@@ -433,24 +429,28 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   button_style.TabStop();
 
   if (allow_navigation)
-    goto_button.Create(parent, _("GoTo"), layout.goto_button,
+    goto_button.Create(parent, look.button, _("GoTo"), layout.goto_button,
                        button_style, *this, GOTO);
 
   if (!images.empty()) {
-    magnify_button.Create(parent, _T("+"), layout.magnify_button,
-                          button_style, *this, MAGNIFY);
-    shrink_button.Create(parent, _T("-"), layout.shrink_button,
-                         button_style, *this, SHRINK);
+    magnify_button.Create(parent, layout.magnify_button, button_style,
+                          new SymbolButtonRenderer(look.button, _T("+")),
+                          *this, MAGNIFY);
+    shrink_button.Create(parent, layout.shrink_button, button_style,
+                         new SymbolButtonRenderer(look.button, _T("-")),
+                         *this, SHRINK);
   }
 
   if (allow_navigation) {
-    previous_button.Create(parent, _T("<"), layout.previous_button,
-                           button_style, *this, PREVIOUS);
-    next_button.Create(parent, _T(">"), layout.next_button,
-                       button_style, *this, NEXT);
+    previous_button.Create(parent, layout.previous_button, button_style,
+                           new SymbolButtonRenderer(look.button, _T("<")),
+                           *this, PREVIOUS);
+    next_button.Create(parent, layout.next_button, button_style,
+                       new SymbolButtonRenderer(look.button, _T(">")),
+                       *this, NEXT);
   }
 
-  close_button.Create(parent, _("Close"), layout.close_button,
+  close_button.Create(parent, look.button, _("Close"), layout.close_button,
                       button_style, dialog, mrOK);
 
   info_dock.Create(parent, layout.main, dock_style);
