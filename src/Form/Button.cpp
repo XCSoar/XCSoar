@@ -45,6 +45,7 @@ WndButton::Create(ContainerWindow &parent,
                   tstring::const_pointer caption, const PixelRect &rc,
                   ButtonWindowStyle style)
 {
+  style.EnableCustomPainting();
   ButtonWindow::Create(parent, caption, rc, style);
 }
 
