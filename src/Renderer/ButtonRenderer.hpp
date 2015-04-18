@@ -28,12 +28,11 @@ struct PixelRect;
 struct ButtonLook;
 class Canvas;
 
-class ButtonRenderer
-{
+class ButtonFrameRenderer {
   const ButtonLook &look;
 
 public:
-  explicit ButtonRenderer(const ButtonLook &_look):look(_look) {}
+  explicit ButtonFrameRenderer(const ButtonLook &_look):look(_look) {}
 
   const ButtonLook &GetLook() const {
     return look;

@@ -28,8 +28,8 @@ Copyright_License {
 #include "Look/ButtonLook.hpp"
 
 void
-ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
-                           bool pressed) const
+ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
+                                bool focused, bool pressed) const
 {
   const ButtonLook::StateLook &_look = focused ? look.focused : look.standard;
 
@@ -49,7 +49,7 @@ ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
 }
 
 PixelRect
-ButtonRenderer::GetDrawingRect(PixelRect rc, bool pressed) const
+ButtonFrameRenderer::GetDrawingRect(PixelRect rc, bool pressed) const
 {
   rc.Grow(-2);
   if (pressed)

@@ -116,7 +116,7 @@ class DigitEntry : public PaintWindow {
 
   const DialogLook &look;
 
-  ButtonRenderer button_renderer;
+  ButtonFrameRenderer button_renderer;
 
   ActionListener *action_listener;
   int action_id;

@@ -36,7 +36,7 @@ class ActionListener;
  */
 class WndButton : public ButtonWindow {
 protected:
-  ButtonRenderer renderer;
+  ButtonFrameRenderer renderer;
 
 private:
 #ifdef USE_GDI
