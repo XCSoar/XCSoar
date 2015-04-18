@@ -33,7 +33,7 @@ class ButtonRenderer
   const ButtonLook &look;
 
 public:
-  ButtonRenderer(const ButtonLook &_look):look(_look) {}
+  explicit ButtonRenderer(const ButtonLook &_look):look(_look) {}
 
   const ButtonLook &GetLook() const {
     return look;
