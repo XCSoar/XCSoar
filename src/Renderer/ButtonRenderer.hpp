@@ -39,8 +39,9 @@ public:
     return look;
   }
 
-  void DrawButton(Canvas &canvas, PixelRect rc, bool focused, bool pressed);
-  PixelRect GetDrawingRect(PixelRect rc, bool pressed);
+  void DrawButton(Canvas &canvas, PixelRect rc,
+                  bool focused, bool pressed) const;
+  PixelRect GetDrawingRect(PixelRect rc, bool pressed) const;
 };
 
 #endif
