@@ -32,7 +32,7 @@ WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ActionListener &_listener, int _id)
-  :renderer(look), listener(nullptr)
+  :renderer(look)
 {
   Create(parent, caption, rc, style, _listener, _id);
 }
