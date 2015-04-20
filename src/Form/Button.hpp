@@ -27,8 +27,6 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
-#include <assert.h>
-
 struct ButtonLook;
 class ContainerWindow;
 class ActionListener;
