@@ -8,6 +8,7 @@ FORM_SOURCES = \
 	$(SRC)/Renderer/TextButtonRenderer.cpp \
 	$(SRC)/Renderer/SymbolRenderer.cpp \
 	$(SRC)/Renderer/SymbolButtonRenderer.cpp \
+	$(SRC)/Renderer/BitmapButtonRenderer.cpp \
 	$(FORM_SRC_DIR)/Control.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
 	$(FORM_SRC_DIR)/Form.cpp \

@@ -24,10 +24,8 @@ Copyright_License {
 #include "SymbolButtonRenderer.hpp"
 #include "SymbolRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Formatter/HexColor.hpp"
-#include "Resources.hpp"
 
 inline void
 SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
@@ -66,28 +64,6 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
   // Draw symbols instead of + and -
   else if (ch == '+' || ch == '-')
     SymbolRenderer::DrawSign(canvas, rc, ch == '+');
-
-  // Draw Fly bitmap
-  else if (caption == _T("Fly")) {
-    Bitmap launcher1_bitmap(IDB_LAUNCHER1);
-    launcher1_bitmap.EnableInterpolation();
-    canvas.ClearWhite();
-    if (pressed)
-      canvas.StretchNot(launcher1_bitmap);
-    else
-      canvas.Stretch(launcher1_bitmap);
-  }
-
-  // Draw Simulator bitmap
-  else if (caption == _T("Simulator")) {
-    Bitmap launcher2_bitmap(IDB_LAUNCHER2);
-    launcher2_bitmap.EnableInterpolation();
-    canvas.ClearWhite();
-    if (pressed)
-      canvas.StretchNot(launcher2_bitmap);
-    else
-      canvas.Stretch(launcher2_bitmap);
-  }
 
   else if (ParseHexColor(caption.c_str(), color)) {
     rc.Grow(-3);

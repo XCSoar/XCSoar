@@ -31,8 +31,9 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"
-#include "Renderer/SymbolButtonRenderer.hpp"
+#include "Renderer/BitmapButtonRenderer.hpp"
 #include "Simulator.hpp"
+#include "Resources.hpp"
 
 class WndButton;
 
@@ -46,11 +47,16 @@ SimulatorPromptWindow::OnCreate()
   ButtonWindowStyle style;
   style.TabStop();
 
+  fly_bitmap.Load(IDB_LAUNCHER1);
+  fly_bitmap.EnableInterpolation();
   fly_button.Create(*this, rc, style,
-                    new SymbolButtonRenderer(look.button, _T("Fly")),
+                    new BitmapButtonRenderer(fly_bitmap),
                     action_listener, FLY);
+
+  sim_bitmap.Load(IDB_LAUNCHER2);
+  sim_bitmap.EnableInterpolation();
   sim_button.Create(*this, rc, style,
-                    new SymbolButtonRenderer(look.button, _T("Simulator")),
+                    new BitmapButtonRenderer(sim_bitmap),
                     action_listener, SIMULATOR);
 
   if (have_quit_button)

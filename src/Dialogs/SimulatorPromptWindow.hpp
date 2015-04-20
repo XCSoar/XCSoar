@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Button.hpp"
@@ -44,7 +45,10 @@ class SimulatorPromptWindow final : public ContainerWindow {
   PixelRect logo_rect;
 
   WndButton quit_button;
+
+  Bitmap fly_bitmap, sim_bitmap;
   WndButton fly_button, sim_button;
+
   RasterPoint label_position;
 
 public:
