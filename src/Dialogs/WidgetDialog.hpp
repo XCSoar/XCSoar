@@ -46,6 +46,10 @@ class WidgetDialog : public WndForm {
 public:
   WidgetDialog(const DialogLook &look);
 
+  const ButtonLook &GetButtonLook() const {
+    return buttons.GetLook();
+  }
+
   void Create(SingleWindow &parent, const TCHAR *caption,
               const PixelRect &rc, Widget *widget);
 
