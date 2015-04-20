@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-05-13 15:30+0000\n"
-"Last-Translator: KnutIvar Skattebo <k.i.skattebo@gmail.com>\n"
+"PO-Revision-Date: 2015-04-20 12:56+0000\n"
+"Last-Translator: Rob Hazes <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-05-28 16:24+0000\n"
-"X-Generator: Launchpad (build 17017)\n"
+"X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
+"X-Generator: Launchpad (build 17430)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,891,-1\n"
@@ -617,9 +617,8 @@ msgid "Loading Waypoints..."
 msgstr "Laster inn Vendepunkter..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "Sirkler ikke"
+msgstr ""
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2874,21 +2873,21 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Merhøyde ved siste vendepunkt"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Fin AltD"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "Ankomsthøyde ved mål i forhold til sikkerhetsankomsthøyde."
+msgstr ""
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -5087,9 +5086,9 @@ msgid "Active"
 msgstr "Aktivert"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "Innlasting av farkostprofil \"%s\" feilet!"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:267
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5098,9 +5097,9 @@ msgstr "Vennligst oppgi farkostens registrerings-ID!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:280
 #: src/Dialogs/Plane/PlaneListDialog.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "Farkostprofilen \"%s\" finnes allerede. Vil du erstatte?"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:283
 #: src/Dialogs/Plane/PlaneListDialog.cpp:326
@@ -5553,9 +5552,9 @@ msgid "Turnpoint"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Mulige landinger størrelse"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 msgid "Comment"
@@ -6660,9 +6659,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "InfoBoks Lim Inn"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
@@ -8163,9 +8162,8 @@ msgid "Make Finish"
 msgstr "Sett som Mål"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
-#, fuzzy
 msgid "Reverse"
-msgstr "Omvendt Stående"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
 msgid "Clear All"
@@ -8491,7 +8489,7 @@ msgstr "Værmelding"
 
 #: src/Dialogs/dlgCredits.cpp:133 Data/Input/default.xci:874
 msgid "Credits"
-msgstr "Bidratt"
+msgstr "Bidragsytere"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
@@ -9780,31 +9778,6 @@ msgstr ""
 msgid "Stored to EEPROM"
 msgstr "Lagret i EEPROM"
 
-#~ msgid "Ignore checksum"
-#~ msgstr "Ikke bruk sjekksum"
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "Dersom din GPS-enhet sender ugyldige NMEA sjekksummer, vil dette valget "
-#~ "lar deg bruke dataene likevel."
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "Farkostprofil \"%s\" aktivert."
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "Vil du virkelig slette farkostprofilen \"%s\"?"
-
-#~ msgid "Configuration Menu"
-#~ msgstr "Konfigureringsmeny"
-
-#~ msgid "Friends"
-#~ msgstr "Venner"
-
-#~ msgid "XCSoar"
-#~ msgstr "XCSoar"
-
 #~ msgid "Height GPS"
 #~ msgstr "Høyde GPS"
 
@@ -9835,6 +9808,9 @@ msgstr "Lagret i EEPROM"
 
 #~ msgid "No help available on this item"
 #~ msgstr "Ingen hjelp for dette elementet"
+
+#~ msgid "Wind At Altitude"
+#~ msgstr "Høydevind"
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "InfoBoks Modus"
@@ -9939,6 +9915,9 @@ msgstr "Lagret i EEPROM"
 #~ msgid "Auto. wind"
 #~ msgstr "Auto Vind"
 
+#~ msgid "Set As New Home"
+#~ msgstr "Sett Som Nytt Hjemsted"
+
 #~ msgid "Latitude"
 #~ msgstr "Breddegrad"
 
@@ -9947,6 +9926,12 @@ msgstr "Lagret i EEPROM"
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "Dette setter oppgavepunktet til vurdering."
+
+#~ msgid "Insert In Task"
+#~ msgstr "Sett Inn i Oppgaven"
+
+#~ msgid "Pan To Waypoint"
+#~ msgstr "Flytt Kart Til Vendepunkt"
 
 #~ msgid "Set Code"
 #~ msgstr "Sett Kode"
@@ -9974,6 +9959,9 @@ msgstr "Lagret i EEPROM"
 #~ msgid "Longitude"
 #~ msgstr "Lengdegrad"
 
+#~ msgid "Remove From Task"
+#~ msgstr "Fjern Fra Oppgaven"
+
 #~ msgid "Short file name"
 #~ msgstr "Kort filnavn"
 
@@ -9983,8 +9971,14 @@ msgstr "Lagret i EEPROM"
 #~ msgid "A+"
 #~ msgstr "A+"
 
+#~ msgid "Append To Task"
+#~ msgstr "Legg Til Oppgaven"
+
 #~ msgid "Fly"
 #~ msgstr "Fly"
+
+#~ msgid "Replace In Task"
+#~ msgstr "Erstatt i Oppgaven"
 
 #~ msgid "Lon."
 #~ msgstr "Brd."
@@ -10031,6 +10025,9 @@ msgstr "Lagret i EEPROM"
 #~ msgid "InfoBox values, small"
 #~ msgstr "InfoBoksverdier, liten"
 
+#~ msgid "XCSoar"
+#~ msgstr "XCSoar"
+
 #~ msgid "H GND"
 #~ msgstr "H Terreng"
 
@@ -10066,6 +10063,9 @@ msgstr "Lagret i EEPROM"
 #~ msgid "Set new teammate:"
 #~ msgstr "Velg ny lagspiller"
 
+#~ msgid "Ignore checksum"
+#~ msgstr "Ikke bruk sjekksum"
+
 #~ msgid "The handicap factor used for the OnLine Contest scoring."
 #~ msgstr "Handicapfaktoren for OLC."
 
@@ -10096,8 +10096,27 @@ msgstr "Lagret i EEPROM"
 #~ msgid "Choose the display size of dialogs."
 #~ msgstr "Dialogboksens størrelse."
 
+#~ msgid ""
+#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
+#~ "data to be used anyway."
+#~ msgstr ""
+#~ "Dersom din GPS-enhet sender ugyldige NMEA sjekksummer, vil dette valget "
+#~ "lar deg bruke dataene likevel."
+
 #~ msgid "Create xcsoar-checklist.txt\n"
 #~ msgstr "Opprett xcsoar-sjekkliste.txt\n"
+
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "Innlasting av farkostprofil \"%s\" feilet!"
+
+#~ msgid "Plane profile \"%s\" activated."
+#~ msgstr "Farkostprofil \"%s\" aktivert."
+
+#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
+#~ msgstr "Farkostprofilen \"%s\" finnes allerede. Vil du erstatte?"
+
+#~ msgid "Do you really want to delete plane profile \"%s\"?"
+#~ msgstr "Vil du virkelig slette farkostprofilen \"%s\"?"
 
 #~ msgid "Do you want to load plane profile \"%s\"?"
 #~ msgstr "Vil du laste inn farkostprofilen \"%s\"?"
@@ -10161,6 +10180,12 @@ msgstr "Lagret i EEPROM"
 
 #~ msgid "Dry mass"
 #~ msgstr "Tørrmasse"
+
+#~ msgid "Configuration Menu"
+#~ msgstr "Konfigureringsmeny"
+
+#~ msgid "Friends"
+#~ msgstr "Venner"
 
 #~ msgid "Optional specification of the wing area."
 #~ msgstr "Opsjon: oppgi vingeareal"
