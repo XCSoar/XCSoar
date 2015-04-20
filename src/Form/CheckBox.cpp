@@ -26,17 +26,6 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
 
-CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
-                                 const DialogLook &look,
-                                 tstring::const_pointer caption,
-                                 const PixelRect &rc,
-                                 const CheckBoxStyle style)
-  :listener(nullptr)
-{
-  CheckBox::Create(parent, caption, rc, style);
-  SetFont(*look.text_font);
-}
-
 void
 CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &look,
                         tstring::const_pointer caption,

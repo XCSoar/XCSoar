@@ -43,15 +43,6 @@ public:
   CheckBoxControl()
     :listener(nullptr) {}
 
-  /**
-   * @param parent Parent window/ContainerControl
-   * @param caption Text on the button
-   */
-  CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
-                  tstring::const_pointer caption,
-                  const PixelRect &rc,
-                  const CheckBoxStyle style);
-
   void Create(ContainerWindow &parent, const DialogLook &look,
               tstring::const_pointer caption,
               const PixelRect &rc,
