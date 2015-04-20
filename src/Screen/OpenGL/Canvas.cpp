@@ -789,6 +789,7 @@ Canvas::StretchNot(const Bitmap &src)
 #endif
 
   GLTexture &texture = *src.GetNative();
+  texture.Bind();
   texture.Draw(0, 0, GetWidth(), GetHeight(),
                0, 0, src.GetWidth(), src.GetHeight());
 }
