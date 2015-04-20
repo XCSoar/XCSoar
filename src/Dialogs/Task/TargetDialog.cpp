@@ -578,7 +578,7 @@ TargetWidget::UpdateNameButton()
       buffer.clear();
   }
 
-  name_button.SetText(buffer);
+  name_button.SetCaption(buffer);
 }
 
 void

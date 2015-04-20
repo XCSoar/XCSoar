@@ -290,7 +290,7 @@ DeviceListWidget::UpdateButtons()
 
     if (config.port_type != DeviceConfig::PortType::DISABLED) {
       disable_button->SetEnabled(true);
-      disable_button->SetText(config.enabled ? _("Disable") : _("Enable"));
+      disable_button->SetCaption(config.enabled ? _("Disable") : _("Enable"));
     } else
       disable_button->SetEnabled(false);
   } else
