@@ -83,6 +83,11 @@ public:
     return widget.Steal();
   }
 
+  WndButton *AddButton(ButtonRenderer *renderer,
+                       ActionListener &listener, int id) {
+    return buttons.Add(renderer, listener, id);
+  }
+
   WndButton *AddButton(const TCHAR *caption,
                        ActionListener &listener, int id) {
     return buttons.Add(caption, listener, id);
