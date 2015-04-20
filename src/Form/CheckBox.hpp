@@ -40,9 +40,6 @@ class CheckBoxControl : public CheckBox {
 #endif
 
 public:
-  CheckBoxControl()
-    :listener(nullptr) {}
-
   void Create(ContainerWindow &parent, const DialogLook &look,
               tstring::const_pointer caption,
               const PixelRect &rc,
