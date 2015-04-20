@@ -47,6 +47,9 @@ public:
     style.Hide();
   }
 
+  WndButton *Add(ButtonRenderer *renderer,
+                 ActionListener &listener, int id);
+
   WndButton *Add(tstring::const_pointer caption,
                  ActionListener &listener, int id);
 

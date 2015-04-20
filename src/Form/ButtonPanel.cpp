@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/ButtonPanel.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Screen/ContainerWindow.hpp"
@@ -60,10 +61,11 @@ ButtonPanel::UpdateLayout()
 static constexpr PixelRect dummy_rc = { 0, 0, 100, 40 };
 
 WndButton *
-ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
+ButtonPanel::Add(ButtonRenderer *renderer,
+                 ActionListener &listener, int id)
 {
-  WndButton *button = new WndButton(parent, look, caption,
-                                    dummy_rc, style, listener, id);
+  WndButton *button = new WndButton(parent, dummy_rc, style,
+                                    renderer, listener, id);
   keys[buttons.size()] = 0;
   buttons.append(button);
 
@@ -71,16 +73,16 @@ ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 }
 
 WndButton *
+ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
+{
+  return Add(new TextButtonRenderer(look, caption), listener, id);
+}
+
+WndButton *
 ButtonPanel::AddSymbol(tstring::const_pointer caption,
                        ActionListener &listener, int id)
 {
-  auto *button = new WndButton(parent, dummy_rc, style,
-                               new SymbolButtonRenderer(look, caption),
-                               listener, id);
-  keys[buttons.size()] = 0;
-  buttons.append(button);
-
-  return button;
+  return Add(new SymbolButtonRenderer(look, caption), listener, id);
 }
 
 void
