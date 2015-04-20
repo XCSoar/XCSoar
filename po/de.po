@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2014-12-24 19:01+0000\n"
-"Last-Translator: Carsten Sonyi <Unknown>\n"
+"PO-Revision-Date: 2015-04-14 11:11+0000\n"
+"Last-Translator: Florian <florian.joachimbauer@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-02-20 18:36+0000\n"
-"X-Generator: Launchpad (build 17355)\n"
+"X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
+"X-Generator: Launchpad (build 17430)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -619,7 +619,7 @@ msgstr "Lade Wegpunkte..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
-msgstr ""
+msgstr "Stillstehend"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2981,7 +2981,7 @@ msgstr "Endanflug MC0 Höhendifferenz"
 #: src/InfoBoxes/Content/Factory.cpp:1273
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr ""
+msgstr "Fin MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
 #, no-c-format
@@ -5641,7 +5641,7 @@ msgstr "Als neue Heimat setzen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan to Waypoint"
-msgstr "Zum Wegpunkt Verschieben"
+msgstr "Zeige zum Wegpunkt"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
 msgid "Clear current task?"
@@ -6802,7 +6802,7 @@ msgstr "Zeigt entweder die Kreisflug, Vorflug, oder Endanflug InfoBoxen an"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr ""
+msgstr "Nutze kompletten Bildschirm (keine InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:353
@@ -6819,12 +6819,16 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
+"Vorflug. Wird angezeigt, wenn 'Auto' gewählt ist und das Luftfahrzeug "
+"unterhalb der Endanflugshöhe ist."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
 msgstr ""
+"Beim Kreisen. Wird angezeigt, wenn 'Auto' ausgewählt ist und das "
+"Luftfahrzeug kreist."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
@@ -6832,6 +6836,8 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
+"Endanflug. Wird angezeigt, wenn 'Auto' ausgewählt ist und das Luftfahrzeug "
+"überhalb der Endanflugshöhe ist."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #, no-c-format
