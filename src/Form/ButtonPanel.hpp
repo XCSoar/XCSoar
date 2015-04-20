@@ -43,6 +43,10 @@ public:
   ButtonPanel(ContainerWindow &parent, const ButtonLook &look);
   ~ButtonPanel();
 
+  const ButtonLook &GetLook() const {
+    return look;
+  }
+
   void SetDefaultHidden() {
     style.Hide();
   }
