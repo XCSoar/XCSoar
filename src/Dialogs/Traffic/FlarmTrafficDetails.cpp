@@ -39,6 +39,8 @@
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Friends.hpp"
 #include "FLARM/Glue.hpp"
+#include "Renderer/ColorButtonRenderer.hpp"
+#include "Renderer/ColorButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Geo/Math.hpp"
 #include "UIGlobals.hpp"
@@ -118,10 +120,20 @@ private:
 inline void
 FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddSymbolButton(_T("#74FF00"), *this, GREEN);
-  buttons.AddSymbolButton(_T("#0090FF"), *this, BLUE);
-  buttons.AddSymbolButton(_T("#FFE800"), *this, YELLOW);
-  buttons.AddSymbolButton(_T("#FF00CB"), *this, MAGENTA);
+  const ButtonLook &look = buttons.GetButtonLook();
+
+  constexpr Color green(0x74, 0xff, 0x00);
+  buttons.AddButton(new ColorButtonRenderer(look, green), *this, GREEN);
+
+  constexpr Color blue(0x00, 0x90, 0xff);
+  buttons.AddButton(new ColorButtonRenderer(look, blue), *this, BLUE);
+
+  constexpr Color yellow(0xff, 0xe8, 0x00);
+  buttons.AddButton(new ColorButtonRenderer(look, yellow), *this, YELLOW);
+
+  constexpr Color magenta(0xff, 0x00, 0xcb);
+  buttons.AddButton(new ColorButtonRenderer(look, magenta), *this, MAGENTA);
+
   buttons.AddButton(_("Clear"), *this, CLEAR);
   buttons.AddButton(_("Team"), *this, TEAM);
 }

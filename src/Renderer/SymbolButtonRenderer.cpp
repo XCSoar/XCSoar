@@ -25,7 +25,6 @@ Copyright_License {
 #include "SymbolRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/ButtonLook.hpp"
-#include "Formatter/HexColor.hpp"
 
 inline void
 SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
@@ -42,8 +41,6 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
     canvas.Select(look.standard.foreground_brush);
 
   const char ch = (char)caption[0u];
-
-  RGB8Color color;
 
   // Draw arrow symbol instead of <
   if (ch == '<')
@@ -64,11 +61,6 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
   // Draw symbols instead of + and -
   else if (ch == '+' || ch == '-')
     SymbolRenderer::DrawSign(canvas, rc, ch == '+');
-
-  else if (ParseHexColor(caption.c_str(), color)) {
-    rc.Grow(-3);
-    canvas.DrawFilledRectangle(rc, Color(color));
-  }
 }
 
 void
