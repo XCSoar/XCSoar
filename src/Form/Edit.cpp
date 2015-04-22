@@ -109,6 +109,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const WindowStyle style)
   :look(_look),
    data_field(nullptr),
+   edit_callback(EditDataFieldDialog),
    read_only(false),
    dragging(false), pressed(false)
 {
@@ -122,6 +123,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 WndProperty::WndProperty(const DialogLook &_look)
   :look(_look),
    data_field(nullptr),
+   edit_callback(EditDataFieldDialog),
    read_only(false),
    dragging(false), pressed(false)
 {
@@ -163,11 +165,11 @@ WndProperty::SetCaptionWidth(int _caption_width)
 bool
 WndProperty::BeginEditing()
 {
-  if (IsReadOnly() || data_field == nullptr) {
+  if (IsReadOnly() || data_field == nullptr || edit_callback == nullptr) {
     OnHelp();
     return false;
   } else {
-    if (!EditDataFieldDialog(GetCaption(), *data_field, GetHelpText()))
+    if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
       return false;
 
     RefreshDisplay();

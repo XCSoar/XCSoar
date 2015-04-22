@@ -37,6 +37,9 @@ class ContainerWindow;
  * an editable field (the Editor).
  */
 class WndProperty : public WindowControl {
+  typedef bool (*EditCallback)(const TCHAR *caption, DataField &df,
+                               const TCHAR *help_text);
+
   const DialogLook &look;
 
   /** Position of the Editor Control */
@@ -48,6 +51,8 @@ class WndProperty : public WindowControl {
   tstring value;
 
   DataField *data_field;
+
+  EditCallback edit_callback;
 
   bool read_only;
 
@@ -142,6 +147,10 @@ public:
   }
 
   void SetDataField(DataField *Value);
+
+  void SetEditCallback(EditCallback _ec) {
+    edit_callback = _ec;
+  }
 
   /**
    * Sets the Editors text to the given Value
