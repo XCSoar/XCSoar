@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "ProfileListDialog.hpp"
 #include "WidgetDialog.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -143,11 +144,27 @@ public:
   }
 };
 
+static bool
+SelectProfileCallback(const TCHAR *caption, DataField &_df,
+                      const TCHAR *help_text)
+{
+  FileDataField &df = (FileDataField &)_df;
+
+  const auto path = SelectProfileDialog(df.GetPathFile());
+  if (path.empty())
+    return false;
+
+  df.ForceModify(path.c_str());
+  return true;
+}
+
 void
 StartupWidget::Prepare(ContainerWindow &parent,
                        const PixelRect &rc)
 {
-  Add(_("Profile"), nullptr, df);
+  auto *pe = Add(_("Profile"), nullptr, df);
+  pe->SetEditCallback(SelectProfileCallback);
+
   AddButton(_("Continue"), action_listener, mrOK);
 }
 

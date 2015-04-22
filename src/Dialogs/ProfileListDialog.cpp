@@ -80,13 +80,25 @@ class ProfileListWidget final
     DELETE,
   };
 
+  const bool select;
+
   WndForm *form;
   WndButton *copy_button, *delete_button;
 
   std::vector<ListItem> list;
 
 public:
+  ProfileListWidget(bool _select=false):select(_select) {}
+
   void CreateButtons(WidgetDialog &dialog);
+
+  gcc_pure
+  tstring::const_pointer GetSelectedPath() const {
+    if (list.empty())
+      return nullptr;
+
+    return list[GetList().GetCursorIndex()].path;
+  }
 
   void SelectPath(const TCHAR *path);
 
@@ -110,6 +122,15 @@ protected:
   /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const override {
+    return select;
+  }
+
+  virtual void OnActivateItem(unsigned index) override {
+    form->SetModalResult(mrOK);
+  }
 
 private:
   /* virtual methods from class ActionListener */
@@ -317,4 +338,32 @@ ProfileListDialog()
 
   dialog.ShowModal();
   dialog.StealWidget();
+}
+
+tstring
+SelectProfileDialog(tstring::const_pointer selected_path)
+{
+  ProfileListWidget widget(true);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Select profile"), &widget);
+  dialog.AddButton(_("Select"), mrOK);
+  widget.CreateButtons(dialog);
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  if (selected_path != nullptr) {
+    dialog.PrepareWidget();
+    widget.SelectPath(selected_path);
+  }
+
+  auto result = dialog.ShowModal();
+  dialog.StealWidget();
+
+  if (result != mrOK)
+    return tstring();
+
+  selected_path = widget.GetSelectedPath();
+  if (selected_path == nullptr)
+    return tstring();
+
+  return selected_path;
 }

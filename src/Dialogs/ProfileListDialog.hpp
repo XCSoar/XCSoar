@@ -21,5 +21,15 @@ Copyright_License {
 }
 */
 
+#include "Util/tstring.hpp"
+
 void
 ProfileListDialog();
+
+/**
+ * Let the user select a profile file.  Returns the absolute path of
+ * the selected file or an empty string if the user has cancelled the
+ * dialog.
+ */
+tstring
+SelectProfileDialog(tstring::const_pointer selected_path);
