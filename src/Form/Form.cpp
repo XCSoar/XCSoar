@@ -596,7 +596,7 @@ WndForm::OnPaint(Canvas &canvas)
     // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-    if (!IsDithered()) {
+    if (!IsDithered() && is_active) {
       canvas.SetBackgroundTransparent();
       canvas.Stretch(title_rect.left, title_rect.top,
                      title_rect.right - title_rect.left,
