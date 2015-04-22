@@ -43,7 +43,7 @@ class WndProperty : public WindowControl {
   PixelRect edit_rc;
 
   /** Width reserved for the caption of the Control */
-  PixelScalar caption_width;
+  int caption_width;
 
   tstring value;
 
@@ -84,9 +84,9 @@ public:
    * font.
    */
   gcc_pure
-  UPixelScalar GetRecommendedCaptionWidth() const;
+  unsigned GetRecommendedCaptionWidth() const;
 
-  void SetCaptionWidth(PixelScalar caption_width);
+  void SetCaptionWidth(int caption_width);
 
   void RefreshDisplay();
 

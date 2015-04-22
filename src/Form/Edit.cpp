@@ -144,14 +144,14 @@ WndProperty::~WndProperty()
   delete data_field;
 }
 
-UPixelScalar
+unsigned
 WndProperty::GetRecommendedCaptionWidth() const
 {
   return look.text_font->TextSize(caption).cx + Layout::GetTextPadding();
 }
 
 void
-WndProperty::SetCaptionWidth(PixelScalar _caption_width)
+WndProperty::SetCaptionWidth(int _caption_width)
 {
   if (caption_width == _caption_width)
     return;
@@ -180,7 +180,7 @@ WndProperty::UpdateLayout()
 {
   edit_rc = GetClientRect();
 
-  const UPixelScalar DEFAULTBORDERPENWIDTH = Layout::FastScale(1);
+  const unsigned DEFAULTBORDERPENWIDTH = Layout::FastScale(1u);
 
   if (caption_width >= 0) {
     edit_rc.left += caption_width + (DEFAULTBORDERPENWIDTH + 1);
@@ -370,10 +370,10 @@ WndProperty::OnPaint(Canvas &canvas)
     canvas.SetBackgroundTransparent();
     canvas.Select(*look.text_font);
 
-    const PixelScalar x = edit_rc.left + Layout::GetTextPadding();
-    const PixelScalar canvas_height = edit_rc.bottom - edit_rc.top;
-    const PixelScalar text_height = canvas.GetFontHeight();
-    const PixelScalar y = edit_rc.top + (canvas_height - text_height) / 2;
+    const int x = edit_rc.left + Layout::GetTextPadding();
+    const int canvas_height = edit_rc.bottom - edit_rc.top;
+    const int text_height = canvas.GetFontHeight();
+    const int y = edit_rc.top + (canvas_height - text_height) / 2;
 
     canvas.TextAutoClipped(x, y, value.c_str());
   }
