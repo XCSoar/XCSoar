@@ -108,7 +108,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          int CaptionWidth,
                          const WindowStyle style)
   :look(_look),
-   mDataField(nullptr),
+   data_field(nullptr),
    read_only(false),
    dragging(false), pressed(false)
 {
@@ -121,7 +121,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 
 WndProperty::WndProperty(const DialogLook &_look)
   :look(_look),
-   mDataField(nullptr),
+   data_field(nullptr),
    read_only(false),
    dragging(false), pressed(false)
 {
@@ -141,7 +141,7 @@ WndProperty::Create(ContainerWindow &parent, const PixelRect &rc,
 
 WndProperty::~WndProperty()
 {
-  delete mDataField;
+  delete data_field;
 }
 
 UPixelScalar
@@ -163,11 +163,11 @@ WndProperty::SetCaptionWidth(PixelScalar _caption_width)
 bool
 WndProperty::BeginEditing()
 {
-  if (IsReadOnly() || mDataField == nullptr) {
+  if (IsReadOnly() || data_field == nullptr) {
     OnHelp();
     return false;
   } else {
-    if (!EditDataFieldDialog(GetCaption(), *mDataField, GetHelpText()))
+    if (!EditDataFieldDialog(GetCaption(), *data_field, GetHelpText()))
       return false;
 
     RefreshDisplay();
@@ -271,8 +271,8 @@ WndProperty::OnCancelMode()
 int
 WndProperty::CallSpecial()
 {
-  if (mDataField != nullptr) {
-    mDataField->Special();
+  if (data_field != nullptr) {
+    data_field->Special();
     RefreshDisplay();
   }
   return 0;
@@ -281,8 +281,8 @@ WndProperty::CallSpecial()
 int
 WndProperty::IncValue()
 {
-  if (mDataField != nullptr) {
-    mDataField->Inc();
+  if (data_field != nullptr) {
+    data_field->Inc();
     RefreshDisplay();
   }
   return 0;
@@ -291,8 +291,8 @@ WndProperty::IncValue()
 int
 WndProperty::DecValue()
 {
-  if (mDataField != nullptr) {
-    mDataField->Dec();
+  if (data_field != nullptr) {
+    data_field->Dec();
     RefreshDisplay();
   }
   return 0;
@@ -394,19 +394,19 @@ WndProperty::SetText(const TCHAR *_value)
 void
 WndProperty::RefreshDisplay()
 {
-  if (!mDataField)
+  if (!data_field)
     return;
 
-  SetText(mDataField->GetAsDisplayString());
+  SetText(data_field->GetAsDisplayString());
 }
 
 void
 WndProperty::SetDataField(DataField *Value)
 {
-  assert(mDataField == nullptr || mDataField != Value);
+  assert(data_field == nullptr || data_field != Value);
 
-  delete mDataField;
-  mDataField = Value;
+  delete data_field;
+  data_field = Value;
 
   UpdateLayout();
 

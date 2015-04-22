@@ -47,7 +47,7 @@ class WndProperty : public WindowControl {
 
   tstring value;
 
-  DataField *mDataField;
+  DataField *data_field;
 
   bool read_only;
 
@@ -130,7 +130,7 @@ public:
    * @return The Control's DataField
    */
   DataField *GetDataField() {
-    return mDataField;
+    return data_field;
   }
 
   /**
@@ -138,7 +138,7 @@ public:
    * @return The Control's DataField
    */
   const DataField *GetDataField() const {
-    return mDataField;
+    return data_field;
   }
 
   void SetDataField(DataField *Value);
