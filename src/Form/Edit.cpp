@@ -164,8 +164,6 @@ bool
 WndProperty::BeginEditing()
 {
   if (IsReadOnly() || mDataField == nullptr) {
-    /* this would display xml file help on a read-only wndproperty if
-       it exists */
     OnHelp();
     return false;
   } else {
@@ -317,9 +315,6 @@ WndProperty::OnPaint(Canvas &canvas)
       canvas.Clear(look.background_color);
   }
 
-  /* kludge: don't draw caption if width is too small (but not 0),
-     used by the polar configuration panel.  This concept needs to be
-     redesigned. */
   if (!caption.empty()) {
     canvas.SetTextColor(focused
                           ? look.focused.text_color
