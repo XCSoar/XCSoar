@@ -79,6 +79,8 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine title image size
   PixelSize title_size = bitmap_title.GetSize();
 
+  unsigned spacing = title_size.cy;
+
   const unsigned magnification =
     std::min((width - 16u) / unsigned(logo_size.cx + title_size.cx),
              (height - 16u) / std::max(unsigned(logo_size.cy),
@@ -89,6 +91,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
     logo_size.cy *= magnification;
     title_size.cx *= magnification;
     title_size.cy *= magnification;
+    spacing *= magnification;
   }
 
   int logox, logoy, titlex, titley;
@@ -96,16 +99,16 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine logo and title positions
   switch (orientation) {
   case LANDSCAPE:
-    logox = Center(width, logo_size.cx + title_size.cy + title_size.cx);
+    logox = Center(width, logo_size.cx + spacing + title_size.cx);
     logoy = Center(height, logo_size.cy);
-    titlex = logox + logo_size.cx + title_size.cy;
+    titlex = logox + logo_size.cx + spacing;
     titley = Center(height, title_size.cy);
     break;
   case PORTRAIT:
     logox = Center(width, logo_size.cx);
-    logoy = Center(height, logo_size.cy + title_size.cy * 2);
+    logoy = Center(height, logo_size.cy + spacing + title_size.cy);
     titlex = Center(width, title_size.cx);
-    titley = logoy + logo_size.cy + title_size.cy;
+    titley = logoy + logo_size.cy + spacing;
     break;
   case SQUARE:
     logox = Center(width, logo_size.cx);
