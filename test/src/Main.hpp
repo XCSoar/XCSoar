@@ -91,6 +91,11 @@ UIGlobals::GetDialogLook()
 #ifdef ENABLE_MAIN_WINDOW
 
 class TestMainWindow : public SingleWindow {
+protected:
+  void OnResize(PixelSize new_size) override {
+    SingleWindow::OnResize(new_size);
+    Layout::Initialize(new_size);
+  }
 };
 
 static TestMainWindow main_window;
