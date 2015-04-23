@@ -40,7 +40,7 @@ static constexpr TCHAR keyboard_letters[] =
 void
 KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  OnResize(rc);
+  PrepareSize(rc);
 
   TCHAR caption[] = _T(" ");
 
@@ -203,12 +203,17 @@ KeyboardWidget::MoveButtons(const PixelRect &rc)
 }
 
 void
-KeyboardWidget::OnResize(const PixelRect &rc)
+KeyboardWidget::PrepareSize(const PixelRect &rc)
 {
   const PixelSize new_size = rc.GetSize();
   button_width = new_size.cx / 10;
   button_height = new_size.cy / 5;
+}
 
+void
+KeyboardWidget::OnResize(const PixelRect &rc)
+{
+  PrepareSize(rc);
   ResizeButtons();
   MoveButtons(rc);
 }

@@ -75,6 +75,7 @@ public:
   void SetAllowedCharacters(const TCHAR *allowed);
 
 private:
+  void PrepareSize(const PixelRect &rc);
   void OnResize(const PixelRect &rc);
 
   gcc_pure
