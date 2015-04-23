@@ -80,15 +80,16 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   PixelSize title_size = bitmap_title.GetSize();
 
   const unsigned magnification =
-    std::max(1u,
-             std::min((width - 16u) / unsigned(logo_size.cx + title_size.cx),
-                      (height - 16u) / std::max(unsigned(logo_size.cy),
-                                                unsigned(title_size.cx))));
+    std::min((width - 16u) / unsigned(logo_size.cx + title_size.cx),
+             (height - 16u) / std::max(unsigned(logo_size.cy),
+                                       unsigned(title_size.cx)));
 
-  logo_size.cx *= magnification;
-  logo_size.cy *= magnification;
-  title_size.cx *= magnification;
-  title_size.cy *= magnification;
+  if (magnification > 1) {
+    logo_size.cx *= magnification;
+    logo_size.cy *= magnification;
+    title_size.cx *= magnification;
+    title_size.cy *= magnification;
+  }
 
   int logox, logoy, titlex, titley;
 
