@@ -41,6 +41,12 @@ LogoView::LogoView()
   big_title.EnableInterpolation();
 }
 
+static int
+Center(unsigned canvas_size, unsigned element_size)
+{
+  return (canvas_size - element_size) / 2;
+}
+
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
@@ -93,20 +99,20 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine logo and title positions
   switch (orientation) {
   case LANDSCAPE:
-    logox = (width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
-    logoy = (height - logo_size.cy) / 2;
+    logox = Center(width, logo_size.cx + title_size.cy + title_size.cx);
+    logoy = Center(height, logo_size.cy);
     titlex = logox + logo_size.cx + title_size.cy;
-    titley = (height - title_size.cy) / 2;
+    titley = Center(height, title_size.cy);
     break;
   case PORTRAIT:
-    logox = (width - logo_size.cx) / 2;
-    logoy = (height - (logo_size.cy + title_size.cy * 2)) / 2;
-    titlex = (width - title_size.cx) / 2;
+    logox = Center(width, logo_size.cx);
+    logoy = Center(height, logo_size.cy + title_size.cy * 2);
+    titlex = Center(width, title_size.cx);
     titley = logoy + logo_size.cy + title_size.cy;
     break;
   case SQUARE:
-    logox = (width - logo_size.cx) / 2;
-    logoy = (height - logo_size.cy) / 2;
+    logox = Center(width, logo_size.cx);
+    logoy = Center(height, logo_size.cy);
     // not needed - silence compiler "may be used uninitialized"
     titlex = 0;
     titley = 0;
