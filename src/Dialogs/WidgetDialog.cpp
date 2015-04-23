@@ -106,7 +106,7 @@ WidgetDialog::AutoSize()
   const PixelRect parent_rc = GetParentClientRect();
   const PixelSize parent_size = parent_rc.GetSize();
 
-  widget.Prepare();
+  PrepareWidget();
 
   // Calculate the minimum size of the dialog
   PixelSize min_size = widget.Get()->GetMinimumSize();

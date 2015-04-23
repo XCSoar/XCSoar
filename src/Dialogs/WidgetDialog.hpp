@@ -76,6 +76,13 @@ public:
     return changed;
   }
 
+  /**
+   * Ensure that the widget is prepared.
+   */
+  void PrepareWidget() {
+    widget.Prepare();
+  }
+
   Widget &GetWidget() {
     assert(widget.IsDefined());
     return *widget.Get();
