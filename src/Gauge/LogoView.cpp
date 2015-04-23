@@ -79,7 +79,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine title image size
   PixelSize title_size = bitmap_title.GetSize();
 
-  unsigned spacing = title_size.cy;
+  unsigned spacing = title_size.cy / 2;
 
   const unsigned magnification =
     std::min((width - 16u) / unsigned(logo_size.cx + spacing + title_size.cx),
