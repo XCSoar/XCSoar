@@ -81,10 +81,27 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   unsigned spacing = title_size.cy / 2;
 
+  unsigned estimated_width, estimated_height;
+  switch (orientation) {
+  case LANDSCAPE:
+    estimated_width = logo_size.cx + spacing + title_size.cx;
+    estimated_height = logo_size.cy;
+    break;
+
+  case PORTRAIT:
+    estimated_width = title_size.cx;
+    estimated_height = logo_size.cy + spacing + title_size.cy;
+    break;
+
+  case SQUARE:
+    estimated_width = logo_size.cx;
+    estimated_height = logo_size.cy;
+    break;
+  }
+
   const unsigned magnification =
-    std::min((width - 16u) / unsigned(logo_size.cx + spacing + title_size.cx),
-             (height - 16u) / std::max(unsigned(logo_size.cy),
-                                       unsigned(title_size.cx)));
+    std::min((width - 16u) / estimated_width,
+             (height - 16u) / estimated_height);
 
   if (magnification > 1) {
     logo_size.cx *= magnification;
