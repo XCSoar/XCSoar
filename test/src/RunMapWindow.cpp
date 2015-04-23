@@ -184,7 +184,7 @@ Main()
 
   MapSettings settings_map;
   settings_map.SetDefaults();
-  Profile::Load(settings_map);
+  Profile::Load(Profile::map, settings_map);
 
   LoadFiles(settings_computer.poi, settings_computer.team_code);
 

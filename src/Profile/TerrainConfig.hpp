@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_TERRAIN_CONFIG_HPP
 #define XCSOAR_PROFILE_TERRAIN_CONFIG_HPP
 
+class ProfileMap;
 struct TerrainRendererSettings;
 
 namespace Profile
 {
-  void LoadTerrainRendererSettings(TerrainRendererSettings &settings);
+  void LoadTerrainRendererSettings(const ProfileMap &map,
+                                   TerrainRendererSettings &settings);
 };
 
 #endif

@@ -24,14 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_MAP_PROFILE_HPP
 #define XCSOAR_MAP_PROFILE_HPP
 
+class ProfileMap;
 struct MapSettings;
 struct TrailSettings;
 struct MapItemListSettings;
 
 namespace Profile {
-  void Load(MapSettings &settings);
-  void Load(TrailSettings &settings);
-  void Load(MapItemListSettings &settings);
+  void Load(const ProfileMap &map, MapSettings &settings);
+  void Load(const ProfileMap &map, TrailSettings &settings);
+  void Load(const ProfileMap &map, MapItemListSettings &settings);
 };
 
 #endif

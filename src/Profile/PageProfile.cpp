@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "PageProfile.hpp"
-#include "Profile.hpp"
+#include "ProfileKeys.hpp"
+#include "Map.hpp"
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
@@ -36,7 +37,7 @@ enum eTopLayout {
 };
 
 static void
-Load(PageLayout &_pl, const unsigned page)
+Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
 {
   char profileKey[32];
   unsigned prefixLen = sprintf(profileKey, "Page%u", page);
@@ -45,15 +46,15 @@ Load(PageLayout &_pl, const unsigned page)
 
   PageLayout pl = PageLayout::Default();
   strcpy(profileKey + prefixLen, "InfoBoxMode");
-  if (!Profile::Get(profileKey, pl.infobox_config.auto_switch))
+  if (!map.Get(profileKey, pl.infobox_config.auto_switch))
     return;
   strcpy(profileKey + prefixLen, "InfoBoxPanel");
-  if (!Profile::Get(profileKey, pl.infobox_config.panel))
+  if (!map.Get(profileKey, pl.infobox_config.panel))
     return;
 
   strcpy(profileKey + prefixLen, "Layout");
   unsigned temp = 0;
-  Profile::Get(profileKey, temp);
+  map.Get(profileKey, temp);
   switch (temp) {
   case tlEmpty:
     pl.valid = false;
@@ -70,12 +71,12 @@ Load(PageLayout &_pl, const unsigned page)
     return;
 
   strcpy(profileKey + prefixLen, "Bottom");
-  if (!Profile::GetEnum(profileKey, pl.bottom) ||
+  if (!map.GetEnum(profileKey, pl.bottom) ||
       unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
     pl.bottom = PageLayout::Bottom::NOTHING;
 
   strcpy(profileKey + prefixLen, "Main");
-  if (!Profile::GetEnum(profileKey, pl.main) ||
+  if (!map.GetEnum(profileKey, pl.main) ||
       unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
     pl.main = PageLayout::Main::MAP;
 
@@ -83,47 +84,47 @@ Load(PageLayout &_pl, const unsigned page)
 }
 
 void
-Profile::Load(PageSettings &settings)
+Profile::Load(const ProfileMap &map, PageSettings &settings)
 {
   for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i)
-    ::Load(settings.pages[i], i);
+    ::Load(map, settings.pages[i], i);
 
   settings.Compress();
 
-  Get(ProfileKeys::PagesDistinctZoom, settings.distinct_zoom);
+  map.Get(ProfileKeys::PagesDistinctZoom, settings.distinct_zoom);
 }
 
 void
-Profile::Save(const PageLayout &page, const unsigned i)
+Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 {
   char profileKey[32];
   unsigned prefixLen = sprintf(profileKey, "Page%u", i);
   if (prefixLen <= 0)
     return;
   strcpy(profileKey + prefixLen, "InfoBoxMode");
-  Profile::Set(profileKey, page.infobox_config.auto_switch);
+  map.Set(profileKey, page.infobox_config.auto_switch);
   strcpy(profileKey + prefixLen, "InfoBoxPanel");
-  Profile::Set(profileKey, page.infobox_config.panel);
+  map.Set(profileKey, page.infobox_config.panel);
 
   strcpy(profileKey + prefixLen, "Layout");
-  Profile::Set(profileKey,
-               page.valid
-               ? (page.infobox_config.enabled
-                  ? tlMapAndInfoBoxes
-                  : tlMap)
-               : tlEmpty);
+  map.Set(profileKey,
+          page.valid
+          ? (page.infobox_config.enabled
+             ? tlMapAndInfoBoxes
+             : tlMap)
+          : tlEmpty);
 
   strcpy(profileKey + prefixLen, "Bottom");
-  Profile::Set(profileKey, (unsigned)page.bottom);
+  map.Set(profileKey, (unsigned)page.bottom);
 
   strcpy(profileKey + prefixLen, "Main");
-  Profile::Set(profileKey, (unsigned)page.main);
+  map.Set(profileKey, (unsigned)page.main);
 }
 
 
 void
-Profile::Save(const PageSettings &settings)
+Profile::Save(ProfileMap &map, const PageSettings &settings)
 {
   for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i)
-    Save(settings.pages[i], i);
+    Save(map, settings.pages[i], i);
 }

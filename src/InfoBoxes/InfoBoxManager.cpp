@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Profile/InfoBoxConfig.hpp"
+#include "Profile/Current.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
 
@@ -293,5 +294,5 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   panel.contents[i] = new_type;
   DisplayInfoBox();
 
-  Profile::Save(panel, panel_index);
+  Profile::Save(Profile::map, panel, panel_index);
 }

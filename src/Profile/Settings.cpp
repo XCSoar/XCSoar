@@ -32,5 +32,5 @@ Profile::Use(const ProfileMap &map)
 {
   Load(map, CommonInterface::SetSystemSettings());
   Load(map, CommonInterface::SetComputerSettings());
-  Load(CommonInterface::SetUISettings());
+  Load(map, CommonInterface::SetUISettings());
 }

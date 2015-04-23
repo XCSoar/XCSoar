@@ -24,14 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_PAGE_PROFILE_HPP
 #define XCSOAR_PAGE_PROFILE_HPP
 
+class ProfileMap;
 struct PageLayout;
 struct PageSettings;
 
 namespace Profile {
-  void Load(PageSettings &settings);
+  void Load(const ProfileMap &map, PageSettings &settings);
 
-  void Save(const PageLayout &page, unsigned i);
-  void Save(const PageSettings &settings);
+  void Save(ProfileMap &map, const PageLayout &page, unsigned i);
+  void Save(ProfileMap &map, const PageSettings &settings);
 };
 
 #endif

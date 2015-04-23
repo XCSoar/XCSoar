@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxesConfigPanel.hpp"
 #include "../dlgConfigInfoboxes.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/Current.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
@@ -62,7 +63,7 @@ InfoBoxesConfigPanel::OnAction(int id)
                                 InfoBoxManager::layout.geometry, data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
-    Profile::Save(data, i);
+    Profile::Save(Profile::map, data, i);
     Profile::Save();
     ((Button &)GetRow(i)).SetCaption(gettext(data.name));
   }

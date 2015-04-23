@@ -26,10 +26,13 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
+class ProfileMap;
+
 namespace Profile
 {
-  void Load(InfoBoxSettings &settings);
-  void Save(const InfoBoxSettings::Panel &panel, unsigned index);
+  void Load(const ProfileMap &map, InfoBoxSettings &settings);
+  void Save(ProfileMap &map,
+            const InfoBoxSettings::Panel &panel, unsigned index);
 };
 
 #endif

@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_UNITS_CONFIG_HPP
 #define XCSOAR_PROFILE_UNITS_CONFIG_HPP
 
+class ProfileMap;
 struct UnitSetting;
 
 namespace Profile
 {
-  void LoadUnits(UnitSetting &config);
+  void LoadUnits(const ProfileMap &map, UnitSetting &config);
 };
 
 #endif

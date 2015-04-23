@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "UnitsConfig.hpp"
-#include "Profile.hpp"
+#include "ProfileKeys.hpp"
+#include "Map.hpp"
 #include "Units/Settings.hpp"
 #include "Units/UnitsGlue.hpp"
 
@@ -59,10 +60,10 @@ ImportSpeedUnit(unsigned tmp)
 }
 
 static bool
-GetLegacySpeedUnit(const char *key, Unit &value)
+GetLegacySpeedUnit(const ProfileMap &map, const char *key, Unit &value)
 {
   unsigned tmp;
-  return Profile::Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
+  return map.Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
 }
 
 gcc_const
@@ -75,12 +76,13 @@ ValidSpeedUnit(Unit unit)
 }
 
 static bool
-GetSpeedUnit(const char *key, const char *legacy_key, Unit &value_r)
+GetSpeedUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+             Unit &value_r)
 {
   Unit tmp;
-  if (!Profile::GetEnum(key, tmp))
+  if (!map.GetEnum(key, tmp))
     /* migrate from XCSoar <= 6.2 profile */
-    return GetLegacySpeedUnit(legacy_key, value_r);
+    return GetLegacySpeedUnit(map, legacy_key, value_r);
 
   if (!ValidSpeedUnit(tmp))
     return false;
@@ -112,19 +114,20 @@ ImportVerticalSpeedUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyVerticalSpeedUnit(const char *key, Unit &value)
+GetLegacyVerticalSpeedUnit(const ProfileMap &map, const char *key, Unit &value)
 {
   unsigned tmp;
-  return Profile::Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
+  return map.Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
 }
 
 static bool
-GetVerticalSpeedUnit(const char *key, const char *legacy_key, Unit &value_r)
+GetVerticalSpeedUnit(const ProfileMap &map, const char *key,
+                     const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
-  if (!Profile::GetEnum(key, tmp))
+  if (!map.GetEnum(key, tmp))
     /* migrate from XCSoar <= 6.2 profile */
-    return GetLegacyVerticalSpeedUnit(legacy_key, value_r);
+    return GetLegacyVerticalSpeedUnit(map, legacy_key, value_r);
 
   if (!ValidSpeedUnit(tmp))
     return false;
@@ -156,10 +159,10 @@ ImportDistanceUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyDistanceUnit(const char *key, Unit &value)
+GetLegacyDistanceUnit(const ProfileMap &map, const char *key, Unit &value)
 {
   unsigned tmp;
-  return Profile::Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
+  return map.Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
 }
 
 gcc_const
@@ -172,12 +175,13 @@ ValidDistanceUnit(Unit unit)
 }
 
 static bool
-GetDistanceUnit(const char *key, const char *legacy_key, Unit &value_r)
+GetDistanceUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+                Unit &value_r)
 {
   Unit tmp;
-  if (!Profile::GetEnum(key, tmp))
+  if (!map.GetEnum(key, tmp))
     /* migrate from XCSoar <= 6.2 profile */
-    return GetLegacyDistanceUnit(legacy_key, value_r);
+    return GetLegacyDistanceUnit(map, legacy_key, value_r);
 
   if (!ValidDistanceUnit(tmp))
     return false;
@@ -206,19 +210,20 @@ ImportAltitudeUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyAltitudeUnit(const char *key, Unit &value)
+GetLegacyAltitudeUnit(const ProfileMap &map, const char *key, Unit &value)
 {
   unsigned tmp;
-  return Profile::Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
+  return map.Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
 }
 
 static bool
-GetAltitudeUnit(const char *key, const char *legacy_key, Unit &value_r)
+GetAltitudeUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+                Unit &value_r)
 {
   Unit tmp;
-  if (!Profile::GetEnum(key, tmp))
+  if (!map.GetEnum(key, tmp))
     /* migrate from XCSoar <= 6.2 profile */
-    return GetLegacyAltitudeUnit(legacy_key, value_r);
+    return GetLegacyAltitudeUnit(map, legacy_key, value_r);
 
   if (!ValidDistanceUnit(tmp))
     return false;
@@ -247,10 +252,10 @@ ImportTemperatureUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyTemperatureUnit(const char *key, Unit &value)
+GetLegacyTemperatureUnit(const ProfileMap &map, const char *key, Unit &value)
 {
   unsigned tmp;
-  return Profile::Get(key, tmp) &&
+  return map.Get(key, tmp) &&
     ApplyUnit(value, ImportTemperatureUnit(tmp));
 }
 
@@ -263,12 +268,13 @@ ValidTemperatureUnit(Unit unit)
 }
 
 static bool
-GetTemperatureUnit(const char *key, const char *legacy_key, Unit &value_r)
+GetTemperatureUnit(const ProfileMap &map, const char *key,
+                   const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
-  if (!Profile::GetEnum(key, tmp))
+  if (!map.GetEnum(key, tmp))
     /* migrate from XCSoar <= 6.2 profile */
-    return GetLegacyTemperatureUnit(legacy_key, value_r);
+    return GetLegacyTemperatureUnit(map, legacy_key, value_r);
 
   if (!ValidTemperatureUnit(tmp))
     return false;
@@ -286,10 +292,10 @@ ValidPressureUnit(Unit unit)
 }
 
 static bool
-GetPressureUnit(const char *key, Unit &value)
+GetPressureUnit(const ProfileMap &map, const char *key, Unit &value)
 {
   Unit tmp;
-  if (!Profile::GetEnum(key, tmp) || !ValidPressureUnit(tmp))
+  if (!map.GetEnum(key, tmp) || !ValidPressureUnit(tmp))
     return false;
 
   value = tmp;
@@ -297,21 +303,21 @@ GetPressureUnit(const char *key, Unit &value)
 }
 
 void
-Profile::LoadUnits(UnitSetting &config)
+Profile::LoadUnits(const ProfileMap &map, UnitSetting &config)
 {
   config = Units::LoadFromOSLanguage();
 
-  GetSpeedUnit(ProfileKeys::SpeedUnitsValue, "Speed", config.speed_unit);
+  GetSpeedUnit(map, ProfileKeys::SpeedUnitsValue, "Speed", config.speed_unit);
   config.wind_speed_unit = config.speed_unit;
-  GetSpeedUnit(ProfileKeys::TaskSpeedUnitsValue, "TaskSpeed",
+  GetSpeedUnit(map, ProfileKeys::TaskSpeedUnitsValue, "TaskSpeed",
                config.task_speed_unit);
-  GetDistanceUnit(ProfileKeys::DistanceUnitsValue, "Distance",
+  GetDistanceUnit(map, ProfileKeys::DistanceUnitsValue, "Distance",
                   config.distance_unit);
-  GetAltitudeUnit(ProfileKeys::AltitudeUnitsValue, "Altitude",
+  GetAltitudeUnit(map, ProfileKeys::AltitudeUnitsValue, "Altitude",
                   config.altitude_unit);
-  GetTemperatureUnit(ProfileKeys::TemperatureUnitsValue, "Temperature",
+  GetTemperatureUnit(map, ProfileKeys::TemperatureUnitsValue, "Temperature",
                      config.temperature_unit);
-  GetVerticalSpeedUnit(ProfileKeys::LiftUnitsValue, "Lift",
+  GetVerticalSpeedUnit(map, ProfileKeys::LiftUnitsValue, "Lift",
                        config.vertical_speed_unit);
-  GetPressureUnit(ProfileKeys::PressureUnitsValue, config.pressure_unit);
+  GetPressureUnit(map, ProfileKeys::PressureUnitsValue, config.pressure_unit);
 }

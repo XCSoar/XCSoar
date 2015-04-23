@@ -25,7 +25,8 @@ Copyright_License {
 #include "Current.hpp"
 #include "TerrainConfig.hpp"
 #include "AirspaceConfig.hpp"
-#include "Profile.hpp"
+#include "Map.hpp"
+#include "ProfileKeys.hpp"
 #include "MapSettings.hpp"
 #include "Util/Clamp.hpp"
 
@@ -45,41 +46,41 @@ IsValidMapOrientation(unsigned value)
 }
 
 static void
-Load(FAITriangleSettings &settings)
+Load(const ProfileMap &map, FAITriangleSettings &settings)
 {
   FAITriangleSettings::Threshold threshold;
-  if (Profile::GetEnum(ProfileKeys::FAITriangleThreshold, threshold) &&
+  if (map.GetEnum(ProfileKeys::FAITriangleThreshold, threshold) &&
       unsigned(threshold) < unsigned(FAITriangleSettings::Threshold::MAX))
     settings.threshold = threshold;
 }
 
 void
-Profile::Load(MapSettings &settings)
+Profile::Load(const ProfileMap &map, MapSettings &settings)
 {
-  Get(ProfileKeys::CircleZoom, settings.circle_zoom_enabled);
-  Get(ProfileKeys::MaxAutoZoomDistance, settings.max_auto_zoom_distance);
-  Get(ProfileKeys::DrawTopography, settings.topography_enabled);
+  map.Get(ProfileKeys::CircleZoom, settings.circle_zoom_enabled);
+  map.Get(ProfileKeys::MaxAutoZoomDistance, settings.max_auto_zoom_distance);
+  map.Get(ProfileKeys::DrawTopography, settings.topography_enabled);
 
-  LoadTerrainRendererSettings(settings.terrain);
+  LoadTerrainRendererSettings(map, settings.terrain);
 
-  GetEnum(ProfileKeys::AircraftSymbol, settings.aircraft_symbol);
+  map.GetEnum(ProfileKeys::AircraftSymbol, settings.aircraft_symbol);
 
-  Get(ProfileKeys::DetourCostMarker, settings.detour_cost_markers_enabled);
-  GetEnum(ProfileKeys::DisplayTrackBearing, settings.display_ground_track);
-  Get(ProfileKeys::AutoZoom, settings.auto_zoom_enabled);
+  map.Get(ProfileKeys::DetourCostMarker, settings.detour_cost_markers_enabled);
+  map.GetEnum(ProfileKeys::DisplayTrackBearing, settings.display_ground_track);
+  map.Get(ProfileKeys::AutoZoom, settings.auto_zoom_enabled);
 
-  GetEnum(ProfileKeys::WindArrowStyle, settings.wind_arrow_style);
+  map.GetEnum(ProfileKeys::WindArrowStyle, settings.wind_arrow_style);
 
   settings.waypoint.LoadFromProfile();
 
   Load(map, settings.airspace);
 
-  Get(ProfileKeys::GliderScreenPosition, settings.glider_screen_position);
+  map.Get(ProfileKeys::GliderScreenPosition, settings.glider_screen_position);
 
   bool orientation_found = false;
 
   unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
-  if (Get(ProfileKeys::OrientationCircling, Temp)) {
+  if (map.Get(ProfileKeys::OrientationCircling, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
@@ -87,7 +88,7 @@ Profile::Load(MapSettings &settings)
   }
 
   Temp = (unsigned)MapOrientation::NORTH_UP;
-  if (Get(ProfileKeys::OrientationCruise, Temp)) {
+  if (map.Get(ProfileKeys::OrientationCruise, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
@@ -96,7 +97,7 @@ Profile::Load(MapSettings &settings)
 
   if (!orientation_found) {
     Temp = 1;
-    Get(ProfileKeys::DisplayUpValue, Temp);
+    map.Get(ProfileKeys::DisplayUpValue, Temp);
     switch (Temp) {
     case 0:
       settings.cruise_orientation = MapOrientation::TRACK_UP;
@@ -122,43 +123,43 @@ Profile::Load(MapSettings &settings)
   }
 
   fixed tmp;
-  if (Profile::Get(ProfileKeys::ClimbMapScale, tmp))
+  if (map.Get(ProfileKeys::ClimbMapScale, tmp))
     settings.circling_scale = Clamp(tmp / 10000, fixed(0.0003), fixed(10));
 
-  if (Profile::Get(ProfileKeys::CruiseMapScale, tmp))
+  if (map.Get(ProfileKeys::CruiseMapScale, tmp))
     settings.cruise_scale = Clamp(tmp / 10000, fixed(0.0003), fixed(10));
 
-  GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
-  Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);
+  map.GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
+  map.Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);
 
-  Get(ProfileKeys::EnableThermalProfile, settings.show_thermal_profile);
-  Get(ProfileKeys::EnableFinalGlideBarMC0,
-      settings.final_glide_bar_mc0_enabled);
-  GetEnum(ProfileKeys::FinalGlideBarDisplayMode,
-          settings.final_glide_bar_display_mode);
-  Get(ProfileKeys::ShowFAITriangleAreas,
-      settings.show_fai_triangle_areas);
-  ::Load(settings.fai_triangle_settings);
+  map.Get(ProfileKeys::EnableThermalProfile, settings.show_thermal_profile);
+  map.Get(ProfileKeys::EnableFinalGlideBarMC0,
+          settings.final_glide_bar_mc0_enabled);
+  map.GetEnum(ProfileKeys::FinalGlideBarDisplayMode,
+              settings.final_glide_bar_display_mode);
+  map.Get(ProfileKeys::ShowFAITriangleAreas,
+          settings.show_fai_triangle_areas);
+  ::Load(map, settings.fai_triangle_settings);
 
-  Get(ProfileKeys::EnableVarioBar,
-      settings.vario_bar_enabled);
+  map.Get(ProfileKeys::EnableVarioBar,
+          settings.vario_bar_enabled);
 
-  Load(settings.trail);
-  Load(settings.item_list);
+  Load(map, settings.trail);
+  Load(map, settings.item_list);
 }
 
 void
-Profile::Load(TrailSettings &settings)
+Profile::Load(const ProfileMap &map, TrailSettings &settings)
 {
-  Get(ProfileKeys::TrailDrift, settings.wind_drift_enabled);
-  Get(ProfileKeys::SnailWidthScale, settings.scaling_enabled);
-  GetEnum(ProfileKeys::SnailType, settings.type);
-  GetEnum(ProfileKeys::SnailTrail, settings.length);
+  map.Get(ProfileKeys::TrailDrift, settings.wind_drift_enabled);
+  map.Get(ProfileKeys::SnailWidthScale, settings.scaling_enabled);
+  map.GetEnum(ProfileKeys::SnailType, settings.type);
+  map.GetEnum(ProfileKeys::SnailTrail, settings.length);
 }
 
 void
-Profile::Load(MapItemListSettings &settings)
+Profile::Load(const ProfileMap &map, MapItemListSettings &settings)
 {
-  Get(ProfileKeys::EnableLocationMapItem, settings.add_location);
-  Get(ProfileKeys::EnableArrivalAltitudeMapItem, settings.add_arrival_altitude);
+  map.Get(ProfileKeys::EnableLocationMapItem, settings.add_location);
+  map.Get(ProfileKeys::EnableArrivalAltitudeMapItem, settings.add_arrival_altitude);
 }

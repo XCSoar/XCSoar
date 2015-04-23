@@ -32,6 +32,7 @@ Copyright_License {
 #include "PageActions.hpp"
 #include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"
+#include "Profile/Current.hpp"
 #include "Interface.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/ListWidget.hpp"
@@ -303,7 +304,7 @@ PageListWidget::Save(bool &_changed)
     PageLayout &dest = _settings.pages[i];
     const PageLayout &src = settings.pages[i];
     if (src != dest) {
-      Profile::Save(src, i);
+      Profile::Save(Profile::map, src, i);
       changed = true;
     }
   }

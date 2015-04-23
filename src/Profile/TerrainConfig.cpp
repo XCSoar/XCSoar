@@ -23,32 +23,33 @@ Copyright_License {
 
 #include "TerrainConfig.hpp"
 #include "ProfileKeys.hpp"
-#include "Profile.hpp"
+#include "Map.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
 void
-Profile::LoadTerrainRendererSettings(TerrainRendererSettings &settings)
+Profile::LoadTerrainRendererSettings(const ProfileMap &map,
+                                     TerrainRendererSettings &settings)
 {
-  Get(ProfileKeys::DrawTerrain, settings.enable);
+  map.Get(ProfileKeys::DrawTerrain, settings.enable);
 
   uint8_t Temp = (uint8_t)settings.slope_shading;
-  if (!Get(ProfileKeys::SlopeShadingType, Temp)) {
+  if (!map.Get(ProfileKeys::SlopeShadingType, Temp)) {
     bool old_profile_setting = true;
-    if (Get(ProfileKeys::SlopeShading, old_profile_setting))
+    if (map.Get(ProfileKeys::SlopeShading, old_profile_setting))
       // 0: OFF, 3: Wind
       Temp = old_profile_setting ? 3 : 0;
   }
   settings.slope_shading = (SlopeShading)Temp;
 
-  Get(ProfileKeys::TerrainContrast, settings.contrast);
-  Get(ProfileKeys::TerrainBrightness, settings.brightness);
+  map.Get(ProfileKeys::TerrainContrast, settings.contrast);
+  map.Get(ProfileKeys::TerrainBrightness, settings.brightness);
 
   unsigned short ramp;
-  if (Get(ProfileKeys::TerrainRamp, ramp) &&
+  if (map.Get(ProfileKeys::TerrainRamp, ramp) &&
       ramp < TerrainRendererSettings::NUM_RAMPS)
     settings.ramp = ramp;
 
   uint8_t contours = (uint8_t)settings.contours;
-  if (Get(ProfileKeys::TerrainContours, contours))
+  if (map.Get(ProfileKeys::TerrainContours, contours))
     settings.contours = (Contours)contours;
 }
