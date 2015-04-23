@@ -21,16 +21,15 @@ Copyright_License {
 }
 */
 
-#include "Profile.hpp"
-#include "SystemProfile.hpp"
-#include "ComputerProfile.hpp"
-#include "UIProfile.hpp"
-#include "Interface.hpp"
+#ifndef XCSOAR_PROFILE_SETTINGS_HPP
+#define XCSOAR_PROFILE_SETTINGS_HPP
 
-void
-Profile::Use()
+namespace Profile
 {
-  Load(CommonInterface::SetSystemSettings());
-  Load(CommonInterface::SetComputerSettings());
-  Load(CommonInterface::SetUISettings());
-}
+  /**
+   * Adjusts the application settings according to the profile settings
+   */
+  void Use();
+};
+
+#endif

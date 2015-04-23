@@ -92,11 +92,6 @@ namespace Profile
    * e.g. #123456
    */
   void SetColor(const char *key, const RGB8Color value);
-
-  /**
-   * Adjusts the application settings according to the profile settings
-   */
-  void Use();
 };
 
 #endif

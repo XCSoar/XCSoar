@@ -28,6 +28,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Profile/Settings.hpp"
 #include "Util/Macros.hpp"
 #include "Util/EnumCast.hpp"
 #include "Units/Units.hpp"

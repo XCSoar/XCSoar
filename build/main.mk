@@ -583,7 +583,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/MapProfile.cpp \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/UIProfile.cpp \
-	$(SRC)/Profile/ProfileGlue.cpp \
+	$(SRC)/Profile/Settings.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/Profile/UnitsConfig.cpp \
