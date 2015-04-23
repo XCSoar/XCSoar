@@ -65,19 +65,13 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   else
     orientation = PORTRAIT;
 
-  // Load logo
-  const Bitmap &bitmap_logo =
-      (orientation == LANDSCAPE && width >= 510 && height >= 170) ||
-      (orientation == PORTRAIT && width >= 330 && height >= 250) ||
-      (orientation == SQUARE && width >= 210 && height >= 210) ?
-      big_logo : logo;
-
-  // Adjust the title to larger screens
-  const Bitmap &bitmap_title =
-      (orientation == LANDSCAPE && width >= 510 && height >= 170) ||
-      (orientation == PORTRAIT && width >= 330 && height >= 250) ||
-      (orientation == SQUARE && width >= 210 && height >= 210) ?
-      big_title : title;
+  /* load bitmaps */
+  const bool use_big =
+    (orientation == LANDSCAPE && width >= 510 && height >= 170) ||
+    (orientation == PORTRAIT && width >= 330 && height >= 250) ||
+    (orientation == SQUARE && width >= 210 && height >= 210);
+  const Bitmap &bitmap_logo = use_big ? big_logo : logo;
+  const Bitmap &bitmap_title = use_big ? big_title : title;
 
   // Determine logo size
   PixelSize logo_size = bitmap_logo.GetSize();
