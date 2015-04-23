@@ -44,7 +44,9 @@ LogoView::LogoView()
 static int
 Center(unsigned canvas_size, unsigned element_size)
 {
-  return (canvas_size - element_size) / 2;
+  /* cast to int to force signed integer division, just in case the
+     difference is negative */
+  return int(canvas_size - element_size) / 2;
 }
 
 void
