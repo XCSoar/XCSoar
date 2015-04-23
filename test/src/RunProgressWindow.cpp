@@ -35,5 +35,7 @@ Main()
   progress.SetRange(0, 1024);
   progress.SetValue(768);
 
+  main_window.SetFullWindow(progress);
+
   main_window.RunEventLoop();
 }
