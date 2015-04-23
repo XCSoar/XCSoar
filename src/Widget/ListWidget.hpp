@@ -53,6 +53,11 @@ protected:
 public:
   virtual PixelSize GetMinimumSize() const override;
   virtual PixelSize GetMaximumSize() const override;
+
+  bool SetFocus() override {
+    GetList().SetFocus();
+    return true;
+  }
 };
 
 #endif
