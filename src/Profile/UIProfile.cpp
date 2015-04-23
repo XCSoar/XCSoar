@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Profile/UIProfile.hpp"
-#include "Profile/MapProfile.hpp"
-#include "Profile/InfoBoxConfig.hpp"
-#include "Profile/PageProfile.hpp"
-#include "Profile/Profile.hpp"
-#include "Profile/UnitsConfig.hpp"
+#include "UIProfile.hpp"
+#include "MapProfile.hpp"
+#include "InfoBoxConfig.hpp"
+#include "PageProfile.hpp"
+#include "Profile.hpp"
+#include "UnitsConfig.hpp"
 #include "UISettings.hpp"
 
 namespace Profile {

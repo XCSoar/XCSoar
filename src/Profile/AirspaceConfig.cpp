@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Profile/AirspaceConfig.hpp"
-#include "Profile/Profile.hpp"
+#include "AirspaceConfig.hpp"
+#include "Profile.hpp"
 #include "Screen/Features.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"

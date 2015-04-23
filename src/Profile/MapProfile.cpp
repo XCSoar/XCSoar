@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Profile/MapProfile.hpp"
-#include "Profile/TerrainConfig.hpp"
-#include "Profile/AirspaceConfig.hpp"
-#include "Profile/Profile.hpp"
+#include "MapProfile.hpp"
+#include "TerrainConfig.hpp"
+#include "AirspaceConfig.hpp"
+#include "Profile.hpp"
 #include "MapSettings.hpp"
 #include "Util/Clamp.hpp"
 

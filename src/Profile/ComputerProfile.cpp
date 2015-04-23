@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Profile/ComputerProfile.hpp"
-#include "Profile/AirspaceConfig.hpp"
-#include "Profile/TaskProfile.hpp"
-#include "Profile/TrackingProfile.hpp"
-#include "Profile/Profile.hpp"
+#include "ComputerProfile.hpp"
+#include "AirspaceConfig.hpp"
+#include "TaskProfile.hpp"
+#include "TrackingProfile.hpp"
+#include "Profile.hpp"
 #include "ContestProfile.hpp"
 #include "Current.hpp"
 #include "Map.hpp"

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Profile/PageProfile.hpp"
-#include "Profile/Profile.hpp"
+#include "PageProfile.hpp"
+#include "Profile.hpp"
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 

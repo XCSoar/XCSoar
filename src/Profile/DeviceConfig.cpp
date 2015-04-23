@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Profile/DeviceConfig.hpp"
-#include "Profile/Profile.hpp"
+#include "DeviceConfig.hpp"
+#include "Profile.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Device/Config.hpp"

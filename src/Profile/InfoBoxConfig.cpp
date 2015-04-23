@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Profile/InfoBoxConfig.hpp"
-#include "Profile/Profile.hpp"
+#include "InfoBoxConfig.hpp"
+#include "Profile.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
 using namespace InfoBoxFactory;

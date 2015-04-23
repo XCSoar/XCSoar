@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Profile/Profile.hpp"
+#include "Profile.hpp"
 #include "Screen/PortableColor.hpp"
 #include "Formatter/HexColor.hpp"
 #include "Util/Macros.hpp"

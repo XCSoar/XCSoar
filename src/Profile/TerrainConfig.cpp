@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Profile/TerrainConfig.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
+#include "TerrainConfig.hpp"
+#include "ProfileKeys.hpp"
+#include "Profile.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
 void

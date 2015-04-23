@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Profile/UnitsConfig.hpp"
-#include "Profile/Profile.hpp"
+#include "UnitsConfig.hpp"
+#include "Profile.hpp"
 #include "Units/Settings.hpp"
 #include "Units/UnitsGlue.hpp"
 

@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Profile/TaskProfile.hpp"
-#include "Profile/RouteProfile.hpp"
-#include "Profile/Profile.hpp"
+#include "TaskProfile.hpp"
+#include "RouteProfile.hpp"
+#include "Profile.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 namespace Profile {

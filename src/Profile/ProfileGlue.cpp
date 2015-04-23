@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Profile/Profile.hpp"
-#include "Profile/SystemProfile.hpp"
-#include "Profile/ComputerProfile.hpp"
-#include "Profile/UIProfile.hpp"
+#include "Profile.hpp"
+#include "SystemProfile.hpp"
+#include "ComputerProfile.hpp"
+#include "UIProfile.hpp"
 #include "Interface.hpp"
 
 void

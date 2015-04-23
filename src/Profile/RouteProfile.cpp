@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Profile/RouteProfile.hpp"
-#include "Profile/Profile.hpp"
+#include "RouteProfile.hpp"
+#include "Profile.hpp"
 #include "Engine/Route/Config.hpp"
 
 void

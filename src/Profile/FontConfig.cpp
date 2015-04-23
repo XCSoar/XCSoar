@@ -21,13 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Profile/FontConfig.hpp"
-#include "Profile/Profile.hpp"
+#include "FontConfig.hpp"
+#include "Profile.hpp"
 #include "Look/FontSettings.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h> /* for strtol() */
 
 #ifdef _UNICODE
