@@ -89,7 +89,11 @@ UIGlobals::GetDialogLook()
 #endif
 
 #ifdef ENABLE_MAIN_WINDOW
-static SingleWindow main_window;
+
+class TestMainWindow : public SingleWindow {
+};
+
+static TestMainWindow main_window;
 
 SingleWindow &
 UIGlobals::GetMainWindow()
