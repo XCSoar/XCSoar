@@ -88,8 +88,13 @@ class ProfileListWidget final
 public:
   void CreateButtons(WidgetDialog &dialog);
 
+  void SelectPath(const TCHAR *path);
+
 private:
   void UpdateList();
+
+  gcc_pure
+  int FindPath(const TCHAR *path) const;
 
   void NewClicked();
   void CopyClicked();
@@ -138,6 +143,24 @@ ProfileListWidget::UpdateList()
   const bool empty = list.empty();
   copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
+}
+
+int
+ProfileListWidget::FindPath(const TCHAR *path) const
+{
+  for (unsigned n = list.size(), i = 0u; i < n; ++i)
+    if (StringIsEqual(path, list[i].path))
+      return i;
+
+  return -1;
+}
+
+void
+ProfileListWidget::SelectPath(const TCHAR *path)
+{
+  auto i = FindPath(path);
+  if (i >= 0)
+    GetList().SetCursorIndex(i);
 }
 
 void
@@ -199,6 +222,7 @@ ProfileListWidget::NewClicked()
   }
 
   UpdateList();
+  SelectPath(path);
 }
 
 inline void
@@ -242,6 +266,7 @@ ProfileListWidget::CopyClicked()
   }
 
   UpdateList();
+  SelectPath(new_path);
 }
 
 inline void
