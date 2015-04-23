@@ -41,7 +41,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   style.Hide();
   Create(parent, rc, style);
 
-  UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
+  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load progress bar background
   bitmap_progress_border.Load(IDB_PROGRESSBORDER);
@@ -56,8 +56,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 #endif
 
   // Make progress bar height proportional to window height
-  UPixelScalar progress_height = height / 20;
-  UPixelScalar progress_horizontal_border = progress_height / 2;
+  const unsigned progress_height = height / 20;
+  const unsigned progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
 
   // Initialize message text field
@@ -137,8 +137,8 @@ ProgressWindow::OnResize(PixelSize new_size)
   ContainerWindow::OnResize(new_size);
 
   // Make progress bar height proportional to window height
-  UPixelScalar progress_height = new_size.cy / 20;
-  UPixelScalar progress_horizontal_border = progress_height / 2;
+  const unsigned progress_height = new_size.cy / 20;
+  const unsigned progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
 
   if (message.IsDefined())
@@ -161,8 +161,8 @@ ProgressWindow::OnPaint(Canvas &canvas)
   canvas.Clear(background_color);
 
   // Determine window size
-  const UPixelScalar window_width = canvas.GetWidth();
-  const UPixelScalar window_height = canvas.GetHeight();
+  const unsigned window_width = canvas.GetWidth();
+  const unsigned window_height = canvas.GetHeight();
 
   PixelRect logo_rect;
   logo_rect.left = 0;
