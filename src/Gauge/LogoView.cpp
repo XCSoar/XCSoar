@@ -82,7 +82,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   unsigned spacing = title_size.cy;
 
   const unsigned magnification =
-    std::min((width - 16u) / unsigned(logo_size.cx + title_size.cx),
+    std::min((width - 16u) / unsigned(logo_size.cx + spacing + title_size.cx),
              (height - 16u) / std::max(unsigned(logo_size.cy),
                                        unsigned(title_size.cx)));
 
