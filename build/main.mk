@@ -66,6 +66,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/SimulatorPromptWindow.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
+	$(SRC)/Dialogs/ProfilePasswordDialog.cpp \
 	\
 	$(SRC)/Dialogs/dlgStatus.cpp \
 	$(SRC)/Dialogs/StatusPanels/StatusPanel.cpp \

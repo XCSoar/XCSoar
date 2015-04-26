@@ -25,6 +25,7 @@ Copyright_License {
 
 namespace ProfileKeys {
 
+const char Password[] = "Password";
 const char AirspaceWarning[] = "AirspaceWarn";
 const char AirspaceBlackOutline[] = "AirspaceBlackOutline";
 const char AirspaceTransparency[] = "AirspaceTransparency";

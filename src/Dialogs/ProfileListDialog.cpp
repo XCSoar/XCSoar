@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ProfileListDialog.hpp"
+#include "ProfilePasswordDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -76,6 +77,7 @@ class ProfileListWidget final
 
   enum Buttons {
     NEW,
+    PASSWORD,
     COPY,
     DELETE,
   };
@@ -83,6 +85,7 @@ class ProfileListWidget final
   const bool select;
 
   WndForm *form;
+  WndButton *password_button;
   WndButton *copy_button, *delete_button;
 
   std::vector<ListItem> list;
@@ -109,6 +112,7 @@ private:
   int FindPath(const TCHAR *path) const;
 
   void NewClicked();
+  void PasswordClicked();
   void CopyClicked();
   void DeleteClicked();
 
@@ -162,6 +166,7 @@ ProfileListWidget::UpdateList()
   list_control.Invalidate();
 
   const bool empty = list.empty();
+  password_button->SetEnabled(!empty);
   copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
 }
@@ -190,6 +195,7 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
   form = &dialog;
 
   dialog.AddButton(_("New"), *this, NEW);
+  password_button = dialog.AddButton(_("Password"), *this, PASSWORD);
   copy_button = dialog.AddButton(_("Copy"), *this, COPY);
   delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
 }
@@ -247,6 +253,29 @@ ProfileListWidget::NewClicked()
 }
 
 inline void
+ProfileListWidget::PasswordClicked()
+{
+  assert(GetList().GetCursorIndex() < list.size());
+
+  const auto &item = list[GetList().GetCursorIndex()];
+
+  ProfileMap data;
+  if (!Profile::LoadFile(data, item.path)) {
+    ShowMessageBox(item.name, _("Failed to load file."),
+                   MB_OK|MB_ICONEXCLAMATION);
+    return;
+  }
+
+  if (!CheckProfilePasswordResult(CheckProfilePassword(data)) ||
+      !SetProfilePasswordDialog(data))
+    return;
+
+  if (!Profile::SaveFile(data, item.path))
+    ShowMessageBox(item.name, _("Failed to save file."),
+                   MB_OK|MB_ICONEXCLAMATION);
+}
+
+inline void
 ProfileListWidget::CopyClicked()
 {
   assert(GetList().GetCursorIndex() < list.size());
@@ -261,6 +290,9 @@ ProfileListWidget::CopyClicked()
                    MB_OK|MB_ICONEXCLAMATION);
     return;
   }
+
+  if (!CheckProfilePasswordResult(CheckProfilePassword(data)))
+    return;
 
   StaticString<64> new_name;
   new_name.clear();
@@ -309,8 +341,23 @@ ProfileListWidget::DeleteClicked()
   assert(GetList().GetCursorIndex() < list.size());
 
   const auto &item = list[GetList().GetCursorIndex()];
-  if (!ConfirmDeleteProfile(item.name))
+
+  const auto password_result = CheckProfileFilePassword(item.path);
+  switch (password_result) {
+  case ProfilePasswordResult::UNPROTECTED:
+    if (!ConfirmDeleteProfile(item.name))
+      return;
+
+    break;
+
+  case ProfilePasswordResult::MATCH:
+    break;
+
+  case ProfilePasswordResult::MISMATCH:
+  case ProfilePasswordResult::CANCEL:
+    CheckProfilePasswordResult(password_result);
     return;
+  }
 
   File::Delete(item.path);
   UpdateList();
@@ -322,6 +369,10 @@ ProfileListWidget::OnAction(int id)
   switch ((Buttons)id) {
   case NEW:
     NewClicked();
+    break;
+
+  case PASSWORD:
+    PasswordClicked();
     break;
 
   case COPY:

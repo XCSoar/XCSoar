@@ -2344,6 +2344,7 @@ $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG)
 
 RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ProfileListDialog.cpp \
+	$(SRC)/Dialogs/ProfilePasswordDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \

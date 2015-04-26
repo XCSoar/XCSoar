@@ -26,6 +26,7 @@ Version 6.8 - not yet released
 * user interface 
   - download data files from site configuration
   - profile manager
+  - password-protected profiles (#851)
   - checklist remembers last opened list (#3110)
   - use configured coordinate format in waypoint editor
   - display rotation for Raspberry Pi and Cubieboard (#3238)

@@ -22,7 +22,9 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "ProfilePasswordDialog.hpp"
 #include "ProfileListDialog.hpp"
+#include "Message.hpp"
 #include "WidgetDialog.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -168,11 +170,14 @@ StartupWidget::Prepare(ContainerWindow &parent,
   AddButton(_("Continue"), action_listener, mrOK);
 }
 
-static void
+static bool
 SelectProfile(const TCHAR *path)
 {
   if (StringIsEmpty(path))
-    return;
+    return true;
+
+  if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
+    return false;
 
   Profile::SetFiles(path);
 
@@ -184,13 +189,16 @@ SelectProfile(const TCHAR *path)
   }
 
   File::Touch(path);
+  return true;
 }
 
 bool
 StartupWidget::Save(bool &changed)
 {
   const auto &dff = (const FileDataField &)GetDataField(PROFILE);
-  SelectProfile(dff.GetPathFile());
+  if (!SelectProfile(dff.GetPathFile()))
+    return false;
+
   changed = true;
 
   return true;
@@ -207,9 +215,12 @@ dlgStartupShowModal()
 
   /* skip this dialog if there is only one (or none) */
   if (dff->GetNumFiles() <= 1) {
-    SelectProfile(dff->GetPathFile());
-    delete dff;
-    return true;
+    const TCHAR *path = dff->GetPathFile();
+    if (!ProfileFileHasPassword(path)) {
+      SelectProfile(path);
+      delete dff;
+      return true;
+    }
   }
 
   /* preselect the most recently used profile */
