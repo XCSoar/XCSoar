@@ -46,6 +46,11 @@ final class BluetoothHelper {
 
   private static final BluetoothAdapter adapter;
 
+  /**
+   * Does this device support Bluetooth Low Energy?
+   */
+  private static boolean hasLe;
+
   static {
     BluetoothAdapter _adapter;
     try {
@@ -58,7 +63,9 @@ final class BluetoothHelper {
     adapter = _adapter;
   }
 
-  public static void Initialize() {
+  public static void Initialize(Context context) {
+    hasLe = adapter != null && android.os.Build.VERSION.SDK_INT >= 18 &&
+      context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
   }
 
   public static boolean isEnabled() {
@@ -121,10 +128,7 @@ final class BluetoothHelper {
       if (device == null)
         return null;
 
-      if ((android.os.Build.VERSION.SDK_INT >= 18) &&
-          (BluetoothDevice.DEVICE_TYPE_LE == device.getType()) &&
-          (context.getPackageManager().hasSystemFeature(
-              PackageManager.FEATURE_BLUETOOTH_LE))) {
+      if (hasLe && BluetoothDevice.DEVICE_TYPE_LE == device.getType()) {
         Log.d(TAG, String.format(
             "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
              device.getName(), device.getAddress()));

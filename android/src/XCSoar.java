@@ -93,7 +93,7 @@ public class XCSoar extends Activity {
     IOIOHelper.onCreateContext(this);
 
     try {
-      BluetoothHelper.Initialize();
+      BluetoothHelper.Initialize(this);
     } catch (VerifyError e) {
       // Android < 2.0 doesn't have Bluetooth support
     }
