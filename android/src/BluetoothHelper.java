@@ -119,6 +119,15 @@ final class BluetoothHelper {
     return addresses;
   }
 
+  public static boolean startLeScan(BluetoothAdapter.LeScanCallback cb) {
+    return hasLe && adapter.startLeScan(cb);
+  }
+
+  public static void stopLeScan(BluetoothAdapter.LeScanCallback cb) {
+    if (hasLe)
+      adapter.stopLeScan(cb);
+  }
+
   public static AndroidPort connect(Context context, String address) {
     if (adapter == null)
       return null;

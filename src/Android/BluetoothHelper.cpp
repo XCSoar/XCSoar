@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/BluetoothHelper.hpp"
 #include "Android/Context.hpp"
 #include "Android/Main.hpp"
+#include "NativeLeScanCallback.hpp"
 #include "PortBridge.hpp"
 #include "Java/String.hpp"
 #include "Java/Class.hpp"
@@ -33,9 +34,11 @@ Copyright_License {
 
 namespace BluetoothHelper {
   static Java::TrivialClass cls;
+  static jfieldID hasLe_field;
   static jmethodID isEnabled_method;
   static jmethodID getNameFromAddress_method;
   static jmethodID list_method, connect_method, createServer_method;
+  static jmethodID startLeScan_method, stopLeScan_method;
 
   static std::map<std::string, std::string> address_to_name;
 }
@@ -50,6 +53,7 @@ BluetoothHelper::Initialise(JNIEnv *env)
     /* Android < 2.0 doesn't have Bluetooth support */
     return false;
 
+  hasLe_field = env->GetStaticFieldID(cls, "hasLe", "Z");
   isEnabled_method = env->GetStaticMethodID(cls, "isEnabled", "()Z");
   getNameFromAddress_method = env->GetStaticMethodID(cls, "getNameFromAddress",
                                                      "(Ljava/lang/String;)Ljava/lang/String;");
@@ -60,6 +64,12 @@ BluetoothHelper::Initialise(JNIEnv *env)
                                           "Lorg/xcsoar/AndroidPort;");
   createServer_method = env->GetStaticMethodID(cls, "createServer",
                                                "()Lorg/xcsoar/AndroidPort;");
+
+  startLeScan_method = env->GetStaticMethodID(cls, "startLeScan",
+                                              "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)Z");
+  stopLeScan_method = env->GetStaticMethodID(cls, "stopLeScan",
+                                             "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)V");
+
   return true;
 }
 
@@ -114,6 +124,37 @@ BluetoothHelper::list(JNIEnv *env)
   /* call BluetoothHelper.connect() */
 
   return (jobjectArray)env->CallStaticObjectMethod(cls, list_method);
+}
+
+bool
+BluetoothHelper::HasLe(JNIEnv *env)
+{
+  return env->GetStaticBooleanField(cls, hasLe_field);
+}
+
+jobject
+BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
+{
+  jobject cb = NativeLeScanCallback::Create(env, _cb);
+  if (cb == nullptr) {
+    env->ExceptionClear();
+    return nullptr;
+  }
+
+  if (!env->CallStaticBooleanMethod(cls, startLeScan_method, cb)) {
+    env->ExceptionClear();
+    env->DeleteLocalRef(cb);
+    return nullptr;
+  }
+
+  return cb;
+}
+
+void
+BluetoothHelper::StopLeScan(JNIEnv *env, jobject cb)
+{
+  env->CallStaticVoidMethod(cls, stopLeScan_method, cb);
+  env->DeleteLocalRef(cb);
 }
 
 PortBridge *

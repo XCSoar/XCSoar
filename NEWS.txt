@@ -37,6 +37,7 @@ Version 6.8 - not yet released
   - Wayland support
 * Android
   - fix IOIO connection on Android 4.x (#2959, #3260)
+  - support Bluetooth LE
 * Kobo
   - menu button
   - add UI allowing the start of external scripts to KoboMenu (#3194)

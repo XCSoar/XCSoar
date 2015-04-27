@@ -701,6 +701,7 @@ endif
 
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
+	$(SRC)/Dialogs/Device/ScanBluetoothLeDialog.cpp \
 	$(SRC)/Java/Global.cpp \
 	$(SRC)/Java/String.cpp \
 	$(SRC)/Java/File.cpp \
@@ -720,6 +721,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/NativeInputListener.cpp \
 	$(SRC)/Android/PortBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
+	$(SRC)/Android/NativeLeScanCallback.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/DownloadManager.cpp \
 	$(SRC)/Android/Vibrator.cpp \

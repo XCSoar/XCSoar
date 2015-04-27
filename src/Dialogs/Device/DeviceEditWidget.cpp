@@ -22,6 +22,7 @@
 */
 
 #include "DeviceEditWidget.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
@@ -31,6 +32,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/String.hpp"
+#include "Form/DataField/ComboList.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Features.hpp"
@@ -49,6 +51,7 @@
 #include "Java/Global.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Device/Port/AndroidIOIOUartPort.hpp"
+#include "ScanBluetoothLeDialog.hpp"
 #endif
 
 enum ControlIndex {
@@ -389,6 +392,41 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   }
 }
 
+static bool
+EditPortCallback(const TCHAR *caption, DataField &_df,
+                 const TCHAR *help_text)
+{
+  DataFieldEnum &df = (DataFieldEnum &)_df;
+
+  ComboList combo_list = df.CreateComboList(nullptr);
+
+#ifdef ANDROID
+  static constexpr int SCAN_BLUETOOTH_LE = -1;
+  if (BluetoothHelper::HasLe(Java::GetEnv()))
+    combo_list.Append(SCAN_BLUETOOTH_LE, _("Bluetooth LE"));
+#endif
+
+  int i = ComboPicker(caption, combo_list, help_text);
+  if (i < 0)
+    return false;
+
+  const ComboList::Item &item = combo_list[i];
+
+#ifdef ANDROID
+  if (item.int_value == SCAN_BLUETOOTH_LE) {
+    char address[32];
+    if (!ScanBluetoothLeDialog(address, sizeof(address)))
+        return false;
+
+    SetPort(df, DeviceConfig::PortType::RFCOMM, address);
+    return true;
+  }
+#endif
+
+  df.SetFromCombo(item.int_value, item.string_value);
+  return true;
+}
+
 DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config)
   :RowFormWidget(UIGlobals::GetDialogLook()),
    config(_config), listener(NULL) {}
@@ -570,7 +608,8 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   DataFieldEnum *port_df = new DataFieldEnum(this);
   FillPorts(*port_df, config);
-  Add(_("Port"), NULL, port_df);
+  auto *port_control = Add(_("Port"), NULL, port_df);
+  port_control->SetEditCallback(EditPortCallback);
 
   DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
   FillBaudRates(*baud_rate_df);
