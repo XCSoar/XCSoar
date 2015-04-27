@@ -9,7 +9,7 @@ MSGMERGE = msgmerge
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 	$(wildcard $(SRC)/Dialogs/Device/Vega/*Parameters.hpp) \
-	$(SRC)/Terrain/RasterWeather.cpp
+	$(SRC)/Terrain/RasterWeatherStore.cpp
 GETTEXT_DIALOGS = $(wildcard Data/Dialogs/*.xml)
 GETTEXT_EVENTS = Data/Input/default.xci
 
