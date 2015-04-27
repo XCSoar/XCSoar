@@ -56,6 +56,9 @@ public:
     caption = _caption;
   }
 
+  gcc_pure
+  unsigned GetMinimumButtonWidth() const override;
+
   void DrawButton(Canvas &canvas, const PixelRect &rc,
                   bool enabled, bool focused, bool pressed) const override;
 

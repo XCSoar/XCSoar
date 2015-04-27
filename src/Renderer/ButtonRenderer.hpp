@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BUTTON_RENDERER_HPP
 #define XCSOAR_BUTTON_RENDERER_HPP
 
+#include "Compiler.h"
+
 struct PixelRect;
 struct ButtonLook;
 class Canvas;
@@ -38,6 +40,10 @@ public:
     return look;
   }
 
+  unsigned GetMargin() const {
+    return 2;
+  }
+
   void DrawButton(Canvas &canvas, PixelRect rc,
                   bool focused, bool pressed) const;
   PixelRect GetDrawingRect(PixelRect rc, bool pressed) const;
@@ -46,6 +52,9 @@ public:
 class ButtonRenderer {
 public:
   virtual ~ButtonRenderer() {}
+
+  gcc_pure
+  virtual unsigned GetMinimumButtonWidth() const;
 
   virtual void DrawButton(Canvas &canvas, const PixelRect &rc,
                           bool enabled, bool focused, bool pressed) const = 0;

@@ -96,6 +96,12 @@ WndButton::SetCaption(tstring::const_pointer caption)
   r.SetCaption(caption);
 }
 
+unsigned
+WndButton::GetMinimumWidth() const
+{
+  return renderer->GetMinimumButtonWidth();
+}
+
 bool
 WndButton::OnClicked()
 {

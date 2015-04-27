@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Pen.hpp"
+#include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Asset.hpp"
 
@@ -70,6 +71,13 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
 #endif
 
   canvas.DrawFormattedText(&text_rc, GetCaption(), style);
+}
+
+unsigned
+TextButtonRenderer::GetMinimumButtonWidth() const
+{
+  return 2 * (frame_renderer.GetMargin() + Layout::GetTextPadding())
+    + GetLook().font->TextSize(caption.c_str()).cx;
 }
 
 void

@@ -94,11 +94,11 @@ ButtonPanel::AddKey(unsigned key_code)
   keys[buttons.size() - 1] = key_code;
 }
 
-unsigned
+inline unsigned
 ButtonPanel::Width(unsigned i) const
 {
-  return look.font->TextSize(buttons[i]->GetText().c_str()).cx +
-    Layout::SmallScale(8);
+  return std::max(buttons[i]->GetMinimumWidth(),
+                  Layout::GetMinimumControlHeight());
 }
 
 unsigned

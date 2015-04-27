@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ButtonRenderer.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 
 void
@@ -54,4 +55,10 @@ ButtonFrameRenderer::GetDrawingRect(PixelRect rc, bool pressed) const
     rc.Offset(1, 1);
 
   return rc;
+}
+
+unsigned
+ButtonRenderer::GetMinimumButtonWidth() const
+{
+  return Layout::GetMaximumControlHeight();
 }

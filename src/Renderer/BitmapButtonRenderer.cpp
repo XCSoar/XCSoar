@@ -23,6 +23,13 @@ Copyright_License {
 
 #include "BitmapButtonRenderer.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Bitmap.hpp"
+
+unsigned
+BitmapButtonRenderer::GetMinimumButtonWidth() const
+{
+  return bitmap.GetSize().cx;
+}
 
 void
 BitmapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,

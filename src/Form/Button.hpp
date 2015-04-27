@@ -95,6 +95,9 @@ public:
    */
   void SetCaption(tstring::const_pointer caption);
 
+  gcc_pure
+  unsigned GetMinimumWidth() const;
+
   /**
    * Called when the button is clicked (either by mouse or by
    * keyboard).  The default implementation invokes the OnClick

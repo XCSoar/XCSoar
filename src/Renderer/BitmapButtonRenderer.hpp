@@ -39,6 +39,9 @@ public:
   explicit BitmapButtonRenderer(const Bitmap &_bitmap)
     :bitmap(_bitmap) {}
 
+  gcc_pure
+  unsigned GetMinimumButtonWidth() const override;
+
   void DrawButton(Canvas &canvas, const PixelRect &rc,
                   bool enabled, bool focused, bool pressed) const override;
 };
