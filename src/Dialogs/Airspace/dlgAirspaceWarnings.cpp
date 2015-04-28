@@ -363,6 +363,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const AirspaceInterceptSolution &solution = warning.solution;
 
   const unsigned text_height = 12, text_top = 1;
+  const int first_row_y = paint_rc.top + Layout::Scale(text_top);
+  const int second_row_y = paint_rc.top + Layout::Scale(text_top + text_height);
 
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
@@ -387,18 +389,14 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                  airspace.GetName(),
                  AirspaceFormatter::GetClass(airspace));
 
-    canvas.DrawClippedText(paint_rc.left + left0,
-                           paint_rc.top + Layout::Scale(text_top),
+    canvas.DrawClippedText(paint_rc.left + left0, first_row_y,
                            rc_text_clip, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-    canvas.DrawText(paint_rc.left + left1,
-                    paint_rc.top + Layout::Scale(text_top), buffer);
+    canvas.DrawText(paint_rc.left + left1, first_row_y, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-    canvas.DrawText(paint_rc.left + left1,
-                    paint_rc.top + Layout::Scale(text_top + text_height),
-                    buffer);
+    canvas.DrawText(paint_rc.left + left1, second_row_y, buffer);
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
@@ -420,8 +418,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 
-    canvas.DrawClippedText(paint_rc.left + left0,
-                           paint_rc.top + Layout::Scale(text_top + text_height),
+    canvas.DrawClippedText(paint_rc.left + left0, second_row_y,
                            rc_text_clip, buffer);
   }
 
