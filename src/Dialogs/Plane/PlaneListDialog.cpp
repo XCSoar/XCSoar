@@ -132,7 +132,7 @@ gcc_pure
 static UPixelScalar
 GetRowHeight(const DialogLook &look)
 {
-  return look.list.font_bold->GetHeight() + Layout::Scale(6)
+  return look.list.font_bold->GetHeight() + 3 * Layout::GetTextPadding()
     + look.small_font->GetHeight();
 }
 
