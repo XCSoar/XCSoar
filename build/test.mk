@@ -465,7 +465,6 @@ TEST_UTF8_DEPENDS = UTIL
 $(eval $(call link-program,TestUTF8,TEST_UTF8))
 
 TEST_POLARS_SOURCES = \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Polar/Shape.cpp \
@@ -1821,7 +1820,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \
 	$(SRC)/Profile/RouteProfile.cpp \
@@ -2210,7 +2208,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
