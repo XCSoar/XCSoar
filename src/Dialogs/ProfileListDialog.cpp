@@ -251,9 +251,9 @@ ProfileListWidget::CopyClicked()
 {
   assert(GetList().GetCursorIndex() < list.size());
 
-  const unsigned index = GetList().GetCursorIndex();
-  const TCHAR *old_path = list[index].path;
-  const TCHAR *old_filename = list[index].name;
+  const auto &item = list[GetList().GetCursorIndex()];
+  const TCHAR *old_path = item.path;
+  const TCHAR *old_filename = item.name;
 
   ProfileMap data;
   if (!Profile::LoadFile(data, old_path)) {
@@ -295,8 +295,10 @@ ProfileListWidget::DeleteClicked()
 {
   assert(GetList().GetCursorIndex() < list.size());
 
+  const auto &item = list[GetList().GetCursorIndex()];
+
   StaticString<256> tmp;
-  StaticString<256> tmp_name(list[GetList().GetCursorIndex()].name.c_str());
+  StaticString<256> tmp_name(item.name.c_str());
   if (tmp_name.length() > 4)
     tmp_name.Truncate(tmp_name.length() - 4);
 
@@ -305,7 +307,7 @@ ProfileListWidget::DeleteClicked()
   if (ShowMessageBox(tmp, _("Delete"), MB_YESNO) != IDYES)
     return;
 
-  File::Delete(list[GetList().GetCursorIndex()].path);
+  File::Delete(item.path);
   UpdateList();
 }
 
