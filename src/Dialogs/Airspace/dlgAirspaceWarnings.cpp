@@ -362,9 +362,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const AbstractAirspace &airspace = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  const unsigned text_height = 12, text_top = 1;
-  const int first_row_y = paint_rc.top + Layout::Scale(text_top);
-  const int second_row_y = paint_rc.top + Layout::Scale(text_top + text_height);
+  const unsigned text_height = 12;
+  const int first_row_y = paint_rc.top + padding;
+  const int second_row_y = first_row_y + Layout::Scale(text_height);
 
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
