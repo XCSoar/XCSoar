@@ -103,7 +103,7 @@ public:
    */
   bool KeyPress(unsigned key_code);
 
-protected:
+private:
   gcc_pure
   UPixelScalar Width(unsigned i) const;
 
