@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_PROFILE_MAP2_HPP
 
 #include "Math/fixed.hpp"
+#include "Util/StaticString.hpp"
 #include "Compiler.h"
 
 #include <map>
@@ -92,6 +93,11 @@ public:
    * @param max_size maximum size of the output buffer
    */
   bool Get(const char *key, TCHAR *value, size_t max_size) const;
+
+  template<size_t max>
+  bool Get(const char *key, StaticString<max> &value) const {
+    return Get(key, value.buffer(), value.MAX_SIZE);
+  }
 
 #ifdef _UNICODE
   void Set(const char *key, const TCHAR *value);
