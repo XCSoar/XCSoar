@@ -110,7 +110,7 @@ public:
    */
   bool KeyPress(unsigned key_code);
 
-protected:
+private:
   gcc_pure
   unsigned Width(unsigned i) const;
 
