@@ -290,21 +290,26 @@ ProfileListWidget::CopyClicked()
   SelectPath(new_path);
 }
 
+static bool
+ConfirmDeleteProfile(const TCHAR *name)
+{
+  StaticString<256> tmp;
+  StaticString<256> tmp_name(name);
+  if (tmp_name.length() > 4)
+    tmp_name.Truncate(tmp_name.length() - 4);
+
+  tmp.Format(_("Delete \"%s\"?"),
+             tmp_name.c_str());
+  return ShowMessageBox(tmp, _("Delete"), MB_YESNO) == IDYES;
+}
+
 inline void
 ProfileListWidget::DeleteClicked()
 {
   assert(GetList().GetCursorIndex() < list.size());
 
   const auto &item = list[GetList().GetCursorIndex()];
-
-  StaticString<256> tmp;
-  StaticString<256> tmp_name(item.name.c_str());
-  if (tmp_name.length() > 4)
-    tmp_name.Truncate(tmp_name.length() - 4);
-
-  tmp.Format(_("Delete \"%s\"?"),
-             tmp_name.c_str());
-  if (ShowMessageBox(tmp, _("Delete"), MB_YESNO) != IDYES)
+  if (!ConfirmDeleteProfile(item.name))
     return;
 
   File::Delete(item.path);
