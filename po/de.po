@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-19 16:01+0200\n"
-"PO-Revision-Date: 2015-04-14 11:11+0000\n"
-"Last-Translator: Florian <florian.joachimbauer@gmail.com>\n"
+"PO-Revision-Date: 2015-04-27 08:55+0000\n"
+"Last-Translator: Carsten Sonyi <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
-"X-Generator: Launchpad (build 17430)\n"
+"X-Launchpad-Export-Date: 2015-04-28 00:04+0000\n"
+"X-Generator: Launchpad (build 17453)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -471,7 +471,7 @@ msgstr "Hinweis"
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr "Eingeschränkte Funktionionalität"
+msgstr "Eingeschränkte Funktionalität"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
