@@ -59,7 +59,7 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
     ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
-                                   Layout::Scale(18u));
+                                   Layout::GetMaximumControlHeight());
     list.SetLength(AIRSPACECLASSCOUNT);
   }
 
