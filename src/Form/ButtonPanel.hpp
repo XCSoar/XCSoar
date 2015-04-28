@@ -114,6 +114,17 @@ private:
   gcc_pure
   unsigned Width(unsigned i) const;
 
+  /**
+   * Check how many buttons fit into a row, starting at the given
+   * offset.
+   *
+   * @param start the first button index in this row
+   * @param total_width the total width of the panel in pixels
+   * @return the first button index not in this row
+   */
+  gcc_pure
+  unsigned FitButtonRow(unsigned start, unsigned total_width) const;
+
   gcc_pure
   unsigned RangeMaxWidth(unsigned start, unsigned end) const;
 
