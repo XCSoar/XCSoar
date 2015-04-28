@@ -345,14 +345,14 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   // This constant defines the margin that should be respected
   // for renderring within the paint_rc area.
-  const int padding = 2;
+  const unsigned padding = Layout::GetTextPadding();
 
   if (i == 0 && warning_list.empty()) {
     /* the warnings were emptied between the opening of the dialog and
        this refresh, so only need to display "No Warnings" for top
        item, otherwise exit immediately */
-    canvas.DrawText(paint_rc.left + Layout::Scale(padding),
-                    paint_rc.top + Layout::Scale(padding), _("No Warnings"));
+    canvas.DrawText(paint_rc.left + padding,
+                    paint_rc.top + padding, _("No Warnings"));
     return;
   }
 
@@ -372,12 +372,12 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
-  const int left0 = Layout::FastScale(padding),
-    left2 = paint_rc.right - Layout::FastScale(padding) - (status_width + 2 * Layout::FastScale(padding)),
-    left1 = left2 - Layout::FastScale(padding) - altitude_width;
+  const int left0 = padding,
+    left2 = paint_rc.right - padding - (status_width + 2 * padding),
+    left1 = left2 - padding - altitude_width;
 
   PixelRect rc_text_clip = paint_rc;
-  rc_text_clip.right = left1 - Layout::FastScale(padding);
+  rc_text_clip.right = left1 - padding;
 
   if (!warning.ack_expired)
     canvas.SetTextColor(COLOR_GRAY);
@@ -449,9 +449,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     PixelRect rc;
 
     rc.left = paint_rc.left + left2;
-    rc.top = paint_rc.top + Layout::FastScale(padding);
-    rc.right = paint_rc.right - Layout::FastScale(padding);
-    rc.bottom = paint_rc.bottom - Layout::FastScale(padding);
+    rc.top = paint_rc.top + padding;
+    rc.right = paint_rc.right - padding;
+    rc.bottom = paint_rc.bottom - padding;
 
     canvas.DrawFilledRectangle(rc, state_color);
 
@@ -463,7 +463,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.DrawText(paint_rc.left + left2 + Layout::FastScale(padding) + (status_width / 2)  - (canvas.CalcTextWidth(state_text) / 2),
+    canvas.DrawText(paint_rc.left + left2 + padding + (status_width / 2) - (canvas.CalcTextWidth(state_text) / 2),
                     (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
                     state_text);
   }
