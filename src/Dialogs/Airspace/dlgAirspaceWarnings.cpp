@@ -362,7 +362,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const AbstractAirspace &airspace = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  const UPixelScalar text_height = 12, text_top = 1;
+  const unsigned text_height = 12, text_top = 1;
 
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
@@ -372,7 +372,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
-  const PixelScalar left0 = Layout::FastScale(padding),
+  const int left0 = Layout::FastScale(padding),
     left2 = paint_rc.right - Layout::FastScale(padding) - (status_width + 2 * Layout::FastScale(padding)),
     left1 = left2 - Layout::FastScale(padding) - altitude_width;
 
