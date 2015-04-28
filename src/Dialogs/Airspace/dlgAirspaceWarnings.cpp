@@ -25,6 +25,7 @@ Copyright_License {
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/Button.hpp"
+#include "Look/DialogLook.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -216,8 +217,14 @@ void
 AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
                                    const PixelRect &rc)
 {
-  CreateList(parent, UIGlobals::GetDialogLook(), rc,
-             Layout::Scale(30));
+  const auto &look = UIGlobals::GetDialogLook();
+
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned font_height = look.list.font->GetHeight();
+  const unsigned row_height = 3 * padding + 2 * font_height;
+
+  CreateList(parent, look, rc,
+             std::max(Layout::GetMaximumControlHeight(), row_height));
 }
 
 void
