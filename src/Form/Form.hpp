@@ -97,11 +97,6 @@ protected:
   KeyDownFunction key_down_function;
   CharacterFunction character_function;
 
-  /*
-   * Control which should get the focus by default
-   */
-  Window *default_focus;
-
   RasterPoint last_drag;
 
   /**
@@ -220,14 +215,6 @@ public:
 
   void SetCharacterFunction(CharacterFunction function) {
     character_function = function;
-  }
-
-  void SetDefaultFocus(Window *_defaultFocus) {
-    default_focus = _defaultFocus;
-  }
-
-  Window *GetDefaultFocus() {
-    return default_focus;
   }
 
   /**
