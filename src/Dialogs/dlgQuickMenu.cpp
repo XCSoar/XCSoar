@@ -29,7 +29,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
-#include "Screen/SingleWindow.hpp"
 #include "Form/Form.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/Macros.hpp"
@@ -225,8 +224,8 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   dialogStyle.Hide();
   dialogStyle.ControlParent();
 
-  wf = new WndForm(parent, dialog_look, parent.GetClientRect(),
-                   _T("Quick Menu"), dialogStyle);
+  wf = new WndForm(dialog_look);
+  wf->Create(parent, _T("Quick Menu"), dialogStyle);
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();
 
