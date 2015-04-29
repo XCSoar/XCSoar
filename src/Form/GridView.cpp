@@ -33,13 +33,6 @@ GridView::Create(ContainerWindow &parent, const DialogLook &look,
 }
 
 void
-GridView::SetNumRows(unsigned _numRows)
-{
-  num_rows = _numRows;
-  RefreshLayout();
-}
-
-void
 GridView::RefreshLayout()
 {
   const PixelRect rc = GetClientRect();

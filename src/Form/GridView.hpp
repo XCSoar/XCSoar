@@ -77,8 +77,6 @@ public:
     return num_rows;
   }
 
-  void SetNumRows(unsigned numRows);
-
   gcc_pure
   signed GetIndexOfItemInFocus() const;
 
