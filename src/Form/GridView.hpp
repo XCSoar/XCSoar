@@ -24,13 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_FORM_GRIDVIEW_HPP
 #define XCSOAR_FORM_GRIDVIEW_HPP
 
-#include "Screen/ContainerWindow.hpp"
+#include "Panel.hpp"
 #include "Util/StaticArray.hpp"
 
-struct DialogLook;
-
-class GridView : public ContainerWindow {
-
+class GridView : public PanelControl {
 public:
   enum
   {
@@ -56,13 +53,10 @@ protected:
   unsigned num_columns;
   unsigned num_rows;
   unsigned current_page;
-  const DialogLook &look;
 
 public:
-  GridView(const DialogLook &_look):look(_look) {}
-
-  void Create(ContainerWindow &parent, const PixelRect &rc,
-              const WindowStyle style=WindowStyle());
+  void Create(ContainerWindow &parent, const DialogLook &look,
+              const PixelRect &rc, const WindowStyle style=WindowStyle());
 
   void AddItem(Window &w) {
     items.push_back(&w);
@@ -100,10 +94,6 @@ public:
 protected:
   signed GetNextItemIndex(unsigned currIndex, Direction direction) const;
   signed GetNextEnabledItemIndex(signed currIndex, Direction direction) const;
-
-#ifdef USE_GDI
-  virtual void OnPaint(Canvas &canvas) override;
-#endif
 };
 
 #endif

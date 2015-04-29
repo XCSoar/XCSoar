@@ -26,15 +26,14 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Window.hpp"
-#include "Look/DialogLook.hpp"
 
 #include <assert.h>
 
 void
-GridView::Create(ContainerWindow &parent, const PixelRect &rc,
-                 const WindowStyle style)
+GridView::Create(ContainerWindow &parent, const DialogLook &look,
+                 const PixelRect &rc, const WindowStyle style)
 {
-  ContainerWindow::Create(parent, rc, style);
+  PanelControl::Create(parent, look, rc, style);
 
   column_width = Layout::Scale(78);
   row_height = Layout::Scale(42);
@@ -280,12 +279,3 @@ GridView::MoveFocus(Direction direction)
       ShowNextPage(direction);
   }
 }
-
-#ifdef USE_GDI
-void
-GridView::OnPaint(Canvas &canvas)
-{
-  canvas.Clear(look.background_color);
-}
-#endif
-
