@@ -34,19 +34,6 @@ GridView::Create(ContainerWindow &parent, const DialogLook &look,
                  const PixelRect &rc, const WindowStyle style)
 {
   PanelControl::Create(parent, look, rc, style);
-
-  column_width = Layout::Scale(78);
-  row_height = Layout::Scale(42);
-  horizontal_spacing = Layout::Scale(0);
-  vertical_spacing = Layout::Scale(0);
-  num_columns = (rc.right - rc.left + horizontal_spacing)
-    / (column_width + horizontal_spacing);
-  if (num_columns == 0)
-    num_columns = 1;
-  num_rows = (rc.bottom - rc.top + vertical_spacing)
-    / (row_height + vertical_spacing);
-  if (num_rows == 0)
-    num_rows = 1;
   current_page = 0;
 }
 
@@ -61,6 +48,20 @@ void
 GridView::RefreshLayout()
 {
   const PixelRect rc = GetClientRect();
+
+  column_width = Layout::Scale(78);
+  row_height = Layout::Scale(42);
+  horizontal_spacing = Layout::Scale(0);
+  vertical_spacing = Layout::Scale(0);
+  num_columns = (rc.right - rc.left + horizontal_spacing)
+    / (column_width + horizontal_spacing);
+  if (num_columns == 0)
+    num_columns = 1;
+  num_rows = (rc.bottom - rc.top + vertical_spacing)
+    / (row_height + vertical_spacing);
+  if (num_rows == 0)
+    num_rows = 1;
+
   unsigned maxColumns = (rc.right - rc.left + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (maxColumns == 0)
