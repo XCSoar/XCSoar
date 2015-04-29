@@ -85,7 +85,10 @@ public:
   void RefreshLayout();
 
 protected:
+  gcc_pure
   signed GetNextItemIndex(unsigned currIndex, Direction direction) const;
+
+  gcc_pure
   signed GetNextEnabledItemIndex(signed currIndex, Direction direction) const;
 
   /* virtual methods from class Window */
