@@ -30,12 +30,11 @@ Copyright_License {
 
 #include <assert.h>
 
-GridView::GridView(ContainerWindow &parent, PixelRect rc,
-                   const DialogLook &_look,
-                   const WindowStyle style)
- :look(_look)
+void
+GridView::Create(ContainerWindow &parent, const PixelRect &rc,
+                 const WindowStyle style)
 {
-  Create(parent, rc, style);
+  ContainerWindow::Create(parent, rc, style);
 
   column_width = Layout::Scale(78);
   row_height = Layout::Scale(42);

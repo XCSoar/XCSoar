@@ -59,9 +59,10 @@ protected:
   const DialogLook &look;
 
 public:
-  GridView(ContainerWindow &parent, PixelRect rc,
-           const DialogLook &look,
-           const WindowStyle style=WindowStyle());
+  GridView(const DialogLook &_look):look(_look) {}
+
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              const WindowStyle style=WindowStyle());
 
   void AddItem(Window &w) {
     items.push_back(&w);

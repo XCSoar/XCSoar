@@ -235,8 +235,8 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   WindowStyle grid_view_style;
   grid_view_style.ControlParent();
 
-  grid_view = new GridView(client_area, r,
-                           dialog_look, grid_view_style);
+  grid_view = new GridView(dialog_look);
+  grid_view->Create(client_area, r, grid_view_style);
 
   WindowStyle buttonStyle;
   buttonStyle.TabStop();
