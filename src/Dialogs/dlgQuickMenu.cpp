@@ -277,8 +277,8 @@ dlgQuickMenuShowModal(SingleWindow &parent)
 
   int result = wf->ShowModal();
 
-  for (auto it = buttons.begin(), end = buttons.end(); it != end; ++it)
-    delete *it;
+  for (auto *button : buttons)
+    delete button;
 
   buttons.clear();
 
