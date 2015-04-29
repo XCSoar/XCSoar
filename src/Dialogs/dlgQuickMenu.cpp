@@ -22,15 +22,16 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "WidgetDialog.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 #include "Look/DialogLook.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Form/GridView.hpp"
 #include "Form/Button.hpp"
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
-#include "Form/Form.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
@@ -98,154 +99,54 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.DrawFormattedText(&text_rc, caption, style);
 }
 
-static WndForm *wf;
-static GridView *grid_view;
+class QuickMenu final : public WindowWidget, ActionListener {
+  WndForm &dialog;
+  const Menu &menu;
 
-static TrivialArray<Window *, GridView::MAX_ITEMS> buttons;
+  GridView grid_view;
 
-class QuickMenu : public ActionListener {
+  StaticArray<Window *, GridView::MAX_ITEMS> buttons;
+
 public:
   unsigned clicked_event;
 
-  virtual void OnAction(int id) override;
+  QuickMenu(WndForm &_dialog, const Menu &_menu)
+    :dialog(_dialog), menu(_menu) {}
+
+  void UpdateCaption();
+
+protected:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
+  bool SetFocus() override;
+  bool KeyPress(unsigned key_code) override;
+
+private:
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override;
 };
 
-static void
-SetFormCaption()
-{
-  StaticString<32> buffer;
-  unsigned pageSize = grid_view->GetNumColumns() * grid_view->GetNumRows();
-  unsigned lastPage = buttons.size() / pageSize;
-  buffer.Format(_T("Quick Menu  %d/%d"),
-                grid_view->GetCurrentPage() + 1, lastPage + 1);
-  wf->SetCaption(buffer);
-}
-
-static void
-SetFormDefaultFocus()
-{
-  unsigned numColumns = grid_view->GetNumColumns();
-  unsigned pageSize = numColumns * grid_view->GetNumRows();
-  unsigned lastPage = buttons.size() / pageSize;
-  unsigned currentPage = grid_view->GetCurrentPage();
-  unsigned currentPageSize = currentPage == lastPage
-    ? buttons.size() % pageSize
-    : pageSize;
-  unsigned centerCol = currentPageSize < numColumns
-    ? currentPageSize / 2
-    : numColumns / 2;
-  unsigned centerRow = currentPageSize / numColumns / 2;
-  unsigned centerPos = currentPage
-    * pageSize + centerCol + centerRow * numColumns;
-
-  if (centerPos < buttons.size()) {
-    if (wf->IsVisible()) {
-      buttons[centerPos]->SetFocus();
-      grid_view->RefreshLayout();
-    } else if (buttons[centerPos]->IsEnabled())
-      wf->SetDefaultFocus(buttons[centerPos]);
-  }
-}
-
-static bool
-FormKeyDown(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_LEFT:
-    grid_view->MoveFocus(GridView::Direction::LEFT);
-    break;
-
-  case KEY_RIGHT:
-    grid_view->MoveFocus(GridView::Direction::RIGHT);
-    break;
-
-  case KEY_UP:
-    grid_view->MoveFocus(GridView::Direction::UP);
-    break;
-
-  case KEY_DOWN:
-    grid_view->MoveFocus(GridView::Direction::DOWN);
-    break;
-
-  case KEY_MENU:
-    grid_view->ShowNextPage();
-    SetFormDefaultFocus();
-    break;
-
-#ifdef GNAV
-  // Altair RemoteStick
-  case KEY_F11:
-    grid_view->MoveFocus(GridView::Direction::UP);
-    break;
-
-  case KEY_F12:
-    grid_view->MoveFocus(GridView::Direction::DOWN);
-    break;
-
-  case KEY_F13:
-    grid_view->MoveFocus(GridView::Direction::RIGHT);
-    break;
-
-  case KEY_F14:
-    grid_view->MoveFocus(GridView::Direction::LEFT);
-    break;
-
-  case KEY_F15:
-       wf->SetModalResult(mrCancel);
-  break;
-#endif
-
-  default:
-    return false;
-  }
-
-  SetFormCaption();
-  return true;
-}
-
 void
-QuickMenu::OnAction(int id)
+QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  clicked_event = id;
-  wf->SetModalResult(mrOK);
-}
-
-void
-dlgQuickMenuShowModal(SingleWindow &parent)
-{
-  const Menu *menu = InputEvents::GetMenu(_T("RemoteStick"));
-  if (menu == NULL)
-    return;
-
-  QuickMenu quick_menu;
+  WindowStyle grid_view_style;
+  grid_view_style.ControlParent();
+  grid_view_style.Hide();
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  WindowStyle dialogStyle;
-  dialogStyle.Hide();
-  dialogStyle.ControlParent();
-
-  wf = new WndForm(dialog_look);
-  wf->Create(parent, _T("Quick Menu"), dialogStyle);
-
-  ContainerWindow &client_area = wf->GetClientAreaWindow();
-
-  PixelRect r = client_area.GetClientRect();
-
-  WindowStyle grid_view_style;
-  grid_view_style.ControlParent();
-
-  grid_view = new GridView();
-  grid_view->Create(client_area, dialog_look, r, grid_view_style);
+  grid_view.Create(parent, dialog_look, rc, grid_view_style);
+  SetWindow(&grid_view);
 
   WindowStyle buttonStyle;
   buttonStyle.TabStop();
 
-  for (unsigned i = 0; i < menu->MAX_ITEMS; ++i) {
+  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     if (buttons.full())
       continue;
 
-    const MenuItem &menuItem = (*menu)[i];
+    const MenuItem &menuItem = menu[i];
     if (!menuItem.IsDefined())
       continue;
 
@@ -261,31 +162,142 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     button_rc.right = 80;
     button_rc.bottom = 30;
     WndButton *button =
-      new WndButton(*grid_view, button_rc, buttonStyle,
+      new WndButton(grid_view, button_rc, buttonStyle,
                     new QuickMenuButtonRenderer(dialog_look,
                                                 expanded.text),
-                    quick_menu, menuItem.event);
+                    *this, menuItem.event);
     button->SetEnabled(expanded.enabled);
 
     buttons.append(button);
-    grid_view->AddItem(*button);
+    grid_view.AddItem(*button);
   }
 
-  grid_view->RefreshLayout();
-  SetFormDefaultFocus();
-  SetFormCaption();
+  grid_view.RefreshLayout();
+  UpdateCaption();
+}
 
-  wf->SetKeyDownFunction(FormKeyDown);
-
-  int result = wf->ShowModal();
-
+void
+QuickMenu::Unprepare()
+{
   for (auto *button : buttons)
     delete button;
+}
 
-  buttons.clear();
+void
+QuickMenu::UpdateCaption()
+{
+  StaticString<32> buffer;
+  unsigned pageSize = grid_view.GetNumColumns() * grid_view.GetNumRows();
+  unsigned lastPage = buttons.size() / pageSize;
+  buffer.Format(_T("Quick Menu  %d/%d"),
+                grid_view.GetCurrentPage() + 1, lastPage + 1);
+  dialog.SetCaption(buffer);
+}
 
-  delete wf;
-  delete grid_view;
+bool
+QuickMenu::SetFocus()
+{
+  unsigned numColumns = grid_view.GetNumColumns();
+  unsigned pageSize = numColumns * grid_view.GetNumRows();
+  unsigned lastPage = buttons.size() / pageSize;
+  unsigned currentPage = grid_view.GetCurrentPage();
+  unsigned currentPageSize = currentPage == lastPage
+    ? buttons.size() % pageSize
+    : pageSize;
+  unsigned centerCol = currentPageSize < numColumns
+    ? currentPageSize / 2
+    : numColumns / 2;
+  unsigned centerRow = currentPageSize / numColumns / 2;
+  unsigned centerPos = currentPage
+    * pageSize + centerCol + centerRow * numColumns;
+
+  if (centerPos >= buttons.size())
+    return false;
+
+  buttons[centerPos]->SetFocus();
+  grid_view.RefreshLayout();
+  return true;
+}
+
+bool
+QuickMenu::KeyPress(unsigned key_code)
+{
+  switch (key_code) {
+  case KEY_LEFT:
+    grid_view.MoveFocus(GridView::Direction::LEFT);
+    break;
+
+  case KEY_RIGHT:
+    grid_view.MoveFocus(GridView::Direction::RIGHT);
+    break;
+
+  case KEY_UP:
+    grid_view.MoveFocus(GridView::Direction::UP);
+    break;
+
+  case KEY_DOWN:
+    grid_view.MoveFocus(GridView::Direction::DOWN);
+    break;
+
+  case KEY_MENU:
+    grid_view.ShowNextPage();
+    SetFocus();
+    break;
+
+#ifdef GNAV
+  // Altair RemoteStick
+  case KEY_F11:
+    grid_view.MoveFocus(GridView::Direction::UP);
+    break;
+
+  case KEY_F12:
+    grid_view.MoveFocus(GridView::Direction::DOWN);
+    break;
+
+  case KEY_F13:
+    grid_view.MoveFocus(GridView::Direction::RIGHT);
+    break;
+
+  case KEY_F14:
+    grid_view.MoveFocus(GridView::Direction::LEFT);
+    break;
+
+  case KEY_F15:
+    dialog.SetModalResult(mrCancel);
+  break;
+#endif
+
+  default:
+    return false;
+  }
+
+  UpdateCaption();
+  return true;
+}
+
+void
+QuickMenu::OnAction(int id)
+{
+  clicked_event = id;
+  dialog.SetModalResult(mrOK);
+}
+
+void
+dlgQuickMenuShowModal(SingleWindow &parent)
+{
+  const Menu *menu = InputEvents::GetMenu(_T("RemoteStick"));
+  if (menu == NULL)
+    return;
+
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(dialog_look);
+  QuickMenu quick_menu(dialog, *menu);
+
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &quick_menu);
+
+  const int result = dialog.ShowModal();
+  dialog.StealWidget();
 
   if (result == mrOK)
     InputEvents::ProcessEvent(quick_menu.clicked_event);
