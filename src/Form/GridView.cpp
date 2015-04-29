@@ -36,6 +36,8 @@ void
 GridView::RefreshLayout()
 {
   const PixelRect rc = GetClientRect();
+  const unsigned width = rc.right - rc.left;
+  const unsigned height = rc.bottom - rc.top;
 
   constexpr unsigned horizontal_spacing = 0;
   constexpr unsigned vertical_spacing = 0;
@@ -43,21 +45,21 @@ GridView::RefreshLayout()
   column_width = Layout::Scale(78);
   row_height = Layout::GetMaximumControlHeight();
 
-  num_columns = (rc.right - rc.left + horizontal_spacing)
+  num_columns = (width + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (num_columns == 0)
     num_columns = 1;
-  num_rows = (rc.bottom - rc.top + vertical_spacing)
+  num_rows = (height + vertical_spacing)
     / (row_height + vertical_spacing);
   if (num_rows == 0)
     num_rows = 1;
 
-  unsigned maxColumns = (rc.right - rc.left + horizontal_spacing)
+  unsigned maxColumns = (width + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (maxColumns == 0)
     maxColumns = 1;
 
-  unsigned maxRows = (rc.bottom - rc.top + vertical_spacing)
+  unsigned maxRows = (height + vertical_spacing)
     / (row_height + vertical_spacing);
   if (maxRows == 0)
     maxRows = 1;
@@ -71,9 +73,9 @@ GridView::RefreshLayout()
   unsigned pageSize = num_columns * num_rows;
 
   // Center grid in the client area
-  unsigned reminderH = rc.right - rc.left + horizontal_spacing
+  unsigned reminderH = width + horizontal_spacing
     - num_columns * (column_width + horizontal_spacing);
-  unsigned reminderV = rc.bottom - rc.top + vertical_spacing
+  unsigned reminderV = height + vertical_spacing
     - num_rows * (row_height + vertical_spacing);
   unsigned leftOrigin = rc.left + reminderH / 2;
   unsigned topOrigin= rc.top + reminderV / 2;
