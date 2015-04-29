@@ -52,13 +52,6 @@ GridView::GridView(ContainerWindow &parent, PixelRect rc,
 }
 
 void
-GridView::SetItems(const TrivialArray<Window *, MAX_ITEMS> &items)
-{
-  (TrivialArray<Window *, MAX_ITEMS> &)this->items = items;
-  RefreshLayout();
-}
-
-void
 GridView::SetNumRows(unsigned _numRows)
 {
   num_rows = _numRows;

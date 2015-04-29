@@ -62,7 +62,9 @@ public:
            const DialogLook &look,
            const WindowStyle style=WindowStyle());
 
-  void SetItems(const TrivialArray<Window *, MAX_ITEMS> &items);
+  void AddItem(Window &w) {
+    items.push_back(&w);
+  }
 
   unsigned GetColumnWidth() const {
     return column_width;

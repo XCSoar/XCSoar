@@ -267,9 +267,10 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     button->SetEnabled(expanded.enabled);
 
     buttons.append(button);
+    grid_view->AddItem(*button);
   }
 
-  grid_view->SetItems(buttons);
+  grid_view->RefreshLayout();
   SetFormDefaultFocus();
   SetFormCaption();
 
