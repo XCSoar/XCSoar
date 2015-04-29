@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticArray.hpp"
-#include "Look/DialogLook.hpp"
+
+struct DialogLook;
 
 class GridView : public ContainerWindow {
 

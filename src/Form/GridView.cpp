@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Window.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <assert.h>
 
