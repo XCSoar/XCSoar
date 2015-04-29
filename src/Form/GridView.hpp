@@ -47,8 +47,6 @@ protected:
 
   unsigned column_width;
   unsigned row_height;
-  unsigned horizontal_spacing;
-  unsigned vertical_spacing;
 
   unsigned num_columns;
   unsigned num_rows;

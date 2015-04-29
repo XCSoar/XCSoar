@@ -49,10 +49,12 @@ GridView::RefreshLayout()
 {
   const PixelRect rc = GetClientRect();
 
+  constexpr unsigned horizontal_spacing = 0;
+  constexpr unsigned vertical_spacing = 0;
+
   column_width = Layout::Scale(78);
   row_height = Layout::GetMaximumControlHeight();
-  horizontal_spacing = Layout::Scale(0);
-  vertical_spacing = Layout::Scale(0);
+
   num_columns = (rc.right - rc.left + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (num_columns == 0)
