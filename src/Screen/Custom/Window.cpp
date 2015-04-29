@@ -116,6 +116,9 @@ Window::SetFocus()
 {
   assert(IsDefined());
 
+  if (!IsEnabled())
+    return;
+
   if (parent != nullptr)
     parent->SetActiveChild(*this);
 
