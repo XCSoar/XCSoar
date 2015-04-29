@@ -46,10 +46,12 @@ public:
 
 protected:
   StaticArray<Window *, MAX_ITEMS> items;
-  UPixelScalar column_width;
-  UPixelScalar row_height;
-  UPixelScalar horizontal_spacing;
-  UPixelScalar vertical_spacing;
+
+  unsigned column_width;
+  unsigned row_height;
+  unsigned horizontal_spacing;
+  unsigned vertical_spacing;
+
   unsigned num_columns;
   unsigned num_rows;
   unsigned current_page;
@@ -62,11 +64,11 @@ public:
 
   void SetItems(const TrivialArray<Window *, MAX_ITEMS> &items);
 
-  UPixelScalar GetColumnWidth() const {
+  unsigned GetColumnWidth() const {
     return column_width;
   }
 
-  UPixelScalar GetRowHeight() const {
+  unsigned GetRowHeight() const {
     return row_height;
   }
 
