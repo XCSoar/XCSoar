@@ -50,7 +50,7 @@ GridView::RefreshLayout()
   const PixelRect rc = GetClientRect();
 
   column_width = Layout::Scale(78);
-  row_height = Layout::Scale(42);
+  row_height = Layout::GetMaximumControlHeight();
   horizontal_spacing = Layout::Scale(0);
   vertical_spacing = Layout::Scale(0);
   num_columns = (rc.right - rc.left + horizontal_spacing)
