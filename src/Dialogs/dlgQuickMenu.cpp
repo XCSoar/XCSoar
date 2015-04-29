@@ -22,9 +22,12 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Form/GridView.hpp"
-#include "Form/CustomButton.hpp"
+#include "Form/Button.hpp"
 #include "Input/InputEvents.hpp"
+#include "Screen/Layout.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Form.hpp"
@@ -35,6 +38,65 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 #include <stdio.h>
+
+class QuickMenuButtonRenderer final : public ButtonRenderer {
+  const DialogLook &look;
+
+  const StaticString<64> caption;
+
+public:
+  explicit QuickMenuButtonRenderer(const DialogLook &_look,
+                                   const TCHAR *_caption)
+    :look(_look), caption(_caption) {}
+
+  gcc_pure
+  unsigned GetMinimumButtonWidth() const override;
+
+  void DrawButton(Canvas &canvas, const PixelRect &rc,
+                  bool enabled, bool focused, bool pressed) const override;
+};
+
+unsigned
+QuickMenuButtonRenderer::GetMinimumButtonWidth() const
+{
+  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).cx;
+}
+
+void
+QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
+                                    bool enabled, bool focused,
+                                    bool pressed) const
+{
+  // Draw focus rectangle
+  if (pressed) {
+    canvas.DrawFilledRectangle(rc, look.list.pressed.background_color);
+    canvas.SetTextColor(look.list.pressed.text_color);
+  } else if (focused) {
+    canvas.DrawFilledRectangle(rc, look.focused.background_color);
+    canvas.SetTextColor(enabled
+                        ? look.focused.text_color
+                        : look.button.disabled.color);
+  } else {
+    if (HaveClipping())
+      canvas.DrawFilledRectangle(rc, look.background_brush);
+    canvas.SetTextColor(enabled ? look.text_color : look.button.disabled.color);
+  }
+
+  canvas.Select(*look.button.font);
+  canvas.SetBackgroundTransparent();
+
+#ifndef USE_GDI
+  unsigned style = DT_CENTER | DT_VCENTER | DT_WORDBREAK;
+
+  if (IsDithered())
+    style |= DT_UNDERLINE;
+#else
+  unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
+#endif
+
+  PixelRect text_rc = rc;
+  canvas.DrawFormattedText(&text_rc, caption, style);
+}
 
 static WndForm *wf;
 static GridView *grid_view;
@@ -199,9 +261,10 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     button_rc.right = 80;
     button_rc.bottom = 30;
     WndButton *button =
-      new WndCustomButton(*grid_view, dialog_look, expanded.text,
-                          button_rc, buttonStyle,
-                          quick_menu, menuItem.event);
+      new WndButton(*grid_view, button_rc, buttonStyle,
+                    new QuickMenuButtonRenderer(dialog_look,
+                                                expanded.text),
+                    quick_menu, menuItem.event);
     button->SetEnabled(expanded.enabled);
 
     buttons.append(button);

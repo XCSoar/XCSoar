@@ -27,7 +27,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/TabMenuDisplay.cpp \
 	$(FORM_SRC_DIR)/CharacterButton.cpp \
 	$(FORM_SRC_DIR)/GridView.cpp \
-	$(FORM_SRC_DIR)/CustomButton.cpp \
 	$(FORM_SRC_DIR)/HLine.cpp
 
 FORM_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
