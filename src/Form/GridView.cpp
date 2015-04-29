@@ -279,3 +279,10 @@ GridView::MoveFocus(Direction direction)
       ShowNextPage(direction);
   }
 }
+
+void
+GridView::OnResize(PixelSize new_size)
+{
+  PanelControl::OnResize(new_size);
+  RefreshLayout();
+}

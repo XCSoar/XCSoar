@@ -94,6 +94,9 @@ public:
 protected:
   signed GetNextItemIndex(unsigned currIndex, Direction direction) const;
   signed GetNextEnabledItemIndex(signed currIndex, Direction direction) const;
+
+  /* virtual methods from class Window */
+  void OnResize(PixelSize new_size) override;
 };
 
 #endif
