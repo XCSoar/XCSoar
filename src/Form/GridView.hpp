@@ -29,10 +29,7 @@ Copyright_License {
 
 class GridView : public PanelControl {
 public:
-  enum
-  {
-    MAX_ITEMS = 32,
-  };
+  static constexpr unsigned MAX_ITEMS = 32;
 
   enum class Direction
   {
