@@ -54,22 +54,6 @@ GridView::RefreshLayout()
   if (num_rows == 0)
     num_rows = 1;
 
-  unsigned maxColumns = (width + horizontal_spacing)
-    / (column_width + horizontal_spacing);
-  if (maxColumns == 0)
-    maxColumns = 1;
-
-  unsigned maxRows = (height + vertical_spacing)
-    / (row_height + vertical_spacing);
-  if (maxRows == 0)
-    maxRows = 1;
-
-  if (maxColumns < num_columns)
-     num_columns = maxColumns;
-
-  if (maxRows < num_rows)
-    num_rows = maxRows;
-
   unsigned pageSize = num_columns * num_rows;
 
   // Center grid in the client area
