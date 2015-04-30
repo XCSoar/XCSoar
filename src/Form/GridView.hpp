@@ -39,7 +39,7 @@ public:
     DOWN
   };
 
-protected:
+private:
   StaticArray<Window *, MAX_ITEMS> items;
 
   unsigned column_width;
@@ -84,7 +84,7 @@ public:
   void ShowNextPage(Direction direction = Direction::RIGHT);
   void RefreshLayout();
 
-protected:
+private:
   gcc_pure
   signed GetNextItemIndex(unsigned currIndex, Direction direction) const;
 
