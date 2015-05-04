@@ -120,6 +120,10 @@ public:
      waypoint_name(look),
      type_label(look) {}
 
+  bool IsModified() const {
+    return task_modified;
+  }
+
   void CreateButtons() {
     previous_button = dialog.AddSymbolButton(_T("<"), *this, PREVIOUS);
     next_button = dialog.AddSymbolButton(_T(">"), *this, NEXT);
@@ -588,7 +592,7 @@ dlgTaskPointShowModal(OrderedTask &task,
   dialog.ShowModal();
   dialog.StealWidget();
 
-  bool task_modified = dialog.GetChanged();
+  bool task_modified = widget.IsModified();
   if (task_modified) {
     task.ClearName();
     task.UpdateGeometry();
