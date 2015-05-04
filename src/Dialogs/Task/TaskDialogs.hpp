@@ -36,7 +36,7 @@ dlgTaskManagerShowModal();
  * @return true if the task was modified
  */
 bool
-dlgTaskPointShowModal(OrderedTask **task, const unsigned index);
+dlgTaskPointShowModal(OrderedTask &task, const unsigned index);
 
 /**
  * Show a dialog that lets the user mutate one task point to another

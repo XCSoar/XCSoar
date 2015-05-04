@@ -491,7 +491,7 @@ void
 TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->TaskSize()) {
-    if (dlgTaskPointShowModal(&ordered_task, ItemIndex)) {
+    if (dlgTaskPointShowModal(*ordered_task, ItemIndex)) {
       *task_modified = true;
       ordered_task->ClearName();
       ordered_task->UpdateGeometry();
