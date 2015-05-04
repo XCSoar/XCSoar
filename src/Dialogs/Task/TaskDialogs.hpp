@@ -48,7 +48,7 @@ bool
 dlgTaskPointType(OrderedTask &task, unsigned index);
 
 bool
-dlgTaskOptionalStarts(OrderedTask **task);
+dlgTaskOptionalStarts(OrderedTask &task);
 
 /**
  * Shows map display zoomed to target point

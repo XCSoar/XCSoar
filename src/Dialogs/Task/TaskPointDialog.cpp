@@ -563,7 +563,7 @@ TaskPointWidget::OnNextClicked()
 inline void
 TaskPointWidget::OnOptionalStartsClicked()
 {
-  if (dlgTaskOptionalStarts(&ordered_task)) {
+  if (dlgTaskOptionalStarts(*ordered_task)) {
     ordered_task->ClearName();
     task_modified = true;
     RefreshView();

@@ -234,9 +234,9 @@ OptionStartsWidget::Remove(unsigned i)
 }
 
 bool
-dlgTaskOptionalStarts(OrderedTask** task)
+dlgTaskOptionalStarts(OrderedTask &task)
 {
-  OptionStartsWidget widget(**task);
+  OptionStartsWidget widget(task);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateFull(UIGlobals::GetMainWindow(),
                     _("Alternate Start Points"), &widget);
