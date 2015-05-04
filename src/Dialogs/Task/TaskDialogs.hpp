@@ -45,7 +45,7 @@ dlgTaskPointShowModal(OrderedTask **task, const unsigned index);
  * @return true if the task was modified
  */
 bool
-dlgTaskPointType(OrderedTask **task, unsigned index);
+dlgTaskPointType(OrderedTask &task, unsigned index);
 
 bool
 dlgTaskOptionalStarts(OrderedTask **task);

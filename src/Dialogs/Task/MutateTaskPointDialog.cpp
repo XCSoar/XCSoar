@@ -99,9 +99,9 @@ SetPointType(TaskPointFactoryType type)
 }
 
 bool
-dlgTaskPointType(OrderedTask** task, const unsigned index)
+dlgTaskPointType(OrderedTask &task, const unsigned index)
 {
-  ordered_task = *task;
+  ordered_task = &task;
   active_index = index;
 
   point = &ordered_task->GetPoint(active_index);

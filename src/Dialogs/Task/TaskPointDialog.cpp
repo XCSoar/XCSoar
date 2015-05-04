@@ -529,7 +529,7 @@ TaskPointWidget::OnRelocateClicked()
 inline void
 TaskPointWidget::OnTypeClicked()
 {
-  if (dlgTaskPointType(&ordered_task, active_index)) {
+  if (dlgTaskPointType(*ordered_task, active_index)) {
     ordered_task->ClearName();
     task_modified = true;
     RefreshView();
