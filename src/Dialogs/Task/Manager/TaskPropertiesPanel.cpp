@@ -49,20 +49,6 @@ enum Controls {
   FAI_FINISH_HEIGHT,
 };
 
-/**
- * returns true if task is an FAI type
- * @param ftype. task type being checked
- */
-constexpr
-static bool
-IsFai(TaskFactoryType ftype)
-{
-  return ftype == TaskFactoryType::FAI_GENERAL ||
-    ftype == TaskFactoryType::FAI_GOAL ||
-    ftype == TaskFactoryType::FAI_OR ||
-    ftype == TaskFactoryType::FAI_TRIANGLE;
-}
-
 TaskPropertiesPanel::TaskPropertiesPanel(TaskManagerDialog &_dialog,
                                          OrderedTask **_active_task,
                                          bool *_task_modified)
