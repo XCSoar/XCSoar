@@ -49,8 +49,8 @@ namespace Java {
      * The local reference is obtained by the caller.
      */
     LocalRef(JNIEnv *_env, T _value):env(_env), value(_value) {
-      assert(env != NULL);
-      assert(value != NULL);
+      assert(env != nullptr);
+      assert(value != nullptr);
     }
 
     ~LocalRef() {
@@ -84,8 +84,8 @@ namespace Java {
     GlobalRef() = default;
 
     GlobalRef(JNIEnv *env, T _value):value(_value) {
-      assert(env != NULL);
-      assert(value != NULL);
+      assert(env != nullptr);
+      assert(value != nullptr);
 
       value = (T)env->NewGlobalRef(value);
     }
@@ -102,7 +102,7 @@ namespace Java {
      * allowed once after the default constructor was used.
      */
     void Set(JNIEnv *env, T _value) {
-      assert(_value != NULL);
+      assert(_value != nullptr);
 
       value = (T)env->NewGlobalRef(_value);
     }
@@ -134,7 +134,7 @@ namespace Java {
     TrivialRef &operator=(const TrivialRef &other) = delete;
 
     bool IsDefined() const {
-      return value != NULL;
+      return value != nullptr;
     }
 
     /**
@@ -142,8 +142,8 @@ namespace Java {
      * This object must not be set already.
      */
     void Set(JNIEnv *env, T _value) {
-      assert(value == NULL);
-      assert(_value != NULL);
+      assert(value == nullptr);
+      assert(_value != nullptr);
 
       value = (T)env->NewGlobalRef(_value);
     }
@@ -152,10 +152,10 @@ namespace Java {
      * Release the global reference and clear this object.
      */
     void Clear(JNIEnv *env) {
-      assert(value != NULL);
+      assert(value != nullptr);
 
       env->DeleteGlobalRef(value);
-      value = NULL;
+      value = nullptr;
     }
 
     /**
@@ -163,7 +163,7 @@ namespace Java {
      * allowed to call this method without ever calling Set().
      */
     void ClearOptional(JNIEnv *env) {
-      if (value != NULL)
+      if (value != nullptr)
         Clear(env);
     }
 

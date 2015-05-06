@@ -45,18 +45,18 @@ namespace Java {
     static void Initialise(JNIEnv *env);
 
     static void close(JNIEnv *env, jobject is) {
-      assert(env != NULL);
-      assert(is != NULL);
-      assert(close_method != NULL);
+      assert(env != nullptr);
+      assert(is != nullptr);
+      assert(close_method != nullptr);
 
       env->CallVoidMethod(is, close_method);
     }
 
     static int read(JNIEnv *env, jobject is, jbyteArray buffer) {
-      assert(env != NULL);
-      assert(is != NULL);
-      assert(buffer != NULL);
-      assert(read_method != NULL);
+      assert(env != nullptr);
+      assert(is != nullptr);
+      assert(buffer != nullptr);
+      assert(read_method != nullptr);
 
       return env->CallIntMethod(is, read_method, buffer);
     }

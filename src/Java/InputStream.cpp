@@ -39,8 +39,8 @@ Java::InputStream::Initialise(JNIEnv *env)
   Class cls(env, "java/io/InputStream");
 
   close_method = env->GetMethodID(cls, "close", "()V");
-  assert(close_method != NULL);
+  assert(close_method != nullptr);
 
   read_method = env->GetMethodID(cls, "read", "([B)I");
-  assert(read_method != NULL);
+  assert(read_method != nullptr);
 }

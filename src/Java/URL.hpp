@@ -48,17 +48,17 @@ namespace Java {
     static void Deinitialise(JNIEnv *env);
 
     static jobject Create(JNIEnv *env, jstring url) {
-      assert(env != NULL);
-      assert(url != NULL);
-      assert(ctor != NULL);
+      assert(env != nullptr);
+      assert(url != nullptr);
+      assert(ctor != nullptr);
 
       return env->NewObject(cls, ctor, url);
     }
 
     static jobject openConnection(JNIEnv *env, jobject url) {
-      assert(env != NULL);
-      assert(url != NULL);
-      assert(openConnection_method != NULL);
+      assert(env != nullptr);
+      assert(url != nullptr);
+      assert(openConnection_method != nullptr);
 
       return env->CallObjectMethod(url, openConnection_method);
     }
@@ -78,33 +78,33 @@ namespace Java {
 
     static void setConnectTimeout(JNIEnv *env, jobject connection,
                                   jint timeout) {
-      assert(env != NULL);
-      assert(connection != NULL);
-      assert(setConnectTimeout_method != NULL);
+      assert(env != nullptr);
+      assert(connection != nullptr);
+      assert(setConnectTimeout_method != nullptr);
 
       env->CallVoidMethod(connection, setConnectTimeout_method, timeout);
     }
 
     static void setReadTimeout(JNIEnv *env, jobject connection, jint timeout) {
-      assert(env != NULL);
-      assert(connection != NULL);
-      assert(setReadTimeout_method != NULL);
+      assert(env != nullptr);
+      assert(connection != nullptr);
+      assert(setReadTimeout_method != nullptr);
 
       env->CallVoidMethod(connection, setReadTimeout_method, timeout);
     }
 
     static int getContentLength(JNIEnv *env, jobject connection) {
-      assert(env != NULL);
-      assert(connection != NULL);
-      assert(getContentLength_method != NULL);
+      assert(env != nullptr);
+      assert(connection != nullptr);
+      assert(getContentLength_method != nullptr);
 
       return env->CallIntMethod(connection, getContentLength_method);
     }
 
     static jobject getInputStream(JNIEnv *env, jobject connection) {
-      assert(env != NULL);
-      assert(connection != NULL);
-      assert(getInputStream_method != NULL);
+      assert(env != nullptr);
+      assert(connection != nullptr);
+      assert(getInputStream_method != nullptr);
 
       return env->CallObjectMethod(connection, getInputStream_method);
     }

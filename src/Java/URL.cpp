@@ -37,16 +37,16 @@ void
 Java::URL::Initialise(JNIEnv *env)
 {
   assert(!cls.IsDefined());
-  assert(env != NULL);
+  assert(env != nullptr);
 
   cls.Find(env, "java/net/URL");
 
   ctor = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;)V");
-  assert(ctor != NULL);
+  assert(ctor != nullptr);
 
   openConnection_method = env->GetMethodID(cls, "openConnection",
                                            "()Ljava/net/URLConnection;");
-  assert(openConnection_method != NULL);
+  assert(openConnection_method != nullptr);
 }
 
 void
@@ -67,15 +67,15 @@ Java::URLConnection::Initialise(JNIEnv *env)
 
   setConnectTimeout_method = env->GetMethodID(cls, "setConnectTimeout",
                                               "(I)V");
-  assert(setConnectTimeout_method != NULL);
+  assert(setConnectTimeout_method != nullptr);
 
   setReadTimeout_method = env->GetMethodID(cls, "setReadTimeout", "(I)V");
-  assert(setReadTimeout_method != NULL);
+  assert(setReadTimeout_method != nullptr);
 
   getContentLength_method = env->GetMethodID(cls, "getContentLength", "()I");
-  assert(getContentLength_method != NULL);
+  assert(getContentLength_method != nullptr);
 
   getInputStream_method = env->GetMethodID(cls, "getInputStream",
                                            "()Ljava/io/InputStream;");
-  assert(getInputStream_method != NULL);
+  assert(getInputStream_method != nullptr);
 }

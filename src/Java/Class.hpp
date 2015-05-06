@@ -53,22 +53,22 @@ namespace Java {
   class TrivialClass : public TrivialRef<jclass> {
   public:
     void Find(JNIEnv *env, const char *name) {
-      assert(env != NULL);
-      assert(name != NULL);
+      assert(env != nullptr);
+      assert(name != nullptr);
 
       jclass cls = env->FindClass(name);
-      assert(cls != NULL);
+      assert(cls != nullptr);
 
       Set(env, cls);
       env->DeleteLocalRef(cls);
     }
 
     bool FindOptional(JNIEnv *env, const char *name) {
-      assert(env != NULL);
-      assert(name != NULL);
+      assert(env != nullptr);
+      assert(name != nullptr);
 
       jclass cls = env->FindClass(name);
-      if (cls == NULL) {
+      if (cls == nullptr) {
         env->ExceptionClear();
         return false;
       }

@@ -34,9 +34,9 @@ char *
 Java::String::CopyTo(JNIEnv *env, jstring value,
                      char *buffer, size_t max_size)
 {
-  const char *p = env->GetStringUTFChars(value, NULL);
-  if (p == NULL)
-    return NULL;
+  const char *p = env->GetStringUTFChars(value, nullptr);
+  if (p == nullptr)
+    return nullptr;
 
   char *result = CopyString(buffer, p, max_size);
   env->ReleaseStringUTFChars(value, p);

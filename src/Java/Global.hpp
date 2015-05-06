@@ -43,7 +43,7 @@ namespace Java {
   static inline void
   DetachCurrentThread()
   {
-    if (jvm != NULL)
+    if (jvm != nullptr)
       jvm->DetachCurrentThread();
   }
 
@@ -51,7 +51,7 @@ namespace Java {
   JNIEnv *GetEnv()
   {
     JNIEnv *env;
-    jvm->AttachCurrentThread(&env, NULL);
+    jvm->AttachCurrentThread(&env, nullptr);
     return env;
   }
 }
