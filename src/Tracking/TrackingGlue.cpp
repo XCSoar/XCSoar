@@ -30,7 +30,7 @@ Copyright_License {
 #ifdef HAVE_LIVETRACK24
 
 static LiveTrack24::VehicleType
-MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
+MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
 {
   static constexpr LiveTrack24::VehicleType vehicleTypeMap[] = {
     LiveTrack24::VehicleType::GLIDER,
@@ -216,7 +216,7 @@ TrackingGlue::Tick()
 
     if (!LiveTrack24::StartTracking(state.session_id, copy.username,
                                     copy.password, tracking_interval,
-                                    MapVehicleTypeToLifetrack24(settings.vehicleType))) {
+                                    MapVehicleTypeToLivetrack24(settings.vehicleType))) {
       state.ResetSession();
       mutex.Lock();
       return;
