@@ -52,7 +52,9 @@ Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
 void
 NativeLeScanCallback::Initialise(JNIEnv *env)
 {
-  cls.Find(env, "org/xcsoar/NativeLeScanCallback");
+  if (!cls.FindOptional(env, "org/xcsoar/NativeLeScanCallback"))
+    /* Bluetooth LE not supported on this Android version */
+    return;
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
@@ -61,13 +63,15 @@ NativeLeScanCallback::Initialise(JNIEnv *env)
 void
 NativeLeScanCallback::Deinitialise(JNIEnv *env)
 {
-  cls.Clear(env);
+  cls.ClearOptional(env);
 }
 
 jobject
 NativeLeScanCallback::Create(JNIEnv *env, LeScanCallback &cb)
 {
-  assert(cls != nullptr);
+  if (!cls.IsDefined())
+    /* Bluetooth LE not supported on this Android version */
+    return nullptr;
 
   return env->NewObject(cls, ctor, (jlong)&cb);
 }
