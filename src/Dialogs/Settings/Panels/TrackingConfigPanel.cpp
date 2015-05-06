@@ -53,6 +53,7 @@ enum ControlIndex {
   LT24Enabled,
   TrackingInterval,
   TrackingVehicleType,
+  TrackingVehicleName,
   LT24Server,
   LT24Username,
   LT24Password
@@ -104,6 +105,7 @@ TrackingConfigPanel::SetEnabled(bool enabled)
 {
   SetRowEnabled(TrackingInterval, enabled);
   SetRowEnabled(TrackingVehicleType, enabled);
+  SetRowEnabled(TrackingVehicleName, enabled);
   SetRowEnabled(LT24Server, enabled);
   SetRowEnabled(LT24Username, enabled);
   SetRowEnabled(LT24Password, enabled);
@@ -213,6 +215,8 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
           (unsigned) settings.vehicleType);
+  AddText(_("Vehicle Name"), _T("Name of vehicle used."),
+          settings.vehicle_name);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
   ((DataFieldEnum *)edit->GetDataField())->Set(settings.livetrack24.server);
@@ -260,6 +264,9 @@ TrackingConfigPanel::Save(bool &_changed)
 
   changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
                            settings.vehicleType);
+
+  changed |= SaveValue(TrackingVehicleName, ProfileKeys::TrackingVehicleName,
+                       settings.vehicle_name.buffer(), settings.vehicle_name.MAX_SIZE);
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING

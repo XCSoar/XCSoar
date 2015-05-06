@@ -60,6 +60,7 @@ struct TrackingSettings {
   /** Minimum time between two position updates (in seconds) */
   unsigned interval;
   VehicleType vehicleType;
+  StaticString<64> vehicle_name;
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING

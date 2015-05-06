@@ -216,7 +216,8 @@ TrackingGlue::Tick()
 
     if (!LiveTrack24::StartTracking(state.session_id, copy.username,
                                     copy.password, tracking_interval,
-                                    MapVehicleTypeToLivetrack24(settings.vehicleType))) {
+                                    MapVehicleTypeToLivetrack24(settings.vehicleType),
+                                    settings.vehicle_name)) {
       state.ResetSession();
       mutex.Lock();
       return;

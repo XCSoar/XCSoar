@@ -243,6 +243,7 @@ const char FlarmLocation[] = "FlarmLocation";
 
 const char TrackingInterval[] = "TrackingInterval";
 const char TrackingVehicleType[] = "TrackingVehicleType";
+const char TrackingVehicleName[] = "TrackingVehicleName";
 const char SkyLinesTrackingEnabled[] = "SkyLinesTrackingEnabled";
 const char SkyLinesTrackingInterval[] = "SkyLinesTrackingInterval";
 const char SkyLinesTrafficEnabled[] = "SkyLinesTrafficEnabled";

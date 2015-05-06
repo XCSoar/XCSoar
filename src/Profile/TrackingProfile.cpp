@@ -69,6 +69,7 @@ Profile::Load(TrackingSettings &settings)
 #ifdef HAVE_LIVETRACK24
   Get(ProfileKeys::TrackingInterval, settings.interval);
   GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
+  Get(ProfileKeys::TrackingVehicleName, settings.vehicle_name);
 #endif
 #ifdef HAVE_SKYLINES_TRACKING
   Load(settings.skylines);
