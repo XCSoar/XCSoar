@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MENU_BAR_HPP
 #define XCSOAR_MENU_BAR_HPP
 
-#include "Screen/ButtonWindow.hpp"
+#include "Form/Button.hpp"
 
 #include <tchar.h>
 
@@ -38,7 +38,7 @@ public:
   static constexpr unsigned MAX_BUTTONS = 32;
 
 protected:
-  class Button : public ButtonWindow {
+  class Button : public WndButton {
     unsigned event;
 
   public:
@@ -58,7 +58,7 @@ protected:
   Button buttons[MAX_BUTTONS];
 
 public:
-  MenuBar(ContainerWindow &parent);
+  MenuBar(ContainerWindow &parent, const ButtonLook &look);
 
 public:
   void SetFont(const Font &font);

@@ -35,15 +35,9 @@ Copyright_License {
 static MenuBar *bar;
 
 void
-ButtonLabel::CreateButtonLabels(ContainerWindow &parent)
+ButtonLabel::CreateButtonLabels(ContainerWindow &parent, ButtonLook &look)
 {
-  bar = new MenuBar(parent);
-}
-
-void
-ButtonLabel::SetFont(const Font &Font)
-{
-  bar->SetFont(Font);
+  bar = new MenuBar(parent, look);
 }
 
 void

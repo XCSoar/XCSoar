@@ -260,8 +260,7 @@ MainWindow::InitialiseConfigured()
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   map_rect = ib_layout.remaining;
 
-  ButtonLabel::CreateButtonLabels(*this);
-  ButtonLabel::SetFont(Fonts::dialog_bold);
+  ButtonLabel::CreateButtonLabels(*this, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
 

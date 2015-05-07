@@ -30,6 +30,7 @@ Copyright_License {
 #include <stddef.h>
 
 struct PixelRect;
+struct ButtonLook;
 class Font;
 class ContainerWindow;
 class Menu;
@@ -40,8 +41,7 @@ namespace ButtonLabel {
     const TCHAR *text;
   };
 
-  void CreateButtonLabels(ContainerWindow &parent);
-  void SetFont(const Font &Font);
+  void CreateButtonLabels(ContainerWindow &parent, ButtonLook &look);
   void Destroy();
 
   gcc_pure

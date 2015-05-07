@@ -114,7 +114,7 @@ MenuBar::Button::OnMessage(HWND hWnd, UINT message,
 }
 #endif
 
-MenuBar::MenuBar(ContainerWindow &parent)
+MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 {
   const PixelRect rc = parent.GetClientRect();
 
@@ -125,7 +125,7 @@ MenuBar::MenuBar(ContainerWindow &parent)
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     PixelRect button_rc = GetButtonPosition(i, rc);
-    buttons[i].Create(parent, _T(""), button_rc, style);
+    buttons[i].Create(parent, look, _T(""), button_rc, style);
   }
 }
 
@@ -144,7 +144,7 @@ MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text,
 
   Button &button = buttons[i];
 
-  button.SetText(text);
+  button.SetCaption(text);
   button.SetEnabled(enabled && event > 0);
   button.SetEvent(event);
   button.ShowOnTop();
