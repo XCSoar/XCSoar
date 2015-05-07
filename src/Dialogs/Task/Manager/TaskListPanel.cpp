@@ -76,7 +76,7 @@ class TaskListPanel final
    */
   bool more;
 
-  WndButton *more_button;
+  Button *more_button;
   TextWidget &summary;
   TwoWidgets *two_widgets;
   ButtonPanelWidget *buttons;

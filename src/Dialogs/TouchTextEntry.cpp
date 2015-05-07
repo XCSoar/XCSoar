@@ -202,22 +202,22 @@ TouchTextEntry(TCHAR *text, size_t width,
   WindowStyle button_style;
   button_style.TabStop();
 
-  WndButton ok_button(client_area, look.button, _("OK"),
-                      { ok_left, button_top, ok_right, button_bottom },
-                      button_style, form, mrOK);
+  Button ok_button(client_area, look.button, _("OK"),
+                   { ok_left, button_top, ok_right, button_bottom },
+                   button_style, form, mrOK);
 
-  WndButton cancel_button(client_area, look.button, _("Cancel"),
-                          { cancel_left, button_top,
-                              cancel_right, button_bottom },
-                          button_style, form, mrCancel);
+  Button cancel_button(client_area, look.button, _("Cancel"),
+                       { cancel_left, button_top,
+                           cancel_right, button_bottom },
+                       button_style, form, mrCancel);
 
   auto clear_listener = MakeLambdaActionListener([](unsigned id){
       ClearText();
     });
-  WndButton clear_button(client_area, look.button, _("Clear"),
-                         { clear_left, button_top,
-                             clear_right, button_bottom },
-                         button_style, clear_listener, 0);
+  Button clear_button(client_area, look.button, _("Clear"),
+                      { clear_left, button_top,
+                          clear_right, button_bottom },
+                      button_style, clear_listener, 0);
 
   KeyboardWidget keyboard(look.button, FormCharacter, !accb,
                           default_shift_state);
@@ -236,10 +236,10 @@ TouchTextEntry(TCHAR *text, size_t width,
   auto backspace_listener = MakeLambdaActionListener([](unsigned id){
       OnBackspace();
     });
-  WndButton backspace_button(client_area, look.button, _T("<-"),
-                             { backspace_left, padding, rc.right - padding,
-                                 editor_bottom },
-                             button_style, backspace_listener, 0);
+  Button backspace_button(client_area, look.button, _T("<-"),
+                          { backspace_left, padding, rc.right - padding,
+                              editor_bottom },
+                          button_style, backspace_listener, 0);
 
   AllowedCharactersCallback = accb;
 

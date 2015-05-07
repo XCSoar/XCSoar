@@ -105,7 +105,7 @@ class InfoBoxesConfigWidget final
   StaticArray<InfoBoxPreview, InfoBoxSettings::Panel::MAX_CONTENTS> previews;
   unsigned current_preview;
 
-  WndButton copy_button, paste_button, close_button;
+  Button copy_button, paste_button, close_button;
 
 public:
   InfoBoxesConfigWidget(ActionListener &_dialog,

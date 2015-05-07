@@ -80,10 +80,10 @@ class AirspaceWarningListWidget final
 
   ProtectedAirspaceWarningManager &airspace_warnings;
 
-  WndButton *ack_warn_button;
-  WndButton *ack_day_button;
-  WndButton *ack_space_button;
-  WndButton *enable_button;
+  Button *ack_warn_button;
+  Button *ack_day_button;
+  Button *ack_space_button;
+  Button *enable_button;
 
   TrivialArray<WarningItem, 64u> warning_list;
 

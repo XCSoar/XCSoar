@@ -101,10 +101,9 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         button_style.Hide();
         button_style.TabStop();
 
-        WndButton *button =
-          new WndButton(tab_bar, look.button, _("Switch InfoBox"),
-                        button_rc, button_style,
-                        form, SWITCH_INFO_BOX);
+        auto *button = new Button(tab_bar, look.button, _("Switch InfoBox"),
+                                  button_rc, button_style,
+                                  form, SWITCH_INFO_BOX);
 
         widget = new TwoWidgets(widget, new WindowWidget(button), false);
       }

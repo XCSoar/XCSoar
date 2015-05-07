@@ -166,7 +166,7 @@ class ManagedFileListWidget
   unsigned font_height;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  WndButton *download_button, *add_button, *cancel_button;
+  Button *download_button, *add_button, *cancel_button;
 #endif
 
   FileRepository repository;

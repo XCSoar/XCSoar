@@ -64,7 +64,7 @@ class MainWindow final : public SingleWindow, ActionListener
     CLOSE = 1,
   };
 
-  WndButton close_button;
+  Button close_button;
   TestWindow test_window;
 
 public:

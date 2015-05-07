@@ -67,7 +67,7 @@ class FontPreviewAndButton : public NullWidget, private ActionListener {
   Font font;
 
   TextWindow preview;
-  WndButton *button;
+  Button *button;
 
 public:
   FontPreviewAndButton(const char *_key, const TCHAR *_text,
@@ -136,8 +136,8 @@ public:
     WindowStyle button_style;
     button_style.Hide();
     button_style.TabStop();
-    button = new WndButton(parent, UIGlobals::GetDialogLook().button,
-                           _("Edit"), rc, button_style, *this, 0);
+    button = new Button(parent, UIGlobals::GetDialogLook().button,
+                        _("Edit"), rc, button_style, *this, 0);
 
     TextWindowStyle preview_style;
     preview_style.Hide();

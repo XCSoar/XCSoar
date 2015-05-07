@@ -94,7 +94,7 @@ PlaneEditWidget::UpdatePolarButton()
     caption = buffer;
   }
 
-  WndButton &polar_button = (WndButton &)GetRow(POLAR);
+  Button &polar_button = (Button &)GetRow(POLAR);
   polar_button.SetCaption(caption);
 }
 

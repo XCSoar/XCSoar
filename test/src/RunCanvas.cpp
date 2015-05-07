@@ -40,9 +40,9 @@ Copyright_License {
 
 class TestWindow final : public SingleWindow, ActionListener {
 #ifndef ENABLE_OPENGL
-  WndButton buffer_button;
+  Button buffer_button;
 #endif
-  WndButton close_button;
+  Button close_button;
   unsigned page;
 #ifndef ENABLE_OPENGL
   bool buffered;

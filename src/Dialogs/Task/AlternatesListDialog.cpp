@@ -46,7 +46,7 @@ class AlternatesListWidget final
 
   const DialogLook &dialog_look;
 
-  WndButton *details_button, *cancel_button, *goto_button;
+  Button *details_button, *cancel_button, *goto_button;
 
 public:
   AlternateList alternates;

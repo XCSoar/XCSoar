@@ -98,19 +98,19 @@ class TaskPointWidget final
 
   PanelControl waypoint_panel;
   WndFrame waypoint_name;
-  WndButton waypoint_details, waypoint_remove, waypoint_relocate;
+  Button waypoint_details, waypoint_remove, waypoint_relocate;
 
   PanelControl tp_panel;
   WndFrame type_label;
-  WndButton change_type;
+  Button change_type;
   WndOwnerDrawFrame map;
   DockWindow properties_dock;
   ObservationZoneEditWidget *properties_widget;
 
-  WndButton optional_starts;
+  Button optional_starts;
   CheckBoxControl score_exit;
 
-  WndButton *previous_button, *next_button;
+  Button *previous_button, *next_button;
 
 public:
   TaskPointWidget(WidgetDialog &_dialog,

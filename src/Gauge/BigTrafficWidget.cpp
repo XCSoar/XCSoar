@@ -866,15 +866,15 @@ TrafficWidget::UpdateButtons()
 
 #ifndef GNAV
 
-static WndButton *
+static Button *
 NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
                 const TCHAR *caption,
                 const PixelRect &rc,
                 ActionListener &listener, int id)
 {
-  return new WndButton(parent, rc, WindowStyle(),
-                       new SymbolButtonRenderer(look, caption),
-                       listener, id);
+  return new Button(parent, rc, WindowStyle(),
+                    new SymbolButtonRenderer(look, caption),
+                    listener, id);
 }
 
 #endif
@@ -897,12 +897,12 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                                          _T("<"), rc, *this, PREVIOUS_ITEM);
   next_item_button = NewSymbolButton(GetContainer(), look.dialog.button,
                                      _T(">"), rc, *this, NEXT_ITEM);
-  details_button = new WndButton(GetContainer(), look.dialog.button,
-                                 _("Details"), rc, WindowStyle(),
-                                 *this, DETAILS);
-  close_button = new WndButton(GetContainer(), look.dialog.button,
-                               _("Close"), rc, WindowStyle(),
-                               *this, CLOSE);
+  details_button = new Button(GetContainer(), look.dialog.button,
+                              _("Details"), rc, WindowStyle(),
+                              *this, DETAILS);
+  close_button = new Button(GetContainer(), look.dialog.button,
+                            _("Close"), rc, WindowStyle(),
+                            *this, CLOSE);
 #endif
 
   WindowStyle style;

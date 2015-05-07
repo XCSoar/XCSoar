@@ -99,7 +99,7 @@ KeyboardWidget::SetAllowedCharacters(const TCHAR *allowed)
                           StringFind(allowed, buttons[i].GetCharacter()) != nullptr);
 }
 
-WndButton *
+Button *
 KeyboardWidget::FindButton(unsigned ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)

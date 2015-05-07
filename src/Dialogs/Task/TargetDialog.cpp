@@ -102,17 +102,17 @@ class TargetWidget
 
   TargetDialogMapWindow map;
 
-  WndButton name_button;
+  Button name_button;
 #ifndef GNAV
-  WndButton previous_button;
-  WndButton next_button;
+  Button previous_button;
+  Button next_button;
 #endif
 
   WndProperty range, radial, ete, delta_t, speed_remaining, speed_achieved;
 
   CheckBoxControl optimized;
 
-  WndButton close_button;
+  Button close_button;
 
   unsigned initial_active_task_point;
   unsigned task_size;

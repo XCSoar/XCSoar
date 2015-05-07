@@ -171,9 +171,9 @@ TaskManagerDialog::Create(SingleWindow &parent)
 
   WindowStyle button_style(hidden);
   button_style.TabStop();
-  target_button = new WndButton(client_area, GetLook().button, _("Target"),
-                                layout.target_button, button_style,
-                                *this, TARGET);
+  target_button = new Button(client_area, GetLook().button, _("Target"),
+                             layout.target_button, button_style,
+                             *this, TARGET);
 
   WindowStyle tab_style;
   tab_style.ControlParent();

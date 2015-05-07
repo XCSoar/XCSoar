@@ -107,7 +107,7 @@ class VegaConfigurationExtraButtons final
 
   WidgetDialog &dialog;
 
-  WndButton demo_button, save_button;
+  Button demo_button, save_button;
 
 public:
   VegaConfigurationExtraButtons(WidgetDialog &_dialog)

@@ -96,7 +96,7 @@ class PortMonitorWidget final : public WindowWidget, public ActionListener {
   TerminalWindow terminal;
   PortTerminalBridge bridge;
 
-  WndButton *pause_button;
+  Button *pause_button;
   bool paused;
 
 public:

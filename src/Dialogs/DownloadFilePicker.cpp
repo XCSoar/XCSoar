@@ -156,7 +156,7 @@ class DownloadFilePickerWidget final
 
   unsigned font_height;
 
-  WndButton *download_button;
+  Button *download_button;
 
   std::vector<AvailableFile> items;
 

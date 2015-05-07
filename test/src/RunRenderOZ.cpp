@@ -199,7 +199,7 @@ OZWindow::OnPaint(Canvas &canvas)
 class TestWindow : public SingleWindow,
                    ActionListener,
                    ListItemRenderer, ListCursorHandler {
-  WndButton close_button;
+  Button close_button;
   ListControl *type_list;
   OZWindow oz;
 

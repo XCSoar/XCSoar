@@ -64,7 +64,7 @@ class ScanBluetoothLeWidget final
   std::set<std::string> addresses;
   std::forward_list<Item> new_items;
 
-  WndButton *select_button;
+  Button *select_button;
 
 public:
   explicit ScanBluetoothLeWidget(WidgetDialog &_dialog)

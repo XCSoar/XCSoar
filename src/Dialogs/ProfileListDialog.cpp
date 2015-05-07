@@ -85,8 +85,8 @@ class ProfileListWidget final
   const bool select;
 
   WndForm *form;
-  WndButton *password_button;
-  WndButton *copy_button, *delete_button;
+  Button *password_button;
+  Button *copy_button, *delete_button;
 
   std::vector<ListItem> list;
 

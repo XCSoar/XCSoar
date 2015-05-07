@@ -51,9 +51,9 @@ private:
 
   const DialogLook &look;
 
-  WndButton close_button;
+  Button close_button;
   WndFrame message;
-  WndButton revert_button;
+  Button revert_button;
 
 public:
   TaskClosePanel(TaskManagerDialog &_dialog, bool *_task_modified,

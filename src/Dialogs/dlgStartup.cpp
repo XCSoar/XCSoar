@@ -62,7 +62,7 @@ class LogoQuitWidget final : public NullWidget {
   ActionListener &action_listener;
 
   LogoWindow logo;
-  WndButton quit;
+  Button quit;
 
 public:
   LogoQuitWidget(const ButtonLook &_look, ActionListener &_action_listener)

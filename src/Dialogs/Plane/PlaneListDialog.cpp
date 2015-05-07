@@ -88,7 +88,7 @@ class PlaneListWidget final
   };
 
   WndForm *form;
-  WndButton *edit_button, *delete_button, *load_button;
+  Button *edit_button, *delete_button, *load_button;
 
   std::vector<ListItem> list;
 

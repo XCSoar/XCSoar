@@ -32,7 +32,7 @@ class ButtonPanel {
   const ButtonLook &look;
   WindowStyle style;
 
-  StaticArray<WndButton *, 8u> buttons;
+  StaticArray<Button *, 8u> buttons;
 
   /**
    * Map key codes to the button that "owns" it.  Used by KeyPress().
@@ -51,18 +51,18 @@ public:
     style.Hide();
   }
 
-  WndButton *Add(ButtonRenderer *renderer,
-                 ActionListener &listener, int id);
+  Button *Add(ButtonRenderer *renderer,
+              ActionListener &listener, int id);
 
-  WndButton *Add(const TCHAR *caption,
-                 ActionListener &listener, int id);
+  Button *Add(const TCHAR *caption,
+              ActionListener &listener, int id);
 
   /**
    * Add a symbol button.  The caption is one of the "special"
    * #WndSymbolButton strings.
    */
-  WndButton *AddSymbol(const TCHAR *caption,
-                       ActionListener &listener, int id);
+  Button *AddSymbol(const TCHAR *caption,
+                    ActionListener &listener, int id);
 
   /**
    * Assign a hot key to the most recently added button.

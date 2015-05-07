@@ -31,7 +31,7 @@ Copyright_License {
 /**
  * A button that emits a character on press.
  */
-class CharacterButton : public WndButton {
+class CharacterButton : public Button {
   typedef bool (*OnCharacterCallback)(unsigned key);
 
   OnCharacterCallback on_character;

@@ -50,7 +50,7 @@ class OptionStartsWidget : public ListWidget, private ActionListener {
   const bool RealStartExists;
   bool modified;
 
-  WndButton *relocate_button, *remove_button;
+  Button *relocate_button, *remove_button;
 
 public:
   OptionStartsWidget(OrderedTask &_task)

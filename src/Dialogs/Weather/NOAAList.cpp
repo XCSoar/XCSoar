@@ -65,7 +65,7 @@ class NOAAListWidget final
     REMOVE,
   };
 
-  WndButton *details_button, *add_button, *update_button, *remove_button;
+  Button *details_button, *add_button, *update_button, *remove_button;
 
   TrivialArray<NOAAListItem, 20> stations;
 

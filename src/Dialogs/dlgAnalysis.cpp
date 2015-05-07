@@ -139,7 +139,7 @@ class AnalysisWidget final : public NullWidget, ActionListener, Timer {
   WndForm &dialog;
 
   WndFrame info;
-  WndButton details_button, previous_button, next_button, close_button;
+  Button details_button, previous_button, next_button, close_button;
   ChartControl chart;
 
 public:

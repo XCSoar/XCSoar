@@ -114,7 +114,7 @@ class TestMainWindow : public SingleWindow, public ActionListener {
   Window *full_window;
 
 #ifdef ENABLE_CLOSE_BUTTON
-  WndButton close_button;
+  Button close_button;
 #endif
 
 public:

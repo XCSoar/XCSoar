@@ -91,8 +91,8 @@ class MapItemListWidget final
   const FinalGlideBarLook &final_glide_look;
   const MapSettings &settings;
 
-  WndButton *settings_button, *details_button, *cancel_button, *goto_button;
-  WndButton *ack_button;
+  Button *settings_button, *details_button, *cancel_button, *goto_button;
+  Button *ack_button;
 
 public:
   void CreateButtons(WidgetDialog &dialog);

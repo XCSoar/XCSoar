@@ -30,13 +30,13 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 class WndForm;
-class WndButton;
+class Button;
 
 class TaskCalculatorPanel final
   : public RowFormWidget,
     private DataFieldListener,
     private NullBlackboardListener {
-  WndButton *target_button;
+  Button *target_button;
 
   const bool *task_modified;
 
@@ -48,7 +48,7 @@ public:
     :RowFormWidget(look),
      target_button(nullptr), task_modified(_task_modified) {}
 
-  void SetTargetButton(WndButton *_target_button) {
+  void SetTargetButton(Button *_target_button) {
     assert(target_button == nullptr);
     assert(_target_button != nullptr);
 

@@ -71,9 +71,9 @@ enum Buttons {
 class TaskEditButtons final : public NullWidget {
   ActionListener *listener;
 
-  WndButton edit_button, mutate_button;
-  WndButton down_button, up_button;
-  WndButton reverse_button, clear_all_button;
+  Button edit_button, mutate_button;
+  Button down_button, up_button;
+  Button reverse_button, clear_all_button;
   bool visible;
 
   bool show_edit, show_mutate, show_down, show_up, show_reverse;

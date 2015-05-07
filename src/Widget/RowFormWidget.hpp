@@ -42,7 +42,7 @@ class ActionListener;
 class Angle;
 class RoughTime;
 class RoughTimeDelta;
-class WndButton;
+class Button;
 
 /**
  * A #Widget that contains #WndProperty controls, one in a row.
@@ -79,7 +79,7 @@ class RowFormWidget : public WindowWidget {
       MULTI_LINE,
 
       /**
-       * A #WndButton.
+       * A #Button.
        */
       BUTTON,
 
@@ -438,7 +438,7 @@ public:
    */
   void AddMultiLine(const TCHAR *text=nullptr);
 
-  WndButton *AddButton(const TCHAR *label, ActionListener &listener, int id);
+  Button *AddButton(const TCHAR *label, ActionListener &listener, int id);
 
   gcc_pure
   Widget &GetRowWidget(unsigned i) {

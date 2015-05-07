@@ -38,7 +38,7 @@ class ButtonRenderer;
 /**
  * This class is used for creating buttons.
  */
-class WndButton : public PaintWindow {
+class Button : public PaintWindow {
   bool dragging, down;
 
   ButtonRenderer *renderer;
@@ -47,20 +47,20 @@ class WndButton : public PaintWindow {
   int id;
 
 public:
-  WndButton(ContainerWindow &parent, const PixelRect &rc,
-            WindowStyle style, ButtonRenderer *_renderer,
-            ActionListener &_listener, int _id) {
+  Button(ContainerWindow &parent, const PixelRect &rc,
+         WindowStyle style, ButtonRenderer *_renderer,
+         ActionListener &_listener, int _id) {
     Create(parent, rc, style, _renderer, _listener, _id);
   }
 
-  WndButton(ContainerWindow &parent, const ButtonLook &look,
-            const TCHAR *caption, const PixelRect &rc,
-            WindowStyle style,
-            ActionListener &_listener, int _id) {
+  Button(ContainerWindow &parent, const ButtonLook &look,
+         const TCHAR *caption, const PixelRect &rc,
+         WindowStyle style,
+         ActionListener &_listener, int _id) {
     Create(parent, look, caption, rc, style, _listener, _id);
   }
 
-  WndButton():listener(nullptr) {}
+  Button():listener(nullptr) {}
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
               WindowStyle style, ButtonRenderer *_renderer);

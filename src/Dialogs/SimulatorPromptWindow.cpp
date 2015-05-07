@@ -35,8 +35,6 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Resources.hpp"
 
-class WndButton;
-
 void
 SimulatorPromptWindow::OnCreate()
 {

@@ -105,7 +105,7 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
 class TestWindow : public SingleWindow,
                    ActionListener,
                    ListItemRenderer, ListCursorHandler {
-  WndButton close_button;
+  Button close_button;
   ListControl *type_list;
   ChartWindow chart;
 

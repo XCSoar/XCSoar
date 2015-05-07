@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2015 The XCSoar Project
@@ -18,7 +18,7 @@ Copyright_License {
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
+  }
 */
 
 #include "Form/Button.hpp"
@@ -30,10 +30,10 @@ Copyright_License {
 #include "Hardware/Vibrator.hpp"
 
 void
-WndButton::Create(ContainerWindow &parent,
-                  const PixelRect &rc,
-                  WindowStyle style,
-                  ButtonRenderer *_renderer)
+Button::Create(ContainerWindow &parent,
+               const PixelRect &rc,
+               WindowStyle style,
+               ButtonRenderer *_renderer)
 {
   dragging = down = false;
   renderer = _renderer;
@@ -42,17 +42,17 @@ WndButton::Create(ContainerWindow &parent,
 }
 
 void
-WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                  const TCHAR *caption, const PixelRect &rc,
-                  WindowStyle style)
+Button::Create(ContainerWindow &parent, const ButtonLook &look,
+               const TCHAR *caption, const PixelRect &rc,
+               WindowStyle style)
 {
   Create(parent, rc, style, new TextButtonRenderer(look, caption));
 }
 
 void
-WndButton::Create(ContainerWindow &parent, const PixelRect &rc,
-                  WindowStyle style, ButtonRenderer *_renderer,
-                  ActionListener &_listener, int _id)
+Button::Create(ContainerWindow &parent, const PixelRect &rc,
+               WindowStyle style, ButtonRenderer *_renderer,
+               ActionListener &_listener, int _id)
 {
   listener = &_listener;
   id = _id;
@@ -61,17 +61,17 @@ WndButton::Create(ContainerWindow &parent, const PixelRect &rc,
 }
 
 void
-WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                  const TCHAR *caption, const PixelRect &rc,
-                  WindowStyle style,
-                  ActionListener &_listener, int _id) {
+Button::Create(ContainerWindow &parent, const ButtonLook &look,
+               const TCHAR *caption, const PixelRect &rc,
+               WindowStyle style,
+               ActionListener &_listener, int _id) {
   Create(parent, rc, style,
          new TextButtonRenderer(look, caption),
          _listener, _id);
 }
 
 void
-WndButton::SetCaption(const TCHAR *caption)
+Button::SetCaption(const TCHAR *caption)
 {
   assert(caption != nullptr);
 
@@ -82,13 +82,13 @@ WndButton::SetCaption(const TCHAR *caption)
 }
 
 unsigned
-WndButton::GetMinimumWidth() const
+Button::GetMinimumWidth() const
 {
   return renderer->GetMinimumButtonWidth();
 }
 
 void
-WndButton::SetDown(bool _down)
+Button::SetDown(bool _down)
 {
   if (_down == down)
     return;
@@ -102,7 +102,7 @@ WndButton::SetDown(bool _down)
 }
 
 bool
-WndButton::OnClicked()
+Button::OnClicked()
 {
   if (listener != nullptr) {
     listener->OnAction(id);
@@ -113,7 +113,7 @@ WndButton::OnClicked()
 }
 
 void
-WndButton::OnDestroy()
+Button::OnDestroy()
 {
   assert(renderer != nullptr);
 
@@ -123,7 +123,7 @@ WndButton::OnDestroy()
 }
 
 bool
-WndButton::OnKeyCheck(unsigned key_code) const
+Button::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -135,7 +135,7 @@ WndButton::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-WndButton::OnKeyDown(unsigned key_code)
+Button::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
 #ifdef GNAV
@@ -155,7 +155,7 @@ WndButton::OnKeyDown(unsigned key_code)
 }
 
 bool
-WndButton::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+Button::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     SetDown(IsInside(x, y));
@@ -165,7 +165,7 @@ WndButton::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 }
 
 bool
-WndButton::OnMouseDown(PixelScalar x, PixelScalar y)
+Button::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   if (IsTabStop())
     SetFocus();
@@ -177,7 +177,7 @@ WndButton::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndButton::OnMouseUp(PixelScalar x, PixelScalar y)
+Button::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (!dragging)
     return true;
@@ -194,21 +194,21 @@ WndButton::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 void
-WndButton::OnSetFocus()
+Button::OnSetFocus()
 {
   PaintWindow::OnSetFocus();
   Invalidate();
 }
 
 void
-WndButton::OnKillFocus()
+Button::OnKillFocus()
 {
   PaintWindow::OnKillFocus();
   Invalidate();
 }
 
 void
-WndButton::OnCancelMode()
+Button::OnCancelMode()
 {
   dragging = false;
   SetDown(false);
@@ -217,7 +217,7 @@ WndButton::OnCancelMode()
 }
 
 void
-WndButton::OnPaint(Canvas &canvas)
+Button::OnPaint(Canvas &canvas)
 {
   assert(renderer != nullptr);
 

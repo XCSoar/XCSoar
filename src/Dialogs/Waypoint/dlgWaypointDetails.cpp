@@ -135,10 +135,10 @@ class WaypointDetailsWidget final
   const Waypoint &waypoint;
   const bool allow_navigation;
 
-  WndButton goto_button;
-  WndButton magnify_button, shrink_button;
-  WndButton previous_button, next_button;
-  WndButton close_button;
+  Button goto_button;
+  Button magnify_button, shrink_button;
+  Button previous_button, next_button;
+  Button close_button;
 
   int page, last_page;
 

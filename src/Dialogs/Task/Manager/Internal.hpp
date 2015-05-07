@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 
 class TaskMapWindow;
-class WndButton;
+class Button;
 class TabBarControl;
 class OrderedTask;
 
@@ -35,7 +35,7 @@ class TaskManagerDialog final : public WndForm {
   PixelRect task_view_position;
 
   TaskMapWindow *task_view;
-  WndButton *target_button;
+  Button *target_button;
   TabBarControl *tab_bar;
 
   unsigned TurnpointTab;

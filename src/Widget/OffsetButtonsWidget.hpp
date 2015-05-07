@@ -32,7 +32,7 @@ Copyright_License {
 
 struct ButtonLook;
 class ActionListener;
-class WndButton;
+class Button;
 
 /**
  * Show four buttons to increment/decrement a value.
@@ -41,7 +41,7 @@ class OffsetButtonsWidget : public NullWidget, private ActionListener {
   const ButtonLook &look;
   const TCHAR *const format;
   const fixed offsets[4];
-  WndButton *buttons[4];
+  Button *buttons[4];
 
 public:
   OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,

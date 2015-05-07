@@ -117,7 +117,7 @@ protected:
 
 class TestWindow final : public SingleWindow, ActionListener {
   KeyCodeDumper key_code_dumper;
-  WndButton close_button;
+  Button close_button;
 
   enum Buttons {
     CLOSE,

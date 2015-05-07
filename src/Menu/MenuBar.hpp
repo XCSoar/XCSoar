@@ -38,7 +38,7 @@ public:
   static constexpr unsigned MAX_BUTTONS = 32;
 
 protected:
-  class Button : public WndButton {
+  class Button : public ::Button {
     unsigned event;
 
   public:

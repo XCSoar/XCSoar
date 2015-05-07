@@ -158,11 +158,11 @@ class DeviceListWidget final
 
   Item items[NUMDEV];
 
-  WndButton *disable_button;
-  WndButton *reconnect_button, *flight_button;
-  WndButton *edit_button;
-  WndButton *manage_button, *monitor_button;
-  WndButton *debug_button;
+  Button *disable_button;
+  Button *reconnect_button, *flight_button;
+  Button *edit_button;
+  Button *manage_button, *monitor_button;
+  Button *debug_button;
 
 public:
   DeviceListWidget(const DialogLook &_look)

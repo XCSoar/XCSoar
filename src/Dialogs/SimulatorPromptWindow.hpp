@@ -44,10 +44,10 @@ class SimulatorPromptWindow final : public ContainerWindow {
   LogoView logo_view;
   PixelRect logo_rect;
 
-  WndButton quit_button;
+  Button quit_button;
 
   Bitmap fly_bitmap, sim_bitmap;
-  WndButton fly_button, sim_button;
+  Button fly_button, sim_button;
 
   RasterPoint label_position;
 

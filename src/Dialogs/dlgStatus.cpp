@@ -89,9 +89,9 @@ dlgStatusShowModal(int start_page)
   WindowStyle button_style;
   button_style.TabStop();
 
-  WndButton close_button(form.GetClientAreaWindow(), look.button,
-                         _("Close"), close_rc, button_style,
-                         form, mrOK);
+  Button close_button(form.GetClientAreaWindow(), look.button,
+                      _("Close"), close_rc, button_style,
+                      form, mrOK);
 
   WindowStyle tab_style;
   tab_style.ControlParent();

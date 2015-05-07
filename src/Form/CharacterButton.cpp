@@ -42,7 +42,7 @@ CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
   on_character = _on_character;
   character = _character;
 
-  WndButton::Create(parent, look, text, rc, style);
+  Button::Create(parent, look, text, rc, style);
 }
 
 unsigned
