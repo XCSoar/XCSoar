@@ -114,7 +114,7 @@ LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
   const WideToUTF8Converter password2(password);
   const WideToUTF8Converter vname2(vname);
   if (!username2.IsValid() || !password2.IsValid() || !vname2.IsValid())
-    return 0;
+    return false;
 
 #ifdef _UNICODE
   NarrowString<32> version;
