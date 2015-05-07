@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Canvas.hpp"
 #include "Math/Point2D.hpp"
-#include "Util/DebugFlag.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -63,11 +62,18 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
   DisplayOrientation old_orientation;
 #endif
 
-  DebugFlag active;
+#ifndef NDEBUG
+  bool active;
+#endif
 
 public:
   BufferCanvas()
-    :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr) {}
+    :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr)
+#ifndef NDEBUG
+    , active(false)
+#endif
+  {}
+
   BufferCanvas(const Canvas &canvas,
                UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas() {

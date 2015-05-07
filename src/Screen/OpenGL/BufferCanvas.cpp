@@ -46,6 +46,9 @@ BufferCanvas::BufferCanvas(const Canvas &canvas,
                            UPixelScalar _width, UPixelScalar _height)
   :Canvas({_width, _height}),
    texture(new GLTexture(_width, _height))
+#ifndef NDEBUG
+  , active(false)
+#endif
 {
   assert(canvas.IsDefined());
 }
@@ -170,7 +173,9 @@ BufferCanvas::Begin(Canvas &other)
     offset = other.offset;
   }
 
+#ifndef NDEBUG
   active = true;
+#endif
 }
 
 void
@@ -230,7 +235,9 @@ BufferCanvas::Commit(Canvas &other)
     CopyToTexture(*texture, GetRect());
   }
 
+#ifndef NDEBUG
   active = false;
+#endif
 }
 
 void
