@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MANAGED_WIDGET_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/DebugFlag.hpp"
 
 class ContainerWindow;
 class Widget;
@@ -46,15 +45,23 @@ class ManagedWidget {
   bool prepared, visible;
 
 #ifndef NDEBUG
-  DebugFlag have_position;
+  bool have_position;
 #endif
 
 public:
   ManagedWidget(ContainerWindow &_parent)
-    :parent(_parent), widget(nullptr) {}
+    :parent(_parent), widget(nullptr)
+#ifndef NDEBUG
+    , have_position(false)
+#endif
+  {}
 
   ManagedWidget(ContainerWindow &_parent, Widget *_widget)
-    :parent(_parent), widget(_widget), prepared(false) {}
+    :parent(_parent), widget(_widget), prepared(false)
+#ifndef NDEBUG
+    , have_position(false)
+#endif
+  {}
 
   ~ManagedWidget() {
     Clear();
