@@ -25,24 +25,23 @@ Copyright_License {
 #define XCSOAR_PROGRESS_DIALOG_HPP
 
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Operation/Operation.hpp"
 #include "ProgressWindow.hpp"
 
 #include <functional>
-
-class ProgressCancelButton;
 
 class ProgressDialog
   : public WndForm, public QuietOperationEnvironment {
 
   ProgressWindow progress;
 
-  ProgressCancelButton *cancel_button;
+  WndButton cancel_button;
+  std::function<void()> cancel_callback;
 
 public:
   ProgressDialog(SingleWindow &parent, const DialogLook &dialog_look,
                  const TCHAR *caption);
-  ~ProgressDialog();
 
   void AddCancelButton(std::function<void()> &&callback);
 
@@ -59,6 +58,9 @@ public:
   void SetProgressPosition(unsigned position) override {
     progress.SetValue(position);
   }
+
+  /* virtual methods from ActionListener */
+  void OnAction(int id) override;
 };
 
 #endif

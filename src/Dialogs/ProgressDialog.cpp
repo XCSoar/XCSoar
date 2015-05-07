@@ -24,43 +24,23 @@ Copyright_License {
 #include "ProgressDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 
 #include <assert.h>
 
-class ProgressCancelButton : public ButtonWindow {
-   std::function<void()> callback;
-
-public:
-  ProgressCancelButton(std::function<void()> &&_callback)
-    :callback(std::move(_callback)) {}
-
-  virtual bool OnClicked() {
-    callback();
-    return true;
-  }
-};
-
 ProgressDialog::ProgressDialog(SingleWindow &parent,
                                const DialogLook &dialog_look,
                                const TCHAR *caption)
   :WndForm(parent, dialog_look, parent.GetClientRect(), caption),
-   progress(GetClientAreaWindow()),
-   cancel_button(nullptr)
+   progress(GetClientAreaWindow())
 {
-}
-
-ProgressDialog::~ProgressDialog()
-{
-  delete cancel_button;
 }
 
 void
 ProgressDialog::AddCancelButton(std::function<void()> &&callback)
 {
-  assert(cancel_button == nullptr);
+  assert(!cancel_button.IsDefined());
 
   ButtonWindowStyle style;
   style.TabStop();
@@ -71,8 +51,19 @@ ProgressDialog::AddCancelButton(std::function<void()> &&callback)
   rc.top += Layout::Scale(2);
   rc.bottom = rc.top + Layout::Scale(35);
 
-  cancel_button = new ProgressCancelButton(std::move(callback));
-  cancel_button->Create(client_area, _("Cancel"), rc, style);
-  cancel_button->SetFont(*GetLook().button.font);
-  cancel_button->BringToTop();
+  cancel_button.Create(client_area, GetLook().button,
+                       _("Cancel"), rc, style,
+                       *this, mrCancel);
+  cancel_button.BringToTop();
+
+  cancel_callback = std::move(callback);
+}
+
+void
+ProgressDialog::OnAction(int id)
+{
+  if (id == mrCancel && cancel_callback)
+    cancel_callback();
+  else
+    WndForm::OnAction(id);
 }
