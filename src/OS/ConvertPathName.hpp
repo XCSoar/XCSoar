@@ -28,9 +28,12 @@ Copyright_License {
 
 #ifdef _UNICODE
 #include "Util/ConvertString.hpp"
-#endif
+#include "Util/LightString.hxx"
 
 #include <tchar.h>
+#else
+#include "Util/StringPointer.hxx"
+#endif
 
 /**
  * Representation of a file name.  It is automatically converted to
@@ -40,36 +43,29 @@ Copyright_License {
  */
 class PathName {
 #ifdef _UNICODE
-  TCHAR *allocated;
+  typedef LightString<TCHAR> Value;
+#else
+  typedef StringPointer<> Value;
 #endif
-  const TCHAR *value;
+
+  Value value;
 
 public:
+  explicit PathName(Value::const_pointer _value)
+    :value(_value) {}
+
 #ifdef _UNICODE
-  explicit PathName(const TCHAR *_value)
-    :allocated(nullptr), value(_value) {}
-
   explicit PathName(const char *_value)
-    :allocated(ConvertACPToWide(_value)), value(allocated) {}
-
-  ~PathName() {
-    delete[] allocated;
-  }
-#else /* !_UNICODE */
-  explicit PathName(const TCHAR *_value):value(_value) {}
-#endif /* !_UNICODE */
+    :value(Value::Donate(ConvertACPToWide(_value))) {}
+#endif
 
 public:
   bool IsDefined() const {
-#ifdef _UNICODE
-    return value != nullptr;
-#else
-    return true;
-#endif
+    return !value.IsNull();
   }
 
-  operator const TCHAR *() const {
-    return value;
+  operator Value::const_pointer() const {
+    return value.c_str();
   }
 };
 
@@ -80,36 +76,29 @@ public:
  */
 class NarrowPathName {
 #ifdef _UNICODE
-  char *allocated;
+  typedef LightString<char> Value;
+#else
+  typedef StringPointer<> Value;
 #endif
-  const char *value;
+
+  Value value;
 
 public:
+  explicit NarrowPathName(Value::const_pointer _value)
+    :value(_value) {}
+
 #ifdef _UNICODE
-  explicit NarrowPathName(const char *_value)
-    :allocated(nullptr), value(_value) {}
-
   explicit NarrowPathName(const TCHAR *_value)
-    :allocated(ConvertWideToACP(_value)), value(allocated) {}
-
-  ~NarrowPathName() {
-    delete[] allocated;
-  }
-#else /* !_UNICODE */
-  explicit NarrowPathName(const char *_value):value(_value) {}
-#endif /* !_UNICODE */
+    :value(Value::Donate(ConvertWideToACP(_value))) {}
+#endif
 
 public:
   bool IsDefined() const {
-#ifdef _UNICODE
-    return value != nullptr;
-#else
-    return true;
-#endif
+    return !value.IsNull();
   }
 
-  operator const char *() const {
-    return value;
+  operator Value::const_pointer() const {
+    return value.c_str();
   }
 };
 

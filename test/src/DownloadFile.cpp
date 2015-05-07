@@ -28,6 +28,9 @@ Copyright_License {
 
 #include <iostream>
 #include <stdio.h>
+
+#include <tchar.h>
+
 using namespace std;
 
 static bool
