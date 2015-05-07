@@ -77,7 +77,7 @@ public:
                                SHACTIVATEINFO *psai) const {
     return SHHandleWMSettingChange_p != NULL
       ? SHHandleWMSettingChange_p(hwnd, wParam, lParam, psai)
-      : NULL;
+      : false;
   }
 
   BOOL SHSetAppKeyWndAssoc(BYTE bVk, HWND hwnd) const {
