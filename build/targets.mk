@@ -399,9 +399,8 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r10e
 
-  ANDROID_PLATFORM = android-19
-  ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
-  ANDROID_NDK_PLATFORM = $(ANDROID_PLATFORM)
+  ANDROID_SDK_PLATFORM = android-22
+  ANDROID_NDK_PLATFORM = android-19
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
