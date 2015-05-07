@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ShowMenuButton.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Layout.hpp"
@@ -32,6 +33,23 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
+class ShowMenuButtonRenderer : public ButtonRenderer {
+public:
+  unsigned GetMinimumButtonWidth() const override {
+    return Layout::GetMinimumControlHeight();
+  }
+
+  void DrawButton(Canvas &canvas, const PixelRect &rc,
+                  bool enabled, bool focused, bool pressed) const override;
+};
+
+void
+ShowMenuButton::Create(ContainerWindow &parent, const PixelRect &rc,
+                       ButtonWindowStyle style)
+{
+  WndButton::Create(parent, rc, style, new ShowMenuButtonRenderer());
+}
+
 bool
 ShowMenuButton::OnClicked()
 {
@@ -40,33 +58,33 @@ ShowMenuButton::OnClicked()
 }
 
 void
-ShowMenuButton::OnPaint(Canvas &canvas)
+ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
+                                   bool enabled, bool focused,
+                                   bool pressed) const
 {
-  const unsigned width = canvas.GetWidth(), height = canvas.GetHeight();
   const unsigned pen_width = Layout::ScalePenWidth(2);
   const unsigned padding = Layout::GetTextPadding() + pen_width;
 
   canvas.Select(Pen(pen_width, COLOR_BLACK));
-  canvas.DrawRoundRectangle(0, 0, width - 1, height - 1,
+  canvas.DrawRoundRectangle(rc.left, rc.top, rc.right - 1, rc.bottom - 1,
                             Layout::SmallScale(8), Layout::SmallScale(8));
 
   const RasterPoint m[] = {
-    RasterPoint(padding, height - padding),
-    RasterPoint(padding, padding),
-    RasterPoint(width / 2, height - 2 * padding),
-    RasterPoint(width - padding, padding),
-    RasterPoint(width - padding, height - padding),
+    RasterPoint(rc.left + padding, rc.bottom - padding),
+    RasterPoint(rc.left + padding, rc.top + padding),
+    RasterPoint((rc.left + rc.right) / 2, rc.bottom - 2 * padding),
+    RasterPoint(rc.right - padding, rc.top + padding),
+    RasterPoint(rc.right - padding, rc.bottom - padding),
   };
 
   canvas.DrawPolyline(m, ARRAY_SIZE(m));
 
-  if (IsDown()) {
+  if (pressed) {
 #ifdef ENABLE_OPENGL
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                               COLOR_YELLOW.WithAlpha(80));
+    canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));
 #else
-    canvas.InvertRectangle(0, 0, width, height);
+    canvas.InvertRectangle(rc);
 #endif
   }
 }

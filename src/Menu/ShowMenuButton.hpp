@@ -24,24 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_SHOW_MENU_BUTTON_HPP
 #define XCSOAR_SHOW_MENU_BUTTON_HPP
 
-#include "Screen/ButtonWindow.hpp"
+#include "Form/Button.hpp"
 
-#include <tchar.h>
-
-class ShowMenuButton : public ButtonWindow {
+class ShowMenuButton : public WndButton {
 public:
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              ButtonWindowStyle style=ButtonWindowStyle()) {
-    style.EnableCustomPainting();
-    ButtonWindow::Create(parent, _T(""), rc, style);
-  }
+              ButtonWindowStyle style=ButtonWindowStyle());
 
 protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() override;
-
-  /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
 };
 
 #endif
