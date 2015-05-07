@@ -51,43 +51,59 @@ LiveBlackboard::RemoveListener(BlackboardListener &listener)
 void
 LiveBlackboard::BroadcastGPSUpdate()
 {
+#ifndef NDEBUG
   calling_listeners = true;
+#endif
 
   for (BlackboardListener *listener : listeners)
     listener->OnGPSUpdate(Basic());
 
+#ifndef NDEBUG
   calling_listeners = false;
+#endif
 }
 
 void
 LiveBlackboard::BroadcastCalculatedUpdate()
 {
+#ifndef NDEBUG
   calling_listeners = true;
+#endif
 
   for (BlackboardListener *listener : listeners)
     listener->OnCalculatedUpdate(Basic(), Calculated());
 
+#ifndef NDEBUG
   calling_listeners = false;
+#endif
 }
 
 void
 LiveBlackboard::BroadcastComputerSettingsUpdate()
 {
+#ifndef NDEBUG
   calling_listeners = true;
+#endif
 
   for (BlackboardListener *listener : listeners)
     listener->OnComputerSettingsUpdate(GetComputerSettings());
 
+#ifndef NDEBUG
   calling_listeners = false;
+#endif
 }
 
 void
 LiveBlackboard::BroadcastUISettingsUpdate()
 {
+#ifndef NDEBUG
   calling_listeners = true;
+#endif
 
   for (BlackboardListener *listener : listeners)
     listener->OnUISettingsUpdate(GetUISettings());
 
+#ifndef NDEBUG
   calling_listeners = false;
+#endif
 }

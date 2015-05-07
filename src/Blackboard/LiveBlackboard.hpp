@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_LIVE_BLACKBOARD_HPP
 
 #include "FullBlackboard.hpp"
-#include "Util/DebugFlag.hpp"
 
 #include <list>
 
@@ -36,9 +35,16 @@ class BlackboardListener;
  */
 class LiveBlackboard : public FullBlackboard {
   std::list<BlackboardListener *> listeners;
-  DebugFlag calling_listeners;
+
+#ifndef NDEBUG
+  bool calling_listeners;
+#endif
 
 public:
+#ifndef NDEBUG
+  LiveBlackboard():calling_listeners(false) {}
+#endif
+
   void AddListener(BlackboardListener &listener);
   void RemoveListener(BlackboardListener &listener);
 
