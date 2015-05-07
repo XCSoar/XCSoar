@@ -62,7 +62,7 @@ TestTracking(int argc, char *argv[])
 
   printf("Starting tracking ... ");
   bool result = StartTracking(session, username.c_str(), password.c_str(), 10,
-                              VehicleType::GLIDER, "Hornet");
+                              VehicleType::GLIDER, _T("Hornet"));
   printf(result ? "done\n" : "failed\n");
   if (!result)
     return false;

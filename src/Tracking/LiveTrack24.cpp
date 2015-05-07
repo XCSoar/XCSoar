@@ -103,7 +103,7 @@ LiveTrack24::GenerateSessionID(UserID user_id)
 bool
 LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
                            const TCHAR *password, unsigned tracking_interval,
-                           VehicleType vtype, const char *vname)
+                           VehicleType vtype, const TCHAR *vname)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
   //   client=YourProgramName&v=1&user=yourusername&pass=yourpass&
@@ -112,7 +112,8 @@ LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
 
   const WideToUTF8Converter username2(username);
   const WideToUTF8Converter password2(password);
-  if (!username2.IsValid() || !password2.IsValid())
+  const WideToUTF8Converter vname2(vname);
+  if (!username2.IsValid() || !password2.IsValid() || !vname2.IsValid())
     return 0;
 
 #ifdef _UNICODE
