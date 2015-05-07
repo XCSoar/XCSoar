@@ -47,7 +47,7 @@ class PathName {
 public:
 #ifdef _UNICODE
   explicit PathName(const TCHAR *_value)
-    :allocated(NULL), value(_value) {}
+    :allocated(nullptr), value(_value) {}
 
   explicit PathName(const char *_value)
     :allocated(ConvertACPToWide(_value)), value(allocated) {}
@@ -62,7 +62,7 @@ public:
 public:
   bool IsDefined() const {
 #ifdef _UNICODE
-    return value != NULL;
+    return value != nullptr;
 #else
     return true;
 #endif
@@ -87,7 +87,7 @@ class NarrowPathName {
 public:
 #ifdef _UNICODE
   explicit NarrowPathName(const char *_value)
-    :allocated(NULL), value(_value) {}
+    :allocated(nullptr), value(_value) {}
 
   explicit NarrowPathName(const TCHAR *_value)
     :allocated(ConvertWideToACP(_value)), value(allocated) {}
@@ -102,7 +102,7 @@ public:
 public:
   bool IsDefined() const {
 #ifdef _UNICODE
-    return value != NULL;
+    return value != nullptr;
 #else
     return true;
 #endif

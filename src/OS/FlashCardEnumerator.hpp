@@ -61,7 +61,7 @@ public:
 
   const TCHAR *Next() {
     if (handle == INVALID_HANDLE_VALUE)
-      return NULL;
+      return nullptr;
 
 #ifdef HAVE_NOTE_PRJ_DLL
     if (note_prj.IsDefined()) {
@@ -71,7 +71,7 @@ public:
                /* On my Dell Axim x51v, the last entry returned by
                   FindNextFlashCard() is empty; workaround: */
                StringIsEmpty(data.cFileName))
-        return NULL;
+        return nullptr;
       return data.cFileName;
     }
 #endif
@@ -87,7 +87,7 @@ public:
       if (first)
         first = false;
       else if (!::FindNextFile(handle, &data))
-        return NULL;
+        return nullptr;
     } while ((data.dwFileAttributes & FLASH) != FLASH);
 
     return data.cFileName;

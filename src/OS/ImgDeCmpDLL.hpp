@@ -41,7 +41,7 @@ public:
                                Lookup(_T("DecompressImageIndirect"))) {}
 
   HRESULT DecompressImageIndirect(DecompressImageInfo *pParams) const {
-    return DecompressImageIndirect_p != NULL
+    return DecompressImageIndirect_p != nullptr
       ? DecompressImageIndirect_p(pParams)
       : E_NOTIMPL;
   }

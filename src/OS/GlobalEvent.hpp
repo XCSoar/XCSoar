@@ -30,8 +30,8 @@ Copyright_License {
 static inline bool
 TriggerGlobalEvent(const TCHAR *name)
 {
-  HANDLE event = CreateEvent(NULL, false, false, name);
-  if (event == NULL)
+  HANDLE event = CreateEvent(nullptr, false, false, name);
+  if (event == nullptr)
     return false;
 
   bool success = SetEvent(event) != 0;

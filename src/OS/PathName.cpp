@@ -36,7 +36,7 @@ LastSeparator(const TCHAR *path)
   const auto *p = StringFindLast(path, _T('/'));
 #ifdef WIN32
   const auto *backslash = StringFindLast(path, _T('\\'));
-  if (p == NULL || backslash > p)
+  if (p == nullptr || backslash > p)
     p = backslash;
 #endif
   return p;
@@ -52,10 +52,10 @@ LastSeparator(TCHAR *path)
 bool
 IsBaseName(const TCHAR *path)
 {
-  assert(path != NULL);
+  assert(path != nullptr);
 
 #ifdef WIN32
-  return _tcspbrk(path, _T("/\\")) == NULL;
+  return _tcspbrk(path, _T("/\\")) == nullptr;
 #else
   return StringFind(path, _T('/')) == nullptr;
 #endif
@@ -65,11 +65,11 @@ const TCHAR *
 BaseName(const TCHAR *path)
 {
   const TCHAR *p = LastSeparator(path);
-  if (p != NULL)
+  if (p != nullptr)
     path = p + 1;
 
   if (StringIsEmpty(path))
-    return NULL;
+    return nullptr;
 
   return path;
 }
@@ -78,7 +78,7 @@ const TCHAR *
 DirName(const TCHAR *gcc_restrict path, TCHAR *gcc_restrict buffer)
 {
   const TCHAR *p = LastSeparator(path);
-  if (p == NULL || p == path)
+  if (p == nullptr || p == path)
     return _T(".");
 
   TCHAR *end = std::copy(path, p, buffer);
@@ -90,7 +90,7 @@ void
 ReplaceBaseName(TCHAR *path, const TCHAR *new_base)
 {
   TCHAR *q = LastSeparator(path);
-  if (q != NULL)
+  if (q != nullptr)
     ++q;
   else
     q = path;

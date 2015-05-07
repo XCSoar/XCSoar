@@ -50,7 +50,7 @@ public:
    * Has the constructor failed?
    */
   bool error() const {
-    return m_data == NULL;
+    return m_data == nullptr;
   }
 
   /**

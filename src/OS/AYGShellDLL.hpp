@@ -61,41 +61,41 @@ public:
      SHLoadImageResource_p((SHLoadImageResource_t)Lookup(_T("SHLoadImageResource"))) {}
 
   BOOL SHFullScreen(HWND hWnd, DWORD flags) const {
-    return SHFullScreen_p != NULL
+    return SHFullScreen_p != nullptr
       ? SHFullScreen_p(hWnd, flags)
       : false;
   }
 
   BOOL SHHandleWMActivate(HWND hwnd, WPARAM wParam, LPARAM lParam,
                           SHACTIVATEINFO *psai, DWORD dwFlags) const {
-    return SHHandleWMActivate_p != NULL
+    return SHHandleWMActivate_p != nullptr
       ? SHHandleWMActivate_p(hwnd, wParam, lParam, psai, dwFlags)
       : false;
   }
 
   BOOL SHHandleWMSettingChange(HWND hwnd, WPARAM wParam, LPARAM lParam,
                                SHACTIVATEINFO *psai) const {
-    return SHHandleWMSettingChange_p != NULL
+    return SHHandleWMSettingChange_p != nullptr
       ? SHHandleWMSettingChange_p(hwnd, wParam, lParam, psai)
       : false;
   }
 
   BOOL SHSetAppKeyWndAssoc(BYTE bVk, HWND hwnd) const {
-    return SHSetAppKeyWndAssoc_p != NULL
+    return SHSetAppKeyWndAssoc_p != nullptr
       ? SHSetAppKeyWndAssoc_p(bVk, hwnd)
       : false;
   }
 
   HBITMAP SHLoadImageFile(LPCTSTR pszFileName) const {
-    return SHLoadImageFile_p != NULL
+    return SHLoadImageFile_p != nullptr
       ? SHLoadImageFile_p(pszFileName)
-      : NULL;
+      : nullptr;
   }
 
   HBITMAP SHLoadImageResource(HINSTANCE hinst, UINT uIdImageFile) const {
-    return SHLoadImageResource_p != NULL
+    return SHLoadImageResource_p != nullptr
       ? SHLoadImageResource_p(hinst, uIdImageFile)
-      : NULL;
+      : nullptr;
   }
 };
 

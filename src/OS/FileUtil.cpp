@@ -48,7 +48,7 @@ Directory::Create(const TCHAR* path)
 #ifdef HAVE_POSIX
   mkdir(path, 0777);
 #else /* !HAVE_POSIX */
-  CreateDirectory(path, NULL);
+  CreateDirectory(path, nullptr);
 #endif /* !HAVE_POSIX */
 }
 
@@ -165,7 +165,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 {
 #ifdef HAVE_POSIX
   DIR *dir = opendir(sPath);
-  if (dir == NULL)
+  if (dir == nullptr)
     return false;
 
   TCHAR FileName[MAX_PATH];
@@ -174,7 +174,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   FileName[FileNameLength++] = '/';
 
   struct dirent *ent;
-  while ((ent = readdir(dir)) != NULL) {
+  while ((ent = readdir(dir)) != nullptr) {
     // omit '.', '..' and any other files/directories starting with '.'
     if (*ent->d_name == _T('.'))
       continue;
@@ -363,13 +363,13 @@ bool
 File::Touch(const TCHAR *path)
 {
 #ifdef HAVE_POSIX
-  return utime(path, NULL) == 0;
+  return utime(path, nullptr) == 0;
 #else
   /// @see http://msdn.microsoft.com/en-us/library/windows/desktop/ms724205(v=vs.85).aspx
 
   // Create a file handle
-  HANDLE handle = ::CreateFile(path, GENERIC_WRITE, 0, NULL,
-                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE handle = ::CreateFile(path, GENERIC_WRITE, 0, nullptr,
+                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
   if (handle == INVALID_HANDLE_VALUE)
     return false;
@@ -383,7 +383,8 @@ File::Touch(const TCHAR *path)
   ::SystemTimeToFileTime(&st, &ft);
 
   // Sets last-write time of the file to the converted current system time
-  bool result = ::SetFileTime(handle, (LPFILETIME)NULL, (LPFILETIME)NULL, &ft);
+  bool result = ::SetFileTime(handle, (LPFILETIME)nullptr, (LPFILETIME)nullptr,
+                              &ft);
 
   CloseHandle(handle);
 

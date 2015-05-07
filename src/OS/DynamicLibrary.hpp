@@ -39,7 +39,7 @@ public:
   }
 
   bool IsDefined() const {
-    return module != NULL;
+    return module != nullptr;
   }
 
   FARPROC WINAPI Lookup(const TCHAR *name) const {

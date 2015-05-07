@@ -42,7 +42,7 @@ public:
     os.Offset = os.OffsetHigh = 0;
     os.Internal = os.InternalHigh = 0;
 
-    os.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    os.hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
   }
 
   ~OverlappedEvent() {
@@ -50,7 +50,7 @@ public:
   }
 
   bool Defined() const {
-    return os.hEvent != NULL;
+    return os.hEvent != nullptr;
   }
 
   OVERLAPPED *GetPointer() {

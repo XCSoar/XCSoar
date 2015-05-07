@@ -42,14 +42,14 @@ public:
      FindNextFlashCard_p((FindNextFlashCard_t)Lookup(_T("FindNextFlashCard"))) {}
 
   HANDLE FindFirstFlashCard(LPWIN32_FIND_DATA lpFindFlashData) const {
-    return FindFirstFlashCard_p != NULL
+    return FindFirstFlashCard_p != nullptr
       ? FindFirstFlashCard_p(lpFindFlashData)
-      : NULL;
+      : nullptr;
   }
 
   BOOL FindNextFlashCard(HANDLE hFlashCard,
                           LPWIN32_FIND_DATA lpFindFlashData) const {
-    return FindNextFlashCard_p != NULL
+    return FindNextFlashCard_p != nullptr
       ? FindNextFlashCard_p(hFlashCard, lpFindFlashData)
       : false;
   }

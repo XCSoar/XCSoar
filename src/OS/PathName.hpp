@@ -38,7 +38,7 @@ IsBaseName(const TCHAR *path);
 
 /**
  * Returns the base name of the specified path, i.e. the part after
- * the last separator.  May return NULL if there is no base name.
+ * the last separator.  May return nullptr if there is no base name.
  */
 gcc_pure
 const TCHAR *

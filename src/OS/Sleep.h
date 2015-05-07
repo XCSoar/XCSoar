@@ -39,7 +39,7 @@ Sleep(unsigned ms)
     static_cast<long>((ms % 1000L) * 1000000L),
   };
 
-  nanosleep(&ts, NULL);
+  nanosleep(&ts, nullptr);
 }
 
 #endif /* !WIN32 */

@@ -34,9 +34,9 @@ Copyright_License {
 #endif
 
 FileMapping::FileMapping(const TCHAR *path)
-  :m_data(NULL)
+  :m_data(nullptr)
 #ifndef HAVE_POSIX
-  , hMapping(NULL)
+  , hMapping(nullptr)
 #endif
 {
 #ifdef HAVE_POSIX
@@ -65,9 +65,9 @@ FileMapping::FileMapping(const TCHAR *path)
 
   m_size = (size_t)st.st_size;
 
-  m_data = mmap(NULL, m_size, PROT_READ, MAP_SHARED, fd, 0);
+  m_data = mmap(nullptr, m_size, PROT_READ, MAP_SHARED, fd, 0);
   close(fd);
-  if (m_data == NULL)
+  if (m_data == nullptr)
     return;
 
   madvise(m_data, m_size, MADV_WILLNEED);
@@ -77,11 +77,11 @@ FileMapping::FileMapping(const TCHAR *path)
      CreateFileForMapping(); this system is not needed with WM5, and
      it is deprecated in WM6 */
   hFile = ::CreateFileForMapping(path, GENERIC_READ, 0,
-                                 NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
-                                 NULL);
+                                 nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
+                                 nullptr);
 #else
   hFile = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ,
-                       NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                       nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 #endif
   if (gcc_unlikely(hFile == INVALID_HANDLE_VALUE))
     return;
@@ -105,14 +105,14 @@ FileMapping::FileMapping(const TCHAR *path)
 
   m_size = i.fi.nFileSizeLow;
 
-  hMapping = ::CreateFileMapping(hFile, NULL, PAGE_READONLY,
+  hMapping = ::CreateFileMapping(hFile, nullptr, PAGE_READONLY,
                                  i.fi.nFileSizeHigh, i.fi.nFileSizeLow,
-                                 NULL);
+                                 nullptr);
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0500
   /* CreateFileForMapping() automatically closes the file handle */
   hFile = INVALID_HANDLE_VALUE;
 #endif
-  if (gcc_unlikely(hMapping == NULL))
+  if (gcc_unlikely(hMapping == nullptr))
     return;
 
   m_data = ::MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, m_size);
@@ -122,13 +122,13 @@ FileMapping::FileMapping(const TCHAR *path)
 FileMapping::~FileMapping()
 {
 #ifdef HAVE_POSIX
-  if (m_data != NULL)
+  if (m_data != nullptr)
     munmap(m_data, m_size);
 #else /* !HAVE_POSIX */
-  if (m_data != NULL)
+  if (m_data != nullptr)
     ::UnmapViewOfFile(m_data);
 
-  if (hMapping != NULL)
+  if (hMapping != nullptr)
     ::CloseHandle(hMapping);
 
   if (hFile != INVALID_HANDLE_VALUE)
