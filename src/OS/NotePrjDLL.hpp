@@ -51,7 +51,7 @@ public:
                           LPWIN32_FIND_DATA lpFindFlashData) const {
     return FindNextFlashCard_p != NULL
       ? FindNextFlashCard_p(hFlashCard, lpFindFlashData)
-      : NULL;
+      : false;
   }
 };
 
