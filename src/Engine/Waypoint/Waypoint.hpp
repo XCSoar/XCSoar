@@ -24,7 +24,6 @@
 #define WAYPOINT_HPP
 
 #include "Util/tstring.hpp"
-#include "Util/DebugFlag.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
@@ -98,7 +97,7 @@ struct Waypoint {
   FlatGeoPoint flat_location;
 
 #ifndef NDEBUG
-  DebugFlag flat_location_initialised;
+  bool flat_location_initialised;
 #endif
 
   /** Height AMSL (m) of waypoint terrain */
@@ -135,7 +134,11 @@ struct Waypoint {
    * @return Uninitialised object
    */
   Waypoint()
-    :runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
+    :
+#ifndef NDEBUG
+     flat_location_initialised(false),
+#endif
+     runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
      type(Type::NORMAL), flags(Flags::Defaults()), file_num(-1)
   {
   }
