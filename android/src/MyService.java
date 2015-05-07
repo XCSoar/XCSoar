@@ -69,7 +69,7 @@ public class MyService extends Service {
   private void onStart() {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
-    Notification notification = new Notification(R.drawable.icon, null,
+    Notification notification = new Notification(R.drawable.notification_icon, null,
                                                  System.currentTimeMillis());
     Intent intent2 = new Intent(this, mainActivityClass);
     PendingIntent contentIntent =
