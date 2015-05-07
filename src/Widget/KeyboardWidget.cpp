@@ -121,7 +121,7 @@ KeyboardWidget::FindButton(unsigned ch)
  * @param top     Number of pixels from the top (in screen pixels)
  */
 void
-KeyboardWidget::MoveButton(unsigned ch, PixelScalar left, PixelScalar top)
+KeyboardWidget::MoveButton(unsigned ch, int left, int top)
 {
   ButtonWindow *kb = FindButton(ch);
   if (kb)
@@ -138,7 +138,7 @@ KeyboardWidget::MoveButton(unsigned ch, PixelScalar left, PixelScalar top)
  */
 void
 KeyboardWidget::ResizeButton(unsigned ch,
-                              UPixelScalar width, UPixelScalar height)
+                             unsigned width, unsigned height)
 {
   ButtonWindow *kb = FindButton(ch);
   if (kb)
@@ -158,7 +158,7 @@ KeyboardWidget::ResizeButtons()
 void
 KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
                                  const TCHAR *buttons, unsigned row,
-                                 PixelScalar offset)
+                                 int offset)
 {
   if (StringIsEmpty(buttons))
     return;

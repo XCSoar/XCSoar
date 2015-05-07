@@ -49,8 +49,8 @@ protected:
 
   OnCharacterCallback_t on_character;
 
-  UPixelScalar button_width;
-  UPixelScalar button_height;
+  unsigned button_width;
+  unsigned button_height;
 
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
@@ -81,13 +81,13 @@ private:
   gcc_pure
   ButtonWindow *FindButton(unsigned ch);
 
-  void MoveButton(unsigned ch, PixelScalar left, PixelScalar top);
-  void ResizeButton(unsigned ch, UPixelScalar width, UPixelScalar height);
+  void MoveButton(unsigned ch, int left, int top);
+  void ResizeButton(unsigned ch, unsigned width, unsigned height);
   void ResizeButtons();
   void SetButtonsSize();
   void MoveButtonsToRow(const PixelRect &rc,
                         const TCHAR *buttons, unsigned row,
-                        PixelScalar offset_left = 0);
+                        int offset_left = 0);
   void MoveButtons(const PixelRect &rc);
 
   gcc_pure
