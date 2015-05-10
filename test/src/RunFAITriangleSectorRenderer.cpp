@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Screen/Canvas.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"

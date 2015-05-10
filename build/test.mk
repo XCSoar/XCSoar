@@ -1050,11 +1050,12 @@ $(eval $(call link-program,AddChecksum,ADD_CHECKSUM))
 KEY_CODE_DUMPER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_LDADD = $(FAKE_LIBS)
-KEY_CODE_DUMPER_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+KEY_CODE_DUMPER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 
 LOAD_TOPOGRAPHY_SOURCES = \
@@ -1680,11 +1681,12 @@ $(eval $(call link-program,ViewImage,VIEW_IMAGE))
 RUN_CANVAS_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
-RUN_CANVAS_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_CANVAS_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
@@ -2040,6 +2042,7 @@ RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MAT
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_HORIZON_RENDERER_SOURCES = \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/HorizonLook.cpp \
@@ -2059,6 +2062,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -2082,6 +2086,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREA
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/ButtonLook.cpp \
@@ -2098,13 +2103,14 @@ $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_
 
 RUN_FLIGHT_LIST_RENDERER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFlightListRenderer.cpp
-RUN_FLIGHT_LIST_RENDERER_DEPENDS = SCREEN EVENT ASYNC IO OS THREAD MATH UTIL TIME
+RUN_FLIGHT_LIST_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC IO OS THREAD MATH UTIL TIME
 $(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \

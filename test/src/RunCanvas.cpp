@@ -22,12 +22,14 @@ Copyright_License {
 */
 
 #define ENABLE_SCREEN
+#define ENABLE_BUTTON_LOOK
 
 #include "Main.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Screen/WindowCanvas.hpp"
@@ -35,23 +37,22 @@ Copyright_License {
 
 #include <algorithm>
 
-class TestWindow : public SingleWindow {
+class TestWindow final : public SingleWindow, ActionListener {
 #ifndef ENABLE_OPENGL
-  ButtonWindow buffer_button;
+  WndButton buffer_button;
 #endif
-  ButtonWindow close_button;
+  WndButton close_button;
   unsigned page;
 #ifndef ENABLE_OPENGL
   bool buffered;
   BufferCanvas buffer;
 #endif
 
-  enum {
-    ID_START = 100,
+  enum Buttons {
 #ifndef ENABLE_OPENGL
-    ID_BUFFER,
+    BUFFER,
 #endif
-    ID_CLOSE
+    CLOSE
   };
 
 public:
@@ -74,14 +75,18 @@ public:
     button_rc.left += 5;
     button_rc.right = button_rc.left + 65;
 
-    buffer_button.Create(*this, _T("Buffer"), ID_BUFFER, button_rc);
+    buffer_button.Create(*this, *button_look, _T("Buffer"), button_rc,
+                        ButtonWindowStyle(),
+                         *this, BUFFER);
     buffer_button.SetFont(normal_font);
 #endif
 
     button_rc.right = rc.right - 5;
     button_rc.left = button_rc.right - 65;
 
-    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, *button_look, _T("Close"), button_rc,
+                        ButtonWindowStyle(),
+                        *this, CLOSE);
     close_button.SetFont(normal_font);
   }
 
@@ -192,28 +197,6 @@ protected:
     return true;
   }
 
-  virtual bool OnCommand(unsigned id, unsigned code) override {
-    switch (id) {
-    case ID_CLOSE:
-      Close();
-      return true;
-
-#ifndef ENABLE_OPENGL
-    case ID_BUFFER:
-      buffered = !buffered;
-      if (buffered) {
-        WindowCanvas canvas(*this);
-        buffer.Create(canvas, canvas.GetSize());
-      } else
-        buffer.Destroy();
-      update();
-      return true;
-#endif
-    }
-
-    return SingleWindow::OnCommand(id, code);
-  }
-
   virtual void OnPaint(Canvas &canvas) override {
 #ifndef ENABLE_OPENGL
     if (!buffered) {
@@ -227,6 +210,27 @@ protected:
 #endif
 
     SingleWindow::OnPaint(canvas);
+  }
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override {
+    switch (id) {
+    case CLOSE:
+      Close();
+      break;
+
+#ifndef ENABLE_OPENGL
+    case BUFFER:
+      buffered = !buffered;
+      if (buffered) {
+        WindowCanvas canvas(*this);
+        buffer.Create(canvas, canvas.GetSize());
+      } else
+        buffer.Destroy();
+      update();
+      break;
+#endif
+    }
   }
 };
 

@@ -25,10 +25,11 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "Screen/Canvas.hpp"
 #include "Look/ChartLook.hpp"
 #include "Form/List.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Util/Macros.hpp"
 #include "Renderer/ChartRenderer.hpp"
 
@@ -102,14 +103,14 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
 }
 
 class TestWindow : public SingleWindow,
+                   ActionListener,
                    ListItemRenderer, ListCursorHandler {
-  ButtonWindow close_button;
+  WndButton close_button;
   ListControl *type_list;
   ChartWindow chart;
 
-  enum {
-    ID_START = 100,
-    ID_CLOSE
+  enum Buttons {
+    CLOSE,
   };
 
 public:
@@ -143,20 +144,21 @@ public:
     PixelRect button_rc = rc;
     button_rc.right = list_rc.right;
     button_rc.top = button_rc.bottom - 30;
-    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, *button_look, _T("Close"), button_rc,
+                        ButtonWindowStyle(),
+                        *this, CLOSE);
 
     type_list->SetFocus();
   }
 
 protected:
-  virtual bool OnCommand(unsigned id, unsigned code) override {
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override {
     switch (id) {
-    case ID_CLOSE:
+    case CLOSE:
       Close();
-      return true;
+      break;
     }
-
-    return SingleWindow::OnCommand(id, code);
   }
 
   /* virtual methods from ListItemRenderer */

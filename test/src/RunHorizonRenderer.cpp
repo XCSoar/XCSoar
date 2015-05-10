@@ -27,6 +27,8 @@ Copyright_License {
 #include "Main.hpp"
 #include "Event/LambdaTimer.hpp"
 #include "Screen/Canvas.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Look/HorizonLook.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "NMEA/Attitude.hpp"
