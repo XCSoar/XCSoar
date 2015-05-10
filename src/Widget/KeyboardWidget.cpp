@@ -28,7 +28,6 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/Layout.hpp"
 
 #include <assert.h>
@@ -100,7 +99,7 @@ KeyboardWidget::SetAllowedCharacters(const TCHAR *allowed)
                           StringFind(allowed, buttons[i].GetCharacter()) != nullptr);
 }
 
-ButtonWindow *
+WndButton *
 KeyboardWidget::FindButton(unsigned ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
@@ -123,7 +122,7 @@ KeyboardWidget::FindButton(unsigned ch)
 void
 KeyboardWidget::MoveButton(unsigned ch, int left, int top)
 {
-  ButtonWindow *kb = FindButton(ch);
+  auto *kb = FindButton(ch);
   if (kb)
     kb->Move(left, top);
 }
@@ -140,7 +139,7 @@ void
 KeyboardWidget::ResizeButton(unsigned ch,
                              unsigned width, unsigned height)
 {
-  ButtonWindow *kb = FindButton(ch);
+  auto *kb = FindButton(ch);
   if (kb)
     kb->Resize(width, height);
 }

@@ -42,8 +42,7 @@ CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
   on_character = _on_character;
   character = _character;
 
-  ButtonWindow::Create(parent, text, rc, style);
-  SetFont(*look.font);
+  WndButton::Create(parent, look, text, rc, style);
 }
 
 unsigned
@@ -69,7 +68,7 @@ CharacterButton::SetCharacter(unsigned _character)
   char buffer[7];
   *UnicodeToUTF8(character, buffer) = '\0';
 #endif
-  SetText(buffer);
+  SetCaption(buffer);
 }
 
 bool

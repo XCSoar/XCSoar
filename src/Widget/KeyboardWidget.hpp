@@ -79,7 +79,7 @@ private:
   void OnResize(const PixelRect &rc);
 
   gcc_pure
-  ButtonWindow *FindButton(unsigned ch);
+  WndButton *FindButton(unsigned ch);
 
   void MoveButton(unsigned ch, int left, int top);
   void ResizeButton(unsigned ch, unsigned width, unsigned height);
