@@ -10,6 +10,7 @@ Version 6.8 - not yet released
 * devices
   - remove option "Ignore checksum"
   - LX: implement LXNAV Nano3 task declaration (#3295)
+  - ATR833: new driver
   - Volkslogger: support DAeC keyhole declaration
   - added TCP port 2000 to portlist (part of #3326)
 * calculations
