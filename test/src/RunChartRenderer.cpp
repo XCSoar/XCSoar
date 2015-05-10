@@ -21,12 +21,6 @@ Copyright_License {
 }
 */
 
-/*
- * This program demonstrates the OZRenderer library.  It
- * shows a list of shapes, and draws the selected shape on the right.
- *
- */
-
 #define ENABLE_DIALOG_LOOK
 
 #include "Main.hpp"
