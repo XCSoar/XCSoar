@@ -21,11 +21,10 @@ Copyright_License {
 }
 */
 
-#define ENABLE_SCREEN
+#define ENABLE_MAIN_WINDOW
+#define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/Canvas.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -70,62 +69,17 @@ protected:
   }
 };
 
-class TestWindow : public SingleWindow
-{
-  ButtonWindow close_button;
-  FAITriangleWindow triangle_window;
-
-  enum {
-    ID_START = 100,
-    ID_CLOSE
-  };
-
-public:
-  void Create(PixelSize size) {
-    TopWindowStyle style;
-    style.Resizable();
-
-    SingleWindow::Create(_T("RunFAITriangleSectorRenderer"),
-                         size, style);
-
-    const PixelRect rc = GetClientRect();
-
-    WindowStyle with_border;
-    with_border.Border();
-
-    PixelRect button_rc = rc;
-    button_rc.top = button_rc.bottom - 30;
-    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
-    close_button.SetFont(normal_font);
-
-    triangle_window.Create(*this, rc, with_border);
-  }
-
-protected:
-  virtual bool OnCommand(unsigned id, unsigned code) override {
-    switch (id) {
-    case ID_CLOSE:
-      Close();
-      return true;
-    }
-
-    return SingleWindow::OnCommand(id, code);
-  }
-
-  virtual void OnResize(PixelSize new_size) override {
-    SingleWindow::OnResize(new_size);
-
-    if (triangle_window.IsDefined())
-      triangle_window.Resize(new_size);
-  }
-};
-
 static void
 Main()
 {
-  TestWindow window;
-  window.Create({640, 480});
+  FAITriangleWindow triangle_window;
 
-  window.Show();
-  window.RunEventLoop();
+  WindowStyle with_border;
+  with_border.Border();
+
+  triangle_window.Create(main_window, main_window.GetClientRect(),
+                         with_border);
+  main_window.SetFullWindow(triangle_window);
+
+  main_window.RunEventLoop();
 }
