@@ -24,7 +24,7 @@
 
 #ifdef ENABLE_CLOSE_BUTTON
 #define ENABLE_MAIN_WINDOW
-#define ENABLE_DIALOG_LOOK
+#define ENABLE_BUTTON_LOOK
 #include "Form/Button.hpp"
 #endif
 
@@ -45,6 +45,13 @@
 #elif defined(ENABLE_DIALOG_LOOK)
 #include "Look/DialogLook.hpp"
 #define ENABLE_SCREEN
+#elif defined(ENABLE_BUTTON_LOOK)
+#include "Look/ButtonLook.hpp"
+#define ENABLE_SCREEN
+#endif
+
+#ifdef ENABLE_DIALOG_LOOK
+#define ENABLE_BUTTON_LOOK
 #endif
 
 #ifdef ENABLE_SCREEN
@@ -79,6 +86,10 @@ static Look *look;
 
 #ifdef ENABLE_DIALOG_LOOK
 static DialogLook *dialog_look;
+#endif
+
+#ifdef ENABLE_BUTTON_LOOK
+static ButtonLook *button_look;
 #endif
 
 #ifdef ENABLE_DIALOG
@@ -137,7 +148,7 @@ protected:
     SingleWindow::OnCreate();
 
 #ifdef ENABLE_CLOSE_BUTTON
-    close_button.Create(*this, dialog_look->button, _T("Close"),
+    close_button.Create(*this, *button_look, _T("Close"),
                         GetCloseButtonRect(GetClientRect()),
                         ButtonWindowStyle(),
                         *this, CLOSE);
@@ -253,10 +264,15 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   dialog_look = &look->dialog;
+  button_look = &dialog_look->button;
 #elif defined(ENABLE_DIALOG_LOOK)
   dialog_look = new DialogLook();
   dialog_look->Initialise(bold_font, normal_font, small_font,
                           bold_font, bold_font, bold_font);
+  button_look = &dialog_look->button;
+#elif defined(ENABLE_BUTTON_LOOK)
+  button_look = new ButtonLook();
+  button_look->Initialise(bold_font);
 #endif
 
 #ifdef ENABLE_DATA_PATH
@@ -287,6 +303,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete look;
 #elif defined(ENABLE_DIALOG_LOOK)
   delete dialog_look;
+#elif defined(ENABLE_BUTTON_LOOK)
+  delete button_look;
 #endif
 
 #ifdef ENABLE_SCREEN
