@@ -1773,6 +1773,15 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/UISettings.cpp \
+	$(SRC)/Audio/Settings.cpp \
+	$(SRC)/Audio/VarioSettings.cpp \
+	$(SRC)/DisplaySettings.cpp \
+	$(SRC)/PageSettings.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Gauge/VarioSettings.cpp \
+	$(SRC)/Gauge/TrafficSettings.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \

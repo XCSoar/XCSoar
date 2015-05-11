@@ -24,6 +24,7 @@ Copyright_License {
 #define ENABLE_RESOURCE_LOADER
 #define ENABLE_PROFILE
 #define ENABLE_SCREEN
+#define ENABLE_LOOK
 #include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
@@ -43,8 +44,6 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "IO/LineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Look/MapLook.hpp"
-#include "Look/TrafficLook.hpp"
 #include "Thread/Debug.hpp"
 
 void
@@ -237,10 +236,7 @@ Main()
   map_look->Initialise(settings_map, normal_font, bold_font,
                        small_font, normal_font);
 
-  TrafficLook *traffic_look = new TrafficLook();
-  traffic_look->Initialise(normal_font);
-
-  TestWindow window(*map_look, *traffic_look);
+  TestWindow window(look->map, look->traffic);
   window.Create({640, 480});
 
   GenerateBlackboard(window.map, settings_computer, settings_map);
@@ -257,6 +253,4 @@ Main()
 
   delete terrain;
   delete topography;
-  delete traffic_look;
-  delete map_look;
 }
