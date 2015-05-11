@@ -92,10 +92,11 @@ public:
     style.Hide();
 
     ButtonWindowStyle button_style(style);
+    button_style.Hide();
     button_style.TabStop();
 
     quit.Create(parent, look, _("Quit"), rc,
-                style, action_listener, mrCancel);
+                button_style, action_listener, mrCancel);
     logo.Create(parent, rc, style);
   }
 
