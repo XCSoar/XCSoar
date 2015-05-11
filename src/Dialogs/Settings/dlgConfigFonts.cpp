@@ -133,7 +133,7 @@ public:
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    ButtonWindowStyle button_style;
+    WindowStyle button_style;
     button_style.Hide();
     button_style.TabStop();
     button = new WndButton(parent, UIGlobals::GetDialogLook().button,

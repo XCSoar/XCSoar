@@ -199,7 +199,7 @@ TouchTextEntry(TCHAR *text, size_t width,
   _editor.SetReadOnly();
   editor = &_editor;
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.TabStop();
 
   WndButton ok_button(client_area, look.button, _("OK"),

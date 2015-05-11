@@ -145,7 +145,7 @@ public:
     button_rc.right = list_rc.right;
     button_rc.top = button_rc.bottom - 30;
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
-                        ButtonWindowStyle(),
+                        WindowStyle(),
                         *this, CLOSE);
 
     type_list->SetFocus();

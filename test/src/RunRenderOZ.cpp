@@ -239,7 +239,7 @@ public:
     button_rc.right = (rc.left + rc.right) / 2;
     button_rc.top = button_rc.bottom - 30;
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
-                        ButtonWindowStyle(),
+                        WindowStyle(),
                         *this, CLOSE);
 
     oz.set_shape(ObservationZone::Shape::LINE);

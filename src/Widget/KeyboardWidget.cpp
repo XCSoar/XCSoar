@@ -54,7 +54,7 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddButton(parent, _T("-"), '-');
 
   if (show_shift_button) {
-    ButtonWindowStyle style;
+    WindowStyle style;
     style.Hide();
     shift_button.Create(parent, { 0, 0, 16, 16 }, style,
                         new SymbolButtonRenderer(look, _T("v")),
@@ -223,7 +223,7 @@ KeyboardWidget::AddButton(ContainerWindow &parent,
 {
   assert(num_buttons < MAX_BUTTONS);
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.Hide();
 
   PixelRect rc;

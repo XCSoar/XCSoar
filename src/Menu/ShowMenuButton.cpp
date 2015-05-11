@@ -45,7 +45,7 @@ public:
 
 void
 ShowMenuButton::Create(ContainerWindow &parent, const PixelRect &rc,
-                       ButtonWindowStyle style)
+                       WindowStyle style)
 {
   WndButton::Create(parent, rc, style, new ShowMenuButtonRenderer());
 }

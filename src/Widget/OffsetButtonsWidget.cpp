@@ -26,6 +26,8 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Screen/Layout.hpp"
 
+#include <stdio.h>
+
 PixelSize
 OffsetButtonsWidget::GetMinimumSize() const
 {
@@ -60,7 +62,7 @@ OffsetButtonsWidget::Prepare(ContainerWindow &parent,
   PixelRect rc[ARRAY_SIZE(buttons)];
   LayoutOffsetButtons(total_rc, rc);
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.TabStop();
   style.Hide();
 

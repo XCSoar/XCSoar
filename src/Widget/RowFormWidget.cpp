@@ -300,9 +300,8 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
   const PixelRect button_rc =
     InitialControlRect(Layout::GetMinimumControlHeight());
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.TabStop();
-  button_style.multiline();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 

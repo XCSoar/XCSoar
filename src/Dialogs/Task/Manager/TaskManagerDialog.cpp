@@ -169,7 +169,7 @@ TaskManagerDialog::Create(SingleWindow &parent)
   task_view = new TaskMapWindow(UIGlobals::GetMapLook(), *this, MAP);
   task_view->Create(client_area, layout.task_view, hidden);
 
-  ButtonWindowStyle button_style(hidden);
+  WindowStyle button_style(hidden);
   button_style.TabStop();
   target_button = new WndButton(client_area, GetLook().button, _("Target"),
                                 layout.target_button, button_style,

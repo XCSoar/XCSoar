@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_FORM_BUTTON_HPP
 #define XCSOAR_FORM_BUTTON_HPP
 
-#include "Screen/ButtonWindow.hpp"
+#include "Screen/PaintWindow.hpp"
+
+#include <tchar.h>
 
 #include <tchar.h>
 
@@ -36,26 +38,24 @@ class ButtonRenderer;
 /**
  * This class is used for creating buttons.
  */
-class WndButton : public ButtonWindow {
+class WndButton : public PaintWindow {
+  bool dragging, down;
+
   ButtonRenderer *renderer;
 
-private:
-#ifdef USE_GDI
-  int id;
-#endif
-
   ActionListener *listener;
+  int id;
 
 public:
   WndButton(ContainerWindow &parent, const PixelRect &rc,
-            ButtonWindowStyle style, ButtonRenderer *_renderer,
+            WindowStyle style, ButtonRenderer *_renderer,
             ActionListener &_listener, int _id) {
     Create(parent, rc, style, _renderer, _listener, _id);
   }
 
   WndButton(ContainerWindow &parent, const ButtonLook &look,
             const TCHAR *caption, const PixelRect &rc,
-            ButtonWindowStyle style,
+            WindowStyle style,
             ActionListener &_listener, int _id) {
     Create(parent, look, caption, rc, style, _listener, _id);
   }
@@ -63,30 +63,26 @@ public:
   WndButton():listener(nullptr) {}
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              ButtonWindowStyle style, ButtonRenderer *_renderer);
+              WindowStyle style, ButtonRenderer *_renderer);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *caption, const PixelRect &rc,
-              ButtonWindowStyle style);
+              WindowStyle style);
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              ButtonWindowStyle style, ButtonRenderer *_renderer,
+              WindowStyle style, ButtonRenderer *_renderer,
               ActionListener &listener, int id);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *caption, const PixelRect &rc,
-              ButtonWindowStyle style,
+              WindowStyle style,
               ActionListener &listener, int id);
 
   /**
    * Set the object that will receive click events.
    */
   void SetListener(ActionListener &_listener, int _id) {
-#ifdef USE_GDI
     id = _id;
-#else
-    SetID(_id);
-#endif
     listener = &_listener;
   }
 
@@ -105,17 +101,25 @@ public:
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual bool OnClicked() override;
+  virtual bool OnClicked();
 
 protected:
+  /* virtual methods from class Window */
   void OnDestroy() override;
 
-#ifdef USE_GDI
-  virtual void OnSetFocus() override;
-  virtual void OnKillFocus() override;
-#endif
+  bool OnKeyCheck(unsigned key_code) const override;
+  bool OnKeyDown(unsigned key_code) override;
+  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  void OnSetFocus() override;
+  void OnKillFocus() override;
+  void OnCancelMode() override;
 
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
+
+private:
+  void SetDown(bool _down);
 };
 
 #endif

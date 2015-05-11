@@ -138,7 +138,7 @@ public:
 
     close_button.Create(*this, *button_look,
                         _T("Close"), button_rc,
-                        ButtonWindowStyle(),
+                        WindowStyle(),
                         *this, CLOSE);
     close_button.SetFont(normal_font);
 

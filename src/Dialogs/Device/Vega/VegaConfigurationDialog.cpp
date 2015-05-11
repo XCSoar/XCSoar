@@ -119,7 +119,7 @@ protected:
                        const PixelRect &rc) override {
     Layout layout(rc);
 
-    ButtonWindowStyle style;
+    WindowStyle style;
     style.Hide();
     style.TabStop();
 

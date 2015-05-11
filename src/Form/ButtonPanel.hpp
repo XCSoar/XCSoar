@@ -30,7 +30,7 @@ Copyright_License {
 class ButtonPanel {
   ContainerWindow &parent;
   const ButtonLook &look;
-  ButtonWindowStyle style;
+  WindowStyle style;
 
   StaticArray<WndButton *, 8u> buttons;
 

@@ -27,64 +27,47 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
+#include "Hardware/Vibrator.hpp"
 
 void
 WndButton::Create(ContainerWindow &parent,
                   const PixelRect &rc,
-                  ButtonWindowStyle style,
+                  WindowStyle style,
                   ButtonRenderer *_renderer)
 {
+  dragging = down = false;
   renderer = _renderer;
 
-  style.EnableCustomPainting();
-  ButtonWindow::Create(parent, _T(""), rc, style);
+  PaintWindow::Create(parent, rc, style);
 }
 
 void
 WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
                   const TCHAR *caption, const PixelRect &rc,
-                  ButtonWindowStyle style)
+                  WindowStyle style)
 {
   Create(parent, rc, style, new TextButtonRenderer(look, caption));
 }
 
 void
 WndButton::Create(ContainerWindow &parent, const PixelRect &rc,
-                  ButtonWindowStyle style, ButtonRenderer *_renderer,
+                  WindowStyle style, ButtonRenderer *_renderer,
                   ActionListener &_listener, int _id)
 {
-  renderer = _renderer;
   listener = &_listener;
-
-  style.EnableCustomPainting();
-#ifdef USE_GDI
-  /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
   id = _id;
-  ButtonWindow::Create(parent, _T(""), rc, style);
-#else
-  /* our custom SDL/OpenGL button doesn't need this hack */
-  ButtonWindow::Create(parent, _T(""), _id, rc, style);
-#endif
+
+  Create(parent, rc, style, _renderer);
 }
 
 void
 WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
                   const TCHAR *caption, const PixelRect &rc,
-                  ButtonWindowStyle style,
+                  WindowStyle style,
                   ActionListener &_listener, int _id) {
-  renderer = new TextButtonRenderer(look, caption);
-
-  listener = &_listener;
-
-  style.EnableCustomPainting();
-#ifdef USE_GDI
-  /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
-  id = _id;
-  ButtonWindow::Create(parent, caption, rc, style);
-#else
-  /* our custom SDL/OpenGL button doesn't need this hack */
-  ButtonWindow::Create(parent, caption, _id, rc, style);
-#endif
+  Create(parent, rc, style,
+         new TextButtonRenderer(look, caption),
+         _listener, _id);
 }
 
 void
@@ -104,18 +87,29 @@ WndButton::GetMinimumWidth() const
   return renderer->GetMinimumButtonWidth();
 }
 
+void
+WndButton::SetDown(bool _down)
+{
+  if (_down == down)
+    return;
+
+#ifdef HAVE_VIBRATOR
+  VibrateShort();
+#endif
+
+  down = _down;
+  Invalidate();
+}
+
 bool
 WndButton::OnClicked()
 {
   if (listener != nullptr) {
-#ifndef USE_GDI
-    unsigned id = GetID();
-#endif
     listener->OnAction(id);
     return true;
   }
 
-  return ButtonWindow::OnClicked();
+  return false;
 }
 
 void
@@ -125,40 +119,109 @@ WndButton::OnDestroy()
 
   delete renderer;
 
-  ButtonWindow::OnDestroy();
+  PaintWindow::OnDestroy();
 }
 
-#ifdef USE_GDI
+bool
+WndButton::OnKeyCheck(unsigned key_code) const
+{
+  switch (key_code) {
+  case KEY_RETURN:
+    return true;
+
+  default:
+    return PaintWindow::OnKeyCheck(key_code);
+  }
+}
+
+bool
+WndButton::OnKeyDown(unsigned key_code)
+{
+  switch (key_code) {
+#ifdef GNAV
+  case VK_F4:
+    // using F16 also as Enter-Key. This allows to use the RemoteStick of Altair to do a "click" on the focused button
+  case VK_F16:
+#endif
+  case KEY_RETURN:
+  case KEY_SPACE:
+    SetDown(false);
+    OnClicked();
+    return true;
+
+  default:
+    return PaintWindow::OnKeyDown(key_code);
+  }
+}
+
+bool
+WndButton::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+{
+  if (dragging) {
+    SetDown(IsInside(x, y));
+    return true;
+  } else
+    return PaintWindow::OnMouseMove(x, y, keys);
+}
+
+bool
+WndButton::OnMouseDown(PixelScalar x, PixelScalar y)
+{
+  if (IsTabStop())
+    SetFocus();
+
+  SetDown(true);
+  SetCapture();
+  dragging = true;
+  return true;
+}
+
+bool
+WndButton::OnMouseUp(PixelScalar x, PixelScalar y)
+{
+  if (!dragging)
+    return true;
+
+  dragging = false;
+  ReleaseCapture();
+
+  if (!down)
+    return true;
+
+  SetDown(false);
+  OnClicked();
+  return true;
+}
 
 void
 WndButton::OnSetFocus()
 {
-  ButtonWindow::OnSetFocus();
-
-  /* GDI's "BUTTON" class on Windows CE Core (e.g. Altair) does not
-     repaint when the window gets focus, but our custom style requires
-     it */
-  ::InvalidateRect(hWnd, nullptr, false);
+  PaintWindow::OnSetFocus();
+  Invalidate();
 }
 
 void
 WndButton::OnKillFocus()
 {
-  ButtonWindow::OnKillFocus();
-
-  /* GDI's "BUTTON" class does not repaint when the window loses
-     focus, but our custom style requires it */
-  ::InvalidateRect(hWnd, nullptr, false);
+  PaintWindow::OnKillFocus();
+  Invalidate();
 }
 
-#endif
+void
+WndButton::OnCancelMode()
+{
+  dragging = false;
+  SetDown(false);
+
+  PaintWindow::OnCancelMode();
+}
 
 void
 WndButton::OnPaint(Canvas &canvas)
 {
   assert(renderer != nullptr);
 
-  const bool pressed = IsDown();
+  const bool pressed = down;
   const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
   renderer->DrawButton(canvas, GetClientRect(),

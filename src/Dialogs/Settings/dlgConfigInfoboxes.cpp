@@ -288,7 +288,7 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   ContainerWindow &form_parent = (ContainerWindow &)RowFormWidget::GetWindow();
   AddRemaining(new WndFrame(form_parent, GetLook(), rc));
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.Hide();
   button_style.TabStop();
 

@@ -38,6 +38,8 @@ Copyright_License {
 #include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
 
+#include <winuser.h> /* for DT_xxx */
+
 #include <stdio.h>
 
 class QuickMenuButtonRenderer final : public ButtonRenderer {

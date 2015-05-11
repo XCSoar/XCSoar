@@ -110,7 +110,7 @@ MenuBar::Button::OnMessage(HWND hWnd, UINT message,
     break;
   }
 
-  return ButtonWindow::OnMessage(hWnd, message, wParam, lParam);
+  return WndButton::OnMessage(hWnd, message, wParam, lParam);
 }
 #endif
 
@@ -118,10 +118,9 @@ MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 {
   const PixelRect rc = parent.GetClientRect();
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.Hide();
   style.Border();
-  style.multiline();
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     PixelRect button_rc = GetButtonPosition(i, rc);

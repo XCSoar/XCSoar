@@ -76,7 +76,7 @@ public:
 
     const PixelRect rc = GetClientRect();
     close_button.Create(*this, *button_look, _T("Close"), GetButtonRect(rc),
-                        ButtonWindowStyle(),
+                        WindowStyle(),
                         *this, CLOSE);
     test_window.Create(*this, rc, style);
   }

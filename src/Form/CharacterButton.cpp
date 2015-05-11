@@ -35,7 +35,7 @@ void
 CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
                         const TCHAR *text, PixelRect rc,
                         OnCharacterCallback _on_character, unsigned _character,
-                        const ButtonWindowStyle style)
+                        const WindowStyle style)
 {
   assert(_on_character);
 

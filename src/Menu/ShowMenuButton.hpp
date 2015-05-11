@@ -29,7 +29,7 @@ Copyright_License {
 class ShowMenuButton : public WndButton {
 public:
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              ButtonWindowStyle style=ButtonWindowStyle());
+              WindowStyle style=WindowStyle());
 
 protected:
   /* virtual methods from class ButtonWindow */

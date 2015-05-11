@@ -44,7 +44,7 @@ SimulatorPromptWindow::OnCreate()
 
   const PixelRect rc = GetClientRect();
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.TabStop();
 
   fly_bitmap.Load(IDB_LAUNCHER1);

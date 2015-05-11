@@ -262,7 +262,7 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   panel_style.Border();
   panel_style.ControlParent();
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.TabStop();
 
   CheckBoxStyle check_box_style;

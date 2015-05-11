@@ -70,7 +70,7 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
 #ifndef GNAV
   close_button = new WndButton(GetContainer(),
                                UIGlobals::GetDialogLook().button,
-                               _("Close"), rc, ButtonWindowStyle(),
+                               _("Close"), rc, WindowStyle(),
                                *this, CLOSE);
 #endif
 

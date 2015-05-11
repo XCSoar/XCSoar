@@ -91,7 +91,7 @@ public:
     WindowStyle style;
     style.Hide();
 
-    ButtonWindowStyle button_style(style);
+    WindowStyle button_style(style);
     button_style.Hide();
     button_style.TabStop();
 

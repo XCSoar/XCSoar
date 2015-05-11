@@ -150,7 +150,7 @@ protected:
 #ifdef ENABLE_CLOSE_BUTTON
     close_button.Create(*this, *button_look, _T("Close"),
                         GetCloseButtonRect(GetClientRect()),
-                        ButtonWindowStyle(),
+                        WindowStyle(),
                         *this, CLOSE);
 #endif
   }

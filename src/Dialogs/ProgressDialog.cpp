@@ -42,7 +42,7 @@ ProgressDialog::AddCancelButton(std::function<void()> &&callback)
 {
   assert(!cancel_button.IsDefined());
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.TabStop();
 
   PixelRect rc = client_area.GetClientRect();

@@ -97,10 +97,9 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
                                     Layout::GetMaximumControlHeight());
 
-        ButtonWindowStyle button_style;
+        WindowStyle button_style;
         button_style.Hide();
         button_style.TabStop();
-        button_style.multiline();
 
         WndButton *button =
           new WndButton(tab_bar, look.button, _("Switch InfoBox"),

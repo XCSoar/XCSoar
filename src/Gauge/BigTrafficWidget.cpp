@@ -872,7 +872,7 @@ NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
                 const PixelRect &rc,
                 ActionListener &listener, int id)
 {
-  return new WndButton(parent, rc, ButtonWindowStyle(),
+  return new WndButton(parent, rc, WindowStyle(),
                        new SymbolButtonRenderer(look, caption),
                        listener, id);
 }
@@ -898,10 +898,10 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   next_item_button = NewSymbolButton(GetContainer(), look.dialog.button,
                                      _T(">"), rc, *this, NEXT_ITEM);
   details_button = new WndButton(GetContainer(), look.dialog.button,
-                                 _("Details"), rc, ButtonWindowStyle(),
+                                 _("Details"), rc, WindowStyle(),
                                  *this, DETAILS);
   close_button = new WndButton(GetContainer(), look.dialog.button,
-                               _("Close"), rc, ButtonWindowStyle(),
+                               _("Close"), rc, WindowStyle(),
                                *this, CLOSE);
 #endif
 

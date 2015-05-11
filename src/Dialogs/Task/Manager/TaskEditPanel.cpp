@@ -156,7 +156,7 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     assert(!visible);
 
-    ButtonWindowStyle style;
+    WindowStyle style;
     style.Hide();
     style.TabStop();
 
