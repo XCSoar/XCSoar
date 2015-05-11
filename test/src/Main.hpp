@@ -24,6 +24,7 @@
 
 #ifdef ENABLE_MAIN_WINDOW
 #include "Screen/SingleWindow.hpp"
+#include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/NumberParser.hpp"
@@ -92,10 +93,15 @@ UIGlobals::GetDialogLook()
 
 #ifdef ENABLE_MAIN_WINDOW
 
-class TestMainWindow : public SingleWindow {
+class TestMainWindow : public SingleWindow, public ActionListener {
   Window *full_window;
 
 public:
+  enum Buttons {
+    CLOSE,
+    LAST_BUTTON
+  };
+
   TestMainWindow():full_window(nullptr) {}
 
   /**
@@ -104,6 +110,15 @@ public:
    */
   void SetFullWindow(Window &w) {
     full_window = &w;
+  }
+
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case CLOSE:
+      Close();
+      break;
+    }
   }
 
 protected:
