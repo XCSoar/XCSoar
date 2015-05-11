@@ -1775,17 +1775,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Look/MapLook.cpp \
-	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/Look/WaypointLook.cpp \
-	$(SRC)/Look/AirspaceLook.cpp \
-	$(SRC)/Look/TrailLook.cpp \
-	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Look/AircraftLook.cpp \
-	$(SRC)/Look/TrafficLook.cpp \
-	$(SRC)/Look/MarkerLook.cpp \
-	$(SRC)/Look/NOAALook.cpp \
-	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
@@ -1866,7 +1855,15 @@ RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
 
-RUN_MAP_WINDOW_DEPENDS = PROFILE TERRAIN SCREEN EVENT RESOURCE SHAPELIB IO ASYNC OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
+RUN_MAP_WINDOW_DEPENDS = \
+	PROFILE TERRAIN \
+	LOOK \
+	SCREEN EVENT \
+	RESOURCE \
+	SHAPELIB \
+	IO ASYNC OS THREAD \
+	TASK ROUTE GLIDE WAYPOINT AIRSPACE \
+	JASPER ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_LIST_CONTROL_SOURCES = \
@@ -2180,33 +2177,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Look/Look.cpp \
-	$(SRC)/Look/UnitsLook.cpp \
-	$(SRC)/Look/IconLook.cpp \
-	$(SRC)/Look/MapLook.cpp \
-	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/Look/VarioLook.cpp \
-	$(SRC)/Look/ChartLook.cpp \
-	$(SRC)/Look/ThermalBandLook.cpp \
-	$(SRC)/Look/TraceHistoryLook.cpp \
-	$(SRC)/Look/CrossSectionLook.cpp \
-	$(SRC)/Look/HorizonLook.cpp \
-	$(SRC)/Look/WaypointLook.cpp \
-	$(SRC)/Look/AirspaceLook.cpp \
-	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Look/AircraftLook.cpp \
-	$(SRC)/Look/TrafficLook.cpp \
-	$(SRC)/Look/GestureLook.cpp \
-	$(SRC)/Look/InfoBoxLook.cpp \
-	$(SRC)/Look/MarkerLook.cpp \
-	$(SRC)/Look/NOAALook.cpp \
-	$(SRC)/Look/TerminalLook.cpp \
-	$(SRC)/Look/TrailLook.cpp \
-	$(SRC)/Look/FinalGlideBarLook.cpp \
-	$(SRC)/Look/FlarmTrafficLook.cpp \
-	$(SRC)/Look/ThermalAssistantLook.cpp \
-	$(SRC)/Look/VarioBarLook.cpp \
-	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/XML/Node.cpp \
@@ -2217,8 +2187,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/Look/DialogLook.cpp \
-	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/CrossSection/AirspaceXSRenderer.cpp \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
@@ -2295,7 +2263,15 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
-RUN_ANALYSIS_DEPENDS = TERRAIN DRIVER PROFILE FORM WIDGET SCREEN EVENT RESOURCE ASYNC IO DATA_FIELD OS THREAD CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
+RUN_ANALYSIS_DEPENDS = \
+	TERRAIN \
+	DRIVER \
+	PROFILE \
+	FORM WIDGET \
+	LOOK \
+	SCREEN EVENT RESOURCE ASYNC IO DATA_FIELD \
+	OS THREAD \
+	CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \

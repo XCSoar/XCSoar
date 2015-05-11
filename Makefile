@@ -115,6 +115,7 @@ INCLUDES += $(BOOST_CPPFLAGS)
 
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libresource.mk
+include $(topdir)/build/liblook.mk
 include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
