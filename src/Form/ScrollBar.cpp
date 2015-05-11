@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/ScrollBar.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Window.hpp"
+#include "Screen/PaintWindow.hpp"
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 
@@ -190,7 +190,7 @@ ScrollBar::Paint(Canvas &canvas) const
     PixelRect rc_slider2 = rc_slider;
     ++rc_slider2.left;
     ++rc_slider2.top;
-    button_renderer.DrawButton(canvas, rc_slider2, false, false);
+    button_renderer.DrawButton(canvas, rc_slider2, dragging, dragging);
   }
 
   // fill the rest with darker gray
@@ -208,7 +208,7 @@ ScrollBar::Paint(Canvas &canvas) const
 }
 
 void
-ScrollBar::DragBegin(Window *w, unsigned y)
+ScrollBar::DragBegin(PaintWindow *w, unsigned y)
 {
   // Make sure that we are not dragging already
   assert(!dragging);
@@ -218,10 +218,11 @@ ScrollBar::DragBegin(Window *w, unsigned y)
   // ... and remember that we are dragging now
   dragging = true;
   w->SetCapture();
+  w->Invalidate(rc_slider);
 }
 
 void
-ScrollBar::DragEnd(Window *w)
+ScrollBar::DragEnd(PaintWindow *w)
 {
   // If we are not dragging right now -> nothing to end
   if (!dragging)
@@ -230,6 +231,7 @@ ScrollBar::DragEnd(Window *w)
   // Realize that we are not dragging anymore
   dragging = false;
   w->ReleaseCapture();
+  w->Invalidate(rc_slider);
 }
 
 unsigned

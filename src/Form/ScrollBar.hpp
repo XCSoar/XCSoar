@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <algorithm>
 
-class Window;
+class PaintWindow;
 class Canvas;
 
 class ScrollBar {
@@ -188,14 +188,14 @@ public:
    * @param w The Window object the ScrollBar is belonging to
    * @param y y-Coordinate
    */
-  void DragBegin(Window *w, unsigned y);
+  void DragBegin(PaintWindow *w, unsigned y);
 
   /**
    * Should be called when stopping to drag
    * (Called by ListControl::OnMouseUp)
    * @param w The Window object the ScrollBar is belonging to
    */
-  void DragEnd(Window *w);
+  void DragEnd(PaintWindow *w);
 
   /**
    * Should be called while dragging
