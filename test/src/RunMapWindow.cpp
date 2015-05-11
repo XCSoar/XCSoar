@@ -81,14 +81,36 @@ public:
 #endif
 };
 
-class TestWindow : public SingleWindow {
+class TestMapWindow final : public MapWindow {
 public:
-  MapWindow map;
-  ButtonWindow close_button;
-
 #ifndef ENABLE_OPENGL
   bool initialised;
 #endif
+
+  TestMapWindow(const MapLook &map_look,
+             const TrafficLook &traffic_look)
+    :MapWindow(map_look, traffic_look)
+#ifndef ENABLE_OPENGL
+    , initialised(false)
+#endif
+  {
+  }
+
+  /* virtual methods from class Window */
+  void OnResize(PixelSize new_size) override {
+    MapWindow::OnResize(new_size);
+
+#ifndef ENABLE_OPENGL
+    if (initialised)
+      DrawThread::Draw(*this);
+#endif
+  }
+};
+
+class TestWindow : public SingleWindow {
+public:
+  TestMapWindow map;
+  ButtonWindow close_button;
 
   enum {
     ID_START = 100,
@@ -98,12 +120,7 @@ public:
 public:
   TestWindow(const MapLook &map_look,
              const TrafficLook &traffic_look)
-    :map(map_look, traffic_look)
-#ifndef ENABLE_OPENGL
-     , initialised(false)
-#endif
-  {
-  }
+    :map(map_look, traffic_look) {}
 
   void Create(PixelSize size) {
     TopWindowStyle style;
@@ -145,11 +162,6 @@ protected:
 
     if (map.IsDefined())
       map.Resize(new_size);
-
-#ifndef ENABLE_OPENGL
-  if (initialised)
-    DrawThread::Draw(map);
-#endif
   }
 };
 
@@ -245,7 +257,7 @@ Main()
   DrawThread::UpdateAll(window.map);
 #else
   DrawThread::Draw(window.map);
-  window.initialised = true;
+  window.map.initialised = true;
 #endif
   window.Show();
 
