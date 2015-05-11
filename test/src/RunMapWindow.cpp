@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #define ENABLE_RESOURCE_LOADER
+#define ENABLE_PROFILE
 #include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
@@ -31,13 +32,11 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/MapProfile.hpp"
-#include "LocalPath.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Airspace/AirspaceParser.hpp"
-#include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "LogFile.hpp"
@@ -226,10 +225,6 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
 void
 Main()
 {
-  InitialiseDataPath();
-  Profile::SetFiles(_T(""));
-  Profile::Load();
-
   ComputerSettings settings_computer;
   settings_computer.SetDefaults();
   Profile::Load(settings_computer);
@@ -271,6 +266,4 @@ Main()
   delete topography;
   delete traffic_look;
   delete map_look;
-
-  DeinitialiseDataPath();
 }
