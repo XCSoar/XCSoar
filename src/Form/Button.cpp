@@ -94,6 +94,8 @@ WndButton::SetCaption(const TCHAR *caption)
 
   TextButtonRenderer &r = *(TextButtonRenderer *)renderer;
   r.SetCaption(caption);
+
+  Invalidate();
 }
 
 unsigned
