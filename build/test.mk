@@ -2043,6 +2043,8 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/HorizonLook.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
