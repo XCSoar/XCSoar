@@ -22,6 +22,12 @@
 #define ENABLE_DIALOG_LOOK
 #endif
 
+#ifdef ENABLE_CLOSE_BUTTON
+#define ENABLE_MAIN_WINDOW
+#define ENABLE_DIALOG_LOOK
+#include "Form/Button.hpp"
+#endif
+
 #ifdef ENABLE_MAIN_WINDOW
 #include "Screen/SingleWindow.hpp"
 #include "Form/ActionListener.hpp"
@@ -96,6 +102,10 @@ UIGlobals::GetDialogLook()
 class TestMainWindow : public SingleWindow, public ActionListener {
   Window *full_window;
 
+#ifdef ENABLE_CLOSE_BUTTON
+  WndButton close_button;
+#endif
+
 public:
   enum Buttons {
     CLOSE,
@@ -122,6 +132,18 @@ public:
   }
 
 protected:
+  /* virtual methods from class Window */
+  void OnCreate() override {
+    SingleWindow::OnCreate();
+
+#ifdef ENABLE_CLOSE_BUTTON
+    close_button.Create(*this, dialog_look->button, _T("Close"),
+                        GetCloseButtonRect(GetClientRect()),
+                        ButtonWindowStyle(),
+                        *this, CLOSE);
+#endif
+  }
+
   void OnResize(PixelSize new_size) override {
     SingleWindow::OnResize(new_size);
     Layout::Initialize(new_size);
@@ -129,6 +151,18 @@ protected:
     if (full_window != nullptr)
       full_window->Resize(new_size);
   }
+
+protected:
+#ifdef ENABLE_CLOSE_BUTTON
+  gcc_pure
+  PixelRect GetCloseButtonRect(PixelRect rc) const {
+    rc.right -= 5;
+    rc.left = rc.right - 120;
+    rc.top += 5;
+    rc.bottom = rc.top + 50;
+    return rc;
+  }
+#endif
 };
 
 static TestMainWindow main_window;
