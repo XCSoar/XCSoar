@@ -24,11 +24,11 @@ Copyright_License {
 #define ENABLE_RESOURCE_LOADER
 #define ENABLE_PROFILE
 #define ENABLE_SCREEN
+#define ENABLE_MAIN_WINDOW
+#define ENABLE_CLOSE_BUTTON
 #define ENABLE_LOOK
 #include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ComputerProfile.hpp"
@@ -104,64 +104,6 @@ public:
     if (initialised)
       DrawThread::Draw(*this);
 #endif
-  }
-};
-
-class TestWindow : public SingleWindow {
-public:
-  TestMapWindow map;
-  ButtonWindow close_button;
-
-  enum {
-    ID_START = 100,
-    ID_CLOSE,
-  };
-
-public:
-  TestWindow(const MapLook &map_look,
-             const TrafficLook &traffic_look)
-    :map(map_look, traffic_look) {}
-
-  void Create(PixelSize size) {
-    TopWindowStyle style;
-    style.Resizable();
-
-    SingleWindow::Create(_T("RunMapWindow"), size, style);
-
-    PixelRect rc = GetClientRect();
-    map.Create(*this, rc);
-    map.SetWaypoints(&way_points);
-    map.SetAirspaces(&airspace_database);
-    map.SetTopography(topography);
-    map.SetTerrain(terrain);
-    if (terrain != NULL)
-      map.SetLocation(terrain->GetTerrainCenter());
-
-    rc.left = 5;
-    rc.top = 5;
-    rc.right = rc.left + 60;
-    rc.bottom = rc.top + 20;
-    close_button.Create(*this, _T("Close"), ID_CLOSE, rc);
-    close_button.SetFont(bold_font);
-    close_button.BringToTop();
-  }
-
-protected:
-  virtual bool OnCommand(unsigned id, unsigned code) override {
-    switch (id) {
-    case ID_CLOSE:
-      Close();
-      return true;
-    }
-
-    return TopWindow::OnCommand(id, code);
-  }
-
-  virtual void OnResize(PixelSize new_size) override {
-    SingleWindow::OnResize(new_size);
-
-    if (map.IsDefined())
-      map.Resize(new_size);
   }
 };
 
@@ -245,20 +187,25 @@ Main()
 
   LoadFiles(settings_computer.poi, settings_computer.team_code);
 
-  TestWindow window(look->map, look->traffic);
-  window.Create({640, 480});
+  TestMapWindow map(look->map, look->traffic);
+  map.SetWaypoints(&way_points);
+  map.SetAirspaces(&airspace_database);
+  map.SetTopography(topography);
+  map.SetTerrain(terrain);
+  if (terrain != nullptr)
+    map.SetLocation(terrain->GetTerrainCenter());
+  map.Create(main_window, main_window.GetClientRect());
+  main_window.SetFullWindow(map);
 
-  GenerateBlackboard(window.map, settings_computer, settings_map);
+  GenerateBlackboard(map, settings_computer, settings_map);
 #ifdef ENABLE_OPENGL
-  DrawThread::UpdateAll(window.map);
+  DrawThread::UpdateAll(map);
 #else
-  DrawThread::Draw(window.map);
-  window.map.initialised = true;
+  DrawThread::Draw(map);
+  map.initialised = true;
 #endif
-  window.Show();
 
-  window.RunEventLoop();
-  window.Destroy();
+  main_window.RunEventLoop();
 
   delete terrain;
   delete topography;
