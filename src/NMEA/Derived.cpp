@@ -87,6 +87,8 @@ DerivedInfo::Reset()
 
   auto_mac_cready_available.Clear();
 
+  glide_polar_safety.SetInvalid();
+
   airspace_warnings.Clear();
 
   planned_route.clear();
