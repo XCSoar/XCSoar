@@ -54,6 +54,7 @@ UsePixelPan()
 
 ListControl::ListControl(const DialogLook &_look)
   :look(_look),
+   scroll_bar(look.button),
    length(0),
    origin(0), pixel_pan(0),
    cursor(0),
@@ -69,6 +70,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
                          UPixelScalar _item_height)
   :look(_look),
+   scroll_bar(look.button),
    length(0),
    origin(0), pixel_pan(0),
    cursor(0),

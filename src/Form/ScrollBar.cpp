@@ -30,8 +30,8 @@ Copyright_License {
 
 #include <assert.h>
 
-ScrollBar::ScrollBar()
-  :dragging(false)
+ScrollBar::ScrollBar(const ButtonLook &_button_look)
+  :button_renderer(_button_look), dragging(false)
 {
   // Reset the ScrollBar on creation
   Reset();
@@ -150,8 +150,8 @@ ScrollBar::Paint(Canvas &canvas) const
   canvas.DrawExactLine(down_arrow_rect.left, down_arrow_rect.top - 1,
                        down_arrow_rect.right, down_arrow_rect.top - 1);
 
-  canvas.DrawButton(up_arrow_rect, false);
-  canvas.DrawButton(down_arrow_rect, false);
+  button_renderer.DrawButton(canvas, up_arrow_rect, false, false);
+  button_renderer.DrawButton(canvas, down_arrow_rect, false, false);
 
   canvas.SelectNullPen();
   canvas.SelectBlackBrush();
@@ -190,7 +190,7 @@ ScrollBar::Paint(Canvas &canvas) const
     PixelRect rc_slider2 = rc_slider;
     ++rc_slider2.left;
     ++rc_slider2.top;
-    canvas.DrawButton(rc_slider2, false);
+    button_renderer.DrawButton(canvas, rc_slider2, false, false);
   }
 
   // fill the rest with darker gray
