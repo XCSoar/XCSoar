@@ -54,14 +54,14 @@ public:
   WndButton *Add(ButtonRenderer *renderer,
                  ActionListener &listener, int id);
 
-  WndButton *Add(tstring::const_pointer caption,
+  WndButton *Add(const TCHAR *caption,
                  ActionListener &listener, int id);
 
   /**
    * Add a symbol button.  The caption is one of the "special"
    * #WndSymbolButton strings.
    */
-  WndButton *AddSymbol(tstring::const_pointer caption,
+  WndButton *AddSymbol(const TCHAR *caption,
                        ActionListener &listener, int id);
 
   /**

@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Screen/ButtonWindow.hpp"
 
+#include <tchar.h>
+
 struct ButtonLook;
 class ContainerWindow;
 class ActionListener;
@@ -52,7 +54,7 @@ public:
   }
 
   WndButton(ContainerWindow &parent, const ButtonLook &look,
-            tstring::const_pointer caption, const PixelRect &rc,
+            const TCHAR *caption, const PixelRect &rc,
             ButtonWindowStyle style,
             ActionListener &_listener, int _id) {
     Create(parent, look, caption, rc, style, _listener, _id);
@@ -64,7 +66,7 @@ public:
               ButtonWindowStyle style, ButtonRenderer *_renderer);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
-              tstring::const_pointer caption, const PixelRect &rc,
+              const TCHAR *caption, const PixelRect &rc,
               ButtonWindowStyle style);
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
@@ -72,7 +74,7 @@ public:
               ActionListener &listener, int id);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
-              tstring::const_pointer caption, const PixelRect &rc,
+              const TCHAR *caption, const PixelRect &rc,
               ButtonWindowStyle style,
               ActionListener &listener, int id);
 
@@ -93,7 +95,7 @@ public:
    * #TextButtonRenderer and may only be used if created with a
    * #TextButtonRenderer instance.
    */
-  void SetCaption(tstring::const_pointer caption);
+  void SetCaption(const TCHAR *caption);
 
   gcc_pure
   unsigned GetMinimumWidth() const;

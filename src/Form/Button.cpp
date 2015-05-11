@@ -42,7 +42,7 @@ WndButton::Create(ContainerWindow &parent,
 
 void
 WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                  tstring::const_pointer caption, const PixelRect &rc,
+                  const TCHAR *caption, const PixelRect &rc,
                   ButtonWindowStyle style)
 {
   Create(parent, rc, style, new TextButtonRenderer(look, caption));
@@ -69,7 +69,7 @@ WndButton::Create(ContainerWindow &parent, const PixelRect &rc,
 
 void
 WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                  tstring::const_pointer caption, const PixelRect &rc,
+                  const TCHAR *caption, const PixelRect &rc,
                   ButtonWindowStyle style,
                   ActionListener &_listener, int _id) {
   renderer = new TextButtonRenderer(look, caption);
@@ -88,7 +88,7 @@ WndButton::Create(ContainerWindow &parent, const ButtonLook &look,
 }
 
 void
-WndButton::SetCaption(tstring::const_pointer caption)
+WndButton::SetCaption(const TCHAR *caption)
 {
   assert(caption != nullptr);
 

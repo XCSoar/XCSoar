@@ -79,7 +79,7 @@ ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 }
 
 WndButton *
-ButtonPanel::AddSymbol(tstring::const_pointer caption,
+ButtonPanel::AddSymbol(const TCHAR *caption,
                        ActionListener &listener, int id)
 {
   return Add(new SymbolButtonRenderer(look, caption), listener, id);

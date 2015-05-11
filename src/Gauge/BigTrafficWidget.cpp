@@ -868,7 +868,7 @@ TrafficWidget::UpdateButtons()
 
 static WndButton *
 NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
-                tstring::const_pointer caption,
+                const TCHAR *caption,
                 const PixelRect &rc,
                 ActionListener &listener, int id)
 {
