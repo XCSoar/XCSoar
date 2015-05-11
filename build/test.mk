@@ -2057,6 +2057,8 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Units/Units.cpp \
