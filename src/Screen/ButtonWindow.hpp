@@ -24,124 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUTTON_WINDOW_HXX
 #define XCSOAR_SCREEN_BUTTON_WINDOW_HXX
 
-#include <Screen/Window.hpp>
-#include "Util/tstring.hpp"
-
-#include <winuser.h>
-
-class ButtonWindowStyle : public WindowStyle {
-public:
-  ButtonWindowStyle() {
-#ifndef USE_GDI
-    text_style |= DT_CENTER | DT_VCENTER | DT_WORDBREAK;
-#else
-    style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
-#endif
-  }
-
-  ButtonWindowStyle(const WindowStyle other):WindowStyle(other) {
-#ifndef USE_GDI
-    text_style |= DT_CENTER | DT_VCENTER | DT_WORDBREAK;
-#else
-    style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
-#endif
-  }
-
-  void multiline() {
 #ifdef USE_GDI
-    style |= BS_MULTILINE;
-#endif
-  }
-
-  void EnableCustomPainting() {
-    WindowStyle::EnableCustomPainting();
-#ifdef USE_GDI
-    style |= BS_OWNERDRAW;
-#endif
-  }
-};
-
-#ifndef USE_GDI
-
-#include "Screen/PaintWindow.hpp"
-
-/**
- * A clickable button.
- */
-class ButtonWindow : public PaintWindow
-{
-  tstring text;
-  unsigned id;
-  bool dragging, down;
-
-public:
-  ButtonWindow():dragging(false), down(false) {}
-
-public:
-  void Create(ContainerWindow &parent, tstring::const_pointer text,
-              unsigned id,
-              const PixelRect &rc,
-              const ButtonWindowStyle style=ButtonWindowStyle());
-
-  void Create(ContainerWindow &parent, tstring::const_pointer text,
-              const PixelRect &rc,
-              const ButtonWindowStyle style=ButtonWindowStyle()) {
-    Create(parent, text, 0, rc, style);
-  }
-
-  unsigned GetID() const {
-    return id;
-  }
-
-  void SetID(unsigned _id) {
-    id = _id;
-  }
-
-  void SetText(tstring::const_pointer _text) {
-    AssertNoneLocked();
-    AssertThread();
-
-    text = _text;
-    Invalidate();
-  }
-
-  const tstring &GetText() const {
-    return text;
-  }
-
-protected:
-  void SetDown(bool _down);
-
-public:
-  bool IsDown() const {
-    return down;
-  }
-
-  /**
-   * The button was clicked, and its action shall be triggered.
-   */
-  virtual bool OnClicked();
-
-protected:
-  /* virtual methods from class Window */
-  virtual bool OnKeyCheck(unsigned key_code) const override;
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual void OnSetFocus() override;
-  virtual void OnKillFocus() override;
-  virtual void OnCancelMode() override;
-
-  /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
-};
-
-#else /* USE_GDI */
 
 #include "Screen/Window.hpp"
+#include "Util/tstring.hpp"
 
-#include <windowsx.h>
 #include <tchar.h>
 
 /**
@@ -187,40 +74,6 @@ protected:
    * Synthesise a click.
    */
   void Click();
-};
-
-/**
- * A clickable button.
- */
-class ButtonWindow : public BaseButtonWindow {
-public:
-  void Create(ContainerWindow &parent, tstring::const_pointer text,
-              unsigned id,
-              const PixelRect &rc,
-              const ButtonWindowStyle style=ButtonWindowStyle()) {
-    BaseButtonWindow::Create(parent, text, id, rc, style);
-  }
-
-  void Create(ContainerWindow &parent, tstring::const_pointer text,
-              const PixelRect &rc,
-              const ButtonWindowStyle style=ButtonWindowStyle()) {
-    BaseButtonWindow::Create(parent, text, rc, style);
-  }
-
-  bool IsDown() const {
-    AssertNoneLocked();
-    AssertThread();
-
-    return (Button_GetState(hWnd) & BST_PUSHED) != 0;
-  }
-
-  void SetText(tstring::const_pointer text);
-
-  const tstring GetText() const;
-
-protected:
-  virtual bool OnKeyCheck(unsigned key_code) const override;
-  virtual bool OnKeyDown(unsigned key_code) override;
 };
 
 #endif /* USE_GDI */

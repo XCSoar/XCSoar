@@ -23,7 +23,6 @@ SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
-	$(SCREEN_SRC_DIR)/Custom/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Window.cpp \
 	$(SCREEN_SRC_DIR)/Custom/WList.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ContainerWindow.cpp \
@@ -172,7 +171,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/LargeTextWindow.cpp \
-	$(SCREEN_SRC_DIR)/GDI/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Pen.cpp \
