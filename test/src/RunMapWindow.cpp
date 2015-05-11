@@ -21,11 +21,12 @@ Copyright_License {
 }
 */
 
+#define ENABLE_RESOURCE_LOADER
+#include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Init.hpp"
-#include "ResourceLoader.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ComputerProfile.hpp"
@@ -222,18 +223,8 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   map.SetLocation(nmea_info.location);
 }
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+void
+Main()
 {
   InitialiseDataPath();
   Profile::SetFiles(_T(""));
@@ -250,10 +241,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadFiles(settings_computer.poi, settings_computer.team_code);
 
   ScreenGlobalInit screen_init;
-
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
 
   MapLook *map_look = new MapLook();
   map_look->Initialise(settings_map, Fonts::map, Fonts::map_bold,
@@ -286,6 +273,4 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete map_look;
 
   DeinitialiseDataPath();
-
-  return 0;
 }
