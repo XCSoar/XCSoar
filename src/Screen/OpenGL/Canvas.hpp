@@ -330,8 +330,6 @@ public:
 
   void DrawFocusRectangle(PixelRect rc);
 
-  void DrawButton(PixelRect rc, bool down);
-
   gcc_pure
   const PixelSize CalcTextSize(const TCHAR *text, size_t length) const;
 

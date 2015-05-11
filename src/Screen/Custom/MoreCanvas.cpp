@@ -34,34 +34,6 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
-void
-Canvas::DrawButton(PixelRect rc, bool down)
-{
-  const Pen old_pen = pen;
-
-  Color gray = IsDithered()
-    ? (down ? COLOR_BLACK : COLOR_WHITE)
-    : COLOR_LIGHT_GRAY;
-  DrawFilledRectangle(rc, gray);
-
-  Pen bright(1, IsDithered() ? COLOR_BLACK : LightColor(gray));
-  Pen dark(1, IsDithered() ? COLOR_BLACK : DarkColor(gray));
-
-  Select(down ? dark : bright);
-  DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top,
-                    rc.right - 2, rc.top);
-  DrawTwoLinesExact(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
-                    rc.right - 3, rc.top + 1);
-
-  Select(down ? bright : dark);
-  DrawTwoLinesExact(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-                    rc.right - 1, rc.top + 1);
-  DrawTwoLinesExact(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
-                    rc.right - 2, rc.top + 2);
-
-  pen = old_pen;
-}
-
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {

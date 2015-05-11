@@ -305,8 +305,6 @@ public:
                          COLOR_DARK_GRAY);
   }
 
-  void DrawButton(PixelRect rc, bool down);
-
   gcc_pure
   const PixelSize CalcTextSize(const TCHAR *text, size_t length) const;
 

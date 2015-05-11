@@ -383,13 +383,6 @@ public:
     ::DrawFocusRect(dc, &rc);
   }
 
-  void DrawButton(PixelRect rc, bool down) {
-    assert(IsDefined());
-
-    ::DrawFrameControl(dc, &rc, DFC_BUTTON,
-                       DFCS_BUTTONPUSH | (down ? DFCS_PUSHED : 0));
-  }
-
   gcc_pure
   const PixelSize CalcTextSize(const TCHAR *text, size_t length) const;
 
