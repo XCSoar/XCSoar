@@ -1769,9 +1769,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
-	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
-	$(SRC)/Look/DefaultFonts.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
@@ -1842,6 +1840,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \

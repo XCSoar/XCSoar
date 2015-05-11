@@ -23,11 +23,11 @@ Copyright_License {
 
 #define ENABLE_RESOURCE_LOADER
 #define ENABLE_PROFILE
+#define ENABLE_SCREEN
 #include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ComputerProfile.hpp"
@@ -45,8 +45,6 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
-#include "Look/GlobalFonts.hpp"
-#include "Look/DefaultFonts.hpp"
 #include "Thread/Debug.hpp"
 
 void
@@ -128,7 +126,7 @@ public:
     rc.right = rc.left + 60;
     rc.bottom = rc.top + 20;
     close_button.Create(*this, _T("Close"), ID_CLOSE, rc);
-    close_button.SetFont(Fonts::map);
+    close_button.SetFont(bold_font);
     close_button.BringToTop();
   }
 
@@ -235,20 +233,17 @@ Main()
 
   LoadFiles(settings_computer.poi, settings_computer.team_code);
 
-  ScreenGlobalInit screen_init;
-
   MapLook *map_look = new MapLook();
-  map_look->Initialise(settings_map, Fonts::map, Fonts::map_bold,
-                       Fonts::map_label, Fonts::map_label_important);
+  map_look->Initialise(settings_map, normal_font, bold_font,
+                       small_font, normal_font);
 
   TrafficLook *traffic_look = new TrafficLook();
-  traffic_look->Initialise(Fonts::map);
+  traffic_look->Initialise(normal_font);
 
   TestWindow window(*map_look, *traffic_look);
   window.Create({640, 480});
 
   GenerateBlackboard(window.map, settings_computer, settings_map);
-  Fonts::Initialize();
 #ifdef ENABLE_OPENGL
   DrawThread::UpdateAll(window.map);
 #else
@@ -259,8 +254,6 @@ Main()
 
   window.RunEventLoop();
   window.Destroy();
-
-  Fonts::Deinitialize();
 
   delete terrain;
   delete topography;
