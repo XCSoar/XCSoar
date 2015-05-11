@@ -30,8 +30,6 @@ Copyright_License {
 
 #include <assert.h>
 
-using std::min;
-
 ScrollBar::ScrollBar()
   :dragging(false)
 {
