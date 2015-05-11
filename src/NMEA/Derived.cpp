@@ -87,7 +87,7 @@ DerivedInfo::Reset()
 
   auto_mac_cready_available.Clear();
 
-  glide_polar_safety.SetInvalid();
+  glide_polar_safety = GlidePolar::Invalid();
 
   airspace_warnings.Clear();
 
