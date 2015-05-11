@@ -27,6 +27,7 @@
 #include "UIGlobals.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/NumberParser.hpp"
+#define ENABLE_SCREEN
 #endif
 
 #ifdef ENABLE_LOOK
