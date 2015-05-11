@@ -208,7 +208,7 @@ MapWindow::SetTopography(TopographyStore *_topography)
 
   delete topography_renderer;
   topography_renderer = topography != nullptr
-    ? new CachedTopographyRenderer(*topography)
+    ? new CachedTopographyRenderer(*topography, look.topography)
     : nullptr;
 }
 

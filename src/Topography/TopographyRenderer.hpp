@@ -31,6 +31,7 @@ class Canvas;
 class WindowProjection;
 class LabelBlock;
 class TopographyFileRenderer;
+struct TopographyLook;
 
 /**
  * Class used to manage and render vector topography layers
@@ -40,7 +41,7 @@ class TopographyRenderer : private NonCopyable {
   StaticArray<TopographyFileRenderer *, TopographyStore::MAXTOPOGRAPHY> files;
 
 public:
-  explicit TopographyRenderer(const TopographyStore &store);
+  TopographyRenderer(const TopographyStore &store, const TopographyLook &look);
 
   TopographyRenderer(const TopographyRenderer &) = delete;
 

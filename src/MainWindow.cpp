@@ -249,7 +249,9 @@ MainWindow::InitialiseConfigured()
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::dialog, Fonts::dialog_bold,
                              Fonts::dialog_small,
-                             Fonts::map, Fonts::map_bold, Fonts::map_label,
+                             Fonts::map, Fonts::map_bold,
+                             Fonts::map_label,
+                             Fonts::map_label_important,
                              Fonts::cdi, Fonts::monospace,
                              Fonts::infobox, Fonts::infobox_small,
 #ifndef GNAV

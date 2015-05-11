@@ -28,7 +28,9 @@ Copyright_License {
 
 void
 MapLook::Initialise(const MapSettings &settings,
-                    const Font &font, const Font &bold_font)
+                    const Font &font, const Font &bold_font,
+                    const Font &regular_topography_font,
+                    const Font &important_topography_font)
 {
   waypoint.Initialise(settings.waypoint, font, bold_font);
   airspace.Initialise(settings.airspace, font);
@@ -90,4 +92,6 @@ MapLook::Initialise(const MapSettings &settings,
   no_gps_icon.LoadResource(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
 
   overlay_font = &bold_font;
+
+  topography.Initialise(regular_topography_font, important_topography_font);
 }

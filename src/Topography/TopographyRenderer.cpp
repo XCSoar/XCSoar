@@ -24,11 +24,12 @@ Copyright_License {
 #include "Topography/TopographyRenderer.hpp"
 #include "Topography/TopographyFileRenderer.hpp"
 
-TopographyRenderer::TopographyRenderer(const TopographyStore &_store)
+TopographyRenderer::TopographyRenderer(const TopographyStore &_store,
+                                       const TopographyLook &look)
   :store(_store)
 {
   for (unsigned i = 0; i < store.size(); ++i)
-    files.append(new TopographyFileRenderer(store[i]));
+    files.append(new TopographyFileRenderer(store[i], look));
 }
 
 TopographyRenderer::~TopographyRenderer()

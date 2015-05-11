@@ -32,6 +32,7 @@ Copyright_License {
 #include "TrailLook.hpp"
 #include "WaveLook.hpp"
 #include "WindArrowLook.hpp"
+#include "TopographyLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Pen.hpp"
@@ -93,8 +94,12 @@ struct MapLook {
 
   const Font *overlay_font;
 
+  TopographyLook topography;
+
   void Initialise(const MapSettings &settings,
-                  const Font &font, const Font &bold_font);
+                  const Font &font, const Font &bold_font,
+                  const Font &regular_topography_font,
+                  const Font &important_topography_font);
 };
 
 #endif

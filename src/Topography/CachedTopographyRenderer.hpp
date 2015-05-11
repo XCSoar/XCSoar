@@ -40,8 +40,9 @@ class CachedTopographyRenderer {
 #endif
 
 public:
-  CachedTopographyRenderer(const TopographyStore &store)
-    :renderer(store)
+  CachedTopographyRenderer(const TopographyStore &store,
+                           const TopographyLook &look)
+    :renderer(store, look)
 #ifndef ENABLE_OPENGL
     , last_serial(0)
 #endif

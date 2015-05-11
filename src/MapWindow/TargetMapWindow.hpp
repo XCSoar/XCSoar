@@ -40,6 +40,7 @@ Copyright_License {
 struct WaypointLook;
 struct TaskLook;
 struct AircraftLook;
+struct TopographyLook;
 class ContainerWindow;
 class TopographyStore;
 class TopographyRenderer;
@@ -51,6 +52,7 @@ class GlideComputer;
 class TargetMapWindow : public BufferWindow {
   const TaskLook &task_look;
   const AircraftLook &aircraft_look;
+  const TopographyLook &topography_look;
 
 #ifndef ENABLE_OPENGL
   // graphics vars
@@ -108,7 +110,8 @@ public:
                   const AirspaceLook &airspace_look,
                   const TrailLook &trail_look,
                   const TaskLook &task_look,
-                  const AircraftLook &aircraft_look);
+                  const AircraftLook &aircraft_look,
+                  const TopographyLook &topography_look);
   virtual ~TargetMapWindow();
 
   void Create(ContainerWindow &parent, PixelRect rc, WindowStyle style);

@@ -44,7 +44,8 @@ Look::InitialiseConfigured(const UISettings &settings,
                            const Font &dialog_bold_font,
                            const Font &dialog_small_font,
                            const Font &map_font, const Font &map_bold_font,
-                           const Font &map_label_font,
+                           const Font &regular_topography_font,
+                           const Font &important_topography_font,
                            const Font &cdi_font,
                            const Font &monospace_font,
                            const Font &infobox_value_font,
@@ -79,6 +80,7 @@ Look::InitialiseConfigured(const UISettings &settings,
   thermal_assistant_gauge.Initialise(true, settings.info_boxes.inverse);
   final_glide_bar.Initialise(map_font);
   vario_bar.Initialise(map_font);
-  map.Initialise(settings.map, map_font, map_bold_font);
+  map.Initialise(settings.map, map_font, map_bold_font,
+                 regular_topography_font, important_topography_font);
   icon.Initialise();
 }

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Topography/TopographyFileRenderer.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
-#include "Look/GlobalFonts.hpp"
+#include "Look/TopographyLook.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
@@ -54,8 +54,10 @@ Copyright_License {
 #include <numeric>
 #include <set>
 
-TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
-  :file(_file), pen(file.GetPenWidth(), file.GetColor()),
+TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
+                                               const TopographyLook &_look)
+  :file(_file), look(_look),
+   pen(file.GetPenWidth(), file.GetColor()),
 #ifdef ENABLE_OPENGL
    array_buffer(nullptr)
 #else
@@ -457,8 +459,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   if (visible_labels.empty())
     return;
 
-  canvas.Select(file.IsLabelImportant(map_scale) ?
-                Fonts::map_label_important : Fonts::map_label);
+  canvas.Select(file.IsLabelImportant(map_scale)
+                ? *look.regular_label_font
+                : *look.important_label_font);
   canvas.SetTextColor(file.IsLabelImportant(map_scale) ?
                 COLOR_BLACK : COLOR_DARK_GRAY);
   canvas.SetBackgroundTransparent();

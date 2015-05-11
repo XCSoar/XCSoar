@@ -256,7 +256,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   MapLook *map_look = new MapLook();
-  map_look->Initialise(settings_map, Fonts::map, Fonts::map_bold);
+  map_look->Initialise(settings_map, Fonts::map, Fonts::map_bold,
+                       Fonts::map_label, Fonts::map_label_important);
 
   TrafficLook *traffic_look = new TrafficLook();
   traffic_look->Initialise(Fonts::map);

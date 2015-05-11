@@ -59,9 +59,10 @@ public:
                         const AirspaceLook &airspace_look,
                         const TrailLook &trail_look,
                         const TaskLook &task_look,
-                        const AircraftLook &aircraft_look)
+                        const AircraftLook &aircraft_look,
+                        const TopographyLook &topography_look)
     :TargetMapWindow(waypoint_look, airspace_look, trail_look,
-                     task_look, aircraft_look),
+                     task_look, aircraft_look, topography_look),
      widget(_widget) {}
 
 protected:
@@ -127,7 +128,8 @@ public:
      rate_limited_bl(*this, 1800, 300),
      map(*this,
          map_look.waypoint, map_look.airspace,
-         map_look.trail, map_look.task, map_look.aircraft),
+         map_look.trail, map_look.task, map_look.aircraft,
+         map_look.topography),
      range(dialog_look),
      radial(dialog_look),
      ete(dialog_look),
