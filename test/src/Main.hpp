@@ -32,6 +32,7 @@
 #ifdef ENABLE_LOOK
 #include "Look/Look.hpp"
 #include "UISettings.hpp"
+#define ENABLE_DIALOG_LOOK
 #define ENABLE_SCREEN
 #elif defined(ENABLE_DIALOG_LOOK)
 #include "Look/DialogLook.hpp"
