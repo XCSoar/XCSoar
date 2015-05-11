@@ -253,6 +253,10 @@ public:
     visible_projection.SetGeoLocation(location);
   }
 
+  void UpdateScreenBounds() {
+    visible_projection.UpdateScreenBounds();
+  }
+
 protected:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;

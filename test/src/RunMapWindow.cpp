@@ -217,6 +217,7 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      settings_map);
   map.SetLocation(nmea_info.location);
+  map.UpdateScreenBounds();
 }
 
 void
