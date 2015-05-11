@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Screen/WindowCanvas.hpp"
@@ -48,6 +49,8 @@ class TestWindow final : public SingleWindow, ActionListener {
   BufferCanvas buffer;
 #endif
 
+  ButtonFrameRenderer button_renderer;
+
   enum Buttons {
 #ifndef ENABLE_OPENGL
     BUFFER,
@@ -60,6 +63,7 @@ public:
 #ifndef ENABLE_OPENGL
               , buffered(false)
 #endif
+              , button_renderer(*button_look)
   {}
 
   void Create(PixelSize size) {
@@ -146,7 +150,7 @@ private:
       rc.top = vmiddle - 20;
       rc.right = hmiddle + 50;
       rc.bottom = vmiddle + 20;
-      canvas.DrawButton(rc, page == 4);
+      button_renderer.DrawButton(canvas, rc, page == 4, page == 4);
       label = page == 4
         ? _T("button down=true") : _T("button down=false");
     }
