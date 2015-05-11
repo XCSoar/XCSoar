@@ -245,10 +245,6 @@ Main()
 
   LoadFiles(settings_computer.poi, settings_computer.team_code);
 
-  MapLook *map_look = new MapLook();
-  map_look->Initialise(settings_map, normal_font, bold_font,
-                       small_font, normal_font);
-
   TestWindow window(look->map, look->traffic);
   window.Create({640, 480});
 
