@@ -36,16 +36,16 @@ ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
   canvas.DrawFilledRectangle(rc, _look.background_color);
 
   canvas.Select(pressed ? _look.dark_border_pen : _look.light_border_pen);
-  canvas.DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top, rc.right - 2,
-                      rc.top);
-  canvas.DrawTwoLines(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
-                      rc.right - 3, rc.top + 1);
+  canvas.DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top, rc.right - 2,
+                           rc.top);
+  canvas.DrawTwoLinesExact(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
+                           rc.right - 3, rc.top + 1);
 
   canvas.Select(pressed ? _look.light_border_pen : _look.dark_border_pen);
-  canvas.DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-                      rc.right - 1, rc.top + 1);
-  canvas.DrawTwoLines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
-                      rc.right - 2, rc.top + 2);
+  canvas.DrawTwoLinesExact(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+                           rc.right - 1, rc.top + 1);
+  canvas.DrawTwoLinesExact(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
+                           rc.right - 2, rc.top + 2);
 }
 
 PixelRect
