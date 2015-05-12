@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Canvas.hpp"
 #include "Asset.hpp"
 
@@ -113,15 +112,6 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
       window->OnPaint(canvas);
       return TRUE;
     }
-
-  case WM_COMMAND:
-    if (wParam == MAKEWPARAM(BaseButtonWindow::COMMAND_BOUNCE_ID, BN_CLICKED)) {
-      /* forward this message to ButtonWindow::OnClicked() */
-      BaseButtonWindow *window = (BaseButtonWindow *)Window::GetChecked((HWND)lParam);
-      if (window != nullptr && window->OnClicked())
-        return true;
-    }
-    break;
   };
 
   return PaintWindow::OnMessage(hWnd, message, wParam, lParam);
