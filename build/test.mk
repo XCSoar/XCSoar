@@ -1881,6 +1881,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -1898,6 +1899,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
@@ -1917,6 +1919,7 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1937,6 +1940,7 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -1955,6 +1959,7 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -1973,6 +1978,7 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
@@ -1999,6 +2005,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/TaskLook.cpp \
@@ -2013,6 +2020,7 @@ $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
 RUN_CHART_RENDERER_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/ChartRenderer.cpp \
@@ -2133,6 +2141,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
@@ -2312,6 +2321,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
@@ -2349,6 +2359,7 @@ RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(MORE_SCREEN_SOURCES) \

@@ -172,29 +172,32 @@ CheckBoxControl::OnCancelMode()
 void
 CheckBoxControl::OnPaint(Canvas &canvas)
 {
-  if (HasCursorKeys() && HasFocus())
-    canvas.Clear(COLOR_XCSOAR_DARK);
+  const auto &cb_look = look->check_box;
+
+  const bool focused = HasCursorKeys() && HasFocus();
+
+  if (focused)
+    canvas.Clear(cb_look.focus_background_brush);
   else if (HaveClipping())
     canvas.Clear(look->background_brush);
 
-  Brush brush(pressed ? COLOR_XCSOAR_LIGHT : COLOR_WHITE);
-  canvas.Select(brush);
-
-  if (IsEnabled())
-    canvas.SelectBlackPen();
-  else
-    canvas.Select(Pen(1, COLOR_GRAY));
+  const auto &state_look = IsEnabled()
+    ? (pressed
+       ? cb_look.pressed
+       : (focused
+          ? cb_look.focused
+          : cb_look.standard))
+    : cb_look.disabled;
 
   unsigned size = canvas.GetHeight() - 4;
+
+  canvas.Select(state_look.box_brush);
+  canvas.Select(state_look.box_pen);
   canvas.Rectangle(2, 2, size, size);
 
   if (checked) {
+    canvas.Select(state_look.check_brush);
     canvas.SelectNullPen();
-
-    if (IsEnabled())
-      canvas.SelectBlackBrush();
-    else
-      canvas.Select(Brush(COLOR_GRAY));
 
     RasterPoint check_mark[] = {
       {-8, -2},
@@ -214,10 +217,8 @@ CheckBoxControl::OnPaint(Canvas &canvas)
     canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
   }
 
-  canvas.Select(*look->text_font);
-  canvas.SetTextColor(IsEnabled()
-                      ? (HasFocus() ? COLOR_WHITE : COLOR_BLACK)
-                      : COLOR_GRAY);
+  canvas.Select(*cb_look.font);
+  canvas.SetTextColor(state_look.text_color);
   canvas.SetBackgroundTransparent();
   canvas.DrawText(canvas.GetHeight() + 2, 2, caption.c_str());
 }

@@ -56,6 +56,7 @@ DialogLook::Initialise(const Font &caption_font,
   text_font = &_text_font;
   small_font = &_small_font;
   button.Initialise(button_font);
+  check_box.Initialise(_text_font);
 
   focused.background_color = COLOR_XCSOAR_DARK;
   focused.text_color = COLOR_WHITE;
