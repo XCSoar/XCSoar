@@ -265,9 +265,6 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle button_style;
   button_style.TabStop();
 
-  CheckBoxStyle check_box_style;
-  check_box_style.TabStop();
-
   WindowStyle dock_style;
   dock_style.ControlParent();
 
@@ -298,7 +295,7 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                          layout.optional_starts, button_style,
                          *this, OPTIONAL_STARTS);
   score_exit.Create(tp_panel, look, _("Score exit"),
-                    layout.score_exit, check_box_style,
+                    layout.score_exit, button_style,
                     *this, SCORE_EXIT);
 
   RefreshView();

@@ -24,42 +24,57 @@ Copyright_License {
 #include "Form/CheckBox.hpp"
 #include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
+#include "Asset.hpp"
+#include "Util/Macros.hpp"
 
 void
-CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &look,
-                        tstring::const_pointer caption,
+CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,
+                        tstring::const_pointer _caption,
                         const PixelRect &rc,
-                        const CheckBoxStyle style,
+                        const WindowStyle style,
                         ActionListener &_listener, int _id)
 {
+  checked = dragging = pressed = false;
+  look = &_look;
+  caption = _caption;
+
   listener = &_listener;
-#ifdef USE_GDI
   id = _id;
-  CheckBox::Create(parent, caption, rc, style);
-#else
-  /* our custom SDL/OpenGL button doesn't need this hack */
-  CheckBox::Create(parent, caption, _id, rc, style);
-#endif
-  SetFont(*look.text_font);
+  PaintWindow::Create(parent, rc, style);
+}
+
+void
+CheckBoxControl::SetState(bool value)
+{
+  if (value == checked)
+    return;
+
+  checked = value;
+  Invalidate();
+}
+
+void
+CheckBoxControl::SetPressed(bool value)
+{
+  if (value == pressed)
+    return;
+
+  pressed = value;
+  Invalidate();
 }
 
 bool
 CheckBoxControl::OnClicked()
 {
   if (listener != nullptr) {
-#ifndef USE_GDI
-    unsigned id = GetID();
-#endif
-
     listener->OnAction(id);
     return true;
   }
 
   return false;
 }
-
-#ifdef _WIN32_WCE
 
 bool
 CheckBoxControl::OnKeyCheck(unsigned key_code) const
@@ -82,11 +97,127 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
   case KEY_APP4:
 #endif
   case KEY_RETURN:
+  case KEY_SPACE:
     SetState(!GetState());
-    return OnClicked();
+    OnClicked();
+    return true;
   }
 
-  return CheckBox::OnKeyDown(key_code);
+  return PaintWindow::OnKeyDown(key_code);
 }
 
-#endif /* _WIN32_WCE */
+bool
+CheckBoxControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+{
+  if (dragging) {
+    SetPressed(IsInside(x, y));
+    return true;
+  } else
+    return PaintWindow::OnMouseMove(x, y, keys);
+}
+
+bool
+CheckBoxControl::OnMouseDown(PixelScalar x, PixelScalar y)
+{
+  if (IsTabStop())
+    SetFocus();
+
+  SetPressed(true);
+  SetCapture();
+  dragging = true;
+  return true;
+}
+
+bool
+CheckBoxControl::OnMouseUp(PixelScalar x, PixelScalar y)
+{
+  if (!dragging)
+    return true;
+
+  dragging = false;
+  ReleaseCapture();
+
+  if (!pressed)
+    return true;
+
+  SetPressed(false);
+  SetState(!GetState());
+  OnClicked();
+  return true;
+}
+
+void
+CheckBoxControl::OnSetFocus()
+{
+  PaintWindow::OnSetFocus();
+  Invalidate();
+}
+
+void
+CheckBoxControl::OnKillFocus()
+{
+  PaintWindow::OnKillFocus();
+  Invalidate();
+}
+
+void
+CheckBoxControl::OnCancelMode()
+{
+  dragging = false;
+  SetPressed(false);
+
+  PaintWindow::OnCancelMode();
+}
+
+void
+CheckBoxControl::OnPaint(Canvas &canvas)
+{
+  if (HasCursorKeys() && HasFocus())
+    canvas.Clear(COLOR_XCSOAR_DARK);
+  else if (HaveClipping())
+    canvas.Clear(look->background_brush);
+
+  Brush brush(pressed ? COLOR_XCSOAR_LIGHT : COLOR_WHITE);
+  canvas.Select(brush);
+
+  if (IsEnabled())
+    canvas.SelectBlackPen();
+  else
+    canvas.Select(Pen(1, COLOR_GRAY));
+
+  unsigned size = canvas.GetHeight() - 4;
+  canvas.Rectangle(2, 2, size, size);
+
+  if (checked) {
+    canvas.SelectNullPen();
+
+    if (IsEnabled())
+      canvas.SelectBlackBrush();
+    else
+      canvas.Select(Brush(COLOR_GRAY));
+
+    RasterPoint check_mark[] = {
+      {-8, -2},
+      {-3, 6},
+      {7, -9},
+      {8, -5},
+      {-3, 9},
+      {-9, 2},
+    };
+
+    unsigned top = canvas.GetHeight() / 2;
+    for (unsigned i = 0; i < ARRAY_SIZE(check_mark); ++i) {
+      check_mark[i].x = (check_mark[i].x * (int)size) / 24 + top;
+      check_mark[i].y = (check_mark[i].y * (int)size) / 24 + top;
+    }
+
+    canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
+  }
+
+  canvas.Select(*look->text_font);
+  canvas.SetTextColor(IsEnabled()
+                      ? (HasFocus() ? COLOR_WHITE : COLOR_BLACK)
+                      : COLOR_GRAY);
+  canvas.SetBackgroundTransparent();
+  canvas.DrawText(canvas.GetHeight() + 2, 2, caption.c_str());
+}

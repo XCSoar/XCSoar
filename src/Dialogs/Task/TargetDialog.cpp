@@ -459,11 +459,8 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   speed_achieved.SetReadOnly();
   speed_achieved.SetHelpText(_("AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time."));
 
-  CheckBoxStyle cb_style;
-  cb_style.Hide();
-
   optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
-                   layout.optimized, cb_style, *this, OPTIMIZED);
+                   layout.optimized, button_style, *this, OPTIMIZED);
 
   close_button.Create(parent, button_look, _("Close"),
                       layout.close_button,
