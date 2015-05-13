@@ -1024,7 +1024,10 @@ public:
    */
   virtual bool OnCharacter(unsigned ch);
 
+#ifdef USE_GDI
   virtual bool OnCommand(unsigned id, unsigned code);
+#endif
+
   virtual void OnCancelMode();
   virtual void OnSetFocus();
   virtual void OnKillFocus();
