@@ -25,7 +25,7 @@ Copyright_License {
 
 #ifdef HAVE_HARDWARE_BLANK
 
-#include "Screen/RootDC.hpp"
+#include "Screen/GDI/RootDC.hpp"
 #include "VideoPower.h"
 
 #include <windows.h>

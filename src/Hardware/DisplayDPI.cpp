@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 #ifdef WIN32
-#include "Screen/RootDC.hpp"
+#include "Screen/GDI/RootDC.hpp"
 #include "Config/Registry.hpp"
 #include "OS/GlobalEvent.hpp"
 
