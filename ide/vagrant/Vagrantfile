@@ -69,6 +69,8 @@ Vagrant.configure("2") do |config|
     config.vm.provider "virtualbox" do |v|
         host = RbConfig::CONFIG['host_os']
 
+        v.name = "xcsoar"
+
         # Give VM 1/4 system memory & access to all cpu cores on the host
         if host =~ /darwin/
             cpus = `sysctl -n hw.ncpu`.to_i
