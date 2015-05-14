@@ -23,7 +23,7 @@ export ANDROID_BUILD_TOOLS_VERSION=20.0.0
 sudo apt-get update
 
 # install base dependencies
-sudo apt-get install -y make g++ libsdl-image1.2-dev libboost-dev zlib1g-dev \
+sudo apt-get install -y make g++ libsdl-image1.2-dev zlib1g-dev \
     libsdl1.2-dev libfreetype6-dev libpng-dev libjpeg-dev \
     libcurl4-openssl-dev libxml-parser-perl librsvg2-bin xsltproc \
     imagemagick gettext ttf-dejavu ccache zip p7zip-full git upx-ucl
