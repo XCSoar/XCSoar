@@ -75,6 +75,7 @@ class ChartControl: public PaintWindow
   FlightStatisticsRenderer fs_renderer;
   CrossSectionRenderer cross_section_renderer;
   GestureManager gestures;
+  bool dragging;
 
   const FullBlackboard &blackboard;
   const GlideComputer &glide_computer;
@@ -97,6 +98,7 @@ public:
      thermal_band_renderer(_thermal_band_look, chart_look),
      fs_renderer(chart_look, map_look),
      cross_section_renderer(cross_section_look, airspace_look, chart_look),
+     dragging(false),
      blackboard(_blackboard), glide_computer(_glide_computer) {
     cross_section_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetTerrain(terrain);
@@ -113,6 +115,11 @@ protected:
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+
+  void OnCancelMode() override {
+    PaintWindow::OnCancelMode();
+    dragging = false;
+  }
 
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;
@@ -582,6 +589,7 @@ AnalysisWidget::OnGesture(const TCHAR *gesture)
 bool
 ChartControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
+  dragging = true;
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
@@ -589,16 +597,20 @@ ChartControl::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 ChartControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
-  gestures.Update(x, y);
+  if (dragging)
+    gestures.Update(x, y);
   return true;
 }
 
 bool
 ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  const TCHAR* gesture = gestures.Finish();
-  if (gesture != NULL)
-    analysis_widget.OnGesture(gesture);
+  if (dragging) {
+    dragging = false;
+    const TCHAR *gesture = gestures.Finish();
+    if (gesture != NULL)
+      analysis_widget.OnGesture(gesture);
+  }
 
   return true;
 }
