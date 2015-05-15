@@ -590,6 +590,7 @@ bool
 ChartControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   dragging = true;
+  SetCapture();
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
@@ -607,6 +608,8 @@ ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (dragging) {
     dragging = false;
+    ReleaseCapture();
+
     const TCHAR *gesture = gestures.Finish();
     if (gesture != NULL)
       analysis_widget.OnGesture(gesture);
