@@ -72,7 +72,11 @@ X11EventQueue::HandleEvent(_XEvent &event)
 
   case KeyPress:
     {
-      Event e(Event::KEY_DOWN, XLookupKeysym(&event.xkey, 0));
+      const auto key_sym = XLookupKeysym(&event.xkey, 0);
+      if (key_sym == NoSymbol)
+        break;
+
+      Event e(Event::KEY_DOWN, key_sym);
 
       // this is ISO-Latin-1 only; TODO: switch to XwcTextEscapement()
       char ch;
@@ -85,8 +89,14 @@ X11EventQueue::HandleEvent(_XEvent &event)
     break;
 
   case KeyRelease:
-    queue.Push(Event(Event::KEY_UP,
-                     XLookupKeysym(&event.xkey, 0)));
+    {
+      const auto key_sym = XLookupKeysym(&event.xkey, 0);
+      if (key_sym == NoSymbol)
+        break;
+
+      Event e(Event::KEY_DOWN, key_sym);
+      queue.Push(Event(Event::KEY_UP, key_sym));
+    }
     break;
 
   case ButtonPress:
