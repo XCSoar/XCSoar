@@ -258,7 +258,16 @@ private:
 
   void SaveDisplayModeScales();
 
-  void OnProjectionModified();
+  /**
+   * The attribute visible_projection has been edited.
+   */
+  void OnProjectionModified() {}
+
+  /**
+   * Invoke WindowProjection::UpdateScreenBounds() and trigger updates
+   * of data file caches for the new bounds (e.g. topography).
+   */
+  void UpdateScreenBounds();
 
   void UpdateScreenAngle();
   void UpdateProjection();

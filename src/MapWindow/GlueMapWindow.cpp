@@ -170,6 +170,7 @@ GlueMapWindow::FullRedraw()
   UpdateScreenAngle();
   UpdateProjection();
   UpdateMapScale();
+  UpdateScreenBounds();
 
 #ifdef ENABLE_OPENGL
   Invalidate();
@@ -184,6 +185,7 @@ GlueMapWindow::QuickRedraw()
   UpdateScreenAngle();
   UpdateProjection();
   UpdateMapScale();
+  UpdateScreenBounds();
 
 #ifndef ENABLE_OPENGL
   /* update the Projection */
