@@ -1,5 +1,5 @@
 DEBUG ?= y
-DEBUG_GLIBCXX ?= $(DEBUG)
+DEBUG_GLIBCXX ?= n
 
 ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
