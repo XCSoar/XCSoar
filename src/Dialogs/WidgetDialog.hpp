@@ -46,6 +46,8 @@ class WidgetDialog : public WndForm {
 public:
   WidgetDialog(const DialogLook &look);
 
+  virtual ~WidgetDialog();
+
   const ButtonLook &GetButtonLook() const {
     return buttons.GetLook();
   }

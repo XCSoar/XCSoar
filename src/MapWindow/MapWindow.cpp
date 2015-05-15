@@ -66,6 +66,8 @@ MapWindow::MapWindow(const MapLook &_look,
 
 MapWindow::~MapWindow()
 {
+  Destroy();
+
   delete topography_renderer;
   delete weather;
 }

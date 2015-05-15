@@ -87,6 +87,8 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
 
 TargetMapWindow::~TargetMapWindow()
 {
+  Destroy();
+
   delete topography_renderer;
 }
 

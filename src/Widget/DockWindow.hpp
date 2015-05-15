@@ -38,6 +38,13 @@ class DockWindow : public ContainerWindow {
 public:
   DockWindow():widget(nullptr) {}
 
+  virtual ~DockWindow() {
+    /* we must override ~Window(), because in ~Window(), our own
+       OnDestroy() method won't be called (during object destruction,
+       this object loses its identity) */
+    Destroy();
+  }
+
   /**
    * Show the specified #Widget.  It will be deleted by this class in
    * OnDestroy().

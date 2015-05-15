@@ -174,6 +174,8 @@ public:
               PixelRect rc, const WindowStyle style,
               UPixelScalar _item_height);
 
+  virtual ~ListControl();
+
   void Create(ContainerWindow &parent,
               PixelRect rc, const WindowStyle style,
               unsigned _item_height);

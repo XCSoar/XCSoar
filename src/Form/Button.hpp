@@ -62,6 +62,8 @@ public:
 
   Button():listener(nullptr) {}
 
+  virtual ~Button();
+
   void Create(ContainerWindow &parent, const PixelRect &rc,
               WindowStyle style, ButtonRenderer *_renderer);
 

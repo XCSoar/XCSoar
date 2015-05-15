@@ -83,6 +83,13 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
   Create(parent, rc, style, _item_height);
 }
 
+ListControl::~ListControl() {
+  /* we must override ~Window(), because in ~Window(), our own
+     OnDestroy() method won't be called (during object destruction,
+     this object loses its identity) */
+  Destroy();
+}
+
 void
 ListControl::Create(ContainerWindow &parent,
                     PixelRect rc, const WindowStyle style,

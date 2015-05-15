@@ -29,6 +29,13 @@
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Hardware/Vibrator.hpp"
 
+Button::~Button() {
+  /* we must override ~Window(), because in ~Window(), our own
+     OnDestroy() method won't be called (during object destruction,
+     this object loses its identity) */
+  Destroy();
+}
+
 void
 Button::Create(ContainerWindow &parent,
                const PixelRect &rc,
