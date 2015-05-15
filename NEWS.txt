@@ -6,6 +6,8 @@ Version 6.7.8 - not yet released
 * user interface
   - draw gray title bar on inactive dialogs
   - improved dialog button placement
+* Linux
+  - support Raspberry Pi 2
 
 Version 6.7.7 - 2015/02/20
 * airspace
