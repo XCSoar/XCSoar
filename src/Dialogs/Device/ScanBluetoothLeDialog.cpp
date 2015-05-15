@@ -56,8 +56,6 @@ class ScanBluetoothLeWidget final
 
   WidgetDialog &dialog;
 
-  jobject callback;
-
   std::vector<Item> items;
 
   Mutex mutex;
