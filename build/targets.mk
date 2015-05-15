@@ -397,7 +397,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r10d
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r10e
 
   ANDROID_PLATFORM = android-19
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
@@ -453,7 +453,7 @@ ifeq ($(TARGET),ANDROID)
   CLANG ?= y
 
   ifeq ($(CLANG),y)
-    ANDROID_TOOLCHAIN_NAME = llvm-3.5
+    ANDROID_TOOLCHAIN_NAME = llvm-3.6
     LIBCXX = y
   else
     ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
