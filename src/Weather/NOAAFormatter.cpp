@@ -164,7 +164,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     StaticString<256> buffer;
 
     buffer.Format(_T("%s: "), _("Visibility"));
-    if (!parsed.qnh_available) {
+    if (!parsed.visibility_available) {
       buffer.append(value, value_length);
     } else {
       TCHAR vis_buffer[32];
