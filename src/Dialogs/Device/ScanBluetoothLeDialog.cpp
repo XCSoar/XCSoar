@@ -97,7 +97,7 @@ private:
     return true;
   }
 
-  void OnActivateItem(unsigned index) {
+  void OnActivateItem(unsigned index) override {
     dialog.SetModalResult(mrOK);
   }
 
