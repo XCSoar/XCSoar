@@ -23,7 +23,7 @@ else
 HOST_HAS_NEON := n
 endif
 
-ifeq ($(HOST_IS_LINUX)$(HOST_IS_ARMV6),yy)
+ifeq ($(HOST_IS_LINUX)$(HOST_IS_ARM),yy)
 # Check for VideoCore headers present on a Raspberry Pi
 HOST_IS_PI := $(call string_equals,$(shell test -f /opt/vc/include/interface/vmcs_host/vc_dispmanx.h && echo y),y)
 else
