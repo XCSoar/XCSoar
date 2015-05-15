@@ -79,7 +79,6 @@ GlueMapWindow::SetPan(bool enable)
     break;
   }
 
-  UpdateProjection();
   FullRedraw();
 }
 
@@ -96,7 +95,6 @@ GlueMapWindow::TogglePan()
     break;
   }
 
-  UpdateProjection();
   FullRedraw();
 }
 
@@ -106,7 +104,6 @@ GlueMapWindow::PanTo(const GeoPoint &location)
   follow_mode = FOLLOW_PAN;
   SetLocation(location);
 
-  UpdateProjection();
   FullRedraw();
 }
 
