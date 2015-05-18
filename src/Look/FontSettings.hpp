@@ -24,30 +24,29 @@ Copyright_License {
 #ifndef XCSOAR_FONT_SETTINGS_HPP
 #define XCSOAR_FONT_SETTINGS_HPP
 
-#include <windef.h>
-#include <wingdi.h>
+#include "FontDescription.hpp"
 
 struct FontSettings {
-  LOGFONT dialog;
+  FontDescription dialog;
 
 #ifdef GNAV
-  LOGFONT dialog_small;
+  FontDescription dialog_small;
 #endif
 
-  LOGFONT infobox;
-  LOGFONT infobox_small;
+  FontDescription infobox;
+  FontDescription infobox_small;
 #ifndef GNAV
-  LOGFONT infobox_units;
+  FontDescription infobox_units;
 #endif
 
-  LOGFONT title;
-  LOGFONT cdi;
-  LOGFONT monospace;
+  FontDescription title;
+  FontDescription cdi;
+  FontDescription monospace;
 
-  LOGFONT map;
-  LOGFONT map_bold;
-  LOGFONT map_label;
-  LOGFONT map_label_important;
+  FontDescription map;
+  FontDescription map_bold;
+  FontDescription map_label;
+  FontDescription map_label_important;
 };
 
 #endif

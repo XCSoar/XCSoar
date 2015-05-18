@@ -24,17 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_AUTO_FONT_HPP
 #define XCSOAR_AUTO_FONT_HPP
 
-#include <windef.h>
-#include <wingdi.h>
 #include <tchar.h>
 
+class FontDescription;
 struct FontSettings;
 
 /**
  * Change the font size so that the text fits into the given width.
  */
 void
-AutoSizeFont(LOGFONT &logfont, unsigned width, const TCHAR *text);
+AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text);
 
 void
 AutoSizeInfoBoxFonts(FontSettings &settings, unsigned control_width);

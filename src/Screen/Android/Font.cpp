@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
+#include "Look/FontDescription.hpp"
+#include "Look/StandardFonts.hpp"
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
@@ -31,10 +33,10 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::Load(const LOGFONT &log)
+Font::Load(const FontDescription &d)
 {
-  return Load(log.lfFaceName, (int) log.lfHeight,
-              log.lfWeight > 600, log.lfItalic != 0);
+  return Load(d.IsMonospace() ? GetStandardMonospaceFontFace() : GetStandardFontFace(),
+              d.GetHeight(), d.IsBold(), d.IsItalic());
 }
 
 /*

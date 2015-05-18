@@ -616,6 +616,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	\
+	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \

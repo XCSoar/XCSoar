@@ -33,12 +33,11 @@ typedef struct FT_FaceRec_ *FT_Face;
 
 #ifdef WIN32
 #include <windows.h>
-#else
-#include <wingdi.h>
 #endif
 
 #include <tchar.h>
 
+class FontDescription;
 class TextUtil;
 
 /**
@@ -100,7 +99,7 @@ public:
 
   bool Load(const TCHAR *facename, unsigned height, bool bold = false,
             bool italic = false);
-  bool Load(const LOGFONT &log_font);
+  bool Load(const FontDescription &d);
   void Destroy();
 
   gcc_pure

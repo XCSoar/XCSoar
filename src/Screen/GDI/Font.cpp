@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/AnyCanvas.hpp"
+#include "Look/FontDescription.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -32,29 +33,17 @@ Copyright_License {
 bool
 Font::Load(const TCHAR* facename, unsigned height, bool bold, bool italic)
 {
-  LOGFONT font;
-  memset((char *)&font, 0, sizeof(LOGFONT));
-
-  _tcscpy(font.lfFaceName, facename);
-  font.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
-  font.lfHeight = (long)height;
-  font.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
-  font.lfItalic = italic;
-  if (IsAltair()) // better would be: if (screen.dpi() < 100)
-    font.lfQuality = NONANTIALIASED_QUALITY;
-  else
-    font.lfQuality = ANTIALIASED_QUALITY;
-  return Font::Load(font);
+  return Load(FontDescription(facename, height, bold, italic));
 }
 
 bool
-Font::Load(const LOGFONT &log_font)
+Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
 
   Destroy();
 
-  font = ::CreateFontIndirect(&log_font);
+  font = ::CreateFontIndirect(&(const LOGFONT &)d);
   if (font == nullptr)
     return false;
 
