@@ -52,15 +52,15 @@ Copyright_License {
     self = [super init];
     if (self) {
         self->index = index_;
-        gregorian_calendar = [NSCalendar alloc];
-        [gregorian_calendar initWithCalendarIdentifier:NSGregorianCalendar];
+        gregorian_calendar = [[NSCalendar alloc]
+            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     }
     return self;
 }
 
 -(void) dealloc
 {
-  [gregorian_calendar dealloc];
+  [gregorian_calendar release];
   [super dealloc];
 }
 
@@ -186,8 +186,8 @@ void InternalSensors::init()
 void InternalSensors::deinit()
 {
   [private_data->locationManager stopUpdatingLocation];
-  [private_data->locationManager dealloc];
-  [private_data->locationDelegate dealloc];
+  [private_data->locationManager release];
+  [private_data->locationDelegate release];
 }
 
 InternalSensors * InternalSensors::create(unsigned int index)
