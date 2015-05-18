@@ -38,11 +38,13 @@ Copyright_License {
 
 #include <string.h>
 
-static void
-InitialiseLogfont(LOGFONT &lf, const TCHAR *facename, unsigned height,
+gcc_const
+static LOGFONT
+InitialiseLogfont(const TCHAR *facename, unsigned height,
                   bool bold = false, bool italic = false,
                   bool variable_pitch = true)
 {
+  LOGFONT lf;
   memset((char *)&lf, 0, sizeof(lf));
 
   _tcscpy(lf.lfFaceName, facename);
@@ -60,29 +62,31 @@ InitialiseLogfont(LOGFONT &lf, const TCHAR *facename, unsigned height,
   else
     lf.lfQuality = ANTIALIASED_QUALITY;
 #endif
+
+  return lf;
 }
 
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
-  InitialiseLogfont(settings.dialog, _T("RasterGothicTwelveCond"), 13);
+  settings.dialog = InitialiseLogfont(_T("RasterGothicTwelveCond"), 13);
 #ifdef GNAV
-  InitialiseLogfont(settings.dialog_small, _T("RasterGothicNineCond"), 10);
+  settings.dialog_small = InitialiseLogfont(_T("RasterGothicNineCond"), 10);
 #endif
-  InitialiseLogfont(settings.infobox,
-                    _T("RasterGothicTwentyFourCond"), 24, true);
-  InitialiseLogfont(settings.title, _T("RasterGothicNineCond"), 10);
-  InitialiseLogfont(settings.cdi, _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(settings.map_label, _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(settings.map_label_important,
-                    _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(settings.map, _T("RasterGothicFourteenCond"), 15);
-  InitialiseLogfont(settings.map_bold,
-                    _T("RasterGothicFourteenCond"), 15, true);
-  InitialiseLogfont(settings.infobox_small,
-                    _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(settings.monospace, GetStandardMonospaceFontFace(),
-                    12, false, false, false);
+  settings.infobox = InitialiseLogfont(_T("RasterGothicTwentyFourCond"),
+                                       24, true);
+  settings.title = InitialiseLogfont(_T("RasterGothicNineCond"), 10);
+  settings.cdi = InitialiseLogfont(_T("RasterGothicEighteenCond"), 19, true);
+  settings.map_label = InitialiseLogfont(_T("RasterGothicTwelveCond"), 13);
+  settings.map_label_important = InitialiseLogfont(_T("RasterGothicTwelveCond"),
+                                                   13);
+  settings.map = InitialiseLogfont(_T("RasterGothicFourteenCond"), 15);
+  settings.map_bold = InitialiseLogfont(_T("RasterGothicFourteenCond"),
+                                        15, true);
+  settings.infobox_small = InitialiseLogfont(_T("RasterGothicEighteenCond"),
+                                             19, true);
+  settings.monospace = InitialiseLogfont(GetStandardMonospaceFontFace(),
+                                         12, false, false, false);
 }
 
 static void
@@ -102,12 +106,12 @@ InitialiseLogFonts(FontSettings &settings)
   const unsigned dpi = Display::GetYDPI();
   constexpr double physical_dlg_height = 0.18;
 
-  InitialiseLogfont(settings.dialog, GetStandardFontFace(),
-                    std::min(std::max(8u, unsigned(physical_dlg_height * dpi)),
-                             font_height / 2));
+  settings.dialog = InitialiseLogfont(GetStandardFontFace(),
+                                      std::min(std::max(8u, unsigned(physical_dlg_height * dpi)),
+                                               font_height / 2));
 
-  InitialiseLogfont(settings.infobox, GetStandardFontFace(),
-                    font_height, true);
+  settings.infobox = InitialiseLogfont(GetStandardFontFace(),
+                                       font_height, true);
 
 #ifdef WIN32
   settings.infobox.lfCharSet = ANSI_CHARSET;
@@ -118,35 +122,39 @@ InitialiseLogFonts(FontSettings &settings)
   settings.infobox_small.lfHeight = settings.infobox_small.lfHeight * 4 / 5;
   settings.infobox_small.lfWeight = FW_MEDIUM;
 
-  InitialiseLogfont(settings.title, GetStandardFontFace(), font_height / 3);
+  settings.title = InitialiseLogfont(GetStandardFontFace(), font_height / 3);
 
   // new font for CDI Scale
-  InitialiseLogfont(settings.cdi, GetStandardFontFace(),
-                    unsigned(font_height * 0.6), false, false, false);
+  settings.cdi = InitialiseLogfont(GetStandardFontFace(),
+                                   unsigned(font_height * 0.6),
+                                   false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(settings.map_label, GetStandardFontFace(),
-                    unsigned(font_height * 0.39), false, true);
+  settings.map_label = InitialiseLogfont(GetStandardFontFace(),
+                                         unsigned(font_height * 0.39),
+                                         false, true);
 
   // new font for map labels big/medium cities
-  InitialiseLogfont(settings.map_label_important, GetStandardFontFace(),
-                    unsigned(font_height * 0.39), false, true);
+  settings.map_label_important = InitialiseLogfont(GetStandardFontFace(),
+                                                   unsigned(font_height * 0.39),
+                                                   false, true);
 
   // new font for map labels
-  InitialiseLogfont(settings.map, GetStandardFontFace(),
-                    unsigned(font_height * 0.507));
+  settings.map = InitialiseLogfont(GetStandardFontFace(),
+                                   unsigned(font_height * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(settings.map_bold, GetStandardFontFace(),
-                    unsigned(font_height * 0.507), true);
+  settings.map_bold = InitialiseLogfont(GetStandardFontFace(),
+                                        unsigned(font_height * 0.507), true);
 
 #ifndef GNAV
-  InitialiseLogfont(settings.infobox_units, GetStandardFontFace(),
-                    (int)(font_height * 0.56));
+  settings.infobox_units = InitialiseLogfont(GetStandardFontFace(),
+                                             (int)(font_height * 0.56));
 #endif
 
-  InitialiseLogfont(settings.monospace, GetStandardMonospaceFontFace(),
-                    unsigned(font_height * 0.39), false, false, false);
+  settings.monospace = InitialiseLogfont(GetStandardMonospaceFontFace(),
+                                         unsigned(font_height * 0.39),
+                                         false, false, false);
 }
 
 FontSettings
