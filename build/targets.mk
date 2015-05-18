@@ -272,7 +272,7 @@ ifeq ($(TARGET),OSX32)
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
   DARWIN_SDK_VERSION = 10.10
-  OSX_MIN_SUPPORTED_VERSION = 10.6
+  OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
     LLVM_TARGET = i386-apple-darwin
@@ -293,7 +293,7 @@ ifeq ($(TARGET),OSX64)
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
   DARWIN_SDK_VERSION = 10.10
-  OSX_MIN_SUPPORTED_VERSION = 10.6
+  OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
     LLVM_TARGET = x86_64-apple-darwin
