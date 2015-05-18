@@ -39,49 +39,49 @@ Copyright_License {
 #include <string.h>
 
 static void
-InitialiseLogfont(LOGFONT *font, const TCHAR *facename, unsigned height,
+InitialiseLogfont(LOGFONT &lf, const TCHAR *facename, unsigned height,
                   bool bold = false, bool italic = false,
                   bool variable_pitch = true)
 {
-  memset((char *)font, 0, sizeof(LOGFONT));
+  memset((char *)&lf, 0, sizeof(lf));
 
-  _tcscpy(font->lfFaceName, facename);
+  _tcscpy(lf.lfFaceName, facename);
 
-  font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
+  lf.lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
                           | FF_DONTCARE;
 
-  font->lfHeight = (long)height;
-  font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
-  font->lfItalic = italic;
+  lf.lfHeight = (long)height;
+  lf.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
+  lf.lfItalic = italic;
 
 #ifdef WIN32
   if (IsAltair())
-    font->lfQuality = NONANTIALIASED_QUALITY;
+    lf.lfQuality = NONANTIALIASED_QUALITY;
   else
-    font->lfQuality = ANTIALIASED_QUALITY;
+    lf.lfQuality = ANTIALIASED_QUALITY;
 #endif
 }
 
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
-  InitialiseLogfont(&settings.dialog, _T("RasterGothicTwelveCond"), 13);
+  InitialiseLogfont(settings.dialog, _T("RasterGothicTwelveCond"), 13);
 #ifdef GNAV
-  InitialiseLogfont(&settings.dialog_small, _T("RasterGothicNineCond"), 10);
+  InitialiseLogfont(settings.dialog_small, _T("RasterGothicNineCond"), 10);
 #endif
-  InitialiseLogfont(&settings.infobox,
+  InitialiseLogfont(settings.infobox,
                     _T("RasterGothicTwentyFourCond"), 24, true);
-  InitialiseLogfont(&settings.title, _T("RasterGothicNineCond"), 10);
-  InitialiseLogfont(&settings.cdi, _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&settings.map_label, _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&settings.map_label_important,
+  InitialiseLogfont(settings.title, _T("RasterGothicNineCond"), 10);
+  InitialiseLogfont(settings.cdi, _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(settings.map_label, _T("RasterGothicTwelveCond"), 13);
+  InitialiseLogfont(settings.map_label_important,
                     _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&settings.map, _T("RasterGothicFourteenCond"), 15);
-  InitialiseLogfont(&settings.map_bold,
+  InitialiseLogfont(settings.map, _T("RasterGothicFourteenCond"), 15);
+  InitialiseLogfont(settings.map_bold,
                     _T("RasterGothicFourteenCond"), 15, true);
-  InitialiseLogfont(&settings.infobox_small,
+  InitialiseLogfont(settings.infobox_small,
                     _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
+  InitialiseLogfont(settings.monospace, GetStandardMonospaceFontFace(),
                     12, false, false, false);
 }
 
@@ -102,11 +102,11 @@ InitialiseLogFonts(FontSettings &settings)
   const unsigned dpi = Display::GetYDPI();
   constexpr double physical_dlg_height = 0.18;
 
-  InitialiseLogfont(&settings.dialog, GetStandardFontFace(),
+  InitialiseLogfont(settings.dialog, GetStandardFontFace(),
                     std::min(std::max(8u, unsigned(physical_dlg_height * dpi)),
                              font_height / 2));
 
-  InitialiseLogfont(&settings.infobox, GetStandardFontFace(),
+  InitialiseLogfont(settings.infobox, GetStandardFontFace(),
                     font_height, true);
 
 #ifdef WIN32
@@ -118,34 +118,34 @@ InitialiseLogFonts(FontSettings &settings)
   settings.infobox_small.lfHeight = settings.infobox_small.lfHeight * 4 / 5;
   settings.infobox_small.lfWeight = FW_MEDIUM;
 
-  InitialiseLogfont(&settings.title, GetStandardFontFace(), font_height / 3);
+  InitialiseLogfont(settings.title, GetStandardFontFace(), font_height / 3);
 
   // new font for CDI Scale
-  InitialiseLogfont(&settings.cdi, GetStandardFontFace(),
+  InitialiseLogfont(settings.cdi, GetStandardFontFace(),
                     unsigned(font_height * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&settings.map_label, GetStandardFontFace(),
+  InitialiseLogfont(settings.map_label, GetStandardFontFace(),
                     unsigned(font_height * 0.39), false, true);
 
   // new font for map labels big/medium cities
-  InitialiseLogfont(&settings.map_label_important, GetStandardFontFace(),
+  InitialiseLogfont(settings.map_label_important, GetStandardFontFace(),
                     unsigned(font_height * 0.39), false, true);
 
   // new font for map labels
-  InitialiseLogfont(&settings.map, GetStandardFontFace(),
+  InitialiseLogfont(settings.map, GetStandardFontFace(),
                     unsigned(font_height * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&settings.map_bold, GetStandardFontFace(),
+  InitialiseLogfont(settings.map_bold, GetStandardFontFace(),
                     unsigned(font_height * 0.507), true);
 
 #ifndef GNAV
-  InitialiseLogfont(&settings.infobox_units, GetStandardFontFace(),
+  InitialiseLogfont(settings.infobox_units, GetStandardFontFace(),
                     (int)(font_height * 0.56));
 #endif
 
-  InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
+  InitialiseLogfont(settings.monospace, GetStandardMonospaceFontFace(),
                     unsigned(font_height * 0.39), false, false, false);
 }
 
