@@ -42,7 +42,7 @@ Font::Load(const LOGFONT &log)
  * reference in text_util_object member.
  */
 bool
-Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const TCHAR *facename, unsigned height, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 

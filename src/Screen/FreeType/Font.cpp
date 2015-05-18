@@ -137,7 +137,7 @@ GetCapitalHeight(FT_Face face)
 }
 
 bool
-Font::LoadFile(const char *file, UPixelScalar ptsize, bool bold, bool italic)
+Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 
@@ -169,7 +169,7 @@ Font::LoadFile(const char *file, UPixelScalar ptsize, bool bold, bool italic)
 }
 
 bool
-Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const TCHAR *facename, unsigned height, bool bold, bool italic)
 {
   LOGFONT lf;
   lf.lfWeight = bold ? 700 : 500;

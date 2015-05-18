@@ -30,7 +30,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::Load(const TCHAR* facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const TCHAR* facename, unsigned height, bool bold, bool italic)
 {
   LOGFONT font;
   memset((char *)&font, 0, sizeof(LOGFONT));
@@ -106,10 +106,10 @@ Font::CalculateHeights()
     rec.bottom = tm.tmHeight;
     buffer.DrawOpaqueText(0, 0, rec, _T("M"));
 
-    UPixelScalar top = tm.tmHeight, bottom = 0;
+    unsigned top = tm.tmHeight, bottom = 0;
 
-    for (UPixelScalar x = 0; x < (UPixelScalar)tm.tmAveCharWidth; ++x) {
-      for (UPixelScalar y = 0; y < (UPixelScalar)tm.tmHeight; ++y) {
+    for (unsigned x = 0; x < (unsigned)tm.tmAveCharWidth; ++x) {
+      for (unsigned y = 0; y < (unsigned)tm.tmHeight; ++y) {
         if (buffer.GetPixel(x, y) != white) {
           if (top > y)
             top = y;

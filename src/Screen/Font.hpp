@@ -94,11 +94,11 @@ public:
   }
 
 #ifdef USE_FREETYPE
-  bool LoadFile(const char *file, UPixelScalar ptsize, bool bold = false,
+  bool LoadFile(const char *file, unsigned ptsize, bool bold = false,
                 bool italic = false);
 #endif
 
-  bool Load(const TCHAR *facename, UPixelScalar height, bool bold = false,
+  bool Load(const TCHAR *facename, unsigned height, bool bold = false,
             bool italic = false);
   bool Load(const LOGFONT &log_font);
   void Destroy();
@@ -122,22 +122,22 @@ public:
   }
 #endif
 
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     return height;
   }
-  UPixelScalar GetAscentHeight() const {
+  unsigned GetAscentHeight() const {
     return ascent_height;
   }
-  UPixelScalar GetCapitalHeight() const {
+  unsigned GetCapitalHeight() const {
     return capital_height;
   }
 
 #ifdef USE_FREETYPE
-  UPixelScalar GetLineSpacing() const {
+  unsigned GetLineSpacing() const {
     return height;
   }
 #elif defined(ANDROID)
-  UPixelScalar GetLineSpacing() const {
+  unsigned GetLineSpacing() const {
     return line_spacing;
   }
 #endif
