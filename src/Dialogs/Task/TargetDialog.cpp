@@ -400,6 +400,20 @@ TargetWidget::Layout::Layout(PixelRect rc)
   }
 }
 
+template<typename... Args>
+static void
+UseRecommendedCaptionWidths(Args&&... args)
+{
+  WndProperty *controls[] = { &args... };
+
+  unsigned width = 0;
+  for (const auto *i : controls)
+    width = std::max(width, i->GetRecommendedCaptionWidth());
+
+  for (auto *i : controls)
+    i->SetCaptionWidth(width);
+}
+
 void
 TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -458,6 +472,9 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   speed_achieved.Create(parent, layout.speed_achieved, _("V ach"), caption_width, style);
   speed_achieved.SetReadOnly();
   speed_achieved.SetHelpText(_("AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time."));
+
+  UseRecommendedCaptionWidths(range, radial, ete, delta_t,
+                              speed_remaining, speed_achieved);
 
   optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
                    layout.optimized, button_style, *this, OPTIMIZED);
