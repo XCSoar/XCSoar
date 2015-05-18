@@ -38,11 +38,11 @@
 #include <arpa/inet.h>
 #endif
 
-#ifdef __GLIBC__
+#if defined(__GLIBC__) || defined(__APPLE__)
 #include <ifaddrs.h>
 #endif
 
-#ifdef __GLIBC__
+#if defined(__GLIBC__) || defined(__APPLE__)
 
 static const struct sockaddr_in *
 CastToIPv4(const struct sockaddr *p)
