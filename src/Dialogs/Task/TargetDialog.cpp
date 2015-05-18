@@ -455,7 +455,7 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   speed_remaining.SetReadOnly();
   speed_remaining.SetHelpText(_("Speed remaining"));
 
-  speed_achieved.Create(parent, layout.speed_achieved, _("V rem."), caption_width, style);
+  speed_achieved.Create(parent, layout.speed_achieved, _("V ach"), caption_width, style);
   speed_achieved.SetReadOnly();
   speed_achieved.SetHelpText(_("AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time."));
 
