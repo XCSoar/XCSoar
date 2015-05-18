@@ -27,6 +27,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Math/fixed.hpp"
 
+#include <TargetConditionals.h>
+
 #import <CoreLocation/CoreLocation.h>
 
 #include <unistd.h>
@@ -75,6 +77,17 @@ Copyright_License {
   NSDate *midnight = [gregorian_calendar dateFromComponents:components];
   return [date timeIntervalSinceDate: midnight];
 }
+
+#if TARGET_OS_IPHONE
+- (void) locationManager:(CLLocationManager *)manager
+    didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+  if ((status == kCLAuthorizationStatusAuthorized)
+      || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+    [manager startUpdatingLocation];
+  }
+}
+#endif
 
 -(void) locationManager:(CLLocationManager *)manager
     didUpdateLocations:(NSArray *)locations
@@ -180,7 +193,22 @@ void InternalSensors::init()
   private_data->locationManager.desiredAccuracy =
       kCLLocationAccuracyBestForNavigation;
   private_data->locationManager.delegate = private_data->locationDelegate;
+#if TARGET_OS_IPHONE
+  if ([private_data->locationManager
+      respondsToSelector: @selector(requestWhenInUseAuthorization)]) {
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if ((status == kCLAuthorizationStatusAuthorized)
+        || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+      [private_data->locationManager startUpdatingLocation];
+    } else {
+      [private_data->locationManager requestWhenInUseAuthorization];
+    }
+  } else {
+    [private_data->locationManager startUpdatingLocation];
+  }
+#else
   [private_data->locationManager startUpdatingLocation];
+#endif
 }
 
 void InternalSensors::deinit()
