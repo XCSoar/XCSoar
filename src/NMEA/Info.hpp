@@ -93,13 +93,14 @@ struct GPSState
    */
   bool simulator;
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
   /**
-   * Was this fix obtained from an Android InternalGPS device?  If
-   * yes, then link timeout detection is disabled, because we get
-   * notifications from Android when the GPS gets disconnected.
+   * Was this fix obtained from an internal GPS device for which
+   * link timeout detection must be disabled? This is the case on
+   * Android, iOS and OS X. On these platforms we get notifications
+   * from the OS when the GPS gets disconnected.
    */
-  bool android_internal_gps;
+  bool nonexpiring_internal_gps;
 #endif
 
   void Reset();
