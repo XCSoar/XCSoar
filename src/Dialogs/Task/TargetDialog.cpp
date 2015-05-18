@@ -368,7 +368,7 @@ TargetWidget::Layout::Layout(PixelRect rc)
     speed_remaining = rl.NextRow(min_control_height);
     speed_achieved = rl.NextRow(min_control_height);
     optimized = rl.NextRow(control_height);
-    close_button = rl.NextRow(control_height);
+    close_button = rl.BottomRow(control_height);
   } else {
     /* portrait: form on the top */
 
