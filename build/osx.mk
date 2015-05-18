@@ -1,5 +1,7 @@
 ifeq ($(TARGET_IS_OSX),y)
 
+TARGET_LDLIBS += -framework AppKit
+
 HDIUTIL = hdiutil
 HDIUTIL_OPTIONS =
 
