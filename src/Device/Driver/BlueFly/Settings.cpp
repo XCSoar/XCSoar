@@ -23,6 +23,9 @@ Copyright_License {
 
 #include "Internal.hpp"
 
+const char BlueFlyDevice::BlueFlySettings::VOLUME_NAME[] = "BVL";
+const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
+
 /**
  * Parse the given BlueFly Vario setting identified by its name.
  */

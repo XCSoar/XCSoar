@@ -34,12 +34,12 @@ public:
     unsigned version;
 
     fixed volume;
-    static constexpr const char *VOLUME_NAME = "BVL";
+    static const char VOLUME_NAME[];
     static constexpr unsigned VOLUME_MAX = 1000;
     static constexpr unsigned VOLUME_MULTIPLIER = 1000;
 
     unsigned output_mode;
-    static constexpr const char *OUTPUT_MODE_NAME = "BOM";
+    static const char OUTPUT_MODE_NAME[];
     static constexpr unsigned OUTPUT_MODE_MAX = 3;
 
     void Parse(const char *name, unsigned long value);
