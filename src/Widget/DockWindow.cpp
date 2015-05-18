@@ -61,6 +61,12 @@ DockWindow::MoveWidget()
   widget->Move(GetClientRect());
 }
 
+bool
+DockWindow::SaveWidget(bool &changed)
+{
+  return widget == nullptr || widget->Save(changed);
+}
+
 void
 DockWindow::OnResize(PixelSize new_size)
 {

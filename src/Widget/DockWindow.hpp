@@ -70,6 +70,11 @@ public:
    */
   void MoveWidget();
 
+  /**
+   * Wrapper for Widget::Save().
+   */
+  bool SaveWidget(bool &changed);
+
 protected:
   void DeleteWidget();
 
