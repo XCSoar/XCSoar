@@ -160,6 +160,10 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
+  void Unprepare() override {
+    properties_dock.DeleteWidget();
+  }
+
   bool Save(bool &changed) override {
     ReadValues();
     changed = task_modified;
@@ -371,7 +375,7 @@ TaskPointWidget::RefreshView()
 
   OrderedTaskPoint &tp = ordered_task.GetPoint(active_index);
 
-  properties_dock.SetWidget(new PanelWidget());
+  properties_dock.DeleteWidget();
 
   ObservationZonePoint &oz = tp.GetObservationZone();
   const bool is_fai_general =
@@ -380,7 +384,8 @@ TaskPointWidget::RefreshView()
   if (properties_widget != nullptr) {
     properties_widget->SetListener(this);
     properties_dock.SetWidget(properties_widget);
-  }
+  } else
+    properties_dock.SetWidget(new PanelWidget());
 
   type_label.SetCaption(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 

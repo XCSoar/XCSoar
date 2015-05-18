@@ -38,16 +38,8 @@ class DockWindow : public ContainerWindow {
 public:
   DockWindow():widget(nullptr) {}
 
-  virtual ~DockWindow() {
-    /* we must override ~Window(), because in ~Window(), our own
-       OnDestroy() method won't be called (during object destruction,
-       this object loses its identity) */
-    Destroy();
-  }
-
   /**
-   * Show the specified #Widget.  It will be deleted by this class in
-   * OnDestroy().
+   * Show the specified #Widget.
    *
    * This method is only legal after this Window has been created.
    *
@@ -64,11 +56,14 @@ public:
   }
 
   /**
-   * Call Widget::Unprepare() and "steal" the #Widget pointer (clear
-   * it and return the old value).  This moves the responsibility to
-   * delete the #Widget to the caller.
+   * Call Widget::Unprepare().
    */
-  Widget *UnprepareStealWidget();
+  void UnprepareWidget();
+
+  /**
+   * Delete the given #Widget instance.
+   */
+  void DeleteWidget();
 
   /**
    * Call Widget::Move() again.  This should never be needed, as the
@@ -83,10 +78,7 @@ public:
   bool SaveWidget(bool &changed);
 
 protected:
-  void DeleteWidget();
-
   void OnResize(PixelSize new_size) override;
-  void OnDestroy() override;
 };
 
 #endif

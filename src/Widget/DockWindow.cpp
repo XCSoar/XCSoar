@@ -28,8 +28,7 @@ void
 DockWindow::SetWidget(Widget *_widget)
 {
   assert(IsDefined());
-
-  DeleteWidget();
+  assert(widget == nullptr);
 
   widget = _widget;
 
@@ -41,17 +40,13 @@ DockWindow::SetWidget(Widget *_widget)
   }
 }
 
-Widget *
-DockWindow::UnprepareStealWidget()
+void
+DockWindow::UnprepareWidget()
 {
   assert(widget != nullptr);
 
-  Widget *w = widget;
-  widget = nullptr;
-
-  w->Hide();
-  w->Unprepare();
-  return w;
+  widget->Hide();
+  widget->Unprepare();
 }
 
 void
@@ -60,7 +55,9 @@ DockWindow::DeleteWidget()
   if (widget == nullptr)
     return;
 
-  delete UnprepareStealWidget();
+  UnprepareWidget();
+  delete widget;
+  widget = nullptr;
 }
 
 void
@@ -84,11 +81,4 @@ DockWindow::OnResize(PixelSize new_size)
 
   if (widget != nullptr)
     widget->Move(GetClientRect());
-}
-
-void
-DockWindow::OnDestroy()
-{
-  DeleteWidget();
-  ContainerWindow::OnDestroy();
 }

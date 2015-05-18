@@ -489,8 +489,8 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 WaypointDetailsWidget::Unprepare()
 {
-  info_dock.UnprepareStealWidget();
-  commands_dock.UnprepareStealWidget();
+  info_dock.UnprepareWidget();
+  commands_dock.UnprepareWidget();
 }
 
 void
