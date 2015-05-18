@@ -64,6 +64,13 @@ public:
   }
 
   /**
+   * Call Widget::Unprepare() and "steal" the #Widget pointer (clear
+   * it and return the old value).  This moves the responsibility to
+   * delete the #Widget to the caller.
+   */
+  Widget *UnprepareStealWidget();
+
+  /**
    * Call Widget::Move() again.  This should never be needed, as the
    * Widget is supposed to be at the position already.  It's a hack to
    * force RowFormWidget to reconsider the visibility of all rows.

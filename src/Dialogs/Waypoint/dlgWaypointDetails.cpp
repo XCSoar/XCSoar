@@ -196,6 +196,7 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
 
   void Show(const PixelRect &rc) override {
     const Layout layout(rc, waypoint);
@@ -483,6 +484,13 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                         });
 
   last_page = 2 + images.size();
+}
+
+void
+WaypointDetailsWidget::Unprepare()
+{
+  info_dock.UnprepareStealWidget();
+  commands_dock.UnprepareStealWidget();
 }
 
 void

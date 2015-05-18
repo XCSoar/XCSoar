@@ -41,16 +41,26 @@ DockWindow::SetWidget(Widget *_widget)
   }
 }
 
+Widget *
+DockWindow::UnprepareStealWidget()
+{
+  assert(widget != nullptr);
+
+  Widget *w = widget;
+  widget = nullptr;
+
+  w->Hide();
+  w->Unprepare();
+  return w;
+}
+
 void
 DockWindow::DeleteWidget()
 {
   if (widget == nullptr)
     return;
 
-  widget->Hide();
-  widget->Unprepare();
-  delete widget;
-  widget = nullptr;
+  delete UnprepareStealWidget();
 }
 
 void
