@@ -28,6 +28,10 @@ Copyright_License {
 
 #if SDL_MAJOR_VERSION >= 2
 #define HAVE_MULTI_TOUCH
+
+#if defined(__APPLE__) && defined(ENABLE_OPENGL)
+#define HAVE_HIGHDPI_SUPPORT
+#endif
 #endif
 
 #endif

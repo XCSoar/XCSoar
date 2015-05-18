@@ -17,5 +17,7 @@
     <string>VERSION</string>
     <key>CFBundleIconFile</key>
     <string>logo_128</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
   </dict>
 </plist>

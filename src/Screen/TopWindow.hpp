@@ -206,6 +206,10 @@ class TopWindow : public ContainerWindow {
 #endif
 #endif /* USE_GDI */
 
+#ifdef HAVE_HIGHDPI_SUPPORT
+  float point_to_real_x = 1, point_to_real_y = 1;
+#endif
+
 public:
 #ifdef HAVE_AYGSHELL_DLL
   const AYGShellDLL ayg_shell_dll;
@@ -377,6 +381,15 @@ public:
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   void SetDisplayOrientation(DisplayOrientation orientation);
+#endif
+
+#ifdef HAVE_HIGHDPI_SUPPORT
+protected:
+  template<typename T>
+  void PointToReal(T& x, T& y) const {
+    x = static_cast<T>(static_cast<float>(x) * point_to_real_x);
+    y = static_cast<T>(static_cast<float>(y) * point_to_real_y);
+  }
 #endif
 
 protected:
