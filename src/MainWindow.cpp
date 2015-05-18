@@ -550,13 +550,6 @@ MainWindow::OnResize(PixelSize new_size)
 
   ReinitialiseLayout();
 
-  if (map != nullptr) {
-    /* the map being created already is an indicator that XCSoar is
-       running already, and so we assume the menu buttons have been
-       created, too */
-    map->BringToBottom();
-  }
-
   const PixelRect rc = GetClientRect();
   ButtonLabel::OnResize(rc);
   ProgressGlue::Move(rc);
