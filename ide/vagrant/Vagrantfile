@@ -19,14 +19,22 @@ export ANDROID_SDK_VERSION=24.0.2
 export ANDROID_NDK_VERSION=10d
 export ANDROID_BUILD_TOOLS_VERSION=20.0.0
 
+# install add-apt-repository helper
+sudo apt-get install python-software-properties
+
+# add ppa:ubuntu-toolchain-r/test repository for GCC 4.9
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+
 # update Apt repository
 sudo apt-get update
 
 # install base dependencies
-sudo apt-get install -y make g++ libsdl-image1.2-dev libboost-dev zlib1g-dev \
-    libsdl1.2-dev libfreetype6-dev libpng-dev libjpeg-dev \
+sudo apt-get install -y make g++-4.9 libsdl-image1.2-dev zlib1g-dev \
+    libsdl1.2-dev libfreetype6-dev libpng-dev libjpeg-dev libegl1-mesa-dev \
     libcurl4-openssl-dev libxml-parser-perl librsvg2-bin xsltproc \
     imagemagick gettext ttf-dejavu ccache zip p7zip-full git upx-ucl
+
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 49
 
 mkdir -p ~/opt
 
@@ -60,14 +68,15 @@ sudo apt-get install --no-install-recommends -y \
 SCRIPT
 
 Vagrant.configure("2") do |config|
-    config.vm.box = "ubuntu-12.04.2-x86_64"
-    config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-vbox4210.box"
+    config.vm.box = "puppetlabs/ubuntu-12.04-64-nocm"
 
     config.vm.network "private_network", type: "dhcp"
     config.vm.synced_folder "../..", "/vagrant", type: "nfs"
 
     config.vm.provider "virtualbox" do |v|
         host = RbConfig::CONFIG['host_os']
+
+        v.name = "xcsoar"
 
         # Give VM 1/4 system memory & access to all cpu cores on the host
         if host =~ /darwin/
