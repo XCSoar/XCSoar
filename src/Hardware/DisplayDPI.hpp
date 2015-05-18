@@ -38,13 +38,17 @@ namespace Display {
    * Returns the number of pixels per logical inch along the screen width
    * @return Number of pixels per logical inch along the screen width
    */
+#ifndef __APPLE__
   gcc_const
+#endif
   unsigned GetXDPI();
   /**
    * Returns the number of pixels per logical inch along the screen height
    * @return Number of pixels per logical inch along the screen height
    */
+#ifndef __APPLE__
   gcc_const
+#endif
   unsigned GetYDPI();
 }
 
