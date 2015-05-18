@@ -1,5 +1,7 @@
 ifeq ($(TARGET_IS_IOS),y)
 
+TARGET_LDLIBS += -framework UIKit
+
 DEB_TMPDIR = $(TARGET_OUTPUT_DIR)/deb
 
 IOS_DEB_VERSION = $(shell echo $(VERSION) | sed -e 's/_/-/g')
