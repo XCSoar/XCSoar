@@ -72,8 +72,9 @@ namespace Layout
    * namespace.
    *
    * @param screen_size the size of the screen in pixels
+   * @param ui_scale the UI scale setting in percent
    */
-  void Initialize(PixelSize screen_size);
+  void Initialize(PixelSize screen_size, unsigned ui_scale=100);
 
   /**
    * Is scaling supported by this platform?

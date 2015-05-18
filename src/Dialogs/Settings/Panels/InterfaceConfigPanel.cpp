@@ -42,6 +42,9 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 enum ControlIndex {
+#ifndef GNAV
+  UIScale,
+#endif
 #ifdef HAVE_BLANK
   AutoBlank,
 #endif
@@ -91,6 +94,19 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const UISettings &settings = CommonInterface::GetUISettings();
 
   RowFormWidget::Prepare(parent, rc);
+
+#ifndef GNAV
+  static constexpr StaticEnumChoice scale_list[] = {
+    { (unsigned)UISettings::Scale::NORMAL, N_("Normal") },
+    { (unsigned)UISettings::Scale::LARGE, N_("Large") },
+    { (unsigned)UISettings::Scale::SMALL, N_("Small") },
+    { 0 }
+  };
+
+  AddEnum(_("Text size"),
+          nullptr,
+          scale_list, (unsigned)settings.scale);
+#endif
 
 #ifdef HAVE_BLANK
   AddBoolean(_("Auto. blank"),
@@ -194,6 +210,12 @@ InterfaceConfigPanel::Save(bool &_changed)
 {
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;;
+
+#ifndef GNAV
+  if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
+                    settings.scale))
+    require_restart = changed = true;
+#endif
 
 #ifdef HAVE_BLANK
   changed |= SaveValue(AutoBlank, ProfileKeys::AutoBlank,

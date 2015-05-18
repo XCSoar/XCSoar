@@ -62,7 +62,7 @@ IsSmallScreen(unsigned width, unsigned height,
 }
 
 void
-Layout::Initialize(PixelSize new_size)
+Layout::Initialize(PixelSize new_size, unsigned ui_scale)
 {
   const unsigned width = new_size.cx, height = new_size.cy;
 
@@ -86,7 +86,7 @@ Layout::Initialize(PixelSize new_size)
 
   pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
 
-  font_scale = 1024 * y_dpi / 72;
+  font_scale = 1024 * y_dpi * ui_scale / 72 / 100;
   if (is_small_screen)
     /* small screens (on portable devices) use a smaller font because
        the viewing distance is usually smaller */

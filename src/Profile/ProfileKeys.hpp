@@ -26,6 +26,7 @@ Copyright_License {
 
 namespace ProfileKeys {
 
+extern const char UIScale[];
 extern const char Password[];
 extern const char SpeedUnitsValue[];
 extern const char DistanceUnitsValue[];

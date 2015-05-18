@@ -118,6 +118,10 @@ Profile::Load(UISettings &settings)
 
   Get(ProfileKeys::MenuTimeout, settings.menu_timeout);
 
+#ifndef GNAV
+  GetEnum(ProfileKeys::UIScale, settings.scale);
+#endif
+
   Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);
 
   GetEnum(ProfileKeys::AppStatusMessageAlignment, settings.popup_message_position);

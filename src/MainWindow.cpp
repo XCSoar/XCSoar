@@ -198,7 +198,8 @@ NoFontsAvailable()
 void
 MainWindow::Initialise()
 {
-  Layout::Initialize(GetSize());
+  Layout::Initialize(GetSize(),
+                     CommonInterface::GetUISettings().GetPercentScale());
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {
@@ -217,6 +218,12 @@ void
 MainWindow::InitialiseConfigured()
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
+
+#ifndef GNAV
+  if (ui_settings.scale != UISettings::Scale::NORMAL)
+    /* call Initialise() again to reload fonts with the new scale */
+    Initialise();
+#endif
 
   PixelRect rc = GetClientRect();
 
@@ -524,7 +531,8 @@ MainWindow::FullRedraw()
 void
 MainWindow::OnResize(PixelSize new_size)
 {
-  Layout::Initialize(new_size);
+  Layout::Initialize(new_size,
+                     CommonInterface::GetUISettings().GetPercentScale());
 
   SingleWindow::OnResize(new_size);
 
