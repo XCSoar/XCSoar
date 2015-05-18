@@ -32,6 +32,11 @@ Copyright_License {
 
 #if SDL_MAJOR_VERSION >= 2
 #include "Util/UTF8.hpp"
+
+#if defined(__MACOSX__) && __MACOSX__
+#include <SDL_syswm.h>
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #if SDL_MAJOR_VERSION < 2
@@ -186,6 +191,16 @@ TopWindow::OnEvent(const SDL_Event &event)
           if ((w >= 0) && (h >= 0)) {
             Resize(w, h);
           }
+
+#if defined(__MACOSX__) && __MACOSX__
+          SDL_SysWMinfo wm_info;
+          SDL_VERSION(&wm_info.version);
+          if ((SDL_GetWindowWMInfo(event_window, &wm_info)) &&
+              (wm_info.subsystem == SDL_SYSWM_COCOA)) {
+            [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+          }
+          Invalidate();
+#endif
         }
       }
       return true;

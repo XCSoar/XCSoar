@@ -46,6 +46,10 @@ Copyright_License {
 #ifdef USE_MEMORY_CANVAS
 #include <SDL_render.h>
 #endif
+#if defined(__MACOSX__) && __MACOSX__
+#include <SDL_syswm.h>
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #include <assert.h>
@@ -102,11 +106,13 @@ MakeSDLFlags(bool full_screen, bool resizable)
 #endif /* !SDL_MAJOR_VERSION */
 #endif /* !ENABLE_OPENGL */
 
+#if !defined(__MACOSX__) || !(__MACOSX__)
   if (full_screen)
 #if SDL_MAJOR_VERSION >= 2
     flags |= SDL_WINDOW_FULLSCREEN;
 #else
     flags |= SDL_FULLSCREEN;
+#endif
 #endif
 
   if (resizable)
@@ -149,6 +155,20 @@ TopCanvas::Create(PixelSize new_size,
             ::SDL_GetError());
     return;
   }
+
+#if defined(__MACOSX__) && __MACOSX__
+  SDL_SysWMinfo wm_info;
+  SDL_VERSION(&wm_info.version);
+  if ((SDL_GetWindowWMInfo(window, &wm_info)) &&
+      (wm_info.subsystem == SDL_SYSWM_COCOA)) {
+    if (resizable) {
+      [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+    }
+    if (full_screen) {
+      [wm_info.info.cocoa.window toggleFullScreen: nil];
+    }
+  }
+#endif
 
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);
