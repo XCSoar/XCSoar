@@ -22,7 +22,7 @@ IOS_APP_BUNDLE_INENTIFIER = org.xcsoar
 IOS_APP_DISPLAY_NAME = XCSoar
 endif
 
-$(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar
+$(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG) $(topdir)/Data/iOS/Info.plist.in.xml
 	@$(NQ)echo "  DEB     $@"
 	$(Q)rm -rf $(DEB_TMPDIR)
 	$(Q)$(MKDIR) -p $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)
