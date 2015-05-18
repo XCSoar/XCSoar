@@ -30,6 +30,7 @@ Version 6.8 - not yet released
   - password-protected profiles (#851)
   - checklist remembers last opened list (#3110)
   - use configured coordinate format in waypoint editor
+  - remove custom font support
   - display rotation for Raspberry Pi and Cubieboard (#3238)
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard

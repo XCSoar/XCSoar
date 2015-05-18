@@ -203,7 +203,6 @@ const char EnableFlightLogger[] = "EnableFlightLogger";
 const char EnableNMEALogger[] = "EnableNMEALogger";
 const char MapFile[] = "MapFile"; // pL
 const char BallastSecsToEmpty[] = "BallastSecsToEmpty";
-const char UseCustomFonts[] = "UseCustomFonts";
 const char DialogFont[] = "DialogFont";
 const char FontInfoWindowFont[] = "InfoWindowFont";
 const char FontTitleWindowFont[] = "TitleWindowFont";

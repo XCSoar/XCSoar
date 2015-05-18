@@ -1856,7 +1856,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 
 ifeq ($(HAVE_HTTP),y)
@@ -2206,7 +2205,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -2339,7 +2337,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp

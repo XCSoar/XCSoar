@@ -24,7 +24,6 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
@@ -56,15 +55,7 @@ enum ControlIndex {
   HapticFeedback
 };
 
-class InterfaceConfigPanel final : public RowFormWidget
-#ifndef GNAV
-  , ActionListener
-#endif
-{
-  enum Buttons {
-    FONTS,
-  };
-
+class InterfaceConfigPanel final : public RowFormWidget {
 public:
   InterfaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -72,37 +63,7 @@ public:
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-
-#ifndef GNAV
-private:
-  /* methods from ActionListener */
-  void OnAction(int id) override {
-    dlgConfigFontsShowModal();
-  }
-#endif
 };
-
-void
-InterfaceConfigPanel::Show(const PixelRect &rc)
-{
-#ifndef GNAV
-  ConfigPanel::BorrowExtraButton(1, _("Fonts"), *this, FONTS);
-#endif
-
-  RowFormWidget::Show(rc);
-}
-
-void
-InterfaceConfigPanel::Hide()
-{
-#ifndef GNAV
-  ConfigPanel::ReturnExtraButton(1);
-#endif
-
-  RowFormWidget::Hide();
-}
 
 #ifndef HAVE_NATIVE_GETTEXT
 

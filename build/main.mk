@@ -585,7 +585,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/UIProfile.cpp \
 	$(SRC)/Profile/Settings.cpp \
-	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/Profile/UnitsConfig.cpp \
 	$(SRC)/Profile/DeviceConfig.cpp \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
@@ -723,11 +722,6 @@ endif
 
 ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
-else
-XCSOAR_SOURCES += \
-	$(SRC)/Look/CustomFonts.cpp \
-	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
-	$(SRC)/Dialogs/Settings/FontEdit.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)

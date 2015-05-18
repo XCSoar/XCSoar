@@ -46,7 +46,6 @@ Copyright_License {
 #include "Widget/Widget.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/GlobalFonts.hpp"
-#include "Look/CustomFonts.hpp"
 #include "Look/DefaultFonts.hpp"
 #include "Look/Look.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -223,25 +222,6 @@ MainWindow::InitialiseConfigured()
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
-
-#ifndef GNAV
-  if (ui_settings.custom_fonts) {
-    LogFormat("Load custom fonts");
-    if (!Fonts::LoadCustom()) {
-      LogFormat("Failed to load custom fonts");
-      if (!Fonts::Initialize()) {
-        Destroy();
-        NoFontsAvailable();
-      }
-    }
-
-#ifdef HAVE_TEXT_CACHE
-    /* fonts may have changed, discard all pre-rendered font
-       textures */
-    TextCache::Flush();
-#endif
-  }
-#endif
 
   Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
 
