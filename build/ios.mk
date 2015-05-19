@@ -1,5 +1,7 @@
 ifeq ($(TARGET_IS_IOS),y)
 
+TARGET_LDLIBS += -framework UIKit
+
 DEB_TMPDIR = $(TARGET_OUTPUT_DIR)/deb
 
 IOS_DEB_VERSION = $(shell echo $(VERSION) | sed -e 's/_/-/g')
@@ -9,18 +11,18 @@ CYDIA_DEB_NAME = xcsoar-testing.deb
 IOS_LOGO_SVG = $(topdir)/Data/graphics/logo_red.svg
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon_red.svg
 IOS_APP_DIR_NAME = XCSoar.testing.app
-IOS_APP_BUNDLE_INENTIFIER = org.xcsoar.testing
+IOS_APP_BUNDLE_INENTIFIER = XCSoar-testing
 IOS_APP_DISPLAY_NAME = XCSoar Testing
 else
 CYDIA_DEB_NAME = xcsoar.deb
 IOS_LOGO_SVG = $(topdir)/Data/graphics/logo.svg
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon.svg
 IOS_APP_DIR_NAME = XCSoar.app
-IOS_APP_BUNDLE_INENTIFIER = org.xcsoar
+IOS_APP_BUNDLE_INENTIFIER = XCSoar
 IOS_APP_DISPLAY_NAME = XCSoar
 endif
 
-$(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar
+$(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG) $(topdir)/Data/iOS/Info.plist.in.xml
 	@$(NQ)echo "  DEB     $@"
 	$(Q)rm -rf $(DEB_TMPDIR)
 	$(Q)$(MKDIR) -p $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)

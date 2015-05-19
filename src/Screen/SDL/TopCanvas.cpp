@@ -46,6 +46,10 @@ Copyright_License {
 #ifdef USE_MEMORY_CANVAS
 #include <SDL_render.h>
 #endif
+#if defined(__MACOSX__) && __MACOSX__
+#include <SDL_syswm.h>
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #include <assert.h>
@@ -102,11 +106,13 @@ MakeSDLFlags(bool full_screen, bool resizable)
 #endif /* !SDL_MAJOR_VERSION */
 #endif /* !ENABLE_OPENGL */
 
+#if !defined(__MACOSX__) || !(__MACOSX__)
   if (full_screen)
 #if SDL_MAJOR_VERSION >= 2
     flags |= SDL_WINDOW_FULLSCREEN;
 #else
     flags |= SDL_FULLSCREEN;
+#endif
 #endif
 
   if (resizable)
@@ -119,6 +125,10 @@ MakeSDLFlags(bool full_screen, bool resizable)
 #if defined(__IPHONEOS__) && __IPHONEOS__
   /* Hide status bar on iOS devices */
   flags |= SDL_WINDOW_BORDERLESS;
+#endif
+
+#ifdef HAVE_HIGHDPI_SUPPORT
+  flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 #endif
 
   return flags;
@@ -149,6 +159,20 @@ TopCanvas::Create(PixelSize new_size,
             ::SDL_GetError());
     return;
   }
+
+#if defined(__MACOSX__) && __MACOSX__
+  SDL_SysWMinfo wm_info;
+  SDL_VERSION(&wm_info.version);
+  if ((SDL_GetWindowWMInfo(window, &wm_info)) &&
+      (wm_info.subsystem == SDL_SYSWM_COCOA)) {
+    if (resizable) {
+      [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+    }
+    if (full_screen) {
+      [wm_info.info.cocoa.window toggleFullScreen: nil];
+    }
+  }
+#endif
 
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);
@@ -199,8 +223,15 @@ TopCanvas::Create(PixelSize new_size,
 #endif
 
   OpenGL::SetupContext();
+#ifdef HAVE_HIGHDPI_SUPPORT
+  int gl_width, gl_height;
+  SDL_GL_GetDrawableSize(window, &gl_width, &gl_height);
+  OpenGL::SetupViewport(Point2D<unsigned>(gl_width, gl_height));
+  Canvas::Create(PixelSize(gl_width, gl_height));
+#else
   OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
+#endif
 #elif (SDL_MAJOR_VERSION < 2)
   surface = s;
 #endif

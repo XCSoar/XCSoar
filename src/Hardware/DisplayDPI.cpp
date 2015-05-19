@@ -42,11 +42,42 @@ Copyright_License {
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#else
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #if !defined(ANDROID) && !defined(_WIN32_WCE)
   static unsigned forced_x_dpi = 0;
   static unsigned forced_y_dpi = 0;
+#endif
+
+#if !defined(WIN32) && !defined(ANDROID)
+#ifndef __APPLE__
+gcc_const
+#endif
+static unsigned
+GetDPI()
+{
+#ifdef KOBO
+  /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
+  return 200;
+#elif defined(__APPLE__)
+#if TARGET_OS_IPHONE
+  UIScreen *screen = [UIScreen mainScreen];
+  float scale = [screen scale];
+  return static_cast<unsigned>(scale * 160);
+#else
+  NSScreen *screen = [NSScreen mainScreen];
+  float scale = [screen backingScaleFactor];
+  return static_cast<unsigned>(scale * 115);
+#endif
+#else
+  return 96;
+#endif
+}
 #endif
 
 void
@@ -70,14 +101,8 @@ Display::GetXDPI()
   return GetDeviceCaps(dc, LOGPIXELSX);
 #elif defined(ANDROID)
   return native_view->GetXDPI();
-#elif defined(KOBO)
-  /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
-  return 200;
-#elif defined(__APPLE__) && TARGET_OS_IPHONE
-  /* Supported modern devices: 264 dpi or 326 dpi  */
-  return 300;
 #else
-  return 96;
+  return GetDPI();
 #endif
 }
 
@@ -93,13 +118,7 @@ Display::GetYDPI()
   return GetDeviceCaps(dc, LOGPIXELSY);
 #elif defined(ANDROID)
   return native_view->GetYDPI();
-#elif defined(KOBO)
-  /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
-  return 200;
-#elif defined(__APPLE__) && TARGET_OS_IPHONE
-  /* Supported modern devices: 264 dpi or 326 dpi  */
-  return 300;
 #else
-  return 96;
+  return GetDPI();
 #endif
 }

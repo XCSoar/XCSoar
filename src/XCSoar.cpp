@@ -59,6 +59,9 @@ Copyright_License {
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
+#if !TARGET_OS_IPHONE
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #include <assert.h>
@@ -130,6 +133,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   ScreenGlobalInit screen_init;
+
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
+  // We do not want the ugly non-localized main menu which SDL creates
+  [NSApp setMainMenu: [[NSMenu alloc] init]];
+#endif
 
 #ifdef WIN32
   /* try to make the UI most responsive */
