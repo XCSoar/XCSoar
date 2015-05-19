@@ -27,8 +27,6 @@ Copyright_License {
 #include "StandardFonts.hpp"
 #include "Asset.hpp"
 
-#include <string.h>
-
 FontDescription::FontDescription(const TCHAR *face,
                                  unsigned height,
                                  bool bold, bool italic,
@@ -51,12 +49,17 @@ FontDescription::Init(const TCHAR *face,
                       bool bold, bool italic,
                       bool monospace)
 {
-  memset((char *)&logfont, 0, sizeof(logfont));
-
   logfont.lfHeight = (long)height;
+  logfont.lfWidth = 0;
+  logfont.lfEscapement = 0;
+  logfont.lfOrientation = 0;
   logfont.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   logfont.lfItalic = italic;
+  logfont.lfUnderline = false;
+  logfont.lfStrikeOut = false;
   logfont.lfCharSet = ANSI_CHARSET;
+  logfont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+  logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
 
   if (IsAltair())
     logfont.lfQuality = NONANTIALIASED_QUALITY;
