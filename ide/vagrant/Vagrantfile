@@ -6,6 +6,7 @@ cat >> ~/.profile << EOF
 export LANG=C
 export LC_CTYPE=C
 export USE_CCACHE=y
+export CCACHE_DIR=/vagrant/tmp/.ccache
 EOF
 
 sudo bash -c "cat > /etc/apt/sources.list" << EOF
