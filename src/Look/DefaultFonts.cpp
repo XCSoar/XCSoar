@@ -114,7 +114,7 @@ InitialiseLogFonts(FontSettings &settings)
   settings.infobox_units = FontDescription((int)(font_height * 0.56));
 #endif
 
-  settings.monospace = FontDescription(unsigned(font_height * 0.39),
+  settings.monospace = FontDescription(settings.dialog.GetHeight(),
                                        false, false, true);
 }
 
