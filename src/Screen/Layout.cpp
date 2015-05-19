@@ -29,6 +29,7 @@ Copyright_License {
 namespace Layout
 {
   bool landscape = false;
+  unsigned min_screen_pixels = 512;
   unsigned scale = 1;
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
@@ -65,6 +66,7 @@ Layout::Initialize(PixelSize new_size)
 {
   const unsigned width = new_size.cx, height = new_size.cy;
 
+  min_screen_pixels = std::min(width, height);
   landscape = width > height;
   const bool square = width == height;
 
@@ -75,10 +77,9 @@ Layout::Initialize(PixelSize new_size)
   const unsigned y_dpi = Display::GetYDPI();
   const bool is_small_screen = IsSmallScreen(width, height, x_dpi, y_dpi);
 
-  unsigned minsize = std::min(width, height);
   // always start w/ shortest dimension
   // square should be shrunk
-  scale_1024 = std::max(1024U, minsize * 1024 / (square ? 320 : 240));
+  scale_1024 = std::max(1024U, min_screen_pixels * 1024 / (square ? 320 : 240));
   scale = scale_1024 / 1024;
 
   small_scale = (scale_1024 - 1024) / 2 + 1024;

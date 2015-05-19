@@ -33,6 +33,11 @@ namespace Layout
   extern bool landscape;
 
   /**
+   * Screen size in pixels, the smaller of width and height.
+   */
+  extern unsigned min_screen_pixels;
+
+  /**
    * Fixed-point scaling factor, fractional part is 10 bits (factor
    * 1024).
    */
