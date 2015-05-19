@@ -34,11 +34,7 @@ Font normal_font, small_font, bold_font, monospace_font;
 void
 InitialiseFonts()
 {
-#ifndef USE_GDI
   unsigned font_height = Layout::SmallScale(IsAndroid() ? 30u : 24u);
-#else
-  unsigned font_height = Layout::SmallScale(35u);
-#endif
 
   normal_font.Load(FontDescription(font_height / 2));
   small_font.Load(FontDescription(font_height / 2 - Layout::Scale(2)));

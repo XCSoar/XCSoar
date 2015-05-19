@@ -75,11 +75,7 @@ InitialiseLogFonts(FontSettings &settings)
   }
 #endif
 
-#ifndef USE_GDI
   unsigned font_height = Layout::SmallScale((IsAndroid()||IsKobo()) ? 30 : (IsIOS() ? 35 : 24));
-#else
-  unsigned font_height = Layout::SmallScale(35);
-#endif
 
   const unsigned dpi = Display::GetYDPI();
   constexpr double physical_dlg_height = 0.18;

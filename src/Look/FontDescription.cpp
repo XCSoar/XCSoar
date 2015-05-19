@@ -40,12 +40,12 @@ FontDescription::FontDescription(unsigned height,
                                  bool monospace)
 {
   Init(monospace ? GetStandardMonospaceFontFace() : GetStandardFontFace(),
-       height, bold, italic, monospace);
+       -int(height), bold, italic, monospace);
 }
 
 void
 FontDescription::Init(const TCHAR *face,
-                      unsigned height,
+                      int height,
                       bool bold, bool italic,
                       bool monospace)
 {

@@ -36,7 +36,7 @@ public:
   FontDescription() = default;
 
   /**
-   * @param _height the cell height of the font
+   * @param _height the character (="em") height of the font
    */
   explicit FontDescription(unsigned _height,
                            bool _bold=false, bool _italic=false,
@@ -68,7 +68,7 @@ public:
 
 private:
   void Init(const TCHAR *face,
-            unsigned height,
+            int height,
             bool bold, bool italic,
             bool monospace);
 };
