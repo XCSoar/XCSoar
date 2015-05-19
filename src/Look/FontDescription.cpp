@@ -53,11 +53,6 @@ FontDescription::Init(const TCHAR *face,
 {
   memset((char *)&logfont, 0, sizeof(logfont));
 
-  _tcscpy(logfont.lfFaceName, face);
-
-  logfont.lfPitchAndFamily = (monospace ? FIXED_PITCH : VARIABLE_PITCH)
-    | FF_DONTCARE;
-
   logfont.lfHeight = (long)height;
   logfont.lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
   logfont.lfItalic = italic;
@@ -67,6 +62,11 @@ FontDescription::Init(const TCHAR *face,
     logfont.lfQuality = NONANTIALIASED_QUALITY;
   else
     logfont.lfQuality = ANTIALIASED_QUALITY;
+
+  logfont.lfPitchAndFamily = (monospace ? FIXED_PITCH : VARIABLE_PITCH)
+    | FF_DONTCARE;
+
+  _tcscpy(logfont.lfFaceName, face);
 }
 
 #endif
