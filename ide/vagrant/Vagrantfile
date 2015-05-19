@@ -21,8 +21,11 @@ export ANDROID_SDK_VERSION=24.0.2
 export ANDROID_NDK_VERSION=10e
 export ANDROID_BUILD_TOOLS_VERSION=20.0.0
 
+# update Apt repository
+sudo apt-get update
+
 # install add-apt-repository helper
-sudo apt-get install python-software-properties
+sudo apt-get install -y python-software-properties
 
 # add ppa:ubuntu-toolchain-r/test repository for GCC 4.9
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
