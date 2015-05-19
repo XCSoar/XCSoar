@@ -1,5 +1,7 @@
 $script = <<SCRIPT
 
+set -e
+
 cat >> ~/.profile << EOF
 export LANG=C
 export LC_CTYPE=C
