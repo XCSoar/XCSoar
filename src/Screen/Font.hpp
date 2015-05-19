@@ -97,8 +97,6 @@ public:
                 bool italic = false);
 #endif
 
-  bool Load(const TCHAR *facename, unsigned height, bool bold = false,
-            bool italic = false);
   bool Load(const FontDescription &d);
   void Destroy();
 

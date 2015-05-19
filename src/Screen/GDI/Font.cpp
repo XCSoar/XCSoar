@@ -31,12 +31,6 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::Load(const TCHAR* facename, unsigned height, bool bold, bool italic)
-{
-  return Load(FontDescription(facename, height, bold, italic));
-}
-
-bool
 Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
