@@ -33,9 +33,31 @@ namespace Layout
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;
+  unsigned font_scale = 1024;
   unsigned text_padding = 2;
   unsigned minimum_control_height = 20, maximum_control_height = 44;
   unsigned hit_radius = 10;
+}
+
+/**
+ * Is the given pixel size smaller than 5 inch?
+ */
+static constexpr bool
+IsSmallScreen(unsigned size, unsigned dpi)
+{
+  return size < dpi * 5;
+}
+
+/**
+ * Is the small edge smaller than 5 inch?
+ */
+static constexpr bool
+IsSmallScreen(unsigned width, unsigned height,
+              unsigned x_dpi, unsigned y_dpi)
+{
+  return width < height
+    ? IsSmallScreen(width, x_dpi)
+    : IsSmallScreen(height, y_dpi);
 }
 
 void
@@ -50,6 +72,8 @@ Layout::Initialize(PixelSize new_size)
     return;
 
   const unsigned x_dpi = Display::GetXDPI();
+  const unsigned y_dpi = Display::GetYDPI();
+  const bool is_small_screen = IsSmallScreen(width, height, x_dpi, y_dpi);
 
   unsigned minsize = std::min(width, height);
   // always start w/ shortest dimension
@@ -60,6 +84,12 @@ Layout::Initialize(PixelSize new_size)
   small_scale = (scale_1024 - 1024) / 2 + 1024;
 
   pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
+
+  font_scale = 1024 * y_dpi / 72;
+  if (is_small_screen)
+    /* small screens (on portable devices) use a smaller font because
+       the viewing distance is usually smaller */
+    font_scale = font_scale * 2 / 3;
 
   text_padding = Scale(2);
 
