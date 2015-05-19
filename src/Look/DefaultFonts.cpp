@@ -75,43 +75,37 @@ InitialiseLogFonts(FontSettings &settings)
   }
 #endif
 
-  unsigned font_height = Layout::SmallScale((IsAndroid()||IsKobo()) ? 30 : (IsIOS() ? 35 : 24));
+  settings.dialog = FontDescription(std::min(Layout::FontScale(12),
+                                             Layout::min_screen_pixels / 20));
 
-  const unsigned dpi = Display::GetYDPI();
-  constexpr double physical_dlg_height = 0.18;
-
-  settings.dialog = FontDescription(std::min(std::max(8u, unsigned(physical_dlg_height * dpi)),
-                                             font_height / 2));
-
-  settings.infobox = FontDescription(font_height, true);
+  settings.infobox = FontDescription(Layout::FontScale(30), true);
 
   /* the "small" font is derived from the regular font */
   settings.infobox_small = settings.infobox;
   settings.infobox_small.SetHeight(settings.infobox_small.GetHeight() * 4 / 5);
   settings.infobox_small.SetBold(false);
 
-  settings.title = FontDescription(font_height / 3);
+  settings.title = FontDescription(Layout::FontScale(8));
 
   // new font for CDI Scale
-  settings.cdi = FontDescription(unsigned(font_height * 0.6),
+  settings.cdi = FontDescription(Layout::FontScale(10),
                                  false, false, true);
 
   // new font for map labels
-  settings.map_label = FontDescription(unsigned(font_height * 0.39),
-                                       false, true);
+  settings.map_label = FontDescription(Layout::FontScale(8), false, true);
 
   // new font for map labels big/medium cities
-  settings.map_label_important = FontDescription(unsigned(font_height * 0.39),
+  settings.map_label_important = FontDescription(Layout::FontScale(9),
                                                  false, true);
 
   // new font for map labels
-  settings.map = FontDescription(unsigned(font_height * 0.507));
+  settings.map = FontDescription(Layout::FontScale(10));
 
   // Font for map bold text
-  settings.map_bold = FontDescription(unsigned(font_height * 0.507), true);
+  settings.map_bold = FontDescription(Layout::FontScale(10), true);
 
 #ifndef GNAV
-  settings.infobox_units = FontDescription((int)(font_height * 0.56));
+  settings.infobox_units = FontDescription(Layout::FontScale(9));
 #endif
 
   settings.monospace = FontDescription(settings.dialog.GetHeight(),

@@ -31,6 +31,7 @@ Version 6.8 - not yet released
   - checklist remembers last opened list (#3110)
   - use configured coordinate format in waypoint editor
   - remove custom font support
+  - improved font sizes
   - display rotation for Raspberry Pi and Cubieboard (#3238)
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard
