@@ -24,7 +24,6 @@ Copyright_License {
 */
 
 #include "PopupMessage.hpp"
-#include "Look/GlobalFonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
@@ -103,9 +102,10 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
 }
 
 void
-PopupMessage::Create(const PixelRect _rc)
+PopupMessage::Create(const PixelRect _rc, const Font &_font)
 {
   rc = _rc;
+  font = &_font;
 
   LargeTextWindowStyle style;
   style.Border();
@@ -114,7 +114,7 @@ PopupMessage::Create(const PixelRect _rc)
 
   LargeTextWindow::Create(parent, GetRect(100), style);
 
-  SetFont(Fonts::dialog_bold);
+  SetFont(_font);
   InstallWndProc();
 }
 
@@ -161,7 +161,7 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
   } else {
     SetText(text);
 
-    const unsigned font_height = Fonts::dialog_bold.GetHeight();
+    const unsigned font_height = font->GetHeight();
 
     unsigned n_lines = max(n_visible, max(1u, GetRowCount()));
 
@@ -176,7 +176,7 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
          after it has been created, so we have to destroy it and
          create a new one */
       Destroy();
-      Create(rthis);
+      Create(rthis, *font);
       SetText(text);
     } else
 #endif

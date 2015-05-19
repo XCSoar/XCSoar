@@ -31,6 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct UISettings;
+class Font;
 class SingleWindow;
 class StatusMessageList;
 
@@ -113,6 +114,8 @@ private:
   struct Message messages[MAXMESSAGES];
   StaticString<2000> text;
 
+  const Font *font;
+
   unsigned n_visible;
 
   bool enable_sound;
@@ -121,7 +124,7 @@ public:
   PopupMessage(const StatusMessageList &_status_messages,
                SingleWindow &_parent, const UISettings &settings);
 
-  void Create(const PixelRect _rc);
+  void Create(const PixelRect _rc, const Font &font);
 
   /** returns true if messages have changed */
   bool Render();
