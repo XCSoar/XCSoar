@@ -17,7 +17,7 @@ ifeq ($(USE_CCACHE),y)
   # ccache will not use the optimisation of avoiding the 2nd call to the
   # pre-processor by compiling the pre-processed output that was used for
   # finding the hash in the case of a cache miss.
-  CCACHE := export CCACHE_CPP2=yes && $(CCACHE)
+  CCACHE := CCACHE_CPP2=yes $(CCACHE)
 endif
 
 ifneq ($(LLVM_TARGET),)
