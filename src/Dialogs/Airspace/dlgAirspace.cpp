@@ -32,7 +32,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
-#include "Look/GlobalFonts.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
@@ -147,7 +146,7 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index)
       return;
 
     ActionInterface::SendMapSettings();
-    look.Initialise(renderer, Fonts::map);
+    look.Reinitialise(renderer);
   } else {
     renderer.classes[index].display = !renderer.classes[index].display;
     if (!renderer.classes[index].display)
