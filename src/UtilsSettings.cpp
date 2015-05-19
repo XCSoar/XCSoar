@@ -25,7 +25,6 @@ Copyright_License {
 #include "Profile/Current.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
-#include "Look/GlobalFonts.hpp"
 #include "MainWindow.hpp"
 #include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
@@ -203,8 +202,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     main_window.SetLook().map.trail.Initialise(settings_map.trail);
 
   if (settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
-    main_window.SetLook().map.waypoint.Initialise(settings_map.waypoint,
-                                                  Fonts::map, Fonts::map_bold);
+    main_window.SetLook().map.waypoint.Reinitialise(settings_map.waypoint);
 
   ResumeAllThreads();
   main_window.ResumeThreads();
