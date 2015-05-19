@@ -35,7 +35,7 @@ LogoView::LogoView()
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
 #ifndef USE_GDI
-  font.Load(FontDescription(Layout::SmallScale(8)));
+  font.Load(FontDescription(Layout::FontScale(10)));
 #endif
 
   big_logo.EnableInterpolation();

@@ -34,12 +34,11 @@ Font normal_font, small_font, bold_font, monospace_font;
 void
 InitialiseFonts()
 {
-  unsigned font_height = Layout::SmallScale(IsAndroid() ? 30u : 24u);
-
-  normal_font.Load(FontDescription(font_height / 2));
-  small_font.Load(FontDescription(font_height / 2 - Layout::Scale(2)));
-  bold_font.Load(FontDescription(font_height / 2, true));
-  monospace_font.Load(FontDescription(10, false, false, true));
+  normal_font.Load(FontDescription(Layout::FontScale(12)));
+  small_font.Load(FontDescription(Layout::FontScale(10)));
+  bold_font.Load(FontDescription(Layout::FontScale(12), true));
+  monospace_font.Load(FontDescription(Layout::FontScale(12),
+                                      false, false, true));
 }
 
 void

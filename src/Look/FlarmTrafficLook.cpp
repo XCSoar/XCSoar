@@ -68,13 +68,13 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
 
   unit_fraction_pen.Set(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
-  no_traffic_font.Load(FontDescription(Layout::FastScale(24)));
-  label_font.Load(FontDescription(Layout::FastScale(14)));
-  side_info_font.Load(FontDescription(Layout::FastScale(small ? 12 : 18),
+  no_traffic_font.Load(FontDescription(Layout::FontScale(22)));
+  label_font.Load(FontDescription(Layout::FontScale(12)));
+  side_info_font.Load(FontDescription(Layout::FontScale(small ? 8 : 12),
                                       true));
 
-  info_labels_font.Load(FontDescription(Layout::FastScale(10), true));
-  info_values_font.Load(FontDescription(Layout::FastScale(20)));
-  info_units_font.Load(FontDescription(Layout::FastScale(8)));
-  call_sign_font.Load(FontDescription(Layout::FastScale(28), true));
+  info_labels_font.Load(FontDescription(Layout::FontScale(12), true));
+  info_values_font.Load(FontDescription(Layout::FontScale(16)));
+  info_units_font.Load(FontDescription(Layout::FontScale(8)));
+  call_sign_font.Load(FontDescription(Layout::FontScale(24), true));
 }
