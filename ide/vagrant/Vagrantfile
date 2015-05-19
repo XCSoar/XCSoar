@@ -18,7 +18,7 @@ EOF
 # set ANDROID variables
 export ANDROID_API_LEVEL=22
 export ANDROID_SDK_VERSION=24.0.2
-export ANDROID_NDK_VERSION=10d
+export ANDROID_NDK_VERSION=10e
 export ANDROID_BUILD_TOOLS_VERSION=20.0.0
 
 # install add-apt-repository helper
