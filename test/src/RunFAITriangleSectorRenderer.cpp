@@ -37,26 +37,86 @@ class FAITriangleWindow : public PaintWindow
 {
   FAITriangleSettings settings;
 
+  GeoPoint a, b;
+
+  WindowProjection projection;
+
+  enum class DragMode {
+    NONE,
+    A,
+    B,
+  } drag_mode;
+
 public:
-  FAITriangleWindow() {
+  FAITriangleWindow()
+    :a(Angle::Degrees(7.70722), Angle::Degrees(51.052)),
+     b(Angle::Degrees(11.5228), Angle::Degrees(50.3972)),
+     drag_mode(DragMode::NONE) {
     settings.SetDefaults();
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
-    canvas.ClearWhite();
-
-    const GeoPoint a(Angle::Degrees(7.70722),
-                     Angle::Degrees(51.052));
-    const GeoPoint b(Angle::Degrees(11.5228),
-                     Angle::Degrees(50.3972));
-
-    WindowProjection projection;
-    projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
+  void OnResize(PixelSize new_size) override {
+    projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
     projection.SetGeoLocation(a.Middle(b));
-    projection.SetScreenSize(canvas.GetSize());
+    projection.SetScreenSize(new_size);
     projection.SetScaleFromRadius(fixed(400000));
     projection.UpdateScreenBounds();
+  }
+
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override {
+    if (drag_mode != DragMode::NONE)
+      return false;
+
+    const GeoPoint gp = projection.ScreenToGeo(x, y);
+
+    if (projection.GeoToScreenDistance(gp.Distance(a)) < Layout::GetHitRadius()) {
+      drag_mode = DragMode::A;
+      SetCapture();
+      return true;
+    }
+
+    if (projection.GeoToScreenDistance(gp.Distance(b)) < Layout::GetHitRadius()) {
+      drag_mode = DragMode::B;
+      SetCapture();
+      return true;
+    }
+
+    return false;
+  }
+
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override {
+    if (drag_mode != DragMode::NONE) {
+      drag_mode = DragMode::NONE;
+      ReleaseCapture();
+      return true;
+    }
+
+    return false;
+  }
+
+  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override {
+    const GeoPoint gp = projection.ScreenToGeo(x, y);
+    switch (drag_mode) {
+    case DragMode::NONE:
+      return false;
+
+    case DragMode::A:
+      a = gp;
+      Invalidate();
+      return true;
+
+    case DragMode::B:
+      b = gp;
+      Invalidate();
+      return true;
+    }
+
+    gcc_unreachable();
+  }
+
+  virtual void OnPaint(Canvas &canvas) override {
+    canvas.ClearWhite();
 
     canvas.SelectBlackPen();
     canvas.SelectHollowBrush();
