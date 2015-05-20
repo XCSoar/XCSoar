@@ -33,7 +33,7 @@ Copyright_License {
 struct DialogLook;
 class Bitmap;
 class ContainerWindow;
-class TabBarControl;
+class TabWidget;
 
 /**
  * TabButton class holds display and callbacks data for a single tab
@@ -71,7 +71,7 @@ public:
  */
 class TabDisplay final : public PaintWindow
 {
-  TabBarControl& tab_bar;
+  TabWidget &pager;
   const DialogLook &look;
 
   StaticArray<TabButton *, 32> buttons;
@@ -85,12 +85,7 @@ class TabDisplay final : public PaintWindow
   const unsigned tab_line_height;
 
 public:
-  /**
-   *
-   * @param parent
-   * @param _theTabBar. An existing TabBar object
-   */
-  TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
+  TabDisplay(TabWidget &_pager, const DialogLook &look,
              ContainerWindow &parent, PixelRect rc,
              bool vertical,
              WindowStyle style=WindowStyle());

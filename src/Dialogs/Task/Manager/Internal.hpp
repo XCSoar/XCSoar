@@ -24,14 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_TASK_MANAGER_INTERNAL_HPP
 #define XCSOAR_TASK_MANAGER_INTERNAL_HPP
 
-#include "Widget/WindowWidget.hpp"
+#include "Widget/TabWidget.hpp"
 #include "Form/Form.hpp"
 
-class TabBarControl;
 class OrderedTask;
 class ButtonWidget;
 
-class TaskManagerDialog final : public WindowWidget, ActionListener {
+class TaskManagerDialog final : public TabWidget, ActionListener {
   enum Tabs {
     TurnpointTab,
     PropertiesTab,
@@ -41,11 +40,6 @@ class TaskManagerDialog final : public WindowWidget, ActionListener {
 
   WndForm &dialog;
 
-  PixelRect task_view_position;
-
-  ButtonWidget *task_view;
-  TabBarControl *tab_bar;
-
   OrderedTask *task;
 
   bool fullscreen;
@@ -54,8 +48,8 @@ class TaskManagerDialog final : public WindowWidget, ActionListener {
 
 public:
   explicit TaskManagerDialog(WndForm &_dialog)
-    :dialog(_dialog),
-     tab_bar(nullptr),
+    :TabWidget(Orientation::AUTO),
+     dialog(_dialog),
      task(nullptr),
      fullscreen(false), modified(false) {}
 
@@ -83,10 +77,20 @@ public:
   void UpdateCaption();
 
   void InvalidateTaskView();
-  void TaskViewClicked();
-  void RestoreTaskView();
+
+  void TaskViewClicked() {
+    ToggleLargeExtra();
+  }
+
+  void RestoreTaskView() {
+    RestoreExtra();
+  }
+
   void ShowTaskView(const OrderedTask *task);
-  void ResetTaskView();
+
+  void ResetTaskView() {
+      ShowTaskView(task);
+  }
 
   void SwitchToEditTab();
   void SwitchToPropertiesPanel();
@@ -103,12 +107,12 @@ public:
 
   /* virtual methods from class Widget */
   void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   void Show(const PixelRect &rc) override;
-  void Hide() override;
-  void Move(const PixelRect &rc) override;
   bool KeyPress(unsigned key_code) override;
+
+protected:
+  /* virtual methods from class PagerWidget */
+  void OnPageFlipped() override;
 
 private:
   /* virtual methods from class ActionListener */

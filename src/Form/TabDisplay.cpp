@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/TabDisplay.hpp"
-#include "Form/TabBar.hpp"
+#include "Widget/TabWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
 #include "Screen/Bitmap.hpp"
@@ -47,11 +47,11 @@ Copyright_License {
 
 static constexpr unsigned TabLineHeightInitUnscaled = 5;
 
-TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
+TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
                        bool _vertical,
                        WindowStyle style)
-  :tab_bar(_theTabBar),
+  :pager(_pager),
    look(_look),
    vertical(_vertical),
    dragging(false),
@@ -315,7 +315,7 @@ TabDisplay::OnPaint(Canvas &canvas)
     const TabButton &button = *buttons[i];
 
     const bool is_down = dragging && i == down_index && !drag_off_button;
-    const bool is_selected = i == tab_bar.GetCurrentPage();
+    const bool is_selected = i == pager.GetCurrentIndex();
 
     canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
                                                is_down));
@@ -365,10 +365,10 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
     return true;
 
   case KEY_LEFT:
-    return (tab_bar.GetCurrentPage() > 0);
+    return pager.GetCurrentIndex() > 0;
 
   case KEY_RIGHT:
-    return tab_bar.GetCurrentPage() < GetSize() - 1;
+    return pager.GetCurrentIndex() < GetSize() - 1;
 
   case KEY_DOWN:
     return false;
@@ -389,40 +389,40 @@ TabDisplay::OnKeyDown(unsigned key_code)
 
   case KEY_APP1:
     if (GetSize() > 0)
-      tab_bar.ClickPage(0);
+      pager.ClickPage(0);
     return true;
 
   case KEY_APP2:
     if (GetSize() > 1)
-      tab_bar.ClickPage(1);
+      pager.ClickPage(1);
     return true;
 
   case KEY_APP3:
     if (GetSize() > 2)
-      tab_bar.ClickPage(2);
+      pager.ClickPage(2);
     return true;
 
   case KEY_APP4:
     if (GetSize() > 3)
-      tab_bar.ClickPage(3);
+      pager.ClickPage(3);
     return true;
 
   case KEY_RETURN:
-    tab_bar.ClickPage(tab_bar.GetCurrentPage());
+    pager.ClickPage(pager.GetCurrentIndex());
     return true;
 
   case KEY_DOWN:
     break;
 
   case KEY_RIGHT:
-    tab_bar.NextPage();
+    pager.NextPage();
     return true;
 
   case KEY_UP:
     break;
 
   case KEY_LEFT:
-    tab_bar.PreviousPage();
+    pager.PreviousPage();
     return true;
   }
   return PaintWindow::OnKeyDown(key_code);
@@ -456,7 +456,7 @@ TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
     EndDrag();
 
     if (!drag_off_button)
-      tab_bar.ClickPage(down_index);
+      pager.ClickPage(down_index);
 
     return true;
   } else {

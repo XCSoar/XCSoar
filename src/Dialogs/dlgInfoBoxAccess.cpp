@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "UIState.hpp"
 #include "Screen/Layout.hpp"
@@ -31,8 +31,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
-#include "Form/TabBar.hpp"
-#include "Form/Form.hpp"
+#include "Widget/TabWidget.hpp"
 #include "Widget/ActionWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -61,17 +60,13 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   PixelRect form_rc = InfoBoxManager::layout.remaining;
 
-  WndForm form(UIGlobals::GetMainWindow(), look, form_rc,
-               gettext(InfoBoxFactory::GetName(old_type)));
+  WidgetDialog dialog(look);
 
-  WindowStyle tab_style;
-  tab_style.ControlParent();
-  ContainerWindow &client_area = form.GetClientAreaWindow();
-  PixelRect client_rc = client_area.GetClientRect();
-  PixelRect tab_rc = client_rc;
-  tab_rc.bottom = tab_rc.top + Layout::Scale(45);
-
-  TabBarControl tab_bar(client_area, look, tab_rc, tab_style, false);
+  TabWidget tab_widget(TabWidget::Orientation::HORIZONTAL);
+  dialog.Create(UIGlobals::GetMainWindow(),
+                gettext(InfoBoxFactory::GetName(old_type)),
+                form_rc, &tab_widget);
+  dialog.PrepareWidget();
 
   bool found_setup = false;
 
@@ -97,39 +92,36 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
                                     Layout::GetMaximumControlHeight());
 
         auto *button = new ButtonWidget(look.button, _("Switch InfoBox"),
-                                        form, SWITCH_INFO_BOX);
+                                        dialog, SWITCH_INFO_BOX);
 
         widget = new TwoWidgets(widget, button, false);
       }
 
-      tab_bar.AddTab(widget, gettext(panels->name));
+      tab_widget.AddTab(widget, gettext(panels->name));
     }
   }
 
   if (!found_setup) {
     /* the InfoBox did not provide a "Setup" tab - create a default
        one that allows switching the contents */
-    Widget *wSwitch = new ActionWidget(form, SWITCH_INFO_BOX);
-    tab_bar.AddTab(wSwitch, _("Switch InfoBox"));
+    Widget *wSwitch = new ActionWidget(dialog, SWITCH_INFO_BOX);
+    tab_widget.AddTab(wSwitch, _("Switch InfoBox"));
   }
 
-  Widget *wClose = new ActionWidget(form, mrOK);
-  tab_bar.AddTab(wClose, _("Close"));
+  Widget *wClose = new ActionWidget(dialog, mrOK);
+  tab_widget.AddTab(wClose, _("Close"));
 
-  const PixelSize max_size = tab_bar.GetMaximumSize();
+  const PixelRect client_rc = dialog.GetClientAreaWindow().GetClientRect();
+  const PixelSize max_size = tab_widget.GetMaximumSize();
   if (unsigned(max_size.cy) < unsigned(client_rc.bottom - client_rc.top)) {
     form_rc.top += client_rc.bottom - client_rc.top - max_size.cy;
-    form.Move(form_rc);
-    tab_bar.Move(client_area.GetClientRect());
+    dialog.Move(form_rc);
   }
 
-  form.SetModeless();
-  int result = form.ShowModal();
+  dialog.SetModeless();
+  int result = dialog.ShowModal();
 
-  if (form.IsDefined()) {
-    bool changed = false;
-    tab_bar.Save(changed);
-  }
+  dialog.StealWidget();
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
