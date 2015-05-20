@@ -155,6 +155,14 @@ public:
   unsigned GetHeight() const {
     return buffer.height;
   }
+#else
+  unsigned GetWidth() const {
+    return GetSize().cx;
+  }
+
+  unsigned GetHeight() const {
+    return GetSize().cy;
+  }
 #endif
 
 #ifdef ENABLE_OPENGL
