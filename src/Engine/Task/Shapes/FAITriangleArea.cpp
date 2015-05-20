@@ -53,7 +53,7 @@ CalcAngle(Angle angle, fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
     : angle - alpha;
 }
 
-gcc_const
+gcc_pure
 static GeoPoint
 CalcGeoPoint(const GeoPoint &origin, Angle angle,
              fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
