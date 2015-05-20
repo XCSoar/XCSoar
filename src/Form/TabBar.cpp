@@ -32,7 +32,7 @@ Copyright_License {
 
 gcc_const
 static PixelRect
-MakePagerRect(PixelRect rc, const PixelRect &tab_rc, bool vertical)
+MakePagerRect(PixelRect rc, PixelRect tab_rc, bool vertical)
 {
   if (vertical)
     rc.left = tab_rc.right;
