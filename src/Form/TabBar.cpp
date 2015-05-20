@@ -189,16 +189,9 @@ TabBarControl::OnResize(PixelSize new_size)
 {
   ContainerWindow::OnResize(new_size);
 
-  if (tab_display != nullptr) {
-    const PixelRect tab_rc = tab_display->GetPosition();
-    PixelRect rc = GetClientRect();
-    if (tab_display->IsVertical())
-      rc.left = tab_rc.right;
-    else
-      rc.top = tab_rc.bottom;
-
-    pager.Move(rc);
-  }
+  if (tab_display != nullptr)
+    pager.Move(MakePagerRect(GetClientRect(), tab_display->GetPosition(),
+                             tab_display->IsVertical()));
 }
 
 #ifdef HAVE_CLIPPING
