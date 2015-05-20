@@ -98,7 +98,7 @@ TabDisplay::GetRecommendedColumnWidth() const
 {
   unsigned width = Layout::GetMaximumControlHeight();
   for (auto *i : buttons) {
-    unsigned w = i->GetRecommendedWidth(GetLook());
+    unsigned w = i->GetRecommendedWidth(GetLook()) + tab_line_height;
     if (w > width)
       width = w;
   }
@@ -111,7 +111,7 @@ TabDisplay::GetRecommendedRowHeight() const
 {
   unsigned height = Layout::GetMaximumControlHeight();
   for (auto *i : buttons) {
-    unsigned h = i->GetRecommendedHeight();
+    unsigned h = i->GetRecommendedHeight() + tab_line_height;
     if (h > height)
       height = h;
   }
