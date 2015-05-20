@@ -76,7 +76,7 @@ class TabDisplay final : public PaintWindow
   bool drag_off_button; // set by mouse_move
   unsigned down_index; // index of tab where mouse down occurred
 
-  const UPixelScalar tab_line_height;
+  const unsigned tab_line_height;
 
 public:
   /**

@@ -84,7 +84,7 @@ TabDisplay::GetButtonSize(unsigned i) const
   if (buttons[i]->rc.left < buttons[i]->rc.right)
     return buttons[i]->rc;
 
-  const UPixelScalar margin = 1;
+  const unsigned margin = 1;
 
   /*
   const bool partialTab = vertial
@@ -92,14 +92,14 @@ TabDisplay::GetButtonSize(unsigned i) const
     : tab_display->GetTabWidth() < GetWidth();
   */
 
-  const UPixelScalar finalmargin = 1; //partialTab ? tab_line_height - 1 * margin : margin;
+  const unsigned finalmargin = 1; //partialTab ? tab_line_height - 1 * margin : margin;
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
   PixelRect rc;
 
   if (vertical) {
-    const UPixelScalar but_height =
+    const unsigned but_height =
        (GetHeight() - finalmargin) / GetSize() - margin;
 
     rc.left = 0;
@@ -118,10 +118,10 @@ TabDisplay::GetButtonSize(unsigned i) const
 
     const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
 
-    const UPixelScalar rowheight = (GetHeight() - tab_line_height)
+    const unsigned rowheight = (GetHeight() - tab_line_height)
         / portraitRows - margin;
 
-    const UPixelScalar but_width =
+    const unsigned but_width =
           (GetWidth() - finalmargin) /
           ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
 
@@ -142,11 +142,11 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
                         const Bitmap *bmp, const bool isDown, bool inverse)
 {
   PixelRect rcTextFinal = rc;
-  const UPixelScalar buttonheight = rc.bottom - rc.top;
+  const unsigned buttonheight = rc.bottom - rc.top;
   const PixelSize text_size = canvas.CalcTextSize(caption);
   const int textwidth = text_size.cx;
   const int textheight = text_size.cy;
-  UPixelScalar textheightoffset = 0;
+  unsigned textheightoffset = 0;
 
   if (textwidth > (rc.right - rc.left)) // assume 2 lines
     textheightoffset = std::max(0, (int)(buttonheight - textheight * 2) / 2);
