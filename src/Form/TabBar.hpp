@@ -43,13 +43,9 @@ class TabDisplay;
  * ToDo: support lazy loading
  */
 class TabBarControl : public ContainerWindow {
-  typedef std::function<void()> PageFlippedCallback;
-
   PagerWidget pager;
 
   TabDisplay * tab_display;
-
-  PageFlippedCallback page_flipped_callback;
 
 public:
   /**
@@ -68,11 +64,9 @@ public:
   void UpdateLayout(const PixelRect &rc, const PixelRect &tab_rc,
                     bool vertical);
 
-  void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
-    assert(!page_flipped_callback);
-    assert(_page_flipped_callback);
-
-    page_flipped_callback = _page_flipped_callback;
+  template<typename C>
+  void SetPageFlippedCallback(C &&_page_flipped_callback) {
+    pager.SetPageFlippedCallback(std::forward<C>(_page_flipped_callback));
   }
 
 public:

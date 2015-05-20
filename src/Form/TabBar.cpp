@@ -125,9 +125,6 @@ TabBarControl::ClickPage(unsigned i)
 
   if (tab_display != nullptr)
     tab_display->Invalidate();
-
-  if (page_flipped_callback)
-    page_flipped_callback();
 }
 
 void
@@ -143,9 +140,6 @@ TabBarControl::SetCurrentPage(unsigned i)
 
   if (tab_display != nullptr)
     tab_display->Invalidate();
-
-  if (page_flipped_callback)
-    page_flipped_callback();
 }
 
 void
@@ -157,9 +151,6 @@ TabBarControl::NextPage()
 
   if (tab_display != nullptr)
     tab_display->Invalidate();
-
-  if (page_flipped_callback)
-    page_flipped_callback();
 }
 
 void
@@ -171,9 +162,6 @@ TabBarControl::PreviousPage()
 
   if (tab_display != nullptr)
     tab_display->Invalidate();
-
-  if (page_flipped_callback)
-    page_flipped_callback();
 }
 
 void
