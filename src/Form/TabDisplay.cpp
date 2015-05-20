@@ -49,7 +49,8 @@ static constexpr unsigned TabLineHeightInitUnscaled = 5;
 
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
-                       bool _vertical)
+                       bool _vertical,
+                       WindowStyle style)
   :tab_bar(_theTabBar),
    look(_look),
    vertical(_vertical),
@@ -58,9 +59,8 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                    ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
                    : Layout::Scale(TabLineHeightInitUnscaled))
 {
-  WindowStyle mystyle;
-  mystyle.TabStop();
-  Create(parent, rc, mystyle);
+  style.TabStop();
+  Create(parent, rc, style);
 }
 
 TabDisplay::~TabDisplay()

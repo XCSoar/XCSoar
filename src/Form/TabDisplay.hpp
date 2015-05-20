@@ -92,7 +92,8 @@ public:
    */
   TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
              ContainerWindow &parent, PixelRect rc,
-             bool vertical);
+             bool vertical,
+             WindowStyle style=WindowStyle());
 
   virtual ~TabDisplay();
 
