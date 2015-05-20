@@ -6,6 +6,7 @@ Version 6.7.8 - not yet released
 * user interface
   - draw gray title bar on inactive dialogs
   - improved dialog button placement
+  - fix missing buttons in terrain configuration (#3421)
 * devices
   - fix crash when downloading flight without "logs" folder
 * Linux

@@ -401,8 +401,8 @@ RowFormWidget::UpdateLayout()
         const unsigned max_height = i.GetMaximumHeight(look, vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
+          grow_height = max_height - height + grow_height;
           height = max_height;
-          grow_height = max_height - height;
         }
 
         excess_height -= grow_height;
