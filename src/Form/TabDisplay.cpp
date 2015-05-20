@@ -69,6 +69,56 @@ TabDisplay::~TabDisplay()
     delete i;
 }
 
+inline unsigned
+TabButton::GetRecommendedWidth(const DialogLook &look) const
+{
+  if (bitmap != nullptr) {
+    unsigned w = bitmap->GetWidth();
+#ifndef ENABLE_OPENGL
+    /* second half is the mask */
+    w /= 2;
+#endif
+    return w;
+  }
+
+  return look.button.font->TextSize(caption).cx + 2 * Layout::GetTextPadding();
+}
+
+inline unsigned
+TabButton::GetRecommendedHeight() const
+{
+  if (bitmap != nullptr)
+    return bitmap->GetHeight() + 2 * Layout::GetTextPadding();
+
+  return 0;
+}
+
+unsigned
+TabDisplay::GetRecommendedColumnWidth() const
+{
+  unsigned width = Layout::GetMaximumControlHeight();
+  for (auto *i : buttons) {
+    unsigned w = i->GetRecommendedWidth(GetLook());
+    if (w > width)
+      width = w;
+  }
+
+  return width;
+}
+
+unsigned
+TabDisplay::GetRecommendedRowHeight() const
+{
+  unsigned height = Layout::GetMaximumControlHeight();
+  for (auto *i : buttons) {
+    unsigned h = i->GetRecommendedHeight();
+    if (h > height)
+      height = h;
+  }
+
+  return height;
+}
+
 void
 TabDisplay::UpdateLayout(const PixelRect &rc, bool _vertical)
 {

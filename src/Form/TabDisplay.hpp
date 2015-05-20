@@ -55,6 +55,12 @@ public:
   void InvalidateLayout() {
     rc.left = rc.right = 0;
   }
+
+  gcc_pure
+  unsigned GetRecommendedWidth(const DialogLook &look) const;
+
+  gcc_pure
+  unsigned GetRecommendedHeight() const;
 };
 
 /**
@@ -93,6 +99,12 @@ public:
   const DialogLook &GetLook() const {
     return look;
   }
+
+  gcc_pure
+  unsigned GetRecommendedColumnWidth() const;
+
+  gcc_pure
+  unsigned GetRecommendedRowHeight() const;
 
   bool IsVertical() const {
     return vertical;
