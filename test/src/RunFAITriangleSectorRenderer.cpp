@@ -32,6 +32,26 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Engine/Task/Shapes/FAITriangleSettings.hpp"
+#include "Engine/Task/Shapes/FAITriangleArea.hpp"
+
+static void
+RenderFAISectorDots(Canvas &canvas, const WindowProjection &projection,
+                    const GeoPoint &pt1, const GeoPoint &pt2,
+                    bool reverse, const FAITriangleSettings &settings)
+{
+  GeoPoint geo_points[FAI_TRIANGLE_SECTOR_MAX];
+  GeoPoint *geo_end = GenerateFAITriangleArea(geo_points, pt1, pt2,
+                                              reverse, settings);
+
+  canvas.SelectBlackPen();
+  canvas.SelectHollowBrush();
+
+  for (auto *i = geo_points; i != geo_end; ++i) {
+    RasterPoint p;
+    if (projection.GeoToScreenIfVisible(*i, p))
+      canvas.DrawCircle(p.x, p.y, 2);
+  }
+}
 
 class FAITriangleWindow : public PaintWindow
 {
@@ -128,6 +148,7 @@ protected:
     canvas.DrawCircle(pb.x, pb.y, 4);
 
     RenderFAISector(canvas, projection, a, b, false, settings);
+    RenderFAISectorDots(canvas, projection, a, b, false, settings);
   }
 };
 
