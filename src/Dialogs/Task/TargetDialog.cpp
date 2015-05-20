@@ -348,9 +348,18 @@ TargetWidget::Layout::Layout(PixelRect rc)
 
     map.right -= ::Layout::Scale(120);
 
-    constexpr unsigned n_rows = 8;
-    const unsigned control_height = std::min(max_control_height,
-                                             height / n_rows);
+    constexpr unsigned n_static = 4;
+#ifndef GNAV
+    constexpr unsigned n_elastic = 6;
+#else
+    constexpr unsigned n_elastic = 5;
+#endif
+    constexpr unsigned n_rows = n_static + n_elastic;
+
+    const unsigned control_height = n_rows * min_control_height >= height
+      ? min_control_height
+      : std::min(max_control_height,
+                 (height - n_static * min_control_height) / n_elastic);
 
     RowLayout rl(PixelRect(map.right, rc.top, rc.right, rc.bottom));
     name_button = rl.NextRow(control_height);
