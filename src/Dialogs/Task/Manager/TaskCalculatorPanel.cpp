@@ -122,21 +122,6 @@ TaskCalculatorPanel::OnModified(DataField &df)
 }
 
 void
-TaskCalculatorPanel::OnSpecial(DataField &df)
-{
-  if (IsDataField(MC, df)) {
-    const DerivedInfo &calculated = CommonInterface::Calculated();
-    if (positive(calculated.time_climb)) {
-      fixed mc = calculated.total_height_gain / calculated.time_climb;
-      DataFieldFloat &dff = (DataFieldFloat &)df;
-      dff.Set(Units::ToUserVSpeed(mc));
-      ActionInterface::SetManualMacCready(mc);
-      Refresh();
-    }
-  }
-}
-
-void
 TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   assert(protected_task_manager != nullptr);

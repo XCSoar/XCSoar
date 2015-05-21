@@ -58,7 +58,6 @@ public:
 private:
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) override;
-  void OnSpecial(DataField &df) override;
 
   /* virtual methods from NullBlackboardListener */
   void OnCalculatedUpdate(const MoreData &, const DerivedInfo &) override {
