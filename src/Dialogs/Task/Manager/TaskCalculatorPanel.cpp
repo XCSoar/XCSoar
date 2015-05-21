@@ -61,15 +61,6 @@ enum Controls {
 static TaskCalculatorPanel *instance;
 
 void
-TaskCalculatorPanel::GetCruiseEfficiency()
-{
-  const auto &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.ordered_task_stats;
-
-  cruise_efficiency = task_stats.cruise_efficiency;
-}
-
-void
 TaskCalculatorPanel::Refresh()
 {
   const auto &calculated = CommonInterface::Calculated();
@@ -137,9 +128,6 @@ TaskCalculatorPanel::OnModified(DataField &df)
     fixed mc = Units::ToSysVSpeed(dff.GetAsFixed());
     ActionInterface::SetManualMacCready(mc);
     Refresh();
-  } else if (IsDataField(CRUISE_EFFICIENCY, df)) {
-    const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    SetCruiseEfficiency(dff.GetAsFixed() / 100);
   }
 }
 
@@ -155,8 +143,6 @@ TaskCalculatorPanel::OnSpecial(DataField &df)
       ActionInterface::SetManualMacCready(mc);
       Refresh();
     }
-  } else if (IsDataField(CRUISE_EFFICIENCY, df)) {
-    GetCruiseEfficiency();
   }
 }
 
@@ -202,20 +188,15 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddReadOnly(_("Achieved speed"), nullptr, _T("%.0f %s"),
               UnitGroup::TASK_SPEED, fixed(0));
 
-  AddFloat(_("Cruise efficiency"),
-           _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
-           _T("%.0f %%"), _T("%.0f"),
-           fixed(0), fixed(100), fixed(1), false, fixed(0),
-           this);
+  AddReadOnly(_("Cruise efficiency"),
+              _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
+              _T("%.0f %%"),
+              fixed(0));
 }
 
 void
 TaskCalculatorPanel::Show(const PixelRect &rc)
 {
-  const GlidePolar &polar =
-    CommonInterface::GetComputerSettings().polar.glide_polar_task;
-
-  cruise_efficiency = polar.GetCruiseEfficiency();
   emc = CommonInterface::Calculated().ordered_task_stats.effective_mc;
 
   Refresh();
