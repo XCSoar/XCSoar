@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "TaskMapWindow.hpp"
-#include "TaskCalculatorPanel.hpp"
 #include "TaskEditPanel.hpp"
 #include "TaskPropertiesPanel.hpp"
 #include "TaskMiscPanel.hpp"
@@ -168,9 +167,6 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   TaskClosePanel *wClose = new TaskClosePanel(*this, &modified,
                                               UIGlobals::GetDialogLook());
 
-  TaskCalculatorPanel *wCalculator =
-    new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &modified);
-
   const MapLook &look = UIGlobals::GetMapLook();
   Widget *wEdit = CreateTaskEditPanel(*this, look.task, look.airspace,
                                       &task, &modified);
@@ -181,12 +177,9 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
   const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : nullptr;
   const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
   const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
   const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
-
-  tab_bar->AddTab(wCalculator, _("Calculator"), CalcIcon);
 
   if (layout.vertical) {
     tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);

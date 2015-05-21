@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_TASK_STATUS_PANEL_HPP
 
 #include "StatusPanel.hpp"
+#include "Form/DataField/Listener.hpp"
 
-class TaskStatusPanel : public StatusPanel {
+class TaskStatusPanel : public StatusPanel, DataFieldListener {
 public:
   TaskStatusPanel(const DialogLook &look):StatusPanel(look) {}
 
@@ -35,6 +36,10 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+
+private:
+  /* virtual methods from DataFieldListener */
+  void OnModified(DataField &df) override;
 };
 
 #endif
