@@ -105,7 +105,7 @@ dlgStatusShowModal(int start_page)
   const NMEAInfo &basic = CommonInterface::Basic();
   const Waypoint *nearest_waypoint = basic.location_available
     ? way_points.GetNearest(CommonInterface::Basic().location, fixed(100000))
-    : NULL;
+    : nullptr;
 
   /* setup tabs */
 
@@ -114,11 +114,11 @@ dlgStatusShowModal(int start_page)
     == DialogSettings::TabStyle::Icon;
 
   const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *FlightIcon = enable_icons ? &icons.hBmpTabFlight : NULL;
-  const Bitmap *SystemIcon = enable_icons ? &icons.hBmpTabSystem : NULL;
-  const Bitmap *TaskIcon = enable_icons ? &icons.hBmpTabTask : NULL;
-  const Bitmap *RulesIcon = enable_icons ? &icons.hBmpTabRules : NULL;
-  const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : NULL;
+  const Bitmap *FlightIcon = enable_icons ? &icons.hBmpTabFlight : nullptr;
+  const Bitmap *SystemIcon = enable_icons ? &icons.hBmpTabSystem : nullptr;
+  const Bitmap *TaskIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
+  const Bitmap *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
+  const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
 
   Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
   tab_bar.AddTab(flight_panel, _("Flight"), FlightIcon);

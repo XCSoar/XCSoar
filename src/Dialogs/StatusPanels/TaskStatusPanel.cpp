@@ -43,7 +43,7 @@ enum Controls {
 void
 TaskStatusPanel::Refresh()
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
