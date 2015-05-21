@@ -30,14 +30,11 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 class WndForm;
-class Button;
 
 class TaskCalculatorPanel final
   : public RowFormWidget,
     private DataFieldListener,
     private NullBlackboardListener {
-  Button *target_button;
-
   const bool *task_modified;
 
   fixed emc;
@@ -45,14 +42,7 @@ class TaskCalculatorPanel final
 public:
   TaskCalculatorPanel(const DialogLook &look, const bool *_task_modified)
     :RowFormWidget(look),
-     target_button(nullptr), task_modified(_task_modified) {}
-
-  void SetTargetButton(Button *_target_button) {
-    assert(target_button == nullptr);
-    assert(_target_button != nullptr);
-
-    target_button = _target_button;
-  }
+     task_modified(_task_modified) {}
 
   bool IsTaskModified() const {
     return *task_modified;

@@ -64,9 +64,6 @@ TaskCalculatorPanel::Refresh()
 
   TCHAR buffer[32];
 
-  if (target_button != nullptr)
-    target_button->SetVisible(task_stats.has_targets);
-
   SetRowVisible(AAT_TIME, task_stats.has_targets);
   if (task_stats.has_targets) {
     FormatTimespanSmart(buffer, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time, 2);
@@ -211,9 +208,6 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
 void
 TaskCalculatorPanel::Hide()
 {
-  if (target_button != nullptr)
-    target_button->Hide();
-
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
   RowFormWidget::Hide();

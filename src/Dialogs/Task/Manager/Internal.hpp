@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 
 class TaskMapWindow;
-class Button;
 class TabBarControl;
 class OrderedTask;
 
@@ -38,7 +37,6 @@ class TaskManagerDialog final : public WindowWidget, ActionListener {
   PixelRect task_view_position;
 
   TaskMapWindow *task_view;
-  Button *target_button;
   TabBarControl *tab_bar;
 
   unsigned TurnpointTab;
@@ -53,7 +51,7 @@ class TaskManagerDialog final : public WindowWidget, ActionListener {
 public:
   explicit TaskManagerDialog(WndForm &_dialog)
     :dialog(_dialog),
-     task_view(nullptr), target_button(nullptr), tab_bar(nullptr),
+     task_view(nullptr), tab_bar(nullptr),
      task(nullptr),
      fullscreen(false), modified(false) {}
 

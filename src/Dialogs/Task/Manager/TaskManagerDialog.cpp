@@ -59,11 +59,10 @@ Copyright_License {
 
 enum Buttons {
   MAP = 100,
-  TARGET,
 };
 
 struct TaskManagerLayout {
-  PixelRect task_view, target_button, tab_bar;
+  PixelRect task_view, tab_bar;
   bool vertical;
 };
 
@@ -76,7 +75,6 @@ TaskManagerDialog::~TaskManagerDialog()
     DeleteWindow();
 
   delete task_view;
-  delete target_button;
   delete task;
 }
 
@@ -114,10 +112,6 @@ TaskManagerDialog::OnAction(int id)
   case MAP:
     TaskViewClicked();
     break;
-
-  case TARGET:
-    dlgTargetShowModal();
-    break;
   }
 }
 
@@ -133,13 +127,9 @@ CalculateTaskManagerLayout(PixelRect rc)
   layout.vertical = rc.right > rc.bottom;
   if (rc.right > rc.bottom) {
     layout.task_view = { 0, 0, Layout::Scale(80), Layout::Scale(52) };
-    layout.target_button = { Layout::Scale(5), Layout::Scale(18),
-                             Layout::Scale(58), Layout::Scale(51) };
     layout.tab_bar = { 0, Layout::Scale(52), Layout::Scale(80), rc.bottom };
   } else {
     layout.task_view = { 0, 0, Layout::Scale(60), Layout::Scale(76) };
-    layout.target_button = { Layout::Scale(2), Layout::Scale(2),
-                             Layout::Scale(59), Layout::Scale(69) };
     layout.tab_bar = { Layout::Scale(60), 0, rc.right, Layout::Scale(76) };
   }
 
@@ -163,13 +153,6 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   task_view = new TaskMapWindow(UIGlobals::GetMapLook(), *this, MAP);
   task_view->Create(parent, layout.task_view, hidden);
 
-  WindowStyle button_style(hidden);
-  button_style.Hide();
-  button_style.TabStop();
-  target_button = new Button(parent, GetLook().button, _("Target"),
-                             layout.target_button, button_style,
-                             *this, TARGET);
-
   WindowStyle tab_style;
   tab_style.ControlParent();
   tab_bar = new TabBarControl(parent, GetLook(), layout.tab_bar,
@@ -187,7 +170,6 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   TaskCalculatorPanel *wCalculator =
     new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &modified);
-  wCalculator->SetTargetButton(target_button);
 
   const MapLook &look = UIGlobals::GetMapLook();
   Widget *wEdit = CreateTaskEditPanel(*this, look.task, look.airspace,
@@ -243,7 +225,6 @@ TaskManagerDialog::Show(const PixelRect &rc)
   task_view_position = layout.task_view;
 
   task_view->Move(layout.task_view);
-  target_button->Move(layout.target_button);
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
   tab_bar->Show();
 }
@@ -252,7 +233,6 @@ void
 TaskManagerDialog::Hide()
 {
   task_view->Hide();
-  target_button->Hide();
   tab_bar->Hide();
 }
 
@@ -264,7 +244,6 @@ TaskManagerDialog::Move(const PixelRect &rc)
   task_view_position = layout.task_view;
 
   task_view->Move(layout.task_view);
-  target_button->Move(layout.target_button);
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
 }
 
