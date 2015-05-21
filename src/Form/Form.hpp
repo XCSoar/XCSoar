@@ -161,9 +161,8 @@ public:
     force = _force;
   }
 
-  int SetModalResult(int Value) {
+  void SetModalResult(int Value) {
     modal_result = Value;
-    return Value;
   }
 
   /** inherited from ActionListener */
