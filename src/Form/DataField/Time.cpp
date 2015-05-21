@@ -95,10 +95,9 @@ DataFieldTime::SetFromCombo(int data_field_index, TCHAR *value_string)
 void
 DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
 {
-  TCHAR buffer[128], buffer2[32];
-  FormatTimespanSmart(buffer, value, max_tokens);
+  TCHAR buffer2[32];
   StringFormatUnsafe(buffer2, _T("%d"), value);
-  combo_list.Append(value, buffer2, buffer);
+  combo_list.Append(value, buffer2, FormatTimespanSmart(value, max_tokens));
 }
 
 ComboList

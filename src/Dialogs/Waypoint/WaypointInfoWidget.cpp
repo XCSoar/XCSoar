@@ -135,9 +135,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                      buffer.buffer(), buffer.MAX_SIZE) != nullptr)
     AddReadOnly(_("Location"), nullptr, buffer);
 
-  FormatUserAltitude(waypoint.elevation,
-                            buffer.buffer(), buffer.MAX_SIZE);
-  AddReadOnly(_("Elevation"), nullptr, buffer);
+  AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint.elevation));
 
   if (basic.time_available && basic.date_time_utc.IsDatePlausible()) {
     const SunEphemeris::Result sun =

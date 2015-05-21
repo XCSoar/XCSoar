@@ -115,13 +115,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const unsigned text_padding = Layout::GetTextPadding();
   int left = rc.left + text_padding;
 
-  TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
+  TCHAR info_buffer[256], direction_buffer[32];
   if (item.vector.IsValid()) {
-    FormatUserDistanceSmart(item.vector.distance, distance_buffer, 32);
     FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
                   item.vector.bearing);
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
-                       _("Distance"), distance_buffer,
+                       _("Distance"),
+                       FormatUserDistanceSmart(item.vector.distance).c_str(),
                        _("Direction"), direction_buffer);
   } else {
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
@@ -133,15 +133,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.DrawClippedText(left, rc.top + text_padding, rc, info_buffer);
 
 
-  TCHAR elevation_buffer[32];
-  if (!RasterBuffer::IsSpecial(item.elevation)) {
-    FormatUserAltitude(fixed(item.elevation), elevation_buffer, 32);
-    StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
-                       elevation_buffer);
-  } else {
-    StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
-                       _T("???"));
-  }
+  StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
+                     RasterBuffer::IsSpecial(item.elevation)
+                     ? _T("???")
+                     : FormatUserAltitude(fixed(item.elevation)).c_str());
 
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
@@ -217,10 +212,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
   }
 
-  FormatUserAltitude(fixed(item.reach.direct),
-                     altitude_buffer, ARRAY_SIZE(altitude_buffer));
-
-  buffer.AppendFormat(_T("%s %s"), altitude_buffer, _("MSL"));
+  buffer.AppendFormat(_T("%s %s"),
+                      FormatUserAltitude(fixed(item.reach.direct)).c_str(),
+                      _("MSL"));
 
   // Draw title row
 
@@ -242,10 +236,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
      buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
     }
 
-    FormatUserAltitude(fixed(item.reach.terrain),
-                       altitude_buffer, ARRAY_SIZE(altitude_buffer));
-
-    buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("MSL"));
+    buffer.AppendFormat(_T("%s %s, "),
+                        FormatUserAltitude(fixed(item.reach.terrain)).c_str(),
+                        _("MSL"));
   } else if (elevation_available &&
              (int)item.reach.direct >= (int)item.elevation &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
@@ -343,11 +336,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   canvas.DrawClippedText(left, rc.top + text_padding, rc, buffer);
 
-  TCHAR time_buffer[32], timespan_buffer[32];
-  FormatLocalTimeHHMM(time_buffer, marker.time.GetSecondOfDay(), utc_offset);
-  FormatTimespanSmart(timespan_buffer, BrokenDateTime::NowUTC() - marker.time);
-  buffer.Format(_("dropped %s ago"), timespan_buffer);
-  buffer.AppendFormat(_T(" (%s)"), time_buffer);
+  buffer.Format(_("dropped %s ago"),
+                FormatTimespanSmart(BrokenDateTime::NowUTC() - marker.time).c_str());
+  buffer.AppendFormat(_T(" (%s)"),
+                      FormatLocalTimeHHMM(marker.time.GetSecondOfDay(), utc_offset).c_str());
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
                          rc.top + name_font.GetHeight() + 2 * text_padding,
@@ -393,20 +385,19 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc, _("Thermal"));
 
   StaticString<256> buffer;
-  TCHAR lift_buffer[32], time_buffer[32], timespan_buffer[32];
+  TCHAR lift_buffer[32];
   FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
-  FormatLocalTimeHHMM(time_buffer, (int)thermal.time, utc_offset);
 
   int timespan = BrokenDateTime::NowUTC().GetSecondOfDay() - (int)thermal.time;
   if (timespan < 0)
     timespan += 24 * 60 * 60;
 
-  FormatTimespanSmart(timespan_buffer, timespan);
-
   buffer.Format(_T("%s: %s"), _("Avg. lift"), lift_buffer);
   buffer.append(_T(" - "));
-  buffer.AppendFormat(_("left %s ago"), timespan_buffer);
-  buffer.AppendFormat(_T(" (%s)"), time_buffer);
+  buffer.AppendFormat(_("left %s ago"),
+                      FormatTimespanSmart(timespan).c_str());
+  buffer.AppendFormat(_T(" (%s)"),
+                      FormatLocalTimeHHMM((int)thermal.time, utc_offset).c_str());
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
                          rc.top + name_font.GetHeight() + 2 * text_padding,
@@ -507,11 +498,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   // Generate the line of info about the target, if it's available
   if (traffic != nullptr) {
-    if (traffic->altitude_available) {
-      TCHAR tmp[15];
-      FormatUserAltitude(traffic->altitude, tmp, 15);
-      info_string.AppendFormat(_T(", %s: %s"), _("Altitude"), tmp);
-    }
+    if (traffic->altitude_available)
+      info_string.AppendFormat(_T(", %s: %s"), _("Altitude"),
+                               FormatUserAltitude(traffic->altitude).c_str());
+
     if (traffic->climb_rate_avg30s_available) {
       TCHAR tmp[15];
       FormatUserVerticalSpeed(traffic->climb_rate_avg30s, tmp, 15);

@@ -64,10 +64,9 @@ TimesStatusPanel::Refresh()
   }
 
   if (basic.time_available) {
-    FormatLocalTimeHHMM(temp.buffer(), (int)basic.time, settings.utc_offset);
-    SetText(LocalTime, temp);
-    FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
-    SetText(UTCTime, temp);
+    SetText(LocalTime,
+            FormatLocalTimeHHMM((int)basic.time, settings.utc_offset));
+    SetText(UTCTime, FormatSignedTimeHHMM((int)basic.time));
   } else {
     ClearText(LocalTime);
     ClearText(UTCTime);
@@ -82,25 +81,23 @@ TimesStatusPanel::Refresh()
   }
 
   if (positive(flight.flight_time)) {
-    FormatLocalTimeHHMM(temp.buffer(), (int)flight.takeoff_time,
-                        settings.utc_offset);
-    SetText(TakeoffTime, temp);
+    SetText(TakeoffTime,
+            FormatLocalTimeHHMM((int)flight.takeoff_time,
+                                settings.utc_offset));
   } else {
     ClearText(TakeoffTime);
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    FormatLocalTimeHHMM(temp.buffer(),
-                        int(flight.takeoff_time + flight.flight_time),
-                        settings.utc_offset);
-    SetText(LandingTime, temp);
+    SetText(LandingTime,
+            FormatLocalTimeHHMM(int(flight.takeoff_time + flight.flight_time),
+                                settings.utc_offset));
   } else {
     ClearText(LandingTime);
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(), (int)flight.flight_time);
-    SetText(FlightTime, temp);
+    SetText(FlightTime, FormatSignedTimeHHMM((int)flight.flight_time));
   } else {
     ClearText(FlightTime);
   }

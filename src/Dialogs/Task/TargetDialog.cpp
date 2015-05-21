@@ -564,27 +564,16 @@ TargetWidget::RefreshCalculator()
   delta_t.SetVisible(!nodisplay);
 
   if (!nodisplay) {
-    TCHAR buffer[64];
-
-    FormatTimespanSmart(buffer, (int)aat_time_estimated, 2);
-    ete.SetText(buffer);
-
-    FormatTimespanSmart(buffer, (int)(aat_time_estimated - aat_time), 2);
-    delta_t.SetText(buffer);
+    ete.SetText(FormatTimespanSmart((int)aat_time_estimated, 2));
+    delta_t.SetText(FormatTimespanSmart((int)(aat_time_estimated - aat_time), 2));
   }
 
   const ElementStat &total = task_stats.total;
-  if (total.remaining_effective.IsDefined()) {
-    TCHAR buffer[64];
-    FormatUserTaskSpeed(total.remaining_effective.GetSpeed(), buffer);
-    speed_remaining.SetText(buffer);
-  }
+  if (total.remaining_effective.IsDefined())
+    speed_remaining.SetText(FormatUserTaskSpeed(total.remaining_effective.GetSpeed()));
 
-  if (total.travelled.IsDefined()) {
-    TCHAR buffer[64];
-    FormatUserTaskSpeed(total.travelled.GetSpeed(), buffer);
-    speed_achieved.SetText(buffer);
-  }
+  if (total.travelled.IsDefined())
+    speed_achieved.SetText(FormatUserTaskSpeed(total.travelled.GetSpeed()));
 }
 
 void

@@ -62,16 +62,13 @@ TaskCalculatorPanel::Refresh()
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  TCHAR buffer[32];
-
   SetRowVisible(AAT_TIME, task_stats.has_targets);
-  if (task_stats.has_targets) {
-    FormatTimespanSmart(buffer, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time, 2);
-    SetText(AAT_TIME, buffer);
-  }
+  if (task_stats.has_targets)
+    SetText(AAT_TIME,
+            FormatTimespanSmart((int)protected_task_manager->GetOrderedTaskSettings().aat_min_time, 2));
 
-  FormatTimespanSmart(buffer, (int)task_stats.GetEstimatedTotalTime(), 2);
-  SetText(AAT_ESTIMATED, buffer);
+  SetText(AAT_ESTIMATED,
+          FormatTimespanSmart((int)task_stats.GetEstimatedTotalTime(), 2));
 
   fixed rPlanned = task_stats.total.solution_planned.IsDefined()
     ? task_stats.total.solution_planned.vector.distance

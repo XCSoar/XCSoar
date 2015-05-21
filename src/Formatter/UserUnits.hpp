@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Units/Unit.hpp"
 #include "Math/fixed.hpp"
+#include "Util/StringBuffer.hxx"
 
 #include <tchar.h>
 
@@ -39,6 +40,15 @@ class AtmosphericPressure;
  */
 void FormatUserAltitude(fixed value, TCHAR *buffer,
                         bool include_unit = true);
+
+gcc_const
+static inline StringBuffer<TCHAR, 32>
+FormatUserAltitude(fixed value)
+{
+  StringBuffer<TCHAR, 32> buffer;
+  FormatUserAltitude(value, buffer.data());
+  return buffer;
+}
 
 /**
  * Converts a double-based Altitude into a formatted string of the alternate
@@ -93,6 +103,15 @@ Unit FormatUserDistanceSmart(fixed value, TCHAR *buffer,
                              fixed small_unit_threshold = fixed(0),
                              fixed precision_threshold = fixed(100));
 
+gcc_const
+static inline StringBuffer<TCHAR, 32>
+FormatUserDistanceSmart(fixed value)
+{
+  StringBuffer<TCHAR, 32> buffer;
+  FormatUserDistanceSmart(value, buffer.data());
+  return buffer;
+}
+
 Unit FormatUserMapScale(fixed value, TCHAR *buffer,
                         bool include_unit = true);
 
@@ -124,6 +143,15 @@ void FormatUserWindSpeed(fixed value, TCHAR *buffer,
  */
 void FormatUserTaskSpeed(fixed value, TCHAR *buffer,
                          bool include_unit=true, bool precision=true);
+
+gcc_const
+static inline StringBuffer<TCHAR, 32>
+FormatUserTaskSpeed(fixed value, bool precision=true)
+{
+  StringBuffer<TCHAR, 32> buffer;
+  FormatUserTaskSpeed(value, buffer.data(), true, precision);
+  return buffer;
+}
 
 /**
  * Give the proper format to display the vertical speed

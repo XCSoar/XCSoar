@@ -131,10 +131,11 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   StaticString<256> comment(AirspaceFormatter::GetClass(airspace));
 
-  TCHAR dist[20], bearing[20];
-  FormatUserDistanceSmart(vector.distance, dist, true);
+  TCHAR bearing[20];
   FormatBearing(bearing, ARRAY_SIZE(bearing), vector.bearing);
-  comment.AppendFormat(_T(" - %s - %s"), dist, bearing);
+  comment.AppendFormat(_T(" - %s - %s"),
+                       FormatUserDistanceSmart(vector.distance).c_str(),
+                       bearing);
 
   Draw(canvas, rc, airspace, comment, dialog_look,
        look, renderer_settings);

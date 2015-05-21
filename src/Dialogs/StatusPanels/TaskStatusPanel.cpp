@@ -49,47 +49,37 @@ TaskStatusPanel::Refresh()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  TCHAR buffer[80];
-
   SetRowVisible(TaskTime, task_stats.has_targets);
-  if (task_stats.has_targets) {
-    FormatSignedTimeHHMM(buffer,
-                         (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time);
-    SetText(TaskTime, buffer);
-  }
+  if (task_stats.has_targets)
+    SetText(TaskTime,
+            FormatSignedTimeHHMM((int)protected_task_manager->GetOrderedTaskSettings().aat_min_time));
 
-  int ete_time(task_stats.GetEstimatedTotalTime());
-  FormatSignedTimeHHMM(buffer, ete_time);
-  SetText(ETETime, buffer);
+  SetText(ETETime,
+          FormatSignedTimeHHMM((int)task_stats.GetEstimatedTotalTime()));
 
-  FormatSignedTimeHHMM(buffer, (int)task_stats.total.time_remaining_now);
-  SetText(RemainingTime, buffer);
+  SetText(RemainingTime,
+          FormatSignedTimeHHMM((int)task_stats.total.time_remaining_now));
 
-  if (task_stats.total.planned.IsDefined()) {
-    FormatUserDistanceSmart(task_stats.total.planned.GetDistance(),
-                            buffer, ARRAY_SIZE(buffer));
-    SetText(TaskDistance, buffer);
-  } else
+  if (task_stats.total.planned.IsDefined())
+    SetText(TaskDistance,
+            FormatUserDistanceSmart(task_stats.total.planned.GetDistance()));
+  else
     ClearText(TaskDistance);
 
-  if (task_stats.total.remaining.IsDefined()) {
-    FormatUserDistanceSmart(task_stats.total.remaining.GetDistance(),
-                            buffer, ARRAY_SIZE(buffer));
-    SetText(RemainingDistance, buffer);
-  }
+  if (task_stats.total.remaining.IsDefined())
+    SetText(RemainingDistance,
+            FormatUserDistanceSmart(task_stats.total.remaining.GetDistance()));
 
-  if (task_stats.total.planned.IsDefined()) {
-    FormatUserTaskSpeed(task_stats.total.planned.GetSpeed(),
-                        buffer, ARRAY_SIZE(buffer));
-    SetText(EstimatedSpeed, buffer);
-  } else
+  if (task_stats.total.planned.IsDefined())
+    SetText(EstimatedSpeed,
+            FormatUserTaskSpeed(task_stats.total.planned.GetSpeed()));
+  else
     ClearText(EstimatedSpeed);
 
-  if (task_stats.total.travelled.IsDefined()) {
-    FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed(),
-                        buffer, ARRAY_SIZE(buffer));
-    SetText(AverageSpeed, buffer);
-  } else
+  if (task_stats.total.travelled.IsDefined())
+    SetText(AverageSpeed,
+            FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed()));
+  else
     ClearText(AverageSpeed);
 }
 

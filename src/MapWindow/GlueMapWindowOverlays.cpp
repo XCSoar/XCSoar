@@ -111,12 +111,9 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   if (terrain) {
     short elevation = terrain->GetTerrainHeight(location);
     if (!RasterBuffer::IsSpecial(elevation)) {
-      StaticString<64> elevation_short, elevation_long;
-      FormatUserAltitude(fixed(elevation),
-                                elevation_short.buffer(), elevation_short.MAX_SIZE);
-
+      StaticString<64> elevation_long;
       elevation_long = _("Elevation: ");
-      elevation_long += elevation_short;
+      elevation_long += FormatUserAltitude(fixed(elevation));
 
       TextInBox(canvas, elevation_long, x, y, mode,
                 render_projection.GetScreenWidth(),

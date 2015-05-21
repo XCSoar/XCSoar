@@ -53,16 +53,12 @@ FlightStatusPanel::Refresh()
   } else
     ClearText(Location);
 
-  if (basic.gps_altitude_available) {
-    FormatUserAltitude(basic.gps_altitude,
-                              buffer.buffer(), buffer.MAX_SIZE);
-    SetText(Altitude, buffer);
-  } else
+  if (basic.gps_altitude_available)
+    SetText(Altitude, FormatUserAltitude(basic.gps_altitude));
+  else
     ClearText(Altitude);
 
-  FormatUserAltitude(calculated.max_height_gain,
-                            buffer.buffer(), buffer.MAX_SIZE);
-  SetText(MaxHeightGain, buffer);
+  SetText(MaxHeightGain, FormatUserAltitude(calculated.max_height_gain));
 
   if (nearest_waypoint) {
     GeoVector vec(basic.location,
@@ -73,8 +69,7 @@ FlightStatusPanel::Refresh()
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vec.bearing, _T(""));
     SetText(Bearing, buffer);
 
-    FormatUserDistanceSmart(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
-    SetText(Distance, buffer);
+    SetText(Distance, FormatUserDistanceSmart(vec.distance));
   } else {
     SetText(Near, _T("-"));
     SetText(Bearing, _T("-"));

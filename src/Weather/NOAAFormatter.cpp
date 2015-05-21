@@ -168,17 +168,11 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     if (!parsed.visibility_available) {
       buffer.append(value, value_length);
     } else {
-      TCHAR vis_buffer[32];
-      if (parsed.visibility >= 9999) {
-        FormatUserDistanceSmart(fixed(10000),
-                                  vis_buffer, ARRAY_SIZE(vis_buffer));
-
-        buffer.AppendFormat(_("more than %s"), vis_buffer);
-      } else {
-        FormatUserDistanceSmart(fixed(parsed.visibility),
-                                  vis_buffer, ARRAY_SIZE(vis_buffer));
-        buffer += vis_buffer;
-      }
+      if (parsed.visibility >= 9999)
+        buffer.AppendFormat(_("more than %s"),
+                            FormatUserDistanceSmart(fixed(10000)).c_str());
+      else
+        buffer +=  FormatUserDistanceSmart(fixed(parsed.visibility));
     }
     output += buffer;
     output += '\n';
