@@ -44,7 +44,7 @@ class WidgetDialog : public WndForm {
   bool changed;
 
 public:
-  WidgetDialog(const DialogLook &look);
+  explicit WidgetDialog(const DialogLook &look);
 
   virtual ~WidgetDialog();
 
