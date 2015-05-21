@@ -231,6 +231,7 @@ Startup()
             OpenGL::render_buffer_stencil);
 #endif
 
+  CommonInterface::SetUISettings().SetDefaults();
   main_window->Initialise();
 
 #ifdef SIMULATOR_AVAILABLE
@@ -254,7 +255,6 @@ Startup()
 
   CommonInterface::SetSystemSettings().SetDefaults();
   CommonInterface::SetComputerSettings().SetDefaults();
-  CommonInterface::SetUISettings().SetDefaults();
   CommonInterface::SetUIState().Clear();
 
   const auto &computer_settings = CommonInterface::GetComputerSettings();
