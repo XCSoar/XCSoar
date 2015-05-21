@@ -109,7 +109,7 @@ public:
   virtual void SetAsInteger(int value);
   virtual void SetAsString(const TCHAR *value);
 
-  virtual void EnableItemHelp(bool value) {};
+  virtual void EnableItemHelp(gcc_unused bool value) {};
 
 
   /**
@@ -123,7 +123,7 @@ public:
   virtual ComboList CreateComboList(const TCHAR *reference) const;
 
   virtual void
-  SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+  SetFromCombo(int iDataFieldIndex, gcc_unused TCHAR *sValue)
   {
     SetAsInteger(iDataFieldIndex);
   }

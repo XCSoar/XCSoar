@@ -105,7 +105,7 @@ public:
    * Invalidates a part of the visible area and schedules a repaint
    * (which will occur in the main thread).
    */
-  void Invalidate(const PixelRect &rect) {
+  void Invalidate(gcc_unused const PixelRect &rect) {
 #ifndef USE_GDI
     Invalidate();
 #else

@@ -107,13 +107,14 @@ inline fixed sqr(fixed a) {
 }
 
 constexpr
-inline fixed fast_mult(fixed a, int a_bits, fixed b, int b_bits)
+inline fixed fast_mult(fixed a, gcc_unused int a_bits,
+                       fixed b, gcc_unused int b_bits)
 {
   return a * b;
 }
 
 constexpr
-inline fixed fast_mult(fixed a, fixed b, int b_bits)
+inline fixed fast_mult(fixed a, fixed b, gcc_unused int b_bits)
 {
   return a * b;
 }

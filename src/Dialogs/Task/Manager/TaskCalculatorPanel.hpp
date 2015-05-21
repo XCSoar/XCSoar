@@ -78,8 +78,7 @@ private:
   void OnSpecial(DataField &df) override;
 
   /* virtual methods from NullBlackboardListener */
-  void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated) override {
+  void OnCalculatedUpdate(const MoreData &, const DerivedInfo &) override {
     Refresh();
   }
 };
