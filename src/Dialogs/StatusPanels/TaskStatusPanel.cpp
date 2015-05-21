@@ -49,45 +49,46 @@ TaskStatusPanel::Refresh()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  TCHAR Temp[80];
+  TCHAR buffer[80];
 
   SetRowVisible(TaskTime, task_stats.has_targets);
   if (task_stats.has_targets) {
-    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time);
-    SetText(TaskTime, Temp);
+    FormatSignedTimeHHMM(buffer,
+                         (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time);
+    SetText(TaskTime, buffer);
   }
 
   int ete_time(task_stats.GetEstimatedTotalTime());
-  FormatSignedTimeHHMM(Temp, ete_time);
-  SetText(ETETime, Temp);
+  FormatSignedTimeHHMM(buffer, ete_time);
+  SetText(ETETime, buffer);
 
-  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining_now);
-  SetText(RemainingTime, Temp);
+  FormatSignedTimeHHMM(buffer, (int)task_stats.total.time_remaining_now);
+  SetText(RemainingTime, buffer);
 
   if (task_stats.total.planned.IsDefined()) {
     FormatUserDistanceSmart(task_stats.total.planned.GetDistance(),
-                              Temp, ARRAY_SIZE(Temp));
-    SetText(TaskDistance, Temp);
+                            buffer, ARRAY_SIZE(buffer));
+    SetText(TaskDistance, buffer);
   } else
     SetText(TaskDistance, _T(""));
 
   if (task_stats.total.remaining.IsDefined()) {
     FormatUserDistanceSmart(task_stats.total.remaining.GetDistance(),
-                              Temp, ARRAY_SIZE(Temp));
-    SetText(RemainingDistance, Temp);
+                            buffer, ARRAY_SIZE(buffer));
+    SetText(RemainingDistance, buffer);
   }
 
   if (task_stats.total.planned.IsDefined()) {
     FormatUserTaskSpeed(task_stats.total.planned.GetSpeed(),
-                               Temp, ARRAY_SIZE(Temp));
-    SetText(EstimatedSpeed, Temp);
+                        buffer, ARRAY_SIZE(buffer));
+    SetText(EstimatedSpeed, buffer);
   } else
     SetText(EstimatedSpeed, _T(""));
 
   if (task_stats.total.travelled.IsDefined()) {
     FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed(),
-                               Temp, ARRAY_SIZE(Temp));
-    SetText(AverageSpeed, Temp);
+                        buffer, ARRAY_SIZE(buffer));
+    SetText(AverageSpeed, buffer);
   } else
     SetText(AverageSpeed, _T(""));
 }
