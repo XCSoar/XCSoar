@@ -190,7 +190,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     buffer.Format(_T("%s: "), _("Sky Conditions"));
 
     StaticString<64> _value;
-    _value.set(value, value_length);
+    _value.assign(value, value_length);
 
     buffer += gettext(_value);
 
@@ -204,7 +204,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     buffer.Format(_T("%s: "), _("Weather"));
 
     StaticString<64> _value;
-    _value.set(value, value_length);
+    _value.assign(value, value_length);
 
     buffer += gettext(_value);
 
@@ -214,7 +214,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
   }
 
   StaticString<64> title;
-  title.set(line, title_length);
+  title.assign(line, title_length);
 
   StaticString<256> buffer;
   buffer.Format(_T("%s: "), gettext(title.c_str()));

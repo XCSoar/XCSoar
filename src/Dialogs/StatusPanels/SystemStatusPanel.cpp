@@ -83,7 +83,7 @@ SystemStatusPanel::Refresh()
     /* append FLARM firmware version */
     Temp.append(_T(" (fw "));
     Temp.UnsafeAppendASCII(basic.flarm.version.software_version.c_str());
-    Temp.Append(_T(')'));
+    Temp.push_back(_T(')'));
   }
 
   SetText(FLARM, Temp);

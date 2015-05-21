@@ -565,7 +565,7 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
 
   unsigned name_length = opening_brace - start + 1;
   if (name_length > 0) {
-    parsed.name.set(start, name_length);
+    parsed.name.assign(start, name_length);
     parsed.name_available = true;
   }
 

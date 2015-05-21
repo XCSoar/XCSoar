@@ -120,7 +120,7 @@ LoadChecklist()
     } else {
       // append text to details string
       Details.append(TempString);
-      Details.Append(_T('\n'));
+      Details.push_back(_T('\n'));
     }
   }
 

@@ -195,7 +195,7 @@ FlarmDevice::GetConfig(const char *setting, char *buffer, size_t length,
 
   NarrowString<90> expected_answer(request);
   expected_answer[6u] = 'A';
-  expected_answer += ',';
+  expected_answer.push_back(',');
 
   Send(request, env);
   return Receive(expected_answer, buffer, length, env, 2000);
