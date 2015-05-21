@@ -60,7 +60,7 @@ TimesStatusPanel::Refresh()
     temp.Format(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunsethours, sunsetmins);
     SetText(Daylight, temp);
   } else {
-    SetText(Daylight, _T(""));
+    ClearText(Daylight);
   }
 
   if (basic.time_available) {
@@ -69,8 +69,8 @@ TimesStatusPanel::Refresh()
     FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
     SetText(UTCTime, temp);
   } else {
-    SetText(LocalTime, _T(""));
-    SetText(UTCTime, _T(""));
+    ClearText(LocalTime);
+    ClearText(UTCTime);
   }
 
   if (basic.date_time_utc.IsDatePlausible()) {
@@ -78,7 +78,7 @@ TimesStatusPanel::Refresh()
                 basic.date_time_utc.month, basic.date_time_utc.day);
     SetText(UTCDate, temp);
   } else {
-    SetText(UTCDate, _T(""));
+    ClearText(UTCDate);
   }
 
   if (positive(flight.flight_time)) {
@@ -86,7 +86,7 @@ TimesStatusPanel::Refresh()
                         settings.utc_offset);
     SetText(TakeoffTime, temp);
   } else {
-    SetText(TakeoffTime, _T(""));
+    ClearText(TakeoffTime);
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
@@ -95,14 +95,14 @@ TimesStatusPanel::Refresh()
                         settings.utc_offset);
     SetText(LandingTime, temp);
   } else {
-    SetText(LandingTime, _T(""));
+    ClearText(LandingTime);
   }
 
   if (positive(flight.flight_time)) {
     FormatSignedTimeHHMM(temp.buffer(), (int)flight.flight_time);
     SetText(FlightTime, temp);
   } else {
-    SetText(FlightTime, _T(""));
+    ClearText(FlightTime);
   }
 }
 

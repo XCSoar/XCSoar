@@ -511,6 +511,10 @@ public:
     control.SetText(text);
   }
 
+  void ClearText(unsigned i) {
+    SetText(i, _T(""));
+  }
+
   /**
    * Update the text of a multi line control.
    */

@@ -62,7 +62,7 @@ SystemStatusPanel::Refresh()
   SetText(GPS, gettext(GetGPSStatus(basic)));
 
   if (!basic.alive)
-    SetText(NumSat, _T(""));
+    ClearText(NumSat);
   else if (gps.satellites_used_available) {
     // known number of sats
     Temp.Format(_T("%d"), gps.satellites_used);

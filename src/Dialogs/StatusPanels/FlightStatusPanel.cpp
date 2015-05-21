@@ -51,14 +51,14 @@ FlightStatusPanel::Refresh()
     FormatGeoPoint(basic.location, buffer.buffer(), buffer.MAX_SIZE);
     SetText(Location, buffer);
   } else
-    SetText(Location, _T(""));
+    ClearText(Location);
 
   if (basic.gps_altitude_available) {
     FormatUserAltitude(basic.gps_altitude,
                               buffer.buffer(), buffer.MAX_SIZE);
     SetText(Altitude, buffer);
   } else
-    SetText(Altitude, _T(""));
+    ClearText(Altitude);
 
   FormatUserAltitude(calculated.max_height_gain,
                             buffer.buffer(), buffer.MAX_SIZE);

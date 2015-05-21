@@ -70,7 +70,7 @@ TaskStatusPanel::Refresh()
                             buffer, ARRAY_SIZE(buffer));
     SetText(TaskDistance, buffer);
   } else
-    SetText(TaskDistance, _T(""));
+    ClearText(TaskDistance);
 
   if (task_stats.total.remaining.IsDefined()) {
     FormatUserDistanceSmart(task_stats.total.remaining.GetDistance(),
@@ -83,14 +83,14 @@ TaskStatusPanel::Refresh()
                         buffer, ARRAY_SIZE(buffer));
     SetText(EstimatedSpeed, buffer);
   } else
-    SetText(EstimatedSpeed, _T(""));
+    ClearText(EstimatedSpeed);
 
   if (task_stats.total.travelled.IsDefined()) {
     FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed(),
                         buffer, ARRAY_SIZE(buffer));
     SetText(AverageSpeed, buffer);
   } else
-    SetText(AverageSpeed, _T(""));
+    ClearText(AverageSpeed);
 }
 
 void
