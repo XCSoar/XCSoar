@@ -181,6 +181,9 @@ public:
   void Move(const PixelRect &rc) override;
   bool SetFocus() override;
   bool KeyPress(unsigned key_code) override;
+
+protected:
+  virtual void OnPageFlipped();
 };
 
 #endif
