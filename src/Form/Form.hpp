@@ -161,7 +161,6 @@ public:
     force = _force;
   }
 
-  int GetModalResult() { return modal_result; }
   int SetModalResult(int Value) {
     modal_result = Value;
     return Value;
