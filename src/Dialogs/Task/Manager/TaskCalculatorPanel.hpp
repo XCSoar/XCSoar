@@ -41,7 +41,6 @@ class TaskCalculatorPanel final
   const bool *task_modified;
 
   fixed emc;
-  fixed cruise_efficiency;
 
 public:
   TaskCalculatorPanel(const DialogLook &look, const bool *_task_modified)
@@ -57,12 +56,6 @@ public:
 
   bool IsTaskModified() const {
     return *task_modified;
-  }
-
-  void GetCruiseEfficiency();
-
-  void SetCruiseEfficiency(fixed value) {
-    cruise_efficiency = value;
   }
 
   void Refresh();
