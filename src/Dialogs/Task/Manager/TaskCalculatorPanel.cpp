@@ -56,10 +56,6 @@ enum Controls {
   CRUISE_EFFICIENCY,
 };
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskCalculatorPanel *instance;
-
 void
 TaskCalculatorPanel::Refresh()
 {
@@ -151,8 +147,6 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   assert(protected_task_manager != nullptr);
 
-  instance = this;
-
   Add(new TextWidget());
   SetRowVisible(WARNING, false);
 
@@ -205,7 +199,7 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
 
   RowFormWidget::Show(rc);
 
-  const bool modified = instance->IsTaskModified();
+  const bool modified = IsTaskModified();
   SetRowVisible(WARNING, modified);
   if (modified) {
     TextWidget &widget = (TextWidget &)GetRowWidget(WARNING);
