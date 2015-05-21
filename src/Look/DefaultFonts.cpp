@@ -95,8 +95,8 @@ InitialiseLogFonts(FontSettings &settings)
   settings.map_label = FontDescription(Layout::FontScale(8), false, true);
 
   // new font for map labels big/medium cities
-  settings.map_label_important = FontDescription(Layout::FontScale(9),
-                                                 false, true);
+  settings.map_label_important = FontDescription(Layout::FontScale(8),
+                                                 true, true);
 
   // new font for map labels
   settings.map = FontDescription(Layout::FontScale(10));
