@@ -33,9 +33,8 @@ Copyright_License {
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
-#include "Form/Button.hpp"
 #include "Widget/ActionWidget.hpp"
-#include "Widget/WindowWidget.hpp"
+#include "Widget/ButtonWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -97,15 +96,10 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
                                     Layout::GetMaximumControlHeight());
 
-        WindowStyle button_style;
-        button_style.Hide();
-        button_style.TabStop();
+        auto *button = new ButtonWidget(look.button, _("Switch InfoBox"),
+                                        form, SWITCH_INFO_BOX);
 
-        auto *button = new Button(tab_bar, look.button, _("Switch InfoBox"),
-                                  button_rc, button_style,
-                                  form, SWITCH_INFO_BOX);
-
-        widget = new TwoWidgets(widget, new WindowWidget(button), false);
+        widget = new TwoWidgets(widget, button, false);
       }
 
       tab_bar.AddTab(widget, gettext(panels->name));
