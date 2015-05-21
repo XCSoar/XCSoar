@@ -215,7 +215,7 @@ MainWindow::InitialiseConfigured()
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
 #ifndef GNAV
-  if (ui_settings.scale != UISettings::Scale::NORMAL)
+  if (ui_settings.scale != 100)
     /* call Initialise() again to reload fonts with the new scale */
     Initialise();
 #endif

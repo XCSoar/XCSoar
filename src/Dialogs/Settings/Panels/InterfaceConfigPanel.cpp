@@ -95,16 +95,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
 #ifndef GNAV
-  static constexpr StaticEnumChoice scale_list[] = {
-    { (unsigned)UISettings::Scale::NORMAL, N_("Normal") },
-    { (unsigned)UISettings::Scale::LARGE, N_("Large") },
-    { (unsigned)UISettings::Scale::SMALL, N_("Small") },
-    { 0 }
-  };
-
-  AddEnum(_("Text size"),
-          nullptr,
-          scale_list, (unsigned)settings.scale);
+  AddInteger(_("Text size"),
+             nullptr,
+             _T("%d %%"), _T("%d"), 75, 150, 5,
+             settings.scale);
 #endif
 
 #ifdef HAVE_BLANK
