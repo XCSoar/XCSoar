@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_MANAGER_INTERNAL_HPP
 #define XCSOAR_TASK_MANAGER_INTERNAL_HPP
 
+#include "Widget/WindowWidget.hpp"
 #include "Form/Form.hpp"
 
 class TaskMapWindow;
@@ -31,7 +32,9 @@ class Button;
 class TabBarControl;
 class OrderedTask;
 
-class TaskManagerDialog final : public WndForm {
+class TaskManagerDialog final : public WindowWidget, ActionListener {
+  WndForm &dialog;
+
   PixelRect task_view_position;
 
   TaskMapWindow *task_view;
@@ -48,13 +51,25 @@ class TaskManagerDialog final : public WndForm {
   bool modified;
 
 public:
-  TaskManagerDialog(const DialogLook &look)
-    :WndForm(look),
+  explicit TaskManagerDialog(WndForm &_dialog)
+    :dialog(_dialog),
      task_view(nullptr), target_button(nullptr), tab_bar(nullptr),
      task(nullptr),
      fullscreen(false), modified(false) {}
 
   virtual ~TaskManagerDialog();
+
+  const DialogLook &GetLook() const {
+    return dialog.GetLook();
+  }
+
+  void FocusFirstControl() {
+    dialog.FocusFirstControl();
+  }
+
+  void SetModalResult(int r) {
+    dialog.SetModalResult(r);
+  }
 
   const OrderedTask &GetTask() const {
     return *task;
@@ -85,13 +100,14 @@ public:
 
   void Revert();
 
-  /* virtual methods from class Window */
-  void OnResize(PixelSize new_size) override;
+  /* virtual methods from class Widget */
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
+  void Move(const PixelRect &rc) override;
+  bool KeyPress(unsigned key_code) override;
 
-  /* virtual methods from class WndForm */
-  void ReinitialiseLayout(const PixelRect &parent_rc) override;
-  bool OnAnyKeyDown(unsigned key_code) override;
-
+private:
   /* virtual methods from class ActionListener */
   void OnAction(int id) override;
 };

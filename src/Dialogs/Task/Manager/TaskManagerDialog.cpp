@@ -33,6 +33,7 @@ Copyright_License {
 #include "Look/IconLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -68,22 +69,21 @@ struct TaskManagerLayout {
 
 TaskManagerDialog::~TaskManagerDialog()
 {
+  /* destroy the TabBar first, to have a well-defined destruction
+     order; this is necessary because some pages refer to buttons
+     belonging to the dialog */
+  if (IsDefined())
+    DeleteWindow();
+
   delete task_view;
   delete target_button;
-  delete tab_bar;
   delete task;
 }
 
-void
-TaskManagerDialog::ReinitialiseLayout(const PixelRect &parent_rc)
-{
-  Move(parent_rc);
-}
-
 bool
-TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
+TaskManagerDialog::KeyPress(unsigned key_code)
 {
-  if (WndForm::OnAnyKeyDown(key_code) ||
+  if (WindowWidget::KeyPress(key_code) &&
       tab_bar->InvokeKeyPress(key_code))
     return true;
 
@@ -118,9 +118,6 @@ TaskManagerDialog::OnAction(int id)
   case TARGET:
     dlgTargetShowModal();
     break;
-
-  default:
-    WndForm::OnAction(id);
   }
 }
 
@@ -150,36 +147,35 @@ CalculateTaskManagerLayout(PixelRect rc)
 }
 
 void
-TaskManagerDialog::Create(SingleWindow &parent)
+TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
-  WndForm::Create(parent, parent.GetClientRect(), _("Task Manager"));
-
   task = protected_task_manager->TaskClone();
 
   /* create the controls */
 
-  ContainerWindow &client_area = GetClientAreaWindow();
   const TaskManagerLayout layout =
-    CalculateTaskManagerLayout(client_area.GetClientRect());
+    CalculateTaskManagerLayout(rc);
 
   task_view_position = layout.task_view;
 
   WindowStyle hidden;
   hidden.Hide();
   task_view = new TaskMapWindow(UIGlobals::GetMapLook(), *this, MAP);
-  task_view->Create(client_area, layout.task_view, hidden);
+  task_view->Create(parent, layout.task_view, hidden);
 
   WindowStyle button_style(hidden);
+  button_style.Hide();
   button_style.TabStop();
-  target_button = new Button(client_area, GetLook().button, _("Target"),
+  target_button = new Button(parent, GetLook().button, _("Target"),
                              layout.target_button, button_style,
                              *this, TARGET);
 
   WindowStyle tab_style;
   tab_style.ControlParent();
-  tab_bar = new TabBarControl(client_area, GetLook(), layout.tab_bar,
+  tab_bar = new TabBarControl(parent, GetLook(), layout.tab_bar,
                               tab_style, layout.vertical);
   tab_bar->SetPageFlippedCallback([this]() { UpdateCaption(); });
+  SetWindow(tab_bar);
 
   /* create pages */
 
@@ -240,35 +236,36 @@ TaskManagerDialog::Create(SingleWindow &parent)
 }
 
 void
-TaskManagerDialog::OnResize(PixelSize new_size)
+TaskManagerDialog::Show(const PixelRect &rc)
 {
-  WndForm::OnResize(new_size);
-
-  ContainerWindow &client_area = GetClientAreaWindow();
-  const PixelRect rc = client_area.GetClientRect();
   const TaskManagerLayout layout = CalculateTaskManagerLayout(rc);
 
   task_view_position = layout.task_view;
 
-  if (task_view != nullptr)
-    task_view->Move(layout.task_view);
-
-  if (target_button != nullptr)
-    target_button->Move(layout.target_button);
-
-  if (tab_bar != nullptr)
-    tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
+  task_view->Move(layout.task_view);
+  target_button->Move(layout.target_button);
+  tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
+  tab_bar->Show();
 }
 
 void
-TaskManagerDialog::Destroy()
+TaskManagerDialog::Hide()
 {
-  /* destroy the TabBar first, to have a well-defined destruction
-     order; this is necessary because some pages refer to buttons
-     belonging to the dialog */
-  tab_bar->Destroy();
+  task_view->Hide();
+  target_button->Hide();
+  tab_bar->Hide();
+}
 
-  WndForm::Destroy();
+void
+TaskManagerDialog::Move(const PixelRect &rc)
+{
+  const TaskManagerLayout layout = CalculateTaskManagerLayout(rc);
+
+  task_view_position = layout.task_view;
+
+  task_view->Move(layout.task_view);
+  target_button->Move(layout.target_button);
+  tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
 }
 
 void
@@ -282,7 +279,7 @@ TaskManagerDialog::UpdateCaption()
     title.Format(_T("%s: %s - %s"), _("Task Manager"),
                  task->GetName().c_str(),
                  tab_bar->GetButtonCaption(tab_bar->GetCurrentPage()));
-  SetCaption(title);
+  dialog.SetCaption(title);
 }
 
 void
@@ -393,10 +390,11 @@ dlgTaskManagerShowModal()
   if (protected_task_manager == nullptr)
     return;
 
-  TaskManagerDialog dialog(UIGlobals::GetDialogLook());
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  TaskManagerDialog tm(dialog);
 
-  dialog.Create(UIGlobals::GetMainWindow());
-
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Task Manager"), &tm);
   dialog.ShowModal();
-  dialog.Destroy();
+  dialog.StealWidget();
 }
