@@ -30,9 +30,11 @@ class TimesStatusPanel : public StatusPanel {
 public:
   TimesStatusPanel(const DialogLook &look):StatusPanel(look) {}
 
-  virtual void Refresh();
+  /* virtual methods from class StatusPanel */
+  void Refresh() override;
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 };
 
 #endif

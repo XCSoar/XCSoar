@@ -32,7 +32,8 @@ public:
 
   virtual void Refresh() = 0;
 
-  virtual void Show(const PixelRect &rc) override;
+  /* virtual methods from class Widget */
+  void Show(const PixelRect &rc) override;
 };
 
 #endif

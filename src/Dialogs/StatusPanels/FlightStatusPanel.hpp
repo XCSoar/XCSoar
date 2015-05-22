@@ -35,9 +35,11 @@ public:
   FlightStatusPanel(const DialogLook &look, const Waypoint *_waypoint)
     :StatusPanel(look), nearest_waypoint(_waypoint) {}
 
-  virtual void Refresh();
+  /* virtual methods from class StatusPanel */
+  void Refresh() override;
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 };
 
 #endif
