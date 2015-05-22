@@ -99,6 +99,8 @@ void
 ButtonPanelWidget::Unprepare()
 {
   assert(buttons != nullptr);
+
+  widget->Unprepare();
 }
 
 bool
