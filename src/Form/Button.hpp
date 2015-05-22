@@ -88,6 +88,10 @@ public:
     listener = &_listener;
   }
 
+  ButtonRenderer &GetRenderer() {
+    return *renderer;
+  }
+
   /**
    * Set a new caption.  This method is a wrapper for
    * #TextButtonRenderer and may only be used if created with a
