@@ -106,8 +106,8 @@ TabBarControl::GetButtonCaption(unsigned i) const
 unsigned
 TabBarControl::AddTab(Widget *widget, const TCHAR *caption, const Bitmap *bmp)
 {
-  pager.Add(widget);
   tab_display->Add(caption, bmp);
+  pager.Add(widget);
   return GetTabCount() - 1;
 }
 
