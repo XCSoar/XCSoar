@@ -32,15 +32,19 @@ class TabBarControl;
 class OrderedTask;
 
 class TaskManagerDialog final : public WindowWidget, ActionListener {
+  enum Tabs {
+    TurnpointTab,
+    PropertiesTab,
+    RulesTab,
+    CloseTab,
+  };
+
   WndForm &dialog;
 
   PixelRect task_view_position;
 
   Button task_view;
   TabBarControl *tab_bar;
-
-  unsigned TurnpointTab;
-  unsigned PropertiesTab;
 
   OrderedTask *task;
 

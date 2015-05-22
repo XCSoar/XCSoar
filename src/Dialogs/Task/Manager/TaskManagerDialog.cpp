@@ -181,31 +181,10 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
   const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
-  if (layout.vertical) {
-    tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-    TurnpointTab = 1;
-
-    tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
-
-    tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
-    PropertiesTab = 3;
-
-    tab_bar->AddTab(wClose, _("Close"));
-
-    tab_bar->SetCurrentPage(0);
-  } else {
-    tab_bar->AddTab(wClose, _("Close"));
-
-    tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-    TurnpointTab = 2;
-
-    tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
-
-    tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
-    PropertiesTab = 4;
-
-    tab_bar->SetCurrentPage(0);
-  }
+  tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
+  tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
+  tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
+  tab_bar->AddTab(wClose, _("Close"));
 
   UpdateCaption();
 }
