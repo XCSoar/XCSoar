@@ -73,7 +73,7 @@ public:
    * Wrapper for AddKey() which is Altair specific; it a no-op on all
    * other platforms.
    */
-  void AddAltairKey(unsigned key_code) {
+  void AddAltairKey(gcc_unused unsigned key_code) {
 #ifdef GNAV
     AddKey(key_code);
 #endif
