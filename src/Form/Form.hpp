@@ -170,10 +170,6 @@ public:
     SetModalResult(id);
   }
 
-  /**
-   * @param mouse_allowed a Window which is allowed to get mouse
-   * input, even though the dialog is modal (a hack for dlgTarget)
-   */
   int ShowModal();
 
   /**
