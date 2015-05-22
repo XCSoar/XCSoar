@@ -56,6 +56,20 @@ Version 6.8 - not yet released
   - support USB-OTG
   - export data partition via USB storage
 
+Version 6.7.8 - 2015-05-22
+* user interface
+  - draw gray title bar on inactive dialogs
+  - improved dialog button placement
+  - fix missing buttons in terrain configuration (#3421)
+* task
+  - support large legs in the FAI triangle renderer (#3413)
+  - make "Cruise efficiency" read-only
+* devices
+  - fix crash when downloading flight without "logs" folder
+* Linux
+  - support Raspberry Pi 2
+  - show ports renamed by udev
+
 Version 6.7.7 - 2015/02/20
 * airspace
   - accept airspaces of class RMZ in OpenAir format files (#3437)
