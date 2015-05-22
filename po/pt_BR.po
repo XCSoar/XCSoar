@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2015-03-17 22:47+0000\n"
+"PO-Revision-Date: 2015-05-18 22:43+0000\n"
 "Last-Translator: Rene Villa <renesampaio@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-13 19:04+0000\n"
-"X-Generator: Launchpad (build 17423)\n"
+"X-Launchpad-Export-Date: 2015-05-22 17:56+0000\n"
+"X-Generator: Launchpad (build 17514)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -127,6 +127,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Área da tarefa modificada. Tarefa irá iniciar, encerrar e pelo menos um "
+"cilindro pré-definido de 1 milha. O piloto pode adicionar pontos se "
+"necessário. O tempo minimo de tarefa se aplica."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -143,7 +146,7 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Prova casual de turismo, usa cilindros de start e de chegada e setores FAI "
+"Prova casual de turismo, usa cilindros de partida e de chegada e setores FAI "
 "para pilões."
 
 #: src/Task/TypeStrings.cpp:76
@@ -153,15 +156,15 @@ msgid ""
 "start."
 msgstr ""
 "Um setor de 90 graus com 1km de raio. Cruzar quina da borda da área de "
-"dentro para iniciar."
+"dentro para partida."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
-"Uma linha reta para o portão do start. Cruzar o portão de start da área de "
-"dentro para o iniciar."
+"Uma linha reta para o portão de partida. Cruzar o portão de partida da área "
+"de dentro para o iniciar."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
@@ -274,17 +277,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr "Quadrante FAI de start"
+msgstr "Quadrante FAI de largada"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "Start line"
-msgstr "Linha de start"
+msgstr "Linha de largada"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start cylinder"
-msgstr "Cilindro de start"
+msgstr "Cilindro de largada"
 
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:185
 #, no-c-format
@@ -344,7 +347,7 @@ msgstr "Cilindro de chegada"
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "BGA start sector"
-msgstr "Setor de start BGA"
+msgstr "Setor de largada BGA"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
@@ -364,7 +367,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr "Inicio inválido"
+msgstr "partida inválida"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
@@ -742,7 +745,7 @@ msgstr "Pto. virada final"
 
 #: src/Menu/ExpandMacros.cpp:208 src/Menu/ExpandMacros.cpp:254
 msgid "Next Startpoint"
-msgstr "Próx. pto de saída"
+msgstr "Próx. pto de partida"
 
 #: src/Menu/ExpandMacros.cpp:214 src/Menu/ExpandMacros.cpp:260
 msgid "Start Turnpoint"
@@ -995,7 +998,7 @@ msgstr "Altura AGL"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
 #, no-c-format
 msgid "H AGL"
-msgstr "A AGL"
+msgstr "ALT AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
@@ -1098,7 +1101,7 @@ msgstr "Velocidade no solo"
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
 msgid "V GND"
-msgstr "Velocidade em relação ao solo"
+msgstr "VEL SOLO"
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -1119,7 +1122,7 @@ msgstr "Última média térmica"
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
 msgid "TL Avg"
-msgstr "TL Avg"
+msgstr "ULT MEDIA TERM"
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
@@ -1136,7 +1139,7 @@ msgstr "Último ganho térmico"
 #: src/InfoBoxes/Content/Factory.cpp:247
 #, no-c-format
 msgid "TL Gain"
-msgstr "TL Ganho"
+msgstr "ULT GANHO TERM"
 
 #: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
@@ -1151,7 +1154,7 @@ msgstr "Hora da última térmica"
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
 msgid "TL Time"
-msgstr "TL Tempo"
+msgstr "HORA ULT TERM"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -1184,7 +1187,7 @@ msgstr "Próxima distância"
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Task.cpp:201
 #, no-c-format
 msgid "WP Dist"
-msgstr "WP Dist"
+msgstr "PROX DIST"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
@@ -1256,7 +1259,7 @@ msgstr "Diferença de altitude final"
 #: src/InfoBoxes/Content/Factory.cpp:320
 #, no-c-format
 msgid "Fin AltD"
-msgstr "Fin AltD"
+msgstr "DIF ALT ATUAL"
 
 #: src/InfoBoxes/Content/Factory.cpp:321
 #, no-c-format
@@ -2806,7 +2809,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1235
 #, no-c-format
 msgid "WP Dist-N"
-msgstr ""
+msgstr "PROX DIST-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:1236
 #, no-c-format
@@ -3258,7 +3261,7 @@ msgstr "Trilha Completa"
 
 #: src/Input/InputEventsSettings.cpp:199
 msgid "Bugs performance"
-msgstr "Performance Bugs"
+msgstr "erros de desempenho"
 
 #: src/Input/InputEventsSettings.cpp:242
 #, no-c-format
@@ -4700,7 +4703,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:298
 msgid "Bugs"
-msgstr "Bugs"
+msgstr "Erros"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:299
 #, no-c-format
@@ -5081,33 +5084,29 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: src/Dialogs/ProfileListDialog.cpp:230 src/Dialogs/ProfileListDialog.cpp:267
-#, fuzzy
 msgid "Profile name"
-msgstr "Nome curto arquivo"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:241 src/Dialogs/ProfileListDialog.cpp:278
 msgid "File exists already."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:284
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Falha ao carregar arquivo"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Excluir"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:335 Data/Input/default.xci:668
-#, fuzzy
 msgid "Profiles"
-msgstr "Perfil"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:348
-#, fuzzy
 msgid "Select profile"
-msgstr "Selecionar Cor"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Activate"
@@ -5549,12 +5548,11 @@ msgstr "Deslocar Para Waypoint"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:271
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "Definido frequência ativa"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "Frequência de Rádio"
+msgstr "Definido frequência de espera"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:432 Data/Input/default.xci:1045
 msgid "GoTo"
@@ -5760,7 +5758,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:199
 msgid "Repetitive sound"
-msgstr ""
+msgstr "Som repetitivo"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:200
 msgid ""
@@ -5905,11 +5903,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
 msgid "Vario bar"
-msgstr ""
+msgstr "Barra de Vario"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
-msgstr ""
+msgstr "Se estiver ligado a barra de vario será mostrada"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:60
 msgid "Speed arrows"
@@ -6105,13 +6103,12 @@ msgstr ""
 "altura de chegada para pernas com vento de frente."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:118
-#, fuzzy
 msgid "Wave assistant"
-msgstr "Assistente de térmica"
+msgstr "Assistênte de onda"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
-msgstr ""
+msgstr "Usar modo de planeio final"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid ""
@@ -6218,7 +6215,7 @@ msgstr "Config. SO"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:224
 msgid "Haptic feedback"
-msgstr "Feedback tátil"
+msgstr "Vibração tátil"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:225
 msgid "Determines if haptic feedback like vibration is used."
@@ -6295,9 +6292,9 @@ msgid "12 Top or Left"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "12 Direita (Paisagem)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -6453,7 +6450,7 @@ msgstr "Estilo guia (tab dialog)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:181
 msgid "Message display"
-msgstr "Display de mensagens"
+msgstr "Posição das mensagens"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Inverse InfoBoxes"
@@ -6553,7 +6550,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:46
 #, no-c-format
 msgid "Heading up"
-msgstr ""
+msgstr "Dirigindo-se acima"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
@@ -6561,6 +6558,7 @@ msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
+"Mapa móvel será rotacionado para que a direção do planador fique para cima."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
@@ -6586,7 +6584,7 @@ msgstr "Mapa móvel gira para que o ponto alvo de navegação fique para cima."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
 msgid "Wind up"
-msgstr ""
+msgstr "Vento a frente"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:53
 #, no-c-format
@@ -6594,6 +6592,8 @@ msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
+"A exibição de mapa será rotacionada para que o vento sempre orientada de "
+"cima para baixo. (pode ser útil para o vôo de onda)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -6686,11 +6686,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
 msgid "Main area"
-msgstr ""
+msgstr "Área principal"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Specifies what should be displayed in the main area."
-msgstr ""
+msgstr "Especifica o que deve ser exibido na área principal."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #, no-c-format
@@ -6739,7 +6739,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:208
 #, no-c-format
 msgid "Nothing"
-msgstr ""
+msgstr "Nada"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:210
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:369
@@ -6753,7 +6753,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:214
 msgid "Specifies what should be displayed below the main area."
-msgstr ""
+msgstr "Especifica o que deve ser exibida abaixo da área principal."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
 #, no-c-format
@@ -6977,13 +6977,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
-msgstr ""
+msgstr "Erros automático"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr ""
+"Se ativado, adiciona 1% para os erros de configuração depois de cada hora "
+"durante o vôo."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7731,7 +7733,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "Contours"
-msgstr ""
+msgstr "Contornos"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
@@ -8634,13 +8636,10 @@ msgid "V rem."
 msgstr "V rem."
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"Velocidade média em torno dos pontos restantes da prova de área, no tempo "
-"mínimo de prova."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -9033,7 +9032,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
 #, no-c-format
 msgid "Circling deadband type"
-msgstr ""
+msgstr "Tipo de zona morta circular"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:41
 #, no-c-format
@@ -9063,7 +9062,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
 #, no-c-format
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "Tipo de zona morta de cruzeiro"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
 #, no-c-format
@@ -9265,12 +9264,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
 #, no-c-format
 msgid "Base frequency"
-msgstr ""
+msgstr "Base de frequência"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "Ajustar a base de frequência de tons em todos os modos."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
@@ -9803,27 +9802,6 @@ msgstr ""
 msgid "Nav"
 msgstr ""
 
-#~ msgid "MANUAL"
-#~ msgstr "MANUAL"
-
-#~ msgid "AUTO"
-#~ msgstr "AUTO"
-
-#~ msgid "Clear current task?"
-#~ msgstr "Limpar prova atual?"
-
-#~ msgid "Goto and clear task"
-#~ msgstr "Ir e limpar prova"
-
-#~ msgid "Unknown error creating task."
-#~ msgstr "Erro desconhecido criando prova."
-
-#~ msgid "Waypoint Info"
-#~ msgstr "Info Pontos"
-
-#~ msgid "Calc"
-#~ msgstr "Calcular"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altura GPS"
 
@@ -9851,6 +9829,9 @@ msgstr ""
 #~ msgid "V rough air"
 #~ msgstr "V ar turbulento"
 
+#~ msgid "Waypoint Info"
+#~ msgstr "Info Pontos"
+
 #~ msgid "Sunset"
 #~ msgstr "Pôr do sol"
 
@@ -9859,6 +9840,9 @@ msgstr ""
 
 #~ msgid "Filter..."
 #~ msgstr "Filtro..."
+
+#~ msgid "Short file name"
+#~ msgstr "Nome curto arquivo"
 
 #~ msgid "Edit text"
 #~ msgstr "Editar texto"
@@ -9915,6 +9899,12 @@ msgstr ""
 #~ "Gráfico da taxa média de subida (eixo horizontal) como uma função da "
 #~ "altura (eixo vertical)."
 
+#~ msgid "AUTO"
+#~ msgstr "AUTO"
+
+#~ msgid "MANUAL"
+#~ msgstr "MANUAL"
+
 #~ msgid "No help available on this item"
 #~ msgstr "Item sem ajuda disponível."
 
@@ -9935,6 +9925,9 @@ msgstr ""
 
 #~ msgid "8 Left + Right (Landscape)"
 #~ msgstr "8 Esquerda + Direita (Paisagem)"
+
+#~ msgid "12 Right (Landscape)"
+#~ msgstr "12 Direita (Paisagem)"
 
 #~ msgid "8 Left (Landscape)"
 #~ msgstr "8 Esquerda (Paisagem)"
@@ -9959,6 +9952,9 @@ msgstr ""
 
 #~ msgid "Change point type?"
 #~ msgstr "Mudar tipo de pto?"
+
+#~ msgid "Goto and clear task"
+#~ msgstr "Ir e limpar prova"
 
 #~ msgid "Show details:"
 #~ msgstr "Mostrar detalhes:"
@@ -10119,6 +10115,12 @@ msgstr ""
 #~ msgid "Save task?"
 #~ msgstr "Salvar prova?"
 
+#~ msgid "Clear current task?"
+#~ msgstr "Limpar prova atual?"
+
+#~ msgid "Unknown error creating task."
+#~ msgstr "Erro desconhecido criando prova."
+
 #~ msgid "Empty task.\n"
 #~ msgstr "Prova vazia.\n"
 
@@ -10224,6 +10226,9 @@ msgstr ""
 
 #~ msgid "The time in seconds to dump full ballast."
 #~ msgstr "O tempo em segundos para despejar todo o lastro."
+
+#~ msgid "Calc"
+#~ msgstr "Calcular"
 
 #~ msgid "Lon."
 #~ msgstr "Lon."
