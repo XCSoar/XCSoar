@@ -123,7 +123,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
     tab_bar.Move(client_area.GetClientRect());
   }
 
-  int result = form.ShowModeless();
+  form.SetModeless();
+  int result = form.ShowModal();
 
   if (form.IsDefined()) {
     bool changed = false;

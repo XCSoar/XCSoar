@@ -170,13 +170,15 @@ public:
     SetModalResult(id);
   }
 
-  int ShowModal();
-
   /**
-   * Opens modeless dialog.  Dialog will close if mouse is clicked
+   * Enables "modeless": dialog will close if mouse is clicked
    * anywhere on screen outside the dialog
    */
-  int ShowModeless();
+  void SetModeless() {
+    modeless = true;
+  }
+
+  int ShowModal();
 
   const TCHAR *GetCaption() const {
     return caption.c_str();

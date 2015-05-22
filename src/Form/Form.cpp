@@ -348,12 +348,6 @@ CheckSpecialKey(ContainerWindow *container, const Event &event)
   return IsSpecialKey(event.GetKeyCode()) && CheckKey(container, event);
 }
 
-int WndForm::ShowModeless()
-{
-  modeless = true;
-  return ShowModal();
-}
-
 int
 WndForm::ShowModal()
 {
