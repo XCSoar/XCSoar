@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
-#include "TaskMapWindow.hpp"
+#include "TaskMapButtonRenderer.hpp"
 #include "TaskEditPanel.hpp"
 #include "TaskPropertiesPanel.hpp"
 #include "TaskMiscPanel.hpp"
@@ -149,8 +149,9 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   WindowStyle hidden;
   hidden.Hide();
-  task_view = new TaskMapWindow(UIGlobals::GetMapLook(), *this, MAP);
-  task_view->Create(parent, layout.task_view, hidden);
+  task_view = new Button(parent, layout.task_view, hidden,
+                         new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
+                         *this, MAP);
 
   WindowStyle tab_style;
   tab_style.ControlParent();
@@ -282,8 +283,10 @@ void
 TaskManagerDialog::ShowTaskView(const OrderedTask *_task)
 {
   RestoreTaskView();
-  task_view->SetTask(_task);
+  auto &renderer = (TaskMapButtonRenderer &)task_view->GetRenderer();
+  renderer.SetTask(_task);
   task_view->Show();
+  task_view->Invalidate();
 }
 
 void
@@ -297,7 +300,10 @@ TaskManagerDialog::ResetTaskView()
 {
   task_view->Hide();
   RestoreTaskView();
-  task_view->SetTask(nullptr);
+
+  auto &renderer = (TaskMapButtonRenderer &)task_view->GetRenderer();
+  renderer.SetTask(nullptr);
+  task_view->Invalidate();
 }
 
 void

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget/WindowWidget.hpp"
 #include "Form/Form.hpp"
 
-class TaskMapWindow;
+class Button;
 class TabBarControl;
 class OrderedTask;
 
@@ -36,7 +36,7 @@ class TaskManagerDialog final : public WindowWidget, ActionListener {
 
   PixelRect task_view_position;
 
-  TaskMapWindow *task_view;
+  Button *task_view;
   TabBarControl *tab_bar;
 
   unsigned TurnpointTab;
