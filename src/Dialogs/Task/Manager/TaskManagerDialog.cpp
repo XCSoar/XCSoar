@@ -73,7 +73,6 @@ TaskManagerDialog::~TaskManagerDialog()
   if (IsDefined())
     DeleteWindow();
 
-  delete task_view;
   delete task;
 }
 
@@ -149,9 +148,9 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   WindowStyle hidden;
   hidden.Hide();
-  task_view = new Button(parent, layout.task_view, hidden,
-                         new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
-                         *this, MAP);
+  task_view.Create(parent, layout.task_view, hidden,
+                   new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
+                   *this, MAP);
 
   WindowStyle tab_style;
   tab_style.ControlParent();
@@ -218,7 +217,7 @@ TaskManagerDialog::Show(const PixelRect &rc)
 
   task_view_position = layout.task_view;
 
-  task_view->Move(layout.task_view);
+  task_view.Move(layout.task_view);
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
   tab_bar->Show();
 }
@@ -226,7 +225,7 @@ TaskManagerDialog::Show(const PixelRect &rc)
 void
 TaskManagerDialog::Hide()
 {
-  task_view->Hide();
+  task_view.Hide();
   tab_bar->Hide();
 }
 
@@ -237,7 +236,7 @@ TaskManagerDialog::Move(const PixelRect &rc)
 
   task_view_position = layout.task_view;
 
-  task_view->Move(layout.task_view);
+  task_view.Move(layout.task_view);
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
 }
 
@@ -259,15 +258,15 @@ void
 TaskManagerDialog::InvalidateTaskView()
 {
   UpdateCaption();
-  task_view->Invalidate();
+  task_view.Invalidate();
 }
 
 void
 TaskManagerDialog::TaskViewClicked()
 {
   fullscreen = !fullscreen;
-  task_view->Move(fullscreen
-                  ? tab_bar->GetPagerPosition() : task_view_position);
+  task_view.Move(fullscreen
+                 ? tab_bar->GetPagerPosition() : task_view_position);
 }
 
 void
@@ -275,7 +274,7 @@ TaskManagerDialog::RestoreTaskView()
 {
   if (fullscreen) {
     fullscreen = false;
-    task_view->Move(task_view_position);
+    task_view.Move(task_view_position);
   }
 }
 
@@ -283,10 +282,10 @@ void
 TaskManagerDialog::ShowTaskView(const OrderedTask *_task)
 {
   RestoreTaskView();
-  auto &renderer = (TaskMapButtonRenderer &)task_view->GetRenderer();
+  auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
   renderer.SetTask(_task);
-  task_view->Show();
-  task_view->Invalidate();
+  task_view.Show();
+  task_view.Invalidate();
 }
 
 void
@@ -298,12 +297,12 @@ TaskManagerDialog::ShowTaskView()
 void
 TaskManagerDialog::ResetTaskView()
 {
-  task_view->Hide();
+  task_view.Hide();
   RestoreTaskView();
 
-  auto &renderer = (TaskMapButtonRenderer &)task_view->GetRenderer();
+  auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
   renderer.SetTask(nullptr);
-  task_view->Invalidate();
+  task_view.Invalidate();
 }
 
 void
