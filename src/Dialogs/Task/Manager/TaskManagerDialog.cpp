@@ -90,9 +90,9 @@ TaskManagerDialog::KeyPress(unsigned key_code)
       /* close the dialog immediately if nothing was modified */
       return false;
 
-    if (tab_bar->GetCurrentPage() != 4) {
+    if (tab_bar->GetCurrentPage() != 3) {
       /* switch to "close" page instead of closing the dialog */
-      tab_bar->SetCurrentPage(4);
+      tab_bar->SetCurrentPage(3);
       tab_bar->FocusCurrentWidget();
       return true;
     }
