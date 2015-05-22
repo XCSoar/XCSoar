@@ -113,7 +113,7 @@ PagerWidget::SetCurrent(unsigned i, bool click)
     }
   }
 
-  assert(old_child.prepared);
+  assert(!visible || old_child.prepared);
   if (visible && !old_child.widget->Leave())
     return false;
 
