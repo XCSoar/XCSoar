@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2015-05-14 06:21+0000\n"
+"PO-Revision-Date: 2015-05-21 12:41+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-15 23:20+0000\n"
-"X-Generator: Launchpad (build 17493)\n"
+"X-Launchpad-Export-Date: 2015-05-22 17:56+0000\n"
+"X-Generator: Launchpad (build 17514)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -5553,7 +5553,7 @@ msgstr "타스크 삭제"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:269
 msgid "Set as New Home"
-msgstr "시작위치(시뮬레이션)"
+msgstr "시작위치(시뮬레이션)로 설정"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:270
 msgid "Pan to Waypoint"
