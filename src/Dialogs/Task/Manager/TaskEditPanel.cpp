@@ -257,7 +257,6 @@ public:
 
   void ReClick() override;
   void Show(const PixelRect &rc) override;
-  void Hide() override;
   bool KeyPress(unsigned key_code) override;
 
 protected:
@@ -636,8 +635,6 @@ TaskEditPanel::ReClick()
 void
 TaskEditPanel::Show(const PixelRect &rc)
 {
-  dialog.ShowTaskView();
-
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;
     GetList().SetCursorIndex(0);
@@ -646,14 +643,6 @@ TaskEditPanel::Show(const PixelRect &rc)
   RefreshView();
 
   ListWidget::Show(rc);
-}
-
-void
-TaskEditPanel::Hide()
-{
-  dialog.ResetTaskView();
-
-  ListWidget::Hide();
 }
 
 Widget *

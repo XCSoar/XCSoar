@@ -55,7 +55,6 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   void ReClick() override;
   void Show(const PixelRect &rc) override;
-  void Hide() override;
 
   /**
    * Saves the panel's properties of the task to the temporary task

@@ -156,7 +156,10 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   tab_style.ControlParent();
   tab_bar = new TabBarControl(parent, GetLook(), layout.tab_bar,
                               tab_style, layout.vertical);
-  tab_bar->SetPageFlippedCallback([this]() { UpdateCaption(); });
+  tab_bar->SetPageFlippedCallback([this]() {
+      RestoreTaskView();
+      UpdateCaption();
+    });
   SetWindow(tab_bar);
 
   /* create pages */
@@ -196,7 +199,9 @@ TaskManagerDialog::Show(const PixelRect &rc)
 
   task_view_position = layout.task_view;
 
-  task_view.Move(layout.task_view);
+  ResetTaskView();
+  task_view.MoveAndShow(layout.task_view);
+
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
   tab_bar->Show();
 }
@@ -205,6 +210,8 @@ void
 TaskManagerDialog::Hide()
 {
   task_view.Hide();
+  RestoreTaskView();
+
   tab_bar->Hide();
 }
 
@@ -260,28 +267,15 @@ TaskManagerDialog::RestoreTaskView()
 void
 TaskManagerDialog::ShowTaskView(const OrderedTask *_task)
 {
-  RestoreTaskView();
   auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
   renderer.SetTask(_task);
-  task_view.Show();
   task_view.Invalidate();
-}
-
-void
-TaskManagerDialog::ShowTaskView()
-{
-  ShowTaskView(task);
 }
 
 void
 TaskManagerDialog::ResetTaskView()
 {
-  task_view.Hide();
-  RestoreTaskView();
-
-  auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
-  renderer.SetTask(nullptr);
-  task_view.Invalidate();
+  ShowTaskView(task);
 }
 
 void

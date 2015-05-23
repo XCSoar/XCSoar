@@ -137,8 +137,6 @@ TaskClosePanel::ReClick()
 void
 TaskClosePanel::Show(const PixelRect &rc)
 {
-  dialog.ShowTaskView();
-
   RefreshStatus();
 
   const Layout layout(rc, look);
@@ -150,8 +148,6 @@ TaskClosePanel::Show(const PixelRect &rc)
 void
 TaskClosePanel::Hide()
 {
-  dialog.ResetTaskView();
-
   close_button.Hide();
   message.Hide();
   revert_button.Hide();

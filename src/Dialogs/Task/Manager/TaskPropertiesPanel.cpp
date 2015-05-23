@@ -274,22 +274,12 @@ TaskPropertiesPanel::ReClick()
 void
 TaskPropertiesPanel::Show(const PixelRect &rc)
 {
-  dialog.ShowTaskView();
-
   ordered_task = *ordered_task_pointer;
   orig_taskType = ordered_task->GetFactoryType();
 
   RefreshView();
 
   RowFormWidget::Show(rc);
-}
-
-void
-TaskPropertiesPanel::Hide()
-{
-  dialog.ResetTaskView();
-
-  RowFormWidget::Hide();
 }
 
 bool

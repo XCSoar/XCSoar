@@ -71,7 +71,6 @@ TaskActionsPanel::SaveTask()
 inline void
 TaskActionsPanel::OnBrowseClicked()
 {
-  dialog.RestoreTaskView();
   parent.SetCurrent(1);
 }
 
@@ -121,22 +120,6 @@ TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */
     SetRowEnabled(DECLARE, false);
-}
-
-void
-TaskActionsPanel::Show(const PixelRect &rc)
-{
-  dialog.ShowTaskView();
-
-  RowFormWidget::Show(rc);
-}
-
-void
-TaskActionsPanel::Hide()
-{
-  dialog.ResetTaskView();
-
-  RowFormWidget::Hide();
 }
 
 void

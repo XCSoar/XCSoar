@@ -85,7 +85,6 @@ public:
   void InvalidateTaskView();
   void TaskViewClicked();
   void RestoreTaskView();
-  void ShowTaskView();
   void ShowTaskView(const OrderedTask *task);
   void ResetTaskView();
 
