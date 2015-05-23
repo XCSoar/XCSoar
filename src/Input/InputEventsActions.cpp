@@ -133,7 +133,11 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   if (StringIsEqual(misc, _T("reset"))) {
     protected_marks->Reset();
   } else {
-    protected_marks->MarkLocation(basic.location, basic.date_time_utc);
+    const auto location = GetVisibleLocation();
+    if (!location.IsValid())
+      return;
+
+    protected_marks->MarkLocation(location, basic.date_time_utc);
 
     if (CommonInterface::GetUISettings().sound.sound_modes_enabled)
       PlayResource(_T("IDR_WAV_CLEAR"));
