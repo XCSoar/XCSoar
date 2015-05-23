@@ -50,6 +50,10 @@ public:
 
   virtual ~ButtonWidget();
 
+  ButtonRenderer &GetRenderer() {
+    return *renderer;
+  }
+
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const override;
   PixelSize GetMaximumSize() const override;
