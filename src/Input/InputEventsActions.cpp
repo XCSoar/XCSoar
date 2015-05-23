@@ -91,6 +91,27 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <tchar.h>
 #include <algorithm>
 
+/**
+ * Determine the reference location of the current map display.
+ */
+gcc_pure
+static GeoPoint
+GetVisibleLocation()
+{
+  const auto &projection = CommonInterface::main_window->GetProjection();
+  if (projection.IsValid())
+    return projection.GetGeoLocation();
+
+  /* just in case the Projection is broken for whatever reason, fall
+     back to NMEAInfo::location */
+
+  const auto &basic = CommonInterface::Basic();
+  if (basic.location_available)
+    return basic.location;
+
+  return GeoPoint::Invalid();
+}
+
 static void
 trigger_redraw()
 {
@@ -102,7 +123,6 @@ trigger_redraw()
 // -----------------------------------------------------------------------
 // Execution - list of things you can do
 // -----------------------------------------------------------------------
-
 
 // TODO code: Keep marker text for use in log file etc.
 void
@@ -374,40 +394,27 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 
 // NearestWaypointDetails
 // Displays the waypoint details dialog
-//  aircraft: the waypoint nearest the aircraft
-//  pan: the waypoint nearest to the pan cursor
 void
-InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
+InputEvents::eventNearestWaypointDetails(gcc_unused const TCHAR *misc)
 {
-  if (StringIsEqual(misc, _T("aircraft")))
-    // big range..
-    PopupNearestWaypointDetails(way_points, CommonInterface::Basic().location,
-                                1.0e5);
-  else if (StringIsEqual(misc, _T("pan"))) {
-    const Projection &projection =
-      CommonInterface::main_window->GetProjection();
+  const auto location = GetVisibleLocation();
+  if (!location.IsValid())
+    return;
 
-    // big range..
-    if (projection.IsValid())
-      PopupNearestWaypointDetails(way_points, projection.GetGeoLocation(),
-                                  1.0e5);
-  }
+  // big range..
+  PopupNearestWaypointDetails(way_points, location, 1.0e5);
 }
 
 // NearestMapItems
 // Displays the map item list dialog
-//  aircraft: the map items to nearest the aircraft
-//  pan: the map items nearest to the pan cursor
 void
-InputEvents::eventNearestMapItems(const TCHAR *misc)
+InputEvents::eventNearestMapItems(gcc_unused const TCHAR *misc)
 {
-  if (StringIsEqual(misc, _T("aircraft")))
-    CommonInterface::main_window->GetMap()->ShowMapItems(
-        CommonInterface::Basic().location);
+  const auto location = GetVisibleLocation();
+  if (!location.IsValid())
+    return;
 
-  else if (StringIsEqual(misc, _T("pan")))
-    CommonInterface::main_window->GetMap()->ShowMapItems(
-        CommonInterface::main_window->GetProjection().GetGeoLocation());
+  CommonInterface::main_window->GetMap()->ShowMapItems(location);
 }
 
 // Null
