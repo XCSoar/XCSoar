@@ -26,10 +26,10 @@ Copyright_License {
 
 #include "Widget/WindowWidget.hpp"
 #include "Form/Form.hpp"
-#include "Form/Button.hpp"
 
 class TabBarControl;
 class OrderedTask;
+class ButtonWidget;
 
 class TaskManagerDialog final : public WindowWidget, ActionListener {
   enum Tabs {
@@ -43,7 +43,7 @@ class TaskManagerDialog final : public WindowWidget, ActionListener {
 
   PixelRect task_view_position;
 
-  Button task_view;
+  ButtonWidget *task_view;
   TabBarControl *tab_bar;
 
   OrderedTask *task;
@@ -103,6 +103,8 @@ public:
 
   /* virtual methods from class Widget */
   void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
   void Show(const PixelRect &rc) override;
   void Hide() override;
   void Move(const PixelRect &rc) override;

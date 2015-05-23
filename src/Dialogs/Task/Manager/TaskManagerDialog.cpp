@@ -34,6 +34,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Widget/ButtonWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/SingleWindow.hpp"
@@ -146,11 +147,9 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   task_view_position = layout.task_view;
 
-  WindowStyle hidden;
-  hidden.Hide();
-  task_view.Create(parent, layout.task_view, hidden,
-                   new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
-                   *this, MAP);
+  task_view = new ButtonWidget(new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
+                               *this, MAP);
+  task_view->Initialise(parent, layout.task_view);
 
   WindowStyle tab_style;
   tab_style.ControlParent();
@@ -193,6 +192,22 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
+TaskManagerDialog::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  const TaskManagerLayout layout =
+    CalculateTaskManagerLayout(rc);
+
+  task_view_position = layout.task_view;
+  task_view->Prepare(parent, layout.task_view);
+}
+
+void
+TaskManagerDialog::Unprepare()
+{
+  task_view->Unprepare();
+}
+
+void
 TaskManagerDialog::Show(const PixelRect &rc)
 {
   const TaskManagerLayout layout = CalculateTaskManagerLayout(rc);
@@ -200,7 +215,7 @@ TaskManagerDialog::Show(const PixelRect &rc)
   task_view_position = layout.task_view;
 
   ResetTaskView();
-  task_view.MoveAndShow(layout.task_view);
+  task_view->Show(layout.task_view);
 
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
   tab_bar->Show();
@@ -209,7 +224,7 @@ TaskManagerDialog::Show(const PixelRect &rc)
 void
 TaskManagerDialog::Hide()
 {
-  task_view.Hide();
+  task_view->Hide();
   RestoreTaskView();
 
   tab_bar->Hide();
@@ -222,7 +237,7 @@ TaskManagerDialog::Move(const PixelRect &rc)
 
   task_view_position = layout.task_view;
 
-  task_view.Move(layout.task_view);
+  task_view->Move(layout.task_view);
   tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
 }
 
@@ -244,15 +259,15 @@ void
 TaskManagerDialog::InvalidateTaskView()
 {
   UpdateCaption();
-  task_view.Invalidate();
+  task_view->Invalidate();
 }
 
 void
 TaskManagerDialog::TaskViewClicked()
 {
   fullscreen = !fullscreen;
-  task_view.Move(fullscreen
-                 ? tab_bar->GetPagerPosition() : task_view_position);
+  task_view->Move(fullscreen
+                  ? tab_bar->GetPagerPosition() : task_view_position);
 }
 
 void
@@ -260,16 +275,16 @@ TaskManagerDialog::RestoreTaskView()
 {
   if (fullscreen) {
     fullscreen = false;
-    task_view.Move(task_view_position);
+    task_view->Move(task_view_position);
   }
 }
 
 void
 TaskManagerDialog::ShowTaskView(const OrderedTask *_task)
 {
-  auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
+  auto &renderer = (TaskMapButtonRenderer &)task_view->GetRenderer();
   renderer.SetTask(_task);
-  task_view.Invalidate();
+  task_view->Invalidate();
 }
 
 void
