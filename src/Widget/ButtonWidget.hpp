@@ -54,6 +54,11 @@ public:
     return *renderer;
   }
 
+  /**
+   * Schedule a repaint.
+   */
+  void Invalidate();
+
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const override;
   PixelSize GetMaximumSize() const override;

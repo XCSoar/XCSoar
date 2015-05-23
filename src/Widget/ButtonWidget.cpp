@@ -40,6 +40,14 @@ ButtonWidget::~ButtonWidget()
     delete renderer;
 }
 
+void
+ButtonWidget::Invalidate()
+{
+  assert(IsDefined());
+
+  ((Button &)GetWindow()).Invalidate();
+}
+
 PixelSize
 ButtonWidget::GetMinimumSize() const
 {
