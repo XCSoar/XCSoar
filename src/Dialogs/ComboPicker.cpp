@@ -74,15 +74,12 @@ ComboPicker(const TCHAR *caption,
     UIGlobals::GetDialogLook().text_font->GetHeight() + Layout::FastScale(2);
   const unsigned text_padding = Layout::GetTextPadding();
   const unsigned max_height = Layout::GetMaximumControlHeight();
-  const unsigned row_height = font_height >= max_height
-    ? font_height
-    /* this formula is supposed to be a compromise between too small
-       and too large: */
-    : (font_height + max_height) / 2;
+  const unsigned padded_height = font_height + 2 * text_padding;
+  const unsigned row_height = std::max(padded_height, max_height);
 
-  const unsigned padding = (row_height - font_height) / 2;
+  const unsigned top_padding = (row_height - font_height) / 2;
 
-  ComboPickerSupport support(combo_list, text_padding, padding);
+  ComboPickerSupport support(combo_list, text_padding, top_padding);
   return ListPicker(caption,
                     combo_list.size(),
                     combo_list.current_index,
