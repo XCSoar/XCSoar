@@ -41,7 +41,7 @@ OPTIMIZE += -funsafe-loop-optimizations
 endif
 
 ifeq ($(LTO),y)
-OPTIMIZE += -flto -fwhole-program
+OPTIMIZE += -flto
 endif
 
 ifeq ($(LLVM),y)
