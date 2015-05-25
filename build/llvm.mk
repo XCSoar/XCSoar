@@ -9,7 +9,7 @@ ifeq ($(CLANG),y)
 
 DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
-ifeq ($(DEBUG)$(LLVM)$(LTO),nny)
+ifeq ($(DEBUG)$(LLVM)$(TARGET_IS_DARWIN)$(LTO),nnny)
 AR += --plugin /usr/local/lib/LLVMgold.so
 endif
 
