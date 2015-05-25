@@ -87,9 +87,17 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
   InetBuff.lpvBuffer = buffer;
   InetBuff.dwBufferLength = buffer_size - 1;
 
-  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this))
-    /* error */
-    return -1;
+  completed_event.Reset();
+  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this)) {
+    if (GetLastError() == ERROR_IO_PENDING) {
+      if (!completed_event.Wait(timeout_ms)) {
+        return -1;
+      }
+    } else {
+      /* error */
+      return -1;
+    }
+  }
 
   ((uint8_t *)buffer)[InetBuff.dwBufferLength] = 0;
   return InetBuff.dwBufferLength;
