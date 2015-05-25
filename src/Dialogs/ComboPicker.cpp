@@ -36,18 +36,19 @@ static const ComboList *ComboListPopup;
 
 class ComboPickerSupport : public ListItemRenderer {
   const ComboList &combo_list;
-  const unsigned padding;
+  const unsigned left_padding, top_padding;
 
 public:
   ComboPickerSupport(const ComboList &_combo_list,
-                     const unsigned _padding)
-    :combo_list(_combo_list), padding(_padding) {}
-
+                     const unsigned _left_padding,
+                     const unsigned _top_padding)
+    :combo_list(_combo_list),
+     left_padding(_left_padding), top_padding(_top_padding) {}
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned i) override {
-    canvas.DrawClippedText(rc.left + padding,
-                           rc.top + padding, rc,
+    canvas.DrawClippedText(rc.left + left_padding,
+                           rc.top + top_padding, rc,
                            combo_list[i].display_string);
   }
 };
@@ -71,6 +72,7 @@ ComboPicker(const TCHAR *caption,
 
   const unsigned font_height =
     UIGlobals::GetDialogLook().text_font->GetHeight() + Layout::FastScale(2);
+  const unsigned text_padding = Layout::GetTextPadding();
   const unsigned max_height = Layout::GetMaximumControlHeight();
   const unsigned row_height = font_height >= max_height
     ? font_height
@@ -80,7 +82,7 @@ ComboPicker(const TCHAR *caption,
 
   const unsigned padding = (row_height - font_height) / 2;
 
-  ComboPickerSupport support(combo_list, padding);
+  ComboPickerSupport support(combo_list, text_padding, padding);
   return ListPicker(caption,
                     combo_list.size(),
                     combo_list.current_index,
