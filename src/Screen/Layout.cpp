@@ -101,12 +101,12 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale)
 
   if (HasTouchScreen()) {
     /* larger rows for touch screens */
-    maximum_control_height = y_dpi * 3 / 7;
+    maximum_control_height = PtScale(30);
     if (maximum_control_height < minimum_control_height)
       maximum_control_height = minimum_control_height;
   } else {
     maximum_control_height = minimum_control_height;
   }
 
-  hit_radius = x_dpi / (HasTouchScreen() ? 3 : 12);
+  hit_radius = PtScale(HasTouchScreen() ? 24 : 6);
 }
