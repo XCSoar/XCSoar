@@ -10,7 +10,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>XCSoar</string>
+    <string>OSX_APP_BUNDLE_INENTIFIER_PLACEHOLDER</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

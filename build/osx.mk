@@ -6,18 +6,30 @@ DMG_TMPDIR = $(TARGET_OUTPUT_DIR)/dmg
 
 MKISOFS ?= mkisofs
 
-$(TARGET_OUTPUT_DIR)/XCSoar.dmg: $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.in.xml $(DATA)/graphics/logo_128.icns
+ifeq ($(TESTING),y)
+DMG_NAME = XCSoar-testing.dmg
+DMG_LABEL = "XCSoar Testing"
+OSX_LOGO = $(DATA)/graphics/logo_red_128.icns
+OSX_APP_BUNDLE_INENTIFIER = XCSoar-Testing.app
+else
+DMG_NAME = XCSoar.dmg
+DMG_LABEL = "XCSoar"
+OSX_LOGO = $(DATA)/graphics/logo_128.icns
+OSX_APP_BUNDLE_INENTIFIER = XCSoar.app
+endif
+
+$(TARGET_OUTPUT_DIR)/$(DMG_NAME): $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.in.xml $(OSX_LOGO)
 	@$(NQ)echo "  DMG     $@"
 	$(Q)rm -rf $(DMG_TMPDIR)
-	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/XCSoar.app/Contents/MacOS
-	$(Q)sed -e "s,VERSION_PLACEHOLDER,$(FULL_VERSION)," < Data/OSX/Info.plist.in.xml >$(DMG_TMPDIR)/XCSoar.app/Contents/Info.plist
-	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(DMG_TMPDIR)/XCSoar.app/Contents/MacOS/
-	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/XCSoar.app/Contents/Resources
-	$(Q)cp $(DATA)/graphics/logo_128.icns $(DMG_TMPDIR)/XCSoar.app/Contents/Resources/
+	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/MacOS
+	$(Q)sed -e "s,VERSION_PLACEHOLDER,$(FULL_VERSION)," -e 's/OSX_APP_BUNDLE_INENTIFIER_PLACEHOLDER/$(OSX_APP_BUNDLE_INENTIFIER)/g' < Data/OSX/Info.plist.in.xml > $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Info.plist
+	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/MacOS/
+	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Resources
+	$(Q)cp $(OSX_LOGO) $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Resources/logo_128.icns
 	$(Q)rm -f $@
-	$(Q)$(MKISOFS) -V "XCSoar" -quiet -D -no-pad -r -apple -o $@ $(DMG_TMPDIR)
+	$(Q)$(MKISOFS) -V $(DMG_LABEL) -quiet -D -no-pad -r -apple -o $@ $(DMG_TMPDIR)
 
-dmg: $(TARGET_OUTPUT_DIR)/XCSoar.dmg
+dmg: $(TARGET_OUTPUT_DIR)/$(DMG_NAME)
 
 endif
 
