@@ -14,7 +14,7 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>VERSION</string>
+    <string>VERSION_PLACEHOLDER</string>
     <key>CFBundleIconFile</key>
     <string>logo_128</string>
     <key>NSHighResolutionCapable</key>
