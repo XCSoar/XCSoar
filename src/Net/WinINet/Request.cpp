@@ -28,28 +28,12 @@ Copyright_License {
 #include <assert.h>
 #include <stdint.h>
 
-static void CALLBACK
-RequestCallback(HINTERNET hInternet,
-                DWORD_PTR dwContext,
-                DWORD dwInternetStatus,
-                LPVOID lpvStatusInformation,
-                DWORD dwStatusInformationLength)
-{
-  Net::Request *request = (Net::Request *)dwContext;
-
-  request->Callback(dwInternetStatus,
-                    lpvStatusInformation, dwStatusInformationLength);
-}
-
 Net::Request::Request(Session &session, const char *url,
                       unsigned timeout_ms)
 {
   UTF8ToWideConverter url2(url);
   if (!url2.IsValid())
     return;
-
-  INTERNET_STATUS_CALLBACK old_callback =
-    session.handle.SetStatusCallback(RequestCallback);
 
   HINTERNET h = session.handle.OpenUrl(url2, NULL, 0,
                                        INTERNET_FLAG_NO_AUTH |
@@ -62,8 +46,6 @@ Net::Request::Request(Session &session, const char *url,
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
     opened_event.Wait(timeout_ms);
-
-  session.handle.SetStatusCallback(old_callback);
 }
 
 bool
