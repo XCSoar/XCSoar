@@ -235,9 +235,9 @@ namespace Layout
    */
   gcc_const
   static inline unsigned
-  FontScale(unsigned pt)
+  FontScale(unsigned spt)
   {
-    return (pt * font_scale) >> 10;
+    return (spt * font_scale) >> 10;
   }
 
   /**
