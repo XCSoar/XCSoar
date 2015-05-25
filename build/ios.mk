@@ -41,6 +41,16 @@ $(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG)
 	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-568h@2x.png \
 		-resize 640x1136 -background white -gravity center -extent 640x1136 \
 		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-568h@2x.png
+	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 750 -h 750 -a \
+		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-667h@2x.png
+	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-667h@2x.png \
+		-resize 750x1334 -background white -gravity center -extent 750x1334 \
+		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-667h@2x.png
+	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 1242 -h 1242 -a \
+		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-736h@3x.png
+	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-736h@3x.png \
+		-resize 1242x2208 -background white -gravity center -extent 1242x2208 \
+		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-736h@3x.png
 	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 768 -h 768 -a \
 		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait.png
 	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait.png \
@@ -61,6 +71,16 @@ $(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG)
 	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape@2x.png \
 		-resize 2048x1496 -background white -gravity center -extent 2048x1496 \
 		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape@2x.png
+	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 750 -h 750 -a \
+		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-667h@2x.png
+	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-667h@2x.png \
+		-resize 1334x750 -background white -gravity center -extent 1334x750 \
+		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-667h@2x.png
+	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 1242 -h 1242 -a \
+		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-736h@3x.png
+	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-736h@3x.png \
+		-resize 2208x1242 -background white -gravity center -extent 2208x1242 \
+		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-736h@3x.png
 	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 57 -h 57 -a \
 		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Icon.png
 	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 72 -h 72 -a \
