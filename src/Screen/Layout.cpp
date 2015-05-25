@@ -34,6 +34,7 @@ namespace Layout
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;
+  unsigned pt_scale = 1024;
   unsigned font_scale = 1024;
   unsigned text_padding = 2;
   unsigned minimum_control_height = 20, maximum_control_height = 44;
@@ -85,6 +86,8 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale)
   small_scale = (scale_1024 - 1024) / 2 + 1024;
 
   pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
+
+  pt_scale = 1024 * y_dpi / 72;
 
   font_scale = 1024 * y_dpi * ui_scale / 72 / 100;
   if (is_small_screen)

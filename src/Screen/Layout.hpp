@@ -53,6 +53,12 @@ namespace Layout
   extern unsigned pen_width_scale;
 
   /**
+   * Fixed-point scaling factor to convert a point (1/72th inch) to
+   * pixels.
+   */
+  extern unsigned pt_scale;
+
+  /**
    * Fixed-point scaling factor to convert a font size (in points =
    * 1/72th inch) to pixels.
    */
@@ -186,6 +192,16 @@ namespace Layout
       return width;
 
     return (width * pen_width_scale) >> 10;
+  }
+
+  /**
+   * Scale a physical size in points (1/72th inch) to pixels.
+   */
+  gcc_const
+  static inline unsigned
+  PtScale(unsigned pt)
+  {
+    return (pt * pt_scale) >> 10;
   }
 
   /**
