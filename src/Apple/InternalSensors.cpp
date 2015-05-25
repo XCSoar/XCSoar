@@ -92,7 +92,11 @@ Copyright_License {
 -(void) locationManager:(CLLocationManager *)manager
     didUpdateLocations:(NSArray *)locations
 {
-  CLLocation *location = locations.lastObject;
+  CLLocation *location;
+  if (locations)
+    location = locations.lastObject;
+  else
+    location = nil;
 
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(self->index);
@@ -146,6 +150,18 @@ Copyright_License {
     basic.track_available.Clear();
   }
 
+  device_blackboard->ScheduleMerge();
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+    didFailWithError:(NSError *)error
+{
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(self->index);
+  if ([error code] != kCLErrorHeadingFailure) {
+    basic.alive.Clear();
+    basic.location_available.Clear();
+  }
   device_blackboard->ScheduleMerge();
 }
 @end
