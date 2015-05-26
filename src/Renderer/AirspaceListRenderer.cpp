@@ -48,8 +48,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
-  const unsigned radius = std::min(line_height / 2 - padding,
-                                   Layout::FastScale(10u));
+  const unsigned radius = line_height / 2 - padding;
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
 
