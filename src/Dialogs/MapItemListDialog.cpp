@@ -182,11 +182,8 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 void
 MapItemListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  UPixelScalar item_height = dialog_look.list.font_bold->GetHeight()
-    + 3 * Layout::GetTextPadding() + dialog_look.small_font->GetHeight();
-  assert(item_height > 0);
-
-  CreateList(parent, dialog_look, rc, item_height);
+  CreateList(parent, dialog_look, rc,
+             renderer.CalculateLayout());
 
   GetList().SetLength(list.size());
   UpdateButtons();

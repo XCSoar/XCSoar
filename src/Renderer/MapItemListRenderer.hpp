@@ -55,6 +55,8 @@ public:
      traffic_look(_traffic_look), final_glide_look(_final_glide_look),
      settings(_settings), utc_offset(_utc_offset) {}
 
+  unsigned CalculateLayout();
+
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
             const TrafficList *traffic_list=nullptr);
 };

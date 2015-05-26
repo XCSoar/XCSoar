@@ -60,6 +60,13 @@ Copyright_License {
 
 #include <cstdio>
 
+unsigned
+MapItemListRenderer::CalculateLayout()
+{
+  return dialog_look.list.font_bold->GetHeight()
+    + 3 * Layout::GetTextPadding() + dialog_look.small_font->GetHeight();
+}
+
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const LocationMapItem &item,
