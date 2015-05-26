@@ -24,8 +24,9 @@ Copyright_License {
 #include "TaskDialogs.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Form/List.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -47,9 +48,15 @@ TPTypeItemHelp(unsigned i)
 class MutateTaskPointRenderer final : public ListItemRenderer {
   const TaskPointFactoryType current_type;
 
+  TextRowRenderer row_renderer;
+
 public:
   explicit MutateTaskPointRenderer(TaskPointFactoryType _current_type)
     :current_type(_current_type) {}
+
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
 };
@@ -69,9 +76,7 @@ MutateTaskPointRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
   else
     buffer.Format(_T(" %s"), text);
 
-  canvas.DrawText(rc.left + Layout::GetTextPadding(),
-                  rc.top + Layout::GetTextPadding(),
-                  buffer);
+  row_renderer.DrawTextRow(canvas, rc, buffer);
 }
 
 /**
@@ -129,7 +134,7 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
 
   int result = ListPicker(_("Task Point Type"),
                           point_types.size(), initial_index,
-                          Layout::Scale(18),
+                          item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
                           item_renderer, false,
                           nullptr, TPTypeItemHelp);
   return result >= 0 && SetPointType(task, index, point_types[result]);
