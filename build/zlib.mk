@@ -18,8 +18,8 @@ else ifeq ($(TARGET),ANDROID)
 # android-ndk-*/docs/STABLE-APIS.html
 
 ZLIB_CPPFLAGS =
-ZLIB_LDADD = $(ANDROID_TARGET_ROOT)/usr/lib/libz.so
-ZLIB_LDLIBS =
+ZLIB_LDADD =
+ZLIB_LDLIBS = -lz
 
 else
 
