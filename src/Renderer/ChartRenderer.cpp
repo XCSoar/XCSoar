@@ -406,7 +406,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   line[0].y = rc.top;
   line[1].y = rc.bottom - padding_bottom;
 
-  const int y = rc.bottom - Layout::Scale(17);
+  const int y = line[1].y - canvas.GetFontHeight();
 
   fixed start = (int)(x.min / tic_step) * tic_step;
 
@@ -458,7 +458,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   line[0].x = rc.left + padding_left;
   line[1].x = rc.right;
 
-  const int x = rc.left + Layout::Scale(8);
+  const int x = line[0].x;
 
   fixed start = (int)(y.min / tic_step) * tic_step;
 
