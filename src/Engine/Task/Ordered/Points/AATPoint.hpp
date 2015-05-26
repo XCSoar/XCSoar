@@ -210,16 +210,16 @@ public:
   const GeoPoint& GetLocationRemaining() const override;
 
   /* virtual methods from class ObservationZoneClient */
-  virtual fixed ScoreAdjustment() const override {
+  fixed ScoreAdjustment() const override {
     return fixed(0);
   }
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual bool Equals(const OrderedTaskPoint &other) const override;
-  virtual bool UpdateSampleNear(const AircraftState &state,
-                                const FlatProjection &projection) override;
-  virtual bool UpdateSampleFar(const AircraftState &state,
-                               const FlatProjection &projection) override;
+  bool Equals(const OrderedTaskPoint &other) const override;
+  bool UpdateSampleNear(const AircraftState &state,
+                        const FlatProjection &projection) override;
+  bool UpdateSampleFar(const AircraftState &state,
+                       const FlatProjection &projection) override;
 };
 
 #endif

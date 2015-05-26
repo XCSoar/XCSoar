@@ -60,10 +60,10 @@ public:
   }
 
   /* virtual methods from class TaskPoint */
-  virtual fixed GetElevation() const override;
+  fixed GetElevation() const override;
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  void SetTaskBehaviour(const TaskBehaviour &tb) override;
 };
 
 #endif //INTERMEDIATEPOINT_H

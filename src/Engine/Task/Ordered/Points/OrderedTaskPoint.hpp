@@ -288,21 +288,21 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  virtual const GeoPoint &GetLocationRemaining() const override {
+  const GeoPoint &GetLocationRemaining() const override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
+  GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
     return TaskLeg::GetVectorRemaining();
   }
-  virtual GeoVector GetNextLegVector() const override;
+  GeoVector GetNextLegVector() const override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const override;
+  bool CheckEnterTransition(const AircraftState &ref_now,
+                            const AircraftState &ref_last) const override;
 
-  virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const  override{
+  bool CheckExitTransition(const AircraftState &ref_now,
+                           const AircraftState &ref_last) const override{
     return CheckEnterTransition(ref_last, ref_now);
   }
 };

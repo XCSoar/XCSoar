@@ -84,24 +84,24 @@ public:
                        const FlatProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  virtual fixed GetElevation() const override;
+  fixed GetElevation() const override;
 
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const override;
+  bool CheckExitTransition(const AircraftState &ref_now,
+                           const AircraftState &ref_last) const override;
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
-  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &s) override;
-  virtual void SetNeighbours(OrderedTaskPoint *prev,
-                             OrderedTaskPoint *next) override;
-  virtual bool IsInSector(const AircraftState &ref) const override;
-  virtual bool UpdateSampleNear(const AircraftState &state,
-                                const FlatProjection &projection) override;
+  void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  void SetOrderedTaskSettings(const OrderedTaskSettings &s) override;
+  void SetNeighbours(OrderedTaskPoint *prev,
+                     OrderedTaskPoint *next) override;
+  bool IsInSector(const AircraftState &ref) const override;
+  bool UpdateSampleNear(const AircraftState &state,
+                        const FlatProjection &projection) override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool ScoreLastExit() const override {
+  bool ScoreLastExit() const override {
     return true;
   }
 };
