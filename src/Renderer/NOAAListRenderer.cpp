@@ -37,10 +37,10 @@ NOAAListRenderer::GetHeight(const DialogLook &look)
          look.small_font->GetHeight();
 }
 
-static void
-Draw(Canvas &canvas, const PixelRect rc,
-     const NOAAStore::Item &station,
-     const DialogLook &dialog_look)
+void
+NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                       const NOAAStore::Item &station,
+                       const DialogLook &dialog_look)
 {
   const unsigned padding = Layout::GetTextPadding();
   const Font &code_font = *dialog_look.list.font;
@@ -71,14 +71,6 @@ Draw(Canvas &canvas, const PixelRect rc,
 }
 
 void
-NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                       const NOAAStore::Item &station,
-                       const DialogLook &dialog_look)
-{
-  ::Draw(canvas, rc, station, dialog_look);
-}
-
-void
 NOAAListRenderer::Draw(Canvas &canvas, PixelRect rc,
                        const NOAAStore::Item &station,
                        const NOAALook &look,
@@ -92,5 +84,5 @@ NOAAListRenderer::Draw(Canvas &canvas, PixelRect rc,
 
   rc.left += line_height;
 
-  ::Draw(canvas, rc, station, dialog_look);
+  Draw(canvas, rc, station, dialog_look);
 }
