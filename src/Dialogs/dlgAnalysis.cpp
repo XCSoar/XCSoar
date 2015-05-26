@@ -391,7 +391,6 @@ ChartControl::OnPaint(Canvas &canvas)
   case AnalysisPage::POLAR:
     RenderGlidePolar(canvas, rcgfx, chart_look,
                      calculated.climb_history,
-                     settings_computer,
                      settings_computer.polar.glide_polar_task);
     break;
   case AnalysisPage::TEMPTRACE:
