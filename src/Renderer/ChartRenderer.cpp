@@ -406,6 +406,8 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   line[0].y = rc.top;
   line[1].y = rc.bottom - padding_bottom;
 
+  const int y = rc.bottom - Layout::Scale(17);
+
   fixed start = (int)(x.min / tic_step) * tic_step;
 
   for (fixed xval = start; xval <= x.max; xval += tic_step) {
@@ -420,7 +422,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.DrawText(xmin, rc.bottom - Layout::Scale(17), unit_text);
+        canvas.DrawText(xmin, y, unit_text);
 
         next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
       }
@@ -456,6 +458,8 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   line[0].x = rc.left + padding_left;
   line[1].x = rc.right;
 
+  const int x = rc.left + Layout::Scale(8);
+
   fixed start = (int)(y.min / tic_step) * tic_step;
 
   for (fixed yval = start; yval <= y.max; yval += tic_step) {
@@ -470,7 +474,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.DrawText(rc.left + Layout::Scale(8), ymin, unit_text);
+        canvas.DrawText(x, ymin, unit_text);
       }
     }
   }
