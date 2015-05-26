@@ -36,8 +36,6 @@ Copyright_License {
 
 #include <assert.h>
 
-static TaskPointFactoryType current_type;
-
 static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
 
 static const TCHAR *
@@ -47,7 +45,12 @@ TPTypeItemHelp(unsigned i)
 }
 
 class MutateTaskPointRenderer final : public ListItemRenderer {
+  const TaskPointFactoryType current_type;
+
 public:
+  explicit MutateTaskPointRenderer(TaskPointFactoryType _current_type)
+    :current_type(_current_type) {}
+
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
 };
 
@@ -78,13 +81,13 @@ static bool
 SetPointType(OrderedTask &task, unsigned index,
              TaskPointFactoryType type)
 {
+  AbstractTaskFactory &factory = task.GetFactory();
+  const auto &old_point = task.GetPoint(index);
+  const auto current_type = factory.GetType(old_point);
   if (type == current_type)
     // no change
     return false;
 
-  const auto &old_point = task.GetPoint(index);
-
-  AbstractTaskFactory &factory = task.GetFactory();
   bool task_modified = false;
 
   auto point = factory.CreateMutatedPoint(old_point, type);
@@ -114,7 +117,7 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
     return SetPointType(task, index, point_types[0]);
 
   const auto &point = task.GetPoint(index);
-  current_type = task.GetFactory().GetType(point);
+  const auto current_type = task.GetFactory().GetType(point);
 
   unsigned initial_index = 0;
   const auto b = point_types.begin(), e = point_types.end();
@@ -122,7 +125,7 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
   if (i != e)
     initial_index = std::distance(b, i);
 
-  MutateTaskPointRenderer item_renderer;
+  MutateTaskPointRenderer item_renderer(current_type);
 
   int result = ListPicker(_("Task Point Type"),
                           point_types.size(), initial_index,
