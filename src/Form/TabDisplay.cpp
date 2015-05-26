@@ -45,8 +45,6 @@ Copyright_License {
 #include <assert.h>
 #include <winuser.h>
 
-static constexpr unsigned TabLineHeightInitUnscaled = 5;
-
 TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
                        bool _vertical,
@@ -55,9 +53,7 @@ TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
    look(_look),
    vertical(_vertical),
    dragging(false),
-   tab_line_height(vertical
-                   ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
-                   : Layout::Scale(TabLineHeightInitUnscaled))
+   tab_line_height(Layout::PtScale(5))
 {
   style.TabStop();
   Create(parent, rc, style);
