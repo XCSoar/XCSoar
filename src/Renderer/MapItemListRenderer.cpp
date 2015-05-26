@@ -355,12 +355,10 @@ Draw(Canvas &canvas, const PixelRect rc,
   if (timespan < 0)
     timespan += 24 * 60 * 60;
 
-  buffer.Format(_T("%s: %s"), _("Avg. lift"), lift_buffer);
-  buffer.append(_T(" - "));
-  buffer.AppendFormat(_("left %s ago"),
-                      FormatTimespanSmart(timespan).c_str());
-  buffer.AppendFormat(_T(" (%s)"),
-                      FormatLocalTimeHHMM((int)thermal.time, utc_offset).c_str());
+  buffer.Format(_T("%s: %s - left %s ago (%s)"),
+                _("Avg. lift"), lift_buffer,
+                FormatTimespanSmart(timespan).c_str(),
+                FormatLocalTimeHHMM((int)thermal.time, utc_offset).c_str());
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
                          rc.top + name_font.GetHeight() + 2 * text_padding,
