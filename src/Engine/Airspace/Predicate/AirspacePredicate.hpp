@@ -51,7 +51,7 @@ public:
  */
 class AirspacePredicateTrue final : public AirspacePredicate {
 public:
-  bool operator()(const AbstractAirspace& t) const override {
+  bool operator()(gcc_unused const AbstractAirspace& t) const override {
     return true;
   }
 };
