@@ -60,7 +60,7 @@ BrokenDateTime::FromUnixTimeUTC(int64_t _t)
   return ToBrokenDateTime(tm);
 }
 
-#ifdef ANDROID
+#if defined(ANDROID) && !defined(__LP64__)
 #include <stdlib.h>
 static time_t
 timegm(struct tm *tm)
