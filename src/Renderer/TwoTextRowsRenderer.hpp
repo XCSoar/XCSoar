@@ -44,6 +44,26 @@ public:
    */
   unsigned CalculateLayout(const Font &_first_font, const Font &_second_font);
 
+  const Font &GetFirstFont() const {
+    return *first_font;
+  }
+
+  const Font &GetSecondFont() const {
+    return *second_font;
+  }
+
+  int GetX() const {
+    return x;
+  }
+
+  int GetFirstY() const {
+    return first_y;
+  }
+
+  int GetSecondY() const {
+    return second_y;
+  }
+
   void DrawFirstRow(Canvas &canvas, const PixelRect &rc,
                     const TCHAR *text) const;
 
