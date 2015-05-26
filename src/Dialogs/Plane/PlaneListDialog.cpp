@@ -196,21 +196,20 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.Select(name_font);
 
   const unsigned padding = Layout::GetTextPadding();
+  const int x = rc.left + padding;
+  const int name_y = rc.top + padding;
+  const int path_y = name_y + name_font.GetHeight() + padding;
 
   if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
     StaticString<256> buffer;
     buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
-    canvas.DrawClippedText(rc.left + padding,
-                           rc.top + padding, rc, buffer);
+    canvas.DrawClippedText(x, name_y, rc, buffer);
   } else
-    canvas.DrawClippedText(rc.left + padding,
-                           rc.top + padding, rc, list[i].name);
+    canvas.DrawClippedText(x, name_y, rc, list[i].name);
 
   canvas.Select(details_font);
 
-  canvas.DrawClippedText(rc.left + padding,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                         rc, list[i].path);
+  canvas.DrawClippedText(x, path_y, rc, list[i].path);
 }
 
 static bool
