@@ -215,6 +215,9 @@ $(eval $(call generate-abi,$(1),armeabi,ANDROID))
 $(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7))
 $(eval $(call generate-abi,$(1),x86,ANDROID86))
 $(eval $(call generate-abi,$(1),mips,ANDROIDMIPS))
+$(eval $(call generate-abi,$(1),arm64-v8a,ANDROIDAARCH64))
+$(eval $(call generate-abi,$(1),x86_64,ANDROIDX64))
+# Not adding ANDROIDMIPS64, because this platform has not been tested yet.
 endef
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
