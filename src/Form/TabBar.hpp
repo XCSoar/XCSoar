@@ -43,13 +43,9 @@ class TabDisplay;
  * ToDo: support lazy loading
  */
 class TabBarControl : public ContainerWindow {
-  typedef std::function<void()> PageFlippedCallback;
-
   PagerWidget pager;
 
   TabDisplay * tab_display;
-
-  PageFlippedCallback page_flipped_callback;
 
 public:
   /**
@@ -67,13 +63,6 @@ public:
 
   void UpdateLayout(const PixelRect &rc, const PixelRect &tab_rc,
                     bool vertical);
-
-  void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
-    assert(!page_flipped_callback);
-    assert(_page_flipped_callback);
-
-    page_flipped_callback = _page_flipped_callback;
-  }
 
 public:
   unsigned AddTab(Widget *widget, const TCHAR *caption,
@@ -101,45 +90,11 @@ public:
     return pager.GetCurrentWidget();
   }
 
-  /**
-   * Call Widget::SetFocus() on the current widget.
-   */
-  void FocusCurrentWidget() {
-    pager.GetCurrentWidget().SetFocus();
-  }
-
   void ClickPage(unsigned i);
 
   void SetCurrentPage(unsigned i);
   void NextPage();
   void PreviousPage();
-
-  bool Save(bool &changed) {
-    return pager.Save(changed);
-  }
-
-  /**
-   * Pass a key press event to the active widget.
-   */
-  bool InvokeKeyPress(unsigned key_code) {
-    return pager.KeyPress(key_code);
-  }
-
-  const PixelRect &GetPagerPosition() const {
-    return pager.GetPosition();
-  }
-
-  gcc_pure
-  const TCHAR *GetButtonCaption(unsigned i) const;
-
-protected:
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
-
-#ifdef HAVE_CLIPPING
-  virtual void OnPaint(Canvas &canvas) override;
-#endif
 };
 
 #endif

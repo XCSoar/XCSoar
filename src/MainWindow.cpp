@@ -46,7 +46,6 @@ Copyright_License {
 #include "Widget/Widget.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/GlobalFonts.hpp"
-#include "Look/CustomFonts.hpp"
 #include "Look/DefaultFonts.hpp"
 #include "Look/Look.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -199,7 +198,8 @@ NoFontsAvailable()
 void
 MainWindow::Initialise()
 {
-  Layout::Initialize(GetSize());
+  Layout::Initialize(GetSize(),
+                     CommonInterface::GetUISettings().GetPercentScale());
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {
@@ -219,29 +219,16 @@ MainWindow::InitialiseConfigured()
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
+#ifndef GNAV
+  if (ui_settings.scale != UISettings::Scale::NORMAL)
+    /* call Initialise() again to reload fonts with the new scale */
+    Initialise();
+#endif
+
   PixelRect rc = GetClientRect();
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
-
-#ifndef GNAV
-  if (ui_settings.custom_fonts) {
-    LogFormat("Load custom fonts");
-    if (!Fonts::LoadCustom()) {
-      LogFormat("Failed to load custom fonts");
-      if (!Fonts::Initialize()) {
-        Destroy();
-        NoFontsAvailable();
-      }
-    }
-
-#ifdef HAVE_TEXT_CACHE
-    /* fonts may have changed, discard all pre-rendered font
-       textures */
-    TextCache::Flush();
-#endif
-  }
-#endif
 
   Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
 
@@ -249,7 +236,9 @@ MainWindow::InitialiseConfigured()
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::dialog, Fonts::dialog_bold,
                              Fonts::dialog_small,
-                             Fonts::map, Fonts::map_bold, Fonts::map_label,
+                             Fonts::map, Fonts::map_bold,
+                             Fonts::map_label,
+                             Fonts::map_label_important,
                              Fonts::cdi, Fonts::monospace,
                              Fonts::infobox, Fonts::infobox_small,
 #ifndef GNAV
@@ -542,18 +531,12 @@ MainWindow::FullRedraw()
 void
 MainWindow::OnResize(PixelSize new_size)
 {
-  Layout::Initialize(new_size);
+  Layout::Initialize(new_size,
+                     CommonInterface::GetUISettings().GetPercentScale());
 
   SingleWindow::OnResize(new_size);
 
   ReinitialiseLayout();
-
-  if (map != nullptr) {
-    /* the map being created already is an indicator that XCSoar is
-       running already, and so we assume the menu buttons have been
-       created, too */
-    map->BringToBottom();
-  }
 
   const PixelRect rc = GetClientRect();
   ButtonLabel::OnResize(rc);

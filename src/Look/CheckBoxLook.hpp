@@ -21,17 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CUSTOM_FONTS_HPP
-#define XCSOAR_CUSTOM_FONTS_HPP
+#ifndef XCSOAR_CHECK_BOX_LOOK_HPP
+#define XCSOAR_CHECK_BOX_LOOK_HPP
 
-namespace Fonts
-{
-  /**
-   * Load custom fonts from the profile.
-   *
-   * @return true on success
-   */
-  bool LoadCustom();
-}
+#include "Screen/Color.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Pen.hpp"
+
+class Font;
+
+struct CheckBoxLook {
+  const Font *font;
+
+  Brush focus_background_brush;
+
+  struct StateLook {
+    Brush box_brush;
+    Pen box_pen;
+
+    Brush check_brush;
+
+    Color text_color;
+  } standard, focused, pressed, disabled;
+
+  void Initialise(const Font &_font);
+};
 
 #endif

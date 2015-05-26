@@ -74,24 +74,24 @@ public:
   void set_fai_finish_height(const fixed height);
 
   /* virtual methods from class TaskPoint */
-  virtual fixed GetElevation() const override;
+  fixed GetElevation() const override;
 
   /* virtual methods from class ScoredTaskPoint */
-  virtual void Reset() override;
-  virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const override;
+  void Reset() override;
+  bool CheckEnterTransition(const AircraftState &ref_now,
+                            const AircraftState &ref_last) const override;
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
-  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &otb) override;
-  virtual void SetNeighbours(OrderedTaskPoint *prev,
-                             OrderedTaskPoint *next) override;
-  virtual bool IsInSector(const AircraftState &ref) const override;
+  void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  void SetOrderedTaskSettings(const OrderedTaskSettings &otb) override;
+  void SetNeighbours(OrderedTaskPoint *prev,
+                     OrderedTaskPoint *next) override;
+  bool IsInSector(const AircraftState &ref) const override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool EntryPrecondition() const override;
-  virtual bool ScoreFirstEntry() const override {
+  bool EntryPrecondition() const override;
+  bool ScoreFirstEntry() const override {
     return true;
   }
 

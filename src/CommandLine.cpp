@@ -139,6 +139,13 @@ CommandLine::Parse(Args &args)
       Display::SetDPI(x_dpi, y_dpi);
     }
 #endif
+#ifdef __APPLE__
+    else if (StringStartsWith(s, "-psn")) {
+      /* The OS X launcher always supplies some process number argument.
+         Just ignore it.
+      */
+    }
+#endif
 #ifndef _WIN32
     else
       args.UsageError();

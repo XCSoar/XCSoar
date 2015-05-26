@@ -26,6 +26,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
@@ -166,7 +167,7 @@ class ManagedFileListWidget
   unsigned font_height;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  WndButton *download_button, *add_button, *cancel_button;
+  Button *download_button, *add_button, *cancel_button;
 #endif
 
   FileRepository repository;
@@ -304,8 +305,8 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const unsigned margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
 
-  UPixelScalar row_height = std::max(3u * margin + 2u * font_height,
-                                     Layout::GetMaximumControlHeight());
+  const unsigned row_height = std::max(3u * margin + 2u * font_height,
+                                       Layout::GetMaximumControlHeight());
   CreateList(parent, look, rc, row_height);
   LoadRepositoryFile();
   RefreshList();
@@ -430,7 +431,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const FileItem &file = items[i];
 
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
 
   canvas.DrawText(rc.left + margin, rc.top + margin, file.name.c_str());
 
@@ -448,11 +449,11 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
-    UPixelScalar width = canvas.CalcTextWidth(text);
+    const unsigned width = canvas.CalcTextWidth(text);
     canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
   } else if (file.failed) {
     const TCHAR *text = _("Error");
-    UPixelScalar width = canvas.CalcTextWidth(text);
+    const unsigned width = canvas.CalcTextWidth(text);
     canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
   }
 
@@ -497,20 +498,33 @@ ManagedFileListWidget::Download()
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 
-static const std::vector<AvailableFile> *add_list;
+class AddFileListItemRenderer final : public ListItemRenderer {
+  const std::vector<AvailableFile> &list;
 
-static void
-OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
+  TextRowRenderer row_renderer;
+
+public:
+  explicit AddFileListItemRenderer(const std::vector<AvailableFile> &_list)
+    :list(_list) {}
+
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
+
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
+};
+
+void
+AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                     unsigned i)
 {
-  assert(add_list != nullptr);
-  assert(i < add_list->size());
+  assert(i < list.size());
 
-  const AvailableFile &file = (*add_list)[i];
+  const AvailableFile &file = list[i];
 
   const UTF8ToWideConverter name(file.GetName());
   if (name.IsValid())
-    canvas.DrawText(rc.left + Layout::GetTextPadding(),
-                    rc.top + Layout::GetTextPadding(), name);
+    row_renderer.DrawTextRow(canvas, rc, name);
 }
 
 #endif
@@ -538,13 +552,11 @@ ManagedFileListWidget::Add()
   if (list.empty())
     return;
 
-  add_list = &list;
-
-  FunctionListItemRenderer item_renderer(OnPaintAddItem);
+  AddFileListItemRenderer item_renderer(list);
   int i = ListPicker(_("Select a file"),
-                     list.size(), 0, Layout::FastScale(18),
+                     list.size(), 0,
+                     item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
                      item_renderer);
-  add_list = nullptr;
   if (i < 0)
     return;
 

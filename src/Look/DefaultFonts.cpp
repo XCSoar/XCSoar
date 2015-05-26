@@ -38,115 +38,78 @@ Copyright_License {
 
 #include <string.h>
 
-static void
-InitialiseLogfont(LOGFONT *font, const TCHAR *facename, unsigned height,
-                  bool bold = false, bool italic = false,
-                  bool variable_pitch = true)
-{
-  memset((char *)font, 0, sizeof(LOGFONT));
-
-  _tcscpy(font->lfFaceName, facename);
-
-  font->lfPitchAndFamily = (variable_pitch ? VARIABLE_PITCH : FIXED_PITCH)
-                          | FF_DONTCARE;
-
-  font->lfHeight = (long)height;
-  font->lfWeight = (long)(bold ? FW_BOLD : FW_MEDIUM);
-  font->lfItalic = italic;
-
 #ifdef WIN32
-  if (IsAltair())
-    font->lfQuality = NONANTIALIASED_QUALITY;
-  else
-    font->lfQuality = ANTIALIASED_QUALITY;
-#endif
-}
 
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
-  InitialiseLogfont(&settings.dialog, _T("RasterGothicTwelveCond"), 13);
+  settings.dialog = FontDescription(_T("RasterGothicTwelveCond"), 13);
 #ifdef GNAV
-  InitialiseLogfont(&settings.dialog_small, _T("RasterGothicNineCond"), 10);
+  settings.dialog_small = FontDescription(_T("RasterGothicNineCond"), 10);
 #endif
-  InitialiseLogfont(&settings.infobox,
-                    _T("RasterGothicTwentyFourCond"), 24, true);
-  InitialiseLogfont(&settings.title, _T("RasterGothicNineCond"), 10);
-  InitialiseLogfont(&settings.cdi, _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&settings.map_label, _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&settings.map_label_important,
-                    _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&settings.map, _T("RasterGothicFourteenCond"), 15);
-  InitialiseLogfont(&settings.map_bold,
-                    _T("RasterGothicFourteenCond"), 15, true);
-  InitialiseLogfont(&settings.infobox_small,
-                    _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
-                    12, false, false, false);
+  settings.infobox = FontDescription(_T("RasterGothicTwentyFourCond"),
+                                     24, true);
+  settings.title = FontDescription(_T("RasterGothicNineCond"), 10);
+  settings.cdi = FontDescription(_T("RasterGothicEighteenCond"), 19, true);
+  settings.map_label = FontDescription(_T("RasterGothicTwelveCond"), 13);
+  settings.map_label_important = FontDescription(_T("RasterGothicTwelveCond"),
+                                                 13);
+  settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
+  settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
+                                      15, true);
+  settings.infobox_small = FontDescription(_T("RasterGothicEighteenCond"),
+                                           19, true);
+  settings.monospace = FontDescription(GetStandardMonospaceFontFace(),
+                                       12, false, false, true);
 }
+
+#endif
 
 static void
 InitialiseLogFonts(FontSettings &settings)
 {
+#ifdef WIN32
   if (IsAltair()) {
     LoadAltairLogFonts(settings);
     return;
   }
-
-#ifndef USE_GDI
-  unsigned font_height = Layout::SmallScale((IsAndroid()||IsKobo()) ? 30 : (IsIOS() ? 35 : 24));
-#else
-  unsigned font_height = Layout::SmallScale(35);
 #endif
 
-  const unsigned dpi = Display::GetYDPI();
-  constexpr double physical_dlg_height = 0.18;
+  settings.dialog = FontDescription(std::min(Layout::FontScale(12),
+                                             Layout::min_screen_pixels / 20));
 
-  InitialiseLogfont(&settings.dialog, GetStandardFontFace(),
-                    std::min(std::max(8u, unsigned(physical_dlg_height * dpi)),
-                             font_height / 2));
-
-  InitialiseLogfont(&settings.infobox, GetStandardFontFace(),
-                    font_height, true);
-
-#ifdef WIN32
-  settings.infobox.lfCharSet = ANSI_CHARSET;
-#endif
+  settings.infobox = FontDescription(Layout::FontScale(30), true);
 
   /* the "small" font is derived from the regular font */
   settings.infobox_small = settings.infobox;
-  settings.infobox_small.lfHeight = settings.infobox_small.lfHeight * 4 / 5;
-  settings.infobox_small.lfWeight = FW_MEDIUM;
+  settings.infobox_small.SetHeight(settings.infobox_small.GetHeight() * 4 / 5);
+  settings.infobox_small.SetBold(false);
 
-  InitialiseLogfont(&settings.title, GetStandardFontFace(), font_height / 3);
+  settings.title = FontDescription(Layout::FontScale(8));
 
   // new font for CDI Scale
-  InitialiseLogfont(&settings.cdi, GetStandardFontFace(),
-                    unsigned(font_height * 0.6), false, false, false);
+  settings.cdi = FontDescription(Layout::FontScale(10),
+                                 false, false, true);
 
   // new font for map labels
-  InitialiseLogfont(&settings.map_label, GetStandardFontFace(),
-                    unsigned(font_height * 0.39), false, true);
+  settings.map_label = FontDescription(Layout::FontScale(8), false, true);
 
   // new font for map labels big/medium cities
-  InitialiseLogfont(&settings.map_label_important, GetStandardFontFace(),
-                    unsigned(font_height * 0.39), false, true);
+  settings.map_label_important = FontDescription(Layout::FontScale(8),
+                                                 true, true);
 
   // new font for map labels
-  InitialiseLogfont(&settings.map, GetStandardFontFace(),
-                    unsigned(font_height * 0.507));
+  settings.map = FontDescription(Layout::FontScale(10));
 
   // Font for map bold text
-  InitialiseLogfont(&settings.map_bold, GetStandardFontFace(),
-                    unsigned(font_height * 0.507), true);
+  settings.map_bold = FontDescription(Layout::FontScale(10), true);
 
 #ifndef GNAV
-  InitialiseLogfont(&settings.infobox_units, GetStandardFontFace(),
-                    (int)(font_height * 0.56));
+  settings.infobox_units = FontDescription(Layout::FontScale(9));
 #endif
 
-  InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
-                    unsigned(font_height * 0.39), false, false, false);
+  settings.monospace = FontDescription(settings.dialog.GetHeight(),
+                                       false, false, true);
 }
 
 FontSettings
@@ -160,33 +123,22 @@ Fonts::GetDefaults()
 bool
 Fonts::Initialize()
 {
-  default_settings = GetDefaults();
+  const auto default_settings = GetDefaults();
 
-#ifdef GNAV
-  const auto &effective_settings = default_settings;
-#else
-  effective_settings = default_settings;
-#endif
-
-  return Load(effective_settings);
+  return Load(default_settings);
 }
 
 void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
-#ifdef GNAV
-  const auto &effective_settings = default_settings;
-#endif
+  auto default_settings = GetDefaults();
 
   AutoSizeInfoBoxFonts(default_settings, control_width);
-#ifndef GNAV
-  AutoSizeInfoBoxFonts(effective_settings, control_width);
-#endif
 
-  infobox.Load(effective_settings.infobox);
-  infobox_small.Load(effective_settings.infobox_small);
+  infobox.Load(default_settings.infobox);
+  infobox_small.Load(default_settings.infobox_small);
 #ifndef GNAV
-  infobox_units.Load(effective_settings.infobox_units);
+  infobox_units.Load(default_settings.infobox_units);
 #endif
 
 #ifdef HAVE_TEXT_CACHE

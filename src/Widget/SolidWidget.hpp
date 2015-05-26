@@ -34,7 +34,7 @@ class SolidWidget : public WindowWidget {
   Widget *const widget;
 
 public:
-  SolidWidget(Widget *_widget):widget(_widget) {}
+  explicit SolidWidget(Widget *_widget):widget(_widget) {}
   virtual ~SolidWidget() override;
 
   Widget &GetWidget() {

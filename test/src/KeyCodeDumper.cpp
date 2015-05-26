@@ -22,11 +22,13 @@ Copyright_License {
 */
 
 #define ENABLE_SCREEN
+#define ENABLE_BUTTON_LOOK
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/Canvas.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 
 #include <algorithm>
 
@@ -113,13 +115,12 @@ protected:
   }
 };
 
-class TestWindow : public SingleWindow {
+class TestWindow final : public SingleWindow, ActionListener {
   KeyCodeDumper key_code_dumper;
-  ButtonWindow close_button;
+  Button close_button;
 
-  enum {
-    ID_START = 100,
-    ID_CLOSE
+  enum Buttons {
+    CLOSE,
   };
 
 public:
@@ -135,7 +136,10 @@ public:
     PixelRect button_rc = rc;
     button_rc.top = (rc.top + rc.bottom + 1) / 2;
 
-    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, *button_look,
+                        _T("Close"), button_rc,
+                        WindowStyle(),
+                        *this, CLOSE);
     close_button.SetFont(normal_font);
 
     key_code_dumper.SetFocus();
@@ -152,14 +156,13 @@ protected:
       close_button.Move(0, (new_size.cy + 1) / 2, new_size.cx, new_size.cy / 2);
   }
 
-  virtual bool OnCommand(unsigned id, unsigned code) override {
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
     switch (id) {
-    case ID_CLOSE:
+    case CLOSE:
       Close();
-      return true;
+      break;
     }
-
-    return SingleWindow::OnCommand(id, code);
   }
 };
 

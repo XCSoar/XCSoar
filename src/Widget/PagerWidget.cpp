@@ -113,7 +113,7 @@ PagerWidget::SetCurrent(unsigned i, bool click)
     }
   }
 
-  assert(old_child.prepared);
+  assert(!visible || old_child.prepared);
   if (visible && !old_child.widget->Leave())
     return false;
 
@@ -133,9 +133,7 @@ PagerWidget::SetCurrent(unsigned i, bool click)
   if (visible)
     new_child.widget->Show(position);
 
-  if (page_flipped_callback)
-    page_flipped_callback();
-
+  OnPageFlipped();
   return true;
 }
 
@@ -383,4 +381,11 @@ PagerWidget::KeyPress(unsigned key_code)
   assert(children[current].prepared);
 
   return children[current].widget->KeyPress(key_code);
+}
+
+void
+PagerWidget::OnPageFlipped()
+{
+  if (page_flipped_callback)
+    page_flipped_callback();
 }

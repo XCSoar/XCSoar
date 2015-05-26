@@ -22,8 +22,10 @@ Copyright_License {
 */
 
 #include "TaskStatusPanel.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Util/Macros.hpp"
-#include "Interface.hpp"
+#include "ActionInterface.hpp"
+#include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Components.hpp"
@@ -38,58 +40,99 @@ enum Controls {
   RemainingDistance,
   EstimatedSpeed,
   AverageSpeed,
+
+  MC,
+  RANGE,
+  SPEED_REMAINING,
+  EFFECTIVE_MC,
+  SPEED_ACHIEVED,
+  CRUISE_EFFICIENCY,
 };
+
+void
+TaskStatusPanel::OnModified(DataField &df)
+{
+  if (IsDataField(MC, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    fixed mc = Units::ToSysVSpeed(dff.GetAsFixed());
+    ActionInterface::SetManualMacCready(mc);
+    Refresh();
+  }
+}
 
 void
 TaskStatusPanel::Refresh()
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  TCHAR Temp[80];
-
   SetRowVisible(TaskTime, task_stats.has_targets);
-  if (task_stats.has_targets) {
-    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time);
-    SetText(TaskTime, Temp);
-  }
+  if (task_stats.has_targets)
+    SetText(TaskTime,
+            FormatSignedTimeHHMM((int)protected_task_manager->GetOrderedTaskSettings().aat_min_time));
 
-  int ete_time(task_stats.GetEstimatedTotalTime());
-  FormatSignedTimeHHMM(Temp, ete_time);
-  SetText(ETETime, Temp);
+  SetText(ETETime,
+          FormatSignedTimeHHMM((int)task_stats.GetEstimatedTotalTime()));
 
-  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining_now);
-  SetText(RemainingTime, Temp);
+  SetText(RemainingTime,
+          FormatSignedTimeHHMM((int)task_stats.total.time_remaining_now));
+
+  if (task_stats.total.planned.IsDefined())
+    SetText(TaskDistance,
+            FormatUserDistanceSmart(task_stats.total.planned.GetDistance()));
+  else
+    ClearText(TaskDistance);
+
+  if (task_stats.total.remaining.IsDefined())
+    SetText(RemainingDistance,
+            FormatUserDistanceSmart(task_stats.total.remaining.GetDistance()));
+
+  if (task_stats.total.planned.IsDefined())
+    SetText(EstimatedSpeed,
+            FormatUserTaskSpeed(task_stats.total.planned.GetSpeed()));
+  else
+    ClearText(EstimatedSpeed);
+
+  if (task_stats.total.travelled.IsDefined())
+    SetText(AverageSpeed,
+            FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed()));
+  else
+    ClearText(AverageSpeed);
+
+  LoadValue(MC,
+            CommonInterface::GetComputerSettings().polar.glide_polar_task.GetMC(),
+            UnitGroup::VERTICAL_SPEED);
 
   if (task_stats.total.planned.IsDefined()) {
-    FormatUserDistanceSmart(task_stats.total.planned.GetDistance(),
-                              Temp, ARRAY_SIZE(Temp));
-    SetText(TaskDistance, Temp);
-  } else
-    SetText(TaskDistance, _T(""));
+    fixed rMax = task_stats.distance_max;
+    fixed rMin = task_stats.distance_min;
 
-  if (task_stats.total.remaining.IsDefined()) {
-    FormatUserDistanceSmart(task_stats.total.remaining.GetDistance(),
-                              Temp, ARRAY_SIZE(Temp));
-    SetText(RemainingDistance, Temp);
-  }
-
-  if (task_stats.total.planned.IsDefined()) {
-    FormatUserTaskSpeed(task_stats.total.planned.GetSpeed(),
-                               Temp, ARRAY_SIZE(Temp));
-    SetText(EstimatedSpeed, Temp);
+    if (rMin < rMax) {
+      fixed range = Double((task_stats.total.remaining.GetDistance() - rMin) / (rMax - rMin)) - fixed(1);
+      LoadValue(RANGE, range * 100);
+    } else
+      ClearValue(RANGE);
   } else
-    SetText(EstimatedSpeed, _T(""));
+    ClearValue(RANGE);
 
-  if (task_stats.total.travelled.IsDefined()) {
-    FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed(),
-                               Temp, ARRAY_SIZE(Temp));
-    SetText(AverageSpeed, Temp);
-  } else
-    SetText(AverageSpeed, _T(""));
+  if (task_stats.total.remaining_effective.IsDefined())
+    LoadValue(SPEED_REMAINING, task_stats.total.remaining_effective.GetSpeed(),
+              UnitGroup::TASK_SPEED);
+  else
+    ClearValue(SPEED_REMAINING);
+
+  LoadValue(EFFECTIVE_MC, task_stats.effective_mc, UnitGroup::VERTICAL_SPEED);
+
+  if (task_stats.total.travelled.IsDefined())
+    LoadValue(SPEED_ACHIEVED, task_stats.total.travelled.GetSpeed(),
+              UnitGroup::TASK_SPEED);
+  else
+    ClearValue(SPEED_ACHIEVED);
+
+  LoadValue(CRUISE_EFFICIENCY, task_stats.cruise_efficiency * 100);
 }
 
 void
@@ -102,4 +145,36 @@ TaskStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddReadOnly(_("Remaining distance"));
   AddReadOnly(_("Speed estimated"));
   AddReadOnly(_("Speed average"));
+
+  AddFloat(_("Set MacCready"),
+           _("Adjusts MC value used in the calculator.  "
+             "Use this to determine the effect on estimated task time due to changes in conditions.  "
+             "This value will not affect the main computer's setting if the dialog is exited with the Cancel button."),
+           _T("%.1f %s"), _T("%.1f"),
+           fixed(0), Units::ToUserVSpeed(fixed(5)),
+           GetUserVerticalSpeedStep(), false, fixed(0),
+           this);
+  DataFieldFloat &mc_df = (DataFieldFloat &)GetDataField(MC);
+  mc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
+
+  AddReadOnly(_("AAT range"),
+              /* xgettext:no-c-format */
+              _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
+              _T("%.0f %%"), fixed(0));
+
+  AddReadOnly(_("Speed remaining"), nullptr, _T("%.0f %s"),
+              UnitGroup::TASK_SPEED, fixed(0));
+
+  AddReadOnly(_("Achieved MacCready"), nullptr, _T("%.1f %s"),
+              UnitGroup::VERTICAL_SPEED, fixed(0));
+  DataFieldFloat &emc_df = (DataFieldFloat &)GetDataField(EFFECTIVE_MC);
+  emc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
+
+  AddReadOnly(_("Achieved speed"), nullptr, _T("%.0f %s"),
+              UnitGroup::TASK_SPEED, fixed(0));
+
+  AddReadOnly(_("Cruise efficiency"),
+              _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
+              _T("%.0f %%"),
+              fixed(0));
 }

@@ -28,7 +28,7 @@ Copyright_License {
  * An interface to be implemented by classes that want to listen on
  * actions (e.g. clicks on a button).
  *
- * @see WndButton::SetListener()
+ * @see Button::SetListener()
  */
 class ActionListener {
 public:

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/Files.hpp"
+#include "Look/FontDescription.hpp"
 #include "Init.hpp"
 #include "Asset.hpp"
 
@@ -137,7 +138,7 @@ GetCapitalHeight(FT_Face face)
 }
 
 bool
-Font::LoadFile(const char *file, UPixelScalar ptsize, bool bold, bool italic)
+Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 
@@ -169,23 +170,12 @@ Font::LoadFile(const char *file, UPixelScalar ptsize, bool bold, bool italic)
 }
 
 bool
-Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
-{
-  LOGFONT lf;
-  lf.lfWeight = bold ? 700 : 500;
-  lf.lfHeight = height;
-  lf.lfItalic = italic;
-  lf.lfPitchAndFamily = FF_DONTCARE | VARIABLE_PITCH;
-  return Load(lf);
-}
-
-bool
-Font::Load(const LOGFONT &log_font)
+Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
 
-  bool bold = log_font.lfWeight >= 700;
-  bool italic = log_font.lfItalic;
+  bool bold = d.IsBold();
+  bool italic = d.IsItalic();
   const char *path = nullptr;
 
   /* check for presence of "real" font and clear the bold or italic
@@ -198,8 +188,7 @@ Font::Load(const LOGFONT &log_font)
   } else if (italic && italic_font_path != nullptr) {
     path = italic_font_path;
     italic = false;
-  } else if ((log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH &&
-      monospace_font_path != nullptr) {
+  } else if (d.IsMonospace() && monospace_font_path != nullptr) {
     path = monospace_font_path;
   } else if (bold && bold_font_path != nullptr) {
     path = bold_font_path;
@@ -211,8 +200,7 @@ Font::Load(const LOGFONT &log_font)
   if (path == nullptr)
     return false;
 
-  return LoadFile(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
-                  bold, italic);
+  return LoadFile(path, d.GetHeight(), bold, italic);
 }
 
 void

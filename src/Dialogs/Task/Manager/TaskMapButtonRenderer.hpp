@@ -21,19 +21,46 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROFILE_FONT_CONFIG_HPP
-#define XCSOAR_PROFILE_FONT_CONFIG_HPP
+#ifndef XCSOAR_TASK_MAP_BUTTON_RENDERER_HPP
+#define XCSOAR_TASK_MAP_BUTTON_RENDERER_HPP
 
-#include <windef.h>
-#include <wingdi.h>
+#include "Renderer/ButtonRenderer.hpp"
+#include "Screen/BufferCanvas.hpp"
 
-struct FontSettings;
+struct MapLook;
+class OrderedTask;
 
-namespace Profile {
-  bool GetFont(const char *key, LOGFONT* lplf);
-  void SetFont(const char *key, LOGFONT &logfont);
+/**
+ * A window that shows the task.
+ */
+class TaskMapButtonRenderer : public ButtonRenderer {
+  const MapLook &look;
 
-  void Get(FontSettings &settings);
+  const OrderedTask *task;
+
+  mutable BufferCanvas buffer;
+  mutable PixelSize size;
+
+public:
+  explicit TaskMapButtonRenderer(const MapLook &_look)
+    :look(_look), task(nullptr), size(0, 0) {}
+
+  void SetTask(const OrderedTask *_task) {
+    task = _task;
+    InvalidateBuffer();
+  }
+
+  void DrawButton(Canvas &canvas, const PixelRect &rc,
+                  bool enabled, bool focused, bool pressed) const override;
+
+private:
+  void InvalidateBuffer() {
+    size.cx = 0;
+  }
+
+  bool IsBufferValid(PixelSize new_size) const {
+    return size == new_size;
+  }
 };
 
-#endif
+#endif /* DLGTASKMANAGER_HPP */

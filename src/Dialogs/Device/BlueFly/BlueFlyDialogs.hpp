@@ -21,13 +21,12 @@ Copyright_License {
 }
 */
 
-#include "CustomFonts.hpp"
-#include "GlobalFonts.hpp"
-#include "Profile/FontConfig.hpp"
+#ifndef XCSOAR_DIALOGS_BLUEFLY_HPP
+#define XCSOAR_DIALOGS_BLUEFLY_HPP
 
-bool
-Fonts::LoadCustom()
-{
-  Profile::Get(effective_settings);
-  return Load(effective_settings);
-}
+class Device;
+
+void
+dlgConfigurationBlueFlyVarioShowModal(Device &device);
+
+#endif

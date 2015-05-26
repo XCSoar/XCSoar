@@ -32,8 +32,8 @@ GPSState::Reset()
   fix_quality_available.Clear();
   real = false;
   simulator = false;
-#ifdef ANDROID
-  android_internal_gps = false;
+#if defined(ANDROID) || defined(__APPLE__)
+  nonexpiring_internal_gps = false;
 #endif
   satellites_used_available.Clear();
   satellite_ids_available.Clear();
@@ -215,9 +215,9 @@ NMEAInfo::ExpireWallClock()
 
   UpdateClock();
 
-#ifdef ANDROID
-  if (gps.android_internal_gps)
-    /* the Android internal GPS does not expire */
+#if defined(ANDROID) || defined(__APPLE__)
+  if (gps.nonexpiring_internal_gps)
+    /* the internal GPS does not expire */
     return;
 #endif
 

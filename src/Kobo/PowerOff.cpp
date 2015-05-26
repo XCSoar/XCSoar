@@ -44,6 +44,7 @@ Copyright_License {
  */
 namespace Layout {
   unsigned small_scale = 1500;
+  unsigned font_scale = 1900;
   unsigned scale_1024 = 2048;
   unsigned text_padding = 3;
 };

@@ -60,8 +60,8 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
    */
   Widget *const extra;
 
-  WndButton previous_button, next_button;
-  WndButton close_button;
+  Button previous_button, next_button;
+  Button close_button;
 
 public:
   ArrowPagerWidget(ActionListener &_action_listener,

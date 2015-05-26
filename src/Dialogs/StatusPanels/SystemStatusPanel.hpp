@@ -36,14 +36,17 @@ public:
   SystemStatusPanel(const DialogLook &look)
     :StatusPanel(look), rate_limiter(*this, 2000, 500) {}
 
-  virtual void Refresh() override;
+  /* virtual methods from class StatusPanel */
+  void Refresh() override;
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
 
 private:
-  virtual void OnGPSUpdate(const MoreData &basic) override;
+  /* virtual methods from class BlackboardListener */
+  void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

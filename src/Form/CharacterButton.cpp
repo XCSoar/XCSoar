@@ -35,14 +35,14 @@ void
 CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
                         const TCHAR *text, PixelRect rc,
                         OnCharacterCallback _on_character, unsigned _character,
-                        const ButtonWindowStyle style)
+                        const WindowStyle style)
 {
   assert(_on_character);
 
   on_character = _on_character;
   character = _character;
 
-  WndButton::Create(parent, look, text, rc, style);
+  Button::Create(parent, look, text, rc, style);
 }
 
 unsigned

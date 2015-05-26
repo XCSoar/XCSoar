@@ -50,7 +50,7 @@ struct FlarmVersion {
     }
   }
 
-  void Expire(fixed clock) {
+  void Expire(gcc_unused fixed clock) {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }

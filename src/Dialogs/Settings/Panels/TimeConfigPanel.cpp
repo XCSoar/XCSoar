@@ -62,14 +62,8 @@ private:
 void
 TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 {
-  TCHAR temp[20];
-  int time(CommonInterface::Basic().time);
-  FormatLocalTimeHHMM(temp, time, utc_offset);
-
-  WndProperty &wp = GetControl(LocalTime);
-
-  wp.SetText(temp);
-  wp.RefreshDisplay();
+  SetText(LocalTime,
+          FormatLocalTimeHHMM((int)CommonInterface::Basic().time, utc_offset));
 }
 
 void

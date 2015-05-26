@@ -21,15 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_FONT_EDIT_HPP
-#define XCSOAR_DIALOGS_FONT_EDIT_HPP
+#ifndef XCSOAR_TOPOGRAPHY_LOOK_HPP
+#define XCSOAR_TOPOGRAPHY_LOOK_HPP
 
-#include <windef.h>
-#include <wingdi.h>
-#include <tchar.h>
+class Font;
 
-bool
-dlgFontEditShowModal(const TCHAR *type, LOGFONT &data,
-                     const LOGFONT &default_data);
+struct TopographyLook {
+  const Font *regular_label_font, *important_label_font;
+
+  void Initialise(const Font &_regular_label_font,
+                  const Font &_important_label_font) {
+    regular_label_font = &_regular_label_font;
+    important_label_font = &_important_label_font;
+  }
+};
 
 #endif

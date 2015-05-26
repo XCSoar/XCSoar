@@ -135,10 +135,10 @@ class WaypointDetailsWidget final
   const Waypoint &waypoint;
   const bool allow_navigation;
 
-  WndButton goto_button;
-  WndButton magnify_button, shrink_button;
-  WndButton previous_button, next_button;
-  WndButton close_button;
+  Button goto_button;
+  Button magnify_button, shrink_button;
+  Button previous_button, next_button;
+  Button close_button;
 
   int page, last_page;
 
@@ -196,6 +196,7 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
 
   void Show(const PixelRect &rc) override {
     const Layout layout(rc, waypoint);
@@ -424,7 +425,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   dock_style.Hide();
   dock_style.ControlParent();
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.Hide();
   button_style.TabStop();
 
@@ -483,6 +484,13 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                         });
 
   last_page = 2 + images.size();
+}
+
+void
+WaypointDetailsWidget::Unprepare()
+{
+  info_dock.UnprepareWidget();
+  commands_dock.UnprepareWidget();
 }
 
 void

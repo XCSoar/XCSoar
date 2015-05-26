@@ -21,35 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef WINGDI_H
-#define WINGDI_H
+#ifndef XCSOAR_DEVICE_DRIVER_ATR833_HPP
+#define XCSOAR_DEVICE_DRIVER_ATR833_HPP
 
-#define LF_FACESIZE 256
-
-enum {
-  FW_MEDIUM = 500,
-  FW_BOLD = 700,
-
-  FF_DONTCARE = 0,
-  FIXED_PITCH = 1,
-  VARIABLE_PITCH = 2,
-};
-
-typedef struct tagLOGFONT {
-  unsigned lfHeight;
-  unsigned lfWidth;
-  unsigned char lfEscapement;
-  unsigned char lfOrientation;
-  unsigned short lfWeight;
-  bool lfItalic;
-  bool lfUnderline;
-  bool lfStrikeOut;
-  unsigned char lfCharSet;
-  unsigned char lfOutPrecision;
-  unsigned char lfClipPrecision;
-  unsigned char lfQuality;
-  unsigned char lfPitchAndFamily;
-	char lfFaceName[LF_FACESIZE];
-} LOGFONT;
+extern const struct DeviceRegister atr833_driver;
 
 #endif
+

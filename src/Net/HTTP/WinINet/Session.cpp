@@ -24,11 +24,28 @@ Copyright_License {
 #include "../Session.hpp"
 #include "../Request.hpp"
 
+static void CALLBACK
+StatusCallback(HINTERNET hInternet,
+               DWORD_PTR dwContext,
+               DWORD dwInternetStatus,
+               LPVOID lpvStatusInformation,
+               DWORD dwStatusInformationLength)
+{
+  if (dwContext != ((DWORD_PTR) 0)) {
+    Net::Request *request = (Net::Request *)dwContext;
+
+    request->Callback(dwInternetStatus,
+                      lpvStatusInformation, dwStatusInformationLength);
+  }
+}
+
 Net::Session::Session()
 {
   // Get session handle
   handle.Set(::InternetOpenA("XCSoar", INTERNET_OPEN_TYPE_PRECONFIG, NULL,
                              NULL, INTERNET_FLAG_ASYNC));
+  if (handle.IsDefined())
+    handle.SetStatusCallback(StatusCallback);
 }
 
 bool

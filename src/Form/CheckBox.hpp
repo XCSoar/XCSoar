@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FORM_CHECK_BOX_HPP
 #define XCSOAR_FORM_CHECK_BOX_HPP
 
-#include "Screen/CheckBox.hpp"
+#include "Screen/PaintWindow.hpp"
+#include "Util/tstring.hpp"
 
 struct DialogLook;
 class ContainerWindow;
@@ -33,17 +34,20 @@ class ActionListener;
 /**
  * This class is used for creating buttons.
  */
-class CheckBoxControl : public CheckBox {
+class CheckBoxControl : public PaintWindow {
+  bool checked, dragging, pressed;
+
+  const DialogLook *look;
+  tstring caption;
+
   ActionListener *listener;
-#ifdef USE_GDI
   int id;
-#endif
 
 public:
   void Create(ContainerWindow &parent, const DialogLook &look,
               tstring::const_pointer caption,
               const PixelRect &rc,
-              const CheckBoxStyle style,
+              const WindowStyle style,
               ActionListener &listener, int id);
 
   /**
@@ -55,13 +59,27 @@ public:
     listener = &_listener;
   }
 
-  virtual bool OnClicked() override;
+  bool GetState() const {
+    return checked;
+  }
 
-#ifdef _WIN32_WCE
+  void SetState(bool value);
+
 protected:
-  virtual bool OnKeyCheck(unsigned key_code) const override;
-  virtual bool OnKeyDown(unsigned key_code) override;
-#endif
+  void SetPressed(bool value);
+
+  virtual bool OnClicked();
+
+  /* virtual methods from class Window */
+  bool OnKeyCheck(unsigned key_code) const override;
+  bool OnKeyDown(unsigned key_code) override;
+  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  void OnSetFocus() override;
+  void OnKillFocus() override;
+  void OnCancelMode() override;
+  void OnPaint(Canvas &canvas) override;
 };
 
 #endif

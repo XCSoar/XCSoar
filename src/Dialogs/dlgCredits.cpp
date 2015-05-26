@@ -26,7 +26,7 @@ Copyright_License {
 #include "Widget/CreateWindowWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
-#include "Look/StandardFonts.hpp"
+#include "Look/FontDescription.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -67,7 +67,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   y += title_size.cy + Layout::FastScale(20);
 
   Font font;
-  font.Load(GetStandardFontFace(), Layout::FastScale(16));
+  font.Load(FontDescription(Layout::FontScale(16)));
   canvas.Select(font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();

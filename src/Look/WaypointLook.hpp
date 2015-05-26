@@ -47,6 +47,8 @@ struct WaypointLook {
 
   void Initialise(const WaypointRendererSettings &settings,
                   const Font &font, const Font &bold_font);
+
+  void Reinitialise(const WaypointRendererSettings &settings);
 };
 
 #endif

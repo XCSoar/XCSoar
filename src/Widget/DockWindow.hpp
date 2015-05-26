@@ -39,8 +39,7 @@ public:
   DockWindow():widget(nullptr) {}
 
   /**
-   * Show the specified #Widget.  It will be deleted by this class in
-   * OnDestroy().
+   * Show the specified #Widget.
    *
    * This method is only legal after this Window has been created.
    *
@@ -57,17 +56,29 @@ public:
   }
 
   /**
+   * Call Widget::Unprepare().
+   */
+  void UnprepareWidget();
+
+  /**
+   * Delete the given #Widget instance.
+   */
+  void DeleteWidget();
+
+  /**
    * Call Widget::Move() again.  This should never be needed, as the
    * Widget is supposed to be at the position already.  It's a hack to
    * force RowFormWidget to reconsider the visibility of all rows.
    */
   void MoveWidget();
 
-protected:
-  void DeleteWidget();
+  /**
+   * Wrapper for Widget::Save().
+   */
+  bool SaveWidget(bool &changed);
 
+protected:
   void OnResize(PixelSize new_size) override;
-  void OnDestroy() override;
 };
 
 #endif

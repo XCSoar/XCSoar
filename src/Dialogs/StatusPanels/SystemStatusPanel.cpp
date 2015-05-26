@@ -62,7 +62,7 @@ SystemStatusPanel::Refresh()
   SetText(GPS, gettext(GetGPSStatus(basic)));
 
   if (!basic.alive)
-    SetText(NumSat, _T(""));
+    ClearText(NumSat);
   else if (gps.satellites_used_available) {
     // known number of sats
     Temp.Format(_T("%d"), gps.satellites_used);
@@ -83,7 +83,7 @@ SystemStatusPanel::Refresh()
     /* append FLARM firmware version */
     Temp.append(_T(" (fw "));
     Temp.UnsafeAppendASCII(basic.flarm.version.software_version.c_str());
-    Temp.Append(_T(')'));
+    Temp.push_back(_T(')'));
   }
 
   SetText(FLARM, Temp);

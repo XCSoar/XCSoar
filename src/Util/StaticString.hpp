@@ -73,7 +73,7 @@ protected:
 public:
   StaticStringBase() = default;
   explicit StaticStringBase(const_pointer value) {
-    set(value);
+    assign(value);
   }
 
   size_type length() const {
@@ -189,23 +189,19 @@ public:
     return data + length();
   }
 
-  value_type last() const {
+  value_type back() const {
     assert(length() > 0);
 
     return data[length() - 1];
   }
 
-  const_pointer get() const {
-    return data;
-  }
-
-  void set(const_pointer new_value) {
+  void assign(const_pointer new_value) {
     assert(new_value != nullptr);
 
     CopyString(data, new_value, MAX_SIZE);
   }
 
-  void set(const_pointer new_value, size_type length) {
+  void assign(const_pointer new_value, size_type length) {
     assert(new_value != nullptr);
 
     size_type max_length = (MAX_SIZE < length + 1) ? MAX_SIZE : length + 1;
@@ -228,7 +224,7 @@ public:
     CopyString(data + len, new_value, max_length);
   }
 
-  bool Append(value_type ch) {
+  bool push_back(value_type ch) {
     size_t l = length();
     if (l >= MAX_SIZE - 1)
       return false;
@@ -247,11 +243,11 @@ public:
   }
 
   const_pointer c_str() const {
-    return get();
+    return data;
   }
 
   operator const_pointer() const {
-    return get();
+    return c_str();
   }
 
   bool operator ==(const_pointer value) const {
@@ -263,7 +259,7 @@ public:
   }
 
   StaticStringBase<T, max> &operator =(const_pointer new_value) {
-    set(new_value);
+    assign(new_value);
     return *this;
   }
 
@@ -273,7 +269,7 @@ public:
   }
 
   StaticStringBase<T, max> &operator +=(value_type ch) {
-    Append(ch);
+    push_back(ch);
     return *this;
   }
 

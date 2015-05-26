@@ -119,7 +119,7 @@ Profile::Load(UISettings &settings)
   Get(ProfileKeys::MenuTimeout, settings.menu_timeout);
 
 #ifndef GNAV
-  Get(ProfileKeys::UseCustomFonts, settings.custom_fonts);
+  GetEnum(ProfileKeys::UIScale, settings.scale);
 #endif
 
   Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);

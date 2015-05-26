@@ -27,12 +27,6 @@ Copyright_License {
 
 #include <algorithm>
 
-FontSettings Fonts::default_settings;
-
-#ifndef GNAV
-FontSettings Fonts::effective_settings;
-#endif
-
 Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
 
 /// values inside infoboxes  like numbers, etc.
@@ -60,16 +54,16 @@ Fonts::Load(const FontSettings &settings)
 {
   dialog.Load(settings.dialog);
 
-  LOGFONT lf = settings.dialog;
-  lf.lfWeight = FW_BOLD;
-  dialog_bold.Load(lf);
+  auto d = settings.dialog;
+  d.SetBold();
+  dialog_bold.Load(d);
 
 #ifdef GNAV
   dialog_small.Load(settings.dialog_small);
 #else
-  lf = settings.dialog;
-  lf.lfHeight = std::max(6u, unsigned(lf.lfHeight) * 3u / 4u);
-  dialog_small.Load(lf);
+  d = settings.dialog;
+  d.SetHeight(std::max(6u, d.GetHeight() * 3u / 4u));
+  dialog_small.Load(d);
 #endif
 
   title.Load(settings.title);

@@ -27,6 +27,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Math/fixed.hpp"
 
+#include <TargetConditionals.h>
+
 #import <CoreLocation/CoreLocation.h>
 
 #include <unistd.h>
@@ -52,15 +54,15 @@ Copyright_License {
     self = [super init];
     if (self) {
         self->index = index_;
-        gregorian_calendar = [NSCalendar alloc];
-        [gregorian_calendar initWithCalendarIdentifier:NSGregorianCalendar];
+        gregorian_calendar = [[NSCalendar alloc]
+            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     }
     return self;
 }
 
 -(void) dealloc
 {
-  [gregorian_calendar dealloc];
+  [gregorian_calendar release];
   [super dealloc];
 }
 
@@ -76,10 +78,25 @@ Copyright_License {
   return [date timeIntervalSinceDate: midnight];
 }
 
+#if TARGET_OS_IPHONE
+- (void) locationManager:(CLLocationManager *)manager
+    didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+  if ((status == kCLAuthorizationStatusAuthorized)
+      || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+    [manager startUpdatingLocation];
+  }
+}
+#endif
+
 -(void) locationManager:(CLLocationManager *)manager
     didUpdateLocations:(NSArray *)locations
 {
-  CLLocation *location = locations.lastObject;
+  CLLocation *location;
+  if (locations)
+    location = locations.lastObject;
+  else
+    location = nil;
 
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(self->index);
@@ -89,6 +106,8 @@ Copyright_License {
   } else {
     basic.alive.Clear();
   }
+
+  basic.gps.nonexpiring_internal_gps = true;
 
   basic.airspeed_available.Clear();
   if (location && (location.speed >= 0.0)) {
@@ -131,6 +150,18 @@ Copyright_License {
     basic.track_available.Clear();
   }
 
+  device_blackboard->ScheduleMerge();
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+    didFailWithError:(NSError *)error
+{
+  ScopeLock protect(device_blackboard->mutex);
+  NMEAInfo &basic = device_blackboard->SetRealState(self->index);
+  if ([error code] != kCLErrorHeadingFailure) {
+    basic.alive.Clear();
+    basic.location_available.Clear();
+  }
   device_blackboard->ScheduleMerge();
 }
 @end
@@ -178,14 +209,29 @@ void InternalSensors::init()
   private_data->locationManager.desiredAccuracy =
       kCLLocationAccuracyBestForNavigation;
   private_data->locationManager.delegate = private_data->locationDelegate;
+#if TARGET_OS_IPHONE
+  if ([private_data->locationManager
+      respondsToSelector: @selector(requestWhenInUseAuthorization)]) {
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if ((status == kCLAuthorizationStatusAuthorized)
+        || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+      [private_data->locationManager startUpdatingLocation];
+    } else {
+      [private_data->locationManager requestWhenInUseAuthorization];
+    }
+  } else {
+    [private_data->locationManager startUpdatingLocation];
+  }
+#else
   [private_data->locationManager startUpdatingLocation];
+#endif
 }
 
 void InternalSensors::deinit()
 {
   [private_data->locationManager stopUpdatingLocation];
-  [private_data->locationManager dealloc];
-  [private_data->locationDelegate dealloc];
+  [private_data->locationManager release];
+  [private_data->locationDelegate release];
 }
 
 InternalSensors * InternalSensors::create(unsigned int index)

@@ -26,10 +26,10 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 
-class ShowMenuButton : public WndButton {
+class ShowMenuButton : public Button {
 public:
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              ButtonWindowStyle style=ButtonWindowStyle());
+              WindowStyle style=WindowStyle());
 
 protected:
   /* virtual methods from class ButtonWindow */

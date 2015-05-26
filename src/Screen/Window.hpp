@@ -617,19 +617,27 @@ public:
       Hide();
   }
 
-#ifndef USE_GDI
+  gcc_pure
   bool IsTabStop() const {
     assert(IsDefined());
 
+#ifdef USE_GDI
+    return (GetStyle() & WS_VISIBLE) != 0;
+#else
     return tab_stop;
+#endif
   }
 
+  gcc_pure
   bool IsControlParent() const {
     assert(IsDefined());
 
+#ifdef USE_GDI
+    return (GetExStyle() & WS_EX_CONTROLPARENT) != 0;
+#else
     return control_parent;
-  }
 #endif
+  }
 
   /**
    * Can this window get user input?
@@ -1016,7 +1024,10 @@ public:
    */
   virtual bool OnCharacter(unsigned ch);
 
+#ifdef USE_GDI
   virtual bool OnCommand(unsigned id, unsigned code);
+#endif
+
   virtual void OnCancelMode();
   virtual void OnSetFocus();
   virtual void OnKillFocus();

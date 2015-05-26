@@ -43,8 +43,6 @@ Copyright_License {
 
 using std::max;
 
-#define SELECTORWIDTH Layout::Scale(5)
-
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
                              const InfoBoxSettings &_settings,

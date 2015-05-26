@@ -55,7 +55,7 @@ protected:
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
 
-  WndButton shift_button;
+  Button shift_button;
   bool shift_state;
 
   const bool show_shift_button;
@@ -79,7 +79,7 @@ private:
   void OnResize(const PixelRect &rc);
 
   gcc_pure
-  WndButton *FindButton(unsigned ch);
+  Button *FindButton(unsigned ch);
 
   void MoveButton(unsigned ch, int left, int top);
   void ResizeButton(unsigned ch, unsigned width, unsigned height);

@@ -31,6 +31,8 @@
 #ifndef QUAD_TREE_HPP
 #define QUAD_TREE_HPP
 
+#include "Compiler.h"
+
 #include <utility>
 #include <limits>
 #include <memory>
@@ -59,7 +61,7 @@ template<typename T, typename Accessor,
 class QuadTree {
   struct AlwaysTrue {
     constexpr
-    bool operator()(const T &value) const {
+    bool operator()(const T &) const {
       return true;
     }
   };

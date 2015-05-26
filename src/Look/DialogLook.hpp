@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DIALOG_LOOK_HPP
 
 #include "ButtonLook.hpp"
+#include "CheckBoxLook.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
@@ -111,6 +112,7 @@ struct DialogLook {
   } list;
 
   ButtonLook button;
+  CheckBoxLook check_box;
 
   void Initialise(const Font &caption_font,
                   const Font &text_font, const Font &small_font,

@@ -41,10 +41,10 @@ ChartRenderer::Axis::Reset()
   max = fixed(0);
 }
 
-PixelScalar
+int
 ChartRenderer::Axis::ToScreen(fixed value) const
 {
-  return (long)((value - min) * scale);
+  return int((value - min) * scale);
 }
 
 void
@@ -167,8 +167,8 @@ ChartRenderer::DrawNoData(const TCHAR *text)
 
   PixelSize tsize = canvas.CalcTextSize(text);
 
-  PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;
-  PixelScalar y = (rc.top + rc.bottom - tsize.cy) / 2;
+  int x = (rc.left + rc.right - tsize.cx) / 2;
+  int y = (rc.top + rc.bottom - tsize.cy) / 2;
 
   canvas.DrawText(x, y, text);
 }
@@ -180,8 +180,8 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  PixelScalar x = rc.right - tsize.cx - Layout::Scale(3);
-  PixelScalar y = rc.bottom - tsize.cy;
+  int x = rc.right - tsize.cx - Layout::GetTextPadding();
+  int y = rc.bottom - tsize.cy - Layout::GetTextPadding();
 
   canvas.DrawText(x, y, text);
 }
@@ -203,9 +203,8 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
   canvas.Select(look.axis_label_font);
   canvas.SetBackgroundTransparent();
 
-  PixelSize tsize = canvas.CalcTextSize(text);
-  PixelScalar x = std::max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
-  PixelScalar y = rc.top;
+  int x = rc.left + Layout::GetTextPadding();
+  int y = rc.top + Layout::GetTextPadding();
 
   canvas.DrawText(x, y, text);
 }
@@ -308,12 +307,12 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
 
   const auto &slots = lsdata.GetSlots();
   for (unsigned i = 0, n = slots.size(); i != n; i++) {
-    PixelScalar xmin((fixed(i) + fixed(1.2)) * x.scale
-                     + fixed(rc.left + padding_left));
-    PixelScalar ymin = ScreenY(y.min);
-    PixelScalar xmax((fixed(i) + fixed(1.8)) * x.scale
-                     + fixed(rc.left + padding_left));
-    PixelScalar ymax = ScreenY(slots[i].y);
+    int xmin((fixed(i) + fixed(1.2)) * x.scale
+             + fixed(rc.left + padding_left));
+    int ymin = ScreenY(y.min);
+    int xmax((fixed(i) + fixed(1.8)) * x.scale
+             + fixed(rc.left + padding_left));
+    int ymax = ScreenY(slots[i].y);
     canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
 }
@@ -394,7 +393,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   RasterPoint line[2];
 
   /** the minimum next position of the text, to avoid overlapping */
-  PixelScalar next_text = rc.left;
+  int next_text = rc.left;
 
   /* increase tic step so graph not too crowded */
   while ((x.max-x.min)/tic_step > fixed(10)) {
@@ -406,10 +405,12 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   line[0].y = rc.top;
   line[1].y = rc.bottom - padding_bottom;
 
+  const int y = line[1].y - canvas.GetFontHeight();
+
   fixed start = (int)(x.min / tic_step) * tic_step;
 
   for (fixed xval = start; xval <= x.max; xval += tic_step) {
-    const PixelScalar xmin = ScreenX(xval);
+    const int xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
     // STYLE_THINDASHPAPER
@@ -420,9 +421,10 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.DrawText(xmin, rc.bottom - Layout::Scale(17), unit_text);
+        canvas.DrawText(xmin, y, unit_text);
 
-        next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
+        next_text = xmin + canvas.CalcTextSize(unit_text).cx
+          + Layout::GetTextPadding();
       }
     }
   }
@@ -456,10 +458,12 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   line[0].x = rc.left + padding_left;
   line[1].x = rc.right;
 
+  const int x = line[0].x;
+
   fixed start = (int)(y.min / tic_step) * tic_step;
 
   for (fixed yval = start; yval <= y.max; yval += tic_step) {
-    const PixelScalar ymin = ScreenY(yval);
+    const int ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
     // STYLE_THINDASHPAPER
@@ -470,19 +474,19 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.DrawText(rc.left + Layout::Scale(8), ymin, unit_text);
+        canvas.DrawText(x, ymin, unit_text);
       }
     }
   }
 }
 
-PixelScalar
+int
 ChartRenderer::ScreenX(fixed _x) const
 {
   return rc.left + padding_left + x.ToScreen(_x);
 }
 
-PixelScalar
+int
 ChartRenderer::ScreenY(fixed _y) const
 {
   return rc.bottom - padding_bottom - y.ToScreen(_y);
@@ -515,9 +519,11 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
 }
 
 void
-ChartRenderer::DrawDot(const fixed x, const fixed y, const PixelScalar width)
+ChartRenderer::DrawDot(const fixed x, const fixed y, const unsigned _width)
 {
   RasterPoint p = ToScreen(x, y);
+
+  const int width = _width;
   RasterPoint line[4] = { { p.x, p.y - width },
                           { p.x - width, p.y },
                           { p.x, p.y + width },

@@ -138,7 +138,7 @@ location=3
 mode=pan
 type=key
 data=APP4
-event=NearestMapItems pan
+event=NearestMapItems
 label=What's\nhere?
 location=4
 
@@ -792,7 +792,7 @@ location=6
 mode=Info1
 type=key
 data=8
-event=NearestMapItems aircraft
+event=NearestMapItems
 event=Mode default
 label=What's\nhere?
 location=7

@@ -35,8 +35,6 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Resources.hpp"
 
-class WndButton;
-
 void
 SimulatorPromptWindow::OnCreate()
 {
@@ -44,7 +42,7 @@ SimulatorPromptWindow::OnCreate()
 
   const PixelRect rc = GetClientRect();
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.TabStop();
 
   fly_bitmap.Load(IDB_LAUNCHER1);

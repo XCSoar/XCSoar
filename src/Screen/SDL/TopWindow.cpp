@@ -32,6 +32,11 @@ Copyright_License {
 
 #if SDL_MAJOR_VERSION >= 2
 #include "Util/UTF8.hpp"
+
+#if defined(__MACOSX__) && __MACOSX__
+#include <SDL_syswm.h>
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #if SDL_MAJOR_VERSION < 2
@@ -126,31 +131,64 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_MOUSEMOTION:
     // XXX keys
+#ifdef HAVE_HIGHDPI_SUPPORT
+    {
+      auto x = event.motion.x;
+      auto y = event.motion.y;
+      PointToReal(x, y);
+      return OnMouseMove(x, y, 0);
+    }
+#else
     return OnMouseMove(event.motion.x, event.motion.y, 0);
+#endif
 
   case SDL_MOUSEBUTTONDOWN:
+    {
 #if SDL_MAJOR_VERSION < 2
-    if (event.button.button == SDL_BUTTON_WHEELUP)
-      return OnMouseWheel(event.button.x, event.button.y, 1);
-    else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-      return OnMouseWheel(event.button.x, event.button.y, -1);
+      if (event.button.button == SDL_BUTTON_WHEELUP)
+        return OnMouseWheel(event.button.x, event.button.y, 1);
+      else if (event.button.button == SDL_BUTTON_WHEELDOWN)
+        return OnMouseWheel(event.button.x, event.button.y, -1);
 #endif
 
-    return double_click.Check(RasterPoint(event.button.x, event.button.y))
-      ? OnMouseDouble(event.button.x, event.button.y)
-      : OnMouseDown(event.button.x, event.button.y);
+#ifdef HAVE_HIGHDPI_SUPPORT
+      auto x = event.button.x;
+      auto y = event.button.y;
+      PointToReal(x, y);
+
+      return double_click.Check(RasterPoint(x, y))
+        ? OnMouseDouble(x, y)
+        : OnMouseDown(x, y);
+#else
+      return double_click.Check(RasterPoint(event.button.x, event.button.y))
+        ? OnMouseDouble(event.button.x, event.button.y)
+        : OnMouseDown(event.button.x, event.button.y);
+#endif
+    }
 
   case SDL_MOUSEBUTTONUP:
+    {
 #if SDL_MAJOR_VERSION < 2
-    if (event.button.button == SDL_BUTTON_WHEELUP ||
-        event.button.button == SDL_BUTTON_WHEELDOWN)
-      /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
-      return false;
+      if (event.button.button == SDL_BUTTON_WHEELUP ||
+          event.button.button == SDL_BUTTON_WHEELDOWN)
+        /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
+        return false;
 #endif
 
-    double_click.Moved(RasterPoint(event.button.x, event.button.y));
+#ifdef HAVE_HIGHDPI_SUPPORT
+      auto x = event.button.x;
+      auto y = event.button.y;
+      PointToReal(x, y);
 
-    return OnMouseUp(event.button.x, event.button.y);
+      double_click.Moved(RasterPoint(x, y));
+
+      return OnMouseUp(x, y);
+#else
+      double_click.Moved(RasterPoint(event.button.x, event.button.y));
+
+      return OnMouseUp(event.button.x, event.button.y);
+#endif
+    }
 
   case SDL_QUIT:
     return OnClose();
@@ -163,17 +201,23 @@ TopWindow::OnEvent(const SDL_Event &event)
 
 #if SDL_MAJOR_VERSION >= 2
   case SDL_MOUSEWHEEL:
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    return OnMouseWheel(x, y, event.wheel.y);
+    {
+      int x, y;
+      SDL_GetMouseState(&x, &y);
+#ifdef HAVE_HIGHDPI_SUPPORT
+      PointToReal(x, y);
+#endif
+      return OnMouseWheel(x, y, event.wheel.y);
+    }
 
   case SDL_WINDOWEVENT:
     switch (event.window.event) {
 
     case SDL_WINDOWEVENT_RESIZED:
+#ifndef HAVE_HIGHDPI_SUPPORT
       Resize(event.window.data1, event.window.data2);
       return true;
-
+#endif
     case SDL_WINDOWEVENT_RESTORED:
     case SDL_WINDOWEVENT_MOVED:
     case SDL_WINDOWEVENT_SHOWN:
@@ -184,8 +228,28 @@ TopWindow::OnEvent(const SDL_Event &event)
           int w, h;
           SDL_GetWindowSize(event_window, &w, &h);
           if ((w >= 0) && (h >= 0)) {
+#ifdef HAVE_HIGHDPI_SUPPORT
+            int real_w, real_h;
+            SDL_GL_GetDrawableSize(event_window, &real_w, &real_h);
+            point_to_real_x = static_cast<float>(real_w) /
+                              static_cast<float>(w);
+            point_to_real_y = static_cast<float>(real_h) /
+                              static_cast<float>(h);
+            Resize(real_w, real_h);
+#else
             Resize(w, h);
+#endif
           }
+
+#if defined(__MACOSX__) && __MACOSX__
+          SDL_SysWMinfo wm_info;
+          SDL_VERSION(&wm_info.version);
+          if ((SDL_GetWindowWMInfo(event_window, &wm_info)) &&
+              (wm_info.subsystem == SDL_SYSWM_COCOA)) {
+            [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+          }
+          Invalidate();
+#endif
         }
       }
       return true;

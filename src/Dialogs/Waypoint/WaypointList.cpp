@@ -26,8 +26,6 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
@@ -48,6 +46,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -138,6 +137,8 @@ class WaypointListWidget final
   WaypointFilterWidget &filter_widget;
 
   WaypointList items;
+
+  TwoTextRowsRenderer row_renderer;
 
 public:
   WaypointListWidget(ActionListener &_action_listener,
@@ -322,7 +323,9 @@ void
 WaypointListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc, WaypointListRenderer::GetHeight(look));
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          *look.small_font));
   UpdateList();
 }
 
@@ -432,15 +435,10 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (items.empty()) {
     assert(i == 0);
 
-    const UPixelScalar line_height = rc.bottom - rc.top;
-    const Font &name_font =
-      *UIGlobals::GetDialogLook().list.font;
-    canvas.SetTextColor(COLOR_BLACK);
-    canvas.Select(name_font);
-    canvas.DrawText(rc.left + line_height + Layout::FastScale(2),
-                    rc.top + line_height / 2 - name_font.GetHeight() / 2,
-                    dialog_state.IsDefined() || way_points.IsEmpty() ?
-                    _("No Match!") : _("Choose a filter or click here"));
+    const auto *text = dialog_state.IsDefined() || way_points.IsEmpty()
+      ? _("No Match!")
+      : _("Choose a filter or click here");
+    row_renderer.DrawFirstRow(canvas, rc, text);
     return;
   }
 
@@ -450,7 +448,7 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              info.GetVector(location),
-                             UIGlobals::GetDialogLook(),
+                             row_renderer,
                              UIGlobals::GetMapLook().waypoint,
                              CommonInterface::GetMapSettings().waypoint);
 }

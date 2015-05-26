@@ -79,6 +79,7 @@ VEGA_SOURCES = \
 BLUEFLY_SOURCES = \
 	$(DRIVER_SRC_DIR)/BlueFly/Misc.cpp \
 	$(DRIVER_SRC_DIR)/BlueFly/Parser.cpp \
+	$(DRIVER_SRC_DIR)/BlueFly/Settings.cpp \
 	$(DRIVER_SRC_DIR)/BlueFly/Register.cpp
 
 DRIVER_SOURCES = \
@@ -113,6 +114,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/WesterboerVW921.cpp \
 	$(DRIVER_SRC_DIR)/Zander.cpp \
 	$(DRIVER_SRC_DIR)/Vaulter.cpp \
+	$(DRIVER_SRC_DIR)/ATR833.cpp \
 	$(DRIVER_SRC_DIR)/KRT2.cpp
 
 $(eval $(call link-library,driver,DRIVER))

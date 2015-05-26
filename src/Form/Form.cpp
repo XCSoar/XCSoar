@@ -348,12 +348,6 @@ CheckSpecialKey(ContainerWindow *container, const Event &event)
   return IsSpecialKey(event.GetKeyCode()) && CheckKey(container, event);
 }
 
-int WndForm::ShowModeless()
-{
-  modeless = true;
-  return ShowModal();
-}
-
 int
 WndForm::ShowModal()
 {
@@ -525,7 +519,7 @@ WndForm::OnPaint(Canvas &canvas)
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     const PixelRect rc = GetClientRect();
-    const PixelScalar size = Layout::SmallScale(4);
+    const PixelScalar size = Layout::PtScale(4);
 
     const RasterPoint vertices[8] = {
       { rc.left, rc.top },
@@ -602,14 +596,14 @@ WndForm::OnPaint(Canvas &canvas)
                      look.caption.background_bitmap);
 
       // Draw titlebar text
-      canvas.DrawText(title_rect.left + Layout::FastScale(2), title_rect.top,
-                      caption.c_str());
+      canvas.DrawText(title_rect.left + Layout::GetTextPadding(),
+                      title_rect.top, caption.c_str());
     } else {
 #endif
       canvas.SetBackgroundColor(is_active
                                 ? look.caption.background_color
                                 : look.caption.inactive_background_color);
-      canvas.DrawOpaqueText(title_rect.left + Layout::FastScale(2),
+      canvas.DrawOpaqueText(title_rect.left + Layout::GetTextPadding(),
                             title_rect.top, title_rect, caption.c_str());
 #ifdef EYE_CANDY
     }

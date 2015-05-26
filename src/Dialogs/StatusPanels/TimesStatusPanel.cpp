@@ -60,17 +60,16 @@ TimesStatusPanel::Refresh()
     temp.Format(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunsethours, sunsetmins);
     SetText(Daylight, temp);
   } else {
-    SetText(Daylight, _T(""));
+    ClearText(Daylight);
   }
 
   if (basic.time_available) {
-    FormatLocalTimeHHMM(temp.buffer(), (int)basic.time, settings.utc_offset);
-    SetText(LocalTime, temp);
-    FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
-    SetText(UTCTime, temp);
+    SetText(LocalTime,
+            FormatLocalTimeHHMM((int)basic.time, settings.utc_offset));
+    SetText(UTCTime, FormatSignedTimeHHMM((int)basic.time));
   } else {
-    SetText(LocalTime, _T(""));
-    SetText(UTCTime, _T(""));
+    ClearText(LocalTime);
+    ClearText(UTCTime);
   }
 
   if (basic.date_time_utc.IsDatePlausible()) {
@@ -78,31 +77,29 @@ TimesStatusPanel::Refresh()
                 basic.date_time_utc.month, basic.date_time_utc.day);
     SetText(UTCDate, temp);
   } else {
-    SetText(UTCDate, _T(""));
+    ClearText(UTCDate);
   }
 
   if (positive(flight.flight_time)) {
-    FormatLocalTimeHHMM(temp.buffer(), (int)flight.takeoff_time,
-                        settings.utc_offset);
-    SetText(TakeoffTime, temp);
+    SetText(TakeoffTime,
+            FormatLocalTimeHHMM((int)flight.takeoff_time,
+                                settings.utc_offset));
   } else {
-    SetText(TakeoffTime, _T(""));
+    ClearText(TakeoffTime);
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    FormatLocalTimeHHMM(temp.buffer(),
-                        int(flight.takeoff_time + flight.flight_time),
-                        settings.utc_offset);
-    SetText(LandingTime, temp);
+    SetText(LandingTime,
+            FormatLocalTimeHHMM(int(flight.takeoff_time + flight.flight_time),
+                                settings.utc_offset));
   } else {
-    SetText(LandingTime, _T(""));
+    ClearText(LandingTime);
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(), (int)flight.flight_time);
-    SetText(FlightTime, temp);
+    SetText(FlightTime, FormatSignedTimeHHMM((int)flight.flight_time));
   } else {
-    SetText(FlightTime, _T(""));
+    ClearText(FlightTime);
   }
 }
 

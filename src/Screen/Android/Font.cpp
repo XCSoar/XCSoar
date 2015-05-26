@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
+#include "Look/FontDescription.hpp"
+#include "Look/StandardFonts.hpp"
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
@@ -30,24 +32,22 @@ Copyright_License {
 
 #include <assert.h>
 
-bool
-Font::Load(const LOGFONT &log)
-{
-  return Load(log.lfFaceName, (int) log.lfHeight,
-              log.lfWeight > 600, log.lfItalic != 0);
-}
-
 /*
  * create a new instance of org.xcsoar.TextUtil and store it with a global
  * reference in text_util_object member.
  */
 bool
-Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
 
+  const char *facename = d.IsMonospace()
+    ? GetStandardMonospaceFontFace()
+    : GetStandardFontFace();
+
   delete text_util_object;
-  text_util_object = TextUtil::create(facename, height, bold, italic);
+  text_util_object = TextUtil::create(facename, d.GetHeight(),
+                                      d.IsBold(), d.IsItalic());
   if (!text_util_object)
     return false;
 

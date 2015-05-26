@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
-#include "Widget/DockWindow.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/CreateWindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -161,7 +160,7 @@ class ConfigurationExtraButtons final
   const DialogLook &look;
 
   CheckBoxControl expert;
-  WndButton button2, button1;
+  Button button2, button1;
   bool borrowed2, borrowed1;
 
 public:
@@ -169,7 +168,7 @@ public:
     :look(_look),
      borrowed2(false), borrowed1(false) {}
 
-  WndButton &GetButton(unsigned number) {
+  Button &GetButton(unsigned number) {
     switch (number) {
     case 1:
       return button1;
@@ -249,7 +248,7 @@ ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
 {
   ConfigurationExtraButtons &extra =
     (ConfigurationExtraButtons &)pager->GetExtra();
-  WndButton &button = extra.GetButton(i);
+  Button &button = extra.GetButton(i);
   button.SetCaption(caption);
   button.SetListener(listener, id);
   button.Show();
@@ -260,7 +259,7 @@ ConfigPanel::ReturnExtraButton(unsigned i)
 {
   ConfigurationExtraButtons &extra =
     (ConfigurationExtraButtons &)pager->GetExtra();
-  WndButton &button = extra.GetButton(i);
+  Button &button = extra.GetButton(i);
   button.Hide();
 }
 

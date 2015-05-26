@@ -62,7 +62,7 @@ MacCreadySetupPanel::OnAction(int id)
 void
 MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  CheckBoxStyle style;
+  WindowStyle style;
   style.Hide();
   style.TabStop();
 

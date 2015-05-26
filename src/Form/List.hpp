@@ -81,14 +81,14 @@ public:
 
 class ListCursorHandler {
 public:
-  virtual void OnCursorMoved(unsigned index) {}
+  virtual void OnCursorMoved(gcc_unused unsigned index) {}
 
   gcc_pure
-  virtual bool CanActivateItem(unsigned index) const {
+  virtual bool CanActivateItem(gcc_unused unsigned index) const {
     return false;
   }
 
-  virtual void OnActivateItem(unsigned index) {}
+  virtual void OnActivateItem(gcc_unused unsigned index) {}
 };
 
 /**
@@ -173,6 +173,8 @@ public:
   ListControl(ContainerWindow &parent, const DialogLook &look,
               PixelRect rc, const WindowStyle style,
               UPixelScalar _item_height);
+
+  virtual ~ListControl();
 
   void Create(ContainerWindow &parent,
               PixelRect rc, const WindowStyle style,

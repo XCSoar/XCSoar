@@ -64,7 +64,7 @@ InfoBoxesConfigPanel::OnAction(int id)
   if (changed) {
     Profile::Save(data, i);
     Profile::Save();
-    ((WndButton &)GetRow(i)).SetCaption(gettext(data.name));
+    ((Button &)GetRow(i)).SetCaption(gettext(data.name));
   }
 }
 

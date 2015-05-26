@@ -62,7 +62,7 @@ class LogoQuitWidget final : public NullWidget {
   ActionListener &action_listener;
 
   LogoWindow logo;
-  WndButton quit;
+  Button quit;
 
 public:
   LogoQuitWidget(const ButtonLook &_look, ActionListener &_action_listener)
@@ -91,11 +91,12 @@ public:
     WindowStyle style;
     style.Hide();
 
-    ButtonWindowStyle button_style(style);
+    WindowStyle button_style(style);
+    button_style.Hide();
     button_style.TabStop();
 
     quit.Create(parent, look, _("Quit"), rc,
-                style, action_listener, mrCancel);
+                button_style, action_listener, mrCancel);
     logo.Create(parent, rc, style);
   }
 

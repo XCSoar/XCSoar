@@ -79,7 +79,6 @@ GlueMapWindow::SetPan(bool enable)
     break;
   }
 
-  UpdateProjection();
   FullRedraw();
 }
 
@@ -96,7 +95,6 @@ GlueMapWindow::TogglePan()
     break;
   }
 
-  UpdateProjection();
   FullRedraw();
 }
 
@@ -106,13 +104,14 @@ GlueMapWindow::PanTo(const GeoPoint &location)
   follow_mode = FOLLOW_PAN;
   SetLocation(location);
 
-  UpdateProjection();
   FullRedraw();
 }
 
 void
-GlueMapWindow::OnProjectionModified()
+GlueMapWindow::UpdateScreenBounds()
 {
+  visible_projection.UpdateScreenBounds();
+
   if (topography_thread != nullptr &&
       CommonInterface::GetMapSettings().topography_enabled)
     topography_thread->Trigger(visible_projection);
@@ -366,8 +365,6 @@ GlueMapWindow::UpdateProjection()
        map center, to avoid showing a fully white map, which confuses
        users */
     SetLocation(terrain->GetTerrainCenter());
-
-  visible_projection.UpdateScreenBounds();
 
   OnProjectionModified();
 }

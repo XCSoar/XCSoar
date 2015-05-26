@@ -38,7 +38,7 @@ public:
   static constexpr unsigned MAX_BUTTONS = 32;
 
 protected:
-  class Button : public WndButton {
+  class Button : public ::Button {
     unsigned event;
 
   public:
@@ -47,12 +47,6 @@ protected:
     }
 
     virtual bool OnClicked();
-
-#ifdef USE_GDI
-  protected:
-    virtual LRESULT OnMessage(HWND hWnd, UINT message,
-                               WPARAM wParam, LPARAM lParam);
-#endif
   };
 
   Button buttons[MAX_BUTTONS];

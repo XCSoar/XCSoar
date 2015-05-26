@@ -292,7 +292,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
   Add(Row::Type::MULTI_LINE, ltw);
 }
 
-WndButton *
+Button *
 RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
 {
   assert(IsDefined());
@@ -300,14 +300,13 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
   const PixelRect button_rc =
     InitialControlRect(Layout::GetMinimumControlHeight());
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.TabStop();
-  button_style.multiline();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
-  WndButton *button = new WndButton(panel, look.button, label, button_rc,
-                                    button_style, listener, id);
+  Button *button = new Button(panel, look.button, label, button_rc,
+                              button_style, listener, id);
 
   Add(Row::Type::BUTTON, button);
   return button;
@@ -401,8 +400,8 @@ RowFormWidget::UpdateLayout()
         const unsigned max_height = i.GetMaximumHeight(look, vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
+          grow_height = max_height - height + grow_height;
           height = max_height;
-          grow_height = max_height - height;
         }
 
         excess_height -= grow_height;

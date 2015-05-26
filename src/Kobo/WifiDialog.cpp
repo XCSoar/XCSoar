@@ -53,7 +53,7 @@ class WifiListWidget final
     bool old_visible, old_configured;
   };
 
-  WndButton *connect_button;
+  Button *connect_button;
 
   WifiStatus status;
   TrivialArray<NetworkInfo, 64> networks;

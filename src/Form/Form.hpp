@@ -161,10 +161,8 @@ public:
     force = _force;
   }
 
-  int GetModalResult() { return modal_result; }
-  int SetModalResult(int Value) {
+  void SetModalResult(int Value) {
     modal_result = Value;
-    return Value;
   }
 
   /** inherited from ActionListener */
@@ -173,16 +171,14 @@ public:
   }
 
   /**
-   * @param mouse_allowed a Window which is allowed to get mouse
-   * input, even though the dialog is modal (a hack for dlgTarget)
-   */
-  int ShowModal();
-
-  /**
-   * Opens modeless dialog.  Dialog will close if mouse is clicked
+   * Enables "modeless": dialog will close if mouse is clicked
    * anywhere on screen outside the dialog
    */
-  int ShowModeless();
+  void SetModeless() {
+    modeless = true;
+  }
+
+  int ShowModal();
 
   const TCHAR *GetCaption() const {
     return caption.c_str();

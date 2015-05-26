@@ -31,7 +31,7 @@ Copyright_License {
 struct AttitudeState;
 class LiveBlackboard;
 struct ThermalAssistantLook;
-class WndButton;
+class Button;
 class BigThermalAssistantWindow;
 
 class BigThermalAssistantWidget
@@ -50,7 +50,7 @@ class BigThermalAssistantWidget
     CLOSE,
   };
 
-  WndButton *close_button;
+  Button *close_button;
 #endif
 
 public:

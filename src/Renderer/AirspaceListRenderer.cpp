@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "AirspaceListRenderer.hpp"
-
+#include "TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
@@ -35,107 +35,76 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
 
-namespace AirspaceListRenderer
-{
-  void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
-            const TCHAR *comment, const DialogLook &dialog_look,
-            const AirspaceLook &look,
-            const AirspaceRendererSettings &renderer_settings);
-}
-
-unsigned
-AirspaceListRenderer::GetHeight(const DialogLook &look)
-{
-  return look.list.font->GetHeight() + Layout::Scale(6u) +
-         look.small_font->GetHeight();
-}
-
-void
-AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const AbstractAirspace &airspace,
-                           const TCHAR *comment, const DialogLook &dialog_look,
-                           const AirspaceLook &look,
-                           const AirspaceRendererSettings &renderer_settings)
+static void
+Draw(Canvas &canvas, PixelRect rc,
+     const AbstractAirspace &airspace,
+     const TCHAR *comment,
+     const TwoTextRowsRenderer &row_renderer,
+     const AirspaceLook &look,
+     const AirspaceRendererSettings &renderer_settings)
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
-  const unsigned spacing = Layout::FastScale(4u);
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
+  const unsigned radius = line_height / 2 - padding;
+  AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
+                                renderer_settings, look);
 
-  // Y-Coordinate of the second row
-  const int top2 = rc.top + name_font.GetHeight() + spacing;
+  rc.left += line_height + padding;
 
-  canvas.Select(small_font);
+  canvas.Select(row_renderer.GetSecondFont());
 
   // Draw upper airspace altitude limit
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-  unsigned altitude_width = canvas.CalcTextWidth(buffer);
-  canvas.DrawClippedText(rc.right - altitude_width - spacing,
-                         rc.top + name_font.GetHeight() -
-                         small_font.GetHeight() + padding, rc,
-                         buffer);
-
-  unsigned max_altitude_width = altitude_width;
+  const int top_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
+  canvas.DrawClippedText(top_x, rc.top + row_renderer.GetFirstY(),
+                         rc, buffer);
 
   // Draw lower airspace altitude limit
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-  altitude_width = canvas.CalcTextWidth(buffer);
-  canvas.DrawClippedText(rc.right - altitude_width - spacing, top2,
+  const int bottom_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
+  canvas.DrawClippedText(bottom_x, rc.top + row_renderer.GetSecondY(),
                          rc, buffer);
 
-  if (altitude_width > max_altitude_width)
-    max_altitude_width = altitude_width;
-
-  const unsigned max_altitude_width_with_padding =
-    max_altitude_width + Layout::FastScale(10);
+  rc.right = std::min(top_x, bottom_x) - padding;
 
   // Draw comment line
-  const int left = rc.left + line_height + padding;
-  const unsigned width = rc.right - max_altitude_width_with_padding - left;
-  canvas.DrawClippedText(left, top2, width, comment);
+  row_renderer.DrawSecondRow(canvas, rc, comment);
 
   // Draw airspace name
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + padding, width,
-                         airspace.GetName());
-
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
-  const unsigned radius = std::min(line_height / 2 - spacing,
-                                   Layout::FastScale(10u));
-  AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
-                                renderer_settings, look);
+  row_renderer.DrawFirstRow(canvas, rc, airspace.GetName());
 }
 
 void
 AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AbstractAirspace &airspace,
-                           const DialogLook &dialog_look,
+                           const TwoTextRowsRenderer &row_renderer,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  Draw(canvas, rc, airspace, AirspaceFormatter::GetClass(airspace), dialog_look,
-       look, renderer_settings);
+  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClass(airspace),
+         row_renderer, look, renderer_settings);
 }
 
 void
 AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AbstractAirspace &airspace,
                            const GeoVector &vector,
-                           const DialogLook &dialog_look,
+                           const TwoTextRowsRenderer &row_renderer,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
   StaticString<256> comment(AirspaceFormatter::GetClass(airspace));
 
-  TCHAR dist[20], bearing[20];
-  FormatUserDistanceSmart(vector.distance, dist, true);
+  TCHAR bearing[20];
   FormatBearing(bearing, ARRAY_SIZE(bearing), vector.bearing);
-  comment.AppendFormat(_T(" - %s - %s"), dist, bearing);
+  comment.AppendFormat(_T(" - %s - %s"),
+                       FormatUserDistanceSmart(vector.distance).c_str(),
+                       bearing);
 
-  Draw(canvas, rc, airspace, comment, dialog_look,
-       look, renderer_settings);
+  ::Draw(canvas, rc, airspace, comment,
+         row_renderer, look, renderer_settings);
 }

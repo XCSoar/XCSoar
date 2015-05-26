@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "ChartLook.hpp"
+#include "FontDescription.hpp"
 #include "Asset.hpp"
-#include "StandardFonts.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>
@@ -39,10 +39,10 @@ ChartLook::Initialise()
 
   bar_brush.Set(COLOR_GREEN);
 
-  PixelScalar axis_label_size = std::max(8u, Layout::FastScale(6u));
-  PixelScalar axis_value_size = std::max(8u, Layout::FastScale(7u));
+  PixelScalar axis_label_size = std::max(8u, Layout::FontScale(6u));
+  PixelScalar axis_value_size = std::max(8u, Layout::FontScale(7u));
 
-  label_font.Load(GetStandardFontFace(), Layout::FastScale(12));
-  axis_label_font.Load(GetStandardFontFace(), axis_label_size, true);
-  axis_value_font.Load(GetStandardFontFace(), axis_value_size);
+  label_font.Load(FontDescription(Layout::FontScale(12)));
+  axis_label_font.Load(FontDescription(axis_label_size, true));
+  axis_value_font.Load(FontDescription(axis_value_size));
 }

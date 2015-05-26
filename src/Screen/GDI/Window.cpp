@@ -130,6 +130,12 @@ Window::SetFont(const Font &_font)
                 (WPARAM)_font.Native(), MAKELPARAM(TRUE, 0));
 }
 
+bool
+Window::OnCommand(unsigned id, unsigned code)
+{
+  return false;
+}
+
 LRESULT
 Window::OnUnhandledMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)

@@ -182,20 +182,20 @@ WndProperty::UpdateLayout()
 {
   edit_rc = GetClientRect();
 
-  const unsigned DEFAULTBORDERPENWIDTH = Layout::FastScale(1u);
+  const unsigned margin = Layout::PtScale(1u);
 
   if (caption_width >= 0) {
-    edit_rc.left += caption_width + (DEFAULTBORDERPENWIDTH + 1);
-    edit_rc.top += (DEFAULTBORDERPENWIDTH + 1);
-    edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
-    edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.left += caption_width + margin;
+    edit_rc.top += margin;
+    edit_rc.right -= margin;
+    edit_rc.bottom -= margin;
   } else {
     const unsigned caption_height = look.text_font->GetHeight();
 
-    edit_rc.left += (DEFAULTBORDERPENWIDTH + 1);
-    edit_rc.top = DEFAULTBORDERPENWIDTH + caption_height;
-    edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
-    edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.left += margin;
+    edit_rc.top = margin + caption_height;
+    edit_rc.right -= margin;
+    edit_rc.bottom -= margin;
   }
 
   Invalidate();

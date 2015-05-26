@@ -31,7 +31,7 @@ UISettings::SetDefaults()
   menu_timeout = 8 * 4;
 
 #ifndef GNAV
-  custom_fonts = false;
+  scale = Scale::NORMAL;
 #endif
 
   enable_thermal_assistant_gauge = true;

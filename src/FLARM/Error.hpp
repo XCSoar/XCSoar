@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_ERROR_HPP
 
 #include "NMEA/Validity.hpp"
+#include "Compiler.h"
 
 #include <type_traits>
 
@@ -85,7 +86,7 @@ struct FlarmError {
     }
   }
 
-  void Expire(fixed clock) {
+  void Expire(gcc_unused fixed clock) {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }

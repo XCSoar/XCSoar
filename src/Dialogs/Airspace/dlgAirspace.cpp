@@ -32,7 +32,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
-#include "Look/GlobalFonts.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
@@ -91,42 +90,50 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     CommonInterface::GetMapSettings().airspace;
   const AirspaceLook &look = CommonInterface::main_window->GetLook().map.airspace;
 
-  PixelScalar w0 = rc.right - rc.left - Layout::FastScale(4);
-
-  PixelScalar w1 = canvas.CalcTextWidth(_("Warn")) + Layout::FastScale(10);
-  PixelScalar w2 = canvas.CalcTextWidth(_("Display")) + Layout::FastScale(10);
-  PixelScalar x0 = w0 - w1 - w2;
-
   const unsigned padding = Layout::GetTextPadding();
 
+  const unsigned column_spacing = Layout::PtScale(5);
+
+  const TCHAR *const name = AirspaceFormatter::GetClass((AirspaceClass)i);
+  const int name_x = rc.left + padding;
+
+  int second_x;
+
   if (color_mode) {
+    second_x = name_x + canvas.CalcTextWidth(name) + column_spacing;
+
     if (AirspacePreviewRenderer::PrepareFill(
         canvas, (AirspaceClass)i, look, renderer)) {
-      canvas.Rectangle(rc.left + x0, rc.top + padding,
+      canvas.Rectangle(second_x, rc.top + padding,
                        rc.right - padding,
                        rc.bottom - padding);
       AirspacePreviewRenderer::UnprepareFill(canvas);
     }
     if (AirspacePreviewRenderer::PrepareOutline(
         canvas, (AirspaceClass)i, look, renderer)) {
-      canvas.Rectangle(rc.left + x0, rc.top + padding,
+      canvas.Rectangle(second_x, rc.top + padding,
                        rc.right - padding,
                        rc.bottom - padding);
     }
   } else {
+    const int display_x = rc.right - padding
+      - canvas.CalcTextWidth(_("Display"));
+    const int warn_x = second_x = display_x - column_spacing
+      - canvas.CalcTextWidth(_("Warn"));
+
     if (computer.warnings.class_warnings[i])
-      canvas.DrawText(rc.left + w0 - w1 - w2, rc.top + padding,
+      canvas.DrawText(warn_x, rc.top + padding,
                       _("Warn"));
 
     if (renderer.classes[i].display)
-      canvas.DrawText(rc.left + w0 - w2, rc.top + padding,
+      canvas.DrawText(display_x, rc.top + padding,
                       _("Display"));
   }
 
-  canvas.DrawClippedText(rc.left + padding,
+  canvas.DrawClippedText(name_x,
                          rc.top + padding,
-                         x0 - Layout::FastScale(10),
-                         AirspaceFormatter::GetClass((AirspaceClass)i));
+                         second_x - column_spacing - name_x,
+                         name);
 }
 
 void
@@ -147,7 +154,7 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index)
       return;
 
     ActionInterface::SendMapSettings();
-    look.Initialise(renderer, Fonts::map);
+    look.Reinitialise(renderer);
   } else {
     renderer.classes[index].display = !renderer.classes[index].display;
     if (!renderer.classes[index].display)

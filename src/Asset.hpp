@@ -220,7 +220,7 @@ constexpr
 static inline bool
 IsEmbedded()
 {
-  return IsAndroid() || IsWindowsCE() || IsKobo();
+  return IsAndroid() || IsWindowsCE() || IsKobo() || IsIOS();
 }
 
 /**
@@ -275,7 +275,7 @@ constexpr
 static inline bool
 HasTouchScreen()
 {
-  return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo();
+  return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo() || IsIOS();
 }
 
 /**
@@ -307,7 +307,7 @@ HasCursorKeys()
 #ifdef ANDROID
   return has_cursor_keys;
 #else
-  return !IsKobo();
+  return !IsKobo() || !IsIOS();
 #endif
 }
 

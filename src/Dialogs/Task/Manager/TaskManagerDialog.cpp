@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
-#include "TaskMapWindow.hpp"
-#include "TaskCalculatorPanel.hpp"
+#include "TaskMapButtonRenderer.hpp"
 #include "TaskEditPanel.hpp"
 #include "TaskPropertiesPanel.hpp"
 #include "TaskMiscPanel.hpp"
@@ -33,7 +32,9 @@ Copyright_License {
 #include "Look/IconLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Widget/ButtonWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/SingleWindow.hpp"
@@ -50,7 +51,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/TabBar.hpp"
+#include "Widget/ButtonWidget.hpp"
+#include "Widget/TabWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
@@ -58,33 +60,17 @@ Copyright_License {
 
 enum Buttons {
   MAP = 100,
-  TARGET,
-};
-
-struct TaskManagerLayout {
-  PixelRect task_view, target_button, tab_bar;
-  bool vertical;
 };
 
 TaskManagerDialog::~TaskManagerDialog()
 {
-  delete task_view;
-  delete target_button;
-  delete tab_bar;
   delete task;
 }
 
-void
-TaskManagerDialog::ReinitialiseLayout(const PixelRect &parent_rc)
-{
-  Move(parent_rc);
-}
-
 bool
-TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
+TaskManagerDialog::KeyPress(unsigned key_code)
 {
-  if (WndForm::OnAnyKeyDown(key_code) ||
-      tab_bar->InvokeKeyPress(key_code))
+  if (TabWidget::KeyPress(key_code))
     return true;
 
   switch (key_code) {
@@ -93,10 +79,10 @@ TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
       /* close the dialog immediately if nothing was modified */
       return false;
 
-    if (tab_bar->GetCurrentPage() != 4) {
+    if (GetCurrentIndex() != 3) {
       /* switch to "close" page instead of closing the dialog */
-      tab_bar->SetCurrentPage(4);
-      tab_bar->FocusCurrentWidget();
+      SetCurrent(3);
+      SetFocus();
       return true;
     }
 
@@ -108,78 +94,34 @@ TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
 }
 
 void
+TaskManagerDialog::OnPageFlipped()
+{
+  RestoreTaskView();
+  UpdateCaption();
+  TabWidget::OnPageFlipped();
+}
+
+void
 TaskManagerDialog::OnAction(int id)
 {
   switch (id) {
   case MAP:
     TaskViewClicked();
     break;
-
-  case TARGET:
-    dlgTargetShowModal();
-    break;
-
-  default:
-    WndForm::OnAction(id);
   }
-}
-
-gcc_pure
-static TaskManagerLayout
-CalculateTaskManagerLayout(PixelRect rc)
-{
-  TaskManagerLayout layout;
-
-  layout.task_view.left = 0;
-  layout.task_view.top = 0;
-
-  layout.vertical = rc.right > rc.bottom;
-  if (rc.right > rc.bottom) {
-    layout.task_view = { 0, 0, Layout::Scale(80), Layout::Scale(52) };
-    layout.target_button = { Layout::Scale(5), Layout::Scale(18),
-                             Layout::Scale(58), Layout::Scale(51) };
-    layout.tab_bar = { 0, Layout::Scale(52), Layout::Scale(80), rc.bottom };
-  } else {
-    layout.task_view = { 0, 0, Layout::Scale(60), Layout::Scale(76) };
-    layout.target_button = { Layout::Scale(2), Layout::Scale(2),
-                             Layout::Scale(59), Layout::Scale(69) };
-    layout.tab_bar = { Layout::Scale(60), 0, rc.right, Layout::Scale(76) };
-  }
-
-  return layout;
 }
 
 void
-TaskManagerDialog::Create(SingleWindow &parent)
+TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
-  WndForm::Create(parent, parent.GetClientRect(), _("Task Manager"));
-
   task = protected_task_manager->TaskClone();
 
   /* create the controls */
 
-  ContainerWindow &client_area = GetClientAreaWindow();
-  const TaskManagerLayout layout =
-    CalculateTaskManagerLayout(client_area.GetClientRect());
+  SetExtra(new ButtonWidget(new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
+                            *this, MAP));
 
-  task_view_position = layout.task_view;
-
-  WindowStyle hidden;
-  hidden.Hide();
-  task_view = new TaskMapWindow(UIGlobals::GetMapLook(), *this, MAP);
-  task_view->Create(client_area, layout.task_view, hidden);
-
-  ButtonWindowStyle button_style(hidden);
-  button_style.TabStop();
-  target_button = new WndButton(client_area, GetLook().button, _("Target"),
-                                layout.target_button, button_style,
-                                *this, TARGET);
-
-  WindowStyle tab_style;
-  tab_style.ControlParent();
-  tab_bar = new TabBarControl(client_area, GetLook(), layout.tab_bar,
-                              tab_style, layout.vertical);
-  tab_bar->SetPageFlippedCallback([this]() { UpdateCaption(); });
+  TabWidget::Initialise(parent, rc);
 
   /* create pages */
 
@@ -188,10 +130,6 @@ TaskManagerDialog::Create(SingleWindow &parent)
 
   TaskClosePanel *wClose = new TaskClosePanel(*this, &modified,
                                               UIGlobals::GetDialogLook());
-
-  TaskCalculatorPanel *wCalculator =
-    new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &modified);
-  wCalculator->SetTargetButton(target_button);
 
   const MapLook &look = UIGlobals::GetMapLook();
   Widget *wEdit = CreateTaskEditPanel(*this, look.task, look.airspace,
@@ -203,72 +141,23 @@ TaskManagerDialog::Create(SingleWindow &parent)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
   const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : nullptr;
   const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
   const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
   const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
-  tab_bar->AddTab(wCalculator, _("Calculator"), CalcIcon);
-
-  if (layout.vertical) {
-    tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-    TurnpointTab = 1;
-
-    tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
-
-    tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
-    PropertiesTab = 3;
-
-    tab_bar->AddTab(wClose, _("Close"));
-
-    tab_bar->SetCurrentPage(0);
-  } else {
-    tab_bar->AddTab(wClose, _("Close"));
-
-    tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-    TurnpointTab = 2;
-
-    tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
-
-    tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
-    PropertiesTab = 4;
-
-    tab_bar->SetCurrentPage(0);
-  }
+  AddTab(wEdit, _("Turn Points"), TurnPointIcon);
+  AddTab(list_tab, _("Manage"), BrowseIcon);
+  AddTab(wProps, _("Rules"), PropertiesIcon);
+  AddTab(wClose, _("Close"));
 
   UpdateCaption();
 }
 
 void
-TaskManagerDialog::OnResize(PixelSize new_size)
+TaskManagerDialog::Show(const PixelRect &rc)
 {
-  WndForm::OnResize(new_size);
-
-  ContainerWindow &client_area = GetClientAreaWindow();
-  const PixelRect rc = client_area.GetClientRect();
-  const TaskManagerLayout layout = CalculateTaskManagerLayout(rc);
-
-  task_view_position = layout.task_view;
-
-  if (task_view != nullptr)
-    task_view->Move(layout.task_view);
-
-  if (target_button != nullptr)
-    target_button->Move(layout.target_button);
-
-  if (tab_bar != nullptr)
-    tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
-}
-
-void
-TaskManagerDialog::Destroy()
-{
-  /* destroy the TabBar first, to have a well-defined destruction
-     order; this is necessary because some pages refer to buttons
-     belonging to the dialog */
-  tab_bar->Destroy();
-
-  WndForm::Destroy();
+  ResetTaskView();
+  TabWidget::Show(rc);
 }
 
 void
@@ -277,72 +166,44 @@ TaskManagerDialog::UpdateCaption()
   StaticString<128> title;
   if (task->GetName().empty())
     title.Format(_T("%s: %s"), _("Task Manager"),
-                 tab_bar->GetButtonCaption(tab_bar->GetCurrentPage()));
+                 GetButtonCaption(GetCurrentIndex()));
   else
     title.Format(_T("%s: %s - %s"), _("Task Manager"),
                  task->GetName().c_str(),
-                 tab_bar->GetButtonCaption(tab_bar->GetCurrentPage()));
-  SetCaption(title);
+                 GetButtonCaption(GetCurrentIndex()));
+  dialog.SetCaption(title);
 }
 
 void
 TaskManagerDialog::InvalidateTaskView()
 {
   UpdateCaption();
-  task_view->Invalidate();
-}
 
-void
-TaskManagerDialog::TaskViewClicked()
-{
-  fullscreen = !fullscreen;
-  task_view->Move(fullscreen
-                  ? tab_bar->GetPagerPosition() : task_view_position);
-}
-
-void
-TaskManagerDialog::RestoreTaskView()
-{
-  if (fullscreen) {
-    fullscreen = false;
-    task_view->Move(task_view_position);
-  }
+  auto &task_view = (ButtonWidget &)GetExtra();
+  task_view.Invalidate();
 }
 
 void
 TaskManagerDialog::ShowTaskView(const OrderedTask *_task)
 {
-  RestoreTaskView();
-  task_view->SetTask(_task);
-  task_view->Show();
-}
-
-void
-TaskManagerDialog::ShowTaskView()
-{
-  ShowTaskView(task);
-}
-
-void
-TaskManagerDialog::ResetTaskView()
-{
-  task_view->Hide();
-  RestoreTaskView();
-  task_view->SetTask(nullptr);
+  auto &task_view = (ButtonWidget &)GetExtra();
+  auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
+  renderer.SetTask(_task);
+  task_view.Invalidate();
 }
 
 void
 TaskManagerDialog::SwitchToEditTab()
 {
-  tab_bar->SetCurrentPage(TurnpointTab);
-  tab_bar->SetFocus();
+  SetCurrent(TurnpointTab);
+  SetFocus();
 }
 
 void
 TaskManagerDialog::SwitchToPropertiesPanel()
 {
-  tab_bar->SetCurrentPage(PropertiesTab);
-  tab_bar->SetFocus();
+  SetCurrent(PropertiesTab);
+  SetFocus();
 }
 
 bool
@@ -393,10 +254,11 @@ dlgTaskManagerShowModal()
   if (protected_task_manager == nullptr)
     return;
 
-  TaskManagerDialog dialog(UIGlobals::GetDialogLook());
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  TaskManagerDialog tm(dialog);
 
-  dialog.Create(UIGlobals::GetMainWindow());
-
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Task Manager"), &tm);
   dialog.ShowModal();
-  dialog.Destroy();
+  dialog.StealWidget();
 }

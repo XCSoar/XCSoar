@@ -123,8 +123,8 @@ public:
     return GetType() != TaskPointType::FINISH;
   }
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
-  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &otb) {}
+  virtual void SetTaskBehaviour(gcc_unused const TaskBehaviour &tb) {}
+  virtual void SetOrderedTaskSettings(gcc_unused const OrderedTaskSettings &otb) {}
 
   /**
    * Set previous/next task points.
@@ -267,8 +267,8 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool UpdateSampleFar(const AircraftState &state,
-                               const FlatProjection &projection) {
+  virtual bool UpdateSampleFar(gcc_unused const AircraftState &state,
+                               gcc_unused const FlatProjection &projection) {
     return false;
   }
 
@@ -288,21 +288,21 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  virtual const GeoPoint &GetLocationRemaining() const override {
+  const GeoPoint &GetLocationRemaining() const override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
+  GeoVector GetVectorRemaining(gcc_unused const GeoPoint &reference) const override {
     return TaskLeg::GetVectorRemaining();
   }
-  virtual GeoVector GetNextLegVector() const override;
+  GeoVector GetNextLegVector() const override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const override;
+  bool CheckEnterTransition(const AircraftState &ref_now,
+                            const AircraftState &ref_last) const override;
 
-  virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const  override{
+  bool CheckExitTransition(const AircraftState &ref_now,
+                           const AircraftState &ref_last) const override{
     return CheckEnterTransition(ref_last, ref_now);
   }
 };

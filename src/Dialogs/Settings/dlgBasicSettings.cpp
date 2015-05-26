@@ -62,7 +62,7 @@ class FlightSetupPanel final
   : public RowFormWidget, DataFieldListener,
     private Timer,
     public ActionListener {
-  WndButton *dump_button;
+  Button *dump_button;
 
   PolarSettings &polar_settings;
 
@@ -76,7 +76,7 @@ public:
      last_altitude(-2)
   {}
 
-  void SetDumpButton(WndButton *_dump_button) {
+  void SetDumpButton(Button *_dump_button) {
     dump_button = _dump_button;
   }
 

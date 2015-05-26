@@ -22,20 +22,36 @@
 #define ENABLE_DIALOG_LOOK
 #endif
 
+#ifdef ENABLE_CLOSE_BUTTON
+#define ENABLE_MAIN_WINDOW
+#define ENABLE_BUTTON_LOOK
+#include "Form/Button.hpp"
+#endif
+
 #ifdef ENABLE_MAIN_WINDOW
 #include "Screen/SingleWindow.hpp"
+#include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/NumberParser.hpp"
+#define ENABLE_SCREEN
 #endif
 
 #ifdef ENABLE_LOOK
 #include "Look/Look.hpp"
 #include "UISettings.hpp"
+#define ENABLE_DIALOG_LOOK
 #define ENABLE_SCREEN
 #elif defined(ENABLE_DIALOG_LOOK)
 #include "Look/DialogLook.hpp"
 #define ENABLE_SCREEN
+#elif defined(ENABLE_BUTTON_LOOK)
+#include "Look/ButtonLook.hpp"
+#define ENABLE_SCREEN
+#endif
+
+#ifdef ENABLE_DIALOG_LOOK
+#define ENABLE_BUTTON_LOOK
 #endif
 
 #ifdef ENABLE_SCREEN
@@ -72,6 +88,10 @@ static Look *look;
 static DialogLook *dialog_look;
 #endif
 
+#ifdef ENABLE_BUTTON_LOOK
+static ButtonLook *button_look;
+#endif
+
 #ifdef ENABLE_DIALOG
 static DialogSettings dialog_settings;
 
@@ -90,10 +110,19 @@ UIGlobals::GetDialogLook()
 
 #ifdef ENABLE_MAIN_WINDOW
 
-class TestMainWindow : public SingleWindow {
+class TestMainWindow : public SingleWindow, public ActionListener {
   Window *full_window;
 
+#ifdef ENABLE_CLOSE_BUTTON
+  Button close_button;
+#endif
+
 public:
+  enum Buttons {
+    CLOSE,
+    LAST_BUTTON
+  };
+
   TestMainWindow():full_window(nullptr) {}
 
   /**
@@ -104,7 +133,28 @@ public:
     full_window = &w;
   }
 
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case CLOSE:
+      Close();
+      break;
+    }
+  }
+
 protected:
+  /* virtual methods from class Window */
+  void OnCreate() override {
+    SingleWindow::OnCreate();
+
+#ifdef ENABLE_CLOSE_BUTTON
+    close_button.Create(*this, *button_look, _T("Close"),
+                        GetCloseButtonRect(GetClientRect()),
+                        WindowStyle(),
+                        *this, CLOSE);
+#endif
+  }
+
   void OnResize(PixelSize new_size) override {
     SingleWindow::OnResize(new_size);
     Layout::Initialize(new_size);
@@ -112,6 +162,18 @@ protected:
     if (full_window != nullptr)
       full_window->Resize(new_size);
   }
+
+protected:
+#ifdef ENABLE_CLOSE_BUTTON
+  gcc_pure
+  PixelRect GetCloseButtonRect(PixelRect rc) const {
+    rc.right -= 5;
+    rc.left = rc.right - 120;
+    rc.top += 5;
+    rc.bottom = rc.top + 50;
+    return rc;
+  }
+#endif
 };
 
 static TestMainWindow main_window;
@@ -191,7 +253,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     ui_settings.SetDefaults();
     look->InitialiseConfigured(ui_settings,
                                normal_font, bold_font, small_font,
-                               normal_font, bold_font, small_font,
+                               normal_font, bold_font,
+                               small_font, normal_font,
                                small_font, monospace_font,
                                normal_font, small_font,
 #ifndef GNAV
@@ -201,10 +264,15 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   dialog_look = &look->dialog;
+  button_look = &dialog_look->button;
 #elif defined(ENABLE_DIALOG_LOOK)
   dialog_look = new DialogLook();
   dialog_look->Initialise(bold_font, normal_font, small_font,
                           bold_font, bold_font, bold_font);
+  button_look = &dialog_look->button;
+#elif defined(ENABLE_BUTTON_LOOK)
+  button_look = new ButtonLook();
+  button_look->Initialise(bold_font);
 #endif
 
 #ifdef ENABLE_DATA_PATH
@@ -235,6 +303,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete look;
 #elif defined(ENABLE_DIALOG_LOOK)
   delete dialog_look;
+#elif defined(ENABLE_BUTTON_LOOK)
+  delete button_look;
 #endif
 
 #ifdef ENABLE_SCREEN

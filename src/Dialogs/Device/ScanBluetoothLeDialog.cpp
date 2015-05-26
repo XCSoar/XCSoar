@@ -56,15 +56,13 @@ class ScanBluetoothLeWidget final
 
   WidgetDialog &dialog;
 
-  jobject callback;
-
   std::vector<Item> items;
 
   Mutex mutex;
   std::set<std::string> addresses;
   std::forward_list<Item> new_items;
 
-  WndButton *select_button;
+  Button *select_button;
 
 public:
   explicit ScanBluetoothLeWidget(WidgetDialog &_dialog)
@@ -97,7 +95,7 @@ private:
     return true;
   }
 
-  void OnActivateItem(unsigned index) {
+  void OnActivateItem(unsigned index) override {
     dialog.SetModalResult(mrOK);
   }
 

@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2014-08-26 23:14+0000\n"
+"PO-Revision-Date: 2015-05-12 15:53+0000\n"
 "Last-Translator: Sergio Solfa <ssolfa@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2015-05-15 23:20+0000\n"
+"X-Generator: Launchpad (build 17493)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -30,7 +30,7 @@ msgstr ""
 #: Data/Input/default.xci:999 Data/Input/default.xci:1037
 #, no-c-format
 msgid "Task"
-msgstr "Manga"
+msgstr "Tarea"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
@@ -615,7 +615,7 @@ msgstr "Cargando waypoints..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
-msgstr ""
+msgstr "Sin Movimiento"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -2263,7 +2263,7 @@ msgstr "Altura sobre el decolage"
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "H T/O"
-msgstr ""
+msgstr "H T/O"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -2758,7 +2758,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1156
 #, no-c-format
 msgid "Cruise Eff"
-msgstr ""
+msgstr "Cruise Eff"
 
 #: src/InfoBoxes/Content/Factory.cpp:1157
 #, no-c-format
@@ -3830,12 +3830,12 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr ""
+msgstr "IOIO i2c sensor de presion"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:84
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "IOIO sensor de voltaje"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:87
 #, no-c-format
@@ -3856,9 +3856,8 @@ msgid "UDP Port"
 msgstr "Puerto UDP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:406
-#, fuzzy
 msgid "Bluetooth LE"
-msgstr "Servidor Bluetooth"
+msgstr "Bluetooth LE"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Port"
@@ -4218,7 +4217,7 @@ msgstr "Configuración del Vario"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:98
 msgid "TE vario"
-msgstr ""
+msgstr "TE vario"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:99
 msgid ""
@@ -4239,7 +4238,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:125
 msgid "Vario Demo"
-msgstr ""
+msgstr "Vario Demo"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:57
 msgid "Climb rate"
@@ -4393,7 +4392,7 @@ msgstr "Cambiar"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
-msgstr ""
+msgstr "Vario circling"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:152
 msgid "Switches"
@@ -4463,7 +4462,7 @@ msgstr "Avión propulsado"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:133
 #, no-c-format
 msgid "Jet aircraft"
-msgstr ""
+msgstr "Jet aircraft"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:135
 #, no-c-format
@@ -4871,7 +4870,7 @@ msgstr "Puntaje"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "FLARM, Other"
-msgstr ""
+msgstr "FLARM, Other"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:114
 #, no-c-format
@@ -5086,7 +5085,7 @@ msgstr "Banda termica"
 
 #: src/Dialogs/dlgAnalysis.cpp:485
 msgid "Wind at Altitude"
-msgstr "Viento a Altitud"
+msgstr "Viento a altitud"
 
 #: src/Dialogs/dlgAnalysis.cpp:488
 msgid "Set Wind"
@@ -5162,33 +5161,29 @@ msgid "Delete"
 msgstr "Borrar"
 
 #: src/Dialogs/ProfileListDialog.cpp:230 src/Dialogs/ProfileListDialog.cpp:267
-#, fuzzy
 msgid "Profile name"
-msgstr "Nombre de Archivo corto"
+msgstr "Nombre del perfil:"
 
 #: src/Dialogs/ProfileListDialog.cpp:241 src/Dialogs/ProfileListDialog.cpp:278
 msgid "File exists already."
-msgstr ""
+msgstr "Archivo ya existe"
 
 #: src/Dialogs/ProfileListDialog.cpp:284
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Falla al cargar archivo"
+msgstr "Error al guardar archivo"
 
 #: src/Dialogs/ProfileListDialog.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Borrar planeador \"%s\"?"
+msgstr "Borrar \"%s\"?"
 
 #: src/Dialogs/ProfileListDialog.cpp:335 Data/Input/default.xci:668
-#, fuzzy
 msgid "Profiles"
-msgstr "Perfil"
+msgstr "Perfiles"
 
 #: src/Dialogs/ProfileListDialog.cpp:348
-#, fuzzy
 msgid "Select profile"
-msgstr "Seleccione un archivo"
+msgstr "Seleccionar perfil"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Activate"
@@ -5633,9 +5628,8 @@ msgid "Set Active Frequency"
 msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "Frecuencia de Radio"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:432 Data/Input/default.xci:1045
 msgid "GoTo"
@@ -5956,7 +5950,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
-msgstr ""
+msgstr "Barra de planeo final"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
 msgid ""
@@ -6148,13 +6142,12 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:118
-#, fuzzy
 msgid "Wave assistant"
-msgstr "Asistente de Ternica"
+msgstr "Asistente de onda"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
-msgstr ""
+msgstr "Usar modo planeo final"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid ""
@@ -6168,7 +6161,7 @@ msgstr "Fuentes"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:135
 msgid "Auto. blank"
-msgstr ""
+msgstr "Auto."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:136
 msgid ""
@@ -6266,12 +6259,12 @@ msgstr "Horizontal"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:62
 #, no-c-format
 msgid "Reverse Portrait"
-msgstr ""
+msgstr "Rotación vertical"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:64
 #, no-c-format
 msgid "Reverse Landscape"
-msgstr ""
+msgstr "Rotación horizontal"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:70
 #, no-c-format
@@ -6324,9 +6317,9 @@ msgid "12 Top or Left"
 msgstr "12 Arriba o izquierda"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "24 Derecha (horizontal)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -6441,7 +6434,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
 #, no-c-format
 msgid "Shaded"
-msgstr ""
+msgstr "Sombreado"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
@@ -8525,12 +8518,10 @@ msgid "V rem."
 msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"Velocida AAT realizable sobre los objetivos en el tiempo minimo remanente."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -9638,33 +9629,6 @@ msgstr ""
 msgid "Nav"
 msgstr "Nav"
 
-#~ msgid "MANUAL"
-#~ msgstr "MANUAL"
-
-#~ msgid "AUTO"
-#~ msgstr "AUTO"
-
-#~ msgid "Clear current task?"
-#~ msgstr "Limpiar tarea?"
-
-#~ msgid "Goto and clear task"
-#~ msgstr "\"Ir a\" y borrar manga."
-
-#~ msgid "Unknown error creating task."
-#~ msgstr "Error desconocido al crear tarea."
-
-#~ msgid "Emulate the sound of an electronic vario."
-#~ msgstr "Emular el sonido de un vario electronico."
-
-#~ msgid "Volume"
-#~ msgstr "Volumen"
-
-#~ msgid "Waypoint Info"
-#~ msgstr "Información de Waypoints"
-
-#~ msgid "Calc"
-#~ msgstr "Cálculo"
-
 #~ msgid "Line skipped."
 #~ msgstr "Linea omitida"
 
@@ -9673,6 +9637,12 @@ msgstr "Nav"
 
 #~ msgid "No help available on this item"
 #~ msgstr "Ayuda no disponible para este elemento"
+
+#~ msgid "MANUAL"
+#~ msgstr "MANUAL"
+
+#~ msgid "AUTO"
+#~ msgstr "AUTO"
 
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Borrar Waypoint?"
@@ -9686,6 +9656,9 @@ msgstr "Nav"
 #~ msgid "V rough air"
 #~ msgstr "Vel. Viento Fuerte"
 
+#~ msgid "Waypoint Info"
+#~ msgstr "Información de Waypoints"
+
 #~ msgid "Dump time"
 #~ msgstr "Tiempo de deslastrado"
 
@@ -9695,8 +9668,14 @@ msgstr "Nav"
 #~ msgid "Lookup"
 #~ msgstr "Advertir"
 
+#~ msgid "Volume"
+#~ msgstr "Volumen"
+
 #~ msgid "Filter..."
 #~ msgstr "Filtrar..."
+
+#~ msgid "Short file name"
+#~ msgstr "Nombre de Archivo corto"
 
 #~ msgid "Edit text"
 #~ msgstr "Editar Texto"
@@ -9756,6 +9735,9 @@ msgstr "Nav"
 
 #~ msgid "Lon."
 #~ msgstr "Long."
+
+#~ msgid "Calc"
+#~ msgstr "Cálculo"
 
 #~ msgid "Latitude"
 #~ msgstr "Latitud"
@@ -9829,6 +9811,15 @@ msgstr "Nav"
 #~ msgid "Configuration Menu"
 #~ msgstr "Menu de Configuracion"
 
+#~ msgid "Emulate the sound of an electronic vario."
+#~ msgstr "Emular el sonido de un vario electronico."
+
+#~ msgid "Clear current task?"
+#~ msgstr "Limpiar tarea?"
+
+#~ msgid "Unknown error creating task."
+#~ msgstr "Error desconocido al crear tarea."
+
 #~ msgid ""
 #~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
 #~ "data to be used anyway."
@@ -9844,6 +9835,9 @@ msgstr "Nav"
 
 #~ msgid "Do you really want to delete plane profile \"%s\"?"
 #~ msgstr "Realmente desea borrarl el perfil de avion \"%s\"?"
+
+#~ msgid "Goto and clear task"
+#~ msgstr "\"Ir a\" y borrar manga."
 
 #~ msgid "Pan To Waypoint"
 #~ msgstr "Desplazarse a la baliza."

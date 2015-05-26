@@ -64,6 +64,8 @@ else
 ICON_SVG = $(topdir)/Data/graphics/logo.svg
 endif
 
+ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
+
 $(ANDROID_BUILD)/res/drawable-ldpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-ldpi/dirstamp
 	$(Q)rsvg-convert --width=36 $< -o $@
 
@@ -81,6 +83,21 @@ $(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/re
 
 $(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=192 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+	$(Q)rsvg-convert --width=24 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-hdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-hdpi/dirstamp
+	$(Q)rsvg-convert --width=36 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-xhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
+	$(Q)rsvg-convert --width=48 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xxhdpi/dirstamp
+	$(Q)rsvg-convert --width=72 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(ANDROID_BUILD)/res/drawable-xxxhdpi/dirstamp
+	$(Q)rsvg-convert --width=96 $< -o $@
 
 OGGENC = oggenc --quiet --quality 1
 
@@ -126,7 +143,12 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
 	$(ANDROID_BUILD)/res/drawable-hdpi/icon.png \
 	$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png \
 	$(ANDROID_BUILD)/res/drawable-xxhdpi/icon.png \
-	$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png
+	$(ANDROID_BUILD)/res/drawable-xxxhdpi/icon.png \
+	$(ANDROID_BUILD)/res/drawable/notification_icon.png \
+	$(ANDROID_BUILD)/res/drawable-hdpi/notification_icon.png \
+	$(ANDROID_BUILD)/res/drawable-xhdpi/notification_icon.png \
+	$(ANDROID_BUILD)/res/drawable-xxhdpi/notification_icon.png \
+	$(ANDROID_BUILD)/res/drawable-xxxhdpi/notification_icon.png
 
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml

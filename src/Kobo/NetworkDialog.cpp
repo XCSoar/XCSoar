@@ -48,7 +48,7 @@ class NetworkWidget final
     FTP,
   };
 
-  WndButton *toggle_wifi_button, *wifi_button;
+  Button *toggle_wifi_button, *wifi_button;
 
 public:
   NetworkWidget(const DialogLook &look):RowFormWidget(look) {}

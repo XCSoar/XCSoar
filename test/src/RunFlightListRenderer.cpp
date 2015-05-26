@@ -23,13 +23,15 @@ Copyright_License {
 
 #define ENABLE_CMDLINE
 #define ENABLE_SCREEN
+#define ENABLE_BUTTON_LOOK
 #define USAGE "flights.log"
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/Timer.hpp"
 #include "Screen/Canvas.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Fonts.hpp"
 #include "Renderer/FlightListRenderer.hpp"
 #include "FlightInfo.hpp"
@@ -37,10 +39,6 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 
 #include <vector>
-
-enum Buttons {
-  CLOSE = 1,
-};
 
 static std::vector<FlightInfo> flights;
 
@@ -60,9 +58,13 @@ protected:
   }
 };
 
-class MainWindow final : public SingleWindow
+class MainWindow final : public SingleWindow, ActionListener
 {
-  ButtonWindow close_button;
+  enum Buttons {
+    CLOSE = 1,
+  };
+
+  Button close_button;
   TestWindow test_window;
 
 public:
@@ -73,7 +75,9 @@ public:
     style.Disable();
 
     const PixelRect rc = GetClientRect();
-    close_button.Create(*this, _T("Close"), CLOSE, GetButtonRect(rc));
+    close_button.Create(*this, *button_look, _T("Close"), GetButtonRect(rc),
+                        WindowStyle(),
+                        *this, CLOSE);
     test_window.Create(*this, rc, style);
   }
 
@@ -85,16 +89,6 @@ private:
   }
 
 protected:
-  bool OnCommand(unsigned id, unsigned code) override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      return true;
-    }
-
-    return SingleWindow::OnCommand(id, code);
-  }
-
   void OnResize(PixelSize size) override {
     SingleWindow::OnResize(size);
 
@@ -114,6 +108,15 @@ protected:
   bool OnMouseUp(PixelScalar x, PixelScalar y) override {
     Close();
     return true;
+  }
+
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case CLOSE:
+      Close();
+      break;
+    }
   }
 };
 

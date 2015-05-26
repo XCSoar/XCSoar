@@ -72,9 +72,11 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
                                  const AirspaceLook &_airspace_look,
                                  const TrailLook &_trail_look,
                                  const TaskLook &_task_look,
-                                 const AircraftLook &_aircraft_look)
+                                 const AircraftLook &_aircraft_look,
+                                 const TopographyLook &_topography_look)
   :task_look(_task_look),
    aircraft_look(_aircraft_look),
+   topography_look(_topography_look),
    topography_renderer(nullptr),
    airspace_renderer(_airspace_look),
    way_point_renderer(nullptr, waypoint_look),
@@ -85,6 +87,8 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
 
 TargetMapWindow::~TargetMapWindow()
 {
+  Destroy();
+
   delete topography_renderer;
 }
 
@@ -255,7 +259,7 @@ TargetMapWindow::SetTopograpgy(TopographyStore *topography)
 {
   delete topography_renderer;
   topography_renderer = topography != nullptr
-    ? new TopographyRenderer(*topography)
+    ? new TopographyRenderer(*topography, topography_look)
     : nullptr;
 }
 

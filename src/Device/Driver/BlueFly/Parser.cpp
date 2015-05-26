@@ -88,14 +88,103 @@ BlueFlyDevice::ParsePRS(const char *content, NMEAInfo &info)
   return true;
 }
 
+static bool
+ParseUlong(const char **line, unsigned long &value)
+{
+  char *endptr;
+  value = strtoul(*line, &endptr, 10);
+
+  if (endptr == *line)
+    return false;
+
+  *line = endptr;
+
+  return true;
+}
+
+/**
+ * Parse the BlueFly Vario version.
+ * Sent Upon a BST request.
+ */
+bool
+BlueFlyDevice::ParseBFV(const char *content, NMEAInfo &info)
+{
+  // e.g. BFV 9
+
+  unsigned long value;
+
+  if (ParseUlong(&content, value)) {
+    assert(value <= UINT_MAX);
+    settings.version = value;
+  }
+
+  return true;
+}
+
+/**
+ * Parse the BlueFly Vario parameter list.
+ * Sent Upon a BST request.
+ */
+bool
+BlueFlyDevice::ParseBST(const char *content, NMEAInfo &info)
+{
+  // e.g. BST BFK BFL BFP BAC BAD BTH BFQ BFI BSQ BSI BFS BOL BOS BRM BVL BOM BOF BQH BRB BPT BUR BLD BR2
+
+  free(settings_keys);
+
+  settings_keys = strdup(content);
+
+  return true;
+}
+
+/**
+ * Parse the BlueFly Vario parameter values.
+ * Sent Upon a BST request.
+ */
+bool
+BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
+{
+  // e.g. SET 0 100 20 1 1 1 180 1000 100 400 100 20 5 5 100 50 0 10 21325 207 1 0 1 34
+
+  const char *values, *token;
+  unsigned long value;
+
+  if (!settings.version || !settings_keys)
+    /* we did not receive the previous BFV and BST, abort */
+    return true;
+
+  token = StringToken(settings_keys, " ");
+  values = content;
+
+  /* the first value should be ignored */
+  if (!ParseUlong(&values, value))
+    return true;
+
+  mutex_settings.Lock();
+  while (token && ParseUlong(&values, value)) {
+    settings.Parse(token, value);
+    token = StringToken(nullptr, " ");
+  }
+  mutex_settings.Unlock();
+
+  trigger_settings_ready.Signal();
+
+  return true;
+}
+
 bool
 BlueFlyDevice::ParseNMEA(const char *line, NMEAInfo &info)
 {
-  if (memcmp(line, "PRS ", 4) == 0)
+  if (StringIsEqual(line, "PRS ", 4))
     return ParsePRS(line + 4, info);
-  else if (memcmp(line, "BAT ", 4) == 0)
+  else if (StringIsEqual(line, "BAT ", 4))
     return ParseBAT(line + 4, info);
+  else if (StringIsEqual(line, "BFV ", 4))
+    return ParseBFV(line + 4, info);
+  else if (StringIsEqual(line, "BST ", 4))
+    return ParseBST(line + 4, info);
+  else if (StringIsEqual(line, "SET ", 4))
+    return ParseSET(line + 4, info);
   else
     return false;
 }
-

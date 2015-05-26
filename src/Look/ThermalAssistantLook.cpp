@@ -22,7 +22,7 @@
 */
 
 #include "ThermalAssistantLook.hpp"
-#include "StandardFonts.hpp"
+#include "FontDescription.hpp"
 #include "Screen/Layout.hpp"
 
 void
@@ -50,6 +50,6 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
   outer_circle_pen.Set(Pen::DASH, 1, circle_color);
   plane_pen.Set(width, inverse ? COLOR_WHITE : COLOR_BLACK);
 
-  overlay_font.Load(GetStandardFontFace(), Layout::FastScale(24));
-  circle_label_font.Load(GetStandardFontFace(), Layout::FastScale(12));
+  overlay_font.Load(FontDescription(Layout::FontScale(22)));
+  circle_label_font.Load(FontDescription(Layout::FontScale(10)));
 }

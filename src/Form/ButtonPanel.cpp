@@ -60,26 +60,26 @@ ButtonPanel::UpdateLayout()
 
 static constexpr PixelRect dummy_rc = { 0, 0, 100, 40 };
 
-WndButton *
+Button *
 ButtonPanel::Add(ButtonRenderer *renderer,
                  ActionListener &listener, int id)
 {
-  WndButton *button = new WndButton(parent, dummy_rc, style,
-                                    renderer, listener, id);
+  auto *button = new Button(parent, dummy_rc, style,
+                            renderer, listener, id);
   keys[buttons.size()] = 0;
   buttons.append(button);
 
   return button;
 }
 
-WndButton *
+Button *
 ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 {
   return Add(new TextButtonRenderer(look, caption), listener, id);
 }
 
-WndButton *
-ButtonPanel::AddSymbol(tstring::const_pointer caption,
+Button *
+ButtonPanel::AddSymbol(const TCHAR *caption,
                        ActionListener &listener, int id)
 {
   return Add(new SymbolButtonRenderer(look, caption), listener, id);

@@ -56,6 +56,7 @@ Copyright_License {
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/KRT2.hpp"
+#include "Device/Driver/ATR833.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringAPI.hpp"
 
@@ -98,6 +99,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &open_vario_driver,
   &vaulter_driver,
   &krt2_driver,
+  &atr833_driver,
   nullptr
 };
 

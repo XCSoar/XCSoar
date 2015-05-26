@@ -322,20 +322,18 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     if (!start_stats.task_started)
       return;
 
-    TCHAR TempTime[40];
-    TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    FormatLocalTimeHHMM(TempTime, (int)start_stats.time,
-                        CommonInterface::GetComputerSettings().utc_offset);
-    FormatUserAltitude(start_stats.altitude, TempAlt, true);
     FormatUserSpeed(start_stats.ground_speed,TempSpeed, true);
     
     TCHAR TempAll[120];
     _stprintf(TempAll, _T("\r\n%s: %s\r\n%s:%s\r\n%s: %s"),
-              _("Altitude"), TempAlt,
+              _("Altitude"),
+              FormatUserAltitude(start_stats.altitude).c_str(),
               _("Speed"), TempSpeed,
-              _("Time"), TempTime);
+              _("Time"),
+              FormatLocalTimeHHMM((int)start_stats.time,
+                                  CommonInterface::GetComputerSettings().utc_offset).c_str());
     Message::AddMessage(_("Task start"), TempAll);
   } else if (StringIsEqual(misc, _T("next"))) {
     Message::AddMessage(_("Next turnpoint"));

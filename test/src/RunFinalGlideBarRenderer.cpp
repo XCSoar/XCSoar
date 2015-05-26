@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
-#define ENABLE_SCREEN
+#define ENABLE_MAIN_WINDOW
+#define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
-#include "Screen/Timer.hpp"
+#include "Event/LambdaTimer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Fonts.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
@@ -99,61 +99,25 @@ protected:
   }
 };
 
-class TestWindow : public SingleWindow
+static void
+Main()
 {
-  ButtonWindow close_button;
-  FinalGlideBarWindow final_glide;
-  fixed step;
-  fixed mc_mc0_step;
+  FinalGlideBarLook final_glide_look;
+  final_glide_look.Initialise(normal_font);
 
-  WindowTimer timer;
+  TaskLook task_look;
+  task_look.Initialise();
 
-  enum {
-    ID_START = 100,
-    ID_CLOSE
-  };
+  FinalGlideBarWindow final_glide(final_glide_look, task_look);
+  WindowStyle with_border;
+  with_border.Border();
+  final_glide.Create(main_window, main_window.GetClientRect(), with_border);
+  main_window.SetFullWindow(final_glide);
 
-public:
-  TestWindow(const FinalGlideBarLook &look, const TaskLook &task_look)
-    :final_glide(look, task_look), step(fixed(10)), mc_mc0_step(fixed(100)), timer(*this)
-  {
-    timer.Schedule(100);
-  }
+  fixed step(10);
+  fixed mc_mc0_step(100);
 
-  ~TestWindow() {
-    timer.Cancel();
-  }
-
-
-  void Create(PixelSize size) {
-    SingleWindow::Create(_T("RunFinalGlideBarRenderer"),
-                         size);
-
-    const PixelRect rc = GetClientRect();
-
-    WindowStyle with_border;
-    with_border.Border();
-
-    final_glide.Create(*this, rc, with_border);
-
-    PixelRect button_rc = rc;
-    button_rc.top = button_rc.bottom - 30;
-    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
-  }
-
-protected:
-  virtual bool OnCommand(unsigned id, unsigned code) override {
-    switch (id) {
-    case ID_CLOSE:
-      Close();
-      return true;
-    }
-
-    return SingleWindow::OnCommand(id, code);
-  }
-
-  virtual bool OnTimer(WindowTimer &_timer) override {
-    if (_timer == timer) {
+  auto timer = MakeLambdaTimer([&](){
       fixed altitude_difference = final_glide.GetAltitudeDifference();
       fixed altitude_difference0 = final_glide.GetAltitudeDifference0();
 
@@ -167,9 +131,9 @@ protected:
         } else if (altitude_difference0 <= altitude_difference) {
           mc_mc0_step = fixed(100);
         }
- 
+
         altitude_difference0 += mc_mc0_step;
-      } 
+      }
 
       altitude_difference += step;
       altitude_difference0 += step;
@@ -178,26 +142,10 @@ protected:
       final_glide.SetAltitudeDifference0(altitude_difference0);
 
       final_glide.Invalidate();
+    });
+  timer.Schedule(100);
 
-      return true;
-    }
+  main_window.RunEventLoop();
 
-    return SingleWindow::OnTimer(_timer);
-  }
-};
-
-static void
-Main()
-{
-  FinalGlideBarLook final_glide_look;
-  final_glide_look.Initialise(normal_font);
-
-  TaskLook task_look;
-  task_look.Initialise();
-
-  TestWindow window(final_glide_look, task_look);
-  window.Create({60, 320});
-
-  window.Show();
-  window.RunEventLoop();
+  timer.Cancel();
 }

@@ -272,7 +272,7 @@ ifeq ($(TARGET),OSX32)
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
   DARWIN_SDK_VERSION = 10.10
-  OSX_MIN_SUPPORTED_VERSION = 10.6
+  OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
     LLVM_TARGET = i386-apple-darwin
@@ -293,7 +293,7 @@ ifeq ($(TARGET),OSX64)
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
   DARWIN_SDK_VERSION = 10.10
-  OSX_MIN_SUPPORTED_VERSION = 10.6
+  OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
     LLVM_TARGET = x86_64-apple-darwin
@@ -313,7 +313,7 @@ ifeq ($(TARGET),IOS32)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  DARWIN_SDK_VERSION = 8.2
+  DARWIN_SDK_VERSION = 8.3
   IOS_MIN_SUPPORTED_VERSION = 5.1
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
@@ -334,7 +334,7 @@ ifeq ($(TARGET),IOS64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  DARWIN_SDK_VERSION = 8.2
+  DARWIN_SDK_VERSION = 8.3
   IOS_MIN_SUPPORTED_VERSION = 7.0
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
@@ -397,11 +397,10 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r10d
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r10e
 
-  ANDROID_PLATFORM = android-19
-  ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
-  ANDROID_NDK_PLATFORM = $(ANDROID_PLATFORM)
+  ANDROID_SDK_PLATFORM = android-22
+  ANDROID_NDK_PLATFORM = android-19
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
@@ -453,7 +452,7 @@ ifeq ($(TARGET),ANDROID)
   CLANG ?= y
 
   ifeq ($(CLANG),y)
-    ANDROID_TOOLCHAIN_NAME = llvm-3.5
+    ANDROID_TOOLCHAIN_NAME = llvm-3.6
     LIBCXX = y
   else
     ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
@@ -558,10 +557,6 @@ ifeq ($(HAVE_WIN32),y)
   ifeq ($(TARGET),CYGWIN)
   TARGET_CPPFLAGS += -DWIN32
   endif
-endif
-
-ifeq ($(TARGET),PPC2000)
-  TARGET_CPPFLAGS += -DNOLINETO -DNOCLEARTYPE
 endif
 
 ifeq ($(TARGET),WINE)

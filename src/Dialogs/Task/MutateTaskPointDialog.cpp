@@ -24,8 +24,9 @@ Copyright_License {
 #include "TaskDialogs.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Form/List.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -36,17 +37,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static OrderedTask* ordered_task = nullptr;
-static OrderedTaskPoint* point = nullptr;
-static unsigned active_index = 0;
-
 static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
-
-static TaskPointFactoryType
-get_point_type() 
-{
-  return ordered_task->GetFactory().GetType(*point);
-}
 
 static const TCHAR *
 TPTypeItemHelp(unsigned i)
@@ -54,9 +45,25 @@ TPTypeItemHelp(unsigned i)
   return OrderedTaskPointDescription(point_types[i]);
 }
 
-static void
-OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
-                     unsigned DrawListIndex)
+class MutateTaskPointRenderer final : public ListItemRenderer {
+  const TaskPointFactoryType current_type;
+
+  TextRowRenderer row_renderer;
+
+public:
+  explicit MutateTaskPointRenderer(TaskPointFactoryType _current_type)
+    :current_type(_current_type) {}
+
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
+
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
+};
+
+void
+MutateTaskPointRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                     unsigned DrawListIndex)
 {
   assert(DrawListIndex < point_types.size());
 
@@ -64,34 +71,35 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 
   const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
 
-  if (point_types[DrawListIndex] == get_point_type())
+  if (point_types[DrawListIndex] == current_type)
     buffer.Format(_T("*%s"), text);
   else
     buffer.Format(_T(" %s"), text);
 
-  canvas.DrawText(rc.left + Layout::GetTextPadding(),
-                  rc.top + Layout::GetTextPadding(),
-                  buffer);
+  row_renderer.DrawTextRow(canvas, rc, buffer);
 }
 
 /**
  * @return true if the task was modified
  */
 static bool
-SetPointType(TaskPointFactoryType type)
+SetPointType(OrderedTask &task, unsigned index,
+             TaskPointFactoryType type)
 {
-  if (type == get_point_type())
+  AbstractTaskFactory &factory = task.GetFactory();
+  const auto &old_point = task.GetPoint(index);
+  const auto current_type = factory.GetType(old_point);
+  if (type == current_type)
     // no change
     return false;
 
-  AbstractTaskFactory &factory = ordered_task->GetFactory();
   bool task_modified = false;
 
-  point = factory.CreateMutatedPoint(*point, type);
+  auto point = factory.CreateMutatedPoint(old_point, type);
   if (point == nullptr)
     return false;
 
-  if (factory.Replace(*point, active_index, true))
+  if (factory.Replace(*point, index, true))
     task_modified = true;
   delete point;
 
@@ -101,13 +109,8 @@ SetPointType(TaskPointFactoryType type)
 bool
 dlgTaskPointType(OrderedTask &task, const unsigned index)
 {
-  ordered_task = &task;
-  active_index = index;
-
-  point = &ordered_task->GetPoint(active_index);
-
   point_types.clear();
-  ordered_task->GetFactory().GetValidTypes(index)
+  task.GetFactory().GetValidTypes(index)
     .CopyTo(std::back_inserter(point_types));
 
   if (point_types.empty()) {
@@ -116,20 +119,23 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
   }
 
   if (point_types.size() == 1)
-    return SetPointType(point_types[0]);
+    return SetPointType(task, index, point_types[0]);
+
+  const auto &point = task.GetPoint(index);
+  const auto current_type = task.GetFactory().GetType(point);
 
   unsigned initial_index = 0;
   const auto b = point_types.begin(), e = point_types.end();
-  auto i = std::find(b, e, get_point_type());
+  auto i = std::find(b, e, current_type);
   if (i != e)
     initial_index = std::distance(b, i);
 
-  FunctionListItemRenderer item_renderer(OnPointPaintListItem);
+  MutateTaskPointRenderer item_renderer(current_type);
 
   int result = ListPicker(_("Task Point Type"),
                           point_types.size(), initial_index,
-                          Layout::Scale(18),
+                          item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
                           item_renderer, false,
                           nullptr, TPTypeItemHelp);
-  return result >= 0 && SetPointType(point_types[result]);
+  return result >= 0 && SetPointType(task, index, point_types[result]);
 }

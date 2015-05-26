@@ -74,7 +74,7 @@ class Color {
 
   struct Internal {};
 
-  constexpr Color(Internal dummy,
+  constexpr Color(Internal,
                   Component _r, Component _g, Component _b, Component _a)
     :r(_r), g(_g), b(_b), a(_a) {}
 

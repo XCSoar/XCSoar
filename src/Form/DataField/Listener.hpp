@@ -28,8 +28,8 @@ class DataField;
 
 class DataFieldListener {
 public:
-  virtual void OnModified(DataField &df) {}
-  virtual void OnSpecial(DataField &df) {}
+  virtual void OnModified(gcc_unused DataField &df) {}
+  virtual void OnSpecial(gcc_unused DataField &df) {}
 };
 
 #endif

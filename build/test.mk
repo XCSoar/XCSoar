@@ -1,6 +1,7 @@
 name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 
 MORE_SCREEN_SOURCES = \
+	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp
 ifeq ($(TARGET_IS_KOBO),y)
@@ -1050,11 +1051,12 @@ $(eval $(call link-program,AddChecksum,ADD_CHECKSUM))
 KEY_CODE_DUMPER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_LDADD = $(FAKE_LIBS)
-KEY_CODE_DUMPER_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+KEY_CODE_DUMPER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 
 LOAD_TOPOGRAPHY_SOURCES = \
@@ -1680,11 +1682,12 @@ $(eval $(call link-program,ViewImage,VIEW_IMAGE))
 RUN_CANVAS_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
-RUN_CANVAS_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_CANVAS_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
@@ -1769,23 +1772,19 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
-	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
-	$(SRC)/Look/DefaultFonts.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Look/MapLook.cpp \
-	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/Look/WaypointLook.cpp \
-	$(SRC)/Look/AirspaceLook.cpp \
-	$(SRC)/Look/TrailLook.cpp \
-	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Look/AircraftLook.cpp \
-	$(SRC)/Look/TrafficLook.cpp \
-	$(SRC)/Look/MarkerLook.cpp \
-	$(SRC)/Look/NOAALook.cpp \
-	$(SRC)/Look/WaveLook.cpp \
+	$(SRC)/UISettings.cpp \
+	$(SRC)/Audio/Settings.cpp \
+	$(SRC)/Audio/VarioSettings.cpp \
+	$(SRC)/DisplaySettings.cpp \
+	$(SRC)/PageSettings.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Gauge/VarioSettings.cpp \
+	$(SRC)/Gauge/TrafficSettings.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
@@ -1853,11 +1852,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 
 ifeq ($(HAVE_HTTP),y)
@@ -1866,13 +1865,23 @@ RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
 
-RUN_MAP_WINDOW_DEPENDS = PROFILE TERRAIN SCREEN EVENT RESOURCE SHAPELIB IO ASYNC OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
+RUN_MAP_WINDOW_DEPENDS = \
+	PROFILE TERRAIN \
+	FORM \
+	LOOK \
+	SCREEN EVENT \
+	RESOURCE \
+	SHAPELIB \
+	IO ASYNC OS THREAD \
+	TASK ROUTE GLIDE WAYPOINT AIRSPACE \
+	JASPER ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_LIST_CONTROL_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -1890,6 +1899,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
@@ -1909,6 +1919,7 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1929,6 +1940,7 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -1947,6 +1959,7 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -1965,6 +1978,7 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
@@ -1991,6 +2005,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/TaskLook.cpp \
@@ -2005,6 +2020,7 @@ $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
 RUN_CHART_RENDERER_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/ChartRenderer.cpp \
@@ -2020,6 +2036,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
@@ -2033,9 +2050,11 @@ RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MAT
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_HORIZON_RENDERER_SOURCES = \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/HorizonLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -2048,8 +2067,10 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -2073,8 +2094,10 @@ RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREA
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
@@ -2088,13 +2111,14 @@ $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_
 
 RUN_FLIGHT_LIST_RENDERER_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFlightListRenderer.cpp
-RUN_FLIGHT_LIST_RENDERER_DEPENDS = SCREEN EVENT ASYNC IO OS THREAD MATH UTIL TIME
+RUN_FLIGHT_LIST_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC IO OS THREAD MATH UTIL TIME
 $(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
@@ -2117,6 +2141,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
@@ -2180,35 +2205,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Look/Look.cpp \
-	$(SRC)/Look/UnitsLook.cpp \
-	$(SRC)/Look/IconLook.cpp \
-	$(SRC)/Look/MapLook.cpp \
-	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/Look/VarioLook.cpp \
-	$(SRC)/Look/ChartLook.cpp \
-	$(SRC)/Look/ThermalBandLook.cpp \
-	$(SRC)/Look/TraceHistoryLook.cpp \
-	$(SRC)/Look/CrossSectionLook.cpp \
-	$(SRC)/Look/HorizonLook.cpp \
-	$(SRC)/Look/WaypointLook.cpp \
-	$(SRC)/Look/AirspaceLook.cpp \
-	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Look/AircraftLook.cpp \
-	$(SRC)/Look/TrafficLook.cpp \
-	$(SRC)/Look/GestureLook.cpp \
-	$(SRC)/Look/InfoBoxLook.cpp \
-	$(SRC)/Look/MarkerLook.cpp \
-	$(SRC)/Look/NOAALook.cpp \
-	$(SRC)/Look/TerminalLook.cpp \
-	$(SRC)/Look/TrailLook.cpp \
-	$(SRC)/Look/FinalGlideBarLook.cpp \
-	$(SRC)/Look/FlarmTrafficLook.cpp \
-	$(SRC)/Look/ThermalAssistantLook.cpp \
-	$(SRC)/Look/VarioBarLook.cpp \
-	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -2217,8 +2214,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/Look/DialogLook.cpp \
-	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/CrossSection/AirspaceXSRenderer.cpp \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
@@ -2295,7 +2290,15 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
-RUN_ANALYSIS_DEPENDS = TERRAIN DRIVER PROFILE FORM WIDGET SCREEN EVENT RESOURCE ASYNC IO DATA_FIELD OS THREAD CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
+RUN_ANALYSIS_DEPENDS = \
+	TERRAIN \
+	DRIVER \
+	PROFILE \
+	FORM WIDGET \
+	LOOK \
+	SCREEN EVENT RESOURCE ASYNC IO DATA_FIELD \
+	OS THREAD \
+	CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
@@ -2317,6 +2320,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
@@ -2334,7 +2338,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
@@ -2354,6 +2357,7 @@ RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(MORE_SCREEN_SOURCES) \

@@ -142,7 +142,7 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (extra != nullptr)
     extra->Prepare(parent, layout.extra);
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.Hide();
   style.TabStop();
 

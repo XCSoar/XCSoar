@@ -68,11 +68,17 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 }
 
 void
-AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
-                         const Font &_name_font)
+AirspaceLook::Reinitialise(const AirspaceRendererSettings &settings)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i)
     classes[i].Initialise(settings.classes[i]);
+}
+
+void
+AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
+                         const Font &_name_font)
+{
+  Reinitialise(settings);
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH

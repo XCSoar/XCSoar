@@ -21,12 +21,11 @@ Copyright_License {
 }
 */
 
-#define ENABLE_SCREEN
+#define ENABLE_MAIN_WINDOW
+#define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
-#include "Screen/Timer.hpp"
+#include "Event/LambdaTimer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
@@ -68,59 +67,20 @@ protected:
   }
 };
 
-class TestWindow : public SingleWindow
+static void
+Main()
 {
-  ButtonWindow close_button;
-  WindWindow wind;
+  WindArrowLook wind_look;
+  wind_look.Initialise(bold_font);
 
-  WindowTimer timer;
+  WindowStyle with_border;
+  with_border.Border();
 
-  enum {
-    ID_START = 100,
-    ID_CLOSE
-  };
+  WindWindow wind(wind_look);
+  wind.Create(main_window, main_window.GetClientRect(), with_border);
+  main_window.SetFullWindow(wind);
 
-public:
-  TestWindow(const WindArrowLook &look):wind(look), timer(*this)
-  {
-    timer.Schedule(250);
-  }
-
-  ~TestWindow() {
-    timer.Cancel();
-  }
-
-  void Create(PixelSize size) {
-    TopWindowStyle style;
-    style.Resizable();
-
-    SingleWindow::Create(_T("RunWindArrowRenderer"), size, style);
-
-    const PixelRect rc = GetClientRect();
-
-    WindowStyle with_border;
-    with_border.Border();
-
-    wind.Create(*this, rc, with_border);
-
-    PixelRect button_rc = rc;
-    button_rc.top = button_rc.bottom - 30;
-    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
-  }
-
-protected:
-  virtual bool OnCommand(unsigned id, unsigned code) override {
-    switch (id) {
-    case ID_CLOSE:
-      Close();
-      return true;
-    }
-
-    return SingleWindow::OnCommand(id, code);
-  }
-
-  virtual bool OnTimer(WindowTimer &_timer) override {
-    if (_timer == timer) {
+  auto timer = MakeLambdaTimer([&wind](){
       SpeedVector _wind = wind.GetWind();
 
       _wind.bearing = (_wind.bearing + Angle::Degrees(5)).AsBearing();
@@ -129,28 +89,10 @@ protected:
         _wind.norm = fixed(0);
 
       wind.SetWind(_wind);
-      return true;
-    }
+    });
+  timer.Schedule(250);
 
-    return SingleWindow::OnTimer(_timer);
-  }
+  main_window.RunEventLoop();
 
-  virtual void OnResize(PixelSize new_size) override {
-    SingleWindow::OnResize(new_size);
-    if (wind.IsDefined())
-      wind.Resize(new_size);
-  }
-};
-
-static void
-Main()
-{
-  WindArrowLook wind_look;
-  wind_look.Initialise(bold_font);
-
-  TestWindow window(wind_look);
-  window.Create({160, 160});
-
-  window.Show();
-  window.RunEventLoop();
+  timer.Cancel();
 }

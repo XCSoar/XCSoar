@@ -40,7 +40,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const Color color(AirspaceLook::preset_colors[i]);
 
   PixelRect rc2 = rc;
-  rc2.Grow(-Layout::FastScale(2));
+  rc2.Grow(-(int)Layout::GetTextPadding());
 
 #ifdef USE_GDI
   canvas.DrawFilledRectangle(rc2, color);
@@ -73,7 +73,7 @@ ShowColorListDialog(RGB8Color &color)
 
   int index = ListPicker(_("Select Color"),
                          ARRAY_SIZE(AirspaceLook::preset_colors), default_index,
-                         Layout::FastScale(18), item_renderer);
+                         Layout::GetMaximumControlHeight(), item_renderer);
 
   if (index < 0)
     return false;

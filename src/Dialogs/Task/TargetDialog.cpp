@@ -59,9 +59,10 @@ public:
                         const AirspaceLook &airspace_look,
                         const TrailLook &trail_look,
                         const TaskLook &task_look,
-                        const AircraftLook &aircraft_look)
+                        const AircraftLook &aircraft_look,
+                        const TopographyLook &topography_look)
     :TargetMapWindow(waypoint_look, airspace_look, trail_look,
-                     task_look, aircraft_look),
+                     task_look, aircraft_look, topography_look),
      widget(_widget) {}
 
 protected:
@@ -101,17 +102,17 @@ class TargetWidget
 
   TargetDialogMapWindow map;
 
-  WndButton name_button;
+  Button name_button;
 #ifndef GNAV
-  WndButton previous_button;
-  WndButton next_button;
+  Button previous_button;
+  Button next_button;
 #endif
 
   WndProperty range, radial, ete, delta_t, speed_remaining, speed_achieved;
 
   CheckBoxControl optimized;
 
-  WndButton close_button;
+  Button close_button;
 
   unsigned initial_active_task_point;
   unsigned task_size;
@@ -127,7 +128,8 @@ public:
      rate_limited_bl(*this, 1800, 300),
      map(*this,
          map_look.waypoint, map_look.airspace,
-         map_look.trail, map_look.task, map_look.aircraft),
+         map_look.trail, map_look.task, map_look.aircraft,
+         map_look.topography),
      range(dialog_look),
      radial(dialog_look),
      ete(dialog_look),
@@ -346,9 +348,18 @@ TargetWidget::Layout::Layout(PixelRect rc)
 
     map.right -= ::Layout::Scale(120);
 
-    constexpr unsigned n_rows = 8;
-    const unsigned control_height = std::min(max_control_height,
-                                             height / n_rows);
+    constexpr unsigned n_static = 4;
+#ifndef GNAV
+    constexpr unsigned n_elastic = 6;
+#else
+    constexpr unsigned n_elastic = 5;
+#endif
+    constexpr unsigned n_rows = n_static + n_elastic;
+
+    const unsigned control_height = n_rows * min_control_height >= height
+      ? min_control_height
+      : std::min(max_control_height,
+                 (height - n_static * min_control_height) / n_elastic);
 
     RowLayout rl(PixelRect(map.right, rc.top, rc.right, rc.bottom));
     name_button = rl.NextRow(control_height);
@@ -366,7 +377,7 @@ TargetWidget::Layout::Layout(PixelRect rc)
     speed_remaining = rl.NextRow(min_control_height);
     speed_achieved = rl.NextRow(min_control_height);
     optimized = rl.NextRow(control_height);
-    close_button = rl.NextRow(control_height);
+    close_button = rl.BottomRow(control_height);
   } else {
     /* portrait: form on the top */
 
@@ -398,6 +409,20 @@ TargetWidget::Layout::Layout(PixelRect rc)
   }
 }
 
+template<typename... Args>
+static void
+UseRecommendedCaptionWidths(Args&&... args)
+{
+  WndProperty *controls[] = { &args... };
+
+  unsigned width = 0;
+  for (const auto *i : controls)
+    width = std::max(width, i->GetRecommendedCaptionWidth());
+
+  for (auto *i : controls)
+    i->SetCaptionWidth(width);
+}
+
 void
 TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -406,7 +431,7 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle style;
   style.Hide();
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.Hide();
   button_style.TabStop();
 
@@ -453,15 +478,15 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   speed_remaining.SetReadOnly();
   speed_remaining.SetHelpText(_("Speed remaining"));
 
-  speed_achieved.Create(parent, layout.speed_achieved, _("V rem."), caption_width, style);
+  speed_achieved.Create(parent, layout.speed_achieved, _("V ach"), caption_width, style);
   speed_achieved.SetReadOnly();
   speed_achieved.SetHelpText(_("AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time."));
 
-  CheckBoxStyle cb_style;
-  cb_style.Hide();
+  UseRecommendedCaptionWidths(range, radial, ete, delta_t,
+                              speed_remaining, speed_achieved);
 
   optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
-                   layout.optimized, cb_style, *this, OPTIMIZED);
+                   layout.optimized, button_style, *this, OPTIMIZED);
 
   close_button.Create(parent, button_look, _("Close"),
                       layout.close_button,
@@ -539,27 +564,16 @@ TargetWidget::RefreshCalculator()
   delta_t.SetVisible(!nodisplay);
 
   if (!nodisplay) {
-    TCHAR buffer[64];
-
-    FormatTimespanSmart(buffer, (int)aat_time_estimated, 2);
-    ete.SetText(buffer);
-
-    FormatTimespanSmart(buffer, (int)(aat_time_estimated - aat_time), 2);
-    delta_t.SetText(buffer);
+    ete.SetText(FormatTimespanSmart((int)aat_time_estimated, 2));
+    delta_t.SetText(FormatTimespanSmart((int)(aat_time_estimated - aat_time), 2));
   }
 
   const ElementStat &total = task_stats.total;
-  if (total.remaining_effective.IsDefined()) {
-    TCHAR buffer[64];
-    FormatUserTaskSpeed(total.remaining_effective.GetSpeed(), buffer);
-    speed_remaining.SetText(buffer);
-  }
+  if (total.remaining_effective.IsDefined())
+    speed_remaining.SetText(FormatUserTaskSpeed(total.remaining_effective.GetSpeed()));
 
-  if (total.travelled.IsDefined()) {
-    TCHAR buffer[64];
-    FormatUserTaskSpeed(total.travelled.GetSpeed(), buffer);
-    speed_achieved.SetText(buffer);
-  }
+  if (total.travelled.IsDefined())
+    speed_achieved.SetText(FormatUserTaskSpeed(total.travelled.GetSpeed()));
 }
 
 void

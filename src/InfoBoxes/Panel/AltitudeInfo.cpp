@@ -50,43 +50,25 @@ AltitudeInfoPanel::Refresh()
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR sTmp[32];
 
   RowFormWidget &first = (RowFormWidget &)GetFirst();
   RowFormWidget &second = (RowFormWidget &)GetSecond();
 
-  if (!calculated.altitude_agl_valid) {
-    second.SetText(0, _("N/A"));
-  } else {
-    // Set Value
-    FormatUserAltitude(calculated.altitude_agl, sTmp, ARRAY_SIZE(sTmp));
-    second.SetText(0, sTmp);
-  }
+  second.SetText(0, calculated.altitude_agl_valid
+                 ? FormatUserAltitude(calculated.altitude_agl).c_str()
+                 : _("N/A"));
 
-  if (!basic.baro_altitude_available) {
-    first.SetText(1, _("N/A"));
-  } else {
-    // Set Value
-    FormatUserAltitude(basic.baro_altitude, sTmp, ARRAY_SIZE(sTmp));
-    first.SetText(1, sTmp);
-  }
+  first.SetText(1, basic.baro_altitude_available
+                ? FormatUserAltitude(basic.baro_altitude).c_str()
+                : _("N/A"));
 
-  if (!basic.gps_altitude_available) {
-    first.SetText(0, _("N/A"));
-  } else {
-    // Set Value
-    FormatUserAltitude(basic.gps_altitude, sTmp, ARRAY_SIZE(sTmp));
-    first.SetText(0, sTmp);
-  }
+  first.SetText(0, basic.gps_altitude_available
+                ? FormatUserAltitude(basic.gps_altitude).c_str()
+                : _("N/A"));
 
-  if (!calculated.terrain_valid){
-    second.SetText(1, _("N/A"));
-  } else {
-    // Set Value
-    FormatUserAltitude(calculated.terrain_altitude,
-                              sTmp, ARRAY_SIZE(sTmp));
-    second.SetText(1, sTmp);
-  }
+  second.SetText(1, calculated.terrain_valid
+                 ? FormatUserAltitude(calculated.terrain_altitude).c_str()
+                 : _("N/A"));
 }
 
 void

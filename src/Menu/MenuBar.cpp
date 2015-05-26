@@ -95,33 +95,13 @@ MenuBar::Button::OnClicked()
   return true;
 }
 
-#ifdef USE_GDI
-LRESULT
-MenuBar::Button::OnMessage(HWND hWnd, UINT message,
-                            WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-  case WM_CAPTURECHANGED:
-    if (lParam == 0)
-      /* the button has the keyboard focus, and the user has stopped
-         dragging the mouse: return the keyboard focus to the parent
-         window, because menu buttons shouldn't have keyboard focus */
-      ::SetFocus(::GetParent(hWnd));
-    break;
-  }
-
-  return ButtonWindow::OnMessage(hWnd, message, wParam, lParam);
-}
-#endif
-
 MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 {
   const PixelRect rc = parent.GetClientRect();
 
-  ButtonWindowStyle style;
+  WindowStyle style;
   style.Hide();
   style.Border();
-  style.multiline();
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     PixelRect button_rc = GetButtonPosition(i, rc);

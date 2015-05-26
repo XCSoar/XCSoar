@@ -1,4 +1,5 @@
 Package: IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER
+Name: IOS_APP_DISPLAY_NAME_PLACEHOLDER
 Version: VERSION_PLACEHOLDER
 Priority: extra
 Architecture: iphoneos-arm

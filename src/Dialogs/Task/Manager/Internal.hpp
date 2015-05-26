@@ -24,22 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_TASK_MANAGER_INTERNAL_HPP
 #define XCSOAR_TASK_MANAGER_INTERNAL_HPP
 
+#include "Widget/TabWidget.hpp"
 #include "Form/Form.hpp"
 
-class TaskMapWindow;
-class WndButton;
-class TabBarControl;
 class OrderedTask;
+class ButtonWidget;
 
-class TaskManagerDialog final : public WndForm {
-  PixelRect task_view_position;
+class TaskManagerDialog final : public TabWidget, ActionListener {
+  enum Tabs {
+    TurnpointTab,
+    PropertiesTab,
+    RulesTab,
+    CloseTab,
+  };
 
-  TaskMapWindow *task_view;
-  WndButton *target_button;
-  TabBarControl *tab_bar;
-
-  unsigned TurnpointTab;
-  unsigned PropertiesTab;
+  WndForm &dialog;
 
   OrderedTask *task;
 
@@ -48,13 +47,25 @@ class TaskManagerDialog final : public WndForm {
   bool modified;
 
 public:
-  TaskManagerDialog(const DialogLook &look)
-    :WndForm(look),
-     task_view(nullptr), target_button(nullptr), tab_bar(nullptr),
+  explicit TaskManagerDialog(WndForm &_dialog)
+    :TabWidget(Orientation::AUTO),
+     dialog(_dialog),
      task(nullptr),
      fullscreen(false), modified(false) {}
 
   virtual ~TaskManagerDialog();
+
+  const DialogLook &GetLook() const {
+    return dialog.GetLook();
+  }
+
+  void FocusFirstControl() {
+    dialog.FocusFirstControl();
+  }
+
+  void SetModalResult(int r) {
+    dialog.SetModalResult(r);
+  }
 
   const OrderedTask &GetTask() const {
     return *task;
@@ -66,11 +77,20 @@ public:
   void UpdateCaption();
 
   void InvalidateTaskView();
-  void TaskViewClicked();
-  void RestoreTaskView();
-  void ShowTaskView();
+
+  void TaskViewClicked() {
+    ToggleLargeExtra();
+  }
+
+  void RestoreTaskView() {
+    RestoreExtra();
+  }
+
   void ShowTaskView(const OrderedTask *task);
-  void ResetTaskView();
+
+  void ResetTaskView() {
+      ShowTaskView(task);
+  }
 
   void SwitchToEditTab();
   void SwitchToPropertiesPanel();
@@ -85,13 +105,16 @@ public:
 
   void Revert();
 
-  /* virtual methods from class Window */
-  void OnResize(PixelSize new_size) override;
+  /* virtual methods from class Widget */
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
+  void Show(const PixelRect &rc) override;
+  bool KeyPress(unsigned key_code) override;
 
-  /* virtual methods from class WndForm */
-  void ReinitialiseLayout(const PixelRect &parent_rc) override;
-  bool OnAnyKeyDown(unsigned key_code) override;
+protected:
+  /* virtual methods from class PagerWidget */
+  void OnPageFlipped() override;
 
+private:
   /* virtual methods from class ActionListener */
   void OnAction(int id) override;
 };

@@ -29,7 +29,7 @@ Copyright_License {
 #endif
 
 #ifdef HAVE_IMGDECMP_DLL
-#include "Screen/RootDC.hpp"
+#include "RootDC.hpp"
 #include "OS/ImgDeCmpDLL.hpp"
 #endif
 

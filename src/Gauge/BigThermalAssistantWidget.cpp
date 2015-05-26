@@ -68,10 +68,10 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
   const PixelRect rc = GetContainer().GetClientRect();
 
 #ifndef GNAV
-  close_button = new WndButton(GetContainer(),
-                               UIGlobals::GetDialogLook().button,
-                               _("Close"), rc, ButtonWindowStyle(),
-                               *this, CLOSE);
+  close_button = new Button(GetContainer(),
+                            UIGlobals::GetDialogLook().button,
+                            _("Close"), rc, WindowStyle(),
+                            *this, CLOSE);
 #endif
 
   view = new BigThermalAssistantWindow(look, Layout::FastScale(10));

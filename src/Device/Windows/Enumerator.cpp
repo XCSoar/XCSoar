@@ -124,7 +124,7 @@ PortEnumerator::Next()
       continue;
 
     /* the trailing colon is missing in this part of the registry */
-    name.Append(_T(':'));
+    name.push_back(_T(':'));
 
     display_name = name;
 

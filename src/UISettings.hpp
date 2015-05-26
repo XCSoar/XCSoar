@@ -48,7 +48,14 @@ struct UISettings {
   unsigned menu_timeout;
 
 #ifndef GNAV
-  bool custom_fonts;
+  /**
+   * Scale the user interface layout.
+   */
+  enum class Scale : uint8_t {
+    NORMAL,
+    LARGE,
+    SMALL,
+  } scale;
 #endif
 
   /** Show ThermalAssistant if circling */
@@ -76,6 +83,23 @@ struct UISettings {
   SoundSettings sound;
 
   void SetDefaults();
+
+  unsigned GetPercentScale() const {
+#ifndef GNAV
+    switch (scale) {
+    case Scale::NORMAL:
+      break;
+
+    case Scale::LARGE:
+      return 150;
+
+    case Scale::SMALL:
+      return 75;
+    }
+#endif
+
+    return 100;
+  }
 };
 
 static_assert(std::is_trivial<UISettings>::value, "type is not trivial");

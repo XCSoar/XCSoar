@@ -48,6 +48,10 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#import <Foundation/Foundation.h>
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
 #ifndef HAVE_NATIVE_GETTEXT
@@ -318,6 +322,29 @@ DetectLanguage()
   // Try to convert the primary language part of the language identifier
   // to a MO file name in the language table
   return FindLanguage(PRIMARYLANGID(lang_id));
+
+#elif defined(__APPLE__)
+
+  NSArray *preferred_languages = [NSLocale preferredLanguages];
+  if (nil != preferred_languages) {
+    for (NSString *lang_str in preferred_languages) {
+      if ([lang_str hasPrefix: @"en"])
+        return nullptr;
+      NSString *lang_res = [NSString stringWithFormat: @"%@.mo", lang_str];
+      const BuiltinLanguage *lang = FindLanguage([lang_res UTF8String]);
+      if (nullptr != lang)
+        return lang;
+      if ([lang_str length] > 2) {
+        lang_res = [NSString stringWithFormat: @"%@.mo",
+            [lang_str substringToIndex: 2]];
+        lang = FindLanguage([lang_res UTF8String]);
+        if (nullptr != lang)
+          return lang;
+      }
+    }
+  }
+
+  return nullptr;
 
 #else
 

@@ -21,41 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TASK_MAP_WINDOW_HPP
-#define XCSOAR_TASK_MAP_WINDOW_HPP
+#include "TextRowRenderer.hpp"
+#include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 
-#include "Screen/BufferWindow.hpp"
+#include <algorithm>
 
-struct MapLook;
-class ActionListener;
-class OrderedTask;
+unsigned
+TextRowRenderer::CalculateLayout(const Font &font)
+{
+  const unsigned font_height = font.GetHeight();
+  const unsigned text_padding = Layout::GetTextPadding();
+  const unsigned max_height = Layout::GetMaximumControlHeight();
+  const unsigned padded_height = font_height + 2 * text_padding;
+  const unsigned row_height = std::max(padded_height, max_height);
 
-/**
- * A window that shows the task.
- */
-class TaskMapWindow : public BufferWindow {
-  const MapLook &look;
+  left_padding = text_padding;
+  top_padding = (row_height - font_height) / 2;
 
-  ActionListener &listener;
-  const int id;
+  return row_height;
+}
 
-  const OrderedTask *task;
-
-public:
-  TaskMapWindow(const MapLook &_look,
-                ActionListener &_listener, const int _id)
-    :look(_look), listener(_listener), id(_id), task(nullptr) {}
-
-  void SetTask(const OrderedTask *_task) {
-    task = _task;
-    Invalidate();
-  }
-
-  /* virtual methods from class Window */
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-
-  /* virtual methods from class BufferWindow */
-  void OnPaintBuffer(Canvas &canvas) override;
-};
-
-#endif /* DLGTASKMANAGER_HPP */
+void
+TextRowRenderer::DrawTextRow(Canvas &canvas, const PixelRect &rc,
+                             const TCHAR *text) const
+{
+    canvas.DrawClippedText(rc.left + left_padding,
+                           rc.top + top_padding,
+                           rc,
+                           text);
+}

@@ -33,6 +33,11 @@ namespace Layout
   extern bool landscape;
 
   /**
+   * Screen size in pixels, the smaller of width and height.
+   */
+  extern unsigned min_screen_pixels;
+
+  /**
    * Fixed-point scaling factor, fractional part is 10 bits (factor
    * 1024).
    */
@@ -48,6 +53,18 @@ namespace Layout
   extern unsigned pen_width_scale;
 
   /**
+   * Fixed-point scaling factor to convert a point (1/72th inch) to
+   * pixels.
+   */
+  extern unsigned pt_scale;
+
+  /**
+   * Fixed-point scaling factor to convert a font size (in points =
+   * 1/72th inch) to pixels.
+   */
+  extern unsigned font_scale;
+
+  /**
    * Recommended padding from Window boundary to text.
    */
   extern unsigned text_padding;
@@ -61,8 +78,9 @@ namespace Layout
    * namespace.
    *
    * @param screen_size the size of the screen in pixels
+   * @param ui_scale the UI scale setting in percent
    */
-  void Initialize(PixelSize screen_size);
+  void Initialize(PixelSize screen_size, unsigned ui_scale=100);
 
   /**
    * Is scaling supported by this platform?
@@ -174,6 +192,28 @@ namespace Layout
       return width;
 
     return (width * pen_width_scale) >> 10;
+  }
+
+  /**
+   * Scale a physical size in points (1/72th inch) to pixels.
+   */
+  gcc_const
+  static inline unsigned
+  PtScale(unsigned pt)
+  {
+    return (pt * pt_scale) >> 10;
+  }
+
+  /**
+   * Scale a font size in points (1/72th inch) to pixels.  Additional
+   * scaling factors may be applied to consider small screens
+   * (i.e. viewing distance) and user preference.
+   */
+  gcc_const
+  static inline unsigned
+  FontScale(unsigned pt)
+  {
+    return (pt * font_scale) >> 10;
   }
 
   /**

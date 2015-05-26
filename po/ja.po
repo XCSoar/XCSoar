@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2015-04-17 06:43+0000\n"
+"PO-Revision-Date: 2015-05-13 07:18+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
-"X-Generator: Launchpad (build 17430)\n"
+"X-Launchpad-Export-Date: 2015-05-15 23:20+0000\n"
+"X-Generator: Launchpad (build 17493)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3851,9 +3851,8 @@ msgid "UDP Port"
 msgstr "UDP　ポート"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:406
-#, fuzzy
 msgid "Bluetooth LE"
-msgstr "ブルーツース　サーバー"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Port"
@@ -5167,33 +5166,29 @@ msgid "Delete"
 msgstr "削除"
 
 #: src/Dialogs/ProfileListDialog.cpp:230 src/Dialogs/ProfileListDialog.cpp:267
-#, fuzzy
 msgid "Profile name"
-msgstr "ショートファイル名"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:241 src/Dialogs/ProfileListDialog.cpp:278
 msgid "File exists already."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:284
-#, fuzzy
 msgid "Failed to save file."
-msgstr "ファイルの読み込み失敗"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "航空機 \"%s\" 削除しますか？"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:335 Data/Input/default.xci:668
-#, fuzzy
 msgid "Profiles"
-msgstr "設定"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:348
-#, fuzzy
 msgid "Select profile"
-msgstr "ファイルを選択してください"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Activate"
@@ -5633,14 +5628,12 @@ msgid "Pan to Waypoint"
 msgstr "ウエイポイントに向かう"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:271
-#, fuzzy
 msgid "Set Active Frequency"
-msgstr "最少周波数（音質）"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "最少周波数（音質）"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:432 Data/Input/default.xci:1045
 msgid "GoTo"
@@ -6194,9 +6187,8 @@ msgstr ""
 "向かい風の場合到着高度は低くなる"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:118
-#, fuzzy
 msgid "Wave assistant"
-msgstr "サーマル　アシスタント"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
@@ -6385,9 +6377,9 @@ msgid "12 Top or Left"
 msgstr "１２　上　または　左"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "12右　（横型）"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -8002,7 +7994,7 @@ msgstr "ウエイポイントのラベル表示選択"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:109
 #, no-c-format
 msgid "No arrival height is displayed."
-msgstr "到着硬度非表示"
+msgstr "到着高度非表示"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
@@ -8714,13 +8706,10 @@ msgid "V rem."
 msgstr "残り　速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"AAT目標最小平均速度\r\n"
-"残りの時間で可能な最小目標平均速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -9904,77 +9893,6 @@ msgstr ""
 msgid "Nav"
 msgstr "ナビゲーション"
 
-#~ msgid "MANUAL"
-#~ msgstr "手動"
-
-#~ msgid "AUTO"
-#~ msgstr "自動"
-
-#~ msgid "Clear current task?"
-#~ msgstr "タスクをクリアーしますか？"
-
-#~ msgid "Goto and clear task"
-#~ msgstr "Goto＆タスククリア"
-
-#~ msgid "Unknown error creating task."
-#~ msgstr "タスク実行上の不明なエラー"
-
-#~ msgid "Audio vario"
-#~ msgstr "オーデオバリオ"
-
-#~ msgid "Emulate the sound of an electronic vario."
-#~ msgstr "オーディオバリオの音質調整"
-
-#~ msgid "Volume"
-#~ msgstr "音量"
-
-#~ msgid "Enable Deadband"
-#~ msgstr "使用不能帯を設定する"
-
-#~ msgid ""
-#~ "Mute the audio output in when the current lift is in a certain range "
-#~ "around zero"
-#~ msgstr "リフトがゼロの近い場合オーディオ音量を出さないよう設定"
-
-#~ msgid "The tone frequency that is played at maximum sink rate."
-#~ msgstr "最大沈下の場合の音質"
-
-#~ msgid "Zero Frequency"
-#~ msgstr "ゼロ　周波数"
-
-#~ msgid "The tone frequency that is played at zero climb rate."
-#~ msgstr "リフトがゼロの場合の音質"
-
-#~ msgid "Max. Frequency"
-#~ msgstr "最大　周波数"
-
-#~ msgid "The tone frequency that is played at maximum climb rate."
-#~ msgstr "最大上昇の場合の音質"
-
-#~ msgid "Deadband min. lift"
-#~ msgstr "最低制限空域"
-
-#~ msgid ""
-#~ "Below this lift threshold the vario will start to play sounds if the "
-#~ "'Deadband' feature is enabled."
-#~ msgstr ""
-#~ "制限空域を設定している場合　その高度以下では　バリオ計器が警告音をだす"
-
-#~ msgid "Deadband max. lift"
-#~ msgstr "最高上昇制限空域"
-
-#~ msgid ""
-#~ "Above this lift threshold the vario will start to play sounds if the "
-#~ "'Deadband' feature is enabled."
-#~ msgstr ""
-#~ "制限空域を設定している場合　その高度以上では　バリオ計器が警告音をだす"
-
-#~ msgid "Waypoint Info"
-#~ msgstr "ウエイポイント情報"
-
-#~ msgid "Calc"
-#~ msgstr "計算"
-
 #~ msgid "English"
 #~ msgstr "英語"
 
@@ -9983,6 +9901,9 @@ msgstr "ナビゲーション"
 
 #~ msgid "Sunset"
 #~ msgstr "日没"
+
+#~ msgid "Volume"
+#~ msgstr "音量"
 
 #~ msgid "Longitude"
 #~ msgstr "経度"
@@ -10001,6 +9922,9 @@ msgstr "ナビゲーション"
 
 #~ msgid "OLC"
 #~ msgstr "OLC"
+
+#~ msgid "AUTO"
+#~ msgstr "自動"
 
 #~ msgid "Not found"
 #~ msgstr "見つかりませんでした"
@@ -10061,6 +9985,9 @@ msgstr "ナビゲーション"
 
 #~ msgid "Unknown competition number"
 #~ msgstr "コンペID該当無し"
+
+#~ msgid "MANUAL"
+#~ msgstr "手動"
 
 #~ msgid ""
 #~ "Enable this if you would like to log the communication with the device."
@@ -10126,6 +10053,9 @@ msgstr "ナビゲーション"
 #~ msgid "8 Right (Landscape)"
 #~ msgstr "8右　（横型）"
 
+#~ msgid "12 Right (Landscape)"
+#~ msgstr "12右　（横型）"
+
 #~ msgid "12 Top (Portrait)"
 #~ msgstr "１２上　（縦型）"
 
@@ -10160,6 +10090,9 @@ msgstr "ナビゲーション"
 #~ "択\r\n"
 #~ "Shortの場合　(81HXABC1IGC)\r\n"
 #~ "Longの場合　(2008-01-18-XXX-ABC-01.IGC)"
+
+#~ msgid "Short file name"
+#~ msgstr "ショートファイル名"
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "ディスプレイのスクーン表示の表示選択設定"
@@ -10236,6 +10169,12 @@ msgstr "ナビゲーション"
 
 #~ msgid "Logger Info"
 #~ msgstr "ロガー情報"
+
+#~ msgid "Emulate the sound of an electronic vario."
+#~ msgstr "オーディオバリオの音質調整"
+
+#~ msgid "Audio vario"
+#~ msgstr "オーデオバリオ"
 
 #~ msgid "4 Top (Portrait)"
 #~ msgstr "4上（縦型）"
@@ -10325,6 +10264,15 @@ msgstr "ナビゲーション"
 #~ msgid "Set new teammate:"
 #~ msgstr "新しいチームメートをセット"
 
+#~ msgid "Clear current task?"
+#~ msgstr "タスクをクリアーしますか？"
+
+#~ msgid "Goto and clear task"
+#~ msgstr "Goto＆タスククリア"
+
+#~ msgid "Unknown error creating task."
+#~ msgstr "タスク実行上の不明なエラー"
+
 #~ msgid "Weather parameters"
 #~ msgstr "気象パラメーター"
 
@@ -10343,6 +10291,9 @@ msgstr "ナビゲーション"
 
 #~ msgid "Dump time"
 #~ msgstr "排出時間"
+
+#~ msgid "Waypoint Info"
+#~ msgstr "ウエイポイント情報"
 
 #~ msgid "Reference mass"
 #~ msgstr "重量設定"
@@ -10399,6 +10350,9 @@ msgstr "ナビゲーション"
 
 #~ msgid "Friends"
 #~ msgstr "友人"
+
+#~ msgid "Calc"
+#~ msgstr "計算"
 
 #~ msgid "Optional specification of the wing area."
 #~ msgstr "翼面積オプション性能"
@@ -10472,11 +10426,55 @@ msgstr "ナビゲーション"
 #~ msgid "A+"
 #~ msgstr "テキスト＋"
 
+#~ msgid ""
+#~ "Mute the audio output in when the current lift is in a certain range "
+#~ "around zero"
+#~ msgstr "リフトがゼロの近い場合オーディオ音量を出さないよう設定"
+
+#~ msgid "The tone frequency that is played at maximum sink rate."
+#~ msgstr "最大沈下の場合の音質"
+
+#~ msgid "Min. Frequency"
+#~ msgstr "最少周波数（音質）"
+
+#~ msgid "The tone frequency that is played at zero climb rate."
+#~ msgstr "リフトがゼロの場合の音質"
+
+#~ msgid "Zero Frequency"
+#~ msgstr "ゼロ　周波数"
+
+#~ msgid "Enable Deadband"
+#~ msgstr "使用不能帯を設定する"
+
+#~ msgid "Max. Frequency"
+#~ msgstr "最大　周波数"
+
+#~ msgid "The tone frequency that is played at maximum climb rate."
+#~ msgstr "最大上昇の場合の音質"
+
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "AAT 残り時間"
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "地形越しに到達不能"
+
+#~ msgid ""
+#~ "Below this lift threshold the vario will start to play sounds if the "
+#~ "'Deadband' feature is enabled."
+#~ msgstr ""
+#~ "制限空域を設定している場合　その高度以下では　バリオ計器が警告音をだす"
+
+#~ msgid "Deadband max. lift"
+#~ msgstr "最高上昇制限空域"
+
+#~ msgid ""
+#~ "Above this lift threshold the vario will start to play sounds if the "
+#~ "'Deadband' feature is enabled."
+#~ msgstr ""
+#~ "制限空域を設定している場合　その高度以上では　バリオ計器が警告音をだす"
+
+#~ msgid "Deadband min. lift"
+#~ msgstr "最低制限空域"
 
 #~ msgid "Do you want to activate plane profile \"%s\"?"
 #~ msgstr "\"%s\"の機体を選択しますか"

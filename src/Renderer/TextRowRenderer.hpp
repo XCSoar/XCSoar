@@ -21,44 +21,29 @@ Copyright_License {
 }
 */
 
-#include "TaskMapWindow.hpp"
-#include "Screen/Canvas.hpp"
-#include "Gauge/TaskView.hpp"
-#include "Look/MapLook.hpp"
-#include "Form/ActionListener.hpp"
-#include "Interface.hpp"
-#include "Components.hpp"
+#ifndef XCSOAR_TEXT_ROW_RENDERER_HPP
+#define XCSOAR_TEXT_ROW_RENDERER_HPP
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include <tchar.h>
+
+struct PixelRect;
+class Font;
+class Canvas;
+
+/**
+ * A helper for drawing a text row into a rectangular area.
+ */
+class TextRowRenderer {
+  unsigned left_padding, top_padding;
+
+public:
+  /**
+   * @return the row height (including top and bottom padding)
+   */
+  unsigned CalculateLayout(const Font &font);
+
+  void DrawTextRow(Canvas &canvas, const PixelRect &rc,
+                   const TCHAR *text) const;
+};
+
 #endif
-
-void
-TaskMapWindow::OnPaintBuffer(Canvas &canvas)
-{
-  if (task == nullptr) {
-    canvas.ClearWhite();
-    return;
-  }
-
-#ifdef ENABLE_OPENGL
-  /* enable clipping */
-  GLCanvasScissor scissor(canvas);
-#endif
-
-  const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTask(canvas, GetClientRect(), *task,
-            basic.location_available ? basic.location : GeoPoint::Invalid(),
-            CommonInterface::GetMapSettings(),
-            look.task, look.airspace,
-            terrain, &airspace_database,
-            true);
-
-}
-
-bool
-TaskMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
-{
-  listener.OnAction(id);
-  return true;
-}

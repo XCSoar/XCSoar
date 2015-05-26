@@ -19,6 +19,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/CAI302/UnitsEditor.cpp \
 	$(SRC)/Dialogs/Device/CAI302/WaypointUploader.cpp \
 	$(SRC)/Dialogs/Device/ManageFlarmDialog.cpp \
+	$(SRC)/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageV7Dialog.cpp \
 	$(SRC)/Dialogs/Device/LX/V7ConfigWidget.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageNanoDialog.cpp \
@@ -114,7 +115,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp \
-	$(SRC)/Dialogs/Task/Manager/TaskMapWindow.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskMapButtonRenderer.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskManagerDialog.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskClosePanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskEditPanel.cpp \
@@ -122,7 +123,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Manager/TaskMiscPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskActionsPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskListPanel.cpp \
-	$(SRC)/Dialogs/Task/Manager/TaskCalculatorPanel.cpp \
 	$(SRC)/Dialogs/Task/OptionalStartsDialog.cpp \
 	$(SRC)/Dialogs/Task/TaskPointDialog.cpp \
 	$(SRC)/Dialogs/Task/MutateTaskPointDialog.cpp \
@@ -178,6 +178,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/HorizonWidget.cpp \
+	$(SRC)/Renderer/TextRowRenderer.cpp \
+	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
@@ -334,7 +336,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/BigThermalAssistantWidget.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/BigTrafficWidget.cpp \
-	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
 	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
@@ -585,7 +586,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/UIProfile.cpp \
 	$(SRC)/Profile/Settings.cpp \
-	$(SRC)/Profile/FontConfig.cpp \
 	$(SRC)/Profile/UnitsConfig.cpp \
 	$(SRC)/Profile/DeviceConfig.cpp \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
@@ -617,37 +617,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	\
+	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \
-	$(SRC)/Look/Look.cpp \
-	$(SRC)/Look/DialogLook.cpp \
-	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/Look/TerminalLook.cpp \
-	$(SRC)/Look/VarioLook.cpp \
-	$(SRC)/Look/ChartLook.cpp \
-	$(SRC)/Look/MapLook.cpp \
-	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/Look/ThermalBandLook.cpp \
-	$(SRC)/Look/TraceHistoryLook.cpp \
-	$(SRC)/Look/AirspaceLook.cpp \
-	$(SRC)/Look/TrailLook.cpp \
-	$(SRC)/Look/CrossSectionLook.cpp \
-	$(SRC)/Look/GestureLook.cpp \
-	$(SRC)/Look/HorizonLook.cpp \
-	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Look/TrafficLook.cpp \
-	$(SRC)/Look/InfoBoxLook.cpp \
-	$(SRC)/Look/WaypointLook.cpp \
-	$(SRC)/Look/AircraftLook.cpp \
-	$(SRC)/Look/MarkerLook.cpp \
-	$(SRC)/Look/NOAALook.cpp \
-	$(SRC)/Look/FinalGlideBarLook.cpp \
-	$(SRC)/Look/VarioBarLook.cpp \
-	$(SRC)/Look/IconLook.cpp \
-	$(SRC)/Look/UnitsLook.cpp \
-	$(SRC)/Look/ThermalAssistantLook.cpp \
-	$(SRC)/Look/WaveLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
@@ -751,11 +724,6 @@ endif
 
 ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
-else
-XCSOAR_SOURCES += \
-	$(SRC)/Look/CustomFonts.cpp \
-	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
-	$(SRC)/Dialogs/Settings/FontEdit.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)
@@ -786,6 +754,7 @@ endif
 XCSOAR_DEPENDS = GETTEXT PROFILE \
 	TERRAIN \
 	WIDGET FORM DATA_FIELD \
+	LOOK \
 	AUDIO SCREEN EVENT \
 	RESOURCE DATA \
 	DRIVER PORT \
@@ -793,6 +762,10 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	SHAPELIB ZZIP \
 	LIBNET TIME OS THREAD \
 	UTIL GEO MATH
+
+ifeq ($(TARGET_IS_DARWIN),y)
+XCSOAR_LDLIBS += -framework CoreLocation
+endif
 
 XCSOAR_STRIP = y
 

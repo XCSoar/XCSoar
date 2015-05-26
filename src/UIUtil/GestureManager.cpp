@@ -69,8 +69,8 @@ GestureManager::Update(PixelScalar x, PixelScalar y)
     return true;
 
   // Return if we are still in the same direction
-  if (gesture.empty() || gesture.last() != direction)
-    gesture.Append(direction);
+  if (gesture.empty() || gesture.back() != direction)
+    gesture.push_back(direction);
 
   return true;
 }

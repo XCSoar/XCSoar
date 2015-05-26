@@ -24,6 +24,7 @@ Copyright_License {
 #include "LogoView.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/FontDescription.hpp"
 #include "Resources.hpp"
 #include "Version.hpp"
 
@@ -34,7 +35,7 @@ LogoView::LogoView()
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
 #ifndef USE_GDI
-  font.Load(_T("Droid Sans"), Layout::SmallScale(8));
+  font.Load(FontDescription(Layout::FontScale(10)));
 #endif
 
   big_logo.EnableInterpolation();

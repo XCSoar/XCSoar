@@ -48,6 +48,14 @@ WidgetDialog::WidgetDialog(const DialogLook &look)
 {
 }
 
+WidgetDialog::~WidgetDialog()
+{
+  /* we must override ~Window(), because in ~Window(), our own
+     OnDestroy() method won't be called (during object destruction,
+     this object loses its identity) */
+  Destroy();
+}
+
 void
 WidgetDialog::Create(SingleWindow &parent,
                      const TCHAR *caption, const PixelRect &rc,

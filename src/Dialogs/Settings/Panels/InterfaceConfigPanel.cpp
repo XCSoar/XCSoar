@@ -24,7 +24,6 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
@@ -43,6 +42,9 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 enum ControlIndex {
+#ifndef GNAV
+  UIScale,
+#endif
 #ifdef HAVE_BLANK
   AutoBlank,
 #endif
@@ -56,15 +58,7 @@ enum ControlIndex {
   HapticFeedback
 };
 
-class InterfaceConfigPanel final : public RowFormWidget
-#ifndef GNAV
-  , ActionListener
-#endif
-{
-  enum Buttons {
-    FONTS,
-  };
-
+class InterfaceConfigPanel final : public RowFormWidget {
 public:
   InterfaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -72,37 +66,7 @@ public:
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
-
-#ifndef GNAV
-private:
-  /* methods from ActionListener */
-  void OnAction(int id) override {
-    dlgConfigFontsShowModal();
-  }
-#endif
 };
-
-void
-InterfaceConfigPanel::Show(const PixelRect &rc)
-{
-#ifndef GNAV
-  ConfigPanel::BorrowExtraButton(1, _("Fonts"), *this, FONTS);
-#endif
-
-  RowFormWidget::Show(rc);
-}
-
-void
-InterfaceConfigPanel::Hide()
-{
-#ifndef GNAV
-  ConfigPanel::ReturnExtraButton(1);
-#endif
-
-  RowFormWidget::Hide();
-}
 
 #ifndef HAVE_NATIVE_GETTEXT
 
@@ -130,6 +94,19 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const UISettings &settings = CommonInterface::GetUISettings();
 
   RowFormWidget::Prepare(parent, rc);
+
+#ifndef GNAV
+  static constexpr StaticEnumChoice scale_list[] = {
+    { (unsigned)UISettings::Scale::NORMAL, N_("Normal") },
+    { (unsigned)UISettings::Scale::LARGE, N_("Large") },
+    { (unsigned)UISettings::Scale::SMALL, N_("Small") },
+    { 0 }
+  };
+
+  AddEnum(_("Text size"),
+          nullptr,
+          scale_list, (unsigned)settings.scale);
+#endif
 
 #ifdef HAVE_BLANK
   AddBoolean(_("Auto. blank"),
@@ -233,6 +210,12 @@ InterfaceConfigPanel::Save(bool &_changed)
 {
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;;
+
+#ifndef GNAV
+  if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
+                    settings.scale))
+    require_restart = changed = true;
+#endif
 
 #ifdef HAVE_BLANK
   changed |= SaveValue(AutoBlank, ProfileKeys::AutoBlank,

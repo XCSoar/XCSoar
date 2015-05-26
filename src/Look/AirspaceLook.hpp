@@ -73,6 +73,8 @@ struct AirspaceLook {
 
   void Initialise(const AirspaceRendererSettings &settings,
                   const Font &_name_font);
+
+  void Reinitialise(const AirspaceRendererSettings &settings);
 };
 
 #endif

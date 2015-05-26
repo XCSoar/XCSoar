@@ -33,7 +33,7 @@ Copyright_License {
 struct DialogLook;
 class Bitmap;
 class ContainerWindow;
-class TabBarControl;
+class TabWidget;
 
 /**
  * TabButton class holds display and callbacks data for a single tab
@@ -55,6 +55,12 @@ public:
   void InvalidateLayout() {
     rc.left = rc.right = 0;
   }
+
+  gcc_pure
+  unsigned GetRecommendedWidth(const DialogLook &look) const;
+
+  gcc_pure
+  unsigned GetRecommendedHeight() const;
 };
 
 /**
@@ -65,7 +71,7 @@ public:
  */
 class TabDisplay final : public PaintWindow
 {
-  TabBarControl& tab_bar;
+  TabWidget &pager;
   const DialogLook &look;
 
   StaticArray<TabButton *, 32> buttons;
@@ -76,23 +82,25 @@ class TabDisplay final : public PaintWindow
   bool drag_off_button; // set by mouse_move
   unsigned down_index; // index of tab where mouse down occurred
 
-  const UPixelScalar tab_line_height;
+  const unsigned tab_line_height;
 
 public:
-  /**
-   *
-   * @param parent
-   * @param _theTabBar. An existing TabBar object
-   */
-  TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
+  TabDisplay(TabWidget &_pager, const DialogLook &look,
              ContainerWindow &parent, PixelRect rc,
-             bool vertical);
+             bool vertical,
+             WindowStyle style=WindowStyle());
 
   virtual ~TabDisplay();
 
   const DialogLook &GetLook() const {
     return look;
   }
+
+  gcc_pure
+  unsigned GetRecommendedColumnWidth() const;
+
+  gcc_pure
+  unsigned GetRecommendedRowHeight() const;
 
   bool IsVertical() const {
     return vertical;

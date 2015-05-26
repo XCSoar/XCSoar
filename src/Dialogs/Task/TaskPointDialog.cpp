@@ -98,19 +98,18 @@ class TaskPointWidget final
 
   PanelControl waypoint_panel;
   WndFrame waypoint_name;
-  WndButton waypoint_details, waypoint_remove, waypoint_relocate;
+  Button waypoint_details, waypoint_remove, waypoint_relocate;
 
   PanelControl tp_panel;
   WndFrame type_label;
-  WndButton change_type;
+  Button change_type;
   WndOwnerDrawFrame map;
   DockWindow properties_dock;
-  ObservationZoneEditWidget *properties_widget;
 
-  WndButton optional_starts;
+  Button optional_starts;
   CheckBoxControl score_exit;
 
-  WndButton *previous_button, *next_button;
+  Button *previous_button, *next_button;
 
 public:
   TaskPointWidget(WidgetDialog &_dialog,
@@ -160,6 +159,10 @@ private:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+
+  void Unprepare() override {
+    properties_dock.DeleteWidget();
+  }
 
   bool Save(bool &changed) override {
     ReadValues();
@@ -262,11 +265,8 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   panel_style.Border();
   panel_style.ControlParent();
 
-  ButtonWindowStyle button_style;
+  WindowStyle button_style;
   button_style.TabStop();
-
-  CheckBoxStyle check_box_style;
-  check_box_style.TabStop();
 
   WindowStyle dock_style;
   dock_style.ControlParent();
@@ -298,7 +298,7 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                          layout.optional_starts, button_style,
                          *this, OPTIONAL_STARTS);
   score_exit.Create(tp_panel, look, _("Score exit"),
-                    layout.score_exit, check_box_style,
+                    layout.score_exit, button_style,
                     *this, SCORE_EXIT);
 
   RefreshView();
@@ -375,16 +375,17 @@ TaskPointWidget::RefreshView()
 
   OrderedTaskPoint &tp = ordered_task.GetPoint(active_index);
 
-  properties_dock.SetWidget(new PanelWidget());
+  properties_dock.DeleteWidget();
 
   ObservationZonePoint &oz = tp.GetObservationZone();
   const bool is_fai_general =
     ordered_task.GetFactoryType() == TaskFactoryType::FAI_GENERAL;
-  properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
+  auto *properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
   if (properties_widget != nullptr) {
     properties_widget->SetListener(this);
     properties_dock.SetWidget(properties_widget);
-  }
+  } else
+    properties_dock.SetWidget(new PanelWidget());
 
   type_label.SetCaption(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 
@@ -462,8 +463,7 @@ TaskPointWidget::ReadValues()
     }
   }
 
-  return properties_widget == nullptr ||
-    properties_widget->Save(task_modified);
+  return properties_dock.SaveWidget(task_modified);
 }
 
 void

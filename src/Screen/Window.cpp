@@ -236,12 +236,6 @@ Window::OnCharacter(unsigned ch)
   return false;
 }
 
-bool
-Window::OnCommand(unsigned id, unsigned code)
-{
-  return false;
-}
-
 void
 Window::OnCancelMode()
 {

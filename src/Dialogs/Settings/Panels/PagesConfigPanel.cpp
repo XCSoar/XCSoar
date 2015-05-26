@@ -95,8 +95,8 @@ class PageListWidget
   PageSettings settings;
 
   ButtonPanelWidget *buttons;
-  WndButton *add_button, *delete_button;
-  WndButton *move_up_button, *move_down_button;
+  Button *add_button, *delete_button;
+  Button *move_up_button, *move_down_button;
 
 public:
   ~PageListWidget() {

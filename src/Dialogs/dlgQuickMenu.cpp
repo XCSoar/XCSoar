@@ -38,6 +38,8 @@ Copyright_License {
 #include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
 
+#include <winuser.h> /* for DT_xxx */
+
 #include <stdio.h>
 
 class QuickMenuButtonRenderer final : public ButtonRenderer {
@@ -161,11 +163,10 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     button_rc.top = 0;
     button_rc.right = 80;
     button_rc.bottom = 30;
-    WndButton *button =
-      new WndButton(grid_view, button_rc, buttonStyle,
-                    new QuickMenuButtonRenderer(dialog_look,
-                                                expanded.text),
-                    *this, menuItem.event);
+    auto *button = new Button(grid_view, button_rc, buttonStyle,
+                              new QuickMenuButtonRenderer(dialog_look,
+                                                          expanded.text),
+                              *this, menuItem.event);
     button->SetEnabled(expanded.enabled);
 
     buttons.append(button);

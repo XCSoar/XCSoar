@@ -10,6 +10,7 @@ Version 6.8 - not yet released
 * devices
   - remove option "Ignore checksum"
   - LX: implement LXNAV Nano3 task declaration (#3295)
+  - ATR833: new driver
   - Volkslogger: support DAeC keyhole declaration
   - added TCP port 2000 to portlist (part of #3326)
 * calculations
@@ -23,12 +24,18 @@ Version 6.8 - not yet released
 * task editor
   - added one-click task reversal (#1730)
   - show name of loaded/saved tasks in dialog title (#1924)
+  - support large legs in the FAI triangle renderer (#3413)
+  - task calculator moved to "Status" dialog
+* map
+  - allow "Mark Drop" while panning
 * user interface 
   - download data files from site configuration
   - profile manager
   - password-protected profiles (#851)
   - checklist remembers last opened list (#3110)
   - use configured coordinate format in waypoint editor
+  - remove custom font support, replaced with global "text size" setting
+  - improved font sizes
   - display rotation for Raspberry Pi and Cubieboard (#3238)
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard
@@ -50,6 +57,20 @@ Version 6.8 - not yet released
   - support open Wifi networks (#3391)
   - support USB-OTG
   - export data partition via USB storage
+
+Version 6.7.8 - 2015-05-22
+* user interface
+  - draw gray title bar on inactive dialogs
+  - improved dialog button placement
+  - fix missing buttons in terrain configuration (#3421)
+* task
+  - support large legs in the FAI triangle renderer (#3413)
+  - make "Cruise efficiency" read-only
+* devices
+  - fix crash when downloading flight without "logs" folder
+* Linux
+  - support Raspberry Pi 2
+  - show ports renamed by udev
 
 Version 6.7.7 - 2015/02/20
 * airspace

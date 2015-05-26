@@ -36,7 +36,7 @@ class ProgressDialog
 
   ProgressWindow progress;
 
-  WndButton cancel_button;
+  Button cancel_button;
   std::function<void()> cancel_callback;
 
 public:

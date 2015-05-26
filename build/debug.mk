@@ -1,16 +1,11 @@
 DEBUG ?= y
-DEBUG_GLIBCXX ?= $(DEBUG)
+DEBUG_GLIBCXX ?= n
 
 ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
 else
-  ifeq ($(CLANG)$(LLVM)$(LTO),yny)
-    OPTIMIZE := -O4
-  else
-    OPTIMIZE := -Os
-  endif
-
+  OPTIMIZE := -Os
   OPTIMIZE += -DNDEBUG
 endif
 
@@ -41,7 +36,7 @@ OPTIMIZE += -funsafe-loop-optimizations
 endif
 
 ifeq ($(LTO),y)
-OPTIMIZE += -flto -fwhole-program
+OPTIMIZE += -flto
 endif
 
 ifeq ($(LLVM),y)

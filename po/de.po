@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2015-04-27 08:55+0000\n"
+"PO-Revision-Date: 2015-05-05 15:29+0000\n"
 "Last-Translator: Carsten Sonyi <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-28 00:04+0000\n"
-"X-Generator: Launchpad (build 17453)\n"
+"X-Launchpad-Export-Date: 2015-05-15 23:20+0000\n"
+"X-Generator: Launchpad (build 17493)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3875,9 +3875,8 @@ msgid "UDP Port"
 msgstr "UDP Port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:406
-#, fuzzy
 msgid "Bluetooth LE"
-msgstr "Bluetoothserver"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Port"
@@ -5217,33 +5216,29 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: src/Dialogs/ProfileListDialog.cpp:230 src/Dialogs/ProfileListDialog.cpp:267
-#, fuzzy
 msgid "Profile name"
-msgstr "Datei Kurzname"
+msgstr "Profilname"
 
 #: src/Dialogs/ProfileListDialog.cpp:241 src/Dialogs/ProfileListDialog.cpp:278
 msgid "File exists already."
-msgstr ""
+msgstr "Datei existiert bereits"
 
 #: src/Dialogs/ProfileListDialog.cpp:284
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Konnte Datei nicht laden."
+msgstr "Speichern der Datei fehlgeschlagen"
 
 #: src/Dialogs/ProfileListDialog.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Das Flugzeug \"%s\" löschen?"
+msgstr "\"%s\" löschen?"
 
 #: src/Dialogs/ProfileListDialog.cpp:335 Data/Input/default.xci:668
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profile"
 
 #: src/Dialogs/ProfileListDialog.cpp:348
-#, fuzzy
 msgid "Select profile"
-msgstr "Datei auswählen"
+msgstr "Profil auswählen"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Activate"
@@ -5684,14 +5679,12 @@ msgid "Pan to Waypoint"
 msgstr "Zeige zum Wegpunkt"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:271
-#, fuzzy
 msgid "Set Active Frequency"
-msgstr "Niedrigster Ton"
+msgstr "als aktive Frequenz setzen"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "Niedrigster Ton"
+msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:432 Data/Input/default.xci:1045
 msgid "GoTo"
@@ -6248,9 +6241,8 @@ msgstr ""
 "reduziert die Ankunftshöhe für den Gegenwindschenkel."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:118
-#, fuzzy
 msgid "Wave assistant"
-msgstr "Zentrierhilfe"
+msgstr "Wellenassistent"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
@@ -6441,9 +6433,9 @@ msgid "12 Top or Left"
 msgstr "12 Oben oder Links"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "12 Rechts (Querformat)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -8836,13 +8828,10 @@ msgid "V rem."
 msgstr "V zu fliegen"
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"Für die Assigned Area Aufgabe erreichbare mittlere Geschwindigkeit um alle "
-"Zielpunkte in minimaler Aufgabenzeit."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -10055,81 +10044,6 @@ msgstr ""
 msgid "Nav"
 msgstr "Nav"
 
-#~ msgid "MANUAL"
-#~ msgstr "manuell"
-
-#~ msgid "AUTO"
-#~ msgstr "auto"
-
-#~ msgid "Clear current task?"
-#~ msgstr "Aufgabe löschen?"
-
-#~ msgid "Goto and clear task"
-#~ msgstr "Flieg hin und lösche Aufgabe"
-
-#~ msgid "Unknown error creating task."
-#~ msgstr "Unbekannter Fehler beim Aufgabe Anlegen."
-
-#~ msgid "Audio vario"
-#~ msgstr "Tonvario"
-
-#~ msgid "Emulate the sound of an electronic vario."
-#~ msgstr "Simuliert den Ton eines elektronischen Varios."
-
-#~ msgid "Volume"
-#~ msgstr "Volumen"
-
-#~ msgid "Enable Deadband"
-#~ msgstr "Tonausblendung Ein"
-
-#~ msgid ""
-#~ "Mute the audio output in when the current lift is in a certain range "
-#~ "around zero"
-#~ msgstr ""
-#~ "Unterdrücke die Audio-Ausgabe, wenn das Steigen in einem bestimmten "
-#~ "Bereich um Null ist."
-
-#~ msgid "The tone frequency that is played at maximum sink rate."
-#~ msgstr "Die Ton-Frequenz bei der größten Sinkrate."
-
-#~ msgid "Zero Frequency"
-#~ msgstr "Null-Ton"
-
-#~ msgid "The tone frequency that is played at zero climb rate."
-#~ msgstr "Die Ton-Frequenz für Nullschieber."
-
-#~ msgid "Max. Frequency"
-#~ msgstr "Höchster Ton"
-
-#~ msgid "The tone frequency that is played at maximum climb rate."
-#~ msgstr "Die Ton-Frequenz bei der größten Steigrate."
-
-#~ msgid "Deadband min. lift"
-#~ msgstr "Tonausblendung min. Steigen"
-
-#~ msgid ""
-#~ "Below this lift threshold the vario will start to play sounds if the "
-#~ "'Deadband' feature is enabled."
-#~ msgstr ""
-#~ "Unter diesem Steig-Schwellwert spielt das Vario töne, falls die  "
-#~ "Tonausblendung aktiviert ist."
-
-#~ msgid "Deadband max. lift"
-#~ msgstr "Tonausblendung max. Steigen"
-
-#~ msgid ""
-#~ "Above this lift threshold the vario will start to play sounds if the "
-#~ "'Deadband' feature is enabled."
-#~ msgstr ""
-#~ "Über diesem Steig-Schwellwert spielt das Vario töne, falls die  "
-#~ "Tonausblendung aktiviert ist."
-
-#~ msgid "Waypoint Info"
-#~ msgstr "Wegpunkt Info"
-
-#~ msgid "Calc"
-#~ msgstr "Berechne"
-
 #~ msgid "Save task?"
 #~ msgstr "Aufgabe speichern?"
 
@@ -10178,6 +10092,9 @@ msgstr "Nav"
 #~ msgid "Lookup"
 #~ msgstr "Suche"
 
+#~ msgid "Calc"
+#~ msgstr "Berechne"
+
 #~ msgid "Task Point"
 #~ msgstr "Wendepunkt"
 
@@ -10195,6 +10112,9 @@ msgstr "Nav"
 
 #~ msgid "A-"
 #~ msgstr "A-"
+
+#~ msgid "Short file name"
+#~ msgstr "Datei Kurzname"
 
 #~ msgid "A+"
 #~ msgstr "A+"
@@ -10229,6 +10149,9 @@ msgstr "Nav"
 #~ msgid "No help available on this item"
 #~ msgstr "Keine Hilfe verfügbar."
 
+#~ msgid "Waypoint Info"
+#~ msgstr "Wegpunkt Info"
+
 #~ msgid "This sets the task point for review."
 #~ msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
 
@@ -10251,6 +10174,9 @@ msgstr "Nav"
 
 #~ msgid "Edit text"
 #~ msgstr "Text bearbeiten"
+
+#~ msgid "Volume"
+#~ msgstr "Volumen"
 
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "Hilfe zu geschätzte verbleibende AAT"
@@ -10311,6 +10237,12 @@ msgstr "Nav"
 #~ "Wegpunkt\n"
 #~ "Details"
 
+#~ msgid "12 Right (Landscape)"
+#~ msgstr "12 Rechts (Querformat)"
+
+#~ msgid "Clear current task?"
+#~ msgstr "Aufgabe löschen?"
+
 #~ msgid "Set As New Home"
 #~ msgstr "Setze als neuer Heimatplatz"
 
@@ -10332,6 +10264,12 @@ msgstr "Nav"
 #~ msgstr ""
 #~ "Graph der mittleren Steigwerte (horizontale Achse) als Funktion der Höhe "
 #~ "(vertikale Achse)."
+
+#~ msgid "MANUAL"
+#~ msgstr "manuell"
+
+#~ msgid "AUTO"
+#~ msgstr "auto"
 
 #~ msgid "Wind At Altitude"
 #~ msgstr "Wind Über Höhe"
@@ -10356,6 +10294,9 @@ msgstr "Nav"
 
 #~ msgid "Export"
 #~ msgstr "Export"
+
+#~ msgid "Unknown error creating task."
+#~ msgstr "Unbekannter Fehler beim Aufgabe Anlegen."
 
 #~ msgid "Lat."
 #~ msgstr "Breite"
@@ -10516,6 +10457,9 @@ msgstr "Nav"
 #~ msgid "Dialog size"
 #~ msgstr "Dialogfenstergröße"
 
+#~ msgid "Goto and clear task"
+#~ msgstr "Flieg hin und lösche Aufgabe"
+
 #~ msgid ""
 #~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
 #~ "data to be used anyway."
@@ -10552,8 +10496,14 @@ msgstr "Nav"
 #~ msgid "4 Top (Portrait)"
 #~ msgstr "4 Oben (Portrait)"
 
+#~ msgid "Audio vario"
+#~ msgstr "Tonvario"
+
 #~ msgid "4 Bottom (Portrait)"
 #~ msgstr "4 Unten (Portrait)"
+
+#~ msgid "Emulate the sound of an electronic vario."
+#~ msgstr "Simuliert den Ton eines elektronischen Varios."
 
 #~ msgid ""
 #~ "This allows switching on or off the automatic wind algorithm.  When the "
@@ -10625,11 +10575,59 @@ msgstr "Nav"
 #~ "aktuellen Position entspricht, sondern exakt dem zurückgelegten Weg "
 #~ "(incl. Zick-Zack o.ä.). Der Wert wird im Kreisflug nicht berechnet."
 
+#~ msgid ""
+#~ "Mute the audio output in when the current lift is in a certain range "
+#~ "around zero"
+#~ msgstr ""
+#~ "Unterdrücke die Audio-Ausgabe, wenn das Steigen in einem bestimmten "
+#~ "Bereich um Null ist."
+
+#~ msgid "Enable Deadband"
+#~ msgstr "Tonausblendung Ein"
+
+#~ msgid "The tone frequency that is played at maximum sink rate."
+#~ msgstr "Die Ton-Frequenz bei der größten Sinkrate."
+
+#~ msgid "Min. Frequency"
+#~ msgstr "Niedrigster Ton"
+
+#~ msgid "Zero Frequency"
+#~ msgstr "Null-Ton"
+
 #~ msgid "WP alt.A"
 #~ msgstr "WP H Ankunft"
 
+#~ msgid "Max. Frequency"
+#~ msgstr "Höchster Ton"
+
+#~ msgid "The tone frequency that is played at zero climb rate."
+#~ msgstr "Die Ton-Frequenz für Nullschieber."
+
+#~ msgid "The tone frequency that is played at maximum climb rate."
+#~ msgstr "Die Ton-Frequenz bei der größten Steigrate."
+
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Unerreichbar durch das Gelände."
+
+#~ msgid "Deadband max. lift"
+#~ msgstr "Tonausblendung max. Steigen"
+
+#~ msgid "Deadband min. lift"
+#~ msgstr "Tonausblendung min. Steigen"
+
+#~ msgid ""
+#~ "Below this lift threshold the vario will start to play sounds if the "
+#~ "'Deadband' feature is enabled."
+#~ msgstr ""
+#~ "Unter diesem Steig-Schwellwert spielt das Vario töne, falls die  "
+#~ "Tonausblendung aktiviert ist."
+
+#~ msgid ""
+#~ "Above this lift threshold the vario will start to play sounds if the "
+#~ "'Deadband' feature is enabled."
+#~ msgstr ""
+#~ "Über diesem Steig-Schwellwert spielt das Vario töne, falls die  "
+#~ "Tonausblendung aktiviert ist."
 
 #~ msgid "Dry mass of the glider (pilot + empty mass)."
 #~ msgstr "Trockengewicht des Seglers (Piloten + Leergewicht)"

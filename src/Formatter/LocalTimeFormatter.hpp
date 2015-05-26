@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_TIME_FORMATTER_HPP
 #define XCSOAR_LOCAL_TIME_FORMATTER_HPP
 
+#include "Time/RoughTime.hpp"
+#include "Util/StringBuffer.hxx"
+#include "Compiler.h"
+
 #include <tchar.h>
 
 class RoughTimeDelta;
@@ -36,5 +40,14 @@ class RoughTimeDelta;
  */
 void
 FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset);
+
+gcc_const
+static inline StringBuffer<TCHAR, 8>
+FormatLocalTimeHHMM(int time, RoughTimeDelta utc_offset)
+{
+  StringBuffer<TCHAR, 8> buffer;
+  FormatLocalTimeHHMM(buffer.data(), time, utc_offset);
+  return buffer;
+}
 
 #endif

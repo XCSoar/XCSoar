@@ -29,7 +29,7 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"
 
-class WndButton;
+class Button;
 class FlarmTrafficControl;
 
 class TrafficWidget : public ContainerWidget,
@@ -47,10 +47,10 @@ class TrafficWidget : public ContainerWidget,
     DETAILS,
   };
 
-  WndButton *zoom_in_button, *zoom_out_button;
-  WndButton *previous_item_button, *next_item_button;
-  WndButton *details_button;
-  WndButton *close_button;
+  Button *zoom_in_button, *zoom_out_button;
+  Button *previous_item_button, *next_item_button;
+  Button *details_button;
+  Button *close_button;
 #endif
 
   FlarmTrafficControl *view;

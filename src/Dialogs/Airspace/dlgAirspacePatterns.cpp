@@ -63,7 +63,8 @@ dlgAirspacePatternsShowModal(const AirspaceLook &look)
   AirspacePatternsDialog dialog(look);
 
   return ListPicker(_("Select Pattern"),
-                    ARRAY_SIZE(AirspaceLook::brushes), 0, Layout::FastScale(18),
+                    ARRAY_SIZE(AirspaceLook::brushes), 0,
+                    Layout::GetMaximumControlHeight(),
                     dialog);
 }
 
