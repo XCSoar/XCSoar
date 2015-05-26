@@ -452,9 +452,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
 
-  const unsigned radius = std::min(line_height / 2 - Layout::FastScale(4u),
-                                   Layout::FastScale(10u));
-
+  const unsigned radius = line_height / 2 - padding;
   OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),
                           pt, radius, task_look,
                           CommonInterface::GetMapSettings().airspace,
