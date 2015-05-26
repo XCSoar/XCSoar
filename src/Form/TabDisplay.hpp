@@ -60,7 +60,7 @@ public:
   unsigned GetRecommendedWidth(const DialogLook &look) const;
 
   gcc_pure
-  unsigned GetRecommendedHeight() const;
+  unsigned GetRecommendedHeight(const DialogLook &look) const;
 };
 
 /**

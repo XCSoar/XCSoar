@@ -85,12 +85,12 @@ TabButton::GetRecommendedWidth(const DialogLook &look) const
 }
 
 inline unsigned
-TabButton::GetRecommendedHeight() const
+TabButton::GetRecommendedHeight(const DialogLook &look) const
 {
   if (bitmap != nullptr)
     return bitmap->GetHeight() + 2 * Layout::GetTextPadding();
 
-  return 0;
+  return look.button.font->GetHeight() + 2 * Layout::GetTextPadding();
 }
 
 unsigned
@@ -111,7 +111,7 @@ TabDisplay::GetRecommendedRowHeight() const
 {
   unsigned height = Layout::GetMaximumControlHeight();
   for (auto *i : buttons) {
-    unsigned h = i->GetRecommendedHeight() + tab_line_height;
+    unsigned h = i->GetRecommendedHeight(GetLook()) + tab_line_height;
     if (h > height)
       height = h;
   }
