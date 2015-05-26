@@ -107,25 +107,23 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Unprepare() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
 
 protected:
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
 
   /* virtual methods from ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(gcc_unused unsigned index) const override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) override;
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) override;
 };
 
 gcc_pure
