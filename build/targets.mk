@@ -5,6 +5,7 @@ TARGETS = PC WIN64 \
 	WAYLAND \
 	PI CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
+	ANDROIDAARCH64 ANDROIDX64 ANDROIDMIPS64 \
 	ANDROIDFAT \
 	WINE CYGWIN \
 	OSX32 OSX64 IOS32 IOS64
@@ -45,8 +46,10 @@ ARMV5 = n
 ARMV6 = n
 ARMV7 := n
 NEON := n
+AARCH64 := n
 X86 := n
 MIPS := n
+MIPS64 := n
 FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
@@ -108,6 +111,21 @@ endif
 
 ifeq ($(TARGET),ANDROIDMIPS)
   MIPS := y
+  override TARGET = ANDROID
+endif
+
+ifeq ($(TARGET),ANDROIDAARCH64)
+  AARCH64 := y
+  override TARGET = ANDROID
+endif
+
+ifeq ($(TARGET),ANDROIDX64)
+  X64 := y
+  override TARGET = ANDROID
+endif
+
+ifeq ($(TARGET),ANDROIDMIPS64)
+  MIPS64 := y
   override TARGET = ANDROID
 endif
 
@@ -401,6 +419,7 @@ ifeq ($(TARGET),ANDROID)
 
   ANDROID_SDK_PLATFORM = android-22
   ANDROID_NDK_PLATFORM = android-19
+  ANDROID_NDK_PLATFORM_64 = android-21
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
@@ -425,6 +444,28 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ARCH = mips
     ANDROID_ABI2 = mipsel-linux-android
     ANDROID_ABI3 = mips
+  endif
+
+  ifeq ($(AARCH64),y)
+    ANDROID_ARCH = arm64
+    ANDROID_ABI2 = aarch64-linux-android
+    ANDROID_ABI3 = arm64-v8a
+    ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+  endif
+
+  ifeq ($(X64),y)
+    ANDROID_ARCH = x86_64
+    ANDROID_ABI2 = x86_64
+    ANDROID_ABI3 = x86_64
+    ANDROID_ABI4 = x86_64-linux-android
+    ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+  endif
+
+  ifeq ($(MIPS64),y)
+    ANDROID_ARCH = mips64
+    ANDROID_ABI2 = mips64el-linux-android
+    ANDROID_ABI3 = mips64
+    ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
   endif
 
   ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
@@ -512,6 +553,21 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(ARMV7)$(NEON),yn)
     TARGET_ARCH += -mfpu=vfpv3-d16
+  endif
+
+  ifeq ($(AARCH64),y)
+    LLVM_TARGET = aarch64-linux-android
+    HAVE_FPU := y
+  endif
+
+  ifeq ($(X64),y)
+    LLVM_TARGET = x86_64-linux-android
+    HAVE_FPU := y
+  endif
+
+  ifeq ($(MIPS64),y)
+    LLVM_TARGET = mips64el-linux-android
+    HAVE_FPU := y
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
@@ -701,7 +757,11 @@ endif
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -Wl,--no-undefined
   TARGET_LDFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
-  TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib
+  ifeq ($(call bool_or,$(X64),$(MIPS64)),y)
+    TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib64
+  else
+    TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib
+  endif
 
   ifeq ($(ARMV7),y)
     TARGET_LDFLAGS += -Wl,--fix-cortex-a8
