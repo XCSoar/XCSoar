@@ -86,10 +86,9 @@ class MapItemListWidget final
   const MapItemList &list;
 
   const DialogLook &dialog_look;
-  const MapLook &look;
-  const TrafficLook &traffic_look;
-  const FinalGlideBarLook &final_glide_look;
   const MapSettings &settings;
+
+  MapItemListRenderer renderer;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
   Button *ack_button;
@@ -104,9 +103,10 @@ public:
                     const FinalGlideBarLook &_final_glide_look,
                     const MapSettings &_settings)
     :list(_list),
-     dialog_look(_dialog_look), look(_look),
-     traffic_look(_traffic_look), final_glide_look(_final_glide_look),
-     settings(_settings) {}
+     dialog_look(_dialog_look),
+     settings(_settings),
+     renderer(_dialog_look, _look, _traffic_look, _final_glide_look,
+              _settings, CommonInterface::GetComputerSettings().utc_offset) {}
 
   unsigned GetCursorIndex() const {
     return GetList().GetCursorIndex();
@@ -205,11 +205,8 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned idx)
 {
   const MapItem &item = *list[idx];
-  MapItemListRenderer::Draw(canvas, rc, item,
-                            dialog_look, look, traffic_look,
-                            final_glide_look, settings,
-                            CommonInterface::GetComputerSettings().utc_offset,
-                            &CommonInterface::Basic().flarm.traffic);
+  renderer.Draw(canvas, rc, item,
+                &CommonInterface::Basic().flarm.traffic);
 
   if ((settings.item_list.add_arrival_altitude &&
        item.type == MapItem::Type::ARRIVAL_ALTITUDE) ||

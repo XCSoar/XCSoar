@@ -536,11 +536,6 @@ Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const MapItem &item,
-                          const DialogLook &dialog_look, const MapLook &look,
-                          const TrafficLook &traffic_look,
-                          const FinalGlideBarLook &final_glide_look,
-                          const MapSettings &settings,
-                          RoughTimeDelta utc_offset,
                           const TrafficList *traffic_list)
 {
   switch (item.type) {

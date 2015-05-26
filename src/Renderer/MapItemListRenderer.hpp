@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 #define XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 
+#include "Time/RoughTime.hpp"
+
 struct PixelRect;
 class Canvas;
 struct MapItem;
@@ -33,18 +35,28 @@ struct TrafficLook;
 struct FinalGlideBarLook;
 struct MapSettings;
 struct TrafficList;
-class RoughTimeDelta;
 
-namespace MapItemListRenderer
-{
+class MapItemListRenderer {
+  const DialogLook &dialog_look;
+  const MapLook &look;
+  const TrafficLook &traffic_look;
+  const FinalGlideBarLook &final_glide_look;
+  const MapSettings &settings;
+  const RoughTimeDelta utc_offset;
+
+public:
+  MapItemListRenderer(const DialogLook &_dialog_look,
+                      const MapLook &_look,
+                      const TrafficLook &_traffic_look,
+                      const FinalGlideBarLook &_final_glide_look,
+                      const MapSettings &_settings,
+                      RoughTimeDelta _utc_offset)
+    :dialog_look(_dialog_look), look(_look),
+     traffic_look(_traffic_look), final_glide_look(_final_glide_look),
+     settings(_settings), utc_offset(_utc_offset) {}
+
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
-            const DialogLook &dialog_look,
-            const MapLook &look,
-            const TrafficLook &traffic_look,
-            const FinalGlideBarLook &final_glide_look,
-            const MapSettings &settings,
-            RoughTimeDelta utc_offset,
             const TrafficList *traffic_list=nullptr);
-}
+};
 
 #endif
