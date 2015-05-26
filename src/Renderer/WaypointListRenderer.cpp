@@ -36,14 +36,6 @@ Copyright_License {
 
 #include <cstdio>
 
-namespace WaypointListRenderer
-{
-  void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            const GeoVector *vector,
-            const DialogLook &dialog_look, const WaypointLook &look,
-            const WaypointRendererSettings &settings);
-}
-
 typedef StaticString<256u> Buffer;
 
 static void
@@ -70,86 +62,12 @@ WaypointListRenderer::GetHeight(const DialogLook &look)
     + look.small_font->GetHeight();
 }
 
-void
-WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const Waypoint &waypoint,
-                           const DialogLook &dialog_look,
-                           const WaypointLook &look,
-                           const WaypointRendererSettings &renderer_settings)
-{
-  Draw(canvas, rc, waypoint, nullptr, dialog_look, look, renderer_settings);
-}
-
-void
-WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const Waypoint &waypoint, const GeoVector &vector,
-                           const DialogLook &dialog_look,
-                           const WaypointLook &look,
-                           const WaypointRendererSettings &settings)
-{
-  Draw(canvas, rc, waypoint, &vector, dialog_look, look, settings);
-}
-
-void
-WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const Waypoint &waypoint, fixed distance,
-                           fixed arrival_altitude,
-                           const DialogLook &dialog_look,
-                           const WaypointLook &look,
-                           const WaypointRendererSettings &settings)
-{
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
-
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
-  // Y-Coordinate of the second row
-  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
-
-  // Use small font for details
-  canvas.Select(small_font);
-
-  // Draw distance and arrival altitude
-  StaticString<256> buffer;
-  TCHAR alt[20], radio[20];
-  
-  FormatRelativeUserAltitude(arrival_altitude, alt, true);
-  buffer.Format(_T("%s: %s - %s: %s"), _("Distance"),
-                FormatUserDistanceSmart(distance).c_str(),
-                _("Arrival Alt"), alt);
-
-  if (waypoint.radio_frequency.IsDefined()) {
-    waypoint.radio_frequency.Format(radio, ARRAY_SIZE(radio));
-    buffer.AppendFormat(_T(" - %s MHz"), radio);
-  }
-
-  const int left = rc.left + line_height + padding;
-  canvas.DrawClippedText(left, top2, rc, buffer);
-
-  // Draw waypoint name
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + padding, rc,
-                         waypoint.name.c_str());
-
-  // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
-
-  WaypointIconRenderer::Reachability reachable =
-      positive(arrival_altitude) ?
-      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
-
-  WaypointIconRenderer wir(settings, look, canvas);
-  wir.Draw(waypoint, pt, reachable);
-}
-
-void
-WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const Waypoint &waypoint, const GeoVector *vector,
-                           const DialogLook &dialog_look,
-                           const WaypointLook &look,
-                           const WaypointRendererSettings &settings)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const Waypoint &waypoint, const GeoVector *vector,
+     const DialogLook &dialog_look,
+     const WaypointLook &look,
+     const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
@@ -204,4 +122,78 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt);
+}
+
+void
+WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const Waypoint &waypoint,
+                           const DialogLook &dialog_look,
+                           const WaypointLook &look,
+                           const WaypointRendererSettings &renderer_settings)
+{
+  ::Draw(canvas, rc, waypoint, nullptr, dialog_look, look, renderer_settings);
+}
+
+void
+WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const Waypoint &waypoint, const GeoVector &vector,
+                           const DialogLook &dialog_look,
+                           const WaypointLook &look,
+                           const WaypointRendererSettings &settings)
+{
+  ::Draw(canvas, rc, waypoint, &vector, dialog_look, look, settings);
+}
+
+void
+WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const Waypoint &waypoint, fixed distance,
+                           fixed arrival_altitude,
+                           const DialogLook &dialog_look,
+                           const WaypointLook &look,
+                           const WaypointRendererSettings &settings)
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned line_height = rc.bottom - rc.top;
+
+  const Font &name_font = *dialog_look.list.font_bold;
+  const Font &small_font = *dialog_look.small_font;
+
+  // Y-Coordinate of the second row
+  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
+
+  // Use small font for details
+  canvas.Select(small_font);
+
+  // Draw distance and arrival altitude
+  StaticString<256> buffer;
+  TCHAR alt[20], radio[20];
+  
+  FormatRelativeUserAltitude(arrival_altitude, alt, true);
+  buffer.Format(_T("%s: %s - %s: %s"), _("Distance"),
+                FormatUserDistanceSmart(distance).c_str(),
+                _("Arrival Alt"), alt);
+
+  if (waypoint.radio_frequency.IsDefined()) {
+    waypoint.radio_frequency.Format(radio, ARRAY_SIZE(radio));
+    buffer.AppendFormat(_T(" - %s MHz"), radio);
+  }
+
+  const int left = rc.left + line_height + padding;
+  canvas.DrawClippedText(left, top2, rc, buffer);
+
+  // Draw waypoint name
+  canvas.Select(name_font);
+  canvas.DrawClippedText(left, rc.top + padding, rc,
+                         waypoint.name.c_str());
+
+  // Draw icon
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
+
+  WaypointIconRenderer::Reachability reachable =
+      positive(arrival_altitude) ?
+      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
+
+  WaypointIconRenderer wir(settings, look, canvas);
+  wir.Draw(waypoint, pt, reachable);
 }
