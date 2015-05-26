@@ -39,7 +39,6 @@ NOAAListRenderer::GetHeight(const DialogLook &look)
 
 static void
 Draw(Canvas &canvas, const PixelRect rc,
-     PixelScalar padding_left,
      const NOAAStore::Item &station,
      const DialogLook &dialog_look)
 {
@@ -55,7 +54,7 @@ Draw(Canvas &canvas, const PixelRect rc,
       station.parsed_metar.name_available)
     title.AppendFormat(_T(": %s"), station.parsed_metar.name.c_str());
 
-  canvas.DrawClippedText(rc.left + padding + padding_left,
+  canvas.DrawClippedText(rc.left + padding,
                          rc.top + padding, rc, title);
 
   canvas.Select(details_font);
@@ -66,7 +65,7 @@ Draw(Canvas &canvas, const PixelRect rc,
   else
     tmp = station.metar.content.c_str();
 
-  canvas.DrawClippedText(rc.left + padding + padding_left,
+  canvas.DrawClippedText(rc.left + padding,
                          rc.top + code_font.GetHeight() + Layout::FastScale(4),
                          rc, tmp);
 }
@@ -76,20 +75,22 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        const NOAAStore::Item &station,
                        const DialogLook &dialog_look)
 {
-  ::Draw(canvas, rc, 0, station, dialog_look);
+  ::Draw(canvas, rc, station, dialog_look);
 }
 
 void
-NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+NOAAListRenderer::Draw(Canvas &canvas, PixelRect rc,
                        const NOAAStore::Item &station,
                        const NOAALook &look,
                        const DialogLook &dialog_look)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  ::Draw(canvas, rc, line_height, station, dialog_look);
-
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
   look.icon.Draw(canvas, pt);
+
+  rc.left += line_height;
+
+  ::Draw(canvas, rc, station, dialog_look);
 }
