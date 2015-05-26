@@ -26,8 +26,7 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
@@ -92,6 +91,8 @@ class PlaneListWidget final
 
   std::vector<ListItem> list;
 
+  TwoTextRowsRenderer row_renderer;
+
 public:
   void CreateButtons(WidgetDialog &dialog);
 
@@ -125,14 +126,6 @@ private:
   /* virtual methods from class ActionListener */
   void OnAction(int id) override;
 };
-
-gcc_pure
-static UPixelScalar
-GetRowHeight(const DialogLook &look)
-{
-  return look.list.font_bold->GetHeight() + 3 * Layout::GetTextPadding()
-    + look.small_font->GetHeight();
-}
 
 void
 PlaneListWidget::UpdateList()
@@ -172,7 +165,9 @@ void
 PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc, GetRowHeight(look));
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          *look.small_font));
   UpdateList();
 }
 
@@ -187,27 +182,14 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < list.size());
 
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  const Font &name_font = *look.list.font_bold;
-  const Font &details_font = *look.small_font;
-
-  canvas.Select(name_font);
-
-  const unsigned padding = Layout::GetTextPadding();
-  const int x = rc.left + padding;
-  const int name_y = rc.top + padding;
-  const int path_y = name_y + name_font.GetHeight() + padding;
-
   if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
     StaticString<256> buffer;
     buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
-    canvas.DrawClippedText(x, name_y, rc, buffer);
+    row_renderer.DrawFirstRow(canvas, rc, buffer);
   } else
-    canvas.DrawClippedText(x, name_y, rc, list[i].name);
+    row_renderer.DrawFirstRow(canvas, rc, list[i].name);
 
-  canvas.Select(details_font);
-
-  canvas.DrawClippedText(x, path_y, rc, list[i].path);
+  row_renderer.DrawSecondRow(canvas, rc, list[i].path);
 }
 
 static bool

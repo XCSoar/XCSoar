@@ -179,6 +179,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/HorizonWidget.cpp \
 	$(SRC)/Renderer/TextRowRenderer.cpp \
+	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
