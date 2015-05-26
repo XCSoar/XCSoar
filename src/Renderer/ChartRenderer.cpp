@@ -180,8 +180,8 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  int x = rc.right - tsize.cx - Layout::Scale(3);
-  int y = rc.bottom - tsize.cy;
+  int x = rc.right - tsize.cx - Layout::GetTextPadding();
+  int y = rc.bottom - tsize.cy - Layout::GetTextPadding();
 
   canvas.DrawText(x, y, text);
 }
@@ -203,9 +203,8 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
   canvas.Select(look.axis_label_font);
   canvas.SetBackgroundTransparent();
 
-  PixelSize tsize = canvas.CalcTextSize(text);
-  int x = std::max(2, int(rc.left - tsize.cx));
-  int y = rc.top;
+  int x = rc.left + Layout::GetTextPadding();
+  int y = rc.top + Layout::GetTextPadding();
 
   canvas.DrawText(x, y, text);
 }
@@ -424,7 +423,8 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
 
         canvas.DrawText(xmin, y, unit_text);
 
-        next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
+        next_text = xmin + canvas.CalcTextSize(unit_text).cx
+          + Layout::GetTextPadding();
       }
     }
   }
