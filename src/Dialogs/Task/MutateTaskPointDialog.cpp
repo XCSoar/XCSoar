@@ -46,9 +46,14 @@ TPTypeItemHelp(unsigned i)
   return OrderedTaskPointDescription(point_types[i]);
 }
 
-static void
-OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
-                     unsigned DrawListIndex)
+class MutateTaskPointRenderer final : public ListItemRenderer {
+public:
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
+};
+
+void
+MutateTaskPointRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                     unsigned DrawListIndex)
 {
   assert(DrawListIndex < point_types.size());
 
@@ -117,7 +122,7 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
   if (i != e)
     initial_index = std::distance(b, i);
 
-  FunctionListItemRenderer item_renderer(OnPointPaintListItem);
+  MutateTaskPointRenderer item_renderer;
 
   int result = ListPicker(_("Task Point Type"),
                           point_types.size(), initial_index,
