@@ -35,14 +35,6 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
 
-namespace AirspaceListRenderer
-{
-  void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
-            const TCHAR *comment, const DialogLook &dialog_look,
-            const AirspaceLook &look,
-            const AirspaceRendererSettings &renderer_settings);
-}
-
 unsigned
 AirspaceListRenderer::GetHeight(const DialogLook &look)
 {
@@ -50,12 +42,12 @@ AirspaceListRenderer::GetHeight(const DialogLook &look)
          look.small_font->GetHeight();
 }
 
-void
-AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                           const AbstractAirspace &airspace,
-                           const TCHAR *comment, const DialogLook &dialog_look,
-                           const AirspaceLook &look,
-                           const AirspaceRendererSettings &renderer_settings)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const AbstractAirspace &airspace,
+     const TCHAR *comment, const DialogLook &dialog_look,
+     const AirspaceLook &look,
+     const AirspaceRendererSettings &renderer_settings)
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
@@ -117,8 +109,8 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  Draw(canvas, rc, airspace, AirspaceFormatter::GetClass(airspace), dialog_look,
-       look, renderer_settings);
+  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClass(airspace),
+         dialog_look, look, renderer_settings);
 }
 
 void
@@ -137,6 +129,6 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        FormatUserDistanceSmart(vector.distance).c_str(),
                        bearing);
 
-  Draw(canvas, rc, airspace, comment, dialog_look,
-       look, renderer_settings);
+  ::Draw(canvas, rc, airspace, comment,
+         dialog_look, look, renderer_settings);
 }
