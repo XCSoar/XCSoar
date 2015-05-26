@@ -63,21 +63,15 @@ Copyright_License {
 unsigned
 MapItemListRenderer::CalculateLayout()
 {
-  return dialog_look.list.font_bold->GetHeight()
-    + 3 * Layout::GetTextPadding() + dialog_look.small_font->GetHeight();
+  return row_renderer.CalculateLayout(*dialog_look.list.font_bold,
+                                      *dialog_look.small_font);
 }
 
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const LocationMapItem &item,
-     const DialogLook &dialog_look)
+     const TwoTextRowsRenderer &row_renderer)
 {
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
-  const unsigned text_padding = Layout::GetTextPadding();
-  int left = rc.left + text_padding;
-
   TCHAR info_buffer[256], direction_buffer[32];
   if (item.vector.IsValid()) {
     FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
@@ -91,26 +85,19 @@ Draw(Canvas &canvas, const PixelRect rc,
                        _("Distance"), _T("???"), _("Direction"), _T("???"));
   }
 
-  canvas.Select(name_font);
-
-  canvas.DrawClippedText(left, rc.top + text_padding, rc, info_buffer);
-
+  row_renderer.DrawFirstRow(canvas, rc, info_buffer);
 
   StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
                      RasterBuffer::IsSpecial(item.elevation)
                      ? _T("???")
                      : FormatUserAltitude(fixed(item.elevation)).c_str());
-
-  canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + 2 * text_padding,
-                         rc, info_buffer);
+  row_renderer.DrawSecondRow(canvas, rc, info_buffer);
 }
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const ArrivalAltitudeMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const FinalGlideBarLook &look)
 {
   const unsigned line_height = rc.bottom - rc.top;
@@ -151,13 +138,8 @@ Draw(Canvas &canvas, const PixelRect rc,
   }
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
-
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
   const unsigned text_padding = Layout::GetTextPadding();
-  int left = rc.left + line_height + text_padding;
-
+  rc.left += line_height + text_padding;
 
   // Format title row
 
@@ -181,8 +163,7 @@ Draw(Canvas &canvas, const PixelRect rc,
 
   // Draw title row
 
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + text_padding, rc, buffer);
+  row_renderer.DrawFirstRow(canvas, rc, buffer);
 
   // Format comment row
 
@@ -214,41 +195,29 @@ Draw(Canvas &canvas, const PixelRect rc,
 
   // Draw comment row
 
-  canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + 2 * text_padding,
-                         rc, buffer);
+  row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const SelfMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const AircraftLook &look,
      const MapSettings &settings)
 {
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
+  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 
-  int left = rc.left + line_height + text_padding;
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + text_padding, rc,
-                         _("Your Position"));
+  rc.left += line_height + text_padding;
+
+  row_renderer.DrawFirstRow(canvas, rc, _("Your Position"));
 
   TCHAR buffer[128];
   FormatGeoPoint(item.location, buffer, 128);
-
-  canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + 2 * text_padding,
-                         rc, buffer);
-
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
-
-  AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
+  row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
 static void
@@ -274,9 +243,9 @@ Draw(Canvas &canvas, const PixelRect rc,
 }
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const MarkerMapItem &item, RoughTimeDelta utc_offset,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const MarkerLook &look)
 {
   const unsigned line_height = rc.bottom - rc.top;
@@ -289,24 +258,17 @@ Draw(Canvas &canvas, const PixelRect rc,
 
   look.icon.Draw(canvas, pt);
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
-  int left = rc.left + line_height + text_padding;
+  rc.left += line_height + text_padding;
 
   StaticString<256> buffer;
   buffer.Format(_T("%s #%d"), _("Marker"), item.id + 1);
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + text_padding, rc, buffer);
+  row_renderer.DrawFirstRow(canvas, rc, buffer);
 
   buffer.Format(_("dropped %s ago"),
                 FormatTimespanSmart(BrokenDateTime::NowUTC() - marker.time).c_str());
   buffer.AppendFormat(_T(" (%s)"),
                       FormatLocalTimeHHMM(marker.time.GetSecondOfDay(), utc_offset).c_str());
-  canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + 2 * text_padding,
-                         rc, buffer);
+  row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
 #ifdef HAVE_NOAA
@@ -322,10 +284,10 @@ Draw(Canvas &canvas, const PixelRect rc,
 #endif
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const ThermalMapItem &item,
      RoughTimeDelta utc_offset,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const MapLook &look)
 {
   const unsigned line_height = rc.bottom - rc.top;
@@ -338,14 +300,9 @@ Draw(Canvas &canvas, const PixelRect rc,
 
   look.thermal_source_icon.Draw(canvas, pt);
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
+  rc.left += line_height + text_padding;
 
-  int left = rc.left + line_height + text_padding;
-
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + text_padding,
-                         rc, _("Thermal"));
+  row_renderer.DrawFirstRow(canvas, rc, _("Thermal"));
 
   StaticString<256> buffer;
   TCHAR lift_buffer[32];
@@ -359,16 +316,13 @@ Draw(Canvas &canvas, const PixelRect rc,
                 _("Avg. lift"), lift_buffer,
                 FormatTimespanSmart(timespan).c_str(),
                 FormatLocalTimeHHMM((int)thermal.time, utc_offset).c_str());
-  canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + 2 * text_padding,
-                         rc, buffer);
+  row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const TaskOZMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const TaskLook &look, const AirspaceLook &airspace_look,
      const AirspaceRendererSettings &airspace_settings)
 {
@@ -378,30 +332,6 @@ Draw(Canvas &canvas, const PixelRect rc,
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
-  TCHAR buffer[256];
-
-  // Y-Coordinate of the second row
-  int top2 = rc.top + name_font.GetHeight() + 2 * text_padding;
-
-  // Use small font for details
-  canvas.Select(small_font);
-
-  // Draw details line
-  const int left = rc.left + line_height + text_padding;
-  OrderedTaskPointRadiusLabel(*item.oz, buffer);
-  if (!StringIsEmpty(buffer))
-    canvas.DrawClippedText(left, top2, rc.right - left, buffer);
-
-  // Draw waypoint name
-  canvas.Select(name_font);
-  OrderedTaskPointLabel(item.tp_type, waypoint.name.c_str(),
-                        item.index, buffer);
-  canvas.DrawClippedText(left, rc.top + text_padding,
-                         rc.right - left, buffer);
-
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
   const unsigned radius = std::min(line_height / 2 - 2 * text_padding,
@@ -409,12 +339,25 @@ Draw(Canvas &canvas, const PixelRect rc,
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
 
+  rc.left += line_height + text_padding;
+
+  TCHAR buffer[256];
+
+  // Draw details line
+  OrderedTaskPointRadiusLabel(*item.oz, buffer);
+  if (!StringIsEmpty(buffer))
+    row_renderer.DrawSecondRow(canvas, rc, buffer);
+
+  // Draw waypoint name
+  OrderedTaskPointLabel(item.tp_type, waypoint.name.c_str(),
+                        item.index, buffer);
+  row_renderer.DrawFirstRow(canvas, rc, buffer);
 }
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const TrafficMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const TrafficLook &traffic_look,
      const TrafficList *traffic_list)
 {
@@ -425,11 +368,16 @@ Draw(Canvas &canvas, const PixelRect rc,
     ? nullptr
     : traffic_list->FindTraffic(item.id);
 
-  // Now render the text information
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-  int left = rc.left + line_height + text_padding;
+  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
+  // Render the representation of the traffic icon
+  if (traffic != nullptr)
+    TrafficRenderer::Draw(canvas, traffic_look, *traffic, traffic->track,
+                          item.color, pt);
+
+  rc.left += line_height + text_padding;
+
+  // Now render the text information
   const FlarmNetRecord *record = FlarmDetails::LookupRecord(item.id);
 
   StaticString<256> title_string;
@@ -445,9 +393,7 @@ Draw(Canvas &canvas, const PixelRect rc,
     title_string.append(callsign);
   }
 
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + text_padding,
-                         rc, title_string);
+  row_renderer.DrawFirstRow(canvas, rc, title_string);
 
   StaticString<256> info_string;
   if (record && !StringIsEmpty(record->plane_type))
@@ -469,17 +415,8 @@ Draw(Canvas &canvas, const PixelRect rc,
       info_string.AppendFormat(_T(", %s: %s"), _("Vario"), tmp);
     }
   }
-  canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + 2 * text_padding,
-                         rc, info_string);
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
-
-  // Render the representation of the traffic icon
-  if (traffic != nullptr)
-    TrafficRenderer::Draw(canvas, traffic_look, *traffic, traffic->track,
-                          item.color, pt);
+  row_renderer.DrawSecondRow(canvas, rc, info_string);
 }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -510,29 +447,16 @@ SinceInMinutes(fixed now_s, uint32_t past_ms)
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const SkyLinesTrafficMapItem &item,
-     const DialogLook &dialog_look)
+     const TwoTextRowsRenderer &row_renderer)
 {
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
-  const unsigned line_height = rc.bottom - rc.top;
-  const unsigned text_padding = Layout::GetTextPadding();
-  const int left = rc.left + line_height + text_padding;
-  const int top = rc.top + text_padding;
-
-  canvas.Select(name_font);
-  canvas.DrawText(left, top, item.name);
+  row_renderer.DrawFirstRow(canvas, rc, item.name);
 
   if (CommonInterface::Basic().time_available) {
-    canvas.Select(small_font);
-
     StaticString<64> buffer;
     buffer.UnsafeFormat(_("%u minutes ago"),
                         SinceInMinutes(CommonInterface::Basic().time,
                                        item.time_of_day_ms));
-
-    canvas.DrawText(left, rc.top + name_font.GetHeight() + 2 * text_padding,
-                    buffer);
+    row_renderer.DrawSecondRow(canvas, rc, buffer);
   }
 }
 
@@ -545,15 +469,15 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   switch (item.type) {
   case MapItem::LOCATION:
-    ::Draw(canvas, rc, (const LocationMapItem &)item, dialog_look);
+    ::Draw(canvas, rc, (const LocationMapItem &)item, row_renderer);
     break;
   case MapItem::ARRIVAL_ALTITUDE:
     ::Draw(canvas, rc, (const ArrivalAltitudeMapItem &)item,
-           dialog_look, final_glide_look);
+           row_renderer, final_glide_look);
     break;
   case MapItem::SELF:
     ::Draw(canvas, rc, (const SelfMapItem &)item,
-           dialog_look, look.aircraft, settings);
+           row_renderer, look.aircraft, settings);
     break;
   case MapItem::AIRSPACE:
     ::Draw(canvas, rc, (const AirspaceMapItem &)item,
@@ -567,12 +491,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     break;
   case MapItem::TASK_OZ:
     ::Draw(canvas, rc, (const TaskOZMapItem &)item,
-           dialog_look, look.task, look.airspace,
+           row_renderer, look.task, look.airspace,
            settings.airspace);
     break;
   case MapItem::MARKER:
     ::Draw(canvas, rc, (const MarkerMapItem &)item, utc_offset,
-           dialog_look, look.marker);
+           row_renderer, look.marker);
     break;
 
 #ifdef HAVE_NOAA
@@ -584,18 +508,18 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   case MapItem::TRAFFIC:
     ::Draw(canvas, rc, (const TrafficMapItem &)item,
-           dialog_look, traffic_look, traffic_list);
+           row_renderer, traffic_look, traffic_list);
     break;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   case MapItem::SKYLINES_TRAFFIC:
-    ::Draw(canvas, rc, (const SkyLinesTrafficMapItem &)item, dialog_look);
+    ::Draw(canvas, rc, (const SkyLinesTrafficMapItem &)item, row_renderer);
     break;
 #endif
 
   case MapItem::THERMAL:
     ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
-         dialog_look, look);
+           row_renderer, look);
     break;
   }
 }

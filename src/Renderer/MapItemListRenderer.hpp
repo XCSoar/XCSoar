@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 
 #include "Time/RoughTime.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 
 struct PixelRect;
 class Canvas;
@@ -43,6 +44,8 @@ class MapItemListRenderer {
   const FinalGlideBarLook &final_glide_look;
   const MapSettings &settings;
   const RoughTimeDelta utc_offset;
+
+  TwoTextRowsRenderer row_renderer;
 
 public:
   MapItemListRenderer(const DialogLook &_dialog_look,
