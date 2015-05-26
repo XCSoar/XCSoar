@@ -195,18 +195,20 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   canvas.Select(name_font);
 
+  const unsigned padding = Layout::GetTextPadding();
+
   if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
     StaticString<256> buffer;
     buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
-    canvas.DrawClippedText(rc.left + Layout::GetTextPadding(),
-                           rc.top + Layout::GetTextPadding(), rc, buffer);
+    canvas.DrawClippedText(rc.left + padding,
+                           rc.top + padding, rc, buffer);
   } else
-    canvas.DrawClippedText(rc.left + Layout::GetTextPadding(),
-                           rc.top + Layout::GetTextPadding(), rc, list[i].name);
+    canvas.DrawClippedText(rc.left + padding,
+                           rc.top + padding, rc, list[i].name);
 
   canvas.Select(details_font);
 
-  canvas.DrawClippedText(rc.left + Layout::GetTextPadding(),
+  canvas.DrawClippedText(rc.left + padding,
                          rc.top + name_font.GetHeight() + Layout::FastScale(4),
                          rc, list[i].path);
 }
