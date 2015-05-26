@@ -30,12 +30,6 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
 
-namespace NOAAListRenderer
-{
-  static void Draw(Canvas &canvas, const PixelRect rc, PixelScalar padding_left,
-                   const NOAAStore::Item &station, const DialogLook &dialog_look);
-}
-
 UPixelScalar
 NOAAListRenderer::GetHeight(const DialogLook &look)
 {
@@ -43,11 +37,11 @@ NOAAListRenderer::GetHeight(const DialogLook &look)
          look.small_font->GetHeight();
 }
 
-void
-NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                       PixelScalar padding_left,
-                       const NOAAStore::Item &station,
-                       const DialogLook &dialog_look)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     PixelScalar padding_left,
+     const NOAAStore::Item &station,
+     const DialogLook &dialog_look)
 {
   const unsigned padding = Layout::GetTextPadding();
   const Font &code_font = *dialog_look.list.font;
@@ -82,7 +76,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        const NOAAStore::Item &station,
                        const DialogLook &dialog_look)
 {
-  Draw(canvas, rc, 0, station, dialog_look);
+  ::Draw(canvas, rc, 0, station, dialog_look);
 }
 
 void
@@ -93,7 +87,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  Draw(canvas, rc, line_height, station, dialog_look);
+  ::Draw(canvas, rc, line_height, station, dialog_look);
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
