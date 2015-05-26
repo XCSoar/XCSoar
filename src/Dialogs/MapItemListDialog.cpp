@@ -105,7 +105,7 @@ public:
     :list(_list),
      dialog_look(_dialog_look),
      settings(_settings),
-     renderer(_dialog_look, _look, _traffic_look, _final_glide_look,
+     renderer(_look, _traffic_look, _final_glide_look,
               _settings, CommonInterface::GetComputerSettings().utc_offset) {}
 
   unsigned GetCursorIndex() const {
@@ -183,7 +183,7 @@ void
 MapItemListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   CreateList(parent, dialog_look, rc,
-             renderer.CalculateLayout());
+             renderer.CalculateLayout(dialog_look));
 
   GetList().SetLength(list.size());
   UpdateButtons();

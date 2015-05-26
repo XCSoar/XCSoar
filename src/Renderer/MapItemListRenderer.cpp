@@ -61,7 +61,7 @@ Copyright_License {
 #include <cstdio>
 
 unsigned
-MapItemListRenderer::CalculateLayout()
+MapItemListRenderer::CalculateLayout(const DialogLook &dialog_look)
 {
   return row_renderer.CalculateLayout(*dialog_look.list.font_bold,
                                       *dialog_look.small_font);

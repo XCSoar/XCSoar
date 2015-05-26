@@ -38,7 +38,6 @@ struct MapSettings;
 struct TrafficList;
 
 class MapItemListRenderer {
-  const DialogLook &dialog_look;
   const MapLook &look;
   const TrafficLook &traffic_look;
   const FinalGlideBarLook &final_glide_look;
@@ -48,17 +47,16 @@ class MapItemListRenderer {
   TwoTextRowsRenderer row_renderer;
 
 public:
-  MapItemListRenderer(const DialogLook &_dialog_look,
-                      const MapLook &_look,
+  MapItemListRenderer(const MapLook &_look,
                       const TrafficLook &_traffic_look,
                       const FinalGlideBarLook &_final_glide_look,
                       const MapSettings &_settings,
                       RoughTimeDelta _utc_offset)
-    :dialog_look(_dialog_look), look(_look),
+    :look(_look),
      traffic_look(_traffic_look), final_glide_look(_final_glide_look),
      settings(_settings), utc_offset(_utc_offset) {}
 
-  unsigned CalculateLayout();
+  unsigned CalculateLayout(const DialogLook &dialog_look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
             const TrafficList *traffic_list=nullptr);
