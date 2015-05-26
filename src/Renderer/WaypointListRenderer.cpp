@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "WaypointListRenderer.hpp"
+#include "TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
@@ -55,114 +56,93 @@ FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
   }
 }
 
-unsigned
-WaypointListRenderer::GetHeight(const DialogLook &look)
-{
-  return look.list.font->GetHeight() + Layout::Scale(6u)
-    + look.small_font->GetHeight();
-}
-
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const Waypoint &waypoint, const GeoVector *vector,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const WaypointLook &look,
      const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
-
-  Buffer buffer;
-
-  // Y-Coordinate of the second row
-  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
-
-  // Use small font for details
-  canvas.Select(small_font);
-
-  // Draw leg distance
-  unsigned leg_info_width = 0;
-  if (vector) {
-    FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
-    unsigned width = leg_info_width = canvas.CalcTextWidth(buffer.c_str());
-    canvas.DrawText(rc.right - padding - width,
-                    rc.top + padding +
-                    (name_font.GetHeight() - small_font.GetHeight()) / 2,
-                    buffer.c_str());
-
-    // Draw leg bearing
-    FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vector->bearing);
-    width = canvas.CalcTextWidth(buffer.c_str());
-    canvas.DrawText(rc.right - padding - width, top2,
-                    buffer.c_str());
-
-    if (width > leg_info_width)
-      leg_info_width = width;
-
-    leg_info_width += padding;
-  }
-
-  // Draw details line
-  FormatWaypointDetails(buffer, waypoint);
-
-  const int left = rc.left + line_height + padding;
-  canvas.DrawClippedText(left, top2, rc.right - leg_info_width - left,
-                         buffer.c_str());
-
-  // Draw waypoint name
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + padding,
-                         rc.right - leg_info_width - left,
-                         waypoint.name.c_str());
-
   // Draw icon
   const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt);
+
+  rc.left += line_height + padding;
+
+  Buffer buffer;
+
+  if (vector) {
+    // Use small font for details
+    canvas.Select(row_renderer.GetSecondFont());
+
+    // Draw leg distance
+    FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
+    const int distance_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
+    canvas.DrawText(distance_x, rc.top + row_renderer.GetFirstY(), buffer);
+
+    // Draw leg bearing
+    FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vector->bearing);
+    const int bearing_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
+    canvas.DrawText(bearing_x, rc.top + row_renderer.GetSecondY(), buffer);
+
+    rc.right = std::min(distance_x, bearing_x) - padding;
+  }
+
+  // Draw details line
+  FormatWaypointDetails(buffer, waypoint);
+  row_renderer.DrawSecondRow(canvas, rc, buffer);
+
+  // Draw waypoint name
+  row_renderer.DrawFirstRow(canvas, rc, waypoint.name.c_str());
 }
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint,
-                           const DialogLook &dialog_look,
+                           const TwoTextRowsRenderer &row_renderer,
                            const WaypointLook &look,
                            const WaypointRendererSettings &renderer_settings)
 {
-  ::Draw(canvas, rc, waypoint, nullptr, dialog_look, look, renderer_settings);
+  ::Draw(canvas, rc, waypoint, nullptr, row_renderer, look, renderer_settings);
 }
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const GeoVector &vector,
-                           const DialogLook &dialog_look,
+                           const TwoTextRowsRenderer &row_renderer,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
-  ::Draw(canvas, rc, waypoint, &vector, dialog_look, look, settings);
+  ::Draw(canvas, rc, waypoint, &vector, row_renderer, look, settings);
 }
 
 void
-WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
                            const Waypoint &waypoint, fixed distance,
                            fixed arrival_altitude,
-                           const DialogLook &dialog_look,
+                           const TwoTextRowsRenderer &row_renderer,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
 
-  const Font &name_font = *dialog_look.list.font_bold;
-  const Font &small_font = *dialog_look.small_font;
+  // Draw icon
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
 
-  // Y-Coordinate of the second row
-  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
+  WaypointIconRenderer::Reachability reachable =
+      positive(arrival_altitude) ?
+      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
 
-  // Use small font for details
-  canvas.Select(small_font);
+  WaypointIconRenderer wir(settings, look, canvas);
+  wir.Draw(waypoint, pt, reachable);
+
+  rc.left += line_height + padding;
 
   // Draw distance and arrival altitude
   StaticString<256> buffer;
@@ -178,22 +158,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(_T(" - %s MHz"), radio);
   }
 
-  const int left = rc.left + line_height + padding;
-  canvas.DrawClippedText(left, top2, rc, buffer);
+  row_renderer.DrawSecondRow(canvas, rc, buffer);
 
   // Draw waypoint name
-  canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + padding, rc,
-                         waypoint.name.c_str());
-
-  // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
-
-  WaypointIconRenderer::Reachability reachable =
-      positive(arrival_altitude) ?
-      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
-
-  WaypointIconRenderer wir(settings, look, canvas);
-  wir.Draw(waypoint, pt, reachable);
+  row_renderer.DrawFirstRow(canvas, rc, waypoint.name.c_str());
 }

@@ -234,12 +234,12 @@ Draw(Canvas &canvas, const PixelRect rc,
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const WaypointMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const WaypointLook &look,
      const WaypointRendererSettings &renderer_settings)
 {
   WaypointListRenderer::Draw(canvas, rc, item.waypoint,
-                             dialog_look, look, renderer_settings);
+                             row_renderer, look, renderer_settings);
 }
 
 static void
@@ -486,7 +486,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     break;
   case MapItem::WAYPOINT:
     ::Draw(canvas, rc, (const WaypointMapItem &)item,
-           dialog_look, look.waypoint,
+           row_renderer, look.waypoint,
            settings.waypoint);
     break;
   case MapItem::TASK_OZ:

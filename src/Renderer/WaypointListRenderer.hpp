@@ -27,30 +27,30 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 class Canvas;
+class TwoTextRowsRenderer;
 struct PixelRect;
 struct Waypoint;
 struct GeoVector;
-struct DialogLook;
 struct WaypointLook;
 struct WaypointRendererSettings;
 
 namespace WaypointListRenderer
 {
-  gcc_pure
-  unsigned GetHeight(const DialogLook &dialog_look);
-
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            const DialogLook &dialog_look, const WaypointLook &look,
+            const TwoTextRowsRenderer &row_renderer,
+            const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
             const GeoVector &vector,
-            const DialogLook &dialog_look, const WaypointLook &look,
+            const TwoTextRowsRenderer &row_renderer,
+            const WaypointLook &look,
             const WaypointRendererSettings &settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
             fixed distance, fixed arrival_altitude,
-            const DialogLook &dialog_look, const WaypointLook &look,
+            const TwoTextRowsRenderer &row_renderer,
+            const WaypointLook &look,
             const WaypointRendererSettings &settings);
 }
 

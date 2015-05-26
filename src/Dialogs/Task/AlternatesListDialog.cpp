@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
 #include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -35,6 +34,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 
 class AlternatesListWidget final
@@ -45,6 +45,8 @@ class AlternatesListWidget final
   };
 
   const DialogLook &dialog_look;
+
+  TwoTextRowsRenderer row_renderer;
 
   Button *details_button, *cancel_button, *goto_button;
 
@@ -86,7 +88,7 @@ public:
 
     WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
                                solution.SelectAltitudeDifference(settings.task.glide),
-                               UIGlobals::GetDialogLook(),
+                               row_renderer,
                                UIGlobals::GetMapLook().waypoint,
                                CommonInterface::GetMapSettings().waypoint);
   }
@@ -112,11 +114,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 void
 AlternatesListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  UPixelScalar item_height = dialog_look.list.font_bold->GetHeight()
-    + Layout::Scale(6) + dialog_look.small_font->GetHeight();
-  assert(item_height > 0);
-
-  CreateList(parent, dialog_look, rc, item_height);
+  CreateList(parent, dialog_look, rc,
+             row_renderer.CalculateLayout(*dialog_look.list.font_bold,
+                                          *dialog_look.small_font));
 
   GetList().SetLength(alternates.size());
 }
