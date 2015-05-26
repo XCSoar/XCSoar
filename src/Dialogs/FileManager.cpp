@@ -497,15 +497,23 @@ ManagedFileListWidget::Download()
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 
-static const std::vector<AvailableFile> *add_list;
+class AddFileListItemRenderer final : public ListItemRenderer {
+  const std::vector<AvailableFile> &list;
 
-static void
-OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
+public:
+  explicit AddFileListItemRenderer(const std::vector<AvailableFile> &_list)
+    :list(_list) {}
+
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
+};
+
+void
+AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                     unsigned i)
 {
-  assert(add_list != nullptr);
-  assert(i < add_list->size());
+  assert(i < list.size());
 
-  const AvailableFile &file = (*add_list)[i];
+  const AvailableFile &file = list[i];
 
   const UTF8ToWideConverter name(file.GetName());
   if (name.IsValid())
@@ -538,13 +546,10 @@ ManagedFileListWidget::Add()
   if (list.empty())
     return;
 
-  add_list = &list;
-
-  FunctionListItemRenderer item_renderer(OnPaintAddItem);
+  AddFileListItemRenderer item_renderer(list);
   int i = ListPicker(_("Select a file"),
                      list.size(), 0, Layout::FastScale(18),
                      item_renderer);
-  add_list = nullptr;
   if (i < 0)
     return;
 
