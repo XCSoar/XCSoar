@@ -123,8 +123,8 @@ public:
     return GetType() != TaskPointType::FINISH;
   }
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
-  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &otb) {}
+  virtual void SetTaskBehaviour(gcc_unused const TaskBehaviour &tb) {}
+  virtual void SetOrderedTaskSettings(gcc_unused const OrderedTaskSettings &otb) {}
 
   /**
    * Set previous/next task points.
@@ -267,8 +267,8 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool UpdateSampleFar(const AircraftState &state,
-                               const FlatProjection &projection) {
+  virtual bool UpdateSampleFar(gcc_unused const AircraftState &state,
+                               gcc_unused const FlatProjection &projection) {
     return false;
   }
 
@@ -291,7 +291,7 @@ public:
   const GeoPoint &GetLocationRemaining() const override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
-  GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
+  GeoVector GetVectorRemaining(gcc_unused const GeoPoint &reference) const override {
     return TaskLeg::GetVectorRemaining();
   }
   GeoVector GetNextLegVector() const override;

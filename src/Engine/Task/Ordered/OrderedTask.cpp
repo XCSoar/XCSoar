@@ -655,8 +655,8 @@ OrderedTask::UpdateIdle(const AircraftState &state,
 
 bool
 OrderedTask::UpdateSample(const AircraftState &state,
-                          const GlidePolar &glide_polar,
-                          const bool full_update)
+                          gcc_unused const GlidePolar &glide_polar,
+                          gcc_unused const bool full_update)
 {
   assert(state.location.IsValid());
 
@@ -1450,7 +1450,7 @@ OrderedTask::IsScored() const
 }
 
 std::vector<TaskFactoryType>
-OrderedTask::GetFactoryTypes(bool all) const
+OrderedTask::GetFactoryTypes(gcc_unused bool all) const
 {
   /// @todo: check transform types if all=false
   std::vector<TaskFactoryType> f_list;

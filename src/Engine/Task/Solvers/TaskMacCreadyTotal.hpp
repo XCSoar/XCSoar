@@ -67,7 +67,7 @@ public:
 
 private:
   /* virtual methods from class TaskMacCready */
-  fixed get_min_height(const AircraftState &aircraft) const override {
+  fixed get_min_height(gcc_unused const AircraftState &aircraft) const override {
     return fixed(0);
   }
 

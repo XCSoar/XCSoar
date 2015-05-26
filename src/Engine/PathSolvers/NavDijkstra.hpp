@@ -107,7 +107,7 @@ protected:
    *
    * @return True if this terminal point completes a valid solution
    */
-  bool IsFinishSatisfied(const ScanTaskPoint sp) const {
+  bool IsFinishSatisfied(gcc_unused const ScanTaskPoint sp) const {
     return true;
   }
 

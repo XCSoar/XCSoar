@@ -468,7 +468,7 @@ TaskEditPanel::OnEditTurnpointClicked()
 }
 
 bool
-TaskEditPanel::CanActivateItem(unsigned index) const
+TaskEditPanel::CanActivateItem(gcc_unused unsigned index) const
 {
   return true;
 }
@@ -521,7 +521,7 @@ TaskEditPanel::OnActivateItem(unsigned index)
 }
 
 void
-TaskEditPanel::OnCursorMoved(unsigned index)
+TaskEditPanel::OnCursorMoved(gcc_unused unsigned index)
 {
   UpdateButtons();
 }
