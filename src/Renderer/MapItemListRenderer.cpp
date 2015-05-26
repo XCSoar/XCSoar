@@ -60,54 +60,10 @@ Copyright_License {
 
 #include <cstdio>
 
-namespace MapItemListRenderer
-{
-  void Draw(Canvas &canvas, const PixelRect rc, const LocationMapItem &item,
-            const DialogLook &dialog_look);
-
-  void Draw(Canvas &canvas, const PixelRect rc,
-            const ArrivalAltitudeMapItem &item,
-            const DialogLook &dialog_look, const FinalGlideBarLook &look);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const SelfMapItem &item,
-            const DialogLook &dialog_look,
-            const AircraftLook &look, const MapSettings &settings);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const AirspaceMapItem &item,
-            const DialogLook &dialog_look, const AirspaceLook &look,
-            const AirspaceRendererSettings &renderer_settings);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const WaypointMapItem &item,
-            const DialogLook &dialog_look, const WaypointLook &look,
-            const WaypointRendererSettings &renderer_settings);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const MarkerMapItem &item,
-            RoughTimeDelta utc_offset,
-            const DialogLook &dialog_look, const MarkerLook &look);
-
-#ifdef HAVE_NOAA
-  void Draw(Canvas &canvas, const PixelRect rc, const WeatherStationMapItem &item,
-            const DialogLook &dialog_look, const NOAALook &look);
-#endif
-
-  void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item,
-            const DialogLook &dialog_look,
-            const TaskLook &look, const AirspaceLook &airspace_look,
-            const AirspaceRendererSettings &airspace_settings);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const TrafficMapItem &item,
-            const DialogLook &dialog_look, const TrafficLook &traffic_look,
-            const TrafficList *traffic_list);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const ThermalMapItem &item,
-            RoughTimeDelta utc_offset,
-            const DialogLook &dialog_look, const MapLook &look);
-}
-
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const LocationMapItem &item,
-                          const DialogLook &dialog_look)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const LocationMapItem &item,
+     const DialogLook &dialog_look)
 {
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
@@ -144,11 +100,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc, info_buffer);
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const ArrivalAltitudeMapItem &item,
-                          const DialogLook &dialog_look,
-                          const FinalGlideBarLook &look)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const ArrivalAltitudeMapItem &item,
+     const DialogLook &dialog_look,
+     const FinalGlideBarLook &look)
 {
   const unsigned line_height = rc.bottom - rc.top;
 
@@ -257,12 +213,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc, buffer);
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const SelfMapItem &item,
-                          const DialogLook &dialog_look,
-                          const AircraftLook &look,
-                          const MapSettings &settings)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const SelfMapItem &item,
+     const DialogLook &dialog_look,
+     const AircraftLook &look,
+     const MapSettings &settings)
 {
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
@@ -288,33 +244,33 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const AirspaceMapItem &item,
-                          const DialogLook &dialog_look,
-                          const AirspaceLook &look,
-                          const AirspaceRendererSettings &renderer_settings)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const AirspaceMapItem &item,
+     const DialogLook &dialog_look,
+     const AirspaceLook &look,
+     const AirspaceRendererSettings &renderer_settings)
 {
   AirspaceListRenderer::Draw(canvas, rc, *item.airspace, dialog_look, look,
                              renderer_settings);
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const WaypointMapItem &item,
-                          const DialogLook &dialog_look,
-                          const WaypointLook &look,
-                          const WaypointRendererSettings &renderer_settings)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const WaypointMapItem &item,
+     const DialogLook &dialog_look,
+     const WaypointLook &look,
+     const WaypointRendererSettings &renderer_settings)
 {
   WaypointListRenderer::Draw(canvas, rc, item.waypoint,
                              dialog_look, look, renderer_settings);
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const MarkerMapItem &item, RoughTimeDelta utc_offset,
-                          const DialogLook &dialog_look,
-                          const MarkerLook &look)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const MarkerMapItem &item, RoughTimeDelta utc_offset,
+     const DialogLook &dialog_look,
+     const MarkerLook &look)
 {
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
@@ -347,23 +303,23 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 }
 
 #ifdef HAVE_NOAA
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const WeatherStationMapItem &item,
-                          const DialogLook &dialog_look,
-                          const NOAALook &look)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const WeatherStationMapItem &item,
+     const DialogLook &dialog_look,
+     const NOAALook &look)
 {
   const NOAAStore::Item &station = *item.station;
   NOAAListRenderer::Draw(canvas, rc, station, look, dialog_look);
 }
 #endif
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const ThermalMapItem &item,
-                          RoughTimeDelta utc_offset,
-                          const DialogLook &dialog_look,
-                          const MapLook &look)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const ThermalMapItem &item,
+     RoughTimeDelta utc_offset,
+     const DialogLook &dialog_look,
+     const MapLook &look)
 {
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
@@ -404,12 +360,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc, buffer);
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const TaskOZMapItem &item,
-                          const DialogLook &dialog_look,
-                          const TaskLook &look, const AirspaceLook &airspace_look,
-                          const AirspaceRendererSettings &airspace_settings)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const TaskOZMapItem &item,
+     const DialogLook &dialog_look,
+     const TaskLook &look, const AirspaceLook &airspace_look,
+     const AirspaceRendererSettings &airspace_settings)
 {
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
@@ -450,12 +406,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 }
 
-void
-MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const TrafficMapItem &item,
-                          const DialogLook &dialog_look,
-                          const TrafficLook &traffic_look,
-                          const TrafficList *traffic_list)
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const TrafficMapItem &item,
+     const DialogLook &dialog_look,
+     const TrafficLook &traffic_look,
+     const TrafficList *traffic_list)
 {
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
@@ -589,45 +545,46 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   switch (item.type) {
   case MapItem::LOCATION:
-    Draw(canvas, rc, (const LocationMapItem &)item, dialog_look);
+    ::Draw(canvas, rc, (const LocationMapItem &)item, dialog_look);
     break;
   case MapItem::ARRIVAL_ALTITUDE:
-    Draw(canvas, rc, (const ArrivalAltitudeMapItem &)item,
-         dialog_look, final_glide_look);
+    ::Draw(canvas, rc, (const ArrivalAltitudeMapItem &)item,
+           dialog_look, final_glide_look);
     break;
   case MapItem::SELF:
-    Draw(canvas, rc, (const SelfMapItem &)item,
-         dialog_look, look.aircraft, settings);
+    ::Draw(canvas, rc, (const SelfMapItem &)item,
+           dialog_look, look.aircraft, settings);
     break;
   case MapItem::AIRSPACE:
-    Draw(canvas, rc, (const AirspaceMapItem &)item,
-         dialog_look, look.airspace,
-         settings.airspace);
+    ::Draw(canvas, rc, (const AirspaceMapItem &)item,
+           dialog_look, look.airspace,
+           settings.airspace);
     break;
   case MapItem::WAYPOINT:
-    Draw(canvas, rc, (const WaypointMapItem &)item,
-         dialog_look, look.waypoint,
-         settings.waypoint);
+    ::Draw(canvas, rc, (const WaypointMapItem &)item,
+           dialog_look, look.waypoint,
+           settings.waypoint);
     break;
   case MapItem::TASK_OZ:
-    Draw(canvas, rc, (const TaskOZMapItem &)item,
-         dialog_look, look.task, look.airspace,
-         settings.airspace);
+    ::Draw(canvas, rc, (const TaskOZMapItem &)item,
+           dialog_look, look.task, look.airspace,
+           settings.airspace);
     break;
   case MapItem::MARKER:
-    Draw(canvas, rc, (const MarkerMapItem &)item, utc_offset,
-         dialog_look, look.marker);
+    ::Draw(canvas, rc, (const MarkerMapItem &)item, utc_offset,
+           dialog_look, look.marker);
     break;
 
 #ifdef HAVE_NOAA
   case MapItem::WEATHER:
-    Draw(canvas, rc, (const WeatherStationMapItem &)item, dialog_look, look.noaa);
+    ::Draw(canvas, rc, (const WeatherStationMapItem &)item,
+           dialog_look, look.noaa);
     break;
 #endif
 
   case MapItem::TRAFFIC:
-    Draw(canvas, rc, (const TrafficMapItem &)item,
-         dialog_look, traffic_look, traffic_list);
+    ::Draw(canvas, rc, (const TrafficMapItem &)item,
+           dialog_look, traffic_look, traffic_list);
     break;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -637,7 +594,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 #endif
 
   case MapItem::THERMAL:
-    Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
+    ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
          dialog_look, look);
     break;
   }
