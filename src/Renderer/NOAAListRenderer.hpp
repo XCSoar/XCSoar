@@ -28,19 +28,17 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 
 class Canvas;
+class TwoTextRowsRenderer;
 struct NOAALook;
-struct DialogLook;
 
 namespace NOAAListRenderer
 {
-  gcc_pure
-  UPixelScalar GetHeight(const DialogLook &dialog_look);
+  void Draw(Canvas &canvas, const PixelRect rc, const NOAAStore::Item &station,
+            const TwoTextRowsRenderer &row_renderer);
 
   void Draw(Canvas &canvas, const PixelRect rc, const NOAAStore::Item &station,
-            const DialogLook &dialog_look);
-
-  void Draw(Canvas &canvas, const PixelRect rc, const NOAAStore::Item &station,
-            const NOAALook &look, const DialogLook &dialog_look);
+            const NOAALook &look,
+            const TwoTextRowsRenderer &row_renderer);
 }
 
 #endif

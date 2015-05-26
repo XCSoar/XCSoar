@@ -275,11 +275,11 @@ Draw(Canvas &canvas, PixelRect rc,
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const WeatherStationMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const NOAALook &look)
 {
   const NOAAStore::Item &station = *item.station;
-  NOAAListRenderer::Draw(canvas, rc, station, look, dialog_look);
+  NOAAListRenderer::Draw(canvas, rc, station, look, row_renderer);
 }
 #endif
 
@@ -502,7 +502,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 #ifdef HAVE_NOAA
   case MapItem::WEATHER:
     ::Draw(canvas, rc, (const WeatherStationMapItem &)item,
-           dialog_look, look.noaa);
+           row_renderer, look.noaa);
     break;
 #endif
 

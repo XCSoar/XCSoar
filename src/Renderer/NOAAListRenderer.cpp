@@ -22,42 +22,23 @@ Copyright_License {
 */
 
 #include "NOAAListRenderer.hpp"
-
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
+#include "TwoTextRowsRenderer.hpp"
 #include "Look/NOAALook.hpp"
 #include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
 
-UPixelScalar
-NOAAListRenderer::GetHeight(const DialogLook &look)
-{
-  return look.list.font->GetHeight() + Layout::Scale(6) +
-         look.small_font->GetHeight();
-}
-
 void
 NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        const NOAAStore::Item &station,
-                       const DialogLook &dialog_look)
+                       const TwoTextRowsRenderer &row_renderer)
 {
-  const unsigned padding = Layout::GetTextPadding();
-  const Font &code_font = *dialog_look.list.font;
-  const Font &details_font = *dialog_look.small_font;
-
-  canvas.Select(code_font);
-
   StaticString<256> title;
   title = station.GetCodeT();
   if (station.parsed_metar_available &&
       station.parsed_metar.name_available)
     title.AppendFormat(_T(": %s"), station.parsed_metar.name.c_str());
 
-  canvas.DrawClippedText(rc.left + padding,
-                         rc.top + padding, rc, title);
-
-  canvas.Select(details_font);
+  row_renderer.DrawFirstRow(canvas, rc, title);
 
   const TCHAR *tmp;
   if (!station.metar_available)
@@ -65,16 +46,14 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   else
     tmp = station.metar.content.c_str();
 
-  canvas.DrawClippedText(rc.left + padding,
-                         rc.top + code_font.GetHeight() + Layout::FastScale(4),
-                         rc, tmp);
+  row_renderer.DrawSecondRow(canvas, rc, tmp);
 }
 
 void
 NOAAListRenderer::Draw(Canvas &canvas, PixelRect rc,
                        const NOAAStore::Item &station,
                        const NOAALook &look,
-                       const DialogLook &dialog_look)
+                       const TwoTextRowsRenderer &row_renderer)
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
@@ -84,5 +63,5 @@ NOAAListRenderer::Draw(Canvas &canvas, PixelRect rc,
 
   rc.left += line_height;
 
-  Draw(canvas, rc, station, dialog_look);
+  Draw(canvas, rc, station, row_renderer);
 }

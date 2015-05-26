@@ -44,6 +44,7 @@ Copyright_License {
 #include "Util/StringAPI.hpp"
 #include "Compiler.h"
 #include "Renderer/NOAAListRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 
 struct NOAAListItem
 {
@@ -68,6 +69,8 @@ class NOAAListWidget final
   Button *details_button, *add_button, *update_button, *remove_button;
 
   TrivialArray<NOAAListItem, 20> stations;
+
+  TwoTextRowsRenderer row_renderer;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -117,7 +120,9 @@ void
 NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc, NOAAListRenderer::GetHeight(look));
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          *look.small_font));
   UpdateList();
 }
 
@@ -158,7 +163,7 @@ NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned index)
   assert(index < stations.size());
 
   NOAAListRenderer::Draw(canvas, rc, *stations[index].iterator,
-                         UIGlobals::GetDialogLook());
+                         row_renderer);
 }
 
 inline void
