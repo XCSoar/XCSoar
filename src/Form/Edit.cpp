@@ -185,17 +185,17 @@ WndProperty::UpdateLayout()
   const unsigned margin = Layout::FastScale(1u);
 
   if (caption_width >= 0) {
-    edit_rc.left += caption_width + margin + 1;
-    edit_rc.top += margin + 1;
-    edit_rc.right -= margin + 1;
-    edit_rc.bottom -= margin + 1;
+    edit_rc.left += caption_width + margin;
+    edit_rc.top += margin;
+    edit_rc.right -= margin;
+    edit_rc.bottom -= margin;
   } else {
     const unsigned caption_height = look.text_font->GetHeight();
 
-    edit_rc.left += margin + 1;
+    edit_rc.left += margin;
     edit_rc.top = margin + caption_height;
-    edit_rc.right -= margin + 1;
-    edit_rc.bottom -= margin + 1;
+    edit_rc.right -= margin;
+    edit_rc.bottom -= margin;
   }
 
   Invalidate();
