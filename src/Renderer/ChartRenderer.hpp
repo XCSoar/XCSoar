@@ -54,7 +54,7 @@ class ChartRenderer
 
     void Reset();
 
-    PixelScalar ToScreen(fixed value) const;
+    int ToScreen(fixed value) const;
   } x, y;
 
 public:
@@ -80,7 +80,7 @@ public:
                       const Brush &brush);
   void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
                    const Pen *pen=nullptr);
-  void DrawDot(const fixed x, const fixed y, const PixelScalar width);
+  void DrawDot(const fixed x, const fixed y, const unsigned width);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
@@ -114,10 +114,10 @@ public:
   fixed GetXMax() const { return x.max; }
 
   gcc_pure
-  PixelScalar ScreenX(fixed x) const;
+  int ScreenX(fixed x) const;
 
   gcc_pure
-  PixelScalar ScreenY(fixed y) const;
+  int ScreenY(fixed y) const;
 
   gcc_pure
   RasterPoint ToScreen(fixed x, fixed y) const {
