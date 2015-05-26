@@ -37,9 +37,6 @@ Copyright_License {
 #include <assert.h>
 
 static TaskPointFactoryType current_type;
-static OrderedTask* ordered_task = nullptr;
-static OrderedTaskPoint* point = nullptr;
-static unsigned active_index = 0;
 
 static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
 
@@ -73,20 +70,23 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
  * @return true if the task was modified
  */
 static bool
-SetPointType(TaskPointFactoryType type)
+SetPointType(OrderedTask &task, unsigned index,
+             TaskPointFactoryType type)
 {
   if (type == current_type)
     // no change
     return false;
 
-  AbstractTaskFactory &factory = ordered_task->GetFactory();
+  const auto &old_point = task.GetPoint(index);
+
+  AbstractTaskFactory &factory = task.GetFactory();
   bool task_modified = false;
 
-  point = factory.CreateMutatedPoint(*point, type);
+  auto point = factory.CreateMutatedPoint(old_point, type);
   if (point == nullptr)
     return false;
 
-  if (factory.Replace(*point, active_index, true))
+  if (factory.Replace(*point, index, true))
     task_modified = true;
   delete point;
 
@@ -96,13 +96,8 @@ SetPointType(TaskPointFactoryType type)
 bool
 dlgTaskPointType(OrderedTask &task, const unsigned index)
 {
-  ordered_task = &task;
-  active_index = index;
-
-  point = &ordered_task->GetPoint(active_index);
-
   point_types.clear();
-  ordered_task->GetFactory().GetValidTypes(index)
+  task.GetFactory().GetValidTypes(index)
     .CopyTo(std::back_inserter(point_types));
 
   if (point_types.empty()) {
@@ -111,9 +106,10 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
   }
 
   if (point_types.size() == 1)
-    return SetPointType(point_types[0]);
+    return SetPointType(task, index, point_types[0]);
 
-  current_type = task.GetFactory().GetType(*point);
+  const auto &point = task.GetPoint(index);
+  current_type = task.GetFactory().GetType(point);
 
   unsigned initial_index = 0;
   const auto b = point_types.begin(), e = point_types.end();
@@ -128,5 +124,5 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
                           Layout::Scale(18),
                           item_renderer, false,
                           nullptr, TPTypeItemHelp);
-  return result >= 0 && SetPointType(point_types[result]);
+  return result >= 0 && SetPointType(task, index, point_types[result]);
 }
