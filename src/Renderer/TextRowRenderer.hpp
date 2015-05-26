@@ -31,13 +31,15 @@ class Font;
 class Canvas;
 
 /**
- * A #ButtonRenderer instance that renders a regular button frame and
- * some text.
+ * A helper for drawing a text row into a rectangular area.
  */
 class TextRowRenderer {
   unsigned left_padding, top_padding;
 
 public:
+  /**
+   * @return the row height (including top and bottom padding)
+   */
   unsigned CalculateLayout(const Font &font);
 
   void DrawTextRow(Canvas &canvas, const PixelRect &rc,
