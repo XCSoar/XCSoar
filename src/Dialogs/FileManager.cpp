@@ -26,6 +26,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
@@ -500,9 +501,15 @@ ManagedFileListWidget::Download()
 class AddFileListItemRenderer final : public ListItemRenderer {
   const std::vector<AvailableFile> &list;
 
+  TextRowRenderer row_renderer;
+
 public:
   explicit AddFileListItemRenderer(const std::vector<AvailableFile> &_list)
     :list(_list) {}
+
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
 };
@@ -517,8 +524,7 @@ AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const UTF8ToWideConverter name(file.GetName());
   if (name.IsValid())
-    canvas.DrawText(rc.left + Layout::GetTextPadding(),
-                    rc.top + Layout::GetTextPadding(), name);
+    row_renderer.DrawTextRow(canvas, rc, name);
 }
 
 #endif
@@ -548,7 +554,8 @@ ManagedFileListWidget::Add()
 
   AddFileListItemRenderer item_renderer(list);
   int i = ListPicker(_("Select a file"),
-                     list.size(), 0, Layout::FastScale(18),
+                     list.size(), 0,
+                     item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
                      item_renderer);
   if (i < 0)
     return;
