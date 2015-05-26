@@ -305,8 +305,8 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const unsigned margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
 
-  UPixelScalar row_height = std::max(3u * margin + 2u * font_height,
-                                     Layout::GetMaximumControlHeight());
+  const unsigned row_height = std::max(3u * margin + 2u * font_height,
+                                       Layout::GetMaximumControlHeight());
   CreateList(parent, look, rc, row_height);
   LoadRepositoryFile();
   RefreshList();
@@ -431,7 +431,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const FileItem &file = items[i];
 
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
 
   canvas.DrawText(rc.left + margin, rc.top + margin, file.name.c_str());
 
@@ -449,11 +449,11 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
-    UPixelScalar width = canvas.CalcTextWidth(text);
+    const unsigned width = canvas.CalcTextWidth(text);
     canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
   } else if (file.failed) {
     const TCHAR *text = _("Error");
-    UPixelScalar width = canvas.CalcTextWidth(text);
+    const unsigned width = canvas.CalcTextWidth(text);
     canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
   }
 
