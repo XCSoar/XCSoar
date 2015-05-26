@@ -71,7 +71,7 @@ ComboPicker(const TCHAR *caption,
   ComboListPopup = &combo_list;
 
   const unsigned font_height =
-    UIGlobals::GetDialogLook().text_font->GetHeight() + Layout::FastScale(2);
+    UIGlobals::GetDialogLook().text_font->GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
   const unsigned max_height = Layout::GetMaximumControlHeight();
   const unsigned padded_height = font_height + 2 * text_padding;
