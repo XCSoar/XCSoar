@@ -28,23 +28,21 @@ Copyright_License {
 
 class Canvas;
 class AbstractAirspace;
+class TwoTextRowsRenderer;
 struct GeoVector;
-struct DialogLook;
 struct AirspaceLook;
 struct AirspaceRendererSettings;
 
 namespace AirspaceListRenderer
 {
-  gcc_pure
-  unsigned GetHeight(const DialogLook &dialog_look);
-
   /**
    * Draws an airspace list item.
    *
    * Comment is e.g. "Class C"
    */
   void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
-            const DialogLook &dialog_look, const AirspaceLook &look,
+            const TwoTextRowsRenderer &row_renderer,
+            const AirspaceLook &look,
             const AirspaceRendererSettings &renderer_settings);
 
   /**
@@ -56,7 +54,8 @@ namespace AirspaceListRenderer
    * added to the comment
    */
   void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
-            const GeoVector &vector, const DialogLook &dialog_look,
+            const GeoVector &vector,
+            const TwoTextRowsRenderer &row_renderer,
             const AirspaceLook &look,
             const AirspaceRendererSettings &renderer_settings);
 }

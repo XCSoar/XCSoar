@@ -37,7 +37,9 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/MapLook.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -73,6 +75,8 @@ class AirspaceListWidget final
   AirspaceFilterWidget &filter_widget;
 
   AirspaceSelectInfoVector items;
+
+  TwoTextRowsRenderer row_renderer;
 
 public:
   AirspaceListWidget(AirspaceFilterWidget &_filter_widget)
@@ -271,7 +275,9 @@ void
 AirspaceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc, AirspaceListRenderer::GetHeight(look));
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font,
+                                          *look.small_font));
   UpdateList();
 }
 
@@ -330,7 +336,7 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,
       items[i].GetVector(location, airspaces->GetProjection()),
-      UIGlobals::GetDialogLook(), UIGlobals::GetMapLook().airspace,
+      row_renderer, UIGlobals::GetMapLook().airspace,
       CommonInterface::GetMapSettings().airspace);
 }
 

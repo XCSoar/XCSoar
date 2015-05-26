@@ -223,11 +223,11 @@ Draw(Canvas &canvas, PixelRect rc,
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const AirspaceMapItem &item,
-     const DialogLook &dialog_look,
+     const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
      const AirspaceRendererSettings &renderer_settings)
 {
-  AirspaceListRenderer::Draw(canvas, rc, *item.airspace, dialog_look, look,
+  AirspaceListRenderer::Draw(canvas, rc, *item.airspace, row_renderer, look,
                              renderer_settings);
 }
 
@@ -481,7 +481,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     break;
   case MapItem::AIRSPACE:
     ::Draw(canvas, rc, (const AirspaceMapItem &)item,
-           dialog_look, look.airspace,
+           row_renderer, look.airspace,
            settings.airspace);
     break;
   case MapItem::WAYPOINT:
