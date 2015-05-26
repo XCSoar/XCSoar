@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Button.hpp"
@@ -223,6 +224,8 @@ class TaskEditPanel
 
   TwoWidgets *two_widgets;
 
+  TwoTextRowsRenderer row_renderer;
+
 public:
   TaskEditPanel(TaskManagerDialog &_dialog,
                 const TaskLook &_task_look, const AirspaceLook &_airspace_look,
@@ -403,16 +406,10 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   TCHAR buffer[120];
 
-  const Font &name_font = *dialog.GetLook().list.font_bold;
-  const Font &small_font = *dialog.GetLook().small_font;
-
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
-    canvas.Select(name_font);
     StringFormatUnsafe(buffer, _T("  (%s)"), _("Add Turnpoint"));
-    canvas.DrawText(rc.left + line_height + padding,
-                    rc.top + line_height / 2 - name_font.GetHeight() / 2,
-                    buffer);
+    row_renderer.DrawFirstRow(canvas, rc, buffer);
     return;
   }
 
@@ -420,46 +417,37 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   GeoVector leg = tp.GetNominalLegVector();
   bool show_leg_info = leg.distance > fixed(0.01);
 
-  // Y-Coordinate of the second row
-  const int top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4u);
+  PixelRect text_rc = rc;
+  text_rc.left += line_height + padding;
 
-  // Use small font for details
-  canvas.Select(small_font);
-
-  unsigned leg_info_width = 0;
   if (show_leg_info) {
+    // Use small font for details
+    canvas.Select(row_renderer.GetSecondFont());
+
     // Draw leg distance
     FormatUserDistanceSmart(leg.distance, buffer, true);
-    unsigned width = leg_info_width = canvas.CalcTextWidth(buffer);
-    canvas.DrawText(rc.right - padding - width,
-                    rc.top + padding +
-                    (name_font.GetHeight() - small_font.GetHeight()) / 2,
-                    buffer);
+    unsigned width = canvas.CalcTextWidth(buffer);
+    const int x1 = rc.right - padding - width;
+    canvas.DrawText(x1, rc.top + row_renderer.GetFirstY(), buffer);
 
     // Draw leg bearing
     FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);
+    const int x2 = rc.right - padding - width;
     width = canvas.CalcTextWidth(buffer);
-    canvas.DrawText(rc.right - padding - width, top2, buffer);
+    canvas.DrawText(x2, rc.top + row_renderer.GetSecondY(), buffer);
 
-    if (width > leg_info_width)
-      leg_info_width = width;
-
-    leg_info_width += padding;
+    text_rc.right = std::min(x1, x2) - padding;
   }
 
   // Draw details line
-  const int left = rc.left + line_height + padding;
   OrderedTaskPointRadiusLabel(tp.GetObservationZone(), buffer);
   if (!StringIsEmpty(buffer))
-    canvas.DrawClippedText(left, top2, rc.right - leg_info_width - left,
-                           buffer);
+    row_renderer.DrawSecondRow(canvas, text_rc, buffer);
 
   // Draw turnpoint name
-  canvas.Select(name_font);
   OrderedTaskPointLabel(tp.GetType(), tp.GetWaypoint().name.c_str(),
                         DrawListIndex, buffer);
-  canvas.DrawClippedText(left, rc.top + padding,
-                         rc.right - leg_info_width - left, buffer);
+  row_renderer.DrawFirstRow(canvas, text_rc, buffer);
 
   // Draw icon
   const RasterPoint pt(rc.left + line_height / 2,
@@ -619,11 +607,12 @@ void
 TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const unsigned line_height = look.list.font_bold->GetHeight()
-    + Layout::Scale(6) + look.small_font->GetHeight();
-  CreateList(parent, look, rc, line_height);
 
-  ordered_task = *ordered_task_pointer;;
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          *look.small_font));
+
+  ordered_task = *ordered_task_pointer;
 }
 
 void
