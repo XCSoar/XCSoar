@@ -36,17 +36,12 @@ Copyright_License {
 
 #include <assert.h>
 
+static TaskPointFactoryType current_type;
 static OrderedTask* ordered_task = nullptr;
 static OrderedTaskPoint* point = nullptr;
 static unsigned active_index = 0;
 
 static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
-
-static TaskPointFactoryType
-get_point_type() 
-{
-  return ordered_task->GetFactory().GetType(*point);
-}
 
 static const TCHAR *
 TPTypeItemHelp(unsigned i)
@@ -64,7 +59,7 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 
   const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
 
-  if (point_types[DrawListIndex] == get_point_type())
+  if (point_types[DrawListIndex] == current_type)
     buffer.Format(_T("*%s"), text);
   else
     buffer.Format(_T(" %s"), text);
@@ -80,7 +75,7 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 static bool
 SetPointType(TaskPointFactoryType type)
 {
-  if (type == get_point_type())
+  if (type == current_type)
     // no change
     return false;
 
@@ -118,9 +113,11 @@ dlgTaskPointType(OrderedTask &task, const unsigned index)
   if (point_types.size() == 1)
     return SetPointType(point_types[0]);
 
+  current_type = task.GetFactory().GetType(*point);
+
   unsigned initial_index = 0;
   const auto b = point_types.begin(), e = point_types.end();
-  auto i = std::find(b, e, get_point_type());
+  auto i = std::find(b, e, current_type);
   if (i != e)
     initial_index = std::distance(b, i);
 
