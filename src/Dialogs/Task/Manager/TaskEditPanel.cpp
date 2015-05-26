@@ -408,8 +408,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
-    StringFormatUnsafe(buffer, _T("  (%s)"), _("Add Turnpoint"));
-    row_renderer.DrawFirstRow(canvas, rc, buffer);
+    row_renderer.DrawFirstRow(canvas, rc, _("Add Turnpoint"));
     return;
   }
 
