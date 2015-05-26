@@ -26,8 +26,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Util/StaticString.hpp"
@@ -36,20 +35,19 @@ static const ComboList *ComboListPopup;
 
 class ComboPickerSupport : public ListItemRenderer {
   const ComboList &combo_list;
-  const unsigned left_padding, top_padding;
+  TextRowRenderer row_renderer;
 
 public:
-  ComboPickerSupport(const ComboList &_combo_list,
-                     const unsigned _left_padding,
-                     const unsigned _top_padding)
-    :combo_list(_combo_list),
-     left_padding(_left_padding), top_padding(_top_padding) {}
+  ComboPickerSupport(const ComboList &_combo_list)
+    :combo_list(_combo_list) {}
+
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned i) override {
-    canvas.DrawClippedText(rc.left + left_padding,
-                           rc.top + top_padding, rc,
-                           combo_list[i].display_string);
+    row_renderer.DrawTextRow(canvas, rc, combo_list[i].display_string);
   }
 };
 
@@ -70,20 +68,11 @@ ComboPicker(const TCHAR *caption,
 {
   ComboListPopup = &combo_list;
 
-  const unsigned font_height =
-    UIGlobals::GetDialogLook().text_font->GetHeight();
-  const unsigned text_padding = Layout::GetTextPadding();
-  const unsigned max_height = Layout::GetMaximumControlHeight();
-  const unsigned padded_height = font_height + 2 * text_padding;
-  const unsigned row_height = std::max(padded_height, max_height);
-
-  const unsigned top_padding = (row_height - font_height) / 2;
-
-  ComboPickerSupport support(combo_list, text_padding, top_padding);
+  ComboPickerSupport support(combo_list);
   return ListPicker(caption,
                     combo_list.size(),
                     combo_list.current_index,
-                    row_height,
+                    support.CalculateLayout(UIGlobals::GetDialogLook()),
                     support, false,
                     help_text,
                     enable_item_help ? OnItemHelp : NULL);
