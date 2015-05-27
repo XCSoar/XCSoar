@@ -33,7 +33,7 @@ MapLook::Initialise(const MapSettings &settings,
                     const Font &important_topography_font)
 {
   waypoint.Initialise(settings.waypoint, font, bold_font);
-  airspace.Initialise(settings.airspace, font);
+  airspace.Initialise(settings.airspace, important_topography_font);
   aircraft.Initialise();
   task.Initialise();
   marker.Initialise();
