@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.7.9 - not yet released
+* user interface
+  - improved font renderer
 
 Version 6.7.8 - 2015-05-22
 * user interface
