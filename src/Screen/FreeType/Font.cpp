@@ -79,15 +79,13 @@ IsMono()
 #endif
 }
 
-gcc_const
-static inline FT_Long
+static constexpr inline FT_Long
 FT_FLOOR(FT_Long x)
 {
   return (x & -64) / 64;
 }
 
-gcc_const
-static inline FT_Long
+static constexpr inline FT_Long
 FT_CEIL(FT_Long x)
 {
   return ((x + 63) & -64) / 64;
