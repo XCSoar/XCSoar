@@ -252,10 +252,6 @@ Font::TextSize(const TCHAR *text) const
     const FT_GlyphSlot glyph = face->glyph;
     const FT_Glyph_Metrics &metrics = glyph->metrics;
 
-    const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
-    const int glyph_maxx = minx + FT_CEIL(metrics.width);
-    const int glyph_advance = FT_CEIL(metrics.horiAdvance);
-
     if (use_kerning) {
       if (prev_index != 0 && i != 0) {
         FT_Vector delta;
@@ -266,6 +262,10 @@ Font::TextSize(const TCHAR *text) const
 
       prev_index = i;
     }
+
+    const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
+    const int glyph_maxx = minx + FT_CEIL(metrics.width);
+    const int glyph_advance = FT_CEIL(metrics.horiAdvance);
 
     int z = x + glyph_minx;
     if (z < minx)
@@ -404,9 +404,6 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
     const FT_GlyphSlot glyph = face->glyph;
     const FT_Glyph_Metrics &metrics = glyph->metrics;
 
-    const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
-    const int glyph_advance = FT_CEIL(metrics.horiAdvance);
-
     if (use_kerning) {
       if (prev_index != 0) {
         FT_Vector delta;
@@ -418,11 +415,10 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
       prev_index = i;
     }
 
-    const int glyph_maxy = FT_FLOOR(metrics.horiBearingY);
+    RenderGlyph((uint8_t *)buffer, size.cx, size.cy, glyph,
+                x + FT_FLOOR(metrics.horiBearingX),
+                ascent_height - FT_FLOOR(metrics.horiBearingY));
 
-    RenderGlyph((uint8_t *)buffer, size.cx, size.cy,
-                glyph, x + glyph_minx, ascent_height - glyph_maxy);
-
-    x += glyph_advance;
+    x += FT_CEIL(metrics.horiAdvance);
   }
 }
