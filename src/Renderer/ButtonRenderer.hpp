@@ -46,6 +46,8 @@ public:
 
   void DrawButton(Canvas &canvas, PixelRect rc,
                   bool focused, bool pressed) const;
+
+  gcc_pure
   PixelRect GetDrawingRect(PixelRect rc, bool pressed) const;
 };
 
