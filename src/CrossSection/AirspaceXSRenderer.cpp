@@ -97,8 +97,8 @@ inline void
 AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
                                             AirspaceClass type) const
 {
-  if (AirspacePreviewRenderer::PrepareFill(
-                                           canvas, type, airspace_look, settings)) {
+  if (AirspacePreviewRenderer::PrepareFill(canvas, type, airspace_look,
+                                           settings)) {
 
     // Draw thick brushed outlines
     PixelScalar border_width = Layout::Scale(10);
@@ -132,8 +132,8 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
   }
 
   // Use transparent brush and type-dependent pen for the outlines
-  if (AirspacePreviewRenderer::PrepareOutline(
-                                              canvas, type, airspace_look, settings))
+  if (AirspacePreviewRenderer::PrepareOutline(canvas, type, airspace_look,
+                                              settings))
     canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
 }
 
