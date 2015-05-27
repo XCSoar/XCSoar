@@ -80,7 +80,7 @@ public:
    * @param c Color of the Pen
    */
   Pen(Style Style, unsigned width, const Color c):pen(nullptr) {
-    Set(Style, width, c);
+    Create(Style, width, c);
   }
   /**
    * Constructor that creates a solid Pen object, based on the given parameters
@@ -88,11 +88,13 @@ public:
    * @param c Color of the Pen
    */
   Pen(unsigned width, Color c):pen(nullptr) {
-    Set(width, c);
+    Create(width, c);
   }
 
   /** Destructor */
-  ~Pen() { Reset(); }
+  ~Pen() {
+    Destroy();
+  }
 
   Pen(const Pen &other) = delete;
   Pen &operator=(const Pen &other) = delete;
@@ -126,17 +128,19 @@ public:
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  void Set(Style style, unsigned width, const Color c);
+  void Create(Style style, unsigned width, const Color c);
+
   /**
    * Sets the Pens parameters to the given values
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  void Set(unsigned width, const Color c);
+  void Create(unsigned width, const Color c);
+
   /**
    * Resets the Pen to nullptr
    */
-  void Reset();
+  void Destroy();
 
   /**
    * Returns whether the Pen is defined (!= nullptr)
@@ -226,7 +230,7 @@ public:
 #ifndef USE_GDI
 
 inline void
-Pen::Reset()
+Pen::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 

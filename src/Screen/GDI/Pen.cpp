@@ -27,22 +27,22 @@ Copyright_License {
 #include <assert.h>
 
 void
-Pen::Set(Style Style, unsigned width, const Color c)
+Pen::Create(Style Style, unsigned width, const Color c)
 {
   assert(IsScreenInitialized());
 
-  Reset();
+  Destroy();
   pen = ::CreatePen(Style, width, c);
 }
 
 void
-Pen::Set(unsigned width, const Color c)
+Pen::Create(unsigned width, const Color c)
 {
-  Set(SOLID, width, c);
+  Create(SOLID, width, c);
 }
 
 void
-Pen::Reset()
+Pen::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 

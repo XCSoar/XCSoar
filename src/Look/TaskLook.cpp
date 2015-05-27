@@ -33,31 +33,32 @@ TaskLook::Initialise()
   const Color bearing_color = Color(0x3e, 0x30, 0x5f);
   const Color isoline_color = bearing_color;
 
-  oz_current_pen.Set(Pen::SOLID, Layout::ScalePenWidth(2), task_color);
-  oz_active_pen.Set(Pen::SOLID, Layout::ScalePenWidth(1), task_color);
-  oz_inactive_pen.Set(Pen::SOLID, Layout::ScalePenWidth(1),
+  oz_current_pen.Create(Pen::SOLID, Layout::ScalePenWidth(2), task_color);
+  oz_active_pen.Create(Pen::SOLID, Layout::ScalePenWidth(1), task_color);
+  oz_inactive_pen.Create(Pen::SOLID, Layout::ScalePenWidth(1),
                       DarkColor(task_color));
 
-  leg_active_pen.Set(Pen::DASH, Layout::ScalePenWidth(2), task_color);
-  leg_inactive_pen.Set(Pen::DASH, Layout::ScalePenWidth(1), task_color);
-  arrow_pen.Set(Layout::ScalePenWidth(1), task_color);
+  leg_active_pen.Create(Pen::DASH, Layout::ScalePenWidth(2), task_color);
+  leg_inactive_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), task_color);
+  arrow_pen.Create(Layout::ScalePenWidth(1), task_color);
 
-  isoline_pen.Set(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
+  isoline_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
 
-  bearing_pen.Set(Layout::ScalePenWidth(2),
+  bearing_pen.Create(Layout::ScalePenWidth(2),
                   HasColors() ? bearing_color : COLOR_BLACK);
-  best_cruise_track_brush.Set(bearing_color);
-  best_cruise_track_pen.Set(Layout::ScalePenWidth(1),
-                            HasColors()
-                            ? DarkColor(bearing_color) : COLOR_BLACK);
+  best_cruise_track_brush.Create(bearing_color);
+  best_cruise_track_pen.Create(Layout::ScalePenWidth(1),
+                               HasColors()
+                               ? DarkColor(bearing_color)
+                               : COLOR_BLACK);
 
-  highlight_pen.Set(Layout::ScalePenWidth(4), COLOR_BLACK);
+  highlight_pen.Create(Layout::ScalePenWidth(4), COLOR_BLACK);
 
   target_icon.LoadResource(IDB_TARGET, IDB_TARGET_HD);
 
-  hbGray.Set(COLOR_GRAY);
-  hbGreen.Set(COLOR_GREEN);
-  hbOrange.Set(COLOR_ORANGE);
-  hbLightGray.Set(COLOR_LIGHT_GRAY);
-  hbNotReachableTerrain.Set(LightColor(COLOR_RED));
+  hbGray.Create(COLOR_GRAY);
+  hbGreen.Create(COLOR_GREEN);
+  hbOrange.Create(COLOR_ORANGE);
+  hbLightGray.Create(COLOR_LIGHT_GRAY);
+  hbNotReachableTerrain.Create(LightColor(COLOR_RED));
 }

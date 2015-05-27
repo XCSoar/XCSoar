@@ -53,8 +53,8 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   pressed_background_color = COLOR_YELLOW;
 
   Color border_color = Color(128, 128, 128);
-  border_pen.Set(BORDER_WIDTH, border_color);
-  selector_pen.Set(Layout::Scale(1) + 2, value.fg_color);
+  border_pen.Create(BORDER_WIDTH, border_color);
+  selector_pen.Create(Layout::Scale(1) + 2, value.fg_color);
 
   value.font = &value_font;
   title.font = &title_font;
@@ -62,7 +62,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   small_font = &_small_font;
 #ifndef GNAV
   unit_font = &_unit_font;
-  unit_fraction_pen.Set(1, value.fg_color);
+  unit_fraction_pen.Create(1, value.fg_color);
 #endif
 
   colors[0] = border_color;

@@ -27,13 +27,13 @@ Copyright_License {
 void
 HorizonLook::Initialise()
 {
-  aircraft_pen.Set(Layout::Scale(2), COLOR_BLACK);
+  aircraft_pen.Create(Layout::Scale(2), COLOR_BLACK);
 
   sky_color = Color(0x0a, 0xb9, 0xf3);
-  sky_brush.Set(sky_color);
-  sky_pen.Set(Layout::Scale(1), DarkColor(sky_color));
+  sky_brush.Create(sky_color);
+  sky_pen.Create(Layout::Scale(1), DarkColor(sky_color));
 
   terrain_color = Color(0x80, 0x45, 0x15);
-  terrain_brush.Set(terrain_color);
-  terrain_pen.Set(Layout::Scale(1), DarkColor(terrain_color));
+  terrain_brush.Create(terrain_color);
+  terrain_pen.Create(Layout::Scale(1), DarkColor(terrain_color));
 }

@@ -125,7 +125,7 @@ public:
   }
 
   void SelectHollowBrush() {
-    brush.Reset();
+    brush.Destroy();
   }
 
   void SelectWhiteBrush() {

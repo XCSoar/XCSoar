@@ -41,32 +41,32 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   Color team_color_yellow = Color(0xFF, 0xE8, 0);
   Color team_color_magenta = Color(0xFF, 0, 0xCB);
 
-  warning_brush.Set(warning_color);
-  alarm_brush.Set(alarm_color);
-  default_brush.Set(default_color);
-  passive_brush.Set(passive_color);
-  selection_brush.Set(selection_color);
-  radar_brush.Set(radar_color);
-  team_brush_green.Set(team_color_green);
-  team_brush_blue.Set(team_color_blue);
-  team_brush_yellow.Set(team_color_yellow);
-  team_brush_magenta.Set(team_color_magenta);
+  warning_brush.Create(warning_color);
+  alarm_brush.Create(alarm_color);
+  default_brush.Create(default_color);
+  passive_brush.Create(passive_color);
+  selection_brush.Create(selection_color);
+  radar_brush.Create(radar_color);
+  team_brush_green.Create(team_color_green);
+  team_brush_blue.Create(team_color_blue);
+  team_brush_yellow.Create(team_color_yellow);
+  team_brush_magenta.Create(team_color_magenta);
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
-  warning_pen.Set(width, warning_color);
-  alarm_pen.Set(width, alarm_color);
-  default_pen.Set(width, default_color);
-  passive_pen.Set(width, passive_color);
-  selection_pen.Set(width, selection_color);
-  team_pen_green.Set(width, team_color_green);
-  team_pen_blue.Set(width, team_color_blue);
-  team_pen_yellow.Set(width, team_color_yellow);
-  team_pen_magenta.Set(width, team_color_magenta);
+  warning_pen.Create(width, warning_color);
+  alarm_pen.Create(width, alarm_color);
+  default_pen.Create(width, default_color);
+  passive_pen.Create(width, passive_color);
+  selection_pen.Create(width, selection_color);
+  team_pen_green.Create(width, team_color_green);
+  team_pen_blue.Create(width, team_color_blue);
+  team_pen_yellow.Create(width, team_color_yellow);
+  team_pen_magenta.Create(width, team_color_magenta);
 
-  plane_pen.Set(width, radar_color);
-  radar_pen.Set(1, radar_color);
+  plane_pen.Create(width, radar_color);
+  radar_pen.Create(1, radar_color);
 
-  unit_fraction_pen.Set(1, inverse ? COLOR_WHITE : COLOR_BLACK);
+  unit_fraction_pen.Create(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   no_traffic_font.Load(FontDescription(Layout::FontScale(22)));
   label_font.Load(FontDescription(Layout::FontScale(12)));

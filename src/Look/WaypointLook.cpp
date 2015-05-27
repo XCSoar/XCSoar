@@ -42,13 +42,13 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings,
   obstacle_icon.LoadResource(IDB_OBSTACLE, IDB_OBSTACLE_HD);
   thermal_hotspot_icon.LoadResource(IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD);
 
-  reachable_brush.Set(COLOR_GREEN);
-  terrain_unreachable_brush.Set(LightColor(COLOR_RED));
-  unreachable_brush.Set(COLOR_RED);
-  white_brush.Set(COLOR_WHITE);
-  light_gray_brush.Set(COLOR_LIGHT_GRAY);
-  magenta_brush.Set(COLOR_MAGENTA);
-  orange_brush.Set(COLOR_ORANGE);
+  reachable_brush.Create(COLOR_GREEN);
+  terrain_unreachable_brush.Create(LightColor(COLOR_RED));
+  unreachable_brush.Create(COLOR_RED);
+  white_brush.Create(COLOR_WHITE);
+  light_gray_brush.Create(COLOR_LIGHT_GRAY);
+  magenta_brush.Create(COLOR_MAGENTA);
+  orange_brush.Create(COLOR_ORANGE);
 
   Reinitialise(settings);
 

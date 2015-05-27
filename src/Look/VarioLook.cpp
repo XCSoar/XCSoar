@@ -47,12 +47,12 @@ VarioLook::Initialise(bool _inverse, bool _colors,
     lift_color = Color(0x19,0x94,0x03);
   }
 
-  sink_brush.Set(sink_color);
-  lift_brush.Set(lift_color);
+  sink_brush.Create(sink_color);
+  lift_brush.Create(lift_color);
 
-  thick_background_pen.Set(Layout::Scale(5), background_color);
-  thick_sink_pen.Set(Layout::Scale(5), sink_color);
-  thick_lift_pen.Set(Layout::Scale(5), lift_color);
+  thick_background_pen.Create(Layout::Scale(5), background_color);
+  thick_sink_pen.Create(Layout::Scale(5), sink_color);
+  thick_lift_pen.Create(Layout::Scale(5), lift_color);
 
   background_bitmap.Load(Units::GetUserVerticalSpeedUnit() == Unit::KNOTS
                          ? IDB_VARIOSCALEC : IDB_VARIOSCALEA);

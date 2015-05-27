@@ -59,12 +59,12 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
   if (AlphaBlendAvailable())
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-    solid_brush.Set(fill_color);
+    solid_brush.Create(fill_color);
 #endif
 
   if (settings.border_width != 0)
-    border_pen.Set(Layout::ScalePenWidth(settings.border_width),
-                   Color(settings.border_color));
+    border_pen.Create(Layout::ScalePenWidth(settings.border_width),
+                      Color(settings.border_color));
 }
 
 void
@@ -92,10 +92,10 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
   bitmaps[7].Load(IDB_AIRSPACE7);
 
   for (unsigned i = 0; i < ARRAY_SIZE(AirspaceLook::brushes); i++)
-    brushes[i].Set(bitmaps[i]);
+    brushes[i].Create(bitmaps[i]);
 #endif
 
-  thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);
+  thick_pen.Create(Layout::ScalePenWidth(10), COLOR_BLACK);
 
   intercept_icon.LoadResource(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
 

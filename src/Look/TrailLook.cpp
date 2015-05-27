@@ -110,10 +110,10 @@ TrailLook::Initialise(const TrailSettings &settings)
                                      Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
 
     trail_widths[i] = iwidth;
-    trail_brushes[i].Set(color);
-    trail_pens[i].Set(minwidth, color);
-    scaled_trail_pens[i].Set(iwidth, color);
+    trail_brushes[i].Create(color);
+    trail_pens[i].Create(minwidth, color);
+    scaled_trail_pens[i].Create(iwidth, color);
   }
 
-  trace_pen.Set(2, Color(50, 243, 45));
+  trace_pen.Create(2, Color(50, 243, 45));
 }

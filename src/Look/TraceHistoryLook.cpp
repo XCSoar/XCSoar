@@ -28,6 +28,6 @@ TraceHistoryLook::Initialise(bool _inverse)
 {
   inverse = _inverse;
 
-  axis_pen.Set(1, COLOR_GRAY);
-  line_pen.Set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
+  axis_pen.Create(1, COLOR_GRAY);
+  line_pen.Create(2, inverse ? COLOR_WHITE : COLOR_BLACK);
 }

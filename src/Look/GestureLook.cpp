@@ -28,9 +28,9 @@ void
 GestureLook::Initialise()
 {
   color = COLOR_RED;
-  pen.Set(Layout::ScalePenWidth(5), color);
+  pen.Create(Layout::ScalePenWidth(5), color);
 
   invalid_color = LightColor(color);
-  invalid_pen.Set(Layout::ScalePenWidth(5), invalid_color);
+  invalid_pen.Create(Layout::ScalePenWidth(5), invalid_color);
 }
 

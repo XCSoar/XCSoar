@@ -27,7 +27,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-Pen::Set(Style _style, unsigned _width, const Color c)
+Pen::Create(Style _style, unsigned _width, const Color c)
 {
   assert(IsScreenInitialized());
 
@@ -40,7 +40,7 @@ Pen::Set(Style _style, unsigned _width, const Color c)
 }
 
 void
-Pen::Set(unsigned width, const Color c)
+Pen::Create(unsigned width, const Color c)
 {
-  Set(SOLID, width, c);
+  Create(SOLID, width, c);
 }

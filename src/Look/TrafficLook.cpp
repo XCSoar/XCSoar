@@ -32,15 +32,15 @@ TrafficLook::Initialise(const Font &_font)
   warning_color = Color(0xfe,0x84,0x38);
   alarm_color = Color(0xfb,0x35,0x2f);
 
-  safe_brush.Set(safe_color);
-  warning_brush.Set(warning_color);
-  alarm_brush.Set(alarm_color);
+  safe_brush.Create(safe_color);
+  warning_brush.Create(warning_color);
+  alarm_brush.Create(alarm_color);
 
   UPixelScalar width = Layout::ScalePenWidth(2);
-  team_pen_green.Set(width, Color(0x74, 0xFF, 0));
-  team_pen_blue.Set(width, Color(0, 0x90, 0xFF));
-  team_pen_yellow.Set(width, Color(0xFF, 0xE8, 0));
-  team_pen_magenta.Set(width, Color(0xFF, 0, 0xCB));
+  team_pen_green.Create(width, Color(0x74, 0xFF, 0));
+  team_pen_blue.Create(width, Color(0, 0x90, 0xFF));
+  team_pen_yellow.Create(width, Color(0xFF, 0xE8, 0));
+  team_pen_magenta.Create(width, Color(0xFF, 0, 0xCB));
 
   teammate_icon.LoadResource(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 

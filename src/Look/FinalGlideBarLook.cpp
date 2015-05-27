@@ -40,18 +40,22 @@ FinalGlideBarLook::Initialise(const Font &_font)
 {
   const uint8_t alpha = 0xA0;
 
-  brush_below.Set(ColorWithAlpha(COLOR_RED, alpha));
-  brush_below_mc0.Set(ColorWithAlpha(LightColor(COLOR_RED), alpha));
-  pen_below.Set(Layout::ScalePenWidth(1), HasColors()? DarkColor(COLOR_RED) : COLOR_BLACK);
+  brush_below.Create(ColorWithAlpha(COLOR_RED, alpha));
+  brush_below_mc0.Create(ColorWithAlpha(LightColor(COLOR_RED), alpha));
+  pen_below.Create(Layout::ScalePenWidth(1),
+                   HasColors()? DarkColor(COLOR_RED) : COLOR_BLACK);
 
-  brush_below_landable.Set(ColorWithAlpha(COLOR_ORANGE, alpha));
-  brush_below_landable_mc0.Set(ColorWithAlpha(LightColor(COLOR_ORANGE), alpha));
-  pen_below_landable.Set(Layout::ScalePenWidth(1),
+  brush_below_landable.Create(ColorWithAlpha(COLOR_ORANGE, alpha));
+  brush_below_landable_mc0.Create(ColorWithAlpha(LightColor(COLOR_ORANGE),
+                                                 alpha));
+  pen_below_landable.Create(Layout::ScalePenWidth(1),
                          HasColors()? DarkColor(COLOR_ORANGE) : COLOR_BLACK);
 
-  brush_above.Set(ColorWithAlpha(COLOR_GREEN, alpha));
-  brush_above_mc0.Set(ColorWithAlpha(LightColor(LightColor(COLOR_GREEN)), alpha));
-  pen_above.Set(Layout::ScalePenWidth(1), HasColors()? DarkColor(COLOR_GREEN) : COLOR_BLACK);
+  brush_above.Create(ColorWithAlpha(COLOR_GREEN, alpha));
+  brush_above_mc0.Create(ColorWithAlpha(LightColor(LightColor(COLOR_GREEN)),
+                                        alpha));
+  pen_above.Create(Layout::ScalePenWidth(1),
+                   HasColors() ? DarkColor(COLOR_GREEN) : COLOR_BLACK);
 
   font = &_font;
 }

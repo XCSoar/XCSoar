@@ -60,7 +60,7 @@ DialogLook::Initialise(const Font &caption_font,
 
   focused.background_color = COLOR_XCSOAR_DARK;
   focused.text_color = COLOR_WHITE;
-  focused.border_pen.Set(Layout::FastScale(1) + 2, COLOR_BLACK);
+  focused.border_pen.Create(Layout::FastScale(1) + 2, COLOR_BLACK);
 
   list.background_color = COLOR_WHITE;
   list.text_color = COLOR_BLACK;
@@ -79,5 +79,5 @@ void
 DialogLook::SetBackgroundColor(Color color)
 {
   background_color = color;
-  background_brush.Set(color);
+  background_brush.Create(color);
 }

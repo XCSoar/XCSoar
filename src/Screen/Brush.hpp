@@ -61,10 +61,14 @@ public:
    * Constructor (creates a Brush object of the given Color
    * @param c Color of the Brush
    */
-  explicit Brush(const Color c) : brush(nullptr) { Set(c); }
+  explicit Brush(const Color c):brush(nullptr) {
+    Create(c);
+  }
 
   /** Destructor */
-  ~Brush() { Reset(); }
+  ~Brush() {
+    Destroy();
+  }
 
   Brush(const Brush &other) = delete;
   Brush &operator=(const Brush &other) = delete;
@@ -75,7 +79,7 @@ public:
    * Sets the Color of the Brush
    * @param c The new Color
    */
-  void Set(const Color c);
+  void Create(const Color c);
 
 #ifdef HAVE_HATCHED_BRUSH
 
@@ -83,14 +87,14 @@ public:
    * Creates a bitmap-based Brush
    * @param bitmap The bitmap the new Brush will be based on
    */
-  void Set(const Bitmap &bitmap);
+  void Create(const Bitmap &bitmap);
 
 #endif
 
   /**
    * Resets the Brush to nullptr
    */
-  void Reset();
+  void Destroy();
 
   /**
    * Returns whether the Brush is defined (!= nullptr)
@@ -141,7 +145,7 @@ public:
 #ifndef USE_GDI
 
 inline void
-Brush::Set(const Color c)
+Brush::Create(const Color c)
 {
   assert(IsScreenInitialized());
 
@@ -149,7 +153,7 @@ Brush::Set(const Color c)
 }
 
 inline void
-Brush::Reset()
+Brush::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
