@@ -25,11 +25,12 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
+#include "Util/Macros.hpp"
 
 unsigned
 ButtonFrameRenderer::GetMargin()
 {
-  return 2;
+  return Layout::VptScale(2);
 }
 
 void
@@ -40,17 +41,55 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
 
   canvas.DrawFilledRectangle(rc, _look.background_color);
 
-  canvas.Select(pressed ? _look.dark_border_pen : _look.light_border_pen);
-  canvas.DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top, rc.right - 2,
-                           rc.top);
-  canvas.DrawTwoLinesExact(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
-                           rc.right - 3, rc.top + 1);
+  const unsigned margin = GetMargin();
 
-  canvas.Select(pressed ? _look.light_border_pen : _look.dark_border_pen);
-  canvas.DrawTwoLinesExact(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-                           rc.right - 1, rc.top + 1);
-  canvas.DrawTwoLinesExact(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
-                           rc.right - 2, rc.top + 2);
+  if (margin < 4) {
+    /* draw 1-pixel lines */
+
+    canvas.Select(pressed ? _look.dark_border_pen : _look.light_border_pen);
+    for (unsigned i = 0; i < margin; ++i)
+      canvas.DrawTwoLinesExact(rc.left + i, rc.bottom - 2 - i,
+                               rc.left + i, rc.top + i,
+                               rc.right - 2 - i, rc.top + i);
+
+    canvas.Select(pressed ? _look.light_border_pen : _look.dark_border_pen);
+    for (unsigned i = 0; i < margin; ++i)
+      canvas.DrawTwoLinesExact(rc.left + 1 + i, rc.bottom - 1 - i,
+                               rc.right - 1 - i, rc.bottom - 1 - i,
+                               rc.right - 1 - i, rc.top + 1 + i);
+  } else {
+    /* at 4 pixels or more, it's more efficient to draw a filled
+       polygon */
+
+    const RasterPoint p1[] = {
+      RasterPoint(rc.left, rc.top),
+      RasterPoint(rc.right, rc.top),
+      RasterPoint(rc.right - margin, rc.top + margin),
+      RasterPoint(rc.left + margin, rc.top + margin),
+      RasterPoint(rc.left + margin, rc.bottom - margin),
+      RasterPoint(rc.left, rc.bottom),
+    };
+
+    canvas.SelectNullPen();
+    canvas.Select(pressed
+                  ? _look.dark_border_brush
+                  : _look.light_border_brush);
+    canvas.DrawTriangleFan(p1, ARRAY_SIZE(p1));
+
+    const RasterPoint p2[] = {
+      RasterPoint(rc.right, rc.bottom),
+      RasterPoint(rc.right, rc.top),
+      RasterPoint(rc.right - margin, rc.top + margin),
+      RasterPoint(rc.right - margin, rc.bottom - margin),
+      RasterPoint(rc.left + margin, rc.bottom - margin),
+      RasterPoint(rc.left, rc.bottom),
+    };
+
+    canvas.Select(pressed
+                  ? _look.light_border_brush
+                  : _look.dark_border_brush);
+    canvas.DrawTriangleFan(p2, ARRAY_SIZE(p2));
+}
 }
 
 PixelRect

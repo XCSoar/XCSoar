@@ -39,10 +39,13 @@ struct ButtonLook {
 
     Color background_color;
     Pen light_border_pen, dark_border_pen;
+    Brush light_border_brush, dark_border_brush;
 
     void CreateBorder(Color light, Color dark) {
       light_border_pen.Create(1, light);
+      light_border_brush.Create(light);
       dark_border_pen.Create(1, dark);
+      dark_border_brush.Create(dark);
     }
   } standard, focused;
 
