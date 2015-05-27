@@ -88,7 +88,7 @@ FT_FLOOR(FT_Long x)
 static constexpr inline FT_Long
 FT_CEIL(FT_Long x)
 {
-  return ((x + 63) & -64) / 64;
+  return FT_FLOOR(x + 63);
 }
 
 gcc_pure
