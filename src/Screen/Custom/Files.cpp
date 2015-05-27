@@ -82,6 +82,11 @@ static const char *const all_font_paths[] = {
   "DejaVuSansCondensed.ttf",
 
 #ifndef KOBO
+  "roboto/Roboto-Regular.ttf",
+#endif
+  "Roboto-Regular.ttf",
+
+#ifndef KOBO
   "ttf-droid/DroidSans.ttf",
   "droid/DroidSans.ttf",
 #endif
@@ -127,6 +132,11 @@ static const char *const all_bold_font_paths[] = {
   "DejaVuSansCondensed-Bold.ttf",
 
 #ifndef KOBO
+  "roboto/Roboto-Bold.ttf",
+#endif
+  "Roboto-Bold.ttf",
+
+#ifndef KOBO
   "ttf-droid/DroidSans-Bold.ttf",
   "droid/DroidSans-Bold.ttf",
 #endif
@@ -168,6 +178,11 @@ static const char *const all_italic_font_paths[] = {
   "DejaVuSansCondensed-Oblique.ttf",
 
 #ifndef KOBO
+  "roboto/Roboto-Italic.ttf",
+#endif
+  "Roboto-Italic.ttf",
+
+#ifndef KOBO
   "ttf-bitstream-vera/VeraIt.ttf",
 #endif
   "VeraIt.ttf",
@@ -201,6 +216,11 @@ static const char *const all_bold_italic_font_paths[] = {
   "dejavu/DejaVuSansCondensed-BoldOblique.ttf",
 #endif
   "DejaVuSansCondensed-BoldOblique.ttf",
+
+#ifndef KOBO
+  "roboto/Roboto-BoldItalic.ttf",
+#endif
+  "Roboto-BoldItalic.ttf",
 
 #ifndef KOBO
   "ttf-bitstream-vera/VeraBI.ttf",
