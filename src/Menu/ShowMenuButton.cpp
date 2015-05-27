@@ -67,7 +67,7 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 
   canvas.Select(Pen(pen_width, COLOR_BLACK));
   canvas.DrawRoundRectangle(rc.left, rc.top, rc.right - 1, rc.bottom - 1,
-                            Layout::SmallScale(8), Layout::SmallScale(8));
+                            Layout::PtScale(8), Layout::PtScale(8));
 
   const RasterPoint m[] = {
     RasterPoint(rc.left + padding, rc.bottom - padding),
