@@ -102,7 +102,7 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
     const auto &class_settings = settings.classes[type];
 
     // Draw thick brushed outlines
-    PixelScalar border_width = Layout::Scale(10);
+    const int border_width = Layout::ScalePenWidth(10);
     if ((rc.right - rc.left) > border_width * 2 &&
         (rc.bottom - rc.top) > border_width * 2 &&
         class_settings.fill_mode ==
