@@ -107,10 +107,7 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
         settings.classes[type].fill_mode ==
         AirspaceClassRendererSettings::FillMode::PADDING) {
       PixelRect border = rc;
-      border.left += border_width;
-      border.right -= border_width;
-      border.top += border_width;
-      border.bottom -= border_width;
+      border.Grow(-border_width);
 
       // Left border
       canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
