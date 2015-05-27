@@ -378,7 +378,7 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
   const FT_Face face = this->face;
   const bool use_kerning = FT_HAS_KERNING(face);
 
-  int x = 0, minx = 0;
+  int x = 0;
   unsigned prev_index = 0;
 
 #ifndef ENABLE_OPENGL
@@ -418,14 +418,10 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
       prev_index = i;
     }
 
-    int z = x + glyph_minx;
-    if (z < minx)
-      minx = z;
-
     const int glyph_maxy = FT_FLOOR(metrics.horiBearingY);
 
     RenderGlyph((uint8_t *)buffer, size.cx, size.cy,
-                glyph, x - minx, ascent_height - glyph_maxy);
+                glyph, x + glyph_minx, ascent_height - glyph_maxy);
 
     x += glyph_advance;
   }

@@ -36,6 +36,7 @@ Version 6.8 - not yet released
   - use configured coordinate format in waypoint editor
   - remove custom font support, replaced with global "text size" setting
   - improved font sizes
+  - improved font renderer
   - display rotation for Raspberry Pi and Cubieboard (#3238)
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard
