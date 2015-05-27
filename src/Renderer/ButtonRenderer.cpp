@@ -26,6 +26,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 
+unsigned
+ButtonFrameRenderer::GetMargin()
+{
+  return 2;
+}
+
 void
 ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
                                 bool focused, bool pressed) const

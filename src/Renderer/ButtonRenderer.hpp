@@ -40,9 +40,8 @@ public:
     return look;
   }
 
-  unsigned GetMargin() const {
-    return 2;
-  }
+  gcc_const
+  static unsigned GetMargin();
 
   void DrawButton(Canvas &canvas, PixelRect rc,
                   bool focused, bool pressed) const;
