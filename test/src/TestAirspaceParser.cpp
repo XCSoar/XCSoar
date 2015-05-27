@@ -98,7 +98,7 @@ TestOpenAir()
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), Unit::NAUTICAL_MILES)));
-      ok1(equals(circle.GetCenter(), 
+      ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
     } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
@@ -205,7 +205,7 @@ TestTNP()
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), Unit::NAUTICAL_MILES)));
-      ok1(equals(circle.GetCenter(), 
+      ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
     } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))

@@ -68,7 +68,7 @@ private:
       settings.classes[airspace.GetType()];
     const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
 
-    RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
+    RasterPoint screen_center = projection.GeoToScreen(airspace.GetReferenceLocation());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
 
     if (!warning_manager.IsAcked(airspace) &&
@@ -236,7 +236,7 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
+    RasterPoint screen_center = projection.GeoToScreen(airspace.GetReferenceLocation());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
 
     if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {

@@ -49,7 +49,7 @@ public:
   AirspaceCircle(const GeoPoint &loc, const fixed _radius);
 
   /* virtual methods from class AbstractAirspace */
-  virtual const GeoPoint GetCenter() const override {
+  virtual const GeoPoint GetReferenceLocation() const override {
     return m_center;
   }
 

@@ -111,7 +111,7 @@ public:
    * @return Location of reference point
    */
   gcc_pure
-  virtual const GeoPoint GetCenter() const = 0;
+  virtual const GeoPoint GetReferenceLocation() const = 0;
 
   /**
    * Checks whether an observer is inside the airspace (no altitude taken into account)
@@ -223,9 +223,9 @@ public:
     days_of_operation = mask;
   }
 
-  /** 
+  /**
    * Get type of airspace
-   * 
+   *
    * @return Type/class of airspace
    */
   AirspaceClass GetType() const {

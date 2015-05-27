@@ -246,9 +246,9 @@ Airspaces::Add(AbstractAirspace *airspace)
 
   if (owns_children) {
     if (IsEmpty())
-      task_projection.Reset(airspace->GetCenter());
+      task_projection.Reset(airspace->GetReferenceLocation());
 
-    task_projection.Scan(airspace->GetCenter());
+    task_projection.Scan(airspace->GetReferenceLocation());
   }
 
   tmp_as.push_back(airspace);

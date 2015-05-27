@@ -77,7 +77,7 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    RasterPoint center = proj.GeoToScreen(airspace.GetCenter());
+    RasterPoint center = proj.GeoToScreen(airspace.GetReferenceLocation());
     unsigned radius = proj.GeoToScreenDistance(airspace.GetRadius());
     DrawCircle(center, radius);
   }
@@ -189,7 +189,7 @@ protected:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    DrawCircle(airspace.GetCenter(), airspace.GetRadius());
+    DrawCircle(airspace.GetReferenceLocation(), airspace.GetRadius());
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
