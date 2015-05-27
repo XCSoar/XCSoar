@@ -92,7 +92,7 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const unsigned padding = Layout::GetTextPadding();
 
-  const unsigned column_spacing = Layout::PtScale(5);
+  const unsigned column_spacing = Layout::VptScale(5);
 
   const TCHAR *const name = AirspaceFormatter::GetClass((AirspaceClass)i);
   const int name_x = rc.left + padding;

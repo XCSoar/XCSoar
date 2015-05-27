@@ -182,7 +182,7 @@ WndProperty::UpdateLayout()
 {
   edit_rc = GetClientRect();
 
-  const unsigned margin = Layout::PtScale(1u);
+  const unsigned margin = Layout::VptScale(1u);
 
   if (caption_width >= 0) {
     edit_rc.left += caption_width + margin;

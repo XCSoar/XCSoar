@@ -59,6 +59,14 @@ namespace Layout
   extern unsigned pt_scale;
 
   /**
+   * Fixed-point scaling factor to convert a "virtual point" to
+   * pixels.
+   *
+   * @see VptScale()
+   */
+  extern unsigned vpt_scale;
+
+  /**
    * Fixed-point scaling factor to convert a font size (in points =
    * 1/72th inch) to pixels.
    */
@@ -196,12 +204,28 @@ namespace Layout
 
   /**
    * Scale a physical size in points (1/72th inch) to pixels.
+   *
+   * Use this if you need exact physical dimensions.
    */
   gcc_const
   static inline unsigned
   PtScale(unsigned pt)
   {
     return (pt * pt_scale) >> 10;
+  }
+
+  /**
+   * Scale a physical size in "virtual points" (nominally 1/72th inch)
+   * to pixels.  An additional scaling factor may be applied to
+   * consider the reduced viewing distance on small screens.
+   *
+   * Use this for best readability of on-screen objects.
+   */
+  gcc_const
+  static inline unsigned
+  VptScale(unsigned pt)
+  {
+    return (pt * vpt_scale) >> 10;
   }
 
   /**

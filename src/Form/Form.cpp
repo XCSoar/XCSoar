@@ -519,7 +519,7 @@ WndForm::OnPaint(Canvas &canvas)
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     const PixelRect rc = GetClientRect();
-    const PixelScalar size = Layout::PtScale(4);
+    const PixelScalar size = Layout::VptScale(4);
 
     const RasterPoint vertices[8] = {
       { rc.left, rc.top },
