@@ -71,6 +71,8 @@ static inline bool
 IsMono()
 {
 #ifdef KOBO
+  /* on the Kobo, "mono" mode can be set at runtime; the shutdown
+     screen renders in greyscale mode */
   return FreeType::mono;
 #else
   return IsDithered();
