@@ -99,12 +99,13 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
 {
   if (AirspacePreviewRenderer::PrepareFill(canvas, type, airspace_look,
                                            settings)) {
+    const auto &class_settings = settings.classes[type];
 
     // Draw thick brushed outlines
     PixelScalar border_width = Layout::Scale(10);
     if ((rc.right - rc.left) > border_width * 2 &&
         (rc.bottom - rc.top) > border_width * 2 &&
-        settings.classes[type].fill_mode ==
+        class_settings.fill_mode ==
         AirspaceClassRendererSettings::FillMode::PADDING) {
       PixelRect border = rc;
       border.Grow(-border_width);
