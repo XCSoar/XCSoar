@@ -297,7 +297,15 @@ To compile, run:
 make TARGET=PI
 \end{verbatim*}
 
-This target is only used for cross-compiling on a (desktop) computer.
+To optimize for the Raspberry Pi 2 (which has an ARMv7 with NEON
+instead of an ARMv6):
+
+\begin{verbatim*}
+make TARGET=PI2
+\end{verbatim*}
+
+These targets are only used for cross-compiling on a (desktop)
+computer.
 If you compile on the Raspberry Pi, the default target will
 auto-detect the Pi.
 
