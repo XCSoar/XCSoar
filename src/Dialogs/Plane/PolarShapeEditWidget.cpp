@@ -200,9 +200,9 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 void
 PolarShapeEditWidget::Unprepare()
 {
-  for (unsigned i = 0; i < ARRAY_SIZE(points); ++i) {
-    delete points[i].v;
-    delete points[i].w;
+  for (auto &i : points) {
+    delete i.v;
+    delete i.w;
   }
 
   PanelWidget::Unprepare();
