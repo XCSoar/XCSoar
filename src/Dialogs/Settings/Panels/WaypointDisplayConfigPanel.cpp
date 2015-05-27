@@ -139,7 +139,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
 
   static constexpr StaticEnumChoice wp_selection_list[] = {
     { (unsigned)WaypointRendererSettings::LabelSelection::ALL,
-      N_("All"), N_("All waypoint labels will be displayed.") },
+      N_("All"), N_("All labels will be displayed.") },
     { (unsigned)WaypointRendererSettings::LabelSelection::TASK_AND_AIRFIELD,
       N_("Task waypoints & airfields"),
       N_("All waypoints part of a task and all airfields will be displayed.") },
@@ -150,12 +150,12 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
       N_("Task waypoints"),
       N_("All waypoints part of a task will be displayed.") },
     { (unsigned)WaypointRendererSettings::LabelSelection::NONE,
-      N_("None"), N_("No waypoint labels will be displayed.") },
+      N_("None"), N_("No labels will be displayed.") },
     { 0 }
   };
 
   AddEnum(_("Label visibility"),
-          _("Determines what waypoint labels are displayed for each waypoint (space permitting)."),
+          _("Determines what labels are displayed."),
           wp_selection_list, (unsigned)settings.label_selection);
   SetExpertRow(WaypointLabelSelection);
 
