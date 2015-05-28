@@ -31,16 +31,21 @@ Copyright_License {
 
 void
 AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
-                                       const AirspaceAltitude &altitude)
+                                       const AirspaceAltitude &altitude,
+                                       bool include_unit)
 {
   switch (altitude.reference) {
   case AltitudeReference::AGL:
     if (!positive(altitude.altitude_above_terrain))
       _tcscpy(buffer, _T("GND"));
     else
-      StringFormatUnsafe(buffer, _T("%d %s AGL"),
-                         iround(Units::ToUserAltitude(altitude.altitude_above_terrain)),
-                         Units::GetAltitudeName());
+      if (include_unit)
+        StringFormatUnsafe(buffer, _T("%d %s AGL"),
+                           iround(Units::ToUserAltitude(altitude.altitude_above_terrain)),
+                           Units::GetAltitudeName());
+      else
+        StringFormatUnsafe(buffer, _T("%d AGL"),
+                           iround(Units::ToUserAltitude(altitude.altitude_above_terrain)));
     break;
 
   case AltitudeReference::STD:
@@ -48,9 +53,13 @@ AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
     break;
 
   case AltitudeReference::MSL:
-    StringFormatUnsafe(buffer, _T("%d %s"),
-                       iround(Units::ToUserAltitude(altitude.altitude)),
-                       Units::GetAltitudeName());
+    if (include_unit)
+      StringFormatUnsafe(buffer, _T("%d %s"),
+                         iround(Units::ToUserAltitude(altitude.altitude)),
+                         Units::GetAltitudeName());
+    else
+      StringFormatUnsafe(buffer, _T("%d"),
+                         iround(Units::ToUserAltitude(altitude.altitude)));
     break;
 
   case AltitudeReference::NONE:
