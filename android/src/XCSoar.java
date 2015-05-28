@@ -145,7 +145,7 @@ public class XCSoar extends Activity {
     finish();
   }
 
-  Handler quitHandler = new Handler() {
+  final Handler quitHandler = new Handler() {
     public void handleMessage(Message msg) {
       quit();
     }
