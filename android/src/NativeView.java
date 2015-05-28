@@ -180,10 +180,17 @@ class NativeView extends SurfaceView
     /* initialize context and surface */
 
     final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-    int[] contextAttribList = {
-      EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
-      EGL10.EGL_NONE
-    };
+    final int contextClientVersion = getEglContextClientVersion();
+    int[] contextAttribList = null;
+    if (contextClientVersion != 1)
+      /* the default EGL_CONTEXT_CLIENT_VERSION is 1, so we need to
+       * specify this only if using GLES2; some old Androids (e.g. HTC
+       * Magic) will fail eglCreateContext() with EGL_BAD_ATTRIBUTE if
+       * EGL_CONTEXT_CLIENT_VERSION is specified */
+      contextAttribList = new int[]{
+        EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
+        EGL10.EGL_NONE
+      };
 
     context = egl.eglCreateContext(display, closestConfig,
                                    EGL10.EGL_NO_CONTEXT, contextAttribList);
