@@ -128,7 +128,7 @@ class NativeView extends SurfaceView
     egl.eglChooseConfig(display, configSpec, null, 0, num_config);
     if (num_config[0] == 0) {
       /* fallback in case stencil buffer is not available */
-      configSpec[1] = 0;
+      configSpec[0] = 0;
       egl.eglChooseConfig(display, configSpec, null, 0, num_config);
     }
 
