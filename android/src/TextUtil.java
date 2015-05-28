@@ -39,9 +39,12 @@ public class TextUtil {
   private int[] extent = new int[2];
   private int[] id = new int[5];
 
-  public TextUtil(String family_name, int style, int textSize,
-                  int paint_flags) {
-    Typeface tf = Typeface.create(family_name, style);
+  public TextUtil(int style, int textSize,
+                  int paint_flags, boolean monospace) {
+    Typeface tf = monospace
+      ? Typeface.MONOSPACE
+      : Typeface.create((Typeface)null, style);
+
     paint = new Paint(paint_flags);
     paint.setTypeface(tf);
     paint.setTextSize(textSize);

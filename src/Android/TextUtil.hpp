@@ -46,8 +46,7 @@ public:
   static void Deinitialise(JNIEnv *env);
 
   gcc_malloc
-  static TextUtil *create(const char *facename, int height,
-                          bool bold, bool italic);
+  static TextUtil *create(int height, bool bold, bool italic, bool monospace);
 
   gcc_pure
   PixelSize getTextBounds(const char *text) const;

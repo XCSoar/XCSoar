@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/FontDescription.hpp"
-#include "Look/StandardFonts.hpp"
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
@@ -41,13 +40,10 @@ Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
 
-  const char *facename = d.IsMonospace()
-    ? GetStandardMonospaceFontFace()
-    : GetStandardFontFace();
-
   delete text_util_object;
-  text_util_object = TextUtil::create(facename, d.GetHeight(),
-                                      d.IsBold(), d.IsItalic());
+  text_util_object = TextUtil::create(d.GetHeight(),
+                                      d.IsBold(), d.IsItalic(),
+                                      d.IsMonospace());
   if (!text_util_object)
     return false;
 

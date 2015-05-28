@@ -30,9 +30,6 @@ gcc_const
 static inline const TCHAR *
 GetStandardMonospaceFontFace()
 {
-  if (IsAndroid())
-    return _T("Droid Sans Mono");
-
   return _T("Courier");
 }
 
@@ -42,9 +39,6 @@ GetStandardFontFace()
 {
   if (IsAltair())
     return _T("RasterGothicFourteenCond");
-
-  if (IsAndroid())
-    return _T("Droid Sans");
 
   return _T("Tahoma");
 }
