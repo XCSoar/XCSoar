@@ -30,6 +30,7 @@ Copyright_License {
 #include <utility>
 
 struct PixelSize;
+class FontDescription;
 
 class TextUtil : protected Java::Object {
   static JNIEnv *env;
@@ -46,7 +47,7 @@ public:
   static void Deinitialise(JNIEnv *env);
 
   gcc_malloc
-  static TextUtil *create(int height, bool bold, bool italic, bool monospace);
+  static TextUtil *create(const FontDescription &d);
 
   gcc_pure
   PixelSize getTextBounds(const char *text) const;

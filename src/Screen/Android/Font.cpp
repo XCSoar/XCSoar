@@ -41,9 +41,7 @@ Font::Load(const FontDescription &d)
   assert(IsScreenInitialized());
 
   delete text_util_object;
-  text_util_object = TextUtil::create(d.GetHeight(),
-                                      d.IsBold(), d.IsItalic(),
-                                      d.IsMonospace());
+  text_util_object = TextUtil::create(d);
   if (!text_util_object)
     return false;
 

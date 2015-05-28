@@ -26,6 +26,7 @@ Copyright_License {
 #include "Java/String.hpp"
 #include "Java/Exception.hpp"
 #include "Screen/Point.hpp"
+#include "Look/FontDescription.hpp"
 #include "Asset.hpp"
 
 JNIEnv *TextUtil::env;
@@ -76,17 +77,17 @@ TextUtil::TextUtil(jobject _obj)
 }
 
 TextUtil *
-TextUtil::create(int height, bool bold, bool italic, bool monospace)
+TextUtil::create(const FontDescription &d)
 {
   jobject localObject;
   jint paramStyle, paramTextSize;
 
   paramStyle = 0;
-  if (bold)
+  if (d.IsBold())
     paramStyle |= 1;
-  if (italic)
+  if (d.IsItalic())
     paramStyle |= 2;
-  paramTextSize = height;
+  paramTextSize = d.GetHeight();
 
   int paint_flags = 0;
   if (!IsDithered())
@@ -96,7 +97,7 @@ TextUtil::create(int height, bool bold, bool italic, bool monospace)
   // construct org.xcsoar.TextUtil object
   localObject = env->NewObject(cls, midTextUtil,
                                paramStyle, paramTextSize,
-                               paint_flags, monospace);
+                               paint_flags, d.IsMonospace());
   if (!localObject)
     return nullptr;
 
