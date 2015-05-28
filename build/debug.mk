@@ -36,7 +36,9 @@ OPTIMIZE += -funsafe-loop-optimizations
 endif
 
 ifeq ($(LTO),y)
-OPTIMIZE += -flto
+# 8 LTO threads - that's an arbitrary value, but better than the
+# default
+OPTIMIZE += -flto=8
 endif
 
 ifeq ($(LLVM),y)
