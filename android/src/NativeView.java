@@ -48,6 +48,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.webkit.MimeTypeMap;
 
+class EGLException extends Exception {
+  public EGLException(String _msg) {
+    super(_msg);
+  }
+};
+
 /**
  * A #View which calls the native part of XCSoar.
  */
@@ -96,11 +102,13 @@ class NativeView extends SurfaceView
     thread.start();
   }
 
-  private void initGL(SurfaceHolder holder) {
+  private void initGL(SurfaceHolder holder) throws EGLException {
     /* initialize display */
 
     egl = (EGL10)EGLContext.getEGL();
     display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+    if (display == EGL10.EGL_NO_DISPLAY)
+      throw new EGLException("eglGetDisplay() failed");
 
     Log.d(TAG, "EGL vendor: " +
           egl.eglQueryString(display, EGL10.EGL_VENDOR));
@@ -110,7 +118,8 @@ class NativeView extends SurfaceView
           egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
 
     int[] version = new int[2];
-    egl.eglInitialize(display, version);
+    if (!egl.eglInitialize(display, version))
+      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
 
     /* choose a configuration */
 
@@ -134,7 +143,9 @@ class NativeView extends SurfaceView
 
     int numConfigs = num_config[0];
     EGLConfig[] configs = new EGLConfig[numConfigs];
-    egl.eglChooseConfig(display, configSpec, configs, numConfigs, num_config);
+    if (!egl.eglChooseConfig(display, configSpec,
+                             configs, numConfigs, num_config))
+      throw new EGLException("eglChooseConfig() failed: " + egl.eglGetError());
 
     EGLConfig closestConfig = null;
     int closestDistance = 1000;
@@ -152,6 +163,9 @@ class NativeView extends SurfaceView
         closestConfig = config;
       }
     }
+
+    if (closestConfig == null)
+      throw new EGLException("eglChooseConfig() failed");
 
     Log.d(TAG, "EGLConfig: red="+
           findConfigAttrib(closestConfig, EGL10.EGL_RED_SIZE, 0) +
@@ -171,10 +185,18 @@ class NativeView extends SurfaceView
 
     context = egl.eglCreateContext(display, closestConfig,
                                    EGL10.EGL_NO_CONTEXT, contextAttribList);
+    if (context == EGL10.EGL_NO_CONTEXT)
+      throw new EGLException("eglCreateContext() failed: " +
+                             egl.eglGetError());
 
     surface = egl.eglCreateWindowSurface(display, closestConfig,
                                          holder, null);
-    egl.eglMakeCurrent(display, surface, surface, context);
+    if (surface == EGL10.EGL_NO_SURFACE)
+      throw new EGLException("eglCreateWindowSurface() failed: " +
+                             egl.eglGetError());
+
+    if (!egl.eglMakeCurrent(display, surface, surface, context))
+      throw new EGLException("eglMakeCurrent() failed: " + egl.eglGetError());
 
     GL10 gl = (GL10)context.getGL();
     Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
@@ -239,7 +261,13 @@ class NativeView extends SurfaceView
   }
 
   @Override public void run() {
-    initGL(getHolder());
+    try {
+      initGL(getHolder());
+    } catch (Exception e) {
+      Log.e(TAG, "initGL error", e);
+      deinitSurface();
+      return;
+    }
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     DisplayMetrics metrics = new DisplayMetrics();
