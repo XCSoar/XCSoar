@@ -191,7 +191,7 @@ class NativeView extends SurfaceView
       initGL(getHolder());
       return true;
     } catch (Exception e) {
-      Log.e(TAG, "initGL error: " + e);
+      Log.e(TAG, "initGL error", e);
       deinitSurface();
       return false;
     }
