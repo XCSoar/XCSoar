@@ -27,14 +27,14 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/Macros.hpp"
 
-class LineSplitter
+class NOAALineSplitter
 {
   const TCHAR *start;
 
 public:
   typedef std::pair<const TCHAR *, unsigned> Range;
 
-  LineSplitter(const TCHAR *_start):start(_start) {}
+  NOAALineSplitter(const TCHAR *_start):start(_start) {}
 
   bool HasNext() const {
     return start != NULL && start[0] != _T('\0');
@@ -240,7 +240,7 @@ FormatDecodedMETAR(METAR &metar, ParsedMETAR &parsed, tstring &output)
   08 ## Pressure (altimeter): 29.47 in. Hg (0998 hPa) ##
   */
 
-  LineSplitter lines(metar.decoded);
+  NOAALineSplitter lines(metar.decoded);
   for (unsigned i = 0; lines.HasNext(); ++i) {
     auto range = lines.Next();
 
