@@ -151,6 +151,16 @@ public class XCSoar extends Activity {
     }
   };
 
+  final Handler errorHandler = new Handler() {
+    public void handleMessage(Message msg) {
+      nativeView = null;
+      TextView tv = new TextView(XCSoar.this);
+      tv.setText(msg.obj.toString());
+      setContentView(tv);
+
+    }
+  };
+
   public void initSDL() {
     if (!Loader.loaded)
       return;
@@ -167,7 +177,7 @@ public class XCSoar extends Activity {
       return;
     }
 
-    nativeView = new NativeView(this, quitHandler);
+    nativeView = new NativeView(this, quitHandler, errorHandler);
     setContentView(nativeView);
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);

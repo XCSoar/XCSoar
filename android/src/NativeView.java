@@ -61,7 +61,7 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
-  Handler quitHandler;
+  final Handler quitHandler, errorHandler;
 
   Resources resources;
 
@@ -80,10 +80,12 @@ class NativeView extends SurfaceView
 
   Thread thread;
 
-  public NativeView(Activity context, Handler _quitHandler) {
+  public NativeView(Activity context, Handler _quitHandler,
+                    Handler _errorHandler) {
     super(context);
 
     quitHandler = _quitHandler;
+    errorHandler = _errorHandler;
 
     resources = context.getResources();
 
@@ -265,6 +267,7 @@ class NativeView extends SurfaceView
       initGL(getHolder());
     } catch (Exception e) {
       Log.e(TAG, "initGL error", e);
+      errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
       deinitSurface();
       return;
     }
