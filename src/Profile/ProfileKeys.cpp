@@ -31,6 +31,7 @@ const char AirspaceWarning[] = "AirspaceWarn";
 const char AirspaceBlackOutline[] = "AirspaceBlackOutline";
 const char AirspaceTransparency[] = "AirspaceTransparency";
 const char AirspaceFillMode[] = "AirspaceFillMode";
+const char AirspaceLabelSelection[] = "AirspaceLabelSelection";
 const char AltMargin[] = "AltMargin";
 const char AltMode[] = "AltitudeMode";
 const char AltitudeUnitsValue[] = "AltitudeUnit";

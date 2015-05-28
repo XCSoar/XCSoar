@@ -67,6 +67,13 @@ struct AirspaceLook {
   MaskedIcon intercept_icon;
 
   /**
+   * look for labels
+   */
+  Pen label_pen;
+  Brush label_brush;
+  Color label_text_color;
+
+  /**
    * The font used to render the airspace name.
    */
   const Font *name_font;

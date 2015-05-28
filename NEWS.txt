@@ -28,6 +28,7 @@ Version 6.8 - not yet released
   - task calculator moved to "Status" dialog
 * map
   - allow "Mark Drop" while panning
+  - airspace labels
 * user interface 
   - download data files from site configuration
   - profile manager

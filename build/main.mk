@@ -428,6 +428,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRendererGL.cpp \
 	$(SRC)/Renderer/AirspaceRendererOther.cpp \
+	$(SRC)/Renderer/AirspaceLabelList.cpp \
 	$(SRC)/Renderer/AirspaceListRenderer.cpp \
 	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \

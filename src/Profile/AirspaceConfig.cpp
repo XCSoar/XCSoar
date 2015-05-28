@@ -71,6 +71,7 @@ GetAirspaceColor(unsigned i, RGB8Color &color)
 void
 Profile::Load(AirspaceRendererSettings &settings)
 {
+  GetEnum(ProfileKeys::AirspaceLabelSelection, settings.label_selection);
   Get(ProfileKeys::AirspaceBlackOutline, settings.black_outline);
   GetEnum(ProfileKeys::AltMode, settings.altitude_mode);
   Get(ProfileKeys::ClipAlt, settings.clip_altitude);

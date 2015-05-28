@@ -43,6 +43,7 @@ Copyright_License {
 
 enum ControlIndex {
   AirspaceDisplay,
+  AirspaceLabelSelection,
   ClipAltitude,
   AltWarningMargin,
   AirspaceWarnings,
@@ -76,6 +77,14 @@ static constexpr StaticEnumChoice as_fill_mode_list[] = {
     N_("Draws a solid outline with a half transparent border around the airspace.") },
   { (unsigned)AirspaceRendererSettings::FillMode::NONE, N_("No fill"),
     N_("Don't fill the airspace area.") },
+  { 0 }
+};
+
+static constexpr StaticEnumChoice as_label_selection_list[] = {
+  { (unsigned)AirspaceRendererSettings::LabelSelection::NONE, N_("None"),
+    N_("No labels will be displayed.") },
+  { (unsigned)AirspaceRendererSettings::LabelSelection::ALL, N_("All"),
+    N_("All labels will be displayed.") },
   { 0 }
 };
 
@@ -180,6 +189,11 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class."),
           as_display_list, (unsigned)renderer.altitude_mode, this);
 
+  AddEnum(_("Label visibility"),
+          _("Determines what labels are displayed."),
+          as_label_selection_list, (unsigned)renderer.label_selection);
+  SetExpertRow(AirspaceLabelSelection);
+
   AddFloat(_("Clip altitude"),
            _("For clip airspace mode, this is the altitude below which airspace is displayed."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(20000), fixed(100), false, UnitGroup::ALTITUDE, fixed(renderer.clip_altitude));
@@ -240,6 +254,8 @@ AirspaceConfigPanel::Save(bool &_changed)
     CommonInterface::SetMapSettings().airspace;
 
   changed |= SaveValueEnum(AirspaceDisplay, ProfileKeys::AltMode, renderer.altitude_mode);
+
+  changed |= SaveValueEnum(AirspaceLabelSelection, ProfileKeys::AirspaceLabelSelection, renderer.label_selection);
 
   changed |= SaveValue(ClipAltitude, UnitGroup::ALTITUDE, ProfileKeys::ClipAlt, renderer.clip_altitude);
 

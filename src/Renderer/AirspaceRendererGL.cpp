@@ -23,10 +23,12 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 
+#include "AirspaceLabelList.hpp"
 #include "AirspaceRenderer.hpp"
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -34,8 +36,9 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
-
+#include "Formatter/AirspaceFormatter.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+#include "Sizes.h"
 
 class AirspaceVisitorRenderer final
   : public AirspaceVisitor, protected MapCanvas
@@ -43,15 +46,17 @@ class AirspaceVisitorRenderer final
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
   const AirspaceRendererSettings &settings;
+  AirspaceLabelList &labels;
 
 public:
   AirspaceVisitorRenderer(Canvas &_canvas, const WindowProjection &_projection,
                           const AirspaceLook &_look,
                           const AirspaceWarningCopy &_warnings,
-                          const AirspaceRendererSettings &_settings)
+                          const AirspaceRendererSettings &_settings,
+                          AirspaceLabelList &_labels)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().Scale(fixed(1.1))),
-     look(_look), warning_manager(_warnings), settings(_settings)
+     look(_look), warning_manager(_warnings), settings(_settings), labels(_labels)
   {
     glStencilMask(0xff);
     glClear(GL_STENCIL_BUFFER_BIT);
@@ -153,6 +158,9 @@ protected:
 
     case AbstractAirspace::Shape::POLYGON:
       VisitPolygon((const AirspacePolygon &)airspace);
+
+      // add label only to polygons
+      labels.Add(airspace.GetCenter(), airspace.GetBase(), airspace.GetTop());
       break;
     }
   }
@@ -221,15 +229,17 @@ class AirspaceFillRenderer final
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
   const AirspaceRendererSettings &settings;
+  AirspaceLabelList &labels;
 
 public:
   AirspaceFillRenderer(Canvas &_canvas, const WindowProjection &_projection,
                        const AirspaceLook &_look,
                        const AirspaceWarningCopy &_warnings,
-                       const AirspaceRendererSettings &_settings)
+                       const AirspaceRendererSettings &_settings,
+                       AirspaceLabelList &_labels)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().Scale(fixed(1.1))),
-     look(_look), warning_manager(_warnings), settings(_settings)
+     look(_look), warning_manager(_warnings), settings(_settings), labels(_labels)
   {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
@@ -273,6 +283,9 @@ protected:
 
     case AbstractAirspace::Shape::POLYGON:
       VisitPolygon((const AirspacePolygon &)airspace);
+
+      // add label only to polygons
+      labels.Add(airspace.GetCenter(), airspace.GetBase(), airspace.GetTop());
       break;
     }
   }
@@ -314,19 +327,71 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
                                const AirspaceWarningCopy &awc,
                                const AirspacePredicate &visible)
 {
+  AirspaceLabelList labels;
+
+  // airspaces
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL ||
       settings.fill_mode == AirspaceRendererSettings::FillMode::NONE) {
     AirspaceFillRenderer renderer(canvas, projection, look, awc,
-                                  settings);
+                                  settings, labels);
     airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                 projection.GetScreenDistanceMeters(),
                                 renderer, visible);
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc,
-                                     settings);
+                                     settings, labels);
     airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                 projection.GetScreenDistanceMeters(),
                                 renderer, visible);
+  }
+
+  // labels
+  if(settings.label_selection == AirspaceRendererSettings::LabelSelection::ALL)
+  {
+    labels.Sort();
+
+    // default paint settings
+    canvas.SetTextColor(look.label_text_color);
+    canvas.Select(*look.name_font);
+    canvas.Select(look.label_pen);
+    canvas.Select(look.label_brush);
+
+    // draw labels
+    TCHAR topText[NAME_SIZE + 1];
+    TCHAR baseText[NAME_SIZE + 1];
+
+    for (const auto &label : labels) {
+      // size of text
+      AirspaceFormatter::FormatAltitudeShort(topText, label.top, false);
+      PixelSize topSize = canvas.CalcTextSize(topText);
+      AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
+      PixelSize baseSize = canvas.CalcTextSize(baseText);
+      int labelWidth = std::max(topSize.cx, baseSize.cx) +
+                       2 * Layout::GetTextPadding();
+      int labelHeight = topSize.cy + baseSize.cy;
+
+      // box
+      RasterPoint pos = projection.GeoToScreen(label.pos);
+      PixelRect rect;
+      rect.left = pos.x - labelWidth / 2;
+      rect.top = pos.y;
+      rect.right = rect.left + labelWidth;
+      rect.bottom = rect.top + labelHeight;
+      canvas.Rectangle(rect.left, rect.top, rect.right, rect.bottom);
+      canvas.DrawHLine(rect.left + Layout::GetTextPadding(),
+                       rect.right - Layout::GetTextPadding(),
+                       rect.top + labelHeight / 2, look.label_pen.GetColor());
+
+      // top text
+      int x = rect.right - Layout::GetTextPadding() - topSize.cx;
+      int y = rect.top;
+      canvas.DrawText(x, y, topText);
+
+      // base text
+      x = rect.right - Layout::GetTextPadding() - baseSize.cx;
+      y = rect.bottom - baseSize.cy;
+      canvas.DrawText(x, y, baseText);
+    }
   }
 }
 

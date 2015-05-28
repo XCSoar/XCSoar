@@ -1755,6 +1755,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRendererGL.cpp \
 	$(SRC)/Renderer/AirspaceRendererOther.cpp \
+	$(SRC)/Renderer/AirspaceLabelList.cpp \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
@@ -1817,6 +1818,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Formatter/UserUnits.cpp \
+	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \

@@ -121,6 +121,12 @@ struct AirspaceRendererSettings {
     NONE,
   } fill_mode;
 
+  /** What type of airspace labels to render */
+  enum class LabelSelection : uint8_t {
+    NONE,
+    ALL,
+  } label_selection;
+
   AirspaceClassRendererSettings classes[AIRSPACECLASSCOUNT];
 
   void SetDefaults();
