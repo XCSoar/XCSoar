@@ -46,6 +46,7 @@ public:
 
   /* virtual methods from class AbstractAirspace */
   virtual const GeoPoint GetReferenceLocation() const override;
+  virtual const GeoPoint GetCenter() const override;
   virtual bool Inside(const GeoPoint &loc) const override;
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,

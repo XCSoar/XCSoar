@@ -61,6 +61,24 @@ AirspacePolygon::GetReferenceLocation() const
   return m_border[0].GetLocation();
 }
 
+const GeoPoint
+AirspacePolygon::GetCenter() const
+{
+  assert(m_border.size() >= 3);
+
+  fixed lat(0), lon(0);
+
+  for (const auto &pt : m_border) {
+    lat += pt.GetLocation().latitude.Native();
+    lon += pt.GetLocation().longitude.Native();
+  }
+
+  lon = lon / m_border.size();
+  lat = lat / m_border.size();
+
+  return GeoPoint(Angle::Native(lon), Angle::Native(lat));
+}
+
 bool
 AirspacePolygon::Inside(const GeoPoint &loc) const
 {

@@ -114,6 +114,14 @@ public:
   virtual const GeoPoint GetReferenceLocation() const = 0;
 
   /**
+   * Get geometric center of airspace.
+   *
+   * @return center
+   */
+  gcc_pure
+  virtual const GeoPoint GetCenter() const = 0;
+
+  /**
    * Checks whether an observer is inside the airspace (no altitude taken into account)
    * This is slow because it uses geodesic calculations
    *

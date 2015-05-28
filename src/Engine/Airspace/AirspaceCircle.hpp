@@ -53,6 +53,10 @@ public:
     return m_center;
   }
 
+  virtual const GeoPoint GetCenter() const override {
+		return GetReferenceLocation();
+  }
+
   virtual bool Inside(const GeoPoint &loc) const override;
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                                 const GeoPoint &end,
