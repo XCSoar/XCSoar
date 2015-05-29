@@ -28,7 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef _UNICODE
-#include "LightString.hxx"
+#include "AllocatedString.hxx"
 #else
 #include "StringPointer.hxx"
 #endif
@@ -64,7 +64,7 @@ ConvertWideToACP(const TCHAR *p);
  */
 class UTF8ToWideConverter {
 #ifdef _UNICODE
-  typedef LightString<TCHAR> Value;
+  typedef AllocatedString<TCHAR> Value;
 #else
   typedef StringPointer<> Value;
 #endif
@@ -108,7 +108,7 @@ public:
  */
 class WideToUTF8Converter {
 #ifdef _UNICODE
-  typedef LightString<> Value;
+  typedef AllocatedString<> Value;
 #else
   typedef StringPointer<> Value;
 #endif
