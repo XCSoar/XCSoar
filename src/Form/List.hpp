@@ -50,8 +50,7 @@ class LambdaListItemRenderer : public ListItemRenderer, private C {
 public:
   LambdaListItemRenderer(C &&c):C(std::move(c)) {}
 
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override {
     C::operator()(canvas, rc, idx);
   }
 };
@@ -73,8 +72,7 @@ public:
   FunctionListItemRenderer(ListItemRendererFunction _function)
     :function(_function) {}
 
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override {
     function(canvas, rc, idx);
   }
 };
@@ -318,28 +316,27 @@ protected:
   void DrawScrollBar(Canvas &canvas);
 
 #ifndef _WIN32_WCE
-  virtual bool OnTimer(WindowTimer &timer) override;
-  virtual void OnDestroy() override;
+  bool OnTimer(WindowTimer &timer) override;
+  void OnDestroy() override;
 #endif
 
-  virtual void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) override;
 
-  virtual void OnSetFocus() override;
-  virtual void OnKillFocus() override;
+  void OnSetFocus() override;
+  void OnKillFocus() override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
 
-  virtual bool OnKeyCheck(unsigned key_code) const override;
-  virtual bool OnKeyDown(unsigned key_code) override;
+  bool OnKeyCheck(unsigned key_code) const override;
+  bool OnKeyDown(unsigned key_code) override;
 
-  virtual void OnCancelMode() override;
+  void OnCancelMode() override;
 
-  virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
+  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
 };
 
 #endif

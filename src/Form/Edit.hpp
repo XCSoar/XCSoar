@@ -114,20 +114,19 @@ public:
   bool BeginEditing();
 
 protected:
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnSetFocus() override;
-  virtual void OnKillFocus() override;
+  void OnResize(PixelSize new_size) override;
+  void OnSetFocus() override;
+  void OnKillFocus() override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
 
-  virtual bool OnKeyCheck(unsigned key_code) const override;
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual bool OnKeyUp(unsigned key_code) override;
+  bool OnKeyCheck(unsigned key_code) const override;
+  bool OnKeyDown(unsigned key_code) override;
+  bool OnKeyUp(unsigned key_code) override;
 
-  virtual void OnCancelMode() override;
+  void OnCancelMode() override;
 
 public:
   /**
@@ -163,7 +162,7 @@ private:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
 
   /** Increases the Editor value */
   int IncValue();

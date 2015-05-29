@@ -71,11 +71,11 @@ public:
   void ModifyValue(RoughTime _value);
 
   /* virtual methods from class DataField */
-  virtual void Inc() override;
-  virtual void Dec() override;
-  virtual int GetAsInteger() const override;
-  virtual const TCHAR *GetAsString() const override;
-  virtual const TCHAR *GetAsDisplayString() const override;
+  void Inc() override;
+  void Dec() override;
+  int GetAsInteger() const override;
+  const TCHAR *GetAsString() const override;
+  const TCHAR *GetAsDisplayString() const override;
 };
 
 #endif

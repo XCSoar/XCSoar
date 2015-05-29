@@ -64,13 +64,13 @@ public:
   }
 
   /* virtual methods from class DataField */
-  virtual void Inc() override;
-  virtual void Dec() override;
-  virtual int GetAsInteger() const override;
-  virtual const TCHAR *GetAsString() const override;
-  virtual void SetAsInteger(int Value) override;
-  virtual void SetAsString(const TCHAR *Value) override;
-  virtual ComboList CreateComboList(const TCHAR *reference) const override;
+  void Inc() override;
+  void Dec() override;
+  int GetAsInteger() const override;
+  const TCHAR *GetAsString() const override;
+  void SetAsInteger(int Value) override;
+  void SetAsString(const TCHAR *Value) override;
+  ComboList CreateComboList(const TCHAR *reference) const override;
 
 private:
   gcc_pure

@@ -37,7 +37,7 @@ public:
     :DataFieldString(initial_value, listener) {}
 
   /* virtual methods from class DataField */
-  virtual const TCHAR *GetAsDisplayString() const override;
+  const TCHAR *GetAsDisplayString() const override;
 };
 
 #endif

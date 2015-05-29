@@ -68,15 +68,15 @@ public:
   }
 
   /* virtual methods from class DataField */
-  virtual void Inc() override;
-  virtual void Dec() override;
-  virtual int GetAsInteger() const override;
-  virtual const TCHAR *GetAsString() const override;
-  virtual const TCHAR *GetAsDisplayString() const override;
-  virtual void SetAsInteger(int value) override;
-  virtual void SetAsString(const TCHAR *value) override;
-  virtual ComboList CreateComboList(const TCHAR *reference) const override;
-  virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue) override;
+  void Inc() override;
+  void Dec() override;
+  int GetAsInteger() const override;
+  const TCHAR *GetAsString() const override;
+  const TCHAR *GetAsDisplayString() const override;
+  void SetAsInteger(int value) override;
+  void SetAsString(const TCHAR *value) override;
+  ComboList CreateComboList(const TCHAR *reference) const override;
+  void SetFromCombo(int iDataFieldIndex, TCHAR *sValue) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

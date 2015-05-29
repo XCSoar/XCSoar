@@ -57,7 +57,7 @@ public:
   void ModifyValue(GeoPoint _value);
 
   /* virtual methods from class DataField */
-  virtual const TCHAR *GetAsString() const override;
+  const TCHAR *GetAsString() const override;
 };
 
 #endif

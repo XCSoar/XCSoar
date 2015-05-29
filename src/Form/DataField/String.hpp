@@ -49,8 +49,8 @@ public:
   void Set(const TCHAR *Value);
 
   /* virtual methods from class DataField */
-  virtual const TCHAR *GetAsString() const override;
-  virtual void SetAsString(const TCHAR *Value) override;
+  const TCHAR *GetAsString() const override;
+  void SetAsString(const TCHAR *Value) override;
 };
 
 #endif

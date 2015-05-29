@@ -51,9 +51,9 @@ public:
   }
 
   /* virtual methods from class DataField */
-  virtual void Inc() override;
-  virtual void Dec() override;
-  virtual const TCHAR *GetAsDisplayString() const override;
+  void Inc() override;
+  void Dec() override;
+  const TCHAR *GetAsDisplayString() const override;
 
 protected:
   gcc_pure

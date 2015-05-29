@@ -57,11 +57,10 @@ class WndForm : public ContainerWindow,
 
   protected:
 #ifdef USE_GDI
-    virtual const Brush *OnChildColor(Window &window,
-                                      Canvas &canvas) override;
+    const Brush *OnChildColor(Window &window, Canvas &canvas) override;
 #endif
 
-    virtual void OnPaint(Canvas &canvas) override;
+    void OnPaint(Canvas &canvas) override;
   };
 
 public:
@@ -103,7 +102,7 @@ protected:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
 
   StaticString<256> caption;
 
@@ -166,7 +165,7 @@ public:
   }
 
   /** inherited from ActionListener */
-  virtual void OnAction(int id) override {
+  void OnAction(int id) override {
     SetModalResult(id);
   }
 
@@ -188,17 +187,17 @@ public:
   void SetCaption(const TCHAR *_caption);
 
   /** from class Window */
-  virtual void OnCreate() override;
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnDestroy() override;
+  void OnCreate() override;
+  void OnResize(PixelSize new_size) override;
+  void OnDestroy() override;
 
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual void OnCancelMode() override;
+  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  void OnCancelMode() override;
 
 #ifdef WIN32
-  virtual bool OnCommand(unsigned id, unsigned code) override;
+  bool OnCommand(unsigned id, unsigned code) override;
 #endif
 
   void SetKeyDownFunction(KeyDownFunction function) {

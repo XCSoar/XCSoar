@@ -294,24 +294,24 @@ private:
   void DragEnd();
 
 protected:
-  virtual void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) override;
 
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnKeyCheck(unsigned key_code) const override;
-  virtual bool OnKeyDown(unsigned key_code) override;
+  bool OnMouseMove(PixelScalar x, PixelScalar y,
+                   unsigned keys) override;
+  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnKeyCheck(unsigned key_code) const override;
+  bool OnKeyDown(unsigned key_code) override;
 
   /**
    * canvas is the tabmenu which is the full content window, no content
    * @param canvas
    * Todo: support icons and "ButtonOnly" style
    */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
 
-  virtual void OnKillFocus() override;
-  virtual void OnSetFocus() override;
+  void OnKillFocus() override;
+  void OnSetFocus() override;
 
 private:
   void InvalidateButton(MenuTabIndex i) {
