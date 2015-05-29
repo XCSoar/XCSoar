@@ -36,8 +36,8 @@ public:
     :ProxyOperationEnvironment(_other) {}
 
   /* virtual methods from class OperationEnvironment */
-  virtual bool IsCancelled() const override;
-  virtual void Sleep(unsigned ms) override;
+  bool IsCancelled() const override;
+  void Sleep(unsigned ms) override;
 };
 
 #endif
