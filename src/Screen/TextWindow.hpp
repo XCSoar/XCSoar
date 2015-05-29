@@ -92,7 +92,7 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
 #endif /* !USE_GDI */
 };
 

@@ -61,14 +61,14 @@ protected:
 protected:
   /* virtual methods from class Window */
 #ifndef ENABLE_OPENGL
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
+  void OnCreate() override;
+  void OnDestroy() override;
 #endif
 
-  virtual void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) override;
 
   /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
 
   /* our virtual methods */
   virtual void OnPaintBuffer(Canvas &canvas) = 0;

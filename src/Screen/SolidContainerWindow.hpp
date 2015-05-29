@@ -47,7 +47,7 @@ public:
 
 protected:
   /* virtual methods from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) override;
 };
 
 #endif

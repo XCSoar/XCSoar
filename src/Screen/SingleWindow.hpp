@@ -110,9 +110,9 @@ public:
   bool FilterEvent(const Event &event, Window *allowed) const;
 
 protected:
-  virtual bool OnClose() override;
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
+  bool OnClose() override;
+  void OnDestroy() override;
+  void OnResize(PixelSize new_size) override;
 };
 
 #endif
