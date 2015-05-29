@@ -37,7 +37,7 @@ class DemoReplayGlue
 public:
   DemoReplayGlue(ProtectedTaskManager &_task_manager);
 
-  virtual bool Update(NMEAInfo &data) override;
+  bool Update(NMEAInfo &data) override;
 };
 
 #endif

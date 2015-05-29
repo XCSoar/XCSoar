@@ -119,7 +119,7 @@ public:
   }
 
 private:
-  virtual void OnTimer() override;
+  void OnTimer() override;
 };
 
 #endif

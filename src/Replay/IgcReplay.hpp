@@ -39,9 +39,9 @@ class IgcReplay: public AbstractReplay
 
 public:
   IgcReplay(NLineReader *reader);
-  virtual ~IgcReplay();
+  ~IgcReplay() override;
 
-  virtual bool Update(NMEAInfo &data) override;
+  bool Update(NMEAInfo &data) override;
 
 private:
   /**
