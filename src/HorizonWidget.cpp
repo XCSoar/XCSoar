@@ -52,7 +52,7 @@ public:
 
 protected:
   /* virtual methods from AntiFlickerWindow */
-  virtual void OnPaintBuffer(Canvas &canvas) override {
+  void OnPaintBuffer(Canvas &canvas) override {
     canvas.ClearWhite();
 
     if (!CommonInterface::Basic().attitude.IsBankAngleUseable() &&
