@@ -27,58 +27,66 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIGHT_STRING_HXX
-#define LIGHT_STRING_HXX
+#ifndef ALLOCATED_STRING_HXX
+#define ALLOCATED_STRING_HXX
 
 #include "StringPointer.hxx"
-#include "AllocatedString.hxx"
 
 #include <utility>
 
 /**
- * A string pointer whose memory may or may not be managed by this
- * class.
+ * A string pointer whose memory is managed by this class.
+ *
+ * Unlike std::string, this object can hold a "nullptr" special value.
  */
 template<typename T=char>
-class LightString : public StringPointer<T> {
+class AllocatedString {
 public:
 	typedef typename StringPointer<T>::pointer pointer;
 	typedef typename StringPointer<T>::const_pointer const_pointer;
 
 private:
-	AllocatedString<T> allocation;
+	pointer value;
 
-	explicit LightString(pointer _allocation)
-		:StringPointer<T>(_allocation),
-		allocation(AllocatedString<T>::Donate(_allocation)) {}
+	explicit AllocatedString(pointer _value)
+		:value(_value) {}
 
 public:
-	explicit LightString(const_pointer _value)
-		:StringPointer<T>(_value), allocation(nullptr) {}
+	AllocatedString(std::nullptr_t n):value(n) {}
 
-	LightString(std::nullptr_t n)
-		:StringPointer<T>(n), allocation(n) {}
+	AllocatedString(AllocatedString &&src)
+		:value(src.Steal()) {}
 
-	LightString(LightString &&src)
-		:StringPointer<T>(std::move(src)),
-		 allocation(std::move(src.allocation)) {}
-
-	static LightString Donate(pointer allocation) {
-		return LightString(allocation);
+	~AllocatedString() {
+		delete[] value;
 	}
 
-	static LightString Null() {
+	static AllocatedString Donate(pointer value) {
+		return AllocatedString(value);
+	}
+
+	static AllocatedString Null() {
 		return nullptr;
 	}
 
-	LightString &operator=(LightString &&src) {
+	AllocatedString &operator=(AllocatedString &&src) {
 		*(StringPointer<T> *)this = std::move(src);
-		allocation = std::move(src.allocation);
+		std::swap(value, src.value);
 		return *this;
 	}
 
+	constexpr bool IsNull() const {
+		return value == nullptr;
+	}
+
+	constexpr const_pointer c_str() const {
+		return value;
+	}
+
 	pointer Steal() {
-		return allocation.Steal();
+		pointer result = value;
+		value = nullptr;
+		return result;
 	}
 };
 
