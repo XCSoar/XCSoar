@@ -34,15 +34,14 @@ class HorizonWidget final : public WindowWidget,
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-  virtual void Unprepare() override;
-  virtual void Show(const PixelRect &rc) override;
-  virtual void Hide() override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  void Unprepare() override;
+  void Show(const PixelRect &rc) override;
+  void Hide() override;
 
 private:
   /* virtual methods from class BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic) override;
+  void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif
