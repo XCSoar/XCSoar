@@ -224,8 +224,8 @@ public:
 
 private:
   gcc_pure
-  virtual bool SolutionExists(fixed distance_min, fixed distance_max,
-                              fixed h_min, fixed h_max) const;
+  bool SolutionExists(fixed distance_min, fixed distance_max,
+                      fixed h_min, fixed h_max) const;
 };
 
 #endif
