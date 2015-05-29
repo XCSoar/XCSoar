@@ -54,13 +54,13 @@ public:
 
 public:
   /* virtual methods from class AbstractContest */
-  virtual void Reset() override;
-  virtual SolverResult Solve(bool exhaustive) override;
-  virtual void CopySolution(ContestTraceVector &vec) const override;
+  void Reset() override;
+  SolverResult Solve(bool exhaustive) override;
+  void CopySolution(ContestTraceVector &vec) const override;
 
 protected:
   /* virtual methods from class AbstractContest */
-  virtual ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const override;
 };
 
 #endif

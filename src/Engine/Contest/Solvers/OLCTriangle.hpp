@@ -390,10 +390,6 @@ protected:
   void ResetBranchAndBound();
 
 public:
-  /* virtual methods from AbstractContest */
-  virtual void Reset() override;
-  virtual SolverResult Solve(bool exhaustive) override;
-
   void SetMaxIterations(unsigned _max_iterations) {
     max_iterations = _max_iterations;
   };
@@ -402,11 +398,15 @@ public:
     max_tree_size = _max_tree_size;
   };
 
+  /* virtual methods from AbstractContest */
+  void Reset() override;
+  SolverResult Solve(bool exhaustive) override;
+
 protected:
   /* virtual methods from AbstractContest */
-  virtual bool UpdateScore() override;
-  virtual void CopySolution(ContestTraceVector &vec) const override;
-  virtual ContestResult CalculateResult() const override;
+  bool UpdateScore() override;
+  void CopySolution(ContestTraceVector &vec) const override;
+  ContestResult CalculateResult() const override;
 };
 
 #endif

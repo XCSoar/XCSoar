@@ -34,7 +34,7 @@ public:
 
 protected:
   /* virtual methods from class OLCTriangle */
-  virtual ContestResult CalculateResult() const;
+  ContestResult CalculateResult() const override;
 };
 
 #endif
