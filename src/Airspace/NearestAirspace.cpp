@@ -117,7 +117,7 @@ protected:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) override {
     Check(as);
   }
 
