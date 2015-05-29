@@ -53,8 +53,8 @@ public:
 
 private:
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  bool Save(bool &changed) override;
 };
 
 static constexpr StaticEnumChoice waypoint_types[] = {

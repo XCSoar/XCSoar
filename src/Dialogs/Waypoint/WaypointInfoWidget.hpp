@@ -39,7 +39,7 @@ public:
   void AddGlideResult(const TCHAR *label, const GlideResult &result);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 };
 
 #endif

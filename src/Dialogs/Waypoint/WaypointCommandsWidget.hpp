@@ -50,10 +50,10 @@ public:
      waypoint(_waypoint), task_manager(_task_manager) {}
 
   /* methods from ActionListener */
-  virtual void OnAction(int id);
+  void OnAction(int id) override;
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 };
 
 #endif

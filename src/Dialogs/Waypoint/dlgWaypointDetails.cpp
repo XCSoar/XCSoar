@@ -68,14 +68,15 @@ public:
   explicit WaypointExternalFileListHandler(const Waypoint &_waypoint)
     :waypoint(_waypoint) {}
 
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  /* virtual methods from class ListItemRenderer */
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) override;
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) override;
 };
 
 void

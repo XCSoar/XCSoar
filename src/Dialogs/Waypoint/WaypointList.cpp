@@ -157,45 +157,44 @@ public:
   }
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  virtual void Unprepare() override {
+  void Unprepare() override {
     DeleteWindow();
   }
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
     UpdateList();
     CommonInterface::GetLiveBlackboard().AddListener(*this);
   }
 
-  virtual void Hide() override {
+  void Hide() override {
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
     ListWidget::Hide();
   }
 
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) override;
 
   /* virtual methods from ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) override;
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) override;
 
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  void OnModified(DataField &df) override;
 
 private:
   /* virtual methods from BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic) override;
+  void OnGPSUpdate(const MoreData &basic) override;
 };
 
 class WaypointFilterWidget : public RowFormWidget {
@@ -212,10 +211,10 @@ public:
   void Update();
 
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent,
+  void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
 #ifdef GNAV
-  virtual bool KeyPress(unsigned key_code) override;
+  bool KeyPress(unsigned key_code) override;
 #endif
 };
 
@@ -231,8 +230,8 @@ public:
     list = _list;
   }
 
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     AddButton(_("Select"), *list, SELECT);
     AddButton(_("Cancel"), dialog, mrCancel);
   }
