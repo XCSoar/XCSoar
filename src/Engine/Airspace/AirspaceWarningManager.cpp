@@ -240,7 +240,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) override {
     Intersection(as);
   }
 

@@ -88,7 +88,7 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
 
 GeoPoint
 AirspaceCircle::ClosestPoint(const GeoPoint &loc,
-                             const FlatProjection &projection) const
+                             gcc_unused const FlatProjection &projection) const
 {
   // Calculate distance from center point
   const fixed d = loc.Distance(m_center);
