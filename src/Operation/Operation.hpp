@@ -76,18 +76,18 @@ public:
 class NullOperationEnvironment : public OperationEnvironment {
 public:
   /* virtual methods from class OperationEnvironment */
-  virtual bool IsCancelled() const override;
-  virtual void Sleep(unsigned ms) override;
-  virtual void SetErrorMessage(const TCHAR *text) override;
-  virtual void SetText(const TCHAR *text) override;
-  virtual void SetProgressRange(unsigned range) override;
-  virtual void SetProgressPosition(unsigned position) override;
+  bool IsCancelled() const override;
+  void Sleep(unsigned ms) override;
+  void SetErrorMessage(const TCHAR *text) override;
+  void SetText(const TCHAR *text) override;
+  void SetProgressRange(unsigned range) override;
+  void SetProgressPosition(unsigned position) override;
 };
 
 class QuietOperationEnvironment : public NullOperationEnvironment {
 public:
   /* virtual methods from class OperationEnvironment */
-  virtual void Sleep(unsigned ms) override;
+  void Sleep(unsigned ms) override;
 };
 
 #endif
