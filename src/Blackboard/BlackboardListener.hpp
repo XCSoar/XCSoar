@@ -68,14 +68,14 @@ public:
  */
 class NullBlackboardListener : public BlackboardListener {
 public:
-  virtual void OnGPSUpdate(const MoreData &basic) override;
+  void OnGPSUpdate(const MoreData &basic) override;
 
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override;
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override;
 
-  virtual void OnComputerSettingsUpdate(const ComputerSettings &settings) override;
+  void OnComputerSettingsUpdate(const ComputerSettings &settings) override;
 
-  virtual void OnUISettingsUpdate(const UISettings &settings) override;
+  void OnUISettingsUpdate(const UISettings &settings) override;
 };
 
 #endif
