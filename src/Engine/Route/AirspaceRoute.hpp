@@ -54,24 +54,22 @@ public:
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 
-  virtual void Reset() override;
+  void Reset() override;
 
   unsigned AirspaceSize() const;
 
 protected:
 
-  virtual void OnSolve(const AGeoPoint &origin,
-                       const AGeoPoint &destination) override;
+  void OnSolve(const AGeoPoint &origin, const AGeoPoint &destination) override;
 
-  virtual bool IsTrivial() const override {
+  bool IsTrivial() const override {
     return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
 private:
-  virtual bool CheckClearance(const RouteLink &e,
-                              RoutePoint &inp) const override;
-  virtual void AddNearby(const RouteLink &e) override;
-  virtual bool CheckSecondary(const RouteLink &e) override;
+  bool CheckClearance(const RouteLink &e, RoutePoint &inp) const override;
+  void AddNearby(const RouteLink &e) override;
+  bool CheckSecondary(const RouteLink &e) override;
 
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                          const RouteLink &e);

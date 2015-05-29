@@ -200,19 +200,19 @@ public:
   {
   }
 
-  virtual void StartFan() {
+  /* virtual methods from class TriangleFanVisitor */
+
+  void StartFan() override {
     // Clear the GeoPointVector for the next TriangleFan
     g.clear();
   }
 
-  virtual void AddPoint(const GeoPoint& p) {
+  void AddPoint(const GeoPoint& p) override {
     // Add a new GeoPoint to the current TriangleFan
     g.append(p);
   }
 
-  virtual void
-  EndFan()
-  {
+  void EndFan() override {
     if (fans.full())
       return;
 

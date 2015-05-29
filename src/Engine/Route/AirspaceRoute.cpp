@@ -55,7 +55,7 @@ public:
     origin(proj.Unproject(_e.first)),
     nearest((const AbstractAirspace *)nullptr, _e.first) {}
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) override {
     assert(!intersections.empty());
 
     GeoPoint point = intersections[0].first;
@@ -93,7 +93,7 @@ public:
   }
 
 protected:
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) override {
     m_found = &as;
   }
 };
