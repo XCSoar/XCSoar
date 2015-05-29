@@ -42,7 +42,8 @@ class FlytecDevice : public AbstractDevice
 public:
   FlytecDevice(Port &_port):port(_port), last_time(fixed(0)) {}
 
-  virtual bool ParseNMEA(const char *line, NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, NMEAInfo &info) override;
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;

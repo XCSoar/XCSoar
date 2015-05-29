@@ -125,8 +125,9 @@ public:
   void WriteDeviceSettings(const BlueFlySettings &settings,
                            OperationEnvironment &env);
 
-  virtual void LinkTimeout() override;
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  void LinkTimeout() override;
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
 
 #endif

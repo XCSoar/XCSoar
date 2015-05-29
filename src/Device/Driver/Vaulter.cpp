@@ -127,11 +127,12 @@ class VaulterDevice : public AbstractDevice {
 public:
   VaulterDevice(Port &_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) override;
-  virtual bool PutBallast(fixed fraction, fixed overload,
-                          OperationEnvironment &env) override;
+  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  bool PutBallast(fixed fraction, fixed overload,
+                  OperationEnvironment &env) override;
 };
 
 bool

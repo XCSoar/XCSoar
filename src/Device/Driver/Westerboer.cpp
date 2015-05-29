@@ -44,9 +44,10 @@ class WesterboerDevice : public AbstractDevice {
 public:
   WesterboerDevice(Port &_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  virtual bool PutMacCready(fixed mac_cready, OperationEnvironment &env) override;
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool PutMacCready(fixed mac_cready, OperationEnvironment &env) override;
+  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
 };
 
 /**

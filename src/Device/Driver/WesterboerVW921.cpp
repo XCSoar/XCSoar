@@ -40,8 +40,8 @@ class WesterboerVW921Device : public AbstractDevice
   StaticFifoBuffer<char, 256u> buffer;
 
 public:
-  virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) override;
+  bool DataReceived(const void *data, size_t length,
+                    struct NMEAInfo &info) override;
 
   void SentenceReceived(unsigned sentence_number,
                         const void *data, size_t length, struct NMEAInfo &info);

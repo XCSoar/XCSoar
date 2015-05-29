@@ -101,9 +101,10 @@ protected:
   bool ParsePFLAC(NMEAInputLine &line);
 
 public:
+  /* virtual methods from class Device */
   void LinkTimeout() override;
   bool EnableNMEA(OperationEnvironment &env) override;
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;

@@ -207,32 +207,33 @@ protected:
   bool EnableCommandMode(OperationEnvironment &env);
 
 public:
-  virtual void LinkTimeout() override;
-  virtual bool EnableNMEA(OperationEnvironment &env) override;
+  /* virtual methods from class Device */
+  void LinkTimeout() override;
+  bool EnableNMEA(OperationEnvironment &env) override;
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  virtual bool PutBallast(fixed fraction, fixed overload,
-                          OperationEnvironment &env) override;
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) override;
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) override;
-  virtual bool PutQNH(const AtmosphericPressure &pres,
+  bool PutBallast(fixed fraction, fixed overload,
+                  OperationEnvironment &env) override;
+  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
+  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  bool PutQNH(const AtmosphericPressure &pres,
+              OperationEnvironment &env) override;
+
+  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+
+  bool EnablePassThrough(OperationEnvironment &env) override;
+
+  bool Declare(const Declaration &declaration, const Waypoint *home,
+               OperationEnvironment &env) override;
+
+  void OnSysTicker() override;
+
+  bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
-
-  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) override;
-
-  virtual bool EnablePassThrough(OperationEnvironment &env) override;
-
-  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) override;
-
-  virtual void OnSysTicker() override;
-
-  virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) override;
-  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path,
-                              OperationEnvironment &env) override;
+  bool DownloadFlight(const RecordedFlightInfo &flight,
+                      const TCHAR *path,
+                      OperationEnvironment &env) override;
 };
 
 #endif

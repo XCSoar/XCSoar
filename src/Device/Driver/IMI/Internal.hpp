@@ -36,13 +36,15 @@ private:
 public:
   IMIDevice(Port &_port):port(_port) {}
 
-  virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) override;
-  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path, OperationEnvironment &env) override;
+  /* virtual methods from class Device */
+  bool ReadFlightList(RecordedFlightList &flight_list,
+                      OperationEnvironment &env) override;
+  bool DownloadFlight(const RecordedFlightInfo &flight,
+                      const TCHAR *path, OperationEnvironment &env) override;
 
-  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) override;
+  bool Declare(const Declaration &declaration, const Waypoint *home,
+               OperationEnvironment &env) override;
+
 private:
   bool Connect(OperationEnvironment &env);
   void Disconnect(OperationEnvironment &env);

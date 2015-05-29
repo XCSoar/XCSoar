@@ -33,7 +33,8 @@ static bool error_reported = false;
 
 class LevilDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
 
 static void

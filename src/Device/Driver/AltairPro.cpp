@@ -63,10 +63,11 @@ public:
   AltairProDevice(Port &_port):port(_port){}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  virtual bool Declare(const struct Declaration &declaration,
-                       const Waypoint *home,
-                       OperationEnvironment &env) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool Declare(const struct Declaration &declaration,
+               const Waypoint *home,
+               OperationEnvironment &env) override;
 };
 
 static bool

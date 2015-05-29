@@ -494,13 +494,13 @@ private:
   bool ParseLine(const char *line);
 
   /* virtual methods from class Notify */
-  virtual void OnNotification() override;
+  void OnNotification() override;
 
   /* virtual methods from DataHandler  */
-  virtual void DataReceived(const void *data, size_t length) override;
+  void DataReceived(const void *data, size_t length) override;
 
   /* virtual methods from PortLineHandler */
-  virtual void LineReceived(const char *line) override;
+  void LineReceived(const char *line) override;
 };
 
 #endif

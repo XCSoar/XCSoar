@@ -32,7 +32,8 @@ class FlyNetDevice : public AbstractDevice {
   WindowFilter<40> vario_filter;
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
   bool ParseBAT(const char *content, NMEAInfo &info);
   bool ParsePRS(const char *content, NMEAInfo &info);

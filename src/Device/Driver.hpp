@@ -234,46 +234,46 @@ public:
  */
 class AbstractDevice : public Device {
 public:
-  virtual void LinkTimeout() override;
-  virtual bool EnableNMEA(OperationEnvironment &env) override;
+  void LinkTimeout() override;
+  bool EnableNMEA(OperationEnvironment &env) override;
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  virtual bool PutMacCready(fixed MacCready, OperationEnvironment &env) override;
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) override;
-  virtual bool PutBallast(fixed fraction, fixed overload,
+  bool PutMacCready(fixed MacCready, OperationEnvironment &env) override;
+  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
+  bool PutBallast(fixed fraction, fixed overload,
+                  OperationEnvironment &env) override;
+  bool PutQNH(const AtmosphericPressure &pres,
+              OperationEnvironment &env) override;
+  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutActiveFrequency(RadioFrequency frequency,
+                          const TCHAR *name,
                           OperationEnvironment &env) override;
-  virtual bool PutQNH(const AtmosphericPressure &pres,
+  bool PutStandbyFrequency(RadioFrequency frequency,
+                           const TCHAR *name,
+                           OperationEnvironment &env) override;
+
+  bool EnablePassThrough(OperationEnvironment &env) override;
+
+  bool Declare(const Declaration &declaration, const Waypoint *home,
+               OperationEnvironment &env) override;
+
+  bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
-  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) override;
-  virtual bool PutActiveFrequency(RadioFrequency frequency,
-                                  const TCHAR *name,
-                                  OperationEnvironment &env) override;
-  virtual bool PutStandbyFrequency(RadioFrequency frequency,
-                                   const TCHAR *name,
-                                   OperationEnvironment &env) override;
 
-  virtual bool EnablePassThrough(OperationEnvironment &env) override;
+  bool DownloadFlight(const RecordedFlightInfo &flight,
+                      const TCHAR *path,
+                      OperationEnvironment &env) override;
 
-  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) override;
+  void OnSysTicker() override;
 
-  virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) override;
+  bool DataReceived(const void *data, size_t length,
+                    struct NMEAInfo &info) override;
 
-  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path,
-                              OperationEnvironment &env) override;
+  void OnSensorUpdate(const MoreData &basic) override {}
 
-  virtual void OnSysTicker() override;
-
-  virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) override;
-
-  virtual void OnSensorUpdate(const MoreData &basic) override {}
-
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override {}
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override {}
 };
 
 /**

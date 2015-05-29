@@ -201,8 +201,9 @@ class CaiLNavDevice final : public AbstractDevice {
 public:
   CaiLNavDevice(Port &_port):port(_port) {}
 
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override;
+  /* virtual methods from class Device */
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override;
 };
 
 void

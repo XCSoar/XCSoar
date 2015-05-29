@@ -35,14 +35,14 @@ private:
 public:
   XCOM760Device(Port &_port):port(_port) {}
 
-public:
-  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) override;
-  virtual bool PutActiveFrequency(RadioFrequency frequency,
-                                  const TCHAR *name,
-                                  OperationEnvironment &env) override;
-  virtual bool PutStandbyFrequency(RadioFrequency frequency,
-                                   const TCHAR *name,
-                                   OperationEnvironment &env) override;
+  /* virtual methods from class Device */
+  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutActiveFrequency(RadioFrequency frequency,
+                          const TCHAR *name,
+                          OperationEnvironment &env) override;
+  bool PutStandbyFrequency(RadioFrequency frequency,
+                           const TCHAR *name,
+                           OperationEnvironment &env) override;
 };
 
 bool

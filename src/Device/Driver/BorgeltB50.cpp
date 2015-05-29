@@ -43,12 +43,13 @@ class B50Device : public AbstractDevice {
 public:
   B50Device(Port &_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) override;
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) override;
-  virtual bool PutBallast(fixed fraction, fixed overload,
-                          OperationEnvironment &env) override;
+  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
+  bool PutBallast(fixed fraction, fixed overload,
+                  OperationEnvironment &env) override;
 };
 
 /*

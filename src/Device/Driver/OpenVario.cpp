@@ -31,7 +31,8 @@ Copyright_License {
 
 class OpenVarioDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, NMEAInfo &info) override;
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, NMEAInfo &info) override;
 
   static bool POV(NMEAInputLine &line, NMEAInfo &info);
 };

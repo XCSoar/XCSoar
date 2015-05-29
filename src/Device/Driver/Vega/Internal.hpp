@@ -75,13 +75,14 @@ protected:
   bool PDVSC(NMEAInputLine &line, NMEAInfo &info);
 
 public:
-  virtual void LinkTimeout() override;
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) override;
-  virtual bool PutQNH(const AtmosphericPressure& pres,
-                      OperationEnvironment &env) override;
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override;
+  /* virtual methods from class Device */
+  void LinkTimeout() override;
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  bool PutQNH(const AtmosphericPressure& pres,
+              OperationEnvironment &env) override;
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override;
 };
 
 #endif

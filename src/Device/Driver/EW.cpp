@@ -65,9 +65,10 @@ protected:
                     OperationEnvironment &env);
 
 public:
-  virtual void LinkTimeout() override;
-  virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) override;
+  /* virtual methods from class Device */
+  void LinkTimeout() override;
+  bool Declare(const Declaration &declaration, const Waypoint *home,
+               OperationEnvironment &env) override;
 };
 
 static void

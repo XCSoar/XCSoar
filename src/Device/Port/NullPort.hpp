@@ -36,20 +36,20 @@ public:
   NullPort(DataHandler  &_handler);
 
   /* virtual methods from class Port */
-  virtual PortState GetState() const override;
-  virtual size_t Write(const void *data, size_t length) override;
-  virtual bool Drain() override;
-  virtual void Flush() override;
-  virtual unsigned GetBaudrate() const override;
-  virtual bool SetBaudrate(unsigned baud_rate) override;
-  virtual bool StopRxThread() override;
-  virtual bool StartRxThread() override;
-  virtual int Read(void *Buffer, size_t Size) override;
-  virtual WaitResult WaitRead(unsigned timeout_ms) override;
+  PortState GetState() const override;
+  size_t Write(const void *data, size_t length) override;
+  bool Drain() override;
+  void Flush() override;
+  unsigned GetBaudrate() const override;
+  bool SetBaudrate(unsigned baud_rate) override;
+  bool StopRxThread() override;
+  bool StartRxThread() override;
+  int Read(void *Buffer, size_t Size) override;
+  WaitResult WaitRead(unsigned timeout_ms) override;
 
 private:
   /* virtual methods from class DataHandler */
-  virtual void DataReceived(const void *data, size_t length) override;
+  void DataReceived(const void *data, size_t length) override;
 };
 
 #endif
