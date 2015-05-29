@@ -42,8 +42,8 @@ public:
    *
    * @return Intercept solution (whether valid or otherwise)
    */
-  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a,
-                                                    const FlatProjection &projection) const;
+  AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a,
+                                            const FlatProjection &projection) const override;
 
   /**
    * Calculate metric for intercept solution.  In this case, returns the
@@ -53,7 +53,7 @@ public:
    *
    * @return Value of metric (smaller is better)
    */
-  virtual fixed metric(const AirspaceInterceptSolution &ais) const;
+  fixed metric(const AirspaceInterceptSolution &ais) const override;
 
   /**
    * Convenience method, calls find_nearest(airspaces, range) with range

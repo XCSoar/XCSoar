@@ -67,7 +67,7 @@ public:
                         const AirspaceFilterData &_filter)
     :location(_location), projection(_projection), filter(_filter) {}
 
-  virtual void Visit(const AbstractAirspace &as) {
+  void Visit(const AbstractAirspace &as) override {
     if (filter.Match(location, projection, as))
       result.emplace_back(as);
   }
