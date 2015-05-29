@@ -72,7 +72,7 @@ public:
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) override;
 
-  bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(gcc_unused unsigned index) const override {
     return true;
   }
 
@@ -602,7 +602,8 @@ WaypointDetailsWidget::OnGotoClicked()
 }
 
 void
-WaypointDetailsWidget::OnImagePaint(Canvas &canvas, const PixelRect &rc)
+WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
+                                    gcc_unused const PixelRect &rc)
 {
   canvas.ClearWhite();
   if (page >= 3 && page < 3 + (int)images.size()) {

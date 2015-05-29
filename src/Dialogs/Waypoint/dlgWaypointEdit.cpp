@@ -65,7 +65,8 @@ static constexpr StaticEnumChoice waypoint_types[] = {
 };
 
 void
-WaypointEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
+                            gcc_unused const PixelRect &rc)
 {
   AddText(_("Name"), nullptr, value.name.c_str());
   AddText(_("Comment"), nullptr, value.comment.c_str());
