@@ -27,6 +27,12 @@ Copyright_License {
 #include "UTF8.hpp"
 #include "Compiler.h"
 
+#ifdef _UNICODE
+#include "LightString.hxx"
+#else
+#include "StringPointer.hxx"
+#endif
+
 #include <assert.h>
 #include <string.h>
 #include <tchar.h>
@@ -58,19 +64,17 @@ ConvertWideToACP(const TCHAR *p);
  */
 class UTF8ToWideConverter {
 #ifdef _UNICODE
-  TCHAR *value;
+  typedef LightString<TCHAR> Value;
 #else
-  const char *value;
+  typedef StringPointer<> Value;
 #endif
+
+  Value value;
 
 public:
 #ifdef _UNICODE
   UTF8ToWideConverter(const char *_value)
-    :value(ConvertUTF8ToWide(_value)) {}
-
-  ~UTF8ToWideConverter() {
-    delete[] value;
-  }
+    :value(Value::Donate(ConvertUTF8ToWide(_value))) {}
 #else
   UTF8ToWideConverter(const char *_value):value(_value) {
     assert(_value != nullptr);
@@ -83,18 +87,18 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != nullptr;
+    return !value.IsNull();
 #else
-    assert(value != nullptr);
+    assert(!value.IsNull());
 
-    return ValidateUTF8(value);
+    return ValidateUTF8(value.c_str());
 #endif
   }
 
   operator const TCHAR *() const {
-    assert(value != nullptr);
+    assert(!value.IsNull());
 
-    return value;
+    return value.c_str();
   }
 };
 
@@ -104,19 +108,17 @@ public:
  */
 class WideToUTF8Converter {
 #ifdef _UNICODE
-  char *value;
+  typedef LightString<> Value;
 #else
-  const char *value;
+  typedef StringPointer<> Value;
 #endif
+
+  Value value;
 
 public:
 #ifdef _UNICODE
   WideToUTF8Converter(const TCHAR *_value)
-    :value(ConvertWideToUTF8(_value)) {}
-
-  ~WideToUTF8Converter() {
-    delete[] value;
-  }
+    :value(Value::Donate(ConvertWideToUTF8(_value))) {}
 #else
   WideToUTF8Converter(const char *_value):value(_value) {
     assert(_value != nullptr);
@@ -129,18 +131,18 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != nullptr;
+    return !value.IsNull();
 #else
-    assert(value != nullptr);
+    assert(!value.IsNull());
 
     return true;
 #endif
   }
 
   operator const char *() const {
-    assert(value != nullptr);
+    assert(!value.IsNull());
 
-    return value;
+    return value.c_str();
   }
 };
 
