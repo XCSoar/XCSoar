@@ -27,9 +27,13 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Util/StringAPI.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringPointer.hxx"
+#include "Util/AllocatedString.hxx"
 #include "Util/Macros.hpp"
 
 #include <windef.h> /* for MAX_PATH */
+
+#include <algorithm>
 
 bool
 ProfileMap::GetPath(const char *key, TCHAR *value) const
@@ -55,14 +59,10 @@ ProfileMap::GetPathIsEqual(const char *key, const TCHAR *value) const
   return StringIsEqual(saved, value);
 }
 
-const TCHAR *
-ProfileMap::GetPathBase(const char *key) const
+gcc_pure
+static const TCHAR *
+BackslashBaseName(const TCHAR *p)
 {
-  TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
-      return nullptr;
-
-  const TCHAR *p = buffer;
   if (DIR_SEPARATOR != '\\') {
     const auto *backslash = StringFindLast(p, _T('\\'));
     if (backslash != NULL)
@@ -71,6 +71,36 @@ ProfileMap::GetPathBase(const char *key) const
 
   return BaseName(p);
 }
+
+#ifdef _UNICODE
+
+AllocatedString<TCHAR>
+ProfileMap::GetPathBase(const char *key) const
+{
+  TCHAR buffer[MAX_PATH];
+  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+      return nullptr;
+
+  const TCHAR *base = BackslashBaseName(buffer);
+  const auto size = StringLength(base) + 1;
+  TCHAR *result = new TCHAR[size];
+  std::copy_n(base, size, result);
+  return AllocatedString<TCHAR>::Donate(result);
+}
+
+#else
+
+StringPointer<TCHAR>
+ProfileMap::GetPathBase(const char *key) const
+{
+  const auto *path = Get(key);
+  if (path != nullptr)
+    path = BackslashBaseName(path);
+
+  return path;
+}
+
+#endif
 
 void
 ProfileMap::SetPath(const char *key, const TCHAR *value)

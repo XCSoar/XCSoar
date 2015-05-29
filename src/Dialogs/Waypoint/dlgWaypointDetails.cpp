@@ -54,6 +54,8 @@ Copyright_License {
 #include "Profile/Map.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "OS/RunFile.hpp"
+#include "Util/StringPointer.hxx"
+#include "Util/AllocatedString.hxx"
 
 #include <assert.h>
 #include <stdio.h>
@@ -667,9 +669,9 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
   }
 
   if (key != nullptr) {
-    const TCHAR *filename = Profile::map.GetPathBase(key);
-    if (filename != nullptr)
-      buffer.AppendFormat(_T(" (%s)"), filename);
+    const auto filename = Profile::map.GetPathBase(key);
+    if (!filename.IsNull())
+      buffer.AppendFormat(_T(" (%s)"), filename.c_str());
   }
 
   form->SetCaption(buffer);

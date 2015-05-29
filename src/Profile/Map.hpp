@@ -35,6 +35,8 @@ Copyright_License {
 #include <tchar.h>
 
 struct GeoPoint;
+template<typename T> class StringPointer;
+template<typename T> class AllocatedString;
 
 class ProfileMap : public std::map<std::string, std::string> {
   bool modified;
@@ -148,8 +150,12 @@ public:
   /**
    * Gets a path from the profile and return its base name only.
    */
+#ifdef _UNICODE
+  AllocatedString<TCHAR> GetPathBase(const char *key) const;
+#else
   gcc_pure
-  const TCHAR *GetPathBase(const char *key) const;
+  StringPointer<TCHAR> GetPathBase(const char *key) const;
+#endif
 
   void SetPath(const char *key, const TCHAR *value);
 

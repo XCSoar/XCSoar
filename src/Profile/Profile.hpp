@@ -32,6 +32,8 @@ Copyright_License {
 
 struct GeoPoint;
 class RGB8Color;
+template<typename T> class StringPointer;
+template<typename T> class AllocatedString;
 
 namespace Profile
 {

@@ -43,6 +43,8 @@ Copyright_License {
 #include "Compiler.h"
 #include "Form/DataField/Enum.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringPointer.hxx"
+#include "Util/AllocatedString.hxx"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
@@ -376,9 +378,9 @@ static void
 ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
                        const char *profile_key)
 {
-  const TCHAR *p = Profile::map.GetPathBase(profile_key);
-  if (p != nullptr)
-    df.replaceEnumText(i, p);
+  const auto p = Profile::map.GetPathBase(profile_key);
+  if (!p.IsNull())
+    df.replaceEnumText(i, p.c_str());
 }
 
 static DataField *
