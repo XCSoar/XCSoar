@@ -109,12 +109,11 @@ public:
   }
 
   /* virtual methods from class ObservationZonePoint */
-  virtual void SetLegs(const GeoPoint *previous,
-                       const GeoPoint *next) override;
-  virtual bool Equals(const ObservationZonePoint &other) const override;
+  void SetLegs(const GeoPoint *previous, const GeoPoint *next) override;
+  bool Equals(const ObservationZonePoint &other) const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
+  ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new SymmetricSectorZone(*this, _reference);
   }
 };

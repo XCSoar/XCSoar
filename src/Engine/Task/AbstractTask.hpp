@@ -424,11 +424,11 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual bool Update(const AircraftState &state_now,
-                      const AircraftState &state_last,
-                      const GlidePolar &glide_polar) override;
-  virtual bool UpdateIdle(const AircraftState &state_now,
-                          const GlidePolar &glide_polar) override;
+  bool Update(const AircraftState &state_now,
+              const AircraftState &state_last,
+              const GlidePolar &glide_polar) override;
+  bool UpdateIdle(const AircraftState &state_now,
+                  const GlidePolar &glide_polar) override;
 };
 
 #endif //ABSTRACTTASK_H

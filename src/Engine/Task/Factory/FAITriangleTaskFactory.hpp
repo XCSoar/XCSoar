@@ -49,7 +49,7 @@ public:
  * 
  * @return True if task is valid according to factory rules
  */
-  virtual bool Validate();
+  bool Validate() override;
 };
 
 #endif

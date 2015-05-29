@@ -154,18 +154,18 @@ protected:
 
 public:
   /* virtual methods from class ObservationZone */
-  virtual bool IsInSector(const GeoPoint &location) const override;
-  virtual OZBoundary GetBoundary() const override;
-  virtual fixed ScoreAdjustment() const override;
+  bool IsInSector(const GeoPoint &location) const override;
+  OZBoundary GetBoundary() const override;
+  fixed ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual bool Equals(const ObservationZonePoint &other) const override;
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
+  bool Equals(const ObservationZonePoint &other) const override;
+  ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new SectorZone(*this, _reference);
   }
 
   /* virtual methods from class CylinderZone */
-  virtual void SetRadius(fixed new_radius) override {
+  void SetRadius(fixed new_radius) override {
     CylinderZone::SetRadius(new_radius);
     UpdateSector();
   }

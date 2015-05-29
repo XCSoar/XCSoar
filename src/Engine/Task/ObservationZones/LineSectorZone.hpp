@@ -73,16 +73,16 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual bool TransitionConstraint(const GeoPoint &location,
-                                    const GeoPoint &last_location) const override {
+  bool TransitionConstraint(const GeoPoint &location,
+                            const GeoPoint &last_location) const override {
     return CylinderZone::IsInSector(location) &&
       CylinderZone::IsInSector(last_location);
   }
 
-  virtual fixed ScoreAdjustment() const override;
+  fixed ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
+  ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new LineSectorZone(*this, _reference);
   }
 };

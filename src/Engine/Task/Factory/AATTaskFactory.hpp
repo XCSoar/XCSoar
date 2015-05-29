@@ -52,8 +52,7 @@ public:
    * @return: point type compatible with current factory, most
    * similar to type of tp
    */
-  virtual gcc_pure
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
 };
 
 
