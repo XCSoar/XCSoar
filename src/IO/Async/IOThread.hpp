@@ -109,7 +109,7 @@ public:
 
 protected:
   /* virtual methods from Thread */
-  virtual void Run() override;
+  void Run() override;
 
   /* virtual methods from FileEventHandler */
   bool OnFileEvent(FileDescriptor fd, unsigned mask) override;

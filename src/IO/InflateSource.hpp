@@ -46,7 +46,7 @@ public:
 
 protected:
   /* virtual methods from class BufferedSource */
-  virtual unsigned Read(char *p, unsigned n) override;
+  unsigned Read(char *p, unsigned n) override;
 };
 
 #endif

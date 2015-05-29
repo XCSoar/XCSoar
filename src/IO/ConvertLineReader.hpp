@@ -44,9 +44,9 @@ public:
 
 public:
   /* virtual methods from class LineReader */
-  virtual TCHAR *ReadLine() override;
-  virtual long GetSize() const override;
-  virtual long Tell() const override;
+  TCHAR *ReadLine() override;
+  long GetSize() const override;
+  long Tell() const override;
 };
 
 #endif
