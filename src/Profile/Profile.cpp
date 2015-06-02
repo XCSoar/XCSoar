@@ -126,12 +126,6 @@ Profile::GetPathIsEqual(const char *key, const TCHAR *value)
   return map.GetPathIsEqual(key, value);
 }
 
-const TCHAR *
-Profile::GetPathBase(const char *key)
-{
-  return map.GetPathBase(key);
-}
-
 void
 Profile::SetPath(const char *key, const TCHAR *value)
 {

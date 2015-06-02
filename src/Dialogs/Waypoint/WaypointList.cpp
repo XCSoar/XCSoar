@@ -31,7 +31,9 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Prefix.hpp"
-#include "Profile/Profile.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
@@ -374,7 +376,7 @@ static void
 ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
                        const char *profile_key)
 {
-  const TCHAR *p = Profile::GetPathBase(profile_key);
+  const TCHAR *p = Profile::map.GetPathBase(profile_key);
   if (p != nullptr)
     df.replaceEnumText(i, p);
 }

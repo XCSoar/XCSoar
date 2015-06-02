@@ -50,7 +50,8 @@ Copyright_License {
 #include "Compiler.h"
 #include "Language/Language.hpp"
 #include "Waypoint/LastUsed.hpp"
-#include "Profile/Profile.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/Map.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "OS/RunFile.hpp"
 
@@ -666,7 +667,7 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
   }
 
   if (key != nullptr) {
-    const TCHAR *filename = Profile::GetPathBase(key);
+    const TCHAR *filename = Profile::map.GetPathBase(key);
     if (filename != nullptr)
       buffer.AppendFormat(_T(" (%s)"), filename);
   }
