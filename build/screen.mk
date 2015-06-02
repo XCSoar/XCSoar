@@ -224,8 +224,8 @@ SCREEN_LDLIBS = \
 	$(SDL_LDLIBS) \
 	$(GDI_LDLIBS) \
 	$(OPENGL_LDLIBS) \
-	$(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) \
 	$(FREETYPE_LDLIBS) \
+	$(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) \
 	$(WAYLAND_LDLIBS) \
 	$(EGL_LDLIBS) \
 	$(FB_LDLIBS)
@@ -235,8 +235,8 @@ $(eval $(call link-library,screen,SCREEN))
 SCREEN_LDADD += \
 	$(SDL_LDADD) \
 	$(FB_LDADD) \
-	$(LIBPNG_LDADD) $(LIBJPEG_LDADD) \
-	$(FREETYPE_LDADD)
+	$(FREETYPE_LDADD) \
+	$(LIBPNG_LDADD) $(LIBJPEG_LDADD)
 
 ifeq ($(USE_FB)$(VFB),yy)
 $(error USE_FB and VFB are mutually exclusive)
