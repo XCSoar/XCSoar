@@ -259,14 +259,9 @@ ifeq ($(TARGET),PI)
 endif
 
 ifeq ($(TARGET),PI2)
-  override TARGET = UNIX
-  TCPREFIX := arm-unknown-linux-gnueabi-
+  override TARGET = NEON
   PI ?= /opt/pi/root
   TARGET_IS_PI = y
-  TARGET_IS_ARM = y
-  TARGET_IS_ARMHF = y
-  ARMV7 = y
-  NEON = y
 endif
 
 ifeq ($(TARGET),CUBIE)
