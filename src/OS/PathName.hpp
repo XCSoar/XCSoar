@@ -28,6 +28,10 @@ Copyright_License {
 
 #include <tchar.h>
 
+gcc_pure gcc_nonnull_all
+bool
+IsAbsolutePath(const TCHAR *path);
+
 /**
  * Is this path a "base name", i.e. is there no path separate?
  * Behaviour is undefined when the string is empty.

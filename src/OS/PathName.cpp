@@ -22,12 +22,37 @@ Copyright_License {
 */
 
 #include "OS/PathName.hpp"
+#include "Compatibility/path.h"
 #include "Util/StringUtil.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/CharUtil.hpp"
 
 #include <assert.h>
 #include <string.h>
 #include <algorithm>
+
+#ifdef WIN32
+
+gcc_pure gcc_nonnull_all
+static constexpr bool
+IsDrive(const TCHAR *p)
+{
+  return IsAlphaASCII(p[0]) && p[1] == ':';
+}
+
+#endif
+
+bool
+IsAbsolutePath(const TCHAR *p)
+{
+#ifdef WIN32
+  if (IsDrive(p) && IsDirSeparator(p[2]))
+    return true;
+#endif
+
+  return IsDirSeparator(*p);
+
+}
 
 gcc_pure
 static const TCHAR *
