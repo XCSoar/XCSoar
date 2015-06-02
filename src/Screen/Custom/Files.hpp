@@ -26,24 +26,26 @@ Copyright_License {
 
 #include "Compiler.h"
 
-gcc_const
-const char *
+/* caller must free the return values with delete[] */
+
+gcc_const gcc_malloc
+char *
 FindDefaultFont();
 
-gcc_const
-const char *
+gcc_const gcc_malloc
+char *
 FindDefaultBoldFont();
 
-gcc_const
-const char *
+gcc_const gcc_malloc
+char *
 FindDefaultItalicFont();
 
-gcc_const
-const char *
+gcc_const gcc_malloc
+char *
 FindDefaultBoldItalicFont();
 
-gcc_const
-const char *
+gcc_const gcc_malloc
+char *
 FindDefaultMonospaceFont();
 
 #endif

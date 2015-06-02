@@ -123,6 +123,12 @@ Font::Initialise()
 void
 Font::Deinitialise()
 {
+  delete[] font_path;
+  delete[] bold_font_path;
+  delete[] italic_font_path;
+  delete[] bold_italic_font_path;
+  delete[] monospace_font_path;
+
   FreeType::Deinitialise();
 }
 
