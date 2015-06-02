@@ -325,21 +325,15 @@ the Cubieboard.
 \subsection{Compiling for Kobo E-book Readers}
 
 You need an ARM toolchain.  For example, you can use the Debian
-package \verb|g++-5-arm-linux-gnueabihf|:
+package \verb|g++-5-arm-linux-gnueabihf|.
 
-Download the
-\href{http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz}{Kobo
-  libraries} and unpack in \texttt{/opt}:
+First build the third-party libraries:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/\
-kobo/kobo-libs-2013-12-11.tar.xz
-\end{verbatim*}
-\begin{verbatim*}
-tar xJfC kobo-libs-2013-12-11.tar.xz /opt
+make TARGET=KOBO TCSUFFIX=-5 kobo-libs
 \end{verbatim*}
 
-To compile, run:
+To compile XCSoar, run:
 
 \begin{verbatim*}
 make TARGET=KOBO TCSUFFIX=-5

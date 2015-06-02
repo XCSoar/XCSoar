@@ -44,6 +44,10 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
 
+.PHONY: kobo-libs
+kobo-libs:
+	./kobo/build.py $(TARGET_OUTPUT_DIR) $(CC) $(CXX) $(AR) $(STRIP)
+
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \

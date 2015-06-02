@@ -274,7 +274,7 @@ endif
 ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
-  KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
+  KOBO = $(TARGET_OUTPUT_DIR)/lib/arm-linux-gnueabihf/root
   TARGET_IS_KOBO = y
 endif
 
