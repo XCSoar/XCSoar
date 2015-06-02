@@ -103,6 +103,7 @@ ScreenGlobalInit::~ScreenGlobalInit()
   OpenGL::Deinitialise();
 #endif
 
+  Font::Deinitialise();
 #ifdef USE_FREETYPE
   FreeType::Deinitialise();
 #endif

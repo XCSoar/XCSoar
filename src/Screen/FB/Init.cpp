@@ -60,6 +60,7 @@ ScreenGlobalInit::~ScreenGlobalInit()
   delete event_queue;
   event_queue = nullptr;
 
+  Font::Deinitialise();
 #ifdef USE_FREETYPE
   FreeType::Deinitialise();
 #endif

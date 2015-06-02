@@ -56,6 +56,7 @@ ScreenGlobalInit::~ScreenGlobalInit()
 
   OpenGL::Deinitialise();
 
+  Font::Deinitialise();
   FreeType::Deinitialise();
 
   ScreenDeinitialized();

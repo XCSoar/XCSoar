@@ -118,6 +118,11 @@ Font::Initialise()
   monospace_font_path = FindDefaultMonospaceFont();
 }
 
+void
+Font::Deinitialise()
+{
+}
+
 gcc_pure
 static unsigned
 GetCapitalHeight(FT_Face face)

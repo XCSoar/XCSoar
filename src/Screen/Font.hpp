@@ -75,10 +75,13 @@ public:
   Font(const Font &other) = delete;
   Font &operator=(const Font &other) = delete;
 
+#ifdef USE_FREETYPE
   /**
    * Perform global font initialisation.
    */
   static void Initialise();
+  static void Deinitialise();
+#endif
 
 public:
   bool
