@@ -250,7 +250,7 @@ endif
 
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
-  TCPREFIX := arm-unknown-linux-gnueabi-
+  TCPREFIX := arm-linux-gnueabihf-
   PI ?= /opt/pi/root
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
@@ -281,7 +281,7 @@ endif
 ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON
   override TARGET = UNIX
-  TCPREFIX = arm-unknown-linux-gnueabi-
+  TCPREFIX = arm-linux-gnueabihf-
   ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
   endif

@@ -291,17 +291,18 @@ specified using the \verb|DARWIN_LIBS| option.
 
 \subsection{Compiling for the Raspberry Pi}
 
-To compile, run:
+You need an ARM toolchain.  For example, you can use the Debian
+package \verb|g++-5-arm-linux-gnueabihf|:
 
 \begin{verbatim*}
-make TARGET=PI
+make TARGET=PI TCSUFFIX=-5
 \end{verbatim*}
 
 To optimize for the Raspberry Pi 2 (which has an ARMv7 with NEON
 instead of an ARMv6):
 
 \begin{verbatim*}
-make TARGET=PI2
+make TARGET=PI2 TCSUFFIX=-5
 \end{verbatim*}
 
 These targets are only used for cross-compiling on a (desktop)
@@ -323,29 +324,8 @@ the Cubieboard.
 
 \subsection{Compiling for Kobo E-book Readers}
 
-You need an ARM toolchain.  For example, you can use this toolchain
-that was built for Debian Wheezy on AMD64:
-
-\begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/\
-x-tools/x-tools-arm-amd64-2013-12-11.tar.xz
-\end{verbatim*}
-\begin{verbatim*}
-tar xJfC x-tools-arm-amd64-2013-12-11.tar.xz $HOME
-\end{verbatim*}
-\begin{verbatim*}
-export PATH=$HOME/x-tools/arm-unknown-linux-gnueabi/bin:$PATH
-\end{verbatim*}
-
-There are precompiled toolchains for
-\href{http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-amd64-2013-12-11.tar.xz}{amd64}
-and for
-\href{http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-i386-2013-12-11.tar.xz}{i386}.
-
-You can build your own toolchain with
-\href{http://crosstool-ng.org/}{crosstool-ng}.  The above toolchain
-was built with crosstool-ng and this configuration file:
-\url{http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.config}
+You need an ARM toolchain.  For example, you can use the Debian
+package \verb|g++-5-arm-linux-gnueabihf|:
 
 Download the
 \href{http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz}{Kobo
@@ -362,7 +342,7 @@ tar xJfC kobo-libs-2013-12-11.tar.xz /opt
 To compile, run:
 
 \begin{verbatim*}
-make TARGET=KOBO
+make TARGET=KOBO TCSUFFIX=-5
 \end{verbatim*}
 
 To build the kobo install file \texttt{KoboRoot.tgz}, you need the
@@ -375,7 +355,7 @@ apt-get install fakeroot ttf-bitstream-vera
 Then compile using this command:
 
 \begin{verbatim*}
-make TARGET=KOBO output/KOBO/KoboRoot.tgz
+make TARGET=KOBO TCSUFFIX=-5 output/KOBO/KoboRoot.tgz
 \end{verbatim*}
 
 \subsubsection{Building USB-OTG Kobo Kernel}
