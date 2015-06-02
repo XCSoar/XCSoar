@@ -105,6 +105,8 @@ NextChar(const TCHAR *p)
 void
 Font::Initialise()
 {
+  FreeType::Initialise();
+
   if (IsMono()) {
     /* disable anti-aliasing */
     load_flags |= FT_LOAD_TARGET_MONO;
@@ -121,6 +123,7 @@ Font::Initialise()
 void
 Font::Deinitialise()
 {
+  FreeType::Deinitialise();
 }
 
 gcc_pure

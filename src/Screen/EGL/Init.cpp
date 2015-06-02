@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/FreeType/Init.hpp"
 
 #ifdef USE_VIDEOCORE
 #include "bcm_host.h"
@@ -41,7 +40,6 @@ ScreenGlobalInit::ScreenGlobalInit()
 
   OpenGL::Initialise();
 
-  FreeType::Initialise();
   Font::Initialise();
 
   event_queue = new EventQueue();
@@ -57,7 +55,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
   OpenGL::Deinitialise();
 
   Font::Deinitialise();
-  FreeType::Deinitialise();
 
   ScreenDeinitialized();
 }

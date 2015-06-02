@@ -131,8 +131,6 @@ int main(int argc, char **argv)
      this program */
   FreeType::mono = false;
 
-  FreeType::Initialise();
-
   Font::Initialise();
   Display::Rotate(DisplayOrientation::PORTRAIT);
 

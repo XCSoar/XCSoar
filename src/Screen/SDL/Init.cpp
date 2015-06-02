@@ -32,10 +32,6 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #endif
 
-#ifdef USE_FREETYPE
-#include "Screen/FreeType/Init.hpp"
-#endif
-
 #include <SDL.h>
 #if SDL_MAJOR_VERSION >= 2
 #include <SDL_hints.h>
@@ -83,10 +79,6 @@ ScreenGlobalInit::ScreenGlobalInit()
   OpenGL::Initialise();
 #endif
 
-#ifdef USE_FREETYPE
-  FreeType::Initialise();
-#endif
-
   Font::Initialise();
 
   event_queue = new EventQueue();
@@ -104,9 +96,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 #endif
 
   Font::Deinitialise();
-#ifdef USE_FREETYPE
-  FreeType::Deinitialise();
-#endif
 
   ::SDL_Quit();
 
