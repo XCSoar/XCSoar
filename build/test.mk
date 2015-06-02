@@ -727,6 +727,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunIGCWriter \
 	RunFlightLogger RunFlyingComputer \
 	RunCirclingWind RunWindEKF RunWindComputer \
+	RunExternalWind \
 	RunTask \
 	LoadImage ViewImage \
 	RunCanvas RunMapWindow \
@@ -1564,6 +1565,14 @@ RUN_WIND_COMPUTER_SOURCES = \
 RUN_WIND_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_COMPUTER_DEPENDS = GEO MATH UTIL TIME
 $(eval $(call link-program,RunWindComputer,RUN_WIND_COMPUTER))
+
+RUN_EXTERNAL_WIND_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(TEST_SRC_DIR)/RunExternalWind.cpp
+RUN_EXTERNAL_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_EXTERNAL_WIND_DEPENDS = GEO MATH UTIL TIME
+$(eval $(call link-program,RunExternalWind,RUN_EXTERNAL_WIND))
 
 RUN_TASK_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
