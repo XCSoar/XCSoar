@@ -370,19 +370,25 @@ CreateDirectionDataField(DataFieldListener *listener)
   return df;
 }
 
+static void
+ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
+                       const char *profile_key)
+{
+  const TCHAR *p = Profile::GetPathBase(profile_key);
+  if (p != nullptr)
+    df.replaceEnumText(i, p);
+}
+
 static DataField *
 CreateTypeDataField(DataFieldListener *listener)
 {
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumTexts(type_filter_items);
 
-  const TCHAR *p = Profile::GetPathBase(ProfileKeys::WaypointFile);
-  if (p != nullptr)
-    df->replaceEnumText((unsigned)TypeFilter::FILE_1, p);
-
-  p = Profile::GetPathBase(ProfileKeys::AdditionalWaypointFile);
-  if (p != nullptr)
-    df->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
+  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE_1,
+                         ProfileKeys::WaypointFile);
+  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE_2,
+                         ProfileKeys::AdditionalWaypointFile);
 
   df->Set((int)dialog_state.type_index);
   return df;
