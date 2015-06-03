@@ -73,16 +73,26 @@ static const char *const all_font_paths[] = {
 #elif defined(WIN32) && !defined(HAVE_POSIX)
   /* just for the experimental WINSDL target */
   "arial.ttf",
-#elif defined(KOBO)
-  "DejaVuSansCondensed.ttf",
-  "Vera.ttf",
 #else
+
+#ifndef KOBO
   "ttf-dejavu/DejaVuSansCondensed.ttf",
   "dejavu/DejaVuSansCondensed.ttf",
+#endif
   "DejaVuSansCondensed.ttf",
+
+#ifndef KOBO
   "ttf-droid/DroidSans.ttf",
   "droid/DroidSans.ttf",
+#endif
   "DroidSans.ttf",
+
+#ifndef KOBO
+  "ttf-bitstream-vera/Vera.ttf",
+#endif
+  "Vera.ttf",
+
+#ifndef KOBO
   "msttcorefonts/Arial.ttf",
   "corefonts/arial.ttf",
   "freefont/FreeSans.ttf",
@@ -90,6 +100,9 @@ static const char *const all_font_paths[] = {
   "unifont/unifont.ttf",
   "corefonts/tahoma.ttf",
 #endif
+
+#endif
+
   nullptr
 };
 
@@ -105,20 +118,32 @@ static const char *const all_bold_font_paths[] = {
   "Arial Narrow Bold.ttf",
   "Arial Bold.ttf",
 #endif
-#elif defined(KOBO)
-  "DejaVuSansCondensed-Bold.ttf",
-  "VeraBd.ttf",
-#elif defined(HAVE_POSIX)
+#else
+
+#ifndef KOBO
   "ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
   "dejavu/DejaVuSansCondensed-Bold.ttf",
+#endif
   "DejaVuSansCondensed-Bold.ttf",
+
+#ifndef KOBO
   "ttf-droid/DroidSans-Bold.ttf",
   "droid/DroidSans-Bold.ttf",
+#endif
   "DroidSans-Bold.ttf",
+
+#ifndef KOBO
+  "ttf-bitstream-vera/VeraBd.ttf",
+#endif
+  "VeraBd.ttf",
+
+#ifndef KOBO
   "msttcorefonts/Arial_Bold.ttf",
   "corefonts/arialbd.ttf",
   "freefont/FreeSansBold.ttf",
   "freefont-ttf/FreeSansBold.ttf",
+#endif
+
 #endif
   nullptr
 };
@@ -134,18 +159,26 @@ static const char *const all_italic_font_paths[] = {
   "Georgia Italic.ttf",
   "Arial Narrow Italic.ttf",
 #endif
-#elif defined(KOBO)
-  "DejaVuSansCondensed-Oblique.ttf",
-  "VeraIt.ttf",
-#elif defined(HAVE_POSIX)
+#else
+
+#ifndef KOBO
   "ttf-dejavu/DejaVuSansCondensed-Oblique.ttf",
   "dejavu/DejaVuSansCondensed-Oblique.ttf",
+#endif
   "DejaVuSansCondensed-Oblique.ttf",
+
+#ifndef KOBO
   "ttf-bitstream-vera/VeraIt.ttf",
+#endif
+  "VeraIt.ttf",
+
+#ifndef KOBO
   "msttcorefonts/Arial_Italic.ttf",
   "corefonts/ariali.ttf",
   "freefont/FreeSansOblique.ttf",
   "freefont-ttf/FreeSansOblique.ttf",
+#endif
+
 #endif
   nullptr
 };
@@ -161,18 +194,26 @@ static const char *const all_bold_italic_font_paths[] = {
   "Georgia Bold Italic.ttf",
   "Arial Narrow Bold Italic.ttf",
 #endif
-#elif defined(KOBO)
-  "DejaVuSansCondensed-BoldOblique.ttf",
-  "VeraBI.ttf",
-#elif defined(HAVE_POSIX)
+#else
+
+#ifndef KOBO
   "ttf-dejavu/DejaVuSansCondensed-BoldOblique.ttf",
   "dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+#endif
   "DejaVuSansCondensed-BoldOblique.ttf",
+
+#ifndef KOBO
   "ttf-bitstream-vera/VeraBI.ttf",
+#endif
+  "VeraBI.ttf",
+
+#ifndef KOBO
   "msttcorefonts/Arial_Bold_Italic.ttf",
   "corefonts/arialbi.ttf",
   "freefont/FreeSansBoldOblique.ttf",
   "freefont-ttf/FreeSansBoldOblique.ttf",
+#endif
+
 #endif
   nullptr
 };
@@ -184,18 +225,30 @@ static const char *const all_monospace_font_paths[] = {
 #else
   "Courier New.ttf",
 #endif
-#elif defined(KOBO)
-  "DejaVuSansMono.ttf",
-  "VeraMono.ttf",
 #else
+
+#ifndef KOBO
   "ttf-dejavu/DejaVuSansMono.ttf",
   "dejavu/DejaVuSansMono.ttf",
+#endif
   "DejaVuSansMono.ttf",
+
+#ifndef KOBO
   "ttf-droid/DroidSansMono.ttf",
   "droid/DroidSansMono.ttf",
+#endif
   "DroidSansMono.ttf",
+
+#ifndef KOBO
+  "ttf-bitstream-vera/VeraMono.ttf",
+#endif
+  "VeraMono.ttf",
+
+#ifndef KOBO
   "msttcorefonts/couri.ttf",
   "freefont/FreeMono.ttf",
+#endif
+
 #endif
   nullptr
 };
