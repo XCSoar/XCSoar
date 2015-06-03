@@ -23,38 +23,25 @@ Copyright_License {
 
 #include "StatusMessage.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/Macros.hpp"
+
+#include <assert.h>
 
 #include <assert.h>
 
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
-  { nullptr }
 };
-
-StatusMessageList::StatusMessageList()
-{
-  // DEFAULT - 0 is loaded as default, and assumed to exist
-  StatusMessage &first = list.append();
-  first.key = _T("DEFAULT");
-  first.visible = true;
-  first.sound = _T("IDR_WAV_DRIP");
-  first.delay_ms = 2500; // 2.5 s
-
-  // Load up other defaults - allow overwrite in config file
-  const StatusMessage *src = &default_status_messages[0];
-  while (src->key != NULL)
-    list.append(*src++);
-}
 
 const StatusMessage &
 StatusMessageList::Find(const TCHAR *key) const
 {
-  assert(!list.empty());
+  assert(ARRAY_SIZE(default_status_messages) > 0);
 
-  unsigned i = list.size() - 1;
+  unsigned i = ARRAY_SIZE(default_status_messages) - 1;
   for (; i > 0; --i)
-    if (StringIsEqual(key, list[i].key))
+    if (StringIsEqual(key, default_status_messages[i].key))
       break;
 
-  return list[i];
+  return default_status_messages[i];
 }

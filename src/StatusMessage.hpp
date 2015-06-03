@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_STATUS_MESSAGE_H
 #define XCSOAR_STATUS_MESSAGE_H
 
-#include "Util/StaticArray.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -60,11 +59,7 @@ struct StatusMessage {
  * Class to manage a list of active and recent status messages
  */
 class StatusMessageList {
-  StaticArray<StatusMessage, 1000> list;
-
 public:
-  StatusMessageList();
-
   gcc_pure
   const StatusMessage &Find(const TCHAR *key) const;
 };
