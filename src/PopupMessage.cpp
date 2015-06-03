@@ -329,10 +329,7 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 {
   ScopeLock protect(mutex);
 
-  StatusMessage msg = status_messages.First();
-  const StatusMessage *found = status_messages.Find(text);
-  if (found != NULL)
-    msg = *found;
+  const auto &msg = status_messages.Find(text);
 
   if (enable_sound && msg.sound != NULL)
     PlayResource(msg.sound);

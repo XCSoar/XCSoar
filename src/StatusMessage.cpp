@@ -24,6 +24,8 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "Util/StringAPI.hpp"
 
+#include <assert.h>
+
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
   { nullptr }
@@ -44,12 +46,15 @@ StatusMessageList::StatusMessageList()
     list.append(*src++);
 }
 
-const StatusMessage *
+const StatusMessage &
 StatusMessageList::Find(const TCHAR *key) const
 {
-  for (int i = list.size() - 1; i > 0; i--)
-    if (StringIsEqual(key, list[i].key))
-      return &list[i];
+  assert(!list.empty());
 
-  return NULL;
+  unsigned i = list.size() - 1;
+  for (; i > 0; --i)
+    if (StringIsEqual(key, list[i].key))
+      break;
+
+  return list[i];
 }

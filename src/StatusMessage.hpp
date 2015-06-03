@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_STATUS_MESSAGE_H
 
 #include "Util/StaticArray.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -64,11 +65,8 @@ class StatusMessageList {
 public:
   StatusMessageList();
 
-  const StatusMessage &First() const {
-    return list[0];
-  }
-
-  const StatusMessage *Find(const TCHAR *key) const;
+  gcc_pure
+  const StatusMessage &Find(const TCHAR *key) const;
 };
 
 #endif
