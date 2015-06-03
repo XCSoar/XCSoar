@@ -22,16 +22,7 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Util/StringAPI.hpp"
-#include "Util/EscapeBackslash.hpp"
-#include "Util/NumberParser.hpp"
-#include "IO/ConfiguredFile.hpp"
-#include "IO/LineReader.hpp"
-
-#include <memory>
-
-#include <stdio.h>
 
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
@@ -51,73 +42,6 @@ StatusMessageList::StatusMessageList()
   const StatusMessage *src = &default_status_messages[0];
   while (src->key != NULL)
     list.append(*src++);
-}
-
-void
-StatusMessageList::LoadFile()
-{
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::StatusFile));
-  if (reader)
-    LoadFile(*reader);
-}
-
-static bool
-parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
-{
-  auto *separator = StringFind(buffer, '=');
-  if (separator == NULL || separator == buffer)
-    return false;
-
-  *separator = _T('\0');
-
-  key = buffer;
-  value = separator + 1;
-
-  return true;
-}
-
-void
-StatusMessageList::LoadFile(TLineReader &reader)
-{
-  // Init first entry
-  StatusMessage current;
-  current.Clear();
-
-  /* Read from the file */
-  TCHAR *buffer;
-  const TCHAR *key, *value;
-  while ((buffer = reader.ReadLine()) != NULL) {
-    // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
-      // Global counter (only if the last entry had some data)
-      if (!current.IsEmpty()) {
-        list.append(current);
-        current.Clear();
-
-        if (list.full())
-          break;
-      }
-    } else {
-      if (StringIsEqual(key, _T("key"))) {
-        if (current.key == NULL)
-          current.key = UnescapeBackslash(value);
-      } else if (StringIsEqual(key, _T("sound"))) {
-        if (current.sound == NULL)
-          current.sound = UnescapeBackslash(value);
-      } else if (StringIsEqual(key, _T("delay"))) {
-        TCHAR *endptr;
-        unsigned ms = ParseUnsigned(value, &endptr);
-        if (endptr > value)
-          current.delay_ms = ms;
-      } else if (StringIsEqual(key, _T("hide"))) {
-        if (StringIsEqual(value, _T("yes")))
-          current.visible = false;
-      }
-    }
-  }
-
-  if (!current.IsEmpty())
-    list.append(current);
 }
 
 const StatusMessage *

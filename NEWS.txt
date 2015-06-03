@@ -32,6 +32,7 @@ Version 6.8 - not yet released
 * user interface
   - allow horizontal speeds in m/s
   - download data files from site configuration
+  - remove support for custom status files
   - profile manager
   - password-protected profiles (#851)
   - checklist remembers last opened list (#3110)

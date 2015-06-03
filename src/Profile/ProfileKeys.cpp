@@ -88,7 +88,6 @@ const char WaypointFile[] = "WPFile"; // pL
 const char AdditionalWaypointFile[] = "AdditionalWPFile"; // pL
 const char WatchedWaypointFile[] = "WatchedWPFile"; // pL
 const char LanguageFile[] = "LanguageFile"; // pL
-const char StatusFile[] = "StatusFile"; // pL
 const char InputFile[] = "InputFile"; // pL
 const char PilotName[] = "PilotName";
 const char AircraftType[] = "AircraftType";

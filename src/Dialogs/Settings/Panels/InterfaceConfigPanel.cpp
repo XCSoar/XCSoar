@@ -52,7 +52,6 @@ enum ControlIndex {
 #ifndef HAVE_NATIVE_GETTEXT
   LanguageFile,
 #endif
-  StatusFile,
   MenuTimeout,
   TextInput,
   HapticFeedback
@@ -161,12 +160,6 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 #endif /* !HAVE_NATIVE_GETTEXT */
 
-  AddFile(_("Status message"),
-          _("The status file can be used to define sounds to be played when certain "
-            "events occur, and how long various status messages will appear on screen."),
-          ProfileKeys::StatusFile, _T("*.xcs\0"));
-  SetExpertRow(StatusFile);
-
   AddTime(_("Menu timeout"),
           _("This determines how long menus will appear on screen if the user does not make any button "
             "presses or interacts with the computer."),
@@ -267,9 +260,6 @@ InterfaceConfigPanel::Save(bool &_changed)
     }
   }
 #endif
-
-  if (SaveValueFileReader(StatusFile, ProfileKeys::StatusFile))
-    require_restart = changed = true;
 
   unsigned menu_timeout = GetValueInteger(MenuTimeout) * 2;
   if (settings.menu_timeout != menu_timeout) {

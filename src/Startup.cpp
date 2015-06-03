@@ -62,7 +62,6 @@ Copyright_License {
 #include "Computer/GlideComputerInterface.hpp"
 #include "Computer/Events.hpp"
 #include "Monitor/AllMonitors.hpp"
-#include "StatusMessage.hpp"
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
@@ -281,7 +280,6 @@ Startup()
 
   ReadLanguageFile();
 
-  CommonInterface::status_messages.LoadFile();
   InputEvents::readFile();
 
   // Initialize DeviceBlackboard

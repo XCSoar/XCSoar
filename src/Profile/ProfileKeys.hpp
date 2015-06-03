@@ -61,7 +61,6 @@ extern const char AdditionalAirspaceFile[];
 extern const char AirfieldFile[];
 extern const char PolarFile[];
 extern const char LanguageFile[];
-extern const char StatusFile[];
 extern const char InputFile[];
 extern const char AltMode[];
 extern const char ClipAlt[];

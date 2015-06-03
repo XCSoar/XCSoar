@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class TLineReader;
-
 /**
  * Struct used to store status message items
  */
@@ -65,9 +63,6 @@ class StatusMessageList {
 
 public:
   StatusMessageList();
-
-  void LoadFile();
-  void LoadFile(TLineReader &reader);
 
   const StatusMessage &First() const {
     return list[0];
