@@ -189,6 +189,7 @@ static const char *const all_monospace_font_paths[] = {
   "VeraMono.ttf",
 #else
   "ttf-dejavu/DejaVuSansMono.ttf",
+  "dejavu/DejaVuSansMono.ttf",
   "DejaVuSansMono.ttf",
   "ttf-droid/DroidSansMono.ttf",
   "droid/DroidSansMono.ttf",
