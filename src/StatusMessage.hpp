@@ -46,14 +46,14 @@ struct StatusMessage {
   unsigned delay_ms;
 
   void Clear() {
-    key = NULL;
-    sound = NULL;
+    key = nullptr;
+    sound = nullptr;
     delay_ms = 2500;
     visible = true;
   }
 
   bool IsEmpty() const {
-    return key == NULL;
+    return key == nullptr;
   }
 };
 

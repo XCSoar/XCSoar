@@ -35,7 +35,7 @@ Copyright_License {
 
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
-  { NULL }
+  { nullptr }
 };
 
 StatusMessageList::StatusMessageList()
