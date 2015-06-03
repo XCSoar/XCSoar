@@ -128,7 +128,7 @@ PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 PixelRect
-PopupMessage::GetRect(UPixelScalar height) const
+PopupMessage::GetRect(unsigned height) const
 {
   PixelRect rthis;
 
@@ -139,12 +139,11 @@ PopupMessage::GetRect(UPixelScalar height) const
     rthis.right = Layout::FastScale(206);
     // TODO code: this shouldn't be hard-coded
   } else {
-    PixelScalar width =// min((rc.right-rc.left)*0.8,tsize.cx);
-      (PixelScalar)((rc.right - rc.left) * 0.9);
-    PixelScalar midx = (rc.right + rc.left) / 2;
-    PixelScalar midy = (rc.bottom + rc.top) / 2;
-    PixelScalar h1 = height / 2;
-    PixelScalar h2 = height - h1;
+    const unsigned width((rc.right - rc.left) * 0.9);
+    const int midx = (rc.right + rc.left) / 2;
+    const int midy = (rc.bottom + rc.top) / 2;
+    const int h1 = height / 2;
+    const int h2 = height - h1;
     rthis.left = midx-width/2;
     rthis.right = midx+width/2;
     rthis.top = midy-h1;
@@ -162,12 +161,12 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
   } else {
     SetText(text);
 
-    const UPixelScalar font_height = Fonts::dialog_bold.GetHeight();
+    const unsigned font_height = Fonts::dialog_bold.GetHeight();
 
     unsigned n_lines = max(n_visible, max(1u, GetRowCount()));
 
-    PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
-                             (PixelScalar)(font_height * (n_lines + 1)));
+    int height = min(int((rc.bottom-rc.top) * 0.8),
+                     int(font_height * (n_lines + 1)));
 
     PixelRect rthis = GetRect(height);
 #ifdef USE_GDI
