@@ -21,7 +21,8 @@ Homepage: http://www.xcsoar.org/
 
 Package: xcsoar
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ttf-dejavu
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ fonts-dejavu | ttf-dejavu
 Suggests: xcsoar-doc, vali-xcs
 Description: tactical glide computer
  XCSoar is a tactical glide computer.  It was initially developed for
