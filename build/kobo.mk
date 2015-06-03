@@ -71,7 +71,8 @@ fi)
 BITSTREAM_VERA_NAMES = Vera VeraBd VeraIt VeraBI VeraMono
 BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA_NAMES))
 
-SYSROOT = $(shell $(CC) -print-sysroot)
+# from Debian package libc6-armhf-cross
+SYSROOT = /usr/arm-linux-gnueabihf
 
 # install our version of the system libraries in /opt/xcsoar/lib; this
 # is necessary because:
@@ -83,6 +84,10 @@ KOBO_SYS_LIB_NAMES = libc.so.6 libm.so.6 libpthread.so.0 librt.so.1 \
 	libdl.so.2 \
 	libresolv.so.2 libnss_dns.so.2 libnss_files.so.2 \
 	ld-linux-armhf.so.3
+
+# from Debian package libgcc1-armhf-cross
+KOBO_SYS_LIB_NAMES += libgcc_s.so.1
+
 KOBO_SYS_LIB_PATHS = $(addprefix $(SYSROOT)/lib/,$(KOBO_SYS_LIB_NAMES))
 
 KOBO_KERNEL_DIR = /opt/kobo/kernel
