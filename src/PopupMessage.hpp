@@ -53,8 +53,8 @@ class PopupMessage : public LargeTextWindow
 {
 public:
   enum Type {
-    MSG_UNKNOWN = 0,
-    MSG_USERINTERFACE = 2,
+    MSG_UNKNOWN,
+    MSG_USERINTERFACE,
   };
 
 private:
