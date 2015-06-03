@@ -135,8 +135,6 @@ AfterStartup()
 {
   StartupLogFreeRamAndStorage();
 
-  CommonInterface::status_messages.Startup(true);
-
   if (is_simulator()) {
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
   } else {
@@ -167,8 +165,6 @@ AfterStartup()
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
-
-  CommonInterface::status_messages.Startup(false);
 }
 
 /**

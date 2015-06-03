@@ -39,7 +39,6 @@ static constexpr StatusMessage default_status_messages[] = {
 };
 
 StatusMessageList::StatusMessageList()
-  :old_delay(2000)
 {
   // DEFAULT - 0 is loaded as default, and assumed to exist
   StatusMessage &first = list.append();
@@ -119,18 +118,6 @@ StatusMessageList::LoadFile(TLineReader &reader)
 
   if (!current.IsEmpty())
     list.append(current);
-}
-
-void
-StatusMessageList::Startup(bool first)
-{
-  if (first) {
-    // NOTE: Must show errors AFTER all windows ready
-    old_delay = list[0].delay_ms;
-    list[0].delay_ms = 20000; // 20 seconds
-  } else {
-    list[0].delay_ms = old_delay;
-  }
 }
 
 const StatusMessage *

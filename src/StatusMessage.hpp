@@ -62,15 +62,12 @@ struct StatusMessage {
  */
 class StatusMessageList {
   StaticArray<StatusMessage, 1000> list;
-  int old_delay;
 
 public:
   StatusMessageList();
 
   void LoadFile();
   void LoadFile(TLineReader &reader);
-
-  void Startup(bool first);
 
   const StatusMessage &First() const {
     return list[0];
