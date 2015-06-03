@@ -24,6 +24,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Startup.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "PopupMessage.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
@@ -138,7 +139,7 @@ MainWindow::MainWindow()
    suppress_traffic_gauge(false), force_traffic_gauge(false),
    thermal_assistant(*this),
    dragging(false),
-   popup(*this, CommonInterface::GetUISettings()),
+   popup(nullptr),
    timer(*this),
    FullScreen(false),
 #ifndef ENABLE_OPENGL
@@ -272,7 +273,8 @@ MainWindow::InitialiseConfigured()
   map->SetUIState(CommonInterface::GetUIState());
   map->Create(*this, map_rect);
 
-  popup.Create(rc, Fonts::dialog_bold);
+  popup = new PopupMessage(*this, ui_settings);
+  popup->Create(rc, Fonts::dialog_bold);
 }
 
 void
@@ -281,7 +283,9 @@ MainWindow::Deinitialise()
   InfoBoxManager::Destroy();
   ButtonLabel::Destroy();
 
-  popup.Destroy();
+  popup->Destroy();
+  delete popup;
+  popup = nullptr;
 
   // During destruction of GlueMapWindow WM_SETFOCUS gets called for
   // MainWindow which tries to set the focus to GlueMapWindow. Prevent
@@ -362,8 +366,8 @@ MainWindow::ReinitialiseLayout()
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
-  popup.Destroy();
-  popup.Create(rc, Fonts::dialog_bold);
+  popup->Destroy();
+  popup->Create(rc, Fonts::dialog_bold);
 
   ReinitialiseLayout_vario(ib_layout);
 

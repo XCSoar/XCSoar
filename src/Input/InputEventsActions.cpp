@@ -65,6 +65,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Markers/ProtectedMarkers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "MainWindow.hpp"
+#include "PopupMessage.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -192,7 +193,8 @@ void
 InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
 {
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
-  CommonInterface::main_window->popup.Acknowledge();
+  if (CommonInterface::main_window->popup != nullptr)
+    CommonInterface::main_window->popup->Acknowledge();
 }
 
 // Mode
@@ -393,7 +395,8 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 {
   // new interface
   // TODO enhancement: display only by type specified in misc field
-  CommonInterface::main_window->popup.Repeat();
+  if (CommonInterface::main_window->popup != nullptr)
+    CommonInterface::main_window->popup->Repeat();
 }
 
 // NearestWaypointDetails

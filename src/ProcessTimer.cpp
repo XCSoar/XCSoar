@@ -35,6 +35,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Time/PeriodClock.hpp"
 #include "MainWindow.hpp"
+#include "PopupMessage.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
@@ -64,7 +65,8 @@ static void
 MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
-  if (CommonInterface::main_window->popup.Render())
+  if (CommonInterface::main_window->popup != nullptr &&
+      CommonInterface::main_window->popup->Render())
     // turn screen on if blanked and receive a new message
     ResetUserIdle();
 }

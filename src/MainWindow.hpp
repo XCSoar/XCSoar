@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Timer.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
@@ -49,6 +48,7 @@ class Widget;
 class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
+class PopupMessage;
 
 /**
  * The XCSoar main window.
@@ -119,7 +119,7 @@ class MainWindow : public SingleWindow {
   GestureManager gestures;
 
 public:
-  PopupMessage popup;
+  PopupMessage *popup;
 
 private:
   WindowTimer timer;

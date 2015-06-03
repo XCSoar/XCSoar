@@ -22,11 +22,13 @@ Copyright_License {
 */
 
 #include "Message.hpp"
+#include "PopupMessage.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 
 void
 Message::AddMessage(const TCHAR* text, const TCHAR *data)
 {
-  CommonInterface::main_window->popup.AddMessage(text, data);
+  if (CommonInterface::main_window->popup != nullptr)
+    CommonInterface::main_window->popup->AddMessage(text, data);
 }
