@@ -44,13 +44,8 @@ struct StatusMessage {
   unsigned delay_ms;
 };
 
-/**
- * Class to manage a list of active and recent status messages
- */
-class StatusMessageList {
-public:
-  gcc_pure
-  const StatusMessage &Find(const TCHAR *key) const;
-};
+gcc_pure
+const StatusMessage &
+FindStatusMessage(const TCHAR *key);
 
 #endif

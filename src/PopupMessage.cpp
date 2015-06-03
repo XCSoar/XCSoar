@@ -91,10 +91,8 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer, unsigned now)
   return true;
 }
 
-PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
-                           SingleWindow &_parent, const UISettings &_settings)
-  :status_messages(_status_messages),
-   parent(_parent),
+PopupMessage::PopupMessage(SingleWindow &_parent, const UISettings &_settings)
+  :parent(_parent),
    settings(_settings),
    n_visible(0),
    enable_sound(true)
@@ -329,7 +327,7 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 {
   ScopeLock protect(mutex);
 
-  const auto &msg = status_messages.Find(text);
+  const auto &msg = FindStatusMessage(text);
 
   if (enable_sound && msg.sound != NULL)
     PlayResource(msg.sound);

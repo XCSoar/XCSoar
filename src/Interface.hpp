@@ -30,7 +30,6 @@ Copyright_License {
 
 struct UIState;
 class MainWindow;
-class StatusMessageList;
 
 /** 
  * Class to hold data/methods accessible by all interface subsystems
@@ -47,7 +46,6 @@ namespace CommonInterface {
   }
 
   // window.. make this protected TODO so have to subclass to get access
-  extern StatusMessageList status_messages;
   extern MainWindow *main_window;
 
   static inline bool MovementDetected() {

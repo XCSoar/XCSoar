@@ -33,8 +33,9 @@ static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
 };
 
+gcc_pure
 const StatusMessage &
-StatusMessageList::Find(const TCHAR *key) const
+FindStatusMessage(const TCHAR *key)
 {
   assert(ARRAY_SIZE(default_status_messages) > 0);
 

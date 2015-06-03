@@ -128,7 +128,7 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
   return result;
 }
 
-MainWindow::MainWindow(const StatusMessageList &status_messages)
+MainWindow::MainWindow()
   :look(nullptr),
 #ifdef HAVE_SHOW_MENU_BUTTON
    show_menu_button(nullptr),
@@ -138,7 +138,7 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
    suppress_traffic_gauge(false), force_traffic_gauge(false),
    thermal_assistant(*this),
    dragging(false),
-   popup(status_messages, *this, CommonInterface::GetUISettings()),
+   popup(*this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
 #ifndef ENABLE_OPENGL

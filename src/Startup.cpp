@@ -199,7 +199,7 @@ Startup()
     style.Resizable();
 
   MainWindow *const main_window = CommonInterface::main_window =
-    new MainWindow(CommonInterface::status_messages);
+    new MainWindow();
   main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;

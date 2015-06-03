@@ -33,7 +33,6 @@ Copyright_License {
 struct UISettings;
 class Font;
 class SingleWindow;
-class StatusMessageList;
 
 /**
  * - Single window, created in GUI thread.
@@ -103,8 +102,6 @@ private:
     bool AppendTo(StaticString<2000> &buffer, unsigned now);
   };
 
-  const StatusMessageList &status_messages;
-
   SingleWindow &parent;
   PixelRect rc; // maximum message size
 
@@ -121,8 +118,7 @@ private:
   bool enable_sound;
 
 public:
-  PopupMessage(const StatusMessageList &_status_messages,
-               SingleWindow &_parent, const UISettings &settings);
+  PopupMessage(SingleWindow &_parent, const UISettings &settings);
 
   void Create(const PixelRect _rc, const Font &font);
 

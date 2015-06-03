@@ -46,7 +46,6 @@ struct UIState;
 struct Look;
 class GlueMapWindow;
 class Widget;
-class StatusMessageList;
 class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
@@ -143,7 +142,7 @@ private:
   bool airspace_warning_pending;
 
 public:
-  MainWindow(const StatusMessageList &status_messages);
+  MainWindow();
   virtual ~MainWindow();
 
 #ifdef USE_GDI

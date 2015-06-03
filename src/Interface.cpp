@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Interface.hpp"
-#include "StatusMessage.hpp"
 #include "UIState.hpp"
 
 UIState CommonInterface::Private::ui_state;
@@ -31,5 +30,4 @@ bool CommonInterface::Private::movement_detected = false;
 
 InterfaceBlackboard CommonInterface::Private::blackboard;
 
-StatusMessageList CommonInterface::status_messages;
 MainWindow *CommonInterface::main_window;
