@@ -24,14 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_POPUP_MESSAGE_H
 #define XCSOAR_POPUP_MESSAGE_H
 
+#include "Screen/PaintWindow.hpp"
+#include "Renderer/TextRenderer.hpp"
 #include "Thread/Mutex.hpp"
 #include "Util/StaticString.hxx"
-#include "Screen/LargeTextWindow.hpp"
 
 #include <tchar.h>
 
 struct UISettings;
-class Font;
+struct DialogLook;
 class SingleWindow;
 
 /**
@@ -49,7 +50,7 @@ class SingleWindow;
  * - Optional logging of all messages to file
  * - Thread locking so available from any thread
  */
-class PopupMessage : public LargeTextWindow
+class PopupMessage : public PaintWindow
 {
 public:
   enum Type {
@@ -103,7 +104,11 @@ private:
   };
 
   SingleWindow &parent;
+  const DialogLook &look;
+
   PixelRect rc; // maximum message size
+
+  TextRenderer renderer;
 
   const UISettings &settings;
 
@@ -111,16 +116,15 @@ private:
   struct Message messages[MAXMESSAGES];
   StaticString<2000> text;
 
-  const Font *font;
-
   unsigned n_visible;
 
   bool enable_sound;
 
 public:
-  PopupMessage(SingleWindow &_parent, const UISettings &settings);
+  PopupMessage(SingleWindow &_parent, const DialogLook &_look,
+               const UISettings &settings);
 
-  void Create(const PixelRect _rc, const Font &font);
+  void Create(const PixelRect _rc);
 
   /** returns true if messages have changed */
   bool Render();
@@ -143,7 +147,10 @@ public:
 
 private:
   gcc_pure
-  PixelRect GetRect(unsigned height) const;
+  unsigned CalculateWidth() const;
+
+  gcc_pure
+  PixelRect GetRect(unsigned width, unsigned height) const;
 
   void UpdateTextAndLayout();
   int GetEmptySlot();
@@ -151,6 +158,9 @@ private:
 protected:
   /* virtual methods from class Window */
   bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+
+  /* virtual methods from class PaintWindow */
+  void OnPaint(Canvas &canvas) override;
 };
 
 #endif

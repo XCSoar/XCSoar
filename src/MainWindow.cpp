@@ -256,8 +256,8 @@ MainWindow::InitialiseConfigured()
   map->SetUIState(CommonInterface::GetUIState());
   map->Create(*this, map_rect);
 
-  popup = new PopupMessage(*this, ui_settings);
-  popup->Create(rc, look->dialog.bold_font);
+  popup = new PopupMessage(*this, look->dialog, ui_settings);
+  popup->Create(rc);
 }
 
 void
@@ -349,7 +349,7 @@ MainWindow::ReinitialiseLayout()
   map_rect = ib_layout.remaining;
 
   popup->Destroy();
-  popup->Create(rc, look->dialog.bold_font);
+  popup->Create(rc);
 
   ReinitialiseLayout_vario(ib_layout);
 

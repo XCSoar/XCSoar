@@ -26,7 +26,8 @@ Copyright_License {
 #include "PopupMessage.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
+#include "Screen/Canvas.hpp"
+#include "Look/DialogLook.hpp"
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
@@ -91,29 +92,28 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer, unsigned now)
   return true;
 }
 
-PopupMessage::PopupMessage(SingleWindow &_parent, const UISettings &_settings)
-  :parent(_parent),
+PopupMessage::PopupMessage(SingleWindow &_parent, const DialogLook &_look,
+                           const UISettings &_settings)
+  :parent(_parent), look(_look),
    settings(_settings),
    n_visible(0),
    enable_sound(true)
 {
+  renderer.SetCenter();
 }
 
 void
-PopupMessage::Create(const PixelRect _rc, const Font &_font)
+PopupMessage::Create(const PixelRect _rc)
 {
   rc = _rc;
-  font = &_font;
 
-  LargeTextWindowStyle style;
+  WindowStyle style;
+#ifdef USE_GDI
   style.Border();
-  style.SetCenter();
+#endif
   style.Hide();
 
-  LargeTextWindow::Create(parent, GetRect(100), style);
-
-  SetFont(_font);
-  InstallWndProc();
+  PaintWindow::Create(parent, GetRect(CalculateWidth(), 100), style);
 }
 
 bool
@@ -125,8 +125,39 @@ PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
   return true;
 }
 
+void
+PopupMessage::OnPaint(Canvas &canvas)
+{
+  canvas.ClearWhite();
+
+  auto rc = GetClientRect();
+#ifndef USE_GDI
+  canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
+                              COLOR_BLACK);
+#endif
+
+  const int padding = Layout::GetTextPadding();
+  rc.Grow(-padding);
+
+  canvas.SetTextColor(look.text_color);
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.text_font);
+
+  renderer.Draw(canvas, rc, text);
+}
+
+inline unsigned
+PopupMessage::CalculateWidth() const
+{
+  if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT)
+    // TODO code: this shouldn't be hard-coded
+    return Layout::FastScale(206);
+  else
+    return unsigned((rc.right - rc.left) * 0.9);
+}
+
 PixelRect
-PopupMessage::GetRect(unsigned height) const
+PopupMessage::GetRect(unsigned width, unsigned height) const
 {
   PixelRect rthis;
 
@@ -134,10 +165,8 @@ PopupMessage::GetRect(unsigned height) const
     rthis.top = 0;
     rthis.left = 0;
     rthis.bottom = height;
-    rthis.right = Layout::FastScale(206);
-    // TODO code: this shouldn't be hard-coded
+    rthis.right = width;
   } else {
-    const unsigned width((rc.right - rc.left) * 0.9);
     const int midx = (rc.right + rc.left) / 2;
     const int midy = (rc.bottom + rc.top) / 2;
     const int h1 = height / 2;
@@ -157,30 +186,15 @@ PopupMessage::UpdateTextAndLayout()
   if (text.empty()) {
     Hide();
   } else {
-    SetText(text);
+    renderer.InvalidateLayout();
 
-    const unsigned font_height = font->GetHeight();
+    const unsigned width = CalculateWidth();
+    const unsigned height = renderer.GetHeight(look.text_font, width, text)
+      + 2 * Layout::GetTextPadding();
 
-    unsigned n_lines = max(n_visible, max(1u, GetRowCount()));
-
-    int height = min(int((rc.bottom-rc.top) * 0.8),
-                     int(font_height * (n_lines + 1)));
-
-    PixelRect rthis = GetRect(height);
-#ifdef USE_GDI
-    PixelRect old_rc = GetPosition();
-    if (rthis.left != old_rc.left || rthis.right != old_rc.right) {
-      /* on Windows, the TEXT control can never change its text style
-         after it has been created, so we have to destroy it and
-         create a new one */
-      Destroy();
-      Create(rthis, *font);
-      SetText(text);
-    } else
-#endif
-      Move(rthis);
-
+    Move(GetRect(width, height));
     ShowOnTop();
+    Invalidate();
   }
 }
 
@@ -205,24 +219,14 @@ PopupMessage::Render()
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
     changed = messages[i].Update(now) || changed;
 
-  static bool doresize = false;
-
   if (!changed) {
     mutex.Unlock();
-
-    if (doresize) {
-      doresize = false;
-      // do one extra resize after display so we are sure we get all
-      // the text (workaround bug in getlinecount)
-      UpdateTextAndLayout();
-    }
     return false;
   }
 
   // ok, we've changed the visible messages, so need to regenerate the
   // text box
 
-  doresize = true;
   text.clear();
   n_visible = 0;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
