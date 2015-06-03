@@ -52,7 +52,7 @@ Display::Rotate(DisplayOrientation orientation)
 
 #ifndef KOBO
 
-#ifdef USE_EGL
+#if defined(USE_EGL) || defined(USE_GLX)
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
 void TopWindow::Refresh() {}

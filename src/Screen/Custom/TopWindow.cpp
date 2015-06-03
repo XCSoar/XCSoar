@@ -58,6 +58,8 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   const char* text2 = text;
 #endif
   screen->Create(text2, size, style.GetFullScreen(), style.GetResizable());
+#elif defined(USE_GLX)
+  screen->Create(x_display, x_window, fb_cfg);
 #elif defined(USE_X11)
   screen->Create(x_display, x_window);
 #elif defined(USE_WAYLAND)

@@ -130,6 +130,18 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp
+else ifeq ($(GLX),y)
+SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
+SCREEN_SOURCES += \
+	$(SCREEN_CUSTOM_SOURCES) \
+	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
+	$(SCREEN_SRC_DIR)/GLX/Init.cpp \
+	$(SCREEN_SRC_DIR)/GLX/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/FB/Window.cpp \
+	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp
 else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
@@ -217,6 +229,7 @@ SCREEN_CPPFLAGS = \
 	$(OPENGL_CPPFLAGS) \
 	$(WAYLAND_CPPFLAGS) \
 	$(EGL_CPPFLAGS) \
+	$(GLX_CPPFLAGS) \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
@@ -228,6 +241,7 @@ SCREEN_LDLIBS = \
 	$(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) \
 	$(WAYLAND_LDLIBS) \
 	$(EGL_LDLIBS) \
+	$(GLX_LDLIBS) \
 	$(FB_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
@@ -246,12 +260,20 @@ ifeq ($(USE_FB)$(EGL),yy)
 $(error USE_FB and EGL are mutually exclusive)
 endif
 
+ifeq ($(USE_FB)$(GLX),yy)
+$(error USE_FB and GLX are mutually exclusive)
+endif
+
 ifeq ($(USE_FB)$(ENABLE_SDL),yy)
 $(error USE_FB and SDL are mutually exclusive)
 endif
 
 ifeq ($(VFB)$(EGL),yy)
 $(error VFB and EGL are mutually exclusive)
+endif
+
+ifeq ($(VFB)$(GLX),yy)
+$(error VFB and GLX are mutually exclusive)
 endif
 
 ifeq ($(VFB)$(ENABLE_SDL),yy)
@@ -262,8 +284,16 @@ ifeq ($(EGL)$(ENABLE_SDL),yy)
 $(error EGL and SDL are mutually exclusive)
 endif
 
+ifeq ($(GLX)$(ENABLE_SDL),yy)
+$(error GLX and SDL are mutually exclusive)
+endif
+
 ifeq ($(EGL)$(OPENGL),yn)
 $(error EGL requires OpenGL)
+endif
+
+ifeq ($(GLX)$(OPENGL),yn)
+$(error GLX requires OpenGL)
 endif
 
 ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yy)

@@ -69,6 +69,10 @@ class TopCanvas;
 #define Window X11Window
 #define Display X11Display
 #include <X11/X.h>
+#ifdef USE_GLX
+#include <GL/glx.h>
+#undef NoValue
+#endif
 #undef Font
 #undef Window
 #undef Display
@@ -148,6 +152,9 @@ class TopWindow : public ContainerWindow {
 #ifdef USE_X11
   _XDisplay *x_display;
   X11Window x_window;
+#ifdef USE_GLX
+  GLXFBConfig *fb_cfg;
+#endif
 #elif defined(USE_WAYLAND)
   struct wl_display *native_display;
   struct wl_egl_window *native_window;
@@ -257,7 +264,7 @@ public:
 #endif
 
 #if !defined(USE_GDI) && !(defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
-#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_VFB)
+#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else
   void SetCaption(const TCHAR *caption);

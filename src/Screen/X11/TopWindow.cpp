@@ -27,6 +27,10 @@ Copyright_License {
 #include "Event/Poll/Queue.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef USE_GLX
+#include "Screen/GLX/System.hpp"
+#endif
+
 #include <X11/Xatom.h>
 
 void
@@ -35,6 +39,30 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 {
   x_display = event_queue->GetDisplay();
   assert(x_display != nullptr);
+
+#ifdef USE_GLX
+  static constexpr int attributes[] = {
+    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+    GLX_RENDER_TYPE, GLX_RGBA_BIT,
+    GLX_X_RENDERABLE, true,
+    GLX_DOUBLEBUFFER, true,
+    GLX_RED_SIZE, 1,
+    GLX_GREEN_SIZE, 1,
+    GLX_BLUE_SIZE, 1,
+    GLX_ALPHA_SIZE, 1,
+    0
+  };
+
+  int fb_cfg_count;
+  fb_cfg = glXChooseFBConfig(x_display, DefaultScreen(x_display),
+                             attributes, &fb_cfg_count);
+  if ((fb_cfg == nullptr) || (fb_cfg_count == 0)) {
+    fprintf(stderr, "Failed to retrieve framebuffer configuration for GLX\n");
+    exit(EXIT_FAILURE);
+  }
+
+  XVisualInfo *vi = glXGetVisualFromFBConfig(x_display, *fb_cfg);
+#endif
 
   const X11Window x_root = DefaultRootWindow(x_display);
   if (x_root == 0) {
@@ -49,15 +77,33 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
     VisibilityChangeMask |
     ExposureMask | StructureNotifyMask;
 
+  unsigned long valuemask = CWEventMask;
+#ifdef USE_GLX
+  int depth = vi->depth;
+  Visual *visual = vi->visual;
+  swa.border_pixel = 0;
+  swa.background_pixel = 0;
+  swa.colormap = XCreateColormap(x_display, x_root,
+                                 vi->visual, AllocNone);
+  valuemask |= CWBorderPixel|CWBackPixel|CWColormap;
+#else
+  int depth = CopyFromParent;
+  Visual *visual = CopyFromParent;
+#endif
+
   x_window = XCreateWindow(x_display, x_root,
                            0, 0, size.cx, size.cy, 0,
-                           CopyFromParent, InputOutput,
-                           CopyFromParent, CWEventMask,
+                           depth, InputOutput,
+                           visual, valuemask,
                            &swa);
   if (x_window == 0) {
     fprintf(stderr, "XCreateWindow() failed\n");
     exit(EXIT_FAILURE);
   }
+
+#ifdef USE_GLX
+  XFree(vi);
+#endif
 
   XMapWindow(x_display, x_window);
   XStoreName(x_display, x_window, text);

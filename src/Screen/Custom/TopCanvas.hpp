@@ -48,6 +48,21 @@ Copyright_License {
 #endif
 #endif
 
+#ifdef USE_GLX
+#include "Screen/GLX/System.hpp"
+
+#define Font X11Font
+#define Window X11Window
+#define Display X11Display
+#include <X11/X.h>
+#undef Font
+#undef Window
+#undef Display
+#undef Expose
+#undef KeyPress
+struct _XDisplay;
+#endif
+
 #ifdef DITHER
 #include "../Memory/Dither.hpp"
 #endif
@@ -111,6 +126,12 @@ class TopCanvas
   EGLDisplay display;
   EGLContext context;
   EGLSurface surface;
+#endif
+
+#ifdef USE_GLX
+  _XDisplay *x_display;
+  GLXContext glx_context;
+  GLXWindow glx_window;
 #endif
 
 #ifdef ENABLE_SDL
@@ -214,6 +235,12 @@ public:
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
   void Create(const char *text, PixelSize new_size,
               bool full_screen, bool resizable);
+#elif defined(USE_GLX)
+  void Create(_XDisplay *x_display,
+              X11Window x_window,
+              GLXFBConfig *fb_cfg) {
+    CreateGLX(x_display, x_window, fb_cfg);
+  }
 #elif defined(USE_X11) || defined(USE_WAYLAND)
   void Create(EGLNativeDisplayType native_display,
               EGLNativeWindowType native_window) {
@@ -275,7 +302,12 @@ public:
 #endif
 
 private:
-#ifdef USE_EGL
+#ifdef USE_GLX
+  void InitGLX(_XDisplay *x_display);
+  void CreateGLX(_XDisplay *x_display,
+                 X11Window x_window,
+                 GLXFBConfig *fb_cfg);
+#elif defined(USE_EGL)
   void CreateEGL(EGLNativeDisplayType native_display,
                  EGLNativeWindowType native_window);
 #endif
