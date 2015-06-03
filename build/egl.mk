@@ -23,8 +23,8 @@ else ifeq ($(USE_SDL2),y)
 # no EGL if SDL was enabled explicitly
 EGL = n
 else
-# default to EGL/X11
-EGL ?= y
+# default to GLX/X11
+EGL ?= n
 endif
 
 ifeq ($(EGL),y)
