@@ -141,6 +141,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
     { (unsigned)Unit::KNOTS, N_("knots") },
     { (unsigned)Unit::KILOMETER_PER_HOUR, _T("km/h") },
+    { (unsigned)Unit::METER_PER_SECOND, _T("m/s") },
     { 0 }
   };
   AddEnum(_("Aircraft/Wind speed"),
@@ -198,6 +199,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
     { (unsigned)Unit::KNOTS, N_("knots") },
     { (unsigned)Unit::KILOMETER_PER_HOUR, _T("km/h") },
+    { (unsigned)Unit::METER_PER_SECOND, _T("m/s") },
     { 0 }
   };
   AddEnum(_("Task speed"), _("Units used for task speeds."),

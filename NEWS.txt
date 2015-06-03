@@ -29,7 +29,8 @@ Version 6.8 - not yet released
 * map
   - allow "Mark Drop" while panning
   - airspace labels
-* user interface 
+* user interface
+  - allow horizontal speeds in m/s
   - download data files from site configuration
   - profile manager
   - password-protected profiles (#851)
