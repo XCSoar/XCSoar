@@ -42,17 +42,6 @@ struct StatusMessage {
 
   /** Delay for DoStatusMessage */
   unsigned delay_ms;
-
-  void Clear() {
-    key = nullptr;
-    sound = nullptr;
-    delay_ms = 2500;
-    visible = true;
-  }
-
-  bool IsEmpty() const {
-    return key == nullptr;
-  }
 };
 
 /**
