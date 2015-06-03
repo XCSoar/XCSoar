@@ -283,7 +283,6 @@ MainWindow::Deinitialise()
   InfoBoxManager::Destroy();
   ButtonLabel::Destroy();
 
-  popup->Destroy();
   delete popup;
   popup = nullptr;
 
