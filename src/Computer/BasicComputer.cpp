@@ -227,6 +227,30 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   basic.airspeed_real = false;
 }
 
+static void
+ComputeWindVector(NMEAInfo &basic, const DerivedInfo &calculated)
+{
+  if(!basic.attitude.heading_available ||
+     !basic.airspeed_available ||
+     !basic.variation_available)
+     //no NMEA compass, airspeed sensor or NMEA variation information available
+     return;
+
+  fixed wind_speed = fixed(0);
+  Angle wind_direction = Angle::Zero();
+  fixed x0 = ((basic.attitude.heading + basic.variation).fastsine() * basic.true_airspeed) -
+                                                   (basic.track.fastsine() * basic.ground_speed);
+  fixed y0 = ((basic.attitude.heading + basic.variation).fastcosine() * basic.true_airspeed) -
+                                                   (basic.track.fastcosine() * basic.ground_speed);
+
+  wind_direction = Angle::FromXY(y0, x0);
+  wind_speed = SmallHypot(x0, y0);
+
+  const SpeedVector wind(wind_direction, wind_speed);
+  basic.external_wind = wind;
+  basic.external_wind_available.Update(basic.clock);
+}
+
 /**
  * Calculates energy height on TAS basis
  *
@@ -420,6 +444,8 @@ BasicComputer::Compute(MoreData &data,
   ground_speed.Compute(data);
 
   ComputeAirspeed(data, calculated);
+
+  ComputeWindVector(data, calculated);
 
   ComputeHeading(data.attitude, data, calculated);
 

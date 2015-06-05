@@ -92,7 +92,13 @@ void
 WindComputer::Select(const WindSettings &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
-  if (basic.external_wind_available && settings.use_external_wind) {
+  if (basic.attitude.heading_available && settings.use_external_wind) {
+    // NMEA Compass data available
+    calculated.wind = basic.external_wind;
+    calculated.wind_available = basic.external_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::COMPASS;
+
+  } else if ((basic.external_wind_available && settings.use_external_wind)) {
     // external wind available
     calculated.wind = basic.external_wind;
     calculated.wind_available = basic.external_wind_available;
