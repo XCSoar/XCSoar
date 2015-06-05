@@ -22,7 +22,13 @@ Copyright_License {
 */
 
 #include "InfoBoxLook.hpp"
+#include "FontDescription.hpp"
 #include "Screen/Layout.hpp"
+#include "AutoFont.hpp"
+
+#ifdef HAVE_TEXT_CACHE
+#include "Screen/Custom/Cache.hpp"
+#endif
 
 #include <algorithm>
 
@@ -34,12 +40,7 @@ Copyright_License {
 
 void
 InfoBoxLook::Initialise(bool _inverse, bool use_colors,
-                        const Font &value_font,
-                        const Font &_small_font,
-#ifndef GNAV
-                        const Font &_unit_font,
-#endif
-                        const Font &title_font)
+                        unsigned width)
 {
   inverse = _inverse;
 
@@ -55,12 +56,16 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);
 
-  value.font = &value_font;
-  title.font = &title_font;
-  comment.font = &title_font;
-  small_font = &_small_font;
-#ifndef GNAV
-  unit_font = &_unit_font;
+#ifdef GNAV
+  value_font.Load(FontDescription(_T("RasterGothicTwentyFourCond"), 24, true));
+  small_value_font.Load(FontDescription(_T("RasterGothicEighteenCond"),
+                                        19, true));
+  title_font.Load(FontDescription(_T("RasterGothicNineCond"), 10));
+#else
+  ReinitialiseLayout(width);
+
+  title_font.Load(FontDescription(Layout::FontScale(8)));
+
   unit_fraction_pen.Create(1, value.fg_color);
 #endif
 
@@ -73,4 +78,23 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
   } else
     std::fill(colors + 1, colors + 6, inverse ? COLOR_WHITE : COLOR_BLACK);
+}
+
+void
+InfoBoxLook::ReinitialiseLayout(unsigned width)
+{
+#ifndef GNAV
+  FontDescription value_font_d(10, true);
+  AutoSizeFont(value_font_d, width, _T("1234m"));
+  value_font.Load(value_font_d);
+
+  FontDescription small_value_font_d(10);
+  AutoSizeFont(small_value_font_d, width, _T("12345m"));
+  small_value_font.Load(small_value_font_d);
+
+  unit_font.Load(FontDescription(value_font_d.GetHeight() * 2u / 5u));
+#ifdef HAVE_TEXT_CACHE
+  TextCache::Flush();
+#endif
+#endif
 }

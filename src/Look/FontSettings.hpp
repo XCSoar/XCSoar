@@ -33,13 +33,6 @@ struct FontSettings {
   FontDescription dialog_small;
 #endif
 
-  FontDescription infobox;
-  FontDescription infobox_small;
-#ifndef GNAV
-  FontDescription infobox_units;
-#endif
-
-  FontDescription title;
   FontDescription cdi;
   FontDescription monospace;
 

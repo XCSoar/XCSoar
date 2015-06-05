@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
+#include "Screen/Font.hpp"
 #include "Util/Macros.hpp"
 
 class Font;
@@ -45,24 +46,23 @@ struct InfoBoxLook {
 
   struct {
     Color fg_color;
-    const Font *font;
   } title, value, comment;
 
-  const Font *small_font;
+  Font value_font, small_value_font;
+
 #ifndef GNAV
-  const Font *unit_font;
+  Font unit_font;
   Pen unit_fraction_pen;
 #endif
+
+  Font title_font;
 
   Color colors[6];
 
   void Initialise(bool inverse, bool use_colors,
-                  const Font &value_font,
-                  const Font &small_font,
-#ifndef GNAV
-                  const Font &unit_font,
-#endif
-                  const Font &title_font);
+                  unsigned width);
+
+  void ReinitialiseLayout(unsigned width);
 
   Color GetColor(int i, Color default_color) const {
     if (i < 0)

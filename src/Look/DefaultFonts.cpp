@@ -47,9 +47,6 @@ LoadAltairLogFonts(FontSettings &settings)
 #ifdef GNAV
   settings.dialog_small = FontDescription(_T("RasterGothicNineCond"), 10);
 #endif
-  settings.infobox = FontDescription(_T("RasterGothicTwentyFourCond"),
-                                     24, true);
-  settings.title = FontDescription(_T("RasterGothicNineCond"), 10);
   settings.cdi = FontDescription(_T("RasterGothicEighteenCond"), 19, true);
   settings.map_label = FontDescription(_T("RasterGothicTwelveCond"), 13);
   settings.map_label_important = FontDescription(_T("RasterGothicTwelveCond"),
@@ -57,8 +54,6 @@ LoadAltairLogFonts(FontSettings &settings)
   settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
   settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
                                       15, true);
-  settings.infobox_small = FontDescription(_T("RasterGothicEighteenCond"),
-                                           19, true);
   settings.monospace = FontDescription(GetStandardMonospaceFontFace(),
                                        12, false, false, true);
 }
@@ -78,15 +73,6 @@ InitialiseLogFonts(FontSettings &settings)
   settings.dialog = FontDescription(std::min(Layout::FontScale(12),
                                              Layout::min_screen_pixels / 20));
 
-  settings.infobox = FontDescription(Layout::FontScale(30), true);
-
-  /* the "small" font is derived from the regular font */
-  settings.infobox_small = settings.infobox;
-  settings.infobox_small.SetHeight(settings.infobox_small.GetHeight() * 4 / 5);
-  settings.infobox_small.SetBold(false);
-
-  settings.title = FontDescription(Layout::FontScale(8));
-
   // new font for CDI Scale
   settings.cdi = FontDescription(Layout::FontScale(10),
                                  false, false, true);
@@ -103,10 +89,6 @@ InitialiseLogFonts(FontSettings &settings)
 
   // Font for map bold text
   settings.map_bold = FontDescription(Layout::FontScale(10), true);
-
-#ifndef GNAV
-  settings.infobox_units = FontDescription(Layout::FontScale(9));
-#endif
 
   settings.monospace = FontDescription(settings.dialog.GetHeight(),
                                        false, false, true);
@@ -126,22 +108,4 @@ Fonts::Initialize()
   const auto default_settings = GetDefaults();
 
   return Load(default_settings);
-}
-
-void
-Fonts::SizeInfoboxFont(unsigned control_width)
-{
-  auto default_settings = GetDefaults();
-
-  AutoSizeInfoBoxFonts(default_settings, control_width);
-
-  infobox.Load(default_settings.infobox);
-  infobox_small.Load(default_settings.infobox_small);
-#ifndef GNAV
-  infobox_units.Load(default_settings.infobox_units);
-#endif
-
-#ifdef HAVE_TEXT_CACHE
-  TextCache::Flush();
-#endif
 }

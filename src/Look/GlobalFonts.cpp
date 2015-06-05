@@ -29,14 +29,6 @@ Copyright_License {
 
 Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
 
-/// values inside infoboxes  like numbers, etc.
-Font Fonts::infobox;
-Font Fonts::infobox_small;
-#ifndef GNAV
-Font Fonts::infobox_units;
-#endif
-/// Titles of infoboxes like Next, WP L/D etc.
-Font Fonts::title;
 /// vario display, runway informations
 Font Fonts::cdi;
 Font Fonts::monospace;
@@ -66,7 +58,6 @@ Fonts::Load(const FontSettings &settings)
   dialog_small.Load(d);
 #endif
 
-  title.Load(settings.title);
   cdi.Load(settings.cdi);
   map_label.Load(settings.map_label);
   map_label_important.Load(settings.map_label_important);
@@ -74,7 +65,7 @@ Fonts::Load(const FontSettings &settings)
   map_bold.Load(settings.map_bold);
   monospace.Load(settings.monospace);
 
-  return title.IsDefined() && cdi.IsDefined() &&
+  return cdi.IsDefined() &&
     map_label.IsDefined() && map_label_important.IsDefined() &&
     map.IsDefined() && map_bold.IsDefined() &&
     monospace.IsDefined();
@@ -86,12 +77,6 @@ Fonts::Deinitialize()
   dialog.Destroy();
   dialog_bold.Destroy();
   dialog_small.Destroy();
-  infobox.Destroy();
-  infobox_small.Destroy();
-#ifndef GNAV
-  infobox_units.Destroy();
-#endif
-  title.Destroy();
   map.Destroy();
   map_bold.Destroy();
   cdi.Destroy();

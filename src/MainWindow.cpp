@@ -61,10 +61,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #endif
 
-#ifdef HAVE_TEXT_CACHE
-#include "Screen/Custom/Cache.hpp"
-#endif
-
 #if !defined(WIN32) && !defined(ANDROID)
 #include <unistd.h>
 #endif
@@ -231,8 +227,6 @@ MainWindow::InitialiseConfigured()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
-
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::dialog, Fonts::dialog_bold,
@@ -241,11 +235,7 @@ MainWindow::InitialiseConfigured()
                              Fonts::map_label,
                              Fonts::map_label_important,
                              Fonts::cdi, Fonts::monospace,
-                             Fonts::infobox, Fonts::infobox_small,
-#ifndef GNAV
-                             Fonts::infobox_units,
-#endif
-                             Fonts::title);
+                             ib_layout.control_size.cx);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   map_rect = ib_layout.remaining;
@@ -359,7 +349,7 @@ MainWindow::ReinitialiseLayout()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
+  look->ReinitialiseLayout(ib_layout.control_size.cx);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   InfoBoxManager::ProcessTimer();

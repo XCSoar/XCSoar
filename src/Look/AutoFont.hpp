@@ -27,15 +27,11 @@ Copyright_License {
 #include <tchar.h>
 
 class FontDescription;
-struct FontSettings;
 
 /**
  * Change the font size so that the text fits into the given width.
  */
 void
 AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text);
-
-void
-AutoSizeInfoBoxFonts(FontSettings &settings, unsigned control_width);
 
 #endif

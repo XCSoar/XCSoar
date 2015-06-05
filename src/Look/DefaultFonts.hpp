@@ -39,8 +39,6 @@ namespace Fonts
    * @return true on success
    */
   bool Initialize();
-
-  void SizeInfoboxFont(unsigned control_width);
 }
 
 #endif
