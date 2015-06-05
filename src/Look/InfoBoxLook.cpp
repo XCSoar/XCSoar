@@ -54,7 +54,6 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);
-  selector_pen.Create(Layout::Scale(1) + 2, value.fg_color);
 
   value.font = &value_font;
   title.font = &title_font;
