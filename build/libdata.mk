@@ -11,7 +11,7 @@ DATA_SOURCES += $(foreach file,$(DATA_RESOURCES),$(DATA)/$(notdir $(file)).c)
 define add-data-file
 $(DATA)/$(notdir $(1)).c: $(1) $(topdir)/tools/BinToC.pl $(topdir)/tools/BinToC.pm | $$(DATA)/dirstamp
 	@$$(NQ)echo "  GEN     $$@"
-	$(Q)$(PERL) $(topdir)/tools/BinToC.pl $$(abspath $$<) $$(abspath $$@)
+	$(Q)$(PERL) $(topdir)/tools/BinToC.pl $$< $$@
 endef
 
 $(foreach file,$(DATA_RESOURCES),$(eval $(call add-data-file,$(file))))
