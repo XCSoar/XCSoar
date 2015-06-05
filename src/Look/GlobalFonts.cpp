@@ -36,10 +36,6 @@ Font Fonts::monospace;
 Font Fonts::map;
 /// menu buttons, waypoint selection, messages, etc.
 Font Fonts::map_bold;
-/// Flarm Traffic draweing and stats, map labels in italic
-Font Fonts::map_label;
-/// font labels for important labels (e.g. big/medium cities)
-Font Fonts::map_label_important;
 
 bool
 Fonts::Load(const FontSettings &settings)
@@ -59,14 +55,11 @@ Fonts::Load(const FontSettings &settings)
 #endif
 
   cdi.Load(settings.cdi);
-  map_label.Load(settings.map_label);
-  map_label_important.Load(settings.map_label_important);
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
   monospace.Load(settings.monospace);
 
   return cdi.IsDefined() &&
-    map_label.IsDefined() && map_label_important.IsDefined() &&
     map.IsDefined() && map_bold.IsDefined() &&
     monospace.IsDefined();
 }
@@ -80,7 +73,5 @@ Fonts::Deinitialize()
   map.Destroy();
   map_bold.Destroy();
   cdi.Destroy();
-  map_label.Destroy();
-  map_label_important.Destroy();
   monospace.Destroy();
 }

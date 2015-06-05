@@ -3,6 +3,7 @@
 LOOK_SRC_DIR = $(SRC)/
 
 LOOK_SOURCES := \
+	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
@@ -11,6 +12,7 @@ LOOK_SOURCES := \
 	$(SRC)/Look/VarioLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/MapLook.cpp \
+	$(SRC)/Look/TopographyLook.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \

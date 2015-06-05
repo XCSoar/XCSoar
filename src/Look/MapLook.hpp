@@ -97,9 +97,7 @@ struct MapLook {
   TopographyLook topography;
 
   void Initialise(const MapSettings &settings,
-                  const Font &font, const Font &bold_font,
-                  const Font &regular_topography_font,
-                  const Font &important_topography_font);
+                  const Font &font, const Font &bold_font);
 };
 
 #endif

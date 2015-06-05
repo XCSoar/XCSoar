@@ -24,16 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_TOPOGRAPHY_LOOK_HPP
 #define XCSOAR_TOPOGRAPHY_LOOK_HPP
 
-class Font;
+#include "Screen/Font.hpp"
 
 struct TopographyLook {
-  const Font *regular_label_font, *important_label_font;
+  Font regular_label_font;
 
-  void Initialise(const Font &_regular_label_font,
-                  const Font &_important_label_font) {
-    regular_label_font = &_regular_label_font;
-    important_label_font = &_important_label_font;
-  }
+  /** for big/medium cities */
+  Font important_label_font;
+
+  void Initialise();
 };
 
 #endif

@@ -38,8 +38,6 @@ struct FontSettings {
 
   FontDescription map;
   FontDescription map_bold;
-  FontDescription map_label;
-  FontDescription map_label_important;
 };
 
 #endif

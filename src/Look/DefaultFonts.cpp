@@ -48,9 +48,6 @@ LoadAltairLogFonts(FontSettings &settings)
   settings.dialog_small = FontDescription(_T("RasterGothicNineCond"), 10);
 #endif
   settings.cdi = FontDescription(_T("RasterGothicEighteenCond"), 19, true);
-  settings.map_label = FontDescription(_T("RasterGothicTwelveCond"), 13);
-  settings.map_label_important = FontDescription(_T("RasterGothicTwelveCond"),
-                                                 13);
   settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
   settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
                                       15, true);
@@ -76,13 +73,6 @@ InitialiseLogFonts(FontSettings &settings)
   // new font for CDI Scale
   settings.cdi = FontDescription(Layout::FontScale(10),
                                  false, false, true);
-
-  // new font for map labels
-  settings.map_label = FontDescription(Layout::FontScale(8), false, true);
-
-  // new font for map labels big/medium cities
-  settings.map_label_important = FontDescription(Layout::FontScale(8),
-                                                 true, true);
 
   // new font for map labels
   settings.map = FontDescription(Layout::FontScale(10));

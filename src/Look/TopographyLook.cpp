@@ -21,32 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLOBAL_FONTS_HPP
-#define XCSOAR_GLOBAL_FONTS_HPP
+#include "TopographyLook.hpp"
+#include "FontDescription.hpp"
+#include "Screen/Layout.hpp"
 
-struct FontSettings;
-class Font;
-
-/**
- * Container for global font variables.  Avoid using it if you can,
- * use the "Look" objects instead.
- */
-namespace Fonts
+void
+TopographyLook::Initialise()
 {
-  /**
-   * Fonts for user interfaces such as dialogs, pop-up messages etc.
-   */
-  extern Font dialog, dialog_bold, dialog_small;
-
-  extern Font cdi;
-  extern Font monospace;
-
-  extern Font map;
-  extern Font map_bold;
-
-  bool Load(const FontSettings &settings);
-
-  void Deinitialize();
-}
-
+#ifdef GNAV
+  regular_label_font.Load(FontDescription(_T("RasterGothicTwelveCond"), 13));
+  important_label_font.Load(FontDescription(_T("RasterGothicTwelveCond"), 13));
+#else
+  regular_label_font.Load(FontDescription(Layout::FontScale(8), false, true));
+  important_label_font.Load(FontDescription(Layout::FontScale(8), true, true));
 #endif
+}

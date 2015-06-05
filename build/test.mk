@@ -1782,7 +1782,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
-	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \

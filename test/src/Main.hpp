@@ -254,13 +254,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     look->InitialiseConfigured(ui_settings,
                                normal_font, bold_font, small_font,
                                normal_font, bold_font,
-                               small_font, normal_font,
                                small_font, monospace_font,
-                               normal_font, small_font,
-#ifndef GNAV
-                               small_font,
-#endif
-                               small_font);
+                               100);
   }
 
   dialog_look = &look->dialog;

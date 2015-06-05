@@ -77,8 +77,6 @@ struct Look {
                             const Font &dialog_bold_font,
                             const Font &dialog_small_font,
                             const Font &map_font, const Font &map_bold_font,
-                            const Font &regular_topography_font,
-                            const Font &important_topography_font,
                             const Font &cdi_font,
                             const Font &monospace_font,
                             unsigned infobox_width);
