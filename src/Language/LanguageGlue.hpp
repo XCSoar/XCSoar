@@ -44,11 +44,13 @@ CloseLanguageFile();
 
 #define HAVE_BUILTIN_LANGUAGES
 
+#include <stddef.h>
 #include <tchar.h>
 
 struct BuiltinLanguage {
   unsigned language;
-  const void *begin, *size;
+  const void * const begin;
+  const size_t size;
   const TCHAR *resource;
   const TCHAR *name;
 };

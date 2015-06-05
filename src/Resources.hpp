@@ -7,12 +7,15 @@
 
 #else
 
+#include <stddef.h>
+#include <stdint.h>
+
 #include "Util/ConstBuffer.hpp"
 
 #define MAKE_RESOURCE(name, id) \
-  extern const char resource_ ## id[]; \
-  extern const char resource_ ## id ## _size[]; \
-  static constexpr ResourceId name(resource_ ##id, resource_ ##id ## _size);
+  extern "C" uint8_t resource_ ## id[]; \
+  extern "C" const size_t resource_ ## id ## _size; \
+  static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);
 
 #endif
 

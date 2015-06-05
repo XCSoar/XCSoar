@@ -102,25 +102,24 @@ CreateLogoPage(ContainerWindow &parent, const PixelRect &rc,
   return window;
 }
 
-/* workaround note: we would prefer to use the "_size" symbol here,
-   but it turns out that Android 4 relocates these symbols for some
-   reason, therefore we use "end-start" instead */
+extern "C"
+{
+  extern const uint8_t COPYING_gz[];
+  extern const size_t COPYING_gz_size;
 
-extern const uint8_t license_start[] asm("_binary_COPYING_gz_start");
-extern const uint8_t license_end[] asm("_binary_COPYING_gz_end");
-
-extern const uint8_t authors_start[] asm("_binary_AUTHORS_gz_start");
-extern const uint8_t authors_end[] asm("_binary_AUTHORS_gz_end");
+  extern const uint8_t AUTHORS_gz[];
+  extern const size_t AUTHORS_gz_size;
+}
 
 void
 dlgCreditsShowModal(SingleWindow &parent)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  char *authors = InflateToString(authors_start, authors_end - authors_start);
+  char *authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
   const UTF8ToWideConverter authors2(authors);
 
-  char *license = InflateToString(license_start, license_end - license_start);
+  char *license = InflateToString(COPYING_gz, COPYING_gz_size);
   const UTF8ToWideConverter license2(license);
 
   WidgetDialog dialog(look);

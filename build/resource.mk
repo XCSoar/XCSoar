@@ -216,9 +216,12 @@ $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES)
 
 else
 
-RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/resources.a
-$(RESOURCE_BINARY): $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl | $(TARGET_OUTPUT_DIR)/resources/dirstamp
+$(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) tools/LinkResources.pl $< $@ "$(AS) $(ASFLAGS)" "$(AR) $(ARFLAGS)"
+	$(Q)$(PERL) tools/LinkResources.pl $< $@
+
+RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
+$(eval $(call link-library,resources,RESOURCES))
+RESOURCE_BINARY = $(RESOURCES_BIN)
 
 endif

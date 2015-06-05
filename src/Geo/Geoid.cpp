@@ -34,7 +34,7 @@ Copyright_License {
 
 #define EGM96SIZE 16200
 
-extern const uint8_t egm96data[] asm("_binary_egm96s_dem_start");
+extern "C" const uint8_t egm96s_dem[];
 
 fixed
 EGM96::LookupSeparation(const GeoPoint &pt)
@@ -49,5 +49,5 @@ EGM96::LookupSeparation(const GeoPoint &pt)
   if (offset < 0)
     return fixed(0);
 
-  return fixed((int)egm96data[offset] - 127);
+  return fixed((int)egm96s_dem[offset] - 127);
 }

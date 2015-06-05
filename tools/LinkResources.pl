@@ -2,26 +2,27 @@
 
 use strict;
 use lib './tools';
-use EmbedFileInObjectFile;
+use BinToC;
 use vars qw($as $ar);
 
 my $rc_path;
-my $output_path;
+my $output_src_path;
 
-($rc_path, $output_path, $as, $ar) = @ARGV;
-$output_path =~ m,^(.*)/,s;
-my $o_path = "$1/resources";
+($rc_path, $output_src_path) = @ARGV;
 
-sub to_o($$$) {
-    my ($input, $output, $name) = @_;
+open my $output_src_fh, '>', $output_src_path
+  or die "Could not source open output file $output_src_path!\n";
 
-    EmbedFileInObjectFile::embed_file_in_object_file($input, $output,
-            ${name}, ${name}."_end", ${name}."_size", $as);
+sub add_to_src($$) {
+    my ($input, $name) = @_;
+    BinToC::binary_to_c($input,
+                        $output_src_fh,
+                        ${name},
+                        ${name}."_end",
+                        ${name}."_size");
 }
 
 open RC, "<$rc_path" or die $!;
-
-my @objects;
 
 while (<RC>) {
     # merge adjacent strings
@@ -34,12 +35,10 @@ while (<RC>) {
         my $name = "resource_${id}";
         $name =~ s,\.,_,g;
 
-        my $output = "${o_path}/${name}.o";
-        to_o($path, $output, $name);
-        push @objects, $output;
+        add_to_src($path, $name);
     }
 }
 
 close RC;
 
-system("${ar} ${output_path} " . join(' ', @objects)) == 0 or die;
+close $output_src_fh;
