@@ -48,6 +48,9 @@ class WindStore
   bool updated;
 
 public:
+  /** Clear as if never flown */
+  void reset();
+
   /**
    * Called with new measurements. The quality is a measure for how good the
    * measurement is. Higher quality measurements are more important in the
@@ -63,19 +66,16 @@ public:
    */
   void SlotAltitude(const MoreData &info, DerivedInfo &derived);
 
+  gcc_pure
+  const Vector GetWind(fixed Time, fixed h, bool &found) const;
+
+private:
   /**
    * Send if a new wind vector has been established. This may happen as
    * new measurements flow in, but also if the altitude changes.
    */
   void NewWind(const NMEAInfo &info, DerivedInfo &derived, Vector& wind) const;
 
-  gcc_pure
-  const Vector GetWind(fixed Time, fixed h, bool &found) const;
-
-  /** Clear as if never flown */
-  void reset();
-
-private:
   /**
    * Recalculates the wind from the stored measurements.
    * May result in a NewWind signal.
