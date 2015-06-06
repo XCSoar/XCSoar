@@ -49,6 +49,10 @@ public:
            PixelRect rc,
            const WindowStyle style=WindowStyle());
 
+  const DialogLook &GetLook() const {
+    return look;
+  }
+
   void SetAlignCenter();
   void SetVAlignCenter();
 
