@@ -46,6 +46,12 @@ class WindComputer {
   // TODO: protect with a Mutex
   WindStore wind_store;
 
+  /**
+   * The EKF algorithm is available, which skips WindStore and
+   * CirclingWind.
+   */
+  bool ekf_active;
+
 public:
   const WindStore &GetWindStore() const {
     return wind_store;
