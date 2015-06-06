@@ -92,18 +92,18 @@ void
 WindComputer::Select(const WindSettings &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
-  if (basic.external_wind_available && settings.use_external_wind) {
-    // external wind available
-    calculated.wind = basic.external_wind;
-    calculated.wind_available = basic.external_wind_available;
-    calculated.wind_source = DerivedInfo::WindSource::EXTERNAL;
-
-  } else if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
-             && settings.IsAutoWindEnabled()) {
+  if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
+      && settings.IsAutoWindEnabled()) {
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
     calculated.wind_source = DerivedInfo::WindSource::AUTO;
+
+  } else if (basic.external_wind_available.Modified(settings.manual_wind_available)) {
+    // external wind available
+    calculated.wind = basic.external_wind;
+    calculated.wind_available = basic.external_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::EXTERNAL;
 
   } else if (settings.manual_wind_available) {
     // wind was set manually

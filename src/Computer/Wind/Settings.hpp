@@ -60,12 +60,6 @@ struct WindSettings {
   bool zig_zag_wind;
 
   /**
-   * If enabled, then the wind vector received from external devices
-   * overrides XCSoar's internal wind calculation.
-   */
-  bool use_external_wind;
-
-  /**
    * This is the manual wind set by the pilot. Validity is set when
    * changeing manual wind but does not expire.
    */

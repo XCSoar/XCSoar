@@ -36,7 +36,6 @@ class WindSettingsPanel final
     private DataFieldListener, private NullBlackboardListener {
   enum ControlIndex {
     AutoWind,
-    ExternalWind,
     TrailDrift,
     SOURCE,
     Speed,

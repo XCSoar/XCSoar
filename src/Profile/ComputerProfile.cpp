@@ -49,8 +49,6 @@ Profile::Load(WindSettings &settings)
   unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
   if (Get(ProfileKeys::AutoWind, auto_wind_mode))
     settings.SetLegacyAutoWindMode(auto_wind_mode);
-
-  Get(ProfileKeys::ExternalWind, settings.use_external_wind);
 }
 
 void

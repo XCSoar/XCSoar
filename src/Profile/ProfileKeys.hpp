@@ -73,7 +73,6 @@ extern const char SlopeShadingType[];
 extern const char TerrainContours[];
 extern const char FinalGlideTerrain[];
 extern const char AutoWind[];
-extern const char ExternalWind[];
 extern const char AirspaceWarning[];
 extern const char AirspaceBlackOutline[];
 extern const char AirspaceTransparency[];

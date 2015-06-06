@@ -65,12 +65,6 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("This allows switching on or off the automatic wind algorithm."),
           auto_wind_list, settings.GetLegacyAutoWindMode());
 
-  AddBoolean(_("Prefer external wind"),
-             _("If enabled, then the wind vector received from external devices overrides "
-                 "XCSoar's internal wind calculation."),
-             settings.use_external_wind,
-             this);
-
   if (edit_trail_drift)
     AddBoolean(_("Trail drift"),
                _("Determines whether the snail trail is drifted with the wind "
@@ -145,9 +139,6 @@ WindSettingsPanel::Save(bool &_changed)
     changed = true;
   }
 
-  changed |= SaveValue(ExternalWind, ProfileKeys::ExternalWind,
-                       settings.use_external_wind);
-
   if (edit_trail_drift)
     changed |= SaveValue(TrailDrift, ProfileKeys::TrailDrift,
                          map_settings.trail.wind_drift_enabled);
@@ -177,10 +168,7 @@ WindSettingsPanel::OnModified(DataField &df)
   const NMEAInfo &basic = CommonInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
 
-  if (&df == &GetDataField(ExternalWind)) {
-    DataFieldBoolean &dfb = (DataFieldBoolean &)df;
-    settings.use_external_wind = dfb.GetAsBoolean();
-  } else if (&df == &GetDataField(Speed) || &df == &GetDataField(Direction)) {
+  if (&df == &GetDataField(Speed) || &df == &GetDataField(Direction)) {
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));
     settings.manual_wind.bearing = GetValueAngle(Direction);
     settings.manual_wind_available.Update(basic.clock);
