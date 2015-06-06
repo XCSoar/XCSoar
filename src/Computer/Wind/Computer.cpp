@@ -111,8 +111,7 @@ WindComputer::Select(const WindSettings &settings,
     calculated.wind_available = calculated.estimated_wind_available;
     calculated.wind_source = DerivedInfo::WindSource::AUTO;
 
-  } else if (settings.manual_wind_available
-             && settings.IsAutoWindEnabled()) {
+  } else if (settings.manual_wind_available) {
     // manual wind overrides auto wind if available
     calculated.wind = settings.manual_wind;
     calculated.wind_available = settings.manual_wind_available;
