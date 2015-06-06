@@ -36,7 +36,6 @@ WindStore::reset()
   windlist.Reset();
   update_clock = fixed(0);
   updated = true;
-  _lastAltitude = fixed(0);
 }
 
 void
@@ -52,7 +51,7 @@ WindStore::SlotMeasurement(const MoreData &info,
 void
 WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 {
-  if ((fabs(info.nav_altitude - _lastAltitude) > fixed(100)) || updated) {
+  if (updated || (fabs(info.nav_altitude - _lastAltitude) > fixed(100))) {
     //only recalculate if there is a significant change
     recalculateWind(info, derived);
 
