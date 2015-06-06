@@ -103,104 +103,103 @@ enum {
 };
 #endif
 
-extern const uint8_t cs_start[] asm("_binary_cs_mo_start");
-extern const uint8_t cs_size[] asm("_binary_cs_mo_size");
-extern const uint8_t da_start[] asm("_binary_da_mo_start");
-extern const uint8_t da_size[] asm("_binary_da_mo_size");
-extern const uint8_t de_start[] asm("_binary_de_mo_start");
-extern const uint8_t de_size[] asm("_binary_de_mo_size");
-extern const uint8_t el_start[] asm("_binary_el_mo_start");
-extern const uint8_t el_size[] asm("_binary_el_mo_size");
-extern const uint8_t es_start[] asm("_binary_es_mo_start");
-extern const uint8_t es_size[] asm("_binary_es_mo_size");
-extern const uint8_t fi_start[] asm("_binary_fi_mo_start");
-extern const uint8_t fi_size[] asm("_binary_fi_mo_size");
-extern const uint8_t fr_start[] asm("_binary_fr_mo_start");
-extern const uint8_t fr_size[] asm("_binary_fr_mo_size");
-extern const uint8_t he_start[] asm("_binary_he_mo_start");
-extern const uint8_t he_size[] asm("_binary_he_mo_size");
-extern const uint8_t hr_start[] asm("_binary_hr_mo_start");
-extern const uint8_t hr_size[] asm("_binary_hr_mo_size");
-extern const uint8_t hu_start[] asm("_binary_hu_mo_start");
-extern const uint8_t hu_size[] asm("_binary_hu_mo_size");
-extern const uint8_t it_start[] asm("_binary_it_mo_start");
-extern const uint8_t it_size[] asm("_binary_it_mo_size");
-extern const uint8_t ja_start[] asm("_binary_ja_mo_start");
-extern const uint8_t ja_size[] asm("_binary_ja_mo_size");
-extern const uint8_t ko_start[] asm("_binary_ko_mo_start");
-extern const uint8_t ko_size[] asm("_binary_ko_mo_size");
-extern const uint8_t lt_start[] asm("_binary_lt_mo_start");
-extern const uint8_t lt_size[] asm("_binary_lt_mo_size");
-extern const uint8_t nb_start[] asm("_binary_nb_mo_start");
-extern const uint8_t nb_size[] asm("_binary_nb_mo_size");
-extern const uint8_t nl_start[] asm("_binary_nl_mo_start");
-extern const uint8_t nl_size[] asm("_binary_nl_mo_size");
-extern const uint8_t pl_start[] asm("_binary_pl_mo_start");
-extern const uint8_t pl_size[] asm("_binary_pl_mo_size");
-extern const uint8_t pt_BR_start[] asm("_binary_pt_BR_mo_start");
-extern const uint8_t pt_BR_size[] asm("_binary_pt_BR_mo_size");
-extern const uint8_t pt_start[] asm("_binary_pt_mo_start");
-extern const uint8_t pt_size[] asm("_binary_pt_mo_size");
-extern const uint8_t ro_start[] asm("_binary_ro_mo_start");
-extern const uint8_t ro_size[] asm("_binary_ro_mo_size");
-extern const uint8_t ru_start[] asm("_binary_ru_mo_start");
-extern const uint8_t ru_size[] asm("_binary_ru_mo_size");
-extern const uint8_t sk_start[] asm("_binary_sk_mo_start");
-extern const uint8_t sk_size[] asm("_binary_sk_mo_size");
-extern const uint8_t sl_start[] asm("_binary_sl_mo_start");
-extern const uint8_t sl_size[] asm("_binary_sl_mo_size");
-extern const uint8_t sr_start[] asm("_binary_sr_mo_start");
-extern const uint8_t sr_size[] asm("_binary_sr_mo_size");
-extern const uint8_t sv_start[] asm("_binary_sv_mo_start");
-extern const uint8_t sv_size[] asm("_binary_sv_mo_size");
-extern const uint8_t tr_start[] asm("_binary_tr_mo_start");
-extern const uint8_t tr_size[] asm("_binary_tr_mo_size");
-extern const uint8_t uk_start[] asm("_binary_uk_mo_start");
-extern const uint8_t uk_size[] asm("_binary_uk_mo_size");
-extern const uint8_t vi_start[] asm("_binary_vi_mo_start");
-extern const uint8_t vi_size[] asm("_binary_vi_mo_size");
-extern const uint8_t zh_CN_start[] asm("_binary_zh_CN_mo_start");
-extern const uint8_t zh_CN_size[] asm("_binary_zh_CN_mo_size");
+extern "C"
+{
+  extern const uint8_t cs_mo[];
+  extern const size_t cs_mo_size;
+  extern const uint8_t da_mo[];
+  extern const size_t da_mo_size;
+  extern const uint8_t de_mo[];
+  extern const size_t de_mo_size;
+  extern const uint8_t el_mo[];
+  extern const size_t el_mo_size;
+  extern const uint8_t es_mo[];
+  extern const size_t es_mo_size;
+  extern const uint8_t fi_mo[];
+  extern const size_t fi_mo_size;
+  extern const uint8_t fr_mo[];
+  extern const size_t fr_mo_size;
+  extern const uint8_t he_mo[];
+  extern const size_t he_mo_size;
+  extern const uint8_t hr_mo[];
+  extern const size_t hr_mo_size;
+  extern const uint8_t hu_mo[];
+  extern const size_t hu_mo_size;
+  extern const uint8_t it_mo[];
+  extern const size_t it_mo_size;
+  extern const uint8_t ja_mo[];
+  extern const size_t ja_mo_size;
+  extern const uint8_t ko_mo[];
+  extern const size_t ko_mo_size;
+  extern const uint8_t lt_mo[];
+  extern const size_t lt_mo_size;
+  extern const uint8_t nb_mo[];
+  extern const size_t nb_mo_size;
+  extern const uint8_t nl_mo[];
+  extern const size_t nl_mo_size;
+  extern const uint8_t pl_mo[];
+  extern const size_t pl_mo_size;
+  extern const uint8_t pt_BR_mo[];
+  extern const size_t pt_BR_mo_size;
+  extern const uint8_t pt_mo[];
+  extern const size_t pt_mo_size;
+  extern const uint8_t ro_mo[];
+  extern const size_t ro_mo_size;
+  extern const uint8_t ru_mo[];
+  extern const size_t ru_mo_size;
+  extern const uint8_t sk_mo[];
+  extern const size_t sk_mo_size;
+  extern const uint8_t sl_mo[];
+  extern const size_t sl_mo_size;
+  extern const uint8_t sr_mo[];
+  extern const size_t sr_mo_size;
+  extern const uint8_t sv_mo[];
+  extern const size_t sv_mo_size;
+  extern const uint8_t tr_mo[];
+  extern const size_t tr_mo_size;
+  extern const uint8_t uk_mo[];
+  extern const size_t uk_mo_size;
+  extern const uint8_t vi_mo[];
+  extern const size_t vi_mo_size;
+  extern const uint8_t zh_CN_mo[];
+  extern const size_t zh_CN_mo_size;
+}
 
-#ifdef __clang__
-/* gcc gives "redeclaration differs in 'constexpr'" */
-constexpr
-#endif
 const BuiltinLanguage language_table[] = {
-  { LANG_CHINESE, zh_CN_start, zh_CN_size, _T("zh_CN.mo"), _T("Simplified Chinese") },
-  { LANG_CZECH, cs_start, cs_size, _T("cs.mo"), _T("Czech") },
-  { LANG_DANISH, da_start, da_size, _T("da.mo"), _T("Danish") },
-  { LANG_GERMAN, de_start, de_size, _T("de.mo"), _T("German") },
-  { LANG_GREEK, el_start, el_size, _T("el.mo"), _T("Greek") },
-  { LANG_SPANISH, es_start, es_size, _T("es.mo"), _T("Spanish") },
-  { LANG_FINNISH, fi_start, fi_size, _T("fi.mo"), _T("Finnish") },
-  { LANG_FRENCH, fr_start, fr_size, _T("fr.mo"), _T("French") },
-  { LANG_HEBREW, he_start, he_size, _T("he.mo"), _T("Hebrew") },
-  { LANG_CROATIAN, hr_start, hr_size, _T("hr.mo"), _T("Croatian") },
-  { LANG_HUNGARIAN, hu_start, hu_size, _T("hu.mo"), _T("Hungarian") },
-  { LANG_ITALIAN, it_start, it_size, _T("it.mo"), _T("Italian") },
-  { LANG_JAPANESE, ja_start, ja_size, _T("ja.mo"), _T("Japanese") },
-  { LANG_KOREAN, ko_start, ko_size, _T("ko.mo"), _T("Korean") },
-  { LANG_LITHUANIAN, lt_start, lt_size, _T("lt.mo"), _T("Lithuanian") },
-  { LANG_NORWEGIAN, nb_start, nb_size, _T("nb.mo"), _T("Norwegian") },
-  { LANG_DUTCH, nl_start, nl_size, _T("nl.mo"), _T("Dutch") },
-  { LANG_POLISH, pl_start, pl_size, _T("pl.mo"), _T("Polish") },
-  { LANG_PORTUGUESE, pt_BR_start, pt_BR_size, _T("pt_BR.mo"), _T("Brazilian Portuguese") },
+  { LANG_CHINESE, zh_CN_mo, zh_CN_mo_size, _T("zh_CN.mo"), _T("Simplified Chinese") },
+  { LANG_CZECH, cs_mo, cs_mo_size, _T("cs.mo"), _T("Czech") },
+  { LANG_DANISH, da_mo, da_mo_size, _T("da.mo"), _T("Danish") },
+  { LANG_GERMAN, de_mo, de_mo_size, _T("de.mo"), _T("German") },
+  { LANG_GREEK, el_mo, el_mo_size, _T("el.mo"), _T("Greek") },
+  { LANG_SPANISH, es_mo, es_mo_size, _T("es.mo"), _T("Spanish") },
+  { LANG_FINNISH, fi_mo, fi_mo_size, _T("fi.mo"), _T("Finnish") },
+  { LANG_FRENCH, fr_mo, fr_mo_size, _T("fr.mo"), _T("French") },
+  { LANG_HEBREW, he_mo, he_mo_size, _T("he.mo"), _T("Hebrew") },
+  { LANG_CROATIAN, hr_mo, hr_mo_size, _T("hr.mo"), _T("Croatian") },
+  { LANG_HUNGARIAN, hu_mo, hu_mo_size, _T("hu.mo"), _T("Hungarian") },
+  { LANG_ITALIAN, it_mo, it_mo_size, _T("it.mo"), _T("Italian") },
+  { LANG_JAPANESE, ja_mo, ja_mo_size, _T("ja.mo"), _T("Japanese") },
+  { LANG_KOREAN, ko_mo, ko_mo_size, _T("ko.mo"), _T("Korean") },
+  { LANG_LITHUANIAN, lt_mo, lt_mo_size, _T("lt.mo"), _T("Lithuanian") },
+  { LANG_NORWEGIAN, nb_mo, nb_mo_size, _T("nb.mo"), _T("Norwegian") },
+  { LANG_DUTCH, nl_mo, nl_mo_size, _T("nl.mo"), _T("Dutch") },
+  { LANG_POLISH, pl_mo, pl_mo_size, _T("pl.mo"), _T("Polish") },
+  { LANG_PORTUGUESE, pt_BR_mo, pt_BR_mo_size, _T("pt_BR.mo"), _T("Brazilian Portuguese") },
 
   /* our Portuguese translation is less advanced than Brazilian
      Portuguese */
-  { LANG_PORTUGUESE, pt_start, pt_size, _T("pt.mo"), _T("Portuguese") },
+  { LANG_PORTUGUESE, pt_mo, pt_mo_size, _T("pt.mo"), _T("Portuguese") },
 
-  { LANG_ROMANIAN, ro_start, ro_size, _T("ro.mo"), _T("Romanian") },
-  { LANG_RUSSIAN, ru_start, ru_size, _T("ru.mo"), _T("Russian") },
-  { LANG_SLOVAK, sk_start, sk_size, _T("sk.mo"), _T("Slovak") },
-  { LANG_SLOVENIAN, sl_start, sl_size, _T("sl.mo"), _T("Slovenian") },
-  { LANG_SERBIAN, sr_start, sr_size, _T("sr.mo"), _T("Serbian") },
-  { LANG_SWEDISH, sv_start, sv_size, _T("sv.mo"), _T("Swedish") },
-  { LANG_TURKISH, tr_start, tr_size, _T("tr.mo"), _T("Turkish") },
-  { LANG_UKRAINIAN, uk_start, uk_size, _T("uk.mo"), _T("Ukranian") },
-  { LANG_VIETNAMESE, vi_start, vi_size, _T("vi.mo"), _T("Vietnamese") },
-  { 0, NULL }
+  { LANG_ROMANIAN, ro_mo, ro_mo_size, _T("ro.mo"), _T("Romanian") },
+  { LANG_RUSSIAN, ru_mo, ru_mo_size, _T("ru.mo"), _T("Russian") },
+  { LANG_SLOVAK, sk_mo, sk_mo_size, _T("sk.mo"), _T("Slovak") },
+  { LANG_SLOVENIAN, sl_mo, sl_mo_size, _T("sl.mo"), _T("Slovenian") },
+  { LANG_SERBIAN, sr_mo, sr_mo_size, _T("sr.mo"), _T("Serbian") },
+  { LANG_SWEDISH, sv_mo, sv_mo_size, _T("sv.mo"), _T("Swedish") },
+  { LANG_TURKISH, tr_mo, tr_mo_size, _T("tr.mo"), _T("Turkish") },
+  { LANG_UKRAINIAN, uk_mo, uk_mo_size, _T("uk.mo"), _T("Ukranian") },
+  { LANG_VIETNAMESE, vi_mo, vi_mo_size, _T("vi.mo"), _T("Vietnamese") },
+  { 0, nullptr, 0, nullptr, nullptr }
 };
 
 #ifdef WIN32
