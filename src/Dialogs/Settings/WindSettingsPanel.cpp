@@ -199,8 +199,12 @@ WindSettingsPanel::UpdateVector()
     source = _("Manual");
     break;
 
-  case DerivedInfo::WindSource::AUTO:
-    source = _("Auto");
+  case DerivedInfo::WindSource::CIRCLING:
+    source = _("Circling");
+    break;
+
+  case DerivedInfo::WindSource::EKF:
+    source = _("ZigZag");
     break;
 
   case DerivedInfo::WindSource::EXTERNAL:

@@ -116,7 +116,9 @@ WindComputer::Select(const WindSettings &settings,
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
-    calculated.wind_source = DerivedInfo::WindSource::AUTO;
+    calculated.wind_source = ekf_active
+      ? DerivedInfo::WindSource::EKF
+      : DerivedInfo::WindSource::CIRCLING;
 
   } else if (basic.external_wind_available.Modified(settings.manual_wind_available)) {
     // external wind available
