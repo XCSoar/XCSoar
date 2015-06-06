@@ -50,6 +50,11 @@ WindComputer::Compute(const WindSettings &settings,
                       const GlidePolar &glide_polar,
                       const MoreData &basic, DerivedInfo &calculated)
 {
+  if (!settings.IsAutoWindEnabled()) {
+    calculated.estimated_wind_available.Clear();
+    return;
+  }
+
   if (!calculated.flight.flying)
     return;
 
@@ -67,8 +72,7 @@ WindComputer::Compute(const WindSettings &settings,
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
 
-  if (settings.IsAutoWindEnabled())
-    wind_store.SlotAltitude(basic, calculated);
+  wind_store.SlotAltitude(basic, calculated);
 }
 
 void
@@ -92,8 +96,7 @@ void
 WindComputer::Select(const WindSettings &settings,
                      const NMEAInfo &basic, DerivedInfo &calculated)
 {
-  if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
-      && settings.IsAutoWindEnabled()) {
+  if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)) {
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
