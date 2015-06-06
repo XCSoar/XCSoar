@@ -355,6 +355,7 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
     canvas.Select(*look.name_font);
     canvas.Select(look.label_pen);
     canvas.Select(look.label_brush);
+    canvas.SetBackgroundTransparent();
 
     // draw labels
     TCHAR topText[NAME_SIZE + 1];
