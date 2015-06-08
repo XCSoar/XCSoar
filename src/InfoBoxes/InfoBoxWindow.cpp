@@ -135,7 +135,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 
 #ifndef GNAV
   // Do text-based unit rendering on higher resolutions
-  if (Layout::FastScale(10) > 18) {
+  if (look.unit_font.IsDefined()) {
     canvas.Select(look.unit_font);
     PixelScalar unit_width =
         UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
