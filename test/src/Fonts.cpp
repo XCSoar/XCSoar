@@ -25,9 +25,6 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
-#include "Asset.hpp"
-
-#include <string.h>
 
 Font normal_font, bold_font;
 
