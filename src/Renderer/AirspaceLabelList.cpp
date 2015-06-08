@@ -21,34 +21,51 @@ Copyright_License {
 }
 */
 
-#include <string.h>
 #include <algorithm>
 #include "AirspaceLabelList.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/AirspaceWarning.hpp"
+#include "Engine/Airspace/AirspaceWarningConfig.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
 
-gcc_pure
-static bool
-MapAirspaceLabelListCompare(const AirspaceLabelList::Label &e1,
-                            const AirspaceLabelList::Label &e2)
-{
-  return false;
-}
+class AirspaceLabelListCompare {
+  const AirspaceWarningConfig &config;
+
+public:
+  AirspaceLabelListCompare(const AirspaceWarningConfig &_config)
+    :config(_config) {}
+
+  bool operator() (const AirspaceLabelList::Label &label1,
+                   const AirspaceLabelList::Label &label2) {
+    bool en1 = config.IsClassEnabled(label1.cls);
+    bool en2 = config.IsClassEnabled(label2.cls);
+
+    if(en1 == en2)
+      return AirspaceAltitude::SortHighest(label2.base, label1.base);
+    else if(en1)
+      return false;
+    else
+      return true;
+  }
+};
 
 void
-AirspaceLabelList::Add(const GeoPoint &pos, const AirspaceAltitude &base,
-                       const AirspaceAltitude &top)
+AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls, 
+                       const AirspaceAltitude &base, const AirspaceAltitude &top)
 {
   if (labels.full())
     return;
 
   auto &label = labels.append();
+  label.cls = cls;
   label.pos = pos;
   label.base = base;
   label.top = top;
 }
 
 void
-AirspaceLabelList::Sort()
+AirspaceLabelList::Sort(const AirspaceWarningConfig &config)
 {
-  std::sort(labels.begin(), labels.end(), MapAirspaceLabelListCompare);
+  AirspaceLabelListCompare compare(config);
+  std::sort(labels.begin(), labels.end(), compare);
 }
-

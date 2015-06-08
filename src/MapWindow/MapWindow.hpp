@@ -33,6 +33,7 @@ Copyright_License {
 #include "Renderer/LabelBlock.hpp"
 #include "Screen/StopWatch.hpp"
 #include "MapWindowBlackboard.hpp"
+#include "Renderer/AirspaceLabelRenderer.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
@@ -129,6 +130,7 @@ protected:
   WaypointRenderer waypoint_renderer;
 
   AirspaceRenderer airspace_renderer;
+  AirspaceLabelRenderer airspace_label_renderer;
 
   TrailRenderer trail_renderer;
 
@@ -207,6 +209,7 @@ public:
 
   void SetAirspaces(Airspaces *airspaces) {
     airspace_renderer.SetAirspaces(airspaces);
+    airspace_label_renderer.SetAirspaces(airspaces);
   }
 
   void SetTopography(TopographyStore *_topography);

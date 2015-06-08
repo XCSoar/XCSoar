@@ -72,7 +72,7 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
 void
 MapWindow::RenderAirspace(Canvas &canvas)
 {
-  if (GetMapSettings().airspace.enable)
+  if (GetMapSettings().airspace.enable) {
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
                            buffer_canvas,
@@ -81,6 +81,16 @@ MapWindow::RenderAirspace(Canvas &canvas)
                            Basic(), Calculated(),
                            GetComputerSettings().airspace,
                            GetMapSettings().airspace);
+
+    airspace_label_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                                 buffer_canvas,
+#endif
+                                 render_projection,
+                                 Basic(), Calculated(),
+                                 GetComputerSettings().airspace,
+                                 GetMapSettings().airspace);
+  }
 }
 
 void

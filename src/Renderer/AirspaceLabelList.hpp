@@ -25,17 +25,20 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_LABEL_LIST_HPP
 
 #include "Engine/Airspace/AirspaceAltitude.hpp"
+#include "Engine/Airspace/AirspaceClass.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 
+struct AirspaceWarningConfig;
 class AbstractAirspace;
 
 class AirspaceLabelList : private NonCopyable {
 public:
-  struct Label{
+  struct Label {
     GeoPoint pos;
+    AirspaceClass cls;
     AirspaceAltitude base;
     AirspaceAltitude top;
   };
@@ -44,11 +47,11 @@ protected:
   StaticArray<Label, 512u> labels;
 
 public:
-  AirspaceLabelList(){}
+  AirspaceLabelList() {}
 
-  void Add(const GeoPoint &pos, const AirspaceAltitude &base,
+  void Add(const GeoPoint &pos, AirspaceClass cls, const AirspaceAltitude &base,
            const AirspaceAltitude &top);
-  void Sort();
+  void Sort(const AirspaceWarningConfig &config);
 
   void Clear() {
     labels.clear();
