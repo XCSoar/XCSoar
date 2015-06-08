@@ -54,13 +54,15 @@ public:
     return logfont;
   }
 
+#ifndef GNAV
   unsigned GetHeight() const {
-    return logfont.lfHeight;
+    return -logfont.lfHeight;
   }
 
   void SetHeight(unsigned _height) {
-    logfont.lfHeight = _height;
+    logfont.lfHeight = -int(_height);
   }
+#endif
 
   void SetBold(bool bold=true) {
     logfont.lfWeight = bold ? FW_BOLD : FW_MEDIUM;
