@@ -79,7 +79,7 @@ InitialiseLogFonts(FontSettings &settings)
   // Font for map bold text
   settings.map_bold = FontDescription(Layout::FontScale(10), true);
 
-  settings.monospace = FontDescription(settings.dialog.GetHeight(),
+  settings.monospace = FontDescription(Layout::FontScale(11),
                                        false, false, true);
 }
 
