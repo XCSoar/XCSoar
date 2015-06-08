@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "DefaultFonts.hpp"
-#include "AutoFont.hpp"
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
 #include "StandardFonts.hpp"
