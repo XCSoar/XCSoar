@@ -41,17 +41,12 @@ bool
 Fonts::Load(const FontSettings &settings)
 {
   dialog.Load(settings.dialog);
-
-  auto d = settings.dialog;
-  d.SetBold();
-  dialog_bold.Load(d);
+  dialog_bold.Load(settings.dialog.WithBold());
 
 #ifdef GNAV
   dialog_small.Load(settings.dialog_small);
 #else
-  d = settings.dialog;
-  d.SetHeight(std::max(6u, d.GetHeight() * 3u / 4u));
-  dialog_small.Load(d);
+  dialog_small.Load(settings.dialog.WithHeight(settings.dialog.GetHeight() * 3u / 4u));
 #endif
 
   cdi.Load(settings.cdi);
