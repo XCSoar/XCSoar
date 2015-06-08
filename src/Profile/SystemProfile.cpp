@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "SystemProfile.hpp"
 #include "DeviceConfig.hpp"
-#include "Profile.hpp"
+#include "Map.hpp"
+#include "ProfileKeys.hpp"
 #include "SystemSettings.hpp"
 
 void
@@ -33,6 +34,6 @@ Profile::Load(const ProfileMap &map, SystemSettings &settings)
     GetDeviceConfig(map, i, settings.devices[i]);
 
 #ifdef HAVE_MODEL_TYPE
-  Profile::GetEnum(ProfileKeys::AppInfoBoxModel, settings.model_type);
+  map.GetEnum(ProfileKeys::AppInfoBoxModel, settings.model_type);
 #endif
 }
