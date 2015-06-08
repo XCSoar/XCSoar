@@ -92,8 +92,9 @@ InfoBoxLook::ReinitialiseLayout(unsigned width)
   AutoSizeFont(small_value_font_d, width, _T("12345m"));
   small_value_font.Load(small_value_font_d);
 
-  if (Layout::FastScale(10) > 18)
-    unit_font.Load(FontDescription(value_font_d.GetHeight() * 2u / 5u));
+  unsigned unit_font_height = value_font_d.GetHeight() * 2u / 5u;
+  if (unit_font_height >= 8)
+    unit_font.Load(FontDescription(unit_font_height));
   else
     unit_font.Destroy();
 #ifdef HAVE_TEXT_CACHE
