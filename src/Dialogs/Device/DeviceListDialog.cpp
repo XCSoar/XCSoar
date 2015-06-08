@@ -239,7 +239,7 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const UPixelScalar margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
   CreateList(parent, look, rc, 3 * margin + font_height +
-             look.small_font->GetHeight()).SetLength(NUMDEV);
+             look.small_font.GetHeight()).SetLength(NUMDEV);
 
   for (Item &i : items)
     i.Clear();
@@ -411,7 +411,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     status = _("Not connected");
   }
 
-  canvas.Select(*look.small_font);
+  canvas.Select(look.small_font);
   canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
                   status);
 }

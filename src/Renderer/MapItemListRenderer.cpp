@@ -64,7 +64,7 @@ unsigned
 MapItemListRenderer::CalculateLayout(const DialogLook &dialog_look)
 {
   return row_renderer.CalculateLayout(*dialog_look.list.font_bold,
-                                      *dialog_look.small_font);
+                                      dialog_look.small_font);
 }
 
 static void

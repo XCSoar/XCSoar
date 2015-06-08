@@ -355,7 +355,7 @@ static UPixelScalar
 GetRowHeight(const DialogLook &look)
 {
   return look.list.font_bold->GetHeight() + 3 * Layout::GetTextPadding()
-    + look.small_font->GetHeight();
+    + look.small_font.GetHeight();
 }
 
 void
@@ -570,7 +570,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   const Font &name_font = *look.list.font_bold;
-  const Font &small_font = *look.small_font;
+  const Font &small_font = look.small_font;
 
   const unsigned text_padding = Layout::GetTextPadding();
   const unsigned frame_padding = text_padding / 2;

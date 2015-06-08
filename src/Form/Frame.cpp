@@ -78,7 +78,7 @@ WndFrame::GetTextHeight() const
   rc.Grow(-padding);
 
   AnyCanvas canvas;
-  canvas.Select(*look.text_font);
+  canvas.Select(look.text_font);
   canvas.DrawFormattedText(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
@@ -93,7 +93,7 @@ WndFrame::OnPaint(Canvas &canvas)
   canvas.SetTextColor(caption_color);
   canvas.SetBackgroundTransparent();
 
-  canvas.Select(*look.text_font);
+  canvas.Select(look.text_font);
 
   PixelRect rc = GetClientRect();
   const int padding = Layout::GetTextPadding();

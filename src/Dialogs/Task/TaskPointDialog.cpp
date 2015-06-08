@@ -200,7 +200,7 @@ private:
 TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
 {
   const unsigned padding = ::Layout::GetTextPadding();
-  const unsigned font_height = look.text_font->GetHeight();
+  const unsigned font_height = look.text_font.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   waypoint_panel = rc;

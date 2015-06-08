@@ -74,7 +74,7 @@ SimulatorPromptWindow::OnResize(PixelSize new_size)
   const unsigned button_width = Layout::Scale(112);
   const unsigned button_height = Layout::Scale(30);
   const unsigned label_height =
-    look.text_font->GetHeight() + Layout::GetTextPadding();
+    look.text_font.GetHeight() + Layout::GetTextPadding();
 
   PixelRect button_rc;
   button_rc.left = h_middle - button_width;
@@ -107,7 +107,7 @@ SimulatorPromptWindow::OnPaint(Canvas &canvas)
   canvas.ClearWhite();
   logo_view.draw(canvas, logo_rect);
 
-  canvas.Select(*look.text_font);
+  canvas.Select(look.text_font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   canvas.DrawText(label_position.x, label_position.y,

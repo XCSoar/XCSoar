@@ -41,7 +41,7 @@ GetMinimumHeight(const WndProperty &control, const DialogLook &look,
                  bool vertical)
 {
   const unsigned padding = Layout::GetTextPadding();
-  unsigned height = look.text_font->GetHeight();
+  unsigned height = look.text_font.GetHeight();
   if (vertical && control.HasCaption())
     height *= 2;
   height += padding * 2;
@@ -284,7 +284,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   LargeTextWindow *ltw = new LargeTextWindow();
   ltw->Create(panel, rc, style);
-  ltw->SetFont(*look.text_font);
+  ltw->SetFont(look.text_font);
 
   if (text != nullptr)
     ltw->SetText(text);
@@ -422,7 +422,7 @@ PixelSize
 RowFormWidget::GetMinimumSize() const
 {
   const unsigned value_width =
-    look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).cx;
 
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
@@ -442,7 +442,7 @@ PixelSize
 RowFormWidget::GetMaximumSize() const
 {
   const unsigned value_width =
-    look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx * 2;
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).cx * 2;
 
   const unsigned edit_width = vertical
     ? std::max(GetRecommendedCaptionWidth(), value_width)

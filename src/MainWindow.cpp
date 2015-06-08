@@ -207,8 +207,7 @@ MainWindow::Initialise()
   if (look == nullptr)
     look = new Look();
 
-  look->Initialise(Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small,
-                   Fonts::map);
+  look->Initialise(Fonts::map);
 }
 
 void
@@ -229,8 +228,6 @@ MainWindow::InitialiseConfigured()
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
-                             Fonts::dialog, Fonts::dialog_bold,
-                             Fonts::dialog_small,
                              Fonts::map, Fonts::map_bold,
                              Fonts::cdi,
                              ib_layout.control_size.cx);
@@ -262,7 +259,7 @@ MainWindow::InitialiseConfigured()
   map->Create(*this, map_rect);
 
   popup = new PopupMessage(*this, ui_settings);
-  popup->Create(rc, Fonts::dialog_bold);
+  popup->Create(rc, look->dialog.bold_font);
 }
 
 void
@@ -354,7 +351,7 @@ MainWindow::ReinitialiseLayout()
   map_rect = ib_layout.remaining;
 
   popup->Destroy();
-  popup->Create(rc, Fonts::dialog_bold);
+  popup->Create(rc, look->dialog.bold_font);
 
   ReinitialiseLayout_vario(ib_layout);
 

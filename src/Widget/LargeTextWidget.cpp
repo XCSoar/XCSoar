@@ -42,7 +42,7 @@ LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   LargeTextWindow *w = new LargeTextWindow();
   w->Create(parent, rc, style);
-  w->SetFont(*look.text_font);
+  w->SetFont(look.text_font);
   if (text != nullptr)
     w->SetText(text);
 

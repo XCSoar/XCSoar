@@ -27,8 +27,6 @@ Copyright_License {
 
 #include <algorithm>
 
-Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
-
 /// vario display, runway informations
 Font Fonts::cdi;
 /// text names on the map
@@ -39,15 +37,6 @@ Font Fonts::map_bold;
 bool
 Fonts::Load(const FontSettings &settings)
 {
-  dialog.Load(settings.dialog);
-  dialog_bold.Load(settings.dialog.WithBold());
-
-#ifdef GNAV
-  dialog_small.Load(settings.dialog_small);
-#else
-  dialog_small.Load(settings.dialog.WithHeight(settings.dialog.GetHeight() * 3u / 4u));
-#endif
-
   cdi.Load(settings.cdi);
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
@@ -59,9 +48,6 @@ Fonts::Load(const FontSettings &settings)
 void
 Fonts::Deinitialize()
 {
-  dialog.Destroy();
-  dialog_bold.Destroy();
-  dialog_small.Destroy();
   map.Destroy();
   map_bold.Destroy();
   cdi.Destroy();

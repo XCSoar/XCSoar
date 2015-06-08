@@ -607,7 +607,7 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font_bold,
-                                          *look.small_font));
+                                          look.small_font));
 
   ordered_task = *ordered_task_pointer;
 }

@@ -29,12 +29,11 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
+#include "Screen/Font.hpp"
 
 #ifdef EYE_CANDY
 #include "Screen/Bitmap.hpp"
 #endif
-
-class Font;
 
 struct DialogLook {
   struct {
@@ -54,7 +53,7 @@ struct DialogLook {
 
   Brush background_brush;
 
-  const Font *text_font, *small_font;
+  Font text_font, bold_font, small_font;
 
   struct {
     Color background_color, text_color;
@@ -114,10 +113,7 @@ struct DialogLook {
   ButtonLook button;
   CheckBoxLook check_box;
 
-  void Initialise(const Font &caption_font,
-                  const Font &text_font, const Font &small_font,
-                  const Font &button_font,
-                  const Font &list_font, const Font &list_font_bold);
+  void Initialise();
 
   void SetBackgroundColor(Color color);
 };

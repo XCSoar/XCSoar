@@ -464,7 +464,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
-  details_text.SetFont(*look.text_font);
+  details_text.SetFont(look.text_font);
   details_text.SetText(waypoint.details.c_str());
 
 #ifdef HAVE_RUN_FILE

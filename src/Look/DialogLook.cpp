@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DialogLook.hpp"
+#include "FontDescription.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
@@ -29,16 +30,28 @@ Copyright_License {
 #include "Resources.hpp"
 #endif
 
+#include <algorithm>
+
 void
-DialogLook::Initialise(const Font &caption_font,
-                       const Font &_text_font,
-                       const Font &_small_font,
-                       const Font &button_font,
-                       const Font &list_font,
-                       const Font &list_font_bold)
+DialogLook::Initialise()
 {
+#ifdef GNAV
+  const FontDescription text_font_d(_T("RasterGothicTwelveCond"), 13);
+  const FontDescription small_font_d(_T("RasterGothicNineCond"), 10);
+#else
+  const FontDescription text_font_d(std::min(Layout::FontScale(12),
+                                             Layout::min_screen_pixels / 20));
+  const FontDescription small_font_d =
+    text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 4u);
+#endif
+
+  text_font.Load(text_font_d);
+  small_font.Load(small_font_d);
+
+  bold_font.Load(text_font_d.WithBold());
+
   caption.text_color = COLOR_BLACK;
-  caption.font = &caption_font;
+  caption.font = &text_font;
 
 #ifdef EYE_CANDY
   caption.background_bitmap.Load(IDB_DIALOGTITLE);
@@ -53,10 +66,8 @@ DialogLook::Initialise(const Font &caption_font,
     SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
   text_color = COLOR_BLACK;
 
-  text_font = &_text_font;
-  small_font = &_small_font;
-  button.Initialise(button_font);
-  check_box.Initialise(_text_font);
+  button.Initialise(bold_font);
+  check_box.Initialise(text_font);
 
   focused.background_color = COLOR_XCSOAR_DARK;
   focused.text_color = COLOR_WHITE;
@@ -71,8 +82,8 @@ DialogLook::Initialise(const Font &caption_font,
   list.focused.text_color = COLOR_WHITE;
   list.pressed.background_color = COLOR_YELLOW;
   list.pressed.text_color = COLOR_BLACK;
-  list.font = &list_font;
-  list.font_bold = &list_font_bold;
+  list.font = &text_font;
+  list.font_bold = &bold_font;
 }
 
 void

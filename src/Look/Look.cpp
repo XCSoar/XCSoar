@@ -25,12 +25,9 @@ Copyright_License {
 #include "UISettings.hpp"
 
 void
-Look::Initialise(const Font &dialog_font, const Font &dialog_bold_font,
-                 const Font &dialog_small_font,
-                 const Font &map_font)
+Look::Initialise(const Font &map_font)
 {
-  dialog.Initialise(dialog_bold_font, dialog_font, dialog_small_font,
-                    dialog_bold_font, dialog_font, dialog_bold_font);
+  dialog.Initialise();
   traffic.Initialise(map_font);
   flarm_dialog.Initialise(traffic, false);
   gesture.Initialise();
@@ -40,15 +37,11 @@ Look::Initialise(const Font &dialog_font, const Font &dialog_bold_font,
 
 void
 Look::InitialiseConfigured(const UISettings &settings,
-                           const Font &dialog_font,
-                           const Font &dialog_bold_font,
-                           const Font &dialog_small_font,
                            const Font &map_font, const Font &map_bold_font,
                            const Font &cdi_font,
                            unsigned infobox_width)
 {
-  dialog.Initialise(dialog_bold_font, dialog_font, dialog_small_font,
-                    dialog_bold_font, dialog_font, dialog_bold_font);
+  dialog.Initialise();
   terminal.Initialise();
   units.Initialise();
   cross_section.Initialise(map_font);

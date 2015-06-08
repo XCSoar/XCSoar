@@ -41,10 +41,6 @@ Copyright_License {
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
-  settings.dialog = FontDescription(_T("RasterGothicTwelveCond"), 13);
-#ifdef GNAV
-  settings.dialog_small = FontDescription(_T("RasterGothicNineCond"), 10);
-#endif
   settings.cdi = FontDescription(_T("RasterGothicEighteenCond"), 19, true);
   settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
   settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
@@ -62,9 +58,6 @@ InitialiseLogFonts(FontSettings &settings)
     return;
   }
 #endif
-
-  settings.dialog = FontDescription(std::min(Layout::FontScale(12),
-                                             Layout::min_screen_pixels / 20));
 
   // new font for CDI Scale
   settings.cdi = FontDescription(Layout::FontScale(10),

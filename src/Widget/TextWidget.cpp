@@ -45,7 +45,7 @@ TextWidget::SetColor(Color _color)
 PixelSize
 TextWidget::GetMinimumSize() const
 {
-  const Font &font = *UIGlobals::GetDialogLook().text_font;
+  const Font &font = UIGlobals::GetDialogLook().text_font;
   const PixelScalar height = 2 * Layout::GetTextPadding() + font.GetHeight();
 
   return { PixelScalar(0), height };

@@ -174,8 +174,7 @@ Main()
   InitialiseFonts();
 
   DialogLook dialog_look;
-  dialog_look.Initialise(bold_font, normal_font, small_font,
-                         bold_font, bold_font, bold_font);
+  dialog_look.Initialise();
 
   TopWindowStyle main_style;
   main_style.Resizable();

@@ -277,7 +277,7 @@ AirspaceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font,
-                                          *look.small_font));
+                                          look.small_font));
   UpdateList();
 }
 

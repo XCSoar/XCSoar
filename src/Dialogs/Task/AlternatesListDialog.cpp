@@ -116,7 +116,7 @@ AlternatesListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   CreateList(parent, dialog_look, rc,
              row_renderer.CalculateLayout(*dialog_look.list.font_bold,
-                                          *dialog_look.small_font));
+                                          dialog_look.small_font));
 
   GetList().SetLength(alternates.size());
 }

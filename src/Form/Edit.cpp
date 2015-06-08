@@ -149,7 +149,7 @@ WndProperty::~WndProperty()
 unsigned
 WndProperty::GetRecommendedCaptionWidth() const
 {
-  return look.text_font->TextSize(caption).cx + Layout::GetTextPadding();
+  return look.text_font.TextSize(caption).cx + Layout::GetTextPadding();
 }
 
 void
@@ -190,7 +190,7 @@ WndProperty::UpdateLayout()
     edit_rc.right -= margin;
     edit_rc.bottom -= margin;
   } else {
-    const unsigned caption_height = look.text_font->GetHeight();
+    const unsigned caption_height = look.text_font.GetHeight();
 
     edit_rc.left += margin;
     edit_rc.top = margin + caption_height;
@@ -322,7 +322,7 @@ WndProperty::OnPaint(Canvas &canvas)
                           ? look.focused.text_color
                           : look.text_color);
     canvas.SetBackgroundTransparent();
-    canvas.Select(*look.text_font);
+    canvas.Select(look.text_font);
 
     PixelSize tsize = canvas.CalcTextSize(caption.c_str());
 
@@ -370,7 +370,7 @@ WndProperty::OnPaint(Canvas &canvas)
   if (!value.empty()) {
     canvas.SetTextColor(text_color);
     canvas.SetBackgroundTransparent();
-    canvas.Select(*look.text_font);
+    canvas.Select(look.text_font);
 
     const int x = edit_rc.left + Layout::GetTextPadding();
     const int canvas_height = edit_rc.bottom - edit_rc.top;

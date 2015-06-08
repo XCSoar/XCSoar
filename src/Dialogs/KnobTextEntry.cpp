@@ -154,7 +154,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 
   // Do the actual painting of the text
   const DialogLook &look = UIGlobals::GetDialogLook();
-  canvas.Select(*look.text_font);
+  canvas.Select(look.text_font);
 
   PixelSize tsize = canvas.CalcTextSize(buffer);
   PixelSize tsizec = canvas.CalcTextSize(buffer, cursor);
