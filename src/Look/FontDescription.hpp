@@ -45,10 +45,10 @@ public:
   /**
    * @param _height the cell height of the font
    */
-  explicit FontDescription(const TCHAR *face,
-                           unsigned _height,
-                           bool _bold=false, bool _italic=false,
-                           bool _monospace=false);
+  FontDescription(const TCHAR *face,
+                  unsigned _height,
+                  bool _bold=false, bool _italic=false,
+                  bool _monospace=false);
 
   explicit operator const LOGFONT &() const {
     return logfont;
