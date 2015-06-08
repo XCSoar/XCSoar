@@ -117,7 +117,7 @@ LoadProfile()
     return false;
 
   Profile::Load();
-  Profile::Use();
+  Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
   SetUserCoordinateFormat(CommonInterface::GetUISettings().format.coordinate_format);

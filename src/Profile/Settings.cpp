@@ -28,9 +28,9 @@ Copyright_License {
 #include "Interface.hpp"
 
 void
-Profile::Use()
+Profile::Use(const ProfileMap &map)
 {
-  Load(CommonInterface::SetSystemSettings());
+  Load(map, CommonInterface::SetSystemSettings());
   Load(CommonInterface::SetComputerSettings());
   Load(CommonInterface::SetUISettings());
 }

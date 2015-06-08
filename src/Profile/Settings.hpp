@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_SETTINGS_HPP
 #define XCSOAR_PROFILE_SETTINGS_HPP
 
+class ProfileMap;
+
 namespace Profile
 {
   /**
    * Adjusts the application settings according to the profile settings
    */
-  void Use();
+  void Use(const ProfileMap &map);
 };
 
 #endif

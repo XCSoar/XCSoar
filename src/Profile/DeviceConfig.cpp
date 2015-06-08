@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DeviceConfig.hpp"
-#include "Profile.hpp"
+#include "Map.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Device/Config.hpp"
@@ -81,32 +81,32 @@ StringToPortType(const char *value, DeviceConfig::PortType &type)
 }
 
 static bool
-ReadPortType(unsigned n, DeviceConfig::PortType &type)
+ReadPortType(const ProfileMap &map, unsigned n, DeviceConfig::PortType &type)
 {
   char name[64];
 
   MakeDeviceSettingName(name, "Port", n, "Type");
 
-  const char *value = Profile::Get(name);
+  const char *value = map.Get(name);
   return value != NULL && StringToPortType(value, type);
 }
 
 static bool
-LoadPath(DeviceConfig &config, unsigned n)
+LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
 {
   char buffer[64];
   MakeDeviceSettingName(buffer, "Port", n, "Path");
-  return Profile::Get(buffer, config.path);
+  return map.Get(buffer, config.path);
 }
 
 static bool
-LoadPortIndex(DeviceConfig &config, unsigned n)
+LoadPortIndex(const ProfileMap &map, DeviceConfig &config, unsigned n)
 {
   char buffer[64];
   MakeDeviceSettingName(buffer, "Port", n, "Index");
 
   unsigned index;
-  if (!Profile::Get(buffer, index))
+  if (!map.Get(buffer, index))
     return false;
 
   /* adjust the number, compatibility quirk for XCSoar 5 */
@@ -122,34 +122,35 @@ LoadPortIndex(DeviceConfig &config, unsigned n)
 }
 
 void
-Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
+Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
+                         DeviceConfig &config)
 {
   char buffer[64];
 
-  bool have_port_type = ReadPortType(n, config.port_type);
+  bool have_port_type = ReadPortType(map, n, config.port_type);
 
   MakeDeviceSettingName(buffer, "Port", n, "BluetoothMAC");
-  Get(buffer, config.bluetooth_mac);
+  map.Get(buffer, config.bluetooth_mac);
 
   MakeDeviceSettingName(buffer, "Port", n, "IOIOUartID");
-  Get(buffer, config.ioio_uart_id);
+  map.Get(buffer, config.ioio_uart_id);
 
   MakeDeviceSettingName(buffer, "Port", n, "IPAddress");
-  if (!Get(buffer, config.ip_address))
+  if (!map.Get(buffer, config.ip_address))
     config.ip_address.clear();
 
   MakeDeviceSettingName(buffer, "Port", n, "TCPPort");
-  if (!Get(buffer, config.tcp_port))
+  if (!map.Get(buffer, config.tcp_port))
     config.tcp_port = 4353;
 
   config.path.clear();
   if ((!have_port_type ||
        config.port_type == DeviceConfig::PortType::SERIAL) &&
-      !LoadPath(config, n) && LoadPortIndex(config, n))
+      !LoadPath(map, config, n) && LoadPortIndex(map, config, n))
     config.port_type = DeviceConfig::PortType::SERIAL;
 
   MakeDeviceSettingName(buffer, "Port", n, "BaudRate");
-  if (!Get(buffer, config.baud_rate)) {
+  if (!map.Get(buffer, config.baud_rate)) {
     /* XCSoar before 6.2 used to store a "speed index", not the real
        baud rate - try to import the old settings */
 
@@ -166,45 +167,45 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
     MakeDeviceSettingName(buffer, "Speed", n, "Index");
     unsigned speed_index;
-    if (Get(buffer, speed_index) &&
+    if (map.Get(buffer, speed_index) &&
         speed_index < ARRAY_SIZE(speed_index_table))
       config.baud_rate = speed_index_table[speed_index];
   }
 
   MakeDeviceSettingName(buffer, "Port", n, "BulkBaudRate");
-  if (!Get(buffer, config.bulk_baud_rate))
+  if (!map.Get(buffer, config.bulk_baud_rate))
     config.bulk_baud_rate = 0;
 
   strcpy(buffer, "DeviceA");
   buffer[strlen(buffer) - 1] += n;
-  Get(buffer, config.driver_name);
+  map.Get(buffer, config.driver_name);
 
   MakeDeviceSettingName(buffer, "Port", n, "Enabled");
-  Get(buffer, config.enabled);
+  map.Get(buffer, config.enabled);
 
   MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
-  Get(buffer, config.sync_from_device);
+  map.Get(buffer, config.sync_from_device);
 
   MakeDeviceSettingName(buffer, "Port", n, "SyncToDevice");
-  Get(buffer, config.sync_to_device);
+  map.Get(buffer, config.sync_to_device);
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
-  Get(buffer, config.k6bt);
+  map.Get(buffer, config.k6bt);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
-  Get(buffer, config.i2c_bus);
+  map.Get(buffer, config.i2c_bus);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Addr");
-  Get(buffer, config.i2c_addr);
+  map.Get(buffer, config.i2c_addr);
 
   MakeDeviceSettingName(buffer, "Port", n, "PressureUse");
-  GetEnum(buffer, config.press_use);
+  map.GetEnum(buffer, config.press_use);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorOffset");
-  Get(buffer, config.sensor_offset);
+  map.Get(buffer, config.sensor_offset);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
-  Get(buffer, config.sensor_factor);
+  map.Get(buffer, config.sensor_factor);
 }
 
 static const char *
@@ -217,7 +218,7 @@ PortTypeToString(DeviceConfig::PortType type)
 }
 
 static void
-WritePortType(unsigned n, DeviceConfig::PortType type)
+WritePortType(ProfileMap &map, unsigned n, DeviceConfig::PortType type)
 {
   const char *value = PortTypeToString(type);
   if (value == NULL)
@@ -225,73 +226,74 @@ WritePortType(unsigned n, DeviceConfig::PortType type)
 
   char name[64];
   MakeDeviceSettingName(name, "Port", n, "Type");
-  Profile::Set(name, value);
+  map.Set(name, value);
 }
 
 void
-Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
+Profile::SetDeviceConfig(ProfileMap &map,
+                         unsigned n, const DeviceConfig &config)
 {
   char buffer[64];
 
-  WritePortType(n, config.port_type);
+  WritePortType(map, n, config.port_type);
 
   MakeDeviceSettingName(buffer, "Port", n, "BluetoothMAC");
-  Set(buffer, config.bluetooth_mac);
+  map.Set(buffer, config.bluetooth_mac);
 
   MakeDeviceSettingName(buffer, "Port", n, "IOIOUartID");
-  Set(buffer, config.ioio_uart_id);
+  map.Set(buffer, config.ioio_uart_id);
 
   MakeDeviceSettingName(buffer, "Port", n, "Path");
-  Set(buffer, config.path);
+  map.Set(buffer, config.path);
 
   MakeDeviceSettingName(buffer, "Port", n, "BaudRate");
-  Set(buffer, config.baud_rate);
+  map.Set(buffer, config.baud_rate);
 
   MakeDeviceSettingName(buffer, "Port", n, "BulkBaudRate");
-  Set(buffer, config.bulk_baud_rate);
+  map.Set(buffer, config.bulk_baud_rate);
 
   MakeDeviceSettingName(buffer, "Port", n, "IPAddress");
-  Set(buffer, config.ip_address);
+  map.Set(buffer, config.ip_address);
 
   MakeDeviceSettingName(buffer, "Port", n, "TCPPort");
-  Set(buffer, config.tcp_port);
+  map.Set(buffer, config.tcp_port);
 
   strcpy(buffer, "DeviceA");
   buffer[strlen(buffer) - 1] += n;
-  Set(buffer, config.driver_name);
+  map.Set(buffer, config.driver_name);
 
   MakeDeviceSettingName(buffer, "Port", n, "Enabled");
-  Set(buffer, config.enabled);
+  map.Set(buffer, config.enabled);
 
   MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
-  Set(buffer, config.sync_from_device);
+  map.Set(buffer, config.sync_from_device);
 
   MakeDeviceSettingName(buffer, "Port", n, "SyncToDevice");
-  Set(buffer, config.sync_to_device);
+  map.Set(buffer, config.sync_to_device);
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
-  Set(buffer, config.k6bt);
+  map.Set(buffer, config.k6bt);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
-  Set(buffer, config.i2c_bus);
+  map.Set(buffer, config.i2c_bus);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Addr");
-  Set(buffer, config.i2c_addr);
+  map.Set(buffer, config.i2c_addr);
 
   MakeDeviceSettingName(buffer, "Port", n, "PressureUse");
-  SetEnum(buffer, config.press_use);
+  map.SetEnum(buffer, config.press_use);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorOffset");
   fixed offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : fixed(0);
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     offset = CommonInterface::Basic().sensor_calibration_offset;
-  Set(buffer, offset);
+  map.Set(buffer, offset);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
   fixed factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : fixed(0);
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     factor = CommonInterface::Basic().sensor_calibration_factor;
-  Set(buffer, factor);
+  map.Set(buffer, factor);
 }

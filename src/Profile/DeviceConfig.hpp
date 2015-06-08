@@ -24,12 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_DEVICE_CONFIG_HPP
 #define XCSOAR_PROFILE_DEVICE_CONFIG_HPP
 
+class ProfileMap;
 struct DeviceConfig;
 
 namespace Profile
 {
-  void GetDeviceConfig(unsigned n, DeviceConfig &config);
-  void SetDeviceConfig(unsigned n, const DeviceConfig &config);
+  void GetDeviceConfig(const ProfileMap &map, unsigned n,
+                       DeviceConfig &config);
+  void SetDeviceConfig(ProfileMap &map, unsigned n,
+                       const DeviceConfig &config);
 };
 
 #endif

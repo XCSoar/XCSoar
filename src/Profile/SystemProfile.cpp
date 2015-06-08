@@ -27,10 +27,10 @@ Copyright_License {
 #include "SystemSettings.hpp"
 
 void
-Profile::Load(SystemSettings &settings)
+Profile::Load(const ProfileMap &map, SystemSettings &settings)
 {
   for (unsigned i = 0; i < settings.devices.size(); ++i)
-    GetDeviceConfig(i, settings.devices[i]);
+    GetDeviceConfig(map, i, settings.devices[i]);
 
 #ifdef HAVE_MODEL_TYPE
   Profile::GetEnum(ProfileKeys::AppInfoBoxModel, settings.model_type);

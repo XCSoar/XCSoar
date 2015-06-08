@@ -29,6 +29,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Settings.hpp"
+#include "Profile/Current.hpp"
 #include "Util/Macros.hpp"
 #include "Util/EnumCast.hpp"
 #include "Units/Units.hpp"
@@ -262,7 +263,7 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
     AirfieldFileChanged = true;
 
     // assuming all is ok, we can...
-    Profile::Use();
+    Profile::Use(Profile::map);
   }
 }
 
