@@ -87,9 +87,8 @@ WndFrame::GetTextHeight() const
 void
 WndFrame::OnPaint(Canvas &canvas)
 {
-#ifdef HAVE_CLIPPING
-  canvas.Clear(look.background_brush);
-#endif
+  if (HaveClipping())
+    canvas.Clear(look.background_brush);
 
   canvas.SetTextColor(caption_color);
   canvas.SetBackgroundTransparent();
