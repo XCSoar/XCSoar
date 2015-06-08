@@ -254,7 +254,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     look->InitialiseConfigured(ui_settings,
                                normal_font, bold_font, small_font,
                                normal_font, bold_font,
-                               small_font, monospace_font,
+                               small_font,
                                100);
   }
 

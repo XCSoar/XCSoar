@@ -76,7 +76,7 @@ static void
 Main()
 {
   TerminalLook look;
-  look.Initialise(monospace_font);
+  look.Initialise();
 
   TestWindow window(look);
   window.Create({400, 400});

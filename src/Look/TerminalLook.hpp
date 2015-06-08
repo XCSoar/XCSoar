@@ -25,15 +25,14 @@ Copyright_License {
 #define XCSOAR_TERMINAL_LOOK_HPP
 
 #include "Screen/Color.hpp"
-
-class Font;
+#include "Screen/Font.hpp"
 
 struct TerminalLook {
   Color background_color, text_color;
 
-  const Font *font;
+  Font font;
 
-  void Initialise(const Font &font);
+  void Initialise();
 };
 
 #endif

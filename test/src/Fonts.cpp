@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <string.h>
 
-Font normal_font, small_font, bold_font, monospace_font;
+Font normal_font, small_font, bold_font;
 
 void
 InitialiseFonts()
@@ -37,14 +37,11 @@ InitialiseFonts()
   normal_font.Load(FontDescription(Layout::FontScale(12)));
   small_font.Load(FontDescription(Layout::FontScale(10)));
   bold_font.Load(FontDescription(Layout::FontScale(12), true));
-  monospace_font.Load(FontDescription(Layout::FontScale(12),
-                                      false, false, true));
 }
 
 void
 DeinitialiseFonts()
 {
-  monospace_font.Destroy();
   bold_font.Destroy();
   small_font.Destroy();
   normal_font.Destroy();

@@ -39,7 +39,6 @@ namespace Fonts
   extern Font dialog, dialog_bold, dialog_small;
 
   extern Font cdi;
-  extern Font monospace;
 
   extern Font map;
   extern Font map_bold;

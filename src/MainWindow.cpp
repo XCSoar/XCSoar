@@ -232,7 +232,7 @@ MainWindow::InitialiseConfigured()
                              Fonts::dialog, Fonts::dialog_bold,
                              Fonts::dialog_small,
                              Fonts::map, Fonts::map_bold,
-                             Fonts::cdi, Fonts::monospace,
+                             Fonts::cdi,
                              ib_layout.control_size.cx);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);

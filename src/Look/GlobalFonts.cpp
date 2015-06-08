@@ -31,7 +31,6 @@ Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
 
 /// vario display, runway informations
 Font Fonts::cdi;
-Font Fonts::monospace;
 /// text names on the map
 Font Fonts::map;
 /// menu buttons, waypoint selection, messages, etc.
@@ -52,11 +51,9 @@ Fonts::Load(const FontSettings &settings)
   cdi.Load(settings.cdi);
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
-  monospace.Load(settings.monospace);
 
   return cdi.IsDefined() &&
-    map.IsDefined() && map_bold.IsDefined() &&
-    monospace.IsDefined();
+    map.IsDefined() && map_bold.IsDefined();
 }
 
 void
@@ -68,5 +65,4 @@ Fonts::Deinitialize()
   map.Destroy();
   map_bold.Destroy();
   cdi.Destroy();
-  monospace.Destroy();
 }

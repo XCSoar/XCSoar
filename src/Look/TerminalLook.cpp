@@ -22,11 +22,20 @@ Copyright_License {
 */
 
 #include "TerminalLook.hpp"
+#include "FontDescription.hpp"
+#include "StandardFonts.hpp"
+#include "Screen/Layout.hpp"
 
 void
-TerminalLook::Initialise(const Font &_font)
+TerminalLook::Initialise()
 {
+#ifdef GNAV
+  font.Load(FontDescription(GetStandardMonospaceFontFace(),
+                            12, false, false, true));
+#else
+  font.Load(FontDescription(Layout::FontScale(11), false, false, true));
+#endif
+
   background_color = COLOR_BLACK;
   text_color = COLOR_WHITE;
-  font = &_font;
 }

@@ -45,12 +45,11 @@ Look::InitialiseConfigured(const UISettings &settings,
                            const Font &dialog_small_font,
                            const Font &map_font, const Font &map_bold_font,
                            const Font &cdi_font,
-                           const Font &monospace_font,
                            unsigned infobox_width)
 {
   dialog.Initialise(dialog_bold_font, dialog_font, dialog_small_font,
                     dialog_bold_font, dialog_font, dialog_bold_font);
-  terminal.Initialise(monospace_font);
+  terminal.Initialise();
   units.Initialise();
   cross_section.Initialise(map_font);
   horizon.Initialise();

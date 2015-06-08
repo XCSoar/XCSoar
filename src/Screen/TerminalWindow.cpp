@@ -96,7 +96,7 @@ void
 TerminalWindow::OnCreate()
 {
   PaintWindow::OnCreate();
-  cell_size = look.font->TextSize(_T("W"));
+  cell_size = look.font.TextSize(_T("W"));
   cursor_x = 0;
   cursor_y = 0;
   data.Reset();
@@ -129,7 +129,7 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
 {
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(look.text_color);
-  canvas.Select(*look.font);
+  canvas.Select(look.font);
 
   const PixelRect cell_dirty = {
     p_dirty.left / cell_size.cx,

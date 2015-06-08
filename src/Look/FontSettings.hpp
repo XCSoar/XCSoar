@@ -34,7 +34,6 @@ struct FontSettings {
 #endif
 
   FontDescription cdi;
-  FontDescription monospace;
 
   FontDescription map;
   FontDescription map_bold;

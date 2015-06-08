@@ -24,7 +24,6 @@ Copyright_License {
 #include "DefaultFonts.hpp"
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
-#include "StandardFonts.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
@@ -50,8 +49,6 @@ LoadAltairLogFonts(FontSettings &settings)
   settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
   settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
                                       15, true);
-  settings.monospace = FontDescription(GetStandardMonospaceFontFace(),
-                                       12, false, false, true);
 }
 
 #endif
@@ -78,9 +75,6 @@ InitialiseLogFonts(FontSettings &settings)
 
   // Font for map bold text
   settings.map_bold = FontDescription(Layout::FontScale(10), true);
-
-  settings.monospace = FontDescription(Layout::FontScale(11),
-                                       false, false, true);
 }
 
 FontSettings
