@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#ifndef GNAV
+
 void
 AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
 {
@@ -68,3 +70,5 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
 
   d.SetHeight(d.GetHeight() + 1);
 }
+
+#endif
