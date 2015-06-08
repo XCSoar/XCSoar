@@ -23,89 +23,90 @@ Copyright_License {
 
 #include "TaskProfile.hpp"
 #include "RouteProfile.hpp"
-#include "Profile.hpp"
+#include "Map.hpp"
+#include "ProfileKeys.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 namespace Profile {
-  static void Load(GlideSettings &settings);
-  static void Load(TaskStartMargins &settings);
-  static void Load(SectorDefaults &settings);
-  static void Load(StartConstraints &constraints);
-  static void Load(FinishConstraints &constraints);
-  static void Load(OrderedTaskSettings &settings);
+  static void Load(const ProfileMap &map, GlideSettings &settings);
+  static void Load(const ProfileMap &map, TaskStartMargins &settings);
+  static void Load(const ProfileMap &map, SectorDefaults &settings);
+  static void Load(const ProfileMap &map, StartConstraints &constraints);
+  static void Load(const ProfileMap &map, FinishConstraints &constraints);
+  static void Load(const ProfileMap &map, OrderedTaskSettings &settings);
 };
 
 void
-Profile::Load(GlideSettings &settings)
+Profile::Load(const ProfileMap &map, GlideSettings &settings)
 {
-  Get(ProfileKeys::PredictWindDrift, settings.predict_wind_drift);
+  map.Get(ProfileKeys::PredictWindDrift, settings.predict_wind_drift);
 }
 
 void
-Profile::Load(TaskStartMargins &settings)
+Profile::Load(const ProfileMap &map, TaskStartMargins &settings)
 {
-  Get(ProfileKeys::StartMaxHeightMargin, settings.max_height_margin);
-  Get(ProfileKeys::StartMaxSpeedMargin, settings.max_speed_margin);
+  map.Get(ProfileKeys::StartMaxHeightMargin, settings.max_height_margin);
+  map.Get(ProfileKeys::StartMaxSpeedMargin, settings.max_speed_margin);
 }
 
 void
-Profile::Load(SectorDefaults &settings)
+Profile::Load(const ProfileMap &map, SectorDefaults &settings)
 {
-  GetEnum(ProfileKeys::StartType, settings.start_type);
-  Get(ProfileKeys::StartRadius, settings.start_radius);
-  GetEnum(ProfileKeys::TurnpointType, settings.turnpoint_type);
-  Get(ProfileKeys::TurnpointRadius, settings.turnpoint_radius);
-  GetEnum(ProfileKeys::FinishType, settings.finish_type);
-  Get(ProfileKeys::FinishRadius, settings.finish_radius);
+  map.GetEnum(ProfileKeys::StartType, settings.start_type);
+  map.Get(ProfileKeys::StartRadius, settings.start_radius);
+  map.GetEnum(ProfileKeys::TurnpointType, settings.turnpoint_type);
+  map.Get(ProfileKeys::TurnpointRadius, settings.turnpoint_radius);
+  map.GetEnum(ProfileKeys::FinishType, settings.finish_type);
+  map.Get(ProfileKeys::FinishRadius, settings.finish_radius);
 }
 
 void
-Profile::Load(StartConstraints &constraints)
+Profile::Load(const ProfileMap &map, StartConstraints &constraints)
 {
-  GetEnum(ProfileKeys::StartHeightRef, constraints.max_height_ref);
-  Get(ProfileKeys::StartMaxHeight, constraints.max_height);
-  Get(ProfileKeys::StartMaxSpeed, constraints.max_speed);
+  map.GetEnum(ProfileKeys::StartHeightRef, constraints.max_height_ref);
+  map.Get(ProfileKeys::StartMaxHeight, constraints.max_height);
+  map.Get(ProfileKeys::StartMaxSpeed, constraints.max_speed);
 }
 
 void
-Profile::Load(FinishConstraints &constraints)
+Profile::Load(const ProfileMap &map, FinishConstraints &constraints)
 {
-  GetEnum(ProfileKeys::FinishHeightRef, constraints.min_height_ref);
-  Get(ProfileKeys::FinishMinHeight, constraints.min_height);
+  map.GetEnum(ProfileKeys::FinishHeightRef, constraints.min_height_ref);
+  map.Get(ProfileKeys::FinishMinHeight, constraints.min_height);
 }
 
 void
-Profile::Load(OrderedTaskSettings &settings)
+Profile::Load(const ProfileMap &map, OrderedTaskSettings &settings)
 {
-  Load(settings.start_constraints);
-  Load(settings.finish_constraints);
-  Get(ProfileKeys::AATMinTime, settings.aat_min_time);
+  Load(map, settings.start_constraints);
+  Load(map, settings.finish_constraints);
+  map.Get(ProfileKeys::AATMinTime, settings.aat_min_time);
 }
 
 void
-Profile::Load(TaskBehaviour &settings)
+Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
 {
-  Load(settings.glide);
+  Load(map, settings.glide);
 
-  Get(ProfileKeys::AATTimeMargin, settings.optimise_targets_margin);
-  Get(ProfileKeys::AutoMc, settings.auto_mc);
-  GetEnum(ProfileKeys::AutoMcMode, settings.auto_mc_mode);
+  map.Get(ProfileKeys::AATTimeMargin, settings.optimise_targets_margin);
+  map.Get(ProfileKeys::AutoMc, settings.auto_mc);
+  map.GetEnum(ProfileKeys::AutoMcMode, settings.auto_mc_mode);
 
   unsigned Temp;
-  if (Get(ProfileKeys::RiskGamma, Temp))
+  if (map.Get(ProfileKeys::RiskGamma, Temp))
     settings.risk_gamma = fixed(Temp) / 10;
 
-  if (Get(ProfileKeys::SafetyMacCready, Temp))
+  if (map.Get(ProfileKeys::SafetyMacCready, Temp))
     settings.safety_mc = fixed(Temp) / 10;
 
-  Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
-  GetEnum(ProfileKeys::TaskType, settings.task_type_default);
-  Load(settings.start_margins);
+  map.Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
+  map.GetEnum(ProfileKeys::TaskType, settings.task_type_default);
+  Load(map, settings.start_margins);
 
-  Load(settings.sector_defaults);
-  Load(settings.ordered_defaults);
+  Load(map, settings.sector_defaults);
+  Load(map, settings.ordered_defaults);
 
-  GetEnum(ProfileKeys::AbortTaskMode, settings.abort_task_mode);
+  map.GetEnum(ProfileKeys::AbortTaskMode, settings.abort_task_mode);
 
-  Load(settings.route_planner);
+  Load(map, settings.route_planner);
 }

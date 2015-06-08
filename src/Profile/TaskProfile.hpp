@@ -25,9 +25,10 @@ Copyright_License {
 #define XCSOAR_TASK_PROFILE_HPP
 
 struct TaskBehaviour;
+class ProfileMap;
 
 namespace Profile {
-  void Load(TaskBehaviour &settings);
+  void Load(const ProfileMap &map, TaskBehaviour &settings);
 };
 
 #endif

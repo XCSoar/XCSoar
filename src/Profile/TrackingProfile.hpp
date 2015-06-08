@@ -31,13 +31,14 @@ struct LiveTrack24Settings;
 #endif
 
 struct TrackingSettings;
+class ProfileMap;
 
 namespace Profile {
 #ifdef HAVE_LIVETRACK24
-  void Load(LiveTrack24Settings &settings);
+  void Load(const ProfileMap &map, LiveTrack24Settings &settings);
 #endif
 
-  void Load(TrackingSettings &settings);
+  void Load(const ProfileMap &map, TrackingSettings &settings);
 };
 
 #endif

@@ -22,17 +22,18 @@ Copyright_License {
 */
 
 #include "ContestProfile.hpp"
-#include "Profile.hpp"
+#include "ProfileKeys.hpp"
+#include "Map.hpp"
 #include "Engine/Contest/Settings.hpp"
 
 void
-Profile::Load(ContestSettings &settings)
+Profile::Load(const ProfileMap &map, ContestSettings &settings)
 {
-  if (GetEnum(ProfileKeys::OLCRules, settings.contest)) {
+  if (map.GetEnum(ProfileKeys::OLCRules, settings.contest)) {
     /* handle out-dated Sprint rule in profile */
     if (settings.contest == Contest::OLC_SPRINT)
       settings.contest = Contest::OLC_LEAGUE;
   }
 
-  Get(ProfileKeys::PredictContest, settings.predict);
+  map.Get(ProfileKeys::PredictContest, settings.predict);
 }

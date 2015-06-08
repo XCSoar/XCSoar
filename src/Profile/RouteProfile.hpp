@@ -25,9 +25,10 @@ Copyright_License {
 #define XCSOAR_ROUTE_PROFILE_HPP
 
 struct RoutePlannerConfig;
+class ProfileMap;
 
 namespace Profile {
-  void Load(RoutePlannerConfig &settings);
+  void Load(const ProfileMap &map, RoutePlannerConfig &settings);
 };
 
 #endif

@@ -25,125 +25,125 @@ Copyright_License {
 #include "AirspaceConfig.hpp"
 #include "TaskProfile.hpp"
 #include "TrackingProfile.hpp"
-#include "Profile.hpp"
+#include "ProfileKeys.hpp"
 #include "ContestProfile.hpp"
-#include "Current.hpp"
 #include "Map.hpp"
 #include "Computer/Settings.hpp"
 
 namespace Profile {
-  static void Load(WindSettings &settings);
-  static void Load(PolarSettings &settings);
-  static void Load(LoggerSettings &settings);
-  static void Load(TeamCodeSettings &settings);
-  static void Load(VoiceSettings &settings);
-  static void Load(PlacesOfInterestSettings &settings);
-  static void Load(FeaturesSettings &settings);
-  static void Load(CirclingSettings &settings);
-  static void Load(WaveSettings &settings);
+  static void Load(const ProfileMap &map, WindSettings &settings);
+  static void Load(const ProfileMap &map, PolarSettings &settings);
+  static void Load(const ProfileMap &map, LoggerSettings &settings);
+  static void Load(const ProfileMap &map, TeamCodeSettings &settings);
+  static void Load(const ProfileMap &map, VoiceSettings &settings);
+  static void Load(const ProfileMap &map, PlacesOfInterestSettings &settings);
+  static void Load(const ProfileMap &map, FeaturesSettings &settings);
+  static void Load(const ProfileMap &map, CirclingSettings &settings);
+  static void Load(const ProfileMap &map, WaveSettings &settings);
 };
 
 void
-Profile::Load(WindSettings &settings)
+Profile::Load(const ProfileMap &map, WindSettings &settings)
 {
   unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
-  if (Get(ProfileKeys::AutoWind, auto_wind_mode))
+  if (map.Get(ProfileKeys::AutoWind, auto_wind_mode))
     settings.SetLegacyAutoWindMode(auto_wind_mode);
 }
 
 void
-Profile::Load(PolarSettings &settings)
+Profile::Load(const ProfileMap &map, PolarSettings &settings)
 {
   fixed degradation;
-  if (Get(ProfileKeys::PolarDegradation, degradation) &&
+  if (map.Get(ProfileKeys::PolarDegradation, degradation) &&
       degradation >= fixed(0.5) && degradation <= fixed(1))
     settings.SetDegradationFactor(degradation);
 
-  Get(ProfileKeys::AutoBugs, settings.auto_bugs);
+  map.Get(ProfileKeys::AutoBugs, settings.auto_bugs);
 }
 
 void
-Profile::Load(LoggerSettings &settings)
+Profile::Load(const ProfileMap &map, LoggerSettings &settings)
 {
-  Get(ProfileKeys::LoggerTimeStepCruise, settings.time_step_cruise);
-  Get(ProfileKeys::LoggerTimeStepCircling, settings.time_step_circling);
+  map.Get(ProfileKeys::LoggerTimeStepCruise, settings.time_step_cruise);
+  map.Get(ProfileKeys::LoggerTimeStepCircling, settings.time_step_circling);
 
-  if (!GetEnum(ProfileKeys::AutoLogger, settings.auto_logger)) {
+  if (!map.GetEnum(ProfileKeys::AutoLogger, settings.auto_logger)) {
     // Legacy
     bool disable_auto_logger;
-    if (Get(ProfileKeys::DisableAutoLogger, disable_auto_logger))
+    if (map.Get(ProfileKeys::DisableAutoLogger, disable_auto_logger))
       settings.auto_logger =
           disable_auto_logger ? LoggerSettings::AutoLogger::OFF :
                                 LoggerSettings::AutoLogger::ON;
   }
 
-  Get(ProfileKeys::LoggerID, settings.logger_id.buffer(),
-      settings.logger_id.MAX_SIZE);
-  Get(ProfileKeys::PilotName, settings.pilot_name.buffer(),
-      settings.pilot_name.MAX_SIZE);
-  Get(ProfileKeys::EnableFlightLogger, settings.enable_flight_logger);
-  Get(ProfileKeys::EnableNMEALogger, settings.enable_nmea_logger);
+  map.Get(ProfileKeys::LoggerID, settings.logger_id.buffer(),
+          settings.logger_id.MAX_SIZE);
+  map.Get(ProfileKeys::PilotName, settings.pilot_name.buffer(),
+          settings.pilot_name.MAX_SIZE);
+  map.Get(ProfileKeys::EnableFlightLogger, settings.enable_flight_logger);
+  map.Get(ProfileKeys::EnableNMEALogger, settings.enable_nmea_logger);
 }
 
 void
-Profile::Load(TeamCodeSettings &settings)
+Profile::Load(const ProfileMap &map, TeamCodeSettings &settings)
 {
-  Get(ProfileKeys::TeamcodeRefWaypoint, settings.team_code_reference_waypoint);
+  map.Get(ProfileKeys::TeamcodeRefWaypoint, settings.team_code_reference_waypoint);
 }
 
 void
-Profile::Load(VoiceSettings &settings)
+Profile::Load(const ProfileMap &map, VoiceSettings &settings)
 {
-  Get(ProfileKeys::VoiceClimbRate, settings.voice_climb_rate_enabled);
-  Get(ProfileKeys::VoiceTerrain, settings.voice_terrain_enabled);
-  Get(ProfileKeys::VoiceWaypointDistance, settings.voice_waypoint_distance_enabled);
-  Get(ProfileKeys::VoiceTaskAltitudeDifference,
-      settings.voice_task_altitude_difference_enabled);
-  Get(ProfileKeys::VoiceMacCready, settings.voice_mac_cready_enabled);
-  Get(ProfileKeys::VoiceNewWaypoint, settings.voice_new_waypoint_enabled);
-  Get(ProfileKeys::VoiceInSector, settings.voice_in_sector_enabled);
-  Get(ProfileKeys::VoiceAirspace, settings.voice_airspace_enabled);
+  map.Get(ProfileKeys::VoiceClimbRate, settings.voice_climb_rate_enabled);
+  map.Get(ProfileKeys::VoiceTerrain, settings.voice_terrain_enabled);
+  map.Get(ProfileKeys::VoiceWaypointDistance,
+          settings.voice_waypoint_distance_enabled);
+  map.Get(ProfileKeys::VoiceTaskAltitudeDifference,
+          settings.voice_task_altitude_difference_enabled);
+  map.Get(ProfileKeys::VoiceMacCready, settings.voice_mac_cready_enabled);
+  map.Get(ProfileKeys::VoiceNewWaypoint, settings.voice_new_waypoint_enabled);
+  map.Get(ProfileKeys::VoiceInSector, settings.voice_in_sector_enabled);
+  map.Get(ProfileKeys::VoiceAirspace, settings.voice_airspace_enabled);
 }
 
 void
-Profile::Load(PlacesOfInterestSettings &settings)
+Profile::Load(const ProfileMap &map, PlacesOfInterestSettings &settings)
 {
-  Get(ProfileKeys::HomeWaypoint, settings.home_waypoint);
+  map.Get(ProfileKeys::HomeWaypoint, settings.home_waypoint);
   settings.home_location_available =
     map.GetGeoPoint(ProfileKeys::HomeLocation, settings.home_location);
 }
 
 void
-Profile::Load(FeaturesSettings &settings)
+Profile::Load(const ProfileMap &map, FeaturesSettings &settings)
 {
-  GetEnum(ProfileKeys::FinalGlideTerrain, settings.final_glide_terrain);
-  Get(ProfileKeys::BlockSTF, settings.block_stf_enabled);
-  Get(ProfileKeys::EnableNavBaroAltitude, settings.nav_baro_altitude_enabled);
+  map.GetEnum(ProfileKeys::FinalGlideTerrain, settings.final_glide_terrain);
+  map.Get(ProfileKeys::BlockSTF, settings.block_stf_enabled);
+  map.Get(ProfileKeys::EnableNavBaroAltitude, settings.nav_baro_altitude_enabled);
 }
 
 void
-Profile::Load(CirclingSettings &settings)
+Profile::Load(const ProfileMap &map, CirclingSettings &settings)
 {
-  Get(ProfileKeys::EnableExternalTriggerCruise,
-      settings.external_trigger_cruise_enabled);
+  map.Get(ProfileKeys::EnableExternalTriggerCruise,
+          settings.external_trigger_cruise_enabled);
 }
 
 void
-Profile::Load(WaveSettings &settings)
+Profile::Load(const ProfileMap &map, WaveSettings &settings)
 {
-  Get(ProfileKeys::WaveAssistant, settings.enabled);
+  map.Get(ProfileKeys::WaveAssistant, settings.enabled);
 }
 
 static bool
-LoadUTCOffset(RoughTimeDelta &value_r)
+LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r)
 {
   /* NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
      settings file (with negative offsets stored as "utc_offset + 24 *
      3600").  Later versions will create a new signed settings key. */
 
   int value;
-  if (Profile::Get(ProfileKeys::UTCOffsetSigned, value)) {
-  } else if (Profile::Get(ProfileKeys::UTCOffset, value)) {
+  if (map.Get(ProfileKeys::UTCOffsetSigned, value)) {
+  } else if (map.Get(ProfileKeys::UTCOffset, value)) {
     if (value > 12 * 3600)
       value = (value % (24 * 3600)) - 24 * 3600;
   } else
@@ -159,29 +159,29 @@ LoadUTCOffset(RoughTimeDelta &value_r)
 }
 
 void
-Profile::Load(ComputerSettings &settings)
+Profile::Load(const ProfileMap &map, ComputerSettings &settings)
 {
-  Load(settings.wind);
-  Load(settings.polar);
-  Load(settings.team_code);
-  Load(settings.voice);
-  Load(settings.poi);
-  Load(settings.features);
+  Load(map, settings.wind);
+  Load(map, settings.polar);
+  Load(map, settings.team_code);
+  Load(map, settings.voice);
+  Load(map, settings.poi);
+  Load(map, settings.features);
   Load(map, settings.airspace);
-  Load(settings.circling);
-  Load(settings.wave);
+  Load(map, settings.circling);
+  Load(map, settings.wave);
 
-  GetEnum(ProfileKeys::AverEffTime, settings.average_eff_time);
+  map.GetEnum(ProfileKeys::AverEffTime, settings.average_eff_time);
 
-  Get(ProfileKeys::SetSystemTimeFromGPS, settings.set_system_time_from_gps);
+  map.Get(ProfileKeys::SetSystemTimeFromGPS, settings.set_system_time_from_gps);
 
-  LoadUTCOffset(settings.utc_offset);
+  LoadUTCOffset(map, settings.utc_offset);
 
-  Load(settings.task);
-  Load(settings.contest);
-  Load(settings.logger);
+  Load(map, settings.task);
+  Load(map, settings.contest);
+  Load(map, settings.logger);
 
 #ifdef HAVE_TRACKING
-  Load(settings.tracking);
+  Load(map, settings.tracking);
 #endif
 }

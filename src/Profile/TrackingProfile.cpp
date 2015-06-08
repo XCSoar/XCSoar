@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TrackingProfile.hpp"
-#include "Profile.hpp"
+#include "Map.hpp"
 #include "ProfileKeys.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Util/NumberParser.hpp"
@@ -31,12 +31,13 @@ Copyright_License {
 
 #ifdef HAVE_SKYLINES_TRACKING
 namespace Profile {
-  static void Load(SkyLinesTracking::Settings &settings) {
-    Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
-    Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
-    Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
+  static void Load(const ProfileMap &map,
+                   SkyLinesTracking::Settings &settings) {
+    map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
+    map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
+    map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
 
-    const char *key = Get(ProfileKeys::SkyLinesTrackingKey);
+    const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
     if (key != NULL)
       settings.key = ParseUint64(key, NULL, 16);
   }
@@ -46,36 +47,36 @@ namespace Profile {
 #ifdef HAVE_LIVETRACK24
 
 void
-Profile::Load(LiveTrack24Settings &settings)
+Profile::Load(const ProfileMap &map, LiveTrack24Settings &settings)
 {
-  Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
+  map.Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
 
-  if (!Get(ProfileKeys::LiveTrack24Server, settings.server))
+  if (!map.Get(ProfileKeys::LiveTrack24Server, settings.server))
     settings.server = _T("www.livetrack24.com");
   else if (StringIsEqual(settings.server, _T("livexc.dhv1.de"))) {
     // DHV tracking server moved to new host (#3208)
     settings.server = _T("livexc.dhv.de");
   }
 
-  Get(ProfileKeys::LiveTrack24Username, settings.username);
-  Get(ProfileKeys::LiveTrack24Password, settings.password);
+  map.Get(ProfileKeys::LiveTrack24Username, settings.username);
+  map.Get(ProfileKeys::LiveTrack24Password, settings.password);
 }
 
 #endif
 
 void
-Profile::Load(TrackingSettings &settings)
+Profile::Load(const ProfileMap &map, TrackingSettings &settings)
 {
 #ifdef HAVE_LIVETRACK24
-  Get(ProfileKeys::TrackingInterval, settings.interval);
-  GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
-  Get(ProfileKeys::TrackingVehicleName, settings.vehicle_name);
+  map.Get(ProfileKeys::TrackingInterval, settings.interval);
+  map.GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
+  map.Get(ProfileKeys::TrackingVehicleName, settings.vehicle_name);
 #endif
 #ifdef HAVE_SKYLINES_TRACKING
-  Load(settings.skylines);
+  Load(map, settings.skylines);
 #endif
 #ifdef HAVE_LIVETRACK24
-  Load(settings.livetrack24);
+  Load(map, settings.livetrack24);
 #endif
 }
 

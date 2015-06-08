@@ -25,9 +25,10 @@ Copyright_License {
 #define XCSOAR_CONTEST_PROFILE_HPP
 
 struct ContestSettings;
+class ProfileMap;
 
 namespace Profile {
-  void Load(ContestSettings &settings);
+  void Load(const ProfileMap &map, ContestSettings &settings);
 };
 
 #endif

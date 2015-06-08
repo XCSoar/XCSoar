@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_COMPUTER_PROFILE_HPP
 #define XCSOAR_COMPUTER_PROFILE_HPP
 
+class ProfileMap;
 struct ComputerSettings;
 
 namespace Profile {
-  void Load(ComputerSettings &settings);
+  void Load(const ProfileMap &map, ComputerSettings &settings);
 };
 
 #endif
