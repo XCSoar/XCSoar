@@ -50,7 +50,7 @@ public:
                            bool _bold=false, bool _italic=false,
                            bool _monospace=false);
 
-  operator const LOGFONT &() const {
+  explicit operator const LOGFONT &() const {
     return logfont;
   }
 
