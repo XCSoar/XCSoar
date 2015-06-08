@@ -22,13 +22,14 @@ Copyright_License {
 */
 
 #include "VarioLook.hpp"
+#include "FontDescription.hpp"
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "Resources.hpp"
 
 void
 VarioLook::Initialise(bool _inverse, bool _colors,
-                      const Font &_text_font, const Font &_value_font)
+                      const Font &_text_font)
 {
   inverse = _inverse;
   colors = _colors;
@@ -61,5 +62,10 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   climb_bitmap.Load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
 
   text_font = &_text_font;
-  value_font = &_value_font;
+
+#ifdef GNAV
+  value_font.Load(FontDescription(_T("RasterGothicEighteenCond"), 19, true));
+#else
+  value_font.Load(FontDescription(Layout::FontScale(10), false, false, true));
+#endif
 }

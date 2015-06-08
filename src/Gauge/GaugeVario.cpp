@@ -68,7 +68,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   const unsigned height = rc.bottom - rc.top;
 
   if (!IsPersistent() || !layout_initialised) {
-    unsigned value_height = 4 + look.value_font->GetCapitalHeight()
+    unsigned value_height = 4 + look.value_font.GetCapitalHeight()
       + look.text_font->GetCapitalHeight();
 
     middle_position.y = offset.y - value_height / 2;
@@ -329,12 +329,12 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 
     value_info->rc.left = value_info->rc.right;
     // update back rect with max label size
-    value_info->rc.bottom = value_info->rc.top + look.value_font->GetCapitalHeight();
+    value_info->rc.bottom = value_info->rc.top + look.value_font.GetCapitalHeight();
 
     value_info->text_position.x = value_info->rc.left;
     value_info->text_position.y = value_info->rc.top
-                         + look.value_font->GetCapitalHeight()
-                         - look.value_font->GetAscentHeight();
+                         + look.value_font.GetCapitalHeight()
+                         - look.value_font.GetAscentHeight();
 
     value_info->last_value = fixed(-9999);
     value_info->last_text[0] = '\0';
@@ -387,7 +387,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
     _stprintf(buffer, _T("%.1f"), (double)value);
-    canvas.Select(*look.value_font);
+    canvas.Select(look.value_font);
     tsize = canvas.CalcTextSize(buffer);
     value_info->text_position.x = value_info->rc.right - tsize.cx;
 

@@ -72,7 +72,6 @@ struct Look {
   void Initialise(const Font &map_font);
   void InitialiseConfigured(const UISettings &settings,
                             const Font &map_font, const Font &map_bold_font,
-                            const Font &cdi_font,
                             unsigned infobox_width);
 
   void ReinitialiseLayout(unsigned infobox_width);

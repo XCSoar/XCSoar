@@ -38,7 +38,6 @@ Look::Initialise(const Font &map_font)
 void
 Look::InitialiseConfigured(const UISettings &settings,
                            const Font &map_font, const Font &map_bold_font,
-                           const Font &cdi_font,
                            unsigned infobox_width)
 {
   dialog.Initialise();
@@ -54,7 +53,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                       infobox_width);
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
-                   info_box.title_font, cdi_font);
+                   info_box.title_font);
   wind_arrow_info_box.Initialise(map_bold_font, settings.info_boxes.inverse);
   flarm_gauge.Initialise(traffic, true, settings.info_boxes.inverse);
   thermal_assistant_gauge.Initialise(true, settings.info_boxes.inverse);

@@ -252,7 +252,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     ui_settings.SetDefaults();
     look->InitialiseConfigured(ui_settings,
                                normal_font, bold_font,
-                               small_font,
                                100);
   }
 

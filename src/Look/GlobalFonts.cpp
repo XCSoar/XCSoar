@@ -27,8 +27,6 @@ Copyright_License {
 
 #include <algorithm>
 
-/// vario display, runway informations
-Font Fonts::cdi;
 /// text names on the map
 Font Fonts::map;
 /// menu buttons, waypoint selection, messages, etc.
@@ -37,12 +35,10 @@ Font Fonts::map_bold;
 bool
 Fonts::Load(const FontSettings &settings)
 {
-  cdi.Load(settings.cdi);
   map.Load(settings.map);
   map_bold.Load(settings.map_bold);
 
-  return cdi.IsDefined() &&
-    map.IsDefined() && map_bold.IsDefined();
+  return map.IsDefined() && map_bold.IsDefined();
 }
 
 void
@@ -50,5 +46,4 @@ Fonts::Deinitialize()
 {
   map.Destroy();
   map_bold.Destroy();
-  cdi.Destroy();
 }

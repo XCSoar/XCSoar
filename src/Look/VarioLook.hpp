@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Font.hpp"
 
 class Font;
 
@@ -47,10 +48,11 @@ struct VarioLook {
 
   Bitmap climb_bitmap;
 
-  const Font *text_font, *value_font;
+  const Font *text_font;
+  Font value_font;
 
   void Initialise(bool inverse, bool colors,
-                  const Font &text_font, const Font &value_font);
+                  const Font &text_font);
 };
 
 #endif

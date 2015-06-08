@@ -41,7 +41,6 @@ Copyright_License {
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
-  settings.cdi = FontDescription(_T("RasterGothicEighteenCond"), 19, true);
   settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
   settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
                                       15, true);
@@ -58,10 +57,6 @@ InitialiseLogFonts(FontSettings &settings)
     return;
   }
 #endif
-
-  // new font for CDI Scale
-  settings.cdi = FontDescription(Layout::FontScale(10),
-                                 false, false, true);
 
   // new font for map labels
   settings.map = FontDescription(Layout::FontScale(10));

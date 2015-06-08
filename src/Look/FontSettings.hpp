@@ -27,8 +27,6 @@ Copyright_License {
 #include "FontDescription.hpp"
 
 struct FontSettings {
-  FontDescription cdi;
-
   FontDescription map;
   FontDescription map_bold;
 };

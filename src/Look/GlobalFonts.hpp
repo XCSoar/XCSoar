@@ -33,8 +33,6 @@ class Font;
  */
 namespace Fonts
 {
-  extern Font cdi;
-
   extern Font map;
   extern Font map_bold;
 
