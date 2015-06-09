@@ -28,6 +28,7 @@ Copyright_License {
 #include "Profile/File.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
 
 bool
 ProfileFileHasPassword(const TCHAR *path)
@@ -41,12 +42,12 @@ CheckProfilePassword(const ProfileMap &map)
 {
   /* oh no, profile passwords are not truly secure! */
 
-  StaticString<80> profile_password;
+  StringBuffer<TCHAR, 80> profile_password;
   if (!map.Get(ProfileKeys::Password, profile_password))
       /* not password protected */
       return ProfilePasswordResult::UNPROTECTED;
 
-  StaticString<80> user_password;
+  StringBuffer<TCHAR, 80> user_password;
   user_password.clear();
   if (!TextEntryDialog(user_password, _("Enter your password")))
     return ProfilePasswordResult::CANCEL;
@@ -88,7 +89,7 @@ CheckProfilePasswordResult(ProfilePasswordResult result)
 bool
 SetProfilePasswordDialog(ProfileMap &map)
 {
-  StaticString<80> new_password;
+  StringBuffer<TCHAR, 80> new_password;
   new_password.clear();
   if (!TextEntryDialog(new_password, _("Enter a new password")))
     return false;

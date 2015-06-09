@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef DIALOGS_TEXT_ENTRY_HPP
 #define DIALOGS_TEXT_ENTRY_HPP
 
-#include "Util/StaticString.hxx"
+#include "Util/StringBuffer.hxx"
 
 #include <functional>
 
@@ -40,23 +40,23 @@ TextEntryDialog(TCHAR *text, size_t size,
 
 template<size_t N>
 static inline bool
-TextEntryDialog(StaticString<N> &text,
+TextEntryDialog(StringBuffer<TCHAR, N> &text,
                 const TCHAR *caption=NULL,
                 AllowedCharacters accb=AllowedCharacters(),
                 bool default_shift_state = true)
 {
-  return TextEntryDialog(text.buffer(), text.capacity(),
+  return TextEntryDialog(text.data(), text.capacity(),
                          caption, accb, default_shift_state);
 }
 
 template<size_t N>
 static inline bool
-TextEntryDialog(StaticString<N> &text,
+TextEntryDialog(StringBuffer<TCHAR, N> &text,
                 const TCHAR *caption,
                 bool default_shift_state)
 {
   AllowedCharacters accb=AllowedCharacters();
-  return TextEntryDialog(text.buffer(), text.capacity(),
+  return TextEntryDialog(text.data(), text.capacity(),
                          caption, accb, default_shift_state);
 }
 
