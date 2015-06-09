@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2015-05-13 07:18+0000\n"
-"Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
+"PO-Revision-Date: 2015-05-29 10:46+0000\n"
+"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-15 23:20+0000\n"
-"X-Generator: Launchpad (build 17493)\n"
+"X-Launchpad-Export-Date: 2015-06-09 09:16+0000\n"
+"X-Generator: Launchpad (build 17549)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3852,7 +3852,7 @@ msgstr "UDP　ポート"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:406
 msgid "Bluetooth LE"
-msgstr ""
+msgstr "ブルーツース　LE"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Port"
@@ -4504,7 +4504,7 @@ msgstr "記録間隔"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr ""
+msgstr "トラッキング無し"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:462
 #: src/Dialogs/dlgAnalysis.cpp:498 src/Dialogs/dlgAnalysis.cpp:507
@@ -5167,28 +5167,28 @@ msgstr "削除"
 
 #: src/Dialogs/ProfileListDialog.cpp:230 src/Dialogs/ProfileListDialog.cpp:267
 msgid "Profile name"
-msgstr ""
+msgstr "プロファイル名"
 
 #: src/Dialogs/ProfileListDialog.cpp:241 src/Dialogs/ProfileListDialog.cpp:278
 msgid "File exists already."
-msgstr ""
+msgstr "ファイル名は既に使用されています"
 
 #: src/Dialogs/ProfileListDialog.cpp:284
 msgid "Failed to save file."
-msgstr ""
+msgstr "保存に失敗しました"
 
 #: src/Dialogs/ProfileListDialog.cpp:303
 #, c-format
 msgid "Delete \"%s\"?"
-msgstr ""
+msgstr "\"%s\" を削除しますか？"
 
 #: src/Dialogs/ProfileListDialog.cpp:335 Data/Input/default.xci:668
 msgid "Profiles"
-msgstr ""
+msgstr "プロフィール"
 
 #: src/Dialogs/ProfileListDialog.cpp:348
 msgid "Select profile"
-msgstr ""
+msgstr "プロフィールを選択"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Activate"
@@ -5629,11 +5629,11 @@ msgstr "ウエイポイントに向かう"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:271
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "使用周波数を設定"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
 msgid "Set Standby Frequency"
-msgstr ""
+msgstr "スタンバイ周波数を設定"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:432 Data/Input/default.xci:1045
 msgid "GoTo"
@@ -6188,7 +6188,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:118
 msgid "Wave assistant"
-msgstr ""
+msgstr "ウエーブ　アシスト"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
@@ -6379,7 +6379,7 @@ msgstr "１２　上　または　左"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
 msgid "16 Right (Landscape)"
-msgstr ""
+msgstr "１６　ライト"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -8710,6 +8710,8 @@ msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
+"AA　速度　アサインド　タスクにおける最小時間で　現在選択されたポイント達成可"
+"能な　平均速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
