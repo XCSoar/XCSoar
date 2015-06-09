@@ -688,11 +688,10 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   /* draw bearing and distance on the right */
   if (item.vector.IsValid()) {
-    FormatUserDistanceSmart(item.vector.distance, tmp.buffer(), true);
     DrawTextRight(canvas, rc.right - text_padding,
                   name_y +
                   (name_font.GetHeight() - small_font.GetHeight()) / 2,
-                  tmp.c_str());
+                  FormatUserDistanceSmart(item.vector.distance).c_str());
 
     // Draw leg bearing
     FormatBearing(tmp.buffer(), tmp.MAX_SIZE, item.vector.bearing);
