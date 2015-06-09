@@ -187,20 +187,6 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
                         const TCHAR *caption, const PixelRect &rc,
                         const Bitmap *bmp, const bool isDown, bool inverse)
 {
-  PixelRect rcTextFinal = rc;
-  const unsigned buttonheight = rc.bottom - rc.top;
-  const PixelSize text_size = canvas.CalcTextSize(caption);
-  const int textwidth = text_size.cx;
-  const int textheight = text_size.cy;
-  unsigned textheightoffset = 0;
-
-  if (textwidth > (rc.right - rc.left)) // assume 2 lines
-    textheightoffset = std::max(0, (int)(buttonheight - textheight * 2) / 2);
-  else
-    textheightoffset = std::max(0, (int)(buttonheight - textheight) / 2);
-
-  rcTextFinal.top += textheightoffset;
-
   canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
 
   if (bmp != nullptr) {
@@ -266,6 +252,20 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 #endif
 
   } else {
+    PixelRect rcTextFinal = rc;
+    const unsigned buttonheight = rc.bottom - rc.top;
+    const PixelSize text_size = canvas.CalcTextSize(caption);
+    const int textwidth = text_size.cx;
+    const int textheight = text_size.cy;
+    unsigned textheightoffset = 0;
+
+    if (textwidth > (rc.right - rc.left)) // assume 2 lines
+      textheightoffset = std::max(0, (int)(buttonheight - textheight * 2) / 2);
+    else
+      textheightoffset = std::max(0, (int)(buttonheight - textheight) / 2);
+
+    rcTextFinal.top += textheightoffset;
+
 #ifndef USE_GDI
     if (IsDithered())
       CaptionStyle |= DT_UNDERLINE;
