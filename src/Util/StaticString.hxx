@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2013 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,6 +30,7 @@
 #ifndef STATIC_STRING_HPP
 #define STATIC_STRING_HPP
 
+#include "StringBuffer.hxx"
 #include "StringAPI.hpp"
 #include "StringUtil.hpp"
 #include "StringFormat.hpp"
@@ -54,46 +55,33 @@ CopyUTF8(TCHAR *dest, size_t dest_size, const char *src);
  * A string with a maximum size known at compile time.
  */
 template<typename T, size_t max>
-class StaticStringBase
-{
-public:
-	typedef T value_type;
-	typedef T &reference;
-	typedef T *pointer;
-	typedef const T *const_pointer;
-	typedef const_pointer const_iterator;
-	typedef size_t size_type;
-
-	static constexpr size_type CAPACITY = max;
-	static constexpr value_type SENTINEL = '\0';
-
-protected:
-	value_type the_data[max];
+class StaticStringBase : public StringBuffer<T, max> {
+	typedef StringBuffer<T, max> Base;
 
 public:
+	typedef typename Base::value_type value_type;
+	typedef typename Base::reference reference;
+	typedef typename Base::pointer pointer;
+	typedef typename Base::const_pointer const_pointer;
+	typedef typename Base::const_iterator const_iterator;
+	typedef typename Base::size_type size_type;
+
+	static constexpr size_type CAPACITY = Base::CAPACITY;
+	static constexpr value_type SENTINEL = Base::SENTINEL;
+
 	StaticStringBase() = default;
 	explicit StaticStringBase(const_pointer value) {
 		assign(value);
-	}
-
-	constexpr size_type capacity() const {
-		return CAPACITY;
 	}
 
 	size_type length() const {
 		return StringLength(c_str());
 	}
 
-	bool empty() const {
-		return the_data[0] == SENTINEL;
-	}
+	using Base::empty;
 
 	bool full() const {
 		return length() >= CAPACITY - 1;
-	}
-
-	void clear() {
-		the_data[0] = SENTINEL;
 	}
 
 	/**
@@ -105,7 +93,7 @@ public:
 	void Truncate(size_type new_length) {
 		assert(new_length <= length());
 
-		the_data[new_length] = SENTINEL;
+		data()[new_length] = SENTINEL;
 	}
 
 	void SetASCII(const char *src, const char *src_end) {
@@ -165,13 +153,6 @@ public:
 	/**
 	 * Returns a writable buffer.
 	 */
-	pointer data() {
-		return the_data;
-	}
-
-	/**
-	 * Returns a writable buffer.
-	 */
 	pointer buffer() {
 		return data();
 	}
@@ -182,7 +163,7 @@ public:
 	value_type operator[](size_type i) const {
 		assert(i <= length());
 
-		return the_data[i];
+		return Base::operator[](i);
 	}
 
 	/**
@@ -191,20 +172,16 @@ public:
 	reference operator[](size_type i) {
 		assert(i <= length());
 
-		return the_data[i];
+		return Base::operator[](i);
 	}
 
-	const_iterator begin() const {
-		return c_str();
-	}
+	using Base::begin;
 
 	const_iterator end() const {
 		return begin() + length();
 	}
 
-	value_type front() const {
-		return *begin();
-	}
+	using Base::front;
 
 	value_type back() const {
 		return end()[-1];
@@ -260,9 +237,7 @@ public:
 		CopyASCII(data() + length(), p);
 	}
 
-	const_pointer c_str() const {
-		return the_data;
-	}
+	using Base::c_str;
 
 	operator const_pointer() const {
 		return c_str();
