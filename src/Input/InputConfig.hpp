@@ -48,7 +48,7 @@ struct InputConfig {
 #ifdef ENABLE_SDL
   static constexpr unsigned MAX_KEY = 400;
 #elif defined(USE_X11)
-  static constexpr unsigned MAX_KEY = 0x10000;
+  static constexpr unsigned MAX_KEY = 0x1000;
 #elif defined(USE_POLL_EVENT)
   static constexpr unsigned MAX_KEY = 0600;
 #else
@@ -162,6 +162,20 @@ struct InputConfig {
 
     /* fall back to the default mode */
     return key_2_event[0][key_code_idx];
+  }
+
+  void SetKeyEvent(unsigned mode, unsigned key_code, unsigned event_id) {
+    assert(mode < MAX_MODE);
+
+    auto key_2_event = Key2Event;
+#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+    if (key_code & SDLK_SCANCODE_MASK) {
+      key_2_event = Key2EventNonChar;
+      key_code &= ~SDLK_SCANCODE_MASK;
+    }
+#endif
+
+    key_2_event[mode][key_code] = event_id;
   }
 
   gcc_pure

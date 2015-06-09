@@ -111,16 +111,9 @@ apply_defaults(InputConfig &input_config,
   }
   
   while (default_key2event->event > 0) {
-    unsigned key_code_idx = default_key2event->key;
-    auto key_2_event = input_config.Key2Event;
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
-    if (default_key2event->key & SDLK_SCANCODE_MASK) {
-      key_2_event = input_config.Key2EventNonChar;
-      key_code_idx &= ~SDLK_SCANCODE_MASK;
-    }
-#endif
-    key_2_event[default_key2event->mode][key_code_idx] =
-      default_key2event->event;
+    input_config.SetKeyEvent(default_key2event->mode,
+                             default_key2event->key,
+                             default_key2event->event);
     ++default_key2event;
   }
 
