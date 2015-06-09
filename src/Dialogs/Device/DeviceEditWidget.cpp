@@ -770,8 +770,7 @@ DeviceEditWidget::Save(bool &_changed)
   }
 
   if (config.UsesIPAddress())
-    changed |= SaveValue(IP_ADDRESS, config.ip_address.buffer(),
-                         config.ip_address.capacity());
+    changed |= SaveValue(IP_ADDRESS, config.ip_address);
 
   if (config.UsesTCPPort())
     changed |= SaveValue(TCPPort, config.tcp_port);
@@ -783,8 +782,7 @@ DeviceEditWidget::Save(bool &_changed)
   }
 
   if (config.UsesDriver()) {
-    changed |= SaveValue(Driver, config.driver_name.buffer(),
-                         config.driver_name.capacity());
+    changed |= SaveValue(Driver, config.driver_name);
 
     if (CanReceiveSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncFromDevice, config.sync_from_device);

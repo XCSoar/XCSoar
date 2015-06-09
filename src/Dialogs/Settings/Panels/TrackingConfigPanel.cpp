@@ -266,8 +266,7 @@ TrackingConfigPanel::Save(bool &_changed)
                            settings.vehicleType);
 
   changed |= SaveValue(TrackingVehicleName, ProfileKeys::TrackingVehicleName,
-                       settings.vehicle_name.buffer(),
-                       settings.vehicle_name.capacity());
+                       settings.vehicle_name);
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING
@@ -290,16 +289,13 @@ TrackingConfigPanel::Save(bool &_changed)
   changed |= SaveValue(LT24Enabled, ProfileKeys::LiveTrack24Enabled, settings.livetrack24.enabled);
 
   changed |= SaveValue(LT24Server, ProfileKeys::LiveTrack24Server,
-                       settings.livetrack24.server.buffer(),
-                       settings.livetrack24.server.capacity());
+                       settings.livetrack24.server);
 
   changed |= SaveValue(LT24Username, ProfileKeys::LiveTrack24Username,
-                       settings.livetrack24.username.buffer(),
-                       settings.livetrack24.username.capacity());
+                       settings.livetrack24.username);
 
   changed |= SaveValue(LT24Password, ProfileKeys::LiveTrack24Password,
-                       settings.livetrack24.password.buffer(),
-                       settings.livetrack24.password.capacity());
+                       settings.livetrack24.password);
 #endif
 
   _changed |= changed;

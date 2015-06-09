@@ -605,7 +605,19 @@ public:
   bool SaveValue(unsigned i, Angle &value_r) const;
   bool SaveValue(unsigned i, RoughTime &value_r) const;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
+
+  template<size_t max>
+  bool SaveValue(unsigned i, StringBuffer<TCHAR, max> &value) const {
+    return SaveValue(i, value.data(), value.capacity());
+  }
+
   bool SaveValue(unsigned i, const char *profile_key, TCHAR *string, size_t max_size) const;
+
+  template<size_t max>
+  bool SaveValue(unsigned i, const char *profile_key,
+                 StringBuffer<TCHAR, max> &value) const {
+    return SaveValue(i, profile_key, value.data(), value.capacity());
+  }
 
   bool SaveValue(unsigned i, unsigned &value) const {
     return SaveValue(i, (int &)value);
