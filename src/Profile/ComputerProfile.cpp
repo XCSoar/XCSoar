@@ -76,10 +76,8 @@ Profile::Load(const ProfileMap &map, LoggerSettings &settings)
                                 LoggerSettings::AutoLogger::ON;
   }
 
-  map.Get(ProfileKeys::LoggerID, settings.logger_id.buffer(),
-          settings.logger_id.capacity());
-  map.Get(ProfileKeys::PilotName, settings.pilot_name.buffer(),
-          settings.pilot_name.capacity());
+  map.Get(ProfileKeys::LoggerID, settings.logger_id);
+  map.Get(ProfileKeys::PilotName, settings.pilot_name);
   map.Get(ProfileKeys::EnableFlightLogger, settings.enable_flight_logger);
   map.Get(ProfileKeys::EnableNMEALogger, settings.enable_nmea_logger);
 }
