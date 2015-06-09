@@ -151,7 +151,7 @@ class ZlibProject(Project):
         subprocess.check_call(['/usr/bin/make', '--quiet',
                                'CC=' + cc,
                                'CPP=' + cc + ' -E',
-                               'AR= ' + ar,
+                               'AR=' + ar,
                                'LDSHARED=' + cc + ' -shared',
                                'install'],
                               cwd=src)
