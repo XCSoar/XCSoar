@@ -233,8 +233,8 @@ thirdparty_libs = [
     ),
 
     FreeTypeProject(
-        'http://download.savannah.gnu.org/releases/freetype/freetype-2.5.5.tar.bz2',
-        '2a7a314927011d5030903179cf183be0',
+        'http://download.savannah.gnu.org/releases/freetype/freetype-2.6.tar.bz2',
+        '5682890cb0267f6671dd3de6eabd3e69',
         'lib/libfreetype.a',
         [
             '--disable-shared', '--enable-static',
