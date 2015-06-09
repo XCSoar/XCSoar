@@ -25,11 +25,12 @@ Copyright_License {
 #define XCSOAR_FLARM_PROFILE_HPP
 
 class FlarmColorDatabase;
+class ProfileMap;
 
 namespace Profile
 {
-  void Load(FlarmColorDatabase &db);
-  void Save(const FlarmColorDatabase &db);
+  void Load(const ProfileMap &map, FlarmColorDatabase &db);
+  void Save(ProfileMap &map, const FlarmColorDatabase &db);
 };
 
 #endif

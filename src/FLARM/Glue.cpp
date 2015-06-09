@@ -32,6 +32,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "Profile/FlarmProfile.hpp"
+#include "Profile/Current.hpp"
 #include "LogFile.hpp"
 
 /**
@@ -82,7 +83,7 @@ LoadFlarmDatabases()
 
   LoadSecondary(traffic_databases->flarm_names);
   LoadFLARMnet(traffic_databases->flarm_net);
-  Profile::Load(traffic_databases->flarm_colors);
+  Profile::Load(Profile::map, traffic_databases->flarm_colors);
 
   merge_thread->Resume();
 }
@@ -91,7 +92,7 @@ void
 SaveFlarmColors()
 {
   if (traffic_databases != nullptr)
-    Profile::Save(traffic_databases->flarm_colors);
+    Profile::Save(Profile::map, traffic_databases->flarm_colors);
 }
 
 /**
