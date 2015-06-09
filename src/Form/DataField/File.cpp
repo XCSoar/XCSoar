@@ -123,7 +123,7 @@ FileDataField::ScanDirectoryTop(const TCHAR *filter)
 {
   if (!loaded) {
     if (!postponed_patterns.full() &&
-        _tcslen(filter) < PatternList::value_type::MAX_SIZE) {
+        _tcslen(filter) < PatternList::value_type::CAPACITY) {
       postponed_patterns.append() = filter;
       return;
     } else
@@ -160,7 +160,7 @@ void
 FileDataField::Lookup(const TCHAR *text)
 {
   if (!loaded) {
-    if (_tcslen(text) < postponed_value.MAX_SIZE) {
+    if (_tcslen(text) < postponed_value.capacity()) {
       postponed_value = text;
       return;
     } else

@@ -114,7 +114,7 @@ namespace Profile {
   static inline bool
   Get(const char *key, StaticString<max> &value)
   {
-    return Get(key, value.buffer(), value.MAX_SIZE);
+    return Get(key, value.buffer(), value.capacity());
   }
 
   bool Exists(const char *key);

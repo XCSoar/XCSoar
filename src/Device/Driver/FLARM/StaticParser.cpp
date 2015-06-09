@@ -54,15 +54,15 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
     return;
 
   line.Read(version.hardware_version.buffer(),
-            version.hardware_version.MAX_SIZE);
+            version.hardware_version.capacity());
   version.hardware_version.CleanASCII();
 
   line.Read(version.software_version.buffer(),
-            version.software_version.MAX_SIZE);
+            version.software_version.capacity());
   version.software_version.CleanASCII();
 
   line.Read(version.obstacle_version.buffer(),
-            version.obstacle_version.MAX_SIZE);
+            version.obstacle_version.capacity());
   version.obstacle_version.CleanASCII();
 
   version.available.Update(clock);

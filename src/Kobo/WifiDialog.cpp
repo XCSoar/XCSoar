@@ -190,7 +190,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     const auto addr = IPv4Address::GetDeviceAddress("eth0");
     if (addr.IsDefined()) { /* valid address? */
       StaticString<40> addr_str;
-      if (addr.ToString(addr_str.buffer(), addr_str.MAX_SIZE) != nullptr) {
+      if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
         state_buffer.Format(_T("%s (%s)"), state, addr_str.c_str());
         state = state_buffer;
       }

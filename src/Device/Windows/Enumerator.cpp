@@ -95,11 +95,11 @@ PortEnumerator::Next()
     TCHAR device_key[64];
     if (device.GetValue(_T("Key"), device_key, 64) &&
         IsSerialPort(device_key) &&
-        device.GetValue(_T("Name"), name.buffer(), name.MAX_SIZE)) {
+        device.GetValue(_T("Name"), name.buffer(), name.capacity())) {
       display_name = name;
       const size_t length = display_name.length();
       TCHAR *const tail = display_name.buffer() + length;
-      const size_t remaining = display_name.MAX_SIZE - length - 3;
+      const size_t remaining = display_name.capacity() - length - 3;
 
       if (GetDeviceFriendlyName(device_key, tail + 2, remaining)) {
         /* build a string in the form: "COM1: (Friendly Name)" */
@@ -120,7 +120,7 @@ PortEnumerator::Next()
     if (port.error())
       continue;
 
-    if (!port.GetValue(_T("Port"), name.buffer(), name.MAX_SIZE - 1))
+    if (!port.GetValue(_T("Port"), name.buffer(), name.capacity() - 1))
       continue;
 
     /* the trailing colon is missing in this part of the registry */
@@ -142,7 +142,7 @@ PortEnumerator::Next()
     if (!device.error()) {
       const size_t length = display_name.length();
       TCHAR *const tail = display_name.buffer() + length;
-      const size_t remaining = display_name.MAX_SIZE - length - 3;
+      const size_t remaining = display_name.capacity() - length - 3;
 
       if (device.GetValue(_T("name"), tail + 2, remaining)) {
         /* build a string in the form: "COM1: (Friendly Name)" */

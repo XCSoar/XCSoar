@@ -91,7 +91,7 @@ template<size_t size>
 static void
 LoadString(const char *bytes, size_t length, StaticString<size> &dest)
 {
-  return LoadString(bytes, length, dest.buffer(), dest.MAX_SIZE);
+  return LoadString(bytes, length, dest.buffer(), dest.capacity());
 }
 
 /**

@@ -236,7 +236,7 @@ RasterWeatherStore::ScanAll(const GeoPoint &location,
 
     const char *dot = strchr(filename, '.');
     if (dot == nullptr || dot == filename ||
-        size_t(dot - filename) >= item.name.MAX_SIZE)
+        size_t(dot - filename) >= item.name.capacity())
       continue;
 
     item.name.SetASCII(filename, dot);

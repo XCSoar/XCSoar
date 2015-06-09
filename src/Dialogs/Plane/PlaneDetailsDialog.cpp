@@ -142,10 +142,10 @@ PlaneEditWidget::Save(bool &_changed)
   bool changed = false;
 
   changed |= SaveValue(REGISTRATION, plane.registration.buffer(),
-                       plane.registration.MAX_SIZE);
+                       plane.registration.capacity());
   changed |= SaveValue(COMPETITION_ID, plane.competition_id.buffer(),
-                       plane.competition_id.MAX_SIZE);
-  changed |= SaveValue(TYPE, plane.type.buffer(), plane.type.MAX_SIZE);
+                       plane.competition_id.capacity());
+  changed |= SaveValue(TYPE, plane.type.buffer(), plane.type.capacity());
   changed |= SaveValue(HANDICAP, plane.handicap);
   changed |= SaveValue(WING_AREA, plane.wing_area);
   changed |= SaveValue(MAX_BALLAST, plane.max_ballast);

@@ -108,7 +108,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   if (waypoint.radio_frequency.IsDefined() &&
       waypoint.radio_frequency.Format(buffer.buffer(),
-                                      buffer.MAX_SIZE) != nullptr) {
+                                      buffer.capacity()) != nullptr) {
     buffer += _T(" MHz");
     AddReadOnly(_("Radio frequency"), nullptr, buffer);
   }
@@ -132,7 +132,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Runway"), nullptr, buffer);
 
   if (FormatGeoPoint(waypoint.location,
-                     buffer.buffer(), buffer.MAX_SIZE) != nullptr)
+                     buffer.buffer(), buffer.capacity()) != nullptr)
     AddReadOnly(_("Location"), nullptr, buffer);
 
   AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint.elevation));
@@ -158,7 +158,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     FormatUserDistanceSmart(vector.distance, distance_buffer,
                                    ARRAY_SIZE(distance_buffer));
 
-    FormatBearing(buffer.buffer(), buffer.MAX_SIZE,
+    FormatBearing(buffer.buffer(), buffer.capacity(),
                   vector.bearing, distance_buffer);
     AddReadOnly(_("Bearing and Distance"), nullptr, buffer);
   }

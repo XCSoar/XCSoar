@@ -48,7 +48,7 @@ FlightStatusPanel::Refresh()
   StaticString<32> buffer;
 
   if (basic.location_available) {
-    FormatGeoPoint(basic.location, buffer.buffer(), buffer.MAX_SIZE);
+    FormatGeoPoint(basic.location, buffer.buffer(), buffer.capacity());
     SetText(Location, buffer);
   } else
     ClearText(Location);

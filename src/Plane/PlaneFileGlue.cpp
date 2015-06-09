@@ -164,7 +164,7 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 
   writer.Write("PolarName", plane.polar_name);
 
-  FormatPolarShape(plane.polar_shape, tmp.buffer(), tmp.MAX_SIZE);
+  FormatPolarShape(plane.polar_shape, tmp.buffer(), tmp.capacity());
   writer.Write("PolarInformation", tmp);
 
   tmp.Format("%f", (double)plane.reference_mass);

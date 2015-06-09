@@ -99,7 +99,7 @@ public:
 
   template<size_t max>
   bool Get(const char *key, StaticString<max> &value) const {
-    return Get(key, value.buffer(), value.MAX_SIZE);
+    return Get(key, value.buffer(), value.capacity());
   }
 
 #ifdef _UNICODE

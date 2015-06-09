@@ -149,7 +149,8 @@ void
 UpdateInfoBoxFreeRAM(InfoBoxData &data)
 {
 #ifdef HAVE_MEM_INFO
-  FormatByteSize(data.value.buffer(), data.value.MAX_SIZE, SystemFreeRAM(), true);
+  FormatByteSize(data.value.buffer(), data.value.capacity(),
+                 SystemFreeRAM(), true);
 #else
   data.SetInvalid();
 #endif

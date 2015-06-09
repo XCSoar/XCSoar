@@ -45,7 +45,7 @@ TextEntryDialog(StaticString<N> &text,
                 AllowedCharacters accb=AllowedCharacters(),
                 bool default_shift_state = true)
 {
-  return TextEntryDialog(text.buffer(), text.MAX_SIZE,
+  return TextEntryDialog(text.buffer(), text.capacity(),
                          caption, accb, default_shift_state);
 }
 
@@ -56,7 +56,7 @@ TextEntryDialog(StaticString<N> &text,
                 bool default_shift_state)
 {
   AllowedCharacters accb=AllowedCharacters();
-  return TextEntryDialog(text.buffer(), text.MAX_SIZE,
+  return TextEntryDialog(text.buffer(), text.capacity(),
                          caption, accb, default_shift_state);
 }
 

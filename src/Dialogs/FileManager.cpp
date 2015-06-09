@@ -142,7 +142,7 @@ class ManagedFileListWidget
       LocalPath(path, name);
 
       if (File::Exists(path)) {
-        FormatByteSize(size.buffer(), size.MAX_SIZE,
+        FormatByteSize(size.buffer(), size.capacity(),
                        File::GetSize(path));
 #ifdef HAVE_POSIX
         FormatISO8601(last_modified.buffer(),

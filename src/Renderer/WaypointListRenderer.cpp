@@ -85,7 +85,7 @@ Draw(Canvas &canvas, PixelRect rc,
     canvas.DrawText(distance_x, rc.top + row_renderer.GetFirstY(), buffer);
 
     // Draw leg bearing
-    FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vector->bearing);
+    FormatBearing(buffer.buffer(), buffer.capacity(), vector->bearing);
     const int bearing_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
     canvas.DrawText(bearing_x, rc.top + row_renderer.GetSecondY(), buffer);
 
