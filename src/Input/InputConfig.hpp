@@ -48,7 +48,7 @@ struct InputConfig {
 #ifdef ENABLE_SDL
   static constexpr unsigned MAX_KEY = 400;
 #elif defined(USE_X11)
-  static constexpr unsigned MAX_KEY = 0x80;
+  static constexpr unsigned MAX_KEY = 0x100;
 #elif defined(USE_POLL_EVENT)
   static constexpr unsigned MAX_KEY = 0600;
 #else
