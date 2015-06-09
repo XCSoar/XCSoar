@@ -36,6 +36,11 @@ libs = ''
 # one on the build host
 os.environ['PKG_CONFIG_LIBDIR'] = os.path.join(root_path, 'lib/pkgconfig')
 
+if 'MAKEFLAGS' in os.environ:
+    # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
+    # which breaks the zlib Makefile (and maybe others)
+    del os.environ['MAKEFLAGS']
+
 def file_md5(path):
     """Calculate the MD5 checksum of a file and return it in hexadecimal notation."""
 
