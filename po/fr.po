@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-28 01:57+0200\n"
-"PO-Revision-Date: 2014-08-13 18:15+0000\n"
+"PO-Revision-Date: 2015-06-06 20:32+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2015-06-09 09:16+0000\n"
+"X-Generator: Launchpad (build 17549)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3896,9 +3896,8 @@ msgid "UDP Port"
 msgstr "Port UDP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:406
-#, fuzzy
 msgid "Bluetooth LE"
-msgstr "Serveur Bluetooth"
+msgstr "Bluetooth LE"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Port"
@@ -4570,7 +4569,7 @@ msgstr "Intervalle d'enregistrement"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr ""
+msgstr "Mode sans tracking"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:462
 #: src/Dialogs/dlgAnalysis.cpp:498 src/Dialogs/dlgAnalysis.cpp:507
@@ -5241,33 +5240,29 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: src/Dialogs/ProfileListDialog.cpp:230 src/Dialogs/ProfileListDialog.cpp:267
-#, fuzzy
 msgid "Profile name"
-msgstr "Nom Fichier Court"
+msgstr "Nom du profil"
 
 #: src/Dialogs/ProfileListDialog.cpp:241 src/Dialogs/ProfileListDialog.cpp:278
 msgid "File exists already."
-msgstr ""
+msgstr "Ficher déjà existant"
 
 #: src/Dialogs/ProfileListDialog.cpp:284
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Echec du chargement du fichier."
+msgstr "Echec de la sauvegarde du fichier."
 
 #: src/Dialogs/ProfileListDialog.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Effacer le planeur \"%s\" ?"
+msgstr "Supprimer \"%s\" ?"
 
 #: src/Dialogs/ProfileListDialog.cpp:335 Data/Input/default.xci:668
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profils"
 
 #: src/Dialogs/ProfileListDialog.cpp:348
-#, fuzzy
 msgid "Select profile"
-msgstr "Sélectionnez un fichier"
+msgstr "Sélectionner un profil."
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:170
 msgid "Activate"
@@ -5708,14 +5703,12 @@ msgid "Pan to Waypoint"
 msgstr "aller au point de repère"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:271
-#, fuzzy
 msgid "Set Active Frequency"
-msgstr "Fréquence min."
+msgstr "Sélection de la fréquence active"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "Fréquence min."
+msgstr "Sélection de la fréquence Standby"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:432 Data/Input/default.xci:1045
 msgid "GoTo"
@@ -6277,9 +6270,8 @@ msgstr ""
 "Cela réduit la hauteur d'arrivée pour les branches face au vent."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:118
-#, fuzzy
 msgid "Wave assistant"
-msgstr "Assistant Thermique"
+msgstr "Assistant en onde"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
@@ -6468,9 +6460,9 @@ msgid "12 Top or Left"
 msgstr "12 en haut ou à gauche"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "12 Droite (Paysage)"
+msgstr "16 à droite (Paysage)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -8874,11 +8866,12 @@ msgid "V rem."
 msgstr "V rest."
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
-msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de temps restant."
+msgstr ""
+"Vitesse AA - Vitesse moyenne atteignable sur les points restants, dans le "
+"temps minimum imparti de l'AAT."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -10087,80 +10080,6 @@ msgstr ""
 msgid "Nav"
 msgstr "Nav."
 
-#~ msgid "MANUAL"
-#~ msgstr "Manuel"
-
-#~ msgid "AUTO"
-#~ msgstr "AUTO"
-
-#~ msgid "Clear current task?"
-#~ msgstr "Effacer circuit actuel?"
-
-#~ msgid "Goto and clear task"
-#~ msgstr "Aller à et effacer circuit"
-
-#~ msgid "Unknown error creating task."
-#~ msgstr "Erreur inconnue lors de la création du circuit."
-
-#~ msgid "Audio vario"
-#~ msgstr "Vario audio"
-
-#~ msgid "Emulate the sound of an electronic vario."
-#~ msgstr "Son vario électronique"
-
-#~ msgid "Volume"
-#~ msgstr "Volume"
-
-#~ msgid "Enable Deadband"
-#~ msgstr "Activer la bande muette"
-
-#~ msgid ""
-#~ "Mute the audio output in when the current lift is in a certain range "
-#~ "around zero"
-#~ msgstr ""
-#~ "Neutraliser le vario sonore quand le taux de montée est proche de zéro"
-
-#~ msgid "The tone frequency that is played at maximum sink rate."
-#~ msgstr "La fréquence de la note correspondant au vario le plus négatif."
-
-#~ msgid "Zero Frequency"
-#~ msgstr "Fréquence nulle"
-
-#~ msgid "The tone frequency that is played at zero climb rate."
-#~ msgstr "La fréquence de la note correspondant à un vario nul."
-
-#~ msgid "Max. Frequency"
-#~ msgstr "Fréquence max."
-
-#~ msgid "The tone frequency that is played at maximum climb rate."
-#~ msgstr "La fréquence de la note correspondante au vario le plus positif."
-
-#~ msgid "Deadband min. lift"
-#~ msgstr "Limite min. de la bande muette"
-
-#~ msgid ""
-#~ "Below this lift threshold the vario will start to play sounds if the "
-#~ "'Deadband' feature is enabled."
-#~ msgstr ""
-#~ "Au-dessous de ce seuil, le variomètre commencera à jouer un son si la "
-#~ "fonction \"bande muette\" est active."
-
-#~ msgid "Deadband max. lift"
-#~ msgstr "Limite max. de la bande muette"
-
-#~ msgid ""
-#~ "Above this lift threshold the vario will start to play sounds if the "
-#~ "'Deadband' feature is enabled."
-#~ msgstr ""
-#~ "Au-dessus de ce seuil, le variomètre commencera à jouer un son si la "
-#~ "fonction \"bande muette\" est active."
-
-#~ msgid "Waypoint Info"
-#~ msgstr "Information du waypoint"
-
-#~ msgid "Calc"
-#~ msgstr "Calc"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -10194,6 +10113,12 @@ msgstr "Nav."
 #~ msgid "Fly"
 #~ msgstr "Vol"
 
+#~ msgid "Volume"
+#~ msgstr "Volume"
+
+#~ msgid "Calc"
+#~ msgstr "Calc"
+
 #~ msgid "V rough air"
 #~ msgstr "V air Agité"
 
@@ -10203,8 +10128,14 @@ msgstr "Nav."
 #~ msgid "Filter..."
 #~ msgstr "Filtre..."
 
+#~ msgid "Short file name"
+#~ msgstr "Nom Fichier Court"
+
 #~ msgid "Edit text"
 #~ msgstr "Saisie texte"
+
+#~ msgid "MANUAL"
+#~ msgstr "Manuel"
 
 #~ msgid "Wind At Altitude"
 #~ msgstr "Vent en Altitude"
@@ -10223,6 +10154,12 @@ msgstr "Nav."
 
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Effacer le waypoint ?"
+
+#~ msgid "Waypoint Info"
+#~ msgstr "Information du waypoint"
+
+#~ msgid "AUTO"
+#~ msgstr "AUTO"
 
 #~ msgid "Not found"
 #~ msgstr "Introuvable"
@@ -10322,6 +10259,9 @@ msgstr "Nav."
 #~ msgid "8 Left (Landscape)"
 #~ msgstr "8 Gauche (Paysage)"
 
+#~ msgid "12 Right (Landscape)"
+#~ msgstr "12 Droite (Paysage)"
+
 #~ msgid "12 Top (Portrait)"
 #~ msgstr "12 Haut (Portrait)"
 
@@ -10372,6 +10312,15 @@ msgstr "Nav."
 
 #~ msgid "Delete Error"
 #~ msgstr "Erreur de suppression"
+
+#~ msgid "Clear current task?"
+#~ msgstr "Effacer circuit actuel?"
+
+#~ msgid "Goto and clear task"
+#~ msgstr "Aller à et effacer circuit"
+
+#~ msgid "Unknown error creating task."
+#~ msgstr "Erreur inconnue lors de la création du circuit."
 
 #~ msgid "Auto. wind"
 #~ msgstr "Vent auto."
@@ -10641,6 +10590,12 @@ msgstr "Nav."
 #~ msgid "4 Top (Portrait)"
 #~ msgstr "4 Haut (portrait)"
 
+#~ msgid "Emulate the sound of an electronic vario."
+#~ msgstr "Son vario électronique"
+
+#~ msgid "Audio vario"
+#~ msgstr "Vario audio"
+
 #~ msgid "Logger Info"
 #~ msgstr "Info logger"
 
@@ -10653,8 +10608,49 @@ msgstr "Nav."
 #~ msgid "4 Right (Landscape)"
 #~ msgstr "4 Droite (portrait)"
 
+#~ msgid ""
+#~ "Mute the audio output in when the current lift is in a certain range "
+#~ "around zero"
+#~ msgstr ""
+#~ "Neutraliser le vario sonore quand le taux de montée est proche de zéro"
+
+#~ msgid "Max. Frequency"
+#~ msgstr "Fréquence max."
+
+#~ msgid "The tone frequency that is played at maximum sink rate."
+#~ msgstr "La fréquence de la note correspondant au vario le plus négatif."
+
+#~ msgid "Min. Frequency"
+#~ msgstr "Fréquence min."
+
+#~ msgid "The tone frequency that is played at zero climb rate."
+#~ msgstr "La fréquence de la note correspondant à un vario nul."
+
+#~ msgid "Zero Frequency"
+#~ msgstr "Fréquence nulle"
+
+#~ msgid "The tone frequency that is played at maximum climb rate."
+#~ msgstr "La fréquence de la note correspondante au vario le plus positif."
+
+#~ msgid "Enable Deadband"
+#~ msgstr "Activer la bande muette"
+
 #~ msgid "Insert In Task"
 #~ msgstr "Insérer dans le circuit"
+
+#~ msgid ""
+#~ "Below this lift threshold the vario will start to play sounds if the "
+#~ "'Deadband' feature is enabled."
+#~ msgstr ""
+#~ "Au-dessous de ce seuil, le variomètre commencera à jouer un son si la "
+#~ "fonction \"bande muette\" est active."
+
+#~ msgid ""
+#~ "Above this lift threshold the vario will start to play sounds if the "
+#~ "'Deadband' feature is enabled."
+#~ msgstr ""
+#~ "Au-dessus de ce seuil, le variomètre commencera à jouer un son si la "
+#~ "fonction \"bande muette\" est active."
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "Définit le point de virage pour vérification."
@@ -10670,6 +10666,12 @@ msgstr "Nav."
 
 #~ msgid "Set As New Home"
 #~ msgstr "Nouvelle Base"
+
+#~ msgid "Deadband max. lift"
+#~ msgstr "Limite max. de la bande muette"
+
+#~ msgid "Deadband min. lift"
+#~ msgstr "Limite min. de la bande muette"
 
 #~ msgid "Do you want to activate plane profile \"%s\"?"
 #~ msgstr "Voulez-vous activer le profil de  planeur \"%s\" ?"
