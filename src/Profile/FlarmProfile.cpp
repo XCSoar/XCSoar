@@ -62,7 +62,6 @@ Profile::Load(const ProfileMap &map, FlarmColorDatabase &db)
 void
 Profile::Save(ProfileMap &map, const FlarmColorDatabase &db)
 {
-  char id[16];
   std::string ids[4];
 
   for (const auto &i : db) {
@@ -74,8 +73,8 @@ Profile::Save(ProfileMap &map, const FlarmColorDatabase &db)
 
     unsigned color_index = (int)i.second - 1;
 
-    i.first.Format(id);
-    ids[color_index] += id;
+    char id_buffer[16];
+    ids[color_index] += i.first.Format(id_buffer);
     ids[color_index] += ',';
   }
 
