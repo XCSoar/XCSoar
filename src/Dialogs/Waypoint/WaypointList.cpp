@@ -248,11 +248,10 @@ GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
 {
   if (direction_filter_index == 0)
     _tcscpy(buffer, _T("*"));
-  else if (direction_filter_index == 1) {
-    TCHAR bearing[8];
-    FormatBearing(bearing, ARRAY_SIZE(bearing), last_heading);
-    StringFormatUnsafe(buffer, _T("HDG(%s)"), bearing);
-  } else
+  else if (direction_filter_index == 1)
+    StringFormatUnsafe(buffer, _T("HDG(%s)"),
+                       FormatBearing(last_heading).c_str());
+  else
     FormatBearing(buffer, size, direction_filter_items[direction_filter_index]);
 
   return buffer;

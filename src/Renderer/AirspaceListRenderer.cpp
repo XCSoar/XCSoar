@@ -99,11 +99,9 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   StaticString<256> comment(AirspaceFormatter::GetClass(airspace));
 
-  TCHAR bearing[20];
-  FormatBearing(bearing, ARRAY_SIZE(bearing), vector.bearing);
   comment.AppendFormat(_T(" - %s - %s"),
                        FormatUserDistanceSmart(vector.distance).c_str(),
-                       bearing);
+                       FormatBearing(vector.bearing).c_str());
 
   ::Draw(canvas, rc, airspace, comment,
          row_renderer, look, renderer_settings);

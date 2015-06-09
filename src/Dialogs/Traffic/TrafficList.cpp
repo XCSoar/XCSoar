@@ -694,10 +694,9 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                   FormatUserDistanceSmart(item.vector.distance).c_str());
 
     // Draw leg bearing
-    FormatBearing(tmp.buffer(), tmp.MAX_SIZE, item.vector.bearing);
     DrawTextRight(canvas, rc.right - text_padding,
                   rc.bottom - small_font.GetHeight() - text_padding,
-                  tmp.c_str());
+                  FormatBearing(item.vector.bearing).c_str());
   }
 }
 

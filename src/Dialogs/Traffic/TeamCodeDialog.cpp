@@ -124,21 +124,15 @@ TeamCodeWidget::Update(const MoreData &basic, const DerivedInfo &calculated)
   const TeamInfo &teamcode_info = calculated;
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
-  StaticString<100> buffer;
 
-  if (teamcode_info.teammate_available && basic.track_available) {
-    FormatAngleDelta(buffer.buffer(), buffer.MAX_SIZE,
-                     teamcode_info.teammate_vector.bearing - basic.track);
-  } else {
-    buffer = _T("---");
-  }
-
-  SetText(RELATIVE_BEARING, buffer);
+  SetText(RELATIVE_BEARING,
+          teamcode_info.teammate_available && basic.track_available
+          ? FormatAngleDelta(teamcode_info.teammate_vector.bearing - basic.track).c_str()
+          : _T("---"));
 
   if (teamcode_info.teammate_available) {
-    FormatBearing(buffer.buffer(), buffer.MAX_SIZE,
-                  teamcode_info.teammate_vector.bearing);
-    SetText(BEARING, buffer);
+    SetText(BEARING,
+            FormatBearing(teamcode_info.teammate_vector.bearing).c_str());
 
     SetText(RANGE,
             FormatUserDistanceSmart(teamcode_info.teammate_vector.distance));

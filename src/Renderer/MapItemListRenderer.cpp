@@ -72,18 +72,16 @@ Draw(Canvas &canvas, const PixelRect rc,
      const LocationMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
-  TCHAR info_buffer[256], direction_buffer[32];
-  if (item.vector.IsValid()) {
-    FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
-                  item.vector.bearing);
+  TCHAR info_buffer[256];
+  if (item.vector.IsValid())
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
                        _("Distance"),
                        FormatUserDistanceSmart(item.vector.distance).c_str(),
-                       _("Direction"), direction_buffer);
-  } else {
+                       _("Direction"),
+                       FormatBearing(item.vector.bearing).c_str());
+  else
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
                        _("Distance"), _T("???"), _("Direction"), _T("???"));
-  }
 
   row_renderer.DrawFirstRow(canvas, rc, info_buffer);
 

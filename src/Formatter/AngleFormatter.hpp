@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_ANGLE_FORMATTER_HPP
 #define XCSOAR_ANGLE_FORMATTER_HPP
 
+#include "Util/StringBuffer.hxx"
+#include "Math/Angle.hpp"
+#include "Compiler.h"
+
 #include <tchar.h>
 #include <stddef.h>
 
@@ -37,8 +41,35 @@ void
 FormatBearing(TCHAR *buffer, size_t size, Angle value,
               const TCHAR *suffix = NULL);
 
+gcc_const
+static inline StringBuffer<TCHAR, 16>
+FormatBearing(unsigned degrees_value)
+{
+  StringBuffer<TCHAR, 16> buffer;
+  FormatBearing(buffer.data(), buffer.capacity(), degrees_value);
+  return buffer;
+}
+
+gcc_const
+static inline StringBuffer<TCHAR, 16>
+FormatBearing(Angle value)
+{
+  StringBuffer<TCHAR, 16> buffer;
+  FormatBearing(buffer.data(), buffer.capacity(), value);
+  return buffer;
+}
+
 void
 FormatAngleDelta(TCHAR *buffer, size_t size, Angle value);
+
+gcc_const
+static inline StringBuffer<TCHAR, 16>
+FormatAngleDelta(Angle value)
+{
+  StringBuffer<TCHAR, 16> buffer;
+  FormatAngleDelta(buffer.data(), buffer.capacity(), value);
+  return buffer;
+}
 
 void
 FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value);

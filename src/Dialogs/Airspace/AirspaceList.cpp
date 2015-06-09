@@ -435,10 +435,8 @@ FillDirectionEnum(DataFieldEnum &df)
     360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
   };
 
-  for (unsigned i = 0; i < ARRAY_SIZE(directions); ++i) {
-    FormatBearing(buffer, ARRAY_SIZE(buffer), directions[i]);
-    df.AddChoice(directions[i], buffer);
-  }
+  for (unsigned i = 0; i < ARRAY_SIZE(directions); ++i)
+    df.AddChoice(directions[i], FormatBearing(directions[i]).c_str());
 
   df.Set(WILDCARD);
 }

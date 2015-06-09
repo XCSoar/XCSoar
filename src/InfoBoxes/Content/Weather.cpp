@@ -197,12 +197,13 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data)
 
   data.SetCustom();
 
-  TCHAR speed_buffer[16], bearing_buffer[16];
+  TCHAR speed_buffer[16];
   FormatUserWindSpeed(info.wind.norm, speed_buffer, true, false);
-  FormatBearing(bearing_buffer, ARRAY_SIZE(bearing_buffer), info.wind.bearing);
 
   StaticString<32> buffer;
-  buffer.Format(_T("%s / %s"), bearing_buffer, speed_buffer);
+  buffer.Format(_T("%s / %s"),
+                FormatBearing(info.wind.bearing).c_str(),
+                speed_buffer);
   data.SetComment(buffer);
 }
 

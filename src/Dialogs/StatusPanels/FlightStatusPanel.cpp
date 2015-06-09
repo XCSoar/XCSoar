@@ -66,8 +66,7 @@ FlightStatusPanel::Refresh()
 
     SetText(Near, nearest_waypoint->name.c_str());
 
-    FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vec.bearing, _T(""));
-    SetText(Bearing, buffer);
+    SetText(Bearing, FormatBearing(vec.bearing).c_str());
 
     SetText(Distance, FormatUserDistanceSmart(vec.distance));
   } else {
