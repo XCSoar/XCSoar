@@ -48,7 +48,7 @@ struct InputConfig {
 #ifdef ENABLE_SDL
   static constexpr unsigned MAX_KEY = 400;
 #elif defined(USE_X11)
-  static constexpr unsigned MAX_KEY = 0x1000;
+  static constexpr unsigned MAX_KEY = 0x80;
 #elif defined(USE_POLL_EVENT)
   static constexpr unsigned MAX_KEY = 0600;
 #else
@@ -79,6 +79,13 @@ struct InputConfig {
   used here and the keycode is stored here with an index without
   SDLK_SCANCODE_MASK. */
   unsigned short Key2EventNonChar[MAX_MODE][MAX_KEY];
+#endif
+
+#ifdef USE_X11
+  /**
+   * Same as #Key2Event but with key code offset 0xff00.
+   */
+  unsigned short Key2EventFF00[MAX_MODE][MAX_KEY];
 #endif
 
   RadixTree<unsigned> Gesture2Event;
@@ -154,6 +161,13 @@ struct InputConfig {
     }
 #endif
 
+#ifdef USE_X11
+    if (key_code_idx >= 0xff00) {
+      key_code_idx -= 0xff00;
+      key_2_event = Key2EventFF00;
+    }
+#endif
+
     if (key_code_idx >= MAX_KEY)
       return 0;
 
@@ -172,6 +186,13 @@ struct InputConfig {
     if (key_code & SDLK_SCANCODE_MASK) {
       key_2_event = Key2EventNonChar;
       key_code &= ~SDLK_SCANCODE_MASK;
+    }
+#endif
+
+#ifdef USE_X11
+    if (key_code >= 0xff00) {
+      key_code -= 0xff00;
+      key_2_event = Key2EventFF00;
     }
 #endif
 

@@ -39,6 +39,9 @@ InputConfig::SetDefaults()
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
   std::fill_n(&Key2EventNonChar[0][0], MAX_MODE*MAX_KEY, 0);
 #endif
+#ifdef USE_X11
+  std::fill_n(&Key2EventFF00[0][0], MAX_MODE * MAX_KEY, 0);
+#endif
 
   Gesture2Event.Clear();
 
