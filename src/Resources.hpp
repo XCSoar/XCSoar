@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "Util/ConstBuffer.hpp"
+#include "Util/ConstBuffer.hxx"
 
 #define MAKE_RESOURCE(name, id) \
   extern "C" uint8_t resource_ ## id[]; \

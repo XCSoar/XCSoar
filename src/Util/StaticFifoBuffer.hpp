@@ -30,7 +30,7 @@
 #ifndef FIFO_BUFFER_HPP
 #define FIFO_BUFFER_HPP
 
-#include "WritableBuffer.hpp"
+#include "WritableBuffer.hxx"
 
 #include <utility>
 #include <algorithm>

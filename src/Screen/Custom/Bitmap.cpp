@@ -32,7 +32,7 @@ Copyright_License {
 #endif
 
 #include "UncompressedImage.hpp"
-#include "Util/ConstBuffer.hpp"
+#include "Util/ConstBuffer.hxx"
 
 Bitmap::Bitmap(ConstBuffer<void> _buffer)
   :

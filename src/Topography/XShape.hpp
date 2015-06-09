@@ -25,7 +25,7 @@ Copyright_License {
 #ifndef TOPOGRAPHY_XSHAPE_HPP
 #define TOPOGRAPHY_XSHAPE_HPP
 
-#include "Util/ConstBuffer.hpp"
+#include "Util/ConstBuffer.hxx"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"

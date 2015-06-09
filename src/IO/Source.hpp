@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IO_SOURCE_HPP
 #define XCSOAR_IO_SOURCE_HPP
 
-#include "Util/WritableBuffer.hpp"
+#include "Util/WritableBuffer.hxx"
 #include "Compiler.h"
 
 #include <utility>

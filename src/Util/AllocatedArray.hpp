@@ -30,7 +30,7 @@
 #ifndef ALLOCATED_ARRAY_HPP
 #define ALLOCATED_ARRAY_HPP
 
-#include "WritableBuffer.hpp"
+#include "WritableBuffer.hxx"
 #include "Compiler.h"
 
 #include <assert.h>

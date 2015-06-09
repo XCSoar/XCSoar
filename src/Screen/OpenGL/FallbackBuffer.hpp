@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Buffer.hpp"
 #include "Util/Manual.hpp"
-#include "Util/WritableBuffer.hpp"
+#include "Util/WritableBuffer.hxx"
 
 #include <assert.h>
 #include <stdlib.h>

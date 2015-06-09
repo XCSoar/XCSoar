@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_LOADER_HPP
 #define XCSOAR_RESOURCE_LOADER_HPP
 
-#include "Util/ConstBuffer.hpp"
+#include "Util/ConstBuffer.hxx"
 
 #ifdef WIN32
 #include <windef.h>
