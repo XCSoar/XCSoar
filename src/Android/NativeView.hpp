@@ -47,8 +47,11 @@ class NativeView {
   static jfieldID textureNonPowerOfTwo_field;
   static jmethodID init_surface_method, deinit_surface_method;
   static jmethodID setRequestedOrientationID;
-  static jmethodID swap_method, load_resource_texture_method;
-  static jmethodID load_file_texture_method, open_file_method;
+  static jmethodID swap_method;
+  static jmethodID loadResourceBitmap_method;
+  static jmethodID loadFileBitmap_method;
+  static jmethodID bitmapToTexture_method;
+  static jmethodID open_file_method;
 
 public:
   /**
@@ -131,26 +134,21 @@ public:
     env->CallVoidMethod(obj, swap_method);
   }
 
-  bool loadResourceTexture(const char *name, jboolean alpha, jint *result) {
+  jobject loadResourceBitmap(const char *name) {
     Java::String name2(env, name);
-    jintArray result2 = env->NewIntArray(5);
-
-    bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
-                                          name2.Get(), alpha, result2);
-    if (success)
-      env->GetIntArrayRegion(result2, 0, 5, result);
-
-    env->DeleteLocalRef(result2);
-
-    return success;
+    return env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get());
   }
 
-  bool loadFileTexture(const char *pathName, jint *result) {
-    Java::String pathName2(env, pathName);
+  jobject loadFileBitmap(const char *path) {
+    Java::String path2(env, path);
+    return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
+  }
+
+  bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
     jintArray result2 = env->NewIntArray(5);
 
-    bool success = env->CallBooleanMethod(obj, load_file_texture_method,
-                                          pathName2.Get(), result2);
+    bool success = env->CallBooleanMethod(obj, bitmapToTexture_method,
+                                          bmp, alpha, result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 5, result);
 

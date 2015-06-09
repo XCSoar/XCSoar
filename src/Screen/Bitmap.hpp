@@ -32,9 +32,8 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
-#include "ResourceId.hpp"
+#include <jni.h>
 #endif
 
 #ifdef USE_GDI
@@ -82,13 +81,9 @@ public:
 
 protected:
 #ifdef ANDROID
-  /** resource id */
-  ResourceId id;
+  jobject bmp;
 
   Type type;
-
-  /** filename for external images (id=0) */
-  tstring pathName;
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -107,7 +102,7 @@ public:
   Bitmap()
     :
 #ifdef ANDROID
-    id(ResourceId::Null()),
+    bmp(nullptr),
 #endif
     texture(nullptr), interpolation(false) {}
 #elif defined(USE_MEMORY_CANVAS)
@@ -130,7 +125,9 @@ public:
   Bitmap &operator=(const Bitmap &other) = delete;
 public:
   bool IsDefined() const {
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
+    return bmp != nullptr;
+#elif defined(ENABLE_OPENGL)
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)
     return buffer.data != nullptr;
@@ -207,11 +204,8 @@ public:
 
 #ifdef ANDROID
 private:
-  /**
-   * Load the texture again after the OpenGL surface has been
-   * recreated.
-   */
-  bool Reload();
+  bool Set(JNIEnv *env, jobject _bmp, Type _type);
+  bool MakeTexture();
 
   /* from GLSurfaceListener */
   virtual void SurfaceCreated() override;

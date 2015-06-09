@@ -335,48 +335,49 @@ class NativeView extends SurfaceView
   }
 
   /**
-   * Loads the specified bitmap resource as OpenGL texture.
-   *
-   * @param alpha expect a GL_ALPHA texture?
-   * @param result an array of 5 integers: texture id, width, height,
-   * allocated width, allocated height (all output)
-   * @return true on success
+   * Loads the specified bitmap resource.
    */
-  private boolean loadResourceTexture(String name, boolean alpha,
-                                      int[] result) {
+  private Bitmap loadResourceBitmap(String name) {
     /* find the resource */
     int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
     if (resourceId == 0) {
       resourceId = resources.getIdentifier(name, "drawable",
                                            "org.xcsoar.testing");
       if (resourceId == 0)
-        return false;
+        return null;
     }
 
     /* load the Bitmap from the resource */
     BitmapFactory.Options opts = new BitmapFactory.Options();
     opts.inScaled = false;
 
-    Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId, opts);
-
-    return BitmapUtil.bitmapToOpenGL(bmp, alpha, result);
+    return BitmapFactory.decodeResource(resources, resourceId, opts);
   }
 
   /**
-   * Loads an image from filesystem as OpenGL texture.
-   *
-   * @param result an array of 5 integers: texture id, width, height,
-   * allocated width, allocated height (all output)
-   * @return true on success
+   * Loads an image from filesystem.
    */
-  private boolean loadFileTexture(String pathName, int[] result) {
+  private Bitmap loadFileBitmap(String pathName) {
     /* load the Bitmap from filesystem */
     BitmapFactory.Options opts = new BitmapFactory.Options();
     opts.inScaled = false;
 
-    Bitmap bmp = BitmapFactory.decodeFile(pathName, opts);
+    return BitmapFactory.decodeFile(pathName, opts);
+  }
 
-    return BitmapUtil.bitmapToOpenGL(bmp, false, result);
+  /**
+   * Loads the specified #Bitmap as OpenGL texture.
+   *
+   * @param alpha expect a GL_ALPHA texture?
+   * @param result an array of 5 integers: texture id, width, height,
+   * allocated width, allocated height (all output)
+   * @return true on success
+   */
+  private boolean bitmapToTexture(Bitmap bmp, boolean alpha, int[] result) {
+    /* pass a copy because bitmapToOpenGL() recycles the given
+       Bitmap */
+    return BitmapUtil.bitmapToOpenGL(bmp.copy(bmp.getConfig(), false),
+                                     alpha, result);
   }
 
   /**

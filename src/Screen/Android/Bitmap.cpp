@@ -24,12 +24,14 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Surface.hpp"
+#include "Android/Bitmap.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
+#include "ResourceId.hpp"
 #include "android_drawable.h"
 
 Bitmap::Bitmap(ResourceId id)
-  :texture(nullptr), interpolation(false)
+  :bmp(nullptr), texture(nullptr), interpolation(false)
 {
   Load(id);
 }
@@ -44,65 +46,65 @@ find_resource_name(unsigned id)
   return nullptr;
 }
 
-gcc_malloc
-static GLTexture *
-LoadResourceTexture(ResourceId id, Bitmap::Type type)
+static jobject
+LoadResourceBitmap(ResourceId id)
 {
   const char *name = find_resource_name((unsigned)id);
   if (name == nullptr)
     return nullptr;
 
-  jint result[5];
-  if (!native_view->loadResourceTexture(name, type == Bitmap::Type::MONO,
-                                        result))
-    return nullptr;
-
-  return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
-}
-
-gcc_malloc
-static GLTexture *
-LoadFileTexture(const TCHAR *path)
-{
-  jint result[5];
-  if (!native_view->loadFileTexture(path, result))
-    return nullptr;
-
-  return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
+  return native_view->loadResourceBitmap(name);
 }
 
 bool
-Bitmap::Reload()
+Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 {
-  assert(id.IsDefined() || !pathName.empty());
-  assert(texture == nullptr);
+  assert(bmp == nullptr);
+  assert(_bmp != nullptr);
 
-  texture = id.IsDefined()
-    ? LoadResourceTexture(id, type)
-    : LoadFileTexture(pathName.c_str());
-  if (texture == nullptr)
+  bmp = env->NewGlobalRef(_bmp);
+  env->DeleteLocalRef(_bmp);
+
+  type = _type;
+
+  size.cx = AndroidBitmap::GetWidth(env, bmp);
+  size.cy = AndroidBitmap::GetHeight(env, bmp);
+
+  AddSurfaceListener(*this);
+
+  if (surface_valid && !MakeTexture()) {
+    Reset();
     return false;
+  }
 
-  size.cx = texture->GetWidth();
-  size.cy = texture->GetHeight();
   return true;
 }
 
 bool
-Bitmap::Load(ResourceId _id, Type _type)
+Bitmap::MakeTexture()
 {
-  assert(_id.IsDefined());
+  assert(bmp != nullptr);
+
+  jint result[5];
+  if (!native_view->bitmapToTexture(bmp, type == Bitmap::Type::MONO, result))
+    return false;
+
+  texture = new GLTexture(result[0], result[1], result[2], result[3], result[4]);
+  return true;
+}
+
+bool
+Bitmap::Load(ResourceId id, Type _type)
+{
+  assert(id.IsDefined());
 
   Reset();
 
-  id = _id;
-  type = _type;
-  AddSurfaceListener(*this);
+  auto *new_bmp = LoadResourceBitmap(id);
+  if (new_bmp == nullptr)
+    return false;
 
-  if (!surface_valid)
-    return true;
-
-  return Reload();
+  return Set(Java::GetEnv(), new_bmp, _type);
 }
 
 bool
@@ -121,22 +123,23 @@ Bitmap::LoadFile(const TCHAR *path)
 
   Reset();
 
-  pathName = path;
-  AddSurfaceListener(*this);
+  auto *new_bmp = native_view->loadFileBitmap(path);
+  if (new_bmp == nullptr)
+    return false;
 
-  if (!surface_valid)
-    return true;
-
-  return Reload();
+  return Set(Java::GetEnv(), new_bmp, Type::STANDARD);
 }
 
 void
 Bitmap::Reset()
 {
-  if (id.IsDefined() || !pathName.empty()) {
+  if (bmp != nullptr) {
+    auto *env = Java::GetEnv();
+    AndroidBitmap::Recycle(env, bmp);
+    env->DeleteGlobalRef(bmp);
+    bmp = nullptr;
+
     RemoveSurfaceListener(*this);
-    id = ResourceId::Null();
-    pathName.clear();
   }
 
   delete texture;
@@ -146,12 +149,16 @@ Bitmap::Reset()
 void
 Bitmap::SurfaceCreated()
 {
-  Reload();
+  assert(bmp != nullptr);
+
+  MakeTexture();
 }
 
 void
 Bitmap::SurfaceDestroyed()
 {
+  assert(bmp != nullptr);
+
   delete texture;
   texture = nullptr;
 }
