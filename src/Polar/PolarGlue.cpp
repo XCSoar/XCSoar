@@ -31,6 +31,8 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringAPI.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <memory>
 

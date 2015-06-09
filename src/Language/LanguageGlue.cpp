@@ -29,6 +29,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 
 #ifdef HAVE_NATIVE_GETTEXT
 #include <locale.h>

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 
 #include <assert.h>
+#include <string.h>
 #include <windef.h> /* for MAX_PATH */
 
 NLineReader *

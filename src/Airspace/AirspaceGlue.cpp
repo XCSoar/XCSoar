@@ -35,6 +35,8 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 #include <memory>
 
+#include <string.h>
+
 static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)

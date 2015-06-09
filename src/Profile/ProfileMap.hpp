@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP_HPP
 #define XCSOAR_PROFILE_MAP_HPP
 
-#include "Util/StaticString.hxx"
+#include "Util/StringBuffer.hxx"
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
@@ -112,9 +112,9 @@ namespace Profile {
 
   template<size_t max>
   static inline bool
-  Get(const char *key, StaticString<max> &value)
+  Get(const char *key, StringBuffer<TCHAR, max> &value)
   {
-    return Get(key, value.buffer(), value.capacity());
+    return Get(key, value.data(), value.capacity());
   }
 
   bool Exists(const char *key);

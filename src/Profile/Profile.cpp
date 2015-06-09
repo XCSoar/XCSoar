@@ -29,6 +29,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 

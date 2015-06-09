@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
+#include <string.h>
+
 // General, open/close
 
 RasterTerrain *

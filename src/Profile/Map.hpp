@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_PROFILE_MAP2_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/StaticString.hxx"
+#include "Util/StringBuffer.hxx"
 #include "Compiler.h"
 
 #include <map>
@@ -98,8 +98,8 @@ public:
   bool Get(const char *key, TCHAR *value, size_t max_size) const;
 
   template<size_t max>
-  bool Get(const char *key, StaticString<max> &value) const {
-    return Get(key, value.buffer(), value.capacity());
+  bool Get(const char *key, StringBuffer<TCHAR, max> &value) const {
+    return Get(key, value.data(), value.capacity());
   }
 
 #ifdef _UNICODE

@@ -30,6 +30,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hpp"
 #include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 

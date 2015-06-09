@@ -24,6 +24,7 @@
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/StaticString.hxx"
 
 static void
 TestMap()

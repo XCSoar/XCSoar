@@ -32,6 +32,8 @@
 #include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
 
+#include <stdio.h>
+
 TLineReader*
 OpenConfiguredTextFile(const char *profile_key, Charset cs)
 {

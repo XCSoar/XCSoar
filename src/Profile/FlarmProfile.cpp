@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <string>
 
+#include <string.h>
+
 static void
 LoadColor(const ProfileMap &map,FlarmColorDatabase &db,
           const char *key, FlarmColor color)
