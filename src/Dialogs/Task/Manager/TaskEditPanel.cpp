@@ -431,8 +431,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     // Draw leg bearing
     FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);
-    const int x2 = rc.right - padding - width;
     width = canvas.CalcTextWidth(buffer);
+    const int x2 = rc.right - padding - width;
     canvas.DrawText(x2, rc.top + row_renderer.GetSecondY(), buffer);
 
     text_rc.right = std::min(x1, x2) - padding;
