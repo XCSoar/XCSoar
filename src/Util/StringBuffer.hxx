@@ -91,11 +91,11 @@ public:
 	}
 
 	constexpr const_iterator begin() const {
-		return data();
+		return the_data;
 	}
 
 	constexpr const_iterator end() const {
-		return data() + capacity();
+		return the_data + capacity();
 	}
 
 	constexpr operator const_pointer() const {
