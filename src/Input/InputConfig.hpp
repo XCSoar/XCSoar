@@ -175,7 +175,8 @@ struct InputConfig {
     }
 #endif
 
-    key_2_event[mode][key_code] = event_id;
+    if (key_code < MAX_KEY)
+      key_2_event[mode][key_code] = event_id;
   }
 
   gcc_pure
