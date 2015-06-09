@@ -25,7 +25,7 @@
 #include "IGC/IGCExtensions.hpp"
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Compiler.h"
 
 #include <cstdio>

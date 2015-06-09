@@ -31,7 +31,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Computer/Settings.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"

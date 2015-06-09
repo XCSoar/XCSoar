@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_WIFI_HPP
 #define XCSOAR_KOBO_WIFI_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Net/SocketDescriptor.hpp"
 
 enum WifiSecurity {

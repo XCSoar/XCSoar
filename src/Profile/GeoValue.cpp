@@ -24,7 +24,7 @@ Copyright_License {
 #include "Map.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Util/NumberParser.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 bool
 ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const

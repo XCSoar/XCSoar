@@ -22,7 +22,7 @@
 
 #include "DataNode.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/NumberParser.hpp"
 #include "Time/RoughTime.hpp"
 

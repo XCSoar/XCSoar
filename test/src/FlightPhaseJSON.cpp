@@ -22,7 +22,7 @@
 
 #include "FlightPhaseJSON.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "JSON/Writer.hpp"
 #include "JSON/GeoWriter.hpp"
 

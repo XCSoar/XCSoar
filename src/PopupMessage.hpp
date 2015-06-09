@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_POPUP_MESSAGE_H
 
 #include "Thread/Mutex.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Screen/LargeTextWindow.hpp"
 
 #include <tchar.h>

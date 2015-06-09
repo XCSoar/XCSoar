@@ -32,7 +32,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StaticFifoBuffer.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <string>
 #include <map>

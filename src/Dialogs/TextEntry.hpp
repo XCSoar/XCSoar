@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef DIALOGS_TEXT_ENTRY_HPP
 #define DIALOGS_TEXT_ENTRY_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <functional>
 

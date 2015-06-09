@@ -28,7 +28,7 @@ Copyright_License {
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Math/fixed.hpp"
 #include "Time/PeriodClock.hpp"
 

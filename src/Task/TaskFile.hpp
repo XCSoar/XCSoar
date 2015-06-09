@@ -23,7 +23,7 @@
 #ifndef XCSOAR_TASK_FILE_HPP
 #define XCSOAR_TASK_FILE_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/StaticArray.hpp"
 
 #include <windef.h> // for MAX_PATH

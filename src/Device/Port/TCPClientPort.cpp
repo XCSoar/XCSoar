@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TCPClientPort.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Net/StaticSocketAddress.hpp"
 
 #ifdef HAVE_POSIX

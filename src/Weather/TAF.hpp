@@ -25,7 +25,7 @@ Copyright_License {
 #define TAF_HPP
 
 #include "Time/BrokenDateTime.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 struct TAF
 {

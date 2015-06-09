@@ -27,7 +27,7 @@ Copyright_License {
 #include "Input.hpp"
 #include "OS/FileDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <list>
 

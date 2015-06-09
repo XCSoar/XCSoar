@@ -35,7 +35,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "Util/TrivialArray.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"

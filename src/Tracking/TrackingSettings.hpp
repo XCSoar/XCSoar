@@ -31,7 +31,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Features.hpp"
 #include "Tracking/SkyLines/Settings.hpp"
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #ifdef HAVE_LIVETRACK24
 

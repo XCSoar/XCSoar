@@ -28,7 +28,7 @@ Copyright_License {
 #include "Event/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Trigger.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 /**
  * This is an OperationEnvironment implementation that can be run in

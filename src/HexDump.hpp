@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HEX_DUMP_HPP
 #define XCSOAR_HEX_DUMP_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "LogFile.hpp"
 
 #include <stdint.h>

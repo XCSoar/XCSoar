@@ -41,7 +41,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Terrain/RasterBuffer.hpp"
 #include "MapSettings.hpp"
 #include "Math/Screen.hpp"

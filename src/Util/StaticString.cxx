@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "StaticString.hpp"
+#include "StaticString.hxx"
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -36,12 +36,12 @@
 bool
 CopyUTF8(char *dest, size_t dest_size, const char *src)
 {
-  if (!::ValidateUTF8(src))
-    return false;
+	if (!::ValidateUTF8(src))
+		return false;
 
-  CopyString(dest, src, dest_size);
-  CropIncompleteUTF8(dest);
-  return true;
+	CopyString(dest, src, dest_size);
+	CropIncompleteUTF8(dest);
+	return true;
 }
 
 #ifdef _UNICODE
@@ -49,8 +49,8 @@ CopyUTF8(char *dest, size_t dest_size, const char *src)
 bool
 CopyUTF8(TCHAR *dest, size_t dest_size, const char *src)
 {
-  int result = MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, dest_size);
-  return result > 0;
+	int result = MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, dest_size);
+	return result > 0;
 }
 
 #endif

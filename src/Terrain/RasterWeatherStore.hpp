@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_WEATHER_STORE_HPP
 
 #include "Util/StaticArray.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Time/BrokenTime.hpp"
 #include "Compiler.h"
 

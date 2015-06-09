@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NAME_DATABASE_HPP
 #define XCSOAR_FLARM_NAME_DATABASE_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/StaticArray.hpp"
 #include "FlarmId.hpp"
 #include "Compiler.h"

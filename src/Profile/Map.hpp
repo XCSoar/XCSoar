@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_PROFILE_MAP2_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Compiler.h"
 
 #include <map>

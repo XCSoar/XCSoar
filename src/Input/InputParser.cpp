@@ -28,7 +28,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StringAPI.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/EscapeBackslash.hpp"
 #include "Util/NumberParser.hpp"
 #include "LogFile.hpp"

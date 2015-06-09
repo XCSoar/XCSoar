@@ -30,7 +30,7 @@
 #ifndef RADIX_TREE_HPP
 #define RADIX_TREE_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "StringUtil.hpp"
 #include "tstring.hpp"
 

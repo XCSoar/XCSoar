@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NET_RECORD_HPP
 #define XCSOAR_FLARM_NET_RECORD_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Compiler.h"
 
 class FlarmId;

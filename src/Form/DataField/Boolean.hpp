@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_BOOLEAN_HPP
 
 #include "Base.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 class DataFieldBoolean final : public DataField {
 private:

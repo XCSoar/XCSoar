@@ -23,7 +23,7 @@
 
 #include "IGCFileCleanup.hpp"
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_UI_STATE_HPP
 
 #include "DisplayMode.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "PageState.hpp"
 #include "Weather/WeatherUIState.hpp"
 

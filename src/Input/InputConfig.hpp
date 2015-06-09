@@ -27,7 +27,7 @@ Copyright_License {
 #include "InputQueue.hpp"
 #include "Menu/MenuData.hpp"
 #include "Util/RadixTree.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/TrivialArray.hpp"
 
 #include <assert.h>

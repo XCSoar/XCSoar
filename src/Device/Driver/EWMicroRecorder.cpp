@@ -37,7 +37,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <assert.h>
 #include <stdio.h>

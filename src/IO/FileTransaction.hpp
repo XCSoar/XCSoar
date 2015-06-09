@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FILE_TRANSACTION_HPP
 #define XCSOAR_FILE_TRANSACTION_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Compiler.h"
 
 #include <windef.h> /* for MAX_PATH */

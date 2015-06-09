@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_ENUMERATOR_HPP
 
 #include "Config/Registry.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 /**
  * A class that can enumerate COMM ports on Windows CE, by reading the

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LIST_FILTER_HPP
 #define XCSOAR_WAYPOINT_LIST_FILTER_HPP
 
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 

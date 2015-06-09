@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <tchar.h>
 

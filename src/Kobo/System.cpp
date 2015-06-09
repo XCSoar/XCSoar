@@ -26,7 +26,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "OS/Process.hpp"
 #include "OS/Sleep.h"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <unistd.h>
 #include <sys/stat.h>

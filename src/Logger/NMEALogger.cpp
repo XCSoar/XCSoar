@@ -27,7 +27,7 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/FileUtil.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <windef.h> // for MAX_PATH
 #include <stdio.h>

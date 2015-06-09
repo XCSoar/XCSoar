@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Compiler.h"
 
 #include <vector>

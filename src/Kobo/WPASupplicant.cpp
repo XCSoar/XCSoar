@@ -25,7 +25,7 @@ Copyright_License {
 #include "Net/StaticSocketAddress.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/NumberParser.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 #include <string.h>
 #include <stdlib.h>

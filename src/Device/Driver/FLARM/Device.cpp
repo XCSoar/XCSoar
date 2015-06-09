@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Util/ConvertString.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
 #include "Util/NumberParser.hpp"
 #include "NMEA/Checksum.hpp"

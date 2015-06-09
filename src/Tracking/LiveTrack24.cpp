@@ -28,7 +28,7 @@ Copyright_License {
 #include "Net/HTTP/Request.hpp"
 #include "Net/HTTP/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 #include "Version.hpp"
 
 #include <assert.h>

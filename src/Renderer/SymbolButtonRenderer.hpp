@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SYMBOL_BUTTON_RENDERER_HPP
 
 #include "ButtonRenderer.hpp"
-#include "Util/StaticString.hpp"
+#include "Util/StaticString.hxx"
 
 /**
  * A #ButtonRenderer instance that renders a regular button frame and
