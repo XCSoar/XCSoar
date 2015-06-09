@@ -74,7 +74,7 @@ TabButton::GetRecommendedWidth(const DialogLook &look) const
     /* second half is the mask */
     w /= 2;
 #endif
-    return w;
+    return w + 2 * Layout::GetTextPadding();
   }
 
   return look.button.font->TextSize(caption).cx + 2 * Layout::GetTextPadding();
