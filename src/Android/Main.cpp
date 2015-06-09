@@ -125,6 +125,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Java::URL::Initialise(env);
   Java::URLConnection::Initialise(env);
 
+  NativeView::Initialise(env);
   Environment::Initialise(env);
   InternalSensors::Initialise(env);
   NativePortListener::Initialise(env);
@@ -259,6 +260,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativePortListener::Deinitialise(env);
   InternalSensors::Deinitialise(env);
   Environment::Deinitialise(env);
+  NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
 
   DeinitialiseIOThread();

@@ -43,10 +43,12 @@ class NativeView {
   unsigned sdk_version;
   char product[20];
 
-  jmethodID init_surface_method, deinit_surface_method;
-  jmethodID setRequestedOrientationID;
-  jmethodID swap_method, load_resource_texture_method;
-  jmethodID load_file_texture_method, open_file_method;
+  static Java::TrivialClass cls;
+  static jfieldID textureNonPowerOfTwo_field;
+  static jmethodID init_surface_method, deinit_surface_method;
+  static jmethodID setRequestedOrientationID;
+  static jmethodID swap_method, load_resource_texture_method;
+  static jmethodID load_file_texture_method, open_file_method;
 
 public:
   /**
@@ -70,6 +72,9 @@ public:
     REVERSE_PORTRAIT_GT = 8,
   };
 
+  static void Initialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env);
+
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
              unsigned _xdpi, unsigned _ydpi,
              unsigned _sdk_version, jstring _product)
@@ -78,18 +83,6 @@ public:
      xdpi(_xdpi), ydpi(_ydpi),
      sdk_version(_sdk_version) {
     Java::String::CopyTo(env, _product, product, sizeof(product));
-    Java::Class cls(env, "org/xcsoar/NativeView");
-    init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
-    deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
-    setRequestedOrientationID =
-      env->GetMethodID(cls, "setRequestedOrientation", "(I)Z");
-    swap_method = env->GetMethodID(cls, "swap", "()V");
-    load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
-                                                    "(Ljava/lang/String;Z[I)Z");
-    load_file_texture_method = env->GetMethodID(cls, "loadFileTexture",
-                                                "(Ljava/lang/String;[I)Z");
-    open_file_method = env->GetMethodID(cls, "openFile",
-                                        "(Ljava/lang/String;)V");
   }
 
   unsigned GetWidth() const { return width; }
@@ -167,11 +160,7 @@ public:
   }
 
   void SetTexturePowerOfTwo(bool value) {
-    Java::Class cls(env, env->GetObjectClass(obj));
-    jfieldID id = env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
-    assert(id);
-
-    env->SetStaticBooleanField(cls, id, value);
+    env->SetStaticBooleanField(cls, textureNonPowerOfTwo_field, value);
   }
 
   void openFile(const char *pathName) {
