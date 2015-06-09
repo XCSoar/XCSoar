@@ -30,23 +30,28 @@ struct AirspaceRendererSettings;
 struct AirspaceClassRendererSettings;
 struct AirspaceComputerSettings;
 class RGB8Color;
+class ProfileMap;
 
 namespace Profile
 {
-  void Load(AirspaceRendererSettings &renderer);
-  void Load(unsigned i, AirspaceClassRendererSettings &settings);
-  void Load(AirspaceComputerSettings &computer);
+  void Load(const ProfileMap &map, AirspaceRendererSettings &renderer);
+  void Load(const ProfileMap &map,
+            unsigned i, AirspaceClassRendererSettings &settings);
+  void Load(const ProfileMap &map, AirspaceComputerSettings &computer);
 
   /**
    * Saves the airspace mode setting to the profile
    * @param i Airspace class index
    */
-  void SetAirspaceMode(unsigned i, bool display, bool warning);
-  void SetAirspaceBorderWidth(unsigned i, unsigned border_width);
-  void SetAirspaceBorderColor(unsigned i, const RGB8Color &color);
-  void SetAirspaceFillColor(unsigned i, const RGB8Color &color);
-  void SetAirspaceFillMode(unsigned i, uint8_t mode);
-  void SetAirspaceBrush(unsigned i, int c);
+  void SetAirspaceMode(ProfileMap &map, unsigned i, bool display, bool warning);
+  void SetAirspaceBorderWidth(ProfileMap &map,
+                              unsigned i, unsigned border_width);
+  void SetAirspaceBorderColor(ProfileMap &map,
+                              unsigned i, const RGB8Color &color);
+  void SetAirspaceFillColor(ProfileMap &map,
+                            unsigned i, const RGB8Color &color);
+  void SetAirspaceFillMode(ProfileMap &map, unsigned i, uint8_t mode);
+  void SetAirspaceBrush(ProfileMap &map, unsigned i, int c);
 };
 
 #endif

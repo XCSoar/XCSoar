@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Profile.hpp"
+#include "Map.hpp"
 #include "Screen/PortableColor.hpp"
 #include "Formatter/HexColor.hpp"
 #include "Util/Macros.hpp"
 
 void
-Profile::SetColor(const char *key, const RGB8Color color)
+ProfileMap::SetColor(const char *key, const RGB8Color color)
 {
   char buffer[16];
   FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
@@ -35,7 +35,7 @@ Profile::SetColor(const char *key, const RGB8Color color)
 }
 
 bool
-Profile::GetColor(const char *key, RGB8Color &color)
+ProfileMap::GetColor(const char *key, RGB8Color &color) const
 {
   const char *color_string = Get(key);
   if (!color_string)

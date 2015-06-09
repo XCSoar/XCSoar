@@ -24,6 +24,7 @@ Copyright_License {
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Profile/Current.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Screen/Canvas.hpp"
@@ -161,7 +162,8 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index)
       computer.warnings.class_warnings[index] =
         !computer.warnings.class_warnings[index];
 
-    Profile::SetAirspaceMode(index, renderer.classes[index].display,
+    Profile::SetAirspaceMode(Profile::map,
+                             index, renderer.classes[index].display,
                              computer.warnings.class_warnings[index]);
     changed = true;
     ActionInterface::SendMapSettings();

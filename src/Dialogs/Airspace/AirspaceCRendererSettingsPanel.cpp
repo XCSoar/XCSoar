@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Profile/AirspaceConfig.hpp"
+#include "Profile/Current.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -114,18 +115,18 @@ bool
 AirspaceClassRendererSettingsPanel::Save(bool &changed)
 {
   if (border_color_changed) {
-    Profile::SetAirspaceBorderColor(type, settings.border_color);
+    Profile::SetAirspaceBorderColor(Profile::map, type, settings.border_color);
     changed = true;
   }
 
   if (fill_color_changed) {
-    Profile::SetAirspaceFillColor(type, settings.fill_color);
+    Profile::SetAirspaceFillColor(Profile::map, type, settings.fill_color);
     changed = true;
   }
 
 #ifdef HAVE_HATCHED_BRUSH
   if (fill_brush_changed) {
-    Profile::SetAirspaceBrush(type, settings.brush);
+    Profile::SetAirspaceBrush(Profile::map, type, settings.brush);
     changed = true;
   }
 #endif
@@ -134,7 +135,7 @@ AirspaceClassRendererSettingsPanel::Save(bool &changed)
   unsigned border_width = border_width_df.GetAsInteger();
   if (border_width != settings.border_width) {
     settings.border_width = border_width;
-    Profile::SetAirspaceBorderWidth(type, border_width);
+    Profile::SetAirspaceBorderWidth(Profile::map, type, border_width);
     changed = true;
   }
 
@@ -142,7 +143,7 @@ AirspaceClassRendererSettingsPanel::Save(bool &changed)
   auto fill_mode = (AirspaceClassRendererSettings::FillMode)fill_mode_df.GetAsInteger();
   if (fill_mode != settings.fill_mode) {
     settings.fill_mode = fill_mode;
-    Profile::SetAirspaceFillMode(type, (unsigned)fill_mode);
+    Profile::SetAirspaceFillMode(Profile::map, type, (unsigned)fill_mode);
     changed = true;
   }
 

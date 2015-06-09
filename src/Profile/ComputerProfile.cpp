@@ -167,7 +167,7 @@ Profile::Load(ComputerSettings &settings)
   Load(settings.voice);
   Load(settings.poi);
   Load(settings.features);
-  Load(settings.airspace);
+  Load(map, settings.airspace);
   Load(settings.circling);
   Load(settings.wave);
 

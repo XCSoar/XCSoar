@@ -35,6 +35,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct GeoPoint;
+class RGB8Color;
 template<typename T> class StringPointer;
 template<typename T> class AllocatedString;
 
@@ -172,6 +173,19 @@ public:
    * character.
    */
   void SetGeoPoint(const char *key, const GeoPoint &value);
+
+  // screen values
+
+  /**
+   * Load a Color from the profile.
+   */
+  bool GetColor(const char *key, RGB8Color &value) const;
+
+  /**
+   * Save a Color to the profile.  It is stored as a RGB hex string
+   * e.g. #123456
+   */
+  void SetColor(const char *key, const RGB8Color value);
 };
 
 #endif

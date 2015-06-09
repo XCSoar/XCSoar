@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapProfile.hpp"
+#include "Current.hpp"
 #include "TerrainConfig.hpp"
 #include "AirspaceConfig.hpp"
 #include "Profile.hpp"
@@ -71,7 +72,7 @@ Profile::Load(MapSettings &settings)
 
   settings.waypoint.LoadFromProfile();
 
-  Load(settings.airspace);
+  Load(map, settings.airspace);
 
   Get(ProfileKeys::GliderScreenPosition, settings.glider_screen_position);
 
