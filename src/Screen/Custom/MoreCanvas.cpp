@@ -75,7 +75,7 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
     if (ch == _T('\n')) {
       /* explicit line break */
 
-      if (++lines >= max_lines)
+      if (++lines > max_lines)
         break;
 
       ch = _T('\0');
