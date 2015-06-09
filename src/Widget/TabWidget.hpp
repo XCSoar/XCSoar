@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
-class Bitmap;
+class MaskedIcon;
 class TabDisplay;
 
 /**
@@ -132,7 +132,7 @@ public:
   }
 
   void AddTab(Widget *widget, const TCHAR *caption,
-              const Bitmap *bmp=nullptr);
+              const MaskedIcon *icon=nullptr);
 
   gcc_pure
   const TCHAR *GetButtonCaption(unsigned i) const;

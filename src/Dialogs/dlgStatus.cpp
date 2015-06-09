@@ -86,11 +86,11 @@ dlgStatusShowModal(int start_page)
     == DialogSettings::TabStyle::Icon;
 
   const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *FlightIcon = enable_icons ? &icons.hBmpTabFlight : nullptr;
-  const Bitmap *SystemIcon = enable_icons ? &icons.hBmpTabSystem : nullptr;
-  const Bitmap *TaskIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
-  const Bitmap *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
-  const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
+  const auto *FlightIcon = enable_icons ? &icons.hBmpTabFlight : nullptr;
+  const auto *SystemIcon = enable_icons ? &icons.hBmpTabSystem : nullptr;
+  const auto *TaskIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
+  const auto *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
+  const auto *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
 
   Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
   widget.AddTab(flight_panel, _("Flight"), FlightIcon);

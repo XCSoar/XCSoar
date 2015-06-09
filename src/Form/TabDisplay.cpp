@@ -25,22 +25,10 @@ Copyright_License {
 #include "Widget/TabWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
-#include "Screen/Bitmap.hpp"
+#include "Screen/Icon.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-
-#ifdef USE_GLSL
-#include "Screen/OpenGL/Shaders.hpp"
-#include "Screen/OpenGL/Program.hpp"
-#else
-#include "Screen/OpenGL/Compatibility.hpp"
-#endif
-#endif
 
 #include <assert.h>
 #include <winuser.h>
@@ -68,14 +56,8 @@ TabDisplay::~TabDisplay()
 inline unsigned
 TabButton::GetRecommendedWidth(const DialogLook &look) const
 {
-  if (bitmap != nullptr) {
-    unsigned w = bitmap->GetWidth();
-#ifndef ENABLE_OPENGL
-    /* second half is the mask */
-    w /= 2;
-#endif
-    return w + 2 * Layout::GetTextPadding();
-  }
+  if (icon != nullptr)
+    return icon->GetSize().cx + 2 * Layout::GetTextPadding();
 
   return look.button.font->TextSize(caption).cx + 2 * Layout::GetTextPadding();
 }
@@ -83,8 +65,8 @@ TabButton::GetRecommendedWidth(const DialogLook &look) const
 inline unsigned
 TabButton::GetRecommendedHeight(const DialogLook &look) const
 {
-  if (bitmap != nullptr)
-    return bitmap->GetHeight() + 2 * Layout::GetTextPadding();
+  if (icon != nullptr)
+    return icon->GetSize().cy + 2 * Layout::GetTextPadding();
 
   return look.button.font->GetHeight() + 2 * Layout::GetTextPadding();
 }
@@ -185,72 +167,12 @@ TabDisplay::GetButtonSize(unsigned i) const
 void
 TabDisplay::PaintButton(Canvas &canvas,
                         const TCHAR *caption, const PixelRect &rc,
-                        const Bitmap *bmp, const bool isDown, bool inverse)
+                        const MaskedIcon *icon, bool isDown, bool inverse)
 {
   canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
 
-  if (bmp != nullptr) {
-    const PixelSize bitmap_size = bmp->GetSize();
-#ifdef ENABLE_OPENGL
-    const unsigned bitmap_width = bitmap_size.cx;
-#else
-    /* second half is the mask */
-    const unsigned bitmap_width = bitmap_size.cx / 2;
-#endif
-    const int offsetx = (rc.right - rc.left - bitmap_width) / 2;
-    const int offsety = (rc.bottom - rc.top - bitmap_size.cy) / 2;
-
-#ifdef ENABLE_OPENGL
-
-#ifdef USE_GLSL
-    if (inverse)
-      OpenGL::invert_shader->Use();
-    else
-      OpenGL::texture_shader->Use();
-#else
-    const GLEnable<GL_TEXTURE_2D> scope;
-
-    if (inverse) {
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-
-      /* invert the texture color */
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_ONE_MINUS_SRC_COLOR);
-
-      /* copy the texture alpha */
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
-    } else
-      /* simple copy */
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
-
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    GLTexture &texture = *bmp->GetNative();
-    texture.Bind();
-    texture.Draw(rc.left + offsetx, rc.top + offsety);
-
-#else
-    if (inverse) // black background
-      canvas.CopyNotOr(rc.left + offsetx,
-                       rc.top + offsety,
-                       bitmap_width,
-                       bitmap_size.cy,
-                       *bmp,
-                       bitmap_width, 0);
-
-    else
-      canvas.CopyAnd(rc.left + offsetx,
-                      rc.top + offsety,
-                      bitmap_width,
-                      bitmap_size.cy,
-                      *bmp,
-                      bitmap_width, 0);
-#endif
-
+  if (icon != nullptr) {
+    icon->Draw(canvas, rc, inverse);
   } else {
     PixelRect rcTextFinal = rc;
     const unsigned buttonheight = rc.bottom - rc.top;
@@ -277,9 +199,9 @@ TabDisplay::PaintButton(Canvas &canvas,
 }
 
 void
-TabDisplay::Add(const TCHAR *caption, const Bitmap *bmp)
+TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon)
 {
-  TabButton *b = new TabButton(caption, bmp);
+  TabButton *b = new TabButton(caption, icon);
   buttons.append(b);
 }
 
@@ -324,7 +246,7 @@ TabDisplay::OnPaint(Canvas &canvas)
                                                            is_down));
 
     const PixelRect &rc = GetButtonSize(i);
-    PaintButton(canvas, button.caption, rc, button.bitmap,
+    PaintButton(canvas, button.caption, rc, button.icon,
                 is_down, is_selected);
   }
 }

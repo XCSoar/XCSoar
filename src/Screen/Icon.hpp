@@ -61,6 +61,8 @@ public:
   void Draw(Canvas &canvas, RasterPoint pt) const {
     Draw(canvas, pt.x, pt.y);
   }
+
+  void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const;
 };
 
 #endif

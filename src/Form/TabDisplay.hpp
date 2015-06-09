@@ -31,7 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct DialogLook;
-class Bitmap;
+class MaskedIcon;
 class ContainerWindow;
 class TabWidget;
 
@@ -41,12 +41,12 @@ class TabWidget;
 class TabButton {
 public:
   StaticString<32> caption;
-  const Bitmap *bitmap;
+  const MaskedIcon *icon;
   PixelRect rc;
 
 public:
-  TabButton(const TCHAR* _caption, const Bitmap *_bitmap)
-    :bitmap(_bitmap)
+  TabButton(const TCHAR *_caption, const MaskedIcon *_icon)
+    :icon(_icon)
   {
     caption = _caption;
     InvalidateLayout();
@@ -113,13 +113,13 @@ public:
    */
   static void PaintButton(Canvas &canvas,
                           const TCHAR *caption, const PixelRect &rc,
-                          const Bitmap *bmp, const bool isDown, bool inverse);
+                          const MaskedIcon *icon, bool down, bool inverse);
 
   unsigned GetSize() const {
     return buttons.size();
   }
 
-  void Add(const TCHAR *caption, const Bitmap *bmp=nullptr);
+  void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr);
 
   gcc_pure
   const TCHAR *GetCaption(unsigned i) const {

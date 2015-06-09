@@ -141,9 +141,9 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
   const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
-  const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
-  const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
+  const auto *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
+  const auto *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
+  const auto *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
   AddTab(wEdit, _("Turn Points"), TurnPointIcon);
   AddTab(list_tab, _("Manage"), BrowseIcon);

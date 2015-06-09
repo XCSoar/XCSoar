@@ -22,19 +22,18 @@ Copyright_License {
 */
 
 #include "IconLook.hpp"
-#include "Screen/Layout.hpp"
 #include "Resources.hpp"
 
 void
 IconLook::Initialise()
 {
-  hBmpTabTask.Load(Layout::scale > 1 ? IDB_TASK_HD : IDB_TASK);
-  hBmpTabWrench.Load(Layout::scale > 1 ? IDB_WRENCH_HD : IDB_WRENCH);
-  hBmpTabSettings.Load(Layout::scale > 1 ? IDB_SETTINGS_HD : IDB_SETTINGS);
-  hBmpTabCalculator.Load(Layout::scale > 1 ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
+  hBmpTabTask.LoadResource(IDB_TASK, IDB_TASK_HD);
+  hBmpTabWrench.LoadResource(IDB_WRENCH, IDB_WRENCH_HD);
+  hBmpTabSettings.LoadResource(IDB_SETTINGS, IDB_SETTINGS_HD);
+  hBmpTabCalculator.LoadResource(IDB_CALCULATOR, IDB_CALCULATOR_HD);
 
-  hBmpTabFlight.Load(Layout::scale > 1 ? IDB_GLOBE_HD : IDB_GLOBE);
-  hBmpTabSystem.Load(Layout::scale > 1 ? IDB_DEVICE_HD : IDB_DEVICE);
-  hBmpTabRules.Load(Layout::scale > 1 ? IDB_RULES_HD : IDB_RULES);
-  hBmpTabTimes.Load(Layout::scale > 1 ? IDB_CLOCK_HD : IDB_CLOCK);
+  hBmpTabFlight.LoadResource(IDB_GLOBE, IDB_GLOBE_HD);
+  hBmpTabSystem.LoadResource(IDB_DEVICE, IDB_DEVICE_HD);
+  hBmpTabRules.LoadResource(IDB_RULES, IDB_RULES_HD);
+  hBmpTabTimes.LoadResource(IDB_CLOCK, IDB_CLOCK_HD);
 }

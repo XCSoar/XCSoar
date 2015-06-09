@@ -94,9 +94,9 @@ TabWidget::RestoreExtra()
 
 void
 TabWidget::AddTab(Widget *widget, const TCHAR *caption,
-                  const Bitmap *bmp)
+                  const MaskedIcon *icon)
 {
-  tab_display->Add(caption, bmp);
+  tab_display->Add(caption, icon);
   PagerWidget::Add(widget);
 }
 

@@ -24,23 +24,23 @@ Copyright_License {
 #ifndef XCSOAR_ICON_LOOK_HPP
 #define XCSOAR_ICON_LOOK_HPP
 
-#include "Screen/Bitmap.hpp"
+#include "Screen/Icon.hpp"
 
 /**
  * This class manages the icons of various XCSoar dialogs.
  */
 struct IconLook {
   // task dialog
-  Bitmap hBmpTabTask;
-  Bitmap hBmpTabWrench;
-  Bitmap hBmpTabSettings;
-  Bitmap hBmpTabCalculator;
+  MaskedIcon hBmpTabTask;
+  MaskedIcon hBmpTabWrench;
+  MaskedIcon hBmpTabSettings;
+  MaskedIcon hBmpTabCalculator;
 
   // status dialog
-  Bitmap hBmpTabFlight;
-  Bitmap hBmpTabSystem;
-  Bitmap hBmpTabRules;
-  Bitmap hBmpTabTimes;
+  MaskedIcon hBmpTabFlight;
+  MaskedIcon hBmpTabSystem;
+  MaskedIcon hBmpTabRules;
+  MaskedIcon hBmpTabTimes;
 
   void Initialise();
 };

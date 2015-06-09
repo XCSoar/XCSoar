@@ -98,3 +98,53 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
                   bitmap, size.cx, 0);
 #endif
 }
+
+void
+MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
+{
+  const int offsetx = (rc.right - rc.left - size.cx) / 2;
+  const int offsety = (rc.bottom - rc.top - size.cy) / 2;
+
+#ifdef ENABLE_OPENGL
+#ifdef USE_GLSL
+  if (inverse)
+    OpenGL::invert_shader->Use();
+  else
+    OpenGL::texture_shader->Use();
+#else
+  const GLEnable<GL_TEXTURE_2D> scope;
+
+  if (inverse) {
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+
+    /* invert the texture color */
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_ONE_MINUS_SRC_COLOR);
+
+    /* copy the texture alpha */
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
+  } else
+    /* simple copy */
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+#endif
+
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  GLTexture &texture = *bitmap.GetNative();
+  texture.Bind();
+  texture.Draw(rc.left + offsetx, rc.top + offsety);
+
+#else
+  if (inverse) // black background
+    canvas.CopyNotOr(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+                     bitmap, size.cx, 0);
+
+  else
+    canvas.CopyAnd(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+                   bitmap, size.cx, 0);
+#endif
+
+}
