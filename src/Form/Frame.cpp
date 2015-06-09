@@ -31,7 +31,7 @@ Copyright_License {
 WndFrame::WndFrame(const DialogLook &_look)
   :look(_look),
    caption_color(look.text_color),
-   mCaptionStyle(DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+   mCaptionStyle(DT_NOPREFIX | DT_WORDBREAK | DT_LEFT | DT_NOCLIP)
 {
   text.clear();
 }
@@ -41,7 +41,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    const WindowStyle style)
   :look(_look),
    caption_color(look.text_color),
-   mCaptionStyle(DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+   mCaptionStyle(DT_NOPREFIX | DT_WORDBREAK | DT_LEFT | DT_NOCLIP)
 {
   text.clear();
 

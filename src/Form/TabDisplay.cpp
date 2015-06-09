@@ -303,7 +303,7 @@ TabDisplay::OnPaint(Canvas &canvas)
   canvas.Clear(COLOR_BLACK);
   canvas.Select(*look.button.font);
 
-  const unsigned CaptionStyle = DT_CENTER | DT_NOCLIP
+  const unsigned CaptionStyle = DT_NOPREFIX | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
   const bool is_focused = !HasCursorKeys() || HasFocus();

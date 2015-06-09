@@ -94,7 +94,7 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   if (IsDithered())
     style |= DT_UNDERLINE;
 #else
-  unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
+  unsigned style = DT_NOPREFIX | DT_WORDBREAK | DT_CENTER | DT_NOCLIP;
 #endif
 
   PixelRect text_rc = rc;
