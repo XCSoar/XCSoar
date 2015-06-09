@@ -68,7 +68,7 @@ public:
 	static constexpr value_type SENTINEL = '\0';
 
 protected:
-	value_type data[max];
+	value_type the_data[max];
 
 public:
 	StaticStringBase() = default;
@@ -81,11 +81,11 @@ public:
 	}
 
 	size_type length() const {
-		return StringLength(data);
+		return StringLength(c_str());
 	}
 
 	bool empty() const {
-		return data[0] == SENTINEL;
+		return the_data[0] == SENTINEL;
 	}
 
 	bool full() const {
@@ -93,7 +93,7 @@ public:
 	}
 
 	void clear() {
-		data[0] = SENTINEL;
+		the_data[0] = SENTINEL;
 	}
 
 	/**
@@ -105,11 +105,11 @@ public:
 	void Truncate(size_type new_length) {
 		assert(new_length <= length());
 
-		data[new_length] = SENTINEL;
+		the_data[new_length] = SENTINEL;
 	}
 
 	void SetASCII(const char *src, const char *src_end) {
-		pointer end = ::CopyASCII(data, CAPACITY - 1, src, src_end);
+		pointer end = ::CopyASCII(data(), CAPACITY - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
@@ -119,7 +119,7 @@ public:
 
 #ifdef _UNICODE
 	void SetASCII(const TCHAR *src, const TCHAR *src_end) {
-		pointer end = ::CopyASCII(data, CAPACITY - 1, src, src_end);
+		pointer end = ::CopyASCII(data(), CAPACITY - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
@@ -132,7 +132,7 @@ public:
 	 * Eliminate all non-ASCII characters.
 	 */
 	void CleanASCII() {
-		CopyASCII(data, data);
+		CopyASCII(data(), c_str());
 	}
 
 	/**
@@ -141,30 +141,39 @@ public:
 	 * @return false if #src was invalid UTF-8
 	 */
 	bool SetUTF8(const char *src) {
-		return ::CopyUTF8(this->buffer(), CAPACITY, src);
+		return ::CopyUTF8(data(), CAPACITY, src);
 	}
 
 	bool equals(const_pointer other) const {
 		assert(other != nullptr);
 
-		return StringIsEqual(data, other);
+		return StringIsEqual(c_str(), other);
 	}
 
 	gcc_pure
 	bool StartsWith(const_pointer prefix) const {
-		return StringStartsWith(data, prefix);
+		return StringStartsWith(c_str(), prefix);
 	}
 
 	gcc_pure
 	bool Contains(const_pointer needle) const {
-		return StringFind(data, needle) != nullptr;
+		return StringFind(c_str(), needle) != nullptr;
+	}
+
+	using Base::data;
+
+	/**
+	 * Returns a writable buffer.
+	 */
+	pointer data() {
+		return the_data;
 	}
 
 	/**
 	 * Returns a writable buffer.
 	 */
 	pointer buffer() {
-		return data;
+		return data();
 	}
 
 	/**
@@ -173,7 +182,7 @@ public:
 	value_type operator[](size_type i) const {
 		assert(i <= length());
 
-		return data[i];
+		return the_data[i];
 	}
 
 	/**
@@ -182,27 +191,29 @@ public:
 	reference operator[](size_type i) {
 		assert(i <= length());
 
-		return data[i];
+		return the_data[i];
 	}
 
 	const_iterator begin() const {
-		return data;
+		return c_str();
 	}
 
 	const_iterator end() const {
-		return data + length();
+		return begin() + length();
+	}
+
+	value_type front() const {
+		return *begin();
 	}
 
 	value_type back() const {
-		assert(length() > 0);
-
-		return data[length() - 1];
+		return end()[-1];
 	}
 
 	void assign(const_pointer new_value) {
 		assert(new_value != nullptr);
 
-		CopyString(data, new_value, CAPACITY);
+		CopyString(data(), new_value, CAPACITY);
 	}
 
 	void assign(const_pointer new_value, size_type length) {
@@ -211,14 +222,14 @@ public:
 		size_type max_length = length + 1 > CAPACITY
 			? CAPACITY
 			: length + 1;
-		CopyString(data, new_value, max_length);
+		CopyString(data(), new_value, max_length);
 	}
 
 	void append(const_pointer new_value) {
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		CopyString(data + len, new_value, CAPACITY - len);
+		CopyString(data() + len, new_value, CAPACITY - len);
 	}
 
 	void append(const_pointer new_value, size_type _length) {
@@ -227,7 +238,7 @@ public:
 		size_type len = length();
 		size_type max_length = (CAPACITY - len < _length + 1) ?
 			CAPACITY - len : _length + 1;
-		CopyString(data + len, new_value, max_length);
+		CopyString(data() + len, new_value, max_length);
 	}
 
 	bool push_back(value_type ch) {
@@ -235,8 +246,9 @@ public:
 		if (l >= CAPACITY - 1)
 			return false;
 
-		data[l] = ch;
-		data[l + 1] = SENTINEL;
+		auto *p = data() + l;
+		*p++ = ch;
+		*p = SENTINEL;
 		return true;
 	}
 
@@ -245,11 +257,11 @@ public:
 	 * buffer boundary checks.
 	 */
 	void UnsafeAppendASCII(const char *p) {
-		CopyASCII(data + length(), p);
+		CopyASCII(data() + length(), p);
 	}
 
 	const_pointer c_str() const {
-		return data;
+		return the_data;
 	}
 
 	operator const_pointer() const {
@@ -283,7 +295,7 @@ public:
 	 * Don't use - not thread safe.
 	 */
 	pointer first_token(const_pointer delim) {
-		return StringToken(data, delim);
+		return StringToken(data(), delim);
 	}
 
 	/**
@@ -299,7 +311,7 @@ public:
 	 */
 	template<typename... Args>
 	void Format(const_pointer fmt, Args&&... args) {
-		StringFormat(data, CAPACITY, fmt, args...);
+		StringFormat(data(), CAPACITY, fmt, args...);
 	}
 
 	/**
@@ -309,7 +321,7 @@ public:
 	template<typename... Args>
 	void AppendFormat(const_pointer fmt, Args&&... args) {
 		size_t l = length();
-		StringFormat(data + l, CAPACITY - l, fmt, args...);
+		StringFormat(data() + l, CAPACITY - l, fmt, args...);
 	}
 
 	/**
@@ -320,7 +332,7 @@ public:
 	 */
 	template<typename... Args>
 	void UnsafeFormat(const T *fmt, Args&&... args) {
-		StringFormatUnsafe(data, fmt, args...);
+		StringFormatUnsafe(data(), fmt, args...);
 	}
 };
 
@@ -357,7 +369,7 @@ public:
 	}
 
 	void CropIncompleteUTF8() {
-		::CropIncompleteUTF8(this->buffer());
+		::CropIncompleteUTF8(this->data());
 	}
 };
 
