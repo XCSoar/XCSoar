@@ -36,6 +36,8 @@ UISettings::SetDefaults()
 
   enable_thermal_assistant_gauge = true;
 
+  enable_airspace_warning_dialog = true;
+
   popup_message_position = PopupMessagePosition::CENTER;
 
   haptic_feedback = HapticFeedback::DEFAULT;

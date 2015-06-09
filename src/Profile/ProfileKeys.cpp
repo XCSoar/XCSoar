@@ -28,6 +28,7 @@ namespace ProfileKeys {
 const char UIScale[] = "UIScale";
 const char Password[] = "Password";
 const char AirspaceWarning[] = "AirspaceWarn";
+const char AirspaceWarningDialog[] = "AirspaceWarnDialog";
 const char AirspaceBlackOutline[] = "AirspaceBlackOutline";
 const char AirspaceTransparency[] = "AirspaceTransparency";
 const char AirspaceFillMode[] = "AirspaceFillMode";

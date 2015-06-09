@@ -125,6 +125,8 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
 
   map.Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);
 
+  map.Get(ProfileKeys::AirspaceWarningDialog, settings.enable_airspace_warning_dialog);
+
   map.GetEnum(ProfileKeys::AppStatusMessageAlignment, settings.popup_message_position);
 
   map.GetEnum(ProfileKeys::HapticFeedback, settings.haptic_feedback);

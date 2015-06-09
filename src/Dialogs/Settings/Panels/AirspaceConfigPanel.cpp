@@ -47,6 +47,7 @@ enum ControlIndex {
   ClipAltitude,
   AltWarningMargin,
   AirspaceWarnings,
+  WarningDialog,
   WarningTime,
   RepetitiveSound,
   AcknowledgeTime,
@@ -141,6 +142,7 @@ AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode mode)
 void
 AirspaceConfigPanel::ShowWarningControls(bool visible)
 {
+  SetRowVisible(WarningDialog, visible);
   SetRowVisible(WarningTime, visible);
   SetRowVisible(RepetitiveSound, visible);
   SetRowVisible(AcknowledgeTime, visible);
@@ -182,6 +184,8 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     CommonInterface::GetComputerSettings().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::GetMapSettings().airspace;
+  const UISettings &ui_settings =
+    CommonInterface::GetUISettings();
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -204,6 +208,11 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."),
              computer.enable_warnings, this);
+
+  AddBoolean(_("Warnings dialog"),
+             _("Enable/disable displaying airspaces warnings dialog."),
+             ui_settings.enable_airspace_warning_dialog, this);
+  SetExpertRow(WarningDialog);
 
   AddTime(_("Warning time"),
           _("This is the time before an airspace incursion is estimated at which the system will warn the pilot."),
@@ -252,6 +261,7 @@ AirspaceConfigPanel::Save(bool &_changed)
     CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
     CommonInterface::SetMapSettings().airspace;
+  UISettings &ui_settings = CommonInterface::SetUISettings();
 
   changed |= SaveValueEnum(AirspaceDisplay, ProfileKeys::AltMode, renderer.altitude_mode);
 
@@ -262,6 +272,9 @@ AirspaceConfigPanel::Save(bool &_changed)
   changed |= SaveValue(AltWarningMargin, UnitGroup::ALTITUDE, ProfileKeys::AltMargin, computer.warnings.altitude_warning_margin);
 
   changed |= SaveValue(AirspaceWarnings, ProfileKeys::AirspaceWarning, computer.enable_warnings);
+
+  changed |= SaveValue(WarningDialog, ProfileKeys::AirspaceWarningDialog,
+                       ui_settings.enable_airspace_warning_dialog);
 
   if (SaveValue(WarningTime, ProfileKeys::WarningTime, computer.warnings.warning_time)) {
     changed = true;

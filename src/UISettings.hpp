@@ -61,6 +61,9 @@ struct UISettings {
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
 
+  /** Enable warning dialog */
+  bool enable_airspace_warning_dialog;
+
   enum class PopupMessagePosition : uint8_t {
     CENTER,
     TOP_LEFT,

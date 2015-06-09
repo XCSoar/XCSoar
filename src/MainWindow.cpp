@@ -695,10 +695,14 @@ MainWindow::OnUser(unsigned id)
       /* already visible */
       return true;
 
-    /* un-blank the display, play a sound and show the dialog */
+    // un-blank the display, play a sound
     ResetUserIdle();
     PlayResource(_T("IDR_WAV_BEEPBWEEP"));
-    dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
+
+    // show airspace warnings dialog
+    if (CommonInterface::GetUISettings().enable_airspace_warning_dialog)
+      dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
+
     return true;
 
   case Command::GPS_UPDATE:
