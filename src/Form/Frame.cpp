@@ -30,8 +30,7 @@ Copyright_License {
 
 WndFrame::WndFrame(const DialogLook &_look)
   :look(_look),
-   caption_color(look.text_color),
-   mCaptionStyle(DT_NOPREFIX | DT_WORDBREAK | DT_LEFT | DT_NOCLIP)
+   caption_color(look.text_color)
 {
   text.clear();
 }
@@ -40,8 +39,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    PixelRect rc,
                    const WindowStyle style)
   :look(_look),
-   caption_color(look.text_color),
-   mCaptionStyle(DT_NOPREFIX | DT_WORDBREAK | DT_LEFT | DT_NOCLIP)
+   caption_color(look.text_color)
 {
   text.clear();
 
@@ -51,15 +49,14 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
 void
 WndFrame::SetAlignCenter()
 {
-  mCaptionStyle &= ~(DT_LEFT|DT_RIGHT);
-  mCaptionStyle |= DT_CENTER;
+  text_renderer.SetCenter();
   Invalidate();
 }
 
 void
 WndFrame::SetVAlignCenter()
 {
-  mCaptionStyle |= DT_VCENTER;
+  text_renderer.SetVCenter();
   Invalidate();
 }
 
@@ -79,9 +76,8 @@ WndFrame::GetTextHeight() const
 
   AnyCanvas canvas;
   canvas.Select(look.text_font);
-  canvas.DrawFormattedText(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
-  return rc.bottom - rc.top;
+  return text_renderer.GetHeight(canvas, rc, text.c_str());
 }
 
 void
@@ -99,5 +95,5 @@ WndFrame::OnPaint(Canvas &canvas)
   const int padding = Layout::GetTextPadding();
   rc.Grow(-padding);
 
-  canvas.DrawFormattedText(&rc, text.c_str(), mCaptionStyle);
+  text_renderer.Draw(canvas, rc, text.c_str());
 }

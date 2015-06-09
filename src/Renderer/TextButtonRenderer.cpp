@@ -47,30 +47,7 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
 
   canvas.Select(*look.font);
 
-#ifndef USE_GDI
-  unsigned style = DT_CENTER | DT_VCENTER | DT_WORDBREAK;
-
-  if (IsDithered())
-    style |= DT_UNDERLINE;
-#else
-  unsigned style = DT_NOPREFIX | DT_WORDBREAK | DT_CENTER | DT_NOCLIP;
-#endif
-
-  PixelRect text_rc = rc;
-
-#ifdef USE_GDI
-  canvas.DrawFormattedText(&text_rc, GetCaption(), style | DT_CALCRECT);
-  text_rc.right = rc.right;
-
-  PixelScalar offset = rc.bottom - text_rc.bottom;
-  if (offset > 0) {
-    offset /= 2;
-    text_rc.top += offset;
-    text_rc.bottom += offset;
-  }
-#endif
-
-  canvas.DrawFormattedText(&text_rc, GetCaption(), style);
+  text_renderer.Draw(canvas, rc, GetCaption());
 }
 
 unsigned

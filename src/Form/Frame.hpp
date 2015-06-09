@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Color.hpp"
+#include "Renderer/TextRenderer.hpp"
 #include "Util/StaticString.hxx"
 
 #include <tchar.h>
@@ -37,7 +38,7 @@ class WndFrame : public PaintWindow {
 
   Color caption_color;
 
-  unsigned mCaptionStyle;
+  TextRenderer text_renderer;
 
   StaticString<300> text;
 
@@ -63,6 +64,7 @@ public:
 
   void SetCaption(const TCHAR *_text) {
     SetText(_text);
+    text_renderer.InvalidateLayout();
   }
 
   void SetCaptionColor(const Color &color) {

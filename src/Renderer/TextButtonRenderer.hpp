@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_TEXT_BUTTON_RENDERER_HPP
 
 #include "ButtonRenderer.hpp"
+#include "TextRenderer.hpp"
 #include "Util/StaticString.hxx"
 
 /**
@@ -34,15 +35,25 @@ Copyright_License {
 class TextButtonRenderer : public ButtonRenderer {
   ButtonFrameRenderer frame_renderer;
 
+  TextRenderer text_renderer;
+
   StaticString<64> caption;
 
 public:
   explicit TextButtonRenderer(const ButtonLook &_look)
-    :frame_renderer(_look) {}
+    :frame_renderer(_look) {
+    text_renderer.SetCenter();
+    text_renderer.SetVCenter();
+    text_renderer.SetControl();
+  }
 
   TextButtonRenderer(const ButtonLook &_look,
                      StaticString<64>::const_pointer _caption)
-    :frame_renderer(_look), caption(_caption) {}
+    :frame_renderer(_look), caption(_caption) {
+    text_renderer.SetCenter();
+    text_renderer.SetVCenter();
+    text_renderer.SetControl();
+  }
 
   const ButtonLook &GetLook() const {
     return frame_renderer.GetLook();
@@ -54,6 +65,7 @@ public:
 
   void SetCaption(StaticString<64>::const_pointer _caption) {
     caption = _caption;
+    text_renderer.InvalidateLayout();
   }
 
   gcc_pure

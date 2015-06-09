@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "WidgetDialog.hpp"
 #include "Renderer/ButtonRenderer.hpp"
+#include "Renderer/TextRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Form/GridView.hpp"
@@ -45,12 +46,18 @@ Copyright_License {
 class QuickMenuButtonRenderer final : public ButtonRenderer {
   const DialogLook &look;
 
+  TextRenderer text_renderer;
+
   const StaticString<64> caption;
 
 public:
   explicit QuickMenuButtonRenderer(const DialogLook &_look,
                                    const TCHAR *_caption)
-    :look(_look), caption(_caption) {}
+    :look(_look), caption(_caption) {
+    text_renderer.SetCenter();
+    text_renderer.SetVCenter();
+    text_renderer.SetControl();
+  }
 
   gcc_pure
   unsigned GetMinimumButtonWidth() const override;
@@ -88,17 +95,7 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.Select(*look.button.font);
   canvas.SetBackgroundTransparent();
 
-#ifndef USE_GDI
-  unsigned style = DT_CENTER | DT_VCENTER | DT_WORDBREAK;
-
-  if (IsDithered())
-    style |= DT_UNDERLINE;
-#else
-  unsigned style = DT_NOPREFIX | DT_WORDBREAK | DT_CENTER | DT_NOCLIP;
-#endif
-
-  PixelRect text_rc = rc;
-  canvas.DrawFormattedText(&text_rc, caption, style);
+  text_renderer.Draw(canvas, rc, caption);
 }
 
 class QuickMenu final : public WindowWidget, ActionListener {
