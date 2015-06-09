@@ -153,7 +153,13 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 
   if (bmp != nullptr) {
     const PixelSize bitmap_size = bmp->GetSize();
-    const int offsetx = (rc.right - rc.left - bitmap_size.cx / 2) / 2;
+#ifdef ENABLE_OPENGL
+    const unsigned bitmap_width = bitmap_size.cx;
+#else
+    /* second half is the mask */
+    const unsigned bitmap_width = bitmap_size.cx / 2;
+#endif
+    const int offsetx = (rc.right - rc.left - bitmap_width) / 2;
     const int offsety = (rc.bottom - rc.top - bitmap_size.cy) / 2;
 
 #ifdef ENABLE_OPENGL
@@ -185,18 +191,18 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
     if (inverse) // black background
       canvas.CopyNotOr(rc.left + offsetx,
                        rc.top + offsety,
-                       bitmap_size.cx / 2,
+                       bitmap_width,
                        bitmap_size.cy,
                        *bmp,
-                       bitmap_size.cx / 2, 0);
+                       bitmap_width, 0);
 
     else
       canvas.CopyAnd(rc.left + offsetx,
                       rc.top + offsety,
-                      bitmap_size.cx / 2,
+                      bitmap_width,
                       bitmap_size.cy,
                       *bmp,
-                      bitmap_size.cx / 2, 0);
+                      bitmap_width, 0);
 #endif
 
   } else {
