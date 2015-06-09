@@ -550,6 +550,16 @@ SinceInMinutes(fixed now_s, uint32_t past_ms)
 
 #endif
 
+/**
+ * Draw right-aligned text.
+ */
+static void
+DrawTextRight(Canvas &canvas, int x, int y, const TCHAR *text)
+{
+  unsigned width = canvas.CalcTextWidth(text);
+  canvas.DrawText(x - width, y, text);
+}
+
 void
 TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned index)
@@ -679,20 +689,17 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   /* draw bearing and distance on the right */
   if (item.vector.IsValid()) {
     FormatUserDistanceSmart(item.vector.distance, tmp.buffer(), true);
-    unsigned width = canvas.CalcTextWidth(tmp.c_str());
-    canvas.DrawText(rc.right - text_padding - width,
-                    name_y +
-                    (name_font.GetHeight() - small_font.GetHeight()) / 2,
-                    tmp.c_str());
+    DrawTextRight(canvas, rc.right - text_padding,
+                  name_y +
+                  (name_font.GetHeight() - small_font.GetHeight()) / 2,
+                  tmp.c_str());
 
     // Draw leg bearing
     FormatBearing(tmp.buffer(), tmp.MAX_SIZE, item.vector.bearing);
-    width = canvas.CalcTextWidth(tmp.c_str());
-    canvas.DrawText(rc.right - text_padding - width,
-                    rc.bottom - small_font.GetHeight() - text_padding,
-                    tmp.c_str());
+    DrawTextRight(canvas, rc.right - text_padding,
+                  rc.bottom - small_font.GetHeight() - text_padding,
+                  tmp.c_str());
   }
-
 }
 
 void
