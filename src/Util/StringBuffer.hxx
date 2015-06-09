@@ -76,6 +76,20 @@ public:
 		return c_str()[0];
 	}
 
+	/**
+	 * Returns one character.  No bounds checking.
+	 */
+	value_type operator[](size_type i) const {
+		return the_data[i];
+	}
+
+	/**
+	 * Returns one writable character.  No bounds checking.
+	 */
+	reference operator[](size_type i) {
+		return the_data[i];
+	}
+
 	constexpr const_iterator begin() const {
 		return data();
 	}
