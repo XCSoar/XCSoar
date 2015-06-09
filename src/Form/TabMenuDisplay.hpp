@@ -325,10 +325,10 @@ private:
    * draw border around main menu
    */
   void PaintMainMenuBorder(Canvas &canvas) const;
-  void PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle) const;
+  void PaintMainMenuItems(Canvas &canvas) const;
   void PaintSubMenuBorder(Canvas &canvas,
                           const MainMenuButton &main_button) const;
-  void PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle) const;
+  void PaintSubMenuItems(Canvas &canvas) const;
 };
 
 #endif

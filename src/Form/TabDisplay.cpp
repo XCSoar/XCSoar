@@ -183,7 +183,7 @@ TabDisplay::GetButtonSize(unsigned i) const
 }
 
 void
-TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
+TabDisplay::PaintButton(Canvas &canvas,
                         const TCHAR *caption, const PixelRect &rc,
                         const Bitmap *bmp, const bool isDown, bool inverse)
 {
@@ -266,6 +266,7 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 
     rcTextFinal.top += textheightoffset;
 
+    unsigned CaptionStyle = DT_NOPREFIX | DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
 #ifndef USE_GDI
     if (IsDithered())
       CaptionStyle |= DT_UNDERLINE;
@@ -309,9 +310,6 @@ TabDisplay::OnPaint(Canvas &canvas)
   canvas.Clear(COLOR_BLACK);
   canvas.Select(*look.button.font);
 
-  const unsigned CaptionStyle = DT_NOPREFIX | DT_CENTER | DT_NOCLIP
-      | DT_WORDBREAK;
-
   const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
     const TabButton &button = *buttons[i];
@@ -326,7 +324,7 @@ TabDisplay::OnPaint(Canvas &canvas)
                                                            is_down));
 
     const PixelRect &rc = GetButtonSize(i);
-    PaintButton(canvas, CaptionStyle, button.caption, rc, button.bitmap,
+    PaintButton(canvas, button.caption, rc, button.bitmap,
                 is_down, is_selected);
   }
 }

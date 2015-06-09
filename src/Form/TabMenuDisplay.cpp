@@ -374,8 +374,7 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 }
 
 inline void
-TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
-                                   const unsigned CaptionStyle) const
+TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const
 {
   PaintMainMenuBorder(canvas);
 
@@ -398,7 +397,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
                                                            isDown));
 
     const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle,
+    TabDisplay::PaintButton(canvas,
                             gettext(GetGroupCaption(main_menu_index)),
                             rc,
                             nullptr, isDown, false);
@@ -417,8 +416,7 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
 }
 
 inline void
-TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
-                                  const unsigned CaptionStyle) const
+TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const
 {
   const MainMenuButton &main_button =
     GetMainMenuButton(GetPageMainIndex(cursor));
@@ -449,7 +447,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
                                                            is_pressed));
 
     const PixelRect &rc = GetSubMenuButtonSize(page_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle,
+    TabDisplay::PaintButton(canvas,
                             gettext(pages[page_index].menu_caption),
                             rc,
                             nullptr, is_cursor,
@@ -463,11 +461,8 @@ TabMenuDisplay::OnPaint(Canvas &canvas)
   canvas.Clear(look.background_color);
   canvas.Select(*look.button.font);
 
-  const unsigned caption_style = DT_CENTER | DT_NOCLIP
-      | DT_WORDBREAK;
-
-  PaintMainMenuItems(canvas, caption_style);
-  PaintSubMenuItems(canvas, caption_style);
+  PaintMainMenuItems(canvas);
+  PaintSubMenuItems(canvas);
 }
 
 void

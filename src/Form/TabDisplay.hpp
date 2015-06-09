@@ -111,7 +111,7 @@ public:
   /**
    * Paints one button
    */
-  static void PaintButton(Canvas &canvas, const unsigned CaptionStyle,
+  static void PaintButton(Canvas &canvas,
                           const TCHAR *caption, const PixelRect &rc,
                           const Bitmap *bmp, const bool isDown, bool inverse);
 
