@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #define ENABLE_DIALOG
+#define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Interface.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
@@ -87,11 +87,6 @@ Main()
   for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)
     airspace_warning.GetWarning(it->GetAirspace())
       .UpdateSolution((AirspaceWarning::State)i, ais);
-
-  SingleWindow main_window;
-  main_window.Create(_T("RunAirspaceWarningDialog"),
-                     {640, 480});
-  main_window.Show();
 
   dlgAirspaceWarningsShowModal(main_window, *airspace_warnings);
 
