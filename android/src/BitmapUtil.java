@@ -177,7 +177,7 @@ final class BitmapUtil {
       }
     } catch (Exception e) {
       glDeleteTextures(1, result, 0);
-      Log.e(TAG, "GLUtils error: " + e);
+      Log.e(TAG, "GLUtils error", e);
       return false;
     } finally {
       bmp.recycle();
