@@ -168,6 +168,9 @@ TabDisplay::CalculateLayout()
       rc.right = rc.left + but_width2;
     }
   }
+
+  for (auto *button : buttons)
+    button->InvalidateLayout();
 }
 
 void

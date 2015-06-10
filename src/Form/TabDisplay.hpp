@@ -52,11 +52,10 @@ public:
     :icon(_icon)
   {
     caption = _caption;
-    InvalidateLayout();
   };
 
   void InvalidateLayout() {
-    rc.left = rc.right = 0;
+    renderer.InvalidateLayout();
   }
 
   gcc_pure

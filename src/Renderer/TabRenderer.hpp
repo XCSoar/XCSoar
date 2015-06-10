@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TAB_RENDERER_HPP
 #define XCSOAR_TAB_RENDERER_HPP
 
+#include "TextRenderer.hpp"
+
 #include <tchar.h>
 
 struct DialogLook;
@@ -35,7 +37,19 @@ class MaskedIcon;
  * Render #TabDisplay / #TabMenuDisplay buttons.
  */
 class TabRenderer {
+  TextRenderer text_renderer;
+
 public:
+  TabRenderer() {
+    text_renderer.SetCenter();
+    text_renderer.SetVCenter();
+    text_renderer.SetControl();
+  }
+
+  void InvalidateLayout() {
+    text_renderer.InvalidateLayout();
+  }
+
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DialogLook &look,
             const TCHAR *caption, const MaskedIcon *icon,

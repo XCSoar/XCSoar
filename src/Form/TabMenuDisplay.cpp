@@ -127,6 +127,8 @@ TabMenuDisplay::UpdateLayout()
     main.rc.bottom = main.rc.top + menu_button_height;
     main_y = main.rc.bottom + border_width;
 
+    main.renderer.InvalidateLayout();
+
     const unsigned group_height =
       item_height * main.NumSubMenus() + border_width;
 
@@ -144,6 +146,8 @@ TabMenuDisplay::UpdateLayout()
       page.rc.top = page_y;
       page.rc.bottom = page.rc.top + menu_button_height;
       page_y = page.rc.bottom + border_width;
+
+      page.renderer.InvalidateLayout();
     }
   }
 }

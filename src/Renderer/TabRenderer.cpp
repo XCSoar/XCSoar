@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Icon.hpp"
 #include "Look/DialogLook.hpp"
-#include "Asset.hpp"
 
 #include <algorithm>
 
@@ -48,27 +47,6 @@ TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   if (icon != nullptr) {
     icon->Draw(canvas, rc, selected);
   } else {
-    PixelRect rcTextFinal = rc;
-    const unsigned buttonheight = rc.bottom - rc.top;
-    const PixelSize text_size = canvas.CalcTextSize(caption);
-    const int textwidth = text_size.cx;
-    const int textheight = text_size.cy;
-    unsigned textheightoffset = 0;
-
-    if (textwidth > (rc.right - rc.left)) // assume 2 lines
-      textheightoffset = std::max(0, (int)(buttonheight - textheight * 2) / 2);
-    else
-      textheightoffset = std::max(0, (int)(buttonheight - textheight) / 2);
-
-    rcTextFinal.top += textheightoffset;
-
-    unsigned CaptionStyle = DT_NOPREFIX | DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-#ifndef USE_GDI
-    if (IsDithered())
-      CaptionStyle |= DT_UNDERLINE;
-#endif
-
-    canvas.DrawFormattedText(&rcTextFinal, caption, CaptionStyle);
+    text_renderer.Draw(canvas, rc, caption);
   }
-
 }
