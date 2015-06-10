@@ -94,7 +94,8 @@ TabDisplay::GetRecommendedRowHeight() const
       height = h;
   }
 
-  return height;
+  const unsigned portraitRows = buttons.size() > 4 ? 2 : 1;
+  return height * portraitRows;
 }
 
 void
