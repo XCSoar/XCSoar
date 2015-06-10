@@ -157,15 +157,17 @@ TabDisplay::CalculateLayout()
       rc.right = rc.left + but_width1;
     }
 
-    const unsigned but_width2 =
+    if (portraitColumnsRow1 > 0) {
+      const unsigned but_width2 =
         (GetWidth() - finalmargin) / portraitColumnsRow1 - margin;
 
-    for (unsigned i = portraitColumnsRow0; i < n; ++i) {
-      PixelRect &rc = buttons[i]->rc;
-      rc.top = rowheight + margin;
-      rc.bottom = rc.top + rowheight;
-      rc.left = finalmargin + (margin + but_width2) * (i - portraitColumnsRow0);
-      rc.right = rc.left + but_width2;
+      for (unsigned i = portraitColumnsRow0; i < n; ++i) {
+        PixelRect &rc = buttons[i]->rc;
+        rc.top = rowheight + margin;
+        rc.bottom = rc.top + rowheight;
+        rc.left = finalmargin + (margin + but_width2) * (i - portraitColumnsRow0);
+        rc.right = rc.left + but_width2;
+      }
     }
   }
 
