@@ -348,8 +348,7 @@ MainWindow::ReinitialiseLayout()
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
-  popup->Destroy();
-  popup->Create(rc);
+  popup->UpdateLayout(rc);
 
   ReinitialiseLayout_vario(ib_layout);
 

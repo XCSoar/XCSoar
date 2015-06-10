@@ -191,6 +191,18 @@ PopupMessage::GetRect() const
 }
 
 void
+PopupMessage::UpdateLayout(PixelRect _rc)
+{
+  rc = _rc;
+
+  if (!text.empty()) {
+    renderer.InvalidateLayout();
+    Move(GetRect());
+    Invalidate();
+  }
+}
+
+void
 PopupMessage::UpdateTextAndLayout()
 {
   if (text.empty()) {

@@ -126,6 +126,8 @@ public:
 
   void Create(const PixelRect _rc);
 
+  void UpdateLayout(PixelRect _rc);
+
   /** returns true if messages have changed */
   bool Render();
 
