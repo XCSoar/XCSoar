@@ -61,9 +61,6 @@ public:
   void Draw(Canvas &canvas, RasterPoint pt) const {
     Draw(canvas, pt.x, pt.y);
   }
-
-protected:
-  void CalculateLayout(bool center);
 };
 
 #endif

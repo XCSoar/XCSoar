@@ -48,21 +48,8 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
   } else
     bitmap.Load(id);
 
-#ifdef ENABLE_OPENGL
-  /* postpone CalculateLayout() call, because the OpenGL surface may
-     be absent now */
-  size.cx = 0;
-  size.cy = center;
-#else
   assert(IsDefined());
 
-  CalculateLayout(center);
-#endif
-}
-
-void
-MaskedIcon::CalculateLayout(bool center)
-{
   size = bitmap.GetSize();
 #ifndef ENABLE_OPENGL
   /* left half is mask, right half is icon */
@@ -84,10 +71,6 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
   assert(IsDefined());
 
 #ifdef ENABLE_OPENGL
-  if (size.cx == 0)
-    /* hack: do the postponed layout calcuation now */
-    const_cast<MaskedIcon *>(this)->CalculateLayout((bool)size.cy);
-
 #ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #else
