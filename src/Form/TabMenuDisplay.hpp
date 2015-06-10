@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "TabMenuData.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Renderer/TabRenderer.hpp"
 #include "Util/StaticArray.hpp"
 
 struct DialogLook;
@@ -52,7 +53,15 @@ class TabMenuDisplay final : public PaintWindow
     const TCHAR *caption;
 
     PixelRect rc;
-  };
+
+    TabRenderer renderer;
+
+    void Draw(Canvas &canvas, const DialogLook &look,
+              bool focused, bool pressed, bool selected) const {
+      renderer.Draw(canvas, rc, look, caption, nullptr,
+                    focused, pressed, selected);
+    }
+};
 
   /**
    * class that holds the main menu button and info
@@ -61,6 +70,8 @@ class TabMenuDisplay final : public PaintWindow
     const TCHAR *caption;
 
     PixelRect rc;
+
+    TabRenderer renderer;
 
     /* index to Pages array of first page in submenu */
     unsigned first_page_index;
@@ -71,6 +82,12 @@ class TabMenuDisplay final : public PaintWindow
     unsigned NumSubMenus() const {
       return last_page_index - first_page_index + 1;
     };
+
+    void Draw(Canvas &canvas, const DialogLook &look,
+              bool focused, bool pressed, bool selected) const {
+      renderer.Draw(canvas, rc, look, caption, nullptr,
+                    focused, pressed, selected);
+    }
   };
 
   /* internally used structure for tracking menu down and selection status */

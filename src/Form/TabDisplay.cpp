@@ -171,40 +171,6 @@ TabDisplay::CalculateLayout()
 }
 
 void
-TabDisplay::PaintButton(Canvas &canvas,
-                        const TCHAR *caption, const PixelRect &rc,
-                        const MaskedIcon *icon, bool isDown, bool inverse)
-{
-  canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
-
-  if (icon != nullptr) {
-    icon->Draw(canvas, rc, inverse);
-  } else {
-    PixelRect rcTextFinal = rc;
-    const unsigned buttonheight = rc.bottom - rc.top;
-    const PixelSize text_size = canvas.CalcTextSize(caption);
-    const int textwidth = text_size.cx;
-    const int textheight = text_size.cy;
-    unsigned textheightoffset = 0;
-
-    if (textwidth > (rc.right - rc.left)) // assume 2 lines
-      textheightoffset = std::max(0, (int)(buttonheight - textheight * 2) / 2);
-    else
-      textheightoffset = std::max(0, (int)(buttonheight - textheight) / 2);
-
-    rcTextFinal.top += textheightoffset;
-
-    unsigned CaptionStyle = DT_NOPREFIX | DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-#ifndef USE_GDI
-    if (IsDithered())
-      CaptionStyle |= DT_UNDERLINE;
-#endif
-
-    canvas.DrawFormattedText(&rcTextFinal, caption, CaptionStyle);
-  }
-}
-
-void
 TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon)
 {
   TabButton *b = new TabButton(caption, icon);
@@ -235,7 +201,6 @@ void
 TabDisplay::OnPaint(Canvas &canvas)
 {
   canvas.Clear(COLOR_BLACK);
-  canvas.Select(*look.button.font);
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
@@ -244,14 +209,7 @@ TabDisplay::OnPaint(Canvas &canvas)
     const bool is_down = dragging && i == down_index && !drag_off_button;
     const bool is_selected = i == pager.GetCurrentIndex();
 
-    canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
-                                               is_down));
-    canvas.SetBackgroundColor(look.list.GetBackgroundColor(is_selected,
-                                                           is_focused,
-                                                           is_down));
-
-    PaintButton(canvas, button.caption, button.rc, button.icon,
-                is_down, is_selected);
+    button.Draw(canvas, look, is_focused, is_down, is_selected);
   }
 }
 

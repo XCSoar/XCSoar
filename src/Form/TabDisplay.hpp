@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_TAB_DISPLAY_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Renderer/TabRenderer.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/StaticString.hxx"
 
@@ -39,6 +40,8 @@ class TabWidget;
  * TabButton class holds display and callbacks data for a single tab
  */
 class TabButton {
+  TabRenderer renderer;
+
 public:
   StaticString<32> caption;
   const MaskedIcon *icon;
@@ -61,6 +64,14 @@ public:
 
   gcc_pure
   unsigned GetRecommendedHeight(const DialogLook &look) const;
+
+  /**
+   * Paints one button
+   */
+  void Draw(Canvas &canvas, const DialogLook &look,
+            bool focused, bool pressed, bool selected) const {
+    renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected);
+  }
 };
 
 /**
@@ -107,13 +118,6 @@ public:
   }
 
   void UpdateLayout(const PixelRect &rc, bool _vertical);
-
-  /**
-   * Paints one button
-   */
-  static void PaintButton(Canvas &canvas,
-                          const TCHAR *caption, const PixelRect &rc,
-                          const MaskedIcon *icon, bool down, bool inverse);
 
   unsigned GetSize() const {
     return buttons.size();

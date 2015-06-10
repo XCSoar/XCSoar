@@ -23,13 +23,13 @@ Copyright_License {
 
 #include "TabMenuDisplay.hpp"
 #include "Widget/PagerWidget.hpp"
-#include "Form/TabDisplay.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringFormat.hpp"
 
 #include <assert.h>
 #include <winuser.h>
@@ -380,17 +380,8 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const
     const bool is_selected = isDown ||
       main_menu_index == GetPageMainIndex(cursor);
 
-    canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
-                                               isDown));
-    canvas.SetBackgroundColor(look.list.GetBackgroundColor(is_selected,
-                                                           is_focused,
-                                                           isDown));
-
-    const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
-    TabDisplay::PaintButton(canvas,
-                            main_menu_buttons[main_menu_index].caption,
-                            rc,
-                            nullptr, isDown, false);
+    main_menu_buttons[main_menu_index].Draw(canvas, look,
+                                            is_focused, isDown, is_selected);
   }
 }
 
@@ -430,18 +421,8 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const
     const bool is_cursor = page_index == cursor;
     const bool is_selected = is_pressed || is_cursor;
 
-    canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
-                                               is_pressed));
-    canvas.SetBackgroundColor(look.list.GetBackgroundColor(is_selected,
-                                                           is_focused,
-                                                           is_pressed));
-
-    const PixelRect &rc = GetSubMenuButtonSize(page_index);
-    TabDisplay::PaintButton(canvas,
-                            buttons[page_index].caption,
-                            rc,
-                            nullptr, is_cursor,
-                            false);
+    buttons[page_index].Draw(canvas, look,
+                             is_focused, is_pressed, is_selected);
   }
 }
 
@@ -449,7 +430,6 @@ void
 TabMenuDisplay::OnPaint(Canvas &canvas)
 {
   canvas.Clear(look.background_color);
-  canvas.Select(*look.button.font);
 
   PaintMainMenuItems(canvas);
   PaintSubMenuItems(canvas);
