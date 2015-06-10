@@ -91,7 +91,7 @@ TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const
     const unsigned i = page - PAGE_OFFSET;
     StringFormat(buffer, size, _T("%s > %s"),
                  gettext(GetPageParentCaption(i)),
-                 gettext(GetPageCaption(i)));
+                 gettext(pages[i].menu_caption));
     return buffer;
   } else
     return nullptr;
@@ -398,7 +398,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const
 
     const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas,
-                            gettext(GetGroupCaption(main_menu_index)),
+                            gettext(groups[main_menu_index].caption),
                             rc,
                             nullptr, isDown, false);
   }

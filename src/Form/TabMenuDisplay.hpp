@@ -180,22 +180,10 @@ private:
     return buttons.size();
   }
 
-  const TCHAR *GetPageCaption(unsigned page) const {
-    assert(page < GetNumPages());
-
-    return pages[page].menu_caption;
-  }
-
-  const TCHAR *GetGroupCaption(unsigned group) const {
-    assert(group < main_menu_buttons.size());
-
-    return groups[group].caption;
-  }
-
   const TCHAR *GetPageParentCaption(unsigned page) const {
     assert(page < GetNumPages());
 
-    return GetGroupCaption(pages[page].main_menu_index);
+    return groups[pages[page].main_menu_index].caption;
   }
 
   unsigned GetNumMainMenuItems() const {
