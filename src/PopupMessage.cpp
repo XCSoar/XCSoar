@@ -187,11 +187,10 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
 bool
 PopupMessage::Render()
 {
-  mutex.Lock();
-  if (parent.HasDialog()) {
-    mutex.Unlock();
+  if (parent.HasDialog())
     return false;
-  }
+
+  mutex.Lock();
 
   const unsigned now = MonotonicClockMS();
 
