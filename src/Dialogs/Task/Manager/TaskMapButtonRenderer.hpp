@@ -59,7 +59,11 @@ private:
   }
 
   bool IsBufferValid(PixelSize new_size) const {
-    return size == new_size;
+    return
+#ifdef ENABLE_OPENGL
+      buffer.IsDefined() &&
+#endif
+      size == new_size;
   }
 };
 
