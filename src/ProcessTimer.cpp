@@ -212,23 +212,10 @@ ProcessAutoBugs()
 }
 
 static void
-ManualWindProcessTimer()
-{
-  ComputerSettings &settings_computer =
-    CommonInterface::SetComputerSettings();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-
-  /* as soon as another wind setting is used, clear the manual wind */
-  if (calculated.wind_available.Modified(settings_computer.wind.manual_wind_available))
-    settings_computer.wind.manual_wind_available.Clear();
-}
-
-static void
 SettingsProcessTimer()
 {
   BallastDumpProcessTimer();
   ProcessAutoBugs();
-  ManualWindProcessTimer();
 }
 
 static void

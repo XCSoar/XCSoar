@@ -21,43 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ALL_MONITORS_HPP
-#define XCSOAR_ALL_MONITORS_HPP
-
-#include "Blackboard/BlackboardListener.hpp"
 #include "WindMonitor.hpp"
-#include "TaskAdvanceMonitor.hpp"
-#include "MatTaskMonitor.hpp"
+#include "Interface.hpp"
 
-/**
- * A container that combines all monitor classes.
- */
-class AllMonitors final : private NullBlackboardListener {
-  WindMonitor wind;
-  TaskAdvanceMonitor task_advance;
-  MatTaskMonitor mat_task;
+void
+WindMonitor::Check()
+{
+  auto &settings_computer = CommonInterface::SetComputerSettings();
+  const auto &calculated = CommonInterface::Calculated();
 
-public:
-  AllMonitors();
-  ~AllMonitors();
-
-  void Reset() {
-    wind.Reset();
-    task_advance.Reset();
-    mat_task.Reset();
-  }
-
-  void Check() {
-    wind.Check();
-    task_advance.Check();
-    mat_task.Check();
-  }
-
-private:
-  void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated) override {
-    Check();
-  }
-};
-
-#endif
+  /* as soon as another wind setting is used, clear the manual wind */
+  if (calculated.wind_available.Modified(settings_computer.wind.manual_wind_available))
+    settings_computer.wind.manual_wind_available.Clear();
+}

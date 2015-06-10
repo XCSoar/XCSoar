@@ -656,6 +656,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Config.cpp \
 	$(DIALOG_SOURCES) \
 	\
+	$(SRC)/Monitor/WindMonitor.cpp \
 	$(SRC)/Monitor/TaskAdvanceMonitor.cpp \
 	$(SRC)/Monitor/MatTaskMonitor.cpp \
 	$(SRC)/Monitor/AllMonitors.cpp \

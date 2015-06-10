@@ -21,43 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ALL_MONITORS_HPP
-#define XCSOAR_ALL_MONITORS_HPP
-
-#include "Blackboard/BlackboardListener.hpp"
-#include "WindMonitor.hpp"
-#include "TaskAdvanceMonitor.hpp"
-#include "MatTaskMonitor.hpp"
+#ifndef XCSOAR_WIND_MONITOR_HPP
+#define XCSOAR_WIND_MONITOR_HPP
 
 /**
- * A container that combines all monitor classes.
+ * Monitors the calculated/external wind, and clears the manual wind
+ * setting when a new wind vector was obtained.
  */
-class AllMonitors final : private NullBlackboardListener {
-  WindMonitor wind;
-  TaskAdvanceMonitor task_advance;
-  MatTaskMonitor mat_task;
-
+class WindMonitor {
 public:
-  AllMonitors();
-  ~AllMonitors();
-
   void Reset() {
-    wind.Reset();
-    task_advance.Reset();
-    mat_task.Reset();
   }
 
-  void Check() {
-    wind.Check();
-    task_advance.Check();
-    mat_task.Check();
-  }
-
-private:
-  void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated) override {
-    Check();
-  }
+  void Check();
 };
 
 #endif
