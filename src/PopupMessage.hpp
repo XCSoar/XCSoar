@@ -152,6 +152,9 @@ private:
   gcc_pure
   PixelRect GetRect(unsigned width, unsigned height) const;
 
+  gcc_pure
+  PixelRect GetRect() const;
+
   void UpdateTextAndLayout();
   int GetEmptySlot();
 

@@ -113,7 +113,7 @@ PopupMessage::Create(const PixelRect _rc)
 #endif
   style.Hide();
 
-  PaintWindow::Create(parent, GetRect(CalculateWidth(), 100), style);
+  PaintWindow::Create(parent, GetRect(), style);
 }
 
 bool
@@ -180,6 +180,16 @@ PopupMessage::GetRect(unsigned width, unsigned height) const
   return rthis;
 }
 
+PixelRect
+PopupMessage::GetRect() const
+{
+  const unsigned width = CalculateWidth();
+  const unsigned height = renderer.GetHeight(look.text_font, width, text)
+    + 2 * Layout::GetTextPadding();
+
+  return GetRect(width, height);
+}
+
 void
 PopupMessage::UpdateTextAndLayout()
 {
@@ -188,11 +198,7 @@ PopupMessage::UpdateTextAndLayout()
   } else {
     renderer.InvalidateLayout();
 
-    const unsigned width = CalculateWidth();
-    const unsigned height = renderer.GetHeight(look.text_font, width, text)
-      + 2 * Layout::GetTextPadding();
-
-    Move(GetRect(width, height));
+    Move(GetRect());
     ShowOnTop();
     Invalidate();
   }
