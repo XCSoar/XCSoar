@@ -47,6 +47,10 @@ class TabMenuDisplay final : public PaintWindow
    * class that holds the child menu button and info for the menu
    */
   struct SubMenuButton {
+    //TODO MainMenuButton *group;
+    unsigned main_menu_index;
+    const TCHAR *caption;
+
     PixelRect rc;
   };
 
@@ -54,6 +58,8 @@ class TabMenuDisplay final : public PaintWindow
    * class that holds the main menu button and info
    */
   struct MainMenuButton {
+    const TCHAR *caption;
+
     PixelRect rc;
 
     /* index to Pages array of first page in submenu */
@@ -119,11 +125,6 @@ class TabMenuDisplay final : public PaintWindow
   /* holds info and buttons for the main menu.  not on child menus */
   StaticArray<MainMenuButton, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
 
-  /* holds pointer to array of menus info (must be sorted by MenuGroup) */
-  const TabMenuPage *pages;
-
-  const TabMenuGroup *groups;
-
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
 
@@ -183,7 +184,7 @@ private:
   const TCHAR *GetPageParentCaption(unsigned page) const {
     assert(page < GetNumPages());
 
-    return groups[pages[page].main_menu_index].caption;
+    return main_menu_buttons[buttons[page].main_menu_index].caption;
   }
 
   unsigned GetNumMainMenuItems() const {
@@ -194,7 +195,7 @@ private:
   unsigned GetPageMainIndex(unsigned page) const {
     assert(page < GetNumPages());
 
-    return pages[page].main_menu_index;
+    return buttons[page].main_menu_index;
   }
 
   /**
@@ -207,20 +208,6 @@ private:
    */
   gcc_pure
   int GetPageNum(MenuTabIndex i) const;
-
-  void AddMenu(unsigned first, unsigned last,
-               unsigned main_menu_index) {
-    assert(main_menu_index == main_menu_buttons.size());
-    assert(main_menu_index < MAX_MAIN_MENU_ITEMS);
-
-    MainMenuButton &b = main_menu_buttons.append();
-    b.first_page_index = first;
-    b.last_page_index = last;
-  }
-
-  void AddMenuItem() {
-    buttons.append();
-  }
 
   gcc_pure
   const PixelRect &GetButtonPosition(MenuTabIndex i) const;

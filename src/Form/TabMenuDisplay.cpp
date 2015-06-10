@@ -48,26 +48,26 @@ TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
 void
 TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
                          unsigned num_pages,
-                         const TabMenuGroup _groups[], unsigned n_groups)
+                         const TabMenuGroup groups[], unsigned n_groups)
 {
   assert(pages_in != nullptr);
   assert(num_pages > 0);
-  assert(_groups != nullptr);
+  assert(groups != nullptr);
   assert(n_groups > 0);
-
-  pages = pages_in;
-  groups = _groups;
 
   for (unsigned i = 0; i < num_pages; ++i) {
     assert(pages_in[i].Load != nullptr);
 
-    AddMenuItem();
+    auto &page_button = buttons.append();
+    page_button.main_menu_index = pages_in[i].main_menu_index;
+    page_button.caption = gettext(pages_in[i].menu_caption);
 
     Widget *w = pages_in[i].Load();
     assert(w != nullptr);
     pager.Add(w);
   }
 
+  main_menu_buttons.resize(n_groups);
   for (unsigned i = 0; i < n_groups; i++) {
     unsigned first = 0;
     while (pages_in[first].main_menu_index != i) {
@@ -79,7 +79,10 @@ TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
     while (last < num_pages && pages_in[last].main_menu_index == i)
       ++last;
 
-    AddMenu(first, last - 1, i);
+    auto &b = main_menu_buttons[i];
+    b.caption = gettext(groups[i].caption);
+    b.first_page_index = first;
+    b.last_page_index = last - 1;
   }
 }
 
@@ -91,7 +94,7 @@ TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const
     const unsigned i = page - PAGE_OFFSET;
     StringFormat(buffer, size, _T("%s > %s"),
                  gettext(GetPageParentCaption(i)),
-                 gettext(pages[i].menu_caption));
+                 buttons[i].caption);
     return buffer;
   } else
     return nullptr;
@@ -398,7 +401,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas) const
 
     const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas,
-                            gettext(groups[main_menu_index].caption),
+                            main_menu_buttons[main_menu_index].caption,
                             rc,
                             nullptr, isDown, false);
   }
@@ -448,7 +451,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const
 
     const PixelRect &rc = GetSubMenuButtonSize(page_index);
     TabDisplay::PaintButton(canvas,
-                            gettext(pages[page_index].menu_caption),
+                            buttons[page_index].caption,
                             rc,
                             nullptr, is_cursor,
                             false);
