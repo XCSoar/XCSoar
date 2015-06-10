@@ -87,14 +87,6 @@ TriggerCalculatedUpdate()
 }
 
 void
-TriggerAirspaceWarning()
-{
-  assert(CommonInterface::main_window != NULL);
-
-  CommonInterface::main_window->SendAirspaceWarning();
-}
-
-void
 CreateCalculationThread()
 {
   assert(glide_computer != NULL);

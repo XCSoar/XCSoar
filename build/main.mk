@@ -657,6 +657,7 @@ XCSOAR_SOURCES := \
 	$(DIALOG_SOURCES) \
 	\
 	$(SRC)/Monitor/WindMonitor.cpp \
+	$(SRC)/Monitor/AirspaceWarningMonitor.cpp \
 	$(SRC)/Monitor/TaskAdvanceMonitor.cpp \
 	$(SRC)/Monitor/MatTaskMonitor.cpp \
 	$(SRC)/Monitor/AllMonitors.cpp \

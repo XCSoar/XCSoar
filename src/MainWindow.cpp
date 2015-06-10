@@ -141,8 +141,7 @@ MainWindow::MainWindow()
 #ifndef ENABLE_OPENGL
    draw_suspended(false),
 #endif
-   restore_page_pending(false),
-   airspace_warning_pending(false)
+   restore_page_pending(false)
 {
 }
 
@@ -682,29 +681,7 @@ MainWindow::OnTimer(WindowTimer &_timer)
 bool
 MainWindow::OnUser(unsigned id)
 {
-  ProtectedAirspaceWarningManager *airspace_warnings;
-
   switch ((Command)id) {
-  case Command::AIRSPACE_WARNING:
-    airspace_warnings = GetAirspaceWarnings();
-    if (!airspace_warning_pending || airspace_warnings == nullptr)
-      return true;
-
-    airspace_warning_pending = false;
-    if (dlgAirspaceWarningVisible())
-      /* already visible */
-      return true;
-
-    // un-blank the display, play a sound
-    ResetUserIdle();
-    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
-
-    // show airspace warnings dialog
-    if (CommonInterface::GetUISettings().enable_airspace_warning_dialog)
-      dlgAirspaceWarningsShowModal(*airspace_warnings, true);
-
-    return true;
-
   case Command::GPS_UPDATE:
     UIReceiveSensorData();
     return true;

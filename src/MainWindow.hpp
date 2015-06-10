@@ -56,12 +56,6 @@ class PopupMessage;
 class MainWindow : public SingleWindow {
   enum class Command: uint8_t {
     /**
-     * Check the airspace_warning_pending flag and show the airspace
-     * warning dialog.
-     */
-    AIRSPACE_WARNING,
-
-    /**
      * Called by the #MergeThread when new GPS data is available.
      */
     GPS_UPDATE,
@@ -138,8 +132,6 @@ private:
 #endif
 
   bool restore_page_pending;
-
-  bool airspace_warning_pending;
 
 public:
   MainWindow();
@@ -265,16 +257,6 @@ public:
   }
 
   void SetFullScreen(bool _full_screen);
-
-  /**
-   * A new airspace warning was found.  This method sends the
-   * Command::AIRSPACE_WARNING command to this window, which displays the
-   * airspace warning dialog.
-   */
-  void SendAirspaceWarning() {
-    airspace_warning_pending = true;
-    SendUser((unsigned)Command::AIRSPACE_WARNING);
-  }
 
   void SendGPSUpdate() {
     SendUser((unsigned)Command::GPS_UPDATE);

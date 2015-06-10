@@ -62,9 +62,6 @@ CalculationThread::Tick()
   const ScopeLockCPU cpu;
 #endif
 
-  const Validity previous_warning =
-    glide_computer.Calculated().airspace_warnings.latest;
-
   bool gps_updated;
 
   // update and transfer master info to glide computer
@@ -114,17 +111,6 @@ CalculationThread::Tick()
   if (do_idle) {
     // do slow calculations last, to minimise latency
     glide_computer.ProcessIdle();
-
-    if (glide_computer.Calculated().airspace_warnings.latest != previous_warning) {
-      /* there's a new airspace warning */
-
-      {
-        ScopeLock protect(device_blackboard->mutex);
-        device_blackboard->ReadBlackboard(glide_computer.Calculated());
-      }
-
-      TriggerAirspaceWarning();
-    }
   }
 }
 

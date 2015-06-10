@@ -21,47 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ALL_MONITORS_HPP
-#define XCSOAR_ALL_MONITORS_HPP
+#ifndef XCSOAR_AIRSPACE_WARNING_MONITOR_HPP
+#define XCSOAR_AIRSPACE_WARNING_MONITOR_HPP
 
-#include "Blackboard/BlackboardListener.hpp"
-#include "WindMonitor.hpp"
-#include "AirspaceWarningMonitor.hpp"
-#include "TaskAdvanceMonitor.hpp"
-#include "MatTaskMonitor.hpp"
+#include "NMEA/Validity.hpp"
 
 /**
- * A container that combines all monitor classes.
+ * Check for new airspace warnings and show the airspace warning
+ * dialog.
  */
-class AllMonitors final : private NullBlackboardListener {
-  WindMonitor wind;
-  AirspaceWarningMonitor airspace_warnings;
-  TaskAdvanceMonitor task_advance;
-  MatTaskMonitor mat_task;
+class AirspaceWarningMonitor {
+  Validity last;
 
 public:
-  AllMonitors();
-  ~AllMonitors();
-
-  void Reset() {
-    wind.Reset();
-    airspace_warnings.Reset();
-    task_advance.Reset();
-    mat_task.Reset();
-  }
-
-  void Check() {
-    wind.Check();
-    airspace_warnings.Check();
-    task_advance.Check();
-    mat_task.Check();
-  }
-
-private:
-  void OnCalculatedUpdate(const MoreData &basic,
-                          const DerivedInfo &calculated) override {
-    Check();
-  }
+  void Reset();
+  void Check();
 };
 
 #endif
