@@ -397,7 +397,7 @@ class NativeView extends SurfaceView
       intent.setDataAndType(Uri.fromFile(file), mimeType);
       getContext().startActivity(intent);
     } catch (Exception e) {
-      Log.e(TAG, "NativeView.openFile('" + pathName + "') error: " + e);
+      Log.e(TAG, "NativeView.openFile('" + pathName + "') error", e);
     }
   }
 
