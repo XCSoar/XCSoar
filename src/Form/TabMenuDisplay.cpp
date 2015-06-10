@@ -46,43 +46,30 @@ TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
 }
 
 void
-TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
-                         unsigned num_pages,
-                         const TabMenuGroup groups[], unsigned n_groups)
+TabMenuDisplay::InitMenu(const TabMenuGroup groups[], unsigned n_groups)
 {
-  assert(pages_in != nullptr);
-  assert(num_pages > 0);
   assert(groups != nullptr);
   assert(n_groups > 0);
-
-  for (unsigned i = 0; i < num_pages; ++i) {
-    assert(pages_in[i].Load != nullptr);
-
-    auto &page_button = buttons.append();
-    page_button.main_menu_index = pages_in[i].main_menu_index;
-    page_button.caption = gettext(pages_in[i].menu_caption);
-
-    Widget *w = pages_in[i].Load();
-    assert(w != nullptr);
-    pager.Add(w);
-  }
+  assert(n_groups <= MAX_MAIN_MENU_ITEMS);
 
   main_menu_buttons.resize(n_groups);
   for (unsigned i = 0; i < n_groups; i++) {
-    unsigned first = 0;
-    while (pages_in[first].main_menu_index != i) {
-      ++first;
-      assert(first < num_pages);
+    const auto &g = groups[i];
+    auto &mb = main_menu_buttons[i];
+    mb.caption = gettext(g.caption);
+    mb.first_page_index = buttons.size();
+
+    for (auto p = g.pages; p->Load != nullptr; ++p) {
+      auto &page_button = buttons.append();
+      page_button.main_menu_index = i;
+      page_button.caption = gettext(p->menu_caption);
+
+      Widget *w = p->Load();
+      assert(w != nullptr);
+      pager.Add(w);
     }
 
-    unsigned last = first + 1;
-    while (last < num_pages && pages_in[last].main_menu_index == i)
-      ++last;
-
-    auto &b = main_menu_buttons[i];
-    b.caption = gettext(groups[i].caption);
-    b.first_page_index = first;
-    b.last_page_index = last - 1;
+    mb.last_page_index = buttons.size() - 1;
   }
 }
 

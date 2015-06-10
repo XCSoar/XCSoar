@@ -85,51 +85,76 @@ static unsigned current_page;
 // TODO: eliminate global variables
 static ArrowPagerWidget *pager;
 
-static constexpr TabMenuGroup main_menu_captions[] = {
-  { N_("Site Files"), },
-  { N_("Map Display"), },
-  { N_("Glide Computer"), },
-  { N_("Gauges"), },
-  { N_("Task Defaults"), },
-  { N_("Look"), },
-  { N_("Setup"), },
+static constexpr TabMenuPage files_pages[] = {
+  { N_("Site Files"), CreateSiteConfigPanel },
+  { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage pages[] = {
-  {N_("Site Files"), 0, CreateSiteConfigPanel },
-  {N_("Orientation"), 1, CreateMapDisplayConfigPanel },
-  {N_("Elements"), 1, CreateSymbolsConfigPanel },
-  {N_("Waypoints"), 1, CreateWaypointDisplayConfigPanel },
-  {N_("Terrain"), 1, CreateTerrainDisplayConfigPanel },
-  {N_("Airspace"), 1, CreateAirspaceConfigPanel },
-  {N_("Safety Factors"), 2, CreateSafetyFactorsConfigPanel },
-  {N_("Glide Computer"), 2, CreateGlideComputerConfigPanel },
-  {N_("Wind"), 2, CreateWindConfigPanel },
-  {N_("Route"), 2, CreateRouteConfigPanel },
-  {N_("Scoring"), 2, CreateScoringConfigPanel },
-  {N_("FLARM, Other"), 3, CreateGaugesConfigPanel },
-  {N_("Vario"), 3, CreateVarioConfigPanel },
+static constexpr TabMenuPage map_pages[] = {
+  { N_("Orientation"), CreateMapDisplayConfigPanel },
+  { N_("Elements"), CreateSymbolsConfigPanel },
+  { N_("Waypoints"), CreateWaypointDisplayConfigPanel },
+  { N_("Terrain"), CreateTerrainDisplayConfigPanel },
+  { N_("Airspace"), CreateAirspaceConfigPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr TabMenuPage computer_pages[] = {
+  { N_("Safety Factors"), CreateSafetyFactorsConfigPanel },
+  { N_("Glide Computer"), CreateGlideComputerConfigPanel },
+  { N_("Wind"), CreateWindConfigPanel },
+  { N_("Route"), CreateRouteConfigPanel },
+  { N_("Scoring"), CreateScoringConfigPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr TabMenuPage gauge_pages[] = {
+  { N_("FLARM, Other"), CreateGaugesConfigPanel },
+  { N_("Vario"), CreateVarioConfigPanel },
 #ifdef HAVE_PCM_PLAYER
-  {N_("Audio Vario"), 3, CreateAudioVarioConfigPanel },
+  { N_("Audio Vario"), CreateAudioVarioConfigPanel },
 #endif
-  {N_("Task Rules"), 4, CreateTaskRulesConfigPanel },
-  {N_("Turnpoint Types"), 4, CreateTaskDefaultsConfigPanel },
-  {N_("Language, Input"), 5, CreateInterfaceConfigPanel },
-  {N_("Screen Layout"), 5, CreateLayoutConfigPanel },
-  {N_("Pages"), 5, CreatePagesConfigPanel },
-  {N_("InfoBox Sets"), 5, CreateInfoBoxesConfigPanel },
-  {N_("Logger"), 6, CreateLoggerConfigPanel },
-  {N_("Units"), 6, CreateUnitsConfigPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr TabMenuPage task_pages[] = {
+  { N_("Task Rules"), CreateTaskRulesConfigPanel },
+  { N_("Turnpoint Types"), CreateTaskDefaultsConfigPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr TabMenuPage look_pages[] = {
+  { N_("Language, Input"), CreateInterfaceConfigPanel },
+  { N_("Screen Layout"), CreateLayoutConfigPanel },
+  { N_("Pages"), CreatePagesConfigPanel },
+  { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr TabMenuPage setup_pages[] = {
+  { N_("Logger"), CreateLoggerConfigPanel },
+  { N_("Units"), CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
-  {N_("Time"), 6, CreateTimeConfigPanel },
+  { N_("Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
-  {N_("Tracking"), 6, CreateTrackingConfigPanel },
+  { N_("Tracking"), CreateTrackingConfigPanel },
 #endif
 #ifdef HAVE_MODEL_TYPE
-  {N_("Experimental Features"), 6, CreateExperimentalConfigPanel, },
+  { N_("Experimental Features"), CreateExperimentalConfigPanel, },
 #endif
+  { nullptr, nullptr }
+};
+
+static constexpr TabMenuGroup main_menu_captions[] = {
+  { N_("Site Files"), files_pages },
+  { N_("Map Display"), map_pages },
+  { N_("Glide Computer"), computer_pages },
+  { N_("Gauges"), gauge_pages },
+  { N_("Task Defaults"), task_pages },
+  { N_("Look"), look_pages },
+  { N_("Setup"), setup_pages },
 };
 
 class ConfigurationExtraButtons final
@@ -326,8 +351,7 @@ void dlgConfigurationShowModal()
                                       return menu;
                                     }));
 
-  menu->InitMenu(pages, ARRAY_SIZE(pages),
-                 main_menu_captions, ARRAY_SIZE(main_menu_captions));
+  menu->InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
 
   /* restore last selected menu item */
   menu->SetCursor(current_page);
