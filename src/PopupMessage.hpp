@@ -149,7 +149,8 @@ private:
   int GetEmptySlot();
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  /* virtual methods from class Window */
+  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
 };
 
 #endif
