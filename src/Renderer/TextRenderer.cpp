@@ -24,6 +24,7 @@ Copyright_License {
 #include "TextRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/AnyCanvas.hpp"
 #include "Asset.hpp"
 
 #include <winuser.h>
@@ -42,6 +43,15 @@ TextRenderer::GetHeight(Canvas &canvas, unsigned width,
                         const TCHAR *text) const
 {
   return GetHeight(canvas, PixelRect(0, 0, width, 0), text);
+}
+
+unsigned
+TextRenderer::GetHeight(const Font &font, unsigned width,
+                        const TCHAR *text) const
+{
+  AnyCanvas canvas;
+  canvas.Select(font);
+  return GetHeight(canvas, width, text);
 }
 
 void

@@ -72,6 +72,10 @@ public:
   gcc_pure
   unsigned GetHeight(Canvas &canvas, unsigned width, const TCHAR *text) const;
 
+  gcc_pure
+  unsigned GetHeight(const Font &font, unsigned width,
+                     const TCHAR *text) const;
+
   void Draw(Canvas &canvas, const PixelRect &rc, const TCHAR *text) const;
 };
 
