@@ -85,7 +85,8 @@ private:
 public:
   explicit TabWidget(Orientation _orientation=Orientation::AUTO,
                      Widget *_extra=nullptr)
-    :orientation(_orientation), tab_display(nullptr), extra(_extra) {}
+    :orientation(_orientation), tab_display(nullptr),
+     extra(_extra), large_extra(false) {}
 
   ~TabWidget() override;
 
