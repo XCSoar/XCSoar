@@ -701,7 +701,7 @@ MainWindow::OnUser(unsigned id)
 
     // show airspace warnings dialog
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog)
-      dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
+      dlgAirspaceWarningsShowModal(*airspace_warnings, true);
 
     return true;
 

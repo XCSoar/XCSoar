@@ -576,8 +576,7 @@ dlgAirspaceWarningVisible()
 }
 
 void
-dlgAirspaceWarningsShowModal(SingleWindow &parent,
-                             ProtectedAirspaceWarningManager &_warnings,
+dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &_warnings,
                              bool _auto_close)
 {
   if (dlgAirspaceWarningVisible())
@@ -588,7 +587,7 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   list = new AirspaceWarningListWidget(_warnings);
 
   WidgetDialog dialog2(UIGlobals::GetDialogLook());
-  dialog2.CreateFull(parent, _("Airspace Warnings"), list);
+  dialog2.CreateFull(UIGlobals::GetMainWindow(), _("Airspace Warnings"), list);
   list->CreateButtons(dialog2);
   dialog2.AddButton(_("Close"), mrOK);
 

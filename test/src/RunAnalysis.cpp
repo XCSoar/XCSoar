@@ -75,8 +75,7 @@ void dlgBasicSettingsShowModal() {}
 void ShowWindSettingsDialog() {}
 
 void
-dlgAirspaceWarningsShowModal(SingleWindow &parent,
-                             ProtectedAirspaceWarningManager &warnings,
+dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &warnings,
                              bool auto_close)
 {
 }

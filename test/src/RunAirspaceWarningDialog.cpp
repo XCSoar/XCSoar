@@ -88,7 +88,7 @@ Main()
     airspace_warning.GetWarning(it->GetAirspace())
       .UpdateSolution((AirspaceWarning::State)i, ais);
 
-  dlgAirspaceWarningsShowModal(main_window, *airspace_warnings);
+  dlgAirspaceWarningsShowModal(*airspace_warnings);
 
   delete airspace_warnings;
 }

@@ -24,12 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_WARNING_DIALOG_HPP
 #define XCSOAR_AIRSPACE_WARNING_DIALOG_HPP
 
-class SingleWindow;
 class ProtectedAirspaceWarningManager;
 
 void
-dlgAirspaceWarningsShowModal(SingleWindow &parent,
-                             ProtectedAirspaceWarningManager &_warnings,
+dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &_warnings,
                              bool auto_close=false);
 
 bool

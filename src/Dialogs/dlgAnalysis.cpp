@@ -673,8 +673,7 @@ AnalysisWidget::OnCalcClicked()
     break;
 
   case AnalysisPage::AIRSPACE:
-    dlgAirspaceWarningsShowModal(dialog.GetMainWindow(),
-                                 glide_computer.GetAirspaceWarnings());
+    dlgAirspaceWarningsShowModal(glide_computer.GetAirspaceWarnings());
     break;
 
   case AnalysisPage::THERMAL_BAND:
