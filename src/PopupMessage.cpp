@@ -152,9 +152,9 @@ PopupMessage::GetRect(unsigned height) const
 }
 
 void
-PopupMessage::UpdateTextAndLayout(const TCHAR *text)
+PopupMessage::UpdateTextAndLayout()
 {
-  if (StringIsEmpty(text)) {
+  if (text.empty()) {
     Hide();
   } else {
     SetText(text);
@@ -214,7 +214,7 @@ PopupMessage::Render()
       doresize = false;
       // do one extra resize after display so we are sure we get all
       // the text (workaround bug in getlinecount)
-      UpdateTextAndLayout(text);
+      UpdateTextAndLayout();
     }
     return false;
   }
@@ -231,7 +231,7 @@ PopupMessage::Render()
 
   mutex.Unlock();
 
-  UpdateTextAndLayout(text);
+  UpdateTextAndLayout();
 
   return true;
 }
