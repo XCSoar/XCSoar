@@ -60,10 +60,10 @@ public:
                fixed(0), fixed(1.0), fixed(0.1), true, fixed(0));
 
       static constexpr StaticEnumChoice modes[] = {
-        { 0, N_("BlueFlyVario") },
-        { 1, N_("LK8EX1") },
-        { 2, N_("LX") },
-        { 3, N_("FlyNet") },
+        { 0, _T("BlueFlyVario") },
+        { 1, _T("LK8EX1") },
+        { 2, _T("LX") },
+        { 3, _T("FlyNet") },
         { 0 }
       };
 
