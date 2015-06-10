@@ -105,13 +105,11 @@ TabDisplay::UpdateLayout(const PixelRect &rc, bool _vertical)
   Move(rc);
 }
 
-const PixelRect &
-TabDisplay::GetButtonSize(unsigned i) const
+void
+TabDisplay::CalculateLayout()
 {
-  assert(i < GetSize());
-
-  if (buttons[i]->rc.left < buttons[i]->rc.right)
-    return buttons[i]->rc;
+  if (buttons.empty() || !IsDefined())
+    return;
 
   const unsigned margin = 1;
 
@@ -125,44 +123,51 @@ TabDisplay::GetButtonSize(unsigned i) const
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
-  PixelRect rc;
-
   if (vertical) {
+    const unsigned n = buttons.size();
     const unsigned but_height =
-       (GetHeight() - finalmargin) / GetSize() - margin;
+       (GetHeight() - finalmargin) / n - margin;
 
+    PixelRect rc = GetClientRect();
     rc.left = 0;
-    rc.right = GetWidth() - tab_line_height;
+    rc.right -= tab_line_height;
 
-    rc.top = finalmargin + (margin + but_height) * i;
-    rc.bottom = rc.top + but_height;
-
+    for (unsigned i = 0; i < n; ++i) {
+      rc.top = finalmargin + (margin + but_height) * i;
+      rc.bottom = rc.top + but_height;
+      buttons[i]->rc = rc;
+    }
   } else {
-    const unsigned portraitRows = (GetSize() > 4) ? 2 : 1;
-
-    const unsigned portraitColumnsRow0 = ((portraitRows == 1)
-       ? GetSize() : GetSize() / 2);
-    const unsigned portraitColumnsRow1 = ((portraitRows == 1)
-       ? 0 : GetSize() - GetSize() / 2);
-
-    const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
-
+    const unsigned n = buttons.size();
+    const unsigned portraitRows = n > 4 ? 2 : 1;
     const unsigned rowheight = (GetHeight() - tab_line_height)
-        / portraitRows - margin;
+      / portraitRows - margin;
 
-    const unsigned but_width =
-          (GetWidth() - finalmargin) /
-          ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
+    const unsigned portraitColumnsRow0 = portraitRows == 1 ? n : n / 2;
+    const unsigned portraitColumnsRow1 = portraitRows == 1 ? 0 : n - n / 2;
 
-    rc.top = row * (rowheight + margin);
-    rc.bottom = rc.top + rowheight;
+    const unsigned but_width1 =
+        (GetWidth() - finalmargin) / portraitColumnsRow0 - margin;
 
-    rc.left = finalmargin + (margin + but_width) * (row ? (i - portraitColumnsRow0) : i);
-    rc.right = rc.left + but_width;
+    for (unsigned i = 0; i < portraitColumnsRow0; ++i) {
+      PixelRect &rc = buttons[i]->rc;
+      rc.top = 0;
+      rc.bottom = rc.top + rowheight;
+      rc.left = finalmargin + (margin + but_width1) * i;
+      rc.right = rc.left + but_width1;
+    }
+
+    const unsigned but_width2 =
+        (GetWidth() - finalmargin) / portraitColumnsRow1 - margin;
+
+    for (unsigned i = portraitColumnsRow0; i < n; ++i) {
+      PixelRect &rc = buttons[i]->rc;
+      rc.top = rowheight + margin;
+      rc.bottom = rc.top + rowheight;
+      rc.left = finalmargin + (margin + but_width2) * (i - portraitColumnsRow0);
+      rc.right = rc.left + but_width2;
+    }
   }
-
-  buttons[i]->rc = rc;
-  return buttons[i]->rc;
 }
 
 void
@@ -204,14 +209,14 @@ TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon)
 {
   TabButton *b = new TabButton(caption, icon);
   buttons.append(b);
+  CalculateLayout();
 }
 
 int
 TabDisplay::GetButtonIndexAt(RasterPoint p) const
 {
   for (unsigned i = 0; i < GetSize(); i++) {
-    const PixelRect &rc = GetButtonSize(i);
-    if (rc.IsInside(p))
+    if (buttons[i]->rc.IsInside(p))
       return i;
   }
 
@@ -223,8 +228,7 @@ TabDisplay::OnResize(PixelSize new_size)
 {
   PaintWindow::OnResize(new_size);
 
-  for (auto button : buttons)
-    button->InvalidateLayout();
+  CalculateLayout();
 }
 
 void
@@ -246,8 +250,7 @@ TabDisplay::OnPaint(Canvas &canvas)
                                                            is_focused,
                                                            is_down));
 
-    const PixelRect &rc = GetButtonSize(i);
-    PaintButton(canvas, button.caption, rc, button.icon,
+    PaintButton(canvas, button.caption, button.rc, button.icon,
                 is_down, is_selected);
   }
 }
@@ -393,7 +396,7 @@ TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   if (!dragging)
     return false;
 
-  const PixelRect rc = GetButtonSize(down_index);
+  const PixelRect &rc = buttons[down_index]->rc;
 
   bool not_on_button = !rc.IsInside({ x, y });
   if (drag_off_button != not_on_button) {

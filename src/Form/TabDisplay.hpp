@@ -133,14 +133,7 @@ public:
   int GetButtonIndexAt(RasterPoint p) const;
 
 private:
-  /**
-   * calculates the size and position of ith button
-   * works in landscape or portrait mode
-   * @param i index of button
-   * @return Rectangle of button coordinates
-   */
-  gcc_pure
-  const PixelRect &GetButtonSize(unsigned i) const;
+  void CalculateLayout();
 
 protected:
   void OnResize(PixelSize new_size) override;
