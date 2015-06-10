@@ -50,8 +50,8 @@ public:
   }
 
 private:
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override {
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override {
     Check();
   }
 };
