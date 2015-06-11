@@ -24,6 +24,7 @@ Copyright_License {
 #include "Glue.hpp"
 #include "Settings.hpp"
 #include "NMEA/Info.hpp"
+#include "Net/State.hpp"
 #include "Net/IPv4Address.hpp"
 
 #ifdef HAVE_POSIX
@@ -33,10 +34,11 @@ Copyright_License {
 #include <assert.h>
 
 SkyLinesTracking::Glue::Glue()
-  :interval(0), clock(fixed(10))
+  :interval(0), clock(fixed(10)),
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  , traffic_clock(fixed(60)), traffic_enabled(false)
+   traffic_clock(fixed(60)), traffic_enabled(false),
 #endif
+   roaming(true)
 {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   assert(io_thread != nullptr);
@@ -56,6 +58,18 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
     traffic_clock.Reset();
 #endif
     return;
+  }
+
+  switch (GetNetState()) {
+  case NetState::UNKNOWN:
+  case NetState::CONNECTED:
+  case NetState::DISCONNECTED:
+    break;
+
+  case NetState::ROAMING:
+    if (!roaming)
+      return;
+    break;
   }
 
   if (clock.CheckAdvance(basic.time))
@@ -86,4 +100,6 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;
 #endif
+
+  roaming = settings.roaming;
 }

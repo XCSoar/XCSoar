@@ -245,6 +245,7 @@ const char TrackingInterval[] = "TrackingInterval";
 const char TrackingVehicleType[] = "TrackingVehicleType";
 const char TrackingVehicleName[] = "TrackingVehicleName";
 const char SkyLinesTrackingEnabled[] = "SkyLinesTrackingEnabled";
+const char SkyLinesRoaming[] = "SkyLinesRoaming";
 const char SkyLinesTrackingInterval[] = "SkyLinesTrackingInterval";
 const char SkyLinesTrafficEnabled[] = "SkyLinesTrafficEnabled";
 const char SkyLinesTrackingKey[] = "SkyLinesTrackingKey";

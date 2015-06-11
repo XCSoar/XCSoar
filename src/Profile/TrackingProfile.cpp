@@ -34,6 +34,7 @@ namespace Profile {
   static void Load(const ProfileMap &map,
                    SkyLinesTracking::Settings &settings) {
     map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
+    map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
     map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
     map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
 

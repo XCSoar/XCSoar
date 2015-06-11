@@ -40,6 +40,8 @@ namespace SkyLinesTracking {
     bool traffic_enabled;
 #endif
 
+    bool roaming;
+
   public:
     Glue();
 

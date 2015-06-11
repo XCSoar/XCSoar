@@ -48,6 +48,7 @@ Version 6.8 - not yet released
   - scale touchscreen coordinates to screen size
   - new translation: Simplified Chinese
 * tracking
+  - new option disables tracking while roaming on the cell network
   - pass vehicle name to LiveTrack24
 * Linux
   - Wayland support

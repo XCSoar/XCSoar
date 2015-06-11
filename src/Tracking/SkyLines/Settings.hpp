@@ -35,6 +35,11 @@ namespace SkyLinesTracking {
     bool enabled;
 
     /**
+     * Enable tracking while on a "roamed" connection?
+     */
+    bool roaming;
+
+    /**
      * Periodically request traffic information?
      */
     bool traffic_enabled;
@@ -48,6 +53,7 @@ namespace SkyLinesTracking {
 
     void SetDefaults() {
       enabled = false;
+      roaming = true;
       traffic_enabled = false;
       interval = 5;
       key = 0;
