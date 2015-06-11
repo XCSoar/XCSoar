@@ -8,12 +8,12 @@ MKISOFS ?= mkisofs
 
 ifeq ($(TESTING),y)
 DMG_NAME = XCSoar-testing.dmg
-DMG_LABEL = "XCSoar Testing"
+OSX_APP_LABEL = XCSoar Testing
 OSX_LOGO = $(DATA)/graphics/logo_red_128.icns
 OSX_APP_BUNDLE_INENTIFIER = XCSoar-Testing.app
 else
 DMG_NAME = XCSoar.dmg
-DMG_LABEL = "XCSoar"
+OSX_APP_LABEL = XCSoar
 OSX_LOGO = $(DATA)/graphics/logo_128.icns
 OSX_APP_BUNDLE_INENTIFIER = XCSoar.app
 endif
@@ -27,7 +27,7 @@ $(TARGET_OUTPUT_DIR)/$(DMG_NAME): $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.i
 	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Resources
 	$(Q)cp $(OSX_LOGO) $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Resources/logo_128.icns
 	$(Q)rm -f $@
-	$(Q)$(MKISOFS) -V $(DMG_LABEL) -quiet -D -no-pad -r -apple -o $@ $(DMG_TMPDIR)
+	$(Q)$(MKISOFS) -V "$(OSX_APP_LABEL)" -quiet -D -no-pad -r -apple -o $@ $(DMG_TMPDIR)
 
 dmg: $(TARGET_OUTPUT_DIR)/$(DMG_NAME)
 
