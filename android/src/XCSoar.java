@@ -87,6 +87,7 @@ public class XCSoar extends Activity {
       return;
     }
 
+    NetUtil.initialise(this);
     InternalGPS.Initialize();
     NonGPSSensors.Initialize();
 

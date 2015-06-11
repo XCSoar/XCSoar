@@ -52,6 +52,7 @@ class NativeView {
   static jmethodID loadFileBitmap_method;
   static jmethodID bitmapToTexture_method;
   static jmethodID open_file_method;
+  static jmethodID getNetState_method;
 
 public:
   /**
@@ -164,6 +165,11 @@ public:
   void openFile(const char *pathName) {
     Java::String pathName2(env, pathName);
     env->CallVoidMethod(obj, open_file_method, pathName2.Get());
+  }
+
+  gcc_pure
+  int getNetState() const {
+    return env->CallIntMethod(obj, getNetState_method);
   }
 };
 

@@ -402,6 +402,10 @@ class NativeView extends SurfaceView
     }
   }
 
+  private int getNetState() {
+    return NetUtil.getNetState();
+  }
+
   private void swap() {
     egl.eglSwapBuffers(display, surface);
   }
