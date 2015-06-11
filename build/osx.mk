@@ -22,7 +22,7 @@ $(TARGET_OUTPUT_DIR)/$(DMG_NAME): $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.i
 	@$(NQ)echo "  DMG     $@"
 	$(Q)rm -rf $(DMG_TMPDIR)
 	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/MacOS
-	$(Q)sed -e "s,VERSION_PLACEHOLDER,$(FULL_VERSION)," -e 's/OSX_APP_BUNDLE_INENTIFIER_PLACEHOLDER/$(OSX_APP_BUNDLE_INENTIFIER)/g' < Data/OSX/Info.plist.in.xml > $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Info.plist
+	$(Q)sed -e "s,VERSION_PLACEHOLDER,$(FULL_VERSION)," -e 's/OSX_APP_LABEL_PLACEHOLDER/$(OSX_APP_LABEL)/g' < Data/OSX/Info.plist.in.xml > $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Info.plist
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/MacOS/
 	$(Q)$(MKDIR) -p $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Resources
 	$(Q)cp $(OSX_LOGO) $(DMG_TMPDIR)/$(OSX_APP_BUNDLE_INENTIFIER)/Contents/Resources/logo_128.icns
