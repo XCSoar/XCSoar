@@ -27,6 +27,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Hardware/Battery.hpp"
+#include "Net/State.hpp"
 
 enum Controls {
   GPS,
@@ -35,6 +36,7 @@ enum Controls {
   FLARM,
   Logger,
   Battery,
+  Network,
 };
 
 gcc_pure
@@ -49,6 +51,20 @@ GetGPSStatus(const NMEAInfo &basic)
     return N_("2D fix");
   else
     return N_("3D fix");
+}
+
+static const TCHAR *const net_state_strings[] = {
+  N_("Unknown"),
+  N_("Disconnected"),
+  N_("Connected"),
+  N_("Roaming"),
+};
+
+gcc_pure
+static const TCHAR *
+ToString(NetState state)
+{
+  return gettext(net_state_strings[unsigned(state)]);
 }
 
 void
@@ -104,6 +120,8 @@ SystemStatusPanel::Refresh()
     Temp.AppendFormat(_T("%.0f%%"), (double)basic.battery_level);
 
   SetText(Battery, Temp);
+
+  SetText(Network, ToString(GetNetState()));
 }
 
 void
@@ -115,6 +133,7 @@ SystemStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddReadOnly(_T("FLARM"));
   AddReadOnly(_("Logger"));
   AddReadOnly(_("Supply voltage"));
+  AddReadOnly(_("Network"));
 }
 
 void
