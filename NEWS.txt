@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.7.9 - not yet released
+* data files
+  - fix comments in TNP files
 * user interface
   - improved font renderer
 

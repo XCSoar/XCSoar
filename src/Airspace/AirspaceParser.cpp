@@ -804,10 +804,8 @@ static bool
 ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
              TempAirspaceType &temp_area, bool &ignore)
 {
-  // Strip comments
-  TCHAR *comment = _tcschr(line, _T('*'));
-  if (comment != NULL)
-    *comment = _T('\0');
+  if (*line == _T('#'))
+    return true;
 
   const TCHAR* parameter;
   if ((parameter = StringAfterPrefixCI(line, _T("INCLUDE="))) != NULL) {
