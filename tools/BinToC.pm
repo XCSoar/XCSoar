@@ -15,10 +15,10 @@ sub binary_to_c($$$$$) {
     print $output_src_fh "\".p2align 3\\n\"\n";
     print $output_src_fh "\".data\\n\"\n";;
     print $output_src_fh "\"$array_var_name:\\n\"\n";
+    print $output_src_fh "\"_$array_var_name:\\n\"\n";
     print $output_src_fh "\".globl $array_var_name\\n\"\n";
-    print $output_src_fh "\".incbin \\\"$input_file_path\\\"\\n\"\n";
-    print $output_src_fh "\".set _$array_var_name, $array_var_name\\n\"\n";
     print $output_src_fh "\".globl _$array_var_name\\n\"\n";
+    print $output_src_fh "\".incbin \\\"$input_file_path\\\"\\n\"\n";
     print $output_src_fh ");\n";
     print $output_src_fh "extern const uint8_t $array_var_name\[\];\n";
     print $output_src_fh "const uint8_t * const $end_ptr_var_name\n";
