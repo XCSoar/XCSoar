@@ -7,6 +7,7 @@ Version 6.8 - not yet released
   - optimise the topography loader
   - faster RASP map change
   - show all RASP maps
+  - fix comments in TNP files
 * devices
   - remove option "Ignore checksum"
   - LX: implement LXNAV Nano3 task declaration (#3295)
