@@ -266,7 +266,6 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
-  task_behaviour.enable_trace = false;
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.calc_glide_required = false;
   if ((test_num == 0) || (test_num == 2))

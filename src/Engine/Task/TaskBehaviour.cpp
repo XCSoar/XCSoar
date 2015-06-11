@@ -62,7 +62,6 @@ TaskBehaviour::SetDefaults()
   sector_defaults.SetDefaults();
   ordered_defaults.SetDefaults();
   route_planner.SetDefaults();
-  enable_trace = true;
   abort_task_mode = AbortTaskMode::SIMPLE;
 }
 

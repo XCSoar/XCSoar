@@ -84,7 +84,6 @@ test_replay()
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
   task_behaviour.auto_mc = true;
-  task_behaviour.enable_trace = false;
 
   TaskManager task_manager(task_behaviour, waypoints);
 

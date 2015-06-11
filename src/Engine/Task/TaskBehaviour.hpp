@@ -132,9 +132,6 @@ struct TaskBehaviour {
   /** Defaults for ordered task */
   OrderedTaskSettings ordered_defaults;
 
-  /** Whether to maintain a thinned trace of the flight.  This is overridden by enable_olc. */
-  bool enable_trace;
-
   /**
    * How should the Abort/Alternate task work like:
    * AbortTaskMode::SIMPLE: sort only by arrival height and wp type

@@ -86,19 +86,15 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
       !calculated.flight.flying)
     return;
 
-  // either olc or basic trace requires trace_full
-  if (settings_computer.contest.enable ||
-      settings_computer.task.enable_trace) {
-    const TracePoint point(basic);
+  const TracePoint point(basic);
 
-    mutex.Lock();
-    full.push_back(point);
-    mutex.Unlock();
+  mutex.Lock();
+  full.push_back(point);
+  mutex.Unlock();
 
-    // only olc requires trace_sprint
-    if (settings_computer.contest.enable) {
-      sprint.push_back(point);
-      contest.push_back(point);
-    }
+  // only olc requires trace_sprint
+  if (settings_computer.contest.enable) {
+    sprint.push_back(point);
+    contest.push_back(point);
   }
 }

@@ -38,7 +38,6 @@ test_abort(int n_wind)
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
-  task_behaviour.enable_trace = false;
 
   TaskManager task_manager(task_behaviour, waypoints);
 
@@ -70,7 +69,6 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
   task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
   task_behaviour.auto_mc = auto_mc;
-  task_behaviour.enable_trace = false;
 
   TaskManager task_manager(task_behaviour, waypoints);
 
@@ -103,7 +101,6 @@ test_null()
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
-  task_behaviour.enable_trace = false;
 
   TaskManager task_manager(task_behaviour, waypoints);
 
