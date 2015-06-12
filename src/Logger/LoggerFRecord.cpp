@@ -54,7 +54,6 @@ LoggerFRecord::Reset()
   std::fill_n(satellite_ids, GPSState::MAXSATELLITES, 0);
 
   clock.Reset(); // reset clock / timer
-  clock.SetDT(fixed(1)); // 1 sec so it appears at top of each file
 }
 
 bool
