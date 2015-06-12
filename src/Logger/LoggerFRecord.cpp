@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Logger/LoggerFRecord.hpp"
 
+#include <string.h>
+
 /*
  * From FAI_Tech_Spec_Gnss.pdf 
  * 4.3 F RECORD - SATELLITE CONSTELLATION.

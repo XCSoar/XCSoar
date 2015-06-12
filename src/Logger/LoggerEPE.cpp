@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "IGC/IGCWriter.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/GPSState.hpp"
 
 /*
  * From FAI_Tech_Spec_Gnss.pdf

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_LOGGER_FRECORD_HPP
 
 #include "Time/GPSClock.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/GPSState.hpp"
 
 class LoggerFRecord
 {
