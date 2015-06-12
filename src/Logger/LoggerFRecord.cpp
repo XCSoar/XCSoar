@@ -72,11 +72,13 @@ LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
   bool update_needed = available_changed ||
       (satellite_ids_available &&
        memcmp(gps.satellite_ids, satellite_ids, sizeof(satellite_ids)) != 0);
+  if (update_needed)
+    clock.Reset();
 
   // Check whether it's time for a new F record yet. Only if
   // 1) the last F record is a certain time ago and
   // 2) something has changed since then
-  if (!clock.CheckAdvance(time) || !update_needed)
+  if (!clock.CheckAdvance(time))
     return false;
 
   // Save the current satellite information for next time
