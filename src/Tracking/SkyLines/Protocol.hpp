@@ -192,8 +192,8 @@ namespace SkyLinesTracking {
     uint32_t flags;
 
     /**
-     * Millisecond of day (UTC).  May be bigger than 24*60*60 if the
-     * flight has wrapped midnight.
+     * Millisecond of day (UTC).  May be bigger than 24*60*60*1000 if
+     * the flight has wrapped midnight.
      */
     uint32_t time;
 
