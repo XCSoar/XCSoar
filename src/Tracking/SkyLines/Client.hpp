@@ -77,6 +77,10 @@ namespace SkyLinesTracking {
       return socket.IsDefined();
     }
 
+    uint64_t GetKey() const {
+      return key;
+    }
+
     void SetKey(uint64_t _key) {
       key = _key;
     }

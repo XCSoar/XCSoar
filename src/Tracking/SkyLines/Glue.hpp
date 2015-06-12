@@ -29,6 +29,7 @@ Copyright_License {
 
 namespace SkyLinesTracking {
   struct Settings;
+  class Queue;
 
   class Glue {
     Client client;
@@ -42,8 +43,11 @@ namespace SkyLinesTracking {
 
     bool roaming;
 
+    Queue *queue;
+
   public:
     Glue();
+    ~Glue();
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void SetHandler(Handler *handler) {

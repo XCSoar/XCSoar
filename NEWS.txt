@@ -50,6 +50,7 @@ Version 6.8 - not yet released
   - new translation: Simplified Chinese
 * tracking
   - new option disables tracking while roaming on the cell network
+  - queue SkyLines tracking fixes while data connection is unavailable
   - pass vehicle name to LiveTrack24
 * Linux
   - Wayland support

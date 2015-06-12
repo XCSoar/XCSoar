@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Glue.hpp"
 #include "Settings.hpp"
+#include "Queue.hpp"
+#include "Assemble.hpp"
 #include "NMEA/Info.hpp"
 #include "Net/State.hpp"
 #include "Net/IPv4Address.hpp"
@@ -38,12 +40,18 @@ SkyLinesTracking::Glue::Glue()
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
    traffic_enabled(false),
 #endif
-   roaming(true)
+   roaming(true),
+   queue(nullptr)
 {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   assert(io_thread != nullptr);
   client.SetIOThread(io_thread);
 #endif
+}
+
+SkyLinesTracking::Glue::~Glue()
+{
+  delete queue;
 }
 
 void
@@ -60,19 +68,46 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
     return;
   }
 
+  bool connected = false;
   switch (GetNetState()) {
   case NetState::UNKNOWN:
-  case NetState::CONNECTED:
   case NetState::DISCONNECTED:
     break;
 
+  case NetState::CONNECTED:
+    connected = true;
+    break;
+
   case NetState::ROAMING:
-    if (!roaming)
-      return;
+    connected = roaming;
     break;
   }
 
-  if (clock.CheckAdvance(basic.time, fixed(interval)))
+  if (!connected) {
+    /* queue the packet, send it later */
+    if (queue == nullptr)
+      queue = new Queue();
+    queue->Push(ToFix(client.GetKey(), basic));
+    return;
+  }
+
+  if (queue != nullptr) {
+    /* send queued fix packets, 8 at a time */
+    unsigned n = 8;
+    while (n-- > 0) {
+      const auto &packet = queue->Peek();
+      if (!client.SendPacket(packet))
+        break;
+
+      queue->Pop();
+      if (queue->IsEmpty()) {
+        delete queue;
+        queue = nullptr;
+      }
+    }
+
+    return;
+  } else if (clock.CheckAdvance(basic.time, fixed(interval)))
     client.SendFix(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
