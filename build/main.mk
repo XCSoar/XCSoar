@@ -750,6 +750,7 @@ endif
 
 XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
+	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp
 
