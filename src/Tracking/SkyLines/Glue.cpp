@@ -84,7 +84,7 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
-  if (!settings.enabled) {
+  if (!settings.enabled || settings.key == 0) {
     client.Close();
     return;
   }
