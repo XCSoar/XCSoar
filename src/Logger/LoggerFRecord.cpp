@@ -51,7 +51,6 @@ LoggerFRecord::Reset()
   update_needed = true;
 
   satellite_ids_available = false;
-  std::fill_n(satellite_ids, GPSState::MAXSATELLITES, 0);
 
   clock.Reset(); // reset clock / timer
 }
