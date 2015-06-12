@@ -50,8 +50,6 @@ Copyright_License {
 void
 LoggerFRecord::Reset()
 {
-  update_needed = true;
-
   satellite_ids_available = false;
 
   clock.Reset(); // reset clock / timer
@@ -71,7 +69,7 @@ LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
   // We need an update if
   // 1) the satellite information availability changed or
   // 2) satellite information is available and the IDs have changed
-  update_needed = update_needed || available_changed ||
+  bool update_needed = available_changed ||
       (satellite_ids_available &&
        memcmp(gps.satellite_ids, satellite_ids, sizeof(satellite_ids)) != 0);
 
@@ -85,8 +83,6 @@ LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
   satellite_ids_available = gps.satellite_ids_available;
   if (satellite_ids_available)
     memcpy(satellite_ids, gps.satellite_ids, sizeof(satellite_ids));
-
-  update_needed = false;
 
   clock.SetDT(fixed(DEFAULT_UPDATE_TIME));
 

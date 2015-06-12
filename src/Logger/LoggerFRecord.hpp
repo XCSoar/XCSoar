@@ -34,7 +34,6 @@ class LoggerFRecord
   static constexpr int ACCELERATED_UPDATE_TIME = 30;
 
   GPSClock clock;
-  bool update_needed;
 
   bool satellite_ids_available;
   int satellite_ids[GPSState::MAXSATELLITES];
