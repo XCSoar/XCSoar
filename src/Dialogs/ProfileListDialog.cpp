@@ -145,7 +145,8 @@ gcc_pure
 static UPixelScalar
 GetRowHeight(const DialogLook &look)
 {
-  return 2 * Layout::GetTextPadding() + look.list.font->GetHeight();
+  return std::max(2 * Layout::GetTextPadding() + look.list.font->GetHeight(),
+                  Layout::GetMaximumControlHeight());
 }
 
 void
