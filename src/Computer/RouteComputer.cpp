@@ -102,7 +102,6 @@ RouteComputer::TerrainWarning(const MoreData &basic,
           calculated.common_stats.task_type != last_task_type;
         if (dirty) {
           // restart clock
-          route_clock.CheckAdvance(basic.time);
           route_clock.Reset();
         }
       }
