@@ -30,7 +30,6 @@ Copyright_License {
  * Class for GPS-time based time intervals
  */
 class GPSClock {
-private:
   fixed last;
   fixed dt;
 
