@@ -96,10 +96,9 @@ SkyLinesTracking::Client::Close()
 bool
 SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 {
+  assert(socket.IsDefined());
+  assert(key != 0);
   assert(basic.time_available);
-
-  if (key == 0 || !socket.IsDefined())
-    return false;
 
   FixPacket packet;
   packet.header.magic = ToBE32(MAGIC);
@@ -173,8 +172,8 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 bool
 SkyLinesTracking::Client::SendPing(uint16_t id)
 {
-  if (key == 0 || !socket.IsDefined())
-    return false;
+  assert(socket.IsDefined());
+  assert(key != 0);
 
   PingPacket packet;
   packet.header.magic = ToBE32(MAGIC);
@@ -193,8 +192,8 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 bool
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club)
 {
-  if (key == 0 || !socket.IsDefined())
-    return false;
+  assert(socket.IsDefined());
+  assert(key != 0);
 
   TrafficRequestPacket packet;
   packet.header.magic = ToBE32(MAGIC);
@@ -213,8 +212,8 @@ SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club)
 bool
 SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 {
-  if (key == 0 || !socket.IsDefined())
-    return false;
+  assert(socket.IsDefined());
+  assert(key != 0);
 
   UserNameRequestPacket packet;
   packet.header.magic = ToBE32(MAGIC);
