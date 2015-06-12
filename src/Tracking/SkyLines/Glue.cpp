@@ -84,13 +84,16 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
+  if (!settings.enabled) {
+    client.Close();
+    return;
+  }
+
   client.SetKey(settings.key);
 
   interval = settings.interval;
 
-  if (!settings.enabled)
-    client.Close();
-  else if (!client.IsDefined())
+  if (!client.IsDefined())
     // TODO: fix hard-coded IP address:
     client.Open(IPv4Address(95, 128, 34, 172, Client::GetDefaultPort()));
 
