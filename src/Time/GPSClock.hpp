@@ -112,6 +112,10 @@ public:
     } else
       return false;
   }
+
+  bool CheckAdvance(fixed now, unsigned dt) {
+    return CheckAdvance(now, fixed(dt));
+  }
 };
 
 #endif
