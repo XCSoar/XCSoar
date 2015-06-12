@@ -100,6 +100,7 @@ PopupMessage::PopupMessage(SingleWindow &_parent, const DialogLook &_look,
    enable_sound(true)
 {
   renderer.SetCenter();
+  text.clear();
 }
 
 void
