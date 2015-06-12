@@ -33,6 +33,8 @@ struct MoreData;
 struct DerivedInfo;
 
 class StatsComputer {
+  static constexpr unsigned PERIOD = 60;
+
   GeoPoint last_location;
 
   fixed last_climb_start_time, last_cruise_start_time;
@@ -42,8 +44,6 @@ class StatsComputer {
   GPSClock stats_clock;
 
 public:
-  StatsComputer();
-
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
   const FlightStatistics &GetFlightStats() const { return flightstats; }

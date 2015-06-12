@@ -26,9 +26,6 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-StatsComputer::StatsComputer()
-  :stats_clock(fixed(60)) {}
-
 void
 StatsComputer::ResetFlight(const bool full)
 {
@@ -67,7 +64,7 @@ StatsComputer::DoLogging(const MoreData &basic,
     return false;
 
   if (calculated.flight.flying &&
-      stats_clock.CheckAdvance(basic.time)) {
+      stats_clock.CheckAdvance(basic.time, PERIOD)) {
     flightstats.AddAltitudeTerrain(calculated.flight.flight_time,
                                    calculated.terrain_altitude);
 

@@ -34,8 +34,6 @@ Copyright_License {
 RouteComputer::RouteComputer(const Airspaces &airspace_database,
                              const ProtectedAirspaceWarningManager *warnings)
   :protected_route_planner(route_planner, airspace_database, warnings),
-   route_clock(fixed(5)),
-   reach_clock(fixed(5)),
    terrain(NULL)
 {}
 
@@ -94,7 +92,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
   if (terrain) {
     if (sol.IsDefined()) {
       const AGeoPoint dest(v.EndPoint(start), sol.min_arrival_altitude);
-      bool dirty = route_clock.CheckAdvance(basic.time);
+      bool dirty = route_clock.CheckAdvance(basic.time, PERIOD);
 
       if (!dirty) {
         dirty =
@@ -145,7 +143,7 @@ RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
   const RoughAltitude h_ceiling((short)std::max((int)basic.nav_altitude + 500,
                                                 (int)calculated.thermal_band.working_band_ceiling));
 
-  if (reach_clock.CheckAdvance(basic.time)) {
+  if (reach_clock.CheckAdvance(basic.time, PERIOD)) {
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);
 
     if (do_solve) {

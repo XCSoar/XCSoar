@@ -29,8 +29,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 
 LogComputer::LogComputer()
-  :log_clock(fixed(5)),
-   logger(NULL) {}
+  :logger(NULL) {}
 
 void
 LogComputer::Reset()
@@ -62,16 +61,16 @@ LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
     return false;
 
   // log points more often in circling mode
-  log_clock.SetDT(fixed(calculated.circling
-                        ? settings_logger.time_step_circling
-                        : settings_logger.time_step_cruise));
-
+  unsigned period;
   if (fast_log_num) {
-    log_clock.SetDT(fixed(1));
+    period = 1;
     fast_log_num--;
-  }
+  } else
+    period = calculated.circling
+      ? settings_logger.time_step_circling
+      : settings_logger.time_step_cruise;
 
-  if (log_clock.CheckAdvance(basic.time) && logger != NULL)
+  if (log_clock.CheckAdvance(basic.time, period) && logger != nullptr)
       logger->LogPoint(basic);
 
   return true;

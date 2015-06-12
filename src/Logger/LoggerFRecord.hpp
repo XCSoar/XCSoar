@@ -39,9 +39,6 @@ class LoggerFRecord
   int satellite_ids[GPSState::MAXSATELLITES];
 
 public:
-  LoggerFRecord()
-    :clock(fixed(DEFAULT_UPDATE_TIME)) {}
-
   /**
    * Returns true if the IGCWriter is supposed to write a new F record to
    * the IGC file or false if no update is needed.

@@ -38,6 +38,8 @@ class RasterTerrain;
 class GlidePolar;
 
 class RouteComputer {
+  static constexpr unsigned PERIOD = 5;
+
   RoutePlannerGlue route_planner;
   ProtectedRoutePlanner protected_route_planner;
 

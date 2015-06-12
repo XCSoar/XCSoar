@@ -38,7 +38,6 @@ class GPSClock {
   static constexpr int RESET_VALUE = -99999;
 
   fixed last;
-  fixed dt;
 
 public:
   /**
@@ -47,7 +46,7 @@ public:
    * default behaviour, call update() immediately after creating the
    * object.
    */
-  GPSClock(const fixed _minstep):last(RESET_VALUE), dt(_minstep) {}
+  GPSClock():last(RESET_VALUE) {}
 
   /**
    * Resets the clock.
@@ -75,24 +74,6 @@ public:
     } else {
       return false;
     }
-  }
-
-  /**
-   * Set dt to a new value defined by _dt
-   * @param _dt The new value fot dt
-   */
-  void SetDT(const fixed _dt) {
-    dt = _dt;
-  }
-
-  /**
-   * Calls check_advance(fixed, fixed) with dt
-   * as the default value for dt
-   * @param now Current time
-   * @see check_advance(fixed, fixed)
-   */
-  bool CheckAdvance(const fixed now) {
-    return CheckAdvance(now, dt);
   }
 
   /**

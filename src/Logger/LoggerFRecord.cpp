@@ -67,8 +67,9 @@ bool
 LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
 {
   // Accelerate to 30 seconds if bad signal
-  if (IsBadSignal(gps) || nav_warning)
-    clock.SetDT(fixed(ACCELERATED_UPDATE_TIME));
+  const fixed period = IsBadSignal(gps) || nav_warning
+    ? fixed(ACCELERATED_UPDATE_TIME)
+    : fixed(DEFAULT_UPDATE_TIME);
 
   // We need an update if
   // 1) the satellite information availability changed or
@@ -79,15 +80,13 @@ LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
   // Check whether it's time for a new F record yet. Only if
   // 1) the last F record is a certain time ago and
   // 2) something has changed since then
-  if (!clock.CheckAdvance(time))
+  if (!clock.CheckAdvance(time, period))
     return false;
 
   // Save the current satellite information for next time
   satellite_ids_available = gps.satellite_ids_available;
   if (satellite_ids_available)
     memcpy(satellite_ids, gps.satellite_ids, sizeof(satellite_ids));
-
-  clock.SetDT(fixed(DEFAULT_UPDATE_TIME));
 
   return true;
 }

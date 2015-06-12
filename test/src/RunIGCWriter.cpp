@@ -51,9 +51,9 @@ int main(int argc, char **argv)
                      _T("Ventus"), _T("D-1234"),
                      _T("MM"), "FOO", driver_name, true);
 
-  GPSClock log_clock(fixed(1));
+  GPSClock log_clock;
   while (replay->Next())
-    if (log_clock.CheckAdvance(replay->Basic().time))
+    if (log_clock.CheckAdvance(replay->Basic().time, fixed(1)))
       writer.LogPoint(replay->Basic());
 
   writer.Flush();

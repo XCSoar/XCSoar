@@ -34,9 +34,9 @@ Copyright_License {
 #include <assert.h>
 
 SkyLinesTracking::Glue::Glue()
-  :interval(0), clock(fixed(10)),
+  :interval(0),
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-   traffic_clock(fixed(60)), traffic_enabled(false),
+   traffic_enabled(false),
 #endif
    roaming(true)
 {
@@ -72,11 +72,11 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
     break;
   }
 
-  if (clock.CheckAdvance(basic.time))
+  if (clock.CheckAdvance(basic.time, fixed(interval)))
     client.SendFix(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  if (traffic_enabled && traffic_clock.CheckAdvance(basic.time))
+  if (traffic_enabled && traffic_clock.CheckAdvance(basic.time, fixed(60)))
     client.SendTrafficRequest(true, true);
 #endif
 }
@@ -86,10 +86,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
   client.SetKey(settings.key);
 
-  if (interval != settings.interval) {
-    interval = settings.interval;
-    clock = GPSClock(fixed(std::max(settings.interval, 1u)));
-  }
+  interval = settings.interval;
 
   if (!settings.enabled)
     client.Close();
