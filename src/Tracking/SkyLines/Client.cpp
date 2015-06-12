@@ -100,8 +100,7 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
   assert(socket.IsDefined());
   assert(key != 0);
 
-  const auto packet = ToFix(key, basic);
-  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+  return SendPacket(ToFix(key, basic));
 }
 
 bool
@@ -110,8 +109,7 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
   assert(socket.IsDefined());
   assert(key != 0);
 
-  const auto packet = MakePing(key, id);
-  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+  return SendPacket(MakePing(key, id));
 }
 
 bool
@@ -120,8 +118,7 @@ SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club)
   assert(socket.IsDefined());
   assert(key != 0);
 
-  const auto packet = MakeTrafficRequest(key, followees, club);
-  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+  return SendPacket(MakeTrafficRequest(key, followees, club));
 }
 
 bool
@@ -130,8 +127,7 @@ SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
   assert(socket.IsDefined());
   assert(key != 0);
 
-  const auto packet = MakeUserNameRequest(key, user_id);
-  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+  return SendPacket(MakeUserNameRequest(key, user_id));
 }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER

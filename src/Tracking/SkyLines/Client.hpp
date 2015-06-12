@@ -84,6 +84,11 @@ namespace SkyLinesTracking {
     bool Open(SocketAddress _address);
     void Close();
 
+    template<typename P>
+    bool SendPacket(const P &packet) {
+      return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+    }
+
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
     bool SendTrafficRequest(bool followees, bool club);
