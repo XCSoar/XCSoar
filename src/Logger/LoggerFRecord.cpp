@@ -55,24 +55,25 @@ LoggerFRecord::Reset()
   clock.Reset(); // reset clock / timer
 }
 
+inline bool
+LoggerFRecord::CheckSatellitesChanged(const GPSState &gps) const
+{
+  return gps.satellite_ids_available != satellite_ids_available ||
+    (satellite_ids_available &&
+     memcmp(gps.satellite_ids, satellite_ids, sizeof(satellite_ids)) != 0);
+}
+
 bool
 LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
 {
   // Accelerate to 30 seconds if bad signal
-  if (!gps.satellites_used_available || gps.satellites_used < 3 || nav_warning)
+  if (IsBadSignal(gps) || nav_warning)
     clock.SetDT(fixed(ACCELERATED_UPDATE_TIME));
-   
-  // Check whether we still have satellite information
-  bool available_changed =
-      gps.satellite_ids_available != satellite_ids_available;
 
   // We need an update if
   // 1) the satellite information availability changed or
   // 2) satellite information is available and the IDs have changed
-  bool update_needed = available_changed ||
-      (satellite_ids_available &&
-       memcmp(gps.satellite_ids, satellite_ids, sizeof(satellite_ids)) != 0);
-  if (update_needed)
+  if (CheckSatellitesChanged(gps))
     clock.Reset();
 
   // Check whether it's time for a new F record yet. Only if

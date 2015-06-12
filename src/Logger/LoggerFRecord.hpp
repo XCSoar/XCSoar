@@ -49,6 +49,15 @@ public:
   bool Update(const GPSState &gps, fixed time, bool nav_warning);
 
   void Reset();
+
+private:
+  gcc_pure
+  static bool IsBadSignal(const GPSState &gps) {
+    return !gps.satellites_used_available || gps.satellites_used < 3;
+  }
+
+  gcc_pure
+  bool CheckSatellitesChanged(const GPSState &gps) const;
 };
 
 #endif
