@@ -42,7 +42,7 @@ Button::Create(ContainerWindow &parent,
                WindowStyle style,
                ButtonRenderer *_renderer)
 {
-  dragging = down = false;
+  dragging = down = selected = false;
   renderer = _renderer;
 
   PaintWindow::Create(parent, rc, style);
@@ -85,6 +85,16 @@ Button::SetCaption(const TCHAR *caption)
   TextButtonRenderer &r = *(TextButtonRenderer *)renderer;
   r.SetCaption(caption);
 
+  Invalidate();
+}
+
+void
+Button::SetSelected(bool _selected)
+{
+  if (_selected == selected)
+    return;
+
+  selected = _selected;
   Invalidate();
 }
 
@@ -234,7 +244,9 @@ Button::OnPaint(Canvas &canvas)
   assert(renderer != nullptr);
 
   const bool pressed = down;
-  const bool focused = HasCursorKeys() ? HasFocus() : pressed;
+  const bool focused = HasCursorKeys()
+    ? HasFocus() || (selected && !HasPointer())
+    : pressed;
 
   renderer->DrawButton(canvas, GetClientRect(),
                        IsEnabled(), focused, pressed);

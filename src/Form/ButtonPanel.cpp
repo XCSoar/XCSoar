@@ -28,9 +28,10 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
+#include "Screen/Key.h"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const ButtonLook &_look)
-  :parent(_parent), look(_look) {
+  :parent(_parent), look(_look), selected_index(-1) {
   style.TabStop();
 }
 
@@ -288,6 +289,49 @@ ButtonPanel::HideAll()
     i->Hide();
 }
 
+void
+ButtonPanel::SetSelectedIndex(unsigned _index)
+{
+  assert(selected_index >= 0);
+  assert(_index < buttons.size());
+
+  if (_index == (unsigned)selected_index)
+    return;
+
+  buttons[selected_index]->SetSelected(false);
+  selected_index = _index;
+  buttons[selected_index]->SetSelected(true);
+}
+
+bool
+ButtonPanel::SelectPrevious()
+{
+  for (int i = selected_index - 1; i >= 0; --i) {
+    const auto &button = *buttons[i];
+    if (button.IsVisible() && button.IsEnabled()) {
+      SetSelectedIndex(i);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool
+ButtonPanel::SelectNext()
+{
+  for (unsigned i = selected_index + 1, n = buttons.size();
+       i < n; ++i) {
+    const auto &button = *buttons[i];
+    if (button.IsVisible() && button.IsEnabled()) {
+      SetSelectedIndex(i);
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool
 ButtonPanel::KeyPress(unsigned key_code)
 {
@@ -298,6 +342,20 @@ ButtonPanel::KeyPress(unsigned key_code)
     if (keys[i] == key_code) {
       buttons[i]->Click();
       return true;
+    }
+  }
+
+  if (selected_index >= 0 && !HasPointer()) {
+    if (key_code == KEY_LEFT) {
+      SelectPrevious();
+      return true;
+    } else if (key_code == KEY_RIGHT) {
+      SelectNext();
+      return true;
+    } else if (key_code == KEY_RETURN) {
+      auto &button = *buttons[selected_index];
+      if (button.IsVisible() && button.IsEnabled())
+        button.Click();
     }
   }
 

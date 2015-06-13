@@ -123,6 +123,13 @@ public:
     return buttons.AddAltairKey(key_code);
   }
 
+  /**
+   * @see ButtonPanel::EnableCursorSelection()
+   */
+  void EnableCursorSelection(unsigned _index=0) {
+    buttons.EnableCursorSelection(_index);
+  }
+
   int ShowModal();
 
   /* virtual methods from class ActionListener */

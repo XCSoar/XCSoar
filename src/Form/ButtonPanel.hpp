@@ -27,6 +27,8 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Form/Button.hpp"
 
+#include <assert.h>
+
 class ButtonPanel {
   ContainerWindow &parent;
   const ButtonLook &look;
@@ -39,9 +41,30 @@ class ButtonPanel {
    */
   unsigned keys[8u];
 
+  /**
+   * The button currently selected with KEY_LEFT / KEY_RIGHT on
+   * devices without a touch screen.  If negative, then cursor
+   * selection is disabled in this ButtonPanel.  Can be enabled with
+   * EnableCursorSelection().
+   */
+  int selected_index;
+
 public:
   ButtonPanel(ContainerWindow &parent, const ButtonLook &look);
   ~ButtonPanel();
+
+  /**
+   * On devices without a touch screen, enable button selection with
+   * KEY_LEFT / KEY_RIGHT.  That allows navigating a ListControl while
+   * allowing the user to select an action on a list item.
+   */
+  void EnableCursorSelection(unsigned _index=0) {
+    assert(selected_index < 0);
+    assert(_index < buttons.size());
+
+    selected_index = _index;
+    buttons[selected_index]->SetSelected(true);
+  }
 
   const ButtonLook &GetLook() const {
     return look;
@@ -131,6 +154,10 @@ private:
   PixelRect VerticalRange(PixelRect rc, unsigned start, unsigned end);
 
   PixelRect HorizontalRange(PixelRect rc, unsigned start, unsigned end);
+
+  void SetSelectedIndex(unsigned _index);
+  bool SelectPrevious();
+  bool SelectNext();
 };
 
 #endif

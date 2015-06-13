@@ -46,6 +46,15 @@ class Button : public PaintWindow {
   ActionListener *listener;
   int id;
 
+  /**
+   * This flag specifies whether the button is "selected".  The
+   * "selected" button in a #ButtonPanel is the button that will be
+   * triggered by the #KEY_RETURN.  On some devices without touch
+   * screen, cursor keys left/right can be used to navigate the
+   * #ButtonPanel.
+   */
+  bool selected;
+
 public:
   Button(ContainerWindow &parent, const PixelRect &rc,
          WindowStyle style, ButtonRenderer *_renderer,
@@ -98,6 +107,8 @@ public:
    * #TextButtonRenderer instance.
    */
   void SetCaption(const TCHAR *caption);
+
+  void SetSelected(bool _selected);
 
   gcc_pure
   unsigned GetMinimumWidth() const;
