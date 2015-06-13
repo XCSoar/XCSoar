@@ -78,6 +78,14 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
   AddEnum(_("Speed"), NULL, speed_list,
           data.GetSpeedUnit());
+
+  static constexpr StaticEnumChoice sink_tone_list[] = {
+    { 0, _T("off"), },
+    { 1, _T("on"), },
+    { 0 }
+  };
+  AddEnum(_("Sink tone"), NULL, sink_tone_list,
+          data.GetSinkTone());
 }
 
 bool
@@ -118,6 +126,12 @@ CAI302UnitsEditor::Save(bool &_changed)
   unsigned speed = data.GetSpeedUnit();
   if (SaveValue(SpeedUnit, speed)) {
     data.SetSpeedUnit(speed);
+    changed = true;
+  }
+
+  unsigned sink_tone = data.GetSinkTone();
+  if (SaveValue(SinkTone, sink_tone)) {
+    data.SetSinkTone(sink_tone);
     changed = true;
   }
 

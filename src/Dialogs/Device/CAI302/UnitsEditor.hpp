@@ -35,6 +35,7 @@ class CAI302UnitsEditor final : public RowFormWidget {
     PressureUnit,
     DistanceUnit,
     SpeedUnit,
+    SinkTone,
   };
 
   CAI302::Pilot data;

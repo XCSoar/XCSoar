@@ -245,6 +245,14 @@ namespace CAI302 {
     void SetSpeedUnit(unsigned unit) {
       SetUnitBits(6, 2, unit);
     }
+
+    unsigned GetSinkTone() const {
+      return sink_tone;
+    }
+
+    void SetSinkTone(unsigned v) {
+      sink_tone = v;
+    }
   } gcc_packed;
 
   /** Structure for CAI302 device info */

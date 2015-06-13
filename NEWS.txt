@@ -6,6 +6,7 @@ Version 6.8 - not yet released
   - fix comments in TNP files
 * devices
   - remove option "Ignore checksum"
+  - CAI302: add sink tone configuration
   - LX: implement LXNAV Nano3 task declaration (#3295)
   - ATR833: new driver
   - Volkslogger: support DAeC keyhole declaration
