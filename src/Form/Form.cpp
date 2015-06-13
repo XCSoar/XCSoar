@@ -307,14 +307,6 @@ WndForm::OnCommand(unsigned id, unsigned code)
 
 #endif
 
-static bool
-IsSpecialKey(unsigned key_code)
-{
-  return key_code == KEY_LEFT || key_code == KEY_RIGHT ||
-    key_code == KEY_UP || key_code == KEY_DOWN ||
-    key_code == KEY_TAB || key_code == KEY_RETURN || key_code == KEY_ESCAPE;
-}
-
 /**
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
@@ -335,17 +327,6 @@ CheckKey(ContainerWindow *container, const Event &event)
 
   return focused->OnKeyCheck(event.GetKeyCode());
 #endif
-}
-
-/**
- * Is this "special" key handled by the focused control? (bypassing
- * the dialog manager)
- */
-gcc_pure
-static bool
-CheckSpecialKey(ContainerWindow *container, const Event &event)
-{
-  return IsSpecialKey(event.GetKeyCode()) && CheckKey(container, event);
 }
 
 int
@@ -410,12 +391,7 @@ WndForm::ShowModal()
     }
 
     if (event.IsKeyDown()) {
-      if (
-#ifdef USE_GDI
-          IdentifyDescendant(event.msg.hwnd) &&
-#endif
-          !CheckSpecialKey(this, event) &&
-          OnAnyKeyDown(event.GetKeyCode()))
+      if (OnAnyKeyDown(event.GetKeyCode()))
         continue;
 
 #ifdef ENABLE_SDL
