@@ -273,12 +273,12 @@ DeviceListWidget::RefreshList()
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  disable_button = dialog.AddButton(_("Disable"), *this, DISABLE);
-  reconnect_button = dialog.AddButton(_("Reconnect"), *this, RECONNECT);
-  flight_button = dialog.AddButton(_("Flight download"), *this, FLIGHT);
   edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
+  flight_button = dialog.AddButton(_("Flight download"), *this, FLIGHT);
   manage_button = dialog.AddButton(_("Manage"), *this, MANAGE);
   monitor_button = dialog.AddButton(_("Monitor"), *this, MONITOR);
+  reconnect_button = dialog.AddButton(_("Reconnect"), *this, RECONNECT);
+  disable_button = dialog.AddButton(_("Disable"), *this, DISABLE);
   debug_button = dialog.AddButton(_("Debug"), *this, DEBUG);
 }
 
@@ -690,8 +690,8 @@ ShowDeviceList()
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Devices"), &widget);
-  dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
 
   dialog.ShowModal();
   dialog.StealWidget();
