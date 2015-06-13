@@ -424,36 +424,10 @@ ListControl::OnKeyCheck(unsigned key_code) const
   case KEY_RETURN:
     return CanActivateItem();
 
-  case KEY_LEFT:
-    if (!HasPointer())
-      /* no wrap-around on Altair, as KEY_LEFT is usually used to
-         switch to the previous dialog page */
-      return true;
-
-    return GetCursorIndex() > 0;
-
   case KEY_UP:
-    if (!HasPointer() && IsShort())
-      /* no page up/down behaviour in short lists on Altair; this
-         rotation knob should move focus */
-      return false;
-
     return GetCursorIndex() > 0;
-
-  case KEY_RIGHT:
-    if (!HasPointer())
-      /* no wrap-around on Altair, as KEY_RIGHT is usually used to
-         switch to the next dialog page */
-      return true;
-
-    return GetCursorIndex() + 1 < length;
 
   case KEY_DOWN:
-    if (!HasPointer() && IsShort())
-      /* no page up/down behaviour in short lists on Altair; this
-         rotation knob should move focus */
-      return false;
-
     return GetCursorIndex() + 1 < length;
 
   default:
@@ -481,34 +455,30 @@ ListControl::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_UP:
-  case KEY_LEFT:
-    if (!HasPointer() ^ (key_code == KEY_LEFT)) {
-      // page up
-      MoveCursor(-(int)items_visible);
-      return true;
-    } else {
-      // previous item
-      if (GetCursorIndex() <= 0)
-        break;
+    // previous item
+    if (GetCursorIndex() <= 0)
+      break;
 
-      MoveCursor(-1);
-      return true;
-    }
+    MoveCursor(-1);
+    return true;
 
   case KEY_DOWN:
-  case KEY_RIGHT:
-    if (!HasPointer() ^ (key_code == KEY_RIGHT)) {
-      // page down
-      MoveCursor(items_visible);
-      return true;
-    } else {
-      // next item
-      if (GetCursorIndex() +1 >= length)
-        break;
+    // next item
+    if (GetCursorIndex() +1 >= length)
+      break;
 
-      MoveCursor(1);
-      return true;
-    }
+    MoveCursor(1);
+    return true;
+
+  case KEY_LEFT:
+    // page up
+    MoveCursor(-(int)items_visible);
+    return true;
+
+  case KEY_RIGHT:
+    // page down
+    MoveCursor(items_visible);
+    return true;
 
   case KEY_HOME:
     SetCursorIndex(0);
