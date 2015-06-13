@@ -103,14 +103,19 @@ public:
   unsigned GetMinimumWidth() const;
 
   /**
+   * Simulate a click on this button.
+   */
+  void Click();
+
+protected:
+  /**
    * Called when the button is clicked (either by mouse or by
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
   virtual bool OnClicked();
 
-protected:
-  /* virtual methods from class Window */
+/* virtual methods from class Window */
   void OnDestroy() override;
 
   bool OnKeyCheck(unsigned key_code) const override;

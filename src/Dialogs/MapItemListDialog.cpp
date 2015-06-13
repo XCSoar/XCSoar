@@ -217,7 +217,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 MapItemListWidget::OnActivateItem(unsigned index)
 {
-  details_button->OnClicked();
+  details_button->Click();
 }
 
 inline void
@@ -233,7 +233,7 @@ MapItemListWidget::OnGotoClicked()
 
   auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
   protected_task_manager->DoGoto(waypoint);
-  cancel_button->OnClicked();
+  cancel_button->Click();
 }
 
 inline void

@@ -120,6 +120,13 @@ Button::OnClicked()
 }
 
 void
+Button::Click()
+{
+  SetDown(false);
+  OnClicked();
+}
+
+void
 Button::OnDestroy()
 {
   assert(renderer != nullptr);
@@ -152,8 +159,7 @@ Button::OnKeyDown(unsigned key_code)
 #endif
   case KEY_RETURN:
   case KEY_SPACE:
-    SetDown(false);
-    OnClicked();
+    Click();
     return true;
 
   default:
@@ -195,8 +201,7 @@ Button::OnMouseUp(PixelScalar x, PixelScalar y)
   if (!down)
     return true;
 
-  SetDown(false);
-  OnClicked();
+  Click();
   return true;
 }
 

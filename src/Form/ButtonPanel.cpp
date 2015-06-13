@@ -296,7 +296,7 @@ ButtonPanel::KeyPress(unsigned key_code)
   const unsigned n = buttons.size();
   for (unsigned i = 0; i < n; ++i) {
     if (keys[i] == key_code) {
-      buttons[i]->OnClicked();
+      buttons[i]->Click();
       return true;
     }
   }
