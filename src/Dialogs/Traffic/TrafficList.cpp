@@ -792,6 +792,7 @@ PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count)
   dialog.CreateFull(UIGlobals::GetMainWindow(), title, widget);
   dialog.AddButton(_("Select"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.EnableCursorSelection();
 
   return dialog.ShowModal() == mrOK
     ? list_widget->GetCursorId()

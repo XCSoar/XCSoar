@@ -161,6 +161,7 @@ dlgAlternatesListShowModal()
   WidgetDialog dialog(dialog_look);
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Alternates"), &widget);
   widget.CreateButtons(dialog);
+  dialog.EnableCursorSelection();
 
   int i = dialog.ShowModal() == mrOK
     ? (int)widget.GetCursorIndex()

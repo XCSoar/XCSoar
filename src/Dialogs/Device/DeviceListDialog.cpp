@@ -692,6 +692,7 @@ ShowDeviceList()
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Devices"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.EnableCursorSelection();
 
   dialog.ShowModal();
   dialog.StealWidget();

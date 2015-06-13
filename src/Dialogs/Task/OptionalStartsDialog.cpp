@@ -241,6 +241,7 @@ dlgTaskOptionalStarts(OrderedTask &task)
   dialog.CreateFull(UIGlobals::GetMainWindow(),
                     _("Alternate Start Points"), &widget);
   widget.CreateButtons(dialog);
+  dialog.EnableCursorSelection();
 
   dialog.ShowModal();
   dialog.StealWidget();

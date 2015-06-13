@@ -277,6 +277,7 @@ dlgNOAAListShowModal()
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("METAR and TAF"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
+  dialog.EnableCursorSelection();
 
   dialog.ShowModal();
   dialog.StealWidget();

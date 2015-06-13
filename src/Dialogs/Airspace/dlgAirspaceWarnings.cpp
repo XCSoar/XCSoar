@@ -93,11 +93,6 @@ class AirspaceWarningListWidget final
   const AbstractAirspace *selected_airspace;
 
   /**
-   * Current action airspace.
-   */
-  const AbstractAirspace *focused_airspace;
-
-  /**
    * Airspace repetitive warning sound interval counter.
    */
   unsigned sound_interval_counter;
@@ -105,7 +100,7 @@ class AirspaceWarningListWidget final
 public:
   AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw)
     :airspace_warnings(aw),
-     selected_airspace(nullptr), focused_airspace(nullptr),
+     selected_airspace(nullptr),
      sound_interval_counter(1)
   {}
 
@@ -180,9 +175,7 @@ static bool auto_close = true;
 const AbstractAirspace *
 AirspaceWarningListWidget::GetSelectedAirspace() const
 {
-  return HasPointer() || focused_airspace == NULL
-    ? selected_airspace
-    : focused_airspace;
+  return selected_airspace;
 }
 
 void
@@ -256,11 +249,7 @@ AirspaceWarningListWidget::Hide()
 void
 AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i)
 {
-  if (!HasPointer())
-    /* on platforms without a pointing device (e.g. ALTAIR), allow
-       "focusing" an airspace by pressing enter */
-    focused_airspace = selected_airspace;
-  else if (selected_airspace != NULL)
+  if (selected_airspace != nullptr)
     dlgAirspaceDetails(*selected_airspace, &airspace_warnings);
 }
 
@@ -590,6 +579,7 @@ dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &_warnings,
   dialog2.CreateFull(UIGlobals::GetMainWindow(), _("Airspace Warnings"), list);
   list->CreateButtons(dialog2);
   dialog2.AddButton(_("Close"), mrOK);
+  dialog2.EnableCursorSelection();
 
   dialog = &dialog2;
 

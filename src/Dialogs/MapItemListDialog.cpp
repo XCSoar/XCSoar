@@ -276,6 +276,7 @@ ShowMapItemListDialog(const MapItemList &list,
   dialog.CreateFull(UIGlobals::GetMainWindow(),
                     _("Map elements at this location"), &widget);
   widget.CreateButtons(dialog);
+  dialog.EnableCursorSelection();
 
   int result = dialog.ShowModal() == mrOK
     ? (int)widget.GetCursorIndex()

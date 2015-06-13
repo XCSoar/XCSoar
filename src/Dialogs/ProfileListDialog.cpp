@@ -384,6 +384,7 @@ ProfileListDialog()
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Profiles"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
+  dialog.EnableCursorSelection();
 
   dialog.ShowModal();
   dialog.StealWidget();
@@ -398,6 +399,7 @@ SelectProfileDialog(tstring::const_pointer selected_path)
   dialog.AddButton(_("Select"), mrOK);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.EnableCursorSelection();
 
   if (selected_path != nullptr) {
     dialog.PrepareWidget();
