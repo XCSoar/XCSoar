@@ -28,7 +28,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Form/Form.hpp"
 #include "Form/Panel.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"

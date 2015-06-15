@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Frame.hpp"

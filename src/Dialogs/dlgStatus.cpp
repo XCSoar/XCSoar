@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
 #include "UIGlobals.hpp"
@@ -35,12 +33,10 @@ Copyright_License {
 #include "StatusPanels/RulesStatusPanel.hpp"
 #include "StatusPanels/SystemStatusPanel.hpp"
 #include "StatusPanels/TimesStatusPanel.hpp"
-#include "Screen/Layout.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
 static int status_page = 0;
 

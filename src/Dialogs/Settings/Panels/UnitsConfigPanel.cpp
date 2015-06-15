@@ -25,7 +25,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "Form/DataField/Base.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef SAFETYFACTORSCONFIGPANEL_HPP
 #define SAFETYFACTORSCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-
 class Widget;
 
 Widget *

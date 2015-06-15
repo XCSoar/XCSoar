@@ -27,7 +27,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "GlideComputerConfigPanel.hpp"
 #include "Language/Language.hpp"
-#include "Form/Form.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"

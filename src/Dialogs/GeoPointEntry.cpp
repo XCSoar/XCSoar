@@ -25,17 +25,11 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/FixedWindowWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
-#include "Form/Form.hpp"
 #include "Form/DigitEntry.hpp"
 #include "Form/LambdaActionListener.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Geo/GeoPoint.hpp"
-
-enum {
-  CLEAR = 100,
-};
 
 bool
 GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,

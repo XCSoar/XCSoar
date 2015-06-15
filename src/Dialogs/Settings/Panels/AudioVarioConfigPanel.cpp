@@ -25,7 +25,6 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Form/Form.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"

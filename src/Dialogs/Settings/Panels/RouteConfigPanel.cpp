@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/Form.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"

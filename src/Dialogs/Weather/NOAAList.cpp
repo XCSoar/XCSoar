@@ -33,7 +33,6 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
