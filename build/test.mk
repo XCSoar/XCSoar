@@ -2358,6 +2358,7 @@ RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOUR
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
 
 RUN_PROFILE_LIST_DIALOG_SOURCES = \
+	$(SRC)/Renderer/TextRowRenderer.cpp \
 	$(SRC)/Dialogs/ProfileListDialog.cpp \
 	$(SRC)/Dialogs/ProfilePasswordDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
