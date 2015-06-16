@@ -31,11 +31,23 @@ Copyright_License {
  * dialog.
  */
 class AirspaceWarningMonitor {
+  friend class AirspaceWarningWidget;
+  class AirspaceWarningWidget *widget;
+
   Validity last;
 
 public:
+  AirspaceWarningMonitor():widget(nullptr) {}
+
   void Reset();
   void Check();
+
+private:
+  void HideWidget();
+
+  void Schedule() {
+    last.Clear();
+  }
 };
 
 #endif

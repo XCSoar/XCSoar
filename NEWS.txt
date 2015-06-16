@@ -37,6 +37,7 @@ Version 6.8 - not yet released
   - download data files from site configuration
   - remove support for custom status files
   - merge airspace warning buttons "ACK Warn" and "ACK Space" (#1086)
+  - show airspace warning at bottom (#1378, #2628, #3275)
   - profile manager
   - password-protected profiles (#851)
   - checklist remembers last opened list (#3110)
