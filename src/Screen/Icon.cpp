@@ -37,14 +37,34 @@ Copyright_License {
 #endif
 #endif
 
+#include <algorithm>
+
+gcc_const
+static unsigned
+IconStretchFixed10(unsigned source_dpi)
+{
+  return Layout::VptScale(72 * 1024) / source_dpi;
+}
+
+gcc_const
+static unsigned
+IconStretchInteger(unsigned source_dpi)
+{
+  return std::max((IconStretchFixed10(source_dpi) + 512) >> 10,
+                  1u);
+}
+
 void
 MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 {
   if (Layout::ScaleEnabled()) {
-    if (big_id.IsDefined())
-      bitmap.Load(big_id);
-    else
-      bitmap.LoadStretch(id, Layout::FastScale(1));
+    unsigned source_dpi = 96;
+    if (big_id.IsDefined()) {
+      id = big_id;
+      source_dpi = 192;
+    }
+
+    bitmap.LoadStretch(id, IconStretchInteger(source_dpi));
   } else
     bitmap.Load(id);
 
