@@ -42,8 +42,10 @@ class DownloadUtil extends BroadcastReceiver {
   }
 
   static void Deinitialise(Context context) {
-    context.unregisterReceiver(instance);
-    instance = null;
+    if (instance != null) {
+      context.unregisterReceiver(instance);
+      instance = null;
+    }
   }
 
   /**
