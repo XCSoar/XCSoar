@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/GridView.hpp"
-#include "Screen/Layout.hpp"
 
 void
 GridView::Create(ContainerWindow &parent, const DialogLook &look,
