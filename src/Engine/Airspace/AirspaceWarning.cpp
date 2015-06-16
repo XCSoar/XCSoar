@@ -129,8 +129,9 @@ AirspaceWarning::IsAckExpired() const
   case WARNING_INSIDE:
     return !acktime_inside;
   };
+
   // unknown, should never get here
-  assert(1);
+  gcc_unreachable();
   return true;
 }
 
