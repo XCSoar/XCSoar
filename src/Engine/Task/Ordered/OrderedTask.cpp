@@ -159,10 +159,12 @@ OrderedTask::UpdateGeometry()
   if (!HasStart())
     return;
 
+  auto &first = *task_points.front();
+
   taskpoint_start->ScanActive(*task_points[active_task_point]);
 
   // scan location of task points
-  GeoBounds bounds(task_points[0]->GetLocation());
+  GeoBounds bounds(first.GetLocation());
   for (const auto *tp : task_points)
     tp->ScanBounds(bounds);
 
@@ -310,7 +312,7 @@ OrderedTask::RunDijsktraMax()
     if (taskpoint_start != nullptr) {
       start_radius = GetCylinderRadiusOrMinusOne(*taskpoint_start);
       if (positive(start_radius))
-        dijkstra.SetBoundary(0, task_points[0]->GetNominalPoints());
+        dijkstra.SetBoundary(0, task_points.front()->GetNominalPoints());
     }
 
     if (taskpoint_finish != nullptr) {
@@ -721,13 +723,13 @@ OrderedTask::ScanStartFinish()
     return false;
   }
 
-  taskpoint_start = task_points[0]->GetType() == TaskPointType::START
-    ? (StartPoint *)task_points[0]
+  taskpoint_start = task_points.front()->GetType() == TaskPointType::START
+    ? (StartPoint *)task_points.front()
     : nullptr;
 
   taskpoint_finish = task_points.size() > 1 &&
-    task_points[task_points.size() - 1]->GetType() == TaskPointType::FINISH
-    ? (FinishPoint *)task_points[task_points.size() - 1]
+    task_points.back()->GetType() == TaskPointType::FINISH
+    ? (FinishPoint *)task_points.back()
     : nullptr;
 
   return HasStart() && HasFinish();
@@ -789,7 +791,7 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
       (/* is the new_tp allowed in this context? */
        !new_tp.IsPredecessorAllowed() ||
        /* can a tp be appended after the last one? */
-       !task_points[task_points.size() - 1]->IsSuccessorAllowed()))
+       !task_points.back()->IsSuccessorAllowed()))
     return false;
 
   const unsigned i = task_points.size();
@@ -1100,7 +1102,7 @@ OrderedTask::CalcGradient(const AircraftState &state) const
     return fixed(0);
 
   // Calculate gradient to the last turnpoint of the remaining task
-  return (state.altitude - task_points[task_points.size() - 1]->GetElevation()) / distance;
+  return (state.altitude - task_points.back()->GetElevation()) / distance;
 }
 
 static void
@@ -1524,9 +1526,9 @@ OrderedTask::SelectOptionalStart(unsigned pos)
   assert(pos< optional_start_points.size());
 
   // put task start onto end
-  optional_start_points.push_back(task_points[0]);
+  optional_start_points.push_back(task_points.front());
   // set task start from top optional item
-  task_points[0] = optional_start_points[pos];
+  task_points.front() = optional_start_points[pos];
   // remove top optional item from list
   optional_start_points.erase(optional_start_points.begin()+pos);
 
