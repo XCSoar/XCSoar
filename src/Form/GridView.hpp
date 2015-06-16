@@ -51,7 +51,8 @@ private:
 
 public:
   void Create(ContainerWindow &parent, const DialogLook &look,
-              const PixelRect &rc, const WindowStyle style=WindowStyle());
+              const PixelRect &rc, const WindowStyle style,
+              unsigned column_width, unsigned row_height);
 
   void AddItem(Window &w) {
     items.push_back(&w);

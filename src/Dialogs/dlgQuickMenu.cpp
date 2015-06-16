@@ -135,7 +135,14 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  grid_view.Create(parent, dialog_look, rc, grid_view_style);
+  const Font &font = *dialog_look.button.font;
+  const unsigned column_width = Layout::Scale(78);
+  const unsigned row_height =
+    std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
+             Layout::GetMaximumControlHeight());
+
+  grid_view.Create(parent, dialog_look, rc, grid_view_style,
+                   column_width, row_height);
   SetWindow(&grid_view);
 
   WindowStyle buttonStyle;
