@@ -7,6 +7,8 @@ Version 6.7.9 - not yet released
   - fix comments in TNP files
 * user interface
   - improved font renderer
+* Kobo
+  - enable crash dumps in XCSoarData/crash/
 
 Version 6.7.8 - 2015-05-22
 * user interface
