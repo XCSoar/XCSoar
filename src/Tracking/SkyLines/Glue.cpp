@@ -103,6 +103,7 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
       if (queue->IsEmpty()) {
         delete queue;
         queue = nullptr;
+        break;
       }
     }
 
