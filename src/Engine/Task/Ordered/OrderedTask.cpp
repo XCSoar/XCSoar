@@ -156,7 +156,7 @@ OrderedTask::UpdateGeometry()
 {
   UpdateStatsGeometry();
 
-  if (!HasStart() || !task_points[0])
+  if (!HasStart())
     return;
 
   taskpoint_start->ScanActive(*task_points[active_task_point]);
@@ -674,10 +674,6 @@ OrderedTask::SetNeighbours(unsigned position)
   OrderedTaskPoint* prev = nullptr;
   OrderedTaskPoint* next = nullptr;
 
-  if (!task_points[position])
-    // nothing to do if this is deleted
-    return;
-
   if (position >= task_points.size())
     // nothing to do
     return;
@@ -708,13 +704,11 @@ OrderedTask::GetAATTaskPoint(unsigned TPindex) const
  if (TPindex > task_points.size() - 1) {
    return nullptr;
  }
- if (task_points[TPindex]) {
-    if (task_points[TPindex]->GetType() == TaskPointType::AAT)
-      return (AATPoint*) task_points[TPindex];
-    else
-      return (AATPoint*)nullptr;
- }
- return nullptr;
+
+ if (task_points[TPindex]->GetType() == TaskPointType::AAT)
+   return (AATPoint *)task_points[TPindex];
+ else
+   return (AATPoint *)nullptr;
 }
 
 bool
@@ -1027,8 +1021,6 @@ OrderedTask::AllowIncrementalBoundaryStats(const AircraftState &aircraft) const
     /* disabled for the start point */
     return false;
 
-  assert(task_points[active_task_point]);
-
   if (task_points[active_task_point]->IsBoundaryScored())
     return true;
 
@@ -1250,7 +1242,7 @@ OrderedTask::HasTargets() const
 GeoPoint
 OrderedTask::GetTaskCenter() const
 {
-  if (!HasStart() || !task_points[0])
+  if (!HasStart())
     return GeoPoint::Invalid();
 
   return task_projection.GetCenter();
@@ -1259,7 +1251,7 @@ OrderedTask::GetTaskCenter() const
 fixed
 OrderedTask::GetTaskRadius() const
 {
-  if (!HasStart() || !task_points[0])
+  if (!HasStart())
     return fixed(0);
 
   return task_projection.ApproxRadius();
