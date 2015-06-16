@@ -53,11 +53,11 @@ public:
   void DrawButton(Canvas &canvas, const PixelRect &rc,
                   bool enabled, bool focused, bool pressed) const override;
 
-private:
   void InvalidateBuffer() {
     size.cx = 0;
   }
 
+private:
   bool IsBufferValid(PixelSize new_size) const {
     return
 #ifdef ENABLE_OPENGL

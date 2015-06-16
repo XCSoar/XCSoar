@@ -179,6 +179,8 @@ TaskManagerDialog::InvalidateTaskView()
   UpdateCaption();
 
   auto &task_view = (ButtonWidget &)GetExtra();
+  auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
+  renderer.InvalidateBuffer();
   task_view.Invalidate();
 }
 
