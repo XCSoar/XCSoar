@@ -156,12 +156,12 @@ OrderedTask::UpdateGeometry()
 {
   UpdateStatsGeometry();
 
-  if (!HasStart())
+  if (task_points.empty())
     return;
 
   auto &first = *task_points.front();
 
-  taskpoint_start->ScanActive(*task_points[active_task_point]);
+  first.ScanActive(*task_points[active_task_point]);
 
   // scan location of task points
   GeoBounds bounds(first.GetLocation());
@@ -189,7 +189,7 @@ OrderedTask::UpdateGeometry()
 
   // update stats so data can be used during task construction
   /// @todo this should only be done if not flying! (currently done with has_entered)
-  if (!taskpoint_start->HasEntered()) {
+  if (!task_points.front()->HasEntered()) {
     UpdateStatsDistances(GeoPoint::Invalid(), true);
     if (HasFinish()) {
       /// @todo: call AbstractTask::update stats methods with fake state
@@ -205,10 +205,10 @@ OrderedTask::UpdateGeometry()
 fixed
 OrderedTask::ScanTotalStartTime()
 {
-  if (taskpoint_start)
-    return taskpoint_start->GetEnteredState().time;
+  if (task_points.empty())
+    return fixed(-1);
 
-  return fixed(-1);
+  return task_points.front()->GetEnteredState().time;
 }
 
 fixed
@@ -278,7 +278,7 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
     last_min_location = location;
   }
 
-  return taskpoint_start->ScanDistanceMin();
+  return task_points.front()->ScanDistanceMin();
 }
 
 inline bool
@@ -309,18 +309,15 @@ OrderedTask::RunDijsktraMax()
        nominal points (i.e. the cylinder's center), and later replace
        it with a point on the cylinder boundary */
 
-    if (taskpoint_start != nullptr) {
-      start_radius = GetCylinderRadiusOrMinusOne(*taskpoint_start);
-      if (positive(start_radius))
-        dijkstra.SetBoundary(0, task_points.front()->GetNominalPoints());
-    }
+    const auto &start = *task_points.front();
+    start_radius = GetCylinderRadiusOrMinusOne(start);
+    if (positive(start_radius))
+      dijkstra.SetBoundary(0, start.GetNominalPoints());
 
-    if (taskpoint_finish != nullptr) {
-      finish_radius = GetCylinderRadiusOrMinusOne(*taskpoint_finish);
-      if (positive(finish_radius))
-        dijkstra.SetBoundary(task_size - 1,
-                             task_points[task_size - 1]->GetNominalPoints());
-    }
+    const auto &finish = *task_points.back();
+    finish_radius = GetCylinderRadiusOrMinusOne(finish);
+    if (positive(finish_radius))
+      dijkstra.SetBoundary(task_size - 1, finish.GetNominalPoints());
   }
 
   if (!dijkstra_max->DistanceMax())
@@ -332,7 +329,7 @@ OrderedTask::RunDijsktraMax()
     if (i == 0 && positive(start_radius)) {
       /* subtract start cylinder radius by finding the intersection
          with the cylinder boundary */
-      const GeoPoint &current = taskpoint_start->GetLocation();
+      const GeoPoint &current = task_points.front()->GetLocation();
       const GeoPoint &neighbour = dijkstra.GetSolution(i + 1).GetLocation();
       GeoPoint gp = current.IntermediatePoint(neighbour, start_radius);
       solution = SearchPoint(gp, task_projection);
@@ -341,7 +338,7 @@ OrderedTask::RunDijsktraMax()
     if (i == task_size - 1 && positive(finish_radius)) {
       /* subtract finish cylinder radius by finding the intersection
          with the cylinder boundary */
-      const GeoPoint &current = taskpoint_finish->GetLocation();
+      const GeoPoint &current = task_points.back()->GetLocation();
       const GeoPoint &neighbour = dijkstra.GetSolution(i - 1).GetLocation();
       GeoPoint gp = current.IntermediatePoint(neighbour, finish_radius);
       solution = SearchPoint(gp, task_projection);
@@ -365,16 +362,13 @@ OrderedTask::ScanDistanceMax()
 
   RunDijsktraMax();
 
-  return taskpoint_start->ScanDistanceMax();
+  return task_points.front()->ScanDistanceMax();
 }
 
 void
 OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
                                 fixed *dmin, fixed *dmax)
 {
-  if (!taskpoint_start)
-    return;
-
   if (force)
     *dmax = ScanDistanceMax();
 
@@ -384,22 +378,20 @@ OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
 fixed
 OrderedTask::ScanDistanceNominal()
 {
-  if (taskpoint_start == nullptr)
+  if (task_points.empty())
     return fixed(0);
 
-  fixed d = taskpoint_start->ScanDistanceNominal();
+  const auto &start = *task_points.front();
+  fixed d = start.ScanDistanceNominal();
 
-  if (subtract_start_finish_cylinder_radius) {
-    fixed radius = GetCylinderRadiusOrMinusOne(*taskpoint_start);
-    if (positive(radius) && radius < d)
-      d -= radius;
+  fixed radius = GetCylinderRadiusOrMinusOne(start);
+  if (positive(radius) && radius < d)
+    d -= radius;
 
-    if (taskpoint_finish != nullptr) {
-      radius = GetCylinderRadiusOrMinusOne(*taskpoint_finish);
-      if (positive(radius) && radius < d)
-        d -= radius;
-    }
-  }
+  const auto &finish = *task_points.back();
+  radius = GetCylinderRadiusOrMinusOne(finish);
+  if (positive(radius) && radius < d)
+    d -= radius;
 
   return d;
 }
@@ -407,37 +399,33 @@ OrderedTask::ScanDistanceNominal()
 fixed
 OrderedTask::ScanDistanceScored(const GeoPoint &location)
 {
-  if (taskpoint_start)
-    return taskpoint_start->ScanDistanceScored(location);
-
-  return fixed(0);
+  return task_points.empty()
+    ? fixed(0)
+    : task_points.front()->ScanDistanceScored(location);
 }
 
 fixed
 OrderedTask::ScanDistanceRemaining(const GeoPoint &location)
 {
-  if (taskpoint_start)
-    return taskpoint_start->ScanDistanceRemaining(location);
-
-  return fixed(0);
+  return task_points.empty()
+    ? fixed(0)
+    : task_points.front()->ScanDistanceRemaining(location);
 }
 
 fixed
 OrderedTask::ScanDistanceTravelled(const GeoPoint &location)
 {
-  if (taskpoint_start)
-    return taskpoint_start->ScanDistanceTravelled(location);
-
-  return fixed(0);
+  return task_points.empty()
+    ? fixed(0)
+    : task_points.front()->ScanDistanceTravelled(location);
 }
 
 fixed
 OrderedTask::ScanDistancePlanned()
 {
-  if (taskpoint_start)
-    return taskpoint_start->ScanDistancePlanned();
-
-  return fixed(0);
+  return task_points.empty()
+    ? fixed(0)
+    : task_points.front()->ScanDistancePlanned();
 }
 
 unsigned
@@ -1245,19 +1233,17 @@ OrderedTask::HasTargets() const
 GeoPoint
 OrderedTask::GetTaskCenter() const
 {
-  if (!HasStart())
-    return GeoPoint::Invalid();
-
-  return task_projection.GetCenter();
+  return task_points.empty()
+    ? GeoPoint::Invalid()
+    : task_projection.GetCenter();
 }
 
 fixed
 OrderedTask::GetTaskRadius() const
 {
-  if (!HasStart())
-    return fixed(0);
-
-  return task_projection.ApproxRadius();
+  return task_points.empty()
+    ? fixed(0)
+    : task_projection.ApproxRadius();
 }
 
 OrderedTask*
