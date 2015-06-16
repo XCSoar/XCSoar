@@ -792,15 +792,16 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
        !task_points[task_points.size() - 1]->IsSuccessorAllowed()))
     return false;
 
+  const unsigned i = task_points.size();
   task_points.push_back(new_tp.Clone(task_behaviour, ordered_settings));
-  if (task_points.size() > 1)
-    SetNeighbours(task_points.size() - 2);
+  if (i > 0)
+    SetNeighbours(i - 1);
   else {
     // give it a value when we have one tp so it is not uninitialised
     last_min_location = new_tp.GetLocation();
   }
 
-  SetNeighbours(task_points.size() - 1);
+  SetNeighbours(i);
   return true;
 }
 
