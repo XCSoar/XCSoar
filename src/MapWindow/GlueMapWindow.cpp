@@ -34,7 +34,6 @@ Copyright_License {
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
    topography_thread(nullptr),
-   logger(nullptr),
 #ifdef ENABLE_OPENGL
    data_timer(*this),
 #endif

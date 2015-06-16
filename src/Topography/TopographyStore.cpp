@@ -59,8 +59,6 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { "town", IDB_TOWN, IDB_TOWN_HD },
   { "mark", IDB_MARK, IDB_MARK_HD },
   { "terrainwarning", IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD },
-  { "logger", IDB_LOGGER, IDB_LOGGER_HD },
-  { "loggeroff", IDB_LOGGEROFF, IDB_LOGGEROFF_HD },
   { "airport_reachable", IDB_AIRPORT_REACHABLE, IDB_AIRPORT_REACHABLE_HD },
   { "airport_unreachable",
     IDB_AIRPORT_UNREACHABLE, IDB_AIRPORT_UNREACHABLE_HD },

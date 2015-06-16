@@ -26,7 +26,6 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
-#include "Logger/Logger.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
@@ -181,14 +180,6 @@ void
 GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 {
   PixelScalar offset = 0;
-
-  // draw logger status
-  if (logger != nullptr && logger->IsLoggerActive()) {
-    bool flip = (Basic().date_time_utc.second % 2) == 0;
-    const MaskedIcon &icon = flip ? look.logger_on_icon : look.logger_off_icon;
-    offset = icon.GetSize().cx;
-    icon.Draw(canvas, rc.right - offset, rc.bottom - icon.GetSize().cy);
-  }
 
   // draw flight mode
   const MaskedIcon *bmp;

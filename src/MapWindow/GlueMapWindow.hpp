@@ -38,7 +38,6 @@ Copyright_License {
 
 struct Look;
 struct GestureLook;
-class Logger;
 class TopographyThread;
 
 class OffsetHistory
@@ -63,8 +62,6 @@ class GlueMapWindow : public MapWindow {
   };
 
   TopographyThread *topography_thread;
-
-  const Logger *logger;
 
 #ifdef ENABLE_OPENGL
   /**
@@ -160,10 +157,6 @@ public:
   virtual ~GlueMapWindow();
 
   void SetTopography(TopographyStore *_topography);
-
-  void SetLogger(Logger *_logger) {
-    logger = _logger;
-  }
 
   void SetMapSettings(const MapSettings &new_value);
   void SetComputerSettings(const ComputerSettings &new_value);

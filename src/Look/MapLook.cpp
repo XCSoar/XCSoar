@@ -81,9 +81,6 @@ MapLook::Initialise(const MapSettings &settings,
   map_scale_left_icon.LoadResource(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
   map_scale_right_icon.LoadResource(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
 
-  logger_on_icon.LoadResource(IDB_LOGGER, IDB_LOGGER_HD);
-  logger_off_icon.LoadResource(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
-
   cruise_mode_icon.LoadResource(IDB_CRUISE, IDB_CRUISE_HD, false);
   climb_mode_icon.LoadResource(IDB_CLIMB, IDB_CLIMB_HD, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);

@@ -412,7 +412,6 @@ Startup()
     map_window->SetTerrain(terrain);
     map_window->SetWeather(rasp);
     map_window->SetMarks(protected_marks);
-    map_window->SetLogger(logger);
 
 #ifdef HAVE_NOAA
     map_window->SetNOAAStore(noaa_store);

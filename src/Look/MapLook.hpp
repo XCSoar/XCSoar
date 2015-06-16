@@ -88,7 +88,6 @@ struct MapLook {
   MaskedIcon map_scale_left_icon;
   MaskedIcon map_scale_right_icon;
 
-  MaskedIcon logger_on_icon, logger_off_icon;
   MaskedIcon cruise_mode_icon, climb_mode_icon, final_glide_mode_icon, abort_mode_icon;
   MaskedIcon waiting_for_fix_icon, no_gps_icon;
 
