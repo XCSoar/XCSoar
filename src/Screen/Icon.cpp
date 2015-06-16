@@ -46,6 +46,8 @@ IconStretchFixed10(unsigned source_dpi)
   return Layout::VptScale(72 * 1024) / source_dpi;
 }
 
+#ifndef ENABLE_OPENGL
+
 gcc_const
 static unsigned
 IconStretchInteger(unsigned source_dpi)
@@ -54,9 +56,15 @@ IconStretchInteger(unsigned source_dpi)
                   1u);
 }
 
+#endif
+
 void
 MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 {
+#ifdef ENABLE_OPENGL
+  unsigned stretch = 1024;
+#endif
+
   if (Layout::ScaleEnabled()) {
     unsigned source_dpi = 96;
     if (big_id.IsDefined()) {
@@ -64,14 +72,24 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
       source_dpi = 192;
     }
 
+#ifdef ENABLE_OPENGL
+    stretch = IconStretchFixed10(source_dpi);
+    bitmap.Load(id);
+    bitmap.EnableInterpolation();
+#else
     bitmap.LoadStretch(id, IconStretchInteger(source_dpi));
+#endif
   } else
     bitmap.Load(id);
 
   assert(IsDefined());
 
   size = bitmap.GetSize();
-#ifndef ENABLE_OPENGL
+#ifdef ENABLE_OPENGL
+  /* let the GPU stretch on-the-fly */
+  size.cx = size.cx * stretch >> 10;
+  size.cy = size.cy * stretch >> 10;
+#else
   /* left half is mask, right half is icon */
   size.cx /= 2;
 #endif
@@ -102,7 +120,8 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(x - origin.x, y - origin.y);
+  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
+               0, 0, texture.GetWidth(), texture.GetHeight());
 #else
 
 #ifdef USE_GDI
@@ -155,8 +174,8 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(rc.left + offsetx, rc.top + offsety);
-
+  texture.Draw(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+               0, 0, texture.GetWidth(), texture.GetHeight());
 #else
   if (inverse) // black background
     canvas.CopyNotOr(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,

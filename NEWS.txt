@@ -47,6 +47,7 @@ Version 6.8 - not yet released
   - use /dev/input/event* on Raspberry Pi and Cubieboard (#3179)
   - support mouse wheel on Raspberry Pi and Cubieboard
   - scale touchscreen coordinates to screen size
+  - bigger icons on high-dpi screens (#2795, #3267, #3397, #3540)
   - improved keypad support (#3281)
   - new translation: Simplified Chinese
 * tracking
