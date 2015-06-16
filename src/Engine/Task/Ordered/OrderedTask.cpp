@@ -785,10 +785,10 @@ OrderedTask::RemoveOptionalStart(const unsigned position)
 bool
 OrderedTask::Append(const OrderedTaskPoint &new_tp)
 {
-  if (/* is the new_tp allowed in this context? */
-      (!task_points.empty() && !new_tp.IsPredecessorAllowed()) ||
-      /* can a tp be appended after the last one? */
-      (task_points.size() >= 1 &&
+  if (!task_points.empty() &&
+      (/* is the new_tp allowed in this context? */
+       !new_tp.IsPredecessorAllowed() ||
+       /* can a tp be appended after the last one? */
        !task_points[task_points.size() - 1]->IsSuccessorAllowed()))
     return false;
 
