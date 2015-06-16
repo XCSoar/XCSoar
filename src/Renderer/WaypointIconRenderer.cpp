@@ -30,6 +30,8 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Util/Macros.hpp"
 
+#include <algorithm>
+
 gcc_pure
 static const MaskedIcon &
 GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
@@ -139,8 +141,8 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   }
 
   // SW rendering of landables
-  fixed scale = fixed(Layout::SmallScale(settings.landable_rendering_scale)) /
-    150;
+  fixed scale = fixed(std::max(Layout::VptScale(settings.landable_rendering_scale),
+                               110u)) / 177;
   fixed radius = 10 * scale;
 
   canvas.SelectBlackPen();
