@@ -51,6 +51,8 @@ class QuestionWidget : public SolidWidget {
 public:
   QuestionWidget(const TCHAR *_message, ActionListener &_listener);
 
+  void SetMessage(const TCHAR *_message);
+
   void AddButton(const TCHAR *caption, int id) {
     buttons.append({caption, id});
   }

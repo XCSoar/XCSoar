@@ -33,6 +33,14 @@ QuestionWidget::QuestionWidget(const TCHAR *_message,
    message(_message), listener(_listener) {}
 
 void
+QuestionWidget::SetMessage(const TCHAR *_message)
+{
+  auto &bpw = (ButtonPanelWidget &)GetWidget();
+  auto &tw = (TextWidget &)bpw.GetWidget();
+  tw.SetText(_message);
+}
+
+void
 QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   SolidWidget::Prepare(parent, rc);
