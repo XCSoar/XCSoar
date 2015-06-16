@@ -93,17 +93,13 @@ public class XCSoar extends Activity {
 
     IOIOHelper.onCreateContext(this);
 
-    try {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR)
+      // Bluetooth suppoert was added in Android 2.0 "Eclair"
       BluetoothHelper.Initialize(this);
-    } catch (VerifyError e) {
-      // Android < 2.0 doesn't have Bluetooth support
-    }
 
-    try {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+      // the DownloadManager was added in Android 2.3 "Gingerbread"
       DownloadUtil.Initialise(this);
-    } catch (VerifyError e) {
-      // Android < 2.3 doesn't have the DownloadManager
-    }
 
     // fullscreen mode
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -248,11 +244,8 @@ public class XCSoar extends Activity {
 
     unregisterReceiver(batteryReceiver);
 
-    try {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
       DownloadUtil.Deinitialise(this);
-    } catch (VerifyError e) {
-      // Android < 2.3 doesn't have the DownloadManager
-    }
 
     if (nativeView != null) {
       nativeView.exitApp();
