@@ -89,7 +89,7 @@ static void
 DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
                    const Angle angle, fixed radius, fixed width)
 {
-  if (radius <= fixed(0))
+  if (!positive(radius))
     return;
 
   const auto sc = angle.SinCos();
@@ -140,8 +140,8 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 
   // SW rendering of landables
   fixed scale = fixed(Layout::SmallScale(settings.landable_rendering_scale)) /
-                fixed(150);
-  fixed radius = fixed(10) * scale;
+    150;
+  fixed radius = 10 * scale;
 
   canvas.SelectBlackPen();
 
