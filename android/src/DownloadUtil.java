@@ -164,6 +164,10 @@ class DownloadUtil extends BroadcastReceiver {
                             DownloadManager.STATUS_SUCCESSFUL);
     Cursor c = dm.query(query);
 
+    if (c == null)
+      /* should not happen, but has been observed on Android 2.3 */
+      return;
+
     if (!c.moveToFirst())
       return;
 
