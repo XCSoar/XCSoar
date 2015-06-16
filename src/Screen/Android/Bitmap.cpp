@@ -90,6 +90,11 @@ Bitmap::MakeTexture()
     return false;
 
   texture = new GLTexture(result[0], result[1], result[2], result[3], result[4]);
+  if (interpolation) {
+    texture->Bind();
+    texture->EnableInterpolation();
+  }
+
   return true;
 }
 
