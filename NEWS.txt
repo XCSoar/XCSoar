@@ -59,6 +59,7 @@ Version 6.8 - not yet released
   - support IOIO-OTG with the Android device in USB host mode
   - support IOIO over Bluetooth
   - support Bluetooth LE
+  - timeout for the HTTP client (e.g. LiveTrack24)
 * Kobo
   - menu button
   - add UI allowing the start of external scripts to KoboMenu (#3194)
