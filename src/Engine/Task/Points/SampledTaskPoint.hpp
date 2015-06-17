@@ -153,6 +153,8 @@ public:
    * Retrieve boundary points polygon
    */
   const SearchPointVector &GetBoundaryPoints() const {
+    assert(!boundary_points.empty());
+
     return boundary_points;
   }
 

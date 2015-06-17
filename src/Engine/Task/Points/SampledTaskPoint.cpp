@@ -110,6 +110,8 @@ SampledTaskPoint::Reset()
 const SearchPointVector &
 SampledTaskPoint::GetSearchPoints() const
 {
+  assert(!boundary_points.empty());
+
   if (HasSampled())
     return sampled_points;
 
