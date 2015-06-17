@@ -146,7 +146,12 @@ ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
   assert(n > 0);
 
   const unsigned total_width = rc.right - rc.left;
-  const unsigned row_height = Layout::GetMaximumControlHeight();
+  const unsigned total_height = rc.bottom - rc.top;
+  const unsigned max_row_height = Layout::GetMaximumControlHeight();
+  const unsigned row_height = max_row_height < total_height / 2
+    ? max_row_height
+    : std::max(Layout::GetMinimumControlHeight(),
+               total_height / 2);
   const unsigned width = total_width / n;
   assert(width > 0);
 
