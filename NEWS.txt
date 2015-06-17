@@ -6,6 +6,8 @@ Version 6.7.9 - not yet released
   - fix comments in TNP files
 * user interface
   - improved font renderer
+* Android
+  - timeout for the HTTP client (e.g. LiveTrack24)
 * Kobo
   - enable crash dumps in XCSoarData/crash/
 
