@@ -165,6 +165,12 @@ public:
   }
 
   /**
+   * Acknowledge an airspace warning or airspace inside (depending on
+   * the state).
+   */
+  void Acknowledge();
+
+  /**
    * Acknowledge an airspace warning
    *
    * @param set Whether to set or cancel acknowledgement

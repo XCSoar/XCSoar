@@ -208,6 +208,12 @@ public:
   }
 
   /**
+   * Acknowledge an airspace warning or airspace inside (depending on
+   * the state).
+   */
+  void Acknowledge(const AbstractAirspace &airspace);
+
+  /**
    * Acknowledge an airspace warning
    *
    * @param airspace The airspace subject

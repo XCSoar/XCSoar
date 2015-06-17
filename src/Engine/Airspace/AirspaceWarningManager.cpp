@@ -424,6 +424,14 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
   return found;
 }
 
+void
+AirspaceWarningManager::Acknowledge(const AbstractAirspace &airspace)
+{
+  auto *w = GetWarningPtr(airspace);
+  if (w != nullptr)
+    w->Acknowledge();
+}
+
 void 
 AirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace& airspace,
                                             const bool set)

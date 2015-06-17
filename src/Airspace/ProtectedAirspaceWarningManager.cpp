@@ -82,3 +82,10 @@ ProtectedAirspaceWarningManager::AcknowledgeInside(const AbstractAirspace &airsp
   ExclusiveLease lease(*this);
   lease->AcknowledgeInside(airspace, set);
 }
+
+void
+ProtectedAirspaceWarningManager::Acknowledge(const AbstractAirspace &airspace)
+{
+  ExclusiveLease lease(*this);
+  lease->Acknowledge(airspace);
+}

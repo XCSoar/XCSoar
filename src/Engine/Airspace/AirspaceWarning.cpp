@@ -136,6 +136,15 @@ AirspaceWarning::IsAckExpired() const
 }
 
 void
+AirspaceWarning::Acknowledge()
+{
+  if (state == WARNING_INSIDE)
+    acktime_inside = null_acktime;
+  else if (state != WARNING_CLEAR)
+    acktime_warning = null_acktime;
+}
+
+void
 AirspaceWarning::AcknowledgeInside(const bool set)
 {
   if (set)

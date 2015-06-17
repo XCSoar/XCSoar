@@ -49,6 +49,7 @@ public:
                           const bool set=true);
   void AcknowledgeInside(const AbstractAirspace &airspace,
                          const bool set=true);
+  void Acknowledge(const AbstractAirspace &airspace);
 
   gcc_pure
   bool IsEmpty() const;
