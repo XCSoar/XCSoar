@@ -26,10 +26,9 @@
 
 SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
                                    const bool b_scored)
-  :boundary_scored(b_scored), past(false)
+  :boundary_scored(b_scored), past(false),
+   nominal_points(1, location)
 {
-  nominal_points.push_back(location);
-
 #ifndef NDEBUG
   search_max.SetInvalid();
   search_min.SetInvalid();
