@@ -80,7 +80,10 @@ dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &warnings,
 {
 }
 
-void dlgTaskManagerShowModal() {}
+void
+dlgStatusShowModal(int page)
+{
+}
 
 void
 ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
