@@ -40,6 +40,11 @@ namespace CommandLine {
   static constexpr bool full_screen = false;
 #endif
 
+#if defined(__linux__) && !defined(ANDROID)
+#define HAVE_CMDLINE_REPLAY
+  extern const char *replay_path;
+#endif
+
 /**
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string

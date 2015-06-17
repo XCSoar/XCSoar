@@ -47,6 +47,10 @@ namespace CommandLine {
 #ifdef HAVE_CMDLINE_FULLSCREEN
   bool full_screen = false;
 #endif
+
+#ifdef HAVE_CMDLINE_REPLAY
+  const char *replay_path;
+#endif
 }
 
 void
@@ -75,6 +79,10 @@ CommandLine::Parse(Args &args)
       s += 10;
       PathName convert(s);
       SetPrimaryDataPath(convert);
+#ifdef HAVE_CMDLINE_REPLAY
+    } else if (StringIsEqual(s, "-replay=", 8)) {
+      replay_path = s + 8;
+#endif
 #ifdef SIMULATOR_AVAILABLE
     } else if (StringIsEqual(s, "-simulator")) {
       global_simulator_flag = true;

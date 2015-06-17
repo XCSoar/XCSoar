@@ -332,6 +332,12 @@ Startup()
 
   replay = new Replay(logger, *protected_task_manager);
 
+#ifdef HAVE_CMDLINE_REPLAY
+  if (CommandLine::replay_path != nullptr)
+    replay->Start(CommandLine::replay_path);
+#endif
+
+
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(fixed(0));
   gp.SetMC(computer_settings.task.safety_mc);
