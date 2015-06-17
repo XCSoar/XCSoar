@@ -1,6 +1,7 @@
 Version 6.7.9 - not yet released
 * user interface
   - fix crash in task editor
+  - fix crash while panning the map
 * data files
   - fix comments in TNP files
 * user interface

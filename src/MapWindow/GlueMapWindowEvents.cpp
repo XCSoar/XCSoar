@@ -307,6 +307,9 @@ GlueMapWindow::OnMultiTouchDown()
 
   /* start panning on MultiTouch event */
 
+  if (!visible_projection.IsValid())
+    return false;
+
   drag_mode = DRAG_MULTI_TOUCH_PAN;
   drag_projection = visible_projection;
   follow_mode = FOLLOW_PAN;
