@@ -33,9 +33,9 @@ class GeoBounds;
 
 class SearchPointVector: public std::vector<SearchPoint> {
 public:
-  SearchPointVector() = default;
-  SearchPointVector(const_iterator begin, const_iterator end)
-    :std::vector<SearchPoint>(begin, end) {}
+  template<typename... Args>
+  SearchPointVector(Args&&... args)
+    :std::vector<SearchPoint>(std::forward<Args>(args)...) {}
 
   bool PruneInterior();
 
