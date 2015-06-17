@@ -72,17 +72,15 @@ class AirspaceWarningListWidget final
   : public ListWidget, private ActionListener, private Timer {
 
   enum Buttons {
-    ACK_WARN,
-    ACK_INSIDE,
+    ACK,
     ACK_DAY,
     ENABLE,
   };
 
   ProtectedAirspaceWarningManager &airspace_warnings;
 
-  Button *ack_warn_button;
+  Button *ack_button;
   Button *ack_day_button;
-  Button *ack_space_button;
   Button *enable_button;
 
   TrivialArray<WarningItem, 64u> warning_list;
@@ -105,11 +103,8 @@ public:
   {}
 
   void CreateButtons(WidgetDialog &buttons) {
-    ack_warn_button = buttons.AddButton(_("ACK Warn"), *this, ACK_WARN);
+    ack_button = buttons.AddButton(_("ACK"), *this, ACK);
     buttons.AddAltairButtonKey('6');
-
-    ack_space_button = buttons.AddButton(_("ACK Space"), *this, ACK_INSIDE);
-    buttons.AddAltairButtonKey('7');
 
     ack_day_button = buttons.AddButton(_("ACK Day"), *this, ACK_DAY);
     buttons.AddAltairButtonKey('8');
@@ -128,8 +123,7 @@ public:
   gcc_pure
   bool HasWarning() const;
 
-  void AckInside();
-  void AckWarning();
+  void Ack();
   void AckDay();
   void Enable();
 
@@ -183,26 +177,23 @@ AirspaceWarningListWidget::UpdateButtons()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace == NULL) {
-    ack_warn_button->SetVisible(false);
+    ack_button->SetVisible(false);
     ack_day_button->SetVisible(false);
-    ack_space_button->SetVisible(false);
     enable_button->SetVisible(false);
     return;
   }
 
-  bool ack_expired, ack_day, inside;
+  bool ack_expired, ack_day;
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     const AirspaceWarning &warning = lease->GetWarning(*airspace);
     ack_expired = warning.IsAckExpired();
     ack_day = warning.GetAckDay();
-    inside = warning.GetWarningState() == AirspaceWarning::WARNING_INSIDE;
   }
 
-  ack_warn_button->SetVisible(ack_expired && !inside);
+  ack_button->SetVisible(ack_expired);
   ack_day_button->SetVisible(!ack_day);
-  ack_space_button->SetVisible(ack_expired && inside);
   enable_button->SetVisible(!ack_expired);
 }
 
@@ -280,22 +271,11 @@ AutoHide()
 }
 
 void
-AirspaceWarningListWidget::AckInside()
+AirspaceWarningListWidget::Ack()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings.AcknowledgeInside(*airspace, true);
-    UpdateList();
-    AutoHide();
-  }
-}
-
-void
-AirspaceWarningListWidget::AckWarning()
-{
-  const AbstractAirspace *airspace = GetSelectedAirspace();
-  if (airspace != NULL) {
-    airspace_warnings.AcknowledgeWarning(*airspace, true);
+    airspace_warnings.Acknowledge(*airspace);
     UpdateList();
     AutoHide();
   }
@@ -477,12 +457,8 @@ void
 AirspaceWarningListWidget::OnAction(int id)
 {
   switch (id) {
-  case ACK_WARN:
-    AckWarning();
-    break;
-
-  case ACK_INSIDE:
-    AckInside();
+  case ACK:
+    Ack();
     break;
 
   case ACK_DAY:
