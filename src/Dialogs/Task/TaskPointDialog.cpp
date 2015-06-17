@@ -496,6 +496,7 @@ TaskPointWidget::OnRemoveClicked()
     return;
 
   ordered_task.ClearName();
+  ordered_task.UpdateGeometry();
   task_modified = true;
   dialog.SetModalResult(mrCancel);
 }
@@ -521,6 +522,7 @@ TaskPointWidget::OnRelocateClicked()
 
   ordered_task.GetFactory().Relocate(active_index, *wp);
   ordered_task.ClearName();
+  ordered_task.UpdateGeometry();
   task_modified = true;
   RefreshView();
 }
@@ -530,6 +532,7 @@ TaskPointWidget::OnTypeClicked()
 {
   if (dlgTaskPointType(ordered_task, active_index)) {
     ordered_task.ClearName();
+    ordered_task.UpdateGeometry();
     task_modified = true;
     RefreshView();
   }
@@ -564,6 +567,7 @@ TaskPointWidget::OnOptionalStartsClicked()
 {
   if (dlgTaskOptionalStarts(ordered_task)) {
     ordered_task.ClearName();
+    ordered_task.UpdateGeometry();
     task_modified = true;
     RefreshView();
   }
@@ -592,9 +596,5 @@ dlgTaskPointShowModal(OrderedTask &task,
   dialog.StealWidget();
 
   bool task_modified = widget.IsModified();
-  if (task_modified) {
-    task.ClearName();
-    task.UpdateGeometry();
-  }
   return task_modified;
 }
