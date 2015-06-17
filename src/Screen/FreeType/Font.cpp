@@ -296,6 +296,14 @@ Font::TextSize(const TCHAR *text) const
 }
 
 static void
+MixLine(uint8_t *dest, const uint8_t *src, size_t n)
+{
+  for (size_t i = 0; i != n; ++i)
+    /* bit-wise "OR" should be good enough for kerning */
+    dest[i] = dest[i] | src[i];
+}
+
+static void
 RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
             const FT_Bitmap &bitmap, int x, int y)
 {
@@ -330,8 +338,7 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
   buffer += unsigned(y) * buffer_width + unsigned(x);
   for (const uint8_t *end = src + height * pitch;
        src != end; src += pitch, buffer += buffer_width)
-    // TODO: mix with previous character?
-    std::copy_n(src, width, buffer);
+    MixLine(buffer, src, width);
 }
 
 static void
