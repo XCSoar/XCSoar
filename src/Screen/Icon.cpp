@@ -43,7 +43,10 @@ gcc_const
 static unsigned
 IconStretchFixed10(unsigned source_dpi)
 {
-  return Layout::VptScale(72 * 1024) / source_dpi;
+  /* the icons were designed for PDAs at short eye distance; the 3/2
+     factor reverses the 2/3 factor applied by Layout::Initialize()
+     for small screens */
+  return Layout::VptScale(72 * 1024 * 3 / 2) / source_dpi;
 }
 
 #ifndef ENABLE_OPENGL
