@@ -41,7 +41,6 @@ private:
   fixed min_distance;
   const FlatProjection &proj;
   const RoutePolars &rpolar;
-  const GeoPoint origin;
   AIVResult nearest;
 
 public:
@@ -52,7 +51,6 @@ public:
     min_distance(-1),
     proj(_proj),
     rpolar(_rpolar),
-    origin(proj.Unproject(_e.first)),
     nearest((const AbstractAirspace *)nullptr, _e.first) {}
 
   void Visit(const AbstractAirspace &as) override {
