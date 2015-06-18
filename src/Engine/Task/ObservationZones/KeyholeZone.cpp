@@ -43,7 +43,7 @@ KeyholeZone::GetBoundary() const
   boundary.GenerateArcExcluding(GetReference(), small_radius,
                                 GetEndRadial(), GetStartRadial());
 
-  return std::move(boundary);
+  return boundary;
 }
 
 fixed
