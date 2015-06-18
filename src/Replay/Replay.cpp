@@ -162,6 +162,8 @@ Replay::Update()
       if (next_data.time_available) {
         if (negative(virtual_time)) {
           virtual_time = next_data.time;
+          if (!negative(fast_forward))
+            fast_forward += virtual_time;
           clock.Update();
           break;
         }
@@ -194,6 +196,8 @@ Replay::Update()
 
     if (negative(virtual_time)) {
       virtual_time = cli->GetMaxTime();
+      if (!negative(fast_forward))
+        fast_forward += virtual_time;
       clock.Update();
     }
 

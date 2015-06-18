@@ -57,7 +57,10 @@ class Replay final
 
   /**
    * If this value is not negative, then we're in fast-forward mode:
-   * replay is going as quickly as possible
+   * replay is going as quickly as possible.  This value denotes the
+   * time stamp when we will stop going fast-forward.  If
+   * #virtual_time is negative, then this is the duration, and
+   * #virtual_time will be added as soon as it is known.
    */
   fixed fast_forward;
 
@@ -114,8 +117,12 @@ public:
    * time as quickly as possible.
    */
   void FastForward(fixed delta_s) {
-    if (IsActive() && !negative(virtual_time))
-      fast_forward = virtual_time + delta_s;
+    if (!IsActive())
+      return;
+
+    fast_forward = delta_s;
+    if (!negative(virtual_time))
+      fast_forward += virtual_time;
   }
 
 private:
