@@ -60,7 +60,7 @@ IgcReplay::ReadPoint(IGCFix &fix, NMEAInfo &basic)
 {
   char *buffer;
 
-  while ((buffer = reader->ReadLine()) != NULL) {
+  while ((buffer = reader->ReadLine()) != nullptr) {
     if (ScanBuffer(buffer, fix, basic))
       return true;
   }

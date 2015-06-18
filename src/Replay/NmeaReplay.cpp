@@ -34,13 +34,13 @@
 NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
   :reader(_reader),
    parser(new NMEAParser()),
-   device(NULL)
+   device(nullptr)
 {
   parser->SetReal(false);
 
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
-  assert(driver != NULL);
-  if (driver->CreateOnPort != NULL) {
+  assert(driver != nullptr);
+  if (driver->CreateOnPort != nullptr) {
     DeviceConfig config;
     config.Clear();
     device = driver->CreateOnPort(config, port);
@@ -61,8 +61,8 @@ NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 {
   data.clock = clock.NextClock(data.time_available ? data.time : fixed(-1));
 
-  if ((device != NULL && device->ParseNMEA(line, data)) ||
-      (parser != NULL && parser->ParseLine(line, data))) {
+  if ((device != nullptr && device->ParseNMEA(line, data)) ||
+      (parser != nullptr && parser->ParseLine(line, data))) {
     data.gps.replay = true;
     data.alive.Update(data.clock);
 
@@ -76,7 +76,7 @@ NmeaReplay::ReadUntilRMC(NMEAInfo &data)
 {
   char *buffer;
 
-  while ((buffer = reader->ReadLine()) != NULL) {
+  while ((buffer = reader->ReadLine()) != nullptr) {
     ParseLine(buffer, data);
 
     if ((StringLength(buffer) >= 6 &&
