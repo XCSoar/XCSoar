@@ -43,6 +43,7 @@ static const char *const port_type_strings[] = {
   "droidsoar_v2",
   "nunchuck",
   "i2c_baro",
+  "ioio_baro",
   "ioio_voltage",
   "auto",
   "internal",
@@ -192,6 +193,9 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   map.Get(buffer, config.k6bt);
 
+  MakeDeviceSettingName(buffer, "Port", n, "PressureType");
+  GetEnum(buffer, config.press_type);
+
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
   map.Get(buffer, config.i2c_bus);
 
@@ -273,6 +277,9 @@ Profile::SetDeviceConfig(ProfileMap &map,
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   map.Set(buffer, config.k6bt);
+
+  MakeDeviceSettingName(buffer, "Port", n, "PressureType");
+  SetEnum(buffer, config.press_type);
 
   MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
   map.Set(buffer, config.i2c_bus);

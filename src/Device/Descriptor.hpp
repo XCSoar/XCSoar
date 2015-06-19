@@ -55,6 +55,7 @@ struct DeviceRegister;
 class InternalSensors;
 class BMP085Device;
 class I2CbaroDevice;
+class BaroDevice;
 class NunchuckDevice;
 class VoltageDevice;
 class RecordedFlightList;
@@ -140,6 +141,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
 #ifdef ANDROID
   BMP085Device *droidsoar_v2;
   I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
+  BaroDevice *baro[3]; // static, pitot, tek, dynamic; in any order
   NunchuckDevice *nunchuck;
   VoltageDevice *voltage;
 #endif
@@ -251,6 +253,18 @@ public:
   void EnableDumpTemporarily(unsigned duration_ms);
 
   /**
+   * @see BaroDevice::IsCalibrating()
+   */
+  gcc_pure
+  bool IsCalibrating() const;
+  bool IsCalibrable() const;
+
+  /**
+   * @see BaroDevice::Calibrate()
+   */
+  void Calibrate(fixed value);
+
+  /**
    * Wrapper for Driver::HasTimeout().  This method can't be inline
    * because the Driver struct is incomplete at this point.
    */
@@ -300,6 +314,7 @@ private:
   bool OpenDroidSoarV2();
 
   bool OpenI2Cbaro();
+  bool OpenBaro();
 
   bool OpenNunchuck();
 

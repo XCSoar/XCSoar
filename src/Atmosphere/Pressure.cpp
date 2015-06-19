@@ -28,6 +28,13 @@ Copyright_License {
 #define k2 fixed(8.417286e-5)
 #define inv_k2 fixed(1.0 / 8.417286e-5)
 
+void
+AtmosphericPressure::Adjust(const fixed factor,
+                            const fixed offset)
+{
+  value = value * factor + offset;
+}
+
 AtmosphericPressure
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 {
