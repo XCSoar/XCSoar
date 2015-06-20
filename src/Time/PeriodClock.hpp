@@ -67,7 +67,7 @@ protected:
   }
 
 public:
-  bool IsDefined() const {
+  constexpr bool IsDefined() const {
     return last != 0;
   }
 
