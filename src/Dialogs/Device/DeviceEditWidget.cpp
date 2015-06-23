@@ -58,7 +58,7 @@ enum ControlIndex {
   Port, BaudRate, BulkBaudRate,
   IP_ADDRESS,
   TCPPort,
-  I2CBus, I2CAddr, PressureUsage, Driver,
+  I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
   SyncFromDevice, SyncToDevice,
   K6Bt,
 };
@@ -572,6 +572,22 @@ GetPortType(const DataField &df)
   return (DeviceConfig::PortType)(port >> 16);
 }
 
+gcc_pure
+static bool
+CanPassThrough(const DataField &df)
+{
+  const TCHAR *driver_name = df.GetAsString();
+  if (driver_name == nullptr)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == nullptr)
+    return false;
+
+  return driver->HasPassThrough();
+}
+
+
 void
 DeviceEditWidget::UpdateVisibilities()
 {
@@ -594,6 +610,13 @@ DeviceEditWidget::UpdateVisibilities()
                 type != DeviceConfig::PortType::NUNCHUCK);
   SetRowAvailable(PressureUsage, DeviceConfig::IsPressureSensor(type));
   SetRowVisible(Driver, DeviceConfig::UsesDriver(type));
+
+  SetRowVisible(UseSecondDriver, DeviceConfig::UsesDriver(type)
+                && CanPassThrough(GetDataField(Driver)));
+  SetRowVisible(SecondDriver, DeviceConfig::UsesDriver(type)
+                && CanPassThrough(GetDataField(Driver))
+                && GetValueBoolean(UseSecondDriver));
+
   SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
                 CanReceiveSettings(GetDataField(Driver)));
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
@@ -665,6 +688,21 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   driver_df->Set(config.driver_name);
 
   Add(_("Driver"), NULL, driver_df);
+
+  // for a passthrough device, offer additional driver
+  AddBoolean(_("Passthrough device"),
+             _("This option lets you configure if this device has a passed "
+               " through device connected."),
+             config.use_second_device, this);
+
+  DataFieldEnum *driver2_df = new DataFieldEnum(this);
+  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != nullptr; i++)
+    driver2_df->addEnumText(driver->name, driver->display_name);
+
+  driver2_df->Sort(1);
+  driver2_df->Set(config.driver2_name);
+
+  Add(_("Second Driver"), nullptr, driver2_df);
 
   AddBoolean(_("Sync. from device"),
              _("This option lets you configure if XCSoar should use settings "
@@ -789,6 +827,12 @@ DeviceEditWidget::Save(bool &_changed)
 
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
+
+    if (CanPassThrough(GetDataField(Driver))) {
+      changed |= SaveValue(UseSecondDriver, config.use_second_device);
+      changed |= SaveValue(SecondDriver, config.driver2_name.buffer(),
+                           config.driver2_name.CAPACITY);
+    }
   }
 
   if (CommonInterface::Basic().sensor_calibration_available)
@@ -802,7 +846,7 @@ void
 DeviceEditWidget::OnModified(DataField &df)
 {
   if (IsDataField(Port, df) || IsDataField(Driver, df) ||
-      IsDataField(K6Bt, df))
+      IsDataField(UseSecondDriver, df) || IsDataField(K6Bt, df))
     UpdateVisibilities();
 
   if (listener != NULL)

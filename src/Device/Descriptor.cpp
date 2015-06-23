@@ -103,7 +103,7 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index,
    port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
-   driver(nullptr), device(nullptr),
+   driver(nullptr), device(nullptr), second_device(nullptr),
 #ifdef HAVE_INTERNAL_GPS
    internal_sensors(nullptr),
 #endif
@@ -133,8 +133,15 @@ DeviceDescriptor::SetConfig(const DeviceConfig &_config)
   if (config.UsesDriver()) {
     driver = FindDriverByName(config.driver_name);
     assert(driver != nullptr);
-  } else
+    second_driver = nullptr;
+    if (driver->HasPassThrough() && config.use_second_device){
+      second_driver = FindDriverByName(config.driver2_name);
+      assert(second_driver != nullptr);
+    }
+  } else{
     driver = nullptr;
+    second_driver = nullptr;
+  }
 }
 
 void
@@ -226,6 +233,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 #endif
   assert(port == nullptr);
   assert(device == nullptr);
+  assert(second_device == nullptr);
   assert(driver != nullptr);
   assert(!ticker);
   assert(!IsBorrowed());
@@ -253,6 +261,9 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 
     const ScopeLock protect(mutex);
     device = new_device;
+
+    if (driver->HasPassThrough() && config.use_second_device)
+      second_device = second_driver->CreateOnPort(config, *port);
   } else
     port->StartRxThread();
 
@@ -263,6 +274,8 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
     port = nullptr;
     delete device;
     device = nullptr;
+    delete second_device;
+    second_device = nullptr;
     return false;
   }
 
@@ -447,6 +460,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(InMainThread());
   assert(port == nullptr);
   assert(device == nullptr);
+  assert(second_device == nullptr);
   assert(!ticker);
   assert(!IsBorrowed());
 
@@ -506,6 +520,9 @@ DeviceDescriptor::Close()
   }
 
   delete old_device;
+
+  delete second_device;
+  second_device = nullptr;
 
   Port *old_port = port;
   port = nullptr;
@@ -961,12 +978,20 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   assert(driver != nullptr);
   assert(device != nullptr);
 
-  /* enable the "muxed FLARM" hack? */
-  const bool flarm = device_blackboard->IsFLARM(index) &&
-    !IsDriver(_T("FLARM"));
+  // explicitly set passthrough device? Use it...
+  if (driver->HasPassThrough() && second_device != nullptr) {
+    // set the primary device to passthrough
+    device->EnablePassThrough(env);
+    return second_device != nullptr &&
+      second_device->Declare(declaration, home, env);
+  } else {
+    /* enable the "muxed FLARM" hack? */
+    const bool flarm = device_blackboard->IsFLARM(index) &&
+      !IsDriver(_T("FLARM"));
 
-  return DoDeclare(declaration, *port, *driver, device, flarm,
-                   home, env);
+    return DoDeclare(declaration, *port, *driver, device, flarm,
+                     home, env);
+  }
 }
 
 bool
@@ -979,10 +1004,20 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
   assert(device != nullptr);
 
   StaticString<60> text;
-  text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
-  env.SetText(text);
 
-  return device->ReadFlightList(flight_list, env);
+  if (driver->HasPassThrough() && second_device != nullptr) {
+    text.Format(_T("%s: %s."), _("Reading flight list"),
+                second_driver->display_name);
+    env.SetText(text);
+
+    device->EnablePassThrough(env);
+    return second_device->ReadFlightList(flight_list, env);
+  } else {
+    text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
+    env.SetText(text);
+
+    return device->ReadFlightList(flight_list, env);
+  }
 }
 
 bool
@@ -999,10 +1034,22 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   StaticString<60> text;
-  text.Format(_T("%s: %s."), _("Downloading flight log"), driver->display_name);
-  env.SetText(text);
 
-  return device->DownloadFlight(flight, path, env);
+
+  if (driver->HasPassThrough() && (second_device != nullptr)) {
+    text.Format(_T("%s: %s."), _("Downloading flight log"),
+                second_driver->display_name);
+    env.SetText(text);
+
+    device->EnablePassThrough(env);
+    return second_device->DownloadFlight(flight, path, env);
+  } else {
+    text.Format(_T("%s: %s."), _("Downloading flight log"),
+                driver->display_name);
+    env.SetText(text);
+
+    return device->DownloadFlight(flight, path, env);
+  }
 }
 
 void

@@ -177,6 +177,12 @@ struct DeviceConfig {
   StaticString<32> driver_name;
 
   /**
+   * useflag and Name of the second driver for passed through device.
+   */
+  bool use_second_device;
+  StaticString<32> driver2_name;
+
+  /**
    * The IP address of the peer to connect to, including the port
    * number.  Used for #TCP_CLIENT.
    */

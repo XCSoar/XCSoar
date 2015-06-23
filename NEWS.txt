@@ -11,6 +11,7 @@ Version 6.8 - not yet released
   - ATR833: new driver
   - Volkslogger: support DAeC keyhole declaration
   - added TCP port 2000 to portlist (part of #3326)
+  - support LXNAV V7 pass-through mode (#1913, #2808, #2919)
 * calculations
   - wave assistant
   - use maximum speed configured in plane setup as limit for calculations

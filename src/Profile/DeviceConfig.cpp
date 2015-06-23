@@ -206,6 +206,12 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
   map.Get(buffer, config.sensor_factor);
+
+  MakeDeviceSettingName(buffer, "Port", n, "UseSecondDevice");
+  map.Get(buffer, config.use_second_device);
+
+  MakeDeviceSettingName(buffer, "Port", n, "SecondDevice");
+  map.Get(buffer, config.driver2_name);
 }
 
 static const char *
@@ -296,4 +302,10 @@ Profile::SetDeviceConfig(ProfileMap &map,
   if (CommonInterface::Basic().sensor_calibration_available)
     factor = CommonInterface::Basic().sensor_calibration_factor;
   map.Set(buffer, factor);
+
+  MakeDeviceSettingName(buffer, "Port", n, "UseSecondDevice");
+  map.Set(buffer, config.use_second_device);
+
+  MakeDeviceSettingName(buffer, "Port", n, "SecondDevice");
+  map.Set(buffer, config.driver2_name);
 }

@@ -129,6 +129,17 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
    */
   Device *device;
 
+  /**
+   * The second device driver for a passed through device.
+   */
+  const DeviceRegister *second_driver;
+
+  /**
+   * An instance of the passed through driver, if available.
+   */
+  Device *second_device;
+
+
 #ifdef HAVE_INTERNAL_GPS
   /**
    * A pointer to the Java object managing all Android sensors (GPS,
