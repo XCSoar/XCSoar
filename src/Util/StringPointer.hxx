@@ -48,6 +48,10 @@ public:
 	constexpr StringPointer(const_pointer _value)
 		:value(_value) {}
 
+	/**
+	 * Check if this is a "nulled" instance.  A "nulled" instance
+	 * must not be used.
+	 */
 	constexpr bool IsNull() const {
 		return value == nullptr;
 	}
