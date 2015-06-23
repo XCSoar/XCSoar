@@ -36,6 +36,7 @@
 template<typename T=char>
 class StringPointer {
 public:
+	typedef T value_type;
 	typedef T *pointer;
 	typedef const T *const_pointer;
 

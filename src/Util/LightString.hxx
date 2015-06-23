@@ -42,6 +42,7 @@
 template<typename T=char>
 class LightString : public StringPointer<T> {
 public:
+	typedef typename StringPointer<T>::value_type value_type;
 	typedef typename StringPointer<T>::pointer pointer;
 	typedef typename StringPointer<T>::const_pointer const_pointer;
 
