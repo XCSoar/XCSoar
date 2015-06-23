@@ -70,6 +70,12 @@ public:
 		return nullptr;
 	}
 
+	static AllocatedString Empty() {
+		auto p = new value_type[1];
+		p[0] = value_type(0);
+		return Donate(p);
+	}
+
 	AllocatedString &operator=(AllocatedString &&src) {
 		*(StringPointer<T> *)this = std::move(src);
 		std::swap(value, src.value);
