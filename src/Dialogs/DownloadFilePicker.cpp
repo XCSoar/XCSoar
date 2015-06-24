@@ -268,18 +268,17 @@ DownloadFilePickerWidget::RefreshList()
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("repository"));
   FileLineReaderA reader(path);
-  if (reader.error())
-    return;
+  if (!reader.error()) {
+    ParseFileRepository(repository, reader);
 
-  ParseFileRepository(repository, reader);
+    for (auto &i : repository)
+      if (i.type == file_type)
+        items.emplace_back(std::move(i));
 
-  for (auto &i : repository)
-    if (i.type == file_type)
-      items.emplace_back(std::move(i));
-
-  ListControl &list = GetList();
-  list.SetLength(items.size());
-  list.Invalidate();
+    ListControl &list = GetList();
+    list.SetLength(items.size());
+    list.Invalidate();
+  }
 
   UpdateButtons();
 }
