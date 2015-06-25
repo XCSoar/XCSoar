@@ -43,6 +43,7 @@ static constexpr UnitStoreItem Presets[] =
     Unit::KILOMETER_PER_HOUR,
     Unit::KILOMETER_PER_HOUR,
     Unit::HECTOPASCAL,
+    Unit::KG_PER_M2,
   } },
   { N_("British"), {
     Unit::KILOMETER,
@@ -53,6 +54,7 @@ static constexpr UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::KILOMETER_PER_HOUR,
     Unit::MILLIBAR,
+    Unit::KG_PER_M2,
   } },
   { N_("American"), {
     Unit::STATUTE_MILES,
@@ -63,6 +65,7 @@ static constexpr UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::STATUTE_MILES_PER_HOUR,
     Unit::INCH_MERCURY,
+    Unit::LB_PER_FT2,
   } },
   { N_("Australian"), {
     Unit::KILOMETER,
@@ -73,6 +76,7 @@ static constexpr UnitStoreItem Presets[] =
     Unit::KNOTS,
     Unit::KILOMETER_PER_HOUR,
     Unit::HECTOPASCAL,
+    Unit::LB_PER_FT2,
   } }
 };
 

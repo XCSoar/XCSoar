@@ -26,6 +26,7 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Computer/Settings.hpp"
 #include "Units/Units.hpp"
+#include "Units/Group.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Form/DataField/Float.hpp"
@@ -153,7 +154,7 @@ FlightSetupPanel::SetBallast()
   const fixed wl = polar_settings.glide_polar_task.GetWingLoading();
   SetRowVisible(WingLoading, positive(wl));
   if (positive(wl))
-    LoadValue(WingLoading, wl);
+    LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
   if (device_blackboard != NULL) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
@@ -292,7 +293,12 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed(0),
            this);
 
-  AddReadOnly(_("Wing loading"), NULL, _T("%.1f kg/m2"), fixed(0));
+  WndProperty *wing_loading = AddFloat(_("Wing loading"), nullptr,
+                                       _T("%.1f %s"), _T("%.0f"), fixed(0),
+                                       fixed(300), fixed(5),
+                                       false, UnitGroup::WING_LOADING,
+                                       fixed(0));
+  wing_loading->SetReadOnly(true);
 
   AddFloat(_("Bugs"), /* xgettext:no-c-format */
            _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "

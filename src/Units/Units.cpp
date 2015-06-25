@@ -34,12 +34,19 @@ UnitSetting Units::current = {
   Unit::KILOMETER_PER_HOUR,
   Unit::KILOMETER_PER_HOUR,
   Unit::HECTOPASCAL,
+  Unit::KG_PER_M2,
 };
 
 void
 Units::SetConfig(const UnitSetting &new_config)
 {
   current = new_config;
+}
+
+Unit
+Units::GetUserWingLoadingUnit()
+{
+  return current.wing_loading_unit;
 }
 
 Unit

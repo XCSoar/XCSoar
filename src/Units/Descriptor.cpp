@@ -50,6 +50,8 @@ const UnitDescriptor Units::unit_descriptors[] = {
   { _T("mb"), fixed(1), fixed(0) },
   { _T("mmHg"), fixed(0.7500616827041698), fixed(0) },
   { _T("inHg"), fixed(0.0295287441401431), fixed(0) },
+  { _T("kg/m²"), fixed(1), fixed(0) },
+  { _T("lb/ft²"), fixed(0.204816144), fixed(0) },
 };
 
 static_assert(ARRAY_SIZE(Units::unit_descriptors) == (size_t)Unit::COUNT,

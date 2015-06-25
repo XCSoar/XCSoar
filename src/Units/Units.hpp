@@ -46,6 +46,13 @@ namespace Units
   void SetConfig(const UnitSetting &new_config);
 
   /**
+   * Returns the user-specified unit for a wing loading
+   * @return The user-specified unit for a wing loading
+   */
+  gcc_pure
+  Unit GetUserWingLoadingUnit();
+
+  /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */
