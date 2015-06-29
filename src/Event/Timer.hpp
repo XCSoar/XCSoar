@@ -27,7 +27,6 @@ Copyright_License {
 #include <atomic>
 
 #include <assert.h>
-#include <stddef.h>
 
 /**
  * A timer that, once initialized, periodically calls OnTimer() after
