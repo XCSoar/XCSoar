@@ -24,7 +24,8 @@ Copyright_License {
 #include "AllMonitors.hpp"
 #include "Interface.hpp"
 
-AllMonitors::AllMonitors() {
+AllMonitors::AllMonitors()
+  :RateLimiter(500, 25) {
   Reset();
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }

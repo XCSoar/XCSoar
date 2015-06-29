@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ALL_MONITORS_HPP
 
 #include "Blackboard/BlackboardListener.hpp"
+#include "RateLimiter.hpp"
 #include "WindMonitor.hpp"
 #include "AirspaceWarningMonitor.hpp"
 #include "TaskAdvanceMonitor.hpp"
@@ -33,7 +34,7 @@ Copyright_License {
 /**
  * A container that combines all monitor classes.
  */
-class AllMonitors final : private NullBlackboardListener {
+class AllMonitors final : NullBlackboardListener, RateLimiter {
   WindMonitor wind;
   AirspaceWarningMonitor airspace_warnings;
   TaskAdvanceMonitor task_advance;
@@ -60,6 +61,10 @@ public:
 private:
   void OnCalculatedUpdate(const MoreData &basic,
                           const DerivedInfo &calculated) override {
+    RateLimiter::Trigger();
+  }
+
+  void Run() override {
     Check();
   }
 };
