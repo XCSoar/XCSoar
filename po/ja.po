@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-05-29 10:46+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2015-06-14 01:07+0000\n"
+"Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-06-09 09:16+0000\n"
-"X-Generator: Launchpad (build 17549)\n"
+"X-Launchpad-Export-Date: 2015-06-29 10:20+0000\n"
+"X-Generator: Launchpad (build 17578)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -4145,9 +4145,9 @@ msgid "Volume"
 msgstr "音量"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "ルートモード"
+msgstr "出力形式"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -5279,9 +5279,8 @@ msgid "Reference Mass"
 msgstr "設定重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
-#, fuzzy
 msgid "Reference mass of the polar"
-msgstr "重量設定"
+msgstr ""
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5368,16 +5367,15 @@ msgstr "続行"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:52
 msgid "Enter your password"
-msgstr ""
+msgstr "パスワードを入力してください"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:79
-#, fuzzy
 msgid "Wrong password."
-msgstr "パスワード"
+msgstr "パスワードが間違っています"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:94
 msgid "Enter a new password"
-msgstr ""
+msgstr "新しいパスワードを入力してください"
 
 #: src/Dialogs/dlgStatus.cpp:51 src/Dialogs/dlgStatus.cpp:74
 #: Data/Input/default.xci:831 Data/Input/default.xci:1228
@@ -5854,15 +5852,15 @@ msgstr "空域の塗りつぶし　無し"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:86
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "ウエイポイントのラベルは表示しない"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All labels will be displayed."
-msgstr "すべてのウエイポイントのラベルを表示"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -5893,9 +5891,8 @@ msgstr "ラベルの表示"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:158
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr "ウエイポイントのラベル表示選択"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5926,14 +5923,12 @@ msgid "Enable/disable all airspace warnings."
 msgstr "有効/無効　全ての空域の警報"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "警告"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "有効/無効　全ての空域の警報"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6311,24 +6306,23 @@ msgid ""
 msgstr "ファイナルグライド　モードを自動モードで使用するかどうか"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Normal"
-msgstr "サーマル"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Large"
-msgstr "ターゲット"
+msgstr "大"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:101
 #, no-c-format
 msgid "Small"
-msgstr ""
+msgstr "小"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:105
-#, fuzzy
 msgid "Text size"
-msgstr "TC　次レッグ"
+msgstr "文字サイズ"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:111
 msgid "Auto. blank"
@@ -8326,9 +8320,8 @@ msgid "Type of vehicle used."
 msgstr "使用する　飛行体のタイプ"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
-#, fuzzy
 msgid "Vehicle Name"
-msgstr "飛行体タイプ"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Server"
@@ -9853,96 +9846,20 @@ msgstr ""
 msgid "Accelerometer leveled"
 msgstr "アクセラレーター　レベル"
 
-#~ msgid "left %s ago"
-#~ msgstr "%s 前離れた"
-
-#~ msgid "Prefer external wind"
-#~ msgstr "外部風信号"
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "風向情報を受信できるデバイスが接続されている場合　XCSOARの値を上書きする"
-
-#~ msgid "Fonts"
-#~ msgstr "フォント"
-
-#~ msgid "Status message"
-#~ msgstr "メッセージの設定"
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "ステータスメッセージ、サウンドの設定\r\n"
-#~ "機能ごとにサウンドの種類　時間を設定する\r\n"
-#~ "イベントごとに画面に現れ各種情報を表示する"
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting)."
-#~ msgstr "選択されたウエイポイントのラベルを表示"
-
-#~ msgid "Calculator"
-#~ msgstr "計算機"
-
-#~ msgid "Calculator excludes unsaved task changes!"
-#~ msgstr "」保存されていないタスク変更は計算されません！"
-
-#~ msgid "Dialog text"
-#~ msgstr "ダイアログ　テキスト"
-
-#~ msgid "InfoBox titles"
-#~ msgstr "インフォボックスのタイトル"
-
-#~ msgid "InfoBox values"
-#~ msgstr "インフォボックス　数値"
-
-#~ msgid "Topography labels, normal"
-#~ msgstr "普通地勢ラベル"
-
-#~ msgid "Topography labels, important"
-#~ msgstr "重要地勢ラベル"
-
-#~ msgid "Overlay text"
-#~ msgstr "テキスト上書き表示"
-
-#~ msgid "Customize fonts"
-#~ msgstr "フォントのカスタマイズ"
-
-#~ msgid "Font Configuration"
-#~ msgstr "フォント設定"
+#~ msgid "English"
+#~ msgstr "英語"
 
 #~ msgid "Font not found."
 #~ msgstr "フォントが見つかりません。"
-
-#~ msgid "Font face"
-#~ msgstr "画面"
-
-#~ msgid "Height"
-#~ msgstr "高さ"
-
-#~ msgid "Bold"
-#~ msgstr "太字体"
-
-#~ msgid "Italic"
-#~ msgstr "イタリック"
-
-#~ msgid "Edit Font"
-#~ msgstr "フォントの編集"
-
-#~ msgid "Reset"
-#~ msgstr "リセット"
-
-#~ msgid "English"
-#~ msgstr "英語"
 
 #~ msgid "Latitude"
 #~ msgstr "緯度"
 
 #~ msgid "Sunset"
 #~ msgstr "日没"
+
+#~ msgid "Fonts"
+#~ msgstr "フォント"
 
 #~ msgid "Longitude"
 #~ msgstr "経度"
@@ -10038,6 +9955,12 @@ msgstr "アクセラレーター　レベル"
 #~ msgstr ""
 #~ "NMEA信号　チェックが不適当であった場合は無視してデーターをそのまま使う"
 
+#~ msgid ""
+#~ "If enabled, then the wind vector received from external devices overrides "
+#~ "XCSoar's internal wind calculation."
+#~ msgstr ""
+#~ "風向情報を受信できるデバイスが接続されている場合　XCSOARの値を上書きする"
+
 #~ msgid "Wind At Altitude"
 #~ msgstr "この標高の風向風速"
 
@@ -10116,6 +10039,17 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "H GPS"
 #~ msgstr "GPS高度"
 
+#~ msgid "Status message"
+#~ msgstr "メッセージの設定"
+
+#~ msgid ""
+#~ "The status file can be used to define sounds to be played when certain "
+#~ "events occur, and how long various status messages will appear on screen."
+#~ msgstr ""
+#~ "ステータスメッセージ、サウンドの設定\r\n"
+#~ "機能ごとにサウンドの種類　時間を設定する\r\n"
+#~ "イベントごとに画面に現れ各種情報を表示する"
+
 #~ msgid "Dialog size"
 #~ msgstr "ダイアログの大きさ"
 
@@ -10166,6 +10100,17 @@ msgstr "アクセラレーター　レベル"
 #~ "The terrain can be shaded among slopes to indicate either wind direction, "
 #~ "sun position or a fixed shading from north-east."
 #~ msgstr "風または太陽光の影を設定した方向から投影することができる"
+
+#~ msgid "No waypoint labels will be displayed."
+#~ msgstr "ウエイポイントのラベルは表示しない"
+
+#~ msgid "All waypoint labels will be displayed."
+#~ msgstr "すべてのウエイポイントのラベルを表示"
+
+#~ msgid ""
+#~ "Determines what waypoint labels are displayed for each waypoint (space "
+#~ "permitting)."
+#~ msgstr "選択されたウエイポイントのラベルを表示"
 
 #~ msgid ""
 #~ "This is the height above mean sea level reported by the GPS. Touch-screen/"
@@ -10229,6 +10174,12 @@ msgstr "アクセラレーター　レベル"
 
 #~ msgid "Scaled centered"
 #~ msgstr "中央揃え"
+
+#~ msgid "Calculator"
+#~ msgstr "計算機"
+
+#~ msgid "Calculator excludes unsaved task changes!"
+#~ msgstr "」保存されていないタスク変更は計算されません！"
 
 #~ msgid "Delete Error"
 #~ msgstr "削除エラー"
@@ -10315,6 +10266,9 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "Weather parameters"
 #~ msgstr "気象パラメーター"
 
+#~ msgid "Reset"
+#~ msgstr "リセット"
+
 #~ msgid ""
 #~ "Sample Text\n"
 #~ "123"
@@ -10322,8 +10276,14 @@ msgstr "アクセラレーター　レベル"
 #~ "サンプルテキスト\n"
 #~ "１２３"
 
+#~ msgid "Edit Font"
+#~ msgstr "フォントの編集"
+
 #~ msgid "My Sample"
 #~ msgstr "サンプル"
+
+#~ msgid "Height"
+#~ msgstr "高さ"
 
 #~ msgid "V rough air"
 #~ msgstr "乱気流速度"
@@ -10334,12 +10294,21 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "Waypoint Info"
 #~ msgstr "ウエイポイント情報"
 
+#~ msgid "Reference mass"
+#~ msgstr "重量設定"
+
+#~ msgid "Font Configuration"
+#~ msgstr "フォント設定"
+
 #~ msgid ""
 #~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
 #~ "Set to zero if it does not apply."
 #~ msgstr ""
 #~ "XCSOAR　が計算する水バラストの搭載量　１００％　使用しない場合０にセットす"
 #~ "る"
+
+#~ msgid "Topography labels, important"
+#~ msgstr "重要地勢ラベル"
 
 #~ msgid "Dry mass of the glider (pilot + empty mass)."
 #~ msgstr "グライダー乾燥重量（パイロット+機体質量）"
@@ -10354,6 +10323,9 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "Reference weight at which the given polar is valid."
 #~ msgstr "ポーラーカーブ設定重量"
 
+#~ msgid "Customize fonts"
+#~ msgstr "フォントのカスタマイズ"
+
 #~ msgid "InfoBox values, normal"
 #~ msgstr "インフォボックスの数値　通常"
 
@@ -10365,6 +10337,9 @@ msgstr "アクセラレーター　レベル"
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "タスクポイントの見直し"
+
+#~ msgid "Topography labels, normal"
+#~ msgstr "普通地勢ラベル"
 
 #~ msgid "Edit text"
 #~ msgstr "テキストの編集"
@@ -10387,6 +10362,9 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "Friends"
 #~ msgstr "友人"
 
+#~ msgid "InfoBox titles"
+#~ msgstr "インフォボックスのタイトル"
+
 #~ msgid "Calc"
 #~ msgstr "計算"
 
@@ -10399,6 +10377,9 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "Filter..."
 #~ msgstr "フィルター"
 
+#~ msgid "Dialog text"
+#~ msgstr "ダイアログ　テキスト"
+
 #~ msgid "InfoBox values, small"
 #~ msgstr "インフォボックス　小さい"
 
@@ -10408,6 +10389,9 @@ msgstr "アクセラレーター　レベル"
 #~ msgstr ""
 #~ "FLARM\n"
 #~ "非設定"
+
+#~ msgid "Font face"
+#~ msgstr "画面"
 
 #~ msgid "Lookup"
 #~ msgstr "検索"
@@ -10432,6 +10416,9 @@ msgstr "アクセラレーター　レベル"
 
 #~ msgid "Loading of plane profile \"%s\" failed!"
 #~ msgstr "機体情報%s の読み込み失敗！"
+
+#~ msgid "left %s ago"
+#~ msgstr "%s 前離れた"
 
 #~ msgid "TC All"
 #~ msgstr "All TC平均"
@@ -10494,6 +10481,9 @@ msgstr "アクセラレーター　レベル"
 #~ msgid "Unreachable through terrain."
 #~ msgstr "地形越しに到達不能"
 
+#~ msgid "Prefer external wind"
+#~ msgstr "外部風信号"
+
 #~ msgid ""
 #~ "Below this lift threshold the vario will start to play sounds if the "
 #~ "'Deadband' feature is enabled."
@@ -10511,6 +10501,18 @@ msgstr "アクセラレーター　レベル"
 
 #~ msgid "Deadband min. lift"
 #~ msgstr "最低制限空域"
+
+#~ msgid "InfoBox values"
+#~ msgstr "インフォボックス　数値"
+
+#~ msgid "Overlay text"
+#~ msgstr "テキスト上書き表示"
+
+#~ msgid "Bold"
+#~ msgstr "太字体"
+
+#~ msgid "Italic"
+#~ msgstr "イタリック"
 
 #~ msgid "Do you want to activate plane profile \"%s\"?"
 #~ msgstr "\"%s\"の機体を選択しますか"
