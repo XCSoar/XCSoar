@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-05-21 12:41+0000\n"
+"PO-Revision-Date: 2015-06-29 06:58+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-22 17:56+0000\n"
-"X-Generator: Launchpad (build 17514)\n"
+"X-Launchpad-Export-Date: 2015-06-29 10:20+0000\n"
+"X-Generator: Launchpad (build 17578)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -4091,9 +4091,9 @@ msgid "Volume"
 msgstr "음량"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "루트 모드"
+msgstr ""
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -5212,9 +5212,8 @@ msgid "Reference Mass"
 msgstr "설정중량"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
-#, fuzzy
 msgid "Reference mass of the polar"
-msgstr "설정중량"
+msgstr ""
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5300,16 +5299,15 @@ msgstr "계속"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:52
 msgid "Enter your password"
-msgstr ""
+msgstr "비밀번호를 입력하세요"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:79
-#, fuzzy
 msgid "Wrong password."
-msgstr "패스워드"
+msgstr "잘못된 암호입니다."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:94
 msgid "Enter a new password"
-msgstr ""
+msgstr "새 비밀번호 입력"
 
 #: src/Dialogs/dlgStatus.cpp:51 src/Dialogs/dlgStatus.cpp:74
 #: Data/Input/default.xci:831 Data/Input/default.xci:1228
@@ -5784,15 +5782,15 @@ msgstr "공역을 채우지 않습니다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:86
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "웨이포인트 이름 숨기기"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All labels will be displayed."
-msgstr "모든 웨이포인트 이름을 표시합니다."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -5822,9 +5820,8 @@ msgstr "웨이포인트 이름 표시"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:158
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr "웨이포인트 이름을 표시하는 방법을 설정합니다."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5853,14 +5850,12 @@ msgid "Enable/disable all airspace warnings."
 msgstr "모든 공역 경보 켜기/끄기"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "경고"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "모든 공역 경보 켜기/끄기"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6220,24 +6215,23 @@ msgstr ""
 "것을 설정한다."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Normal"
-msgstr "써멀"
+msgstr "보통"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Large"
-msgstr "웨이포인트"
+msgstr "크게"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:101
 #, no-c-format
 msgid "Small"
-msgstr ""
+msgstr "작게"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:105
-#, fuzzy
 msgid "Text size"
-msgstr "포인트써멀"
+msgstr "글자 크기"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:111
 msgid "Auto. blank"
@@ -8216,9 +8210,8 @@ msgid "Type of vehicle used."
 msgstr "사용하는 기체종류를 설정합니다."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
-#, fuzzy
 msgid "Vehicle Name"
-msgstr "기체종류"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Server"
@@ -9717,88 +9710,6 @@ msgstr ""
 msgid "Accelerometer leveled"
 msgstr "엑셀레이터 레벨"
 
-#~ msgid "left %s ago"
-#~ msgstr "%s분전 이동"
-
-#~ msgid "Prefer external wind"
-#~ msgstr "외부풍향/풍속계정보"
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "풍향/풍속을 수신할 수 있는 외부기기가 있을경우 XCSoar에서 불러와서 사용한"
-#~ "다."
-
-#~ msgid "Fonts"
-#~ msgstr "글꼴"
-
-#~ msgid "Status message"
-#~ msgstr "메세지 설정"
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "상태 메세지의 사운드를 설정합니다. 기능별로 사운드의 종류와 시간을 설정 "
-#~ "할 수 있으며, 다양한 이벤트의 화면 표시 시간을 설정 할 수 있습니다."
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting)."
-#~ msgstr "웨이포인트의 이름을 표시하는 설정입니다."
-
-#~ msgid "Calculator"
-#~ msgstr "타스크계산기"
-
-#~ msgid "Calculator excludes unsaved task changes!"
-#~ msgstr "저장하지 않은 타스크는 타스크 계산에서 제외됩니다!"
-
-#~ msgid "Dialog text"
-#~ msgstr "대화"
-
-#~ msgid "InfoBox titles"
-#~ msgstr "정보창 제목"
-
-#~ msgid "InfoBox values"
-#~ msgstr "정보창 내용"
-
-#~ msgid "Topography labels, normal"
-#~ msgstr "지역/장소(보통)"
-
-#~ msgid "Topography labels, important"
-#~ msgstr "지역/장소(중요한)"
-
-#~ msgid "Overlay text"
-#~ msgstr "텍스트"
-
-#~ msgid "Customize fonts"
-#~ msgstr "커스텀 글꼴설정 :"
-
-#~ msgid "Font Configuration"
-#~ msgstr "폰트 설정"
-
-#~ msgid "Font not found."
-#~ msgstr "폰트를 찾을 수 없습니다."
-
-#~ msgid "Font face"
-#~ msgstr "서체"
-
-#~ msgid "Height"
-#~ msgstr "크기"
-
-#~ msgid "Bold"
-#~ msgstr "굵게"
-
-#~ msgid "Italic"
-#~ msgstr "기울임체"
-
-#~ msgid "Edit Font"
-#~ msgstr "서체 편집"
-
-#~ msgid "Reset"
-#~ msgstr "다시설정"
-
 #~ msgid "Height GPS"
 #~ msgstr "GPS 고도"
 
@@ -9874,8 +9785,32 @@ msgstr "엑셀레이터 레벨"
 #~ msgid "Clear current task?"
 #~ msgstr "현재 타스크를 삭제하겠습니까?"
 
+#~ msgid "Edit Font"
+#~ msgstr "서체 편집"
+
 #~ msgid "Sunset"
 #~ msgstr "일몰"
+
+#~ msgid "Fonts"
+#~ msgstr "글꼴"
+
+#~ msgid "InfoBox titles"
+#~ msgstr "정보창 제목"
+
+#~ msgid "Font Configuration"
+#~ msgstr "폰트 설정"
+
+#~ msgid "Font not found."
+#~ msgstr "폰트를 찾을 수 없습니다."
+
+#~ msgid "Font face"
+#~ msgstr "서체"
+
+#~ msgid "Height"
+#~ msgstr "크기"
+
+#~ msgid "Reset"
+#~ msgstr "다시설정"
 
 #~ msgid "Calc"
 #~ msgstr "계산"
@@ -9892,11 +9827,24 @@ msgstr "엑셀레이터 레벨"
 #~ msgid "MANUAL"
 #~ msgstr "수동"
 
+#~ msgid "left %s ago"
+#~ msgstr "%s분전 이동"
+
 #~ msgid "Goto and clear task"
 #~ msgstr "웨이포인트이동, 타스크삭제"
 
 #~ msgid "Unknown error creating task."
 #~ msgstr "타스크제작중 원인미상의 오류발생."
+
+#~ msgid "Prefer external wind"
+#~ msgstr "외부풍향/풍속계정보"
+
+#~ msgid ""
+#~ "If enabled, then the wind vector received from external devices overrides "
+#~ "XCSoar's internal wind calculation."
+#~ msgstr ""
+#~ "풍향/풍속을 수신할 수 있는 외부기기가 있을경우 XCSoar에서 불러와서 사용한"
+#~ "다."
 
 #~ msgid "Replace In Task"
 #~ msgstr "타스크 교체"
@@ -9912,6 +9860,33 @@ msgstr "엑셀레이터 레벨"
 
 #~ msgid "Pan To Waypoint"
 #~ msgstr "웨이포인트 위치보기"
+
+#~ msgid "Status message"
+#~ msgstr "메세지 설정"
+
+#~ msgid ""
+#~ "The status file can be used to define sounds to be played when certain "
+#~ "events occur, and how long various status messages will appear on screen."
+#~ msgstr ""
+#~ "상태 메세지의 사운드를 설정합니다. 기능별로 사운드의 종류와 시간을 설정 "
+#~ "할 수 있으며, 다양한 이벤트의 화면 표시 시간을 설정 할 수 있습니다."
+
+#~ msgid "All waypoint labels will be displayed."
+#~ msgstr "모든 웨이포인트 이름을 표시합니다."
+
+#~ msgid "No waypoint labels will be displayed."
+#~ msgstr "웨이포인트 이름 숨기기"
+
+#~ msgid ""
+#~ "Determines what waypoint labels are displayed for each waypoint (space "
+#~ "permitting)."
+#~ msgstr "웨이포인트의 이름을 표시하는 설정입니다."
+
+#~ msgid "Calculator"
+#~ msgstr "타스크계산기"
+
+#~ msgid "Calculator excludes unsaved task changes!"
+#~ msgstr "저장하지 않은 타스크는 타스크 계산에서 제외됩니다!"
 
 #~ msgid "Audio vario"
 #~ msgstr "바리오소리"
@@ -9963,8 +9938,32 @@ msgstr "엑셀레이터 레벨"
 #~ "'Deadband' feature is enabled."
 #~ msgstr "제한 상승량을 벗어나는 경우 바리오 소리가 경고음을 냅니다."
 
+#~ msgid "Dialog text"
+#~ msgstr "대화"
+
+#~ msgid "Topography labels, normal"
+#~ msgstr "지역/장소(보통)"
+
+#~ msgid "Topography labels, important"
+#~ msgstr "지역/장소(중요한)"
+
+#~ msgid "Customize fonts"
+#~ msgstr "커스텀 글꼴설정 :"
+
 #~ msgid "Waypoint Info"
 #~ msgstr "웨이포인트 정보"
+
+#~ msgid "InfoBox values"
+#~ msgstr "정보창 내용"
+
+#~ msgid "Overlay text"
+#~ msgstr "텍스트"
+
+#~ msgid "Bold"
+#~ msgstr "굵게"
+
+#~ msgid "Italic"
+#~ msgstr "기울임체"
 
 #, fuzzy
 #~ msgid "Landpoint"
