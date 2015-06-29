@@ -24,11 +24,11 @@
 
 GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
                        const GeoPoint &p, const FlatProjection &_projection)
-  :projection(_projection)
+  :projection(_projection),
+   ell(projection.ProjectFloat(f1),
+       projection.ProjectFloat(f2),
+       projection.ProjectFloat(p))
 {
-  ell = FlatEllipse(projection.ProjectFloat(f1),
-                    projection.ProjectFloat(f2),
-                    projection.ProjectFloat(p));
 }
 
 GeoPoint 

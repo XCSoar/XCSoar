@@ -54,20 +54,6 @@ public:
   FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2, const FlatPoint &_ap);
 
   /**
-   * Dummy constructor for zero-sized ellipse
-   *
-   * @return Initialised object
-   */
-  FlatEllipse()
-    :f1(fixed(0), fixed(0)),
-     f2(fixed(0), fixed(0)),
-     ap(fixed(0), fixed(0)),
-     p(fixed(0), fixed(0)),
-     a(fixed(1)), b(fixed(1)),
-     theta(Angle::Zero()),
-     theta_initial(Angle::Zero()) {}
-
-  /**
    * Parametric representation of ellipse
    *
    * @param t Parameter [0,1]
