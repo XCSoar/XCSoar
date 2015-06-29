@@ -41,7 +41,7 @@ public:
                                 unsigned period_ms, unsigned delay_ms)
     :ProxyBlackboardListener(_next),
      RateLimiter(period_ms, delay_ms),
-     basic(NULL), basic2(NULL), calculated(NULL) {}
+     basic(nullptr), basic2(nullptr), calculated(nullptr) {}
 
   using RateLimiter::Cancel;
 
