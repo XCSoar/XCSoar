@@ -85,8 +85,9 @@ public:
    *
    * @return Center point
    */
-  gcc_pure
-  FlatPoint ave() const;
+  constexpr FlatPoint ave() const {
+    return (p1 + p2).Half();
+  }
 
   /**
    * Find angle of this line starting from the x-axis counter-clockwise
@@ -149,11 +150,13 @@ public:
   fixed dot(const FlatLine& that) const;
 
 private:
-  gcc_pure
-  fixed dx() const;
+  constexpr fixed dx() const {
+    return p2.x - p1.x;
+  }
 
-  gcc_pure
-  fixed dy() const;
+  constexpr fixed dy() const {
+    return p2.y - p1.y;
+  }
 
   gcc_pure
   fixed cross() const;

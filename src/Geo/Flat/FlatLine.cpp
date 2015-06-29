@@ -28,24 +28,6 @@ sgn(fixed x, fixed y)
   return negative(x) ? -y : y;
 }
 
-FlatPoint
-FlatLine::ave() const
-{
-  return (p1 + p2).Half();
-}
-
-fixed
-FlatLine::dx() const
-{
-  return p2.x - p1.x;
-}
-
-fixed
-FlatLine::dy() const
-{
-  return p2.y - p1.y;
-}
-
 fixed
 FlatLine::cross() const
 {
