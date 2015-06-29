@@ -22,7 +22,11 @@
 
 #include "FlatLine.hpp"
 
-#define sgn(x,y) (negative(x) ? -y : y)
+static constexpr fixed
+sgn(fixed x, fixed y)
+{
+  return negative(x) ? -y : y;
+}
 
 FlatPoint
 FlatLine::ave() const
