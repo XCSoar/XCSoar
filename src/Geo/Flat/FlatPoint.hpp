@@ -68,20 +68,6 @@ struct FlatPoint : Point2D<fixed>
   void MultiplyY(const fixed a);
 
   /**
-   * Subtract delta from this point
-   *
-   * @param p2 Point to subtract
-   */
-  void Subtract(const FlatPoint &p2);
-
-  /**
-   * Add delta to this point
-   *
-   * @param p2 Point to add
-   */
-  void Add(const FlatPoint &p2);
-
-  /**
    * Rotate point counter-clockwise around origin
    *
    * @param angle Angle (deg) to rotate point counter-clockwise

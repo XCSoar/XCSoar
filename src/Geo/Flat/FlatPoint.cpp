@@ -30,20 +30,6 @@ FlatPoint::MultiplyY(const fixed a)
 }
 
 void
-FlatPoint::Subtract(const FlatPoint &p2)
-{
-  x -= p2.x;
-  y -= p2.y;
-}
-
-void
-FlatPoint::Add(const FlatPoint &p2)
-{
-  x += p2.x;
-  y += p2.y;
-}
-
-void
 FlatPoint::Rotate(const Angle angle)
 {
   const fixed _x = x;

@@ -70,15 +70,15 @@ FlatLine::dsq() const
 void
 FlatLine::sub(const FlatPoint&p)
 {
-  p1.Subtract(p);
-  p2.Subtract(p);
+  p1 -= p;
+  p2 -= p;
 }
 
 void
 FlatLine::add(const FlatPoint&p)
 {
-  p1.Add(p);
-  p2.Add(p);
+  p1 += p;
+  p2 += p;
 }
 
 Angle

@@ -46,12 +46,12 @@ int main(int argc, char **argv)
   ok1(equals(p2.y, 4));
 
   // test sub()
-  p2.Subtract(p1);
+  p2 -= p1;
   ok1(equals(p2.x, 0));
   ok1(equals(p2.y, 3));
 
   // test add()
-  p2.Add(p3);
+  p2 += p3;
   ok1(equals(p2.x, 3));
   ok1(equals(p2.y, 13));
 
