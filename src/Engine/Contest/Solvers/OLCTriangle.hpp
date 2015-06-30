@@ -132,8 +132,6 @@ private:
    * closed track loops
    */
   struct TracePointNode {
-    typedef int value_type;
-
     const TracePoint *point;
     unsigned index;
 
