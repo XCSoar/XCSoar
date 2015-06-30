@@ -96,18 +96,18 @@ private:
   struct ClosingPairs {
     std::map<unsigned, unsigned> closing_pairs;
 
-    bool insert(const ClosingPair &p) {
-      auto found = findRange(p);
+    bool Insert(const ClosingPair &p) {
+      auto found = FindRange(p);
       if (found.first == 0 && found.second == 0) {
         closing_pairs[p.first] = p.second;
-        removeRange(p.first + 1, p.second);
+        RemoveRange(p.first + 1, p.second);
         return true;
       } else {
         return false;
       }
     }
-    
-    ClosingPair findRange(const ClosingPair &p) const {
+
+    ClosingPair FindRange(const ClosingPair &p) const {
       for (auto it = closing_pairs.begin(); it != closing_pairs.end(); ++it)
         if (it->first <= p.first && it->second >= p.second)
           return ClosingPair(it->first, it->second);
@@ -115,7 +115,7 @@ private:
       return ClosingPair(0, 0);
     }
 
-    void removeRange(unsigned first, unsigned last) {
+    void RemoveRange(unsigned first, unsigned last) {
       auto it = closing_pairs.begin();
       while (it != closing_pairs.end()) {
         if (it->first > first && it->second < last)
@@ -125,7 +125,7 @@ private:
       }
     }
 
-    void clear() {
+    void Clear() {
       closing_pairs.clear();
     }
   };
@@ -146,7 +146,7 @@ private:
       lat_min(0), lat_max(0) {}
 
     TurnPointRange(OLCTriangle *parent, unsigned min, unsigned max) {
-      update(parent, min, max);
+      Update(parent, min, max);
     }
 
     TurnPointRange(const TurnPointRange &other) {
@@ -163,19 +163,19 @@ private:
     }
 
     // returns the manhatten diagonal of the bounding box
-    unsigned diagonal() const {
+    unsigned GetDiagnoal() const {
       unsigned width = abs(lon_max - lon_min);
       unsigned height = abs(lat_max - lat_min);
       return width + height;
     }
 
     // returns the number of points in this range
-    unsigned size() const {
+    unsigned GetSize() const {
       return index_max - index_min;
     }
 
     // updates the bounding box by a given point range
-    void update(OLCTriangle *parent, unsigned &_min, unsigned &_max) {
+    void Update(OLCTriangle *parent, unsigned &_min, unsigned &_max) {
       lon_min = parent->GetPoint(_min).GetFlatLocation().longitude;
       lon_max = parent->GetPoint(_min).GetFlatLocation().longitude;
       lat_min = parent->GetPoint(_min).GetFlatLocation().latitude;
@@ -193,7 +193,7 @@ private:
     }
 
     // calculate the minimal distance estimate between two TurnPointRanges
-    unsigned min_dist(const TurnPointRange &tp) const {
+    unsigned GetMinDistance(const TurnPointRange &tp) const {
       const unsigned d_lon = std::max(tp.lon_min - lon_max, lon_min - tp.lon_max) < 0 ?
                        0 :
                        std::min(abs(tp.lon_min - lon_max), abs(tp.lon_max - lon_min));
@@ -206,7 +206,7 @@ private:
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
-    unsigned max_dist(const TurnPointRange &tp) const {
+    unsigned GetMaxDistance(const TurnPointRange &tp) const {
       const unsigned d_lon = std::max(lon_max - tp.lon_min, tp.lon_max - lon_min);
       const unsigned d_lat = std::max(lat_max - tp.lat_min, tp.lat_max - lat_min);
 
@@ -221,35 +221,35 @@ private:
     TurnPointRange tp1, tp2, tp3;
     unsigned df_min, df_max;
     unsigned shortest_max, longest_min, longest_max;
-    
+
     CandidateSet() :
       df_min(0), df_max(0),
       shortest_max(0), longest_min(0), longest_max(0) {}
 
     CandidateSet(OLCTriangle *parent, unsigned first, unsigned last) {
-      tp1.update(parent, first, last);
-      tp2.update(parent, first, last);
-      tp3.update(parent, first, last);
+      tp1.Update(parent, first, last);
+      tp2.Update(parent, first, last);
+      tp3.Update(parent, first, last);
 
-      updateDistances();
+      UpdateDistances();
     }
-    
+
     CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3) {
       tp1 = _tp1;
       tp2 = _tp2;
       tp3 = _tp3;
 
-      updateDistances();
+      UpdateDistances();
     }
 
-    void updateDistances() {  
-      const unsigned df_12_min = tp1.min_dist(tp2),
-                     df_23_min = tp2.min_dist(tp3),
-                     df_31_min = tp3.min_dist(tp1);
-      
-      const unsigned df_12_max = tp1.max_dist(tp2),
-                     df_23_max = tp2.max_dist(tp3),
-                     df_31_max = tp3.max_dist(tp1);
+    void UpdateDistances() {
+      const unsigned df_12_min = tp1.GetMinDistance(tp2),
+                     df_23_min = tp2.GetMinDistance(tp3),
+                     df_31_min = tp3.GetMinDistance(tp1);
+
+      const unsigned df_12_max = tp1.GetMaxDistance(tp2),
+                     df_23_max = tp2.GetMaxDistance(tp3),
+                     df_31_max = tp3.GetMaxDistance(tp1);
 
       shortest_max = std::min({df_12_max, df_23_max, df_31_max});
       longest_min = std::max({df_12_min, df_23_min, df_31_min});
@@ -261,7 +261,6 @@ private:
                         shortest_max * 4);
     }
 
-
     bool operator==(CandidateSet other) const {
       return (tp1 == other.tp1 && tp2 == other.tp2 && tp3 == other.tp3);
     }
@@ -271,7 +270,7 @@ private:
      * Use relaxed checks to ensure distance errors due to the flat projection
      * or integer rounding don't invalidate close positives.
      */
-    bool isFeasible(const bool fai, const unsigned large_triangle_check) const {
+    bool IsFeasible(const bool fai, const unsigned large_triangle_check) const {
       // always feasible if no fai constraints
       if (!fai) return true;
 
@@ -293,15 +292,16 @@ private:
     /* Check if the candidate set is a real fai triangle. Use fast checks on projected
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
-    bool integral(OLCTriangle *parent, const bool fai, const unsigned large_triangle_check) const {
-      if (!(tp1.size() == 1 && tp2.size() == 1 && tp3.size() == 1))
+    bool IsIntegral(OLCTriangle *parent, const bool fai,
+                    const unsigned large_triangle_check) const {
+      if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
 
       if (!fai) return true;
 
       assert(df_min == df_max);
 
-      // fast checks, as in isFeasible
+      // fast checks, as in IsFeasible
 
       // shortest >= 28.2% * dist_total
       if (shortest_max * 39 >= df_max * 11)

@@ -81,7 +81,7 @@ OLCTriangle::Reset()
   // this should be adjusted when the trace size is known
   tick_iterations = 1000;
 
-  closing_pairs.clear();
+  closing_pairs.Clear();
   ClearTrace();
 
   ResetBranchAndBound();
@@ -121,7 +121,7 @@ OLCTriangle::UpdateTrace(bool force)
 
     best_d = 0;
 
-    closing_pairs.clear();
+    closing_pairs.Clear();
     is_closed = FindClosingPairs(0);
 
    } else if (is_complete && incremental) {
@@ -194,7 +194,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
          closing_pair != closing_pairs.closing_pairs.end();
          ++closing_pair) {
 
-      auto already_relaxed = relaxed_pairs.findRange(*closing_pair);
+      auto already_relaxed = relaxed_pairs.FindRange(*closing_pair);
       if (already_relaxed.first != 0 || already_relaxed.second != 0)
         // this pair is already relaxed... continue with next
         continue;
@@ -209,7 +209,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
            ++relaxed)
         relax_last = std::max(relax_last, relaxed->second);
 
-      relaxed_pairs.insert(ClosingPair(relax_first, relax_last));
+      relaxed_pairs.Insert(ClosingPair(relax_first, relax_last));
     }
 
     // TODO: reverse sort relaxed pairs according to number of contained points
@@ -226,7 +226,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
         // solution is better than best_d
         // only if triangle is inside a unrelaxed pair...
 
-        auto unrelaxed = closing_pairs.findRange(ClosingPair(std::get<0>(triangle), std::get<2>(triangle)));
+        auto unrelaxed = closing_pairs.FindRange(ClosingPair(std::get<0>(triangle), std::get<2>(triangle)));
         if (unrelaxed.first != 0 || unrelaxed.second != 0) {
           // fortunately it is inside a unrelaxed closing pair :-)
           start = unrelaxed.first;
@@ -242,7 +242,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
           for (const auto closing_pair : closing_pairs.closing_pairs) {
             if (closing_pair.first >= relaxed_pair.first &&
                 closing_pair.second <= relaxed_pair.second)
-              close_look.insert(closing_pair);
+              close_look.Insert(closing_pair);
          }
        }
       }
@@ -342,7 +342,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
     CandidateSet root_candidates(this, from, to + 1);
-    if (root_candidates.isFeasible(is_fai, large_triangle_check) && root_candidates.df_max >= worst_d)
+    if (root_candidates.IsFeasible(is_fai, large_triangle_check) &&
+        root_candidates.df_max >= worst_d)
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
   }
 
@@ -384,7 +385,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
       node = --branch_and_bound.end();
     }
 
-    if (node->second.df_min >= worst_d && node->second.integral(this, is_fai, large_triangle_check)) {
+    if (node->second.df_min >= worst_d &&
+        node->second.IsIntegral(this, is_fai, large_triangle_check)) {
       // node is integral feasible -> a possible solution
 
       worst_d = node->second.df_min;
@@ -399,16 +401,16 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     } else {
       // split largest bounding box of node and create child nodes
 
-      const unsigned tp1_diag = node->second.tp1.diagonal();
-      const unsigned tp2_diag = node->second.tp2.diagonal();
-      const unsigned tp3_diag = node->second.tp3.diagonal();
+      const unsigned tp1_diag = node->second.tp1.GetDiagnoal();
+      const unsigned tp2_diag = node->second.tp2.GetDiagnoal();
+      const unsigned tp3_diag = node->second.tp3.GetDiagnoal();
 
       const unsigned max_diag = std::max({tp1_diag, tp2_diag, tp3_diag});
 
       CandidateSet left, right;
       bool add = false;
 
-      if (tp1_diag == max_diag && node->second.tp1.size() != 1) {
+      if (tp1_diag == max_diag && node->second.tp1.GetSize() != 1) {
         // split tp1 range
         const unsigned split = (node->second.tp1.index_min + node->second.tp1.index_max) / 2;
 
@@ -421,7 +423,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
           right = CandidateSet(TurnPointRange(this, split, node->second.tp1.index_max),
                                node->second.tp2, node->second.tp3);
         }
-      } else if (tp2_diag == max_diag && node->second.tp2.size() != 1) {
+      } else if (tp2_diag == max_diag && node->second.tp2.GetSize() != 1) {
         // split tp2 range
         const unsigned split = (node->second.tp2.index_min + node->second.tp2.index_max) / 2;
 
@@ -436,7 +438,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
                                TurnPointRange(this, split, node->second.tp2.index_max),
                                node->second.tp3);
         }
-      } else if (node->second.tp3.size() != 1) {
+      } else if (node->second.tp3.GetSize() != 1) {
         // split tp3 range
         const unsigned split = (node->second.tp3.index_min + node->second.tp3.index_max) / 2;
 
@@ -453,11 +455,13 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 
       if (add) {
         // add the new candidate set only if it it's feasible and has d_min >= worst_d
-        if (left.df_max >= worst_d && left.isFeasible(is_fai, large_triangle_check)) {
+        if (left.df_max >= worst_d &&
+            left.IsFeasible(is_fai, large_triangle_check)) {
           branch_and_bound.insert(std::pair<unsigned, CandidateSet>(left.df_max, left));
         }
 
-        if (right.df_max >= worst_d && right.isFeasible(is_fai, large_triangle_check)) {
+        if (right.df_max >= worst_d &&
+            right.IsFeasible(is_fai, large_triangle_check)) {
           branch_and_bound.insert(std::pair<unsigned, CandidateSet>(right.df_max, right));
         }
       }
@@ -500,7 +504,7 @@ bool
 OLCTriangle::FindClosingPairs(unsigned old_size)
 {
   if (predict) {
-    return closing_pairs.insert(ClosingPair(0, n_points-1));
+    return closing_pairs.Insert(ClosingPair(0, n_points-1));
   }
 
   struct TracePointNode {
@@ -570,7 +574,7 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
     search_point_tree.VisitWithinRange(point, max_range, visitor);
 
-    if (last != 0 && closing_pairs.insert(ClosingPair(first, last)))
+    if (last != 0 && closing_pairs.Insert(ClosingPair(first, last)))
       new_pair = true;
   }
 
