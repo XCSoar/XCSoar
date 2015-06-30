@@ -111,7 +111,7 @@ private:
     ClosingPair FindRange(const ClosingPair &p) const {
       for (auto it = closing_pairs.begin(); it != closing_pairs.end(); ++it)
         if (it->first <= p.first && it->second >= p.second)
-          return ClosingPair(it->first, it->second);
+          return *it;
 
       return ClosingPair(0, 0);
     }
