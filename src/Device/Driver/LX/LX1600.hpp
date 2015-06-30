@@ -50,42 +50,6 @@ namespace LX1600 {
   };
 
   /**
-   * Enable pass-through mode on the LX1600.  This command was provided
-   * by Crtomir Rojnik (LX Navigation) in an email without further
-   * explanation.  Tests have shown that this command can be sent at
-   * either 4800 baud or the current vario baud rate.  Since both works
-   * equally well, we don't bother to switch.
-   */
-  static inline bool
-  ModeColibri(Port &port, OperationEnvironment &env)
-  {
-    return PortWriteNMEA(port, "PFLX0,COLIBRI", env);
-  }
-
-  /**
-   * Cancel pass-through mode on the LX1600.  This command was provided
-   * by Crtomir Rojnik (LX Navigation) in an email.  It must always be
-   * sent at 4800 baud.  After this command has been sent, we switch
-   * back to the "real" baud rate.
-   */
-  static inline bool
-  ModeLX1600(Port &port, OperationEnvironment &env)
-  {
-    unsigned old_baud_rate = port.GetBaudrate();
-    if (old_baud_rate == 4800)
-      old_baud_rate = 0;
-    else if (old_baud_rate != 0 && !port.SetBaudrate(4800))
-      return false;
-
-    const bool success = PortWriteNMEA(port, "PFLX0,LX1600", env);
-
-    if (old_baud_rate != 0)
-      port.SetBaudrate(old_baud_rate);
-
-    return success;
-  }
-
-  /**
    * Store the current settings into the EEPROM of the device.
    */
   static inline bool

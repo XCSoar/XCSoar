@@ -72,10 +72,8 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     return true;
   }
 
-  /* just in case the LX1600 is still in pass-through mode: */
+  /* just in case the V7 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
-  if (!is_v7)
-    LX1600::ModeLX1600(port, env);
 
   V7::SetupNMEA(port, env);
   if (!is_v7)
@@ -111,18 +109,14 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
   if (mode == Mode::PASS_THROUGH)
     return true;
 
-  if (is_colibri) {
-    /* avoid confusing a Colibri with new protocol commands */
-    mode = Mode::PASS_THROUGH;
-    return true;
-  }
+  if (is_v7) {
+    if (!V7::ModeDirect(port, env))
+      return false;
+  } else
+    return false;
 
-  bool success = is_v7
-    ? V7::ModeDirect(port, env)
-    : LX1600::ModeColibri(port, env);
-  if (success)
-    mode = Mode::PASS_THROUGH;
-  return success;
+  mode = Mode::PASS_THROUGH;
+  return true;
 }
 
 bool
