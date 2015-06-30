@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_GEO_WGS84_HPP
 #define XCSOAR_GEO_WGS84_HPP
 
+#include "Math/fixed.hpp"
+
 namespace WGS84 {
   static constexpr fixed EQUATOR_RADIUS = fixed(6378137);
   static constexpr fixed POLE_RADIUS = fixed(6356752.3142);
