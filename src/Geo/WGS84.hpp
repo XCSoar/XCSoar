@@ -28,8 +28,8 @@ Copyright_License {
 
 namespace WGS84 {
   static constexpr double EQUATOR_RADIUS = 6378137;
-  static constexpr double POLE_RADIUS = 6356752.3142;
   static constexpr double FLATTENING = 1 / 298.257223563;
+  static constexpr double POLE_RADIUS = EQUATOR_RADIUS * (1 - FLATTENING);
 
   namespace Fixed {
     static constexpr fixed EQUATOR_RADIUS = fixed(WGS84::EQUATOR_RADIUS);
