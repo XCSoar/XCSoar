@@ -25,7 +25,7 @@
 #include "FlatPoint.hpp"
 #include "FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Geo/Math.hpp"
+#include "Geo/FAISphere.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -98,10 +98,7 @@ FlatProjection::ProjectRangeFloat(const GeoPoint &tp,
 {
   assert(IsValid());
 
-  GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::Zero(), range);
-  FlatPoint f = ProjectFloat(fr);
-  FlatPoint p = ProjectFloat(tp);
-  return fabs(f.y - p.y);
+  return EarthDistanceToAngle(range).Native() * fixed_scale;
 }
 
 unsigned
