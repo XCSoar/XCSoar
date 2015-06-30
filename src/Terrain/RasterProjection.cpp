@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "RasterProjection.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Geo/Constants.hpp"
+#include "Geo/FAISphere.hpp"
 
 #include <algorithm>
 

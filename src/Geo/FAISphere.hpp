@@ -21,12 +21,39 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GEO_CONSTANTS_HPP
-#define XCSOAR_GEO_CONSTANTS_HPP
+/*! @file
+ * @brief Library for calculating Earth dimensions on the FAI sphere
+ */
 
-// WGS 84
-static constexpr fixed REARTH_A = fixed(6378137);
-static constexpr fixed REARTH_B = fixed(6356752.3142);
-static constexpr fixed FLATTENING = fixed(1/298.257223563);
+#ifndef XCSOAR_GEO_FAI_SPHERE_HPP
+#define XCSOAR_GEO_FAI_SPHERE_HPP
+
+#include "Math/fixed.hpp"
+#include "Math/Angle.hpp"
+#include "Compiler.h"
+
+static constexpr unsigned REARTH = 6371000;
+
+/**
+ * Convert a distance on earth's surface [m] to the according Angle,
+ * assuming the earth is a sphere.
+ */
+constexpr
+static inline Angle
+EarthDistanceToAngle(fixed distance)
+{
+  return Angle::Radians(distance / REARTH);
+}
+
+/**
+ * Convert an angle to the according distance on earth's surface [m],
+ * assuming the earth is a sphere.
+ */
+constexpr
+static inline fixed
+AngleToEarthDistance(Angle angle)
+{
+  return angle.Radians() * REARTH;
+}
 
 #endif

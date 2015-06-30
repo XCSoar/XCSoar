@@ -34,7 +34,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
-#include "Geo/Constants.hpp"
+#include "Geo/FAISphere.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/VertexPointer.hpp"

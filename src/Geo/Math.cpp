@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Math.hpp"
+#include "FAISphere.hpp"
 #include "Constants.hpp"
 #include "GeoPoint.hpp"
 

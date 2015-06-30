@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Projection.hpp"
-#include "Geo/Constants.hpp"
+#include "Geo/FAISphere.hpp"
 #include "Math/Angle.hpp"
 
 #include <algorithm>

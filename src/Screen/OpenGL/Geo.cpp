@@ -25,7 +25,7 @@ Copyright_License {
 #include "System.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Geo/Constants.hpp"
+#include "Geo/FAISphere.hpp"
 
 #ifdef USE_GLSL
 
