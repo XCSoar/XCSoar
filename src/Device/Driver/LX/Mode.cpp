@@ -112,8 +112,7 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
   if (is_v7) {
     if (!V7::ModeDirect(port, env))
       return false;
-  } else
-    return false;
+  }
 
   mode = Mode::PASS_THROUGH;
   return true;
