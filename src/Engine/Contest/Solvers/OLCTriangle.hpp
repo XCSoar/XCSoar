@@ -137,10 +137,6 @@ private:
     const TracePoint *point;
     unsigned index;
 
-    value_type operator[](unsigned n) const {
-      return n ? point->GetFlatLocation().longitude : point->GetFlatLocation().latitude;
-    }
-
     unsigned distance(const TracePointNode &node) const {
       const int lon = point->GetFlatLocation().longitude;
       const int lat = point->GetFlatLocation().latitude;
