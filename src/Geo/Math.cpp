@@ -99,7 +99,7 @@ CalcA(fixed u_sq)
 {
   const fixed A_16k = fixed(16384)
     + u_sq * (fixed(4096) + u_sq *
-              (fixed(-768) + u_sq * (fixed(320) - fixed(175) * u_sq)));
+              (fixed(-768) + u_sq * (fixed(320) - 175 * u_sq)));
   return A_16k / 16384;
 }
 
@@ -109,7 +109,7 @@ CalcB(fixed u_sq)
 {
   const fixed B_1k = u_sq
     * (fixed(256) + u_sq * (fixed(-128) +
-                            u_sq * (fixed(74) - fixed(47) * u_sq)));
+                            u_sq * (fixed(74) - 47 * u_sq)));
   return B_1k / 1024;
 }
 
@@ -117,8 +117,8 @@ gcc_const
 static fixed
 CalcC(fixed cos_sq_alpha)
 {
-  return FLATTENING / fixed(16) * cos_sq_alpha *
-    (fixed(4) + FLATTENING * (fixed(4) - fixed(3) * cos_sq_alpha));
+  return FLATTENING / 16 * cos_sq_alpha *
+    (fixed(4) + FLATTENING * (fixed(4) - 3 * cos_sq_alpha));
 }
 
 gcc_pure
@@ -315,15 +315,15 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
       lambda_p = lambda;
       lambda = lon21.Radians() + FLATTENING * inner_alpha * sigma;
     } else {
-      cos_2_sigma_m = cos_sigma - fixed(2) * sinu1 * sinu2 / cos_sq_alpha;
+      cos_2_sigma_m = cos_sigma - Double(sinu1 * sinu2 / cos_sq_alpha);
 
-      fixed c = FLATTENING/fixed(16) * cos_sq_alpha *
-                (fixed(4) + FLATTENING * (fixed(4) - fixed(3) * cos_sq_alpha));
+      fixed c = FLATTENING / 16 * cos_sq_alpha *
+                (fixed(4) + FLATTENING * (fixed(4) - 3 * cos_sq_alpha));
 
       lambda_p = lambda;
       lambda = lon21.Radians() + (fixed(1) - c) * FLATTENING * inner_alpha *
         (sigma + c * sin_sigma * (cos_2_sigma_m + c * cos_sigma *
-        (fixed(-1) + fixed(2) * sqr(cos_2_sigma_m))));
+                                  (fixed(-1) + Double(sqr(cos_2_sigma_m)))));
     }
   }
 
@@ -339,10 +339,10 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
 
     fixed delta_sigma = B * sin_sigma * (
       cos_2_sigma_m +
-      B/fixed(4) * (cos_sigma * (fixed(-1) + fixed(2) * sqr(cos_2_sigma_m)) -
-                    B/fixed(6) * cos_2_sigma_m *
-                                 (fixed(-3) + fixed(4) * sqr(sin_sigma)) *
-                                 (fixed(-3) + fixed(4) * sqr(cos_2_sigma_m))));
+      Quarter(B) * (cos_sigma * (fixed(-1) + fixed(2) * sqr(cos_2_sigma_m)) -
+                    B / 6 * cos_2_sigma_m *
+                    (fixed(-3) + Quadruple(sqr(sin_sigma))) *
+                    (fixed(-3) + Quadruple(sqr(cos_2_sigma_m)))));
 
     *distance = POLE_RADIUS * A * (sigma - delta_sigma);
   }
@@ -528,13 +528,15 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   fixed sin_sigma, cos_sigma, cos_2_sigma_m;
 
   do {
-    cos_2_sigma_m = cos(fixed(2) * sigma1 + sigma);
+    cos_2_sigma_m = cos(Double(sigma1) + sigma);
     sin_sigma = sin(sigma);
     cos_sigma = cos(sigma);
 
-    fixed delta_sigma = B * sin_sigma * (cos_2_sigma_m + B/fixed(4) * (cos_sigma *
-      (fixed(-1) + fixed(2) * sqr(cos_2_sigma_m)) - B/fixed(6) * cos_2_sigma_m *
-      (fixed(-3) + fixed(4) * sqr(sin_sigma)) * (fixed(-3) + fixed(4) * sqr(cos_2_sigma_m))));
+    fixed delta_sigma = B * sin_sigma *
+      (cos_2_sigma_m + Quarter(B) *
+       (cos_sigma *
+        (fixed(-1) + 2 * sqr(cos_2_sigma_m)) - B / 6 * cos_2_sigma_m *
+        (fixed(-3) + 4 * sqr(sin_sigma)) * (fixed(-3) + Quadruple(sqr(cos_2_sigma_m)))));
 
     sigmaP = sigma;
     sigma = distance / (POLE_RADIUS * A) + delta_sigma;
@@ -550,8 +552,9 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const fixed C = CalcC(cos_sq_alpha);
 
   const fixed L = lambda - (fixed(1) - C) * FLATTENING * sin_alpha *
-    (sigma + C * sin_sigma * (cos_2_sigma_m + C * cos_sigma * (fixed(-1) +
-    fixed(2) * sqr(cos_2_sigma_m))));
+    (sigma + C * sin_sigma *
+     (cos_2_sigma_m + C * cos_sigma * (fixed(-1) +
+                                       Double(sqr(cos_2_sigma_m)))));
 
   loc_out.longitude = Angle::Radians(lon1 + L);
   loc_out.latitude = Angle::Radians(lat2);
