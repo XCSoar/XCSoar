@@ -23,10 +23,12 @@ Copyright_License {
 
 #include "Math.hpp"
 #include "FAISphere.hpp"
-#include "Constants.hpp"
+#include "WGS84.hpp"
 #include "GeoPoint.hpp"
 
 #include <assert.h>
+
+using namespace WGS84;
 
 #ifdef INSTRUMENT_TASK
 // global, used for test harness
@@ -289,7 +291,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   }
 
   if (distance != nullptr) {
-    //fixed u_sq = cos_sq_alpha * (sqr(REARTH_A) - sqr(REARTH_B)) / sqr(REARTH_B);
+    //fixed u_sq = cos_sq_alpha * (sqr(EQUATOR_RADIUS) - sqr(POLE_RADIUS)) / sqr(POLE_RADIUS);
     fixed u_sq = cos_sq_alpha * fixed(0.006739497);
 
     fixed A = fixed(16384) + u_sq * (fixed(4096) + u_sq * (fixed(-768) +
@@ -309,7 +311,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
                                  (fixed(-3) + fixed(4) * sqr(sin_sigma)) *
                                  (fixed(-3) + fixed(4) * sqr(cos_2_sigma_m))));
 
-    *distance = REARTH_B * A * (sigma - delta_sigma);
+    *distance = POLE_RADIUS * A * (sigma - delta_sigma);
   }
 
   if (bearing != nullptr)
@@ -490,7 +492,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const fixed B = (u_sq * (fixed(256) + u_sq * (fixed(-128) +
                   u_sq * (fixed(74) - fixed(47) * u_sq)))) / fixed(1024);
 
-  fixed sigma = distance / (REARTH_B * A);
+  fixed sigma = distance / (POLE_RADIUS * A);
   fixed sigmaP = fixed_two_pi;
 
   fixed sin_sigma, cos_sigma, cos_2_sigma_m;
@@ -505,7 +507,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
       (fixed(-3) + fixed(4) * sqr(sin_sigma)) * (fixed(-3) + fixed(4) * sqr(cos_2_sigma_m))));
 
     sigmaP = sigma;
-    sigma = distance / (REARTH_B * A) + delta_sigma;
+    sigma = distance / (POLE_RADIUS * A) + delta_sigma;
   } while (fabs(sigma - sigmaP) > fixed(1e-7));
 
   const fixed tmp = sin_u1 * sin_sigma - cos_u1 * cos_sigma * cos_alpha1;

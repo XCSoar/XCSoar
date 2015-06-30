@@ -21,12 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GEO_CONSTANTS_HPP
-#define XCSOAR_GEO_CONSTANTS_HPP
+#ifndef XCSOAR_GEO_WGS84_HPP
+#define XCSOAR_GEO_WGS84_HPP
 
-// WGS 84
-static constexpr fixed REARTH_A = fixed(6378137);
-static constexpr fixed REARTH_B = fixed(6356752.3142);
-static constexpr fixed FLATTENING = fixed(1/298.257223563);
+namespace WGS84 {
+  static constexpr fixed EQUATOR_RADIUS = fixed(6378137);
+  static constexpr fixed POLE_RADIUS = fixed(6356752.3142);
+  static constexpr fixed FLATTENING = fixed(1/298.257223563);
+}
 
 #endif
