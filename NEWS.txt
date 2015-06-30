@@ -5,6 +5,8 @@ Version 6.7.9 - not yet released
   - improved font renderer
 * data files
   - fix comments in TNP files
+* calculations
+  - faster triangle score calculation
 * Android
   - timeout for the HTTP client (e.g. LiveTrack24)
 * Kobo
