@@ -39,7 +39,7 @@ LXCreateOnPort(const DeviceConfig &config, Port &com_port)
 
 const struct DeviceRegister lx_driver = {
   _T("LX"),
-  _T("LX / Colibri"),
+  _T("LXNAV"),
   DeviceRegister::DECLARE | DeviceRegister::LOGGER |
   DeviceRegister::PASS_THROUGH |
   DeviceRegister::BULK_BAUD_RATE |
