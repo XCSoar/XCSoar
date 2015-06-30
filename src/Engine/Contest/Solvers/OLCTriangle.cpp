@@ -503,6 +503,11 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     return closing_pairs.insert(ClosingPair(0, n_points-1));
   }
 
+  struct TracePointNode {
+    const TracePoint *point;
+    unsigned index;
+  };
+
   struct TracePointNodeAccessor {
     gcc_pure
     int GetX(const TracePointNode &node) const {

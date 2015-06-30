@@ -132,16 +132,6 @@ private:
 
   ClosingPairs closing_pairs;
 
-
-  /**
-   * kd-tree node of a trace point. Used for nearest search to find
-   * closed track loops
-   */
-  struct TracePointNode {
-    const TracePoint *point;
-    unsigned index;
-  };
-
   /**
    * A bounding box around a range of trace points.
    */
