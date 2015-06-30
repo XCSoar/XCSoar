@@ -500,6 +500,18 @@ OLCTriangle::CalculateResult() const
   return result;
 }
 
+gcc_pure
+static bool
+IsInRange(const SearchPoint &a, const SearchPoint &b,
+          unsigned half_max_range_sq, fixed max_distance)
+{
+  /* optimisation: if the flat distance is much smaller than the
+     maximum range, we don't need to call the method
+     GeoPoint::Distance() which is very expensive */
+  return a.GetFlatLocation().DistanceSquared(b.GetFlatLocation()) <= half_max_range_sq ||
+    a.GetLocation().Distance(b.GetLocation()) <= max_distance;
+}
+
 bool
 OLCTriangle::FindClosingPairs(unsigned old_size)
 {
@@ -543,8 +555,9 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     point.point = &GetPoint(i);
     point.index = i;
 
-    const GeoPoint start = point.point->GetLocation();
-    const unsigned max_range = trace_master.ProjectRange(start, max_distance);
+    const SearchPoint start = *point.point;
+    const unsigned max_range = trace_master.ProjectRange(start.GetLocation(), max_distance);
+    const unsigned half_max_range_sq = max_range * max_range / 2;
 
     const int min_altitude = GetMinimumFinishAltitude(*point.point);
     const int max_altitude = GetMaximumStartAltitude(*point.point);
@@ -552,6 +565,7 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     unsigned last = 0, first = i;
 
     const auto visitor = [this, i, start,
+                          half_max_range_sq,
                           min_altitude, max_altitude,
                           &first, &last]
       (const TracePointNode &node) {
@@ -559,13 +573,13 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
       if (node.index + 2 < i &&
           dest.GetIntegerAltitude() <= max_altitude &&
-          start.Distance(dest.GetLocation()) <= max_distance) {
+          IsInRange(start, dest, half_max_range_sq, max_distance)) {
         // point i is last point
         first = std::min(node.index, first);
         last = i;
       } else if (node.index > i + 2 &&
                  dest.GetIntegerAltitude() >= min_altitude &&
-                 start.Distance(dest.GetLocation()) <= max_distance) {
+                 IsInRange(start, dest, half_max_range_sq, max_distance)) {
         // point i is first point
         first = i;
         last = std::max(node.index, last);
