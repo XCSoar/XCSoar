@@ -107,6 +107,7 @@ private:
       }
     }
 
+    gcc_pure
     ClosingPair FindRange(const ClosingPair &p) const {
       for (auto it = closing_pairs.begin(); it != closing_pairs.end(); ++it)
         if (it->first <= p.first && it->second >= p.second)
@@ -163,6 +164,7 @@ private:
     }
 
     // returns the manhatten diagonal of the bounding box
+    gcc_pure
     unsigned GetDiagnoal() const {
       unsigned width = abs(lon_max - lon_min);
       unsigned height = abs(lat_max - lat_min);
@@ -193,6 +195,7 @@ private:
     }
 
     // calculate the minimal distance estimate between two TurnPointRanges
+    gcc_pure
     unsigned GetMinDistance(const TurnPointRange &tp) const {
       const unsigned d_lon = std::max(tp.lon_min - lon_max, lon_min - tp.lon_max) < 0 ?
                        0 :
@@ -206,6 +209,7 @@ private:
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
+    gcc_pure
     unsigned GetMaxDistance(const TurnPointRange &tp) const {
       const unsigned d_lon = std::max(lon_max - tp.lon_min, tp.lon_max - lon_min);
       const unsigned d_lat = std::max(lat_max - tp.lat_min, tp.lat_max - lat_min);
@@ -270,6 +274,7 @@ private:
      * Use relaxed checks to ensure distance errors due to the flat projection
      * or integer rounding don't invalidate close positives.
      */
+    gcc_pure
     bool IsFeasible(const bool fai, const unsigned large_triangle_check) const {
       // always feasible if no fai constraints
       if (!fai) return true;
@@ -292,6 +297,7 @@ private:
     /* Check if the candidate set is a real fai triangle. Use fast checks on projected
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
+    gcc_pure
     bool IsIntegral(OLCTriangle *parent, const bool fai,
                     const unsigned large_triangle_check) const {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
