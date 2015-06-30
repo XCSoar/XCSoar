@@ -27,9 +27,15 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 namespace WGS84 {
-  static constexpr fixed EQUATOR_RADIUS = fixed(6378137);
-  static constexpr fixed POLE_RADIUS = fixed(6356752.3142);
-  static constexpr fixed FLATTENING = fixed(1/298.257223563);
+  static constexpr double EQUATOR_RADIUS = 6378137;
+  static constexpr double POLE_RADIUS = 6356752.3142;
+  static constexpr double FLATTENING = 1 / 298.257223563;
+
+  namespace Fixed {
+    static constexpr fixed EQUATOR_RADIUS = fixed(WGS84::EQUATOR_RADIUS);
+    static constexpr fixed POLE_RADIUS = fixed(WGS84::POLE_RADIUS);
+    static constexpr fixed FLATTENING = fixed(WGS84::FLATTENING);
+  }
 }
 
 #endif

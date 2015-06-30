@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <assert.h>
 
-using namespace WGS84;
+using namespace WGS84::Fixed;
 
 #ifdef INSTRUMENT_TASK
 // global, used for test harness
