@@ -79,6 +79,48 @@ SmallMult(fixed a, fixed b, fixed c)
   return SmallMult(SmallMult(a, b), c);
 }
 
+gcc_const
+static fixed
+CalcUSquare(fixed cos_sq_alpha)
+{
+  static constexpr double EQUATOR_RADIUS_SQ =
+    WGS84::EQUATOR_RADIUS * WGS84::EQUATOR_RADIUS;
+  static constexpr double POLE_RADIUS_SQ =
+    WGS84::POLE_RADIUS * WGS84::POLE_RADIUS;
+  static constexpr fixed factor((EQUATOR_RADIUS_SQ - POLE_RADIUS_SQ)
+                                / POLE_RADIUS_SQ);
+
+  return cos_sq_alpha * factor;
+}
+
+gcc_const
+static fixed
+CalcA(fixed u_sq)
+{
+  const fixed A_16k = fixed(16384)
+    + u_sq * (fixed(4096) + u_sq *
+              (fixed(-768) + u_sq * (fixed(320) - fixed(175) * u_sq)));
+  return A_16k / 16384;
+}
+
+gcc_const
+static fixed
+CalcB(fixed u_sq)
+{
+  const fixed B_1k = u_sq
+    * (fixed(256) + u_sq * (fixed(-128) +
+                            u_sq * (fixed(74) - fixed(47) * u_sq)));
+  return B_1k / 1024;
+}
+
+gcc_const
+static fixed
+CalcC(fixed cos_sq_alpha)
+{
+  return FLATTENING / fixed(16) * cos_sq_alpha *
+    (fixed(4) + FLATTENING * (fixed(4) - fixed(3) * cos_sq_alpha));
+}
+
 gcc_pure
 static GeoPoint
 IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
@@ -291,18 +333,9 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   }
 
   if (distance != nullptr) {
-    //fixed u_sq = cos_sq_alpha * (sqr(EQUATOR_RADIUS) - sqr(POLE_RADIUS)) / sqr(POLE_RADIUS);
-    fixed u_sq = cos_sq_alpha * fixed(0.006739497);
-
-    fixed A = fixed(16384) + u_sq * (fixed(4096) + u_sq * (fixed(-768) +
-      u_sq * (fixed(320) - fixed(175) * u_sq)));
-
-    A /= fixed(16384);
-
-    fixed B = u_sq * (fixed(256) + u_sq * (fixed(-128) +
-      u_sq * (fixed(74) - fixed(47) * u_sq)));
-
-    B /= fixed(1024);
+    const fixed u_sq = CalcUSquare(cos_sq_alpha);
+    const fixed A = CalcA(u_sq);
+    const fixed B = CalcB(u_sq);
 
     fixed delta_sigma = B * sin_sigma * (
       cos_2_sigma_m +
@@ -485,12 +518,9 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const fixed sin_alpha = cos_u1 * sin_alpha1;
   const fixed cos_sq_alpha = fixed(1) - sqr(sin_alpha);
 
-  const fixed u_sq = cos_sq_alpha * fixed(0.006739497);
-  const fixed A = (fixed(16384) + u_sq * (fixed(4096) + u_sq * (fixed(-768) +
-                  u_sq * (fixed(320) - fixed(175) * u_sq)))) / fixed(16384);
-
-  const fixed B = (u_sq * (fixed(256) + u_sq * (fixed(-128) +
-                  u_sq * (fixed(74) - fixed(47) * u_sq)))) / fixed(1024);
+  const fixed u_sq = CalcUSquare(cos_sq_alpha);
+  const fixed A = CalcA(u_sq);
+  const fixed B = CalcB(u_sq);
 
   fixed sigma = distance / (POLE_RADIUS * A);
   fixed sigmaP = fixed_two_pi;
@@ -517,8 +547,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const fixed lambda = atan2(sin_sigma * sin_alpha1, cos_u1 * cos_sigma -
     sin_u1 * sin_sigma * cos_alpha1);
 
-  const fixed C = FLATTENING/fixed(16) * cos_sq_alpha *
-    (fixed(4) + FLATTENING * (fixed(4) - fixed(3) * cos_sq_alpha));
+  const fixed C = CalcC(cos_sq_alpha);
 
   const fixed L = lambda - (fixed(1) - C) * FLATTENING * sin_alpha *
     (sigma + C * sin_sigma * (cos_2_sigma_m + C * cos_sigma * (fixed(-1) +
