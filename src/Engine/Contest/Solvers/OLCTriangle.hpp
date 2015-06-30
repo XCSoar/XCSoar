@@ -140,13 +140,6 @@ private:
   struct TracePointNode {
     const TracePoint *point;
     unsigned index;
-
-    unsigned distance(const TracePointNode &node) const {
-      const int lon = point->GetFlatLocation().longitude;
-      const int lat = point->GetFlatLocation().latitude;
-
-      return std::max(std::abs(lon), std::abs(lat));
-    }
   };
 
   /**
