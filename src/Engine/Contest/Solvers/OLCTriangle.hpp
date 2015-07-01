@@ -124,7 +124,8 @@ private:
 
     void RemoveRange(std::map<unsigned, unsigned>::iterator it,
                      unsigned last) {
-      while (it != closing_pairs.end()) {
+      const auto end = closing_pairs.end();
+      while (it != end) {
         if (it->second < last)
           it = closing_pairs.erase(it);
         else
