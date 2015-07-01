@@ -99,8 +99,10 @@ private:
     bool Insert(const ClosingPair &p) {
       auto found = FindRange(p);
       if (found.first == 0 && found.second == 0) {
-        closing_pairs[p.first] = p.second;
-        RemoveRange(p.first + 1, p.second);
+        const auto result = closing_pairs.insert(p);
+        if (!result.second)
+          result.first->second = p.second;
+        RemoveRange(std::next(result.first), p.second);
         return true;
       } else {
         return false;
@@ -120,10 +122,10 @@ private:
       return ClosingPair(0, 0);
     }
 
-    void RemoveRange(unsigned first, unsigned last) {
-      auto it = closing_pairs.begin();
+    void RemoveRange(std::map<unsigned, unsigned>::iterator it,
+                     unsigned last) {
       while (it != closing_pairs.end()) {
-        if (it->first > first && it->second < last)
+        if (it->second < last)
           it = closing_pairs.erase(it);
         else
           it++;
