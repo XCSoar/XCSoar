@@ -97,7 +97,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #ifndef GNAV
   AddInteger(_("Text size"),
              nullptr,
-             _T("%d %%"), _T("%d"), 75, 150, 5,
+             _T("%d %%"), _T("%d"), 75, 200, 5,
              settings.scale);
 #endif
 
