@@ -202,7 +202,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
       unsigned relax_first = closing_pair->first;
       unsigned relax_last = closing_pair->second;
 
-      for (auto relaxed = closing_pair;
+      for (auto relaxed = std::next(closing_pair);
            relaxed != closing_pairs.closing_pairs.end() &&
            relaxed->first <= closing_pair->first + relax &&
            relaxed->second <= closing_pair->second + relax;
