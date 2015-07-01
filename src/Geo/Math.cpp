@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Math.hpp"
+#include "SimplifiedMath.hpp"
 #include "FAISphere.hpp"
 #include "WGS84.hpp"
 #include "GeoPoint.hpp"
@@ -66,17 +67,6 @@ static inline fixed
 SmallMult(fixed a, fixed b)
 {
   return fast_mult(a, b, 0);
-}
-
-/**
- * Multiply three very small values (less than 2).  This is an
- * optimised fast path for fixed-point.
- */
-constexpr
-static inline fixed
-SmallMult(fixed a, fixed b, fixed c)
-{
-  return SmallMult(SmallMult(a, b), c);
 }
 
 gcc_const
@@ -198,56 +188,6 @@ Middle(const GeoPoint &a, const GeoPoint &b)
   return IntermediatePoint(a, b, Half(distance));
 }
 
-/**
- * Calculates the distance and bearing of two locations
- * @param loc1 Location 1
- * @param loc2 Location 2
- * @param Distance Pointer to the distance variable
- * @param Bearing Pointer to the bearing variable
- */
-static void
-DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 Angle *distance, Angle *bearing)
-{
-  assert(loc1.IsValid());
-  assert(loc2.IsValid());
-
-  const auto sc1 = loc1.latitude.SinCos();
-  fixed sin_lat1 = sc1.first, cos_lat1 = sc1.second;
-  const auto sc2 = loc2.latitude.SinCos();
-  fixed sin_lat2 = sc2.first, cos_lat2 = sc2.second;
-
-  const Angle dlon = loc2.longitude - loc1.longitude;
-
-  if (distance) {
-    const fixed s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
-    const fixed s2 = dlon.accurate_half_sin();
-    const fixed a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
-
-    Angle distance2 = EarthDistance(a);
-    assert(!negative(distance2.Native()));
-    *distance = distance2;
-  }
-
-  if (bearing) {
-    // speedup for fixed since this is one call
-    const auto sc = dlon.SinCos();
-    const fixed sin_dlon = sc.first, cos_dlon = sc.second;
-
-    const fixed y = SmallMult(sin_dlon, cos_lat2);
-    const fixed x = SmallMult(cos_lat1, sin_lat2)
-      - SmallMult(sin_lat1, cos_lat2, cos_dlon);
-
-    *bearing = (x == fixed(0) && y == fixed(0))
-      ? Angle::Zero()
-      : Angle::FromXY(x, y).AsBearing();
-  }
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
-}
-
 void
 DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
                 fixed *distance, Angle *bearing)
@@ -352,12 +292,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
       cosu1 * sinu2 - sinu1 * cosu2 * cos(lambda))).AsBearing();
 
 #else
-  if (distance != nullptr) {
-    Angle distance_angle;
-    DistanceBearingS(loc1, loc2, &distance_angle, bearing);
-    *distance = FAISphere::AngleToEarthDistance(distance_angle);
-  } else
-    DistanceBearingS(loc1, loc2, nullptr, bearing);
+  return DistanceBearingS(loc1, loc2, distance, bearing);
 #endif
 }
 
