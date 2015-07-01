@@ -53,11 +53,11 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
 
   Angle distance = WidthToAngle(fixed_sqrt_two * FACTOR * pixels);
   GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
-  fixed x = location.Distance(p);
+  fixed x = location.DistanceS(p);
 
   distance = HeightToAngle(fixed_sqrt_two * FACTOR * pixels);
   p = GeoPoint(location.longitude, location.latitude + distance);
-  fixed y = location.Distance(p);
+  fixed y = location.DistanceS(p);
 
   return std::max(x, y) / FACTOR;
 }

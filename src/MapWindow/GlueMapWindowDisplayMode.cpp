@@ -282,7 +282,7 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location)
   }
 
   const fixed distance_meters =
-    visible_projection.GetGeoLocation().Distance(location);
+    visible_projection.GetGeoLocation().DistanceS(location);
   const fixed distance_pixels =
     visible_projection.DistanceMetersToPixels(distance_meters);
   if (distance_pixels > fixed(0.5))
@@ -348,7 +348,7 @@ GlueMapWindow::UpdateProjection()
   if (!IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
-    const fixed d_t = calculated.thermal_locator.estimate_location.Distance(basic.location);
+    const fixed d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
     if (!positive(d_t)) {
       SetLocationLazy(basic.location);
     } else {

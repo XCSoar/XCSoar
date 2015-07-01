@@ -194,7 +194,7 @@ MapItemListBuilder::AddArrivalAltitudes(
 void
 MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, Angle bearing)
 {
-  if (!list.full() && location.Distance(self) < range)
+  if (!list.full() && location.DistanceS(self) < range)
     list.append(new SelfMapItem(self, bearing));
 }
 
@@ -262,7 +262,7 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
     if (list.full())
       break;
 
-    if (location.Distance(m.location) < range)
+    if (location.DistanceS(m.location) < range)
       list.append(new MarkerMapItem(i, m));
 
     i++;
@@ -279,7 +279,7 @@ MapItemListBuilder::AddWeatherStations(NOAAStore &store)
 
     if (it->parsed_metar_available &&
         it->parsed_metar.location_available &&
-        location.Distance(it->parsed_metar.location) < range)
+        location.DistanceS(it->parsed_metar.location) < range)
       list.checked_append(new WeatherStationMapItem(it));
   }
 }
@@ -292,7 +292,7 @@ MapItemListBuilder::AddTraffic(const TrafficList &flarm)
     if (list.full())
       break;
 
-    if (location.Distance(t.location) < range) {
+    if (location.DistanceS(t.location) < range) {
       auto color = FlarmFriends::GetFriendColor(t.id);
       list.append(new TrafficMapItem(t.id, color));
     }
@@ -313,7 +313,7 @@ MapItemListBuilder::AddSkyLinesTraffic()
       break;
 
     if (i.second.location.IsValid() &&
-        location.Distance(i.second.location) < range) {
+        location.DistanceS(i.second.location) < range) {
       const uint32_t id = i.first;
       auto name_i = data.user_names.find(id);
       const TCHAR *name;
@@ -349,7 +349,7 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
       ? t.CalculateAdjustedLocation(basic.nav_altitude, calculated.wind)
       : t.location;
 
-    if (location.Distance(loc) < range)
+    if (location.DistanceS(loc) < range)
       list.append(new ThermalMapItem(t));
   }
 }

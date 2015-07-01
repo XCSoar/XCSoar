@@ -175,7 +175,7 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   GeoPoint start = seg.Parametric(fixed(0));
   GeoPoint end = seg.Parametric(fixed(1));
 
-  if (m_proj.GeoToScreenDistance(start.Distance(end)) <= 2)
+  if (m_proj.GeoToScreenDistance(start.DistanceS(end)) <= 2)
     return;
 
   RasterPoint screen[21];

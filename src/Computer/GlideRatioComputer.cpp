@@ -61,7 +61,7 @@ GlideRatioComputer::Compute(const MoreData &basic,
   if (!basic.location_available.Modified(last_location_available))
     return;
 
-  fixed DistanceFlown = basic.location.Distance(last_location);
+  fixed DistanceFlown = basic.location.DistanceS(last_location);
 
   // Glide ratio over ground
   vario_info.gr =

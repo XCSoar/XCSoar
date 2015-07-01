@@ -229,7 +229,7 @@ protected:
         /* no L/D if below waypoint */
         return;
 
-      const fixed distance = basic.location.Distance(way_point.location);
+      const fixed distance = basic.location.DistanceS(way_point.location);
       const fixed gr = distance / delta_h;
       if (!GradientValid(gr))
         return;

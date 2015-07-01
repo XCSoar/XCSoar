@@ -50,6 +50,6 @@ UpdateInfoBoxTerrainCollision(InfoBoxData &data)
   }
 
   fixed distance =
-    basic.location.Distance(calculated.terrain_warning_location);
+    basic.location.DistanceS(calculated.terrain_warning_location);
   data.SetValueFromDistance(distance);
 }

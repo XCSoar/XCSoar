@@ -47,7 +47,7 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
 bool
 AirspaceCircle::Inside(const GeoPoint &loc) const
 {
-  return (loc.Distance(m_center) <= m_radius);
+  return loc.DistanceS(m_center) <= m_radius;
 }
 
 AirspaceIntersectionVector
@@ -91,7 +91,7 @@ AirspaceCircle::ClosestPoint(const GeoPoint &loc,
                              gcc_unused const FlatProjection &projection) const
 {
   // Calculate distance from center point
-  const fixed d = loc.Distance(m_center);
+  const fixed d = loc.DistanceS(m_center);
 
   // If loc is INSIDE the circle return loc itself
   if (d <= m_radius)

@@ -134,7 +134,7 @@ RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
     return;
 
   /* only update the RasterMap if the center was moved far enough */
-  if (center.IsValid() && center.Distance(location) < fixed(1000))
+  if (center.IsValid() && center.DistanceS(location) < fixed(1000))
     return;
 
   weather_map->SetViewCenter(location, radius);

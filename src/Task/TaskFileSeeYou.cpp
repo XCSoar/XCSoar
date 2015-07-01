@@ -533,7 +533,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != NULL &&
-        wp->location.Distance(file_wp->location) <= fixed(10)) {
+        wp->location.DistanceS(file_wp->location) <= fixed(10)) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
       continue;
@@ -544,7 +544,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != NULL &&
-        wp->location.Distance(file_wp->location) <= fixed(10)) {
+        wp->location.DistanceS(file_wp->location) <= fixed(10)) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
       continue;

@@ -52,8 +52,8 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     GeoPoint plon = basic.location;
     plon.longitude += delta_lon;
 
-    fixed dlat = basic.location.Distance(plat);
-    fixed dlon = basic.location.Distance(plon);
+    fixed dlat = basic.location.DistanceS(plat);
+    fixed dlon = basic.location.DistanceS(plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
       north_to_latitude = delta_lat.Degrees() / dlat;

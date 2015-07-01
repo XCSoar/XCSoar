@@ -47,7 +47,7 @@ FlatProjection::SetCenter(const GeoPoint &_center)
 
   cos = center.latitude.fastcosine() * fixed_scale;
   r_cos = fixed(1) / cos;
-  approx_scale = Unproject(FlatGeoPoint(0,-1)).Distance(Unproject(FlatGeoPoint(0,1))) / 2;
+  approx_scale = Unproject(FlatGeoPoint(0,-1)).DistanceS(Unproject(FlatGeoPoint(0,1))) / 2;
 }
 
 FlatPoint

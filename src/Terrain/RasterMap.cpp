@@ -130,7 +130,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 
   const short invalid = RasterBuffer::TERRAIN_INVALID;
 
-  const fixed total_distance = start.Distance(end);
+  const fixed total_distance = start.DistanceS(end);
   if (!positive(total_distance)) {
     std::fill_n(buffer, size, invalid);
     return;
@@ -146,9 +146,9 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   }
 
   fixed clipped_start_distance =
-    std::max(clipped_start.Distance(start), fixed(0));
+    std::max(clipped_start.DistanceS(start), fixed(0));
   fixed clipped_end_distance =
-    std::max(clipped_end.Distance(start), fixed(0));
+    std::max(clipped_end.DistanceS(start), fixed(0));
 
   /* calculate the offsets of the clipped range within the buffer */
 

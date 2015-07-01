@@ -99,7 +99,7 @@ public:
     const Record r0 = Interpolate(_time - fixed(0.05));
     const Record r1 = Interpolate(_time + fixed(0.05));
 
-    fixed speed = p[1].location.Distance(p[2].location) / (p[2].time - p[1].time);
+    fixed speed = p[1].location.DistanceS(p[2].location) / (p[2].time - p[1].time);
     Angle bearing = r0.location.Bearing(r1.location);
 
     return GeoVector(speed, bearing);

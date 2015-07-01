@@ -251,7 +251,7 @@ TaskAutoPilot::IsFarFromTarget(const TaskAccessor& task,
   // are we considered close to the target?
 
   if (task.IsEmpty() || !task.GetLegStats().remaining.IsDefined())
-    return w[0].Distance(state.location) > state.ground_speed;
+    return w[0].DistanceS(state.location) > state.ground_speed;
 
   bool d_far = task.GetLegStats().remaining.GetDistance() > fixed(100);
 
@@ -264,7 +264,7 @@ TaskAutoPilot::IsFarFromTarget(const TaskAccessor& task,
   if (HasTarget(task))
     return d_far || !entered;
 
-  fixed dc = w[0].Distance(state.location);
+  fixed dc = w[0].DistanceS(state.location);
   if (awp == 0)
     return (dc > state.ground_speed);
 

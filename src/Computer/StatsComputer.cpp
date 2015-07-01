@@ -54,7 +54,7 @@ StatsComputer::DoLogging(const MoreData &basic,
 {
   /// @todo consider putting this sanity check inside Parser
   bool location_jump = basic.location_available && last_location.IsValid() &&
-                       basic.location.Distance(last_location) > fixed(200);
+    basic.location.DistanceS(last_location) > fixed(200);
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();

@@ -511,7 +511,7 @@ IsInRange(const SearchPoint &a, const SearchPoint &b,
      maximum range, we don't need to call the method
      GeoPoint::Distance() which is very expensive */
   return a.GetFlatLocation().DistanceSquared(b.GetFlatLocation()) <= half_max_range_sq ||
-    a.GetLocation().Distance(b.GetLocation()) <= max_distance;
+    a.GetLocation().DistanceS(b.GetLocation()) <= max_distance;
 }
 
 bool

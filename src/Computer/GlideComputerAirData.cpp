@@ -210,7 +210,7 @@ GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
       calculated.cruise_start_time = basic.time;
     } else {
       fixed DistanceFlown =
-        basic.location.Distance(calculated.cruise_start_location);
+        basic.location.DistanceS(calculated.cruise_start_location);
 
       calculated.cruise_gr =
           UpdateGR(calculated.cruise_gr, DistanceFlown,

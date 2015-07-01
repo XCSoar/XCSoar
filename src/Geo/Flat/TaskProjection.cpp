@@ -57,6 +57,6 @@ TaskProjection::ApproxRadius() const
 {
   assert(bounds.IsValid());
 
-  return std::max(GetCenter().Distance(bounds.GetSouthWest()),
-                  GetCenter().Distance(bounds.GetNorthEast()));
+  return std::max(GetCenter().DistanceS(bounds.GetSouthWest()),
+                  GetCenter().DistanceS(bounds.GetNorthEast()));
 }
