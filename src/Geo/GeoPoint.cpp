@@ -23,6 +23,7 @@
 #include "GeoPoint.hpp"
 #include "GeoVector.hpp"
 #include "Math.hpp"
+#include "SimplifiedMath.hpp"
 
 GeoPoint 
 GeoPoint::Parametric(const GeoPoint &delta, const fixed t) const
@@ -54,6 +55,14 @@ GeoPoint::DistanceBearing(const GeoPoint &other) const
   GeoVector gv;
   ::DistanceBearing(*this, other, &gv.distance, &gv.bearing);
   return gv;
+}
+
+fixed
+GeoPoint::DistanceS(const GeoPoint &other) const
+{
+  fixed distance;
+  ::DistanceBearingS(*this, other, &distance, nullptr);
+  return distance;
 }
 
 fixed 
