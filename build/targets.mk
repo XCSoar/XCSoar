@@ -244,6 +244,13 @@ ifeq ($(TARGET),UNIX)
 
   ifeq ($(ARMV6),y)
     TARGET_ARCH += -march=armv6
+
+    ifneq ($(CLANG),y)
+      # Force-disable thumb just in case the gcc binary was built with
+      # thumb enabled by default.  This fixes the dreaded gcc error
+      # "sorry, unimplemented: Thumb-1 hard-float VFP ABI".
+      TARGET_ARCH += -marm
+    endif
   endif
 
   ifeq ($(ARMV7),y)
