@@ -109,9 +109,13 @@ private:
 
     gcc_pure
     ClosingPair FindRange(const ClosingPair &p) const {
-      for (const auto &i : closing_pairs)
-        if (i.first <= p.first && i.second >= p.second)
+      for (const auto &i : closing_pairs) {
+        if (i.first > p.first)
+          break;
+
+        if (i.second >= p.second)
           return i;
+      }
 
       return ClosingPair(0, 0);
     }
