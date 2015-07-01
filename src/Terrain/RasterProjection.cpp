@@ -65,6 +65,6 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
 unsigned
 RasterProjection::DistancePixelsFine(fixed distance) const
 {
-  Angle angle = Angle::Radians(distance / REARTH);
+  Angle angle = Angle::Radians(distance / FAISphere::REARTH);
   return AngleToHeight(angle);
 }

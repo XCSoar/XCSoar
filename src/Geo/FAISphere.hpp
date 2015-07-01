@@ -32,28 +32,30 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Compiler.h"
 
-static constexpr unsigned REARTH = 6371000;
+namespace FAISphere {
+  static constexpr unsigned REARTH = 6371000;
 
-/**
- * Convert a distance on earth's surface [m] to the according Angle,
- * assuming the earth is a sphere.
- */
-constexpr
-static inline Angle
-EarthDistanceToAngle(fixed distance)
-{
-  return Angle::Radians(distance / REARTH);
-}
+  /**
+   * Convert a distance on earth's surface [m] to the according Angle,
+   * assuming the earth is a sphere.
+   */
+  constexpr
+  static inline Angle
+  EarthDistanceToAngle(fixed distance)
+  {
+    return Angle::Radians(distance / REARTH);
+  }
 
-/**
- * Convert an angle to the according distance on earth's surface [m],
- * assuming the earth is a sphere.
- */
-constexpr
-static inline fixed
-AngleToEarthDistance(Angle angle)
-{
-  return angle.Radians() * REARTH;
+  /**
+   * Convert an angle to the according distance on earth's surface [m],
+   * assuming the earth is a sphere.
+   */
+  constexpr
+  static inline fixed
+  AngleToEarthDistance(Angle angle)
+  {
+    return angle.Radians() * REARTH;
+  }
 }
 
 #endif

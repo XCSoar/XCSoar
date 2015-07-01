@@ -98,7 +98,7 @@ FlatProjection::ProjectRangeFloat(const GeoPoint &tp,
 {
   assert(IsValid());
 
-  return EarthDistanceToAngle(range).Native() * fixed_scale;
+  return FAISphere::EarthDistanceToAngle(range).Native() * fixed_scale;
 }
 
 unsigned

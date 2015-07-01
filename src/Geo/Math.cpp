@@ -186,8 +186,8 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
     return loc2;
 
   return IntermediatePoint(loc1, loc2,
-                           EarthDistanceToAngle(dthis),
-                           EarthDistanceToAngle(dtotal));
+                           FAISphere::EarthDistanceToAngle(dthis),
+                           FAISphere::EarthDistanceToAngle(dtotal));
 }
 
 GeoPoint
@@ -355,7 +355,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   if (distance != nullptr) {
     Angle distance_angle;
     DistanceBearingS(loc1, loc2, &distance_angle, bearing);
-    *distance = AngleToEarthDistance(distance_angle);
+    *distance = FAISphere::AngleToEarthDistance(distance_angle);
   } else
     DistanceBearingS(loc1, loc2, nullptr, bearing);
 #endif
@@ -409,7 +409,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
     *loc4 = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
   }
 
-  return AngleToEarthDistance(cross_track_distance);
+  return FAISphere::AngleToEarthDistance(cross_track_distance);
 #endif
 }
 
@@ -454,7 +454,7 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 
   return Distance(loc1, projected);
 #else
-  return AngleToEarthDistance(along_track_distance);
+  return FAISphere::AngleToEarthDistance(along_track_distance);
 #endif
 }
 
@@ -485,7 +485,7 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   count_distbearing++;
 #endif
 
-  return (2 * REARTH) *
+  return (2 * FAISphere::REARTH) *
     (EarthDistance(a12) + EarthDistance(a23)).Radians();
 }
 
@@ -560,7 +560,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   loc_out.latitude = Angle::Radians(lat2);
 
 #else
-  const Angle distance_angle = EarthDistanceToAngle(distance);
+  const Angle distance_angle = FAISphere::EarthDistanceToAngle(distance);
 
   const auto scd = distance_angle.SinCos();
   const fixed sin_distance = scd.first, cos_distance = scd.second;

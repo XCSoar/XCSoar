@@ -40,7 +40,7 @@ ToGLM(const WindowProjection &projection, const GeoPoint &reference)
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
-  const fixed scale_r = scale * REARTH;
+  const fixed scale_r = scale * FAISphere::REARTH;
   const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
   const fixed scale_y = -scale_r;
 
@@ -71,7 +71,7 @@ ApplyProjection(const WindowProjection &projection, const GeoPoint &reference)
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
-  const fixed scale_r = scale * REARTH;
+  const fixed scale_r = scale * FAISphere::REARTH;
   const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
   const fixed scale_y = -scale_r;
 

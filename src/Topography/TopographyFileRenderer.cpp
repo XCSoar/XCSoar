@@ -238,7 +238,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const unsigned level = file.GetThinningLevel(map_scale);
   const ShapeScalar min_distance =
     ShapeScalar(file.GetMinimumPointDistance(level))
-    / (Layout::Scale(1) * REARTH);
+    / (Layout::Scale(1) * FAISphere::REARTH);
 
 #ifdef HAVE_GLES
   const float *const opengl_matrix = nullptr;
