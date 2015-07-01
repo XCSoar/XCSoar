@@ -83,6 +83,8 @@ BLUEFLY_SOURCES = \
 	$(DRIVER_SRC_DIR)/BlueFly/Register.cpp
 
 DRIVER_SOURCES = \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
 	$(VOLKSLOGGER_SOURCES) \
 	$(IMI_SOURCES) \
 	$(LX_SOURCES) \

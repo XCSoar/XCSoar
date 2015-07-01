@@ -640,9 +640,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Startup.cpp \
 	$(SRC)/Components.cpp \
 	\
-	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \
-	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/MultipleDevices.cpp \
 	$(SRC)/Device/device.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
