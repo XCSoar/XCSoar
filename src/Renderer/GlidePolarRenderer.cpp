@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "NMEA/ClimbHistory.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Util/StaticString.hxx"
 
 #include <stdio.h>
@@ -119,10 +120,12 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   canvas.Select(chart_look.label_font);
 
   StaticString<80> text;
+  StaticString<20> value;
   canvas.SetBackgroundTransparent();
 
-  text.Format(_T("%s: %d kg"), _("Mass"),
-              (int)glide_polar.GetTotalMass());
+  FormatUserMass(glide_polar.GetTotalMass(), value.buffer(), true);
+
+  text.Format(_T("%s: %s"), _("Mass"), value.c_str());
   canvas.DrawText(rc.left + Layout::Scale(30),
                   rc.bottom - Layout::Scale(55),
                   text);
@@ -130,7 +133,9 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   fixed wl = glide_polar.GetWingLoading();
   if ( wl != fixed(0) )
   {
-    text.Format(_T("%s: %.1f kg/m2"), _("Wing loading"), (double)wl);
+    FormatUserWingLoading(wl, value.buffer(), true);
+
+    text.Format(_T("%s: %s"), _("Wing loading"), value.c_str());
 
     canvas.DrawText(rc.left + Layout::Scale(30),
                     rc.bottom - Layout::Scale(40),
