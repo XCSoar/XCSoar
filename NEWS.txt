@@ -70,6 +70,20 @@ Version 6.8 - not yet released
   - support open Wifi networks (#3391)
   - support USB-OTG
   - export data partition via USB storage
+
+Version 6.7.9 - 2015/07/03
+* user interface
+  - fix crash in task editor
+  - fix crash while panning the map
+  - improved font renderer
+* data files
+  - fix comments in TNP files
+* calculations
+  - faster triangle score calculation
+  - fix crash in triangle score calculation (#3576)
+* Android
+  - timeout for the HTTP client (e.g. LiveTrack24)
+* Kobo
   - enable crash dumps in XCSoarData/crash/
 
 Version 6.7.8 - 2015-05-22
