@@ -43,6 +43,28 @@ void FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
                     bool include_unit = true);
 
 /**
+ * Converts a mass into a formatted string
+ * @param buffer buffer string to write to (pointer)
+ * @param size Size of the buffer
+ * @param value the mass
+ * @param unit the mass unit (e.g. kg, ft, ...)
+ * @param include_unit include the unit into the string?
+ */
+void FormatMass(TCHAR *buffer, fixed value, Unit unit,
+                bool include_unit = true);
+
+/**
+ * Converts a wing loading into a formatted string
+ * @param buffer buffer string to write to (pointer)
+ * @param size Size of the buffer
+ * @param value the wing loading
+ * @param unit the wing loading unit (e.g. kg/m2, ...)
+ * @param include_unit include the unit into the string?
+ */
+void FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
+                       bool include_unit = true);
+
+/**
  * Converts an signed/relative altitude into a formatted string
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer

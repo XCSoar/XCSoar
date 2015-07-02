@@ -28,6 +28,20 @@ Copyright_License {
 
 #include <stdio.h>
 
+
+void
+FormatUserWingLoading(fixed value, TCHAR *buffer, bool include_unit)
+{
+  FormatWingLoading(buffer, value, Units::GetUserWingLoadingUnit(),
+                    include_unit);
+}
+
+void
+FormatUserMass(fixed value, TCHAR *buffer, bool include_unit)
+{
+  FormatMass(buffer, value, Units::GetUserMassUnit(), include_unit);
+}
+
 void
 FormatUserAltitude(fixed value, TCHAR *buffer, bool include_unit)
 {

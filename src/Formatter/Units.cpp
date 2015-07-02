@@ -43,6 +43,27 @@ FormatInteger(TCHAR *buffer,
 }
 
 void
+FormatMass(TCHAR *buffer, fixed value, Unit unit,
+           bool include_unit)
+{
+  FormatInteger(buffer, value, unit, include_unit, false);
+}
+
+void
+FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
+                  bool include_unit)
+{
+  const fixed uvalue = Units::ToUserUnit(value, unit);
+  int precision = uvalue > fixed(20) ? 0 : 1;
+
+    if (include_unit)
+      _stprintf(buffer, _T("%.*f %s"), precision, (double)uvalue,
+                Units::GetUnitName(unit));
+    else
+      _stprintf(buffer, _T("%.*f"), precision, (double)uvalue);
+}
+
+void
 FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
                       bool include_unit)
 {

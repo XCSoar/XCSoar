@@ -33,6 +33,24 @@ Copyright_License {
 class AtmosphericPressure;
 
 /**
+ * Converts a double-based wing loading into a formatted string
+ * @param value The double-based wing loading
+ * @param buffer buffer string to write to (pointer)
+ * @param size Size of the buffer
+ */
+void FormatUserWingLoading(fixed value, TCHAR *buffer,
+                           bool include_unit = true);
+
+/**
+ * Converts a double-based mass into a formatted string
+ * @param value The double-based mass
+ * @param buffer buffer string to write to (pointer)
+ * @param size Size of the buffer
+ */
+void FormatUserMass(fixed value, TCHAR *buffer,
+                    bool include_unit = true);
+
+/**
  * Converts a double-based Altitude into a formatted string
  * @param Altitude The double-based Altitude
  * @param buffer buffer string to write to (pointer)
