@@ -312,20 +312,23 @@ private:
 
       if (!fai) return true;
 
-      assert(df_min == df_max);
+      // Solution is integral, calculate rough distance for fast checks
+      const unsigned df_total = tp1.GetMaxDistance(tp2) +
+                                tp2.GetMaxDistance(tp3) +
+                                tp3.GetMaxDistance(tp1);
 
       // fast checks, as in IsFeasible
 
-      // shortest >= 28.2% * dist_total
-      if (shortest_max * 39 >= df_max * 11)
+      // shortest >= 28.2% * df_total
+      if (shortest_max * 39 >= df_total * 11)
         return true;
 
-      // longest >= 45.8% * dist_total
-      if (longest_max * 24 > df_max * 11)
+      // longest >= 45.8% * df_total
+      if (longest_max * 24 > df_total * 11)
         return false;
 
-      // small triangle and shortest < 27.5% dist_total
-      if (df_max < large_triangle_check && shortest_max * 40 < df_max * 11)
+      // small triangle and shortest < 27.5% df_total
+      if (df_total < large_triangle_check && shortest_max * 40 < df_total * 11)
         return false;
 
       // detailed checks
