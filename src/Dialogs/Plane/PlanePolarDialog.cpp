@@ -38,6 +38,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "Units/Units.hpp"
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener, ActionListener {
@@ -124,8 +125,8 @@ PlanePolarWidget::Update()
   LoadPolarShape(plane.polar_shape);
   UpdatePolarLabel();
 
-  LoadValue(REFERENCE_MASS, plane.reference_mass);
-  LoadValue(DRY_MASS, plane.dry_mass);
+  LoadValue(REFERENCE_MASS, plane.reference_mass, UnitGroup::MASS);
+  LoadValue(DRY_MASS, plane.dry_mass, UnitGroup::MASS);
 }
 
 void
@@ -139,14 +140,14 @@ PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Add(new PolarShapeEditWidget(plane.polar_shape, this));
 
   AddFloat(_("Reference Mass"), _("Reference mass of the polar"),
-           _T("%.0f kg"), _T("%.0f"),
-           fixed(0), fixed(1000), fixed(5),
-           false, plane.reference_mass);
+           _T("%.0f %s"), _T("%.0f"),
+           fixed(0), fixed(1000), fixed(5), false,
+           UnitGroup::MASS, plane.reference_mass);
 
   AddFloat(_("Dry Mass"), _("Dry all-up flying mass of your plane"),
-           _T("%.0f kg"), _T("%.0f"),
-           fixed(0), fixed(1000), fixed(5),
-           false, plane.dry_mass);
+           _T("%.0f %s"), _T("%.0f"),
+           fixed(0), fixed(1000), fixed(5), false,
+           UnitGroup::MASS, plane.dry_mass);
 }
 
 void
@@ -167,8 +168,8 @@ PlanePolarWidget::Save(bool &_changed)
       plane.polar_shape = widget.GetPolarShape();
   }
 
-  changed |= SaveValue(REFERENCE_MASS, plane.reference_mass);
-  changed |= SaveValue(DRY_MASS, plane.dry_mass);
+  changed |= SaveValue(REFERENCE_MASS, UnitGroup::MASS, plane.reference_mass);
+  changed |= SaveValue(DRY_MASS, UnitGroup::MASS, plane.dry_mass);
 
   _changed |= changed;
   return true;
