@@ -38,7 +38,7 @@ Version 6.8 - not yet released
   - airspace labels
 * user interface
   - allow horizontal speeds in m/s
-  - allow wing loading in lb/ft^2
+  - allow mass in lb, wing loading in lb/ft^2
   - download data files from site configuration
   - remove support for custom status files
   - merge airspace warning buttons "ACK Warn" and "ACK Space" (#1086)

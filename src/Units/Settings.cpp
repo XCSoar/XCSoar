@@ -35,6 +35,7 @@ UnitSetting::SetDefaults()
   task_speed_unit = Unit::KILOMETER_PER_HOUR;
   pressure_unit = Unit::HECTOPASCAL;
   wing_loading_unit = Unit::KG_PER_M2;
+  mass_unit = Unit::KG;
 }
 
 Unit
@@ -70,6 +71,9 @@ UnitSetting::GetByGroup(UnitGroup group) const
 
   case UnitGroup::WING_LOADING:
     return wing_loading_unit;
+
+  case UnitGroup::MASS:
+    return mass_unit;
   }
 
   return Unit::UNDEFINED;
@@ -86,5 +90,6 @@ UnitSetting::operator==(const UnitSetting &right) const
       wind_speed_unit == right.wind_speed_unit &&
       task_speed_unit == right.task_speed_unit &&
       pressure_unit == right.pressure_unit &&
-      wing_loading_unit == right.wing_loading_unit);
+      wing_loading_unit == right.wing_loading_unit &&
+      mass_unit == right.mass_unit);
 }

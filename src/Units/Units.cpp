@@ -35,6 +35,7 @@ UnitSetting Units::current = {
   Unit::KILOMETER_PER_HOUR,
   Unit::HECTOPASCAL,
   Unit::KG_PER_M2,
+  Unit::KG,
 };
 
 void
@@ -47,6 +48,12 @@ Unit
 Units::GetUserWingLoadingUnit()
 {
   return current.wing_loading_unit;
+}
+
+Unit
+Units::GetUserMassUnit()
+{
+  return current.mass_unit;
 }
 
 Unit

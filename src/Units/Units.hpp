@@ -53,6 +53,13 @@ namespace Units
   Unit GetUserWingLoadingUnit();
 
   /**
+   * Returns the user-specified unit for mass
+   * @return The user-specified unit for mass
+   */
+  gcc_pure
+  Unit GetUserMassUnit();
+
+  /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */

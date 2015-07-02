@@ -58,6 +58,8 @@ static constexpr UnitSymbolStrings symbol_strings[] = {
   { _T("in"), _T("Hg"), false },
   { _T("kg"), _T("m²"), false },
   { _T("lb"), _T("ft²"), false },
+  { nullptr, _T("kg"), false },
+  { nullptr, _T("lb"), false },
 };
 
 static_assert(ARRAY_SIZE(symbol_strings) == (size_t)Unit::COUNT,

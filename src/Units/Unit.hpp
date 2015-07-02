@@ -48,6 +48,8 @@ enum class Unit: uint8_t {
   INCH_MERCURY,
   KG_PER_M2,
   LB_PER_FT2,
+  KG,
+  LB,
 
   /**
    * The sentinel: the number of units in this enum.
