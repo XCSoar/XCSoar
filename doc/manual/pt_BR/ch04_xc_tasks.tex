@@ -96,7 +96,7 @@ Os detalhes do waypoint contém duas páginas principais (acessadas através dos
 \subsection*{Detalhes do Waypoint}
 \label{sec:waypointdetails}
 Esta página contém texto descritivo da localização do waypoint, frequência de rádio e informações da pista (se houver esta informação no arquivo de waypoints), elevação, hora do nascer e pôr do sol, direção, distancia ao waypoint e altitude necessária para atingir o waypoint. Também há um botão 
-\bmenuw{GoTo} para iniciar imediatamente a navegação a este waypoint.  Este botão cancela a prova atual.
+\bmenuw{IR} para iniciar imediatamente a navegação a este waypoint.  Este botão cancela a prova atual.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
@@ -198,14 +198,14 @@ Em vôo, a Calculadora de Prova também pode ser acessada da página de Análise
 \end{description}
 Veja seção ~\ref{sec:task-speed-estim} para mais detalhes da velocidade da prova e cálculos de MacCready realizados.
 
-Fechando a janela, o valor digitado de MacCready será usado como ajuste. Se o botão \bmenuw{Cancel} for pressionado, o ajuste de MacCready não será afetado.
+Fechando a janela, o valor digitado de MacCready será usado como ajuste. Se o botão \bmenuw{Fechar} for pressionado, o ajuste de MacCready não será afetado.
 
-The \bmenuw{Pilões} button, para provas AAT tasks, ajuste a faixa (aumente ou diminua) para que o tempo estimado exceda o tempo designado para prova subtraído de 5 minutos. A faixa é ajustada largamente, geralmente todos os alvos são configurados para ''auto", significando que o piloto não tem que ajustar manualmente a faixa para achar o caminho para a chegada no tempo designado, diminuindo o trabalho do piloto.
+O botão \bmenuw{Pilões} para provas AAT , ajusta o alcance (aumenta ou diminui) para que o tempo estimado exceda o tempo designado para prova subtraído de 5 minutos. O alcance é ajustado amplamente, geralmente todos os alvos são configurados para ''auto", significando que o piloto não tem que ajustar manualmente o alcance para achar o caminho para a chegada no tempo designado, diminuindo o trabalho do piloto.
   
 \subsection*{Pilões}
 Esta opção mostra uma lista ordenada de pontos da prova atual.
 \menulabelr{\bmenuw{Pilões}} 
-ISe não houver waypoints na prova atual, só haverá a opção “Adicionar Pilão”.  Clicando no waypoint da lista e depois em “Selec”, o mesmo será incluso na lista.  
+Se não houver waypoints na prova atual, só haverá a opção \bmenuw{Adicionar Pilão}.  Clicando no waypoint da lista e depois em \bmenug{Selec} o mesmo será incluso na lista.  
 
 \subsection*{Gerenciar}
 Esta página permite acionar todas as operações necessárias para criar novas provas ou gerenciar
@@ -216,12 +216,12 @@ Esta página permite acionar todas as operações necessárias para criar novas 
 \item [\bmenuw{Nova Prova}] Apaga a prova atual e limpa as regras da prova, deixando os valores padrões.
 \item [\bmenuw{Declarar}] Se houver um registrador externo conectado, permitirá que se envie a prova atual para o logger e faça a declaração.
 \item [\bmenuw{Procurar}] Mostra uma lista de provas salvas, permitindo o piloto carregar uma prova já realizada.  Observe que esta opção irá sobrescrever a prova atual.
-\item [\bmenuw{Salvar}] SSalva a prova atual.  Clicando em 
-  \bmenuw{Save} o piloto será questionado a entrar com um nome de arquivo para ser salvo.
+\item [\bmenuw{Salvar}] Salva a prova atual.  Clicando em 
+  \bmenuw{Salvar} o piloto será questionado a entrar com um nome de arquivo para ser salvo.
 \end{itemize}
 
 \subsection*{Regras}
-TOs valores neste menu dependem do tipo de prova selecionado.  Clicando 
+Os valores neste menu dependem do tipo de prova selecionado.  Clicando 
 \menulabelr{\bmenuw{Regras}} em qualquer valor existente abrirá outro menu permitindo ao piloto selecionar um valor diferente para esta regra.  Os tipos de provas serão apresentados mais a frente.
 
 Também clicando em \bmenuw{Regras} novamente, permite alternar entre uma visão geral da prova e retornar para a tela anterior.  
@@ -238,11 +238,11 @@ A descrição detalhada dos tipos de prova está listada adiante, mas este manua
   \item [Arm start manually] se ajustado para “Ligado”, alguns botões extras serão mostrados em ordem para \bmenug{Armar largada} bem como \bmenug{Desarmar largada} no menu \bmenug{Nav 1/2}, controlando a condição de detecção do Start.
   \item [Start open time] É a hora quando o Start deve abrir. 
   \item [Start close time] Hora em que a área de Start deverá fechar.
-  \item [Start max. speed] esta é a velocidade máxima permitida na área de start.  Deve ter valor 0 se não houver limite.
-  \item [Start max. height] maior altitude acima da altura de referência do start (AGL ou MSL), cuja prova pode ser iniciada.  Se não houver limites, o valor deverá ser 0.
-  \item [Start height ref.] especifica a altura máxima acima da altura de referência ao nível do solo do ponto de start (AGL ou MSL).
-  \item [Finish min. height] Taltura mínima baseada na altura final de referência (AGL ou MSL) que a prova pode ser finalizada.  Deve ser ajustada em zero se não houver limite. 
-  \item [Finish height ref.] altura mínima referenciada ao nível do solo para o ponto final da prova (AGL ou MSL).
+  \item [Veloc máx largada] esta é a velocidade máxima permitida na área de start.  Deve ter valor 0 se não houver limite.
+  \item [Altura máx largada] maior altitude acima da altura de referência do start (AGL ou MSL), cuja prova pode ser iniciada.  Se não houver limites, o valor deverá ser 0.
+  \item [Ref altura largada] especifica a altura máxima acima da altura de referência ao nível do solo do ponto de start (AGL ou MSL).
+  \item [Altura mín chegada] Taltura mínima baseada na altura final de referência (AGL ou MSL) que a prova pode ser finalizada.  Deve ser ajustada em zero se não houver limite. 
+  \item [Altura final de ref.] altura mínima referenciada ao nível do solo para o ponto final da prova (AGL ou MSL).
 % \item [FAI start/finish rules] If enabled, this task type has no max. start height 
 %   or max. start speed.  Finish height reference is set to AGL and finish height 
 %   is 1000m below the start height \todonum[inline]{Is this description correct?}
@@ -265,14 +265,14 @@ Uma vez definido o tipo de prova e as regras de início e fim também foram defi
 
 \section{Regras da prova para os pilões}\label{sec:task-rules}
 
-A janela de \bmenuw{Pilões} dialogue brings up the list of waypoints in the task. 
-\menulabelr{\bmenuw{Pilões}} Se não houver pilões definidos, a tela irá mostrar uma lista vazia.  Com ‘Adicionar Pilão’, botões acima e abaixo, a lista é criada.  Os waypoints podem ser o ponto de início, pilão ou ponto final.  Selecione qualquer waypoint na lista ou clicando em ‘Editando Ponto’ mostrará as definições deste waypoint.  Clicando me ‘Mudar o Tipo’ mostrará uma série de opções de tipos de pilões disponíveis.  As definições de cada tipo são mostradas na parte inferior da tela.
+A janela de \bmenuw{Pilões} mostra uma lista de waypoint da prova. 
+\menulabelr{\bmenuw{Pilões}} Se não houver pilões definidos, a tela irá mostrar uma lista vazia.  Com \bmenuw{Adicionar Pilão}, botões acima e abaixo, e \bmenug{Fazer Final} a lista é criada.  Os waypoints podem ser o ponto de início, pilão ou ponto final.  Selecione qualquer waypoint na lista ou clicando em \bmenug{Editar Ponto} mostrará as definições deste waypoint.  Clicando em \bmenuw{Mudar Tipo} mostrará uma série de opções de tipos de pilões disponíveis.  As definições de cada tipo são mostradas na parte inferior da tela.
 
 Uma série de regras de prova podem ser usadas quando se monta uma prova, incluindo o triangulo FAI e Prova de Área Atribuída (AAT).  Muitas características da prova também podem ser personalizadas.
 
 As linhas de início e fim são centralizadas nos seus waypoint e alinhadas perpendicularmente aos waypoints anteriores e posteriores, respectivamente.
 
-Os pilos de setor são segmentos alinhados a 90° com a bissecção dos waypoints anteriores e posteriores, comumente usados em provas FAI.  Também há opções para os triângulos ingleses BGA e alemães DAeC.  
+Os pilões de setor são segmentos alinhados a 90° com a bissecção dos waypoints anteriores e posteriores, comumente usados em provas FAI.  Também há opções para os triângulos ingleses BGA e alemães DAeC.  
 
 \subsection*{Tipos de start point}
 As condições para se fazer o start dependem do tipo de início:
@@ -284,11 +284,11 @@ As condições para se fazer o start dependem do tipo de início:
 \subsection*{Tipos de pilões}
 As condições para se fazer um pilão válido dependente de seu tipo:
 \begin{description}
-\item[Setor FAI] quando a aeronave entra na zona de observação (OZ), definida por um segmento e distância radial do waypoint.  O segmento é definido por um arco de 90° centrado sobre a bissetriz das pernas de entrada e saída, com distância de 20km.  
+\item[Setor FAI] quando a aeronave entra na zona de observação (ZO), definida por um segmento e distância radial do waypoint.  O segmento é definido por um arco de 90° centrado sobre a bissetriz das pernas de entrada e saída, com distância de 20km.  
 \item[Keyhole Sector (DAeC 0.5/10 sector)] é quando a aeronave entra em uma zona de observação, definida por um segmento e distância do waypoint. O segmento é definido por um arco de 90° centrado na bissetriz das pernas de entrada e saída, com distância de 10km.  A zona de observação também inclui um cilindro de 500m.
 \item[Turnpoint Cylinder]  quando a aeronave entra em uma zona de observação definida por uma distância radial do waypoint.
 \item[BGA Enhanced Option Fixed Course Sector]  quando a aeronave entra na zona de observação definida por um segmento e uma distância radial do waypoint.  O segmento é definido por um arco de 180° centrado na bissetriz das pernas de entrada e saída, com distância de 10km.  A zona de observação também inclui um cilindro de 500m (regras britânicas).
-\item[Area Zylinder (AAT)]  and
+\item[Area Cylinder (AAT)]  e
 \item[Area Sector (AAT)]  quando a aeronave entra na zona de observação definida por uma distância radial do waypoint e segmento para áreas de setores.
 
 \end{description}
@@ -306,7 +306,7 @@ O avanço automático é disparado sempre que uma condição é alcançada.  Par
 
 As regras adicionais da prova para inícios e finais válidos também devem ser especificadas.  O Start deve ter uma altitude máxima acima do solo e velocidade máxima definidas.  Os finais devem ter uma definição da altitude mínima acima do solo.  Estes parâmetros são definidos na página “Padrão das Provas”, nos ajustes das configurações.
 
-Para provas não AAT, há opção disponível para ajustar a altura mínima final de acordo com a regra FAI, pela qual estabelece a altura mínima de chegada deve ser 1000 metros acima da altura de largada.
+Para provas não AAT, há opção disponível para ajustar a altura mínima final de acordo com a regra FAI, pela qual estabelece a altura mínima de chegada deve ser 1.000 metros acima da altura de largada.
 
 
 %Need to add a section describing how to start the task%
@@ -328,7 +328,7 @@ Para provas não-Corrida, não é necessária nenhuma interação do usuário pa
 Os botões \bmenug{Pto virada anterior} e
 \bmenug{Próx. Pto. Virada} mostram rótulos dinâmicos que indicam a ação a ser feita se selecionados.
 
-FPara os pontos de provas que necessitam serem armados, \bmenug{Próx. Pto. Virada} se torna 
+Para os pontos de provas que necessitam serem armados, \bmenug{Próx. Pto. Virada} se torna 
 \bmenug{Armar ponto} se o ponto não for armado;  se estiver armado, então aparecerá
 \bmenug{Próx. Pto. Virada} permitindo o avanço manual.  O
 \bmenug{Pto. virada anterior} aparecerá como\bmenug{Desarmar ponto}se o ponto estiver armado e vice versa.  Igualmente para provas de corrida, estes itens de menu se atualizam para armar os pontos de início.  Se o próximo ponto de virada é o ponto final, o rótulo se altera para tal.
@@ -367,15 +367,15 @@ Um bip do sistema e uma mensagem é mostrada no avanço da prova/waypoint.  A me
 
 O sistema de provas permite que se defina start alternativos:
 
-\blink\bmenuw{Pilões} select start point, \menulabelr{\bmenug{Nav 1/2}\blink
+\blink\bmenuw{Pilões} selecione o início, \menulabelr{\bmenug{Nav 1/2}\blink
 \bmenug{Prova}}\bmenuw{Editar Ponto}\blink\bmenuw{Habilitar Starts Alternados}
 
-Na página de ponto de start do Gerenciador de Tarefas, mude para \bmenuw{Habilitar Starts Alternados}. Outra tela aparecerá para definir o ponto alternativo.  Neste caso, os pontos de start devem ter sidos definidos previamente.  Depois de selecionado \bmenuw{Habilitar Starts Alternados} e teclado \bmenuw{Edit Alternates}. After selecting ``Add Alternate Start'' and touching 
+Na página de ponto de start do Gerenciador de Tarefas, mude para \bmenuw{Habilitar Starts Alternados}. Outra tela aparecerá para definir o ponto alternativo.  Neste caso, os pontos de start devem ter sidos definidos previamente.  Depois de selecionado \bmenuw{Habilitar Starts Alternados} e teclado \bmenuw{Edit Alternates}. Depois de selecionado\bmenuw{Add Alternates Starts} e pressionando 
 \bmenuw{Realocar} abrirá a janela para seleção de waypoints.
  
-Tendo configurado alguns Starts alternativos, o método “próximo waypoint” será novamente aumentado.  Antes da detecção de um start vário e tendo armado o start manualmente, no menu de botões irá aparecer  \bmenug{Próximo Start}.
+Tendo configurado alguns starts alternativos, o método “próximo waypoint” será novamente aumentado.  Antes da detecção de um start válido e tendo armado o start manualmente, no menu de botões irá aparecer  \bmenug{Próximo Start}.
 
-Resumindo, todos os rótulos dinâmicos em \bmenug{Nav 1/2} mostrará os comandos a serem executados para selecionar os waypoints e condições, tanto na ordem normal como inversa.
+Resumindo, todos os rótulos dinâmicos em \bmenug{Nav 1/2} mostrarão os comandos a serem executados para selecionar os waypoints e condições, tanto na ordem normal como inversa.
 
 %\begin{center}
 %\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/%dialog-startpoint2.png}
@@ -423,7 +423,7 @@ Resumindo, todos os rótulos dinâmicos em \bmenug{Nav 1/2} mostrará os comando
 Se as condições atmosféricas ficarem piores, você poderá concluir que será impossível completar a prova.  Neste caso, você poderá instruir o XCSoar para “abortar” a prova e lhe orientar a procurar um pouso seguro.  Uma prova ordenada pode ser abortada de diversas maneiras, tanto pela seleção do waypoint e executar o comando ‘ir para’ ou acionando o modo de aborto.  Em ambos os casos, a prova atual poderá ser retomada.
 
 \subsection*{Abortando a prova}\label{sec:taskabort}
-Acionando o modo de aborto, força o XCSoar a entrar em modo especial de planeio final.  Para se aprofundar em modos de vôo, veja a seção \menulabelr{\bmenug{Nav 2/2}\blink\bmenug{Prova Abortar}} Para se aprofundar em modos de vôo, veja a seção  \ref{sec:flightmodes}. Neste modo de vôo, a opção de configuração “alcance polar” determina qual a altura de chegada do waypoint, usando o valor de segurança de MacCready para abortar a prova.  O padrão é usar o MacCready de segurança.  Quando se alterna para o modo de aborto, o valor de MacCready é alterado para seguro, mesmo que seja mais baixo que o valor atual em vôo.
+Acionando o modo de aborto, força o XCSoar a entrar em modo especial de planeio final.  Para se aprofundar em modos de vôo, veja a seção \menulabelr{\bmenug{Nav 2/2}\blink\bmenug{Prova Abortar}}.  Para se aprofundar em modos de vôo, veja a seção  \ref{sec:flightmodes}. Neste modo de vôo, a opção de configuração “alcance polar” determina qual a altura de chegada do waypoint, usando o valor de segurança de MacCready para abortar a prova.  O padrão é usar o MacCready de segurança.  Quando se alterna para o modo de aborto, o valor de MacCready é alterado para seguro, mesmo que seja mais baixo que o valor atual em vôo.
 
 Com o modo de aborto, a prova é desabilitada.  No mapa haverá pontos para os próximos pontos pousáveis para ajudar na decisão do piloto.  Enquanto durar o vôo, o grupo de pontos pousáveis é mantido permanentemente.  Os pontos pousáveis podem se alterar dinamicamente quando estiver em modo de aborto portanto, a qualquer momento vários pontos pousáveis são mostrados e qualquer um deles pode ser selecionado como waypoint ativo.  Mesmo que não haja ponto pousável dentro do planeio, os raios serão desenhados na tela
 \sketch{figures/abort-low.png} 
@@ -431,14 +431,13 @@ Se as condições melhorarem, a prova pode ser retomada selecionando o mesmo bot
 
 \subsection*{Alternativos} \label{sec:alternates}
 Os pontos alternativos são mantidos durante o vôo, refletindo que o piloto mantém seus olhos nestes pontos.\menulabelr{\bmenug{Nav 1/2}\blink
-\bmenug{Alternativos}} Six landing 
-options are maintained. .  Seis opções de pousos serão mantidas.  São filtrados pelos critérios de configuração (simples, prova ou casa). \config{alternatesmode} 
-CEscolhendo Prova ou Casa, há a inserção de alguns conceitos na apresentação dos alternativos, enquanto você está sendo orientado pela prova. 
+\bmenug{Alternativos}}.  Seis opções de pousos serão mantidas.  São filtradas pelos critérios de configuração (simples, prova ou casa). \config{alternatesmode} 
+Escolhendo Prova ou Casa, há a inserção de alguns conceitos na apresentação dos alternativos, enquanto você está sendo orientado pela prova. 
 
-Igualmente quando se tem toda a lista de waypoints, as informações adicionais podem ser vistas clicando em “Detalhes” antes de decidir para qual ponto se navegara.  Selecione um waypoint da lista e clique em \bmenuw{Ir Para}.
+Igualmente quando se tem toda a lista de waypoints, as informações adicionais podem ser vistas clicando em \bmenuw{Detalhes} antes de decidir para qual ponto se navegara.  Selecione um waypoint da lista e clique em \bmenuw{Ir Para}.
 \sketch{figures/alternates_list.png}
 
-Todavia, os itens na lista de alternativos obedecem regras diferentes e interagem da mesma forma com a prova atual.  Escolher um ponto na lista de alternativos aborta a prova; uma vez que as condições melhores, o resumo da prova pode ser dobrado pelo botão já mencionado.
+Todavia, os itens na lista de alternativos obedecem regras diferentes e interagem da mesma forma com a prova atual.  Escolher um ponto na lista de alternativos aborta a prova; uma vez que as condições melhores, o resumo da prova pode ser realizado pelo botão já mencionado.
 
 
 \section{Estado da prova }\label{sec:task-status}
@@ -452,7 +451,7 @@ A aba de prova mostra o tempo AAT, distâncias alcançadas, tempos restantes e d
 
 \begin{center}
 \begin{tabular}{c c}
-Task & Rules \\
+Prova & Regras \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/status-task.png} &
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/status-rules.png} \\
 \end{tabular}
@@ -471,7 +470,7 @@ para mais detalhes.
 
 \subsection*{Movendo manualmente os alvos}
 
-Para fazer a especificação dos alvos diretamente, a localização destes é definida por alguns parâmetros que determinam quão longe da distância mínima ou máxima o alvo está. É expresso em porcentagem.  Por exemplo, um alcance ajustado em 100%, o alvo é posicionado para fornecer a distância máxima possível de onde está o alvo.  Com o alcance ajustado em -100%, o alvo é posicionado para fornecer a mínima distância total da prova.
+Para fazer a especificação dos alvos diretamente, a localização destes é definida por alguns parâmetros que determinam quão longe da distância mínima ou máxima o alvo está. É expresso em porcentagem.  Por exemplo, um alcance ajustado em 100\%, o alvo é posicionado para fornecer a distância máxima possível de onde está o alvo.  Com o alcance ajustado em -100\%, o alvo é posicionado para fornecer a mínima distância total da prova.
 
 O alcance zero determina a distância nominal da prova:  para setores, a prova é a metade da bissetriz radial; para cilindros, o alvo é o centro do cilindro.
 
@@ -596,7 +595,7 @@ Vários registradores de vôo são acessíveis através do XCSoar:
 \end{itemize}
 
 \subsection*{Configuração}
-Uma tabela completa de características aceitas dos registradores está na seção~\ref{sec:supported-varios}.  
+Uma tabela completa de características aceitas dos registradores está na seção~\ref{sec:supported-varios}.
 A configuração é descrita em detalhes na seção ~\ref{conf:logger}.  Os detalhes dos arquivos ‘log’ estão na seção ~\ref{sec:logfiles}.
 
 \subsection*{Ativação do Registrador}
@@ -631,7 +630,7 @@ Para iniciar um replay do registo, primeiro selecione o arquivo para carregar e 
 Pare o registrador usando   \button{Parar}.
 Uma vez iniciado, apertando a tecla  \button{Iniciar} tem o feito de reiniciar o replay.
 
-\tip É recomendado reiniciar o dispositivo ante de voar, depois que um arquivo de log foi visto, para se assegurar que as estatísticas internas do XCSoar foram devidamente zeradas.
+\tip É recomendado reiniciar o dispositivo antes de voar, depois que um arquivo de log foi visto, para se assegurar que as estatísticas internas do XCSoar foram devidamente zeradas.
 
 Quando operar o XCSoar em modo FLY, o replay é desabilitado (parado) se o receptor de GPS detectar que a aeronave está se movendo.
 
@@ -689,5 +688,4 @@ O botão “Calculador” abre a calculadora de prova (ex. para ajustar o alcanc
 O XCSoar computa a hora do nascer e pôr do sol, mostrado na janela de Estado da aeronave (veja seção ~\ref{sec:time-status}).  Observe que o terreno local e condições atmosféricas podem resultar em má visibilidade antes do pôr do sol.
 Para sistemas PDA, o relógio é ajustado para a luz solar economizando tempo de acordo com os ajustes no menu de operação.  Para o Altair, o deslocamento de hora UTC deve ser ajustado manualmente para hora correta na janela de ajuste de configurações.
 Se o tempo esperado de chegada no waypoint final da prova é posterior ao pôr do sol, haverá uma mensagem de alerta informando esta ação.
-
 
