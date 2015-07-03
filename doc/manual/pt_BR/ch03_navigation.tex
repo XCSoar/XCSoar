@@ -14,7 +14,7 @@ O mapa dinâmico mostra:
 \item Topografia, rios, rodovias e cidades
 \item Waypoints, aeroportos e pousos
 \item Prova ativa, zonas de observação e pilões
-\item A direção (ou rota\footnote {A linha até o próximo waypoint pode ser uma {\em route}, como descrição na seção~\ref{sec:route}.}) para a direção para o próximo waypoint.
+\item A direção (ou rota\footnote {A linha até o próximo waypoint pode ser uma {\em rota}, como descrição na seção~\ref{sec:route}.}) para a direção para o próximo waypoint.
 \item Espaços aéreos
 \item Marcadores, histórico de termais, trilha
 \item Alcance do planeio\footnote{O alcance do planeio também é citado como
@@ -27,7 +27,7 @@ O símbolo do planador mostra a posição da aeronave no mapa.  A orientação d
 
 O mapa é orientado de três formas: norte acima, trilha acima e alvo acima.  O ajuste da configuração pode ser utilizado para especificar uma orientação diferente no mapa quando estiver em modo de círculos.  É bem útil para prevenir a desorientação quando olhar o mapa girando.  O modo alvo acima facilita determinar em qual direção se deve sair da termal.
 
-Quando o modo trilha ou alvo acima é usado no modo de círculos, o símbolo da aeronave é centralizado na tela, mesmo que o símbolo seja configurado de outra forma.  No modo de cruzeiro, a orientação de trilha e alvo acima permite que o símbolo da aeronave seja posicionado (ex. 20\%) na parte inferior da tela, fornecendo uma boa visão do mapa a frente da aeronave.  Esta posição é definida nos ajustes da configuração.  
+Quando o modo trilha ou alvo acima é usado no modo de círculos, o símbolo da aeronave é centralizado na tela, mesmo que o símbolo seja configurado de outra forma.  No modo de cruzeiro, a orientação de trilha e alvo acima permite que o símbolo da aeronave seja posicionada (ex. 20\%) na parte inferior da tela, fornecendo uma boa visão do mapa à frente da aeronave.  Esta posição é definida nos ajustes da configuração.  
 
 \section{Zoom e escala do mapa}\label{sec:zooming}
 
@@ -39,34 +39,29 @@ Para alterar a escala do mapa, dependendo do hardware, você usa:
 \item Você pode também fazer o gesto para mudar o nível de zoom. Gesto acima (veja à esquerda) aumento o zoom.  Para baixo diminui o zoom.\gesturespec{up}
 \item Ou selecione a função através do menu.
 \begin{quote}
-\bmenug{Mostrar 1}\blink\bmenug{Zoom In} and \bmenug{Zoom Out}
+\bmenug{Mostrar 1}\blink\bmenug{Zoom In} e \bmenug{Zoom Out}
 \end{quote}
 \item No Altair, o botão rotativo pode ser usado para alterar o zoom.
 \end{enumerate}
 
 A escala do mapa é mostrada no canto inferior do mapa dinâmico.  A distância indicada é medida da borda esquerda para a direita do mapa dinâmico.
-Usuários do Compaq Aero.  Se você ativar as teclas de jogo do Compaq Aero (no Menu-Q), os dois botões centrais serão as teclas acima/abaixo.
+Usuários do Compaq Aero:  Se você ativar as teclas de jogo do Compaq Aero (no Menu-Q), os dois botões centrais serão as teclas acima/abaixo.
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
 
-Usuários do Compaq Aero.  Se você ativar as teclas de jogo do Compaq Aero (no Menu-Q), os dois botões centrais serão as teclas acima/abaixo.
+Usuários do Compaq Aero:  Se você ativar as teclas de jogo do Compaq Aero (no Menu-Q), os dois botões centrais serão as teclas acima/abaixo.
 
 \subsection*{Zoom Girando}
 Há uma facilidade de ter dois tipos de zoom: um quando a aeronave está em modo girando e outro em modo de cruzeiro ou modo final.  Esta é a opção de Zoom girando, nos ajustes das configurações.  Por padrão, o zoom girando é ajustado em 2,5 – 5,0km dependendo do tamanho da tela.  Quando o usuário altera o zoom, afeta diretamente o zoom atual somente.  Quando se sai do modo atual de zoom, é usado o modo prévio de zoom. Se o modo de Zoom girando não está ativo, haverá somente um único nível de zoom.  Esta situação conduz a diferentes níveis de zoom sendo preservados para serem alterados manualmente, independentemente dos ajustes de Auto Zoom.
  
 \subsection*{Auto Zoom}
-Auto Zoom automaticamente aproxima a tela quando se está aproximando de um waypoint 
-para manter a visualização em uma distância apropriada.  
-\marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
+Auto Zoom automaticamente aproxima a tela quando se está aproximando de um waypoint para manter a visualização em uma distância apropriada. 
+\marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}} 
 Quando o Auto Zoom está ativo, ‘AUTO’ aparece perto da escala do mapa.
 
-Para ativar o Auto Zoom, use o gesto \gesturespec{ud} ou o menu descrito à esquerda.  
-Para voltar ao zoom normal, faça o zoom manualmente, não importando o que já foi 
-feito por menu ou gesto. 
+Para ativar o Auto Zoom, use o gesto \gesturespec{ud} ou o menu descrito à esquerda. Para voltar ao zoom normal, faça o zoom manualmente, não importando o que já foi feito por menu ou gesto. 
 
-Quando um waypoint muda (automaticamente, através do seletor de prova ou manualmente 
 \menulabel{\bmenug{Mostrar 1}\blink\bmenut{Zoom}{Auto}}
-selecionando waypoints), o Auto Zoom ajusta o nível de zoom automaticamente para que 
-o próximo waypoint seja visível no mapa.
+Quando um waypoint muda (automaticamente, através do seletor de prova ou manualmente selecionando waypoints), o Auto Zoom ajusta o nível de zoom automaticamente para que o próximo waypoint seja visível no mapa.
 
 Durante o modo Girando se uma termal foi detectada, o mapa é centrado sobre a termal ou parte dela para que a aeronave continue sendo visível.
  
@@ -141,18 +136,11 @@ No topo dos waypoints pousáveis, pode haver mais detalhamento.  Se houver a op�
 \end{enumerate}
 
 \subsection*{Pousáveis ao Alcance}
-Próximo aos pousáveis, há uma estimativa da altitude acima da altura de segurança dos 
-pontos pousáveis e é mostrada próxima ao waypoints.  Esta característica é uma das 
-capacidades mais poderosas do XCSoar.  A altitude de chegada é calculada configurando-se 
-o computador de planeio do XCSoar com parâmetros de polar, ajustes de MacCready, vento, 
-abertura do terreno e altitudes de segurança.  Com tudo isso sendo configurável, há muito 
-espaço para erros, portanto:
+Próximo aos pousáveis, há uma estimativa da altitude acima da altura de segurança dos pontos pousáveis e é mostrada próxima ao waypoints.  Esta característica é uma das capacidades mais poderosas do XCSoar.  A altitude de chegada é calculada configurando-se o computador de planeio do XCSoar com parâmetros de polar, ajustes de MacCready, vento, abertura do terreno e altitudes de segurança.  Com tudo isso sendo configurável, há muito espaço para erros, portanto:
 
-A menos que tenha entendido completamente os conceitos de cálculo de planeio, você deve 
-\warning manter a pré-configuração do XCSoar (já julgado e fortemente aprovada).
+A menos que tenha entendido completamente os conceitos de cálculo de planeio, você deve \warning manter a pré-configuração do XCSoar (já julgado e fortemente aprovada).
 
-É da responsabilidade do piloto sempre interpretar a leitura e observar os valores com o 
-tempo.  Todavia, tendo ajustado o computador de planeio seguindo o capítulo 
+É da responsabilidade do piloto sempre interpretar a leitura e observar os valores com o tempo.  Todavia, tendo ajustado o computador de planeio seguindo o Capítulo 
 \ref{cha:glide} mostra a altitude estimada de alcance, desenhada ao lado de campos pousáveis ao alcance levam em consideração o relevo ou mostram ambos.
 \config{arrivalheight}
 
@@ -188,7 +176,7 @@ Como o arquivo de waypoints contém informações da natureza do campo não-pous
 \includegraphics[width=0.8cm]{icons/map_bridge.pdf} \\
 
 \end{tabular}
-\caption{non-landables}\label{fig:nonlandables}
+\caption{não pousáveis}\label{fig:nonlandables}
 \end{figure}
 
 \section{Prova ativa}
@@ -224,14 +212,10 @@ O solo é colorido de acordo com a elevação e opcionalmente sombreado pelo sol
 
 
 \menulabel{\bmenug{Mostrar 2}\blink\bmenut{Terreno}{On/Off}}
-\menulabel{\vspace{1cm}\bmenug{Display 2}\blink\bmenut{Topo.}{On/Off}}
+\menulabel{\vspace{1cm}\bmenug{Mostrar 2}\blink\bmenut{Topo.}{On/Off}}
 
-O solo é sombreado para melhorar a visibilidade.  O sombreamento padrão é ajustado 
-coincidindo a iluminação virtual com a direção do vento, sendo as áreas mais brilhantes 
-são barlavento e as áreas mais escuras são sotavento.   
-A inclinação solar também foi implementada.  Se o sombreamento da encosta for ajustado 
-para ‘Sol’, o brilho da encosta segue conforme o dia e hora.  A quantidade de sombra sobre 
-o brilho do terreno é ajustável \config{shading}.
+O solo é sombreado para melhorar a visibilidade.  O sombreamento padrão é ajustado coincidindo a iluminação virtual com a direção do vento, sendo as áreas mais brilhantes são barlavento e as áreas mais escuras são sotavento.   
+A inclinação solar também foi implementada.  Se o sombreamento da encosta for ajustado para ‘Sol’, o brilho da encosta segue conforme o dia e hora.  A quantidade de sombra sobre o brilho do terreno é ajustável \config{shading}.
 
 A visualização do solo e topografia podem ser acionados ou não através do menu.
 
@@ -241,7 +225,7 @@ Topografia & Terreno \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-terrain.png} \\
 \end{tabular}
 
-Se os dados do solo não estão disponíveis (ou a visualização está desligada), a cor de fundo do mapa será branca.  Todo o solo abaixo do nível médio do mar é mostrado em azul.  Se você estiver voando fora da terra, o fundo da tela será branco.  
+Se os dados do solo não estiverem disponíveis (ou a visualização estiver desligada), a cor de fundo do mapa será branca.  Todo o solo abaixo do nível médio do mar é mostrado em azul.  Se você estiver voando fora da terra, o fundo da tela será branco.  
 
 \subsection*{Rótulos do mapa}\label{sec:maplabels}
 
@@ -303,36 +287,23 @@ Os marcadores não são mantidos após o XCSoar ser fechado, porém a localizaç
 
 \section{Termais}
 
-Enquanto estiver girando em termais, automaticamente será gerado um marcado e mantido até o 
-\sketch{figures/thermalhistory.png}
-fim do vôo.  Este histórico termal é acessível através da função de elementos de mapa, da 
-mesma forma que os marcadores ou waypoints.
+Enquanto estiver girando em termais, automaticamente será gerado um marcador e mantido até o \sketch{figures/thermalhistory.png} fim do vôo.  Este histórico termal é acessível através da função de elementos de mapa, da mesma forma que os marcadores ou waypoints.
 
 
 \section{Linha de alcance de planeio}\label{sec:reach}
 
-Uma linha de alcance de planeio é mostrada no mapa como uma linha pontilhada branca e 
-preta, indicando onde a aeronave poderá pousar em terreno aberto.  O alcance é mostrado 
-em todas as direções, incluindo caminhos obstruídos no terreno.  Esta opção é útil para 
-conhecer o planeio relativo à topografia quando se está baixo e procura por termais, ou 
-quando está voando em áreas montanhosas.
+Uma linha de alcance de planeio é mostrada no mapa como uma linha pontilhada branca e preta, indicando onde a aeronave poderá pousar em terreno aberto.  O alcance é mostrado em todas as direções, incluindo caminhos obstruídos no terreno.  Esta opção é útil para conhecer o planeio relativo à topografia quando se está baixo e procura por termais, ou quando está voando em áreas montanhosas.
 
 Os cálculos para o alcance podem ser configurados \config{turningreach} em dois níveis: 
 \begin{description}
-\item[Linha reta] se o alcance de curva está desabilitado, mostrará a maior distância 
-que a aeronave pode voar no planeio final em todas as direções sem fazer curvas.  O 
-alcance aparece como um anel fechado ao redor da aeronave.  
+\item[Linha reta] se o alcance em curva está desabilitado, mostrará a maior distância que a aeronave pode voar no planeio final em todas as direções sem fazer curvas.  O alcance aparece como um anel fechado ao redor da aeronave.  
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/reach1.png}
 % CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY, FULLSCREEN, NO TASK. TURNING=FALSE
 \end{center}
 
-\item[Girando] se o modo Girando estiver ativo, o planeio será mostrado como a maior área 
-que a aeronave pode alcançar em todas as direções, mesmo permitindo curvas ao redor de 
-obstáculos.  A área de alcance aparece com um anel fechado ao redor da aeronave mas 
-também pode incluir buracos indicando picos de montanhas que a aeronave não pode alcançar 
-sem subir.
+\item[Girando] se o modo Girando estiver ativo, o planeio será mostrado como a maior área que a aeronave pode alcançar em todas as direções, mesmo permitindo curvas ao redor de obstáculos.  A área de alcance aparece com um anel fechado ao redor da aeronave mas também pode incluir buracos indicando picos de montanhas que a aeronave não pode alcançar sem subir.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/reach2.png}
@@ -342,9 +313,9 @@ sem subir.
 \end{description}
 
 A tela pode ser configurada também para desfocar as áreas não alcançáveis fora do alcance do planeio da aeronave.  O caminho do planeio final é verificado levando-se em consideração também a abertura do terreno através do caminho e também a altura do terreno.
-Se a abertura (clareza) do terreno não é alcançada, aparecerá uma cruz vermelha no mapa onde a área é perigosa.  Se um alvo for definido, os cálculos são feitos através do caminho reto para o alvo.  Se não há alvo definido, o cálculo é feito através do caminho que está seguindo.
-Se o alcance estiver ativo, então o modo de aborto de prova usará os waypoints pousáveis e abrirá uma lista também com os waypoints alternativos do mapa.
-Observe que os cálculos da prova não são afetados pelos cálculos de alcance – por exemplo, não são levando em conta os dados de altitude necessária para finalizar a prova e dados mostrados nas infoboxes.
+Se a abertura (clareza) do terreno não é atingida, aparecerá uma cruz vermelha no mapa onde a área é perigosa.  Se um alvo for definido, os cálculos são feitos através do caminho reto para o alvo.  Se não há alvo definido, o cálculo é feito através do caminho que está seguindo.
+Se o alcance estiver ativo, o modo de aborto de prova usará os waypoints pousáveis e abrirá uma lista também com os waypoints alternativos do mapa.
+Observe que os cálculos da prova não são afetados pelos cálculos de alcance – por exemplo, não são levados em conta os dados de altitude necessária para finalizar a prova e dados mostrados nas infoboxes.
 
 Além do mais, os cálculos são usados para o anel de alcance, altura de chegada para waypoints pousáveis, modo de aborto e janelas de diálogo alternativas.  O desempenho da aeronave e os ajustes de MacCready usados nestes cálculos são configuráveis\config{reachpolar}:
 \begin{description}
@@ -373,7 +344,7 @@ Mostrará a hora local, tempo de vôo, hora da decolagem e pouso e hora do nasce
 
 Observe que estes valores nesta aba são estáticos e só serão atualizados a cada abertura de aba. 
 \sketch{figures/status-times.png}
-Para ver os dados atualizados, é necessário fechar a aba e abrí-la novamente.  Os valores serão atualizados. 
+Para ver os dados atualizados, é necessário fechar a aba e abrí-la novamente.  Os valores serão atualizados automaticamente a cada abertura desta janela.  Familiarize com este procedimento antes de realizá-lo em vôo.
 
 
 \section{Rota}\label{sec:route}
@@ -386,25 +357,13 @@ As funções de planejamento de rota são ordenadas por modo de prova, modo de a
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/route3.png}
 \end{center}
 
-As rotas levam em consideração o desempenho da polar e são calculadas para levarem o mínimo 
-tempo.  Por padrão, os cálculos de rota são desativados e podem ser ativados somente por 
-solo ou, prevenção de espaço aéreo. \config{routemode}.
+As rotas levam em consideração o desempenho da polar e são calculadas para levarem o mínimo tempo.  Por padrão, os cálculos de rota são desativados e podem ser ativados somente por solo ou quando na prevenção de espaço aéreo. \config{routemode}
 
-O solo é evitado verticalmente pela altura de segurança do terreno
-\config{safetyterrain}, sem nenhuma abertura de terreno lateral.  As rotas válidas podem 
-resultar na chegada da aeronave ao destino mais alta que a altura mínima – como pode 
-ocorrer quando o destino está além de uma montanha mais alta.
+O solo é evitado verticalmente pela altura de segurança do terreno \config{safetyterrain}, sem nenhuma abertura de terreno lateral.  As rotas válidas podem  resultar na chegada da aeronave ao destino mais alta que a altura mínima – como pode ocorrer quando o destino está além de uma montanha mais alta.
 
-O espaço aéreo é evitado horizontalmente por uma margem de aproximadamente 250m sem 
-nenhuma abertura imposta verticalmente.  As rotas válidas podem voar acima ou abaixo 
-do espaço aéreo.
+O espaço aéreo é evitado horizontalmente por uma margem de aproximadamente 250m sem nenhuma abertura imposta verticalmente.  As rotas válidas podem voar acima ou abaixo do espaço aéreo.
 
-Se o MacCready é positivo, a subida é opcionalmente permitida nos cálculos de rota.  O 
-topo da subida deve ser limitado a 500m acima do teto de início e final, ou incluso no 
-teto, definido pelo teto da termal \config{routeceiling}.  
-As subidas acima da altitude 
-de início e final são penalizadas por uma taxa de subida mais lenta que o valor de 
-MacCready atual.
+Se o MacCready é positivo, a subida é opcionalmente permitida nos cálculos de rota.  O topo da subida deve ser limitado a 500m acima do teto de início e final, ou incluso no teto, definido pelo teto da termal \config{routeceiling}.  As subidas acima da altitude de início e final são penalizadas por uma taxa de subida mais lenta que o valor de MacCready atual.
 
 Algumas aproximações e limitações do sistema de planejamento de rotas são:
 \begin{itemize}
