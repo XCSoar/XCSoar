@@ -4,13 +4,13 @@
 \emph{A integração} reúne todas os objetos e ações em uma entidade construindo um sistema que forneça as funcionalidades desejadas.  Os objetos são componentes de hardware, software, banco de dados, configurações, fonte de energia e componentes integradores.  Como você deve esperar, este capítulo trata da integração do XCSoar, com os componentes de interesse:
 \begin{itemize} 
 \item A integração reúne todas os objetos e ações em uma entidade construindo um sistema que forneça as funcionalidades desejadas.  Os objetos são componentes de hardware, software, banco de dados, configurações, fonte de energia e componentes integradores.  Como você deve esperar, este capítulo trata da integração do XCSoar, com os componentes de interesse:
-\item software XCSoar  
+\item software XCSoar. 
 \item banco de dados de informações de vôo: terreno, waypoint, metereologia, polar, rede FLARM, detalhes de aeródromos, etc.
-\item Instrumentos: barômetro, variômetro, FLARM, registrador, horizonte
+\item Instrumentos: barômetro, variômetro, FLARM, registrador, horizonte.
 \item componentes de reserva: segunda unidade com XCSoar.
-\item Montagem
+\item Montagem.
 \item Configuração: internamente no XCSoar e suas conexões.
-\item Treinamento do usuário
+\item Treinamento do usuário.
 \end{itemize}
 Nenhum sistema roda sem usar alguns componentes para fornecer funções secundárias, mas precisamos de alguma ‘cola’ para agrupar todos os componentes juntos.  Igualmente, seu sistema XCSoar precisa de um ou mais componentes ‘cola’, como cabeamento, dados, sinais, conversor de força e multiplexador de sinais.
 
@@ -55,7 +55,7 @@ Adicionalmente, o XCSoar pega os dados de posição de outros em volta de você 
 \subsubsection*{Aplicação} Aumento do apoio à situação de prevenção.  Porém, muitos pilotos julgam as informações do ADS-B exageradas pois mostram muito controle das organizações representativas do vôo como um todo.  Por gentileza, dispense algum tempo lendo as discussões sobre o uso do ADS-B em planadores antes de comprar o hardware.  Falando tecnicamente, o ADS-B é brilhante se usado como FLARM.
 
 \subsection*{XCSoar Táctico}
-\subsubsection*{Setup} Integre um variômetro eletrônico com o seu sistema clássico, chamado de eVario.  O eVario é a segunda peça do seu hardware a ser conectado, portanto você deve necessitar também de um multiplexador de dados para conectar ambos FLARM e eVario ao seu hardware que abriga o XCSoar.  Dispenda tempo estudando as características de interesse do seu eVario.  Há alguns modelos à venda que trazem consigo um multiplexador que mescla os dados do GPS e outros dados FLARM com suas próprias medições.  Também deve ser incluso um conversor de energia na porta de saída, deixando uma saída de força e dados prontos para o seu XCSoar. 
+\subsubsection*{Ajuste} Integre um variômetro eletrônico com o seu sistema clássico, chamado de eVario.  O eVario é a segunda peça do seu hardware a ser conectado, portanto você deve necessitar também de um multiplexador de dados para conectar ambos FLARM e eVario ao seu hardware que abriga o XCSoar.  Dispenda tempo estudando as características de interesse do seu eVario.  Há alguns modelos à venda que trazem consigo um multiplexador que mescla os dados do GPS e outros dados FLARM com suas próprias medições.  Também deve ser incluso um conversor de energia na porta de saída, deixando uma saída de força e dados prontos para o seu XCSoar. 
 
 \subsubsection*{Funcionamento} Os cálculos táticos do XCSoar irão lhe fornecer estimativas valiosas da posição ao alcance, mostrando a direção e informações sofisticadas atualizadas para alcançar estes pontos e muito mais.... mas como os vários cálculos dependem do vetor de vento e são de grande relevância, um eVario pode incrementar a estimativa de vento do XCSoar, tornando o valor de vento estimado um valor real (mas o vetor de vento continua como estimado).  Obviamente, o eVario também irá fornecer uma medição precisa de sustentação e afundamento.
 
@@ -65,7 +65,7 @@ Sendo os cálculos táticos dependentes de sua estimativa atual de MacCready e d
 \subsubsection*{Aplicação} Consiga os melhores dados táticos em vôo que um piloto pode conseguir. :-))
 
 \subsection*{XCSoar de Competição}
-\subsubsection*{Setup} Adicione arquivos de dados no seu sistema tático, como provas e waypoints entre outros.  Para entrar com os vários formatos de arquivos pode ser necessário envolver um conversor de dados.  Pode ser necessário também ajustar uma página extra de tela, mostrando as medições relativas às competições.
+\subsubsection*{Ajuste} Adicione arquivos de dados no seu sistema tático, como provas e waypoints entre outros.  Para entrar com os vários formatos de arquivos pode ser necessário envolver um conversor de dados.  Pode ser necessário também ajustar uma página extra de tela, mostrando as medições relativas às competições.
 
 Neste caso, há chances de que a organização das regras da prova possa ter um item a ser melhorado pelos desenvolvedores do XCSoar.  Assim que introduzidas algumas regras e verificar que existem algumas divergências, poderá necessitar de apoio dos desenvolvedores.  Desta forma, o desenvolvimento do XCSoar pode ser visto como sendo parte do seu sistema XCSoar.
 
@@ -83,7 +83,7 @@ Sem comentários.
 \subsection*{Referência do XCSoar / Desenvolvedor}
 \subsubsection*{Ajuste} Coloque outro componente não mencionado nos ajustes do seu XCSoar, mas tenha cuidado de que o projeto do XCSoar tem como objetivo ter o melhor suporte possível de vôo tipo VFR (Visual Flight Reference – Referência Visual de Vôo).  Entrando com outras funcionalidades, você provavelmente entrará em funções experimentais e atrairá a atenção da comunidade XCSoar, especialmente quando integrar um sistema AHRS – você está lidando com componentes não certificados.   
 
-\tip \emph{TODAS AS COISAS, TUDO O QUE FIZER} com o software XCSoar é por sua conta e risco.  Com algumas integrações podendo ser exóticas, você deixa longe o campo do objetivo primário.  Devem haver alguns poucos usuários que se dispões a fazer testes seguros para características exóticas.  Todavia, toda vez que o código do XCSoar é feito para ser estável, você estará sendo envolvido no lançamento deste \emph{novo código}.
+\tip \emph{TODAS AS COISAS, TUDO O QUE FIZER} com o software XCSoar é por sua conta e risco.  Com algumas integrações podendo ser exóticas, você deixa longe o campo do objetivo primário.  Devem haver alguns poucos usuários que se dispõem a fazer testes seguros para características exóticas.  Todavia, toda vez que o código do XCSoar é feito para ser estável, você estará sendo envolvido no lançamento deste \emph{novo código}.
 
 AHRS é um sistema de referência de direção e altitude (AHRS -for Altitude Heading Reference System).
 
