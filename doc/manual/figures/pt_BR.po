@@ -41,9 +41,8 @@ msgid "Glider track during cruise"
 msgstr "Trilha de vôo durante cruzeiro"
 
 #: doc/manual/figures/figure_speed_to_fly.svg:5
-#, fuzzy
 msgid "Airmass Vertical Motion"
-msgstr "movimento vertical da massa de ar"
+msgstr "Movimento vertical da massa de ar"
 
 #: doc/manual/figures/figure_optimal_cruise.svg:1
 #, fuzzy
@@ -55,9 +54,9 @@ msgid "Below final glide"
 msgstr "Abaixo do planeio final"
 
 #: doc/manual/figures/figure_speed_to_fly.svg:1
-#, fuzzy
 msgid "A constant airspeed is maintained regardless of lift/sink."
-msgstr "velocidade contante mantida independentemente da subida/descida"
+msgstr ""
+"Velocidade do ar é mantida constante independente da subida ou descida."
 
 #: doc/manual/figures/figure_auto_maccready.svg:11
 msgid "VOpt = 80"
@@ -84,9 +83,8 @@ msgid "Glideslope below terrain safety height"
 msgstr "Declive abaixo da altura de segurança do terreno"
 
 #: doc/manual/figures/figure_speed_to_fly.svg:4
-#, fuzzy
 msgid "Dolphin Speed to Fly"
-msgstr "Velocidade golfinho"
+msgstr "Velocidade de vôo Golfinho"
 
 #: doc/manual/figures/figure_auto_maccready.svg:5
 msgid "VOpt = 50"
@@ -127,9 +125,8 @@ msgid "terrain safety height"
 msgstr "de segurança do terreno"
 
 #: doc/manual/figures/figure_speed_to_fly.svg:2
-#, fuzzy
 msgid "Airspeed is reduced in lift and increased in sink."
-msgstr "Velocidade do ar é reduzida na ascendente e acelerada na descendente"
+msgstr "Velocidade do ar é reduzida na subida e aumentada na descida."
 
 #: doc/manual/figures/figure_optimal_cruise.svg:5
 #, fuzzy
@@ -145,9 +142,8 @@ msgid "Glideslope above terrain safety height"
 msgstr "Declive acima da altura do terreno"
 
 #: doc/manual/figures/figure_speed_to_fly.svg:3
-#, fuzzy
 msgid "Block Speed to Fly"
-msgstr "Travar a velocidade ideal"
+msgstr "Velocidade travada de vôo"
 
 #: doc/manual/figures/figure_terrain.svg:1
 msgid "unreachable due to"
