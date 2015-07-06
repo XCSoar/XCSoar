@@ -897,6 +897,9 @@ DEBUG_DISPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/DebugDisplay.cpp
 DEBUG_DISPLAY_DEPENDS = IO
+ifeq ($(USE_X11),y)
+DEBUG_DISPLAY_DEPENDS += EVENT
+endif
 $(eval $(call link-program,DebugDisplay,DEBUG_DISPLAY))
 
 WRITE_TEXT_FILE_SOURCES = \
