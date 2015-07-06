@@ -191,11 +191,7 @@ WindowList::FindPreviousChildControl(Window *reference)
 
   std::list<Window*>::const_reverse_iterator i =
     std::find(list.rbegin(), list.rend(), reference);
-#ifndef ANDROID
-  /* Android's NDK r5b ships a cxx-stl which does not allow comparing
-     two const_reverse_iterator objects for inequality */
   assert(i != list.rend());
-#endif
 
   return FindControl(++i, list.rend());
 }
