@@ -47,10 +47,12 @@ PagerWidget::Add(Widget *w)
   if (initialised) {
     w->Initialise(*parent, position);
 
-    if (prepared && visible && was_empty) {
-      children.front().prepared = true;
+    if (prepared) {
+      children.back().prepared = true;
       w->Prepare(*parent, position);
-      w->Show(position);
+
+      if (visible && was_empty)
+        w->Show(position);
     }
   }
 }
