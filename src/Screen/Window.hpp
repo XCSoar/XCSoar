@@ -202,6 +202,7 @@ private:
   bool tab_stop, control_parent;
 
   bool visible;
+  bool transparent;
   bool enabled;
   bool focused;
   bool capture;
@@ -222,7 +223,8 @@ public:
   Window()
     :parent(nullptr), size(0, 0),
      font(nullptr),
-     visible(true), focused(false), capture(false), has_border(false),
+     visible(true), transparent(false),
+     focused(false), capture(false), has_border(false),
      double_clicks(false) {}
 #else
   Window():hWnd(nullptr), prev_wndproc(nullptr),
@@ -616,6 +618,24 @@ public:
     else
       Hide();
   }
+
+#ifndef USE_GDI
+  bool IsTransparent() const {
+    return transparent;
+  }
+
+  /**
+   * Declare this window "transparent".  This means that portions of
+   * the windows below it may be visible, and it will not be
+   * considered "covering" windows behind it completely.  This flag is
+   * evaluated by WindowList::IsCovered().
+   */
+  void SetTransparent() {
+    assert(!transparent);
+
+    transparent = true;
+  }
+#endif
 
   gcc_pure
   bool IsTabStop() const {
