@@ -31,9 +31,9 @@ void
 WindowList::Clear()
 {
   /* destroy all child windows */
-  std::list<Window *>::const_iterator i;
+  List::iterator i;
   while ((i = list.begin()) != list.end()) {
-    Window &w = **i;
+    Window &w = *i;
     w.Destroy();
 
     assert(!Contains(w));
@@ -45,7 +45,11 @@ WindowList::Clear()
 bool
 WindowList::Contains(const Window &w) const
 {
-  return std::find(list.begin(), list.end(), &w) != list.end();
+  for (const auto &i : list)
+    if (&i == &w)
+      return true;
+
+  return false;
 }
 
 bool
@@ -58,7 +62,7 @@ WindowList::IsCovered(const Window &w) const
   for (auto i = list.begin();; ++i) {
     assert(i != list.end());
 
-    Window &child = **i;
+    const Window &child = *i;
     if (&child == &w)
       /* didn't find a covering sibling so far */
       return false;
@@ -78,8 +82,8 @@ WindowList::BringToTop(Window &w)
 {
   assert(Contains(w));
 
-  list.remove(&w);
-  list.insert(list.begin(), &w);
+  list.erase(list.iterator_to(w));
+  list.push_front(w);
 }
 
 void
@@ -87,8 +91,8 @@ WindowList::BringToBottom(Window &w)
 {
   assert(Contains(w));
 
-  list.remove(&w);
-  list.push_back(&w);
+  list.erase(list.iterator_to(w));
+  list.push_back(w);
 }
 
 gcc_pure
@@ -103,20 +107,19 @@ IsAt(Window &w, PixelScalar x, PixelScalar y)
 Window *
 WindowList::FindAt(PixelScalar x, PixelScalar y)
 {
-  for (Window *w : list)
-    if (w->IsEnabled() && IsAt(*w, x, y))
-      return w;
+  for (Window &w : list)
+    if (w.IsEnabled() && IsAt(w, x, y))
+      return &w;
 
   return nullptr;
 }
 
 gcc_pure
 Window *
-WindowList::FindControl(std::list<Window*>::const_iterator i,
-                        std::list<Window*>::const_iterator end)
+WindowList::FindControl(List::iterator i, WindowList::List::iterator end)
 {
   for (; i != end; ++i) {
-    Window &child = **i;
+    Window &child = *i;
     if (!child.IsVisible() || !child.IsEnabled())
       continue;
 
@@ -136,11 +139,11 @@ WindowList::FindControl(std::list<Window*>::const_iterator i,
 
 gcc_pure
 Window *
-WindowList::FindControl(std::list<Window*>::const_reverse_iterator i,
-                        std::list<Window*>::const_reverse_iterator end)
+WindowList::FindControl(WindowList::List::reverse_iterator i,
+                        WindowList::List::reverse_iterator end)
 {
   for (; i != end; ++i) {
-    Window &child = **i;
+    Window &child = *i;
     if (!child.IsVisible() || !child.IsEnabled())
       continue;
 
@@ -176,8 +179,7 @@ WindowList::FindNextChildControl(Window *reference)
   assert(reference != nullptr);
   assert(Contains(*reference));
 
-  std::list<Window*>::const_iterator i =
-    std::find(list.begin(), list.end(), reference);
+  auto i = list.iterator_to(*reference);
   assert(i != list.end());
 
   return FindControl(++i, list.end());
@@ -189,8 +191,7 @@ WindowList::FindPreviousChildControl(Window *reference)
   assert(reference != nullptr);
   assert(Contains(*reference));
 
-  std::list<Window*>::const_reverse_iterator i =
-    std::find(list.rbegin(), list.rend(), reference);
+  List::reverse_iterator i(list.iterator_to(*reference));
   assert(i != list.rend());
 
   return FindControl(++i, list.rend());
@@ -208,21 +209,19 @@ IsFullWindow(const Window &w, int width, int height)
 void
 WindowList::Paint(Canvas &canvas)
 {
-  const auto &list = this->list;
-
   auto begin = list.rbegin(), end = list.rend();
 
   /* find the last full window which covers all the other windows
      behind it */
   for (auto i = begin; i != end; ++i) {
-    Window &child = **i;
+    Window &child = *i;
     if (IsFullWindow(child, canvas.GetWidth(), canvas.GetHeight()) &&
         !child.IsTransparent())
       begin = i;
   }
 
   for (auto i = begin; i != end; ++i) {
-    Window &child = **i;
+    Window &child = *i;
     if (!child.IsVisible())
       continue;
 

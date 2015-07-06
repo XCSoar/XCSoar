@@ -25,9 +25,8 @@ Copyright_License {
 #define XCSOAR_SCREEN_WINDOW_LIST_HPP
 
 #include "Screen/Point.hpp"
+#include "Screen/Window.hpp"
 #include "Compiler.h"
-
-#include <list>
 
 #include <assert.h>
 
@@ -39,7 +38,13 @@ class Canvas;
  * #ContainerWindow implementation to manage its children.
  */
 class WindowList {
-  std::list<Window *> list;
+  typedef boost::intrusive::list<Window,
+                                 boost::intrusive::member_hook<Window,
+                                                               Window::SiblingsHook,
+                                                               &Window::siblings>,
+                                 boost::intrusive::constant_time_size<false>> List;
+
+  List list;
 
 public:
   ~WindowList() {
@@ -50,13 +55,13 @@ public:
   void Add(Window &w) {
     assert(!Contains(w));
 
-    list.push_back(&w);
+    list.push_back(w);
   }
 
   void Remove(Window &w) {
     assert(Contains(w));
 
-    list.remove(&w);
+    list.erase(list.iterator_to(w));
   }
 
   /**
@@ -83,12 +88,11 @@ public:
   Window *FindAt(PixelScalar x, PixelScalar y);
 
   gcc_pure
-  static Window *FindControl(std::list<Window*>::const_iterator i,
-                             std::list<Window*>::const_iterator end);
+  static Window *FindControl(List::iterator i, List::iterator end);
 
   gcc_pure
-  static Window *FindControl(std::list<Window*>::const_reverse_iterator i,
-                             std::list<Window*>::const_reverse_iterator end);
+  static Window *FindControl(List::reverse_iterator i,
+                             List::reverse_iterator end);
 
   gcc_pure
   Window *FindFirstControl();

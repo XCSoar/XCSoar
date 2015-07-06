@@ -33,7 +33,9 @@ Copyright_License {
 
 #ifdef USE_GDI
 #include <windows.h>
-#endif /* GDI */
+#else
+#include <boost/intrusive/list.hpp>
+#endif
 
 #ifdef ANDROID
 struct Event;
@@ -186,6 +188,12 @@ public:
  */
 class Window {
   friend class ContainerWindow;
+
+#ifndef USE_GDI
+  friend class WindowList;
+  typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> SiblingsHook;
+  SiblingsHook siblings;
+#endif
 
 protected:
 #ifndef USE_GDI
