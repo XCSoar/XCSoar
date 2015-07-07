@@ -70,7 +70,6 @@ public:
 protected:
   DWORD style, ex_style;
   bool double_clicks;
-  bool custom_painting;
 
 #ifdef _WIN32_WCE
   /* workaround for gcc optimization bug on ARM/XScale */
@@ -81,7 +80,7 @@ public:
   constexpr
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
-     ex_style(0), double_clicks(false), custom_painting(false)
+     ex_style(0), double_clicks(false)
 #ifdef _WIN32_WCE
     , dummy0(0), dummy1(0)
 #endif
@@ -163,12 +162,6 @@ public:
 #ifdef USE_GDI
     style &= ~WS_CHILD;
     style |= WS_SYSMENU;
-#endif
-  }
-
-  void EnableCustomPainting() {
-#ifdef USE_GDI
-    custom_painting = true;
 #endif
   }
 

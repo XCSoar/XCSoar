@@ -45,9 +45,6 @@ Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
 
   DWORD style = window_style.style, ex_style = window_style.ex_style;
 
-  if (window_style.custom_painting)
-    EnableCustomPainting();
-
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
                           rc.left, rc.top,
                           rc.right - rc.left, rc.bottom - rc.top,
