@@ -53,16 +53,6 @@ public:
     text_style |= DT_LEFT | DT_WORDBREAK;
 #endif
   }
-
-  void SetCenter() {
-#ifndef USE_GDI
-    text_style &= ~DT_LEFT;
-    text_style |= DT_CENTER;
-#else
-    style &= ~ES_LEFT;
-    style |= ES_CENTER;
-#endif
-  }
 };
 
 /**
