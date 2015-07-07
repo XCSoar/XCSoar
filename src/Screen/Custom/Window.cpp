@@ -47,7 +47,6 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
   visible = window_style.visible;
   enabled = window_style.enabled;
   has_border = window_style.has_border;
-  text_style = window_style.text_style;
 
   if (parent != nullptr)
     parent->AddChild(*this);

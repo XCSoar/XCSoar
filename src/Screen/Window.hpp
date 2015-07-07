@@ -58,15 +58,13 @@ protected:
   bool tab_stop, control_parent;
   bool double_clicks;
   bool has_border;
-  unsigned text_style;
 
 public:
   constexpr
   WindowStyle()
     :visible(true), enabled(true),
      tab_stop(false), control_parent(false),
-     double_clicks(false), has_border(false),
-     text_style(0) {}
+     double_clicks(false), has_border(false) {}
 
 #else /* USE_GDI */
 protected:
@@ -204,8 +202,6 @@ private:
   PixelSize size;
 
 private:
-  unsigned text_style;
-
   bool tab_stop, control_parent;
 
   bool visible;
@@ -350,10 +346,6 @@ public:
 
   PixelScalar GetBottom() const {
     return GetTop() + GetHeight();
-  }
-
-  unsigned GetTextStyle() const {
-    return text_style;
   }
 #else /* USE_GDI */
   UPixelScalar GetWidth() const {
