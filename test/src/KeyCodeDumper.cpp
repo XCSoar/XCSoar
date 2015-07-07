@@ -140,7 +140,6 @@ public:
                         _T("Close"), button_rc,
                         WindowStyle(),
                         *this, CLOSE);
-    close_button.SetFont(normal_font);
 
     key_code_dumper.SetFocus();
   }

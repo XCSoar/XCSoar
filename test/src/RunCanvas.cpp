@@ -82,7 +82,6 @@ public:
     buffer_button.Create(*this, *button_look, _T("Buffer"), button_rc,
                         WindowStyle(),
                          *this, BUFFER);
-    buffer_button.SetFont(normal_font);
 #endif
 
     button_rc.right = rc.right - 5;
@@ -91,7 +90,6 @@ public:
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
                         WindowStyle(),
                         *this, CLOSE);
-    close_button.SetFont(normal_font);
   }
 
 private:
