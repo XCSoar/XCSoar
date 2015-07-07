@@ -21,41 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_PROGRESS_BAR_HXX
-#define XCSOAR_SCREEN_PROGRESS_BAR_HXX
+#ifndef XCSOAR_SCREEN_NATIVE_WINDOW_HXX
+#define XCSOAR_SCREEN_NATIVE_WINDOW_HXX
 
-#include "NativeWindow.hpp"
+#include "Screen/Window.hpp"
 
-class ProgressBarStyle : public WindowStyle {
-public:
-  ProgressBarStyle() = default;
-  ProgressBarStyle(const WindowStyle &_style):WindowStyle(_style) {}
+#ifdef USE_GDI
 
-  void Vertical();
-  void Smooth();
-};
+#include "Window.hpp"
+#define NativeWindow Window
 
-class ProgressBar : public NativeWindow {
-#ifndef USE_GDI
-  unsigned min_value, max_value, value, step_size;
+#else
 
-public:
-  ProgressBar():min_value(0), max_value(0), value(0), step_size(1) {}
+#include "PaintWindow.hpp"
+
+/**
+ * A base class for Window implementations that use a "native" GDI
+ * window class.  On non-GDI, this is an alias for PaintWindow, and
+ * everything needs to be reimplemented.
+ */
+using NativeWindow = PaintWindow;
+
 #endif
-
-public:
-  void Create(ContainerWindow &parent, PixelRect rc,
-              const ProgressBarStyle style=ProgressBarStyle());
-
-  void SetRange(unsigned min_value, unsigned max_value);
-  void SetValue(unsigned value);
-  void SetStep(unsigned size);
-  void Step();
-
-#ifndef USE_GDI
-protected:
-  void OnPaint(Canvas &canvas) override;
-#endif
-};
 
 #endif

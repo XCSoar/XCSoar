@@ -82,7 +82,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   ProgressBarStyle pb_style;
   progress_bar.Create(*this, pb_rc, pb_style);
 
+#ifdef USE_GDI
   message.InstallWndProc(); // needed for OnChildColor()
+#endif
 
   // Set progress bar step size and range
   SetRange(0, 1000);

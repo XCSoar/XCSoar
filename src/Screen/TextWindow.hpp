@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TEXT_WINDOW_HXX
 #define XCSOAR_SCREEN_TEXT_WINDOW_HXX
 
-#include "Screen/Window.hpp"
+#include "NativeWindow.hpp"
 
 #ifndef USE_GDI
 #include "Util/tstring.hpp"
@@ -66,7 +66,7 @@ public:
 /**
  * A window which renders static text.
  */
-class TextWindow : public Window {
+class TextWindow : public NativeWindow {
 #ifndef USE_GDI
   const Font *font;
 

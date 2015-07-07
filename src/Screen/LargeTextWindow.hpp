@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LARGE_TEXT_WINDOW_HPP
 #define XCSOAR_SCREEN_LARGE_TEXT_WINDOW_HPP
 
-#include "Screen/Window.hpp"
+#include "NativeWindow.hpp"
 
 #ifndef USE_GDI
 #include "Util/tstring.hpp"
@@ -54,7 +54,7 @@ public:
 /**
  * A window showing large multi-line text.
  */
-class LargeTextWindow : public Window {
+class LargeTextWindow : public NativeWindow {
 #ifndef USE_GDI
   const Font *font;
 
