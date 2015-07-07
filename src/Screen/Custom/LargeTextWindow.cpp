@@ -124,7 +124,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
 #ifndef USE_GDI
   canvas.Select(GetFont());
 #endif
-  canvas.DrawFormattedText(&rc, value.c_str(), GetTextStyle());
+  canvas.DrawFormattedText(&rc, value.c_str(), DT_LEFT | DT_WORDBREAK);
 }
 
 bool

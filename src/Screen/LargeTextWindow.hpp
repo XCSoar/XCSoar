@@ -40,8 +40,6 @@ public:
     VerticalScroll();
 #ifdef USE_GDI
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
-#else
-    text_style |= DT_LEFT | DT_WORDBREAK;
 #endif
   }
 
@@ -49,8 +47,6 @@ public:
     VerticalScroll();
 #ifdef USE_GDI
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
-#else
-    text_style |= DT_LEFT | DT_WORDBREAK;
 #endif
   }
 };
