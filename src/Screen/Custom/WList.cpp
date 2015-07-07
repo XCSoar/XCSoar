@@ -234,7 +234,6 @@ WindowList::Paint(Canvas &canvas)
       continue;
 #endif
 
-    child.Setup(sub_canvas);
     child.OnPaint(sub_canvas);
   }
 }

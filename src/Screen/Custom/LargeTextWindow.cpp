@@ -120,6 +120,10 @@ LargeTextWindow::OnPaint(Canvas &canvas)
   canvas.SetTextColor(COLOR_BLACK);
 
   rc.top -= origin * GetFont().GetHeight();
+
+#ifndef USE_GDI
+  canvas.Select(GetFont());
+#endif
   canvas.DrawFormattedText(&rc, value.c_str(), GetTextStyle());
 }
 

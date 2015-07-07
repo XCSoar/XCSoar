@@ -70,6 +70,8 @@ public:
  */
 class LargeTextWindow : public Window {
 #ifndef USE_GDI
+  const Font *font;
+
   tstring value;
 
   /**
@@ -79,15 +81,31 @@ class LargeTextWindow : public Window {
 #endif
 
 public:
+#if !defined(USE_GDI) && !defined(NDEBUG)
+  LargeTextWindow():font(nullptr) {}
+#endif
+
   void Create(ContainerWindow &parent, PixelRect rc,
               const LargeTextWindowStyle style=LargeTextWindowStyle());
 
 #ifndef USE_GDI
+  void SetFont(const Font &_font) {
+    AssertNoneLocked();
+    AssertThread();
+
+    font = &_font;
+  }
+
+  const Font &GetFont() const {
+    AssertThread();
+    assert(font != nullptr);
+
+    return *font;
+  }
+
   gcc_pure
   unsigned GetVisibleRows() const;
-#endif
 
-#ifndef USE_GDI
   gcc_pure
   unsigned GetRowCount() const;
 #else

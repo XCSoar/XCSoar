@@ -68,12 +68,34 @@ public:
  */
 class TextWindow : public Window {
 #ifndef USE_GDI
+  const Font *font;
+
   tstring text;
 #endif
 
 public:
+#if !defined(USE_GDI) && !defined(NDEBUG)
+  TextWindow():font(nullptr) {}
+#endif
+
   void Create(ContainerWindow &parent, const TCHAR *text, PixelRect rc,
               const TextWindowStyle style=TextWindowStyle());
+
+#ifndef USE_GDI
+  void SetFont(const Font &_font) {
+    AssertNoneLocked();
+    AssertThread();
+
+    font = &_font;
+  }
+
+  const Font &GetFont() const {
+    AssertThread();
+    assert(font != nullptr);
+
+    return *font;
+  }
+#endif
 
   void set_text(const TCHAR *_text) {
     AssertNoneLocked();

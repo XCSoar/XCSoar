@@ -182,15 +182,6 @@ Window::ClearCapture()
 }
 
 void
-Window::Setup(Canvas &canvas)
-{
-  assert(IsDefined());
-
-  if (font != nullptr)
-    canvas.Select(*font);
-}
-
-void
 Window::Invalidate()
 {
   AssertThread();

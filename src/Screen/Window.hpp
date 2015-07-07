@@ -204,7 +204,6 @@ private:
   PixelSize size;
 
 private:
-  const Font *font;
   unsigned text_style;
 
   bool tab_stop, control_parent;
@@ -230,7 +229,6 @@ public:
 #ifndef USE_GDI
   Window()
     :parent(nullptr), size(0, 0),
-     font(nullptr),
      visible(true), transparent(false),
      focused(false), capture(false), has_border(false),
      double_clicks(false) {}
@@ -552,21 +550,6 @@ public:
 
 #ifdef USE_GDI
   void SetFont(const Font &_font);
-#else
-  void SetFont(const Font &_font) {
-    AssertNoneLocked();
-    AssertThread();
-
-    font = &_font;
-    Invalidate();
-  }
-
-  const Font &GetFont() const {
-    AssertThread();
-    assert(font != nullptr);
-
-    return *font;
-  }
 #endif
 
   /**
@@ -909,8 +892,6 @@ public:
 #endif
 
 #ifndef USE_GDI
-  void Setup(Canvas &canvas);
-
   virtual void Invalidate();
 #else /* USE_GDI */
   HDC BeginPaint(PAINTSTRUCT *ps) {
