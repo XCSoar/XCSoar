@@ -55,7 +55,6 @@ public:
   MenuBar(ContainerWindow &parent, const ButtonLook &look);
 
 public:
-  void SetFont(const Font &font);
   void ShowButton(unsigned i, bool enabled, const TCHAR *text,
                   unsigned event);
   void HideButton(unsigned i);

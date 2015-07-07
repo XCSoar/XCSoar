@@ -110,13 +110,6 @@ MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 }
 
 void
-MenuBar::SetFont(const Font &font)
-{
-  for (unsigned i = 0; i < MAX_BUTTONS; i++)
-    buttons[i].SetFont(font);
-}
-
-void
 MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text,
                     unsigned event)
 {
