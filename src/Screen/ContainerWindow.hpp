@@ -85,6 +85,8 @@ protected:
 
   LRESULT OnMessage(HWND hWnd, UINT message,
                     WPARAM wParam, LPARAM lParam) override;
+
+  virtual void OnPaint(gcc_unused Canvas &canvas) {}
 #endif
 
 public:

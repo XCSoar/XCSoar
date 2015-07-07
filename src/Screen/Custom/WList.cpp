@@ -221,7 +221,7 @@ WindowList::Paint(Canvas &canvas)
   }
 
   for (auto i = begin; i != end; ++i) {
-    Window &child = *i;
+    PaintWindow &child = (PaintWindow &)*i;
     if (!child.IsVisible())
       continue;
 

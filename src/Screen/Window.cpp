@@ -277,14 +277,3 @@ Window::OnUser(unsigned id)
 {
   return false;
 }
-
-void
-Window::OnPaint(Canvas &canvas)
-{
-}
-
-void
-Window::OnPaint(Canvas &canvas, const PixelRect &dirty)
-{
-  OnPaint(canvas);
-}

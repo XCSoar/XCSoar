@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/GDI/PaintCanvas.hpp"
 #include "Event/Idle.hpp"
 #include "Asset.hpp"
 
@@ -258,14 +258,6 @@ Window::OnMessage(HWND _hWnd, UINT message,
   case WM_TIMER:
     if (OnTimer(*(WindowTimer *)wParam))
       return 0;
-    break;
-
-  case WM_PAINT:
-    if (custom_painting) {
-      PaintCanvas canvas(*this);
-      OnPaint(canvas, canvas.get_dirty());
-      return 0;
-    }
     break;
 
   case WM_GETDLGCODE:

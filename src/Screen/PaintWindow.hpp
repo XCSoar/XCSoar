@@ -112,6 +112,20 @@ public:
     ::InvalidateRect(hWnd, &rect, false);
 #endif
   }
+
+#ifdef USE_GDI
+protected:
+  /* virtual methods from class Window */
+  LRESULT OnMessage(HWND hWnd, UINT message,
+                    WPARAM wParam, LPARAM lParam) override;
+#endif
+
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) = 0;
+
+  virtual void OnPaint(Canvas &canvas, gcc_unused const PixelRect &dirty) {
+    OnPaint(canvas);
+  }
 };
 
 #endif

@@ -1028,9 +1028,6 @@ public:
   virtual bool OnTimer(WindowTimer &timer);
   virtual bool OnUser(unsigned id);
 
-  virtual void OnPaint(Canvas &canvas);
-  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty);
-
 #ifdef USE_GDI
   /**
    * Called by OnMessage() when the message was not handled by any
