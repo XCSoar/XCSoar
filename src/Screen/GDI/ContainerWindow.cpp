@@ -97,21 +97,6 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
 
       return (LRESULT)brush->Native();
     }
-
-  case WM_DRAWITEM:
-    /* forward WM_DRAWITEM to the child window who sent this
-       message */
-    {
-      const DRAWITEMSTRUCT *di = (const DRAWITEMSTRUCT *)lParam;
-
-      Window *window = Window::GetChecked(di->hwndItem);
-      if (window == nullptr)
-        break;
-
-      Canvas canvas(di->hDC, PixelRect(di->rcItem).GetSize());
-      window->OnPaint(canvas);
-      return TRUE;
-    }
   };
 
   return PaintWindow::OnMessage(hWnd, message, wParam, lParam);
