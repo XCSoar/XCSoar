@@ -154,6 +154,9 @@ namespace InfoBoxFactory
 
     FIN_MC0_ALTD,
 
+    /* 110..119 */
+    NEXT_ARROW,
+
     e_NUM_TYPES /* Last item */
   };
 

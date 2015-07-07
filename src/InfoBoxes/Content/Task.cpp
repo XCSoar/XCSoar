@@ -34,6 +34,9 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "Renderer/NextArrowRenderer.hpp"
+#include "UIGlobals.hpp"
+#include "Look/Look.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -935,4 +938,67 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
   }
+}
+
+/*
+ * The NextArrow infobox contains an arrow pointing at the next waypoint.
+ * This function updates the text fields in the infobox.
+ */
+void
+InfoBoxContentNextArrow::Update(InfoBoxData &data)
+{
+  // use proper non-terminal next task stats
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+
+  // Check if data is valid
+  bool distance_valid = task_stats.task_valid && vector_remaining.IsValid();
+  bool angle_valid = distance_valid && basic.track_available;
+
+  // Set title. Use waypoint name if available.
+  const Waypoint *way_point = protected_task_manager != nullptr
+    ? protected_task_manager->GetActiveWaypoint()
+    : nullptr;
+  if (!way_point)
+    data.SetTitle(_("Next arrow"));
+  else
+    data.SetTitle(way_point->name.c_str());
+
+  // Set value
+  if (angle_valid)
+    data.SetCustom(); // Enables OnCustomPaint
+  else
+    data.SetInvalid();
+
+  // Set comment
+  if (distance_valid)
+    data.SetCommentFromDistance(vector_remaining.distance);
+  else
+    data.SetCommentInvalid();
+}
+
+/*
+ * The NextArrow infobox contains an arrow pointing at the next waypoint.
+ * This function renders the arrow.
+ */
+void
+InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+{
+  // use proper non-terminal next task stats
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+
+  // We exit immediately if this function is called when all data isn't
+  // available. This can happen e.g. while state is being changed.
+  if (!task_stats.task_valid
+      || !vector_remaining.IsValid()
+      || !basic.track_available)
+    return;
+
+  Angle bd = vector_remaining.bearing - basic.track;
+
+  NextArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
+  renderer.DrawArrow(canvas, rc, bd);
 }

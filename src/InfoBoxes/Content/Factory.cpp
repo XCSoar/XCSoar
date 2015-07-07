@@ -1276,6 +1276,20 @@ static constexpr MetaData meta_data[] = {
     FIN_MC0_ALTD,
     FIN_MC0_ALTD,
   },
+
+  // NEXT_ARROW
+  {
+    N_("Next arrow"),
+    N_("Next arrow"),
+    N_("Arrow pointing to the currently selected waypoint. The name of the "
+       "waypoint and the distance are also shown. "
+       "The position used is the optimized position of the active waypoint "
+       "in the current task, the center of a selected goto waypoint "
+       "or the target within the AAT sector for AAT tasks."),
+    IBFHelper<InfoBoxContentNextArrow>::Create,
+    NEXT_ARROW,
+    NEXT_ARROW,
+  },
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
