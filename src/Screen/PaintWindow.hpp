@@ -42,10 +42,6 @@ private:
   void InstallWndProc();
 
 public:
-  PaintWindow() {
-    EnableCustomPainting();
-  }
-
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance);
 #endif

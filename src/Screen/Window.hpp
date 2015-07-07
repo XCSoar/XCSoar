@@ -212,7 +212,6 @@ private:
 
 private:
   bool double_clicks;
-  bool custom_painting;
 
 public:
 #ifndef USE_GDI
@@ -223,22 +222,12 @@ public:
      double_clicks(false) {}
 #else
   Window():hWnd(nullptr), prev_wndproc(nullptr),
-           double_clicks(false), custom_painting(false) {}
+           double_clicks(false) {}
 #endif
   virtual ~Window();
 
   Window(const Window &other) = delete;
   Window &operator=(const Window &other) = delete;
-
-  /**
-   * Activates the OnPaint() method.  It is disabled by default
-   * because its preparation would needlessly allocate resources.
-   */
-  void EnableCustomPainting() {
-#ifdef USE_GDI
-    custom_painting = true;
-#endif
-  }
 
 #ifndef USE_GDI
   const ContainerWindow *GetParent() const {
@@ -285,12 +274,6 @@ protected:
 #else
   void AssertThread() const;
   void AssertThreadOrUndefined() const;
-#endif
-
-#ifdef USE_GDI
-  bool GetCustomPainting() const {
-    return custom_painting;
-  }
 #endif
 
 #ifndef USE_GDI
