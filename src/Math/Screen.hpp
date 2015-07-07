@@ -34,16 +34,24 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
                    const RasterPoint &p3, RasterPoint *p4, int offset);
 
 /**
- * Shifts and rotates the given polygon and also sizes it via FastScale()
+ * Shifts, rotates and scales the given polygon.
  *
  * @param poly Points specifying the polygon
  * @param n Number of points of the polygon
- * @param shift pixels to shift
+ * @param shift The polygon is placed with position (0,0) centered here.
  * @param angle Angle of rotation
- * @param scale Additional scaling in percent (100 = 100%, 150 = 150%, ...)
+ * @param scale An input polygon with coordinates in the range -50 to +50
+ *        is scaled to fill a square with the size of the 'scale' argument.
+ *        (The scale value 100 preserves the size of the input polygon.)
+ *        For best scaling precision, avoid 'scale' values smaller than
+ *        the intended size of the polygon.
+ * @param use_fast_scale If true, additional scaling via FastScale()
+ *        will be applied. This flag is only intended for backwards
+ *        compatibility as the use of FastScale() is deprecated.
  */
 void
 PolygonRotateShift(RasterPoint *poly, int n, RasterPoint shift,
-                   Angle angle, const int scale = 100);
+                   Angle angle, int scale = 100,
+                   bool use_fast_scale = true);
 
 #endif
