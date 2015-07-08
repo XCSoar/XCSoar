@@ -4,7 +4,7 @@
 \caption{Layout mais comum da tela do XCSoar}
 \end{figure}
 
-Este capítulo descreve de um modo geral, os conceitos fundamentais da interface do usuário usados pelos XCSoar.  A tela principal mostra a maioria das informações necessárias para o vôo normal.   Geralmente a tela principal é composta de um mapa móvel e infoboxes.  Por várias razões – não é o escopo da introdução – você tem a oportunidade de utilizar várias telas principais, chamadas de páginas de telas.
+Este capítulo descreve de um modo geral, os conceitos fundamentais da interface do usuário usados pelo XCSoar.  A tela principal mostra a maioria das informações necessárias para o vôo normal.   Geralmente a tela principal é composta de um mapa móvel e infoboxes.  Por várias razões – não é o escopo da introdução – você tem a oportunidade de utilizar várias telas principais, chamadas de páginas de telas.
 
 As páginas de telas são facilmente acessadas por um gesto de deslizamento horizontal, como se tivesse virando páginas de um livro ou por um apertar de botão, dependendo do hardware que estiver usando.  Com a página de telas você estará apto a compor várias telas principais para tirar vantagem da sua utilização em diversas situações de vôo.  Simplificando, você poderá usar a informação apropriada em diferentes casos, podem ser acessadas muito facilmente e rapidamente.
 
@@ -103,7 +103,7 @@ Na versão para PC, as teclas 1, 2 3 e 4 ativam os menus correspondentes.  A lis
  & \bmenut{Próx. Pto.}{Virada}
  & \bmenut{Lista}{Waypoint}
  & \bmenus{Alternativos} \\
-see
+veja
  & \ref{cha:tasks}
  & \ref{sec:advanc-rest-tasks}
  & \ref{sec:advanc-rest-tasks}
@@ -115,7 +115,7 @@ see
  & \bmenus{Alvo}
  & {}
  & {} \\
-see
+veja
  & \ref{sec:taskabort}
  & \ref{sec:markers}
  & \ref{sec:waypointdetails}
@@ -131,9 +131,9 @@ Você não deve iniciar o uso do XCSoar sem antes saber sobre todas as caracter�
  & \bmenut{Zoom}{In}
  & \bmenut{Zoom}{Out}
  & \bmenut{Zoom}{Auto}
- & \bmenut{Info}{Planeio/...}
+ & \bmenut{Info}{Auto/...}
  & \bmenut{Pan}{On} \\
-see
+veja
  & \ref{sec:zooming}
  & \ref{sec:zooming}
  & \ref{sec:zooming}
@@ -145,7 +145,7 @@ see
  & \bmenut{Terreno}{Desligado/...}
  & \bmenut{Topo.}{Desligado/...}
  & \bmenut{Espaço Aéreo}{Desligado/...} \\
-see
+veja
  & \ref{sec:maplabels}
  & \ref{sec:trail}
  & \ref{sec:terrain_topo}
@@ -165,7 +165,7 @@ A maioria dos menus mostrados estão disponíveis também com gestos ou atalhos 
  & \bmenut{MacCready}{Auto}
  & \bmenus{Flight}
  & \bmenus{Vento} \\
-see
+veja
  & \ref{sec:stf}
  & \ref{sec:stf}
  & \ref{sec:auto-maccready}
@@ -177,7 +177,7 @@ see
  & \bmenus{Dispositivos}
  & \bmenut{File}{Manager}
  & \bmenus{Replay} \\
-see
+veja
  & \ref{cha:configuration}
  & \ref{sec:glidepolar}
  & \ref{conf:comdevices}
@@ -185,11 +185,11 @@ see
  & \ref{sec:logger-replay} \\ \\
 \bmenus{Config 3/3} 
  & \bmenut{Registrador}{Iniciar}
- & \bmenus{Raw Logger}
+ & \bmenus{Logar NMEA}
  & \bmenus{Espaço Aéreo}
- & {}
- & \bmenus{Vega} \\
-see
+ & \bmenus{Vega}
+ & \bmenus{Profiles} \\
+veja
  & \ref{sec:logger}
  & \ref{sec:raw-logger}
  & \ref{sec:airspace-filter}
@@ -210,7 +210,7 @@ O menu de configuração é geralmente parte da interação básica com o XCSoar
  & \bmenut{Oque}{aqui?}
  & \bmenut{Check}{list}
  & \bmenus{Análise} \\
-see
+veja
  & \ref{sec:flarm-traffic}
  & \ref{sec:metar-taf}
  & {}
@@ -222,7 +222,7 @@ see
  & \bmenut{Time}{Código}
  & \bmenut{Traffic}{List}
  & \bmenut{Assistente}{Termal} \\
-see
+veja
  & \ref{sec:flight-status}
  & \ref{sec:weather-forecast}
  & \ref{sec:team-flying}
@@ -234,7 +234,7 @@ see
  & \bmenut{Message}{Repeat}
  & {}
  & {} \\
-see
+veja
  & \ref{sec:credits}
  & 
  & 
@@ -294,11 +294,11 @@ Quando não há menu ativo (chamado de modo padrão), uma linha de botões no Al
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
  Altair: & F5 & F6 & F7 & F8 & F9 \\
-& \bmenus{Flight} & \bmenut{Task}{Manager} & {} & \bmenus{Alvo} & \bmenut{Marcar}{Ponto} \\
+& \bmenus{Voo} & \bmenut{Gerenciador}{Tarefas} & {} & \bmenus{Alvo} & \bmenut{Marcar}{Ponto} \\
 \end{tabular}	
 \end{center}
 
-Teclando ESC no Altair mostra os rótulos para estes botões.
+Teclando ESC no Altair mostrará os rótulos destes botões.
 Para outras versões no modo padrão, o cursor faz as seguintes funções:
 
 \begin{jspecs}
@@ -306,7 +306,7 @@ Para outras versões no modo padrão, o cursor faz as seguintes funções:
 \item[Tecla Abaixo] Zoom -
 \item[Tecla esquerda] Marcar ponto
 \item[Tecla direita] alterna entre as infoboxes normais e auxiliares e tela cheia
-\item[Enter] Limpa a mensagem de estado ou suprimi o mostrador FLARM se estiver aberto e se nenhuma mensagem de alerta estiver ativa.  
+\item[Enter] Limpa a mensagem de estado ou suprime o mostrador FLARM se estiver aberto e se nenhuma mensagem de alerta estiver ativa.  
 \end{jspecs}
 
 Para a versão Altair em modo padrão, o botão rotativo desempenha as seguintes funções:
@@ -368,8 +368,7 @@ Mais ainda, você pode usar as páginas de tela para mudar o conteúdo da Infobo
 Para ter acesso à mudança automática de infobox de acordo com o tipo de vôo, deixe o XCSoar rodar um o conjunto pré-configurado da instalação.  Para ajustar sua própria versão de infoboxes, siga o procedimento:
 
 \begin{description}
-\item[Geometria da InfoBox] escolha o layout da infobox.  O layout básico é mantido através de qualquer mudança no vôo, influenciando somente o conteúdo da infobox.
-only.\config{interface-appearance}
+\item[Geometria da InfoBox] escolha o layout da infobox.  O layout básico é mantido através de qualquer mudança no vôo, influenciando somente o conteúdo da infobox.\config{interface-appearance}
 \item[Escolha Infobox "Auto"] Configure pelo menos uma página de tela com a escolha de Infobox “Auto”.  Como pode ser visto na tela configuração correspondente, há mais páginas de telas pré-definida.  As demais não são necessárias para terem alternância automática. 
 \item[Defina os conjuntos de ajustes da Infobox] Agrupe o conteúdo da infobox que deseja que seja mostrada em três páginas de infobox chamada de “Girando”, “Planeio” e “Planeio Final”, respectivamente.
 \end{description}
@@ -378,18 +377,18 @@ only.\config{interface-appearance}
  
 \subsection*{Página de telas com diferentes conjuntos de infobox}\label{sec:screenpages}
 
-XCSoar permite que o piloto defina os vários conjuntos de infoboxes que forem apropriados para o vôo normal.  Assume girando, voando ou planeio final como normal, o XCSoar pode alterar as infobox correspondentes automaticamente.
+O XCSoar permite que o piloto defina os vários conjuntos de infoboxes que forem apropriados para o vôo normal.  Assume girando, voando ou planeio final como normal, o XCSoar pode alterar as infobox correspondentes automaticamente.
 
 Como pode imaginar, há inúmeros casos de conjuntos que podem ser mostrados.  Você pode ter até oito conjuntos de páginas de telas, refletindo a situação atual.  Algumas possibilidades são dadas, só para fazer um breve resumo do uso do conceito da página de telas.
 
 \label{par:use_case}
 \begin{description}
-\item[Familiarização] se você é um piloto de ponta, você está procurando obter os benefícios dos inúmeros cálculos e provas que o XCSoar pode fornecer.  Para ter estes benefícios relacionado às fases da competição, deve aceitar a idéia de definir dois casos especiais de páginas, para a fase de início, outra para a prova.  Se você procura por um valor específico para ser mostrado, vá ao capítulo  \ref{cha:infobox} "Infobox reference". 
+\item[Familiarização] se você é um piloto de ponta, você está procurando obter os benefícios dos inúmeros cálculos e provas que o XCSoar pode fornecer.  Para ter estes benefícios relacionado às fases da competição, deve aceitar a idéia de definir dois casos especiais de páginas, para a fase de início, outra para a prova.  Se você procura por um valor específico para ser mostrado, vá ao Capítulo  \ref{cha:infobox} "Referências das Infoboxes". 
 Há grande chance de achar lá.
 \item[No chão] Como um gerenciador, você deve usar uma página de tela mostrando o “Radar FLARM” somente.  Pode acontecer na tela do PC rodando o XCSoar conectado a um receptor FLARM.
 \end{description}
 
-Qualquer que seja o que gostaria de mostrar, leve em conta o momento de uso e o conceito de página de telas.
+O que quer que seja que gostaria de mostrar, leve em conta o momento de uso e o conceito de página de telas.
 
 \gesturespec{left}
 Para ir através de várias páginas de telas, use as teclas esquerda/direita (Altair) ou gestos esquerda/direita (tela de toque) através do botão de menu \bmenug{Mostrar 1/2}, mostrando um rótulo dinâmico, mudando de acordo com o conteúdo da página de tela para mostrar o próximo:
@@ -400,9 +399,7 @@ Para ir através de várias páginas de telas, use as teclas esquerda/direita (A
 
 \subsection*{Modificando o conteúdo da InfoBox }
 
-(This section applies only when a touch-screen or mouse is present.)
-
-S(Esta seção somente se aplica se houver tela de toque ou mouse presente).  Alguns valores de infobox podem ser alterados pelo usuário selecionando (ex. longo pressionamento) o dado no infobox na tela de toque ou mouse.  Aparecerá uma caixa de diálogo pequena:
+(Esta seção somente se aplica se houver tela de toque ou mouse presente).  Alguns valores de infobox podem ser alterados pelo usuário selecionando (ex. longo pressionamento) o dado no infobox na tela de toque ou mouse.  Aparecerá uma caixa de diálogo pequena:
 
 \begin{description}
 \item[\bmenuw{Editar}]  
@@ -431,12 +428,12 @@ As mensagens mais comuns são
 
 \sketch{figures/status-message.png}
 
-Typical status messages include:
+As mensagens mais comuns são:
 \begin{itemize}
-\item Questões de espaço aéreo
+\item Dados de espaço aéreo
 \item Alertas de espaço aéreo
 \item Eventos de interface do usuário (ex. mudança da tela)
-\item Eventos de alteração de cálculos de vôo (ex: decolagem, pilões)
+\item Eventos de alteração de cálculos de vôo (ex: decolagem, pilões, etc.)
 \end{itemize}
 
 Note que as mensagens de estado não aparecerão se houver uma janela de diálogo aberta na tela.  As mensagens são enfileiradas e serão mostradas assim que a janela de diálogo for fechada.  
@@ -474,7 +471,7 @@ Em alguns diálogos, os itens que não relevantes ou inválidos (como detalhes A
 Estes diálogos são descritos em capítulos posteriores, com exceção da checklist, estado e caixas de diálogo com estrada de textos, que são descritas abaixo.
 
 
-\subsection*{Check-list (exemplo de diálogo}\label{sec:checklist}
+\subsection*{Check-list (exemplo de diálogo)}\label{sec:checklist}
 
 A janela de checklist pode ser mostrada em diversas páginas definidas pelo usuário.  Geralmente é usada para checklist e podem ser acessadas através do menu.
 
@@ -497,15 +494,15 @@ Para alterar o tamanho do texto, use os botões
 para ajustar o caractere sobre o cursor. Clicando nos botões the \button{$<$} 
 e \button{$>$} move o cursor para esquerda/direita.  
 
-Para entrar um texto com a tela de toque, aperte as letras uma após outra.  Em algumas janelas (ex. edição de waypoints) somente as letras que coincidem com uma entrada no banco de dados será mostrada.  Para apagar a última letra, use\button{$<-$} \sketch{figures/textentry_keyboard.png}. A tecla \button{$CLEAR$} apaga toda a entrada.
+Para entrar um texto com a tela de toque, aperte as letras uma após outra.  Em algumas janelas (ex. edição de waypoints) somente as letras que coincidem com uma entrada no banco de dados será mostrada.  Para apagar a última letra, use\button{$<-$} \sketch{figures/textentry_keyboard.png}. A tecla \button{$Limpar$} apaga toda a entrada.
 
-Pressione \button{$OK$} para finalizar ou \button{$CANCEL$} para sair. 
+Pressione \button{$OK$} para finalizar ou \button{$Cancelar$} para sair. 
 
 
 
 \section{Alertas acústicos e retorno de som}
 
-O XCSoar gera sons para eventos diferentes e podem ser configurados para ter sons personalizados para cada evento.  Veja seção 14.13 para detalhes desta personalização.
+O XCSoar gera sons para eventos diferentes e podem ser configurados para ter sons personalizados para cada evento.  Veja a seção \ref{sec:status-file} para detalhes desta personalização.
 
 Quando o XCSoar é conectado ao variômetro inteligente Vega, envia um comando ao sistema de voz do Vega para fornecer alertas sonoros como:
 
@@ -521,7 +518,7 @@ A interface do usuário do XCSoar também pode conectar um retorno de som ao com
 \end{itemize}
 
 
-\section{Screen visuals}
+\section{Aparências da tela}
 
 Certos aspectos da aparência dos itens na tela podem ser ajustados.  O mais comumente configurado é a visualização das infoboxes e mostradores em branco e preto (chamado de cores inversas), ou preto e branco.
 Para os controles da tela do Altair, o brilho pode ser ajustado conforme abaixo:
@@ -534,24 +531,19 @@ brightness can be controlled from the brightness dialogue.
 \bmenug{Mostrar 2}\blink\bmenug{Brilho}
 \end{quote}
 
-Consulte {\em Altair Manual do Usuário's Manual} para detalhes da janela de brilho.
+Consulte {\em Altair Manual do Usuário} para detalhes da janela de brilho.
 
 
 \section{Sistema de ajuda}
 
 Um sistema de ajuda fornece um texto descritivo das propriedades para a maioria dos comandos.  Quando há a seleção de uma propriedade, para o Altair, aperte e segure o botão \button{$ENTER$} por 2 segundos e solte. Abrirá uma janela com um texto de ajuda descrevendo a propriedade.  
 
-\section{Interfacing with gestures}\label{sec:gestures}
+\section{Agindo com gestos}\label{sec:gestures}
 A partir da versão 6.0, o XCSoar aceita “gestos”
 
-Para usar esta característica, seguro o dedo na tela (ou botão do mouse no PC), desenhe 
-uma figura e solte a tela ou o botão do mouse.  Dependendo do que for desenhado, será 
-ativada uma função específica. \sketch{figures/gesture1.png}
+Para usar esta característica, segure o dedo na tela (ou botão do mouse no PC), desenhe uma figura e solte a tela ou o botão do mouse.  Dependendo do que for desenhado, será ativada uma função específica. \sketch{figures/gesture1.png}
 
-Um gesto específico é definido pelos movimentos dos dedos ou cursor nas quatro direções 
-Cima, Baixo, Esquerda e Direita.  Significa que se você arrastar seu dedo para baixo e 
-depois para a direita na tela, \gesture{dr} o gesto “BD” (baixo e direita) é detectado e 
-está configurado para mostrar a lista de waypoints
+Um gesto específico é definido pelos movimentos dos dedos ou cursor nas quatro direções Cima, Baixo, Esquerda e Direita.  Significa que se você arrastar seu dedo para baixo e depois para a direita na tela, \gesture{dr} o gesto “BD” (baixo e direita) é detectado e está configurado para mostrar a lista de waypoints
  
 O manual indica os gestos disponíveis mostrados aqui no lado esquerdo do corpo de texto.  Ambos os pictogramas do movimento e a mão azul são utilizados para indicar um gesto específico, neste caso movendo para baixo e para direita.  A lista com os movimentos disponíveis é mostrada abaixo. \gesturespec{dr}
 \vspace{2em}
@@ -577,7 +569,6 @@ O manual indica os gestos disponíveis mostrados aqui no lado esquerdo do corpo 
 \begin{itemize}
 \item[\raisebox{-1em}
 {\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/dr.png}}] BD, escrevendo um “L”: mostra a lista de Waypoints 
-item Waypoint \textbf{L}ist
 \item[\raisebox{-1em}
 {\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/rd.png}}] DB, escrevendo um “T”: abre o gerenciador de provas
 \item[\raisebox{-1em}

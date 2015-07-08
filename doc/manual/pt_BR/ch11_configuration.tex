@@ -41,7 +41,7 @@ A janela de ajustes também contém diversas páginas.  Uma vez feitas alteraç�
 
 \tip Se estiver contente com os ajustes das configurações, salve o arquivo de perfil e faça uma cópia de segurança, caso tenha que restaurar os ajustes se a memória do seu PDA for acidentalmente apagada.
 
-Veja o capítulo ~\ref{cha:data-files} para descrição do formato de arquivos relativos aos ajustes.  Se não for usado nenhum arquivo, o campo pode deixar em branco.  Os campos no formulário de nome do arquivo mostram os arquivos que correspondem ao filtro de extensão de arquivos.  Isto torna mais fácil achar e selecionar o arquivo correto.
+Veja o Capítulo~\ref{cha:data-files} para descrição do formato de arquivos relativos aos ajustes.  Se não for usado nenhum arquivo, o campo pode deixar em branco.  Os campos no formulário de nome do arquivo mostram os arquivos que correspondem ao filtro de extensão de arquivos.  Isto torna mais fácil achar e selecionar o arquivo correto.
 
 A janela de configuração principal (Ajuste do sistema) pode rodar em nível Básico ou Avançado através de um campo no canto superior esquerdo da janela.  
 \sketch{figures/config-expert.png}
@@ -58,7 +58,7 @@ A janela especifica os arquivos mais importantes que devem ser configurados quan
 \item[Mais waypoints*]  arquivo secundário de waypoints.  Deve ser usado para adicionar waypoints para competições.
 \item[Waypoints observados*]  arquivo de waypoints contendo waypoints especiais para os quais os podem substituir os cálculos adicionais de altura de chegada no mapa.  Útil para waypoints como fontes de térmicas conhecidas (ex, usinas) ou passagens por montanhas.
 \item[Espaço aéreo]  arquivo de espaço aéreo primário.  Se deixado em branco, os espaços aéreos serão carregados do arquivo de mapa (se disponíveis).
-\item[Mais espaços aéreos*] arquivo secundário de espaço aéreo.
+\item[Mais espaços aéreos*] nome do arquivo secundário de espaço aéreo.
 \item[Detalhes de Waypoint] o aeródromo pode conter suplementos de rotas ou outras informações sobre aeródromos individuais
 \end{description}
 
@@ -123,7 +123,7 @@ Esta página fornece opções relativas aos elementos da tela sobrepostos à exi
   {\bf Simples (largo)}: aumenta o gráfico ‘Simples’ para melhor visibilidade. \\
   {\bf Detalhado}: mostra o planador com detalhes. \\
   {\bf HangGlider}: asa-delta simples branca com contornos negros. \\
-  {\bf ParaGlider}: SParaglider simples branco com contornos negros.
+  {\bf ParaGlider}: Paraglider simples branco com contornos negros.
 \item[Seta de vento*]  determina a forma que a seta de vento é desenhada no mapa. \\
   {\bf Desligado}: não será desenhada seta. \\
   {\bf Ponta de seta}: desenha somente a ponta da seta. \\
@@ -139,8 +139,7 @@ Esta página fornece opções relativas aos elementos da tela sobrepostos à exi
 Esta página mostra as opções relativas à exibição do mapa.
 
 \begin{description}
-\item[Formato do rótulo]  este ajuste  \label{conf:labels} determina o rótulo mostrado 
-  para cada waypoint, com cinco opções diferentes: \\
+\item[Formato do rótulo]  este ajuste  \label{conf:labels} determina o rótulo mostrado para cada waypoint, com cinco opções diferentes: \\
   {\bf Nome completo}: o nome completo de cada waypoint é mostrado. \\
   {\bf Primeira palavra do nome}: somente a primeira palavra (até o primeiro espaço) do nome do waypoint é mostrada.
 \sketch{figures/config-map_waypoint.png} \\
@@ -155,10 +154,10 @@ Esta página mostra as opções relativas à exibição do mapa.
   {\bf Taxa de planeio requerida}: mostra a taxa de planeio sobre o solo necessária para alcançar o waypoint.
 \item[Estilo de rótulo*]  podem ser mostrados os rótulos para pousáveis por um retângulo com fundo branco ou com linhas pontilhadas.
 \item[Visibilidade do rótulo*]  \label{conf:labelvisibility} controla quais waypoints serão mostrados com nomes e altitudes de chegada no mapa: \\
-  {\bf Tudo}: All waypoint labels will be displayed. \\
+  {\bf Tudo}: Todos os waypoints serão mostrados. \\
   {\bf Task waypoints \& airfields}: todos os waypoints da prova e aeródromos serão mostrados. \\
-  {\bf Waypoints da prova \& pousáveis}:todos os waypoints da prova e pousáveis serão mostrados.
-  {\bf Waypoints da prova:}: todos os waypoints da prova serão mostrados. \\
+  {\bf Waypoints da prova \& pousáveis}: todos os waypoints da prova e pousáveis serão mostrados.
+  {\bf Waypoints da prova}: todos os waypoints da prova serão mostrados. \\
   {\bf Nenhum}:  nenhum waypoint da prova será mostrado.
 \item[Símbolo pousáveis]  \label{conf:waypointicons} três símbolos estão disponíveis: círculo roxo, com alto contraste com os ícones e ícones com luz de tráfego. Veja seção~\ref{sec:waypoint-schemes} para detalhes.
 \item[Detalhar pousáveis*]  ativa os detalhes dos pousáveis ao invés de ícones fixos, com informações diversas sobre o comprimento da pista e direção.
@@ -188,6 +187,8 @@ O efeito da alteração dos ajustes do terreno é visto abaixo:
 As cores dos terrenos são ilustradas na tabela abaixo:
 
 \begin{longtable}{c c c c}
+\em{Planícies [m]} & \em{Montanhas [m]} & \em{ICAO [m]} & \em{Cinza [m]} \\
+\nopagebreak[4]
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-mountanous.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
@@ -195,6 +196,8 @@ As cores dos terrenos são ilustradas na tabela abaixo:
 \end{longtable}
 
 \begin{longtable}{c c c c}
+\em{Imhof 4 [m]} & \em{Imhof 7 [m]} & \em{Imhof 12 [m]} & \em{Imhof Atlas [m]} \\
+\nopagebreak[4]
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
@@ -241,8 +244,7 @@ Esta página permite definir as alturas de segurança e comportamentos para os p
 
 \begin{description}
 \item[Altura de chegada]  a altura acima do terreno que o planador deverá chegar para pousar com segurança.
-\item[Altura do terreno]  \label{conf:safetyterrain} altura acima do terreno que o planador deve planar no planeio final.  Veja seção
-  ~\ref{sec:safety-heights} para mais detalhes dos significados de altura de segurança. \\
+\item[Altura do terreno]  \label{conf:safetyterrain} altura acima do terreno que o planador deve planar no planeio final.  Veja seção~\ref{sec:safety-heights} para mais detalhes dos significados de altura de segurança. \\
 \item[Modo alternativo]  \label{conf:alternatesmode} determina o tipo de pousos alternativos conforme abaixo: \\
   {\bf Simples}: os alternativos irão ser ordenados pela altura de chegada.  O primeiro waypoint na lista é o que está mais ao alcance.   \\
   {\bf Prova}: a ordem irá levar em conta a direção da prova atual mostrará de acordo com a distância mínima extra navegada ao respeito campo e adiante na prova. \\
@@ -251,7 +253,7 @@ Esta página permite definir as alturas de segurança e comportamentos para os p
 \item[Fator de Risco STF*] 
  o fator de risco STF reduz o ajuste de MacCready usado para calcular a velocidade ideal quando o planador está baixo para compensar o risco.  Ajuste 0,0 para não compensado, 1,0 faz o 
 \sketch{figures/config-safety.png}
- MacCready linear com o peso (com referência à altura de subida máxima).  Se optar por esta configuração, o valor de 0,3 pode ser recomendado.  Veja Seção ~\ref{sec:safety-para} mais detalhes.
+ MacCready linear com o peso (com referência à altura de subida máxima).  Se optar por esta configuração, o valor de 0,3 pode ser recomendado.  Veja Seção~\ref{sec:safety-factor} para mais detalhes.
 \end{description}
 
 
@@ -305,6 +307,7 @@ para as descrições detalhadas.
 \item[Polar de chegada*]  \label{conf:reachpolar} determina o desempenho do planeio usado no alcance nos cálculos de chegada de pousável, aborto e alternativos. \\
   {\bf Prova}: usa o valor de MacCready da prova. \\
   {\bf MC de Segurança}: usa o valor de MacCready de segurança.
+\item[Exibir chegada] \label{conf:arrivaldisplay} determina se o alcance é desenhado no mapa como uma linha ou uma sombra.
 \end{description}
 
 %%%%%%%%%%%%%%%%%%
@@ -499,7 +502,6 @@ Para mudar um conjunto, tecle em uma das infoboxes rotuladas com o conteúdo atu
 \begin{tabular}{|c|c|c|c|}
 \hline
 1 & 2 & 3 & 4 \\
-\hline
 \hline
 5 & 6 & 7 & 8 \\
 \hline

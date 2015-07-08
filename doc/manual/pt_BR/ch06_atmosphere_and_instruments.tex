@@ -1,5 +1,5 @@
 \chapter{Atmosfera e Instrumentos}\label{cha:atmosph}
-O XCSoar mantém um modelo interno de atmosfera baseado nas estatísticas adquiridas dos vôos e outros instrumentos conectados ao dispositivo Pocket PC.  Estas estatísticas e medições são aproximadas e em alguns dias podemos ter uma rápida alteração do tempo.  O piloto deve estar observando a todo instante a condição de vôo.  Quando está se dirigindo para o pouso, o piloto deve procurar para indicadores no chão que confirmem a velocidade e direção do vento.
+O XCSoar mantém um modelo interno de atmosfera baseado nas estatísticas adquiridas dos vôos e outros instrumentos conectados ao dispositivo Pocket PC.  Estas estatísticas e medições são aproximadas e em alguns dias podemos ter uma rápida alteração do tempo.  O piloto deve observar a todo instante a condição de vôo.  Quando está se dirigindo para o pouso, o piloto deve procurar para indicadores no chão que confirmem a velocidade e direção do vento.
 
 \section{Variômetro}\label{sec:variometer}
 
@@ -14,9 +14,9 @@ O valor médio pode também ser mostrado como uma agulha opcional (circunflexo).
 
 Quando um variômetro inteligente é conectado ao XCSoar, a agulha irá mostrar os dados do instrumento, caso contrário irá mostrar a estimativa baseado nos dados de GPS de velocidade vertical, que é bem mais lento e descompensado para a energia total da aeronave.
 
-O valor de MacCready, bugs e lastro, velocidade ideal de vôo e dados de vento são transferidos entre o XCSoar e o variômetro inteligente externo.  No ajuste ideal, tanto o XCSoar quanto o variômetro têm uma perspectiva consistente de vôo a todo instante.  Ajustando o valor de MacCready no dispositivo, o sincronistmo é mantido, não necessitando de entrada adicional pelo piloto.
+O valor de MacCready, bugs e lastro, velocidade ideal de vôo e dados de vento são transferidos entre o XCSoar e o variômetro inteligente externo.  No ajuste ideal, tanto o XCSoar quanto o variômetro têm uma perspectiva consistente de vôo a todo instante.  Ajustando o valor de MacCready no dispositivo, o sincronismo é mantido, não necessitando de entrada adicional pelo piloto.
 
-Os pilotos podem abusar da sincronização dos dispositivos (veja  \ref{conf:comdevices}) por diversas razões.  Você teve ter ajustes diferenciados de MacCready no PDA e no variômetro inteligente para verificação dos dados. Você deve fazer alguns cálculos com diferentes ajustes de lastro e verificar o resultado.  Deve escolher um dos dois dispositivos manualmente e entrar com o ajuste de vento e verificar o resultado, etc.
+Os pilotos podem abusar da sincronização dos dispositivos (veja seção \ref{conf:comdevices}) por diversas razões.  Você teve ter ajustes diferenciados de MacCready no PDA e no variômetro inteligente para verificação dos dados. Você deve fazer alguns cálculos com diferentes ajustes de lastro e verificar o resultado.  Deve escolher um dos dois dispositivos manualmente e entrar com o ajuste de vento e verificar o resultado, etc.
 
 A lista de variômetros compatíveis é mostrada na Seção ~\ref{sec:supported-varios}.
 
@@ -176,8 +176,7 @@ Deve ser observada que a interpretação do assistente de termal sempre é relat
 
 Se a aeronave estiver equipada com um sensor externo de temperatura e umidade, há um sistema simples de previsão de convecção que estima o teto da térmica e a base da nuvem.  O sensor de umidade é opcional e necessário para estimar a base da nuvem.
 
-Antes de decolar ou durante o vôo, o piloto pode modificar a temperatura máxima no chão, ajustando o valor na infobox ‘Temperatura prevista’.  
- {\InfoBox}.
+Antes de decolar ou durante o vôo, o piloto pode modificar a temperatura máxima no chão, ajustando o valor na infobox ‘Temperatura prevista’  {\InfoBox}.
 
 A previsão do teto da termal é determinada pela altitude pela qual a temperatura atmosférica se iguala à temperatura máxima prevista no solo, resfriada adiabaticamente enquanto sobe de acordo com a taxa adiabática seca.  Geralmente a aeronave não subirá mais do que o teto da termal, portanto os valores medidos são extrapolados para se determinar o teto.  Se a atmosfera é estável, o teto da convecção é reportado como altitude zero.
 
@@ -196,7 +195,7 @@ A previsão da base da nuvem é determinada pela altitude na qual o ponto de orv
 \section{Janela de análise}
 
 A janela de análise é usada para observar vários aspectos da atmosfera.
-\menulabel{\bmenug{Info 1}\blink\bmenug{Analysis}}
+\menulabel{\bmenug{Info 1}\blink\bmenug{Análise}}
 
 Há várias páginas de interesse:  
 \begin{description}
@@ -224,8 +223,8 @@ O histórico de subida e página do barógrafo, descritos na seção ~\ref{sec:a
 
 Se o hardware em que o XCSoar esteja rodando for capaz de conectar-se à internet, as previsões e reportes atmosféricos podem ser baixados.   \menulabelr{\bmenug{Info}\blink
 \bmenug{METAR TAF}} Apresentará informações atuais e representado como uma pequena bandeira, inserida no waypoint da estação emissora do reporte. 
-\menulabelr{\includegraphics[width=0.6cm]{icons/map_weather_station.pdf}}Para ajustar as previsões e reportes, clique no botão METAR / TAF om o botão
-\bmenuw{Adicionar} , abrirá uma janela de filtro com o código ICAO do aeroporto.  Depois de digitar o nome do aeroporto, clique em \bmenuw{Ok} e poderá adicionar outra estação à lista.  Acessando as informações também é possível selecionar o aeroporto e teclando em \bmenuw{Detalhes} na mesma tela ou tocando o mapa abrirá o “Elementos de mapa nesta localização”.  A janela irá mostrar aeroportos, espaços aéreos... e dados de metereologia. Se não houverem bandeiras no mapa, nenhuma informação estará disponível.  Abra a janela e clique em \bmenuw{Atualizar}.  
+\menulabelr{\includegraphics[width=0.6cm]{icons/map_weather_station.pdf}}Para ajustar as previsões e reportes, clique no botão METAR / TAF e o botão
+\bmenuw{Adicionar} abrirá uma janela de filtro com o código ICAO do aeroporto.  Depois de digitar o nome do aeroporto, clique em \bmenuw{Ok} e poderá adicionar outra estação à lista.  Acessando as informações também é possível selecionar o aeroporto e teclando em \bmenuw{Detalhes} na mesma tela ou tocando o mapa abrirá o “Elementos de mapa nesta localização”.  A janela irá mostrar aeroportos, espaços aéreos... e dados de metereologia. Se não houverem bandeiras no mapa, nenhuma informação estará disponível.  Abra a janela e clique em \bmenuw{Atualizar}.  
 
 \section{Previsão metereológica, RASP}\label{sec:weather-forecast}
 
@@ -249,7 +248,7 @@ Os campos disponíveis mostrados são os seguintes:
 \item[Terreno] Mostra o terreno no mapa, sem dados de metereologia.
 
 \item[W*] 
-média de subida em térmica seca próxima a altura média BL.
+média de subida em térmica seca próxima à altura média BL.
 Subtraia a taxa de descida da aeronave para ver a média de leitura do variômetro para térmicas sem nuvens.  A força da ascendente será mais forte que a previsão se as nuvens convectivas estiverem presentes, desde que a condensação da nuvem faça a flutuação (esqueça a ‘sugada’ da nuvem).  Este valor depende do aquecimento da superfície e profundidade BL.  
 
 
@@ -306,4 +305,3 @@ As cores usadas são os contornos RASP renderizados, ilustrados na tabela abaixo
 \end{longtable}
 \end{maxipage}
 
-%{\it IN THE MANUAL RELEASED IN OCTOBER, 18, 2014 THERE WAS NO COLOURS ILUSTRATED IN THE TABLE BELOW - THERE WAS NO TABLE}
