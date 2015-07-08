@@ -32,12 +32,6 @@ AirspaceIntersectSort::add(const fixed t, const GeoPoint &p)
 }
 
 bool
-AirspaceIntersectSort::empty() const
-{
-  return m_q.empty();
-}
-
-bool
 AirspaceIntersectSort::top(GeoPoint &p) const
 {
   if (m_airspace->Inside(m_start)) {

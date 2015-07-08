@@ -75,7 +75,9 @@ public:
    *
    * @return True if no points added
    */
-  bool empty() const;
+  bool empty() const {
+    return m_q.empty();
+  }
 
   /**
    * Return closest intercept point (or location if inside)
