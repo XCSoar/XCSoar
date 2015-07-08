@@ -30,27 +30,28 @@ Copyright_License {
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicateHeightRange.hpp"
 #include "Engine/Airspace/Predicate/OutsideAirspacePredicate.hpp"
+#include "Engine/Airspace/Minimum.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-struct NearestAirspaceVisitor final : AirspaceVisitor {
-  const GeoPoint location;
-  const FlatProjection &projection;
+gcc_pure
+__attribute__((always_inline))
+static inline NearestAirspace
+CalculateNearestAirspaceHorizontal(const GeoPoint &location,
+                                   const FlatProjection &projection,
+                                   const AbstractAirspace &airspace)
+{
+  const auto closest = airspace.ClosestPoint(location, projection);
+  assert(closest.IsValid());
 
-  NearestAirspace nearest;
+  return NearestAirspace(airspace, closest.DistanceS(location));
+}
 
-  NearestAirspaceVisitor(const GeoPoint &_location,
-                         const FlatProjection &_projection)
-    :location(_location), projection(_projection) {}
-
-  void Visit(const AbstractAirspace &aa) override {
-    const auto closest = aa.ClosestPoint(location, projection);
-    assert(closest.IsValid());
-
-    const fixed distance = closest.DistanceS(location);
-    if (!nearest.IsDefined() || distance < nearest.distance)
-      nearest = { aa, distance };
+struct CompareNearestAirspace {
+  gcc_pure
+  bool operator()(const NearestAirspace &a, const NearestAirspace &b) const {
+    return !b.IsDefined() || a.distance < b.distance;
   }
 };
 
@@ -60,10 +61,12 @@ FindHorizontal(const GeoPoint &location,
                const Airspaces &airspace_database,
                const AirspacePredicate &predicate)
 {
-  NearestAirspaceVisitor visitor(location, airspace_database.GetProjection());
-  airspace_database.VisitWithinRange(location, fixed(30000),
-                                     visitor, predicate);
-  return visitor.nearest;
+  const auto &projection = airspace_database.GetProjection();
+  return FindMinimum(airspace_database, location, fixed(30000), predicate,
+                     [&location, &projection](const AbstractAirspace &airspace){
+                       return CalculateNearestAirspaceHorizontal(location, projection, airspace);
+                     },
+                     CompareNearestAirspace());
 }
 
 gcc_pure
