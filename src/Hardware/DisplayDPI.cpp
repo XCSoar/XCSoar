@@ -28,14 +28,8 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
-#ifdef KOBO
-#include "OS/FileUtil.hpp"
-#endif
-
 #ifdef WIN32
 #include "Screen/GDI/RootDC.hpp"
-#include "Config/Registry.hpp"
-#include "OS/GlobalEvent.hpp"
 
 #include <windows.h>
 #endif
