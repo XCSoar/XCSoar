@@ -191,7 +191,10 @@ WindowList::FindPreviousChildControl(Window *reference)
   assert(reference != nullptr);
   assert(Contains(*reference));
 
-  List::reverse_iterator i(list.iterator_to(*reference));
+  /* the std::next() is necessary because reverse iterators
+     dereference to std::previous() - sounds like an awkward design
+     decision, but that's how it is */
+  List::reverse_iterator i(std::next(list.iterator_to(*reference)));
   assert(i != list.rend());
 
   return FindControl(++i, list.rend());
