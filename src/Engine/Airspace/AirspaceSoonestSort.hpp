@@ -35,6 +35,7 @@ public:
      m_perf(perf),
      m_max_time(max_time) {};
 
+protected:
   /**
    * Compute intercept solution
    *
@@ -55,6 +56,7 @@ public:
    */
   fixed metric(const AirspaceInterceptSolution &ais) const override;
 
+public:
   /**
    * Convenience method, calls find_nearest(airspaces, range) with range
    * set according to limit of performance model.

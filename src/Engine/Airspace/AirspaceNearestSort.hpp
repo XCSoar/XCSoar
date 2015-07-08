@@ -61,6 +61,7 @@ public:
   const AbstractAirspace *find_nearest(const Airspaces &airspaces,
                                        const fixed range);
 
+protected:
   /**
    * Compute complete or partial solution as required to this sort strategy
    *
