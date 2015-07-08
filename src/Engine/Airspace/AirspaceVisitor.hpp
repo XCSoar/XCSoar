@@ -24,8 +24,6 @@
 
 class Airspace;
 class AbstractAirspace;
-class AirspacePolygon;
-class AirspaceCircle;
 
 /**
  * Generic visitor for objects in the Airspaces container
