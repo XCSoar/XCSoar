@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Layout.hpp"
 #include "Hardware/DisplayDPI.hpp"
+#include "Hardware/DisplaySize.hpp"
 
 #include <algorithm>
 
@@ -63,6 +64,16 @@ IsSmallScreen(unsigned width, unsigned height,
     : IsSmallScreen(height, y_dpi);
 }
 
+/**
+ * Is the small edge smaller than 5 inch?
+ */
+static constexpr bool
+IsSmallScreen(PixelSize size,
+              unsigned x_dpi, unsigned y_dpi)
+{
+  return IsSmallScreen(size.cx, size.cy, x_dpi, y_dpi);
+}
+
 void
 Layout::Initialize(PixelSize new_size, unsigned ui_scale)
 {
@@ -77,7 +88,8 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale)
 
   const unsigned x_dpi = Display::GetXDPI();
   const unsigned y_dpi = Display::GetYDPI();
-  const bool is_small_screen = IsSmallScreen(width, height, x_dpi, y_dpi);
+  const bool is_small_screen = IsSmallScreen(Display::GetSize(new_size),
+                                             x_dpi, y_dpi);
 
   // always start w/ shortest dimension
   // square should be shrunk
