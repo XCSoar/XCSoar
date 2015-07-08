@@ -200,14 +200,6 @@ public:
   void VisitInside(const GeoPoint &location, AirspaceVisitor &visitor) const;
 
   /**
-   * Find the nearest airspace that matches the specified condition.
-   */
-  gcc_pure
-  const Airspace *FindNearest(const GeoPoint &location,
-                              const AirspacePredicate &condition =
-                                    AirspacePredicate::always_true) const;
-
-  /**
    * Search for airspaces within range of the aircraft.
    *
    * @param location location of aircraft, from which to search

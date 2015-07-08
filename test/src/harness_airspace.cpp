@@ -272,13 +272,6 @@ void scan_airspaces(const AircraftState state,
   const fixed range(20000.0);
 
   Directory::Create(_T("output/results"));
-  AirspaceVisitorPrint pvn("output/results/res-bb-nearest.txt",
-                           do_report);
-  const Airspace *nearest = airspaces.FindNearest(state.location);
-  if (nearest != nullptr) {
-    AirspaceVisitor &v = pvn;
-    v.Visit(*nearest);
-  }
 
   {
     AirspaceVisitorPrint pvisitor("output/results/res-bb-range.txt",
