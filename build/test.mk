@@ -3,6 +3,7 @@ name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 MORE_SCREEN_SOURCES = \
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp
 ifeq ($(TARGET_IS_KOBO),y)
 MORE_SCREEN_SOURCES += \

@@ -4,6 +4,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \

@@ -533,6 +533,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/DisplaySize.cpp \
 	$(SRC)/Hardware/BlankDisplay.cpp \
 	$(SRC)/Hardware/DisplayGlue.cpp \
 	$(SRC)/Hardware/Vibrator.cpp \
