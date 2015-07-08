@@ -56,8 +56,8 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
     /* check altitude; hard-coded margin of 50m (for now) */
     WrapAirspacePredicate<AirspacePredicateHeightRange> height_range_predicate(RoughAltitude(basic.nav_altitude-fixed(50)),
                                                                                RoughAltitude(basic.nav_altitude+fixed(50)));
-     AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
-     airspace = airspace_database.FindNearest(basic.location, and_predicate);
+    AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
+    airspace = airspace_database.FindNearest(basic.location, and_predicate);
   } else //only filter outside and active
     airspace = airspace_database.FindNearest(basic.location, outside_and_active_predicate);
 
