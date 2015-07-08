@@ -30,9 +30,9 @@ Copyright_License {
 #include "Components.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
-#include "Airspace/AirspaceSoonestSort.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
+#include "Engine/Airspace/SoonestAirspace.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "MainWindow.hpp"
@@ -116,9 +116,9 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
   GlidePolar polar = settings_computer.polar.glide_polar_task;
   polar.SetMC(std::max(polar.GetMC(), fixed(1)));
   const AirspaceAircraftPerformance perf(polar);
-  AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 
-  const AbstractAirspace* as = ans.find_nearest(airspace_database);
+  const auto *as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
+                                       visible, fixed(1800));
   if (!as) {
     return;
   } 

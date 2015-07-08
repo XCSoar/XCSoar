@@ -25,8 +25,7 @@
 #include "harness_airspace.hpp"
 #include "test_debug.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/AirspaceNearestSort.hpp"
-#include "Airspace/AirspaceSoonestSort.hpp"
+#include "Airspace/SoonestAirspace.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "OS/FileUtil.hpp"
@@ -302,21 +301,8 @@ void scan_airspaces(const AircraftState state,
   }
 
   {
-    AirspaceNearestSort ans(state.location);
-    const AbstractAirspace* as = ans.find_nearest(airspaces, range);
-    if (do_report) {
-      std::ofstream fout("output/results/res-bb-sortednearest.txt");
-      if (as) {
-        fout << *as << "\n";
-      } else {
-        fout << "# no nearest found\n";
-      }
-    }
-  }
-
-  {
-    AirspaceSoonestSort ans(state, perf);
-    const AbstractAirspace* as = ans.find_nearest(airspaces);
+    const auto *as = FindSoonestAirspace(airspaces, state, perf,
+                                         AirspacePredicateTrue());
     if (do_report) {
       std::ofstream fout("output/results/res-bb-sortedsoonest.txt");
       if (as) {
