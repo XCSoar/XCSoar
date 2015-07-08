@@ -35,6 +35,15 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 gcc_pure
+static const Airspace *
+FindHorizontal(const GeoPoint &location,
+               const Airspaces &airspace_database,
+               const AirspacePredicate &predicate)
+{
+  return airspace_database.FindNearest(location, predicate);
+}
+
+gcc_pure
 NearestAirspace
 NearestAirspace::FindHorizontal(const MoreData &basic,
                                 const ProtectedAirspaceWarningManager &airspace_warnings,
@@ -57,9 +66,11 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
     WrapAirspacePredicate<AirspacePredicateHeightRange> height_range_predicate(RoughAltitude(basic.nav_altitude-fixed(50)),
                                                                                RoughAltitude(basic.nav_altitude+fixed(50)));
     AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
-    airspace = airspace_database.FindNearest(basic.location, and_predicate);
+    airspace = ::FindHorizontal(basic.location, airspace_database,
+                                and_predicate);
   } else //only filter outside and active
-    airspace = airspace_database.FindNearest(basic.location, outside_and_active_predicate);
+    airspace = ::FindHorizontal(basic.location, airspace_database,
+                                outside_and_active_predicate);
 
   if (airspace == nullptr)
     return NearestAirspace();
