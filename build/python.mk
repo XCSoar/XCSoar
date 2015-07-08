@@ -46,10 +46,8 @@ PYTHON_SOURCES = \
 	$(ENGINE_SRC_DIR)/Airspace/Airspace.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceIntersectionVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceIntersectSort.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/AirspaceNearestSort.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspacePolygon.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/AirspaceSoonestSort.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceSorter.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceAircraftPerformance.cpp \
