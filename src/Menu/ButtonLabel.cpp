@@ -71,8 +71,7 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
 {
   /* copy to buffer, because gettext() expects a null-terminated
      string */
-  std::copy(src, src_end, buffer);
-  buffer[src_end - src] = _T('\0');
+  *std::copy(src, src_end, buffer) = _T('\0');
 
   return StringIsEmpty(buffer) ? _T("") : gettext(buffer);
 }
