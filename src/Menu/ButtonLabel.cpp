@@ -61,6 +61,22 @@ LacksAlphaASCII(const TCHAR *s)
   return true;
 }
 
+/**
+ * Translate a portion of the source string.
+ */
+gcc_pure
+static const TCHAR *
+GetTextN(const TCHAR *src, const TCHAR *src_end,
+         TCHAR *buffer, size_t buffer_size)
+{
+  /* copy to buffer, because gettext() expects a null-terminated
+     string */
+  std::copy(src, src_end, buffer);
+  buffer[src_end - src] = _T('\0');
+
+  return StringIsEmpty(buffer) ? _T("") : gettext(buffer);
+}
+
 ButtonLabel::Expanded
 ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 {
@@ -82,11 +98,8 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
       /* copy the text up to the '\n' to a new buffer and translate it */
       TCHAR translatable[256];
-      std::copy(text, nl, translatable);
-      translatable[nl - text] = _T('\0');
-
-      const TCHAR *translated = StringIsEmpty(translatable)
-        ? _T("") : gettext(translatable);
+      const TCHAR *translated = GetTextN(text, nl, translatable,
+                                         ARRAY_SIZE(translatable));
 
       /* concatenate the translated text and the part starting with '\n' */
       _tcscpy(buffer, translated);
@@ -113,11 +126,8 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     /* copy the text (without trailing whitespace) to a new buffer and
        translate it */
     TCHAR translatable[256];
-    std::copy(text, macros, translatable);
-    translatable[macros - text] = _T('\0');
-
-    const TCHAR *translated = StringIsEmpty(translatable)
-      ? _T("") : gettext(translatable);
+    const TCHAR *translated = GetTextN(text, macros, translatable,
+                                       ARRAY_SIZE(translatable));
 
     /* concatenate the translated text and the macro output */
     _tcscpy(buffer, translated);
