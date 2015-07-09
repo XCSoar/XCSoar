@@ -63,6 +63,8 @@ LacksAlphaASCII(const TCHAR *s)
 
 /**
  * Translate a portion of the source string.
+ *
+ * @return the translated string or nullptr if the buffer is too small
  */
 gcc_pure
 static const TCHAR *
@@ -73,6 +75,11 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
     /* gettext("") returns the PO header, and thus we need to exclude
        this special case */
     return _T("");
+
+  const size_t src_length = src_end - src;
+  if (src_length >= buffer_size)
+    /* buffer too small */
+    return nullptr;
 
   /* copy to buffer, because gettext() expects a null-terminated
      string */
@@ -104,6 +111,11 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
       TCHAR translatable[256];
       const TCHAR *translated = GetTextN(text, nl, translatable,
                                          ARRAY_SIZE(translatable));
+      if (translated == nullptr) {
+        /* buffer too small: keep it untranslated */
+        expanded.text = text;
+        return expanded;
+      }
 
       /* concatenate the translated text and the part starting with '\n' */
       _tcscpy(buffer, translated);
@@ -132,6 +144,12 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     TCHAR translatable[256];
     const TCHAR *translated = GetTextN(text, macros, translatable,
                                        ARRAY_SIZE(translatable));
+    if (translated == nullptr) {
+      /* buffer too small: fail */
+      // TODO: find a more clever fallback
+      expanded.visible = false;
+      return expanded;
+    }
 
     /* concatenate the translated text and the macro output */
     _tcscpy(buffer, translated);
