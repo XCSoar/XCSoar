@@ -69,11 +69,16 @@ static const TCHAR *
 GetTextN(const TCHAR *src, const TCHAR *src_end,
          TCHAR *buffer, size_t buffer_size)
 {
+  if (src == src_end)
+    /* gettext("") returns the PO header, and thus we need to exclude
+       this special case */
+    return _T("");
+
   /* copy to buffer, because gettext() expects a null-terminated
      string */
   *std::copy(src, src_end, buffer) = _T('\0');
 
-  return StringIsEmpty(buffer) ? _T("") : gettext(buffer);
+  return gettext(buffer);
 }
 
 ButtonLabel::Expanded
