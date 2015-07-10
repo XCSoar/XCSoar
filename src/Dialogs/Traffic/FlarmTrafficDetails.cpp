@@ -279,8 +279,8 @@ FlarmTrafficDetailsWidget::Update()
       CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
 
     const TCHAR* actype;
-    if (target == NULL ||
-        (actype = FlarmTraffic::GetTypeString(target->type)) == NULL)
+    if (target == nullptr ||
+        (actype = FlarmTraffic::GetTypeString(target->type)) == nullptr)
       actype = _T("--");
 
     SetText(PLANE, actype);
@@ -290,7 +290,7 @@ FlarmTrafficDetailsWidget::Update()
   // note: don't use target->Name here since it is not updated
   //       yet if it was changed
   const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
-  if (cs != NULL && cs[0] != 0) {
+  if (cs != nullptr && cs[0] != 0) {
     _tcscpy(tmp, cs);
     if (record) {
       _tcscat(tmp, _T(" ("));

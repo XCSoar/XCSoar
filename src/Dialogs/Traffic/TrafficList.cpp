@@ -593,10 +593,10 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   StaticString<256> tmp;
 
   if (item.IsFlarm()) {
-    if (record != NULL)
+    if (record != nullptr)
       tmp.Format(_T("%s - %s - %s"),
                  callsign, record->registration.c_str(), tmp_id);
-    else if (callsign != NULL)
+    else if (callsign != nullptr)
       tmp.Format(_T("%s - %s"), callsign, tmp_id);
     else
       tmp.Format(_T("%s"), tmp_id);
@@ -646,7 +646,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   canvas.DrawText(name_x, name_y, tmp);
 
-  if (record != NULL) {
+  if (record != nullptr) {
     tmp.clear();
 
     if (!record->pilot.empty())
