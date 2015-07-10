@@ -47,6 +47,7 @@
 #include "Components.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Util/StringBuilder.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
@@ -251,11 +252,9 @@ FlarmTrafficDetailsWidget::Update()
     SetText(PILOT, record->pilot);
 
     // Fill the frequency field
-    if (!StringIsEmpty(record->frequency)) {
-      _tcscpy(tmp, record->frequency);
-      _tcscat(tmp, _T(" MHz"));
-      value = tmp;
-    } else
+    if (!StringIsEmpty(record->frequency))
+      value = UnsafeBuildString(tmp, record->frequency.c_str(), _T(" MHz"));
+    else
       value = _T("--");
     SetText(RADIO, value);
 
@@ -291,12 +290,10 @@ FlarmTrafficDetailsWidget::Update()
   //       yet if it was changed
   const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
   if (cs != nullptr && cs[0] != 0) {
-    _tcscpy(tmp, cs);
-    if (record) {
-      _tcscat(tmp, _T(" ("));
-      _tcscat(tmp, record->registration);
-      _tcscat(tmp, _T(")"));
-    }
+    StringBuilder<TCHAR> builder(tmp, ARRAY_SIZE(tmp));
+    builder.Append(cs);
+    if (record)
+      builder.Append(_T(" ("), record->registration.c_str(), _T(")"));
     value = tmp;
   } else
     value = _T("--");
