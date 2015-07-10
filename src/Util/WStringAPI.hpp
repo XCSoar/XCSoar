@@ -103,6 +103,19 @@ UnsafeCopyString(wchar_t *dest, const wchar_t *src)
   wcscpy(dest, src);
 }
 
+gcc_nonnull_all
+static inline char *
+UnsafeCopyStringP(wchar_t *dest, const wchar_t *src)
+{
+#ifdef WIN32
+  /* emulate wcpcpy() */
+  UnsafeCopyString(dest, src);
+  return dest + StringLength(dest);
+#else
+  return wcpcpy(dest, src);
+#endif
+}
+
 /**
  * Checks whether str1 and str2 are equal.
  * @param str1 String 1

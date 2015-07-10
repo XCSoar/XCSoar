@@ -107,6 +107,19 @@ UnsafeCopyString(char *dest, const char *src)
   strcpy(dest, src);
 }
 
+gcc_nonnull_all
+static inline char *
+UnsafeCopyStringP(char *dest, const char *src)
+{
+#ifdef WIN32
+  /* emulate stpcpy() */
+  UnsafeCopyString(dest, src);
+  return dest + StringLength(dest);
+#else
+  return stpcpy(dest, src);
+#endif
+}
+
 /**
  * Checks whether #a and #b are equal.
  */
