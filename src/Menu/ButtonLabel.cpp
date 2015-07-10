@@ -26,7 +26,7 @@ Copyright_License {
 #include "MenuData.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringAPI.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringBuilder.hxx"
 #include "Util/CharUtil.hpp"
 #include "Util/Macros.hpp"
 
@@ -118,10 +118,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
       }
 
       /* concatenate the translated text and the part starting with '\n' */
-      _tcscpy(buffer, translated);
-      _tcscat(buffer, nl);
-
-      expanded.text = buffer;
+      expanded.text = BuildString(buffer, size, translated, nl);
     } else
       expanded.text = gettext(text);
     return expanded;
@@ -152,11 +149,8 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     }
 
     /* concatenate the translated text and the macro output */
-    _tcscpy(buffer, translated);
-    _tcscat(buffer, s + (macros - text));
-
     expanded.visible = true;
-    expanded.text = buffer;
+    expanded.text = BuildString(buffer, size, translated, s + (macros - text));
     return expanded;
   }
 }
