@@ -104,7 +104,7 @@ UnsafeCopyString(wchar_t *dest, const wchar_t *src)
 }
 
 gcc_nonnull_all
-static inline char *
+static inline wchar_t *
 UnsafeCopyStringP(wchar_t *dest, const wchar_t *src)
 {
 #ifdef WIN32
