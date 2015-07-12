@@ -111,7 +111,7 @@ gcc_nonnull_all
 static inline char *
 UnsafeCopyStringP(char *dest, const char *src)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(__BIONIC__)
   /* emulate stpcpy() */
   UnsafeCopyString(dest, src);
   return dest + StringLength(dest);
