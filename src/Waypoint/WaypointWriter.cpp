@@ -223,6 +223,7 @@ WaypointWriter::WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp)
 {
   switch (wp.type) {
   case Waypoint::Type::NORMAL:
+  case Waypoint::Type::MARKER:
     writer.Write('1');
     break;
 
