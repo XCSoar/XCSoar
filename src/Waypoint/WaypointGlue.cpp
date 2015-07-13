@@ -37,6 +37,8 @@ Copyright_License {
 
 namespace WaypointGlue {
   static bool GetPath(int file_number, TCHAR *value);
+
+  gcc_pure
   static bool IsWritable(int file_number);
 }
 
