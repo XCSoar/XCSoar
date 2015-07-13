@@ -108,9 +108,6 @@ namespace WaypointGlue {
                      OperationEnvironment &operation);
 
   bool SaveWaypoints(const Waypoints &way_points);
-  bool SaveWaypointFile(const Waypoints &way_points, WaypointOrigin origin);
-
-  bool IsWritable();
 };
 
 #endif

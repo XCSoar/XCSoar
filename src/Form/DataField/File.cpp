@@ -56,6 +56,7 @@ IsInternalFile(const TCHAR* str)
     _T("xcsoar-startup.log"),
     _T("xcsoar.log"),
     _T("xcsoar-rasp.dat"),
+    _T("user.cup"),
     nullptr
   };
 

@@ -75,11 +75,6 @@ WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 static void
 OnWaypointNewClicked()
 {
-  if (!WaypointGlue::IsWritable()) {
-    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
-    return;
-  }
-
   Waypoint edit_waypoint = way_points.Create(CommonInterface::Basic().location);
   edit_waypoint.elevation = CommonInterface::Calculated().terrain_valid
     ? CommonInterface::Calculated().terrain_altitude
@@ -98,15 +93,14 @@ OnWaypointNewClicked()
 static void
 OnWaypointEditClicked()
 {
-  if (!WaypointGlue::IsWritable()) {
-    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
-    return;
-  }
-
   const Waypoint *way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
+
+    /* move to user.cup */
+    wp_copy.origin = WaypointOrigin::USER;
+
     if (dlgWaypointEditShowModal(wp_copy)) {
       WaypointsNeedSave = true;
 
@@ -121,7 +115,7 @@ static void
 SaveWaypoints()
 {
   if (!WaypointGlue::SaveWaypoints(way_points))
-    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
+    ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
   else
     WaypointFileChanged = true;
 
@@ -137,11 +131,6 @@ OnWaypointSaveClicked()
 static void
 OnWaypointDeleteClicked()
 {
-  if (!WaypointGlue::IsWritable()) {
-    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
-    return;
-  }
-
   const Waypoint *way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
   if (way_point == nullptr)

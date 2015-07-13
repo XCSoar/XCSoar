@@ -352,7 +352,7 @@ Waypoints::Create(const GeoPoint &location)
   Waypoint edit_waypoint(location);
 
   // first waypoint, put into primary file (this will be auto-generated)
-  edit_waypoint.origin = WaypointOrigin::PRIMARY;
+  edit_waypoint.origin = WaypointOrigin::USER;
   edit_waypoint.original_id = 0;
   return edit_waypoint;
 }

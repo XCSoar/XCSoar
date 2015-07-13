@@ -4,6 +4,7 @@ Version 6.8 - not yet released
   - faster RASP map change
   - show all RASP maps
   - fix comments in TNP files
+  - store user-edited waypoints in "user.cup"
 * devices
   - remove option "Ignore checksum"
   - CAI302: add sink tone configuration

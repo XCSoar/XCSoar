@@ -656,8 +656,14 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
 
   const char *key = nullptr;
+  const TCHAR *name = nullptr;
+
   switch (waypoint->origin) {
   case WaypointOrigin::NONE:
+    break;
+
+  case WaypointOrigin::USER:
+    name = _T("user.cup");
     break;
 
   case WaypointOrigin::PRIMARY:
@@ -677,7 +683,8 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
     const auto filename = Profile::map.GetPathBase(key);
     if (!filename.IsNull())
       buffer.AppendFormat(_T(" (%s)"), filename.c_str());
-  }
+  } else if (name != nullptr)
+    buffer.AppendFormat(_T(" (%s)"), name);
 
   form->SetCaption(buffer);
 }

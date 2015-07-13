@@ -34,6 +34,11 @@ enum class WaypointOrigin : uint8_t {
    */
   NONE,
 
+  /**
+   * User-defined waypoints stored in "user.cup".
+   */
+  USER,
+
   PRIMARY,
   ADDITIONAL,
   WATCHED,
