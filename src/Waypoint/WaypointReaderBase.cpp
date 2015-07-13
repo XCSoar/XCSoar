@@ -30,14 +30,6 @@ Copyright_License {
 
 #include <assert.h>
 
-WaypointReaderBase::WaypointReaderBase(const int _file_num,
-                           bool _compressed):
-  file_num(_file_num),
-  terrain(nullptr),
-  compressed(_compressed)
-{
-}
-
 static bool is_closing_quote_char(TCHAR const *s) {
   // Perform look-ahead to check if the detected quote_char terminates
   // the quoted field. true for (optional) ' 's followed by ',' or

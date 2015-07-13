@@ -42,8 +42,10 @@ protected:
   bool compressed;
 
 protected:
-  WaypointReaderBase(const int _file_num,
-               bool _compressed = false);
+  WaypointReaderBase(const int _file_num, bool _compressed)
+    :file_num(_file_num),
+     terrain(nullptr),
+     compressed(_compressed) {}
 
 public:
   virtual ~WaypointReaderBase() {}
