@@ -25,8 +25,8 @@ Copyright_License {
 #define WAYPOINT_WRITER_HPP
 
 #include "Math/fixed.hpp"
-
 #include "WaypointFileType.hpp"
+#include "Engine/Waypoint/Origin.hpp"
 
 struct Waypoint;
 class Waypoints;
@@ -40,11 +40,11 @@ class WaypointWriter
 {
 private:
   const Waypoints &waypoints;
-  int file_number;
+  const WaypointOrigin origin;
 
 public:
-  WaypointWriter(const Waypoints &_waypoints, int _file_number)
-    :waypoints(_waypoints), file_number(_file_number) {}
+  WaypointWriter(const Waypoints &_waypoints, WaypointOrigin _origin)
+    :waypoints(_waypoints), origin(_origin) {}
 
   void Save(TextWriter &writer, WaypointFileType type);
 

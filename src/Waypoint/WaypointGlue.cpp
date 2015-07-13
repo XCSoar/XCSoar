@@ -36,27 +36,30 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 namespace WaypointGlue {
-  static bool GetPath(int file_number, TCHAR *value);
+  static bool GetPath(WaypointOrigin origin, TCHAR *value);
 
   gcc_pure
-  static bool IsWritable(int file_number);
+  static bool IsWritable(WaypointOrigin origin);
 }
 
 bool
-WaypointGlue::GetPath(int file_number, TCHAR *value)
+WaypointGlue::GetPath(WaypointOrigin origin, TCHAR *value)
 {
   const char *key;
 
-  switch (file_number) {
-  case 1:
+  switch (origin) {
+  case WaypointOrigin::PRIMARY:
     key = ProfileKeys::WaypointFile;
     break;
-  case 2:
+
+  case WaypointOrigin::ADDITIONAL:
     key = ProfileKeys::AdditionalWaypointFile;
     break;
-  case 3:
+
+  case WaypointOrigin::WATCHED:
     key = ProfileKeys::WatchedWaypointFile;
     break;
+
   default:
     return false;
   }
@@ -65,10 +68,10 @@ WaypointGlue::GetPath(int file_number, TCHAR *value)
 }
 
 bool
-WaypointGlue::IsWritable(int file_number)
+WaypointGlue::IsWritable(WaypointOrigin origin)
 {
   TCHAR file[MAX_PATH];
-  if (!GetPath(file_number, file))
+  if (!GetPath(origin, file))
     return false;
 
   return (MatchesExtension(file, _T(".dat")) ||
@@ -79,14 +82,17 @@ WaypointGlue::IsWritable(int file_number)
 bool
 WaypointGlue::IsWritable()
 {
-  return IsWritable(1) || IsWritable(2) || IsWritable(3);
+  return IsWritable(WaypointOrigin::PRIMARY) ||
+    IsWritable(WaypointOrigin::ADDITIONAL) ||
+    IsWritable(WaypointOrigin::WATCHED);
 }
 
 static bool
-LoadWaypointFile(Waypoints &waypoints, const TCHAR *path, int file_num,
+LoadWaypointFile(Waypoints &waypoints, const TCHAR *path,
+                 WaypointOrigin origin,
                  const RasterTerrain *terrain, OperationEnvironment &operation)
 {
-  WaypointReader reader(path, WaypointFactory(file_num, terrain));
+  WaypointReader reader(path, WaypointFactory(origin, terrain));
   if (reader.Error()) {
     LogFormat(_T("Failed to open waypoint file: %s"), path);
     return false;
@@ -118,15 +124,18 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 
   // ### FIRST FILE ###
   if (Profile::GetPath(ProfileKeys::WaypointFile, path))
-    found |= LoadWaypointFile(way_points, path, 1, terrain, operation);
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
+                              terrain, operation);
 
   // ### SECOND FILE ###
   if (Profile::GetPath(ProfileKeys::AdditionalWaypointFile, path))
-    found |= LoadWaypointFile(way_points, path, 2, terrain, operation);
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
+                              terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
   if (Profile::GetPath(ProfileKeys::WatchedWaypointFile, path))
-    found |= LoadWaypointFile(way_points, path, 3, terrain, operation);
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
+                              terrain, operation);
 
   // ### MAP/FOURTH FILE ###
 
@@ -135,10 +144,12 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
     TCHAR *tail = path + _tcslen(path);
 
     _tcscpy(tail, _T("/waypoints.xcw"));
-    found |= LoadWaypointFile(way_points, path, 0, terrain, operation);
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::NONE,
+                              terrain, operation);
 
     _tcscpy(tail, _T("/waypoints.cup"));
-    found |= LoadWaypointFile(way_points, path, 0, terrain, operation);
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::NONE,
+                              terrain, operation);
   }
 
   // Optimise the waypoint list after attaching new waypoints
@@ -149,26 +160,27 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 }
 
 bool
-WaypointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
+WaypointGlue::SaveWaypointFile(const Waypoints &way_points,
+                               WaypointOrigin origin)
 {
-  if (!IsWritable(num)) {
-    LogFormat("Waypoint file %d can not be written", num);
+  if (!IsWritable(origin)) {
+    LogFormat("Waypoint file %d can not be written", int(origin));
     return false;
   }
 
   TCHAR file[255];
-  GetPath(num, file);
+  GetPath(origin, file);
 
   TextWriter writer(file);
   if (!writer.IsOpen()) {
-    LogFormat("Waypoint file %d can not be written", num);
+    LogFormat("Waypoint file %d can not be written", int(origin));
     return false;
   }
 
-  WaypointWriter wp_writer(way_points, num);
+  WaypointWriter wp_writer(way_points, origin);
   wp_writer.Save(writer, DetermineWaypointFileType(file));
 
-  LogFormat("Waypoint file %d saved", num);
+  LogFormat("Waypoint file %d saved", int(origin));
   return true;
 }
 
@@ -178,13 +190,13 @@ WaypointGlue::SaveWaypoints(const Waypoints &way_points)
   bool result = false;
 
   // ### FIRST FILE ###
-  result |= SaveWaypointFile(way_points, 1);
+  result |= SaveWaypointFile(way_points, WaypointOrigin::PRIMARY);
 
   // ### SECOND FILE ###
-  result |= SaveWaypointFile(way_points, 2);
+  result |= SaveWaypointFile(way_points, WaypointOrigin::ADDITIONAL);
 
   // ### THIRD FILE ###
-  result |= SaveWaypointFile(way_points, 3);
+  result |= SaveWaypointFile(way_points, WaypointOrigin::WATCHED);
 
   return result;
 }

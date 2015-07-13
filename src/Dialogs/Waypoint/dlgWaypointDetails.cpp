@@ -656,14 +656,19 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
 
   const char *key = nullptr;
-  switch (waypoint->file_num) {
-  case 1:
+  switch (waypoint->origin) {
+  case WaypointOrigin::NONE:
+    break;
+
+  case WaypointOrigin::PRIMARY:
     key = ProfileKeys::WaypointFile;
     break;
-  case 2:
+
+  case WaypointOrigin::ADDITIONAL:
     key = ProfileKeys::AdditionalWaypointFile;
     break;
-  case 3:
+
+  case WaypointOrigin::WATCHED:
     key = ProfileKeys::WatchedWaypointFile;
     break;
   }

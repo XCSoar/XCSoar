@@ -34,17 +34,17 @@ class RasterTerrain;
  * implementation.
  */
 class WaypointFactory {
-  int file_num;
+  WaypointOrigin origin;
   const RasterTerrain *terrain;
 
 public:
-  explicit WaypointFactory(int _file_num,
+  explicit WaypointFactory(WaypointOrigin _origin,
                            const RasterTerrain *_terrain=nullptr)
-    :file_num(_file_num), terrain(_terrain) {}
+    :origin(_origin), terrain(_terrain) {}
 
   Waypoint Create(const GeoPoint &location) const {
     Waypoint w(location);
-    w.file_num = file_num;
+    w.origin = origin;
     w.original_id = 0;
     return w;
   }

@@ -466,7 +466,8 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
   {
-    WaypointReaderSeeYou waypoint_file(WaypointFactory(0));
+    const WaypointFactory factory(WaypointOrigin::NONE);
+    WaypointReaderSeeYou waypoint_file(factory);
     NullOperationEnvironment operation;
     waypoint_file.Parse(file_waypoints, reader, operation);
   }

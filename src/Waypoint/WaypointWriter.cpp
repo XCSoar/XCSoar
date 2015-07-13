@@ -34,7 +34,7 @@ WaypointWriter::Save(TextWriter &writer, WaypointFileType type)
   /// @todo JMW: iteration ordered by ID would be preferred
   for (auto it = waypoints.begin(); it != waypoints.end(); ++it) {
     const Waypoint& wp = *it;
-    if (wp.file_num == file_number)
+    if (wp.origin == origin)
       WriteWaypoint(writer, wp, type);
   }
 }

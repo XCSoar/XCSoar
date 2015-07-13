@@ -20,29 +20,23 @@
 }
  */
 
-#include "Waypoint.hpp"
-#include "Geo/Flat/FlatProjection.hpp"
+#ifndef WAYPOINT_FILE_ID_HPP
+#define WAYPOINT_FILE_ID_HPP
 
-Waypoint::Waypoint(const GeoPoint &_location)
-  :location(_location),
-   runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-   type(Type::NORMAL), flags(Flags::Defaults()),
-   origin(WaypointOrigin::NONE)
-{
-}
+#include <stdint.h>
 
-bool
-Waypoint::IsCloseTo(const GeoPoint &_location, const fixed range) const
-{
-  return location.Distance(_location) <= range;
-}
+/**
+ * The origin where we loaded the waypoint from.
+ */
+enum class WaypointOrigin : uint8_t {
+  /**
+   * Temporary waypoints not stored in any file.
+   */
+  NONE,
 
-void
-Waypoint::Project(const FlatProjection &projection)
-{
-  flat_location = projection.ProjectInteger(location);
+  PRIMARY,
+  ADDITIONAL,
+  WATCHED,
+};
 
-#ifndef NDEBUG
-  flat_location_initialised = true;
 #endif
-}

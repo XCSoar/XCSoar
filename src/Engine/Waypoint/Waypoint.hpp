@@ -23,6 +23,7 @@
 #ifndef WAYPOINT_HPP
 #define WAYPOINT_HPP
 
+#include "Origin.hpp"
 #include "Util/tstring.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
@@ -113,8 +114,9 @@ struct Waypoint {
   Type type;
   /** Flag types of this waypoint */
   Flags flags;
-  /** File number to store waypoint in (0,1), -1 to delete/ignore */
-  int8_t file_num;
+
+  /** File number to store waypoint in */
+  WaypointOrigin origin;
 
   /** Name of waypoint */
   tstring name;
@@ -140,7 +142,7 @@ struct Waypoint {
      flat_location_initialised(false),
 #endif
      runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
-     type(Type::NORMAL), flags(Flags::Defaults()), file_num(-1)
+     type(Type::NORMAL), flags(Flags::Defaults()), origin(WaypointOrigin::NONE)
   {
   }
 

@@ -55,10 +55,10 @@ WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
     return triangle_validator.IsFAITrianglePoint(waypoint, true);
 
   case TypeFilter::FILE_1:
-    return waypoint.file_num == 1;
+    return waypoint.origin == WaypointOrigin::PRIMARY;
 
   case TypeFilter::FILE_2:
-    return waypoint.file_num == 2;
+    return waypoint.origin == WaypointOrigin::ADDITIONAL;
 
   case TypeFilter::LAST_USED:
     return false;

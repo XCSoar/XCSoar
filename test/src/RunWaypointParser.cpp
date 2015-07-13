@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
   Waypoints way_points;
 
-  WaypointReader parser(path.c_str(), WaypointFactory(0));
+  WaypointReader parser(path.c_str(), WaypointFactory(WaypointOrigin::NONE));
   if (parser.Error()) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");
     return EXIT_FAILURE;
