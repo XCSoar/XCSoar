@@ -30,9 +30,8 @@ class WaypointReaderOzi:
   public WaypointReaderBase 
 {
 public:
-  WaypointReaderOzi(const int _file_num,
-                    bool _compressed = false)
-    :WaypointReaderBase(_file_num, _compressed) {}
+  explicit WaypointReaderOzi(int _file_num)
+    :WaypointReaderBase(_file_num) {}
 
   static bool VerifyFormat(TLineReader &reader);
 

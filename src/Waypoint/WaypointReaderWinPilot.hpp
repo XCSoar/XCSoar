@@ -34,9 +34,8 @@ class WaypointReaderWinPilot:
   public WaypointReaderBase 
 {
 public:
-  WaypointReaderWinPilot(const int _file_num,
-                       bool _compressed = false)
-    :WaypointReaderBase(_file_num, _compressed) {}
+  explicit WaypointReaderWinPilot(int _file_num)
+    :WaypointReaderBase(_file_num) {}
 
 protected:
   bool ParseLine(const TCHAR* line, const unsigned linenum,

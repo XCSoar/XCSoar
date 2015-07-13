@@ -39,13 +39,11 @@ class WaypointReaderBase
 protected:
   const int file_num;
   const RasterTerrain* terrain;
-  bool compressed;
 
 protected:
-  WaypointReaderBase(const int _file_num, bool _compressed)
+  explicit WaypointReaderBase(int _file_num)
     :file_num(_file_num),
-     terrain(nullptr),
-     compressed(_compressed) {}
+     terrain(nullptr) {}
 
 public:
   virtual ~WaypointReaderBase() {}

@@ -72,9 +72,7 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
   _tcscpy(path, filename);
 
   // Test if file exists
-  bool compressed = false;
   if (!File::Exists(filename)) {
-    compressed = true;
     // Test if file exists in zip archive
     ZipSource zip(filename);
     if (zip.error())
@@ -84,27 +82,27 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
 
   switch (DetermineWaypointFileType(filename)) {
   case WaypointFileType::WINPILOT:
-    reader = new WaypointReaderWinPilot(the_filenum, compressed);
+    reader = new WaypointReaderWinPilot(the_filenum);
     break;
 
   case WaypointFileType::SEEYOU:
-    reader = new WaypointReaderSeeYou(the_filenum, compressed);
+    reader = new WaypointReaderSeeYou(the_filenum);
     break;
 
   case WaypointFileType::ZANDER:
-    reader = new WaypointReaderZander(the_filenum, compressed);
+    reader = new WaypointReaderZander(the_filenum);
     break;
 
   case WaypointFileType::FS:
-    reader = new WaypointReaderFS(the_filenum, compressed);
+    reader = new WaypointReaderFS(the_filenum);
     break;
 
   case WaypointFileType::OZI_EXPLORER:
-    reader = new WaypointReaderOzi(the_filenum, compressed);
+    reader = new WaypointReaderOzi(the_filenum);
     break;
 
   case WaypointFileType::COMPE_GPS:
-    reader = new WaypointReaderCompeGPS(the_filenum, compressed);
+    reader = new WaypointReaderCompeGPS(the_filenum);
     break;
 
   default:
