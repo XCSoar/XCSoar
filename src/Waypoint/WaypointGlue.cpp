@@ -36,8 +36,8 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 namespace WaypointGlue {
-  bool GetPath(int file_number, TCHAR *value);
-  bool IsWritable(int file_number);
+  static bool GetPath(int file_number, TCHAR *value);
+  static bool IsWritable(int file_number);
 }
 
 bool
