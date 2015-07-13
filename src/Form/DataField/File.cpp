@@ -44,6 +44,7 @@ Copyright_License {
  * @param str The string to check
  * @return True if string equals a xcsoar internal file's filename
  */
+gcc_pure
 static bool
 IsInternalFile(const TCHAR* str)
 {
