@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2015 The XCSoar Project
@@ -19,23 +18,22 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef WAYPOINTFILEZANDER_HPP
-#define WAYPOINTFILEZANDER_HPP
+#include "Factory.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
-#include "WaypointReaderBase.hpp"
-
-class WaypointReaderZander: 
-  public WaypointReaderBase 
+bool
+WaypointFactory::FallbackElevation(Waypoint &waypoint) const
 {
-public:
-  explicit WaypointReaderZander(WaypointFactory _factory)
-    :WaypointReaderBase(_factory) {}
+  if (terrain != nullptr) {
+    // Load waypoint altitude from terrain
+    const short t_alt = terrain->GetTerrainHeight(waypoint.location);
+    if (!RasterBuffer::IsSpecial(t_alt)) {
+      waypoint.elevation = (fixed)t_alt;
+      return true;
+    }
+  }
 
-protected:
-  bool ParseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points);
-};
-
-#endif
+  return false;
+}

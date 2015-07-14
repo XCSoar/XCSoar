@@ -47,9 +47,9 @@ public:
   WaypointReader():reader(nullptr) {}
 
   /** Initializing constructor. Loads the specified waypoint file */
-  WaypointReader(const TCHAR* filename, int filenum = 0)
+  WaypointReader(const TCHAR *filename, WaypointFactory factory)
     :reader(nullptr) {
-    Open(filename, filenum);
+    Open(filename, factory);
   }
 
   WaypointReader(const WaypointReader &other) = delete;
@@ -77,10 +77,7 @@ public:
    * @param filename The file that should be opened
    * @param filenum The filenum parameter that is saved into the parsed waypoints
    */
-  void Open(const TCHAR* filename, int filenum = 0);
-
-  /** Sets the terrain that should be used for waypoint elevation detection */
-  void SetTerrain(const RasterTerrain* _terrain);
+  void Open(const TCHAR *filename, WaypointFactory factory);
 
   /**
    * Parses the waypoint file into the given Waypoints instance

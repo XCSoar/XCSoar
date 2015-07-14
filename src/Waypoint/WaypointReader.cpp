@@ -53,14 +53,7 @@ WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
 }
 
 void
-WaypointReader::SetTerrain(const RasterTerrain* _terrain)
-{
-  if (reader != nullptr)
-    reader->SetTerrain(_terrain);
-}
-
-void
-WaypointReader::Open(const TCHAR* filename, int the_filenum)
+WaypointReader::Open(const TCHAR *filename, WaypointFactory factory)
 {
   delete reader;
   reader = nullptr;
@@ -82,27 +75,27 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
 
   switch (DetermineWaypointFileType(filename)) {
   case WaypointFileType::WINPILOT:
-    reader = new WaypointReaderWinPilot(the_filenum);
+    reader = new WaypointReaderWinPilot(factory);
     break;
 
   case WaypointFileType::SEEYOU:
-    reader = new WaypointReaderSeeYou(the_filenum);
+    reader = new WaypointReaderSeeYou(factory);
     break;
 
   case WaypointFileType::ZANDER:
-    reader = new WaypointReaderZander(the_filenum);
+    reader = new WaypointReaderZander(factory);
     break;
 
   case WaypointFileType::FS:
-    reader = new WaypointReaderFS(the_filenum);
+    reader = new WaypointReaderFS(factory);
     break;
 
   case WaypointFileType::OZI_EXPLORER:
-    reader = new WaypointReaderOzi(the_filenum);
+    reader = new WaypointReaderOzi(factory);
     break;
 
   case WaypointFileType::COMPE_GPS:
-    reader = new WaypointReaderCompeGPS(the_filenum);
+    reader = new WaypointReaderCompeGPS(factory);
     break;
 
   default:

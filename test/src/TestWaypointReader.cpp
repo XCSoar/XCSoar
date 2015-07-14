@@ -181,7 +181,7 @@ typedef std::vector<Waypoint> wp_vector;
 static bool
 TestWaypointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 {
-  WaypointReader f(filename, 0);
+  WaypointReader f(filename, WaypointFactory(0));
   if (!ok1(!f.Error())) {
     skip(3, 0, "opening waypoint file failed");
     return false;

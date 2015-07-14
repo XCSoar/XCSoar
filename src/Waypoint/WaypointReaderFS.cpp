@@ -185,15 +185,13 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
       (is_utm && !ParseLocationUTM(line + 9, location)))
     return false;
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = 0;
+  Waypoint new_waypoint = factory.Create(location);
 
   if (!ParseString(line, new_waypoint.name, 8))
     return false;
 
   if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation) &&
-      !CheckAltitude(new_waypoint))
+      !factory.FallbackElevation(new_waypoint))
     return false;
 
   // Description (Characters 35-44)

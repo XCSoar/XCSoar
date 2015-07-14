@@ -317,6 +317,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
 	$(SRC)/Computer/Wind/MeasurementList.cpp \
 	$(SRC)/Computer/Wind/Store.cpp \

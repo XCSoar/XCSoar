@@ -32,8 +32,8 @@ class WaypointReaderFS:
   bool is_utm;
 
 public:
-  explicit WaypointReaderFS(int _file_num)
-    :WaypointReaderBase(_file_num), is_utm(false) {}
+  explicit WaypointReaderFS(WaypointFactory _factory)
+    :WaypointReaderBase(_factory), is_utm(false) {}
 
   static bool VerifyFormat(TLineReader &reader);
 

@@ -35,7 +35,7 @@ class CAI302WaypointUploader : public Job {
 
 public:
   CAI302WaypointUploader(const TCHAR *path, CAI302Device &_device)
-    :reader(path), device(_device) {}
+    :reader(path, WaypointFactory(-1)), device(_device) {}
 
   bool Error() const {
     return reader.Error();

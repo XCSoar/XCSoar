@@ -25,6 +25,8 @@ Copyright_License {
 #ifndef WAYPOINTFILE_HPP
 #define WAYPOINTFILE_HPP
 
+#include "Factory.hpp"
+
 #include <tchar.h>
 #include <stddef.h>
 
@@ -37,13 +39,11 @@ class OperationEnvironment;
 class WaypointReaderBase 
 {
 protected:
-  const int file_num;
-  const RasterTerrain* terrain;
+  const WaypointFactory factory;
 
 protected:
-  explicit WaypointReaderBase(int _file_num)
-    :file_num(_file_num),
-     terrain(nullptr) {}
+  explicit WaypointReaderBase(WaypointFactory _factory)
+    :factory(_factory) {}
 
 public:
   virtual ~WaypointReaderBase() {}
@@ -57,14 +57,7 @@ public:
   void Parse(Waypoints &way_points, TLineReader &reader,
              OperationEnvironment &operation);
 
-  void SetTerrain(const RasterTerrain* _terrain) {
-    terrain = _terrain;
-  }
-
 protected:
-  static bool CheckAltitude(Waypoint &new_waypoint, const RasterTerrain *terrain);
-  bool CheckAltitude(Waypoint &new_waypoint) const;
-
   /**
    * Parse a file line
    * @param line The line to parse

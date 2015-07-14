@@ -103,8 +103,7 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 
   location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
+  Waypoint new_waypoint = factory.Create(location);
 
   long value;
   new_waypoint.original_id = (ParseNumber(params[0], value) ? value : 0);
@@ -114,7 +113,7 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 
   if (ParseNumber(params[14], value) && value != -777)
     new_waypoint.elevation = Units::ToSysUnit(fixed(value), Unit::FEET);
-  else if (!CheckAltitude(new_waypoint))
+  else if (!factory.FallbackElevation(new_waypoint))
     return false;
 
   // Description (Characters 35-44)

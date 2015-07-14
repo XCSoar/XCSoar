@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "WaypointReaderBase.hpp"
-
-#include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Operation/Operation.hpp"
 #include "IO/LineReader.hpp"
@@ -126,28 +124,6 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
   } while (*s++ != _T('\0') && i < sz);
 
   return i;
-}
-
-bool
-WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint,
-                                  const RasterTerrain *terrain)
-{
-  if (terrain == nullptr)
-    return false;
-
-  // Load waypoint altitude from terrain
-  const short t_alt = terrain->GetTerrainHeight(new_waypoint.location);
-  if (RasterBuffer::IsSpecial(t_alt))
-    return false;
-
-  new_waypoint.elevation = (fixed)t_alt;
-  return true;
-}
-
-bool
-WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
-{
-  return CheckAltitude(new_waypoint, terrain);
 }
 
 void

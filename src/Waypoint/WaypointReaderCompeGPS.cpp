@@ -214,14 +214,12 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   line++;
 
   // Create new waypoint instance
-  Waypoint waypoint(location);
-  waypoint.file_num = file_num;
-  waypoint.original_id = 0;
+  Waypoint waypoint = factory.Create(location);
   waypoint.name.assign(name, name_length);
 
   // Parse altitude
   if (!ParseAltitude(line, waypoint.elevation) &&
-      !CheckAltitude(waypoint))
+      !factory.FallbackElevation(waypoint))
     return false;
 
   // Skip whitespace

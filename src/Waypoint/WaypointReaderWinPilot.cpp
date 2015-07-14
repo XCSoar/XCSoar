@@ -232,9 +232,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
     return false;
   location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = ParseUnsigned(params[0], nullptr, 0);
+  Waypoint new_waypoint = factory.Create(location);
 
   // Name (e.g. KAMPLI)
   if (*params[5] == _T('\0'))
@@ -244,7 +242,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
   if (!ParseAltitude(params[3], new_waypoint.elevation) &&
-      !CheckAltitude(new_waypoint))
+      !factory.FallbackElevation(new_waypoint))
     return false;
 
   if (n_params > 6) {

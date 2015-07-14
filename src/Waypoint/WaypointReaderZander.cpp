@@ -175,9 +175,7 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
 
   location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = 0;
+  Waypoint new_waypoint = factory.Create(location);
 
   // Name (Characters 0-12)
   if (!ParseString(line, new_waypoint.name, 12))
@@ -186,7 +184,7 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
   if (!ParseAltitude(line + 30, new_waypoint.elevation) &&
-      !CheckAltitude(new_waypoint))
+      !factory.FallbackElevation(new_waypoint))
     return false;
 
   // Description (Characters 35-44)

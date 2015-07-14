@@ -661,6 +661,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -1115,6 +1116,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -1137,6 +1139,7 @@ NEAREST_WAYPOINTS_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -1572,6 +1575,7 @@ RUN_TASK_SOURCES = \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
@@ -1840,6 +1844,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
@@ -2172,6 +2177,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
@@ -2422,6 +2428,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -2536,6 +2543,7 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -2580,6 +2588,7 @@ TEST_REPLAY_RETROSPECTIVE_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderFS.cpp \
 	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \

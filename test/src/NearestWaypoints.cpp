@@ -36,7 +36,7 @@ static bool
 LoadWaypoints(const char *_path, Waypoints &waypoints)
 {
   PathName path(_path);
-  WaypointReader parser(path, 0);
+  WaypointReader parser(path, WaypointFactory(0));
   if (parser.Error()) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");
     return false;

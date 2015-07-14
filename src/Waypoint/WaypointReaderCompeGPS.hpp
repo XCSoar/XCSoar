@@ -32,8 +32,8 @@ class WaypointReaderCompeGPS:
   bool is_utm;
 
 public:
-  explicit WaypointReaderCompeGPS(const int _file_num)
-    :WaypointReaderBase(_file_num), is_utm(false) {}
+  explicit WaypointReaderCompeGPS(WaypointFactory _factory)
+    :WaypointReaderBase(_factory), is_utm(false) {}
 
   static bool VerifyFormat(TLineReader &reader);
 
