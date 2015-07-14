@@ -660,7 +660,6 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderFS.cpp \
 	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
-	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
@@ -1115,7 +1114,6 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
-	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1138,7 +1136,6 @@ NEAREST_WAYPOINTS_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
-	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
