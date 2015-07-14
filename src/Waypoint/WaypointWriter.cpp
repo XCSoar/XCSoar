@@ -26,21 +26,87 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "Engine/Waypoint/Runway.hpp"
 
-void
-WaypointWriter::Save(TextWriter &writer)
+static void
+WriteAngleDMM(TextWriter &writer, const Angle angle, bool is_latitude)
 {
-  // Iterate through the waypoint list and save each waypoint with
-  // the right file number to the TextWriter
-  /// @todo JMW: iteration ordered by ID would be preferred
-  for (auto it = waypoints.begin(); it != waypoints.end(); ++it) {
-    const Waypoint& wp = *it;
-    if (wp.origin == origin)
-      WriteWaypoint(writer, wp);
+  // Calculate degrees, minutes and decimal minutes
+  unsigned deg, min, mmm;
+  bool is_positive;
+  angle.ToDMM(deg, min, mmm, is_positive);
+
+  // Save them into the buffer string
+  writer.Format(is_latitude ? "%02u%02u.%03u" : "%03u%02u.%03u",
+                deg, min, mmm);
+
+  // Attach the buffer string to the output
+  if (is_latitude)
+    writer.Write(is_positive ? "N" : "S");
+  else
+    writer.Write(is_positive ? "E" : "W");
+}
+
+static void
+WriteAltitude(TextWriter &writer, fixed altitude)
+{
+  writer.Format("%dM", (int)altitude);
+}
+
+static void
+WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp)
+{
+  switch (wp.type) {
+  case Waypoint::Type::NORMAL:
+  case Waypoint::Type::MARKER:
+    writer.Write('1');
+    break;
+
+  case Waypoint::Type::OUTLANDING:
+    writer.Write('3');
+    break;
+
+  case Waypoint::Type::AIRFIELD:
+    if (wp.flags.home)
+      writer.Write('4');
+    else // 2 or 5 no rule for this!
+      writer.Write('2');
+    break;
+
+  case Waypoint::Type::MOUNTAIN_PASS:
+    writer.Write('6');
+    break;
+
+  case Waypoint::Type::MOUNTAIN_TOP:
+    writer.Write('7');
+    break;
+
+  case Waypoint::Type::OBSTACLE:
+    writer.Write('8');
+    break;
+
+  case Waypoint::Type::TOWER:
+    // 11 or 16 no rule for this!
+    writer.Write("11");
+    break;
+
+  case Waypoint::Type::TUNNEL:
+    writer.Write("13");
+    break;
+
+  case Waypoint::Type::BRIDGE:
+    writer.Write("14");
+    break;
+
+  case Waypoint::Type::POWERPLANT:
+    writer.Write("15");
+    break;
+
+  case Waypoint::Type::THERMAL_HOTSPOT:
+    break;
   }
 }
 
-void
-WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint &wp)
+static void
+WriteCup(TextWriter &writer, const Waypoint &wp)
 {
   // Write Title
   writer.Format(_T("\"%s\","), wp.name.c_str());
@@ -96,82 +162,15 @@ WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint &wp)
 }
 
 void
-WaypointWriter::WriteAngleDMM(TextWriter &writer, const Angle angle,
-                              bool is_latitude)
+WriteCup(TextWriter &writer, const Waypoints &waypoints,
+         WaypointOrigin origin)
 {
-  // Calculate degrees, minutes and decimal minutes
-  unsigned deg, min, mmm;
-  bool is_positive;
-  angle.ToDMM(deg, min, mmm, is_positive);
-
-  // Save them into the buffer string
-  writer.Format(is_latitude ? "%02u%02u.%03u" : "%03u%02u.%03u",
-                deg, min, mmm);
-
-  // Attach the buffer string to the output
-  if (is_latitude)
-    writer.Write(is_positive ? "N" : "S");
-  else
-    writer.Write(is_positive ? "E" : "W");
-}
-
-void
-WaypointWriter::WriteAltitude(TextWriter &writer, fixed altitude)
-{
-  writer.Format("%dM", (int)altitude);
-}
-
-void
-WaypointWriter::WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp)
-{
-  switch (wp.type) {
-  case Waypoint::Type::NORMAL:
-  case Waypoint::Type::MARKER:
-    writer.Write('1');
-    break;
-
-  case Waypoint::Type::OUTLANDING:
-    writer.Write('3');
-    break;
-
-  case Waypoint::Type::AIRFIELD:
-    if (wp.flags.home)
-      writer.Write('4');
-    else // 2 or 5 no rule for this!
-      writer.Write('2');
-    break;
-
-  case Waypoint::Type::MOUNTAIN_PASS:
-    writer.Write('6');
-    break;
-
-  case Waypoint::Type::MOUNTAIN_TOP:
-    writer.Write('7');
-    break;
-
-  case Waypoint::Type::OBSTACLE:
-    writer.Write('8');
-    break;
-
-  case Waypoint::Type::TOWER:
-    // 11 or 16 no rule for this!
-    writer.Write("11");
-    break;
-
-  case Waypoint::Type::TUNNEL:
-    writer.Write("13");
-    break;
-
-  case Waypoint::Type::BRIDGE:
-    writer.Write("14");
-    break;
-
-  case Waypoint::Type::POWERPLANT:
-    writer.Write("15");
-    break;
-
-  case Waypoint::Type::THERMAL_HOTSPOT:
-    break;
+  // Iterate through the waypoint list and save each waypoint with
+  // the right file number to the TextWriter
+  /// @todo JMW: iteration ordered by ID would be preferred
+  for (auto it = waypoints.begin(); it != waypoints.end(); ++it) {
+    const Waypoint& wp = *it;
+    if (wp.origin == origin)
+      WriteCup(writer, wp);
   }
 }
-

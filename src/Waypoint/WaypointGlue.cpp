@@ -124,8 +124,7 @@ WaypointGlue::SaveWaypoints(const Waypoints &way_points)
     return false;
   }
 
-  WaypointWriter wp_writer(way_points, WaypointOrigin::USER);
-  wp_writer.Save(writer);
+  WriteCup(writer, way_points, WaypointOrigin::USER);
 
   LogFormat(_T("Waypoint file '%s' saved"), path);
   return true;
