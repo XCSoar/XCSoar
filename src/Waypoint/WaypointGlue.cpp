@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "WaypointGlue.hpp"
+#include "CupWriter.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -30,7 +31,6 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "OS/PathName.hpp"
 #include "LocalPath.hpp"
-#include "Waypoint/WaypointWriter.hpp"
 #include "Operation/Operation.hpp"
 #include "WaypointFileType.hpp"
 
