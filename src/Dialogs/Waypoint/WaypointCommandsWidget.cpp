@@ -22,10 +22,12 @@ Copyright_License {
 */
 
 #include "WaypointCommandsWidget.hpp"
+#include "WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -47,6 +49,7 @@ enum Commands {
   PAN,
   SET_ACTIVE_FREQUENCY,
   SET_STANDBY_FREQUENCY,
+  EDIT,
 };
 
 static bool
@@ -249,6 +252,25 @@ WaypointCommandsWidget::OnAction(int id)
     device_blackboard->SetStandbyFrequency(waypoint.radio_frequency,
                                            waypoint.name.c_str(), env);
     break;
+
+  case EDIT:
+    {
+      Waypoint wp_copy = waypoint;
+
+      /* move to user.cup */
+      wp_copy.origin = WaypointOrigin::USER;
+
+      if (dlgWaypointEditShowModal(wp_copy)) {
+        // TODO: refresh data instead of closing dialog?
+        // TODO: save user.cup?
+        form->SetModalResult(mrOK);
+
+        ScopeSuspendAllThreads suspend;
+        way_points.Replace(waypoint, wp_copy);
+        way_points.Optimise();
+      }
+    }
+    break;
   }
 }
 
@@ -270,4 +292,5 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddButton(_("Pan to Waypoint"), *this, PAN);
   AddButton(_("Set Active Frequency"), *this, SET_ACTIVE_FREQUENCY);
   AddButton(_("Set Standby Frequency"), *this, SET_STANDBY_FREQUENCY);
+  AddButton(_("Edit"), *this, EDIT);
 }
