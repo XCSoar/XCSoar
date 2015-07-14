@@ -34,7 +34,7 @@ class ProtectedTaskManager;
 /**
  * A Widget that shows a few commands for a Waypoint.
  */
-struct WaypointCommandsWidget
+class WaypointCommandsWidget final
   : public RowFormWidget, ActionListener {
   WndForm *form;
 
