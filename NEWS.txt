@@ -4,7 +4,7 @@ Version 6.8 - not yet released
   - faster RASP map change
   - show all RASP maps
   - fix comments in TNP files
-  - store user-edited waypoints in "user.cup"
+  - store user-edited waypoints and markers in "user.cup"
 * devices
   - remove option "Ignore checksum"
   - CAI302: add sink tone configuration
@@ -31,6 +31,7 @@ Version 6.8 - not yet released
   - show name of loaded/saved tasks in dialog title (#1924)
   - support large legs in the FAI triangle renderer (#3413)
   - task calculator moved to "Status" dialog
+  - markers can be used in tasks and for "goto"
 * map
   - allow "Mark Drop" while panning
   - airspace labels

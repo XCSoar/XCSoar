@@ -189,7 +189,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/TaskProgressRenderer.cpp \
-	$(SRC)/Renderer/MarkerRenderer.cpp \
 	\
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -517,7 +516,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
-	$(SRC)/Markers/ProtectedMarkers.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightInfo.cpp \

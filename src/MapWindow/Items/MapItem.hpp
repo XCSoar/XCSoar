@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Markers/Marker.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
@@ -58,7 +57,6 @@ struct MapItem
     WEATHER,
 #endif
     AIRSPACE,
-    MARKER,
     THERMAL,
     WAYPOINT,
     TRAFFIC,
@@ -139,15 +137,6 @@ struct WaypointMapItem: public MapItem
 
   WaypointMapItem(const Waypoint &_waypoint)
     :MapItem(WAYPOINT), waypoint(_waypoint) {}
-};
-
-struct MarkerMapItem: public MapItem
-{
-  unsigned id;
-  Marker marker;
-
-  MarkerMapItem(unsigned _id, const Marker &_marker)
-    :MapItem(MARKER), id(_id), marker(_marker) {}
 };
 
 #ifdef HAVE_NOAA

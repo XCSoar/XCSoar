@@ -323,6 +323,23 @@ Waypoints::Erase(const Waypoint& wp)
 }
 
 void
+Waypoints::EraseUserMarkers()
+{
+  waypoint_tree.EraseIf([this](const Waypoint &wp){
+      if (wp.origin == WaypointOrigin::USER &&
+          wp.type == Waypoint::Type::MARKER) {
+        if (home == &wp)
+          home = nullptr;
+
+        name_tree.Remove(wp);
+        ++serial;
+        return true;
+      } else
+        return false;
+    });
+}
+
+void
 Waypoints::Replace(const Waypoint &orig, const Waypoint &replacement)
 {
   assert(!waypoint_tree.IsEmpty());

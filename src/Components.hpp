@@ -27,7 +27,6 @@ Copyright_License {
 #include "Compiler.h"
 
 class FileCache;
-class ProtectedMarkers;
 class TopographyStore;
 class RasterTerrain;
 class RasterWeatherStore;
@@ -53,7 +52,6 @@ extern Airspaces airspace_database;
 extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
-extern ProtectedMarkers *protected_marks;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
 extern RasterWeatherStore *rasp;

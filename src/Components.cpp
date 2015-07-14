@@ -33,7 +33,6 @@ Copyright_License {
 #endif
 
 FileCache *file_cache;
-ProtectedMarkers *protected_marks;
 TopographyStore *topography;
 RasterTerrain *terrain;
 RasterWeatherStore *rasp;

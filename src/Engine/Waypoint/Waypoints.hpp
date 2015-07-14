@@ -118,6 +118,12 @@ public:
   void Erase(const Waypoint& wp);
 
   /**
+   * Erase all waypoints with origin==WaypointOrigin::USER &&
+   * type==Type::MARKER.
+   */
+  void EraseUserMarkers();
+
+  /**
    * Replace waypoint from the internal store.  Requires Optimise() to
    * be called afterwards.
    *

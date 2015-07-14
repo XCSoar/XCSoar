@@ -112,9 +112,6 @@ CompareMapItems(const MapItem *a, const MapItem *b)
         ((const AirspaceMapItem *)a)->airspace->GetBase(),
         ((const AirspaceMapItem *)b)->airspace->GetBase());
 
-  if (a->type == MapItem::MARKER && b->type == MapItem::MARKER)
-    return ((const MarkerMapItem *)a)->id < ((const MarkerMapItem *)b)->id;
-
 #ifdef HAVE_NOAA
   if (a->type == MapItem::WEATHER && b->type == MapItem::WEATHER)
     return strcmp(((const WeatherStationMapItem *)a)->station->code,

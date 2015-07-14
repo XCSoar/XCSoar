@@ -53,6 +53,7 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 #include "Time/RoughTime.hpp"
+#include "Time/BrokenDateTime.hpp"
 
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"
@@ -238,35 +239,6 @@ Draw(Canvas &canvas, const PixelRect rc,
 {
   WaypointListRenderer::Draw(canvas, rc, item.waypoint,
                              row_renderer, look, renderer_settings);
-}
-
-static void
-Draw(Canvas &canvas, PixelRect rc,
-     const MarkerMapItem &item, RoughTimeDelta utc_offset,
-     const TwoTextRowsRenderer &row_renderer,
-     const MarkerLook &look)
-{
-  const unsigned line_height = rc.bottom - rc.top;
-  const unsigned text_padding = Layout::GetTextPadding();
-
-  const Marker &marker = item.marker;
-
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
-
-  look.icon.Draw(canvas, pt);
-
-  rc.left += line_height + text_padding;
-
-  StaticString<256> buffer;
-  buffer.Format(_T("%s #%d"), _("Marker"), item.id + 1);
-  row_renderer.DrawFirstRow(canvas, rc, buffer);
-
-  buffer.Format(_("dropped %s ago"),
-                FormatTimespanSmart(BrokenDateTime::NowUTC() - marker.time).c_str());
-  buffer.AppendFormat(_T(" (%s)"),
-                      FormatLocalTimeHHMM(marker.time.GetSecondOfDay(), utc_offset).c_str());
-  row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
 #ifdef HAVE_NOAA
@@ -490,10 +462,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     ::Draw(canvas, rc, (const TaskOZMapItem &)item,
            row_renderer, look.task, look.airspace,
            settings.airspace);
-    break;
-  case MapItem::MARKER:
-    ::Draw(canvas, rc, (const MarkerMapItem &)item, utc_offset,
-           row_renderer, look.marker);
     break;
 
 #ifdef HAVE_NOAA

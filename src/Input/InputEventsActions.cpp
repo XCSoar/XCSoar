@@ -62,7 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
 #include "Message.hpp"
-#include "Markers/ProtectedMarkers.hpp"
+#include "Markers/Markers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "MainWindow.hpp"
 #include "PopupMessage.hpp"
@@ -79,6 +79,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Waypoint/Factory.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
@@ -87,6 +88,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Weather/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
+#include "Formatter/TimeFormatter.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -132,13 +134,34 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   const NMEAInfo &basic = CommonInterface::Basic();
 
   if (StringIsEqual(misc, _T("reset"))) {
-    protected_marks->Reset();
+    ScopeSuspendAllThreads suspend;
+    way_points.EraseUserMarkers();
   } else {
     const auto location = GetVisibleLocation();
     if (!location.IsValid())
       return;
 
-    protected_marks->MarkLocation(location, basic.date_time_utc);
+    MarkLocation(location, basic.date_time_utc);
+
+    const WaypointFactory factory(WaypointOrigin::USER, terrain);
+    Waypoint wp = factory.Create(location);
+    factory.FallbackElevation(wp);
+
+    TCHAR name[64] = _T("Marker");
+    if (basic.date_time_utc.IsPlausible()) {
+      auto *p = name + StringLength(name);
+      *p++ = _T(' ' );
+      FormatISO8601(p, basic.date_time_utc);
+    }
+
+    wp.name = name;
+    wp.type = Waypoint::Type::MARKER;
+
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.Append(std::move(wp));
+      way_points.Optimise();
+    }
 
     if (CommonInterface::GetUISettings().sound.sound_modes_enabled)
       PlayResource(_T("IDR_WAV_CLEAR"));

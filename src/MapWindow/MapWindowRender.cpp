@@ -25,7 +25,6 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
-#include "Renderer/MarkerRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
 
 #ifdef HAVE_NOAA
@@ -91,14 +90,6 @@ MapWindow::RenderAirspace(Canvas &canvas)
                                  GetComputerSettings().airspace,
                                  GetMapSettings().airspace);
   }
-}
-
-void
-MapWindow::RenderMarkers(Canvas &canvas)
-{
-  if (marks != nullptr &&
-      render_projection.GetMapScale() <= fixed(30000))
-    ::RenderMarkers(canvas, render_projection, look.marker, *marks);
 }
 
 void
@@ -191,8 +182,6 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
     RenderTrail(canvas, aircraft_pos);
 
   DrawWaves(canvas);
-
-  RenderMarkers(canvas);
 
   // Render estimate of thermal location
   DrawThermalEstimate(canvas);

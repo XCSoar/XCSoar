@@ -36,7 +36,6 @@ class Waypoints;
 struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
-class ProtectedMarkers;
 struct TrafficList;
 struct ThermalLocatorInfo;
 struct NMEAInfo;
@@ -65,7 +64,6 @@ public:
                           const AirspaceRendererSettings &renderer_settings,
                           const MoreData &basic, const DerivedInfo &calculated);
   void AddTaskOZs(const ProtectedTaskManager &task);
-  void AddMarkers(const ProtectedMarkers &marks);
   void AddTraffic(const TrafficList &flarm);
   void AddSkyLinesTraffic();
   void AddThermals(const ThermalLocatorInfo &thermals,

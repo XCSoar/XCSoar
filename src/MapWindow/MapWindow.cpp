@@ -51,7 +51,6 @@ MapWindow::MapWindow(const MapLook &_look,
    airspace_label_renderer(look.airspace),
    trail_renderer(look.trail),
    task(nullptr), route_planner(nullptr), glide_computer(nullptr),
-   marks(nullptr),
 #ifdef HAVE_NOAA
    noaa_store(nullptr),
 #endif

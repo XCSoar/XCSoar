@@ -28,7 +28,6 @@ Copyright_License {
 #include "AirspaceLook.hpp"
 #include "AircraftLook.hpp"
 #include "TaskLook.hpp"
-#include "MarkerLook.hpp"
 #include "TrailLook.hpp"
 #include "WaveLook.hpp"
 #include "WindArrowLook.hpp"
@@ -51,7 +50,6 @@ struct MapLook {
   AirspaceLook airspace;
   AircraftLook aircraft;
   TaskLook task;
-  MarkerLook marker;
   TrailLook trail;
   WaveLook wave;
   WindArrowLook wind;

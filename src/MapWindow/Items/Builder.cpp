@@ -39,8 +39,6 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
-#include "Markers/ProtectedMarkers.hpp"
-#include "Markers/Markers.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -249,23 +247,6 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
     const ObservationZonePoint &oz = task_point.GetObservationZone();
     list.append(new TaskOZMapItem(i, oz, task_point.GetType(),
                                   task_point.GetWaypoint()));
-  }
-}
-
-void
-MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
-{
-  ProtectedMarkers::Lease lease(marks);
-  unsigned i = 0;
-
-  for (const auto &m : (const Markers &)lease) {
-    if (list.full())
-      break;
-
-    if (location.DistanceS(m.location) < range)
-      list.append(new MarkerMapItem(i, m));
-
-    i++;
   }
 }
 

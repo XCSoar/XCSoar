@@ -22,29 +22,22 @@ Copyright_License {
 */
 
 #include "Markers.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Time/BrokenDateTime.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/DataFile.hpp"
 
 void
-Markers::Reset()
-{
-  marker_store.clear();
-}
-
-void
-Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
+MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 {
   assert(time.IsPlausible());
-
-  Marker marker = { loc, time };
-  marker_store.push_back(marker);
 
   char message[160];
   sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
           time.day, time.month, time.year,
           time.hour, time.minute, time.second,
-          (double)(loc.longitude.Degrees()), 
-          (double)(loc.latitude.Degrees()));
+          (double)loc.longitude.Degrees(),
+          (double)loc.latitude.Degrees());
 
   TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
   if (writer != NULL) {

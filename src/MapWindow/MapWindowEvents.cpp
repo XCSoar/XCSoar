@@ -63,7 +63,6 @@ MapWindow::OnDestroy()
 #ifdef HAVE_NOAA
   SetNOAAStore(nullptr);
 #endif
-  SetMarks(nullptr);
   airspace_renderer.Clear();
   SetWaypoints(nullptr);
   SetTopography(nullptr);

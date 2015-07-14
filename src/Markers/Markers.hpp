@@ -24,28 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_MARKS_HPP
 #define XCSOAR_MARKS_HPP
 
-#include "Marker.hpp"
+struct GeoPoint;
+struct BrokenDateTime;
 
-#include <vector>
-
-class Markers
-{
-public:
-  typedef std::vector<Marker>::const_iterator const_iterator;
-
-private:
-  std::vector<Marker> marker_store;
-
-public:
-  void Reset();
-  void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
-
-  const_iterator begin() const {
-    return marker_store.begin();
-  }
-  const_iterator end() const {
-    return marker_store.end();
-  }
-};
+void
+MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
 
 #endif

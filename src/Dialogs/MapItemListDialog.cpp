@@ -55,7 +55,6 @@ HasDetails(const MapItem &item)
   case MapItem::LOCATION:
   case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
-  case MapItem::MARKER:
   case MapItem::THERMAL:
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   case MapItem::SKYLINES_TRAFFIC:
@@ -294,7 +293,6 @@ ShowMapItemDialog(const MapItem &item,
   case MapItem::LOCATION:
   case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
-  case MapItem::MARKER:
   case MapItem::THERMAL:
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   case MapItem::SKYLINES_TRAFFIC:

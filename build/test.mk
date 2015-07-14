@@ -1727,7 +1727,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/TransparentRendererCache.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
-	$(SRC)/Renderer/MarkerRenderer.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
@@ -1769,8 +1768,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Renderer/WaveRenderer.cpp \
-	$(SRC)/Markers/Markers.cpp \
-	$(SRC)/Markers/ProtectedMarkers.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \

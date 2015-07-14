@@ -48,7 +48,6 @@ class CachedTopographyRenderer;
 class RasterTerrain;
 class RasterWeatherStore;
 class RasterWeatherCache;
-class ProtectedMarkers;
 class Waypoints;
 class Airspaces;
 class ProtectedTaskManager;
@@ -138,8 +137,6 @@ protected:
   const ProtectedRoutePlanner *route_planner;
   GlideComputer *glide_computer;
 
-  ProtectedMarkers *marks;
-
 #ifdef HAVE_NOAA
   NOAAStore *noaa_store;
 #endif
@@ -215,10 +212,6 @@ public:
   void SetTopography(TopographyStore *_topography);
   void SetTerrain(RasterTerrain *_terrain);
   void SetWeather(const RasterWeatherStore *_weather);
-
-  void SetMarks(ProtectedMarkers *_marks) {
-    marks = _marks;
-  }
 
 #ifdef HAVE_NOAA
   void SetNOAAStore(NOAAStore *_noaa_store) {
@@ -353,11 +346,7 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderAirspace(Canvas &canvas);
-  /**
-   * Renders the markers
-   * @param canvas The drawing canvas
-   */
-  void RenderMarkers(Canvas &canvas);
+
   /**
    * Renders the NOAA stations
    * @param canvas The drawing canvas
