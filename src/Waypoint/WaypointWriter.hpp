@@ -25,7 +25,6 @@ Copyright_License {
 #define WAYPOINT_WRITER_HPP
 
 #include "Math/fixed.hpp"
-#include "WaypointFileType.hpp"
 #include "Engine/Waypoint/Origin.hpp"
 
 struct Waypoint;
@@ -34,7 +33,7 @@ class TextWriter;
 class Angle;
 
 /** 
- * Waypoint file writer
+ * Waypoint file writer for the CUP format.
  */
 class WaypointWriter
 {
@@ -46,21 +45,14 @@ public:
   WaypointWriter(const Waypoints &_waypoints, WaypointOrigin _origin)
     :waypoints(_waypoints), origin(_origin) {}
 
-  void Save(TextWriter &writer, WaypointFileType type);
+  void Save(TextWriter &writer);
 
 private:
-  static void WriteWaypoint(TextWriter &writer, const Waypoint &wp,
-                            WaypointFileType type);
-  static void WriteAngleDMS(TextWriter &writer, Angle angle,
-                            bool is_latitude);
+  static void WriteWaypoint(TextWriter &writer, const Waypoint &wp);
   static void WriteAngleDMM(TextWriter &writer, Angle angle,
                             bool is_latitude);
   static void WriteAltitude(TextWriter &writer, fixed altitude);
-  static void WriteWinPilotFlags(TextWriter &writer, const Waypoint &wp);
   static void WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp);
-
-  static void WriteWinPilot(TextWriter &writer, const Waypoint &wp);
-  static void WriteSeeYou(TextWriter &writer, const Waypoint &wp);
 };
 
 #endif

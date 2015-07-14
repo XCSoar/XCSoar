@@ -27,7 +27,7 @@ Copyright_License {
 #include "Engine/Waypoint/Runway.hpp"
 
 void
-WaypointWriter::Save(TextWriter &writer, WaypointFileType type)
+WaypointWriter::Save(TextWriter &writer)
 {
   // Iterate through the waypoint list and save each waypoint with
   // the right file number to the TextWriter
@@ -35,64 +35,12 @@ WaypointWriter::Save(TextWriter &writer, WaypointFileType type)
   for (auto it = waypoints.begin(); it != waypoints.end(); ++it) {
     const Waypoint& wp = *it;
     if (wp.origin == origin)
-      WriteWaypoint(writer, wp, type);
+      WriteWaypoint(writer, wp);
   }
 }
 
 void
-WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint &wp, WaypointFileType type)
-{
-  switch (type) {
-  case WaypointFileType::WINPILOT:
-    WriteWinPilot(writer, wp);
-    break;
-
-  case WaypointFileType::SEEYOU:
-    WriteSeeYou(writer, wp);
-    break;
-
-  case WaypointFileType::UNKNOWN:
-  case WaypointFileType::ZANDER:
-  case WaypointFileType::FS:
-  case WaypointFileType::OZI_EXPLORER:
-  case WaypointFileType::COMPE_GPS:
-    gcc_unreachable();
-    break;
-  }
-}
-
-void
-WaypointWriter::WriteWinPilot(TextWriter &writer, const Waypoint &wp)
-{
-  // Write the waypoint id
-  writer.Format("%u,", wp.original_id > 0 ? wp.original_id : wp.id);
-
-  // Write the latitude
-  WriteAngleDMS(writer, wp.location.latitude, true);
-  writer.Write(',');
-
-  // Write the longitude id
-  WriteAngleDMS(writer, wp.location.longitude, false);
-  writer.Write(',');
-
-  // Write the altitude id
-  WriteAltitude(writer, wp.elevation);
-  writer.Write(',');
-
-  // Write the waypoint flags
-  WriteWinPilotFlags(writer, wp);
-  writer.Write(',');
-
-  // Write the waypoint name
-  writer.Write(wp.name.c_str());
-  writer.Write(',');
-
-  // Write the waypoint description
-  writer.WriteLine(wp.comment.c_str());
-}
-
-void
-WaypointWriter::WriteSeeYou(TextWriter &writer, const Waypoint &wp)
+WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint &wp)
 {
   // Write Title
   writer.Format(_T("\"%s\","), wp.name.c_str());
@@ -148,26 +96,6 @@ WaypointWriter::WriteSeeYou(TextWriter &writer, const Waypoint &wp)
 }
 
 void
-WaypointWriter::WriteAngleDMS(TextWriter &writer, const Angle angle,
-                           bool is_latitude)
-{
-  // Calculate degrees, minutes and seconds
-  unsigned deg, min, sec;
-  bool is_positive;
-  angle.ToDMS(deg, min, sec, is_positive);
-
-  // Save them into the buffer string
-  writer.Format(is_latitude ? "%02u:%02u:%02u" : "%03u:%02u:%02u",
-                deg, min, sec);
-
-  // Attach the buffer string to the output
-  if (is_latitude)
-    writer.Write(is_positive ? "N" : "S");
-  else
-    writer.Write(is_positive ? "E" : "W");
-}
-
-void
 WaypointWriter::WriteAngleDMM(TextWriter &writer, const Angle angle,
                               bool is_latitude)
 {
@@ -191,31 +119,6 @@ void
 WaypointWriter::WriteAltitude(TextWriter &writer, fixed altitude)
 {
   writer.Format("%dM", (int)altitude);
-}
-
-void
-WaypointWriter::WriteWinPilotFlags(TextWriter &writer, const Waypoint &wp)
-{
-  if (wp.IsAirport())
-    writer.Write('A');
-  if (wp.flags.turn_point)
-    writer.Write('T');
-  if (wp.IsLandable())
-    writer.Write('L');
-  if (wp.flags.home)
-    writer.Write('H');
-  if (wp.flags.start_point)
-    writer.Write('S');
-  if (wp.flags.finish_point)
-    writer.Write('F');
-
-  // set as turnpoint by default if nothing else
-  if (!wp.flags.turn_point &&
-      !wp.IsLandable() &&
-      !wp.flags.home &&
-      !wp.flags.start_point &&
-      !wp.flags.finish_point)
-    writer.Write('T');
 }
 
 void
