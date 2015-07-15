@@ -49,8 +49,7 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   OrderedTask *task = new OrderedTask(task_behaviour);
 
   // Read the task from the XML file
-  Deserialiser des(*root, waypoints);
-  des.Deserialise(*task);
+  LoadTask(*task, *root, waypoints);
 
   // Return the parsed task
   return task;

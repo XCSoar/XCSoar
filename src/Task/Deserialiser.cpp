@@ -36,82 +36,65 @@
 
 #include <memory>
 
-void
-Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
+static void
+Deserialise(GeoPoint &data, const DataNode &node)
 {
-  const TCHAR *type = node.GetAttribute(_T("type"));
-  if (type == nullptr)
-    return;
-
-  std::unique_ptr<DataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
-  if (!wp_node)
-    return;
-
-  Deserialiser wser(*wp_node, waypoints);
-  std::unique_ptr<Waypoint> wp(wser.DeserialiseWaypoint());
-  if (!wp)
-    return;
-
-  std::unique_ptr<DataNode> oz_node(node.GetChildNamed(_T("ObservationZone")));
-
-  AbstractTaskFactory &fact = data.GetFactory();
-
-  ObservationZonePoint* oz = nullptr;
-  std::unique_ptr<OrderedTaskPoint> pt;
-
-  if (oz_node) {
-    bool is_turnpoint = StringIsEqual(type, _T("Turn")) ||
-      StringIsEqual(type, _T("Area"));
-
-    Deserialiser oser(*oz_node, waypoints);
-    oz = oser.DeserialiseOZ(*wp, is_turnpoint);
-  }
-
-  if (StringIsEqual(type, _T("Start"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateStart(oz, *wp)
-             : fact.CreateStart(*wp));
-
-  } else if (StringIsEqual(type, _T("OptionalStart"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateStart(oz, *wp)
-             : fact.CreateStart(*wp));
-    fact.AppendOptionalStart(*pt);
-
-    // don't let generic code below add it
-    pt.reset();
-
-  } else if (StringIsEqual(type, _T("Turn"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateASTPoint(oz, *wp)
-             : fact.CreateIntermediate(*wp));
-
-  } else if (StringIsEqual(type, _T("Area"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateAATPoint(oz, *wp)
-             : fact.CreateIntermediate(*wp));
-
-  } else if (StringIsEqual(type, _T("Finish"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateFinish(oz, *wp)
-             : fact.CreateFinish(*wp));
-  } 
-
-  if (!pt)
-    return;
-
-  if (pt->GetType() == TaskPointType::AST) {
-    ASTPoint &ast = (ASTPoint &)*pt;
-    bool score_exit = false;
-    if (node.GetAttribute(_T("score_exit"), score_exit))
-      ast.SetScoreExit(score_exit);
-  }
-
-  fact.Append(*pt, false);
+  node.GetAttribute(_T("longitude"), data.longitude);
+  node.GetAttribute(_T("latitude"), data.latitude);
 }
 
-ObservationZonePoint*
-Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
+static Waypoint *
+DeserialiseWaypoint(const DataNode &node, const Waypoints *waypoints)
+{
+  std::unique_ptr<DataNode> loc_node(node.GetChildNamed(_T("Location")));
+  if (!loc_node)
+    return nullptr;
+
+  GeoPoint loc;
+  Deserialise(loc, *loc_node);
+
+  const TCHAR *name = node.GetAttribute(_T("name"));
+  if (name == nullptr)
+    // Turnpoints need names
+    return nullptr;
+
+  if (waypoints != nullptr) {
+    // Try to find waypoint by name
+    const Waypoint *from_database = waypoints->LookupName(name);
+
+    // If waypoint by name found and closer than 10m to the original
+    if (from_database != nullptr &&
+        from_database->location.DistanceS(loc) <= fixed(10))
+      // Use this waypoint for the task
+      return new Waypoint(*from_database);
+
+    // Try finding the closest waypoint to the original one
+    from_database = waypoints->GetNearest(loc, fixed(10));
+
+    // If closest waypoint found and closer than 10m to the original
+    if (from_database != nullptr &&
+        from_database->location.DistanceS(loc) <= fixed(10))
+      // Use this waypoint for the task
+      return new Waypoint(*from_database);
+  }
+
+  // Create a new waypoint from the original one
+  Waypoint *wp = new Waypoint(loc);
+  wp->name = name;
+
+  node.GetAttribute(_T("id"), wp->id);
+
+  const TCHAR *comment = node.GetAttribute(_T("comment"));
+  if (comment != nullptr)
+    wp->comment.assign(comment);
+
+  node.GetAttribute(_T("altitude"), wp->elevation);
+
+  return wp;
+}
+
+static ObservationZonePoint *
+DeserialiseOZ(const Waypoint &wp, const DataNode &node, bool is_turnpoint)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
   if (type == nullptr)
@@ -187,106 +170,82 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
   return nullptr;
 }
 
-void 
-Deserialiser::Deserialise(GeoPoint &data)
+static void
+DeserialiseTaskpoint(OrderedTask &data, const DataNode &node,
+                     const Waypoints *waypoints)
 {
-  node.GetAttribute(_T("longitude"), data.longitude);
-  node.GetAttribute(_T("latitude"), data.latitude);
-}
+  const TCHAR *type = node.GetAttribute(_T("type"));
+  if (type == nullptr)
+    return;
 
-Waypoint*
-Deserialiser::DeserialiseWaypoint()
-{
-  std::unique_ptr<DataNode> loc_node(node.GetChildNamed(_T("Location")));
-  if (!loc_node)
-    return nullptr;
+  std::unique_ptr<DataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
+  if (!wp_node)
+    return;
 
-  GeoPoint loc;
-  Deserialiser lser(*loc_node, waypoints);
-  lser.Deserialise(loc);
+  std::unique_ptr<Waypoint> wp(DeserialiseWaypoint(*wp_node, waypoints));
+  if (!wp)
+    return;
 
-  const TCHAR *name = node.GetAttribute(_T("name"));
-  if (name == nullptr)
-    // Turnpoints need names
-    return nullptr;
+  std::unique_ptr<DataNode> oz_node(node.GetChildNamed(_T("ObservationZone")));
 
-  if (waypoints != nullptr) {
-    // Try to find waypoint by name
-    const Waypoint *from_database = waypoints->LookupName(name);
+  AbstractTaskFactory &fact = data.GetFactory();
 
-    // If waypoint by name found and closer than 10m to the original
-    if (from_database != nullptr &&
-        from_database->location.DistanceS(loc) <= fixed(10))
-      // Use this waypoint for the task
-      return new Waypoint(*from_database);
+  ObservationZonePoint* oz = nullptr;
+  std::unique_ptr<OrderedTaskPoint> pt;
 
-    // Try finding the closest waypoint to the original one
-    from_database = waypoints->GetNearest(loc, fixed(10));
+  if (oz_node) {
+    bool is_turnpoint = StringIsEqual(type, _T("Turn")) ||
+      StringIsEqual(type, _T("Area"));
 
-    // If closest waypoint found and closer than 10m to the original
-    if (from_database != nullptr &&
-        from_database->location.DistanceS(loc) <= fixed(10))
-      // Use this waypoint for the task
-      return new Waypoint(*from_database);
+    oz = DeserialiseOZ(*wp, *oz_node, is_turnpoint);
   }
 
-  // Create a new waypoint from the original one
-  Waypoint *wp = new Waypoint(loc);
-  wp->name = name;
+  if (StringIsEqual(type, _T("Start"))) {
+    pt.reset(oz != nullptr
+             ? fact.CreateStart(oz, *wp)
+             : fact.CreateStart(*wp));
 
-  node.GetAttribute(_T("id"), wp->id);
+  } else if (StringIsEqual(type, _T("OptionalStart"))) {
+    pt.reset(oz != nullptr
+             ? fact.CreateStart(oz, *wp)
+             : fact.CreateStart(*wp));
+    fact.AppendOptionalStart(*pt);
 
-  const TCHAR *comment = node.GetAttribute(_T("comment"));
-  if (comment != nullptr)
-    wp->comment.assign(comment);
+    // don't let generic code below add it
+    pt.reset();
 
-  node.GetAttribute(_T("altitude"), wp->elevation);
+  } else if (StringIsEqual(type, _T("Turn"))) {
+    pt.reset(oz != nullptr
+             ? fact.CreateASTPoint(oz, *wp)
+             : fact.CreateIntermediate(*wp));
 
-  return wp;
-}
+  } else if (StringIsEqual(type, _T("Area"))) {
+    pt.reset(oz != nullptr
+             ? fact.CreateAATPoint(oz, *wp)
+             : fact.CreateIntermediate(*wp));
 
-void 
-Deserialiser::Deserialise(OrderedTaskSettings &data)
-{
-  node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
-  node.GetAttribute(_T("start_requires_arm"),
-                    data.start_constraints.require_arm);
-  node.GetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
-  node.GetAttribute(_T("start_max_height"), data.start_constraints.max_height);
-  data.start_constraints.max_height_ref =
-    GetHeightRef(_T("start_max_height_ref"));
-  data.start_constraints.open_time_span =
-    node.GetAttributeRoughTimeSpan(_T("start_open_time"),
-                                   _T("start_close_time"));
-  node.GetAttribute(_T("finish_min_height"),
-                    data.finish_constraints.min_height);
-  data.finish_constraints.min_height_ref =
-    GetHeightRef(_T("finish_min_height_ref"));
-  node.GetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
-  data.start_constraints.fai_finish = data.finish_constraints.fai_finish;
-}
+  } else if (StringIsEqual(type, _T("Finish"))) {
+    pt.reset(oz != nullptr
+             ? fact.CreateFinish(oz, *wp)
+             : fact.CreateFinish(*wp));
+  } 
 
-void 
-Deserialiser::Deserialise(OrderedTask &task)
-{
-  task.Clear();
-  task.SetFactory(GetTaskFactoryType());
-  task.Reset();
+  if (!pt)
+    return;
 
-  OrderedTaskSettings beh = task.GetOrderedTaskSettings();
-  Deserialise(beh);
-  task.SetOrderedTaskSettings(beh);
-
-  const DataNode::List children = node.ListChildrenNamed(_T("Point"));
-  for (const auto &i : children) {
-    std::unique_ptr<DataNode> point_node(i);
-    Deserialiser pser(*point_node, waypoints);
-    pser.DeserialiseTaskpoint(task);
+  if (pt->GetType() == TaskPointType::AST) {
+    ASTPoint &ast = (ASTPoint &)*pt;
+    bool score_exit = false;
+    if (node.GetAttribute(_T("score_exit"), score_exit))
+      ast.SetScoreExit(score_exit);
   }
+
+  fact.Append(*pt, false);
 }
 
-AltitudeReference
-Deserialiser::GetHeightRef(const TCHAR *nodename) const
+gcc_pure
+static AltitudeReference
+GetHeightRef(const DataNode &node, const TCHAR *nodename)
 {
   const TCHAR *type = node.GetAttribute(nodename);
   if (type != nullptr && StringIsEqual(type, _T("MSL")))
@@ -295,8 +254,29 @@ Deserialiser::GetHeightRef(const TCHAR *nodename) const
   return AltitudeReference::AGL;
 }
 
-TaskFactoryType
-Deserialiser::GetTaskFactoryType() const
+static void
+Deserialise(OrderedTaskSettings &data, const DataNode &node)
+{
+  node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
+  node.GetAttribute(_T("start_requires_arm"),
+                    data.start_constraints.require_arm);
+  node.GetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
+  node.GetAttribute(_T("start_max_height"), data.start_constraints.max_height);
+  data.start_constraints.max_height_ref =
+    GetHeightRef(node, _T("start_max_height_ref"));
+  data.start_constraints.open_time_span =
+    node.GetAttributeRoughTimeSpan(_T("start_open_time"),
+                                   _T("start_close_time"));
+  node.GetAttribute(_T("finish_min_height"),
+                    data.finish_constraints.min_height);
+  data.finish_constraints.min_height_ref =
+    GetHeightRef(node, _T("finish_min_height_ref"));
+  node.GetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
+  data.start_constraints.fai_finish = data.finish_constraints.fai_finish;
+}
+
+static TaskFactoryType
+GetTaskFactoryType(const DataNode &node)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
   if (type == nullptr)
@@ -322,4 +302,23 @@ Deserialiser::GetTaskFactoryType() const
     return TaskFactoryType::TOURING;
 
   return TaskFactoryType::FAI_GENERAL;
+}
+
+void
+LoadTask(OrderedTask &task, const DataNode &node,
+         const Waypoints *waypoints)
+{
+  task.Clear();
+  task.SetFactory(GetTaskFactoryType(node));
+  task.Reset();
+
+  OrderedTaskSettings beh = task.GetOrderedTaskSettings();
+  Deserialise(beh, node);
+  task.SetOrderedTaskSettings(beh);
+
+  const DataNode::List children = node.ListChildrenNamed(_T("Point"));
+  for (const auto &i : children) {
+    std::unique_ptr<DataNode> point_node(i);
+    DeserialiseTaskpoint(task, *point_node, waypoints);
+  }
 }

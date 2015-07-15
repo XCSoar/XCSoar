@@ -12,9 +12,8 @@ LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour)
     return NULL;
   }
 
-  Deserialiser des(*node);
   OrderedTask *task = new OrderedTask(task_behaviour);
-  des.Deserialise(*task);
+  LoadTask(*task, *node);
   delete node;
 
   task->UpdateGeometry();
