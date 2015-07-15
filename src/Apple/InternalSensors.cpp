@@ -29,24 +29,7 @@ Copyright_License {
 
 #include <TargetConditionals.h>
 
-#import <CoreLocation/CoreLocation.h>
-
 #include <unistd.h>
-
-@interface LocationDelegate : NSObject <CLLocationManagerDelegate>
-{
- @private
-  unsigned int index;
-
- @private
-  NSCalendar *gregorian_calendar;
-}
-
--(instancetype) init __attribute__((unavailable()));
-
--(instancetype) init: (unsigned int) index_;
-@end
-
 
 @implementation LocationDelegate
 -(instancetype) init: (unsigned int) index_
@@ -167,19 +150,9 @@ Copyright_License {
 @end
 
 
-struct InternalSensorsPrivate
+InternalSensors::InternalSensors(unsigned int _index)
+    : index(_index)
 {
-  unsigned int index;
-  CLLocationManager *locationManager;
-  LocationDelegate* locationDelegate;
-};
-
-
-InternalSensors::InternalSensors(unsigned int index)
-    : private_data(new InternalSensorsPrivate)
-{
-  private_data->index = index;
-
   if ([NSThread isMainThread]) {
     Init();
   } else {
@@ -198,43 +171,41 @@ InternalSensors::~InternalSensors()
       Deinit();
     });
   }
-  delete private_data;
 }
 
 void InternalSensors::Init()
 {
-  private_data->locationManager = [[CLLocationManager alloc] init];
-  private_data->locationDelegate = [[LocationDelegate alloc]
-      init: private_data->index];
-  private_data->locationManager.desiredAccuracy =
+  location_manager = [[CLLocationManager alloc] init];
+  location_delegate = [[LocationDelegate alloc] init: index];
+  location_manager.desiredAccuracy =
       kCLLocationAccuracyBestForNavigation;
-  private_data->locationManager.delegate = private_data->locationDelegate;
+  location_manager.delegate = location_delegate;
 #if TARGET_OS_IPHONE
-  if ([private_data->locationManager
+  if ([location_manager
       respondsToSelector: @selector(requestWhenInUseAuthorization)]) {
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     if ((status == kCLAuthorizationStatusAuthorized)
         || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
-      [private_data->locationManager startUpdatingLocation];
+      [location_manager startUpdatingLocation];
     } else {
-      [private_data->locationManager requestWhenInUseAuthorization];
+      [location_manager requestWhenInUseAuthorization];
     }
   } else {
-    [private_data->locationManager startUpdatingLocation];
+    [location_manager startUpdatingLocation];
   }
 #else
-  [private_data->locationManager startUpdatingLocation];
+  [location_manager startUpdatingLocation];
 #endif
 }
 
 void InternalSensors::Deinit()
 {
-  [private_data->locationManager stopUpdatingLocation];
-  [private_data->locationManager release];
-  [private_data->locationDelegate release];
+  [location_manager stopUpdatingLocation];
+  [location_manager release];
+  [location_delegate release];
 }
 
-InternalSensors * InternalSensors::create(unsigned int index)
+InternalSensors * InternalSensors::Create(unsigned int index)
 {
   return new InternalSensors(index);
 }

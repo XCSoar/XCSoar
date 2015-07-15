@@ -26,12 +26,28 @@ Copyright_License {
 
 #include "Compiler.h"
 
-struct InternalSensorsPrivate;
+#import <CoreLocation/CoreLocation.h>
+
+@interface LocationDelegate : NSObject <CLLocationManagerDelegate>
+{
+ @private
+  unsigned int index;
+
+ @private
+  NSCalendar *gregorian_calendar;
+}
+
+-(instancetype) init __attribute__((unavailable()));
+
+-(instancetype) init: (unsigned int) index_;
+@end
 
 // InternalSensors implementation which uses the Apple CoreLocation API
 class InternalSensors {
  private:
-  InternalSensorsPrivate* private_data;
+  unsigned int index;
+  CLLocationManager *location_manager;
+  LocationDelegate *location_delegate;
 
   InternalSensors(unsigned int index);
 
