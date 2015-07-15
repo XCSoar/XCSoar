@@ -29,9 +29,7 @@
 /**
  * DataNode implementation for XML files
  */
-class DataNodeXML:
-  public DataNode
-{
+class DataNodeXML final : public DataNode {
   XMLNode node;
 
 protected:
