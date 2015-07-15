@@ -34,7 +34,7 @@ RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
     planner.SetTerrain(&terrain->map);
   } else {
     planner.Reset();
-    planner.SetTerrain(NULL);
+    planner.SetTerrain(nullptr);
   }
 }
 

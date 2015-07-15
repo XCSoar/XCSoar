@@ -89,7 +89,7 @@ ParseTaskTime(const TCHAR* str)
   if (str != end && _tcslen(str) > 3 && str[2] == _T(':')) {
     mm = _tcstol(str + 3, &end, 10);
     if (str != end && _tcslen(str + 3) > 3 && str[5] == _T(':'))
-      ss = _tcstol(str + 6, NULL, 10);
+      ss = _tcstol(str + 6, nullptr, 10);
   }
   return fixed(ss + mm * 60 + hh * 3600);
 }
@@ -241,7 +241,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   TCHAR *line;
   int TPIndex = 0;
   const unsigned int max_params = ARRAY_SIZE(params);
-  while ((line = reader.ReadLine()) != NULL &&
+  while ((line = reader.ReadLine()) != nullptr &&
          line[0] != _T('\"') && line[0] != _T(',')) {
     const size_t n_params = WaypointReaderBase::
         ExtractParameters(line, params_buffer, params, max_params, true);
@@ -336,12 +336,12 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
          unsigned pos, unsigned size, const Waypoint *wps[],
          TaskFactoryType factType)
 {
-  ObservationZonePoint* oz = NULL;
+  ObservationZonePoint* oz = nullptr;
   const bool is_intermediate = (pos > 0) && (pos < (size - 1));
   const Waypoint *wp = wps[pos];
 
   if (!turnpoint_infos.valid)
-    return NULL;
+    return nullptr;
 
   if (factType == TaskFactoryType::RACING &&
       is_intermediate && isKeyhole(turnpoint_infos))
@@ -415,7 +415,7 @@ CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
     AbstractTaskFactory& fact, ObservationZonePoint* oz,
     const TaskFactoryType factType)
 {
-  OrderedTaskPoint *pt = NULL;
+  OrderedTaskPoint *pt = nullptr;
 
   if (pos == 0)
     pt = (oz ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
@@ -439,7 +439,7 @@ AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
   unsigned count = 0;
   bool in_task_section = false;
   TCHAR *line;
-  for (unsigned i = 0; (line = reader.ReadLine()) != NULL; i++) {
+  for (unsigned i = 0; (line = reader.ReadLine()) != nullptr; i++) {
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
         if (count == index)
@@ -461,7 +461,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   // Create FileReader for reading the task
   FileLineReader reader(path, Charset::AUTO);
   if (reader.error())
-    return NULL;
+    return nullptr;
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
@@ -474,11 +474,11 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   file_waypoints.Optimise();
 
   if (!reader.Rewind())
-    return NULL;
+    return nullptr;
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
-  if (line == NULL)
-    return NULL;
+  if (line == nullptr)
+    return nullptr;
 
   // Read waypoint list
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
@@ -495,7 +495,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
   // At least taskname and takeoff, start, finish and landing points are needed
   if (n_waypoints < 5)
-    return NULL;
+    return nullptr;
 
   // Remove taskname, start point and landing point from count
   n_waypoints -= 3;
@@ -526,14 +526,14 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
     const Waypoint* file_wp = file_waypoints.LookupName(wps[i + 2]);
-    if (file_wp == NULL)
-      return NULL;
+    if (file_wp == nullptr)
+      return nullptr;
 
     // Try to find waypoint by name
     const Waypoint* wp = waypoints->LookupName(file_wp->name);
 
     // If waypoint by name found and closer than 10m to the original
-    if (wp != NULL &&
+    if (wp != nullptr &&
         wp->location.DistanceS(file_wp->location) <= fixed(10)) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
@@ -544,7 +544,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     wp = waypoints->GetNearest(file_wp->location, fixed(10));
 
     // If closest waypoint found and closer than 10m to the original
-    if (wp != NULL &&
+    if (wp != nullptr &&
         wp->location.DistanceS(file_wp->location) <= fixed(10)) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
@@ -564,7 +564,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, waypoints_in_task[i],
                                        fact, oz, factType);
 
-    if (pt != NULL)
+    if (pt != nullptr)
       fact.Append(*pt, false);
 
     delete pt;
@@ -586,7 +586,7 @@ TaskFileSeeYou::Count()
   unsigned count = 0;
   bool in_task_section = false;
   TCHAR *line;
-  while ((line = reader.ReadLine()) != NULL) {
+  while ((line = reader.ReadLine()) != nullptr) {
     if (in_task_section) {
       // If the line starts with a string or "nothing" followed
       // by a comma it is a new task definition line
@@ -595,7 +595,7 @@ TaskFileSeeYou::Count()
         if (count < namesuffixes.capacity()) {
           // If the task doesn't have a name inside the file
           if (line[0] == _T(','))
-            namesuffixes.append(NULL);
+            namesuffixes.append(nullptr);
           else {
             // Ignore starting quote (")
             line++;
@@ -613,7 +613,7 @@ TaskFileSeeYou::Count()
             if (_tcslen(name) > 0)
               namesuffixes.append(_tcsdup(name));
             else
-              namesuffixes.append(NULL);
+              namesuffixes.append(nullptr);
           }
         }
 

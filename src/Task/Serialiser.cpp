@@ -259,7 +259,7 @@ Serialiser::GetHeightRef(AltitudeReference height_ref) const
     /* not applicable here */
     break;
   }
-  return NULL;
+  return nullptr;
 }
 
 const TCHAR* 

@@ -38,7 +38,7 @@ class ReachIntersectionTest: public AbortIntersectionTest {
   const RoutePlannerGlue *route;
 
 public:
-  ReachIntersectionTest(): route(NULL) {};
+  ReachIntersectionTest():route(nullptr) {};
 
   void SetRoute(const RoutePlannerGlue *_route) {
     route = _route;

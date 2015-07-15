@@ -52,7 +52,7 @@ public:
       :task_name(_task_name),
        filename(the_filename),
        task_index(_task_index),
-       task(NULL),
+       task(nullptr),
        valid(true) {}
 
     ~Item();

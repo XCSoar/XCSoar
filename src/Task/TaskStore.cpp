@@ -57,7 +57,7 @@ public:
 
       // If the task file holds more than one task
       const TCHAR *saved_name = task_file->GetName(i);
-      if (saved_name != NULL) {
+      if (saved_name != nullptr) {
         name += _T(": ");
         name += saved_name;
       } else if (count > 1) {
@@ -104,14 +104,14 @@ TaskStore::Item::~Item()
 const OrderedTask *
 TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
 {
-  if (task != NULL)
+  if (task != nullptr)
     return task;
 
   if (valid)
     task = TaskFile::GetTask(filename.c_str(), task_behaviour,
                              &way_points, task_index);
 
-  if (task == NULL)
+  if (task == nullptr)
     valid = false;
   else
     task->UpdateGeometry();

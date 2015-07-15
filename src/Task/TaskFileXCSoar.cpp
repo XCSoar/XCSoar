@@ -39,11 +39,11 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   // Load root node
   std::unique_ptr<DataNode> root(DataNodeXML::Load(path));
   if (!root)
-    return NULL;
+    return nullptr;
 
   // Check if root node is a <Task> node
   if (!StringIsEqual(root->GetName(), _T("Task")))
-    return NULL;
+    return nullptr;
 
   // Create a blank task
   OrderedTask *task = new OrderedTask(task_behaviour);

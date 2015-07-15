@@ -42,7 +42,7 @@ ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
 
 ProtectedTaskManager::~ProtectedTaskManager() {
   UnprotectedLease lease(*this);
-  lease->SetIntersectionTest(NULL); // de-register
+  lease->SetIntersectionTest(nullptr); // de-register
 }
 
 void 
@@ -67,7 +67,7 @@ ProtectedTaskManager::GetActiveWaypoint() const
   if (tp)
     return &tp->GetWaypoint();
 
-  return NULL;
+  return nullptr;
 }
 
 bool
