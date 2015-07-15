@@ -43,12 +43,6 @@ Copyright_License {
   return self;
 }
 
--(void) dealloc
-{
-  [gregorian_calendar release];
-  [super dealloc];
-}
-
 -(double) getSecondsOfDay: (NSDate*) date
 {
   NSDateComponents *components = [gregorian_calendar
@@ -201,8 +195,6 @@ void InternalSensors::Init()
 void InternalSensors::Deinit()
 {
   [location_manager stopUpdatingLocation];
-  [location_manager release];
-  [location_delegate release];
 }
 
 InternalSensors * InternalSensors::Create(unsigned int index)
