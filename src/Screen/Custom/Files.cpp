@@ -37,6 +37,7 @@ Copyright_License {
 static const char *const font_search_paths[] = {
 #ifdef __APPLE__
 #if TARGET_OS_IPHONE
+  "/System/Library/Fonts/Core",
   "/System/Library/Fonts/Cache",
 #else
   "/Library/Fonts",
