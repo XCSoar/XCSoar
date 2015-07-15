@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_IO_FILE_HANDLE_HPP
 #define XCSOAR_IO_FILE_HANDLE_HPP
 
+#include <algorithm>
+
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -61,10 +63,7 @@ public:
   FileHandle &operator=(const FileHandle &other) = delete;
 
   FileHandle &operator=(FileHandle &&other) {
-    if (IsOpen())
-      fclose(file);
-    file = other.file;
-    other.file = nullptr;
+    std::swap(file, other.file);
     return *this;
   }
 
