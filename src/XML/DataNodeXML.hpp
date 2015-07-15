@@ -30,9 +30,9 @@
  * ConstDataNode implementation for XML files
  */
 class ConstDataNodeXML final : public ConstDataNode {
-  const XMLNode node;
+  const XMLNode &node;
 
-protected:
+public:
   /**
    * Construct a node from an XMLNode
    *
@@ -42,19 +42,6 @@ protected:
    */
   explicit ConstDataNodeXML(const XMLNode &_node)
     :node(_node) {}
-
-  explicit ConstDataNodeXML(const XMLNode &&_node)
-    :node(std::move(_node)) {}
-
-public:
-  /**
-   * Create a ConstDataNode tree from an XML file
-   *
-   * @param path Path to file to load
-   *
-   * @return Root node (or nullptr on failure)
-   */
-  static ConstDataNode *Load(const TCHAR* path);
 
   /* virtual methods from ConstDataNode */
   const TCHAR *GetName() const override;
@@ -68,9 +55,9 @@ public:
  * WritableDataNode implementation for XML files
  */
 class WritableDataNodeXML final : public WritableDataNode {
-  XMLNode node;
+  XMLNode &node;
 
-protected:
+public:
   /**
    * Construct a node from an XMLNode
    *
@@ -78,20 +65,8 @@ protected:
    *
    * @return Initialised object
    */
-  explicit WritableDataNodeXML(const XMLNode &_node)
+  explicit WritableDataNodeXML(XMLNode &_node)
     :node(_node) {}
-
-  explicit WritableDataNodeXML(const XMLNode &&_node)
-    :node(std::move(_node)) {}
-
-public:
-  /**
-   * Create root node
-   *
-   * @param name Name of root node
-   */
-  explicit WritableDataNodeXML(const TCHAR *name)
-    :node(XMLNode::CreateRoot(name)) {}
 
   /**
    * Save tree canonically to file

@@ -27,16 +27,6 @@
 
 #include <memory>
 
-ConstDataNode *
-ConstDataNodeXML::Load(const TCHAR *path)
-{
-  std::unique_ptr<XMLNode> child(XML::ParseFile(path));
-  if (!child)
-    return nullptr;
-
-  return new ConstDataNodeXML(std::move(*child));
-}
-
 void
 WritableDataNodeXML::Serialise(TextWriter &writer) const
 {

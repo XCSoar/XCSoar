@@ -23,6 +23,7 @@
 #include "LoadFile.hpp"
 #include "Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
+#include "XML/Parser.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -33,19 +34,21 @@ LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints)
 {
   // Load root node
-  std::unique_ptr<ConstDataNode> root(ConstDataNodeXML::Load(path));
-  if (!root)
+  std::unique_ptr<XMLNode> xml_root(XML::ParseFile(path));
+  if (!xml_root)
     return nullptr;
 
+  const ConstDataNodeXML root(*xml_root);
+
   // Check if root node is a <Task> node
-  if (!StringIsEqual(root->GetName(), _T("Task")))
+  if (!StringIsEqual(root.GetName(), _T("Task")))
     return nullptr;
 
   // Create a blank task
   OrderedTask *task = new OrderedTask(task_behaviour);
 
   // Read the task from the XML file
-  LoadTask(*task, *root, waypoints);
+  LoadTask(*task, root, waypoints);
 
   // Return the parsed task
   return task;
