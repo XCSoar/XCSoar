@@ -47,9 +47,13 @@ protected:
     :node(std::move(_node)) {}
 
 public:
-  DataNodeXML(DataNodeXML &&other)
-    :node(std::move(other.node)) {
-  }
+  /**
+   * Create root node
+   *
+   * @param name Name of root node
+   */
+  explicit DataNodeXML(const TCHAR *name)
+    :node(XMLNode::CreateRoot(name)) {}
 
   /**
    * Create a DataNode tree from an XML file
@@ -59,18 +63,6 @@ public:
    * @return Root node (or nullptr on failure)
    */
   static DataNode *Load(const TCHAR* path);
-
-  /**
-   * Create root node
-   *
-   * @param node_name Name of root node
-   *
-   * @return Pointer to root node
-   */
-  gcc_pure
-  static DataNodeXML CreateRoot(const TCHAR *node_name) {
-    return DataNodeXML(XMLNode::CreateRoot(node_name));
-  }
 
   /**
    * Save tree canonically to file
