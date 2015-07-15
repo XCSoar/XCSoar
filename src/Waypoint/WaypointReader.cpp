@@ -33,7 +33,6 @@ Copyright_License {
 #include "IO/ZipSource.hpp"
 #include "IO/TextFile.hpp"
 #include "IO/LineReader.hpp"
-#include "Util/StringUtil.hpp"
 
 #include <string.h>
 
@@ -57,10 +56,6 @@ WaypointReader::Open(const TCHAR *filename, WaypointFactory factory)
 {
   delete reader;
   reader = nullptr;
-
-  // If filename is empty -> clear and return
-  if (StringIsEmpty(filename))
-    return;
 
   _tcscpy(path, filename);
 
