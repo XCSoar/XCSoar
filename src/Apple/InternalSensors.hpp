@@ -35,13 +35,13 @@ class InternalSensors {
 
   InternalSensors(unsigned int index);
 
-  void init();
-  void deinit();
+  void Init();
+  void Deinit();
 
  public:
   ~InternalSensors();
   gcc_malloc
-  static InternalSensors *create(unsigned int index);
+  static InternalSensors *Create(unsigned int index);
 };
 
 #endif

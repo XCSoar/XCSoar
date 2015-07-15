@@ -298,7 +298,7 @@ DeviceDescriptor::OpenInternalSensors()
     return true;
   }
 #elif defined(__APPLE__)
-  internal_sensors = InternalSensors::create(GetIndex());
+  internal_sensors = InternalSensors::Create(GetIndex());
   return (internal_sensors != nullptr);
 #endif
 #endif

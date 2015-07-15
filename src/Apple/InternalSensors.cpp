@@ -181,10 +181,10 @@ InternalSensors::InternalSensors(unsigned int index)
   private_data->index = index;
 
   if ([NSThread isMainThread]) {
-    init();
+    Init();
   } else {
     dispatch_sync(dispatch_get_main_queue(), ^{
-      init();
+      Init();
     });
   }
 }
@@ -192,16 +192,16 @@ InternalSensors::InternalSensors(unsigned int index)
 InternalSensors::~InternalSensors()
 {
   if ([NSThread isMainThread]) {
-    deinit();
+    Deinit();
   } else {
     dispatch_sync(dispatch_get_main_queue(), ^{
-      deinit();
+      Deinit();
     });
   }
   delete private_data;
 }
 
-void InternalSensors::init()
+void InternalSensors::Init()
 {
   private_data->locationManager = [[CLLocationManager alloc] init];
   private_data->locationDelegate = [[LocationDelegate alloc]
@@ -227,7 +227,7 @@ void InternalSensors::init()
 #endif
 }
 
-void InternalSensors::deinit()
+void InternalSensors::Deinit()
 {
   [private_data->locationManager stopUpdatingLocation];
   [private_data->locationManager release];
