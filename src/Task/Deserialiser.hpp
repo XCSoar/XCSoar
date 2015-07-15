@@ -40,7 +40,7 @@ struct OrderedTaskSettings;
  */
 class Deserialiser
 {
-  DataNode &node;
+  const DataNode &node;
 
   const Waypoints *waypoints;
 
@@ -53,7 +53,7 @@ public:
    * 
    * @return Initialised object
    */
-  Deserialiser(DataNode &_node, const Waypoints *_waypoints=nullptr)
+  Deserialiser(const DataNode &_node, const Waypoints *_waypoints=nullptr)
     :node(_node), waypoints(_waypoints) {}
 
   /** 
