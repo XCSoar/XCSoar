@@ -24,7 +24,6 @@
 #define DATANODE_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/NonCopyable.hpp"
 
 #include <list>
 
@@ -39,10 +38,15 @@ class RoughTimeSpan;
  * Class used as generic node for tree-structured data.
  * 
  */
-class DataNode : private NonCopyable
+class DataNode
 {
 public:
   typedef std::list<DataNode *> List;
+
+  DataNode() = default;
+
+  DataNode(const DataNode &) = delete;
+  DataNode &operator=(const DataNode &) = delete;
 
   virtual ~DataNode();
 
