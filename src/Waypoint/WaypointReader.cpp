@@ -36,6 +36,35 @@ Copyright_License {
 
 #include <string.h>
 
+static WaypointReaderBase *
+CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
+{
+  switch (DetermineWaypointFileType(path)) {
+  case WaypointFileType::UNKNOWN:
+    break;
+
+  case WaypointFileType::WINPILOT:
+    return new WaypointReaderWinPilot(factory);
+
+  case WaypointFileType::SEEYOU:
+    return new WaypointReaderSeeYou(factory);
+
+  case WaypointFileType::ZANDER:
+    return new WaypointReaderZander(factory);
+
+  case WaypointFileType::FS:
+    return new WaypointReaderFS(factory);
+
+  case WaypointFileType::OZI_EXPLORER:
+    return new WaypointReaderOzi(factory);
+
+  case WaypointFileType::COMPE_GPS:
+    return new WaypointReaderCompeGPS(factory);
+  }
+
+  return nullptr;
+}
+
 bool
 WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
 {
@@ -68,32 +97,5 @@ WaypointReader::Open(const TCHAR *filename, WaypointFactory factory)
       return;
   }
 
-  switch (DetermineWaypointFileType(filename)) {
-  case WaypointFileType::WINPILOT:
-    reader = new WaypointReaderWinPilot(factory);
-    break;
-
-  case WaypointFileType::SEEYOU:
-    reader = new WaypointReaderSeeYou(factory);
-    break;
-
-  case WaypointFileType::ZANDER:
-    reader = new WaypointReaderZander(factory);
-    break;
-
-  case WaypointFileType::FS:
-    reader = new WaypointReaderFS(factory);
-    break;
-
-  case WaypointFileType::OZI_EXPLORER:
-    reader = new WaypointReaderOzi(factory);
-    break;
-
-  case WaypointFileType::COMPE_GPS:
-    reader = new WaypointReaderCompeGPS(factory);
-    break;
-
-  default:
-    break;
-  }
+  reader = CreateWaypointReader(filename, factory);
 }
