@@ -82,14 +82,14 @@ public:
   bool Save(const TCHAR* path);
 
   /* virtual methods from DataNode */
-  virtual const TCHAR *GetName() const;
-  virtual DataNode *AppendChild(const TCHAR *name);
-  virtual DataNode *GetChildNamed(const TCHAR *name) const;
-  virtual List ListChildren() const;
-  virtual List ListChildrenNamed(const TCHAR *name) const;
-  virtual void Serialise(TextWriter &writer) const;
-  virtual void SetAttribute(const TCHAR *name, const TCHAR *value);
-  virtual const TCHAR *GetAttribute(const TCHAR *name) const;
+  const TCHAR *GetName() const override;
+  DataNode *AppendChild(const TCHAR *name) override;
+  DataNode *GetChildNamed(const TCHAR *name) const override;
+  List ListChildren() const override;
+  List ListChildrenNamed(const TCHAR *name) const override;
+  void Serialise(TextWriter &writer) const override;
+  void SetAttribute(const TCHAR *name, const TCHAR *value) override;
+  const TCHAR *GetAttribute(const TCHAR *name) const override;
 };
 
 #endif
