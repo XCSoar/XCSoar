@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef WAYPOINT_FILE_TYPE_HPP
 #define WAYPOINT_FILE_TYPE_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 #include <tchar.h>
 
@@ -37,6 +39,7 @@ enum class WaypointFileType: uint8_t {
   COMPE_GPS,
 };
 
+gcc_pure
 WaypointFileType DetermineWaypointFileType(const TCHAR *path);
 
 #endif
