@@ -24,12 +24,12 @@
 
 #include <tchar.h>
 
-class DataNode;
+class ConstDataNode;
 class Waypoints;
 class OrderedTask;
 
 void
-LoadTask(OrderedTask &task, const DataNode &node,
+LoadTask(OrderedTask &task, const ConstDataNode &node,
          const Waypoints *waypoints=nullptr);
 
 #endif

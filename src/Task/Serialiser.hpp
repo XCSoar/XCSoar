@@ -22,10 +22,10 @@
 #ifndef SERIALISER_HPP
 #define SERIALISER_HPP
 
-class DataNode;
+class WritableDataNode;
 class OrderedTask;
 
 void
-SaveTask(DataNode &node, const OrderedTask &task);
+SaveTask(WritableDataNode &node, const OrderedTask &task);
 
 #endif

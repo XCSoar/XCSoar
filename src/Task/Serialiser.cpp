@@ -65,26 +65,26 @@ GetName(const OrderedTaskPoint &tp, bool mode_optional_start)
 }
 
 static void
-Serialise(DataNode &node, const GeoPoint &data)
+Serialise(WritableDataNode &node, const GeoPoint &data)
 {
   node.SetAttribute(_T("longitude"), data.longitude);
   node.SetAttribute(_T("latitude"), data.latitude);
 }
 
 static void
-Serialise(DataNode &node, const Waypoint &data)
+Serialise(WritableDataNode &node, const Waypoint &data)
 {
   node.SetAttribute(_T("name"), data.name.c_str());
   node.SetAttribute(_T("id"), data.id);
   node.SetAttribute(_T("comment"), data.comment.c_str());
   node.SetAttribute(_T("altitude"), data.elevation);
 
-  std::unique_ptr<DataNode> child(node.AppendChild(_T("Location")));
+  std::unique_ptr<WritableDataNode> child(node.AppendChild(_T("Location")));
   Serialise(*child, data.location);
 }
 
 static void
-Visit(DataNode &node, const SectorZone &data)
+Visit(WritableDataNode &node, const SectorZone &data)
 {
   node.SetAttribute(_T("type"), _T("Sector"));
   node.SetAttribute(_T("radius"), data.GetRadius());
@@ -93,7 +93,7 @@ Visit(DataNode &node, const SectorZone &data)
 }
 
 static void
-Visit(DataNode &node, const SymmetricSectorZone &data)
+Visit(WritableDataNode &node, const SymmetricSectorZone &data)
 {
   node.SetAttribute(_T("type"), _T("SymmetricQuadrant"));
   node.SetAttribute(_T("radius"), data.GetRadius());
@@ -101,28 +101,28 @@ Visit(DataNode &node, const SymmetricSectorZone &data)
 }
 
 static void
-Visit(DataNode &node, const AnnularSectorZone &data)
+Visit(WritableDataNode &node, const AnnularSectorZone &data)
 {
   Visit(node, (const SectorZone &)data);
   node.SetAttribute(_T("inner_radius"), data.GetInnerRadius());
 }
 
 static void
-Visit(DataNode &node, const LineSectorZone &data)
+Visit(WritableDataNode &node, const LineSectorZone &data)
 {
   node.SetAttribute(_T("type"), _T("Line"));
   node.SetAttribute(_T("length"), data.GetLength());
 }
 
 static void
-Visit(DataNode &node, const CylinderZone &data)
+Visit(WritableDataNode &node, const CylinderZone &data)
 {
   node.SetAttribute(_T("type"), _T("Cylinder"));
   node.SetAttribute(_T("radius"), data.GetRadius());
 }
 
 static void
-Serialise(DataNode &node, const ObservationZonePoint &data)
+Serialise(WritableDataNode &node, const ObservationZonePoint &data)
 {
   switch (data.GetShape()) {
   case ObservationZone::Shape::FAI_SECTOR:
@@ -179,16 +179,17 @@ Serialise(DataNode &node, const ObservationZonePoint &data)
 } 
 
 static void
-Serialise(DataNode &node, const OrderedTaskPoint &data, const TCHAR* name)
+Serialise(WritableDataNode &node, const OrderedTaskPoint &data,
+          const TCHAR *name)
 {
   // do nothing
-  std::unique_ptr<DataNode> child(node.AppendChild(_T("Point")));
+  std::unique_ptr<WritableDataNode> child(node.AppendChild(_T("Point")));
   child->SetAttribute(_T("type"), name);
 
-  std::unique_ptr<DataNode> wchild(child->AppendChild(_T("Waypoint")));
+  std::unique_ptr<WritableDataNode> wchild(child->AppendChild(_T("Waypoint")));
   Serialise(*wchild, data.GetWaypoint());
 
-  std::unique_ptr<DataNode> ochild(child->AppendChild(_T("ObservationZone")));
+  std::unique_ptr<WritableDataNode> ochild(child->AppendChild(_T("ObservationZone")));
   Serialise(*ochild, data.GetObservationZone());
 
   if (data.GetType() == TaskPointType::AST) {
@@ -199,7 +200,8 @@ Serialise(DataNode &node, const OrderedTaskPoint &data, const TCHAR* name)
 }
 
 static void
-Serialise(DataNode &node, const OrderedTaskPoint &tp, bool mode_optional_start)
+Serialise(WritableDataNode &node, const OrderedTaskPoint &tp,
+          bool mode_optional_start)
 {
   const TCHAR *name = GetName(tp, mode_optional_start);
   assert(name != nullptr);
@@ -255,7 +257,7 @@ GetTaskFactoryType(TaskFactoryType type)
 }
 
 static void
-Serialise(DataNode &node, const OrderedTaskSettings &data)
+Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
 {
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.SetAttribute(_T("start_requires_arm"),
@@ -276,7 +278,7 @@ Serialise(DataNode &node, const OrderedTaskSettings &data)
 }
 
 void
-SaveTask(DataNode &node, const OrderedTask &task)
+SaveTask(WritableDataNode &node, const OrderedTask &task)
 {
   node.SetAttribute(_T("type"), GetTaskFactoryType(task.GetFactoryType()));
   Serialise(node, task.GetOrderedTaskSettings());

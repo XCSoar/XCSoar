@@ -138,7 +138,7 @@ ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 bool 
 ProtectedTaskManager::TaskSave(const TCHAR* path, const OrderedTask& task)
 {
-  DataNodeXML root(_T("Task"));
+  WritableDataNodeXML root(_T("Task"));
   SaveTask(root, task);
 
   return root.Save(path);

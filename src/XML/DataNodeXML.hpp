@@ -27,9 +27,47 @@
 #include "XML/Node.hpp"
 
 /**
- * DataNode implementation for XML files
+ * ConstDataNode implementation for XML files
  */
-class DataNodeXML final : public DataNode {
+class ConstDataNodeXML final : public ConstDataNode {
+  const XMLNode node;
+
+protected:
+  /**
+   * Construct a node from an XMLNode
+   *
+   * @param the_node XML node reflecting this node
+   *
+   * @return Initialised object
+   */
+  explicit ConstDataNodeXML(const XMLNode &_node)
+    :node(_node) {}
+
+  explicit ConstDataNodeXML(const XMLNode &&_node)
+    :node(std::move(_node)) {}
+
+public:
+  /**
+   * Create a ConstDataNode tree from an XML file
+   *
+   * @param path Path to file to load
+   *
+   * @return Root node (or nullptr on failure)
+   */
+  static ConstDataNode *Load(const TCHAR* path);
+
+  /* virtual methods from ConstDataNode */
+  const TCHAR *GetName() const override;
+  ConstDataNode *GetChildNamed(const TCHAR *name) const override;
+  List ListChildren() const override;
+  List ListChildrenNamed(const TCHAR *name) const override;
+  const TCHAR *GetAttribute(const TCHAR *name) const override;
+};
+
+/**
+ * WritableDataNode implementation for XML files
+ */
+class WritableDataNodeXML final : public WritableDataNode {
   XMLNode node;
 
 protected:
@@ -40,10 +78,10 @@ protected:
    *
    * @return Initialised object
    */
-  explicit DataNodeXML(const XMLNode &_node)
+  explicit WritableDataNodeXML(const XMLNode &_node)
     :node(_node) {}
 
-  explicit DataNodeXML(const XMLNode &&_node)
+  explicit WritableDataNodeXML(const XMLNode &&_node)
     :node(std::move(_node)) {}
 
 public:
@@ -52,17 +90,8 @@ public:
    *
    * @param name Name of root node
    */
-  explicit DataNodeXML(const TCHAR *name)
+  explicit WritableDataNodeXML(const TCHAR *name)
     :node(XMLNode::CreateRoot(name)) {}
-
-  /**
-   * Create a DataNode tree from an XML file
-   *
-   * @param path Path to file to load
-   *
-   * @return Root node (or nullptr on failure)
-   */
-  static DataNode *Load(const TCHAR* path);
 
   /**
    * Save tree canonically to file
@@ -73,15 +102,10 @@ public:
    */
   bool Save(const TCHAR* path);
 
-  /* virtual methods from DataNode */
-  const TCHAR *GetName() const override;
-  DataNode *AppendChild(const TCHAR *name) override;
-  DataNode *GetChildNamed(const TCHAR *name) const override;
-  List ListChildren() const override;
-  List ListChildrenNamed(const TCHAR *name) const override;
+  /* virtual methods from WritableDataNode */
+  WritableDataNode *AppendChild(const TCHAR *name) override;
   void Serialise(TextWriter &writer) const override;
   void SetAttribute(const TCHAR *name, const TCHAR *value) override;
-  const TCHAR *GetAttribute(const TCHAR *name) const override;
 };
 
 #endif

@@ -27,77 +27,77 @@
 
 #include <memory>
 
-DataNode *
-DataNodeXML::Load(const TCHAR* path)
+ConstDataNode *
+ConstDataNodeXML::Load(const TCHAR *path)
 {
   std::unique_ptr<XMLNode> child(XML::ParseFile(path));
   if (!child)
     return nullptr;
 
-  return new DataNodeXML(std::move(*child));
+  return new ConstDataNodeXML(std::move(*child));
 }
 
 void
-DataNodeXML::Serialise(TextWriter &writer) const
+WritableDataNodeXML::Serialise(TextWriter &writer) const
 {
   node.Serialise(writer, true);
 }
 
 const TCHAR *
-DataNodeXML::GetName() const
+ConstDataNodeXML::GetName() const
 {
   return node.GetName();
 }
 
-DataNode*
-DataNodeXML::AppendChild(const TCHAR *name)
+WritableDataNode*
+WritableDataNodeXML::AppendChild(const TCHAR *name)
 {
-  return new DataNodeXML(node.AddChild(name, false));
+  return new WritableDataNodeXML(node.AddChild(name, false));
 }
 
-DataNode *
-DataNodeXML::GetChildNamed(const TCHAR *name) const
+ConstDataNode *
+ConstDataNodeXML::GetChildNamed(const TCHAR *name) const
 {
   const XMLNode *child = node.GetChildNode(name);
   if (child == nullptr)
     return nullptr;
 
-  return new DataNodeXML(*child);
+  return new ConstDataNodeXML(*child);
 }
 
-DataNode::List
-DataNodeXML::ListChildren() const
+ConstDataNode::List
+ConstDataNodeXML::ListChildren() const
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
-    list.push_back(new DataNodeXML(*i));
+    list.push_back(new ConstDataNodeXML(*i));
   return list;
 }
 
-DataNode::List
-DataNodeXML::ListChildrenNamed(const TCHAR *name) const
+ConstDataNode::List
+ConstDataNodeXML::ListChildrenNamed(const TCHAR *name) const
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
     if (StringIsEqualIgnoreCase(i->GetName(), name))
-      list.push_back(new DataNodeXML(*i));
+      list.push_back(new ConstDataNodeXML(*i));
   return list;
 }
 
 void
-DataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
+WritableDataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
 {
   node.AddAttribute(name, value);
 }
 
 const TCHAR *
-DataNodeXML::GetAttribute(const TCHAR *name) const
+ConstDataNodeXML::GetAttribute(const TCHAR *name) const
 {
   return node.GetAttribute(name);
 }
 
 bool
-DataNodeXML::Save(const TCHAR *path)
+WritableDataNodeXML::Save(const TCHAR *path)
 {
   /// @todo make xml writing portable (unicode etc)
   TextWriter writer(path);

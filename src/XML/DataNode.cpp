@@ -26,62 +26,12 @@
 #include "Util/NumberParser.hpp"
 #include "Time/RoughTime.hpp"
 
-DataNode::~DataNode()
+ConstDataNode::~ConstDataNode()
 {
-}
-
-void
-DataNode::SetAttribute(const TCHAR *name, Angle value)
-{
-  SetAttribute(name, value.Degrees());
-}
-
-void
-DataNode::SetAttribute(const TCHAR *name, fixed value)
-{
-  StaticString<48> buf;
-  buf.UnsafeFormat(_T("%g"), (double)value);
-  SetAttribute(name, buf);
-}
-
-void
-DataNode::SetAttribute(const TCHAR *name, int value)
-{
-  StaticString<24> buf;
-  buf.UnsafeFormat(_T("%d"), value);
-  SetAttribute(name, buf);
-}
-
-void
-DataNode::SetAttribute(const TCHAR *name, unsigned value)
-{
-  StaticString<24> buf;
-  buf.UnsafeFormat(_T("%d"), value);
-  SetAttribute(name, buf);
-}
-
-void
-DataNode::SetAttribute(const TCHAR *name, bool value)
-{
-  StaticString<4> buf;
-  buf.UnsafeFormat(_T("%d"), (int)value);
-  SetAttribute(name, buf);
-}
-
-void
-DataNode::SetAttribute(const TCHAR *name, RoughTime value)
-{
-  if (!value.IsValid())
-    /* no-op */
-    return;
-
-  StaticString<8> buffer;
-  buffer.UnsafeFormat(_T("%02u:%02u"), value.GetHour(), value.GetMinute());
-  SetAttribute(name, buffer);
 }
 
 bool
-DataNode::GetAttribute(const TCHAR *name, Angle &value) const
+ConstDataNode::GetAttribute(const TCHAR *name, Angle &value) const
 {
   fixed v;
   if (GetAttribute(name, v)) {
@@ -92,7 +42,7 @@ DataNode::GetAttribute(const TCHAR *name, Angle &value) const
 }
 
 bool
-DataNode::GetAttribute(const TCHAR *name, fixed &value) const
+ConstDataNode::GetAttribute(const TCHAR *name, fixed &value) const
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -103,7 +53,7 @@ DataNode::GetAttribute(const TCHAR *name, fixed &value) const
 }
 
 bool
-DataNode::GetAttribute(const TCHAR *name, int &value) const
+ConstDataNode::GetAttribute(const TCHAR *name, int &value) const
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -114,7 +64,7 @@ DataNode::GetAttribute(const TCHAR *name, int &value) const
 }
 
 bool
-DataNode::GetAttribute(const TCHAR *name, unsigned &value) const
+ConstDataNode::GetAttribute(const TCHAR *name, unsigned &value) const
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -125,7 +75,7 @@ DataNode::GetAttribute(const TCHAR *name, unsigned &value) const
 }
 
 bool
-DataNode::GetAttribute(const TCHAR *name, bool &value) const
+ConstDataNode::GetAttribute(const TCHAR *name, bool &value) const
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -136,7 +86,7 @@ DataNode::GetAttribute(const TCHAR *name, bool &value) const
 }
 
 RoughTime
-DataNode::GetAttributeRoughTime(const TCHAR *name) const
+ConstDataNode::GetAttributeRoughTime(const TCHAR *name) const
 {
   const TCHAR *p = GetAttribute(name);
   if (p == nullptr)
@@ -156,9 +106,63 @@ DataNode::GetAttributeRoughTime(const TCHAR *name) const
 }
 
 RoughTimeSpan
-DataNode::GetAttributeRoughTimeSpan(const TCHAR *start_name,
+ConstDataNode::GetAttributeRoughTimeSpan(const TCHAR *start_name,
                                     const TCHAR *end_name) const
 {
   return RoughTimeSpan(GetAttributeRoughTime(start_name),
                        GetAttributeRoughTime(end_name));
+}
+
+WritableDataNode::~WritableDataNode()
+{
+}
+
+void
+WritableDataNode::SetAttribute(const TCHAR *name, Angle value)
+{
+  SetAttribute(name, value.Degrees());
+}
+
+void
+WritableDataNode::SetAttribute(const TCHAR *name, fixed value)
+{
+  StaticString<48> buf;
+  buf.UnsafeFormat(_T("%g"), (double)value);
+  SetAttribute(name, buf);
+}
+
+void
+WritableDataNode::SetAttribute(const TCHAR *name, int value)
+{
+  StaticString<24> buf;
+  buf.UnsafeFormat(_T("%d"), value);
+  SetAttribute(name, buf);
+}
+
+void
+WritableDataNode::SetAttribute(const TCHAR *name, unsigned value)
+{
+  StaticString<24> buf;
+  buf.UnsafeFormat(_T("%d"), value);
+  SetAttribute(name, buf);
+}
+
+void
+WritableDataNode::SetAttribute(const TCHAR *name, bool value)
+{
+  StaticString<4> buf;
+  buf.UnsafeFormat(_T("%d"), (int)value);
+  SetAttribute(name, buf);
+}
+
+void
+WritableDataNode::SetAttribute(const TCHAR *name, RoughTime value)
+{
+  if (!value.IsValid())
+    /* no-op */
+    return;
+
+  StaticString<8> buffer;
+  buffer.UnsafeFormat(_T("%02u:%02u"), value.GetHour(), value.GetMinute());
+  SetAttribute(name, buffer);
 }

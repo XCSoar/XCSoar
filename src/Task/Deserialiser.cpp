@@ -37,16 +37,16 @@
 #include <memory>
 
 static void
-Deserialise(GeoPoint &data, const DataNode &node)
+Deserialise(GeoPoint &data, const ConstDataNode &node)
 {
   node.GetAttribute(_T("longitude"), data.longitude);
   node.GetAttribute(_T("latitude"), data.latitude);
 }
 
 static Waypoint *
-DeserialiseWaypoint(const DataNode &node, const Waypoints *waypoints)
+DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 {
-  std::unique_ptr<DataNode> loc_node(node.GetChildNamed(_T("Location")));
+  std::unique_ptr<ConstDataNode> loc_node(node.GetChildNamed(_T("Location")));
   if (!loc_node)
     return nullptr;
 
@@ -94,7 +94,7 @@ DeserialiseWaypoint(const DataNode &node, const Waypoints *waypoints)
 }
 
 static ObservationZonePoint *
-DeserialiseOZ(const Waypoint &wp, const DataNode &node, bool is_turnpoint)
+DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
   if (type == nullptr)
@@ -171,14 +171,14 @@ DeserialiseOZ(const Waypoint &wp, const DataNode &node, bool is_turnpoint)
 }
 
 static void
-DeserialiseTaskpoint(OrderedTask &data, const DataNode &node,
+DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
                      const Waypoints *waypoints)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
   if (type == nullptr)
     return;
 
-  std::unique_ptr<DataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
+  std::unique_ptr<ConstDataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
   if (!wp_node)
     return;
 
@@ -186,7 +186,7 @@ DeserialiseTaskpoint(OrderedTask &data, const DataNode &node,
   if (!wp)
     return;
 
-  std::unique_ptr<DataNode> oz_node(node.GetChildNamed(_T("ObservationZone")));
+  std::unique_ptr<ConstDataNode> oz_node(node.GetChildNamed(_T("ObservationZone")));
 
   AbstractTaskFactory &fact = data.GetFactory();
 
@@ -245,7 +245,7 @@ DeserialiseTaskpoint(OrderedTask &data, const DataNode &node,
 
 gcc_pure
 static AltitudeReference
-GetHeightRef(const DataNode &node, const TCHAR *nodename)
+GetHeightRef(const ConstDataNode &node, const TCHAR *nodename)
 {
   const TCHAR *type = node.GetAttribute(nodename);
   if (type != nullptr && StringIsEqual(type, _T("MSL")))
@@ -255,7 +255,7 @@ GetHeightRef(const DataNode &node, const TCHAR *nodename)
 }
 
 static void
-Deserialise(OrderedTaskSettings &data, const DataNode &node)
+Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
 {
   node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.GetAttribute(_T("start_requires_arm"),
@@ -276,7 +276,7 @@ Deserialise(OrderedTaskSettings &data, const DataNode &node)
 }
 
 static TaskFactoryType
-GetTaskFactoryType(const DataNode &node)
+GetTaskFactoryType(const ConstDataNode &node)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
   if (type == nullptr)
@@ -305,7 +305,7 @@ GetTaskFactoryType(const DataNode &node)
 }
 
 void
-LoadTask(OrderedTask &task, const DataNode &node,
+LoadTask(OrderedTask &task, const ConstDataNode &node,
          const Waypoints *waypoints)
 {
   task.Clear();
@@ -316,9 +316,9 @@ LoadTask(OrderedTask &task, const DataNode &node,
   Deserialise(beh, node);
   task.SetOrderedTaskSettings(beh);
 
-  const DataNode::List children = node.ListChildrenNamed(_T("Point"));
+  const auto children = node.ListChildrenNamed(_T("Point"));
   for (const auto &i : children) {
-    std::unique_ptr<DataNode> point_node(i);
+    std::unique_ptr<ConstDataNode> point_node(i);
     DeserialiseTaskpoint(task, *point_node, waypoints);
   }
 }

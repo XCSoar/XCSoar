@@ -37,7 +37,7 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   assert(index == 0);
 
   // Load root node
-  std::unique_ptr<DataNode> root(DataNodeXML::Load(path));
+  std::unique_ptr<ConstDataNode> root(ConstDataNodeXML::Load(path));
   if (!root)
     return nullptr;
 
