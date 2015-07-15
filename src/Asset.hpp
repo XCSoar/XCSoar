@@ -253,7 +253,7 @@ HasIOIOLib()
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons
  */
-#if defined(USE_CONSOLE) && !defined(KOBO) && !defined(USE_LIBINPUT)
+#if defined(USE_CONSOLE) && !defined(KOBO)
 gcc_pure
 bool
 HasPointer();
@@ -271,24 +271,36 @@ HasPointer()
  * Does this device have a touch screen?  This is useful to know for
  * sizing controls, as a touch screen may require bigger areas.
  */
+#ifdef USE_LIBINPUT
+gcc_pure
+bool
+HasTouchScreen();
+#else
 constexpr
 static inline bool
 HasTouchScreen()
 {
   return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo() || IsIOS();
 }
+#endif
 
 /**
  * Does this device have a keyboard device?
  * @return True if a keyboard is assumed for the hardware
  * that XCSoar is running on, False if the hardware has no keyboard
  */
+#ifdef USE_LIBINPUT
+gcc_pure
+bool
+HasKeyboard();
+#else
 constexpr
 static inline bool
 HasKeyboard()
 {
   return !IsEmbedded();
 }
+#endif
 
 /**
  * Does this device have a cursor keys?  These may be used to navigate

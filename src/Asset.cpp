@@ -189,12 +189,28 @@ ReadAssetNumber()
 #endif
 }
 
-#if defined(USE_CONSOLE) && !defined(KOBO) && !defined(USE_LIBINPUT)
+#if defined(USE_CONSOLE) && !defined(KOBO)
 
 bool
 HasPointer()
 {
   return event_queue->HasPointer();
+}
+
+#endif
+
+#ifdef USE_LIBINPUT
+
+bool
+HasTouchScreen()
+{
+  return event_queue->HasTouchScreen();
+}
+
+bool
+HasKeyboard()
+{
+  return event_queue->HasKeyboard();
 }
 
 #endif

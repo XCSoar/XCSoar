@@ -126,9 +126,19 @@ public:
   void SetMouseRotation(DisplayOrientation orientation) {
     input_queue.SetMouseRotation(orientation);
   }
+#endif
 
   bool HasPointer() const {
     return input_queue.HasPointer();
+  }
+
+#ifdef USE_LIBINPUT
+  bool HasTouchScreen() const {
+    return input_queue.HasTouchScreen();
+  }
+
+  bool HasKeyboard() const {
+    return input_queue.HasKeyboard();
   }
 #endif
 

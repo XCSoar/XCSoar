@@ -82,9 +82,23 @@ public:
   }
 
   void SetMouseRotation(DisplayOrientation orientation);
+#endif
 
   bool HasPointer() const {
+#ifdef USE_LIBINPUT
+    return libinput_handler.HasPointer();
+#else
     return merge_mouse.HasPointer();
+#endif
+  }
+
+#ifdef USE_LIBINPUT
+  bool HasTouchScreen() const {
+    return libinput_handler.HasTouchScreen();
+  }
+
+  bool HasKeyboard() const {
+    return libinput_handler.HasKeyboard();
   }
 #endif
 

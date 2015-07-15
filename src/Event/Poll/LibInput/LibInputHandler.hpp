@@ -53,6 +53,11 @@ class LibInputHandler final : private FileEventHandler {
   double x = -1.0, y = -1.0;
   unsigned width = 0, height = 0;
 
+  /**
+   * The number of pointer input devices, touch screens ans keyboards.
+   */
+  unsigned n_pointers = 0, n_touch_screens = 0, n_keyboards = 0;
+
 public:
   explicit LibInputHandler(IOLoop &_io_loop, EventQueue &_queue)
     :io_loop(_io_loop), queue(_queue) {}
@@ -84,6 +89,18 @@ public:
 
   unsigned GetY() const {
     return (unsigned) y;
+  }
+
+  bool HasPointer() const {
+    return n_pointers > 0;
+  }
+
+  bool HasTouchScreen() const {
+    return n_touch_screens > 0;
+  }
+
+  bool HasKeyboard() const {
+    return n_keyboards > 0;
   }
 
 private:

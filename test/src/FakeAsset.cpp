@@ -29,12 +29,28 @@ ModelType global_model_type = ModelType::GENERIC;
 
 #endif
 
-#if defined(USE_CONSOLE) && !defined(KOBO) && !defined(USE_LIBINPUT)
+#if defined(USE_CONSOLE) && !defined(KOBO)
 
 bool
 HasPointer()
 {
   return !IsAltair();
+}
+
+#endif
+
+#ifdef USE_LIBINPUT
+
+bool
+HasTouchScreen()
+{
+  return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo() || IsIOS();
+}
+
+bool
+HasKeyboard()
+{
+  return !IsEmbedded();
 }
 
 #endif
