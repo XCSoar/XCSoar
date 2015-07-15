@@ -178,11 +178,18 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
     {
       libinput_event_pointer *ptr_li_event =
         libinput_event_get_pointer_event(li_event);
+#ifdef LIBINPUT_LEGACY_API
+      double axis_value = libinput_event_pointer_get_axis_value(ptr_li_event);
+#else
       double axis_value =
-        libinput_event_pointer_get_axis_value(ptr_li_event);
-      Event event(Event::MOUSE_WHEEL, (unsigned) x, (unsigned) y);
-      event.param = unsigned((int) axis_value);
-      queue.Push(event);
+        libinput_event_pointer_get_axis_value(
+          ptr_li_event, LIBINPUT_POINTER_AXIS_SCROLL_VERTICAL);
+#endif
+      if (0 != axis_value) {
+        Event event(Event::MOUSE_WHEEL, (unsigned) x, (unsigned) y);
+        event.param = unsigned((int) axis_value);
+        queue.Push(event);
+      }
     }
     break;
   case LIBINPUT_EVENT_TOUCH_DOWN:
