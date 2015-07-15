@@ -99,7 +99,7 @@ public:
    *
    * @return Initialised object
    */
-  OrderedTask(const TaskBehaviour &tb);
+  explicit OrderedTask(const TaskBehaviour &tb);
   ~OrderedTask();
 
   /**
