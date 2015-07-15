@@ -139,8 +139,7 @@ bool
 ProtectedTaskManager::TaskSave(const TCHAR* path, const OrderedTask& task)
 {
   DataNodeXML root(_T("Task"));
-  Serialiser tser(root);
-  tser.Serialise(task);
+  SaveTask(root, task);
 
   return root.Save(path);
 }
