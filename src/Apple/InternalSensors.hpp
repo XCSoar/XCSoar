@@ -30,11 +30,8 @@ Copyright_License {
 
 @interface LocationDelegate : NSObject <CLLocationManagerDelegate>
 {
- @private
-  unsigned int index;
-
- @private
-  NSCalendar *gregorian_calendar;
+  @private unsigned int index;
+  @private NSCalendar *gregorian_calendar;
 }
 
 -(instancetype) init __attribute__((unavailable()));
@@ -44,7 +41,7 @@ Copyright_License {
 
 // InternalSensors implementation which uses the Apple CoreLocation API
 class InternalSensors {
- private:
+private:
   unsigned int index;
   CLLocationManager *location_manager;
   LocationDelegate *location_delegate;
@@ -54,7 +51,7 @@ class InternalSensors {
   void Init();
   void Deinit();
 
- public:
+public:
   ~InternalSensors();
   gcc_malloc
   static InternalSensors *Create(unsigned int index);

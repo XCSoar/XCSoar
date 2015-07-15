@@ -34,13 +34,13 @@ Copyright_License {
 @implementation LocationDelegate
 -(instancetype) init: (unsigned int) index_
 {
-    self = [super init];
-    if (self) {
-        self->index = index_;
-        gregorian_calendar = [[NSCalendar alloc]
-            initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    self->index = index_;
+    gregorian_calendar = [[NSCalendar alloc]
+      initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+  }
+  return self;
 }
 
 -(void) dealloc
