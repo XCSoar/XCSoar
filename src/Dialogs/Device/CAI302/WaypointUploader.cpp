@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "WaypointUploader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Waypoint/WaypointReader.hpp"
+#include "Waypoint/Factory.hpp"
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
@@ -33,7 +35,9 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
   Waypoints waypoints;
 
   env.SetText(_("Loading Waypoints..."));
-  if (!reader.Parse(waypoints, env)) {
+
+  if (!ReadWaypointFile(path, waypoints, WaypointFactory(WaypointOrigin::NONE),
+                        env)) {
     env.SetErrorMessage(_("Failed to load file."));
     return;
   }

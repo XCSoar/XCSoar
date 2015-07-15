@@ -25,75 +25,14 @@ Copyright_License {
 #ifndef WAYPOINT_READER_HPP
 #define WAYPOINT_READER_HPP
 
-#include "WaypointReaderBase.hpp"
-
-#include <algorithm>
 #include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
 
 class Waypoints;
-class RasterTerrain;
+class WaypointFactory;
 class OperationEnvironment;
 
-class WaypointReader
-{
-  /** The internal reader implementation depending on the file format */
-  WaypointReaderBase* reader;
-
-  TCHAR path[MAX_PATH];
-
-public:
-  /** Non-initializing constructor */
-  WaypointReader():reader(nullptr) {}
-
-  /** Initializing constructor. Loads the specified waypoint file */
-  WaypointReader(const TCHAR *filename, WaypointFactory factory)
-    :reader(nullptr) {
-    Open(filename, factory);
-  }
-
-  WaypointReader(const WaypointReader &other) = delete;
-
-  WaypointReader(WaypointReader &&other)
-    :reader(other.reader) {
-    other.reader = nullptr;
-  }
-
-  /** Destroys the internal reader */
-  ~WaypointReader() {
-    delete reader;
-  }
-
-  WaypointReader &operator=(const WaypointReader &other) = delete;
-
-  WaypointReader &operator=(WaypointReader &&other) {
-    std::swap(reader, other.reader);
-    return *this;
-  }
-
-  /**
-   * Opens the given file, tries to guess the file format and
-   * initializes the internal reader
-   * @param filename The file that should be opened
-   * @param filenum The filenum parameter that is saved into the parsed waypoints
-   */
-  void Open(const TCHAR *filename, WaypointFactory factory);
-
-  /**
-   * Parses the waypoint file into the given Waypoints instance
-   * @param way_points A Waypoints instance that will hold the parsed waypoints
-   * @return True if the file was parsed successfully
-   */
-  bool Parse(Waypoints &way_points, OperationEnvironment &operation);
-
-  /**
-   * Returns whether there is a valid internal reader
-   * that can be used for parsing the waypoint file.
-   * @return True if Parse() can be used
-   */
-  bool Error() const {
-    return reader == nullptr;
-  }
-};
+bool
+ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation);
 
 #endif

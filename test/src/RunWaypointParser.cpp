@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Waypoint/WaypointReader.hpp"
+#include "Waypoint/Factory.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "OS/Args.hpp"
@@ -48,15 +49,11 @@ int main(int argc, char **argv)
 
   Waypoints way_points;
 
-  WaypointReader parser(path.c_str(), WaypointFactory(WaypointOrigin::NONE));
-  if (parser.Error()) {
-    fprintf(stderr, "WayPointParser::SetFile() has failed\n");
-    return EXIT_FAILURE;
-  }
-
   NullOperationEnvironment operation;
-  if (!parser.Parse(way_points, operation)) {
-    fprintf(stderr, "WayPointParser::Parse() has failed\n");
+  if (!ReadWaypointFile(path.c_str(), way_points,
+                        WaypointFactory(WaypointOrigin::NONE),
+                        operation)) {
+    fprintf(stderr, "ReadWaypointFile() has failed\n");
     return EXIT_FAILURE;
   }
 

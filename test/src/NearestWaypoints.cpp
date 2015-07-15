@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Waypoint/WaypointReader.hpp"
+#include "Waypoint/Factory.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "OS/ConvertPathName.hpp"
@@ -36,15 +37,11 @@ static bool
 LoadWaypoints(const char *_path, Waypoints &waypoints)
 {
   PathName path(_path);
-  WaypointReader parser(path, WaypointFactory(WaypointOrigin::NONE));
-  if (parser.Error()) {
-    fprintf(stderr, "WayPointParser::SetFile() has failed\n");
-    return false;
-  }
 
   NullOperationEnvironment operation;
-  if (!parser.Parse(waypoints, operation)) {
-    fprintf(stderr, "WayPointParser::Parse() has failed\n");
+  if (!ReadWaypointFile(path, waypoints, WaypointFactory(WaypointOrigin::NONE),
+                        operation)) {
+    fprintf(stderr, "ReadWaypointFile() failed\n");
     return false;
   }
 

@@ -66,36 +66,22 @@ CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
 }
 
 bool
-WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
+ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation)
 {
+  auto *reader = CreateWaypointReader(path, factory);
   if (reader == nullptr)
     return false;
 
-  TLineReader *line_reader = OpenTextFile(path, Charset::AUTO);
-  if (line_reader == nullptr)
-    return false;
+  bool success = false;
 
-  reader->Parse(way_points, *line_reader, operation);
-  delete line_reader;
-  return true;
-}
-
-void
-WaypointReader::Open(const TCHAR *filename, WaypointFactory factory)
-{
-  delete reader;
-  reader = nullptr;
-
-  _tcscpy(path, filename);
-
-  // Test if file exists
-  if (!File::Exists(filename)) {
-    // Test if file exists in zip archive
-    ZipSource zip(filename);
-    if (zip.error())
-      // If the file doesn't exist return
-      return;
+  auto *line_reader = OpenTextFile(path, Charset::AUTO);
+  if (line_reader != nullptr) {
+    reader->Parse(way_points, *line_reader, operation);
+    delete line_reader;
+    success = true;
   }
 
-  reader = CreateWaypointReader(filename, factory);
+  delete reader;
+  return success;
 }

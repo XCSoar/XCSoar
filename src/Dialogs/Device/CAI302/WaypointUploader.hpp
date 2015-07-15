@@ -25,21 +25,18 @@ Copyright_License {
 #define XCSOAR_CAI302_WAYPOINT_UPLOADER_HPP
 
 #include "Job/Job.hpp"
-#include "Waypoint/WaypointReader.hpp"
+
+#include <tchar.h>
 
 class CAI302Device;
 
 class CAI302WaypointUploader : public Job {
-  WaypointReader reader;
+  const TCHAR *const path;
   CAI302Device &device;
 
 public:
-  CAI302WaypointUploader(const TCHAR *path, CAI302Device &_device)
-    :reader(path, WaypointFactory(WaypointOrigin::NONE)), device(_device) {}
-
-  bool Error() const {
-    return reader.Error();
-  }
+  CAI302WaypointUploader(const TCHAR *_path, CAI302Device &_device)
+    :path(_path), device(_device) {}
 
   virtual void Run(OperationEnvironment &env);
 };

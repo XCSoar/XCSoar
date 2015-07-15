@@ -181,14 +181,10 @@ typedef std::vector<Waypoint> wp_vector;
 static bool
 TestWaypointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 {
-  WaypointReader f(filename, WaypointFactory(WaypointOrigin::NONE));
-  if (!ok1(!f.Error())) {
-    skip(3, 0, "opening waypoint file failed");
-    return false;
-  }
-
   NullOperationEnvironment operation;
-  if(!ok1(f.Parse(way_points, operation))) {
+  if (!ok1(ReadWaypointFile(filename, way_points,
+                            WaypointFactory(WaypointOrigin::NONE),
+                            operation))) {
     skip(2, 0, "parsing waypoint file failed");
     return false;
   }
@@ -530,7 +526,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(315);
+  plan_tests(307);
 
   TestExtractParameters();
 

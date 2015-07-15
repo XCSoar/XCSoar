@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "WaypointGlue.hpp"
+#include "Factory.hpp"
 #include "CupWriter.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
@@ -41,15 +42,9 @@ LoadWaypointFile(Waypoints &waypoints, const TCHAR *path,
                  WaypointOrigin origin,
                  const RasterTerrain *terrain, OperationEnvironment &operation)
 {
-  WaypointReader reader(path, WaypointFactory(origin, terrain));
-  if (reader.Error()) {
-    LogFormat(_T("Failed to open waypoint file: %s"), path);
-    return false;
-  }
-
-  // parse the file
-  if (!reader.Parse(waypoints, operation)) {
-    LogFormat(_T("Failed to parse waypoint file: %s"), path);
+  if (!ReadWaypointFile(path, waypoints, WaypointFactory(origin, terrain),
+                        operation)) {
+    LogFormat(_T("Failed to read waypoint file: %s"), path);
     return false;
   }
 
