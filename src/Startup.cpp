@@ -81,6 +81,7 @@ Copyright_License {
 
 #include "Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/DefaultTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "PageActions.hpp"
@@ -137,10 +138,8 @@ AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  const TaskFactoryType task_type_default =
-    CommonInterface::GetComputerSettings().task.task_type_default;
-  OrderedTask *defaultTask =
-    protected_task_manager->TaskCreateDefault(&way_points, task_type_default);
+  OrderedTask *defaultTask = LoadDefaultTask(CommonInterface::GetComputerSettings().task,
+                                             &way_points);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;

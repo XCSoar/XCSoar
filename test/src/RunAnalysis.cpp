@@ -50,6 +50,7 @@ Copyright_License {
 #include "Computer/BasicComputer.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"
+#include "Task/DefaultTask.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Task/TaskFile.hpp"
@@ -171,10 +172,8 @@ Main()
 
   LoadFiles(airspace_database);
 
-  const TaskFactoryType task_type_default =
-    blackboard.GetComputerSettings().task.task_type_default;
-  OrderedTask *task =
-    protected_task_manager.TaskCreateDefault(&way_points, task_type_default);
+  OrderedTask *task = LoadDefaultTask(blackboard.GetComputerSettings().task,
+                                      &way_points);
   if (task != nullptr) {
     protected_task_manager.TaskCommit(*task);
     delete task;

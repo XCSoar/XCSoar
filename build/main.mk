@@ -161,6 +161,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
+	$(SRC)/Task/DefaultTask.cpp \
 	$(SRC)/Task/MapTaskManager.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \

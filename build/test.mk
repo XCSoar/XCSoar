@@ -2160,6 +2160,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/UIUtil/GestureManager.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
+	$(SRC)/Task/DefaultTask.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \

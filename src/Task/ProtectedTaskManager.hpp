@@ -57,8 +57,6 @@ protected:
   const TaskBehaviour &task_behaviour;
   ReachIntersectionTest intersection_test;
 
-  static const TCHAR default_task_path[];
-
 public:
   ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb);
 
@@ -93,19 +91,6 @@ public:
 
   bool TaskSaveDefault();
 
-  /**
-   * Creates an ordered task based on the Default.tsk file
-   * Consumer's responsibility to delete task
-   *
-   * @param waypoints waypoint structure
-   * @param failfactory default task type used if Default.tsk is invalid
-   * @return OrderedTask from Default.tsk file or if Default.tsk is invalid
-   * or non-existent, returns empty task with defaults set by
-   * config task defaults
-   */
-  gcc_malloc
-  OrderedTask* TaskCreateDefault(const Waypoints *waypoints,
-                                 TaskFactoryType factory);
 
   bool TaskSave(const TCHAR* path, const OrderedTask& task);
 

@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "ProtectedTaskManager.hpp"
+#include "DefaultTask.hpp"
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
-#include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -151,24 +151,6 @@ ProtectedTaskManager::TaskSave(const TCHAR* path)
   bool retval = TaskSave(path, *task);
   delete task;
   return retval;
-}
-
-const TCHAR ProtectedTaskManager::default_task_path[] = _T("Default.tsk");
-
-
-OrderedTask*
-ProtectedTaskManager::TaskCreateDefault(const Waypoints *waypoints,
-                                          TaskFactoryType factoryfail)
-{
-  TCHAR path[MAX_PATH];
-  LocalPath(path, default_task_path);
-  OrderedTask *task = TaskFile::GetTask(path, task_behaviour, waypoints, 0);
-  if (!task) {
-    task = new OrderedTask(task_behaviour);
-    assert(task);
-    task->SetFactory(factoryfail);
-  }
-  return task;
 }
 
 bool 
