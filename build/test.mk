@@ -1789,13 +1789,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
-	$(SRC)/Task/Serialiser.cpp \
-	$(SRC)/Task/Deserialiser.cpp \
-	$(SRC)/Task/TaskFile.cpp \
-	$(SRC)/Task/TaskFileXCSoar.cpp \
-	$(SRC)/Task/TaskFileIGC.cpp \
-	$(SRC)/Task/TaskFileSeeYou.cpp \
-	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Topography/TopographyFile.cpp \
