@@ -91,9 +91,6 @@ public:
 
   bool TaskSaveDefault();
 
-
-  bool TaskSave(const TCHAR* path, const OrderedTask& task);
-
   /** Reset the tasks (as if never flown) */
   void Reset();
 

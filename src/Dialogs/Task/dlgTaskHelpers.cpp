@@ -28,7 +28,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Task/ValidationErrorStrings.hpp"
-#include "Task/ProtectedTaskManager.hpp"
+#include "Task/SaveFile.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
@@ -37,7 +37,6 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Points/Type.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
-#include "Components.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 
@@ -242,8 +241,6 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 bool
 OrderedTaskSave(OrderedTask &task)
 {
-  assert(protected_task_manager != nullptr);
-
   TCHAR fname[69] = _T("");
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
@@ -255,6 +252,6 @@ OrderedTaskSave(OrderedTask &task)
   _tcscat(fname, _T(".tsk"));
   task.SetName(StaticString<64>(fname));
   LocalPath(path, _T("tasks"), fname);
-  protected_task_manager->TaskSave(path, task);
+  SaveTask(path, task);
   return true;
 }

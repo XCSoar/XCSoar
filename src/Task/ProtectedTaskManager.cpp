@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ProtectedTaskManager.hpp"
 #include "DefaultTask.hpp"
-#include "Serialiser.hpp"
+#include "SaveFile.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
@@ -136,20 +136,10 @@ ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 }
 
 bool 
-ProtectedTaskManager::TaskSave(const TCHAR* path, const OrderedTask& task)
-{
-  XMLNode root_node = XMLNode::CreateRoot(_T("Task"));
-  WritableDataNodeXML root(root_node);
-  SaveTask(root, task);
-
-  return root.Save(path);
-}
-
-bool 
 ProtectedTaskManager::TaskSave(const TCHAR* path)
 {
   OrderedTask* task = TaskClone();
-  bool retval = TaskSave(path, *task);
+  bool retval = SaveTask(path, *task);
   delete task;
   return retval;
 }
