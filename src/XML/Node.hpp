@@ -41,9 +41,7 @@
 
 class TextWriter;
 
-struct XMLNode {
-//  friend class XMLNode;
-protected:
+class XMLNode {
   /**
    * To allow shallow copy and "intelligent/smart" pointers (automatic
    * delete).

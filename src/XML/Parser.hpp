@@ -33,7 +33,7 @@
 
 #include <tchar.h>
 
-struct XMLNode;
+class XMLNode;
 
 namespace XML {
   /** Enumeration for XML parse errors. */
