@@ -23,13 +23,22 @@
 #include "SaveFile.hpp"
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
+#include "IO/TextWriter.hpp"
 
 bool
 SaveTask(const TCHAR *path, const OrderedTask &task)
 {
   XMLNode root_node = XMLNode::CreateRoot(_T("Task"));
-  WritableDataNodeXML root(root_node);
-  SaveTask(root, task);
 
-  return root.Save(path);
+  {
+    WritableDataNodeXML root(root_node);
+    SaveTask(root, task);
+  }
+
+  TextWriter writer(path);
+  if (!writer.IsOpen())
+    return false;
+
+  root_node.Serialise(writer, true);
+  return true;
 }

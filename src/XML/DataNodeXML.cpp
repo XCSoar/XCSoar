@@ -21,11 +21,8 @@
  */
 
 #include "DataNodeXML.hpp"
-#include "IO/TextWriter.hpp"
 #include "XML/Parser.hpp"
 #include "Util/StringAPI.hpp"
-
-#include <memory>
 
 const TCHAR *
 ConstDataNodeXML::GetName() const
@@ -78,16 +75,4 @@ const TCHAR *
 ConstDataNodeXML::GetAttribute(const TCHAR *name) const
 {
   return node.GetAttribute(name);
-}
-
-bool
-WritableDataNodeXML::Save(const TCHAR *path)
-{
-  /// @todo make xml writing portable (unicode etc)
-  TextWriter writer(path);
-  if (!writer.IsOpen())
-    return false;
-
-  node.Serialise(writer, true);
-  return true;
 }
