@@ -237,7 +237,13 @@ public:
   XMLNode &operator=(const XMLNode& A);
 
   XMLNode &operator=(XMLNode &&other) {
-    std::swap(d, other.d);
+    Data *old = d;
+    d = other.d;
+    other.d = nullptr;
+
+    if (old != nullptr)
+      old->Unref();
+
     return *this;
   }
 
