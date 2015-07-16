@@ -31,24 +31,6 @@
 
 #include <assert.h>
 
-void
-XMLNode::Data::Ref()
-{
-  assert(ref_count > 0);
-
-  ++ref_count;
-}
-
-void
-XMLNode::Data::Unref()
-{
-  assert(ref_count > 0);
-
-  --ref_count;
-  if (ref_count == 0)
-    delete this;
-}
-
 XMLNode
 XMLNode::CreateRoot(const TCHAR *name)
 {

@@ -77,24 +77,13 @@ class XMLNode {
     /** Array of attributes */
     std::forward_list<Attribute> attributes;
 
-    unsigned ref_count;
-
     Data(const TCHAR *_name, bool _is_declaration)
       :name(_name),
-       is_declaration(_is_declaration),
-       ref_count(1) {}
+       is_declaration(_is_declaration) {}
 
     Data(const TCHAR *_name, size_t name_length, bool _is_declaration)
       :name(_name, name_length),
-       is_declaration(_is_declaration),
-       ref_count(1) {}
-
-    ~Data() {
-      assert(ref_count == 0);
-    }
-
-    void Ref();
-    void Unref();
+       is_declaration(_is_declaration) {}
 
     bool HasChildren() const {
       return !children.empty() || !text.empty();
@@ -215,8 +204,7 @@ public:
 
   // to allow shallow copy:
   ~XMLNode() {
-    if (d != nullptr)
-      d->Unref();
+    delete d;
   }
 
   XMLNode(const XMLNode &A) = delete;
@@ -236,8 +224,7 @@ public:
     d = other.d;
     other.d = nullptr;
 
-    if (old != nullptr)
-      old->Unref();
+    delete old;
 
     return *this;
   }
