@@ -1568,7 +1568,6 @@ RUN_TASK_SOURCES = \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \
-	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/LoadFile.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
@@ -2152,9 +2151,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/UIUtil/GestureManager.cpp \
-	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
-	$(SRC)/Task/SaveFile.cpp \
 	$(SRC)/Task/LoadFile.cpp \
 	$(SRC)/Task/DefaultTask.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
@@ -2164,7 +2161,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \
-	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
@@ -2203,7 +2199,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
-	$(SRC)/XML/Writer.cpp \
 	$(SRC)/XML/DataNode.cpp \
 	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \

@@ -22,16 +22,10 @@ Copyright_License {
 */
 
 #include "ProtectedTaskManager.hpp"
-#include "DefaultTask.hpp"
-#include "SaveFile.hpp"
-#include "XML/DataNodeXML.hpp"
-#include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Route/ReachResult.hpp"
-
-#include <windef.h> // for MAX_PATH
 
 ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
                                            const TaskBehaviour &tb)
@@ -133,23 +127,6 @@ ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 {
   ExclusiveLease lease(*this);
   return lease->Commit(that);
-}
-
-bool 
-ProtectedTaskManager::TaskSave(const TCHAR* path)
-{
-  OrderedTask* task = TaskClone();
-  bool retval = SaveTask(path, *task);
-  delete task;
-  return retval;
-}
-
-bool 
-ProtectedTaskManager::TaskSaveDefault()
-{
-  TCHAR path[MAX_PATH];
-  LocalPath(path, default_task_path);
-  return TaskSave(path);
 }
 
 void 
