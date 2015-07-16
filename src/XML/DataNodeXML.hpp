@@ -79,7 +79,6 @@ public:
 
   /* virtual methods from WritableDataNode */
   WritableDataNode *AppendChild(const TCHAR *name) override;
-  void Serialise(TextWriter &writer) const override;
   void SetAttribute(const TCHAR *name, const TCHAR *value) override;
 };
 

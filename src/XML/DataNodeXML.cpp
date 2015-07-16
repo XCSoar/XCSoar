@@ -27,12 +27,6 @@
 
 #include <memory>
 
-void
-WritableDataNodeXML::Serialise(TextWriter &writer) const
-{
-  node.Serialise(writer, true);
-}
-
 const TCHAR *
 ConstDataNodeXML::GetName() const
 {
@@ -94,6 +88,6 @@ WritableDataNodeXML::Save(const TCHAR *path)
   if (!writer.IsOpen())
     return false;
 
-  Serialise(writer);
+  node.Serialise(writer, true);
   return true;
 }

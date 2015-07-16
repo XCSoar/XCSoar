@@ -159,14 +159,6 @@ public:
   virtual WritableDataNode *AppendChild(const TCHAR *name) = 0;
 
   /**
-   * Writes the canonical serialised form of this node to a
-   * TextWriter.
-   *
-   * @param writer the destination file
-   */
-  virtual void Serialise(TextWriter &writer) const = 0;
-
-  /**
    * Set named attribute value
    *
    * @param name Name of attribute
