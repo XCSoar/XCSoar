@@ -21,7 +21,7 @@
 */
 
 #include "DefaultTask.hpp"
-#include "TaskFile.hpp"
+#include "LoadFile.hpp"
 #include "LocalPath.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 
@@ -33,7 +33,7 @@ LoadDefaultTask(const TaskBehaviour &task_behaviour,
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  OrderedTask *task = TaskFile::GetTask(path, task_behaviour, waypoints, 0);
+  OrderedTask *task = LoadTask(path, task_behaviour, waypoints);
   if (!task) {
     task = new OrderedTask(task_behaviour);
     assert(task);
