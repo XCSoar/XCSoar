@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2015 The XCSoar Project
@@ -21,16 +20,17 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskFileXCSoar.hpp"
-#include "LoadFile.hpp"
+#ifndef TASK_LOAD_FILE_HPP
+#define TASK_LOAD_FILE_HPP
 
-#include <assert.h>
+#include <tchar.h>
 
-OrderedTask* 
-TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
-                        const Waypoints *waypoints, unsigned index) const
-{
-  assert(index == 0);
+class OrderedTask;
+class Waypoints;
+struct TaskBehaviour;
 
-  return LoadTask(path, task_behaviour, waypoints);
-}
+OrderedTask *
+LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+         const Waypoints *waypoints=nullptr);
+
+#endif

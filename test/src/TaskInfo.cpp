@@ -1,20 +1,15 @@
 #include "OS/Args.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "XML/DataNodeXML.hpp"
-#include "Task/Deserialiser.hpp"
+#include "Task/LoadFile.hpp"
 
 static OrderedTask *
-LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour)
+LoadTask2(const TCHAR *path, const TaskBehaviour &task_behaviour)
 {
-  auto *node = ConstDataNodeXML::Load(path);
-  if (node == NULL) {
+  OrderedTask *task = LoadTask(path, task_behaviour);
+  if (task == nullptr) {
     fprintf(stderr, "Failed to parse XML\n");
-    return NULL;
+    return nullptr;
   }
-
-  OrderedTask *task = new OrderedTask(task_behaviour);
-  LoadTask(*task, *node);
-  delete node;
 
   task->UpdateGeometry();
   if (!task->CheckTask()) {
@@ -54,7 +49,7 @@ main(int argc, char **argv)
 
   do {
     tstring path = args.ExpectNextT();
-    OrderedTask *task = LoadTask(path.c_str(), task_behaviour);
+    OrderedTask *task = LoadTask2(path.c_str(), task_behaviour);
     if (task != NULL) {
       Print(*task);
       delete task;
@@ -67,4 +62,3 @@ main(int argc, char **argv)
 
   return result;
 }
-

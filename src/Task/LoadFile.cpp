@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2015 The XCSoar Project
@@ -21,16 +20,33 @@ Copyright_License {
 }
 */
 
-#include "Task/TaskFileXCSoar.hpp"
 #include "LoadFile.hpp"
+#include "Deserialiser.hpp"
+#include "XML/DataNodeXML.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Util/StringUtil.hpp"
 
-#include <assert.h>
+#include <memory>
 
-OrderedTask* 
-TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
-                        const Waypoints *waypoints, unsigned index) const
+OrderedTask *
+LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+         const Waypoints *waypoints)
 {
-  assert(index == 0);
+  // Load root node
+  std::unique_ptr<ConstDataNode> root(ConstDataNodeXML::Load(path));
+  if (!root)
+    return nullptr;
 
-  return LoadTask(path, task_behaviour, waypoints);
+  // Check if root node is a <Task> node
+  if (!StringIsEqual(root->GetName(), _T("Task")))
+    return nullptr;
+
+  // Create a blank task
+  OrderedTask *task = new OrderedTask(task_behaviour);
+
+  // Read the task from the XML file
+  LoadTask(*task, *root, waypoints);
+
+  // Return the parsed task
+  return task;
 }

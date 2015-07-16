@@ -10,28 +10,27 @@
 #include "OS/ConvertPathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Task/Deserialiser.hpp"
-#include "XML/DataNodeXML.hpp"
+#include "Task/LoadFile.hpp"
 #include "NMEA/Info.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 #include <fstream>
 
-static OrderedTask* task_load(OrderedTask* task) {
+static OrderedTask *
+task_load(const TaskBehaviour &task_behaviour)
+{
   PathName szFilename(task_file.c_str());
-  auto *root = ConstDataNodeXML::Load(szFilename);
-  if (!root)
-    return NULL;
 
-  LoadTask(*task, *root);
-  task->UpdateStatsGeometry();
-  if (task->CheckTask()) {
-    delete root;
-    return task;
+  auto *task = LoadTask(szFilename, task_behaviour);
+  if (task != nullptr) {
+    task->UpdateStatsGeometry();
+    if (!task->CheckTask()) {
+      delete task;
+      return nullptr;
+    }
   }
-  delete task;
-  delete root;
-  return NULL;
+
+  return task;
 }
 
 class ReplayLoggerSim: public IgcReplay
@@ -93,11 +92,10 @@ test_replay()
 
   task_manager.SetGlidePolar(glide_polar);
 
-  OrderedTask* blank = new OrderedTask(task_manager.GetTaskBehaviour());
-
-  OrderedTask* t = task_load(blank);
+  OrderedTask* t = task_load(task_behaviour);
   if (t) {
     task_manager.Commit(*t);
+    delete t;
     task_manager.Resume();
   } else {
     return false;
