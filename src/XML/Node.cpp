@@ -101,28 +101,6 @@ XMLNode::AddText(const TCHAR *text, size_t length)
   d->text.append(text, length);
 }
 
-XMLNode&
-XMLNode::operator=(const XMLNode& A)
-{
-  Data *old = d;
-
-  d = A.d;
-  if (d != nullptr)
-    d->Ref();
-
-  if (old != nullptr)
-    old->Unref();
-
-  return *this;
-}
-
-XMLNode::XMLNode(const XMLNode &A)
-{
-  d = A.d;
-  if (d)
-    d->Ref();
-}
-
 const XMLNode *
 XMLNode::GetChildNode(const TCHAR *name) const
 {

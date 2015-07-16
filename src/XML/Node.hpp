@@ -221,10 +221,7 @@ public:
       d->Unref();
   }
 
-  /**
-   * Shallow copy.
-   */
-  XMLNode(const XMLNode &A);
+  XMLNode(const XMLNode &A) = delete;
 
   XMLNode(XMLNode &&other)
     :d(other.d) {
@@ -234,7 +231,7 @@ public:
   /**
    * Shallow copy.
    */
-  XMLNode &operator=(const XMLNode& A);
+  XMLNode &operator=(const XMLNode& A) = delete;
 
   XMLNode &operator=(XMLNode &&other) {
     Data *old = d;
