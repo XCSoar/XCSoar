@@ -7,7 +7,7 @@ CommonStats::ResetTask()
   landable_reachable = false;
   TimeUnderStartMaxHeight = fixed(-1);
   aat_time_remaining = fixed(0);
-  aat_speed_remaining = fixed(-1);
+  aat_speed_target = fixed(-1);
   aat_speed_max = fixed(-1);
   aat_speed_min = fixed(-1);
   task_type = TaskType::NONE;

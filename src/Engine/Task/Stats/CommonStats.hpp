@@ -50,14 +50,11 @@ public:
   fixed TimeUnderStartMaxHeight;
   /** Time (s) until assigned minimum time is achieved */
   fixed aat_time_remaining;
-  /**
-   * Speed to achieve remaining task in minimum assigned time (m/s),
-   * negative if already beyond minimum time
-   */
-  fixed aat_speed_remaining;
-  /** Average speed over max task at minimum assigned time (m/s) */
+  /** Average speed over target task distance at minimum assigned time + margin (m/s) */
+  fixed aat_speed_target;
+  /** Average speed over max task at minimum assigned time + margin (m/s) */
   fixed aat_speed_max;
-  /** Average speed over min task at minimum assigned time (m/s) */
+  /** Average speed over min task at minimum assigned time + margin (m/s) */
   fixed aat_speed_min;
   /** Vector to home waypoint */
   GeoVector vector_home;

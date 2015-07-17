@@ -687,14 +687,14 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!task_stats.has_targets || !positive(common_stats.aat_speed_remaining)) {
+  if (!task_stats.has_targets || !positive(common_stats.aat_speed_target)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
   data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(common_stats.aat_speed_remaining));
+                    Units::ToUserTaskSpeed(common_stats.aat_speed_target));
 
   // Set Unit
   data.SetValueUnit(Units::current.task_speed_unit);

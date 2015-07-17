@@ -307,7 +307,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
                            _("Distance to go"),
                            (double)Units::ToUserDistance(d_remaining),
                            Units::GetDistanceName(), _("Target speed"),
-                           (double)Units::ToUserTaskSpeed(common.aat_speed_remaining),
+                           (double)Units::ToUserTaskSpeed(common.aat_speed_target),
                            Units::GetTaskSpeedName());
       } else {
         StringFormatUnsafe(sTmp,
@@ -318,7 +318,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
                            (double)Units::ToUserDistance(d_remaining),
                            Units::GetDistanceName(),
                            _("Target speed"),
-                           (double)Units::ToUserTaskSpeed(common.aat_speed_remaining),
+                           (double)Units::ToUserTaskSpeed(common.aat_speed_target),
                            Units::GetTaskSpeedName());
       }
     } else {
