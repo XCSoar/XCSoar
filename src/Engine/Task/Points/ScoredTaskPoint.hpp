@@ -119,7 +119,9 @@ public:
    * This is always the scored best location for prior-active task points.
    */
   gcc_pure
-  const GeoPoint &GetLocationTravelled() const;
+  const GeoPoint &GetLocationTravelled() const {
+    return GetLocationMin();
+  }
 
 protected:
   /**

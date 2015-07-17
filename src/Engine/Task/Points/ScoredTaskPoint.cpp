@@ -59,12 +59,6 @@ ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
 }
 
 const GeoPoint &
-ScoredTaskPoint::GetLocationTravelled() const
-{
-  return GetLocationMin();
-}
-
-const GeoPoint &
 ScoredTaskPoint::GetLocationScored() const
 {
   if (IsBoundaryScored() || !HasEntered())
