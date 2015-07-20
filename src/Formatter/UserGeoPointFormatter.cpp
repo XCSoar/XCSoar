@@ -53,8 +53,8 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size)
 
 TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-               TCHAR seperator)
+               TCHAR separator)
 {
   return FormatGeoPoint(location, buffer, size, user_coordinate_format,
-                        seperator);
+                        separator);
 }

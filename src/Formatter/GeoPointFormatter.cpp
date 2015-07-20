@@ -184,22 +184,22 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
 
 static TCHAR *
 FormatUTM(const GeoPoint &location, TCHAR *buffer, size_t size,
-          TCHAR seperator = _T(' '))
+          TCHAR separator = _T(' '))
 {
   UTM utm = UTM::FromGeoPoint(location);
   StringFormat(buffer, size, _T("%u%c%c%.0f%c%.0f"),
-               utm.zone_number, utm.zone_letter, seperator,
-               (double)utm.easting, seperator,
+               utm.zone_number, utm.zone_letter, separator,
+               (double)utm.easting, separator,
                (double)utm.northing);
   return buffer;
 }
 
 TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-               CoordinateFormat format, TCHAR seperator)
+               CoordinateFormat format, TCHAR separator)
 {
   if (format == CoordinateFormat::UTM)
-    return FormatUTM(location, buffer, size, seperator);
+    return FormatUTM(location, buffer, size, separator);
 
   if (!FormatLatitude(location.latitude, buffer, size, format))
     return nullptr;
@@ -208,7 +208,7 @@ FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
   if (p >= end)
     return nullptr;
 
-  *p++ = seperator;
+  *p++ = separator;
 
   if (!FormatLongitude(location.longitude, p, end - p, format))
     return nullptr;

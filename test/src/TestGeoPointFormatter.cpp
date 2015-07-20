@@ -101,7 +101,7 @@ main(int argc, char **argv)
                  CoordinateFormat::UTM);
   ok1(StringIsEqualWildcard(buffer, _T("19H 4051** 6386***")));
 
-  // Test seperator
+  // Test separator
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),
                  CoordinateFormat::DDMMSS, _T('\n'));
   ok1(StringIsEqual(buffer, _T("49°29'14\" N\n008°27'59\" E")));
