@@ -132,6 +132,22 @@ SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
+static constexpr Angle
+ImportAngle(int32_t src)
+{
+  return Angle::Degrees(fixed(FromBE32(src)) / 1000000);
+}
+
+/**
+ * Convert a SkyLines #SkyLinesTracking::GeoPoint to a XCSoar
+ * #::GeoPoint.
+ */
+static constexpr ::GeoPoint
+ImportGeoPoint(SkyLinesTracking::GeoPoint src)
+{
+  return ::GeoPoint(ImportAngle(src.longitude), ImportAngle(src.latitude));
+}
+
 inline void
 SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
                                             size_t length)
@@ -147,8 +163,7 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
   for (; traffic != end; ++traffic)
     handler->OnTraffic(FromBE32(traffic->pilot_id),
                        FromBE32(traffic->time),
-                       ::GeoPoint(Angle::Degrees(fixed(FromBE32(traffic->location.longitude)) / 1000000),
-                                  Angle::Degrees(fixed(FromBE32(traffic->location.latitude)) / 1000000)),
+                       ImportGeoPoint(traffic->location),
                        FromBE16(traffic->altitude));
 }
 
