@@ -87,6 +87,11 @@ main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
+  if (address.GetFamily() != AF_INET) {
+    fprintf(stderr, "Not an IPv4 address: %s\n", host);
+    return EXIT_FAILURE;
+  }
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   InitialiseIOThread();
 #endif
@@ -100,9 +105,8 @@ main(int argc, char *argv[])
   client.SetHandler(&handler);
 #endif
 
-  IPv4Address address2(1,2,3,4,1234);
   client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(address2)) {
+  if (!client.Open(IPv4Address(address))) {
     fprintf(stderr, "Failed to create client\n");
     return EXIT_FAILURE;
   }
