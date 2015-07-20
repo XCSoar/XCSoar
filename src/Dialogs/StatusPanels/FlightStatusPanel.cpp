@@ -45,12 +45,9 @@ FlightStatusPanel::Refresh()
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  StaticString<32> buffer;
-
-  if (basic.location_available) {
-    FormatGeoPoint(basic.location, buffer.buffer(), buffer.capacity());
-    SetText(Location, buffer);
-  } else
+  if (basic.location_available)
+    SetText(Location, FormatGeoPoint(basic.location));
+  else
     ClearText(Location);
 
   if (basic.gps_altitude_available)

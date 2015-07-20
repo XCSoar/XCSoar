@@ -32,13 +32,11 @@ Copyright_License {
 static void
 LogEvent(const TCHAR *event, fixed time, const GeoPoint &location)
 {
-  TCHAR time_buffer[32], location_buffer[64];
+  TCHAR time_buffer[32];
   FormatTime(time_buffer, time);
 
   _tprintf(_T("%s %s %s\n"), time_buffer,
-           FormatGeoPoint(location,
-                          location_buffer, ARRAY_SIZE(location_buffer),
-                          CoordinateFormat::DDMMSS),
+           FormatGeoPoint(location, CoordinateFormat::DDMMSS).c_str(),
            event);
 }
 
@@ -68,14 +66,10 @@ int main(int argc, char **argv)
   }
 
   const FlyingState &flight = replay->Calculated().flight;
-  if (!negative(flight.far_distance)) {
-    TCHAR location_buffer[64];
-
+  if (!negative(flight.far_distance))
     _tprintf(_T("far %u km at %s\n"), unsigned(flight.far_distance / 1000),
              FormatGeoPoint(flight.far_location,
-                            location_buffer, ARRAY_SIZE(location_buffer),
-                            CoordinateFormat::DDMMSS));
-  }
+                            CoordinateFormat::DDMMSS).c_str());
 
   delete replay;
 }

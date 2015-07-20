@@ -43,10 +43,9 @@ Main()
   if (!GeoPointEntryDialog(_T("The caption"), value, format, true))
     return;
 
-  if (value.IsValid()) {
-    TCHAR buffer[64];
-    _tprintf(_T("%s\n"), FormatGeoPoint(value, buffer, ARRAY_SIZE(buffer),
-                                        CoordinateFormat::DDMMSS));
-  } else
+  if (value.IsValid())
+    _tprintf(_T("%s\n"),
+             FormatGeoPoint(value, CoordinateFormat::DDMMSS).c_str());
+  else
     printf("invalid\n");
 }

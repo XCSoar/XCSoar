@@ -213,10 +213,7 @@ Draw(Canvas &canvas, PixelRect rc,
   rc.left += line_height + text_padding;
 
   row_renderer.DrawFirstRow(canvas, rc, _("Your Position"));
-
-  TCHAR buffer[128];
-  FormatGeoPoint(item.location, buffer, 128);
-  row_renderer.DrawSecondRow(canvas, rc, buffer);
+  row_renderer.DrawSecondRow(canvas, rc, FormatGeoPoint(item.location));
 }
 
 static void

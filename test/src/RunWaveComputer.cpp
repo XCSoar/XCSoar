@@ -57,8 +57,7 @@ int main(int argc, char **argv)
 
   delete replay;
 
-  for (const auto &w : result.waves) {
-    TCHAR buffer[64];
+  for (const auto &w : result.waves)
     _tprintf(_T("wave: location=%f,%f a=%f,%f b=%f,%f location=%s normal=%f\n"),
              (double)w.location.longitude.Degrees(),
              (double)w.location.latitude.Degrees(),
@@ -66,10 +65,8 @@ int main(int argc, char **argv)
              (double)w.a.latitude.Degrees(),
              (double)w.b.longitude.Degrees(),
              (double)w.b.latitude.Degrees(),
-             FormatGeoPoint(w.location, buffer, ARRAY_SIZE(buffer),
-                            CoordinateFormat::DDMMSS),
+             FormatGeoPoint(w.location, CoordinateFormat::DDMMSS).c_str(),
              (double)w.normal.Degrees());
-  }
 
   return EXIT_SUCCESS;
 }

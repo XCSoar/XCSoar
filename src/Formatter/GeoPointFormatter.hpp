@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_GEOPOINT_FORMATTER_HPP
 #define XCSOAR_GEOPOINT_FORMATTER_HPP
 
+#include "Util/StringBuffer.hxx"
 #include "Geo/CoordinateFormat.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 #include <stddef.h>
@@ -55,5 +57,18 @@ bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
  */
 TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
                       CoordinateFormat format, TCHAR separator = _T(' '));
+
+gcc_pure
+static inline StringBuffer<TCHAR, 32>
+FormatGeoPoint(const GeoPoint &location, CoordinateFormat format,
+               TCHAR separator = _T(' '))
+{
+  StringBuffer<TCHAR, 32> buffer;
+  auto result = FormatGeoPoint(location, buffer.data(), buffer.capacity(),
+                               format, separator);
+  if (result == nullptr)
+    buffer.clear();
+  return buffer;
+}
 
 #endif
