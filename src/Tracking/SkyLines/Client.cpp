@@ -135,7 +135,7 @@ SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 static constexpr Angle
 ImportAngle(int32_t src)
 {
-  return Angle::Degrees(fixed(FromBE32(src)) / 1000000);
+  return Angle::Degrees(fixed(int32_t(FromBE32(src))) / 1000000);
 }
 
 /**
