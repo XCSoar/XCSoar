@@ -32,6 +32,7 @@
 
 #include <algorithm>
 
+#include <assert.h>
 #include <string.h>
 
 #ifdef HAVE_POSIX
@@ -47,6 +48,8 @@
 static const struct sockaddr_in *
 CastToIPv4(const struct sockaddr *p)
 {
+	assert(p->sa_family == AF_INET);
+
 	/* cast through void to work around the bogus alignment warning */
 	const void *q = reinterpret_cast<const void *>(p);
 	return reinterpret_cast<const struct sockaddr_in *>(q);
