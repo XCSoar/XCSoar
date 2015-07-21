@@ -47,7 +47,6 @@ Copyright_License {
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/Westerboer.hpp"
-#include "Device/Driver/WesterboerVW921.hpp"
 #include "Device/Driver/FLARM.hpp"
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/CProbe.hpp"
@@ -88,7 +87,6 @@ static const struct DeviceRegister *const driver_list[] = {
   &westerboer_driver,
   &imi_driver,
   &flarm_driver,
-  &westerboer_vw921_driver,
   &flynet_driver,
   &gt_altimeter_driver,
   &c_probe_driver,

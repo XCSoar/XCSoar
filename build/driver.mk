@@ -114,7 +114,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/XCOM760.cpp \
 	$(DRIVER_SRC_DIR)/ILEC.cpp \
 	$(DRIVER_SRC_DIR)/Westerboer.cpp \
-	$(DRIVER_SRC_DIR)/WesterboerVW921.cpp \
 	$(DRIVER_SRC_DIR)/Zander.cpp \
 	$(DRIVER_SRC_DIR)/Vaulter.cpp \
 	$(DRIVER_SRC_DIR)/ATR833.cpp \
