@@ -106,7 +106,7 @@ main(int argc, char *argv[])
 #endif
 
   client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(IPv4Address(address))) {
+  if (!client.Open(address)) {
     fprintf(stderr, "Failed to create client\n");
     return EXIT_FAILURE;
   }
