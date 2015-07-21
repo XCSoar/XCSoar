@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_LOOP_HPP
 
 #include "OS/Poll.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hpp"
 #include "FileEventHandler.hpp"

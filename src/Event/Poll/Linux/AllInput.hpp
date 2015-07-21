@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_ALL_LINUX_INPUT_HPP
 
 #include "Input.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 #include "IO/Async/FileEventHandler.hpp"
 #include "Util/StaticString.hxx"
 

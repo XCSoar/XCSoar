@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
 #include "IO/Async/FileEventHandler.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 
 #include <assert.h>
 

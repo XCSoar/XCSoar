@@ -26,7 +26,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/Async/IOThread.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 
 #include <atomic>
 #include <string>

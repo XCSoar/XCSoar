@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SIGNAL_LISTENER_HPP
 
 #include "IO/Async/FileEventHandler.hpp"
-#include "OS/UniqueFileDescriptor.hpp"
+#include "OS/UniqueFileDescriptor.hxx"
 
 class IOLoop;
 

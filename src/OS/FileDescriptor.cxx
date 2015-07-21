@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "FileDescriptor.hpp"
+#include "FileDescriptor.hxx"
 
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -63,14 +63,14 @@
 bool
 FileDescriptor::Open(const char *pathname, int flags, mode_t mode)
 {
-  fd = ::open(pathname, flags | O_NOCTTY | O_CLOEXEC, mode);
-  return IsDefined();
+	fd = ::open(pathname, flags | O_NOCTTY | O_CLOEXEC, mode);
+	return IsDefined();
 }
 
 bool
 FileDescriptor::OpenReadOnly(const char *pathname)
 {
-  return Open(pathname, O_RDONLY);
+	return Open(pathname, O_RDONLY);
 }
 
 #ifdef HAVE_POSIX
@@ -78,51 +78,51 @@ FileDescriptor::OpenReadOnly(const char *pathname)
 bool
 FileDescriptor::OpenNonBlocking(const char *pathname)
 {
-  return Open(pathname, O_RDWR | O_NONBLOCK);
+	return Open(pathname, O_RDWR | O_NONBLOCK);
 }
 
 bool
 FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w)
 {
-  int fds[2];
+	int fds[2];
 
 #ifdef __linux__
-  const int flags = O_CLOEXEC;
+	const int flags = O_CLOEXEC;
 #ifdef __BIONIC__
-  /* Bionic provides the pipe2() function only since Android 2.3,
-     therefore we must roll our own system call here */
-  const int result = syscall(__NR_pipe2, fds, flags);
+	/* Bionic provides the pipe2() function only since Android 2.3,
+	   therefore we must roll our own system call here */
+	const int result = syscall(__NR_pipe2, fds, flags);
 #else
-  const int result = pipe2(fds, flags);
+	const int result = pipe2(fds, flags);
 #endif
 #else
-  const int result = pipe(fds);
+	const int result = pipe(fds);
 #endif
 
-  if (result < 0)
-    return false;
+	if (result < 0)
+		return false;
 
-  r = FileDescriptor(fds[0]);
-  w = FileDescriptor(fds[1]);
-  return true;
+	r = FileDescriptor(fds[0]);
+	w = FileDescriptor(fds[1]);
+	return true;
 }
 
 void
 FileDescriptor::SetNonBlocking()
 {
-  assert(IsDefined());
+	assert(IsDefined());
 
-  int flags = fcntl(fd, F_GETFL);
-  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+	int flags = fcntl(fd, F_GETFL);
+	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
 
 void
 FileDescriptor::SetBlocking()
 {
-  assert(IsDefined());
+	assert(IsDefined());
 
-  int flags = fcntl(fd, F_GETFL);
-  fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
+	int flags = fcntl(fd, F_GETFL);
+	fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
 }
 
 #endif
@@ -133,13 +133,13 @@ bool
 FileDescriptor::CreateEventFD(unsigned initval)
 {
 #ifdef __BIONIC__
-  /* Bionic provides the eventfd() function only since Android 2.3,
-     therefore we must roll our own system call here */
-  fd = syscall(__NR_eventfd2, initval, O_NONBLOCK|O_CLOEXEC);
+	/* Bionic provides the eventfd() function only since Android 2.3,
+	   therefore we must roll our own system call here */
+	fd = syscall(__NR_eventfd2, initval, O_NONBLOCK|O_CLOEXEC);
 #else
-  fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
+	fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
 #endif
-  return fd >= 0;
+	return fd >= 0;
 }
 
 #endif
@@ -150,16 +150,16 @@ bool
 FileDescriptor::CreateSignalFD(const sigset_t *mask)
 {
 #ifdef __BIONIC__
-  int new_fd = syscall(__NR_signalfd4, fd, mask, sizeof(*mask),
-                       O_NONBLOCK|O_CLOEXEC);
+	int new_fd = syscall(__NR_signalfd4, fd, mask, sizeof(*mask),
+			     O_NONBLOCK|O_CLOEXEC);
 #else
-  int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
+	int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
 #endif
-  if (new_fd < 0)
-    return false;
+	if (new_fd < 0)
+		return false;
 
-  fd = new_fd;
-  return true;
+	fd = new_fd;
+	return true;
 }
 
 #endif
@@ -170,20 +170,20 @@ bool
 FileDescriptor::CreateInotify()
 {
 #ifdef __BIONIC__
-  /* Bionic doesn't have inotify_init1() */
-  int new_fd = inotify_init();
+	/* Bionic doesn't have inotify_init1() */
+	int new_fd = inotify_init();
 #else
-  int new_fd = inotify_init1(IN_CLOEXEC|IN_NONBLOCK);
+	int new_fd = inotify_init1(IN_CLOEXEC|IN_NONBLOCK);
 #endif
-  if (new_fd < 0)
-    return false;
+	if (new_fd < 0)
+		return false;
 
 #ifdef __BIONIC__
-  SetNonBlocking();
+	SetNonBlocking();
 #endif
 
-  fd = new_fd;
-  return true;
+	fd = new_fd;
+	return true;
 }
 
 #endif
@@ -191,18 +191,18 @@ FileDescriptor::CreateInotify()
 bool
 FileDescriptor::Rewind()
 {
-  assert(IsDefined());
+	assert(IsDefined());
 
-  return lseek(fd, 0, SEEK_SET) == 0;
+	return lseek(fd, 0, SEEK_SET) == 0;
 }
 
 off_t
 FileDescriptor::GetSize() const
 {
-  struct stat st;
-  return ::fstat(fd, &st) >= 0
-    ? (long)st.st_size
-    : -1;
+	struct stat st;
+	return ::fstat(fd, &st) >= 0
+		? (long)st.st_size
+		: -1;
 }
 
 #ifdef HAVE_POSIX
@@ -210,27 +210,27 @@ FileDescriptor::GetSize() const
 int
 FileDescriptor::Poll(short events, int timeout) const
 {
-  assert(IsDefined());
+	assert(IsDefined());
 
-  struct pollfd pfd;
-  pfd.fd = fd;
-  pfd.events = events;
-  int result = poll(&pfd, 1, timeout);
-  return result > 0
-    ? pfd.revents
-    : result;
+	struct pollfd pfd;
+	pfd.fd = fd;
+	pfd.events = events;
+	int result = poll(&pfd, 1, timeout);
+	return result > 0
+		? pfd.revents
+		: result;
 }
 
 int
 FileDescriptor::WaitReadable(int timeout) const
 {
-  return Poll(POLLIN, timeout);
+	return Poll(POLLIN, timeout);
 }
 
 int
 FileDescriptor::WaitWritable(int timeout) const
 {
-  return Poll(POLLOUT, timeout);
+	return Poll(POLLOUT, timeout);
 }
 
 #endif

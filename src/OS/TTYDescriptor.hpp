@@ -30,7 +30,7 @@
 #ifndef XCSOAR_TTY_DESCRIPTOR_HPP
 #define XCSOAR_TTY_DESCRIPTOR_HPP
 
-#include "UniqueFileDescriptor.hpp"
+#include "UniqueFileDescriptor.hxx"
 
 #include <stdlib.h>
 #include <termios.h>

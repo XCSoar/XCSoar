@@ -28,7 +28,7 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 
-#include "OS/UniqueFileDescriptor.hpp"
+#include "OS/UniqueFileDescriptor.hxx"
 
 class PosixFileSource : public BufferedSource<char, 4096u> {
 private:

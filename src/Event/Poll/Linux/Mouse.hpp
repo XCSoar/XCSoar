@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LINUX_MOUSE_HPP
 #define XCSOAR_EVENT_LINUX_MOUSE_HPP
 
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 #include "IO/Async/FileEventHandler.hpp"
 
 class IOLoop;

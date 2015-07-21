@@ -30,7 +30,7 @@
 #ifndef XCSOAR_SOCKET_DESCRIPTOR_HPP
 #define XCSOAR_SOCKET_DESCRIPTOR_HPP
 
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 
 #include <type_traits>
 

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DiscardFileEventHandler.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "OS/FileDescriptor.hxx"
 
 bool
 DiscardFileEventHandler::OnFileEvent(FileDescriptor fd, unsigned mask)

@@ -30,7 +30,7 @@
 #ifndef XCSOAR_EVENT_PIPE_HPP
 #define XCSOAR_EVENT_PIPE_HPP
 
-#include "UniqueFileDescriptor.hpp"
+#include "UniqueFileDescriptor.hxx"
 
 #include <assert.h>
 
