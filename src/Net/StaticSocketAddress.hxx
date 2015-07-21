@@ -31,6 +31,7 @@
 #define STATIC_SOCKET_ADDRESS_HPP
 
 #include "SocketAddress.hxx"
+#include "Features.hxx"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -56,7 +57,7 @@ public:
 				     size);
 	}
 
-#if defined(HAVE_POSIX) && !defined(__BIONIC__)
+#if defined(HAVE_UN) && !defined(__BIONIC__)
 	/**
 	 * Make this a "local" address (UNIX domain socket).
 	 */

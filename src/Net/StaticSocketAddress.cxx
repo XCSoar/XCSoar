@@ -63,7 +63,7 @@ StaticSocketAddress::operator==(const StaticSocketAddress &other) const
 		memcmp(&address, &other.address, size) == 0;
 }
 
-#if defined(HAVE_POSIX) && !defined(__BIONIC__)
+#if defined(HAVE_UN) && !defined(__BIONIC__)
 
 void
 StaticSocketAddress::SetLocal(const char *path)
