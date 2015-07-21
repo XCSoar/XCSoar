@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WPASupplicant.hpp"
-#include "Net/StaticSocketAddress.hxx"
+#include "Net/AllocatedSocketAddress.hxx"
 #include "OS/FileUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StaticString.hxx"
@@ -38,10 +38,10 @@ WPASupplicant::Connect(const char *path)
 
   strcpy(local_path, "/tmp/xcsoar.XXXXXX");
 
-  StaticSocketAddress local_address;
+  AllocatedSocketAddress local_address;
   local_address.SetLocal(mktemp(local_path));
 
-  StaticSocketAddress peer_address;
+  AllocatedSocketAddress peer_address;
   peer_address.SetLocal(path);
 
   return fd.Create(AF_LOCAL, SOCK_DGRAM, 0) &&
