@@ -99,6 +99,11 @@ public:
 	:address{AF_INET, ToBE16(port), ConstructInAddr(INADDR_ANY), {}} {}
 #endif
 
+	/**
+	 * Convert a #SocketAddress to a #IPv4Address.  Its address family must be AF_INET.
+	 */
+	explicit IPv4Address(SocketAddress src);
+
 	operator SocketAddress() const {
 		return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
 				     sizeof(address));

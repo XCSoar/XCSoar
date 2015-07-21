@@ -43,8 +43,6 @@
 #include <ifaddrs.h>
 #endif
 
-#if defined(__GLIBC__) || defined(__APPLE__)
-
 static const struct sockaddr_in *
 CastToIPv4(const struct sockaddr *p)
 {
@@ -54,6 +52,11 @@ CastToIPv4(const struct sockaddr *p)
 	const void *q = reinterpret_cast<const void *>(p);
 	return reinterpret_cast<const struct sockaddr_in *>(q);
 }
+
+IPv4Address::IPv4Address(SocketAddress src)
+	:address(*CastToIPv4(src.GetAddress())) {}
+
+#if defined(__GLIBC__) || defined(__APPLE__)
 
 /**
  * helper to iterate over available devices, locate the
