@@ -83,6 +83,15 @@ public:
 		return *this;
 	}
 
+	gcc_pure
+	bool operator==(SocketAddress other) const {
+		return (SocketAddress)*this == other;
+	}
+
+	bool operator!=(SocketAddress &other) const {
+		return !(*this == other);
+	}
+
 	gcc_const
 	static AllocatedSocketAddress Null() {
 		return AllocatedSocketAddress(nullptr, 0);

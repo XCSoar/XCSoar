@@ -48,13 +48,6 @@ StaticSocketAddress::operator=(SocketAddress other)
 	return *this;
 }
 
-bool
-StaticSocketAddress::operator==(const StaticSocketAddress &other) const
-{
-	return size == other.size &&
-		memcmp(&address, &other.address, size) == 0;
-}
-
 #ifndef _WIN32_WCE
 
 bool
