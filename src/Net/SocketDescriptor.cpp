@@ -249,7 +249,7 @@ SocketDescriptor::Read(void *buffer, size_t length,
 
   socklen_t addrlen = address.GetCapacity();
   ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length, flags,
-                              address, &addrlen);
+			      address.GetAddress(), &addrlen);
   if (nbytes > 0)
     address.SetSize(addrlen);
 
