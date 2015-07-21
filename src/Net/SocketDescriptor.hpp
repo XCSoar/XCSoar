@@ -171,7 +171,7 @@ public:
    * Send a datagram to the specified address.
    */
   ssize_t Write(const void *buffer, size_t length,
-                const StaticSocketAddress &address);
+                SocketAddress address);
 };
 
 static_assert(std::is_trivial<SocketDescriptor>::value, "type is not trivial");

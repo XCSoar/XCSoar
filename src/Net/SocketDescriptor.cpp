@@ -258,7 +258,7 @@ SocketDescriptor::Read(void *buffer, size_t length,
 
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
-                        const StaticSocketAddress &address)
+                        SocketAddress address)
 {
   int flags = 0;
 #ifdef HAVE_POSIX
@@ -269,5 +269,5 @@ SocketDescriptor::Write(const void *buffer, size_t length,
 #endif
 
   return ::sendto(Get(), (const char *)buffer, length, flags,
-                  address, address.GetSize());
+                  address.GetAddress(), address.GetSize());
 }
