@@ -91,7 +91,7 @@ public:
 	:address{AF_INET, ToBE16(port), ConstructInAddr(a, b, c, d), {}} {}
 #endif
 
-	constexpr IPv4Address(uint16_t port)
+	constexpr explicit IPv4Address(uint16_t port)
 #if defined(__APPLE__)
 	:address{sizeof(struct sockaddr_in), AF_INET, ToBE16(port),
 			ConstructInAddr(INADDR_ANY), {}} {}
