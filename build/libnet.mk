@@ -2,9 +2,9 @@
 
 LIBNET_SOURCES = \
 	$(SRC)/Net/State.cpp \
-	$(SRC)/Net/IPv4Address.cpp \
-	$(SRC)/Net/StaticSocketAddress.cpp \
-	$(SRC)/Net/SocketAddress.cpp \
+	$(SRC)/Net/IPv4Address.cxx \
+	$(SRC)/Net/StaticSocketAddress.cxx \
+	$(SRC)/Net/SocketAddress.cxx \
 	$(SRC)/Net/SocketDescriptor.cpp
 
 HAVE_HTTP := n

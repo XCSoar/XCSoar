@@ -33,7 +33,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
-#include "Net/IPv4Address.hpp"
+#include "Net/IPv4Address.hxx"
 
 class WifiListWidget final
   : public ListWidget, ActionListener, Timer {

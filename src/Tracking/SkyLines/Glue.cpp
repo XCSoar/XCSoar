@@ -27,7 +27,7 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "NMEA/Info.hpp"
 #include "Net/State.hpp"
-#include "Net/IPv4Address.hpp"
+#include "Net/IPv4Address.hxx"
 
 #ifdef HAVE_POSIX
 #include "IO/Async/GlobalIOThread.hpp"

@@ -28,9 +28,9 @@
  */
 
 #include "SocketDescriptor.hpp"
-#include "SocketAddress.hpp"
-#include "StaticSocketAddress.hpp"
-#include "IPv4Address.hpp"
+#include "SocketAddress.hxx"
+#include "StaticSocketAddress.hxx"
+#include "IPv4Address.hxx"
 
 #ifdef HAVE_POSIX
 #include <sys/socket.h>

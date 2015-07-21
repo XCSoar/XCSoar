@@ -30,16 +30,16 @@
 #ifndef STATIC_SOCKET_ADDRESS_HPP
 #define STATIC_SOCKET_ADDRESS_HPP
 
-#include "SocketAddress.hpp"
+#include "SocketAddress.hxx"
 #include "Compiler.h"
 
 #include <assert.h>
 #include <stdint.h>
 
-#ifdef HAVE_POSIX
-#include <sys/socket.h>
-#else
+#ifdef WIN32
 #include <winsock2.h>
+#else
+#include <sys/socket.h>
 #endif
 
 /**
@@ -47,73 +47,73 @@
  */
 class StaticSocketAddress {
 public:
-  typedef SocketAddress::size_type size_type;
+	typedef SocketAddress::size_type size_type;
 
 private:
-  size_type size;
-  struct sockaddr_storage address;
+	size_type size;
+	struct sockaddr_storage address;
 
 public:
-  StaticSocketAddress() = default;
+	StaticSocketAddress() = default;
 
-  StaticSocketAddress &operator=(SocketAddress other);
+	StaticSocketAddress &operator=(SocketAddress other);
 
-  operator SocketAddress() const {
-    return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
-                         size);
-  }
+	operator SocketAddress() const {
+		return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
+				     size);
+	}
 
 #if defined(HAVE_POSIX) && !defined(__BIONIC__)
-  /**
-   * Make this a "local" address (UNIX domain socket).
-   */
-  void SetLocal(const char *path);
+	/**
+	 * Make this a "local" address (UNIX domain socket).
+	 */
+	void SetLocal(const char *path);
 #endif
 
-  operator struct sockaddr *() {
-    return reinterpret_cast<struct sockaddr *>(&address);
-  }
+	operator struct sockaddr *() {
+		return reinterpret_cast<struct sockaddr *>(&address);
+	}
 
-  operator const struct sockaddr *() const {
-    return reinterpret_cast<const struct sockaddr *>(&address);
-  }
+	operator const struct sockaddr *() const {
+		return reinterpret_cast<const struct sockaddr *>(&address);
+	}
 
-  constexpr size_type GetCapacity() const {
-    return sizeof(address);
-  }
+	constexpr size_type GetCapacity() const {
+		return sizeof(address);
+	}
 
-  size_type GetSize() const {
-    return size;
-  }
+	size_type GetSize() const {
+		return size;
+	}
 
-  void SetSize(size_type _size) {
-    assert(_size > 0);
-    assert(size_t(_size) <= sizeof(address));
+	void SetSize(size_type _size) {
+		assert(_size > 0);
+		assert(size_t(_size) <= sizeof(address));
 
-    size = _size;
-  }
+		size = _size;
+	}
 
-  int GetFamily() const {
-    return address.ss_family;
-  }
+	int GetFamily() const {
+		return address.ss_family;
+	}
 
-  bool IsDefined() const {
-    return GetFamily() != AF_UNSPEC;
-  }
+	bool IsDefined() const {
+		return GetFamily() != AF_UNSPEC;
+	}
 
-  void Clear() {
-    address.ss_family = AF_UNSPEC;
-  }
+	void Clear() {
+		address.ss_family = AF_UNSPEC;
+	}
 
-  gcc_pure
-  bool operator==(const StaticSocketAddress &other) const;
+	gcc_pure
+	bool operator==(const StaticSocketAddress &other) const;
 
-  bool operator!=(const StaticSocketAddress &other) const {
-    return !(*this == other);
-  }
+	bool operator!=(const StaticSocketAddress &other) const {
+		return !(*this == other);
+	}
 
 #ifndef _WIN32_WCE
-  bool Lookup(const char *host, const char *service, int socktype);
+	bool Lookup(const char *host, const char *service, int socktype);
 #endif
 };
 

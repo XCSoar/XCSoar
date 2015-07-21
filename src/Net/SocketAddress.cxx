@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "SocketAddress.hpp"
+#include "SocketAddress.hxx"
 
 #include <string.h>
 

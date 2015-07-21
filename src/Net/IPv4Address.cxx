@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "IPv4Address.hpp"
+#include "IPv4Address.hxx"
 #include "Util/Macros.hpp"
 
 #include <algorithm>
@@ -47,9 +47,9 @@
 static const struct sockaddr_in *
 CastToIPv4(const struct sockaddr *p)
 {
-  /* cast through void to work around the bogus alignment warning */
-  const void *q = reinterpret_cast<const void *>(p);
-  return reinterpret_cast<const struct sockaddr_in *>(q);
+	/* cast through void to work around the bogus alignment warning */
+	const void *q = reinterpret_cast<const void *>(p);
+	return reinterpret_cast<const struct sockaddr_in *>(q);
 }
 
 /**
@@ -67,46 +67,46 @@ gcc_pure
 static const struct sockaddr_in *
 GetIpAddressInner(const ifaddrs *ifaddr, const char *device)
 {
-  /* iterate over all interfaces */
-  for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
-    /* is this the (droid) device we're looking for and it's IPv4? */
-    if (ifa->ifa_addr != nullptr && strcmp(ifa->ifa_name, device) == 0 &&
-        ifa->ifa_addr->sa_family == AF_INET)
-      return CastToIPv4(ifa->ifa_addr);
+	/* iterate over all interfaces */
+	for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
+		/* is this the (droid) device we're looking for and it's IPv4? */
+		if (ifa->ifa_addr != nullptr && strcmp(ifa->ifa_name, device) == 0 &&
+		    ifa->ifa_addr->sa_family == AF_INET)
+			return CastToIPv4(ifa->ifa_addr);
 
-  return nullptr;
+	return nullptr;
 }
 
 IPv4Address
 IPv4Address::GetDeviceAddress(const char *device)
 {
-  /* intialize result to undefined StaticSocketAddress */
-  IPv4Address address;
-  auto &sin = address.address;
-  sin.sin_family = AF_UNSPEC;
-  sin.sin_port = 0;
-  sin.sin_addr.s_addr = 0;
-  std::fill_n(sin.sin_zero, ARRAY_SIZE(sin.sin_zero), 0);
+	/* intialize result to undefined StaticSocketAddress */
+	IPv4Address address;
+	auto &sin = address.address;
+	sin.sin_family = AF_UNSPEC;
+	sin.sin_port = 0;
+	sin.sin_addr.s_addr = 0;
+	std::fill_n(sin.sin_zero, ARRAY_SIZE(sin.sin_zero), 0);
 
-  ifaddrs *ifaddr;
-  if (getifaddrs(&ifaddr) == -1)
-    return address;
+	ifaddrs *ifaddr;
+	if (getifaddrs(&ifaddr) == -1)
+		return address;
 
-  const struct sockaddr_in *found = GetIpAddressInner(ifaddr, device);
-  if (found != nullptr)
-    sin = *found;
+	const struct sockaddr_in *found = GetIpAddressInner(ifaddr, device);
+	if (found != nullptr)
+		sin = *found;
 
-  freeifaddrs(ifaddr);
-  return address;
+	freeifaddrs(ifaddr);
+	return address;
 }
 
 const char *
 IPv4Address::ToString(char *buffer, size_t buffer_size) const
 {
-  if (!IsDefined())
-    return nullptr;
+	if (!IsDefined())
+		return nullptr;
 
-  return inet_ntop(AF_INET, &address, buffer, buffer_size);
+	return inet_ntop(AF_INET, &address, buffer, buffer_size);
 }
 
 #endif

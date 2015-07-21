@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WPASupplicant.hpp"
-#include "Net/StaticSocketAddress.hpp"
+#include "Net/StaticSocketAddress.hxx"
 #include "OS/FileUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StaticString.hxx"

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
-#include "Net/IPv4Address.hpp"
+#include "Net/IPv4Address.hxx"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/GlobalIOThread.hpp"
