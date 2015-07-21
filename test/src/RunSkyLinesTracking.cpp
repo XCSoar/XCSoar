@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
 #include "Net/IPv4Address.hxx"
+#include "Net/StaticSocketAddress.hxx"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/GlobalIOThread.hpp"

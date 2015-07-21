@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
 #include "Handler.hpp"
-#include "Net/StaticSocketAddress.hxx"
+#include "Net/AllocatedSocketAddress.hxx"
 #include "Net/SocketDescriptor.hpp"
 #include "IO/Async/SocketEventHandler.hpp"
 
@@ -50,7 +50,7 @@ namespace SkyLinesTracking {
 
     uint64_t key;
 
-    StaticSocketAddress address;
+    AllocatedSocketAddress address;
     SocketDescriptor socket;
 
   public:
