@@ -70,7 +70,7 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
   Close();
 
   address = _address;
-  if (!socket.CreateUDP())
+  if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
     return false;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
