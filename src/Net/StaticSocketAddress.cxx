@@ -37,15 +37,7 @@
 #ifdef WIN32
 #include <ws2tcpip.h>
 #else
-#include <sys/un.h>
-#include <netinet/in.h>
 #include <netdb.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#endif
-
-#ifdef __GLIBC__
-#include <ifaddrs.h>
 #endif
 
 StaticSocketAddress &
@@ -62,27 +54,6 @@ StaticSocketAddress::operator==(const StaticSocketAddress &other) const
 	return size == other.size &&
 		memcmp(&address, &other.address, size) == 0;
 }
-
-#if defined(HAVE_UN) && !defined(__BIONIC__)
-
-void
-StaticSocketAddress::SetLocal(const char *path)
-{
-	auto &sun = reinterpret_cast<struct sockaddr_un &>(address);
-
-	const size_t path_length = strlen(path);
-
-	// TODO: make this a runtime check
-	assert(path_length < sizeof(sun.sun_path));
-
-	sun.sun_family = AF_LOCAL;
-	memcpy(sun.sun_path, path, path_length + 1);
-
-	/* note: Bionic doesn't provide SUN_LEN() */
-	size = SUN_LEN(&sun);
-}
-
-#endif
 
 #ifndef _WIN32_WCE
 
