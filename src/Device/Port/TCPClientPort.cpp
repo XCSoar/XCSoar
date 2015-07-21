@@ -47,7 +47,7 @@ TCPClientPort::Connect(const char *host, unsigned port)
   service.UnsafeFormat("%u", port);
 
   StaticSocketAddress address;
-  if (!address.Lookup(host, service, AF_INET))
+  if (!address.Lookup(host, service, SOCK_STREAM))
     return false;
 
   SocketDescriptor s;
