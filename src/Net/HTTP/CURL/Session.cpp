@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "../Session.hpp"
 
-#include <algorithm>
-#include <assert.h>
 #include <sys/select.h>
 
 bool
