@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-06-09 03:00+0000\n"
-"Last-Translator: Carsten Sonyi <Unknown>\n"
+"PO-Revision-Date: 2015-07-10 22:11+0000\n"
+"Last-Translator: Jonas Becker <jonasbecker_gt@yahoo.de>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-06-09 09:16+0000\n"
-"X-Generator: Launchpad (build 17549)\n"
+"X-Launchpad-Export-Date: 2015-07-22 05:20+0000\n"
+"X-Generator: Launchpad (build 17628)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4178,9 +4178,9 @@ msgid "Volume"
 msgstr "Volumen"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Routenplaner Modus"
+msgstr ""
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -5328,9 +5328,8 @@ msgid "Reference Mass"
 msgstr "Referenz Gewicht"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
-#, fuzzy
 msgid "Reference mass of the polar"
-msgstr "Referenzmasse"
+msgstr ""
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5418,16 +5417,15 @@ msgstr "Fortsetzen"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:52
 msgid "Enter your password"
-msgstr ""
+msgstr "Geben Sie Ihr Passwort ein"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:79
-#, fuzzy
 msgid "Wrong password."
-msgstr "Passwort"
+msgstr "Falsches Passwort"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:94
 msgid "Enter a new password"
-msgstr ""
+msgstr "Geben Sie ein neues Passwort ein"
 
 #: src/Dialogs/dlgStatus.cpp:51 src/Dialogs/dlgStatus.cpp:74
 #: Data/Input/default.xci:831 Data/Input/default.xci:1228
@@ -5910,15 +5908,15 @@ msgstr "Lufträume nicht ausfüllen"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:86
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "Keine Wegpunktbeschriftung anzeigen."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All labels will be displayed."
-msgstr "Alle Wegpunktbeschriftungen werden angezeigt."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -5949,9 +5947,8 @@ msgstr "Sichtbarkeit der Beschriftung"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:158
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr "Bestimmt wie die Beschriftung der Wegpunkte dargestellt wird."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5982,14 +5979,12 @@ msgid "Enable/disable all airspace warnings."
 msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "Warnungen"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
+msgstr "Aktivieren/deaktivieren von Luftraumwarnungen"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6368,14 +6363,14 @@ msgstr ""
 "wird."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Normal"
-msgstr "Thermik - Mittel ü. alle Bärte"
+msgstr "Normal"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Large"
-msgstr "Zielpunkt"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:101
 #, no-c-format
@@ -6383,9 +6378,8 @@ msgid "Small"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:105
-#, fuzzy
 msgid "Text size"
-msgstr "T nächs. Schenkel"
+msgstr "Schriftgröße"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:111
 msgid "Auto. blank"
@@ -8441,9 +8435,8 @@ msgid "Type of vehicle used."
 msgstr "Typ des Luftfahrzeugs."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
-#, fuzzy
 msgid "Vehicle Name"
-msgstr "Luftfahrzeugtyp"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Server"
@@ -10000,91 +9993,6 @@ msgstr ""
 msgid "Accelerometer leveled"
 msgstr "Beschleunigungsmesser zurückgesetzt"
 
-#~ msgid "left %s ago"
-#~ msgstr "verlassen vor %s"
-
-#~ msgid "Prefer external wind"
-#~ msgstr "externen Wind bevorzugen"
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "Wenn diese Einstellung aktiv ist, wird die Windberechnung von externen "
-#~ "Geräten der Berechnung von XCSoar vorgezogen."
-
-#~ msgid "Fonts"
-#~ msgstr "Schriften"
-
-#~ msgid "Status message"
-#~ msgstr "Nachricht"
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "Die Statusdatei legt fest welche Klänge auf welche Ereignisse hin "
-#~ "abgespielt werden und wie lange die verschiedenen Meldungen angezeigt "
-#~ "werden."
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting)."
-#~ msgstr ""
-#~ "Bestimmt für jeden Wegpunkt welche Wegpunktbeschriftungen angezeigt "
-#~ "werden (Leerzeichen erlaubt)."
-
-#~ msgid "Calculator"
-#~ msgstr "Rechner"
-
-#~ msgid "Calculator excludes unsaved task changes!"
-#~ msgstr "Der Rechner berücksichtigt ungespeicherte Änderungen nicht!"
-
-#~ msgid "Dialog text"
-#~ msgstr "Dialog Text"
-
-#~ msgid "InfoBox titles"
-#~ msgstr "InfoBox Titel"
-
-#~ msgid "InfoBox values"
-#~ msgstr "InfoBox Werte"
-
-#~ msgid "Topography labels, normal"
-#~ msgstr "Topographie Beschriftung, normal"
-
-#~ msgid "Topography labels, important"
-#~ msgstr "Topographie Beschriftung, wichtig"
-
-#~ msgid "Overlay text"
-#~ msgstr "Overlay text"
-
-#~ msgid "Customize fonts"
-#~ msgstr "Schriften anpassen"
-
-#~ msgid "Font Configuration"
-#~ msgstr "Schrift Einstellung"
-
-#~ msgid "Font not found."
-#~ msgstr "Schriftsatz nicht gefunden."
-
-#~ msgid "Font face"
-#~ msgstr "Schriftsatz"
-
-#~ msgid "Height"
-#~ msgstr "Höhe"
-
-#~ msgid "Bold"
-#~ msgstr "Fett"
-
-#~ msgid "Italic"
-#~ msgstr "Kursiv"
-
-#~ msgid "Edit Font"
-#~ msgstr "Schrift bearbeiten"
-
-#~ msgid "Reset"
-#~ msgstr "Zurücksetzen"
-
 #~ msgid "Save task?"
 #~ msgstr "Aufgabe speichern?"
 
@@ -10126,6 +10034,12 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 
 #~ msgid "Latitude"
 #~ msgstr "Breitengrad"
+
+#~ msgid "Reset"
+#~ msgstr "Zurücksetzen"
+
+#~ msgid "Height"
+#~ msgstr "Höhe"
 
 #~ msgid "Fly"
 #~ msgstr "Fliegen"
@@ -10190,8 +10104,19 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "No help available on this item"
 #~ msgstr "Keine Hilfe verfügbar."
 
+#~ msgid ""
+#~ "The status file can be used to define sounds to be played when certain "
+#~ "events occur, and how long various status messages will appear on screen."
+#~ msgstr ""
+#~ "Die Statusdatei legt fest welche Klänge auf welche Ereignisse hin "
+#~ "abgespielt werden und wie lange die verschiedenen Meldungen angezeigt "
+#~ "werden."
+
 #~ msgid "Waypoint Info"
 #~ msgstr "Wegpunkt Info"
+
+#~ msgid "Edit Font"
+#~ msgstr "Schrift bearbeiten"
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
@@ -10218,6 +10143,12 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "Hilfe zu geschätzte verbleibende AAT"
+
+#~ msgid "Fonts"
+#~ msgstr "Schriften"
+
+#~ msgid "Font not found."
+#~ msgstr "Schriftsatz nicht gefunden."
 
 #~ msgid ""
 #~ "Sample Text\n"
@@ -10287,6 +10218,12 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "Insert In Task"
 #~ msgstr "In Aufgabe einfügen"
 
+#~ msgid "InfoBox titles"
+#~ msgstr "InfoBox Titel"
+
+#~ msgid "Customize fonts"
+#~ msgstr "Schriften anpassen"
+
 #~ msgid "Remove From Task"
 #~ msgstr "Von Aufgabe entfernen"
 
@@ -10295,6 +10232,9 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 
 #~ msgid "Replace In Task"
 #~ msgstr "In Aufgabe ersetzen"
+
+#~ msgid "Font face"
+#~ msgstr "Schriftsatz"
 
 #~ msgid ""
 #~ "Graph of average circling climb rate (horizontal axis) as a function of "
@@ -10318,8 +10258,14 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "InfoBox Pages"
 #~ msgstr "InfoBox Seiten"
 
+#~ msgid "No waypoint labels will be displayed."
+#~ msgstr "Keine Wegpunktbeschriftung anzeigen."
+
 #~ msgid "Delete Error"
 #~ msgstr "Fehler beim Löschen"
+
+#~ msgid "Font Configuration"
+#~ msgstr "Schrift Einstellung"
 
 #~ msgid "Auto. wind"
 #~ msgstr "Auto. Wind"
@@ -10333,6 +10279,9 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "Export"
 #~ msgstr "Export"
 
+#~ msgid "All waypoint labels will be displayed."
+#~ msgstr "Alle Wegpunktbeschriftungen werden angezeigt."
+
 #~ msgid "Unknown error creating task."
 #~ msgstr "Unbekannter Fehler beim Aufgabe Anlegen."
 
@@ -10345,11 +10294,20 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "12 Bottom (Portrait)"
 #~ msgstr "12 Unten (Hochformat)"
 
+#~ msgid "Topography labels, normal"
+#~ msgstr "Topographie Beschriftung, normal"
+
+#~ msgid "Dialog text"
+#~ msgstr "Dialog Text"
+
 #~ msgid "InfoBox values, normal"
 #~ msgstr "InfoBox Werte, normal"
 
 #~ msgid "XCSoar"
 #~ msgstr "XCSoar"
+
+#~ msgid "Topography labels, important"
+#~ msgstr "Topographie Beschriftung, wichtig"
 
 #~ msgid "InfoBox values, small"
 #~ msgstr "InfoBox Werte, klein"
@@ -10378,6 +10336,12 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 
 #~ msgid "Not found"
 #~ msgstr "Nicht gefunden"
+
+#~ msgid "Calculator"
+#~ msgstr "Rechner"
+
+#~ msgid "Calculator excludes unsaved task changes!"
+#~ msgstr "Der Rechner berücksichtigt ungespeicherte Änderungen nicht!"
 
 #~ msgid "12 Top (Portrait)"
 #~ msgstr "12 Oben (Hochformat)"
@@ -10439,6 +10403,9 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "Configuration Menu"
 #~ msgstr "Einstellungsmenü"
 
+#~ msgid "Reference mass"
+#~ msgstr "Referenzmasse"
+
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr ""
 #~ "Bestimmt die Informationen, die auf den verschiedenen Seiten angezeigt "
@@ -10483,6 +10450,13 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "Aircraft reg."
 #~ msgstr "Flugzeugkennz."
 
+#~ msgid ""
+#~ "If enabled, then the wind vector received from external devices overrides "
+#~ "XCSoar's internal wind calculation."
+#~ msgstr ""
+#~ "Wenn diese Einstellung aktiv ist, wird die Windberechnung von externen "
+#~ "Geräten der Berechnung von XCSoar vorgezogen."
+
 #~ msgid "Page"
 #~ msgstr "Seite"
 
@@ -10501,6 +10475,16 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgstr ""
 #~ "Wenn das angeschlossene GPS ungültige NMEA Prüfsummen sendet, können die "
 #~ "Daten mit dieser Einstellung trotzdem verwendet werden."
+
+#~ msgid ""
+#~ "Determines what waypoint labels are displayed for each waypoint (space "
+#~ "permitting)."
+#~ msgstr ""
+#~ "Bestimmt für jeden Wegpunkt welche Wegpunktbeschriftungen angezeigt "
+#~ "werden (Leerzeichen erlaubt)."
+
+#~ msgid "left %s ago"
+#~ msgstr "verlassen vor %s"
 
 #~ msgid "Return"
 #~ msgstr "Zurück"
@@ -10641,8 +10625,14 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 #~ msgid "The tone frequency that is played at maximum climb rate."
 #~ msgstr "Die Ton-Frequenz bei der größten Steigrate."
 
+#~ msgid "Prefer external wind"
+#~ msgstr "externen Wind bevorzugen"
+
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Unerreichbar durch das Gelände."
+
+#~ msgid "Status message"
+#~ msgstr "Nachricht"
 
 #~ msgid "Deadband max. lift"
 #~ msgstr "Tonausblendung max. Steigen"
@@ -10675,6 +10665,18 @@ msgstr "Beschleunigungsmesser zurückgesetzt"
 
 #~ msgid "Loading of plane profile \"%s\" failed!"
 #~ msgstr "Laden des Flugzeugprofils \"%s\" ist fehlgeschlagen!"
+
+#~ msgid "InfoBox values"
+#~ msgstr "InfoBox Werte"
+
+#~ msgid "Overlay text"
+#~ msgstr "Overlay text"
+
+#~ msgid "Bold"
+#~ msgstr "Fett"
+
+#~ msgid "Italic"
+#~ msgstr "Kursiv"
 
 #~ msgid "Do you want to activate plane profile \"%s\"?"
 #~ msgstr "Flugzeugprofil \"%s\" wirklich aktivieren?"
