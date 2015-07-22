@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-06-14 01:07+0000\n"
-"Last-Translator: Masahiro Mori <Unknown>\n"
+"PO-Revision-Date: 2015-07-06 09:33+0000\n"
+"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-06-29 10:20+0000\n"
-"X-Generator: Launchpad (build 17578)\n"
+"X-Launchpad-Export-Date: 2015-07-22 05:20+0000\n"
+"X-Generator: Launchpad (build 17628)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -5280,7 +5280,7 @@ msgstr "設定重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
 msgid "Reference mass of the polar"
-msgstr ""
+msgstr "ポーラー設定重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5288,7 +5288,7 @@ msgstr "乾燥重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "自重"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
@@ -5854,13 +5854,13 @@ msgstr "空域の塗りつぶし　無し"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr ""
+msgstr "ラベルは表示されない"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr ""
+msgstr "全ラベルを表示"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -5892,7 +5892,7 @@ msgstr "ラベルの表示"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:158
 msgid "Determines what labels are displayed."
-msgstr ""
+msgstr "表示するラベルを選択"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5924,11 +5924,11 @@ msgstr "有効/無効　全ての空域の警報"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Warnings dialog"
-msgstr ""
+msgstr "警告ダイアログ"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr ""
+msgstr "空域警報ダイアログの設定"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6308,7 +6308,7 @@ msgstr "ファイナルグライド　モードを自動モードで使用する
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
 #, no-c-format
 msgid "Normal"
-msgstr ""
+msgstr "標準"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
 #, no-c-format
@@ -8321,7 +8321,7 @@ msgstr "使用する　飛行体のタイプ"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
 msgid "Vehicle Name"
-msgstr ""
+msgstr "車両の名称"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Server"
@@ -8720,7 +8720,7 @@ msgstr "残り　速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:481
 msgid "V ach"
-msgstr ""
+msgstr "表示速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:483
 msgid ""
