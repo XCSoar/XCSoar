@@ -61,14 +61,6 @@ public:
                               gcc_unused const int i) {}
 
   /**
-   * Called when a task is invalid due to improper construction
-   * (e.g. no finish point etc)
-   *
-   * @param error Text of error message
-   */
-  virtual void ConstructionError(gcc_unused const char *error) {}
-
-  /**
    * Called when a task point can be advanced but the advance needs
    * to be armed
    *

@@ -40,16 +40,6 @@ TaskEventsPrint::ExitTransition(const TaskWaypoint &tp)
 }
 
 void
-TaskEventsPrint::ConstructionError(const char* error)
-{
-  if (verbose) {
-    printf("#Task construction error: ");
-    printf("#%s", error);
-    printf("\n");
-  }
-}
-
-void
 TaskEventsPrint::RequestArm(const TaskWaypoint &tp)
 {
   if (verbose)
