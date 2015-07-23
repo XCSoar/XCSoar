@@ -29,9 +29,13 @@
 
 #include "TrackingGestureManager.hpp"
 
+#include <assert.h>
+
 bool
 TrackingGestureManager::Update(PixelScalar x, PixelScalar y)
 {
+  assert(!points.empty());
+
   points.back() = { x, y };
 
   if (!GestureManager::Update(x, y))
