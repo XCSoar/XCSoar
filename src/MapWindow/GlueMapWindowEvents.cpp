@@ -311,15 +311,15 @@ GlueMapWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 bool
 GlueMapWindow::OnMultiTouchDown()
 {
+  if (!visible_projection.IsValid())
+    return false;
+
   if (drag_mode == DRAG_GESTURE)
     gestures.Finish();
   else if (follow_mode != FOLLOW_SELF)
     return false;
 
   /* start panning on MultiTouch event */
-
-  if (!visible_projection.IsValid())
-    return false;
 
   drag_mode = DRAG_MULTI_TOUCH_PAN;
   drag_projection = visible_projection;
