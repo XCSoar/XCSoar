@@ -64,29 +64,29 @@ struct StartConstraints {
    * Check whether aircraft speed is within start speed limits
    *
    * @param state Aircraft state
-   * @param with_margin Whether to use margin for minor rule violation
+   * @param margins if not nullptr, the given margins are allowed for
+   * minor rule violation
    *
    * @return True if within limits
    */
   gcc_pure
   bool CheckSpeed(const AircraftState &state,
-                  const TaskStartMargins &margins,
-                  const bool with_margin = false) const;
+                  const TaskStartMargins *margins=nullptr) const;
 
   /**
    * Check whether aircraft height is within start height limit
    *
    * @param state Aircraft state
    * @param start_elevation start point elevation
-   * @param with_margin Whether to use margin for minor rule violation
+   * @param margins if not nullptr, the given margins are allowed for
+   * minor rule violation
    *
    * @return True if within limits
    */
   gcc_pure
   bool CheckHeight(const AircraftState &state,
-                   const TaskStartMargins &margins,
                    const fixed start_elevation,
-                   const bool with_margin = false) const;
+                   const TaskStartMargins *margins=nullptr) const;
 };
 
 #endif

@@ -115,7 +115,8 @@ bool
 StartPoint::IsInSector(const AircraftState &state) const
 {
   return OrderedTaskPoint::IsInSector(state) &&
-    constraints.CheckHeight(state, margins, GetBaseElevation());
+    // TODO: not using margins?
+    constraints.CheckHeight(state, GetBaseElevation());
 }
 
 bool
@@ -130,10 +131,11 @@ StartPoint::CheckExitTransition(const AircraftState &ref_now,
     /* the start gate was already closed when we left the OZ */
     return false;
 
+  // TODO: not using margins?
   const bool now_in_height =
-    constraints.CheckHeight(ref_now, margins, GetBaseElevation());
+    constraints.CheckHeight(ref_now, GetBaseElevation());
   const bool last_in_height =
-    constraints.CheckHeight(ref_last, margins, GetBaseElevation());
+    constraints.CheckHeight(ref_last, GetBaseElevation());
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks
