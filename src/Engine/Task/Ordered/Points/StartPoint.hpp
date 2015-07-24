@@ -96,8 +96,6 @@ public:
   void SetNeighbours(OrderedTaskPoint *prev,
                      OrderedTaskPoint *next) override;
   bool IsInSector(const AircraftState &ref) const override;
-  bool UpdateSampleNear(const AircraftState &state,
-                        const FlatProjection &projection) override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */

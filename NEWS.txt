@@ -23,6 +23,7 @@ Version 6.8 - not yet released
   - remove setting "Prefer external wind"
   - reduce EKF wind latency
   - fix bogus value in "Nearest Airspace H" InfoBox (#3589)
+  - obey the maximum start speed (#2841)
 * airspace cross-section
   - sync map & cross-section view zoom setting (#2913)
 * infoboxes

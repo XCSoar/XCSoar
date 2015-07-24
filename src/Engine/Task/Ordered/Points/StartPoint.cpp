@@ -68,18 +68,6 @@ StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 }
 
 
-bool
-StartPoint::UpdateSampleNear(const AircraftState& state,
-                             const FlatProjection &projection)
-{
-  /* TODO:
-  if (IsInSector(state) && !constraints.CheckSpeed(state, margins))
-    TO_BE_IMPLEMENTED;
-  */
-
-  return OrderedTaskPoint::UpdateSampleNear(state, projection);
-}
-
 void
 StartPoint::find_best_start(const AircraftState &state,
                             const OrderedTaskPoint &next,
@@ -129,6 +117,11 @@ StartPoint::CheckExitTransition(const AircraftState &ref_now,
 
   if (constraints.open_time_span.HasEnded(RoughTime::FromSecondOfDayChecked(unsigned(ref_now.time))))
     /* the start gate was already closed when we left the OZ */
+    return false;
+
+  if (!constraints.CheckSpeed(ref_now.ground_speed, &margins) ||
+      !constraints.CheckSpeed(ref_last.ground_speed, &margins))
+    /* flying too fast */
     return false;
 
   // TODO: not using margins?
