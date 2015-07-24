@@ -24,6 +24,7 @@ KOBO_MENU_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
+	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/System.cpp \
 	$(SRC)/Kobo/Kernel.cpp \
 	$(SRC)/Kobo/NetworkDialog.cpp \
