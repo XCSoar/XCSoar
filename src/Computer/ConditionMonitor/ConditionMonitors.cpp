@@ -27,7 +27,6 @@ Copyright_License {
 #include "ConditionMonitorFinalGlide.hpp"
 #include "ConditionMonitorGlideTerrain.hpp"
 #include "ConditionMonitorLandableReachable.hpp"
-#include "ConditionMonitorStartRules.hpp"
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
 
@@ -35,7 +34,6 @@ static ConditionMonitorWind cm_wind;
 static ConditionMonitorFinalGlide cm_finalglide;
 static ConditionMonitorSunset cm_sunset;
 static ConditionMonitorAATTime cm_aattime;
-static ConditionMonitorStartRules cm_startrules;
 static ConditionMonitorGlideTerrain cm_glideterrain;
 static ConditionMonitorLandableReachable cm_landablereachable;
 
@@ -47,7 +45,6 @@ ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
   cm_finalglide.Update(basic, calculated, settings);
   cm_sunset.Update(basic, calculated, settings);
   cm_aattime.Update(basic, calculated, settings);
-  cm_startrules.Update(basic, calculated, settings);
   cm_glideterrain.Update(basic, calculated, settings);
   cm_landablereachable.Update(basic, calculated, settings);
 }
