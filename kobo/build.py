@@ -26,7 +26,7 @@ build_path = os.path.join(arch_path, 'build')
 root_path = os.path.join(arch_path, 'root')
 
 target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
-common_flags = '-Os -g ' + target_arch
+common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + target_arch
 cflags = common_flags
 cxxflags = common_flags
 cppflags = '--sysroot=' + target_root + ' -isystem ' + os.path.join(root_path, 'include' + ' -DNDEBUG')
