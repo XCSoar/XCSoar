@@ -143,6 +143,15 @@ Unit FormatUserMapScale(fixed value, TCHAR *buffer,
 void FormatUserSpeed(fixed value, TCHAR *buffer,
                      bool include_unit = true, bool Precision = true);
 
+gcc_const
+static inline StringBuffer<TCHAR, 32>
+FormatUserSpeed(fixed value, bool precision=true)
+{
+  StringBuffer<TCHAR, 32> buffer;
+  FormatUserSpeed(value, buffer.data(), true, precision);
+  return buffer;
+}
+
 /**
  * Converts a double-based Speed into a formatted string
  * @param Speed The double-based Speed
