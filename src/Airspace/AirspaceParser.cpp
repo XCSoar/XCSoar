@@ -44,10 +44,10 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
-enum AirspaceFileType {
-  AFT_UNKNOWN,
-  AFT_OPENAIR,
-  AFT_TNP
+enum class AirspaceFileType {
+  UNKNOWN,
+  OPENAIR,
+  TNP,
 };
 
 struct AirspaceClassCharCouple
@@ -881,13 +881,13 @@ DetectFileType(const TCHAR *line)
   if (StringAfterPrefixCI(line, _T("INCLUDE=")) ||
       StringAfterPrefixCI(line, _T("TYPE=")) ||
       StringAfterPrefixCI(line, _T("TITLE=")))
-    return AFT_TNP;
+    return AirspaceFileType::TNP;
 
   const TCHAR *p = StringAfterPrefixCI(line, _T("AC"));
   if (p != nullptr && (StringIsEmpty(p) || *p == _T(' ')))
-    return AFT_OPENAIR;
+    return AirspaceFileType::OPENAIR;
 
-  return AFT_UNKNOWN;
+  return AirspaceFileType::UNKNOWN;
 }
 
 bool
@@ -901,7 +901,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   const long file_size = reader.GetSize();
 
   TempAirspaceType temp_area;
-  AirspaceFileType filetype = AFT_UNKNOWN;
+  AirspaceFileType filetype = AirspaceFileType::UNKNOWN;
 
   TCHAR *line;
 
@@ -911,19 +911,19 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
     if (StringIsEmpty(line))
       continue;
 
-    if (filetype == AFT_UNKNOWN) {
+    if (filetype == AirspaceFileType::UNKNOWN) {
       filetype = DetectFileType(line);
-      if (filetype == AFT_UNKNOWN)
+      if (filetype == AirspaceFileType::UNKNOWN)
         continue;
     }
 
     // Parse the line
-    if (filetype == AFT_OPENAIR)
+    if (filetype == AirspaceFileType::OPENAIR)
       if (!ParseLine(airspaces, line, temp_area) &&
           !ShowParseWarning(line_num, line, operation))
         return false;
 
-    if (filetype == AFT_TNP)
+    if (filetype == AirspaceFileType::TNP)
       if (!ParseLineTNP(airspaces, line, temp_area, ignore) &&
           !ShowParseWarning(line_num, line, operation))
         return false;
@@ -933,7 +933,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
       operation.SetProgressPosition(reader.Tell() * 1024 / file_size);
   }
 
-  if (filetype == AFT_UNKNOWN) {
+  if (filetype == AirspaceFileType::UNKNOWN) {
     operation.SetErrorMessage(_("Unknown airspace filetype"));
     return false;
   }
