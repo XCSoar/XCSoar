@@ -195,7 +195,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     return true;
 
   // If task marker is reached ignore all following lines
-  if (_tcsstr(line, _T("-----Related Tasks-----")) == line)
+  if (StringStartsWith(line, _T("-----Related Tasks-----")))
     ignore_following = true;
   if (ignore_following)
     return true;

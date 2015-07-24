@@ -161,7 +161,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
     return true;
 
   // Check for format: UTM or LatLon
-  if (*line == _T('U') && _tcsstr(line, _T("U  0")) == line) {
+  if (StringStartsWith(line, _T("U  0"))) {
     is_utm = true;
     return true;
   }

@@ -165,8 +165,7 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
   if (line[0] == '\0')
     return true;
 
-  if (linenum == 0 &&
-      _tcsstr(line, _T("$FormatUTM")) == line) {
+  if (linenum == 0 && StringStartsWith(line, _T("$FormatUTM"))) {
     is_utm = true;
     return true;
   }
