@@ -546,15 +546,6 @@ ValueAfterSpace(const TCHAR *p)
   return p + 1;
 }
 
-static const TCHAR *
-SkipSpaces(const TCHAR *p)
-{
-  while (*p == _T(' '))
-    p++;
-
-  return p;
-}
-
 static bool
 ParseLine(Airspaces &airspace_database, TCHAR *line,
           TempAirspaceType &temp_area)
@@ -611,12 +602,12 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
   case _T('V'):
   case _T('v'):
     // Need to set these while in count mode, or DB/DA will crash
-    if ((value = StringAfterPrefixCI(SkipSpaces(line + 1), _T("X="))) != nullptr) {
+    if ((value = StringAfterPrefixCI(StripLeft(line + 1), _T("X="))) != nullptr) {
       if (!ReadCoords(value, temp_area.center))
         return false;
-    } else if (StringAfterPrefixCI(SkipSpaces(line + 1), _T("D=-"))) {
+    } else if (StringAfterPrefixCI(StripLeft(line + 1), _T("D=-"))) {
       temp_area.rotation = -1;
-    } else if (StringAfterPrefixCI(SkipSpaces(line + 1), _T("D=+"))) {
+    } else if (StringAfterPrefixCI(StripLeft(line + 1), _T("D=+"))) {
       temp_area.rotation = +1;
     }
     break;
