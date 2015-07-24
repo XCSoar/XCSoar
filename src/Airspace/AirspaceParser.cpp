@@ -869,9 +869,9 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
 static AirspaceFileType
 DetectFileType(const TCHAR *line)
 {
-  if (StringAfterPrefixCI(line, _T("INCLUDE=")) ||
-      StringAfterPrefixCI(line, _T("TYPE=")) ||
-      StringAfterPrefixCI(line, _T("TITLE=")))
+  if (StringStartsWithIgnoreCase(line, _T("INCLUDE=")) ||
+      StringStartsWithIgnoreCase(line, _T("TYPE=")) ||
+      StringStartsWithIgnoreCase(line, _T("TITLE=")))
     return AirspaceFileType::TNP;
 
   const TCHAR *p = StringAfterPrefixCI(line, _T("AC"));
