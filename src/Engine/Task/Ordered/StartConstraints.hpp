@@ -63,14 +63,14 @@ struct StartConstraints {
   /**
    * Check whether aircraft speed is within start speed limits
    *
-   * @param state Aircraft state
+   * @param ground_speed the aircraft's ground speed
    * @param margins if not nullptr, the given margins are allowed for
    * minor rule violation
    *
    * @return True if within limits
    */
   gcc_pure
-  bool CheckSpeed(const AircraftState &state,
+  bool CheckSpeed(fixed ground_speed,
                   const TaskStartMargins *margins=nullptr) const;
 
   /**

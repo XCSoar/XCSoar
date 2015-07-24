@@ -36,7 +36,7 @@ StartConstraints::SetDefaults()
 }
 
 bool
-StartConstraints::CheckSpeed(const AircraftState &state,
+StartConstraints::CheckSpeed(fixed ground_speed,
                              const TaskStartMargins *margins) const
 {
   if (max_speed == fixed(0))
@@ -49,7 +49,7 @@ StartConstraints::CheckSpeed(const AircraftState &state,
     ? margins->max_speed_margin
     : fixed(0);
 
-  return state.ground_speed <= max_speed + margin;
+  return ground_speed <= max_speed + margin;
 }
 
 bool
