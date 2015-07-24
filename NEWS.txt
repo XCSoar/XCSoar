@@ -4,6 +4,7 @@ Version 6.8 - not yet released
   - faster RASP map change
   - show all RASP maps
   - fix comments in TNP files
+  - ignore trailing whitespace in airspace files (#3546)
   - store user-edited waypoints and markers in "user.cup"
 * devices
   - remove option "Ignore checksum"

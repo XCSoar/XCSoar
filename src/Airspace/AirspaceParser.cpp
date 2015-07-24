@@ -898,6 +898,8 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
 
   // Iterate through the lines
   for (unsigned line_num = 1; (line = reader.ReadLine()) != nullptr; line_num++) {
+    StripRight(line);
+
     // Skip empty line
     if (StringIsEmpty(line))
       continue;
