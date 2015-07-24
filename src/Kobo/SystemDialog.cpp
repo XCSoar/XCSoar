@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
+#include "Model.hpp"
 
 class SystemWidget final
   : public RowFormWidget, ActionListener {
@@ -69,6 +70,11 @@ inline void
 SystemWidget::SwitchKernel()
 {
 #ifdef KOBO
+  if (DetectKoboModel() != KoboModel::MINI &&
+      ShowMessageBox(_T("This feature was designed for the Kobo Mini, but this is not one.  Use at your own risk.  Continue?"),
+                     _T("USB-OTG"), MB_YESNO) != IDYES)
+    return;
+
   const char *otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.otg";
   const char *kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.kobo";
 
