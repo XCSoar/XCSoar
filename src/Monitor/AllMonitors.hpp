@@ -28,6 +28,7 @@ Copyright_License {
 #include "RateLimiter.hpp"
 #include "WindMonitor.hpp"
 #include "AirspaceWarningMonitor.hpp"
+#include "TaskConstraintsMonitor.hpp"
 #include "TaskAdvanceMonitor.hpp"
 #include "MatTaskMonitor.hpp"
 
@@ -37,6 +38,7 @@ Copyright_License {
 class AllMonitors final : NullBlackboardListener, RateLimiter {
   WindMonitor wind;
   AirspaceWarningMonitor airspace_warnings;
+  TaskConstraintsMonitor task_constraints;
   TaskAdvanceMonitor task_advance;
   MatTaskMonitor mat_task;
 
@@ -47,6 +49,7 @@ public:
   void Reset() {
     wind.Reset();
     airspace_warnings.Reset();
+    task_constraints.Reset();
     task_advance.Reset();
     mat_task.Reset();
   }
@@ -54,6 +57,7 @@ public:
   void Check() {
     wind.Check();
     airspace_warnings.Check();
+    task_constraints.Check();
     task_advance.Check();
     mat_task.Check();
   }
