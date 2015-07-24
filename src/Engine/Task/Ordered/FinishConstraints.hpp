@@ -51,7 +51,7 @@ struct FinishConstraints {
    * Check whether aircraft height is within finish height limit
    *
    * @param state Aircraft state
-   * @param fpAlt finish point altitude
+   * @param finish_elevation finish point elevation
    *
    * @return True if within limits
    */

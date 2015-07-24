@@ -64,7 +64,6 @@ struct StartConstraints {
    * Check whether aircraft speed is within start speed limits
    *
    * @param state Aircraft state
-   * @param behaviour TaskBehaviour (contains margins)
    * @param with_margin Whether to use margin for minor rule violation
    *
    * @return True if within limits
@@ -78,8 +77,7 @@ struct StartConstraints {
    * Check whether aircraft height is within start height limit
    *
    * @param state Aircraft state
-   * @param behaviour TaskBehaviour (contains margins)
-   * @param spAlt start point altitude
+   * @param start_elevation start point elevation
    * @param with_margin Whether to use margin for minor rule violation
    *
    * @return True if within limits
