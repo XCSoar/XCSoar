@@ -61,6 +61,8 @@ HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
 
+USE_CROSSTOOL_NG := n
+
 TARGET_ARCH :=
 
 # virtual targets ("flavors")
@@ -281,7 +283,11 @@ endif
 ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON
   override TARGET = UNIX
-  TCPREFIX = arm-linux-gnueabihf-
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    TCPREFIX = arm-unknown-linux-gnueabihf-
+  else
+    TCPREFIX = arm-linux-gnueabihf-
+  endif
   ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
   endif
