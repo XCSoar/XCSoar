@@ -31,12 +31,13 @@ Copyright_License {
  * Waypoint file read/writer for WinPilot format
  */
 class WaypointReaderWinPilot final : public WaypointReaderBase {
+  bool first;
   bool welt2000_format;
 
 public:
   explicit WaypointReaderWinPilot(WaypointFactory _factory)
     :WaypointReaderBase(_factory),
-     welt2000_format(false) {}
+     first(true), welt2000_format(false) {}
 
 protected:
   /* virtual methods from class WaypointReaderBase */

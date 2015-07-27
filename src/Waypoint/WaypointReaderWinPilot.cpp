@@ -203,8 +203,11 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // If comment
   if (line[0] == _T('*')) {
-    if (linenum == 0)
+    if (first) {
+      first = false;
       welt2000_format = (_tcsstr(line, _T("WRITTEN BY WELT2000")) != nullptr);
+    }
+
     // -> return without error condition
     return true;
   }
