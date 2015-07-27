@@ -307,6 +307,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointListBuilder.cpp \
 	$(SRC)/Waypoint/WaypointFilter.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
+	$(SRC)/Waypoint/SaveGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \

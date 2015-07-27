@@ -1830,7 +1830,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
-	$(SRC)/Waypoint/CupWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/XML/Node.cpp \
