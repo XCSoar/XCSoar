@@ -53,9 +53,7 @@ enum class TypeFilter: uint8_t {
 
 struct WaypointFilter
 {
-  enum {
-    NAME_LENGTH = 10,
-  };
+  static constexpr size_t NAME_LENGTH = 10;
 
   StaticString<NAME_LENGTH + 1> name;
 
