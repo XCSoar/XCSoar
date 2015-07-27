@@ -244,11 +244,11 @@ public:
 
 static WaypointListDialogState dialog_state;
 
-static TCHAR *
+static const TCHAR *
 GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
 {
   if (direction_filter_index == 0)
-    _tcscpy(buffer, _T("*"));
+    return _T("*");
   else if (direction_filter_index == 1)
     StringFormatUnsafe(buffer, _T("HDG(%s)"),
                        FormatBearing(last_heading).c_str());
