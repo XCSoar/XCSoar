@@ -34,7 +34,8 @@ class WaypointReaderSeeYou:
 
 public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
-    :WaypointReaderBase(_factory) {}
+    :WaypointReaderBase(_factory),
+     ignore_following(false) {}
 
 protected:
   /**

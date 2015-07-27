@@ -175,9 +175,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     iDescription = 10,
   };
 
-  if (linenum == 0)
-    ignore_following = false;
-
   // If (end-of-file or comment)
   if (StringIsEmpty(line) ||
       StringStartsWith(line, _T("**")) ||
