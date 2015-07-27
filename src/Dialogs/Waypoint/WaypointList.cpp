@@ -99,6 +99,7 @@ static const TCHAR *const type_filter_items[] = {
   _T("Right FAI Triangle"),
   _T("Custom"),
   _T("File 1"), _T("File 2"),
+  _T("Map file"),
   _T("Recently Used"),
   nullptr
 };
@@ -392,6 +393,8 @@ CreateTypeDataField(DataFieldListener *listener)
                          ProfileKeys::WaypointFile);
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE_2,
                          ProfileKeys::AdditionalWaypointFile);
+  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
+                         ProfileKeys::MapFile);
 
   df->Set((int)dialog_state.type_index);
   return df;

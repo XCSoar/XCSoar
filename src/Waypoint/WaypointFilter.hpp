@@ -47,6 +47,7 @@ enum class TypeFilter: uint8_t {
   USER,
   FILE_1,
   FILE_2,
+  MAP,
   LAST_USED,
 };
 

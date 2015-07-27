@@ -42,6 +42,11 @@ enum class WaypointOrigin : uint8_t {
   PRIMARY,
   ADDITIONAL,
   WATCHED,
+
+  /**
+   * Waypoints stored in the map file.
+   */
+  MAP,
 };
 
 #endif

@@ -91,11 +91,11 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
     TCHAR *tail = path + _tcslen(path);
 
     _tcscpy(tail, _T("/waypoints.xcw"));
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::NONE,
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::MAP,
                               terrain, operation);
 
     _tcscpy(tail, _T("/waypoints.cup"));
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::NONE,
+    found |= LoadWaypointFile(way_points, path, WaypointOrigin::MAP,
                               terrain, operation);
   }
 
