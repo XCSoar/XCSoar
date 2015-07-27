@@ -162,6 +162,7 @@ namespace InputEvents
   void eventTerrainTopography(const TCHAR *misc);
   void eventTerrainTopology(const TCHAR *misc);
   void eventWaypointDetails(const TCHAR *misc);
+  void eventWaypointEditor(const TCHAR *misc);
   void eventZoom(const TCHAR *misc);
   void eventBrightness(const TCHAR *misc);
   void eventDeclutterLabels(const TCHAR *misc);

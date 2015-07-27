@@ -334,6 +334,12 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     dlgWaypointDetailsShowModal(*wp);
 }
 
+void
+InputEvents::eventWaypointEditor(const TCHAR *misc)
+{
+  dlgConfigWaypointsShowModal();
+}
+
 // StatusMessage
 // Displays a user defined status message.
 //    The argument is the text to be displayed.

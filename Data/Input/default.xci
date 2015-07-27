@@ -591,6 +591,14 @@ location=5
 
 mode=Config2
 type=key
+data=8
+event=WaypointEditor
+event=Mode default
+label=Waypoints Editor
+location=7
+
+mode=Config2
+type=key
 data=9
 event=FileManager
 event=Mode default
