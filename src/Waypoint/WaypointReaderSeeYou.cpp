@@ -175,6 +175,15 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     iDescription = 10,
   };
 
+  if (first) {
+    first = false;
+
+    /* skip first line if it doesn't begin with a quotation character
+       (usually the field order line) */
+    if (line[0] != _T('\"'))
+      return true;
+  }
+
   // If (end-of-file or comment)
   if (StringIsEmpty(line) ||
       StringStartsWith(line, _T("*")))
@@ -185,11 +194,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
     return false;
-
-  // Skip first line if it doesn't begin with a quotation character
-  // (usually the field order line)
-  if (linenum == 0 && line[0] != _T('\"'))
-    return true;
 
   // If task marker is reached ignore all following lines
   if (StringStartsWith(line, _T("-----Related Tasks-----")))

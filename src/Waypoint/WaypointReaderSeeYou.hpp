@@ -30,12 +30,14 @@ Copyright_License {
 class WaypointReaderSeeYou: 
   public WaypointReaderBase 
 {
+  bool first;
+
   bool ignore_following;
 
 public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
     :WaypointReaderBase(_factory),
-     ignore_following(false) {}
+     first(true), ignore_following(false) {}
 
 protected:
   /**
