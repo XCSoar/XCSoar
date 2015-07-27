@@ -193,11 +193,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   TCHAR ctemp[4096];
   const TCHAR *params[20];
   static constexpr unsigned int max_params = ARRAY_SIZE(params);
-  static bool welt2000_format = false;
   size_t n_params;
-
-  if (linenum == 0)
-    welt2000_format = false;
 
   // If (end-of-file)
   if (line[0] == '\0')

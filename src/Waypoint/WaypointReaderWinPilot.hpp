@@ -33,9 +33,12 @@ Copyright_License {
 class WaypointReaderWinPilot: 
   public WaypointReaderBase 
 {
+  bool welt2000_format;
+
 public:
   explicit WaypointReaderWinPilot(WaypointFactory _factory)
-    :WaypointReaderBase(_factory) {}
+    :WaypointReaderBase(_factory),
+     welt2000_format(false) {}
 
 protected:
   bool ParseLine(const TCHAR* line, const unsigned linenum,
