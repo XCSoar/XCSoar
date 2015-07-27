@@ -188,8 +188,7 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
 }
 
 bool
-WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &waypoints)
+WaypointReaderWinPilot::ParseLine(const TCHAR *line, Waypoints &waypoints)
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];

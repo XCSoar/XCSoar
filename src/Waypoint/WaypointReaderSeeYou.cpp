@@ -160,8 +160,7 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
 }
 
 bool
-WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &waypoints)
+WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
 {
   enum {
     iName = 0,

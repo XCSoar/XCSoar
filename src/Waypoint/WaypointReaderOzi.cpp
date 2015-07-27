@@ -67,8 +67,7 @@ ParseString(const TCHAR *src, tstring &dest)
 }
 
 bool
-WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+WaypointReaderOzi::ParseLine(const TCHAR *line, Waypoints &way_points)
 {
   if (line[0] == '\0')
     return true;

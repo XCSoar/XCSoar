@@ -36,7 +36,7 @@ WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
   TCHAR *line;
   for (unsigned i = 0; (line = reader.ReadLine()) != nullptr; i++) {
     // and parse them
-    ParseLine(line, i, way_points);
+    ParseLine(line, way_points);
 
     if ((i & 0x3f) == 0)
       operation.SetProgressPosition(reader.Tell() * 100 / filesize);

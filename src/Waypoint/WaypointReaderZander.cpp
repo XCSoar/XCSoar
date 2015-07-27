@@ -147,8 +147,7 @@ ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
 }
 
 bool
-WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+WaypointReaderZander::ParseLine(const TCHAR* line, Waypoints &way_points)
 {
   // If (end-of-file or comment)
   if (line[0] == '\0' || line[0] == '*')

@@ -66,8 +66,7 @@ protected:
    * @return True if the line was parsed correctly or ignored, False if
    * parsing error occured
    */
-  virtual bool ParseLine(const TCHAR* line, unsigned linenum,
-                         Waypoints &way_points) = 0;
+  virtual bool ParseLine(const TCHAR* line, Waypoints &way_points) = 0;
 };
 
 #endif

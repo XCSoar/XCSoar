@@ -141,8 +141,7 @@ ParseAltitude(const TCHAR *&src, fixed &dest)
 }
 
 bool
-WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
-                                  Waypoints &waypoints)
+WaypointReaderCompeGPS::ParseLine(const TCHAR *line, Waypoints &waypoints)
 {
   /*
    * G  WGS 84

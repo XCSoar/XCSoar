@@ -33,8 +33,7 @@ public:
 
 protected:
   /* virtual methods from class WaypointReaderBase */
-  bool ParseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points) override;
+  bool ParseLine(const TCHAR *line, Waypoints &way_points) override;
 };
 
 #endif

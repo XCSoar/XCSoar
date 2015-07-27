@@ -145,8 +145,7 @@ ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
 }
 
 bool
-WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 {
   //$FormatGEO
   //ACONCAGU  S 32 39 12.00    W 070 00 42.00  6962  Aconcagua
