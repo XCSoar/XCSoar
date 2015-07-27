@@ -178,8 +178,9 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
     return false;
 
   GeoPoint location;
-  if ((!is_utm && !ParseLocation(line + 10, location)) ||
-      (is_utm && !ParseLocationUTM(line + 9, location)))
+  if (!(is_utm
+        ? ParseLocationUTM(line + 9, location)
+        : ParseLocation(line + 10, location)))
     return false;
 
   Waypoint new_waypoint = factory.Create(location);
