@@ -105,7 +105,7 @@ WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp)
   }
 }
 
-static void
+void
 WriteCup(TextWriter &writer, const Waypoint &wp)
 {
   // Write Title

@@ -33,6 +33,9 @@ class TextWriter;
 class Angle;
 
 void
+WriteCup(TextWriter &writer, const Waypoint &wp);
+
+void
 WriteCup(TextWriter &writer, const Waypoints &waypoints,
          WaypointOrigin origin);
 

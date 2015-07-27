@@ -46,3 +46,19 @@ WaypointGlue::SaveWaypoints(const Waypoints &way_points)
   LogFormat(_T("Waypoint file '%s' saved"), path);
   return true;
 }
+
+bool
+WaypointGlue::SaveWaypoint(const Waypoint &wp)
+{
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("user.cup"));
+
+  TextWriter writer(path, true);
+  if (!writer.IsOpen()) {
+    LogFormat(_T("Waypoint file '%s' can not be written"), path);
+    return false;
+  }
+
+  WriteCup(writer, wp);
+  return true;
+}

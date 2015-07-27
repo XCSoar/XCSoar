@@ -108,6 +108,11 @@ namespace WaypointGlue {
                      OperationEnvironment &operation);
 
   bool SaveWaypoints(const Waypoints &way_points);
+
+  /**
+   * Append one waypoint to the file "user.cup".
+   */
+  bool SaveWaypoint(const Waypoint &wp);
 };
 
 #endif
