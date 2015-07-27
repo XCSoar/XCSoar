@@ -75,11 +75,6 @@ enum Buttons {
   SELECT,
 };
 
-static GeoPoint location;
-
-static OrderedTask *ordered_task;
-static unsigned ordered_task_index;
-
 static constexpr unsigned distance_filter_items[] = {
   0, 25, 50, 75, 100, 150, 250, 500, 1000
 };
@@ -87,8 +82,6 @@ static constexpr unsigned distance_filter_items[] = {
 static constexpr int direction_filter_items[] = {
   -1, -1, 0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
-
-static Angle last_heading = Angle::Zero();
 
 static const TCHAR *const type_filter_items[] = {
   _T("*"), _T("Airport"), _T("Landable"),
@@ -145,11 +138,23 @@ class WaypointListWidget final
 
   TwoTextRowsRenderer row_renderer;
 
+  const GeoPoint location;
+  Angle last_heading;
+
+  OrderedTask *const ordered_task;
+  const unsigned ordered_task_index;
+
 public:
   WaypointListWidget(ActionListener &_action_listener,
-                     WaypointFilterWidget &_filter_widget)
+                     WaypointFilterWidget &_filter_widget,
+                     GeoPoint _location, Angle _heading,
+                     OrderedTask *_ordered_task,
+                     unsigned _ordered_task_index)
     :action_listener(_action_listener),
-    filter_widget(_filter_widget) {}
+     filter_widget(_filter_widget),
+     location(_location), last_heading(_heading),
+     ordered_task(_ordered_task),
+     ordered_task_index(_ordered_task_index) {}
 
   void UpdateList();
 
@@ -203,17 +208,19 @@ private:
 };
 
 class WaypointFilterWidget : public RowFormWidget {
+  Angle last_heading;
+
   DataFieldListener *listener;
 
 public:
-  WaypointFilterWidget(const DialogLook &look)
-    :RowFormWidget(look, true) {}
+  WaypointFilterWidget(const DialogLook &look, Angle _heading)
+    :RowFormWidget(look, true), last_heading(_heading) {}
 
   void SetListener(DataFieldListener *_listener) {
     listener = _listener;
   }
 
-  void Update();
+  void Update(Angle last_heading);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
@@ -245,13 +252,14 @@ public:
 static WaypointListDialogState dialog_state;
 
 static const TCHAR *
-GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
+GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index,
+                 Angle heading)
 {
   if (direction_filter_index == 0)
     return _T("*");
   else if (direction_filter_index == 1)
     StringFormatUnsafe(buffer, _T("HDG(%s)"),
-                       FormatBearing(last_heading).c_str());
+                       FormatBearing(heading).c_str());
   else
     FormatBearing(buffer, size, direction_filter_items[direction_filter_index]);
 
@@ -259,21 +267,24 @@ GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
 }
 
 void
-WaypointFilterWidget::Update()
+WaypointFilterWidget::Update(Angle _last_heading)
 {
+  last_heading = _last_heading;
+
   WndProperty &direction_control = GetControl(DIRECTION);
   DataFieldEnum &direction_df = *(DataFieldEnum *)
     direction_control.GetDataField();
 
   TCHAR buffer[12];
   direction_df.replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer),
-                                                   1));
+                                                   1, last_heading));
   direction_control.RefreshDisplay();
 }
 
 static void
 FillList(WaypointList &list, const Waypoints &src,
-         GeoPoint location, Angle heading, const WaypointListDialogState &state)
+         GeoPoint location, Angle heading, const WaypointListDialogState &state,
+         OrderedTask *ordered_task, unsigned ordered_task_index)
 {
   if (!state.IsDefined() && src.size() >= 500)
     return;
@@ -313,7 +324,8 @@ WaypointListWidget::UpdateList()
                      way_points);
   else
     FillList(items, way_points, location, last_heading,
-             dialog_state);
+             dialog_state,
+             ordered_task, ordered_task_index);
 
   auto &list = GetList();
   list.SetLength(std::max(1u, (unsigned)items.size()));
@@ -363,12 +375,13 @@ CreateDistanceDataField(DataFieldListener *listener)
 }
 
 static DataField *
-CreateDirectionDataField(DataFieldListener *listener)
+CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 {
   TCHAR buffer[12];
   DataFieldEnum *df = new DataFieldEnum(listener);
   for (unsigned i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
-    df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
+    df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i,
+                                     last_heading));
 
   df->Set(dialog_state.direction_index);
   return df;
@@ -406,7 +419,7 @@ WaypointFilterWidget::Prepare(ContainerWindow &parent,
 {
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
-  Add(_("Direction"), nullptr, CreateDirectionDataField(listener));
+  Add(_("Direction"), nullptr, CreateDirectionDataField(listener, last_heading));
   Add(_("Type"), nullptr, CreateTypeDataField(listener));
 }
 
@@ -498,7 +511,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
     Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
       last_heading = heading;
-      filter_widget.Update();
+      filter_widget.Update(last_heading);
       UpdateList();
     }
   }
@@ -535,15 +548,13 @@ ShowWaypointListDialog(const GeoPoint &_location,
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  location = _location;
-  ordered_task = _ordered_task;
-  ordered_task_index = _ordered_task_index;
-  last_heading = CommonInterface::Basic().attitude.heading;
+  const Angle heading = CommonInterface::Basic().attitude.heading;
+
   dialog_state.name.clear();
 
   WidgetDialog dialog(look);
 
-  WaypointFilterWidget *filter_widget = new WaypointFilterWidget(look);
+  auto *filter_widget = new WaypointFilterWidget(look, heading);
 
   WaypointListButtons *buttons_widget = new WaypointListButtons(look, dialog);
 
@@ -551,7 +562,9 @@ ShowWaypointListDialog(const GeoPoint &_location,
     new TwoWidgets(filter_widget, buttons_widget, true);
 
   WaypointListWidget *const list_widget =
-    new WaypointListWidget(dialog, *filter_widget);
+    new WaypointListWidget(dialog, *filter_widget,
+                           _location, heading,
+                           _ordered_task, _ordered_task_index);
 
   filter_widget->SetListener(list_widget);
   buttons_widget->SetList(list_widget);
