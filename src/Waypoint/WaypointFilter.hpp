@@ -61,6 +61,7 @@ struct WaypointFilter
   Angle direction;
   TypeFilter type_index;
 
+  gcc_pure
   bool Matches(const Waypoint &waypoint, GeoPoint location,
                const FAITrianglePointValidator &triangle_validator) const;
 
