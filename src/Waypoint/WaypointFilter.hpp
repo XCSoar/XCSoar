@@ -61,6 +61,10 @@ struct WaypointFilter
   Angle direction;
   TypeFilter type_index;
 
+  bool Matches(const Waypoint &waypoint, GeoPoint location,
+               const FAITrianglePointValidator &triangle_validator) const;
+
+private:
   static bool CompareType(const Waypoint &waypoint, TypeFilter type,
                           const FAITrianglePointValidator &triangle_validator);
 
@@ -75,9 +79,6 @@ struct WaypointFilter
   static bool CompareName(const Waypoint &waypoint, const TCHAR *name);
 
   bool CompareName(const Waypoint &waypoint) const;
-
-  bool Matches(const Waypoint &waypoint, GeoPoint location,
-               const FAITrianglePointValidator &triangle_validator) const;
 };
 
 #endif

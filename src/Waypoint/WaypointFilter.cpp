@@ -25,7 +25,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Engine/Task/Shapes/FAITrianglePointValidator.hpp"
 
-bool
+inline bool
 WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
                             const FAITrianglePointValidator &triangle_validator)
 {
@@ -74,14 +74,14 @@ WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
   return false;
 }
 
-bool
+inline bool
 WaypointFilter::CompareType(const Waypoint &waypoint,
                             const FAITrianglePointValidator &triangle_validator) const
 {
   return CompareType(waypoint, type_index, triangle_validator);
 }
 
-bool
+inline bool
 WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
                                      GeoPoint location)
 {
@@ -94,20 +94,20 @@ WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
   return direction_error < fixed(18);
 }
 
-bool
+inline bool
 WaypointFilter::CompareDirection(const Waypoint &waypoint,
                                  GeoPoint location) const
 {
   return CompareDirection(waypoint, direction, location);
 }
 
-bool
+inline bool
 WaypointFilter::CompareName(const Waypoint &waypoint, const TCHAR *name)
 {
   return StringIsEqualIgnoreCase(waypoint.name.c_str(), name, _tcslen(name));
 }
 
-bool
+inline bool
 WaypointFilter::CompareName(const Waypoint &waypoint) const
 {
   return CompareName(waypoint, name);
