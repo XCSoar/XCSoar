@@ -33,9 +33,7 @@ class WaypointList;
 class Waypoints;
 struct Waypoint;
 
-class WaypointListBuilder:
-  public WaypointVisitor
-{
+class WaypointListBuilder final : public WaypointVisitor {
   const WaypointFilter &filter;
   const GeoPoint location;
   WaypointList &list;
