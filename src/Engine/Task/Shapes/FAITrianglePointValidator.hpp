@@ -37,8 +37,8 @@ struct FAITriangleSettings;
  */
 class FAITrianglePointValidator
 {
-  OrderedTask *task;
-  unsigned t_index;
+  OrderedTask *const task;
+  const unsigned t_index;
   unsigned t_size;
   fixed leg1;
   fixed leg2;

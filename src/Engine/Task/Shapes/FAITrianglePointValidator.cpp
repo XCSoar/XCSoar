@@ -52,7 +52,6 @@ FAITrianglePointValidator::FAITrianglePointValidator(
   } else {
     leg1 = leg2 = leg3 = fixed(0);
     t_size = 0;
-    t_index = 0;
   }
 
   fai_triangle_point_invalid = t_size > 4 || t_index > 3;
