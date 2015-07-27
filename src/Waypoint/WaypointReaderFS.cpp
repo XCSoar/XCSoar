@@ -165,13 +165,11 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
   if (line[0] == '\0')
     return true;
 
-  if (linenum == 0 && StringStartsWith(line, _T("$FormatUTM"))) {
-    is_utm = true;
+  if (line[0] == _T('$')) {
+    if (StringStartsWith(line, _T("$FormatUTM")))
+      is_utm = true;
     return true;
   }
-
-  if (line[0] == _T('$'))
-    return true;
 
   // Determine the length of the line
   size_t len = _tcslen(line);
