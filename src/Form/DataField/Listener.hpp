@@ -28,7 +28,7 @@ class DataField;
 
 class DataFieldListener {
 public:
-  virtual void OnModified(gcc_unused DataField &df) {}
+  virtual void OnModified(DataField &df) = 0;
 };
 
 #endif
