@@ -29,9 +29,13 @@ Copyright_License {
 class WaypointReaderOzi:
   public WaypointReaderBase 
 {
+  unsigned ignore_lines;
+
 public:
   explicit WaypointReaderOzi(WaypointFactory _factory)
-    :WaypointReaderBase(_factory) {}
+    :WaypointReaderBase(_factory),
+     /* ignore the first 4 lines */
+     ignore_lines(4) {}
 
   static bool VerifyFormat(TLineReader &reader);
 

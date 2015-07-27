@@ -74,8 +74,10 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
     return true;
 
   // Ignore first four header lines
-  if (linenum < 4)
+  if (ignore_lines > 0) {
+    --ignore_lines;
     return true;
+  }
 
   TCHAR ctemp[255];
   const TCHAR *params[20];
