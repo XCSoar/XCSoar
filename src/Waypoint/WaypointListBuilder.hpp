@@ -47,7 +47,9 @@ public:
      triangle_validator(ordered_task, ordered_task_index) {}
 
   void Visit(const Waypoints &waypoints);
-  void Visit(const Waypoint &waypoint);
+
+  /* virtual methods from class WaypointVisitor */
+  void Visit(const Waypoint &waypoint) override;
 };
 
 
