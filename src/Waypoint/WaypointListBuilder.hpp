@@ -37,7 +37,7 @@ class WaypointListBuilder final : public WaypointVisitor {
   const WaypointFilter &filter;
   const GeoPoint location;
   WaypointList &list;
-  FAITrianglePointValidator triangle_validator;
+  const FAITrianglePointValidator triangle_validator;
 
 public:
   WaypointListBuilder(const WaypointFilter &_filter,
