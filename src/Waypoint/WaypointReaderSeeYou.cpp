@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaypointReaderSeeYou.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Util/ExtractParameters.hpp"
 #include "Util/Macros.hpp"
 
 #include <stdlib.h>

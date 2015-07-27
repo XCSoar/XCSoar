@@ -28,6 +28,7 @@
 #include "TestUtil.hpp"
 #include "Util/tstring.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>
@@ -41,30 +42,30 @@ TestExtractParameters()
 
   // test basic functionality
 
-  n = WaypointReaderBase::ExtractParameters(_T(""), buffer, params, 64);
+  n = ExtractParameters(_T(""), buffer, params, 64);
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo"), buffer, params, 64);
+  n = ExtractParameters(_T("foo"), buffer, params, 64);
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("foo")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo,bar"), buffer, params, 64);
+  n = ExtractParameters(_T("foo,bar"), buffer, params, 64);
   ok1(n == 2);
   ok1(StringIsEqual(params[0], _T("foo")));
   ok1(StringIsEqual(params[1], _T("bar")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo,bar"), buffer, params, 1);
+  n = ExtractParameters(_T("foo,bar"), buffer, params, 1);
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("foo")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo,bar,"), buffer, params, 64);
+  n = ExtractParameters(_T("foo,bar,"), buffer, params, 64);
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("foo")));
   ok1(StringIsEqual(params[1], _T("bar")));
   ok1(StringIsEqual(params[2], _T("")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo,bar,,"), buffer, params, 64);
+  n = ExtractParameters(_T("foo,bar,,"), buffer, params, 64);
   ok1(n == 4);
   ok1(StringIsEqual(params[0], _T("foo")));
   ok1(StringIsEqual(params[1], _T("bar")));
@@ -74,8 +75,7 @@ TestExtractParameters()
 
   // with qoutes but no quote handling
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo,comma\",\"bar\""),
-                                      buffer, params, 64);
+  n = ExtractParameters(_T("\"foo,comma\",\"bar\""), buffer, params, 64);
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("\"foo")));
   ok1(StringIsEqual(params[1], _T("comma\"")));
@@ -84,22 +84,22 @@ TestExtractParameters()
 
   // quote handling
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"\""),
+  n = ExtractParameters(_T("\"\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"\"\""),
+  n = ExtractParameters(_T("\"\"\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("\"")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"\"\"\""),
+  n = ExtractParameters(_T("\"\"\"\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("\"")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo,comma\",\"bar\""),
+  n = ExtractParameters(_T("\"foo,comma\",\"bar\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 2);
   ok1(StringIsEqual(params[0], _T("foo,comma")));
@@ -108,27 +108,24 @@ TestExtractParameters()
 
   // no quotes, whitespace removal
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo bar"),
-                                      buffer, params, 64, true);
+  n = ExtractParameters(_T("foo bar"), buffer, params, 64, true);
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("foo bar")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("foo , bar, baz"),
-                                      buffer, params, 64, true);
+  n = ExtractParameters(_T("foo , bar, baz"), buffer, params, 64, true);
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("foo")));
   ok1(StringIsEqual(params[1], _T("bar")));
   ok1(StringIsEqual(params[2], _T("baz")));
 
-  n = WaypointReaderBase::ExtractParameters(_T(" foo  ,  bar  , baz "),
-                                      buffer, params, 64, true);
+  n = ExtractParameters(_T(" foo  ,  bar  , baz "), buffer, params, 64, true);
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("foo")));
   ok1(StringIsEqual(params[1], _T("bar")));
   ok1(StringIsEqual(params[2], _T("baz")));
 
-  n = WaypointReaderBase::ExtractParameters(_T(" foo\"  , \" bar \"  , \"baz "),
-                                      buffer, params, 64, true);
+  n = ExtractParameters(_T(" foo\"  , \" bar \"  , \"baz "),
+                        buffer, params, 64, true);
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("foo\"")));
   ok1(StringIsEqual(params[1], _T("\" bar \"")));
@@ -136,42 +133,41 @@ TestExtractParameters()
 
   // quote handling, whitespace removal
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo \" , \" bar\", \" baz\""),
-                                      buffer, params, 64, true, _T('"'));
+  n = ExtractParameters(_T("\"foo \" , \" bar\", \" baz\""),
+                        buffer, params, 64, true, _T('"'));
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("foo ")));
   ok1(StringIsEqual(params[1], _T(" bar")));
   ok1(StringIsEqual(params[2], _T(" baz")));
 
-  n = WaypointReaderBase::ExtractParameters(
-                            _T(" \" foo  \"  ,  \"  bar  \"  , \" baz \" "),
-                            buffer, params, 64, true, _T('"'));
+  n = ExtractParameters(_T(" \" foo  \"  ,  \"  bar  \"  , \" baz \" "),
+                        buffer, params, 64, true, _T('"'));
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T(" foo  ")));
   ok1(StringIsEqual(params[1], _T("  bar  ")));
   ok1(StringIsEqual(params[2], _T(" baz ")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo\",\"\",\"bar\""),
-                                      buffer, params, 64, true, _T('"'));
+  n = ExtractParameters(_T("\"foo\",\"\",\"bar\""), buffer, params, 64,
+                        true, _T('"'));
   ok1(n == 3);
   ok1(StringIsEqual(params[0], _T("foo")));
   ok1(StringIsEqual(params[1], _T("")));
   ok1(StringIsEqual(params[2], _T("bar")));
 
   // missing end quote
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo, bar"),
-                                      buffer, params, 64, true, _T('"'));
+  n = ExtractParameters(_T("\"foo, bar"), buffer, params, 64,
+                        true, _T('"'));
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("foo, bar")));
 
   // embedded quotes and commas
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo, \"bar\"\""),
-                                      buffer, params, 64, true, _T('"'));
+  n = ExtractParameters(_T("\"foo, \"bar\"\""), buffer, params, 64,
+                        true, _T('"'));
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("foo, \"bar\"")));
 
-  n = WaypointReaderBase::ExtractParameters(_T("\"foo, \"\"bar\"\"\""),
-                                      buffer, params, 64, true, _T('"'));
+  n = ExtractParameters(_T("\"foo, \"\"bar\"\"\""), buffer, params, 64,
+                        true, _T('"'));
   ok1(n == 1);
   ok1(StringIsEqual(params[0], _T("foo, \"bar\"")));
 }

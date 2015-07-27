@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaypointReaderWinPilot.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Util/ExtractParameters.hpp"
 #include "Util/StringAPI.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"

@@ -22,6 +22,7 @@
  */
 
 #include "Task/TaskFileSeeYou.hpp"
+#include "Util/ExtractParameters.hpp"
 #include "Util/StringAPI.hpp"
 #include "Util/Macros.hpp"
 #include "IO/FileLineReader.hpp"
@@ -243,8 +244,8 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   const unsigned int max_params = ARRAY_SIZE(params);
   while ((line = reader.ReadLine()) != nullptr &&
          line[0] != _T('\"') && line[0] != _T(',')) {
-    const size_t n_params = WaypointReaderBase::
-        ExtractParameters(line, params_buffer, params, max_params, true);
+    const size_t n_params = ExtractParameters(line, params_buffer,
+                                              params, max_params, true);
 
     if (StringIsEqual(params[0], _T("Options"))) {
       // Options line found
@@ -485,8 +486,8 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
   TCHAR waypoints_buffer[1024];
   const TCHAR *wps[30];
-  size_t n_waypoints = WaypointReaderBase::
-      ExtractParameters(line, waypoints_buffer, wps, 30, true, _T('"'));
+  size_t n_waypoints = ExtractParameters(line, waypoints_buffer, wps, 30,
+                                         true, _T('"'));
 
   // Some versions of StrePla append a trailing ',' without a following
   // WP name resulting an empty last entry. Remove it from the results
