@@ -70,7 +70,7 @@ WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
     return false;
   }
 
-  /* not reachable */
+  gcc_unreachable();
   return false;
 }
 
