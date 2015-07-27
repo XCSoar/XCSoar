@@ -41,8 +41,8 @@ class WaypointListBuilder final : public WaypointVisitor {
 
 public:
   WaypointListBuilder(const WaypointFilter &_filter,
-                        GeoPoint _location, WaypointList &_list,
-                        OrderedTask *ordered_task, unsigned ordered_task_index)
+                      GeoPoint _location, WaypointList &_list,
+                      OrderedTask *ordered_task, unsigned ordered_task_index)
     :filter(_filter), location(_location), list(_list),
      triangle_validator(ordered_task, ordered_task_index) {}
 
