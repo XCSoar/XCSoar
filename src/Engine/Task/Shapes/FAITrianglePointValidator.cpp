@@ -182,8 +182,6 @@ FAITrianglePointValidator::PrepareFAITest(OrderedTask *ordered_task,
   task = ordered_task;
   t_index = ordered_task_index;
 
-  fai_triangle_point_invalid = false;
-
   if (ordered_task) {
     t_size = task->TaskSize();
     leg1 = t_size > 1
@@ -198,9 +196,5 @@ FAITrianglePointValidator::PrepareFAITest(OrderedTask *ordered_task,
     t_index = 0;
   }
 
-  if (t_size > 4)
-    fai_triangle_point_invalid = true;
-
-  if (t_index > 3)
-    fai_triangle_point_invalid = true;
+  fai_triangle_point_invalid = t_size > 4 || t_index > 3;
 }
