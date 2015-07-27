@@ -45,7 +45,7 @@ FAITrianglePointValidator::FAITrianglePointValidator(
 }
 
 
-bool
+inline bool
 FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
                                            const fixed d3,
                                            const FAITriangleSettings &settings)
@@ -56,7 +56,7 @@ FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
   return FAITriangleRules::TestDistances(d1, d2, d3, settings);
 }
 
-bool
+inline bool
 FAITrianglePointValidator::IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1,
                                       const GeoPoint &p2, bool right)
 {
@@ -175,7 +175,7 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
   return true;
 }
 
-void
+inline void
 FAITrianglePointValidator::PrepareFAITest(OrderedTask *ordered_task,
                                           const unsigned ordered_task_index)
 {
