@@ -80,6 +80,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/Factory.hpp"
+#include "Waypoint/WaypointGlue.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
@@ -137,6 +138,14 @@ SuspendAppendWaypoint(Waypoint &&wp)
   return result;
 }
 
+static const Waypoint &
+SuspendAppendSaveWaypoint(Waypoint &&wp)
+{
+  auto &wp2 = SuspendAppendWaypoint(std::move(wp));
+  WaypointGlue::SaveWaypoint(wp2);
+  return wp2;
+}
+
 // -----------------------------------------------------------------------
 // Execution - list of things you can do
 // -----------------------------------------------------------------------
@@ -171,7 +180,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
     wp.name = name;
     wp.type = Waypoint::Type::MARKER;
 
-    SuspendAppendWaypoint(std::move(wp));
+    SuspendAppendSaveWaypoint(std::move(wp));
 
     if (CommonInterface::GetUISettings().sound.sound_modes_enabled)
       PlayResource(_T("IDR_WAV_CLEAR"));
@@ -598,7 +607,7 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
       return;
     }
 
-    SuspendAppendWaypoint(std::move(edit_waypoint));
+    SuspendAppendSaveWaypoint(std::move(edit_waypoint));
   }
 
   trigger_redraw();
