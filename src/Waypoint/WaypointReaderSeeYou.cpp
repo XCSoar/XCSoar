@@ -177,7 +177,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // If (end-of-file or comment)
   if (StringIsEmpty(line) ||
-      StringStartsWith(line, _T("**")) ||
       StringStartsWith(line, _T("*")))
     // -> return without error condition
     return true;
