@@ -97,6 +97,7 @@ static const TCHAR *const type_filter_items[] = {
   _T("Finish"), 
   _T("Left FAI Triangle"),
   _T("Right FAI Triangle"),
+  _T("Custom"),
   _T("File 1"), _T("File 2"),
   _T("Recently Used"),
   nullptr

@@ -54,6 +54,9 @@ WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
   case TypeFilter::FAI_TRIANGLE_RIGHT:
     return triangle_validator.IsFAITrianglePoint(waypoint, true);
 
+  case TypeFilter::USER:
+    return waypoint.origin == WaypointOrigin::USER;
+
   case TypeFilter::FILE_1:
     return waypoint.origin == WaypointOrigin::PRIMARY;
 

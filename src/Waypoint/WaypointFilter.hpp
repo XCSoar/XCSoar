@@ -44,6 +44,7 @@ enum class TypeFilter: uint8_t {
   FINISH,
   FAI_TRIANGLE_LEFT,
   FAI_TRIANGLE_RIGHT,
+  USER,
   FILE_1,
   FILE_2,
   LAST_USED,
