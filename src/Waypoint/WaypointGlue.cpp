@@ -67,8 +67,7 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   TCHAR path[MAX_PATH];
 
   LocalPath(path, _T("user.cup"));
-  found |= LoadWaypointFile(way_points, path, WaypointOrigin::USER,
-                            terrain, operation);
+  LoadWaypointFile(way_points, path, WaypointOrigin::USER, terrain, operation);
 
   // ### FIRST FILE ###
   if (Profile::GetPath(ProfileKeys::WaypointFile, path))
