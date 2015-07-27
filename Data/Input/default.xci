@@ -647,14 +647,6 @@ location=6
 
 mode=Config3
 type=key
-data=8
-event=Setup Airspace
-event=Mode default
-label=Airspace$(CheckAirspace)
-location=7
-
-mode=Config3
-type=key
 data=9
 event=Mode Vario1
 label=Vega$(CheckVega)
