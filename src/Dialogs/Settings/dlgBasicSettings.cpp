@@ -127,7 +127,6 @@ public:
 private:
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
-  virtual void OnSpecial(DataField &df) override;
 
   /* virtual methods from Timer */
   virtual void OnTimer() override;
@@ -270,13 +269,6 @@ FlightSetupPanel::OnModified(DataField &df)
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
     SetQNH(Units::FromUserPressure(dff.GetAsFixed()));
   }
-}
-
-void
-FlightSetupPanel::OnSpecial(DataField &df)
-{
-  if (IsDataField(Ballast, df))
-    FlipBallastTimer();
 }
 
 void

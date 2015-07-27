@@ -59,13 +59,6 @@ DataField::Modified()
 }
 
 void
-DataField::Special()
-{
-  if (listener != nullptr)
-    listener->OnSpecial(*this);
-}
-
-void
 DataField::Inc()
 {
 }

@@ -24,11 +24,6 @@ Copyright_License {
 #include "Form/DataField/Base.hpp"
 #include "Dialogs/DataField.hpp"
 
-void
-DataField::Special()
-{
-}
-
 bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)

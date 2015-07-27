@@ -75,17 +75,6 @@ WndProperty::OnKeyDown(unsigned key_code)
   return WindowControl::OnKeyDown(key_code);
 }
 
-bool
-WndProperty::OnKeyUp(unsigned key_code)
-{
-  if (key_code == KEY_RETURN) {
-    if (CallSpecial())
-      return true;
-  }
-
-  return WindowControl::OnKeyUp(key_code);
-}
-
 void
 WndProperty::OnSetFocus()
 {
@@ -268,16 +257,6 @@ WndProperty::OnCancelMode()
   }
 
   WindowControl::OnCancelMode();
-}
-
-int
-WndProperty::CallSpecial()
-{
-  if (data_field != nullptr) {
-    data_field->Special();
-    RefreshDisplay();
-  }
-  return 0;
 }
 
 int

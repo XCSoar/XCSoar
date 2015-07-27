@@ -93,7 +93,6 @@ public:
     return type;
   }
 
-  void Special();
   virtual void Inc();
   virtual void Dec();
 

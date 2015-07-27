@@ -80,9 +80,6 @@ public:
               unsigned _caption_width,
               const WindowStyle style);
 
-protected:
-  int CallSpecial();
-
 public:
   /**
    * Returns the recommended caption width, measured by the dialog
@@ -124,7 +121,6 @@ protected:
 
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
-  bool OnKeyUp(unsigned key_code) override;
 
   void OnCancelMode() override;
 
