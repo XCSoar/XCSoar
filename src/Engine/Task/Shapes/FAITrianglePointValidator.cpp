@@ -77,11 +77,10 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
   if (fai_triangle_point_invalid)
     return false;
 
-  if (!task)
-    return true;
-
   if (t_size == 0)
     return true;
+
+  assert(task != nullptr);
 
   const FAITriangleSettings &settings =
     task->GetOrderedTaskSettings().fai_triangle;
