@@ -41,7 +41,21 @@ FAITrianglePointValidator::FAITrianglePointValidator(
    leg1(fixed(0)), leg2(fixed(0)), leg3(fixed(0)),
    fai_triangle_point_invalid(false)
 {
-  PrepareFAITest(ordered_task, ordered_task_index);
+  if (task != nullptr) {
+    t_size = task->TaskSize();
+    leg1 = t_size > 1
+      ? task->GetTaskPoint(1).GetVectorPlanned().distance : fixed(0);
+    leg2 = t_size > 2
+      ? task->GetTaskPoint(2).GetVectorPlanned().distance : fixed(0);
+    leg3 = t_size > 3
+      ? task->GetTaskPoint(3).GetVectorPlanned().distance : fixed(0);
+  } else {
+    leg1 = leg2 = leg3 = fixed(0);
+    t_size = 0;
+    t_index = 0;
+  }
+
+  fai_triangle_point_invalid = t_size > 4 || t_index > 3;
 }
 
 
@@ -172,28 +186,4 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
                             settings);
   }
   return true;
-}
-
-inline void
-FAITrianglePointValidator::PrepareFAITest(OrderedTask *ordered_task,
-                                          const unsigned ordered_task_index)
-{
-  task = ordered_task;
-  t_index = ordered_task_index;
-
-  if (ordered_task) {
-    t_size = task->TaskSize();
-    leg1 = t_size > 1
-      ? task->GetTaskPoint(1).GetVectorPlanned().distance : fixed(0);
-    leg2 = t_size > 2
-      ? task->GetTaskPoint(2).GetVectorPlanned().distance : fixed(0);
-    leg3 = t_size > 3
-      ? task->GetTaskPoint(3).GetVectorPlanned().distance : fixed(0);
-  } else {
-    leg1 = leg2 = leg3 = fixed(0);
-    t_size = 0;
-    t_index = 0;
-  }
-
-  fai_triangle_point_invalid = t_size > 4 || t_index > 3;
 }
