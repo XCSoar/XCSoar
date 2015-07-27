@@ -27,12 +27,10 @@ Copyright_License {
 
 #include "WaypointReaderBase.hpp"
 
-/** 
+/**
  * Waypoint file read/writer for WinPilot format
  */
-class WaypointReaderWinPilot: 
-  public WaypointReaderBase 
-{
+class WaypointReaderWinPilot final : public WaypointReaderBase {
   bool welt2000_format;
 
 public:
@@ -41,8 +39,9 @@ public:
      welt2000_format(false) {}
 
 protected:
+  /* virtual methods from class WaypointReaderBase */
   bool ParseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points);
+                 Waypoints &way_points) override;
 };
 
 #endif

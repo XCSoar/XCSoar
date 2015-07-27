@@ -27,9 +27,12 @@ Copyright_License {
 
 #include "WaypointReaderBase.hpp"
 
-class WaypointReaderSeeYou: 
-  public WaypointReaderBase 
-{
+/**
+ * Parses a SeeYou waypoint file.
+ *
+ * @see http://data.naviter.si/docs/cup_format.pdf
+ */
+class WaypointReaderSeeYou final : public WaypointReaderBase {
   bool first;
 
   bool ignore_following;
@@ -40,13 +43,9 @@ public:
      first(true), ignore_following(false) {}
 
 protected:
-  /**
-   * Parses a SeeYou waypoint file line
-   * @see parseLine()
-   * @see http://data.naviter.si/docs/cup_format.pdf
-   */
+  /* virtual methods from class WaypointReaderBase */
   bool ParseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points);
+                 Waypoints &way_points) override;
 };
 
 #endif

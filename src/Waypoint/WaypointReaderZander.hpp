@@ -26,16 +26,15 @@ Copyright_License {
 
 #include "WaypointReaderBase.hpp"
 
-class WaypointReaderZander: 
-  public WaypointReaderBase 
-{
+class WaypointReaderZander final : public WaypointReaderBase {
 public:
   explicit WaypointReaderZander(WaypointFactory _factory)
     :WaypointReaderBase(_factory) {}
 
 protected:
+  /* virtual methods from class WaypointReaderBase */
   bool ParseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points);
+                 Waypoints &way_points) override;
 };
 
 #endif
