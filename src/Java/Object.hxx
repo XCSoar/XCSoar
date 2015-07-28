@@ -27,57 +27,29 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_CLASS_HPP
-#define XCSOAR_JAVA_CLASS_HPP
+#ifndef JAVA_OBJECT_HXX
+#define JAVA_OBJECT_HXX
 
-#include "Ref.hpp"
+#include "Ref.hxx"
 
-#include <assert.h>
+#include <jni.h>
 
 namespace Java {
-  /**
-   * Wrapper for a local "jclass" reference.
-   */
-  class Class : public LocalRef<jclass> {
-  public:
-    Class(JNIEnv *env, jclass cls)
-      :LocalRef<jclass>(env, cls) {}
+	/**
+	 * Wrapper for a local "jobject" reference.
+	 */
+	typedef LocalRef<jobject> LocalObject;
 
-    Class(JNIEnv *env, const char *name)
-      :LocalRef<jclass>(env, env->FindClass(name)) {}
-  };
+	class Object : public GlobalRef<jobject> {
+	public:
+		/**
+		 * Constructs an uninitialized object.  The method set() must be
+		 * called before it is destructed.
+		 */
+		Object() = default;
 
-  /**
-   * Wrapper for a global "jclass" reference.
-   */
-  class TrivialClass : public TrivialRef<jclass> {
-  public:
-    void Find(JNIEnv *env, const char *name) {
-      assert(env != nullptr);
-      assert(name != nullptr);
-
-      jclass cls = env->FindClass(name);
-      assert(cls != nullptr);
-
-      Set(env, cls);
-      env->DeleteLocalRef(cls);
-    }
-
-    bool FindOptional(JNIEnv *env, const char *name) {
-      assert(env != nullptr);
-      assert(name != nullptr);
-
-      jclass cls = env->FindClass(name);
-      if (cls == nullptr) {
-        env->ExceptionClear();
-        return false;
-      }
-
-      Set(env, cls);
-      env->DeleteLocalRef(cls);
-      return true;
-    }
-  };
+		Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
+	};
 }
 
 #endif

@@ -29,7 +29,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
-#include "Java/Global.hpp"
+#include "Java/Global.hxx"
 #endif
 
 #include <stdio.h>

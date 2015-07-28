@@ -27,16 +27,16 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "File.hpp"
-#include "Class.hpp"
+#include "File.hxx"
+#include "Class.hxx"
 
 jmethodID Java::File::getAbsolutePath_method;
 
 void
 Java::File::Initialise(JNIEnv *env)
 {
-  Class cls(env, "java/io/File");
+	Class cls(env, "java/io/File");
 
-  getAbsolutePath_method = env->GetMethodID(cls, "getAbsolutePath",
-                                            "()Ljava/lang/String;");
+	getAbsolutePath_method = env->GetMethodID(cls, "getAbsolutePath",
+						  "()Ljava/lang/String;");
 }

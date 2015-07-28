@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
 #define XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
 
-#include "Java/Object.hpp"
-#include "Java/Class.hpp"
+#include "Java/Object.hxx"
+#include "Java/Class.hxx"
 #include "Compiler.h"
 
 #include <jni.h>

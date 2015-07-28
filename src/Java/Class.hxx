@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,40 +27,57 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_INPUT_STREAM_HPP
-#define XCSOAR_JAVA_INPUT_STREAM_HPP
+#ifndef JAVA_CLASS_HXX
+#define JAVA_CLASS_HXX
 
-#include <jni.h>
+#include "Ref.hxx"
+
 #include <assert.h>
-#include <stddef.h>
 
 namespace Java {
-  /**
-   * Wrapper for a java.io.InputStream object.
-   */
-  class InputStream {
-    static jmethodID close_method, read_method;
+	/**
+	 * Wrapper for a local "jclass" reference.
+	 */
+	class Class : public LocalRef<jclass> {
+	public:
+		Class(JNIEnv *env, jclass cls)
+			:LocalRef<jclass>(env, cls) {}
 
-  public:
-    static void Initialise(JNIEnv *env);
+		Class(JNIEnv *env, const char *name)
+			:LocalRef<jclass>(env, env->FindClass(name)) {}
+	};
 
-    static void close(JNIEnv *env, jobject is) {
-      assert(env != nullptr);
-      assert(is != nullptr);
-      assert(close_method != nullptr);
+	/**
+	 * Wrapper for a global "jclass" reference.
+	 */
+	class TrivialClass : public TrivialRef<jclass> {
+	public:
+		void Find(JNIEnv *env, const char *name) {
+			assert(env != nullptr);
+			assert(name != nullptr);
 
-      env->CallVoidMethod(is, close_method);
-    }
+			jclass cls = env->FindClass(name);
+			assert(cls != nullptr);
 
-    static int read(JNIEnv *env, jobject is, jbyteArray buffer) {
-      assert(env != nullptr);
-      assert(is != nullptr);
-      assert(buffer != nullptr);
-      assert(read_method != nullptr);
+			Set(env, cls);
+			env->DeleteLocalRef(cls);
+		}
 
-      return env->CallIntMethod(is, read_method, buffer);
-    }
-  };
+		bool FindOptional(JNIEnv *env, const char *name) {
+			assert(env != nullptr);
+			assert(name != nullptr);
+
+			jclass cls = env->FindClass(name);
+			if (cls == nullptr) {
+				env->ExceptionClear();
+				return false;
+			}
+
+			Set(env, cls);
+			env->DeleteLocalRef(cls);
+			return true;
+		}
+	};
 }
 
 #endif

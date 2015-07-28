@@ -46,8 +46,8 @@ Copyright_License {
 #include "Job/Job.hpp"
 
 #ifdef ANDROID
-#include "Java/Object.hpp"
-#include "Java/Global.hpp"
+#include "Java/Object.hxx"
+#include "Java/Global.hxx"
 #include "Android/InternalSensors.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"

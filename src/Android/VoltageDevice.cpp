@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "VoltageDevice.hpp"
 #include "NativeVoltageListener.hpp"
-#include "Java/Class.hpp"
+#include "Java/Class.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Atmosphere/Temperature.hpp"

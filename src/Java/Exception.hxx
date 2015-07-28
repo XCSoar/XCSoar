@@ -27,23 +27,23 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_EXCEPTION_HPP
-#define XCSOAR_JAVA_EXCEPTION_HPP
+#ifndef JAVA_EXCEPTION_HXX
+#define JAVA_EXCEPTION_HXX
 
 #include <jni.h>
 
 namespace Java {
-  /**
-   * Check if an exception has occurred, and discard it.
-   *
-   * @return true if an exception was found (and discarded)
-   */
-  static inline bool DiscardException(JNIEnv *env) {
-    bool result = env->ExceptionCheck();
-    if (result)
-      env->ExceptionClear();
-    return result;
-  }
+	/**
+	 * Check if an exception has occurred, and discard it.
+	 *
+	 * @return true if an exception was found (and discarded)
+	 */
+	static inline bool DiscardException(JNIEnv *env) {
+		bool result = env->ExceptionCheck();
+		if (result)
+			env->ExceptionClear();
+		return result;
+	}
 }
 
 #endif

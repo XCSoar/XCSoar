@@ -30,7 +30,7 @@
 #include "Screen/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Java/Global.hpp"
+#include "Java/Global.hxx"
 #include "Android/LeScanCallback.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Language/Language.hpp"

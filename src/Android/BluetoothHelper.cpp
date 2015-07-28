@@ -26,8 +26,8 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "NativeLeScanCallback.hpp"
 #include "PortBridge.hpp"
-#include "Java/String.hpp"
-#include "Java/Class.hpp"
+#include "Java/String.hxx"
+#include "Java/Class.hxx"
 
 #include <map>
 #include <string>

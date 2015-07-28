@@ -25,7 +25,7 @@ Copyright_License {
 #include "I2CbaroListener.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Java/Class.hpp"
+#include "Java/Class.hxx"
 #include "org_xcsoar_NativeI2CbaroListener.h"
 
 #include <stddef.h>

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_NUNCHUCK_DEVICE_HPP
 
 #include "NunchuckListener.hpp"
-#include "Java/Object.hpp"
+#include "Java/Object.hxx"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Compiler.h"
 

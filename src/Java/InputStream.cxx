@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,29 +27,20 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_OBJECT_HPP
-#define XCSOAR_JAVA_OBJECT_HPP
+#include "InputStream.hxx"
+#include "Class.hxx"
 
-#include "Ref.hpp"
+jmethodID Java::InputStream::close_method;
+jmethodID Java::InputStream::read_method;
 
-#include <jni.h>
+void
+Java::InputStream::Initialise(JNIEnv *env)
+{
+	Class cls(env, "java/io/InputStream");
 
-namespace Java {
-  /**
-   * Wrapper for a local "jobject" reference.
-   */
-  typedef LocalRef<jobject> LocalObject;
+	close_method = env->GetMethodID(cls, "close", "()V");
+	assert(close_method != nullptr);
 
-  class Object : public GlobalRef<jobject> {
-  public:
-    /**
-     * Constructs an uninitialized object.  The method set() must be
-     * called before it is destructed.
-     */
-    Object() = default;
-
-    Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
-  };
+	read_method = env->GetMethodID(cls, "read", "([B)I");
+	assert(read_method != nullptr);
 }
-
-#endif

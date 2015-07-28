@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Android/IOIOHelper.hpp"
 #include "PortBridge.hpp"
-#include "Java/Class.hpp"
+#include "Java/Class.hxx"
 
 Java::TrivialClass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,

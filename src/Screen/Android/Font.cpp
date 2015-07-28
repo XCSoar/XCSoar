@@ -24,9 +24,9 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/FontDescription.hpp"
-#include "Java/Global.hpp"
-#include "Java/Class.hpp"
-#include "Java/String.hpp"
+#include "Java/Global.hxx"
+#include "Java/Class.hxx"
+#include "Java/String.hxx"
 #include "Android/TextUtil.hpp"
 
 #include <assert.h>

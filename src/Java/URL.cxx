@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "URL.hpp"
+#include "URL.hxx"
 
 Java::TrivialClass Java::URL::cls;
 jmethodID Java::URL::ctor;
@@ -36,23 +36,23 @@ jmethodID Java::URL::openConnection_method;
 void
 Java::URL::Initialise(JNIEnv *env)
 {
-  assert(!cls.IsDefined());
-  assert(env != nullptr);
+	assert(!cls.IsDefined());
+	assert(env != nullptr);
 
-  cls.Find(env, "java/net/URL");
+	cls.Find(env, "java/net/URL");
 
-  ctor = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;)V");
-  assert(ctor != nullptr);
+	ctor = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;)V");
+	assert(ctor != nullptr);
 
-  openConnection_method = env->GetMethodID(cls, "openConnection",
-                                           "()Ljava/net/URLConnection;");
-  assert(openConnection_method != nullptr);
+	openConnection_method = env->GetMethodID(cls, "openConnection",
+						 "()Ljava/net/URLConnection;");
+	assert(openConnection_method != nullptr);
 }
 
 void
 Java::URL::Deinitialise(JNIEnv *env)
 {
-  cls.Clear(env);
+	cls.Clear(env);
 }
 
 jmethodID Java::URLConnection::setConnectTimeout_method;
@@ -63,19 +63,21 @@ jmethodID Java::URLConnection::getInputStream_method;
 void
 Java::URLConnection::Initialise(JNIEnv *env)
 {
-  Java::Class cls(env, "java/net/URLConnection");
+	Java::Class cls(env, "java/net/URLConnection");
 
-  setConnectTimeout_method = env->GetMethodID(cls, "setConnectTimeout",
-                                              "(I)V");
-  assert(setConnectTimeout_method != nullptr);
+	setConnectTimeout_method = env->GetMethodID(cls, "setConnectTimeout",
+						    "(I)V");
+	assert(setConnectTimeout_method != nullptr);
 
-  setReadTimeout_method = env->GetMethodID(cls, "setReadTimeout", "(I)V");
-  assert(setReadTimeout_method != nullptr);
+	setReadTimeout_method = env->GetMethodID(cls, "setReadTimeout",
+						 "(I)V");
+	assert(setReadTimeout_method != nullptr);
 
-  getContentLength_method = env->GetMethodID(cls, "getContentLength", "()I");
-  assert(getContentLength_method != nullptr);
+	getContentLength_method = env->GetMethodID(cls, "getContentLength",
+						   "()I");
+	assert(getContentLength_method != nullptr);
 
-  getInputStream_method = env->GetMethodID(cls, "getInputStream",
-                                           "()Ljava/io/InputStream;");
-  assert(getInputStream_method != nullptr);
+	getInputStream_method = env->GetMethodID(cls, "getInputStream",
+						 "()Ljava/io/InputStream;");
+	assert(getInputStream_method != nullptr);
 }

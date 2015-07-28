@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_PORT_BRIDGE_HPP
 #define XCSOAR_ANDROID_PORT_BRIDGE_HPP
 
-#include "Java/Object.hpp"
+#include "Java/Object.hxx"
+
+#include <stddef.h>
 
 class PortListener;
 class DataHandler;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,27 +27,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_FILE_HPP
-#define XCSOAR_JAVA_FILE_HPP
-
-#include "Object.hpp"
-
-#include <jni.h>
+#include "Global.hxx"
 
 namespace Java {
-  /**
-   * Wrapper for a java.io.File object.
-   */
-  class File : public LocalObject {
-    static jmethodID getAbsolutePath_method;
+	JavaVM *jvm;
 
-  public:
-    static void Initialise(JNIEnv *env);
-
-    static jstring getAbsolutePath(JNIEnv *env, jobject file) {
-      return (jstring)env->CallObjectMethod(file, getAbsolutePath_method);
-    }
-  };
+	void Init(JNIEnv *env)
+	{
+		env->GetJavaVM(&jvm);
+	}
 }
-
-#endif

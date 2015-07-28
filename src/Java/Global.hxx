@@ -27,45 +27,32 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_STRING_HPP
-#define XCSOAR_JAVA_STRING_HPP
+#ifndef JAVA_GLOBAL_HXX
+#define JAVA_GLOBAL_HXX
 
-#include "Ref.hpp"
+#include "Compiler.h"
 
-#include <assert.h>
 #include <jni.h>
 
 namespace Java {
-  /**
-   * Wrapper for a local "jstring" reference.
-   */
-  class String : public LocalRef<jstring> {
-  public:
-    String(JNIEnv *env, jstring value)
-      :LocalRef<jstring>(env, value) {}
+	extern JavaVM *jvm;
 
-    String(JNIEnv *_env, const char *_value)
-      :LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
+	void Init(JNIEnv *env);
 
-    /**
-     * Copy the value to the specified buffer.  Truncates the value if
-     * it does not fit into the buffer.
-     *
-     * @return a pointer to the terminating null byte, nullptr on error
-     */
-    static char *CopyTo(JNIEnv *env, jstring value,
-                        char *buffer, size_t max_size);
+	static inline void
+	DetachCurrentThread()
+	{
+		if (jvm != nullptr)
+			jvm->DetachCurrentThread();
+	}
 
-    /**
-     * Copy the value to the specified buffer.  Truncates the value if
-     * it does not fit into the buffer.
-     *
-     * @return a pointer to the terminating null byte, nullptr on error
-     */
-    char *CopyTo(JNIEnv *env, char *buffer, size_t max_size) {
-      return CopyTo(env, Get(), buffer, max_size);
-    }
-  };
+	static inline gcc_pure
+	JNIEnv *GetEnv()
+	{
+		JNIEnv *env;
+		jvm->AttachCurrentThread(&env, nullptr);
+		return env;
+	}
 }
 
 #endif

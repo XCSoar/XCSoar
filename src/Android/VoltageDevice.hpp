@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_VOLTAGE_DEVICE_HPP
 
 #include "VoltageListener.hpp"
-#include "Java/Object.hpp"
+#include "Java/Object.hxx"
 #include "Compiler.h"
 #include "Math/fixed.hpp"
 #include "Math/WindowFilter.hpp"

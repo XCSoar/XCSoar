@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "NativeLeScanCallback.hpp"
 #include "LeScanCallback.hpp"
-#include "Java/Class.hpp"
-#include "Java/String.hpp"
+#include "Java/Class.hxx"
+#include "Java/String.hxx"
 #include "org_xcsoar_NativeLeScanCallback.h"
 
 namespace NativeLeScanCallback {

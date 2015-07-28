@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Android/TextUtil.hpp"
-#include "Java/Class.hpp"
-#include "Java/String.hpp"
-#include "Java/Exception.hpp"
+#include "Java/Class.hxx"
+#include "Java/String.hxx"
+#include "Java/Exception.hxx"
 #include "Screen/Point.hpp"
 #include "Look/FontDescription.hpp"
 #include "Asset.hpp"

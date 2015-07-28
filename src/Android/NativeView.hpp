@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_NATIVE_VIEW_HPP
 #define XCSOAR_ANDROID_NATIVE_VIEW_HPP
 
-#include "Java/Object.hpp"
-#include "Java/Class.hpp"
-#include "Java/String.hpp"
+#include "Java/Object.hxx"
+#include "Java/Class.hxx"
+#include "Java/String.hxx"
 
 #ifndef NO_SCREEN
 #include "Screen/Point.hpp"

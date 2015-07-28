@@ -40,9 +40,9 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Java/Global.hpp"
-#include "Java/Class.hpp"
-#include "Java/Object.hpp"
+#include "Java/Global.hxx"
+#include "Java/Class.hxx"
+#include "Java/Object.hxx"
 #endif
 
 #ifdef WIN32

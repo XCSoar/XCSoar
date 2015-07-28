@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "NativePortListener.hpp"
 #include "Device/Port/Listener.hpp"
-#include "Java/Class.hpp"
+#include "Java/Class.hxx"
 #include "org_xcsoar_NativePortListener.h"
 
 #include <stddef.h>

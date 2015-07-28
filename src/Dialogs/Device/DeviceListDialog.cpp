@@ -61,7 +61,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #ifdef ANDROID
-#include "Java/Global.hpp"
+#include "Java/Global.hxx"
 #include "Android/BluetoothHelper.hpp"
 #endif
 

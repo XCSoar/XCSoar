@@ -27,33 +27,18 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_GLOBAL_HPP
-#define XCSOAR_JAVA_GLOBAL_HPP
+#include "String.hxx"
+#include "Util/StringUtil.hpp"
 
-#include "Compiler.h"
+char *
+Java::String::CopyTo(JNIEnv *env, jstring value,
+		     char *buffer, size_t max_size)
+{
+	const char *p = env->GetStringUTFChars(value, nullptr);
+	if (p == nullptr)
+		return nullptr;
 
-#include <jni.h>
-#include <stddef.h>
-
-namespace Java {
-  extern JavaVM *jvm;
-
-  void Init(JNIEnv *env);
-
-  static inline void
-  DetachCurrentThread()
-  {
-    if (jvm != nullptr)
-      jvm->DetachCurrentThread();
-  }
-
-  static inline gcc_pure
-  JNIEnv *GetEnv()
-  {
-    JNIEnv *env;
-    jvm->AttachCurrentThread(&env, nullptr);
-    return env;
-  }
+	char *result = CopyString(buffer, p, max_size);
+	env->ReleaseStringUTFChars(value, p);
+	return result;
 }
-
-#endif

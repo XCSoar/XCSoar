@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util.hpp"
 
 #ifdef ANDROID
-#include "Java/Global.hpp"
+#include "Java/Global.hxx"
 #endif
 
 #include <assert.h>

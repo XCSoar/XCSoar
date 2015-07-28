@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "NunchuckDevice.hpp"
 #include "NativeNunchuckListener.hpp"
-#include "Java/Class.hpp"
+#include "Java/Class.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "LogFile.hpp"

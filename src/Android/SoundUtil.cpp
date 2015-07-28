@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Android/SoundUtil.hpp"
-#include "Java/Class.hpp"
-#include "Java/String.hpp"
+#include "Java/Class.hxx"
+#include "Java/String.hxx"
 
 namespace SoundUtil {
   static Java::TrivialClass cls;

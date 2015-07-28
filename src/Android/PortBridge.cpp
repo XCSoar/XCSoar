@@ -24,7 +24,7 @@ Copyright_License {
 #include "Android/PortBridge.hpp"
 #include "Android/NativePortListener.hpp"
 #include "Android/NativeInputListener.hpp"
-#include "Java/Class.hpp"
+#include "Java/Class.hxx"
 
 #include <string.h>
 

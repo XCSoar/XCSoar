@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_CONTEXT_HPP
 #define XCSOAR_ANDROID_CONTEXT_HPP
 
-#include "Java/Object.hpp"
+#include "Java/Object.hxx"
 
 class Context : public Java::Object {
 public:

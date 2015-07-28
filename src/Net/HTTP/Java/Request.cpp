@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "../Request.hpp"
 #include "Version.hpp"
-#include "Java/Global.hpp"
-#include "Java/String.hpp"
-#include "Java/InputStream.hpp"
-#include "Java/URL.hpp"
-#include "Java/Exception.hpp"
+#include "Java/Global.hxx"
+#include "Java/String.hxx"
+#include "Java/InputStream.hxx"
+#include "Java/URL.hxx"
+#include "Java/Exception.hxx"
 
 #include <assert.h>
 

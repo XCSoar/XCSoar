@@ -27,18 +27,46 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "String.hpp"
-#include "Util/StringUtil.hpp"
+#ifndef JAVA_STRING_HXX
+#define JAVA_STRING_HXX
 
-char *
-Java::String::CopyTo(JNIEnv *env, jstring value,
-                     char *buffer, size_t max_size)
-{
-  const char *p = env->GetStringUTFChars(value, nullptr);
-  if (p == nullptr)
-    return nullptr;
+#include "Ref.hxx"
 
-  char *result = CopyString(buffer, p, max_size);
-  env->ReleaseStringUTFChars(value, p);
-  return result;
+#include <jni.h>
+
+#include <stddef.h>
+
+namespace Java {
+	/**
+	 * Wrapper for a local "jstring" reference.
+	 */
+	class String : public LocalRef<jstring> {
+	public:
+		String(JNIEnv *env, jstring value)
+			:LocalRef<jstring>(env, value) {}
+
+		String(JNIEnv *_env, const char *_value)
+			:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
+
+		/**
+		 * Copy the value to the specified buffer.  Truncates the value if
+		 * it does not fit into the buffer.
+		 *
+		 * @return a pointer to the terminating null byte, nullptr on error
+		 */
+		static char *CopyTo(JNIEnv *env, jstring value,
+				    char *buffer, size_t max_size);
+
+		/**
+		 * Copy the value to the specified buffer.  Truncates the value if
+		 * it does not fit into the buffer.
+		 *
+		 * @return a pointer to the terminating null byte, nullptr on error
+		 */
+		char *CopyTo(JNIEnv *env, char *buffer, size_t max_size) {
+			return CopyTo(env, Get(), buffer, max_size);
+		}
+	};
 }
+
+#endif

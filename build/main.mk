@@ -683,11 +683,11 @@ endif
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Device/ScanBluetoothLeDialog.cpp \
-	$(SRC)/Java/Global.cpp \
-	$(SRC)/Java/String.cpp \
-	$(SRC)/Java/File.cpp \
-	$(SRC)/Java/InputStream.cpp \
-	$(SRC)/Java/URL.cpp \
+	$(SRC)/Java/Global.cxx \
+	$(SRC)/Java/String.cxx \
+	$(SRC)/Java/File.cxx \
+	$(SRC)/Java/InputStream.cxx \
+	$(SRC)/Java/URL.cxx \
 	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
