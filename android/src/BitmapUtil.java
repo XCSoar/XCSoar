@@ -132,9 +132,6 @@ final class BitmapUtil {
    */
   public static boolean bitmapToOpenGL(Bitmap bmp, boolean alpha,
                                        int[] result) {
-    if (bmp == null)
-      return false;
-
     result[1] = bmp.getWidth();
     result[2] = bmp.getHeight();
     result[3] = validateTextureSize(result[1]);
