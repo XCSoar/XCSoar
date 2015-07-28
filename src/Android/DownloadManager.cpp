@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DownloadManager.hpp"
+#include "Main.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Context.hpp"
 #include "Java/Class.hxx"
@@ -47,7 +48,8 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
   assert(util_class == nullptr);
   assert(env != nullptr);
 
-  if (!util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
+  if (android_api_level < 9 ||
+      !util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
     return false;
 
   enumerate_method = env->GetStaticMethodID(util_class, "enumerate",

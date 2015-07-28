@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "NativeLeScanCallback.hpp"
 #include "LeScanCallback.hpp"
+#include "Main.hpp"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 #include "org_xcsoar_NativeLeScanCallback.h"
@@ -52,7 +53,8 @@ Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
 void
 NativeLeScanCallback::Initialise(JNIEnv *env)
 {
-  if (!cls.FindOptional(env, "org/xcsoar/NativeLeScanCallback"))
+  if (android_api_level < 18 ||
+      !cls.FindOptional(env, "org/xcsoar/NativeLeScanCallback"))
     /* Bluetooth LE not supported on this Android version */
     return;
 
