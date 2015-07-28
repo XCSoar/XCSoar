@@ -30,6 +30,11 @@ class EventQueue;
 class Vibrator;
 class IOIOHelper;
 
+/**
+ * A copy of android.os.Build.VERSION.SDK_INT.
+ */
+extern unsigned android_api_level;
+
 extern Context *context;
 
 extern NativeView *native_view;

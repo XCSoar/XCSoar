@@ -50,7 +50,6 @@ Copyright_License {
 #include "Java/Global.hxx"
 #include "Android/InternalSensors.hpp"
 #include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
 #include "Android/Product.hpp"
 #include "Android/IOIOHelper.hpp"
 #include "Android/BMP085Device.hpp"
@@ -564,7 +563,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 
 #ifdef ANDROID
   if (config.port_type == DeviceConfig::PortType::RFCOMM &&
-      native_view->GetAPILevel() < 11 && n_failures >= 2) {
+      android_api_level < 11 && n_failures >= 2) {
     /* on Android < 3.0, system_server's "BT EventLoop" thread
        eventually crashes with JNI reference table overflow due to a
        memory leak after too many Bluetooth failures

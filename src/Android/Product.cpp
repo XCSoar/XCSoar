@@ -39,7 +39,7 @@ IsGalaxyTab22()
 {
   assert(native_view);
 
-  return native_view->GetAPILevel() == 8 &&
+  return android_api_level == 8 &&
     (StringIsEqual(native_view->GetProduct(), "GT-P1000") ||
      StringIsEqual(native_view->GetProduct(), "GT-P1010"));
 }

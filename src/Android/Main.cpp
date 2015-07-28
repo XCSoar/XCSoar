@@ -81,6 +81,8 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
+unsigned android_api_level;
+
 Context *context;
 
 NativeView *native_view;
@@ -116,6 +118,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint xdpi, jint ydpi,
                                             jint sdk_version, jstring product)
 {
+  android_api_level = sdk_version;
+
   InitThreadDebug();
 
   InitialiseIOThread();
@@ -156,7 +160,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   assert(native_view == nullptr);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
-                               sdk_version, product);
+                               product);
 #ifdef __arm__
   is_nook = StringIsEqual(native_view->GetProduct(), "NOOK");
 #endif

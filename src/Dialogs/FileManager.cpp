@@ -46,7 +46,6 @@ Copyright_License {
 #include "Repository/Parser.hpp"
 
 #ifdef ANDROID
-#include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
 #endif
 
@@ -724,7 +723,7 @@ ShowFileManager()
   const TCHAR *message =
     _("The file manager is not available on this device.");
 #ifdef ANDROID
-  if (native_view->GetAPILevel() < 9)
+  if (android_api_level < 9)
     message = _("The file manager requires Android 2.3.");
 #endif
 
