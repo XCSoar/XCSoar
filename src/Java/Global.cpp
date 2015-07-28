@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Java/Global.hpp"
+#include "Global.hpp"
 
 namespace Java {
   JavaVM *jvm;

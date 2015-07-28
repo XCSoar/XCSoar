@@ -30,7 +30,7 @@
 #ifndef XCSOAR_JAVA_GLOBAL_REF_HPP
 #define XCSOAR_JAVA_GLOBAL_REF_HPP
 
-#include "Java/Global.hpp"
+#include "Global.hpp"
 
 #include <assert.h>
 #include <jni.h>

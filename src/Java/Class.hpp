@@ -30,7 +30,7 @@
 #ifndef XCSOAR_JAVA_CLASS_HPP
 #define XCSOAR_JAVA_CLASS_HPP
 
-#include "Java/Ref.hpp"
+#include "Ref.hpp"
 
 #include <assert.h>
 

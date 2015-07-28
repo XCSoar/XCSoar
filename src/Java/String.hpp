@@ -30,7 +30,7 @@
 #ifndef XCSOAR_JAVA_STRING_HPP
 #define XCSOAR_JAVA_STRING_HPP
 
-#include "Java/Ref.hpp"
+#include "Ref.hpp"
 
 #include <assert.h>
 #include <jni.h>

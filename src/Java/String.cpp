@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Java/String.hpp"
+#include "String.hpp"
 #include "Util/StringUtil.hpp"
 
 char *

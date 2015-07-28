@@ -30,7 +30,7 @@
 #ifndef XCSOAR_JAVA_OBJECT_HPP
 #define XCSOAR_JAVA_OBJECT_HPP
 
-#include "Java/Ref.hpp"
+#include "Ref.hpp"
 
 #include <jni.h>
 
