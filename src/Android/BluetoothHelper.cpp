@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Android/BluetoothHelper.hpp"
-#include "Android/Context.hpp"
-#include "Android/Main.hpp"
+#include "BluetoothHelper.hpp"
+#include "Context.hpp"
+#include "Main.hpp"
 #include "NativeLeScanCallback.hpp"
 #include "PortBridge.hpp"
 #include "Java/String.hxx"

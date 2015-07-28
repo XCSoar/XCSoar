@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Android/Environment.hpp"
+#include "Environment.hpp"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 #include "Java/File.hxx"

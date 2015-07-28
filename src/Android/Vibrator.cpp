@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Vibrator.hpp"
+#include "Main.hpp"
 #include "Context.hpp"
 #include "Java/Class.hxx"
-#include "Android/Main.hpp"
 
 jmethodID Vibrator::cancel_method, Vibrator::vibrate_method;
 

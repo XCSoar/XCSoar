@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Android/InternalSensors.hpp"
-#include "Android/Context.hpp"
+#include "InternalSensors.hpp"
+#include "Context.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "org_xcsoar_InternalGPS.h"
 #include "org_xcsoar_NonGPSSensors.h"

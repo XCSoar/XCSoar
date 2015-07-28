@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Android/SoundUtil.hpp"
+#include "SoundUtil.hpp"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 

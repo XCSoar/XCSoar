@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Android/TextUtil.hpp"
+#include "TextUtil.hpp"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 #include "Java/Exception.hxx"
