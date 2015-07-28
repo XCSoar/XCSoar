@@ -123,6 +123,27 @@ final class BitmapUtil {
   }
 
   /**
+   * Create an immutable copy of the given #Bitmap.  Unlike raw
+   * Bitmap.copy(), this is safe against a NullPointerException that
+   * can occur on old Android versions (1.6) when
+   * Bitmap.getConfig()==null.
+   */
+  static Bitmap copy(Bitmap src, boolean alpha) {
+    Bitmap.Config config = src.getConfig();
+
+    if (alpha && config != Bitmap.Config.ALPHA_8)
+      return toAlpha8(src);
+
+    if (config == null)
+      /* convert to a format compatible with OpenGL */
+      config = src.hasAlpha()
+        ? Bitmap.Config.ARGB_8888
+        : Bitmap.Config.RGB_565;
+
+    return src.copy(config, false);
+  }
+
+  /**
    * Loads an Android Bitmap as OpenGL texture.
    *
    * @param alpha expect a GL_ALPHA texture?
