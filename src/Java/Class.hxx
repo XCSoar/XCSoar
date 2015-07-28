@@ -31,6 +31,7 @@
 #define JAVA_CLASS_HXX
 
 #include "Ref.hxx"
+#include "Exception.hxx"
 
 #include <assert.h>
 
@@ -68,10 +69,8 @@ namespace Java {
 			assert(name != nullptr);
 
 			jclass cls = env->FindClass(name);
-			if (cls == nullptr) {
-				env->ExceptionClear();
+			if (DiscardException(env))
 				return false;
-			}
 
 			Set(env, cls);
 			env->DeleteLocalRef(cls);
