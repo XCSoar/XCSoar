@@ -38,7 +38,7 @@ namespace Java {
   /**
    * Wrapper for a local "jclass" reference.
    */
-  class Class : public Java::LocalRef<jclass> {
+  class Class : public LocalRef<jclass> {
   public:
     Class(JNIEnv *env, jclass cls)
       :LocalRef<jclass>(env, cls) {}
