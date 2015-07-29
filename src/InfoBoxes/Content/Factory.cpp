@@ -253,8 +253,8 @@ static constexpr MetaData meta_data[] = {
 
   // e_TL_Time
   {
-    N_("Last thermal time"),
-    N_("TL Time"),
+    N_("Last thermal duration"),
+    N_("TL duration"),
     N_("Time spent circling in the last thermal."),
     UpdateInfoBoxThermalLastTime,
     e_Thermal_Avg, // TC Avg
