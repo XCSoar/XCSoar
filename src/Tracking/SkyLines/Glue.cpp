@@ -75,10 +75,13 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
   }
 
   if (!connected) {
-    /* queue the packet, send it later */
-    if (queue == nullptr)
-      queue = new Queue();
-    queue->Push(ToFix(client.GetKey(), basic));
+    if (clock.CheckAdvance(basic.time, fixed(interval))) {
+      /* queue the packet, send it later */
+      if (queue == nullptr)
+        queue = new Queue();
+      queue->Push(ToFix(client.GetKey(), basic));
+    }
+
     return;
   }
 
