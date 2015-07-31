@@ -54,19 +54,10 @@ SkyLinesTracking::Glue::~Glue()
   delete queue;
 }
 
-void
-SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
+inline void
+SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 {
-  if (!client.IsDefined())
-    return;
-
-  if (!basic.time_available) {
-    clock.Reset();
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    traffic_clock.Reset();
-#endif
-    return;
-  }
+  assert(client.IsDefined());
 
   bool connected = false;
   switch (GetNetState()) {
@@ -110,6 +101,23 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
     return;
   } else if (clock.CheckAdvance(basic.time, fixed(interval)))
     client.SendFix(basic);
+}
+
+void
+SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
+{
+  if (!client.IsDefined())
+    return;
+
+  if (!basic.time_available) {
+    clock.Reset();
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    traffic_clock.Reset();
+#endif
+    return;
+  }
+
+  SendFixes(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   if (traffic_enabled && traffic_clock.CheckAdvance(basic.time, fixed(60)))
