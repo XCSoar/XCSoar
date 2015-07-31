@@ -78,6 +78,11 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 {
   assert(client.IsDefined());
 
+  if (!basic.time_available) {
+    clock.Reset();
+    return;
+  }
+
   if (!IsConnected()) {
     if (clock.CheckAdvance(basic.time, fixed(interval))) {
       /* queue the packet, send it later */
@@ -115,11 +120,6 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 {
   if (!client.IsDefined())
     return;
-
-  if (!basic.time_available) {
-    clock.Reset();
-    return;
-  }
 
   SendFixes(basic);
 
