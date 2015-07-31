@@ -95,10 +95,11 @@ namespace SkyLinesTracking {
 
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     bool SendTrafficRequest(bool followees, bool club);
     bool SendUserNameRequest(uint32_t user_id);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   private:
     void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
     void OnUserNameReceived(const UserNameResponsePacket &packet,

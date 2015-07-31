@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_ASSEMBLE_HPP
 #define XCSOAR_TRACKING_SKYLINES_ASSEMBLE_HPP
 
+#include "Features.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
@@ -44,6 +45,7 @@ namespace SkyLinesTracking {
   FixPacket
   ToFix(uint64_t key, const NMEAInfo &basic);
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   gcc_const
   TrafficRequestPacket
   MakeTrafficRequest(uint64_t key, bool followees, bool club);
@@ -51,6 +53,7 @@ namespace SkyLinesTracking {
   gcc_const
   UserNameRequestPacket
   MakeUserNameRequest(uint64_t key, uint32_t user_id);
+#endif
 };
 
 #endif

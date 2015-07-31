@@ -59,9 +59,11 @@ namespace SkyLinesTracking {
 
     void Tick(const NMEAInfo &basic);
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void RequestUserName(uint32_t user_id) {
       client.SendUserNameRequest(user_id);
     }
+#endif
 
   private:
     gcc_pure
