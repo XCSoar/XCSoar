@@ -29,8 +29,8 @@ target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
 common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + target_arch
 cflags = common_flags
 cxxflags = common_flags
-cppflags = '--sysroot=' + target_root + ' -isystem ' + os.path.join(root_path, 'include' + ' -DNDEBUG')
-ldflags = '--sysroot=' + target_root + ' -L' + os.path.join(root_path, 'lib')
+cppflags = '-isystem ' + os.path.join(root_path, 'include' + ' -DNDEBUG')
+ldflags = '-L' + os.path.join(root_path, 'lib')
 libs = ''
 
 # redirect pkg-config to use our root directory instead of the default
@@ -195,7 +195,6 @@ class AutotoolsProject(Project):
             'STRIP=' + strip,
             '--host=' + host_arch,
             '--prefix=' + root_path,
-            '--with-sysroot=' + target_root,
             '--enable-silent-rules',
         ] + self.configure_args
 
