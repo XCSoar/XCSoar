@@ -646,6 +646,8 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   canvas.DrawText(name_x, name_y, tmp);
 
+  canvas.Select(small_font);
+
   if (record != nullptr) {
     tmp.clear();
 
@@ -666,20 +668,16 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       tmp.append(record->airfield);
     }
 
-    if (!tmp.empty()) {
-      canvas.Select(small_font);
+    if (!tmp.empty())
       canvas.DrawText(rc.left + text_padding,
                       rc.bottom - small_font.GetHeight() - text_padding,
                       tmp);
-    }
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   } else if (item.IsSkyLines() && CommonInterface::Basic().time_available) {
-    canvas.Select(small_font);
 
     tmp.UnsafeFormat(_("%u minutes ago"),
                      SinceInMinutes(CommonInterface::Basic().time,
                                     item.time_of_day_ms));
-    canvas.Select(small_font);
     canvas.DrawText(rc.left + text_padding,
                     rc.bottom - small_font.GetHeight() - text_padding,
                     tmp);
