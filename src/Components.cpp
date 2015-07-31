@@ -70,9 +70,9 @@ AltairControl altair_control;
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings()
 {
-  return glide_computer != NULL
+  return glide_computer != nullptr
     ? &glide_computer->GetAirspaceWarnings()
-    : NULL;
+    : nullptr;
 }
 
 #ifndef NDEBUG
@@ -88,7 +88,7 @@ InDrawThread()
 #ifdef ENABLE_OPENGL
   return InMainThread() && draw_thread_handle.IsInside();
 #else
-  return draw_thread != NULL && draw_thread->IsInside();
+  return draw_thread != nullptr && draw_thread->IsInside();
 #endif
 }
 
@@ -117,7 +117,7 @@ LeaveDrawThread()
 bool
 InDrawThread()
 {
-  return draw_thread != NULL && draw_thread->IsInside();
+  return draw_thread != nullptr && draw_thread->IsInside();
 }
 
 #endif

@@ -39,7 +39,7 @@ bool global_running;
 void
 TriggerMergeThread()
 {
-  if (merge_thread != NULL)
+  if (merge_thread != nullptr)
     merge_thread->Trigger();
 }
 
@@ -49,7 +49,7 @@ TriggerMergeThread()
 void
 TriggerGPSUpdate()
 {
-  if (calculation_thread == NULL)
+  if (calculation_thread == nullptr)
     return;
 
   calculation_thread->Trigger();
@@ -58,14 +58,14 @@ TriggerGPSUpdate()
 void
 ForceCalculation()
 {
-  if (calculation_thread != NULL)
+  if (calculation_thread != nullptr)
     calculation_thread->ForceTrigger();
 }
 
 void
 TriggerVarioUpdate()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   CommonInterface::main_window->SendGPSUpdate();
 }
@@ -73,7 +73,7 @@ TriggerVarioUpdate()
 void
 TriggerMapUpdate()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   CommonInterface::main_window->FullRedraw();
 }
@@ -81,7 +81,7 @@ TriggerMapUpdate()
 void
 TriggerCalculatedUpdate()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   CommonInterface::main_window->SendCalculatedUpdate();
 }
@@ -89,7 +89,7 @@ TriggerCalculatedUpdate()
 void
 CreateCalculationThread()
 {
-  assert(glide_computer != NULL);
+  assert(glide_computer != nullptr);
 
   /* copy settings to DeviceBlackboard */
   device_blackboard->ReadComputerSettings(CommonInterface::GetComputerSettings());
@@ -114,8 +114,8 @@ CreateCalculationThread()
 void
 SuspendAllThreads()
 {
-  assert(CommonInterface::main_window != NULL);
-  assert(calculation_thread != NULL);
+  assert(CommonInterface::main_window != nullptr);
+  assert(calculation_thread != nullptr);
 
   /* not suspending MergeThread, because it does not access shared
      unprotected data structures */
@@ -127,8 +127,8 @@ SuspendAllThreads()
 void
 ResumeAllThreads()
 {
-  assert(calculation_thread != NULL);
-  assert(CommonInterface::main_window != NULL);
+  assert(calculation_thread != nullptr);
+  assert(CommonInterface::main_window != nullptr);
 
   calculation_thread->Resume();
   CommonInterface::main_window->ResumeThreads();

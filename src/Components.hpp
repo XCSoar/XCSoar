@@ -75,7 +75,7 @@ extern AltairControl altair_control;
 
 /**
  * Returns the global ProtectedAirspaceWarningManager instance.  May
- * be NULL if disabled.
+ * be nullptr if disabled.
  */
 gcc_pure
 ProtectedAirspaceWarningManager *

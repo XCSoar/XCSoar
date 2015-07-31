@@ -77,7 +77,7 @@ LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
 
 /**
  * Return the portion of the specified path that is relative to the
- * primary data path.  Returns NULL on failure (if the path is not
+ * primary data path.  Returns nullptr on failure (if the path is not
  * inside the primary data path).
  */
 gcc_pure

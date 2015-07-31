@@ -35,7 +35,7 @@ static HINSTANCE ResourceLoaderInstance;
 void
 ResourceLoader::Init(HINSTANCE hInstance)
 {
-  assert(ResourceLoaderInstance == NULL);
+  assert(ResourceLoaderInstance == nullptr);
 
   ResourceLoaderInstance = hInstance;
 }
@@ -51,10 +51,10 @@ ResourceLoader::Data
 ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 {
 #ifdef USE_WIN32_RESOURCES
-  assert(ResourceLoaderInstance != NULL);
+  assert(ResourceLoaderInstance != nullptr);
 
   HRSRC resource = ::FindResource(ResourceLoaderInstance, name, type);
-  if (resource == NULL)
+  if (resource == nullptr)
     return Data::Null();
 
   DWORD size = ::SizeofResource(ResourceLoaderInstance, resource);
@@ -62,11 +62,11 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
     return Data::Null();
 
   HGLOBAL handle = ::LoadResource(ResourceLoaderInstance, resource);
-  if (handle == NULL)
+  if (handle == nullptr)
     return Data::Null();
 
   LPVOID data = LockResource(handle);
-  if (data == NULL)
+  if (data == nullptr)
     return Data::Null();
 
   return Data(data, size);

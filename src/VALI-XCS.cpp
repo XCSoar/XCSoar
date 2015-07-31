@@ -53,9 +53,9 @@ ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
 {
   STATUS_t eStatus = eValidationFileNotFound;
 
-  FILE *inFile = NULL;
+  FILE *inFile = nullptr;
   inFile = _tfopen(FileName, _T("r"));
-  if (inFile == NULL)
+  if (inFile == nullptr)
     return eStatus;
 
   fclose(inFile);

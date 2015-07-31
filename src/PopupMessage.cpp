@@ -351,14 +351,14 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 
   const auto &msg = FindStatusMessage(text);
 
-  if (enable_sound && msg.sound != NULL)
+  if (enable_sound && msg.sound != nullptr)
     PlayResource(msg.sound);
 
   // TODO code: consider what is a sensible size?
   if (msg.visible) {
     TCHAR msgcache[1024];
     _tcscpy(msgcache, text);
-    if (data != NULL) {
+    if (data != nullptr) {
       _tcscat(msgcache, _T(" "));
       _tcscat(msgcache, data);
     }

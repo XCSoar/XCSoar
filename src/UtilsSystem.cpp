@@ -59,7 +59,7 @@ void MyCompactHeaps() {
   HeapCompact(GetProcessHeap(), 0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
-  static CompactAllHeapsFn CompactAllHeaps = NULL;
+  static CompactAllHeapsFn CompactAllHeaps = nullptr;
   static bool init = false;
   if (!init) {
     // get the pointer to the function

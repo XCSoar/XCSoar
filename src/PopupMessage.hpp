@@ -136,7 +136,7 @@ protected:
   void AddMessage(unsigned tshow, Type type, const TCHAR *Text);
 
 public:
-  void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
+  void AddMessage(const TCHAR* text, const TCHAR *data=nullptr);
 
   /**
    * Repeats last non-visible message of specified type

@@ -167,7 +167,7 @@ BallastDumpProcessTimer()
     // Plane is dry now -> disable ballast_timer
     settings_computer.polar.ballast_timer_active = false;
 
-  if (protected_task_manager != NULL)
+  if (protected_task_manager != nullptr)
     protected_task_manager->SetGlidePolar(glide_polar);
 }
 
@@ -300,7 +300,7 @@ ProcessTimer()
   }
 
 #ifdef HAVE_TRACKING
-  if (tracking != NULL && CommonInterface::Basic().gps.real) {
+  if (tracking != nullptr && CommonInterface::Basic().gps.real) {
     tracking->SetSettings(CommonInterface::GetComputerSettings().tracking);
     tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
   }

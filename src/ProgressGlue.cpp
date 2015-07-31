@@ -39,7 +39,7 @@ ProgressGlue::Create(const TCHAR *text)
 {
   UIGlobals::GetMainWindow().RefreshSize();
 
-  if (global_progress_window == NULL)
+  if (global_progress_window == nullptr)
     global_progress_window = new ProgressWindow(UIGlobals::GetMainWindow());
 
   global_progress_window->SetMessage(text);
@@ -52,7 +52,7 @@ ProgressGlue::Create(const TCHAR *text)
 void
 ProgressGlue::Move(const PixelRect &rc)
 {
-  if (global_progress_window == NULL)
+  if (global_progress_window == nullptr)
     return;
 
   global_progress_window->Move(rc);
@@ -63,13 +63,13 @@ void
 ProgressGlue::Close()
 {
   delete global_progress_window;
-  global_progress_window = NULL;
+  global_progress_window = nullptr;
 }
 
 void
 ProgressGlue::Step()
 {
-  if (global_progress_window == NULL)
+  if (global_progress_window == nullptr)
     return;
 
   if (!throttle_clock.CheckUpdate(200))
@@ -83,7 +83,7 @@ ProgressGlue::Step()
 void
 ProgressGlue::SetValue(unsigned value)
 {
-  if (global_progress_window == NULL)
+  if (global_progress_window == nullptr)
     return;
 
   if (!throttle_clock.CheckUpdate(200))
@@ -97,7 +97,7 @@ ProgressGlue::SetValue(unsigned value)
 void
 ProgressGlue::SetRange(unsigned value)
 {
-  if (global_progress_window == NULL)
+  if (global_progress_window == nullptr)
     return;
 
   global_progress_window->SetRange(0, value);
@@ -107,7 +107,7 @@ ProgressGlue::SetRange(unsigned value)
 void
 ProgressGlue::SetStep(int step)
 {
-  if (global_progress_window == NULL)
+  if (global_progress_window == nullptr)
     return;
 
   global_progress_window->SetStep(step);

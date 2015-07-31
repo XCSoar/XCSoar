@@ -29,7 +29,7 @@ TCHAR *
 RadioFrequency::Format(TCHAR *buffer, size_t max_size) const
 {
   if (!IsDefined())
-    return NULL;
+    return nullptr;
 
   unsigned khz = GetKiloHertz();
   unsigned mhz = khz / 1000;

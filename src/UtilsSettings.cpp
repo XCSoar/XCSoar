@@ -120,8 +120,8 @@ SettingsLeave(const UISettings &old_ui_settings)
        (e.g. the cross section) */
     main_window.SetBottomWidget(nullptr);
 
-    main_window.SetTerrain(NULL);
-    glide_computer->SetTerrain(NULL);
+    main_window.SetTerrain(nullptr);
+    glide_computer->SetTerrain(nullptr);
 
     // re-load terrain
     delete terrain;
@@ -140,7 +140,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     WaypointDetails::ReadFileFromProfile(way_points, operation);
   }
 
-  if (WaypointFileChanged && protected_task_manager != NULL) {
+  if (WaypointFileChanged && protected_task_manager != nullptr) {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
     OrderedTask *task = lease->Clone(CommonInterface::GetComputerSettings().task);
     if (task) {
@@ -167,17 +167,17 @@ SettingsLeave(const UISettings &old_ui_settings)
   }
 
   if (TopographyFileChanged) {
-    main_window.SetTopography(NULL);
+    main_window.SetTopography(nullptr);
     topography->Reset();
     LoadConfiguredTopography(*topography, operation);
     main_window.SetTopography(topography);
   }
 
   if (AirspaceFileChanged) {
-    if (glide_computer != NULL)
+    if (glide_computer != nullptr)
       glide_computer->GetAirspaceWarnings().Clear();
 
-    if (glide_computer != NULL)
+    if (glide_computer != nullptr)
       glide_computer->ClearAirspaces();
 
     airspace_database.Clear();

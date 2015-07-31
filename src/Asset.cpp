@@ -73,8 +73,9 @@ ReadCompaqID()
 {
   PROCESS_INFORMATION pi;
 
-  if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
-                    FALSE, 0, NULL, NULL, NULL, &pi)) {
+  if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"),
+                    nullptr, nullptr, nullptr,
+                    FALSE, 0, nullptr, nullptr, nullptr, &pi)) {
     WaitForSingleObject(pi.hProcess, 1000);
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);

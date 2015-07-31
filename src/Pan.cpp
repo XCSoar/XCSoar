@@ -34,16 +34,16 @@ bool
 IsPanning()
 {
   const GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  return map != NULL && map->IsPanning();
+  return map != nullptr && map->IsPanning();
 }
 
 void
 EnterPan()
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
-  if (map == NULL || map->IsPanning())
+  if (map == nullptr || map->IsPanning())
     return;
 
   map->SetPan(true);
@@ -55,10 +55,10 @@ EnterPan()
 bool
 PanTo(const GeoPoint &location)
 {
-  assert(CommonInterface::main_window != NULL);
+  assert(CommonInterface::main_window != nullptr);
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
-  if (map == NULL)
+  if (map == nullptr)
     return false;
 
   map->PanTo(location);
@@ -72,7 +72,7 @@ void
 DisablePan()
 {
   GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  if (map == NULL || !map->IsPanning())
+  if (map == nullptr || !map->IsPanning())
     return;
 
   map->SetPan(false);
@@ -84,7 +84,7 @@ void
 LeavePan()
 {
   GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  if (map == NULL || !map->IsPanning())
+  if (map == nullptr || !map->IsPanning())
     return;
 
   map->SetPan(false);

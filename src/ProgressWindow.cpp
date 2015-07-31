@@ -67,7 +67,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   message_rc.top = message_rc.bottom - text_height;
   TextWindowStyle message_style;
   message_style.center();
-  message.Create(*this, NULL, message_rc, message_style);
+  message.Create(*this, nullptr, message_rc, message_style);
 
 #ifndef USE_GDI
   message.SetFont(font);

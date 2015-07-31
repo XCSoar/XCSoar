@@ -87,7 +87,7 @@ codeINSTALL_INIT
 Install_Init(HWND hwndparent, BOOL ffirstcall, BOOL fpreviouslyinstalled,
              LPCTSTR pszinstalldir)
 {
-  HKEY hKey = NULL;
+  HKEY hKey = nullptr;
 
   if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                    TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
@@ -118,7 +118,7 @@ Install_Exit(HWND hwndparent, LPCTSTR pszinstalldir, WORD cfaileddirs,
 codeUNINSTALL_INIT
 Uninstall_Init(HWND hwndparent, LPCTSTR pszinstalldir)
 {
-  HKEY hKey = NULL;
+  HKEY hKey = nullptr;
 
   if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                    TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
