@@ -256,6 +256,13 @@ namespace SkyLinesTracking {
      */
     static const uint32_t FLAG_CLUB = 0x2;
 
+    /**
+     * The client wants to receive information about all traffic near
+     * the location he submitted recently in a #FixPacket.  The server
+     * chooses a reasonable range.
+     */
+    static const uint32_t FLAG_NEAR = 0x4;
+
     Header header;
 
     uint32_t flags;

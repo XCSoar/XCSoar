@@ -116,12 +116,13 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 bool
-SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club)
+SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
+                                             bool near)
 {
   assert(socket.IsDefined());
   assert(key != 0);
 
-  return SendPacket(MakeTrafficRequest(key, followees, club));
+  return SendPacket(MakeTrafficRequest(key, followees, club, near));
 }
 
 bool

@@ -97,7 +97,7 @@ namespace SkyLinesTracking {
     bool SendPing(uint16_t id);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    bool SendTrafficRequest(bool followees, bool club);
+    bool SendTrafficRequest(bool followees, bool club, bool near);
     bool SendUserNameRequest(uint32_t user_id);
 
   private:

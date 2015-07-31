@@ -122,7 +122,8 @@ SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 SkyLinesTracking::TrafficRequestPacket
-SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club)
+SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
+                                     bool near)
 {
   assert(key != 0);
 
@@ -132,7 +133,8 @@ SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club)
   packet.header.type = ToBE16(Type::TRAFFIC_REQUEST);
   packet.header.key = ToBE64(key);
   packet.flags = ToBE32((followees ? packet.FLAG_FOLLOWEES : 0)
-                        | (club ? packet.FLAG_CLUB : 0));
+                        | (club ? packet.FLAG_CLUB : 0)
+                        | (near ? packet.FLAG_NEAR : 0));
   packet.reserved = 0;
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));

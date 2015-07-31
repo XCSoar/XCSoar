@@ -40,9 +40,14 @@ namespace SkyLinesTracking {
     bool roaming;
 
     /**
-     * Periodically request traffic information?
+     * Periodically request friend traffic information?
      */
     bool traffic_enabled;
+
+    /**
+     * Periodically request near traffic information?
+     */
+    bool near_traffic_enabled;
 
     /**
      * Tracking interval in seconds.
@@ -55,6 +60,7 @@ namespace SkyLinesTracking {
       enabled = false;
       roaming = true;
       traffic_enabled = false;
+      near_traffic_enabled = false;
       interval = 5;
       key = 0;
     }

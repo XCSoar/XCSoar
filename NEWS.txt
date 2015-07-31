@@ -66,6 +66,7 @@ Version 6.8 - not yet released
   - show SkyLines traffic even if we have no GPS fix yet
   - show nearby waypoint in SkyLines traffic list
   - show altitude in list (#3606)
+  - show all nearby traffic (#2814)
   - pass vehicle name to LiveTrack24
 * Linux
   - Wayland support

@@ -48,7 +48,7 @@ namespace SkyLinesTracking {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   gcc_const
   TrafficRequestPacket
-  MakeTrafficRequest(uint64_t key, bool followees, bool club);
+  MakeTrafficRequest(uint64_t key, bool followees, bool club, bool near);
 
   gcc_const
   UserNameRequestPacket

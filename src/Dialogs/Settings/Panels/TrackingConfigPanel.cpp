@@ -47,6 +47,7 @@ enum ControlIndex {
   SL_INTERVAL,
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SL_TRAFFIC_ENABLED,
+  SL_NEAR_TRAFFIC_ENABLED,
 #endif
   SL_KEY,
 #endif
@@ -99,6 +100,8 @@ TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
   SetRowEnabled(SL_INTERVAL, enabled);
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SetRowEnabled(SL_TRAFFIC_ENABLED, enabled);
+  SetRowEnabled(SL_NEAR_TRAFFIC_ENABLED,
+                enabled && GetValueBoolean(SL_TRAFFIC_ENABLED));
 #endif
   SetRowEnabled(SL_KEY, enabled);
 }
@@ -127,6 +130,14 @@ TrackingConfigPanel::OnModified(DataField &df)
   if (IsDataField(SL_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetSkyLinesEnabled(dfb.GetAsBoolean());
+    return;
+  }
+#endif
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  if (IsDataField(SL_TRAFFIC_ENABLED, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    SetRowEnabled(SL_NEAR_TRAFFIC_ENABLED, dfb.GetAsBoolean());
     return;
   }
 #endif
@@ -204,6 +215,10 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Track friends"),
              _("Download the position of your friends live from the SkyLines server."),
              settings.skylines.traffic_enabled, this);
+
+  AddBoolean(_("Show nearby traffic"),
+             _("Download the position of your nearby traffic live from the SkyLines server."),
+             settings.skylines.near_traffic_enabled, this);
 #endif
 
   StaticString<64> buffer;
@@ -294,6 +309,9 @@ TrackingConfigPanel::Save(bool &_changed)
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   changed |= SaveValue(SL_TRAFFIC_ENABLED, ProfileKeys::SkyLinesTrafficEnabled,
                        settings.skylines.traffic_enabled);
+  changed |= SaveValue(SL_NEAR_TRAFFIC_ENABLED,
+                       ProfileKeys::SkyLinesNearTrafficEnabled,
+                       settings.skylines.near_traffic_enabled);
 #endif
 
   changed |= SaveKey(*this, SL_KEY, ProfileKeys::SkyLinesTrackingKey,

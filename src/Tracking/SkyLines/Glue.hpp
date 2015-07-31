@@ -39,6 +39,7 @@ namespace SkyLinesTracking {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     GPSClock traffic_clock;
     bool traffic_enabled;
+    bool near_traffic_enabled;
 #endif
 
     bool roaming;

@@ -250,6 +250,7 @@ const char SkyLinesTrackingEnabled[] = "SkyLinesTrackingEnabled";
 const char SkyLinesRoaming[] = "SkyLinesRoaming";
 const char SkyLinesTrackingInterval[] = "SkyLinesTrackingInterval";
 const char SkyLinesTrafficEnabled[] = "SkyLinesTrafficEnabled";
+const char SkyLinesNearTrafficEnabled[] = "SkyLinesNearTrafficEnabled";
 const char SkyLinesTrackingKey[] = "SkyLinesTrackingKey";
 const char LiveTrack24Enabled[] = "LiveTrack24Enabled";
 const char LiveTrack24Server[] = "LiveTrack24Server";
