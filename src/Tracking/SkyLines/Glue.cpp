@@ -54,27 +54,31 @@ SkyLinesTracking::Glue::~Glue()
   delete queue;
 }
 
+inline bool
+SkyLinesTracking::Glue::IsConnected() const
+{
+  switch (GetNetState()) {
+  case NetState::UNKNOWN:
+  case NetState::DISCONNECTED:
+    return false;
+
+  case NetState::CONNECTED:
+    return true;
+
+  case NetState::ROAMING:
+    return roaming;
+  }
+
+  assert(false);
+  gcc_unreachable();
+}
+
 inline void
 SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 {
   assert(client.IsDefined());
 
-  bool connected = false;
-  switch (GetNetState()) {
-  case NetState::UNKNOWN:
-  case NetState::DISCONNECTED:
-    break;
-
-  case NetState::CONNECTED:
-    connected = true;
-    break;
-
-  case NetState::ROAMING:
-    connected = roaming;
-    break;
-  }
-
-  if (!connected) {
+  if (!IsConnected()) {
     if (clock.CheckAdvance(basic.time, fixed(interval))) {
       /* queue the packet, send it later */
       if (queue == nullptr)

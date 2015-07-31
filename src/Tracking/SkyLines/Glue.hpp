@@ -64,6 +64,9 @@ namespace SkyLinesTracking {
     }
 
   private:
+    gcc_pure
+    bool IsConnected() const;
+
     void SendFixes(const NMEAInfo &basic);
   };
 }
