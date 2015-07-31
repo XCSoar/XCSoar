@@ -26,6 +26,7 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Prefix.hpp"
@@ -194,6 +195,8 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
    */
   Validity last_update;
 
+  TwoTextRowsRenderer row_renderer;
+
 public:
   TrafficListWidget(ActionListener &_action_listener,
                     const FlarmId *array, size_t count)
@@ -349,14 +352,6 @@ public:
     AddButton(_("Close"), dialog, mrCancel);
   }
 };
-
-gcc_pure
-static UPixelScalar
-GetRowHeight(const DialogLook &look)
-{
-  return look.list.font_bold->GetHeight() + 3 * Layout::GetTextPadding()
-    + look.small_font.GetHeight();
-}
 
 void
 TrafficListWidget::UpdateList()
@@ -517,7 +512,8 @@ TrafficListWidget::Prepare(ContainerWindow &parent,
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   ListControl &list = CreateList(parent, look, rc,
-                                 GetRowHeight(look));
+                                 row_renderer.CalculateLayout(*look.list.font_bold,
+                                                              look.small_font));
 
   if (filter_widget != nullptr)
     UpdateList();
@@ -611,8 +607,6 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     tmp = _T("?");
   }
 
-  const int name_x = rc.left + text_padding, name_y = rc.top + text_padding;
-
   if (item.color != FlarmColor::NONE) {
     const TrafficLook &traffic_look = UIGlobals::GetLook().traffic;
 
@@ -638,13 +632,13 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     canvas.SelectHollowBrush();
 
     const PixelSize size = canvas.CalcTextSize(tmp);
-    canvas.Rectangle(name_x - frame_padding,
-                     name_y - frame_padding,
-                     name_x + size.cx + frame_padding,
-                     name_y + size.cy + frame_padding);
+    canvas.Rectangle(rc.left + row_renderer.GetX() - frame_padding,
+                     rc.top + row_renderer.GetFirstY() - frame_padding,
+                     rc.left + row_renderer.GetX() + size.cx + frame_padding,
+                     rc.top + row_renderer.GetFirstY() + size.cy + frame_padding);
   }
 
-  canvas.DrawText(name_x, name_y, tmp);
+  row_renderer.DrawFirstRow(canvas, rc, tmp);
 
   canvas.Select(small_font);
 
@@ -669,31 +663,25 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     if (!tmp.empty())
-      canvas.DrawText(rc.left + text_padding,
-                      rc.bottom - small_font.GetHeight() - text_padding,
-                      tmp);
+      row_renderer.DrawSecondRow(canvas, rc, tmp);
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   } else if (item.IsSkyLines() && CommonInterface::Basic().time_available) {
-
     tmp.UnsafeFormat(_("%u minutes ago"),
                      SinceInMinutes(CommonInterface::Basic().time,
                                     item.time_of_day_ms));
-    canvas.DrawText(rc.left + text_padding,
-                    rc.bottom - small_font.GetHeight() - text_padding,
-                    tmp);
+    row_renderer.DrawSecondRow(canvas, rc, tmp);
 #endif
   }
 
   /* draw bearing and distance on the right */
   if (item.vector.IsValid()) {
     DrawTextRight(canvas, rc.right - text_padding,
-                  name_y +
-                  (name_font.GetHeight() - small_font.GetHeight()) / 2,
+                  rc.top + row_renderer.GetFirstY(),
                   FormatUserDistanceSmart(item.vector.distance).c_str());
 
     // Draw leg bearing
     DrawTextRight(canvas, rc.right - text_padding,
-                  rc.bottom - small_font.GetHeight() - text_padding,
+                  rc.top + row_renderer.GetSecondY(),
                   FormatBearing(item.vector.bearing).c_str());
   }
 }
