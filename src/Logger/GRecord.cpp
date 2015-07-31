@@ -84,22 +84,22 @@ AppendIGCString(MD5 &md5, const char *s, bool ignore_comma)
 void
 GRecord::AppendStringToBuffer(const char *in)
 {
-  for (int i = 0; i < 4; i++)
-    AppendIGCString(md5[i], in, ignore_comma);
+  for (auto &i : md5)
+    AppendIGCString(i, in, ignore_comma);
 }
 
 void
 GRecord::FinalizeBuffer()
 {
-  for (int i = 0; i < 4; i++)
-    md5[i].Finalize();
+  for (auto &i : md5)
+    i.Finalize();
 }
 
 void
 GRecord::GetDigest(char *output) const
 {
-  for (int i = 0; i <= 3; i++)
-    output = md5[i].GetDigest(output);
+  for (auto &i : md5)
+    output = i.GetDigest(output);
 }
 
 bool
