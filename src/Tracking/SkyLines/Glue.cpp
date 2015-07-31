@@ -121,6 +121,10 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
   if (!client.IsDefined())
     return;
 
+  if (basic.location_available && !basic.gps.real)
+    /* disable in simulator/replay */
+    return;
+
   SendFixes(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER

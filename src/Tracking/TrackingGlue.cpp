@@ -127,7 +127,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
        attribute */
     return;
 
-  if (!basic.time_available || !basic.location_available)
+  if (!basic.time_available || !basic.gps.real || !basic.location_available)
     /* can't track without a valid GPS fix */
     return;
 

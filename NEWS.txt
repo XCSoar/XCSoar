@@ -63,6 +63,7 @@ Version 6.8 - not yet released
   - new option disables tracking while roaming on the cell network
   - queue SkyLines tracking fixes while data connection is unavailable
   - fix SkyLines traffic display on southern hemisphere (#3601)
+  - show SkyLines traffic even if we have no GPS fix yet
   - pass vehicle name to LiveTrack24
 * Linux
   - Wayland support
