@@ -125,11 +125,9 @@ main(int argc, char *argv[])
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     handler.Wait();
-#endif
   } else if (StringIsEqual(args.PeekNext(), "traffic")) {
     client.SendTrafficRequest(true, true, true);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     handler.Wait();
 #endif
   } else {
