@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-06-06 20:32+0000\n"
+"PO-Revision-Date: 2015-07-26 14:09+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-06-09 09:16+0000\n"
-"X-Generator: Launchpad (build 17549)\n"
+"X-Launchpad-Export-Date: 2015-07-31 18:32+0000\n"
+"X-Generator: Launchpad (build 17656)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4204,9 +4204,9 @@ msgid "Volume"
 msgstr "Volume"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Mode route"
+msgstr "Mode de sortie"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -5352,9 +5352,8 @@ msgid "Reference Mass"
 msgstr "Masse de référence"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
-#, fuzzy
 msgid "Reference mass of the polar"
-msgstr "Masse de référence"
+msgstr "Masse de référence de la polaire"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5362,7 +5361,7 @@ msgstr "Masse  à vide"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "Masse au décollage sans ballast"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
@@ -5442,16 +5441,15 @@ msgstr "Continuer"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:52
 msgid "Enter your password"
-msgstr ""
+msgstr "Entrez votre mot de passe"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:79
-#, fuzzy
 msgid "Wrong password."
-msgstr "Mot de passe"
+msgstr "Mot de passe incorrect."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:94
 msgid "Enter a new password"
-msgstr ""
+msgstr "Entrez un nouveau mot de passe"
 
 #: src/Dialogs/dlgStatus.cpp:51 src/Dialogs/dlgStatus.cpp:74
 #: Data/Input/default.xci:831 Data/Input/default.xci:1228
@@ -5938,15 +5936,15 @@ msgstr "Ne remplit pas l'espace aérien."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:86
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "Aucun nom de waypoint n'est affiché."
+msgstr "Aucun nom ne sera affiché."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All labels will be displayed."
-msgstr "Tous les noms de waypoints sont affichés."
+msgstr "Tous les noms seront affichés"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -5977,10 +5975,8 @@ msgstr "Visibilité étiquettes"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:158
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr ""
-"Définit comment les étiquettes sont affichées sur chaque point de virage."
+msgstr "Définit quels noms seront affichés."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -6012,14 +6008,13 @@ msgid "Enable/disable all airspace warnings."
 msgstr "Active/Désactive toutes les alertes d'espace aérien"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "Avertissements"
+msgstr "Fenêtre d'avertissement"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Active/Désactive toutes les alertes d'espace aérien"
+msgstr ""
+"Active/Désactive l'affichage de la fenêtre d'avertissement d'espaces aériens."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6397,24 +6392,23 @@ msgstr ""
 "Indique si l'InfoBox \"arrivée\" doit apparaître sur les pages \"auto\"."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Normal"
-msgstr "Thermique"
+msgstr "Normal"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Large"
-msgstr "Objectif"
+msgstr "Grand"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:101
 #, no-c-format
 msgid "Small"
-msgstr ""
+msgstr "Petit"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:105
-#, fuzzy
 msgid "Text size"
-msgstr "Vz Moy. après WP"
+msgstr "Taille du texte"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:111
 msgid "Auto. blank"
@@ -8478,9 +8472,8 @@ msgid "Type of vehicle used."
 msgstr "aéronef utilisé"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
-#, fuzzy
 msgid "Vehicle Name"
-msgstr "Aéronef"
+msgstr "Nom de l'aéronef"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Server"
@@ -10036,96 +10029,14 @@ msgstr ""
 msgid "Accelerometer leveled"
 msgstr "Accéléromètre lissé"
 
-#~ msgid "left %s ago"
-#~ msgstr "Quitté il y a %s"
-
-#~ msgid "Prefer external wind"
-#~ msgstr "Préférence au vent exerne"
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "Si activé, alors le vent reçu de la part d'un équipement externe remplace "
-#~ "le calcul interne d'XCSoar."
-
-#~ msgid "Fonts"
-#~ msgstr "Polices"
-
-#~ msgid "Status message"
-#~ msgstr "Message d'état"
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "Le fichier de statut peut être utilisé pour définir les sons à jouer "
-#~ "lorsque certains évènements se produisent, et combien de temps les divers "
-#~ "messages de statut apparaissent à l'écran."
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting)."
-#~ msgstr ""
-#~ "Définit quelles étiquettes de waypoints sont affichées pour chaque "
-#~ "waypoint (autant que la place le permet)."
-
-#~ msgid "Calculator"
-#~ msgstr "Calculateur"
-
-#~ msgid "Calculator excludes unsaved task changes!"
-#~ msgstr "Le calculateur exclut les modification de circuit non sauvées!"
-
-#~ msgid "Dialog text"
-#~ msgstr "Texte"
-
-#~ msgid "InfoBox titles"
-#~ msgstr "Titres des InfoBoxes"
-
-#~ msgid "InfoBox values"
-#~ msgstr "Valeurs des Infoboxes"
-
-#~ msgid "Topography labels, normal"
-#~ msgstr "Infos topographie, normal"
-
-#~ msgid "Topography labels, important"
-#~ msgstr "Infos topographie, important"
-
-#~ msgid "Overlay text"
-#~ msgstr "Texte superposé"
-
-#~ msgid "Customize fonts"
-#~ msgstr "Personnaliser Polices"
-
-#~ msgid "Font Configuration"
-#~ msgstr "Configuration de la police"
-
-#~ msgid "Font not found."
-#~ msgstr "Police introuvable."
-
-#~ msgid "Font face"
-#~ msgstr "Nom de la police"
-
-#~ msgid "Height"
-#~ msgstr "Hauteur"
-
-#~ msgid "Bold"
-#~ msgstr "Gras"
-
-#~ msgid "Italic"
-#~ msgstr "Italique"
-
-#~ msgid "Edit Font"
-#~ msgstr "Editer Police"
-
-#~ msgid "Reset"
-#~ msgstr "Reset"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
 #~ msgid "QFE GPS"
 #~ msgstr "QFE GPS"
+
+#~ msgid "Fonts"
+#~ msgstr "Polices"
 
 #~ msgid "Task Selection"
 #~ msgstr "Selection de circuit"
@@ -10148,6 +10059,12 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Latitude"
 #~ msgstr "Latitude"
 
+#~ msgid "Reset"
+#~ msgstr "Reset"
+
+#~ msgid "Height"
+#~ msgstr "Hauteur"
+
 #~ msgid "A+"
 #~ msgstr "A+"
 
@@ -10156,6 +10073,9 @@ msgstr "Accéléromètre lissé"
 
 #~ msgid "Calc"
 #~ msgstr "Calc"
+
+#~ msgid "Edit Font"
+#~ msgstr "Editer Police"
 
 #~ msgid "V rough air"
 #~ msgstr "V air Agité"
@@ -10178,6 +10098,9 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Wind At Altitude"
 #~ msgstr "Vent en Altitude"
 
+#~ msgid "Customize fonts"
+#~ msgstr "Personnaliser Polices"
+
 #~ msgid "Remove From Task"
 #~ msgstr "Retirer du circuit"
 
@@ -10193,6 +10116,12 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Effacer le waypoint ?"
 
+#~ msgid "All waypoint labels will be displayed."
+#~ msgstr "Tous les noms de waypoints sont affichés."
+
+#~ msgid "No waypoint labels will be displayed."
+#~ msgstr "Aucun nom de waypoint n'est affiché."
+
 #~ msgid "Waypoint Info"
 #~ msgstr "Information du waypoint"
 
@@ -10204,6 +10133,9 @@ msgstr "Accéléromètre lissé"
 
 #~ msgid "English"
 #~ msgstr "Anglais"
+
+#~ msgid "Calculator"
+#~ msgstr "Calculateur"
 
 #~ msgid "Show details:"
 #~ msgstr "Afficher les détails :"
@@ -10357,8 +10289,14 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Goto and clear task"
 #~ msgstr "Aller à et effacer circuit"
 
+#~ msgid "Font not found."
+#~ msgstr "Police introuvable."
+
 #~ msgid "Unknown error creating task."
 #~ msgstr "Erreur inconnue lors de la création du circuit."
+
+#~ msgid "Font Configuration"
+#~ msgstr "Configuration de la police"
 
 #~ msgid "Auto. wind"
 #~ msgstr "Vent auto."
@@ -10373,11 +10311,22 @@ msgstr "Accéléromètre lissé"
 #~ "de fichier long (2008-01-18-XXX-ABC-01.IGC)."
 
 #~ msgid ""
+#~ "The status file can be used to define sounds to be played when certain "
+#~ "events occur, and how long various status messages will appear on screen."
+#~ msgstr ""
+#~ "Le fichier de statut peut être utilisé pour définir les sons à jouer "
+#~ "lorsque certains évènements se produisent, et combien de temps les divers "
+#~ "messages de statut apparaissent à l'écran."
+
+#~ msgid ""
 #~ "Determines whether the snail trail is drifted with the wind when "
 #~ "displayed in circling mode."
 #~ msgstr ""
 #~ "Détermine si la trace en spirale est déviée avec le vent quand elle est "
 #~ "affichée en mode spirale."
+
+#~ msgid "InfoBox titles"
+#~ msgstr "Titres des InfoBoxes"
 
 #~ msgid ""
 #~ "Sample Text\n"
@@ -10407,6 +10356,9 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Wing area"
 #~ msgstr "Surface alaire"
 
+#~ msgid "Status message"
+#~ msgstr "Message d'état"
+
 #~ msgid "L/D average period"
 #~ msgstr "Tps Finesse Moy."
 
@@ -10434,6 +10386,9 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Dump time"
 #~ msgstr "Durée de vidange"
 
+#~ msgid "Font face"
+#~ msgstr "Nom de la police"
+
 #~ msgid "Ignore checksum"
 #~ msgstr "Ignore vérif."
 
@@ -10459,6 +10414,13 @@ msgstr "Accéléromètre lissé"
 #~ "[Base] l'ordre essaie de prendre en compte la direction du terrain défini "
 #~ "comme Base."
 
+#~ msgid ""
+#~ "If enabled, then the wind vector received from external devices overrides "
+#~ "XCSoar's internal wind calculation."
+#~ msgstr ""
+#~ "Si activé, alors le vent reçu de la part d'un équipement externe remplace "
+#~ "le calcul interne d'XCSoar."
+
 #~ msgid "Dialog size"
 #~ msgstr "Taille de la fenêtre"
 
@@ -10467,6 +10429,9 @@ msgstr "Accéléromètre lissé"
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "Contenu des informations affichées sur les différentes pages."
+
+#~ msgid "left %s ago"
+#~ msgstr "Quitté il y a %s"
 
 #~ msgid ""
 #~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
@@ -10483,6 +10448,22 @@ msgstr "Accéléromètre lissé"
 #~ "direction du vent, la position du soleil, ou un ombrage fixe par "
 #~ "éclairage par le nord-est."
 
+#~ msgid ""
+#~ "Determines what waypoint labels are displayed for each waypoint (space "
+#~ "permitting)."
+#~ msgstr ""
+#~ "Définit quelles étiquettes de waypoints sont affichées pour chaque "
+#~ "waypoint (autant que la place le permet)."
+
+#~ msgid "Topography labels, normal"
+#~ msgstr "Infos topographie, normal"
+
+#~ msgid "Topography labels, important"
+#~ msgstr "Infos topographie, important"
+
+#~ msgid "Calculator excludes unsaved task changes!"
+#~ msgstr "Le calculateur exclut les modification de circuit non sauvées!"
+
 #~ msgid "Gate Width"
 #~ msgstr "Largeur de porte"
 
@@ -10492,6 +10473,9 @@ msgstr "Accéléromètre lissé"
 #~ msgstr ""
 #~ "Optionnel : Quantité d'eau (ballast) que XCSoar doit considérer comme "
 #~ "100%. Mettre 0 si non applicable."
+
+#~ msgid "Reference mass"
+#~ msgstr "Masse de référence"
 
 #~ msgid "Dry mass of the glider (pilot + empty mass)."
 #~ msgstr "Masse du planeur (pilote + masse à vide)"
@@ -10543,6 +10527,9 @@ msgstr "Accéléromètre lissé"
 
 #~ msgid "My Sample"
 #~ msgstr "Mon Exemple"
+
+#~ msgid "Dialog text"
+#~ msgstr "Texte"
 
 #~ msgid ""
 #~ "Optional the maximum manoeuvring speed can be entered on this page to "
@@ -10673,6 +10660,9 @@ msgstr "Accéléromètre lissé"
 #~ msgid "Insert In Task"
 #~ msgstr "Insérer dans le circuit"
 
+#~ msgid "Prefer external wind"
+#~ msgstr "Préférence au vent exerne"
+
 #~ msgid ""
 #~ "Below this lift threshold the vario will start to play sounds if the "
 #~ "'Deadband' feature is enabled."
@@ -10707,6 +10697,18 @@ msgstr "Accéléromètre lissé"
 
 #~ msgid "Deadband min. lift"
 #~ msgstr "Limite min. de la bande muette"
+
+#~ msgid "InfoBox values"
+#~ msgstr "Valeurs des Infoboxes"
+
+#~ msgid "Overlay text"
+#~ msgstr "Texte superposé"
+
+#~ msgid "Bold"
+#~ msgstr "Gras"
+
+#~ msgid "Italic"
+#~ msgstr "Italique"
 
 #~ msgid "Do you want to activate plane profile \"%s\"?"
 #~ msgstr "Voulez-vous activer le profil de  planeur \"%s\" ?"
