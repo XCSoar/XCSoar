@@ -63,8 +63,9 @@ public:
 
   /**
    * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
+   * @return a pointer to the null terminator
    */
-  void GetDigest(char *buffer) const;
+  char *GetDigest(char *buffer) const;
 };
 
 #endif

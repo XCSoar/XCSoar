@@ -234,9 +234,10 @@ MD5::Process512(const uint8_t *s512in)
   state.d += d;
 }
 
-void
+char *
 MD5::GetDigest(char *buffer) const
 {
   sprintf(buffer, "%08x%08x%08x%08x",
           ByteSwap32(state.a), ByteSwap32(state.b), ByteSwap32(state.c), ByteSwap32(state.d));
+  return buffer + DIGEST_LENGTH;
 }
