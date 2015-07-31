@@ -47,6 +47,7 @@ Copyright_License {
 #include "Blackboard/BlackboardListener.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/TrackingGlue.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "Components.hpp"
 #include "Pan.hpp"
 
@@ -111,6 +112,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     std::string name;
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    StaticString<20> near_name;
+    fixed near_distance;
+#endif
+
     explicit Item(FlarmId _id)
       :id(_id),
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -122,6 +128,10 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
        vector(GeoVector::Invalid()) {
       assert(id.IsDefined());
       assert(IsFlarm());
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+      near_name.clear();
+#endif
     }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -135,6 +145,8 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
        location(_location),
        vector(GeoVector::Invalid()), name(std::move(_name)) {
       assert(IsSkyLines());
+
+      near_name.clear();
     }
 #endif
 
@@ -404,10 +416,18 @@ TrafficListWidget::UpdateList()
                            i.second.location, std::move(name));
         Item &item = items.back();
 
-        if (i.second.location.IsValid() &&
-            CommonInterface::Basic().location_available)
-          item.vector = GeoVector(CommonInterface::Basic().location,
-                                  i.second.location);
+        if (i.second.location.IsValid()) {
+          if (CommonInterface::Basic().location_available)
+            item.vector = GeoVector(CommonInterface::Basic().location,
+                                    i.second.location);
+
+          const auto *wp = way_points.GetNearestLandable(i.second.location,
+                                                         fixed(20000));
+          if (wp != nullptr) {
+            item.near_name = wp->name.c_str();
+            item.near_distance = wp->location.DistanceS(i.second.location);
+          }
+        }
       }
     }
 #endif
@@ -665,11 +685,21 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  } else if (item.IsSkyLines() && CommonInterface::Basic().time_available) {
-    tmp.UnsafeFormat(_("%u minutes ago"),
-                     SinceInMinutes(CommonInterface::Basic().time,
-                                    item.time_of_day_ms));
-    row_renderer.DrawSecondRow(canvas, rc, tmp);
+  } else if (item.IsSkyLines()) {
+    if (CommonInterface::Basic().time_available) {
+      tmp.UnsafeFormat(_("%u minutes ago"),
+                       SinceInMinutes(CommonInterface::Basic().time,
+                                      item.time_of_day_ms));
+    } else
+      tmp.clear();
+
+    if (!item.near_name.empty())
+      tmp.AppendFormat(_T(" near %s (%s)"),
+                       item.near_name.c_str(),
+                       FormatUserDistanceSmart(item.near_distance).c_str());
+
+    if (!tmp.empty())
+      row_renderer.DrawSecondRow(canvas, rc, tmp);
 #endif
   }
 

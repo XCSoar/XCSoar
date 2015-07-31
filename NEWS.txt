@@ -64,6 +64,7 @@ Version 6.8 - not yet released
   - queue SkyLines tracking fixes while data connection is unavailable
   - fix SkyLines traffic display on southern hemisphere (#3601)
   - show SkyLines traffic even if we have no GPS fix yet
+  - show nearby waypoint in SkyLines traffic list
   - pass vehicle name to LiveTrack24
 * Linux
   - Wayland support
