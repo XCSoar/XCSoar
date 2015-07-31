@@ -34,10 +34,11 @@ class TextWriter;
 class GRecord
 {
 public:
-  static constexpr size_t DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH;
+  static constexpr unsigned N_MD5 = 4;
+  static constexpr size_t DIGEST_LENGTH = N_MD5 * MD5::DIGEST_LENGTH;
 
 private:
-  MD5 md5[4];
+  MD5 md5[N_MD5];
 
   /**
    * If true, then the comma is ignored in the MD5 calculation, even

@@ -33,7 +33,7 @@
 /**
  * Security theater.
  */
-static constexpr MD5::State g_key[4] = {
+static constexpr MD5::State g_key[GRecord::N_MD5] = {
   { 0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76 },
   { 0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a },
   { 0x67452301,0xefcdab89,0x98badcfe,0x10325476 },
@@ -45,7 +45,7 @@ GRecord::Initialize()
 {
   ignore_comma = true;
 
-  for (unsigned i = 0; i < 4; ++i)
+  for (unsigned i = 0; i < N_MD5; ++i)
     md5[i].Initialise(g_key[i]);
 }
 
