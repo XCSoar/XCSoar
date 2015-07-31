@@ -115,6 +115,8 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     StaticString<20> near_name;
     fixed near_distance;
+
+    int altitude;
 #endif
 
     explicit Item(FlarmId _id)
@@ -136,14 +138,15 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     explicit Item(uint32_t _id, uint32_t _time_of_day_ms,
-                  const GeoPoint &_location,
+                  const GeoPoint &_location, int _altitude,
                   std::string &&_name)
       :id(FlarmId::Undefined()), skylines_id(_id),
        time_of_day_ms(_time_of_day_ms),
        color(FlarmColor::COUNT),
        loaded(false),
        location(_location),
-       vector(GeoVector::Invalid()), name(std::move(_name)) {
+       vector(GeoVector::Invalid()), name(std::move(_name)),
+       altitude(_altitude) {
       assert(IsSkyLines());
 
       near_name.clear();
@@ -413,7 +416,8 @@ TrafficListWidget::UpdateList()
           : std::string();
 
         items.emplace_back(i.first, i.second.time_of_day_ms,
-                           i.second.location, std::move(name));
+                           i.second.location, i.second.altitude,
+                           std::move(name));
         Item &item = items.back();
 
         if (i.second.location.IsValid()) {
@@ -697,6 +701,10 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       tmp.AppendFormat(_T(" near %s (%s)"),
                        item.near_name.c_str(),
                        FormatUserDistanceSmart(item.near_distance).c_str());
+
+    if (!tmp.empty())
+      tmp.append(_T("; "));
+    tmp.append(FormatUserAltitude(fixed(item.altitude)));
 
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);
