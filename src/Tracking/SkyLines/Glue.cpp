@@ -118,16 +118,13 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 
   if (!basic.time_available) {
     clock.Reset();
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    traffic_clock.Reset();
-#endif
     return;
   }
 
   SendFixes(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  if (traffic_enabled && traffic_clock.CheckAdvance(basic.time, fixed(60)))
+  if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, fixed(60)))
     client.SendTrafficRequest(true, true);
 #endif
 }
