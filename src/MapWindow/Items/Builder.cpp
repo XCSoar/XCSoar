@@ -307,6 +307,7 @@ MapItemListBuilder::AddSkyLinesTraffic()
         name = name_i->second.c_str();
 
       list.append(new SkyLinesTrafficMapItem(id, i.second.time_of_day_ms,
+                                             i.second.altitude,
                                              name));
     }
   }

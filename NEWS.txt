@@ -65,6 +65,7 @@ Version 6.8 - not yet released
   - fix SkyLines traffic display on southern hemisphere (#3601)
   - show SkyLines traffic even if we have no GPS fix yet
   - show nearby waypoint in SkyLines traffic list
+  - show altitude in list (#3606)
   - pass vehicle name to LiveTrack24
 * Linux
   - Wayland support

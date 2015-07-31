@@ -411,10 +411,22 @@ SinceInMinutes(fixed now_s, uint32_t past_ms)
 #include "Interface.hpp"
 
 static void
-Draw(Canvas &canvas, const PixelRect rc,
+Draw(Canvas &canvas, PixelRect rc,
      const SkyLinesTrafficMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
+  const unsigned padding = Layout::GetTextPadding();
+
+  {
+    canvas.Select(row_renderer.GetSecondFont());
+    const auto altitude = FormatUserAltitude(fixed(item.altitude));
+    const int x = rc.right - canvas.CalcTextWidth(altitude) - padding;
+    canvas.DrawText(x, rc.top + row_renderer.GetFirstY(), altitude);
+    rc.right = x - padding;
+  }
+
+  canvas.Select(row_renderer.GetFirstFont());
+
   row_renderer.DrawFirstRow(canvas, rc, item.name);
 
   if (CommonInterface::Basic().time_available) {
