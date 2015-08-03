@@ -53,12 +53,20 @@ public:
   WaypointManagerWidget(const DialogLook &look)
     :RowFormWidget(look) {}
 
+  void SaveWaypoints();
+
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
 private:
   /* virtual methods from ActionListener */
   void OnAction(int id) override;
+
+private:
+  void OnWaypointNewClicked();
+  void OnWaypointEditClicked();
+  void OnWaypointSaveClicked();
+  void OnWaypointDeleteClicked();
 };
 
 static bool WaypointsNeedSave = false;
@@ -72,8 +80,8 @@ WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddButton(_("Delete"), *this, DELETE);
 }
 
-static void
-OnWaypointNewClicked()
+inline void
+WaypointManagerWidget::OnWaypointNewClicked()
 {
   Waypoint edit_waypoint = way_points.Create(CommonInterface::Basic().location);
   edit_waypoint.elevation = CommonInterface::Calculated().terrain_valid
@@ -90,8 +98,8 @@ OnWaypointNewClicked()
   }
 }
 
-static void
-OnWaypointEditClicked()
+inline void
+WaypointManagerWidget::OnWaypointEditClicked()
 {
   const Waypoint *way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
@@ -111,8 +119,8 @@ OnWaypointEditClicked()
   }
 }
 
-static void
-SaveWaypoints()
+void
+WaypointManagerWidget::SaveWaypoints()
 {
   if (!WaypointGlue::SaveWaypoints(way_points))
     ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
@@ -122,14 +130,14 @@ SaveWaypoints()
   WaypointsNeedSave = false;
 }
 
-static void
-OnWaypointSaveClicked()
+inline void
+WaypointManagerWidget::OnWaypointSaveClicked()
 {
   SaveWaypoints();
 }
 
-static void
-OnWaypointDeleteClicked()
+inline void
+WaypointManagerWidget::OnWaypointDeleteClicked()
 {
   const Waypoint *way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
@@ -185,5 +193,5 @@ dlgConfigWaypointsShowModal()
   if (WaypointsNeedSave &&
       ShowMessageBox(_("Save changes to waypoint file?"), _("Waypoints edited"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
-      SaveWaypoints();
+      widget.SaveWaypoints();
 }
