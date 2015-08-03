@@ -24,14 +24,21 @@ Copyright_License {
 #include "WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Renderer/WaypointListRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
+#include "Look/MapLook.hpp"
+#include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "Components.hpp"
-#include "Waypoint/Waypoints.hpp"
+#include "Waypoint/WaypointList.hpp"
+#include "Waypoint/WaypointListBuilder.hpp"
+#include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
@@ -41,19 +48,27 @@ Copyright_License {
 #endif
 
 class WaypointManagerWidget final
-  : public RowFormWidget, private ActionListener {
+  : public ListWidget, private ActionListener {
   enum Buttons {
     NEW,
+    IMPORT,
     EDIT,
     SAVE,
     DELETE,
   };
 
+  Button *new_button, *edit_button, *save_button, *delete_button;
+
+  WaypointList items;
+
+  TwoTextRowsRenderer row_renderer;
+
   bool modified;
 
 public:
-  WaypointManagerWidget(const DialogLook &look)
-    :RowFormWidget(look), modified(false) {}
+  WaypointManagerWidget():modified(false) {}
+
+  void CreateButtons(WidgetDialog &dialog);
 
   bool IsModified() const {
     return modified;
@@ -64,24 +79,107 @@ public:
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
+  void Unprepare() override {
+    DeleteWindow();
+  }
+
+  void Show(const PixelRect &rc) override {
+    ListWidget::Show(rc);
+    UpdateList();
+    UpdateButtons();
+  }
+
 private:
+  /* virtual methods from ListItemRenderer */
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) override;
+
+  /* virtual methods from ListCursorHandler */
+  bool CanActivateItem(unsigned index) const override {
+    return true;
+  }
+
+  void OnActivateItem(unsigned index) override;
+
   /* virtual methods from ActionListener */
   void OnAction(int id) override;
 
 private:
+  void UpdateList();
+  void UpdateButtons();
+
   void OnWaypointNewClicked();
-  void OnWaypointEditClicked();
+  void OnWaypointImportClicked();
+  void OnWaypointEditClicked(unsigned i);
   void OnWaypointSaveClicked();
-  void OnWaypointDeleteClicked();
+  void OnWaypointDeleteClicked(unsigned i);
 };
+
+void
+WaypointManagerWidget::CreateButtons(WidgetDialog &dialog)
+{
+  new_button = dialog.AddButton(_("New"), *this, NEW);
+  edit_button = dialog.AddButton(_("Import"), *this, IMPORT);
+  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
+  save_button = dialog.AddButton(_("Save"), *this, SAVE);
+  delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
+}
+
+void
+WaypointManagerWidget::UpdateButtons()
+{
+  const bool non_empty = !items.empty();
+  edit_button->SetEnabled(non_empty);
+  delete_button->SetEnabled(non_empty);
+}
+
+void
+WaypointManagerWidget::UpdateList()
+{
+  items.clear();
+
+  WaypointFilter filter;
+  filter.Clear();
+  filter.type_index = TypeFilter::USER;
+
+  WaypointListBuilder builder(filter, GeoPoint::Invalid(),
+                              items, nullptr, 0);
+  builder.Visit(way_points);
+
+  auto &list = GetList();
+  list.SetLength(items.size());
+  list.SetOrigin(0);
+  list.SetCursorIndex(0);
+  list.Invalidate();
+}
 
 void
 WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  AddButton(_("New"), *this, NEW);
-  AddButton(_("Edit"), *this, EDIT);
-  AddButton(_("Save"), *this, SAVE);
-  AddButton(_("Delete"), *this, DELETE);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          look.small_font));
+}
+
+void
+WaypointManagerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                   unsigned i)
+{
+  assert(i < items.size());
+
+  const auto &info = items[i];
+
+  WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
+                             row_renderer,
+                             UIGlobals::GetMapLook().waypoint,
+                             CommonInterface::GetMapSettings().waypoint);
+}
+
+void
+WaypointManagerWidget::OnActivateItem(unsigned i)
+{
+  OnWaypointEditClicked(i);
 }
 
 inline void
@@ -96,14 +194,18 @@ WaypointManagerWidget::OnWaypointNewClicked()
       edit_waypoint.name.size()) {
     modified = true;
 
-    ScopeSuspendAllThreads suspend;
-    way_points.Append(std::move(edit_waypoint));
-    way_points.Optimise();
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.Append(std::move(edit_waypoint));
+      way_points.Optimise();
+    }
+
+    UpdateList();
   }
 }
 
 inline void
-WaypointManagerWidget::OnWaypointEditClicked()
+WaypointManagerWidget::OnWaypointImportClicked()
 {
   const Waypoint *way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
@@ -116,10 +218,28 @@ WaypointManagerWidget::OnWaypointEditClicked()
     if (dlgWaypointEditShowModal(wp_copy)) {
       modified = true;
 
-      ScopeSuspendAllThreads suspend;
-      way_points.Replace(*way_point, wp_copy);
-      way_points.Optimise();
+      {
+        ScopeSuspendAllThreads suspend;
+        way_points.Replace(*way_point, wp_copy);
+        way_points.Optimise();
+      }
+
+      UpdateList();
     }
+  }
+}
+
+inline void
+WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
+{
+  const Waypoint &wp = *items[i].waypoint;
+  Waypoint wp_copy = wp;
+  if (dlgWaypointEditShowModal(wp_copy)) {
+    modified = true;
+
+    ScopeSuspendAllThreads suspend;
+    way_points.Replace(wp, wp_copy);
+    way_points.Optimise();
   }
 }
 
@@ -141,20 +261,21 @@ WaypointManagerWidget::OnWaypointSaveClicked()
 }
 
 inline void
-WaypointManagerWidget::OnWaypointDeleteClicked()
+WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
 {
-  const Waypoint *way_point =
-    ShowWaypointListDialog(CommonInterface::Basic().location);
-  if (way_point == nullptr)
-    return;
+  const Waypoint &wp = *items[i].waypoint;
 
-  if (ShowMessageBox(way_point->name.c_str(), _("Delete waypoint?"),
+  if (ShowMessageBox(wp.name.c_str(), _("Delete waypoint?"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES) {
     modified = true;
 
-    ScopeSuspendAllThreads suspend;
-    way_points.Erase(*way_point);
-    way_points.Optimise();
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.Erase(wp);
+      way_points.Optimise();
+    }
+
+    UpdateList();
   }
 }
 
@@ -166,8 +287,12 @@ WaypointManagerWidget::OnAction(int id)
     OnWaypointNewClicked();
     break;
 
+  case IMPORT:
+    OnWaypointImportClicked();
+    break;
+
   case EDIT:
-    OnWaypointEditClicked();
+    OnWaypointEditClicked(GetList().GetCursorIndex());
     break;
 
   case SAVE:
@@ -175,7 +300,7 @@ WaypointManagerWidget::OnAction(int id)
     break;
 
   case DELETE:
-    OnWaypointDeleteClicked();
+    OnWaypointDeleteClicked(GetList().GetCursorIndex());
     break;
   }
 }
@@ -184,10 +309,11 @@ void
 dlgConfigWaypointsShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WaypointManagerWidget widget(look);
+  WaypointManagerWidget widget;
   WidgetDialog dialog(look);
   dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Waypoints Editor"),
                     &widget);
+  widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);
 
   dialog.ShowModal();
