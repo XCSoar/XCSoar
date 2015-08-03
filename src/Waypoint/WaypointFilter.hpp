@@ -61,6 +61,13 @@ struct WaypointFilter
   Angle direction;
   TypeFilter type_index;
 
+  void Clear() {
+    name.clear();
+    distance = fixed(0);
+    direction = Angle::Native(fixed(-1));
+    type_index = TypeFilter::ALL;
+  }
+
   gcc_pure
   bool Matches(const Waypoint &waypoint, GeoPoint location,
                const FAITrianglePointValidator &triangle_validator) const;
