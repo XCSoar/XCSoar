@@ -49,9 +49,15 @@ class WaypointManagerWidget final
     DELETE,
   };
 
+  bool modified;
+
 public:
   WaypointManagerWidget(const DialogLook &look)
-    :RowFormWidget(look) {}
+    :RowFormWidget(look), modified(false) {}
+
+  bool IsModified() const {
+    return modified;
+  }
 
   void SaveWaypoints();
 
@@ -68,8 +74,6 @@ private:
   void OnWaypointSaveClicked();
   void OnWaypointDeleteClicked();
 };
-
-static bool WaypointsNeedSave = false;
 
 void
 WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -90,7 +94,7 @@ WaypointManagerWidget::OnWaypointNewClicked()
 
   if (dlgWaypointEditShowModal(edit_waypoint) &&
       edit_waypoint.name.size()) {
-    WaypointsNeedSave = true;
+    modified = true;
 
     ScopeSuspendAllThreads suspend;
     way_points.Append(std::move(edit_waypoint));
@@ -110,7 +114,7 @@ WaypointManagerWidget::OnWaypointEditClicked()
     wp_copy.origin = WaypointOrigin::USER;
 
     if (dlgWaypointEditShowModal(wp_copy)) {
-      WaypointsNeedSave = true;
+      modified = true;
 
       ScopeSuspendAllThreads suspend;
       way_points.Replace(*way_point, wp_copy);
@@ -127,7 +131,7 @@ WaypointManagerWidget::SaveWaypoints()
   else
     WaypointFileChanged = true;
 
-  WaypointsNeedSave = false;
+  modified = false;
 }
 
 inline void
@@ -146,7 +150,7 @@ WaypointManagerWidget::OnWaypointDeleteClicked()
 
   if (ShowMessageBox(way_point->name.c_str(), _("Delete waypoint?"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES) {
-    WaypointsNeedSave = true;
+    modified = true;
 
     ScopeSuspendAllThreads suspend;
     way_points.Erase(*way_point);
@@ -186,11 +190,10 @@ dlgConfigWaypointsShowModal()
                     &widget);
   dialog.AddButton(_("Close"), mrCancel);
 
-  WaypointsNeedSave = false;
   dialog.ShowModal();
   dialog.StealWidget();
 
-  if (WaypointsNeedSave &&
+  if (widget.IsModified() &&
       ShowMessageBox(_("Save changes to waypoint file?"), _("Waypoints edited"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
       widget.SaveWaypoints();
