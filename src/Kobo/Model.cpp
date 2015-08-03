@@ -55,6 +55,7 @@ static constexpr struct {
   const char *id;
   KoboModel model;
 } kobo_model_ids[] = {
+  { "SN-N514", KoboModel::AURA },
   { "SN-N705", KoboModel::MINI },
   { "SN-N905", KoboModel::TOUCH },
 };
