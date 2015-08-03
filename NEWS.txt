@@ -83,6 +83,7 @@ Version 6.8 - not yet released
   - support open Wifi networks (#3391)
   - support USB-OTG
   - export data partition via USB storage
+  - support the Kobo Aura screen (#3490)
 
 Version 6.7.9 - 2015/07/03
 * user interface

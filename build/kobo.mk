@@ -57,6 +57,7 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FlightInfo.cpp \
+	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
 KOBO_POWER_OFF_LDADD = $(FAKE_LIBS)
 KOBO_POWER_OFF_DEPENDS = SCREEN RESOURCE IO OS MATH UTIL TIME

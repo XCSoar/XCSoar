@@ -29,6 +29,7 @@ Copyright_License {
 #endif
 
 #if defined(KOBO) && defined(USE_FB)
+#include "Kobo/Model.hpp"
 #include "mxcfb.h"
 #endif
 
@@ -46,15 +47,28 @@ Copyright_License {
 #include <errno.h>
 
 static unsigned
+TranslateDimension(unsigned value)
+{
+#ifdef KOBO
+  if (value == 1024 && DetectKoboModel() == KoboModel::AURA)
+    /* the Kobo Aura announces 1024 pixel rows, but the physical
+       display only shows 1014 */
+    value -= 10;
+#endif
+
+  return value;
+}
+
+static unsigned
 GetWidth(const struct fb_var_screeninfo &vinfo)
 {
-  return vinfo.xres;
+  return TranslateDimension(vinfo.xres);
 }
 
 static unsigned
 GetHeight(const struct fb_var_screeninfo &vinfo)
 {
-  return vinfo.yres;
+  return TranslateDimension(vinfo.yres);
 }
 
 #endif

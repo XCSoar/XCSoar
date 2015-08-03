@@ -732,6 +732,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/XCSoar.cpp
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Kobo/Model.cpp
+endif
+
 ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
 endif
