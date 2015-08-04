@@ -26,15 +26,6 @@ Copyright_License {
 NumberDataField::NumberDataField(Type type, bool support_combo,
                                  const TCHAR *_edit_format,
                                  const TCHAR *_display_format,
-                                 DataAccessCallback OnDataAccess)
-  :DataField(type, support_combo, OnDataAccess),
-   edit_format(_edit_format), display_format(_display_format)
-{
-}
-
-NumberDataField::NumberDataField(Type type, bool support_combo,
-                                 const TCHAR *_edit_format,
-                                 const TCHAR *_display_format,
                                  DataFieldListener *listener)
   :DataField(type, support_combo, listener),
    edit_format(_edit_format), display_format(_display_format)

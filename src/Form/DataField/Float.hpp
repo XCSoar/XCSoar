@@ -45,14 +45,6 @@ protected:
   fixed SpeedUp(bool keyup);
 
 public:
-  DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                 fixed Min, fixed Max, fixed Default,
-                 fixed Step, bool Fine, DataAccessCallback OnDataAccess)
-    :NumberDataField(Type::REAL, true, EditFormat, DisplayFormat, OnDataAccess),
-     mValue(Default), mMin(Min), mMax(Max), mStep(Step),
-     mSpeedup(0), mFine(Fine),
-     unit(_T("")) {}
-
   DataFieldFloat(const TCHAR *edit_format, const TCHAR *display_format,
                  fixed _min, fixed _max, fixed _value,
                  fixed _step, bool _fine,

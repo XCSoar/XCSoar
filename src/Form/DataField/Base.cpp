@@ -35,15 +35,7 @@ enum {
 
 DataField::DataField(Type _type, bool _supports_combolist,
                      DataFieldListener *_listener)
-  :listener(_listener), data_access_callback(nullptr),
-   supports_combolist(_supports_combolist), type(_type),
-   item_help_enabled(false)
-{
-}
-
-DataField::DataField(Type _type, bool _supports_combolist,
-                     DataAccessCallback _data_access_callback)
-  :listener(nullptr), data_access_callback(_data_access_callback),
+  :listener(_listener),
    supports_combolist(_supports_combolist), type(_type),
    item_help_enabled(false)
 {
@@ -54,8 +46,6 @@ DataField::Modified()
 {
   if (listener != nullptr)
     listener->OnModified(*this);
-  else if (data_access_callback != nullptr)
-    data_access_callback(this);
 }
 
 void

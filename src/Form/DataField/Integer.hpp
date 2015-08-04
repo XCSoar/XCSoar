@@ -43,12 +43,6 @@ protected:
   int SpeedUp(bool keyup);
 
 public:
-  DataFieldInteger(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                   int Min, int Max,
-                   int Default, int Step, DataAccessCallback OnDataAccess)
-    :NumberDataField(Type::INTEGER, true, EditFormat, DisplayFormat, OnDataAccess),
-     value(Default), min(Min), max(Max), step(Step) {}
-
   DataFieldInteger(const TCHAR *edit_format, const TCHAR *display_format,
                    int _min, int _max, int _value, int _step,
                    DataFieldListener *listener=nullptr)

@@ -105,10 +105,6 @@ public:
   DataFieldEnum(DataFieldListener *listener=nullptr)
     :DataField(Type::ENUM, true, listener), value(0) {}
 
-  DataFieldEnum(DataAccessCallback OnDataAccess) :
-    DataField(Type::ENUM, true, OnDataAccess),
-    value(0) {}
-
   gcc_pure
   unsigned GetValue() const;
 

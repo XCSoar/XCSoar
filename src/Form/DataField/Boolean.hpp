@@ -35,12 +35,6 @@ private:
   StaticString<32> false_text;
 
 public:
-  DataFieldBoolean(bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
-                   DataAccessCallback OnDataAccess)
-    :DataField(Type::BOOLEAN, true, OnDataAccess),
-     mValue(Default),
-     true_text(TextTrue), false_text(TextFalse) {}
-
   DataFieldBoolean(bool _value,
                    const TCHAR *_true_text, const TCHAR *_false_text,
                    DataFieldListener *listener=nullptr)

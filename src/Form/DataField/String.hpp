@@ -42,10 +42,6 @@ public:
   DataFieldString(const TCHAR *_value, DataFieldListener *listener=nullptr)
     :DataField(Type::STRING, false, listener), mValue(_value) {}
 
-  DataFieldString(const TCHAR *Default,
-                  DataAccessCallback OnDataAccess) :
-    DataField(Type::STRING, false, OnDataAccess), mValue(Default) {}
-
   void Set(const TCHAR *Value);
 
   /* virtual methods from class DataField */
