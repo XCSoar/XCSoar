@@ -38,6 +38,8 @@ extern "C" {
 #include "tap.h"
 }
 
+#undef fail
+
 static inline bool
 is_zero(const fixed value, const int accuracy=ACCURACY)
 {
