@@ -53,6 +53,7 @@ struct FileRepository {
     return files.end();
   }
 
+  gcc_pure
   const AvailableFile *FindByName(const char *name) const;
 };
 
