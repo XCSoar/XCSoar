@@ -41,20 +41,17 @@ FilePicker(const TCHAR *caption, FileDataField &df,
   if (combo_list.size() == 0)
     return false;
 
+  const TCHAR *extra_caption = nullptr;
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (df.GetFileType() != FileType::UNKNOWN &&
       Net::DownloadManager::IsAvailable())
-    combo_list.Append(ComboList::Item::DOWNLOAD, _("Download"));
+    extra_caption = _("Download");
 #endif
 
-  int i = ComboPicker(caption, combo_list, help_text);
-  if (i < 0)
-    return false;
-
-  const ComboList::Item &item = combo_list[i];
+  int i = ComboPicker(caption, combo_list, help_text, false, extra_caption);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  if (item.int_value == ComboList::Item::DOWNLOAD) {
+  if (i == -2) {
     const auto path = DownloadFilePicker(df.GetFileType());
     if (path.empty())
       return false;
@@ -64,6 +61,10 @@ FilePicker(const TCHAR *caption, FileDataField &df,
   }
 #endif
 
+  if (i < 0)
+    return false;
+
+  const ComboList::Item &item = combo_list[i];
   df.SetFromCombo(item.int_value, item.string_value);
   return true;
 }
