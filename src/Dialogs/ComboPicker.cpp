@@ -64,7 +64,8 @@ int
 ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
             const TCHAR *help_text,
-            bool enable_item_help)
+            bool enable_item_help,
+            const TCHAR *extra_caption)
 {
   ComboListPopup = &combo_list;
 
@@ -75,7 +76,8 @@ ComboPicker(const TCHAR *caption,
                     support.CalculateLayout(UIGlobals::GetDialogLook()),
                     support, false,
                     help_text,
-                    enable_item_help ? OnItemHelp : NULL);
+                    enable_item_help ? OnItemHelp : nullptr,
+                    extra_caption);
 }
 
 bool

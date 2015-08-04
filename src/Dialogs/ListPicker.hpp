@@ -41,7 +41,10 @@ typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
  * @param update Update per timer
  * @param help_text enable the "Help" button and show this text on click
  * @param itemhelp_callback Callback to return string for current item help
- * @return the list index, or -1 if the user cancelled the dialog
+ * @param extra_caption caption of another button that closes the
+ * dialog (nullptr disables it)
+ * @return the list index, -1 if the user cancelled the dialog, -2 if
+ * the user clicked the "extra" button
  */
 int
 ListPicker(const TCHAR *caption,
@@ -49,6 +52,7 @@ ListPicker(const TCHAR *caption,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update = false,
            const TCHAR *help_text = nullptr,
-           ItemHelpCallback_t itemhelp_callback = nullptr);
+           ItemHelpCallback_t itemhelp_callback = nullptr,
+           const TCHAR *extra_caption=nullptr);
 
 #endif

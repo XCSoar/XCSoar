@@ -33,7 +33,8 @@ int
 ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
             const TCHAR *help_text = nullptr,
-            bool enable_item_help = false);
+            bool enable_item_help = false,
+            const TCHAR *extra_caption=nullptr);
 
 /**
  * @return true if the user has selected a new value (though it may be

@@ -157,7 +157,8 @@ ListPicker(const TCHAR *caption,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update,
            const TCHAR *help_text,
-           ItemHelpCallback_t _itemhelp_callback)
+           ItemHelpCallback_t _itemhelp_callback,
+           const TCHAR *extra_caption)
 {
   assert(num_items <= 0x7fffffff);
   assert((num_items == 0 && initial_value == 0) || initial_value < num_items);
@@ -188,6 +189,9 @@ ListPicker(const TCHAR *caption,
   if (num_items > 0)
     dialog.AddButton(_("Select"), mrOK);
 
+  if (extra_caption != nullptr)
+    dialog.AddButton(extra_caption, -2);
+
   dialog.AddButton(_("Cancel"), mrCancel);
 
   dialog.EnableCursorSelection();
@@ -198,9 +202,11 @@ ListPicker(const TCHAR *caption,
   if (update)
     update_timer.Schedule(1000);
 
-  int result = dialog.ShowModal() == mrOK
-    ? (int)list_widget->GetList().GetCursorIndex()
-    : -1;
+  int result = dialog.ShowModal();
+  if (result == mrOK)
+    result = (int)list_widget->GetList().GetCursorIndex();
+  else if (result != -2)
+    result = -1;
 
   update_timer.Cancel();
   return result;
