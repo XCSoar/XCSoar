@@ -190,6 +190,8 @@ ListPicker(const TCHAR *caption,
 
   dialog.AddButton(_("Cancel"), mrCancel);
 
+  dialog.EnableCursorSelection();
+
   auto update_timer = MakeLambdaTimer([list_widget](){
       list_widget->GetList().Invalidate();
     });
