@@ -315,6 +315,7 @@ dlgConfigWaypointsShowModal()
                     &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);
+  dialog.EnableCursorSelection();
 
   dialog.ShowModal();
   dialog.StealWidget();
