@@ -27,6 +27,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRowRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
@@ -163,7 +164,7 @@ class ManagedFileListWidget
     }
   };
 
-  unsigned font_height;
+  TwoTextRowsRenderer row_renderer;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Button *download_button, *add_button, *cancel_button;
@@ -301,12 +302,11 @@ void
 ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const unsigned margin = Layout::GetTextPadding();
-  font_height = look.list.font->GetHeight();
 
-  const unsigned row_height = std::max(3u * margin + 2u * font_height,
-                                       Layout::GetMaximumControlHeight());
-  CreateList(parent, look, rc, row_height);
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          look.small_font));
+
   LoadRepositoryFile();
   RefreshList();
   UpdateButtons();
@@ -432,7 +432,10 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const unsigned margin = Layout::GetTextPadding();
 
-  canvas.DrawText(rc.left + margin, rc.top + margin, file.name.c_str());
+  canvas.Select(row_renderer.GetFirstFont());
+  row_renderer.DrawFirstRow(canvas, rc, file.name.c_str());
+
+  canvas.Select(row_renderer.GetSecondFont());
 
   if (file.downloading) {
     StaticString<64> text;
@@ -449,17 +452,21 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     const unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
+    canvas.DrawText(rc.right - width - margin,
+                    rc.top + row_renderer.GetFirstY(),
+                    text);
   } else if (file.failed) {
     const TCHAR *text = _("Error");
     const unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
+    canvas.DrawText(rc.right - width - margin,
+                    rc.top + row_renderer.GetFirstY(),
+                    text);
   }
 
-  canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
-                  file.size.c_str());
+  row_renderer.DrawSecondRow(canvas, rc, file.size.c_str());
 
-  canvas.DrawText((rc.left + rc.right) / 2, rc.top + 2 * margin + font_height,
+  canvas.DrawText((rc.left + rc.right) / 2,
+                  rc.top + row_renderer.GetSecondY(),
                   file.last_modified.c_str());
 }
 
