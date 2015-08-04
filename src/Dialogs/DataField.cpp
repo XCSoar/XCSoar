@@ -38,7 +38,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 {
   if (df.GetType() == DataField::Type::FILE) {
     return FilePicker(caption, (FileDataField &)df, help_text);
-  } else if (df.supports_combolist) {
+  } else if (df.SupportsCombolist()) {
     return ComboPicker(caption, df, help_text);
   } else if (df.GetType() == DataField::Type::ROUGH_TIME) {
     RoughTimeDataField &tdf = (RoughTimeDataField &)df;

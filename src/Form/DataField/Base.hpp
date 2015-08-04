@@ -52,6 +52,7 @@ public:
     GEOPOINT,
   };
 
+private:
   DataFieldListener *listener;
 
   // all Types dataField support combolist except DataFieldString.
@@ -78,6 +79,10 @@ public:
 
   Type GetType() const {
     return type;
+  }
+
+  bool SupportsCombolist() const {
+    return supports_combolist;
   }
 
   virtual void Inc();
