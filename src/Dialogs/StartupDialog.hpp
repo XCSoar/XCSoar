@@ -21,24 +21,14 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
+#ifndef XCSOAR_STARTUP_DIALOG_HPP
+#define XCSOAR_STARTUP_DIALOG_HPP
 
-class SingleWindow;
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void ShowWindSettingsDialog();
-
-void dlgStatusShowModal(int page);
-
-void dlgCreditsShowModal(SingleWindow &parent);
-
-void dlgQuickMenuShowModal(SingleWindow &parent);
+/**
+ * @return true on success, false if the user has pressed the "Quit"
+ * button
+ */
+bool
+dlgStartupShowModal();
 
 #endif

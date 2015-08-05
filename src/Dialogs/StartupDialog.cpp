@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
+#include "StartupDialog.hpp"
 #include "ProfilePasswordDialog.hpp"
 #include "ProfileListDialog.hpp"
 #include "Message.hpp"

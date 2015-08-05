@@ -34,7 +34,7 @@ Copyright_License {
 #include "Terrain/RasterWeatherStore.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
