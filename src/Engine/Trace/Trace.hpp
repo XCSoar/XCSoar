@@ -34,6 +34,8 @@ Copyright_License {
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/set.hpp>
 
+#include <algorithm>
+
 #include <assert.h>
 #include <stdlib.h>
 
