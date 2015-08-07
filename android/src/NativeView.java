@@ -376,8 +376,7 @@ class NativeView extends SurfaceView
   private boolean bitmapToTexture(Bitmap bmp, boolean alpha, int[] result) {
     /* pass a copy because bitmapToOpenGL() recycles the given
        Bitmap */
-    return BitmapUtil.bitmapToOpenGL(BitmapUtil.copy(bmp, alpha),
-                                     alpha, result);
+    return BitmapUtil.bitmapToOpenGL(bmp, false, alpha, result);
   }
 
   /**

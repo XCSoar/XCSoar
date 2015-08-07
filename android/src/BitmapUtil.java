@@ -127,56 +127,40 @@ final class BitmapUtil {
   }
 
   /**
-   * Create an immutable copy of the given #Bitmap.  Unlike raw
-   * Bitmap.copy(), this is safe against a NullPointerException that
-   * can occur on old Android versions (1.6) when
-   * Bitmap.getConfig()==null.
-   */
-  static Bitmap copy(Bitmap src, boolean alpha) {
-    Bitmap.Config config = src.getConfig();
-
-    if (alpha && config != Bitmap.Config.ALPHA_8)
-      return toAlpha8(src, false);
-
-    if (config == null)
-      /* convert to a format compatible with OpenGL */
-      config = src.hasAlpha()
-        ? Bitmap.Config.ARGB_8888
-        : Bitmap.Config.RGB_565;
-
-    return src.copy(config, false);
-  }
-
-  /**
    * Loads an Android Bitmap as OpenGL texture.
    *
+   * @param recycle recycle the #Bitmap parameter?
    * @param alpha expect a GL_ALPHA texture?
    * @param result an array of 5 integers: texture id, width, height,
    * allocated width, allocated height (all output)
    * @return true on success
    */
-  public static boolean bitmapToOpenGL(Bitmap bmp, boolean alpha,
+  public static boolean bitmapToOpenGL(Bitmap bmp, boolean recycle,
+                                       boolean alpha,
                                        int[] result) {
     result[1] = bmp.getWidth();
     result[2] = bmp.getHeight();
     result[3] = validateTextureSize(result[1]);
     result[4] = validateTextureSize(result[2]);
 
-    if (alpha && bmp.getConfig() != Bitmap.Config.ALPHA_8)
-      bmp = toAlpha8(bmp, true);
-    else if (bmp.getConfig() == null) {
+    if (alpha && bmp.getConfig() != Bitmap.Config.ALPHA_8) {
+      bmp = toAlpha8(bmp, recycle);
+      recycle = true;
+    } else if (bmp.getConfig() == null) {
       /* convert to a format compatible with OpenGL */
       Bitmap.Config config = bmp.hasAlpha()
         ? Bitmap.Config.ARGB_8888
         : Bitmap.Config.RGB_565;
 
       Bitmap tmp = bmp.copy(config, false);
-      bmp.recycle();
+      if (recycle)
+        bmp.recycle();
 
       if (tmp == null)
         return false;
 
       bmp = tmp;
+      recycle = true;
     }
 
     /* create and configure an OpenGL texture */
@@ -202,7 +186,8 @@ final class BitmapUtil {
       Log.e(TAG, "GLUtils error", e);
       return false;
     } finally {
-      bmp.recycle();
+      if (recycle)
+        bmp.recycle();
     }
 
     /* done */
