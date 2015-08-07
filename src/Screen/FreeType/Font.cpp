@@ -312,8 +312,8 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
   int pitch = bitmap.pitch;
 
   if (x < 0) {
-    src += x;
-    width -= x;
+    src -= x;
+    width += x;
     x = 0;
   }
 
@@ -324,8 +324,8 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
     width = buffer_width - x;
 
   if (y < 0) {
-    src += y * pitch;
-    height -= y;
+    src -= y * pitch;
+    height += y;
     y = 0;
   }
 
