@@ -105,6 +105,13 @@ BufferCanvas::Resize(PixelSize new_size)
   texture->ResizeDiscard(new_size);
 
   if (stencil_buffer != nullptr) {
+    /* the stencil buffer must be detached before we resize it */
+    frame_buffer->Bind();
+    if (OpenGL::render_buffer_stencil == OpenGL::render_buffer_depth_stencil)
+      stencil_buffer->DetachFramebuffer(FBO::DEPTH_ATTACHMENT);
+    stencil_buffer->DetachFramebuffer(FBO::STENCIL_ATTACHMENT);
+    frame_buffer->Unbind();
+
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
     stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.cx, size.cy);

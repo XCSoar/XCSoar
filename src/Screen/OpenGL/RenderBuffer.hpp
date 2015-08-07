@@ -61,6 +61,11 @@ public:
                                  FBO::RENDERBUFFER, id);
   }
 
+  static void DetachFramebuffer(GLenum attachment) {
+    FBO::FramebufferRenderbuffer(FBO::FRAMEBUFFER, attachment,
+                                 FBO::RENDERBUFFER, 0);
+  }
+
 protected:
   void Gen() {
     FBO::GenRenderbuffers(1, &id);
