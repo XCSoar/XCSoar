@@ -88,7 +88,7 @@ final class BitmapUtil {
    * Copy the red channel to a new Bitmap's alpha channel.  The old
    * one will be recycled.
    */
-  static Bitmap redToAlpha(Bitmap src) {
+  static Bitmap redToAlpha(Bitmap src, boolean recycle) {
     Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
                                       Bitmap.Config.ARGB_8888);
 
@@ -106,19 +106,23 @@ final class BitmapUtil {
     canvas.setDensity(Bitmap.DENSITY_NONE);
     canvas.drawBitmap(src, 0, 0, paint);
 
-    src.recycle();
+    if (recycle)
+      src.recycle();
     return dest;
   }
 
   /**
    * Convert the Bitmap to ALPHA_8.  The old one will be recycled.
    */
-  static Bitmap toAlpha8(Bitmap src) {
-    if (!src.hasAlpha())
-      src = redToAlpha(src);
+  static Bitmap toAlpha8(Bitmap src, boolean recycle) {
+    if (!src.hasAlpha()) {
+      src = redToAlpha(src, recycle);
+      recycle = true;
+    }
 
     Bitmap dest = src.copy(Bitmap.Config.ALPHA_8, false);
-    src.recycle();
+    if (recycle)
+      src.recycle();
     return dest;
   }
 
@@ -132,7 +136,7 @@ final class BitmapUtil {
     Bitmap.Config config = src.getConfig();
 
     if (alpha && config != Bitmap.Config.ALPHA_8)
-      return toAlpha8(src);
+      return toAlpha8(src, false);
 
     if (config == null)
       /* convert to a format compatible with OpenGL */
@@ -159,7 +163,7 @@ final class BitmapUtil {
     result[4] = validateTextureSize(result[2]);
 
     if (alpha && bmp.getConfig() != Bitmap.Config.ALPHA_8)
-      bmp = toAlpha8(bmp);
+      bmp = toAlpha8(bmp, true);
     else if (bmp.getConfig() == null) {
       /* convert to a format compatible with OpenGL */
       Bitmap.Config config = bmp.hasAlpha()
