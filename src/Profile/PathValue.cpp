@@ -82,6 +82,9 @@ ProfileMap::GetPathBase(const char *key) const
       return nullptr;
 
   const TCHAR *base = BackslashBaseName(buffer);
+  if (base == nullptr)
+    return nullptr;
+
   const auto size = StringLength(base) + 1;
   TCHAR *result = new TCHAR[size];
   std::copy_n(base, size, result);
