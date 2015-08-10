@@ -281,6 +281,10 @@ static constexpr PolarStore::Item internal_polars[] =
   //Derived from Pilatus B4 PH-448, fixed gear serial production, measured at Idaflieg-vergleichsfliegen at Aalen in the year 1973.
   {_T("Pilatus B4"), 306, 0, 90.0, -0.847, 126.0, -1.644, 198.0, -5.098},
 
+  { _T("SGS 2-33 (PAS)"), 470, 0, 82.32, -0.96, 130.0, -1.74, 170.0, -3.44, 20.35, 33, 0 },
+  // 170
+  { _T("SGS 2-33 (PIL)"), 360, 0, 69.75, -0.84, 130.0, -2.13, 170.0, -4.39, 20.35, 33, 0 },
+
 };
 
 const PolarStore::Item &
