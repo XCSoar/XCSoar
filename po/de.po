@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-07-10 22:11+0000\n"
-"Last-Translator: Jonas Becker <jonasbecker_gt@yahoo.de>\n"
+"PO-Revision-Date: 2015-08-10 12:28+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-07-22 05:20+0000\n"
-"X-Generator: Launchpad (build 17628)\n"
+"X-Launchpad-Export-Date: 2015-08-11 16:44+0000\n"
+"X-Generator: Launchpad (build 17686)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3867,7 +3867,7 @@ msgstr "UDP Port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:406
 msgid "Bluetooth LE"
-msgstr ""
+msgstr "Bluetooth LE"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Port"
@@ -4180,7 +4180,7 @@ msgstr "Volumen"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #, no-c-format
 msgid "Output mode"
-msgstr ""
+msgstr "Ausgabemodus"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -4546,7 +4546,7 @@ msgstr "Logger interval"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr ""
+msgstr "Kein Tracking"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:468
 #: src/Dialogs/dlgAnalysis.cpp:504 src/Dialogs/dlgAnalysis.cpp:513
@@ -5329,7 +5329,7 @@ msgstr "Referenz Gewicht"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
 msgid "Reference mass of the polar"
-msgstr ""
+msgstr "Referenzmasse zur Polare"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5337,7 +5337,7 @@ msgstr "Trockengewicht"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "Leergewicht des Flugzeugs"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
@@ -5910,13 +5910,13 @@ msgstr "Lufträume nicht ausfüllen"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr ""
+msgstr "Keine Labels angezeigen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr ""
+msgstr "Alle Labels angezeigen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -5948,7 +5948,7 @@ msgstr "Sichtbarkeit der Beschriftung"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:158
 msgid "Determines what labels are displayed."
-msgstr ""
+msgstr "Leget fest, welche Labels angezeigt werden sollen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5980,7 +5980,7 @@ msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Warnings dialog"
-msgstr ""
+msgstr "Warnungen"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
@@ -6370,12 +6370,12 @@ msgstr "Normal"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
 #, no-c-format
 msgid "Large"
-msgstr ""
+msgstr "Groß"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:101
 #, no-c-format
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:105
 msgid "Text size"
@@ -8436,7 +8436,7 @@ msgstr "Typ des Luftfahrzeugs."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
 msgid "Vehicle Name"
-msgstr ""
+msgstr "Flugzeug"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Server"
@@ -8840,13 +8840,15 @@ msgstr "V zu fliegen"
 
 #: src/Dialogs/Task/TargetDialog.cpp:481
 msgid "V ach"
-msgstr ""
+msgstr "V ach"
 
 #: src/Dialogs/Task/TargetDialog.cpp:483
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
+"AA Geschwindigkeit - Erreichbare mittlere Assigned Area Geschwindigkeit um "
+"alle verbleibenden Zielpunkte und minimaler Aufgabenzeit."
 
 #: src/Dialogs/Task/TargetDialog.cpp:488
 msgid "Optimized"
