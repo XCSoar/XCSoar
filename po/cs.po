@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-08-11 14:49+0000\n"
+"PO-Revision-Date: 2015-08-16 00:15+0000\n"
 "Last-Translator: Miloš Hrabě <darktroll@mybox.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-08-11 16:44+0000\n"
+"X-Launchpad-Export-Date: 2015-08-17 18:08+0000\n"
 "X-Generator: Launchpad (build 17686)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -152,6 +152,8 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
+"90° výseč o poloměru 1km. Protněte rohovou hranu zevnitř výseče pro zahájení "
+"úlohy."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
@@ -263,7 +265,7 @@ msgstr "Symetrická výseč s vlastním radiusem."
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Klíčová dírka, bodovájo podle nejzazšího dosaženého hodu v oblasti."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
@@ -1939,6 +1941,10 @@ msgid ""
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
+"Okamžitý poměr vztlak/odpor, vychází z indikované vzdušné rychlosti dělené "
+"vertikální rychlostí dle celkové energie, pokud je připojeno inteligentní "
+"vario. záporné hodmoty značí stoupání. Pokud je hodnota totáljí energie z "
+"varia blízká nule, zobrazí se '---'"
 
 #: src/InfoBoxes/Content/Factory.cpp:715
 #, no-c-format
@@ -2093,6 +2099,10 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
+"Rozdíl mezi předpokládaným časem úlohy a AAT minimálním časem. Zbarveno "
+"červeně, pokud je záporný (předpokládá se že dorazíte moc brzy), nebo modře "
+"pokud jste v oblasti a můžete otočit nyní s předpokládaným časem větším než "
+"minimální čas AAT plus 5 minut."
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
@@ -2789,7 +2799,7 @@ msgstr "Radiála"
 #: src/InfoBoxes/Content/Factory.cpp:1205
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr ""
+msgstr "skutečný směr z dalšího bodu trati na vaši současnou pozici."
 
 #: src/InfoBoxes/Content/Factory.cpp:1213
 #: src/InfoBoxes/Content/Factory.cpp:1214
@@ -2803,6 +2813,8 @@ msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
+"Skutečný směr z vybranéhomreferenčního bodu na vaši pozici. Vzdálenost je "
+"zobrazena v námořních mílích pro komunikaci s ATC."
 
 #: src/InfoBoxes/Content/Factory.cpp:1224
 #, no-c-format
@@ -2881,7 +2893,7 @@ msgstr "Vzdálenost k detekovanému bodu vzletu"
 #: src/InfoBoxes/Content/Factory.cpp:1263
 #, no-c-format
 msgid "On-Line Contest speed"
-msgstr ""
+msgstr "On-line soutěžní rychlost"
 
 #: src/InfoBoxes/Content/Factory.cpp:1264
 #, no-c-format
@@ -5437,6 +5449,10 @@ msgid ""
 "indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
 "is maximum AAT distance."
 msgstr ""
+"Pro AAT úlohy. Toto číslo vám ukáže jak daleko, na základě otočných bodů "
+"vaší úlohy poletíte vzhledem minimální a maximální možné vzdálenosti. -100% "
+"značí minimální AAT vzdálenost. 0% nominální AAT vzdálenost. +100% je "
+"maximální AAT vzdálenost."
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:165
 #: src/Dialogs/Task/TargetDialog.cpp:479
@@ -5813,6 +5829,9 @@ msgid ""
 "filter button also allows filtering of display and warnings independently "
 "for each airspace class."
 msgstr ""
+"Nastavuje filtrování prostorů k zobrazení a varováním. Tlačítko filtru "
+"rovněž umožňuje filtraci zobrazení a varování nezávisle promkaždou třídu "
+"prostorů."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:157
@@ -5833,6 +5852,8 @@ msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr ""
+"Pro režim ořezání, nastavuje výšku nad mořem, pod kterou budou zobrazovány "
+"prostory."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid "Margin"
@@ -5865,6 +5886,8 @@ msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
+"Toto je odhadovaná doba letu před narušením  prostoru, při keré sytém varuje "
+"pilota."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:222
 msgid "Repetitive sound"
@@ -6041,7 +6064,7 @@ msgstr "Zobrazit MacReady"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:72
 msgid "Whether to show the MacCready setting."
-msgstr ""
+msgstr "Zda zobrazit nastavení MacCready"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:75
 msgid "Show bugs"
@@ -6049,7 +6072,7 @@ msgstr "Zobrazit chyby"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:75
 msgid "Whether to show the bugs percentage."
-msgstr ""
+msgstr "Zda zobrazit procento much."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:78
 msgid "Show ballast"
@@ -6057,7 +6080,7 @@ msgstr "Ukaž zátěž"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:78
 msgid "Whether to show the ballast percentage."
-msgstr ""
+msgstr "Zda zobrazit procento přítěže."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:81
 msgid "Show gross"
@@ -6114,7 +6137,7 @@ msgstr "Auto MC  mód"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:74
 msgid "This option defines which auto MacCready algorithm is used."
-msgstr ""
+msgstr "Tato volba určuje jaký auto algorytmus MacCready bude použit."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:77
 msgid "Block speed to fly"
@@ -6142,13 +6165,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:91
 msgid "Flap forces cruise"
-msgstr ""
+msgstr "Klapka vynutí přeskok"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:92
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
+"Pokud je připojen Vega variometr a tato volba je zapnuta, nastavení klapky "
+"na pozitivní přepne letový režim mezi kroužením a přeskokem."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:98
 #, no-c-format
@@ -6170,6 +6195,8 @@ msgid ""
 "done. Normally for gliders a good value is 90-120 seconds, and for "
 "paragliders 15 seconds."
 msgstr ""
+"Zde nastavujete kolik sekund letu je zahrnuto v tomto  výpočtu. Normálně pro "
+"kluzáky je vhodné 90-120, a pro paraglide 15 sekund."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:113
 msgid "Predict wind drift"
@@ -6237,6 +6264,8 @@ msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
 msgstr ""
+"Soubor vstupních podnětů definující rozložení menu a jak bude XCSoarreagovat "
+"na stisky tlačítek a dálosti z externího zařízení."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:125
 msgid "Language"
@@ -6286,6 +6315,8 @@ msgstr "Styl vložení textu"
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
+"Určuje jak bude uživatel vyzván k zadání textu (název souboru, kód týmu, "
+"atd.)"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:188
 #, no-c-format
@@ -6453,7 +6484,7 @@ msgstr "Střed"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:128
 #, no-c-format
 msgid "Center the status message boxes."
-msgstr ""
+msgstr "vystředí okno se zprávou"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:129
 #, no-c-format
@@ -6512,6 +6543,8 @@ msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
 msgstr ""
+"Seznam možných rozložení infoboxů. Vyzkoušejte si různá nastavení aby jste "
+"našli nejvhodnější pro vaši velikost obrazovky."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:173
 msgid "FLARM display"
@@ -6606,7 +6639,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Log book"
-msgstr ""
+msgstr "kniha záznamů"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Logs each start and landing."
@@ -6745,15 +6778,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:140
 msgid "Max. auto zoom distance"
-msgstr ""
+msgstr "Max. auto měřítko"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
 msgid "The upper limit for auto zoom distance."
-msgstr ""
+msgstr "horní limit pro auto měřítko."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Distinct page zoom"
-msgstr ""
+msgstr "rozlišuj měřítko na stránkách"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
@@ -6761,11 +6794,11 @@ msgstr "Udržuj stejné přiblížení mapy na všech obrazovkách."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
-msgstr ""
+msgstr "Hlavní oblast"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:172
 msgid "Specifies what should be displayed in the main area."
-msgstr ""
+msgstr "Určuje co bude zobrazeno v hlavní oblasti."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
@@ -6879,11 +6912,14 @@ msgid ""
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
 "disabled, climbs are unlimited."
 msgstr ""
+"Pokud je povoleno, plájování trasy je omezeno stropem definovaným větším z "
+"aktuální výška plus 500 m nebo termickým stropem. Pokud je zakázáno, "
+"stoupání je neomezeno."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr ""
+msgstr "Výpočty doletu zakázány"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
@@ -6893,7 +6929,7 @@ msgstr "Přímá"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
-msgstr ""
+msgstr "Dolet je po přímé lince od kluzáku."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
@@ -6903,7 +6939,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:136
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
+msgstr "Dolet je vypočten s přihlédnutím k vyhnutí se teréním překážkám."
 
 #. Spacer
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
@@ -6914,7 +6950,7 @@ msgstr ""
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
-msgstr ""
+msgstr "Jak jsou prováděny výpočty doletu kluzáku s ohledm na terén."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #, no-c-format
@@ -6934,13 +6970,15 @@ msgstr "Použije bezpečnostní MacCready hodnotu"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:155
 msgid "Reach polar"
-msgstr ""
+msgstr "Doletová polára"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:156
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
 msgstr ""
+"This determines the glide performance used in reach, landable arrival, abort "
+"and alternate calculations."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -6956,7 +6994,7 @@ msgstr "Páska"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
 msgid "Draws a dashed line at the glide reach."
-msgstr ""
+msgstr "Zobrazí čárkovynou čáru v doletu kluzáku."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7357,6 +7395,9 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
+"Pokud se letadlo odchýlí od aktuálního bodu trati, zobrazí se značky před "
+"letadlem. Hodnota každého bodu je extra vzdálenost k dosažení bodu trati "
+"jako procentní podíl z přímé vzdálejosti k bodu."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 msgid "Aircraft symbol"
@@ -7398,6 +7439,8 @@ msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"Maximální výška dle starovní reference (AGL či MSL) při zahájení úlohy. "
+"Nastav na 0 pro bezlimitní."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:83
 msgid "Start max. height margin"
@@ -7429,7 +7472,7 @@ msgstr "Výška startu ref"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid "Reference used for start max height rule."
-msgstr ""
+msgstr "Reference použitá pro pravidlo maximální výšky."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:254
@@ -7442,16 +7485,18 @@ msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"Minimáljí výška dle reference (AGL či MSL) při ukončení úlohy. Nastav na 0 "
+"pro bez limitu."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
 msgid "Finish height ref."
-msgstr ""
+msgstr "reference cílové výšky."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 msgid "Reference used for finish min height rule."
-msgstr ""
+msgstr "Reference použitá pro pravidlo minimální výšky."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7785,7 +7830,7 @@ msgstr "Obrysy"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "Pokud je povoleno, vykreylí obrysové čáry terénu."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
@@ -7999,7 +8044,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:126
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr ""
+msgstr "Určuje, jak bude zobrazena výška příletu v popisu bodu."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:131
 #, no-c-format
@@ -8043,7 +8088,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr ""
+msgstr "Všechny body jež jsou součástí úlohy budou zobrazeny."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:164
 #, no-c-format
@@ -8096,7 +8141,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:179
 msgid "Landable symbols"
-msgstr ""
+msgstr "Symboly ploch"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:180
 msgid ""
@@ -8104,6 +8149,9 @@ msgid ""
 "(monochrome) style, or orange. The rendering differs for landable field and "
 "airport. All styles mark the waypoints within reach green."
 msgstr ""
+"K diypozici jsou 3 styly:  fialové kroužky (styl WinPilot), vysoký kontrast "
+"(černobílé), nebo oranžové. Vybarvení se lyší pro plochy a letiště. Všechny "
+"styly označí boby v doletu zeleně."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:185
 msgid "Detailed landables"
@@ -8135,6 +8183,8 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
+"[Vypnuto] Zobrazí jednotnou délku dráhy\n"
+"[Zapnuto] Zobrazí délku dráhy v odpovídajícím měřítku."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:172
 #, no-c-format
@@ -8455,15 +8505,15 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:75
 msgid "Out and return"
-msgstr ""
+msgstr "Návratová"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:79
 msgid "Two legs"
-msgstr ""
+msgstr "Dvě ramena"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:84
 msgid "Three legs"
-msgstr ""
+msgstr "Tři ramena"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:90
 msgid "non-FAI triangle"
@@ -8472,7 +8522,7 @@ msgstr "ne-FAI trojúhelník"
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:94
 #, c-format
 msgid "%d legs"
-msgstr ""
+msgstr "%d ramen"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:125
 #, c-format
@@ -8544,6 +8594,8 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
+"Pro AAT úlohy. Tato volba upravjje cílové body uvnitř AAT oblastí. Kladné "
+"hodjotyotáčí rozsahpo směru hodinových ručiček,záporné proti směru."
 
 #: src/Dialogs/Task/TargetDialog.cpp:469
 msgid "ETE"
@@ -8564,6 +8616,10 @@ msgid ""
 "sector and can turn now with estimated arrival time greater than AAT time "
 "plus 5 minutes."
 msgstr ""
+"AAT delta čas. Rozdíl mezi předpolládaným časem úlohy a AAT mijimáljím "
+"časem. Zbarvený červeně pokud je předpokládaný příled koc brzy, nebo modře, "
+"pokud jste v AAT oblasti a můžete otočit nyní s předpokládaným časem  nad "
+"AAT minimum plus 5 minut."
 
 #: src/Dialogs/Task/TargetDialog.cpp:477
 msgid "V rem."
@@ -8768,7 +8824,7 @@ msgstr "Ztlumit vário na rádio"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr ""
+msgstr "Ztišení vária"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
