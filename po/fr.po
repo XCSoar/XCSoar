@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-10 10:05+0200\n"
-"PO-Revision-Date: 2015-07-26 14:09+0000\n"
+"PO-Revision-Date: 2015-08-17 16:57+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-07-31 18:32+0000\n"
-"X-Generator: Launchpad (build 17656)\n"
+"X-Launchpad-Export-Date: 2015-08-17 18:08+0000\n"
+"X-Generator: Launchpad (build 17686)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -8878,7 +8878,7 @@ msgstr "V rest."
 
 #: src/Dialogs/Task/TargetDialog.cpp:481
 msgid "V ach"
-msgstr ""
+msgstr "V Real"
 
 #: src/Dialogs/Task/TargetDialog.cpp:483
 msgid ""
