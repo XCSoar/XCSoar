@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-17 20:04+0200\n"
-"PO-Revision-Date: 2015-08-17 16:57+0000\n"
+"PO-Revision-Date: 2015-08-17 21:47+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-08-17 18:08+0000\n"
-"X-Generator: Launchpad (build 17686)\n"
+"X-Launchpad-Export-Date: 2015-08-18 05:32+0000\n"
+"X-Generator: Launchpad (build 17690)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1055,7 +1055,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "GR instantaneous"
-msgstr "finesse instantanée"
+msgstr "Finesse instantanée"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
@@ -1155,14 +1155,14 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Gain ou perte total(e) d'altitude dans le dernier thermique."
 
 #: src/InfoBoxes/Content/Factory.cpp:256
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Gain du dernier thermique"
+msgstr "Durée du dernier termique"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "Tps Vol"
+msgstr "Durée DerTh"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -2477,7 +2477,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1002
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr "trace taux de montée"
+msgstr "Trace du taux de montée"
 
 #: src/InfoBoxes/Content/Factory.cpp:1003
 #, no-c-format
@@ -3006,9 +3006,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Prochain point de départ"
+msgstr "Flèche suivante"
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -3018,6 +3018,10 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"Flèche pointant vers le waypoint sélectionné actuellement. Ses nom et "
+"distance sont également affichés. La position utilisée est la position "
+"optimale du waypoint dans le circuit en cours, le centre du waypoint choisi "
+"en \"Aller à\" ou l'objectif dans un secteur de circuit AAT."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3960,18 +3964,19 @@ msgstr "Pilote"
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:693
 msgid "Passthrough device"
-msgstr ""
+msgstr "Périphérique intermédiaire"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:694
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
 msgstr ""
+"Cette option permet de déclarer le périphérique comme intermédiaire pour un "
+"autre périphérique."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
-#, fuzzy
 msgid "Second Driver"
-msgstr "Pilote"
+msgstr "Second driver"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:707
 msgid "Sync. from device"
@@ -4175,9 +4180,8 @@ msgid "Pressure"
 msgstr "Pression"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
-#, fuzzy
 msgid "Sink tone"
-msgstr "grès"
+msgstr "Tonalité en descente"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:255 src/Dialogs/ProfileListDialog.cpp:280
@@ -4307,8 +4311,8 @@ msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
-"Ceci produit une fausse valeur de vitesse air. Cela peut être utilisé en "
-"mode spirale pour tester les sons correspondants à la consigne de vitesse."
+"Ceci simule une vitesse air. Cela peut être utilisé hors du mode spirale "
+"pour tester les tonalités correspondants à la consigne de vitesse."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:111
 msgid "This forces the variometer into circling or cruise mode"
@@ -4746,9 +4750,8 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "OK Auj."
+msgstr "CONF"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -5526,7 +5529,7 @@ msgstr "Pos 3D"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:60
 #, no-c-format
 msgid "Roaming"
-msgstr ""
+msgstr "Itinérance"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
@@ -5546,7 +5549,7 @@ msgstr "Tension d'alimentation"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "Réseau"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Assigned task time"
@@ -5820,9 +5823,8 @@ msgid "GoTo"
 msgstr "Aller à"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Echec de l'effacement des waypoints."
+msgstr "Echec de la sauvegarde des waypoints"
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -8083,7 +8085,7 @@ msgstr "Système de mesures"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:130
 msgid "Load a set of units."
-msgstr "Charge un système de mesures."
+msgstr "Charge un système d'unités."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:133
 msgid "Custom"
@@ -8109,13 +8111,13 @@ msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
 msgstr ""
-"Unité utilisée pour les vitesses air et sol. Une unité différente est "
-"possible pour la vitesse sur circuit."
+"Unité de vitesses air et sol. Une unité différente est possible pour la "
+"vitesse sur circuit."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:165
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
-msgstr "Unités de distance (e.g. distance à un waypoint, distance restante)."
+msgstr "Unité de distance (e.g. distance à un waypoint, distance restante)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:177
 msgid "Lift"
@@ -8123,7 +8125,7 @@ msgstr "Ascendance"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:177
 msgid "Units used for vertical speeds (variometer)."
-msgstr "Unités de vitesse verticale (e.g. variomètre)."
+msgstr "Unité de vitesse verticale (e.g. variomètre)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:183
 #, no-c-format
@@ -8137,11 +8139,11 @@ msgstr "mètre"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:187
 msgid "Units used for altitude and heights."
-msgstr "Unités d'altitude et hauteur."
+msgstr "Unité d'altitude et hauteur."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:197
 msgid "Units used for temperature."
-msgstr "Unité des températures"
+msgstr "Unité de température"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Task speed"
@@ -8149,21 +8151,19 @@ msgstr "Vitesse Circuit"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Units used for task speeds."
-msgstr "Unités utilisées pour les vitesses du circuit."
+msgstr "Unité de vitesse sur circuit."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:220
 msgid "Units used for pressures."
-msgstr "Unités de pression."
+msgstr "Unité de pression."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
-#, fuzzy
 msgid "Units used mass."
-msgstr "Unités utilisées pour les vitesses du circuit."
+msgstr "Unité de masse."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
-#, fuzzy
 msgid "Units used for wing loading."
-msgstr "Unités pour latitude et longitude."
+msgstr "Unité de charge alaire."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8171,7 +8171,7 @@ msgstr "Lat./Lon."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Units used for latitude and longitude."
-msgstr "Unités pour latitude et longitude."
+msgstr "Unités de latitude et longitude."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:82
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:33
@@ -8484,15 +8484,15 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr "Télécharger la position de vos amis en live sur le serveur Skylines"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "Trace spirale courte"
+msgstr "Afficher les trafics alentour"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
-#, fuzzy
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr "Télécharger la position de vos amis en live sur le serveur Skylines"
+msgstr ""
+"Télécharger en direct les positions des trafics alentours depuis le serveur "
+"SkyLines."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Vehicle Type"
@@ -8977,20 +8977,16 @@ msgid "This function is not available on your platform yet."
 msgstr "Cette fonction n'est pas encore disponible sur votre plateforme."
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "Autres esp. aér."
+msgstr "A l'intérieur de l'espace aérien"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr ""
-"Esp.Aér.le\n"
-"+ proche"
+msgstr "Proche de l'espace aérien"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "Dépassement de la vitesse maximum au départ"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
@@ -10077,49 +10073,6 @@ msgstr ""
 "Régl.Esp.\n"
 "Aériens"
 
-#~ msgid ""
-#~ "Start rules slightly violated\n"
-#~ "but within margin"
-#~ msgstr ""
-#~ "Règles de départ légèrement enfreintes\n"
-#~ "mais dans la tolérance"
-
-#~ msgid "Start rules violated"
-#~ msgstr "Règles de départ enfreintes"
-
-#~ msgid "Last thermal time"
-#~ msgstr "Durée dans le dernier thermique"
-
-#~ msgid "TL Time"
-#~ msgstr "Th Durée"
-
-#~ msgid "Marker"
-#~ msgstr "Marqueur"
-
-#~ msgid "dropped %s ago"
-#~ msgstr "Déposé il y a %s"
-
-#~ msgid "ACK Warn"
-#~ msgstr "OK Alert."
-
-#~ msgid "ACK Space"
-#~ msgstr "OK Esp."
-
-#~ msgid "Waypoints not editable"
-#~ msgstr "Waypoints non editables"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "Large"
-#~ msgstr "Grand"
-
-#~ msgid "Small"
-#~ msgstr "Petit"
-
-#~ msgid "Waypts."
-#~ msgstr "Wpts."
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -10171,17 +10124,26 @@ msgstr ""
 #~ msgid "V rough air"
 #~ msgstr "V air Agité"
 
+#~ msgid "ACK Warn"
+#~ msgstr "OK Alert."
+
 #~ msgid "Lookup"
 #~ msgstr "Parcourir"
 
 #~ msgid "Filter..."
 #~ msgstr "Filtre..."
 
+#~ msgid "ACK Space"
+#~ msgstr "OK Esp."
+
 #~ msgid "Short file name"
 #~ msgstr "Nom Fichier Court"
 
 #~ msgid "Edit text"
 #~ msgstr "Saisie texte"
+
+#~ msgid "Last thermal time"
+#~ msgstr "Durée dans le dernier thermique"
 
 #~ msgid "MANUAL"
 #~ msgstr "Manuel"
@@ -10206,6 +10168,9 @@ msgstr ""
 
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Effacer le waypoint ?"
+
+#~ msgid "Waypoints not editable"
+#~ msgstr "Waypoints non editables"
 
 #~ msgid "All waypoint labels will be displayed."
 #~ msgstr "Tous les noms de waypoints sont affichés."
@@ -10269,6 +10234,16 @@ msgstr ""
 #~ msgstr "Nom de la polaire"
 
 #~ msgid ""
+#~ "Start rules slightly violated\n"
+#~ "but within margin"
+#~ msgstr ""
+#~ "Règles de départ légèrement enfreintes\n"
+#~ "mais dans la tolérance"
+
+#~ msgid "Start rules violated"
+#~ msgstr "Règles de départ enfreintes"
+
+#~ msgid ""
 #~ "This is the navigation altitude minus the terrain height obtained from "
 #~ "the terrain file. The value is coloured red when the glider is below the "
 #~ "terrain safety clearance height."
@@ -10276,6 +10251,9 @@ msgstr ""
 #~ "Il s'agit de l'altitude de vol moins l'altitude du relief obtenue à "
 #~ "partir du fichier de relief. La valeur est en rouge lorsque le planeur "
 #~ "est en dessous de l'altitude de sécurité."
+
+#~ msgid "TL Time"
+#~ msgstr "Th Durée"
 
 #~ msgid "OLC"
 #~ msgstr "OLC"
@@ -10512,6 +10490,9 @@ msgstr ""
 #~ "Si activé, alors le vent reçu de la part d'un équipement externe remplace "
 #~ "le calcul interne d'XCSoar."
 
+#~ msgid "Marker"
+#~ msgstr "Marqueur"
+
 #~ msgid "Dialog size"
 #~ msgstr "Taille de la fenêtre"
 
@@ -10552,6 +10533,9 @@ msgstr ""
 #~ msgid "Topography labels, important"
 #~ msgstr "Infos topographie, important"
 
+#~ msgid "dropped %s ago"
+#~ msgstr "Déposé il y a %s"
+
 #~ msgid "Calculator excludes unsaved task changes!"
 #~ msgstr "Le calculateur exclut les modification de circuit non sauvées!"
 
@@ -10573,6 +10557,9 @@ msgstr ""
 
 #~ msgid "InfoBox values, small"
 #~ msgstr "Valeurs en InfoBox, petites"
+
+#~ msgid "Waypts."
+#~ msgstr "Wpts."
 
 #~ msgid "XCSoar"
 #~ msgstr "XCSoar"
@@ -10788,6 +10775,15 @@ msgstr ""
 
 #~ msgid "Deadband min. lift"
 #~ msgstr "Limite min. de la bande muette"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Large"
+#~ msgstr "Grand"
+
+#~ msgid "Small"
+#~ msgstr "Petit"
 
 #~ msgid "InfoBox values"
 #~ msgstr "Valeurs des Infoboxes"
