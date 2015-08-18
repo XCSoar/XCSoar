@@ -227,7 +227,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)Unit::LB, _T("lb") },
     { 0 }
   };
-  AddEnum(_("Mass"), _("Units used mass."),
+  AddEnum(_("Mass"), _("Units used for mass."),
           mass_labels_list,
           (unsigned)config.mass_unit, this);
   SetExpertRow(UnitsMass);
