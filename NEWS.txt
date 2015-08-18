@@ -1,4 +1,4 @@
-Version 6.8 - not yet released
+Version 6.8 - 2015/08/18
 * data files
   - optimise the topography loader
   - faster RASP map change
