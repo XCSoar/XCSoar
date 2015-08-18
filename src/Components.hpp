@@ -41,7 +41,6 @@ class Airspaces;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class Replay;
-class AltairControl;
 class Logger;
 class GlueFlightLogger;
 class TrackingGlue;
@@ -68,10 +67,6 @@ extern Logger *logger;
 extern GlueFlightLogger *flight_logger;
 
 extern TrackingGlue *tracking;
-
-#ifdef GNAV
-extern AltairControl altair_control;
-#endif
 
 /**
  * Returns the global ProtectedAirspaceWarningManager instance.  May

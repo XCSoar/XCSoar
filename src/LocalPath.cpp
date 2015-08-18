@@ -50,10 +50,6 @@ Copyright_License {
 #endif
 #endif
 
-#ifdef _WIN32_WCE
-#include "OS/FlashCardEnumerator.hpp"
-#endif
-
 #ifdef ANDROID
 #include <android/log.h>
 #include <sys/stat.h>
@@ -217,71 +213,7 @@ FindDataPathAtModule(HMODULE hModule, TCHAR *buffer)
 
 #endif
 
-#ifdef _WIN32_WCE
-
-static bool
-InFlashNamed(const TCHAR *path, const TCHAR *name)
-{
-  size_t name_length = StringLength(name);
-
-  return IsDirSeparator(path[0]) &&
-    memcmp(path + 1, name, name_length * sizeof(name[0])) == 0 &&
-    IsDirSeparator(path[1 + name_length]);
-}
-
-/**
- * Determine whether the specified path is on a flash disk.  If yes,
- * it returns the absolute root path of the disk.
- */
-static const TCHAR *
-InFlash(const TCHAR *path, TCHAR *buffer)
-{
-  assert(path != nullptr);
-  assert(buffer != nullptr);
-
-  FlashCardEnumerator enumerator;
-  const TCHAR *name;
-  while ((name = enumerator.Next()) != nullptr) {
-    if (InFlashNamed(path, name)) {
-      buffer[0] = DIR_SEPARATOR;
-      StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S"%s"), name);
-      return buffer;
-    }
-  }
-
-  return nullptr;
-}
-
-static const TCHAR *
-ModuleInFlash(HMODULE hModule, TCHAR *buffer)
-{
-  if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
-    return nullptr;
-
-  return InFlash(buffer, buffer);
-}
-
-/**
- * Looks for a directory called "XCSoarData" on all flash disks.
- */
-static const TCHAR *
-ExistingDataOnFlash(TCHAR *buffer)
-{
-  assert(buffer != nullptr);
-
-  FlashCardEnumerator enumerator;
-  const TCHAR *name;
-  while ((name = enumerator.Next()) != nullptr) {
-    StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
-                       name);
-    if (Directory::Exists(buffer))
-      return buffer;
-  }
-
-  return nullptr;
-}
-
-#elif defined(WIN32)
+#ifdef WIN32
 
 static const TCHAR *
 ModuleInFlash(HMODULE module, TCHAR *buffer)
@@ -381,20 +313,9 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
   } else
     return _T("/etc/xcsoar");
 #else
-  if (IsWindowsCE())
-    /* clear the buffer, just in case we evaluate it after
-       SHGetSpecialFolderPath() failure, see below */
-    buffer[0] = _T('\0');
 
   bool success = SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
                                         create);
-  if (IsWindowsCE() && !success && !StringIsEmpty(buffer))
-    /* MSDN: "If you are using the AYGShell extensions, then this
-       function returns FALSE even if successful. If the folder
-       represented by the CSIDL does not exist and is not created, a
-       nullptr string is returned indicating that the directory does not
-       exist." */
-    success = true;
   if (!success)
     return nullptr;
 
@@ -407,17 +328,6 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 static TCHAR *
 FindDataPath()
 {
-  if (IsAltair() && IsEmbedded()) {
-    /* if XCSoarData exists on USB drive, use that, because the
-       internal memory is extremely small */
-    const TCHAR *usb = _T("\\USB HD\\" XCSDATADIR);
-    if (Directory::Exists(usb))
-      return DuplicateString(usb);
-
-    /* hard-coded path for Altair */
-    return DuplicateString(_T("\\NOR Flash"));
-  }
-
 #ifdef WIN32
   {
     TCHAR buffer[MAX_PATH];
@@ -491,12 +401,6 @@ FindDataPath()
       if (Directory::Exists(buffer))
         return DuplicateString(buffer);
     }
-
-#ifdef _WIN32_WCE
-    /* if a flash disk with XCSoarData exists, use it */
-    if (ExistingDataOnFlash(buffer) != nullptr)
-      return DuplicateString(buffer);
-#endif
   }
 #endif
 
@@ -522,21 +426,6 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
     if (home_path != nullptr && !StringIsEqual(data_path, home_path))
       Directory::VisitSpecificFiles(home_path, filter, visitor, true);
   }
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-  TCHAR flash_path[MAX_PATH];
-  FlashCardEnumerator enumerator;
-  const TCHAR *flash_name;
-  while ((flash_name = enumerator.Next()) != nullptr) {
-    StringFormatUnsafe(flash_path, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
-                       flash_name);
-    if (StringIsEqual(data_path, flash_path))
-      /* don't scan primary data path twice */
-      continue;
-
-    Directory::VisitSpecificFiles(flash_path, filter, visitor, true);
-  }
-#endif /* _WIN32_WCE && !GNAV*/
 }
 
 #ifdef ANDROID

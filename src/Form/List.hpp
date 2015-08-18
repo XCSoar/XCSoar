@@ -25,13 +25,10 @@ Copyright_License {
 #define XCSOAR_FORM_LIST_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Form/ScrollBar.hpp"
-#include "Compiler.h"
-
-#ifndef _WIN32_WCE
 #include "Screen/Timer.hpp"
+#include "Form/ScrollBar.hpp"
 #include "UIUtil/KineticManager.hpp"
-#endif
+#include "Compiler.h"
 
 struct DialogLook;
 class ContainerWindow;
@@ -156,10 +153,8 @@ protected:
   ListItemRenderer *item_renderer;
   ListCursorHandler *cursor_handler;
 
-#ifndef _WIN32_WCE
   KineticManager kinetic;
   WindowTimer kinetic_timer;
-#endif
 
 public:
   ListControl(const DialogLook &_look);
@@ -220,7 +215,7 @@ public:
   /**
    * Check whether the length of the list is below a certain
    * threshold.  Small lists may have different behaviour on some
-   * platforms (e.g. Altair).
+   * platforms.
    */
   bool IsShort() const {
     return length <= 8 || length <= items_visible;
@@ -315,10 +310,8 @@ protected:
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);
 
-#ifndef _WIN32_WCE
   bool OnTimer(WindowTimer &timer) override;
   void OnDestroy() override;
-#endif
 
   void OnResize(PixelSize new_size) override;
 

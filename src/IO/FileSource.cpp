@@ -52,28 +52,10 @@ PosixFileSource::Read(char *p, unsigned n)
 
 #ifdef WIN32
 
-#ifdef _WIN32_WCE
-#include <syslimits.h> /* for PATH_MAX */
-#endif
-
 WindowsFileSource::WindowsFileSource(const char *path)
 {
-#ifdef _WIN32_WCE
-  /* Windows Mobile doesn't provide narrow API functions */
-  TCHAR tpath[PATH_MAX];
-
-  int length = ::MultiByteToWideChar(CP_ACP, 0, path, -1, tpath, PATH_MAX);
-  if (length == 0) {
-    handle = INVALID_HANDLE_VALUE;
-    return;
-  }
-
-  handle = ::CreateFile(tpath, GENERIC_READ, FILE_SHARE_READ, nullptr,
-                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-#else
   handle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-#endif
 }
 
 #ifdef _UNICODE
@@ -93,20 +75,10 @@ WindowsFileSource::~WindowsFileSource()
 long
 WindowsFileSource::GetSize() const
 {
-  struct {
-    BY_HANDLE_FILE_INFORMATION i;
+  BY_HANDLE_FILE_INFORMATION i;
 
-#ifdef _WIN32_WCE
-    /* on Windows CE, GetFileInformationByHandle() seems to overflow
-       the BY_HANDLE_FILE_INFORMATION variable by 4 bytes
-       (undocumented on MSDN); adding the following DWORD gives it
-       enough buffer to play with */
-    DWORD dummy;
-#endif
-  } i;
-
-  return ::GetFileInformationByHandle(handle, &i.i)
-    ? i.i.nFileSizeLow
+  return ::GetFileInformationByHandle(handle, &i)
+    ? i.nFileSizeLow
     : -1;
 }
 

@@ -108,19 +108,9 @@ Window::GetRootOwner()
 
   return root;
 #else /* USE_GDI */
-#ifndef _WIN32_WCE
   HWND hRoot = ::GetAncestor(hWnd, GA_ROOTOWNER);
   if (hRoot == nullptr)
     return nullptr;
-#else
-  HWND hRoot = hWnd;
-  while (true) {
-    HWND hParent = ::GetParent(hRoot);
-    if (hParent == nullptr)
-      break;
-    hRoot = hParent;
-  }
-#endif
 
   /* can't use the "checked" method get() because hRoot may be a
      dialog, and uses Dialog::DlgProc() */

@@ -118,8 +118,6 @@ SocketDescriptor::Accept()
     : Undefined();
 }
 
-#ifndef _WIN32_WCE
-
 bool
 SocketDescriptor::Connect(SocketAddress address)
 {
@@ -127,8 +125,6 @@ SocketDescriptor::Connect(SocketAddress address)
 
   return ::connect(Get(), address.GetAddress(), address.GetSize()) >= 0;
 }
-
-#endif
 
 bool
 SocketDescriptor::Create(int domain, int type, int protocol)
@@ -158,8 +154,6 @@ SocketDescriptor::BindPort(unsigned port)
   return Bind(IPv4Address(port));
 }
 
-#ifndef _WIN32_WCE
-
 bool
 SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 {
@@ -171,8 +165,6 @@ SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 
   return Create(address.GetFamily(), socktype, 0) && Connect(address);
 }
-
-#endif
 
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)

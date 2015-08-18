@@ -49,7 +49,7 @@ ParseDouble(const TCHAR *p, TCHAR **endptr)
   return (double)wcstod(p, endptr);
 }
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#ifdef WIN32
 #include <windef.h>
 #ifdef __MINGW64_VERSION_MAJOR
 #if __MINGW64_VERSION_MAJOR == 3 && __MINGW64_VERSION_MINOR == 1

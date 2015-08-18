@@ -776,16 +776,6 @@ FlarmTrafficControl::OnKeyDown(unsigned key_code)
 
     ZoomOut();
     return true;
-
-#ifdef GNAV
-  case '6':
-    PrevTarget();
-    return true;
-
-  case '7':
-    NextTarget();
-    return true;
-#endif
   }
 
   return FlarmTrafficWindow::OnKeyDown(key_code) ||
@@ -798,7 +788,6 @@ TrafficWidget::UpdateLayout()
   const PixelRect rc = GetContainer().GetClientRect();
   view->Move(rc);
 
-#ifndef GNAV
   const unsigned margin = Layout::Scale(1);
   const unsigned button_height = Layout::GetMinimumControlHeight();
   const unsigned button_width = std::max(unsigned(rc.right / 6),
@@ -844,13 +833,11 @@ TrafficWidget::UpdateLayout()
   button_rc.right = rc.right - margin;
   button_rc.left = button_rc.right - Layout::Scale(50);
   close_button->Move(button_rc);
-#endif
 }
 
 void
 TrafficWidget::UpdateButtons()
 {
-#ifndef GNAV
   const bool unlocked = !view->WarningMode();
   const TrafficList &traffic = CommonInterface::Basic().flarm.traffic;
   const bool not_empty = !traffic.IsEmpty();
@@ -861,10 +848,7 @@ TrafficWidget::UpdateButtons()
   previous_item_button->SetEnabled(unlocked && two_or_more);
   next_item_button->SetEnabled(unlocked && two_or_more);
   details_button->SetEnabled(unlocked && not_empty);
-#endif
 }
-
-#ifndef GNAV
 
 static Button *
 NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
@@ -877,8 +861,6 @@ NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
                     listener, id);
 }
 
-#endif
-
 void
 TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 {
@@ -888,7 +870,6 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   const PixelRect rc = GetContainer().GetClientRect();
 
-#ifndef GNAV
   zoom_in_button = NewSymbolButton(GetContainer(), look.dialog.button,
                                    _T("+"), rc, *this, ZOOM_IN);
   zoom_out_button = NewSymbolButton(GetContainer(), look.dialog.button,
@@ -903,7 +884,6 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   close_button = new Button(GetContainer(), look.dialog.button,
                             _("Close"), rc, WindowStyle(),
                             *this, CLOSE);
-#endif
 
   WindowStyle style;
   style.EnableDoubleClicks();
@@ -917,14 +897,12 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 void
 TrafficWidget::Unprepare()
 {
-#ifndef GNAV
   delete zoom_in_button;
   delete zoom_out_button;
   delete previous_item_button;
   delete next_item_button;
   delete details_button;
   delete close_button;
-#endif
 
   delete view;
 
@@ -940,10 +918,8 @@ TrafficWidget::Show(const PixelRect &rc)
   ContainerWidget::Show(rc);
   UpdateLayout();
 
-#ifndef GNAV
   /* show the "Close" button only if this is a "special" page */
   close_button->SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
-#endif
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
@@ -970,8 +946,6 @@ TrafficWidget::SetFocus()
   view->SetFocus();
   return true;
 }
-
-#ifndef GNAV
 
 void
 TrafficWidget::OnAction(int id)
@@ -1002,8 +976,6 @@ TrafficWidget::OnAction(int id)
     break;
   }
 }
-
-#endif
 
 void
 TrafficWidget::OnGPSUpdate(const MoreData &basic)

@@ -71,19 +71,11 @@ protected:
   DWORD style, ex_style;
   bool double_clicks;
 
-#ifdef _WIN32_WCE
-  /* workaround for gcc optimization bug on ARM/XScale */
-  bool dummy0, dummy1;
-#endif
-
 public:
   constexpr
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
      ex_style(0), double_clicks(false)
-#ifdef _WIN32_WCE
-    , dummy0(0), dummy1(0)
-#endif
   {}
 #endif /* USE_GDI */
 
@@ -899,13 +891,6 @@ public:
   static Window *GetChecked(HWND hWnd) {
     WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hWnd, GWLP_WNDPROC);
     return wndproc == WndProc
-#ifdef _WIN32_WCE
-      /* Windows CE seems to put WNDPROC pointers into some other
-         segment (0x22000000 added); this is a dirty workaround which
-         will be implemented properly once we understand what this
-         really means */
-      || ((DWORD)wndproc & 0xffffff) == (DWORD)WndProc
-#endif
       ? GetUnchecked(hWnd)
       : nullptr;
   }

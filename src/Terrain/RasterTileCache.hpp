@@ -51,15 +51,9 @@ class RasterTileCache : private NonCopyable {
    */
 #if defined(ANDROID)
   static constexpr unsigned MAX_ACTIVE_TILES = 128;
-#elif !defined(_WIN32_WCE)
+#else
   // desktop: use a lot of memory
   static constexpr unsigned MAX_ACTIVE_TILES = 512;
-#elif !defined(_WIN32_WCE) || (_WIN32_WCE >= 0x0400 && !defined(GNAV))
-  // embedded: use less memory
-  static constexpr unsigned MAX_ACTIVE_TILES = 32;
-#else
-  // old Windows CE and Altair: use only little memory
-  static constexpr unsigned MAX_ACTIVE_TILES = 16;
 #endif
 
   /**

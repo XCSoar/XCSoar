@@ -63,9 +63,5 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 
   text_font = &_text_font;
 
-#ifdef GNAV
-  value_font.Load(FontDescription(_T("RasterGothicEighteenCond"), 19, true));
-#else
   value_font.Load(FontDescription(Layout::FontScale(10), false, false, true));
-#endif
 }

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Canvas.hpp"
-#include "Asset.hpp"
 
 bool
 ContainerWindow::FocusFirstControl()
@@ -43,12 +42,6 @@ ContainerWindow::FocusNextControl()
   if (hControl == nullptr)
     return false;
 
-  if (IsAltair()) { // detect and block wraparound 
-    HWND hControl_first = ::GetNextDlgTabItem(hWnd, nullptr, false);
-    if (hControl == hControl_first)
-      return false;
-  }
-
   ::SetFocus(hControl);
   return true;
 }
@@ -57,12 +50,6 @@ bool
 ContainerWindow::FocusPreviousControl()
 {
   HWND hFocus = ::GetFocus();
-
-  if (IsAltair()) { // detect and block wraparound 
-    HWND hControl_first = ::GetNextDlgTabItem(hWnd, nullptr, false);
-    if (hFocus == hControl_first) 
-      return false;
-  }
 
   HWND hControl = ::GetNextDlgTabItem(hWnd, hFocus, true);
   if (hControl == nullptr)

@@ -265,16 +265,10 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
     HighlightNext();
     return true;
 
   case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
     HighlightPrevious();
     return true;
 

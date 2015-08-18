@@ -224,15 +224,9 @@ Canvas::CopyTransparentWhite(int dest_x, int dest_y,
   assert(IsDefined());
   assert(src.IsDefined());
 
-#ifdef _WIN32_WCE
-  ::TransparentImage(dc, dest_x, dest_y, dest_width, dest_height,
-                     src.dc, src_x, src_y, dest_width, dest_height,
-                     COLOR_WHITE);
-#else
   ::TransparentBlt(dc, dest_x, dest_y, dest_width, dest_height,
                    src.dc, src_x, src_y, dest_width, dest_height,
                    COLOR_WHITE);
-#endif
 }
 
 void
@@ -324,7 +318,6 @@ Canvas::StretchMono(int dest_x, int dest_y,
   assert(IsDefined());
   assert(src.IsDefined());
 
-#ifndef _WIN32_WCE
   if (bg_color == COLOR_BLACK && (src_width != dest_width ||
                                   src_height != dest_height)) {
     /* workaround for a WINE bug: stretching a mono bitmap ignores the
@@ -336,7 +329,6 @@ Canvas::StretchMono(int dest_x, int dest_y,
             MERGEPAINT);
     return;
   }
-#endif
 
   /* on GDI, monochrome bitmaps are special: they are painted with the
      destination HDC's current colors */

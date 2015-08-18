@@ -36,28 +36,9 @@ Copyright_License {
 
 #include <string.h>
 
-#ifdef WIN32
-
-static void
-LoadAltairLogFonts(FontSettings &settings)
-{
-  settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
-  settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
-                                      15, true);
-}
-
-#endif
-
 static void
 InitialiseLogFonts(FontSettings &settings)
 {
-#ifdef WIN32
-  if (IsAltair()) {
-    LoadAltairLogFonts(settings);
-    return;
-  }
-#endif
-
   // new font for map labels
   settings.map = FontDescription(Layout::FontScale(10));
 

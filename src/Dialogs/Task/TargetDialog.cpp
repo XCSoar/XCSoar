@@ -74,10 +74,8 @@ class TargetWidget
     DataFieldListener,
     NullBlackboardListener {
   enum Buttons {
-#ifndef GNAV
     PREVIOUS,
     NEXT,
-#endif
     NAME,
     OPTIMIZED,
   };
@@ -86,9 +84,7 @@ class TargetWidget
     PixelRect map;
 
     PixelRect name_button;
-#ifndef GNAV
     PixelRect previous_button, next_button;
-#endif
     PixelRect range, radial, ete, delta_t, speed_remaining, speed_achieved;
     PixelRect optimized;
     PixelRect close_button;
@@ -103,10 +99,8 @@ class TargetWidget
   TargetDialogMapWindow map;
 
   Button name_button;
-#ifndef GNAV
   Button previous_button;
   Button next_button;
-#endif
 
   WndProperty range, radial, ete, delta_t, speed_remaining, speed_achieved;
 
@@ -199,10 +193,8 @@ public:
 
     map.MoveAndShow(layout.map);
     name_button.MoveAndShow(layout.name_button);
-#ifndef GNAV
     previous_button.MoveAndShow(layout.previous_button);
     next_button.MoveAndShow(layout.next_button);
-#endif
     range.MoveAndShow(layout.range);
     radial.MoveAndShow(layout.radial);
     ete.MoveAndShow(layout.ete);
@@ -223,10 +215,8 @@ public:
 
     map.Hide();
     name_button.Hide();
-#ifndef GNAV
     previous_button.Hide();
     next_button.Hide();
-#endif
     range.Hide();
     radial.Hide();
     ete.Hide();
@@ -242,10 +232,8 @@ public:
 
     map.Move(layout.map);
     name_button.Move(layout.name_button);
-#ifndef GNAV
     previous_button.Move(layout.previous_button);
     next_button.Move(layout.next_button);
-#endif
     range.Move(layout.range);
     radial.Move(layout.radial);
     ete.Move(layout.ete);
@@ -267,7 +255,6 @@ private:
   /* virtual methods from class ActionListener */
   void OnAction(int id) override {
     switch (id) {
-#ifndef GNAV
     case PREVIOUS:
       OnPrevClicked();
       break;
@@ -275,7 +262,6 @@ private:
     case NEXT:
       OnNextClicked();
       break;
-#endif
 
     case NAME:
       OnNameClicked();
@@ -349,11 +335,7 @@ TargetWidget::Layout::Layout(PixelRect rc)
     map.right -= ::Layout::Scale(120);
 
     constexpr unsigned n_static = 4;
-#ifndef GNAV
     constexpr unsigned n_elastic = 6;
-#else
-    constexpr unsigned n_elastic = 5;
-#endif
     constexpr unsigned n_rows = n_static + n_elastic;
 
     const unsigned control_height = n_rows * min_control_height >= height
@@ -364,11 +346,9 @@ TargetWidget::Layout::Layout(PixelRect rc)
     RowLayout rl(PixelRect(map.right, rc.top, rc.right, rc.bottom));
     name_button = rl.NextRow(control_height);
 
-#ifndef GNAV
     previous_button = next_button = rl.NextRow(control_height);
     previous_button.right = next_button.left =
       (previous_button.right + next_button.left) / 2;
-#endif
 
     range = rl.NextRow(control_height);
     radial = rl.NextRow(control_height);
@@ -385,13 +365,9 @@ TargetWidget::Layout::Layout(PixelRect rc)
 
     const unsigned control_height = min_control_height;
 
-#ifdef GNAV
-    name_button = rl.NextRow(control_height);
-#else
     previous_button = name_button = next_button = rl.NextRow(control_height);
     previous_button.right = name_button.left = previous_button.left + control_height;
     next_button.left = name_button.right = next_button.right - control_height;
-#endif
 
     range = rl.NextRow(control_height);
     radial = SplitRow(range);
@@ -442,7 +418,6 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   name_button.Create(parent, button_look, _T(""), layout.name_button,
                      button_style, *this, NAME);
 
-#ifndef GNAV
   previous_button.Create(parent, layout.previous_button, button_style,
                          new SymbolButtonRenderer(button_look,
                                                   _T("<")),
@@ -450,7 +425,6 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   next_button.Create(parent, layout.next_button, button_style,
                      new SymbolButtonRenderer(button_look, _T(">")),
                      *this, NEXT);
-#endif
 
   const unsigned caption_width = ::Layout::Scale(50);
 

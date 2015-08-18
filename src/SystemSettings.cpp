@@ -30,22 +30,7 @@ SystemSettings::SetDefaults()
   for (unsigned i = 0; i < devices.size(); ++i)
     devices[i].Clear();
 
-  if (IsAltair()) {
-    devices[0].port_type = DeviceConfig::PortType::SERIAL;
-    devices[0].path = _T("COM3:");
-    devices[0].baud_rate = 38400;
-    devices[0].driver_name = _T("Altair RU");
-
-    devices[1].port_type = DeviceConfig::PortType::SERIAL;
-    devices[1].path = _T("COM1:");
-    devices[1].baud_rate = 38400;
-    devices[1].driver_name = _T("Vega");
-
-    devices[2].port_type = DeviceConfig::PortType::SERIAL;
-    devices[2].path = _T("COM2:");
-    devices[2].baud_rate = 38400;
-    devices[2].driver_name = _T("NmeaOut");
-  } else if (IsAndroid() || IsApple()) {
+  if (IsAndroid() || IsApple()) {
     devices[0].port_type = DeviceConfig::PortType::INTERNAL;
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
@@ -57,8 +42,4 @@ SystemSettings::SetDefaults()
     devices[0].baud_rate = 4800;
     devices[0].driver_name = _T("Generic");
   }
-
-#ifdef HAVE_MODEL_TYPE
-  model_type = ModelType::GENERIC;
-#endif
 }

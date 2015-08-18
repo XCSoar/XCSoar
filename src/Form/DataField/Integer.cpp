@@ -24,7 +24,6 @@ Copyright_License {
 #include "Integer.hpp"
 #include "ComboList.hpp"
 #include "Util/NumberParser.hpp"
-#include "Asset.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -93,9 +92,6 @@ int
 DataFieldInteger::SpeedUp(bool keyup)
 {
   int res = 1;
-
-  if (IsAltair())
-    return res;
 
   if (keyup != datafield_key_up) {
     speedup = 0;

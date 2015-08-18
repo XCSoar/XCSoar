@@ -35,6 +35,8 @@ Copyright_License {
 struct UIState {
   /**
    * Is the display currently blanked?
+   *
+   * TODO: unimplemented
    */
   bool screen_blanked;
 

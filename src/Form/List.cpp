@@ -59,10 +59,8 @@ ListControl::ListControl(const DialogLook &_look)
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr)
-#ifndef _WIN32_WCE
-  , kinetic_timer(*this)
-#endif
+   item_renderer(nullptr), cursor_handler(nullptr),
+   kinetic_timer(*this)
 {
 }
 
@@ -75,10 +73,8 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr)
-#ifndef _WIN32_WCE
-   , kinetic_timer(*this)
-#endif
+   item_renderer(nullptr), cursor_handler(nullptr),
+   kinetic_timer(*this)
 {
   Create(parent, rc, style, _item_height);
 }
@@ -439,16 +435,9 @@ bool
 ListControl::OnKeyDown(unsigned key_code)
 {
   scroll_bar.DragEnd(this);
-
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 
   switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case KEY_APP4:
-#endif
   case KEY_RETURN:
     if (CanActivateItem())
       ActivateItem();
@@ -517,18 +506,14 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
-#ifndef _WIN32_WCE
     const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
-#endif
 
     drag_end();
 
-#ifndef _WIN32_WCE
     if (enable_kinetic) {
       kinetic.MouseUp(GetPixelOrigin());
       kinetic_timer.Schedule(30);
     }
-#endif
 
     return true;
   } else
@@ -570,10 +555,8 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   if (drag_mode == DragMode::SCROLL) {
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
-#ifndef _WIN32_WCE
     if (UsePixelPan())
       kinetic.MouseMove(GetPixelOrigin());
-#endif
     return true;
   }
 
@@ -587,9 +570,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
   scroll_bar.DragEnd(this);
   drag_end();
 
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 
   RasterPoint Pos;
   Pos.x = x;
@@ -640,10 +621,8 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
       SetCursorIndex(index);
       drag_mode = DragMode::SCROLL;
     }
-#ifndef _WIN32_WCE
     if (UsePixelPan())
       kinetic.MouseDown(GetPixelOrigin());
-#endif
     SetCapture();
   }
 
@@ -656,9 +635,7 @@ ListControl::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
   scroll_bar.DragEnd(this);
   drag_end();
 
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 
   if (delta > 0) {
     // scroll up
@@ -679,12 +656,8 @@ ListControl::OnCancelMode()
   scroll_bar.DragEnd(this);
   drag_end();
 
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 }
-
-#ifndef _WIN32_WCE
 
 bool
 ListControl::OnTimer(WindowTimer &timer)
@@ -710,5 +683,3 @@ ListControl::OnDestroy()
 
   PaintWindow::OnDestroy();
 }
-
-#endif

@@ -1,8 +1,8 @@
 #
 # This is the XCSoar build script.  To compile XCSoar, you must
-# specify the target platform, e.g. for Pocket PC 2003, type:
+# specify the target platform, e.g. for Android, type:
 #
-#   make TARGET=PPC2003
+#   make TARGET=ANDROID
 #
 # The following parameters may be specified on the "make" command
 # line:
@@ -157,8 +157,6 @@ include $(topdir)/build/harness.mk
 
 endif
 
-include $(topdir)/build/setup.mk
-include $(topdir)/build/launch.mk
 include $(topdir)/build/vali.mk
 include $(topdir)/build/main.mk
 include $(topdir)/build/kobo.mk
@@ -183,10 +181,8 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 ####### sources
 
 include $(topdir)/build/gettext.mk
-include $(topdir)/build/cab.mk
 
 OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
-OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
 ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk

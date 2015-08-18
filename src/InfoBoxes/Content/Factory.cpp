@@ -822,11 +822,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Battery
   {
-#ifndef GNAV
     N_("Battery percent"),
-#else
-    N_("Battery voltage"),
-#endif
     N_("Battery"),
     N_("Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
     UpdateInfoBoxBattery,

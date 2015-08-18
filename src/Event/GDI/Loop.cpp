@@ -24,7 +24,6 @@ Copyright_License {
 #include "Loop.hpp"
 #include "Event.hpp"
 #include "Queue.hpp"
-#include "Transcode.hpp"
 #include "Screen/GDI/Key.h"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
@@ -34,26 +33,7 @@ EventLoop::Get(Event &event)
 {
   AssertNoneLocked();
 
-  if (!queue.Wait(event))
-    return false;
-
-  if (IsOldWindowsCE() && event.IsKey() &&
-      event.msg.wParam >= KEY_APP1 && event.msg.wParam <= KEY_APP4) {
-    /* kludge for iPaq 3xxx: the VK_APPx buttons emit a WM_KEYUP
-       instead of WM_KEYDOWN when the user presses the button */
-
-    static bool seen_app_down = false;
-    if (event.IsKeyDown())
-      /* everything seems ok, disable the kludge */
-      seen_app_down = true;
-    else if (!seen_app_down && event.msg.lParam == (LPARAM)0x80000001)
-      event.msg.message = WM_KEYDOWN;
-  }
-
-  if (event.IsKey())
-    event.msg.wParam = TranscodeKey(event.msg.wParam);
-
-  return true;
+  return queue.Wait(event);
 }
 
 void
@@ -65,39 +45,13 @@ EventLoop::Dispatch(const Event &event)
   AssertNoneLocked();
 }
 
-/**
- * Checks if we should pass this message to the WIN32 dialog manager.
- */
-gcc_pure
-static bool
-AllowDialogMessage(const MSG &msg)
-{
-  /* this hack disallows the dialog manager to handle VK_LEFT/VK_RIGHT
-     on the Altair; some dialogs use the knob as a hot key, and they
-     can't implement Window::OnKeyCheck() */
-  if (IsAltair() && (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) &&
-      (msg.wParam == VK_LEFT || msg.wParam == VK_RIGHT))
-    return false;
-
-  return true;
-}
-
 void
 DialogEventLoop::Dispatch(Event &event)
 {
   AssertNoneLocked();
 
-  if (AllowDialogMessage(event.msg) && ::IsDialogMessage(dialog, &event.msg)) {
-    AssertNoneLocked();
+  if (::IsDialogMessage(dialog, &event.msg))
     return;
-  }
-
-  if (IsAltair() && event.IsKeyDown() && event.msg.wParam == VK_ESCAPE) {
-    /* the Windows CE dialog manager does not handle VK_ESCAPE, but
-       the Altair needs it - let's roll our own */
-    ::SendMessage(dialog, WM_COMMAND, IDCANCEL, 0);
-    return;
-  }
 
   EventLoop::Dispatch(event);
 }

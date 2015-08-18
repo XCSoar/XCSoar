@@ -79,7 +79,7 @@ struct InfoBoxSettings {
     /** @see #BOTTOM_RIGHT_8 */
     OBSOLETE_BOTTOM_RIGHT_8 = 5,
 
-    /** infoboxes GNAV (9 right + vario) */
+    /** 9 right + vario */
     RIGHT_9_VARIO = 6,
 
     /** infoboxes (5) along right side (square screen) */

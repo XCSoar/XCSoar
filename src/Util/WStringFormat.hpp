@@ -34,7 +34,7 @@
 
 #include <stdio.h>
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#ifdef WIN32
 #include <string.h>
 #endif
 
@@ -45,7 +45,7 @@ StringFormat(wchar_t *buffer, size_t size, const wchar_t *fmt, Args&&... args)
   /* unlike snprintf(), _sntprintf() does not guarantee that the
      destination buffer is terminated */
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#ifdef WIN32
   /* usually, it would be enough to clear the last byte in the output
      buffer after the _sntprintf() call, but unfortunately WINE 1.4.1
      has a bug that applies the wrong limit in the overflow branch
@@ -65,9 +65,6 @@ template<typename... Args>
 static inline void
 StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt, Args&&... args)
 {
-#ifdef _WIN32_WCE
-  swprintf(buffer, fmt, args...);
-#else
   /* work around a problem in mingw-w64/libstdc++: libstdc++ defines
      __USE_MINGW_ANSI_STDIO=1 and forces mingw to expose the
      POSIX-compatible stdio functions instead of the
@@ -76,7 +73,6 @@ StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt, Args&&... args)
      need to use "%ls"; this workaround explicitly selects the
      Microsoft-compatible implementation */
   _swprintf(buffer, fmt, args...);
-#endif
 }
 
 #endif

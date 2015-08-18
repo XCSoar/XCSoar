@@ -66,7 +66,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
-#include "Hardware/AltairControl.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "Compiler.h"
@@ -119,10 +118,6 @@ LoadProfile()
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
   SetUserCoordinateFormat(CommonInterface::GetUISettings().format.coordinate_format);
-
-#ifdef HAVE_MODEL_TYPE
-  global_model_type = CommonInterface::GetSystemSettings().model_type;
-#endif
 
   return true;
 }
@@ -191,8 +186,7 @@ Startup()
   if (CommandLine::full_screen)
     style.FullScreen();
 
-  if (!IsWindowsCE())
-    style.Resizable();
+  style.Resizable();
 
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow();
@@ -282,21 +276,6 @@ Startup()
   device_blackboard = new DeviceBlackboard();
   devices = new MultipleDevices();
   device_blackboard->SetDevices(*devices);
-
-#ifdef HAVE_AYGSHELL_DLL
-  const AYGShellDLL &ayg = main_window->ayg_shell_dll;
-  ayg.SHSetAppKeyWndAssoc(VK_APP1, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP2, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP3, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP4, *main_window);
-  // Typical Record Button
-  //	Why you can't always get this to work
-  //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
-  //	To do with the fact it is a global hotkey, but you can with code above
-  //	Also APPA is record key on some systems
-  ayg.SHSetAppKeyWndAssoc(VK_APP5, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP6, *main_window);
-#endif
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();

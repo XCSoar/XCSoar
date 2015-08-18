@@ -92,10 +92,6 @@ bool
 CheckBoxControl::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case KEY_APP4:
-#endif
   case KEY_RETURN:
   case KEY_SPACE:
     SetState(!GetState());

@@ -35,15 +35,10 @@ Copyright_License {
 void
 DialogLook::Initialise()
 {
-#ifdef GNAV
-  const FontDescription text_font_d(_T("RasterGothicTwelveCond"), 13);
-  const FontDescription small_font_d(_T("RasterGothicNineCond"), 10);
-#else
   const FontDescription text_font_d(std::min(Layout::FontScale(12),
                                              Layout::min_screen_pixels / 20));
   const FontDescription small_font_d =
     text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 4u);
-#endif
 
   text_font.Load(text_font_d);
   small_font.Load(small_font_d);

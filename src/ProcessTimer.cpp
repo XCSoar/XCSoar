@@ -29,7 +29,6 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Device/device.hpp"
 #include "Device/MultipleDevices.hpp"
-#include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
@@ -46,20 +45,6 @@ Copyright_License {
 #include "Tracking/TrackingGlue.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/Idle.hpp"
-
-#ifdef _WIN32_WCE
-static void
-HeapCompact()
-{
-  static int iheapcompact = 0;
-  // called 2 times per second, compact heap every minute.
-  iheapcompact++;
-  if (iheapcompact == 120) {
-    MyCompactHeaps();
-    iheapcompact = 0;
-  }
-}
-#endif
 
 static void
 MessageProcessTimer()
@@ -81,8 +66,7 @@ SystemClockTimer()
 #ifdef WIN32
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  // Altair doesn't have a battery-backed up realtime clock,
-  // so as soon as we get a fix for the first time, set the
+  // as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
   static bool sysTimeInitialised = false;
 
@@ -105,18 +89,6 @@ SystemClockTimer()
     sysTime.wMilliseconds = 0;
     ::SetSystemTime(&sysTime);
 
-#if defined(_WIN32_WCE) && defined(GNAV)
-    TIME_ZONE_INFORMATION tzi;
-    tzi.Bias = - CommonInterface::GetComputerSettings().utc_offset.AsMinutes();
-    _tcscpy(tzi.StandardName,TEXT("Altair"));
-    tzi.StandardDate.wMonth= 0; // disable daylight savings
-    tzi.StandardBias = 0;
-    _tcscpy(tzi.DaylightName,TEXT("Altair"));
-    tzi.DaylightDate.wMonth= 0; // disable daylight savings
-    tzi.DaylightBias = 0;
-
-    SetTimeZoneInformation(&tzi);
-#endif
     sysTimeInitialised =true;
   } else if (!basic.alive)
     /* set system clock again after a device reconnect; the new device
@@ -130,13 +102,7 @@ SystemClockTimer()
 static void
 SystemProcessTimer()
 {
-#ifdef _WIN32_WCE
-  HeapCompact();
-#endif
-
   SystemClockTimer();
-
-  CheckDisplayTimeOut(false);
 }
 
 static void

@@ -60,15 +60,6 @@ Copyright_License {
 const Brush *
 WndForm::ClientAreaWindow::OnChildColor(Window &window, Canvas &canvas)
 {
-#ifdef _WIN32_WCE
-  if ((window.GetStyle() & 0xf) == BS_PUSHBUTTON)
-    /* Windows CE allows custom background colors for push buttons,
-       while desktop Windows does not; to make push buttons retain
-       their normal background color, we're implementing this
-       exception */
-    return ContainerWindow::OnChildColor(window, canvas);
-#endif
-
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(look.background_color);
   return &look.background_brush;
@@ -342,7 +333,7 @@ WndForm::ShowModal()
 #endif /* USE_GDI */
 
   PeriodClock enter_clock;
-  if (IsEmbedded() && !IsAltair())
+  if (IsEmbedded())
     enter_clock.Update();
 
   ShowOnTop();
@@ -381,7 +372,7 @@ WndForm::ShowModal()
     }
 
     // hack to stop exiting immediately
-    if (IsEmbedded() && !IsAltair() && !hastimed &&
+    if (IsEmbedded() && !hastimed &&
         event.IsUserInput()) {
       if (!enter_clock.Check(200))
         /* ignore user input in the first 200ms */
@@ -430,19 +421,8 @@ WndForm::ShowModal()
         }
       }
 
-#if !defined USE_GDI || defined _WIN32_WCE
-      /* The Windows CE dialog manager does not handle KEY_ESCAPE and
-         so we have to do it by ourself */
-
-      // On Altair, the RemoteKey ("E" Button) shall also close the analyse-page
-      if (IsAltair()) {
-#ifdef GNAV
-        if (event.GetKeyCode() == KEY_ESCAPE || event.GetKeyCode() == KEY_F15) {
-          modal_result = mrOK;
-          continue;
-        }
-#endif
-      } else if (event.GetKeyCode() == KEY_ESCAPE) {
+#ifndef USE_GDI
+      if (event.GetKeyCode() == KEY_ESCAPE) {
         modal_result = mrCancel;
         continue;
       }

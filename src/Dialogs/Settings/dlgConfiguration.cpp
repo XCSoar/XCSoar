@@ -74,10 +74,6 @@ Copyright_License {
 #include "Panels/TrackingConfigPanel.hpp"
 #endif
 
-#ifdef HAVE_MODEL_TYPE
-#include "Panels/ExperimentalConfigPanel.hpp"
-#endif
-
 #include <assert.h>
 
 static unsigned current_page;
@@ -140,9 +136,6 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
-#endif
-#ifdef HAVE_MODEL_TYPE
-  { N_("Experimental Features"), CreateExperimentalConfigPanel, },
 #endif
   { nullptr, nullptr }
 };

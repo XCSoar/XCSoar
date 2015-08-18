@@ -303,11 +303,6 @@ key_to_event(InputEvents::Mode mode, InputEvents::Mode overlay_mode,
 bool
 InputEvents::ProcessKey(Mode mode, unsigned key_code)
 {
-  if (IsAltair() && key_code == 0xF5) {
-    UIActions::SignalShutdown(false);
-    return true;
-  }
-
   if (!global_running)
     return false;
 

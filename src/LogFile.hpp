@@ -45,7 +45,7 @@ void
 LogFormat(const TCHAR *fmt, ...);
 #endif
 
-#if !defined(NDEBUG) && !defined(GNAV)
+#if !defined(NDEBUG)
 
 #define LogDebug(...) LogFormat(__VA_ARGS__)
 

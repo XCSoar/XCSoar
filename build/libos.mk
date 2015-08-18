@@ -18,16 +18,8 @@ OS_SOURCES += \
 	$(OS_SRC_DIR)/EventPipe.cpp
 endif
 
-ifeq ($(HAVE_CE),y)
-OS_SOURCES += $(OS_SRC_DIR)/MemInfo.cpp
-endif
-
 $(eval $(call link-library,libos,OS))
 
 ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-OS_LDLIBS += -lws2
-else
 OS_LDLIBS += -lws2_32
-endif
 endif

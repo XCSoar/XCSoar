@@ -47,9 +47,7 @@ struct UISettings {
   /** timeout in quarter seconds of menu button */
   unsigned menu_timeout;
 
-#ifndef GNAV
   unsigned scale;
-#endif
 
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
@@ -81,11 +79,7 @@ struct UISettings {
   void SetDefaults();
 
   unsigned GetPercentScale() const {
-#ifndef GNAV
     return scale;
-#endif
-
-    return 100;
   }
 };
 

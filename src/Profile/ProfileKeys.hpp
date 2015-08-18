@@ -101,7 +101,6 @@ extern const char SoundAudioVario[];
 extern const char SoundTask[];
 extern const char SoundModes[];
 extern const char NettoSpeed[];
-extern const char AutoBlank[];
 extern const char AverEffTime[]; // VENTA6
 extern const char VarioGauge[];
 extern const char AppIndLandable[];
@@ -122,7 +121,6 @@ extern const char HapticFeedback[];
 extern const char AppDialogTabStyle[];
 extern const char AppDialogStyle[];
 extern const char AppInfoBoxBorder[];
-extern const char AppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
 extern const char AppAveNeedle[];
 extern const char AutoAdvance[];
 extern const char UTCOffset[];

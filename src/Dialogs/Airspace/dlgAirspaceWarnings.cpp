@@ -104,13 +104,8 @@ public:
 
   void CreateButtons(WidgetDialog &buttons) {
     ack_button = buttons.AddButton(_("ACK"), *this, ACK);
-    buttons.AddAltairButtonKey('6');
-
     ack_day_button = buttons.AddButton(_("ACK Day"), *this, ACK_DAY);
-    buttons.AddAltairButtonKey('8');
-
     enable_button = buttons.AddButton(_("Enable"), *this, ENABLE);
-    buttons.AddAltairButtonKey('9');
   }
 
   void CopyList();

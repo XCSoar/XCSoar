@@ -50,7 +50,6 @@ struct InfoBoxLook {
 
   Font value_font, small_value_font;
 
-#ifndef GNAV
   /**
    * The font for units.  Use unit symbol bitmaps if this font is not
    * configured.
@@ -58,7 +57,6 @@ struct InfoBoxLook {
   Font unit_font;
 
   Pen unit_fraction_pen;
-#endif
 
   Font title_font;
 

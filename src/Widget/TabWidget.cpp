@@ -113,7 +113,8 @@ TabWidget::ClickPage(unsigned i)
     return false;
 
   /* switching to a new page by mouse click focuses the first control
-     of the page, which is important for Altair hot keys */
+     of the page, which is important for devices without touch
+     screen */
   PagerWidget::SetFocus();
   return true;
 }

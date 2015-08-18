@@ -39,10 +39,6 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Interface.hpp"
 
-#ifdef _WIN32_WCE
-#include "Device/Windows/Enumerator.hpp"
-#endif
-
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYEnumerator.hpp"
 #endif
@@ -68,9 +64,6 @@ static constexpr struct {
   const TCHAR *label;
 } port_types[] = {
   { DeviceConfig::PortType::DISABLED, N_("Disabled") },
-#ifdef _WIN32_WCE
-  { DeviceConfig::PortType::AUTO, N_("GPS Intermediate Driver") },
-#endif
 #ifdef HAVE_INTERNAL_GPS
   { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS & sensors") },
 #endif
@@ -143,43 +136,6 @@ DetectSerialPorts(DataFieldEnum &df)
 
 #endif
 
-#ifdef GNAV
-
-static bool
-DetectSerialPorts(DataFieldEnum &df)
-{
-  AddPort(df, DeviceConfig::PortType::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
-  AddPort(df, DeviceConfig::PortType::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
-  AddPort(df, DeviceConfig::PortType::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
-  return true;
-}
-
-#elif defined(_WIN32_WCE)
-
-static bool
-DetectSerialPorts(DataFieldEnum &df)
-{
-  PortEnumerator enumerator;
-  if (enumerator.Error())
-    return false;
-
-  unsigned sort_start = df.Count();
-
-  bool found = false;
-  while (enumerator.Next()) {
-    AddPort(df, DeviceConfig::PortType::SERIAL, enumerator.GetName(),
-            enumerator.GetDisplayName());
-    found = true;
-  }
-
-  if (found)
-    df.Sort(sort_start);
-
-  return found;
-}
-
-#endif
-
 #if defined(WIN32) && !defined(HAVE_POSIX)
 
 static void
@@ -221,10 +177,7 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
 #if defined(HAVE_POSIX)
   DetectSerialPorts(df);
 #elif defined(WIN32)
-#ifdef _WIN32_WCE
-  if (!DetectSerialPorts(df))
-#endif
-    FillDefaultSerialPorts(df);
+  FillDefaultSerialPorts(df);
 #endif
 
   if (config.port_type == DeviceConfig::PortType::SERIAL)

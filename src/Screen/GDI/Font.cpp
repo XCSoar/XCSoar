@@ -70,43 +70,7 @@ Font::CalculateHeights()
 
   height = tm.tmHeight;
   ascent_height = tm.tmAscent;
-
-  if (IsAltair()) {
-    // JMW: don't know why we need this in GNAV, but we do.
-
-    BufferCanvas buffer(canvas, {tm.tmAveCharWidth, tm.tmHeight});
-    const HWColor white = buffer.map(COLOR_WHITE);
-
-    buffer.SetBackgroundOpaque();
-    buffer.SetBackgroundColor(COLOR_WHITE);
-    buffer.SetTextColor(COLOR_BLACK);
-    buffer.Select(*this);
-
-    PixelRect rec;
-    rec.left = 0;
-    rec.top = 0;
-    rec.right = tm.tmAveCharWidth;
-    rec.bottom = tm.tmHeight;
-    buffer.DrawOpaqueText(0, 0, rec, _T("M"));
-
-    unsigned top = tm.tmHeight, bottom = 0;
-
-    for (unsigned x = 0; x < (unsigned)tm.tmAveCharWidth; ++x) {
-      for (unsigned y = 0; y < (unsigned)tm.tmHeight; ++y) {
-        if (buffer.GetPixel(x, y) != white) {
-          if (top > y)
-            top = y;
-          if (bottom < y)
-            bottom = y;
-        }
-      }
-    }
-
-    capital_height = bottom - top + 1;
-  } else {
-    // This works for PPC
-    capital_height = tm.tmAscent - 1 - tm.tmHeight / 10;
-  }
+  capital_height = tm.tmAscent - 1 - tm.tmHeight / 10;
 }
 
 void

@@ -47,7 +47,7 @@ ScrollBar::SetSize(const PixelSize size)
     /* with a mouse, the scroll bar can be smaller */
     width = Layout::GetMinimumControlHeight();
   else
-    // thin for ALTAIR b/c no touch screen
+    // thin for devices without touch screen
     width = Layout::SmallScale(12);
 
   // Update the coordinates of the scrollbar

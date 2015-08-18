@@ -136,7 +136,6 @@ public:
 
   SocketDescriptor Accept();
 
-#ifndef _WIN32_WCE
   bool Connect(SocketAddress address);
 
   /**
@@ -148,7 +147,6 @@ public:
    * @param port a numeric UDP port number
    */
   bool CreateConnectUDP(const char *host, const char *port);
-#endif
 
   ssize_t Read(void *buffer, size_t length);
   ssize_t Write(const void *buffer, size_t length);

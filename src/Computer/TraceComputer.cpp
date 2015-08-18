@@ -31,7 +31,7 @@ static constexpr unsigned full_trace_size =
   HasLittleMemory() ? 512 : 1024;
 
 static constexpr unsigned contest_trace_size =
-  HasLittleMemory() || IsWindowsCE() ? 128 : 256;
+  HasLittleMemory() ? 128 : 256;
 
 static constexpr unsigned sprint_trace_size =
   IsAncientHardware() ? 96 : 128;

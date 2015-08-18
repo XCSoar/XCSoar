@@ -25,8 +25,6 @@
 
 #ifdef WIN32
 
-#ifndef _WIN32_WCE
-
 #include <windows.h>
 #include <tlhelp32.h>
 #include <stdio.h>
@@ -66,15 +64,6 @@ unsigned SystemLoadCPU()
 
   return retval;
 }
-
-#else /* WIN32_WCE */
-
-unsigned SystemLoadCPU()
-{
-  return (unsigned)-1;
-}
-
-#endif
 
 #elif defined(__linux__) || defined(ANDROID)
 

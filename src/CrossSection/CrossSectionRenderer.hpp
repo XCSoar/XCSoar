@@ -48,11 +48,7 @@ class CrossSectionRenderer :
   public BaseBlackboard
 {
 public:
-#ifdef _WIN32_WCE
-  static constexpr unsigned NUM_SLICES = 16;
-#else
   static constexpr unsigned NUM_SLICES = 64;
-#endif
 
 protected:
   const CrossSectionLook &look;

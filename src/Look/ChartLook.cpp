@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "ChartLook.hpp"
 #include "FontDescription.hpp"
-#include "Asset.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>
@@ -31,11 +30,10 @@ Copyright_License {
 void
 ChartLook::Initialise()
 {
-  pens[STYLE_BLUETHIN].Create(Pen::DASH,
-                              IsAltair() ? 1 : 2, Color(0, 50, 255));
+  pens[STYLE_BLUETHIN].Create(Pen::DASH, 2, Color(0, 50, 255));
   pens[STYLE_REDTHICK].Create(Pen::DASH, 3, Color(200, 50, 50));
   pens[STYLE_DASHGREEN].Create(Pen::DASH, 2, COLOR_GREEN);
-  pens[STYLE_MEDIUMBLACK].Create(IsAltair() ? 1 : 2, Color(50, 243, 45));
+  pens[STYLE_MEDIUMBLACK].Create(2, Color(50, 243, 45));
   pens[STYLE_THINDASHPAPER].Create(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);

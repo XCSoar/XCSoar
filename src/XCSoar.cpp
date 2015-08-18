@@ -73,13 +73,11 @@ static const char *const Usage = "\n"
   "  -fly            bypass startup-screen, use fly mode directly\n"
 #endif
   "  -profile=fname  load profile from file fname\n"
-#if !defined(_WIN32_WCE)
   "  -WIDTHxHEIGHT   use screen resolution WIDTH x HEIGHT\n"
   "  -portrait       use a 480x640 screen resolution\n"
   "  -square         use a 480x480 screen resolution\n"
   "  -small          use a 320x240 screen resolution\n"
-#endif
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#if !defined(ANDROID)
   "  -dpi=DPI        force usage of DPI for pixel density\n"
   "  -dpi=XDPIxYDPI  force usage of XDPI and YDPI for pixel density\n"
 #endif
@@ -89,7 +87,7 @@ static const char *const Usage = "\n"
 #ifdef HAVE_CMDLINE_RESIZABLE
   "  -resizable      resizable window\n"
 #endif
-#if defined(_WIN32) && !defined(_WIN32_WCE)&& !defined(__WINE__)
+#if defined(_WIN32) && !defined(__WINE__)
   "  -console        open debug output console\n"
 #endif
   ;
@@ -102,11 +100,7 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        gcc_unused LPWSTR lpCmdLine,
-#else
         gcc_unused LPSTR lpCmdLine2,
-#endif
         int nCmdShow)
 #endif
 {

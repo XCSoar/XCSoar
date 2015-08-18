@@ -97,7 +97,7 @@ namespace Layout
   static inline bool
   ScaleSupported()
   {
-    return !IsAltair();
+    return true;
   }
 
   /**
@@ -270,9 +270,6 @@ namespace Layout
   static inline unsigned
   GetMinimumControlHeight()
   {
-    if (IsAltair())
-      return 22;
-
     return minimum_control_height;
   }
 
@@ -283,9 +280,6 @@ namespace Layout
   static inline unsigned
   GetMaximumControlHeight()
   {
-    if (IsAltair())
-      return 22;
-
     return maximum_control_height;
   }
 

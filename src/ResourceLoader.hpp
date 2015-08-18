@@ -56,14 +56,6 @@ namespace ResourceLoader {
   HBITMAP
   LoadBitmap2(ResourceId id);
 #endif
-
-#ifdef HAVE_AYGSHELL_DLL
-  /**
-   * Load an image resource using aygshell.dll.
-   */
-  HBITMAP
-  SHLoadImageResource(ResourceId id);
-#endif
 }
 
 #endif

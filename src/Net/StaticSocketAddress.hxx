@@ -100,9 +100,7 @@ public:
 		return !(*this == other);
 	}
 
-#ifndef _WIN32_WCE
 	bool Lookup(const char *host, const char *service, int socktype);
-#endif
 };
 
 #endif

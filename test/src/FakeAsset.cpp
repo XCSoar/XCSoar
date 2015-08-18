@@ -23,18 +23,12 @@ Copyright_License {
 
 #include "Asset.hpp"
 
-#ifdef HAVE_MODEL_TYPE
-
-ModelType global_model_type = ModelType::GENERIC;
-
-#endif
-
 #if defined(USE_CONSOLE) && !defined(KOBO)
 
 bool
 HasPointer()
 {
-  return !IsAltair();
+  return true;
 }
 
 #endif
@@ -44,7 +38,7 @@ HasPointer()
 bool
 HasTouchScreen()
 {
-  return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo() || IsIOS();
+  return IsAndroid() || IsKobo() || IsIOS();
 }
 
 bool

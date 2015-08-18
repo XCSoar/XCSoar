@@ -32,7 +32,6 @@ Copyright_License {
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"
 #include "UIState.hpp"
-#include "Asset.hpp"
 #include "Pan.hpp"
 #include "PageActions.hpp"
 #include "Util/Clamp.hpp"
@@ -137,18 +136,10 @@ InputEvents::eventPan(const TCHAR *misc)
     LeavePan();
 
   else if (StringIsEqual(misc, _T("up")))
-    if (IsHP31X())
-      // Scroll wheel on the HP31x series should zoom in pan mode
-      sub_ScaleZoom(1);
-    else
-      sub_PanCursor(0, 1);
+    sub_PanCursor(0, 1);
 
   else if (StringIsEqual(misc, _T("down")))
-    if (IsHP31X())
-      // Scroll wheel on the HP31x series should zoom in pan mode
-      sub_ScaleZoom(-1);
-    else
-      sub_PanCursor(0, -1);
+    sub_PanCursor(0, -1);
 
   else if (StringIsEqual(misc, _T("left")))
     sub_PanCursor(1, 0);

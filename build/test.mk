@@ -781,10 +781,6 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 DEBUG_PROGRAM_NAMES += PlayTone PlayVario DumpVario
 endif
 
-ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
-DEBUG_PROGRAM_NAMES += TodayInstall
-endif
-
 DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
 
 DEBUG_REPLAY_SOURCES = \
@@ -2553,10 +2549,6 @@ IGC2NMEA_DEPENDS = GEO MATH UTIL TIME
 IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
 
 $(eval $(call link-program,IGC2NMEA,IGC2NMEA))
-
-TODAY_INSTALL_SOURCES = \
-	$(TEST_SRC_DIR)/TodayInstall.cpp
-$(eval $(call link-program,TodayInstall,TODAY_INSTALL))
 
 debug: $(DEBUG_PROGRAMS)
 

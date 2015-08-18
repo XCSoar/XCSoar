@@ -30,9 +30,7 @@ UISettings::SetDefaults()
 
   menu_timeout = 8 * 4;
 
-#ifndef GNAV
   scale = 100;
-#endif
 
   enable_thermal_assistant_gauge = true;
 

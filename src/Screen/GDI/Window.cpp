@@ -61,11 +61,7 @@ void
 Window::CreateMessageWindow()
 {
   hWnd = ::CreateWindowEx(0, _T("PaintWindow"), nullptr, 0, 0, 0, 0, 0,
-#ifdef _WIN32_WCE
-                          nullptr,
-#else
                           HWND_MESSAGE,
-#endif
                           nullptr, nullptr, this);
   assert(hWnd != nullptr);
 }
@@ -92,8 +88,7 @@ Window::SetEnabled(bool enabled)
   if (was_focused && ::GetFocus() == nullptr) {
     /* The window lost its keyboard focus because it got disabled; now
        the focus is in limbo, and can only be recovered by clicking on
-       another control, which is impossible for Altair users (no touch
-       screen).  This is a major WIN32 API misdesign that is
+       another control.  This is a major WIN32 API misdesign that is
        documtented here:
        https://blogs.msdn.com/b/oldnewthing/archive/2004/08/04/208005.aspx */
 
@@ -275,14 +270,6 @@ Window::OnMessage(HWND _hWnd, UINT message,
 LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  enum {
-#ifndef _WIN32_WCE
-    WM_VERY_FIRST = WM_NCCREATE,
-#else
-    WM_VERY_FIRST = WM_CREATE,
-#endif
-  };
-
   AssertNoneLocked();
 
   if (message == WM_GETMINMAXINFO)
@@ -291,7 +278,7 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return ::DefWindowProc(_hWnd, message, wParam, lParam);
 
   Window *window;
-  if (message == WM_VERY_FIRST) {
+  if (message == WM_CREATE) {
     LPCREATESTRUCT cs = (LPCREATESTRUCT)lParam;
 
     window = (Window *)cs->lpCreateParams;

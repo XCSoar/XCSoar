@@ -73,18 +73,10 @@ struct BGRColor
 
 #else /* !SDL */
 
-#ifdef _WIN32_WCE
-  RGB555Color value;
-
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :value(R, G, B) {}
-
-#else /* !_WIN32_WCE */
   BGR8Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
-#endif /* !_WIN32_WCE */
 
 #endif
 };
@@ -113,17 +105,6 @@ protected:
   mutable bool dirty;
 #elif defined(USE_GDI)
   BITMAPINFO bi;
-#ifdef _WIN32_WCE
-  /**
-   * Need RGB masks for BI_BITFIELDS (16 bit 5-5-5).  This attribute
-   * is not used explicitly, it is only here to reserve enough room
-   * after the BITMAPINFO attribute.
-   */
-  DWORD mask_buffer[3];
-#endif
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
-  HBITMAP bitmap;
-#endif
 #endif
 
 public:

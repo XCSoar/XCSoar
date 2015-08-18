@@ -1,6 +1,4 @@
 TARGETS = PC WIN64 \
-	PPC2000 PPC2003 PPC2003X WM5 WM5X \
-	ALTAIR \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	PI PI2 CUBIE KOBO NEON \
@@ -36,7 +34,6 @@ else
   TARGET_FLAVOR := $(TARGET)
 endif
 
-HAVE_CE := n
 HAVE_FPU := y
 X64 := n
 TARGET_IS_ARM = n
@@ -70,18 +67,6 @@ TARGET_ARCH :=
 ifeq ($(TARGET),WIN64)
   X64 := y
   override TARGET = PC
-endif
-
-ifeq ($(TARGET),PPC2003X)
-  TARGET_IS_ARM = y
-  XSCALE := y
-  override TARGET = PPC2003
-endif
-
-ifeq ($(TARGET),WM5X)
-  TARGET_IS_ARM = y
-  XSCALE := y
-  override TARGET = WM5
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -138,24 +123,6 @@ endif
 
 # real targets
 
-ifeq ($(TARGET),PPC2000)
-  TARGET_IS_ARM = y
-  CE_MAJOR := 3
-  CE_MINOR := 00
-  PCPU := ARM
-
-  HAVE_CE := y
-endif
-
-ifeq ($(TARGET),PPC2003)
-  TARGET_IS_ARM = y
-  CE_MAJOR := 4
-  CE_MINOR := 00
-  PCPU := ARMV4
-
-  HAVE_CE := y
-endif
-
 ifeq ($(TARGET),PC)
   ifeq ($(X64),y)
     TCPREFIX := x86_64-w64-mingw32-
@@ -187,24 +154,6 @@ ifeq ($(TARGET),CYGWIN)
   HAVE_WIN32 := y
   HAVE_MSVCRT := n
   HAVE_VASPRINTF := y
-endif
-
-ifeq ($(TARGET),ALTAIR)
-  CE_MAJOR := 5
-  CE_MINOR := 00
-
-  TARGET_IS_ARM = y
-  HAVE_CE := y
-  XSCALE := y
-endif
-
-ifeq ($(TARGET),WM5)
-  TARGET_IS_ARM = y
-  PCPU := ARMV4
-  CE_MAJOR := 5
-  CE_MINOR := 00
-
-  HAVE_CE := y
 endif
 
 ifeq ($(TARGET),WINE)
@@ -599,17 +548,6 @@ ifeq ($(TARGET),ANDROID)
   HAVE_VASPRINTF := y
 endif
 
-ifeq ($(HAVE_CE),y)
-  TCPREFIX := arm-mingw32ce-
-  HAVE_FPU := n
-
-  ifeq ($(XSCALE),y)
-    TARGET_ARCH += -mcpu=xscale
-  else
-    TARGET_ARCH += -mcpu=strongarm1110
-  endif
-endif
-
 ######## target definitions
 
 TARGET_INCLUDES =
@@ -619,11 +557,6 @@ TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 ifneq ($(WINVER),)
   TARGET_CPPFLAGS += -DWINVER=$(WINVER) -D_WIN32_WINDOWS=$(WINVER)
   TARGET_CPPFLAGS += -D_WIN32_WINNT=$(WINVER) -D_WIN32_IE=$(WINVER)
-endif
-
-ifeq ($(HAVE_CE),y)
-  TARGET_CPPFLAGS += -D_WIN32_WCE=0x0$(CE_MAJOR)$(CE_MINOR)
-  TARGET_CPPFLAGS += -DWIN32_PLATFORM_PSPC=$(CE_MAJOR)$(CE_MINOR)
 endif
 
 ifeq ($(HAVE_WIN32),y)
@@ -638,10 +571,6 @@ ifeq ($(TARGET),WINE)
   TARGET_CPPFLAGS += -D__WINE__
   TARGET_CPPFLAGS += -DWINE_STRICT_PROTOTYPES
   # -mno-cygwin
-endif
-
-ifeq ($(TARGET),ALTAIR)
-  TARGET_CPPFLAGS += -DGNAV
 endif
 
 ifeq ($(HAVE_POSIX),y)
@@ -727,11 +656,6 @@ ifeq ($(TARGET),PC)
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  ifeq ($(HAVE_CE),y)
-    TARGET_LDFLAGS += -Wl,--major-subsystem-version=$(CE_MAJOR)
-    TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
-  endif
-
   ifeq ($(TARGET),WINE)
     TARGET_LDLIBS += -lpthread
   else
@@ -793,14 +717,6 @@ endif
 
 ifeq ($(TARGET),CYGWIN)
   TARGET_LDLIBS += -lintl
-endif
-
-ifeq ($(HAVE_CE),y)
-  ifneq ($(TARGET),ALTAIR)
-    TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
-    TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
-    TARGET_CPPFLAGS += -DHAVE_IMGDECMP_DLL
-  endif
 endif
 
 ifeq ($(TARGET),UNIX)

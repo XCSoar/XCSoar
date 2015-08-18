@@ -28,10 +28,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Thread/Debug.hpp"
 
-#ifdef GNAV
-#include "Hardware/AltairControl.hpp"
-#endif
-
 FileCache *file_cache;
 TopographyStore *topography;
 RasterTerrain *terrain;
@@ -62,10 +58,6 @@ ProtectedTaskManager *protected_task_manager;
 Airspaces airspace_database;
 
 GlideComputer *glide_computer;
-
-#ifdef GNAV
-AltairControl altair_control;
-#endif
 
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings()

@@ -145,23 +145,12 @@ InputEvents::LoadDefaults(InputConfig &input_config)
   // Get defaults
   input_config.SetDefaults();
 
-  if (IsAltair()) {
-#include "InputEvents_altair.cpp"
-    apply_defaults(input_config,
-                   default_modes,
-                   default_events,
-                   ARRAY_SIZE(default_events),
-                   default_gesture2event,
-                   default_key2event, default_gc2event, default_n2event,
-                   default_labels);
-  } else {
 #include "InputEvents_default.cpp"
-    apply_defaults(input_config,
-                   default_modes,
-                   default_events,
-                   ARRAY_SIZE(default_events),
-                   default_gesture2event,
-                   default_key2event, default_gc2event, default_n2event,
-                   default_labels);
-  }
+  apply_defaults(input_config,
+                 default_modes,
+                 default_events,
+                 ARRAY_SIZE(default_events),
+                 default_gesture2event,
+                 default_key2event, default_gc2event, default_n2event,
+                 default_labels);
 }

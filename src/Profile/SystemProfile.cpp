@@ -32,8 +32,4 @@ Profile::Load(const ProfileMap &map, SystemSettings &settings)
 {
   for (unsigned i = 0; i < settings.devices.size(); ++i)
     GetDeviceConfig(map, i, settings.devices[i]);
-
-#ifdef HAVE_MODEL_TYPE
-  map.GetEnum(ProfileKeys::AppInfoBoxModel, settings.model_type);
-#endif
 }

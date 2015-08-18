@@ -56,7 +56,7 @@ Copyright_License {
 #endif
 #endif
 
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   static unsigned forced_x_dpi = 0;
   static unsigned forced_y_dpi = 0;
 #endif
@@ -99,7 +99,7 @@ GetDPI()
 void
 Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
 {
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   forced_x_dpi = x_dpi;
   forced_y_dpi = y_dpi;
 #endif
@@ -108,7 +108,7 @@ Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
 unsigned
 Display::GetXDPI()
 {
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   if (forced_x_dpi > 0)
     return forced_x_dpi;
 #endif
@@ -133,7 +133,7 @@ Display::GetXDPI()
 unsigned
 Display::GetYDPI()
 {
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   if (forced_y_dpi > 0)
     return forced_y_dpi;
 #endif

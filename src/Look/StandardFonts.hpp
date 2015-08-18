@@ -37,9 +37,6 @@ gcc_const
 static inline const TCHAR *
 GetStandardFontFace()
 {
-  if (IsAltair())
-    return _T("RasterGothicFourteenCond");
-
   return _T("Tahoma");
 }
 

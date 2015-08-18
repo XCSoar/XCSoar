@@ -133,7 +133,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 
   canvas.SetTextColor(look.GetValueColor(data.value_color));
 
-#ifndef GNAV
   // Do text-based unit rendering on higher resolutions
   if (look.unit_font.IsDefined()) {
     canvas.Select(look.unit_font);
@@ -170,7 +169,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
     }
     return;
   }
-#endif
 
   canvas.Select(look.value_font);
   UPixelScalar ascent_height = look.value_font.GetAscentHeight();
@@ -506,10 +504,7 @@ bool
 InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   dialog_timer.Cancel();
-
-  if (!IsAltair())
-    InputEvents::ShowMenu();
-
+  InputEvents::ShowMenu();
   return true;
 }
 

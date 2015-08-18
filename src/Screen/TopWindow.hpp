@@ -26,10 +26,6 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
-#ifdef HAVE_AYGSHELL_DLL
-#include "OS/AYGShellDLL.hpp"
-#endif
-
 #ifndef USE_GDI
 #include "Screen/Custom/DoubleClick.hpp"
 #endif
@@ -195,31 +191,15 @@ class TopWindow : public ContainerWindow {
 
 #else /* USE_GDI */
 
-#ifdef _WIN32_WCE
-  /**
-   * A handle to the task bar that was manually hidden.  This is a
-   * hack when aygshell.dll is not available (Windows CE Core).
-   */
-  HWND task_bar;
-#endif
-
   /**
    * On WM_ACTIVATE, the focus is returned to this window.
    */
   HWND hSavedFocus;
 
-#ifdef HAVE_AYGSHELL_DLL
-  SHACTIVATEINFO s_sai;
-#endif
 #endif /* USE_GDI */
 
 #ifdef HAVE_HIGHDPI_SUPPORT
   float point_to_real_x = 1, point_to_real_y = 1;
-#endif
-
-public:
-#ifdef HAVE_AYGSHELL_DLL
-  const AYGShellDLL ayg_shell_dll;
 #endif
 
 public:
@@ -250,10 +230,6 @@ private:
 public:
 #endif
 
-#ifdef _WIN32_WCE
-  void Destroy();
-#endif
-
   /**
    * Check if the screen has been resized.
    */
@@ -277,7 +253,7 @@ public:
    */
   void CancelMode();
 
-#if defined(USE_GDI) && !defined(_WIN32_WCE)
+#if defined(USE_GDI)
   gcc_pure
   const PixelRect GetClientRect() const {
     if (::IsIconic(hWnd)) {

@@ -106,7 +106,7 @@ namespace File
   gcc_pure
   bool Exists(const TCHAR* path);
 
-#if defined(WIN32) && defined(UNICODE) && !defined(_WIN32_WCE)
+#if defined(WIN32) && defined(UNICODE)
   gcc_pure
   bool Exists(const char *path);
 #endif
@@ -149,11 +149,6 @@ namespace File
   {
 #ifdef HAVE_POSIX
     return rename(oldpath, newpath) == 0;
-#elif defined(_WIN32_WCE)
-    /* MoveFileEx() is not available on Windows CE, we need to fall
-       back to non-atomic delete and rename */
-    Delete(newpath);
-    return MoveFile(oldpath, newpath) != 0;
 #else
     return MoveFileEx(oldpath, newpath, MOVEFILE_REPLACE_EXISTING) != 0;
 #endif

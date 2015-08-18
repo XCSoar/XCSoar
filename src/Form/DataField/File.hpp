@@ -67,11 +67,7 @@ public:
   };
 
 private:
-#ifdef _WIN32_WCE
-  static constexpr unsigned MAX_FILES = 100;
-#else
   static constexpr unsigned MAX_FILES = 512;
-#endif
 
   /** Index of the active file */
   unsigned int current_index;

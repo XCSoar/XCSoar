@@ -29,9 +29,7 @@ Copyright_License {
 
 #include <windef.h>
 
-#ifndef _WIN32_WCE
 class OverlappedEvent;
-#endif
 
 /**
  * Generic SerialPort thread handler class
@@ -41,15 +39,6 @@ class SerialPort : public BufferedPort, protected StoppableThread
   unsigned baud_rate;
 
   HANDLE hPort;
-
-#ifdef _WIN32_WCE
-  /**
-   * @see IsWidcommDevice()
-   */
-  bool is_widcomm;
-#else
-  static constexpr bool is_widcomm = false;
-#endif
 
 public:
   /**
@@ -97,7 +86,6 @@ protected:
    */
   int GetDataPending() const;
 
-#ifndef _WIN32_WCE
   /**
    * Wait until there is data in the driver's receive buffer.
    *
@@ -105,7 +93,6 @@ protected:
    */
   WaitResult WaitDataPending(OverlappedEvent &overlapped,
                              unsigned timeout_ms) const;
-#endif
 
 public:
   /* virtual methods from class Port */

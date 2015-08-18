@@ -39,7 +39,6 @@ BigThermalAssistantWidget::UpdateLayout()
   const PixelRect rc = GetContainer().GetClientRect();
   view->Move(rc);
 
-#ifndef GNAV
   const unsigned margin = Layout::Scale(1);
   const unsigned button_height = Layout::GetMinimumControlHeight();
 
@@ -49,7 +48,6 @@ BigThermalAssistantWidget::UpdateLayout()
   button_rc.right = rc.right - margin;
   button_rc.left = button_rc.right - Layout::Scale(50);
   close_button->Move(button_rc);
-#endif
 }
 
 void
@@ -67,12 +65,10 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
 
   const PixelRect rc = GetContainer().GetClientRect();
 
-#ifndef GNAV
   close_button = new Button(GetContainer(),
                             UIGlobals::GetDialogLook().button,
                             _("Close"), rc, WindowStyle(),
                             *this, CLOSE);
-#endif
 
   view = new BigThermalAssistantWindow(look, Layout::FastScale(10));
   view->Create(GetContainer(), rc);
@@ -82,9 +78,7 @@ void
 BigThermalAssistantWidget::Unprepare()
 {
   delete view;
-#ifndef GNAV
   delete close_button;
-#endif
 
   ContainerWidget::Unprepare();
 }
@@ -97,10 +91,8 @@ BigThermalAssistantWidget::Show(const PixelRect &rc)
   ContainerWidget::Show(rc);
   UpdateLayout();
 
-#ifndef GNAV
   /* show the "Close" button only if this is a "special" page */
   close_button->SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
-#endif
 
   blackboard.AddListener(*this);
 }
@@ -126,8 +118,6 @@ BigThermalAssistantWidget::SetFocus()
   return false;
 }
 
-#ifndef GNAV
-
 void
 BigThermalAssistantWidget::OnAction(int id)
 {
@@ -137,8 +127,6 @@ BigThermalAssistantWidget::OnAction(int id)
     break;
   }
 }
-
-#endif
 
 void
 BigThermalAssistantWidget::OnCalculatedUpdate(const MoreData &basic,

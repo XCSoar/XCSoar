@@ -48,8 +48,6 @@ StaticSocketAddress::operator=(SocketAddress other)
 	return *this;
 }
 
-#ifndef _WIN32_WCE
-
 bool
 StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
 {
@@ -70,5 +68,3 @@ StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
 	freeaddrinfo(ai);
 	return true;
 }
-
-#endif

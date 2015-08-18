@@ -42,12 +42,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 enum ControlIndex {
-#ifndef GNAV
   UIScale,
-#endif
-#ifdef HAVE_BLANK
-  AutoBlank,
-#endif
   InputFile,
 #ifndef HAVE_NATIVE_GETTEXT
   LanguageFile,
@@ -94,19 +89,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-#ifndef GNAV
   AddInteger(_("Text size"),
              nullptr,
              _T("%d %%"), _T("%d"), 75, 200, 5,
              settings.scale);
-#endif
-
-#ifdef HAVE_BLANK
-  AddBoolean(_("Auto. blank"),
-             _("This determines whether to blank the display after a long period of inactivity "
-                 "when operating on internal battery power."),
-             settings.display.enable_auto_blank);
-#endif
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -174,7 +160,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(TextInput);
 
   /* on-screen keyboard doesn't work without a pointing device
-     (mouse or touch screen), hide the option on Altair */
+     (mouse or touch screen) */
   SetRowVisible(TextInput, HasPointer());
 
 #ifdef HAVE_VIBRATOR
@@ -198,16 +184,9 @@ InterfaceConfigPanel::Save(bool &_changed)
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;;
 
-#ifndef GNAV
   if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
                     settings.scale))
     require_restart = changed = true;
-#endif
-
-#ifdef HAVE_BLANK
-  changed |= SaveValue(AutoBlank, ProfileKeys::AutoBlank,
-                       settings.display.enable_auto_blank);
-#endif
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
     require_restart = changed = true;

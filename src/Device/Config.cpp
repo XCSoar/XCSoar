@@ -55,13 +55,13 @@ DeviceConfig::IsAvailable() const
     return HasIOIOLib();
 
   case PortType::AUTO:
-    return IsWindowsCE();
+    return false;
 
   case PortType::INTERNAL:
     return IsAndroid() || IsApple();
 
   case PortType::TCP_CLIENT:
-    return !IsWindowsCE();
+    return true;
 
   case PortType::TCP_LISTENER:
   case PortType::UDP_LISTENER:
@@ -88,10 +88,8 @@ DeviceConfig::ShouldReopenOnTimeout() const
 
   case PortType::SERIAL:
   case PortType::AUTO:
-    /* auto-reopen on Windows CE due to its quirks, but not Altair,
-       because Altair ports are known to be "kind of sane" (no flaky
-       Bluetooth drivers, because there's no Bluetooth) */
-    return IsWindowsCE() && !IsAltair();
+    /* TODO: old branch for Windows CE due to its quirks */
+    return false;
 
   case PortType::RFCOMM:
   case PortType::RFCOMM_SERVER:
@@ -137,13 +135,6 @@ DeviceConfig::MaybeBluetooth(PortType port_type, const TCHAR *path)
     return true;
 #endif
 
-#ifdef _WIN32_WCE
-  /* on Windows CE, any serial port may be mapped to a Bluetooth
-     driver */
-  if (port_type == PortType::SERIAL)
-    return true;
-#endif
-
   return false;
 }
 
@@ -159,13 +150,6 @@ DeviceConfig::MaybeBluetooth() const
 
 #ifdef HAVE_POSIX
   if (port_type == PortType::SERIAL && path.Contains(_T("/rfcomm")))
-    return true;
-#endif
-
-#ifdef _WIN32_WCE
-  /* on Windows CE, any serial port may be mapped to a Bluetooth
-     driver */
-  if (port_type == PortType::SERIAL)
     return true;
 #endif
 

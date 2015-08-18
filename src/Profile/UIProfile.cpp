@@ -43,7 +43,6 @@ namespace Profile {
 void
 Profile::Load(const ProfileMap &map, DisplaySettings &settings)
 {
-  map.Get(ProfileKeys::AutoBlank, settings.enable_auto_blank);
   map.GetEnum(ProfileKeys::MapOrientation, settings.orientation);
 }
 
@@ -119,11 +118,9 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
 
   map.Get(ProfileKeys::MenuTimeout, settings.menu_timeout);
 
-#ifndef GNAV
   map.Get(ProfileKeys::UIScale, settings.scale);
   if (settings.scale < 50 || settings.scale > 200)
     settings.scale = 100;
-#endif
 
   map.Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);
 

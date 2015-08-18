@@ -56,18 +56,11 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);
 
-#ifdef GNAV
-  value_font.Load(FontDescription(_T("RasterGothicTwentyFourCond"), 24, true));
-  small_value_font.Load(FontDescription(_T("RasterGothicEighteenCond"),
-                                        19, true));
-  title_font.Load(FontDescription(_T("RasterGothicNineCond"), 10));
-#else
   ReinitialiseLayout(width);
 
   title_font.Load(FontDescription(Layout::FontScale(8)));
 
   unit_fraction_pen.Create(1, value.fg_color);
-#endif
 
   colors[0] = border_color;
   if (HasColors() && use_colors) {
@@ -83,7 +76,6 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width)
 {
-#ifndef GNAV
   FontDescription value_font_d(10, true);
   AutoSizeFont(value_font_d, width, _T("1234m"));
   value_font.Load(value_font_d);
@@ -99,6 +91,5 @@ InfoBoxLook::ReinitialiseLayout(unsigned width)
     unit_font.Destroy();
 #ifdef HAVE_TEXT_CACHE
   TextCache::Flush();
-#endif
 #endif
 }

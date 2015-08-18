@@ -30,8 +30,6 @@ En fonction du matériel sur lequel XCSoar est installé, toutes ces méthodes n
 
 Pour la version PC de XCSoar, cliquer sur un élément de l'interface utilisateur revient à le toucher sur un écran tactile.
 
-Altair n'ayant pas d'écran tactile, toutes les inter-actions se font à l'aide des boutons physiques, des switches ou boutons de commande des matériels connectés.
-
 \section{Menu Principal}
 
 Le menu principal est un ensemble de boutons affichés à l'écran. Ils s'utilisent par toucher (pression sur l'écran) ou par pression sur des touches physiques, suivant le matériel. Faire apparaitre/disparaitre le menu principal et naviguer dans les sous menus représente la base de l'utilisation de XCSoar.
@@ -190,25 +188,22 @@ Pan & \bmenut{Pan}{Off} & \ref{sec:panning}\bmenut{Zoom}{in} & \bmenut{Zoom}{out
 
 This sub-menu unfortunately overlays the full-screen map view of the pan mode.
  It's functions are quite evident, although the menu could be replaced by multi-touch
- technology or knobs (like on Altair). Besides the essential `exit pan mode'
+ technology or knobs. Besides the essential `exit pan mode'
  function the `What's here?' button offers brilliant access to the variety of
  information of the map.
 
 \section{Default menu buttons}
 
 When no menu is active, (so-called default mode), the horizontal row
-of buttons in Altair perform the following functions (from left to right):
+of buttons perform the following functions (from left to right):
 
 \begin{center}
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
- Altair: & F5 & F6 & F7 & F8 & F9 \\
 & \bmenut{Flight}{Setup} & \bmenut{Task}{Manager} & {} &
 \bmenus{Target} & \bmenut{Drop}{Mark} \\
 \end{tabular}	
 \end{center}
-
-Pressing ESC on Altair displays labels for these default menu buttons.
 
 For all other versions in the default mode, the cursor keys perform
 the following functions:
@@ -220,33 +215,6 @@ the following functions:
 \item[Enter] Clear status message or suppress FLARM gauge if open and no warning
 active
 \end{jspecs}
-
-For the Altair version in the default mode, the rotary knob performs
-the following functions:
-\begin{jspecs}
-\item[Outer knob counter-clockwise] Zoom in
-\item[Outer knob clockwise] Zoom out
-\item[Inner knob counter-clockwise] (No function assigned)
-\item[Outer knob clockwise] (No function assigned)
-\item[Knob button press] Clear status message or acknowledge airspace warning
-\end{jspecs}
-
-In dialogue forms, the rotary knob in Altair performs the role of the cursor and
-enter keys:
-\begin{jspecs}
-\item[Outer knob counter-clockwise] Up cursor
-\item[Outer knob clockwise] Down cursor
-\item[Inner knob counter-clockwise] Left cursor
-\item[Inner knob clockwise] Right cursor
-\item[Knob button press] Enter key
-\end{jspecs}
-
-For Altair, the buttons along the edge of the display can be used as
-alternate ways of navigating in dialogues.  The F4 key (directly above
-the rotary knob) can be used as an alternate ENTER key (instead of
-pressing the rotary knob) in dialogues.  The F6 and F7 keys (directly to
-the right of the rotary knob) can be used to select the next or
-previous page in multi-page dialogues.
 
 \subsection*{Dynamic menu labels}
 Certain menu items have dynamic labels to make it clearer what happens when the
@@ -314,7 +282,7 @@ map orientation and scale.
 
 \gesture{Right or Left} 
 To toggle through the various InfoBox pages, using the left/right cursor 
-keys (Altair), or by gestures (touch-screen).
+keys, or by gestures (touch-screen).
 
 
 \subsection*{Modifying InfoBox content}
@@ -355,7 +323,7 @@ Status messages appear over the map area to present text for a short period of
 time.  The message disappears after the time period has elapsed, and different
 types of message have different periods. Additionally, status messages can be
 made to disappear by acknowledging the message.  Acknowledgement is achieved by
-either pressing the enter key (rotary knob on Altair), touching the status
+either pressing the enter key, touching the status
 message (on touch-screen devices) or clicking the screen (mouse enabled devices).
 
 Additional user buttons may be assigned to a status message repeat function,
@@ -384,7 +352,7 @@ Some dialogues simply display information, and require no user input. Other
 dialogues contain data fields that can be modified or buttons that can be pressed.  
 
 A cursor appears over the active button or data field. Pressing the up/down
-arrow keys (or rotating the outer knob on Altair), the cursor will cycle
+arrow keys, the cursor will cycle
 through the next or previous items. For list items and scrollable text, the
 up/down arrow key moves the cursor up or down the list or text, and the
 left/right arrow keys move the cursor up or down by one page in long lists.
@@ -393,10 +361,9 @@ For PDAs and PC versions, list items can be selected by touching the item (or
 left-clicking with the mouse). Once a list item is selected, another touch
 (left click) is equivalent to pressing the enter key.
 
-Pressing the right/left arrow keys (or rotating the inner knob on Altair), the
-data field value under the cursor can be modified. Pressing the enter key (or
-pressing the rotary knob on Altair) activates the button or makes a selection
-from a list.
+Pressing the right/left arrow keys, the data field value under the
+cursor can be modified. Pressing the enter key activates the button or
+makes a selection from a list.
 
 Dialogues are typically started from the button menu.  
 
@@ -405,8 +372,7 @@ in a consistent fashion. Press the \button{$<$} or \button{$>$} buttons to
 select the next or previous page of the dialogue and the \button{Close} button to
 make the dialogue disappear.
 
-The escape key on a PC or the PWR/ESC button on Altair, can also be used to
-close dialogues.
+The escape key on a PC can also be used to close dialogues.
 
 The user must close the dialogue to return to the map view. When a dialogue
 has been opened, the main button menu is disabled until the dialogue is closed.
@@ -451,12 +417,12 @@ Typically this is used for check-lists. It can be accessed via the menu.
 \bmenus{Info 1}\blink\bmenut{Check}{List}
 \end{quote}
 
-These check-lists may include: daily inspection, preflight, out-landing,
-\sketch{figures/checklist.png}
-pre-landing, radio procedures, and aircraft rigging and de-rigging
-instructions.  Since the check-lists may be long, the up/down keys (or rotary
-knob on Altair) may be used to scroll through the text. Clicking the
-\button{$<$} and \button{$>$} buttons selects the previous/next checklist.
+These check-lists may include: daily inspection, preflight,
+out-landing, \sketch{figures/checklist.png} pre-landing, radio
+procedures, and aircraft rigging and de-rigging instructions.  Since
+the check-lists may be long, the up/down keys may be used to scroll
+through the text. Clicking the \button{$<$} and \button{$>$} buttons
+selects the previous/next checklist.
 
 
 \subsection*{Text entry} \label{sec:textentry}
@@ -508,23 +474,11 @@ Certain aspects of the look of items on the screen can be adjusted.
 The most noticeable of these is whether to display InfoBoxes and
 gauges in white on black (called inverse colours) or black on white.
 
-For Altair the control of the screen hardware 
-brightness can be controlled from the brightness dialogue.
-\sketch{figures/brightness.png}
-\begin{quote}
-\bmenug{Display 2}\blink\bmenug{Bright}
-\end{quote}
-
-Refer to the {\em Altair User's Manual} for details of the brightness
-dialogue.
-
 
 \section{Help system}
 
 A help system now provides descriptive text for properties in
-most dialogues.  When a property is selected, for Altair, press and hold the
-enter button for two seconds, then release.  A window will open with
-help text describing the property.
+most dialogues.
 
 \section{Interfacing with gestures}\label{sec:gestures}
 As of version 6.0, XCSoar supports so-called `gestures'.

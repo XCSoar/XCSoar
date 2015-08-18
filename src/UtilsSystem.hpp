@@ -27,10 +27,6 @@ Copyright_License {
 
 struct PixelSize;
 
-#ifdef _WIN32_WCE
-void MyCompactHeaps();
-#endif
-
 unsigned long FindFreeSpace(const TCHAR *path);
 
 void StartupLogFreeRamAndStorage();

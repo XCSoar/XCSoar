@@ -36,22 +36,18 @@ class BigThermalAssistantWindow;
 
 class BigThermalAssistantWidget
   : public ContainerWidget,
-#ifndef GNAV
     private ActionListener,
-#endif
     private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
 
   BigThermalAssistantWindow *view;
 
-#ifndef GNAV
   enum Action {
     CLOSE,
   };
 
   Button *close_button;
-#endif
 
 public:
   BigThermalAssistantWidget(LiveBlackboard &_blackboard,
@@ -71,10 +67,8 @@ private:
   void UpdateLayout();
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
 
-#ifndef GNAV
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;
-#endif
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,

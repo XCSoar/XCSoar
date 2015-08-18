@@ -27,14 +27,9 @@ Copyright_License {
 #include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/Battery.hpp"
 #include "OS/SystemLoad.hpp"
-#include "OS/MemInfo.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
-
-#ifdef HAVE_MEM_INFO
-#include "Formatter/ByteSizeFormatter.hpp"
-#endif
 
 #include <tchar.h>
 
@@ -148,12 +143,8 @@ UpdateInfoBoxCPULoad(InfoBoxData &data)
 void
 UpdateInfoBoxFreeRAM(InfoBoxData &data)
 {
-#ifdef HAVE_MEM_INFO
-  FormatByteSize(data.value.buffer(), data.value.capacity(),
-                 SystemFreeRAM(), true);
-#else
+  // used to be implemented on WinCE
   data.SetInvalid();
-#endif
 }
 
 void

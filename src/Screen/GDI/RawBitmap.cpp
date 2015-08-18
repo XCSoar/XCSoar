@@ -55,41 +55,12 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   bi.bmiHeader.biClrUsed = 0;
   bi.bmiHeader.biClrImportant = 0;
 
-#ifdef _WIN32_WCE
-  /* configure 16 bit 5-5-5 on Windows CE */
-  bi.bmiHeader.biBitCount = 16;
-  bi.bmiHeader.biCompression = BI_BITFIELDS;
-  bi.bmiHeader.biClrUsed = 3;
-  LPVOID p = &bi.bmiColors[0];
-  DWORD *q = (DWORD *)p;
-  *q++ = 0x7c00; /* 5 bits red */
-  *q++ = 0x03e0; /* 5 bits green */
-  *q++ = 0x001f; /* 5 bits blue */
-#endif
-
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
-  /* StretchDIBits() is bugged on PPC2002, workaround follows */
-  VOID *pvBits;
-  HDC hDC = ::GetDC(nullptr);
-  bitmap = CreateDIBSection(hDC, &bi, DIB_RGB_COLORS, &pvBits, nullptr, 0);
-  ::ReleaseDC(nullptr, hDC);
-  buffer = (BGRColor *)pvBits;
-#else
   buffer = new BGRColor[corrected_width * height];
-#endif
 }
 
 RawBitmap::~RawBitmap()
 {
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
-#ifndef NDEBUG
-  bool success =
-#endif
-    ::DeleteObject(bitmap);
-  assert(success);
-#else
   delete[] buffer;
-#endif
 }
 
 void
@@ -97,19 +68,8 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
                      unsigned dest_width, unsigned dest_height) const
 {
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
-  /* StretchDIBits() is bugged on PPC2002, workaround follows */
-  HDC source_dc = ::CreateCompatibleDC(dest_canvas);
-  ::SelectObject(source_dc, bitmap);
-  ::StretchBlt(dest_canvas, 0, 0,
-               dest_width, dest_height,
-               source_dc, 0, 0, width, height,
-               SRCCOPY);
-  ::DeleteDC(source_dc);
-#else
   ::StretchDIBits(dest_canvas, 0, 0,
                   dest_width, dest_height,
                   0, GetHeight() - height, width, height,
                   buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
-#endif
 }

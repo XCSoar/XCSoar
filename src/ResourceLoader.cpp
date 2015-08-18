@@ -101,15 +101,3 @@ ResourceLoader::LoadBitmap2(ResourceId id)
   return ::LoadBitmap(ResourceLoaderInstance, MAKEINTRESOURCE((unsigned)id));
 }
 #endif
-
-#ifdef HAVE_AYGSHELL_DLL
-#include "OS/AYGShellDLL.hpp"
-
-HBITMAP
-ResourceLoader::SHLoadImageResource(ResourceId id)
-{
-  const AYGShellDLL ayg_shell_dll;
-  return ayg_shell_dll.SHLoadImageResource(ResourceLoaderInstance,
-                                           (unsigned)id);
-}
-#endif

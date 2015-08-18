@@ -142,9 +142,6 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-#ifdef GNAV
-  virtual bool KeyPress(unsigned key_code) override;
-#endif
 };
 
 class AirspaceListButtons final : public RowFormWidget {
@@ -376,31 +373,6 @@ AirspaceFilterWidget::Update()
   direction_df.replaceEnumText(0, GetHeadingString(buffer));
   direction_control.RefreshDisplay();
 }
-
-#ifdef GNAV
-
-bool
-AirspaceFilterWidget::KeyPress(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_APP1:
-    LoadValueEnum(TYPE, WILDCARD);
-    return true;
-
-  case KEY_APP2:
-    LoadValueEnum(TYPE, RESTRICT);
-    return true;
-
-  case KEY_APP3:
-    LoadValueEnum(TYPE, PROHIBITED);
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-#endif /* GNAV */
 
 static void
 FillDistanceEnum(DataFieldEnum &df)

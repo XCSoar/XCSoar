@@ -27,14 +27,6 @@ Copyright_License {
 #include "StandardFonts.hpp"
 #include "Asset.hpp"
 
-FontDescription::FontDescription(const TCHAR *face,
-                                 unsigned height,
-                                 bool bold, bool italic,
-                                 bool monospace)
-{
-  Init(face, height, bold, italic, monospace);
-}
-
 FontDescription::FontDescription(unsigned height,
                                  bool bold, bool italic,
                                  bool monospace)
@@ -60,11 +52,7 @@ FontDescription::Init(const TCHAR *face,
   logfont.lfCharSet = ANSI_CHARSET;
   logfont.lfOutPrecision = OUT_DEFAULT_PRECIS;
   logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-
-  if (IsAltair())
-    logfont.lfQuality = NONANTIALIASED_QUALITY;
-  else
-    logfont.lfQuality = ANTIALIASED_QUALITY;
+  logfont.lfQuality = ANTIALIASED_QUALITY;
 
   logfont.lfPitchAndFamily = (monospace ? FIXED_PITCH : VARIABLE_PITCH)
     | FF_DONTCARE;

@@ -104,12 +104,10 @@ public:
         *d = *s;
         if (option == d) {
           // first quoted blank or non blank character of new option
-#ifndef _WIN32_WCE
           // program name is not included in command line on CE
           if (name == nullptr)
             name = option;
           else
-#endif
             args.push_back(option);
         }
         d++;

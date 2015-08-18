@@ -40,7 +40,7 @@ static inline bool
 IsDirSeparator(TCHAR ch)
 {
 #ifdef WIN32
-#if defined(__WINE__) || defined(_WIN32_WCE)
+#if defined(__WINE__)
   return ch == _T('/') || ch == _T('\\');
 #else
   return ch == _T('\\');

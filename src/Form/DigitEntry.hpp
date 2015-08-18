@@ -40,8 +40,7 @@ struct DialogLook;
 
 /**
  * A control that allows entering numbers or other data types digit by
- * digit.  It aims to be usable for both touch screens and knob-only
- * (e.g. Altair).
+ * digit.  It aims to be usable for both touch screens and knob-only.
  */
 class DigitEntry : public PaintWindow {
   static constexpr unsigned MAX_LENGTH = 16;

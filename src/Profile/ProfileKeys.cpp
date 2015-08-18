@@ -105,7 +105,6 @@ const char SoundModes[] = "SoundModes";
 const char NettoSpeed[] = "NettoSpeed";
 const char AccelerometerZero[] = "AccelerometerZero";
 
-const char AutoBlank[] = "AutoBlank";
 const char AverEffTime[] = "AverEffTime";
 const char VarioGauge[] = "VarioGauge";
 
@@ -128,8 +127,6 @@ const char AppDialogStyle[] = "AppDialogStyle";
 const char AppInfoBoxColors[] = "AppInfoBoxColors";
 const char TeamcodeRefWaypoint[] = "TeamcodeRefWaypoint";
 const char AppInfoBoxBorder[] = "AppInfoBoxBorder";
-
-const char AppInfoBoxModel[] = "AppInfoBoxModel"; // VENTA-ADDON MODEL CONFIG
 
 const char AppAveNeedle[] = "AppAveNeedle";
 

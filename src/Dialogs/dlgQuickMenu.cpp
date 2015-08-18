@@ -249,29 +249,6 @@ QuickMenu::KeyPress(unsigned key_code)
     SetFocus();
     break;
 
-#ifdef GNAV
-  // Altair RemoteStick
-  case KEY_F11:
-    grid_view.MoveFocus(GridView::Direction::UP);
-    break;
-
-  case KEY_F12:
-    grid_view.MoveFocus(GridView::Direction::DOWN);
-    break;
-
-  case KEY_F13:
-    grid_view.MoveFocus(GridView::Direction::RIGHT);
-    break;
-
-  case KEY_F14:
-    grid_view.MoveFocus(GridView::Direction::LEFT);
-    break;
-
-  case KEY_F15:
-    dialog.SetModalResult(mrCancel);
-  break;
-#endif
-
   default:
     return false;
   }

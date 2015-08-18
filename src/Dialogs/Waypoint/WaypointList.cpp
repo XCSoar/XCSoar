@@ -225,9 +225,6 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-#ifdef GNAV
-  bool KeyPress(unsigned key_code) override;
-#endif
 };
 
 class WaypointListButtons : public RowFormWidget {
@@ -516,31 +513,6 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
     }
   }
 }
-
-#ifdef GNAV
-
-bool
-WaypointFilterWidget::KeyPress(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_APP1:
-    LoadValueEnum(TYPE, TypeFilter::ALL);
-    return true;
-
-  case KEY_APP2:
-    LoadValueEnum(TYPE, TypeFilter::LANDABLE);
-    return true;
-
-  case KEY_APP3:
-    LoadValueEnum(TYPE, TypeFilter::TURNPOINT);
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-#endif /* GNAV */
 
 const Waypoint*
 ShowWaypointListDialog(const GeoPoint &_location,

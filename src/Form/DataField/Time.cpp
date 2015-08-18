@@ -26,7 +26,6 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Util/StringFormat.hpp"
 #include "Util/NumberParser.hpp"
-#include "Asset.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -62,9 +61,6 @@ DataFieldTime::Dec()
 int
 DataFieldTime::SpeedUp(bool key_up)
 {
-  if (IsAltair())
-    return 1;
-
   if (key_up != data_field_key_up) {
     speedup = 0;
     data_field_key_up = key_up;

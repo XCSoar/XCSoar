@@ -42,19 +42,10 @@ public:
                            bool _bold=false, bool _italic=false,
                            bool _monospace=false);
 
-  /**
-   * @param _height the cell height of the font
-   */
-  FontDescription(const TCHAR *face,
-                  unsigned _height,
-                  bool _bold=false, bool _italic=false,
-                  bool _monospace=false);
-
   explicit operator const LOGFONT &() const {
     return logfont;
   }
 
-#ifndef GNAV
   unsigned GetHeight() const {
     return -logfont.lfHeight;
   }
@@ -68,7 +59,6 @@ public:
     result.SetHeight(_height);
     return result;
   }
-#endif
 
   void SetBold(bool bold=true) {
     logfont.lfWeight = bold ? FW_BOLD : FW_MEDIUM;

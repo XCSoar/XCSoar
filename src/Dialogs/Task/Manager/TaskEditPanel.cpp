@@ -260,7 +260,6 @@ public:
 
   void ReClick() override;
   void Show(const PixelRect &rc) override;
-  bool KeyPress(unsigned key_code) override;
 
 protected:
   void RefreshView();
@@ -568,36 +567,6 @@ TaskEditPanel::MoveDown()
 
   ordered_task->UpdateGeometry();
   RefreshView();
-}
-
-bool
-TaskEditPanel::KeyPress(unsigned key_code)
-{
-  switch (key_code){
-  case KEY_ESCAPE:
-    if (IsAltair() && GetList().HasFocus()){
-       dialog.FocusFirstControl();
-      return true;
-    }
-    return false;
-
-  case '6': /* F5 */
-    if (IsAltair()) {
-      MoveUp();
-      return true;
-    } else
-      return false;
-
-  case '7': /* F6 */
-    if (IsAltair()) {
-      MoveDown();
-      return true;
-    } else
-      return false;
-
-  default:
-    return false;
-  }
 }
 
 void

@@ -162,11 +162,6 @@ bool
 Button::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  case VK_F4:
-    // using F16 also as Enter-Key. This allows to use the RemoteStick of Altair to do a "click" on the focused button
-  case VK_F16:
-#endif
   case KEY_RETURN:
   case KEY_SPACE:
     Click();

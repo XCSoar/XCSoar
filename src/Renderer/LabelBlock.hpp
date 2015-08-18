@@ -32,11 +32,7 @@ Copyright_License {
  * Simple code to prevent text writing over map city names.
  */
 class LabelBlock {
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x400
-  /* PPC2000 (ancient hardware, expect small screens) */
-  static constexpr unsigned SCREEN_HEIGHT = 1024;
-  static constexpr unsigned BUCKET_SIZE = 32;
-#elif defined(_WIN32_WCE) || defined(HAVE_GLES)
+#if defined(HAVE_GLES)
   /* embedded (Android or Windows CE) */
   static constexpr unsigned SCREEN_HEIGHT = 2048;
   static constexpr unsigned BUCKET_SIZE = 64;

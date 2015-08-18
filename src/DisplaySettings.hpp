@@ -32,8 +32,6 @@ Copyright_License {
  * Display settings.
  */
 struct DisplaySettings {
-  bool enable_auto_blank;
-
   DisplayOrientation orientation;
 
   void SetDefaults();

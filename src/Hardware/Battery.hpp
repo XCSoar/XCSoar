@@ -28,7 +28,7 @@ Copyright_License {
 #include <SDL_version.h>
 #endif
 
-#if defined(ANDROID) || (defined(_WIN32_WCE) && !defined(GNAV)) || defined(KOBO) || (defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
+#if defined(ANDROID) || defined(KOBO) || (defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
 #define HAVE_BATTERY
 
 #include <stdbool.h>
@@ -70,12 +70,12 @@ UpdateBatteryInfo()
   /* nothing to do, this is updated by Android callbacks */
 }
 
-#else /* _WIN32_WCE or KOBO*/
+#else
 
 void
 UpdateBatteryInfo();
 
-#endif /* _WIN32_WCE or KOBO */
+#endif
 
 #endif /* !HAVE_BATTERY */
 

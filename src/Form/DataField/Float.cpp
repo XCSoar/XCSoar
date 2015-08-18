@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Float.hpp"
 #include "ComboList.hpp"
-#include "Asset.hpp"
 #include "Util/NumberParser.hpp"
 
 #include <stdlib.h>
@@ -108,9 +107,6 @@ DataFieldFloat::Dec()
 fixed
 DataFieldFloat::SpeedUp(bool keyup)
 {
-  if (IsAltair())
-    return fixed(1);
-
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;

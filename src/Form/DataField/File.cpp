@@ -29,10 +29,6 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
-#include "OS/FlashCardEnumerator.hpp"
-#endif
-
 #include <algorithm>
 
 #include <windef.h> /* for MAX_PATH */

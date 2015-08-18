@@ -29,12 +29,7 @@ Copyright_License {
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
 #include "Util/ConvertString.hpp"
-
-#ifdef _WIN32_WCE
-#include "Config/Registry.hpp"
-#else
 #include "TCPClientPort.hpp"
-#endif
 
 #ifdef ANDROID
 #include "AndroidBluetoothPort.hpp"
@@ -66,17 +61,7 @@ Copyright_License {
 static bool
 DetectGPS(TCHAR *path, size_t path_max_size)
 {
-#ifdef _WIN32_WCE
-  static const TCHAR *const gps_idm_key =
-    _T("System\\CurrentControlSet\\GPS Intermediate Driver\\Multiplexer");
-  static const TCHAR *const gps_idm_value = _T("DriverInterface");
-
-  RegistryKey key(HKEY_LOCAL_MACHINE, gps_idm_key, true);
-  return !key.error() &&
-    key.GetValue(gps_idm_value, path, path_max_size);
-#else
   return false;
-#endif
 }
 
 static Port *
@@ -166,9 +151,6 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
     break;
 
   case DeviceConfig::PortType::TCP_CLIENT: {
-#ifdef _WIN32_WCE
-    return nullptr;
-#else
     const WideToUTF8Converter ip_address(config.ip_address);
     if (!ip_address.IsValid())
       return nullptr;
@@ -180,7 +162,6 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
     }
 
     return port;
-#endif
   }
 
   case DeviceConfig::PortType::TCP_LISTENER: {

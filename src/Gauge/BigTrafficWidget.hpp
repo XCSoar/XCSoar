@@ -33,11 +33,8 @@ class Button;
 class FlarmTrafficControl;
 
 class TrafficWidget : public ContainerWidget,
-#ifndef GNAV
                       private ActionListener,
-#endif
                       private NullBlackboardListener {
-#ifndef GNAV
   enum Action {
     CLOSE,
     ZOOM_IN,
@@ -51,7 +48,6 @@ class TrafficWidget : public ContainerWidget,
   Button *previous_item_button, *next_item_button;
   Button *details_button;
   Button *close_button;
-#endif
 
   FlarmTrafficControl *view;
 
@@ -88,10 +84,8 @@ public:
   virtual bool SetFocus() override;
 
 private:
-#ifndef GNAV
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;
-#endif
 
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;

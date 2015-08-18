@@ -238,16 +238,16 @@ inline void
 KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 {
   dialog.AddButton(_T("A+"), window, DOWN);
-  dialog.AddButtonKey(IsAltair() ? KEY_LEFT : KEY_UP);
+  dialog.AddButtonKey(KEY_UP);
 
   dialog.AddButton(_T("A-"), window, UP);
-  dialog.AddButtonKey(IsAltair() ? KEY_RIGHT : KEY_DOWN);
+  dialog.AddButtonKey(KEY_DOWN);
 
   dialog.AddSymbolButton(_T("<"), window, LEFT);
-  dialog.AddButtonKey(IsAltair() ? KEY_UP : KEY_LEFT);
+  dialog.AddButtonKey(KEY_LEFT);
 
   dialog.AddSymbolButton(_T(">"), window, RIGHT);
-  dialog.AddButtonKey(IsAltair() ? KEY_DOWN : KEY_RIGHT);
+  dialog.AddButtonKey(KEY_RIGHT);
 }
 
 void

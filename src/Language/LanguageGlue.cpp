@@ -35,10 +35,6 @@ Copyright_License {
 #include <locale.h>
 #endif
 
-#ifdef _WIN32_WCE
-#include "OS/DynamicLibrary.hpp"
-#endif
-
 #ifdef ANDROID
 #include "Java/Global.hxx"
 #include "Java/Class.hxx"
@@ -293,25 +289,6 @@ DetectLanguage()
   return FindLanguage(language_buffer);
 
 #elif defined(WIN32)
-
-#if defined(_WIN32_WCE)
-  /* the GetUserDefaultUILanguage() prototype is missing on
-     mingw32ce, we have to look it up dynamically */
-  DynamicLibrary coreloc_dll(_T("coredll"));
-  if (!coreloc_dll.IsDefined()) {
-    LogFormat("Language: coredll.dll not found");
-    return NULL;
-  }
-
-  typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
-  GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
-    (GetUserDefaultUILanguage_t)
-    coreloc_dll.Lookup(_T("GetUserDefaultUILanguage"));
-  if (GetUserDefaultUILanguage == NULL) {
-    LogFormat("Language: GetUserDefaultUILanguage() not available");
-    return NULL;
-  }
-#endif
 
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();

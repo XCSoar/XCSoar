@@ -73,7 +73,7 @@ ComputerSettings::SetDefaults()
   wave.SetDefaults();
 
   average_eff_time = ae30seconds;
-  set_system_time_from_gps = IsAltair() && IsEmbedded();
+  set_system_time_from_gps = false;
   utc_offset = RoughTimeDelta::FromSeconds(GetSystemUTCOffset());
   forecast_temperature = CelsiusToKelvin(fixed(25));
   pressure = AtmosphericPressure::Standard();

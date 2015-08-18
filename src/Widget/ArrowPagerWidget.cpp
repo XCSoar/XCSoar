@@ -217,16 +217,10 @@ ArrowPagerWidget::KeyPress(unsigned key_code)
 
   switch (key_code) {
   case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
     Previous(true);
     return true;
 
   case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
     Next(true);
     return true;
 

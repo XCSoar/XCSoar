@@ -84,7 +84,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
-#include "Hardware/AltairControl.hpp"
 #include "Compiler.h"
 #include "Weather/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -484,9 +483,7 @@ InputEvents::eventNull(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventBeep(gcc_unused const TCHAR *misc)
 {
-  #if defined(GNAV)
-  altair_control.ShortBeep();
-#elif defined(WIN32)
+#ifdef WIN32
   MessageBeep(MB_ICONEXCLAMATION);
 #else
   PlayResource(_T("IDR_WAV_CLEAR"));
@@ -566,7 +563,7 @@ InputEvents::eventRun(const TCHAR *misc)
 void
 InputEvents::eventBrightness(gcc_unused const TCHAR *misc)
 {
-  dlgBrightnessShowModal();
+  // not implemented (was only implemented on Altair)
 }
 
 void

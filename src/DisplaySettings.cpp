@@ -26,6 +26,5 @@ Copyright_License {
 void
 DisplaySettings::SetDefaults()
 {
-  enable_auto_blank = false;
   orientation = DisplayOrientation::DEFAULT;
 }

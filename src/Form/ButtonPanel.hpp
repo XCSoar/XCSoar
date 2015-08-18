@@ -93,16 +93,6 @@ public:
   void AddKey(unsigned key_code);
 
   /**
-   * Wrapper for AddKey() which is Altair specific; it a no-op on all
-   * other platforms.
-   */
-  void AddAltairKey(gcc_unused unsigned key_code) {
-#ifdef GNAV
-    AddKey(key_code);
-#endif
-  }
-
-  /**
    * Call this after all buttons have been added or after the parent
    * window has been resized.
    *

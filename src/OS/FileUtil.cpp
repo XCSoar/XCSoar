@@ -307,7 +307,7 @@ File::Exists(const TCHAR* path)
 #endif
 }
 
-#if defined(WIN32) && defined(UNICODE) && !defined(_WIN32_WCE)
+#if defined(WIN32) && defined(UNICODE)
 
 bool
 File::Exists(const char *path)

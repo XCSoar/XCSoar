@@ -65,26 +65,12 @@ enum {
   KEY_TAB = VK_TAB,
   KEY_BACK = VK_BACK,
   KEY_MENU = VK_MENU,
-#ifdef _WIN32_WCE
-  KEY_APP1 = VK_APP1,
-  KEY_APP2 = VK_APP2,
-  KEY_APP3 = VK_APP3,
-  KEY_APP4 = VK_APP4,
-  KEY_APP5 = VK_APP5,
-  KEY_APP6 = VK_APP6,
-#else
   KEY_APP1 = '1',
   KEY_APP2 = '2',
   KEY_APP3 = '3',
   KEY_APP4 = '4',
   KEY_APP5 = '5',
   KEY_APP6 = '6',
-#endif
 };
-
-#ifndef _WIN32_WCE
-enum {
-};
-#endif
 
 #endif

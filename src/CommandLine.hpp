@@ -27,9 +27,7 @@ Copyright_License {
 class Args;
 
 namespace CommandLine {
-#ifndef _WIN32_WCE
   extern unsigned width, height;
-#endif
 
 #ifdef KOBO
   static constexpr bool full_screen = false;

@@ -157,12 +157,7 @@ gcc_pure gcc_nonnull_all
 static inline int
 StringCollate(const wchar_t *a, const wchar_t *b)
 {
-#ifdef _WIN32_WCE
-  /* WinCE doesn't have wcscoll() */
-  return wcscmp(a, b);
-#else
   return wcscoll(a, b);
-#endif
 }
 
 gcc_malloc gcc_nonnull_all

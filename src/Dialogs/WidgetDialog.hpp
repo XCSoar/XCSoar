@@ -119,10 +119,6 @@ public:
     return buttons.AddKey(key_code);
   }
 
-  void AddAltairButtonKey(unsigned key_code) {
-    return buttons.AddAltairKey(key_code);
-  }
-
   /**
    * @see ButtonPanel::EnableCursorSelection()
    */

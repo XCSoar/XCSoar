@@ -25,7 +25,6 @@ Copyright_License {
 #include "CommandLine.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "OS/MemInfo.hpp"
 #include "Screen/Point.hpp"
 
 #ifdef ANDROID
@@ -49,29 +48,6 @@ Copyright_License {
 #ifdef USE_VIDEOCORE
 #include <bcm_host.h>
 #endif
-
-#ifdef _WIN32_WCE
-// This is necessary to be called periodically to get rid of
-// memory defragmentation, since on pocket pc platforms there is no
-// automatic defragmentation.
-void MyCompactHeaps() {
-#if defined(GNAV) && !defined(__GNUC__)
-  HeapCompact(GetProcessHeap(), 0);
-#else
-  typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
-  static CompactAllHeapsFn CompactAllHeaps = nullptr;
-  static bool init = false;
-  if (!init) {
-    // get the pointer to the function
-    CompactAllHeaps = (CompactAllHeapsFn)GetProcAddress(
-        LoadLibrary(_T("coredll.dll")), _T("CompactAllHeaps"));
-    init = true;
-  }
-  if (CompactAllHeaps)
-    CompactAllHeaps();
-#endif
-}
-#endif /* _WIN32_WCE */
 
 /**
  * Calculates the free disk space for the given path
@@ -105,10 +81,6 @@ unsigned long FindFreeSpace(const TCHAR *path) {
 void
 StartupLogFreeRamAndStorage()
 {
-#ifdef HAVE_MEM_INFO
-  unsigned long freeram = SystemFreeRAM() / 1024;
-  LogFormat("Free ram %lu KB", freeram);
-#endif
   unsigned long freestorage = FindFreeSpace(GetPrimaryDataPath());
   LogFormat("Free storage %lu KB", freestorage);
 }
@@ -120,15 +92,12 @@ StartupLogFreeRamAndStorage()
 PixelSize
 SystemWindowSize()
 {
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#if defined(WIN32)
   unsigned width = CommandLine::width + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
   unsigned height = CommandLine::height + 2 * GetSystemMetrics(SM_CYFIXEDFRAME)
     + GetSystemMetrics(SM_CYCAPTION);
 
   return { width, height };
-#else
-  #ifdef WIN32
-  return { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 #elif defined(ANDROID)
   return native_view->GetSize();
 #elif defined(USE_VIDEOCORE)
@@ -139,7 +108,5 @@ SystemWindowSize()
 #else
   /// @todo implement this properly for SDL/UNIX
   return { CommandLine::width, CommandLine::height };
-  #endif /* !WIN32 */
-
 #endif
 }
