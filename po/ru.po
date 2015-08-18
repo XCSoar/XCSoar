@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 20:04+0200\n"
+"POT-Creation-Date: 2015-08-18 07:31+0200\n"
 "PO-Revision-Date: 2015-02-17 04:31+0000\n"
 "Last-Translator: Aleksander Kharchuk <Aleks22006@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -8060,7 +8060,7 @@ msgstr "Единицы измерения давления"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 #, fuzzy
-msgid "Units used mass."
+msgid "Units used for mass."
 msgstr "Единицы измерения \"задачных\" соростей"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240

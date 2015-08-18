@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 20:04+0200\n"
+"POT-Creation-Date: 2015-08-18 07:31+0200\n"
 "PO-Revision-Date: 2015-07-06 09:33+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -8021,7 +8021,7 @@ msgstr "圧力単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 #, fuzzy
-msgid "Units used mass."
+msgid "Units used for mass."
 msgstr "タスク速度の単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240

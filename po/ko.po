@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 20:04+0200\n"
+"POT-Creation-Date: 2015-08-18 07:31+0200\n"
 "PO-Revision-Date: 2015-06-29 06:58+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -7914,7 +7914,7 @@ msgstr "기압에 사용되는 단위입니다."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 #, fuzzy
-msgid "Units used mass."
+msgid "Units used for mass."
 msgstr "타스크 속도에 쓰이는 단위입니다."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240

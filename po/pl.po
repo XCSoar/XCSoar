@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 20:04+0200\n"
+"POT-Creation-Date: 2015-08-18 07:31+0200\n"
 "PO-Revision-Date: 2014-04-30 08:58+0000\n"
 "Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -8161,7 +8161,7 @@ msgstr "Jednostki dla ciśnienia."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 #, fuzzy
-msgid "Units used mass."
+msgid "Units used for mass."
 msgstr "Jednostki używane dla prędkości zadań"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
