@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/GDI/AlphaBlend.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Event/Globals.hpp"
@@ -35,10 +34,6 @@ Copyright_License {
 ScreenGlobalInit::ScreenGlobalInit()
 {
   InitCommonControls();
-
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-  AlphaBlendInit();
-#endif
 
   event_queue = new EventQueue();
 
@@ -53,10 +48,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 {
   delete event_queue;
   event_queue = nullptr;
-
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-  AlphaBlendDeinit();
-#endif
 
   ScreenDeinitialized();
 }

@@ -28,10 +28,4 @@ Copyright_License {
 
 #define HAVE_ALPHA_BLEND
 
-static constexpr inline bool
-AlphaBlendAvailable()
-{
-  return true;
-}
-
 #endif

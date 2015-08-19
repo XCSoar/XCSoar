@@ -25,10 +25,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 #include "Projection/WindowProjection.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
+#include "Screen/Features.hpp"
 
 bool
 TransparentRendererCache::Check(const WindowProjection &projection) const
@@ -104,7 +101,6 @@ TransparentRendererCache::AlphaBlendTo(Canvas &canvas,
                                        const WindowProjection &projection,
                                        uint8_t alpha) const
 {
-  assert(AlphaBlendAvailable());
   assert(canvas.IsDefined());
   assert(buffer.IsDefined());
   assert(projection.IsValid());

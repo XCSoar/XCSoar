@@ -35,7 +35,6 @@ Copyright_License {
 /* AlphaBlend() is implemented since Windows 2000 */
 #if _WIN32_WINDOWS >= 0x500
 #define HAVE_ALPHA_BLEND
-#define HAVE_BUILTIN_ALPHA_BLEND
 #endif
 
 #endif

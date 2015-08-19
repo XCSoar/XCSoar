@@ -29,10 +29,6 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
-
 StencilMapCanvas::StencilMapCanvas(Canvas &_buffer, Canvas &_stencil,
                                    const WindowProjection &_proj,
                                    const AirspaceRendererSettings &_settings)

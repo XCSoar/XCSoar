@@ -27,10 +27,6 @@ Copyright_License {
 #include "Resources.hpp"
 #include "Util/Macros.hpp"
 
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
-
 const RGB8Color AirspaceLook::preset_colors[] = {
   RGB8_RED,
   RGB8_GREEN,
@@ -55,11 +51,8 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 {
   fill_color = Color(settings.fill_color);
 
-#ifdef HAVE_ALPHA_BLEND
-  if (AlphaBlendAvailable())
-#endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-    solid_brush.Create(fill_color);
+  solid_brush.Create(fill_color);
 #endif
 
   if (settings.border_width != 0)

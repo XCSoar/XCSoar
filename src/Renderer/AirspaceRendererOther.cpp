@@ -27,6 +27,7 @@ Copyright_License {
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Features.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -36,10 +37,6 @@ Copyright_License {
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
 #include "Asset.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
 
 /**
  * Class to render airspaces onto map in two passes,
@@ -120,7 +117,7 @@ private:
 #else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
-    if (settings.transparency && AlphaBlendAvailable()) {
+    if (settings.transparency) {
       buffer.Select(look.classes[airspace_class].solid_brush);
     } else {
 #endif
@@ -256,7 +253,7 @@ AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
 
 #ifdef HAVE_ALPHA_BLEND
 #ifdef HAVE_HATCHED_BRUSH
-  if (settings.transparency && AlphaBlendAvailable())
+  if (settings.transparency)
 #endif
     fill_cache.AlphaBlendTo(canvas, projection, 60);
 #ifdef HAVE_HATCHED_BRUSH

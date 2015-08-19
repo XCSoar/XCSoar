@@ -349,17 +349,15 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
                    unsigned src_width, unsigned src_height,
                    uint8_t alpha)
 {
-  assert(AlphaBlendAvailable());
-
   BLENDFUNCTION fn;
   fn.BlendOp = AC_SRC_OVER;
   fn.BlendFlags = 0;
   fn.SourceConstantAlpha = alpha;
   fn.AlphaFormat = 0;
 
-  ::AlphaBlendInvoke(dc, dest_x, dest_y, dest_width, dest_height,
-                     src, src_x, src_y, src_width, src_height,
-                     fn);
+  ::AlphaBlend(dc, dest_x, dest_y, dest_width, dest_height,
+               src, src_x, src_y, src_width, src_height,
+               fn);
 }
 
 #endif

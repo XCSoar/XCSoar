@@ -33,10 +33,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
-
 #include <assert.h>
 
 AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceClass _type)
@@ -83,7 +79,7 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent, const Pixel
 #ifdef HAVE_HATCHED_BRUSH
 #ifdef HAVE_ALPHA_BLEND
   bool transparency = CommonInterface::GetMapSettings().airspace.transparency;
-  if (!transparency || !AlphaBlendAvailable())
+  if (!transparency)
 #endif
     AddButton(_("Change Fill Brush"), *this, FillBrush);
 #ifdef HAVE_ALPHA_BLEND

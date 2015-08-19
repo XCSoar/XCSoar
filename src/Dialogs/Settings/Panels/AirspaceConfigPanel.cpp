@@ -36,10 +36,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
+#include "Screen/Features.hpp"
 
 enum ControlIndex {
   AirspaceDisplay,
@@ -240,11 +237,9 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(AirspaceFillMode);
 
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  if (AlphaBlendAvailable()) {
-    AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
-               renderer.transparency);
-    SetExpertRow(AirspaceTransparency);
-  }
+  AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
+             renderer.transparency);
+  SetExpertRow(AirspaceTransparency);
 #endif
 
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
@@ -295,9 +290,8 @@ AirspaceConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(AirspaceFillMode, ProfileKeys::AirspaceFillMode, renderer.fill_mode);
 
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  if (AlphaBlendAvailable())
-    changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
-                         renderer.transparency);
+  changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
+                       renderer.transparency);
 #endif
 
   _changed |= changed;
