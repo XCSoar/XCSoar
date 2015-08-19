@@ -28,7 +28,7 @@ Copyright_License {
 #include "OpenGL/BufferCanvas.hpp"
 #elif defined(USE_MEMORY_CANVAS)
 #include "Screen/VirtualCanvas.hpp"
-#define BufferCanvas VirtualCanvas
+using BufferCanvas = VirtualCanvas;
 #else /* GDI */
 #include "GDI/BufferCanvas.hpp"
 #endif

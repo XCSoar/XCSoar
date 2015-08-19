@@ -28,10 +28,9 @@ Copyright_License {
 
 #include "BufferWindow.hpp"
 
-class DoubleBufferWindow : public BufferWindow {
-  /* there's no DrawThread on OpenGL, so this is just a normal
-     BufferWindow */
-};
+/* there's no DrawThread on OpenGL, so this is just a normal
+   BufferWindow */
+using DoubleBufferWindow = BufferWindow;
 
 #else
 
