@@ -297,22 +297,9 @@ jas_stream_t *jas_stream_fopen(const char *filename, const char *mode)
 	return stream;
 }
 
-#if defined(WIN32) || defined(WIN32)
-/* For these platforms, the default jasper approach using tmpnam() and
- * the alternative approach using mkstemp() fail anyway. */
-#define JAS_STREAM_TMPFILE_DISABLED
-#elif defined(__APPLE__) || defined(__linux__)
-/* These plattforms suppport temporary files in "/tmp/" and the
- * the mkstemp() API, JAS_STREAM_USE_MKSTEMP can be used. */
-#define JAS_STREAM_USE_MKSTEMP
-#endif
-
 jas_stream_t *jas_stream_tmpfile()
 {
-#ifdef JAS_STREAM_TMPFILE_DISABLED
-  return 0;
-#else
-  jas_stream_t *stream;
+	jas_stream_t *stream;
 	jas_stream_fileobj_t *obj;
 
 	if (!(stream = jas_stream_create())) {
@@ -333,17 +320,14 @@ jas_stream_t *jas_stream_tmpfile()
 	obj->pathname[0] = '\0';
 	stream->obj_ = obj;
 
-#ifdef JAS_STREAM_USE_MKSTEMP
-	/* Choose a file name and open it. */
-	strcpy(obj->pathname, "/tmp/jasperXXXXXX");
-	if (mkstemp(obj->pathname) < 0) {
-#else
 	/* Choose a file name. */
+#ifndef WIN32
 	tmpnam(obj->pathname);
+#endif
+
 	/* Open the underlying file. */
 	if ((obj->fd = open(obj->pathname, O_CREAT | O_EXCL | O_RDWR | O_TRUNC | O_BINARY,
 	  JAS_STREAM_PERMS)) < 0) {
-#endif
 		jas_stream_destroy(stream);
 		return 0;
 	}
@@ -365,7 +349,6 @@ jas_stream_t *jas_stream_tmpfile()
 	stream->ops_ = &jas_stream_fileops;
 
 	return stream;
-#endif
 }
 
 jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
