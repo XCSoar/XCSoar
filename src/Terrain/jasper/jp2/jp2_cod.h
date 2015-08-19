@@ -280,7 +280,9 @@ typedef struct jp2_boxops_s {
 	void (*init)(jp2_box_t *box);
 	void (*destroy)(jp2_box_t *box);
 	int (*getdata)(jp2_box_t *box, jas_stream_t *in);
+#ifdef JASPER_DISABLED
 	int (*putdata)(jp2_box_t *box, jas_stream_t *out);
+#endif /* JASPER_DISABLED */
 } jp2_boxops_t;
 
 /******************************************************************************\
