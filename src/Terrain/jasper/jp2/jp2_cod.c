@@ -104,6 +104,10 @@ static int jp2_putuint64(jas_stream_t *out, uint_fast64_t val);
 
 static int jp2_getint(jas_stream_t *in, int s, int n, int_fast32_t *val);
 
+#ifdef JASPER_DISABLED
+void jp2_box_dump(jp2_box_t *box, FILE *out);
+#endif /* JASPER_DISABLED */
+
 static int jp2_jp_getdata(jp2_box_t *box, jas_stream_t *in);
 static int jp2_jp_putdata(jp2_box_t *box, jas_stream_t *out);
 static int jp2_ftyp_getdata(jp2_box_t *box, jas_stream_t *in);
@@ -291,9 +295,9 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 		jas_stream_close(tmpstream);
 	}
 
-#if 0
+#ifdef JASPER_DISABLED
 	jp2_box_dump(box, stderr);
-#endif
+#endif /* JASPER_DISABLED */
 
 	return box;
 	abort();
@@ -307,6 +311,22 @@ error:
 	}
 	return 0;
 }
+
+#ifdef JASPER_DISABLED
+void jp2_box_dump(jp2_box_t *box, FILE *out)
+{
+	jp2_boxinfo_t *boxinfo;
+	boxinfo = jp2_boxinfolookup(box->type);
+	assert(boxinfo);
+
+	fprintf(out, "JP2 box: ");
+	fprintf(out, "type=%c%s%c (0x%08x); length=%d\n", '"', boxinfo->name,
+	  '"', box->type, box->len);
+	if (box->ops->dumpdata) {
+		(*box->ops->dumpdata)(box, out);
+	}
+}
+#endif /* JASPER_DISABLED */
 
 static int jp2_jp_getdata(jp2_box_t *box, jas_stream_t *in)
 {
