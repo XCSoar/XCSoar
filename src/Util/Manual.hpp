@@ -35,13 +35,9 @@
 #include <new>
 #include <utility>
 
-#if GCC_OLDER_THAN(4,8)
-#include <type_traits>
-#endif
-
 #include <assert.h>
 
-#if CLANG_OR_GCC_VERSION(4,7)
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
@@ -123,7 +119,7 @@ public:
   }
 };
 
-#if CLANG_OR_GCC_VERSION(4,7)
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 
