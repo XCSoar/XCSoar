@@ -1,5 +1,5 @@
 CXX_FEATURES = -fno-exceptions -fno-rtti
-CXX_FEATURES += -std=gnu++0x
+CXX_FEATURES += -std=gnu++11
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 
