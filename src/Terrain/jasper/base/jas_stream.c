@@ -99,9 +99,6 @@
 
 static int jas_strtoopenmode(const char *s);
 static void jas_stream_destroy(jas_stream_t *stream);
-static jas_stream_t *jas_stream_create(void);
-static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
-  int bufsize);
 
 static int mem_read(jas_stream_obj_t *obj, char *buf, int cnt);
 static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt);
@@ -135,7 +132,7 @@ static jas_stream_ops_t jas_stream_memops = {
 * Code for opening and closing streams.
 \******************************************************************************/
 
-static jas_stream_t *jas_stream_create()
+jas_stream_t *jas_stream_create(void)
 {
 	jas_stream_t *stream;
 
@@ -663,7 +660,7 @@ long jas_stream_tell(jas_stream_t *stream)
 * Buffer initialization code.
 \******************************************************************************/
 
-static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
+void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
   int bufsize)
 {
 	/* If this function is being called, the buffer should not have been
