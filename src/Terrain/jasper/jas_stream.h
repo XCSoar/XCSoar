@@ -256,7 +256,6 @@ typedef struct {
 	int flags;
 	//char pathname[L_tmpnam + 1];
 	char pathname[DIM_MAX_FILE_NAME]; // dima
-	struct zzip_file *zfile;
 } jas_stream_fileobj_t;
 
 #define	JAS_STREAM_FILEOBJ_DELONCLOSE	0x01
