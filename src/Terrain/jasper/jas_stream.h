@@ -292,6 +292,10 @@ typedef struct {
 * Macros/functions for opening and closing streams.
 \******************************************************************************/
 
+jas_stream_t *jas_stream_create(void);
+
+void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf, int bufsize);
+
 /* Open a file as a stream. */
 gcc_malloc
 jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
