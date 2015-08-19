@@ -694,11 +694,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
           if (node.IsDeclaration() && attribute_name.back() == _T('?')) {
-#if GCC_VERSION >= 40700
             attribute_name.pop_back();
-#else
-            attribute_name.erase(std::prev(attribute_name.end()));
-#endif
           }
 
           if (!attribute_name.empty())
