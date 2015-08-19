@@ -132,8 +132,6 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 
   jas_aux_buffer_t aux_buf;
   aux_buf.id = 0;
-	aux_buf.size = 0;
-	aux_buf.buf = NULL;
 
   dec = 0;
 	box = 0;
@@ -503,9 +501,8 @@ fprintf(stderr, "no of components is %d\n", jas_image_numcmpts(dec->image));
 
 error:
 	// JMW memory leak fixed
-	if (aux_buf.buf) {
+	if (aux_buf.id == -1)
 		jas_free(aux_buf.buf);
-	}
 	if (box) {
 		jp2_box_destroy(box);
 	}
