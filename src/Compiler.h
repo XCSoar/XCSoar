@@ -164,18 +164,6 @@ Copyright_License {
 #define gcc_restrict
 #endif
 
-/* C++11 features */
-
-#if defined(__cplusplus)
-
-#if CLANG_OR_GCC_VERSION(4,8)
-#define gcc_alignas(T, fallback) alignas(T)
-#else
-#define gcc_alignas(T, fallback) gcc_aligned(fallback)
-#endif
-
-#endif
-
 #ifndef __has_feature
   // define dummy macro for non-clang compilers
   #define __has_feature(x) 0
