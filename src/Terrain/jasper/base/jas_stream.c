@@ -97,7 +97,9 @@
 * Local function prototypes.
 \******************************************************************************/
 
+#ifdef JASPER_DISABLED
 static int jas_strtoopenmode(const char *s);
+#endif /* JASPER_DISABLED */
 static void jas_stream_destroy(jas_stream_t *stream);
 
 static int mem_read(jas_stream_obj_t *obj, char *buf, int cnt);
@@ -105,21 +107,25 @@ static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt);
 static long mem_seek(jas_stream_obj_t *obj, long offset, int origin);
 static int mem_close(jas_stream_obj_t *obj);
 
+#ifdef JASPER_DISABLED
 static int file_read(jas_stream_obj_t *obj, char *buf, int cnt);
 static int file_write(jas_stream_obj_t *obj, char *buf, int cnt);
 static long file_seek(jas_stream_obj_t *obj, long offset, int origin);
 static int file_close(jas_stream_obj_t *obj);
+#endif /* JASPER_DISABLED */
 
 /******************************************************************************\
 * Local data.
 \******************************************************************************/
 
+#ifdef JASPER_DISABLED
 static jas_stream_ops_t jas_stream_fileops = {
 	file_read,
 	file_write,
 	file_seek,
 	file_close
 };
+#endif /* JASPER_DISABLED */
 
 static jas_stream_ops_t jas_stream_memops = {
 	mem_read,
@@ -219,6 +225,8 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 	
 	return stream;
 }
+
+#ifdef JASPER_DISABLED
 
 jas_stream_t *jas_stream_fopen(const char *filename, const char *mode)
 {
@@ -413,6 +421,8 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	return stream;
 }
 
+#endif /* JASPER_DISABLED */
+
 static void jas_stream_destroy(jas_stream_t *stream)
 {
 	/* If the memory for the buffer was allocated with malloc, free
@@ -585,6 +595,7 @@ int jas_stream_pad(jas_stream_t *stream, int n, int c)
 * Code for getting and setting the stream position.
 \******************************************************************************/
 
+#ifdef JASPER_DISABLED
 int jas_stream_isseekable(jas_stream_t *stream)
 {
 	if (stream->ops_ == &jas_stream_memops) {
@@ -598,6 +609,7 @@ int jas_stream_isseekable(jas_stream_t *stream)
 		return 0;
 	}
 }
+#endif /* JASPER_DISABLED */
 
 int jas_stream_rewind(jas_stream_t *stream)
 {
@@ -807,6 +819,8 @@ int jas_stream_flushbuf(jas_stream_t *stream, int c)
 * Miscellaneous code.
 \******************************************************************************/
 
+#ifdef JASPER_DISABLED
+
 static int jas_strtoopenmode(const char *s)
 {
 	int openmode = 0;
@@ -834,6 +848,8 @@ static int jas_strtoopenmode(const char *s)
 	}
 	return openmode;
 }
+
+#endif /* JASPER_DISABLED */
 
 int jas_stream_copy(jas_stream_t *out, jas_stream_t *in, int n)
 {
@@ -1003,6 +1019,8 @@ static int mem_close(jas_stream_obj_t *obj)
 * File stream object.
 \******************************************************************************/
 
+#ifdef JASPER_DISABLED
+
 static int file_read(jas_stream_obj_t *obj, char *buf, int cnt)
 {
 	jas_stream_fileobj_t *fileobj = JAS_CAST(jas_stream_fileobj_t *, obj);
@@ -1042,3 +1060,5 @@ static int file_close(jas_stream_obj_t *obj)
 	jas_free(fileobj);
 	return ret;
 }
+
+#endif /* JASPER_DISABLED */
