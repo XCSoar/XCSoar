@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
+#include "ZzipStream.hpp"
 #include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
@@ -327,11 +328,9 @@ extern RasterTileCache *raster_tile_current;
 void
 RasterTileCache::LoadJPG2000(const char *jp2_filename)
 {
-  jas_stream_t *in;
-
   raster_tile_current = this;
 
-  in = jas_stream_fopen(jp2_filename, "rb");
+  const auto in = OpenJasperZzipStream(jp2_filename);
   if (!in) {
     Reset();
     return;
