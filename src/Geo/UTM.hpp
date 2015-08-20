@@ -27,7 +27,6 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 struct GeoPoint;
-class Angle;
 
 struct UTM
 {
@@ -45,12 +44,6 @@ struct UTM
   static UTM FromGeoPoint(const GeoPoint &p);
 
   GeoPoint ToGeoPoint() const;
-
-private:
-  static unsigned char CalculateZoneNumber(const GeoPoint &p);
-  static char CalculateZoneLetter(const Angle latitude);
-
-  static Angle GetCentralMeridian(unsigned char zone_number);
 };
 
 #endif

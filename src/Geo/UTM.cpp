@@ -34,16 +34,16 @@ static constexpr double e_p2 = e / (1.0 - e);
 
 static constexpr double r = 6378137;
 
-char
-UTM::CalculateZoneLetter(const Angle latitude)
+static char
+CalculateZoneLetter(const Angle latitude)
 {
   static constexpr char letters[] = "CDEFGHJKLMNPQRSTUVWXX";
   unsigned index = (unsigned)((latitude.Degrees() + fixed(80)) / 8);
   return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
 }
 
-unsigned char
-UTM::CalculateZoneNumber(const GeoPoint &p)
+static unsigned char
+CalculateZoneNumber(const GeoPoint &p)
 {
   if (p.latitude.Degrees() <= fixed(64) &&
       p.latitude.Degrees() >= fixed(56) &&
@@ -67,8 +67,8 @@ UTM::CalculateZoneNumber(const GeoPoint &p)
   return (int)floor((p.longitude.Degrees() + fixed(180)) / 6) + 1;
 }
 
-Angle
-UTM::GetCentralMeridian(unsigned char zone_number)
+static Angle
+GetCentralMeridian(unsigned char zone_number)
 {
   return Angle::Degrees(fixed((zone_number - 1) * 6 - 180 + 3));
 }
