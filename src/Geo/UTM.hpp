@@ -40,7 +40,7 @@ struct UTM {
     :zone_number(_zone_number), zone_letter(_zone_letter),
      easting(_easting), northing(_northing) {}
 
-  static UTM FromGeoPoint(const GeoPoint &p);
+  static UTM FromGeoPoint(GeoPoint p);
 
   GeoPoint ToGeoPoint() const;
 };
