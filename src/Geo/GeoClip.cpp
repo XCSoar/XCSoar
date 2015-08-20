@@ -73,8 +73,9 @@ static constexpr bool CLIP_ACCEPT(unsigned a, unsigned b) {
   return !(a | b);
 }
 
-gcc_pure
-unsigned GeoClip::ClipEncodeX(const Angle& x) const {
+unsigned
+GeoClip::ClipEncodeX(const Angle x) const
+{
   if (x< Angle::Zero())
     return CLIP_LEFT_EDGE;
   if (x> width)
@@ -82,8 +83,9 @@ unsigned GeoClip::ClipEncodeX(const Angle& x) const {
   return 0;
 }
 
-gcc_pure
-unsigned GeoClip::ClipEncodeY(const Angle& y) const {
+unsigned
+GeoClip::ClipEncodeY(const Angle y) const
+{
   if (y< GetSouth())
     return CLIP_BOTTOM_EDGE;
   if (y> GetNorth())
@@ -91,8 +93,9 @@ unsigned GeoClip::ClipEncodeY(const Angle& y) const {
   return 0;
 }
 
-gcc_pure
-unsigned GeoClip::ClipEncode(const GeoPoint &pt) const {
+unsigned
+GeoClip::ClipEncode(const GeoPoint pt) const
+{
   return ClipEncodeX(pt.longitude) | ClipEncodeY(pt.latitude);
 }
 

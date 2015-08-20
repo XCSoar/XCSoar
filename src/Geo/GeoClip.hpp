@@ -102,9 +102,9 @@ public:
   unsigned ClipPolygon(GeoPoint *dest,
                        const GeoPoint *src, unsigned src_length) const;
 private:
-  gcc_pure unsigned ClipEncodeX(const Angle& x) const;
-  gcc_pure unsigned ClipEncodeY(const Angle& y) const;
-  gcc_pure unsigned ClipEncode(const GeoPoint &pt) const;
+  gcc_pure unsigned ClipEncodeX(Angle x) const;
+  gcc_pure unsigned ClipEncodeY(Angle y) const;
+  gcc_pure unsigned ClipEncode(GeoPoint pt) const;
 
 };
 
