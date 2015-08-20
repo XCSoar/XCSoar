@@ -42,13 +42,13 @@ class Angle;
  */
 class Canvas {
 protected:
-  HDC dc, compatible_dc;
+  HDC dc = nullptr, compatible_dc = nullptr;
   PixelSize size;
 
 public:
-  Canvas():dc(nullptr), compatible_dc(nullptr) {}
+  Canvas() = default;
   Canvas(HDC _dc, PixelSize new_size)
-    :dc(_dc), compatible_dc(nullptr), size(new_size) {
+    :dc(_dc), size(new_size) {
     assert(dc != nullptr);
   }
 

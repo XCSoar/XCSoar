@@ -63,16 +63,12 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
 #endif
 
 #ifndef NDEBUG
-  bool active;
+  bool active = false;
 #endif
 
 public:
   BufferCanvas()
-    :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr)
-#ifndef NDEBUG
-    , active(false)
-#endif
-  {}
+    :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr) {}
 
   BufferCanvas(const Canvas &canvas,
                UPixelScalar _width, UPixelScalar _height);

@@ -65,16 +65,16 @@ class Canvas {
   friend class BufferCanvas;
 
 protected:
-  RasterPoint offset;
-  PixelSize size;
+  RasterPoint offset = {0, 0};
+  PixelSize size = {0, 0};
 
   Pen pen;
   Brush brush;
-  const Font *font;
+  const Font *font = nullptr;
   Color text_color, background_color;
   enum {
     OPAQUE, TRANSPARENT
-  } background_mode;
+  } background_mode = OPAQUE;
 
   /**
    * static buffer to store vertices of wide lines.
@@ -82,13 +82,8 @@ protected:
   static AllocatedArray<RasterPoint> vertex_buffer;
 
 public:
-  Canvas()
-    :offset(0, 0), size(0, 0),
-     font(nullptr), background_mode(OPAQUE) {}
-
-  Canvas(PixelSize _size)
-    :offset(0, 0), size(_size),
-     font(nullptr), background_mode(OPAQUE) {}
+  Canvas() = default;
+  Canvas(PixelSize _size):size(_size) {}
 
   Canvas(const Canvas &other) = delete;
   Canvas &operator=(const Canvas &other) = delete;
