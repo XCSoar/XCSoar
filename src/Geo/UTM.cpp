@@ -73,7 +73,7 @@ gcc_const
 static Angle
 GetCentralMeridian(unsigned zone_number)
 {
-  return Angle::Degrees(fixed((zone_number - 1) * 6 - 180 + 3));
+  return Angle::Degrees(fixed(int(zone_number - 1) * 6 - 180 + 3));
 }
 
 UTM
