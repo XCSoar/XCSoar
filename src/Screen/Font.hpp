@@ -46,13 +46,13 @@ class TextUtil;
 class Font {
 protected:
 #ifdef USE_FREETYPE
-  FT_Face face;
+  FT_Face face = nullptr;
 #elif defined(ANDROID)
-  TextUtil *text_util_object;
+  TextUtil *text_util_object = nullptr;
 
   unsigned line_spacing;
 #elif defined(USE_GDI)
-  HFONT font;
+  HFONT font = nullptr;
 #else
 #error No font renderer
 #endif
@@ -62,13 +62,7 @@ protected:
   void CalculateHeights();
 
 public:
-#ifdef USE_FREETYPE
-  Font():face(nullptr) {}
-#elif defined(ANDROID)
-  Font():text_util_object(nullptr) {}
-#else
-  Font():font(nullptr) {}
-#endif
+  Font() = default;
 
   ~Font() { Destroy(); }
 

@@ -42,20 +42,20 @@ class Brush
 {
 protected:
 #ifndef USE_GDI
-  Color color;
+  Color color = Color::Transparent();
 #else
-  HBRUSH brush;
+  HBRUSH brush = nullptr;
 #endif
 
 public:
 #ifndef USE_GDI
-  constexpr Brush():color(Color::Transparent()) {}
+  Brush() = default;
 
   constexpr
   explicit Brush(const Color _color):color(_color)  {}
 #else
   /** Base Constructor of the Brush class */
-  Brush():brush(nullptr) {}
+  Brush() = default;
 
   /**
    * Constructor (creates a Brush object of the given Color

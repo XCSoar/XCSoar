@@ -81,36 +81,24 @@ public:
 
 protected:
 #ifdef ANDROID
-  jobject bmp;
+  jobject bmp = nullptr;
 
   Type type;
 #endif
 
 #ifdef ENABLE_OPENGL
-  GLTexture *texture;
+  GLTexture *texture = nullptr;
   PixelSize size;
 
-  bool interpolation;
+  bool interpolation = false;
 #elif defined(USE_MEMORY_CANVAS)
-  WritableImageBuffer<BitmapPixelTraits> buffer;
+  WritableImageBuffer<BitmapPixelTraits> buffer = WritableImageBuffer<BitmapPixelTraits>::Empty();
 #else
-  HBITMAP bitmap;
+  HBITMAP bitmap = nullptr;
 #endif
 
 public:
-#ifdef ENABLE_OPENGL
-  Bitmap()
-    :
-#ifdef ANDROID
-    bmp(nullptr),
-#endif
-    texture(nullptr), interpolation(false) {}
-#elif defined(USE_MEMORY_CANVAS)
-  constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
-#else
-  Bitmap():bitmap(nullptr) {}
-#endif
-
+  Bitmap() = default;
   explicit Bitmap(ResourceId id);
 
 #if !defined(USE_GDI) && !defined(ANDROID)

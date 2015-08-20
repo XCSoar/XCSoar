@@ -57,11 +57,11 @@ public:
 
 protected:
 #ifdef USE_GDI
-  HPEN pen;
+  HPEN pen = nullptr;
 #else
   Color color;
 
-  uint8_t width;
+  uint8_t width = 0;
 
 #if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
   Style style;
@@ -72,22 +72,24 @@ public:
 #ifdef USE_GDI
 
   /** Base Constructor for the Pen class */
-  Pen() : pen(nullptr) {}
+  Pen() = default;
+
   /**
    * Constructor that creates a Pen object, based on the given parameters
    * @param style Line style (SOLID, DASH, BLANK)
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  Pen(Style Style, unsigned width, const Color c):pen(nullptr) {
+  Pen(Style Style, unsigned width, const Color c) {
     Create(Style, width, c);
   }
+
   /**
    * Constructor that creates a solid Pen object, based on the given parameters
    * @param width Width of the line/Pen
    * @param c Color of the Pen
    */
-  Pen(unsigned width, Color c):pen(nullptr) {
+  Pen(unsigned width, Color c) {
     Create(width, c);
   }
 
@@ -101,7 +103,7 @@ public:
 
 #else /* !USE_GDI */
 
-  Pen():width(0) {}
+  Pen() = default;
 
   constexpr
   Pen(Style _style, unsigned _width, const Color _color)
