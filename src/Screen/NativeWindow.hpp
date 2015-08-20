@@ -29,7 +29,7 @@ Copyright_License {
 #ifdef USE_GDI
 
 #include "Window.hpp"
-#define NativeWindow Window
+using NativeWindow = Window;
 
 #else
 
