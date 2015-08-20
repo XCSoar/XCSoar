@@ -34,6 +34,7 @@ static constexpr double e_p2 = e / (1.0 - e);
 
 static constexpr double r = 6378137;
 
+gcc_const
 static char
 CalculateZoneLetter(const Angle latitude)
 {
@@ -42,6 +43,7 @@ CalculateZoneLetter(const Angle latitude)
   return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
 }
 
+gcc_const
 static unsigned
 CalculateZoneNumber(const GeoPoint &p)
 {
@@ -67,6 +69,7 @@ CalculateZoneNumber(const GeoPoint &p)
   return (int)floor((p.longitude.Degrees() + fixed(180)) / 6) + 1;
 }
 
+gcc_const
 static Angle
 GetCentralMeridian(unsigned zone_number)
 {
