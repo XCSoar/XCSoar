@@ -37,10 +37,7 @@ public:
 
 class ProgressBar : public NativeWindow {
 #ifndef USE_GDI
-  unsigned min_value, max_value, value, step_size;
-
-public:
-  ProgressBar():min_value(0), max_value(0), value(0), step_size(1) {}
+  unsigned min_value = 0, max_value = 0, value = 0, step_size = 1;
 #endif
 
 public:

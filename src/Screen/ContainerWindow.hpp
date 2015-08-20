@@ -52,15 +52,14 @@ protected:
    * this attribute is nullptr, then the focused window is not an
    * (indirect) child window of this one.
    */
-  Window *active_child;
+  Window *active_child = nullptr;
 
   /**
    * The child window which captures the mouse.
    */
-  Window *capture_child;
+  Window *capture_child = nullptr;
 
 public:
-  ContainerWindow();
   virtual ~ContainerWindow();
 #endif /* !USE_GDI */
 

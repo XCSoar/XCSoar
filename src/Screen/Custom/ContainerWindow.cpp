@@ -28,11 +28,6 @@ Copyright_License {
 #include <algorithm>
 #include <assert.h>
 
-ContainerWindow::ContainerWindow()
-  :active_child(nullptr), capture_child(nullptr)
-{
-}
-
 ContainerWindow::~ContainerWindow()
 {
   Destroy();

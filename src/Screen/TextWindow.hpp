@@ -68,16 +68,12 @@ public:
  */
 class TextWindow : public NativeWindow {
 #ifndef USE_GDI
-  const Font *font;
+  const Font *font = nullptr;
 
   tstring text;
 #endif
 
 public:
-#if !defined(USE_GDI) && !defined(NDEBUG)
-  TextWindow():font(nullptr) {}
-#endif
-
   void Create(ContainerWindow &parent, const TCHAR *text, PixelRect rc,
               const TextWindowStyle style=TextWindowStyle());
 

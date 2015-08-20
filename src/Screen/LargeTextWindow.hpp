@@ -56,7 +56,7 @@ public:
  */
 class LargeTextWindow : public NativeWindow {
 #ifndef USE_GDI
-  const Font *font;
+  const Font *font = nullptr;
 
   tstring value;
 
@@ -67,10 +67,6 @@ class LargeTextWindow : public NativeWindow {
 #endif
 
 public:
-#if !defined(USE_GDI) && !defined(NDEBUG)
-  LargeTextWindow():font(nullptr) {}
-#endif
-
   void Create(ContainerWindow &parent, PixelRect rc,
               const LargeTextWindowStyle style=LargeTextWindowStyle());
 

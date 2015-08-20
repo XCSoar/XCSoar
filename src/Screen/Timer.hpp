@@ -53,20 +53,15 @@ class WindowTimer
 {
   Window &window;
 #ifdef USE_GDI
-  UINT_PTR id;
+  UINT_PTR id = 0;
 #endif
 
 public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#ifdef USE_GDI
-  WindowTimer(Window &_window)
-    :window(_window), id(0) {}
-#else
-  WindowTimer(Window &_window)
+  explicit WindowTimer(Window &_window)
     :window(_window) {}
-#endif
 
   WindowTimer(const WindowTimer &other) = delete;
 

@@ -157,7 +157,7 @@ class TopWindow : public ContainerWindow {
 #endif
 
 #ifndef USE_GDI
-  TopCanvas *screen;
+  TopCanvas *screen = nullptr;
 
   bool invalidated;
 
@@ -170,19 +170,19 @@ class TopWindow : public ContainerWindow {
    * OpenGL operations are allowed, because the OpenGL surface does
    * not exist.
    */
-  bool paused;
+  bool paused = false;
 
   /**
    * Has the application been resumed?  When this flag is set,
    * TopWindow::Expose() attempts to reinitialize the OpenGL surface.
    */
-  bool resumed;
+  bool resumed = false;
 
   /**
    * Was the application view resized while paused?  If true, then
    * new_width and new_height contain the new display dimensions.
    */
-  bool resized;
+  bool resized = false;
 
   UPixelScalar new_width, new_height;
 #endif
@@ -203,12 +203,6 @@ class TopWindow : public ContainerWindow {
 #endif
 
 public:
-#ifdef ANDROID
-  TopWindow():screen(nullptr), paused(false), resumed(false), resized(false) {}
-#elif !defined(USE_GDI)
-  TopWindow():screen(nullptr) {}
-#endif
-
 #ifndef USE_GDI
   virtual ~TopWindow();
 #endif

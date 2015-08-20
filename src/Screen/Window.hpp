@@ -51,34 +51,22 @@ class WindowTimer;
  * creation.
  */
 class WindowStyle {
-#ifndef USE_GDI
 protected:
-  bool visible;
-  bool enabled;
-  bool tab_stop, control_parent;
-  bool double_clicks;
-  bool has_border;
-
-public:
-  constexpr
-  WindowStyle()
-    :visible(true), enabled(true),
-     tab_stop(false), control_parent(false),
-     double_clicks(false), has_border(false) {}
+#ifndef USE_GDI
+  bool visible = true;
+  bool enabled = true;
+  bool tab_stop = false, control_parent = false;
+  bool double_clicks = false;
+  bool has_border = false;
 
 #else /* USE_GDI */
-protected:
-  DWORD style, ex_style;
-  bool double_clicks;
+  DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+  DWORD ex_style = 0;
+  bool double_clicks = false;
 
-public:
-  constexpr
-  WindowStyle()
-    :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
-     ex_style(0), double_clicks(false)
-  {}
 #endif /* USE_GDI */
 
+public:
   /** The window is initially not visible. */
   void Hide() {
 #ifndef USE_GDI
@@ -180,42 +168,33 @@ class Window {
 
 protected:
 #ifndef USE_GDI
-  ContainerWindow *parent;
+  ContainerWindow *parent = nullptr;
 
 private:
   RasterPoint position;
-  PixelSize size;
+  PixelSize size = {0, 0};
 
 private:
   bool tab_stop, control_parent;
 
-  bool visible;
-  bool transparent;
+  bool visible = true;
+  bool transparent = false;
   bool enabled;
-  bool focused;
-  bool capture;
-  bool has_border;
+  bool focused = false;
+  bool capture = false;
+  bool has_border = false;
 #else
-  HWND hWnd;
+  HWND hWnd = nullptr;
 
 private:
-  WNDPROC prev_wndproc;
+  WNDPROC prev_wndproc = nullptr;
 #endif
 
 private:
-  bool double_clicks;
+  bool double_clicks = false;
 
 public:
-#ifndef USE_GDI
-  Window()
-    :parent(nullptr), size(0, 0),
-     visible(true), transparent(false),
-     focused(false), capture(false), has_border(false),
-     double_clicks(false) {}
-#else
-  Window():hWnd(nullptr), prev_wndproc(nullptr),
-           double_clicks(false) {}
-#endif
+  Window() = default;
   virtual ~Window();
 
   Window(const Window &other) = delete;
