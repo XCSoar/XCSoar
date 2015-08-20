@@ -200,6 +200,8 @@ FooBar(int a_parameter, unsigned another_parameter,
 
 \section{C++}
 
+XCSoar is written in C++11.
+
 \subsection{Features}
 
 C++ is a complex language with many features, but some of them come at
@@ -209,32 +211,14 @@ difficult, because the new version may not be available on all
 platforms.  This section describes the C++ language features that are
 allowed to be used.
 
-XCSoar's standard compiler is \texttt{gcc}.  We need to stay
-compatible with version 4.6, because that is what \texttt{cegcc} is
-based on.
+XCSoar's standard compilers are \texttt{gcc} (at least version 4.8.1) and
+\texttt{clang} (at least version 3.4).
 
 The following C++ features must \emph{not} be used:
 
 \begin{itemize}
 \item RTTI
 \item exceptions
-\end{itemize}
-
-\subsubsection{C++11}
-
-The XCSoar code base is currently migrating to the new standard
-C++11.  The following C++11 features are safe to use:
-
-\begin{itemize}
-\item \verb|auto|-typed variables
-\item Rvalue references
-\item Explicit conversion operators
-\item Strongly-typed enums
-\item Defaulted and deleted functions
-\item Generalized constant expressions (\verb|constexpr|)
-\item \verb|override| and \verb|final|
-\item Range-based \verb|for|
-\item \verb|nullptr|
 \end{itemize}
 
 \subsection{Other rules}
