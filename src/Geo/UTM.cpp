@@ -74,7 +74,8 @@ GetCentralMeridian(unsigned char zone_number)
 }
 
 UTM
-UTM::FromGeoPoint(const GeoPoint &p) {
+UTM::FromGeoPoint(const GeoPoint &p)
+{
   double lat = (double)p.latitude.Radians();
   double _sin = (double)p.latitude.sin();
   double _cos = (double)p.latitude.cos();

@@ -28,8 +28,7 @@ Copyright_License {
 
 struct GeoPoint;
 
-struct UTM
-{
+struct UTM {
   unsigned char zone_number;
   char zone_letter;
 
@@ -37,7 +36,7 @@ struct UTM
 
   UTM() = default;
   constexpr UTM(unsigned char _zone_number, char _zone_letter,
-      fixed _easting, fixed _northing)
+                fixed _easting, fixed _northing)
     :zone_number(_zone_number), zone_letter(_zone_letter),
      easting(_easting), northing(_northing) {}
 
