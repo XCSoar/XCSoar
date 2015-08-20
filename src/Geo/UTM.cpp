@@ -42,7 +42,7 @@ CalculateZoneLetter(const Angle latitude)
   return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
 }
 
-static unsigned char
+static unsigned
 CalculateZoneNumber(const GeoPoint &p)
 {
   if (p.latitude <= Angle::Degrees(64) &&
@@ -68,7 +68,7 @@ CalculateZoneNumber(const GeoPoint &p)
 }
 
 static Angle
-GetCentralMeridian(unsigned char zone_number)
+GetCentralMeridian(unsigned zone_number)
 {
   return Angle::Degrees(fixed((zone_number - 1) * 6 - 180 + 3));
 }
