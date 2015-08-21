@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_RASTER_RENDERER_HPP
 
 #include "Terrain/HeightMatrix.hpp"
-#include "Screen/RawBitmap.hpp"
 #include "Math/fixed.hpp"
 #include "Util/NonCopyable.hpp"
 
@@ -39,7 +38,13 @@ class Angle;
 class Canvas;
 class RasterMap;
 class WindowProjection;
+class RawBitmap;
+struct RawColor;
 struct ColorRamp;
+
+#ifdef ENABLE_OPENGL
+class GLTexture;
+#endif
 
 class RasterRenderer : private NonCopyable {
   /** screen dimensions in coarse pixels */
@@ -75,7 +80,7 @@ class RasterRenderer : private NonCopyable {
 
   fixed pixel_size;
 
-  RawColor color_table[256 * 128];
+  RawColor *color_table = nullptr;
 
 public:
   RasterRenderer();
@@ -110,9 +115,7 @@ public:
     return bounds;
   }
 
-  const GLTexture &BindAndGetTexture() const {
-    return image->BindAndGetTexture();
-  }
+  const GLTexture &BindAndGetTexture() const;
 #endif
 
   /**

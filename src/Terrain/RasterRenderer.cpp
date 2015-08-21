@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Color.hpp"
+#include "Screen/RawBitmap.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
 #include "Event/Idle.hpp"
@@ -101,6 +102,7 @@ RasterRenderer::RasterRenderer()
 
 RasterRenderer::~RasterRenderer()
 {
+  delete[] color_table;
   delete image;
   delete[] contour_column_base;
 }
@@ -128,6 +130,12 @@ RasterRenderer::UpdateQuantisation()
 {
   quantisation_pixels = GetQuantisation();
   return quantisation_pixels < last_quantisation_pixels;
+}
+
+const GLTexture &
+RasterRenderer::BindAndGetTexture() const
+{
+  return image->BindAndGetTexture();
 }
 
 #endif
@@ -438,6 +446,9 @@ void
 RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
                                   unsigned height_scale, int interp_levels)
 {
+  if (color_table == nullptr)
+    color_table = new RawColor[256 * 128];
+
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {
       RawColor color;
