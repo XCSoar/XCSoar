@@ -48,6 +48,7 @@ CorrectedWidth(unsigned nWidth)
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
+   buffer(new BGRColor[corrected_width * height]),
    texture(new GLTexture(CorrectedWidth(nWidth), nHeight))
 {
   assert(nWidth > 0);
@@ -56,8 +57,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   texture->EnableInterpolation();
 
   AddSurfaceListener(*this);
-
-  buffer = new BGRColor[corrected_width * height];
 }
 
 RawBitmap::~RawBitmap()

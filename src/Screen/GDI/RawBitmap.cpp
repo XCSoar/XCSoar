@@ -38,7 +38,8 @@ CorrectedWidth(unsigned nWidth)
 
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth))
+   corrected_width(CorrectedWidth(nWidth)),
+   buffer(new BGRColor[corrected_width * height])
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -54,8 +55,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   bi.bmiHeader.biYPelsPerMeter = 3780;
   bi.bmiHeader.biClrUsed = 0;
   bi.bmiHeader.biClrImportant = 0;
-
-  buffer = new BGRColor[corrected_width * height];
 }
 
 RawBitmap::~RawBitmap()
