@@ -70,8 +70,6 @@ public:
   BufferCanvas()
     :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr) {}
 
-  BufferCanvas(const Canvas &canvas,
-               UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas() {
     Destroy();
   }
