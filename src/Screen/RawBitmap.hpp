@@ -25,7 +25,6 @@
 #endif
 
 #include <stdint.h>
-#include "Compiler.h"
 
 class Canvas;
 
