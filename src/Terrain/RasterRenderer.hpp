@@ -43,14 +43,14 @@ struct ColorRamp;
 
 class RasterRenderer : private NonCopyable {
   /** screen dimensions in coarse pixels */
-  unsigned quantisation_pixels;
+  unsigned quantisation_pixels = 2;
 
 #ifdef ENABLE_OPENGL
   /**
    * The value of #quantisation_pixels that was used in the last
    * ScanMap() call.
    */
-  unsigned last_quantisation_pixels;
+  unsigned last_quantisation_pixels = -1;
 #endif
 
   /**
@@ -65,13 +65,13 @@ class RasterRenderer : private NonCopyable {
    * the #RawBitmap.  This attribute is used to decide whether the
    * texture has to be redrawn.
    */
-  GeoBounds bounds;
+  GeoBounds bounds = GeoBounds::Invalid();
 #endif
 
   HeightMatrix height_matrix;
-  RawBitmap *image;
+  RawBitmap *image = nullptr;
 
-  unsigned char *contour_column_base;
+  unsigned char *contour_column_base = nullptr;
 
   fixed pixel_size;
 

@@ -91,13 +91,6 @@ ContourInterval(const int h, const unsigned contour_height_scale)
 }
 
 RasterRenderer::RasterRenderer()
-  :quantisation_pixels(2),
-#ifdef ENABLE_OPENGL
-   last_quantisation_pixels(-1),
-   bounds(GeoBounds::Invalid()),
-#endif
-   image(NULL),
-   contour_column_base(NULL)
 {
   // scale quantisation_pixels so resolution is not too high on old hardware
   // with large displays
