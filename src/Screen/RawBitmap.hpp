@@ -83,7 +83,7 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class RawBitmap
+class RawBitmap final
 #ifdef ENABLE_OPENGL
   :private GLSurfaceListener
 #endif
