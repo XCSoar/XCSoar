@@ -48,7 +48,7 @@ CorrectedWidth(unsigned nWidth)
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
-   buffer(new BGRColor[corrected_width * height]),
+   buffer(new RawColor[corrected_width * height]),
    texture(new GLTexture(corrected_width, nHeight))
 {
   assert(nWidth > 0);

@@ -75,7 +75,7 @@ class RasterRenderer : private NonCopyable {
 
   fixed pixel_size;
 
-  BGRColor color_table[256 * 128];
+  RawColor color_table[256 * 128];
 
 public:
   RasterRenderer();

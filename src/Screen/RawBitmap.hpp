@@ -35,23 +35,23 @@ class GLTexture;
 #endif
 
 /**
- * BGRColor structure encapsulates color information about one point. Color
- * order is Blue, Green, Red (not RGB).
+ * The RawColor structure encapsulates color information about one
+ * point in a #RawBitmap.
  */
-struct BGRColor
+struct RawColor
 {
-  BGRColor() = default;
+  RawColor() = default;
 
 #ifdef GREYSCALE
   Luminosity8 value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
 #elif defined(HAVE_GLES)
   RGB565Color value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
 #elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL) || defined(USE_EGL) || defined(USE_GLX)
@@ -61,14 +61,14 @@ struct BGRColor
   uint8_t dummy;
   RGB8Color value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :dummy(), value(R, G, B) {}
 #else
   /* little-endian */
   BGR8Color value;
   uint8_t dummy;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B), dummy() {}
 #endif
 
@@ -76,7 +76,7 @@ struct BGRColor
 
   BGR8Color value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
 #endif
@@ -95,7 +95,7 @@ protected:
   const unsigned height;
   const unsigned corrected_width;
 
-  const std::unique_ptr<BGRColor[]> buffer;
+  const std::unique_ptr<RawColor[]> buffer;
 
 #ifdef ENABLE_OPENGL
   GLTexture *texture;
@@ -125,20 +125,20 @@ public:
 
   /**
    * Returns the Buffer
-   * @return The Buffer as BGRColor array
+   * @return The Buffer as RawColor array
    */
-  BGRColor *GetBuffer() {
+  RawColor *GetBuffer() {
     return buffer.get();
   }
 
-  const BGRColor *GetBuffer() const {
+  const RawColor *GetBuffer() const {
     return buffer.get();
   }
 
   /**
    * Returns a pointer to the top-most row.
    */
-  BGRColor *GetTopRow() {
+  RawColor *GetTopRow() {
 #ifndef USE_GDI
     return GetBuffer();
 #else
@@ -150,7 +150,7 @@ public:
   /**
    * Returns a pointer to the row below the current one.
    */
-  BGRColor *GetNextRow(BGRColor *row) {
+  RawColor *GetNextRow(RawColor *row) {
 #ifndef USE_GDI
     return row + corrected_width;
 #else
