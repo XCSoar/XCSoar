@@ -102,7 +102,7 @@ protected:
    * Has the buffer been modified, and needs to be copied into the
    * texture?
    */
-  mutable bool dirty;
+  mutable bool dirty = true;
 #elif defined(USE_GDI)
   BITMAPINFO bi;
 #endif
