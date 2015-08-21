@@ -71,5 +71,5 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
   ::StretchDIBits(dest_canvas, 0, 0,
                   dest_width, dest_height,
                   0, GetHeight() - height, width, height,
-                  buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
+                  GetBuffer(), &bi, DIB_RGB_COLORS, SRCCOPY);
 }

@@ -126,15 +126,19 @@ public:
     return buffer;
   }
 
+  const BGRColor *GetBuffer() const {
+    return buffer.get();
+  }
+
   /**
    * Returns a pointer to the top-most row.
    */
   BGRColor *GetTopRow() {
 #ifndef USE_GDI
-    return buffer;
+    return GetBuffer();
 #else
   /* in WIN32 bitmaps, the bottom-most row comes first */
-    return buffer + (height - 1) * corrected_width;
+    return GetBuffer() + (height - 1) * corrected_width;
 #endif
   }
 
