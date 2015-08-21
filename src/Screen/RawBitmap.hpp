@@ -19,6 +19,8 @@
 #include "Screen/OpenGL/Features.hpp"
 #endif
 
+#include <memory>
+
 #ifdef USE_GDI
 #include <windef.h>
 #include <wingdi.h>
@@ -92,7 +94,8 @@ protected:
   const unsigned width;
   const unsigned height;
   const unsigned corrected_width;
-  BGRColor *buffer;
+
+  const std::unique_ptr<BGRColor[]> buffer;
 
 #ifdef ENABLE_OPENGL
   GLTexture *texture;
@@ -116,14 +119,16 @@ public:
    */
   RawBitmap(unsigned width, unsigned height);
 
+#ifdef ENABLE_OPENGL
   ~RawBitmap();
+#endif
 
   /**
    * Returns the Buffer
    * @return The Buffer as BGRColor array
    */
   BGRColor *GetBuffer() {
-    return buffer;
+    return buffer.get();
   }
 
   const BGRColor *GetBuffer() const {

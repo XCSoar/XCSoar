@@ -43,11 +43,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 {
 }
 
-RawBitmap::~RawBitmap()
-{
-  delete[] buffer;
-}
-
 void
 RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,

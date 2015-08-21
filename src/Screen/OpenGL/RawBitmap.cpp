@@ -64,7 +64,6 @@ RawBitmap::~RawBitmap()
   RemoveSurfaceListener(*this);
 
   delete texture;
-  delete[] buffer;
 }
 
 void

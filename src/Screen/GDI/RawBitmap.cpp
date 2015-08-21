@@ -57,11 +57,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   bi.bmiHeader.biClrImportant = 0;
 }
 
-RawBitmap::~RawBitmap()
-{
-  delete[] buffer;
-}
-
 void
 RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
