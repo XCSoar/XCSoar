@@ -40,9 +40,8 @@ struct ColorRamp {
 
 gcc_pure
 RGB8Color
-ColorRampLookup(short h,
+ColorRampLookup(int h,
                 const ColorRamp* ramp_colors,
-                const int numramp,
-                const unsigned char interp_bits=6);
+                unsigned numramp, unsigned interp_bits=6);
 
 #endif

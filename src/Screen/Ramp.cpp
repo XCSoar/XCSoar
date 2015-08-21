@@ -27,16 +27,15 @@ Copyright_License {
 #include <assert.h>
 
 static RGB8Color
-Interpolate(short h, const ColorRamp *c1, const ColorRamp *c2,
-            unsigned char interp_levels)
+Interpolate(int h, const ColorRamp *c1, const ColorRamp *c2,
+            unsigned interp_levels)
 {
   if (interp_levels == 0)
     return c1->ToRGB8Color();
 
-  unsigned short is =  1 << interp_levels;
-  unsigned short f = (unsigned short)(h - c1->h) * is
-                   / (unsigned short)(c2->h - c1->h);
-  unsigned short of = is - f;
+  unsigned is = 1u << interp_levels;
+  unsigned f = unsigned(h - c1->h) * is / unsigned(c2->h - c1->h);
+  unsigned of = is - f;
 
   return RGB8Color((f * c2->r + of * c1->r) >> interp_levels,
                    (f * c2->g + of * c1->g) >> interp_levels,
@@ -44,10 +43,10 @@ Interpolate(short h, const ColorRamp *c1, const ColorRamp *c2,
 }
 
 RGB8Color
-ColorRampLookup(const short h,
+ColorRampLookup(const int h,
                 const ColorRamp* ramp_colors,
-                const int numramp,
-                const unsigned char interp_levels)
+                const unsigned numramp,
+                const unsigned interp_levels)
 {
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
