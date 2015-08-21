@@ -24,18 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RAMP_HPP
 #define XCSOAR_SCREEN_RAMP_HPP
 
+#include "PortableColor.hpp"
 #include "Compiler.h"
 
 class RGB8Color;
 
 struct ColorRamp {
   short h;
-  unsigned char r;
-  unsigned char g;
-  unsigned char b;
-
-  gcc_pure
-  RGB8Color ToRGB8Color() const;
+  RGB8Color color;
 };
 
 gcc_pure
