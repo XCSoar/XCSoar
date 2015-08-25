@@ -39,6 +39,8 @@ TopographyThread::~TopographyThread()
 void
 TopographyThread::Trigger(const WindowProjection &_projection)
 {
+  assert(_projection.IsValid());
+
   const GeoBounds new_bounds = _projection.GetScreenBounds();
   if (last_bounds.IsValid() && last_bounds.IsInside(new_bounds)) {
     /* still inside cache bounds - now check if we crossed a scale
