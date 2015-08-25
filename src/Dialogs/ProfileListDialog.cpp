@@ -407,12 +407,12 @@ SelectProfileDialog(tstring::const_pointer selected_path)
   }
 
   auto result = dialog.ShowModal();
+
+  selected_path = result == mrOK
+    ? widget.GetSelectedPath()
+    : nullptr;
   dialog.StealWidget();
 
-  if (result != mrOK)
-    return tstring();
-
-  selected_path = widget.GetSelectedPath();
   if (selected_path == nullptr)
     return tstring();
 
