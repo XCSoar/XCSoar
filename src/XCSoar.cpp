@@ -87,7 +87,7 @@ static const char *const Usage = "\n"
 #ifdef HAVE_CMDLINE_RESIZABLE
   "  -resizable      resizable window\n"
 #endif
-#if defined(_WIN32) && !defined(__WINE__)
+#ifdef WIN32
   "  -console        open debug output console\n"
 #endif
   ;

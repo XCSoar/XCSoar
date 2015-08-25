@@ -37,14 +37,6 @@ define link-program
 
 $(2)_BIN = $$(TARGET_BIN_DIR)/$(1)$$(TARGET_EXEEXT)
 
-# Disabline stripping on WINE, because winegcc generates a wrapper
-# script that cannot be stripped, and since WINE is just an
-# experimental target and no binaries will ever be distributed, it
-# doesn't matter anyway.
-ifeq ($$(TARGET),WINE)
-$(2)_STRIP := n
-endif
-
 # Disable stripping on UNIX, because that should usually be done
 # during installation (the Debian package is explicitly stripped), and
 # we often need the debug symbols while developing.

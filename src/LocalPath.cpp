@@ -147,7 +147,7 @@ RelativePath(const TCHAR *path)
 static void
 NormalizeBackslashes(TCHAR *p)
 {
-#if !defined(_WIN32) || defined(__WINE__)
+#ifndef WIN32
   while ((p = StringFind(p, '\\')) != nullptr)
     *p++ = '/';
 #endif
@@ -297,7 +297,7 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
     return nullptr;
 
 #ifdef HAVE_POSIX
-  /* on Unix or WINE, use ~/.xcsoar */
+  /* on Unix, use ~/.xcsoar */
   const TCHAR *home = getenv("HOME");
   if (home != nullptr) {
     _tcscpy(buffer, home);

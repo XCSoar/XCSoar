@@ -10,7 +10,7 @@ LIBNET_SOURCES = \
 
 HAVE_HTTP := n
 
-ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
+ifneq ($(findstring $(TARGET),PC CYGWIN),)
 HAVE_HTTP := y
 LIBNET_SOURCES += \
 	$(SRC)/Net/HTTP/WinINet/Session.cpp \

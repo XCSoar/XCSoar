@@ -111,7 +111,7 @@ CommandLine::Parse(Args &args)
     } else if (StringIsEqual(s, "-fullscreen")) {
       full_screen = true;
 #endif
-#if defined(_WIN32) && !defined(__WINE__)
+#ifdef WIN32
     } else if (StringIsEqual(s, "-console")) {
       AllocConsole();
       freopen("CONOUT$", "wb", stdout);

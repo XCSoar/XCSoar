@@ -5,7 +5,7 @@ TARGETS = PC WIN64 \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDAARCH64 ANDROIDX64 ANDROIDMIPS64 \
 	ANDROIDFAT \
-	WINE CYGWIN \
+	CYGWIN \
 	OSX32 OSX64 IOS32 IOS64
 
 ifeq ($(TARGET),)
@@ -154,15 +154,6 @@ ifeq ($(TARGET),CYGWIN)
   HAVE_WIN32 := y
   HAVE_MSVCRT := n
   HAVE_VASPRINTF := y
-endif
-
-ifeq ($(TARGET),WINE)
-  TCPREFIX := wine
-  TARGET_ARCH += -march=i586
-  WINVER = 0x0500
-
-  HAVE_POSIX := y
-  HAVE_MSVCRT := n
 endif
 
 ifeq ($(TARGET),OPT)
@@ -331,7 +322,7 @@ ifeq ($(TARGET),IOS64)
   ASFLAGS += -arch arm64
 endif
 
-ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
+ifeq ($(TARGET),UNIX)
   ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
     TARGET_IS_LINUX := y
   endif
@@ -567,12 +558,6 @@ ifeq ($(HAVE_WIN32),y)
   endif
 endif
 
-ifeq ($(TARGET),WINE)
-  TARGET_CPPFLAGS += -D__WINE__
-  TARGET_CPPFLAGS += -DWINE_STRICT_PROTOTYPES
-  # -mno-cygwin
-endif
-
 ifeq ($(HAVE_POSIX),y)
   TARGET_CPPFLAGS += -DHAVE_POSIX
   TARGET_CPPFLAGS += -DHAVE_STDINT_H
@@ -588,10 +573,6 @@ endif
 
 ifeq ($(HAVE_WIN32),n)
   TARGET_INCLUDES += -I$(SRC)/unix
-endif
-
-ifeq ($(TARGET),WINE)
-  TARGET_INCLUDES += -I$(SRC)/wine
 endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
@@ -623,11 +604,7 @@ endif
 ####### compiler target
 
 ifeq ($(HAVE_WIN32),y)
-  ifeq ($(TARGET),WINE)
-    TARGET_ARCH += -m32
-  else
-    TARGET_ARCH += -mwin32
-  endif
+  TARGET_ARCH += -mwin32
 
   WINDRESFLAGS := -I$(OUT)/include -I$(SRC) $(TARGET_CPPFLAGS)
 endif
@@ -656,13 +633,9 @@ ifeq ($(TARGET),PC)
 endif
 
 ifeq ($(HAVE_WIN32),y)
-  ifeq ($(TARGET),WINE)
-    TARGET_LDLIBS += -lpthread
-  else
   ifneq ($(TARGET),CYGWIN)
     # link libstdc++-6.dll statically, so we don't have to distribute it
     TARGET_STATIC = y
-  endif
   endif
 endif
 
@@ -711,7 +684,7 @@ ifeq ($(TARGET),ANDROID)
   endif
 endif
 
-ifneq ($(filter PC WINE CYGWIN,$(TARGET)),)
+ifneq ($(filter PC CYGWIN,$(TARGET)),)
   TARGET_LDLIBS += -lwinmm
 endif
 

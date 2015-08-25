@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_COMPATIBILITY_PATH_H
 #define XCSOAR_COMPATIBILITY_PATH_H
 
-#if defined(WIN32) && !defined(__WINE__)
+#ifdef WIN32
 
 #define DIR_SEPARATOR '\\'
 #define DIR_SEPARATOR_S "\\"
@@ -40,11 +40,7 @@ static inline bool
 IsDirSeparator(TCHAR ch)
 {
 #ifdef WIN32
-#if defined(__WINE__)
-  return ch == _T('/') || ch == _T('\\');
-#else
   return ch == _T('\\');
-#endif
 #else
   return ch == _T('/');
 #endif

@@ -8,7 +8,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
   endif
 endif
 
-ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(call string_equals,WINE,$(TARGET)),nyn)
+ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32),ny)
   PKG_CONFIG := PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
 endif
 
