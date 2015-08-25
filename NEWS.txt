@@ -1,4 +1,5 @@
 Version 6.8.1 - not yet released
+* fix freeze bug when starting without GPS fix
 
 Version 6.8 - not yet released
 * data files
