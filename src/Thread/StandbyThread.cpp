@@ -69,16 +69,8 @@ StandbyThread::WaitDone()
   assert(!IsInside());
   assert(mutex.IsLockedByCurrent());
 
-  while (alive && IsBusy()) {
-#ifdef HAVE_POSIX
+  while (alive && IsBusy())
     cond.wait(mutex);
-#else
-    done_trigger.Reset();
-    mutex.Unlock();
-    done_trigger.Wait();
-    mutex.Lock();
-#endif
-  }
 }
 
 void
@@ -112,14 +104,7 @@ StandbyThread::Run()
 
     if (!pending) {
       /* wait for a command */
-#ifdef HAVE_POSIX
       cond.wait(mutex);
-#else
-      command_trigger.Reset();
-      mutex.Unlock();
-      command_trigger.Wait();
-      mutex.Lock();
-#endif
     }
 
     assert(!busy);

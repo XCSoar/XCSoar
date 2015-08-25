@@ -27,11 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
 #include "Thread/Mutex.hpp"
-#ifdef HAVE_POSIX
 #include "Cond.hxx"
-#else
-#include "Thread/Trigger.hpp"
-#endif
 
 /**
  * A thread which waits for work in background.  It is similar to
@@ -47,21 +43,7 @@ protected:
   Mutex mutex;
 
 private:
-#ifdef HAVE_POSIX
   Cond cond;
-
-#else
-  /**
-   * This trigger gets signalled when a command is sent to the thread.
-   */
-  ::Trigger command_trigger;
-
-  /**
-   * This trigger gets signalled when the thread has finished a
-   * command.
-   */
-  ::Trigger done_trigger;
-#endif
 
   /**
    * Is the thread alive?  Unlike Thread::IsDefined(), this one is
@@ -97,21 +79,13 @@ private:
   void TriggerCommand() {
     assert(mutex.IsLockedByCurrent());
 
-#ifdef HAVE_POSIX
     cond.signal();
-#else
-    command_trigger.Signal();
-#endif
   }
 
   void TriggerDone() {
     assert(mutex.IsLockedByCurrent());
 
-#ifdef HAVE_POSIX
     cond.signal();
-#else
-    done_trigger.Signal();
-#endif
   }
 
 protected:
