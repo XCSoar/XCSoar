@@ -42,8 +42,7 @@ Copyright_License {
 
 #ifndef NDEBUG
 #include "Thread/Handle.hpp"
-#include "Thread/Local.hpp"
-extern ThreadLocalInteger thread_locks_held;
+extern thread_local unsigned thread_locks_held;
 #endif
 
 /**

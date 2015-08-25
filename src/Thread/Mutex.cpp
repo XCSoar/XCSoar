@@ -24,5 +24,5 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 
 #ifndef NDEBUG
-ThreadLocalInteger thread_locks_held;
+thread_local unsigned thread_locks_held;
 #endif
