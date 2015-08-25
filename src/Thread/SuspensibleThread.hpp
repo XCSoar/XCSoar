@@ -28,10 +28,10 @@ Copyright_License {
 #include "Thread/Thread.hpp"
 
 #ifdef HAVE_POSIX
-#include "Thread/PosixMutex.hpp"
-#include "Thread/Cond.hpp"
+#include "PosixMutex.hxx"
+#include "Cond.hxx"
 #else
-#include "Thread/CriticalSection.hpp"
+#include "CriticalSection.hxx"
 #include "Thread/Trigger.hpp"
 #endif
 

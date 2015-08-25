@@ -81,9 +81,9 @@ Thread::Start()
 
 #ifndef NDEBUG
   if (success) {
-    all_threads_mutex.Lock();
+    all_threads_mutex.lock();
     all_threads.push_back(*this);
-    all_threads_mutex.Unlock();
+    all_threads_mutex.unlock();
   }
 #endif
 
@@ -106,9 +106,9 @@ Thread::Join()
 #endif
 
 #ifndef NDEBUG
-  all_threads_mutex.Lock();
+  all_threads_mutex.lock();
   all_threads.erase(all_threads.iterator_to(*this));
-  all_threads_mutex.Unlock();
+  all_threads_mutex.unlock();
 #endif
 }
 
@@ -126,9 +126,9 @@ Thread::Join(unsigned timeout_ms)
 
 #ifndef NDEBUG
     {
-      all_threads_mutex.Lock();
+      all_threads_mutex.lock();
       all_threads.erase(all_threads.iterator_to(*this));
-      all_threads_mutex.Unlock();
+      all_threads_mutex.unlock();
     }
 #endif
   }
@@ -182,9 +182,9 @@ Thread::ThreadProc(LPVOID lpParameter)
 bool
 ExistsAnyThread()
 {
-  all_threads_mutex.Lock();
+  all_threads_mutex.lock();
   bool result = !all_threads.empty();
-  all_threads_mutex.Unlock();
+  all_threads_mutex.unlock();
   return result;
 }
 

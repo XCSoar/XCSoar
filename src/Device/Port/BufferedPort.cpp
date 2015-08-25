@@ -49,7 +49,7 @@ BufferedPort::BeginClose()
   ScopeLock protect(mutex);
   closing = true;
 #ifdef HAVE_POSIX
-  cond.Signal();
+  cond.signal();
 #else
   data_trigger.Signal();
 #endif
@@ -74,7 +74,7 @@ BufferedPort::StopRxThread()
   running = false;
 
 #ifdef HAVE_POSIX
-  cond.Broadcast();
+  cond.broadcast();
 #else
   data_trigger.Signal();
 #endif
@@ -92,7 +92,7 @@ BufferedPort::StartRxThread()
   }
 
 #ifdef HAVE_POSIX
-  cond.Broadcast();
+  cond.broadcast();
 #else
   data_trigger.Signal();
 #endif
@@ -133,7 +133,7 @@ BufferedPort::WaitRead(unsigned timeout_ms)
       return WaitResult::TIMEOUT;
 
 #ifdef HAVE_POSIX
-    cond.Wait(mutex, remaining_ms);
+    cond.timed_wait(mutex, remaining_ms);
 #else
     mutex.Unlock();
     data_trigger.Wait(remaining_ms);
@@ -168,7 +168,7 @@ BufferedPort::DataReceived(const void *data, size_t length)
     buffer.Append(nbytes);
 
 #ifdef HAVE_POSIX
-    cond.Broadcast();
+    cond.broadcast();
 #else
     data_trigger.Signal();
 #endif

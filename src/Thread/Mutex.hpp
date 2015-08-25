@@ -63,7 +63,9 @@ class Mutex {
   ThreadHandle owner;
 #endif
 
-  friend class Cond;
+#ifdef HAVE_POSIX
+  friend class PosixCond;
+#endif
   friend class TemporaryUnlock;
 
 public:
@@ -98,9 +100,9 @@ public:
    */
   gcc_pure
   bool IsLockedByCurrent() const {
-    debug_mutex.Lock();
+    debug_mutex.lock();
     bool result = locked && owner.IsInside();
-    debug_mutex.Unlock();
+    debug_mutex.unlock();
     return result;
   }
 #endif
@@ -110,23 +112,23 @@ public:
    */
   void Lock() {
 #ifdef NDEBUG
-    mutex.Lock();
+    mutex.lock();
 #else
-    if (!mutex.TryLock()) {
+    if (!mutex.try_lock()) {
       /* locking has failed - at this point, "locked" and "owner" are
          either not yet update, or "owner" is set to another thread */
       assert(!IsLockedByCurrent());
 
-      mutex.Lock();
+      mutex.lock();
     }
 
     /* we have just obtained the mutex; the "locked" flag must not be
        set */
-    debug_mutex.Lock();
+    debug_mutex.lock();
     assert(!locked);
     locked = true;
     owner = ThreadHandle::GetCurrent();
-    debug_mutex.Unlock();
+    debug_mutex.unlock();
 
     ++thread_locks_held;
 #endif
@@ -136,7 +138,7 @@ public:
    * Tries to lock the Mutex
    */
   bool TryLock() {
-    if (!mutex.TryLock()) {
+    if (!mutex.try_lock()) {
 #ifndef NDEBUG
       assert(!IsLockedByCurrent());
 #endif
@@ -144,11 +146,11 @@ public:
     }
 
 #ifndef NDEBUG
-    debug_mutex.Lock();
+    debug_mutex.lock();
     assert(!locked);
     locked = true;
     owner = ThreadHandle::GetCurrent();
-    debug_mutex.Unlock();
+    debug_mutex.unlock();
 
     ++thread_locks_held;
 #endif
@@ -160,14 +162,14 @@ public:
    */
   void Unlock() {
 #ifndef NDEBUG
-    debug_mutex.Lock();
+    debug_mutex.lock();
     assert(locked);
     assert(owner.IsInside());
     locked = false;
-    debug_mutex.Unlock();
+    debug_mutex.unlock();
 #endif
 
-    mutex.Unlock();
+    mutex.unlock();
 
 #ifndef NDEBUG
     --thread_locks_held;
@@ -193,6 +195,7 @@ public:
   ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
     scope_mutex.Lock();
   };
+
   ~ScopeLock() {
     scope_mutex.Unlock();
   }
@@ -213,19 +216,19 @@ class TemporaryUnlock {
 
 public:
   TemporaryUnlock(Mutex &_mutex):mutex(_mutex) {
-    mutex.debug_mutex.Lock();
+    mutex.debug_mutex.lock();
     assert(mutex.locked);
     assert(mutex.owner.IsInside());
     mutex.locked = false;
-    mutex.debug_mutex.Unlock();
+    mutex.debug_mutex.unlock();
   }
 
   ~TemporaryUnlock() {
-    mutex.debug_mutex.Lock();
+    mutex.debug_mutex.lock();
     assert(!mutex.locked);
     mutex.owner = ThreadHandle::GetCurrent();
     mutex.locked = true;
-    mutex.debug_mutex.Unlock();
+    mutex.debug_mutex.unlock();
   }
 #else
 public:

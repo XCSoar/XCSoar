@@ -27,7 +27,7 @@ Copyright_License {
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
 #include "Thread/Mutex.hpp"
-#include "Thread/Cond.hpp"
+#include "Thread/Cond.hxx"
 
 #include <queue>
 

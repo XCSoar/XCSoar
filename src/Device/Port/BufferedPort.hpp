@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/StaticFifoBuffer.hpp"
 
 #ifdef HAVE_POSIX
-#include "Thread/Cond.hpp"
+#include "Thread/Cond.hxx"
 #else
 #include "Thread/Trigger.hpp"
 #endif

@@ -71,7 +71,7 @@ StandbyThread::WaitDone()
 
   while (alive && IsBusy()) {
 #ifdef HAVE_POSIX
-    cond.Wait(mutex);
+    cond.wait(mutex);
 #else
     done_trigger.Reset();
     mutex.Unlock();
@@ -113,7 +113,7 @@ StandbyThread::Run()
     if (!pending) {
       /* wait for a command */
 #ifdef HAVE_POSIX
-      cond.Wait(mutex);
+      cond.wait(mutex);
 #else
       command_trigger.Reset();
       mutex.Unlock();

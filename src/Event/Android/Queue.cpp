@@ -36,7 +36,7 @@ EventQueue::Push(const Event &event)
     return;
 
   events.push(event);
-  cond.Signal();
+  cond.signal();
 }
 
 bool
@@ -80,9 +80,9 @@ EventQueue::Wait(Event &event)
 
     const int64_t timeout_us = timers.GetTimeoutUS(now_us);
     if (timeout_us < 0)
-      cond.Wait(mutex);
+      cond.wait(mutex);
     else
-      cond.Wait(mutex, (timeout_us + 999) / 1000);
+      cond.timed_wait(mutex, (timeout_us + 999) / 1000);
 
     now_us = MonotonicClockUS();
   }
@@ -150,7 +150,7 @@ EventQueue::AddTimer(Timer &timer, unsigned ms)
   ScopeLock protect(mutex);
 
   timers.Add(timer, MonotonicClockUS() + ms * 1000);
-  cond.Signal();
+  cond.signal();
 }
 
 void

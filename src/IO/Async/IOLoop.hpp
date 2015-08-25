@@ -27,7 +27,7 @@ Copyright_License {
 #include "OS/Poll.hpp"
 #include "OS/FileDescriptor.hxx"
 #include "Thread/Mutex.hpp"
-#include "Thread/Cond.hpp"
+#include "Thread/Cond.hxx"
 #include "FileEventHandler.hpp"
 
 #include <boost/intrusive/set.hpp>
@@ -148,7 +148,7 @@ public:
 
   void WaitUntilNotRunning() {
     while (running)
-      cond.Wait(mutex);
+      cond.wait(mutex);
   }
 
   void Wait(int timeout_ms=-1);

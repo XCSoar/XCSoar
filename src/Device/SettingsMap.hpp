@@ -30,7 +30,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 
 #ifdef HAVE_POSIX
-#include "Thread/Cond.hpp"
+#include "Thread/Cond.hxx"
 #else
 #include "OS/Sleep.h"
 #endif
@@ -125,7 +125,7 @@ public:
         return end();
 
 #ifdef HAVE_POSIX
-      cond.Wait(*this, remaining);
+      cond.timed_wait(*this, remaining);
 #else
       /* Windows doesn't have condition objects, sorry for this ugly
          kludge :-( */
@@ -161,7 +161,7 @@ public:
       item.value = value;
 
 #ifdef HAVE_POSIX
-    cond.Broadcast();
+    cond.broadcast();
 #endif
   }
 

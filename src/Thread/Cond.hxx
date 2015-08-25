@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2013 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2009-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,42 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_THREAD_POSIX_MUTEX_HXX
-#define XCSOAR_THREAD_POSIX_MUTEX_HXX
+#ifndef THREAD_COND_HXX
+#define THREAD_COND_HXX
 
-#include <pthread.h>
-
-/**
- * Low-level wrapper for a pthread_mutex_t.
- */
-class PosixMutex {
-  pthread_mutex_t mutex;
-
-  friend class Cond;
-
-public:
-  /**
-   * Create a "fast" mutex.
-   */
-#if !defined(__BIONIC__) || !defined(__clang__)
-  constexpr
-#endif
-  PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
-
-  PosixMutex(const PosixMutex &other) = delete;
-  PosixMutex &operator=(const PosixMutex &other) = delete;
-
-  void Lock() {
-    pthread_mutex_lock(&mutex);
-  }
-
-  bool TryLock() {
-    return pthread_mutex_trylock(&mutex) == 0;
-  }
-
-  void Unlock() {
-    pthread_mutex_unlock(&mutex);
-  }
-};
+#include "PosixCond.hxx"
+class Cond : public PosixCond {};
 
 #endif

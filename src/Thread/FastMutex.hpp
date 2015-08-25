@@ -26,14 +26,14 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 
-#include "Thread/PosixMutex.hpp"
+#include "Thread/PosixMutex.hxx"
 
 class FastMutex : public PosixMutex {
 };
 
 #else
 
-#include "Thread/CriticalSection.hpp"
+#include "Thread/CriticalSection.hxx"
 typedef CriticalSection FastMutex;
 
 #endif

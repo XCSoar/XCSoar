@@ -27,40 +27,40 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_THREAD_CRITICAL_SECTION_HXX
-#define XCSOAR_THREAD_CRITICAL_SECTION_HXX
+#ifndef THREAD_CRITICAL_SECTION_HXX
+#define THREAD_CRITICAL_SECTION_HXX
 
 #include <windows.h>
 
 /**
- * Low-level wrapper for a CRITICAL_SECTION.
+ * Wrapper for a CRITICAL_SECTION, backend for the Mutex class.
  */
 class CriticalSection {
-  CRITICAL_SECTION critical_section;
+	CRITICAL_SECTION critical_section;
 
 public:
-  CriticalSection() {
-    ::InitializeCriticalSection(&critical_section);
-  }
+	CriticalSection() {
+		::InitializeCriticalSection(&critical_section);
+	}
 
-  ~CriticalSection() {
-    ::DeleteCriticalSection(&critical_section);
-  }
+	~CriticalSection() {
+		::DeleteCriticalSection(&critical_section);
+	}
 
-  CriticalSection(const CriticalSection &other) = delete;
-  CriticalSection &operator=(const CriticalSection &other) = delete;
+	CriticalSection(const CriticalSection &other) = delete;
+	CriticalSection &operator=(const CriticalSection &other) = delete;
 
-  void Lock() {
-    ::EnterCriticalSection(&critical_section);
-  };
+	void lock() {
+		::EnterCriticalSection(&critical_section);
+	};
 
-  bool TryLock() {
-    return TryEnterCriticalSection(&critical_section) != 0;
-  };
+	bool try_lock() {
+		return ::TryEnterCriticalSection(&critical_section) != 0;
+	};
 
-  void Unlock() {
-    LeaveCriticalSection(&critical_section);
-  }
+	void unlock() {
+		::LeaveCriticalSection(&critical_section);
+	}
 };
 
 #endif

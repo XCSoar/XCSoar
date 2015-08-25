@@ -162,7 +162,7 @@ IOLoop::HandleReady(File *ready)
   /* clear the "running" flag and wake up threads waiting inside
      LockRemove() */
   running = false;
-  cond.Broadcast();
+  cond.broadcast();
 }
 
 void

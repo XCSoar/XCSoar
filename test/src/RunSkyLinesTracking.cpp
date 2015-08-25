@@ -44,14 +44,14 @@ public:
 
   bool Wait(unsigned timeout_ms=5000) {
     const ScopeLock protect(mutex);
-    return done || (cond.Wait(mutex, timeout_ms) && done);
+    return done || (cond.timed_wait(mutex, timeout_ms) && done);
   }
 
 protected:
   void Done() {
     const ScopeLock protect(mutex);
     done = true;
-    cond.Broadcast();
+    cond.broadcast();
   }
 
 public:

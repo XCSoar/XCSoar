@@ -28,7 +28,7 @@ Copyright_License {
 #include "Thread/Thread.hpp"
 #include "Thread/Mutex.hpp"
 #ifdef HAVE_POSIX
-#include "Thread/Cond.hpp"
+#include "Cond.hxx"
 #else
 #include "Thread/Trigger.hpp"
 #endif
@@ -98,7 +98,7 @@ private:
     assert(mutex.IsLockedByCurrent());
 
 #ifdef HAVE_POSIX
-    cond.Signal();
+    cond.signal();
 #else
     command_trigger.Signal();
 #endif
@@ -108,7 +108,7 @@ private:
     assert(mutex.IsLockedByCurrent());
 
 #ifdef HAVE_POSIX
-    cond.Signal();
+    cond.signal();
 #else
     done_trigger.Signal();
 #endif
