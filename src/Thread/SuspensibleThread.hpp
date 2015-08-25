@@ -26,29 +26,18 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
-
-#ifdef HAVE_POSIX
-#include "PosixMutex.hxx"
+#include "FastMutex.hpp"
 #include "Cond.hxx"
-#else
-#include "CriticalSection.hxx"
-#include "Thread/Trigger.hpp"
-#endif
 
 /**
  * A thread which can be suspended and stopped from the outside.
  * Implementers must check CheckStopped().
  */
 class SuspensibleThread : public Thread {
-#ifdef HAVE_POSIX
-  PosixMutex mutex;
+  FastMutex mutex;
   Cond command_trigger, client_trigger;
 
   bool stop_received, suspend_received, suspended;
-#else
-  CriticalSection mutex;
-  Trigger command_trigger, stop_trigger, suspend_trigger, suspended;
-#endif
 
 public:
   SuspensibleThread(const char *_name):Thread(_name) {}

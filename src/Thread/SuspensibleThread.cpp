@@ -28,19 +28,9 @@ Copyright_License {
 bool
 SuspensibleThread::Start(bool _suspended)
 {
-#ifdef HAVE_POSIX
   stop_received = false;
   suspend_received = _suspended;
   suspended = false;
-#else
-  if (_suspended)
-    suspend_trigger.Signal();
-  else
-    suspend_trigger.Reset();
-  stop_trigger.Reset();
-  command_trigger.Reset();
-  suspended.Reset();
-#endif
 
   return Thread::Start();
 }
@@ -48,15 +38,10 @@ SuspensibleThread::Start(bool _suspended)
 void
 SuspensibleThread::BeginStop()
 {
-#ifdef HAVE_POSIX
   mutex.lock();
   stop_received = true;
   command_trigger.signal();
   mutex.unlock();
-#else
-  stop_trigger.Signal();
-  command_trigger.Signal();
-#endif
 }
 
 void
@@ -65,15 +50,10 @@ SuspensibleThread::BeginSuspend()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-#ifdef HAVE_POSIX
   mutex.lock();
   suspend_received = true;
   command_trigger.signal();
   mutex.unlock();
-#else
-  suspend_trigger.Signal();
-  command_trigger.Signal();
-#endif
 }
 
 void
@@ -82,18 +62,12 @@ SuspensibleThread::WaitUntilSuspended()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-#ifdef HAVE_POSIX
   mutex.lock();
   assert(suspend_received);
 
   while (!suspended)
     client_trigger.wait(mutex);
   mutex.unlock();
-#else
-  assert(suspend_trigger.Test());
-
-  suspended.Wait();
-#endif
 }
 
 void
@@ -106,15 +80,10 @@ SuspensibleThread::Suspend()
 void
 SuspensibleThread::Resume()
 {
-#ifdef HAVE_POSIX
   mutex.lock();
   suspend_received = false;
   command_trigger.signal();
   mutex.unlock();
-#else
-  suspend_trigger.Reset();
-  command_trigger.Signal();
-#endif
 }
 
 bool
@@ -122,14 +91,10 @@ SuspensibleThread::IsCommandPending()
 {
   assert(Thread::IsInside());
 
-#ifdef HAVE_POSIX
   mutex.lock();
   bool result = stop_received || suspend_received;
   mutex.unlock();
   return result;
-#else
-  return stop_trigger.Test() || suspend_trigger.Test();
-#endif
 }
 
 bool
@@ -137,7 +102,6 @@ SuspensibleThread::CheckStoppedOrSuspended()
 {
   assert(Thread::IsInside());
 
-#ifdef HAVE_POSIX
   mutex.lock();
 
   assert(!suspended);
@@ -153,20 +117,6 @@ SuspensibleThread::CheckStoppedOrSuspended()
   bool stop = stop_received;
   mutex.unlock();
   return stop;
-#else
-  if (stop_trigger.Test())
-    return true;
-
-  if (suspend_trigger.Test()) {
-    suspended.Signal();
-    while (suspend_trigger.Test() && !stop_trigger.Test())
-      command_trigger.WaitAndReset();
-
-    suspended.Reset();
-  }
-
-  return stop_trigger.Test();
-#endif
 }
 
 bool
@@ -174,7 +124,6 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
 {
   assert(Thread::IsInside());
 
-#ifdef HAVE_POSIX
   mutex.lock();
 
   assert(!suspended);
@@ -193,18 +142,4 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
   bool stop = stop_received;
   mutex.unlock();
   return stop;
-#else
-  if (stop_trigger.Test())
-    return true;
-
-  suspended.Signal();
-
-  command_trigger.WaitAndReset(timeout_ms);
-  while (suspend_trigger.Test() && !stop_trigger.Test())
-    command_trigger.WaitAndReset();
-
-  suspended.Reset();
-
-  return stop_trigger.Test();
-#endif
 }
