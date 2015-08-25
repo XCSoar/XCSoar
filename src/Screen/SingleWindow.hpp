@@ -46,10 +46,6 @@ class SingleWindow : public TopWindow {
 
 public:
 #ifdef USE_GDI
-  static bool Find(const TCHAR *text) {
-    return TopWindow::find(class_name, text);
-  }
-
   /**
    * Register the WIN32 window class.
    */

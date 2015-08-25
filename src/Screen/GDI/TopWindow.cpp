@@ -27,16 +27,6 @@ Copyright_License {
 #include "Event/GDI/Loop.hpp"
 #include "Event/Queue.hpp"
 
-bool
-TopWindow::find(const TCHAR *cls, const TCHAR *text)
-{
-  HWND h = FindWindow(cls, text);
-  if (h != nullptr)
-    SetForegroundWindow(h);
-
-  return h != nullptr;
-}
-
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
                   TopWindowStyle style)

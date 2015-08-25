@@ -137,12 +137,6 @@ public:
   MainWindow();
   virtual ~MainWindow();
 
-#ifdef USE_GDI
-  static bool Find() {
-    return SingleWindow::Find(title);
-  }
-#endif
-
 protected:
   /**
    * Is XCSoar already up and running?

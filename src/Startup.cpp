@@ -168,12 +168,6 @@ Startup()
 {
   VerboseOperationEnvironment operation;
 
-#ifdef USE_GDI
-  //If "XCSoar" is already running, stop this instance
-  if (MainWindow::Find())
-    return false;
-#endif
-
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Initialise();
 #endif
