@@ -1,4 +1,6 @@
 Version 7.0 - not yet released
+* Windows
+  - drop support for Windows CE
 
 Version 6.8 - 2015/08/18
 * data files
