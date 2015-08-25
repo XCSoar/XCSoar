@@ -51,10 +51,8 @@ static_assert(sizeof(RasterPoint) == sizeof(POINT), "not same size");
 struct PixelSize : public tagSIZE {
   PixelSize() = default;
 
-#ifndef __WINE__
   constexpr PixelSize(PixelScalar _width, PixelScalar _height)
     :tagSIZE({_width, _height}) {}
-#endif
 
   constexpr PixelSize(int _width, int _height)
     :tagSIZE({_width, _height}) {}

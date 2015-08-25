@@ -7,13 +7,7 @@ ifeq ($(CLANG),n)
 CXX_FEATURES += -fconserve-space -fno-operator-names
 endif
 
-ifneq ($(TARGET),WINE)
 C_FEATURES = -std=gnu99
-else
-# libwine fails with -std=gnu99 due to funny "extern inline" tricks in
-# winnt.h
-C_FEATURES =
-endif
 
 # produce position independent code when compiling the python library
 ifeq ($(MAKECMDGOALS),python)
