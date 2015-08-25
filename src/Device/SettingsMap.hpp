@@ -27,13 +27,8 @@ Copyright_License {
 #include "Util/Serial.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Thread/Mutex.hpp"
-#include "Operation/Operation.hpp"
-
-#ifdef HAVE_POSIX
 #include "Thread/Cond.hxx"
-#else
-#include "OS/Sleep.h"
-#endif
+#include "Operation/Operation.hpp"
 
 #include <map>
 #include <string>
@@ -50,9 +45,7 @@ Copyright_License {
 template<typename V>
 class DeviceSettingsMap {
   Mutex mutex;
-#ifdef HAVE_POSIX
   Cond cond;
-#endif
 
   struct Item {
     V value;
@@ -124,13 +117,7 @@ public:
       if (remaining <= 0)
         return end();
 
-#ifdef HAVE_POSIX
       cond.timed_wait(*this, remaining);
-#else
-      /* Windows doesn't have condition objects, sorry for this ugly
-         kludge :-( */
-      Sleep(std::min(remaining, 250));
-#endif
     }
   }
 
@@ -160,9 +147,7 @@ public:
     if (!i.second)
       item.value = value;
 
-#ifdef HAVE_POSIX
     cond.broadcast();
-#endif
   }
 
   template<typename K>
