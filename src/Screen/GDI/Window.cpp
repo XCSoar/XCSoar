@@ -278,7 +278,7 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return ::DefWindowProc(_hWnd, message, wParam, lParam);
 
   Window *window;
-  if (message == WM_CREATE) {
+  if (message == WM_NCCREATE) {
     LPCREATESTRUCT cs = (LPCREATESTRUCT)lParam;
 
     window = (Window *)cs->lpCreateParams;
