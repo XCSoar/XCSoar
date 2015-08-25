@@ -65,6 +65,8 @@ class Mutex {
 
 #ifdef HAVE_POSIX
   friend class PosixCond;
+#else
+  friend class WindowsCond;
 #endif
   friend class TemporaryUnlock;
 

@@ -27,41 +27,51 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_CRITICAL_SECTION_HXX
-#define THREAD_CRITICAL_SECTION_HXX
+#ifndef THREAD_WINDOWS_COND_HXX
+#define THREAD_WINDOWS_COND_HXX
 
-#include <windows.h>
+#include "CriticalSection.hxx"
+#include "Mutex.hpp"
 
 /**
- * Wrapper for a CRITICAL_SECTION, backend for the Mutex class.
+ * Wrapper for a CONDITION_VARIABLE, backend for the Cond class.
  */
-class CriticalSection {
-	friend class WindowsCond;
-
-	CRITICAL_SECTION critical_section;
+class WindowsCond {
+	CONDITION_VARIABLE cond;
 
 public:
-	CriticalSection() {
-		::InitializeCriticalSection(&critical_section);
+	WindowsCond() {
+		InitializeConditionVariable(&cond);
 	}
 
-	~CriticalSection() {
-		::DeleteCriticalSection(&critical_section);
+	WindowsCond(const WindowsCond &other) = delete;
+	WindowsCond &operator=(const WindowsCond &other) = delete;
+
+	void signal() {
+		WakeConditionVariable(&cond);
 	}
 
-	CriticalSection(const CriticalSection &other) = delete;
-	CriticalSection &operator=(const CriticalSection &other) = delete;
+	void broadcast() {
+		WakeAllConditionVariable(&cond);
+	}
 
-	void lock() {
-		::EnterCriticalSection(&critical_section);
-	};
+	bool timed_wait(CriticalSection &mutex, DWORD timeout_ms) {
+		return SleepConditionVariableCS(&cond, &mutex.critical_section,
+						timeout_ms);
+	}
 
-	bool try_lock() {
-		return ::TryEnterCriticalSection(&critical_section) != 0;
-	};
+	bool timed_wait(Mutex &mutex, unsigned timeout_ms) {
+		TemporaryUnlock unlock(mutex);
+		return timed_wait(mutex.mutex, timeout_ms);
+	}
 
-	void unlock() {
-		::LeaveCriticalSection(&critical_section);
+	void wait(CriticalSection &mutex) {
+		timed_wait(mutex, INFINITE);
+	}
+
+	void wait(Mutex &mutex) {
+		TemporaryUnlock unlock(mutex);
+		wait(mutex.mutex);
 	}
 };
 
