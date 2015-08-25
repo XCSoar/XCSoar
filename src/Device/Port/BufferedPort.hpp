@@ -27,13 +27,8 @@ Copyright_License {
 #include "Port.hpp"
 #include "IO/DataHandler.hpp"
 #include "Thread/Mutex.hpp"
-#include "Util/StaticFifoBuffer.hpp"
-
-#ifdef HAVE_POSIX
 #include "Thread/Cond.hxx"
-#else
-#include "Thread/Trigger.hpp"
-#endif
+#include "Util/StaticFifoBuffer.hpp"
 
 #include <stdint.h>
 
@@ -49,15 +44,11 @@ class BufferedPort : public Port, protected DataHandler {
    */
   Mutex mutex;
 
-#ifdef HAVE_POSIX
-  Cond cond;
-#else
   /**
    * Emitted by DataReceived() after data has been placed into the
    * buffer.
    */
-  Trigger data_trigger;
-#endif
+  Cond cond;
 
   StaticFifoBuffer<uint8_t, 16384> buffer;
 
