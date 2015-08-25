@@ -140,7 +140,7 @@ ifeq ($(TARGET),PC)
     TCPREFIX :=
   endif
 
-  WINVER = 0x0500
+  WINVER = 0x0600
 endif
 
 ifeq ($(TARGET),CYGWIN)
@@ -148,7 +148,7 @@ ifeq ($(TARGET),CYGWIN)
 
   TARGET_ARCH += -march=i586
 
-  WINVER = 0x0500
+  WINVER = 0x0600
 
   HAVE_POSIX := y
   HAVE_WIN32 := y
