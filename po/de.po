@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-08-10 12:28+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2015-08-23 18:36+0000\n"
+"Last-Translator: Jonas Becker <jonasbecker_gt@yahoo.de>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-08-11 16:44+0000\n"
-"X-Generator: Launchpad (build 17686)\n"
+"X-Launchpad-Export-Date: 2015-08-26 20:00+0000\n"
+"X-Generator: Launchpad (build 17690)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1153,14 +1153,14 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Gesamter Höhengewinn in der letzten Thermik."
 
 #: src/InfoBoxes/Content/Factory.cpp:256
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Letzte Thermik - Höhengewinn"
+msgstr "Letzte Thermikdauer"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "Flugzeit"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -2985,9 +2985,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Nächster Startpunkt"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -3945,9 +3945,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
-#, fuzzy
 msgid "Second Driver"
-msgstr "Treiber"
+msgstr "Zweiter Treiber"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:707
 msgid "Sync. from device"
@@ -4149,9 +4148,8 @@ msgid "Pressure"
 msgstr "Luftdruck"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
-#, fuzzy
 msgid "Sink tone"
-msgstr "Sandstein"
+msgstr "Ton für Sinken"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:255 src/Dialogs/ProfileListDialog.cpp:280
@@ -4720,9 +4718,8 @@ msgstr "Legt die Schraffierung der Lufträume mit der eingestellten Farbe fest."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "Best. Tag"
+msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -5502,7 +5499,7 @@ msgstr "3D Positionsbestimmung"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:60
 #, no-c-format
 msgid "Roaming"
-msgstr ""
+msgstr "Roaming"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
@@ -5522,7 +5519,7 @@ msgstr "Versorgungs Spannung"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "Netzwerk"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Assigned task time"
@@ -5796,9 +5793,8 @@ msgid "GoTo"
 msgstr "Fliege zu"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Konnte Wegpunkte nicht löschen."
+msgstr "Speichern der Wegpunkte fehlgeschlagen"
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -8122,14 +8118,12 @@ msgid "Units used for pressures."
 msgstr "Einheiten für Drücke."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
-#, fuzzy
 msgid "Units used for mass."
-msgstr "Einheiten für die Geschwindigkeiten bei einer Aufgabe."
+msgstr "Maßeinheiten für Gewichte"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
-#, fuzzy
 msgid "Units used for wing loading."
-msgstr "Einheiten für Breitengrad und Längengrad."
+msgstr "Maßeinheiten für Flächenbelastung"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8447,15 +8441,13 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr "Lade die Position deiner Freunde live vom  SkyLines Server."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "Kurze Flugspur"
+msgstr "Zeige nahen Verkehr"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
-#, fuzzy
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr "Lade die Position deiner Freunde live vom  SkyLines Server."
+msgstr "Donwload der Position von nahem Verkehr live von SkyLines"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Vehicle Type"
@@ -8939,20 +8931,16 @@ msgid "This function is not available on your platform yet."
 msgstr "Diese Funktion ist auf deiner Plattform bisher nicht verfügbar."
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "Weitere Lufträume"
+msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr ""
-"Naher\n"
-"Luftraum"
+msgstr "Naher Luftraum"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "Maximale Abfluggeschwindigkeit überschritten"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
@@ -10043,49 +10031,6 @@ msgstr ""
 "Luftraum\n"
 "Einstellung"
 
-#~ msgid ""
-#~ "Start rules slightly violated\n"
-#~ "but within margin"
-#~ msgstr ""
-#~ "Abflugregeln leicht verletzt\n"
-#~ "aber innerhalb der Toleranz"
-
-#~ msgid "Start rules violated"
-#~ msgstr "Abflugregeln verletzt"
-
-#~ msgid "Last thermal time"
-#~ msgstr "Letzte Thermik - Zeit im Steigflug"
-
-#~ msgid "TL Time"
-#~ msgstr "LSteig Zeit"
-
-#~ msgid "Marker"
-#~ msgstr "Marke"
-
-#~ msgid "dropped %s ago"
-#~ msgstr "abgesetzt vor %s"
-
-#~ msgid "ACK Warn"
-#~ msgstr "Warnung Bestätigen"
-
-#~ msgid "ACK Space"
-#~ msgstr "Best. Luftraum"
-
-#~ msgid "Waypoints not editable"
-#~ msgstr "Wegpunkt nicht änderbar"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "Large"
-#~ msgstr "Groß"
-
-#~ msgid "Small"
-#~ msgstr "Klein"
-
-#~ msgid "Waypts."
-#~ msgstr "Wegpkte."
-
 #~ msgid "Save task?"
 #~ msgstr "Aufgabe speichern?"
 
@@ -10198,6 +10143,16 @@ msgstr ""
 #~ msgstr "Keine Hilfe verfügbar."
 
 #~ msgid ""
+#~ "Start rules slightly violated\n"
+#~ "but within margin"
+#~ msgstr ""
+#~ "Abflugregeln leicht verletzt\n"
+#~ "aber innerhalb der Toleranz"
+
+#~ msgid "Start rules violated"
+#~ msgstr "Abflugregeln verletzt"
+
+#~ msgid ""
 #~ "The status file can be used to define sounds to be played when certain "
 #~ "events occur, and how long various status messages will appear on screen."
 #~ msgstr ""
@@ -10237,6 +10192,12 @@ msgstr ""
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "Hilfe zu geschätzte verbleibende AAT"
 
+#~ msgid "ACK Space"
+#~ msgstr "Best. Luftraum"
+
+#~ msgid "ACK Warn"
+#~ msgstr "Warnung Bestätigen"
+
 #~ msgid "Fonts"
 #~ msgstr "Schriften"
 
@@ -10249,6 +10210,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Beispiel Text\n"
 #~ "123"
+
+#~ msgid "Waypts."
+#~ msgstr "Wegpkte."
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -10298,6 +10262,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Wegpunkt\n"
 #~ "Details"
+
+#~ msgid "Waypoints not editable"
+#~ msgstr "Wegpunkt nicht änderbar"
 
 #~ msgid "12 Right (Landscape)"
 #~ msgstr "12 Rechts (Querformat)"
@@ -10408,6 +10375,9 @@ msgstr ""
 #~ msgid "Height GPS"
 #~ msgstr "Höhe - über MSL (GPS)"
 
+#~ msgid "Last thermal time"
+#~ msgstr "Letzte Thermik - Zeit im Steigflug"
+
 #~ msgid "Show details:"
 #~ msgstr "Zeige Details:"
 
@@ -10463,6 +10433,9 @@ msgstr ""
 
 #~ msgid "Do you really want to delete plane profile \"%s\"?"
 #~ msgstr "Möchtest Du das Flugzeugprofil \"%s\" wirklich löschen?"
+
+#~ msgid "Marker"
+#~ msgstr "Marke"
 
 #~ msgid "Gate Width"
 #~ msgstr "Torbreite"
@@ -10578,6 +10551,9 @@ msgstr ""
 
 #~ msgid "left %s ago"
 #~ msgstr "verlassen vor %s"
+
+#~ msgid "dropped %s ago"
+#~ msgstr "abgesetzt vor %s"
 
 #~ msgid "Return"
 #~ msgstr "Zurück"
@@ -10753,11 +10729,23 @@ msgstr ""
 #~ msgid "Dry mass"
 #~ msgstr "Trockengewicht"
 
+#~ msgid "TL Time"
+#~ msgstr "LSteig Zeit"
+
 #~ msgid "Set Code"
 #~ msgstr "Code setzen"
 
 #~ msgid "Loading of plane profile \"%s\" failed!"
 #~ msgstr "Laden des Flugzeugprofils \"%s\" ist fehlgeschlagen!"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Large"
+#~ msgstr "Groß"
+
+#~ msgid "Small"
+#~ msgstr "Klein"
 
 #~ msgid "InfoBox values"
 #~ msgstr "InfoBox Werte"
