@@ -133,6 +133,15 @@ SocketDescriptor::Connect(SocketAddress address)
 bool
 SocketDescriptor::Create(int domain, int type, int protocol)
 {
+#ifdef WIN32
+  static bool initialised = false;
+  if (!initialised) {
+    WSADATA data;
+    WSAStartup(MAKEWORD(2,2), &data);
+    initialised = true;
+  }
+#endif
+
 #ifdef SOCK_CLOEXEC
   /* implemented since Linux 2.6.27 */
   type |= SOCK_CLOEXEC;
