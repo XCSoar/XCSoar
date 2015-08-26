@@ -323,6 +323,36 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   CopyTextRectangle(canvas, x, y, s.width, s.height, transparent, s);
 }
 
+void
+Canvas::DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text)
+{
+  // TODO: implement full clipping
+  if (rc.right > x)
+    DrawClippedText(x, y, rc.right - x, text);
+}
+
+void
+Canvas::DrawClippedText(int x, int y, unsigned width, const TCHAR *text)
+{
+  assert(text != nullptr);
+#ifndef UNICODE
+  assert(ValidateUTF8(text));
+#endif
+
+  auto s = RenderText(font, text);
+  if (s.data == nullptr)
+    return;
+
+  if (width > s.width)
+    width = s.width;
+
+  SDLRasterCanvas canvas(buffer);
+  CopyTextRectangle(canvas, x, y, width, s.height, s,
+                    text_color, background_color,
+                    background_mode == OPAQUE);
+
+}
+
 static bool
 Clip(int &position, unsigned &length, unsigned max,
      int &src_position)

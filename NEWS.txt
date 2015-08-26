@@ -3,6 +3,8 @@ Version 6.8.1 - not yet released
 * fix crash with empty xcsoar-checklist.txt file
 * devices
   - fix TCP port on Windows (#3428)
+* Kobo
+  - fix overlapping text (#3634)
 * Android
   - fix USB-RS232-OTG permissions on Android
 

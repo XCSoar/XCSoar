@@ -329,15 +329,8 @@ public:
 
   void DrawOpaqueText(int x, int y, const PixelRect &rc, const TCHAR *text);
 
-  void DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text) {
-    // XXX
-    DrawText(x, y, text);
-  }
-
-  void DrawClippedText(int x, int y, unsigned width, const TCHAR *text) {
-    // XXX
-    DrawText(x, y, text);
-  }
+  void DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text);
+  void DrawClippedText(int x, int y, unsigned width, const TCHAR *text);
 
   /**
    * Render text, clip it within the bounds of this Canvas.
