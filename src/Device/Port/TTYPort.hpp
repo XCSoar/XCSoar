@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TTY_PORT_HPP
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
-#include "Thread/StoppableThread.hpp"
 #include "BufferedPort.hpp"
 #include "OS/TTYDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
 #include <atomic>
+
+#include <tchar.h>
 
 /**
  * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
