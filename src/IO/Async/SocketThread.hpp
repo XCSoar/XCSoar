@@ -27,6 +27,8 @@ Copyright_License {
 #include "Thread/StoppableThread.hpp"
 #include "Net/SocketDescriptor.hpp"
 
+#include <assert.h>
+
 class SocketEventHandler;
 
 /**
@@ -37,8 +39,15 @@ class SocketThread : public StoppableThread {
   SocketEventHandler &handler;
 
 public:
-  SocketThread(SocketDescriptor _socket, SocketEventHandler &_handler)
-    :StoppableThread("SocketThread"), socket(_socket), handler(_handler) {}
+  SocketThread(SocketEventHandler &_handler)
+    :StoppableThread("SocketThread"), handler(_handler) {}
+
+  bool Start(SocketDescriptor _socket) {
+    assert(_socket.IsDefined());
+
+    socket = _socket;
+    return StoppableThread::Start();
+  }
 
 protected:
   /* virtual methods from class Thread */

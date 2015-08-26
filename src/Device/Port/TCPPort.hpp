@@ -54,7 +54,7 @@ public:
     :SocketPort(_listener, _handler),
      listener(SocketDescriptor::Undefined())
 #ifndef HAVE_POSIX
-    , thread(listener, *this)
+    , thread(*this)
 #endif
   {}
 

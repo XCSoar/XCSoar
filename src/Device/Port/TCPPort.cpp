@@ -58,7 +58,7 @@ TCPPort::Open(unsigned port)
 #ifdef HAVE_POSIX
   io_thread->LockAdd(listener.ToFileDescriptor(), Poll::READ, *this);
 #else
-  thread.Start();
+  thread.Start(listener);
 #endif
   StateChanged();
   return true;
