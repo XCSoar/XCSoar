@@ -84,10 +84,8 @@ LoadChecklist()
   ChecklistTitle[0] = NULL;
 
   TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST));
-  if (reader == NULL) {
-    addChecklist(_("No checklist loaded"), _("Create xcsoar-checklist.txt"));
+  if (reader == NULL)
     return;
-  }
 
   StaticString<MAXDETAILS> Details;
   TCHAR Name[100];
@@ -138,6 +136,8 @@ dlgChecklistShowModal()
   static bool first = true;
   if (first) {
     LoadChecklist();
+    if (nLists == 0)
+      addChecklist(_("No checklist loaded"), _("Create xcsoar-checklist.txt"));
     first = false;
   }
 

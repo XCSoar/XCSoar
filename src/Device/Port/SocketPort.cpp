@@ -78,7 +78,7 @@ SocketPort::Set(SocketDescriptor &&_socket)
 #ifdef HAVE_POSIX
   io_thread->LockAdd(socket.ToFileDescriptor(), Poll::READ, *this);
 #else
-  thread.Start();
+  thread.Start(socket);
 #endif
 
   StateChanged();

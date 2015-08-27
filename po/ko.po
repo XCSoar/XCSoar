@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-06-29 06:58+0000\n"
+"PO-Revision-Date: 2015-08-25 14:03+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-06-29 10:20+0000\n"
-"X-Generator: Launchpad (build 17578)\n"
+"X-Launchpad-Export-Date: 2015-08-26 20:01+0000\n"
+"X-Generator: Launchpad (build 17690)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1125,14 +1125,14 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "마지막 써멀에서 획득/손실량을 표시합니다."
 
 #: src/InfoBoxes/Content/Factory.cpp:256
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "써멀(마지막 상승값)"
+msgstr "써멀(마지막 써멀 선회시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "비행시간"
+msgstr "써멀(선회시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -2912,9 +2912,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "다음 시작 포인트"
+msgstr "화살표(다음 포인트까지)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -2924,6 +2924,9 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"현재 선택된 웨이포인트를 가리키는 화살표. 웨이포인트의 이름과 거리도 표시됩니"
+"다. 최적화된 방향을 가리키며, 웨이포인트의 중심이나, AAT 타스크의 AAT 섹터내 "
+"타겟을 가리킵니다."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3864,9 +3867,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
-#, fuzzy
 msgid "Second Driver"
-msgstr "드라이버"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:707
 msgid "Sync. from device"
@@ -4064,9 +4066,8 @@ msgid "Pressure"
 msgstr "기압"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
-#, fuzzy
 msgid "Sink tone"
-msgstr "모래색"
+msgstr "シンクトーン"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:255 src/Dialogs/ProfileListDialog.cpp:280
@@ -4115,7 +4116,7 @@ msgstr "음량"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #, no-c-format
 msgid "Output mode"
-msgstr ""
+msgstr "출력모드"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -4619,9 +4620,8 @@ msgstr "공역을 채울 색을 설정하십시오."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "활동일"
+msgstr "ACK"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -5234,7 +5234,7 @@ msgstr "설정중량"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:142
 msgid "Reference mass of the polar"
-msgstr ""
+msgstr "폴라의 기본중량"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:147
 msgid "Dry Mass"
@@ -5386,7 +5386,7 @@ msgstr "3D 고정"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:60
 #, no-c-format
 msgid "Roaming"
-msgstr ""
+msgstr "로밍"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
@@ -5406,7 +5406,7 @@ msgstr "공급전압"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "네트워크"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Assigned task time"
@@ -5675,9 +5675,8 @@ msgid "GoTo"
 msgstr "포인트로 이동"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "웨이포인트 삭제에 실패함."
+msgstr "웨이포인트 저장실패"
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -5815,13 +5814,13 @@ msgstr "공역을 채우지 않습니다."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr ""
+msgstr "아무 이름도 표시되지 않습니다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr ""
+msgstr "모든 이름이 표시됩니다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:154
 msgid "Colours"
@@ -6849,7 +6848,7 @@ msgstr "없음"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:370
 #, no-c-format
 msgid "Cross section"
-msgstr "단면도"
+msgstr "그래프"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:214
 msgid "Bottom area"
@@ -7913,14 +7912,12 @@ msgid "Units used for pressures."
 msgstr "기압에 사용되는 단위입니다."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
-#, fuzzy
 msgid "Units used for mass."
-msgstr "타스크 속도에 쓰이는 단위입니다."
+msgstr "중량에 사용되는 단위입니다."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
-#, fuzzy
 msgid "Units used for wing loading."
-msgstr "위도/경도수치를 표시하는 단위를 설정합니다."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8224,15 +8221,13 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr "Skylines 서버에서 친구의 위치를 다운로드 합니다."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "짧은 비행 항적"
+msgstr "근처의 트래픽 표시"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
-#, fuzzy
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr "Skylines 서버에서 친구의 위치를 다운로드 합니다."
+msgstr "SkyLines server에서 근처의 라이브 트래픽을 다운로드 받습니다."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Vehicle Type"
@@ -8244,7 +8239,7 @@ msgstr "사용하는 기체종류를 설정합니다."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
 msgid "Vehicle Name"
-msgstr ""
+msgstr "기체이름"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:246
 msgid "Server"
@@ -8712,20 +8707,16 @@ msgid "This function is not available on your platform yet."
 msgstr "이 기능은 당신의 시스템에서 사용할 수 없습니다."
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "추가공역파일"
+msgstr "공역내부"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr ""
-"근처의\n"
-"공역"
+msgstr "공역접근"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "최대스타트속도에 도달했습니다."
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
@@ -9760,6 +9751,12 @@ msgid ""
 "Airspace"
 msgstr "공역 설정"
 
+#~ msgid "Height GPS"
+#~ msgstr "GPS 고도"
+
+#~ msgid "H GPS"
+#~ msgstr "수직 고도"
+
 #~ msgid ""
 #~ "Start rules slightly violated\n"
 #~ "but within margin"
@@ -9767,45 +9764,6 @@ msgstr "공역 설정"
 
 #~ msgid "Start rules violated"
 #~ msgstr "스타트 규정 위반"
-
-#~ msgid "Last thermal time"
-#~ msgstr "써멀(최근 써멀에서 선회한 시간)"
-
-#~ msgid "TL Time"
-#~ msgstr "최근써멀시간"
-
-#~ msgid "Marker"
-#~ msgstr "마커"
-
-#~ msgid "dropped %s ago"
-#~ msgstr "%s분전 투하"
-
-#~ msgid "ACK Warn"
-#~ msgstr "유효경보"
-
-#~ msgid "ACK Space"
-#~ msgstr "활성 공간"
-
-#~ msgid "Waypoints not editable"
-#~ msgstr "편집 할 수 없는 웨이포인트"
-
-#~ msgid "Normal"
-#~ msgstr "보통"
-
-#~ msgid "Large"
-#~ msgstr "크게"
-
-#~ msgid "Small"
-#~ msgstr "작게"
-
-#~ msgid "Waypts."
-#~ msgstr "WP에디터"
-
-#~ msgid "Height GPS"
-#~ msgstr "GPS 고도"
-
-#~ msgid "H GPS"
-#~ msgstr "수직 고도"
 
 #~ msgid "OLC"
 #~ msgstr "온라인 컨테스트"
@@ -9828,6 +9786,9 @@ msgstr "공역 설정"
 #~ msgid "InfoBox Pages"
 #~ msgstr "인포박스 페이지"
 
+#~ msgid "Waypoints not editable"
+#~ msgstr "편집 할 수 없는 웨이포인트"
+
 #~ msgid "Delete Waypoint?"
 #~ msgstr "웨이포인트를 지우겠습니까?"
 
@@ -9848,6 +9809,9 @@ msgstr "공역 설정"
 
 #~ msgid "Unknown competition number"
 #~ msgstr "알 수없는 선수 번호"
+
+#~ msgid "Marker"
+#~ msgstr "마커"
 
 #~ msgid "Wind At Altitude"
 #~ msgstr "고도에서의 풍속"
@@ -9885,6 +9849,9 @@ msgstr "공역 설정"
 #~ msgid "Fonts"
 #~ msgstr "글꼴"
 
+#~ msgid "Waypts."
+#~ msgstr "WP에디터"
+
 #~ msgid "InfoBox titles"
 #~ msgstr "정보창 제목"
 
@@ -9915,11 +9882,26 @@ msgstr "공역 설정"
 #~ msgid "No valid start.\n"
 #~ msgstr "유효한 출발이 없음.\n"
 
+#~ msgid "Last thermal time"
+#~ msgstr "써멀(최근 써멀에서 선회한 시간)"
+
+#~ msgid "TL Time"
+#~ msgstr "최근써멀시간"
+
 #~ msgid "MANUAL"
 #~ msgstr "수동"
 
+#~ msgid "dropped %s ago"
+#~ msgstr "%s분전 투하"
+
 #~ msgid "left %s ago"
 #~ msgstr "%s분전 이동"
+
+#~ msgid "ACK Warn"
+#~ msgstr "유효경보"
+
+#~ msgid "ACK Space"
+#~ msgstr "활성 공간"
 
 #~ msgid "Goto and clear task"
 #~ msgstr "웨이포인트이동, 타스크삭제"
@@ -10043,6 +10025,15 @@ msgstr "공역 설정"
 
 #~ msgid "Waypoint Info"
 #~ msgstr "웨이포인트 정보"
+
+#~ msgid "Normal"
+#~ msgstr "보통"
+
+#~ msgid "Large"
+#~ msgstr "크게"
+
+#~ msgid "Small"
+#~ msgstr "작게"
 
 #~ msgid "InfoBox values"
 #~ msgstr "정보창 내용"

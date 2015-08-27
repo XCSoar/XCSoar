@@ -257,6 +257,36 @@ RenderText(const Font *font, const TCHAR *text)
 #endif
 }
 
+template<typename Operations>
+static void
+CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
+                  unsigned width, unsigned height,
+                  Operations o, TextCache::Result s)
+{
+  typedef typename Operations::SourcePixelTraits SourcePixelTraits;
+  canvas.CopyRectangle<decltype(o), SourcePixelTraits>
+    (x, y, width, height,
+     typename SourcePixelTraits::const_pointer_type(s.data),
+     s.pitch, o);
+}
+
+static void
+CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
+                  unsigned width, unsigned height,
+                  TextCache::Result s,
+                  Color text_color, Color background_color, bool opaque)
+{
+  if (opaque) {
+    OpaqueAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
+      opaque(canvas.Import(background_color), canvas.Import(text_color));
+    CopyTextRectangle(canvas, x, y, width, height, opaque, s);
+  } else {
+    ColoredAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
+      transparent(canvas.Import(text_color));
+    CopyTextRectangle(canvas, x, y, width, height, transparent, s);
+  }
+}
+
 void
 Canvas::DrawText(int x, int y, const TCHAR *text)
 {
@@ -270,22 +300,9 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
     return;
 
   SDLRasterCanvas canvas(buffer);
-
-  if (background_mode == OPAQUE) {
-    OpaqueAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
-      opaque(canvas.Import(background_color), canvas.Import(text_color));
-    canvas.CopyRectangle<decltype(opaque), GreyscalePixelTraits>
-      (x, y, s.width, s.height,
-       GreyscalePixelTraits::const_pointer_type(s.data),
-       s.pitch, opaque);
-  } else {
-    ColoredAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
-      transparent(canvas.Import(text_color));
-    canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
-      (x, y, s.width, s.height,
-       GreyscalePixelTraits::const_pointer_type(s.data),
-       s.pitch, transparent);
-  }
+  CopyTextRectangle(canvas, x, y, s.width, s.height, s,
+                    text_color, background_color,
+                    background_mode == OPAQUE);
 }
 
 void
@@ -303,10 +320,37 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   SDLRasterCanvas canvas(buffer);
   ColoredAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
     transparent(canvas.Import(text_color));
-  canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
-    (x, y, s.width, s.height,
-     GreyscalePixelTraits::const_pointer_type(s.data),
-     s.pitch, transparent);
+  CopyTextRectangle(canvas, x, y, s.width, s.height, transparent, s);
+}
+
+void
+Canvas::DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text)
+{
+  // TODO: implement full clipping
+  if (rc.right > x)
+    DrawClippedText(x, y, rc.right - x, text);
+}
+
+void
+Canvas::DrawClippedText(int x, int y, unsigned width, const TCHAR *text)
+{
+  assert(text != nullptr);
+#ifndef UNICODE
+  assert(ValidateUTF8(text));
+#endif
+
+  auto s = RenderText(font, text);
+  if (s.data == nullptr)
+    return;
+
+  if (width > s.width)
+    width = s.width;
+
+  SDLRasterCanvas canvas(buffer);
+  CopyTextRectangle(canvas, x, y, width, s.height, s,
+                    text_color, background_color,
+                    background_mode == OPAQUE);
+
 }
 
 static bool

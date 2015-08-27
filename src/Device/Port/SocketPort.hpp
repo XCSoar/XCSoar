@@ -55,7 +55,7 @@ public:
     :BufferedPort(_listener, _handler),
      socket(SocketDescriptor::Undefined())
 #ifndef HAVE_POSIX
-    , thread(socket, *this)
+    , thread(*this)
 #endif
   {}
 

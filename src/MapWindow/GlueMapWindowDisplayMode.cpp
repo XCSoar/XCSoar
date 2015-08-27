@@ -113,6 +113,7 @@ GlueMapWindow::UpdateScreenBounds()
   visible_projection.UpdateScreenBounds();
 
   if (topography_thread != nullptr &&
+      visible_projection.IsValid() &&
       CommonInterface::GetMapSettings().topography_enabled)
     topography_thread->Trigger(visible_projection);
 }

@@ -228,7 +228,7 @@ bool
 StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
 {
   return StringIsEqualIgnoreCase(haystack, needle,
-                                 StringLength(needle) * sizeof(needle[0]));
+                                 StringLength(needle));
 }
 
 wchar_t *

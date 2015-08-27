@@ -4,6 +4,18 @@ Version 7.0 - not yet released
   - require Windows Vista or later
   - allow starting multiple XCSoar instances
 
+Version 6.8.1 - 2015/08/27
+* fix freeze bug when starting without GPS fix
+* fix crash with empty xcsoar-checklist.txt file
+* devices
+  - fix TCP port on Windows (#3428)
+* Windows
+  - fix the airspace file parser (#3633)
+* Kobo
+  - fix overlapping text (#3634)
+* Android
+  - fix USB-RS232-OTG permissions on Android
+
 Version 6.8 - 2015/08/18
 * data files
   - optimise the topography loader
