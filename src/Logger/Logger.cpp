@@ -39,7 +39,7 @@ Logger::LogPoint(const NMEAInfo &gps_info)
   // don't hold up the calculation thread if it's locked
   // by another process (most likely the logger gui message)
 
-  if (lock.tryWriteLock()) {
+  if (lock.try_lock()) {
     logger.LogPoint(gps_info);
     lock.unlock();
   }
@@ -48,7 +48,7 @@ Logger::LogPoint(const NMEAInfo &gps_info)
 void
 Logger::LogEvent(const NMEAInfo &gps_info, const char* event)
 {
-  if (lock.tryWriteLock()) {
+  if (lock.try_lock()) {
     logger.LogEvent(gps_info, event);
     lock.unlock();
   }
@@ -69,7 +69,7 @@ Logger::LogFinishEvent(const NMEAInfo &gps_info)
 bool
 Logger::IsLoggerActive() const
 {
-  Poco::ScopedRWLock protect(lock, false);
+  const ScopeSharedLock protect(lock);
   return logger.IsActive();
 }
 
@@ -122,7 +122,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
     return;
   }
 
-  Poco::ScopedRWLock protect(lock, true);
+  const ScopeExclusiveLock protect(lock);
   logger.StartLogger(gps_info, settings.logger, asset_number, decl);
 }
 
@@ -147,7 +147,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 
   if (noAsk || (ShowMessageBox(_("Stop Logger"), _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-    Poco::ScopedRWLock protect(lock, true);
+    const ScopeExclusiveLock protect(lock);
     logger.StopLogger(gps_info);
   }
 }
@@ -155,13 +155,13 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 void
 Logger::LoggerNote(const TCHAR *text)
 {
-  Poco::ScopedRWLock protect(lock, true);
+  const ScopeExclusiveLock protect(lock);
   logger.LoggerNote(text);
 }
 
 void
 Logger::ClearBuffer()
 {
-  Poco::ScopedRWLock protect(lock, true);
+  const ScopeExclusiveLock protect(lock);
   logger.ClearBuffer();
 }

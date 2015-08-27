@@ -23,7 +23,7 @@
 #ifndef XCSOAR_THREAD_GUARD_HPP
 #define XCSOAR_THREAD_GUARD_HPP
 
-#include "Poco/RWLock.h"
+#include "SharedMutex.hpp"
 
 /**
  * This class protects its value with a mutex.  A user may get a lease
@@ -34,7 +34,7 @@ template<typename T>
 class Guard {
 protected:
   T &value;
-  mutable Poco::RWLock mutex;
+  mutable SharedMutex mutex;
 
 public:
   /**
@@ -45,11 +45,11 @@ public:
 
   public:
     explicit Lease(const Guard &_guard):guard(_guard) {
-      guard.mutex.readLock();
+      guard.mutex.lock_shared();
     }
 
     ~Lease() {
-      guard.mutex.unlock();
+      guard.mutex.unlock_shared();
     }
 
     operator const T&() const {
@@ -69,7 +69,7 @@ public:
 
   public:
     explicit ExclusiveLease(Guard &_guard):guard(_guard) {
-      guard.mutex.writeLock();
+      guard.mutex.lock();
     }
 
     ~ExclusiveLease() {

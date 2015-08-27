@@ -25,9 +25,9 @@ Copyright_License {
 #define XCSOAR_LOGGER_HPP
 
 #include "LoggerImpl.hpp"
+#include "Thread/SharedMutex.hpp"
 
 #include <tchar.h>
-#include "Poco/RWLock.h"
 
 struct NMEAInfo;
 struct ComputerSettings;
@@ -35,9 +35,9 @@ struct ComputerSettings;
 class ProtectedTaskManager;
 
 class Logger {
-private:
   LoggerImpl logger;
-  mutable Poco::RWLock lock;
+  mutable SharedMutex lock;
+
   void LogEvent(const NMEAInfo &gps_info, const char*);
 
 public:

@@ -3,7 +3,6 @@
 THREAD_SRC_DIR = $(SRC)/Thread
 
 THREAD_SOURCES = \
-	$(SRC)/Poco/RWLock.cpp \
 	$(THREAD_SRC_DIR)/Thread.cpp \
 	$(THREAD_SRC_DIR)/SuspensibleThread.cpp \
 	$(THREAD_SRC_DIR)/RecursivelySuspensibleThread.cpp \
