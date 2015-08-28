@@ -133,9 +133,11 @@ EventQueue::Wait(Event &event)
       return true;
 
     while (events.empty()) {
-      mutex.Unlock();
-      Poll();
-      mutex.Lock();
+      {
+        const ScopeUnlock unlock(mutex);
+        Poll();
+      }
+
       if (quit)
         return false;
 
