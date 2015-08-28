@@ -85,9 +85,8 @@ StandbyThread::WaitStopped()
     return;
 
   /* mutex must be unlocked because Thread::Join() blocks */
-  mutex.Unlock();
+  const ScopeUnlock unlock(mutex);
   Thread::Join();
-  mutex.Lock();
 }
 
 void
@@ -96,7 +95,8 @@ StandbyThread::Run()
   assert(!mutex.IsLockedByCurrent());
   assert(!busy);
 
-  mutex.Lock();
+  const ScopeLock lock(mutex);
+
   alive = true;
 
   while (!stop) {
@@ -121,6 +121,5 @@ StandbyThread::Run()
 
   alive = false;
   TriggerDone();
-  mutex.Unlock();
 }
 
