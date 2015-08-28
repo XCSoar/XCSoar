@@ -5,7 +5,7 @@ JASPER_SOURCES = \
 	$(JASSRC)/base/jas_seq.c 	$(JASSRC)/base/jas_stream.c \
 	$(JASSRC)/base/jas_string.c 	$(JASSRC)/base/jas_tvp.c \
 	$(JASSRC)/jp2/jp2_cod.c \
-	$(JASSRC)/jp2/jp2_dec.c 	$(JASSRC)/jpc/jpc_bs.c \
+	$(JASSRC)/jpc/jpc_bs.c \
 	$(JASSRC)/jpc/jpc_cs.c 		$(JASSRC)/jpc/jpc_dec.c \
 	$(JASSRC)/jpc/jpc_math.c 	$(JASSRC)/jpc/jpc_mct.c \
 	$(JASSRC)/jpc/jpc_mqdec.c       $(JASSRC)/jpc/jpc_mqcod.c \

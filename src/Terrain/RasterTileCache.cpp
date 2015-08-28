@@ -24,11 +24,15 @@ Copyright_License {
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
 #include "ZzipStream.hpp"
-#include "jasper/jas_image.h"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Math/FastMath.h"
+
+extern "C" {
+#include "jasper/jp2/jp2_cod.h"
+#include "jasper/jpc/jpc_dec.h"
+}
 
 #include <string.h>
 #include <algorithm>
@@ -325,6 +329,47 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
 
 extern RasterTileCache *raster_tile_current;
 
+static bool
+LoadJPG2000(jas_stream_t *in, const char *optstr)
+{
+  /* Get the first box.  This should be a JP box. */
+  auto box = jp2_box_get(in);
+  if (box == nullptr)
+    return false;
+
+  if (box->type != JP2_BOX_JP ||
+      box->data.jp.magic != JP2_JP_MAGIC) {
+    jp2_box_destroy(box);
+    return false;
+  }
+
+  jp2_box_destroy(box);
+
+  /* Get the second box.  This should be a FTYP box. */
+  box = jp2_box_get(in);
+  if (box == nullptr)
+    return false;
+
+  auto type = box->type;
+  jp2_box_destroy(box);
+  if (type != JP2_BOX_FTYP)
+    return false;
+
+  /* find the JP2C box */
+  do {
+    box = jp2_box_get(in);
+    if (box == nullptr)
+      /* not found */
+      return false;
+
+    type = box->type;
+    jp2_box_destroy(box);
+  } while (type != JP2_BOX_JP2C);
+
+  jpc_decode(in, optstr);
+  return true;
+}
+
 void
 RasterTileCache::LoadJPG2000(const char *jp2_filename)
 {
@@ -339,7 +384,7 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
   if (operation != NULL)
     operation->SetProgressRange(jas_stream_length(in) / 65536);
 
-  jp2_decode(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
+  ::LoadJPG2000(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
   jas_stream_close(in);
 }
 
