@@ -176,7 +176,7 @@ TrackingGlue::Tick()
   unsigned tracking_interval = settings.interval;
   LiveTrack24Settings copy = this->settings.livetrack24;
 
-  mutex.Unlock();
+  const ScopeUnlock unlock(mutex);
 
   if (!flying) {
     if (last_flying && state.HasSession()) {
@@ -187,7 +187,6 @@ TrackingGlue::Tick()
     }
 
     /* don't track if not flying */
-    mutex.Lock();
     return;
   }
 
@@ -219,7 +218,6 @@ TrackingGlue::Tick()
                                     MapVehicleTypeToLivetrack24(settings.vehicleType),
                                     settings.vehicle_name)) {
       state.ResetSession();
-      mutex.Lock();
       return;
     }
 
@@ -229,8 +227,6 @@ TrackingGlue::Tick()
   LiveTrack24::SendPosition(state.session_id, state.packet_id++,
                             location, altitude, ground_speed, track,
                             current_timestamp);
-
-  mutex.Lock();
 }
 
 #endif
