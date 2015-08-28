@@ -70,12 +70,14 @@
 
 typedef struct {
 
+#ifdef ENABLE_JASPER_IMAGE
 	jp2_box_t *pclr;
 	jp2_box_t *cdef;
 	jp2_box_t *ihdr;
 	jp2_box_t *bpcc;
 	jp2_box_t *cmap;
 	jp2_box_t *colr;
+#endif /* ENABLE_JASPER_IMAGE */
 	jas_image_t *image;
 	uint_fast16_t numchans;
 	uint_fast16_t *chantocmptlut;
