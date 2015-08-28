@@ -71,10 +71,11 @@ InputEvents::DoQueuedEvents()
   int i;
 
   // copy the queue first, blocking
-  mutexEventQueue.Lock();
-  std::copy_n(GCE_Queue, MAX_GCE_QUEUE, GCE_Queue_copy);
-  std::fill_n(GCE_Queue, MAX_GCE_QUEUE, -1);
-  mutexEventQueue.Unlock();
+  {
+    const ScopeLock lock(mutexEventQueue);
+    std::copy_n(GCE_Queue, MAX_GCE_QUEUE, GCE_Queue_copy);
+    std::fill_n(GCE_Queue, MAX_GCE_QUEUE, -1);
+  }
 
   // process each item in the queue
   for (i = 0; i < MAX_GCE_QUEUE; i++) {
@@ -92,13 +93,14 @@ bool
 InputEvents::processGlideComputer(unsigned gce_id)
 {
   // add an event to the bottom of the queue
-  mutexEventQueue.Lock();
+  ScopeLock protect(mutexEventQueue);
+
   for (int i = 0; i < MAX_GCE_QUEUE; i++) {
     if (GCE_Queue[i] == -1) {
       GCE_Queue[i] = gce_id;
       break;
     }
   }
-  mutexEventQueue.Unlock();
+
   return true;
 }
