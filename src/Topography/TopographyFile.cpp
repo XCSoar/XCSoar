@@ -146,9 +146,10 @@ TopographyFile::Update(const WindowProjection &map_projection)
         assert(*current == it);
 
         /* remove from linked list (protected) */
-        mutex.Lock();
-        *current = it->next;
-        mutex.Unlock();
+        {
+          const ScopeLock lock(mutex);
+          *current = it->next;
+        }
 
         /* now it's unreachable, and we can delete the XShape without
            holding a lock */
@@ -165,9 +166,10 @@ TopographyFile::Update(const WindowProjection &map_projection)
         it->next = *current;
 
         /* insert into linked list (protected) */
-        mutex.Lock();
-        *current = it;
-        mutex.Unlock();
+        {
+          const ScopeLock lock(mutex);
+          *current = it;
+        }
       }
 
       current = &it->next;
@@ -176,9 +178,10 @@ TopographyFile::Update(const WindowProjection &map_projection)
   // end of list marker
   assert(*current == nullptr);
 
-  mutex.Lock();
-  ++serial;
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    ++serial;
+  }
 
   return true;
 }
