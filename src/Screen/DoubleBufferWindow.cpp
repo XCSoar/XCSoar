@@ -60,9 +60,10 @@ void
 DoubleBufferWindow::Flip()
 {
   /* enable the drawing buffer */
-  mutex.Lock();
-  current ^= 1;
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    current ^= 1;
+  }
 
   /* commit the finished buffer to the screen (asynchronously) */
   SendUser(INVALIDATE);
