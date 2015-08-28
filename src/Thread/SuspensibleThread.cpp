@@ -38,6 +38,8 @@ SuspensibleThread::Start(bool _suspended)
 void
 SuspensibleThread::BeginStop()
 {
+  assert(!Thread::IsInside());
+
   const ScopeLock lock(mutex);
   stop_received = true;
   command_trigger.signal();
@@ -70,6 +72,8 @@ SuspensibleThread::WaitUntilSuspended()
 void
 SuspensibleThread::Suspend()
 {
+  assert(!Thread::IsInside());
+
   BeginSuspend();
   WaitUntilSuspended();
 }
@@ -77,6 +81,8 @@ SuspensibleThread::Suspend()
 void
 SuspensibleThread::Resume()
 {
+  assert(!Thread::IsInside());
+
   const ScopeLock lock(mutex);
   suspend_received = false;
   command_trigger.signal();
