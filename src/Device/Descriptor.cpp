@@ -239,10 +239,11 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  device_blackboard->mutex.Lock();
-  device_blackboard->SetRealState(index).Reset();
-  device_blackboard->ScheduleMerge();
-  device_blackboard->mutex.Unlock();
+  {
+    const ScopeLock lock(device_blackboard->mutex);
+    device_blackboard->SetRealState(index).Reset();
+    device_blackboard->ScheduleMerge();
+  }
 
   settings_sent.Clear();
   settings_received.Clear();
@@ -529,10 +530,11 @@ DeviceDescriptor::Close()
 
   ticker = false;
 
-  device_blackboard->mutex.Lock();
-  device_blackboard->SetRealState(index).Reset();
-  device_blackboard->ScheduleMerge();
-  device_blackboard->mutex.Unlock();
+  {
+    const ScopeLock lock(device_blackboard->mutex);
+    device_blackboard->SetRealState(index).Reset();
+    device_blackboard->ScheduleMerge();
+  }
 
   settings_sent.Clear();
   settings_received.Clear();
