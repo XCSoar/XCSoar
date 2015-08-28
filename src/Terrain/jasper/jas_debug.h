@@ -90,7 +90,7 @@ extern "C" {
 
 /* Output debugging information to standard error provided that the debug
   level is set sufficiently high. */
-#ifndef NDEBUG
+#ifdef ENABLE_JASPER_LOG
 #define	JAS_DBGLOG(n, x) \
   (void)((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
 #else
@@ -105,7 +105,11 @@ int jas_getdbglevel(void);
 int jas_setdbglevel(int dbglevel);
 
 /* Perform formatted output to standard error. */
+#ifdef ENABLE_JASPER_LOG
 int jas_eprintf(const char *fmt, ...);
+#else
+#define jas_eprintf(...)
+#endif
 
 /* Dump memory to a stream. */
 int jas_memdump(FILE *out, void *data, size_t len);

@@ -1,6 +1,5 @@
 JASSRC = $(SRC)/Terrain/jasper
 JASPER_SOURCES = \
-	$(JASSRC)/base/jas_debug.c \
 	$(JASSRC)/base/jas_malloc.c \
 	$(JASSRC)/base/jas_seq.c 	$(JASSRC)/base/jas_stream.c \
 	$(JASSRC)/base/jas_string.c 	$(JASSRC)/base/jas_tvp.c \
