@@ -534,7 +534,6 @@ typedef struct {
 	/* The packet iterator for this tile. */
 	jpc_pi_t *pi;
 
-	/* JMW hidden and caching */
 	int cache_index;
 
 } jpc_dec_tile_t;
@@ -664,7 +663,6 @@ typedef struct {
 	/* This is required by the tier-2 decoder. */
 	jpc_cstate_t *cstate;
 
-	// JMW
 	int xcsoar; // xcsoar progressive import mode
 } jpc_dec_t;
 

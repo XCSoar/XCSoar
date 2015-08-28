@@ -244,7 +244,7 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 	jpc_dec_importopts_t opts;
 	jpc_dec_t *dec;
 #ifdef ENABLE_JASPER_IMAGE
-	jas_image_t *image = 0;
+	jas_image_t *image;
   unsigned int i;
 #endif /* ENABLE_JASPER_IMAGE */
 
@@ -265,12 +265,8 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 		goto error;
 	}
 
-	if (dec->xcsoar) {
-		if (dec->xcsoar == 2)
-			jas_rtc_SetInitialised(true);
-		jpc_dec_destroy(dec);
-		return 0;
-	}
+	if (dec->xcsoar == 2)
+		jas_rtc_SetInitialised(true);
 
 #ifdef ENABLE_JASPER_IMAGE
   // dima: define the default for color space
@@ -510,18 +506,14 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 #endif /* ENABLE_JASPER_IMAGE */
 
-		// JMW image created here
-
 		if (dec->cmpts) {
 			jas_rtc_SetSize(dec->cmpts->width, dec->cmpts->height,
 					dec->tilewidth, dec->tileheight,
 					dec->numhtiles, dec->numvtiles);
 		}
 
-		// JMW don't create this image in xcsoar mode
 #ifdef ENABLE_JASPER_IMAGE
-		if (dec->xcsoar == 0 &&
-		  !(dec->image = jas_image_create(dec->numcomps, compinfos,
+		if (!(dec->image = jas_image_create(dec->numcomps, compinfos,
 		  JAS_CLRSPC_UNKNOWN))) {
 			return -1;
 		}
@@ -672,7 +664,6 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		tile->pptstab = 0;
 	}
 
-	// JMW hack
 	if (jpc_dec_decodepkts(dec, (tile->pkthdrstream) ? tile->pkthdrstream :
 	  dec->in, dec->in)) {
 #if 0 // JMW
@@ -1124,9 +1115,6 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	jpc_dec_ccp_t *ccp;
 	jpc_dec_cmpt_t *cmpt;
 
-	short* dptr;
-	int ilevel = 0;
-
 	if (jpc_dec_decodecblks(dec, tile)) {
 #if 0 // JMW
 		fprintf(stderr, "jpc_dec_decodecblks failed\n");
@@ -1138,16 +1126,9 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 	  ++compno, ++tcomp) {
 		ccp = &tile->cp->ccps[compno];
-
-		ilevel = tcomp->numrlvls;
-		// JMW
-		if (dec->xcsoar==2) {
-			// JMW don't do this because it can result in significant errors
-			//ilevel = min(ilevel,1);
-		}
-
-		for (rlvlno = 0, rlvl = tcomp->rlvls; rlvlno < ilevel; ++rlvlno, ++rlvl) {
-			//printf(" level %d\n", rlvlno);
+		const int ilevel = tcomp->numrlvls;
+		for (rlvlno = 0, rlvl = tcomp->rlvls; rlvlno < ilevel;
+		  ++rlvlno, ++rlvl) {
 			if (!rlvl->bands) {
 				continue;
 			}
@@ -1231,6 +1212,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Write the data for each component of the image. */
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
+		short *dptr;
 		int x, y, xx, yy, iw, ih;
 		x = tcomp->xstart - JPC_CEILDIV(dec->xstart, cmpt->hstep);
 		y = tcomp->ystart - JPC_CEILDIV(dec->ystart, cmpt->vstep);
@@ -1265,21 +1247,17 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				}
 			}
 			break;
-#ifdef ENABLE_JASPER_IMAGE
-		default:
-		case 0:
-			if (jas_image_writecmpt(dec->image, compno,
-			  x, y,
-			  jas_matrix_numcols(tcomp->data),
-			  jas_matrix_numrows(tcomp->data),
-			  tcomp->data)) {
-#if 0 // JMW
-				fprintf(stderr, "write component failed\n");
-#endif
-				return -4;
-			}
-#endif /* ENABLE_JASPER_IMAGE */
 		}
+
+#ifdef ENABLE_JASPER_IMAGE
+		if (jas_image_writecmpt(dec->image, compno, tcomp->xstart -
+		  JPC_CEILDIV(dec->xstart, cmpt->hstep), tcomp->ystart -
+		  JPC_CEILDIV(dec->ystart, cmpt->vstep), jas_matrix_numcols(
+		  tcomp->data), jas_matrix_numrows(tcomp->data), tcomp->data)) {
+			fprintf(stderr, "write component failed\n");
+			return -4;
+		}
+#endif /* ENABLE_JASPER_IMAGE */
 	}
 
 	return 0;
@@ -1382,7 +1360,6 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		tile->cp = 0;
 		tile->pi = NULL;
 
-		// JMW, memory leak?
 		if (!(tile->tcomps = jas_malloc(dec->numcomps *
 		  sizeof(jpc_dec_tcomp_t)))) {
 			return -1;
