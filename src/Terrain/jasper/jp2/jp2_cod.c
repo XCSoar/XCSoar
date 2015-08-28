@@ -207,6 +207,8 @@ jp2_boxinfo_t jp2_boxinfo_unk = {
 * Box constructor.
 \******************************************************************************/
 
+#ifdef ENABLE_JASPER_ENCODE
+
 jp2_box_t *jp2_box_create(int type)
 {
 	jp2_box_t *box;
@@ -225,6 +227,8 @@ jp2_box_t *jp2_box_create(int type)
 	box->ops = &boxinfo->ops;
 	return box;
 }
+
+#endif /* ENABLE_JASPER_ENCODE */
 
 /******************************************************************************\
 * Box destructor.
