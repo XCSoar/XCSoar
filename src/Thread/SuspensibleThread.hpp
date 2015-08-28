@@ -34,7 +34,10 @@ Copyright_License {
  * Implementers must check CheckStopped().
  */
 class SuspensibleThread : public Thread {
+protected:
   Mutex mutex;
+
+private:
   Cond command_trigger, client_trigger;
 
   bool stop_received, suspend_received, suspended;
