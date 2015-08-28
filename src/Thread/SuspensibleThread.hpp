@@ -63,10 +63,35 @@ public:
 
 protected:
   /**
+   * Like BeginStop(), but expects the mutex to be locked
+   * already.
+   */
+  void _BeginStop();
+
+  /**
+   * Like BeginSuspend(), but expects the mutex to be locked
+   * already.
+   */
+  void _BeginSuspend();
+
+  /**
+   * Like WaitUntilSuspended(), but expects the mutex to be locked
+   * already.
+   */
+  void _WaitUntilSuspended();
+
+  /**
    * Has a suspend or stop command been received?
    */
   gcc_pure
   bool IsCommandPending();
+
+  /**
+   * Like IsCommandPending(), but expects the mutex to be locked
+   * already.
+   */
+  gcc_pure
+  bool _IsCommandPending() const;
 
   /**
    * Handles the "suspend" and "stop" commands.
@@ -75,7 +100,19 @@ protected:
    */
   bool CheckStoppedOrSuspended();
 
+  /**
+   * Like CheckStoppedOrSuspended(), but expects the mutex to be
+   * locked already.
+   */
+  bool _CheckStoppedOrSuspended();
+
   bool WaitForStopped(unsigned timeout_ms);
+
+  /**
+   * Like WaitForStopped(), but expects the mutex to be locked
+   * already.
+   */
+  bool _WaitForStopped(unsigned timeout_ms);
 };
 
 #endif
