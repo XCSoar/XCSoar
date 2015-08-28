@@ -1212,40 +1212,8 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Write the data for each component of the image. */
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		short *dptr;
-		int xx, yy, iw, ih;
-
-		switch (dec->xcsoar) {
-		case 2:
-			dptr = jas_rtc_GetOverview();
-			iw = dec->cmpts->width/16;
-			ih = dec->cmpts->height/16;
-			if (dptr) {
-				for (i = 0; i < jas_matrix_numrows(tcomp->data); i+= 16) {
-					for (j = 0; j < jas_matrix_numcols(tcomp->data); j+= 16) {
-						short d = jas_matrix_get(tcomp->data, i, j);
-						xx = (j+tcomp->xstart)/16;
-						yy = (i+tcomp->ystart)/16;
-						if ((xx<iw)&&(yy<ih)) {
-							dptr[xx+iw*yy]= d;
-						}
-					}
-				}
-			}
-			break;
-		case 1:
-			// JMW put data into image buffer
-			dptr = jas_rtc_GetImageBuffer(tile->cache_index);
-			if (dptr) {
-				for (i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
-					for (j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
-						short d = jas_matrix_get(tcomp->data, i, j);
-						*dptr++ = d;
-					}
-				}
-			}
-			break;
-		}
+		jas_rtc_PutTileData(tile->cache_index, tcomp->xstart,
+				    tcomp->ystart, tcomp->data);
 
 #ifdef ENABLE_JASPER_IMAGE
 		if (jas_image_writecmpt(dec->image, compno, tcomp->xstart -

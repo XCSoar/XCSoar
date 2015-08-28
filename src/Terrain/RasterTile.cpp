@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Terrain/RasterTile.hpp"
 
+#include "jasper/jas_seq.h"
+
 #include <algorithm>
 
 #include <stdlib.h>
@@ -57,6 +59,21 @@ RasterTile::Enable()
     Disable();
   } else {
     buffer.Resize(width, height);
+  }
+}
+
+void
+RasterTile::CopyFrom(const struct jas_matrix &m)
+{
+  short *gcc_restrict dest = buffer.GetData();
+  assert(dest != nullptr);
+
+  const unsigned width = m.numcols_, height = m.numrows_;
+
+  for (unsigned y = 0; y != height; ++y) {
+    const jas_seqent_t *gcc_restrict src = m.rows_[y];
+
+    dest = std::copy_n(src, width, dest);
   }
 }
 

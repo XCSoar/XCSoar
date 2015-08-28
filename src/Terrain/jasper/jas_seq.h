@@ -104,7 +104,7 @@ typedef int_fast32_t jas_matent_t;
 
 /* Matrix. */
 
-typedef struct {
+typedef struct jas_matrix {
 
 	/* Additional state information. */
 	int flags_;
