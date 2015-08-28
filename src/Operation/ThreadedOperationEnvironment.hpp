@@ -104,6 +104,24 @@ public:
     cancelled.Signal();
   }
 
+private:
+  bool LockSetProgressRange(unsigned range) {
+    const ScopeLock lock(mutex);
+    return data.SetProgressRange(range);
+  }
+
+  bool LockSetProgressPosition(unsigned position) {
+    const ScopeLock lock(mutex);
+    return data.SetProgressPosition(position);
+  }
+
+  Data LockReceiveData() {
+    const ScopeLock lock(mutex);
+    Data new_data = data;
+    data.ClearUpdate();
+    return new_data;
+  }
+
 public:
   /* virtual methods from class OperationEnvironment */
   bool IsCancelled() const override;
