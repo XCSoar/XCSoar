@@ -131,16 +131,19 @@ GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
 
-  device_blackboard->mutex.Lock();
-  ReadBlackboard(device_blackboard->Basic(), device_blackboard->Calculated());
-  device_blackboard->mutex.Unlock();
+  {
+    const ScopeLock lock(device_blackboard->mutex);
+    ReadBlackboard(device_blackboard->Basic(),
+                   device_blackboard->Calculated());
+  }
 
 #ifndef ENABLE_OPENGL
-  next_mutex.Lock();
-  ReadMapSettings(next_settings_map);
-  ReadComputerSettings(next_settings_computer);
-  ReadUIState(next_ui_state);
-  next_mutex.Unlock();
+  {
+    const ScopeLock lock(next_mutex);
+    ReadMapSettings(next_settings_map);
+    ReadComputerSettings(next_settings_computer);
+    ReadUIState(next_ui_state);
+  }
 #endif
 }
 
