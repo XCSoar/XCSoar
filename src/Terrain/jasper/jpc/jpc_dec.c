@@ -1213,9 +1213,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
 		short *dptr;
-		int x, y, xx, yy, iw, ih;
-		x = tcomp->xstart - JPC_CEILDIV(dec->xstart, cmpt->hstep);
-		y = tcomp->ystart - JPC_CEILDIV(dec->ystart, cmpt->vstep);
+		int xx, yy, iw, ih;
 
 		switch (dec->xcsoar) {
 		case 2:
