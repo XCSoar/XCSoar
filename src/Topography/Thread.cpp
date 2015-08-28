@@ -73,15 +73,13 @@ TopographyThread::Tick()
   while (next_projection.IsValid() && again && !IsStopped()) {
     const WindowProjection projection = next_projection;
 
-    mutex.Unlock();
+    const ScopeUnlock unlock(mutex);
     again = store.ScanVisibility(projection, 1) > 0;
-    mutex.Lock();
   }
 
   /* notify the client that we have updated the topography cache */
   if (callback) {
-    mutex.Unlock();
+    const ScopeUnlock unlock(mutex);
     callback();
-    mutex.Lock();
   }
 }
