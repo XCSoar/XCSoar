@@ -38,10 +38,9 @@ SuspensibleThread::Start(bool _suspended)
 void
 SuspensibleThread::BeginStop()
 {
-  mutex.lock();
+  const ScopeLock lock(mutex);
   stop_received = true;
   command_trigger.signal();
-  mutex.unlock();
 }
 
 void
@@ -50,10 +49,9 @@ SuspensibleThread::BeginSuspend()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-  mutex.lock();
+  const ScopeLock lock(mutex);
   suspend_received = true;
   command_trigger.signal();
-  mutex.unlock();
 }
 
 void
@@ -62,12 +60,11 @@ SuspensibleThread::WaitUntilSuspended()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-  mutex.lock();
+  const ScopeLock lock(mutex);
   assert(suspend_received);
 
   while (!suspended)
     client_trigger.wait(mutex);
-  mutex.unlock();
 }
 
 void
@@ -80,10 +77,9 @@ SuspensibleThread::Suspend()
 void
 SuspensibleThread::Resume()
 {
-  mutex.lock();
+  const ScopeLock lock(mutex);
   suspend_received = false;
   command_trigger.signal();
-  mutex.unlock();
 }
 
 bool
@@ -91,10 +87,8 @@ SuspensibleThread::IsCommandPending()
 {
   assert(Thread::IsInside());
 
-  mutex.lock();
-  bool result = stop_received || suspend_received;
-  mutex.unlock();
-  return result;
+  const ScopeLock lock(mutex);
+  return stop_received || suspend_received;
 }
 
 bool
@@ -102,7 +96,7 @@ SuspensibleThread::CheckStoppedOrSuspended()
 {
   assert(Thread::IsInside());
 
-  mutex.lock();
+  const ScopeLock lock(mutex);
 
   assert(!suspended);
 
@@ -114,9 +108,7 @@ SuspensibleThread::CheckStoppedOrSuspended()
     suspended = false;
   }
 
-  bool stop = stop_received;
-  mutex.unlock();
-  return stop;
+  return stop_received;
 }
 
 bool
@@ -124,7 +116,7 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
 {
   assert(Thread::IsInside());
 
-  mutex.lock();
+  const ScopeLock lock(mutex);
 
   assert(!suspended);
   suspended = true;
@@ -139,7 +131,5 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
   }
 
   suspended = false;
-  bool stop = stop_received;
-  mutex.unlock();
-  return stop;
+  return stop_received;
 }

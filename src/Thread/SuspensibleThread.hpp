@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
-#include "FastMutex.hpp"
+#include "Mutex.hpp"
 #include "Cond.hxx"
 
 /**
@@ -34,7 +34,7 @@ Copyright_License {
  * Implementers must check CheckStopped().
  */
 class SuspensibleThread : public Thread {
-  FastMutex mutex;
+  Mutex mutex;
   Cond command_trigger, client_trigger;
 
   bool stop_received, suspend_received, suspended;
