@@ -183,6 +183,7 @@ typedef struct {
 
 /* Image class. */
 
+#ifdef ENABLE_JASPER_AUX_BUF
 // dima 
 // this field here added for aditional information about the image
 // e.g. GeoTiff information
@@ -191,6 +192,7 @@ typedef struct {
   long size; // size of the buffer
   unsigned char *buf; // the buffer itself
 } jas_aux_buffer_t;
+#endif /* ENABLE_JASPER_AUX_BUF */
 
 typedef struct {
 
@@ -224,10 +226,12 @@ typedef struct {
 
 	bool inmem_;
 
+#ifdef ENABLE_JASPER_AUX_BUF
   // dima 
   // this field here added for aditional information about the image
   // e.g. GeoTiff information
   jas_aux_buffer_t aux_buf;
+#endif /* ENABLE_JASPER_AUX_BUF */
 
 
 } jas_image_t;
