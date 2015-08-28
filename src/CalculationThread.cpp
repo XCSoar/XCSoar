@@ -77,7 +77,7 @@ CalculationThread::Tick()
   bool force;
   {
     ScopeLock protect(mutex);
-    // Copy settings form ComputerSettingsBlackboard to GlideComputerBlackboard
+    // Copy settings from ComputerSettingsBlackboard to GlideComputerBlackboard
     glide_computer.ReadComputerSettings(settings_computer);
 
     force = this->force;
