@@ -49,9 +49,10 @@ TraceComputer::TraceComputer()
 void
 TraceComputer::Reset()
 {
-  mutex.Lock();
-  full.clear();
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    full.clear();
+  }
 
   contest.clear();
   sprint.clear();
@@ -60,9 +61,8 @@ TraceComputer::Reset()
 void
 TraceComputer::LockedCopyTo(TracePointVector &v) const
 {
-  mutex.Lock();
+  const ScopeLock lock(mutex);
   full.GetPoints(v);
-  mutex.Unlock();
 }
 
 void
@@ -70,9 +70,8 @@ TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
                             const GeoPoint &location,
                             fixed resolution) const
 {
-  mutex.Lock();
+  const ScopeLock lock(mutex);
   full.GetPoints(v, min_time, location, resolution);
-  mutex.Unlock();
 }
 
 void
@@ -88,9 +87,10 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
 
   const TracePoint point(basic);
 
-  mutex.Lock();
-  full.push_back(point);
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    full.push_back(point);
+  }
 
   // only olc requires trace_sprint
   if (settings_computer.contest.enable) {
