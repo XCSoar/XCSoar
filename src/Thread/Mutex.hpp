@@ -206,6 +206,26 @@ public:
 };
 
 /**
+ * Within the scope of an instance, this class will keep a #Mutex
+ * unlocked.
+ */
+class ScopeUnlock {
+  Mutex &mutex;
+
+public:
+  explicit ScopeUnlock(Mutex &_mutex):mutex(_mutex) {
+    mutex.Unlock();
+  };
+
+  ~ScopeUnlock() {
+    mutex.Lock();
+  }
+
+  ScopeUnlock(const ScopeUnlock &other) = delete;
+  ScopeUnlock &operator=(const ScopeUnlock &other) = delete;
+};
+
+/**
  * A debug-only class that changes internal debug flags to indicate
  * "not locked", even though you did lock it.  An instance of this
  * class shall wrap function calls that will temporarily unlock the
