@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <stdio.h>
 
+struct jas_matrix;
+
 class RasterTile : private NonCopyable {
   struct MetaData {
     unsigned int xstart, ystart, xend, yend;
@@ -108,6 +110,8 @@ public:
     return !buffer.IsDefined();
   }
 
+  void CopyFrom(const struct jas_matrix &m);
+
   /**
    * Determine the non-interpolated height at the specified pixel
    * location.
@@ -130,10 +134,6 @@ public:
   gcc_pure
   short GetInterpolatedHeight(unsigned x, unsigned y,
                               unsigned ix, unsigned iy) const;
-
-  inline short* GetImageBuffer() {
-    return buffer.GetData();
-  }
 
   bool VisibilityChanged(int view_x, int view_y, unsigned view_radius);
 

@@ -37,15 +37,6 @@ extern "C" {
 #include <string.h>
 #include <algorithm>
 
-short*
-RasterTileCache::GetImageBuffer(unsigned index)
-{
-  if (TileRequest(index))
-    return tiles.GetLinear(index).GetImageBuffer();
-
-  return NULL;
-}
-
 void
 RasterTileCache::SetTile(unsigned index,
                          int xstart, int ystart, int xend, int yend)
@@ -55,6 +46,47 @@ RasterTileCache::SetTile(unsigned index,
     segments.last().tile = index;
 
   tiles.GetLinear(index).Set(xstart, ystart, xend, yend);
+}
+
+static void
+CopyOverviewRow(short *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
+                unsigned width, unsigned skip)
+{
+  for (unsigned x = 0; x < width; x += skip)
+    *dest++ = src[x];
+}
+
+void
+RasterTileCache::PutTileData(unsigned index,
+                             unsigned start_x, unsigned start_y,
+                             const struct jas_matrix &m)
+{
+  if (scan_overview) {
+    const unsigned dest_pitch = overview.GetWidth();
+
+    start_x >>= OVERVIEW_BITS;
+    start_y >>= OVERVIEW_BITS;
+
+    if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
+      return;
+
+    unsigned width = m.numcols_, height = m.numrows_;
+    if (start_x + (width >> OVERVIEW_BITS) > overview.GetWidth())
+      width = (overview.GetWidth() - start_x) << OVERVIEW_BITS;
+    if (start_y + (height >> OVERVIEW_BITS) > overview.GetHeight())
+      height = (overview.GetHeight() - start_y) << OVERVIEW_BITS;
+
+    const unsigned skip = 1 << OVERVIEW_BITS;
+
+    short *gcc_restrict dest = overview.GetData()
+      + start_y * dest_pitch + start_x;
+
+    for (unsigned y = 0; y < height; y += skip, dest += dest_pitch)
+      CopyOverviewRow(dest, m.rows_[y], width, skip);
+  } else {
+    if (TileRequest(index))
+      tiles.GetLinear(index).CopyFrom(m);
+  }
 }
 
 struct RTDistanceSort {

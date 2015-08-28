@@ -19,8 +19,9 @@ extern "C" {
     raster_tile_current->SetTile(index, xstart, ystart, xend, yend);
   }
 
-  short* jas_rtc_GetImageBuffer(unsigned index) {
-    return raster_tile_current->GetImageBuffer(index);
+  void jas_rtc_PutTileData(unsigned index, unsigned x, unsigned y,
+                           const struct jas_matrix *data) {
+    raster_tile_current->PutTileData(index, x, y, *data);
   }
 
   void jas_rtc_SetLatLonBounds(double lon_min, double lon_max,
@@ -38,9 +39,5 @@ extern "C" {
 
   void jas_rtc_SetInitialised(bool val) {
     raster_tile_current->SetInitialised(val);
-  }
-
-  short* jas_rtc_GetOverview(void) {
-    return raster_tile_current->GetOverview();
   }
 };

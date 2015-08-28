@@ -39,6 +39,7 @@ Copyright_License {
 
 #define RASTER_SLOPE_FACT 12
 
+struct jas_matrix;
 struct GridLocation;
 class OperationEnvironment;
 
@@ -293,17 +294,16 @@ public:
 
   bool TileRequest(unsigned index);
 
-  short *GetOverview() {
-    return overview.GetData();
-  }
-
   void SetSize(unsigned width, unsigned height,
                unsigned tile_width, unsigned tile_height,
                unsigned tile_columns, unsigned tile_rows);
-  short* GetImageBuffer(unsigned index);
+
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
   void SetTile(unsigned index, int xstart, int ystart, int xend, int yend);
+
+  void PutTileData(unsigned index, unsigned x, unsigned y,
+                   const struct jas_matrix &m);
 
   void SetInitialised(bool val) {
     initialised = val;
