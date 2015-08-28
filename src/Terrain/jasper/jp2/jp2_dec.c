@@ -182,6 +182,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 		case JP2_BOX_JP2C:
 			found = 1;
 			break;
+#ifdef ENABLE_JASPER_IMAGE
 		case JP2_BOX_IHDR:
 			if (!dec->ihdr) {
 				dec->ihdr = box;
@@ -218,6 +219,7 @@ jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr)
 				box = 0;
 			}
 			break;
+#endif /* ENABLE_JASPER_IMAGE */
     
 #ifdef ENABLE_JASPER_AUX_BUF
     //-------------------------------------------------------
@@ -567,19 +569,24 @@ static jp2_dec_t *jp2_dec_create(void)
 	if (!(dec = jas_malloc(sizeof(jp2_dec_t)))) {
 		return 0;
 	}
+#ifdef ENABLE_JASPER_IMAGE
 	dec->ihdr = 0;
 	dec->bpcc = 0;
 	dec->cdef = 0;
 	dec->pclr = 0;
+#endif /* ENABLE_JASPER_IMAGE */
 	dec->image = 0;
 	dec->chantocmptlut = 0;
+#ifdef ENABLE_JASPER_IMAGE
 	dec->cmap = 0;
 	dec->colr = 0;
+#endif /* ENABLE_JASPER_IMAGE */
 	return dec;
 }
 
 static void jp2_dec_destroy(jp2_dec_t *dec)
 {
+#ifdef ENABLE_JASPER_IMAGE
 	if (dec->ihdr) {
 		jp2_box_destroy(dec->ihdr);
 	}
@@ -592,17 +599,16 @@ static void jp2_dec_destroy(jp2_dec_t *dec)
 	if (dec->pclr) {
 		jp2_box_destroy(dec->pclr);
 	}
-#ifdef ENABLE_JASPER_IMAGE
 	if (dec->image) {
 		jas_image_destroy(dec->image);
 	}
-#endif /* ENABLE_JASPER_IMAGE */
 	if (dec->cmap) {
 		jp2_box_destroy(dec->cmap);
 	}
 	if (dec->colr) {
 		jp2_box_destroy(dec->colr);
 	}
+#endif /* ENABLE_JASPER_IMAGE */
 	if (dec->chantocmptlut) {
 		jas_free(dec->chantocmptlut);
 	}
