@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Thread/WorkerThread.hpp"
-#include "Thread/Trigger.hpp"
 #include "Time/PeriodClock.hpp"
 
 WorkerThread::WorkerThread(const char *_name,
@@ -37,35 +36,37 @@ WorkerThread::Run()
 {
   PeriodClock clock;
 
+  const ScopeLock lock(mutex);
+
   while (true) {
     /* wait for work */
-    event_trigger.Wait();
+    if (!trigger_flag) {
+      if (_CheckStoppedOrSuspended())
+        break;
+
+      trigger_cond.wait(mutex);
+    }
 
     /* got the "stop" trigger? */
     if (delay > 0
-        ? WaitForStopped(delay)
-        : CheckStoppedOrSuspended())
+        ? _WaitForStopped(delay)
+        : _CheckStoppedOrSuspended())
       break;
 
-    /* reset the trigger here, because our client might have called
-       Trigger() a few more times while we were suspended in
-       CheckStoppedOrSuspended() */
-    event_trigger.Reset();
-
-    if (IsCommandPending()) {
-      /* just in case we got another suspend/stop command after
-         CheckStoppedOrSuspended() returned and before the trigger got
-         reset: restore the trigger and skip this iteration, to fix
-         the race condition */
-      event_trigger.Signal();
+    if (!trigger_flag)
       continue;
+
+    trigger_flag = false;
+
+    {
+      const ScopeUnlock unlock(mutex);
+
+      /* do the actual work */
+      if (period_min > 0)
+        clock.Update();
+
+      Tick();
     }
-
-    /* do the actual work */
-    if (period_min > 0)
-      clock.Update();
-
-    Tick();
 
     unsigned idle = idle_min;
     if (period_min > 0) {
@@ -74,7 +75,7 @@ WorkerThread::Run()
         idle = period_min - elapsed;
     }
 
-    if (idle > 0 && WaitForStopped(idle))
+    if (idle > 0 && _WaitForStopped(idle))
       break;
   }
 }
