@@ -28,7 +28,7 @@ Copyright_License {
 #include "Math/KalmanFilter1d.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
-#include "Thread/Trigger.hpp"
+#include "Thread/Cond.hxx"
 
 #include <assert.h>
 
@@ -75,7 +75,8 @@ public:
 private:
   Port &port;
   Mutex mutex_settings;
-  Trigger trigger_settings_ready;
+  Cond settings_cond;
+  bool settings_ready;
   BlueFlySettings settings;
   char *settings_keys;
 

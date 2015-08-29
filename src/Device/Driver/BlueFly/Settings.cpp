@@ -59,14 +59,21 @@ BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
 bool
 BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 {
-  trigger_settings_ready.Reset();
+  {
+    const ScopeLock lock(mutex_settings);
+    settings_ready = false;
+  }
+
   return PortWriteNMEA(port, "BST", env);
 }
 
 bool
 BlueFlyDevice::WaitForSettings(unsigned int timeout)
 {
-  return trigger_settings_ready.Wait(timeout);
+  const ScopeLock lock(mutex_settings);
+  if (!settings_ready)
+    settings_cond.timed_wait(mutex_settings, timeout);
+  return settings_ready;
 }
 
 void

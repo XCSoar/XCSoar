@@ -165,9 +165,9 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
     settings.Parse(token, value);
     token = StringToken(nullptr, " ");
   }
+  settings_ready = true;
+  settings_cond.broadcast();
   mutex_settings.Unlock();
-
-  trigger_settings_ready.Signal();
 
   return true;
 }
