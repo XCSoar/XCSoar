@@ -359,7 +359,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
                                       MarkerSegmentInfo::NO_TILE));
 }
 
-extern RasterTileCache *raster_tile_current;
+extern thread_local RasterTileCache *raster_tile_current;
 
 static bool
 LoadJPG2000(jas_stream_t *in, const char *optstr)

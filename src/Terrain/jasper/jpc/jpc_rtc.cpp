@@ -1,7 +1,7 @@
 #include "jasper/jpc_rtc.h"
 #include "Terrain/RasterTileCache.hpp"
 
-RasterTileCache *raster_tile_current = 0;
+thread_local RasterTileCache *raster_tile_current = 0;
 
 extern "C" {
 
