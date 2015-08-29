@@ -27,7 +27,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Event/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
-#include "Thread/Trigger.hpp"
+#include "Thread/Cond.hxx"
 #include "Util/StaticString.hxx"
 
 /**
@@ -91,17 +91,21 @@ class ThreadedOperationEnvironment
 
   OperationEnvironment &other;
 
-  Mutex mutex;
+  mutable Mutex mutex;
+  Cond cancel_cond;
+  bool cancel_flag = false;
 
   Data data;
-
-  Trigger cancelled;
 
 public:
   explicit ThreadedOperationEnvironment(OperationEnvironment &_other);
 
   void Cancel() {
-    cancelled.Signal();
+    const ScopeLock lock(mutex);
+    if (!cancel_flag) {
+      cancel_flag = true;
+      cancel_cond.signal();
+    }
   }
 
 private:

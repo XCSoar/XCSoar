@@ -31,13 +31,16 @@ ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment 
 bool
 ThreadedOperationEnvironment::IsCancelled() const
 {
-  return cancelled.Test();
+  const ScopeLock lock(mutex);
+  return cancel_flag;
 }
 
 void
 ThreadedOperationEnvironment::Sleep(unsigned ms)
 {
-  cancelled.Wait(ms);
+  const ScopeLock lock(mutex);
+  if (!cancel_flag)
+    cancel_cond.timed_wait(mutex, ms);
 }
 
 void
