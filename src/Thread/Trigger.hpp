@@ -26,29 +26,14 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#ifdef HAVE_POSIX
-#include <pthread.h>
-#include <sys/time.h>
-#else
 #include <windows.h>
-#endif
-#include <tchar.h>
 
 /**
  * This class wraps an OS specific trigger.  It is an object which one
  * thread can wait for, and another thread can wake it up.
  */
 class Trigger {
-#ifdef HAVE_POSIX
-  /** this mutex protects the value */
-  mutable pthread_mutex_t mutex;
-
-  pthread_cond_t cond;
-
-  bool value;
-#else
   HANDLE handle;
-#endif
 
 public:
   /**
@@ -56,26 +41,13 @@ public:
    *
    * @param name an application specific name for this trigger
    */
-#ifdef HAVE_POSIX
-  Trigger()
-    :value(false) {
-    pthread_mutex_init(&mutex, nullptr);
-    pthread_cond_init(&cond, nullptr);
-  }
-#else
   Trigger():handle(::CreateEvent(nullptr, true, false, nullptr)) {}
-#endif
 
   /**
    * Kills the trigger.
    */
   ~Trigger() {
-#ifdef HAVE_POSIX
-    pthread_cond_destroy(&cond);
-    pthread_mutex_destroy(&mutex);
-#else
     ::CloseHandle(handle);
-#endif
   }
 
   Trigger(const Trigger &other) = delete;
@@ -91,34 +63,11 @@ public:
    * has expired
    */
   bool Wait(unsigned timeout_ms) {
-#ifdef HAVE_POSIX
-    bool ret;
-
-    pthread_mutex_lock(&mutex);
-
-    if (!value) {
-      struct timeval now;
-      gettimeofday(&now, nullptr);
-      long future_us = now.tv_usec + timeout_ms * 1000;
-
-      struct timespec timeout;
-      timeout.tv_sec = now.tv_sec + future_us / 1000000;
-      timeout.tv_nsec = (future_us % 1000000) * 1000;
-
-      ret = pthread_cond_timedwait(&cond, &mutex, &timeout) == 0 || value;
-    } else
-      ret = true;
-
-    pthread_mutex_unlock(&mutex);
-    return ret;
-#else
     if (::WaitForSingleObject(handle, timeout_ms) != WAIT_OBJECT_0)
       return false;
     return true;
-#endif
   }
 
-#ifndef HAVE_POSIX
   bool WaitAndReset(unsigned timeout_ms) {
     if (::WaitForSingleObject(handle, timeout_ms) != WAIT_OBJECT_0)
       return false;
@@ -126,7 +75,6 @@ public:
     Reset();
     return true;
   }
-#endif
 
   /**
    * Checks if this object is triggered.
@@ -134,19 +82,9 @@ public:
    */
   gcc_pure
   bool Test() const {
-#ifdef HAVE_POSIX
-    bool ret;
-
-    pthread_mutex_lock(&mutex);
-    ret = value;
-    pthread_mutex_unlock(&mutex);
-
-    return ret;
-#else
     if (::WaitForSingleObject(handle, 0) != WAIT_OBJECT_0)
       return false;
     return true;
-#endif
   }
 
   /**
@@ -155,54 +93,26 @@ public:
    * immediately.
    */
   void Wait() {
-#ifdef HAVE_POSIX
-    pthread_mutex_lock(&mutex);
-
-    if (!value)
-      pthread_cond_wait(&cond, &mutex);
-
-    pthread_mutex_unlock(&mutex);
-#else
     Wait(INFINITE);
-#endif
   }
 
-#ifndef HAVE_POSIX
   void WaitAndReset() {
     WaitAndReset(INFINITE);
   }
-#endif
 
   /**
    * Wakes up the thread waiting for the trigger.  The state of the
    * trigger is reset only if a thread was really woken up.
    */
   void Signal() {
-#ifdef HAVE_POSIX
-    pthread_mutex_lock(&mutex);
-
-    if (!value) {
-      value = true;
-      pthread_cond_broadcast(&cond);
-    }
-
-    pthread_mutex_unlock(&mutex);
-#else
     ::SetEvent(handle);
-#endif
   }
 
   /**
    * Resets the trigger
    */
   void Reset() {
-#ifdef HAVE_POSIX
-    pthread_mutex_lock(&mutex);
-    value = false;
-    pthread_mutex_unlock(&mutex);
-#else
     ::ResetEvent(handle);
-#endif
   }
 };
 
