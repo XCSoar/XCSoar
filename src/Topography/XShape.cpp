@@ -25,21 +25,21 @@ Copyright_License {
 #include "Convert.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/UTF8.hpp"
+#include "Util/StringUtil.hpp"
+
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Geo/Math.hpp"
 #endif
 
-#include "Util/StringUtil.hpp"
-#include <algorithm>
-#include <tchar.h>
-#include <string.h>
-#include <stdio.h>
-
 #ifdef _UNICODE
-#include <windows.h>
+#include "Util/ConvertString.hpp"
 #endif
+
+#include <algorithm>
+
+#include <tchar.h>
 
 static TCHAR *
 ImportLabel(const char *src)
@@ -54,14 +54,7 @@ ImportLabel(const char *src)
     return nullptr;
 
 #ifdef _UNICODE
-  size_t length = strlen(src);
-  TCHAR *dest = new TCHAR[length + 1];
-  if (::MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, length + 1) <= 0) {
-    delete[] dest;
-    return nullptr;
-  }
-
-  return dest;
+  return ConvertUTF8ToWide(src);
 #else
   if (!ValidateUTF8(src))
     return nullptr;
