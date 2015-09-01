@@ -102,7 +102,6 @@ public:
     buffer.Reset();
   }
 
-  void Enable();
   bool IsEnabled() const {
     return buffer.IsDefined();
   }
