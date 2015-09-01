@@ -27,7 +27,6 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "RasterTileCache.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -35,7 +34,7 @@ Copyright_License {
 class FileCache;
 class OperationEnvironment;
 
-class RasterMap : private NonCopyable {
+class RasterMap {
   char *path;
   RasterTileCache raster_tile_cache;
   RasterProjection projection;
@@ -44,6 +43,9 @@ public:
   RasterMap(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
             OperationEnvironment &operation);
   ~RasterMap();
+
+  RasterMap(const RasterMap &) = delete;
+  RasterMap &operator=(const RasterMap &) = delete;
 
   bool IsDefined() const {
     return raster_tile_cache.GetInitialised();

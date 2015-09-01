@@ -27,7 +27,6 @@ Copyright_License {
 #include "RasterTile.hpp"
 #include "RasterLocation.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/Serial.hpp"
 
@@ -43,7 +42,7 @@ struct jas_matrix;
 struct GridLocation;
 class OperationEnvironment;
 
-class RasterTileCache : private NonCopyable {
+class RasterTileCache {
   static constexpr unsigned MAX_RTC_TILES = 4096;
 
   /**
@@ -170,6 +169,9 @@ public:
   RasterTileCache():operation(NULL) {
     Reset();
   }
+
+  RasterTileCache(const RasterTileCache &) = delete;
+  RasterTileCache &operator=(const RasterTileCache &) = delete;
 
 protected:
   void ScanTileLine(GridLocation start, GridLocation end,

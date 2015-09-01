@@ -24,13 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_RASTER_BUFFER_HPP
 #define XCSOAR_RASTER_BUFFER_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Util/AllocatedGrid.hpp"
 #include "Compiler.h"
 
 #include <cstddef>
 
-class RasterBuffer : private NonCopyable {
+class RasterBuffer {
 public:
   /** invalid value for terrain */
   static constexpr short TERRAIN_INVALID = -32768;
@@ -73,6 +72,9 @@ public:
   RasterBuffer() = default;
   RasterBuffer(unsigned _width, unsigned _height)
     :data(_width, _height) {}
+
+  RasterBuffer(const RasterBuffer &) = delete;
+  RasterBuffer &operator=(const RasterBuffer &) = delete;
 
   bool IsDefined() const {
     return data.IsDefined();

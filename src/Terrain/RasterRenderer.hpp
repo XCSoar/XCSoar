@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Terrain/HeightMatrix.hpp"
 #include "Math/fixed.hpp"
-#include "Util/NonCopyable.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
@@ -46,7 +45,7 @@ struct ColorRamp;
 class GLTexture;
 #endif
 
-class RasterRenderer : private NonCopyable {
+class RasterRenderer {
   /** screen dimensions in coarse pixels */
   unsigned quantisation_pixels = 2;
 
@@ -85,6 +84,9 @@ class RasterRenderer : private NonCopyable {
 public:
   RasterRenderer();
   ~RasterRenderer();
+
+  RasterRenderer(const RasterRenderer &) = delete;
+  RasterRenderer &operator=(const RasterRenderer &) = delete;
 
   const HeightMatrix &GetHeightMatrix() const {
     return height_matrix;
