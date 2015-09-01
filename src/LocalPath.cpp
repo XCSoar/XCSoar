@@ -153,21 +153,32 @@ NormalizeBackslashes(TCHAR *p)
 
 static constexpr TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
 
+gcc_pure
+static const TCHAR *
+AfterLocalPathCode(const TCHAR *p)
+{
+  p = StringAfterPrefix(p, local_path_code);
+  if (p == nullptr)
+    return nullptr;
+
+  while (*p == _T('/') || *p == _T('\\'))
+    ++p;
+
+  if (StringIsEmpty(p))
+    return nullptr;
+
+  return p;
+}
+
 void
 ExpandLocalPath(TCHAR *dest, const TCHAR *src)
 {
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = StringAfterPrefix(src, local_path_code);
+  const TCHAR *ptr = AfterLocalPathCode(src);
   if (ptr == nullptr) {
     _tcscpy(dest, src);
     return;
   }
-
-  while (*ptr == _T('/') || *ptr == _T('\\'))
-    ++ptr;
-
-  if (StringIsEmpty(ptr))
-    return;
 
   // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
   LocalPath(dest, ptr);
