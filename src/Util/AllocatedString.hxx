@@ -46,6 +46,8 @@ public:
 	typedef typename StringPointer<T>::pointer pointer;
 	typedef typename StringPointer<T>::const_pointer const_pointer;
 
+	static constexpr value_type SENTINEL = '\0';
+
 private:
 	pointer value;
 
@@ -72,7 +74,7 @@ public:
 
 	static AllocatedString Empty() {
 		auto p = new value_type[1];
-		p[0] = value_type(0);
+		p[0] = SENTINEL;
 		return Donate(p);
 	}
 
