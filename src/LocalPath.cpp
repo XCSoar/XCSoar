@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/StringFormat.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/StringBuilder.hxx"
 #include "Asset.hpp"
 
 #include "OS/FileUtil.hpp"
@@ -37,6 +38,8 @@ Copyright_License {
 #ifdef WIN32
 #include "OS/PathName.hpp"
 #endif
+
+#include <algorithm>
 
 #include <assert.h>
 #include <stdio.h>
@@ -105,11 +108,8 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
 {
   assert(data_path != nullptr);
 
-  memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
-  buffer[data_path_length] = _T(DIR_SEPARATOR);
-  _tcscpy(buffer + data_path_length + 1, file);
-
-  return buffer;
+  return UnsafeBuildString(buffer, data_path, data_path_length,
+                           _T(DIR_SEPARATOR), file);
 }
 
 const TCHAR *
@@ -122,13 +122,9 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
-  buffer[data_path_length] = _T(DIR_SEPARATOR);
-  _tcscpy(buffer + data_path_length + 1, subdir);
-  _tcscat(buffer + data_path_length + 1, _T(DIR_SEPARATOR_S));
-  _tcscat(buffer + data_path_length + 1, name);
-
-  return buffer;
+  return UnsafeBuildString(buffer, data_path, data_path_length,
+                           _T(DIR_SEPARATOR), subdir,
+                           _T(DIR_SEPARATOR), name);
 }
 
 const TCHAR *
@@ -271,15 +267,15 @@ static TCHAR *
 TryMountPoint(const TCHAR *mnt)
 {
   TCHAR buffer[MAX_PATH];
-  _tcscpy(buffer, mnt);
-  _tcscat(buffer, _T(DIR_SEPARATOR_S XCSDATADIR));
+  const auto path = UnsafeBuildString(buffer, mnt,
+                                      _T(DIR_SEPARATOR_S XCSDATADIR));
 
   __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                       "Try '%s' exists=%d access=%d",
-                      buffer, Directory::Exists(buffer), access(buffer, W_OK));
+                      path, Directory::Exists(path), access(path, W_OK));
 
-  return Directory::Exists(buffer) && access(buffer, W_OK) == 0
-    ? DuplicateString(buffer)
+  return Directory::Exists(path) && access(path, W_OK) == 0
+    ? DuplicateString(path)
     : nullptr;
 }
 
@@ -302,16 +298,17 @@ GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
   /* on Unix, use ~/.xcsoar */
   const TCHAR *home = getenv("HOME");
   if (home != nullptr) {
-    _tcscpy(buffer, home);
+    return UnsafeBuildString(buffer, home,
 #ifdef __APPLE__
-    /* Mac OS X users are not used to dot-files in their home
-       directory - make it a little bit easier for them to find the
-       files */
-    _tcscat(buffer, _T("/XCSoarData"));
+                             /* Mac OS X users are not used to
+                                dot-files in their home directory -
+                                make it a little bit easier for them
+                                to find the files */
+                             _T("/XCSoarData")
 #else
-    _tcscat(buffer, _T("/.xcsoar"));
+                             _T("/.xcsoar")
 #endif
-    return buffer;
+                             );
   } else
     return _T("/etc/xcsoar");
 #else
