@@ -191,22 +191,6 @@ public:
 
     return value;
   }
-
-  /**
-   * Returns a newly allocated string.  It invalidates this object.
-   */
-  gcc_malloc
-  char *StealDup() {
-    assert(value != nullptr);
-
-#ifdef _UNICODE
-    char *result = value;
-    value = nullptr;
-    return result;
-#else
-    return strdup(value);
-#endif
-  }
 };
 
 #endif
