@@ -50,7 +50,7 @@ TriangulateAll(const TopographyFile &file)
   for (const XShape &shape : file)
     if (shape.get_type() == MS_SHAPE_POLYGON)
       for (unsigned i = 0; i < 4; ++i)
-        shape.get_indices(i, 1, count);
+        shape.GetIndices(i, 1, count);
 }
 
 static void

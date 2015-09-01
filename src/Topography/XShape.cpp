@@ -42,7 +42,7 @@ Copyright_License {
 #endif
 
 static TCHAR *
-import_label(const char *src)
+ImportLabel(const char *src)
 {
   if (src == nullptr)
     return nullptr;
@@ -76,7 +76,7 @@ import_label(const char *src)
  */
 gcc_const
 static unsigned
-min_points_for_type(int shapelib_type)
+GetMinPointsForShapeType(int shapelib_type)
 {
   switch (shapelib_type) {
   case MS_SHAPE_POINT:
@@ -113,7 +113,7 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
   num_lines = 0;
 
-  const int min_points = min_points_for_type(shape.type);
+  const int min_points = GetMinPointsForShapeType(shape.type);
   if (min_points < 0) {
     /* not supported, leave an empty XShape object */
     points = nullptr;
@@ -165,7 +165,7 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
   if (label_field >= 0) {
     const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
-    label = import_label(src);
+    label = ImportLabel(src);
   }
 
   msFreeShape(&shape);
@@ -255,8 +255,8 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
 }
 
 const unsigned short *
-XShape::get_indices(int thinning_level, ShapeScalar min_distance,
-                    const unsigned short *&count) const
+XShape::GetIndices(int thinning_level, ShapeScalar min_distance,
+                   const unsigned short *&count) const
 {
   if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);

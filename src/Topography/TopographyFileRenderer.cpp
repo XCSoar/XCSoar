@@ -103,7 +103,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
     if (shape.get_type() != MS_SHAPE_NULL)
       visible_shapes.push_back(&shape);
 
-    if (shape.get_label() != nullptr)
+    if (shape.GetLabel() != nullptr)
       visible_labels.push_back(&shape);
   }
 }
@@ -134,7 +134,7 @@ TopographyFileRenderer::UpdateArrayBuffer()
 
   for (const auto &shape : file) {
     const auto lines = shape.GetLines();
-    const ShapePoint *src = shape.get_points();
+    const ShapePoint *src = shape.GetPoints();
     for (const auto n_points : lines) {
       p = std::copy_n(src, n_points, p);
       src += n_points;
@@ -156,7 +156,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   // TODO: for now i assume there is only one point for point-XShapes
 
   RasterPoint sc;
-  if (!projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.get_points()[0]),
+  if (!projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.GetPoints()[0]),
                                        sc))
     return;
 
@@ -277,7 +277,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = buffer + shape.GetOffset();
 #else // !ENABLE_OPENGL
-    const GeoPoint *points = shape.get_points();
+    const GeoPoint *points = shape.GetPoints();
 #endif
 
     switch (shape.get_type()) {
@@ -311,7 +311,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
         const GLushort *indices, *count;
         if (level == 0 ||
-            (indices = shape.get_indices(level, min_distance, count)) == nullptr) {
+            (indices = shape.GetIndices(level, min_distance, count)) == nullptr) {
           unsigned offset = 0;
           for (unsigned n : lines) {
             glDrawArrays(GL_LINE_STRIP, offset, n);
@@ -344,8 +344,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
       {
         const GLushort *index_count;
-        const GLushort *triangles = shape.get_indices(level, min_distance,
-                                                        index_count);
+        const GLushort *triangles = shape.GetIndices(level, min_distance,
+                                                     index_count);
         const unsigned n = *index_count;
 
 #ifdef GL_EXT_multi_draw_arrays
@@ -477,14 +477,14 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     const XShape &shape = *shape_p;
 
     // Skip shapes without a label
-    const TCHAR *label = shape.get_label();
+    const TCHAR *label = shape.GetLabel();
     assert(label != nullptr);
 
     const auto lines = shape.GetLines();
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = shape.get_points();
+    const ShapePoint *points = shape.GetPoints();
 #else
-    const GeoPoint *points = shape.get_points();
+    const GeoPoint *points = shape.GetPoints();
 #endif
 
     for (const unsigned n : lines) {

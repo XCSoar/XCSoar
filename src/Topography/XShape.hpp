@@ -110,9 +110,9 @@ protected:
   bool BuildIndices(unsigned thinning_level, ShapeScalar min_distance);
 
 public:
-  const unsigned short *get_indices(int thinning_level,
-                                    ShapeScalar min_distance,
-                                    const unsigned short *&count) const;
+  const unsigned short *GetIndices(int thinning_level,
+                                   ShapeScalar min_distance,
+                                   const unsigned short *&count) const;
 #endif
 
   const GeoBounds &get_bounds() const {
@@ -128,14 +128,14 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  const ShapePoint *get_points() const {
+  const ShapePoint *GetPoints() const {
 #else
-  const GeoPoint *get_points() const {
+  const GeoPoint *GetPoints() const {
 #endif
     return points;
   }
 
-  const TCHAR *get_label() const {
+  const TCHAR *GetLabel() const {
     return label;
   }
 };
