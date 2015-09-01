@@ -38,10 +38,14 @@ static const TCHAR *const terrain_cache_name = _T("terrain_fixed");
 static const TCHAR *const terrain_cache_name = _T("terrain");
 #endif
 
-static char *
+static AllocatedString<>
 ToNarrowPath(const TCHAR *src)
 {
-  return WideToACPConverter(src).StealDup();
+#ifdef _UNICODE
+  return AllocatedString<>::Donate(ConvertWideToACP(src));
+#else
+  return AllocatedString<>::Duplicate(src);
+#endif
 }
 
 RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
@@ -59,7 +63,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   }
 
   if (!cache_loaded) {
-    if (!raster_tile_cache.LoadOverview(path, world_file, operation))
+    if (!raster_tile_cache.LoadOverview(path.c_str(), world_file, operation))
       return;
 
     if (cache != NULL) {
@@ -77,10 +81,6 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   projection.Set(GetBounds(),
                  raster_tile_cache.GetFineWidth(),
                  raster_tile_cache.GetFineHeight());
-}
-
-RasterMap::~RasterMap() {
-  free(path);
 }
 
 static unsigned
@@ -103,7 +103,7 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
   int y = AngleToPixel(location.latitude, bounds.GetNorth(), bounds.GetSouth(),
                        raster_tile_cache.GetHeight());
 
-  raster_tile_cache.UpdateTiles(path, x, y,
+  raster_tile_cache.UpdateTiles(path.c_str(), x, y,
                                 projection.DistancePixelsCoarse(radius));
 }
 
