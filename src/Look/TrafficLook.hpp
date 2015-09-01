@@ -40,6 +40,11 @@ struct TrafficLook {
   Brush warning_brush;
   Brush alarm_brush;
 
+  static constexpr Color team_color_green = Color(0x74, 0xff, 0);
+  static constexpr Color team_color_magenta = Color(0xff, 0, 0xcb);
+  static constexpr Color team_color_blue = Color(0, 0x90, 0xff);
+  static constexpr Color team_color_yellow = Color(0xff, 0xe8, 0);
+
   Pen team_pen_green;
   Pen team_pen_blue;
   Pen team_pen_yellow;

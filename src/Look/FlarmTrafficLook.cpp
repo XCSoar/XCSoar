@@ -36,10 +36,6 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   selection_color = COLOR_BLUE;
   background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
   radar_color = COLOR_GRAY;
-  Color team_color_green = Color(0x74, 0xFF, 0);
-  Color team_color_blue = Color(0, 0x90, 0xFF);
-  Color team_color_yellow = Color(0xFF, 0xE8, 0);
-  Color team_color_magenta = Color(0xFF, 0, 0xCB);
 
   warning_brush.Create(warning_color);
   alarm_brush.Create(alarm_color);
@@ -47,10 +43,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   passive_brush.Create(passive_color);
   selection_brush.Create(selection_color);
   radar_brush.Create(radar_color);
-  team_brush_green.Create(team_color_green);
-  team_brush_blue.Create(team_color_blue);
-  team_brush_yellow.Create(team_color_yellow);
-  team_brush_magenta.Create(team_color_magenta);
+  team_brush_green.Create(other.team_color_green);
+  team_brush_blue.Create(other.team_color_blue);
+  team_brush_yellow.Create(other.team_color_yellow);
+  team_brush_magenta.Create(other.team_color_magenta);
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
   warning_pen.Create(width, warning_color);
@@ -58,10 +54,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   default_pen.Create(width, default_color);
   passive_pen.Create(width, passive_color);
   selection_pen.Create(width, selection_color);
-  team_pen_green.Create(width, team_color_green);
-  team_pen_blue.Create(width, team_color_blue);
-  team_pen_yellow.Create(width, team_color_yellow);
-  team_pen_magenta.Create(width, team_color_magenta);
+  team_pen_green.Create(width, other.team_color_green);
+  team_pen_blue.Create(width, other.team_color_blue);
+  team_pen_yellow.Create(width, other.team_color_yellow);
+  team_pen_magenta.Create(width, other.team_color_magenta);
 
   plane_pen.Create(width, radar_color);
   radar_pen.Create(1, radar_color);

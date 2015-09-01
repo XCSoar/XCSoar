@@ -30,6 +30,7 @@
  */
 
 #include "TrafficDialogs.hpp"
+#include "Look/TrafficLook.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -123,20 +124,20 @@ FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
   const ButtonLook &button_look = buttons.GetButtonLook();
 
-  constexpr Color green(0x74, 0xff, 0x00);
-  buttons.AddButton(new ColorButtonRenderer(button_look, green),
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_green),
                     *this, GREEN);
 
-  constexpr Color blue(0x00, 0x90, 0xff);
-  buttons.AddButton(new ColorButtonRenderer(button_look, blue),
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_blue),
                     *this, BLUE);
 
-  constexpr Color yellow(0xff, 0xe8, 0x00);
-  buttons.AddButton(new ColorButtonRenderer(button_look, yellow),
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_yellow),
                     *this, YELLOW);
 
-  constexpr Color magenta(0xff, 0x00, 0xcb);
-  buttons.AddButton(new ColorButtonRenderer(button_look, magenta),
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_magenta),
                     *this, MAGENTA);
 
   buttons.AddButton(_("Clear"), *this, CLEAR);

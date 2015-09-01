@@ -56,6 +56,7 @@ struct FlarmTrafficLook {
   Pen default_pen;
   Pen passive_pen;
   Pen selection_pen;
+
   Pen team_pen_green;
   Pen team_pen_blue;
   Pen team_pen_yellow;
