@@ -35,9 +35,8 @@ class FileCache;
 class OperationEnvironment;
 
 /**
- * Class to manage raster terrain database, potentially with 
- * caching or demand-loading.
- * 
+ * Class to manage raster terrain database, potentially with caching
+ * or demand-loading.
  */
 class RasterTerrain : public Guard<RasterMap> {
 public:
@@ -52,11 +51,9 @@ protected:
   RasterMap map;
 
 public:
-
-/** 
- * Constructor.  Returns uninitialised object. 
- * 
- */
+  /**
+   * Constructor.  Returns uninitialised object.
+   */
   RasterTerrain(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
                 OperationEnvironment &operation)
     :Guard<RasterMap>(map), map(path, world_file, cache, operation) {}
@@ -65,10 +62,9 @@ public:
     return map.GetSerial();
   }
 
-/** 
- * Load the terrain.  Determines the file to load from profile settings.
- * 
- */
+  /**
+   * Load the terrain.  Determines the file to load from profile settings.
+   */
   static RasterTerrain *OpenTerrain(FileCache *cache,
                                     OperationEnvironment &operation);
 
@@ -99,7 +95,6 @@ public:
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }
-
 };
 
 #endif
