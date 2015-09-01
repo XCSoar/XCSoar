@@ -292,8 +292,6 @@ public:
   long SkipMarkerSegment(long file_offset) const;
   void MarkerSegment(long file_offset, unsigned id);
 
-  bool TileRequest(unsigned index);
-
   void SetSize(unsigned width, unsigned height,
                unsigned tile_width, unsigned tile_height,
                unsigned tile_columns, unsigned tile_rows);
