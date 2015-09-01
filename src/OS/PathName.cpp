@@ -24,7 +24,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/CharUtil.hpp"
 
 #include <assert.h>

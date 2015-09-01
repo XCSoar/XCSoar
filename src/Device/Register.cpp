@@ -56,7 +56,7 @@ Copyright_License {
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/ATR833.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <assert.h>
 #include <string.h>

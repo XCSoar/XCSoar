@@ -27,7 +27,7 @@
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "Util/tstring.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 

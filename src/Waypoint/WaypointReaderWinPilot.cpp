@@ -25,7 +25,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Util/ExtractParameters.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
 

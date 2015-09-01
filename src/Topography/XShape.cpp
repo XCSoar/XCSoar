@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/UTF8.hpp"
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"

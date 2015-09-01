@@ -25,7 +25,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "FlightInfo.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <stdio.h>
 

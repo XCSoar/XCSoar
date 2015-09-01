@@ -22,7 +22,7 @@
 
 #include "OS/FileUtil.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 class TestingFileVisitor: public File::Visitor
 {

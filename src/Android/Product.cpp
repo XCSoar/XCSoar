@@ -24,7 +24,7 @@ Copyright_License {
 #include "Product.hpp"
 #include "Main.hpp"
 #include "NativeView.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <assert.h>
 

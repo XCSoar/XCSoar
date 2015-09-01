@@ -27,7 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/NumberParser.hpp"
 
 #include <tchar.h>

@@ -29,7 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
 #include "Geo/Math.hpp"

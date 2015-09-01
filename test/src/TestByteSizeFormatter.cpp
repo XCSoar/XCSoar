@@ -22,7 +22,7 @@
 
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "TestUtil.hpp"
 
 int

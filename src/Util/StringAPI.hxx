@@ -27,106 +27,97 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WSTRING_API_HPP
-#define WSTRING_API_HPP
+#ifndef STRING_API_HXX
+#define STRING_API_HXX
 
 #include "Compiler.h"
 
-#include <wchar.h>
+#include <string.h>
+
+#ifdef _UNICODE
+#include "WStringAPI.hxx"
+#endif
 
 gcc_pure gcc_nonnull_all
 static inline size_t
-StringLength(const wchar_t *p)
+StringLength(const char *p)
 {
-  return wcslen(p);
+  return strlen(p);
 }
 
 gcc_pure gcc_nonnull_all
-static inline const wchar_t *
-StringFind(const wchar_t *haystack, const wchar_t *needle)
+static inline const char *
+StringFind(const char *haystack, const char *needle)
 {
-  return wcsstr(haystack, needle);
+  return strstr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
-static inline const wchar_t *
-StringFind(const wchar_t *haystack, wchar_t needle, size_t size)
+static inline char *
+StringFind(char *haystack, char needle, size_t size)
 {
-  return wmemchr(haystack, needle, size);
+  return (char *)memchr(haystack, needle, size);
 }
 
 gcc_pure gcc_nonnull_all
-static inline wchar_t *
-StringFind(wchar_t *haystack, wchar_t needle, size_t size)
+static inline const char *
+StringFind(const char *haystack, char needle, size_t size)
 {
-  return wmemchr(haystack, needle, size);
+  return (const char *)memchr(haystack, needle, size);
 }
 
 gcc_pure gcc_nonnull_all
-static inline const wchar_t *
-StringFind(const wchar_t *haystack, wchar_t needle)
+static inline const char *
+StringFind(const char *haystack, char needle)
 {
-  return wcschr(haystack, needle);
+  return strchr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
-static inline wchar_t *
-StringFind(wchar_t *haystack, wchar_t needle)
+static inline char *
+StringFind(char *haystack, char needle)
 {
-  return wcschr(haystack, needle);
+  return strchr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
-static inline const wchar_t *
-StringFindLast(const wchar_t *haystack, wchar_t needle)
+static inline const char *
+StringFindLast(const char *haystack, char needle)
 {
-  return wcsrchr(haystack, needle);
+  return strrchr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
-static inline wchar_t *
-StringFindLast(wchar_t *haystack, wchar_t needle)
+static inline char *
+StringFindLast(char *haystack, char needle)
 {
-  return wcsrchr(haystack, needle);
+  return strrchr(haystack, needle);
 }
 
-static inline wchar_t *
-StringToken(wchar_t *str, const wchar_t *delim)
+static inline char *
+StringToken(char *str, const char *delim)
 {
-  return wcstok(str, delim);
+  return strtok(str, delim);
 }
 
 gcc_nonnull_all
 static inline void
-UnsafeCopyString(wchar_t *dest, const wchar_t *src)
+UnsafeCopyString(char *dest, const char *src)
 {
-  wcscpy(dest, src);
+  strcpy(dest, src);
 }
 
 gcc_nonnull_all
-static inline wchar_t *
-UnsafeCopyStringP(wchar_t *dest, const wchar_t *src)
+static inline char *
+UnsafeCopyStringP(char *dest, const char *src)
 {
-#ifdef WIN32
-  /* emulate wcpcpy() */
+#if defined(WIN32) || defined(__BIONIC__)
+  /* emulate stpcpy() */
   UnsafeCopyString(dest, src);
   return dest + StringLength(dest);
 #else
-  return wcpcpy(dest, src);
+  return stpcpy(dest, src);
 #endif
-}
-
-/**
- * Checks whether str1 and str2 are equal.
- * @param str1 String 1
- * @param str2 String 2
- * @return True if equal, False otherwise
- */
-gcc_pure gcc_nonnull_all
-static inline bool
-StringIsEqual(const wchar_t *str1, const wchar_t *str2)
-{
-  return wcscmp(str1, str2) == 0;
 }
 
 /**
@@ -134,37 +125,51 @@ StringIsEqual(const wchar_t *str1, const wchar_t *str2)
  */
 gcc_pure gcc_nonnull_all
 static inline bool
-StringIsEqual(const wchar_t *a, const wchar_t *b, size_t length)
+StringIsEqual(const char *a, const char *b)
 {
-  return wcsncmp(a, b, length) == 0;
+  return strcmp(a, b) == 0;
+}
+
+/**
+ * Checks whether #a and #b are equal.
+ */
+gcc_pure gcc_nonnull_all
+static inline bool
+StringIsEqual(const char *a, const char *b, size_t length)
+{
+  return strncmp(a, b, length) == 0;
 }
 
 gcc_pure gcc_nonnull_all
 static inline bool
-StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b)
+StringIsEqualIgnoreCase(const char *a, const char *b)
 {
-  return _wcsicmp(a, b) == 0;
+  return strcasecmp(a, b) == 0;
 }
 
 gcc_pure gcc_nonnull_all
 static inline bool
-StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b, size_t size)
+StringIsEqualIgnoreCase(const char *a, const char *b, size_t size)
 {
-  return _wcsnicmp(a, b, size) == 0;
+  return strncasecmp(a, b, size) == 0;
 }
 
 gcc_pure gcc_nonnull_all
 static inline int
-StringCollate(const wchar_t *a, const wchar_t *b)
+StringCollate(const char *a, const char *b)
 {
-  return wcscoll(a, b);
+  return strcoll(a, b);
 }
 
+/**
+ * Copy the string to a new allocation.  The return value must be
+ * freed with free().
+ */
 gcc_malloc gcc_nonnull_all
-static inline wchar_t *
-DuplicateString(const wchar_t *p)
+static inline char *
+DuplicateString(const char *p)
 {
-  return wcsdup(p);
+  return strdup(p);
 }
 
 #endif

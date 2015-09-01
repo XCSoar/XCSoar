@@ -20,7 +20,7 @@
 }
 */
 
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 #include "TestUtil.hpp"
 

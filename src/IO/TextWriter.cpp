@@ -24,7 +24,7 @@ Copyright_License {
 #include "TextWriter.hpp"
 
 #ifdef _UNICODE
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include <windows.h>
 #endif
 

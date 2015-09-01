@@ -28,7 +28,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Process.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <vector>
 #include <windef.h> /* for MAX_PATH */

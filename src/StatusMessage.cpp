@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/Macros.hpp"
 
 #include <assert.h>

@@ -28,7 +28,7 @@ Copyright_License {
 #include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 void
 ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock)
