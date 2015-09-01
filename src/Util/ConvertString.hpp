@@ -153,19 +153,17 @@ public:
  */
 class WideToACPConverter {
 #ifdef _UNICODE
-  char *value;
+  typedef AllocatedString<> Value;
 #else
-  const char *value;
+  typedef StringPointer<> Value;
 #endif
+
+  Value value;
 
 public:
 #ifdef _UNICODE
   WideToACPConverter(const TCHAR *_value)
-    :value(ConvertWideToACP(_value)) {}
-
-  ~WideToACPConverter() {
-    delete[] value;
-  }
+    :value(Value::Donate(ConvertWideToACP(_value))) {}
 #else
   WideToACPConverter(const char *_value):value(_value) {
     assert(_value != nullptr);
@@ -178,18 +176,18 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != nullptr;
+    return !value.IsNull();
 #else
-    assert(value != nullptr);
+    assert(!value.IsNull());
 
     return true;
 #endif
   }
 
   operator const char *() const {
-    assert(value != nullptr);
+    assert(!value.IsNull());
 
-    return value;
+    return value.c_str();
   }
 };
 
