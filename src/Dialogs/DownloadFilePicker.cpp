@@ -137,9 +137,8 @@ DownloadFile(const char *uri, const char *_base)
     return tstring();
   }
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, base);
-  return path;
+  TCHAR buffer[MAX_PATH];
+  return LocalPath(buffer, base);
 }
 
 class DownloadFilePickerWidget final
@@ -265,8 +264,8 @@ DownloadFilePickerWidget::RefreshList()
 
   FileRepository repository;
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("repository"));
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, _T("repository"));
   FileLineReaderA reader(path);
   if (!reader.error()) {
     ParseFileRepository(repository, reader);

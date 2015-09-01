@@ -81,8 +81,8 @@ SaveCrash(int pid, const char *data, size_t length)
   strftime(name, sizeof(name),
            "crash/crash-%Y-%m-%d-%H-%M-%S", gmtime_r(&t, &tm));
 
-  char path[1024];
-  LocalPath(path, name);
+  char buffer[1024];
+  const auto path = LocalPath(buffer, name);
   unlink(path);
 
   LogFormat("Saving logcat to %s", path);

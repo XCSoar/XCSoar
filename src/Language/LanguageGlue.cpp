@@ -464,10 +464,8 @@ ReadLanguageFile()
   if (base == NULL)
     base = value;
 
-  if (base == value) {
-    LocalPath(second_buffer, value);
-    value = second_buffer;
-  }
+  if (base == value)
+    value = LocalPath(second_buffer, value);
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
     AutoDetectLanguage();

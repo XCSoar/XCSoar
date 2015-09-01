@@ -49,15 +49,13 @@ OpenLog()
     initialised = true;
 
     /* delete the obsolete log file */
-    LocalPath(path, _T("xcsoar-startup.log"));
-    File::Delete(path);
+    File::Delete(LocalPath(path, _T("xcsoar-startup.log")));
 
     LocalPath(path, _T("xcsoar.log"));
 
     {
-      TCHAR old_path[MAX_PATH];
-      LocalPath(old_path, _T("xcsoar-old.log"));
-      File::Replace(path, old_path);
+      TCHAR buffer2[MAX_PATH];
+      File::Replace(path, LocalPath(buffer2, _T("xcsoar-old.log")));
     }
 
 #ifdef ANDROID

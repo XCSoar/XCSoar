@@ -31,8 +31,8 @@ OrderedTask *
 LoadDefaultTask(const TaskBehaviour &task_behaviour,
                 const Waypoints *waypoints)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, default_task_path);
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, default_task_path);
   OrderedTask *task = LoadTask(path, task_behaviour, waypoints);
   if (!task) {
     task = new OrderedTask(task_behaviour);

@@ -258,9 +258,10 @@ Startup()
 
   main_window->InitialiseConfigured();
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("cache"));
-  file_cache = new FileCache(path);
+  {
+    TCHAR buffer[MAX_PATH];
+    file_cache = new FileCache(LocalPath(buffer, _T("cache")));
+  }
 
   ReadLanguageFile();
 
@@ -417,8 +418,8 @@ Startup()
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
-    LocalPath(path, _T("flights.log"));
-    flight_logger->SetPath(path);
+    TCHAR buffer[MAX_PATH];
+    flight_logger->SetPath(LocalPath(buffer, _T("flights.log")));
   }
 
   if (computer_settings.logger.enable_nmea_logger)

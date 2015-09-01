@@ -254,8 +254,8 @@ PlaneListWidget::NewClicked()
     StaticString<42> filename(plane.registration);
     filename += _T(".xcp");
 
-    StaticString<MAX_PATH> path;
-    LocalPath(path.buffer(), filename);
+    StaticString<MAX_PATH> buffer;
+    const auto path = LocalPath(buffer.buffer(), filename);
 
     if (File::Exists(path)) {
       StaticString<256> tmp;

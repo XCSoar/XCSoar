@@ -328,12 +328,10 @@ TaskListPanel::RenameTask()
 
   newname.append(_T(".tsk"));
 
-  TCHAR newpath[MAX_PATH];
-  LocalPath(newpath, _T("tasks"));
-  Directory::Create(newpath);
-  LocalPath(newpath, _T("tasks"), newname.c_str());
-
-  File::Rename(task_store->GetPath(cursor_index), newpath);
+  TCHAR buffer[MAX_PATH];
+  Directory::Create(LocalPath(buffer, _T("tasks")));
+  File::Rename(task_store->GetPath(cursor_index),
+               LocalPath(buffer, _T("tasks"), newname.c_str()));
 
   task_store->Scan(more);
   RefreshView();

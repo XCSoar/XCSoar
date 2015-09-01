@@ -276,9 +276,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   }
 
   {
-    TCHAR path[MAX_PATH];
-    LocalPath(path, _T("logs"));
-    Directory::Create(path);
+    TCHAR buffer[MAX_PATH];
+    Directory::Create(LocalPath(buffer, _T("logs")));
   }
 
   while (true) {
@@ -288,11 +287,10 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       break;
 
     // Download chosen IGC file into temporary file
-    TCHAR path[MAX_PATH];
-    LocalPath(path, _T("logs"));
-    Directory::Create(path);
+    TCHAR buffer[MAX_PATH];
+    Directory::Create(LocalPath(buffer, _T("logs")));
 
-    LocalPath(path, _T("logs"), _T("temp.igc"));
+    const auto path = LocalPath(buffer, _T("logs"), _T("temp.igc"));
     switch (DoDownloadFlight(device, *flight, path)) {
     case TriStateJobResult::SUCCESS:
       break;
@@ -322,8 +320,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    TCHAR final_path[MAX_PATH];
-    LocalPath(final_path, _T("logs"), name);
+    TCHAR buffer2[MAX_PATH];
+    const auto final_path = LocalPath(buffer2, _T("logs"), name);
 
     // Remove a file with the same name if it exists
     if (File::Exists(final_path))
