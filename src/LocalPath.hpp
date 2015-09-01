@@ -72,7 +72,7 @@ GetPrimaryDataPath();
  */
 void LocalPath(TCHAR* buf, const TCHAR *file);
 
-TCHAR *
+const TCHAR *
 LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
 
 /**

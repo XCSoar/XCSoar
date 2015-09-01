@@ -110,7 +110,7 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
   _tcscpy(buffer + data_path_length + 1, file);
 }
 
-TCHAR *
+const TCHAR *
 LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
           const TCHAR *gcc_restrict name)
 {
