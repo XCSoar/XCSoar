@@ -23,34 +23,31 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/Profile.hpp"
-#include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 
 #include <windef.h> /* for MAX_PATH */
 
 #include <string.h>
 
-// General, open/close
-
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 {
-  TCHAR szFile[MAX_PATH], world_file_buffer[MAX_PATH];
+  TCHAR path[MAX_PATH], world_file_buffer[MAX_PATH];
   const TCHAR *world_file;
 
-  if (Profile::GetPath(ProfileKeys::MapFile, szFile)) {
-    _tcscpy(world_file_buffer, szFile);
+  if (Profile::GetPath(ProfileKeys::MapFile, path)) {
+    _tcscpy(world_file_buffer, path);
     _tcscat(world_file_buffer, _T(DIR_SEPARATOR_S "terrain.j2w"));
     world_file = world_file_buffer;
 
-    _tcscat(szFile, _T("/terrain.jp2"));
+    _tcscat(path, _T("/terrain.jp2"));
   } else
-    return NULL;
+    return nullptr;
 
-  RasterTerrain *rt = new RasterTerrain(szFile, world_file, cache, operation);
+  RasterTerrain *rt = new RasterTerrain(path, world_file, cache, operation);
   if (!rt->map.IsDefined()) {
     delete rt;
-    return NULL;
+    return nullptr;
   }
 
   return rt;
