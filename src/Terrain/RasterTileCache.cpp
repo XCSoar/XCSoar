@@ -88,7 +88,6 @@ RasterTileCache::PutTileData(unsigned index,
     if (!tile.IsRequested())
       return;
 
-    tile.Enable();
     tile.CopyFrom(m);
   }
 }

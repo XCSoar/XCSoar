@@ -53,18 +53,13 @@ RasterTile::LoadCache(FILE *file)
 }
 
 void
-RasterTile::Enable()
-{
-  if (!width || !height) {
-    Disable();
-  } else {
-    buffer.Resize(width, height);
-  }
-}
-
-void
 RasterTile::CopyFrom(const struct jas_matrix &m)
 {
+  if (!IsDefined())
+    return;
+
+  buffer.Resize(width, height);
+
   short *gcc_restrict dest = buffer.GetData();
   assert(dest != nullptr);
 
