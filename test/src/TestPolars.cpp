@@ -33,6 +33,7 @@
 #include "Util/Macros.hpp"
 
 #include <stdio.h>
+#include <string.h>
 
 TLineReader*
 OpenConfiguredTextFile(const char *profile_key, Charset cs)
