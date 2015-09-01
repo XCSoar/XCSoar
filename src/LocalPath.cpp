@@ -100,7 +100,7 @@ SetPrimaryDataPath(const TCHAR *path)
   data_path_length = StringLength(data_path);
 }
 
-void
+const TCHAR *
 LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
 {
   assert(data_path != nullptr);
@@ -108,6 +108,8 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
   memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
   buffer[data_path_length] = _T(DIR_SEPARATOR);
   _tcscpy(buffer + data_path_length + 1, file);
+
+  return buffer;
 }
 
 const TCHAR *

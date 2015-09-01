@@ -70,7 +70,8 @@ GetPrimaryDataPath();
  * @param buffer Output buffer
  * @param file optional filename to include in the output
  */
-void LocalPath(TCHAR* buf, const TCHAR *file);
+const TCHAR *
+LocalPath(TCHAR* buf, const TCHAR *file);
 
 const TCHAR *
 LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
