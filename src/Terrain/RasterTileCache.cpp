@@ -84,8 +84,12 @@ RasterTileCache::PutTileData(unsigned index,
     for (unsigned y = 0; y < height; y += skip, dest += dest_pitch)
       CopyOverviewRow(dest, m.rows_[y], width, skip);
   } else {
-    if (TileRequest(index))
-      tiles.GetLinear(index).CopyFrom(m);
+    auto &tile = tiles.GetLinear(index);
+    if (!tile.IsRequested())
+      return;
+
+    tile.Enable();
+    tile.CopyFrom(m);
   }
 }
 
@@ -165,18 +169,6 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
   }
 
   return num_activate > 0;
-}
-
-bool
-RasterTileCache::TileRequest(unsigned index)
-{
-  RasterTile &tile = tiles.GetLinear(index);
-
-  if (!tile.IsRequested())
-    return false;
-
-  tile.Enable();
-  return true; // want to load this one!
 }
 
 short
