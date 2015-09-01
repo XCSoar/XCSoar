@@ -147,69 +147,6 @@ public:
 };
 
 /**
- * Convert an ACP string (Windows ANSI code page) to a TCHAR string.
- * The source buffer passed to the constructor must be valid as long
- * as this object is being used.
- */
-class ACPToWideConverter {
-#ifdef _UNICODE
-  TCHAR *value;
-#else
-  const char *value;
-#endif
-
-public:
-#ifdef _UNICODE
-  ACPToWideConverter(const char *_value)
-    :value(ConvertACPToWide(_value)) {}
-
-  ~ACPToWideConverter() {
-    delete[] value;
-  }
-#else
-  ACPToWideConverter(const char *_value):value(_value) {
-    assert(_value != nullptr);
-  }
-#endif
-
-  ACPToWideConverter(const ACPToWideConverter &other) = delete;
-  ACPToWideConverter &operator=(const ACPToWideConverter &other) = delete;
-
-  gcc_pure
-  bool IsValid() const {
-#ifdef _UNICODE
-    return value != nullptr;
-#else
-    assert(value != nullptr);
-
-    return true;
-#endif
-  }
-
-  operator const TCHAR *() const {
-    assert(value != nullptr);
-
-    return value;
-  }
-
-  /**
-   * Returns a newly allocated string.  It invalidates this object.
-   */
-  gcc_malloc
-  TCHAR *StealDup() {
-    assert(value != nullptr);
-
-#ifdef _UNICODE
-    TCHAR *result = value;
-    value = nullptr;
-    return result;
-#else
-    return strdup(value);
-#endif
-  }
-};
-
-/**
  * Convert a TCHAR string to ACP (Windows ANSI code page).  The source
  * buffer passed to the constructor must be valid as long as this
  * object is being used.
