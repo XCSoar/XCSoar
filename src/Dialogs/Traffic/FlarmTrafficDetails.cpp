@@ -121,19 +121,23 @@ private:
 inline void
 FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
-  const ButtonLook &look = buttons.GetButtonLook();
+  const ButtonLook &button_look = buttons.GetButtonLook();
 
   constexpr Color green(0x74, 0xff, 0x00);
-  buttons.AddButton(new ColorButtonRenderer(look, green), *this, GREEN);
+  buttons.AddButton(new ColorButtonRenderer(button_look, green),
+                    *this, GREEN);
 
   constexpr Color blue(0x00, 0x90, 0xff);
-  buttons.AddButton(new ColorButtonRenderer(look, blue), *this, BLUE);
+  buttons.AddButton(new ColorButtonRenderer(button_look, blue),
+                    *this, BLUE);
 
   constexpr Color yellow(0xff, 0xe8, 0x00);
-  buttons.AddButton(new ColorButtonRenderer(look, yellow), *this, YELLOW);
+  buttons.AddButton(new ColorButtonRenderer(button_look, yellow),
+                    *this, YELLOW);
 
   constexpr Color magenta(0xff, 0x00, 0xcb);
-  buttons.AddButton(new ColorButtonRenderer(look, magenta), *this, MAGENTA);
+  buttons.AddButton(new ColorButtonRenderer(button_look, magenta),
+                    *this, MAGENTA);
 
   buttons.AddButton(_("Clear"), *this, CLEAR);
   buttons.AddButton(_("Team"), *this, TEAM);
