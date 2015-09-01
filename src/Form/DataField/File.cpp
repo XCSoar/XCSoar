@@ -25,7 +25,7 @@ Copyright_License {
 #include "ComboList.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 

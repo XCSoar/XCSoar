@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Config/Registry.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <windows.h>
 #include <tchar.h>

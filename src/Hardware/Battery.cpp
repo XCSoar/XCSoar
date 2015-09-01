@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Battery.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #ifdef HAVE_BATTERY
 

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Prefix.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 const TCHAR *
 PrefixDataField::GetAsDisplayString() const

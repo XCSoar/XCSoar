@@ -25,7 +25,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Compiler.h"
 
 #ifdef __APPLE__

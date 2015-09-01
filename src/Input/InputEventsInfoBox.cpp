@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 // SelectInfoBox
 // Selects the next or previous infobox

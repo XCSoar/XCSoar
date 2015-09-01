@@ -25,7 +25,7 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "MenuData.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StringBuilder.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"

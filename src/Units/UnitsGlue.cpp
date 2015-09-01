@@ -24,7 +24,7 @@ Copyright_License {
 #include "Units/UnitsGlue.hpp"
 #include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <tchar.h>
 

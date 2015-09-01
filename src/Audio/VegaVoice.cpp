@@ -26,7 +26,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <stdio.h>
 

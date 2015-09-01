@@ -28,7 +28,7 @@
  */
 
 #include "AllocatedString.hxx"
-#include "StringAPI.hpp"
+#include "StringAPI.hxx"
 
 template<>
 AllocatedString<char>

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Terrain/RasterWeatherCache.hpp"
 #include "Screen/Ramp.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 static constexpr ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Asset.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"

@@ -25,7 +25,7 @@ Copyright_License {
 #include "Queue.hpp"
 #include "../Shared/Event.hpp"
 #include "IO/Async/IOLoop.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <wayland-client.h>
 

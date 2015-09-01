@@ -35,7 +35,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"

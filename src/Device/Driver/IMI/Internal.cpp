@@ -30,7 +30,7 @@ Copyright_License {
 #include "Units/Unit.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 bool
 IMIDevice::Connect(OperationEnvironment &env)

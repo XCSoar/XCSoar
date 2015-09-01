@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 

@@ -38,7 +38,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 

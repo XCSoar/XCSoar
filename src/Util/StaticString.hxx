@@ -31,7 +31,7 @@
 #define STATIC_STRING_HPP
 
 #include "StringBuffer.hxx"
-#include "StringAPI.hpp"
+#include "StringAPI.hxx"
 #include "StringUtil.hpp"
 #include "StringFormat.hpp"
 #include "UTF8.hpp"

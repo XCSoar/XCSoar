@@ -31,7 +31,7 @@
 #define STRING_BUILDER_HXX
 
 #include "TruncateString.hpp"
-#include "StringAPI.hpp"
+#include "StringAPI.hxx"
 
 #include <utility>
 

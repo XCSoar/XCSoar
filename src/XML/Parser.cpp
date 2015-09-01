@@ -29,7 +29,7 @@
 #include "Parser.hpp"
 #include "Node.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "IO/FileLineReader.hpp"

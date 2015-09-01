@@ -28,7 +28,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"

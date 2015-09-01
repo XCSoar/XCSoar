@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Widcomm.hpp"
 #include "Config/Registry.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 static bool
 FindDevice(const TCHAR *name, TCHAR *result, size_t result_size)

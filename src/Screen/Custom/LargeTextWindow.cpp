@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <string.h>
 

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "PageActions.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 void
 InputEvents::eventPage(const TCHAR *misc)

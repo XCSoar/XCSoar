@@ -24,7 +24,7 @@ Copyright_License {
 #include "KeyboardWidget.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "Screen/Canvas.hpp"

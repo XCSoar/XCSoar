@@ -28,7 +28,7 @@ Copyright_License {
 #include "Profile/File.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 bool
 ProfileFileHasPassword(const TCHAR *path)

@@ -24,7 +24,7 @@ Copyright_License {
 #include "InputKeys.hpp"
 #include "Screen/Key.h"
 #include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 struct string_to_key {
   const TCHAR *name;

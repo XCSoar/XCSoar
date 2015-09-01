@@ -28,7 +28,7 @@ Copyright_License {
 #include "IO/FileTransaction.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/KeyValueFileWriter.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 
 bool

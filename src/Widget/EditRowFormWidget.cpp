@@ -36,7 +36,7 @@ Copyright_License {
 #include "Time/RoughTime.hpp"
 #include "Language/Language.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/TruncateString.hpp"
 
 #include <assert.h>

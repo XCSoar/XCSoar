@@ -43,7 +43,7 @@ ResourceLoader::Init(HINSTANCE hInstance)
 #else /* !WIN32 */
 
 #include "resource_data.h"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #endif /* !WIN32 */
 

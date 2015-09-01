@@ -27,7 +27,7 @@
  */
 
 #include "Node.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <assert.h>
 

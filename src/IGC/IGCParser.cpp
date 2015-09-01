@@ -29,7 +29,7 @@ Copyright_License {
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <stdlib.h>
 

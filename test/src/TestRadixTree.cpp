@@ -25,7 +25,7 @@
 #include <iostream>
 
 #include "Util/RadixTree.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "TestUtil.hpp"
 
 struct Sum {

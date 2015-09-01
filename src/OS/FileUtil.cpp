@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "OS/FileUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Compatibility/path.h"

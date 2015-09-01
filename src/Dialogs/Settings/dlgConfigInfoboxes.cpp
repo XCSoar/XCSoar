@@ -40,7 +40,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StaticArray.hpp"
 #include "Compiler.h"
 

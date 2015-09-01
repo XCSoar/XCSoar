@@ -27,7 +27,7 @@
 #include "IO/KeyValueFileWriter.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 static void
 TestReader()

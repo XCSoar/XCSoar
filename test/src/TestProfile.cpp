@@ -23,7 +23,7 @@
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StaticString.hxx"
 
 static void

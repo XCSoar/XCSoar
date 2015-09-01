@@ -25,7 +25,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Util/StringUtil.hpp"
 #include "Util/StringFormat.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Asset.hpp"
 
 #include "OS/FileUtil.hpp"
