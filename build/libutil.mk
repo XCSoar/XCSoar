@@ -11,6 +11,7 @@ UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/ExtractParameters.cpp \
 	$(UTIL_SRC_DIR)/ConvertString.cpp \
 	$(UTIL_SRC_DIR)/StaticString.cxx \
+	$(UTIL_SRC_DIR)/AllocatedString.cxx \
 	$(UTIL_SRC_DIR)/StringUtil.cpp
 
 ifeq ($(HAVE_MSVCRT),y)

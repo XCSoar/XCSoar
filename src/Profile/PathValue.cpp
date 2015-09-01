@@ -85,10 +85,7 @@ ProfileMap::GetPathBase(const char *key) const
   if (base == nullptr)
     return nullptr;
 
-  const auto size = StringLength(base) + 1;
-  TCHAR *result = new TCHAR[size];
-  std::copy_n(base, size, result);
-  return AllocatedString<TCHAR>::Donate(result);
+  return AllocatedString<TCHAR>::Duplicate(base);
 }
 
 #else
