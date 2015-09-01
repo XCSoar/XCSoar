@@ -88,10 +88,8 @@ WaypointExternalFileListHandler::OnActivateItem(unsigned i)
   auto file = waypoint.files_external.begin();
   std::advance(file, i);
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, file->c_str());
-
-  RunFile(path);
+  TCHAR buffer[MAX_PATH];
+  RunFile(LocalPath(buffer, file->c_str()));
 }
 
 void
@@ -413,9 +411,8 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (images.full())
       break;
 
-    TCHAR path[MAX_PATH];
-    LocalPath(path, i.c_str());
-    if (!images.append().LoadFile(path))
+    TCHAR buffer[MAX_PATH];
+    if (!images.append().LoadFile(LocalPath(buffer, i.c_str())))
       images.shrink(images.size() - 1);
   }
 

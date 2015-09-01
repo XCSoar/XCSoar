@@ -36,8 +36,8 @@ OpenDataFile(const TCHAR *name)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, name);
 
   FileSource *source = new FileSource(path);
   if (source == nullptr)
@@ -57,8 +57,8 @@ OpenDataTextFile(const TCHAR *name, Charset cs)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, name);
 
   FileLineReader *reader = new FileLineReader(path, cs);
   if (reader == nullptr)
@@ -78,8 +78,8 @@ OpenDataTextFileA(const TCHAR *name)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, name);
 
   FileLineReaderA *reader = new FileLineReaderA(path);
   if (reader == nullptr)
@@ -99,8 +99,8 @@ CreateDataTextFile(const TCHAR *name, bool append)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, name);
 
   TextWriter *writer = new TextWriter(path, append);
   if (writer == nullptr)

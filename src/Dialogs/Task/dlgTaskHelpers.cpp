@@ -245,13 +245,11 @@ OrderedTaskSave(OrderedTask &task)
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("tasks"));
-  Directory::Create(path);
+  TCHAR buffer[MAX_PATH];
+  Directory::Create(LocalPath(buffer, _T("tasks")));
 
   _tcscat(fname, _T(".tsk"));
   task.SetName(StaticString<64>(fname));
-  LocalPath(path, _T("tasks"), fname);
-  SaveTask(path, task);
+  SaveTask(LocalPath(buffer, _T("tasks"), fname), task);
   return true;
 }

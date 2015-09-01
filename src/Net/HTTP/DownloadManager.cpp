@@ -270,8 +270,8 @@ DownloadManagerThread::Tick()
     current_position = 0;
     mutex.Unlock();
 
-    TCHAR path[MAX_PATH];
-    LocalPath(path, item.path_relative.c_str());
+    TCHAR buffer[MAX_PATH];
+    const auto path = LocalPath(buffer, item.path_relative.c_str());
 
     TCHAR tmp[MAX_PATH];
     _tcscpy(tmp, path);

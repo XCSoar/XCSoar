@@ -56,12 +56,10 @@ NMEALogger::Start()
               dt.year, dt.month, dt.day,
               dt.hour, dt.minute);
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("logs"));
-  Directory::Create(path);
+  TCHAR buffer[MAX_PATH];
+  Directory::Create(LocalPath(buffer, _T("logs")));
 
-  LocalPath(path, _T("logs"), name);
-
+  const auto path = LocalPath(buffer, _T("logs"), name);
   writer = new TextWriter(path, false);
   if (writer == nullptr)
     return false;

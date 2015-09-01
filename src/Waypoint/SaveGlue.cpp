@@ -32,8 +32,8 @@ Copyright_License {
 bool
 WaypointGlue::SaveWaypoints(const Waypoints &way_points)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("user.cup"));
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, _T("user.cup"));
 
   TextWriter writer(path);
   if (!writer.IsOpen()) {
@@ -50,8 +50,8 @@ WaypointGlue::SaveWaypoints(const Waypoints &way_points)
 bool
 WaypointGlue::SaveWaypoint(const Waypoint &wp)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("user.cup"));
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, _T("user.cup"));
 
   TextWriter writer(path, true);
   if (!writer.IsOpen()) {

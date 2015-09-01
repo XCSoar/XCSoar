@@ -231,8 +231,8 @@ ProfileListWidget::NewClicked()
   filename = name;
   filename += _T(".prf");
 
-  StaticString<MAX_PATH> path;
-  LocalPath(path.buffer(), filename);
+  StaticString<MAX_PATH> buffer;
+  const auto path = LocalPath(buffer.buffer(), filename);
 
   if (!File::CreateExclusive(path)) {
     ShowMessageBox(name, _("File exists already."), MB_OK|MB_ICONEXCLAMATION);
@@ -294,8 +294,8 @@ ProfileListWidget::CopyClicked()
   new_filename = new_name;
   new_filename += _T(".prf");
 
-  StaticString<MAX_PATH> new_path;
-  LocalPath(new_path.buffer(), new_filename);
+  StaticString<MAX_PATH> buffer;
+  const auto new_path = LocalPath(buffer.buffer(), new_filename);
 
   if (File::ExistsAny(new_path)) {
     ShowMessageBox(new_name, _("File exists already."),

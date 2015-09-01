@@ -234,8 +234,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   assert(writer == nullptr);
 
-  LocalPath(filename, _T("logs"));
-  Directory::Create(filename);
+  Directory::Create(LocalPath(filename, _T("logs")));
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? (const BrokenDate &)gps_info.date_time_utc

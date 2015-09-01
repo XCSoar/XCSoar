@@ -139,8 +139,8 @@ private:
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
                                     unsigned time_index);
 
-  static void GetFilename(TCHAR *rasp_filename, const TCHAR *name,
-                          unsigned time_index);
+  static const TCHAR *GetFilename(TCHAR *rasp_filename, const TCHAR *name,
+                                  unsigned time_index);
 
   gcc_pure
   static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,

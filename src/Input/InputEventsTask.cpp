@@ -275,9 +275,8 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 
   if (!StringIsEmpty(misc)) {
     TCHAR buffer[MAX_PATH];
-    LocalPath(buffer, misc);
 
-    OrderedTask *task = TaskFile::GetTask(buffer,
+    OrderedTask *task = TaskFile::GetTask(LocalPath(buffer, misc),
                                           CommonInterface::GetComputerSettings().task,
                                           &way_points, 0);
     if (task) {
@@ -305,8 +304,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 
   if (!StringIsEmpty(misc)) {
     TCHAR buffer[MAX_PATH];
-    LocalPath(buffer, misc);
-    protected_task_manager->TaskSave(buffer);
+    protected_task_manager->TaskSave(LocalPath(buffer, misc));
   }
 }
 

@@ -41,7 +41,7 @@ ProtectedTaskManager::TaskSave(const TCHAR* path)
 bool
 ProtectedTaskManager::TaskSaveDefault()
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, default_task_path);
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, default_task_path);
   return TaskSave(path);
 }

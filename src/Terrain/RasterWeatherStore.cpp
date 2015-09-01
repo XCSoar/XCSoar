@@ -123,23 +123,23 @@ RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
           (const char *)narrow_name, t.hour, t.minute);
 }
 
-void
-RasterWeatherStore::GetFilename(TCHAR *rasp_filename, const TCHAR *name,
+inline const TCHAR *
+RasterWeatherStore::GetFilename(TCHAR *buffer, const TCHAR *name,
                                 unsigned time_index)
 {
   TCHAR fname[MAX_PATH];
   const BrokenTime t = IndexToTime(time_index);
   _stprintf(fname, _T(RASP_FILENAME "/" RASP_FORMAT),
             name, t.hour, t.minute);
-  LocalPath(rasp_filename, fname);
+  return LocalPath(buffer, fname);
 }
 
 RasterMap *
 RasterWeatherStore::LoadItem(const TCHAR *name, unsigned time_index,
                              OperationEnvironment &operation)
 {
-  TCHAR rasp_filename[MAX_PATH];
-  GetFilename(rasp_filename, name, time_index);
+  TCHAR buffer[MAX_PATH];
+  const auto rasp_filename = GetFilename(buffer, name, time_index);
   RasterMap *map = new RasterMap(rasp_filename);
   if (!map->Load(rasp_filename, nullptr, operation)) {
     delete map;
@@ -152,8 +152,8 @@ RasterWeatherStore::LoadItem(const TCHAR *name, unsigned time_index,
 struct zzip_dir *
 RasterWeatherStore::OpenArchive()
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T(RASP_FILENAME));
+  TCHAR buffer[MAX_PATH];
+  const auto path = LocalPath(buffer, _T(RASP_FILENAME));
 
   const WideToACPConverter narrow_path(path);
   return zzip_dir_open(narrow_path, nullptr);
