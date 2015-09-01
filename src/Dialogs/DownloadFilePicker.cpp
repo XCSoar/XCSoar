@@ -117,7 +117,7 @@ DownloadFile(const char *uri, const char *_base)
 {
   assert(Net::DownloadManager::IsAvailable());
 
-  const ACPToWideConverter base(_base);
+  const UTF8ToWideConverter base(_base);
   if (!base.IsValid())
     return tstring();
 
