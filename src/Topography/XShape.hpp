@@ -26,6 +26,7 @@ Copyright_License {
 #define TOPOGRAPHY_XSHAPE_HPP
 
 #include "Util/ConstBuffer.hxx"
+#include "Util/AllocatedString.hxx"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"
@@ -87,7 +88,7 @@ class XShape {
   GeoPoint *points;
 #endif
 
-  TCHAR *label;
+  AllocatedString<TCHAR> label;
 
 public:
   XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
@@ -136,7 +137,7 @@ public:
   }
 
   const TCHAR *GetLabel() const {
-    return label;
+    return label.c_str();
   }
 };
 

@@ -41,7 +41,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-static TCHAR *
+static AllocatedString<TCHAR>
 ImportLabel(const char *src)
 {
   if (src == nullptr)
@@ -54,12 +54,12 @@ ImportLabel(const char *src)
     return nullptr;
 
 #ifdef _UNICODE
-  return ConvertUTF8ToWide(src);
+  return AllocatedString<TCHAR>::Donate(ConvertUTF8ToWide(src));
 #else
   if (!ValidateUTF8(src))
     return nullptr;
 
-  return strdup(src);
+  return AllocatedString<TCHAR>::Duplicate(src);
 #endif
 }
 
@@ -166,7 +166,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
 XShape::~XShape()
 {
-  free(label);
   delete[] points;
 #ifdef ENABLE_OPENGL
   // Note: index_count and indices share one buffer
