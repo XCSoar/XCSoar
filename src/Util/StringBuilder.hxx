@@ -34,6 +34,7 @@
 #include "StringAPI.hxx"
 
 #include <utility>
+#include <algorithm>
 
 #include <stddef.h>
 
@@ -62,13 +63,39 @@ public:
 		return end - p;
 	}
 
+	constexpr bool IsFull() const {
+		return p >= end - 1;
+	}
+
+	void Append(T ch) {
+		if (!IsFull())
+			*p++ = ch;
+	}
+
 	void Append(const_pointer src) {
 		p = CopyString(p, src, GetRemainingSize());
+	}
+
+	void Append(const_pointer src, size_t length) {
+		p = std::copy_n(src, std::min(length, GetRemainingSize() - 1),
+				p);
+	}
+
+	template<typename... Args>
+	void Append(T ch, Args&&... args) {
+		Append(ch);
+		Append(std::forward<Args>(args)...);
 	}
 
 	template<typename... Args>
 	void Append(const_pointer src, Args&&... args) {
 		Append(src);
+		Append(std::forward<Args>(args)...);
+	}
+
+	template<typename... Args>
+	void Append(const_pointer src, size_t length, Args&&... args) {
+		Append(src, length);
 		Append(std::forward<Args>(args)...);
 	}
 };
@@ -98,6 +125,21 @@ _UnsafeAppendAll(T *dest)
 	*dest = '\0';
 }
 
+template<typename T, typename... Args>
+static inline void
+_UnsafeAppendAll(T *dest, const T *first, Args&&... args);
+
+/**
+ * Helper function for BuildStringUnsafe().
+ */
+template<typename T, typename... Args>
+static inline void
+_UnsafeAppendAll(T *dest, T ch, Args&&... args)
+{
+	*dest++ = ch;
+	_UnsafeAppendAll(dest, std::forward<Args>(args)...);
+}
+
 /**
  * Helper function for BuildStringUnsafe().
  */
@@ -106,6 +148,17 @@ static inline void
 _UnsafeAppendAll(T *dest, const T *first, Args&&... args)
 {
 	_UnsafeAppendAll(UnsafeCopyStringP(dest, first),
+			 std::forward<Args>(args)...);
+}
+
+/**
+ * Helper function for BuildStringUnsafe().
+ */
+template<typename T, typename... Args>
+static inline void
+_UnsafeAppendAll(T *dest, const T *first, size_t first_length, Args&&... args)
+{
+	_UnsafeAppendAll(std::copy_n(first, first_length, dest),
 			 std::forward<Args>(args)...);
 }
 
