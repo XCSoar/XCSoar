@@ -27,6 +27,7 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "RasterTileCache.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Util/AllocatedString.hxx"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -35,14 +36,13 @@ class FileCache;
 class OperationEnvironment;
 
 class RasterMap {
-  char *path;
+  AllocatedString<> path;
   RasterTileCache raster_tile_cache;
   RasterProjection projection;
 
 public:
   RasterMap(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
             OperationEnvironment &operation);
-  ~RasterMap();
 
   RasterMap(const RasterMap &) = delete;
   RasterMap &operator=(const RasterMap &) = delete;
