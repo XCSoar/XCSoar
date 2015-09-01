@@ -6,13 +6,11 @@ import urllib.request
 import hashlib
 import re
 
-if len(sys.argv) != 6:
-    print("Usage: build.py TARGET_OUTPUT_DIR CC CXX AR STRIP", file=sys.stderr)
+if len(sys.argv) != 7:
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, cc, cxx, ar, strip = sys.argv[1:]
-
-host_arch = 'arm-linux-gnueabihf'
+target_output_dir, host_arch, cc, cxx, ar, strip = sys.argv[1:]
 
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
