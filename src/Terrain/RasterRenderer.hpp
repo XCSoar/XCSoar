@@ -27,7 +27,6 @@ Copyright_License {
 #include "Terrain/HeightMatrix.hpp"
 #include "Screen/RawBitmap.hpp"
 #include "Math/fixed.hpp"
-#include "Util/NonCopyable.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
@@ -41,7 +40,7 @@ class RasterMap;
 class WindowProjection;
 struct ColorRamp;
 
-class RasterRenderer : private NonCopyable {
+class RasterRenderer {
   /** screen dimensions in coarse pixels */
   unsigned quantisation_pixels;
 
@@ -80,6 +79,9 @@ class RasterRenderer : private NonCopyable {
 public:
   RasterRenderer();
   ~RasterRenderer();
+
+  RasterRenderer(const RasterRenderer &) = delete;
+  RasterRenderer &operator=(const RasterRenderer &) = delete;
 
   const HeightMatrix &GetHeightMatrix() const {
     return height_matrix;

@@ -25,13 +25,12 @@ Copyright_License {
 #define XCSOAR_RASTERTILE_HPP
 
 #include "Terrain/RasterBuffer.hpp"
-#include "Util/NonCopyable.hpp"
 
 #include <stdio.h>
 
 struct jas_matrix;
 
-class RasterTile : private NonCopyable {
+class RasterTile {
   struct MetaData {
     unsigned int xstart, ystart, xend, yend;
   };
@@ -54,6 +53,9 @@ public:
   RasterTile()
     :xstart(0), ystart(0), xend(0), yend(0),
      width(0), height(0) {}
+
+  RasterTile(const RasterTile &) = delete;
+  RasterTile &operator=(const RasterTile &) = delete;
 
   void Set(unsigned _xstart, unsigned _ystart,
            unsigned _xend, unsigned _yend) {

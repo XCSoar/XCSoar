@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 #define XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
@@ -36,12 +35,15 @@ class GeoBounds;
 class WindowProjection;
 #endif
 
-class HeightMatrix : private NonCopyable {
+class HeightMatrix {
   AllocatedArray<short> data;
   unsigned width, height;
 
 public:
   HeightMatrix():width(0), height(0) {}
+
+  HeightMatrix(const HeightMatrix &) = delete;
+  HeightMatrix &operator=(const HeightMatrix &) = delete;
 
 protected:
   void SetSize(size_t _size);

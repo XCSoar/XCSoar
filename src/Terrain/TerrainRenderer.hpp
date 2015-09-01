@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RENDERER_HPP
 
 #include "RasterRenderer.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
@@ -38,7 +37,7 @@ class WindowProjection;
 class RasterTerrain;
 struct ColorRamp;
 
-class TerrainRenderer : private NonCopyable {
+class TerrainRenderer {
   const RasterTerrain &terrain;
 
   Serial terrain_serial;
@@ -59,6 +58,9 @@ protected:
 public:
   TerrainRenderer(const RasterTerrain &_terrain);
   virtual ~TerrainRenderer() {}
+
+  TerrainRenderer(const TerrainRenderer &) = delete;
+  TerrainRenderer &operator=(const TerrainRenderer &) = delete;
 
   /**
    * Flush the cache.
