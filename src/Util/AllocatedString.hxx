@@ -91,6 +91,10 @@ public:
 		return value;
 	}
 
+	bool empty() const {
+		return *value == SENTINEL;
+	}
+
 	pointer Steal() {
 		pointer result = value;
 		value = nullptr;
