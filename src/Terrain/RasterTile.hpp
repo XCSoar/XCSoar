@@ -37,8 +37,8 @@ class RasterTile : private NonCopyable {
   };
 
 public:
-  unsigned int xstart, ystart, xend, yend;
-  unsigned int width, height;
+  unsigned xstart = 0, ystart = 0, xend = 0, yend = 0;
+  unsigned width = 0, height = 0;
 
   /**
    * The distance of this tile to the center of the screen.  This
@@ -51,9 +51,7 @@ public:
   RasterBuffer buffer;
 
 public:
-  RasterTile()
-    :xstart(0), ystart(0), xend(0), yend(0),
-     width(0), height(0) {}
+  RasterTile() = default;
 
   void Set(unsigned _xstart, unsigned _ystart,
            unsigned _xend, unsigned _yend) {
