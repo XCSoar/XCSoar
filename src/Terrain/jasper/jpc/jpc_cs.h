@@ -602,8 +602,10 @@ typedef union {
 	jpc_poc_t poc;
 	/* jpc_plm_t plm; */
 	/* jpc_plt_t plt; */
+#ifdef ENABLE_JASPER_PPM
 	jpc_ppm_t ppm;
 	jpc_ppt_t ppt;
+#endif /* ENABLE_JASPER_PPM */
 	jpc_sop_t sop;
 	int eph;	/* unused */
 	jpc_com_t com;

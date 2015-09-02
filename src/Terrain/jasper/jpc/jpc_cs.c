@@ -113,8 +113,10 @@ static int jpc_qcd_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 static int jpc_qcc_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static int jpc_rgn_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static int jpc_sop_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
+#ifdef ENABLE_JASPER_PPM
 static int jpc_ppm_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static int jpc_ppt_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
+#endif /* ENABLE_JASPER_PPM */
 static int jpc_crg_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static int jpc_com_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 
@@ -127,8 +129,10 @@ static int jpc_qcc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 static int jpc_rgn_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_unk_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_sop_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
+#ifdef ENABLE_JASPER_PPM
 static int jpc_ppm_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
+#endif /* ENABLE_JASPER_PPM */
 static int jpc_crg_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_com_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 
@@ -138,8 +142,10 @@ static void jpc_qcc_destroyparms(jpc_ms_t *ms);
 static void jpc_cod_destroyparms(jpc_ms_t *ms);
 static void jpc_coc_destroyparms(jpc_ms_t *ms);
 static void jpc_unk_destroyparms(jpc_ms_t *ms);
+#ifdef ENABLE_JASPER_PPM
 static void jpc_ppm_destroyparms(jpc_ms_t *ms);
 static void jpc_ppt_destroyparms(jpc_ms_t *ms);
+#endif /* ENABLE_JASPER_PPM */
 static void jpc_crg_destroyparms(jpc_ms_t *ms);
 static void jpc_com_destroyparms(jpc_ms_t *ms);
 
@@ -178,10 +184,12 @@ static jpc_mstabent_t jpc_mstab[] = {
 	  jpc_poc_putparms, }},
 	{JPC_MS_TLM, "TLM", {0, jpc_unk_getparms, jpc_unk_putparms}},
 	{JPC_MS_PLM, "PLM", {0, jpc_unk_getparms, jpc_unk_putparms}},
+#ifdef ENABLE_JASPER_PPM
 	{JPC_MS_PPM, "PPM", {jpc_ppm_destroyparms, jpc_ppm_getparms,
 	  jpc_ppm_putparms, }},
 	{JPC_MS_PPT, "PPT", {jpc_ppt_destroyparms, jpc_ppt_getparms,
 	  jpc_ppt_putparms, }},
+#endif /* ENABLE_JASPER_PPM */
 	{JPC_MS_SOP, "SOP", {0, jpc_sop_getparms, jpc_sop_putparms,
 	  }},
 	{JPC_MS_EPH, "EPH", {0, 0, 0}},
@@ -924,6 +932,7 @@ static int jpc_sop_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	return 0;
 }
 
+#ifdef ENABLE_JASPER_PPM
 /******************************************************************************\
 * PPM marker segment operations.
 \******************************************************************************/
@@ -1043,6 +1052,7 @@ static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
+#endif /* ENABLE_JASPER_PPM */
 
 /******************************************************************************\
 * POC marker segment operations.
