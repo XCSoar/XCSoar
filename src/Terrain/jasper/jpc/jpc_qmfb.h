@@ -123,7 +123,7 @@ typedef struct {
 typedef struct {
 
 	/* The operations for this QMFB. */
-	struct jpc_qmfb1dops_s *ops;
+	const struct jpc_qmfb1dops_s *ops;
 
 } jpc_qmfb1d_t;
 
