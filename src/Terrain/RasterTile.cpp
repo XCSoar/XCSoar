@@ -117,7 +117,7 @@ RasterTile::CalcDistanceTo(int x, int y) const
   return std::max(std::min(dx1, dx2), std::min(dy1, dy2));
 }
 
-bool
+inline bool
 RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
 {
   if (!IsDefined()) {
