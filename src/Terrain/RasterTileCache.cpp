@@ -259,9 +259,9 @@ gcc_pure
 const RasterTileCache::MarkerSegmentInfo *
 RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
 {
-  for (const MarkerSegmentInfo *p = segments.begin(); p < segments.end(); ++p)
-    if (p->file_offset >= file_offset)
-      return p;
+  for (const auto &s : segments)
+    if (s.file_offset >= file_offset)
+      return &s;
 
   return NULL;
 }
