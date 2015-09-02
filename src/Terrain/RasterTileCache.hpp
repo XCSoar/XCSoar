@@ -163,10 +163,10 @@ protected:
   /**
    * Progress callbacks for loading the file during startup.
    */
-  OperationEnvironment *operation;
+  OperationEnvironment *operation = nullptr;
 
 public:
-  RasterTileCache():operation(NULL) {
+  RasterTileCache() {
     Reset();
   }
 
