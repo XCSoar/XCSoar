@@ -90,6 +90,7 @@
 * Below are some ugly warts necessary to support packed packet headers.
 \******************************************************************************/
 
+#ifdef ENABLE_JASPER_PPM
 /* PPM/PPT marker segment table entry. */
 
 typedef struct {
@@ -136,6 +137,7 @@ typedef struct {
 	jas_stream_t **streams;
 
 } jpc_streamlist_t;
+#endif /* ENABLE_JASPER_PPM */
 
 /******************************************************************************\
 * Coding parameters class.
@@ -507,6 +509,7 @@ typedef struct {
 	  reference grid (plus one). */
 	uint_fast32_t yend;
 
+#ifdef ENABLE_JASPER_PPM
 	/* The packed packet header data for this tile. */
 	jpc_ppxstab_t *pptstab;
 
@@ -515,6 +518,7 @@ typedef struct {
 
 	/* The current position within the packed packet header stream. */
 	long pkthdrstreampos;
+#endif /* ENABLE_JASPER_PPM */
 
 	/* The coding parameters for this tile. */
 	jpc_dec_cp_t *cp;
@@ -641,8 +645,10 @@ typedef struct {
 	  code stream. */
 	int numpkts;
 
+#ifdef ENABLE_JASPER_PPM
 	/* The next expected PPM marker segment sequence number. */
 	int ppmseqno;
+#endif /* ENABLE_JASPER_PPM */
 
 	/* The current state for code stream processing. */
 	int state;
@@ -650,12 +656,14 @@ typedef struct {
 	/* The per-component information. */
 	jpc_dec_cmpt_t *cmpts;
 
+#ifdef ENABLE_JASPER_PPM
 	/* The information from PPM marker segments. */
 	jpc_ppxstab_t *ppmstab;
 
 	/* A list of streams containing packet header data from PPM marker
 	  segments. */
 	jpc_streamlist_t *pkthdrstreams;
+#endif /* ENABLE_JASPER_PPM */
 
 	/* The expected ending offset for a tile-part. */
 	long curtileendoff;
