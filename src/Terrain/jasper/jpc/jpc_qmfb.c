@@ -132,7 +132,7 @@ static void jpc_ns_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
 *
 \******************************************************************************/
 
-jpc_qmfb1dops_t jpc_ft_ops = {
+static const jpc_qmfb1dops_t jpc_ft_ops = {
 	jpc_ft_getnumchans,
 	jpc_ft_getanalfilters,
 	jpc_ft_getsynfilters,
@@ -140,7 +140,7 @@ jpc_qmfb1dops_t jpc_ft_ops = {
 	jpc_ft_synthesize
 };
 
-jpc_qmfb1dops_t jpc_ns_ops = {
+static const jpc_qmfb1dops_t jpc_ns_ops = {
 	jpc_ns_getnumchans,
 	jpc_ns_getanalfilters,
 	jpc_ns_getsynfilters,
