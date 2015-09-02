@@ -122,7 +122,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   assert(ax < GetFineWidth());
   assert(bx < GetFineWidth());
   assert(y < GetFineHeight());
-  assert(buffer != NULL);
+  assert(buffer != nullptr);
   assert(size > 0);
 
   if (size == 1) {
@@ -184,7 +184,7 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
   assert(ay < GetFineHeight());
   assert(bx < GetFineWidth());
   assert(by < GetFineHeight());
-  assert(buffer != NULL);
+  assert(buffer != nullptr);
   assert(size > 0);
 
   if (ay == by) {

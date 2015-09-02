@@ -53,10 +53,10 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   :path(ToNarrowPath(_path))
 {
   bool cache_loaded = false;
-  if (cache != NULL) {
+  if (cache != nullptr) {
     /* load the cache file */
     FILE *file = cache->Load(terrain_cache_name, _path);
-    if (file != NULL) {
+    if (file != nullptr) {
       cache_loaded = raster_tile_cache.LoadCache(file);
       fclose(file);
     }
@@ -66,10 +66,10 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
     if (!raster_tile_cache.LoadOverview(path.c_str(), world_file, operation))
       return;
 
-    if (cache != NULL) {
+    if (cache != nullptr) {
       /* save the cache file */
       FILE *file = cache->Save(terrain_cache_name, _path);
-      if (file != NULL) {
+      if (file != nullptr) {
         if (raster_tile_cache.SaveCache(file))
           cache->Commit(terrain_cache_name, file);
         else
@@ -125,7 +125,7 @@ void
 RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
                     short *buffer, unsigned size, bool interpolate) const
 {
-  assert(buffer != NULL);
+  assert(buffer != nullptr);
   assert(size > 0);
 
   const short invalid = RasterBuffer::TERRAIN_INVALID;
