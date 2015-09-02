@@ -90,11 +90,10 @@ short
 RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
                                   unsigned ix, unsigned iy) const
 {
+  assert(IsEnabled());
+
   // we want to exit out of this function as soon as possible
   // if we have the wrong tile
-
-  if (IsDisabled())
-    return RasterBuffer::TERRAIN_INVALID;
 
   // check x in range
   if ((lx -= xstart) >= width)
