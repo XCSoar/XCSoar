@@ -138,9 +138,8 @@ typedef struct {
 * Local function prototypes.
 \******************************************************************************/
 
-gcc_malloc static
+#ifdef ENABLE_JASPER_PPM
 jpc_ppxstab_t *jpc_ppxstab_create(void);
-
 void jpc_ppxstab_destroy(jpc_ppxstab_t *tab);
 int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents);
 int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent);
@@ -149,17 +148,14 @@ int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab);
 jpc_ppxstabent_t *jpc_ppxstabent_create(void);
 void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent);
 
-gcc_pure static
 int jpc_streamlist_numstreams(jpc_streamlist_t *streamlist);
-
-gcc_malloc static
 jpc_streamlist_t *jpc_streamlist_create(void);
-
 int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
   jas_stream_t *stream);
 jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno);
 void jpc_streamlist_destroy(jpc_streamlist_t *streamlist);
 jas_stream_t *jpc_streamlist_get(jpc_streamlist_t *streamlist, int streamno);
+#endif /* ENABLE_JASPER_PPM */
 
 static void jpc_dec_cp_resetflags(jpc_dec_cp_t *cp);
 static jpc_dec_cp_t *jpc_dec_cp_create(uint_fast16_t numcomps);
@@ -520,6 +516,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		jas_free(compinfos);
 #endif /* ENABLE_JASPER_IMAGE */
 
+#ifdef ENABLE_JASPER_PPM
 		/* Is the packet header information stored in PPM marker segments in
 		  the main header? */
 		if (dec->ppmstab) {
@@ -531,6 +528,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 			jpc_ppxstab_destroy(dec->ppmstab);
 			dec->ppmstab = 0;
 		}
+#endif /* ENABLE_JASPER_PPM */
 	}
 
 	if (sot->len > 0) {
@@ -576,7 +574,9 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		tile->numparts = sot->numparts;
 	}
 
+#ifdef ENABLE_JASPER_PPM
 	tile->pptstab = 0;
+#endif /* ENABLE_JASPER_PPM */
 
 	switch (tile->state) {
 	case JPC_TILE_INIT:
@@ -608,7 +608,9 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 {
 	jpc_dec_tile_t *tile;
+#ifdef ENABLE_JASPER_PPM
 	int pos;
+#endif /* ENABLE_JASPER_PPM */
 
 	/* Eliminate compiler warnings about unused variables. */
 	ms = 0;
@@ -639,6 +641,7 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
     return 0;
 	}
 
+#ifdef ENABLE_JASPER_PPM
 	/* Are packet headers stored in the main header or tile-part header? */
 	if (dec->pkthdrstreams) {
 		/* Get the stream containing the packet header data for this
@@ -663,8 +666,12 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		jpc_ppxstab_destroy(tile->pptstab);
 		tile->pptstab = 0;
 	}
+#endif /* ENABLE_JASPER_PPM */
 
-	if (jpc_dec_decodepkts(dec, (tile->pkthdrstream) ? tile->pkthdrstream :
+	if (jpc_dec_decodepkts(dec,
+#ifdef ENABLE_JASPER_PPM
+			       (tile->pkthdrstream) ? tile->pkthdrstream :
+#endif /* ENABLE_JASPER_PPM */
 	  dec->in, dec->in)) {
 #if 0 // JMW
 		fprintf(stderr, "jpc_dec_decodepkts failed\n");
@@ -1086,6 +1093,7 @@ if (!prc->cblks) {
 		jpc_pi_destroy(tile->pi);
 		tile->pi = 0;
 	}
+#ifdef ENABLE_JASPER_PPM
 	if (tile->pkthdrstream) {
 		jas_stream_close(tile->pkthdrstream);
 		tile->pkthdrstream = 0;
@@ -1094,6 +1102,7 @@ if (!prc->cblks) {
 		jpc_ppxstab_destroy(tile->pptstab);
 		tile->pptstab = 0;
 	}
+#endif /* ENABLE_JASPER_PPM */
 
 	tile->state = JPC_TILE_DONE;
 
@@ -1320,9 +1329,11 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		  dec->tileheight, dec->yend);
 		tile->numparts = 0;
 		tile->partno = 0;
+#ifdef ENABLE_JASPER_PPM
 		tile->pkthdrstream = 0;
 		tile->pkthdrstreampos = 0;
 		tile->pptstab = 0;
+#endif /* ENABLE_JASPER_PPM */
 		tile->cp = 0;
 		tile->pi = NULL;
 
@@ -1343,7 +1354,9 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 	}
 
+#ifdef ENABLE_JASPER_PPM
 	dec->pkthdrstreams = 0;
+#endif /* ENABLE_JASPER_PPM */
 
 	/* We should expect to encounter other main header marker segments
 	  or an SOT marker segment next. */
@@ -1512,6 +1525,7 @@ static int jpc_dec_process_poc(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_ppm(jpc_dec_t *dec, jpc_ms_t *ms)
 {
+#ifdef ENABLE_JASPER_PPM
 	jpc_ppm_t *ppm = &ms->parms.ppm;
 	jpc_ppxstabent_t *ppmstabent;
 
@@ -1532,10 +1546,16 @@ static int jpc_dec_process_ppm(jpc_dec_t *dec, jpc_ms_t *ms)
 		return -1;
 	}
 	return 0;
+#else
+	(void)dec;
+	(void)ms;
+	return -1;
+#endif /* ENABLE_JASPER_PPM */
 }
 
 static int jpc_dec_process_ppt(jpc_dec_t *dec, jpc_ms_t *ms)
 {
+#ifdef ENABLE_JASPER_PPM
 	jpc_ppt_t *ppt = &ms->parms.ppt;
 	jpc_dec_tile_t *tile;
 	jpc_ppxstabent_t *pptstabent;
@@ -1557,6 +1577,11 @@ static int jpc_dec_process_ppt(jpc_dec_t *dec, jpc_ms_t *ms)
 		return -1;
 	}
 	return 0;
+#else
+	(void)dec;
+	(void)ms;
+	return -1;
+#endif /* ENABLE_JASPER_PPM */
 }
 
 static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
@@ -1998,11 +2023,15 @@ static jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in
 	dec->maxpkts = impopts->maxpkts;
 	dec->xcsoar = impopts->xcsoar;
 dec->numpkts = 0;
+#ifdef ENABLE_JASPER_PPM
 	dec->ppmseqno = 0;
+#endif /* ENABLE_JASPER_PPM */
 	dec->state = 0;
 	dec->cmpts = 0;
+#ifdef ENABLE_JASPER_PPM
 	dec->pkthdrstreams = 0;
 	dec->ppmstab = 0;
+#endif /* ENABLE_JASPER_PPM */
 	dec->curtileendoff = 0;
 
 	return dec;
@@ -2013,9 +2042,11 @@ static void jpc_dec_destroy(jpc_dec_t *dec)
 	if (dec->cstate) {
 		jpc_cstate_destroy(dec->cstate);
 	}
+#ifdef ENABLE_JASPER_PPM
 	if (dec->pkthdrstreams) {
 		jpc_streamlist_destroy(dec->pkthdrstreams);
 	}
+#endif /* ENABLE_JASPER_PPM */
 #ifdef ENABLE_JASPER_IMAGE
 	if (dec->image) {
 		jas_image_destroy(dec->image);
@@ -2112,6 +2143,7 @@ void jpc_seg_destroy(jpc_dec_seg_t *seg)
 	jas_free(seg);
 }
 
+#ifdef ENABLE_JASPER_PPM
 jpc_streamlist_t *jpc_streamlist_create()
 {
 	jpc_streamlist_t *streamlist;
@@ -2377,3 +2409,4 @@ void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent)
 	}
 	jas_free(ent);
 }
+#endif /* ENABLE_JASPER_PPM */

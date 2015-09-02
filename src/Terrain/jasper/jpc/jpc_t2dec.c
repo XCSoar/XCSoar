@@ -435,7 +435,9 @@ int jpc_dec_decodepkts(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_stream_t 
 	tile = dec->curtile;
 	pi = tile->pi;
 	for (;;) {
+#ifdef ENABLE_JASPER_PPM
 if (!tile->pkthdrstream || jas_stream_peekc(tile->pkthdrstream) == EOF) {
+#endif /* ENABLE_JASPER_PPM */
 		switch (jpc_dec_lookahead(in)) {
 		case JPC_MS_EOC:
 		case JPC_MS_SOT:
@@ -449,7 +451,9 @@ if (!tile->pkthdrstream || jas_stream_peekc(tile->pkthdrstream) == EOF) {
 			return -1;
 			break;
 		}
+#ifdef ENABLE_JASPER_PPM
 }
+#endif /* ENABLE_JASPER_PPM */
 		if ((ret = jpc_pi_next(pi))) {
 			return ret;
 		}
