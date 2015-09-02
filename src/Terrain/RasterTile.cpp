@@ -110,7 +110,7 @@ RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
 bool
 RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
 {
-  if (!width || !height) {
+  if (!IsDefined()) {
     Disable();
     return false;
   }
