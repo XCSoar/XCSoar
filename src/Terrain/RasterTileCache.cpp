@@ -256,7 +256,7 @@ RasterTileCache::Reset()
 }
 
 gcc_pure
-const RasterTileCache::MarkerSegmentInfo *
+inline const RasterTileCache::MarkerSegmentInfo *
 RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
 {
   for (const auto &s : segments)
