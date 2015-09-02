@@ -42,13 +42,13 @@ template<class T>
 class AllocatedGrid {
 protected:
   AllocatedArray<T> array;
-  unsigned width, height;
+  unsigned width = 0, height = 0;
 
 public:
   typedef typename AllocatedArray<T>::iterator iterator;
   typedef typename AllocatedArray<T>::const_iterator const_iterator;
 
-  constexpr AllocatedGrid():width(0), height(0) {}
+  constexpr AllocatedGrid() = default;
   AllocatedGrid(unsigned _width, unsigned _height)
     :array(_width * _height), width(_width), height(_height) {}
 
