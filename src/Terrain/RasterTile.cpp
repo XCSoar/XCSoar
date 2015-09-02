@@ -111,7 +111,7 @@ bool
 RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
 {
   if (!IsDefined()) {
-    Disable();
+    assert(!IsEnabled());
     return false;
   }
 
