@@ -198,7 +198,7 @@ RasterRenderer::GenerateImage(bool do_shading,
                               const Angle sunazimuth,
                               bool do_contour)
 {
-  if (image == NULL ||
+  if (image == nullptr ||
       height_matrix.GetWidth() > image->GetWidth() ||
       height_matrix.GetHeight() > image->GetHeight()) {
     delete image;

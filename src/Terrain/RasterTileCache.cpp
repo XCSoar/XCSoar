@@ -284,7 +284,7 @@ RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
     if (s.file_offset >= file_offset)
       return &s;
 
-  return NULL;
+  return nullptr;
 }
 
 long
@@ -301,7 +301,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
   }
 
   const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
-  if (segment == NULL)
+  if (segment == nullptr)
     /* past the end of the recorded segment list; shouldn't happen */
     return 0;
 
@@ -346,7 +346,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (!scan_overview || segments.full())
     return;
 
-  if (operation != NULL)
+  if (operation != nullptr)
     operation->SetProgressPosition(file_offset / 65536);
 
   if (IsTileSegment(id) && !segments.empty() &&
@@ -439,7 +439,7 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
     return false;
   }
 
-  if (operation != NULL)
+  if (operation != nullptr)
     operation->SetProgressRange(jas_stream_length(in) / 65536);
 
   bool success = ::LoadJPG2000(in, scan_overview);
@@ -461,7 +461,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     return false;
 
   line = reader.ReadLine(); // y rotation
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   double y_rotation = strtod(line, &endptr);
@@ -470,7 +470,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     return false;
 
   line = reader.ReadLine(); // x rotation
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   double x_rotation = strtod(line, &endptr);
@@ -479,7 +479,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     return false;
 
   line = reader.ReadLine(); // y scale
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   double y_scale = strtod(line, &endptr);
@@ -487,7 +487,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     return false;
 
   line = reader.ReadLine(); // x origin
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   double x_origin = strtod(line, &endptr);
@@ -495,7 +495,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     return false;
 
   line = reader.ReadLine(); // y origin
-  if (line == NULL)
+  if (line == nullptr)
     return false;
 
   double y_origin = strtod(line, &endptr);
@@ -511,7 +511,7 @@ bool
 RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
                               OperationEnvironment &_operation)
 {
-  assert(operation == NULL);
+  assert(operation == nullptr);
   operation = &_operation;
 
   Reset();
@@ -519,7 +519,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
   bool initialised = LoadJPG2000(path);
   scan_overview = false;
 
-  if (initialised && world_file != NULL)
+  if (initialised && world_file != nullptr)
     LoadWorldFile(world_file);
 
   if (initialised && !bounds.IsValid())
@@ -528,7 +528,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
   if (!initialised)
     Reset();
 
-  operation = NULL;
+  operation = nullptr;
   return initialised;
 }
 
