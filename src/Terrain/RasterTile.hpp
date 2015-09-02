@@ -96,6 +96,9 @@ public:
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);
 
+  gcc_pure
+  unsigned CalcDistanceTo(int x, int y) const;
+
   bool CheckTileVisibility(int view_x, int view_y, unsigned view_radius);
 
   void Disable() {

@@ -106,6 +106,17 @@ RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
   return buffer.GetInterpolated(lx, ly, ix, iy);
 }
 
+inline unsigned
+RasterTile::CalcDistanceTo(int x, int y) const
+{
+  const unsigned int dx1 = abs(x - (int)xstart);
+  const unsigned int dx2 = abs((int)xend - x);
+  const unsigned int dy1 = abs(y - (int)ystart);
+  const unsigned int dy2 = abs((int)yend - y);
+
+  return std::max(std::min(dx1, dx2), std::min(dy1, dy2));
+}
+
 bool
 RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
 {
@@ -114,12 +125,7 @@ RasterTile::CheckTileVisibility(int view_x, int view_y, unsigned view_radius)
     return false;
   }
 
-  const unsigned int dx1 = abs(view_x - (int)xstart);
-  const unsigned int dx2 = abs((int)xend - view_x);
-  const unsigned int dy1 = abs(view_y - (int)ystart);
-  const unsigned int dy2 = abs((int)yend - view_y);
-
-  distance = std::max(std::min(dx1, dx2), std::min(dy1, dy2));
+  distance = CalcDistanceTo(view_x, view_y);
   return distance <= view_radius || IsEnabled();
 }
 
