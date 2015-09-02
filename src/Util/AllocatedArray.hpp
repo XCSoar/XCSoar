@@ -49,10 +49,10 @@ public:
   typedef typename Buffer::const_iterator const_iterator;
 
 protected:
-  Buffer buffer;
+  Buffer buffer = nullptr;
 
 public:
-  constexpr AllocatedArray():buffer(Buffer::Null()) {}
+  constexpr AllocatedArray() = default;
 
   explicit AllocatedArray(size_type _size)
     :buffer{new T[_size], _size} {
