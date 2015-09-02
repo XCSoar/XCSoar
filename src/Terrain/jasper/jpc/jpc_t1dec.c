@@ -365,12 +365,12 @@ static int dec_sigpass(jpc_dec_t *dec, register jpc_mqdec_t *mqdec, int bitpos, 
 	int vscanlen;
 	int width;
 	int height;
-	jpc_fix_t *fp;
+	jpc_fix_t *restrict fp;
 	int frowstep;
 	int fstripestep;
 	jpc_fix_t *fstripestart;
 	jpc_fix_t *fvscanstart;
-	jpc_fix_t *dp;
+	jpc_fix_t *restrict dp;
 	int drowstep;
 	int dstripestep;
 	jpc_fix_t *dstripestart;
@@ -472,12 +472,12 @@ static int dec_rawsigpass(jpc_dec_t *dec, jpc_bitstream_t *in, int bitpos, int v
 	int vscanlen;
 	int width;
 	int height;
-	jpc_fix_t *fp;
+	jpc_fix_t *restrict fp;
 	int frowstep;
 	int fstripestep;
 	jpc_fix_t *fstripestart;
 	jpc_fix_t *fvscanstart;
-	jpc_fix_t *dp;
+	jpc_fix_t *restrict dp;
 	int drowstep;
 	int dstripestep;
 	jpc_fix_t *dstripestart;
@@ -573,12 +573,12 @@ static int dec_refpass(jpc_dec_t *dec, register jpc_mqdec_t *mqdec, int bitpos,
 	int one;
 	int poshalf;
 	int neghalf;
-	jpc_fix_t *fp;
+	jpc_fix_t *restrict fp;
 	int frowstep;
 	int fstripestep;
 	jpc_fix_t *fstripestart;
 	jpc_fix_t *fvscanstart;
-	jpc_fix_t *dp;
+	jpc_fix_t *restrict dp;
 	int drowstep;
 	int dstripestep;
 	jpc_fix_t *dstripestart;
@@ -672,12 +672,12 @@ static int dec_rawrefpass(jpc_dec_t *dec, jpc_bitstream_t *in, int bitpos, int v
 	int one;
 	int poshalf;
 	int neghalf;
-	jpc_fix_t *fp;
+	jpc_fix_t *restrict fp;
 	int frowstep;
 	int fstripestep;
 	jpc_fix_t *fstripestart;
 	jpc_fix_t *fvscanstart;
-	jpc_fix_t *dp;
+	jpc_fix_t *restrict dp;
 	int drowstep;
 	int dstripestep;
 	jpc_fix_t *dstripestart;
@@ -784,13 +784,13 @@ static int dec_clnpass(jpc_dec_t *dec, register jpc_mqdec_t *mqdec, int bitpos, 
 	int one;
 	int oneplushalf;
 
-	jpc_fix_t *fp;
+	jpc_fix_t *restrict fp;
 	int frowstep;
 	int fstripestep;
 	jpc_fix_t *fstripestart;
 	jpc_fix_t *fvscanstart;
 
-	jpc_fix_t *dp;
+	jpc_fix_t *restrict dp;
 	int drowstep;
 	int dstripestep;
 	jpc_fix_t *dstripestart;
