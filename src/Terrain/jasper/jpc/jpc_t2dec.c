@@ -344,10 +344,12 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 
 	hdroffend = jas_stream_getrwcount(pkthdrstream);
 	hdrlen = hdroffend - hdroffstart;
+#ifdef ENABLE_JASPER_LOG
 	if (jas_getdbglevel() >= 5) {
 		fprintf(stderr, "hdrlen=%lu bodylen=%lu \n", (unsigned long) hdrlen,
 		  (unsigned long) bodylen);
 	}
+#endif /* ENABLE_JASPER_LOG */
 
 	if (cp->csty & JPC_COD_EPH) {
 		if (jpc_dec_lookahead(pkthdrstream) == JPC_MS_EPH) {
@@ -370,9 +372,11 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 
 	/* decode the packet body. */
 
+#ifdef ENABLE_JASPER_LOG
 	if (jas_getdbglevel() >= 1) {
 		fprintf(stderr, "packet body offset=%06ld\n", (long) jas_stream_getrwcount(in));
 	}
+#endif /* ENABLE_JASPER_LOG */
 
 	if (!discard) {
 		tcomp = &tile->tcomps[compno];
@@ -455,12 +459,14 @@ if (dec->maxpkts >= 0 && dec->numpkts >= dec->maxpkts) {
 #endif
 	return 0;
 }
+#ifdef ENABLE_JASPER_LOG
 		if (jas_getdbglevel() >= 1) {
 			fprintf(stderr, "packet offset=%08ld prg=%d cmptno=%02d "
 			  "rlvlno=%02d prcno=%03d lyrno=%02d\n", (long)
 			  jas_stream_getrwcount(in), jpc_pi_prg(pi), jpc_pi_cmptno(pi),
 			  jpc_pi_rlvlno(pi), jpc_pi_prcno(pi), jpc_pi_lyrno(pi));
 		}
+#endif /* ENABLE_JASPER_LOG */
 		if (jpc_dec_decodepkt(dec, pkthdrstream, in, jpc_pi_cmptno(pi), jpc_pi_rlvlno(pi),
 		  jpc_pi_prcno(pi), jpc_pi_lyrno(pi))) {
 			return -1;
