@@ -105,7 +105,7 @@ struct RTDistanceSort {
   }
 };
 
-bool
+inline bool
 RasterTileCache::PollTiles(int x, int y, unsigned radius)
 {
   if (scan_overview)
