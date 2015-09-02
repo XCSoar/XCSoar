@@ -91,7 +91,7 @@
 
 #define	ONES(n)	((1 << (n)) - 1)
 
-jp2_boxinfo_t *jp2_boxinfolookup(int type);
+static const jp2_boxinfo_t *jp2_boxinfolookup(int type);
 
 #ifdef ENABLE_JASPER_IMAGE
 static int jp2_getuint8(jas_stream_t *in, uint_fast8_t *val);
@@ -152,7 +152,7 @@ static int jp2_uuid_putdata(jp2_box_t *box, jas_stream_t *out);
 * Local data.
 \******************************************************************************/
 
-jp2_boxinfo_t jp2_boxinfos[] = {
+static const jp2_boxinfo_t jp2_boxinfos[] = {
 	{JP2_BOX_JP, "JP", 0,
 	  {0, 0, jp2_jp_getdata}},
 	{JP2_BOX_FTYP, "FTYP", 0,
@@ -198,7 +198,7 @@ jp2_boxinfo_t jp2_boxinfos[] = {
 	{0, 0, 0, {0, 0, 0}},
 };
 
-jp2_boxinfo_t jp2_boxinfo_unk = {
+static const jp2_boxinfo_t jp2_boxinfo_unk = {
 	0, "Unknown", 0, {0, 0, 0}
 };
 
@@ -268,7 +268,7 @@ static void jp2_cdef_destroy(jp2_box_t *box)
 jp2_box_t *jp2_box_get(jas_stream_t *in)
 {
 	jp2_box_t *box;
-	jp2_boxinfo_t *boxinfo;
+	const jp2_boxinfo_t *boxinfo;
 	jas_stream_t *tmpstream;
 	uint_fast32_t len;
 	uint_fast64_t extlen;
@@ -745,9 +745,9 @@ static int jp2_putuint64(jas_stream_t *out, uint_fast64_t val)
 * Miscellaneous code.
 \******************************************************************************/
 
-jp2_boxinfo_t *jp2_boxinfolookup(int type)
+static const jp2_boxinfo_t *jp2_boxinfolookup(int type)
 {
-	jp2_boxinfo_t *boxinfo;
+	const jp2_boxinfo_t *boxinfo;
 	for (boxinfo = jp2_boxinfos; boxinfo->name; ++boxinfo) {
 		if (boxinfo->type == type) {
 			return boxinfo;
