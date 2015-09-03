@@ -32,6 +32,7 @@ Copyright_License {
 extern "C" {
 #include "jasper/jp2/jp2_cod.h"
 #include "jasper/jpc/jpc_dec.h"
+#include "jasper/jpc/jpc_t1cod.h"
 }
 
 #include <string.h>
@@ -353,7 +354,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
 extern RasterTileCache *raster_tile_current;
 
 static bool
-LoadJPG2000(jas_stream_t *in, const char *optstr)
+LoadJPG2000(jas_stream_t *in, bool scan_overview)
 {
   /* Get the first box.  This should be a JP box. */
   auto box = jp2_box_get(in);
@@ -389,11 +390,24 @@ LoadJPG2000(jas_stream_t *in, const char *optstr)
     jp2_box_destroy(box);
   } while (type != JP2_BOX_JP2C);
 
-  jpc_decode(in, optstr);
-  return true;
+  jpc_dec_importopts_t opts;
+  opts.debug = 0;
+  opts.xcsoar = scan_overview ? 2 : 1;
+  opts.maxlyrs = JPC_MAXLYRS;
+  opts.maxpkts = -1;
+
+  jpc_initluts();
+
+  const auto dec = jpc_dec_create(&opts, in);
+  if (dec == nullptr)
+    return false;
+
+  bool success = jpc_dec_decode(dec) == 0;
+  jpc_dec_destroy(dec);
+  return success;
 }
 
-void
+bool
 RasterTileCache::LoadJPG2000(const char *jp2_filename)
 {
   raster_tile_current = this;
@@ -401,14 +415,15 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
   const auto in = OpenJasperZzipStream(jp2_filename);
   if (!in) {
     Reset();
-    return;
+    return false;
   }
 
   if (operation != NULL)
     operation->SetProgressRange(jas_stream_length(in) / 65536);
 
-  ::LoadJPG2000(in, scan_overview ? "xcsoar=2" : "xcsoar=1");
+  bool success = ::LoadJPG2000(in, scan_overview);
   jas_stream_close(in);
+  return success;
 }
 
 bool
@@ -480,7 +495,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
 
   Reset();
 
-  LoadJPG2000(path);
+  initialised = LoadJPG2000(path);
   scan_overview = false;
 
   if (initialised && world_file != NULL)

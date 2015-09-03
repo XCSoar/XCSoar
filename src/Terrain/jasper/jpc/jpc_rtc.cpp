@@ -36,8 +36,4 @@ extern "C" {
                                  tile_width, tile_height,
                                  tile_columns, tile_rows);
   }
-
-  void jas_rtc_SetInitialised(bool val) {
-    raster_tile_current->SetInitialised(val);
-  }
 };
