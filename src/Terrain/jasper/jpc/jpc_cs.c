@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -84,8 +84,6 @@
 /******************************************************************************\
 * Types.
 \******************************************************************************/
-
-typedef unsigned int uint;
 
 /* Marker segment table entry. */
 typedef struct {
@@ -285,13 +283,14 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 			return 0;
 		}
 
-#if 0 // JMW
+		if (jas_getdbglevel() > 0) {
+			jpc_ms_dump(ms, stderr);
+		}
+
 		if (JAS_CAST(ulong, jas_stream_tell(tmpstream)) != ms->len) {
-			fprintf(stderr,
-			  "warning: trailing garbage in marker segment (%ld bytes)\n",
+			jas_eprintf("warning: trailing garbage in marker segment (%ld bytes)\n",
 			  ms->len - jas_stream_tell(tmpstream));
 		}
-#endif
 
 		/* Close the temporary stream. */
 		jas_stream_close(tmpstream);
@@ -570,6 +569,30 @@ static int jpc_cod_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
+
+#ifdef ENABLE_JASPER_DUMP
+static int jpc_cod_dumpparms(jpc_ms_t *ms, FILE *out)
+{
+	jpc_cod_t *cod = &ms->parms.cod;
+	int i;
+	fprintf(out, "csty = 0x%02x;\n", cod->compparms.csty);
+	fprintf(out, "numdlvls = %d; qmfbid = %d; mctrans = %d\n",
+	  cod->compparms.numdlvls, cod->compparms.qmfbid, cod->mctrans);
+	fprintf(out, "prg = %d; numlyrs = %d;\n",
+	  cod->prg, cod->numlyrs);
+	fprintf(out, "cblkwidthval = %d; cblkheightval = %d; "
+	  "cblksty = 0x%02x;\n", cod->compparms.cblkwidthval, cod->compparms.cblkheightval,
+	  cod->compparms.cblksty);
+	if (cod->csty & JPC_COX_PRT) {
+		for (i = 0; i < cod->compparms.numrlvls; ++i) {
+			jas_eprintf("prcwidth[%d] = %d, prcheight[%d] = %d\n",
+			  i, cod->compparms.rlvls[i].parwidthval,
+			  i, cod->compparms.rlvls[i].parheightval);
+		}
+	}
+	return 0;
+}
+#endif /* ENABLE_JASPER_DUMP */
 
 /******************************************************************************\
 * COC marker segment operations.
@@ -860,21 +883,21 @@ static int jpc_qcx_getcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 		compparms->numstepsizes = (len - n) / 2;
 		break;
 	}
-if (compparms->numstepsizes > 0) {
-	compparms->stepsizes = jas_malloc(compparms->numstepsizes *
-	  sizeof(uint_fast32_t));
-	assert(compparms->stepsizes);
-	for (i = 0; i < compparms->numstepsizes; ++i) {
-		if (compparms->qntsty == JPC_QCX_NOQNT) {
-			jpc_getuint8(in, &tmp);
-			compparms->stepsizes[i] = JPC_QCX_EXPN(tmp >> 3);
-		} else {
-			jpc_getuint16(in, &compparms->stepsizes[i]);
+	if (compparms->numstepsizes > 0) {
+		compparms->stepsizes = jas_malloc(compparms->numstepsizes *
+		  sizeof(uint_fast16_t));
+		assert(compparms->stepsizes);
+		for (i = 0; i < compparms->numstepsizes; ++i) {
+			if (compparms->qntsty == JPC_QCX_NOQNT) {
+				jpc_getuint8(in, &tmp);
+				compparms->stepsizes[i] = JPC_QCX_EXPN(tmp >> 3);
+			} else {
+				jpc_getuint16(in, &compparms->stepsizes[i]);
+			}
 		}
+	} else {
+		compparms->stepsizes = 0;
 	}
-} else {
-	compparms->stepsizes = 0;
-}
 	if (jas_stream_error(in) || jas_stream_eof(in)) {
 		jpc_qcx_destroycompparms(compparms);
 		return -1;

@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -235,6 +235,8 @@ int jas_matrix_cmp(jas_matrix_t *mat0, jas_matrix_t *mat1);
 
 gcc_malloc
 jas_matrix_t *jas_matrix_copy(jas_matrix_t *x);
+
+jas_matrix_t *jas_matrix_input(FILE *);
 
 /******************************************************************************\
 * Functions/macros for 2-D sequence class.

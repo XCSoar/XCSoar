@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -740,8 +740,12 @@ int jpc_getdata(jas_stream_t *in, jas_stream_t *out, long n);
 /* Copy code stream data from one stream to another. */
 int jpc_putdata(jas_stream_t *out, jas_stream_t *in, long n);
 
+#ifdef ENABLE_JASPER_DUMP
 /* Dump a marker segment (for debugging). */
 void jpc_ms_dump(jpc_ms_t *ms, FILE *out);
+#else
+#define jpc_ms_dump(ms, out)
+#endif
 
 /* Read a 8-bit unsigned integer from a stream. */
 int jpc_getuint8(jas_stream_t *in, uint_fast8_t *val);

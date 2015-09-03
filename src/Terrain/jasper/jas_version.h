@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -87,10 +87,9 @@ extern "C" {
 #define GJAS_VERSION "1.3.1"
 
 #define	JAS_COPYRIGHT \
-  "GeoJasPer Copyright (c) 2003-2006 Dmitry Fedorov.\n" \
-	"JasPer Copyright (c) 1999-2000 Image Power, Inc. and the University of\n" \
+	"Copyright (c) 2001-2006 Michael David Adams.\n" \
+	"Copyright (c) 1999-2000 Image Power, Inc. and the University of\n" \
 	"  British Columbia.\n" \
-	"JasPer Copyright (c) 2001-2003 Michael David Adams.\n" \
 	"All rights reserved.\n"
 
 #define	JAS_NOTES \

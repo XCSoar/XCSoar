@@ -5,20 +5,13 @@
  * All rights reserved.
  */
 
-/*
- * Modified by Andrey Kiselev <dron@remotesensing.org> to handle UUID
- * box properly.
-
-   Revision: Dima (11/07/2003 17:29 - UUID from j_image_t)
- */
-
 /* __START_OF_JASPER_LICENSE__
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -94,7 +87,7 @@
 * Box class.
 \******************************************************************************/
 
-#define	JP2_BOX_HDRLEN	8
+#define	JP2_BOX_HDRLEN(ext) ((ext) ? 16 : 8)
 
 /* Box types. */
 #define	JP2_BOX_JP		0x6a502020	/* Signature */
@@ -124,11 +117,6 @@
 
 #define	JP2_JP_MAGIC	0x0d0a870a
 #define	JP2_JP_LEN		12
-
-// Magick sequence for GeoJP2 box
-static const unsigned char msi_uuid2[16] =
-        {0xb1,0x4b,0xf8,0xbd,0x08,0x3d,0x4b,0x43,
-         0xa5,0xae,0x8c,0xd7,0xd5,0xa6,0xce,0x03};
 
 typedef struct {
 	uint_fast32_t magic;
@@ -241,12 +229,6 @@ typedef struct {
 	jp2_cmapent_t *ents;
 } jp2_cmap_t;
 
-typedef struct {
-	uint_fast32_t data_len;
-	uint_fast8_t uuid[16];
-	uint_fast8_t *data;
-} jp2_uuid_t;
-
 #define	JP2_CMAP_DIRECT		0
 #define	JP2_CMAP_PALETTE	1
 
@@ -259,8 +241,12 @@ typedef struct {
 	const struct jp2_boxinfo_s *info;
 
 	uint_fast32_t type;
+
+	/* The length of the box including the (variable-length) header. */
 	uint_fast32_t len;
-	uint_fast32_t data_len;
+
+	/* The length of the box data. */
+	uint_fast32_t datalen;
 
 	union {
 		jp2_jp_t jp;
@@ -271,7 +257,6 @@ typedef struct {
 		jp2_pclr_t pclr;
 		jp2_cdef_t cdef;
 		jp2_cmap_t cmap;
-		jp2_uuid_t uuid;
 	} data;
 
 } jp2_box_t;
