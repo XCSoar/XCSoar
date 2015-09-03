@@ -1300,7 +1300,9 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		cmpt->vsubstep = 0;
 	}
 
+#ifdef ENABLE_JASPER_IMAGE
 	dec->image = 0;
+#endif /* ENABLE_JASPER_IMAGE */
 
 	dec->numhtiles = JPC_CEILDIV(dec->xend - dec->tilexoff, dec->tilewidth);
 	dec->numvtiles = JPC_CEILDIV(dec->yend - dec->tileyoff, dec->tileheight);
@@ -1998,7 +2000,9 @@ jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in)
 		return 0;
 	}
 
+#ifdef ENABLE_JASPER_IMAGE
 	dec->image = 0;
+#endif /* ENABLE_JASPER_IMAGE */
 	dec->xstart = 0;
 	dec->ystart = 0;
 	dec->xend = 0;

@@ -576,8 +576,10 @@ typedef struct {
 
 typedef struct {
 
+#ifdef ENABLE_JASPER_IMAGE
 	/* The decoded image. */
 	jas_image_t *image;
+#endif /* ENABLE_JASPER_IMAGE */
 
 	/* The x-coordinate of the top-left corner of the image area on
 	  the reference grid. */
