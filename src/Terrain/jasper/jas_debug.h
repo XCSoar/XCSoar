@@ -92,7 +92,7 @@ extern "C" {
   level is set sufficiently high. */
 #ifdef ENABLE_JASPER_LOG
 #define	JAS_DBGLOG(n, x) \
-  (void)((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
+	((jas_getdbglevel() >= (n)) ? (jas_eprintf x) : 0)
 #else
 #define	JAS_DBGLOG(n, x)
 #endif
