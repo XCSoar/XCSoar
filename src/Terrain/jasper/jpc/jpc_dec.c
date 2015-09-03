@@ -175,9 +175,6 @@ static void jpc_dec_cp_destroy(jpc_dec_cp_t *cp);
 static int jpc_dec_cp_setfrompoc(jpc_dec_cp_t *cp, jpc_poc_t *poc, int reset);
 static int jpc_pi_addpchgfrompoc(jpc_pi_t *pi, jpc_poc_t *poc);
 
-static int jpc_dec_decode(jpc_dec_t *dec);
-static jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in);
-static void jpc_dec_destroy(jpc_dec_t *dec);
 static void jpc_dequantize(jas_matrix_t *x, jpc_fix_t absstepsize);
 static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, int numbps);
 static jpc_fix_t jpc_calcabsstepsize(int stepsize, int numbits);
@@ -375,7 +372,7 @@ static const jpc_dec_mstabent_t *jpc_dec_mstab_lookup(uint_fast16_t id)
 	return mstabent;
 }
 
-static int jpc_dec_decode(jpc_dec_t *dec)
+int jpc_dec_decode(jpc_dec_t *dec)
 {
 	jpc_ms_t *ms;
 	const jpc_dec_mstabent_t *mstabent;
@@ -1994,7 +1991,7 @@ static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, int numbps)
 	}
 }
 
-static jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in)
+jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in)
 {
 	jpc_dec_t *dec;
 
@@ -2037,7 +2034,7 @@ dec->numpkts = 0;
 	return dec;
 }
 
-static void jpc_dec_destroy(jpc_dec_t *dec)
+void jpc_dec_destroy(jpc_dec_t *dec)
 {
 	if (dec->cstate) {
 		jpc_cstate_destroy(dec->cstate);
