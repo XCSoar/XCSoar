@@ -130,8 +130,6 @@ protected:
     GeoBounds bounds;
   };
 
-  bool initialised;
-
   bool dirty;
 
   /**
@@ -263,7 +261,7 @@ public:
   }
 
   bool IsValid() const {
-    return initialised;
+    return bounds.IsValid();
   }
 
   const Serial &GetSerial() const {

@@ -244,7 +244,6 @@ RasterTileCache::Reset()
 {
   width = 0;
   height = 0;
-  initialised = false;
   bounds.SetInvalid();
   segments.clear();
   scan_overview = true;
@@ -494,7 +493,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
 
   Reset();
 
-  initialised = LoadJPG2000(path);
+  bool initialised = LoadJPG2000(path);
   scan_overview = false;
 
   if (initialised && world_file != NULL)
@@ -536,7 +535,7 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 bool
 RasterTileCache::SaveCache(FILE *file) const
 {
-  if (!initialised)
+  if (!IsValid())
     return false;
 
   assert(bounds.IsValid());
@@ -640,7 +639,6 @@ RasterTileCache::LoadCache(FILE *file)
             overview_size, file) != overview_size)
     return false;
 
-  initialised = true;
   scan_overview = false;
   return true;
 }
