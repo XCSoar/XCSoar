@@ -46,7 +46,7 @@ public:
   ~RasterMap();
 
   bool IsDefined() const {
-    return raster_tile_cache.GetInitialised();
+    return raster_tile_cache.IsValid();
   }
 
   const GeoBounds &GetBounds() const {

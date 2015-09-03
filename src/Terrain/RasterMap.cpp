@@ -92,7 +92,7 @@ AngleToPixel(Angle value, Angle start, Angle end, unsigned width)
 void
 RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 {
-  if (!raster_tile_cache.GetInitialised())
+  if (!raster_tile_cache.IsValid())
     return;
 
   const GeoBounds &bounds = GetBounds();

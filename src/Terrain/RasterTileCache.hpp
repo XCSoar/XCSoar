@@ -262,7 +262,7 @@ public:
     return dirty;
   }
 
-  bool GetInitialised() const {
+  bool IsValid() const {
     return initialised;
   }
 
