@@ -237,7 +237,6 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                               std::max(lat_min, lat_max)),
                      GeoPoint(std::max(lon_min, lon_max),
                               std::min(lat_min, lat_max)));
-  bounds_initialised = true;
 }
 
 void
@@ -246,7 +245,7 @@ RasterTileCache::Reset()
   width = 0;
   height = 0;
   initialised = false;
-  bounds_initialised = false;
+  bounds.SetInvalid();
   segments.clear();
   scan_overview = true;
 
@@ -501,7 +500,7 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
   if (initialised && world_file != NULL)
     LoadWorldFile(world_file);
 
-  if (initialised && !bounds_initialised)
+  if (initialised && !bounds.IsValid())
     initialised = false;
 
   if (!initialised)
@@ -540,7 +539,7 @@ RasterTileCache::SaveCache(FILE *file) const
   if (!initialised)
     return false;
 
-  assert(bounds_initialised);
+  assert(bounds.IsValid());
 
   /* save metadata */
   CacheHeader header;
@@ -611,8 +610,6 @@ RasterTileCache::LoadCache(FILE *file)
   bounds = header.bounds;
   if (!bounds.IsValid())
     return false;
-
-  bounds_initialised = true;
 
   /* load segments */
   for (unsigned i = 0; i < header.num_marker_segments; ++i) {

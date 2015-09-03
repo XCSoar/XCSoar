@@ -132,9 +132,6 @@ protected:
 
   bool initialised;
 
-  /** is the "bounds" attribute valid? */
-  bool bounds_initialised;
-
   bool dirty;
 
   /**
@@ -276,7 +273,7 @@ public:
   void Reset();
 
   const GeoBounds &GetBounds() const {
-    assert(bounds_initialised);
+    assert(bounds.IsValid());
 
     return bounds;
   }
