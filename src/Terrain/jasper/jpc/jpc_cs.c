@@ -1398,6 +1398,7 @@ static jpc_mstabent_t *jpc_mstab_lookup(int id)
 	return 0;
 }
 
+#ifdef JASPER_DISABLED
 int jpc_validate(jas_stream_t *in)
 {
 	int n;
@@ -1422,6 +1423,7 @@ int jpc_validate(jas_stream_t *in)
 	}
 	return -1;
 }
+#endif /* JASPER_DISABLED */
 
 int jpc_getdata(jas_stream_t *in, jas_stream_t *out, long len)
 {
