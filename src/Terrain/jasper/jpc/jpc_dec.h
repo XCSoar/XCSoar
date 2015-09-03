@@ -694,6 +694,12 @@ typedef struct {
 * Functions.
 \******************************************************************************/
 
+jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in);
+
+void jpc_dec_destroy(jpc_dec_t *dec);
+
+int jpc_dec_decode(jpc_dec_t *dec);
+
 /* Create a decoder segment object. */
 gcc_malloc
 jpc_dec_seg_t *jpc_seg_alloc(void);
