@@ -23,7 +23,6 @@ extern "C" {
   void jas_rtc_SetSize(unsigned width, unsigned height,
 		       unsigned tile_width, unsigned tile_height,
 		       unsigned tile_columns, unsigned tile_rows);
-  void jas_rtc_SetInitialised(bool val);
 
 #ifdef __cplusplus
 }

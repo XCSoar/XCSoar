@@ -224,7 +224,7 @@ public:
                int h_origin, const int slope_fact) const;
 
 protected:
-  void LoadJPG2000(const char *path);
+  bool LoadJPG2000(const char *path);
 
   /**
    * Load a world file (*.tfw or *.j2w).
@@ -298,10 +298,6 @@ public:
 
   void PutTileData(unsigned index, unsigned x, unsigned y,
                    const struct jas_matrix &m);
-
-  void SetInitialised(bool val) {
-    initialised = val;
-  }
 
 protected:
   bool PollTiles(int x, int y, unsigned radius);

@@ -197,7 +197,9 @@ static int jpc_dec_process_ppt(jpc_dec_t *dec, jpc_ms_t *ms);
 static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms);
 static int jpc_dec_process_unk(jpc_dec_t *dec, jpc_ms_t *ms);
 static int jpc_dec_process_crg(jpc_dec_t *dec, jpc_ms_t *ms);
+#ifdef ENABLE_JASPER_IMAGE
 static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts);
+#endif /* ENABLE_JASPER_IMAGE */
 
 static const jpc_dec_mstabent_t *jpc_dec_mstab_lookup(uint_fast16_t id);
 
@@ -232,14 +234,14 @@ static const jpc_dec_mstabent_t jpc_dec_mstab[] = {
 * The main entry point for the JPEG-2000 decoder.
 \******************************************************************************/
 
+#ifdef ENABLE_JASPER_IMAGE
+
 jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 {
 	jpc_dec_importopts_t opts;
 	jpc_dec_t *dec;
-#ifdef ENABLE_JASPER_IMAGE
 	jas_image_t *image;
   unsigned int i;
-#endif /* ENABLE_JASPER_IMAGE */
 
 	dec = 0;
 
@@ -258,10 +260,6 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 		goto error;
 	}
 
-	if (dec->xcsoar == 2)
-		jas_rtc_SetInitialised(true);
-
-#ifdef ENABLE_JASPER_IMAGE
   // dima: define the default for color space
 	jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
   for (i=0; i<(unsigned int)jas_image_numcmpts(dec->image); ++i)
@@ -291,7 +289,6 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 	jpc_dec_destroy(dec);
 
 	return image;
-#endif /* ENABLE_JASPER_IMAGE */
 
 error:
 	if (dec) {
@@ -356,6 +353,8 @@ static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts)
 
 	return 0;
 }
+
+#endif /* ENABLE_JASPER_IMAGE */
 
 /******************************************************************************\
 * Code for table-driven code stream decoder.
