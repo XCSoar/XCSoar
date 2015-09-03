@@ -304,7 +304,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
  * inherits the tile number.
  */
 static bool
-is_tile_segment(unsigned id)
+IsTileSegment(unsigned id)
 {
   return id == 0xff93 /* SOD */ ||
     id == 0xff52 /* COD */ ||
@@ -327,7 +327,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
   if (operation != NULL)
     operation->SetProgressPosition(file_offset / 65536);
 
-  if (is_tile_segment(id) && !segments.empty() &&
+  if (IsTileSegment(id) && !segments.empty() &&
       segments.last().IsTileSegment()) {
     /* this segment belongs to the same tile as the preceding SOT
        segment */
