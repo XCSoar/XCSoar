@@ -3,18 +3,15 @@
  *   British Columbia.
  * Copyright (c) 2001-2003 Michael David Adams.
  * All rights reserved.
-
-   Revision:
-     11/07/2003 15:00 - auxBuffer added for j_image_t : dima <dima@dimin.net>
  */
 
 /* __START_OF_JASPER_LICENSE__
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -183,17 +180,6 @@ typedef struct {
 
 /* Image class. */
 
-#ifdef ENABLE_JASPER_AUX_BUF
-// dima 
-// this field here added for aditional information about the image
-// e.g. GeoTiff information
-typedef struct {
-  int id;    // just some info about the buffer contents
-  long size; // size of the buffer
-  unsigned char *buf; // the buffer itself
-} jas_aux_buffer_t;
-#endif /* ENABLE_JASPER_AUX_BUF */
-
 typedef struct {
 
 	jas_image_coord_t tlx_;
@@ -225,14 +211,6 @@ typedef struct {
 	jas_cmprof_t *cmprof_;
 
 	bool inmem_;
-
-#ifdef ENABLE_JASPER_AUX_BUF
-  // dima 
-  // this field here added for aditional information about the image
-  // e.g. GeoTiff information
-  jas_aux_buffer_t aux_buf;
-#endif /* ENABLE_JASPER_AUX_BUF */
-
 
 } jas_image_t;
 

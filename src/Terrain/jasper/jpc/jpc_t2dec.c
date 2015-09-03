@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -211,9 +211,7 @@ static int jpc_dec_decodepkt(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_str
 			}
 			if (jpc_ms_gettype(ms) != JPC_MS_SOP) {
 				jpc_ms_destroy(ms);
-#if 0 // JMW
-				fprintf(stderr, "missing SOP marker segment\n");
-#endif
+				jas_eprintf("missing SOP marker segment\n");
 				return -1;
 			}
 			jpc_ms_destroy(ms);
@@ -334,9 +332,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 
 	} else {
 		if (jpc_bitstream_inalign(inb, 0x7f, 0)) {
-#if 0 // JMW
-			fprintf(stderr, "alignment failed\n");
-#endif
+			jas_eprintf("alignment failed\n");
 			return -1;
 		}
 	}
@@ -344,26 +340,20 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 
 	hdroffend = jas_stream_getrwcount(pkthdrstream);
 	hdrlen = hdroffend - hdroffstart;
-#ifdef ENABLE_JASPER_LOG
 	if (jas_getdbglevel() >= 5) {
-		fprintf(stderr, "hdrlen=%lu bodylen=%lu \n", (unsigned long) hdrlen,
+		jas_eprintf("hdrlen=%lu bodylen=%lu \n", (unsigned long) hdrlen,
 		  (unsigned long) bodylen);
 	}
-#endif /* ENABLE_JASPER_LOG */
 
 	if (cp->csty & JPC_COD_EPH) {
 		if (jpc_dec_lookahead(pkthdrstream) == JPC_MS_EPH) {
 			if (!(ms = jpc_getms(pkthdrstream, dec->cstate))) {
-#if 0 // JMW
-				fprintf(stderr, "cannot get (EPH) marker segment\n");
-#endif
+				jas_eprintf("cannot get (EPH) marker segment\n");
 				return -1;
 			}
 			if (jpc_ms_gettype(ms) != JPC_MS_EPH) {
 				jpc_ms_destroy(ms);
-#if 0 // JMW
-				fprintf(stderr, "missing EPH marker segment\n");
-#endif
+				jas_eprintf("missing EPH marker segment\n");
 				return -1;
 			}
 			jpc_ms_destroy(ms);
@@ -372,11 +362,9 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 
 	/* decode the packet body. */
 
-#ifdef ENABLE_JASPER_LOG
 	if (jas_getdbglevel() >= 1) {
-		fprintf(stderr, "packet body offset=%06ld\n", (long) jas_stream_getrwcount(in));
+		jas_eprintf("packet body offset=%06ld\n", (long) jas_stream_getrwcount(in));
 	}
-#endif /* ENABLE_JASPER_LOG */
 
 	if (!discard) {
 		tcomp = &tile->tcomps[compno];
@@ -400,7 +388,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 						}
 					}
 #if 0
-fprintf(stderr, "lyrno=%02d, compno=%02d, lvlno=%02d, prcno=%02d, bandno=%02d, cblkno=%02d, passno=%02d numpasses=%02d cnt=%d numbps=%d, numimsbs=%d\n", lyrno, compno, rlvlno, prcno, band - rlvl->bands, cblk - prc->cblks, seg->passno, seg->numpasses, seg->cnt, band->numbps, cblk->numimsbs);
+jas_eprintf("lyrno=%02d, compno=%02d, lvlno=%02d, prcno=%02d, bandno=%02d, cblkno=%02d, passno=%02d numpasses=%02d cnt=%d numbps=%d, numimsbs=%d\n", lyrno, compno, rlvlno, prcno, band - rlvl->bands, cblk - prc->cblks, seg->passno, seg->numpasses, seg->cnt, band->numbps, cblk->numimsbs);
 #endif
 					if (seg->cnt > 0) {
 						if (jpc_getdata(in, seg->stream, seg->cnt) < 0) {
@@ -458,19 +446,15 @@ if (!tile->pkthdrstream || jas_stream_peekc(tile->pkthdrstream) == EOF) {
 			return ret;
 		}
 if (dec->maxpkts >= 0 && dec->numpkts >= dec->maxpkts) {
-#if 0 // JMW
-	fprintf(stderr, "warning: stopping decode prematurely as requested\n");
-#endif
+	jas_eprintf("warning: stopping decode prematurely as requested\n");
 	return 0;
 }
-#ifdef ENABLE_JASPER_LOG
 		if (jas_getdbglevel() >= 1) {
-			fprintf(stderr, "packet offset=%08ld prg=%d cmptno=%02d "
+			jas_eprintf("packet offset=%08ld prg=%d cmptno=%02d "
 			  "rlvlno=%02d prcno=%03d lyrno=%02d\n", (long)
 			  jas_stream_getrwcount(in), jpc_pi_prg(pi), jpc_pi_cmptno(pi),
 			  jpc_pi_rlvlno(pi), jpc_pi_prcno(pi), jpc_pi_lyrno(pi));
 		}
-#endif /* ENABLE_JASPER_LOG */
 		if (jpc_dec_decodepkt(dec, pkthdrstream, in, jpc_pi_cmptno(pi), jpc_pi_rlvlno(pi),
 		  jpc_pi_prcno(pi), jpc_pi_lyrno(pi))) {
 			return -1;

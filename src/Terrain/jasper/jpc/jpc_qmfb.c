@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -67,29 +67,18 @@
  * $Id$
  */
 
-/*
- * Original JasPer file modified 09/09/2005 by Kaspar Daugaard (kdaugaard@lionhead.com)
- * Improved performance by making the code process larger chunks of data
- * in a more cache efficient way. The speed-up depends on your platform
- * and compiler, but typically the modified library is several times
- * faster, while creating bit-for-bit identical files. 
- * The size of a chunk (in 4 byte elements) is defined by JPC_BATCH_SIZE.
- */
- 
-/*
- * Modified 12 Oct 2005 by Greg Coats (gregcoats@mac.com)
- * Reordered two statements so code would compile with gcc 4
- * Changed original JPC_BATCH_SIZE default from 8 to 128
- * Testing with Intel Pentium 4 and Apple G5 CPUs shows that 128 is a good
- * default value for JPC_BATCH_SIZE
- */
+/******************************************************************************\
+*
+\******************************************************************************/
+
+#undef WT_LENONE /* This is not needed due to normalization. */
+#define WT_DOSCALE
 
 /******************************************************************************\
 * Includes.
 \******************************************************************************/
 
 #include <assert.h>
-
 #include "jasper/jas_fix.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
@@ -102,93 +91,247 @@
 *
 \******************************************************************************/
 
-#if 0
-#if ( defined(_MSC_VER) || defined(WIN32) || defined(__INTEL_COMPILER) || defined(__ICC) )
-  #pragma message("QMFB: BATCH_SIZE = 256")
-  #define JPC_BATCH_SIZE 128
-  //#define JPC_BATCH_SIZE 256
-#else
-  #pragma message("QMFB: BATCH_SIZE = 128")
-  #define JPC_BATCH_SIZE 128
-#endif
-#endif
-#define JPC_BATCH_SIZE 128
+#define QMFB_SPLITBUFSIZE	4096
+#define	QMFB_JOINBUFSIZE	4096
 
-static jpc_qmfb1d_t *jpc_qmfb1d_create(void);
+#ifdef ENABLE_JASPER_ENCODE
+int jpc_ft_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+  int stride);
+#endif /* ENABLE_JASPER_ENCODE */
+int jpc_ft_synthesize(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+  int stride);
 
-static int jpc_ft_getnumchans(jpc_qmfb1d_t *qmfb);
-static int jpc_ft_getanalfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters);
-static int jpc_ft_getsynfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters);
-static void jpc_ft_analyze(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
-static void jpc_ft_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
+#ifdef ENABLE_JASPER_ENCODE
+int jpc_ns_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+  int stride);
+#endif /* ENABLE_JASPER_ENCODE */
+int jpc_ns_synthesize(jpc_fix_t *a, int xstart, int ystart, int width,
+  int height, int stride);
 
-static int jpc_ns_getnumchans(jpc_qmfb1d_t *qmfb);
-static int jpc_ns_getanalfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters);
-static int jpc_ns_getsynfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters);
-static void jpc_ns_analyze(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
-static void jpc_ns_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_ft_fwdlift_row(jpc_fix_t *a, int numcols, int parity);
+void jpc_ft_fwdlift_col(jpc_fix_t *a, int numrows, int stride,
+  int parity);
+void jpc_ft_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride,
+  int parity);
+void jpc_ft_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols,
+  int stride, int parity);
+#endif /* ENABLE_JASPER_ENCODE */
 
-/******************************************************************************\
-*
-\******************************************************************************/
+void jpc_ft_invlift_row(jpc_fix_t *a, int numcols, int parity);
+void jpc_ft_invlift_col(jpc_fix_t *a, int numrows, int stride,
+  int parity);
+void jpc_ft_invlift_colgrp(jpc_fix_t *a, int numrows, int stride,
+  int parity);
+void jpc_ft_invlift_colres(jpc_fix_t *a, int numrows, int numcols,
+  int stride, int parity);
 
-static const jpc_qmfb1dops_t jpc_ft_ops = {
-	jpc_ft_getnumchans,
-	jpc_ft_getanalfilters,
-	jpc_ft_getsynfilters,
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_ns_fwdlift_row(jpc_fix_t *a, int numcols, int parity);
+void jpc_ns_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+void jpc_ns_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+  int parity);
+#endif /* ENABLE_JASPER_ENCODE */
+void jpc_ns_invlift_row(jpc_fix_t *a, int numcols, int parity);
+void jpc_ns_invlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+void jpc_ns_invlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+  int parity);
+
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_qmfb_split_row(jpc_fix_t *a, int numcols, int parity);
+void jpc_qmfb_split_col(jpc_fix_t *a, int numrows, int stride, int parity);
+void jpc_qmfb_split_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+void jpc_qmfb_split_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+  int parity);
+#endif /* ENABLE_JASPER_ENCODE */
+
+void jpc_qmfb_join_row(jpc_fix_t *a, int numcols, int parity);
+void jpc_qmfb_join_col(jpc_fix_t *a, int numrows, int stride, int parity);
+void jpc_qmfb_join_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+void jpc_qmfb_join_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+  int parity);
+
+double jpc_ft_lpenergywts[32] = {
+	1.2247448713915889,
+	1.6583123951776999,
+	2.3184046238739260,
+	3.2691742076555053,
+	4.6199296531440819,
+	6.5323713152269596,
+	9.2377452606141937,
+	13.0639951297449581,
+	18.4752262333915667,
+	26.1278968190610392,
+	36.9504194305524791,
+	52.2557819580462777,
+	73.9008347315741645,
+	104.5115624560829133,
+	147.8016689469569656,
+	209.0231247296646018,
+	295.6033378293900000,
+	418.0462494347059419,
+	591.2066756503630813,
+	836.0924988714708661,
+	/* approximations */
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661,
+	836.0924988714708661
+};
+
+double jpc_ft_hpenergywts[32] = {
+	0.8477912478906585,
+	0.9601432184835760,
+	1.2593401049756179,
+	1.7444107171191079,
+	2.4538713036750726,
+	3.4656517695088755,
+	4.8995276398597856,
+	6.9283970402160842,
+	9.7980274940131444,
+	13.8564306871112652,
+	19.5959265076535587,
+	27.7128159494245487,
+	39.1918369552045860,
+	55.4256262207444053,
+	78.3836719028959124,
+	110.8512517317256822,
+	156.7673435548526868,
+	221.7025033739244293,
+	313.5346870787551552,
+	443.4050067351659550,
+	/* approximations */
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550,
+	443.4050067351659550
+};
+
+double jpc_ns_lpenergywts[32] = {
+	1.4021081679297411,
+	2.0303718560817923,
+	2.9011625562785555,
+	4.1152851751758002,
+	5.8245108637728071,
+	8.2387599345725171,
+	11.6519546479210838,
+	16.4785606470644375,
+	23.3042776444606794,
+	32.9572515613740435,
+	46.6086013487782793,
+	65.9145194076860861,
+	93.2172084551803977,
+	131.8290408510004283,
+	186.4344176300625691,
+	263.6580819564562148,
+	372.8688353500955373,
+	527.3161639447193920,
+	745.7376707114038936,
+	1054.6323278917823245,
+	/* approximations follow */
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245,
+	1054.6323278917823245
+};
+
+double jpc_ns_hpenergywts[32] = {
+	1.4425227650161456,
+	1.9669426082455688,
+	2.8839248082788891,
+	4.1475208393432981,
+	5.8946497530677817,
+	8.3471789178590949,
+	11.8086046551047463,
+	16.7012780415647804,
+	23.6196657032246620,
+	33.4034255108592362,
+	47.2396388881632632,
+	66.8069597416714061,
+	94.4793162154500692,
+	133.6139330736999113,
+	188.9586372358249378,
+	267.2278678461869390,
+	377.9172750722391356,
+	534.4557359047058753,
+	755.8345502191498326,
+	1068.9114718353569060,
+	/* approximations follow */
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060,
+	1068.9114718353569060
+};
+
+const jpc_qmfb2d_t jpc_ft_qmfb2d = {
+#ifdef ENABLE_JASPER_ENCODE
 	jpc_ft_analyze,
-	jpc_ft_synthesize
+#endif /* ENABLE_JASPER_ENCODE */
+	jpc_ft_synthesize,
+	jpc_ft_lpenergywts,
+	jpc_ft_hpenergywts
 };
 
-static const jpc_qmfb1dops_t jpc_ns_ops = {
-	jpc_ns_getnumchans,
-	jpc_ns_getanalfilters,
-	jpc_ns_getsynfilters,
+const jpc_qmfb2d_t jpc_ns_qmfb2d = {
+#ifdef ENABLE_JASPER_ENCODE
 	jpc_ns_analyze,
-	jpc_ns_synthesize
+#endif /* ENABLE_JASPER_ENCODE */
+	jpc_ns_synthesize,
+	jpc_ns_lpenergywts,
+	jpc_ns_hpenergywts
 };
 
 /******************************************************************************\
-*
+* generic
 \******************************************************************************/
 
-static void jpc_qmfb1d_setup(jpc_fix_t *startptr, int startind, int endind,
-  int intrastep, jpc_fix_t **lstartptr, int *lstartind, int *lendind,
-  jpc_fix_t **hstartptr, int *hstartind, int *hendind)
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_qmfb_split_row(jpc_fix_t *a, int numcols, int parity)
 {
-	*lstartind = JPC_CEILDIVPOW2(startind, 1);
-	*lendind = JPC_CEILDIVPOW2(endind, 1);
-	*hstartind = JPC_FLOORDIVPOW2(startind, 1);
-	*hendind = JPC_FLOORDIVPOW2(endind, 1);
-	*lstartptr = startptr;
-	*hstartptr = &startptr[(*lendind - *lstartind) * intrastep];
-}
 
-static void jpc_qmfb1d_split(jpc_fix_t *startptr, int startind, int endind,
-  register int step, jpc_fix_t *lstartptr, int lstartind, int lendind,
-  jpc_fix_t *hstartptr, int hstartind, int hendind)
-{
-	int bufsize = JPC_CEILDIVPOW2(endind - startind, 2);
+	int bufsize = JPC_CEILDIVPOW2(numcols, 1);
 #if !defined(HAVE_VLA)
-#define QMFB_SPLITBUFSIZE 4096
 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE];
 #else
 	jpc_fix_t splitbuf[bufsize];
 #endif
 	jpc_fix_t *buf = splitbuf;
-	int llen;
-	int hlen;
-	int twostep;
-	jpc_fix_t *tmpptr;
-	register jpc_fix_t *ptr;
-	register jpc_fix_t *hptr;
-	register jpc_fix_t *lptr;
+	register jpc_fix_t *srcptr;
+	register jpc_fix_t *dstptr;
 	register int n;
-	int state;
-
-	twostep = step << 1;
-	llen = lendind - lstartind;
-	hlen = hendind - hstartind;
+	register int m;
+	int hstartcol;
 
 #if !defined(HAVE_VLA)
 	/* Get a buffer. */
@@ -200,83 +343,35 @@ static void jpc_qmfb1d_split(jpc_fix_t *startptr, int startind, int endind,
 	}
 #endif
 
-	if (hstartind < lstartind) {
-		/* The first sample in the input signal is to appear
-		  in the highpass subband signal. */
-		/* Copy the appropriate samples into the lowpass subband
-		  signal, saving any samples destined for the highpass subband
-		  signal as they are overwritten. */
-		tmpptr = buf;
-		ptr = &startptr[step];
-		lptr = lstartptr;
-		n = llen;
-		state = 1;
+	if (numcols >= 2) {
+		hstartcol = (numcols + 1 - parity) >> 1;
+		m = (parity) ? hstartcol : (numcols - hstartcol);
+		/* Save the samples destined for the highpass channel. */
+		n = m;
+		dstptr = buf;
+		srcptr = &a[1 - parity];
 		while (n-- > 0) {
-			if (state) {
-				*tmpptr = *lptr;
-				++tmpptr;
-			}
-			*lptr = *ptr;
-			ptr += twostep;
-			lptr += step;
-			state ^= 1;
+			*dstptr = *srcptr;
+			++dstptr;
+			srcptr += 2;
 		}
-		/* Copy the appropriate samples into the highpass subband
-		  signal. */
-		/* Handle the nonoverwritten samples. */
-		hptr = &hstartptr[(hlen - 1) * step];
-		ptr = &startptr[(((llen + hlen - 1) >> 1) << 1) * step];
-		n = hlen - (tmpptr - buf);
+		/* Copy the appropriate samples into the lowpass channel. */
+		dstptr = &a[1 - parity];
+		srcptr = &a[2 - parity];
+		n = numcols - m - (!parity);
 		while (n-- > 0) {
-			*hptr = *ptr;
-			hptr -= step;
-			ptr -= twostep;
+			*dstptr = *srcptr;
+			++dstptr;
+			srcptr += 2;
 		}
-		/* Handle the overwritten samples. */
-		n = tmpptr - buf;
+		/* Copy the saved samples into the highpass channel. */
+		dstptr = &a[hstartcol];
+		srcptr = buf;
+		n = m;
 		while (n-- > 0) {
-			--tmpptr;
-			*hptr = *tmpptr;
-			hptr -= step;
-		}
-	} else {
-		/* The first sample in the input signal is to appear
-		  in the lowpass subband signal. */
-		/* Copy the appropriate samples into the lowpass subband
-		  signal, saving any samples for the highpass subband
-		  signal as they are overwritten. */
-		state = 0;
-		ptr = startptr;
-		lptr = lstartptr;
-		tmpptr = buf;
-		n = llen;
-		while (n-- > 0) {
-			if (state) {
-				*tmpptr = *lptr;
-				++tmpptr;
-			}
-			*lptr = *ptr;
-			ptr += twostep;
-			lptr += step;
-			state ^= 1;
-		}
-		/* Copy the appropriate samples into the highpass subband
-		  signal. */
-		/* Handle the nonoverwritten samples. */
-		ptr = &startptr[((((llen + hlen) >> 1) << 1) - 1) * step];
-		hptr = &hstartptr[(hlen - 1) * step];
-		n = hlen - (tmpptr - buf);
-		while (n-- > 0) {
-			*hptr = *ptr;
-			ptr -= twostep;
-			hptr -= step;
-		}
-		/* Handle the overwritten samples. */
-		n = tmpptr - buf;
-		while (n-- > 0) {
-			--tmpptr;
-			*hptr = *tmpptr;
-			hptr -= step;
+			*dstptr = *srcptr;
+			++dstptr;
+			++srcptr;
 		}
 	}
 
@@ -286,151 +381,270 @@ static void jpc_qmfb1d_split(jpc_fix_t *startptr, int startind, int endind,
 		jas_free(buf);
 	}
 #endif
+
 }
 
-#define QMFB_SPLITBUFSIZE_BATCH (8192/JPC_BATCH_SIZE)
-#define	QMFB_JOINBUFSIZE_BATCH (8192/JPC_BATCH_SIZE)
-
-typedef struct {
-	jpc_fix_t vec[JPC_BATCH_SIZE];
-} jpc_batch_t;
-
-static void jpc_qmfb1d_split_batch(jpc_fix_t *startptr, int startind, int endind,
-  register int step, jpc_fix_t *lstartptr, int lstartind, int lendind,
-  jpc_fix_t *hstartptr, int hstartind, int hendind)
+void jpc_qmfb_split_col(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	int bufsize = JPC_CEILDIVPOW2(endind - startind, 2);
-	jpc_batch_t splitbuf[QMFB_SPLITBUFSIZE_BATCH];
-	jpc_batch_t *buf = splitbuf;
-	int llen;
-	int hlen;
-	int twostep;
-	jpc_batch_t *tmpptr;
-	register jpc_fix_t *ptr;
-	register jpc_fix_t *hptr;
-	register jpc_fix_t *lptr;
+
+	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+#if !defined(HAVE_VLA)
+	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE];
+#else
+	jpc_fix_t splitbuf[bufsize];
+#endif
+	jpc_fix_t *buf = splitbuf;
+	register jpc_fix_t *srcptr;
+	register jpc_fix_t *dstptr;
 	register int n;
-	int state;
+	register int m;
+	int hstartcol;
 
-	twostep = step << 1;
-	llen = lendind - lstartind;
-	hlen = hendind - hstartind;
-
+#if !defined(HAVE_VLA)
 	/* Get a buffer. */
-	if (bufsize > QMFB_SPLITBUFSIZE_BATCH) {
-		if (!(buf = jas_malloc(bufsize * sizeof(jpc_batch_t)))) {
+	if (bufsize > QMFB_SPLITBUFSIZE) {
+		if (!(buf = jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
 			/* We have no choice but to commit suicide in this case. */
 			abort();
 		}
 	}
+#endif
 
-	if (hstartind < lstartind) {
-		/* The first sample in the input signal is to appear
-		  in the highpass subband signal. */
-		/* Copy the appropriate samples into the lowpass subband
-		  signal, saving any samples destined for the highpass subband
-		  signal as they are overwritten. */
-		tmpptr = buf;
-		ptr = &startptr[step];
-		lptr = lstartptr;
-		n = llen;
-		state = 1;
+	if (numrows >= 2) {
+		hstartcol = (numrows + 1 - parity) >> 1;
+		m = (parity) ? hstartcol : (numrows - hstartcol);
+		/* Save the samples destined for the highpass channel. */
+		n = m;
+		dstptr = buf;
+		srcptr = &a[(1 - parity) * stride];
 		while (n-- > 0) {
-			if (state) {
-				*tmpptr = *(jpc_batch_t*)lptr;
-				++tmpptr;
-			}
-			*(jpc_batch_t*)lptr = *(jpc_batch_t*)ptr;
-			ptr += twostep;
-			lptr += step;
-			state ^= 1;
+			*dstptr = *srcptr;
+			++dstptr;
+			srcptr += stride << 1;
 		}
-		/* Copy the appropriate samples into the highpass subband
-		  signal. */
-		/* Handle the nonoverwritten samples. */
-		hptr = &hstartptr[(hlen - 1) * step];
-		ptr = &startptr[(((llen + hlen - 1) >> 1) << 1) * step];
-		n = hlen - (tmpptr - buf);
+		/* Copy the appropriate samples into the lowpass channel. */
+		dstptr = &a[(1 - parity) * stride];
+		srcptr = &a[(2 - parity) * stride];
+		n = numrows - m - (!parity);
 		while (n-- > 0) {
-			*(jpc_batch_t*)hptr = *(jpc_batch_t*)ptr;
-			hptr -= step;
-			ptr -= twostep;
+			*dstptr = *srcptr;
+			dstptr += stride;
+			srcptr += stride << 1;
 		}
-		/* Handle the overwritten samples. */
-		n = tmpptr - buf;
+		/* Copy the saved samples into the highpass channel. */
+		dstptr = &a[hstartcol * stride];
+		srcptr = buf;
+		n = m;
 		while (n-- > 0) {
-			--tmpptr;
-			*(jpc_batch_t*)hptr = *tmpptr;
-			hptr -= step;
-		}
-	} else {
-		/* The first sample in the input signal is to appear
-		  in the lowpass subband signal. */
-		/* Copy the appropriate samples into the lowpass subband
-		  signal, saving any samples for the highpass subband
-		  signal as they are overwritten. */
-		state = 0;
-		ptr = startptr;
-		lptr = lstartptr;
-		tmpptr = buf;
-		n = llen;
-		while (n-- > 0) {
-			if (state) {
-				*tmpptr = *(jpc_batch_t*)lptr;
-				++tmpptr;
-			}
-			*(jpc_batch_t*)lptr = *(jpc_batch_t*)ptr;
-			ptr += twostep;
-			lptr += step;
-			state ^= 1;
-		}
-		/* Copy the appropriate samples into the highpass subband
-		  signal. */
-		/* Handle the nonoverwritten samples. */
-		ptr = &startptr[((((llen + hlen) >> 1) << 1) - 1) * step];
-		hptr = &hstartptr[(hlen - 1) * step];
-		n = hlen - (tmpptr - buf);
-		while (n-- > 0) {
-			*(jpc_batch_t*)hptr = *(jpc_batch_t*)ptr;
-			ptr -= twostep;
-			hptr -= step;
-		}
-		/* Handle the overwritten samples. */
-		n = tmpptr - buf;
-		while (n-- > 0) {
-			--tmpptr;
-			*(jpc_batch_t*)hptr = *tmpptr;
-			hptr -= step;
+			*dstptr = *srcptr;
+			dstptr += stride;
+			++srcptr;
 		}
 	}
 
+#if !defined(HAVE_VLA)
 	/* If the split buffer was allocated on the heap, free this memory. */
 	if (buf != splitbuf) {
 		jas_free(buf);
 	}
+#endif
+
 }
 
-static void jpc_qmfb1d_join(jpc_fix_t *startptr, int startind, int endind,
-  register int step, jpc_fix_t *lstartptr, int lstartind, int lendind,
-  jpc_fix_t *hstartptr, int hstartind, int hendind)
+void jpc_qmfb_split_colgrp(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	int bufsize = JPC_CEILDIVPOW2(endind - startind, 2);
-#define	QMFB_JOINBUFSIZE	4096
+
+	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+#if !defined(HAVE_VLA)
+	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE * JPC_QMFB_COLGRPSIZE];
+#else
+	jpc_fix_t splitbuf[bufsize * JPC_QMFB_COLGRPSIZE];
+#endif
+	jpc_fix_t *buf = splitbuf;
+	jpc_fix_t *srcptr;
+	jpc_fix_t *dstptr;
+	register jpc_fix_t *srcptr2;
+	register jpc_fix_t *dstptr2;
+	register int n;
+	register int i;
+	int m;
+	int hstartcol;
+
+#if !defined(HAVE_VLA)
+	/* Get a buffer. */
+	if (bufsize > QMFB_SPLITBUFSIZE) {
+		if (!(buf = jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
+			/* We have no choice but to commit suicide in this case. */
+			abort();
+		}
+	}
+#endif
+
+	if (numrows >= 2) {
+		hstartcol = (numrows + 1 - parity) >> 1;
+		m = (parity) ? hstartcol : (numrows - hstartcol);
+		/* Save the samples destined for the highpass channel. */
+		n = m;
+		dstptr = buf;
+		srcptr = &a[(1 - parity) * stride];
+		while (n-- > 0) {
+			dstptr2 = dstptr;
+			srcptr2 = srcptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				*dstptr2 = *srcptr2;
+				++dstptr2;
+				++srcptr2;
+			}
+			dstptr += JPC_QMFB_COLGRPSIZE;
+			srcptr += stride << 1;
+		}
+		/* Copy the appropriate samples into the lowpass channel. */
+		dstptr = &a[(1 - parity) * stride];
+		srcptr = &a[(2 - parity) * stride];
+		n = numrows - m - (!parity);
+		while (n-- > 0) {
+			dstptr2 = dstptr;
+			srcptr2 = srcptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				*dstptr2 = *srcptr2;
+				++dstptr2;
+				++srcptr2;
+			}
+			dstptr += stride;
+			srcptr += stride << 1;
+		}
+		/* Copy the saved samples into the highpass channel. */
+		dstptr = &a[hstartcol * stride];
+		srcptr = buf;
+		n = m;
+		while (n-- > 0) {
+			dstptr2 = dstptr;
+			srcptr2 = srcptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				*dstptr2 = *srcptr2;
+				++dstptr2;
+				++srcptr2;
+			}
+			dstptr += stride;
+			srcptr += JPC_QMFB_COLGRPSIZE;
+		}
+	}
+
+#if !defined(HAVE_VLA)
+	/* If the split buffer was allocated on the heap, free this memory. */
+	if (buf != splitbuf) {
+		jas_free(buf);
+	}
+#endif
+
+}
+
+void jpc_qmfb_split_colres(jpc_fix_t *a, int numrows, int numcols,
+  int stride, int parity)
+{
+
+	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+#if !defined(HAVE_VLA)
+	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE * JPC_QMFB_COLGRPSIZE];
+#else
+	jpc_fix_t splitbuf[bufsize * numcols];
+#endif
+	jpc_fix_t *buf = splitbuf;
+	jpc_fix_t *srcptr;
+	jpc_fix_t *dstptr;
+	register jpc_fix_t *srcptr2;
+	register jpc_fix_t *dstptr2;
+	register int n;
+	register int i;
+	int m;
+	int hstartcol;
+
+#if !defined(HAVE_VLA)
+	/* Get a buffer. */
+	if (bufsize > QMFB_SPLITBUFSIZE) {
+		if (!(buf = jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
+			/* We have no choice but to commit suicide in this case. */
+			abort();
+		}
+	}
+#endif
+
+	if (numrows >= 2) {
+		hstartcol = (numrows + 1 - parity) >> 1;
+		m = (parity) ? hstartcol : (numrows - hstartcol);
+		/* Save the samples destined for the highpass channel. */
+		n = m;
+		dstptr = buf;
+		srcptr = &a[(1 - parity) * stride];
+		while (n-- > 0) {
+			dstptr2 = dstptr;
+			srcptr2 = srcptr;
+			for (i = 0; i < numcols; ++i) {
+				*dstptr2 = *srcptr2;
+				++dstptr2;
+				++srcptr2;
+			}
+			dstptr += numcols;
+			srcptr += stride << 1;
+		}
+		/* Copy the appropriate samples into the lowpass channel. */
+		dstptr = &a[(1 - parity) * stride];
+		srcptr = &a[(2 - parity) * stride];
+		n = numrows - m - (!parity);
+		while (n-- > 0) {
+			dstptr2 = dstptr;
+			srcptr2 = srcptr;
+			for (i = 0; i < numcols; ++i) {
+				*dstptr2 = *srcptr2;
+				++dstptr2;
+				++srcptr2;
+			}
+			dstptr += stride;
+			srcptr += stride << 1;
+		}
+		/* Copy the saved samples into the highpass channel. */
+		dstptr = &a[hstartcol * stride];
+		srcptr = buf;
+		n = m;
+		while (n-- > 0) {
+			dstptr2 = dstptr;
+			srcptr2 = srcptr;
+			for (i = 0; i < numcols; ++i) {
+				*dstptr2 = *srcptr2;
+				++dstptr2;
+				++srcptr2;
+			}
+			dstptr += stride;
+			srcptr += numcols;
+		}
+	}
+
+#if !defined(HAVE_VLA)
+	/* If the split buffer was allocated on the heap, free this memory. */
+	if (buf != splitbuf) {
+		jas_free(buf);
+	}
+#endif
+
+}
+#endif /* ENABLE_JASPER_ENCODE */
+
+void jpc_qmfb_join_row(jpc_fix_t *a, int numcols, int parity)
+{
+
+	int bufsize = JPC_CEILDIVPOW2(numcols, 1);
 #if !defined(HAVE_VLA)
 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE];
 #else
 	jpc_fix_t joinbuf[bufsize];
 #endif
 	jpc_fix_t *buf = joinbuf;
-	int llen;
-	int hlen;
-	int twostep;
-	jpc_fix_t *tmpptr;
-	register jpc_fix_t *ptr;
-	register jpc_fix_t *hptr;
-	register jpc_fix_t *lptr;
+	register jpc_fix_t *srcptr;
+	register jpc_fix_t *dstptr;
 	register int n;
-	int state;
+	int hstartcol;
 
 #if !defined(HAVE_VLA)
 	/* Allocate memory for the join buffer from the heap. */
@@ -442,89 +656,34 @@ static void jpc_qmfb1d_join(jpc_fix_t *startptr, int startind, int endind,
 	}
 #endif
 
-	twostep = step << 1;
-	llen = lendind - lstartind;
-	hlen = hendind - hstartind;
+	hstartcol = (numcols + 1 - parity) >> 1;
 
-	if (hstartind < lstartind) {
-		/* The first sample in the highpass subband signal is to
-		  appear first in the output signal. */
-		/* Copy the appropriate samples into the first phase of the
-		  output signal. */
-		tmpptr = buf;
-		hptr = hstartptr;
-		ptr = startptr;
-		n = (llen + 1) >> 1;
-		while (n-- > 0) {
-			*tmpptr = *ptr;
-			*ptr = *hptr;
-			++tmpptr;
-			ptr += twostep;
-			hptr += step;
-		}
-		n = hlen - ((llen + 1) >> 1);
-		while (n-- > 0) {
-			*ptr = *hptr;
-			ptr += twostep;
-			hptr += step;
-		}
-		/* Copy the appropriate samples into the second phase of
-		  the output signal. */
-		ptr -= (lendind > hendind) ? (step) : (step + twostep);
-		state = !((llen - 1) & 1);
-		lptr = &lstartptr[(llen - 1) * step];
-		n = llen;
-		while (n-- > 0) {
-			if (state) {
-				--tmpptr;
-				*ptr = *tmpptr;
-			} else {
-				*ptr = *lptr;
-			}
-			lptr -= step;
-			ptr -= twostep;
-			state ^= 1;
-		}
-	} else {
-		/* The first sample in the lowpass subband signal is to
-		  appear first in the output signal. */
-		/* Copy the appropriate samples into the first phase of the
-		  output signal (corresponding to even indexed samples). */
-		lptr = &lstartptr[(llen - 1) * step];
-		ptr = &startptr[((llen - 1) << 1) * step];
-		n = llen >> 1;
-		tmpptr = buf;
-		while (n-- > 0) {
-			*tmpptr = *ptr;
-			*ptr = *lptr;
-			++tmpptr;
-			ptr -= twostep;
-			lptr -= step;
-		}
-		n = llen - (llen >> 1);
-		while (n-- > 0) {
-			*ptr = *lptr;
-			ptr -= twostep;
-			lptr -= step;
-		}
-		/* Copy the appropriate samples into the second phase of
-		  the output signal (corresponding to odd indexed
-		  samples). */
-		ptr = &startptr[step];
-		hptr = hstartptr;
-		state = !(llen & 1);
-		n = hlen;
-		while (n-- > 0) {
-			if (state) {
-				--tmpptr;
-				*ptr = *tmpptr;
-			} else {
-				*ptr = *hptr;
-			}
-			hptr += step;
-			ptr += twostep;
-			state ^= 1;
-		}
+	/* Save the samples from the lowpass channel. */
+	n = hstartcol;
+	srcptr = &a[0];
+	dstptr = buf;
+	while (n-- > 0) {
+		*dstptr = *srcptr;
+		++srcptr;
+		++dstptr;
+	}
+	/* Copy the samples from the highpass channel into place. */
+	srcptr = &a[hstartcol];
+	dstptr = &a[1 - parity];
+	n = numcols - hstartcol;
+	while (n-- > 0) {
+		*dstptr = *srcptr;
+		dstptr += 2;
+		++srcptr;
+	}
+	/* Copy the samples from the lowpass channel into place. */
+	srcptr = buf;
+	dstptr = &a[parity];
+	n = hstartcol;
+	while (n-- > 0) {
+		*dstptr = *srcptr;
+		dstptr += 2;
+		++srcptr;
 	}
 
 #if !defined(HAVE_VLA)
@@ -533,1108 +692,2477 @@ static void jpc_qmfb1d_join(jpc_fix_t *startptr, int startind, int endind,
 		jas_free(buf);
 	}
 #endif
+
 }
 
-static void jpc_qmfb1d_join_batch(jpc_fix_t *startptr, int startind, int endind,
-  register int step, jpc_fix_t *lstartptr, int lstartind, int lendind,
-  jpc_fix_t *hstartptr, int hstartind, int hendind)
+void jpc_qmfb_join_col(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	int bufsize = JPC_CEILDIVPOW2(endind - startind, 2);
-	jpc_batch_t joinbuf[QMFB_JOINBUFSIZE_BATCH];
-	jpc_batch_t *buf = joinbuf;
-	int llen;
-	int hlen;
-	int twostep;
-	jpc_batch_t *tmpptr;
-	register jpc_fix_t *ptr;
-	register jpc_fix_t *hptr;
-	register jpc_fix_t *lptr;
-	register int n;
-	int state;
 
+	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+#if !defined(HAVE_VLA)
+	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE];
+#else
+	jpc_fix_t joinbuf[bufsize];
+#endif
+	jpc_fix_t *buf = joinbuf;
+	register jpc_fix_t *srcptr;
+	register jpc_fix_t *dstptr;
+	register int n;
+	int hstartcol;
+
+#if !defined(HAVE_VLA)
 	/* Allocate memory for the join buffer from the heap. */
-if (bufsize > QMFB_JOINBUFSIZE_BATCH) {
-		if (!(buf = jas_malloc(bufsize * sizeof(jpc_batch_t)))) {
+	if (bufsize > QMFB_JOINBUFSIZE) {
+		if (!(buf = jas_malloc(bufsize * sizeof(jpc_fix_t)))) {
 			/* We have no choice but to commit suicide. */
 			abort();
 		}
 	}
+#endif
 
-	twostep = step << 1;
-	llen = lendind - lstartind;
-	hlen = hendind - hstartind;
+	hstartcol = (numrows + 1 - parity) >> 1;
 
-	if (hstartind < lstartind) {
-		/* The first sample in the highpass subband signal is to
-		  appear first in the output signal. */
-		/* Copy the appropriate samples into the first phase of the
-		  output signal. */
-		tmpptr = buf;
-		hptr = hstartptr;
-		ptr = startptr;
-		n = (llen + 1) >> 1;
-		while (n-- > 0) {
-			*tmpptr = *(jpc_batch_t*)ptr;
-			*(jpc_batch_t*)ptr = *(jpc_batch_t*)hptr;
-			++tmpptr;
-			ptr += twostep;
-			hptr += step;
-		}
-		n = hlen - ((llen + 1) >> 1);
-		while (n-- > 0) {
-			*(jpc_batch_t*)ptr = *(jpc_batch_t*)hptr;
-			ptr += twostep;
-			hptr += step;
-		}
-		/* Copy the appropriate samples into the second phase of
-		  the output signal. */
-		ptr -= (lendind > hendind) ? (step) : (step + twostep);
-		state = !((llen - 1) & 1);
-		lptr = &lstartptr[(llen - 1) * step];
-		n = llen;
-		while (n-- > 0) {
-			if (state) {
-				--tmpptr;
-				*(jpc_batch_t*)ptr = *tmpptr;
-			} else {
-				*(jpc_batch_t*)ptr = *(jpc_batch_t*)lptr;
-			}
-			lptr -= step;
-			ptr -= twostep;
-			state ^= 1;
-		}
-	} else {
-		/* The first sample in the lowpass subband signal is to
-		  appear first in the output signal. */
-		/* Copy the appropriate samples into the first phase of the
-		  output signal (corresponding to even indexed samples). */
-		lptr = &lstartptr[(llen - 1) * step];
-		ptr = &startptr[((llen - 1) << 1) * step];
-		n = llen >> 1;
-		tmpptr = buf;
-		while (n-- > 0) {
-			*tmpptr = *(jpc_batch_t*)ptr;
-			*(jpc_batch_t*)ptr = *(jpc_batch_t*)lptr;
-			++tmpptr;
-			ptr -= twostep;
-			lptr -= step;
-		}
-		n = llen - (llen >> 1);
-		while (n-- > 0) {
-		  if (ptr != lptr) {
-		    *(jpc_batch_t*)ptr = *(jpc_batch_t*)lptr;
-		  }
-		  ptr -= twostep;
-		  lptr -= step;
-		}
-		/* Copy the appropriate samples into the second phase of
-		  the output signal (corresponding to odd indexed
-		  samples). */
-		ptr = &startptr[step];
-		hptr = hstartptr;
-		state = !(llen & 1);
-		n = hlen;
-		while (n-- > 0) {
-			if (state) {
-				--tmpptr;
-				*(jpc_batch_t*)ptr = *tmpptr;
-			} else {
-			  if (ptr != hptr) {
-			    *(jpc_batch_t*)ptr = *(jpc_batch_t*)hptr;
-			  }
-			}
-			hptr += step;
-			ptr += twostep;
-			state ^= 1;
-		}
+	/* Save the samples from the lowpass channel. */
+	n = hstartcol;
+	srcptr = &a[0];
+	dstptr = buf;
+	while (n-- > 0) {
+		*dstptr = *srcptr;
+		srcptr += stride;
+		++dstptr;
+	}
+	/* Copy the samples from the highpass channel into place. */
+	srcptr = &a[hstartcol * stride];
+	dstptr = &a[(1 - parity) * stride];
+	n = numrows - hstartcol;
+	while (n-- > 0) {
+		*dstptr = *srcptr;
+		dstptr += 2 * stride;
+		srcptr += stride;
+	}
+	/* Copy the samples from the lowpass channel into place. */
+	srcptr = buf;
+	dstptr = &a[parity * stride];
+	n = hstartcol;
+	while (n-- > 0) {
+		*dstptr = *srcptr;
+		dstptr += 2 * stride;
+		++srcptr;
 	}
 
+#if !defined(HAVE_VLA)
 	/* If the join buffer was allocated on the heap, free this memory. */
 	if (buf != joinbuf) {
 		jas_free(buf);
 	}
+#endif
+
+}
+
+void jpc_qmfb_join_colgrp(jpc_fix_t *a, int numrows, int stride,
+  int parity)
+{
+
+	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+#if !defined(HAVE_VLA)
+	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE * JPC_QMFB_COLGRPSIZE];
+#else
+	jpc_fix_t joinbuf[bufsize * JPC_QMFB_COLGRPSIZE];
+#endif
+	jpc_fix_t *buf = joinbuf;
+	jpc_fix_t *srcptr;
+	jpc_fix_t *dstptr;
+	register jpc_fix_t *srcptr2;
+	register jpc_fix_t *dstptr2;
+	register int n;
+	register int i;
+	int hstartcol;
+
+#if !defined(HAVE_VLA)
+	/* Allocate memory for the join buffer from the heap. */
+	if (bufsize > QMFB_JOINBUFSIZE) {
+		if (!(buf = jas_malloc(bufsize * JPC_QMFB_COLGRPSIZE * sizeof(jpc_fix_t)))) {
+			/* We have no choice but to commit suicide. */
+			abort();
+		}
+	}
+#endif
+
+	hstartcol = (numrows + 1 - parity) >> 1;
+
+	/* Save the samples from the lowpass channel. */
+	n = hstartcol;
+	srcptr = &a[0];
+	dstptr = buf;
+	while (n-- > 0) {
+		dstptr2 = dstptr;
+		srcptr2 = srcptr;
+		for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+			*dstptr2 = *srcptr2;
+			++dstptr2;
+			++srcptr2;
+		}
+		srcptr += stride;
+		dstptr += JPC_QMFB_COLGRPSIZE;
+	}
+	/* Copy the samples from the highpass channel into place. */
+	srcptr = &a[hstartcol * stride];
+	dstptr = &a[(1 - parity) * stride];
+	n = numrows - hstartcol;
+	while (n-- > 0) {
+		dstptr2 = dstptr;
+		srcptr2 = srcptr;
+		for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+			*dstptr2 = *srcptr2;
+			++dstptr2;
+			++srcptr2;
+		}
+		dstptr += 2 * stride;
+		srcptr += stride;
+	}
+	/* Copy the samples from the lowpass channel into place. */
+	srcptr = buf;
+	dstptr = &a[parity * stride];
+	n = hstartcol;
+	while (n-- > 0) {
+		dstptr2 = dstptr;
+		srcptr2 = srcptr;
+		for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+			*dstptr2 = *srcptr2;
+			++dstptr2;
+			++srcptr2;
+		}
+		dstptr += 2 * stride;
+		srcptr += JPC_QMFB_COLGRPSIZE;
+	}
+
+#if !defined(HAVE_VLA)
+	/* If the join buffer was allocated on the heap, free this memory. */
+	if (buf != joinbuf) {
+		jas_free(buf);
+	}
+#endif
+
+}
+
+void jpc_qmfb_join_colres(jpc_fix_t *a, int numrows, int numcols,
+  int stride, int parity)
+{
+
+	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
+#if !defined(HAVE_VLA)
+	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE * JPC_QMFB_COLGRPSIZE];
+#else
+	jpc_fix_t joinbuf[bufsize * numcols];
+#endif
+	jpc_fix_t *buf = joinbuf;
+	jpc_fix_t *srcptr;
+	jpc_fix_t *dstptr;
+	register jpc_fix_t *srcptr2;
+	register jpc_fix_t *dstptr2;
+	register int n;
+	register int i;
+	int hstartcol;
+
+#if !defined(HAVE_VLA)
+	/* Allocate memory for the join buffer from the heap. */
+	if (bufsize > QMFB_JOINBUFSIZE) {
+		if (!(buf = jas_malloc(bufsize * numcols * sizeof(jpc_fix_t)))) {
+			/* We have no choice but to commit suicide. */
+			abort();
+		}
+	}
+#endif
+
+	hstartcol = (numrows + 1 - parity) >> 1;
+
+	/* Save the samples from the lowpass channel. */
+	n = hstartcol;
+	srcptr = &a[0];
+	dstptr = buf;
+	while (n-- > 0) {
+		dstptr2 = dstptr;
+		srcptr2 = srcptr;
+		for (i = 0; i < numcols; ++i) {
+			*dstptr2 = *srcptr2;
+			++dstptr2;
+			++srcptr2;
+		}
+		srcptr += stride;
+		dstptr += numcols;
+	}
+	/* Copy the samples from the highpass channel into place. */
+	srcptr = &a[hstartcol * stride];
+	dstptr = &a[(1 - parity) * stride];
+	n = numrows - hstartcol;
+	while (n-- > 0) {
+		dstptr2 = dstptr;
+		srcptr2 = srcptr;
+		for (i = 0; i < numcols; ++i) {
+			*dstptr2 = *srcptr2;
+			++dstptr2;
+			++srcptr2;
+		}
+		dstptr += 2 * stride;
+		srcptr += stride;
+	}
+	/* Copy the samples from the lowpass channel into place. */
+	srcptr = buf;
+	dstptr = &a[parity * stride];
+	n = hstartcol;
+	while (n-- > 0) {
+		dstptr2 = dstptr;
+		srcptr2 = srcptr;
+		for (i = 0; i < numcols; ++i) {
+			*dstptr2 = *srcptr2;
+			++dstptr2;
+			++srcptr2;
+		}
+		dstptr += 2 * stride;
+		srcptr += numcols;
+	}
+
+#if !defined(HAVE_VLA)
+	/* If the join buffer was allocated on the heap, free this memory. */
+	if (buf != joinbuf) {
+		jas_free(buf);
+	}
+#endif
+
 }
 
 /******************************************************************************\
-* Code for 5/3 transform.
+* 5/3 transform
 \******************************************************************************/
 
-static int jpc_ft_getnumchans(jpc_qmfb1d_t *qmfb)
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_ft_fwdlift_row(jpc_fix_t *a, int numcols, int parity)
 {
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
 
-	return 2;
-}
+	register jpc_fix_t *lptr;
+	register jpc_fix_t *hptr;
+	register int n;
+	int llen;
 
-static int jpc_ft_getanalfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters)
-{
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-	len = 0;
-	filters = 0;
-	abort();
-	return -1;
-}
+	llen = (numcols + 1 - parity) >> 1;
 
-static int jpc_ft_getsynfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters)
-{
-	jas_seq_t *lf;
-	jas_seq_t *hf;
+	if (numcols > 1) {
 
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-
-	lf = 0;
-	hf = 0;
-
-	if (len > 1 || (!len)) {
-		if (!(lf = jas_seq_create(-1, 2))) {
-			goto error;
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (parity) {
+			hptr[0] -= lptr[0];
+			++hptr;
 		}
-		jas_seq_set(lf, -1, jpc_dbltofix(0.5));
-		jas_seq_set(lf, 0, jpc_dbltofix(1.0));
-		jas_seq_set(lf, 1, jpc_dbltofix(0.5));
-		if (!(hf = jas_seq_create(-1, 4))) {
-			goto error;
+		n = numcols - llen - parity - (parity == (numcols & 1));
+		while (n-- > 0) {
+			hptr[0] -= (lptr[0] + lptr[1]) >> 1;
+			++hptr;
+			++lptr;
 		}
-		jas_seq_set(hf, -1, jpc_dbltofix(-0.125));
-		jas_seq_set(hf, 0, jpc_dbltofix(-0.25));
-		jas_seq_set(hf, 1, jpc_dbltofix(0.75));
-		jas_seq_set(hf, 2, jpc_dbltofix(-0.25));
-		jas_seq_set(hf, 3, jpc_dbltofix(-0.125));
-	} else if (len == 1) {
-		if (!(lf = jas_seq_create(0, 1))) {
-			goto error;
+		if (parity == (numcols & 1)) {
+			hptr[0] -= lptr[0];
 		}
-		jas_seq_set(lf, 0, jpc_dbltofix(1.0));
-		if (!(hf = jas_seq_create(0, 1))) {
-			goto error;
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (!parity) {
+			lptr[0] += (hptr[0] + 1) >> 1;
+			++lptr;
 		}
-		jas_seq_set(hf, 0, jpc_dbltofix(2.0));
+		n = llen - (!parity) - (parity != (numcols & 1));
+		while (n-- > 0) {
+			lptr[0] += (hptr[0] + hptr[1] + 2) >> 2;
+			++lptr;
+			++hptr;
+		}
+		if (parity != (numcols & 1)) {
+			lptr[0] += (hptr[0] + 1) >> 1;
+		}
+
 	} else {
-		abort();
+
+		if (parity) {
+			lptr = &a[0];
+			lptr[0] <<= 1;
+		}
+
 	}
 
-	filters[0] = lf;
-	filters[1] = hf;
+}
+
+void jpc_ft_fwdlift_col(jpc_fix_t *a, int numrows, int stride, int parity)
+{
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+#if 0
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int i;
+#endif
+	register int n;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			hptr[0] -= lptr[0];
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			hptr[0] -= (lptr[0] + lptr[stride]) >> 1;
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			hptr[0] -= lptr[0];
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr[0] += (hptr[0] + 1) >> 1;
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr[0] += (hptr[0] + hptr[stride] + 2) >> 2;
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr[0] += (hptr[0] + 1) >> 1;
+		}
+
+	} else {
+
+		if (parity) {
+			lptr = &a[0];
+			lptr[0] <<= 1;
+		}
+
+	}
+
+}
+
+void jpc_ft_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity)
+{
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] -= lptr2[0];
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] -= (lptr2[0] + lptr2[stride]) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] -= lptr2[0];
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] += (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] += (hptr2[0] + hptr2[stride] + 2) >> 2;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] += (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+	} else {
+
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] <<= 1;
+				++lptr2;
+			}
+		}
+
+	}
+
+}
+
+void jpc_ft_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+  int parity)
+{
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] -= lptr2[0];
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] -= (lptr2[0] + lptr2[stride]) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] -= lptr2[0];
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] += (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] += (hptr2[0] + hptr2[stride] + 2) >> 2;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] += (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+	} else {
+
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] <<= 1;
+				++lptr2;
+			}
+		}
+
+	}
+
+}
+#endif /* ENABLE_JASPER_ENCODE */
+
+void jpc_ft_invlift_row(jpc_fix_t *a, int numcols, int parity)
+{
+
+	register jpc_fix_t *lptr;
+	register jpc_fix_t *hptr;
+	register int n;
+	int llen;
+
+	llen = (numcols + 1 - parity) >> 1;
+
+	if (numcols > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (!parity) {
+			lptr[0] -= (hptr[0] + 1) >> 1;
+			++lptr;
+		}
+		n = llen - (!parity) - (parity != (numcols & 1));
+		while (n-- > 0) {
+			lptr[0] -= (hptr[0] + hptr[1] + 2) >> 2;
+			++lptr;
+			++hptr;
+		}
+		if (parity != (numcols & 1)) {
+			lptr[0] -= (hptr[0] + 1) >> 1;
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (parity) {
+			hptr[0] += lptr[0];
+			++hptr;
+		}
+		n = numcols - llen - parity - (parity == (numcols & 1));
+		while (n-- > 0) {
+			hptr[0] += (lptr[0] + lptr[1]) >> 1;
+			++hptr;
+			++lptr;
+		}
+		if (parity == (numcols & 1)) {
+			hptr[0] += lptr[0];
+		}
+
+	} else {
+
+		if (parity) {
+			lptr = &a[0];
+			lptr[0] >>= 1;
+		}
+
+	}
+
+}
+
+void jpc_ft_invlift_col(jpc_fix_t *a, int numrows, int stride, int parity)
+{
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+#if 0
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int i;
+#endif
+	register int n;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr[0] -= (hptr[0] + 1) >> 1;
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr[0] -= (hptr[0] + hptr[stride] + 2) >> 2;
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr[0] -= (hptr[0] + 1) >> 1;
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			hptr[0] += lptr[0];
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			hptr[0] += (lptr[0] + lptr[stride]) >> 1;
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			hptr[0] += lptr[0];
+		}
+
+	} else {
+
+		if (parity) {
+			lptr = &a[0];
+			lptr[0] >>= 1;
+		}
+
+	}
+
+}
+
+void jpc_ft_invlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity)
+{
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] -= (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] -= (hptr2[0] + hptr2[stride] + 2) >> 2;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] -= (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] += lptr2[0];
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] += (lptr2[0] + lptr2[stride]) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] += lptr2[0];
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+	} else {
+
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] >>= 1;
+				++lptr2;
+			}
+		}
+
+	}
+
+}
+
+void jpc_ft_invlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+  int parity)
+{
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] -= (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] -= (hptr2[0] + hptr2[stride] + 2) >> 2;
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] -= (hptr2[0] + 1) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] += lptr2[0];
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] += (lptr2[0] + lptr2[stride]) >> 1;
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] += lptr2[0];
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+	} else {
+
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] >>= 1;
+				++lptr2;
+			}
+		}
+
+	}
+
+}
+
+#ifdef ENABLE_JASPER_ENCODE
+int jpc_ft_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+  int stride)
+{
+	int numrows = height;
+	int numcols = width;
+	int rowparity = ystart & 1;
+	int colparity = xstart & 1;
+	int i;
+	jpc_fix_t *startptr;
+	int maxcols;
+
+	maxcols = (numcols / JPC_QMFB_COLGRPSIZE) * JPC_QMFB_COLGRPSIZE;
+	startptr = &a[0];
+	for (i = 0; i < maxcols; i += JPC_QMFB_COLGRPSIZE) {
+		jpc_qmfb_split_colgrp(startptr, numrows, stride, rowparity);
+		jpc_ft_fwdlift_colgrp(startptr, numrows, stride, rowparity);
+		startptr += JPC_QMFB_COLGRPSIZE;
+	}
+	if (maxcols < numcols) {
+		jpc_qmfb_split_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+		jpc_ft_fwdlift_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+	}
+
+	startptr = &a[0];
+	for (i = 0; i < numrows; ++i) {
+		jpc_qmfb_split_row(startptr, numcols, colparity);
+		jpc_ft_fwdlift_row(startptr, numcols, colparity);
+		startptr += stride;
+	}
 
 	return 0;
 
-error:
-	if (lf) {
-		jas_seq_destroy(lf);
-	}
-	if (hf) {
-		jas_seq_destroy(hf);
-	}
-	return -1;
 }
+#endif /* ENABLE_JASPER_ENCODE */
 
-#define	NFT_LIFT0(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pluseq) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (hendind) - (hstartind); \
-	if ((hstartind) < (lstartind)) { \
-		pluseq(*hptr, *lptr); \
-		hptr += (step); \
-		--n; \
-	} \
-	if ((hendind) >= (lendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		pluseq(*hptr, jpc_fix_asr(jpc_fix_add(*lptr, lptr[(step)]), 1)); \
-		hptr += (step); \
-		lptr += (step); \
-	} \
-	if ((hendind) >= (lendind)) { \
-		pluseq(*hptr, *lptr); \
-	} \
-}
-
-#define	NFT_LIFT1(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pluseq) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (lendind) - (lstartind); \
-	if ((hstartind) >= (lstartind)) { \
-		pluseq(*lptr, *hptr); \
-		lptr += (step); \
-		--n; \
-	} \
-	if ((lendind) > (hendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		pluseq(*lptr, jpc_fix_asr(jpc_fix_add(*hptr, hptr[(step)]), 2)); \
-		lptr += (step); \
-		hptr += (step); \
-	} \
-	if ((lendind) > (hendind)) { \
-		pluseq(*lptr, *hptr); \
-	} \
-}
-
-#define	NFT_LIFT0_BATCH(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pluseq) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (hendind) - (hstartind); \
-	register int v; \
-	if ((hstartind) < (lstartind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			pluseq(hptr[v], lptr[v]); \
-		} \
-		hptr += (step); \
-		--n; \
-	} \
-	if ((hendind) >= (lendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			pluseq(hptr[v], jpc_fix_asr(jpc_fix_add(lptr[v], lptr[(step)+v]), 1)); \
-		} \
-		hptr += (step); \
-		lptr += (step); \
-	} \
-	if ((hendind) >= (lendind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			pluseq(hptr[v], lptr[v]); \
-		} \
-	} \
-}
-
-#define	NFT_LIFT1_BATCH(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pluseq) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (lendind) - (lstartind); \
-	register int v; \
-	if ((hstartind) >= (lstartind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			pluseq(lptr[v], hptr[v]); \
-		} \
-		lptr += (step); \
-		--n; \
-	} \
-	if ((lendind) > (hendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			pluseq(lptr[v], jpc_fix_asr(jpc_fix_add(hptr[v], hptr[(step)+v]), 2)); \
-		} \
-		lptr += (step); \
-		hptr += (step); \
-	} \
-	if ((lendind) > (hendind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			pluseq(lptr[v], hptr[v]); \
-		} \
-	} \
-}
-
-#define	RFT_LIFT0(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pmeqop) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (hendind) - (hstartind); \
-	if ((hstartind) < (lstartind)) { \
-		*hptr pmeqop *lptr; \
-		hptr += (step); \
-		--n; \
-	} \
-	if ((hendind) >= (lendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		*hptr pmeqop (*lptr + lptr[(step)]) >> 1; \
-		hptr += (step); \
-		lptr += (step); \
-	} \
-	if ((hendind) >= (lendind)) { \
-		*hptr pmeqop *lptr; \
-	} \
-}
-
-#define	RFT_LIFT1(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pmeqop) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (lendind) - (lstartind); \
-	if ((hstartind) >= (lstartind)) { \
-		*lptr pmeqop ((*hptr << 1) + 2) >> 2; \
-		lptr += (step); \
-		--n; \
-	} \
-	if ((lendind) > (hendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		*lptr pmeqop ((*hptr + hptr[(step)]) + 2) >> 2; \
-		lptr += (step); \
-		hptr += (step); \
-	} \
-	if ((lendind) > (hendind)) { \
-		*lptr pmeqop ((*hptr << 1) + 2) >> 2; \
-	} \
-}
-
-#define	RFT_LIFT0_BATCH(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pmeqop) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (hendind) - (hstartind); \
-	register int v; \
-	if ((hstartind) < (lstartind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			hptr[v] pmeqop lptr[v]; \
-		} \
-		hptr += (step); \
-		--n; \
-	} \
-	if ((hendind) >= (lendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			hptr[v] pmeqop (lptr[v] + lptr[(step)+v]) >> 1; \
-		} \
-		hptr += (step); \
-		lptr += (step); \
-	} \
-	if ((hendind) >= (lendind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			hptr[v] pmeqop lptr[v]; \
-		} \
-	} \
-}
-
-#define	RFT_LIFT1_BATCH(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, pmeqop) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (lendind) - (lstartind); \
-	register int v; \
-	if ((hstartind) >= (lstartind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			lptr[v] pmeqop ((hptr[v] << 1) + 2) >> 2; \
-		} \
-		lptr += (step); \
-		--n; \
-	} \
-	if ((lendind) > (hendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			lptr[v] pmeqop ((hptr[v] + hptr[(step)+v]) + 2) >> 2; \
-		} \
-		lptr += (step); \
-		hptr += (step); \
-	} \
-	if ((lendind) > (hendind)) { \
-		for (v=0; v<JPC_BATCH_SIZE; v++) { \
-			lptr[v] pmeqop ((hptr[v] << 1) + 2) >> 2; \
-		} \
-	} \
-}
-
-#define JPC_BATCH_OP(ptr, op) \
-{ \
-	int v; \
-	for (v=0; v<JPC_BATCH_SIZE; v++) { \
-		(ptr)[v] op; \
-	} \
-}
-
-#define JPC_BATCH_FIX_AS1(ptr) \
-{ \
-	int v; \
-	for (v=0; v<JPC_BATCH_SIZE; v++) { \
-		(ptr)[v] = jpc_fix_asl((ptr)[v], 1); \
-	} \
-}
-
-#define JPC_BATCH_FIX_ASR(ptr, n) \
-{ \
-	int v; \
-	for (v=0; v<JPC_BATCH_SIZE; v++) { \
-		(ptr)[v] = jpc_fix_asr((ptr)[v], (n)); \
-	} \
-}
-
-static void jpc_ft_analyze(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x)
+int jpc_ft_synthesize(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+  int stride)
 {
+	int numrows = height;
+	int numcols = width;
+	int rowparity = ystart & 1;
+	int colparity = xstart & 1;
+
+	int maxcols;
 	jpc_fix_t *startptr;
-	int startind;
-	int endind;
-	jpc_fix_t *  lstartptr;
-	int   lstartind;
-	int   lendind;
-	jpc_fix_t *  hstartptr;
-	int   hstartind;
-	int   hendind;
-	int interstep;
-	int intrastep;
-	int numseq;
+	int i;
 
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-
-	if (flags & JPC_QMFB1D_VERT) {
-		interstep = 1;
-		intrastep = jas_seq2d_rowstep(x);
-		numseq = jas_seq2d_width(x);
-		startind = jas_seq2d_ystart(x);
-		endind = jas_seq2d_yend(x);
-	} else {
-		interstep = jas_seq2d_rowstep(x);
-		intrastep = 1;
-		numseq = jas_seq2d_height(x);
-		startind = jas_seq2d_xstart(x);
-		endind = jas_seq2d_xend(x);
+	startptr = &a[0];
+	for (i = 0; i < numrows; ++i) {
+		jpc_ft_invlift_row(startptr, numcols, colparity);
+		jpc_qmfb_join_row(startptr, numcols, colparity);
+		startptr += stride;
 	}
 
-	assert(startind < endind);
-
-	startptr = jas_seq2d_getref(x, jas_seq2d_xstart(x), jas_seq2d_ystart(x));
-	if (flags & JPC_QMFB1D_RITIMODE) {
-		if (interstep==1) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			while (numseq >= JPC_BATCH_SIZE) {
-				if (endind - startind > 1) {
-					jpc_qmfb1d_split_batch(startptr, startind, endind,
-					  intrastep, lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind);
-					RFT_LIFT0_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep, -=);
-					RFT_LIFT1_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep, +=);
-				} else {
-					if (lstartind == lendind) {
-						JPC_BATCH_OP(startptr, <<= 1);
-					}
-				}
-				startptr += JPC_BATCH_SIZE;
-				lstartptr += JPC_BATCH_SIZE;
-				hstartptr += JPC_BATCH_SIZE;
-				numseq -= JPC_BATCH_SIZE;
-			}
-		}
-		while (numseq-- > 0) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			if (endind - startind > 1) {
-				jpc_qmfb1d_split(startptr, startind, endind,
-				  intrastep, lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind);
-				RFT_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep, -=);
-				RFT_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep, +=);
-			} else {
-				if (lstartind == lendind) {
-					*startptr <<= 1;
-				}
-			}
-			startptr += interstep;
-		}
-	} else {
-		if (interstep==1) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			while (numseq >= JPC_BATCH_SIZE) {
-				if (endind - startind > 1) {
-					jpc_qmfb1d_split_batch(startptr, startind, endind,
-					  intrastep, lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind);
-					NFT_LIFT0_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep,
-					  jpc_fix_minuseq);
-					NFT_LIFT1_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep,
-					  jpc_fix_pluseq);
-				} else {
-					if (lstartind == lendind) {
-						JPC_BATCH_FIX_AS1(startptr);
-					}
-				}
-				startptr += JPC_BATCH_SIZE;
-				lstartptr += JPC_BATCH_SIZE;
-				hstartptr += JPC_BATCH_SIZE;
-				numseq -= JPC_BATCH_SIZE;
-			}
-		}
-		while (numseq-- > 0) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			if (endind - startind > 1) {
-				jpc_qmfb1d_split(startptr, startind, endind,
-				  intrastep, lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind);
-				NFT_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_fix_minuseq);
-				NFT_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_fix_pluseq);
-			} else {
-				if (lstartind == lendind) {
-					*startptr = jpc_fix_asl(*startptr, 1);
-				}
-			}
-			startptr += interstep;
-		}
+	maxcols = (numcols / JPC_QMFB_COLGRPSIZE) * JPC_QMFB_COLGRPSIZE;
+	startptr = &a[0];
+	for (i = 0; i < maxcols; i += JPC_QMFB_COLGRPSIZE) {
+		jpc_ft_invlift_colgrp(startptr, numrows, stride, rowparity);
+		jpc_qmfb_join_colgrp(startptr, numrows, stride, rowparity);
+		startptr += JPC_QMFB_COLGRPSIZE;
 	}
-}
-
-static void jpc_ft_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x)
-{
-	jpc_fix_t *startptr;
-	int startind;
-	int endind;
-	jpc_fix_t *lstartptr;
-	int lstartind;
-	int lendind;
-	jpc_fix_t *hstartptr;
-	int hstartind;
-	int hendind;
-	int interstep;
-	int intrastep;
-	int numseq;
-
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-
-	if (flags & JPC_QMFB1D_VERT) {
-		interstep = 1;
-		intrastep = jas_seq2d_rowstep(x);
-		numseq = jas_seq2d_width(x);
-		startind = jas_seq2d_ystart(x);
-		endind = jas_seq2d_yend(x);
-	} else {
-		interstep = jas_seq2d_rowstep(x);
-		intrastep = 1;
-		numseq = jas_seq2d_height(x);
-		startind = jas_seq2d_xstart(x);
-		endind = jas_seq2d_xend(x);
+	if (maxcols < numcols) {
+		jpc_ft_invlift_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+		jpc_qmfb_join_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
 	}
-
-	assert(startind < endind);
-
-	startptr = jas_seq2d_getref(x, jas_seq2d_xstart(x), jas_seq2d_ystart(x));
-	if (flags & JPC_QMFB1D_RITIMODE) {
-		if (interstep==1) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			while (numseq >= JPC_BATCH_SIZE) {
-				if (endind - startind > 1) {
-					RFT_LIFT1_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep, -=);
-					RFT_LIFT0_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep, +=);
-					jpc_qmfb1d_join_batch(startptr, startind, endind,
-					  intrastep, lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind);
-				} else {
-					if (lstartind == lendind) {
-						JPC_BATCH_OP(startptr, >>= 1);
-					}
-				}
-				startptr += JPC_BATCH_SIZE;
-				lstartptr += JPC_BATCH_SIZE;
-				hstartptr += JPC_BATCH_SIZE;
-				numseq -= JPC_BATCH_SIZE;
-			}
-		}
-		while (numseq-- > 0) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			if (endind - startind > 1) {
-				RFT_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep, -=);
-				RFT_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep, +=);
-				jpc_qmfb1d_join(startptr, startind, endind,
-				  intrastep, lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind);
-			} else {
-				if (lstartind == lendind) {
-					*startptr >>= 1;
-				}
-			}
-			startptr += interstep;
-		}
-	} else {
-		if (interstep==1) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			while (numseq >= JPC_BATCH_SIZE) {
-				if (endind - startind > 1) {
-					NFT_LIFT1_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep,
-					  jpc_fix_minuseq);
-					NFT_LIFT0_BATCH(lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind, intrastep,
-					  jpc_fix_pluseq);
-					jpc_qmfb1d_join_batch(startptr, startind, endind,
-					  intrastep, lstartptr, lstartind, lendind,
-					  hstartptr, hstartind, hendind);
-				} else {
-					if (lstartind == lendind) {
-						JPC_BATCH_FIX_ASR(startptr, 1);
-					}
-				}
-				startptr += JPC_BATCH_SIZE;
-				lstartptr += JPC_BATCH_SIZE;
-				hstartptr += JPC_BATCH_SIZE;
-				numseq -= JPC_BATCH_SIZE;
-			}
-		}
-		while (numseq-- > 0) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			if (endind - startind > 1) {
-				NFT_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_fix_minuseq);
-				NFT_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_fix_pluseq);
-				jpc_qmfb1d_join(startptr, startind, endind,
-				  intrastep, lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind);
-			} else {
-				if (lstartind == lendind) {
-					*startptr = jpc_fix_asr(*startptr, 1);
-				}
-			}
-			startptr += interstep;
-		}
-	}
-}
-
-/******************************************************************************\
-* Code for 9/7 transform.
-\******************************************************************************/
-
-static int jpc_ns_getnumchans(jpc_qmfb1d_t *qmfb)
-{
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-
-	return 2;
-}
-
-static int jpc_ns_getanalfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters)
-{
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-	len = 0;
-	filters = 0;
-
-	abort();
-	return -1;
-}
-
-static int jpc_ns_getsynfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters)
-{
-	jas_seq_t *lf;
-	jas_seq_t *hf;
-
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-
-	lf = 0;
-	hf = 0;
-
-	if (len > 1 || (!len)) {
-		if (!(lf = jas_seq_create(-3, 4))) {
-			goto error;
-		}
-		jas_seq_set(lf, -3, jpc_dbltofix(-0.09127176311424948));
-		jas_seq_set(lf, -2, jpc_dbltofix(-0.05754352622849957));
-		jas_seq_set(lf, -1, jpc_dbltofix(0.5912717631142470));
-		jas_seq_set(lf, 0, jpc_dbltofix(1.115087052456994));
-		jas_seq_set(lf, 1, jpc_dbltofix(0.5912717631142470));
-		jas_seq_set(lf, 2, jpc_dbltofix(-0.05754352622849957));
-		jas_seq_set(lf, 3, jpc_dbltofix(-0.09127176311424948));
-		if (!(hf = jas_seq_create(-3, 6))) {
-			goto error;
-		}
-		jas_seq_set(hf, -3, jpc_dbltofix(-0.02674875741080976 * 2.0));
-		jas_seq_set(hf, -2, jpc_dbltofix(-0.01686411844287495 * 2.0));
-		jas_seq_set(hf, -1, jpc_dbltofix(0.07822326652898785 * 2.0));
-		jas_seq_set(hf, 0, jpc_dbltofix(0.2668641184428723 * 2.0));
-		jas_seq_set(hf, 1, jpc_dbltofix(-0.6029490182363579 * 2.0));
-		jas_seq_set(hf, 2, jpc_dbltofix(0.2668641184428723 * 2.0));
-		jas_seq_set(hf, 3, jpc_dbltofix(0.07822326652898785 * 2.0));
-		jas_seq_set(hf, 4, jpc_dbltofix(-0.01686411844287495 * 2.0));
-		jas_seq_set(hf, 5, jpc_dbltofix(-0.02674875741080976 * 2.0));
-	} else if (len == 1) {
-		if (!(lf = jas_seq_create(0, 1))) {
-			goto error;
-		}
-		jas_seq_set(lf, 0, jpc_dbltofix(1.0));
-		if (!(hf = jas_seq_create(0, 1))) {
-			goto error;
-		}
-		jas_seq_set(hf, 0, jpc_dbltofix(2.0));
-	} else {
-		abort();
-	}
-
-	filters[0] = lf;
-	filters[1] = hf;
 
 	return 0;
 
-error:
-	if (lf) {
-		jas_seq_destroy(lf);
-	}
-	if (hf) {
-		jas_seq_destroy(hf);
-	}
-	return -1;
 }
 
-#define	NNS_LIFT0(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, alpha) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (hendind) - (hstartind); \
-	jpc_fix_t twoalpha = jpc_fix_mulbyint(alpha, 2); \
-	if ((hstartind) < (lstartind)) { \
-		jpc_fix_pluseq(*hptr, jpc_fix_mul(*lptr, (twoalpha))); \
-		hptr += (step); \
-		--n; \
-	} \
-	if ((hendind) >= (lendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		jpc_fix_pluseq(*hptr, jpc_fix_mul(jpc_fix_add(*lptr, lptr[(step)]), (alpha))); \
-		hptr += (step); \
-		lptr += (step); \
-	} \
-	if ((hendind) >= (lendind)) { \
-		jpc_fix_pluseq(*hptr, jpc_fix_mul(*lptr, (twoalpha))); \
-	} \
-}
+/******************************************************************************\
+* 9/7 transform
+\******************************************************************************/
 
-#define	NNS_LIFT1(lstartptr, lstartind, lendind, hstartptr, hstartind, hendind, step, alpha) \
-{ \
-	register jpc_fix_t *lptr = (lstartptr); \
-	register jpc_fix_t *hptr = (hstartptr); \
-	register int n = (lendind) - (lstartind); \
-	int twoalpha = jpc_fix_mulbyint(alpha, 2); \
-	if ((hstartind) >= (lstartind)) { \
-		jpc_fix_pluseq(*lptr, jpc_fix_mul(*hptr, (twoalpha))); \
-		lptr += (step); \
-		--n; \
-	} \
-	if ((lendind) > (hendind)) { \
-		--n; \
-	} \
-	while (n-- > 0) { \
-		jpc_fix_pluseq(*lptr, jpc_fix_mul(jpc_fix_add(*hptr, hptr[(step)]), (alpha))); \
-		lptr += (step); \
-		hptr += (step); \
-	} \
-	if ((lendind) > (hendind)) { \
-		jpc_fix_pluseq(*lptr, jpc_fix_mul(*hptr, (twoalpha))); \
-	} \
-}
+#define ALPHA (-1.586134342059924)
+#define BETA (-0.052980118572961)
+#define GAMMA (0.882911075530934)
+#define DELTA (0.443506852043971)
+#define LGAIN (1.0 / 1.23017410558578)
+#define HGAIN (1.0 / 1.62578613134411)
 
-#define	NNS_SCALE(startptr, startind, endind, step, alpha) \
-{ \
-	register jpc_fix_t *ptr = (startptr); \
-	register int n = (endind) - (startind); \
-	while (n-- > 0) { \
-		jpc_fix_muleq(*ptr, alpha); \
-		ptr += (step); \
-	} \
-}
-
-static void jpc_ns_analyze(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x)
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_ns_fwdlift_row(jpc_fix_t *a, int numcols, int parity)
 {
-	jpc_fix_t *startptr;
-	int startind;
-	int endind;
-	jpc_fix_t *lstartptr;
-	int lstartind;
-	int lendind;
-	jpc_fix_t *hstartptr;
-	int hstartind;
-	int hendind;
-	int interstep;
-	int intrastep;
-	int numseq;
 
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
+	register jpc_fix_t *lptr;
+	register jpc_fix_t *hptr;
+	register int n;
+	int llen;
 
-	if (flags & JPC_QMFB1D_VERT) {
-		interstep = 1;
-		intrastep = jas_seq2d_rowstep(x);
-		numseq = jas_seq2d_width(x);
-		startind = jas_seq2d_ystart(x);
-		endind = jas_seq2d_yend(x);
-	} else {
-		interstep = jas_seq2d_rowstep(x);
-		intrastep = 1;
-		numseq = jas_seq2d_height(x);
-		startind = jas_seq2d_xstart(x);
-		endind = jas_seq2d_xend(x);
-	}
+	llen = (numcols + 1 - parity) >> 1;
 
-	assert(startind < endind);
+	if (numcols > 1) {
 
-	startptr = jas_seq2d_getref(x, jas_seq2d_xstart(x), jas_seq2d_ystart(x));
-	if (!(flags & JPC_QMFB1D_RITIMODE)) {
-		while (numseq-- > 0) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			if (endind - startind > 1) {
-				jpc_qmfb1d_split(startptr, startind, endind,
-				  intrastep, lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind);
-				NNS_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(-1.586134342));
-				NNS_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(-0.052980118));
-				NNS_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(0.882911075));
-				NNS_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(0.443506852));
-				NNS_SCALE(lstartptr, lstartind, lendind,
-				  intrastep, jpc_dbltofix(1.0/1.23017410558578));
-				NNS_SCALE(hstartptr, hstartind, hendind,
-				  intrastep, jpc_dbltofix(1.0/1.62578613134411));
-			} else {
-#if 0
-				if (lstartind == lendind) {
-					*startptr = jpc_fix_asl(*startptr, 1);
-				}
-#endif
-			}
-			startptr += interstep;
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (parity) {
+			jpc_fix_pluseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+			  lptr[0]));
+			++hptr;
 		}
-	} else {
-		/* The reversible integer-to-integer mode is not supported
-		  for this transform. */
-		abort();
-	}
-}
-
-static void jpc_ns_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x)
-{
-	jpc_fix_t *startptr;
-	int startind;
-	int endind;
-	jpc_fix_t *lstartptr;
-	int lstartind;
-	int lendind;
-	jpc_fix_t *hstartptr;
-	int hstartind;
-	int hendind;
-	int interstep;
-	int intrastep;
-	int numseq;
-
-	/* Avoid compiler warnings about unused parameters. */
-	qmfb = 0;
-
-	if (flags & JPC_QMFB1D_VERT) {
-		interstep = 1;
-		intrastep = jas_seq2d_rowstep(x);
-		numseq = jas_seq2d_width(x);
-		startind = jas_seq2d_ystart(x);
-		endind = jas_seq2d_yend(x);
-	} else {
-		interstep = jas_seq2d_rowstep(x);
-		intrastep = 1;
-		numseq = jas_seq2d_height(x);
-		startind = jas_seq2d_xstart(x);
-		endind = jas_seq2d_xend(x);
-	}
-
-	assert(startind < endind);
-
-	startptr = jas_seq2d_getref(x, jas_seq2d_xstart(x), jas_seq2d_ystart(x));
-	if (!(flags & JPC_QMFB1D_RITIMODE)) {
-		while (numseq-- > 0) {
-			jpc_qmfb1d_setup(startptr, startind, endind, intrastep,
-			  &lstartptr, &lstartind, &lendind, &hstartptr,
-			  &hstartind, &hendind);
-			if (endind - startind > 1) {
-				NNS_SCALE(lstartptr, lstartind, lendind,
-				  intrastep, jpc_dbltofix(1.23017410558578));
-				NNS_SCALE(hstartptr, hstartind, hendind,
-				  intrastep, jpc_dbltofix(1.62578613134411));
-				NNS_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(-0.443506852));
-				NNS_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(-0.882911075));
-				NNS_LIFT1(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(0.052980118));
-				NNS_LIFT0(lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind, intrastep,
-				  jpc_dbltofix(1.586134342));
-				jpc_qmfb1d_join(startptr, startind, endind,
-				  intrastep, lstartptr, lstartind, lendind,
-				  hstartptr, hstartind, hendind);
-			} else {
-#if 0
-				if (lstartind == lendind) {
-					*startptr = jpc_fix_asr(*startptr, 1);
-				}
-#endif
-			}
-			startptr += interstep;
+		n = numcols - llen - parity - (parity == (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_pluseq(hptr[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+			  jpc_fix_add(lptr[0], lptr[1])));
+			++hptr;
+			++lptr;
 		}
+		if (parity == (numcols & 1)) {
+			jpc_fix_pluseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+			  lptr[0]));
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (!parity) {
+			jpc_fix_pluseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr[0]));
+			++lptr;
+		}
+		n = llen - (!parity) - (parity != (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_pluseq(lptr[0], jpc_fix_mul(jpc_dbltofix(BETA),
+			  jpc_fix_add(hptr[0], hptr[1])));
+			++lptr;
+			++hptr;
+		}
+		if (parity != (numcols & 1)) {
+			jpc_fix_pluseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr[0]));
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (parity) {
+			jpc_fix_pluseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+			  lptr[0]));
+			++hptr;
+		}
+		n = numcols - llen - parity - (parity == (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_pluseq(hptr[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+			  jpc_fix_add(lptr[0], lptr[1])));
+			++hptr;
+			++lptr;
+		}
+		if (parity == (numcols & 1)) {
+			jpc_fix_pluseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+			  lptr[0]));
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (!parity) {
+			jpc_fix_pluseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+			  hptr[0]));
+			++lptr;
+		}
+		n = llen - (!parity) - (parity != (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_pluseq(lptr[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+			  jpc_fix_add(hptr[0], hptr[1])));
+			++lptr;
+			++hptr;
+		}
+		if (parity != (numcols & 1)) {
+			jpc_fix_pluseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+			  hptr[0]));
+		}
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr[0] = jpc_fix_mul(lptr[0], jpc_dbltofix(LGAIN));
+			++lptr;
+		}
+		hptr = &a[llen];
+		n = numcols - llen;
+		while (n-- > 0) {
+			hptr[0] = jpc_fix_mul(hptr[0], jpc_dbltofix(HGAIN));
+			++hptr;
+		}
+#endif
+
 	} else {
-		/* The reversible integer-to-integer mode is not supported
-		  for this transform. */
-		abort();
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr = &a[0];
+			lptr[0] <<= 1;
+		}
+#endif
+
 	}
+
 }
 
-/******************************************************************************\
-*
-\******************************************************************************/
-
-jpc_qmfb1d_t *jpc_qmfb1d_make(int qmfbid)
+void jpc_ns_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	jpc_qmfb1d_t *qmfb;
-	if (!(qmfb = jpc_qmfb1d_create())) {
-		return 0;
-	}
-	switch (qmfbid) {
-	case JPC_QMFB1D_FT:
-		qmfb->ops = &jpc_ft_ops;
-		break;
-	case JPC_QMFB1D_NS:
-		qmfb->ops = &jpc_ns_ops;
-		break;
-	default:
-		jpc_qmfb1d_destroy(qmfb);
-		return 0;
-		break;
-	}
-	return qmfb;
-}
 
-static jpc_qmfb1d_t *jpc_qmfb1d_create()
-{
-	jpc_qmfb1d_t *qmfb;
-	if (!(qmfb = jas_malloc(sizeof(jpc_qmfb1d_t)))) {
-		return 0;
-	}
-	qmfb->ops = 0;
-	return qmfb;
-}
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
 
-jpc_qmfb1d_t *jpc_qmfb1d_copy(jpc_qmfb1d_t *qmfb)
-{
-	jpc_qmfb1d_t *newqmfb;
+	llen = (numrows + 1 - parity) >> 1;
 
-	if (!(newqmfb = jpc_qmfb1d_create())) {
-		return 0;
-	}
-	newqmfb->ops = qmfb->ops;
-	return newqmfb;
-}
+	if (numrows > 1) {
 
-void jpc_qmfb1d_destroy(jpc_qmfb1d_t *qmfb)
-{
-	jas_free(qmfb);
-}
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+				  lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+				  lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
 
-/******************************************************************************\
-*
-\******************************************************************************/
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
 
-void jpc_qmfb1d_getbands(jpc_qmfb1d_t *qmfb, int flags, uint_fast32_t xstart,
-  uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend, int maxbands,
-  int *numbandsptr, jpc_qmfb1dband_t *bands)
-{
-	int start;
-	int end;
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+				  lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+				  lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
 
-	(void)qmfb;
-	(void)maxbands;
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
 
-	assert(maxbands >= 2);
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr2 = lptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(LGAIN));
+				++lptr2;
+			}
+			lptr += stride;
+		}
+		hptr = &a[llen * stride];
+		n = numrows - llen;
+		while (n-- > 0) {
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(HGAIN));
+				++hptr2;
+			}
+			hptr += stride;
+		}
+#endif
 
-	if (flags & JPC_QMFB1D_VERT) {
-		start = ystart;
-		end = yend;
 	} else {
-		start = xstart;
-		end = xend;
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] <<= 1;
+				++lptr2;
+			}
+		}
+#endif
+
 	}
-	assert(jpc_qmfb1d_getnumchans(qmfb) == 2);
-	assert(start <= end);
-	bands[0].start = JPC_CEILDIVPOW2(start, 1);
-	bands[0].end = JPC_CEILDIVPOW2(end, 1);
-	bands[0].locstart = start;
-	bands[0].locend = start + bands[0].end - bands[0].start;
-	bands[1].start = JPC_FLOORDIVPOW2(start, 1);
-	bands[1].end = JPC_FLOORDIVPOW2(end, 1);
-	bands[1].locstart = bands[0].locend;
-	bands[1].locend = bands[1].locstart + bands[1].end - bands[1].start;
-	assert(bands[1].locend == end);
-	*numbandsptr = 2;
+
 }
 
-/******************************************************************************\
-*
-\******************************************************************************/
-
-int jpc_qmfb1d_getnumchans(jpc_qmfb1d_t *qmfb)
+void jpc_ns_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols,
+  int stride, int parity)
 {
-	return (*qmfb->ops->getnumchans)(qmfb);
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+				  lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+				  lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+				  lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+				  lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr2 = lptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(LGAIN));
+				++lptr2;
+			}
+			lptr += stride;
+		}
+		hptr = &a[llen * stride];
+		n = numrows - llen;
+		while (n-- > 0) {
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(HGAIN));
+				++hptr2;
+			}
+			hptr += stride;
+		}
+#endif
+
+	} else {
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] <<= 1;
+				++lptr2;
+			}
+		}
+#endif
+
+	}
+
 }
 
-int jpc_qmfb1d_getanalfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters)
+void jpc_ns_fwdlift_col(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	return (*qmfb->ops->getanalfilters)(qmfb, len, filters);
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+			  lptr2[0]));
+			++hptr2;
+			++lptr2;
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+			  jpc_fix_add(lptr2[0], lptr2[stride])));
+			++lptr2;
+			++hptr2;
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+			  lptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr2[0]));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
+			  jpc_fix_add(hptr2[0], hptr2[stride])));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+			  lptr2[0]));
+			++hptr2;
+			++lptr2;
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+			  jpc_fix_add(lptr2[0], lptr2[stride])));
+			++lptr2;
+			++hptr2;
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+			  lptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+			  hptr2[0]));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+			  jpc_fix_add(hptr2[0], hptr2[stride])));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+			  hptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr2 = lptr;
+			lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(LGAIN));
+			++lptr2;
+			lptr += stride;
+		}
+		hptr = &a[llen * stride];
+		n = numrows - llen;
+		while (n-- > 0) {
+			hptr2 = hptr;
+			hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(HGAIN));
+			++hptr2;
+			hptr += stride;
+		}
+#endif
+
+	} else {
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr2 = &a[0];
+			lptr2[0] <<= 1;
+			++lptr2;
+		}
+#endif
+
+	}
+
+}
+#endif /* ENABLE_JASPER_ENCODE */
+
+void jpc_ns_invlift_row(jpc_fix_t *a, int numcols, int parity)
+{
+
+	register jpc_fix_t *lptr;
+	register jpc_fix_t *hptr;
+	register int n;
+	int llen;
+
+	llen = (numcols + 1 - parity) >> 1;
+
+	if (numcols > 1) {
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr[0] = jpc_fix_mul(lptr[0], jpc_dbltofix(1.0 / LGAIN));
+			++lptr;
+		}
+		hptr = &a[llen];
+		n = numcols - llen;
+		while (n-- > 0) {
+			hptr[0] = jpc_fix_mul(hptr[0], jpc_dbltofix(1.0 / HGAIN));
+			++hptr;
+		}
+#endif
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (!parity) {
+			jpc_fix_minuseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+			  hptr[0]));
+			++lptr;
+		}
+		n = llen - (!parity) - (parity != (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_minuseq(lptr[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+			  jpc_fix_add(hptr[0], hptr[1])));
+			++lptr;
+			++hptr;
+		}
+		if (parity != (numcols & 1)) {
+			jpc_fix_minuseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
+			  hptr[0]));
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (parity) {
+			jpc_fix_minuseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+			  lptr[0]));
+			++hptr;
+		}
+		n = numcols - llen - parity - (parity == (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_minuseq(hptr[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+			  jpc_fix_add(lptr[0], lptr[1])));
+			++hptr;
+			++lptr;
+		}
+		if (parity == (numcols & 1)) {
+			jpc_fix_minuseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
+			  lptr[0]));
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (!parity) {
+			jpc_fix_minuseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr[0]));
+			++lptr;
+		}
+		n = llen - (!parity) - (parity != (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_minuseq(lptr[0], jpc_fix_mul(jpc_dbltofix(BETA),
+			  jpc_fix_add(hptr[0], hptr[1])));
+			++lptr;
+			++hptr;
+		}
+		if (parity != (numcols & 1)) {
+			jpc_fix_minuseq(lptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr[0]));
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen];
+		if (parity) {
+			jpc_fix_minuseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+			  lptr[0]));
+			++hptr;
+		}
+		n = numcols - llen - parity - (parity == (numcols & 1));
+		while (n-- > 0) {
+			jpc_fix_minuseq(hptr[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+			  jpc_fix_add(lptr[0], lptr[1])));
+			++hptr;
+			++lptr;
+		}
+		if (parity == (numcols & 1)) {
+			jpc_fix_minuseq(hptr[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
+			  lptr[0]));
+		}
+
+	} else {
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr = &a[0];
+			lptr[0] >>= 1;
+		}
+#endif
+
+	}
+
 }
 
-int jpc_qmfb1d_getsynfilters(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters)
+void jpc_ns_invlift_colgrp(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	return (*qmfb->ops->getsynfilters)(qmfb, len, filters);
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr2 = lptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(1.0 / LGAIN));
+				++lptr2;
+			}
+			lptr += stride;
+		}
+		hptr = &a[llen * stride];
+		n = numrows - llen;
+		while (n-- > 0) {
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(1.0 / HGAIN));
+				++hptr2;
+			}
+			hptr += stride;
+		}
+#endif
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  DELTA), hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  DELTA), hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  GAMMA), lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  GAMMA), lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  ALPHA), lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  ALPHA), lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+	} else {
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < JPC_QMFB_COLGRPSIZE; ++i) {
+				lptr2[0] >>= 1;
+				++lptr2;
+			}
+		}
+#endif
+
+	}
+
 }
 
-void jpc_qmfb1d_analyze(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x)
+void jpc_ns_invlift_colres(jpc_fix_t *a, int numrows, int numcols,
+  int stride, int parity)
 {
-	(*qmfb->ops->analyze)(qmfb, flags, x);
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	register int i;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr2 = lptr;
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(1.0 / LGAIN));
+				++lptr2;
+			}
+			lptr += stride;
+		}
+		hptr = &a[llen * stride];
+		n = numrows - llen;
+		while (n-- > 0) {
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(1.0 / HGAIN));
+				++hptr2;
+			}
+			hptr += stride;
+		}
+#endif
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  DELTA), hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  DELTA), hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  GAMMA), lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  GAMMA), lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
+				  jpc_fix_add(hptr2[0], hptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+				  hptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  ALPHA), lptr2[0]));
+				++hptr2;
+				++lptr2;
+			}
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+				  jpc_fix_add(lptr2[0], lptr2[stride])));
+				++lptr2;
+				++hptr2;
+			}
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			for (i = 0; i < numcols; ++i) {
+				jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+				  ALPHA), lptr2[0]));
+				++lptr2;
+				++hptr2;
+			}
+		}
+
+	} else {
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr2 = &a[0];
+			for (i = 0; i < numcols; ++i) {
+				lptr2[0] >>= 1;
+				++lptr2;
+			}
+		}
+#endif
+
+	}
+
 }
 
-void jpc_qmfb1d_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x)
+#ifdef ENABLE_JASPER_ENCODE
+void jpc_ns_invlift_col(jpc_fix_t *a, int numrows, int stride,
+  int parity)
 {
-	(*qmfb->ops->synthesize)(qmfb, flags, x);
+
+	jpc_fix_t *lptr;
+	jpc_fix_t *hptr;
+	register jpc_fix_t *lptr2;
+	register jpc_fix_t *hptr2;
+	register int n;
+	int llen;
+
+	llen = (numrows + 1 - parity) >> 1;
+
+	if (numrows > 1) {
+
+		/* Apply the scaling step. */
+#if defined(WT_DOSCALE)
+		lptr = &a[0];
+		n = llen;
+		while (n-- > 0) {
+			lptr2 = lptr;
+			lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(1.0 / LGAIN));
+			++lptr2;
+			lptr += stride;
+		}
+		hptr = &a[llen * stride];
+		n = numrows - llen;
+		while (n-- > 0) {
+			hptr2 = hptr;
+			hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(1.0 / HGAIN));
+			++hptr2;
+			hptr += stride;
+		}
+#endif
+
+		/* Apply the first lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+			  DELTA), hptr2[0]));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
+			  jpc_fix_add(hptr2[0], hptr2[stride])));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+			  DELTA), hptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the second lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+			  GAMMA), lptr2[0]));
+			++hptr2;
+			++lptr2;
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
+			  jpc_fix_add(lptr2[0], lptr2[stride])));
+			++lptr2;
+			++hptr2;
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+			  GAMMA), lptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the third lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (!parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr2[0]));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+		}
+		n = llen - (!parity) - (parity != (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
+			  jpc_fix_add(hptr2[0], hptr2[stride])));
+			++lptr2;
+			++hptr2;
+			lptr += stride;
+			hptr += stride;
+		}
+		if (parity != (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
+			  hptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+		/* Apply the fourth lifting step. */
+		lptr = &a[0];
+		hptr = &a[llen * stride];
+		if (parity) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+			  ALPHA), lptr2[0]));
+			++hptr2;
+			++lptr2;
+			hptr += stride;
+		}
+		n = numrows - llen - parity - (parity == (numrows & 1));
+		while (n-- > 0) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
+			  jpc_fix_add(lptr2[0], lptr2[stride])));
+			++lptr2;
+			++hptr2;
+			hptr += stride;
+			lptr += stride;
+		}
+		if (parity == (numrows & 1)) {
+			lptr2 = lptr;
+			hptr2 = hptr;
+			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
+			  ALPHA), lptr2[0]));
+			++lptr2;
+			++hptr2;
+		}
+
+	} else {
+
+#if defined(WT_LENONE)
+		if (parity) {
+			lptr2 = &a[0];
+			lptr2[0] >>= 1;
+			++lptr2;
+		}
+#endif
+
+	}
+
 }
+
+int jpc_ns_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+  int stride)
+{
+
+	int numrows = height;
+	int numcols = width;
+	int rowparity = ystart & 1;
+	int colparity = xstart & 1;
+	int i;
+	jpc_fix_t *startptr;
+	int maxcols;
+
+	maxcols = (numcols / JPC_QMFB_COLGRPSIZE) * JPC_QMFB_COLGRPSIZE;
+	startptr = &a[0];
+	for (i = 0; i < maxcols; i += JPC_QMFB_COLGRPSIZE) {
+		jpc_qmfb_split_colgrp(startptr, numrows, stride, rowparity);
+		jpc_ns_fwdlift_colgrp(startptr, numrows, stride, rowparity);
+		startptr += JPC_QMFB_COLGRPSIZE;
+	}
+	if (maxcols < numcols) {
+		jpc_qmfb_split_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+		jpc_ns_fwdlift_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+	}
+
+	startptr = &a[0];
+	for (i = 0; i < numrows; ++i) {
+		jpc_qmfb_split_row(startptr, numcols, colparity);
+		jpc_ns_fwdlift_row(startptr, numcols, colparity);
+		startptr += stride;
+	}
+
+	return 0;
+
+}
+#endif /* ENABLE_JASPER_ENCODE */
+
+int jpc_ns_synthesize(jpc_fix_t *a, int xstart, int ystart, int width,
+  int height, int stride)
+{
+
+	int numrows = height;
+	int numcols = width;
+	int rowparity = ystart & 1;
+	int colparity = xstart & 1;
+	int maxcols;
+	jpc_fix_t *startptr;
+	int i;
+
+	startptr = &a[0];
+	for (i = 0; i < numrows; ++i) {
+		jpc_ns_invlift_row(startptr, numcols, colparity);
+		jpc_qmfb_join_row(startptr, numcols, colparity);
+		startptr += stride;
+	}
+
+	maxcols = (numcols / JPC_QMFB_COLGRPSIZE) * JPC_QMFB_COLGRPSIZE;
+	startptr = &a[0];
+	for (i = 0; i < maxcols; i += JPC_QMFB_COLGRPSIZE) {
+		jpc_ns_invlift_colgrp(startptr, numrows, stride, rowparity);
+		jpc_qmfb_join_colgrp(startptr, numrows, stride, rowparity);
+		startptr += JPC_QMFB_COLGRPSIZE;
+	}
+	if (maxcols < numcols) {
+		jpc_ns_invlift_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+		jpc_qmfb_join_colres(startptr, numrows, numcols - maxcols, stride,
+		  rowparity);
+	}
+
+	return 0;
+
+}
+

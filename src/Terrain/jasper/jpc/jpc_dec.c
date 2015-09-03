@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -268,16 +268,19 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 
 	if (jas_image_numcmpts(dec->image) >= 3) {
 		jas_image_setclrspc(dec->image, JAS_CLRSPC_SRGB);
-		jas_image_setcmpttype(dec->image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
-		jas_image_setcmpttype(dec->image, 1, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
-		jas_image_setcmpttype(dec->image, 2, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
-	} 
+		jas_image_setcmpttype(dec->image, 0,
+		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_R));
+		jas_image_setcmpttype(dec->image, 1,
+		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_G));
+		jas_image_setcmpttype(dec->image, 2,
+		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_RGB_B));
+	} else {
   /* dima: already defined
-  else {
 		jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
-		jas_image_setcmpttype(dec->image, 0, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
-	}
+		jas_image_setcmpttype(dec->image, 0,
+		  JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
   */
+	}
 
 	/* Save the return value. */
 	image = dec->image;
@@ -341,10 +344,8 @@ static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts)
 			opts->maxpkts = atoi(jas_tvparser_getval(tvp));
 			break;
 		default:
-#if 0 // JMW
-			fprintf(stderr, "warning: ignoring invalid option %s\n",
+			jas_eprintf("warning: ignoring invalid option %s\n",
 			  jas_tvparser_gettag(tvp));
-#endif
 			break;
 		}
 	}
@@ -391,16 +392,14 @@ int jpc_dec_decode(jpc_dec_t *dec)
 		/* Get the next marker segment in the code stream. */
 		if (!(ms = jpc_getms(dec->in, cstate))) {
 
-      // dima: adobe photoshop cs2 files seem not to end with the EOC marker
-      // although they carry additional pair of SOT/SOD markers
-      // we can get this by checking for tile number and leave
-      if (dec->tiles && dec->tiles->partno >= dec->tiles->numparts && dec->state == JPC_TPHSOT) {
-        return 0;
-      }
+			// dima: adobe photoshop cs2 files seem not to end with the EOC marker
+			// although they carry additional pair of SOT/SOD markers
+			// we can get this by checking for tile number and leave
+			if (dec->tiles && dec->tiles->partno >= dec->tiles->numparts && dec->state == JPC_TPHSOT) {
+				return 0;
+			}
 
-#if 0 // JMW
-			fprintf(stderr, "cannot get marker segment\n");
-#endif
+			jas_eprintf("cannot get marker segment\n");
 			return -1;
 		}
 
@@ -410,9 +409,7 @@ int jpc_dec_decode(jpc_dec_t *dec)
 		/* Ensure that this type of marker segment is permitted
 		  at this point in the code stream. */
 		if (!(dec->state & mstabent->validstates)) {
-#if 0 // JMW
-			fprintf(stderr, "unexpected marker segment type\n");
-#endif
+			jas_eprintf("unexpected marker segment type\n");
 			jpc_ms_destroy(ms);
 			return -1;
 		}
@@ -433,6 +430,7 @@ int jpc_dec_decode(jpc_dec_t *dec)
 		} else if (ret > 0) {
 			break;
 		}
+
 	}
 
 	return 0;
@@ -528,15 +526,14 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	}
 
 	if (sot->len > 0) {
-		dec->curtileendoff = jas_stream_getrwcount(dec->in) - ms->len - 4 + sot->len;
+		dec->curtileendoff = jas_stream_getrwcount(dec->in) - ms->len -
+		  4 + sot->len;
 	} else {
 		dec->curtileendoff = 0;
 	}
 
 	if (JAS_CAST(int, sot->tileno) > dec->numtiles) {
-#if 0 // JMW
-		fprintf(stderr, "invalid tile number in SOT marker segment\n");
-#endif
+		jas_eprintf("invalid tile number in SOT marker segment\n");
 		return -1;
 	}
 	/* Set the current tile. */
@@ -555,15 +552,14 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	if (sot->partno != tile->partno) {
 		return -1;
 	}
-	
-  if (tile->numparts > 0 && sot->partno >= tile->numparts) {
-    // dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
-    // here we simply ignore these boxes
-    if (tile->state == JPC_TILE_DONE) {
-      dec->state = JPC_TPH;
-      return 0;
-    }
-  	return -1;
+	if (tile->numparts > 0 && sot->partno >= tile->numparts) {
+		// dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
+		// here we simply ignore these boxes
+		if (tile->state == JPC_TILE_DONE) {
+			dec->state = JPC_TPH;
+			return 0;
+		}
+		return -1;
 	}
 
 	if (!tile->numparts && sot->numparts > 0) {
@@ -626,15 +622,15 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 	}
 
-  // dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
-  // here we simply ignore these markers
+	// dima: photoshop cs2 saves jpeg2000 with additional group of SOT/SOD
+	// here we simply ignore these markers
 	if (tile->numparts > 0 && tile->partno >= tile->numparts) {
-  	dec->curtile = 0;
-  	// Increment the expected tile-part number.
-  	++tile->partno;
-  	// We should expect to encounter a SOT marker segment next.
-  	dec->state = JPC_TPHSOT;
-    return 0;
+		dec->curtile = 0;
+		// Increment the expected tile-part number.
+		++tile->partno;
+		// We should expect to encounter a SOT marker segment next.
+		dec->state = JPC_TPHSOT;
+		return 0;
 	}
 
 #ifdef ENABLE_JASPER_PPM
@@ -669,9 +665,7 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 			       (tile->pkthdrstream) ? tile->pkthdrstream :
 #endif /* ENABLE_JASPER_PPM */
 	  dec->in, dec->in)) {
-#if 0 // JMW
-		fprintf(stderr, "jpc_dec_decodepkts failed\n");
-#endif
+		jas_eprintf("jpc_dec_decodepkts failed\n");
 		return -1;
 	}
 
@@ -682,26 +676,18 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		curoff = jas_stream_getrwcount(dec->in);
 		if (curoff < dec->curtileendoff) {
 			n = dec->curtileendoff - curoff;
-#if 0 // JMW
-			fprintf(stderr,
-			  "warning: ignoring trailing garbage (%lu bytes)\n",
+			jas_eprintf("warning: ignoring trailing garbage (%lu bytes)\n",
 			  (unsigned long) n);
-#endif
 
 			while (n-- > 0) {
 				if (jas_stream_getc(dec->in) == EOF) {
-#if 0 // JMW
-					fprintf(stderr, "read error\n");
-#endif
+					jas_eprintf("read error\n");
 					return -1;
 				}
 			}
 		} else if (curoff > dec->curtileendoff) {
-#if 0 // JMW
-			fprintf(stderr,
-			  "warning: not enough tile data (%lu bytes)\n",
+			jas_eprintf("warning: not enough tile data (%lu bytes)\n",
 			  (unsigned long) curoff - dec->curtileendoff);
-#endif
 		}
 
 	}
@@ -1121,9 +1107,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	jpc_dec_cmpt_t *cmpt;
 
 	if (jpc_dec_decodecblks(dec, tile)) {
-#if 0 // JMW
-		fprintf(stderr, "jpc_dec_decodecblks failed\n");
-#endif
+		jas_eprintf("jpc_dec_decodecblks failed\n");
 		return -1;
 	}
 
@@ -1157,22 +1141,23 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 	  ++compno, ++tcomp) {
 		ccp = &tile->cp->ccps[compno];
-		jpc_tsfb_synthesize(tcomp->tsfb, ((ccp->qmfbid ==
-		  JPC_COX_RFT) ? JPC_TSFB_RITIMODE : 0), tcomp->data);
+		jpc_tsfb_synthesize(tcomp->tsfb, tcomp->data);
 	}
 
 
 	/* Apply an inverse intercomponent transform if necessary. */
-  // dima: if there are more components than 3, let it go!
+// dima: if there are more components than 3, let it go!
 	if (dec->numcomps >= 3)
-  switch (tile->cp->mctid) {
+	switch (tile->cp->mctid) {
 	case JPC_MCT_RCT:
 		//assert(dec->numcomps == 3);
-		jpc_irct(tile->tcomps[0].data, tile->tcomps[1].data, tile->tcomps[2].data);
+		jpc_irct(tile->tcomps[0].data, tile->tcomps[1].data,
+		  tile->tcomps[2].data);
 		break;
 	case JPC_MCT_ICT:
 		//assert(dec->numcomps == 3);
-		jpc_iict(tile->tcomps[0].data, tile->tcomps[1].data, tile->tcomps[2].data);
+		jpc_iict(tile->tcomps[0].data, tile->tcomps[1].data,
+		  tile->tcomps[2].data);
 		break;
 	}
 
@@ -1225,7 +1210,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 		  JPC_CEILDIV(dec->xstart, cmpt->hstep), tcomp->ystart -
 		  JPC_CEILDIV(dec->ystart, cmpt->vstep), jas_matrix_numcols(
 		  tcomp->data), jas_matrix_numrows(tcomp->data), tcomp->data)) {
-			fprintf(stderr, "write component failed\n");
+			jas_eprintf("write component failed\n");
 			return -4;
 		}
 #endif /* ENABLE_JASPER_IMAGE */
@@ -1391,10 +1376,7 @@ static int jpc_dec_process_coc(jpc_dec_t *dec, jpc_ms_t *ms)
 	jpc_dec_tile_t *tile;
 
 	if (JAS_CAST(int, coc->compno) > dec->numcomps) {
-#if 0 // JMW
-		fprintf(stderr,
-		  "invalid component number in COC marker segment\n");
-#endif
+		jas_eprintf("invalid component number in COC marker segment\n");
 		return -1;
 	}
 	switch (dec->state) {
@@ -1420,10 +1402,7 @@ static int jpc_dec_process_rgn(jpc_dec_t *dec, jpc_ms_t *ms)
 	jpc_dec_tile_t *tile;
 
 	if (JAS_CAST(int, rgn->compno) > dec->numcomps) {
-#if 0 // JMW
-		fprintf(stderr,
-		  "invalid component number in RGN marker segment\n");
-#endif
+		jas_eprintf("invalid component number in RGN marker segment\n");
 		return -1;
 	}
 	switch (dec->state) {
@@ -1472,10 +1451,7 @@ static int jpc_dec_process_qcc(jpc_dec_t *dec, jpc_ms_t *ms)
 	jpc_dec_tile_t *tile;
 
 	if (JAS_CAST(int, qcc->compno) > dec->numcomps) {
-#if 0 // JMW
-		fprintf(stderr,
-		  "invalid component number in QCC marker segment\n");
-#endif
+		jas_eprintf("invalid component number in QCC marker segment\n");
 		return -1;
 	}
 	switch (dec->state) {
@@ -1612,10 +1588,8 @@ static int jpc_dec_process_unk(jpc_dec_t *dec, jpc_ms_t *ms)
 	dec = 0;
 	(void)ms;
 
-#if 0 // JMW
-	fprintf(stderr, "warning: ignoring unknown marker segment\n");
+	jas_eprintf("warning: ignoring unknown marker segment\n");
 	jpc_ms_dump(ms, stderr);
-#endif
 	return 0;
 }
 
@@ -1977,10 +1951,7 @@ static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, int numbps)
 				  Here we ensure that any such bits are masked off. */
 				if (mag & (~mask)) {
 					if (!warn) {
-#if 0 // JMW
-						fprintf(stderr,
-						  "warning: possibly corrupt code stream\n");
-#endif
+						jas_eprintf("warning: possibly corrupt code stream\n");
 						warn = true;
 					}
 					mag &= mask;

@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -345,11 +345,11 @@ extern "C" {
 
 /* Handle overflow. */
 #define	JAS_FIX_OFLOW() \
-	fprintf(stderr, "overflow error: file %s, line %d\n", __FILE__, __LINE__)
+	jas_eprintf("overflow error: file %s, line %d\n", __FILE__, __LINE__)
 
 /* Handle underflow. */
 #define	JAS_FIX_UFLOW() \
-	fprintf(stderr, "underflow error: file %s, line %d\n", __FILE__, __LINE__)
+	jas_eprintf("underflow error: file %s, line %d\n", __FILE__, __LINE__)
 
 #ifdef __cplusplus
 }

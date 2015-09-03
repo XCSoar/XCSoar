@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 1999-2000 Image Power, Inc. and the University of
  *   British Columbia.
- * Copyright (c) 2001-2002 Michael David Adams.
+ * Copyright (c) 2001-2004 Michael David Adams.
  * All rights reserved.
  */
 
@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -75,19 +75,11 @@
 \******************************************************************************/
 
 #include "jasper/jas_seq.h"
+#include "jpc_fix.h"
 
 /******************************************************************************\
 * Constants.
 \******************************************************************************/
-
-/* The maximum number of channels for a QMF bank. */
-#define	JPC_QMFB1D_MAXCHANS	2
-
-/* Select reversible integer-to-integer mode. */
-#define	JPC_QMFB1D_RITIMODE	1
-
-/* Vertical filtering. */
-#define	JPC_QMFB1D_VERT	0x10000
 
 /* QMFB IDs. */
 #define	JPC_QMFB1D_FT	1	/* 5/3 */
@@ -97,90 +89,28 @@
 * Types.
 \******************************************************************************/
 
-/* Forward declaration. */
-struct jpc_qmfb1dops_s;
-
-/* Band information. */
-
-typedef struct {
-
-	/* The starting index for the band in the downsampled domain. */
-	int start;
-
-	/* The ending index for the band in the downsampled domain. */
-	int end;
-
-	/* The location of the start of the band. */
-	int locstart;
-
-	/* The location of the end of the band. */
-	int locend;
-
-} jpc_qmfb1dband_t;
-
-/* QMF bank */
-
-typedef struct {
-
-	/* The operations for this QMFB. */
-	const struct jpc_qmfb1dops_s *ops;
-
-} jpc_qmfb1d_t;
-
-/* QMFB operations. */
-
-typedef struct jpc_qmfb1dops_s {
-
-	/* The number of channels in the QMFB. */
-	int (*getnumchans)(jpc_qmfb1d_t *qmfb);
-
-	/* Get the analysis filters for this QMFB. */
-	int (*getanalfilters)(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters);
-
-	/* Get the synthesis filters for this QMFB. */
-	int (*getsynfilters)(jpc_qmfb1d_t *qmfb, int len, jas_seq2d_t **filters);
-
-	/* Do analysis. */
-	void (*analyze)(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
-
-	/* Do synthesis. */
-	void (*synthesize)(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
-
-} jpc_qmfb1dops_t;
-
 /******************************************************************************\
 * Functions.
 \******************************************************************************/
 
-/* Create a QMFB from a QMFB ID. */
-jpc_qmfb1d_t *jpc_qmfb1d_make(int qmfbid);
+#if !defined(JPC_QMFB_COLGRPSIZE)
+/* The number of columns to group together during the vertical processing
+stage of the wavelet transform. */
+/* The default value for this parameter is probably not optimal for
+any particular platform.  Hopefully, it is not too unreasonable, however. */
+#define JPC_QMFB_COLGRPSIZE	16
+#endif
 
-/* Create a copy of a QMFB. */
-jpc_qmfb1d_t *jpc_qmfb1d_copy(jpc_qmfb1d_t *qmfb);
+typedef struct {
+#ifdef ENABLE_JASPER_ENCODE
+	int (*analyze)(int *, int, int, int, int, int);
+#endif /* ENABLE_JASPER_ENCODE */
+	int (*synthesize)(jpc_fix_t *, int, int, int, int, int);
+	double *lpenergywts;
+	double *hpenergywts;
+} jpc_qmfb2d_t;
 
-/* Destroy a QMFB. */
-void jpc_qmfb1d_destroy(jpc_qmfb1d_t *qmfb);
-
-/* Get the number of channels for a QMFB. */
-int jpc_qmfb1d_getnumchans(jpc_qmfb1d_t *qmfb);
-
-/* Get the analysis filters for a QMFB. */
-int jpc_qmfb1d_getanalfilters(jpc_qmfb1d_t *qmfb, int len,
-  jas_seq2d_t **filters);
-
-/* Get the synthesis filters for a QMFB. */
-int jpc_qmfb1d_getsynfilters(jpc_qmfb1d_t *qmfb, int len,
-  jas_seq2d_t **filters);
-
-/* Get the bands for a QMFB. */
-void jpc_qmfb1d_getbands(jpc_qmfb1d_t *qmfb, int flags, uint_fast32_t xstart,
-  uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend, int maxbands,
-  int *numbandsptr, jpc_qmfb1dband_t *bands);
-
-/* Perform analysis. */
-void jpc_qmfb1d_analyze(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
-
-/* Perform synthesis. */
-void jpc_qmfb1d_synthesize(jpc_qmfb1d_t *qmfb, int flags, jas_seq2d_t *x);
+extern const jpc_qmfb2d_t jpc_ft_qmfb2d;
+extern const jpc_qmfb2d_t jpc_ns_qmfb2d;
 
 #endif

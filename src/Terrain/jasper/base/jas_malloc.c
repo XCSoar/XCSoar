@@ -9,9 +9,9 @@
  * 
  * JasPer License Version 2.0
  * 
+ * Copyright (c) 2001-2006 Michael David Adams
  * Copyright (c) 1999-2000 Image Power, Inc.
  * Copyright (c) 1999-2000 The University of British Columbia
- * Copyright (c) 2001-2003 Michael David Adams
  * 
  * All rights reserved.
  * 
@@ -72,6 +72,7 @@
 \******************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /* We need the prototype for memset. */
 #include <string.h>
@@ -88,8 +89,20 @@
 
 #if !defined(DEBUG_MEMALLOC)
 
+#define MEMALLOC_ALIGNMENT	32
+#define MEMALLOC_ALIGN2
+#undef MEMALLOC_ALIGN2
+
 void *jas_malloc(size_t size)
 {
+#if defined(MEMALLOC_ALIGN2)
+	void *ptr;
+abort();
+	if (posix_memalign(&ptr, MEMALLOC_ALIGNMENT, size)) {
+		return 0;
+	}
+	return ptr;
+#endif
 	return malloc(size);
 }
 
