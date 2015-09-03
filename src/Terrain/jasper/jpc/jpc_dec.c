@@ -797,7 +797,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 			return -1;
 		}
 		if (!(tcomp->tsfb = jpc_cod_gettsfb(ccp->qmfbid,
-		  ccp->numrlvls - 1))) {
+		  tcomp->numrlvls - 1))) {
 			return -1;
 		}
 {
