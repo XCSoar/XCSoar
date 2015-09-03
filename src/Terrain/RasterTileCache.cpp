@@ -609,6 +609,9 @@ RasterTileCache::LoadCache(FILE *file)
           header.tile_width, header.tile_height,
           header.tile_columns, header.tile_rows);
   bounds = header.bounds;
+  if (!bounds.IsValid())
+    return false;
+
   bounds_initialised = true;
 
   /* load segments */
