@@ -303,7 +303,7 @@ RasterTileCache::SkipMarkerSegment(long file_offset) const
  * Does this segment belong to the preceding tile?  If yes, then it
  * inherits the tile number.
  */
-static bool
+static constexpr bool
 IsTileSegment(unsigned id)
 {
   return id == 0xff93 /* SOD */ ||
