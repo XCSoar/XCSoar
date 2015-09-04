@@ -79,7 +79,9 @@
 #include "jpc_tsfb.h"
 #include "jpc_cod.h"
 #include "jpc_cs.h"
+#ifdef ENABLE_JASPER_ENCODE
 #include "jpc_util.h"
+#endif /* ENABLE_JASPER_ENCODE */
 #include "jpc_math.h"
 
 static
