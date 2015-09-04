@@ -1150,12 +1150,12 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	if (dec->numcomps >= 3)
 	switch (tile->cp->mctid) {
 	case JPC_MCT_RCT:
-		//assert(dec->numcomps == 3);
+		assert(dec->numcomps == 3 || dec->numcomps == 4);
 		jpc_irct(tile->tcomps[0].data, tile->tcomps[1].data,
 		  tile->tcomps[2].data);
 		break;
 	case JPC_MCT_ICT:
-		//assert(dec->numcomps == 3);
+		assert(dec->numcomps == 3 || dec->numcomps == 4);
 		jpc_iict(tile->tcomps[0].data, tile->tcomps[1].data,
 		  tile->tcomps[2].data);
 		break;
