@@ -84,7 +84,7 @@
 #include "jpc_t1cod.h"
 #include "jpc_tsfb.h"
 
-double jpc_pow2i(int n);
+static double jpc_pow2i(int n);
 
 /******************************************************************************\
 * Global data.
