@@ -1145,6 +1145,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	}
 
 
+#ifdef ENABLE_JASPER_MULTICOMPONENT
 	/* Apply an inverse intercomponent transform if necessary. */
 // dima: if there are more components than 3, let it go!
 	if (dec->numcomps >= 3)
@@ -1160,6 +1161,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 		  tile->tcomps[2].data);
 		break;
 	}
+#endif /* ENABLE_JASPER_MULTICOMPONENT */
 
 	/* Perform rounding and convert to integer values. */
 	if (tile->realmode) {

@@ -6,7 +6,7 @@ JASPER_SOURCES = \
 	$(JASSRC)/jp2/jp2_cod.c \
 	$(JASSRC)/jpc/jpc_bs.c \
 	$(JASSRC)/jpc/jpc_cs.c 		$(JASSRC)/jpc/jpc_dec.c \
-	$(JASSRC)/jpc/jpc_math.c 	$(JASSRC)/jpc/jpc_mct.c \
+	$(JASSRC)/jpc/jpc_math.c \
 	$(JASSRC)/jpc/jpc_mqdec.c       $(JASSRC)/jpc/jpc_mqcod.c \
 	$(JASSRC)/jpc/jpc_qmfb.c 	$(JASSRC)/jpc/jpc_rtc.cpp \
 	$(JASSRC)/jpc/jpc_t1dec.c \
