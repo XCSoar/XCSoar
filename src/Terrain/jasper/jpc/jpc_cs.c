@@ -883,7 +883,10 @@ static int jpc_qcx_getcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 		compparms->numstepsizes = (len - n) / 2;
 		break;
 	}
-	if (compparms->numstepsizes > 0) {
+	if (compparms->numstepsizes > 3 * JPC_MAXRLVLS + 1) {
+		jpc_qcx_destroycompparms(compparms);
+                return -1;
+        } else if (compparms->numstepsizes > 0) {
 		compparms->stepsizes = jas_malloc(compparms->numstepsizes *
 		  sizeof(uint_fast16_t));
 		assert(compparms->stepsizes);
