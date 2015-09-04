@@ -698,8 +698,10 @@ typedef struct jpc_msops_s {
 	/* Get the marker segment parameters from a stream. */
 	int (*getparms)(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 
+#ifdef ENABLE_JASPER_ENCODE
 	/* Put the marker segment parameters to a stream. */
 	int (*putparms)(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
+#endif /* ENABLE_JASPER_ENCODE */
 
 } jpc_msops_t;
 
