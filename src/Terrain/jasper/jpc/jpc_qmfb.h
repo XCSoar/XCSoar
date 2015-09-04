@@ -106,8 +106,8 @@ typedef struct {
 	int (*analyze)(int *, int, int, int, int, int);
 #endif /* ENABLE_JASPER_ENCODE */
 	int (*synthesize)(jpc_fix_t *, int, int, int, int, int);
-	double *lpenergywts;
-	double *hpenergywts;
+	const double *lpenergywts;
+	const double *hpenergywts;
 } jpc_qmfb2d_t;
 
 extern const jpc_qmfb2d_t jpc_ft_qmfb2d;
