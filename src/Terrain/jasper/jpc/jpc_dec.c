@@ -488,15 +488,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 			compinfo->hstep = cmpt->hstep;
 			compinfo->vstep = cmpt->vstep;
 		}
-#endif /* ENABLE_JASPER_IMAGE */
 
-		if (dec->cmpts) {
-			jas_rtc_SetSize(dec->cmpts->width, dec->cmpts->height,
-					dec->tilewidth, dec->tileheight,
-					dec->numhtiles, dec->numvtiles);
-		}
-
-#ifdef ENABLE_JASPER_IMAGE
 		if (!(dec->image = jas_image_create(dec->numcomps, compinfos,
 		  JAS_CLRSPC_UNKNOWN))) {
 			return -1;
@@ -1340,6 +1332,10 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 	/* We should expect to encounter other main header marker segments
 	  or an SOT marker segment next. */
 	dec->state = JPC_MH;
+
+	jas_rtc_SetSize(dec->xend, dec->yend,
+			dec->tilewidth, dec->tileheight,
+			dec->numhtiles, dec->numvtiles);
 
 	return 0;
 }
