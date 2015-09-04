@@ -12,8 +12,7 @@ JASPER_SOURCES = \
 	$(JASSRC)/jpc/jpc_t1dec.c \
 	$(JASSRC)/jpc/jpc_t1cod.c \
 	$(JASSRC)/jpc/jpc_t2dec.c 	$(JASSRC)/jpc/jpc_t2cod.c \
-	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
-	$(JASSRC)/jpc/jpc_util.c
+	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c
 
 JASPER_CFLAGS_INTERNAL = -Wno-type-limits
 
