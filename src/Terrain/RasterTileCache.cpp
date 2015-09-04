@@ -390,7 +390,6 @@ LoadJPG2000(jas_stream_t *in, bool scan_overview)
 
   jpc_dec_importopts_t opts;
   opts.debug = 0;
-  opts.xcsoar = scan_overview ? 2 : 1;
   opts.maxlyrs = JPC_MAXLYRS;
   opts.maxpkts = -1;
 
@@ -399,6 +398,8 @@ LoadJPG2000(jas_stream_t *in, bool scan_overview)
   const auto dec = jpc_dec_create(&opts, in);
   if (dec == nullptr)
     return false;
+
+  dec->xcsoar = scan_overview ? 2 : 1;
 
   bool success = jpc_dec_decode(dec) == 0;
   jpc_dec_destroy(dec);
