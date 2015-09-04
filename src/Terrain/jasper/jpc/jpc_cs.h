@@ -684,7 +684,7 @@ typedef struct {
 	jpc_msparms_t parms;
 
 	/* The marker segment operations. */
-	struct jpc_msops_s *ops;
+	const struct jpc_msops_s *ops;
 
 } jpc_ms_t;
 
