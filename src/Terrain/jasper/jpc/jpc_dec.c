@@ -303,15 +303,13 @@ error:
 typedef enum {
 	OPT_MAXLYRS,
 	OPT_MAXPKTS,
-	OPT_DEBUG,
-	OPT_XCSOAR
+	OPT_DEBUG
 } optid_t;
 
 jas_taginfo_t decopts[] = {
 	{OPT_MAXLYRS, "maxlyrs"},
 	{OPT_MAXPKTS, "maxpkts"},
 	{OPT_DEBUG, "debug"},
-	{OPT_XCSOAR, "xcsoar"},
 	{-1, 0}
 };
 
@@ -320,7 +318,6 @@ static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts)
 	jas_tvparser_t *tvp;
 
 	opts->debug = 0;
-	opts->xcsoar = 0;
 	opts->maxlyrs = JPC_MAXLYRS;
 	opts->maxpkts = -1;
 
@@ -336,9 +333,6 @@ static int jpc_dec_parseopts(const char *optstr, jpc_dec_importopts_t *opts)
 			break;
 		case OPT_DEBUG:
 			opts->debug = atoi(jas_tvparser_getval(tvp));
-			break;
-		case OPT_XCSOAR:
-			opts->xcsoar = atoi(jas_tvparser_getval(tvp));
 			break;
 		case OPT_MAXPKTS:
 			opts->maxpkts = atoi(jas_tvparser_getval(tvp));
@@ -1994,7 +1988,6 @@ jpc_dec_t *jpc_dec_create(jpc_dec_importopts_t *impopts, jas_stream_t *in)
 	dec->cp = 0;
 	dec->maxlyrs = impopts->maxlyrs;
 	dec->maxpkts = impopts->maxpkts;
-	dec->xcsoar = impopts->xcsoar;
 dec->numpkts = 0;
 #ifdef ENABLE_JASPER_PPM
 	dec->ppmseqno = 0;

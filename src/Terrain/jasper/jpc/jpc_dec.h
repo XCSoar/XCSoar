@@ -689,7 +689,6 @@ typedef struct {
 	/* The maximum number of packets to decode. */
 	int maxpkts;
 
-	int xcsoar; // xcsoar progressive import mode
 } jpc_dec_importopts_t;
 
 /******************************************************************************\
