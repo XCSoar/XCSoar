@@ -528,7 +528,6 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	// JMW set tile parms here and get index into the raster array
 	if (dec->xcsoar) {
-		tile->cache_index = sot->tileno;
 		jas_rtc_SetTile(sot->tileno, tile->xstart,
 				tile->ystart, tile->xend,
 				tile->yend);
@@ -1307,6 +1306,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 #endif /* ENABLE_JASPER_PPM */
 		tile->cp = 0;
 		tile->pi = NULL;
+		tile->cache_index = tileno;
 
 		if (!(tile->tcomps = jas_alloc2(dec->numcomps,
 		  sizeof(jpc_dec_tcomp_t)))) {
