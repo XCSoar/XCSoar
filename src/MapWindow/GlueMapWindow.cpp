@@ -30,6 +30,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Event/Idle.hpp"
 #include "Topography/Thread.hpp"
+#include "Terrain/Thread.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
@@ -69,6 +70,25 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
                            [this](){
                              SendUser(unsigned(Command::INVALIDATE));
                            });
+}
+
+void
+GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
+{
+  if (terrain_thread != nullptr) {
+    terrain_thread->LockStop();
+    delete terrain_thread;
+    terrain_thread = nullptr;
+  }
+
+  MapWindow::SetTerrain(_terrain);
+
+  if (_terrain != nullptr)
+    terrain_thread =
+      new TerrainThread(*_terrain,
+                        [this](){
+                          SendUser(unsigned(Command::INVALIDATE));
+                        });
 }
 
 void
@@ -232,7 +252,7 @@ GlueMapWindow::Idle()
   bool still_dirty;
 
   do {
-    still_dirty = UpdateWeather() || UpdateTerrain();
+    still_dirty = UpdateWeather();
   } while (!clock.Check(700) && /* stop after 700ms */
 #ifndef ENABLE_OPENGL
            !draw_thread->IsTriggered() &&

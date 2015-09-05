@@ -118,8 +118,6 @@ protected:
   CachedTopographyRenderer *topography_renderer = nullptr;
 
   RasterTerrain *terrain = nullptr;
-  GeoPoint terrain_center;
-  fixed terrain_radius = fixed(0);
 
   RasterWeatherCache *weather = nullptr;
 

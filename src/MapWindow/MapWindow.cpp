@@ -123,21 +123,11 @@ MapWindow::UpdateTerrain()
 
   GeoPoint location = visible_projection.GetGeoScreenCenter();
   fixed radius = visible_projection.GetScreenWidthMeters() / 2;
-  if (terrain_radius >= radius && terrain_center.IsValid() &&
-      terrain_center.DistanceS(location) < fixed(1000))
-    return false;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   RasterTerrain::ExclusiveLease lease(*terrain);
   lease->SetViewCenter(location, radius);
-  if (lease->IsDirty())
-    terrain_radius = fixed(0);
-  else {
-    terrain_radius = radius;
-    terrain_center = location;
-  }
-
   return lease->IsDirty();
 }
 
@@ -199,7 +189,6 @@ void
 MapWindow::SetTerrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  terrain_center = GeoPoint::Invalid();
   background.SetTerrain(_terrain);
 }
 

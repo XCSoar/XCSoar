@@ -39,6 +39,7 @@ Copyright_License {
 struct Look;
 struct GestureLook;
 class TopographyThread;
+class TerrainThread;
 
 class OffsetHistory
 {
@@ -62,6 +63,8 @@ class GlueMapWindow : public MapWindow {
   };
 
   TopographyThread *topography_thread = nullptr;
+
+  TerrainThread *terrain_thread = nullptr;
 
 #ifdef ENABLE_OPENGL
   /**
@@ -157,6 +160,7 @@ public:
   virtual ~GlueMapWindow();
 
   void SetTopography(TopographyStore *_topography);
+  void SetTerrain(RasterTerrain *_terrain);
 
   void SetMapSettings(const MapSettings &new_value);
   void SetComputerSettings(const ComputerSettings &new_value);

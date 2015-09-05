@@ -24,6 +24,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Topography/Thread.hpp"
+#include "Terrain/Thread.hpp"
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
@@ -116,6 +117,13 @@ GlueMapWindow::UpdateScreenBounds()
       visible_projection.IsValid() &&
       CommonInterface::GetMapSettings().topography_enabled)
     topography_thread->Trigger(visible_projection);
+
+  /* always service terrain even if it's not used by the map, because
+     it's used by other calculations, therefore don't check if terrain
+     display is enabled */
+  if (terrain_thread != nullptr &&
+      visible_projection.IsValid())
+    terrain_thread->Trigger(visible_projection);
 }
 
 void

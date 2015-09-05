@@ -47,8 +47,9 @@ Copyright_License {
 void
 GlueMapWindow::OnDestroy()
 {
-  /* stop the TopographyThread */
+  /* stop the TopographyThread and the TerrainThread */
   SetTopography(nullptr);
+  SetTerrain(nullptr);
 
 #ifdef ENABLE_OPENGL
   data_timer.Cancel();
