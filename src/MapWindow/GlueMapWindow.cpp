@@ -229,13 +229,6 @@ GlueMapWindow::Idle()
   if (!render_projection.IsValid())
     return false;
 
-  if (skip_idle) {
-    /* draw the first frame as quickly as possible, so the user can
-       start interacting with XCSoar immediately */
-    skip_idle = false;
-    return true;
-  }
-
   /* hack: update RASP weather maps as quickly as possible; they only
      ever need to be updated after the user has selected a new map, so
      this is not a UI latency problem (quite contrary, don't let the
