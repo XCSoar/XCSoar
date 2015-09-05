@@ -449,8 +449,11 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
 bool
 RasterTileCache::LoadWorldFile(const TCHAR *path)
 {
-  bounds = ::LoadWorldFile(path, GetWidth(), GetHeight());
-  return bounds.IsValid();
+  const auto new_bounds = ::LoadWorldFile(path, GetWidth(), GetHeight());
+  bool success = new_bounds.IsValid();
+  if (success)
+    bounds = new_bounds;
+  return success;
 }
 
 bool
