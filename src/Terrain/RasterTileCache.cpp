@@ -231,6 +231,36 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                               std::min(lat_min, lat_max)));
 }
 
+inline void
+RasterTileCache::ParseBounds(const char *data)
+{
+  /* this code is obsolete, since new map files include a "world
+     file", but we keep it for compatibility */
+
+  data = strstr(data, "XCSoar");
+  if (data == nullptr)
+    return;
+
+  float lon_min, lon_max, lat_min, lat_max;
+  if (sscanf(data + 6, "%f %f %f %f",
+             &lon_min, &lon_max, &lat_min, &lat_max) == 4)
+    SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
+}
+
+void
+RasterTileCache::ProcessComment(const char *data, unsigned size)
+{
+  if (scan_overview) {
+    char buffer[128];
+    if (size < sizeof(buffer)) {
+      memcpy(buffer, data, size);
+      buffer[size] = 0;
+
+      ParseBounds(buffer);
+    }
+  }
+}
+
 void
 RasterTileCache::Reset()
 {
