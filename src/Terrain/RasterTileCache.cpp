@@ -375,7 +375,7 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
 extern thread_local RasterTileCache *raster_tile_current;
 
 static bool
-LoadJPG2000(jas_stream_t *in, bool scan_overview)
+LoadJPG2000(jas_stream_t *in)
 {
   /* Get the first box.  This should be a JP box. */
   auto box = jp2_box_get(in);
@@ -441,7 +441,7 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
   if (operation != nullptr)
     operation->SetProgressRange(jas_stream_length(in) / 65536);
 
-  bool success = ::LoadJPG2000(in, scan_overview);
+  bool success = ::LoadJPG2000(in);
   jas_stream_close(in);
   return success;
 }
