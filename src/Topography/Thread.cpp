@@ -29,7 +29,7 @@ TopographyThread::TopographyThread(TopographyStore &_store,
                                    std::function<void()> &&_callback)
   :StandbyThread("Topography"),
    store(_store),
-   callback(_callback),
+   callback(std::move(_callback)),
    last_bounds(GeoBounds::Invalid()) {}
 
 TopographyThread::~TopographyThread()
