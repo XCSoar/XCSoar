@@ -68,14 +68,6 @@ public:
     return true;
   }
 
-  bool WaitAndReset(unsigned timeout_ms) {
-    if (::WaitForSingleObject(handle, timeout_ms) != WAIT_OBJECT_0)
-      return false;
-
-    Reset();
-    return true;
-  }
-
   /**
    * Checks if this object is triggered.
    * @return true if this object was triggered, false if not
@@ -94,10 +86,6 @@ public:
    */
   void Wait() {
     Wait(INFINITE);
-  }
-
-  void WaitAndReset() {
-    WaitAndReset(INFINITE);
   }
 
   /**
