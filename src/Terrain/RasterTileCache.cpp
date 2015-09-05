@@ -421,8 +421,6 @@ LoadJPG2000(jas_stream_t *in, bool scan_overview)
   if (dec == nullptr)
     return false;
 
-  dec->xcsoar = scan_overview ? 2 : 1;
-
   bool success = jpc_dec_decode(dec) == 0;
   jpc_dec_destroy(dec);
   return success;

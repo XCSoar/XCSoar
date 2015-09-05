@@ -672,8 +672,6 @@ typedef struct {
 
 	/* This is required by the tier-2 decoder. */
 	jpc_cstate_t *cstate;
-
-	int xcsoar; // xcsoar progressive import mode
 } jpc_dec_t;
 
 /* Decoder options. */
