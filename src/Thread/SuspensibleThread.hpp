@@ -37,9 +37,9 @@ class SuspensibleThread : public Thread {
 protected:
   Mutex mutex;
 
-private:
   Cond command_trigger, client_trigger;
 
+private:
   bool stop_received, suspend_received, suspended;
 
 public:
