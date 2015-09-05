@@ -527,11 +527,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	tile = dec->curtile;
 
 	// JMW set tile parms here and get index into the raster array
-	if (dec->xcsoar) {
-		jas_rtc_SetTile(sot->tileno, tile->xstart,
-				tile->ystart, tile->xend,
-				tile->yend);
-	}
+	jas_rtc_StartTile(sot->tileno);
 
 	/* Ensure that this is the expected part number. */
 	if (sot->partno != tile->partno) {
@@ -1189,8 +1185,10 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Write the data for each component of the image. */
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		jas_rtc_PutTileData(tile->cache_index, tcomp->xstart,
-				    tcomp->ystart, tcomp->data);
+		jas_rtc_PutTileData(tile->cache_index,
+				    tcomp->xstart, tcomp->ystart,
+				    tcomp->xend, tcomp->yend,
+				    tcomp->data);
 
 #ifdef ENABLE_JASPER_IMAGE
 		if (jas_image_writecmpt(dec->image, compno, tcomp->xstart -
