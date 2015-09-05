@@ -63,9 +63,7 @@ public:
    * has expired
    */
   bool Wait(unsigned timeout_ms) {
-    if (::WaitForSingleObject(handle, timeout_ms) != WAIT_OBJECT_0)
-      return false;
-    return true;
+    return ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;
   }
 
   /**
@@ -74,9 +72,7 @@ public:
    */
   gcc_pure
   bool Test() const {
-    if (::WaitForSingleObject(handle, 0) != WAIT_OBJECT_0)
-      return false;
-    return true;
+    return ::WaitForSingleObject(handle, 0) == WAIT_OBJECT_0;
   }
 
   /**
