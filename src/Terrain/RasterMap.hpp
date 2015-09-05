@@ -41,11 +41,13 @@ class RasterMap {
   RasterProjection projection;
 
 public:
-  RasterMap(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
-            OperationEnvironment &operation);
+  RasterMap(const TCHAR *path);
 
   RasterMap(const RasterMap &) = delete;
   RasterMap &operator=(const RasterMap &) = delete;
+
+  bool Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
+            OperationEnvironment &operation);
 
   bool IsDefined() const {
     return raster_tile_cache.IsValid();

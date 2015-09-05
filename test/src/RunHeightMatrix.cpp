@@ -50,9 +50,10 @@ int main(int argc, char **argv)
   _tcscpy(j2w_path, map_path.c_str());
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
+  RasterMap map(jp2_path);
+
   NullOperationEnvironment operation;
-  RasterMap map(jp2_path, j2w_path, NULL, operation);
-  if (!map.IsDefined()) {
+  if (!map.Load(jp2_path, j2w_path, nullptr, operation)) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }
