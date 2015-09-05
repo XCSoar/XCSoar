@@ -283,15 +283,22 @@ public:
   long SkipMarkerSegment(long file_offset) const;
   void MarkerSegment(long file_offset, unsigned id);
 
+  void StartTile(unsigned index) {
+    if (!segments.empty() && !segments.back().IsTileSegment())
+      /* link current marker segment with this tile */
+      segments.back().tile = index;
+  }
+
   void SetSize(unsigned width, unsigned height,
                unsigned tile_width, unsigned tile_height,
                unsigned tile_columns, unsigned tile_rows);
 
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
-  void SetTile(unsigned index, int xstart, int ystart, int xend, int yend);
 
-  void PutTileData(unsigned index, unsigned x, unsigned y,
+  void PutTileData(unsigned index,
+                   unsigned start_x, unsigned start_y,
+                   unsigned end_x, unsigned end_y,
                    const struct jas_matrix &m);
 
 protected:

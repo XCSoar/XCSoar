@@ -38,17 +38,6 @@ extern "C" {
 #include <string.h>
 #include <algorithm>
 
-void
-RasterTileCache::SetTile(unsigned index,
-                         int xstart, int ystart, int xend, int yend)
-{
-  if (!segments.empty() && !segments.back().IsTileSegment())
-    /* link current marker segment with this tile */
-    segments.back().tile = index;
-
-  tiles.GetLinear(index).Set(xstart, ystart, xend, yend);
-}
-
 static void
 CopyOverviewRow(short *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
                 unsigned width, unsigned skip)
@@ -60,9 +49,12 @@ CopyOverviewRow(short *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
 void
 RasterTileCache::PutTileData(unsigned index,
                              unsigned start_x, unsigned start_y,
+                             unsigned end_x, unsigned end_y,
                              const struct jas_matrix &m)
 {
   if (scan_overview) {
+    tiles.GetLinear(index).Set(start_x, start_y, end_x, end_y);
+
     const unsigned dest_pitch = overview.GetWidth();
 
     start_x >>= OVERVIEW_BITS;

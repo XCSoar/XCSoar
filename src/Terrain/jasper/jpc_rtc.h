@@ -13,10 +13,11 @@ extern "C" {
   long jas_rtc_SkipMarkerSegment(long file_offset);
   void jas_rtc_MarkerSegment(long file_offset, unsigned id);
 
-  void jas_rtc_SetTile(unsigned index,
-		       int xstart, int ystart, int xend, int yend);
+  void jas_rtc_StartTile(unsigned index);
 
-  void jas_rtc_PutTileData(unsigned index, unsigned x, unsigned y,
+  void jas_rtc_PutTileData(unsigned index,
+			   unsigned start_x, unsigned start_y,
+			   unsigned end_x, unsigned end_y,
 			   const struct jas_matrix *data);
 
   void jas_rtc_SetLatLonBounds(double lon_min, double lon_max, double lat_min, double lat_max);
