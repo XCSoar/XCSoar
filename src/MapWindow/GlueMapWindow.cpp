@@ -226,34 +226,7 @@ GlueMapWindow::QuickRedraw()
 bool
 GlueMapWindow::Idle()
 {
-  if (!render_projection.IsValid())
-    return false;
-
-  /* hack: update RASP weather maps as quickly as possible; they only
-     ever need to be updated after the user has selected a new map, so
-     this is not a UI latency problem (quite contrary, don't let the
-     user wait until he sees the new map) */
-  UpdateWeather();
-
-  if (!IsUserIdle(2500))
-    /* don't hold back the UI thread while the user is interacting */
-    return true;
-
-  PeriodClock clock;
-  clock.Update();
-
-  bool still_dirty;
-
-  do {
-    still_dirty = UpdateWeather();
-  } while (!clock.Check(700) && /* stop after 700ms */
-#ifndef ENABLE_OPENGL
-           !draw_thread->IsTriggered() &&
-#endif
-           IsUserIdle(2500) &&
-           still_dirty);
-
-  return still_dirty;
+  return render_projection.IsValid() && UpdateWeather();
 }
 
 bool

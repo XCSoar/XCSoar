@@ -65,13 +65,6 @@ public:
   }
 
   /**
-   * To be removed, only used by GlueMapWindow::Idle().
-   */
-  bool IsTriggered() {
-    return trigger.Test();
-  }
-
-  /**
    * Triggers a redraw.
    */
   void TriggerRedraw() {
