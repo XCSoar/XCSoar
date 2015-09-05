@@ -22,12 +22,9 @@ Copyright_License {
 */
 
 #include "ZipSource.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <zzip/util.h>
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
 
 ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
 {
@@ -43,14 +40,12 @@ ZipSource::ZipSource(const char *path)
 ZipSource::ZipSource(const TCHAR *path)
   :file(nullptr)
 {
-  char narrow_path[4096];
-
-  int length = WideCharToMultiByte(CP_ACP, 0, path, -1,
-                                   narrow_path, sizeof(narrow_path), nullptr, nullptr);
-  if (length == 0)
+  auto *narrow_path = ConvertWideToACP(path);
+  if (narrow_path == nullptr)
     return;
 
   file = zzip_fopen(narrow_path, "rb");
+  delete[] narrow_path;
 }
 #endif
 
