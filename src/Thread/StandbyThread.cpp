@@ -24,8 +24,7 @@ Copyright_License {
 #include "Thread/StandbyThread.hpp"
 
 StandbyThread::StandbyThread(const char *_name)
-  :Thread(_name),
-   alive(false), pending(false), busy(false), stop(false) {}
+  :Thread(_name) {}
 
 StandbyThread::~StandbyThread()
 {

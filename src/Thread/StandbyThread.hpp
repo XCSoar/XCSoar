@@ -49,23 +49,23 @@ private:
    * Is the thread alive?  Unlike Thread::IsDefined(), this one is
    * thread-safe.
    */
-  bool alive;
+  bool alive = false;
 
   /**
    * Is work pending?  This flag gets cleared by the thread as soon as
    * it starts working.
    */
-  bool pending;
+  bool pending = false;
 
   /**
    * Is the thread currently working, i.e. inside Tick()?
    */
-  bool busy;
+  bool busy = false;
 
   /**
    * This flag asks the thread to stop.
    */
-  bool stop;
+  bool stop = false;
 
 public:
   StandbyThread(const char *_name);
