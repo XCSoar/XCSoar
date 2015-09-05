@@ -48,10 +48,17 @@ ToNarrowPath(const TCHAR *src)
 #endif
 }
 
-RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
-                     FileCache *cache, OperationEnvironment &operation)
+RasterMap::RasterMap(const TCHAR *_path)
   :path(ToNarrowPath(_path))
 {
+}
+
+bool
+RasterMap::Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
+                OperationEnvironment &operation)
+{
+  assert(!raster_tile_cache.IsValid());
+
   bool cache_loaded = false;
   if (cache != nullptr) {
     /* load the cache file */
@@ -64,7 +71,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
 
   if (!cache_loaded) {
     if (!raster_tile_cache.LoadOverview(path.c_str(), world_file, operation))
-      return;
+      return false;
 
     if (cache != nullptr) {
       /* save the cache file */
@@ -81,6 +88,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   projection.Set(GetBounds(),
                  raster_tile_cache.GetFineWidth(),
                  raster_tile_cache.GetFineHeight());
+  return true;
 }
 
 static unsigned

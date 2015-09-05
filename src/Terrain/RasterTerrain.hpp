@@ -54,9 +54,8 @@ public:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  RasterTerrain(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
-                OperationEnvironment &operation)
-    :Guard<RasterMap>(map), map(path, world_file, cache, operation) {}
+  RasterTerrain(const TCHAR *path)
+    :Guard<RasterMap>(map), map(path) {}
 
   const Serial &GetSerial() const {
     return map.GetSerial();

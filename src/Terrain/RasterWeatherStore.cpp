@@ -140,8 +140,8 @@ RasterWeatherStore::LoadItem(const TCHAR *name, unsigned time_index,
 {
   TCHAR buffer[MAX_PATH];
   const auto rasp_filename = GetFilename(buffer, name, time_index);
-  RasterMap *map = new RasterMap(rasp_filename, nullptr, nullptr, operation);
-  if (!map->IsDefined()) {
+  RasterMap *map = new RasterMap(rasp_filename);
+  if (!map->Load(rasp_filename, nullptr, nullptr, operation)) {
     delete map;
     return nullptr;
   }

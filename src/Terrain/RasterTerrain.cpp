@@ -44,8 +44,8 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
   } else
     return nullptr;
 
-  RasterTerrain *rt = new RasterTerrain(path, world_file, cache, operation);
-  if (!rt->map.IsDefined()) {
+  RasterTerrain *rt = new RasterTerrain(path);
+  if (!rt->map.Load(path, world_file, cache, operation)) {
     delete rt;
     return nullptr;
   }

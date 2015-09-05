@@ -181,8 +181,14 @@ main(int argc, char** argv)
   _tcscpy(j2w_path, PathName(hc_path));
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
+  RasterMap map(jp2_path);
+
   NullOperationEnvironment operation;
-  RasterMap map(jp2_path, j2w_path, NULL, operation);
+  if (!map.Load(jp2_path, j2w_path, nullptr, operation)) {
+    fprintf(stderr, "failed to load map\n");
+    return EXIT_FAILURE;
+  }
+
   do {
     map.SetViewCenter(map.GetMapCenter(), fixed(100000));
   } while (map.IsDirty());
