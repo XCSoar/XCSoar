@@ -79,6 +79,7 @@ public:
 
 protected:
   friend struct RTDistanceSort;
+  friend class TerrainLoader;
 
   struct MarkerSegmentInfo {
     static constexpr uint16_t NO_TILE = (uint16_t)-1;
@@ -135,7 +136,6 @@ protected:
   unsigned short tile_width, tile_height;
 
   RasterBuffer overview;
-  bool scan_overview;
   unsigned int width, height;
   unsigned int overview_width_fine, overview_height_fine;
 
@@ -144,21 +144,11 @@ protected:
   StaticArray<MarkerSegmentInfo, 8192> segments;
 
   /**
-   * The number of remaining segments after the current one.
-   */
-  mutable unsigned remaining_segments;
-
-  /**
    * An array that is used to sort the requested tiles by distance.
    * This is only used by PollTiles() internally, but is stored in the
    * class because it would be too large for the stack.
    */
   StaticArray<uint16_t, MAX_RTC_TILES> request_tiles;
-
-  /**
-   * Progress callbacks for loading the file during startup.
-   */
-  OperationEnvironment *operation = nullptr;
 
 public:
   RasterTileCache() {
@@ -219,8 +209,6 @@ public:
                int h_origin, const int slope_fact) const;
 
 protected:
-  bool LoadJPG2000(const char *path);
-
   /**
    * Load a world file (*.tfw or *.j2w).
    */
@@ -273,18 +261,14 @@ public:
   }
 
 private:
+  /* methods called by class TerrainLoader */
+
   gcc_pure
   const MarkerSegmentInfo *
   FindMarkerSegment(uint32_t file_offset) const;
 
-public:
-  /* callback methods for libjasper (via jas_rtc.cpp) */
-
   long SkipMarkerSegment(long file_offset) const;
   void MarkerSegment(long file_offset, unsigned id);
-
-  void ProcessComment(const char *data, unsigned size);
-  void ParseBounds(const char *data);
 
   void StartTile(unsigned index) {
     if (!segments.empty() && !segments.back().IsTileSegment())
@@ -299,10 +283,12 @@ public:
   void SetLatLonBounds(double lon_min, double lon_max,
                        double lat_min, double lat_max);
 
-  void PutTileData(unsigned index,
-                   unsigned start_x, unsigned start_y,
-                   unsigned end_x, unsigned end_y,
-                   const struct jas_matrix &m);
+  void PutOverviewTile(unsigned index,
+                       unsigned start_x, unsigned start_y,
+                       unsigned end_x, unsigned end_y,
+                       const struct jas_matrix &m);
+
+  void PutTileData(unsigned index, const struct jas_matrix &m);
 
 protected:
   bool PollTiles(int x, int y, unsigned radius);

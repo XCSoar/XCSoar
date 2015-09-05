@@ -23,17 +23,15 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
+#include "Loader.hpp"
 #include "WorldFile.hpp"
-#include "ZzipStream.hpp"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Math/FastMath.h"
 
 extern "C" {
-#include "jasper/jp2/jp2_cod.h"
-#include "jasper/jpc/jpc_dec.h"
-#include "jasper/jpc/jpc_t1cod.h"
+#include "jasper/jas_seq.h"
 }
 
 #include <string.h>
@@ -48,42 +46,45 @@ CopyOverviewRow(short *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
 }
 
 void
+RasterTileCache::PutOverviewTile(unsigned index,
+                                 unsigned start_x, unsigned start_y,
+                                 unsigned end_x, unsigned end_y,
+                                 const struct jas_matrix &m)
+{
+  tiles.GetLinear(index).Set(start_x, start_y, end_x, end_y);
+
+  const unsigned dest_pitch = overview.GetWidth();
+
+  start_x >>= OVERVIEW_BITS;
+  start_y >>= OVERVIEW_BITS;
+
+  if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
+    return;
+
+  unsigned width = m.numcols_, height = m.numrows_;
+  if (start_x + (width >> OVERVIEW_BITS) > overview.GetWidth())
+    width = (overview.GetWidth() - start_x) << OVERVIEW_BITS;
+  if (start_y + (height >> OVERVIEW_BITS) > overview.GetHeight())
+    height = (overview.GetHeight() - start_y) << OVERVIEW_BITS;
+
+  const unsigned skip = 1 << OVERVIEW_BITS;
+
+  short *gcc_restrict dest = overview.GetData()
+    + start_y * dest_pitch + start_x;
+
+  for (unsigned y = 0; y < height; y += skip, dest += dest_pitch)
+    CopyOverviewRow(dest, m.rows_[y], width, skip);
+}
+
+void
 RasterTileCache::PutTileData(unsigned index,
-                             unsigned start_x, unsigned start_y,
-                             unsigned end_x, unsigned end_y,
                              const struct jas_matrix &m)
 {
-  if (scan_overview) {
-    tiles.GetLinear(index).Set(start_x, start_y, end_x, end_y);
+  auto &tile = tiles.GetLinear(index);
+  if (!tile.IsRequested())
+    return;
 
-    const unsigned dest_pitch = overview.GetWidth();
-
-    start_x >>= OVERVIEW_BITS;
-    start_y >>= OVERVIEW_BITS;
-
-    if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
-      return;
-
-    unsigned width = m.numcols_, height = m.numrows_;
-    if (start_x + (width >> OVERVIEW_BITS) > overview.GetWidth())
-      width = (overview.GetWidth() - start_x) << OVERVIEW_BITS;
-    if (start_y + (height >> OVERVIEW_BITS) > overview.GetHeight())
-      height = (overview.GetHeight() - start_y) << OVERVIEW_BITS;
-
-    const unsigned skip = 1 << OVERVIEW_BITS;
-
-    short *gcc_restrict dest = overview.GetData()
-      + start_y * dest_pitch + start_x;
-
-    for (unsigned y = 0; y < height; y += skip, dest += dest_pitch)
-      CopyOverviewRow(dest, m.rows_[y], width, skip);
-  } else {
-    auto &tile = tiles.GetLinear(index);
-    if (!tile.IsRequested())
-      return;
-
-    tile.CopyFrom(m);
-  }
+  tile.CopyFrom(m);
 }
 
 struct RTDistanceSort {
@@ -102,9 +103,6 @@ struct RTDistanceSort {
 inline bool
 RasterTileCache::PollTiles(int x, int y, unsigned radius)
 {
-  if (scan_overview)
-    return false;
-
   /* tiles are usually 256 pixels wide; with a radius smaller than
      that, the (optimized) tile distance calculations may fail;
      additionally, this ensures that tiles which are slightly out of
@@ -232,36 +230,6 @@ RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                               std::min(lat_min, lat_max)));
 }
 
-inline void
-RasterTileCache::ParseBounds(const char *data)
-{
-  /* this code is obsolete, since new map files include a "world
-     file", but we keep it for compatibility */
-
-  data = strstr(data, "XCSoar");
-  if (data == nullptr)
-    return;
-
-  float lon_min, lon_max, lat_min, lat_max;
-  if (sscanf(data + 6, "%f %f %f %f",
-             &lon_min, &lon_max, &lat_min, &lat_max) == 4)
-    SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
-}
-
-void
-RasterTileCache::ProcessComment(const char *data, unsigned size)
-{
-  if (scan_overview) {
-    char buffer[128];
-    if (size < sizeof(buffer)) {
-      memcpy(buffer, data, size);
-      buffer[size] = 0;
-
-      ParseBounds(buffer);
-    }
-  }
-}
-
 void
 RasterTileCache::Reset()
 {
@@ -269,7 +237,6 @@ RasterTileCache::Reset()
   height = 0;
   bounds.SetInvalid();
   segments.clear();
-  scan_overview = true;
 
   overview.Reset();
 
@@ -277,8 +244,7 @@ RasterTileCache::Reset()
     it->Disable();
 }
 
-gcc_pure
-inline const RasterTileCache::MarkerSegmentInfo *
+const RasterTileCache::MarkerSegmentInfo *
 RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
 {
   for (const auto &s : segments)
@@ -286,164 +252,6 @@ RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
       return &s;
 
   return nullptr;
-}
-
-long
-RasterTileCache::SkipMarkerSegment(long file_offset) const
-{
-  if (scan_overview)
-    /* use all segments when loading the overview */
-    return 0;
-
-  if (remaining_segments > 0) {
-    /* enable the follow-up segment */
-    --remaining_segments;
-    return 0;
-  }
-
-  const MarkerSegmentInfo *segment = FindMarkerSegment(file_offset);
-  if (segment == nullptr)
-    /* past the end of the recorded segment list; shouldn't happen */
-    return 0;
-
-  long skip_to = segment->file_offset;
-  while (segment->IsTileSegment() &&
-         !tiles.GetLinear(segment->tile).IsRequested()) {
-    ++segment;
-    if (segment >= segments.end())
-      /* last segment is hidden; shouldn't happen either, because we
-         expect EOC there */
-      break;
-
-    skip_to = segment->file_offset;
-  }
-
-  remaining_segments = segment->count;
-  return skip_to - file_offset;
-}
-
-/**
- * Does this segment belong to the preceding tile?  If yes, then it
- * inherits the tile number.
- */
-static constexpr bool
-IsTileSegment(unsigned id)
-{
-  return id == 0xff93 /* SOD */ ||
-    id == 0xff52 /* COD */ ||
-    id == 0xff53 /* COC */ ||
-    id == 0xff5c /* QCD */ ||
-    id == 0xff5d /* QCC */ ||
-    id == 0xff5e /* RGN */ ||
-    id == 0xff5f /* POC */ ||
-    id == 0xff61 /* PPT */ ||
-    id == 0xff58 /* PLT */ ||
-    id == 0xff64 /* COM */;
-}
-
-void
-RasterTileCache::MarkerSegment(long file_offset, unsigned id)
-{
-  if (!scan_overview || segments.full())
-    return;
-
-  if (operation != nullptr)
-    operation->SetProgressPosition(file_offset / 65536);
-
-  if (IsTileSegment(id) && !segments.empty() &&
-      segments.back().IsTileSegment()) {
-    /* this segment belongs to the same tile as the preceding SOT
-       segment */
-    ++segments.back().count;
-    return;
-  }
-
-  if (segments.size() >= 2 && !segments.back().IsTileSegment() &&
-      !segments[segments.size() - 2].IsTileSegment()) {
-    /* the last two segments are both "generic" segments and can be merged*/
-    assert(segments.back().count == 0);
-
-    ++segments[segments.size() - 2].count;
-
-    /* reuse the second segment */
-    segments.back().file_offset = file_offset;
-  } else
-    segments.append(MarkerSegmentInfo(file_offset,
-                                      MarkerSegmentInfo::NO_TILE));
-}
-
-extern thread_local RasterTileCache *raster_tile_current;
-
-static bool
-LoadJPG2000(jas_stream_t *in)
-{
-  /* Get the first box.  This should be a JP box. */
-  auto box = jp2_box_get(in);
-  if (box == nullptr)
-    return false;
-
-  if (box->type != JP2_BOX_JP ||
-      box->data.jp.magic != JP2_JP_MAGIC) {
-    jp2_box_destroy(box);
-    return false;
-  }
-
-  jp2_box_destroy(box);
-
-  /* Get the second box.  This should be a FTYP box. */
-  box = jp2_box_get(in);
-  if (box == nullptr)
-    return false;
-
-  auto type = box->type;
-  jp2_box_destroy(box);
-  if (type != JP2_BOX_FTYP)
-    return false;
-
-  /* find the JP2C box */
-  do {
-    box = jp2_box_get(in);
-    if (box == nullptr)
-      /* not found */
-      return false;
-
-    type = box->type;
-    jp2_box_destroy(box);
-  } while (type != JP2_BOX_JP2C);
-
-  jpc_dec_importopts_t opts;
-  opts.debug = 0;
-  opts.maxlyrs = JPC_MAXLYRS;
-  opts.maxpkts = -1;
-
-  jpc_initluts();
-
-  const auto dec = jpc_dec_create(&opts, in);
-  if (dec == nullptr)
-    return false;
-
-  bool success = jpc_dec_decode(dec) == 0;
-  jpc_dec_destroy(dec);
-  return success;
-}
-
-bool
-RasterTileCache::LoadJPG2000(const char *jp2_filename)
-{
-  raster_tile_current = this;
-
-  const auto in = OpenJasperZzipStream(jp2_filename);
-  if (!in) {
-    Reset();
-    return false;
-  }
-
-  if (operation != nullptr)
-    operation->SetProgressRange(jas_stream_length(in) / 65536);
-
-  bool success = ::LoadJPG2000(in);
-  jas_stream_close(in);
-  return success;
 }
 
 bool
@@ -460,13 +268,9 @@ bool
 RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
                               OperationEnvironment &_operation)
 {
-  assert(operation == nullptr);
-  operation = &_operation;
-
   Reset();
 
-  bool initialised = LoadJPG2000(path);
-  scan_overview = false;
+  bool initialised = LoadTerrainOverview(path, *this, _operation);
 
   if (initialised && world_file != nullptr)
     LoadWorldFile(world_file);
@@ -477,7 +281,6 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
   if (!initialised)
     Reset();
 
-  operation = nullptr;
   return initialised;
 }
 
@@ -487,9 +290,7 @@ RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
   if (!PollTiles(x, y, radius))
     return;
 
-  remaining_segments = 0;
-
-  LoadJPG2000(path);
+  UpdateTerrainTiles(path, *this);
 
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
@@ -607,6 +408,5 @@ RasterTileCache::LoadCache(FILE *file)
             overview_size, file) != overview_size)
     return false;
 
-  scan_overview = false;
   return true;
 }
