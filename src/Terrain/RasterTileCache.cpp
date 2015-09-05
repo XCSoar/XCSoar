@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
+#include "WorldFile.hpp"
 #include "ZzipStream.hpp"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
@@ -448,61 +449,8 @@ RasterTileCache::LoadJPG2000(const char *jp2_filename)
 bool
 RasterTileCache::LoadWorldFile(const TCHAR *path)
 {
-  ZipLineReaderA reader(path);
-  if (reader.error())
-    return false;
-
-  char *endptr;
-  const char *line = reader.ReadLine(); // x scale
-  double x_scale = strtod(line, &endptr);
-  if (endptr == line)
-    return false;
-
-  line = reader.ReadLine(); // y rotation
-  if (line == nullptr)
-    return false;
-
-  double y_rotation = strtod(line, &endptr);
-  if (endptr == line || y_rotation < -0.01 || y_rotation > 0.01)
-    /* we don't support rotation */
-    return false;
-
-  line = reader.ReadLine(); // x rotation
-  if (line == nullptr)
-    return false;
-
-  double x_rotation = strtod(line, &endptr);
-  if (endptr == line || x_rotation < -0.01 || x_rotation > 0.01)
-    /* we don't support rotation */
-    return false;
-
-  line = reader.ReadLine(); // y scale
-  if (line == nullptr)
-    return false;
-
-  double y_scale = strtod(line, &endptr);
-  if (endptr == line)
-    return false;
-
-  line = reader.ReadLine(); // x origin
-  if (line == nullptr)
-    return false;
-
-  double x_origin = strtod(line, &endptr);
-  if (endptr == line)
-    return false;
-
-  line = reader.ReadLine(); // y origin
-  if (line == nullptr)
-    return false;
-
-  double y_origin = strtod(line, &endptr);
-  if (endptr == line)
-    return false;
-
-  SetLatLonBounds(x_origin, x_origin + GetWidth() * x_scale,
-                  y_origin, y_origin + GetHeight() * y_scale);
-  return true;
+  bounds = ::LoadWorldFile(path, GetWidth(), GetHeight());
+  return bounds.IsValid();
 }
 
 bool
