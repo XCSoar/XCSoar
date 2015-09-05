@@ -61,7 +61,7 @@ class GlueMapWindow : public MapWindow {
     INVALIDATE,
   };
 
-  TopographyThread *topography_thread;
+  TopographyThread *topography_thread = nullptr;
 
 #ifdef ENABLE_OPENGL
   /**
@@ -90,34 +90,34 @@ class GlueMapWindow : public MapWindow {
     DRAG_PAN,
     DRAG_GESTURE,
     DRAG_SIMULATOR,
-  } drag_mode;
+  } drag_mode = DRAG_NONE;
 
   GeoPoint drag_start_geopoint;
   RasterPoint drag_start;
   TrackingGestureManager gestures;
-  bool ignore_single_click;
+  bool ignore_single_click = false;
 
   /**
    * Skip the next Idle() call?  This is set to true when a new frame
    * shall be rendered quickly without I/O delay, e.g. to display the
    * first frame quickly.
    */
-  bool skip_idle;
+  bool skip_idle = true;
 
 #ifdef ENABLE_OPENGL
-  KineticManager kinetic_x, kinetic_y;
+  KineticManager kinetic_x = 700, kinetic_y = 700;
   WindowTimer kinetic_timer;
 #endif
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
-  bool arm_mapitem_list;
+  bool arm_mapitem_list = false;
 
   /**
    * The projection which was active when dragging started.
    */
   Projection drag_projection;
 
-  DisplayMode last_display_mode;
+  DisplayMode last_display_mode = DisplayMode::NONE;
 
   OffsetHistory offset_history;
 

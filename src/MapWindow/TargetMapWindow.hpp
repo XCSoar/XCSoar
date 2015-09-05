@@ -65,7 +65,7 @@ class TargetMapWindow : public BufferWindow {
   LabelBlock label_block;
 
   BackgroundRenderer background;
-  TopographyRenderer *topography_renderer;
+  TopographyRenderer *topography_renderer = nullptr;
 
   AirspaceRenderer airspace_renderer;
 
@@ -73,8 +73,8 @@ class TargetMapWindow : public BufferWindow {
 
   TrailRenderer trail_renderer;
 
-  ProtectedTaskManager *task;
-  const GlideComputer *glide_computer;
+  ProtectedTaskManager *task = nullptr;
+  const GlideComputer *glide_computer = nullptr;
 
   unsigned target_index;
 

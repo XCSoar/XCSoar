@@ -77,11 +77,9 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
   :task_look(_task_look),
    aircraft_look(_aircraft_look),
    topography_look(_topography_look),
-   topography_renderer(nullptr),
    airspace_renderer(_airspace_look),
    way_point_renderer(nullptr, waypoint_look),
-   trail_renderer(_trail_look),
-   task(nullptr)
+   trail_renderer(_trail_look)
 {
 }
 

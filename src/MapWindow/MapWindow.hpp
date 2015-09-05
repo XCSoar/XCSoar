@@ -89,7 +89,7 @@ protected:
     FOLLOW_PAN,
   };
 
-  FollowMode follow_mode;
+  FollowMode follow_mode = FOLLOW_SELF;
 
   /**
    * The projection as currently visible on the screen.  This object
@@ -113,15 +113,15 @@ protected:
    */
   MapWindowProjection render_projection;
 
-  const Waypoints *waypoints;
-  TopographyStore *topography;
-  CachedTopographyRenderer *topography_renderer;
+  const Waypoints *waypoints = nullptr;
+  TopographyStore *topography = nullptr;
+  CachedTopographyRenderer *topography_renderer = nullptr;
 
-  RasterTerrain *terrain;
+  RasterTerrain *terrain = nullptr;
   GeoPoint terrain_center;
-  fixed terrain_radius;
+  fixed terrain_radius = fixed(0);
 
-  RasterWeatherCache *weather;
+  RasterWeatherCache *weather = nullptr;
 
   const TrafficLook &traffic_look;
 
@@ -133,19 +133,19 @@ protected:
 
   TrailRenderer trail_renderer;
 
-  ProtectedTaskManager *task;
-  const ProtectedRoutePlanner *route_planner;
-  GlideComputer *glide_computer;
+  ProtectedTaskManager *task = nullptr;
+  const ProtectedRoutePlanner *route_planner = nullptr;
+  GlideComputer *glide_computer = nullptr;
 
 #ifdef HAVE_NOAA
-  NOAAStore *noaa_store;
+  NOAAStore *noaa_store = nullptr;
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  const SkyLinesTracking::Data *skylines_data;
+  const SkyLinesTracking::Data *skylines_data = nullptr;
 #endif
 
-  bool compass_visible;
+  bool compass_visible = true;
 
 #ifndef ENABLE_OPENGL
   /**
@@ -153,14 +153,14 @@ protected:
    * those attributes to prevent showing invalid data on the map, when
    * the user switches quickly to or from full-screen mode.
    */
-  unsigned ui_generation, buffer_generation;
+  unsigned ui_generation = 1, buffer_generation = 0;
 
   /**
    * If non-zero, then the buffer will be scaled to the new
    * projection, and this variable is decremented.  This is used while
    * zooming and panning, to give instant visual feedback.
    */
-  unsigned scale_buffer;
+  unsigned scale_buffer = 0;
 #endif
 
   /**

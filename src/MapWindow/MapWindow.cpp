@@ -39,30 +39,11 @@ Copyright_License {
 MapWindow::MapWindow(const MapLook &_look,
                      const TrafficLook &_traffic_look)
   :look(_look),
-   follow_mode(FOLLOW_SELF),
-   waypoints(nullptr),
-   topography(nullptr), topography_renderer(nullptr),
-   terrain(nullptr),
-   terrain_radius(fixed(0)),
-   weather(nullptr),
    traffic_look(_traffic_look),
    waypoint_renderer(nullptr, look.waypoint),
    airspace_renderer(look.airspace),
    airspace_label_renderer(look.airspace),
-   trail_renderer(look.trail),
-   task(nullptr), route_planner(nullptr), glide_computer(nullptr),
-#ifdef HAVE_NOAA
-   noaa_store(nullptr),
-#endif
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-   skylines_data(nullptr),
-#endif
-   compass_visible(true)
-#ifndef ENABLE_OPENGL
-   , ui_generation(1), buffer_generation(0),
-   scale_buffer(0)
-#endif
-{}
+   trail_renderer(look.trail) {}
 
 MapWindow::~MapWindow()
 {

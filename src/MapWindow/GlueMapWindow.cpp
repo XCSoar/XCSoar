@@ -33,20 +33,12 @@ Copyright_License {
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
-   topography_thread(nullptr),
 #ifdef ENABLE_OPENGL
    data_timer(*this),
 #endif
-   drag_mode(DRAG_NONE),
-   ignore_single_click(false),
-   skip_idle(true),
 #ifdef ENABLE_OPENGL
-   kinetic_x(700),
-   kinetic_y(700),
    kinetic_timer(*this),
 #endif
-   arm_mapitem_list(false),
-   last_display_mode(DisplayMode::NONE),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    vario_bar_renderer(look.vario_bar),
