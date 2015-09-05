@@ -283,6 +283,9 @@ public:
   long SkipMarkerSegment(long file_offset) const;
   void MarkerSegment(long file_offset, unsigned id);
 
+  void ProcessComment(const char *data, unsigned size);
+  void ParseBounds(const char *data);
+
   void StartTile(unsigned index) {
     if (!segments.empty() && !segments.back().IsTileSegment())
       /* link current marker segment with this tile */

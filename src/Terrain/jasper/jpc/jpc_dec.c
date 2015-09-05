@@ -1550,24 +1550,13 @@ static int jpc_dec_process_ppt(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	float lon_min, lon_max, lat_min, lat_max;
-	char* cptr;
+	const jpc_com_t *com = &ms->parms.com;
 
-	// JMW
-	if (dec->xcsoar == 2) {
-		char sTmp[128];
-		jpc_com_t *com = &ms->parms.com;
+	/* Eliminate compiler warnings about unused variables. */
+	dec = 0;
+	ms = 0;
 
-		if (ms->len < sizeof(sTmp)) {
-			strncpy(sTmp, (const char *)com->data, ms->len-2); // build a null-terminated string
-			sTmp[ms->len-2]= '\0';
-			cptr = strstr (sTmp, "XCSoar");
-			if (cptr) {
-				if (sscanf(cptr+6, "%f %f %f %f", &lon_min, &lon_max, &lat_min, &lat_max) == 4)
-					jas_rtc_SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
-			}
-		}
-	}
+	jas_rtc_ProcessComment((const char *)com->data, com->len);
 
 	return 0;
 }

@@ -13,6 +13,10 @@ extern "C" {
     return raster_tile_current->MarkerSegment(file_offset, id);
   }
 
+  void jas_rtc_ProcessComment(const char *data, unsigned size) {
+    return raster_tile_current->ProcessComment(data, size);
+  }
+
   void jas_rtc_StartTile(unsigned index) {
     raster_tile_current->StartTile(index);
   }
@@ -23,11 +27,6 @@ extern "C" {
                            const struct jas_matrix *data) {
     raster_tile_current->PutTileData(index, start_x, start_y, end_x, end_y,
                                      *data);
-  }
-
-  void jas_rtc_SetLatLonBounds(double lon_min, double lon_max,
-                               double lat_min, double lat_max) {
-    raster_tile_current->SetLatLonBounds(lon_min, lon_max, lat_min, lat_max);
   }
 
   void jas_rtc_SetSize(unsigned width, unsigned height,
