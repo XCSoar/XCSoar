@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DRAW_THREAD_HPP
 
 #include "Thread/RecursivelySuspensibleThread.hpp"
-#include "Thread/Trigger.hpp"
 #include "Compiler.h"
 
 class GlueMapWindow;
@@ -42,9 +41,10 @@ class DrawThread final : public RecursivelySuspensibleThread {
   static constexpr unsigned MIN_WAIT_TIME = 100;
 
   /**
-   * This triggers a redraw.
+   * Is work pending?  This flag gets cleared by the thread as soon as
+   * it starts working.
    */
-  Trigger trigger;
+  bool pending = true;
 
   /** Pointer to the MapWindow */
   GlueMapWindow &map;
@@ -53,31 +53,13 @@ public:
   DrawThread(GlueMapWindow &_map)
     :RecursivelySuspensibleThread("DrawThread"), map(_map) {}
 
-  /** Locks the Mutex and "pauses" the drawing thread */
-  void BeginSuspend() {
-    RecursivelySuspensibleThread::BeginSuspend();
-    TriggerRedraw();
-  }
-
-  void Suspend() {
-    BeginSuspend();
-    WaitUntilSuspended();
-  }
-
   /**
    * Triggers a redraw.
    */
   void TriggerRedraw() {
-    trigger.Signal();
-  }
-
-  /**
-   * Triggers thread shutdown.  Call join() after this to wait
-   * synchronously for the thread to exit.
-   */
-  void BeginStop() {
-    RecursivelySuspensibleThread::BeginStop();
-    TriggerRedraw();
+    const ScopeLock lock(mutex);
+    pending = true;
+    command_trigger.signal();
   }
 
 protected:

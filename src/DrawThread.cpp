@@ -36,31 +36,18 @@ DrawThread::Run()
 {
   SetLowPriority();
 
-  // wait until the startup is finished
-  if (CheckStoppedOrSuspended())
-    return;
-
-  /* trigger the first draw immediately */
-  trigger.Signal();
+  const ScopeLock lock(mutex);
 
   // circle until application is closed
-  while (true) {
-    trigger.Wait();
-
-    /* got the "stop" trigger? */
-    if (CheckStoppedOrSuspended())
-      break;
-
-    trigger.Reset();
-
-    if (IsCommandPending()) {
-      /* just in case we got another suspend/stop command after
-         CheckStoppedOrSuspended() returned and before the trigger got
-         reset: restore the trigger and skip this iteration, to fix
-         the race condition */
-      trigger.Signal();
+  while (!_CheckStoppedOrSuspended()) {
+    if (!pending) {
+      command_trigger.wait(mutex);
       continue;
     }
+
+    pending = false;
+
+    const ScopeUnlock unlock(mutex);
 
 #ifdef HAVE_CPU_FREQUENCY
     const ScopeLockCPU cpu;
