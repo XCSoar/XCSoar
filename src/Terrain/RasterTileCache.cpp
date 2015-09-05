@@ -42,9 +42,9 @@ void
 RasterTileCache::SetTile(unsigned index,
                          int xstart, int ystart, int xend, int yend)
 {
-  if (!segments.empty() && !segments.last().IsTileSegment())
+  if (!segments.empty() && !segments.back().IsTileSegment())
     /* link current marker segment with this tile */
-    segments.last().tile = index;
+    segments.back().tile = index;
 
   tiles.GetLinear(index).Set(xstart, ystart, xend, yend);
 }
@@ -328,22 +328,22 @@ RasterTileCache::MarkerSegment(long file_offset, unsigned id)
     operation->SetProgressPosition(file_offset / 65536);
 
   if (IsTileSegment(id) && !segments.empty() &&
-      segments.last().IsTileSegment()) {
+      segments.back().IsTileSegment()) {
     /* this segment belongs to the same tile as the preceding SOT
        segment */
-    ++segments.last().count;
+    ++segments.back().count;
     return;
   }
 
-  if (segments.size() >= 2 && !segments.last().IsTileSegment() &&
+  if (segments.size() >= 2 && !segments.back().IsTileSegment() &&
       !segments[segments.size() - 2].IsTileSegment()) {
     /* the last two segments are both "generic" segments and can be merged*/
-    assert(segments.last().count == 0);
+    assert(segments.back().count == 0);
 
     ++segments[segments.size() - 2].count;
 
     /* reuse the second segment */
-    segments.last().file_offset = file_offset;
+    segments.back().file_offset = file_offset;
   } else
     segments.append(MarkerSegmentInfo(file_offset,
                                       MarkerSegmentInfo::NO_TILE));

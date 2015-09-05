@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -159,13 +159,13 @@ public:
     return std::next(data.begin(), the_size);
   }
 
-  T &last() {
+  T &back() {
     assert(the_size > 0);
 
     return data[the_size - 1];
   }
 
-  const T &last() const {
+  const T &back() const {
     assert(the_size > 0);
 
     return data[the_size - 1];
@@ -255,14 +255,6 @@ public:
     assert(the_size > 0);
 
     return data.front();
-  }
-
-  T &back() {
-    return last();
-  }
-
-  const T &back() const {
-    return last();
   }
 };
 

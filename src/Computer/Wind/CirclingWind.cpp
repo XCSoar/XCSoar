@@ -145,7 +145,7 @@ CirclingWind::CalcWind()
   assert(!samples.empty());
 
   // reject if average time step greater than 2.0 seconds
-  if ((samples.last().time - samples[0].time) / (samples.size() - 1) > fixed(2))
+  if ((samples.back().time - samples[0].time) / (samples.size() - 1) > fixed(2))
     return Result(0);
 
   // find average
