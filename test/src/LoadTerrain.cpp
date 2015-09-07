@@ -38,15 +38,15 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "PATH");
-  const char *map_path = args.ExpectNext();
+  const auto map_path = args.ExpectNextT();
   args.ExpectEnd();
 
-  char jp2_path[4096];
-  strcpy(jp2_path, map_path);
-  strcat(jp2_path, "/terrain.jp2");
+  TCHAR jp2_path[4096];
+  _tcscpy(jp2_path, map_path.c_str());
+  _tcscat(jp2_path, _T("/terrain.jp2"));
 
   TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, PathName(map_path));
+  _tcscpy(j2w_path, map_path.c_str());
   _tcscat(j2w_path, _T("/terrain.j2w"));
 
   NullOperationEnvironment operation;

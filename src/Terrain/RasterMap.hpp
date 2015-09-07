@@ -36,7 +36,7 @@ class FileCache;
 class OperationEnvironment;
 
 class RasterMap {
-  AllocatedString<> path;
+  AllocatedString<TCHAR> path;
   RasterTileCache raster_tile_cache;
   RasterProjection projection;
 

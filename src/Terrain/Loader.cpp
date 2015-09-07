@@ -25,6 +25,7 @@ Copyright_License {
 #include "RasterTileCache.hpp"
 #include "ZzipStream.hpp"
 #include "Operation/Operation.hpp"
+#include "OS/ConvertPathName.hpp"
 
 extern "C" {
 #include "jasper/jp2/jp2_cod.h"
@@ -232,11 +233,11 @@ LoadJPG2000(jas_stream_t *in)
 }
 
 inline bool
-TerrainLoader::LoadJPG2000(const char *path)
+TerrainLoader::LoadJPG2000(const TCHAR *path)
 {
   assert(current_terrain_loader == nullptr);
 
-  const auto in = OpenJasperZzipStream(path);
+  const auto in = OpenJasperZzipStream(NarrowPathName(path));
   if (in == nullptr)
     return false;
 
@@ -252,7 +253,7 @@ TerrainLoader::LoadJPG2000(const char *path)
 }
 
 inline bool
-TerrainLoader::LoadOverview(const char *path, const TCHAR *world_file)
+TerrainLoader::LoadOverview(const TCHAR *path, const TCHAR *world_file)
 {
   assert(scan_overview);
 
@@ -275,7 +276,7 @@ TerrainLoader::LoadOverview(const char *path, const TCHAR *world_file)
 }
 
 bool
-LoadTerrainOverview(const char *path, const TCHAR *world_file,
+LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env)
 {
@@ -284,7 +285,7 @@ LoadTerrainOverview(const char *path, const TCHAR *world_file,
 }
 
 inline bool
-TerrainLoader::UpdateTiles(const char *path, int x, int y, unsigned radius)
+TerrainLoader::UpdateTiles(const TCHAR *path, int x, int y, unsigned radius)
 {
   assert(!scan_overview);
 
@@ -298,7 +299,7 @@ TerrainLoader::UpdateTiles(const char *path, int x, int y, unsigned radius)
 }
 
 bool
-UpdateTerrainTiles(const char *path,
+UpdateTerrainTiles(const TCHAR *path,
                    RasterTileCache &raster_tile_cache,
                    int x, int y, unsigned radius)
 {
