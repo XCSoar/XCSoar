@@ -252,20 +252,35 @@ TerrainLoader::LoadJPG2000(const char *path)
 }
 
 inline bool
-TerrainLoader::LoadOverview(const char *path)
+TerrainLoader::LoadOverview(const char *path, const TCHAR *world_file)
 {
   assert(scan_overview);
 
-  return LoadJPG2000(path);
+  raster_tile_cache.Reset();
+
+  bool success = LoadJPG2000(path);
+
+  /* if we loaded the JPG2000 file successfully, but no bounds were
+     obtained from there, try to load the world file "terrain.j2w" */
+  if (success && !raster_tile_cache.bounds.IsValid() &&
+      !raster_tile_cache.LoadWorldFile(world_file))
+    /* that failed: without bounds, we can't do anything; give up,
+       discard the whole file */
+    success = false;
+
+  if (!success)
+    raster_tile_cache.Reset();
+
+  return success;
 }
 
 bool
-LoadTerrainOverview(const char *path,
+LoadTerrainOverview(const char *path, const TCHAR *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env)
 {
   TerrainLoader loader(raster_tile_cache, true, env);
-  return loader.LoadOverview(path);
+  return loader.LoadOverview(path, world_file);
 }
 
 inline bool

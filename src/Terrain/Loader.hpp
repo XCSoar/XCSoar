@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_LOADER_HPP
 #define XCSOAR_TERRAIN_LOADER_HPP
 
+#include <tchar.h>
+
 class RasterTileCache;
 class OperationEnvironment;
 
@@ -44,7 +46,7 @@ public:
                 OperationEnvironment &_env)
     :raster_tile_cache(_rtc), scan_overview(_scan_overview), env(_env) {}
 
-  bool LoadOverview(const char *path);
+  bool LoadOverview(const char *path, const TCHAR *world_file);
   bool UpdateTiles(const char *path, int x, int y, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
@@ -71,7 +73,7 @@ private:
 };
 
 bool
-LoadTerrainOverview(const char *path,
+LoadTerrainOverview(const char *path, const TCHAR *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env);
 
