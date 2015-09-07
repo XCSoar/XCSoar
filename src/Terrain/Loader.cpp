@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Loader.hpp"
 #include "RasterTileCache.hpp"
+#include "RasterProjection.hpp"
 #include "ZzipStream.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/ConvertPathName.hpp"
@@ -306,4 +307,17 @@ UpdateTerrainTiles(const TCHAR *path,
   NullOperationEnvironment env;
   TerrainLoader loader(raster_tile_cache, false, env);
   return loader.UpdateTiles(path, x, y, radius);
+}
+
+bool
+UpdateTerrainTiles(const TCHAR *path,
+                   RasterTileCache &raster_tile_cache,
+                   const RasterProjection &projection,
+                   const GeoPoint &location, fixed radius)
+{
+  const auto raster_location = projection.ProjectCoarse(location);
+
+  return UpdateTerrainTiles(path, raster_tile_cache,
+                            raster_location.x, raster_location.y,
+                            projection.DistancePixelsCoarse(radius));
 }

@@ -24,9 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_LOADER_HPP
 #define XCSOAR_TERRAIN_LOADER_HPP
 
+#include "Math/fixed.hpp"
+
 #include <tchar.h>
 
+struct GeoPoint;
 class RasterTileCache;
+class RasterProjection;
 class OperationEnvironment;
 
 class TerrainLoader {
@@ -81,5 +85,11 @@ bool
 UpdateTerrainTiles(const TCHAR *path,
                    RasterTileCache &raster_tile_cache,
                    int x, int y, unsigned radius);
+
+bool
+UpdateTerrainTiles(const TCHAR *path,
+                   RasterTileCache &raster_tile_cache,
+                   const RasterProjection &projection,
+                   const GeoPoint &location, fixed radius);
 
 #endif
