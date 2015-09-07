@@ -75,27 +75,15 @@ RasterMap::Load(const TCHAR *_path, const TCHAR *world_file,
   return true;
 }
 
-static unsigned
-AngleToPixel(Angle value, Angle start, Angle end, unsigned width)
-{
-  return unsigned((value - start).Native() * width / (end - start).Native());
-}
-
 void
 RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 {
   if (!raster_tile_cache.IsValid())
     return;
 
-  const GeoBounds &bounds = GetBounds();
+  const auto raster_center = projection.ProjectCoarse(location);
 
-  int x = AngleToPixel(location.longitude, bounds.GetWest(), bounds.GetEast(),
-                       raster_tile_cache.GetWidth());
-
-  int y = AngleToPixel(location.latitude, bounds.GetNorth(), bounds.GetSouth(),
-                       raster_tile_cache.GetHeight());
-
-  raster_tile_cache.UpdateTiles(path.c_str(), x, y,
+  raster_tile_cache.UpdateTiles(path.c_str(), raster_center.x, raster_center.y,
                                 projection.DistancePixelsCoarse(radius));
 }
 
