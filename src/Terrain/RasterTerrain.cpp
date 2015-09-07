@@ -32,17 +32,14 @@ Copyright_License {
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 {
-  TCHAR path[MAX_PATH], world_file_buffer[MAX_PATH];
-  const TCHAR *world_file;
+  TCHAR path[MAX_PATH], world_file[MAX_PATH];
 
-  if (Profile::GetPath(ProfileKeys::MapFile, path)) {
-    _tcscpy(world_file_buffer, path);
-    _tcscat(world_file_buffer, _T(DIR_SEPARATOR_S "terrain.j2w"));
-    world_file = world_file_buffer;
-
-    _tcscat(path, _T("/terrain.jp2"));
-  } else
+  if (!Profile::GetPath(ProfileKeys::MapFile, path))
     return nullptr;
+
+  _tcscpy(world_file, path);
+  _tcscat(world_file, _T(DIR_SEPARATOR_S "terrain.j2w"));
+  _tcscat(path, _T("/terrain.jp2"));
 
   RasterTerrain *rt = new RasterTerrain(path);
   if (!rt->map.Load(path, world_file, cache, operation)) {
