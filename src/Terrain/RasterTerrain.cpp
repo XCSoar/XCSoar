@@ -75,19 +75,17 @@ inline bool
 RasterTerrain::Load(const TCHAR *world_file,
                     FileCache *cache, OperationEnvironment &operation)
 {
-  const TCHAR *path = map.GetPath();
-
-  if (LoadCache(cache, path))
+  if (LoadCache(cache, path.c_str()))
     return true;
 
-  if (!LoadTerrainOverview(path, world_file, map.GetTileCache(),
+  if (!LoadTerrainOverview(path.c_str(), world_file, map.GetTileCache(),
                            operation))
     return false;
 
   map.UpdateProjection();
 
   if (cache != nullptr)
-    SaveCache(*cache, path);
+    SaveCache(*cache, path.c_str());
 
   return true;
 }
@@ -120,7 +118,7 @@ RasterTerrain::UpdateTiles(const GeoPoint &location, fixed radius)
   if (!tile_cache.IsValid())
     return false;
 
-  UpdateTerrainTiles(map.GetPath(), tile_cache, mutex, map.GetProjection(),
+  UpdateTerrainTiles(path.c_str(), tile_cache, mutex, map.GetProjection(),
                      location, radius);
   return map.IsDirty();
 }

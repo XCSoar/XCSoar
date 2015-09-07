@@ -130,9 +130,6 @@ public:
   gcc_const
   static BrokenTime IndexToTime(unsigned index);
 
-  static RasterMap *LoadItem(const TCHAR *name, unsigned time_index,
-                             OperationEnvironment &operation);
-
   static const TCHAR *GetFilename(TCHAR *rasp_filename, const TCHAR *name,
                                   unsigned time_index);
 

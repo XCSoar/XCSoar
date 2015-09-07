@@ -103,8 +103,20 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
 
   Close();
 
-  weather_map = store.LoadItem(store.GetItemInfo(parameter).name,
-                               effective_weather_time, operation);
+  TCHAR buffer[MAX_PATH];
+  const auto new_path =
+    RasterWeatherStore::GetFilename(buffer, store.GetItemInfo(parameter).name,
+                                    effective_weather_time);
+
+  RasterMap *new_map = new RasterMap();
+  if (!LoadTerrainOverview(new_path, nullptr, new_map->GetTileCache(),
+                           operation)) {
+    delete new_map;
+    return;
+  }
+
+  path = AllocatedString<TCHAR>::Duplicate(new_path);
+  weather_map = new_map;
 }
 
 void
@@ -132,7 +144,7 @@ RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
   /* fake a mutex - weather data is only used in the DrawThread */
   SharedMutex mutex;
 
-  UpdateTerrainTiles(weather_map->GetPath(), weather_map->GetTileCache(),
+  UpdateTerrainTiles(path.c_str(), weather_map->GetTileCache(),
                      mutex,
                      weather_map->GetProjection(),
                      location, radius);

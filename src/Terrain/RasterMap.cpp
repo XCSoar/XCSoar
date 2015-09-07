@@ -28,11 +28,6 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-RasterMap::RasterMap(const TCHAR *_path)
-  :path(AllocatedString<TCHAR>::Duplicate(_path))
-{
-}
-
 void
 RasterMap::UpdateProjection()
 {

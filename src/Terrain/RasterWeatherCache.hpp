@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Time/BrokenTime.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Util/AllocatedString.hxx"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -50,6 +51,8 @@ class RasterWeatherCache {
   unsigned weather_time = 0;
   unsigned last_weather_time = 0;
 
+  AllocatedString<TCHAR> path;
+
   RasterMap *weather_map = nullptr;
 
 public:
@@ -57,7 +60,7 @@ public:
    * Default constructor
    */
   explicit RasterWeatherCache(const RasterWeatherStore &_store)
-    :store(_store) {}
+    :store(_store), path(nullptr) {}
 
   ~RasterWeatherCache() {
     Close();

@@ -27,6 +27,7 @@ Copyright_License {
 #include "RasterMap.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Thread/Guard.hpp"
+#include "Util/AllocatedString.hxx"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -47,15 +48,18 @@ public:
   /** invalid value for terrain */
   static constexpr short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
 
-protected:
+private:
+  AllocatedString<TCHAR> path;
+
   RasterMap map;
 
 private:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  RasterTerrain(const TCHAR *path)
-    :Guard<RasterMap>(map), map(path) {}
+  explicit RasterTerrain(const TCHAR *_path)
+    :Guard<RasterMap>(map),
+     path(AllocatedString<TCHAR>::Duplicate(_path)) {}
 
 public:
   const Serial &GetSerial() const {

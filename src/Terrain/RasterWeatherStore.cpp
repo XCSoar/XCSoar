@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "RasterWeatherStore.hpp"
 #include "RasterMap.hpp"
-#include "Loader.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
@@ -124,7 +123,7 @@ RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
           (const char *)narrow_name, t.hour, t.minute);
 }
 
-inline const TCHAR *
+const TCHAR *
 RasterWeatherStore::GetFilename(TCHAR *buffer, const TCHAR *name,
                                 unsigned time_index)
 {
@@ -133,22 +132,6 @@ RasterWeatherStore::GetFilename(TCHAR *buffer, const TCHAR *name,
   _stprintf(fname, _T(RASP_FILENAME "/" RASP_FORMAT),
             name, t.hour, t.minute);
   return LocalPath(buffer, fname);
-}
-
-RasterMap *
-RasterWeatherStore::LoadItem(const TCHAR *name, unsigned time_index,
-                             OperationEnvironment &operation)
-{
-  TCHAR buffer[MAX_PATH];
-  const auto rasp_filename = GetFilename(buffer, name, time_index);
-  RasterMap *map = new RasterMap(rasp_filename);
-  if (!LoadTerrainOverview(rasp_filename, nullptr, map->GetTileCache(),
-                           operation)) {
-    delete map;
-    return nullptr;
-  }
-
-  return map;
 }
 
 struct zzip_dir *
