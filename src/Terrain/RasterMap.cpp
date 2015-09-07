@@ -53,6 +53,14 @@ RasterMap::RasterMap(const TCHAR *_path)
 {
 }
 
+void
+RasterMap::UpdateProjection()
+{
+  projection.Set(GetBounds(),
+                 raster_tile_cache.GetFineWidth(),
+                 raster_tile_cache.GetFineHeight());
+}
+
 bool
 RasterMap::Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
                 OperationEnvironment &operation)
@@ -85,9 +93,7 @@ RasterMap::Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
     }
   }
 
-  projection.Set(GetBounds(),
-                 raster_tile_cache.GetFineWidth(),
-                 raster_tile_cache.GetFineHeight());
+  UpdateProjection();
   return true;
 }
 

@@ -46,6 +46,8 @@ public:
   RasterMap(const RasterMap &) = delete;
   RasterMap &operator=(const RasterMap &) = delete;
 
+  void UpdateProjection();
+
   bool Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
             OperationEnvironment &operation);
 
