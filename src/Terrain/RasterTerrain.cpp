@@ -105,3 +105,11 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 
   return rt;
 }
+
+bool
+RasterTerrain::UpdateTiles(const GeoPoint &location, fixed radius)
+{
+  ExclusiveLease lease(*this);
+  lease->SetViewCenter(location, radius);
+  return lease->IsDirty();
+}

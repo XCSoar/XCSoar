@@ -126,9 +126,7 @@ MapWindow::UpdateTerrain()
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
-  RasterTerrain::ExclusiveLease lease(*terrain);
-  lease->SetViewCenter(location, radius);
-  return lease->IsDirty();
+  return terrain->UpdateTiles(location, radius);
 }
 
 bool

@@ -96,6 +96,11 @@ public:
     return map.GetMapCenter();
   }
 
+  /**
+   * @return true if the method shall be called again
+   */
+  bool UpdateTiles(const GeoPoint &location, fixed radius);
+
 private:
   bool LoadCache(FileCache &cache, const TCHAR *path);
 

@@ -61,9 +61,7 @@ TerrainThread::Tick()
 
     {
       const ScopeUnlock unlock(mutex);
-      RasterTerrain::ExclusiveLease lease(terrain);
-      lease->SetViewCenter(center, radius);
-      again = lease->IsDirty();
+      again = terrain.UpdateTiles(center, radius);
     }
 
     last_center = center;
