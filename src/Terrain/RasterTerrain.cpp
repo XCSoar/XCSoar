@@ -76,7 +76,7 @@ RasterTerrain::Load(const TCHAR *path, const TCHAR *world_file,
   if (LoadCache(cache, path))
     return true;
 
-  if (!map.Load(path, world_file, operation))
+  if (!map.Load(world_file, operation))
     return false;
 
   if (cache != nullptr)

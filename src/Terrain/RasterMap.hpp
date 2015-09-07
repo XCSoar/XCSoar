@@ -53,7 +53,7 @@ public:
 
   bool LoadCache(FILE *file);
 
-  bool Load(const TCHAR *_path, const TCHAR *world_file,
+  bool Load(const TCHAR *world_file,
             OperationEnvironment &operation);
 
   bool IsDefined() const {

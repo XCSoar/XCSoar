@@ -63,7 +63,7 @@ RasterMap::LoadCache(FILE *file)
 }
 
 bool
-RasterMap::Load(const TCHAR *_path, const TCHAR *world_file,
+RasterMap::Load(const TCHAR *world_file,
                 OperationEnvironment &operation)
 {
   assert(!raster_tile_cache.IsValid());
