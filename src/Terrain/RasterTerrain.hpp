@@ -27,11 +27,11 @@ Copyright_License {
 #include "RasterMap.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Thread/Guard.hpp"
-#include "Util/AllocatedString.hxx"
 #include "Compiler.h"
 
 #include <tchar.h>
 
+struct zzip_dir;
 class FileCache;
 class OperationEnvironment;
 
@@ -49,7 +49,7 @@ public:
   static constexpr short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
 
 private:
-  AllocatedString<TCHAR> path;
+  struct zzip_dir *const dir;
 
   RasterMap map;
 
@@ -57,11 +57,12 @@ private:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  explicit RasterTerrain(const TCHAR *_path)
-    :Guard<RasterMap>(map),
-     path(AllocatedString<TCHAR>::Duplicate(_path)) {}
+  explicit RasterTerrain(struct zzip_dir *_dir, const TCHAR *_path)
+    :Guard<RasterMap>(map), dir(_dir) {}
 
 public:
+  ~RasterTerrain();
+
   const Serial &GetSerial() const {
     return map.GetSerial();
   }
@@ -114,7 +115,7 @@ private:
 
   bool SaveCache(FileCache &cache, const TCHAR *path) const;
 
-  bool Load(const TCHAR *world_file, FileCache *cache,
+  bool Load(const TCHAR *path, FileCache *cache,
             OperationEnvironment &operation);
 };
 

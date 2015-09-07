@@ -237,11 +237,11 @@ LoadJPG2000(jas_stream_t *in)
 }
 
 inline bool
-TerrainLoader::LoadJPG2000(const TCHAR *path)
+TerrainLoader::LoadJPG2000(struct zzip_dir *dir, const char *path)
 {
   assert(current_terrain_loader == nullptr);
 
-  const auto in = OpenJasperZzipStream(NarrowPathName(path));
+  const auto in = OpenJasperZzipStream(dir, path);
   if (in == nullptr)
     return false;
 
@@ -257,13 +257,14 @@ TerrainLoader::LoadJPG2000(const TCHAR *path)
 }
 
 static bool
-LoadWorldFile(RasterTileCache &tile_cache, const TCHAR *path)
+LoadWorldFile(RasterTileCache &tile_cache,
+              struct zzip_dir *dir, const char *path)
 {
   if (path == nullptr)
     return false;
 
-  const auto new_bounds = ::LoadWorldFile(path, tile_cache.GetWidth(),
-                                          tile_cache.GetHeight());
+  const auto new_bounds = LoadWorldFile(dir, path, tile_cache.GetWidth(),
+                                        tile_cache.GetHeight());
   bool success = new_bounds.IsValid();
   if (success)
     tile_cache.SetBounds(new_bounds);
@@ -271,18 +272,19 @@ LoadWorldFile(RasterTileCache &tile_cache, const TCHAR *path)
 }
 
 inline bool
-TerrainLoader::LoadOverview(const TCHAR *path, const TCHAR *world_file)
+TerrainLoader::LoadOverview(struct zzip_dir *dir,
+                            const char *path, const char *world_file)
 {
   assert(scan_overview);
 
   raster_tile_cache.Reset();
 
-  bool success = LoadJPG2000(path);
+  bool success = LoadJPG2000(dir, path);
 
   /* if we loaded the JPG2000 file successfully, but no bounds were
      obtained from there, try to load the world file "terrain.j2w" */
   if (success && !raster_tile_cache.bounds.IsValid() &&
-      !LoadWorldFile(raster_tile_cache, world_file))
+      !LoadWorldFile(raster_tile_cache, dir, world_file))
     /* that failed: without bounds, we can't do anything; give up,
        discard the whole file */
     success = false;
@@ -294,7 +296,8 @@ TerrainLoader::LoadOverview(const TCHAR *path, const TCHAR *world_file)
 }
 
 bool
-LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
+LoadTerrainOverview(struct zzip_dir *dir,
+                    const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env)
 {
@@ -302,11 +305,12 @@ LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
   SharedMutex mutex;
 
   TerrainLoader loader(mutex, raster_tile_cache, true, env);
-  return loader.LoadOverview(path, world_file);
+  return loader.LoadOverview(dir, path, world_file);
 }
 
 inline bool
-TerrainLoader::UpdateTiles(const TCHAR *path, int x, int y, unsigned radius)
+TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
+                           int x, int y, unsigned radius)
 {
   assert(!scan_overview);
 
@@ -314,13 +318,13 @@ TerrainLoader::UpdateTiles(const TCHAR *path, int x, int y, unsigned radius)
     /* nothing to do */
     return true;
 
-  bool success = LoadJPG2000(path);
+  bool success = LoadJPG2000(dir, path);
   raster_tile_cache.FinishTileUpdate();
   return success;
 }
 
 bool
-UpdateTerrainTiles(const TCHAR *path,
+UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    int x, int y, unsigned radius)
 {
@@ -329,18 +333,18 @@ UpdateTerrainTiles(const TCHAR *path,
 
   NullOperationEnvironment env;
   TerrainLoader loader(mutex, raster_tile_cache, false, env);
-  return loader.UpdateTiles(path, x, y, radius);
+  return loader.UpdateTiles(dir, path, x, y, radius);
 }
 
 bool
-UpdateTerrainTiles(const TCHAR *path,
+UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
                    const GeoPoint &location, fixed radius)
 {
   const auto raster_location = projection.ProjectCoarse(location);
 
-  return UpdateTerrainTiles(path, raster_tile_cache, mutex,
+  return UpdateTerrainTiles(dir, path, raster_tile_cache, mutex,
                             raster_location.x, raster_location.y,
                             projection.DistancePixelsCoarse(radius));
 }

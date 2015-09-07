@@ -26,9 +26,11 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct zzip_dir;
 class GeoBounds;
 
 GeoBounds
-LoadWorldFile(const TCHAR *path, unsigned width, unsigned height);
+LoadWorldFile(struct zzip_dir *dir, const char *path,
+              unsigned width, unsigned height);
 
 #endif

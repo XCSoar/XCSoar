@@ -82,17 +82,18 @@ ReadWorldFile(NLineReader &reader, WorldFileData &data)
 }
 
 static bool
-ReadWorldFile(const TCHAR *path, WorldFileData &data)
+ReadWorldFile(struct zzip_dir *dir, const char *path, WorldFileData &data)
 {
-  ZipLineReaderA reader(path);
+  ZipLineReaderA reader(dir, path);
   return !reader.error() && ReadWorldFile(reader, data);
 }
 
 GeoBounds
-LoadWorldFile(const TCHAR *path, unsigned width, unsigned height)
+LoadWorldFile(struct zzip_dir *dir, const char *path,
+              unsigned width, unsigned height)
 {
   WorldFileData data;
-  if (!ReadWorldFile(path, data) ||
+  if (!ReadWorldFile(dir, path, data) ||
       /* we don't support rotation */
       data.IsRotated())
     return GeoBounds::Invalid();

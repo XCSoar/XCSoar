@@ -130,15 +130,12 @@ public:
   gcc_const
   static BrokenTime IndexToTime(unsigned index);
 
-  static const TCHAR *GetFilename(TCHAR *rasp_filename, const TCHAR *name,
-                                  unsigned time_index);
-
-private:
   static struct zzip_dir *OpenArchive();
 
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
                                     unsigned time_index);
 
+private:
   gcc_pure
   static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                          unsigned time_index);

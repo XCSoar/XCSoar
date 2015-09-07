@@ -26,7 +26,9 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "IO/FileCache.hpp"
 #include "Compatibility/path.h"
-#include "Util/ConvertString.hpp"
+#include "OS/ConvertPathName.hpp"
+
+#include <zzip/zzip.h>
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -39,6 +41,11 @@ static const TCHAR *const terrain_cache_name = _T("terrain_fixed");
 #else
 static const TCHAR *const terrain_cache_name = _T("terrain");
 #endif
+
+RasterTerrain::~RasterTerrain()
+{
+    zzip_dir_close(dir);
+}
 
 inline bool
 RasterTerrain::LoadCache(FileCache &cache, const TCHAR *path)
@@ -72,20 +79,19 @@ RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
 }
 
 inline bool
-RasterTerrain::Load(const TCHAR *world_file,
-                    FileCache *cache, OperationEnvironment &operation)
+RasterTerrain::Load(const TCHAR *path, FileCache *cache,
+                    OperationEnvironment &operation)
 {
-  if (LoadCache(cache, path.c_str()))
+  if (LoadCache(cache, path))
     return true;
 
-  if (!LoadTerrainOverview(path.c_str(), world_file, map.GetTileCache(),
-                           operation))
+  if (!LoadTerrainOverview(dir, map.GetTileCache(), operation))
     return false;
 
   map.UpdateProjection();
 
   if (cache != nullptr)
-    SaveCache(*cache, path.c_str());
+    SaveCache(*cache, path);
 
   return true;
 }
@@ -93,17 +99,16 @@ RasterTerrain::Load(const TCHAR *world_file,
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 {
-  TCHAR path[MAX_PATH], world_file[MAX_PATH];
-
+  TCHAR path[MAX_PATH];
   if (!Profile::GetPath(ProfileKeys::MapFile, path))
     return nullptr;
 
-  _tcscpy(world_file, path);
-  _tcscat(world_file, _T(DIR_SEPARATOR_S "terrain.j2w"));
-  _tcscat(path, _T("/terrain.jp2"));
+  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), nullptr);
+  if (dir == nullptr)
+    return nullptr;
 
-  RasterTerrain *rt = new RasterTerrain(path);
-  if (!rt->Load(world_file, cache, operation)) {
+  RasterTerrain *rt = new RasterTerrain(dir, path);
+  if (!rt->Load(path, cache, operation)) {
     delete rt;
     return nullptr;
   }
@@ -118,7 +123,7 @@ RasterTerrain::UpdateTiles(const GeoPoint &location, fixed radius)
   if (!tile_cache.IsValid())
     return false;
 
-  UpdateTerrainTiles(path.c_str(), tile_cache, mutex, map.GetProjection(),
-                     location, radius);
+  UpdateTerrainTiles(dir, tile_cache, mutex,
+                     map.GetProjection(), location, radius);
   return map.IsDirty();
 }

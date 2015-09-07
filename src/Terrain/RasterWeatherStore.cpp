@@ -123,17 +123,6 @@ RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
           (const char *)narrow_name, t.hour, t.minute);
 }
 
-const TCHAR *
-RasterWeatherStore::GetFilename(TCHAR *buffer, const TCHAR *name,
-                                unsigned time_index)
-{
-  TCHAR fname[MAX_PATH];
-  const BrokenTime t = IndexToTime(time_index);
-  _stprintf(fname, _T(RASP_FILENAME "/" RASP_FORMAT),
-            name, t.hour, t.minute);
-  return LocalPath(buffer, fname);
-}
-
 struct zzip_dir *
 RasterWeatherStore::OpenArchive()
 {

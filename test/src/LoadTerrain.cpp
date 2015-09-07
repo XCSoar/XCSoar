@@ -33,6 +33,8 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
 
+#include <zzip/zzip.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <tchar.h>
@@ -40,21 +42,20 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "PATH");
-  const auto map_path = args.ExpectNextT();
+  const auto map_path = args.ExpectNext();
   args.ExpectEnd();
 
-  TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, map_path.c_str());
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
-
-  TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, map_path.c_str());
-  _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
+  ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
+  if (dir == nullptr) {
+    fprintf(stderr, "Failed to open %s\n", map_path);
+    return EXIT_FAILURE;
+  }
 
   NullOperationEnvironment operation;
   RasterTileCache rtc;
-  if (!LoadTerrainOverview(jp2_path, j2w_path, rtc, operation)) {
+  if (!LoadTerrainOverview(dir, rtc, operation)) {
     fprintf(stderr, "LoadOverview failed\n");
+    zzip_dir_close(dir);
     return EXIT_FAILURE;
   }
 
@@ -67,9 +68,10 @@ int main(int argc, char **argv)
 
   SharedMutex mutex;
   do {
-    UpdateTerrainTiles(jp2_path, rtc, mutex,
+    UpdateTerrainTiles(dir, rtc, mutex,
                        rtc.GetWidth() / 2, rtc.GetHeight() / 2, 1000);
   } while (rtc.IsDirty());
+  zzip_dir_close(dir);
 
   return EXIT_SUCCESS;
 }

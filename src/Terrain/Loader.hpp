@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct zzip_dir;
 struct GeoPoint;
 class RasterTileCache;
 class RasterProjection;
@@ -55,8 +56,10 @@ public:
     :mutex(_mutex), raster_tile_cache(_rtc),
      scan_overview(_scan_overview), env(_env) {}
 
-  bool LoadOverview(const TCHAR *path, const TCHAR *world_file);
-  bool UpdateTiles(const TCHAR *path, int x, int y, unsigned radius);
+  bool LoadOverview(struct zzip_dir *dir,
+                    const char *path, const char *world_file);
+  bool UpdateTiles(struct zzip_dir *dir, const char *path,
+                   int x, int y, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
@@ -77,24 +80,53 @@ public:
                    const struct jas_matrix &m);
 
 private:
-  bool LoadJPG2000(const TCHAR *path);
+  bool LoadJPG2000(struct zzip_dir *dir, const char *path);
   void ParseBounds(const char *data);
 };
 
 bool
-LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
+LoadTerrainOverview(struct zzip_dir *dir,
+                    const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env);
 
+static inline bool
+LoadTerrainOverview(struct zzip_dir *dir,
+                    RasterTileCache &tile_cache,
+                    OperationEnvironment &env)
+{
+  return LoadTerrainOverview(dir, "terrain.jp2", "terrain.j2w",
+                             tile_cache, env);
+}
+
 bool
-UpdateTerrainTiles(const TCHAR *path,
+UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    int x, int y, unsigned radius);
 
+static inline bool
+UpdateTerrainTiles(struct zzip_dir *dir,
+                   RasterTileCache &tile_cache, SharedMutex &mutex,
+                   int x, int y, unsigned radius)
+{
+  return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
+                            x, y, radius);
+}
+
 bool
-UpdateTerrainTiles(const TCHAR *path,
+UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
                    const GeoPoint &location, fixed radius);
+
+static inline bool
+UpdateTerrainTiles(struct zzip_dir *dir,
+                   RasterTileCache &tile_cache, SharedMutex &mutex,
+                   const RasterProjection &projection,
+                   const GeoPoint &location, fixed radius)
+{
+  return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
+                            projection, location, radius);
+}
 
 #endif

@@ -26,7 +26,9 @@ Copyright_License {
 
 #include "jasper/jas_stream.h"
 
+struct zzip_dir;
+
 jas_stream_t *
-OpenJasperZzipStream(const char *path);
+OpenJasperZzipStream(struct zzip_dir *dir, const char *path);
 
 #endif

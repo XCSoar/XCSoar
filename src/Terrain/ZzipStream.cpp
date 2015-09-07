@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ZzipStream.hpp"
 
-#include <zzip/lib.h>
+#include <zzip/util.h>
 
 static int
 jas_zzip_read(jas_stream_obj_t *obj, char *buf, int cnt)
@@ -63,9 +63,9 @@ static constexpr jas_stream_ops_t zzip_stream_ops = {
 };
 
 jas_stream_t *
-OpenJasperZzipStream(const char *path)
+OpenJasperZzipStream(struct zzip_dir *dir, const char *path)
 {
-  const auto f = zzip_fopen(path, "rb");
+  const auto f = zzip_open_rb(dir, path);
   if (f == nullptr)
     return nullptr;
 

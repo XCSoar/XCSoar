@@ -36,6 +36,8 @@
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
 
+#include <zzip/zzip.h>
+
 #include <string.h>
 
 static void
@@ -104,8 +106,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
 }
 
 int main(int argc, char** argv) {
-
-  const char hc_path[] = "tmp/terrain";
+  static const char hc_path[] = "tmp/map.xcm";
   const char *map_path;
   if ((argc<2) || !strlen(argv[0])) {
     map_path = hc_path;
@@ -113,29 +114,29 @@ int main(int argc, char** argv) {
     map_path = argv[0];
   }
 
-  TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, PathName(map_path));
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
-
-  TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, PathName(map_path));
-  _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
+  ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
+  if (dir == nullptr) {
+    fprintf(stderr, "Failed to open %s\n", map_path);
+    return EXIT_FAILURE;
+  }
 
   RasterMap map;
 
   NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(jp2_path, j2w_path, map.GetTileCache(),
+  if (!LoadTerrainOverview(dir, map.GetTileCache(),
                            operation)) {
     fprintf(stderr, "failed to load map\n");
+    zzip_dir_close(dir);
     return EXIT_FAILURE;
   }
 
   SharedMutex mutex;
   do {
-    UpdateTerrainTiles(jp2_path, map.GetTileCache(), mutex,
+    UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
                        map.GetProjection(),
                        map.GetMapCenter(), fixed(100000));
   } while (map.IsDirty());
+  zzip_dir_close(dir);
 
   plan_tests(16*3);
   test_troute(map, fixed(0), fixed(0.1), RoughAltitude(10000));
