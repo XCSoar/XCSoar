@@ -95,6 +95,11 @@ public:
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }
+
+private:
+  bool Load(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
+            OperationEnvironment &operation);
+
 };
 
 #endif
