@@ -28,7 +28,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "Util/ConvertString.hpp"
+#include "OS/ConvertPathName.hpp"
 
 #include <zzip/zzip.h>
 
@@ -46,8 +46,7 @@ LoadConfiguredTopographyZip(TopographyStore &store,
   if (!Profile::GetPath(ProfileKeys::MapFile, path))
     return false;
 
-  const WideToACPConverter narrow_path(path);
-  ZZIP_DIR *dir = zzip_dir_open(narrow_path, nullptr);
+  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), nullptr);
   if (dir == nullptr)
     return false;
 
