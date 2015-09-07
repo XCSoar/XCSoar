@@ -138,7 +138,11 @@ RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
   if (center.IsValid() && center.DistanceS(location) < fixed(1000))
     return;
 
+  /* fake a mutex - weather data is only used in the DrawThread */
+  SharedMutex mutex;
+
   UpdateTerrainTiles(weather_map->GetPath(), weather_map->GetTileCache(),
+                     mutex,
                      weather_map->GetProjection(),
                      location, radius);
   if (!weather_map->IsDirty())

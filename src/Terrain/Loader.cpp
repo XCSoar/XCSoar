@@ -176,8 +176,10 @@ TerrainLoader::PutTileData(unsigned index,
   if (scan_overview)
     raster_tile_cache.PutOverviewTile(index, start_x, start_y,
                                       end_x, end_y, m);
-  else
+  else {
+    const ScopeExclusiveLock lock(mutex);
     raster_tile_cache.PutTileData(index, m);
+  }
 }
 
 static bool
@@ -281,7 +283,10 @@ LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env)
 {
-  TerrainLoader loader(raster_tile_cache, true, env);
+  /* fake a mutex - we don't need it for LoadTerrainOverview() */
+  SharedMutex mutex;
+
+  TerrainLoader loader(mutex, raster_tile_cache, true, env);
   return loader.LoadOverview(path, world_file);
 }
 
@@ -301,26 +306,26 @@ TerrainLoader::UpdateTiles(const TCHAR *path, int x, int y, unsigned radius)
 
 bool
 UpdateTerrainTiles(const TCHAR *path,
-                   RasterTileCache &raster_tile_cache,
+                   RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    int x, int y, unsigned radius)
 {
   if (!raster_tile_cache.IsValid())
     return false;
 
   NullOperationEnvironment env;
-  TerrainLoader loader(raster_tile_cache, false, env);
+  TerrainLoader loader(mutex, raster_tile_cache, false, env);
   return loader.UpdateTiles(path, x, y, radius);
 }
 
 bool
 UpdateTerrainTiles(const TCHAR *path,
-                   RasterTileCache &raster_tile_cache,
+                   RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
                    const GeoPoint &location, fixed radius)
 {
   const auto raster_location = projection.ProjectCoarse(location);
 
-  return UpdateTerrainTiles(path, raster_tile_cache,
+  return UpdateTerrainTiles(path, raster_tile_cache, mutex,
                             raster_location.x, raster_location.y,
                             projection.DistancePixelsCoarse(radius));
 }

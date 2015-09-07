@@ -130,8 +130,10 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
+  SharedMutex mutex;
   do {
-    UpdateTerrainTiles(jp2_path, map.GetTileCache(), map.GetProjection(),
+    UpdateTerrainTiles(jp2_path, map.GetTileCache(), mutex,
+                       map.GetProjection(),
                        map.GetMapCenter(), fixed(100000));
   } while (map.IsDirty());
 

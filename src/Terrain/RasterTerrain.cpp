@@ -116,13 +116,11 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 bool
 RasterTerrain::UpdateTiles(const GeoPoint &location, fixed radius)
 {
-  ExclusiveLease lease(*this);
-
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())
     return false;
 
-  UpdateTerrainTiles(map.GetPath(), tile_cache, map.GetProjection(),
+  UpdateTerrainTiles(map.GetPath(), tile_cache, mutex, map.GetProjection(),
                      location, radius);
-  return lease->IsDirty();
+  return map.IsDirty();
 }

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_LOADER_HPP
 #define XCSOAR_TERRAIN_LOADER_HPP
 
+#include "Thread/SharedMutex.hpp"
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
@@ -34,6 +35,8 @@ class RasterProjection;
 class OperationEnvironment;
 
 class TerrainLoader {
+  SharedMutex &mutex;
+
   RasterTileCache &raster_tile_cache;
 
   const bool scan_overview;
@@ -46,9 +49,11 @@ class TerrainLoader {
   mutable unsigned remaining_segments = 0;
 
 public:
-  TerrainLoader(RasterTileCache &_rtc, bool _scan_overview,
+  TerrainLoader(SharedMutex &_mutex, RasterTileCache &_rtc,
+                bool _scan_overview,
                 OperationEnvironment &_env)
-    :raster_tile_cache(_rtc), scan_overview(_scan_overview), env(_env) {}
+    :mutex(_mutex), raster_tile_cache(_rtc),
+     scan_overview(_scan_overview), env(_env) {}
 
   bool LoadOverview(const TCHAR *path, const TCHAR *world_file);
   bool UpdateTiles(const TCHAR *path, int x, int y, unsigned radius);
@@ -83,12 +88,12 @@ LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
 
 bool
 UpdateTerrainTiles(const TCHAR *path,
-                   RasterTileCache &raster_tile_cache,
+                   RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    int x, int y, unsigned radius);
 
 bool
 UpdateTerrainTiles(const TCHAR *path,
-                   RasterTileCache &raster_tile_cache,
+                   RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
                    const GeoPoint &location, fixed radius);
 

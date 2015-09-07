@@ -65,8 +65,9 @@ int main(int argc, char **argv)
          (double)bounds.GetEast().Degrees(),
          (double)bounds.GetSouth().Degrees());
 
+  SharedMutex mutex;
   do {
-    UpdateTerrainTiles(jp2_path, rtc,
+    UpdateTerrainTiles(jp2_path, rtc, mutex,
                        rtc.GetWidth() / 2, rtc.GetHeight() / 2, 1000);
   } while (rtc.IsDirty());
 

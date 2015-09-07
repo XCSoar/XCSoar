@@ -1,4 +1,6 @@
 Version 7.0 - not yet released
+* data files
+  - optimise the terrain loader
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later
