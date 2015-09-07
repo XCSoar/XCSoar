@@ -163,14 +163,8 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   derived_info.Reset();
   derived_info.terrain_valid = true;
 
-  if (terrain != NULL) {
-    RasterTerrain::UnprotectedLease lease(*terrain);
-    do {
-      UpdateTerrainTiles(lease->GetPath(), lease->GetTileCache(),
-                         lease->GetProjection(),
-                         nmea_info.location, fixed(50000));
-    } while (lease->IsDirty());
-  }
+  if (terrain != nullptr)
+    while (terrain->UpdateTiles(nmea_info.location, fixed(50000))) {}
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      settings_map);
