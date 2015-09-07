@@ -49,6 +49,10 @@ public:
     return path.c_str();
   }
 
+  RasterTileCache &GetTileCache() {
+    return raster_tile_cache;
+  }
+
   void UpdateProjection();
 
   bool SaveCache(FILE *file) const {
@@ -56,9 +60,6 @@ public:
   }
 
   bool LoadCache(FILE *file);
-
-  bool Load(const TCHAR *world_file,
-            OperationEnvironment &operation);
 
   bool IsDefined() const {
     return raster_tile_cache.IsValid();
@@ -78,11 +79,9 @@ public:
     return GetBounds().GetCenter();
   }
 
-  void SetViewCenter(const GeoPoint &location, fixed radius);
-
   /**
-   * Determines if SetViewCenter() should be called again to continue
-   * loading.
+   * Determines if UpdateTerrainTiles() should be called again to
+   * continue loading.
    */
   gcc_pure
   bool IsDirty() const {
@@ -91,6 +90,10 @@ public:
 
   const Serial &GetSerial() const {
     return raster_tile_cache.GetSerial();
+  }
+
+  const RasterProjection &GetProjection() const {
+    return projection;
   }
 
   /**

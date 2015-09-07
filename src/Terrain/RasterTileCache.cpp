@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
-#include "Loader.hpp"
 #include "WorldFile.hpp"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
@@ -262,19 +261,6 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
   if (success)
     bounds = new_bounds;
   return success;
-}
-
-bool
-RasterTileCache::LoadOverview(const TCHAR *path, const TCHAR *world_file,
-                              OperationEnvironment &_operation)
-{
-  return LoadTerrainOverview(path, world_file, *this, _operation);
-}
-
-void
-RasterTileCache::UpdateTiles(const TCHAR *path, int x, int y, unsigned radius)
-{
-  UpdateTerrainTiles(path, *this, x, y, radius);
 }
 
 void

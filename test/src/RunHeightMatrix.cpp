@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/HeightMatrix.hpp"
+#include "Terrain/Loader.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "OS/Args.hpp"
@@ -53,13 +54,15 @@ int main(int argc, char **argv)
   RasterMap map(jp2_path);
 
   NullOperationEnvironment operation;
-  if (!map.Load(j2w_path, operation)) {
+  if (!LoadTerrainOverview(jp2_path, j2w_path, map.GetTileCache(),
+                           operation)) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }
 
   do {
-    map.SetViewCenter(map.GetMapCenter(), fixed(50000));
+    UpdateTerrainTiles(jp2_path, map.GetTileCache(), map.GetProjection(),
+                       map.GetMapCenter(), fixed(50000));
   } while (map.IsDirty());
 
   fixed radius = fixed(50000);

@@ -27,6 +27,7 @@ Copyright_License {
  */
 
 #include "Terrain/RasterTileCache.hpp"
+#include "Terrain/Loader.hpp"
 #include "OS/Args.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "Compatibility/path.h"
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
 
   NullOperationEnvironment operation;
   RasterTileCache rtc;
-  if (!rtc.LoadOverview(jp2_path, j2w_path, operation)) {
+  if (!LoadTerrainOverview(jp2_path, j2w_path, rtc, operation)) {
     fprintf(stderr, "LoadOverview failed\n");
     return EXIT_FAILURE;
   }
@@ -65,8 +66,8 @@ int main(int argc, char **argv)
          (double)bounds.GetSouth().Degrees());
 
   do {
-    rtc.UpdateTiles(jp2_path, rtc.GetWidth() / 2, rtc.GetHeight() / 2,
-                    1000);
+    UpdateTerrainTiles(jp2_path, rtc,
+                       rtc.GetWidth() / 2, rtc.GetHeight() / 2, 1000);
   } while (rtc.IsDirty());
 
   return EXIT_SUCCESS;

@@ -51,31 +51,6 @@ RasterMap::LoadCache(FILE *file)
   return success;
 }
 
-bool
-RasterMap::Load(const TCHAR *world_file,
-                OperationEnvironment &operation)
-{
-  assert(!raster_tile_cache.IsValid());
-
-  if (!raster_tile_cache.LoadOverview(path.c_str(), world_file, operation))
-    return false;
-
-  UpdateProjection();
-  return true;
-}
-
-void
-RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
-{
-  if (!raster_tile_cache.IsValid())
-    return;
-
-  const auto raster_center = projection.ProjectCoarse(location);
-
-  raster_tile_cache.UpdateTiles(path.c_str(), raster_center.x, raster_center.y,
-                                projection.DistancePixelsCoarse(radius));
-}
-
 short
 RasterMap::GetHeight(const GeoPoint &location) const
 {

@@ -21,10 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Terrain/RasterTerrain.hpp"
+#include "RasterTerrain.hpp"
+#include "Loader.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/FileCache.hpp"
 #include "Compatibility/path.h"
+#include "Util/ConvertString.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -78,8 +80,11 @@ RasterTerrain::Load(const TCHAR *world_file,
   if (LoadCache(cache, path))
     return true;
 
-  if (!map.Load(world_file, operation))
+  if (!LoadTerrainOverview(path, world_file, map.GetTileCache(),
+                           operation))
     return false;
+
+  map.UpdateProjection();
 
   if (cache != nullptr)
     SaveCache(*cache, path);
@@ -112,6 +117,12 @@ bool
 RasterTerrain::UpdateTiles(const GeoPoint &location, fixed radius)
 {
   ExclusiveLease lease(*this);
-  lease->SetViewCenter(location, radius);
+
+  auto &tile_cache = map.GetTileCache();
+  if (!tile_cache.IsValid())
+    return false;
+
+  UpdateTerrainTiles(map.GetPath(), tile_cache, map.GetProjection(),
+                     location, radius);
   return lease->IsDirty();
 }

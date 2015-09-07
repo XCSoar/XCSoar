@@ -30,6 +30,7 @@ Copyright_License {
 #include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Terrain/Loader.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/MapProfile.hpp"
@@ -165,7 +166,9 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   if (terrain != NULL) {
     RasterTerrain::UnprotectedLease lease(*terrain);
     do {
-      lease->SetViewCenter(nmea_info.location, fixed(50000));
+      UpdateTerrainTiles(lease->GetPath(), lease->GetTileCache(),
+                         lease->GetProjection(),
+                         nmea_info.location, fixed(50000));
     } while (lease->IsDirty());
   }
 

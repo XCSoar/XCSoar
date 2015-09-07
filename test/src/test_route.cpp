@@ -29,6 +29,7 @@
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Terrain/RasterMap.hpp"
+#include "Terrain/Loader.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "Compatibility/path.h"
@@ -184,13 +185,15 @@ main(int argc, char** argv)
   RasterMap map(jp2_path);
 
   NullOperationEnvironment operation;
-  if (!map.Load(j2w_path, operation)) {
+  if (!LoadTerrainOverview(jp2_path, j2w_path, map.GetTileCache(),
+                           operation)) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }
 
   do {
-    map.SetViewCenter(map.GetMapCenter(), fixed(100000));
+    UpdateTerrainTiles(jp2_path, map.GetTileCache(), map.GetProjection(),
+                       map.GetMapCenter(), fixed(100000));
   } while (map.IsDirty());
 
   plan_tests(4 + NUM_SOL);

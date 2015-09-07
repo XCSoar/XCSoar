@@ -304,6 +304,9 @@ UpdateTerrainTiles(const TCHAR *path,
                    RasterTileCache &raster_tile_cache,
                    int x, int y, unsigned radius)
 {
+  if (!raster_tile_cache.IsValid())
+    return false;
+
   NullOperationEnvironment env;
   TerrainLoader loader(raster_tile_cache, false, env);
   return loader.UpdateTiles(path, x, y, radius);

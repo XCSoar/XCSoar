@@ -133,14 +133,14 @@ public:
   static RasterMap *LoadItem(const TCHAR *name, unsigned time_index,
                              OperationEnvironment &operation);
 
+  static const TCHAR *GetFilename(TCHAR *rasp_filename, const TCHAR *name,
+                                  unsigned time_index);
+
 private:
   static struct zzip_dir *OpenArchive();
 
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
                                     unsigned time_index);
-
-  static const TCHAR *GetFilename(TCHAR *rasp_filename, const TCHAR *name,
-                                  unsigned time_index);
 
   gcc_pure
   static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,

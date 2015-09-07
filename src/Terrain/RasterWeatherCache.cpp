@@ -24,6 +24,7 @@ Copyright_License {
 #include "RasterWeatherCache.hpp"
 #include "RasterWeatherStore.hpp"
 #include "RasterMap.hpp"
+#include "Loader.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
@@ -137,7 +138,9 @@ RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
   if (center.IsValid() && center.DistanceS(location) < fixed(1000))
     return;
 
-  weather_map->SetViewCenter(location, radius);
+  UpdateTerrainTiles(weather_map->GetPath(), weather_map->GetTileCache(),
+                     weather_map->GetProjection(),
+                     location, radius);
   if (!weather_map->IsDirty())
     center = location;
 }

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "RasterWeatherStore.hpp"
 #include "RasterMap.hpp"
+#include "Loader.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
@@ -141,7 +142,8 @@ RasterWeatherStore::LoadItem(const TCHAR *name, unsigned time_index,
   TCHAR buffer[MAX_PATH];
   const auto rasp_filename = GetFilename(buffer, name, time_index);
   RasterMap *map = new RasterMap(rasp_filename);
-  if (!map->Load(nullptr, operation)) {
+  if (!LoadTerrainOverview(rasp_filename, nullptr, map->GetTileCache(),
+                           operation)) {
     delete map;
     return nullptr;
   }
