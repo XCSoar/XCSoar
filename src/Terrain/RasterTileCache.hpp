@@ -158,6 +158,12 @@ public:
   RasterTileCache(const RasterTileCache &) = delete;
   RasterTileCache &operator=(const RasterTileCache &) = delete;
 
+  void SetBounds(const GeoBounds &_bounds) {
+    assert(_bounds.IsValid());
+
+    bounds = _bounds;
+  }
+
 protected:
   void ScanTileLine(GridLocation start, GridLocation end,
                     short *buffer, unsigned size, bool interpolate) const;
@@ -207,12 +213,6 @@ public:
   Intersection(int origin_x, int origin_y,
                int destination_x, int destination_y,
                int h_origin, const int slope_fact) const;
-
-protected:
-  /**
-   * Load a world file (*.tfw or *.j2w).
-   */
-  bool LoadWorldFile(const TCHAR *path);
 
 private:
   /**

@@ -25,6 +25,7 @@ Copyright_License {
 #include "RasterTileCache.hpp"
 #include "RasterProjection.hpp"
 #include "ZzipStream.hpp"
+#include "WorldFile.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/ConvertPathName.hpp"
 
@@ -255,6 +256,20 @@ TerrainLoader::LoadJPG2000(const TCHAR *path)
   return success;
 }
 
+static bool
+LoadWorldFile(RasterTileCache &tile_cache, const TCHAR *path)
+{
+  if (path == nullptr)
+    return false;
+
+  const auto new_bounds = ::LoadWorldFile(path, tile_cache.GetWidth(),
+                                          tile_cache.GetHeight());
+  bool success = new_bounds.IsValid();
+  if (success)
+    tile_cache.SetBounds(new_bounds);
+  return success;
+}
+
 inline bool
 TerrainLoader::LoadOverview(const TCHAR *path, const TCHAR *world_file)
 {
@@ -267,7 +282,7 @@ TerrainLoader::LoadOverview(const TCHAR *path, const TCHAR *world_file)
   /* if we loaded the JPG2000 file successfully, but no bounds were
      obtained from there, try to load the world file "terrain.j2w" */
   if (success && !raster_tile_cache.bounds.IsValid() &&
-      !raster_tile_cache.LoadWorldFile(world_file))
+      !LoadWorldFile(raster_tile_cache, world_file))
     /* that failed: without bounds, we can't do anything; give up,
        discard the whole file */
     success = false;

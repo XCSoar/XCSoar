@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
-#include "WorldFile.hpp"
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
@@ -251,16 +250,6 @@ RasterTileCache::FindMarkerSegment(uint32_t file_offset) const
       return &s;
 
   return nullptr;
-}
-
-bool
-RasterTileCache::LoadWorldFile(const TCHAR *path)
-{
-  const auto new_bounds = ::LoadWorldFile(path, GetWidth(), GetHeight());
-  bool success = new_bounds.IsValid();
-  if (success)
-    bounds = new_bounds;
-  return success;
 }
 
 void
