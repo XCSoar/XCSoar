@@ -70,12 +70,7 @@ struct zzip_dir
     zzip_plugin_io_t io;          /* vtable for io routines */
 }; 
 
-#ifdef _WIN32_WCE
-/* smaller buffer on weak Windows CE hardware */
-#define ZZIP_32K 8192
-#else
 #define ZZIP_32K 32768
-#endif
 
 /* try to open a zip-basename with default_fileext */
 int      __zzip_try_open (zzip_char_t* filename, int filemode,
