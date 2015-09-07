@@ -46,15 +46,6 @@ ToHalfHours(BrokenTime t)
   return t.hour * 2u + t.minute / 30;
 }
 
-RasterWeatherCache::RasterWeatherCache(const RasterWeatherStore &_store)
-  :store(_store),
-   center(GeoPoint::Invalid()),
-   parameter(0), last_parameter(0),
-   weather_time(0), last_weather_time(0),
-   weather_map(nullptr)
-{
-}
-
 const TCHAR *
 RasterWeatherCache::GetMapName() const
 {

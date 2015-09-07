@@ -42,21 +42,22 @@ struct zzip_dir;
 class RasterWeatherCache {
   const RasterWeatherStore &store;
 
-  GeoPoint center;
+  GeoPoint center = GeoPoint::Invalid();
 
-  unsigned parameter;
-  unsigned last_parameter;
+  unsigned parameter = 0;
+  unsigned last_parameter = 0;
 
-  unsigned weather_time;
-  unsigned last_weather_time;
+  unsigned weather_time = 0;
+  unsigned last_weather_time = 0;
 
-  RasterMap *weather_map;
+  RasterMap *weather_map = nullptr;
 
 public:
   /** 
    * Default constructor
    */
-  RasterWeatherCache(const RasterWeatherStore &_store);
+  explicit RasterWeatherCache(const RasterWeatherStore &_store)
+    :store(_store) {}
 
   ~RasterWeatherCache() {
     Close();
