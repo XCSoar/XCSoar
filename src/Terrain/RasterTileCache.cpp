@@ -268,20 +268,7 @@ bool
 RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
                               OperationEnvironment &_operation)
 {
-  Reset();
-
-  bool initialised = LoadTerrainOverview(path, *this, _operation);
-
-  if (initialised && world_file != nullptr)
-    LoadWorldFile(world_file);
-
-  if (initialised && !bounds.IsValid())
-    initialised = false;
-
-  if (!initialised)
-    Reset();
-
-  return initialised;
+  return LoadTerrainOverview(path, world_file, *this, _operation);
 }
 
 void
