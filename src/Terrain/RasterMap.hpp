@@ -32,7 +32,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class FileCache;
 class OperationEnvironment;
 
 class RasterMap {
@@ -48,7 +47,13 @@ public:
 
   void UpdateProjection();
 
-  bool Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
+  bool SaveCache(FILE *file) const {
+    return raster_tile_cache.SaveCache(file);
+  }
+
+  bool LoadCache(FILE *file);
+
+  bool Load(const TCHAR *_path, const TCHAR *world_file,
             OperationEnvironment &operation);
 
   bool IsDefined() const {

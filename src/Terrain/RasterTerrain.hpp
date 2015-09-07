@@ -97,9 +97,16 @@ public:
   }
 
 private:
+  bool LoadCache(FileCache &cache, const TCHAR *path);
+
+  bool LoadCache(FileCache *cache, const TCHAR *path) {
+    return cache != nullptr && LoadCache(*cache, path);
+  }
+
+  bool SaveCache(FileCache &cache, const TCHAR *path) const;
+
   bool Load(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
             OperationEnvironment &operation);
-
 };
 
 #endif

@@ -23,20 +23,11 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Geo/GeoClip.hpp"
-#include "IO/FileCache.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <algorithm>
 #include <assert.h>
 #include <string.h>
-
-/* use separate cache files for FIXED=y and FIXED=n because the file
-   format is different */
-#ifdef FIXED_MATH
-static const TCHAR *const terrain_cache_name = _T("terrain_fixed");
-#else
-static const TCHAR *const terrain_cache_name = _T("terrain");
-#endif
 
 static AllocatedString<>
 ToNarrowPath(const TCHAR *src)
@@ -62,36 +53,23 @@ RasterMap::UpdateProjection()
 }
 
 bool
-RasterMap::Load(const TCHAR *_path, const TCHAR *world_file, FileCache *cache,
+RasterMap::LoadCache(FILE *file)
+{
+  bool success = raster_tile_cache.LoadCache(file);
+  if (success)
+    UpdateProjection();
+
+  return success;
+}
+
+bool
+RasterMap::Load(const TCHAR *_path, const TCHAR *world_file,
                 OperationEnvironment &operation)
 {
   assert(!raster_tile_cache.IsValid());
 
-  bool cache_loaded = false;
-  if (cache != nullptr) {
-    /* load the cache file */
-    FILE *file = cache->Load(terrain_cache_name, _path);
-    if (file != nullptr) {
-      cache_loaded = raster_tile_cache.LoadCache(file);
-      fclose(file);
-    }
-  }
-
-  if (!cache_loaded) {
-    if (!raster_tile_cache.LoadOverview(path.c_str(), world_file, operation))
-      return false;
-
-    if (cache != nullptr) {
-      /* save the cache file */
-      FILE *file = cache->Save(terrain_cache_name, _path);
-      if (file != nullptr) {
-        if (raster_tile_cache.SaveCache(file))
-          cache->Commit(terrain_cache_name, file);
-        else
-          cache->Cancel(terrain_cache_name, file);
-      }
-    }
-  }
+  if (!raster_tile_cache.LoadOverview(path.c_str(), world_file, operation))
+    return false;
 
   UpdateProjection();
   return true;

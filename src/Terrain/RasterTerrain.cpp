@@ -23,17 +23,66 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/Profile.hpp"
+#include "IO/FileCache.hpp"
 #include "Compatibility/path.h"
 
 #include <windef.h> /* for MAX_PATH */
 
 #include <string.h>
 
+/* use separate cache files for FIXED=y and FIXED=n because the file
+   format is different */
+#ifdef FIXED_MATH
+static const TCHAR *const terrain_cache_name = _T("terrain_fixed");
+#else
+static const TCHAR *const terrain_cache_name = _T("terrain");
+#endif
+
+inline bool
+RasterTerrain::LoadCache(FileCache &cache, const TCHAR *path)
+{
+  bool success = false;
+
+  FILE *file = cache.Load(terrain_cache_name, path);
+  if (file != nullptr) {
+    success = map.LoadCache(file);
+    fclose(file);
+  }
+
+  return success;
+}
+
+inline bool
+RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
+{
+  bool success = false;
+
+  FILE *file = cache.Save(terrain_cache_name, path);
+  if (file != nullptr) {
+    success = map.SaveCache(file);
+    if (success)
+      cache.Commit(terrain_cache_name, file);
+    else
+      cache.Cancel(terrain_cache_name, file);
+  }
+
+  return success;
+}
+
 inline bool
 RasterTerrain::Load(const TCHAR *path, const TCHAR *world_file,
                     FileCache *cache, OperationEnvironment &operation)
 {
-  return map.Load(path, world_file, cache, operation);
+  if (LoadCache(cache, path))
+    return true;
+
+  if (!map.Load(path, world_file, operation))
+    return false;
+
+  if (cache != nullptr)
+    SaveCache(*cache, path);
+
+  return true;
 }
 
 RasterTerrain *

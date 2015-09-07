@@ -184,7 +184,7 @@ main(int argc, char** argv)
   RasterMap map(jp2_path);
 
   NullOperationEnvironment operation;
-  if (!map.Load(jp2_path, j2w_path, nullptr, operation)) {
+  if (!map.Load(jp2_path, j2w_path, operation)) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }
