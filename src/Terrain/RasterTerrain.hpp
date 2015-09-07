@@ -50,13 +50,14 @@ public:
 protected:
   RasterMap map;
 
-public:
+private:
   /**
    * Constructor.  Returns uninitialised object.
    */
   RasterTerrain(const TCHAR *path)
     :Guard<RasterMap>(map), map(path) {}
 
+public:
   const Serial &GetSerial() const {
     return map.GetSerial();
   }
