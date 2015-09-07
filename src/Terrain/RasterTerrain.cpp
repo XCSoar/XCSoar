@@ -28,6 +28,13 @@ Copyright_License {
 
 #include <string.h>
 
+inline bool
+RasterTerrain::Load(const TCHAR *path, const TCHAR *world_file,
+                    FileCache *cache, OperationEnvironment &operation)
+{
+  return map.Load(path, world_file, cache, operation);
+}
+
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 {
@@ -44,7 +51,7 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
     return nullptr;
 
   RasterTerrain *rt = new RasterTerrain(path);
-  if (!rt->map.Load(path, world_file, cache, operation)) {
+  if (!rt->Load(path, world_file, cache, operation)) {
     delete rt;
     return nullptr;
   }
