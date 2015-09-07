@@ -100,7 +100,7 @@ struct RTDistanceSort {
   }
 };
 
-inline bool
+bool
 RasterTileCache::PollTiles(int x, int y, unsigned radius)
 {
   /* tiles are usually 256 pixels wide; with a radius smaller than
@@ -287,11 +287,12 @@ RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
 void
 RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
-  if (!PollTiles(x, y, radius))
-    return;
+  UpdateTerrainTiles(path, *this, x, y, radius);
+}
 
-  UpdateTerrainTiles(path, *this);
-
+void
+RasterTileCache::FinishTileUpdate()
+{
   /* permanently disable the requested tiles which are still not
      loaded, to prevent trying to reload them over and over in a busy
      loop */

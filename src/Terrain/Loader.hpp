@@ -45,7 +45,7 @@ public:
     :raster_tile_cache(_rtc), scan_overview(_scan_overview), env(_env) {}
 
   bool LoadOverview(const char *path);
-  bool UpdateTiles(const char *path);
+  bool UpdateTiles(const char *path, int x, int y, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
@@ -77,6 +77,7 @@ LoadTerrainOverview(const char *path,
 
 bool
 UpdateTerrainTiles(const char *path,
-                   RasterTileCache &raster_tile_cache);
+                   RasterTileCache &raster_tile_cache,
+                   int x, int y, unsigned radius);
 
 #endif
