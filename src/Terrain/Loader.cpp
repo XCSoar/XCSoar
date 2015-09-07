@@ -269,18 +269,25 @@ LoadTerrainOverview(const char *path,
 }
 
 inline bool
-TerrainLoader::UpdateTiles(const char *path)
+TerrainLoader::UpdateTiles(const char *path, int x, int y, unsigned radius)
 {
   assert(!scan_overview);
 
-  return LoadJPG2000(path);
+  if (!raster_tile_cache.PollTiles(x, y, radius))
+    /* nothing to do */
+    return true;
+
+  bool success = LoadJPG2000(path);
+  raster_tile_cache.FinishTileUpdate();
+  return success;
 }
 
 bool
 UpdateTerrainTiles(const char *path,
-                   RasterTileCache &raster_tile_cache)
+                   RasterTileCache &raster_tile_cache,
+                   int x, int y, unsigned radius)
 {
   NullOperationEnvironment env;
   TerrainLoader loader(raster_tile_cache, false, env);
-  return loader.UpdateTiles(path);
+  return loader.UpdateTiles(path, x, y, radius);
 }

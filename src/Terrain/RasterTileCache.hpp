@@ -264,7 +264,7 @@ public:
     return bounds;
   }
 
-private:
+public:
   /* methods called by class TerrainLoader */
 
   gcc_pure
@@ -292,10 +292,11 @@ private:
                        unsigned end_x, unsigned end_y,
                        const struct jas_matrix &m);
 
+  bool PollTiles(int x, int y, unsigned radius);
+
   void PutTileData(unsigned index, const struct jas_matrix &m);
 
-protected:
-  bool PollTiles(int x, int y, unsigned radius);
+  void FinishTileUpdate();
 
 public:
   short GetMaxElevation() const {
