@@ -45,6 +45,10 @@ public:
   RasterMap(const RasterMap &) = delete;
   RasterMap &operator=(const RasterMap &) = delete;
 
+  const TCHAR *GetPath() const {
+    return path.c_str();
+  }
+
   void UpdateProjection();
 
   bool SaveCache(FILE *file) const {

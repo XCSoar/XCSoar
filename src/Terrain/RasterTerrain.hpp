@@ -110,7 +110,7 @@ private:
 
   bool SaveCache(FileCache &cache, const TCHAR *path) const;
 
-  bool Load(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
+  bool Load(const TCHAR *world_file, FileCache *cache,
             OperationEnvironment &operation);
 };
 

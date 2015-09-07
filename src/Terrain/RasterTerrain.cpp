@@ -70,9 +70,11 @@ RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
 }
 
 inline bool
-RasterTerrain::Load(const TCHAR *path, const TCHAR *world_file,
+RasterTerrain::Load(const TCHAR *world_file,
                     FileCache *cache, OperationEnvironment &operation)
 {
+  const TCHAR *path = map.GetPath();
+
   if (LoadCache(cache, path))
     return true;
 
@@ -98,7 +100,7 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
   _tcscat(path, _T("/terrain.jp2"));
 
   RasterTerrain *rt = new RasterTerrain(path);
-  if (!rt->Load(path, world_file, cache, operation)) {
+  if (!rt->Load(world_file, cache, operation)) {
     delete rt;
     return nullptr;
   }
