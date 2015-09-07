@@ -46,8 +46,8 @@ public:
                 OperationEnvironment &_env)
     :raster_tile_cache(_rtc), scan_overview(_scan_overview), env(_env) {}
 
-  bool LoadOverview(const char *path, const TCHAR *world_file);
-  bool UpdateTiles(const char *path, int x, int y, unsigned radius);
+  bool LoadOverview(const TCHAR *path, const TCHAR *world_file);
+  bool UpdateTiles(const TCHAR *path, int x, int y, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
@@ -68,17 +68,17 @@ public:
                    const struct jas_matrix &m);
 
 private:
-  bool LoadJPG2000(const char *path);
+  bool LoadJPG2000(const TCHAR *path);
   void ParseBounds(const char *data);
 };
 
 bool
-LoadTerrainOverview(const char *path, const TCHAR *world_file,
+LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env);
 
 bool
-UpdateTerrainTiles(const char *path,
+UpdateTerrainTiles(const TCHAR *path,
                    RasterTileCache &raster_tile_cache,
                    int x, int y, unsigned radius);
 

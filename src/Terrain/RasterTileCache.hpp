@@ -227,13 +227,13 @@ private:
   std::pair<short, bool> GetFieldDirect(unsigned px, unsigned py) const;
 
 public:
-  bool LoadOverview(const char *path, const TCHAR *world_file,
+  bool LoadOverview(const TCHAR *path, const TCHAR *world_file,
                     OperationEnvironment &operation);
 
   bool SaveCache(FILE *file) const;
   bool LoadCache(FILE *file);
 
-  void UpdateTiles(const char *path, int x, int y, unsigned radius);
+  void UpdateTiles(const TCHAR *path, int x, int y, unsigned radius);
 
   /**
    * Determines if there are still tiles scheduled to be loaded.  Call

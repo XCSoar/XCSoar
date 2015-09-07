@@ -23,24 +23,13 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Geo/GeoClip.hpp"
-#include "Util/ConvertString.hpp"
 
 #include <algorithm>
 #include <assert.h>
 #include <string.h>
 
-static AllocatedString<>
-ToNarrowPath(const TCHAR *src)
-{
-#ifdef _UNICODE
-  return AllocatedString<>::Donate(ConvertWideToACP(src));
-#else
-  return AllocatedString<>::Duplicate(src);
-#endif
-}
-
 RasterMap::RasterMap(const TCHAR *_path)
-  :path(ToNarrowPath(_path))
+  :path(AllocatedString<TCHAR>::Duplicate(_path))
 {
 }
 

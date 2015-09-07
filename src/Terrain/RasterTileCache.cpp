@@ -265,14 +265,14 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
 }
 
 bool
-RasterTileCache::LoadOverview(const char *path, const TCHAR *world_file,
+RasterTileCache::LoadOverview(const TCHAR *path, const TCHAR *world_file,
                               OperationEnvironment &_operation)
 {
   return LoadTerrainOverview(path, world_file, *this, _operation);
 }
 
 void
-RasterTileCache::UpdateTiles(const char *path, int x, int y, unsigned radius)
+RasterTileCache::UpdateTiles(const TCHAR *path, int x, int y, unsigned radius)
 {
   UpdateTerrainTiles(path, *this, x, y, radius);
 }
