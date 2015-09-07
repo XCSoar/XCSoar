@@ -251,13 +251,29 @@ TerrainLoader::LoadJPG2000(const char *path)
   return success;
 }
 
+inline bool
+TerrainLoader::LoadOverview(const char *path)
+{
+  assert(scan_overview);
+
+  return LoadJPG2000(path);
+}
+
 bool
 LoadTerrainOverview(const char *path,
                     RasterTileCache &raster_tile_cache,
                     OperationEnvironment &env)
 {
   TerrainLoader loader(raster_tile_cache, true, env);
-  return loader.LoadJPG2000(path);
+  return loader.LoadOverview(path);
+}
+
+inline bool
+TerrainLoader::UpdateTiles(const char *path)
+{
+  assert(!scan_overview);
+
+  return LoadJPG2000(path);
 }
 
 bool
@@ -266,5 +282,5 @@ UpdateTerrainTiles(const char *path,
 {
   NullOperationEnvironment env;
   TerrainLoader loader(raster_tile_cache, false, env);
-  return loader.LoadJPG2000(path);
+  return loader.UpdateTiles(path);
 }

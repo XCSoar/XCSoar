@@ -44,7 +44,8 @@ public:
                 OperationEnvironment &_env)
     :raster_tile_cache(_rtc), scan_overview(_scan_overview), env(_env) {}
 
-  bool LoadJPG2000(const char *path);
+  bool LoadOverview(const char *path);
+  bool UpdateTiles(const char *path);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
@@ -65,6 +66,7 @@ public:
                    const struct jas_matrix &m);
 
 private:
+  bool LoadJPG2000(const char *path);
   void ParseBounds(const char *data);
 };
 
