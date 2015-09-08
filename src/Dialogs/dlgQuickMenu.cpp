@@ -33,13 +33,11 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
 #include "Event/KeyCode.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/StaticArray.hpp"
 #include "Util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
-
-#include <winuser.h> /* for DT_xxx */
 
 #include <stdio.h>
 
