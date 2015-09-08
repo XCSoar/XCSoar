@@ -43,7 +43,6 @@ Copyright_License {
 #include <algorithm>
 #include <assert.h>
 #include <string.h>
-#include <winuser.h>
 
 class SDLRasterCanvas : public RasterCanvas<ActivePixelTraits> {
 public:
