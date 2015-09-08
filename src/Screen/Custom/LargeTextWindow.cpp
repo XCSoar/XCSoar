@@ -39,7 +39,7 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
 unsigned
 LargeTextWindow::GetVisibleRows() const
 {
-  return GetHeight() / GetFont().GetHeight();
+  return GetHeight() / GetFont().GetLineSpacing();
 }
 
 unsigned
