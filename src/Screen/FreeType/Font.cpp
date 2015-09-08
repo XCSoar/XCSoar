@@ -298,25 +298,21 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
 PixelSize
 Font::TextSize(const TCHAR *text) const
 {
-  int minx = 0, maxx = 0;
+  int maxx = 0;
 
   ForEachGlyph(face, ascent_height, text,
-               [&minx, &maxx](int x, int y, const FT_GlyphSlot glyph){
+               [&maxx](int x, int y, const FT_GlyphSlot glyph){
       const FT_Glyph_Metrics &metrics = glyph->metrics;
       const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
-      const int glyph_maxx = minx + FT_CEIL(metrics.width);
+      const int glyph_maxx = glyph_minx + FT_CEIL(metrics.width);
       const int glyph_advance = FT_CEIL(metrics.horiAdvance);
 
-      int z = x + glyph_minx;
-      if (z < minx)
-        minx = z;
-
-      z = x + std::max(glyph_maxx, glyph_advance);
+      int z = x + std::max(glyph_maxx, glyph_advance);
       if (z > maxx)
         maxx = z;
     });
 
-  return PixelSize{unsigned(maxx - minx), height};
+  return PixelSize{unsigned(maxx), height};
 }
 
 static void
