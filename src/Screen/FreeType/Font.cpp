@@ -231,14 +231,28 @@ Font::Destroy()
 
 template<typename F>
 static void
-ForEachGlyph(const FT_Face face, unsigned ascent_height, const TCHAR *text,
-             F &&f)
+ForEachChar(const TCHAR *text, F &&f)
 {
   assert(text != nullptr);
 #ifndef _UNICODE
   assert(ValidateUTF8(text));
 #endif
 
+  while (true) {
+      const auto n = NextChar(text);
+      if (n.first == 0)
+        break;
+
+      text = n.second;
+      f(n.first);
+    }
+}
+
+template<typename T, typename F>
+static void
+ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
+             F &&f)
+{
   const bool use_kerning = FT_HAS_KERNING(face);
 
   int x = 0;
@@ -248,42 +262,37 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, const TCHAR *text,
   const ScopeLock protect(freetype_mutex);
 #endif
 
-  while (true) {
-    const auto n = NextChar(text);
-    if (n.first == 0)
-      break;
+  ForEachChar(std::forward<T>(text),
+              [face, ascent_height, &f, use_kerning,
+               &x, &prev_index](unsigned ch){
+      const FT_UInt i = FT_Get_Char_Index(face, ch);
+      if (i == 0)
+        return;
 
-    const unsigned ch = n.first;
-    text = n.second;
+      const FT_Error error = FT_Load_Glyph(face, i, load_flags);
+      if (error)
+        return;
 
-    const FT_UInt i = FT_Get_Char_Index(face, ch);
-    if (i == 0)
-      continue;
+      const FT_GlyphSlot glyph = face->glyph;
+      const FT_Glyph_Metrics &metrics = glyph->metrics;
 
-    const FT_Error error = FT_Load_Glyph(face, i, load_flags);
-    if (error)
-      continue;
+      if (use_kerning) {
+        if (prev_index != 0 && i != 0) {
+          FT_Vector delta;
+          FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
+                         &delta);
+          x += delta.x >> 6;
+        }
 
-    const FT_GlyphSlot glyph = face->glyph;
-    const FT_Glyph_Metrics &metrics = glyph->metrics;
-
-    if (use_kerning) {
-      if (prev_index != 0 && i != 0) {
-        FT_Vector delta;
-        FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
-                       &delta);
-        x += delta.x >> 6;
+        prev_index = i;
       }
 
-      prev_index = i;
-    }
+      f(x + FT_FLOOR(metrics.horiBearingX),
+        ascent_height - FT_FLOOR(metrics.horiBearingY),
+        glyph);
 
-    f(x + FT_FLOOR(metrics.horiBearingX),
-      ascent_height - FT_FLOOR(metrics.horiBearingY),
-      glyph);
-
-    x += FT_CEIL(metrics.horiAdvance);
-  }
+      x += FT_CEIL(metrics.horiAdvance);
+    });
 }
 
 PixelSize
