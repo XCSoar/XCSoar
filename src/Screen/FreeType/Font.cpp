@@ -229,18 +229,19 @@ Font::Destroy()
   face = nullptr;
 }
 
-PixelSize
-Font::TextSize(const TCHAR *text) const
+template<typename F>
+static void
+ForEachGlyph(const FT_Face face, unsigned ascent_height, const TCHAR *text,
+             F &&f)
 {
   assert(text != nullptr);
 #ifndef _UNICODE
   assert(ValidateUTF8(text));
 #endif
 
-  const FT_Face face = this->face;
   const bool use_kerning = FT_HAS_KERNING(face);
 
-  int x = 0, minx = 0, maxx = 0;
+  int x = 0;
   unsigned prev_index = 0;
 
 #ifndef ENABLE_OPENGL
@@ -255,11 +256,11 @@ Font::TextSize(const TCHAR *text) const
     const unsigned ch = n.first;
     text = n.second;
 
-    FT_UInt i = FT_Get_Char_Index(face, ch);
+    const FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
       continue;
 
-    FT_Error error = FT_Load_Glyph(face, i, load_flags);
+    const FT_Error error = FT_Load_Glyph(face, i, load_flags);
     if (error)
       continue;
 
@@ -277,20 +278,34 @@ Font::TextSize(const TCHAR *text) const
       prev_index = i;
     }
 
-    const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
-    const int glyph_maxx = minx + FT_CEIL(metrics.width);
-    const int glyph_advance = FT_CEIL(metrics.horiAdvance);
+    f(x + FT_FLOOR(metrics.horiBearingX),
+      ascent_height - FT_FLOOR(metrics.horiBearingY),
+      glyph);
 
-    int z = x + glyph_minx;
-    if (z < minx)
-      minx = z;
-
-    z = x + std::max(glyph_maxx, glyph_advance);
-    if (z > maxx)
-      maxx = z;
-
-    x += glyph_advance;
+    x += FT_CEIL(metrics.horiAdvance);
   }
+}
+
+PixelSize
+Font::TextSize(const TCHAR *text) const
+{
+  int minx = 0, maxx = 0;
+
+  ForEachGlyph(face, ascent_height, text,
+               [&minx, &maxx](int x, int y, const FT_GlyphSlot glyph){
+      const FT_Glyph_Metrics &metrics = glyph->metrics;
+      const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
+      const int glyph_maxx = minx + FT_CEIL(metrics.width);
+      const int glyph_advance = FT_CEIL(metrics.horiAdvance);
+
+      int z = x + glyph_minx;
+      if (z < minx)
+        minx = z;
+
+      z = x + std::max(glyph_maxx, glyph_advance);
+      if (z > maxx)
+        maxx = z;
+    });
 
   return PixelSize{unsigned(maxx - minx), height};
 }
@@ -388,58 +403,12 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 void
 Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 {
-  assert(text != nullptr);
-#ifndef _UNICODE
-  assert(ValidateUTF8(text));
-#endif
-
   uint8_t *buffer = (uint8_t *)_buffer;
   std::fill_n(buffer, BufferSize(size), 0);
 
-  const FT_Face face = this->face;
-  const bool use_kerning = FT_HAS_KERNING(face);
-
-  int x = 0;
-  unsigned prev_index = 0;
-
-#ifndef ENABLE_OPENGL
-  const ScopeLock protect(freetype_mutex);
-#endif
-
-  while (true) {
-    const auto n = NextChar(text);
-    if (n.first == 0)
-      break;
-
-    const unsigned ch = n.first;
-    text = n.second;
-
-    FT_UInt i = FT_Get_Char_Index(face, ch);
-    if (i == 0)
-      continue;
-
-    FT_Error error = FT_Load_Glyph(face, i, load_flags);
-    if (error)
-      continue;
-
-    const FT_GlyphSlot glyph = face->glyph;
-    const FT_Glyph_Metrics &metrics = glyph->metrics;
-
-    if (use_kerning) {
-      if (prev_index != 0) {
-        FT_Vector delta;
-        FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
-                       &delta);
-        x += delta.x >> 6;
-      }
-
-      prev_index = i;
-    }
-
-    RenderGlyph((uint8_t *)buffer, size.cx, size.cy, glyph,
-                x + FT_FLOOR(metrics.horiBearingX),
-                ascent_height - FT_FLOOR(metrics.horiBearingY));
-
-    x += FT_CEIL(metrics.horiAdvance);
-  }
+  ForEachGlyph(face, ascent_height, text,
+               [size, buffer](int x, int y, const FT_GlyphSlot glyph){
+      RenderGlyph(buffer, size.cx, size.cy, glyph,
+                  x, y);
+    });
 }
