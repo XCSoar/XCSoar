@@ -28,7 +28,7 @@ Copyright_License {
 #include "Event/KeyCode.hpp"
 #include "Util/StringAPI.hxx"
 
-#include <string.h>
+#include <winuser.h>
 
 void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,

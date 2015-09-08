@@ -28,8 +28,6 @@ Copyright_License {
 
 #ifndef USE_GDI
 #include "Util/tstring.hpp"
-
-#include <winuser.h>
 #endif
 
 #include <tchar.h>
