@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-08-17 21:47+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2015-09-04 13:38+0000\n"
+"Last-Translator: Sylvain BURGER <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-08-18 05:32+0000\n"
-"X-Generator: Launchpad (build 17690)\n"
+"X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
+"X-Generator: Launchpad (build 17706)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -32,7 +32,7 @@ msgstr ""
 #: Data/Input/default.xci:976 Data/Input/default.xci:1014
 #, no-c-format
 msgid "Task"
-msgstr "Tâche"
+msgstr "Circuit"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
