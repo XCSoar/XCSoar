@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "FileCache.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Compiler.h"
 
@@ -95,12 +94,6 @@ gcc_pure
 static inline bool
 GetRegularFileInfo(const TCHAR *path, FileInfo &info)
 {
-  TCHAR buffer[MAX_PATH];
-  if (!File::Exists(path))
-    // XXX hack: get parent file's info, just in case this is a
-    // virtual file inside a ZIP archive
-    path = DirName(path, buffer);
-
 #ifdef HAVE_POSIX
   struct stat st;
   if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
