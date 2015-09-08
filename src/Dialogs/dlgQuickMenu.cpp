@@ -133,10 +133,10 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
   grid_view_style.ControlParent();
   grid_view_style.Hide();
 
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+  const auto &dialog_look = UIGlobals::GetDialogLook();
 
-  const Font &font = *dialog_look.button.font;
-  const unsigned column_width = Layout::Scale(78);
+  const auto &font = *dialog_look.button.font;
+  const unsigned column_width = Layout::Scale(78u);
   const unsigned row_height =
     std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
              Layout::GetMaximumControlHeight());
@@ -152,12 +152,12 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (buttons.full())
       continue;
 
-    const MenuItem &menuItem = menu[i];
+    const auto &menuItem = menu[i];
     if (!menuItem.IsDefined())
       continue;
 
     TCHAR buffer[100];
-    ButtonLabel::Expanded expanded =
+    const auto expanded =
       ButtonLabel::Expand(menuItem.label, buffer, ARRAY_SIZE(buffer));
     if (!expanded.visible)
       continue;
@@ -267,18 +267,18 @@ QuickMenu::OnAction(int id)
 void
 dlgQuickMenuShowModal(SingleWindow &parent)
 {
-  const Menu *menu = InputEvents::GetMenu(_T("RemoteStick"));
-  if (menu == NULL)
+  const auto *menu = InputEvents::GetMenu(_T("RemoteStick"));
+  if (menu == nullptr)
     return;
 
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+  const auto &dialog_look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(dialog_look);
   QuickMenu quick_menu(dialog, *menu);
 
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &quick_menu);
 
-  const int result = dialog.ShowModal();
+  const auto result = dialog.ShowModal();
   dialog.StealWidget();
 
   if (result == mrOK)
