@@ -305,9 +305,8 @@ Font::TextSize(const TCHAR *text) const
       const FT_Glyph_Metrics &metrics = glyph->metrics;
       const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
       const int glyph_maxx = glyph_minx + FT_CEIL(metrics.width);
-      const int glyph_advance = FT_CEIL(metrics.horiAdvance);
 
-      int z = x + std::max(glyph_maxx, glyph_advance);
+      int z = x + glyph_maxx;
       if (z > maxx)
         maxx = z;
     });
