@@ -29,8 +29,6 @@ Copyright_License {
 #include "Look/ButtonLook.hpp"
 #include "Asset.hpp"
 
-#include <winuser.h>
-
 inline void
 TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
                                 bool enabled, bool focused, bool pressed) const

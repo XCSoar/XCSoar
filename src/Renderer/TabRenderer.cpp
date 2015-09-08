@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <winuser.h>
-
 void
 TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                   const DialogLook &look,
