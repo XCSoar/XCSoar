@@ -23,12 +23,9 @@ Copyright_License {
 
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
 #include "Util/StringAPI.hxx"
-
-#include <winuser.h>
 
 void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
@@ -124,7 +121,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
 #ifndef USE_GDI
   canvas.Select(GetFont());
 #endif
-  canvas.DrawFormattedText(&rc, value.c_str(), DT_LEFT | DT_WORDBREAK);
+  renderer.Draw(canvas, rc, value.c_str());
 }
 
 bool

@@ -27,6 +27,7 @@ Copyright_License {
 #include "NativeWindow.hpp"
 
 #ifndef USE_GDI
+#include "Renderer/TextRenderer.hpp"
 #include "Util/tstring.hpp"
 #endif
 
@@ -62,6 +63,8 @@ class LargeTextWindow : public NativeWindow {
    * The first visible line.
    */
   unsigned origin;
+
+  TextRenderer renderer;
 #endif
 
 public:
