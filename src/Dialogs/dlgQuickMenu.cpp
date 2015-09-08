@@ -32,7 +32,7 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"

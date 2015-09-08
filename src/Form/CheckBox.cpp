@@ -25,7 +25,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 

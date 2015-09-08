@@ -40,7 +40,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"

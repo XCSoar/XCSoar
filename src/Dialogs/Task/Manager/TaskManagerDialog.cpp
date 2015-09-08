@@ -36,7 +36,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Widget/ButtonWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"

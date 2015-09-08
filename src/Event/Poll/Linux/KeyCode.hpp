@@ -21,43 +21,56 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_KEY_H
-#define XCSOAR_SCREEN_SDL_KEY_H
+#ifndef XCSOAR_EVENT_LINUX_KEY_CODE_HPP
+#define XCSOAR_EVENT_LINUX_KEY_CODE_HPP
 
-#include <SDL_version.h>
-#if SDL_VERSION_ATLEAST(1,3,0)
-#include <SDL_keyboard.h>
-#else
-#include <SDL_keysym.h>
+#if defined(USE_LINUX_INPUT) || defined(USE_LIBINPUT) || defined(USE_WAYLAND)
+#include <linux/input.h>
+
+/* these macros conflict with Event::Type */
+#undef KEY_UP
+#undef KEY_DOWN
+
+/* wrong meaning */
+#undef KEY_NEXT
 #endif
 
 enum {
-  KEY_SPACE = SDLK_SPACE,
-  KEY_UP = SDLK_UP,
-  KEY_DOWN = SDLK_DOWN,
-  KEY_LEFT = SDLK_LEFT,
-  KEY_RIGHT = SDLK_RIGHT,
-  KEY_HOME = SDLK_HOME,
-  KEY_END = SDLK_END,
-  KEY_PRIOR = SDLK_PAGEUP,
-  KEY_NEXT = SDLK_PAGEDOWN,
-  KEY_RETURN = SDLK_RETURN,
-  KEY_F1 = SDLK_F1,
-  KEY_F2 = SDLK_F2,
-  KEY_F3 = SDLK_F3,
-  KEY_F4 = SDLK_F4,
-  KEY_F5 = SDLK_F5,
-  KEY_F6 = SDLK_F6,
-  KEY_F7 = SDLK_F7,
-  KEY_F8 = SDLK_F8,
-  KEY_F9 = SDLK_F9,
-  KEY_F10 = SDLK_F10,
-  KEY_F11 = SDLK_F11,
-  KEY_F12 = SDLK_F12,
-  KEY_ESCAPE = SDLK_ESCAPE,
-  KEY_TAB = SDLK_TAB,
-  KEY_BACK = SDLK_BACKSPACE,
-  KEY_MENU = SDLK_MENU,
+#if defined(USE_LINUX_INPUT) || defined(USE_LIBINPUT) || defined(USE_WAYLAND)
+  KEY_RETURN = KEY_ENTER,
+  KEY_ESCAPE = KEY_ESC,
+  KEY_PRIOR = KEY_PAGEUP,
+  KEY_NEXT = KEY_PAGEDOWN,
+  KEY_UP = 103,
+  KEY_DOWN = 108,
+#else
+  KEY_SPACE = ' ',
+  KEY_UP = 0403,
+  KEY_DOWN = 0402,
+  KEY_LEFT = 0404,
+  KEY_RIGHT = 0405,
+  KEY_HOME = 0406,
+  KEY_END = 0550,
+  KEY_PRIOR = 0523,
+  KEY_NEXT = 0522,
+  KEY_RETURN = '\n',
+  KEY_F1 = 0411,
+  KEY_F2 = 0412,
+  KEY_F3 = 0413,
+  KEY_F4 = 0414,
+  KEY_F5 = 0415,
+  KEY_F6 = 0416,
+  KEY_F7 = 0417,
+  KEY_F8 = 0420,
+  KEY_F9 = 0421,
+  KEY_F10 = 0422,
+  KEY_F11 = 0423,
+  KEY_F12 = 0424,
+  KEY_ESCAPE = 0x1b,
+  KEY_TAB = '\t',
+  KEY_BACK = 0407,
+  KEY_MENU,
+#endif
   KEY_APP1,
   KEY_APP2,
   KEY_APP3,

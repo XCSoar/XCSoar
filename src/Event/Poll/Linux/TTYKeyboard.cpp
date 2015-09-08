@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TTYKeyboard.hpp"
 #include "Event/Queue.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Util/CharUtil.hpp"
 #include "IO/Async/IOLoop.hpp"
 

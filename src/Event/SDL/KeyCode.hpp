@@ -21,36 +21,49 @@ Copyright_License {
 }
 */
 
-#include "Loop.hpp"
-#include "Event.hpp"
-#include "Queue.hpp"
-#include "Thread/Debug.hpp"
-#include "Asset.hpp"
+#ifndef XCSOAR_EVENT_SDL_KEY_CODE_HPP
+#define XCSOAR_EVENT_SDL_KEY_CODE_HPP
 
-bool
-EventLoop::Get(Event &event)
-{
-  AssertNoneLocked();
+#include <SDL_version.h>
+#if SDL_VERSION_ATLEAST(1,3,0)
+#include <SDL_keyboard.h>
+#else
+#include <SDL_keysym.h>
+#endif
 
-  return queue.Wait(event);
-}
+enum {
+  KEY_SPACE = SDLK_SPACE,
+  KEY_UP = SDLK_UP,
+  KEY_DOWN = SDLK_DOWN,
+  KEY_LEFT = SDLK_LEFT,
+  KEY_RIGHT = SDLK_RIGHT,
+  KEY_HOME = SDLK_HOME,
+  KEY_END = SDLK_END,
+  KEY_PRIOR = SDLK_PAGEUP,
+  KEY_NEXT = SDLK_PAGEDOWN,
+  KEY_RETURN = SDLK_RETURN,
+  KEY_F1 = SDLK_F1,
+  KEY_F2 = SDLK_F2,
+  KEY_F3 = SDLK_F3,
+  KEY_F4 = SDLK_F4,
+  KEY_F5 = SDLK_F5,
+  KEY_F6 = SDLK_F6,
+  KEY_F7 = SDLK_F7,
+  KEY_F8 = SDLK_F8,
+  KEY_F9 = SDLK_F9,
+  KEY_F10 = SDLK_F10,
+  KEY_F11 = SDLK_F11,
+  KEY_F12 = SDLK_F12,
+  KEY_ESCAPE = SDLK_ESCAPE,
+  KEY_TAB = SDLK_TAB,
+  KEY_BACK = SDLK_BACKSPACE,
+  KEY_MENU = SDLK_MENU,
+  KEY_APP1,
+  KEY_APP2,
+  KEY_APP3,
+  KEY_APP4,
+  KEY_APP5,
+  KEY_APP6,
+};
 
-void
-EventLoop::Dispatch(const Event &event)
-{
-  AssertNoneLocked();
-  ::TranslateMessage(&event.msg);
-  ::DispatchMessage(&event.msg);
-  AssertNoneLocked();
-}
-
-void
-DialogEventLoop::Dispatch(Event &event)
-{
-  AssertNoneLocked();
-
-  if (::IsDialogMessage(dialog, &event.msg))
-    return;
-
-  EventLoop::Dispatch(event);
-}
+#endif

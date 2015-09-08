@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 
 #ifdef ENABLE_OPENGL

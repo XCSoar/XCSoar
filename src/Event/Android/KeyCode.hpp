@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_ANDROID_KEY_H
-#define XCSOAR_SCREEN_ANDROID_KEY_H
+#ifndef XCSOAR_EVENT_ANDROID_KEY_CODE_HPP
+#define XCSOAR_EVENT_ANDROID_KEY_CODE_HPP
 
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html

@@ -21,19 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#ifndef XCSOAR_EVENT_POLL_KEY_CODE_HPP
+#define XCSOAR_EVENT_POLL_KEY_CODE_HPP
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(USE_X11)
-#include "Screen/X11/Key.h"
-#elif defined(USE_POLL_EVENT)
-#include "Screen/FB/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
+#ifdef USE_X11
+#include "X11KeyCode.hpp"
 #else
-#include "Screen/GDI/Key.h"
+#include "Linux/KeyCode.hpp"
 #endif
 
 #endif

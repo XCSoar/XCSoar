@@ -21,56 +21,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_CONSOLE_KEY_H
-#define XCSOAR_SCREEN_CONSOLE_KEY_H
+#ifndef XCSOAR_EVENT_X11_KEY_CODE_HPP
+#define XCSOAR_EVENT_X11_KEY_CODE_HPP
 
-#if defined(USE_LINUX_INPUT) || defined(USE_LIBINPUT) || defined(USE_WAYLAND)
-#include <linux/input.h>
-
-/* these macros conflict with Event::Type */
-#undef KEY_UP
-#undef KEY_DOWN
-
-/* wrong meaning */
-#undef KEY_NEXT
-#endif
+#include <X11/keysym.h>
 
 enum {
-#if defined(USE_LINUX_INPUT) || defined(USE_LIBINPUT) || defined(USE_WAYLAND)
-  KEY_RETURN = KEY_ENTER,
-  KEY_ESCAPE = KEY_ESC,
-  KEY_PRIOR = KEY_PAGEUP,
-  KEY_NEXT = KEY_PAGEDOWN,
-  KEY_UP = 103,
-  KEY_DOWN = 108,
-#else
-  KEY_SPACE = ' ',
-  KEY_UP = 0403,
-  KEY_DOWN = 0402,
-  KEY_LEFT = 0404,
-  KEY_RIGHT = 0405,
-  KEY_HOME = 0406,
-  KEY_END = 0550,
-  KEY_PRIOR = 0523,
-  KEY_NEXT = 0522,
-  KEY_RETURN = '\n',
-  KEY_F1 = 0411,
-  KEY_F2 = 0412,
-  KEY_F3 = 0413,
-  KEY_F4 = 0414,
-  KEY_F5 = 0415,
-  KEY_F6 = 0416,
-  KEY_F7 = 0417,
-  KEY_F8 = 0420,
-  KEY_F9 = 0421,
-  KEY_F10 = 0422,
-  KEY_F11 = 0423,
-  KEY_F12 = 0424,
-  KEY_ESCAPE = 0x1b,
-  KEY_TAB = '\t',
-  KEY_BACK = 0407,
-  KEY_MENU,
-#endif
+  KEY_RETURN = XK_Return,
+  KEY_ESCAPE = XK_Escape,
+  KEY_PRIOR = XK_Page_Up,
+  KEY_NEXT = XK_Page_Down,
+  KEY_UP = XK_Up,
+  KEY_DOWN = XK_Down,
+  KEY_LEFT = XK_Left,
+  KEY_RIGHT = XK_Right,
+  KEY_HOME = XK_Home,
+  KEY_END = XK_End,
+  KEY_TAB = XK_Tab,
+  KEY_BACK = XK_BackSpace,
+  KEY_SPACE = XK_space,
+  KEY_F1 = XK_F1,
+  KEY_F2 = XK_F2,
+  KEY_F3 = XK_F3,
+  KEY_F4 = XK_F4,
+  KEY_F5 = XK_F5,
+  KEY_F6 = XK_F6,
+  KEY_F7 = XK_F7,
+  KEY_F8 = XK_F8,
+  KEY_F9 = XK_F9,
+  KEY_F10 = XK_F10,
+  KEY_F11 = XK_F11,
+  KEY_F12 = XK_F12,
+  KEY_MENU = XK_Menu,
   KEY_APP1,
   KEY_APP2,
   KEY_APP3,

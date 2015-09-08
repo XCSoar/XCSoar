@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Version.hpp"
 #include "Inflate.hpp"
 #include "Util/ConvertString.hpp"

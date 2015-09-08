@@ -24,7 +24,7 @@
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Look/ButtonLook.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Hardware/Vibrator.hpp"

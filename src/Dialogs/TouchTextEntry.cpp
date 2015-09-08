@@ -29,7 +29,7 @@ Copyright_License {
 #include "Form/LambdaActionListener.hpp"
 #include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Util/StringUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

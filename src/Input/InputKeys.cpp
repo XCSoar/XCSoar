@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InputKeys.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringAPI.hxx"
 

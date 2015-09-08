@@ -62,7 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Pan.hpp"
 
 #ifdef KOBO
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #endif
 
 #include <assert.h>
