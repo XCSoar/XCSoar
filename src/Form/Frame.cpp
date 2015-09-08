@@ -26,8 +26,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 
-#include <winuser.h>
-
 WndFrame::WndFrame(const DialogLook &_look)
   :look(_look),
    caption_color(look.text_color)

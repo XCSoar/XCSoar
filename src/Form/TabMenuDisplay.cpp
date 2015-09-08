@@ -32,7 +32,6 @@ Copyright_License {
 #include "Util/StringFormat.hpp"
 
 #include <assert.h>
-#include <winuser.h>
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
                                const DialogLook &_look)

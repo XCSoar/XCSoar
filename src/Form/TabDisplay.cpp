@@ -31,7 +31,6 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <assert.h>
-#include <winuser.h>
 
 TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
