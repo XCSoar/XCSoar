@@ -50,9 +50,9 @@ Copyright_License {
 #elif defined(USE_POLL_EVENT)
 #include "Event/Shared/Event.hpp"
 #include "Event/Poll/Loop.hpp"
-#elif defined(USE_GDI)
-#include "Event/GDI/Event.hpp"
-#include "Event/GDI/Loop.hpp"
+#elif defined(WIN32)
+#include "Event/Windows/Event.hpp"
+#include "Event/Windows/Loop.hpp"
 #endif
 
 #ifdef USE_GDI

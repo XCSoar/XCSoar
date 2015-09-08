@@ -74,8 +74,8 @@ EVENT_SOURCES += \
 	$(SRC)/Event/SDL/Queue.cpp
 else ifeq ($(HAVE_WIN32),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/GDI/Loop.cpp \
-	$(SRC)/Event/GDI/Queue.cpp
+	$(SRC)/Event/Windows/Loop.cpp \
+	$(SRC)/Event/Windows/Queue.cpp
 endif
 
 ifeq ($(USE_LINUX_INPUT),y)

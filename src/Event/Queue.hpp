@@ -30,8 +30,8 @@ Copyright_License {
 #include "Poll/Queue.hpp"
 #elif defined(ENABLE_SDL)
 #include "SDL/Queue.hpp"
-#elif defined(USE_GDI)
-#include "GDI/Queue.hpp"
+#elif defined(WIN32)
+#include "Windows/Queue.hpp"
 #else
 #error No EventQueue implementation
 #endif

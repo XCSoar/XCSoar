@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Event/Globals.hpp"
-#include "Event/GDI/Event.hpp"
-#include "Event/GDI/Loop.hpp"
+#include "Event/Windows/Event.hpp"
+#include "Event/Windows/Loop.hpp"
 #include "Event/Queue.hpp"
 
 void

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_GDI_LOOP_HPP
-#define XCSOAR_EVENT_GDI_LOOP_HPP
+#ifndef XCSOAR_EVENT_WINDOWS_LOOP_HPP
+#define XCSOAR_EVENT_WINDOWS_LOOP_HPP
 
 #include "Compiler.h"
 

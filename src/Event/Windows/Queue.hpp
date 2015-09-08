@@ -21,52 +21,49 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_GDI_EVENT_HPP
-#define XCSOAR_EVENT_GDI_EVENT_HPP
+#ifndef XCSOAR_EVENT_WINDOWS_QUEUE_HPP
+#define XCSOAR_EVENT_WINDOWS_QUEUE_HPP
+
+#include "../Shared/TimerQueue.hpp"
+#include "Thread/Mutex.hpp"
 
 #include <windows.h>
-#include <assert.h>
 
-struct Event {
-  MSG msg;
+struct Event;
 
-  bool IsKeyDown() const {
-    return msg.message == WM_KEYDOWN;
+class EventQueue {
+  /**
+   * The current time after the event thread returned from sleeping.
+   */
+  uint64_t now_us;
+
+  HANDLE trigger;
+
+  Mutex mutex;
+  TimerQueue timers;
+
+public:
+  EventQueue();
+
+  ~EventQueue() {
+    ::CloseHandle(trigger);
   }
 
-  bool IsKey() const {
-    return IsKeyDown() || msg.message == WM_KEYUP;
+  bool Wait(Event &event);
+
+private:
+  void WakeUp() {
+    ::SetEvent(trigger);
   }
 
-  unsigned GetKeyCode() const {
-    assert(IsKey());
+public:
+  void AddTimer(Timer &timer, unsigned ms);
+  void CancelTimer(Timer &timer);
 
-    return msg.wParam;
-  }
-
-  size_t GetCharacterCount() const {
-    return msg.message == WM_CHAR ? 1 : 0;
-  }
-
-  unsigned GetCharacter(size_t characterIdx) const {
-    assert(GetCharacterCount() == 1);
-    assert(characterIdx == 0);
-
-    return msg.wParam;
-  }
-
-  bool IsMouseDown() const {
-    return msg.message == WM_LBUTTONDOWN;
-  }
-
-  bool IsMouse() const {
-    return IsMouseDown() || msg.message == WM_LBUTTONUP ||
-      msg.message == WM_LBUTTONDBLCLK;
-  }
-
-  bool IsUserInput() const {
-    return IsKey() || (GetCharacterCount() > 0) || IsMouse();
-  }
+  /**
+   * Handle all pending repaint messages.
+   */
+  static void HandlePaintMessages();
 };
 
 #endif

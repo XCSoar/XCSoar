@@ -37,8 +37,8 @@
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
-#include "Event/GDI/Event.hpp"
-#include "Event/GDI/Loop.hpp"
+#include "Event/Windows/Event.hpp"
+#include "Event/Windows/Loop.hpp"
 #endif
 
 #ifdef USE_FB
