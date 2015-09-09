@@ -204,7 +204,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (file.IsEmpty())
     return;
 
-  fixed map_scale = projection.GetMapScale();
+  const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale))
     return;
 
@@ -450,7 +450,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   if (file.IsEmpty())
     return;
 
-  fixed map_scale = projection.GetMapScale();
+  const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))
     return;
 

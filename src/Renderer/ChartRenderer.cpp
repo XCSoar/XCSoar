@@ -78,9 +78,8 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
   }
 
   if (lsdata.HasResult()) {
-    fixed y0, y1;
-    y0 = lsdata.GetYAtMinX();
-    y1 = lsdata.GetYAtMaxX();
+    auto y0 = lsdata.GetYAtMinX();
+    auto y1 = lsdata.GetYAtMaxX();
     y.min = std::min({y.min, y0, y1});
     y.max = std::max({y.max, y0, y1});
   }
@@ -229,11 +228,10 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
   if (x.unscaled || y.unscaled)
     return;
 
-  fixed xmin, xmax, ymin, ymax;
-  xmin = lsdata.GetMinX();
-  xmax = lsdata.GetMaxX();
-  ymin = lsdata.GetYAtMinX();
-  ymax = lsdata.GetYAtMaxX();
+  auto xmin = lsdata.GetMinX();
+  auto xmax = lsdata.GetMaxX();
+  auto ymin = lsdata.GetYAtMinX();
+  auto ymax = lsdata.GetYAtMaxX();
 
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
@@ -247,11 +245,10 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
   if (x.unscaled || y.unscaled)
     return;
 
-  fixed xmin, xmax, ymin, ymax;
-  xmin = fixed(0.5);
-  xmax = fixed(lsdata.GetCount()) + fixed(0.5);
-  ymin = lsdata.GetYAtMinX();
-  ymax = lsdata.GetYAtMaxX();
+  auto xmin = fixed(0.5);
+  auto xmax = fixed(lsdata.GetCount()) + fixed(0.5);
+  auto ymin = lsdata.GetYAtMinX();
+  auto ymax = lsdata.GetYAtMaxX();
 
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
@@ -407,9 +404,9 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
 
   const int y = line[1].y - canvas.GetFontHeight();
 
-  fixed start = (int)(x.min / tic_step) * tic_step;
+  auto start = (int)(x.min / tic_step) * tic_step;
 
-  for (fixed xval = start; xval <= x.max; xval += tic_step) {
+  for (auto xval = start; xval <= x.max; xval += tic_step) {
     const int xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
@@ -460,9 +457,9 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
 
   const int x = line[0].x;
 
-  fixed start = (int)(y.min / tic_step) * tic_step;
+  auto start = (int)(y.min / tic_step) * tic_step;
 
-  for (fixed yval = start; yval <= y.max; yval += tic_step) {
+  for (auto yval = start; yval <= y.max; yval += tic_step) {
     const int ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 

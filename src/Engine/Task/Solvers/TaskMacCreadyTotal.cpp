@@ -65,7 +65,7 @@ TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
     const GlideResult &result = leg_solutions[i];
 
     if (result.IsOk() && positive(result.time_elapsed)) {
-      fixed p = (time_remaining - t_total) / result.time_elapsed;
+      auto p = (time_remaining - t_total) / result.time_elapsed;
       if ((p>=fixed(0)) && (p<=fixed(1))) {
         return d_total + p * result.vector.distance;
       }
@@ -81,7 +81,7 @@ fixed
 TaskMacCreadyTotal::effective_leg_distance(const fixed time_remaining) const
 {
   const GlideResult &result = get_active_solution();
-  fixed p = time_remaining / result.time_elapsed;
+  auto p = time_remaining / result.time_elapsed;
   return p * result.vector.distance;
 }
 

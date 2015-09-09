@@ -125,7 +125,7 @@ ParseAPENV1(NMEAInputLine &line, NMEAInfo &info)
   int vs;
   if (!line.ReadChecked(vs)) return false;
 
-  fixed sys_alt = Units::ToSysUnit(fixed(altitude), Unit::FEET);
+  auto sys_alt = Units::ToSysUnit(fixed(altitude), Unit::FEET);
   info.ProvidePressureAltitude(sys_alt);
   info.ProvideIndicatedAirspeedWithAltitude(Units::ToSysUnit(fixed(ias), Unit::KNOTS), sys_alt);
 

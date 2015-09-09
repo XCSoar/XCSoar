@@ -78,7 +78,7 @@ FindSoonestAirspace(const Airspaces &airspaces,
                     const fixed max_time)
 {
   const auto &projection = airspaces.GetProjection();
-  const fixed range = perf.GetMaxSpeed() * max_time;
+  const auto range = perf.GetMaxSpeed() * max_time;
   return FindMinimum(airspaces, state.location, range, predicate,
                      [&state, &perf, max_time,
                       &projection](const AbstractAirspace &airspace){

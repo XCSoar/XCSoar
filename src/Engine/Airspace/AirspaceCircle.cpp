@@ -54,24 +54,25 @@ AirspaceIntersectionVector
 AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
                            const FlatProjection &projection) const
 {
-  const fixed f_radius = projection.ProjectRangeFloat(m_center, m_radius);
-  const FlatPoint f_center = projection.ProjectFloat(m_center);
-  const FlatPoint f_start = projection.ProjectFloat(start);
-  const FlatPoint f_end = projection.ProjectFloat(end);
+  const auto f_radius = projection.ProjectRangeFloat(m_center, m_radius);
+  const auto f_center = projection.ProjectFloat(m_center);
+  const auto f_start = projection.ProjectFloat(start);
+  const auto f_end = projection.ProjectFloat(end);
   const FlatLine line(f_start, f_end);
 
   FlatPoint f_p1, f_p2;
   if (!line.intersect_circle(f_radius, f_center, f_p1, f_p2))
     return AirspaceIntersectionVector();
 
-  const fixed mag = line.dsq();
+  const auto mag = line.dsq();
   if (!positive(mag))
     return AirspaceIntersectionVector();
 
-  const fixed inv_mag = fixed(1) / mag;
-  const fixed t1 = FlatLine(f_start, f_p1).dot(line);
-  const fixed t2 = (f_p1 == f_p2) ?
-    fixed(-1) : FlatLine(f_start, f_p2).dot(line);
+  const auto inv_mag = fixed(1) / mag;
+  const auto t1 = FlatLine(f_start, f_p1).dot(line);
+  const auto t2 = f_p1 == f_p2
+    ? fixed(-1)
+    : FlatLine(f_start, f_p2).dot(line);
 
   const bool in_range = (t1 < mag) || (t2 < mag);
   // if at least one point is within range, capture both points
@@ -91,7 +92,7 @@ AirspaceCircle::ClosestPoint(const GeoPoint &loc,
                              gcc_unused const FlatProjection &projection) const
 {
   // Calculate distance from center point
-  const fixed d = loc.DistanceS(m_center);
+  const auto d = loc.DistanceS(m_center);
 
   // If loc is INSIDE the circle return loc itself
   if (d <= m_radius)

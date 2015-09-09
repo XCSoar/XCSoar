@@ -31,7 +31,7 @@
 void
 TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short *elevations) const
 {
-  const fixed max_distance = chart.GetXMax();
+  const auto max_distance = chart.GetXMax();
 
   StaticArray<RasterPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
 
@@ -41,9 +41,9 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
   fixed last_distance = fixed(0);
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
-    const fixed distance_factor =
+    const auto distance_factor =
         fixed(j) / (CrossSectionRenderer::NUM_SLICES - 1);
-    const fixed distance = distance_factor * max_distance;
+    const auto distance = distance_factor * max_distance;
 
     short h = elevations[j];
     RasterBuffer::TerrainType type = RasterBuffer::GetTerrainType(h);
@@ -55,7 +55,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
     if (j != 0 &&
         type != last_type &&
         last_type != RasterBuffer::TerrainType::UNKNOWN) {
-      const fixed center_distance = (distance + last_distance) / 2;
+      const auto center_distance = (distance + last_distance) / 2;
       points.append() = chart.ToScreen(center_distance, fixed(0));
       points.append() = chart.ToScreen(center_distance, fixed(-500));
 
@@ -71,7 +71,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
         // Start new polygon
         points.clear();
 
-        const fixed center_distance = (distance + last_distance) / 2;
+        const auto center_distance = (distance + last_distance) / 2;
         points.append() = chart.ToScreen(center_distance, fixed(-500));
         points.append() = chart.ToScreen(center_distance, fixed(0));
       }

@@ -137,15 +137,15 @@ InputEvents::eventMacCready(const TCHAR *misc)
 
   const GlidePolar &polar =
     CommonInterface::GetComputerSettings().polar.glide_polar_task;
-  fixed mc = polar.GetMC();
+  auto mc = polar.GetMC();
 
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
   if (StringIsEqual(misc, _T("up"))) {
-    const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+    const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
     ActionInterface::OffsetManualMacCready(step);
   } else if (StringIsEqual(misc, _T("down"))) {
-    const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+    const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
     ActionInterface::OffsetManualMacCready(-step);
   } else if (StringIsEqual(misc, _T("auto toggle"))) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;

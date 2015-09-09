@@ -58,6 +58,6 @@ TaskGlideRequired::f(const fixed S)
 fixed
 TaskGlideRequired::search(const fixed S)
 {
-  fixed a = find_zero(S);
+  auto a = find_zero(S);
   return a/res.v_opt;
 }

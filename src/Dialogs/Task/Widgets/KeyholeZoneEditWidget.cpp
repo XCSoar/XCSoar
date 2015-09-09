@@ -61,13 +61,13 @@ KeyholeZoneEditWidget::Save(bool &_changed)
 {
   bool changed = false;
 
-  fixed radius = GetObject().GetRadius();
+  auto radius = GetObject().GetRadius();
   if (SaveValue(RADIUS, UnitGroup::DISTANCE, radius)) {
     GetObject().SetRadius(radius);
     changed = true;
   }
 
-  fixed inner_radius = GetObject().GetInnerRadius();
+  auto inner_radius = GetObject().GetInnerRadius();
   if (SaveValue(INNER_RADIUS, UnitGroup::DISTANCE, inner_radius)) {
     GetObject().SetInnerRadius(inner_radius);
     changed = true;

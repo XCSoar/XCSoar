@@ -86,10 +86,10 @@ StartPoint::find_best_start(const AircraftState &state,
   const GeoPoint &next_location = next.GetLocationRemaining();
 
   GeoPoint best_location = *i;
-  fixed best_distance = ::DoubleDistance(state.location, *i, next_location);
+  auto best_distance = ::DoubleDistance(state.location, *i, next_location);
 
   for (++i; i != end; ++i) {
-    fixed distance = ::DoubleDistance(state.location, *i, next_location);
+    auto distance = ::DoubleDistance(state.location, *i, next_location);
     if (distance < best_distance) {
       best_location = *i;
       best_distance = distance;

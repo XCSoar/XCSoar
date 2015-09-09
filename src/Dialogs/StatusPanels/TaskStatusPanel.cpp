@@ -54,7 +54,7 @@ TaskStatusPanel::OnModified(DataField &df)
 {
   if (IsDataField(MC, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    fixed mc = Units::ToSysVSpeed(dff.GetAsFixed());
+    auto mc = Units::ToSysVSpeed(dff.GetAsFixed());
     ActionInterface::SetManualMacCready(mc);
     Refresh();
   }
@@ -107,11 +107,11 @@ TaskStatusPanel::Refresh()
             UnitGroup::VERTICAL_SPEED);
 
   if (task_stats.total.planned.IsDefined()) {
-    fixed rMax = task_stats.distance_max;
-    fixed rMin = task_stats.distance_min;
+    auto rMax = task_stats.distance_max;
+    auto rMin = task_stats.distance_min;
 
     if (rMin < rMax) {
-      fixed range = Double((task_stats.total.remaining.GetDistance() - rMin) / (rMax - rMin)) - fixed(1);
+      auto range = Double((task_stats.total.remaining.GetDistance() - rMin) / (rMax - rMin)) - fixed(1);
       LoadValue(RANGE, range * 100);
     } else
       ClearValue(RANGE);

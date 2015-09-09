@@ -147,7 +147,7 @@ namespace LX1600 {
   {
     assert(qnh.IsPlausible());
 
-    fixed altitude_offset = Units::ToUserUnit(
+    auto altitude_offset = Units::ToUserUnit(
         -AtmosphericPressure::StaticPressureToPressureAltitude(qnh),
         Unit::FEET);
 
@@ -176,9 +176,9 @@ namespace LX1600 {
   SetPolar(Port &port, OperationEnvironment &env, const PolarCoefficients &polar)
   {
     // Convert from m/s to (km/h)/100
-    fixed polar_a = polar.a * 10000 / sqr(fixed(3.6));
-    fixed polar_b = polar.b * 100 / fixed(3.6);
-    fixed polar_c = polar.c;
+    auto polar_a = polar.a * 10000 / sqr(fixed(3.6));
+    auto polar_b = polar.b * 100 / fixed(3.6);
+    auto polar_c = polar.c;
 
     return SetPolar(port, env, polar_a, polar_b, polar_c);
   }

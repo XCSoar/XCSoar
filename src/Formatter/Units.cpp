@@ -32,7 +32,7 @@ FormatInteger(TCHAR *buffer,
               const fixed value, const Unit unit, bool include_unit,
               bool include_sign)
 {
-  const fixed uvalue = Units::ToUserUnit(value, unit);
+  const auto uvalue = Units::ToUserUnit(value, unit);
   const int ivalue = iround(uvalue);
 
   if (include_unit)
@@ -53,7 +53,7 @@ void
 FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
                   bool include_unit)
 {
-  const fixed uvalue = Units::ToUserUnit(value, unit);
+  const auto uvalue = Units::ToUserUnit(value, unit);
   int precision = uvalue > fixed(20) ? 0 : 1;
 
     if (include_unit)
@@ -65,21 +65,21 @@ FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
 
 void
 FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
-                      bool include_unit)
+               bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, false);
 }
 
 void
 FormatRelativeAltitude(TCHAR *buffer, fixed value,
-                              Unit unit, bool include_unit)
+                       Unit unit, bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, true);
 }
 
 void
 FormatDistance(TCHAR *buffer, fixed value, Unit unit,
-                      bool include_unit, int precision)
+               bool include_unit, int precision)
 {
   value = Units::ToUserUnit(value, unit);
 
@@ -109,7 +109,7 @@ GetSmallerDistanceUnit(Unit unit)
 
 Unit
 FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
-                           bool include_unit, int precision)
+                    bool include_unit, int precision)
 {
   unit = GetSmallerDistanceUnit(unit);
   value = Units::ToUserUnit(value, unit);
@@ -130,7 +130,7 @@ GetBestDistanceUnit(fixed value, Unit unit, fixed threshold = fixed(2500))
   if (small_unit == unit)
     return unit;
 
-  fixed small_value = Units::ToUserUnit(value, small_unit);
+  auto small_value = Units::ToUserUnit(value, small_unit);
   return small_value > threshold ? unit : small_unit;
 }
 
@@ -148,8 +148,8 @@ GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
 
 Unit
 FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
-                           bool include_unit, fixed small_unit_threshold,
-                           fixed precision_threshold)
+                    bool include_unit, fixed small_unit_threshold,
+                    fixed precision_threshold)
 {
   unit = GetBestDistanceUnit(value, unit, small_unit_threshold);
   int precision = GetBestDistancePrecision(value, unit, precision_threshold);
@@ -202,7 +202,7 @@ GetVerticalSpeedStep(Unit unit)
 
 void
 FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
-                           bool include_unit, bool include_sign)
+                    bool include_unit, bool include_sign)
 {
   value = Units::ToUserUnit(value, unit);
 
@@ -233,7 +233,7 @@ void
 FormatPressure(TCHAR *buffer, AtmosphericPressure pressure,
                Unit unit, bool include_unit)
 {
-  fixed _pressure = Units::ToUserUnit(pressure.GetHectoPascal(), unit);
+  auto _pressure = Units::ToUserUnit(pressure.GetHectoPascal(), unit);
 
   if (include_unit)
     StringFormatUnsafe(buffer, GetPressureFormat(unit, include_unit),

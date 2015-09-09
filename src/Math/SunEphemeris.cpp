@@ -100,7 +100,7 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
   if (negative(lat.Degrees()))
     dfo.Flip();
 
-  fixed fo = (declin + dfo).tan() * lat.tan();
+  auto fo = (declin + dfo).tan() * lat.tan();
   return Angle::asin(fo) + Angle::QuarterCircle();
 }
 
@@ -113,7 +113,7 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
   if (negative(lat.Degrees()))
     df1.Flip();
 
-  fixed fi = (declin + df1).tan() * lat.tan();
+  auto fi = (declin + df1).tan() * lat.tan();
   return Angle::asin(fi) + Angle::QuarterCircle();
 }
 
@@ -149,7 +149,7 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
 {
   assert(time.IsPlausible());
 
-  fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12)
+  auto T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12)
     + fixed(time_zone.AsMinutes()) / 60;
   Angle t = Angle::Degrees(15) * T;
 
@@ -167,7 +167,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   assert(date_time.IsPlausible());
 
-  fixed days_to_j2000 = FNday(date_time);
+  auto days_to_j2000 = FNday(date_time);
 
   Angle l = GetMeanSunLongitude(days_to_j2000);
 
@@ -183,11 +183,11 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  fixed ll = (l - alpha).Radians();
+  auto ll = (l - alpha).Radians();
   if (l.Radians() < fixed_pi)
     ll += fixed_two_pi;
 
-  fixed equation = fixed(1440) * (fixed(1) - ll / fixed_two_pi);
+  auto equation = fixed(1440) * (fixed(1) - ll / fixed_two_pi);
 
   Angle hour_angle = GetHourAngle(location.latitude, delta);
   Angle hour_angle_twilight = GetHourAngleTwilight(location.latitude, delta);
@@ -195,7 +195,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   result.azimuth = CalculateAzimuth(location, date_time, time_zone, delta);
 
   // length of twilight in hours
-  fixed twilight_hours = (hour_angle_twilight - hour_angle).Hours();
+  auto twilight_hours = (hour_angle_twilight - hour_angle).Hours();
 
   // Conversion of angle to hours and minutes
   result.day_length = Double(hour_angle.Hours());
@@ -229,7 +229,7 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
 {
   assert(date_time.IsPlausible());
 
-  fixed days_to_j2000 = FNday(date_time);
+  auto days_to_j2000 = FNday(date_time);
 
   Angle l = GetMeanSunLongitude(days_to_j2000);
 

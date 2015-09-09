@@ -56,9 +56,9 @@ TaskSolveTravelled::time_error()
     return fixed(999999);
 
 #ifdef SOLVE_ZERO
-  fixed d = res.time_elapsed - dt;
+  auto d = res.time_elapsed - dt;
 #else
-  fixed d = fabs(res.time_elapsed - dt);
+  auto d = fabs(res.time_elapsed - dt);
 #endif
   d += res.time_virtual;
 

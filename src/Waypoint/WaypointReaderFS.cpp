@@ -58,7 +58,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
   if (endptr == src || *endptr != _T(' '))
     return false;
 
-  fixed value = fixed(deg + (double)min / 60 + sec / 3600);
+  auto value = fixed(deg + (double)min / 60 + sec / 3600);
   if (!is_positive)
     value = -value;
 

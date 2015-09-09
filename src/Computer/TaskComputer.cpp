@@ -83,7 +83,7 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
     last_state = current_as;
     valid_last_state = true;
 
-    const fixed fallback_mc = calculated.last_thermal.IsDefined() &&
+    const auto fallback_mc = calculated.last_thermal.IsDefined() &&
       positive(calculated.last_thermal_average_smooth)
       ? calculated.last_thermal_average_smooth
       : fixed(0);

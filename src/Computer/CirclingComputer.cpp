@@ -69,8 +69,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     return;
   }
 
-  const fixed dt = turn_rate_delta_time.Update(basic.time,
-                                               fixed_third, fixed(10));
+  const auto dt = turn_rate_delta_time.Update(basic.time,
+                                              fixed_third, fixed(10));
   if (negative(dt)) {
     circling_info.turn_rate = Angle::Zero();
     circling_info.turn_rate_heading = Angle::Zero();
@@ -93,8 +93,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
                             Angle::Degrees(-50), Angle::Degrees(50));
 
     // Make the turn rate more smooth using the LowPassFilter
-    fixed smoothed = LowPassFilter(circling_info.turn_rate_smoothed.Native(),
-                                   turn_rate.Native(), fixed(0.3));
+    auto smoothed = LowPassFilter(circling_info.turn_rate_smoothed.Native(),
+                                  turn_rate.Native(), fixed(0.3));
     circling_info.turn_rate_smoothed = Angle::Native(smoothed);
 
     // Makes smoothing of heading turn rate
@@ -120,8 +120,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   if (!basic.time_available || !flight.flying)
     return;
 
-  const fixed dt = turning_delta_time.Update(basic.time,
-                                             fixed(0), fixed(0));
+  const auto dt = turning_delta_time.Update(basic.time,
+                                            fixed(0), fixed(0));
   if (!positive(dt))
     return;
 
@@ -239,8 +239,8 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
-  const fixed dt = percent_delta_time.Update(basic.time,
-                                             fixed(0), fixed(0));
+  const auto dt = percent_delta_time.Update(basic.time,
+                                            fixed(0), fixed(0));
   if (!positive(dt))
     return;
 
@@ -275,7 +275,7 @@ CirclingComputer::MaxHeightGain(const MoreData &basic,
     return;
 
   if (positive(min_altitude)) {
-    fixed height_gain = basic.nav_altitude - min_altitude;
+    auto height_gain = basic.nav_altitude - min_altitude;
     circling_info.max_height_gain =
       std::max(height_gain, circling_info.max_height_gain);
   } else {

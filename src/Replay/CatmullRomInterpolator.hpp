@@ -99,7 +99,7 @@ public:
     const Record r0 = Interpolate(_time - fixed(0.05));
     const Record r1 = Interpolate(_time + fixed(0.05));
 
-    fixed speed = p[1].location.DistanceS(p[2].location) / (p[2].time - p[1].time);
+    auto speed = p[1].location.DistanceS(p[2].location) / (p[2].time - p[1].time);
     Angle bearing = r0.location.Bearing(r1.location);
 
     return GeoVector(speed, bearing);
@@ -111,7 +111,7 @@ public:
   {
     assert(Ready());
 
-    const fixed u = GetTimeFraction(_time, false);
+    const auto u = GetTimeFraction(_time, false);
 
     /*
       ps = ( c0   c1    c2  c3)
@@ -121,8 +121,8 @@ public:
            [ -t  2-t   t-2   t] u^3
     */
 
-    const fixed u2 = sqr(u);
-    const fixed u3 = u2 * u;
+    const auto u2 = sqr(u);
+    const auto u3 = u2 * u;
     const fixed c[4]= {-time * u3 + 2 * time * u2 - time * u,
                        (fixed(2) - time) * u3 + (time - fixed(3)) * u2 + fixed(1),
                        (time - fixed(2)) * u3 + (fixed(3) - 2 * time) * u2 + time * u,
@@ -179,7 +179,7 @@ private:
     assert(Ready());
     assert(p[2].time > p[1].time);
 
-    const fixed fraction = (time - p[1].time) / (p[2].time - p[1].time);
+    const auto fraction = (time - p[1].time) / (p[2].time - p[1].time);
 
     if (limit_range)
       return Clamp(fraction, fixed(0), fixed(1));

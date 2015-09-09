@@ -382,9 +382,9 @@ OrderedTask::ScanDistanceNominal()
     return fixed(0);
 
   const auto &start = *task_points.front();
-  fixed d = start.ScanDistanceNominal();
+  auto d = start.ScanDistanceNominal();
 
-  fixed radius = GetCylinderRadiusOrMinusOne(start);
+  auto radius = GetCylinderRadiusOrMinusOne(start);
   if (positive(radius) && radius < d)
     d -= radius;
 
@@ -1061,13 +1061,13 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 {
   if (stats.has_targets) {
     // only perform scan if modification is possible
-    const fixed t_rem = std::max(fixed(0),
-                                 t_target - stats.total.time_elapsed);
+    const auto t_rem = std::max(fixed(0),
+                                t_target - stats.total.time_elapsed);
 
     TaskMinTarget bmt(task_points, active_task_point, aircraft,
                       task_behaviour.glide, glide_polar,
                       t_rem, taskpoint_start);
-    fixed p = bmt.search(fixed(0));
+    auto p = bmt.search(fixed(0));
     return p;
   }
 

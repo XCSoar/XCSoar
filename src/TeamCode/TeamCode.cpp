@@ -150,8 +150,8 @@ TeamCode::Update(const TCHAR* _code)
 GeoPoint
 TeamCode::GetLocation(const GeoPoint ref) const
 {
-  Angle bearing = GetBearing();
-  fixed distance = GetRange();
+  auto bearing = GetBearing();
+  auto distance = GetRange();
 
   return FindLatitudeLongitude(ref, bearing, distance);
 }

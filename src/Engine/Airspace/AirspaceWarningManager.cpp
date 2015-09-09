@@ -282,7 +282,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // it can be the minimum of the user set warning time, or the time of the 
   // task segment
 
-  const fixed max_time_limit = std::min(fixed(config.warning_time), max_time);
+  const auto max_time_limit = std::min(fixed(config.warning_time), max_time);
 
   // the ceiling is the max height for predicted intrusions, given
   // that you may be climbing.  the ceiling is nominally set at 1000m
@@ -292,7 +292,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // collected for it.  It is very unlikely users will have more than 1000m
   // in AltWarningMargin anyway.
 
-  const fixed ceiling = state.altitude
+  const auto ceiling = state.altitude
     + fixed(std::max((unsigned)1000, config.altitude_warning_margin));
 
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
@@ -330,10 +330,10 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
   const AirspaceAircraftPerformance perf_task(glide_polar,
                                               current_leg.solution_remaining);
   GeoPoint location_tp = current_leg.location_remaining;
-  const fixed time_remaining = solution.time_elapsed;
+  const auto time_remaining = solution.time_elapsed;
 
   const GeoVector vector(state.location, location_tp);
-  fixed max_distance = config.warning_time * glide_polar.GetVMax();
+  auto max_distance = config.warning_time * glide_polar.GetVMax();
   if (vector.distance > max_distance)
     /* limit the distance to what our glider can actually fly within
        the configured warning time */

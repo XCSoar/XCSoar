@@ -50,6 +50,6 @@ AATIsolineSegment::IsValid() const
 GeoPoint
 AATIsolineSegment::Parametric(const fixed t) const
 {
-  const fixed r = t * (t_up - t_down) + t_down;
+  const auto r = t * (t_up - t_down) + t_down;
   return ell.Parametric(r);
 }

@@ -170,7 +170,7 @@ gcc_pure
 static bool
 CheckTakeOffSpeed(fixed takeoff_speed, const NMEAInfo &basic)
 {
-  const fixed speed = basic.airspeed_available
+  const auto speed = basic.airspeed_available
     ? std::max(basic.true_airspeed, basic.ground_speed)
     : basic.ground_speed;
 
@@ -250,7 +250,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
   if (!basic.time_available || !basic.location_available)
     return;
 
-  const fixed dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
+  const auto dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
   if (negative(dt)) {
     Reset();
     flying.Reset();
@@ -268,7 +268,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
        above the take-off airfield and there's no airspeed probe; this
        shall reduce the risk of false landing detection when flying in
        strong head wind (e.g. ridge or wave) */
-    fixed dh = any_altitude.second - last_ground_altitude;
+    auto dh = any_altitude.second - last_ground_altitude;
 
     if (dh > fixed(1000))
       takeoff_speed /= 4;
@@ -298,7 +298,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
     sinking_since = fixed(-1);
 
   if (flying.flying && flying.release_location.IsValid()) {
-    fixed distance = basic.location.Distance(flying.release_location);
+    auto distance = basic.location.Distance(flying.release_location);
     if (distance > flying.far_distance) {
       flying.far_location = basic.location;
       flying.far_distance = distance;

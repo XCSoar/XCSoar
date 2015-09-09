@@ -33,27 +33,27 @@ bool
 ParsePolarShape(PolarShape &shape, const char *s)
 {
   char *p;
-  fixed v1 = Units::ToSysUnit(fixed(ParseDouble(s, &p)), Unit::KILOMETER_PER_HOUR);
+  auto v1 = Units::ToSysUnit(fixed(ParseDouble(s, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  fixed w1 = fixed(ParseDouble(p + 1, &p));
+  auto w1 = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  fixed v2 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  auto v2 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  fixed w2 = fixed(ParseDouble(p + 1, &p));
+  auto w2 = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  fixed v3 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  auto v3 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  fixed w3 = fixed(ParseDouble(p + 1, &p));
+  auto w3 = fixed(ParseDouble(p + 1, &p));
   if (*p != '\0')
     return false;
 

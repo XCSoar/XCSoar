@@ -32,10 +32,10 @@ FlatPoint::MultiplyY(const fixed a)
 void
 FlatPoint::Rotate(const Angle angle)
 {
-  const fixed _x = x;
-  const fixed _y = y;
+  const auto _x = x;
+  const auto _y = y;
   const auto sc = angle.SinCos();
-  const fixed sa = sc.first, ca = sc.second;
+  const auto sa = sc.first, ca = sc.second;
   x = _x * ca - _y * sa;
   y = _x * sa + _y * ca;
 }

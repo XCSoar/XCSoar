@@ -82,7 +82,7 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (warnings != nullptr) {
     const GeoPoint closest =
       airspace.ClosestPoint(basic.location, warnings->GetProjection());
-    const fixed distance = closest.Distance(basic.location);
+    const auto distance = closest.Distance(basic.location);
 
     FormatUserDistance(distance, buffer);
     AddReadOnly(_("Distance"), nullptr, buffer);

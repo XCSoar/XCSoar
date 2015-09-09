@@ -31,7 +31,7 @@ Copyright_License {
 void
 UpdateInfoBoxGRInstant(InfoBoxData &data)
 {
-  const fixed gr = CommonInterface::Calculated().gr;
+  const auto gr = CommonInterface::Calculated().gr;
 
   if (!::GradientValid(gr)) {
     data.SetInvalid();
@@ -45,9 +45,9 @@ UpdateInfoBoxGRInstant(InfoBoxData &data)
 void
 UpdateInfoBoxGRCruise(InfoBoxData &data)
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  const fixed cruise_gr = calculated.cruise_gr;
+  const auto &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
+  const auto cruise_gr = calculated.cruise_gr;
 
   if (!::GradientValid(cruise_gr)) {
     data.SetInvalid();
@@ -66,7 +66,7 @@ UpdateInfoBoxGRCruise(InfoBoxData &data)
 void
 UpdateInfoBoxGRAvg(InfoBoxData &data)
 {
-  const fixed average_gr = CommonInterface::Calculated().average_gr;
+  const auto average_gr = CommonInterface::Calculated().average_gr;
 
   if (average_gr == fixed(0)) {
     data.SetInvalid();
@@ -85,7 +85,7 @@ UpdateInfoBoxGRAvg(InfoBoxData &data)
 void
 UpdateInfoBoxLDVario(InfoBoxData &data)
 {
-  const fixed ld_vario = CommonInterface::Calculated().ld_vario;
+  const auto ld_vario = CommonInterface::Calculated().ld_vario;
 
   if (!::GradientValid(ld_vario) ||
       !CommonInterface::Basic().total_energy_vario_available ||

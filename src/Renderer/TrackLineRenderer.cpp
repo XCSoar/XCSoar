@@ -40,7 +40,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const Angle track_angle, const RasterPoint pos)
 {
   const auto sc = (track_angle - screen_angle).SinCos();
-  const fixed x = sc.first, y = sc.second;
+  const auto x = sc.first, y = sc.second;
 
   RasterPoint end;
   end.x = pos.x + iround(x * 400);
@@ -99,7 +99,7 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
     traildrift = GeoPoint(Angle::Native(fixed(0)),Angle::Native(fixed(0)));
   }
 
-  fixed dt = ARC_SWEEP/ARC_STEPS/
+  auto dt = ARC_SWEEP/ARC_STEPS/
     std::max(MIN_RATE,calculated.turn_rate_heading_smoothed.Absolute());
 
   Angle heading = basic.attitude.heading;

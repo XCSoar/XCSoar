@@ -46,16 +46,16 @@ Filter::Design(const fixed cutoff_wavelength, const bool bessel)
     p = 2;
   }
 
-  fixed f_star = c / (sample_freq * cutoff_wavelength);
+  auto f_star = c / (sample_freq * cutoff_wavelength);
 
   if (!positive(f_star) || f_star >= fixed(1) / 8) {
     ok = false;
     return false;
   }
 
-  fixed omega0 = (Angle::HalfCircle() * f_star).tan();
-  fixed K1 = p * omega0;
-  fixed K2 = g * sqr(omega0);
+  auto omega0 = (Angle::HalfCircle() * f_star).tan();
+  auto K1 = p * omega0;
+  auto K2 = g * sqr(omega0);
 
   a[0] = K2 / (fixed(1) + K1 + K2);
   a[1] = Double(a[0]);
@@ -90,11 +90,11 @@ Filter::Update(const fixed _x)
   x[1] = x[0];
   x[0] = _x;
 
-  fixed _y = a[0] * x[0]
-           + a[1] * x[1]
-           + a[2] * x[2]
-           + b[0] * y[0]
-           + b[1] * y[1];
+  auto _y = a[0] * x[0]
+          + a[1] * x[1]
+          + a[2] * x[2]
+          + b[0] * y[0]
+          + b[1] * y[1];
 
   y[1] = y[0];
   y[0] = _y;

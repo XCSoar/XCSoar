@@ -45,7 +45,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  fixed range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  auto range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);

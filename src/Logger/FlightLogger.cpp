@@ -108,7 +108,7 @@ FlightLogger::Tick(const MoreData &basic, const DerivedInfo &calculated)
     return;
 
   if (positive(last_time)) {
-    fixed time_delta = basic.time - last_time;
+    auto time_delta = basic.time - last_time;
     if (negative(time_delta) || time_delta > fixed(300))
       /* reset on time warp (positive or negative) */
       Reset();

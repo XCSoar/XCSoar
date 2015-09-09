@@ -233,9 +233,9 @@ FlightPhaseDetector::Finish()
   }
 
   // Calculate fractions
-  fixed total_circling = totals.total_circstats.duration;
-  fixed total_cruise = totals.total_cruisestats.duration;
-  fixed total_duration = total_circling + total_cruise;
+  auto total_circling = totals.total_circstats.duration;
+  auto total_cruise = totals.total_cruisestats.duration;
+  auto total_duration = total_circling + total_cruise;
   if (total_duration > fixed(0)) {
       totals.total_circstats.fraction = total_circling / total_duration;
       totals.total_cruisestats.fraction = total_cruise / total_duration;

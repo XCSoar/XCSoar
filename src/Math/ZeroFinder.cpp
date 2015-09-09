@@ -57,14 +57,14 @@ ZeroFinder::solution_within_tolerance(const fixed x,
 {
 
   // are we away from the edges? if so, check improved solution
-  const fixed x_minus = x-tol_act;
+  const auto x_minus = x-tol_act;
   if (xmin >= x_minus)
     return false;
-  const fixed x_plus = x+tol_act;
+  const auto x_plus = x+tol_act;
   if (x_plus >= xmax)
     return false;
 
-  const fixed fx = f(x);
+  const auto fx = f(x);
   if (f(x_plus)<fx)
     return false;
   if (f(x_minus)<fx)
@@ -158,7 +158,7 @@ ZeroFinder::find_zero_actual(const fixed xstart)
   // Main iteration loop
   for (;;) {
     // Distance from the last but one to the last approximation
-    fixed prev_step = b - a;
+    auto prev_step = b - a;
    
     if (fabs(fc) < fabs(fb)) {
       // Swap data for b to be the best approximation
@@ -176,10 +176,10 @@ ZeroFinder::find_zero_actual(const fixed xstart)
     }
 
     // Actual tolerance
-    const fixed tol_act = tolerance_actual_zero(b);
+    const auto tol_act = tolerance_actual_zero(b);
 
     // Step at this iteration
-    fixed new_step = Half(c - b);
+    auto new_step = Half(c - b);
 
     if (fabs(new_step) <= tol_act || fabs(fb) < sqrt_epsilon) {
       if (!b_best)
@@ -200,18 +200,18 @@ ZeroFinder::find_zero_actual(const fixed xstart)
       fixed p;
       fixed q;
 
-      const fixed cb = c - b;
+      const auto cb = c - b;
       // If we have only two distinct points
       // -> linear interpolation can only be applied
       if (a == c) {
-        const fixed t1 = fb / fa;
+        const auto t1 = fb / fa;
         p = cb * t1;
         q = fixed(1) - t1;
       } else {
         // Quadric inverse interpolation
         q = fa / fc;
-        const fixed t1 = fb / fc;
-        const fixed t2 = fb / fa;
+        const auto t1 = fb / fc;
+        const auto t2 = fb / fa;
         p = t2 * (cb * q * (q - t1) - (b - a) * (t1 - fixed(1)));
         q = (q - fixed(1)) * (t1 - fixed(1)) * (t2 - fixed(1));
       }
@@ -337,12 +337,12 @@ ZeroFinder::find_min_actual(const fixed xstart)
   // Main iteration loop
   for (;;) {
     // Range over which the minimum is seeked for
-    const fixed range = b - a;
-    const fixed middle_range = Half(a + b);
+    const auto range = b - a;
+    const auto middle_range = Half(a + b);
 
     // Actual tolerance
-    const fixed tol_act = tolerance_actual_min(x);
-    const fixed double_tol_act = Double(tol_act);
+    const auto tol_act = tolerance_actual_min(x);
+    const auto double_tol_act = Double(tol_act);
 
     if (fabs(x-middle_range) + Half(range) <= double_tol_act) {
       if (!x_best)
@@ -355,7 +355,7 @@ ZeroFinder::find_min_actual(const fixed xstart)
 
     // Step at this iteration
     // Obtain the gold section step
-    fixed new_step = r * (x < middle_range ? b - x : a - x);
+    auto new_step = r * (x < middle_range ? b - x : a - x);
 
     // Decide if the interpolation can be tried
 
@@ -367,7 +367,7 @@ ZeroFinder::find_min_actual(const fixed xstart)
       fixed p;
       fixed q;
 
-      const fixed t = (x - w) * (fx - fv);
+      const auto t = (x - w) * (fx - fv);
       q = (x - v) * (fx - fw);
       p = (x - v) * q - (x - w) * t;
       q = Double(q - t);
@@ -394,8 +394,8 @@ ZeroFinder::find_min_actual(const fixed xstart)
     // Obtain the next approximation to min and reduce the enveloping range
     {
       // Tentative point for the min
-      const fixed t = x + new_step;
-      const fixed ft = f(t);
+      const auto t = x + new_step;
+      const auto ft = f(t);
       // t is a better approximation
       if (ft <= fx) {
         // Reduce the range so that t would fall within it

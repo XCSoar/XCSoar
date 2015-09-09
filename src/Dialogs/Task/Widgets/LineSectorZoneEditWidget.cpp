@@ -53,7 +53,7 @@ LineSectorZoneEditWidget::Save(bool &_changed)
   bool changed = false;
 
   if (length_editable) {
-    fixed length = GetObject().GetLength();
+    auto length = GetObject().GetLength();
     if (SaveValue(LENGTH, UnitGroup::DISTANCE, length)) {
       GetObject().SetLength(length);
       changed = true;

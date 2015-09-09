@@ -59,7 +59,7 @@ FinishPoint::EntryPrecondition() const
 fixed
 FinishPoint::GetElevation() const
 {
-  const fixed nominal_elevation = GetBaseElevation() + safety_height;
+  const auto nominal_elevation = GetBaseElevation() + safety_height;
 
   if (constraints.fai_finish) {
     return std::max(nominal_elevation, fai_finish_height);

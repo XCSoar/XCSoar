@@ -113,7 +113,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
     // near new waypoint
 
     // first check if it's outside range
-    fixed dist_wpwp = waypoint->location.Distance(back.location);
+    auto dist_wpwp = waypoint->location.Distance(back.location);
 
     if ((dist_wpwp <= search_range) && (candidate_list.size()>1)) {
       // if we have a previous, we can see if this one is a better replacement
@@ -122,8 +122,8 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
       auto previous = ++candidate_list.rbegin();
 	
       // distance previous
-      fixed d_prev_back = previous->location.Distance(back.location);
-      fixed d_prev_candidate = previous->location.Distance(waypoint->location);
+      auto d_prev_back = previous->location.Distance(back.location);
+      auto d_prev_candidate = previous->location.Distance(waypoint->location);
 	
       if (d_prev_candidate > d_prev_back) {
 	// replace back with new point

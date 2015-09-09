@@ -74,11 +74,11 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
     return;
   }
 
-  const fixed nav_altitude = gps_info.NavAltitudeAvailable()
+  const auto nav_altitude = gps_info.NavAltitudeAvailable()
     ? gps_info.nav_altitude
     : fixed(0);
-  fixed hmin = std::max(fixed(0), nav_altitude - fixed(3300));
-  fixed hmax = std::max(fixed(3300), nav_altitude + fixed(1000));
+  auto hmin = std::max(fixed(0), nav_altitude - fixed(3300));
+  auto hmax = std::max(fixed(3300), nav_altitude + fixed(1000));
 
   chart.ResetScale();
   chart.ScaleXFromValue(fixed(0));
@@ -114,7 +114,7 @@ CrossSectionRenderer::UpdateTerrain(short *elevations) const
 
   RasterTerrain::Lease map(*terrain);
   for (unsigned i = 0; i < NUM_SLICES; ++i) {
-    const fixed slice_distance_factor = fixed(i) / (NUM_SLICES - 1);
+    const auto slice_distance_factor = fixed(i) / (NUM_SLICES - 1);
     const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
     elevations[i] = map->GetHeight(slice_point);
@@ -127,7 +127,7 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
   if (!gps_info.NavAltitudeAvailable() || !glide_polar.IsValid())
     return;
 
-  const fixed altitude = gps_info.nav_altitude;
+  const auto altitude = gps_info.nav_altitude;
 
   const MacCready mc(glide_settings, glide_polar);
   const GlideState task(vec, fixed(0), altitude,

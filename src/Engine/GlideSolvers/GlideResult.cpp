@@ -56,7 +56,7 @@ GlideResult::CalcCruiseBearing()
   if (!positive(effective_wind_speed))
     return;
 
-  const fixed sintheta = effective_wind_angle.sin();
+  const auto sintheta = effective_wind_angle.sin();
   if (sintheta == fixed(0))
     return;
 

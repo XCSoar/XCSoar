@@ -73,23 +73,23 @@ MacCready::SolveVertical(const GlideState &task) const
     return result;
   }
   
-  const fixed v = glide_polar.GetVBestLD() * cruise_efficiency;
-  const fixed denom1 = v - task.wind.norm;
+  const auto v = glide_polar.GetVBestLD() * cruise_efficiency;
+  const auto denom1 = v - task.wind.norm;
 
   if (!positive(denom1)) {
     result.validity = GlideResult::Validity::WIND_EXCESSIVE;
     return result;
   }
-  const fixed denom2 = glide_polar.GetMC() * denom1 - task.wind.norm;
+  const auto denom2 = glide_polar.GetMC() * denom1 - task.wind.norm;
   if (!positive(denom2)) {
     result.validity = GlideResult::Validity::MACCREADY_INSUFFICIENT;
     return result;
   }
 
   // from (2)
-  const fixed time_climb = -task.altitude_difference * denom1 / denom2;
+  const auto time_climb = -task.altitude_difference * denom1 / denom2;
   // from (1)
-  const fixed time_cruise = task.wind.norm * time_climb / denom1; 
+  const auto time_cruise = task.wind.norm * time_climb / denom1; 
 
   result.pure_glide_height = fixed(0);
   result.time_elapsed = time_cruise + time_climb;
@@ -128,18 +128,18 @@ GlideResult
 MacCready::SolveCruise(const GlideState &task) const
 {
   // cruise speed for current MC (m/s)
-  const fixed mc_speed = glide_polar.GetVBestLD();
+  const auto mc_speed = glide_polar.GetVBestLD();
 
   GlideResult result(task, mc_speed);
 
   // sink rate at current MC speed (m/s)
-  const fixed mc_sink_rate = glide_polar.GetSBestLD();
+  const auto mc_sink_rate = glide_polar.GetSBestLD();
 
   // MC value (m/s)
-  const fixed mc = glide_polar.GetMC();
+  const auto mc = glide_polar.GetMC();
 
   // Inverse MC value (s/m)
-  const fixed inv_mc = glide_polar.GetInvMC();
+  const auto inv_mc = glide_polar.GetInvMC();
 
   /*
       |      rho = S / MC
@@ -157,15 +157,15 @@ MacCready::SolveCruise(const GlideState &task) const
 
   // Sink rate divided by MC value
   // same as (cruise speed - resulting speed) / resulting speed
-  const fixed rho = mc_sink_rate * inv_mc;
+  const auto rho = mc_sink_rate * inv_mc;
 
   // quotient of cruise speed over resulting speed (> 1.0)
-  const fixed rho_plus_one = fixed(1) + rho;
+  const auto rho_plus_one = fixed(1) + rho;
 
   // quotient of resulting speed over cruise speed (0 .. 1)
-  const fixed inv_rho_plus_one = fixed(1) / rho_plus_one;
+  const auto inv_rho_plus_one = fixed(1) / rho_plus_one;
 
-  const fixed estimated_speed =
+  const auto estimated_speed =
       task.CalcAverageSpeed(mc_speed * cruise_efficiency * inv_rho_plus_one);
   if (!positive(estimated_speed)) {
     result.validity = GlideResult::Validity::WIND_EXCESSIVE;
@@ -174,7 +174,7 @@ MacCready::SolveCruise(const GlideState &task) const
   }
 
   fixed time_climb_drift = fixed(0);
-  fixed distance_with_climb_drift = task.vector.distance;
+  auto distance_with_climb_drift = task.vector.distance;
 
   // Calculate additional distance_with_climb_drift/time due to wind drift while circling
   if (negative(task.altitude_difference)) {
@@ -183,13 +183,13 @@ MacCready::SolveCruise(const GlideState &task) const
   }
 
   // Estimated time to finish the task
-  const fixed estimated_time = distance_with_climb_drift / estimated_speed;
+  const auto estimated_time = distance_with_climb_drift / estimated_speed;
   // Estimated time in cruise
-  const fixed time_cruise = estimated_time * inv_rho_plus_one;
+  const auto time_cruise = estimated_time * inv_rho_plus_one;
   // Estimated time in climb (including wind drift while circling)
-  const fixed time_climb = time_cruise * rho + time_climb_drift;
+  const auto time_climb = time_cruise * rho + time_climb_drift;
 
-  const fixed sink_glide = time_cruise * mc_sink_rate;
+  const auto sink_glide = time_cruise * mc_sink_rate;
 
   result.time_elapsed = estimated_time + time_climb_drift;
   result.time_virtual = fixed(0);
@@ -218,7 +218,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   //   V*V=Vn*Vn+W*W-2*Vn*W*cos(theta)
   //     Vn*Vn-2*Vn*W*cos(theta)+W*W-V*V=0  ... (1)
 
-  const fixed estimated_speed = task.CalcAverageSpeed(v_set * cruise_efficiency);
+  const auto estimated_speed = task.CalcAverageSpeed(v_set * cruise_efficiency);
   if (!positive(estimated_speed)) {
     result.validity = GlideResult::Validity::WIND_EXCESSIVE;
     result.vector.distance = fixed(0);
@@ -228,7 +228,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   result.validity = GlideResult::Validity::OK;
 
   if (allow_partial) {
-    const fixed Vndh = estimated_speed * task.altitude_difference;
+    const auto Vndh = estimated_speed * task.altitude_difference;
 
     // S/Vn > dh/task.Distance
     if (sink_rate * task.vector.distance > Vndh) {
@@ -241,7 +241,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
     }
   }
 
-  const fixed time_cruise = result.vector.distance / estimated_speed;
+  const auto time_cruise = result.vector.distance / estimated_speed;
   result.time_elapsed = time_cruise;
   result.height_climb = fixed(0);
   result.height_glide = time_cruise * sink_rate;
@@ -249,7 +249,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   result.altitude_difference -= result.height_glide;
   result.pure_glide_altitude_difference -= result.pure_glide_height;
 
-  const fixed inv_mc = glide_polar.GetInvMC();
+  const auto inv_mc = glide_polar.GetInvMC();
   if(positive(inv_mc))
     // equivalent time to gain the height that was used
     result.time_virtual = result.height_glide * inv_mc;
@@ -263,7 +263,7 @@ GlideResult
 MacCready::SolveGlide(const GlideState &task, const fixed v_set,
                        const bool allow_partial) const
 {
-  const fixed sink_rate = glide_polar.SinkRate(v_set);
+  const auto sink_rate = glide_polar.SinkRate(v_set);
   return SolveGlide(task, v_set, sink_rate, allow_partial);
 }
 
@@ -396,7 +396,7 @@ public:
   GlideResult
   Result(const fixed v_init)
   {
-    fixed v = find_min(v_init);
+    auto v = find_min(v_init);
     return mac.SolveGlide(task, v, allow_partial);
   }
 };

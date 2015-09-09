@@ -139,7 +139,7 @@ WaveComputer::Compute(const NMEAInfo &basic,
        and a vario value */
     return;
 
-  const fixed dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
+  const auto dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
   if (negative(dt))
     /* time warp */
     Reset();
@@ -148,7 +148,7 @@ WaveComputer::Compute(const NMEAInfo &basic,
     /* throttle */
     return;
 
-  const fixed vario = basic.netto_vario;
+  const auto vario = basic.netto_vario;
 
   constexpr fixed threshold(0.5);
   if (vario > threshold) {

@@ -53,7 +53,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
 
   GeoPoint origin(map.GetMapCenter());
 
-  fixed pd = map.PixelDistance(origin, 1);
+  auto pd = map.PixelDistance(origin, 1);
   printf("# pixel size %g\n", (double)pd);
 
   bool retval= true;
@@ -65,8 +65,8 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        fixed fy = (fixed)j / (ny - 1) * 2 - fixed(1);
+        auto fx = (fixed)i / (nx - 1) * 2 - fixed(1);
+        auto fy = (fixed)j / (ny - 1) * 2 - fixed(1);
         GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
                    origin.latitude + Angle::Degrees(fixed(0.4) * fy));
         short h = map.GetInterpolatedHeight(x);

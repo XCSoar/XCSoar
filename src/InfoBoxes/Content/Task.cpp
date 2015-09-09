@@ -286,7 +286,7 @@ UpdateInfoBoxNextETA(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
 
   if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
@@ -314,8 +314,8 @@ SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
     return;
   }
 
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  fixed altitude_difference =
+  const auto &settings = CommonInterface::GetComputerSettings();
+  auto altitude_difference =
     solution.SelectAltitudeDifference(settings.task.glide);
   data.SetValueFromArrival(altitude_difference);
 }
@@ -325,8 +325,8 @@ UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &next_solution = task_stats.current_leg.solution_remaining;
 
   SetValueFromAltDiff(data, task_stats, next_solution);
 }
@@ -345,8 +345,8 @@ UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &next_solution = task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
@@ -360,9 +360,9 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const MoreData &basic = CommonInterface::Basic();
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult next_solution = task_stats.current_leg.solution_remaining;
+  const auto &basic = CommonInterface::Basic();
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto next_solution = task_stats.current_leg.solution_remaining;
   if (!basic.NavAltitudeAvailable() ||
       !task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
@@ -384,7 +384,7 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
     return;
   }
 
-  fixed gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
+  auto gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
 
   if (!positive(gradient)) {
     data.SetValue(_T("+++"));
@@ -564,7 +564,7 @@ UpdateInfoBoxFinalGR(InfoBoxData &data)
     return;
   }
 
-  fixed gradient = task_stats.total.gradient;
+  auto gradient = task_stats.total.gradient;
 
   if (!positive(gradient)) {
     data.SetValue(_T("+++"));
@@ -616,7 +616,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 
   assert(!negative(task_stats.total.time_remaining_start));
 
-  fixed diff = task_stats.total.time_remaining_start -
+  auto diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
   TCHAR value[32];
@@ -745,8 +745,8 @@ void
 UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
+  const auto &task_stats = calculated.ordered_task_stats;
+  const auto &common_stats = calculated.common_stats;
   const fixed maxheight = fixed(protected_task_manager->
                                 GetOrderedTaskSettings().start_constraints.max_height);
 
@@ -780,8 +780,8 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
     return;
   }
 
-  const fixed d = task_stats.current_leg.remaining.GetDistance();
-  const fixed v = basic.ground_speed;
+  const auto d = task_stats.current_leg.remaining.GetDistance();
+  const auto v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
       !positive(d) ||
@@ -811,8 +811,8 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
     return;
   }
 
-  const fixed d = task_stats.total.remaining.GetDistance();
-  const fixed v = basic.ground_speed;
+  const auto d = task_stats.total.remaining.GetDistance();
+  const auto v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
       !positive(d) ||

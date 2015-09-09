@@ -38,7 +38,7 @@ CylinderZone::GetBoundary() const
   OZBoundary boundary;
 
   const unsigned steps = 20;
-  const Angle delta = Angle::FullCircle() / steps;
+  const auto delta = Angle::FullCircle() / steps;
 
   GeoVector vector(GetRadius(), Angle::Zero());
   for (unsigned i = 0; i < steps; ++i, vector.bearing += delta)
@@ -61,9 +61,9 @@ CylinderZone::GetRandomPointInSector(const fixed mag) const
   GeoPoint location;
 
   do {
-    Angle dir = Angle::Degrees(fixed(rand() % 360));
-    fixed dmag = std::max(std::min(radius, fixed(100.0)), radius * mag);
-    fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
+    auto dir = Angle::Degrees(fixed(rand() % 360));
+    auto dmag = std::max(std::min(radius, fixed(100.0)), radius * mag);
+    auto dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis, dir);
     location = vec.EndPoint(GetReference());
   } while (!IsInSector(location));

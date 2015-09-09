@@ -201,7 +201,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     strcpy(shape_filename_end + (p - line), ".shp");
 
     // Parse shape range
-    fixed shape_range = fixed(strtod(p + 1, &p)) * 1000;
+    auto shape_range = fixed(strtod(p + 1, &p)) * 1000;
     if (*p != _T(','))
       continue;
 
@@ -255,7 +255,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     }
 
     // Parse range for displaying labels
-    fixed label_range = shape_range;
+    auto label_range = shape_range;
     if (*p == _T(','))
       label_range = fixed(strtod(p + 1, &p)) * 1000;
 

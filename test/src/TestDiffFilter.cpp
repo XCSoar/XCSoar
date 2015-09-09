@@ -44,7 +44,7 @@ main(int argc, char **argv)
         //
         // the discrete filter design results in steady-state error
         // of approximately 3.4507 percent
-        fixed error = fabs((df.Update(fixed(Y)) - fixed(dY)) / dY);
+        auto error = fabs((df.Update(fixed(Y)) - fixed(dY)) / dY);
         ok1(error < fixed(0.035));
       }
     }
@@ -58,20 +58,20 @@ main(int argc, char **argv)
       //
       // the discrete filter design results in steady-state error
       // of approximately 3.4507 percent
-      fixed error = fabs((df.Update(fixed(Y)) - fixed(dY)) / dY);
+      auto error = fabs((df.Update(fixed(Y)) - fixed(dY)) / dY);
       ok1(error < fixed(0.035));
     }
   }
 
   df.Reset();
-  fixed p = fixed_two_pi / fixed(10);
+  auto p = fixed_two_pi / fixed(10);
   for (int X = 0; X < 50; X += 1) {
     // Y = sin(2 * pi * (X/10)
-    fixed Y = fixed(sin(p * X));
+    auto Y = fixed(sin(p * X));
 
-    fixed dY_shifted = fixed(cos(p * (X - 3))) * p;
-    fixed dY_filter = df.Update(fixed(Y));
-    fixed error = fabs(dY_filter - dY_shifted);
+    auto dY_shifted = fixed(cos(p * (X - 3))) * p;
+    auto dY_filter = df.Update(fixed(Y));
+    auto error = fabs(dY_filter - dY_shifted);
     if (X >= 10)
       ok1(error < fixed(0.05));
   }

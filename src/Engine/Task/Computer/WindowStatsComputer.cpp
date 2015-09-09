@@ -40,7 +40,7 @@ WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
   if (task_stats.task_finished)
     return;
 
-  const fixed dt = minute_clock.Update(time, fixed(59), fixed(180));
+  const auto dt = minute_clock.Update(time, fixed(59), fixed(180));
   if (negative(dt)) {
     Reset();
     stats.Reset();

@@ -72,12 +72,12 @@ int main(int argc, char **argv)
       NarrowString<16> sentence;
 
       int elapsed_ms = start_clock.Elapsed();
-      fixed elapsed = fixed(elapsed_ms) / 1000;
-      fixed vario = sin(elapsed / 3) * cos(elapsed / 10) *
+      auto elapsed = fixed(elapsed_ms) / 1000;
+      auto vario = sin(elapsed / 3) * cos(elapsed / 10) *
         cos(elapsed / 20 + fixed(2)) * 3;
 
-      fixed pressure_vario = -vario * fixed(12.5);
-      fixed delta_pressure = pressure_vario * 48 / 1000;
+      auto pressure_vario = -vario * fixed(12.5);
+      auto delta_pressure = pressure_vario * 48 / 1000;
       pressure += delta_pressure;
 
       sentence = "_PRS ";

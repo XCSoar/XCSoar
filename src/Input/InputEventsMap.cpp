@@ -206,11 +206,11 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("Auto. zoom off"));
   }
 
-  fixed vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
-  fixed scale_2min_distance = vmin * 12;
+  auto vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
+  auto scale_2min_distance = vmin * 12;
   const fixed scale_100m = fixed(10);
   const fixed scale_1600km = fixed(1600*100);
-  fixed minreasonable = displayMode == DisplayMode::CIRCLING
+  auto minreasonable = displayMode == DisplayMode::CIRCLING
     ? scale_100m
     : std::max(scale_100m, scale_2min_distance);
 
@@ -231,7 +231,7 @@ InputEvents::sub_ScaleZoom(int vswitch)
   if (!projection.IsValid())
     return;
 
-  fixed value = projection.GetMapScale();
+  auto value = projection.GetMapScale();
 
   if (projection.HaveScaleList()) {
     value = projection.StepMapScale(value, -vswitch);

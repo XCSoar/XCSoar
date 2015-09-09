@@ -52,8 +52,8 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
 
     center = bounds.GetCenter();
 
-    fixed geo_width = bounds.GetGeoWidth();
-    fixed geo_heigth = bounds.GetGeoHeight();
+    auto geo_width = bounds.GetGeoWidth();
+    auto geo_heigth = bounds.GetGeoHeight();
 
     scale = fixed(radius * 2) / std::max(geo_heigth, geo_width);
   }

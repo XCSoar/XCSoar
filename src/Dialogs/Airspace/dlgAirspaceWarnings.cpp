@@ -385,7 +385,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
          distance */
       _tcscat(buffer, _T(" vertical "));
 
-      fixed delta = solution.altitude - CommonInterface::Basic().nav_altitude;
+      auto delta = solution.altitude - CommonInterface::Basic().nav_altitude;
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 

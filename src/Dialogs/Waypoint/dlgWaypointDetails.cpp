@@ -606,12 +606,12 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
     RasterPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();
-    fixed scale = std::min((fixed)canvas.GetWidth() / (fixed)img_size.cx,
-                           (fixed)canvas.GetHeight() / (fixed)img_size.cy) *
-                  zoom_factors[zoom];
+    auto scale = std::min((fixed)canvas.GetWidth() / (fixed)img_size.cx,
+                          (fixed)canvas.GetHeight() / (fixed)img_size.cy) *
+      zoom_factors[zoom];
 
     // centered image and optionally zoomed into the center of the image
-    fixed scaled_size = img_size.cx * scale;
+    auto scaled_size = img_size.cx * scale;
     if (scaled_size <= (fixed)canvas.GetWidth()) {
       img_pos.x = 0;
       screen_pos.x = (int) (((fixed)canvas.GetWidth() - scaled_size) / 2);

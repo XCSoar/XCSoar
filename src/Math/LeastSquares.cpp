@@ -99,7 +99,7 @@ LeastSquares::Reset()
 void
 LeastSquares::Compute()
 {
-  fixed denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
+  auto denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
 
   if (positive(fabs(denom))) {
     m = (sum_weights * sum_xi_yi - sum_xi * sum_yi) / denom;
@@ -126,7 +126,7 @@ LeastSquares::Update(fixed x, fixed y, fixed weight)
   Compute();
 
   // Calculate error
-  fixed error = fabs(y - GetYAt(x));
+  auto error = fabs(y - GetYAt(x));
   sum_error += sqr(error) * weight;
   if (error > max_error)
     max_error = error;
@@ -164,8 +164,8 @@ LeastSquares::Add(fixed x, fixed y, fixed weight)
   // Add weighted point
   sum_weights += weight;
 
-  fixed xw = x * weight;
-  fixed yw = y * weight;
+  auto xw = x * weight;
+  auto yw = y * weight;
 
   sum_xi += xw;
   sum_yi += yw;

@@ -80,7 +80,7 @@ SectorZoneEditWidget::Save(bool &_changed)
   const auto shape = GetObject().GetShape();
   bool changed = false;
 
-  fixed radius = GetObject().GetRadius();
+  auto radius = GetObject().GetRadius();
   if (SaveValue(RADIUS, UnitGroup::DISTANCE, radius)) {
     GetObject().SetRadius(radius);
     changed = true;

@@ -151,8 +151,8 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
   if (basic.ground_speed_available && calculated.wind_available &&
       (positive(basic.ground_speed) || calculated.wind.IsNonZero()) &&
       calculated.flight.flying) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
+    auto x0 = basic.track.fastsine() * basic.ground_speed;
+    auto y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += calculated.wind.bearing.fastsine() * calculated.wind.norm;
     y0 += calculated.wind.bearing.fastcosine() * calculated.wind.norm;
 
@@ -209,8 +209,8 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 
   const SpeedVector wind = calculated.wind;
   if (positive(basic.ground_speed) || wind.IsNonZero()) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
+    auto x0 = basic.track.fastsine() * basic.ground_speed;
+    auto y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
@@ -261,13 +261,13 @@ ComputeGPSVario(MoreData &basic,
 
     /* use the "Validity" time stamp, because it reflects when this
        vertical speed was measured, and GPS time may not be available */
-    const fixed delta_t =
+    const auto delta_t =
       basic.noncomp_vario_available.GetTimeDifference(last.noncomp_vario_available);
 
     if (positive(delta_t)) {
       /* only update when a new value was received */
 
-      fixed delta_e = basic.energy_height - last.energy_height;
+      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = basic.noncomp_vario;
       basic.gps_vario_TE = basic.noncomp_vario + delta_e / delta_t;
@@ -278,14 +278,14 @@ ComputeGPSVario(MoreData &basic,
        even if navigate by GPS altitude is configured, because pressure
        altitude is expected to be more exact. */
 
-    const fixed delta_t =
+    const auto delta_t =
       basic.pressure_altitude_available.GetTimeDifference(last.pressure_altitude_available);
 
     if (positive(delta_t)) {
       /* only update when a new value was received */
 
-      fixed delta_h = basic.pressure_altitude - last.pressure_altitude;
-      fixed delta_e = basic.energy_height - last.energy_height;
+      auto delta_h = basic.pressure_altitude - last.pressure_altitude;
+      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = delta_h / delta_t;
       basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
@@ -295,14 +295,14 @@ ComputeGPSVario(MoreData &basic,
     /* barometric altitude is also ok, but it's rare that it is
        available when pressure altitude is not */
 
-    const fixed delta_t =
+    const auto delta_t =
       basic.baro_altitude_available.GetTimeDifference(last.baro_altitude_available);
 
     if (positive(delta_t)) {
       /* only update when a new value was received */
 
-      fixed delta_h = basic.baro_altitude - last.baro_altitude;
-      fixed delta_e = basic.energy_height - last.energy_height;
+      auto delta_h = basic.baro_altitude - last.baro_altitude;
+      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = delta_h / delta_t;
       basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
@@ -313,13 +313,13 @@ ComputeGPSVario(MoreData &basic,
     /* use the GPS time stamp, because it reflects when this altitude
        was measured by the GPS receiver; the Validity object just
        shows when this value was parsed by XCSoar */
-    const fixed delta_t = basic.time - last_gps.time;
+    const auto delta_t = basic.time - last_gps.time;
 
     if (positive(delta_t)) {
       /* only update when a new value was received */
 
-      fixed delta_h = basic.gps_altitude - last_gps.gps_altitude;
-      fixed delta_e = basic.energy_height - last_gps.energy_height;
+      auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
+      auto delta_e = basic.energy_height - last_gps.energy_height;
 
       basic.gps_vario = delta_h / delta_t;
       basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
@@ -373,7 +373,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
     return;
 
   // estimate bank angle (assuming balanced turn)
-  const fixed angle = atan((calculated.turn_rate_heading
+  const auto angle = atan((calculated.turn_rate_heading
       * basic.true_airspeed * fixed_inv_g).Radians());
 
   if (!basic.attitude.bank_angle_available) {

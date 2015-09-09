@@ -168,23 +168,23 @@ AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock)
 void
 AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
 {
-  const FlatPoint fprev =
+  const auto fprev =
     proj.ProjectFloat(GetPrevious()->GetLocationRemaining());
-  const FlatPoint floc = proj.ProjectFloat(GetLocation());
+  const auto floc = proj.ProjectFloat(GetLocation());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius(floc,
                          proj.ProjectFloat(negative(rar.range)
                                            ? GetLocationMin()
                                            : GetLocationMax()));
-  const fixed radius = fradius.d() * fabs(rar.range);
+  const auto radius = fradius.d() * fabs(rar.range);
 
-  const Angle angle = rar.radial - flb.angle();
+  const auto angle = rar.radial - flb.angle();
 
   const FlatPoint ftarget1(radius * angle.cos(),
                            radius * -(angle).sin());
 
-  const FlatPoint ftarget2 = floc + ftarget1;
-  const GeoPoint targetG = proj.Unproject(ftarget2);
+  const auto ftarget2 = floc + ftarget1;
+  const auto targetG = proj.Unproject(ftarget2);
 
   SetTarget(targetG, true);
 }
@@ -192,20 +192,20 @@ AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
 RangeAndRadial
 AATPoint::GetTargetRangeRadial(fixed oldrange) const
 {
-  const GeoPoint fprev = GetPrevious()->GetLocationRemaining();
-  const GeoPoint floc = GetLocation();
-  const Angle radialraw = (floc.Bearing(GetTargetLocation()) -
+  const auto fprev = GetPrevious()->GetLocationRemaining();
+  const auto floc = GetLocation();
+  const auto radialraw = (floc.Bearing(GetTargetLocation()) -
       fprev.Bearing(floc)).AsBearing();
-  Angle radial = radialraw.AsDelta();
+  auto radial = radialraw.AsDelta();
 
-  fixed d = floc.Distance(GetTargetLocation());
+  auto d = floc.Distance(GetTargetLocation());
   if (radial < -Angle::QuarterCircle() || radial > Angle::QuarterCircle())
     d = -d;
 
-  const fixed radius = negative(d)
+  const auto radius = negative(d)
     ? floc.Distance(GetLocationMin())
     : floc.Distance(GetLocationMax());
-  const fixed range = Clamp(d / radius, fixed(-1), fixed(1));
+  const auto range = Clamp(d / radius, fixed(-1), fixed(1));
 
   if (oldrange == fixed(0) && range == fixed(0))
     radial = Angle::Zero();
@@ -216,7 +216,7 @@ AATPoint::GetTargetRangeRadial(fixed oldrange) const
 bool
 AATPoint::Equals(const OrderedTaskPoint &other) const
 {
-  const AATPoint &tp = (const AATPoint &)other;
+  const auto &tp = (const AATPoint &)other;
 
   return OrderedTaskPoint::Equals(other) &&
     target_locked == tp.target_locked &&

@@ -610,7 +610,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
 {
   // Latitude in floating point degrees
   value = value.AsDelta();
-  const fixed degrees = fabs(value.Degrees());
+  const auto degrees = fabs(value.Degrees());
 
   // Check the first three columns
   assert(columns[0].type == Column::Type::NORTH_SOUTH);
@@ -629,7 +629,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
 {
   // Longitude in floating point degrees
   value = value.AsDelta();
-  const fixed degrees = fabs(value.Degrees());
+  const auto degrees = fabs(value.Degrees());
 
   // Check the first three columns here
   assert(columns[0].type == Column::Type::EAST_WEST);
@@ -657,7 +657,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
   assert(columns[1].type == Column::Type::DIGIT ||
          columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
-  fixed degrees = fixed(columns[1].value * 10 + columns[2].value);
+  auto degrees = fixed(columns[1].value * 10 + columns[2].value);
 
   // Read columns according to specified format
   /// \todo support UTM format

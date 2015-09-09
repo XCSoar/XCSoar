@@ -39,8 +39,8 @@ ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
     return false;
   }
 
-  fixed mag_change = fabs(wind.norm - last_wind.norm);
-  fixed dir_change = (wind.bearing - last_wind.bearing).AsDelta().AbsoluteDegrees();
+  auto mag_change = fabs(wind.norm - last_wind.norm);
+  auto dir_change = (wind.bearing - last_wind.bearing).AsDelta().AbsoluteDegrees();
 
   if (mag_change > fixed(2.5))
     return true;

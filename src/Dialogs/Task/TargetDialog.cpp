@@ -531,7 +531,7 @@ TargetWidget::RefreshCalculator()
   // update outputs
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const fixed aat_time_estimated = task_stats.GetEstimatedTotalTime();
+  const auto aat_time_estimated = task_stats.GetEstimatedTotalTime();
 
   ete.SetVisible(!nodisplay);
 
@@ -614,7 +614,7 @@ TargetWidget::OnRangeModified(fixed new_value)
   if (target_point < initial_active_task_point)
     return;
 
-  const fixed new_range = new_value / fixed(100);
+  const auto new_range = new_value / fixed(100);
   if (new_range == range_and_radial.range)
     return;
 

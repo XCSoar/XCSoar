@@ -54,7 +54,7 @@ public:
     }
 
     bool update_location(const GeoPoint &location_now) {
-      fixed range_now = location_now.Distance(waypoint.location);
+      auto range_now = location_now.Distance(waypoint.location);
       if (range_now < range) {
 	range = range_now;
 	location = location_now;

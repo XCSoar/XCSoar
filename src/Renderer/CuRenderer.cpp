@@ -42,8 +42,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   int hmin = 10000;
   int hmax = -10000;
-  fixed tmin = cu_sonde.maxGroundTemperature;
-  fixed tmax = cu_sonde.maxGroundTemperature;
+  auto tmin = cu_sonde.maxGroundTemperature;
+  auto tmax = cu_sonde.maxGroundTemperature;
 
   // find range for scaling of graph
   for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {

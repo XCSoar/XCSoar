@@ -68,8 +68,8 @@ TestApproximation(fixed radius, fixed step)
       it != it_end; it_last = it++) {
     for (fixed x = fixed(0); x < fixed(1); x += fixed(0.1)) {
       GeoPoint test_point = (*it_last).Interpolate(*it, x);
-      fixed distance = center.Distance(test_point);
-      fixed error = fabs(radius - distance);
+      auto distance = center.Distance(test_point);
+      auto error = fabs(radius - distance);
       if (error > max_error)
         max_error = error;
     }
@@ -82,8 +82,8 @@ int main(int argc, char **argv)
 {
   Args args(argc, argv, "RADIUS [DEGREE STEPWIDTH = 5]");
 
-  fixed radius = fixed(args.ExpectNextInt());
-  fixed step = fixed(args.IsEmpty() ? 5 : args.ExpectNextDouble());
+  auto radius = fixed(args.ExpectNextInt());
+  auto step = args.IsEmpty() ? fixed(5) : args.ExpectNextDouble();
 
   printf("Airspace Arc Approximation\n\nRadius: %.0f m\nDegree Stepwith: %f deg\n\n",
          (double)radius, (double)step);

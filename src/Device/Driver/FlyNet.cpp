@@ -75,13 +75,13 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
 
       auto last_pressure = info.static_pressure;
 
-      fixed alt = AtmosphericPressure::StaticPressureToPressureAltitude(pressure);
-      fixed last_alt = AtmosphericPressure::StaticPressureToPressureAltitude(last_pressure);
+      auto alt = AtmosphericPressure::StaticPressureToPressureAltitude(pressure);
+      auto last_alt = AtmosphericPressure::StaticPressureToPressureAltitude(last_pressure);
 
-      fixed vario = (alt - last_alt) * frequency;
+      auto vario = (alt - last_alt) * frequency;
       vario_filter.Update(vario);
 
-      fixed vario_filtered = vario_filter.Average();
+      auto vario_filtered = vario_filter.Average();
 
       info.ProvideNoncompVario(vario_filtered);
     } else {

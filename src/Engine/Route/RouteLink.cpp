@@ -37,8 +37,8 @@ gcc_const
 static unsigned
 AngleToIndex(Angle a)
 {
-  fixed i = ROUTEPOLAR_POINTS * (fixed(1.25)
-                                 - a.AsBearing().Radians() / fixed_two_pi);
+  auto i = ROUTEPOLAR_POINTS * (fixed(1.25)
+                                - a.AsBearing().Radians() / fixed_two_pi);
   assert(positive(i));
   return uround(i) % ROUTEPOLAR_POINTS;
 }
@@ -66,7 +66,7 @@ RouteLink::RouteLink (const RoutePoint& _destination, const RoutePoint& _origin,
 void
 RouteLink::CalcSpeedups(const FlatProjection &proj)
 {
-  const fixed scale = proj.GetApproximateScale();
+  const auto scale = proj.GetApproximateScale();
   const fixed dx = fixed(first.longitude - second.longitude);
   const fixed dy = fixed(first.latitude - second.latitude);
   if (!positive(fabs(dx)) && !positive(fabs(dy))) {

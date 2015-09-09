@@ -58,7 +58,7 @@ GeoPoint
 ThermalSource::CalculateAdjustedLocation(fixed altitude,
                                          const SpeedVector &wind) const
 {
-  fixed dh = altitude - ground_height;
-  fixed t = dh / lift_rate;
+  auto dh = altitude - ground_height;
+  auto t = dh / lift_rate;
   return FindLatitudeLongitude(location, wind.bearing.Reciprocal(), wind.norm * t);
 }

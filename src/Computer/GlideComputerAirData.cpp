@@ -139,8 +139,9 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
                                  VarioInfo &vario,
                                  const ComputerSettings &settings_computer)
 {
-  fixed g_load = basic.acceleration.available ?
-                 basic.acceleration.g_load : fixed(1);
+  auto g_load = basic.acceleration.available
+    ? basic.acceleration.g_load
+    : fixed(1);
 
   vario.sink_rate =
     flight.flying && basic.airspeed_available &&
@@ -163,8 +164,8 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
        !basic.acceleration.real ||
        fabs(basic.acceleration.g_load - fixed(1)) <= fixed(0.25))) {
     // TODO: Check this is correct for TAS/IAS
-    fixed ias_to_tas = basic.indicated_airspeed / basic.true_airspeed;
-    fixed w_tas = basic.total_energy_vario * ias_to_tas;
+    auto ias_to_tas = basic.indicated_airspeed / basic.true_airspeed;
+    auto w_tas = basic.total_energy_vario * ias_to_tas;
 
     calculated.climb_history.Add(uround(basic.indicated_airspeed), w_tas);
   }
@@ -209,7 +210,7 @@ GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
       calculated.cruise_start_altitude = basic.nav_altitude;
       calculated.cruise_start_time = basic.time;
     } else {
-      fixed DistanceFlown =
+      auto DistanceFlown =
         basic.location.DistanceS(calculated.cruise_start_location);
 
       calculated.cruise_gr =
@@ -279,7 +280,7 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
                                   FlyingState &flying,
                                   const GlidePolar &glide_polar)
 {
-  fixed v_takeoff = glide_polar.IsValid()
+  auto v_takeoff = glide_polar.IsValid()
     ? glide_polar.GetVTakeoff()
     /* if there's no valid polar, assume 10 m/s (36 km/h); that's an
        arbitrary value, but better than nothing */
@@ -353,12 +354,12 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
       !positive(calculated.climb_start_time))
     return;
 
-  fixed duration = calculated.cruise_start_time - calculated.climb_start_time;
+  auto duration = calculated.cruise_start_time - calculated.climb_start_time;
   if (duration < THERMAL_TIME_MIN)
     return;
 
-  fixed gain =
-    calculated.cruise_start_altitude_te - calculated.climb_start_altitude_te;
+  auto gain = calculated.cruise_start_altitude_te
+    - calculated.climb_start_altitude_te;
 
   if (!positive(gain))
     return;
@@ -421,9 +422,9 @@ GlideComputerAirData::NextLegEqThermal(const NMEAInfo &basic,
   }
 
   // Calculate wind component on current and next legs
-  const fixed wind_comp = calculated.wind.norm *
+  const auto wind_comp = calculated.wind.norm *
       (calculated.wind.bearing - vector_remaining.bearing).fastcosine();
-  const fixed next_comp = calculated.wind.norm *
+  const auto next_comp = calculated.wind.norm *
       (calculated.wind.bearing - next_leg_vector.bearing).fastcosine();
 
   calculated.next_leg_eq_thermal =

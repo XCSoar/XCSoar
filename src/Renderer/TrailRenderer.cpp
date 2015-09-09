@@ -65,7 +65,7 @@ gcc_const
 static unsigned
 GetSnailColorIndex(fixed vario, fixed min_vario, fixed max_vario)
 {
-  fixed cv = negative(vario) ? -vario / min_vario : vario / max_vario;
+  auto cv = negative(vario) ? -vario / min_vario : vario / max_vario;
 
   return Clamp((int)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS),
                0, (int)(TrailLook::NUMSNAILCOLORS - 1));
@@ -75,7 +75,7 @@ gcc_const
 static unsigned
 GetAltitudeColorIndex(fixed alt, fixed min_alt, fixed max_alt)
 {
-  fixed relative_altitude = (alt - min_alt) / (max_alt - min_alt);
+  auto relative_altitude = (alt - min_alt) / (max_alt - min_alt);
   int _max = TrailLook::NUMSNAILCOLORS - 1;
   return Clamp((int)(relative_altitude * _max), 0, _max);
 }
@@ -134,8 +134,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   }
 
   auto minmax = GetMinMax(settings.type, trace);
-  fixed value_min = minmax.first;
-  fixed value_max = minmax.second;
+  auto value_min = minmax.first;
+  auto value_max = minmax.second;
 
   bool scaled_trail = settings.scaling_enabled &&
                       projection.GetMapScale() <= fixed(6000);

@@ -81,21 +81,20 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysVSpeed(fixed(1)),
                   ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
 
-  fixed sinkrate0, sinkrate1;
-  fixed v0 = fixed(0), v1;
+  fixed v0 = fixed(0);
   bool v0valid = false;
   unsigned i0 = 0;
 
   const unsigned vmin = (unsigned)glide_polar.GetVMin();
   const unsigned vmax = (unsigned)glide_polar.GetVMax();
   for (unsigned i = vmin; i <= vmax; ++i) {
-    sinkrate0 = -glide_polar.SinkRate(fixed(i));
-    sinkrate1 = -glide_polar.SinkRate(fixed(i + 1));
+    auto sinkrate0 = -glide_polar.SinkRate(fixed(i));
+    auto sinkrate1 = -glide_polar.SinkRate(fixed(i + 1));
     chart.DrawLine(fixed(i), sinkrate0, fixed(i + 1), sinkrate1,
                    ChartLook::STYLE_MEDIUMBLACK);
 
     if (climb_history.Check(i)) {
-      v1 = climb_history.Get(i);
+      auto v1 = climb_history.Get(i);
 
       if (v0valid)
         chart.DrawLine(fixed(i0), v0, fixed(i), v1, blue_pen);
@@ -106,9 +105,9 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  fixed MACCREADY = glide_polar.GetMC();
-  fixed sb = -glide_polar.GetSBestLD();
-  fixed ff = (sb - MACCREADY) / glide_polar.GetVBestLD();
+  auto MACCREADY = glide_polar.GetMC();
+  auto sb = -glide_polar.GetSBestLD();
+  auto ff = (sb - MACCREADY) / glide_polar.GetVBestLD();
 
   chart.DrawLine(fixed(0), MACCREADY, glide_polar.GetVMax(),
                  MACCREADY + ff * glide_polar.GetVMax(),
@@ -130,7 +129,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                   rc.bottom - Layout::Scale(55),
                   text);
 
-  fixed wl = glide_polar.GetWingLoading();
+  auto wl = glide_polar.GetWingLoading();
   if ( wl != fixed(0) )
   {
     FormatUserWingLoading(wl, value.buffer(), true);

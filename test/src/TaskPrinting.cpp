@@ -148,10 +148,8 @@ PrintHelper::aatpoint_print(std::ostream& f,
       // prev max or target changes
 
       AATIsolineSegment seg(tp, projection);
-      fixed tdist = tp.GetPrevious()->GetLocationRemaining().Distance(
-        tp.GetLocationMin());
-      fixed rdist = tp.GetPrevious()->GetLocationRemaining().Distance(
-        tp.GetTargetLocation());
+      auto tdist = tp.GetPrevious()->GetLocationRemaining().Distance(tp.GetLocationMin());
+      auto rdist = tp.GetPrevious()->GetLocationRemaining().Distance(tp.GetTargetLocation());
 
       bool filter_backtrack = true;
       if (seg.IsValid()) {

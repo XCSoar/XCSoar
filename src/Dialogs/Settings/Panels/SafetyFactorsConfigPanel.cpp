@@ -138,7 +138,7 @@ SafetyFactorsConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(AlternateMode, ProfileKeys::AbortTaskMode,
                            task_behaviour.abort_task_mode);
 
-  fixed degradation = (fixed(1) - settings_computer.polar.degradation_factor) * 100;
+  auto degradation = (fixed(1) - settings_computer.polar.degradation_factor) * 100;
   if (SaveValue(PolarDegradation, degradation)) {
     settings_computer.polar.SetDegradationFactor(fixed(1) - degradation / 100);
     Profile::Set(ProfileKeys::PolarDegradation,

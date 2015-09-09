@@ -60,7 +60,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   ChartRenderer chart(chart_look, canvas, rc);
 
-  const fixed height =
+  const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
   if (height <= fixed(10)) {
     chart.DrawNoData();
@@ -70,10 +70,10 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   windstats_mag.Reset();
 
   for (unsigned i = 0; i < numsteps; i++) {
-    fixed h = height * i / (numsteps - 1) + fs.altitude_base.GetMinY();
+    auto h = height * i / (numsteps - 1) + fs.altitude_base.GetMinY();
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
-    fixed mag = wind.Magnitude();
+    auto mag = wind.Magnitude();
 
     windstats_mag.Update(mag, h);
   }
@@ -97,17 +97,17 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   canvas.Select(chart_look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 
   // draw direction vectors
-  const fixed x_max = std::max(windstats_mag.GetMaxX(),
-                               fixed(1)); // prevent /0 problems
+  const auto x_max = std::max(windstats_mag.GetMaxX(),
+                              fixed(1)); // prevent /0 problems
   fixed hfact;
   for (unsigned i = 0; i < numsteps; i++) {
     hfact = fixed(i + 1) / (numsteps + 1);
-    fixed h = height * hfact + fs.altitude_base.GetMinY();
+    auto h = height * hfact + fs.altitude_base.GetMinY();
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
     wind.x /= x_max;
     wind.y /= x_max;
-    fixed mag = wind.Magnitude();
+    auto mag = wind.Magnitude();
     if (negative(mag))
       continue;
 

@@ -41,10 +41,10 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
   GeoBounds bounds = airspace.GetGeoBounds();
   GeoPoint center = bounds.GetCenter();
 
-  fixed geo_heigth = bounds.GetGeoHeight();
-  fixed geo_width = bounds.GetGeoWidth();
+  auto geo_heigth = bounds.GetGeoHeight();
+  auto geo_width = bounds.GetGeoWidth();
 
-  fixed geo_size = std::max(geo_heigth, geo_width);
+  auto geo_size = std::max(geo_heigth, geo_width);
 
   WindowProjection projection;
   projection.SetScreenSize({radius * 2, radius * 2});

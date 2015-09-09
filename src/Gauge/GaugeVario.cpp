@@ -99,7 +99,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   }
 
   if (Settings().show_mc) {
-    fixed mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
+    auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
     RenderValue(canvas, bottom_position.x, bottom_position.y,
                 &value_bottom, &label_bottom,
                 mc,
@@ -123,7 +123,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   static int sval_last = 0;
   static int ival_last = 0;
 
-  fixed vval = Basic().brutto_vario;
+  auto vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Calculated().sink_rate);
   if (Settings().show_average_needle) {
@@ -160,7 +160,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   RenderNeedle(canvas, ival, false, false);
 
   if (Settings().show_gross) {
-    fixed vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
+    auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
                               fixed(-99.9), fixed(99.9));
 
     RenderValue(canvas, middle_position.x, middle_position.y,

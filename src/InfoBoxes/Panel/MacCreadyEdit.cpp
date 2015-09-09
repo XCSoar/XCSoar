@@ -48,7 +48,7 @@ MacCreadyOffsetButtons::OnOffset(fixed offset)
 Widget *
 LoadMacCreadyEditPanel(unsigned id)
 {
-  const fixed step = GetUserVerticalSpeedStep();
+  const auto step = GetUserVerticalSpeedStep();
   return new MacCreadyOffsetButtons(UIGlobals::GetDialogLook().button,
                                     GetUserVerticalSpeedFormat(false, true),
                                     step, 5 * step);

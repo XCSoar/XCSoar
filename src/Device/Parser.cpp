@@ -396,17 +396,17 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
     return false;
 
   // Calculate Hour
-  fixed hours = value / 10000;
+  auto hours = value / 10000;
   broken_time.hour = (int)hours;
 
   // Calculate Minute
-  fixed mins = value / 100;
+  auto mins = value / 100;
   mins = mins - fixed(broken_time.hour) * 100;
   broken_time.minute = (int)mins;
 
   // Calculate Second
-  fixed secs = value - fixed(broken_time.hour * 10000 +
-                             broken_time.minute * 100);
+  auto secs = value - fixed(broken_time.hour * 10000 +
+                            broken_time.minute * 100);
   broken_time.second = (int)secs;
 
   time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);

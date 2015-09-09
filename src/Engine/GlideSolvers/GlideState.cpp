@@ -101,20 +101,20 @@ GlideState::DriftedDistance(const fixed time) const
     return vector.distance;
 
   // Distance that the wine travels in the given #time
-  const fixed distance_wind = wind.norm * time;
+  const auto distance_wind = wind.norm * time;
   // Direction of the wind
   auto sc_wind = wind.bearing.Reciprocal().SinCos();
-  const fixed sin_wind = sc_wind.first, cos_wind = sc_wind.second;
+  const auto sin_wind = sc_wind.first, cos_wind = sc_wind.second;
 
   // Distance to the target
-  const fixed distance_task = vector.distance;
+  const auto distance_task = vector.distance;
   // Direction to the target
   auto sc_task = vector.bearing.SinCos();
-  const fixed sin_task = sc_task.first, cos_task = sc_task.second;
+  const auto sin_task = sc_task.first, cos_task = sc_task.second;
 
   // X-/Y-Components of the resulting vector
-  const fixed dx = distance_task * sin_task - distance_wind * sin_wind;
-  const fixed dy = distance_task * cos_task - distance_wind * cos_wind;
+  const auto dx = distance_task * sin_task - distance_wind * sin_wind;
+  const auto dy = distance_task * cos_task - distance_wind * cos_wind;
 
   return MediumHypot(dx, dy);
 

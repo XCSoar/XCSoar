@@ -34,15 +34,15 @@ Copyright_License {
 glm::mat4
 ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 {
-  fixed angle = projection.GetScreenAngle().Degrees();
-  fixed scale = projection.GetScale();
+  auto angle = projection.GetScreenAngle().Degrees();
+  auto scale = projection.GetScale();
   const RasterPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
-  const fixed scale_r = scale * FAISphere::REARTH;
-  const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
-  const fixed scale_y = -scale_r;
+  const auto scale_r = scale * FAISphere::REARTH;
+  const auto scale_x = scale_r * screen_location.latitude.fastcosine();
+  const auto scale_y = -scale_r;
 
   const glm::vec3 scale_vec(GLfloat(scale_x), GLfloat(scale_y), 1);
 
@@ -65,15 +65,15 @@ ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 void
 ApplyProjection(const WindowProjection &projection, const GeoPoint &reference)
 {
-  fixed angle = projection.GetScreenAngle().Degrees();
-  fixed scale = projection.GetScale();
+  auto angle = projection.GetScreenAngle().Degrees();
+  auto scale = projection.GetScale();
   const RasterPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
-  const fixed scale_r = scale * FAISphere::REARTH;
-  const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
-  const fixed scale_y = -scale_r;
+  const auto scale_r = scale * FAISphere::REARTH;
+  const auto scale_x = scale_r * screen_location.latitude.fastcosine();
+  const auto scale_y = -scale_r;
 
 #ifdef HAVE_GLES
   GLfixed fixed_angle = angle * (1<<16);

@@ -52,18 +52,20 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2
     - Layout::Scale(1);
 
-  fixed bank_degrees = attitude.IsBankAngleUseable() ?
-                       attitude.bank_angle.Degrees() : fixed(0);
+  auto bank_degrees = attitude.IsBankAngleUseable()
+    ? attitude.bank_angle.Degrees()
+    : fixed(0);
 
-  fixed pitch_degrees = attitude.IsPitchAngleUseable() ?
-                        attitude.pitch_angle.Degrees() : fixed(0);
+  auto pitch_degrees = attitude.IsPitchAngleUseable()
+    ? attitude.pitch_angle.Degrees()
+    : fixed(0);
 
-  fixed phi = Clamp(bank_degrees, fixed(-89), fixed(89));
-  Angle alpha = Angle::acos(Clamp(pitch_degrees / 50,
-                                  fixed(-1), fixed(1)));
-  Angle sphi = Angle::HalfCircle() - Angle::Degrees(phi);
-  Angle alpha1 = sphi - alpha;
-  Angle alpha2 = sphi + alpha;
+  auto phi = Clamp(bank_degrees, fixed(-89), fixed(89));
+  auto alpha = Angle::acos(Clamp(pitch_degrees / 50,
+                                 fixed(-1), fixed(1)));
+  auto sphi = Angle::HalfCircle() - Angle::Degrees(phi);
+  auto alpha1 = sphi - alpha;
+  auto alpha2 = sphi + alpha;
 
   // draw sky part
   canvas.Select(look.sky_pen);
@@ -81,8 +83,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.DrawLine(center.x, center.y - radius / 4, center.x, center.y);
 
   // draw 45 degree dash marks
-  const UPixelScalar rr2p = uround(radius * fixed_sqrt_half) + Layout::Scale(1);
-  const UPixelScalar rr2n = rr2p - Layout::Scale(2);
+  const int rr2p = uround(radius * fixed_sqrt_half) + Layout::Scale(1);
+  const int rr2n = rr2p - Layout::Scale(2);
   canvas.DrawLine(center.x + rr2p, center.y - rr2p,
               center.x + rr2n, center.y - rr2n);
   canvas.DrawLine(center.x - rr2p, center.y - rr2p,

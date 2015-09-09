@@ -177,7 +177,7 @@ UpdateInfoBoxVarioDistance(InfoBoxData &data)
 void
 UpdateInfoBoxNextLegEqThermal(InfoBoxData &data)
 {
-  const fixed next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
+  const auto next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
   if (negative(next_leg_eq_thermal)) {
     data.SetInvalid();
     return;
@@ -203,7 +203,7 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
     return;
   }
 
-  const fixed circle_diameter = CommonInterface::Basic().true_airspeed
+  const auto circle_diameter = CommonInterface::Basic().true_airspeed
      / turn_rate.Radians()
      * fixed(2); // convert turn rate to radians/s and double it to get estimated circle diameter
 
@@ -217,7 +217,7 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
   data.SetValue (buffer);
   data.SetValueUnit(unit);
 
-  const fixed circle_duration =
+  const auto circle_duration =
     Angle::FullCircle().Native() / turn_rate.Native();
 
   StaticString<16> duration_buffer;

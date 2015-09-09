@@ -41,7 +41,7 @@ ThermalBandComputer::Compute(const MoreData &basic,
   if (!basic.NavAltitudeAvailable())
     return;
 
-  const fixed h_safety =
+  const auto h_safety =
     settings.task.route_planner.safety_height_terrain +
     calculated.GetTerrainBaseFallback();
 
@@ -51,7 +51,7 @@ ThermalBandComputer::Compute(const MoreData &basic,
     return;
   }
 
-  const fixed max_height = tbi.max_thermal_height;
+  const auto max_height = tbi.max_thermal_height;
   if (positive(max_height))
     tbi.working_band_fraction = tbi.working_band_height / max_height;
   else

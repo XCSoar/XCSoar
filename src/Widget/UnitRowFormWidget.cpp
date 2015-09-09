@@ -84,8 +84,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
   assert(df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  fixed new_value = df.GetAsFixed();
-  fixed old_value = Units::ToUserUnit(value, unit);
+  auto new_value = df.GetAsFixed();
+  auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
@@ -103,8 +103,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
   assert(df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  fixed new_value = df.GetAsFixed();
-  fixed old_value = Units::ToUserUnit(value, unit);
+  auto new_value = df.GetAsFixed();
+  auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
@@ -124,8 +124,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
          df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  fixed new_value = df.GetAsFixed();
-  fixed old_value = Units::ToUserUnit(fixed(value), unit);
+  auto new_value = df.GetAsFixed();
+  auto old_value = Units::ToUserUnit(fixed(value), unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;

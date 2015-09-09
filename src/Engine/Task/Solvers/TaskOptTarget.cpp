@@ -72,7 +72,7 @@ TaskOptTarget::search(const fixed tp)
   }
   if (iso.IsValid()) {
     tm.target_save();
-    const fixed t = find_min(tp);
+    const auto t = find_min(tp);
     if (!valid(t)) {
       // invalid, so restore old value
       tm.target_restore();

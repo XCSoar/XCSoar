@@ -232,7 +232,7 @@ WritePoint(TextWriter &writer, const ContestTracePoint &point,
   JSON::WriteGeoPointAttributes(object, point.GetLocation());
 
   if (previous != NULL) {
-    fixed distance = point.DistanceTo(previous->GetLocation());
+    auto distance = point.DistanceTo(previous->GetLocation());
     object.WriteElement("distance", JSON::WriteUnsigned, uround(distance));
 
     unsigned duration =
@@ -240,7 +240,7 @@ WritePoint(TextWriter &writer, const ContestTracePoint &point,
     object.WriteElement("duration", JSON::WriteUnsigned, duration);
 
     if (duration > 0) {
-      fixed speed = distance / duration;
+      auto speed = distance / duration;
       object.WriteElement("speed", JSON::WriteFixed, speed);
     }
   }

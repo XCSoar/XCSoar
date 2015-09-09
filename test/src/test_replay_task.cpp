@@ -125,7 +125,7 @@ test_replay()
   sim.state.wind.norm = fixed(7);
   sim.state.wind.bearing = Angle::Degrees(330);
 
-  fixed time_last = sim.state.time;
+  auto time_last = sim.state.time;
 
 //  uncomment this to manually go to first tp
 //  task_manager.incrementActiveTaskPoint(1);

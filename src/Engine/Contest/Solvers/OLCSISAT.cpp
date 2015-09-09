@@ -62,10 +62,10 @@ OLCSISAT::CalculateResult(const ContestTraceVector &solution) const
   }
 
   // R distance (start to end)
-  const fixed R = solution[0].DistanceTo(solution[num_stages - 1].GetLocation());
+  const auto R = solution[0].DistanceTo(solution[num_stages - 1].GetLocation());
 
   // V zigzag-free distance
-  const fixed V = G - R;
+  const auto V = G - R;
 
   // S = total distance
   ContestResult result = ContestDijkstra::CalculateResult(solution);

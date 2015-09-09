@@ -34,8 +34,8 @@ RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
 {
   const unsigned safe_index = ((unsigned)index) % ROUTEPOLAR_POINTS;
   const FlatGeoPoint fp = proj.ProjectInteger(p);
-  const fixed d = p.altitude * polar_glide.GetPoint(safe_index).inv_gradient;
-  const fixed scale = proj.GetApproximateScale();
+  const auto d = p.altitude * polar_glide.GetPoint(safe_index).inv_gradient;
+  const auto scale = proj.GetApproximateScale();
   const int steps = int(d / scale) + 1;
   int dx, dy;
   RoutePolar::IndexToDXDY(safe_index, dx, dy);
@@ -51,7 +51,7 @@ RoutePolars::Initialise(const GlideSettings &settings, const GlidePolar &polar,
 {
   polar_glide.Initialise(settings, polar, wind, true);
   polar_cruise.Initialise(settings, polar, wind, false);
-  const fixed imc = polar.GetInvMC();
+  const auto imc = polar.GetInvMC();
   if (positive(imc))
     inv_mc = fixed(MC_CEILING_PENALTY_FACTOR) * imc;
   else
@@ -73,10 +73,10 @@ RoutePolars::CalcTime(const RouteLink& link) const
     return UINT_MAX;
 
   // dh/d = gradient
-  const fixed rho = dh.IsPositive() ?
-    std::min(fixed(1), (dh * link.inv_d *
-                         polar_glide.GetPoint(link.polar_index).inv_gradient)) :
-    fixed(0);
+  const auto rho = dh.IsPositive()
+    ? std::min(fixed(1), (dh * link.inv_d *
+                          polar_glide.GetPoint(link.polar_index).inv_gradient))
+    : fixed(0);
 
   if ((rho < fixed(1)) && !polar_cruise.GetPoint(link.polar_index).valid)
     // impossible, can't cruise

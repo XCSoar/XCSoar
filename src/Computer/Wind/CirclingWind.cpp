@@ -186,7 +186,7 @@ CirclingWind::CalcWind()
   }
 
   // attempt to fit cycloid
-  const fixed mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
+  const auto mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
   if (mag >= fixed(30))
     // limit to reasonable values (60 knots), reject otherwise
     return Result(0);
@@ -195,10 +195,10 @@ CirclingWind::CalcWind()
 
   for (const Sample &sample : samples) {
     const auto sc = sample.vector.bearing.SinCos();
-    fixed wx = sc.second, wy = sc.first;
+    auto wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    fixed cmag = SmallHypot(wx, wy) - sample.vector.norm;
+    auto cmag = SmallHypot(wx, wy) - sample.vector.norm;
     rthis += sqr(cmag);
   }
 

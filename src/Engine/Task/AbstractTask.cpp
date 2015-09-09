@@ -120,7 +120,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
 
   if (stats.start.task_started && task_behaviour.calc_effective_mc &&
       valid) {
-    fixed val = glide_polar.GetMC();
+    auto val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, glide_polar, val))
       stats.effective_mc = std::max(em_lpf.Update(val), fixed(0));
   } else {
@@ -289,7 +289,7 @@ AbstractTask::UpdateStatsTimes(const fixed time)
   if (!stats.task_finished) {
     stats.current_leg.SetTimes(fixed(0), ScanLegStartTime(), time);
 
-    const fixed until_start_s = GetType() == TaskType::ORDERED &&
+    const auto until_start_s = GetType() == TaskType::ORDERED &&
       GetActiveTaskPointIndex() == 0
       /* flying towards the start point in an ordered task: pass
          current_leg.time_remaining, which is the estimated time to
@@ -326,7 +326,7 @@ AbstractTask::CalcLegGradient(const AircraftState &aircraft) const
     return fixed(0);
 
   // Get the distance to the next turnpoint
-  const fixed d = tp->GetVectorRemaining(aircraft.location).distance;
+  const auto d = tp->GetVectorRemaining(aircraft.location).distance;
   if (!positive(d))
     return fixed(0);
 

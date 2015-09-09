@@ -146,13 +146,13 @@ DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
 ComboList
 DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
 {
-  const fixed reference = reference_string != nullptr
+  const auto reference = reference_string != nullptr
     ? ParseString(reference_string)
     : mValue;
 
   ComboList combo_list;
-  const fixed epsilon = mStep / 1000;
-  const fixed fine_step = mStep / 10;
+  const auto epsilon = mStep / 1000;
+  const auto fine_step = mStep / 10;
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
@@ -160,21 +160,21 @@ DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
     surrounding_items -= 20;
 
   /* the value aligned to mStep */
-  fixed corrected_value = int((reference - mMin) / mStep) * mStep + mMin;
+  auto corrected_value = int((reference - mMin) / mStep) * mStep + mMin;
 
-  fixed first = corrected_value - surrounding_items * mStep;
+  auto first = corrected_value - surrounding_items * mStep;
   if (first > mMin + epsilon)
     /* there are values before "first" - give the user a choice */
     combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < mMin - epsilon)
     first = int(mMin / mStep) * mStep;
 
-  fixed last = std::min(first + surrounding_items * mStep * 2, mMax);
+  auto last = std::min(first + surrounding_items * mStep * 2, mMax);
 
   bool found_current = false;
-  fixed step = mStep;
+  auto step = mStep;
   bool inFineSteps = false;
-  for (fixed i = first; i <= last + epsilon; i += step) {
+  for (auto i = first; i <= last + epsilon; i += step) {
 
     // Skip over the items which fall below the beginning of the valid range.
     // e.g. first may be 0.0 for values with valid range 0.1 - 10.0 and step 1.0

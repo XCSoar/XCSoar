@@ -34,7 +34,7 @@ KeyholeZone::GetBoundary() const
   boundary.GenerateArcExcluding(GetReference(), GetRadius(),
                                 GetStartRadial(), GetEndRadial());
 
-  const fixed small_radius = GetInnerRadius();
+  const auto small_radius = GetInnerRadius();
   GeoVector small_vector(small_radius, GetStartRadial());
   boundary.push_front(small_vector.EndPoint(GetReference()));
   small_vector.bearing = GetEndRadial();

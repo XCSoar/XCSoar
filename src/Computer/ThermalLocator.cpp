@@ -36,7 +36,7 @@ inline void
 ThermalLocator::Point::Drift(fixed t, const FlatProjection &projection,
                              const GeoPoint& wind_drift)
 {
-  const fixed dt = t - t_0;
+  const auto dt = t - t_0;
 
   // thermal decay function is located in GenerateSineTables.cpp
   recency_weight = thermal_recency_fn((unsigned)fabs(dt));

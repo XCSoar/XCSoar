@@ -34,7 +34,7 @@ ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
     return;
 
   bool restart = false;
-  const fixed Time = basic.time;
+  const auto Time = basic.time;
   if (Ready_Time_Check(Time, &restart)) {
     LastTime_Check = Time;
     if (CheckCondition(basic, calculated, settings)) {

@@ -66,7 +66,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
   deg = std::min(deg, lat ? 90L : 180L);
 
-  fixed value = fixed(deg) + fixed(min) / 60 + fixed(sec) / 3600;
+  auto value = fixed(deg) + fixed(min) / 60 + fixed(sec) / 3600;
 
   TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')

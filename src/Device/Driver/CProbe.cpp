@@ -112,7 +112,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
 
   unsigned _delta_pressure;
   if (line.ReadHexChecked(_delta_pressure)) {
-    fixed delta_pressure = fixed((int16_t)_delta_pressure) / 10;
+    auto delta_pressure = fixed((int16_t)_delta_pressure) / 10;
     info.ProvideDynamicPressure(AtmosphericPressure::Pascal(delta_pressure));
   }
 

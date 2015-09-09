@@ -45,7 +45,7 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   if (!basic.time_available)
     return;
 
-  const fixed dt = delta_time.Update(basic.time, fixed(1), fixed(20));
+  const auto dt = delta_time.Update(basic.time, fixed(1), fixed(20));
   if (negative(dt))
     /* time warp */
     Reset();

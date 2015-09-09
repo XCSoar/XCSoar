@@ -63,11 +63,11 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
          warps "should" be filtered at a higher level already */
       continue;
 
-    fixed timediff = fixed(now - m.time) / timeRange;
+    auto timediff = fixed(now - m.time) / timeRange;
     if (timediff >= fixed(1))
       continue;
 
-    fixed altdiff = fabs(alt - m.altitude) / altRange;
+    auto altdiff = fabs(alt - m.altitude) / altRange;
     if (altdiff >= fixed(1))
       continue;
 

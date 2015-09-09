@@ -45,7 +45,7 @@ StartConstraints::CheckSpeed(fixed ground_speed,
   if (fai_finish)
     return true;
 
-  const fixed margin = margins != nullptr
+  const auto margin = margins != nullptr
     ? margins->max_speed_margin
     : fixed(0);
 

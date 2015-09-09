@@ -55,7 +55,7 @@ main(int argc, char **argv)
   }
 
   while (replay->Next()) {
-    fixed vario = replay->Basic().brutto_vario;
+    auto vario = replay->Basic().brutto_vario;
     printf("%2.1f\n", (double)vario);
     synthesiser.SetVario(sample_rate, vario);
     Sleep(1000);

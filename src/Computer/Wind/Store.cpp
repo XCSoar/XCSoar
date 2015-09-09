@@ -82,7 +82,7 @@ void
 WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
                    Vector &wind) const
 {
-  fixed mag = wind.Magnitude();
+  auto mag = wind.Magnitude();
   Angle bearing;
 
   if (wind.y == fixed(0) && wind.x == fixed(0))

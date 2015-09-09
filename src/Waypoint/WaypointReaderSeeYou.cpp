@@ -52,7 +52,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
   if (endptr != src + 3 || l < 0 || l >= 1000)
     return false;
 
-  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
+  auto value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
 
   TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')

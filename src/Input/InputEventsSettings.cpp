@@ -179,8 +179,8 @@ InputEvents::eventBugs(const TCHAR *misc)
     return;
 
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
-  fixed BUGS = settings.bugs;
-  fixed oldBugs = BUGS;
+  auto BUGS = settings.bugs;
+  auto oldBugs = BUGS;
 
   if (StringIsEqual(misc, _T("up"))) {
     BUGS += fixed(1) / 10;
@@ -221,8 +221,8 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   GlidePolar &polar =
     CommonInterface::SetComputerSettings().polar.glide_polar_task;
-  fixed BALLAST = polar.GetBallast();
-  fixed oldBallast = BALLAST;
+  auto BALLAST = polar.GetBallast();
+  auto oldBallast = BALLAST;
 
   if (StringIsEqual(misc, _T("up"))) {
     BALLAST += fixed(1) / 10;
@@ -289,7 +289,7 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("-")))
     CommonInterface::SetComputerSettings().forecast_temperature -= fixed(1);
   else if (StringIsEqual(misc, _T("show"))) {
-    fixed temperature =
+    auto temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;
     TCHAR Temp[100];
     _stprintf(Temp, _T("%f"),

@@ -159,10 +159,10 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 
   if (pixel_size < fixed(3000)) {
     // Data point size of the (terrain) map in meters multiplied by 256
-    fixed map_pixel_size = map.PixelDistance(center, 1);
+    auto map_pixel_size = map.PixelDistance(center, 1);
 
     // How many screen pixels does one data point stretch?
-    fixed q = map_pixel_size / pixel_size;
+    auto q = map_pixel_size / pixel_size;
 
     /* round down to reduce slope shading artefacts (caused by
        RasterBuffer interpolation) */

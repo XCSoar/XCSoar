@@ -223,7 +223,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.alive.Update(basic.clock);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
-  fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
+  auto second_of_day = fixed(date_time.GetSecondOfDay()) +
     /* add the millisecond fraction of the original timestamp for
        better accuracy */
     fixed((unsigned)(time % 1000)) / 1000u;
@@ -247,7 +247,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {
-    fixed GeoidSeparation = EGM96::LookupSeparation(basic.location);
+    auto GeoidSeparation = EGM96::LookupSeparation(basic.location);
     basic.gps_altitude = fixed(altitude) - GeoidSeparation;
     basic.gps_altitude_available.Update(basic.clock);
   } else

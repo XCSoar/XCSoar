@@ -66,7 +66,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  fixed MACCREADY = glide_polar.GetMC();
+  auto MACCREADY = glide_polar.GetMC();
 
   chart.ScaleYFromData(fs.thermal_average);
   chart.ScaleYFromValue(MACCREADY + fixed(0.5));

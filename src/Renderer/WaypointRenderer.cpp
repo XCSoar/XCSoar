@@ -81,7 +81,7 @@ struct VisibleWaypoint {
     assert(basic.location_available);
     assert(basic.NavAltitudeAvailable());
 
-    const fixed elevation = waypoint->elevation +
+    const auto elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const GlideState state(GeoVector(basic.location, waypoint->location),
                            elevation, basic.nav_altitude, wind);
@@ -222,15 +222,15 @@ protected:
       if (!basic.location_available || !basic.NavAltitudeAvailable())
         return;
 
-      const fixed safety_height = task_behaviour.safety_height_arrival;
-      const fixed target_altitude = way_point.elevation + safety_height;
-      const fixed delta_h = basic.nav_altitude - target_altitude;
+      const auto safety_height = task_behaviour.safety_height_arrival;
+      const auto target_altitude = way_point.elevation + safety_height;
+      const auto delta_h = basic.nav_altitude - target_altitude;
       if (!positive(delta_h))
         /* no L/D if below waypoint */
         return;
 
-      const fixed distance = basic.location.DistanceS(way_point.location);
-      const fixed gr = distance / delta_h;
+      const auto distance = basic.location.DistanceS(way_point.location);
+      const auto gr = distance / delta_h;
       if (!GradientValid(gr))
         return;
 

@@ -70,7 +70,7 @@ UpdateInfoBoxTemperature(InfoBoxData &data)
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
-  fixed temperature = CommonInterface::GetComputerSettings().forecast_temperature;
+  auto temperature = CommonInterface::GetComputerSettings().forecast_temperature;
   data.SetValue(_T("%2.1f"),
                     Units::ToUserTemperature(temperature));
 
@@ -177,7 +177,7 @@ UpdateInfoBoxHeadWindSimplified(InfoBoxData &data)
     return;
   }
 
-  fixed value = basic.true_airspeed - basic.ground_speed;
+  auto value = basic.true_airspeed - basic.ground_speed;
 
   // Set Value
   data.SetValue(_T("%2.0f"), Units::ToUserWindSpeed(value));

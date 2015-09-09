@@ -249,7 +249,7 @@ GlueMapWindow::UpdateMapScale()
   if (!IsNearSelf())
     return;
 
-  fixed distance = calculated.auto_zoom_distance;
+  auto distance = calculated.auto_zoom_distance;
   if (settings.auto_zoom_enabled && positive(distance)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
@@ -290,9 +290,9 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location)
     return;
   }
 
-  const fixed distance_meters =
+  const auto distance_meters =
     visible_projection.GetGeoLocation().DistanceS(location);
-  const fixed distance_pixels =
+  const auto distance_pixels =
     visible_projection.DistanceMetersToPixels(distance_meters);
   if (distance_pixels > fixed(0.5))
     SetLocation(location);
@@ -343,7 +343,7 @@ GlueMapWindow::UpdateProjection()
           y = sc.second;
         }
       }
-      fixed position_factor = fixed(50 - settings_map.glider_screen_position) / 100;
+      auto position_factor = fixed(50 - settings_map.glider_screen_position) / 100;
       offset.x = PixelScalar(x * (rc.right - rc.left) * position_factor);
       offset.y = PixelScalar(y * (rc.top - rc.bottom) * position_factor);
       offset_history.Add(offset);
@@ -357,12 +357,12 @@ GlueMapWindow::UpdateProjection()
   if (!IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
-    const fixed d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
+    const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
     if (!positive(d_t)) {
       SetLocationLazy(basic.location);
     } else {
-      const fixed d_max = Double(visible_projection.GetMapScale());
-      const fixed t = std::min(d_t, d_max)/d_t;
+      const auto d_max = Double(visible_projection.GetMapScale());
+      const auto t = std::min(d_t, d_max)/d_t;
       SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
                                                t));
     }

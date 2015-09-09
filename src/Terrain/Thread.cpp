@@ -39,7 +39,7 @@ TerrainThread::Trigger(const WindowProjection &projection)
   const ScopeLock protect(mutex);
 
   GeoPoint center = projection.GetGeoScreenCenter();
-  fixed radius = projection.GetScreenWidthMeters() / 2;
+  auto radius = projection.GetScreenWidthMeters() / 2;
   if (last_center.IsValid() && last_radius >= radius &&
       last_center.DistanceS(center) < fixed(1000))
     return;
@@ -57,7 +57,7 @@ TerrainThread::Tick()
   bool again = true;
   while (next_center.IsValid() && again && !IsStopped()) {
     const GeoPoint center = next_center;
-    const fixed radius = next_radius;
+    const auto radius = next_radius;
 
     {
       const ScopeUnlock unlock(mutex);

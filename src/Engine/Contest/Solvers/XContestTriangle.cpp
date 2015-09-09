@@ -34,7 +34,7 @@ XContestTriangle::CalculateResult() const
 
   if (positive(result.distance)) {
     // approximation for now: gap is distance from start to finish
-    const fixed d_gap = TraceManager::GetPoint(0).GetLocation()
+    const auto d_gap = TraceManager::GetPoint(0).GetLocation()
       .Distance(TraceManager::GetPoint(n_points - 1).GetLocation());
 
     // award no points if gap is >20% of triangle
@@ -49,9 +49,9 @@ XContestTriangle::CalculateResult() const
   // DHV-XC: 2.0 or 1.75 points per km for FAI vs non-FAI triangle
   // XContest: 1.4 or 1.2 points per km for FAI vs non-FAI triangle
 
-  const fixed score_factor = is_dhv?
-    (is_fai? fixed(0.002): fixed(0.00175))
-    :(is_fai? fixed(0.0014): fixed(0.0012));
+  const auto score_factor = is_dhv
+    ? (is_fai ? fixed(0.002) : fixed(0.00175))
+    : (is_fai ? fixed(0.0014): fixed(0.0012));
 
   result.score = ApplyHandicap(result.distance * score_factor);
   return result;

@@ -183,7 +183,7 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   screen[20] = m_proj.GeoToScreen(end);
 
   for (unsigned i = 1; i < 20; ++i) {
-    fixed t = i * fixed_twentieth;
+    auto t = i * fixed_twentieth;
     GeoPoint ga = seg.Parametric(t);
     screen[i] = m_proj.GeoToScreen(ga);
   }

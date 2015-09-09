@@ -30,17 +30,16 @@
 GlideResult
 TaskMacCready::glide_solution(const AircraftState &aircraft)
 {
-  const fixed aircraft_min_height = get_min_height(aircraft);
+  const auto aircraft_min_height = get_min_height(aircraft);
   GlideResult acc_gr;
-  AircraftState aircraft_predict = get_aircraft_start(aircraft);
+  auto aircraft_predict = get_aircraft_start(aircraft);
 
   for (unsigned i = 0, size = points.size(); i < size; ++i) {
-    const fixed tp_min_height = std::max(aircraft_min_height,
-                                         points[i]->GetElevation());
+    const auto tp_min_height = std::max(aircraft_min_height,
+                                        points[i]->GetElevation());
 
     // perform estimate, ensuring that alt is above previous taskpoint
-    const GlideResult gr = SolvePoint(*points[i], aircraft_predict,
-                                      tp_min_height);
+    const auto gr = SolvePoint(*points[i], aircraft_predict, tp_min_height);
     leg_solutions[i] = gr;
 
     // update state
@@ -66,11 +65,11 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
 GlideResult
 TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S) const
 {
-  AircraftState aircraft_predict = aircraft;
+  auto aircraft_predict = aircraft;
   GlideResult acc_gr;
 
   for (unsigned i = 0, size = points.size(); i < size; ++i) {
-    const GlideResult gr =
+    const auto gr =
       TaskSolution::GlideSolutionSink(*points[i], aircraft_predict,
                                       settings, glide_polar, S);
 

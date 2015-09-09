@@ -274,7 +274,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   StaticString<80> buffer;
 
-  fixed map_width = projection.GetScreenWidthMeters();
+  auto map_width = projection.GetScreenWidthMeters();
 
   const Font &font = *look.overlay_font;
   canvas.Select(font);
@@ -440,7 +440,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
 {
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
-    fixed s = Clamp(Basic().stall_ratio, fixed(0), fixed(1));
+    auto s = Clamp(Basic().stall_ratio, fixed(0), fixed(1));
     PixelScalar m((rc.bottom - rc.top) * s * s);
 
     canvas.SelectBlackPen();

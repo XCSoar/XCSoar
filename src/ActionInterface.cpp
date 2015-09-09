@@ -123,7 +123,7 @@ ActionInterface::SetBallast(fixed ballast, bool to_devices)
   if (to_devices) {
     const Plane &plane = GetComputerSettings().plane;
     if (positive(plane.dry_mass)) {
-      fixed overload = (plane.dry_mass + ballast * plane.max_ballast) /
+      auto overload = (plane.dry_mass + ballast * plane.max_ballast) /
         plane.dry_mass;
 
       MessageOperationEnvironment env;
@@ -207,8 +207,8 @@ void
 ActionInterface::OffsetManualMacCready(fixed offset, bool to_devices)
 {
   const GlidePolar &polar = GetComputerSettings().polar.glide_polar_task;
-  const fixed old_mc = polar.GetMC();
-  fixed mc = old_mc + offset;
+  const auto old_mc = polar.GetMC();
+  auto mc = old_mc + offset;
   if (negative(mc))
     mc = fixed(0);
   else if (mc > fixed(5))

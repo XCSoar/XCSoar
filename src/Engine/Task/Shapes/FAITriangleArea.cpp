@@ -38,7 +38,7 @@ gcc_const
 static Angle
 CalcAlpha(fixed dist_a, fixed dist_b, fixed dist_c)
 {
-    const fixed cos_alpha = (sqr(dist_b) + sqr(dist_c) - sqr(dist_a))
+    const auto cos_alpha = (sqr(dist_b) + sqr(dist_c) - sqr(dist_a))
       / Double(dist_c * dist_b);
     return Angle::acos(cos_alpha);
 }
@@ -71,12 +71,12 @@ GenerateFAITriangleRight(GeoPoint *dest,
                          const fixed dist_min, const fixed dist_max,
                          bool reverse, const fixed large_threshold)
 {
-  const fixed delta_distance = (dist_max - dist_min) / STEPS;
-  fixed total_distance = dist_min;
+  const auto delta_distance = (dist_max - dist_min) / STEPS;
+  auto total_distance = dist_min;
   for (unsigned i = 0; i < STEPS && total_distance < large_threshold; ++i,
          total_distance += delta_distance) {
-    const fixed dist_a = SMALL_MIN_LEG * total_distance;
-    const fixed dist_b = total_distance - dist_a - leg_c.distance;
+    const auto dist_a = SMALL_MIN_LEG * total_distance;
+    const auto dist_b = total_distance - dist_a - leg_c.distance;
 
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
@@ -94,10 +94,10 @@ GenerateFAITriangleTop(GeoPoint *dest,
                        const fixed dist_max,
                        bool reverse)
 {
-  const fixed delta_distance = dist_max * (fixed(1) - 3 * SMALL_MIN_LEG)
+  const auto delta_distance = dist_max * (fixed(1) - 3 * SMALL_MIN_LEG)
     / STEPS;
-  fixed dist_a = leg_c.distance;
-  fixed dist_b = dist_max - dist_a - leg_c.distance;
+  auto dist_a = leg_c.distance;
+  auto dist_b = dist_max - dist_a - leg_c.distance;
   for (unsigned i = 0; i < STEPS; ++i,
          dist_a += delta_distance,
          dist_b -= delta_distance) {
@@ -117,15 +117,15 @@ GenerateFAITriangleLeft(GeoPoint *dest,
                         const fixed dist_min, const fixed dist_max,
                         bool reverse, const fixed large_threshold)
 {
-  const fixed delta_distance = (dist_max - dist_min) / STEPS;
-  fixed total_distance = dist_max;
+  const auto delta_distance = (dist_max - dist_min) / STEPS;
+  auto total_distance = dist_max;
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance -= delta_distance) {
     if (total_distance >= large_threshold)
       continue;
 
-    const fixed dist_b = SMALL_MIN_LEG * total_distance;
-    const fixed dist_a = total_distance - dist_b - leg_c.distance;
+    const auto dist_b = SMALL_MIN_LEG * total_distance;
+    const auto dist_a = total_distance - dist_b - leg_c.distance;
 
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
@@ -142,12 +142,12 @@ GenerateFAITriangleLargeBottom(GeoPoint *dest,
                                const GeoPoint &origin, const GeoVector &leg_c,
                                bool reverse)
 {
-  const fixed total = leg_c.distance / LARGE_MAX_LEG;
+  const auto total = leg_c.distance / LARGE_MAX_LEG;
 
-  fixed dist_b = LargeMinLeg(total);
-  fixed dist_a = total - leg_c.distance - dist_b;
+  auto dist_b = LargeMinLeg(total);
+  auto dist_a = total - leg_c.distance - dist_b;
 
-  const fixed delta_distance = (dist_a - dist_b) / STEPS;
+  const auto delta_distance = (dist_a - dist_b) / STEPS;
   for (unsigned i = 0; i < STEPS; ++i,
          dist_a -= delta_distance, dist_b += delta_distance)
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
@@ -164,21 +164,21 @@ GenerateFAITriangleLargeBottomRight(GeoPoint *dest,
                                     const GeoPoint &origin, const GeoVector &leg_c,
                                     bool reverse, const fixed large_threshold)
 {
-  const fixed max_leg = large_threshold * LARGE_MAX_LEG;
-  const fixed min_leg = large_threshold - max_leg - leg_c.distance;
+  const auto max_leg = large_threshold * LARGE_MAX_LEG;
+  const auto min_leg = large_threshold - max_leg - leg_c.distance;
   assert(max_leg >= min_leg);
 
-  const fixed min_a = LargeMinLeg(large_threshold);
+  const auto min_a = LargeMinLeg(large_threshold);
 
-  const fixed a_start = large_threshold * SMALL_MIN_LEG;
-  const fixed a_end = std::max(min_leg, min_a);
+  const auto a_start = large_threshold * SMALL_MIN_LEG;
+  const auto a_end = std::max(min_leg, min_a);
   if (a_start <= a_end)
     return dest;
 
-  fixed dist_a = a_start;
-  fixed dist_b = large_threshold - leg_c.distance - dist_a;
+  auto dist_a = a_start;
+  auto dist_b = large_threshold - leg_c.distance - dist_a;
 
-  const fixed delta_distance = (a_start - a_end) / STEPS;
+  const auto delta_distance = (a_start - a_end) / STEPS;
   for (unsigned i = 0; i < STEPS; ++i,
          dist_a -= delta_distance, dist_b += delta_distance) {
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
@@ -197,13 +197,13 @@ GenerateFAITriangleLargeRight1(GeoPoint *dest,
                                const fixed dist_min, const fixed dist_max,
                                bool reverse, const fixed large_threshold)
 {
-  const fixed delta_distance = (dist_max - large_threshold) / STEPS;
-  fixed total_distance = std::max(dist_min, large_threshold);
+  const auto delta_distance = (dist_max - large_threshold) / STEPS;
+  auto total_distance = std::max(dist_min, large_threshold);
 
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance += delta_distance) {
-    const fixed dist_a = LargeMinLeg(total_distance);
-    const fixed dist_b = total_distance - dist_a - leg_c.distance;
+    const auto dist_a = LargeMinLeg(total_distance);
+    const auto dist_b = total_distance - dist_a - leg_c.distance;
     if (dist_b > total_distance * LARGE_MAX_LEG)
       break;
 
@@ -225,16 +225,16 @@ GenerateFAITriangleLargeRight2(GeoPoint *dest,
 {
   /* this is the total distance where the Right1 arc ends; here, A is
      25% */
-  const fixed min_total_for_a = leg_c.distance
+  const auto min_total_for_a = leg_c.distance
     / (fixed(1) - LARGE_MAX_LEG - LARGE_MIN_LEG);
 
-  const fixed delta_distance = (dist_max - dist_min) / STEPS;
-  fixed total_distance = std::max(std::max(dist_min, large_threshold),
-                                  min_total_for_a);
+  const auto delta_distance = (dist_max - dist_min) / STEPS;
+  auto total_distance = std::max(std::max(dist_min, large_threshold),
+                                 min_total_for_a);
   for (unsigned i = 0; i < STEPS && total_distance < dist_max; ++i,
          total_distance += delta_distance) {
-    const fixed dist_b = total_distance * LARGE_MAX_LEG;
-    const fixed dist_a = total_distance - dist_b - leg_c.distance;
+    const auto dist_b = total_distance * LARGE_MAX_LEG;
+    const auto dist_a = total_distance - dist_b - leg_c.distance;
 
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
@@ -249,12 +249,12 @@ GenerateFAITriangleLargeTop(GeoPoint *dest,
                             const fixed dist_max,
                             bool reverse)
 {
-  const fixed max_leg = dist_max * LARGE_MAX_LEG;
-  const fixed min_leg = dist_max - leg_c.distance - max_leg;
+  const auto max_leg = dist_max * LARGE_MAX_LEG;
+  const auto min_leg = dist_max - leg_c.distance - max_leg;
   assert(max_leg >= min_leg);
 
-  const fixed delta_distance = (max_leg - min_leg) / STEPS;
-  fixed dist_a = min_leg, dist_b = max_leg;
+  const auto delta_distance = (max_leg - min_leg) / STEPS;
+  auto dist_a = min_leg, dist_b = max_leg;
   for (unsigned i = 0; i < STEPS; ++i,
          dist_a += delta_distance, dist_b -= delta_distance) {
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
@@ -273,15 +273,15 @@ GenerateFAITriangleLargeLeft2(GeoPoint *dest,
                               const fixed dist_min, const fixed dist_max,
                               bool reverse, const fixed large_threshold)
 {
-  const fixed delta_distance = (dist_max - dist_min) / STEPS;
-  fixed total_distance = dist_max;
+  const auto delta_distance = (dist_max - dist_min) / STEPS;
+  auto total_distance = dist_max;
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance -= delta_distance) {
     if (total_distance < large_threshold)
       break;
 
-    const fixed dist_a = total_distance * LARGE_MAX_LEG;
-    const fixed dist_b = total_distance - dist_a - leg_c.distance;
+    const auto dist_a = total_distance * LARGE_MAX_LEG;
+    const auto dist_b = total_distance - dist_a - leg_c.distance;
     if (dist_b < LargeMinLeg(total_distance))
       break;
 
@@ -303,21 +303,21 @@ GenerateFAITriangleLargeLeft1(GeoPoint *dest,
 {
   /* this is the total distance where the Left1 arc starts; here, A is
      25% */
-  const fixed max_total_for_a = leg_c.distance
+  const auto max_total_for_a = leg_c.distance
     / (fixed(1) - LARGE_MAX_LEG - LARGE_MIN_LEG);
 
-  const fixed total_start = std::min(dist_max, max_total_for_a);
-  const fixed total_end = std::max(dist_min, large_threshold);
+  const auto total_start = std::min(dist_max, max_total_for_a);
+  const auto total_end = std::max(dist_min, large_threshold);
   if (total_start <= total_end)
     return dest;
 
-  const fixed delta_distance = (total_start - total_end) / STEPS;
-  fixed total_distance = total_start;
+  const auto delta_distance = (total_start - total_end) / STEPS;
+  auto total_distance = total_start;
 
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance -= delta_distance) {
-    const fixed dist_b = LargeMinLeg(total_distance);
-    const fixed dist_a = total_distance - dist_b - leg_c.distance;
+    const auto dist_b = LargeMinLeg(total_distance);
+    const auto dist_a = total_distance - dist_b - leg_c.distance;
 
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
@@ -336,21 +336,21 @@ GenerateFAITriangleLargeBottomLeft(GeoPoint *dest,
                                     const GeoPoint &origin, const GeoVector &leg_c,
                                     bool reverse, const fixed large_threshold)
 {
-  const fixed max_leg = large_threshold * LARGE_MAX_LEG;
-  const fixed min_leg = large_threshold - max_leg - leg_c.distance;
+  const auto max_leg = large_threshold * LARGE_MAX_LEG;
+  const auto min_leg = large_threshold - max_leg - leg_c.distance;
   assert(max_leg >= min_leg);
 
-  const fixed min_b = LargeMinLeg(large_threshold);
+  const auto min_b = LargeMinLeg(large_threshold);
 
-  const fixed b_start = std::max(min_leg, min_b);
-  const fixed b_end = large_threshold * SMALL_MIN_LEG;
+  const auto b_start = std::max(min_leg, min_b);
+  const auto b_end = large_threshold * SMALL_MIN_LEG;
   if (b_start >= b_end)
     return dest;
 
-  fixed dist_b = b_start;
-  fixed dist_a = large_threshold - leg_c.distance - dist_b;
+  auto dist_b = b_start;
+  auto dist_a = large_threshold - leg_c.distance - dist_b;
 
-  const fixed delta_distance = (b_end - b_start) / STEPS;
+  const auto delta_distance = (b_end - b_start) / STEPS;
   for (unsigned i = 0; i < STEPS; ++i,
          dist_a -= delta_distance, dist_b += delta_distance) {
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
@@ -366,15 +366,15 @@ GenerateFAITriangleArea(GeoPoint *dest,
                         bool reverse,
                         const FAITriangleSettings &settings)
 {
-  const fixed large_threshold = settings.GetThreshold();
+  const auto large_threshold = settings.GetThreshold();
 
-  const GeoVector leg_c = pt1.DistanceBearing(pt2);
+  const auto leg_c = pt1.DistanceBearing(pt2);
 
-  const fixed dist_max = leg_c.distance / SMALL_MIN_LEG;
-  const fixed dist_min = leg_c.distance / SMALL_MAX_LEG;
+  const auto dist_max = leg_c.distance / SMALL_MIN_LEG;
+  const auto dist_min = leg_c.distance / SMALL_MAX_LEG;
 
-  const fixed large_dist_min = leg_c.distance / LARGE_MAX_LEG;
-  const fixed large_dist_max = leg_c.distance / LARGE_MIN_LEG;
+  const auto large_dist_min = leg_c.distance / LARGE_MAX_LEG;
+  const auto large_dist_max = leg_c.distance / LARGE_MIN_LEG;
 
   const bool have_large = large_dist_max > large_threshold;
   const bool have_small = large_dist_min < large_threshold || dist_min <= large_dist_min;

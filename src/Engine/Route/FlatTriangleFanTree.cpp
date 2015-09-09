@@ -236,7 +236,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   // return true if this gap was caught (applicable) whether or not it generated
   // a change
 
-  const fixed f0 = e_short.d * e_long.inv_d;
+  const auto f0 = e_short.d * e_long.inv_d;
   const RoughAltitude h_loss =
       parms.rpolars.CalcGlideArrival(n, p_long, parms.projection) - n.altitude;
 
@@ -255,7 +255,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   children.emplace_back(depth + 1);
   FlatTriangleFanTree &child = children.back();
 
-  for (fixed f = f0; f < fixed(0.9); f += fixed(0.1)) {
+  for (auto f = f0; f < fixed(0.9); f += fixed(0.1)) {
     // find corner point
     const FlatGeoPoint px = (dp * f + n);
     // position x is length (n to p_short) along (n to p_long)

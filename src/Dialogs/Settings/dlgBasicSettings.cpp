@@ -150,7 +150,7 @@ FlightSetupPanel::SetBallast()
   if (ballastable)
     LoadValue(Ballast, polar_settings.glide_polar_task.GetBallastLitres());
 
-  const fixed wl = polar_settings.glide_polar_task.GetWingLoading();
+  const auto wl = polar_settings.glide_polar_task.GetWingLoading();
   SetRowVisible(WingLoading, positive(wl));
   if (positive(wl))
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
@@ -158,8 +158,8 @@ FlightSetupPanel::SetBallast()
   if (device_blackboard != NULL) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
     if (positive(plane.dry_mass)) {
-      fixed fraction = polar_settings.glide_polar_task.GetBallast();
-      fixed overload = (plane.dry_mass + fraction * plane.max_ballast) /
+      auto fraction = polar_settings.glide_polar_task.GetBallast();
+      auto overload = (plane.dry_mass + fraction * plane.max_ballast) /
         plane.dry_mass;
 
       MessageOperationEnvironment env;

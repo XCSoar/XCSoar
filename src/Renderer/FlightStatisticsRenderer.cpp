@@ -294,7 +294,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
       !derived.task_stats.total.remaining.IsDefined()) {
     _tcscpy(sTmp, _("No task"));
   } else {
-    const fixed d_remaining = derived.task_stats.total.remaining.GetDistance();
+    const auto d_remaining = derived.task_stats.total.remaining.GetDistance();
     if (task_stats.has_targets) {
       const auto timetext1 = FormatSignedTimeHHMM((int)task_stats.total.time_remaining_start);
       const auto timetext2 = FormatSignedTimeHHMM((int)common.aat_time_remaining);

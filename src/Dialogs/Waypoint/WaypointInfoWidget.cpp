@@ -191,12 +191,12 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     const TaskBehaviour &task_behaviour =
       CommonInterface::GetComputerSettings().task;
 
-    const fixed safety_height = task_behaviour.safety_height_arrival;
-    const fixed target_altitude = waypoint.elevation + safety_height;
-    const fixed delta_h = basic.nav_altitude - target_altitude;
+    const auto safety_height = task_behaviour.safety_height_arrival;
+    const auto target_altitude = waypoint.elevation + safety_height;
+    const auto delta_h = basic.nav_altitude - target_altitude;
     if (positive(delta_h)) {
-      const fixed distance = basic.location.Distance(waypoint.location);
-      const fixed gr = distance / delta_h;
+      const auto distance = basic.location.Distance(waypoint.location);
+      const auto gr = distance / delta_h;
       if (GradientValid(gr)) {
         buffer.UnsafeFormat(_T("%.1f"), (double)gr);
         AddReadOnly(_("Required glide ratio"), nullptr, buffer);

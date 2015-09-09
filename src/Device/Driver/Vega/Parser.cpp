@@ -144,7 +144,7 @@ PDVDV(NMEAInputLine &line, NMEAInfo &info)
   bool ias_available = line.ReadChecked(value);
   int tas_ratio = line.Read(1024);
   if (ias_available) {
-    const fixed ias = fixed(value) / 10;
+    const auto ias = fixed(value) / 10;
     info.ProvideBothAirspeeds(ias, ias * tas_ratio / 1024);
   }
 
@@ -163,7 +163,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
 {
   const int accel_x = line.Read(0), accel_z = line.Read(0);
 
-  fixed mag = SmallHypot(fixed(accel_x), fixed(accel_z));
+  auto mag = SmallHypot(fixed(accel_x), fixed(accel_z));
   info.acceleration.ProvideGLoad(mag / 100, true);
 
   /*

@@ -216,9 +216,9 @@ RoutePlanner::FindSolution(const RoutePoint &final_point,
       const RoughAltitude vh = rpolars_route.CalcVHeight(l);
       assert(vh.IsPositive());
       if (vh > p_last.altitude - p.altitude) { // climb was cut off
-        const fixed f = (p_last.altitude - p.altitude) / vh;
-        const GeoPoint gp(projection.Unproject(p));
-        const GeoPoint gp_last(projection.Unproject(p_last));
+        const auto f = (p_last.altitude - p.altitude) / vh;
+        const auto gp = projection.Unproject(p);
+        const auto gp_last = projection.Unproject(p_last);
         const AGeoPoint gp_int(gp.Interpolate(gp_last, f), p_last.altitude);
         this_route.insert(this_route.begin(), gp_int);
         // @todo: assert check_clearance?

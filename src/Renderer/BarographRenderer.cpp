@@ -89,7 +89,7 @@ DrawLegs(ChartRenderer &chart,
   if (!task_stats.start.task_started)
     return;
 
-  const fixed start_time = task_relative
+  const auto start_time = task_relative
     ? basic.time - task_stats.total.time_elapsed
     : calculated.flight.takeoff_time;
 
@@ -99,7 +99,7 @@ DrawLegs(ChartRenderer &chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    fixed x = tp.GetEnteredState().time - start_time;
+    auto x = tp.GetEnteredState().time - start_time;
     if (!negative(x)) {
       x /= 3600;
       chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),

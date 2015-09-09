@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     }
 
     if (last_t > 0 && t > last_t) {
-      fixed dt = fixed(t - last_t) / 1000;
+      auto dt = fixed(t - last_t) / 1000;
 
       kalman_filter.Update(fixed(value), fixed(0.05), dt);
 

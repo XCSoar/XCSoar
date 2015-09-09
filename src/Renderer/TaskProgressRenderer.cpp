@@ -40,7 +40,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
 
-  const fixed sweep = fixed_two_pi * fixed(0.9);
+  const auto sweep = fixed_two_pi * fixed(0.9);
   Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   if (summary.p_remaining < fixed(0.99)) {

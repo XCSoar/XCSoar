@@ -73,7 +73,7 @@ SaveValue(WndProperty &e, fixed &value_r, UnitGroup unit_group)
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
 
-  fixed new_value = Units::ToSysUnit(GetValue(e), unit);
+  auto new_value = Units::ToSysUnit(GetValue(e), unit);
   if (new_value == value_r)
     return false;
 
@@ -165,7 +165,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   rc.right = rc.left + edit_width;
   rc.bottom = height;
 
-  fixed step = fixed(0.05), min = fixed(-10);
+  auto step = fixed(0.05), min = fixed(-10);
   switch (Units::current.vertical_speed_unit) {
   case Unit::FEET_PER_MINUTE:
     step = fixed(10);

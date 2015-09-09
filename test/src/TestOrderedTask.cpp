@@ -73,15 +73,15 @@ static void
 CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
          const TaskStats &stats)
 {
-  const GeoPoint destination = tp.GetWaypoint().location;
-  const fixed safety_height = GetSafetyHeight(tp);
-  const fixed min_arrival_alt = tp.GetWaypoint().elevation + safety_height;
-  const GeoVector vector = aircraft.location.DistanceBearing(destination);
-  const fixed ld = glide_polar.GetBestLD();
-  const fixed height_above_min = aircraft.altitude - min_arrival_alt;
-  const fixed height_consumption = vector.distance / ld;
-  const ElementStat &leg = stats.current_leg;
-  const GlideResult &solution_remaining = leg.solution_remaining;
+  const auto destination = tp.GetWaypoint().location;
+  const auto safety_height = GetSafetyHeight(tp);
+  const auto min_arrival_alt = tp.GetWaypoint().elevation + safety_height;
+  const auto vector = aircraft.location.DistanceBearing(destination);
+  const auto ld = glide_polar.GetBestLD();
+  const auto height_above_min = aircraft.altitude - min_arrival_alt;
+  const auto height_consumption = vector.distance / ld;
+  const auto &leg = stats.current_leg;
+  const auto &solution_remaining = leg.solution_remaining;
 
   ok1(leg.vector_remaining.IsValid());
   ok1(equals(leg.vector_remaining.distance, vector.distance));
@@ -115,25 +115,25 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
            const TaskWaypoint &start, const TaskWaypoint &tp1,
            const TaskWaypoint &finish)
 {
-  const fixed min_arrival_alt1 = tp1.GetWaypoint().elevation +
+  const auto min_arrival_alt1 = tp1.GetWaypoint().elevation +
     task_behaviour.safety_height_arrival;
-  const fixed min_arrival_alt2 = finish.GetWaypoint().elevation +
+  const auto min_arrival_alt2 = finish.GetWaypoint().elevation +
     task_behaviour.safety_height_arrival;
-  const GeoVector vector0 =
+  const auto vector0 =
     start.GetWaypoint().location.DistanceBearing(tp1.GetWaypoint().location);
-  const GeoVector vector1 =
+  const auto vector1 =
     aircraft.location.DistanceBearing(tp1.GetWaypoint().location);
-  const GeoVector vector2 =
+  const auto vector2 =
     tp1.GetWaypoint().location.DistanceBearing(finish.GetWaypoint().location);
-  const fixed ld = glide_polar.GetBestLD();
-  const fixed height_consumption1 = vector1.distance / ld;
+  const auto ld = glide_polar.GetBestLD();
+  const auto height_consumption1 = vector1.distance / ld;
 
-  const fixed height_consumption2 = vector2.distance / ld;
+  const auto height_consumption2 = vector2.distance / ld;
 
-  const ElementStat &total = stats.total;
-  const GlideResult &solution_remaining = total.solution_remaining;
-  const fixed distance_nominal = vector0.distance + vector2.distance;
-  const fixed distance_ahead = vector1.distance + vector2.distance;
+  const auto &total = stats.total;
+  const auto &solution_remaining = total.solution_remaining;
+  const auto distance_nominal = vector0.distance + vector2.distance;
+  const auto distance_ahead = vector1.distance + vector2.distance;
 
   ok1(equals(stats.distance_nominal, distance_nominal));
   ok1(equals(stats.distance_min, distance_nominal));
@@ -145,9 +145,9 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
   ok1(equals(solution_remaining.vector.distance, distance_ahead));
   ok1(equals(solution_remaining.height_glide, distance_ahead / ld));
 
-  fixed alt_required_at_1 = std::max(min_arrival_alt1,
-                                     min_arrival_alt2 + height_consumption2);
-  fixed alt_required_at_aircraft = alt_required_at_1 + height_consumption1;
+  auto alt_required_at_1 = std::max(min_arrival_alt1,
+                                    min_arrival_alt2 + height_consumption2);
+  auto alt_required_at_aircraft = alt_required_at_1 + height_consumption1;
   ok1(equals(solution_remaining.GetRequiredAltitudeWithDrift(),
              alt_required_at_aircraft));
   ok1(equals(solution_remaining.altitude_difference,

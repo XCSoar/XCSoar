@@ -71,7 +71,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
    * is not usable with variable map sizes (e.g. because of the cross-section
    * area). size_divisor is used to introduce a screen size dependent scaling.
    * That workaround is an ugly hack and needs a rework. */
-  const fixed size_divisor =
+  const auto size_divisor =
     std::max((fixed) Layout::Scale(70 / (rc.bottom - rc.top)), fixed(0.15));
 
   PixelScalar dy_variobar = 0;
@@ -82,13 +82,13 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelScalar clipping_arrow_av_offset = Layout::Scale(4);
 //  PixelScalar clipping_arrow_mc_offset = Layout::Scale(4);
 
-  fixed vario_gross = (fixed) basic.brutto_vario;
+  auto vario_gross = basic.brutto_vario;
 
   FormatUserVerticalSpeed(vario_gross, Value, false, true);
   canvas.Select(*look.font);
   const PixelSize text_size = canvas.CalcTextSize(Value);
 
-  fixed vario_avg = (fixed) calculated.average;
+  auto vario_avg = calculated.average;
 
   // cut vario_gross at +- 5 meters/s
   if (vario_gross > fixed(5))
@@ -135,7 +135,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
 
   //clip MC Value
-  fixed mc_val = (fixed) glide_polar.GetMC();
+  auto mc_val = glide_polar.GetMC();
   if (mc_val > fixed(5))
     mc_val = fixed(5);
   if (!positive(mc_val)) {

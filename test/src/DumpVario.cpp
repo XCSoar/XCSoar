@@ -45,7 +45,7 @@ main(int argc, char **argv)
   VarioSynthesiser synthesiser;
 
   while (replay->Next()) {
-    fixed vario = replay->Basic().brutto_vario;
+    auto vario = replay->Basic().brutto_vario;
     synthesiser.SetVario(sample_rate, vario);
 
     static int16_t buffer[sample_rate];

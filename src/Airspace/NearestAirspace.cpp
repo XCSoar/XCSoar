@@ -126,16 +126,16 @@ protected:
       return;
 
     /* check delta below */
-    fixed base = airspace.GetBase().GetAltitude(altitude);
-    fixed base_delta = base - altitude.altitude;
+    auto base = airspace.GetBase().GetAltitude(altitude);
+    auto base_delta = base - altitude.altitude;
     if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
       nearest = &airspace;
       nearest_delta = base_delta;
     }
 
     /* check delta above */
-    fixed top = airspace.GetTop().GetAltitude(altitude);
-    fixed top_delta = altitude.altitude - top;
+    auto top = airspace.GetTop().GetAltitude(altitude);
+    auto top_delta = altitude.altitude - top;
     if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
       nearest = &airspace;
       nearest_delta = -top_delta;

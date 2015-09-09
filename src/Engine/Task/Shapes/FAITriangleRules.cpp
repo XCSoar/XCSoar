@@ -31,7 +31,7 @@ static bool
 IsSmallFAITriangle(const fixed d_total,
                    const fixed d1, const fixed d2, const fixed d3)
 {
-  const fixed d_min = d_total * SMALL_MIN_LEG;
+  const auto d_min = d_total * SMALL_MIN_LEG;
   return d1 >= d_min && d2 >= d_min && d3 >= d_min;
 }
 
@@ -44,11 +44,11 @@ IsLargeFAITriangle(const fixed d_total,
   if (d_total < large_threshold)
     return false;
 
-  const fixed d_min = LargeMinLeg(d_total);
+  const auto d_min = LargeMinLeg(d_total);
   if (d1 < d_min || d2 < d_min || d3 < d_min)
     return false;
 
-  const fixed d_max = d_total * LARGE_MAX_LEG;
+  const auto d_max = d_total * LARGE_MAX_LEG;
   return d1 <= d_max && d2 <= d_max && d3 <= d_max;
 }
 
@@ -56,7 +56,7 @@ bool
 FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3,
                                 const FAITriangleSettings &settings)
 {
-  const fixed d_wp = d1 + d2 + d3;
+  const auto d_wp = d1 + d2 + d3;
 
   /*
    * A triangle is a valid FAI-triangle, if no side is less than

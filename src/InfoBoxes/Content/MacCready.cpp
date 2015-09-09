@@ -80,7 +80,7 @@ InfoBoxContentMacCready::Update(InfoBoxData &data)
 bool
 InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
-  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+  const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
   switch (keycode) {

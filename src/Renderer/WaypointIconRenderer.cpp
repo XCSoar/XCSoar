@@ -97,7 +97,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
     return;
 
   const auto sc = angle.SinCos();
-  const fixed x = sc.first, y = sc.second;
+  const auto x = sc.first, y = sc.second;
   int lx = iround(Double(x * radius)) & ~0x1;  // make it a even number
   int ly = iround(Double(y * radius)) & ~0x1;
   int wx = iround(-y * width);
@@ -143,9 +143,9 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   }
 
   // SW rendering of landables
-  fixed scale = fixed(std::max(Layout::VptScale(settings.landable_rendering_scale),
-                               110u)) / 177;
-  fixed radius = 10 * scale;
+  auto scale = fixed(std::max(Layout::VptScale(settings.landable_rendering_scale),
+                              110u)) / 177;
+  auto radius = 10 * scale;
 
   canvas.SelectBlackPen();
 

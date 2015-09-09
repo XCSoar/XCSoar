@@ -52,7 +52,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
 
   // Max time the thermal could have risen for if ground
   // elevation is zero
-  const fixed Tmax = altitude / average;
+  const auto Tmax = altitude / average;
 
   // Shortcut if no terrain available
   if (terrain == NULL) {
@@ -66,7 +66,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
   RasterTerrain::Lease map(*terrain);
 
   // Height step of the 10 calculation intervals
-  const fixed dh = altitude / 10;
+  const auto dh = altitude / 10;
 
   // Iterate over 10 altitude-based calculation intervals
   // We do this because the terrain elevation may shift
@@ -74,16 +74,16 @@ EstimateThermalBase(const RasterTerrain *terrain,
 
   GeoPoint loc = location;
 
-  for (fixed h = altitude; !negative(h); h -= dh) {
+  for (auto h = altitude; !negative(h); h -= dh) {
     // Time to descend to this height
-    fixed t = (altitude-h)/average;
+    auto t = (altitude - h) / average;
 
     // Calculate position
     loc = FindLatitudeLongitude(location, wind.bearing, 
                                 wind.norm * t);
 
     // Calculate altitude above ground
-    fixed dh = h - GetElevation(map, loc);
+    auto dh = h - GetElevation(map, loc);
 
     // At or below ground level, use linear interpolation
     // to estimate intersection

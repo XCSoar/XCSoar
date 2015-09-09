@@ -128,7 +128,7 @@ public:
   }
 
   fixed CalculateDrift(fixed now) const {
-    const fixed dt = now - fixed(time);
+    const auto dt = now - fixed(time);
     return dt * drift_factor / 256;
   }
 

@@ -89,7 +89,7 @@ WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
     return true;
 
   auto bearing = location.Bearing(waypoint.location);
-  fixed direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
+  auto direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
 
   return direction_error < fixed(18);
 }

@@ -427,7 +427,7 @@ RowFormWidget::SaveValue(unsigned i, uint16_t &value) const
 bool
 RowFormWidget::SaveValue(unsigned i, fixed &value) const
 {
-  fixed new_value = GetValueFloat(i);
+  auto new_value = GetValueFloat(i);
   if (new_value == value)
     return false;
 

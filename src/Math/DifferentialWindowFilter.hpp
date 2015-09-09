@@ -98,8 +98,8 @@ public:
    */
   gcc_pure
   fixed DeriveAverage() const {
-    const fixed delta_x = GetDeltaX();
-    const fixed delta_y = GetDeltaY();
+    auto delta_x = GetDeltaX();
+    auto delta_y = GetDeltaY();
     return delta_y / delta_x;
   }
 };

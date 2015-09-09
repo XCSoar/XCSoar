@@ -64,8 +64,8 @@ GlidePolar::Update()
     return;
   }
 
-  const fixed loading_factor = sqrt(GetTotalMass() / reference_mass);
-  const fixed inv_bugs = fixed(1)/bugs;
+  const auto loading_factor = sqrt(GetTotalMass() / reference_mass);
+  const auto inv_bugs = fixed(1)/bugs;
 
   polar.a = inv_bugs * ideal_polar.a / loading_factor;
   polar.b = inv_bugs * ideal_polar.b;
@@ -139,8 +139,8 @@ GlidePolar::SinkRate(const fixed V) const
 fixed
 GlidePolar::SinkRate(const fixed V, const fixed n) const
 {
-  const fixed w0 = SinkRate(V);
-  const fixed vl = VbestLD / std::max(Half(VbestLD), V);
+  const auto w0 = SinkRate(V);
+  const auto vl = VbestLD / std::max(Half(VbestLD), V);
   return std::max(fixed(0),
                   w0 + (V / Double(bestLD)) * (sqr(n) - fixed(1)) * sqr(vl));
 }
@@ -322,7 +322,7 @@ public:
   fixed
   solve(const fixed Vstart)
   {
-    fixed Vopt = find_min(Vstart);
+    auto Vopt = find_min(Vstart);
     return Vopt + m_head_wind;
   }
 };
@@ -334,16 +334,20 @@ GlidePolar::SpeedToFly(const AircraftState &state,
   assert(IsValid());
 
   fixed V_stf;
-  const fixed g_scaling (block_stf ? fixed(1) : sqrt(fabs(state.g_load))); 
+  const auto g_scaling = block_stf
+    ? fixed(1)
+    : sqrt(fabs(state.g_load));
 
   if (!block_stf && (state.netto_vario > mc + Smin)) {
     // stop to climb
     V_stf = Vmin;
   } else {
-    const fixed head_wind(!positive(GetMC()) && solution.IsDefined()
-                          ? solution.head_wind
-                          : fixed(0));
-    const fixed stf_sink_rate (block_stf ? fixed(0) : -state.netto_vario);
+    const auto head_wind = !positive(GetMC()) && solution.IsDefined()
+      ? solution.head_wind
+      : fixed(0);
+    const auto stf_sink_rate = block_stf
+      ? fixed(0)
+      : -state.netto_vario;
 
     GlidePolarSpeedToFly gp_stf(*this, stf_sink_rate, head_wind, Vmin, Vmax);
     V_stf = gp_stf.solve(Vmax);
@@ -398,7 +402,7 @@ GlidePolar::GetRiskMC(fixed height_fraction, const fixed riskGamma) const
   else if (riskGamma > fixed_up_limit)
     return height_fraction * mc;
 
-  const fixed k = fixed(1) / sqr(riskGamma) - fixed(1);
+  const auto k = fixed(1) / sqr(riskGamma) - fixed(1);
   return mc * FRiskFunction(height_fraction, k) / FRiskFunction(fixed(1), k);
 }
 
@@ -407,7 +411,7 @@ GlidePolar::GetBestGlideRatioSpeed(fixed head_wind) const
 {
   assert(polar.IsValid());
 
-  fixed s = sqr(head_wind) +
+  auto s = sqr(head_wind) +
     (mc + polar.c + polar.b * head_wind) / polar.a;
   if (negative(s))
     /* should never happen, but just in case */
@@ -428,11 +432,11 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
   if (wind.IsZero())
     return bestLD;
 
-  const fixed c_theta = (wind.bearing.Reciprocal() - track).cos();
+  const auto c_theta = (wind.bearing.Reciprocal() - track).cos();
 
   /* convert the wind speed into some sort of "virtual L/D" to put it
      in relation to the polar's best L/D */
-  const fixed wind_ld = wind.norm / GetSBestLD();
+  const auto wind_ld = wind.norm / GetSBestLD();
 
   Quadratic q(- Double(wind_ld * c_theta),
               sqr(wind_ld) - sqr(bestLD));
@@ -454,7 +458,7 @@ GlidePolar::GetNextLegEqThermal(fixed current_wind, fixed next_wind) const
 {
   assert(polar.IsValid());
 
-  const fixed no_wind_thermal =
+  const auto no_wind_thermal =
       mc - (mc + SbestLD) / VbestLD * current_wind;
 
   /* calculate coefficients of the polar shifted to the right
@@ -464,7 +468,7 @@ GlidePolar::GetNextLegEqThermal(fixed current_wind, fixed next_wind) const
                                   polar.c + next_wind *
                                   (next_wind * polar.a + polar.b));
 
-  const fixed v_opt = sqrt((s_polar.c + no_wind_thermal) / s_polar.a);
-  const fixed s_opt = v_opt * (v_opt * s_polar.a + s_polar.b) + s_polar.c;
+  const auto v_opt = sqrt((s_polar.c + no_wind_thermal) / s_polar.a);
+  const auto s_opt = v_opt * (v_opt * s_polar.a + s_polar.b) + s_polar.c;
   return no_wind_thermal + (s_opt + no_wind_thermal) / v_opt * next_wind;
 }

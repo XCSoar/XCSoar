@@ -98,7 +98,7 @@ VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
   }
 
   if (temp_adc >= 0) {
-    fixed v = CelsiusToKelvin(offset + fixed(temp_adc));
+    auto v = CelsiusToKelvin(offset + fixed(temp_adc));
     if (temperature_filter.Update(v))
       v = temperature_filter.Average();
     basic.temperature = v;
@@ -108,7 +108,7 @@ VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
   }
 
   if ((unsigned)voltage_index < NUMBER_OF_VOLTAGES) {
-    fixed v = factor * volt_adc;
+    auto v = factor * volt_adc;
     if (voltage_filter[voltage_index].Update(v))
       v = voltage_filter[voltage_index].Average();
     basic.voltage = v;

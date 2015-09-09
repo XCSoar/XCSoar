@@ -208,12 +208,12 @@ struct TempAirspaceType
     // Determine start bearing and radius
     const GeoVector v = center.DistanceBearing(start);
     Angle start_bearing = v.bearing;
-    const fixed radius = v.distance;
+    const auto radius = v.distance;
 
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
-    const Angle step = Angle::Degrees(rotation * _step);
-    const fixed threshold = _step * fixed(1.5);
+    const auto step = Angle::Degrees(rotation * _step);
+    const auto threshold = _step * fixed(1.5);
 
     // Determine end bearing
     Angle end_bearing = center.Bearing(end);
@@ -244,8 +244,8 @@ struct TempAirspaceType
   {
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
-    const Angle step = Angle::Degrees(rotation * _step);
-    const fixed threshold = _step * fixed(1.5);
+    const auto step = Angle::Degrees(rotation * _step);
+    const auto threshold = _step * fixed(1.5);
 
     if (rotation > 0) {
       while (end < start)
@@ -282,9 +282,9 @@ ShowParseWarning(int line, const TCHAR *str, OperationEnvironment &operation)
 static void
 ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
 {
-  Unit unit = Unit::FEET;
+  auto unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
-  fixed value = fixed(0);
+  auto value = fixed(0);
 
   const TCHAR *p = buffer;
   while (true) {

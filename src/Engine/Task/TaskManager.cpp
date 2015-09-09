@@ -154,7 +154,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
       ordered_task->GetOrderedTaskSettings().aat_min_time -
       task_stats.total.time_elapsed;
 
-    fixed aat_time = ordered_task->GetOrderedTaskSettings().aat_min_time +
+    auto aat_time = ordered_task->GetOrderedTaskSettings().aat_min_time +
       fixed(task_behaviour.optimise_targets_margin);
 
     if (positive(aat_time)) {
@@ -171,7 +171,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     const StartConstraints &start_constraints =
       ordered_task->GetOrderedTaskSettings().start_constraints;
     common_stats.start_open_time_span = start_constraints.open_time_span;
-    const fixed start_max_height =
+    const auto start_max_height =
       fixed(start_constraints.max_height) +
       (start_constraints.max_height_ref == AltitudeReference::MSL
        ? fixed(0)

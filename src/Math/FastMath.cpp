@@ -249,7 +249,7 @@ void mag_rmag(fixed x,
     inv_dist = fixed(0);
     return;
   }
-  const fixed mag_sq = sqr(x)+sqr(y);
+  const auto mag_sq = sqr(x)+sqr(y);
   inv_dist = rsqrt(mag_sq);
   assert(positive(inv_dist));
   dist = inv_dist*mag_sq;

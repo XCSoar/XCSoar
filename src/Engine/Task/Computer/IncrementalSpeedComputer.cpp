@@ -43,7 +43,7 @@ IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed time)
     return;
   }
 
-  const fixed dt = time - last_time;
+  const auto dt = time - last_time;
   const unsigned seconds = uround(dt);
   if (seconds == 0)
     return;
@@ -51,12 +51,12 @@ IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed time)
   if (!av_dist.Update(data.distance))
     return;
 
-  const fixed d_av = av_dist.Average();
+  const auto d_av = av_dist.Average();
   av_dist.Reset();
 
   fixed v_f = fixed(0);
   for (unsigned i = 0; i < seconds; ++i) {
-    const fixed v = df.Update(d_av);
+    const auto v = df.Update(d_av);
     v_f = v_lpf.Update(v);
   }
 
@@ -68,8 +68,8 @@ IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed time)
 void
 IncrementalSpeedComputer::Reset(DistanceStat &data)
 {
-  fixed distance = data.IsDefined() ? data.GetDistance() : fixed(0);
-  fixed speed = data.IsDefined() ? data.GetSpeed() : fixed(0);
+  auto distance = data.IsDefined() ? data.GetDistance() : fixed(0);
+  auto speed = data.IsDefined() ? data.GetSpeed() : fixed(0);
 
   df.Reset(distance, (is_positive ? -1 : 1) * speed);
   v_lpf.Reset((is_positive ? -1 : 1) * speed);

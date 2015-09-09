@@ -36,7 +36,7 @@ inline bool compare_scores(const ContestResult& official,
   if (!positive(official.score)) {
     return true;
   }
-  fixed e = fabs((official.score-estimated.score)/official.score);
+  auto e = fabs((official.score-estimated.score)/official.score);
   std::cout << "# Error (score) " << e << "\n";
   if (positive(official.score)) {
     return (e<fixed(0.01));

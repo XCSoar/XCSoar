@@ -130,7 +130,7 @@ TaskPropertiesPanel::ReadValues()
     changed = true;
   }
 
-  fixed max_speed = Units::ToSysSpeed(GetValueFloat(START_MAX_SPEED));
+  auto max_speed = Units::ToSysSpeed(GetValueFloat(START_MAX_SPEED));
   if (max_speed != p.start_constraints.max_speed) {
     p.start_constraints.max_speed = max_speed;
     changed = true;

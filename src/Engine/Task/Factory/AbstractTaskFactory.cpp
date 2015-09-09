@@ -61,7 +61,7 @@ OrderedTaskPoint*
 AbstractTaskFactory::CreateMutatedPoint(const OrderedTaskPoint &tp,
                                         const TaskPointFactoryType newtype) const
 {
-  fixed ozsize = GetOZSize(tp.GetObservationZone());
+  auto ozsize = GetOZSize(tp.GetObservationZone());
   return CreatePoint(newtype, tp.GetWaypoint(), ozsize, ozsize, ozsize);
 }
 
@@ -745,8 +745,8 @@ AbstractTaskFactory::ValidateFAIOZs()
   bool valid = true;
 
   for (unsigned i = 0; i < task.TaskSize() && valid; i++) {
-    const OrderedTaskPoint &tp = task.GetPoint(i);
-    const fixed ozsize = GetOZSize(tp.GetObservationZone());
+    const auto &tp = task.GetPoint(i);
+    const auto ozsize = GetOZSize(tp.GetObservationZone());
 
     switch (GetType(tp)) {
     case TaskPointFactoryType::START_BGA:

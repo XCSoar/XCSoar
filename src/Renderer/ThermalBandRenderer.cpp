@@ -63,7 +63,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
 
   // calculate height above safety height
-  fixed hoffset = task_props.route_planner.safety_height_terrain +
+  auto hoffset = task_props.route_planner.safety_height_terrain +
     calculated.GetTerrainBaseFallback();
 
   fixed h = fixed(0);
@@ -108,7 +108,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     if (positive(thermal_band.thermal_profile_w[i])) {
       // height of this thermal point [0,mth]
       // requires 5 items in bucket before displaying, to eliminate kinks
-      fixed wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
+      auto wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
       ht[numtherm] = i * calculated.thermal_band.max_thermal_height 
         / ThermalBandInfo::NUMTHERMALBUCKETS;
       Wt[numtherm] = wthis;

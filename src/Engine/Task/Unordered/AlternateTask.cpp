@@ -78,15 +78,15 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
   q.reserve(task_points.size());
 
-  const fixed straight_distance = state_now.location.Distance(destination);
+  const auto straight_distance = state_now.location.Distance(destination);
 
   for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
     const TaskWaypoint &tp = i->point;
     const Waypoint &wp = tp.GetWaypoint();
 
-    const fixed diversion_distance =
+    const auto diversion_distance =
         ::DoubleDistance(state_now.location, wp.location, destination);
-    const fixed delta = straight_distance - diversion_distance;
+    const auto delta = straight_distance - diversion_distance;
 
     q.push(Divert(wp, i->solution, delta));
   }

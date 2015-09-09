@@ -87,7 +87,7 @@ ThermalBandInfo::Expand(const fixed height)
   ThermalBandInfo new_tbi;
 
   // calculate new buckets so glider is below max
-  fixed hbuk = max_thermal_height / NUMTHERMALBUCKETS;
+  auto hbuk = max_thermal_height / NUMTHERMALBUCKETS;
 
   new_tbi.Clear();
   new_tbi.max_thermal_height = std::max(fixed(1), max_thermal_height);
@@ -99,7 +99,7 @@ ThermalBandInfo::Expand(const fixed height)
 
   // shift data into new buckets
   for (unsigned i = 0; i < NUMTHERMALBUCKETS; ++i) {
-    const fixed h = BucketHeight(i);
+    const auto h = BucketHeight(i);
     // height of center of bucket
     if (thermal_profile_n[i] > 0) {
       const unsigned j = new_tbi.BucketForHeight(h);

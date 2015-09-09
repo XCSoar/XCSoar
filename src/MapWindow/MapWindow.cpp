@@ -122,7 +122,7 @@ MapWindow::UpdateTerrain()
     return false;
 
   GeoPoint location = visible_projection.GetGeoScreenCenter();
-  fixed radius = visible_projection.GetScreenWidthMeters() / 2;
+  auto radius = visible_projection.GetScreenWidthMeters() / 2;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations

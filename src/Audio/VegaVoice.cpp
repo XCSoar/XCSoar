@@ -270,7 +270,7 @@ VegaVoiceMessage::Update(const NMEAInfo &basic,
                          const DerivedInfo &calculated,
                          const VoiceSettings &settings)
 {
-  const fixed Time = basic.clock;
+  const auto Time = basic.clock;
   TCHAR text[80];
 
   switch(id) {

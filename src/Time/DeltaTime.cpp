@@ -40,12 +40,12 @@ DeltaTime::Update(fixed current_time, fixed min_delta, fixed warp_tolerance)
   if (current_time < last_time) {
     /* time warp */
 
-    const fixed delta = last_time - current_time;
+    const auto delta = last_time - current_time;
     last_time = current_time;
     return delta < warp_tolerance ? fixed(0) : fixed(-1);
   }
 
-  const fixed delta = current_time - last_time;
+  const auto delta = current_time - last_time;
   if (delta < min_delta)
     /* difference too small, don't update "last" time stamp to let
        small differences add up eventually */

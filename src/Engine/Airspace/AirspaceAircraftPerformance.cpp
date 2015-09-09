@@ -30,9 +30,9 @@
 fixed 
 AirspaceAircraftPerformance::SolutionGeneral(fixed distance, fixed dh) const
 {
-  const fixed t_cruise =
+  const auto t_cruise =
       positive(distance) ? distance / GetCruiseSpeed() : fixed(0);
-  const fixed h_descent = dh - t_cruise * GetCruiseDescent();
+  const auto h_descent = dh - t_cruise * GetCruiseDescent();
 
   if (fabs(h_descent) < fixed(1))
     return t_cruise;
@@ -40,24 +40,24 @@ AirspaceAircraftPerformance::SolutionGeneral(fixed distance, fixed dh) const
   if (positive(h_descent)) {
     // descend steeper than best glide
 
-    fixed mod_descent_rate = GetDescentRate() + vertical_tolerance;
+    auto mod_descent_rate = GetDescentRate() + vertical_tolerance;
 
     if (!positive(mod_descent_rate))
       return fixed_big;
 
-    const fixed t_descent = h_descent / mod_descent_rate;
+    const auto t_descent = h_descent / mod_descent_rate;
     return std::max(t_cruise, t_descent);
 
   }
 
   // require climb
 
-  fixed mod_climb_rate = GetClimbRate() + vertical_tolerance;
+  auto mod_climb_rate = GetClimbRate() + vertical_tolerance;
 
   if (!positive(mod_climb_rate))
     return fixed_big;
 
-  const fixed t_climb = -h_descent / mod_climb_rate;
+  const auto t_climb = -h_descent / mod_climb_rate;
   return t_cruise + t_climb;
 }
 
@@ -97,8 +97,8 @@ public:
    * @return Time of arrival (or -1 if no solution found)
    */
   fixed solve(fixed &h) {
-    fixed h_this = find_min(m_h_min);
-    fixed t = f(h_this);
+    auto h_this = find_min(m_h_min);
+    auto t = f(h_this);
     if (t < fixed_big) {
       h = h_this;
       return t;
@@ -123,7 +123,7 @@ AirspaceAircraftPerformance::SolutionVertical(fixed distance, fixed altitude,
 
   if (top <= base) {
     // unique solution
-    fixed t_this = SolutionGeneral(distance, altitude - top);
+    auto t_this = SolutionGeneral(distance, altitude - top);
     if (t_this < fixed_big) {
       intercept_alt = top;
       return t_this;
@@ -169,8 +169,8 @@ public:
    * @return Time of arrival (or -1 if no solution found)
    */
   fixed solve(fixed &distance) {
-    fixed distance_this = find_min(m_d_min);
-    fixed t = f(distance_this);
+    auto distance_this = find_min(m_d_min);
+    auto t = f(distance_this);
     if (t < fixed_big) {
       distance = distance_this;
       return t;
@@ -193,11 +193,11 @@ AirspaceAircraftPerformance::SolutionHorizontal(fixed distance_min,
   if (!SolutionExists(distance_max, altitude, h, h))
     return fixed(-1);
 
-  const fixed dh = altitude - h;
+  const auto dh = altitude - h;
 
   if (distance_max <= distance_min) {
     // unique solution
-    fixed t_this = SolutionGeneral(distance_max, dh);
+    auto t_this = SolutionGeneral(distance_max, dh);
     if (t_this != fixed_big) {
       intercept_distance = distance_max;
       return t_this;

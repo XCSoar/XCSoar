@@ -64,16 +64,16 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   assert(loc2.IsValid());
 
   const auto sc1 = loc1.latitude.SinCos();
-  fixed sin_lat1 = sc1.first, cos_lat1 = sc1.second;
+  auto sin_lat1 = sc1.first, cos_lat1 = sc1.second;
   const auto sc2 = loc2.latitude.SinCos();
-  fixed sin_lat2 = sc2.first, cos_lat2 = sc2.second;
+  auto sin_lat2 = sc2.first, cos_lat2 = sc2.second;
 
   const Angle dlon = loc2.longitude - loc1.longitude;
 
   if (distance) {
-    const fixed s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
-    const fixed s2 = dlon.accurate_half_sin();
-    const fixed a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
+    const auto s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
+    const auto s2 = dlon.accurate_half_sin();
+    const auto a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
 
     Angle distance2 = EarthDistance(a);
     assert(!negative(distance2.Native()));
@@ -83,10 +83,10 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   if (bearing) {
     // speedup for fixed since this is one call
     const auto sc = dlon.SinCos();
-    const fixed sin_dlon = sc.first, cos_dlon = sc.second;
+    const auto sin_dlon = sc.first, cos_dlon = sc.second;
 
-    const fixed y = SmallMult(sin_dlon, cos_lat2);
-    const fixed x = SmallMult(cos_lat1, sin_lat2)
+    const auto y = SmallMult(sin_dlon, cos_lat2);
+    const auto x = SmallMult(cos_lat1, sin_lat2)
       - SmallMult(sin_lat1, cos_lat2, cos_dlon);
 
     *bearing = (x == fixed(0) && y == fixed(0))

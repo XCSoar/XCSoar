@@ -55,7 +55,7 @@ AircraftStateFilter::Reset(const AircraftState &state)
 void
 AircraftStateFilter::Update(const AircraftState &state)
 {
-  fixed dt = state.time - last_state.time;
+  auto dt = state.time - last_state.time;
 
   if (negative(dt) || dt > fixed(60)) {
     Reset(state);

@@ -253,7 +253,7 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
       // This drag moves the aircraft (changes speed and direction)
       const Angle old_bearing = CommonInterface::Basic().track;
-      const fixed min_speed = fixed(1.1) *
+      const auto min_speed = fixed(1.1) *
         CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
       const Angle new_bearing = drag_start_geopoint.Bearing(location);
       if (((new_bearing - old_bearing).AsDelta().AbsoluteDegrees() < fixed(30)) ||

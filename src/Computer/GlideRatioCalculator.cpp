@@ -127,7 +127,7 @@ GlideRatioCalculator::Calculate() const
   if (altdiff == 0)
     return INVALID_GR; // infinitum
 
-  fixed eff = (fixed) totaldistance / (fixed) altdiff;
+  auto eff = (fixed) totaldistance / (fixed) altdiff;
   if (eff > MAXEFFICIENCYSHOW)
     eff = INVALID_GR;
 
@@ -160,7 +160,7 @@ UpdateGR(fixed gr, fixed leg_distance, fixed height_above_leg,
   if (!positive(leg_distance))
     return gr;
 
-  fixed glideangle = height_above_leg / leg_distance;
+  auto glideangle = height_above_leg / leg_distance;
   if (gr != INVALID_GR)
     glideangle = LowPassFilter(fixed(1) / gr, glideangle, filter_factor);
 

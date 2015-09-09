@@ -123,7 +123,7 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
   }
 
   if (fix.ias >= 0) {
-    fixed ias = Units::ToSysUnit(fixed(fix.ias), Unit::KILOMETER_PER_HOUR);
+    auto ias = Units::ToSysUnit(fixed(fix.ias), Unit::KILOMETER_PER_HOUR);
     if (fix.tas >= 0)
       basic.ProvideBothAirspeeds(ias,
                                  Units::ToSysUnit(fixed(fix.tas),

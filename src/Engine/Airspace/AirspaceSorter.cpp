@@ -18,7 +18,7 @@ AirspaceSelectInfo::GetVector(const GeoPoint &location,
                               const FlatProjection &projection) const
 {
   if (!vec.IsValid()) {
-    const GeoPoint closest_loc = airspace->ClosestPoint(location, projection);
+    const auto closest_loc = airspace->ClosestPoint(location, projection);
     vec = GeoVector(location, closest_loc);
   }
 
@@ -37,16 +37,16 @@ AirspaceFilterData::Match(const GeoPoint &location,
     return false;
 
   if (!negative(direction.Native())) {
-    const GeoPoint closest = as.ClosestPoint(location, projection);
-    const Angle bearing = location.Bearing(closest);
-    fixed direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
+    const auto closest = as.ClosestPoint(location, projection);
+    const auto bearing = location.Bearing(closest);
+    auto direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
     if (direction_error > fixed(18))
       return false;
   }
 
   if (!negative(distance)) {
-    const GeoPoint closest = as.ClosestPoint(location, projection);
-    const fixed distance = location.Distance(closest);
+    const auto closest = as.ClosestPoint(location, projection);
+    const auto distance = location.Distance(closest);
     if (distance > distance)
       return false;
   }

@@ -70,8 +70,8 @@ FlightCheck::fix(const IGCFix &fix)
     return;
 
   if (previous_valid && fix.time > previous.time) {
-    fixed distance = fix.location.Distance(previous.location);
-    fixed speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
+    auto distance = fix.location.Distance(previous.location);
+    auto speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
     if (speed > fixed(15)) {
       if (fast_count == 0)
         fast = fix;

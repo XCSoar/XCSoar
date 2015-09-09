@@ -97,7 +97,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
   for (auto it = m_border.begin(); it + 1 != m_border.end(); ++it) {
 
     const FlatRay r_seg(it->GetFlatLocation(), (it + 1)->GetFlatLocation());
-    fixed t = ray.DistinctIntersection(r_seg);
+    auto t = ray.DistinctIntersection(r_seg);
     if (!negative(t))
       sorter.add(t, projection.Unproject(ray.Parametric(t)));
   }
@@ -109,7 +109,7 @@ GeoPoint
 AirspacePolygon::ClosestPoint(const GeoPoint &loc,
                               const FlatProjection &projection) const
 {
-  const FlatGeoPoint p = projection.ProjectInteger(loc);
-  const FlatGeoPoint pb = m_border.NearestPoint(p);
+  const auto p = projection.ProjectInteger(loc);
+  const auto pb = m_border.NearestPoint(p);
   return projection.Unproject(pb);
 }

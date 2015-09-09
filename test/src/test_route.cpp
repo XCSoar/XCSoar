@@ -60,8 +60,8 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     for (unsigned i = 0; i < nx; ++i) {
       for (unsigned j = 0; j < ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        fixed fy = (fixed)j / (ny - 1) * 2 - fixed(1);
+        auto fx = (fixed)i / (nx - 1) * 2 - fixed(1);
+        auto fy = (fixed)j / (ny - 1) * 2 - fixed(1);
         GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.2) + fixed(0.7) * fx),
                    origin.latitude + Angle::Degrees(fixed(0.9) * fy));
         short h = map.GetInterpolatedHeight(x);
@@ -91,7 +91,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     const AirspaceAircraftPerformance perf(glide_polar);
 
     GeoVector vec(loc_start, loc_end);
-    fixed range = fixed(10000) + vec.distance / 2;
+    auto range = fixed(10000) + vec.distance / 2;
 
     state.location = loc_start;
     state.altitude = loc_start.altitude;

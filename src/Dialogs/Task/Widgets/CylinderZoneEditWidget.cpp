@@ -53,7 +53,7 @@ CylinderZoneEditWidget::Save(bool &_changed)
   bool changed = false;
 
   if (radius_editable) {
-    fixed radius = GetObject().GetRadius();
+    auto radius = GetObject().GetRadius();
     if (SaveValue(RADIUS, UnitGroup::DISTANCE, radius)) {
       GetObject().SetRadius(radius);
       changed = true;
