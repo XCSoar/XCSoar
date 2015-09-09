@@ -38,14 +38,14 @@ class WndForm;
  * the process quits.
  */
 class SingleWindow : public TopWindow {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   static constexpr const TCHAR *class_name = _T("XCSoarMain");
 #endif
 
   std::list<WndForm *> dialogs;
 
 public:
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   /**
    * Register the WIN32 window class.
    */
@@ -54,7 +54,7 @@ public:
 
   void Create(const TCHAR *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle()) {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     TopWindow::Create(class_name, text, size, style);
 #else
     TopWindow::Create(text, size, style);
@@ -90,7 +90,7 @@ public:
     return *dialogs.front();
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 protected:
   gcc_pure
   bool FilterMouseEvent(RasterPoint pt, Window *allowed) const;

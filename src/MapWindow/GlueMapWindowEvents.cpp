@@ -120,7 +120,7 @@ IsCtrlKeyPressed()
 {
 #ifdef ENABLE_SDL
   return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
-#elif defined(USE_GDI)
+#elif defined(USE_WINUSER)
   return GetKeyState(VK_CONTROL) & 0x8000;
 #elif defined(USE_X11)
   return event_queue->WasCtrlClick();

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 #include <tchar.h>
 #endif
 
@@ -38,18 +38,18 @@ class ContainerWindow;
  */
 class PaintWindow : public Window {
 public:
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   static bool register_class(HINSTANCE hInstance);
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   using Window::Create;
 
   void Create(ContainerWindow &parent, PixelRect rc,
               const WindowStyle style=WindowStyle()) {
     Create(&parent, rc, style);
   }
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   void Create(ContainerWindow *parent, const TCHAR *cls, PixelRect rc,
               const WindowStyle style=WindowStyle()) {
     Window::Create(parent, cls, nullptr, rc, style);
@@ -64,11 +64,11 @@ public:
               const WindowStyle style=WindowStyle()) {
     Create(parent, _T("PaintWindow"), rc, style);
   }
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
   constexpr
   static bool SupportsPartialRedraw() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     /* we can use the GDI function InvalidateRect() with a non-nullptr
        RECT */
     return true;
@@ -86,7 +86,7 @@ public:
   void Invalidate() {
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     Window::Invalidate();
 #else
     ::InvalidateRect(hWnd, nullptr, false);
@@ -98,14 +98,14 @@ public:
    * (which will occur in the main thread).
    */
   void Invalidate(gcc_unused const PixelRect &rect) {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     Invalidate();
 #else
     ::InvalidateRect(hWnd, &rect, false);
 #endif
   }
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 protected:
   /* virtual methods from class Window */
   LRESULT OnMessage(HWND hWnd, UINT message,

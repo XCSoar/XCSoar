@@ -158,13 +158,13 @@ GridView::ShowNextPage(Direction direction)
         items[newPos]->SetFocus();
       }
     } else if (focusPos != -1) {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
       HWND oldFocusHwnd = ::GetFocus();
       if (oldFocusHwnd != nullptr)
         ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #else
       items[focusPos]->ClearFocus();
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
     }
 
     RefreshLayout();

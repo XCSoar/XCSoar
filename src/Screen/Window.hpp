@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 #include <windows.h>
 #else
 #include <boost/intrusive/list.hpp>
@@ -52,24 +52,24 @@ class WindowTimer;
  */
 class WindowStyle {
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   bool visible = true;
   bool enabled = true;
   bool tab_stop = false, control_parent = false;
   bool double_clicks = false;
   bool has_border = false;
 
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
   DWORD ex_style = 0;
   bool double_clicks = false;
 
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
 public:
   /** The window is initially not visible. */
   void Hide() {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     visible = false;
 #else
     style &= ~WS_VISIBLE;
@@ -81,7 +81,7 @@ public:
    * A disabled window cannot receive input from the user.
    */
   void Disable() {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     enabled = false;
 #else
     style |= WS_DISABLED;
@@ -94,7 +94,7 @@ public:
    * focus to the next control with the WS_TABSTOP style.
    */
   void TabStop() {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     tab_stop = true;
 #else
     style |= WS_TABSTOP;
@@ -107,7 +107,7 @@ public:
    * searches the window's children.
    */
   void ControlParent() {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     control_parent = true;
 #else
     ex_style |= WS_EX_CONTROLPARENT;
@@ -116,7 +116,7 @@ public:
 
   /** The window has a thin-line border. */
   void Border() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= WS_BORDER;
 #else
     has_border = true;
@@ -126,20 +126,20 @@ public:
   /** The window has a sunken 3D border. */
   void SunkenEdge() {
     Border();
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     ex_style |= WS_EX_CLIENTEDGE;
 #endif
   }
 
   /** The window has a vertical scroll bar. */
   void VerticalScroll() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= WS_VSCROLL;
 #endif
   }
 
   void Popup() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style &= ~WS_CHILD;
     style |= WS_SYSMENU;
 #endif
@@ -160,14 +160,14 @@ public:
 class Window {
   friend class ContainerWindow;
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   friend class WindowList;
   typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> SiblingsHook;
   SiblingsHook siblings;
 #endif
 
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   ContainerWindow *parent = nullptr;
 
 private:
@@ -197,7 +197,7 @@ public:
   Window(const Window &other) = delete;
   Window &operator=(const Window &other) = delete;
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   const ContainerWindow *GetParent() const {
     assert(IsDefined());
 
@@ -244,7 +244,7 @@ protected:
   void AssertThreadOrUndefined() const;
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   bool HasBorder() const {
     return has_border;
   }
@@ -252,14 +252,14 @@ protected:
 
 public:
   bool IsDefined() const {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     return size.cx > 0;
 #else
     return hWnd != nullptr;
 #endif
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   PixelScalar GetTop() const {
     assert(IsDefined());
 
@@ -291,7 +291,7 @@ public:
   PixelScalar GetBottom() const {
     return GetTop() + GetHeight();
   }
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   UPixelScalar GetWidth() const {
     return GetSize().cx;
   }
@@ -301,7 +301,7 @@ public:
   }
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void Create(ContainerWindow *parent, const PixelRect rc,
               const WindowStyle window_style=WindowStyle());
 #else
@@ -315,7 +315,7 @@ public:
   void CreateMessageWindow();
 #endif
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   void Created(HWND _hWnd);
 #endif
 
@@ -340,7 +340,7 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     position = { left, top };
     Invalidate();
 #else
@@ -355,10 +355,10 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     Move(left, top);
     Resize(width, height);
-#else /* USE_GDI */
+#else /* USE_WINUSER */
     ::SetWindowPos(hWnd, nullptr, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
@@ -389,9 +389,9 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     Move(left, top, width, height);
-#else /* USE_GDI */
+#else /* USE_WINUSER */
     ::SetWindowPos(hWnd, nullptr, left, top, width, height,
                    SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
@@ -410,7 +410,7 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     ::SetWindowPos(hWnd, nullptr,
                    rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
                    SWP_SHOWWINDOW | SWP_NOACTIVATE |
@@ -425,7 +425,7 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     if (width == GetWidth() && height == GetHeight())
       return;
 
@@ -433,7 +433,7 @@ public:
 
     Invalidate();
     OnResize(size);
-#else /* USE_GDI */
+#else /* USE_WINUSER */
     ::SetWindowPos(hWnd, nullptr, 0, 0, width, height,
                    SWP_NOMOVE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
@@ -445,7 +445,7 @@ public:
     Resize(size.cx, size.cy);
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void BringToTop();
   void BringToBottom();
 #else
@@ -474,7 +474,7 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     BringToTop();
     Show();
 #else
@@ -484,7 +484,7 @@ public:
 #endif
   }
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   void SetFont(const Font &_font);
 #endif
 
@@ -497,14 +497,14 @@ public:
   bool IsVisible() const {
     assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     return visible;
 #else
     return (GetStyle() & WS_VISIBLE) != 0;
 #endif
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void Show();
   void Hide();
 #else
@@ -528,7 +528,7 @@ public:
   void FastHide() {
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     Hide();
 #else
     ::SetWindowPos(hWnd, nullptr, 0, 0, 0, 0,
@@ -546,7 +546,7 @@ public:
       Hide();
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   bool IsTransparent() const {
     return transparent;
   }
@@ -568,7 +568,7 @@ public:
   bool IsTabStop() const {
     assert(IsDefined());
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     return (GetStyle() & WS_VISIBLE) != 0;
 #else
     return tab_stop;
@@ -579,7 +579,7 @@ public:
   bool IsControlParent() const {
     assert(IsDefined());
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     return (GetExStyle() & WS_EX_CONTROLPARENT) != 0;
 #else
     return control_parent;
@@ -593,7 +593,7 @@ public:
   bool IsEnabled() const {
     assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     return enabled;
 #else
     return ::IsWindowEnabled(hWnd);
@@ -605,7 +605,7 @@ public:
    */
   void SetEnabled(bool enabled);
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 
   virtual Window *GetFocusedWindow();
   virtual void SetFocus();
@@ -624,7 +624,7 @@ public:
    */
   void FocusParent();
 
-#else /* USE_GDI */
+#else /* USE_WINUSER */
 
   void SetFocus() {
     AssertNoneLocked();
@@ -640,20 +640,20 @@ public:
     ::SetFocus(::GetParent(hWnd));
   }
 
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
   gcc_pure
   bool HasFocus() const {
     assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     return focused;
 #else
     return hWnd == ::GetFocus();
 #endif
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void SetCapture();
   void ReleaseCapture();
   virtual void ClearCapture();
@@ -669,7 +669,7 @@ protected:
 
 public:
 
-#else /* USE_GDI */
+#else /* USE_WINUSER */
 
   void SetCapture() {
     AssertNoneLocked();
@@ -703,9 +703,9 @@ public:
 
     ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)value);
   }
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void ToScreen(PixelRect &rc) const;
 #endif
 
@@ -718,7 +718,7 @@ public:
     assert(IsDefined());
 
     PixelRect rc;
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     rc = GetPosition();
     ToScreen(rc);
 #else
@@ -735,7 +735,7 @@ public:
   {
     assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     return { GetLeft(), GetTop(), GetRight(), GetBottom() };
 #else
     PixelRect rc = GetScreenPosition();
@@ -765,7 +765,7 @@ public:
   {
     assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     return PixelRect(size);
 #else
     PixelRect rc;
@@ -779,7 +779,7 @@ public:
   {
     assert(IsDefined());
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     PixelRect rc = GetClientRect();
     PixelSize s;
     s.cx = rc.right;
@@ -810,7 +810,7 @@ public:
   /**
    * Returns the parent's client area rectangle.
    */
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   gcc_pure
   PixelRect GetParentClientRect() const {
     assert(IsDefined());
@@ -827,9 +827,9 @@ public:
   PixelRect GetParentClientRect() const;
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   virtual void Invalidate();
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   HDC BeginPaint(PAINTSTRUCT *ps) {
     AssertThread();
 
@@ -901,7 +901,7 @@ public:
   }
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void SendUser(unsigned id);
 #else
   void SendUser(unsigned id) {
@@ -912,9 +912,9 @@ public:
 #endif
 
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 public:
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
   /**
    * @return true on success, false if the window should not be
    * created
@@ -962,7 +962,7 @@ public:
    */
   virtual bool OnCharacter(unsigned ch);
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   virtual bool OnCommand(unsigned id, unsigned code);
 #endif
 
@@ -972,7 +972,7 @@ public:
   virtual bool OnTimer(WindowTimer &timer);
   virtual bool OnUser(unsigned id);
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   /**
    * Called by OnMessage() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is
@@ -984,17 +984,17 @@ public:
 
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam);
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
 public:
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   /**
    * This static method reads the Window* object from GWL_USERDATA and
    * calls OnMessage().
    */
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
                                   WPARAM wParam, LPARAM lParam);
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 };
 
 #endif

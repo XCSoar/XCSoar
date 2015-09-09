@@ -192,6 +192,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
 GDI_CPPFLAGS = -DUSE_GDI
+GDI_CPPFLAGS += -DUSE_WINUSER
 GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32
 
 ifeq ($(TARGET),PC)

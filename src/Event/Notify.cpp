@@ -28,7 +28,7 @@ Copyright_License {
 Notify::Notify()
   :pending(false)
 {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   Window::CreateMessageWindow();
 #endif
 }
@@ -64,7 +64,7 @@ Notify::RunNotification()
     OnNotification();
 }
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 
 bool
 Notify::OnUser(unsigned id)

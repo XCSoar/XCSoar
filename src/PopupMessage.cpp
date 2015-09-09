@@ -109,7 +109,7 @@ PopupMessage::Create(const PixelRect _rc)
   rc = _rc;
 
   WindowStyle style;
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   style.Border();
 #endif
   style.Hide();
@@ -132,7 +132,7 @@ PopupMessage::OnPaint(Canvas &canvas)
   canvas.ClearWhite();
 
   auto rc = GetClientRect();
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
                               COLOR_BLACK);
 #endif

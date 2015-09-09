@@ -41,7 +41,7 @@ public:
    */
   void Raise();
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   void Hide() override;
 #endif
 };

@@ -104,7 +104,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 {
   Create(parent, rc, Caption, CaptionWidth, style);
 
-#if defined(USE_GDI) && !defined(NDEBUG)
+#if defined(USE_WINUSER) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
 }

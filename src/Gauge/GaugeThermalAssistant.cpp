@@ -28,10 +28,6 @@ Copyright_License {
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Input/InputEvents.hpp"
 
-#ifdef USE_GDI
-#include "Screen/Canvas.hpp"
-#endif
-
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #endif

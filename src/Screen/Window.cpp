@@ -47,7 +47,7 @@ Window::AssertThread() const
 
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-#elif defined(USE_GDI)
+#elif defined(USE_WINUSER)
   assert(hWnd != nullptr);
   assert(!::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, nullptr) == ::GetCurrentThreadId());
@@ -59,7 +59,7 @@ Window::AssertThreadOrUndefined() const
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-#elif defined(USE_GDI)
+#elif defined(USE_WINUSER)
   assert(hWnd == nullptr || !::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, nullptr) == ::GetCurrentThreadId());
 #endif
@@ -76,14 +76,14 @@ Window::Destroy()
   assert(IsScreenInitialized());
   AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   OnDestroy();
 
   size = {0, 0};
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   ::DestroyWindow(hWnd);
   hWnd = nullptr;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 ContainerWindow *
@@ -91,7 +91,7 @@ Window::GetRootOwner()
 {
   assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   if (parent == nullptr)
     /* no parent?  We must be a ContainerWindow instance */
     return (ContainerWindow *)this;
@@ -101,7 +101,7 @@ Window::GetRootOwner()
     root = root->parent;
 
   return root;
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   HWND hRoot = ::GetAncestor(hWnd, GA_ROOTOWNER);
   if (hRoot == nullptr)
     return nullptr;
@@ -109,7 +109,7 @@ Window::GetRootOwner()
   /* can't use the "checked" method get() because hRoot may be a
      dialog, and uses Dialog::DlgProc() */
   return (ContainerWindow *)GetUnchecked(hRoot);
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 void
@@ -120,7 +120,7 @@ Window::OnCreate()
 void
 Window::OnDestroy()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   visible = false;
 
   if (capture)
@@ -132,11 +132,11 @@ Window::OnDestroy()
   }
 
   event_queue->Purge(*this);
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   assert(hWnd != nullptr);
 
   hWnd = nullptr;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 void
@@ -166,7 +166,7 @@ Window::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 Window::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   if (!double_clicks)
     return OnMouseDown(x, y);
 #endif
@@ -223,7 +223,7 @@ Window::OnCharacter(unsigned ch)
 void
 Window::OnCancelMode()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   ReleaseCapture();
 #endif
 }
@@ -231,23 +231,23 @@ Window::OnCancelMode()
 void
 Window::OnSetFocus()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   assert(!focused);
 
   focused = true;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 void
 Window::OnKillFocus()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   assert(focused);
 
   ReleaseCapture();
 
   focused = false;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 bool

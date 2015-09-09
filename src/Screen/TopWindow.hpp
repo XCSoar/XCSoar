@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 #include "Screen/Custom/DoubleClick.hpp"
 #endif
 
@@ -56,7 +56,7 @@ union SDL_Event;
 enum class DisplayOrientation : uint8_t;
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 class TopCanvas;
 #endif
 
@@ -126,7 +126,7 @@ public:
   void Resizable() {
 #ifdef ENABLE_SDL
     resizable = true;
-#elif defined(USE_GDI)
+#elif defined(USE_WINUSER)
     style &= ~WS_BORDER;
     style |= WS_THICKFRAME;
 #endif
@@ -156,7 +156,7 @@ class TopWindow : public ContainerWindow {
   struct wl_egl_window *native_window;
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   TopCanvas *screen = nullptr;
 
   bool invalidated;
@@ -189,25 +189,25 @@ class TopWindow : public ContainerWindow {
 
   DoubleClick double_click;
 
-#else /* USE_GDI */
+#else /* USE_WINUSER */
 
   /**
    * On WM_ACTIVATE, the focus is returned to this window.
    */
   HWND hSavedFocus;
 
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
 #ifdef HAVE_HIGHDPI_SUPPORT
   float point_to_real_x = 1, point_to_real_y = 1;
 #endif
 
 public:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   virtual ~TopWindow();
 #endif
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   void Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle());
 #else
@@ -231,7 +231,7 @@ public:
   void CheckResize() {}
 #endif
 
-#if !defined(USE_GDI) && !(defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
+#if !defined(USE_WINUSER) && !(defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else
@@ -245,7 +245,7 @@ public:
    */
   void CancelMode();
 
-#if defined(USE_GDI)
+#if defined(USE_WINUSER)
   gcc_pure
   const PixelRect GetClientRect() const {
     if (::IsIconic(hWnd)) {
@@ -278,7 +278,7 @@ public:
   }
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void Invalidate() override;
 
 protected:
@@ -290,7 +290,7 @@ protected:
 #endif
 
 public:
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 
   /**
    * Synchronously refresh the screen by handling all pending repaint
@@ -301,7 +301,7 @@ public:
   void Close() {
     AssertNoneLocked();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     OnClose();
 #else
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);
@@ -377,12 +377,12 @@ protected:
   void OnPaint(Canvas &canvas) override;
 #endif
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   LRESULT OnMessage(HWND _hWnd, UINT message,
                     WPARAM wParam, LPARAM lParam) override;
 #endif
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void OnResize(PixelSize new_size) override;
 #endif
 

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "NativeWindow.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 #include "Util/tstring.hpp"
 #include <algorithm>
 #endif
@@ -39,25 +39,25 @@ public:
   TextWindowStyle(const WindowStyle other):WindowStyle(other) {}
 
   void left() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= SS_LEFT;
 #endif
   }
 
   void right() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= SS_RIGHT;
 #endif
   }
 
   void center() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= SS_CENTER;
 #endif
   }
 
   void notify() {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= SS_NOTIFY;
 #endif
   }
@@ -67,7 +67,7 @@ public:
  * A window which renders static text.
  */
 class TextWindow : public NativeWindow {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   const Font *font = nullptr;
 
   tstring text;
@@ -77,7 +77,7 @@ public:
   void Create(ContainerWindow &parent, const TCHAR *text, PixelRect rc,
               const TextWindowStyle style=TextWindowStyle());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void SetFont(const Font &_font) {
     AssertNoneLocked();
     AssertThread();
@@ -97,21 +97,21 @@ public:
     AssertNoneLocked();
     AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     if (_text != nullptr)
       text = _text;
     else
       text.clear();
     Invalidate();
-#else /* USE_GDI */
+#else /* USE_WINUSER */
     ::SetWindowText(hWnd, _text);
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 protected:
   void OnPaint(Canvas &canvas) override;
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 };
 
 #endif

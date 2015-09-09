@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_NOTIFY_HPP
 #define XCSOAR_EVENT_NOTIFY_HPP
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 #include "Screen/Window.hpp"
 #endif
 
@@ -36,7 +36,7 @@ Copyright_License {
  * OnNotification().
  */
 class Notify
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   : Window
 #endif
 {
@@ -47,7 +47,7 @@ public:
 
   Notify(const Notify &) = delete;
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   ~Notify() {
     ClearNotification();
   }
@@ -67,7 +67,7 @@ public:
 private:
   void RunNotification();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   /**
    * Called by the event loop when the "notify" message is received.
    */
@@ -81,7 +81,7 @@ protected:
    */
   virtual void OnNotification() = 0;
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 private:
   virtual bool OnUser(unsigned id) override;
 #endif

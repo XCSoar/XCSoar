@@ -26,7 +26,7 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 #include "Screen/VirtualCanvas.hpp"
 #else
 #include "Screen/Canvas.hpp"
@@ -48,7 +48,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   bitmap_progress_border.Load(IDB_PROGRESSBORDER);
 
   // Determine text height
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   font.Load(FontDescription(Layout::FontScale(10)));
   text_height = font.GetHeight();
 #else
@@ -69,7 +69,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   message_style.center();
   message.Create(*this, nullptr, message_rc, message_style);
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   message.SetFont(font);
 #endif
 
@@ -177,7 +177,7 @@ ProgressWindow::OnPaint(Canvas &canvas)
   ContainerWindow::OnPaint(canvas);
 }
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 
 const Brush *
 ProgressWindow::OnChildColor(Canvas &canvas)

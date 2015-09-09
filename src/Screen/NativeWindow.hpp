@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 
 #include "Window.hpp"
 using NativeWindow = Window;

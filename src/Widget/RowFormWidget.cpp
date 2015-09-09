@@ -243,7 +243,7 @@ void
 RowFormWidget::Add(Row::Type type, Window *window)
 {
   assert(IsDefined());
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   assert(window->GetParent() == &GetWindow());
 #endif
   assert(window->IsVisible());

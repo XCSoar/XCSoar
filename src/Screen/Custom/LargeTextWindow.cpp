@@ -118,9 +118,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
 
   rc.top -= origin * GetFont().GetHeight();
 
-#ifndef USE_GDI
   canvas.Select(GetFont());
-#endif
   renderer.Draw(canvas, rc, value.c_str());
 }
 

@@ -49,7 +49,7 @@ VirtualCanvas::Create(PixelSize new_size)
 void
 VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
 {
-#if defined(ENABLE_OPENGL) || defined(USE_GDI)
+#if defined(ENABLE_OPENGL)
   assert(canvas.IsDefined());
 #endif
 

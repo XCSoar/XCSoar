@@ -33,7 +33,7 @@ OverlappedWidget::Raise()
   GetWindow().BringToTop();
 }
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 
 void
 OverlappedWidget::Hide()

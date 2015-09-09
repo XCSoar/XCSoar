@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "NativeWindow.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 #include "Renderer/TextRenderer.hpp"
 #include "Util/tstring.hpp"
 #endif
@@ -37,14 +37,14 @@ class LargeTextWindowStyle : public WindowStyle {
 public:
   LargeTextWindowStyle() {
     VerticalScroll();
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
 #endif
   }
 
   LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {
     VerticalScroll();
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
 #endif
   }
@@ -54,7 +54,7 @@ public:
  * A window showing large multi-line text.
  */
 class LargeTextWindow : public NativeWindow {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   const Font *font = nullptr;
 
   tstring value;
@@ -71,7 +71,7 @@ public:
   void Create(ContainerWindow &parent, PixelRect rc,
               const LargeTextWindowStyle style=LargeTextWindowStyle());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void SetFont(const Font &_font) {
     AssertNoneLocked();
     AssertThread();
@@ -108,13 +108,13 @@ public:
    */
   void ScrollVertically(int delta_lines);
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 protected:
   void OnResize(PixelSize new_size) override;
   void OnPaint(Canvas &canvas) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 };
 
 #endif

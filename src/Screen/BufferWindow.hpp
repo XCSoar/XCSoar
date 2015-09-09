@@ -41,7 +41,7 @@ class BufferWindow : public PaintWindow {
 
 public:
   void Invalidate()
-#ifndef USE_GDI
+#ifndef USE_WINUSER
     override
 #endif
   {

@@ -47,9 +47,7 @@ TextWindow::OnPaint(Canvas &canvas)
     canvas.SetTextColor(COLOR_BLACK);
     canvas.SetBackgroundTransparent();
 
-#ifndef USE_GDI
     canvas.Select(GetFont());
-#endif
     canvas.DrawText(1, 1, text.c_str());
   }
 }

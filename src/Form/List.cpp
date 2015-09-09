@@ -368,7 +368,7 @@ ListControl::SetOrigin(int i)
 
   origin = i;
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   if ((unsigned)abs(delta) < items_visible) {
     PixelRect rc = GetClientRect();
     rc.right = scroll_bar.GetLeft(GetSize());

@@ -40,7 +40,7 @@ class ProgressWindow : public ContainerWindow {
 
   Bitmap bitmap_progress_border;
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   Font font;
 #endif
 
@@ -68,7 +68,7 @@ protected:
   virtual void OnResize(PixelSize new_size) override;
   virtual void OnPaint(Canvas &canvas) override;
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   virtual const Brush *OnChildColor(Canvas &canvas) override;
 #endif
 };

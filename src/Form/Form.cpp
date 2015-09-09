@@ -32,7 +32,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Event/Globals.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 #include "Screen/Custom/Reference.hpp"
 #endif
 
@@ -87,7 +87,7 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
 
   ContainerWindow::Create(main_window, rc, AddBorder(style));
 
-#if defined(USE_GDI) && !defined(NDEBUG)
+#if defined(USE_WINUSER) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());
 #endif
 }
@@ -278,7 +278,7 @@ gcc_pure
 static bool
 CheckKey(ContainerWindow *container, const Event &event)
 {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   const MSG &msg = event.msg;
   LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
                             (LPARAM)&msg);
@@ -297,12 +297,12 @@ WndForm::ShowModal()
 {
   AssertNoneLocked();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
 #else
   HWND oldFocusHwnd;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 
   PeriodClock enter_clock;
   if (IsEmbedded())
@@ -315,9 +315,9 @@ WndForm::ShowModal()
   SingleWindow &main_window = GetMainWindow();
   main_window.CancelMode();
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   oldFocusHwnd = ::GetFocus();
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
   SetDefaultFocus();
 
   bool hastimed = false;
@@ -375,7 +375,7 @@ WndForm::ShowModal()
 #endif
 
       if (
-#ifdef USE_GDI
+#ifdef USE_WINUSER
           IdentifyDescendant(event.msg.hwnd) &&
 #endif
           (event.GetKeyCode() == KEY_UP || event.GetKeyCode() == KEY_DOWN)) {
@@ -393,7 +393,7 @@ WndForm::ShowModal()
         }
       }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
       if (event.GetKeyCode() == KEY_ESCAPE) {
         modal_result = mrCancel;
         continue;
@@ -422,7 +422,7 @@ WndForm::ShowModal()
 
   main_window.RemoveDialog(this);
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   ::SetFocus(oldFocusHwnd);
 #else
   if (old_focus_reference.Defined()) {
@@ -430,7 +430,7 @@ WndForm::ShowModal()
     if (old_focus != nullptr)
       old_focus->SetFocus();
   }
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 
   return modal_result;
 }

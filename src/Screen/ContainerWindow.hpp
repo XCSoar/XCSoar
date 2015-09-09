@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 #include "Screen/Custom/WList.hpp"
 #endif
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 class Brush;
 #else
 class WindowReference;
@@ -43,7 +43,7 @@ class WindowReference;
  */
 class ContainerWindow : public PaintWindow {
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   friend class WindowList;
   WindowList children;
 
@@ -61,10 +61,10 @@ protected:
 
 public:
   virtual ~ContainerWindow();
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void OnDestroy() override;
   void OnCancelMode() override;
   bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
@@ -79,7 +79,7 @@ protected:
 #endif
 
   void OnPaint(Canvas &canvas) override;
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   virtual const Brush *OnChildColor(Canvas &canvas);
 
   LRESULT OnMessage(HWND hWnd, UINT message,
@@ -89,7 +89,7 @@ protected:
 #endif
 
 public:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void AddChild(Window &child);
   void RemoveChild(Window &child);
 
@@ -155,7 +155,7 @@ protected:
   Window *FindPreviousControl(Window *reference);
 
 public:
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 
   /**
    * Sets the keyboard focus on the first descendant window which has
