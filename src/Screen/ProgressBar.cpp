@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ProgressBar.hpp"
+#include "Features.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
 
@@ -119,6 +120,13 @@ ProgressBar::Step()
 }
 
 #ifndef USE_GDI
+
+#if defined(EYE_CANDY) && !defined(HAVE_CLIPPING)
+/* when the Canvas is clipped, we can't render rounded corners,
+   because the parent's background would not be left visible then */
+#define ROUND_PROGRESS_BAR
+#endif
+
 void
 ProgressBar::OnPaint(Canvas &canvas)
 {
@@ -129,7 +137,7 @@ ProgressBar::OnPaint(Canvas &canvas)
       value = min_value;
     else if (value > max_value)
       value = max_value;
-#ifdef EYE_CANDY
+#ifdef ROUND_PROGRESS_BAR
     position = (value - min_value) * (GetWidth() - GetHeight()) /
                (max_value - min_value);
 #else
@@ -137,7 +145,7 @@ ProgressBar::OnPaint(Canvas &canvas)
 #endif
   }
 
-#ifdef EYE_CANDY
+#ifdef ROUND_PROGRESS_BAR
   unsigned margin = GetHeight() / 9;
 
   canvas.SelectNullPen();
