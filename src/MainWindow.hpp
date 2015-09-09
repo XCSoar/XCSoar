@@ -376,10 +376,6 @@ protected:
   /* virtual methods from class TopWindow */
   virtual bool OnClose() override;
 
-#ifdef USE_GDI
-  virtual bool OnActivate() override;
-#endif
-
 #ifdef ANDROID
   virtual void OnPause() override;
 #endif

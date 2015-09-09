@@ -148,10 +148,6 @@ AfterStartup()
 
   task_manager->Resume();
 
-#ifdef USE_GDI
-  CommonInterface::main_window->Fullscreen();
-#endif
-
   InfoBoxManager::SetDirty();
 
   ForceCalculation();

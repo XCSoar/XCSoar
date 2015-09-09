@@ -47,13 +47,6 @@ TopWindow::CancelMode()
 
 
 void
-TopWindow::Fullscreen()
-{
-  ::SetForegroundWindow(hWnd);
-  ShowOnTop();
-}
-
-void
 TopWindow::Refresh()
 {
   EventQueue::HandlePaintMessages();

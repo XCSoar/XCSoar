@@ -526,20 +526,6 @@ MainWindow::OnResize(PixelSize new_size)
   ProgressGlue::Move(rc);
 }
 
-#ifdef USE_GDI
-
-bool
-MainWindow::OnActivate()
-{
-  SingleWindow::OnActivate();
-
-  Fullscreen();
-
-  return true;
-}
-
-#endif
-
 void
 MainWindow::OnSetFocus()
 {

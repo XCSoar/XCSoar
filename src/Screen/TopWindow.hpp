@@ -278,10 +278,6 @@ public:
   }
 #endif
 
-#ifdef USE_GDI
-  void Fullscreen();
-#endif
-
 #ifndef USE_GDI
   void Invalidate() override;
 
