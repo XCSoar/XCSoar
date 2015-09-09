@@ -56,10 +56,6 @@ class WndForm : public ContainerWindow,
       :look(_look) {}
 
   protected:
-#ifdef USE_GDI
-    const Brush *OnChildColor(Window &window, Canvas &canvas) override;
-#endif
-
     void OnPaint(Canvas &canvas) override;
   };
 
