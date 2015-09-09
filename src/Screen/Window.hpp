@@ -185,9 +185,6 @@ private:
   bool has_border = false;
 #else
   HWND hWnd = nullptr;
-
-private:
-  WNDPROC prev_wndproc = nullptr;
 #endif
 
 private:
@@ -864,7 +861,7 @@ public:
   /**
    * Converts a #HWND into a #Window pointer.  Returns nullptr if the
    * HWND is not a Window peer.  This only works for windows which
-   * have called InstallWndProc().
+   * use our WndProc.
    */
   gcc_const
   static Window *GetChecked(HWND hWnd) {
@@ -990,23 +987,13 @@ public:
 #endif /* USE_GDI */
 
 public:
-#ifndef USE_GDI
-  void InstallWndProc() {
-    // XXX
-  }
-#else /* USE_GDI */
+#ifdef USE_GDI
   /**
    * This static method reads the Window* object from GWL_USERDATA and
    * calls OnMessage().
    */
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
                                   WPARAM wParam, LPARAM lParam);
-
-  /**
-   * Installs Window::WndProc() has the WNDPROC.  This enables the
-   * methods on_*() methods, which may be implemented by sub classes.
-   */
-  void InstallWndProc();
 #endif /* USE_GDI */
 };
 

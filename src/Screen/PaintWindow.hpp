@@ -37,10 +37,6 @@ class ContainerWindow;
  * Window::OnPaint() to draw something.
  */
 class PaintWindow : public Window {
-private:
-  /* hide this method */
-  void InstallWndProc();
-
 public:
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance);

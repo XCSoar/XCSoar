@@ -82,13 +82,7 @@ Window::Destroy()
   size = {0, 0};
 #else /* USE_GDI */
   ::DestroyWindow(hWnd);
-
-  /* the OnDestroy() method must have cleared the variable by
-     now */
-  assert(prev_wndproc == nullptr || hWnd == nullptr);
-
   hWnd = nullptr;
-  prev_wndproc = nullptr;
 #endif /* USE_GDI */
 }
 

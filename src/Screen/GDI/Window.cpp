@@ -132,9 +132,7 @@ LRESULT
 Window::OnUnhandledMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)
 {
-  return prev_wndproc != nullptr
-    ? ::CallWindowProc(prev_wndproc, hWnd, message, wParam, lParam)
-    : ::DefWindowProc(hWnd, message, wParam, lParam);
+  return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 LRESULT
@@ -292,13 +290,4 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   AssertNoneLocked();
 
   return result;
-}
-
-void
-Window::InstallWndProc()
-{
-  assert(prev_wndproc == nullptr);
-
-  SetUserData(this);
-  prev_wndproc = SetWndProc(WndProc);
 }
