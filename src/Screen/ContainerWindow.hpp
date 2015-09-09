@@ -80,7 +80,7 @@ protected:
 
   void OnPaint(Canvas &canvas) override;
 #else /* USE_GDI */
-  virtual const Brush *OnChildColor(Window &window, Canvas &canvas);
+  virtual const Brush *OnChildColor(Canvas &canvas);
 
   LRESULT OnMessage(HWND hWnd, UINT message,
                     WPARAM wParam, LPARAM lParam) override;

@@ -69,8 +69,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 
 #ifdef USE_GDI
-  virtual const Brush *OnChildColor(Window &window,
-                                    Canvas &canvas) override;
+  virtual const Brush *OnChildColor(Canvas &canvas) override;
 #endif
 };
 

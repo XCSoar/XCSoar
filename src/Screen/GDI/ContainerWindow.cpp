@@ -60,7 +60,7 @@ ContainerWindow::FocusPreviousControl()
 }
 
 const Brush *
-ContainerWindow::OnChildColor(Window &window, Canvas &canvas)
+ContainerWindow::OnChildColor(Canvas &canvas)
 {
   return nullptr;
 }
@@ -73,12 +73,8 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
   case WM_CTLCOLORSTATIC:
   case WM_CTLCOLORBTN:
     {
-      Window *window = Window::GetChecked((HWND)lParam);
-      if (window == nullptr)
-        break;
-
       Canvas canvas((HDC)wParam, {1, 1});
-      const Brush *brush = OnChildColor(*window, canvas);
+      const Brush *brush = OnChildColor(canvas);
       if (brush == nullptr)
         break;
 

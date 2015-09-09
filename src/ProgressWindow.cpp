@@ -82,10 +82,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   ProgressBarStyle pb_style;
   progress_bar.Create(*this, pb_rc, pb_style);
 
-#ifdef USE_GDI
-  message.InstallWndProc(); // needed for OnChildColor()
-#endif
-
   // Set progress bar step size and range
   SetRange(0, 1000);
   SetStep(50);
@@ -185,7 +181,7 @@ ProgressWindow::OnPaint(Canvas &canvas)
 #ifdef USE_GDI
 
 const Brush *
-ProgressWindow::OnChildColor(Window &window, Canvas &canvas)
+ProgressWindow::OnChildColor(Canvas &canvas)
 {
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(background_color);
