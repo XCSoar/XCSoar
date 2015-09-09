@@ -29,12 +29,9 @@ Copyright_License {
 #include "Event/Queue.hpp"
 
 #include <windows.h>
-#include <commctrl.h>
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-  InitCommonControls();
-
   event_queue = new EventQueue();
 
   HINSTANCE hInstance = ::GetModuleHandle(nullptr);
