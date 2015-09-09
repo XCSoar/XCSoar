@@ -50,11 +50,6 @@ class FlatTriangleFan;
 struct Waypoint;
 struct AirspaceAltitude;
 
-#ifdef FIXED_MATH
-#include "Math/fixed.hpp"
-std::ostream& operator<<(std::ostream& os, fixed value);
-#endif
-
 std::ostream &operator<< (std::ostream &f, const Waypoint &wp);
 
 class PrintHelper {

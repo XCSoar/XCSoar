@@ -110,11 +110,7 @@ protected:
   };
 
   struct CacheHeader {
-#ifdef FIXED_MATH
-    static constexpr unsigned VERSION = 0xa;
-#else
     static constexpr unsigned VERSION = 0xb;
-#endif
 
     unsigned version;
     unsigned width, height;

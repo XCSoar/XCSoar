@@ -25,15 +25,10 @@
 #include <algorithm>
 #include <limits>
 
-#ifdef FIXED_MATH
-static constexpr fixed epsilon(fixed::internal(), 2);
-static const fixed sqrt_epsilon = sqrt(epsilon);
-#else
 /** machine tolerance */
 static constexpr fixed epsilon(std::numeric_limits<fixed>::epsilon());
 /** sqrt of machine tolerance */
 static const fixed sqrt_epsilon = sqrt(epsilon);
-#endif
 static const fixed r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
 #define fixed_threequaters fixed(0.75)

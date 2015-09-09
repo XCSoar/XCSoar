@@ -63,11 +63,7 @@ public:
 
 #ifdef HAVE_GLES
     glTranslatex((GLfixed)pos.x << 16, (GLfixed)pos.y << 16, 0);
-#ifdef FIXED_MATH
-    GLfixed fixed_angle = angle.Degrees().as_glfixed();
-#else
     GLfixed fixed_angle = angle.Degrees() * (1<<16);
-#endif
     glRotatex(fixed_angle, 0, 0, 1<<16);
 #else
     glTranslatef(pos.x, pos.y, 0.);

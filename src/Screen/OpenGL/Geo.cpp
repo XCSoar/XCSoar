@@ -76,11 +76,7 @@ ApplyProjection(const WindowProjection &projection, const GeoPoint &reference)
   const fixed scale_y = -scale_r;
 
 #ifdef HAVE_GLES
-#ifdef FIXED_MATH
-  GLfixed fixed_angle = angle.as_glfixed();
-#else
   GLfixed fixed_angle = angle * (1<<16);
-#endif
   glTranslatex((int)screen_origin.x << 16, (int)screen_origin.y << 16, 0);
   glRotatex(fixed_angle, 0, 0, -(1<<16));
 #else

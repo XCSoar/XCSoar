@@ -100,11 +100,7 @@ fixed
 thermal_recency_fn(unsigned x)
 {
   return x < THERMALRECENCY_SIZE
-#ifdef FIXED_MATH
-    ? fixed(fixed::internal(), THERMALRECENCY[x])
-#else
     ? THERMALRECENCY[x]
-#endif
     : fixed(0);
 }
 
@@ -253,24 +249,10 @@ void mag_rmag(fixed x,
     inv_dist = fixed(0);
     return;
   }
-#ifdef FIXED_MATH
-  unsigned d_shift = 1;
-  while (std::max(x,y) > fixed(1000)) {
-    x = Half(x);
-    y = Half(y);
-    d_shift = (d_shift << 1);
-  }
-#endif
   const fixed mag_sq = sqr(x)+sqr(y);
   inv_dist = rsqrt(mag_sq);
   assert(positive(inv_dist));
   dist = inv_dist*mag_sq;
-#ifdef FIXED_MATH
-  if (d_shift>1) {
-    inv_dist /= d_shift;
-    dist *= d_shift;
-  }
-#endif
 }
 
 static inline unsigned

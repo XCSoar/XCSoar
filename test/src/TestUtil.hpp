@@ -61,43 +61,17 @@ equals(const fixed a, const fixed b, const int accuracy=ACCURACY)
   return is_one(a / b, accuracy);
 }
 
-#ifdef FIXED_MATH
-static inline bool
-equals(const fixed a, double b)
-{
-  return equals(a, fixed(b));
-}
-#endif
-
 static inline bool
 equals(const fixed a, int b)
 {
   return equals(a, fixed(b));
 }
 
-#ifdef FIXED_MATH
-static inline bool
-between(double x, double a, double b)
-{
-  return x >= a && x <= b;
-}
-#endif
-
 static inline bool
 between(fixed x, fixed a, fixed b)
 {
   return x >= a && x <= b;
 }
-
-#ifdef FIXED_MATH
-
-static inline bool
-between(fixed x, double a, double b)
-{
-  return between(x, fixed(a), fixed(b));
-}
-
-#endif
 
 static inline bool
 equals(const Angle a, int b)

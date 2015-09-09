@@ -34,7 +34,6 @@ else
   TARGET_FLAVOR := $(TARGET)
 endif
 
-HAVE_FPU := y
 X64 := n
 TARGET_IS_ARM = n
 TARGET_IS_ARMHF = n
@@ -480,30 +479,25 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(X86),y)
     LLVM_TARGET = i686-none-linux-android
-    HAVE_FPU := y
   endif
 
   ifeq ($(MIPS),y)
     LLVM_TARGET = mipsel-none-linux-android
-    HAVE_FPU := y
   endif
 
   ifeq ($(ARMV5),y)
     LLVM_TARGET = armv5te-none-linux-androideabi
     TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
-    HAVE_FPU := n
   endif
 
   ifeq ($(ARMV6),y)
     LLVM_TARGET = armv6-none-linux-androideabi
     TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
-    HAVE_FPU := n
   endif
 
   ifeq ($(ARMV7),y)
     LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1
-    HAVE_FPU := y
   endif
 
   ifeq ($(ARMV7)$(NEON),yy)
@@ -516,17 +510,14 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(AARCH64),y)
     LLVM_TARGET = aarch64-linux-android
-    HAVE_FPU := y
   endif
 
   ifeq ($(X64),y)
     LLVM_TARGET = x86_64-linux-android
-    HAVE_FPU := y
   endif
 
   ifeq ($(MIPS64),y)
     LLVM_TARGET = mips64el-linux-android
-    HAVE_FPU := y
   endif
 
   TARGET_ARCH += -fpic -funwind-tables

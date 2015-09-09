@@ -23,7 +23,6 @@ Copyright_License {
 #ifndef ANGLE_HPP
 #define ANGLE_HPP
 
-#include "Math/fixed.hpp"
 #include "FastTrig.hpp"
 #include "Compiler.h"
 
@@ -103,13 +102,6 @@ public:
   static Angle Degrees(double value) {
     return Angle(fixed(value * DEG_TO_RAD));
   }
-
-#ifdef FIXED_MATH
-  constexpr
-  static Angle Degrees(const fixed _value) {
-    return Angle(fast_mult(fixed(DEG_TO_RAD), _value, 4));
-  }
-#endif
 
   constexpr
   static Angle Radians(const fixed _value) {

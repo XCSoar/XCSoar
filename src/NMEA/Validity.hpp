@@ -42,11 +42,7 @@ class Validity {
 
   constexpr
   static uint32_t Import(fixed time) {
-#ifdef FIXED_MATH
-    return (uint32_t)(time << BITS);
-#else
     return (uint32_t)(time * (1 << BITS));
-#endif
   }
 
   constexpr
@@ -56,11 +52,7 @@ class Validity {
 
   constexpr
   static fixed Export(uint32_t i) {
-#ifdef FIXED_MATH
-    return fixed(i) >> BITS;
-#else
     return fixed(i) / (1 << BITS);
-#endif
   }
 
 public:

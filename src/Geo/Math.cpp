@@ -48,14 +48,7 @@ EarthDistance(const fixed a)
   if (!positive(a))
     return Angle::Zero();
 
-#ifdef FIXED_MATH
-  // acos(1-x) = 2*asin(sqrt(x/2))
-  // acos(1-2*x) = 2*asin(sqrt(x))
-  //    = 2*atan2(sqrt(x), sqrt(fixed(1)-x));
-  return EarthASin(sqrt(a) >> fixed::accurate_cordic_shift) * 2;
-#else
   return Angle::acos(fixed(1) - Double(a));
-#endif
 }
 
 /**
@@ -218,19 +211,6 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
     fixed sin_lambda = sin(lambda),
           cos_lambda = cos(lambda);
 
-#ifdef FIXED_MATH
-    fixed sqr_cosu2_sinlambda = sqr(cosu2 * sin_lambda<<12);
-    fixed rest = sqr(cosu1 * sinu2 - sinu1 * cosu2 * cos_lambda<<12);
-
-    if (sqr_cosu2_sinlambda + rest == fixed(0)) {
-      // coincident points...
-      if (distance != nullptr) *distance = fixed(0);
-      if (bearing != nullptr) *bearing = Angle::Zero();
-      return;
-    }
-
-    sin_sigma = sqrt(sqr_cosu2_sinlambda + rest)>>12;
-#else
     sin_sigma = sqrt(sqr(cosu2 * sin_lambda) +
                      sqr(cosu1 * sinu2 - sinu1 * cosu2 * cos_lambda));
 
@@ -240,7 +220,6 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
       if (bearing != nullptr) *bearing = Angle::Zero();
       return;
     }
-#endif
 
     cos_sigma = sinu1 * sinu2 + cosu1 * cosu2 * cos_lambda;
     sigma = atan2(sin_sigma, cos_sigma);

@@ -27,13 +27,6 @@
 
 #include <fstream>
 
-#ifdef FIXED_MATH
-std::ostream& operator<<(std::ostream& os, fixed value)
-{
-  return os<<value.as_double();
-}
-#endif
-
 std::ostream &
 operator<< (std::ostream& f, const Waypoint& wp)
 {

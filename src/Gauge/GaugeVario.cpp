@@ -317,9 +317,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 {
   PixelSize tsize;
 
-#ifndef FIXED_MATH
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
-#endif
 
   if (!value_info->initialised) {
 

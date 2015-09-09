@@ -2479,7 +2479,6 @@ EMULATE_DEVICE_DEPENDS = PORT ASYNC LIBNET OS THREAD UTIL
 $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
 
 FEED_FLYNET_DATA_SOURCES = \
-	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \

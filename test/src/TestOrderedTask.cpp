@@ -29,11 +29,7 @@
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 
-#ifdef FIXED_MATH
-#define ACCURACY 100
-#else
 #define ACCURACY 500
-#endif
 
 #include "TestUtil.hpp"
 

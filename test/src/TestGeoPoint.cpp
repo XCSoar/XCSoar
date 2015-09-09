@@ -117,11 +117,7 @@ int main(int argc, char **argv)
   ok1(equals(p1.Distance(p4), 619486.719361));
   ok1(equals(p1.Distance(p3), 1240403.22926));
   ok1(equals(p3.Distance(p4), 620924.169000));
-#ifdef FIXED_MATH
-  ok1(equals(p1.Distance(p11), 1.493101));
-#else
   ok1(equals(p1.Distance(p11), 1.561761));
-#endif
   ok1(equals(p1.Distance(p12), 18599361.600));
 #else
   ok1(equals(p2.Distance(p6), 869326.653160));

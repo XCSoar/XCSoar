@@ -34,13 +34,7 @@ Copyright_License {
 
 #include <string.h>
 
-/* use separate cache files for FIXED=y and FIXED=n because the file
-   format is different */
-#ifdef FIXED_MATH
-static const TCHAR *const terrain_cache_name = _T("terrain_fixed");
-#else
 static const TCHAR *const terrain_cache_name = _T("terrain");
-#endif
 
 RasterTerrain::~RasterTerrain()
 {

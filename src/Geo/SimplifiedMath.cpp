@@ -25,30 +25,13 @@ Copyright_License {
 #include "FAISphere.hpp"
 #include "GeoPoint.hpp"
 
-#ifdef FIXED_MATH
-
-static inline Angle
-EarthASin(const fixed a)
-{
-  return Angle::asin(a);
-}
-
-#endif
-
 static inline Angle
 EarthDistance(const fixed a)
 {
   if (!positive(a))
     return Angle::Zero();
 
-#ifdef FIXED_MATH
-  // acos(1-x) = 2*asin(sqrt(x/2))
-  // acos(1-2*x) = 2*asin(sqrt(x))
-  //    = 2*atan2(sqrt(x), sqrt(fixed(1)-x));
-  return EarthASin(sqrt(a) >> fixed::accurate_cordic_shift) * 2;
-#else
   return Angle::acos(fixed(1) - Double(a));
-#endif
 }
 
 /**

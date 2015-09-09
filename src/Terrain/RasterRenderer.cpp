@@ -399,11 +399,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const unsigned dd2 = p20 * p31 * height_slope_factor;
         const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
         const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
-#ifdef FIXED_MATH
-        const unsigned mag = isqrt4(square_mag);
-#else
         const unsigned mag = (unsigned)sqrt((fixed)square_mag);
-#endif
         /* this is a workaround for a SIGFPE (division by zero)
            observed by our users on some Android devices (e.g. Nexus
            7), even though we did our best to make sure that the

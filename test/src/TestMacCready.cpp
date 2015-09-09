@@ -27,10 +27,6 @@
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
 
-#ifdef FIXED_MATH
-#define ACCURACY 1000
-#endif
-
 #include "TestUtil.hpp"
 
 static GlideSettings glide_settings;

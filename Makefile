@@ -39,8 +39,6 @@
 #   V           Verbosity; 1 is the default, and prints terse information.
 #               0 means quiet, and 2 prints the full compiler commands.
 #
-#   FIXED       "y" means use fixed point math (for FPU-less platforms)
-#
 #   LTO         "y" enables gcc's link-time optimization flag (experimental,
 #               requires gcc 4.5)
 #

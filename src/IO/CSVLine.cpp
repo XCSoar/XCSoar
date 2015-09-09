@@ -146,30 +146,6 @@ CSVLine::ReadChecked(double &value_r)
   return success;
 }
 
-#ifdef FIXED_MATH
-
-fixed
-CSVLine::Read(fixed default_value)
-{
-  double value;
-  return ReadChecked(value)
-    ? fixed(value)
-    : default_value;
-}
-
-bool
-CSVLine::ReadChecked(fixed &value_r)
-{
-  double value;
-  if (ReadChecked(value)) {
-    value_r = fixed(value);
-    return true;
-  } else
-    return false;
-}
-
-#endif /* FIXED_MATH */
-
 bool
 CSVLine::ReadChecked(int &value_r)
 {

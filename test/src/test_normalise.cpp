@@ -58,44 +58,14 @@ int slow_norm3(const int k, const int x, const int y, const int z) {
   return (1<<NORMALISE_BITS)*k/isqrt4(mag);
 }
 
-#ifdef FIXED_MATH
-
-static
-void
-test_fixed_err()
-{
-  bool err_ok=true;
-  for (fixed x=fixed(0.0001); x< fixed(100000.0); x*= fixed(1.5)) {
-    fixed y0 = fixed(1)/sqrt(x);
-    fixed y1 = rsqrt(x);
-    fixed err = fabs(y1 / y0 - fixed(1));
-    bool this_ok = err< fixed(0.0001);
-    err_ok &= this_ok;
-    if (!this_ok) {
-      printf("%g %g %g %g\n", (double)x, (double)y0, (double)y1, (double)err);
-    }
-  }
-  ok(err_ok, "fixed rsqrt error", 0);
-}
-
-#endif
-
 int main(int argc, char** argv) {
 
-#ifdef FIXED_MATH
-  plan_tests(5);
-#else
   plan_tests(4);
-#endif
 
   test_normalise_err(100, 50);
   test_normalise_err(-100, 50);
   test_normalise_err(100, -50);
   test_normalise_err(-100, -50);
-
-#ifdef FIXED_MATH
-  test_fixed_err();
-#endif
 
   return exit_status();
 }

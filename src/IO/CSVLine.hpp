@@ -87,11 +87,6 @@ public:
   double Read(double default_value);
   bool ReadChecked(double &value_r);
 
-#ifdef FIXED_MATH
-  fixed Read(fixed default_value);
-  bool ReadChecked(fixed &value_r);
-#endif
-
   bool ReadChecked(int &value_r);
   bool ReadChecked(long &value_r);
   bool ReadChecked(unsigned long &value_r);

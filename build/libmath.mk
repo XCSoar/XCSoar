@@ -8,7 +8,6 @@ MATH_SOURCES = \
 	$(MATH_SRC_DIR)/FastMath.cpp \
 	$(MATH_SRC_DIR)/FastTrig.cpp \
 	$(MATH_SRC_DIR)/FastRotation.cpp \
-	$(MATH_SRC_DIR)/fixed.cpp \
 	$(MATH_SRC_DIR)/LeastSquares.cpp \
 	$(MATH_SRC_DIR)/DiffFilter.cpp \
 	$(MATH_SRC_DIR)/Filter.cpp \
