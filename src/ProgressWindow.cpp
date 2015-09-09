@@ -79,8 +79,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   pb_rc.right = pb_rc.left + width - progress_height;
   pb_rc.top = height - progress_border_height + progress_horizontal_border;
   pb_rc.bottom = pb_rc.top + progress_height;
-  ProgressBarStyle pb_style;
-  progress_bar.Create(*this, pb_rc, pb_style);
+  progress_bar.Create(*this, pb_rc);
 
   // Set progress bar step size and range
   SetRange(0, 1000);
