@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "ActionListener.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/SolidContainerWindow.hpp"
 #include "Util/StaticString.hxx"
 
 #include <functional>
@@ -48,17 +49,6 @@ enum ModalResult {
 class WndForm : public ContainerWindow,
                 public ActionListener
 {
-  class ClientAreaWindow : public ContainerWindow {
-    const DialogLook &look;
-
-  public:
-    ClientAreaWindow(const DialogLook &_look)
-      :look(_look) {}
-
-  protected:
-    void OnPaint(Canvas &canvas) override;
-  };
-
 public:
   typedef std::function<bool(unsigned)> KeyDownFunction;
   typedef std::function<bool(unsigned)> CharacterFunction;
@@ -83,7 +73,7 @@ protected:
   bool dragging = false;
 
   /** The ClientWindow */
-  ClientAreaWindow client_area;
+  SolidContainerWindow client_area;
   /** Coordinates of the ClientWindow */
   PixelRect client_rect;
   /** Coordinates of the titlebar */

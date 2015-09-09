@@ -55,14 +55,6 @@ Copyright_License {
 #include "Event/Windows/Loop.hpp"
 #endif
 
-void
-WndForm::ClientAreaWindow::OnPaint(Canvas &canvas)
-{
-  canvas.Clear(look.background_color);
-
-  ContainerWindow::OnPaint(canvas);
-}
-
 static WindowStyle
 AddBorder(WindowStyle style)
 {
@@ -71,8 +63,7 @@ AddBorder(WindowStyle style)
 }
 
 WndForm::WndForm(const DialogLook &_look)
-  :look(_look),
-   client_area(_look)
+  :look(_look)
 {
 }
 
@@ -80,8 +71,7 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const PixelRect &rc,
                  const TCHAR *Caption,
                  const WindowStyle style)
-  :look(_look),
-   client_area(_look)
+  :look(_look)
 {
   Create(main_window, rc, Caption, AddBorder(style));
 }
@@ -145,7 +135,7 @@ WndForm::OnCreate()
 
   WindowStyle client_style;
   client_style.ControlParent();
-  client_area.Create(*this, client_rect, client_style);
+  client_area.Create(*this, client_rect, look.background_color, client_style);
 }
 
 void
