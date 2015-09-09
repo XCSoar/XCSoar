@@ -22,42 +22,10 @@ Copyright_License {
 */
 
 #include "ProgressBar.hpp"
+#include "Canvas.hpp"
 #include "Features.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
-
-#ifdef USE_GDI
-#include <commctrl.h>
-#else
-#include "Screen/Canvas.hpp"
-#endif
-
-void
-ProgressBarStyle::Vertical()
-{
-#ifdef USE_GDI
-  style |= PBS_VERTICAL;
-#endif
-}
-
-void
-ProgressBarStyle::Smooth()
-{
-#ifdef USE_GDI
-  style |= PBS_SMOOTH;
-#endif
-}
-
-void
-ProgressBar::Create(ContainerWindow &parent, PixelRect rc,
-                    const ProgressBarStyle style)
-{
-  Window::Create(&parent,
-#ifdef USE_GDI
-                 PROGRESS_CLASS, nullptr,
-#endif
-                 rc, style);
-}
 
 void
 ProgressBar::SetRange(unsigned min_value, unsigned max_value)
@@ -65,16 +33,11 @@ ProgressBar::SetRange(unsigned min_value, unsigned max_value)
   AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   this->min_value = min_value;
   this->max_value = max_value;
   value = 0;
   step_size = 1;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_SETRANGE, (WPARAM)0,
-                (LPARAM)MAKELPARAM(min_value, max_value));
-#endif
 }
 
 void
@@ -83,12 +46,8 @@ ProgressBar::SetValue(unsigned value)
   AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   this->value = value;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_SETPOS, value, 0);
-#endif
 }
 
 void
@@ -97,12 +56,8 @@ ProgressBar::SetStep(unsigned size)
   AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   step_size = size;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
-#endif
 }
 
 void
@@ -111,15 +66,9 @@ ProgressBar::Step()
   AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   value += step_size;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_STEPIT, (WPARAM)0, (LPARAM)0);
-#endif
 }
-
-#ifndef USE_GDI
 
 #if defined(EYE_CANDY) && !defined(HAVE_CLIPPING)
 /* when the Canvas is clipped, we can't render rounded corners,
@@ -163,4 +112,3 @@ ProgressBar::OnPaint(Canvas &canvas)
   canvas.DrawFilledRectangle(position, 0, GetWidth(), GetHeight(), COLOR_WHITE);
 #endif
 }
-#endif

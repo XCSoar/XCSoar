@@ -24,35 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PROGRESS_BAR_HXX
 #define XCSOAR_SCREEN_PROGRESS_BAR_HXX
 
-#include "NativeWindow.hpp"
+#include "PaintWindow.hpp"
 
-class ProgressBarStyle : public WindowStyle {
-public:
-  ProgressBarStyle() = default;
-  ProgressBarStyle(const WindowStyle &_style):WindowStyle(_style) {}
-
-  void Vertical();
-  void Smooth();
-};
-
-class ProgressBar : public NativeWindow {
-#ifndef USE_GDI
+class ProgressBar : public PaintWindow {
   unsigned min_value = 0, max_value = 0, value = 0, step_size = 1;
-#endif
 
 public:
-  void Create(ContainerWindow &parent, PixelRect rc,
-              const ProgressBarStyle style=ProgressBarStyle());
-
   void SetRange(unsigned min_value, unsigned max_value);
   void SetValue(unsigned value);
   void SetStep(unsigned size);
   void Step();
 
-#ifndef USE_GDI
 protected:
   void OnPaint(Canvas &canvas) override;
-#endif
 };
 
 #endif
