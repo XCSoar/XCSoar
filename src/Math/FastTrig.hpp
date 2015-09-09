@@ -38,11 +38,7 @@ extern const fixed INVCOSINETABLE[4096];
 
 extern const short ISINETABLE[4096];
 
-#ifdef RADIANS
 #define INT_ANGLE_MULT fixed(4096.0 / M_2PI)
-#else
-#define INT_ANGLE_MULT fixed(4096.0 / 360)
-#endif
 
 gcc_const
 static inline int

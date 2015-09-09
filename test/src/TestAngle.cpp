@@ -46,7 +46,6 @@ int main(int argc, char **argv)
   ok1(equals(Angle::FullCircle().Radians(), fixed_two_pi));
 
   // Test degrees()
-#ifdef RADIANS
   ok1(equals(Angle::Degrees(0).Native(), fixed(0)));
   ok1(equals(Angle::Degrees(90).Native(), fixed_half_pi));
   ok1(equals(Angle::Degrees(180).Native(), fixed_pi));
@@ -59,19 +58,6 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Radians(fixed_pi + fixed_half_pi).Native(),
                             fixed_pi + fixed_half_pi));
   ok1(equals(Angle::Radians(fixed_two_pi).Native(), fixed_two_pi));
-#else
-  ok1(equals(Angle::Degrees(0).Native(), fixed(0)));
-  ok1(equals(Angle::Degrees(90).Native(), fixed(90)));
-  ok1(equals(Angle::Degrees(180).Native(), fixed(180)));
-  ok1(equals(Angle::Degrees(270).Native(), fixed(270)));
-  ok1(equals(Angle::Degrees(360).Native(), fixed(360)));
-
-  ok1(equals(Angle::Radians(fixed(0)).Native(), fixed(0)));
-  ok1(equals(Angle::Radians(fixed_half_pi).Native(), fixed(90)));
-  ok1(equals(Angle::Radians(fixed_pi).Native(), fixed(180)));
-  ok1(equals(Angle::Radians(fixed_pi + fixed_half_pi).Native(), fixed(270)));
-  ok1(equals(Angle::Radians(fixed_two_pi).Native(), fixed(360)));
-#endif
 
   // Test Degrees()
   ok1(equals(Angle::Degrees(90).Degrees(), 90));

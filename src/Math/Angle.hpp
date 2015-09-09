@@ -63,11 +63,7 @@ public:
    */
   constexpr
   static Angle FullCircle() {
-#ifdef RADIANS
     return Native(fixed_two_pi);
-#else
-    return Native(fixed(360));
-#endif
   }
 
   /**
@@ -76,11 +72,7 @@ public:
    */
   constexpr
   static Angle HalfCircle() {
-#ifdef RADIANS
     return Native(fixed_pi);
-#else
-    return Native(fixed(180));
-#endif
   }
 
   /**
@@ -89,11 +81,7 @@ public:
    */
   constexpr
   static Angle QuarterCircle() {
-#ifdef RADIANS
     return Native(fixed_half_pi);
-#else
-    return Native(fixed(90));
-#endif
   }
 
   constexpr
@@ -101,7 +89,6 @@ public:
     return value;
   }
 
-#ifdef RADIANS
   constexpr
   static Angle Degrees(int value) {
     return Angle(fixed(value * DEG_TO_RAD));
@@ -143,49 +130,6 @@ public:
   fixed Hours() const {
     return fast_mult(value, fixed(24 / M_2PI), 4);
   }
-#else
-  constexpr
-  static Angle Degrees(const fixed _value) {
-    return Angle(_value);
-  }
-
-  constexpr
-  static Angle Degrees(int value) {
-    return Angle(fixed(value));
-  }
-
-  constexpr
-  static Angle Degrees(unsigned value) {
-    return Degrees(int(value));
-  }
-
-  constexpr
-  static Angle Radians(double value) {
-    return Angle(fixed(value * RAD_TO_DEG));
-  }
-
-#ifdef FIXED_MATH
-  constexpr
-  static Angle Radians(const fixed _value) {
-    return Angle(fast_mult(_value, fixed(RAD_TO_DEG), 4));
-  }
-#endif
-
-  constexpr
-  fixed Degrees() const {
-    return value;
-  }
-
-  constexpr
-  fixed Radians() const {
-    return fast_mult(fixed(DEG_TO_RAD), value, 4);
-  }
-
-  gcc_pure
-  fixed Hours() const {
-    return value * fixed(24. / 360.);
-  }
-#endif
 
   constexpr
   static Angle DMS(unsigned d, unsigned m, unsigned s) {

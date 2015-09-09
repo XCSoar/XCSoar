@@ -1,4 +1,3 @@
-RADIANS ?= y
 LLVM ?= n
 CLANG ?= $(LLVM)
 IWYU ?= n
@@ -6,10 +5,6 @@ IWYU ?= n
 FIXED ?= $(call bool_not,$(HAVE_FPU))
 ifeq ($(FIXED),y)
 TARGET_CPPFLAGS += -DFIXED_MATH
-endif
-
-ifeq ($(RADIANS),y)
-TARGET_CPPFLAGS += -DRADIANS
 endif
 
 # shall we paint with some eye candy?

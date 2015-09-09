@@ -31,11 +31,7 @@
 #include <cassert>
 
 // scaling for flat earth integer representation, gives approximately 50m resolution
-#ifdef RADIANS
 static constexpr int fixed_scale = 57296;
-#else
-static constexpr int fixed_scale = 1000;
-#endif
 static constexpr fixed inv_scale(1.0/fixed_scale);
 
 void
