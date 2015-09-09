@@ -70,21 +70,21 @@ public:
 protected:
   const DialogLook &look;
 
-  int modal_result;
+  int modal_result = 0;
 
   /**
    * The dialog stays open as long as this flag is set, even if
    * SetModalResult has been called.
    */
-  bool force;
+  bool force = false;
 
   /**
    * Show in modeless mode.  Close if screen is clicked
    * outside dialog
    */
-  bool modeless;
+  bool modeless = false;
 
-  bool dragging;
+  bool dragging = false;
 
   /** The ClientWindow */
   ClientAreaWindow client_area;

@@ -84,9 +84,6 @@ AddBorder(WindowStyle style)
 
 WndForm::WndForm(const DialogLook &_look)
   :look(_look),
-   modal_result(0), force(false),
-   modeless(false),
-   dragging(false),
    client_area(_look)
 {
 }
@@ -96,9 +93,6 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const TCHAR *Caption,
                  const WindowStyle style)
   :look(_look),
-   modal_result(0), force(false),
-   modeless(false),
-   dragging(false),
    client_area(_look)
 {
   Create(main_window, rc, Caption, AddBorder(style));
