@@ -73,7 +73,7 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const WindowStyle style)
   :look(_look)
 {
-  Create(main_window, rc, Caption, AddBorder(style));
+  Create(main_window, rc, Caption, style);
 }
 
 void
