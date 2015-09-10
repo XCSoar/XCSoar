@@ -148,7 +148,7 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto z = SmallMult(A, sin_loc1_lat) + SmallMult(B, sin_loc2_lat);
 
   GeoPoint loc3;
-  loc3.latitude = Angle::FromXY(TinyHypot(x, y), z);
+  loc3.latitude = Angle::FromXY(hypot(x, y), z);
   loc3.longitude = Angle::FromXY(x, y);
   loc3.Normalize(); // ensure longitude is within -180:180
 

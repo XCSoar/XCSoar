@@ -116,7 +116,7 @@ GlideState::DriftedDistance(const fixed time) const
   const auto dx = distance_task * sin_task - distance_wind * sin_wind;
   const auto dy = distance_task * cos_task - distance_wind * cos_wind;
 
-  return MediumHypot(dx, dy);
+  return hypot(dx, dy);
 
   // ??   task.Bearing = RAD_TO_DEG*(atan2(dx,dy));
 }

@@ -135,37 +135,7 @@ static void test_hypot() {
 
     fixed fdx(dx);
     fixed fdy(dy);
-    fixed fd(MediumHypot(fdx, fdy));
-
-    ok(fabs(fd - fixed(d)) < fixed(1.0e-3), "hypot(dx, dy)", 0);
-  }
-}
-
-static constexpr double tiny_hypot_test_values[][2] = {
-  { 3, 3 },
-  { 2, 2 },
-  { 1.5, 1.5 },
-  { 1, 1 },
-  { 0.1, 0.1 },
-  { 0.01, 0.01 },
-  { 0.001, 0.001 },
-  { 0.0001, 0.0001 },
-  { 0.00001, 0.00001 },
-  { 0.000001, 0.000001 },
-  { 0.0, 0.0 },
-};
-
-static void
-TestTinyHypot()
-{
-  for (unsigned i = 0; i < ARRAY_SIZE(tiny_hypot_test_values); i++) {
-    double dx = tiny_hypot_test_values[i][0];
-    double dy = tiny_hypot_test_values[i][1];
-    double d = hypot(dx, dy);
-
-    fixed fdx(dx);
-    fixed fdy(dy);
-    fixed fd(TinyHypot(fdx, fdy));
+    fixed fd(hypot(fdx, fdy));
 
     ok(fabs(fd - fixed(d)) < fixed(1.0e-3), "hypot(dx, dy)", 0);
   }
@@ -175,8 +145,7 @@ int main(int argc, char** argv) {
   plan_tests(43 + ARRAY_SIZE(Hypot_test_values)
              + ARRAY_SIZE(floor_ceil_tests) * 2
              + ARRAY_SIZE(uround_test_values)
-             + 2 * ARRAY_SIZE(iround_test_values)
-             + ARRAY_SIZE(tiny_hypot_test_values));
+             + 2 * ARRAY_SIZE(iround_test_values));
 
   /* check the division operator */
   ok((fixed(1) / fixed(1)) * fixed(1000) == fixed(1000), "1/1", 0);
@@ -234,7 +203,6 @@ int main(int argc, char** argv) {
   TestFloorCeil();
   TestRound();
   test_hypot();
-  TestTinyHypot();
 
   return exit_status();
 }

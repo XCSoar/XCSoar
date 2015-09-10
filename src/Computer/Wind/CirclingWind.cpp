@@ -198,7 +198,7 @@ CirclingWind::CalcWind()
     auto wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    auto cmag = SmallHypot(wx, wy) - sample.vector.norm;
+    auto cmag = hypot(wx, wy) - sample.vector.norm;
     rthis += sqr(cmag);
   }
 

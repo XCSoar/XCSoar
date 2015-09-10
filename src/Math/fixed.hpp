@@ -123,53 +123,6 @@ inline fixed accurate_half_sin(fixed a) {
   return sin(a/2);
 }
 
-/**
- * Calculate the euclidian distance for "tiny" parameter values,
- * i.e. all values below 3.
- *
- * This function was calibrated for small delta angles,
- * e.g. reasonable distances on earth's surface.
- */
-gcc_const
-inline fixed
-TinyHypot(fixed x, fixed y)
-{
-  return hypot(x, y);
-}
-
-/**
- * Calculate the euclidian distance for "small" parameter values,
- * i.e. values below 100,000.
- */
-gcc_const
-inline fixed
-SmallHypot(fixed x, fixed y)
-{
-  return hypot(x, y);
-}
-
-/**
- * Calculate the euclidian distance for "medium" parameter values,
- * i.e. values below 1,000,000.
- */
-gcc_const
-inline fixed
-MediumHypot(fixed x, fixed y)
-{
-  return hypot(x, y);
-}
-
-/**
- * Calculate the euclidian distance for "large" parameter values,
- * i.e. values below 8,000,000,000.
- */
-gcc_const
-inline fixed
-LargeHypot(fixed x, fixed y)
-{
-  return hypot(x, y);
-}
-
 inline void limit_tolerance(fixed& f, const fixed tol_act) {
   if (fabs(f)<tol_act) {
     f = positive(f)? tol_act:-tol_act;

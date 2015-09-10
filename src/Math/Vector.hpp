@@ -52,7 +52,7 @@ struct Vector : Point2D<fixed> {
 
   gcc_pure
   fixed Magnitude() const {
-    return MediumHypot(x, y);
+    return hypot(x, y);
   }
 };
 

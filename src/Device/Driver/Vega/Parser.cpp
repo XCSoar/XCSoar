@@ -163,7 +163,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
 {
   const int accel_x = line.Read(0), accel_z = line.Read(0);
 
-  auto mag = SmallHypot(fixed(accel_x), fixed(accel_z));
+  auto mag = hypot(fixed(accel_x), fixed(accel_z));
   info.acceleration.ProvideGLoad(mag / 100, true);
 
   /*
