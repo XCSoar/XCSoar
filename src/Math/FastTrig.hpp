@@ -38,18 +38,37 @@ extern const double INVCOSINETABLE[INT_ANGLE_RANGE];
 
 extern const short ISINETABLE[INT_ANGLE_RANGE];
 
+static constexpr inline unsigned
+NormalizeIntAngle(unsigned angle)
+{
+  return angle & INT_ANGLE_MASK;
+}
+
+static constexpr inline unsigned
+IntAngleForCos(unsigned angle)
+{
+  return NormalizeIntAngle(angle + INT_QUARTER_CIRCLE);
+}
+
+gcc_const
+static inline unsigned
+UnsafeRadiansToIntAngle(double radians)
+{
+  return lround(radians * INT_ANGLE_MULT);
+}
+
 gcc_const
 static inline int
 NATIVE_TO_INT(double x)
 {
-  return lround(INT_ANGLE_MULT * x) & INT_ANGLE_MASK;
+  return NormalizeIntAngle(UnsafeRadiansToIntAngle(x));
 }
 
 gcc_const
 static inline int
 NATIVE_TO_INT_COS(double x)
 {
-  return (lround(INT_ANGLE_MULT * x) + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK;
+  return IntAngleForCos(UnsafeRadiansToIntAngle(x));
 }
 
 gcc_const
