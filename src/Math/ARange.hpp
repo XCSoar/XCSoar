@@ -58,7 +58,7 @@ struct AngleRange {
    */
   gcc_pure
   Angle GetMiddle() const {
-    return start.Fraction(end, fixed(0.5));
+    return start.Fraction(end, 0.5);
   }
 
   /**

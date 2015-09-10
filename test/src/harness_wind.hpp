@@ -26,20 +26,20 @@
 
 #define NUM_WIND 9
 
-static inline fixed
+static inline double
 wind_to_mag(int n_wind)
 {
   if (n_wind)
-    return (fixed(n_wind - 1) / 4 + fixed(1)) * 5;
+    return ((n_wind - 1) / 4 + 1) * 5;
 
-  return fixed(0);
+  return 0;
 }
 
 static inline Angle
 wind_to_dir(int n_wind)
 {
   if (n_wind)
-    return Angle::Degrees(fixed(90 * ((n_wind - 1) % 4))).AsBearing();
+    return Angle::Degrees(90 * ((n_wind - 1) % 4)).AsBearing();
 
   return Angle::Zero();
 }

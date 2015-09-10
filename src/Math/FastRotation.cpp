@@ -39,7 +39,7 @@ FastRotation::SetAngle(Angle _angle)
 }
 
 FastRotation::Point
-FastRotation::Rotate(fixed x, fixed y) const
+FastRotation::Rotate(double x, double y) const
 {
   return Point(x * cost - y * sint, y * cost + x * sint);
 }

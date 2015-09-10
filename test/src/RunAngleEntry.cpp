@@ -37,5 +37,5 @@ Main()
   if (!AngleEntryDialog(_T("The caption"), value))
     return;
 
-  printf("%u\n", uround(value.Degrees()));
+  printf("%ld\n", lround(value.Degrees()));
 }

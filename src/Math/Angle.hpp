@@ -25,6 +25,7 @@ Copyright_License {
 
 #include "Trig.hpp"
 #include "FastTrig.hpp"
+#include "Constants.h"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -37,10 +38,9 @@ Copyright_License {
 
 class Angle
 {
-  fixed value;
+  double value;
 
-  constexpr
-  explicit Angle(const fixed _value):value(_value) {};
+  explicit constexpr Angle(const double _value):value(_value) {};
 
 public:
   /**
@@ -51,11 +51,11 @@ public:
 
   constexpr
   static Angle Zero() {
-    return Native(fixed(0));
+    return Native(double(0));
   }
 
   constexpr
-  static Angle Native(const fixed _value) {
+  static Angle Native(const double _value) {
     return Angle(_value);
   }
 
@@ -65,7 +65,7 @@ public:
    */
   constexpr
   static Angle FullCircle() {
-    return Native(fixed_two_pi);
+    return Native(M_2PI);
   }
 
   /**
@@ -74,7 +74,7 @@ public:
    */
   constexpr
   static Angle HalfCircle() {
-    return Native(fixed_pi);
+    return Native(M_PI);
   }
 
   /**
@@ -83,17 +83,16 @@ public:
    */
   constexpr
   static Angle QuarterCircle() {
-    return Native(fixed_half_pi);
+    return Native(M_HALFPI);
   }
 
-  constexpr
-  fixed Native() const {
+  constexpr double Native() const {
     return value;
   }
 
   constexpr
   static Angle Degrees(int value) {
-    return Angle(fixed(value * DEG_TO_RAD));
+    return Angle(value * DEG_TO_RAD);
   }
 
   constexpr
@@ -103,32 +102,28 @@ public:
 
   constexpr
   static Angle Degrees(double value) {
-    return Angle(fixed(value * DEG_TO_RAD));
+    return Angle(value * DEG_TO_RAD);
   }
 
-  constexpr
-  static Angle Radians(const fixed _value) {
+  static constexpr Angle Radians(const double _value) {
     return Angle(_value);
   }
 
-  constexpr
-  fixed Degrees() const {
-    return fast_mult(value, fixed(RAD_TO_DEG), 4);
+  constexpr double Degrees() const {
+    return value * RAD_TO_DEG;
   }
 
-  constexpr
-  fixed Radians() const {
+  constexpr double Radians() const {
     return value;
   }
 
-  constexpr
-  fixed Hours() const {
-    return fast_mult(value, fixed(24 / M_2PI), 4);
+  constexpr double Hours() const {
+    return value * 24 / M_2PI;
   }
 
   constexpr
   static Angle DMS(unsigned d, unsigned m, unsigned s) {
-    return Angle::Degrees(fixed(d) + fixed(m) / 60 + fixed(s) / 3600);
+    return Angle::Degrees(d + m / 60. + s / 3600.);
   }
 
   /**
@@ -164,7 +159,7 @@ public:
    * Calculates the tangent of the Angle.
    */
   gcc_pure
-  inline fixed tan() const {
+  inline double tan() const {
     return ::tan(Radians());
   }
 
@@ -172,20 +167,20 @@ public:
    * Calculates the sine of the Angle.
    */
   gcc_pure
-  inline fixed sin() const {
+  inline double sin() const {
     return ::sin(Radians());
   }
 
   gcc_pure
-  inline fixed accurate_half_sin() const {
-    return ::accurate_half_sin(Radians());
+  inline double accurate_half_sin() const {
+    return Half().sin();
   }
 
   /**
    * Calculates the cosine of the Angle.
    */
   gcc_pure
-  inline fixed cos() const {
+  inline double cos() const {
     return ::cos(Radians());
   }
 
@@ -193,7 +188,7 @@ public:
    * Faster but more inaccurate version of sin()
    */
   gcc_pure
-  inline fixed fastsine() const {
+  inline double fastsine() const {
     return (::fastsine(Native()));
   }
 
@@ -201,12 +196,12 @@ public:
    * Faster but more inaccurate version of cos()
    */
   gcc_pure
-  inline fixed fastcosine() const {
+  inline double fastcosine() const {
     return (::fastcosine(Native()));
   }
 
   gcc_pure
-  inline fixed invfastcosine() const {
+  inline double invfastcosine() const {
     return (::invfastcosine(Native()));
   }
 
@@ -242,18 +237,18 @@ public:
   int Sign() const;
 
   gcc_pure
-  int Sign(const fixed tolerance) const;
+  int Sign(const double tolerance) const;
 
   gcc_pure
-  std::pair<fixed, fixed> SinCos() const {
+  std::pair<double, double> SinCos() const {
     return ::sin_cos(Radians());
   }
 
   gcc_pure
-  fixed AbsoluteDegrees() const;
+  double AbsoluteDegrees() const;
 
   gcc_pure
-  fixed AbsoluteRadians() const;
+  double AbsoluteRadians() const;
 
   void Flip() {
     value = -value;
@@ -284,7 +279,7 @@ public:
    */
   constexpr
   Angle Half() const {
-    return Angle(::Half(value));
+    return Angle(value * 0.5);
   }
 
   /**
@@ -304,16 +299,16 @@ public:
    * @return the resulting Angle, not normalized
    */
   gcc_pure
-  Angle Fraction(const Angle end, const fixed fraction) const;
+  Angle Fraction(const Angle end, const double fraction) const;
 
   constexpr Angle
   operator*(const Angle x) const
   {
-    return Angle(fast_mult(value, 6, x.value, 6));
+    return Angle(value * x.value);
   }
 
   gcc_pure Angle
-  operator*(const fixed x) const
+  operator*(const double x) const
   {
     return Angle(value * x);
   }
@@ -334,13 +329,13 @@ public:
 
   gcc_pure
   Angle
-  operator/(const fixed x) const
+  operator/(const double x) const
   {
     return Angle(value / x);
   }
 
   gcc_pure
-  fixed
+  double
   operator/(const Angle x) const
   {
     return value / x.value;
@@ -382,7 +377,7 @@ public:
   }
 
   const Angle&
-  operator*=(const fixed x)
+  operator*=(const double x)
   {
     value *= x;
     return *this;
@@ -450,12 +445,12 @@ public:
 #endif
 
   gcc_const
-  static Angle asin(fixed x) {
+  static Angle asin(double x) {
     return Radians(::asin(x));
   }
 
   gcc_const
-  static Angle acos(fixed x) {
+  static Angle acos(double x) {
     return Radians(::acos(x));
   }
 
@@ -468,7 +463,7 @@ public:
    * @return Counter-clockwise angle between the x-axis and the given coordinate
    */
   gcc_const
-  static Angle FromXY(const fixed x, const fixed y) {
+  static Angle FromXY(const double x, const double y) {
     return Angle::Radians(atan2(y,x));
   }
 

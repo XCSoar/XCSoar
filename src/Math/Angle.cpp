@@ -22,14 +22,15 @@ Copyright_License {
 */
 
 #include "Angle.hpp"
+
 #include <assert.h>
 
 void
 Angle::ToDMS(unsigned &dd, unsigned &mm, unsigned &ss, bool &is_positive) const
 {
-  is_positive = !negative(value);
+  is_positive = value >= 0;
 
-  unsigned value = uround(AbsoluteDegrees() * 3600);
+  unsigned value = lround(AbsoluteDegrees() * 3600);
 
   ss = value % 60;
   value /= 60;
@@ -44,9 +45,9 @@ void
 Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
              bool &is_positive) const
 {
-  is_positive = !negative(value);
+  is_positive = value >= 0;
 
-  unsigned value = (unsigned) (AbsoluteDegrees() * 60000);
+  unsigned value = lround(AbsoluteDegrees() * 60000);
   dd = value / 60000;
   value %= 60000;
   mm = value / 1000;
@@ -54,7 +55,7 @@ Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
 }
 
 int
-Angle::Sign(const fixed tolerance) const
+Angle::Sign(const double tolerance) const
 {
   if ((value > tolerance))
     return 1;
@@ -67,22 +68,22 @@ Angle::Sign(const fixed tolerance) const
 int
 Angle::Sign() const
 {
-  if (positive(value))
+  if (value > 0)
     return 1;
-  if (negative(value))
+  if (value < 0)
     return -1;
 
   return 0;
 }
 
-fixed
-Angle::AbsoluteDegrees() const 
+double
+Angle::AbsoluteDegrees() const
 {
   return Absolute().Degrees();
 }
 
-fixed
-Angle::AbsoluteRadians() const 
+double
+Angle::AbsoluteRadians() const
 {
   return Absolute().Radians();
 }
@@ -90,7 +91,7 @@ Angle::AbsoluteRadians() const
 Angle
 Angle::AsBearing() const
 {
-  assert(fabs(value) < fixed(100) * FullCircle().Native());
+  assert(fabs(value) < 100 * FullCircle().Native());
 
   Angle retval(value);
 
@@ -106,7 +107,7 @@ Angle::AsBearing() const
 Angle
 Angle::AsDelta() const
 {
-  assert(fabs(value) < fixed(100) * FullCircle().Native());
+  assert(fabs(value) < 100 * FullCircle().Native());
 
   Angle retval(value);
 
@@ -144,7 +145,7 @@ Angle::HalfAngle(const Angle end) const
 }
 
 Angle
-Angle::Fraction(const Angle end, const fixed fraction) const
+Angle::Fraction(const Angle end, const double fraction) const
 {
   if (value == end.value)
     return Angle(value);
