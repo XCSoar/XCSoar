@@ -31,12 +31,9 @@ Copyright_License {
  * This class generates tones with a sine wave.
  */
 class ToneSynthesiser : public PCMSynthesiser {
-  unsigned volume, angle, increment;
+  unsigned volume = 100, angle = 0, increment = 0;
 
 public:
-  constexpr
-  ToneSynthesiser():volume(100), angle(0), increment(0) {}
-
   /**
    * Set the (software) volume of the generated tone.
    *
