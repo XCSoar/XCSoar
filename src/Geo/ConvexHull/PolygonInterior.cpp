@@ -37,25 +37,18 @@
 //            =0 for P2 on the line
 //            <0 for P2 right of the line
 //    See: the January 2001 Algorithm "Area of 2D and 3D Triangles and Polygons"
-inline static int
+inline static double
 isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
     return ( (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
-             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).Sign();
+             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).Native();
 }
 
 inline static int
 isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 {
-  int p = (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
+  return (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
     - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude);
-  if (p>0) {
-    return 1;
-  }
-  if (p<0) {
-    return -1;
-  }
-  return 0;
 }
 
 //===================================================================
