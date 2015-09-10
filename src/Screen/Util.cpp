@@ -33,7 +33,7 @@ CirclePoint(int x, int y, int radius, unsigned angle)
   assert(angle < ARRAY_SIZE(ISINETABLE));
 
   return RasterPoint(x + ISINETABLE[angle] * radius / 1024,
-                     y - ISINETABLE[(angle + 1024) & 0xfff] * radius / 1024);
+                     y - ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
 }
 
 static void
@@ -49,18 +49,20 @@ segment_poly(RasterPoint* pt, const int x, const int y,
 
   // add intermediate nodes (if any)
   if (forward) {
-    const unsigned ilast = istart < iend ? iend : iend + 4096;
-    for (unsigned i = istart + 4096 / 64; i < ilast; i += 4096 / 64) {
-      const unsigned angle = i & 0xfff;
+    const unsigned ilast = istart < iend ? iend : iend + INT_ANGLE_RANGE;
+    for (unsigned i = istart + INT_ANGLE_RANGE / 64; i < ilast;
+         i += INT_ANGLE_RANGE / 64) {
+      const unsigned angle = i & INT_ANGLE_MASK;
       pt[npoly] = CirclePoint(x, y, radius, angle);
 
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
     }
   } else {
-    const unsigned ilast = istart > iend ? iend : iend - 4096;
-    for (int i = istart + 4096 / 64; i > (int)ilast; i -= 4096 / 64) {
-      const unsigned angle = i & 0xfff;
+    const unsigned ilast = istart > iend ? iend : iend - INT_ANGLE_RANGE;
+    for (int i = istart + INT_ANGLE_RANGE / 64; i > (int)ilast;
+         i -= INT_ANGLE_RANGE / 64) {
+      const unsigned angle = i & INT_ANGLE_MASK;
       pt[npoly] = CirclePoint(x, y, radius, angle);
 
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
@@ -165,10 +167,21 @@ RoundRect(Canvas &canvas, int left, int top,
   unsigned npoly = 0;
   RasterPoint pt[66*4];
 
-  segment_poly(pt, left + radius, top + radius, radius, 3072, 4095, npoly);
-  segment_poly(pt, right - radius, top + radius, radius, 0, 1023, npoly);
-  segment_poly(pt, right - radius, bottom - radius, radius, 1024, 2047, npoly);
-  segment_poly(pt, left + radius, bottom - radius, radius, 2048, 3071, npoly);
+  segment_poly(pt, left + radius, top + radius, radius,
+               INT_ANGLE_RANGE * 3 / 4,
+               INT_ANGLE_RANGE - 1,
+               npoly);
+  segment_poly(pt, right - radius, top + radius, radius,
+               0, INT_ANGLE_RANGE / 4 - 1,
+               npoly);
+  segment_poly(pt, right - radius, bottom - radius, radius,
+               INT_ANGLE_RANGE / 4,
+               INT_ANGLE_RANGE / 2 - 1,
+               npoly);
+  segment_poly(pt, left + radius, bottom - radius, radius,
+               INT_ANGLE_RANGE / 2,
+               INT_ANGLE_RANGE * 3 / 4 - 1,
+               npoly);
 
   assert(npoly < ARRAY_SIZE(pt));
   if (npoly)

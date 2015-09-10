@@ -27,25 +27,29 @@ Copyright_License {
 #include "Constants.h"
 #include "Compiler.h"
 
-extern const double SINETABLE[4096];
-extern const double INVCOSINETABLE[4096];
+static constexpr unsigned INT_ANGLE_RANGE = 4096;
+static constexpr unsigned INT_ANGLE_MASK = INT_ANGLE_RANGE - 1;
+static constexpr unsigned INT_QUARTER_CIRCLE = INT_ANGLE_RANGE / 4;
 
-extern const short ISINETABLE[4096];
+extern const double SINETABLE[INT_ANGLE_RANGE];
+extern const double INVCOSINETABLE[INT_ANGLE_RANGE];
 
-#define INT_ANGLE_MULT (4096.0 / M_2PI)
+extern const short ISINETABLE[INT_ANGLE_RANGE];
+
+#define INT_ANGLE_MULT (INT_ANGLE_RANGE / M_2PI)
 
 gcc_const
 static inline int
 NATIVE_TO_INT(double x)
 {
-  return lround(INT_ANGLE_MULT * x) & 0xfff;
+  return lround(INT_ANGLE_MULT * x) & INT_ANGLE_MASK;
 }
 
 gcc_const
 static inline int
 NATIVE_TO_INT_COS(double x)
 {
-  return (lround(INT_ANGLE_MULT * x) + 1024) & 0xfff;
+  return (lround(INT_ANGLE_MULT * x) + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK;
 }
 
 gcc_const

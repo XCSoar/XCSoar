@@ -27,12 +27,12 @@ Copyright_License {
 GLDonutVertices::GLDonutVertices(GLvalue center_x, GLvalue center_y,
                                  GLvalue radius_inner, GLvalue radius_outer)
 {
-  static_assert(4096 % CIRCLE_SIZE == 0, "Wrong CIRCLE_SIZE");
+  static_assert(INT_ANGLE_RANGE % CIRCLE_SIZE == 0, "Wrong CIRCLE_SIZE");
   RasterPoint *p = v, *p2 = v + CIRCLE_SIZE;
 
   for (unsigned i = 0; i < CIRCLE_SIZE/2; ++i) {
-    int cos = ISINETABLE[(i * (4096 / CIRCLE_SIZE) + 1024) & 0xfff];
-    int sin = ISINETABLE[i * (4096 / CIRCLE_SIZE)];
+    int cos = ISINETABLE[(i * (INT_ANGLE_RANGE / CIRCLE_SIZE) + 1024) & INT_ANGLE_MASK];
+    int sin = ISINETABLE[i * (INT_ANGLE_RANGE / CIRCLE_SIZE)];
 
     int offset_x = cos * (int)radius_inner / 1024.;
     int offset_y = sin * (int)radius_inner / 1024.;

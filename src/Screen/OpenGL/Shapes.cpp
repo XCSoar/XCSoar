@@ -35,7 +35,7 @@ namespace OpenGL {
 static GLFallbackArrayBuffer *
 MakeCircleBuffer(unsigned n)
 {
-  assert(4096 % n == 0);
+  assert(INT_ANGLE_RANGE % n == 0);
 
   auto buffer = new GLFallbackArrayBuffer();
 
@@ -43,8 +43,8 @@ MakeCircleBuffer(unsigned n)
   FloatPoint *p = p0, *p2 = p + n / 2;
 
   for (unsigned i = 0; i < n / 2; ++i, ++p, ++p2) {
-    float x = ISINETABLE[(i * (4096 / n) + 1024) & 0xfff] / 1024.;
-    float y = ISINETABLE[i * (4096 / n)] / 1024.;
+    float x = ISINETABLE[(i * (INT_ANGLE_RANGE / n) + 1024) & INT_ANGLE_MASK] / 1024.;
+    float y = ISINETABLE[i * (INT_ANGLE_RANGE / n)] / 1024.;
 
     p->x = x;
     p->y = y;
@@ -62,7 +62,7 @@ OpenGL::InitShapes()
 {
   DeinitShapes();
 
-  assert(4096 % CIRCLE_SIZE == 0);  // implies: assert(SIZE % 2 == 0)
+  assert(INT_ANGLE_RANGE % CIRCLE_SIZE == 0); // implies: assert(SIZE % 2 == 0)
 
   circle_buffer = MakeCircleBuffer(CIRCLE_SIZE);
   small_circle_buffer = MakeCircleBuffer(SMALL_CIRCLE_SIZE);
