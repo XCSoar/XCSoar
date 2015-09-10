@@ -25,7 +25,7 @@ Copyright_License {
 #include "Geo/Math.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "NMEA/ThermalLocator.hpp"
 
 #include <algorithm>

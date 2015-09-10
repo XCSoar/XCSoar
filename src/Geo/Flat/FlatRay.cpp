@@ -21,7 +21,7 @@
  */
 
 #include "FlatRay.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <stdlib.h>
 

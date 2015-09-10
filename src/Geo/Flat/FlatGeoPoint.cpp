@@ -21,7 +21,7 @@
  */
 
 #include "FlatGeoPoint.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 unsigned
 FlatGeoPoint::Distance(const FlatGeoPoint &sp) const

@@ -28,7 +28,7 @@
  */
 
 #include "GestureManager.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Compiler.h"
 
 static gcc_const TCHAR

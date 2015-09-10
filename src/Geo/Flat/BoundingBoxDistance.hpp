@@ -23,7 +23,7 @@
 #ifndef BOUNDINGBOXDISTANCE_HPP
 #define BOUNDINGBOXDISTANCE_HPP
 
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Compiler.h"
 
 /**

@@ -20,7 +20,7 @@
 }
 */
 
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Computer/ThermalLocator.hpp"
 #include "TestUtil.hpp"
 

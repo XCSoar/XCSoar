@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Math/FastRotation.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <math.h>
 

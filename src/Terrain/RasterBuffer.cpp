@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Terrain/RasterBuffer.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <algorithm>
 #include <assert.h>

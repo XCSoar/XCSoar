@@ -26,7 +26,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 extern "C" {
 #include "jasper/jas_seq.h"

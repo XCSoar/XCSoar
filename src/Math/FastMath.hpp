@@ -21,15 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MATH_FASTMATH_H
-#define XCSOAR_MATH_FASTMATH_H
+#ifndef XCSOAR_MATH_FASTMATH_HPP
+#define XCSOAR_MATH_FASTMATH_HPP
 
 #include "Compiler.h"
 #include "Math/Constants.h"
 #include <math.h>
 #include <stdint.h>
-
-#ifdef __cplusplus
 
 #include "Math/fixed.hpp"
 
@@ -109,17 +107,9 @@ CombinedDivAndMod(unsigned int &lx)
   return ox;
 }
 
-extern "C"
-{
-#endif
-
 gcc_const
 unsigned
 isqrt4(unsigned val);
-
-#ifdef __cplusplus
-}
-#endif
 
 gcc_const
 static inline unsigned

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Compiler.h"
 #include "Interface.hpp"
 #include "Pan.hpp"

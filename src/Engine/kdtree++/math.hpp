@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_KDTREE_MATH_HPP
 #define XCSOAR_KDTREE_MATH_HPP
 
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <math.h>
 

@@ -27,7 +27,7 @@
 #include "GlideSolvers/MacCready.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <assert.h>
 #include <limits.h>

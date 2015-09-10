@@ -21,7 +21,7 @@
 */
 
 #include "Math/fixed.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Util/Macros.hpp"
 #include "TestUtil.hpp"
 
