@@ -22,7 +22,7 @@
 
 #include "FlatLine.hpp"
 
-#include <cmath>
+#include <math.h>
 
 fixed
 FlatLine::cross() const
@@ -91,8 +91,8 @@ FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
 
   det = sqrt(det);
   const auto inv_dr = fixed(1) / dr;
-  i1.x = (D * _dy + std::copysign(_dx, _dy) * det) * inv_dr;
-  i2.x = (D * _dy - std::copysign(_dx, _dy) * det) * inv_dr;
+  i1.x = (D * _dy + copysign(_dx, _dy) * det) * inv_dr;
+  i2.x = (D * _dy - copysign(_dx, _dy) * det) * inv_dr;
   i1.y = (-D * _dx + fabs(_dy) * det) * inv_dr;
   i2.y = (-D * _dx - fabs(_dy) * det) * inv_dr;
   return true;
