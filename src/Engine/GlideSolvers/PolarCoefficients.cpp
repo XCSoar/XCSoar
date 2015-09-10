@@ -24,33 +24,37 @@ Copyright_License {
 #include "PolarCoefficients.hpp"
 
 PolarCoefficients
-PolarCoefficients::From3VW(fixed v1, fixed v2, fixed v3,
-                          fixed w1, fixed w2, fixed w3)
+PolarCoefficients::From3VW(double v1, double v2, double v3,
+                           double w1, double w2, double w3)
 {
   PolarCoefficients pc;
 
-  auto d = sqr(v1) * (v2 - v3) + sqr(v2) * (v3 - v1) + sqr(v3) * (v1 - v2);
-  pc.a = (d == fixed(0)) ? fixed(0) :
-         -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
+  auto d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
+  pc.a = d == 0
+    ? 0.
+    : -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
 
   d = v2 - v3;
-  pc.b = (d == fixed(0)) ? fixed(0):
-    -(w2 - w3 + pc.a * (sqr(v2) - sqr(v3))) / d;
+  pc.b = d == 0
+    ? 0.
+    : -(w2 - w3 + pc.a * (v2 * v2 - v3 * v3)) / d;
 
-  pc.c = -(w3 + pc.a * sqr(v3) + pc.b * v3);
+  pc.c = -(w3 + pc.a * v3 * v3 + pc.b * v3);
 
   return pc;
 }
 
 PolarCoefficients
-PolarCoefficients::From2VW(fixed v1, fixed v2, fixed w1, fixed w2)
+PolarCoefficients::From2VW(double v1, double v2, double w1, double w2)
 {
   PolarCoefficients pc;
 
-  auto d = sqr(v2 - v1);
-  pc.a = (d == fixed(0)) ? fixed(0) : (w2 - w1) / d;
-  pc.b = - Double(pc.a * v1);
-  pc.c = pc.a * sqr(v1) + w1;
+  auto d = (v2 - v1) * (v2 - v1);
+  pc.a = d == 0
+    ? 0.
+    : (w2 - w1) / d;
+  pc.b = -2 * pc.a * v1;
+  pc.c = pc.a * v1 * v1 + w1;
 
   return pc;
 }
@@ -58,5 +62,5 @@ PolarCoefficients::From2VW(fixed v1, fixed v2, fixed w1, fixed w2)
 bool
 PolarCoefficients::IsValid() const
 {
-  return positive(a) && negative(b) && positive(c);
+  return a > 0 && b < 0 && c > 0;
 }

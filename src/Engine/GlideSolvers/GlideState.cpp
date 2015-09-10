@@ -38,8 +38,8 @@ public:
    *
    * @return Initialised object (not solved)
    */
-  AverageSpeedSolver(const fixed dwcostheta, const fixed wind_speed_squared,
-                     const fixed V)
+  AverageSpeedSolver(const double dwcostheta, const double wind_speed_squared,
+                     const double V)
     :Quadratic(dwcostheta, wind_speed_squared - sqr(V)) {}
 
   /**
@@ -48,17 +48,17 @@ public:
    * @return Ground speed during cruise (m/s)
    */
   gcc_pure
-  fixed Solve() const {
+  double Solve() const {
     if (Check())
       /// @todo check this is correct for all theta
       return SolutionMax();
 
-    return fixed(-1);
+    return -1;
   }
 };
 
-fixed
-GlideState::CalcAverageSpeed(const fixed Veff) const
+double
+GlideState::CalcAverageSpeed(const double Veff) const
 {
   if (wind.IsNonZero()) {
     // only need to solve if positive wind speed
@@ -69,8 +69,8 @@ GlideState::CalcAverageSpeed(const fixed Veff) const
 }
 
 // dummy task
-GlideState::GlideState(const GeoVector &vector, const fixed htarget,
-                       fixed altitude, const SpeedVector wind)
+GlideState::GlideState(const GeoVector &vector, const double htarget,
+                       double altitude, const SpeedVector wind)
   :vector(vector),
    min_arrival_altitude(htarget),
    altitude_difference(altitude - min_arrival_altitude)
@@ -89,13 +89,13 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
   } else {
     wind = SpeedVector::Zero();
     effective_wind_angle = Angle::Zero();
-    head_wind = fixed(0);
-    wind_speed_squared = fixed(0);
+    head_wind = 0;
+    wind_speed_squared = 0;
   }
 }
 
-fixed
-GlideState::DriftedDistance(const fixed time) const
+double
+GlideState::DriftedDistance(const double time) const
 {
   if (wind.IsZero())
     return vector.distance;

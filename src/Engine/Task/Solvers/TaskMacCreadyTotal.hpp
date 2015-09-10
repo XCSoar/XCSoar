@@ -51,7 +51,7 @@ public:
    * @return Effective distance remaining (m)
    */
   gcc_pure
-  fixed effective_distance(const fixed time_remaining) const;
+  double effective_distance(double time_remaining) const;
 
   /**
    * Calculate effective distance remaining such that at the virtual
@@ -63,17 +63,17 @@ public:
    * @return Effective distance remaining (m) for active leg
    */
   gcc_pure
-  fixed effective_leg_distance(const fixed time_remaining) const;
+  double effective_leg_distance(double time_remaining) const;
 
 private:
   /* virtual methods from class TaskMacCready */
-  fixed get_min_height(gcc_unused const AircraftState &aircraft) const override {
-    return fixed(0);
+  double get_min_height(gcc_unused const AircraftState &aircraft) const override {
+    return double(0);
   }
 
   GlideResult SolvePoint(const TaskPoint &tp,
                          const AircraftState &aircraft,
-                         fixed minH) const override;
+                         double minH) const override;
 
   AircraftState get_aircraft_start(const AircraftState &aircraft) const override;
 };

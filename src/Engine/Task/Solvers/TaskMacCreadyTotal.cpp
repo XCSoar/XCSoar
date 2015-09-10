@@ -28,7 +28,7 @@
 GlideResult
 TaskMacCreadyTotal::SolvePoint(const TaskPoint &tp,
                                const AircraftState &aircraft,
-                               fixed minH) const
+                               double minH) const
 {
   assert(tp.GetType() != TaskPointType::UNORDERED);
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
@@ -55,18 +55,16 @@ TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
   }
 }
 
-fixed
-TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
+double
+TaskMacCreadyTotal::effective_distance(const double time_remaining) const
 {
-
-  fixed t_total = fixed(0);
-  fixed d_total = fixed(0);
+  double t_total = 0, d_total = 0;
   for (int i = points.size() - 1; i >= 0; i--) {
     const GlideResult &result = leg_solutions[i];
 
     if (result.IsOk() && positive(result.time_elapsed)) {
       auto p = (time_remaining - t_total) / result.time_elapsed;
-      if ((p>=fixed(0)) && (p<=fixed(1))) {
+      if (p >= 0 && p <= 1) {
         return d_total + p * result.vector.distance;
       }
 
@@ -77,8 +75,8 @@ TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
   return d_total;
 }
 
-fixed
-TaskMacCreadyTotal::effective_leg_distance(const fixed time_remaining) const
+double
+TaskMacCreadyTotal::effective_leg_distance(const double time_remaining) const
 {
   const GlideResult &result = get_active_solution();
   auto p = time_remaining / result.time_elapsed;

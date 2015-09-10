@@ -22,7 +22,6 @@
 #ifndef MACCREADY_HPP
 #define MACCREADY_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 struct GlideSettings;
@@ -48,7 +47,7 @@ class MacCready
   gcc_unused_field const GlideSettings &settings;
 
   const GlidePolar &glide_polar;
-  const fixed cruise_efficiency;
+  const double cruise_efficiency;
 
 public:
   /**
@@ -59,7 +58,7 @@ public:
    * @param _cruise_efficiency The efficiency ratio for calculations 
    */
   MacCready(const GlideSettings &settings, const GlidePolar &_glide_polar,
-            const fixed _cruise_efficiency);
+            const double _cruise_efficiency);
 
   MacCready(const GlideSettings &settings, const GlidePolar &glide_polar);
 
@@ -75,12 +74,12 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   gcc_pure
-  GlideResult SolveSink(const GlideState &task, const fixed sink_rate) const;
+  GlideResult SolveSink(const GlideState &task, const double sink_rate) const;
 
   gcc_pure
   static GlideResult SolveSink(const GlideSettings &settings,
                                const GlidePolar &glide_polar,
-                               const GlideState &task, const fixed sink_rate);
+                               const GlideState &task, const double sink_rate);
 
   /**
    * Like Solve(), but always assume straight glide, no cruise.
@@ -123,7 +122,7 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   gcc_pure
-  GlideResult SolveGlide(const GlideState &task, const fixed v_set,
+  GlideResult SolveGlide(const GlideState &task, const double v_set,
                          const bool allow_partial = false) const;
 
 private:
@@ -140,7 +139,8 @@ private:
    */
   gcc_pure
   GlideResult
-  SolveGlide(const GlideState &task, const fixed v_set, const fixed sink_rate,
+  SolveGlide(const GlideState &task, const double v_set,
+             const double sink_rate,
              const bool allow_partial = false) const;
 
   /**

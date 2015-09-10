@@ -29,7 +29,7 @@
 GlideResult
 TaskMacCreadyTravelled::SolvePoint(const TaskPoint &tp,
                                    const AircraftState &aircraft,
-                                   fixed minH) const
+                                   double minH) const
 {
   assert(tp.GetType() != TaskPointType::UNORDERED);
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
@@ -51,8 +51,7 @@ TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
   }
 }
 
-
-fixed
+double
 TaskMacCreadyTravelled::get_min_height(const AircraftState &aircraft) const
 {
   return aircraft.altitude;

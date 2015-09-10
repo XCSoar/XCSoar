@@ -23,7 +23,9 @@
 #include "GlideResult.hpp"
 #include "GlideState.hpp"
 
-GlideResult::GlideResult(const GlideState &task, const fixed V)
+#include <assert.h>
+
+GlideResult::GlideResult(const GlideState &task, const double V)
   :head_wind(task.head_wind),
    v_opt(V),
 #ifndef NDEBUG
@@ -53,11 +55,11 @@ GlideResult::CalcCruiseBearing()
     return;
 
   cruise_track_bearing = vector.bearing;
-  if (!positive(effective_wind_speed))
+  if (effective_wind_speed <= 0)
     return;
 
   const auto sintheta = effective_wind_angle.sin();
-  if (sintheta == fixed(0))
+  if (sintheta == 0)
     return;
 
   cruise_track_bearing -=
@@ -128,28 +130,28 @@ GlideResult::Add(const GlideResult &s2)
   time_virtual += s2.time_virtual;
 }
 
-fixed
+double
 GlideResult::GlideAngleGround() const
 {
-  if (positive(vector.distance))
+  if (vector.distance > 0)
     return pure_glide_height / vector.distance;
 
-  return fixed(1000);
+  return 1000;
 }
 
-fixed
+double
 GlideResult::DestinationAngleGround() const
 {
-  if (positive(vector.distance))
+  if (vector.distance > 0)
     return (altitude_difference + pure_glide_height) / vector.distance;
 
-  return fixed(1000);
+  return 1000;
 }
 
 bool
 GlideResult::IsFinalGlide() const
 {
-  return IsOk() && !negative(altitude_difference) && !positive(height_climb);
+  return IsOk() && altitude_difference >= 0 && height_climb <= 0;
 }
 
 void

@@ -31,7 +31,7 @@
 GlideState
 GlideState::Remaining(const TaskPoint &tp,
                       const AircraftState &aircraft,
-                      const fixed min_h)
+                      const double min_h)
 {
   assert(aircraft.location.IsValid());
 

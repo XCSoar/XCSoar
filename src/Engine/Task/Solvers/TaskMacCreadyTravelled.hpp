@@ -46,11 +46,11 @@ public:
 
 private:
   /* virtual methods from class TaskMacCready */
-  virtual fixed get_min_height(const AircraftState &aircraft) const override;
+  virtual double get_min_height(const AircraftState &aircraft) const override;
 
   virtual GlideResult SolvePoint(const TaskPoint &tp,
                                  const AircraftState &aircraft,
-                                 fixed minH) const override;
+                                 double minH) const override;
 
   virtual AircraftState get_aircraft_start(const AircraftState &aircraft) const override;
 };

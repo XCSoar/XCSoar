@@ -23,10 +23,11 @@
 #define GLIDEPOLAR_HPP
 
 #include "PolarCoefficients.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
+
+#include <assert.h>
 
 struct GlideState;
 struct GlideResult;
@@ -57,33 +58,33 @@ struct SpeedVector;
 class GlidePolar
 {
   /** MacCready ring setting (m/s) */
-  fixed mc;
+  double mc;
   /** Inverse of MC setting (s/m) */
-  fixed inv_mc;
+  double inv_mc;
 
   /** Clean ratio (1=clean, 0=100% bugs) */
-  fixed bugs;
+  double bugs;
   /** Ballast ratio (litres) */
-  fixed ballast;
+  double ballast;
   /** Cruise efficiency */
-  fixed cruise_efficiency;
+  double cruise_efficiency;
 
   /** Best lift to drag ratio */
-  fixed bestLD;
+  double bestLD;
   /** Speed for best L/D (m/s) */
-  fixed VbestLD;
+  double VbestLD;
   /** Sink rate at best L/D (m/s, positive down) */
-  fixed SbestLD;
+  double SbestLD;
 
   /** Maximum cruise speed (m/s) */
-  fixed Vmax;
+  double Vmax;
   /** Sink rate at maximum cruise speed (m/s, positive down) */
-  fixed Smax;
+  double Smax;
 
   /** Speed for minimum sink (m/s) */
-  fixed Vmin;
+  double Vmin;
   /** Minimum sink rate (m/s, positive down) */
-  fixed Smin;
+  double Smin;
 
   /** coefficients of glide polar empty/clean */
   PolarCoefficients ideal_polar;
@@ -91,13 +92,13 @@ class GlidePolar
   PolarCoefficients polar;
 
   /** Ratio of mass of ballast to glider empty weight */
-  fixed ballast_ratio;
+  double ballast_ratio;
   /** Reference mass of polar, kg */
-  fixed reference_mass;
+  double reference_mass;
   /** Dry/unballasted mass of glider, kg */
-  fixed dry_mass;
+  double dry_mass;
   /** Reference wing area, m^2 */
-  fixed wing_area;
+  double wing_area;
 
   friend class GlidePolarTest;
 
@@ -114,15 +115,15 @@ public:
    * @param _bugs Bugs (clean) ratio (default clean)
    * @param _ballast Ballast ratio (default empty)
    */
-  GlidePolar(const fixed _mc, const fixed _bugs = fixed(1),
-      const fixed _ballast = fixed(0));
+  GlidePolar(const double _mc, const double _bugs=1,
+             const double _ballast=0);
 
   /**
    * Constructs a GlidePolar object that is invalid.
    */
   gcc_const
   static GlidePolar Invalid() {
-    GlidePolar gp(fixed(0));
+    GlidePolar gp(0);
     gp.SetInvalid();
     return gp;
   }
@@ -150,9 +151,7 @@ public:
    * @return Sink rate (m/s, positive down)
    */
   gcc_pure
-  fixed
-  GetSMin() const
-  {
+  double GetSMin() const {
     assert(IsValid());
     return Smin;
   }
@@ -163,9 +162,7 @@ public:
    * @return Speed (m/s)
    */
   gcc_pure
-  fixed
-  GetVMin() const
-  {
+  double GetVMin() const {
     assert(IsValid());
     return Vmin;
   }
@@ -178,16 +175,12 @@ public:
    * @return Speed (m/s)
    */
   gcc_pure
-  fixed
-  GetVMax() const
-  {
+  double GetVMax() const {
     assert(IsValid());
     return Vmax;
   }
 
-  void
-  SetVMax(fixed _v_max, bool update = true)
-  {
+  void SetVMax(double _v_max, bool update = true) {
     Vmax = _v_max;
 
     if (update) {
@@ -202,9 +195,7 @@ public:
    * @return Sink rate (m/s, positive down)
    */
   gcc_pure
-  fixed
-  GetSMax() const
-  {
+  double GetSMax() const {
     assert(IsValid());
 
     return Smax;
@@ -216,9 +207,7 @@ public:
    * @return Speed of best LD (m/s)
    */
   gcc_pure
-  fixed
-  GetVBestLD() const
-  {
+  double GetVBestLD() const {
     assert(IsValid());
 
     return VbestLD;
@@ -230,7 +219,7 @@ public:
    * @return Sink rate at best L/D (m/s)
    */
   gcc_pure
-  fixed
+  double
   GetSBestLD() const
   {
     assert(IsValid());
@@ -244,7 +233,7 @@ public:
    * @return Best L/D ratio
    */
   gcc_pure
-  fixed GetBestLD() const
+  double GetBestLD() const
   {
     assert(IsValid());
 
@@ -256,23 +245,21 @@ public:
    * considering the given head wind.
    */
   gcc_pure
-  fixed GetBestGlideRatioSpeed(fixed head_wind) const;
+  double GetBestGlideRatioSpeed(double head_wind) const;
 
   /**
    * Takeoff speed
    * @return Takeoff speed threshold (m/s)
    */
   gcc_pure
-  fixed GetVTakeoff() const;
+  double GetVTakeoff() const;
 
   /**
    * Set cruise efficiency value.  1.0 = perfect MacCready speed
    *
    * @param _ce The new cruise efficiency value
    */
-  void
-  SetCruiseEfficiency(const fixed _ce)
-  {
+  void SetCruiseEfficiency(const double _ce) {
     cruise_efficiency = _ce;
   }
 
@@ -282,9 +269,7 @@ public:
    * @return Cruise efficiency
    */
   gcc_pure
-  fixed
-  GetCruiseEfficiency() const
-  {
+  double GetCruiseEfficiency() const {
     return cruise_efficiency;
   }
 
@@ -293,14 +278,14 @@ public:
    *
    * @param clean The new bugs setting (clean ratio) (0-1]
    */
-  void SetBugs(const fixed clean);
+  void SetBugs(const double clean);
 
   /**
    * Retrieve bugs 
    * @return Cleanliness of glider (0-1]
    */
   gcc_pure
-  fixed GetBugs() const {
+  double GetBugs() const {
     return bugs;
   }
 
@@ -309,20 +294,20 @@ public:
    *
    * @param ratio The new ballast setting (proportion of possible ballast, [0-1]
    */
-  void SetBallast(const fixed ratio);
+  void SetBallast(const double ratio);
 
   /**
    * Set ballast value in litres
    * @param litres The new ballast setting (l or kg)
    */
-  void SetBallastLitres(const fixed litres);
+  void SetBallastLitres(const double litres);
 
   /**
    * Retrieve ballast 
    * @return Proportion of possible ballast [0-1]
    */
   gcc_pure
-  fixed GetBallast() const {
+  double GetBallast() const {
     return ballast / (ballast_ratio * reference_mass);
   }
 
@@ -330,7 +315,7 @@ public:
    * Retrieve if the glider is ballasted
    */
   bool HasBallast() const {
-    return positive(ballast);
+    return ballast > 0;
   }
 
   /**
@@ -338,7 +323,7 @@ public:
    * @return Ballast (l or kg)
    */
   gcc_pure
-  fixed GetBallastLitres() const;
+  double GetBallastLitres() const;
 
   /**
    * Determine if glider carries ballast
@@ -354,7 +339,7 @@ public:
    *
    * @param _mc The new MacCready ring setting (m/s)
    */
-  void SetMC(const fixed _mc);
+  void SetMC(const double _mc);
 
   /**
    * Accessor for MC setting
@@ -362,7 +347,7 @@ public:
    * @return The current MacCready ring setting (m/s)
    */
   gcc_pure
-  fixed GetMC() const {
+  double GetMC() const {
     return mc;
   }
 
@@ -372,7 +357,7 @@ public:
    * @return The inverse of current MacCready ring setting (s/m)
    */
   gcc_pure
-  fixed GetInvMC() const {
+  double GetInvMC() const {
     return inv_mc;
   }
 
@@ -382,7 +367,7 @@ public:
    * @return Mass (kg) of aircraft including ballast
    */
   gcc_pure
-  fixed GetTotalMass() const;
+  double GetTotalMass() const;
 
   /**
    * Calculate wing loading
@@ -390,7 +375,7 @@ public:
    * @return Wing loading (all up mass divided by reference area, kg/m^2)
    */
   gcc_pure
-  fixed GetWingLoading() const;
+  double GetWingLoading() const;
 
   /**
    * Sink rate model (actual glide polar) function.
@@ -400,7 +385,7 @@ public:
    * @return Sink rate (m/s, positive down)
    */
   gcc_pure
-  fixed SinkRate(const fixed V) const;
+  double SinkRate(double V) const;
 
   /**
    * Sink rate model (actual glide polar) function.
@@ -420,7 +405,7 @@ public:
    * @return Sink rate (m/s, positive down)
    */
   gcc_pure
-  fixed SinkRate(const fixed V, const fixed n) const;
+  double SinkRate(double V, double n) const;
 
   /**
    * Sink rate model adjusted by MC setting.  This is used
@@ -432,7 +417,7 @@ public:
    * @return Sink rate plus MC setting (m/s, positive down)
    */
   gcc_pure
-  fixed MSinkRate(const fixed V) const;
+  double MSinkRate(double V) const;
 
   /**
    * Quickly determine whether a task is achievable without
@@ -458,8 +443,8 @@ public:
    * @return Speed to fly (true, m/s)
    */
   gcc_pure
-  fixed SpeedToFly(const AircraftState &state, const GlideResult &solution,
-      const bool block_stf) const;
+  double SpeedToFly(const AircraftState &state, const GlideResult &solution,
+                   const bool block_stf) const;
 
   /**
    * Compute MacCready ring setting to adjust speeds to incorporate
@@ -472,7 +457,7 @@ public:
    * @return MC value adjusted for risk (m/s)
    */
   gcc_pure
-  fixed GetRiskMC(fixed height_fraction, const fixed riskGamma) const;
+  double GetRiskMC(double height_fraction, double riskGamma) const;
 
   /**
    * Find LD relative to ground for specified track bearing
@@ -482,7 +467,7 @@ public:
    * @return LD ratio (distance travelled per unit height loss)
    */
   gcc_pure
-  fixed GetLDOverGround(Angle track, SpeedVector wind) const;
+  double GetLDOverGround(Angle track, SpeedVector wind) const;
 
   /**
    * Find LD relative to ground for specified track bearing
@@ -492,7 +477,7 @@ public:
    * @return LD ratio (distance travelled per unit height loss)
    */
   gcc_pure
-  fixed GetLDOverGround(const AircraftState &state) const;
+  double GetLDOverGround(const AircraftState &state) const;
 
   /**
    * Calculates the thermal value of next leg that is equivalent (gives the
@@ -505,25 +490,25 @@ public:
    * some situations it can be negative.
    */
   gcc_pure
-  fixed GetNextLegEqThermal(fixed current_wind, fixed next_wind) const;
+  double GetNextLegEqThermal(double current_wind, double next_wind) const;
 
   /** Returns the wing area in m^2 */
-  fixed GetWingArea() const {
+  double GetWingArea() const {
     return wing_area;
   }
 
   /** Sets the wing area in m^2 */
-  void SetWingArea(fixed _wing_area) {
+  void SetWingArea(double _wing_area) {
     wing_area = _wing_area;
   }
 
   /** Returns the reference mass in kg */
-  fixed GetReferenceMass() const {
+  double GetReferenceMass() const {
     return reference_mass;
   }
 
   /** Sets the reference mass in kg */
-  void SetReferenceMass(fixed _reference_mass, bool update = true) {
+  void SetReferenceMass(double _reference_mass, bool update = true) {
     reference_mass = _reference_mass;
 
     if (update)
@@ -531,12 +516,12 @@ public:
   }
 
   /** Returns the dry mass in kg */
-  fixed GetDryMass() const {
+  double GetDryMass() const {
     return dry_mass;
   }
 
   /** Sets the dry mass in kg */
-  void SetDryMass(fixed _dry_mass, bool update = true) {
+  void SetDryMass(double _dry_mass, bool update = true) {
     dry_mass = _dry_mass;
 
     if (update)
@@ -544,12 +529,12 @@ public:
   }
 
   /** Returns the ballast ratio */
-  fixed GetBallastRatio() const {
+  double GetBallastRatio() const {
     return ballast_ratio;
   }
 
   /** Sets the ballast ratio */
-  void SetBallastRatio(fixed _ballast_ratio) {
+  void SetBallastRatio(double _ballast_ratio) {
     ballast_ratio = _ballast_ratio;
   }
 

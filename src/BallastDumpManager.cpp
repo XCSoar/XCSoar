@@ -68,15 +68,15 @@ BallastDumpManager::Update(GlidePolar &glide_polar, unsigned dump_time)
   ballast_clock.Update();
 
   // How many percent of the max. ballast do we dump in one millisecond
-  auto percent_per_millisecond = fixed(1) / (1000 * dump_time);
+  auto percent_per_millisecond = 1. / (1000 * dump_time);
 
   // Calculate the new ballast percentage
   auto ballast = glide_polar.GetBallast() - dt * percent_per_millisecond;
 
   // Check if the plane is dry now
-  if (negative(ballast)) {
+  if (ballast < 0) {
     Stop();
-    glide_polar.SetBallastLitres(fixed(0));
+    glide_polar.SetBallastLitres(0);
     return false;
   }
 
