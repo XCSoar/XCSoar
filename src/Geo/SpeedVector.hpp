@@ -40,7 +40,7 @@ struct SpeedVector {
   /**
    * The norm of the vector [m/s].
    */
-  fixed norm;
+  double norm;
 
   /** 
    * Non-initialising default constructor.
@@ -55,7 +55,7 @@ struct SpeedVector {
    * @return Initialised object
    */
   constexpr
-  SpeedVector(Angle _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
+  SpeedVector(Angle _bearing, double _norm):bearing(_bearing), norm(_norm) {}
 
   /** 
    * Constructor given two magnitudes (east and north)
@@ -64,14 +64,14 @@ struct SpeedVector {
    * @param y North speed
    * @return Initialised object
    */
-  SpeedVector(fixed x, fixed y)
+  SpeedVector(double x, double y)
     :bearing(Angle::FromXY(y,x).AsBearing()), norm(hypot(x, y)) {}
 
   /**
    * Returns the null vector.
    */
   static constexpr SpeedVector Zero() {
-    return SpeedVector(Angle::Zero(), fixed(0));
+    return SpeedVector(Angle::Zero(), 0);
   }
 
   /**
@@ -85,7 +85,7 @@ struct SpeedVector {
    * Returns true if the norm of the vector is non-zero.
    */
   constexpr bool IsNonZero() const {
-    return positive(norm);
+    return norm > 0;
   }
 
   /**

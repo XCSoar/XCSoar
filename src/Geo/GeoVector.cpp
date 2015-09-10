@@ -47,7 +47,7 @@ GeoVector::MidPoint(const GeoPoint &source) const
   return ::FindLatitudeLongitude(source, bearing, Half(distance));
 }
 
-fixed
+double
 GeoVector::MinimumDistance(const GeoPoint &source,
                             const GeoPoint &ref) const
 {
