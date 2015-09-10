@@ -184,7 +184,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
   auto ll = (l - alpha).Radians();
-  if (l.Radians() < fixed_pi)
+  if (l < Angle::HalfCircle())
     ll += fixed_two_pi;
 
   auto equation = fixed(1440) * (fixed(1) - ll / fixed_two_pi);
