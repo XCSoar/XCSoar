@@ -35,7 +35,7 @@ Copyright_License {
  * too low quality data).
  */
 const Vector
-WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
+WindMeasurementList::getWind(unsigned now, double alt, bool &found) const
 {
   //relative weight for each factor
   static constexpr unsigned REL_FACTOR_QUALITY = 100;
@@ -45,15 +45,15 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
   static constexpr unsigned altRange = 1000;
   static constexpr unsigned timeRange = 3600; // one hour
 
-  static constexpr fixed k(0.0025);
+  static constexpr double k = 0.0025;
 
   unsigned int total_quality = 0;
 
-  Vector result(fixed(0), fixed(0));
+  Vector result(0, 0);
 
   found = false;
 
-  fixed override_time(1.1);
+  double override_time = 1.1;
   bool overridden = false;
 
   for (unsigned i = 0; i < measurements.size(); i++) {
@@ -64,12 +64,12 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
          warps "should" be filtered at a higher level already */
       continue;
 
-    auto timediff = fixed(now - m.time) / timeRange;
-    if (timediff >= fixed(1))
+    auto timediff = double(now - m.time) / timeRange;
+    if (timediff >= 1)
       continue;
 
     auto altdiff = fabs(alt - m.altitude) / altRange;
-    if (altdiff >= fixed(1))
+    if (altdiff >= 1)
       continue;
 
     // measurement quality
@@ -78,12 +78,12 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
     // factor in altitude difference between current altitude and
     // measurement.  Maximum alt difference is 1000 m.
     unsigned int a_quality =
-      uround(((fixed(2) / (Square(altdiff) + fixed(1))) - fixed(1))
+      uround(((2. / (Square(altdiff) + 1.)) - 1.)
              * REL_FACTOR_ALTITUDE);
 
     // factor in timedifference. Maximum difference is 1 hours.
     unsigned int t_quality =
-      uround(k * (fixed(1) - timediff) / (Square(timediff) + k)
+      uround(k * (1. - timediff) / (Square(timediff) + k)
              * REL_FACTOR_TIME);
 
     if (m.quality == 6) {
@@ -91,8 +91,8 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
         // over-ride happened, so re-set accumulator
         override_time = timediff;
         total_quality = 0;
-        result.x = fixed(0);
-        result.y = fixed(0);
+        result.x = 0;
+        result.y = 0;
         overridden = true;
       } else {
         // this isn't the latest over-ride or obtained fix, so ignore
@@ -107,8 +107,8 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
           // re-set accumulators
           overridden = false;
           total_quality = 0;
-          result.x = fixed(0);
-          result.y = fixed(0);
+          result.x = 0;
+          result.y = 0;
         }
       }
     }
@@ -133,7 +133,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
  */
 void
 WindMeasurementList::addMeasurement(unsigned time, const SpeedVector &vector,
-                                    fixed alt, unsigned quality)
+                                    double alt, unsigned quality)
 {
   WindMeasurement &wind = measurements.full()
     ? measurements[getLeastImportantItem(time)] :

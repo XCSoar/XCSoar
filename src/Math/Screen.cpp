@@ -56,10 +56,10 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
       }
     }
 
-    const auto f = Clamp(fixed(proj) / mag12, fixed(0), fixed(1));
+    const auto f = Clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
-    p4->x = iround(v12x * f) + p1.x;
-    p4->y = iround(v12y * f) + p1.y;
+    p4->x = lround(v12x * f) + p1.x;
+    p4->y = lround(v12y * f) + p1.y;
   } else {
     p4->x = p1.x;
     p4->y = p1.y;

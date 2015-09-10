@@ -34,7 +34,7 @@ void
 WindStore::reset()
 {
   windlist.Reset();
-  update_clock = fixed(0);
+  update_clock = 0;
   updated = true;
 }
 
@@ -51,7 +51,7 @@ WindStore::SlotMeasurement(const MoreData &info,
 void
 WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 {
-  if (updated || (fabs(info.nav_altitude - _lastAltitude) > fixed(100))) {
+  if (updated || (fabs(info.nav_altitude - _lastAltitude) > 100)) {
     //only recalculate if there is a significant change
     recalculateWind(info, derived);
 
@@ -61,7 +61,7 @@ WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 }
 
 const Vector
-WindStore::GetWind(fixed Time, fixed h, bool &found) const
+WindStore::GetWind(double Time, double h, bool &found) const
 {
   return windlist.getWind((unsigned)Time, h, found);
 }
@@ -85,12 +85,12 @@ WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
   auto mag = wind.Magnitude();
   Angle bearing;
 
-  if (wind.y == fixed(0) && wind.x == fixed(0))
+  if (wind.y == 0 && wind.x == 0)
     bearing = Angle::Zero();
   else
     bearing = Angle::FromXY(wind.x, wind.y);
 
-  if (mag < fixed(30)) { // limit to reasonable values
+  if (mag < 30) { // limit to reasonable values
     derived.estimated_wind = SpeedVector(bearing.AsBearing(), mag);
     derived.estimated_wind_available.Update(update_clock);
   } else {

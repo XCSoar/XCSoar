@@ -41,7 +41,7 @@ struct WindMeasurement
    * Time of fix.
    */
   unsigned time;
-  fixed altitude;               /**< Altitude of fix */
+  double altitude;               /**< Altitude of fix */
 
   gcc_pure
   unsigned Score(unsigned _time) const {
@@ -69,11 +69,11 @@ public:
    * too low quality data).
    */
   gcc_pure
-  const Vector getWind(unsigned now, fixed alt, bool &found) const;
+  const Vector getWind(unsigned now, double alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
   void addMeasurement(unsigned time, const SpeedVector &vector,
-                      fixed alt, unsigned quality);
+                      double alt, unsigned quality);
 
   void Reset();
 

@@ -76,12 +76,12 @@ MacCready::SolveVertical(const GlideState &task) const
   const auto v = glide_polar.GetVBestLD() * cruise_efficiency;
   const auto denom1 = v - task.wind.norm;
 
-  if (!positive(denom1)) {
+  if (denom1 <= 0) {
     result.validity = GlideResult::Validity::WIND_EXCESSIVE;
     return result;
   }
   const auto denom2 = glide_polar.GetMC() * denom1 - task.wind.norm;
-  if (!positive(denom2)) {
+  if (denom2 <= 0) {
     result.validity = GlideResult::Validity::MACCREADY_INSUFFICIENT;
     return result;
   }
@@ -167,7 +167,7 @@ MacCready::SolveCruise(const GlideState &task) const
 
   const auto estimated_speed =
       task.CalcAverageSpeed(mc_speed * cruise_efficiency * inv_rho_plus_one);
-  if (!positive(estimated_speed)) {
+  if (estimated_speed <= 0) {
     result.validity = GlideResult::Validity::WIND_EXCESSIVE;
     result.vector.distance = 0;
     return result;
@@ -177,7 +177,7 @@ MacCready::SolveCruise(const GlideState &task) const
   auto distance_with_climb_drift = task.vector.distance;
 
   // Calculate additional distance_with_climb_drift/time due to wind drift while circling
-  if (negative(task.altitude_difference)) {
+  if (task.altitude_difference < 0) {
     time_climb_drift = -task.altitude_difference * inv_mc;
     distance_with_climb_drift = task.DriftedDistance(time_climb_drift);
   }
@@ -219,7 +219,7 @@ MacCready::SolveGlide(const GlideState &task, const double v_set,
   //     Vn*Vn-2*Vn*W*cos(theta)+W*W-V*V=0  ... (1)
 
   const auto estimated_speed = task.CalcAverageSpeed(v_set * cruise_efficiency);
-  if (!positive(estimated_speed)) {
+  if (estimated_speed <= 0) {
     result.validity = GlideResult::Validity::WIND_EXCESSIVE;
     result.vector.distance = 0;
     return result;
@@ -232,7 +232,7 @@ MacCready::SolveGlide(const GlideState &task, const double v_set,
 
     // S/Vn > dh/task.Distance
     if (sink_rate * task.vector.distance > Vndh) {
-      if (negative(task.altitude_difference))
+      if (task.altitude_difference < 0)
         // insufficient height, and can't climb
         result.vector.distance = 0;
       else
@@ -250,7 +250,7 @@ MacCready::SolveGlide(const GlideState &task, const double v_set,
   result.pure_glide_altitude_difference -= result.pure_glide_height;
 
   const auto inv_mc = glide_polar.GetInvMC();
-  if(positive(inv_mc))
+  if (inv_mc > 0)
     // equivalent time to gain the height that was used
     result.time_virtual = result.height_glide * inv_mc;
   else
@@ -283,10 +283,10 @@ MacCready::SolveStraight(const GlideState &task) const
     return result;
   }
 
-  if (!positive(task.vector.distance))
+  if (task.vector.distance <= 0)
     return SolveVertical(task);
 
-  if (!positive(glide_polar.GetMC()))
+  if (glide_polar.GetMC() <= 0)
     // whole task must be glide
     return OptimiseGlide(task);
 
@@ -303,14 +303,14 @@ MacCready::Solve(const GlideState &task) const
     return result;
   }
 
-  if (!positive(task.vector.distance))
+  if (task.vector.distance <= 0)
     return SolveVertical(task);
 
-  if (!positive(glide_polar.GetMC()))
+  if (glide_polar.GetMC() <= 0)
     // whole task must be glide
     return OptimiseGlide(task, false);
 
-  if (negative(task.altitude_difference))
+  if (task.altitude_difference < 0)
     // whole task climb-cruise
     return SolveCruise(task);
 
@@ -319,7 +319,7 @@ MacCready::Solve(const GlideState &task) const
   // calc first final glide part
   GlideResult result_fg = SolveGlide(task, glide_polar.GetVBestLD(), true);
   if (result_fg.validity == GlideResult::Validity::OK &&
-      !positive(task.vector.distance - result_fg.vector.distance))
+      task.vector.distance - result_fg.vector.distance <= 0)
     // whole task final glided
     return result_fg;
 
@@ -379,7 +379,7 @@ public:
    */
   double f(const double v) {
     res = mac.SolveGlide(task, v, allow_partial);
-    if (!res.IsOk() || !positive(res.vector.distance))
+    if (!res.IsOk() || res.vector.distance <= 0)
       /* the solver failed: return a large value that will be
          discarded by ZeroFinder */
       return 1000000;
@@ -400,7 +400,7 @@ public:
 GlideResult
 MacCready::OptimiseGlide(const GlideState &task, const bool allow_partial) const
 {
-  assert(!positive(glide_polar.GetMC()));
+  assert(glide_polar.GetMC() <= 0);
 
   MacCreadyVopt mc_vopt(task, *this,
                        glide_polar.GetVMin(), glide_polar.GetVMax(),

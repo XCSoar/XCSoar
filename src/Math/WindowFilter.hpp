@@ -44,7 +44,7 @@ public:
    * @return True if buffer is full
    *
    */
-  bool Update(const fixed x0) {
+  bool Update(const double x0) {
     auto &x = this->x;
 
     assert(i < x.capacity());

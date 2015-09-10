@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef LOW_PASS_FILTER_HPP
 #define LOW_PASS_FILTER_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 /**
@@ -36,10 +35,10 @@ Copyright_License {
  * @return Output value (y)
  */
 gcc_const
-static inline fixed
-LowPassFilter(fixed y_last, fixed x_in, fixed fact)
+static inline double
+LowPassFilter(double y_last, double x_in, double fact)
 {
-  return (fixed(1) - fact) * y_last + (fact) * x_in;
+  return (1. - fact) * y_last + fact * x_in;
 }
 
 #endif

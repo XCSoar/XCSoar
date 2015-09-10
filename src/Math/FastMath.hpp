@@ -25,11 +25,6 @@ Copyright_License {
 #define XCSOAR_MATH_FASTMATH_HPP
 
 #include "Compiler.h"
-#include "Math/Constants.h"
-#include <math.h>
-#include <stdint.h>
-
-#include "Math/fixed.hpp"
 
 /**
  * Compares a^2 + b^2 against c^2
@@ -89,12 +84,12 @@ i_normalise_mag2(int mag, int x, int y);
  * Find magnitude and reciprocal magnitude simultaneously
  */
 void
-mag_rmag(fixed x, fixed y,
-         fixed &__restrict__ s,
-         fixed &__restrict__ is);
+mag_rmag(double x, double y,
+         double &__restrict__ s,
+         double &__restrict__ is);
 
 gcc_const
-fixed
+double
 thermal_recency_fn(unsigned x);
 
 inline unsigned int

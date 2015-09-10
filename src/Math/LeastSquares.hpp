@@ -49,7 +49,6 @@ Copyright_License {
 #define _LEASTSQS_H
 
 #include "Util/TrivialArray.hpp"
-#include "Math/fixed.hpp"
 
 #include <type_traits>
 
@@ -76,7 +75,7 @@ Copyright_License {
  */
 class LeastSquares
 {
-  fixed sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
+  double sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
 
   unsigned sum_n;
 
@@ -86,36 +85,36 @@ class LeastSquares
   *              {n*\sum_0^{i-1} x_i^2 - (\sum_0^{i-1} x_i)^2}
   * \f]
   */
-  fixed m;
+  double m;
   /**
   * \f[
   *     b = \frac{\sum_0^{i-1} y_i}{n} - b_1 * \frac{\sum_0^{i-1} x_i}{n}
   * \f]
   */
-  fixed b;
-  fixed sum_error;
+  double b;
+  double sum_error;
 
-  fixed rms_error;
-  fixed max_error;
-  fixed sum_weights;
-  fixed y_max;
-  fixed y_min;
-  fixed x_min;
-  fixed x_max;
+  double rms_error;
+  double max_error;
+  double sum_weights;
+  double y_max;
+  double y_min;
+  double x_min;
+  double x_max;
 
-  fixed y_ave;
+  double y_ave;
 
   struct Slot {
-    fixed x, y;
+    double x, y;
 
 #ifdef LEASTSQS_WEIGHT_STORE
-    fixed weight;
+    double weight;
 #endif
 
     Slot() = default;
 
     constexpr
-    Slot(fixed _x, fixed _y, fixed _weight)
+    Slot(double _x, double _y, double _weight)
       :x(_x), y(_y)
 #ifdef LEASTSQS_WEIGHT_STORE
       , weight(_weight)
@@ -143,43 +142,43 @@ public:
    */
   void Reset();
 
-  fixed GetGradient() const {
+  double GetGradient() const {
     return m;
   }
 
-  fixed GetMinX() const {
+  double GetMinX() const {
     return x_min;
   }
 
-  fixed GetMaxX() const {
+  double GetMaxX() const {
     return x_max;
   }
 
-  fixed GetMiddleX() const {
-    return Half(x_min + x_max);
+  double GetMiddleX() const {
+    return (x_min + x_max) / 2.;
   }
 
-  fixed GetMinY() const {
+  double GetMinY() const {
     return y_min;
   }
 
-  fixed GetMaxY() const {
+  double GetMaxY() const {
     return y_max;
   }
 
-  fixed GetAverageY() const {
+  double GetAverageY() const {
     return y_ave;
   }
 
-  fixed GetYAt(fixed x) const {
+  double GetYAt(double x) const {
     return x * m + b;
   }
 
-  fixed GetYAtMinX() const {
+  double GetYAtMinX() const {
     return GetYAt(GetMinX());
   }
 
-  fixed GetYAtMaxX() const {
+  double GetYAtMaxX() const {
     return GetYAt(GetMaxX());
   }
 
@@ -193,7 +192,7 @@ public:
    *
    * @param y y-Value of the new data point
    */
-  void Update(fixed y);
+  void Update(double y);
 
   /**
    * Add a new data point to the values and calculate least squares
@@ -203,7 +202,7 @@ public:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void Update(fixed x, fixed y, fixed weight = fixed(1));
+  void Update(double x, double y, double weight=1);
 
 private:
   /**
@@ -223,7 +222,7 @@ private:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void Add(fixed x, fixed y, fixed weight = fixed(1));
+  void Add(double x, double y, double weight=1);
 };
 
 static_assert(std::is_trivial<LeastSquares>::value, "type is not trivial");

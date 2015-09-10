@@ -19,22 +19,24 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "DiffFilter.hpp"
+#include "Constants.h"
 
 void
-DiffFilter::Reset(const fixed x0, const fixed y0)
+DiffFilter::Reset(const double x0, const double y0)
 {
   for (unsigned i = 0; i < x.size(); i++)
     x[i] = x0 - y0 * i;
 }
 
-fixed
-DiffFilter::Update(const fixed x0)
+double
+DiffFilter::Update(const double x0)
 {
   std::copy_backward(x.cbegin(), std::prev(x.cend()), x.end());
   x.front() = x0;
 
   /// @note not sure why need to divide by pi/2 here
-  return ((x.back() - x.front()) / 16 + x[2] - x[4]) / fixed_half_pi;
+  return ((x.back() - x.front()) / 16 + x[2] - x[4]) / M_HALFPI;
 }
 

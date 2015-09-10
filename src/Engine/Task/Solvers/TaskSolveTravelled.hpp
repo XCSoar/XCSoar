@@ -32,8 +32,8 @@
  */
 class TaskSolveTravelled : protected ZeroFinder {
   const AircraftState &aircraft;
-  fixed inv_dt;
-  fixed dt;
+  double inv_dt;
+  double dt;
 
 protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
@@ -53,8 +53,8 @@ public:
                      const unsigned activeTaskPoint,
                      const AircraftState &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,
-                     const fixed xmin,
-                     const fixed xmax);
+                     const double xmin,
+                     const double xmax);
 
 protected:
   /**
@@ -62,7 +62,7 @@ protected:
    *
    * @return Time error
    */
-  fixed time_error();
+  double time_error();
 
 public:
   /**
@@ -72,7 +72,7 @@ public:
    *
    * @return Value producing same travelled time
    */
-  fixed search(const fixed ce);
+  double search(const double ce);
 };
 
 #endif

@@ -24,19 +24,18 @@ Copyright_License {
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "Math/fixed.hpp"
 #include "Util.hpp"
 #include "Point2D.hpp"
 #include "Geo/SpeedVector.hpp"
 
 #include <math.h>
 
-struct Vector : Point2D<fixed> {
+struct Vector : Point2D<double> {
   Vector() = default;
 
-  constexpr Vector(fixed _x, fixed _y):Point2D<fixed>(_x, _y) {}
+  constexpr Vector(double _x, double _y):Point2D<double>(_x, _y) {}
 
-  Vector(Angle bearing, fixed norm) {
+  Vector(Angle bearing, double norm) {
     auto sc = bearing.SinCos();
     x = sc.second * norm;
     y = sc.first * norm;
@@ -49,12 +48,12 @@ struct Vector : Point2D<fixed> {
   }
 
   gcc_pure
-  fixed SquareMagnitude() const {
+  double SquareMagnitude() const {
     return Square(x) + Square(y);
   }
 
   gcc_pure
-  fixed Magnitude() const {
+  double Magnitude() const {
     return hypot(x, y);
   }
 };

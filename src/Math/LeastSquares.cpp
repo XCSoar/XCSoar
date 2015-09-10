@@ -80,19 +80,19 @@ void
 LeastSquares::Reset()
 {
   sum_n = 0;
-  sum_xi = fixed(0);
-  sum_yi = fixed(0);
-  sum_xi_2 = fixed(0);
-  sum_xi_yi = fixed(0);
-  max_error = fixed(0);
-  sum_error = fixed(0);
-  rms_error = fixed(0);
-  sum_weights = fixed(0);
-  y_max = fixed(0);
-  y_min = fixed(0);
-  x_min = fixed(0);
-  x_max = fixed(0);
-  y_ave = fixed(0);
+  sum_xi = 0.;
+  sum_yi = 0.;
+  sum_xi_2 = 0.;
+  sum_xi_yi = 0.;
+  max_error = 0.;
+  sum_error = 0.;
+  rms_error = 0.;
+  sum_weights = 0.;
+  y_max = 0.;
+  y_min = 0.;
+  x_min = 0.;
+  x_max = 0.;
+  y_ave = 0.;
   slots.clear();
 }
 
@@ -101,10 +101,10 @@ LeastSquares::Compute()
 {
   auto denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
 
-  if (positive(fabs(denom))) {
+  if (fabs(denom) > 0) {
     m = (sum_weights * sum_xi_yi - sum_xi * sum_yi) / denom;
   } else {
-    m = fixed(0);
+    m = 0.;
   }
   b = (sum_yi - m * sum_xi) / sum_weights;
 
@@ -112,13 +112,13 @@ LeastSquares::Compute()
 }
 
 void
-LeastSquares::Update(fixed y)
+LeastSquares::Update(double y)
 {
-  Update(fixed(sum_n + 1), y);
+  Update(double(sum_n + 1), y);
 }
 
 void
-LeastSquares::Update(fixed x, fixed y, fixed weight)
+LeastSquares::Update(double x, double y, double weight)
 {
   // Add new point
   Add(x, y, weight);
@@ -139,7 +139,7 @@ LeastSquares::UpdateError()
 }
 
 void
-LeastSquares::Add(fixed x, fixed y, fixed weight)
+LeastSquares::Add(double x, double y, double weight)
 {
   // Update maximum/minimum values
   if (IsEmpty() || y > y_max)

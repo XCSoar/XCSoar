@@ -28,6 +28,8 @@
 
 #include <algorithm>
 
+#include <assert.h>
+
 FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
                          const FlatPoint &_ap)
   :f1(_f1),f2(_f2),ap(_ap)

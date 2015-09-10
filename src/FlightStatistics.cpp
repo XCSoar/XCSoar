@@ -44,29 +44,29 @@ FlightStatistics::StartTask()
 }
 
 void
-FlightStatistics::AddAltitudeTerrain(const fixed tflight, const fixed terrainalt)
+FlightStatistics::AddAltitudeTerrain(const double tflight, const double terrainalt)
 {
   ScopeLock lock(mutex);
-  altitude_terrain.Update(std::max(fixed(0), tflight / 3600),
+  altitude_terrain.Update(std::max(0., tflight / 3600.),
                           terrainalt);
 }
 
 void
-FlightStatistics::AddAltitude(const fixed tflight, const fixed alt)
+FlightStatistics::AddAltitude(const double tflight, const double alt)
 {
   ScopeLock lock(mutex);
-  altitude.Update(std::max(fixed(0), tflight / 3600), alt);
+  altitude.Update(std::max(0., tflight / 3600.), alt);
 }
 
-fixed
-FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
+double
+FlightStatistics::AverageThermalAdjusted(const double mc_current,
                                          const bool circling)
 {
   ScopeLock lock(mutex);
 
-  fixed mc_stats;
-  if (positive(thermal_average.GetAverageY())) {
-    if (mc_current > fixed(0) && circling)
+  double mc_stats;
+  if (thermal_average.GetAverageY() > 0) {
+    if (mc_current > 0 && circling)
       mc_stats = (thermal_average.GetCount() * thermal_average.GetAverageY() + mc_current) /
         (thermal_average.GetCount() + 1);
     else
@@ -79,28 +79,28 @@ FlightStatistics::AverageThermalAdjusted(const fixed mc_current,
 }
 
 void
-FlightStatistics::AddTaskSpeed(const fixed tflight, const fixed val)
+FlightStatistics::AddTaskSpeed(const double tflight, const double val)
 {
   ScopeLock lock(mutex);
-  task_speed.Update(tflight / 3600, std::max(fixed(0),val));
+  task_speed.Update(tflight / 3600, std::max(0., val));
 }
 
 void
-FlightStatistics::AddClimbBase(const fixed tflight, const fixed alt)
+FlightStatistics::AddClimbBase(const double tflight, const double alt)
 {
   ScopeLock lock(mutex);
 
   if (!altitude_ceiling.IsEmpty())
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
-    altitude_base.Update(std::max(fixed(0), tflight) / 3600, alt);
+    altitude_base.Update(std::max(0., tflight) / 3600., alt);
 }
 
 void
-FlightStatistics::AddClimbCeiling(const fixed tflight, const fixed alt)
+FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
 {
   ScopeLock lock(mutex);
-  altitude_ceiling.Update(std::max(fixed(0), tflight) / 3600, alt);
+  altitude_ceiling.Update(std::max(0., tflight) / 3600., alt);
 }
 
 /**
@@ -108,7 +108,7 @@ FlightStatistics::AddClimbCeiling(const fixed tflight, const fixed alt)
  * @param v Average climb speed of the last thermal
  */
 void
-FlightStatistics::AddThermalAverage(const fixed v)
+FlightStatistics::AddThermalAverage(const double v)
 {
   ScopeLock lock(mutex);
   thermal_average.Update(v);

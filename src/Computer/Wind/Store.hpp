@@ -36,14 +36,14 @@ struct DerivedInfo;
  */
 class WindStore
 {
-  fixed _lastAltitude;
+  double _lastAltitude;
   WindMeasurementList windlist;
 
   /**
    * The time stamp (NMEAInfo::clock) of the last wind update.  It is
    * used to update DerivedInfo::estimated_wind_available.
    */
-  fixed update_clock;
+  double update_clock;
 
   bool updated;
 
@@ -67,7 +67,7 @@ public:
   void SlotAltitude(const MoreData &info, DerivedInfo &derived);
 
   gcc_pure
-  const Vector GetWind(fixed Time, fixed h, bool &found) const;
+  const Vector GetWind(double Time, double h, bool &found) const;
 
 private:
   /**

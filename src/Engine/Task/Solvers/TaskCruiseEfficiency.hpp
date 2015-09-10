@@ -49,7 +49,7 @@ public:
 
 protected:
   /* virtual methods from class ZeroFinder */
-  virtual fixed f(const fixed x) override;
+  virtual double f(const double x) override;
 };
 
 #endif

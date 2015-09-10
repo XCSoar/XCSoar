@@ -28,28 +28,27 @@
 #include <stdio.h>
 
 bool
-Filter::Design(const fixed cutoff_wavelength, const bool bessel)
+Filter::Design(const double cutoff_wavelength, const bool bessel)
 {
   static constexpr unsigned sample_freq = 1;
   static constexpr unsigned n = 1;
-  fixed c;
+  double c;
   unsigned g, p;
 
   if (bessel) {
     // Bessel
-    c = pow((sqrt(pow(fixed(2), fixed(1) / n) - fixed(0.75)) - fixed(0.5)),
-            -fixed(0.5)) / sqrt(fixed(3));
+    c = pow((sqrt(pow(2., 1. / n) - 0.75) - 0.5), -0.5) / sqrt(3.);
     g = p = 3;
   } else {
     // Critically damped
-    c = pow((pow(fixed(2), fixed(1) / (2 * n)) - fixed(1)), -fixed(0.5));
+    c = pow((pow(2., 0.5 / n) - 1.), -0.5);
     g = 1;
     p = 2;
   }
 
   auto f_star = c / (sample_freq * cutoff_wavelength);
 
-  if (!positive(f_star) || f_star >= fixed(1) / 8) {
+  if (f_star <= 0 || f_star >= 1. / 8.) {
     ok = false;
     return false;
   }
@@ -58,20 +57,20 @@ Filter::Design(const fixed cutoff_wavelength, const bool bessel)
   auto K1 = p * omega0;
   auto K2 = g * Square(omega0);
 
-  a[0] = K2 / (fixed(1) + K1 + K2);
-  a[1] = Double(a[0]);
+  a[0] = K2 / (1. + K1 + K2);
+  a[1] = 2 * a[0];
   a[2] = a[0];
-  b[0] = a[1] * (fixed(1) / K2 - fixed(1));
-  b[1] = fixed(1) - (a[0] + a[1] + a[2] + b[0]);
+  b[0] = a[1] * (1. / K2 - 1.);
+  b[1] = 1. - (a[0] + a[1] + a[2] + b[0]);
 
-  Reset(fixed(0));
+  Reset(0);
   ok = true;
 
   return true;
 }
 
-fixed
-Filter::Reset(const fixed _x)
+double
+Filter::Reset(const double _x)
 {
   x[0] = _x;
   y[0] = _x;
@@ -82,8 +81,8 @@ Filter::Reset(const fixed _x)
   return _x;
 }
 
-fixed
-Filter::Update(const fixed _x)
+double
+Filter::Update(const double _x)
 {
   assert(ok);
 

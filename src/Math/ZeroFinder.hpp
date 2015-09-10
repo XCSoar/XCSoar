@@ -1,6 +1,3 @@
-#ifndef ZERO_FINDER_HPP
-#define ZERO_FINDER_HPP
-
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
@@ -21,9 +18,14 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "Math/fixed.hpp"
+#ifndef ZERO_FINDER_HPP
+#define ZERO_FINDER_HPP
+
+#include "Compiler.h"
+
+#include <assert.h>
 
 #include <assert.h>
 
@@ -36,11 +38,11 @@
 class ZeroFinder {
 protected:
   /** min value of search range */
-  const fixed xmin;
+  const double xmin;
   /** max value of search range */
-  const fixed xmax;
+  const double xmax;
   /** search tolerance in x */
-  const fixed tolerance;
+  const double tolerance;
 
 public:
   /**
@@ -50,8 +52,8 @@ public:
    * @param _xmax Maximum allowable value of x
    * @param _tolerance Absolute tolerance of solution (in x)
    */
-  ZeroFinder(const fixed _xmin, const fixed _xmax, const fixed _tolerance) :
-    xmin(_xmin), xmax(_xmax), tolerance(_tolerance)
+  ZeroFinder(const double _xmin, const double _xmax, const double _tolerance)
+    :xmin(_xmin), xmax(_xmax), tolerance(_tolerance)
   {
     assert(xmin < xmax);
   }
@@ -63,7 +65,7 @@ public:
    *
    * @return f(x)
    */
-  virtual fixed f(const fixed x) = 0;
+  virtual double f(const double x) = 0;
 
   /**
    * Find closest value of x that produces f(x)=0
@@ -75,7 +77,7 @@ public:
    * @return x value of best solution
    */
   gcc_pure
-  fixed find_zero(const fixed xstart);
+  double find_zero(const double xstart);
 
   /**
    * Find value of x that minimises f(x)
@@ -87,26 +89,26 @@ public:
    * @return x value of best solution
    */
   gcc_pure
-  fixed find_min(const fixed xstart);
+  double find_min(const double xstart);
 
 private:
   gcc_pure
-  fixed find_zero_actual(const fixed xstart);
+  double find_zero_actual(const double xstart);
 
   gcc_pure
-  fixed find_min_actual(const fixed xstart);
+  double find_min_actual(const double xstart);
 
   /**
    * Tolerance in f of minimisation routine at x
    */
   gcc_pure
-  fixed tolerance_actual_min(const fixed x) const;
+  double tolerance_actual_min(const double x) const;
 
   /**
    * Tolerance in f of zero finding routine at x
    */
   gcc_pure
-  fixed tolerance_actual_zero(const fixed x) const;
+  double tolerance_actual_zero(const double x) const;
 
   /**
    * Test whether solution is within tolerance
@@ -117,8 +119,8 @@ private:
    * @return true if no search required (xstart is good)
    */
   gcc_pure
-  bool solution_within_tolerance(const fixed xstart,
-                                 const fixed tol_act);
+  bool solution_within_tolerance(const double xstart,
+                                 const double tol_act);
 
 };
 

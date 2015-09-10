@@ -23,8 +23,6 @@
 #ifndef DIFF_FILTER_HPP
 #define DIFF_FILTER_HPP
 
-#include "Math/fixed.hpp"
-
 #include <array>
 
 /**
@@ -33,7 +31,7 @@
  */
 class DiffFilter 
 {
-  std::array<fixed, 7> x;
+  std::array<double, 7> x;
 
 public:
   /**
@@ -47,7 +45,7 @@ public:
    *
    * @param x_default Default value of input
    */
-  DiffFilter(const fixed x_default)
+  DiffFilter(const double x_default)
   {
     Reset(x_default);
   }
@@ -60,7 +58,7 @@ public:
    *
    * @return Filter output value
    */
-  fixed Update(const fixed x0);
+  double Update(double x0);
 
   /**
    * Resets filter as if fed value to produce y0
@@ -68,7 +66,7 @@ public:
    * @param x0 Steady state value of filter input
    * @param y0 Desired value of differentiated output
    */
-  void Reset(const fixed x0 = fixed(0), const fixed y0 = fixed(0));
+  void Reset(double x0=0, double y0=0);
 };
 
 

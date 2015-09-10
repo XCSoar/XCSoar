@@ -31,6 +31,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <assert.h>
+
 using namespace FAITriangleRules;
 
 static constexpr unsigned STEPS = FAI_TRIANGLE_SECTOR_MAX / 3 / 8;

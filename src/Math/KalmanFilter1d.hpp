@@ -23,8 +23,6 @@
 #ifndef XCSOAR_KALMAN_FILTER_1D_HPP
 #define XCSOAR_KALMAN_FILTER_1D_HPP
 
-#include "fixed.hpp"
-
 /**
  * A Kalman filter that estimates a one-dimensional quantity "x" and
  * its rate of change. Observations are of the one-dimensional
@@ -40,23 +38,23 @@
  */
 class KalmanFilter1d {
   // The state we are tracking, namely:
-  fixed x_abs_;  // The absolute quantity x.
-  fixed x_vel_;  // The rate of change of x, in x units per second squared.
+  double x_abs_;  // The absolute quantity x.
+  double x_vel_;  // The rate of change of x, in x units per second squared.
 
   // Covariance matrix for the state.
-  fixed p_abs_abs_;
-  fixed p_abs_vel_;
-  fixed p_vel_vel_;
+  double p_abs_abs_;
+  double p_abs_vel_;
+  double p_vel_vel_;
 
   // The variance of the acceleration noise input to the system model, in units
   // per second squared.
-  fixed var_x_accel_;
+  double var_x_accel_;
 
  public:
   // Constructors: the first allows you to supply the variance of the
   // acceleration noise input to the system model in x units per second squared;
   // the second constructor assumes a variance of 1.0.
-  KalmanFilter1d(const fixed var_x_accel);
+  KalmanFilter1d(double var_x_accel);
   KalmanFilter1d();
 
   // The following three methods reset the filter. All of them assign a huge
@@ -68,14 +66,14 @@ class KalmanFilter1d {
   // NOTE: "x_abs_value" is meant to connote the value of the absolute quantity
   // x, not the absolute value of x.
   void Reset();
-  void Reset(const fixed x_abs_value);
-  void Reset(const fixed x_abs_value, const fixed x_vel_value);
+  void Reset(double x_abs_value);
+  void Reset(double x_abs_value, double x_vel_value);
 
   /**
    * Sets the variance of the acceleration noise input to the system model in
    * x units per second squared.
    */
-  void SetAccelerationVariance(const fixed var_x_accel) {
+  void SetAccelerationVariance(double var_x_accel) {
     var_x_accel_ = var_x_accel;
   }
 
@@ -86,14 +84,14 @@ class KalmanFilter1d {
    * greater than 0; for the first measurement after a Reset(), it's
    * safe to use 1.0.
    */
-  void Update(const fixed z_abs, const fixed var_z_abs, const fixed dt);
+  void Update(double z_abs, double var_z_abs, double dt);
 
   // Getters for the state and its covariance.
-  fixed GetXAbs() const { return x_abs_; }
-  fixed GetXVel() const { return x_vel_; }
-  fixed GetCovAbsAbs() const { return p_abs_abs_; }
-  fixed GetCovAbsVel() const { return p_abs_vel_; }
-  fixed GetCovVelVel() const { return p_vel_vel_; }
+  double GetXAbs() const { return x_abs_; }
+  double GetXVel() const { return x_vel_; }
+  double GetCovAbsAbs() const { return p_abs_abs_; }
+  double GetCovAbsVel() const { return p_abs_vel_; }
+  double GetCovVelVel() const { return p_vel_vel_; }
 };
 
 #endif

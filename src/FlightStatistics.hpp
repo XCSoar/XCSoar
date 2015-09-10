@@ -39,14 +39,14 @@ public:
 
   void StartTask();
 
-  fixed AverageThermalAdjusted(const fixed wthis, const bool circling);
+  double AverageThermalAdjusted(double wthis, const bool circling);
 
-  void AddAltitude(const fixed tflight, const fixed alt);
-  void AddAltitudeTerrain(const fixed tflight, const fixed terrainalt);
-  void AddTaskSpeed(const fixed tflight, const fixed val);
-  void AddClimbBase(const fixed tflight, const fixed alt);
-  void AddClimbCeiling(const fixed tflight, const fixed alt);
-  void AddThermalAverage(const fixed v);
+  void AddAltitude(double tflight, double alt);
+  void AddAltitudeTerrain(double tflight, double terrainalt);
+  void AddTaskSpeed(double tflight, double val);
+  void AddClimbBase(double tflight, double alt);
+  void AddClimbCeiling(double tflight, double alt);
+  void AddThermalAverage(double v);
 
   void Reset();
 };

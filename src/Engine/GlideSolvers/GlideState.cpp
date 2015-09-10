@@ -62,7 +62,7 @@ GlideState::CalcAverageSpeed(const double Veff) const
 {
   if (wind.IsNonZero()) {
     // only need to solve if positive wind speed
-    return AverageSpeedSolver(Double(head_wind), wind_speed_squared, Veff).Solve();
+    return AverageSpeedSolver(2 * head_wind, wind_speed_squared, Veff).Solve();
   }
 
   return Veff;

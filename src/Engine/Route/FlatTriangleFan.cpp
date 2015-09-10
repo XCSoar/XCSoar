@@ -22,6 +22,8 @@
 
 #include "FlatTriangleFan.hpp"
 
+#include <assert.h>
+
 void
 FlatTriangleFan::CalcBoundingBox()
 {

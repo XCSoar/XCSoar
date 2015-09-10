@@ -96,12 +96,12 @@ isqrt4(unsigned val)
 #endif
 }
 
-fixed
+double
 thermal_recency_fn(unsigned x)
 {
   return x < THERMALRECENCY_SIZE
     ? THERMALRECENCY[x]
-    : fixed(0);
+    : 0.;
 }
 
 // find inverse sqrt of x scaled to NORMALISE_BITS^2 by using
@@ -237,14 +237,14 @@ i_normalise(int &x, int &y)
 }
 
 void
-mag_rmag(fixed x, fixed y,
-         fixed &__restrict__ dist, fixed &__restrict__ inv_dist)
+mag_rmag(double x, double y,
+         double &__restrict__ dist, double &__restrict__ inv_dist)
 {
   x = fabs(x);
   y = fabs(y);
-  if (!positive(x) && !positive(y)) {
-    dist = fixed(0);
-    inv_dist = fixed(0);
+  if (x <= 0 && y <= 0) {
+    dist = 0;
+    inv_dist = 0;
     return;
   }
 

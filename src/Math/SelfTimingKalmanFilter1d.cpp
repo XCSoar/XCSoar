@@ -23,32 +23,32 @@
 #include "SelfTimingKalmanFilter1d.hpp"
 #include "OS/Clock.hpp"
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const fixed max_dt,
-                                                   const fixed var_x_accel)
+SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt,
+                                                   const double var_x_accel)
     : filter_(var_x_accel), t_last_update_ms_(0) {
   SetMaxDt(max_dt);
 }
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const fixed max_dt)
+SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt)
     : t_last_update_ms_(0) {
   SetMaxDt(max_dt);
 }
 
 void
-SelfTimingKalmanFilter1d::SetMaxDt(const fixed max_dt)
+SelfTimingKalmanFilter1d::SetMaxDt(const double max_dt)
 {
   // It's OK, albeit silly, to have a zero max_dt value. We just always reset.
-  max_dt_ms_ = negative(max_dt) ? 0U : (unsigned int)(max_dt * 1000);
+  max_dt_ms_ = max_dt < 0 ? 0u : unsigned(max_dt * 1000);
 }
 
-fixed
+double
 SelfTimingKalmanFilter1d::GetMaxDt() const
 {
-  return fixed(max_dt_ms_) / 1000;
+  return max_dt_ms_ / 1000.;
 }
 
 void
-SelfTimingKalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs)
+SelfTimingKalmanFilter1d::Update(const double z_abs, const double var_z_abs)
 {
   const unsigned int t_ms = MonotonicClockMS();
   const unsigned int dt_ms = t_ms - t_last_update_ms_;
@@ -56,5 +56,5 @@ SelfTimingKalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs)
 
   if (dt_ms > max_dt_ms_)
     filter_.Reset();
-  filter_.Update(z_abs, var_z_abs, fixed(dt_ms) / 1000);
+  filter_.Update(z_abs, var_z_abs, dt_ms / 1000.);
 }

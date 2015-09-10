@@ -27,12 +27,12 @@ TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoin
                                                const GlideSettings &settings,
                                                const GlidePolar &gp):
   TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
-                     settings, gp, fixed(0.001), fixed(10.0))
+                     settings, gp, 0.001, 10.0)
 {
 }
 
-fixed
-TaskEffectiveMacCready::f(const fixed mc)
+double
+TaskEffectiveMacCready::f(const double mc)
 {
   tm.set_mc(mc);
   return time_error();

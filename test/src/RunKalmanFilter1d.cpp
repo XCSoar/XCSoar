@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  KalmanFilter1d kalman_filter(fixed(0.0075));
+  KalmanFilter1d kalman_filter(0.0075);
 
   unsigned last_t = 0;
   double last_value;
@@ -62,13 +62,13 @@ int main(int argc, char **argv)
     }
 
     if (last_t > 0 && t > last_t) {
-      auto dt = fixed(t - last_t) / 1000;
+      auto dt = (t - last_t) / 1000.;
 
-      kalman_filter.Update(fixed(value), fixed(0.05), dt);
+      kalman_filter.Update(value, 0.05, dt);
 
       printf("%u %f %f %f %f\n", t,
-             value, double(fixed(value - last_value) / dt),
-             (double)kalman_filter.GetXAbs(), (double)kalman_filter.GetXVel());
+             value, (value - last_value) / dt,
+             kalman_filter.GetXAbs(), kalman_filter.GetXVel());
     }
 
     last_t = t;
