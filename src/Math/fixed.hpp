@@ -28,19 +28,6 @@
 
 typedef double fixed;
 
-gcc_const
-static inline std::pair<fixed, fixed>
-sin_cos(const fixed thetha)
-{
-#if defined(__GLIBC__) && defined(_GNU_SOURCE)
-  double s, c;
-  sincos(thetha, &s, &c);
-  return std::make_pair(s, c);
-#else
-  return std::make_pair(sin(thetha), cos(thetha));
-#endif
-}
-
 static inline constexpr bool
 positive(fixed x)
 {

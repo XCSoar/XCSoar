@@ -23,6 +23,7 @@ Copyright_License {
 #ifndef ANGLE_HPP
 #define ANGLE_HPP
 
+#include "Trig.hpp"
 #include "FastTrig.hpp"
 #include "Compiler.h"
 
