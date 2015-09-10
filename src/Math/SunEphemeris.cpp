@@ -31,10 +31,11 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Time/RoughTime.hpp"
 
-// Sun radius in degrees (?)
-#define SUN_DIAMETER fixed(0.53)
+/** Sun radius in degrees (?) */
+static constexpr auto SUN_DIAMETER = fixed(0.53);
+
 // Atmospheric refraction degrees
-#define AIR_REFRACTION fixed(34.0/60.0)
+static constexpr auto AIR_REFRACTION = fixed(34.0 / 60.0);
 
 namespace SunEphemeris
 {
