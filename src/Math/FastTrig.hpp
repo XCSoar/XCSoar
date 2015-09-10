@@ -24,62 +24,61 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FAST_TRIG_HPP
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
-#include "Math/fixed.hpp"
-#include "Math/Constants.h"
+#include "Constants.h"
 #include "Compiler.h"
 
-extern const fixed SINETABLE[4096];
-extern const fixed INVCOSINETABLE[4096];
+extern const double SINETABLE[4096];
+extern const double INVCOSINETABLE[4096];
 
 extern const short ISINETABLE[4096];
 
-#define INT_ANGLE_MULT fixed(4096.0 / M_2PI)
+#define INT_ANGLE_MULT (4096.0 / M_2PI)
 
 gcc_const
 static inline int
-NATIVE_TO_INT(fixed x)
+NATIVE_TO_INT(double x)
 {
-  return iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) & 0xfff;
+  return lround(INT_ANGLE_MULT * x) & 0xfff;
 }
 
 gcc_const
 static inline int
-NATIVE_TO_INT_COS(fixed x)
+NATIVE_TO_INT_COS(double x)
 {
-  return (iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) + 1024) & 0xfff;
+  return (lround(INT_ANGLE_MULT * x) + 1024) & 0xfff;
 }
 
 gcc_const
-static inline fixed
-invfastcosine(fixed x)
+static inline double
+invfastcosine(double x)
 {
   return INVCOSINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline int
-ifastsine(fixed x)
+ifastsine(double x)
 {
   return ISINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline int
-ifastcosine(fixed x)
+ifastcosine(double x)
 {
   return ISINETABLE[NATIVE_TO_INT_COS(x)];
 }
 
 gcc_const
-static inline fixed
-fastsine(fixed x)
+static inline double
+fastsine(double x)
 {
   return SINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
-static inline fixed
-fastcosine(fixed x)
+static inline double
+fastcosine(double x)
 {
   return SINETABLE[NATIVE_TO_INT_COS(x)];
 }
