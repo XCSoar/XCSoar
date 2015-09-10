@@ -34,8 +34,8 @@ Copyright_License {
 int
 compare_squared(int a, int b, int c)
 {
-  int a2b2 = a*a+b*b;
-  int c2 = c*c;
+  int a2b2 = a * a + b * b;
+  int c2 = c * c;
   if (a2b2 > c2)
     return 1;
   if (a2b2 < c2)
@@ -111,9 +111,9 @@ static inline
 unsigned i_rsqrt(const uint64_t x, const uint64_t yhint)
 {
   int64_t y_last=yhint, y= yhint;
-  while (1) {
-    y= ((((int64_t)3<<(4*NORMALISE_BITS))-x*y*y)*y)>>(1+4*NORMALISE_BITS);
-    if (y_last==y)
+  while (true) {
+    y= (((int64_t(3) << (4 * NORMALISE_BITS)) - x * y * y) * y) >> (1 + 4 * NORMALISE_BITS);
+    if (y_last == y)
       return y;
     y_last = y;
   }
@@ -172,75 +172,73 @@ uint64_t normalise_hint3(const uint32_t x)
   static const uint64_t hint3_limit =
     sqrt((double)((uint64_t)3 << (NORMALISE_BITS * 4))) / sqrt(3.0);
 
-  uint64_t y = 1<< (NORMALISE_BITS*2-log2_fast(x));
-  while (x*y > hint3_limit)
-    y= y>>1;
+  uint64_t y = 1<< (NORMALISE_BITS * 2 - log2_fast(x));
+  while (x * y > hint3_limit)
+    y = y >> 1;
 
   return y;
 }
 
-
-int i_normalise_mag2(const int mag,
-                     const int x,
-                     const int y)
+int
+i_normalise_mag2(const int mag, const int x, const int y)
 {
   const uint32_t m_max = abs(x) | abs(y);
   assert(m_max);
   const uint64_t m = (long)x*x+(long)y*y;
   const uint64_t r = i_rsqrt(m, normalise_hint2(m_max));
-  return (mag*r) >> (2*NORMALISE_BITS);
+  return (mag * r) >> (2 * NORMALISE_BITS);
 }
 
-int i_normalise_mag3(const int mag,
-                     const int x,
-                     const int y,
-                     const int z)
+int
+i_normalise_mag3(const int mag, const int x, const int y, const int z)
 {
   const uint32_t m_max = abs(x) | abs(y) | abs(z);
   assert(m_max);
-  const uint64_t m = (long)x*x+(long)y*y+(long)z*z;
+  const uint64_t m = (long)x * x + (long)y * y + (long)z * z;
   const uint64_t r = i_rsqrt(m, normalise_hint3(m_max));
-  return (mag*r) >> (2*NORMALISE_BITS);
+  return (mag * r) >> (2 * NORMALISE_BITS);
 }
 
-
-void i_normalise_fast(int &x,
-                      int &y) {
+void
+i_normalise_fast(int &x, int &y)
+{
   const uint32_t m_max = abs(x) | abs(y);
   if (!m_max)
     return;
-  const uint64_t r = i_rsqrt((long)x*x+(long)y*y, normalise_hint2(m_max));
 
-  x= (x*r)>> NORMALISE_BITS;
-  y= (y*r)>> NORMALISE_BITS;
+  const uint64_t r = i_rsqrt((long)x * x + (long)y * y,
+                             normalise_hint2(m_max));
+  x = (x * r) >> NORMALISE_BITS;
+  y = (y * r) >> NORMALISE_BITS;
 }
 
-unsigned i_normalise_sine(unsigned x,
-                          unsigned y)
+unsigned
+i_normalise_sine(unsigned x, unsigned y)
 {
   const auto m_max = std::max(x, y);
   const auto m_min = std::min(x, y);
-  if (!m_max)
+  if (m_max == 0)
     return 0;
-  const uint64_t r = i_rsqrt((unsigned long)x*x+(unsigned long)y*y, normalise_hint2(m_max));
-  return (m_min*r)>> (NORMALISE_BITS*2-3);
+
+  const uint64_t r = i_rsqrt((unsigned long)x * x +(unsigned long)y * y,
+                             normalise_hint2(m_max));
+  return (m_min * r) >> (NORMALISE_BITS * 2 - 3);
 }
 
-
-void i_normalise(int &x,
-                 int &y) {
+void
+i_normalise(int &x, int &y)
+{
   const unsigned m_max = std::max(abs(x), abs(y));
-  if (!m_max)
+  if (m_max == 0)
     return;
   const int mag = ihypot(x, y);
-  x= (x<<NORMALISE_BITS)/mag;
-  y= (y<<NORMALISE_BITS)/mag;
+  x = (x << NORMALISE_BITS) / mag;
+  y = (y << NORMALISE_BITS) / mag;
 }
 
-void mag_rmag(fixed x,
-              fixed y,
-              fixed& __restrict__ dist,
-              fixed& __restrict__ inv_dist)
+void
+mag_rmag(fixed x, fixed y,
+         fixed &__restrict__ dist, fixed &__restrict__ inv_dist)
 {
   x = fabs(x);
   y = fabs(y);
@@ -249,10 +247,11 @@ void mag_rmag(fixed x,
     inv_dist = fixed(0);
     return;
   }
-  const auto mag_sq = sqr(x)+sqr(y);
+
+  const auto mag_sq = sqr(x) + sqr(y);
   inv_dist = rsqrt(mag_sq);
   assert(positive(inv_dist));
-  dist = inv_dist*mag_sq;
+  dist = inv_dist * mag_sq;
 }
 
 static inline unsigned

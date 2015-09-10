@@ -38,7 +38,9 @@ Copyright_License {
  *         0 if a^2 + b^2 = c^2,
  *        -1 if a^2 + b^2 < c^2,
  */
-gcc_const int compare_squared(int a, int b, int c);
+gcc_const
+int
+compare_squared(int a, int b, int c);
 
 #define NORMALISE_BITS 7
 
@@ -46,22 +48,22 @@ gcc_const int compare_squared(int a, int b, int c);
  * normalise a vector scaled to NORMALISE_BITS without
  * using sqrt or div operator
  */
-void i_normalise_fast(int &x,
-                      int &y);
+void
+i_normalise_fast(int &x, int &y);
 
 /**
  * calculate normalised value of lesser of x and y scaled
  * to 3 bits without using sqrt or div operator
  */
 gcc_const
-unsigned i_normalise_sine(unsigned x,
-                          unsigned y);
+unsigned
+i_normalise_sine(unsigned x, unsigned y);
 
 /**
  * normalise a vector scaled to NORMALISE_BITS (slow)
  */
-void i_normalise(int &x,
-                 int &y);
+void
+i_normalise(int &x, int &y);
 
 /**
  * normalise a magnitude based on a 3-vector to NORMALISE_BITS
@@ -70,10 +72,8 @@ void i_normalise(int &x,
  * result = mag/sqrt(x*x+y*y+z*z)
  */
 gcc_const
-int i_normalise_mag3(const int mag,
-                     const int x,
-                     const int y,
-                     const int z);
+int
+i_normalise_mag3(int mag, int x, int y, int z);
 
 /**
  * normalise a magnitude based on a 2-vector to NORMALISE_BITS
@@ -82,23 +82,23 @@ int i_normalise_mag3(const int mag,
  * result = mag/sqrt(x*x+y*y)
  */
 gcc_const
-int i_normalise_mag2(const int mag,
-                     const int x,
-                     const int y);
+int
+i_normalise_mag2(int mag, int x, int y);
 
 /**
  * Find magnitude and reciprocal magnitude simultaneously
  */
-void mag_rmag(fixed x,
-              fixed y,
-              fixed& __restrict__ s,
-              fixed& __restrict__ is);
+void
+mag_rmag(fixed x, fixed y,
+         fixed &__restrict__ s,
+         fixed &__restrict__ is);
 
 gcc_const
-fixed thermal_recency_fn(unsigned x);
+fixed
+thermal_recency_fn(unsigned x);
 
 inline unsigned int
-CombinedDivAndMod(unsigned int &lx)
+CombinedDivAndMod(unsigned &lx)
 {
   unsigned int ox = lx & 0xff;
   // JMW no need to check max since overflow will result in
