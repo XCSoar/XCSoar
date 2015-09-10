@@ -273,7 +273,7 @@ FlarmTrafficControl::ZoomIn()
 void
 FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 {
-  if (negative(task_direction.Degrees()))
+  if (task_direction.IsNegative())
     return;
 
   canvas.Select(look.radar_pen);

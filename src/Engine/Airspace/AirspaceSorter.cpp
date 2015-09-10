@@ -36,7 +36,7 @@ AirspaceFilterData::Match(const GeoPoint &location,
   if (name_prefix != nullptr && !as.MatchNamePrefix(name_prefix))
     return false;
 
-  if (!negative(direction.Native())) {
+  if (!direction.IsNegative()) {
     const auto closest = as.ClosestPoint(location, projection);
     const auto bearing = location.Bearing(closest);
     auto direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
@@ -110,7 +110,7 @@ FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
     for (const auto &i : airspaces)
       visitor.Visit(i.GetAirspace());
 
-  if (negative(filter.direction.Native()) && negative(filter.distance))
+  if (filter.direction.IsNegative() && negative(filter.distance))
     SortByName(visitor.result);
   else
     SortByDistance(visitor.result, location, airspaces.GetProjection());

@@ -33,6 +33,8 @@ Copyright_License {
 #include <iostream>
 #endif
 
+#include <cmath>
+
 class Angle
 {
   fixed value;
@@ -224,6 +226,16 @@ public:
   gcc_pure
   inline int ifastcosine() const {
     return (::ifastcosine(Native()));
+  }
+
+  gcc_pure
+  bool IsPositive() const {
+    return value > 0;
+  }
+
+  gcc_pure
+  bool IsNegative() const {
+    return std::signbit(value);
   }
 
   gcc_pure

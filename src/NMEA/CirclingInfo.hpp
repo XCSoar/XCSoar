@@ -114,7 +114,7 @@ struct CirclingInfo
   void Clear();
 
   bool TurningLeft() const {
-    return negative(turn_rate_smoothed.Native());
+    return turn_rate_smoothed.IsNegative();
   }
 };
 

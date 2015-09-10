@@ -112,7 +112,7 @@ UTM::FromGeoPoint(GeoPoint p)
   utm.northing = fixed(k0 * (m + n * _tan *
       (a2 / 2 +  a4 / 24 * (5 - tan2 + 9 * c + 4 * c * c) +
        a6 / 720 * (61 - 58 * tan2 + tan4 + 600 * c - 330 * e_p2))));
-  if (negative(p.latitude.Native()))
+  if (p.latitude.IsNegative())
     utm.northing += fixed(10000000);
 
   return utm;

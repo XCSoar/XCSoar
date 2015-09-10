@@ -36,7 +36,7 @@ static void
 FormatLatitude(char *buffer, size_t buffer_size, Angle latitude )
 {
   // Calculate Latitude sign
-  char sign = negative(latitude.Native()) ? 'S' : 'N';
+  char sign = latitude.IsNegative() ? 'S' : 'N';
 
   double mlat(latitude.AbsoluteDegrees());
 
@@ -52,7 +52,7 @@ static void
 FormatLongitude(char *buffer, size_t buffer_size, Angle longitude)
 {
   // Calculate Longitude sign
-  char sign = negative(longitude.Native()) ? 'W' : 'E';
+  char sign = longitude.IsNegative() ? 'W' : 'E';
 
   double mlong(longitude.AbsoluteDegrees());
 

@@ -293,7 +293,7 @@ FillList(WaypointList &list, const Waypoints &src,
                               ordered_task, ordered_task_index);
   builder.Visit(src);
 
-  if (positive(filter.distance) || !negative(filter.direction.Native()))
+  if (positive(filter.distance) || !filter.direction.IsNegative())
     list.SortByDistance(location);
 }
 

@@ -51,7 +51,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  TCHAR sign = negative(longitude.Native()) ? _T('W') : _T('E');
+  TCHAR sign = longitude.IsNegative() ? _T('W') : _T('E');
 
   double mlong(longitude.AbsoluteDegrees());
 
@@ -120,7 +120,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  TCHAR sign = negative(latitude.Native()) ? _T('S') : _T('N');
+  TCHAR sign = latitude.IsNegative() ? _T('S') : _T('N');
 
   double mlat(latitude.AbsoluteDegrees());
 

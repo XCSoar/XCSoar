@@ -116,12 +116,12 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
       loc1.latitude == loc2.latitude)
     return loc1;
 
-  if (!positive(dtotal.Native()))
+  if (!dtotal.IsPositive())
     return loc1;
 
   // dthis can be larger than dtotal or even smaller than 0, which extrapolates
   // the gc between loc1 and loc2 to loc3
-  //assert(dthis <= dtotal && !negative(dthis.Native()));
+  //assert(dthis <= dtotal && !dthis.IsNegative());
 
   const auto A = (dtotal - dthis).sin();
   const auto B = dthis.sin();
@@ -329,14 +329,14 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 {
   Angle dist_AD, crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
-  if (!positive(dist_AD.Native()))
+  if (!dist_AD.IsPositive())
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
     return fixed(0);
 
   Angle dist_AB, crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
-  if (!positive(dist_AB.Native()))
+  if (!dist_AB.IsPositive())
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
     return fixed(0);

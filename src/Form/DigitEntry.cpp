@@ -616,7 +616,7 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
   assert(columns[0].type == Column::Type::NORTH_SOUTH);
   assert(columns[1].type == Column::Type::DIGIT);
   assert(columns[2].type == Column::Type::DIGIT);
-  columns[0].value = negative(value.Native());
+  columns[0].value = value.IsNegative();
 
   // Set up and check the remaining digits
   SetDigits(degrees, format, true);
@@ -635,7 +635,7 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
   assert(columns[0].type == Column::Type::EAST_WEST);
   assert(columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
-  columns[0].value = negative(value.Native());
+  columns[0].value = value.IsNegative();
 
   // Set up and check the remaining digits
   SetDigits(degrees, format, false);

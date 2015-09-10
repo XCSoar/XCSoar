@@ -50,13 +50,13 @@ Volkslogger::Waypoint::SetLocation(GeoPoint gp)
   uint32_t llat = labs((long)(gp.latitude.Degrees() * 60000));
   uint32_t llon = labs((long)(gp.longitude.Degrees() * 60000));
 
-  if (negative(gp.longitude.Native()))
+  if (gp.longitude.IsNegative())
     type_and_longitude_sign |= 0x80;
   else
     type_and_longitude_sign &= ~0x80;
 
   latitude[0] = llat >> 16;
-  if (negative(gp.latitude.Native()))
+  if (gp.latitude.IsNegative())
     latitude[0] |= 0x80;
   latitude[1] = llat >> 8;
   latitude[2] = llat;

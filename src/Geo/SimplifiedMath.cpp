@@ -76,7 +76,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
     const auto a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
 
     Angle distance2 = EarthDistance(a);
-    assert(!negative(distance2.Native()));
+    assert(!distance2.IsNegative());
     *distance = distance2;
   }
 

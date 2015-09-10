@@ -97,7 +97,7 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
   Angle dfo = Angle::Degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
   // Correction: different sign at southern hemisphere
-  if (negative(lat.Degrees()))
+  if (lat.IsNegative())
     dfo.Flip();
 
   auto fo = (declin + dfo).tan() * lat.tan();
@@ -110,7 +110,7 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
   Angle df1 = Angle::Degrees(6);
 
   // Correction: different sign at southern hemisphere
-  if (negative(lat.Degrees()))
+  if (lat.IsNegative())
     df1.Flip();
 
   auto fi = (declin + df1).tan() * lat.tan();

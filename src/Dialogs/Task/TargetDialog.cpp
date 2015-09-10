@@ -620,7 +620,7 @@ TargetWidget::OnRangeModified(fixed new_value)
 
   if (negative(new_range) != negative(range_and_radial.range)) {
     /* when the range gets flipped, flip the radial as well */
-    if (negative(range_and_radial.radial.Native()))
+    if (range_and_radial.radial.IsNegative())
       range_and_radial.radial += Angle::HalfCircle();
     else
       range_and_radial.radial -= Angle::HalfCircle();

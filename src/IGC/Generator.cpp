@@ -50,13 +50,11 @@ FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
 char *
 FormatIGCLocation(char *buffer, const GeoPoint &location)
 {
-  char latitude_suffix = negative(location.latitude.Native())
-    ? 'S' : 'N';
+  char latitude_suffix = location.latitude.IsNegative() ? 'S' : 'N';
   unsigned latitude =
     (unsigned)uround(fabs(location.latitude.Degrees() * 60000));
 
-  char longitude_suffix = negative(location.longitude.Native())
-    ? 'W' : 'E';
+  char longitude_suffix = location.longitude.IsNegative() ? 'W' : 'E';
   unsigned longitude =
     (unsigned)uround(fabs(location.longitude.Degrees() * 60000));
 

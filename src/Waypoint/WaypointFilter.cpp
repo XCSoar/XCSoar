@@ -85,7 +85,7 @@ inline bool
 WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
                                      GeoPoint location)
 {
-  if (negative(angle.Native()))
+  if (angle.IsNegative())
     return true;
 
   auto bearing = location.Bearing(waypoint.location);
