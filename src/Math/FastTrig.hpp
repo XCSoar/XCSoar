@@ -69,6 +69,12 @@ NATIVE_TO_INT_COS(double x)
   return IntAngleForCos(UnsafeRadiansToIntAngle(x));
 }
 
+static inline constexpr double
+IntAngleToRadians(unsigned angle)
+{
+  return angle / INT_ANGLE_MULT;
+}
+
 gcc_const
 static inline double
 invfastcosine(double x)
