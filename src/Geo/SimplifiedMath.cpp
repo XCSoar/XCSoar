@@ -26,6 +26,8 @@ Copyright_License {
 #include "GeoPoint.hpp"
 #include "Math/Util.hpp"
 
+#include <assert.h>
+
 static inline Angle
 EarthDistance(const fixed a)
 {
@@ -33,28 +35,6 @@ EarthDistance(const fixed a)
     return Angle::Zero();
 
   return Angle::acos(fixed(1) - Double(a));
-}
-
-/**
- * Multiply two very small values (less than 4).  This is an optimised
- * fast path for fixed-point.
- */
-constexpr
-static inline fixed
-SmallMult(fixed a, fixed b)
-{
-  return fast_mult(a, b, 0);
-}
-
-/**
- * Multiply three very small values (less than 2).  This is an
- * optimised fast path for fixed-point.
- */
-constexpr
-static inline fixed
-SmallMult(fixed a, fixed b, fixed c)
-{
-  return SmallMult(SmallMult(a, b), c);
 }
 
 void
@@ -86,9 +66,8 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
     const auto sc = dlon.SinCos();
     const auto sin_dlon = sc.first, cos_dlon = sc.second;
 
-    const auto y = SmallMult(sin_dlon, cos_lat2);
-    const auto x = SmallMult(cos_lat1, sin_lat2)
-      - SmallMult(sin_lat1, cos_lat2, cos_dlon);
+    const auto y = sin_dlon * cos_lat2;
+    const auto x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
     *bearing = (x == fixed(0) && y == fixed(0))
       ? Angle::Zero()

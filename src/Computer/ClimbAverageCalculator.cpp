@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "ClimbAverageCalculator.hpp"
 
+#include <assert.h>
+
 void
 ClimbAverageCalculator::Reset()
 {

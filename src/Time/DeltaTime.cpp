@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "DeltaTime.hpp"
 
+#include <assert.h>
+
 fixed
 DeltaTime::Update(fixed current_time, fixed min_delta, fixed warp_tolerance)
 {

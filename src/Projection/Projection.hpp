@@ -122,7 +122,7 @@ public:
    */
   gcc_pure
   fixed AngleToPixels(Angle angle) const {
-    return fast_mult(angle.Radians(), draw_scale, 12);
+    return angle.Radians() * draw_scale;
   }
 
   /**

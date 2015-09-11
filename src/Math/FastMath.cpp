@@ -249,9 +249,9 @@ mag_rmag(fixed x, fixed y,
   }
 
   const auto mag_sq = Square(x) + Square(y);
-  inv_dist = rsqrt(mag_sq);
-  assert(positive(inv_dist));
-  dist = inv_dist * mag_sq;
+  dist = sqrt(mag_sq);
+  assert(dist > 0);
+  inv_dist = 1. / dist;
 }
 
 unsigned

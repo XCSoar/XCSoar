@@ -21,7 +21,6 @@
  */
 #include "ZeroFinder.hpp"
 #include <math.h>
-#include <assert.h>
 #include <algorithm>
 #include <limits>
 

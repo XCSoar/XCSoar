@@ -52,17 +52,6 @@ EarthDistance(const fixed a)
   return Angle::acos(fixed(1) - Double(a));
 }
 
-/**
- * Multiply two very small values (less than 4).  This is an optimised
- * fast path for fixed-point.
- */
-constexpr
-static inline fixed
-SmallMult(fixed a, fixed b)
-{
-  return fast_mult(a, b, 0);
-}
-
 gcc_const
 static fixed
 CalcUSquare(fixed cos_sq_alpha)
@@ -139,14 +128,13 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto sc4 = loc2.longitude.SinCos();
   const auto sin_loc2_lon = sc4.first, cos_loc2_lon = sc4.second;
 
-  const auto a_cos_loc1_lat = SmallMult(A, cos_loc1_lat);
-  const auto b_cos_loc2_lat = SmallMult(B, cos_loc2_lat);
+  const auto a_cos_loc1_lat = A * cos_loc1_lat;
+  const auto b_cos_loc2_lat = B * cos_loc2_lat;
 
-  const auto x = SmallMult(a_cos_loc1_lat, cos_loc1_lon)
-    + SmallMult(b_cos_loc2_lat, cos_loc2_lon);
-  const auto y = SmallMult(a_cos_loc1_lat, sin_loc1_lon)
-    + SmallMult(b_cos_loc2_lat, sin_loc2_lon);
-  const auto z = SmallMult(A, sin_loc1_lat) + SmallMult(B, sin_loc2_lat);
+  const auto x = a_cos_loc1_lat * cos_loc1_lon + b_cos_loc2_lat * cos_loc2_lon;
+  const auto y = a_cos_loc1_lat * sin_loc1_lon
+    + b_cos_loc2_lat * sin_loc2_lon;
+  const auto z = A  * sin_loc1_lat + B * sin_loc2_lat;
 
   GeoPoint loc3;
   loc3.latitude = Angle::FromXY(hypot(x, y), z);
@@ -289,7 +277,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
 
   // cross track distance
   const Angle cross_track_distance =
-    EarthASin(SmallMult(sindist_AD, (crs_AD - crs_AB).sin()));
+    EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -347,7 +335,7 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 
   const auto sindist_AD = dist_AD.sin();
   const auto cross_track_distance =
-    EarthASin(SmallMult(sindist_AD, (crs_AD - crs_AB).sin()));
+    EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
 
   const auto sc = cross_track_distance.SinCos();
   const auto sinXTD = sc.first, cosXTD = sc.second;

@@ -72,7 +72,7 @@ public:
   }
 
   RoughAltitude &operator=(fixed other) {
-    value = (short)iround(other);
+    value = iround(other);
     return *this;
   }
 
