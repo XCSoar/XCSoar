@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FAST_TRIG_HPP
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
-#include "Constants.h"
+#include "Constants.hpp"
 #include "Util.hpp"
 #include "Compiler.h"
 

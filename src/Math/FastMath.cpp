@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "FastMath.hpp"
-#include "Constants.h"
 #include "Util.hpp"
 #include "MathTables.h"
 

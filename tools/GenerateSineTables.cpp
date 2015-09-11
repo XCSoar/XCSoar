@@ -1,4 +1,4 @@
-#include "Math/Constants.h"
+#include "Math/Constants.hpp"
 #include "Computer/ThermalLocator.hpp"
 
 #include <math.h>

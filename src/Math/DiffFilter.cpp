@@ -21,7 +21,7 @@
  */
 
 #include "DiffFilter.hpp"
-#include "Constants.h"
+#include "Constants.hpp"
 
 void
 DiffFilter::Reset(const double x0, const double y0)
