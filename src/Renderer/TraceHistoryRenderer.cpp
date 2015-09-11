@@ -77,7 +77,7 @@ TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
     fixed x= fixed(i);
     fixed y= *it;
     if (i) {
-      if (sgn(y)*sgn(y_last)<0) {
+      if (y * y_last < 0) {
         if (positive(y_last))
           chart.DrawFilledLine(x_last, y_last, x_last+fixed(0.5), fixed(0),
                                vario_look.lift_brush);
