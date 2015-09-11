@@ -110,12 +110,6 @@ inline fixed accurate_half_sin(fixed a) {
   return sin(a/2);
 }
 
-inline void limit_tolerance(fixed& f, const fixed tol_act) {
-  if (fabs(f)<tol_act) {
-    f = positive(f)? tol_act:-tol_act;
-  }
-}
-
 /**
  * Convert this number to a signed integer, with rounding.
  */
