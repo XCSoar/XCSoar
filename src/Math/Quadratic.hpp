@@ -24,6 +24,7 @@
 #define QUADRATIC_HPP
 
 #include "Math/fixed.hpp"
+#include "Util.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -44,7 +45,7 @@ public:
    * @param _c Value of c
    */
   Quadratic(const fixed _b, const fixed _c)
-    :da(2), b(_b), denom(sqr(b) - Quadruple(_c))
+    :da(2), b(_b), denom(Square(b) - Quadruple(_c))
   {
   }
 
@@ -56,7 +57,7 @@ public:
    * @param _c Value of c
    */
   Quadratic(const fixed _a, const fixed _b, const fixed _c)
-    :da(Double(_a)), b(_b), denom(sqr(b) - Double(da * _c))
+    :da(Double(_a)), b(_b), denom(Square(b) - Double(da * _c))
   {
   }
 

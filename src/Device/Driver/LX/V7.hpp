@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Util/NMEAWriter.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Units/System.hpp"
+#include "Math/Util.hpp"
 
 /**
  * Code specific to LXNav varios (e.g. V7).

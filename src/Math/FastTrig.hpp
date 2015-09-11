@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
 #include "Constants.h"
+#include "Util.hpp"
 #include "Compiler.h"
 
 static constexpr unsigned INT_ANGLE_RANGE = 4096;
@@ -54,7 +55,7 @@ gcc_const
 static inline unsigned
 UnsafeRadiansToIntAngle(double radians)
 {
-  return lround(radians * INT_ANGLE_MULT);
+  return uround(radians * INT_ANGLE_MULT);
 }
 
 gcc_const

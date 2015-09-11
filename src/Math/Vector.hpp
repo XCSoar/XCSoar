@@ -25,8 +25,11 @@ Copyright_License {
 #define VECTOR_HPP
 
 #include "Math/fixed.hpp"
+#include "Util.hpp"
 #include "Point2D.hpp"
 #include "Geo/SpeedVector.hpp"
+
+#include <math.h>
 
 struct Vector : Point2D<fixed> {
   Vector() = default;
@@ -47,7 +50,7 @@ struct Vector : Point2D<fixed> {
 
   gcc_pure
   fixed SquareMagnitude() const {
-    return sqr(x) + sqr(y);
+    return Square(x) + Square(y);
   }
 
   gcc_pure

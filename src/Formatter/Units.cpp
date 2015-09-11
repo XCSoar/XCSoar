@@ -25,6 +25,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Units/Descriptor.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Math/Util.hpp"
 #include "Util/StringFormat.hpp"
 
 static void

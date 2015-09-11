@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ROUGH_ALTITUDE_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Util.hpp"
 #include "Compiler.h"
 
 #include <type_traits>

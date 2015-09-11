@@ -25,6 +25,7 @@ Copyright_License {
    http://kflog.org/cumulus/ */
 
 #include "MeasurementList.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 
@@ -77,12 +78,12 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
     // factor in altitude difference between current altitude and
     // measurement.  Maximum alt difference is 1000 m.
     unsigned int a_quality =
-      uround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
+      uround(((fixed(2) / (Square(altdiff) + fixed(1))) - fixed(1))
              * REL_FACTOR_ALTITUDE);
 
     // factor in timedifference. Maximum difference is 1 hours.
     unsigned int t_quality =
-      uround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
+      uround(k * (fixed(1) - timediff) / (Square(timediff) + k)
              * REL_FACTOR_TIME);
 
     if (m.quality == 6) {

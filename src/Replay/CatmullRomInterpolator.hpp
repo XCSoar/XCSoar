@@ -25,6 +25,7 @@
 #define XCSOAR_CATMULL_ROM_INTERPOLATOR_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Util.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Util/Clamp.hpp"
@@ -121,7 +122,7 @@ public:
            [ -t  2-t   t-2   t] u^3
     */
 
-    const auto u2 = sqr(u);
+    const auto u2 = Square(u);
     const auto u3 = u2 * u;
     const fixed c[4]= {-time * u3 + 2 * time * u2 - time * u,
                        (fixed(2) - time) * u3 + (time - fixed(3)) * u2 + fixed(1),

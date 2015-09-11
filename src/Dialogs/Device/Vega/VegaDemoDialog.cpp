@@ -34,6 +34,7 @@ Copyright_License {
 #include "Form/DataField/Boolean.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "Math/Util.hpp"
 
 static fixed VegaDemoW = fixed(0);
 static fixed VegaDemoV = fixed(0);

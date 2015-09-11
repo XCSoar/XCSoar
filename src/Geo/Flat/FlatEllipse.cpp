@@ -24,6 +24,7 @@
 // Circle radius r at (0,0)
 
 #include "FlatEllipse.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 
@@ -37,8 +38,8 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   const fixed csq = f12.dsq();
   a = (f1.Distance(ap) + f2.Distance(ap));
 
-  assert(sqr(a) >= csq);
-  b = Half(sqrt(sqr(a) - csq));
+  assert(Square(a) >= csq);
+  b = Half(sqrt(Square(a) - csq));
   a = Half(a);
 
   // a.sin(t) = ap.x
@@ -128,8 +129,8 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
 // r1+r2 = 2.a
 // 
 
-// e = sqrt(1.0-sqr(b/a)) = c/a
-// .: c = a. sqrt(1.0-sqr(b/a))
+// e = sqrt(1.0-Square(b/a)) = c/a
+// .: c = a. sqrt(1.0-Square(b/a))
 //    c = sqrt(a*a-b*b)
 //    c^2 = a*a-b*b
 

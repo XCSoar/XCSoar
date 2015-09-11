@@ -24,6 +24,7 @@ Copyright_License {
 #include "SimplifiedMath.hpp"
 #include "FAISphere.hpp"
 #include "GeoPoint.hpp"
+#include "Math/Util.hpp"
 
 static inline Angle
 EarthDistance(const fixed a)
@@ -73,7 +74,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   if (distance) {
     const auto s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
     const auto s2 = dlon.accurate_half_sin();
-    const auto a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
+    const auto a = Square(s1) + cos_lat1 * cos_lat2 * Square(s2);
 
     Angle distance2 = EarthDistance(a);
     assert(!distance2.IsNegative());

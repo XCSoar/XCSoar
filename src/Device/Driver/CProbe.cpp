@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Atmosphere/Temperature.hpp"
+#include "Math/Util.hpp"
 
 #include <stdint.h>
 
@@ -62,13 +63,13 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
       info.attitude.pitch_angle = Angle::asin(sin_pitch);
 
       Angle heading = Angle::HalfCircle() +
-        Angle::FromXY(sqr(q[3]) - sqr(q[0]) - sqr(q[1]) + sqr(q[2]),
+        Angle::FromXY(Square(q[3]) - Square(q[0]) - Square(q[1]) + Square(q[2]),
                       Double(q[1] * q[2] + q[3] * q[0]));
 
       info.attitude.heading_available.Update(info.clock);
       info.attitude.heading = heading;
 
-      Angle roll = Angle::FromXY(sqr(q[3]) + sqr(q[0]) - sqr(q[1]) - sqr(q[2]),
+      Angle roll = Angle::FromXY(Square(q[3]) + Square(q[0]) - Square(q[1]) - Square(q[2]),
                                  Double(q[0] * q[1] + q[3] * q[2]));
 
       info.attitude.bank_angle_available.Update(info.clock);
@@ -89,7 +90,8 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
       // Cast to int16_t to interpret the 16th bit as the sign bit
       a[i] = fixed((int16_t)_a[i]) / 1000;
 
-    info.acceleration.ProvideGLoad(sqrt(sqr(a[0]) + sqr(a[1]) + sqr(a[2])), true);
+    info.acceleration.ProvideGLoad(SpaceDiagonal(a[0], a[1], a[2]),
+                                   true);
   }
 
   unsigned temperature;

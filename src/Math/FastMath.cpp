@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Math/FastMath.hpp"
-#include "Math/Constants.h"
-
+#include "FastMath.hpp"
+#include "Constants.h"
+#include "Util.hpp"
 #include "MathTables.h"
 
 #include <algorithm>
@@ -248,16 +248,10 @@ mag_rmag(fixed x, fixed y,
     return;
   }
 
-  const auto mag_sq = sqr(x) + sqr(y);
+  const auto mag_sq = Square(x) + Square(y);
   inv_dist = rsqrt(mag_sq);
   assert(positive(inv_dist));
   dist = inv_dist * mag_sq;
-}
-
-static inline unsigned
-SquareUnsigned(unsigned x)
-{
-  return x * x;
 }
 
 unsigned
@@ -283,6 +277,6 @@ ShiftedIntegerHypot(int _x, int _y, unsigned bits)
      parameter moved out of the square root call; this avoids squaring
      the raw parameters, and therefore reduces the risk of overflowing
      32 bit integers */
-  return (a * isqrt4((1u << (bits << 1u)) + SquareUnsigned((b << bits) / a)))
+  return (a * isqrt4((1u << (bits << 1u)) + Square<unsigned>((b << bits) / a)))
     << remaining_bits;
 }

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "Math/Util.hpp"
 
 #include <assert.h>
 

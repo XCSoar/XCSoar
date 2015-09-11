@@ -42,8 +42,8 @@ Copyright_License {
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 
-
-#include "Math/LeastSquares.hpp"
+#include "LeastSquares.hpp"
+#include "Util.hpp"
 
 #include <math.h>
 
@@ -127,7 +127,7 @@ LeastSquares::Update(fixed x, fixed y, fixed weight)
 
   // Calculate error
   auto error = fabs(y - GetYAt(x));
-  sum_error += sqr(error) * weight;
+  sum_error += Square(error) * weight;
   if (error > max_error)
     max_error = error;
 }
@@ -169,6 +169,6 @@ LeastSquares::Add(fixed x, fixed y, fixed weight)
 
   sum_xi += xw;
   sum_yi += yw;
-  sum_xi_2 += sqr(xw);
+  sum_xi_2 += Square(xw);
   sum_xi_yi += xw * yw;
 }

@@ -24,6 +24,7 @@
 #define FlatGeoPoint_HPP
 
 #include "Math/fixed.hpp"
+#include "Math/Util.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 

@@ -26,6 +26,7 @@
 #include "MacCready.hpp"
 #include "Math/ZeroFinder.hpp"
 #include "Math/Quadratic.hpp"
+#include "Math/Util.hpp"
 #include "Util/Tolerances.hpp"
 #include "Util/Clamp.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -431,7 +432,7 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
   const auto wind_ld = wind.norm / GetSBestLD();
 
   Quadratic q(- Double(wind_ld * c_theta),
-              sqr(wind_ld) - sqr(bestLD));
+              Square(wind_ld) - Square(bestLD));
 
   if (q.Check())
     return std::max(0., q.SolutionMax());

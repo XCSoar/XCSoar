@@ -30,6 +30,7 @@ Copyright_License {
 #include "IO/Async/GlobalIOThread.hpp"
 #include "Util/StaticString.hxx"
 #include "Math/fixed.hpp"
+#include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
 
 #include <stdio.h>

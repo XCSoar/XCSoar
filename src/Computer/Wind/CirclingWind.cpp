@@ -27,6 +27,7 @@ Copyright_License {
 #include "CirclingWind.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 
@@ -199,7 +200,7 @@ CirclingWind::CalcWind()
     wx = wx * av + mag;
     wy *= av;
     auto cmag = hypot(wx, wy) - sample.vector.norm;
-    rthis += sqr(cmag);
+    rthis += Square(cmag);
   }
 
   rthis /= samples.size();

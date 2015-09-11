@@ -24,6 +24,7 @@ Copyright_License {
 #include "PocketNav.hpp"
 #include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
+#include "Math/Util.hpp"
 
 #include <stdio.h>
 

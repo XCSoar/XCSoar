@@ -22,6 +22,7 @@
 
 #include "IncrementalSpeedComputer.hpp"
 #include "Task/Stats/DistanceStat.hpp"
+#include "Math/Util.hpp"
 
 IncrementalSpeedComputer::IncrementalSpeedComputer(const bool _is_positive)
   :df(fixed(0)),

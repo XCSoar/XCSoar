@@ -40,13 +40,6 @@ negative(fixed x)
   return x < 0;
 }
 
-gcc_const
-static inline fixed
-sigmoid(fixed x)
-{
-  return 2.0 / (1.0 + exp(-x)) - 1.0;
-}
-
 constexpr
 static inline fixed
 Half(fixed a)
@@ -88,11 +81,6 @@ inline fixed fast_sqrt(fixed a) {
 }
 
 constexpr
-inline fixed sqr(fixed a) {
-  return a*a;
-}
-
-constexpr
 inline fixed fast_mult(fixed a, gcc_unused int a_bits,
                        fixed b, gcc_unused int b_bits)
 {
@@ -108,24 +96,6 @@ inline fixed fast_mult(fixed a, fixed b, gcc_unused int b_bits)
 gcc_const
 inline fixed accurate_half_sin(fixed a) {
   return sin(a/2);
-}
-
-/**
- * Convert this number to a signed integer, with rounding.
- */
-gcc_const static inline int
-iround(fixed x)
-{
-  return (int)lround(x);
-}
-
-/**
- * Convert this number to an unsigned integer, with rounding.
- */
-gcc_const static inline unsigned
-uround(const fixed x)
-{
-  return (unsigned)(x + fixed(0.5));
 }
 
 /**

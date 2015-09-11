@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "Math/Util.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hxx"
 

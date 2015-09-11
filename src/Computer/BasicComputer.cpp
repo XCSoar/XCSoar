@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Settings.hpp"
 #include "Atmosphere/AirDensity.hpp"
+#include "Math/Util.hpp"
 
 #define fixed_inv_g fixed(1.0/9.81)
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
@@ -236,7 +237,7 @@ static void
 ComputeEnergyHeight(MoreData &basic)
 {
   if (basic.airspeed_available)
-    basic.energy_height = sqr(basic.true_airspeed) * fixed_inv_2g;
+    basic.energy_height = Square(basic.true_airspeed) * fixed_inv_2g;
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */

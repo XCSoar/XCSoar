@@ -26,6 +26,7 @@ Copyright_License {
 #include "FAISphere.hpp"
 #include "WGS84.hpp"
 #include "GeoPoint.hpp"
+#include "Math/Util.hpp"
 
 #include <assert.h>
 
@@ -221,7 +222,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
     sigma = atan2(sin_sigma, cos_sigma);
 
     auto inner_alpha = cosu1 * cosu2 * sin_lambda / sin_sigma;
-    cos_sq_alpha = fixed(1) - sqr(inner_alpha);
+    cos_sq_alpha = fixed(1) - Square(inner_alpha);
 
     if (fabs(loc1.latitude.Radians()) < fixed(1e-7) &&
         fabs(loc2.latitude.Radians()) < fixed(1e-7)) {
@@ -238,7 +239,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
       lambda_p = lambda;
       lambda = lon21.Radians() + (fixed(1) - c) * FLATTENING * inner_alpha *
         (sigma + c * sin_sigma * (cos_2_sigma_m + c * cos_sigma *
-                                  (fixed(-1) + Double(sqr(cos_2_sigma_m)))));
+                                  (fixed(-1) + 2 * Square(cos_2_sigma_m))));
     }
   }
 
@@ -254,10 +255,10 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
 
     auto delta_sigma = B * sin_sigma * (
       cos_2_sigma_m +
-      Quarter(B) * (cos_sigma * (fixed(-1) + fixed(2) * sqr(cos_2_sigma_m)) -
+      Quarter(B) * (cos_sigma * (fixed(-1) + fixed(2) * Square(cos_2_sigma_m)) -
                     B / 6 * cos_2_sigma_m *
-                    (fixed(-3) + Quadruple(sqr(sin_sigma))) *
-                    (fixed(-3) + Quadruple(sqr(cos_2_sigma_m)))));
+                    (fixed(-3) + Quadruple(Square(sin_sigma))) *
+                    (fixed(-3) + Quadruple(Square(cos_2_sigma_m)))));
 
     *distance = POLE_RADIUS * A * (sigma - delta_sigma);
   }
@@ -299,7 +300,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto sinXTD = sc.first, cosXTD = sc.second;
 
   const Angle along_track_distance =
-    EarthASin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
+    EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
 
   auto loc4_tmp = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
 
@@ -314,7 +315,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
     const auto sinXTD = sc.first, cosXTD = sc.second;
 
     const Angle along_track_distance =
-      EarthASin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
+      EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
 
     *loc4 = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
   }
@@ -353,7 +354,7 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 
   // along track distance
   const Angle along_track_distance =
-    EarthASin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
+    EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -386,10 +387,8 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto s32 = (loc3.latitude - loc2.latitude).accurate_half_sin();
   const auto sl32 = (loc3.longitude - loc2.longitude).accurate_half_sin();
 
-  const auto a12 = sqr(s21)
-    + SmallMult(cos_loc1_lat, cos_loc2_lat) * sqr(sl21);
-  const auto a23 = sqr(s32)
-    + SmallMult(cos_loc2_lat, cos_loc3_lat) * sqr(sl32);
+  const auto a12 = Square(s21) + cos_loc1_lat * cos_loc2_lat * Square(sl21);
+  const auto a23 = Square(s32) + cos_loc2_lat * cos_loc3_lat * Square(sl32);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -426,7 +425,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const auto sigma1 = atan2(tan_u1, cos_alpha1);
 
   const auto sin_alpha = cos_u1 * sin_alpha1;
-  const auto cos_sq_alpha = fixed(1) - sqr(sin_alpha);
+  const auto cos_sq_alpha = 1. - Square(sin_alpha);
 
   const auto u_sq = CalcUSquare(cos_sq_alpha);
   const auto A = CalcA(u_sq);
@@ -445,8 +444,8 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
     auto delta_sigma = B * sin_sigma *
       (cos_2_sigma_m + Quarter(B) *
        (cos_sigma *
-        (fixed(-1) + 2 * sqr(cos_2_sigma_m)) - B / 6 * cos_2_sigma_m *
-        (fixed(-3) + 4 * sqr(sin_sigma)) * (fixed(-3) + Quadruple(sqr(cos_2_sigma_m)))));
+        (fixed(-1) + 2 * Square(cos_2_sigma_m)) - B / 6 * cos_2_sigma_m *
+        (fixed(-3) + 4 * Square(sin_sigma)) * (fixed(-3) + Quadruple(Square(cos_2_sigma_m)))));
 
     sigmaP = sigma;
     sigma = distance / (POLE_RADIUS * A) + delta_sigma;
@@ -464,7 +463,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const auto L = lambda - (fixed(1) - C) * FLATTENING * sin_alpha *
     (sigma + C * sin_sigma *
      (cos_2_sigma_m + C * cos_sigma * (fixed(-1) +
-                                       Double(sqr(cos_2_sigma_m)))));
+                                       2 * Square(cos_2_sigma_m))));
 
   loc_out.longitude = Angle::Radians(lon1 + L);
   loc_out.latitude = Angle::Radians(lat2);

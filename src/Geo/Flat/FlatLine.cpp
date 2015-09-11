@@ -21,8 +21,7 @@
  */
 
 #include "FlatLine.hpp"
-
-#include <math.h>
+#include "Math/Util.hpp"
 
 fixed
 FlatLine::cross() const
@@ -46,7 +45,7 @@ FlatLine::d() const
 fixed
 FlatLine::dsq() const
 {
-  return sqr(dx()) + sqr(dy());
+  return Square(dx()) + Square(dy());
 }
 
 void
@@ -84,7 +83,7 @@ FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
   const auto dr = dsq();
   const auto D = cross();
 
-  auto det = sqr(r) * dr - sqr(D);
+  auto det = Square(r) * dr - Square(D);
   if (negative(det))
     // no solution
     return false;

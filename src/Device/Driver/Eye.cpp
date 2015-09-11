@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"
+#include "Math/Util.hpp"
 
 #include <stdlib.h>
 
@@ -187,7 +188,7 @@ EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
   if (!x_valid || !y_valid || !z_valid)
     return false;
 
-  value_r.ProvideGLoad(sqrt(sqr(x) + sqr(y) + sqr(z)), true);
+  value_r.ProvideGLoad(SpaceDiagonal(x, y, z), true);
   return true;
 }
 

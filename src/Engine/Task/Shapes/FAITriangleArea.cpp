@@ -27,6 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 
@@ -38,7 +39,7 @@ gcc_const
 static Angle
 CalcAlpha(fixed dist_a, fixed dist_b, fixed dist_c)
 {
-    const auto cos_alpha = (sqr(dist_b) + sqr(dist_c) - sqr(dist_a))
+    const auto cos_alpha = (Square(dist_b) + Square(dist_c) - Square(dist_a))
       / Double(dist_c * dist_b);
     return Angle::acos(cos_alpha);
 }

@@ -40,7 +40,7 @@ public:
    */
   AverageSpeedSolver(const double dwcostheta, const double wind_speed_squared,
                      const double V)
-    :Quadratic(dwcostheta, wind_speed_squared - sqr(V)) {}
+    :Quadratic(dwcostheta, wind_speed_squared - Square(V)) {}
 
   /**
    * Find ground speed from task and wind
@@ -84,7 +84,7 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
   if (_wind.IsNonZero()) {
     wind = _wind;
     effective_wind_angle = wind.bearing.Reciprocal() - vector.bearing;
-    wind_speed_squared = sqr(wind.norm);
+    wind_speed_squared = Square(wind.norm);
     head_wind = -wind.norm * effective_wind_angle.cos();
   } else {
     wind = SpeedVector::Zero();

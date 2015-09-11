@@ -21,6 +21,7 @@
  */
 
 #include "KalmanFilter1d.hpp"
+#include "Util.hpp"
 
 KalmanFilter1d::KalmanFilter1d(const fixed var_x_accel)
   :var_x_accel_(var_x_accel)
@@ -71,9 +72,9 @@ KalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs,
   // Update state estimate.
   x_abs_ += x_vel_ * dt;
   // Update state covariance. The last term mixes in acceleration noise.
-  const auto dt2 = sqr(dt);
+  const auto dt2 = Square(dt);
   const auto dt3 = dt * dt2;
-  const auto dt4 = sqr(dt2);
+  const auto dt4 = Square(dt2);
   p_abs_abs_ += Double(dt*p_abs_vel_) + dt2 * p_vel_vel_ + Quarter(var_x_accel_ * dt4);
   p_abs_vel_ += dt * p_vel_vel_ + Half(var_x_accel_ * dt3);
   p_vel_vel_ += var_x_accel_ * dt2;

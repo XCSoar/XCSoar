@@ -24,6 +24,7 @@
 #define XCSOAR_RUNWAY_HPP
 
 #include "Math/Angle.hpp"
+#include "Math/Util.hpp"
 
 #include <stdint.h>
 

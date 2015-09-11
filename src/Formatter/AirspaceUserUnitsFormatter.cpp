@@ -25,6 +25,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "Math/Util.hpp"
 #include "Util/StringFormat.hpp"
 
 #include <string.h>

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Units/System.hpp"
+#include "Math/Util.hpp"
 
 #include <assert.h>
 #include <stdint.h>
@@ -176,7 +177,7 @@ namespace LX1600 {
   SetPolar(Port &port, OperationEnvironment &env, const PolarCoefficients &polar)
   {
     // Convert from m/s to (km/h)/100
-    auto polar_a = polar.a * 10000 / sqr(fixed(3.6));
+    auto polar_a = polar.a * 10000 / Square(3.6);
     auto polar_b = polar.b * 100 / fixed(3.6);
     auto polar_c = polar.c;
 
