@@ -64,7 +64,7 @@ main(int argc, char **argv)
   }
 
   df.Reset();
-  auto p = fixed_two_pi / fixed(10);
+  auto p = M_2PI / fixed(10);
   for (int X = 0; X < 50; X += 1) {
     // Y = sin(2 * pi * (X/10)
     auto Y = fixed(sin(p * X));

@@ -39,33 +39,33 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Zero().Native(), fixed(0)));
 
   // test constants
-  ok1(equals(Angle::QuarterCircle().Radians(), fixed_half_pi));
-  ok1(equals(Angle::HalfCircle().Radians(), fixed_pi));
+  ok1(equals(Angle::QuarterCircle().Radians(), M_PI_2));
+  ok1(equals(Angle::HalfCircle().Radians(), M_PI));
   ok1(equals((Angle::HalfCircle() + Angle::QuarterCircle()).Radians(),
-             fixed_pi + fixed_half_pi));
-  ok1(equals(Angle::FullCircle().Radians(), fixed_two_pi));
+             M_PI + M_PI_2));
+  ok1(equals(Angle::FullCircle().Radians(), M_2PI));
 
   // Test degrees()
   ok1(equals(Angle::Degrees(0).Native(), fixed(0)));
-  ok1(equals(Angle::Degrees(90).Native(), fixed_half_pi));
-  ok1(equals(Angle::Degrees(180).Native(), fixed_pi));
-  ok1(equals(Angle::Degrees(270).Native(), fixed_pi + fixed_half_pi));
-  ok1(equals(Angle::Degrees(360).Native(), fixed_two_pi));
+  ok1(equals(Angle::Degrees(90).Native(), M_PI_2));
+  ok1(equals(Angle::Degrees(180).Native(), M_PI));
+  ok1(equals(Angle::Degrees(270).Native(), M_PI + M_PI_2));
+  ok1(equals(Angle::Degrees(360).Native(), M_2PI));
 
   ok1(equals(Angle::Radians(fixed(0)).Native(), fixed(0)));
-  ok1(equals(Angle::Radians(fixed_half_pi).Native(), fixed_half_pi));
-  ok1(equals(Angle::Radians(fixed_pi).Native(), fixed_pi));
-  ok1(equals(Angle::Radians(fixed_pi + fixed_half_pi).Native(),
-                            fixed_pi + fixed_half_pi));
-  ok1(equals(Angle::Radians(fixed_two_pi).Native(), fixed_two_pi));
+  ok1(equals(Angle::Radians(M_PI_2).Native(), M_PI_2));
+  ok1(equals(Angle::Radians(M_PI).Native(), M_PI));
+  ok1(equals(Angle::Radians(M_PI + M_PI_2).Native(),
+                            M_PI + M_PI_2));
+  ok1(equals(Angle::Radians(M_2PI).Native(), M_2PI));
 
   // Test Degrees()
   ok1(equals(Angle::Degrees(90).Degrees(), 90));
   ok1(equals(Angle::Degrees(-90).Degrees(), -90));
 
   // Test Radians()
-  ok1(equals(Angle::Degrees(90).Radians(), fixed_half_pi));
-  ok1(equals(Angle::Degrees(-90).Radians(), -fixed_half_pi));
+  ok1(equals(Angle::Degrees(90).Radians(), M_PI_2));
+  ok1(equals(Angle::Degrees(-90).Radians(), -M_PI_2));
 
   // Test Hours()
   ok1(equals(Angle::Degrees(90).Hours(), fixed(6)));
@@ -80,8 +80,8 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Degrees(-90).AbsoluteDegrees(), 90));
 
   // Test AbsoluteRadians()
-  ok1(equals(Angle::Degrees(90).AbsoluteRadians(), fixed_half_pi));
-  ok1(equals(Angle::Degrees(-90).AbsoluteRadians(), fixed_half_pi));
+  ok1(equals(Angle::Degrees(90).AbsoluteRadians(), M_PI_2));
+  ok1(equals(Angle::Degrees(-90).AbsoluteRadians(), M_PI_2));
 
   // Test Reciprocal()
   ok1(equals(Angle::Degrees(90).Reciprocal(), 270));

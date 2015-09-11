@@ -420,7 +420,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const auto B = CalcB(u_sq);
 
   auto sigma = distance / (POLE_RADIUS * A);
-  auto sigmaP = fixed_two_pi;
+  auto sigmaP = M_2PI;
 
   fixed sin_sigma, cos_sigma, cos_2_sigma_m;
 

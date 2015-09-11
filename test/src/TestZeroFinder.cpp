@@ -75,14 +75,14 @@ int main(int argc, char **argv)
   ok1(equals(zf3.find_zero(fixed(1)), fixed(1.584963)));
   ok1(equals(zf3.find_zero(fixed(140)), fixed(1.584963)));
 
-  ZeroFinderTest zf4(fixed(0), fixed_pi + fixed(1), 2);
-  ok1(equals(zf4.find_zero(fixed(-150)), fixed_half_pi));
-  ok1(equals(zf4.find_zero(fixed(1)), fixed_half_pi));
-  ok1(equals(zf4.find_zero(fixed(140)), fixed_half_pi));
+  ZeroFinderTest zf4(fixed(0), M_PI + fixed(1), 2);
+  ok1(equals(zf4.find_zero(fixed(-150)), M_PI_2));
+  ok1(equals(zf4.find_zero(fixed(1)), M_PI_2));
+  ok1(equals(zf4.find_zero(fixed(140)), M_PI_2));
 
-  ok1(equals(zf4.find_min(fixed(-150)), fixed_pi));
-  ok1(equals(zf4.find_min(fixed(1)), fixed_pi));
-  ok1(equals(zf4.find_min(fixed(140)), fixed_pi));
+  ok1(equals(zf4.find_min(fixed(-150)), M_PI));
+  ok1(equals(zf4.find_min(fixed(1)), M_PI));
+  ok1(equals(zf4.find_min(fixed(140)), M_PI));
 
   return exit_status();
 }
