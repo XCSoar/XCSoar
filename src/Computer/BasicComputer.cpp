@@ -32,8 +32,6 @@ Copyright_License {
 static constexpr double INVERSE_G = 1. / GRAVITY;
 static constexpr double INVERSE_2G = INVERSE_G / 2.;
 
-#define fixed_small fixed(0.001)
-
 /**
  * Fill vario values when they are provided by the external vario.
  * This is a short path that works even when no GPS (providing GPS
@@ -124,7 +122,7 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
     return;
 
   const GeoVector v = last.location.DistanceBearing(basic.location);
-  if (v.distance >= fixed(1)) {
+  if (v.distance >= 1) {
     basic.track = v.bearing;
     basic.track_available = basic.location_available;
   }
@@ -152,7 +150,7 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
   }
 
   if (basic.ground_speed_available && calculated.wind_available &&
-      (positive(basic.ground_speed) || calculated.wind.IsNonZero()) &&
+      (basic.ground_speed > 0 || calculated.wind.IsNonZero()) &&
       calculated.flight.flying) {
     auto x0 = basic.track.fastsine() * basic.ground_speed;
     auto y0 = basic.track.fastcosine() * basic.ground_speed;
@@ -182,7 +180,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   const auto any_altitude = basic.GetAnyAltitude();
 
   if (!basic.airspeed_available && any_altitude.first) {
-    fixed dyn; bool available = false;
+    double dyn; bool available = false;
     if (basic.dyn_pressure_available) {
       dyn = basic.dyn_pressure.GetHectoPascal();
       available = true;
@@ -191,7 +189,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
       available = true;
     }
     if (available) {
-      basic.indicated_airspeed = sqrt(fixed(163.2653061) * dyn);
+      basic.indicated_airspeed = sqrt(double(163.2653061) * dyn);
       basic.true_airspeed = basic.indicated_airspeed *
                             AirDensityRatio(any_altitude.second);
 
@@ -208,10 +206,10 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
     return;
   }
 
-  fixed TrueAirspeedEstimated = fixed(0);
+  double TrueAirspeedEstimated = 0;
 
   const SpeedVector wind = calculated.wind;
-  if (positive(basic.ground_speed) || wind.IsNonZero()) {
+  if (basic.ground_speed > 0 || wind.IsNonZero()) {
     auto x0 = basic.track.fastsine() * basic.ground_speed;
     auto y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += wind.bearing.fastsine() * wind.norm;
@@ -243,7 +241,7 @@ ComputeEnergyHeight(MoreData &basic)
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
-    basic.energy_height = fixed(0);
+    basic.energy_height = 0;
 
   basic.TE_altitude = basic.nav_altitude + basic.energy_height;
 }
@@ -267,7 +265,7 @@ ComputeGPSVario(MoreData &basic,
     const auto delta_t =
       basic.noncomp_vario_available.GetTimeDifference(last.noncomp_vario_available);
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
       auto delta_e = basic.energy_height - last.energy_height;
@@ -284,7 +282,7 @@ ComputeGPSVario(MoreData &basic,
     const auto delta_t =
       basic.pressure_altitude_available.GetTimeDifference(last.pressure_altitude_available);
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
       auto delta_h = basic.pressure_altitude - last.pressure_altitude;
@@ -301,7 +299,7 @@ ComputeGPSVario(MoreData &basic,
     const auto delta_t =
       basic.baro_altitude_available.GetTimeDifference(last.baro_altitude_available);
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
       auto delta_h = basic.baro_altitude - last.baro_altitude;
@@ -318,7 +316,7 @@ ComputeGPSVario(MoreData &basic,
        shows when this value was parsed by XCSoar */
     const auto delta_t = basic.time - last_gps.time;
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
       auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
@@ -329,7 +327,7 @@ ComputeGPSVario(MoreData &basic,
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {
-    basic.gps_vario = basic.gps_vario_TE = fixed(0);
+    basic.gps_vario = basic.gps_vario_TE = 0;
     basic.gps_vario_available.Clear();
   }
 }
@@ -368,7 +366,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
   if (!calculated.flight.flying)
     return;
 
-  if (!positive(basic.ground_speed) &&
+  if (basic.ground_speed <= 0 &&
       (!calculated.wind_available || calculated.wind.IsZero()))
     return;
 
@@ -392,7 +390,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
   }
 
   if (!basic.acceleration.available)
-    basic.acceleration.ProvideGLoad(fixed(1) / std::max(fixed_small, fabs(cos(angle))), false);
+    basic.acceleration.ProvideGLoad(1. / std::max(0.001, fabs(cos(angle))), false);
 }
 
 void

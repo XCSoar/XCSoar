@@ -29,7 +29,7 @@ Copyright_License {
 #define WIND_K1 1.0e-5f
 
 void
-WindEKF::Update(const fixed airspeed, const float gps_vel[2])
+WindEKF::Update(const double airspeed, const float gps_vel[2])
 {
   // airsp = sf * | gps_v - wind_v |
   const float dx = gps_vel[0]-X[0];

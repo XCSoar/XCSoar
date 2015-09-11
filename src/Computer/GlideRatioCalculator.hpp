@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_HPP
 #define XCSOAR_GLIDE_RATIO_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
-static constexpr fixed INVALID_GR = fixed(999);
+static constexpr double INVALID_GR = 999;
 
 struct ComputerSettings;
 
@@ -59,13 +58,13 @@ class GlideRatioCalculator {
 public:
   void Initialize(const ComputerSettings &settings);
   void Add(unsigned distance, int altitude);
-  fixed Calculate() const;
+  double Calculate() const;
 };
 
 // methods using low-pass filter
 
 gcc_const
-fixed
-UpdateGR(fixed GR, fixed d, fixed h, fixed filter_factor);
+double
+UpdateGR(double GR, double d, double h, double filter_factor);
 
 #endif

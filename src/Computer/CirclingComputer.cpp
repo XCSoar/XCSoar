@@ -30,8 +30,8 @@ Copyright_License {
 #include "Util/Clamp.hpp"
 
 static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
-static constexpr fixed CRUISE_CLIMB_SWITCH(15);
-static constexpr fixed CLIMB_CRUISE_SWITCH(10);
+static constexpr double CRUISE_CLIMB_SWITCH(15);
+static constexpr double CLIMB_CRUISE_SWITCH(10);
 
 void
 CirclingComputer::Reset()
@@ -46,7 +46,7 @@ CirclingComputer::Reset()
 void
 CirclingComputer::ResetStats()
 {
-  min_altitude = fixed(0);
+  min_altitude = 0;
 }
 
 void
@@ -69,7 +69,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
   }
 
   const auto dt = turn_rate_delta_time.Update(basic.time, 1./3., 10);
-  if (negative(dt)) {
+  if (dt < 0) {
     circling_info.turn_rate = Angle::Zero();
     circling_info.turn_rate_heading = Angle::Zero();
     circling_info.turn_rate_smoothed = Angle::Zero();
@@ -79,7 +79,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     return;
   }
 
-  if (positive(dt)) {
+  if (dt > 0) {
     circling_info.turn_rate =
       (basic.track - last_track).AsDelta() / dt;
     circling_info.turn_rate_heading =
@@ -92,7 +92,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
     // Make the turn rate more smooth using the LowPassFilter
     auto smoothed = LowPassFilter(circling_info.turn_rate_smoothed.Native(),
-                                  turn_rate.Native(), fixed(0.3));
+                                  turn_rate.Native(), 0.3);
     circling_info.turn_rate_smoothed = Angle::Native(smoothed);
 
     // Makes smoothing of heading turn rate
@@ -100,7 +100,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
                       Angle::Degrees(-50), Angle::Degrees(50));
     // Make the heading turn rate more smooth using the LowPassFilter
     smoothed = LowPassFilter(circling_info.turn_rate_heading_smoothed.Native(),
-                             turn_rate.Native(), fixed(0.3));
+                             turn_rate.Native(), 0.3);
     circling_info.turn_rate_heading_smoothed = Angle::Native(smoothed);
 
     last_track = basic.track;
@@ -118,9 +118,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   if (!basic.time_available || !flight.flying)
     return;
 
-  const auto dt = turning_delta_time.Update(basic.time,
-                                            fixed(0), fixed(0));
-  if (!positive(dt))
+  const auto dt = turning_delta_time.Update(basic.time, 0, 0);
+  if (dt <= 0)
     return;
 
   circling_info.turning =
@@ -237,9 +236,8 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
-  const auto dt = percent_delta_time.Update(basic.time,
-                                            fixed(0), fixed(0));
-  if (!positive(dt))
+  const auto dt = percent_delta_time.Update(basic.time, 0, 0);
+  if (dt <= 0)
     return;
 
   // if (Circling)
@@ -257,11 +255,11 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   }
 
   // Calculate the circling percentage
-  if (circling_info.time_cruise + circling_info.time_climb > fixed(1))
+  if (circling_info.time_cruise + circling_info.time_climb > 1)
     circling_info.circling_percentage = 100 * circling_info.time_climb /
         (circling_info.time_cruise + circling_info.time_climb);
   else
-    circling_info.circling_percentage = fixed(-1);
+    circling_info.circling_percentage = -1;
 }
 
 void
@@ -272,7 +270,7 @@ CirclingComputer::MaxHeightGain(const MoreData &basic,
   if (!basic.NavAltitudeAvailable() || !flight.flying)
     return;
 
-  if (positive(min_altitude)) {
+  if (min_altitude > 0) {
     auto height_gain = basic.nav_altitude - min_altitude;
     circling_info.max_height_gain =
       std::max(height_gain, circling_info.max_height_gain);

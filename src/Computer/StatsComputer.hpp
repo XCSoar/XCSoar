@@ -37,8 +37,8 @@ class StatsComputer {
 
   GeoPoint last_location;
 
-  fixed last_climb_start_time, last_cruise_start_time;
-  fixed last_thermal_end_time;
+  double last_climb_start_time, last_cruise_start_time;
+  double last_thermal_end_time;
 
   FlightStatistics flightstats;
   GPSClock stats_clock;
@@ -53,7 +53,7 @@ public:
   bool DoLogging(const MoreData &basic, const DerivedInfo &calculated);
 
 private:
-  void OnClimbBase(const DerivedInfo &calculated, fixed StartAlt);
+  void OnClimbBase(const DerivedInfo &calculated, double StartAlt);
   void OnClimbCeiling(const DerivedInfo &calculated);
   void OnDepartedThermal(const DerivedInfo &calculated);
 

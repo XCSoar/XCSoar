@@ -63,7 +63,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   if (!basic.track_available || !basic.ground_speed_available ||
       !basic.airspeed_available || !basic.airspeed_real ||
-      basic.true_airspeed < fixed(1)) {
+      basic.true_airspeed < 1) {
     ResetBlackout();
     return Result(0);
   }
@@ -91,7 +91,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   if (derived.turn_rate.Absolute() > Angle::Degrees(20) ||
       (basic.acceleration.available &&
        basic.acceleration.real &&
-       fabs(basic.acceleration.g_load - fixed(1)) > fixed(0.3))) {
+       fabs(basic.acceleration.g_load - 1) > 0.3)) {
 
     SetBlackout(time);
     return Result(0);
@@ -126,7 +126,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   Result res;
   res.quality = CounterToQuality(i);
-  res.wind = SpeedVector(fixed(-x[0]), fixed(-x[1]));
+  res.wind = SpeedVector(-x[0], -x[1]);
 
   return res;
 }

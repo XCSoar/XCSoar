@@ -38,7 +38,7 @@ class GlideRatioComputer {
   GlideRatioCalculator gr_calculator;
 
   GeoPoint last_location;
-  fixed last_altitude;
+  double last_altitude;
   Validity last_location_available;
 
 public:

@@ -84,9 +84,9 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
     valid_last_state = true;
 
     const auto fallback_mc = calculated.last_thermal.IsDefined() &&
-      positive(calculated.last_thermal_average_smooth)
+      calculated.last_thermal_average_smooth > 0
       ? calculated.last_thermal_average_smooth
-      : fixed(0);
+      : 0;
     if (_task->UpdateAutoMC(current_as, fallback_mc))
       calculated.ProvideAutoMacCready(basic.clock,
                                       _task->GetGlidePolar().GetMC());
@@ -141,7 +141,7 @@ Predicted(const ContestSettings &settings,
   return TracePoint(current_leg.location_remaining,
                     unsigned(basic.time + current_leg.time_remaining_now),
                     current_leg.solution_remaining.min_arrival_altitude,
-                    fixed(0), 0);
+                    0, 0);
 }
 
 void
@@ -180,8 +180,7 @@ TaskComputer::ProcessAutoTask(const NMEAInfo &basic,
 
   last_flying = true;
 
-  if (calculated.altitude_agl_valid &&
-      calculated.altitude_agl > fixed(500))
+  if (calculated.altitude_agl_valid && calculated.altitude_agl > 500)
     return;
 
   ProtectedTaskManager::ExclusiveLease _task(task);

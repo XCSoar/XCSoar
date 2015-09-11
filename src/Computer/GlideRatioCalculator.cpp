@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 /** over this, show INVALID_GR */
-static constexpr fixed MAXEFFICIENCYSHOW = fixed(200);
+static constexpr double MAXEFFICIENCYSHOW = 200;
 
 void
 GlideRatioCalculator::Initialize(const ComputerSettings &settings)
@@ -102,18 +102,18 @@ GlideRatioCalculator::Add(unsigned distance, int altitude)
 /*
  * returns 0 if invalid, 999 if too high
  */
-fixed
+double
 GlideRatioCalculator::Calculate() const
 {
   int altdiff;
   short bcold;
 
   if (start >= size)
-    return fixed(0);
+    return 0;
 
   if (!valid) {
     if (start == 0)
-      return fixed(0); // unavailable
+      return 0; // unavailable
 
     bcold = 0;
   } else {
@@ -127,7 +127,7 @@ GlideRatioCalculator::Calculate() const
   if (altdiff == 0)
     return INVALID_GR; // infinitum
 
-  auto eff = (fixed) totaldistance / (fixed) altdiff;
+  auto eff = (double)totaldistance / (double)altdiff;
   if (eff > MAXEFFICIENCYSHOW)
     eff = INVALID_GR;
 
@@ -138,34 +138,34 @@ GlideRatioCalculator::Calculate() const
 
 // limit to reasonable values
 gcc_const
-static fixed
-LimitGR(fixed gr)
+static double
+LimitGR(double gr)
 {
   if (fabs(gr) > INVALID_GR)
     return INVALID_GR;
 
-  if (gr >= fixed(0) && gr < fixed(1))
-    return fixed(1);
+  if (gr >= 0 && gr < 1)
+    return 1;
 
-  if (gr < fixed(0) && gr > fixed(-1))
-    return fixed(-1);
+  if (gr < 0 && gr > -1)
+    return -1;
 
   return gr;
 }
 
-fixed
-UpdateGR(fixed gr, fixed leg_distance, fixed height_above_leg,
-         fixed filter_factor)
+double
+UpdateGR(double gr, double leg_distance, double height_above_leg,
+         double filter_factor)
 {
-  if (!positive(leg_distance))
+  if (leg_distance <= 0)
     return gr;
 
   auto glideangle = height_above_leg / leg_distance;
   if (gr != INVALID_GR)
-    glideangle = LowPassFilter(fixed(1) / gr, glideangle, filter_factor);
+    glideangle = LowPassFilter(1. / gr, glideangle, filter_factor);
 
-  if (fabs(glideangle) > fixed(1) / INVALID_GR)
-    gr = LimitGR(fixed(1) / glideangle);
+  if (fabs(glideangle) > 1. / INVALID_GR)
+    gr = LimitGR(1. / glideangle);
   else
     gr = INVALID_GR;
 

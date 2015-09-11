@@ -23,17 +23,17 @@ Copyright_License {
 
 #include "FLARM/FlarmCalculations.hpp"
 
-fixed
-FlarmCalculations::Average30s(FlarmId id, fixed time, fixed altitude)
+double
+FlarmCalculations::Average30s(FlarmId id, double time, double altitude)
 {
   ClimbAverageCalculator &item = averageCalculatorMap[id];
-  return item.GetAverage(time, altitude, fixed(30));
+  return item.GetAverage(time, altitude, 30);
 }
 
 void
-FlarmCalculations::CleanUp(fixed now)
+FlarmCalculations::CleanUp(double now)
 {
-  static constexpr fixed MAX_AGE = fixed(60);
+  static constexpr double MAX_AGE = 60;
 
   // Iterate through ClimbAverageCalculators and remove expired ones
   for (auto it = averageCalculatorMap.begin(),

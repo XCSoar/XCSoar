@@ -28,25 +28,25 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 
-static fixed
+static double
 GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
 {
   short hground = map->GetHeight(loc);
   if (RasterBuffer::IsSpecial(hground))
     hground = 0;
 
-  return fixed(hground);
+  return double(hground);
 }
 
 void
 EstimateThermalBase(const RasterTerrain *terrain,
-                    const GeoPoint location, const fixed altitude,
-                    const fixed average, const SpeedVector wind,
-                    GeoPoint &ground_location, fixed &ground_alt)
+                    const GeoPoint location, const double altitude,
+                    const double average, const SpeedVector wind,
+                    GeoPoint &ground_location, double &ground_alt)
 {
-  if (!positive(average) || !positive(altitude)) {    
+  if (average <= 0 || altitude <= 0) {
     ground_location = location;
-    ground_alt = fixed(0);
+    ground_alt = 0;
     return;
   }
 
@@ -59,7 +59,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
     ground_location = FindLatitudeLongitude(location, 
                                             wind.bearing,
                                             wind.norm * Tmax);
-    ground_alt = fixed(0);
+    ground_alt = 0;
     return;
   }
 
@@ -74,7 +74,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
 
   GeoPoint loc = location;
 
-  for (auto h = altitude; !negative(h); h -= dh) {
+  for (auto h = altitude; h >= 0; h -= dh) {
     // Time to descend to this height
     auto t = (altitude - h) / average;
 
@@ -87,11 +87,11 @@ EstimateThermalBase(const RasterTerrain *terrain,
 
     // At or below ground level, use linear interpolation
     // to estimate intersection
-    if (!positive(dh)) {
+    if (dh <= 0) {
       // Calculate time when we passed the ground level
       t += dh / average;
 
-      if (!positive(t))
+      if (t <= 0)
         /* can happen when the terrain at this location is higher than
            the aircraft's current altitude; bail out */
         break;

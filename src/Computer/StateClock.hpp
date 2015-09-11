@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_STATE_CLOCK_HPP
 #define XCSOAR_STATE_CLOCK_HPP
 
-#include "Math/fixed.hpp"
-
 #include <algorithm>
 
 #include <assert.h>
@@ -42,49 +40,49 @@ Copyright_License {
  */
 template<unsigned max_value, unsigned max_delta>
 class StateClock {
-  fixed value;
+  double value;
 
 public:
   void Clear() {
-    value = fixed(0);
+    value = 0;
   }
 
   bool IsDefined() const {
-    assert(!negative(value));
+    assert(value >= 0);
 
-    return positive(value);
+    return value > 0;
   }
 
 private:
-  static fixed LimitDelta(fixed delta) {
-    assert(!negative(delta));
+  static double LimitDelta(double delta) {
+    assert(delta >= 0);
 
-    return std::min(delta, fixed(max_delta));
+    return std::min(delta, double(max_delta));
   }
 
 public:
-  void Add(fixed delta) {
-    assert(!negative(value));
-    assert(value <= fixed(max_value));
+  void Add(double delta) {
+    assert(value >= 0);
+    assert(value <= double(max_value));
 
     value += LimitDelta(delta);
-    if (value > fixed(max_value))
-      value = fixed(max_value);
+    if (value > double(max_value))
+      value = double(max_value);
   }
 
-  void Subtract(fixed delta) {
-    assert(!negative(value));
-    assert(value <= fixed(max_value));
+  void Subtract(double delta) {
+    assert(value >= 0);
+    assert(value <= double(max_value));
 
     value -= LimitDelta(delta);
-    if (negative(value))
-      value = fixed(0);
+    if (value < 0)
+      value = 0;
   }
 
-  bool operator>=(fixed other) const {
-    assert(positive(other));
-    assert(!negative(value));
-    assert(value <= fixed(max_value));
+  bool operator>=(double other) const {
+    assert(other > 0);
+    assert(value >= 0);
+    assert(value <= double(max_value));
 
     return value >= other;
   }

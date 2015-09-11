@@ -36,14 +36,14 @@ WindComputer::Reset()
 }
 
 gcc_pure
-static fixed
+static double
 GetVTakeoffFallback(const GlidePolar &glide_polar)
 {
   return glide_polar.IsValid()
     ? glide_polar.GetVTakeoff()
     /* if there's no valid polar, assume 10 m/s (36 km/h); that's an
        arbitrary value, but better than nothing */
-    : fixed(10);
+    : 10.;
 }
 
 void

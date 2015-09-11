@@ -24,27 +24,25 @@ Copyright_License {
 #ifndef CLIMBAVERAGECALCULATOR_HPP
 #define CLIMBAVERAGECALCULATOR_HPP
 
-#include "Math/fixed.hpp"
-
 class ClimbAverageCalculator
 {
   static constexpr int MAX_HISTORY = 40;
   struct HistoryItem
   {
-    fixed time;
-    fixed altitude;
+    double time;
+    double altitude;
 
     HistoryItem() = default;
 
-    constexpr HistoryItem(fixed _time, fixed _altitude)
+    constexpr HistoryItem(double _time, double _altitude)
       :time(_time), altitude(_altitude) {}
 
     bool IsDefined() const {
-      return !negative(time);
+      return time >= 0;
     }
 
     void Reset() {
-      time = fixed(-1);
+      time = -1;
     }
   };
 
@@ -52,9 +50,9 @@ class ClimbAverageCalculator
   int newestValIndex;
 
 public:
-  fixed GetAverage(fixed time, fixed altitude, fixed average_time);
+  double GetAverage(double time, double altitude, double average_time);
   void Reset();
-  bool Expired(fixed now, fixed max_age) const;
+  bool Expired(double now, double max_age) const;
 };
 
 #endif

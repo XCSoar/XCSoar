@@ -143,11 +143,10 @@ GlideComputer::ProcessGPS(bool force)
 
   // update basic trace history
   if (basic.time_available) {
-    const auto dt = trace_history_time.Update(basic.time, fixed(0.5),
-                                              fixed(30));
-    if (positive(dt))
+    const auto dt = trace_history_time.Update(basic.time, 0.5, 30);
+    if (dt > 0)
       calculated.trace_history.append(basic);
-    else if (negative(dt))
+    else if (dt < 0)
       /* time warp */
       calculated.trace_history.clear();
   }

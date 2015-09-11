@@ -30,8 +30,8 @@ Copyright_License {
 void
 PolarSettings::SetDefaults()
 {
-  degradation_factor = fixed(1);
-  bugs = fixed(1);
+  degradation_factor = 1;
+  bugs = 1;
   glide_polar_task = GlidePolar::Invalid();
   ballast_timer_active = false;
   auto_bugs = false;
@@ -75,7 +75,7 @@ ComputerSettings::SetDefaults()
   average_eff_time = ae30seconds;
   set_system_time_from_gps = false;
   utc_offset = RoughTimeDelta::FromSeconds(GetSystemUTCOffset());
-  forecast_temperature = CelsiusToKelvin(fixed(25));
+  forecast_temperature = CelsiusToKelvin(25);
   pressure = AtmosphericPressure::Standard();
   pressure_available.Clear();
   airspace.SetDefaults();

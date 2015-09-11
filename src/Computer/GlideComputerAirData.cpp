@@ -32,7 +32,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "NMEA/MoreData.hpp"
 
-static constexpr fixed THERMAL_TIME_MIN(45);
+static constexpr double THERMAL_TIME_MIN = 45;
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),
@@ -141,7 +141,7 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
 {
   auto g_load = basic.acceleration.available
     ? basic.acceleration.g_load
-    : fixed(1);
+    : 1;
 
   vario.sink_rate =
     flight.flying && basic.airspeed_available &&
@@ -149,20 +149,20 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
     ? - settings_computer.polar.glide_polar_task.SinkRate(basic.indicated_airspeed,
                                                           g_load)
     /* the glider sink rate is useless when not flying */
-    : fixed(0);
+    : 0;
 }
 
 inline void
 GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
                                        DerivedInfo &calculated)
 {
-  if (basic.airspeed_available && positive(basic.indicated_airspeed) &&
-      positive(basic.true_airspeed) &&
+  if (basic.airspeed_available && basic.indicated_airspeed > 0 &&
+      basic.true_airspeed > 0 &&
       basic.total_energy_vario_available &&
       !calculated.circling &&
       (!basic.acceleration.available ||
        !basic.acceleration.real ||
-       fabs(basic.acceleration.g_load - fixed(1)) <= fixed(0.25))) {
+       fabs(basic.acceleration.g_load - 1) <= 0.25)) {
     // TODO: Check this is correct for TAS/IAS
     auto ias_to_tas = basic.indicated_airspeed / basic.true_airspeed;
     auto w_tas = basic.total_energy_vario * ias_to_tas;
@@ -176,7 +176,7 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
                                      const CirclingInfo &circling,
                                      OneClimbInfo &current_thermal)
 {
-  if (positive(circling.climb_start_time)) {
+  if (circling.climb_start_time > 0) {
     current_thermal.start_time = circling.climb_start_time;
     current_thermal.end_time = basic.time;
     current_thermal.gain =
@@ -195,7 +195,7 @@ GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
       flying.flying) {
     vario_info.ld_vario =
       UpdateGR(vario_info.ld_vario, basic.indicated_airspeed,
-               -basic.total_energy_vario, fixed(0.3));
+               -basic.total_energy_vario, 0.3);
   } else {
     vario_info.ld_vario = INVALID_GR;
   }
@@ -205,7 +205,7 @@ inline void
 GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
 {
   if (!calculated.circling && basic.NavAltitudeAvailable()) {
-    if (negative(calculated.cruise_start_time)) {
+    if (calculated.cruise_start_time < 0) {
       calculated.cruise_start_location = basic.location;
       calculated.cruise_start_altitude = basic.nav_altitude;
       calculated.cruise_start_time = basic.time;
@@ -216,7 +216,7 @@ GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
       calculated.cruise_gr =
           UpdateGR(calculated.cruise_gr, DistanceFlown,
                    calculated.cruise_start_altitude - basic.nav_altitude,
-                   fixed(0.5));
+                   0.5);
     }
   }
 }
@@ -230,9 +230,9 @@ GlideComputerAirData::TerrainHeight(const MoreData &basic,
 {
   if (!basic.location_available || terrain == NULL) {
     calculated.terrain_valid = false;
-    calculated.terrain_altitude = fixed(0);
+    calculated.terrain_altitude = 0;
     calculated.altitude_agl_valid = false;
-    calculated.altitude_agl = fixed(0);
+    calculated.altitude_agl = 0;
     return;
   }
 
@@ -243,15 +243,15 @@ GlideComputerAirData::TerrainHeight(const MoreData &basic,
       Alt = 0;
     else {
       calculated.terrain_valid = false;
-      calculated.terrain_altitude = fixed(0);
+      calculated.terrain_altitude = 0;
       calculated.altitude_agl_valid = false;
-      calculated.altitude_agl = fixed(0);
+      calculated.altitude_agl = 0;
       return;
     }
   }
 
   calculated.terrain_valid = true;
-  calculated.terrain_altitude = fixed(Alt);
+  calculated.terrain_altitude = Alt;
 
   if (basic.NavAltitudeAvailable()) {
     calculated.altitude_agl = basic.nav_altitude - calculated.terrain_altitude;
@@ -266,7 +266,7 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
                                   const ComputerSettings &settings)
 {
   if (basic.time_available &&
-      negative(delta_time.Update(basic.time, fixed(0), fixed(180))))
+      delta_time.Update(basic.time, 0, 180) < 0)
     /* time warp: reset the computer */
     ResetFlight(calculated, true);
 
@@ -284,7 +284,7 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
     ? glide_polar.GetVTakeoff()
     /* if there's no valid polar, assume 10 m/s (36 km/h); that's an
        arbitrary value, but better than nothing */
-    : fixed(10);
+    : 10;
 
   flying_computer.Compute(v_takeoff, basic,
                           calculated, flying);
@@ -316,18 +316,18 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
   if (!thermal_locator.estimate_valid ||
       !basic.NavAltitudeAvailable() ||
       !calculated.last_thermal.IsDefined() ||
-      negative(calculated.last_thermal.lift_rate))
+      calculated.last_thermal.lift_rate < 0)
     return;
 
   if (calculated.wind_available &&
-      calculated.wind.norm / calculated.last_thermal.lift_rate > fixed(10.0)) {
+      calculated.wind.norm / calculated.last_thermal.lift_rate > 10.0) {
     // thermal strength is so weak compared to wind that source estimate
     // is unlikely to be reliable, so don't calculate or remember it
     return;
   }
 
   GeoPoint ground_location;
-  fixed ground_altitude = fixed(-1);
+  double ground_altitude = -1;
   EstimateThermalBase(terrain, thermal_locator.estimate_location,
                       basic.nav_altitude,
                       calculated.last_thermal.lift_rate,
@@ -335,7 +335,7 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
                       ground_location,
                       ground_altitude);
 
-  if (positive(ground_altitude)) {
+  if (ground_altitude > 0) {
     ThermalSource &source = thermal_locator.AllocateSource();
 
     source.lift_rate = calculated.last_thermal.lift_rate;
@@ -351,7 +351,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
                                        bool last_circling)
 {
   if (calculated.circling || !last_circling ||
-      !positive(calculated.climb_start_time))
+      calculated.climb_start_time <= 0)
     return;
 
   auto duration = calculated.cruise_start_time - calculated.climb_start_time;
@@ -361,7 +361,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   auto gain = calculated.cruise_start_altitude_te
     - calculated.climb_start_altitude_te;
 
-  if (!positive(gain))
+  if (gain <= 0)
     return;
 
   bool was_defined = calculated.last_thermal.IsDefined();
@@ -378,7 +378,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   else
     calculated.last_thermal_average_smooth =
         LowPassFilter(calculated.last_thermal_average_smooth,
-                      calculated.last_thermal.lift_rate, fixed(0.3));
+                      calculated.last_thermal.lift_rate, 0.3);
 
   ThermalSources(basic, calculated, calculated.thermal_locator);
 }
@@ -392,7 +392,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
     return;
 
   // Only calculate new azimuth if data is older than 15 minutes
-  if (!calculated.sun_data_available.IsOlderThan(basic.clock, fixed(15 * 60)))
+  if (!calculated.sun_data_available.IsOlderThan(basic.clock, 15 * 60))
     return;
 
   // Calculate new azimuth
@@ -417,7 +417,7 @@ GlideComputerAirData::NextLegEqThermal(const NMEAInfo &basic,
       !vector_remaining.IsValid() ||
       !calculated.wind_available) {
     // Assign a negative value to invalidate the result
-    calculated.next_leg_eq_thermal = fixed(-1);
+    calculated.next_leg_eq_thermal = -1;
     return;
   }
 

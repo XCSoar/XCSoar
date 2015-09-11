@@ -113,11 +113,11 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
 
   // detect zero crossing
   if ((heading < Angle::QuarterCircle() &&
-       last_heading.Degrees() > fixed(270)) ||
+       last_heading.Degrees() > 270) ||
       (last_heading < Angle::QuarterCircle() &&
-       heading.Degrees() > fixed(270))) {
+       heading.Degrees() > 270)) {
 
-    fixed h_av = fixed(0);
+    double h_av = 0;
     for (auto i : lift_database)
       h_av += i;
 

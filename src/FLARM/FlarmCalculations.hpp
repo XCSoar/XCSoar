@@ -36,9 +36,9 @@ private:
   AverageCalculatorMap averageCalculatorMap;
 
 public:
-  fixed Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude);
+  double Average30s(FlarmId flarmId, double curTime, double curAltitude);
 
-  void CleanUp(fixed now);
+  void CleanUp(double now);
 };
 
 #endif

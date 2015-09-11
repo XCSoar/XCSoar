@@ -27,8 +27,8 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 
 class ConditionMonitorFinalGlide final : public ConditionMonitor {
-  fixed tad;
-  fixed last_tad;
+  double tad;
+  double last_tad;
 
 public:
   constexpr ConditionMonitorFinalGlide()

@@ -30,9 +30,9 @@ void
 StatsComputer::ResetFlight(const bool full)
 {
   last_location = GeoPoint::Invalid();
-  last_climb_start_time = fixed(-1);
-  last_cruise_start_time = fixed(-1);
-  last_thermal_end_time = fixed(-1);
+  last_climb_start_time = -1;
+  last_cruise_start_time = -1;
+  last_thermal_end_time = -1;
 
   if (full)
     flightstats.Reset();
@@ -54,7 +54,7 @@ StatsComputer::DoLogging(const MoreData &basic,
 {
   /// @todo consider putting this sanity check inside Parser
   bool location_jump = basic.location_available && last_location.IsValid() &&
-    basic.location.DistanceS(last_location) > fixed(200);
+    basic.location.DistanceS(last_location) > 200;
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();
@@ -81,7 +81,7 @@ StatsComputer::DoLogging(const MoreData &basic,
 }
 
 void
-StatsComputer::OnClimbBase(const DerivedInfo &calculated, fixed StartAlt)
+StatsComputer::OnClimbBase(const DerivedInfo &calculated, double StartAlt)
 {
   flightstats.AddClimbBase(calculated.climb_start_time -
                            calculated.flight.takeoff_time, StartAlt);
@@ -127,12 +127,13 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   }
 
   if (calculated.last_thermal.IsDefined() &&
-      (negative(last_thermal_end_time) ||
+      (last_thermal_end_time < 0 ||
        calculated.last_thermal.end_time > last_thermal_end_time))
     OnDepartedThermal(calculated);
 
   last_climb_start_time = calculated.climb_start_time;
   last_cruise_start_time = calculated.cruise_start_time;
   last_thermal_end_time = calculated.last_thermal.IsDefined()
-    ? calculated.last_thermal.end_time : fixed(-1);
+    ? calculated.last_thermal.end_time
+    : -1.;
 }

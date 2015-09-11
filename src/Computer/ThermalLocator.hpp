@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef THERMALLOCATOR_H
 #define THERMALLOCATOR_H
 
-#include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
 
@@ -53,7 +52,7 @@ private:
      * @param wind_drift Wind drift offset
      * @param decay decay factor for weighting
      */
-    void Drift(fixed t, const FlatProjection &projection,
+    void Drift(double t, const FlatProjection &projection,
                const GeoPoint& wind_drift);
 
     /** Actual location of sample */
@@ -61,13 +60,13 @@ private:
     /** Projected/drifted sample */
     FlatPoint loc_drift;
     /** Time of sample (s) */
-    fixed t_0;
+    double t_0;
     /** Scaled updraft value of sample */
-    fixed w;
+    double w;
     /** Lift weighting used for this point */
-    fixed lift_weight;
+    double lift_weight;
     /** Recency weighting used for this point */
-    fixed recency_weight;
+    double recency_weight;
   };
 
   /** Circular buffer of points */
@@ -90,8 +89,8 @@ public:
    * @param wind Wind vector
    * @param therm Output thermal estimate data
    */
-  void Process(const bool circling, const fixed time, const GeoPoint &location,
-               const fixed w, const SpeedVector wind,
+  void Process(bool circling, double time, const GeoPoint &location,
+               double w, SpeedVector wind,
                ThermalLocatorInfo& therm);
 
   /**
@@ -102,12 +101,12 @@ public:
 private:
   FlatPoint glider_average();
 
-  void AddPoint(const fixed t, const GeoPoint &location, const fixed w);
-  void Update(const fixed t_0, const GeoPoint &location_0,
-              const SpeedVector wind, ThermalLocatorInfo &therm);
+  void AddPoint(double t, const GeoPoint &location, double w);
+  void Update(double t_0, const GeoPoint &location_0,
+              SpeedVector wind, ThermalLocatorInfo &therm);
 
-  void Drift(const fixed t_0, const FlatProjection &projection,
-             const GeoPoint& traildrift);
+  void Drift(double t_0, const FlatProjection &projection,
+             const GeoPoint &traildrift);
 };
 
 #endif

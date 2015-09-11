@@ -24,16 +24,14 @@ Copyright_License {
 #ifndef THERMALBASE_HPP
 #define THERMALBASE_HPP
 
-#include "Math/fixed.hpp"
-
 class RasterTerrain;
 struct GeoPoint;
 struct SpeedVector;
 
 void
 EstimateThermalBase(const RasterTerrain *terrain,
-                    const GeoPoint location, const fixed altitude,
-                    const fixed average, const SpeedVector wind,
-                    GeoPoint &ground_location, fixed &ground_alt);
+                    const GeoPoint location, const double altitude,
+                    const double average, const SpeedVector wind,
+                    GeoPoint &ground_location, double &ground_alt);
 
 #endif

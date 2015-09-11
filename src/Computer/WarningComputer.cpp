@@ -45,12 +45,12 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   if (!basic.time_available)
     return;
 
-  const auto dt = delta_time.Update(basic.time, fixed(1), fixed(20));
-  if (negative(dt))
+  const auto dt = delta_time.Update(basic.time, 1, 20);
+  if (dt < 0)
     /* time warp */
     Reset();
 
-  if (!positive(dt))
+  if (dt <= 0)
     return;
 
   airspaces.SetFlightLevels(settings_computer.pressure);

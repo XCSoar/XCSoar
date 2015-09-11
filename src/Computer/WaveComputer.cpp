@@ -139,18 +139,18 @@ WaveComputer::Compute(const NMEAInfo &basic,
        and a vario value */
     return;
 
-  const auto dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
-  if (negative(dt))
+  const auto dt = delta_time.Update(basic.time, 0.5, 20);
+  if (dt < 0)
     /* time warp */
     Reset();
 
-  if (!positive(dt))
+  if (dt <= 0)
     /* throttle */
     return;
 
   const auto vario = basic.netto_vario;
 
-  constexpr fixed threshold(0.5);
+  constexpr double threshold(0.5);
   if (vario > threshold) {
     /* positive vario value - feed it to the #LeastSquares instance */
 
@@ -163,12 +163,12 @@ WaveComputer::Compute(const NMEAInfo &basic,
     ls.Update(flat.x, flat.y, vario - Half(threshold));
   }
 
-  if (negative(vario))
+  if (vario < 0)
     sinking_clock.Add(dt);
   else
     sinking_clock.Subtract(dt);
 
-  const bool sinking = sinking_clock >= dt + fixed(1);
+  const bool sinking = sinking_clock >= dt + 1;
   if (sinking) {
     /* we've been sinking; stop calculating the current wave; prepare
        to flush the #LeastSquares instance */

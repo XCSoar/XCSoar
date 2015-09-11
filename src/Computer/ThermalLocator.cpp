@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 inline void
-ThermalLocator::Point::Drift(fixed t, const FlatProjection &projection,
+ThermalLocator::Point::Drift(double t, const FlatProjection &projection,
                              const GeoPoint& wind_drift)
 {
   const auto dt = t - t_0;
@@ -56,11 +56,11 @@ ThermalLocator::Reset()
 }
 
 inline void
-ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
+ThermalLocator::AddPoint(const double t, const GeoPoint &location, const double w)
 {
   points[n_index].location = location;
   points[n_index].t_0 = t;
-  points[n_index].w = std::max(w, fixed(-0.1));
+  points[n_index].w = std::max(w, -0.1);
   // lift_weight and recency_weight are set by Drift()
 
   n_index = (n_index + 1) % TLOCATOR_NMAX;
@@ -70,7 +70,7 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 }
 
 void
-ThermalLocator::Update(const fixed t_0, 
+ThermalLocator::Update(const double t_0,
                        const GeoPoint &location_0,
                        const SpeedVector wind, 
                        ThermalLocatorInfo &therm)
@@ -90,8 +90,8 @@ ThermalLocator::Update(const fixed t_0,
   FlatPoint av = glider_average();
   // find thermal center relative to glider's average position
 
-  FlatPoint f0(fixed(0), fixed(0));
-  fixed acc = fixed(0);
+  FlatPoint f0(0, 0);
+  double acc = 0;
   for (unsigned i = 0; i < n_points; ++i) {
     f0 += (points[i].loc_drift-av)*points[i].lift_weight;
     acc += points[i].lift_weight;
@@ -99,11 +99,11 @@ ThermalLocator::Update(const fixed t_0,
 
   // if sufficient data, estimate location
 
-  if (!positive(acc)) {
+  if (acc <= 0) {
     therm.estimate_valid = false;
     return;
   }
-  f0 = f0 * (fixed(1)/acc) + av;
+  f0 = f0 * (1. / acc) + av;
 
   therm.estimate_location = projection.Unproject(f0);
   therm.estimate_valid = true;
@@ -112,19 +112,19 @@ ThermalLocator::Update(const fixed t_0,
 inline FlatPoint
 ThermalLocator::glider_average()
 {
-  FlatPoint result(fixed(0), fixed(0));
+  FlatPoint result(0, 0);
   assert(n_points>0);
   if (n_points == 0)
     return result;
 
   // find glider's average position
-  fixed acc = fixed(0);
+  double acc = 0;
   for (unsigned i = 0; i < n_points; ++i) {
     result += points[i].loc_drift*points[i].recency_weight;
     acc += points[i].recency_weight;
   }
 
-  if (positive(acc)) {
+  if (acc > 0) {
     result.x /= acc;
     result.y /= acc;
   }
@@ -133,7 +133,7 @@ ThermalLocator::glider_average()
 }
 
 inline void
-ThermalLocator::Drift(const fixed t_0, const FlatProjection &projection,
+ThermalLocator::Drift(const double t_0, const FlatProjection &projection,
                       const GeoPoint& traildrift)
 {
   for (unsigned i = 0; i < n_points; ++i)
@@ -141,8 +141,8 @@ ThermalLocator::Drift(const fixed t_0, const FlatProjection &projection,
 }
 
 void
-ThermalLocator::Process(const bool circling, const fixed time,
-                        const GeoPoint &location, const fixed w,
+ThermalLocator::Process(const bool circling, const double time,
+                        const GeoPoint &location, const double w,
                         const SpeedVector wind, ThermalLocatorInfo& therm)
 {
   if (circling) {

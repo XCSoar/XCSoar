@@ -33,10 +33,11 @@ ClimbAverageCalculator::Reset()
     history[i].Reset();
 }
 
-fixed
-ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_time)
+double
+ClimbAverageCalculator::GetAverage(double time, double altitude,
+                                   double average_time)
 {
-  assert(average_time <= fixed(MAX_HISTORY));
+  assert(average_time <= MAX_HISTORY);
 
   int bestHistory;
 
@@ -72,11 +73,11 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
     return (altitude - history[bestHistory].altitude) /
            (time - history[bestHistory].time);
 
-  return fixed(0);
+  return 0;
 }
 
 bool
-ClimbAverageCalculator::Expired(fixed now, fixed max_age) const
+ClimbAverageCalculator::Expired(double now, double max_age) const
 {
   if (newestValIndex < 0)
     return true;

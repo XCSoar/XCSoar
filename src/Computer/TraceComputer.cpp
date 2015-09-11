@@ -68,7 +68,7 @@ TraceComputer::LockedCopyTo(TracePointVector &v) const
 void
 TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
                             const GeoPoint &location,
-                            fixed resolution) const
+                            double resolution) const
 {
   const ScopeLock lock(mutex);
   full.GetPoints(v, min_time, location, resolution);

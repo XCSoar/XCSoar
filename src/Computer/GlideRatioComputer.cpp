@@ -41,7 +41,7 @@ GlideRatioComputer::Compute(const MoreData &basic,
   if (!basic.NavAltitudeAvailable()) {
     Reset();
     vario_info.gr = INVALID_GR;
-    vario_info.average_gr = fixed(0);
+    vario_info.average_gr = 0;
     return;
   }
 
@@ -50,7 +50,7 @@ GlideRatioComputer::Compute(const MoreData &basic,
        wasn't valid, skip this iteration and try the next one */
     Reset();
     vario_info.gr = INVALID_GR;
-    vario_info.average_gr = fixed(0);
+    vario_info.average_gr = 0;
 
     last_location = basic.location;
     last_location_available = basic.location_available;
@@ -66,7 +66,7 @@ GlideRatioComputer::Compute(const MoreData &basic,
   // Glide ratio over ground
   vario_info.gr =
     UpdateGR(vario_info.gr, DistanceFlown,
-             last_altitude - basic.nav_altitude, fixed(0.1));
+             last_altitude - basic.nav_altitude, 0.1);
 
   if (calculated.flight.flying && !calculated.circling) {
     if (!gr_calculator_initialised) {

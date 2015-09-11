@@ -60,7 +60,7 @@ struct PolarSettings {
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
    */
-  fixed degradation_factor;
+  double degradation_factor;
 
   /**
    * Bugs ratio applied to polar.  Range is 0..1, where 1 means
@@ -70,7 +70,7 @@ struct PolarSettings {
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
    */
-  fixed bugs;
+  double bugs;
 
   /** Glide polar used for task calculations */
   GlidePolar glide_polar_task;
@@ -85,12 +85,12 @@ struct PolarSettings {
 
   void SetDefaults();
 
-  void SetDegradationFactor(fixed _degradation_factor) {
+  void SetDegradationFactor(double _degradation_factor) {
     degradation_factor = _degradation_factor;
     glide_polar_task.SetBugs(degradation_factor * bugs);
   }
 
-  void SetBugs(fixed _bugs) {
+  void SetBugs(double _bugs) {
     bugs = _bugs;
     glide_polar_task.SetBugs(degradation_factor * bugs);
   }
@@ -187,7 +187,7 @@ struct ComputerSettings {
   /**
    * The forecasted maximum ground temperature [Kelvin].
    */
-  fixed forecast_temperature;
+  double forecast_temperature;
 
   /**
    * Troposhere atmosphere model for QNH correction

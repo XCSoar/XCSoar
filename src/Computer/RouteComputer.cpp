@@ -84,10 +84,10 @@ RouteComputer::TerrainWarning(const MoreData &basic,
   // allow at least 500m of climb above current altitude as ceiling, in case
   // there are no actual working band stats.
   GeoVector v = sol.vector;
-  if (v.distance > fixed(200000))
+  if (v.distance > 200000)
     /* limit to reasonable distances (200km max.) to avoid overflow in
        GeoVector::EndPoint() */
-    v.distance = fixed(200000);
+    v.distance = 200000;
 
   if (terrain) {
     if (sol.IsDefined()) {

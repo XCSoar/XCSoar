@@ -46,12 +46,12 @@ GlideComputerBlackboard::StartTask()
   calculated_info.cruise_start_time = gps_info.time;
 
   // JMW reset time cruising/time circling stats on task start
-  calculated_info.time_climb = fixed(0);
-  calculated_info.time_cruise = fixed(0);
-  calculated_info.total_height_gain = fixed(0);
+  calculated_info.time_climb = 0;
+  calculated_info.time_cruise = 0;
+  calculated_info.total_height_gain = 0;
 
   // reset max height gain stuff on task start
-  calculated_info.max_height_gain = fixed(0);
+  calculated_info.max_height_gain = 0;
 }
 
 void

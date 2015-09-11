@@ -92,7 +92,7 @@ public:
    * may be called from any thread.
    */
   void LockedCopyTo(TracePointVector &v, unsigned min_time,
-                            const GeoPoint &location, fixed resolution) const;
+                            const GeoPoint &location, double resolution) const;
 
   void Update(const ComputerSettings &settings_computer,
               const MoreData &basic, const DerivedInfo &calculated);

@@ -77,7 +77,7 @@ public:
   }
 
   void LockedCopyTraceTo(TracePointVector &v, unsigned min_time,
-                         const GeoPoint &location, fixed resolution) const {
+                         const GeoPoint &location, double resolution) const {
     trace.LockedCopyTo(v, min_time, location, resolution);
   }
 

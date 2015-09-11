@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_COMPUTER_HPP
 #define XCSOAR_CIRCLING_COMPUTER_HPP
 
-#include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/DeltaTime.hpp"
 
@@ -49,7 +48,7 @@ class CirclingComputer {
   /**
    * Start/end time of the turn.
    */
-  fixed turn_start_time;
+  double turn_start_time;
 
   /**
    * Start/end location of the turn.
@@ -59,19 +58,19 @@ class CirclingComputer {
   /**
    * Start/end energy height of the turn.
    */
-  fixed turn_start_energy_height;
+  double turn_start_energy_height;
 
   /**
    * Start/end altitude of the turn.
    */
-  fixed turn_start_altitude;
+  double turn_start_altitude;
 
   DeltaTime percent_delta_time;
 
   /**
    * Minimum altitude since start of task.
    */
-  fixed min_altitude;
+  double min_altitude;
 
 public:
   /**

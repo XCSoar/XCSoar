@@ -37,25 +37,25 @@ ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
   const GlideResult &res = calculated.task_stats.total.solution_remaining;
 
   // TODO: use low pass filter
-  tad = res.altitude_difference * fixed(0.2) + fixed(0.8) * tad;
+  tad = res.altitude_difference * 0.2 + 0.8 * tad;
 
   bool BeforeFinalGlide = !res.IsFinalGlide();
 
   if (BeforeFinalGlide) {
-    Interval_Notification = fixed(60 * 5);
-    if ((tad > fixed(50)) && (last_tad < fixed(-50)))
+    Interval_Notification = 60 * 5;
+    if (tad > 50 && last_tad < -50)
       // report above final glide early
       return true;
-    else if (tad < fixed(-50))
+    else if (tad < -50)
       last_tad = tad;
   } else {
-    Interval_Notification = fixed(60);
+    Interval_Notification = 60;
     if (res.IsFinalGlide()) {
-      if ((last_tad < fixed(-50)) && (tad > fixed(1)))
+      if (last_tad < -50 && tad > 1)
         // just reached final glide, previously well below
         return true;
 
-      if ((last_tad > fixed(1)) && (tad < fixed(-50))) {
+      if (last_tad > 1 && tad < -50) {
         // dropped well below final glide, previously above
         last_tad = tad;
         return true; // JMW this was true before
@@ -68,9 +68,9 @@ ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
 void
 ConditionMonitorFinalGlide::Notify()
 {
-  if (tad > fixed(1))
+  if (tad > 1)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
-  if (tad < fixed(-1))
+  if (tad < -1)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_BELOW);
 }
 

@@ -38,8 +38,8 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
   if (!flarm.IsDetected())
     return;
 
-  fixed north_to_latitude(0);
-  fixed east_to_longitude(0);
+  double north_to_latitude(0);
+  double east_to_longitude(0);
 
   if (basic.location_available) {
     // Precalculate relative east and north projection to lat/lon
@@ -52,8 +52,8 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     GeoPoint plon = basic.location;
     plon.longitude += delta_lon;
 
-    fixed dlat = basic.location.DistanceS(plat);
-    fixed dlon = basic.location.DistanceS(plon);
+    double dlat = basic.location.DistanceS(plat);
+    double dlon = basic.location.DistanceS(plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
       north_to_latitude = delta_lat.Degrees() / dlat;
@@ -110,7 +110,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
       continue;
 
     // Calculate the time difference between now and the last contact
-    fixed dt = traffic.valid.GetTimeDifference(last_traffic->valid);
+    double dt = traffic.valid.GetTimeDifference(last_traffic->valid);
     if (positive(dt)) {
       // Calculate the immediate climb rate
       if (!traffic.climb_rate_received)
