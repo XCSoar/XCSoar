@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "AirDensity.hpp"
 
+#include <math.h>
+
 #define isa_sea_level_density fixed(1.225)
 #define k4 fixed(44330.8)
 #define k6 fixed(1.0 / 42266.5)

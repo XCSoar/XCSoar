@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Pressure.hpp"
 
+#include <math.h>
+
 #define k1 fixed(0.190263)
 #define inv_k1 fixed(1.0 / 0.190263)
 #define k2 fixed(8.417286e-5)

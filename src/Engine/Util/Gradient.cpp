@@ -23,6 +23,8 @@
 #include "Gradient.hpp"
 #include "Util/Clamp.hpp"
 
+#include <math.h>
+
 fixed
 AngleToGradient(const fixed d)
 {

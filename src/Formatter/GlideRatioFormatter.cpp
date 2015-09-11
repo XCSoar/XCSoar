@@ -25,6 +25,7 @@ Copyright_License {
 #include "Util/StringFormat.hpp"
 
 #include <assert.h>
+#include <math.h>
 
 void
 FormatGlideRatio(TCHAR *buffer, size_t size, fixed gr)
