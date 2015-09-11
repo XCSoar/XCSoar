@@ -153,6 +153,7 @@ include $(topdir)/build/form.mk
 include $(topdir)/build/libwidget.mk
 include $(topdir)/build/libaudio.mk
 include $(topdir)/build/libterrain.mk
+include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk
 
 endif

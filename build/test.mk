@@ -779,7 +779,20 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 DEBUG_PROGRAM_NAMES += PlayTone PlayVario DumpVario
 endif
 
+ifeq ($(LUA),y)
+DEBUG_PROGRAM_NAMES += RunLua
+endif
+
 DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
+
+ifeq ($(LUA),y)
+RUN_LUA_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/RunLua.cpp
+RUN_LUA_DEPENDS = LUA IO OS UTIL
+$(eval $(call link-program,RunLua,RUN_LUA))
+endif
 
 DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \

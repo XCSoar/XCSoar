@@ -640,6 +640,14 @@ location=6
 
 mode=Config3
 type=key
+data=7
+event=RunLuaFile
+event=Mode default
+label=Lua
+location=6
+
+mode=Config3
+type=key
 data=9
 event=Mode Vario1
 label=Vega$(CheckVega)

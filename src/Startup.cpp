@@ -95,6 +95,12 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Util/Error.hxx"
 
+#ifdef USE_LUA
+#include "Lua/StartFile.hpp"
+#include "Lua/Background.hpp"
+#include <windef.h> /* for MAX_PATH */
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Dynamic.hpp"
@@ -127,6 +133,15 @@ static void
 AfterStartup()
 {
   StartupLogFreeRamAndStorage();
+
+#ifdef USE_LUA
+  {
+    Error error;
+    TCHAR buffer[PATH_MAX];
+    if (!Lua::StartFile(LocalPath(buffer, _T("lua"), _T("init.lua")), error))
+      LogError(error);
+  }
+#endif
 
   if (is_simulator()) {
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
@@ -477,6 +492,10 @@ Shutdown()
   main_window->BeginShutdown();
 
   StartupLogFreeRamAndStorage();
+
+#ifdef USE_LUA
+  Lua::StopAllBackground();
+#endif
 
   // Turn off all displays
   global_running = false;

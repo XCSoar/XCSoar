@@ -181,6 +181,7 @@ namespace InputEvents
   void eventWeather(const TCHAR *misc);
   void eventQuickMenu(const TCHAR *misc);
   void eventFileManager(const TCHAR *misc);
+  void eventRunLuaFile(const TCHAR *misc);
 
   // -------
 };

@@ -402,6 +402,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputEventsSettings.cpp \
 	$(SRC)/Input/InputEventsThermalAssistant.cpp \
 	$(SRC)/Input/InputEventsTraffic.cpp \
+	$(SRC)/Input/InputEventsLua.cpp \
 	$(SRC)/Input/InputQueue.cpp \
 	$(SRC)/Input/InputLookup.cpp \
 	$(SRC)/Input/InputKeys.cpp \
@@ -762,6 +763,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	RESOURCE DATA \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
+	LUA \
 	SHAPELIB ZZIP \
 	LIBNET TIME OS THREAD \
 	UTIL GEO MATH

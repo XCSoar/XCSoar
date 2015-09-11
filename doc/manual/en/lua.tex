@@ -1,0 +1,203 @@
+\lstnewenvironment{lua}
+{\lstset{language=[5.0]Lua}}
+{}
+
+Starting with version 7.0, \xc can be extended using
+\href{http://www.lua.org/}{Lua} scripts.
+
+Lua is a language that is easy to learn, powerful enough for XCSoar
+and light: the interpreter library weighs just 200 kB.  Lua is a
+common language choice for integrated scripting languages.
+
+\section{Learning Lua}
+
+\begin{lua}
+print("Hello World")
+\end{lua}
+
+This manual will not attempt to teach you basic Lua.  There are enough
+resources on the internet, for example:
+
+\begin{itemize}
+\item \href{http://www.lua.org/manual/5.3/}{Lua 5.3 Reference Manual}
+\item \href{http://www.lua.org/pil/contents.html}{Programming in
+  Lua}, a book on Lua
+\item \href{http://lua-users.org/wiki/TutorialDirectory}{Tutorial
+  Directory} on the lua-users wiki
+\item \href{https://en.wikipedia.org/wiki/Lua_%28programming_language%29}{Wikipedia}
+\end{itemize}
+
+Just to get you started from here, here's some more example code:
+
+\begin{lua}
+-- comment starts with a double hyphen
+
+--[[
+multi
+line
+comment
+]]--
+
+i = 42
+if i > 1 then
+   print("i=" .. i)
+elseif i == 0 then
+   print("zero")
+else
+   error("negative")
+end
+
+a = {1, 'a', 3.14}
+print(a[2])
+
+function f(a, b)
+   return a * b
+end
+print(f(2, 3))
+\end{lua}
+
+\section{Running Lua}
+
+The directory \texttt{XCSoarData/lua/} may contain Lua scripts
+(\texttt{*.lua}).  The directory \texttt{XCSoarData/lua/lib/} may
+contain Lua libraries to be loaded with \texttt{require}.
+
+After startup, \xc starts the script \texttt{init.lua} (if it
+exists).
+
+The \emph{InputEvent} ``\texttt{RunLuaFile}'' can be used to start
+additional scripts.  If no parameter is given, the user is asked to
+choose a file.  Note that the \emph{InputEvent} subsystem is
+deprecated and will be removed once Lua support is complete.
+
+As long as a Lua script runs, the \xc user interface is blocked.
+Be careful not to write scripts that loop forever.
+
+Once the Lua script finishes, the Lua interpreter is shut down --
+unless the script has registered a callback (e.g. a \verb|timer|).  In
+that case, the Lua script stays resident until it unregisters all
+callbacks (or until \xc quits or the user stops the script
+explicitly).
+
+\section{Lua Standard Libraries}
+
+\xc enables the following Lua standard libraries:
+
+\begin{itemize}
+\item \verb|package|
+\item \verb|table|
+\item \verb|string|
+\item \verb|math|
+\end{itemize}
+
+Lua's \verb|print()| function writes to the \xc log file
+(\texttt{XCSoarData/xcsoar.log}).
+
+The \verb|error()| function aborts the Lua script and reports the
+specified error message to the user.
+
+\xc adds another function to the root namespace: \verb|alert()|.
+It shows a dialog with the specified message, and returns as soon as
+the user has closed the dialog.  This function is experimental, and
+may disappear or be renamed at any time.  Most importantly: do not
+abuse it, as it may annoy the user.
+
+\section{\xc's Lua API}
+
+The package/namespace \verb|xcsoar| provides access to \xc.  It
+contains the following names:
+
+\begin{maxipage}
+\begin{tabular}{l|p{13cm}}
+  Name & Description \\
+  \hline
+  \hline
+
+  \verb|VERSION| & The \xc version number, for example
+  ``\texttt{7.0}''. \\
+  \hline
+  \verb|blackboard| & Access to sensor data. \\
+  \hline
+  \verb|timer| & Class for scheduling periodic callbacks. \\
+\end{tabular}
+\end{maxipage}
+
+\subsection{The Blackboard}
+
+The blackboard provides access to sensor data, such as GPS location.
+
+The following attributes are provided by \verb|xcsoar.blackboard|:
+
+\begin{maxipage}
+\begin{tabular}{l|p{12cm}}
+Name & Description \\
+\hline\hline
+
+\verb|location| & The current location (table with
+keys \verb|longitude| and \verb|latitude| in degrees) according to
+GPS. \\
+
+\hline
+
+\verb|altitude| & The current altitude $[m]$ above MSL. \\
+
+\hline
+
+\verb|track| & The current flying direction above ground in degrees. \\
+
+\hline
+
+\verb|ground_speed| & The aircraft speed relative to the ground
+$[{m \over s}]$. \\
+
+\end{tabular}
+\end{maxipage}
+
+Any of these may be \verb|nil| if its value is not known, e.g. if
+there is no GPS fix.
+
+\subsection{Timers}
+
+The class \verb|xcsoar.timer| implements a timer that calls a given
+Lua function periodically.
+
+\begin{lua}
+xcsoar.timer.new(60, function(t)
+  print("A minute has passed")
+  t:cancel()
+end)
+\end{lua}
+
+The following methods are available in \verb|xcsoar.timer|:
+
+\begin{maxipage}
+\begin{tabular}{l|p{10cm}}
+Method & Description \\
+\hline\hline
+
+\verb|new(period, function)| & Create a new instance and schedule
+it.  The period is a numeric value in seconds. \\
+
+\hline
+
+\verb|cancel()| & Cancel the timer. \\
+
+\hline
+
+\verb|schedule(period)| & Reschedule the timer. \\
+
+\end{tabular}
+\end{maxipage}
+
+\subsection{Legacy}
+
+Before version 7.0, \xc was adapted using the \emph{InputEvent}
+subsystem (see Appendix~\ref{cha:file_formats}).  During the Lua
+transition, Lua scripts can invoke InputEvents, for example:
+
+\begin{lua}
+xcsoar.fire_legacy_event("Setup", "basic")
+xcsoar.fire_legacy_event("Zoom", "basic")
+\end{lua}
+
+This function will be removed before the final 7.0 release.

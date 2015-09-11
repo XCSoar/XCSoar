@@ -1,4 +1,5 @@
 Version 7.0 - not yet released
+* LUA scripting
 * data files
   - optimise the terrain loader
 * devices
