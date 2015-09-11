@@ -207,8 +207,8 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   while (fabs(lambda - lambda_p) > fixed(1e-7) && --iterLimit) {
     auto sin_lambda = sin(lambda), cos_lambda = cos(lambda);
 
-    sin_sigma = sqrt(sqr(cosu2 * sin_lambda) +
-                     sqr(cosu1 * sinu2 - sinu1 * cosu2 * cos_lambda));
+    sin_sigma = hypot(cosu2 * sin_lambda,
+                      cosu1 * sinu2 - sinu1 * cosu2 * cos_lambda);
 
     if (sin_sigma == fixed(0)) {
       // coincident points...
@@ -420,7 +420,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const auto cos_alpha1 = bearing.SinCos().second;
 
   const auto tan_u1 = (fixed(1) - FLATTENING) * tan(lat1);
-  const auto cos_u1 = fixed(1) / sqrt(fixed(1) + sqr(tan_u1));
+  const auto cos_u1 = fixed(1) / hypot(1, tan_u1);
   const auto sin_u1 = tan_u1 * cos_u1;
 
   const auto sigma1 = atan2(tan_u1, cos_alpha1);
@@ -454,7 +454,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
 
   const auto tmp = sin_u1 * sin_sigma - cos_u1 * cos_sigma * cos_alpha1;
   const auto lat2 = atan2(sin_u1 * cos_sigma + cos_u1 * sin_sigma * cos_alpha1,
-    (fixed(1) - FLATTENING) * sqrt(sqr(sin_alpha) + sqr(tmp)));
+                          (fixed(1) - FLATTENING) * hypot(sin_alpha, tmp));
 
   const auto lambda = atan2(sin_sigma * sin_alpha1, cos_u1 * cos_sigma -
     sin_u1 * sin_sigma * cos_alpha1);
