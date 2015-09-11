@@ -12,9 +12,6 @@
 #define fixed_third fixed(1./3.)
 #define fixed_two_thirds fixed(2./3.)
 
-#define fixed_sqrt_two fixed(1.4142135623730951)
-#define fixed_sqrt_half fixed(0.70710678118654757)
-
 typedef double fixed;
 
 static inline constexpr bool

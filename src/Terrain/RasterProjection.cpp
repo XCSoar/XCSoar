@@ -51,11 +51,11 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
     FACTOR = 256,
   };
 
-  Angle distance = WidthToAngle(fixed_sqrt_two * FACTOR * pixels);
+  Angle distance = WidthToAngle(M_SQRT2 * FACTOR * pixels);
   GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
   auto x = location.DistanceS(p);
 
-  distance = HeightToAngle(fixed_sqrt_two * FACTOR * pixels);
+  distance = HeightToAngle(M_SQRT2 * FACTOR * pixels);
   p = GeoPoint(location.longitude, location.latitude + distance);
   auto y = location.DistanceS(p);
 

@@ -89,7 +89,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(*look.font);
 
-  const unsigned offset = uround(fixed_sqrt_two * wind.norm);
+  const unsigned offset = uround(M_SQRT2 * wind.norm);
   RasterPoint label[] = {
     { 18, -26 - int(offset) },
   };

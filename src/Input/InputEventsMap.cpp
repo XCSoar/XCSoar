@@ -238,10 +238,10 @@ InputEvents::sub_ScaleZoom(int vswitch)
   } else {
     if (vswitch == 1)
       // zoom in a little
-      value /= fixed_sqrt_two;
+      value /= M_SQRT2;
     else if (vswitch == -1)
       // zoom out a little
-      value *= fixed_sqrt_two;
+      value *= M_SQRT2;
     else if (vswitch == 2)
       // zoom in a lot
       value /= 2;
