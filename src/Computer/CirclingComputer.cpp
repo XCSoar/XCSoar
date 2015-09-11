@@ -64,13 +64,11 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
     // initialize turn_rate_delta_time on first call
     if (basic.time_available)
-      turn_rate_delta_time.Update(basic.time,
-                                  fixed_third, fixed(10));
+      turn_rate_delta_time.Update(basic.time, 1./3., 10);
     return;
   }
 
-  const auto dt = turn_rate_delta_time.Update(basic.time,
-                                              fixed_third, fixed(10));
+  const auto dt = turn_rate_delta_time.Update(basic.time, 1./3., 10);
   if (negative(dt)) {
     circling_info.turn_rate = Angle::Zero();
     circling_info.turn_rate_heading = Angle::Zero();

@@ -9,9 +9,6 @@
 
 #include "Compiler.h"
 
-#define fixed_third fixed(1./3.)
-#define fixed_two_thirds fixed(2./3.)
-
 typedef double fixed;
 
 static inline constexpr bool
