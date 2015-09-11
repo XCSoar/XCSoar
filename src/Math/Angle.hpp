@@ -83,7 +83,7 @@ public:
    */
   constexpr
   static Angle QuarterCircle() {
-    return Native(M_HALFPI);
+    return Native(M_PI_2);
   }
 
   constexpr double Native() const {

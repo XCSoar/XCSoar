@@ -35,8 +35,8 @@ Copyright_License {
 #ifndef M_2PI
 #define M_2PI 6.28318530718
 #endif
-#ifndef M_HALFPI
-#define M_HALFPI 1.5707963268
+#ifndef M_PI_2
+#define M_PI_2 1.5707963268
 #endif
 
 #endif

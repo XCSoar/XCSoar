@@ -37,6 +37,6 @@ DiffFilter::Update(const double x0)
   x.front() = x0;
 
   /// @note not sure why need to divide by pi/2 here
-  return ((x.back() - x.front()) / 16 + x[2] - x[4]) / M_HALFPI;
+  return ((x.back() - x.front()) / 16 + x[2] - x[4]) / M_PI_2;
 }
 
