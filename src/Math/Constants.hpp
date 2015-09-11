@@ -26,9 +26,6 @@ Copyright_License {
 
 #include <math.h>
 
-#define DEG_TO_RAD .0174532925199432958
-#define RAD_TO_DEG 57.2957795131
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -38,5 +35,8 @@ Copyright_License {
 #ifndef M_PI_2
 #define M_PI_2 1.5707963268
 #endif
+
+static constexpr double DEG_TO_RAD = .0174532925199432958;
+static constexpr double RAD_TO_DEG = 57.2957795131;
 
 #endif
