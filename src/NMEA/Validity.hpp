@@ -25,11 +25,13 @@ Copyright_License {
 #define XCSOAR_VALIDITY_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <type_traits>
 
 #include <assert.h>
 #include <stdint.h>
+#include <math.h>
 
 /**
  * This keeps track when a value was last changed, to check if it was
@@ -41,9 +43,9 @@ class Validity {
 
   uint32_t last;
 
-  constexpr
+  gcc_const
   static uint32_t Import(fixed time) {
-    return (uint32_t)(time * (1 << BITS));
+    return (uint32_t)ldexp(time, BITS);
   }
 
   constexpr
@@ -51,9 +53,9 @@ class Validity {
     return (uint32_t)(time << BITS);
   }
 
-  constexpr
+  gcc_const
   static fixed Export(uint32_t i) {
-    return fixed(i) / (1 << BITS);
+    return ldexp(i, -BITS);
   }
 
 public:
@@ -65,7 +67,7 @@ public:
   /**
    * Initialize the object with the specified timestamp.
    */
-  explicit constexpr Validity(fixed _last):last(Import(_last)) {}
+  explicit Validity(fixed _last):last(Import(_last)) {}
 
 public:
   /**
