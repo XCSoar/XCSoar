@@ -51,22 +51,19 @@ IntAngleForCos(unsigned angle)
   return NormalizeIntAngle(angle + INT_QUARTER_CIRCLE);
 }
 
-gcc_const
-static inline unsigned
+static inline constexpr unsigned
 UnsafeRadiansToIntAngle(double radians)
 {
   return uround(radians * INT_ANGLE_MULT);
 }
 
-gcc_const
-static inline int
+static inline constexpr unsigned
 NATIVE_TO_INT(double x)
 {
   return NormalizeIntAngle(UnsafeRadiansToIntAngle(x));
 }
 
-gcc_const
-static inline int
+static inline constexpr unsigned
 NATIVE_TO_INT_COS(double x)
 {
   return IntAngleForCos(UnsafeRadiansToIntAngle(x));

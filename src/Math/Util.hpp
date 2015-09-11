@@ -40,8 +40,7 @@ iround(double x)
 /**
  * Convert this number to an unsigned integer, with rounding.
  */
-gcc_const
-static inline unsigned
+static inline constexpr unsigned
 uround(const double x)
 {
   return (unsigned)(x + 0.5);
