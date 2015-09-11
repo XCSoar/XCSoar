@@ -1061,8 +1061,7 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 {
   if (stats.has_targets) {
     // only perform scan if modification is possible
-    const auto t_rem = std::max(fixed(0),
-                                t_target - stats.total.time_elapsed);
+    const auto t_rem = fdim(t_target, stats.total.time_elapsed);
 
     TaskMinTarget bmt(task_points, active_task_point, aircraft,
                       task_behaviour.glide, glide_polar,

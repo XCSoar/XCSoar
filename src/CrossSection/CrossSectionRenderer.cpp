@@ -77,7 +77,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   const auto nav_altitude = gps_info.NavAltitudeAvailable()
     ? gps_info.nav_altitude
     : fixed(0);
-  auto hmin = std::max(fixed(0), nav_altitude - fixed(3300));
+  auto hmin = fdim(nav_altitude, 3300);
   auto hmax = std::max(fixed(3300), nav_altitude + fixed(1000));
 
   chart.ResetScale();
