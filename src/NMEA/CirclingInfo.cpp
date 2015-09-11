@@ -31,17 +31,17 @@ CirclingInfo::Clear()
 
   turn_rate = turn_rate_heading = Angle::Zero();
 
-  time_cruise = fixed(0);
-  time_climb = fixed(0);
-  total_height_gain = fixed(0);
+  time_cruise = 0;
+  time_climb = 0;
+  total_height_gain = 0;
 
-  cruise_start_time = fixed(-1);
-  climb_start_time = fixed(-1);
+  cruise_start_time = -1;
+  climb_start_time = -1;
 
-  max_height_gain = fixed(0);
+  max_height_gain = 0;
 
   turn_rate_smoothed = turn_rate_heading_smoothed = Angle::Zero();
   turn_mode = CirclingMode::CRUISE;
 
-  circling_percentage = fixed(-1);
+  circling_percentage = -1;
 }

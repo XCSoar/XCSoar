@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_THERMAL_BAND_H
 #define XCSOAR_NMEA_THERMAL_BAND_H
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 
 /**
@@ -36,37 +34,37 @@ struct ThermalBandInfo
   static constexpr unsigned NUMTHERMALBUCKETS = 10;
 
   /** Height above working band/safety (m) */
-  fixed working_band_height;
+  double working_band_height;
 
   /** Absolute ceiling of climbs (m) */
-  fixed working_band_ceiling;
+  double working_band_ceiling;
 
   /** Fraction of working band height */
-  fixed working_band_fraction;
+  double working_band_fraction;
 
-  /** Maximum height achieved in circling */ 
-  fixed max_thermal_height;
-  /** Number of samples in each bucket */ 
+  /** Maximum height achieved in circling */
+  double max_thermal_height;
+  /** Number of samples in each bucket */
   int thermal_profile_n[NUMTHERMALBUCKETS];
-  /** Average climb rate in each bucket */ 
-  fixed thermal_profile_w[NUMTHERMALBUCKETS];
+  /** Average climb rate in each bucket */
+  double thermal_profile_w[NUMTHERMALBUCKETS];
 
   void Clear();
 
   /**
    * Calculates the bucket number for the specified height.
    */
-  unsigned BucketForHeight(fixed height) const;
+  unsigned BucketForHeight(double height) const;
 
   /**
    * Calculates the base height of the specified bucket.
    */
-  fixed BucketHeight(unsigned bucket) const;
+  double BucketHeight(unsigned bucket) const;
 
-  void Add(const fixed height, const fixed total_energy_vario);
+  void Add(const double height, const double total_energy_vario);
 
 private:
-  void Expand(const fixed height);
+  void Expand(const double height);
 };
 
 static_assert(std::is_trivial<ThermalBandInfo>::value, "type is not trivial");

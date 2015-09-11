@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_EXTERNAL_SETTINGS_HPP
 
 #include "NMEA/Validity.hpp"
-#include "Math/fixed.hpp"
 #include "Atmosphere/Pressure.hpp"
 
 #include <stdlib.h>
@@ -38,12 +37,12 @@ struct ExternalSettings {
   Validity mac_cready_available;
 
   /** MacCready value (m/s) of external device (if available) */
-  fixed mac_cready;
+  double mac_cready;
 
   Validity ballast_fraction_available;
 
   /** Ballast information (1: full, 0: empty) of external device (if available) */
-  fixed ballast_fraction;
+  double ballast_fraction;
 
   Validity ballast_overload_available;
 
@@ -51,17 +50,17 @@ struct ExternalSettings {
    * Ballast information (1: no ballast, 1.5: ballast = 0.5 times dry mass)
    * of external device (if available)
    */
-  fixed ballast_overload;
+  double ballast_overload;
 
   Validity wing_loading_available;
 
   /** Wing loading information (kg/m^2) of external device (if available) */
-  fixed wing_loading;
+  double wing_loading;
 
   Validity bugs_available;
 
   /** Bugs information (1: clean, 0: dirty) of external device (if available) */
-  fixed bugs;
+  double bugs;
 
   Validity qnh_available;
 
@@ -74,7 +73,7 @@ struct ExternalSettings {
   unsigned volume;
 
   void Clear();
-  void Expire(fixed time);
+  void Expire(double time);
   void Complement(const ExternalSettings &add);
 
   /**
@@ -95,8 +94,8 @@ struct ExternalSettings {
    * @return true if the current setting is the same, false if the
    * value is different or if there is no value
    */
-  bool CompareMacCready(fixed value) const {
-    return mac_cready_available && fabs(mac_cready - value) <= fixed(0.05);
+  bool CompareMacCready(double value) const {
+    return mac_cready_available && fabs(mac_cready - value) <= 0.05;
   }
 
   /**
@@ -105,9 +104,9 @@ struct ExternalSettings {
    * @return true if the current setting is the same, false if the
    * value is different or if there is no value
    */
-  bool CompareBallastFraction(fixed value) const {
+  bool CompareBallastFraction(double value) const {
     return ballast_fraction_available &&
-      fabs(ballast_fraction - value) <= fixed(0.01);
+      fabs(ballast_fraction - value) <= 0.01;
   }
 
   /**
@@ -116,9 +115,9 @@ struct ExternalSettings {
    * @return true if the current setting is the same, false if the
    * value is different or if there is no value
    */
-  bool CompareBallastOverload(fixed value) const {
+  bool CompareBallastOverload(double value) const {
     return ballast_overload_available &&
-      fabs(ballast_overload - value) <= fixed(0.01);
+      fabs(ballast_overload - value) <= 0.01;
   }
 
   /**
@@ -127,9 +126,9 @@ struct ExternalSettings {
    * @return true if the current setting is the same, false if the
    * value is different or if there is no value
    */
-  bool CompareWingLoading(fixed value) const {
+  bool CompareWingLoading(double value) const {
     return wing_loading_available &&
-      fabs(wing_loading - value) <= fixed(0.5);
+      fabs(wing_loading - value) <= 0.5;
   }
 
   /**
@@ -138,8 +137,8 @@ struct ExternalSettings {
    * @return true if the current setting is the same, false if the
    * value is different or if there is no value
    */
-  bool CompareBugs(fixed value) const {
-    return bugs_available && fabs(bugs - value) <= fixed(0.01);
+  bool CompareBugs(double value) const {
+    return bugs_available && fabs(bugs - value) <= 0.01;
   }
 
   /**
@@ -150,7 +149,7 @@ struct ExternalSettings {
    */
   bool CompareQNH(AtmosphericPressure value) const {
     return qnh_available &&
-      fabs(qnh.GetHectoPascal() - value.GetHectoPascal()) <= fixed(0.5);
+      fabs(qnh.GetHectoPascal() - value.GetHectoPascal()) <= 0.5;
   }
 
   /**
@@ -169,13 +168,13 @@ struct ExternalSettings {
    *
    * @return true if the value and the time stamp have been updated
    */
-  bool ProvideMacCready(fixed value, fixed time);
-  bool ProvideBallastFraction(fixed value, fixed time);
-  bool ProvideBallastOverload(fixed value, fixed time);
-  bool ProvideWingLoading(fixed value, fixed time);
-  bool ProvideBugs(fixed value, fixed time);
-  bool ProvideQNH(AtmosphericPressure value, fixed time);
-  bool ProvideVolume(unsigned value, fixed time);
+  bool ProvideMacCready(double value, double time);
+  bool ProvideBallastFraction(double value, double time);
+  bool ProvideBallastOverload(double value, double time);
+  bool ProvideWingLoading(double value, double time);
+  bool ProvideBugs(double value, double time);
+  bool ProvideQNH(AtmosphericPressure value, double time);
+  bool ProvideVolume(unsigned value, double time);
 };
 
 #endif

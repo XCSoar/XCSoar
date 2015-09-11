@@ -42,7 +42,7 @@ class CirclingWind
    */
   struct Sample
   {
-    fixed time;
+    double time;
     SpeedVector vector;
   };
 

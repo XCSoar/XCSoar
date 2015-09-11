@@ -32,7 +32,7 @@ TerrainInfo::Clear()
   terrain_base_valid = false;
 
   altitude_agl_valid = false;
-  altitude_agl = fixed(0);
+  altitude_agl = 0;
 }
 
 void
@@ -95,7 +95,7 @@ DerivedInfo::Reset()
 }
 
 void
-DerivedInfo::Expire(fixed Time)
+DerivedInfo::Expire(double Time)
 {
   // NOTE: wind_available is deliberately not expired. Expiry happens automatically
   // due to the expiration of the real wind source. If wind_available would be
@@ -104,10 +104,10 @@ DerivedInfo::Expire(fixed Time)
   // Invalidated shortly after the copy here).
 
   /* the estimated wind remains valid for an hour */
-  estimated_wind_available.Expire(Time, fixed(3600));
+  estimated_wind_available.Expire(Time, 3600);
 
-  head_wind_available.Expire(Time, fixed(3));
+  head_wind_available.Expire(Time, 3);
 
-  auto_mac_cready_available.Expire(Time, fixed(3600));
-  sun_data_available.Expire(Time, fixed(3600));
+  auto_mac_cready_available.Expire(Time, 3600);
+  sun_data_available.Expire(Time, 3600);
 }

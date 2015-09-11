@@ -49,7 +49,7 @@ struct NMEAInfo {
    * any data.  It is used to update and check the #Validity
    * attributes in this struct.
    */
-  fixed clock;
+  double clock;
 
   /**
    * Is the device alive?  This attribute gets updated each time a
@@ -102,14 +102,14 @@ struct NMEAInfo {
    * @see TrueAirspeed
    * @see IndicatedAirspeed
    */
-  fixed ground_speed;
+  double ground_speed;
 
   /**
    * True air speed (m/s)
    * @see Speed
    * @see IndicatedAirspeed
    */
-  fixed true_airspeed;
+  double true_airspeed;
 
   /**
    * Indicated air speed (m/s)
@@ -117,7 +117,7 @@ struct NMEAInfo {
    * @see TrueAirspeed
    * @see AirDensityRatio
    */
-  fixed indicated_airspeed;
+  double indicated_airspeed;
 
   //##############
   //   Altitude
@@ -126,7 +126,7 @@ struct NMEAInfo {
   Validity gps_altitude_available;
 
   /** GPS altitude AMSL (m) */
-  fixed gps_altitude;
+  double gps_altitude;
 
   /**
    * Static pressure value [Pa].
@@ -154,8 +154,8 @@ struct NMEAInfo {
    *   2) outside air temperature sensor
    *   3) battery voltage measurement
    */
-  fixed sensor_calibration_offset;
-  fixed sensor_calibration_factor; // 0 is not a valid factor.
+  double sensor_calibration_offset;
+  double sensor_calibration_factor; // 0 is not a valid factor.
   Validity sensor_calibration_available;
 
   /**
@@ -169,14 +169,14 @@ struct NMEAInfo {
    * @see BaroAltitudeAvailable
    * @see Altitude
    */
-  fixed baro_altitude;
+  double baro_altitude;
 
   /**
    * Pressure altitude, which is the BaroAltitude with QNH=1013.25 as reference (if available)
    * @see BaroAltitudeAvailable
    * @see Altitude
    */
-  fixed pressure_altitude;
+  double pressure_altitude;
   Validity pressure_altitude_available;
 
   /**
@@ -207,7 +207,7 @@ struct NMEAInfo {
   /**
    * Global time (seconds after UTC midnight)
    */
-  fixed time;
+  double time;
 
   /**
    * GPS date and time (UTC).
@@ -243,19 +243,19 @@ struct NMEAInfo {
    * Gross, non-compensated aircraft vertical speed (m/s, up positive)
    * @see NoncompVarioAvailable
    */
-  fixed noncomp_vario;
+  double noncomp_vario;
 
   /**
    * Rate of change of total energy of aircraft (m/s, up positive)
    * @see TotalEnergyVarioAvailable
    */
-  fixed total_energy_vario;
+  double total_energy_vario;
 
   /**
    * Vertical speed of air mass (m/s, up positive)
    * @see NettoVarioAvailable
    */
-  fixed netto_vario;
+  double netto_vario;
 
   //##############
   //   Settings
@@ -292,7 +292,7 @@ struct NMEAInfo {
    * Temperature of outside air (if available)
    * @see TemperatureAvailable
    */
-  fixed temperature;
+  double temperature;
 
   /**
    * Is heading information available?
@@ -323,7 +323,7 @@ struct NMEAInfo {
    * Humidity of outside air (if available)
    * @see HumidityAvailable
    */
-  fixed humidity;
+  double humidity;
 
   //###########
   //   Other
@@ -335,17 +335,17 @@ struct NMEAInfo {
   Validity voltage_available;
 
   /** Battery supply voltage information (if available) */
-  fixed voltage;
+  double voltage;
 
   Validity battery_level_available;
 
   /** Battery supply information in percent (0.0 - 100.0; if available) */
-  fixed battery_level;
+  double battery_level;
 
   /** Switch state of the user inputs */
   SwitchState switch_state;
 
-  fixed stall_ratio;
+  double stall_ratio;
   Validity stall_ratio_available;
 
   DeviceInfo device;
@@ -368,10 +368,10 @@ struct NMEAInfo {
    * @param other_time the time stamp (see attribute #time)
    */
   gcc_pure
-  BrokenDateTime GetDateTimeAt(fixed other_time) const;
+  BrokenDateTime GetDateTimeAt(double other_time) const;
 
   bool MovementDetected() const {
-    return ground_speed_available && ground_speed > fixed(2);
+    return ground_speed_available && ground_speed > 2;
   }
 
   /**
@@ -379,21 +379,21 @@ struct NMEAInfo {
    * used during startup to move the glider symbol to the home
    * waypoint.
    */
-  void SetFakeLocation(const GeoPoint &_location, const fixed _altitude) {
+  void SetFakeLocation(const GeoPoint &_location, const double _altitude) {
     location = _location;
     location_available.Clear();
     gps_altitude = _altitude;
     gps_altitude_available.Clear();
   }
 
-  void ProvideTime(fixed time);
+  void ProvideTime(double time);
   void ProvideDate(const BrokenDate &date);
 
   /**
    * Provide a "true" barometric altitude, but only use it if the
    * previous altitude was not present or the same/lower priority.
    */
-  void ProvideBaroAltitudeTrue(fixed value) {
+  void ProvideBaroAltitudeTrue(double value) {
     baro_altitude = value;
     baro_altitude_weak = false;
     baro_altitude_available.Update(clock);
@@ -403,7 +403,7 @@ struct NMEAInfo {
    * Same as ProvideBaroAltitudeTrue(), but don't overwrite a "strong"
    * value.
    */
-  void ProvideWeakBaroAltitude(fixed value) {
+  void ProvideWeakBaroAltitude(double value) {
     if (baro_altitude_available && !baro_altitude_weak)
       /* don't overwrite "strong" value */
       return;
@@ -425,7 +425,7 @@ struct NMEAInfo {
    * Provide pressure altitude above 1013 hPa, but only use it if
    * the previous altitude was not present or the same/lower priority.
    */
-  void ProvidePressureAltitude(fixed value) {
+  void ProvidePressureAltitude(double value) {
     pressure_altitude = value;
     pressure_altitude_weak = false;
     pressure_altitude_available.Update(clock);
@@ -435,7 +435,7 @@ struct NMEAInfo {
    * Same as ProvidePressureAltitude(), but don't overwrite a "strong"
    * value.
    */
-  void ProvideWeakPressureAltitude(fixed value) {
+  void ProvideWeakPressureAltitude(double value) {
     if (pressure_altitude_available && !pressure_altitude_weak)
       /* don't overwrite "strong" value */
       return;
@@ -491,7 +491,7 @@ struct NMEAInfo {
    *       offset between the pitot- and the static pressure sensor in hPa (zero).
    *       temperature sensor
    */
-  void ProvideSensorCalibration(fixed value, fixed offset) {
+  void ProvideSensorCalibration(double value, double offset) {
     sensor_calibration_factor = value;
     sensor_calibration_offset = offset;
     sensor_calibration_available.Update(clock);
@@ -504,14 +504,14 @@ struct NMEAInfo {
    * altitude value [m] if "first" is true.
    */
   gcc_pure
-  std::pair<bool, fixed> GetAnyAltitude() const {
+  std::pair<bool, double> GetAnyAltitude() const {
     return pressure_altitude_available
       ? std::make_pair(true, pressure_altitude)
       : (baro_altitude_available
          ? std::make_pair(true, baro_altitude)
          : (gps_altitude_available
             ? std::make_pair(true, gps_altitude)
-            : std::make_pair(false, fixed(0))));
+            : std::make_pair(false, 0.)));
   }
 
   /**
@@ -519,7 +519,7 @@ struct NMEAInfo {
    * [m/s].  This is used by device drivers when it is not documented
    * whether the airspeed variable is TAS or IAS.
    */
-  void ProvideBothAirspeeds(fixed as) {
+  void ProvideBothAirspeeds(double as) {
     indicated_airspeed = true_airspeed = as;
     airspeed_available.Update(clock);
     airspeed_real = true;
@@ -529,7 +529,7 @@ struct NMEAInfo {
    * Set both true airspeed and indicated airspeed to two different
    * values [m/s].
    */
-  void ProvideBothAirspeeds(fixed ias, fixed tas) {
+  void ProvideBothAirspeeds(double ias, double tas) {
     indicated_airspeed = ias;
     true_airspeed = tas;
     airspeed_available.Update(clock);
@@ -540,30 +540,30 @@ struct NMEAInfo {
    * Set the true airspeed [m/s] and derive the indicated airspeed
    * from it, using the specified altitude [m].
    */
-  void ProvideTrueAirspeedWithAltitude(fixed tas, fixed altitude);
+  void ProvideTrueAirspeedWithAltitude(double tas, double altitude);
 
   /**
    * Set the indicated airspeed [m/s] and derive the true airspeed
    * from it, using the specified altitude [m].
    */
-  void ProvideIndicatedAirspeedWithAltitude(fixed ias, fixed altitude);
+  void ProvideIndicatedAirspeedWithAltitude(double ias, double altitude);
 
   /**
    * Set the true airspeed [m/s] and derive the indicated airspeed
    * from it, using the current altitude.
    */
-  void ProvideTrueAirspeed(fixed tas);
+  void ProvideTrueAirspeed(double tas);
 
   /**
    * Set the indicated airspeed [m/s] and derive the true airspeed
    * from it, using the current altitude.
    */
-  void ProvideIndicatedAirspeed(fixed ias);
+  void ProvideIndicatedAirspeed(double ias);
 
   /**
    * Set the gross, non-compensated, plain-old vertical speed vario value [m/s].
    */
-  void ProvideNoncompVario(fixed value) {
+  void ProvideNoncompVario(double value) {
     noncomp_vario = value;
     noncomp_vario_available.Update(clock);
   }
@@ -571,7 +571,7 @@ struct NMEAInfo {
   /**
    * Set the barometric TE vario value [m/s].
    */
-  void ProvideTotalEnergyVario(fixed value) {
+  void ProvideTotalEnergyVario(double value) {
     total_energy_vario = value;
     total_energy_vario_available.Update(clock);
   }
@@ -579,7 +579,7 @@ struct NMEAInfo {
   /**
    * Set the barometric netto vario value [m/s].
    */
-  void ProvideNettoVario(fixed value) {
+  void ProvideNettoVario(double value) {
     netto_vario = value;
     netto_vario_available.Update(clock);
   }

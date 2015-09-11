@@ -37,9 +37,9 @@ AttitudeState::Complement(const AttitudeState &add)
 }
 
 void
-AttitudeState::Expire(fixed now)
+AttitudeState::Expire(double now)
 {
-  bank_angle_available.Expire(now, fixed(5));
-  pitch_angle_available.Expire(now, fixed(5));
-  heading_available.Expire(now, fixed(5));
+  bank_angle_available.Expire(now, 5);
+  pitch_angle_available.Expire(now, 5);
+  heading_available.Expire(now, 5);
 }

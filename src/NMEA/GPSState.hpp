@@ -68,7 +68,7 @@ struct GPSState
   Validity satellite_ids_available;
 
   /** Horizontal dilution of precision */
-  fixed hdop;
+  double hdop;
 
   /**
    * Is the fix real? (no replay, no simulator)
@@ -94,7 +94,7 @@ struct GPSState
 #endif
 
   void Reset();
-  void Expire(fixed now);
+  void Expire(double now);
 };
 
 #endif

@@ -29,16 +29,16 @@ FlyingState::Reset()
   flying = false;
   on_ground = false;
   powered = false;
-  flight_time = takeoff_time = fixed(0);
+  flight_time = takeoff_time = 0;
   takeoff_location.SetInvalid();
-  release_time = fixed(-1);
+  release_time = -1;
   release_location.SetInvalid();
-  power_on_time = fixed(-1);
+  power_on_time = -1;
   power_on_location.SetInvalid();
-  power_off_time = fixed(-1);
+  power_off_time = -1;
   power_off_location.SetInvalid();
   far_location.SetInvalid();
-  far_distance = fixed(-1);
-  landing_time = fixed(-1);
+  far_distance = -1;
+  landing_time = -1;
   landing_location.SetInvalid();
 }

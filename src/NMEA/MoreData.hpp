@@ -35,18 +35,18 @@ Copyright_License {
  */
 struct MoreData : public NMEAInfo {
   /** Altitude used for navigation (GPS or Baro) */
-  fixed nav_altitude;
+  double nav_altitude;
 
   /** Energy height excess to slow to best glide speed */
-  fixed energy_height;
+  double energy_height;
 
   /** Nav Altitude + Energy height (m) */
-  fixed TE_altitude;
+  double TE_altitude;
 
   /** GPS-based vario */
-  fixed gps_vario;
+  double gps_vario;
   /** GPS-based vario including energy height */
-  fixed gps_vario_TE;
+  double gps_vario_TE;
 
   Validity gps_vario_available;
 
@@ -55,7 +55,7 @@ struct MoreData : public NMEAInfo {
    * TotalEnergyVario if available, and falls back to GPSVario.  It is
    * maintained by DeviceBlackboard::Vario().
    */
-  fixed brutto_vario;
+  double brutto_vario;
 
   Validity brutto_vario_available;
 

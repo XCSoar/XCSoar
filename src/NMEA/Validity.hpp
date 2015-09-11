@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_VALIDITY_HPP
 #define XCSOAR_VALIDITY_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -44,7 +43,7 @@ class Validity {
   uint32_t last;
 
   gcc_const
-  static uint32_t Import(fixed time) {
+  static uint32_t Import(double time) {
     return (uint32_t)ldexp(time, BITS);
   }
 
@@ -54,7 +53,7 @@ class Validity {
   }
 
   gcc_const
-  static fixed Export(uint32_t i) {
+  static double Export(uint32_t i) {
     return ldexp(i, -BITS);
   }
 
@@ -67,7 +66,7 @@ public:
   /**
    * Initialize the object with the specified timestamp.
    */
-  explicit Validity(fixed _last):last(Import(_last)) {}
+  explicit Validity(double _last):last(Import(_last)) {}
 
 public:
   /**
@@ -83,7 +82,7 @@ public:
    *
    * @param now the current time stamp in seconds
    */
-  void Update(fixed now) {
+  void Update(double now) {
     last = Import(now);
   }
 
@@ -94,7 +93,7 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool Expire(fixed _now, fixed _max_age) {
+  bool Expire(double _now, double _max_age) {
     const uint32_t now = Import(_now);
     const uint32_t max_age = Import(_max_age);
 
@@ -115,7 +114,7 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool IsOlderThan(fixed _now, fixed _max_age) const {
+  bool IsOlderThan(double _now, double _max_age) const {
     if (!IsValid())
       return true;
 
@@ -135,7 +134,7 @@ public:
    * @param other The second Validity object
    * @return The time difference in seconds
    */
-  fixed GetTimeDifference(const Validity &other) const {
+  double GetTimeDifference(const Validity &other) const {
     assert(IsValid());
     assert(other.IsValid());
 

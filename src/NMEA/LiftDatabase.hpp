@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_LIFT_DATABASE_HPP
 #define XCSOAR_LIFT_DATABASE_HPP
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 #include <array>
 
-class LiftDatabase : public std::array<fixed, 36> {
+class LiftDatabase : public std::array<double, 36> {
 public:
   void Clear() {
-    fill(fixed(0));
+    fill(0);
   }
 };
 

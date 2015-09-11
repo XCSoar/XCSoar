@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ACCELERATION_HPP
 #define XCSOAR_ACCELERATION_HPP
 
-#include "Math/fixed.hpp"
-
 /**
  * State of acceleration of aircraft
  */
@@ -48,13 +46,13 @@ struct AccelerationState
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable
    */
-  fixed g_load;
+  double g_load;
 
   void Reset() {
     available = false;
   }
 
-  void ProvideGLoad(fixed _g_load, bool _real) {
+  void ProvideGLoad(double _g_load, bool _real) {
     g_load = _g_load;
     real = _real;
     available = true;

@@ -55,7 +55,7 @@ ThermalLocatorInfo::AllocateSource()
 }
 
 GeoPoint
-ThermalSource::CalculateAdjustedLocation(fixed altitude,
+ThermalSource::CalculateAdjustedLocation(double altitude,
                                          const SpeedVector &wind) const
 {
   auto dh = altitude - ground_height;

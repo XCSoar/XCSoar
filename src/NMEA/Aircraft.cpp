@@ -38,28 +38,28 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   /* ALTITUDE_STATE */
   aircraft.altitude = info.NavAltitudeAvailable()
     ? info.nav_altitude
-    : fixed(0);
+    : 0.;
 
   aircraft.working_band_fraction = calculated.thermal_band.working_band_fraction;
 
   aircraft.altitude_agl =
     info.NavAltitudeAvailable() && calculated.terrain_valid
     ? calculated.altitude_agl
-    : fixed(0);
+    : 0.;
 
   /* VARIO_INFO */
   aircraft.vario = info.brutto_vario;
   aircraft.netto_vario = info.netto_vario;
 
   /* AIRCRAFT_STATE */
-  aircraft.time = info.time_available ? info.time : fixed(-1);
+  aircraft.time = info.time_available ? info.time : -1.;
   aircraft.location = info.location_available
     ? info.location
     : GeoPoint::Invalid();
   aircraft.track = info.track;
   aircraft.g_load = info.acceleration.available
     ? info.acceleration.g_load
-    : fixed(1);
+    : 1.;
   aircraft.wind = calculated.GetWindOrZero();
   aircraft.flying = calculated.flight.flying;
 

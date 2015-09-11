@@ -35,11 +35,11 @@ struct SpeedVector;
 struct ThermalSource
 {
   GeoPoint location;
-  fixed ground_height;
-  fixed lift_rate;
-  fixed time;
+  double ground_height;
+  double lift_rate;
+  double time;
 
-  GeoPoint CalculateAdjustedLocation(fixed altitude,
+  GeoPoint CalculateAdjustedLocation(double altitude,
                                      const SpeedVector &wind) const;
 };
 

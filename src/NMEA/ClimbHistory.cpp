@@ -29,12 +29,12 @@ Copyright_License {
 void
 ClimbHistory::Clear()
 {
-  std::fill_n(vario, ARRAY_SIZE(vario), fixed(0));
+  std::fill_n(vario, ARRAY_SIZE(vario), 0);
   std::fill_n(count, ARRAY_SIZE(count), 0);
 }
 
 void
-ClimbHistory::Add(unsigned speed, fixed _vario)
+ClimbHistory::Add(unsigned speed, double _vario)
 {
   if (speed >= SIZE)
     return;

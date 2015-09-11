@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_VARIO_INFO_HPP
 #define XCSOAR_VARIO_INFO_HPP
 
-#include "Math/fixed.hpp"
 #include "LiftDatabase.hpp"
 
 #include <type_traits>
@@ -32,25 +31,25 @@ Copyright_License {
 /** Derived vario data */
 struct VarioInfo
 {
-  fixed sink_rate;
+  double sink_rate;
 
   /** Average vertical speed based on 30s */
-  fixed average;
+  double average;
   /** Average vertical speed of the airmass based on 30s */
-  fixed netto_average;
+  double netto_average;
 
   /** Instant glide ratio over ground */
-  fixed gr;
+  double gr;
   /** Glide ratio over ground while in Cruise mode */
-  fixed cruise_gr;
+  double cruise_gr;
 
   /**
    * Average glide ratio over ground.  Zero means the value is not available.
    */
-  fixed average_gr;
+  double average_gr;
 
   /** Instant lift/drag ratio */
-  fixed ld_vario;
+  double ld_vario;
 
   /**
    * The lift of each ten degrees while circling.

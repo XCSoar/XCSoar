@@ -54,15 +54,15 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   auto bank_degrees = attitude.IsBankAngleUseable()
     ? attitude.bank_angle.Degrees()
-    : fixed(0);
+    : 0.;
 
   auto pitch_degrees = attitude.IsPitchAngleUseable()
     ? attitude.pitch_angle.Degrees()
-    : fixed(0);
+    : 0.;
 
-  auto phi = Clamp(bank_degrees, fixed(-89), fixed(89));
+  auto phi = Clamp(bank_degrees, -89., 89.);
   auto alpha = Angle::acos(Clamp(pitch_degrees / 50,
-                                 fixed(-1), fixed(1)));
+                                 -1., 1.));
   auto sphi = Angle::HalfCircle() - Angle::Degrees(phi);
   auto alpha1 = sphi - alpha;
   auto alpha2 = sphi + alpha;

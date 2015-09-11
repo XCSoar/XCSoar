@@ -71,7 +71,7 @@ struct AttitudeState
    */
   void Complement(const AttitudeState &add);
 
-  void Expire(fixed now);
+  void Expire(double now);
 };
 
 #endif

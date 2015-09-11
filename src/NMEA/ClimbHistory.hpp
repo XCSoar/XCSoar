@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_CLIMB_HISTORY_HPP
 #define XCSOAR_CLIMB_HISTORY_HPP
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 
 #include <assert.h>
@@ -41,7 +39,7 @@ class ClimbHistory {
   static constexpr unsigned SIZE = 100;
 
   /** Average climb rate for each episode */
-  fixed vario[SIZE];
+  double vario[SIZE];
 
   /** Number of samples in each episode */
   unsigned short count[SIZE];
@@ -49,7 +47,7 @@ class ClimbHistory {
 public:
   void Clear();
 
-  void Add(unsigned speed, fixed vario);
+  void Add(unsigned speed, double vario);
 
   /**
    * Do we have data for the specified speed?
@@ -61,7 +59,7 @@ public:
   /**
    * Returns the average climb rate for the specified speed.
    */
-  fixed Get(unsigned speed) const {
+  double Get(unsigned speed) const {
     assert(speed < SIZE);
     assert(count[speed] > 0);
 

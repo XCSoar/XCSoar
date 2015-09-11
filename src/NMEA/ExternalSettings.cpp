@@ -36,7 +36,7 @@ ExternalSettings::Clear()
 }
 
 void
-ExternalSettings::Expire(fixed time)
+ExternalSettings::Expire(double time)
 {
   /* the settings do not expire, they are only updated with a new
      value */
@@ -116,9 +116,9 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
 }
 
 bool
-ExternalSettings::ProvideMacCready(fixed value, fixed time)
+ExternalSettings::ProvideMacCready(double value, double time)
 {
-  if (negative(value) || value > fixed(20))
+  if (negative(value) || value > 20)
     /* failed sanity check */
     return false;
 
@@ -131,9 +131,9 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
+ExternalSettings::ProvideBallastFraction(double value, double time)
 {
-  if (negative(value) || value > fixed(1))
+  if (negative(value) || value > 1)
     /* failed sanity check */
     return false;
 
@@ -146,9 +146,9 @@ ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
+ExternalSettings::ProvideBallastOverload(double value, double time)
 {
-  if (value < fixed(1) || value > fixed(5))
+  if (value < 1 || value > 5)
     /* failed sanity check */
     return false;
 
@@ -161,9 +161,9 @@ ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideWingLoading(fixed value, fixed time)
+ExternalSettings::ProvideWingLoading(double value, double time)
 {
-  if (value < fixed(1) || value > fixed(200))
+  if (value < 1 || value > 200)
     /* failed sanity check */
     return false;
 
@@ -176,9 +176,9 @@ ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideBugs(fixed value, fixed time)
+ExternalSettings::ProvideBugs(double value, double time)
 {
-  if (value < fixed(0.5) || value > fixed(1))
+  if (value < 0.5 || value > 1)
     /* failed sanity check */
     return false;
 
@@ -191,10 +191,10 @@ ExternalSettings::ProvideBugs(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideQNH(AtmosphericPressure value, fixed time)
+ExternalSettings::ProvideQNH(AtmosphericPressure value, double time)
 {
-  if (value.GetHectoPascal() < fixed(500) ||
-      value.GetHectoPascal() > fixed(1500))
+  if (value.GetHectoPascal() < 500 ||
+      value.GetHectoPascal() > 1500)
     /* failed sanity check */
     return false;
 
@@ -207,7 +207,7 @@ ExternalSettings::ProvideQNH(AtmosphericPressure value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideVolume(unsigned value, fixed time)
+ExternalSettings::ProvideVolume(unsigned value, double time)
 {
   if (value > 100)
     /* failed sanity check */

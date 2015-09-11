@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FLYING_STATE_HPP
 #define XCSOAR_FLYING_STATE_HPP
 
-#include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 
 #include <type_traits>
@@ -42,9 +41,9 @@ struct FlyingState
   bool powered;
 
   /** Time of flight */
-  fixed flight_time;
+  double flight_time;
   /** Time of takeoff */
-  fixed takeoff_time;
+  double takeoff_time;
 
   /**
    * The location of the aircraft when it took off.  This attribute is
@@ -59,14 +58,14 @@ struct FlyingState
    * not too useful.  This is negative if the aircraft is assumed to
    * be still towing.
    */
-  fixed release_time;
+  double release_time;
 
   /**
    * The time stamp of the last detected 'power-on' - e.g. the last start
    * of the aircraft's engine.
    */
-  fixed power_on_time;
-  fixed power_off_time;
+  double power_on_time;
+  double power_off_time;
 
   /**
    * The location of the aircraft when it released from towing.
@@ -92,12 +91,12 @@ struct FlyingState
    * The distance from #release_location to #far_location.  This value
    * is negative if it was not calculated yet.
    */
-  fixed far_distance;
+  double far_distance;
 
   /**
    * Time stamp of the landing.  Invalid if negative.
    */
-  fixed landing_time;
+  double landing_time;
 
   GeoPoint landing_location;
 

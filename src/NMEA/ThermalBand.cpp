@@ -30,21 +30,21 @@ Copyright_License {
 void
 ThermalBandInfo::Clear()
 {
-  working_band_height = working_band_ceiling = fixed(0);
-  working_band_fraction = fixed(0);
+  working_band_height = working_band_ceiling = 0;
+  working_band_fraction = 0;
 
-  max_thermal_height = fixed(0);
+  max_thermal_height = 0;
 
   for (unsigned i = 0; i < NUMTHERMALBUCKETS; i++) {
-    thermal_profile_w[i] = fixed(0);
+    thermal_profile_w[i] = 0;
     thermal_profile_n[i] = 0;
   }
 }
 
 unsigned
-ThermalBandInfo::BucketForHeight(fixed height) const
+ThermalBandInfo::BucketForHeight(double height) const
 {
-  if (negative(height))
+  if (height < 0)
     return 0;
 
   if (height >= max_thermal_height)
@@ -60,7 +60,7 @@ ThermalBandInfo::BucketForHeight(fixed height) const
   return bucket;
 }
 
-fixed
+double
 ThermalBandInfo::BucketHeight(unsigned bucket) const
 {
   assert(bucket < NUMTHERMALBUCKETS);
@@ -69,7 +69,7 @@ ThermalBandInfo::BucketHeight(unsigned bucket) const
 }
 
 void
-ThermalBandInfo::Add(const fixed height, const fixed total_energy_vario)
+ThermalBandInfo::Add(const double height, const double total_energy_vario)
 {
   if (height > max_thermal_height) {
     // moved beyond ceiling, so redistribute buckets
@@ -82,7 +82,7 @@ ThermalBandInfo::Add(const fixed height, const fixed total_energy_vario)
 }
 
 void
-ThermalBandInfo::Expand(const fixed height)
+ThermalBandInfo::Expand(const double height)
 {
   ThermalBandInfo new_tbi;
 
@@ -90,7 +90,7 @@ ThermalBandInfo::Expand(const fixed height)
   auto hbuk = max_thermal_height / NUMTHERMALBUCKETS;
 
   new_tbi.Clear();
-  new_tbi.max_thermal_height = std::max(fixed(1), max_thermal_height);
+  new_tbi.max_thermal_height = std::max(1., max_thermal_height);
 
   // increase ceiling until reach required height
   while (new_tbi.max_thermal_height < height) {

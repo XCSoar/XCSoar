@@ -86,7 +86,7 @@ struct FlarmError {
     }
   }
 
-  void Expire(gcc_unused fixed clock) {
+  void Expire(gcc_unused double clock) {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }
