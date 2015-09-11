@@ -1,4 +1,5 @@
 #include "Math/Constants.hpp"
+#include "Math/FastTrig.hpp"
 #include "Computer/ThermalLocator.hpp"
 
 #include <math.h>
@@ -13,7 +14,7 @@ thermal_fn(int x)
 static inline double
 INT_TO_DEG(int x)
 {
-  return DEG_TO_RAD * ((double)x * 360) / 4096;
+  return DEG_TO_RAD * ((double)x * 360) / INT_ANGLE_RANGE;
 }
 
 int
@@ -22,18 +23,18 @@ main(int argc, char **argv)
   (void)argc;
   (void)argv;
 
-  puts("const double SINETABLE[4096] = {");
-  for (unsigned i = 0; i < 4096; i++)
+  printf("const double SINETABLE[%u] = {", INT_ANGLE_RANGE);
+  for (unsigned i = 0; i < INT_ANGLE_RANGE; i++)
     printf("  %.20e,\n", sin(INT_TO_DEG(i)));
   puts("};");
 
-  puts("const short ISINETABLE[4096] = {");
-  for (unsigned i = 0; i < 4096; i++)
+  printf("const short ISINETABLE[%u] = {", INT_ANGLE_RANGE);
+  for (unsigned i = 0; i < INT_ANGLE_RANGE; i++)
     printf("  %d,\n", (int)lround(sin(INT_TO_DEG(i)) * 1024));
   puts("};");
 
-  puts("const double INVCOSINETABLE[4096] = {");
-  for (unsigned i = 0; i < 4096; i++) {
+  printf("const double INVCOSINETABLE[%u] = {", INT_ANGLE_RANGE);
+  for (unsigned i = 0; i < INT_ANGLE_RANGE; i++) {
     double x = cos(INT_TO_DEG(i));
     if ((x >= 0) && (x < 1.0e-8))
       x = 1.0e-8;
