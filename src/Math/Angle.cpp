@@ -54,28 +54,6 @@ Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
   mmm = value % 1000;
 }
 
-int
-Angle::Sign(const double tolerance) const
-{
-  if ((value > tolerance))
-    return 1;
-  if ((value < -tolerance))
-    return -1;
-
-  return 0;
-}
-
-int
-Angle::Sign() const
-{
-  if (value > 0)
-    return 1;
-  if (value < 0)
-    return -1;
-
-  return 0;
-}
-
 double
 Angle::AbsoluteDegrees() const
 {

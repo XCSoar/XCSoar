@@ -27,7 +27,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(105);
+  plan_tests(97);
 
   // Test Native() and Native()
   ok1(equals(Angle::Native(fixed(0)).Native(), fixed(0)));
@@ -141,17 +141,6 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Zero().Fraction(Angle::Degrees(90), fixed(0.25)), 22.5));
   ok1(equals(Angle::Zero().Fraction(Angle::Degrees(90), fixed(0.5)), 45));
   ok1(equals(Angle::Zero().Fraction(Angle::Degrees(90), fixed(0.75)), 67.5));
-
-  // Test Sign()
-  ok1(Angle::Degrees(90).Sign() == 1);
-  ok1(Angle::Zero().Sign() == 0);
-  ok1(Angle::Degrees(-90).Sign() == -1);
-
-  ok1(Angle::Degrees(90).Sign(fixed(1)) == 1);
-  ok1(Angle::Degrees(0.5).Sign(fixed(1)) == 0);
-  ok1(Angle::Zero().Sign(fixed(1)) == 0);
-  ok1(Angle::Degrees(-0.5).Sign(fixed(1)) == 0);
-  ok1(Angle::Degrees(-90).Sign(fixed(1)) == -1);
 
   // Test SinCos()
   const auto sc = Angle::Degrees(45).SinCos();

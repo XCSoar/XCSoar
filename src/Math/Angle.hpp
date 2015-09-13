@@ -234,12 +234,6 @@ public:
   }
 
   gcc_pure
-  int Sign() const;
-
-  gcc_pure
-  int Sign(const double tolerance) const;
-
-  gcc_pure
   std::pair<double, double> SinCos() const {
     return ::sin_cos(Radians());
   }
