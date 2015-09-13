@@ -31,7 +31,7 @@ Copyright_License {
  */
 struct ThermalBandInfo
 {
-  static constexpr unsigned NUMTHERMALBUCKETS = 10;
+  static constexpr unsigned N_BUCKETS = 10;
 
   /** Height above working band/safety (m) */
   double working_band_height;
@@ -45,9 +45,9 @@ struct ThermalBandInfo
   /** Maximum height achieved in circling */
   double max_thermal_height;
   /** Number of samples in each bucket */
-  int thermal_profile_n[NUMTHERMALBUCKETS];
+  int thermal_profile_n[N_BUCKETS];
   /** Average climb rate in each bucket */
-  double thermal_profile_w[NUMTHERMALBUCKETS];
+  double thermal_profile_w[N_BUCKETS];
 
   void Clear();
 

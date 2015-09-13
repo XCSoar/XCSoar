@@ -98,10 +98,10 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
   fixed Wmax = fixed(0);
   fixed Wav = fixed(0);
-  fixed Wt[ThermalBandInfo::NUMTHERMALBUCKETS];
-  fixed ht[ThermalBandInfo::NUMTHERMALBUCKETS];
+  fixed Wt[ThermalBandInfo::N_BUCKETS];
+  fixed ht[ThermalBandInfo::N_BUCKETS];
 
-  for (unsigned i = 0; i < ThermalBandInfo::NUMTHERMALBUCKETS; ++i) {
+  for (unsigned i = 0; i < ThermalBandInfo::N_BUCKETS; ++i) {
     if (thermal_band.thermal_profile_n[i] < 6) 
       continue;
 
@@ -110,7 +110,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
       // requires 5 items in bucket before displaying, to eliminate kinks
       auto wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
       ht[numtherm] = i * calculated.thermal_band.max_thermal_height 
-        / ThermalBandInfo::NUMTHERMALBUCKETS;
+        / ThermalBandInfo::N_BUCKETS;
       Wt[numtherm] = wthis;
       Wmax = std::max(Wmax, wthis);
       Wav+= wthis;
