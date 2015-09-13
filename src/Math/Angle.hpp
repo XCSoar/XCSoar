@@ -301,12 +301,6 @@ public:
   gcc_pure
   Angle Fraction(const Angle end, const double fraction) const;
 
-  constexpr Angle
-  operator*(const Angle x) const
-  {
-    return Angle(value * x.value);
-  }
-
   gcc_pure Angle
   operator*(const double x) const
   {
