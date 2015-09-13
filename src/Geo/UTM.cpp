@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Geo/UTM.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "WGS84.hpp"
 #include "Util/Macros.hpp"
 
 static constexpr double k0 = 0.9996;
@@ -31,8 +32,6 @@ static constexpr double e = 0.00669438;
 static constexpr double e2 = e * e;
 static constexpr double e3 = e * e;
 static constexpr double e_p2 = e / (1.0 - e);
-
-static constexpr double r = 6378137;
 
 gcc_const
 static char
@@ -90,7 +89,7 @@ UTM::FromGeoPoint(GeoPoint p)
   utm.zone_number = CalculateZoneNumber(p);
   utm.zone_letter = CalculateZoneLetter(p.latitude);
 
-  double n = r / sqrt(1 - e * _sin * _sin);
+  double n = WGS84::EQUATOR_RADIUS / sqrt(1 - e * _sin * _sin);
   double c = e_p2 * _cos * _cos;
 
   double a = _cos * (double)(p.longitude.Radians() -
@@ -101,10 +100,11 @@ UTM::FromGeoPoint(GeoPoint p)
   double a5 = a * a4;
   double a6 = a * a5;
 
-  double m = r * ((1 - e / 4 - 3 * e2 / 64 - 5 * e3 / 256) * lat -
-                  (3 * e / 8 + 3 * e2 / 32 + 45 * e3 / 1024) * sin(2 * lat) +
-                  (15 * e2 / 256 + 45 * e3 / 1024) * sin(4 * lat) -
-                  (35 * e3 / 3072) * sin(6 * lat));
+  double m = WGS84::EQUATOR_RADIUS
+    * ((1 - e / 4 - 3 * e2 / 64 - 5 * e3 / 256) * lat -
+       (3 * e / 8 + 3 * e2 / 32 + 45 * e3 / 1024) * sin(2 * lat) +
+       (15 * e2 / 256 + 45 * e3 / 1024) * sin(4 * lat) -
+       (35 * e3 / 3072) * sin(6 * lat));
 
   utm.easting = fixed(k0 * n * (a + (1 - tan2 + c) * a3 / 6 +
       (5 - 18 * tan2 + tan4 + 72 * c - 58 * e_p2) * a5 / 120) + 500000.0);
@@ -130,7 +130,7 @@ UTM::ToGeoPoint() const
     y -= 10000000.0;
 
   double m  = y / k0;
-  double mu = m / (r * (1 - e / 4 - 3 * e2 / 64 - 5 * e3 / 256));
+  double mu = m / (WGS84::EQUATOR_RADIUS * (1 - e / 4 - 3 * e2 / 64 - 5 * e3 / 256));
   double _e_sqrt = sqrt(1 - e);
   double _e = (1 - _e_sqrt) / (1 + _e_sqrt);
   double _e2 = _e * _e;
@@ -153,10 +153,10 @@ UTM::ToGeoPoint() const
 
   double _e_sin2_sqrt = sqrt(1 - e * sin2);
   double _e_sin2_sqrt3 = _e_sin2_sqrt * _e_sin2_sqrt * _e_sin2_sqrt;
-  double n = r / _e_sin2_sqrt;
+  double n = WGS84::EQUATOR_RADIUS / _e_sin2_sqrt;
   double c = e * _cos * _cos;
   double c2 = c * c;
-  double _r = r * (1 - e) / _e_sin2_sqrt3;
+  double _r = WGS84::EQUATOR_RADIUS * (1 - e) / _e_sin2_sqrt3;
 
   double d = x / (n * k0);
   double d2 = d * d;
