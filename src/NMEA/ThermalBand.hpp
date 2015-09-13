@@ -45,7 +45,7 @@ struct ThermalBandInfo
   /** Maximum height achieved in circling */
   double max_thermal_height;
   /** Number of samples in each bucket */
-  int thermal_profile_n[N_BUCKETS];
+  unsigned thermal_profile_n[N_BUCKETS];
   /** Average climb rate in each bucket */
   double thermal_profile_w[N_BUCKETS];
 
