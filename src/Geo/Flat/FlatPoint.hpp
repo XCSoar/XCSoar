@@ -65,7 +65,9 @@ struct FlatPoint : Point2D<fixed>
    *
    * @param a Value to multiply
    */
-  void MultiplyY(const fixed a);
+  void MultiplyY(const fixed a) {
+    y *= a;
+  }
 
   /**
    * Rotate point counter-clockwise around origin
@@ -82,7 +84,9 @@ struct FlatPoint : Point2D<fixed>
    * @return Distance
    */
   gcc_pure
-  fixed Distance(const FlatPoint &p) const;
+  fixed Distance(FlatPoint p) const {
+    return (*this - p).Magnitude();
+  }
 
   /**
    * Find dx * dx + dy * dy
@@ -96,7 +100,9 @@ struct FlatPoint : Point2D<fixed>
    * @return Magnitude
    */
   gcc_pure
-  fixed Magnitude() const;
+  fixed Magnitude() const {
+    return hypot(x, y);
+  }
 
   /**
    * Calculate dot product of one point with another

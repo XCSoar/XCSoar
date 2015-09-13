@@ -24,12 +24,6 @@
 #include "Math/Util.hpp"
 
 void
-FlatPoint::MultiplyY(const fixed a)
-{
-  y *= a;
-}
-
-void
 FlatPoint::Rotate(const Angle angle)
 {
   const auto _x = x;
@@ -41,19 +35,7 @@ FlatPoint::Rotate(const Angle angle)
 }
 
 fixed
-FlatPoint::Distance(const FlatPoint &p) const
-{
-  return hypot(p.x - x, p.y - y);
-}
-
-fixed
 FlatPoint::MagnitudeSquared() const
 {
   return Square(x) + Square(y);
-}
-
-fixed
-FlatPoint::Magnitude() const
-{
-  return hypot(x, y);
 }
