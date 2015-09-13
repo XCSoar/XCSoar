@@ -40,15 +40,21 @@
 inline static double
 isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
-    return ( (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
-             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).Native();
+  const auto delta_a = P1 - P0;
+  const auto delta_b = P2 - P0;
+
+  return (delta_a.longitude * delta_b.latitude
+          - delta_b.longitude * delta_a.latitude).Native();
 }
 
 inline static int
 isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 {
-  return (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
-    - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude);
+  const auto delta_a = P1 - P0;
+  const auto delta_b = P2 - P0;
+
+  return delta_a.longitude * delta_b.latitude
+    - delta_b.longitude * delta_a.latitude;
 }
 
 //===================================================================

@@ -45,8 +45,11 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   // is on a straight line.
   //
 
-  const Angle a = (p0.longitude - p1.longitude) * (p2.latitude - p1.latitude);
-  const Angle b = (p2.longitude - p1.longitude) * (p0.latitude - p1.latitude);
+  const auto delta_a = p0 - p1;
+  const auto delta_b = p2 - p1;
+
+  const Angle a = delta_a.longitude * delta_b.latitude;
+  const Angle b = delta_b.longitude * delta_a.latitude;
 
   if (negative(tolerance))
     /* auto-tolerance - this has been verified by experiment */
