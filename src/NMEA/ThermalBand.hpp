@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_THERMAL_BAND_H
 #define XCSOAR_NMEA_THERMAL_BAND_H
 
+#include <array>
 #include <type_traits>
 
 /**
@@ -44,10 +45,12 @@ struct ThermalBandInfo
 
   /** Maximum height achieved in circling */
   double max_thermal_height;
+
   /** Number of samples in each bucket */
-  unsigned thermal_profile_n[N_BUCKETS];
+  std::array<unsigned, N_BUCKETS> thermal_profile_n;
+
   /** Average climb rate in each bucket */
-  double thermal_profile_w[N_BUCKETS];
+  std::array<double, N_BUCKETS> thermal_profile_w;
 
   void Clear();
 

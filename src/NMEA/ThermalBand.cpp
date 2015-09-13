@@ -35,8 +35,8 @@ ThermalBandInfo::Clear()
 
   max_thermal_height = 0;
 
-  std::fill_n(thermal_profile_n, N_BUCKETS, 0);
-  std::fill_n(thermal_profile_w, N_BUCKETS, 0);
+  thermal_profile_n.fill(0);
+  thermal_profile_w.fill(0);
 }
 
 unsigned
