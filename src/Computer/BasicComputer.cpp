@@ -26,10 +26,12 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Settings.hpp"
 #include "Atmosphere/AirDensity.hpp"
+#include "Geo/Gravity.hpp"
 #include "Math/Util.hpp"
 
-#define fixed_inv_g fixed(1.0/9.81)
-#define fixed_inv_2g fixed(1.0/(2.0*9.81))
+static constexpr double INVERSE_G = 1. / GRAVITY;
+static constexpr double INVERSE_2G = INVERSE_G / 2.;
+
 #define fixed_small fixed(0.001)
 
 /**
@@ -237,7 +239,7 @@ static void
 ComputeEnergyHeight(MoreData &basic)
 {
   if (basic.airspeed_available)
-    basic.energy_height = Square(basic.true_airspeed) * fixed_inv_2g;
+    basic.energy_height = Square(basic.true_airspeed) * INVERSE_2G;
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
@@ -375,7 +377,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
   // estimate bank angle (assuming balanced turn)
   const auto angle = atan((calculated.turn_rate_heading
-      * basic.true_airspeed * fixed_inv_g).Radians());
+      * basic.true_airspeed * INVERSE_G).Radians());
 
   if (!basic.attitude.bank_angle_available) {
     basic.attitude.bank_angle = Angle::Radians(angle);
