@@ -43,8 +43,8 @@ isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
   const auto delta_a = P1 - P0;
   const auto delta_b = P2 - P0;
 
-  return (delta_a.longitude * delta_b.latitude
-          - delta_b.longitude * delta_a.latitude).Native();
+  return delta_a.longitude.Native() * delta_b.latitude.Native()
+    - delta_b.longitude.Native() * delta_a.latitude.Native();
 }
 
 inline static int

@@ -30,6 +30,18 @@ sortleft
   return sp1.Sort(sp2);
 }
 
+gcc_const
+static int
+Sign(double value, double tolerance)
+{
+  if (value > tolerance)
+    return 1;
+  if (value < -tolerance)
+    return -1;
+
+  return 0;
+}
+
 static int
 Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
           fixed tolerance)
@@ -48,14 +60,14 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   const auto delta_a = p0 - p1;
   const auto delta_b = p2 - p1;
 
-  const Angle a = delta_a.longitude * delta_b.latitude;
-  const Angle b = delta_b.longitude * delta_a.latitude;
+  const auto a = delta_a.longitude.Native() * delta_b.latitude.Native();
+  const auto b = delta_b.longitude.Native() * delta_a.latitude.Native();
 
   if (negative(tolerance))
     /* auto-tolerance - this has been verified by experiment */
-    tolerance = std::max(fabs(a.Native()), fabs(b.Native())) / 10;
+    tolerance = std::max(fabs(a), fabs(b)) / 10;
 
-  return (a - b).Sign(tolerance);
+  return Sign(a - b, tolerance);
 }
 
 GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
