@@ -34,7 +34,7 @@ WindEKF::Update(const double airspeed, const float gps_vel[2])
   // airsp = sf * | gps_v - wind_v |
   const float dx = gps_vel[0]-X[0];
   const float dy = gps_vel[1]-X[1];
-  const float mag = sqrtf(dx*dx+dy*dy);
+  const float mag = hypotf(dx, dy);
 
   const float K[3] = {
     -X[2]*dx/mag*k,
