@@ -343,7 +343,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     running = true;
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
-    CandidateSet root_candidates(this, from, to + 1);
+    CandidateSet root_candidates(*this, from, to + 1);
     if (root_candidates.IsFeasible(is_fai, large_triangle_check) &&
         root_candidates.df_max >= worst_d)
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
@@ -388,7 +388,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     }
 
     if (node->second.df_min >= worst_d &&
-        node->second.IsIntegral(this, is_fai, large_triangle_check)) {
+        node->second.IsIntegral(*this, is_fai, large_triangle_check)) {
       // node is integral feasible -> a possible solution
 
       worst_d = node->second.df_min;
@@ -419,10 +419,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
         if (split <= node->second.tp2.index_max) {
           add = true;
 
-          left = CandidateSet(TurnPointRange(this, node->second.tp1.index_min, split),
+          left = CandidateSet(TurnPointRange(*this, node->second.tp1.index_min, split),
                               node->second.tp2, node->second.tp3);
 
-          right = CandidateSet(TurnPointRange(this, split, node->second.tp1.index_max),
+          right = CandidateSet(TurnPointRange(*this, split, node->second.tp1.index_max),
                                node->second.tp2, node->second.tp3);
         }
       } else if (tp2_diag == max_diag && node->second.tp2.GetSize() != 1) {
@@ -433,11 +433,11 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
           add = true;
 
           left = CandidateSet(node->second.tp1,
-                              TurnPointRange(this, node->second.tp2.index_min, split),
+                              TurnPointRange(*this, node->second.tp2.index_min, split),
                               node->second.tp3);
 
           right = CandidateSet(node->second.tp1,
-                               TurnPointRange(this, split, node->second.tp2.index_max),
+                               TurnPointRange(*this, split, node->second.tp2.index_max),
                                node->second.tp3);
         }
       } else if (node->second.tp3.GetSize() != 1) {
@@ -448,10 +448,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
           add = true;
 
           left = CandidateSet(node->second.tp1, node->second.tp2,
-                              TurnPointRange(this, node->second.tp3.index_min, split));
+                              TurnPointRange(*this, node->second.tp3.index_min, split));
 
           right = CandidateSet(node->second.tp1, node->second.tp2,
-                               TurnPointRange(this, split, node->second.tp3.index_max));
+                               TurnPointRange(*this, split, node->second.tp3.index_max));
         }
       }
 

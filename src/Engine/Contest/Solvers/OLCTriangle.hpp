@@ -153,7 +153,7 @@ private:
       :index_min(0), index_max(0),
        bounding_box(FlatGeoPoint(0, 0)) {}
 
-    TurnPointRange(OLCTriangle *parent, unsigned min, unsigned max) {
+    TurnPointRange(const OLCTriangle &parent, unsigned min, unsigned max) {
       Update(parent, min, max);
     }
 
@@ -173,11 +173,11 @@ private:
     }
 
     // updates the bounding box by a given point range
-    void Update(OLCTriangle *parent, unsigned _min, unsigned _max) {
-      bounding_box = FlatBoundingBox(parent->GetPoint(_min).GetFlatLocation());
+    void Update(const OLCTriangle &parent, unsigned _min, unsigned _max) {
+      bounding_box = FlatBoundingBox(parent.GetPoint(_min).GetFlatLocation());
 
       for (unsigned i = _min + 1; i < _max; ++i)
-        bounding_box.Expand(parent->GetPoint(i).GetFlatLocation());
+        bounding_box.Expand(parent.GetPoint(i).GetFlatLocation());
 
       index_min = _min;
       index_max = _max;
@@ -225,7 +225,7 @@ private:
       df_min(0), df_max(0),
       shortest_max(0), longest_min(0), longest_max(0) {}
 
-    CandidateSet(OLCTriangle *parent, unsigned first, unsigned last) {
+    CandidateSet(const OLCTriangle &parent, unsigned first, unsigned last) {
       tp1.Update(parent, first, last);
       tp2.Update(parent, first, last);
       tp3.Update(parent, first, last);
@@ -293,7 +293,7 @@ private:
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
     gcc_pure
-    bool IsIntegral(OLCTriangle *parent, const bool fai,
+    bool IsIntegral(OLCTriangle &parent, const bool fai,
                     const unsigned large_triangle_check) const {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
@@ -320,9 +320,9 @@ private:
         return false;
 
       // detailed checks
-      auto geo_tp1 = parent->GetPoint(tp1.index_min).GetLocation();
-      auto geo_tp2 = parent->GetPoint(tp2.index_min).GetLocation();
-      auto geo_tp3 = parent->GetPoint(tp3.index_min).GetLocation();
+      auto geo_tp1 = parent.GetPoint(tp1.index_min).GetLocation();
+      auto geo_tp2 = parent.GetPoint(tp2.index_min).GetLocation();
+      auto geo_tp3 = parent.GetPoint(tp3.index_min).GetLocation();
 
       const unsigned d_12 = unsigned(geo_tp1.Distance(geo_tp2));
       const unsigned d_23 = unsigned(geo_tp2.Distance(geo_tp3));
