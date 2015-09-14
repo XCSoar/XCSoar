@@ -225,19 +225,13 @@ private:
       df_min(0), df_max(0),
       shortest_max(0), longest_min(0), longest_max(0) {}
 
-    CandidateSet(const OLCTriangle &parent, unsigned first, unsigned last) {
-      tp1.Update(parent, first, last);
-      tp2.Update(parent, first, last);
-      tp3.Update(parent, first, last);
-
+    CandidateSet(const OLCTriangle &parent, unsigned first, unsigned last)
+      :tp1(parent, first, last), tp2(tp1), tp3(tp1) {
       UpdateDistances();
     }
 
-    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3) {
-      tp1 = _tp1;
-      tp2 = _tp2;
-      tp3 = _tp3;
-
+    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3)
+      :tp1(_tp1), tp2(_tp2), tp3(_tp3) {
       UpdateDistances();
     }
 
