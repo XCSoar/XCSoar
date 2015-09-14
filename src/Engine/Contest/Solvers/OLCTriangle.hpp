@@ -157,15 +157,6 @@ private:
       Update(parent, min, max);
     }
 
-    TurnPointRange(const TurnPointRange &other) {
-      index_min = other.index_min;
-      index_max = other.index_max;
-      lon_min = other.lon_min;
-      lon_max = other.lon_max;
-      lat_min = other.lat_min;
-      lat_max = other.lat_max;
-    }
-
     bool operator==(TurnPointRange other) const {
       return (index_min == other.index_min && index_max == other.index_max);
     }
