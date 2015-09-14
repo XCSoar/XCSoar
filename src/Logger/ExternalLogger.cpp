@@ -57,7 +57,9 @@ public:
     :device(_device), declaration(_declaration), home(_home) {}
 
   bool Run(OperationEnvironment &env) {
-    return device.Declare(declaration, home, env);
+    bool result = device.Declare(declaration, home, env);
+    device.EnableNMEA(env);
+    return result;
   }
 };
 

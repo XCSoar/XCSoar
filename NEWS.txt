@@ -1,4 +1,6 @@
 Version 6.8.2 - not yet released
+* devices
+  - fix wrong baud rate after task declaration (#3654)
 
 Version 6.8.1 - 2015/08/27
 * fix freeze bug when starting without GPS fix
