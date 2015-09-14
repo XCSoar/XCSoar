@@ -67,8 +67,8 @@ void
 RouteLink::CalcSpeedups(const FlatProjection &proj)
 {
   const auto scale = proj.GetApproximateScale();
-  const fixed dx = fixed(first.longitude - second.longitude);
-  const fixed dy = fixed(first.latitude - second.latitude);
+  const fixed dx = fixed(first.x - second.x);
+  const fixed dy = fixed(first.y - second.y);
   if (!positive(fabs(dx)) && !positive(fabs(dy))) {
     d = fixed(0);
     inv_d = fixed(0);
@@ -94,6 +94,6 @@ RouteLink::Flat() const
 bool
 RouteLinkBase::IsShort() const
 {
-  return abs(first.longitude - second.longitude) < ROUTE_MIN_STEP &&
-         abs(first.latitude - second.latitude) < ROUTE_MIN_STEP;
+  return abs(first.x - second.x) < ROUTE_MIN_STEP &&
+         abs(first.y - second.y) < ROUTE_MIN_STEP;
 }

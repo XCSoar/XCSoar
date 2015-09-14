@@ -51,8 +51,7 @@ public:
    */
   constexpr
   FlatBoundingBox(const FlatGeoPoint ll, const FlatGeoPoint ur)
-    :bb_ll(ll.longitude, ll.latitude),
-     bb_ur(ur.longitude, ur.latitude) {}
+    :bb_ll(ll.x, ll.y), bb_ur(ur.x, ur.y) {}
 
   /**
    * Constructor given center point and radius
@@ -63,8 +62,8 @@ public:
    */
   constexpr
   FlatBoundingBox(const FlatGeoPoint loc, const unsigned range = 0)
-    :bb_ll(loc.longitude - range, loc.latitude - range),
-     bb_ur(loc.longitude + range, loc.latitude + range) {}
+    :bb_ll(loc.x - range, loc.y - range),
+    bb_ur(loc.x + range, loc.y + range) {}
 
   constexpr const FlatGeoPoint &GetLowerLeft() const {
     return bb_ll;
@@ -122,20 +121,20 @@ public:
    * Expand the bounding box to include this point
    */
   void Expand(const FlatGeoPoint& p) {
-    bb_ll.longitude = std::min(bb_ll.longitude, p.longitude);
-    bb_ur.longitude = std::max(bb_ur.longitude, p.longitude);
-    bb_ll.latitude = std::min(bb_ll.latitude, p.latitude);
-    bb_ur.latitude = std::max(bb_ur.latitude, p.latitude);
+    bb_ll.x = std::min(bb_ll.x, p.x);
+    bb_ur.x = std::max(bb_ur.x, p.x);
+    bb_ll.y = std::min(bb_ll.y, p.y);
+    bb_ur.y = std::max(bb_ur.y, p.y);
   }
 
   /**
    * Expand the bounding box to include this bounding box
    */
   void Merge(const FlatBoundingBox& p) {
-    bb_ll.longitude = std::min(bb_ll.longitude, p.bb_ll.longitude);
-    bb_ur.longitude = std::max(bb_ur.longitude, p.bb_ur.longitude);
-    bb_ll.latitude = std::min(bb_ll.latitude, p.bb_ll.latitude);
-    bb_ur.latitude = std::max(bb_ur.latitude, p.bb_ur.latitude);
+    bb_ll.x = std::min(bb_ll.x, p.bb_ll.x);
+    bb_ur.x = std::max(bb_ur.x, p.bb_ur.x);
+    bb_ll.y = std::min(bb_ll.y, p.bb_ll.y);
+    bb_ur.y = std::max(bb_ur.y, p.bb_ur.y);
   }
 
   /**
@@ -150,10 +149,10 @@ public:
    * Expand the border by x amount
    */
   void ExpandByOne() {
-    --bb_ll.longitude;
-    ++bb_ur.longitude;
-    --bb_ll.latitude;
-    ++bb_ur.latitude;
+    --bb_ll.x;
+    ++bb_ur.x;
+    --bb_ll.y;
+    ++bb_ur.y;
   }
 };
 

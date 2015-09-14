@@ -84,7 +84,7 @@ class RoutePlanner {
   struct RoutePointHasher : std::unary_function<RoutePoint, size_t> {
     gcc_const
     result_type operator()(const argument_type p) const {
-      return p.longitude * result_type(104729) + p.latitude;
+      return p.x * result_type(104729) + p.y;
     }
   };
 

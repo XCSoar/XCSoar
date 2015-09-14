@@ -53,8 +53,7 @@ isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
   const auto delta_a = P1 - P0;
   const auto delta_b = P2 - P0;
 
-  return delta_a.longitude * delta_b.latitude
-    - delta_b.longitude * delta_a.latitude;
+  return delta_a.x * delta_b.y - delta_b.x * delta_a.y;
 }
 
 //===================================================================
@@ -116,18 +115,18 @@ PolygonInterior(const FlatGeoPoint &P,
   for (auto i = begin, next = std::next(i); next != end;
        i = next, next = std::next(i)) {
     // edge from current to next
-    if (i->GetFlatLocation().latitude <= P.latitude) {
-      // start y <= P.latitude
-      if (next->GetFlatLocation().latitude > P.latitude)
+    if (i->GetFlatLocation().y <= P.y) {
+      // start y <= P.y
+      if (next->GetFlatLocation().y > P.y)
         // an upward crossing
         if (isLeft(i->GetFlatLocation(), next->GetFlatLocation(), P) > 0)
           // P left of edge
           // have a valid up intersect
           ++wn;
     } else {
-      // start y > P.latitude (no test needed)
+      // start y > P.y (no test needed)
 
-      if (next->GetFlatLocation().latitude <= P.latitude)
+      if (next->GetFlatLocation().y <= P.y)
         // a downward crossing
         if (isLeft(i->GetFlatLocation(), next->GetFlatLocation(), P) < 0)
           // P right of edge

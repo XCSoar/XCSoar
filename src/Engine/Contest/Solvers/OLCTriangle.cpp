@@ -529,12 +529,12 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
   struct TracePointNodeAccessor {
     gcc_pure
     int GetX(const TracePointNode &node) const {
-      return node.point->GetFlatLocation().longitude;
+      return node.point->GetFlatLocation().x;
     }
 
     gcc_pure
     int GetY(const TracePointNode &node) const {
-      return node.point->GetFlatLocation().latitude;
+      return node.point->GetFlatLocation().y;
     }
   };
 

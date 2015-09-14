@@ -163,14 +163,14 @@ PrintHelper::print(const FlatTriangleFan& r, const unsigned depth) {
     return;
 
   if (depth) {
-    printf("%d %d # fcorner\n", r.vs[0].longitude, r.vs[0].latitude);
+    printf("%d %d # fcorner\n", r.vs[0].x, r.vs[0].y);
   }
 
   for (auto it = r.vs.begin(); it != r.vs.end(); ++it) {
     const FlatGeoPoint p = (*it);
-    printf("%d %d # ftri\n", p.longitude, p.latitude);
+    printf("%d %d # ftri\n", p.x, p.y);
   }
-  printf("%d %d # ftri\n", r.vs[0].longitude, r.vs[0].latitude);
+  printf("%d %d # ftri\n", r.vs[0].x, r.vs[0].y);
   printf("# ftri\n");
 }
 

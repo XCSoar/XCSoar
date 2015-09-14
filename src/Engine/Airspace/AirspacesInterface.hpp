@@ -53,13 +53,13 @@ class AirspacesInterface {
     int operator()(const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
-        return d.GetLowerLeft().longitude;
+        return d.GetLowerLeft().x;
       case 1:
-        return d.GetLowerLeft().latitude;
+        return d.GetLowerLeft().y;
       case 2:
-        return d.GetUpperRight().longitude;
+        return d.GetUpperRight().x;
       case 3:
-        return d.GetUpperRight().latitude;
+        return d.GetUpperRight().y;
       default:
         assert(false);
         gcc_unreachable();

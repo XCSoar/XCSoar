@@ -185,16 +185,16 @@ private:
 
     // updates the bounding box by a given point range
     void Update(OLCTriangle *parent, unsigned &_min, unsigned &_max) {
-      lon_min = parent->GetPoint(_min).GetFlatLocation().longitude;
-      lon_max = parent->GetPoint(_min).GetFlatLocation().longitude;
-      lat_min = parent->GetPoint(_min).GetFlatLocation().latitude;
-      lat_max = parent->GetPoint(_min).GetFlatLocation().latitude;
+      lon_min = parent->GetPoint(_min).GetFlatLocation().x;
+      lon_max = parent->GetPoint(_min).GetFlatLocation().x;
+      lat_min = parent->GetPoint(_min).GetFlatLocation().y;
+      lat_max = parent->GetPoint(_min).GetFlatLocation().y;
 
       for (unsigned i = _min + 1; i < _max; ++i) {
-        lon_min = std::min(lon_min, parent->GetPoint(i).GetFlatLocation().longitude);
-        lon_max = std::max(lon_max, parent->GetPoint(i).GetFlatLocation().longitude);
-        lat_min = std::min(lat_min, parent->GetPoint(i).GetFlatLocation().latitude);
-        lat_max = std::max(lat_max, parent->GetPoint(i).GetFlatLocation().latitude);
+        lon_min = std::min(lon_min, parent->GetPoint(i).GetFlatLocation().x);
+        lon_max = std::max(lon_max, parent->GetPoint(i).GetFlatLocation().x);
+        lat_min = std::min(lat_min, parent->GetPoint(i).GetFlatLocation().y);
+        lat_max = std::max(lat_max, parent->GetPoint(i).GetFlatLocation().y);
       }
 
       index_min = _min;

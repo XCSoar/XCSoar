@@ -54,12 +54,10 @@ FlatTriangleFan::IsInside(const FlatGeoPoint &p) const
   bool inside = false;
   for (auto i = vs.begin(), j = vs.end() - 1, end = vs.end();
        i != end; j = i++) {
-    if ((i->latitude > p.latitude) == (j->latitude > p.latitude))
+    if ((i->y > p.y) == (j->y > p.y))
       continue;
 
-    if ((p.longitude < (j->longitude - i->longitude) *
-                       (p.latitude - i->latitude) /
-                       (j->latitude - i->latitude) + i->longitude))
+    if (p.x < (j->x - i->x) * (p.y - i->y) / (j->y - i->y) + i->x)
       inside = !inside;
   }
 

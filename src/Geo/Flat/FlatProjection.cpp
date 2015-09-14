@@ -82,9 +82,9 @@ FlatProjection::Unproject(const FlatGeoPoint &fp) const
 {
   assert(IsValid());
 
-  return GeoPoint(Angle::Native(fp.longitude * r_cos)
+  return GeoPoint(Angle::Native(fp.x * r_cos)
                   + center.longitude,
-                  Angle::Native(fp.latitude * inv_scale)
+                  Angle::Native(fp.y * inv_scale)
                   + center.latitude);
 }
 
@@ -111,10 +111,10 @@ FlatProjection::Unproject(const FlatBoundingBox &bb) const
 {
   assert(IsValid());
 
-  return GeoBounds(Unproject(FlatGeoPoint(bb.GetLowerLeft().longitude,
-                                          bb.GetUpperRight().latitude)),
-                   Unproject(FlatGeoPoint(bb.GetUpperRight().longitude,
-                                          bb.GetLowerLeft().latitude)));
+  return GeoBounds(Unproject(FlatGeoPoint(bb.GetLowerLeft().x,
+                                          bb.GetUpperRight().y)),
+                   Unproject(FlatGeoPoint(bb.GetUpperRight().x,
+                                          bb.GetLowerLeft().y)));
 }
 
 FlatBoundingBox

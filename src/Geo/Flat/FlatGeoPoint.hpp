@@ -34,10 +34,10 @@
  */
 struct FlatGeoPoint {
   /** Projected x (Longitude) value [undefined units] */
-  int longitude;
+  int x;
 
   /** Projected y (Latitude) value [undefined units] */
-  int latitude;
+  int y;
 
   /**
    * Non-initialising constructor.
@@ -53,8 +53,7 @@ struct FlatGeoPoint {
    * @return Initialised object at origin
    */
   constexpr
-  FlatGeoPoint(const int x, const int y)
-    :longitude(x), latitude(y) {};
+  FlatGeoPoint(const int _x, const int _y):x(_x), y(_y) {}
 
   /**
    * Find distance from one point to another
@@ -93,8 +92,7 @@ struct FlatGeoPoint {
    */
   constexpr
   FlatGeoPoint operator+(const FlatGeoPoint other) const {
-    return FlatGeoPoint(longitude + other.longitude,
-                        latitude + other.latitude);
+    return FlatGeoPoint(x + other.x, y + other.y);
   }
 
   /**
@@ -106,8 +104,7 @@ struct FlatGeoPoint {
    */
   constexpr
   FlatGeoPoint operator-(const FlatGeoPoint other) const {
-    return FlatGeoPoint(longitude - other.longitude,
-                        latitude - other.latitude);
+    return FlatGeoPoint(x - other.x, y - other.y);
   }
 
   /**
@@ -119,8 +116,7 @@ struct FlatGeoPoint {
    */
   gcc_pure
   FlatGeoPoint operator*(const double t) const {
-    return FlatGeoPoint(iround(longitude * t),
-                        iround(latitude * t));
+    return FlatGeoPoint(iround(x * t), iround(y * t));
   }
 
   /**
@@ -131,7 +127,7 @@ struct FlatGeoPoint {
    * @return Cross product
    */
   constexpr int CrossProduct(FlatGeoPoint other) const {
-    return longitude * other.latitude - latitude * other.longitude;
+    return x * other.y - y * other.x;
   }
 
   /**
@@ -142,7 +138,7 @@ struct FlatGeoPoint {
    * @return Dot product
    */
   constexpr int DotProduct(FlatGeoPoint other) const {
-    return longitude * other.longitude + latitude * other.latitude;
+    return x * other.x + y * other.y;
   }
 
   /**
@@ -164,15 +160,15 @@ struct FlatGeoPoint {
 
   constexpr
   bool Equals(const FlatGeoPoint sp) const {
-    return longitude == sp.longitude && latitude == sp.latitude;
+    return x == sp.x && y == sp.y;
   }
 
   gcc_pure
   bool Sort(const FlatGeoPoint& sp) const {
-    if (longitude < sp.longitude)
+    if (x < sp.x)
       return false;
-    else if (longitude == sp.longitude)
-      return latitude > sp.latitude;
+    else if (x == sp.x)
+      return y > sp.y;
     else
       return true;
   }
@@ -201,8 +197,8 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Rounds location to reduce state space */
   void RoundLocation() {
     // round point to correspond roughly with terrain step size
-    longitude = (longitude >> 2) << 2;
-    latitude = (latitude >> 2) << 2;
+    x = (x >> 2) << 2;
+    y = (y >> 2) << 2;
   }
 
   /**

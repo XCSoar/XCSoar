@@ -43,12 +43,12 @@ class Waypoints {
   struct WaypointAccessor {
     constexpr
     int GetX(const Waypoint &wp) const {
-      return wp.flat_location.longitude;
+      return wp.flat_location.x;
     }
 
     constexpr
     int GetY(const Waypoint &wp) const {
-      return wp.flat_location.latitude;
+      return wp.flat_location.y;
     }
   };
 

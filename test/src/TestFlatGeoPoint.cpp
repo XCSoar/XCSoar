@@ -64,13 +64,13 @@ int main(int argc, char **argv)
 
   // test +
   p2 = p2 + p1;
-  ok1(p2.longitude == 2);
-  ok1(p2.latitude == 3);
+  ok1(p2.x == 2);
+  ok1(p2.y == 3);
 
   // test -
   p2 = p2 - p1;
-  ok1(p2.longitude == 1);
-  ok1(p2.latitude == 2);
+  ok1(p2.x == 1);
+  ok1(p2.y == 2);
 
   // test distance_sq_to()
   ok1(p1.DistanceSquared(p2) == 1);

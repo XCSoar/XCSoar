@@ -27,14 +27,14 @@ unsigned
 FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
-  return ihypot(delta.longitude, delta.latitude);
+  return ihypot(delta.x, delta.y);
 }
 
 unsigned
 FlatGeoPoint::ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const
 {
   const FlatGeoPoint delta = *this - sp;
-  return ShiftedIntegerHypot(delta.longitude, delta.latitude, bits);
+  return ShiftedIntegerHypot(delta.x, delta.y, bits);
 }
 
 unsigned

@@ -38,7 +38,7 @@ static bool
 AlmostTheSame(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
 {
   const FlatGeoPoint k = p1 - p2;
-  const int dmax = std::max(abs(k.longitude), abs(k.latitude));
+  const int dmax = std::max(abs(k.x), abs(k.y));
   return dmax <= 1;
 }
 
@@ -46,7 +46,7 @@ static bool
 TooClose(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
 {
   const FlatGeoPoint k = p1 - p2;
-  const int dmax = std::max(abs(k.longitude), abs(k.latitude));
+  const int dmax = std::max(abs(k.x), abs(k.y));
   return dmax < REACH_MIN_STEP;
 }
 

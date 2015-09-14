@@ -1484,13 +1484,11 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
   FlatGeoPoint lr = task_projection.ProjectInteger(bounds.GetSouthEast());
   FlatGeoPoint ul = task_projection.ProjectInteger(bounds.GetNorthWest());
   FlatGeoPoint ur = task_projection.ProjectInteger(bounds.GetNorthEast());
-  FlatGeoPoint fmin(std::min(ll.longitude, ul.longitude),
-                    std::min(ll.latitude, lr.latitude));
-  FlatGeoPoint fmax(std::max(lr.longitude, ur.longitude),
-                    std::max(ul.latitude, ur.latitude));
+  FlatGeoPoint fmin(std::min(ll.x, ul.x), std::min(ll.y, lr.y));
+  FlatGeoPoint fmax(std::max(lr.x, ur.x), std::max(ul.y, ur.y));
   // note +/- 1 to ensure rounding keeps bb valid
-  fmin.longitude -= 1; fmin.latitude -= 1;
-  fmax.longitude += 1; fmax.latitude += 1;
+  --fmin.x; --fmin.y;
+  ++fmax.x; ++fmax.y;
   return FlatBoundingBox (fmin, fmax);
 }
 
