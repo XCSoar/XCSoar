@@ -38,12 +38,6 @@ FlatLine::mul_y(const fixed a)
 }
 
 fixed
-FlatLine::d() const
-{
-  return sqrt(dsq());
-}
-
-fixed
 FlatLine::dsq() const
 {
   return Square(dx()) + Square(dy());

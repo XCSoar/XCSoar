@@ -111,7 +111,9 @@ public:
    * @return Length
    */
   gcc_pure
-  fixed d() const;
+  fixed d() const {
+    return hypot(dx(), dy());
+  }
 
   /**
    * Subtract a delta from the line (both start and end points)
