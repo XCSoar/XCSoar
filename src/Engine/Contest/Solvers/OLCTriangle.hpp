@@ -26,6 +26,7 @@
 #include "AbstractContest.hpp"
 #include "TraceManager.hpp"
 #include "Trace/Point.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <map>
 #include <cstdlib>
@@ -145,13 +146,12 @@ private:
    */
   struct TurnPointRange {
     unsigned index_min, index_max; // [index_min, index_max)
-    int lon_min, lon_max,
-        lat_min, lat_max;
 
-    TurnPointRange() :
-      index_min(0), index_max(0),
-      lon_min(0), lon_max(0),
-      lat_min(0), lat_max(0) {}
+    FlatBoundingBox bounding_box;
+
+    TurnPointRange()
+      :index_min(0), index_max(0),
+       bounding_box(FlatGeoPoint(0, 0)) {}
 
     TurnPointRange(OLCTriangle *parent, unsigned min, unsigned max) {
       Update(parent, min, max);
@@ -164,9 +164,7 @@ private:
     // returns the manhatten diagonal of the bounding box
     gcc_pure
     unsigned GetDiagnoal() const {
-      unsigned width = abs(lon_max - lon_min);
-      unsigned height = abs(lat_max - lat_min);
-      return width + height;
+      return bounding_box.GetWidth() + bounding_box.GetHeight();
     }
 
     // returns the number of points in this range
@@ -176,17 +174,10 @@ private:
 
     // updates the bounding box by a given point range
     void Update(OLCTriangle *parent, unsigned _min, unsigned _max) {
-      lon_min = parent->GetPoint(_min).GetFlatLocation().x;
-      lon_max = parent->GetPoint(_min).GetFlatLocation().x;
-      lat_min = parent->GetPoint(_min).GetFlatLocation().y;
-      lat_max = parent->GetPoint(_min).GetFlatLocation().y;
+      bounding_box = FlatBoundingBox(parent->GetPoint(_min).GetFlatLocation());
 
-      for (unsigned i = _min + 1; i < _max; ++i) {
-        lon_min = std::min(lon_min, parent->GetPoint(i).GetFlatLocation().x);
-        lon_max = std::max(lon_max, parent->GetPoint(i).GetFlatLocation().x);
-        lat_min = std::min(lat_min, parent->GetPoint(i).GetFlatLocation().y);
-        lat_max = std::max(lat_max, parent->GetPoint(i).GetFlatLocation().y);
-      }
+      for (unsigned i = _min + 1; i < _max; ++i)
+        bounding_box.Expand(parent->GetPoint(i).GetFlatLocation());
 
       index_min = _min;
       index_max = _max;
@@ -195,13 +186,17 @@ private:
     // calculate the minimal distance estimate between two TurnPointRanges
     gcc_pure
     unsigned GetMinDistance(const TurnPointRange &tp) const {
-      const unsigned d_lon = std::max(tp.lon_min - lon_max, lon_min - tp.lon_max) < 0 ?
-                       0 :
-                       std::min(abs(tp.lon_min - lon_max), abs(tp.lon_max - lon_min));
+      const unsigned d_lon = std::max(tp.bounding_box.GetLeft() - bounding_box.GetRight(),
+                                      bounding_box.GetLeft() - tp.bounding_box.GetRight()) < 0
+        ? 0
+        : std::min(abs(tp.bounding_box.GetLeft() - bounding_box.GetRight()),
+                   abs(tp.bounding_box.GetRight() - bounding_box.GetLeft()));
 
-      const unsigned d_lat = std::max(tp.lat_min - lat_max, lat_min - tp.lat_max) < 0 ?
-                       0 :
-                       std::min(abs(tp.lat_min - lat_max), abs(tp.lat_max - lat_min));
+      const unsigned d_lat = std::max(tp.bounding_box.GetBottom() - bounding_box.GetTop(),
+                                      bounding_box.GetBottom() - tp.bounding_box.GetTop()) < 0
+        ? 0
+        : std::min(abs(tp.bounding_box.GetBottom() - bounding_box.GetTop()),
+                   abs(tp.bounding_box.GetTop() - bounding_box.GetBottom()));
 
       return sqrt(d_lon*d_lon + d_lat*d_lat);
     }
@@ -209,8 +204,10 @@ private:
     // calculate maximal distance estimate between two TurnPointRanges
     gcc_pure
     unsigned GetMaxDistance(const TurnPointRange &tp) const {
-      const unsigned d_lon = std::max(lon_max - tp.lon_min, tp.lon_max - lon_min);
-      const unsigned d_lat = std::max(lat_max - tp.lat_min, tp.lat_max - lat_min);
+      const unsigned d_lon = std::max(bounding_box.GetRight() - tp.bounding_box.GetLeft(),
+                                      tp.bounding_box.GetRight() - bounding_box.GetLeft());
+      const unsigned d_lat = std::max(bounding_box.GetTop() - tp.bounding_box.GetBottom(),
+                                      tp.bounding_box.GetTop() - bounding_box.GetBottom());
 
       return sqrt(d_lon*d_lon + d_lat*d_lat);
     }
