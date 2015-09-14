@@ -80,7 +80,7 @@ struct FloatPoint : Point2D<float> {
 };
 
 template<typename P, typename RT=typename P::scalar_type>
-static inline RT
+static constexpr inline RT
 DotProduct(P a, P b)
 {
   static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
@@ -90,7 +90,7 @@ DotProduct(P a, P b)
 }
 
 template<typename P, typename RT=typename P::scalar_type>
-static inline RT
+static constexpr inline RT
 CrossProduct(P a, P b)
 {
   static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
