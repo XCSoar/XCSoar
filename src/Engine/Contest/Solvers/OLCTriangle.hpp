@@ -198,7 +198,7 @@ private:
         : std::min(abs(tp.bounding_box.GetBottom() - bounding_box.GetTop()),
                    abs(tp.bounding_box.GetTop() - bounding_box.GetBottom()));
 
-      return sqrt(d_lon*d_lon + d_lat*d_lat);
+      return hypot(d_lon, d_lat);
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
@@ -209,7 +209,7 @@ private:
       const unsigned d_lat = std::max(bounding_box.GetTop() - tp.bounding_box.GetBottom(),
                                       tp.bounding_box.GetTop() - bounding_box.GetBottom());
 
-      return sqrt(d_lon*d_lon + d_lat*d_lat);
+      return hypot(d_lon, d_lat);
     }
   };
 
