@@ -53,14 +53,6 @@ public:
    *
    * @param _val Set distance (typically 0)
    */
-  explicit constexpr BBDist(const double _val)
-    :val{-1, -1}, d(_val) {}
-
-  /**
-   * Constructor for set distance
-   *
-   * @param _val Set distance (typically 0)
-   */
   explicit constexpr BBDist(const int _val)
     :val{-1, -1}, d(_val) {}
 
