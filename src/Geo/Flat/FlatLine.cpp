@@ -25,36 +25,9 @@
 #include "Math/Angle.hpp"
 
 fixed
-FlatLine::cross() const
-{
-  return p1.CrossProduct(p2);
-}
-
-void
-FlatLine::mul_y(const fixed a)
-{
-  p1.MultiplyY(a);
-  p2.MultiplyY(a);
-}
-
-fixed
 FlatLine::dsq() const
 {
   return Square(dx()) + Square(dy());
-}
-
-void
-FlatLine::sub(const FlatPoint&p)
-{
-  p1 -= p;
-  p2 -= p;
-}
-
-void
-FlatLine::add(const FlatPoint&p)
-{
-  p1 += p;
-  p2 += p;
 }
 
 Angle

@@ -120,14 +120,20 @@ public:
    *
    * @param p Point to subtract
    */
-  void sub(const FlatPoint&p);
+  void sub(const FlatPoint p) {
+    p1 -= p;
+    p2 -= p;
+  }
 
   /**
    * Add a delta to the line (both start and end points)
    *
    * @param p Point to add
    */
-  void add(const FlatPoint&p);
+  void add(const FlatPoint p) {
+    p1 += p;
+    p2 += p;
+  }
 
   /**
    * Rotate line clockwise around origin
@@ -141,7 +147,10 @@ public:
    *
    * @param a Scale ratio
    */
-  void mul_y(const fixed a);
+  void mul_y(const fixed a) {
+    p1.MultiplyY(a);
+    p2.MultiplyY(a);
+  }
 
   /**
    * Return dot product of two lines (vectors)
@@ -161,7 +170,9 @@ private:
   }
 
   gcc_pure
-  fixed cross() const;
+  fixed cross() const {
+    return p1.CrossProduct(p2);
+  }
 };
 
 #endif
