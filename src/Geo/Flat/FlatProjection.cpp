@@ -111,10 +111,7 @@ FlatProjection::Unproject(const FlatBoundingBox &bb) const
 {
   assert(IsValid());
 
-  return GeoBounds(Unproject(FlatGeoPoint(bb.GetLowerLeft().x,
-                                          bb.GetUpperRight().y)),
-                   Unproject(FlatGeoPoint(bb.GetUpperRight().x,
-                                          bb.GetLowerLeft().y)));
+  return GeoBounds(Unproject(bb.GetTopLeft()), Unproject(bb.GetBottomRight()));
 }
 
 FlatBoundingBox

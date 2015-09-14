@@ -73,6 +73,38 @@ public:
     return bb_ur;
   }
 
+  constexpr int GetLeft() const {
+    return bb_ll.x;
+  }
+
+  constexpr int GetTop() const {
+    return bb_ur.y;
+  }
+
+  constexpr int GetRight() const {
+    return bb_ur.x;
+  }
+
+  constexpr int GetBottom() const {
+    return bb_ll.y;
+  }
+
+  constexpr FlatGeoPoint GetTopLeft() const {
+    return FlatGeoPoint(GetLeft(), GetTop());
+  }
+
+  constexpr FlatGeoPoint GetBottomRight() const {
+    return FlatGeoPoint(GetRight(), GetBottom());
+  }
+
+  constexpr unsigned GetWidth() const {
+    return GetRight() - GetLeft();
+  }
+
+  constexpr unsigned GetHeight() const {
+    return GetTop() - GetBottom();
+  }
+
   /**
    * Calculate non-overlapping distance from one box to another.
    *
