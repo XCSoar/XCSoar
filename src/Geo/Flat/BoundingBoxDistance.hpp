@@ -32,7 +32,7 @@
  */
 class BBDist {
   int val[2];
-  int d;
+  unsigned d;
 
 public:
   /**
@@ -53,7 +53,7 @@ public:
    *
    * @param _val Set distance (typically 0)
    */
-  explicit constexpr BBDist(const int _val)
+  explicit constexpr BBDist(const unsigned _val)
     :val{-1, -1}, d(_val) {}
 
   /**
@@ -79,7 +79,7 @@ public:
    */
   gcc_pure
   BBDist sqrt() const {
-    return BBDist((int)isqrt4(d));
+    return BBDist(isqrt4(d));
   }
 
   constexpr bool operator<=(const BBDist &other) const {
