@@ -39,7 +39,7 @@ class SearchPoint
   FlatGeoPoint flat_location;
 
 #ifndef NDEBUG
-  bool projected;
+  bool projected = false;
 #endif
 
 public:
@@ -48,11 +48,7 @@ public:
    * 
    * @return Null object
    */
-#ifdef NDEBUG
   SearchPoint() = default;
-#else
-  SearchPoint():projected(false) {}
-#endif
 
   /**
    * Constructor.  The flat location is not initialized here; the
@@ -63,9 +59,6 @@ public:
    */
   SearchPoint(const GeoPoint &loc)
     :location(loc)
-#ifndef NDEBUG
-    , projected(false)
-#endif
   {}
 
   SearchPoint(const GeoPoint &_location, const FlatGeoPoint &_flat)
