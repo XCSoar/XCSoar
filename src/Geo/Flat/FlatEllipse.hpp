@@ -25,6 +25,7 @@
 
 #include "FlatPoint.hpp"
 #include "FlatLine.hpp"
+#include "Math/Angle.hpp"
 #include "Compiler.h"
 
 /**

@@ -22,6 +22,7 @@
 
 #include "FlatLine.hpp"
 #include "Math/Util.hpp"
+#include "Math/Angle.hpp"
 
 fixed
 FlatLine::cross() const

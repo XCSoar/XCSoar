@@ -23,9 +23,10 @@
 #define FLATPOINT_HPP
 
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
 #include "Math/Point2D.hpp"
 #include "Compiler.h"
+
+class Angle;
 
 /**
  * 2-d Cartesian projected real-valued point

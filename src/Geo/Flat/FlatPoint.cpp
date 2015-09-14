@@ -22,6 +22,7 @@
 
 #include "FlatPoint.hpp"
 #include "Math/Util.hpp"
+#include "Math/Angle.hpp"
 
 void
 FlatPoint::Rotate(const Angle angle)
