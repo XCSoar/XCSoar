@@ -77,10 +77,14 @@ public:
 
 private:
   gcc_pure
-  fixed ab() const;
+  fixed ab() const {
+    return a / b;
+  }
 
   gcc_pure
-  fixed ba() const;
+  fixed ba() const {
+    return b / a;
+  }
 
   bool Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const;
 };

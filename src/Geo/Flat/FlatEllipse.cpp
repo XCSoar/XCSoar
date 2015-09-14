@@ -53,18 +53,6 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   theta_initial = Angle::FromXY(op.x * b, op.y * a).AsDelta();
 }
 
-fixed
-FlatEllipse::ab() const
-{
-  return a / b;
-}
-
-fixed
-FlatEllipse::ba() const
-{
-  return b / a;
-}
-
 FlatPoint
 FlatEllipse::Parametric(const fixed t) const
 {
