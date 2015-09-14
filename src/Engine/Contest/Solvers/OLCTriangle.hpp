@@ -184,7 +184,7 @@ private:
     }
 
     // updates the bounding box by a given point range
-    void Update(OLCTriangle *parent, unsigned &_min, unsigned &_max) {
+    void Update(OLCTriangle *parent, unsigned _min, unsigned _max) {
       lon_min = parent->GetPoint(_min).GetFlatLocation().x;
       lon_max = parent->GetPoint(_min).GetFlatLocation().x;
       lat_min = parent->GetPoint(_min).GetFlatLocation().y;
