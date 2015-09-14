@@ -31,7 +31,7 @@
  * \todo better documentation for BBDist hack
  */
 class BBDist {
-  int val[2];
+  unsigned val[2];
   unsigned d;
 
 public:
@@ -41,8 +41,8 @@ public:
    * @param _dim Dimension index
    * @param _val Value of distance
    */
-  BBDist(const size_t _dim, const int _val)
-    :val{-1, -1}
+  BBDist(const size_t _dim, const unsigned _val)
+    :val{0, 0}
   {
     val[_dim % 2] = _val;
     calc_d();
@@ -54,7 +54,7 @@ public:
    * @param _val Set distance (typically 0)
    */
   explicit constexpr BBDist(const unsigned _val)
-    :val{-1, -1}, d(_val) {}
+    :val{0, 0}, d(_val) {}
 
   /**
    * Add distance measure
@@ -99,9 +99,7 @@ private:
   void calc_d() {
     d = 0;
     for (unsigned i = 0; i < 2; i++) {
-      if (val[i] > 0) {
-        d += val[i] * val[i];
-      }
+      d += val[i] * val[i];
     }
   }
 };
