@@ -24,6 +24,7 @@
 #define FlatGeoPoint_HPP
 
 #include "Math/Util.hpp"
+#include "Math/Point2D.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
@@ -32,13 +33,7 @@
 /**
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
-struct FlatGeoPoint {
-  /** Projected x (Longitude) value [undefined units] */
-  int x;
-
-  /** Projected y (Latitude) value [undefined units] */
-  int y;
-
+struct FlatGeoPoint : Point2D<int> {
   /**
    * Non-initialising constructor.
    */
@@ -53,7 +48,7 @@ struct FlatGeoPoint {
    * @return Initialised object at origin
    */
   constexpr
-  FlatGeoPoint(const int _x, const int _y):x(_x), y(_y) {}
+  FlatGeoPoint(const int _x, const int _y):Point2D<int>(_x, _y) {}
 
   /**
    * Find distance from one point to another
@@ -127,7 +122,7 @@ struct FlatGeoPoint {
    * @return Cross product
    */
   constexpr int CrossProduct(FlatGeoPoint other) const {
-    return x * other.y - y * other.x;
+    return ::CrossProduct(*this, other);
   }
 
   /**
@@ -138,7 +133,7 @@ struct FlatGeoPoint {
    * @return Dot product
    */
   constexpr int DotProduct(FlatGeoPoint other) const {
-    return x * other.x + y * other.y;
+    return ::DotProduct(*this, other);
   }
 
   /**
@@ -150,18 +145,13 @@ struct FlatGeoPoint {
    */
   constexpr
   bool operator==(const FlatGeoPoint other) const {
-    return FlatGeoPoint::Equals(other);
+    return Point2D<int>::operator==(other);
   };
 
   constexpr
   bool operator!=(const FlatGeoPoint other) const {
-    return !FlatGeoPoint::Equals(other);
+    return Point2D<int>::operator!=(other);
   };
-
-  constexpr
-  bool Equals(const FlatGeoPoint sp) const {
-    return x == sp.x && y == sp.y;
-  }
 
   gcc_pure
   bool Sort(const FlatGeoPoint& sp) const {
@@ -210,7 +200,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    */
   constexpr
   bool operator==(const AFlatGeoPoint other) const {
-    return FlatGeoPoint::Equals(other) && (altitude == other.altitude);
+    return FlatGeoPoint::operator==(other) && (altitude == other.altitude);
   };
 
   /**
@@ -224,7 +214,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   bool Sort(const AFlatGeoPoint &sp) const {
     if (!FlatGeoPoint::Sort(sp))
       return false;
-    else if (FlatGeoPoint::Equals(sp))
+    else if (FlatGeoPoint::operator==(sp))
       return altitude > sp.altitude;
     else
       return true;
