@@ -49,15 +49,15 @@ class FlatProjection {
   /**
    * Cosine of the #center location.
    */
-  fixed cos;
+  double cos;
 
   /**
    * Reciprocal of cosine of the #center location.
    */
-  fixed r_cos;
+  double r_cos;
 
   /**< Approximate scale (m) of grid spacing at center */
-  fixed approx_scale;
+  double approx_scale;
 
 public:
   FlatProjection() = default;
@@ -156,7 +156,7 @@ public:
    * @return Distance in flat earth projected units
    */
   gcc_pure
-  unsigned ProjectRangeInteger(const GeoPoint &tp, const fixed range) const;
+  unsigned ProjectRangeInteger(const GeoPoint &tp, double range) const;
 
   /**
    * Calculates the floating point flat earth distance from an actual distance
@@ -168,7 +168,7 @@ public:
    * @return Distance in flat earth projected units
    */
   gcc_pure
-  fixed ProjectRangeFloat(const GeoPoint &tp, const fixed range) const;
+  double ProjectRangeFloat(const GeoPoint &tp, double range) const;
 
   /** 
    * Return center point (projection reference)
@@ -184,7 +184,7 @@ public:
    * Return approximate grid to flat earth scale in meters
    */
   gcc_pure
-  fixed GetApproximateScale() const {
+  double GetApproximateScale() const {
     return approx_scale;
   }
 };

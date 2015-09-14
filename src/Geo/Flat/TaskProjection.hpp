@@ -80,7 +80,7 @@ public:
    * @return Radius (m) from center to edge
    */
   gcc_pure
-  fixed ApproxRadius() const; 
+  double ApproxRadius() const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

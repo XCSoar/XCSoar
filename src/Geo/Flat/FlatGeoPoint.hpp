@@ -23,7 +23,6 @@
 #ifndef FlatGeoPoint_HPP
 #define FlatGeoPoint_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Util.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
@@ -119,7 +118,7 @@ struct FlatGeoPoint {
    * @return Scaled value
    */
   gcc_pure
-  FlatGeoPoint operator* (const fixed t) const {
+  FlatGeoPoint operator*(const double t) const {
     return FlatGeoPoint(iround(longitude * t),
                         iround(latitude * t));
   }

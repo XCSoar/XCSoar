@@ -64,7 +64,7 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const;
+  bool intersect_czero(double r, FlatPoint &i1, FlatPoint &i2) const;
 
   /** 
    * Calculate intersections between this line
@@ -77,7 +77,7 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_circle(const fixed r, const FlatPoint c,
+  bool intersect_circle(double r, FlatPoint c,
                         FlatPoint &i1, FlatPoint &i2) const;
 
   /**
@@ -103,7 +103,7 @@ public:
    * @return Squared length
    */
   gcc_pure
-  fixed dsq() const;
+  double dsq() const;
 
   /**
    * Calculate length of line
@@ -111,7 +111,7 @@ public:
    * @return Length
    */
   gcc_pure
-  fixed d() const {
+  double d() const {
     return hypot(dx(), dy());
   }
 
@@ -147,7 +147,7 @@ public:
    *
    * @param a Scale ratio
    */
-  void mul_y(const fixed a) {
+  void mul_y(const double a) {
     p1.MultiplyY(a);
     p2.MultiplyY(a);
   }
@@ -158,19 +158,19 @@ public:
    * @return Dot product
    */
   gcc_pure
-  fixed dot(const FlatLine& that) const;
+  double dot(const FlatLine& that) const;
 
 private:
-  constexpr fixed dx() const {
+  constexpr double dx() const {
     return p2.x - p1.x;
   }
 
-  constexpr fixed dy() const {
+  constexpr double dy() const {
     return p2.y - p1.y;
   }
 
   gcc_pure
-  fixed cross() const {
+  double cross() const {
     return p1.CrossProduct(p2);
   }
 };

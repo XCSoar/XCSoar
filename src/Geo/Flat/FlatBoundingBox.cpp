@@ -22,7 +22,6 @@
 
 #include "FlatBoundingBox.hpp"
 #include "FlatRay.hpp"
-#include "Math/fixed.hpp"
 #include "Math/FastMath.hpp"
 
 #include <algorithm>
@@ -44,9 +43,8 @@ FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 bool
 FlatBoundingBox::Intersects(const FlatRay& ray) const
 {
-  fixed tmin = fixed(0);
-  fixed tmax = fixed(1);
-  
+  double tmin = 0, tmax = 1;
+
   // Longitude
   if (ray.vector.longitude == 0) {
     // ray is parallel to slab. No hit if origin not within slab

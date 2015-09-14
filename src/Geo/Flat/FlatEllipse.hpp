@@ -36,8 +36,8 @@ class FlatEllipse
 {
   FlatPoint f1, f2, ap;
   FlatPoint p;
-  fixed a;
-  fixed b;
+  double a;
+  double b;
   Angle theta;
 
   Angle theta_initial;
@@ -62,7 +62,7 @@ public:
    * @return Location on ellipse
    */
   gcc_pure
-  FlatPoint Parametric(const fixed t) const;
+  FlatPoint Parametric(double t) const;
 
   /**
    * Find intersection of line from focus 1 to p, through the ellipse
@@ -77,12 +77,12 @@ public:
 
 private:
   gcc_pure
-  fixed ab() const {
+  double ab() const {
     return a / b;
   }
 
   gcc_pure
-  fixed ba() const {
+  double ba() const {
     return b / a;
   }
 

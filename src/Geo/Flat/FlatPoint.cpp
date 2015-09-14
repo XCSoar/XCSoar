@@ -35,7 +35,7 @@ FlatPoint::Rotate(const Angle angle)
   y = _x * sa + _y * ca;
 }
 
-fixed
+double
 FlatPoint::MagnitudeSquared() const
 {
   return Square(x) + Square(y);

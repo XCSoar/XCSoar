@@ -24,7 +24,7 @@
 #include "Math/Util.hpp"
 #include "Math/Angle.hpp"
 
-fixed
+double
 FlatLine::dsq() const
 {
   return Square(dx()) + Square(dy());
@@ -44,7 +44,7 @@ FlatLine::rotate(const Angle theta)
 }
 
 bool
-FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
+FlatLine::intersect_czero(const double r, FlatPoint &i1, FlatPoint &i2) const
 {
   const auto _dx = dx();
   const auto _dy = dy();
@@ -52,12 +52,12 @@ FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
   const auto D = cross();
 
   auto det = Square(r) * dr - Square(D);
-  if (negative(det))
+  if (det < 0)
     // no solution
     return false;
 
   det = sqrt(det);
-  const auto inv_dr = fixed(1) / dr;
+  const auto inv_dr = 1. / dr;
   i1.x = (D * _dy + copysign(_dx, _dy) * det) * inv_dr;
   i2.x = (D * _dy - copysign(_dx, _dy) * det) * inv_dr;
   i1.y = (-D * _dx + fabs(_dy) * det) * inv_dr;
@@ -66,7 +66,7 @@ FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
 }
 
 bool
-FlatLine::intersect_circle(const fixed r, const FlatPoint c,
+FlatLine::intersect_circle(const double r, const FlatPoint c,
                            FlatPoint &i1, FlatPoint &i2) const
 {
   FlatLine that = *this;
@@ -80,7 +80,7 @@ FlatLine::intersect_circle(const fixed r, const FlatPoint c,
   return false;
 }
 
-fixed
+double
 FlatLine::dot(const FlatLine& that) const
 {
   return (p2 - p1).DotProduct(that.p2 - that.p1);

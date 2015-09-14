@@ -67,7 +67,7 @@ FlatRay::IntersectsRatio(const FlatRay &that) const
 }
 
 FlatGeoPoint
-FlatRay::Parametric(const fixed t) const
+FlatRay::Parametric(const double t) const
 {
   FlatGeoPoint p = point;
   p.longitude += iround(vector.longitude * t);
@@ -75,13 +75,13 @@ FlatRay::Parametric(const fixed t) const
   return p;
 }
 
-fixed
+double
 FlatRay::Intersects(const FlatRay &that) const
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second == 0)
-    return fixed(-1);
-  return ((fixed)r.first) / r.second;
+    return -1;
+  return double(r.first) / double(r.second);
 }
 
 bool
@@ -93,15 +93,15 @@ FlatRay::IntersectsDistinct(const FlatRay& that) const
          (abs(r.first) < abs(r.second));
 }
 
-fixed
+double
 FlatRay::DistinctIntersection(const FlatRay& that) const
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second != 0 &&
       sgn(r.second) * r.first > 0 &&
       abs(r.first) < abs(r.second)) {
-    return fixed(r.first) / r.second;
+    return double(r.first) / double(r.second);
   }
 
-  return fixed(-1);
+  return -1;
 }

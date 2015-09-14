@@ -32,7 +32,7 @@
 
 // scaling for flat earth integer representation, gives approximately 50m resolution
 static constexpr int fixed_scale = 57296;
-static constexpr fixed inv_scale(1.0/fixed_scale);
+static constexpr double inv_scale(1.0/fixed_scale);
 
 void
 FlatProjection::SetCenter(const GeoPoint &_center)
@@ -42,7 +42,7 @@ FlatProjection::SetCenter(const GeoPoint &_center)
   center = _center;
 
   cos = center.latitude.fastcosine() * fixed_scale;
-  r_cos = fixed(1) / cos;
+  r_cos = 1. / cos;
   approx_scale = Unproject(FlatGeoPoint(0,-1)).DistanceS(Unproject(FlatGeoPoint(0,1))) / 2;
 }
 
@@ -88,9 +88,9 @@ FlatProjection::Unproject(const FlatGeoPoint &fp) const
                   + center.latitude);
 }
 
-fixed
+double
 FlatProjection::ProjectRangeFloat(const GeoPoint &tp,
-                                  const fixed range) const
+                                  const double range) const
 {
   assert(IsValid());
 
@@ -99,7 +99,7 @@ FlatProjection::ProjectRangeFloat(const GeoPoint &tp,
 
 unsigned
 FlatProjection::ProjectRangeInteger(const GeoPoint &tp,
-                                    const fixed range) const
+                                    const double range) const
 {
   assert(IsValid());
 

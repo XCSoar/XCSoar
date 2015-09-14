@@ -52,7 +52,7 @@ TaskProjection::Update()
   return true;
 }
 
-fixed
+double
 TaskProjection::ApproxRadius() const
 {
   assert(bounds.IsValid());

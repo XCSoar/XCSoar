@@ -22,7 +22,6 @@
 #ifndef FLATPOINT_HPP
 #define FLATPOINT_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Point2D.hpp"
 #include "Compiler.h"
 
@@ -31,7 +30,7 @@ class Angle;
 /**
  * 2-d Cartesian projected real-valued point
  */
-struct FlatPoint : Point2D<fixed>
+struct FlatPoint : Point2D<double>
 {
   /**
    * Non-initialising default constructor.
@@ -47,7 +46,7 @@ struct FlatPoint : Point2D<fixed>
    * @return Initialised object
    */
   constexpr
-  FlatPoint(const fixed _x, const fixed _y):Point2D<fixed>(_x, _y) {}
+  FlatPoint(const double _x, const double _y):Point2D<double>(_x, _y) {}
 
   /**
    * Calculate cross product of two points
@@ -57,7 +56,7 @@ struct FlatPoint : Point2D<fixed>
    * @return Cross product
    */
   gcc_pure
-  fixed CrossProduct(const FlatPoint &p2) const {
+  double CrossProduct(const FlatPoint &p2) const {
     return ::CrossProduct(*this, p2);
   }
 
@@ -66,7 +65,7 @@ struct FlatPoint : Point2D<fixed>
    *
    * @param a Value to multiply
    */
-  void MultiplyY(const fixed a) {
+  void MultiplyY(const double a) {
     y *= a;
   }
 
@@ -85,7 +84,7 @@ struct FlatPoint : Point2D<fixed>
    * @return Distance
    */
   gcc_pure
-  fixed Distance(FlatPoint p) const {
+  double Distance(FlatPoint p) const {
     return (*this - p).Magnitude();
   }
 
@@ -94,14 +93,14 @@ struct FlatPoint : Point2D<fixed>
    * @return Magnitude squared
    */
   gcc_pure
-  fixed MagnitudeSquared() const;
+  double MagnitudeSquared() const;
 
   /**
    * Find sqrt(dx * dx + dy * dy)
    * @return Magnitude
    */
   gcc_pure
-  fixed Magnitude() const {
+  double Magnitude() const {
     return hypot(x, y);
   }
 
@@ -113,7 +112,7 @@ struct FlatPoint : Point2D<fixed>
    * @return Dot product
    */
   gcc_pure
-  fixed DotProduct(FlatPoint other) const {
+  double DotProduct(FlatPoint other) const {
     return ::DotProduct(*this, other);
   }
 
@@ -125,7 +124,7 @@ struct FlatPoint : Point2D<fixed>
    * @return Scaled point
    */
   gcc_pure
-  FlatPoint operator*(fixed p) const
+  FlatPoint operator*(double p) const
   {
     return { x * p, y * p };
   }
@@ -156,7 +155,7 @@ struct FlatPoint : Point2D<fixed>
 
   constexpr
   FlatPoint Half() const {
-    return FlatPoint(::Half(x), ::Half(y));
+    return FlatPoint(x / 2, y / 2);
   }
 };
 
