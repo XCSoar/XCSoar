@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
@@ -46,6 +47,8 @@ class AirspaceSettingsListWidget : public ListWidget {
   const bool color_mode;
   bool changed;
 
+  TextRowRenderer row_renderer;
+
 public:
   AirspaceSettingsListWidget(bool _color_mode)
     :color_mode(_color_mode), changed(false) {}
@@ -58,8 +61,9 @@ public:
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
-                                   Layout::GetMaximumControlHeight());
+    const auto &look = UIGlobals::GetDialogLook();
+    ListControl &list = CreateList(parent, look, rc,
+                                   row_renderer.CalculateLayout(*look.list.font));
     list.SetLength(AIRSPACECLASSCOUNT);
   }
 
@@ -80,7 +84,7 @@ public:
 };
 
 void
-AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
                                          unsigned i)
 {
   assert(i < AIRSPACECLASSCOUNT);
@@ -91,17 +95,12 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     CommonInterface::GetMapSettings().airspace;
   const AirspaceLook &look = CommonInterface::main_window->GetLook().map.airspace;
 
-  const unsigned padding = Layout::GetTextPadding();
-
-  const unsigned column_spacing = Layout::VptScale(5);
-
   const TCHAR *const name = AirspaceFormatter::GetClass((AirspaceClass)i);
-  const int name_x = rc.left + padding;
-
-  int second_x;
 
   if (color_mode) {
-    second_x = name_x + canvas.CalcTextWidth(name) + column_spacing;
+    int second_x = row_renderer.NextColumn(canvas, rc, name);
+
+    const unsigned padding = Layout::GetTextPadding();
 
     if (AirspacePreviewRenderer::PrepareFill(
         canvas, (AirspaceClass)i, look, renderer)) {
@@ -117,24 +116,16 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                        rc.bottom - padding);
     }
   } else {
-    const int display_x = rc.right - padding
-      - canvas.CalcTextWidth(_("Display"));
-    const int warn_x = second_x = display_x - column_spacing
-      - canvas.CalcTextWidth(_("Warn"));
+    rc.right = renderer.classes[i].display
+      ? row_renderer.DrawRightColumn(canvas, rc, _("Display"))
+      : row_renderer.PreviousRightColumn(canvas, rc, _("Display"));
 
-    if (computer.warnings.class_warnings[i])
-      canvas.DrawText(warn_x, rc.top + padding,
-                      _("Warn"));
-
-    if (renderer.classes[i].display)
-      canvas.DrawText(display_x, rc.top + padding,
-                      _("Display"));
+    rc.right = computer.warnings.class_warnings[i]
+      ? row_renderer.DrawRightColumn(canvas, rc, _("Warn"))
+      : row_renderer.PreviousRightColumn(canvas, rc, _("Warn"));
   }
 
-  canvas.DrawClippedText(name_x,
-                         rc.top + padding,
-                         second_x - column_spacing - name_x,
-                         name);
+  row_renderer.DrawTextRow(canvas, rc, name);
 }
 
 void
