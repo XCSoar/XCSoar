@@ -45,13 +45,13 @@ class OptionStartsWidget : public ListWidget, private ActionListener {
   };
 
   OrderedTask &task;
-  bool modified;
+  bool modified = false;
 
   Button *relocate_button, *remove_button;
 
 public:
-  OptionStartsWidget(OrderedTask &_task)
-    :task(_task), modified(false) {}
+  explicit OptionStartsWidget(OrderedTask &_task)
+    :task(_task) {}
 
   void CreateButtons(WidgetDialog &dialog) {
     relocate_button = dialog.AddButton(_("Relocate"), *this, RELOCATE);
