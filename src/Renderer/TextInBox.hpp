@@ -45,15 +45,10 @@ struct TextInBoxMode {
     BELOW,
   };
 
-  LabelShape shape;
-  Alignment align;
-  VerticalPosition vertical_position;
-  bool move_in_view;
-
-  constexpr TextInBoxMode()
-    :shape(LabelShape::SIMPLE), align(Alignment::LEFT),
-     vertical_position(VerticalPosition::BELOW),
-     move_in_view(false) {}
+  LabelShape shape = LabelShape::SIMPLE;
+  Alignment align = Alignment::LEFT;
+  VerticalPosition vertical_position = VerticalPosition::BELOW;
+  bool move_in_view = false;
 };
 
 bool
