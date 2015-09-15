@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
@@ -48,6 +48,8 @@ class OptionStartsWidget : public ListWidget, private ActionListener {
   bool modified = false;
 
   Button *relocate_button, *remove_button;
+
+  TextRowRenderer row_renderer;
 
 public:
   explicit OptionStartsWidget(OrderedTask &_task)
@@ -119,38 +121,35 @@ void
 OptionStartsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   CreateList(parent, UIGlobals::GetDialogLook(),
-             rc, Layout::GetMaximumControlHeight());
+             rc, row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font));
 
   RefreshView();
 }
 
 void
-OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+OptionStartsWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
                                 unsigned DrawListIndex)
 {
   assert(DrawListIndex < task.GetOptionalStartPointCount() + 2);
   assert(GetList().GetLength() == task.GetOptionalStartPointCount() + 2);
 
-  const unsigned padding = Layout::GetTextPadding();
   const unsigned index_optional_starts = DrawListIndex - 1;
 
   if (DrawListIndex == GetList().GetLength() - 1) {
-    canvas.DrawText(rc.left + padding, rc.top + padding,
-                    _("(Add Alternate Start)"));
+    row_renderer.DrawTextRow(canvas, rc,
+                             _("(Add Alternate Start)"));
   } else {
-    RasterPoint pt(rc.left + padding, rc.top + padding);
-
     const OrderedTaskPoint *tp;
     if (DrawListIndex == 0) {
       tp = &task.GetPoint(0);
-      canvas.DrawText(pt.x, pt.y, _T("*"));
-      pt.x += canvas.CalcTextWidth(_T("*"));
+      row_renderer.DrawTextRow(canvas, rc, _T("*"));
+      rc.left += canvas.CalcTextWidth(_T("*"));
     } else
       tp = &task.GetOptionalStartPoint(index_optional_starts);
 
     assert(tp != nullptr);
 
-    canvas.DrawText(pt.x, pt.y, tp->GetWaypoint().name.c_str());
+    row_renderer.DrawTextRow(canvas, rc, tp->GetWaypoint().name.c_str());
   }
 }
 
