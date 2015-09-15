@@ -418,8 +418,6 @@ Draw(Canvas &canvas, PixelRect rc,
   rc.right = row_renderer.DrawRightFirstRow(canvas, rc,
                                             FormatUserAltitude(item.altitude));
 
-  canvas.Select(row_renderer.GetFirstFont());
-
   row_renderer.DrawFirstRow(canvas, rc, item.name);
 
   if (CommonInterface::Basic().time_available) {
