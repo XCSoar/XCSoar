@@ -415,15 +415,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const SkyLinesTrafficMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
-  const unsigned padding = Layout::GetTextPadding();
-
-  {
-    canvas.Select(row_renderer.GetSecondFont());
-    const auto altitude = FormatUserAltitude(fixed(item.altitude));
-    const int x = rc.right - canvas.CalcTextWidth(altitude) - padding;
-    canvas.DrawText(x, rc.top + row_renderer.GetFirstY(), altitude);
-    rc.right = x - padding;
-  }
+  rc.right = row_renderer.DrawRightFirstRow(canvas, rc,
+                                            FormatUserAltitude(item.altitude));
 
   canvas.Select(row_renderer.GetFirstFont());
 
