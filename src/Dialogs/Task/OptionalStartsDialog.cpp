@@ -202,7 +202,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
     if (task.RelocateOptionalStart(index_optional_starts, *way_point))
       modified = true;
 
-  } else if (!task.IsFull()) {
+  } else {
 
     const GeoPoint &location = task.TaskSize() > 0
       ? task.GetPoint(0).GetLocation()
