@@ -570,16 +570,6 @@ SinceInMinutes(fixed now_s, uint32_t past_ms)
 
 #endif
 
-/**
- * Draw right-aligned text.
- */
-static void
-DrawTextRight(Canvas &canvas, int x, int y, const TCHAR *text)
-{
-  unsigned width = canvas.CalcTextWidth(text);
-  canvas.DrawText(x - width, y, text);
-}
-
 void
 TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned index)
@@ -713,14 +703,12 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   /* draw bearing and distance on the right */
   if (item.vector.IsValid()) {
-    DrawTextRight(canvas, rc.right - text_padding,
-                  rc.top + row_renderer.GetFirstY(),
-                  FormatUserDistanceSmart(item.vector.distance).c_str());
+    row_renderer.DrawRightFirstRow(canvas, rc,
+                                   FormatUserDistanceSmart(item.vector.distance).c_str());
 
     // Draw leg bearing
-    DrawTextRight(canvas, rc.right - text_padding,
-                  rc.top + row_renderer.GetSecondY(),
-                  FormatBearing(item.vector.bearing).c_str());
+    row_renderer.DrawRightSecondRow(canvas, rc,
+                                    FormatBearing(item.vector.bearing).c_str());
   }
 }
 

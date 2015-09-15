@@ -54,22 +54,16 @@ Draw(Canvas &canvas, PixelRect rc,
 
   rc.left += line_height + padding;
 
-  canvas.Select(row_renderer.GetSecondFont());
-
   // Draw upper airspace altitude limit
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-  const int top_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-  canvas.DrawClippedText(top_x, rc.top + row_renderer.GetFirstY(),
-                         rc, buffer);
+  const int top_x = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 
   // Draw lower airspace altitude limit
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-  const int bottom_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-  canvas.DrawClippedText(bottom_x, rc.top + row_renderer.GetSecondY(),
-                         rc, buffer);
+  const int bottom_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-  rc.right = std::min(top_x, bottom_x) - padding;
+  rc.right = std::min(top_x, bottom_x);
 
   // Draw comment line
   row_renderer.DrawSecondRow(canvas, rc, comment);

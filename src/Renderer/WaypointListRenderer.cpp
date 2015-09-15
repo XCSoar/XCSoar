@@ -76,20 +76,15 @@ Draw(Canvas &canvas, PixelRect rc,
   Buffer buffer;
 
   if (vector) {
-    // Use small font for details
-    canvas.Select(row_renderer.GetSecondFont());
-
     // Draw leg distance
     FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
-    const int distance_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-    canvas.DrawText(distance_x, rc.top + row_renderer.GetFirstY(), buffer);
+    const int distance_x = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 
     // Draw leg bearing
     FormatBearing(buffer.buffer(), buffer.capacity(), vector->bearing);
-    const int bearing_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-    canvas.DrawText(bearing_x, rc.top + row_renderer.GetSecondY(), buffer);
+    const int bearing_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-    rc.right = std::min(distance_x, bearing_x) - padding;
+    rc.right = std::min(distance_x, bearing_x);
   }
 
   // Draw details line

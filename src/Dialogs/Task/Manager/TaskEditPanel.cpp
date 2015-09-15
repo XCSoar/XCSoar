@@ -419,22 +419,15 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   text_rc.left += line_height + padding;
 
   if (show_leg_info) {
-    // Use small font for details
-    canvas.Select(row_renderer.GetSecondFont());
-
     // Draw leg distance
     FormatUserDistanceSmart(leg.distance, buffer, true);
-    unsigned width = canvas.CalcTextWidth(buffer);
-    const int x1 = rc.right - padding - width;
-    canvas.DrawText(x1, rc.top + row_renderer.GetFirstY(), buffer);
+    const int x1 = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 
     // Draw leg bearing
     FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);
-    width = canvas.CalcTextWidth(buffer);
-    const int x2 = rc.right - padding - width;
-    canvas.DrawText(x2, rc.top + row_renderer.GetSecondY(), buffer);
+    const int x2 = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-    text_rc.right = std::min(x1, x2) - padding;
+    text_rc.right = std::min(x1, x2);
   }
 
   // Draw details line

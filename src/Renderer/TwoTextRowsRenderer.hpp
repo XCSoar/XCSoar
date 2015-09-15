@@ -69,6 +69,22 @@ public:
 
   void DrawSecondRow(Canvas &canvas, const PixelRect &rc,
                      const TCHAR *text) const;
+
+  /**
+   * Draws a right-aligned column in the first row (but with the
+   * second font which is usually smaller) and returns the new "right"
+   * coordinate.
+   */
+  int DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
+                        const TCHAR *text) const;
+
+  /**
+   * Draws a right-aligned column in the second row and returns the
+   * new "right" coordinate.
+   */
+  int DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
+                         const TCHAR *text) const;
+
 };
 
 #endif

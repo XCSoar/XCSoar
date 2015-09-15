@@ -430,8 +430,6 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const FileItem &file = items[i];
 
-  const unsigned margin = Layout::GetTextPadding();
-
   canvas.Select(row_renderer.GetFirstFont());
   row_renderer.DrawFirstRow(canvas, rc, file.name.c_str());
 
@@ -451,23 +449,15 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
-    const unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - width - margin,
-                    rc.top + row_renderer.GetFirstY(),
-                    text);
+    row_renderer.DrawRightFirstRow(canvas, rc, text);
   } else if (file.failed) {
     const TCHAR *text = _("Error");
-    const unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - width - margin,
-                    rc.top + row_renderer.GetFirstY(),
-                    text);
+    row_renderer.DrawRightFirstRow(canvas, rc, text);
   }
 
-  row_renderer.DrawSecondRow(canvas, rc, file.size.c_str());
+  row_renderer.DrawRightSecondRow(canvas, rc, file.last_modified.c_str());
 
-  canvas.DrawText((rc.left + rc.right) / 2,
-                  rc.top + row_renderer.GetSecondY(),
-                  file.last_modified.c_str());
+  row_renderer.DrawSecondRow(canvas, rc, file.size.c_str());
 }
 
 void

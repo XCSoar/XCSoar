@@ -60,6 +60,13 @@ public:
    */
   int DrawColumn(Canvas &canvas, const PixelRect &rc,
                  const TCHAR *text) const;
+
+  /**
+   * Draws a right-aligned column and returns the new "right"
+   * coordinate.
+   */
+  int DrawRightColumn(Canvas &canvas, const PixelRect &rc,
+                      const TCHAR *text) const;
 };
 
 #endif
