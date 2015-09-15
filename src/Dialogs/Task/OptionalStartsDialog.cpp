@@ -32,7 +32,6 @@ Copyright_License {
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
-#include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -46,15 +45,13 @@ class OptionStartsWidget : public ListWidget, private ActionListener {
   };
 
   OrderedTask &task;
-  const bool RealStartExists;
   bool modified;
 
   Button *relocate_button, *remove_button;
 
 public:
   OptionStartsWidget(OrderedTask &_task)
-    :task(_task), RealStartExists(task.TaskSize() > 0),
-     modified(false) {}
+    :task(_task), modified(false) {}
 
   void CreateButtons(WidgetDialog &dialog) {
     relocate_button = dialog.AddButton(_("Relocate"), *this, RELOCATE);
@@ -73,15 +70,14 @@ public:
 
 protected:
   void UpdateList() {
-    GetList().SetLength(task.GetOptionalStartPointCount()
-                        + (RealStartExists ? 2 : 1));
+    GetList().SetLength(task.GetOptionalStartPointCount() + 2);
     GetList().Invalidate();
   }
 
   void UpdateButtons() {
     const unsigned current = GetCursorIndex();
-    relocate_button->SetEnabled(!RealStartExists || current >= 1);
-    remove_button->SetEnabled((!RealStartExists || current >= 1) &&
+    relocate_button->SetEnabled(current >= 1);
+    remove_button->SetEnabled(current >= 1 &&
                               current < GetList().GetLength() - 1);
   }
 
@@ -108,10 +104,7 @@ public:
   }
 
   bool CanActivateItem(unsigned index) const override {
-    if (index == 0 && RealStartExists)
-      return false;
-
-    return true;
+    return index > 0;
   }
 
   void OnActivateItem(unsigned index) override {
@@ -135,13 +128,11 @@ void
 OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                 unsigned DrawListIndex)
 {
-  assert(DrawListIndex <= task.GetOptionalStartPointCount()
-         + (RealStartExists ? 2 : 1));
-  assert(GetList().GetLength() ==
-         task.GetOptionalStartPointCount() + (RealStartExists ? 2 : 1));
+  assert(DrawListIndex < task.GetOptionalStartPointCount() + 2);
+  assert(GetList().GetLength() == task.GetOptionalStartPointCount() + 2);
 
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned index_optional_starts = DrawListIndex - (RealStartExists ? 1 : 0);
+  const unsigned index_optional_starts = DrawListIndex - 1;
 
   if (DrawListIndex == GetList().GetLength() - 1) {
     canvas.DrawText(rc.left + padding, rc.top + padding,
@@ -150,7 +141,7 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     RasterPoint pt(rc.left + padding, rc.top + padding);
 
     const OrderedTaskPoint *tp;
-    if (DrawListIndex == 0 && RealStartExists) {
+    if (DrawListIndex == 0) {
       tp = &task.GetPoint(0);
       canvas.DrawText(pt.x, pt.y, _T("*"));
       pt.x += canvas.CalcTextWidth(_T("*"));
@@ -180,19 +171,16 @@ OptionStartsWidget::OnAction(int id)
 void
 OptionStartsWidget::Relocate(unsigned ItemIndex)
 {
-  assert(ItemIndex <= task.GetOptionalStartPointCount()
-      +  (RealStartExists ? 2 : 1));
-  assert(GetList().GetLength() ==
-         task.GetOptionalStartPointCount() + (RealStartExists ? 2 : 1));
+  assert(ItemIndex <= task.GetOptionalStartPointCount() + 2);
+  assert(GetList().GetLength() == task.GetOptionalStartPointCount() + 2);
+  assert(task.TaskSize() > 0);
 
-  if (ItemIndex == 0 && RealStartExists)
+  if (ItemIndex == 0)
     return;
 
-  const unsigned index_optional_starts = ItemIndex - (RealStartExists ? 1 : 0);
+  const unsigned index_optional_starts = ItemIndex - 1;
 
-  const GeoPoint &location = task.TaskSize() > 0
-    ? task.GetPoint(0).GetLocation()
-    : CommonInterface::Basic().location;
+  const GeoPoint &location = task.GetPoint(0).GetLocation();
   const Waypoint* way_point =
     ShowWaypointListDialog(location);
   if (!way_point)
@@ -213,8 +201,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
 void
 OptionStartsWidget::Remove(unsigned i)
 {
-  if (RealStartExists)
-    --i;
+  --i;
 
   if (task.RemoveOptionalStart(i)) {
     RefreshView();
@@ -225,6 +212,8 @@ OptionStartsWidget::Remove(unsigned i)
 bool
 dlgTaskOptionalStarts(OrderedTask &task)
 {
+  assert(task.TaskSize() > 0);
+
   OptionStartsWidget widget(task);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateFull(UIGlobals::GetMainWindow(),
