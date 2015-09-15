@@ -62,6 +62,14 @@ public:
                  const TCHAR *text) const;
 
   /**
+   * Returns the maximum X coordinate of the column before the given
+   * text.
+   */
+  gcc_pure
+  int PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
+                          const TCHAR *text) const;
+
+  /**
    * Draws a right-aligned column and returns the new "right"
    * coordinate.
    */

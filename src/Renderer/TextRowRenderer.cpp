@@ -69,6 +69,20 @@ TextRowRenderer::DrawColumn(Canvas &canvas, const PixelRect &rc,
 }
 
 int
+TextRowRenderer::PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
+                                     const TCHAR *text) const
+{
+  int text_width = canvas.CalcTextWidth(text);
+  int x = rc.right - left_padding - text_width;
+  if (x < rc.left)
+    /* text is too large: skip it completely (is there something
+       better we can do?) */
+    return rc.right;
+
+  return x - left_padding;
+}
+
+int
 TextRowRenderer::DrawRightColumn(Canvas &canvas, const PixelRect &rc,
                                  const TCHAR *text) const
 {
