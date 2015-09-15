@@ -49,7 +49,7 @@ TaskRenderer::Draw(const AbortTask &task)
 void 
 TaskRenderer::Draw(const OrderedTask &task)
 {
-  tpv.SetBoundingBox(task.GetBoundingBox(screen_bounds));
+  tpv.SetBoundingBox(task.GetTaskProjection().Project(screen_bounds));
   tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();

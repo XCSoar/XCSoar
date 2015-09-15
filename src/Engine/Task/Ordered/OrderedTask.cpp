@@ -1472,14 +1472,6 @@ OrderedTask::Clear()
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 }
 
-FlatBoundingBox
-OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
-{
-  assert(TaskSize() > 0);
-
-  return task_projection.Project(bounds);
-}
-
 void
 OrderedTask::RotateOptionalStarts()
 {

@@ -377,13 +377,6 @@ public:
   void UpdateGeometry();
 
   /**
-   * Convert a GeoBounds into a flat bounding box projected
-   * according to the task projection.
-   */
-  gcc_pure
-  FlatBoundingBox GetBoundingBox(const GeoBounds &bounds) const;
-
-  /**
    * Update summary task statistics (progress along path)
    */
   void UpdateSummary(TaskSummary &summary) const;
