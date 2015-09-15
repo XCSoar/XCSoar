@@ -168,7 +168,7 @@ OptionStartsWidget::OnAction(int id)
   }
 }
 
-void
+inline void
 OptionStartsWidget::Relocate(unsigned ItemIndex)
 {
   assert(ItemIndex <= task.GetOptionalStartPointCount() + 2);
@@ -198,7 +198,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
   RefreshView();
 }
 
-void
+inline void
 OptionStartsWidget::Remove(unsigned i)
 {
   --i;
