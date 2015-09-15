@@ -29,6 +29,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
@@ -58,6 +59,8 @@ class WifiListWidget final
   WifiStatus status;
   TrivialArray<NetworkInfo, 64> networks;
 
+  TwoTextRowsRenderer row_renderer;
+
   WPASupplicant wpa_supplicant;
 
 public:
@@ -72,13 +75,10 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
     const DialogLook &look = UIGlobals::GetDialogLook();
-    const unsigned row_height =
-      std::max(Layout::GetMaximumControlHeight(),
-               unsigned(Layout::GetTextPadding()) * 3
-               + look.text_font.GetHeight()
-               + look.small_font.GetHeight());
 
-    CreateList(parent, look, rc, row_height);
+    CreateList(parent, look, rc,
+               row_renderer.CalculateLayout(look.text_font,
+                                            look.small_font));
     UpdateList();
     Timer::Schedule(1000);
   }
@@ -159,13 +159,7 @@ void
 WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned idx)
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
   const auto &info = networks[idx];
-  const unsigned padding = Layout::GetTextPadding();
-
-  const unsigned x1 = rc.left + padding;
-  const unsigned y1 = rc.top + padding;
-  const unsigned y2 = y1 + look.text_font.GetHeight() + padding;
 
   static char wifi_security[][20] = {
     "WPA",
@@ -173,11 +167,8 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     "Open",
   };
 
-  canvas.Select(look.text_font);
-  canvas.DrawText(x1, y1, info.ssid);
-
-  canvas.Select(look.small_font);
-  canvas.DrawText(x1, y2, info.bssid);
+  row_renderer.DrawFirstRow(canvas, rc, info.ssid);
+  row_renderer.DrawSecondRow(canvas, rc, info.bssid);
 
   const TCHAR *state = nullptr;
   StaticString<40> state_buffer;
@@ -203,16 +194,13 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   else if (info.signal_level >= 0)
     state = _("Visible");
 
-  if (state != nullptr) {
-    unsigned width = canvas.CalcTextWidth(state);
-    canvas.DrawText(rc.right - padding - width, y1, state);
-  }
+  if (state != nullptr)
+    row_renderer.DrawRightFirstRow(canvas, rc, state);
 
   if (info.signal_level >= 0) {
     StaticString<20> text;
     text.UnsafeFormat(_T("%s %u"), wifi_security[info.security], info.signal_level);
-    unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - padding - width, y2, text);
+    row_renderer.DrawRightSecondRow(canvas, rc, text);
   }
 }
 
