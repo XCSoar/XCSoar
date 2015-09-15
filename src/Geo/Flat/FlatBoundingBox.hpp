@@ -177,6 +177,14 @@ public:
     bb_ur = bb_ur + offset;
   }
 
+  FlatBoundingBox &Grow(int delta) {
+    bb_ll.x -= delta;
+    bb_ll.y -= delta;
+    bb_ur.x += delta;
+    bb_ur.y += delta;
+    return *this;
+  }
+
   /**
    * Expand the border by x amount
    */
