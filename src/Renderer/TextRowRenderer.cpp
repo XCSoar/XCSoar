@@ -51,3 +51,19 @@ TextRowRenderer::DrawTextRow(Canvas &canvas, const PixelRect &rc,
                            rc,
                            text);
 }
+
+int
+TextRowRenderer::NextColumn(Canvas &canvas, const PixelRect &rc,
+                            const TCHAR *text) const
+{
+  return std::min<int>(rc.left + 2 * left_padding + canvas.CalcTextWidth(text),
+                       rc.right);
+}
+
+int
+TextRowRenderer::DrawColumn(Canvas &canvas, const PixelRect &rc,
+                            const TCHAR *text) const
+{
+  DrawTextRow(canvas, rc, text);
+  return NextColumn(canvas, rc, text);
+}

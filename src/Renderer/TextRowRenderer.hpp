@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TEXT_ROW_RENDERER_HPP
 #define XCSOAR_TEXT_ROW_RENDERER_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 struct PixelRect;
@@ -44,6 +46,20 @@ public:
 
   void DrawTextRow(Canvas &canvas, const PixelRect &rc,
                    const TCHAR *text) const;
+
+  /**
+   * Returns the minimum X coordinate of the column after the given
+   * text.
+   */
+  gcc_pure
+  int NextColumn(Canvas &canvas, const PixelRect &rc,
+                 const TCHAR *text) const;
+
+  /**
+   * Combine DrawTextRow() and NextColumn().
+   */
+  int DrawColumn(Canvas &canvas, const PixelRect &rc,
+                 const TCHAR *text) const;
 };
 
 #endif
