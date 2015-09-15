@@ -1475,10 +1475,7 @@ OrderedTask::Clear()
 FlatBoundingBox
 OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
 {
-  if (!TaskSize()) {
-    // undefined!
-    return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
-  }
+  assert(TaskSize() > 0);
 
   FlatGeoPoint ll = task_projection.ProjectInteger(bounds.GetSouthWest());
   FlatGeoPoint lr = task_projection.ProjectInteger(bounds.GetSouthEast());
