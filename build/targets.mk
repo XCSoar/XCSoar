@@ -389,6 +389,11 @@ ifeq ($(TARGET),ANDROID)
   ifeq ($(ARMV7),y)
     ANDROID_ABI3 = armeabi-v7a-hard
     ANDROID_ABI5 = armeabi-v7a
+
+    ifeq ($(NEON),y)
+      # ARMv7+NEON builds are assumed to be run on at least Android 2.3
+      ANDROID_MIN_SDK_VERSION = 9
+    endif
   endif
 
   ifeq ($(X86),y)
