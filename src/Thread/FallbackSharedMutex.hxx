@@ -27,58 +27,43 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_THREAD_FAST_SHARED_MUTEX_HXX
-#define XCSOAR_THREAD_FAST_SHARED_MUTEX_HXX
+#ifndef THREAD_FALLBACK_SHARED_MUTEX_HXX
+#define THREAD_FALLBACK_SHARED_MUTEX_HXX
 
-#ifdef WIN32
+#include "FastMutex.hpp"
 
-#include "WindowsSharedMutex.hxx"
-using FastSharedMutex = WindowsSharedMutex;
-
-#elif defined(ANDROID)
-
-#include "FallbackSharedMutex.hxx"
-
-class FastSharedMutex : public FallbackSharedMutex {
-};
-
-#else
-
-#include "PosixSharedMutex.hxx"
-using FastSharedMutex = PosixSharedMutex;
-
-#endif
-
-class ScopeExclusiveLock {
-  FastSharedMutex &mutex;
+/**
+ * Fallback SharedMutex implementation which uses a regular non-shared
+ * mutex.  Therefore, this is not actually a "shared" mutex, but a
+ * fallback for systems that don't have a native reader/writer lock.
+ */
+class FallbackSharedMutex {
+	FastMutex mutex;
 
 public:
-  ScopeExclusiveLock(FastSharedMutex &_mutex):mutex(_mutex) {
-    mutex.lock();
-  };
+	void lock() {
+		mutex.lock();
+	}
 
-  ~ScopeExclusiveLock() {
-    mutex.unlock();
-  }
+	bool try_lock() {
+		return mutex.try_lock();
+	}
 
-  ScopeExclusiveLock(const ScopeExclusiveLock &other) = delete;
-  ScopeExclusiveLock &operator=(const ScopeExclusiveLock &other) = delete;
-};
+	void unlock() {
+		mutex.unlock();
+	}
 
-class ScopeSharedLock {
-  FastSharedMutex &mutex;
+	void lock_shared() {
+		mutex.lock();
+	}
 
-public:
-  ScopeSharedLock(FastSharedMutex &_mutex):mutex(_mutex) {
-    mutex.lock_shared();
-  };
+	bool try_lock_shared() {
+		return mutex.try_lock();
+	}
 
-  ~ScopeSharedLock() {
-    mutex.unlock_shared();
-  }
-
-  ScopeSharedLock(const ScopeSharedLock &other) = delete;
-  ScopeSharedLock &operator=(const ScopeSharedLock &other) = delete;
+	void unlock_shared() {
+		mutex.unlock();
+	}
 };
 
 #endif
