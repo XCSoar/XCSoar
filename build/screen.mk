@@ -32,11 +32,15 @@ SCREEN_CUSTOM_SOURCES = \
 
 ifeq ($(COREGRAPHICS),y)
 SCREEN_CUSTOM_SOURCES_IMG = \
-	$(SCREEN_SRC_DIR)/Custom/CoreGraphics.cpp 
-else
-SCREEN_CUSTOM_SOURCES_IMG += \
-	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
-	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp 
+	$(SCREEN_SRC_DIR)/Custom/CoreGraphics.cpp
+endif
+
+ifeq ($(LIBPNG),y)
+SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibPNG.cpp
+endif
+
+ifeq ($(LIBJPEG),y)
+SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
