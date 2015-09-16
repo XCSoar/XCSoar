@@ -50,7 +50,7 @@ Font::Load(const FontDescription &d)
   capital_height = text_util_object->get_capital_height();
   line_spacing = text_util_object->GetLineSpacing();
 
-  return text_util_object != nullptr;
+  return true;
 }
 
 void
