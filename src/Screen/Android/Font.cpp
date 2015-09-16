@@ -28,6 +28,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 #include "Android/TextUtil.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 
@@ -80,7 +81,7 @@ Font::TextTextureGL(const TCHAR *text, PixelSize &size,
   if (!text_util_object)
     return 0;
 
-  if (*text == _T('\0'))
+  if (StringIsEmpty(text))
     return 0;
 
   const TextUtil::Texture texture =
