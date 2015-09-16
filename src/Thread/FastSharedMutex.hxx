@@ -35,7 +35,7 @@
 #include "WindowsSharedMutex.hxx"
 using FastSharedMutex = WindowsSharedMutex;
 
-#elif defined(ANDROID)
+#elif defined(ANDROID) && ANDROID_MIN_SDK_VERSION < 9
 
 #include "FallbackSharedMutex.hxx"
 
