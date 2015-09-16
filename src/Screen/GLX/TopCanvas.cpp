@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/OpenGL/EGL.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 

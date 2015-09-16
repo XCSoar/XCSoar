@@ -33,12 +33,6 @@ Copyright_License {
 #ifdef ANDROID
 
 /**
- * The EGL API is available.  May require a runtime check
- * (OpenGL::egl).
- */
-#define HAVE_DYNAMIC_EGL
-
-/**
  * The OES_draw_texture extension is available.
  */
 #ifndef HAVE_GLES2

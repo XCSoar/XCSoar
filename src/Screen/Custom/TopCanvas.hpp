@@ -124,7 +124,9 @@ class TopCanvas
 #endif
 
   EGLDisplay display;
+#ifndef ANDROID
   EGLContext context;
+#endif
   EGLSurface surface;
 #endif
 

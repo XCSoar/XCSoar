@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/OpenGL/EGL.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
@@ -31,6 +30,11 @@ Copyright_License {
 void
 TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
 {
+#ifdef USE_EGL
+  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  surface = eglGetCurrentSurface(EGL_DRAW);
+#endif
+
   OpenGL::SetupContext();
   OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
@@ -49,10 +53,9 @@ TopCanvas::OnResize(PixelSize new_size)
 void
 TopCanvas::Flip()
 {
-  if (OpenGL::egl)
-    /* if native EGL support was detected, we can circumvent the JNI
-       call */
-    EGLSwapBuffers();
-  else
-    native_view->swap();
+#ifdef USE_EGL
+  eglSwapBuffers(display, surface);
+#else
+  native_view->swap();
+#endif
 }

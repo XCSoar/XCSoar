@@ -47,10 +47,6 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
-#if defined(HAVE_DYNAMIC_EGL)
-#include "EGL.hpp"
-#endif
-
 #ifdef USE_GLSL
 #include <glm/gtc/matrix_transform.hpp>
 #endif
@@ -239,10 +235,6 @@ CheckStencil()
 void
 OpenGL::SetupContext()
 {
-#if defined(HAVE_DYNAMIC_EGL)
-  egl = EGLInit();
-#endif
-
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef HAVE_OES_DRAW_TEXTURE

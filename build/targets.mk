@@ -594,6 +594,11 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_MIN_SDK_VERSION ?= 4
   TARGET_CPPFLAGS += -DANDROID_MIN_SDK_VERSION=$(ANDROID_MIN_SDK_VERSION)
 
+  ifeq ($(shell test $(ANDROID_MIN_SDK_VERSION) -ge 9 && echo y),y)
+    # native EGL is available since Android 2.3
+    EGL = y
+  endif
+
   ifeq ($(X86),y)
     # On NDK r6, the macro _BYTE_ORDER never gets defined - workaround:
     TARGET_CPPFLAGS += -D_BYTE_ORDER=_LITTLE_ENDIAN

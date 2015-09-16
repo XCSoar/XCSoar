@@ -7,7 +7,7 @@ EGL ?= y
 else ifeq ($(ENABLE_MESA_KMS),y)
 # if Mesa KMS is explicitly enabled, we also need to enable EGL
 EGL ?= y
-else ifneq ($(HAVE_WIN32)$(TARGET_IS_DARWIN)$(TARGET_IS_ANDROID)$(TARGET_IS_KOBO),nnnn)
+else ifneq ($(HAVE_WIN32)$(TARGET_IS_DARWIN)$(TARGET_IS_KOBO),nnn)
 # Windows uses GDI
 # Mac OS X and iOS use SDL
 # Android uses Java-EGL
@@ -30,9 +30,13 @@ endif
 ifeq ($(EGL),y)
 
 OPENGL = y
+
+ifneq ($(TARGET),ANDROID)
 FREETYPE = y
 LIBPNG = y
 LIBJPEG = y
+endif
+
 ENABLE_SDL = n
 
 EGL_CPPFLAGS = -DUSE_EGL
@@ -60,6 +64,7 @@ else ifeq ($(USE_WAYLAND),y)
 EGL_CPPFLAGS += $(WAYLAND_CPPFLAGS)
 EGL_LDLIBS += $(WAYLAND_LDLIBS)
 USE_CONSOLE = n
+else ifeq ($(TARGET),ANDROID)
 else
 USE_X11 = y
 EGL_CPPFLAGS += -DUSE_X11
@@ -67,7 +72,9 @@ EGL_LDLIBS += -lX11
 USE_CONSOLE = n
 endif
 
+ifneq ($(TARGET),ANDROID)
 USE_POLL_EVENT = y
+endif
 
 endif
 

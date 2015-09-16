@@ -26,10 +26,6 @@ Copyright_License {
 #include "Point.hpp"
 
 namespace OpenGL {
-#ifdef HAVE_DYNAMIC_EGL
-  bool egl;
-#endif
-
   bool texture_non_power_of_two;
 
 #ifdef HAVE_OES_DRAW_TEXTURE

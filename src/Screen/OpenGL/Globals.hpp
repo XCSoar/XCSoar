@@ -47,15 +47,6 @@ template<typename T> struct Point2D;
 struct RasterPoint;
 
 namespace OpenGL {
-#ifdef HAVE_DYNAMIC_EGL
-  /**
-   * Was EGL detected at runtime?  The EGL API has been supported
-   * since Android API level 9, but we require API level 4, so we need
-   * to detect at runtime.
-   */
-  extern bool egl;
-#endif
-
   /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
    * then textures can have any size, not just power of two.

@@ -186,8 +186,12 @@ Startup()
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
-#ifdef HAVE_DYNAMIC_EGL
-            "egl=%d "
+#ifdef ANDROID
+#ifdef USE_EGL
+            "egl=native "
+#else
+            "egl=no "
+#endif
 #endif
 #ifdef HAVE_OES_DRAW_TEXTURE
             "oesdt=%d "
@@ -196,9 +200,6 @@ Startup()
             "mda=%d "
 #endif
             "npot=%d vbo=%d fbo=%d stencil=%#x",
-#ifdef HAVE_DYNAMIC_EGL
-             OpenGL::egl,
-#endif
 #ifdef HAVE_OES_DRAW_TEXTURE
             OpenGL::oes_draw_texture,
 #endif

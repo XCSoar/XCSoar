@@ -46,7 +46,6 @@ endif
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp \
 	$(SCREEN_SRC_DIR)/Android/Window.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
@@ -121,7 +120,7 @@ SCREEN_SOURCES += \
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
 endif
-else ifeq ($(EGL),y)
+else ifeq ($(EGL)$(TARGET_IS_ANDROID),yn)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
