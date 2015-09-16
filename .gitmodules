@@ -43,3 +43,6 @@
 [submodule "lib/boost/function_types"]
 	path = lib/boost/function_types
 	url = git://github.com/boostorg/function_types.git
+[submodule "lib/glm"]
+	path = lib/glm
+	url = git://github.com/g-truc/glm
