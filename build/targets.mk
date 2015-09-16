@@ -396,12 +396,14 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI2 = x86
     ANDROID_ABI3 = x86
     ANDROID_ABI4 = i686-linux-android
+    ANDROID_MIN_SDK_VERSION = 9
   endif
 
   ifeq ($(MIPS),y)
     ANDROID_ARCH = mips
     ANDROID_ABI2 = mipsel-linux-android
     ANDROID_ABI3 = mips
+    ANDROID_MIN_SDK_VERSION = 9
   endif
 
   ifeq ($(AARCH64),y)
@@ -409,6 +411,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI2 = aarch64-linux-android
     ANDROID_ABI3 = arm64-v8a
     ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+    ANDROID_MIN_SDK_VERSION = 21
   endif
 
   ifeq ($(X64),y)
@@ -417,6 +420,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI3 = x86_64
     ANDROID_ABI4 = x86_64-linux-android
     ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+    ANDROID_MIN_SDK_VERSION = 21
   endif
 
   ifeq ($(MIPS64),y)
@@ -424,6 +428,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI2 = mips64el-linux-android
     ANDROID_ABI3 = mips64
     ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+    ANDROID_MIN_SDK_VERSION = 21
   endif
 
   ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
@@ -585,6 +590,9 @@ ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
   TARGET_CPPFLAGS += -DANDROID
   CXXFLAGS += -D__STDC_VERSION__=199901L
+
+  ANDROID_MIN_SDK_VERSION ?= 4
+  TARGET_CPPFLAGS += -DANDROID_MIN_SDK_VERSION=$(ANDROID_MIN_SDK_VERSION)
 
   ifeq ($(X86),y)
     # On NDK r6, the macro _BYTE_ORDER never gets defined - workaround:
