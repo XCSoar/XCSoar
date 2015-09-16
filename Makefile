@@ -80,6 +80,7 @@ include $(topdir)/build/libintl.mk
 
 ifeq ($(HEADLESS),y)
 else
+include $(topdir)/build/libglm.mk
 include $(topdir)/build/vfb.mk
 include $(topdir)/build/fb.mk
 include $(topdir)/build/wayland.mk
