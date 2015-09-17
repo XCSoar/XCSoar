@@ -33,10 +33,12 @@ Copyright_License {
  * @see http://developer.android.com/reference/android/view/KeyEvent.html
  */
 enum {
+  KEYCODE_BACK = 0x04,
   KEYCODE_0 = 0x07,
   KEYCODE_9 = 0x10,
   KEYCODE_A = 0x1d,
   KEYCODE_Z = 0x36,
+  KEYCODE_ESCAPE = 0x6f,
 };
 
 static constexpr unsigned KEYCODE_DPAD_UP = 0x13;
@@ -45,6 +47,10 @@ static constexpr unsigned KEYCODE_DPAD_DOWN = 0x14;
 static unsigned
 TranslateKeyCode(unsigned key_code)
 {
+  if (key_code == KEYCODE_BACK)
+    /* the "back" key acts as escape */
+    return KEYCODE_ESCAPE;
+
   if (key_code >= KEYCODE_0 && key_code <= KEYCODE_9)
     return '0' + (key_code - KEYCODE_0);
 

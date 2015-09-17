@@ -6,6 +6,8 @@ Version 6.8.2 - not yet released
   - fix crash in the topography renderer
 * devices
   - fix wrong baud rate after task declaration (#3654)
+* Android
+  - support the "escape" key (#3647)
 * Kobo
   - fix wrong IP address display (#3650)
 

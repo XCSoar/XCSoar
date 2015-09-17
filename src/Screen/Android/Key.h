@@ -28,7 +28,6 @@ Copyright_License {
  * @see http://developer.android.com/reference/android/view/KeyEvent.html
  */
 enum {
-  KEY_ESCAPE = 0x04,
   KEY_UP = 0x13,
   KEY_DOWN = 0x14,
   KEY_LEFT = 0x15,
@@ -37,6 +36,7 @@ enum {
   KEY_SPACE = 0x3e,
   KEY_RETURN = 0x42,
   KEY_MENU = 0x52,
+  KEY_ESCAPE = 0x6f,
 
   KEY_DUMMY = 0x80,
   KEY_BACK,
