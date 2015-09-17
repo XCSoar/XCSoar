@@ -28,17 +28,22 @@ Copyright_License {
 
 #include <linux/input.h>
 
+static constexpr struct {
+  unsigned from, to;
+} key_code_translation_table[] = {
+#ifdef KOBO
+  /* the Kobo Touch "home" button shall open the menu */
+  { KEY_HOME, KEY_MENU },
+#endif
+};
+
 gcc_const
 static unsigned
 TranslateKeyCode(unsigned key_code)
 {
-  if (IsKobo()) {
-    switch (key_code) {
-    case KEY_HOME:
-      /* the Kobo Touch "home" button shall open the menu */
-      return KEY_MENU;
-    }
-  }
+  for (auto i : key_code_translation_table)
+    if (key_code == i.from)
+      return i.to;
 
   return key_code;
 }
