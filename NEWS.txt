@@ -11,6 +11,8 @@ Version 6.8.2 - not yet released
   - fix all RS232 permissions on Android (#3648)
 * Kobo
   - fix wrong IP address display (#3650)
+* Raspberry Pi / Cubieboard
+  - support digit and letter keys (#3611)
 
 Version 6.8.1 - 2015/08/27
 * fix freeze bug when starting without GPS fix
