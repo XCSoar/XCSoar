@@ -1,5 +1,7 @@
 Version 6.8.2 - not yet released
 * Rubik R-26S polar
+* user interface
+  - save settings after copy&pasting an InfoBox set (#3649)
 * map
   - fix crash in the topography renderer
 * devices
