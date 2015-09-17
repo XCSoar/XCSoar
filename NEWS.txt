@@ -1,5 +1,7 @@
 Version 6.8.2 - not yet released
 * Rubik R-26S polar
+* map
+  - fix crash in the topography renderer
 * devices
   - fix wrong baud rate after task declaration (#3654)
 * Kobo
