@@ -8,6 +8,7 @@ Version 6.8.2 - not yet released
   - fix wrong baud rate after task declaration (#3654)
 * Android
   - support the "escape" key (#3647)
+  - fix all RS232 permissions on Android (#3648)
 * Kobo
   - fix wrong IP address display (#3650)
 

@@ -27,6 +27,7 @@ Copyright_License {
 #include "OS/Sleep.h"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/StringFormat.hpp"
 
 #include <time.h>
 #include <fcntl.h>
@@ -39,6 +40,7 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <windef.h> // for MAX_PATH
 
 TTYPort::~TTYPort()
 {
@@ -67,10 +69,13 @@ TTYPort::Drain()
 bool
 TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
-  if (IsAndroid() && StringIsEqual(path, _T("/dev/ttyUSB0")))
+  if (IsAndroid()) {
     /* attempt to give the XCSoar process permissions to access the
        USB serial adapter; this is mostly relevant to the Nook */
-    system("su -c 'chmod 666 /dev/ttyUSB0'");
+    TCHAR command[MAX_PATH];
+    StringFormat(command, MAX_PATH, "su -c 'chmod 666 %s'", path);
+    system(command);
+  }
 
   if (!tty.OpenNonBlocking(path)) {
     LogErrno(_T("Failed to open port '%s'"), path);
