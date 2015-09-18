@@ -53,6 +53,9 @@ kobo-libs:
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/DisplaySize.cpp \
+	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -60,7 +63,7 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
 KOBO_POWER_OFF_LDADD = $(FAKE_LIBS)
-KOBO_POWER_OFF_DEPENDS = SCREEN RESOURCE IO OS MATH UTIL TIME
+KOBO_POWER_OFF_DEPENDS = SCREEN EVENT RESOURCE IO ASYNC OS MATH UTIL TIME
 KOBO_POWER_OFF_STRIP = y
 $(eval $(call link-program,PowerOff,KOBO_POWER_OFF))
 OPTIONAL_OUTPUTS += $(KOBO_POWER_OFF_BIN)

@@ -1,4 +1,6 @@
 Version 6.8.3 - not yet released
+* Kobo
+  - support Kobo Glo HD
 
 Version 6.8.2 - 2015/09/19
 * Rubik R-26S polar

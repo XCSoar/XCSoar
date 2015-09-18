@@ -213,6 +213,14 @@ LinuxInputDevice::Read()
       case ABS_Y:
         edit_position.y = e.value;
         break;
+
+      case ABS_MT_POSITION_X:
+        edit_position.x = e.value;
+        break;
+
+      case ABS_MT_POSITION_Y:
+        edit_position.y = e.value;
+        break;
       }
 
       break;

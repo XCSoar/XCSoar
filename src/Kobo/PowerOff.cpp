@@ -29,25 +29,17 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/FreeType/Init.hpp"
+#include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/FlightListRenderer.hpp"
 #include "FlightInfo.hpp"
 #include "Logger/FlightParser.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Resources.hpp"
+#include "Model.hpp"
 
 #include <algorithm>
 #include <stdio.h>
-
-/**
- * Fake symbols to avoid linking the Screen/Layout library.
- */
-namespace Layout {
-  unsigned small_scale = 1500;
-  unsigned font_scale = 1900;
-  unsigned scale_1024 = 2048;
-  unsigned text_padding = 3;
-};
 
 static void
 DrawBanner(Canvas &canvas, PixelRect &rc)
@@ -131,6 +123,9 @@ int main(int argc, char **argv)
      this program */
   FreeType::mono = false;
 
+  ScreenGlobalInit screen_init;
+  Layout::Initialize({600, 800});
+
   Font::Initialise();
   Display::Rotate(DisplayOrientation::PORTRAIT);
 
@@ -138,7 +133,7 @@ int main(int argc, char **argv)
 
   {
     TopCanvas screen;
-    screen.Create(PixelSize{100, 100}, true, false);
+    screen.Create(PixelSize(100, 100), true, false);
 
     Canvas canvas = screen.Lock();
     if (canvas.IsDefined()) {
@@ -164,6 +159,11 @@ int main(int argc, char **argv)
 
   /* now we can power off the Kobo; the picture remains on the
      screen */
-  execl("/sbin/poweroff", "poweroff", nullptr);
+  if (DetectKoboModel() == KoboModel::GLO_HD)
+    //The GloHD needs -f to not clear screen
+    execl("/sbin/poweroff", "poweroff", "-f", nullptr);
+  else
+    execl("/sbin/poweroff", "poweroff", nullptr);
+
   return 0;
 }
