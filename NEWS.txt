@@ -4,6 +4,8 @@ Version 6.8.2 - not yet released
   - save settings after copy&pasting an InfoBox set (#3649)
 * map
   - fix crash in the topography renderer
+* calculations
+  - fix task progress display after finish achieved (#3657)
 * devices
   - fix wrong baud rate after task declaration (#3654)
 * Android

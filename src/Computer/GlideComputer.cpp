@@ -112,11 +112,16 @@ GlideComputer::ProcessGPS(bool force)
                                  GetComputerSettings());
 
   // Process basic task information
+  const bool last_finished = calculated.ordered_task_stats.task_finished;
+
   task_computer.ProcessBasicTask(basic,
                                  calculated,
                                  GetComputerSettings(),
                                  force);
   task_computer.ProcessMoreTask(basic, calculated, GetComputerSettings());
+
+  if (!last_finished && calculated.ordered_task_stats.task_finished)
+    OnFinishTask();
 
   // Check if everything is okay with the gps time and process it
   air_data_computer.FlightTimes(Basic(), SetCalculated(),

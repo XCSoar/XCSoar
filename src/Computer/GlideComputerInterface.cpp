@@ -61,5 +61,4 @@ void
 GlideComputerTaskEvents::TaskFinish()
 {
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
-  computer->OnFinishTask();
 }
