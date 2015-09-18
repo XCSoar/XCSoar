@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "System.hpp"
+#include "Model.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "OS/Process.hpp"
@@ -117,12 +118,29 @@ bool
 KoboExportUSBStorage()
 {
 #ifdef KOBO
+  bool result = false;
+
   RmMod("g_ether");
   RmMod("g_file_storage");
 
-  InsMod("/drivers/ntx508/usb/gadget/arcotg_udc.ko");
-  return InsMod("/drivers/ntx508/usb/gadget/g_file_storage.ko",
-                "file=/dev/mmcblk0p3", "stall=0");
+  switch (DetectKoboModel())
+  {
+  case KoboModel::UNKNOWN: // Let unknown try the old device
+  case KoboModel::MINI:
+  case KoboModel::TOUCH:
+  case KoboModel::AURA:
+    InsMod("/drivers/ntx508/usb/gadget/arcotg_udc.ko");
+    result = InsMod("/drivers/ntx508/usb/gadget/g_file_storage.ko",
+                    "file=/dev/mmcblk0p3", "stall=0");
+    break;
+
+  case KoboModel::GLO_HD:
+    InsMod("/drivers/mx6sl-ntx/usb/gadget/arcotg_udc.ko");
+    result = InsMod("/drivers/mx6sl-ntx/usb/gadget/g_file_storage.ko",
+                    "file=/dev/mmcblk0p3", "stall=0");
+    break;
+  }
+  return result;
 #else
   return true;
 #endif
@@ -152,8 +170,22 @@ bool
 KoboWifiOn()
 {
 #ifdef KOBO
-  InsMod("/drivers/ntx508/wifi/sdio_wifi_pwr.ko");
-  InsMod("/drivers/ntx508/wifi/dhd.ko");
+
+  switch (DetectKoboModel())
+  {
+  case KoboModel::UNKNOWN: // Let unknown try the old device
+  case KoboModel::MINI:
+  case KoboModel::TOUCH:
+  case KoboModel::AURA:
+    InsMod("/drivers/ntx508/wifi/sdio_wifi_pwr.ko");
+    InsMod("/drivers/ntx508/wifi/dhd.ko");
+    break;
+
+  case KoboModel::GLO_HD:
+    InsMod("/drivers/mx6sl-ntx/wifi/sdio_wifi_pwr.ko");
+    InsMod("/drivers/mx6sl-ntx/wifi/dhd.ko");
+    break;
+  }
 
   Sleep(2000);
 

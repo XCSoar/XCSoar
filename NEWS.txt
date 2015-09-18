@@ -5,6 +5,8 @@ Version 7.0 - not yet released
   - drop support for Windows CE
   - require Windows Vista or later
   - allow starting multiple XCSoar instances
+* Kobo
+  - support Kobo Glo HD
 
 Version 6.8.1 - 2015/08/27
 * fix freeze bug when starting without GPS fix
