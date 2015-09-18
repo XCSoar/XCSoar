@@ -40,13 +40,13 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
 
-  const fixed sweep = fixed_two_pi * fixed(0.9);
+  const Angle sweep = Angle::FullCircle() * fixed(0.9);
 
   if (summary.p_remaining < fixed(0.99)) {
     canvas.Select(look.hbGray);
     canvas.SelectNullPen();
     canvas.DrawSegment(center.x, center.y, radius, Angle::Zero(),
-                   Angle::Radians(sweep * (fixed(1) -  summary.p_remaining)));
+                       sweep * (fixed(1) -  summary.p_remaining));
   }
 
   const Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
@@ -56,7 +56,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
 
   unsigned i = 0;
   for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {
-    Angle a = Angle::Radians(it->p * sweep);
+    Angle a = sweep * it->p;
     int x = center.x + (int)(radius * a.fastsine());
     int y = center.y - (int)(radius * a.fastcosine());
     int w;
