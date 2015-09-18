@@ -55,7 +55,6 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   canvas.DrawCircle(center.x, center.y, radius);
 
   unsigned i = 0;
-  canvas.Select(pen_f);
   for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {
     Angle a = Angle::Radians(it->p * sweep);
     int x = center.x + (int)(radius * a.fastsine());
