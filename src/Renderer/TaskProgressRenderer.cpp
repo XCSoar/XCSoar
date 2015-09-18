@@ -41,7 +41,6 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   center.y = (rc.bottom + rc.top) / 2;
 
   const fixed sweep = fixed_two_pi * fixed(0.9);
-  Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   if (summary.p_remaining < fixed(0.99)) {
     canvas.Select(look.hbGray);
@@ -50,6 +49,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
                    Angle::Radians(sweep * (fixed(1) -  summary.p_remaining)));
   }
 
+  const Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
   canvas.DrawCircle(center.x, center.y, radius);
