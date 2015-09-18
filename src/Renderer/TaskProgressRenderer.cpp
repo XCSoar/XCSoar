@@ -40,7 +40,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
 
-  const Angle sweep = Angle::FullCircle() * fixed(0.9);
+  const Angle sweep = Angle::FullCircle() * fixed(0.97);
 
   if (summary.p_remaining < fixed(0.99)) {
     canvas.Select(look.hbGray);
