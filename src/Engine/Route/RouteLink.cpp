@@ -38,7 +38,7 @@ static unsigned
 AngleToIndex(Angle a)
 {
   auto i = ROUTEPOLAR_POINTS * (fixed(1.25)
-                                - a.AsBearing().Radians() / M_2PI);
+                                - a.AsBearing() / Angle::FullCircle());
   assert(positive(i));
   return uround(i) % ROUTEPOLAR_POINTS;
 }
