@@ -249,12 +249,8 @@ MacCready::SolveGlide(const GlideState &task, const double v_set,
   result.altitude_difference -= result.height_glide;
   result.pure_glide_altitude_difference -= result.pure_glide_height;
 
-  const auto inv_mc = glide_polar.GetInvMC();
-  if (inv_mc > 0)
-    // equivalent time to gain the height that was used
-    result.time_virtual = result.height_glide * inv_mc;
-  else
-    result.time_virtual = 0;
+  // equivalent time to gain the height that was used
+  result.time_virtual = result.height_glide * glide_polar.GetInvMC();
 
   return result;
 }
