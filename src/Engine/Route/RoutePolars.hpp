@@ -25,6 +25,7 @@
 
 #include "Config.hpp"
 #include "RoutePolar.hpp"
+#include "Point.hpp"
 #include "Rough/RoughAltitude.hpp"
 
 class GlidePolar;

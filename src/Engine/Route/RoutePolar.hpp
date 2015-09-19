@@ -22,8 +22,6 @@
 #ifndef ROUTEPOLAR_HPP
 #define ROUTEPOLAR_HPP
 
-#include "Point.hpp"
-
 class Angle;
 class GlidePolar;
 struct GlideSettings;
