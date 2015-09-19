@@ -45,8 +45,6 @@ LargeTextWindow::GetVisibleRows() const
 unsigned
 LargeTextWindow::GetRowCount() const
 {
-  AssertNoneLocked();
-
   const TCHAR *str = value.c_str();
   unsigned row_count = 1;
   while ((str = StringFind(str, _T('\n'))) != nullptr) {
@@ -60,8 +58,6 @@ LargeTextWindow::GetRowCount() const
 void
 LargeTextWindow::ScrollVertically(int delta_lines)
 {
-  AssertNoneLocked();
-
   const unsigned visible_rows = GetVisibleRows();
   const unsigned row_count = GetRowCount();
 
@@ -156,8 +152,6 @@ LargeTextWindow::OnKeyDown(unsigned key_code)
 void
 LargeTextWindow::SetText(const TCHAR *text)
 {
-  AssertNoneLocked();
-
   if (text != nullptr)
     value = text;
   else

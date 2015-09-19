@@ -30,7 +30,6 @@ Copyright_License {
 void
 ProgressBar::SetRange(unsigned min_value, unsigned max_value)
 {
-  AssertNoneLocked();
   AssertThread();
 
   this->min_value = min_value;
@@ -43,7 +42,6 @@ ProgressBar::SetRange(unsigned min_value, unsigned max_value)
 void
 ProgressBar::SetValue(unsigned value)
 {
-  AssertNoneLocked();
   AssertThread();
 
   this->value = value;
@@ -53,7 +51,6 @@ ProgressBar::SetValue(unsigned value)
 void
 ProgressBar::SetStep(unsigned size)
 {
-  AssertNoneLocked();
   AssertThread();
 
   step_size = size;
@@ -63,7 +60,6 @@ ProgressBar::SetStep(unsigned size)
 void
 ProgressBar::Step()
 {
-  AssertNoneLocked();
   AssertThread();
 
   value += step_size;

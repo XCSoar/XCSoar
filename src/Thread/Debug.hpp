@@ -33,11 +33,6 @@ InitThreadDebug()
 }
 #endif
 
-static inline void
-AssertNoneLocked()
-{
-}
-
 #ifdef ENABLE_OPENGL
 
 static inline void
@@ -58,13 +53,6 @@ LeaveDrawThread()
 void
 InitThreadDebug();
 #endif
-
-/**
- * Abort the program if the current thread holds at least one mutex.
- * Add a call to this function before invoking blocking system calls.
- */
-void
-AssertNoneLocked();
 
 bool
 InMainThread();

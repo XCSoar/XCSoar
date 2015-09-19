@@ -295,8 +295,6 @@ CheckKey(ContainerWindow *container, const Event &event)
 int
 WndForm::ShowModal()
 {
-  AssertNoneLocked();
-
 #ifndef USE_WINUSER
   ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();

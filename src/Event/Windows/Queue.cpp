@@ -90,8 +90,6 @@ HandleMessages(UINT wMsgFilterMin, UINT wMsgFilterMax)
 void
 EventQueue::HandlePaintMessages()
 {
-  AssertNoneLocked();
-
   HandleMessages(WM_SIZE, WM_SIZE);
   HandleMessages(WM_PAINT, WM_PAINT);
 }

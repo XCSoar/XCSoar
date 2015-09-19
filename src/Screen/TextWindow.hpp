@@ -79,7 +79,6 @@ public:
 
 #ifndef USE_WINUSER
   void SetFont(const Font &_font) {
-    AssertNoneLocked();
     AssertThread();
 
     font = &_font;
@@ -94,7 +93,6 @@ public:
 #endif
 
   void set_text(const TCHAR *_text) {
-    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_WINUSER

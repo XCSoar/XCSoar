@@ -37,8 +37,6 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
 void
 LargeTextWindow::SetText(const TCHAR *text)
 {
-  AssertNoneLocked();
-
   // Replace \n by \r\r\n to enable usage of line-breaks in edit control
   unsigned size = _tcslen(text);
   TCHAR buffer[size * sizeof(TCHAR) * 3];

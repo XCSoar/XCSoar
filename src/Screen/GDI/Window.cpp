@@ -115,7 +115,6 @@ Window::Created(HWND _hWnd)
 void
 Window::SetFont(const Font &_font)
 {
-  AssertNoneLocked();
   AssertThread();
 
   ::SendMessage(hWnd, WM_SETFONT,
@@ -268,8 +267,6 @@ Window::OnMessage(HWND _hWnd, UINT message,
 LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  AssertNoneLocked();
-
   if (message == WM_GETMINMAXINFO)
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
        a Window pointer yet - let DefWindowProc() handle it */
@@ -286,8 +283,5 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     window = GetUnchecked(_hWnd);
   }
 
-  LRESULT result = window->OnMessage(_hWnd, message, wParam, lParam);
-  AssertNoneLocked();
-
-  return result;
+  return window->OnMessage(_hWnd, message, wParam, lParam);
 }

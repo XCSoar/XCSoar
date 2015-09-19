@@ -92,7 +92,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 void
 ProgressWindow::SetMessage(const TCHAR *text)
 {
-  AssertNoneLocked();
   AssertThread();
 
   message.set_text(text);
@@ -113,7 +112,6 @@ ProgressWindow::SetStep(unsigned size)
 void
 ProgressWindow::SetValue(unsigned value)
 {
-  AssertNoneLocked();
   AssertThread();
 
   if (value == position)

@@ -24,31 +24,24 @@ Copyright_License {
 #include "Loop.hpp"
 #include "Event.hpp"
 #include "Queue.hpp"
-#include "Thread/Debug.hpp"
 #include "Asset.hpp"
 
 bool
 EventLoop::Get(Event &event)
 {
-  AssertNoneLocked();
-
   return queue.Wait(event);
 }
 
 void
 EventLoop::Dispatch(const Event &event)
 {
-  AssertNoneLocked();
   ::TranslateMessage(&event.msg);
   ::DispatchMessage(&event.msg);
-  AssertNoneLocked();
 }
 
 void
 DialogEventLoop::Dispatch(Event &event)
 {
-  AssertNoneLocked();
-
   if (::IsDialogMessage(dialog, &event.msg))
     return;
 

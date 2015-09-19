@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
-#include "Thread/Debug.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -337,7 +336,6 @@ public:
   bool IsMaximised() const;
 
   void Move(PixelScalar left, PixelScalar top) {
-    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -352,7 +350,6 @@ public:
 
   void Move(PixelScalar left, PixelScalar top,
             UPixelScalar width, UPixelScalar height) {
-    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -386,7 +383,6 @@ public:
    */
   void FastMove(PixelScalar left, PixelScalar top,
                 UPixelScalar width, UPixelScalar height) {
-    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -407,7 +403,6 @@ public:
    * ContainerWindow and make it visible.
    */
   void MoveAndShow(const PixelRect rc) {
-    AssertNoneLocked();
     AssertThread();
 
 #ifdef USE_WINUSER
@@ -422,7 +417,6 @@ public:
   }
 
   void Resize(UPixelScalar width, UPixelScalar height) {
-    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -450,7 +444,6 @@ public:
   void BringToBottom();
 #else
   void BringToTop() {
-    AssertNoneLocked();
     AssertThread();
 
     /* not using BringWindowToTop() because it activates the
@@ -461,7 +454,6 @@ public:
   }
 
   void BringToBottom() {
-    AssertNoneLocked();
     AssertThread();
 
     ::SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
@@ -471,7 +463,6 @@ public:
 #endif
 
   void ShowOnTop() {
-    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -627,14 +618,12 @@ public:
 #else /* USE_WINUSER */
 
   void SetFocus() {
-    AssertNoneLocked();
     AssertThread();
 
     ::SetFocus(hWnd);
   }
 
   void FocusParent() {
-    AssertNoneLocked();
     AssertThread();
 
     ::SetFocus(::GetParent(hWnd));
@@ -672,14 +661,12 @@ public:
 #else /* USE_WINUSER */
 
   void SetCapture() {
-    AssertNoneLocked();
     AssertThread();
 
     ::SetCapture(hWnd);
   }
 
   void ReleaseCapture() {
-    AssertNoneLocked();
     AssertThread();
 
     ::ReleaseCapture();

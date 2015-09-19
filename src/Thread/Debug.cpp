@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Thread/Debug.hpp"
-#include "Thread/Mutex.hpp"
 #include "Thread/Handle.hpp"
 
 #include <assert.h>
@@ -46,12 +45,6 @@ InitThreadDebug()
 }
 
 #endif
-
-void
-AssertNoneLocked()
-{
-  assert(thread_locks_held == 0);
-}
 
 bool
 InMainThread()

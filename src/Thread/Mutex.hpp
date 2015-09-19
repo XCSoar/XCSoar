@@ -42,7 +42,6 @@ Copyright_License {
 
 #ifndef NDEBUG
 #include "Thread/Handle.hpp"
-extern thread_local unsigned thread_locks_held;
 #endif
 
 /**
@@ -130,8 +129,6 @@ public:
     locked = true;
     owner = ThreadHandle::GetCurrent();
     debug_mutex.unlock();
-
-    ++thread_locks_held;
 #endif
   };
 
@@ -152,8 +149,6 @@ public:
     locked = true;
     owner = ThreadHandle::GetCurrent();
     debug_mutex.unlock();
-
-    ++thread_locks_held;
 #endif
     return true;
   };
@@ -171,10 +166,6 @@ public:
 #endif
 
     mutex.unlock();
-
-#ifndef NDEBUG
-    --thread_locks_held;
-#endif
   }
 };
 

@@ -299,8 +299,6 @@ public:
   void Refresh();
 
   void Close() {
-    AssertNoneLocked();
-
 #ifndef USE_WINUSER
     OnClose();
 #else

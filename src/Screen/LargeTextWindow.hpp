@@ -73,7 +73,6 @@ public:
 
 #ifndef USE_WINUSER
   void SetFont(const Font &_font) {
-    AssertNoneLocked();
     AssertThread();
 
     font = &_font;
@@ -94,7 +93,6 @@ public:
 #else
   gcc_pure
   unsigned GetRowCount() const {
-    AssertNoneLocked();
 
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
   }
