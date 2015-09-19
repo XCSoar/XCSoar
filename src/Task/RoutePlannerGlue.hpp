@@ -78,8 +78,9 @@ public:
 
   void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
 
-  bool Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
-                    GeoPoint &intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin,
+                        const AGeoPoint &destination) const;
 
   RoughAltitude GetTerrainBase() const;
 };

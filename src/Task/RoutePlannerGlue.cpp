@@ -87,13 +87,12 @@ RoutePlannerGlue::AcceptInRange(const GeoBounds &bounds,
   planner.AcceptInRange(bounds, visitor);
 }
 
-bool
+GeoPoint
 RoutePlannerGlue::Intersection(const AGeoPoint &origin,
-                               const AGeoPoint &destination,
-                               GeoPoint &intx) const
+                               const AGeoPoint &destination) const
 {
   RasterTerrain::Lease lease(*terrain);
-  return planner.Intersection(origin, destination, intx);
+  return planner.Intersection(origin, destination);
 }
 
 RoughAltitude

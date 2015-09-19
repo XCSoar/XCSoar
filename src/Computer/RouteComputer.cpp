@@ -111,9 +111,10 @@ RouteComputer::TerrainWarning(const MoreData &basic,
         protected_route_planner.SolveRoute(dest, start, config, h_ceiling);
         calculated.planned_route = route_planner.GetSolution();
 
+        calculated.terrain_warning_location =
+          route_planner.Intersection(start, dest);
         calculated.terrain_warning =
-          route_planner.Intersection(start, dest,
-                                     calculated.terrain_warning_location);
+          calculated.terrain_warning_location.IsValid();
       }
       return;
     } else {

@@ -209,24 +209,24 @@ RoutePolars::CanClimb() const
   return config.allow_climb && inv_mc > 0;
 }
 
-bool
-RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                          const RasterMap *map, const FlatProjection &proj,
-                          GeoPoint& intx) const
+GeoPoint
+RoutePolars::Intersection(const AGeoPoint &origin,
+                          const AGeoPoint &destination,
+                          const RasterMap *map, const FlatProjection &proj) const
 {
   if (map == nullptr || !map->IsDefined())
-    return false;
+    return GeoPoint::Invalid();
 
   RouteLink e(RoutePoint(proj.ProjectInteger(destination),
                          destination.altitude),
               RoutePoint(proj.ProjectInteger(origin), origin.altitude), proj);
   if (e.d <= 0)
-    return false;
+    return GeoPoint::Invalid();
 
   const RoughAltitude vh = CalcVHeight(e);
-  intx = map->Intersection(origin, (short)(origin.altitude - GetSafetyHeight()),
+  return map->Intersection(origin,
+                           (short)(origin.altitude - GetSafetyHeight()),
                            (short)vh, destination);
-  return intx.IsValid();
 }
 
 RoughAltitude

@@ -243,10 +243,12 @@ public:
    * @param destination Target
    * @param intx First intercept point
    *
-   * @return true if terrain intersects
+   * @return location of intersection, or GeoPoint::Invalid() if none
+   * was found
    */
-  bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                    GeoPoint& intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin,
+                        const AGeoPoint &destination) const;
 
   /**
    * Find arrival height at destination.

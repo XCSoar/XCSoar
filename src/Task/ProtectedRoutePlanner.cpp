@@ -51,13 +51,12 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
   lease->Solve(dest, start, config, h_ceiling);
 }
 
-bool
+GeoPoint
 ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
-                                    const AGeoPoint &destination,
-                                    GeoPoint &intx) const
+                                    const AGeoPoint &destination) const
 {
   Lease lease(*this);
-  return lease->Intersection(origin, destination, intx);
+  return lease->Intersection(origin, destination);
 }
 
 void

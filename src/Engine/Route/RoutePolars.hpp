@@ -214,13 +214,14 @@ public:
    * @param destination Target
    * @param map RasterMap of terrain.
    * @param proj Task projection
-   * @param intx First intercept point (output)
    *
-   * @return true if terrain intersects
+   * @return location of intersection, or GeoPoint::Invalid() if none
+   * was found
    */
-  bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                    const RasterMap* map, const FlatProjection &proj,
-                    GeoPoint& intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
+                        const RasterMap *map,
+                        const FlatProjection &proj) const;
 
   /**
    * Calculate height of arrival at destination starting from origin

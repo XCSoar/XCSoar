@@ -75,9 +75,9 @@ public:
                   const RoutePlannerConfig &config,
                   const RoughAltitude h_ceiling);
 
-  bool Intersection(const AGeoPoint &origin,
-                    const AGeoPoint &destination,
-                    GeoPoint &intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin,
+                        const AGeoPoint &destination) const;
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
                   RoughAltitude h_ceiling, bool do_solve);

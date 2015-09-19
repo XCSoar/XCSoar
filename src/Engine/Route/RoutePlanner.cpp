@@ -483,12 +483,12 @@ RoutePlanner::IsHullExtended(const RoutePoint &p)
   return true;
 }
 
-bool
+GeoPoint
 RoutePlanner::Intersection(const AGeoPoint& origin,
-                           const AGeoPoint& destination, GeoPoint& intx) const
+                           const AGeoPoint& destination) const
 {
   const FlatProjection proj(origin);
-  return rpolars_route.Intersection(origin, destination, terrain, proj, intx);
+  return rpolars_route.Intersection(origin, destination, terrain, proj);
 }
 
 /*
