@@ -178,7 +178,7 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
 
     // now check gaps
     const RoutePoint o(origin, RoughAltitude(0));
-    RouteLink e_last(RoutePoint(*vs.begin(), RoughAltitude(0)),
+    RouteLink e_last(RoutePoint(vs.front(), RoughAltitude(0)),
                      o, parms.projection);
     for (auto x_last = vs.cbegin(), end = vs.cend(),
          x = x_last + 1; x != end; x_last = x++) {
