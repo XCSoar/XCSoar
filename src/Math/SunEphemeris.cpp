@@ -184,11 +184,11 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  auto ll = (l - alpha).Radians();
+  Angle ll = l - alpha;
   if (l < Angle::HalfCircle())
-    ll += M_2PI;
+    ll += Angle::FullCircle();
 
-  auto equation = 1440 * (1 - ll / M_2PI);
+  auto equation = 1440 * (1 - ll / Angle::FullCircle());
 
   Angle hour_angle = GetHourAngle(location.latitude, delta);
   Angle hour_angle_twilight = GetHourAngleTwilight(location.latitude, delta);
