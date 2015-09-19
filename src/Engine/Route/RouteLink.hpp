@@ -86,7 +86,7 @@ struct RouteLinkBase {
    */
   gcc_pure
   int DotProduct(const RouteLinkBase& o) const {
-    return (o.second-o.first).DotProduct(second-first);
+    return o.GetDelta().DotProduct(GetDelta());
   }
 
   /**
@@ -99,7 +99,12 @@ struct RouteLinkBase {
    */
   gcc_pure
   int CrossProduct(const RouteLinkBase& o) const {
-    return (o.second - o.first).CrossProduct(second - first);
+    return o.GetDelta().CrossProduct(GetDelta());
+  }
+
+private:
+  FlatGeoPoint GetDelta() const {
+    return second - first;
   }
 };
 
