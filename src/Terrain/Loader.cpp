@@ -35,8 +35,6 @@ extern "C" {
 #include "jasper/jpc/jpc_t1cod.h"
 }
 
-extern thread_local TerrainLoader *current_terrain_loader;
-
 long
 TerrainLoader::SkipMarkerSegment(long file_offset) const
 {
@@ -184,7 +182,7 @@ TerrainLoader::PutTileData(unsigned index,
 }
 
 static bool
-LoadJPG2000(jas_stream_t *in)
+LoadJPG2000(jas_stream_t *in, void *loader)
 {
   /* Get the first box.  This should be a JP box. */
   auto box = jp2_box_get(in);
@@ -231,6 +229,8 @@ LoadJPG2000(jas_stream_t *in)
   if (dec == nullptr)
     return false;
 
+  dec->loader = loader;
+
   bool success = jpc_dec_decode(dec) == 0;
   jpc_dec_destroy(dec);
   return success;
@@ -239,20 +239,14 @@ LoadJPG2000(jas_stream_t *in)
 inline bool
 TerrainLoader::LoadJPG2000(struct zzip_dir *dir, const char *path)
 {
-  assert(current_terrain_loader == nullptr);
-
   const auto in = OpenJasperZzipStream(dir, path);
   if (in == nullptr)
     return false;
 
-  current_terrain_loader = this;
   env.SetProgressRange(jas_stream_length(in) / 65536);
 
-  bool success = ::LoadJPG2000(in);
+  bool success = ::LoadJPG2000(in, this);
   jas_stream_close(in);
-
-  assert(current_terrain_loader == this);
-  current_terrain_loader = nullptr;
   return success;
 }
 

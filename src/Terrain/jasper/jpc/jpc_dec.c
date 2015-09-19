@@ -383,7 +383,8 @@ int jpc_dec_decode(jpc_dec_t *dec)
 
 	for (;;) {
 		long file_offset = jas_stream_tell(dec->in);
-		long seek_offset = jas_rtc_SkipMarkerSegment(file_offset);
+		long seek_offset = jas_rtc_SkipMarkerSegment(dec->loader,
+							     file_offset);
 		if (seek_offset > 0 &&
 		    jas_stream_seek(dec->in, seek_offset, SEEK_CUR) < 0)
 			return -1;
@@ -402,7 +403,7 @@ int jpc_dec_decode(jpc_dec_t *dec)
 			return -1;
 		}
 
-		jas_rtc_MarkerSegment(file_offset, ms->id);
+		jas_rtc_MarkerSegment(dec->loader, file_offset, ms->id);
 
 		mstabent = jpc_dec_mstab_lookup(ms->id);
 		assert(mstabent);
@@ -534,7 +535,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	tile = dec->curtile;
 
 	// JMW set tile parms here and get index into the raster array
-	jas_rtc_StartTile(sot->tileno);
+	jas_rtc_StartTile(dec->loader, sot->tileno);
 
 	/* Ensure that this is the expected part number. */
 	if (sot->partno != tile->partno) {
@@ -1192,7 +1193,8 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Write the data for each component of the image. */
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		jas_rtc_PutTileData(tile->cache_index,
+		jas_rtc_PutTileData(dec->loader,
+				    tile->cache_index,
 				    tcomp->xstart, tcomp->ystart,
 				    tcomp->xend, tcomp->yend,
 				    tcomp->data);
@@ -1338,7 +1340,8 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 	  or an SOT marker segment next. */
 	dec->state = JPC_MH;
 
-	jas_rtc_SetSize(dec->xend, dec->yend,
+	jas_rtc_SetSize(dec->loader,
+			dec->xend, dec->yend,
 			dec->tilewidth, dec->tileheight,
 			dec->numhtiles, dec->numvtiles);
 
@@ -1563,7 +1566,8 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 	dec = 0;
 	ms = 0;
 
-	jas_rtc_ProcessComment((const char *)com->data, com->len);
+	jas_rtc_ProcessComment(dec->loader,
+			       (const char *)com->data, com->len);
 
 	return 0;
 }
