@@ -56,14 +56,6 @@ namespace InfoBoxFactory
   const TCHAR *
   GetDescription(Type type);
 
-  gcc_const
-  Type
-  GetNext(Type type);
-
-  gcc_const
-  Type
-  GetPrevious(Type type);
-
   InfoBoxContent* Create(Type infobox_type);
 };
 
