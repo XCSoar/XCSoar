@@ -12,7 +12,6 @@ MORE_SCREEN_SOURCES += \
 endif
 
 TESTFAST = \
-	test_normalise \
 	test_fixed \
 	TestWaypoints \
 	test_pressure \
@@ -85,7 +84,6 @@ $(foreach name,$(HARNESS_PROGRAMS),$(eval $(call link-harness-program,$(name))))
 
 TEST_NAMES = \
 	test_fixed \
-	test_normalise \
 	TestWaypoints \
 	test_pressure \
 	test_task \

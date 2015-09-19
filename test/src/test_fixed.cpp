@@ -98,27 +98,6 @@ TestRound()
 
 // tolerance is 0.3%
 
-static void test_mag_rmag(double mag) {
-  fixed px(7.07106*mag);
-  fixed py(-7.07106*mag);
-
-  double msq(px * px + py * py);
-  printf("# testing mag i %g %g\n", mag, msq);
-
-  fixed d; fixed inv_d;
-  mag_rmag(px, py, d, inv_d);
-  fixed ed = fabs(d-fixed(10.0*mag))/fixed(0.03*mag);
-  if (ed>= fixed(1)) {
-    printf("# d %g %g %g\n", (double)d, (double)ed, mag);
-  }
-  ok(ed< fixed(1), "mag_rmag d", 0);
-  fixed inv_ed = fabs(inv_d-fixed(0.1/mag))/fixed(3.0e-4/mag);
-  if (inv_ed>= fixed(1)) {
-    printf("# inv %g %g %g\n", (double)inv_d, (double)inv_ed, mag);
-  }
-  ok(inv_ed< fixed(1), "mag_rmag inv_d", 0);
-}
-
 static double Hypot_test_values[][2]={
   { 243859.6, -57083.4 },
   { -57083.4, 243859.6 },
@@ -142,7 +121,7 @@ static void test_hypot() {
 }
 
 int main(int argc, char** argv) {
-  plan_tests(43 + ARRAY_SIZE(Hypot_test_values)
+  plan_tests(19 + ARRAY_SIZE(Hypot_test_values)
              + ARRAY_SIZE(floor_ceil_tests) * 2
              + ARRAY_SIZE(uround_test_values)
              + 2 * ARRAY_SIZE(iround_test_values));
@@ -193,12 +172,6 @@ int main(int argc, char** argv) {
   printf("x=%g, y=%g atan(y,x)=%g\n", dx, dy, dt);
 
   ok(fabs(t - fixed(dt)) < fixed(1.0e-5), "atan(y,x)", 0);
-
-  {
-    for (int i=1; i<=2048; i*= 2) {
-      test_mag_rmag(i);
-    }
-  }
 
   TestFloorCeil();
   TestRound();
