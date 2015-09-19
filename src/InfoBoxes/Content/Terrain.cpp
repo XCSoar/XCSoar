@@ -44,7 +44,8 @@ UpdateInfoBoxTerrainCollision(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TerrainInfo &calculated = CommonInterface::Calculated();
-  if (!basic.location_available || !calculated.terrain_warning) {
+  if (!basic.location_available ||
+      !calculated.terrain_warning_location.IsValid()) {
     data.SetInvalid();
     return;
   }

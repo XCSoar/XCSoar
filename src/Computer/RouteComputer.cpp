@@ -74,7 +74,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
 
   const GlideResult& sol = calculated.task_stats.current_leg.solution_remaining;
   if (!sol.IsDefined()) {
-    calculated.terrain_warning = false;
+    calculated.terrain_warning_location.SetInvalid();
     return;
   }
 
@@ -113,8 +113,6 @@ RouteComputer::TerrainWarning(const MoreData &basic,
 
         calculated.terrain_warning_location =
           route_planner.Intersection(start, dest);
-        calculated.terrain_warning =
-          calculated.terrain_warning_location.IsValid();
       }
       return;
     } else {
@@ -122,7 +120,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
       calculated.planned_route = route_planner.GetSolution();
     }
   }
-  calculated.terrain_warning = false;
+  calculated.terrain_warning_location.SetInvalid();
 }
 
 inline void

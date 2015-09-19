@@ -438,7 +438,7 @@ void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (!Calculated().flight.flying ||
-      !Calculated().terrain_warning ||
+      !Calculated().terrain_warning_location.IsValid() ||
       Calculated().terrain_warning_location.DistanceS(Basic().location) < fixed(500.0))
     return;
 

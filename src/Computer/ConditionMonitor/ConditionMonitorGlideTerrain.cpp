@@ -40,7 +40,7 @@ ConditionMonitorGlideTerrain::CheckCondition(const NMEAInfo &basic,
     // only give message about terrain warnings if above final glide
     return false;
 
-  return calculated.terrain_warning;
+  return calculated.terrain_warning_location.IsValid();
 }
 
 void

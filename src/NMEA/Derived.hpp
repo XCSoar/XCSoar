@@ -58,8 +58,6 @@ struct TerrainInfo
   /** Does the attribute #AltitudeAGL have a valid value? */
   bool altitude_agl_valid;
 
-  bool terrain_warning;
-
   /** Terrain altitude */
   double terrain_altitude;
 
@@ -69,6 +67,11 @@ struct TerrainInfo
   /** Altitude over terrain */
   double altitude_agl;
 
+  /**
+   * Location of terrain warning.
+   *
+   * Check GeoPoint::IsValid().
+   */
   GeoPoint terrain_warning_location;
 
   void Clear();

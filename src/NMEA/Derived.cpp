@@ -27,12 +27,13 @@ void
 TerrainInfo::Clear()
 {
   terrain_valid = false;
-  terrain_warning = false;
 
   terrain_base_valid = false;
 
   altitude_agl_valid = false;
   altitude_agl = 0;
+
+  terrain_warning_location.SetInvalid();
 }
 
 void

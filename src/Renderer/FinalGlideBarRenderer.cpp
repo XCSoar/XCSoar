@@ -225,7 +225,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (!total.IsAchievable())
     cross_sign = 1;
-  if (calculated.terrain_warning && (altitude_difference>0))
+  if (calculated.terrain_warning_location.IsValid() &&
+      altitude_difference > 0 )
     cross_sign = -1;
 
   if (cross_sign != 0) {
