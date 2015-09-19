@@ -23,11 +23,9 @@
 #ifndef ROUTELINK_HPP
 #define ROUTELINK_HPP
 
-#include "Geo/Flat/FlatGeoPoint.hpp"
+#include "Point.hpp"
 
 class FlatProjection;
-
-typedef AFlatGeoPoint RoutePoint;
 
 /**
  * Class used for primitive 3d navigation links.

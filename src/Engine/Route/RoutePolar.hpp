@@ -22,15 +22,13 @@
 #ifndef ROUTEPOLAR_HPP
 #define ROUTEPOLAR_HPP
 
-#include "Geo/Flat/FlatGeoPoint.hpp"
+#include "Point.hpp"
 
 class Angle;
 class GlidePolar;
 struct GlideSettings;
 struct GlideResult;
 struct SpeedVector;
-
-typedef AFlatGeoPoint RoutePoint;
 
 #define ROUTEPOLAR_Q0 (6)
 #define ROUTEPOLAR_Q1 (2*ROUTEPOLAR_Q0-1)
