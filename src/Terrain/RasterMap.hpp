@@ -134,7 +134,8 @@ public:
    * @param h_glide Height to be glided (m)
    * @param destination Location of aircraft at MSL
    *
-   * @return Location of intersection, or if none, destination
+   * @return location of intersection, or GeoPoint::Invalid() if none
+   * was found
    */
   gcc_pure
   GeoPoint Intersection(const GeoPoint& origin,

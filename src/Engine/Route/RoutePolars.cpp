@@ -226,7 +226,7 @@ RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
   const RoughAltitude vh = CalcVHeight(e);
   intx = map->Intersection(origin, (short)(origin.altitude - GetSafetyHeight()),
                            (short)vh, destination);
-  return !(intx == destination);
+  return intx.IsValid();
 }
 
 RoughAltitude

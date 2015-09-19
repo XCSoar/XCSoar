@@ -205,6 +205,9 @@ public:
                          RasterLocation &_location, int &h_int,
                          const bool can_climb) const;
 
+  /**
+   * @return {-1,-1} if no intersection was found
+   */
   gcc_pure SignedRasterLocation
   Intersection(int origin_x, int origin_y,
                int destination_x, int destination_y,

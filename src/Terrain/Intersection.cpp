@@ -272,7 +272,7 @@ RasterTileCache::Intersection(const int x0, const int y0,
 
   if (!IsInside(location))
     // origin is outside overall bounds
-    return location;
+    return {-1, -1};
 
   // line algorithm parameters
   const int dx = abs(x1-x0);
@@ -312,7 +312,7 @@ RasterTileCache::Intersection(const int x0, const int y0,
     if (!step_counter) {
 
       if (!IsInside(location))
-        break; // outside bounds
+        break;
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
       if (RasterBuffer::IsInvalid(field_direct.first))
@@ -364,5 +364,5 @@ RasterTileCache::Intersection(const int x0, const int y0,
   }
 
   // if we reached invalid terrain, assume we can hit MSL
-  return {x1, y1};
+  return {-1, -1};
 }

@@ -182,19 +182,17 @@ RasterMap::Intersection(const GeoPoint& origin,
   const auto c_origin = projection.ProjectCoarse(origin);
   const auto c_destination = projection.ProjectCoarse(destination);
   const int c_diff = c_origin.ManhattanDistance(c_destination);
-  if (c_diff==0) {
-    return destination; // no distance
-  }
+  if (c_diff == 0)
+    return GeoPoint::Invalid();
+
   const int slope_fact = (((int)h_glide) << RASTER_SLOPE_FACT) / c_diff;
 
   auto c_int =
     raster_tile_cache.Intersection(c_origin.x, c_origin.y,
                                    c_destination.x, c_destination.y,
                                    h_origin, slope_fact);
-
-  if (c_int == c_destination) // made it to grid location, return exact location
-                              // of destination
-    return destination;
+  if (c_int.x < 0)
+    return GeoPoint::Invalid();
 
   return projection.UnprojectCoarse(c_int);
 }
