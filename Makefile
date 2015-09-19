@@ -141,6 +141,7 @@ include $(topdir)/build/libroute.mk
 include $(topdir)/build/libcontest.mk
 include $(topdir)/build/libglide.mk
 include $(topdir)/build/datafield.mk
+include $(topdir)/build/libevent_options.mk
 include $(topdir)/build/libevent.mk
 include $(topdir)/build/freetype.mk
 include $(topdir)/build/libpng.mk
