@@ -165,27 +165,6 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
   data.SetValueColor(solution_remaining.IsFinalGlide() ? 2 : 0);
 }
 
-bool
-InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  if (protected_task_manager == NULL)
-    return false;
-
-  switch (keycode) {
-  case ibkRight:
-  case ibkUp:
-    protected_task_manager->IncrementActiveTaskPoint(1);
-    return true;
-
-  case ibkLeft:
-  case ibkDown:
-    protected_task_manager->IncrementActiveTaskPoint(-1);
-    return true;
-  }
-
-  return false;
-}
-
 const InfoBoxPanel *
 InfoBoxContentNextWaypoint::GetDialogContent()
 {

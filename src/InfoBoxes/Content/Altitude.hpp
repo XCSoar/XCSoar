@@ -41,7 +41,6 @@ class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxData &data) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
 };
 
 void

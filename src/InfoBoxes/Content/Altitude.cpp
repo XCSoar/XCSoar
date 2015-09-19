@@ -101,50 +101,6 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
   data.SetCommentFromAlternateAltitude(basic.gps_altitude);
 }
 
-static void
-ChangeAltitude(const fixed step)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  device_blackboard->SetAltitude(basic.gps_altitude +
-                                 (fixed)Units::ToSysAltitude(step));
-}
-
-bool
-InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  if (!is_simulator())
-    return false;
-  if (!basic.gps.simulator)
-    return false;
-
-  const Angle a5 = Angle::Degrees(5);
-
-  switch (keycode) {
-  case ibkUp:
-    ChangeAltitude(fixed(+100));
-    return true;
-
-  case ibkDown:
-    ChangeAltitude(fixed(-100));
-    return true;
-
-  case ibkLeft:
-    device_blackboard->SetTrack(
-        basic.track - a5);
-    return true;
-
-  case ibkRight:
-    device_blackboard->SetTrack(
-        basic.track + a5);
-    return true;
-  }
-
-  return false;
-}
-
 void
 UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
 {

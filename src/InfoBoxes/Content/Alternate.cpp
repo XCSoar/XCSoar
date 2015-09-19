@@ -88,24 +88,6 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
 }
 
-bool
-InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkLeft:
-  case ibkUp:
-    if (index > 0)
-      index--;
-    break;
-  case ibkRight:
-  case ibkDown:
-    index++;
-    break;
-  }
-
-  return true;
-}
-
 const InfoBoxPanel *
 InfoBoxContentAlternateName::GetDialogContent()
 {
@@ -158,24 +140,6 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
 
   // Set Color (blue/black)
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
-}
-
-bool
-InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkLeft:
-  case ibkUp:
-    if (index > 0)
-      index--;
-    break;
-  case ibkRight:
-  case ibkDown:
-    index++;
-    break;
-  }
-
-  return true;
 }
 
 const InfoBoxPanel *
