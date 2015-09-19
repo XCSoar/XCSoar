@@ -672,6 +672,9 @@ typedef struct {
 
 	/* This is required by the tier-2 decoder. */
 	jpc_cstate_t *cstate;
+
+	void *loader;
+
 } jpc_dec_t;
 
 /* Decoder options. */
