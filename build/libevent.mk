@@ -8,7 +8,13 @@ USE_X11 ?= n
 USE_CONSOLE ?= n
 
 # use Wayland's libinput for input device handling
-USE_LIBINPUT ?= n
+ifeq ($(TARGET_IS_LINUX)$(TARGET_IS_KOBO)$(USE_CONSOLE),yny)
+  # use libinput by default on Raspberry Pi and others
+  USE_LIBINPUT ?= y
+else
+  # no libinput on the Kobo
+  USE_LIBINPUT ?= n
+endif
 
 ifeq ($(USE_LIBINPUT),n)
 # query /dev/input/event* instead of stdin and /dev/input/mice or libinput?
