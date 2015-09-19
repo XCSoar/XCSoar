@@ -27,7 +27,6 @@
 #include "GlideSolvers/MacCready.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
-#include "Math/FastMath.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -67,18 +66,18 @@ void
 RouteLink::CalcSpeedups(const FlatProjection &proj)
 {
   const auto scale = proj.GetApproximateScale();
-  const double dx = first.x - second.x;
-  const double dy = first.y - second.y;
-  if (!positive(fabs(dx)) && !positive(fabs(dy))) {
+  const auto dx = first.x - second.x;
+  const auto dy = first.y - second.y;
+  if (dx == 0 && dy == 0) {
     d = 0;
     inv_d = 0;
     polar_index = 0;
     return;
   }
-  mag_rmag(dx, dy, d, inv_d);
+
   polar_index = XYToIndex(dx, dy);
-  d *= scale;
-  inv_d /= scale;
+  d = hypot(dx, dy) * scale;
+  inv_d = 1. / d;
 }
 
 RouteLink
