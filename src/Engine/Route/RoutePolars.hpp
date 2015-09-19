@@ -49,7 +49,7 @@ class RoutePolars
   RoutePolar polar_cruise;
 
   /** Reciprocal of MacCready value (s/m) */
-  fixed inv_mc;
+  double inv_mc;
 
   RoutePlannerConfig config;
 

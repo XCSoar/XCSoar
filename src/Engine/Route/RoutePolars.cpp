@@ -64,27 +64,27 @@ unsigned
 RoutePolars::CalcTime(const RouteLink& link) const
 {
   const RoughAltitude dh = link.second.altitude - link.first.altitude;
-  if (dh.IsNegative() && !positive(inv_mc))
+  if (dh.IsNegative() && inv_mc <= 0)
     // impossible, can't climb
     return UINT_MAX;
 
   // dh/d = gradient
   const auto rho = dh.IsPositive()
-    ? std::min(fixed(1), (dh * link.inv_d *
-                          polar_glide.GetPoint(link.polar_index).inv_gradient))
-    : fixed(0);
+    ? std::min(1., (dh * link.inv_d *
+                    polar_glide.GetPoint(link.polar_index).inv_gradient))
+    : 0.;
 
-  if ((rho < fixed(1)) && !polar_cruise.GetPoint(link.polar_index).valid)
+  if (rho < 1 && !polar_cruise.GetPoint(link.polar_index).valid)
     // impossible, can't cruise
     return UINT_MAX;
 
-  if (positive(rho) && !polar_glide.GetPoint(link.polar_index).valid)
+  if (rho > 0 && !polar_glide.GetPoint(link.polar_index).valid)
     // impossible, can't glide
     return UINT_MAX;
 
   const int t_cruise = (int)(
     link.d * (rho * polar_glide.GetPoint(link.polar_index).slowness +
-    (fixed(1) - rho) * polar_cruise.GetPoint(link.polar_index).slowness));
+    (1 - rho) * polar_cruise.GetPoint(link.polar_index).slowness));
 
   if (link.second.altitude > cruise_altitude) {
     // penalise any climbs required above cruise altitude
@@ -206,7 +206,7 @@ RoutePolars::SetConfig(const RoutePlannerConfig& _config,
 bool
 RoutePolars::CanClimb() const
 {
-  return config.allow_climb && positive(inv_mc);
+  return config.allow_climb && inv_mc > 0;
 }
 
 bool
@@ -220,7 +220,7 @@ RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
   RouteLink e(RoutePoint(proj.ProjectInteger(destination),
                          destination.altitude),
               RoutePoint(proj.ProjectInteger(origin), origin.altitude), proj);
-  if (!positive(e.d))
+  if (e.d <= 0)
     return false;
 
   const RoughAltitude vh = CalcVHeight(e);

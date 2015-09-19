@@ -37,15 +37,15 @@ gcc_const
 static unsigned
 AngleToIndex(Angle a)
 {
-  auto i = ROUTEPOLAR_POINTS * (fixed(1.25)
+  auto i = ROUTEPOLAR_POINTS * (1.25
                                 - a.AsBearing() / Angle::FullCircle());
-  assert(positive(i));
+  assert(i > 0);
   return uround(i) % ROUTEPOLAR_POINTS;
 }
 
 gcc_const
 static unsigned
-XYToIndex(fixed x, fixed y)
+XYToIndex(double x, double y)
 {
   return AngleToIndex(Angle::FromXY(y, x));
 }
@@ -67,11 +67,11 @@ void
 RouteLink::CalcSpeedups(const FlatProjection &proj)
 {
   const auto scale = proj.GetApproximateScale();
-  const fixed dx = fixed(first.x - second.x);
-  const fixed dy = fixed(first.y - second.y);
+  const double dx = first.x - second.x;
+  const double dy = first.y - second.y;
   if (!positive(fabs(dx)) && !positive(fabs(dy))) {
-    d = fixed(0);
-    inv_d = fixed(0);
+    d = 0;
+    inv_d = 0;
     polar_index = 0;
     return;
   }

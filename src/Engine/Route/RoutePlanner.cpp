@@ -440,7 +440,7 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
     return;
 
   // add deflecting paths to get around obstacle
-  if (positive(c_link.d)) {
+  if (c_link.d > 0) {
     const RouteLinkBase end(e.first, astar_goal);
     if ((FlatGeoPoint)e.second == (FlatGeoPoint)astar_goal) {
       // if this link was shooting directly for goal, try both directions

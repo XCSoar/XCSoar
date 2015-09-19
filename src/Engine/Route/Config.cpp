@@ -28,7 +28,7 @@ RoutePlannerConfig::SetDefaults()
   mode = Mode::NONE; // default disable while experimental
   allow_climb = true;
   use_ceiling = false;
-  safety_height_terrain = fixed(150);
+  safety_height_terrain = 150;
   reach_calc_mode = ReachMode::STRAIGHT;
   reach_polar_mode = Polar::SAFETY;
 }

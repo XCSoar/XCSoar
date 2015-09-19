@@ -204,7 +204,7 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
   }
 
   for (const auto &x : vs) {
-    const FlatGeoPoint av = (o + x) * fixed(0.5);
+    const FlatGeoPoint av = (o + x) * 0.5;
     const GeoPoint p = parms.projection.Unproject(av);
     short h = parms.terrain->GetHeight(p);
 
@@ -255,7 +255,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   children.emplace_back(depth + 1);
   FlatTriangleFanTree &child = children.back();
 
-  for (auto f = f0; f < fixed(0.9); f += fixed(0.1)) {
+  for (auto f = f0; f < 0.9; f += 0.1) {
     // find corner point
     const FlatGeoPoint px = (dp * f + n);
     // position x is length (n to p_short) along (n to p_long)

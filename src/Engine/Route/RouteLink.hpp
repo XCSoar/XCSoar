@@ -23,7 +23,6 @@
 #ifndef ROUTELINK_HPP
 #define ROUTELINK_HPP
 
-#include "Math/fixed.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
 
 class FlatProjection;
@@ -112,9 +111,9 @@ struct RouteLinkBase {
 struct RouteLink: public RouteLinkBase {
 public:
   /** Distance (m) */
-  fixed d;
+  double d;
   /** Reciprocal of Distance (1/m) */
-  fixed inv_d;
+  double inv_d;
   /** Direction index to be used for RoutePolar lookups */
   unsigned polar_index;
 

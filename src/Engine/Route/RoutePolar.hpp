@@ -23,7 +23,6 @@
 #define ROUTEPOLAR_HPP
 
 #include "Geo/Flat/FlatGeoPoint.hpp"
-#include "Math/fixed.hpp"
 
 class Angle;
 class GlidePolar;
@@ -53,23 +52,23 @@ class RoutePolar
   struct RoutePolarPoint
   {
     /** Inverse speed (s/m) */
-    fixed slowness;
+    double slowness;
     /** Glide slope gradient (m loss / m travelled) */
-    fixed gradient;
+    double gradient;
     /** Reciprocal gradient (m travelled / m loss) */
-    fixed inv_gradient;
+    double inv_gradient;
     /** Whether this solution is valid (non-zero speed) */
     bool valid;
 
     RoutePolarPoint() = default;
 
-    RoutePolarPoint(fixed _slowness, fixed _gradient)
+    RoutePolarPoint(double _slowness, double _gradient)
       :slowness(_slowness), gradient(_gradient), valid(true)
     {
-      if (positive(gradient))
-        inv_gradient = fixed(1) / gradient;
+      if (gradient > 0)
+        inv_gradient = 1. / gradient;
       else
-        inv_gradient = fixed(0);
+        inv_gradient = 0;
     };
   };
 

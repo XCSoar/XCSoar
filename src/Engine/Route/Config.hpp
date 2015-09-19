@@ -23,8 +23,6 @@
 #ifndef XCSOAR_ROUTE_PLANNER_CONFIG_HPP
 #define XCSOAR_ROUTE_PLANNER_CONFIG_HPP
 
-#include "Math/fixed.hpp"
-
 struct RoutePlannerConfig
 {
   enum class Mode {
@@ -51,7 +49,7 @@ struct RoutePlannerConfig
 
   /** Minimum height above terrain for arrival height at non-landable waypoint,
       and for terrain clearance en-route (m) */
-  fixed safety_height_terrain;
+  double safety_height_terrain;
 
   /** Whether to allow turns around obstacles in reach calculations, or just
       straight line */

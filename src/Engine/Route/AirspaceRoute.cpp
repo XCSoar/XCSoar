@@ -38,7 +38,7 @@ public:
 
 private:
   const RouteLink &link;
-  fixed min_distance;
+  double min_distance;
   const FlatProjection &proj;
   const RoutePolars &rpolar;
   AIVResult nearest;
@@ -68,7 +68,7 @@ public:
         l.second.altitude > RoughAltitude(as.GetTop().altitude))
       return;
 
-    if (negative(min_distance) || (l.d < min_distance)) {
+    if (min_distance < 0 || l.d < min_distance) {
       min_distance = l.d;
       nearest = std::make_pair(&as, l.second);
     }
@@ -112,7 +112,7 @@ const AbstractAirspace *
 AirspaceRoute::InsideOthers(const AGeoPoint &origin) const
 {
   AirspaceInsideOtherVisitor visitor;
-  m_airspaces.VisitWithinRange(origin, fixed(1), visitor);
+  m_airspaces.VisitWithinRange(origin, 1, visitor);
   ++count_airspace;
   return visitor.GetFound();
 }
