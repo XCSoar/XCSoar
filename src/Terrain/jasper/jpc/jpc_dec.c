@@ -382,6 +382,11 @@ int jpc_dec_decode(jpc_dec_t *dec)
 	dec->state = JPC_MHSOC;
 
 	for (;;) {
+		long file_offset = jas_stream_tell(dec->in);
+		long seek_offset = jas_rtc_SkipMarkerSegment(file_offset);
+		if (seek_offset > 0 &&
+		    jas_stream_seek(dec->in, seek_offset, SEEK_CUR) < 0)
+			return -1;
 
 		/* Get the next marker segment in the code stream. */
 		if (!(ms = jpc_getms(dec->in, cstate))) {
@@ -396,6 +401,8 @@ int jpc_dec_decode(jpc_dec_t *dec)
 			jas_eprintf("cannot get marker segment\n");
 			return -1;
 		}
+
+		jas_rtc_MarkerSegment(file_offset, ms->id);
 
 		mstabent = jpc_dec_mstab_lookup(ms->id);
 		assert(mstabent);

@@ -77,7 +77,6 @@
 
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
-#include "jasper/jpc_rtc.h"
 
 #include "jpc_cs.h"
 
@@ -221,11 +220,6 @@ void jpc_cstate_destroy(jpc_cstate_t *cstate)
 /* Read a marker segment from a stream. */
 jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 {
-	long file_offset = jas_stream_tell(in);
-	long seek_offset = jas_rtc_SkipMarkerSegment(file_offset);
-	if (seek_offset > 0 && jas_stream_seek(in, seek_offset, SEEK_CUR) < 0)
-		return NULL;
-
 	jpc_ms_t *ms;
 	const jpc_mstabent_t *mstabent;
 	jas_stream_t *tmpstream;
@@ -240,8 +234,6 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 		jpc_ms_destroy(ms);
 		return 0;
 	}
-
-	jas_rtc_MarkerSegment(file_offset, ms->id);
 
 	mstabent = jpc_mstab_lookup(ms->id);
 	ms->ops = &mstabent->ops;
