@@ -88,7 +88,6 @@ include $(topdir)/build/egl.mk
 include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/sdl.mk
-include $(topdir)/build/udev.mk
 endif
 
 include $(topdir)/build/flags.mk
@@ -142,6 +141,7 @@ include $(topdir)/build/libcontest.mk
 include $(topdir)/build/libglide.mk
 include $(topdir)/build/datafield.mk
 include $(topdir)/build/libevent_options.mk
+include $(topdir)/build/udev.mk
 include $(topdir)/build/libevent.mk
 include $(topdir)/build/freetype.mk
 include $(topdir)/build/libpng.mk
