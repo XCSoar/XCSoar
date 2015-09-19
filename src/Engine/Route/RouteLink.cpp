@@ -22,14 +22,9 @@
 
 #include "RouteLink.hpp"
 #include "RoutePolar.hpp"
-#include "GlideSolvers/GlideState.hpp"
-#include "GlideSolvers/GlideResult.hpp"
-#include "GlideSolvers/MacCready.hpp"
-#include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 
 #include <assert.h>
-#include <limits.h>
 #include <stdlib.h>
 
 gcc_const
