@@ -64,10 +64,13 @@ GlideComputerBlackboard::SaveFinish()
 void
 GlideComputerBlackboard::RestoreFinish()
 {
+  const auto flight = calculated_info.flight;
+
   calculated_info = Finish_Derived_Info;
 
-  // \todo restore flying state
-  //  SetBasic().flying_state = flying_state;
+  /* retain some of the data to avoid confusing some of our subsystems
+     (e.g. spurious takeoff/landing detection) */
+  calculated_info.flight = flight;
 }
 
 /**

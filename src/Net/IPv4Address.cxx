@@ -112,7 +112,7 @@ IPv4Address::ToString(char *buffer, size_t buffer_size) const
 	if (!IsDefined())
 		return nullptr;
 
-	return inet_ntop(AF_INET, &address, buffer, buffer_size);
+	return inet_ntop(AF_INET, &address.sin_addr, buffer, buffer_size);
 }
 
 #endif

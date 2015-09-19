@@ -27,34 +27,12 @@ Copyright_License {
 #include "Event/Queue.hpp"
 #include "IO/Async/IOLoop.hpp"
 #include "Asset.hpp"
+#include "Translate.hpp"
 
 #include <algorithm>
 
 #include <termios.h>
-#include <linux/input.h>
 #include <sys/ioctl.h>
-
-#ifdef KEY_DOWN
-#undef KEY_DOWN
-#endif
-#ifdef KEY_UP
-#undef KEY_UP
-#endif
-
-gcc_const
-static unsigned
-TranslateKeyCode(unsigned key_code)
-{
-  if (IsKobo()) {
-    switch (key_code) {
-    case KEY_HOME:
-      /* the Kobo Touch "home" button shall open the menu */
-      return KEY_MENU;
-    }
-  }
-
-  return key_code;
-}
 
 template<typename T>
 static constexpr unsigned

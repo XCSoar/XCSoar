@@ -8,6 +8,24 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.2 - 2015/09/19
+* Rubik R-26S polar
+* user interface
+  - save settings after copy&pasting an InfoBox set (#3649)
+* map
+  - fix crash in the topography renderer
+* calculations
+  - fix task progress display after finish achieved (#3657)
+* devices
+  - fix wrong baud rate after task declaration (#3654)
+* Android
+  - support the "escape" key (#3647)
+  - fix all RS232 permissions on Android (#3648)
+* Kobo
+  - fix wrong IP address display (#3650)
+* Raspberry Pi / Cubieboard
+  - support digit and letter keys (#3611)
+
 Version 6.8.1 - 2015/08/27
 * fix freeze bug when starting without GPS fix
 * fix crash with empty xcsoar-checklist.txt file

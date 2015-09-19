@@ -25,6 +25,7 @@ Copyright_License {
 #include "UdevContext.hpp"
 #include "Event/Queue.hpp"
 #include "Event/Shared/Event.hpp"
+#include "Event/Poll/Linux/Translate.hpp"
 #include "Util/Clamp.hpp"
 
 #include <errno.h>
@@ -153,7 +154,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       queue.Push(Event(key_state == LIBINPUT_KEY_STATE_PRESSED
                        ? Event::KEY_DOWN
                        : Event::KEY_UP,
-                       key_code));
+                       TranslateKeyCode(key_code)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_MOTION:

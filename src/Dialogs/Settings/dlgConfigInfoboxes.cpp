@@ -371,6 +371,7 @@ InfoBoxesConfigWidget::OnPaste()
   }
 
   RefreshEditContent();
+  changed = true;
 }
 
 void
