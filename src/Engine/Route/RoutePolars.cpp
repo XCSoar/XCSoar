@@ -51,11 +51,7 @@ RoutePolars::Initialise(const GlideSettings &settings, const GlidePolar &polar,
 {
   polar_glide.Initialise(settings, polar, wind, true);
   polar_cruise.Initialise(settings, polar, wind, false);
-  const auto imc = polar.GetInvMC();
-  if (positive(imc))
-    inv_mc = fixed(MC_CEILING_PENALTY_FACTOR) * imc;
-  else
-    inv_mc = fixed(0);
+  inv_mc = MC_CEILING_PENALTY_FACTOR * polar.GetInvMC();
 }
 
 unsigned
