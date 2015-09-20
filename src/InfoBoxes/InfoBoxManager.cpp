@@ -96,56 +96,6 @@ InfoBoxManager::GetFocused()
 }
 
 void
-InfoBoxManager::Event_Select(int i)
-{
-  int InfoFocus = GetFocused();
-
-  if (InfoFocus < 0) {
-    InfoFocus = (i >= 0 ? 0 : layout.count - 1);
-  } else {
-    InfoFocus += i;
-
-    if (InfoFocus < 0 || (unsigned)InfoFocus >= layout.count)
-      InfoFocus = -1;
-  }
-
-  if (InfoFocus >= 0)
-    infoboxes[InfoFocus]->SetFocus();
-  else
-    infoboxes[0]->FocusParent();
-}
-
-void
-InfoBoxManager::Event_Change(int i)
-{
-  InfoBoxFactory::Type j = InfoBoxFactory::MIN_TYPE_VAL;
-  InfoBoxFactory::Type k;
-
-  int InfoFocus = GetFocused();
-  if (InfoFocus < 0)
-    return;
-
-  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
-  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
-
-  k = panel.contents[InfoFocus];
-  if (i > 0)
-    j = InfoBoxFactory::GetNext(k);
-  else if (i < 0)
-    j = InfoBoxFactory::GetPrevious(k);
-
-  // TODO code: if i==0, go to default or reset
-
-  if (j == k)
-    return;
-
-  panel.contents[InfoFocus] = j;
-
-  infoboxes[InfoFocus]->UpdateContent();
-}
-
-void
 InfoBoxManager::DisplayInfoBox()
 {
   static int DisplayTypeLast[InfoBoxSettings::Panel::MAX_CONTENTS];

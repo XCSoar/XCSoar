@@ -36,9 +36,6 @@ namespace InfoBoxManager
 {
   extern InfoBoxLayout::Layout layout;
 
-  void Event_Select(int i);
-  void Event_Change(int i);
-
   void ProcessTimer();
   void SetDirty();
 
