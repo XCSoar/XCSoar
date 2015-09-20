@@ -37,8 +37,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::max;
-
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
                              const InfoBoxSettings &_settings,
