@@ -124,7 +124,6 @@ namespace InputEvents
   void eventBallast(const TCHAR *misc);
   void eventBugs(const TCHAR *misc);
   void eventCalculator(const TCHAR *misc);
-  void eventChangeInfoBoxType(const TCHAR *misc);
   void eventChecklist(const TCHAR *misc);
   void eventClearAirspaceWarnings(const TCHAR *misc);
   void eventClearStatusMessages(const TCHAR *misc);
@@ -145,7 +144,6 @@ namespace InputEvents
   void eventRepeatStatusMessage(const TCHAR *misc);
   void eventRun(const TCHAR *misc);
   void eventScreenModes(const TCHAR *misc);
-  void eventSelectInfoBox(const TCHAR *misc);
   void eventDevice(const TCHAR *misc);
   void eventSendNMEA(const TCHAR *misc);
   void eventSendNMEAPort1(const TCHAR *misc);
