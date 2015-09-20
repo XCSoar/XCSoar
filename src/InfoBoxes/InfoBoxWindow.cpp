@@ -31,13 +31,9 @@ Copyright_License {
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "Screen/Canvas.hpp"
 #include "Event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/SubCanvas.hpp"
-#endif
 
 #include <algorithm>
 
@@ -286,22 +282,6 @@ InfoBoxWindow::Paint(Canvas &canvas)
       canvas.DrawExactLine(0, 0, 0, height - 1);
     }
   }
-}
-
-void
-InfoBoxWindow::PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
-                         UPixelScalar width, UPixelScalar height)
-{
-#ifdef ENABLE_OPENGL
-  SubCanvas canvas(dest, RasterPoint(xoff, yoff), PixelSize(width, height));
-  Paint(canvas);
-#else
-  const PixelSize size = GetSize();
-  BufferCanvas buffer(dest, size);
-
-  Paint(buffer);
-  dest.Stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
-#endif
 }
 
 void
