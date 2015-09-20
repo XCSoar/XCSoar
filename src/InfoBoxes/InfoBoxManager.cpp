@@ -48,9 +48,6 @@ namespace InfoBoxManager
 
   static void DisplayInfoBox();
   static void InfoBoxDrawIfDirty();
-
-  gcc_pure
-  static int GetFocused();
 }
 
 static bool infoboxes_dirty = false;
@@ -83,16 +80,6 @@ InfoBoxManager::Show()
     infoboxes[i]->Show();
 
   SetDirty();
-}
-
-int
-InfoBoxManager::GetFocused()
-{
-  for (unsigned i = 0; i < layout.count; i++)
-    if (infoboxes[i]->HasFocus())
-      return i;
-
-  return -1;
 }
 
 void
@@ -198,16 +185,8 @@ InfoBoxManager::Destroy()
 }
 
 void
-InfoBoxManager::ShowInfoBoxPicker(const int id)
+InfoBoxManager::ShowInfoBoxPicker(const int i)
 {
-  int i;
-
-  if (id < 0) i = GetFocused();
-  else i = id;
-
-  if (i < 0)
-    return;
-
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   InfoBoxSettings::Panel &panel = settings.panels[panel_index];
