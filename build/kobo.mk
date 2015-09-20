@@ -59,7 +59,6 @@ KOBO_POWER_OFF_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
-	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Kobo/Model.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
