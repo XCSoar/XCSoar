@@ -33,6 +33,8 @@ Copyright_License {
 
 #include <X11/Xatom.h>
 
+#include <stdio.h>
+
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                         TopWindowStyle style)
