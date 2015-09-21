@@ -878,7 +878,7 @@ $(eval $(call link-program,DumpTextZip,DUMP_TEXT_ZIP))
 
 DUMP_TEXT_INFLATE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextInflate.cpp
-DUMP_TEXT_INFLATE_DEPENDS = IO OS ZLIB
+DUMP_TEXT_INFLATE_DEPENDS = IO OS ZLIB UTIL
 $(eval $(call link-program,DumpTextInflate,DUMP_TEXT_INFLATE))
 
 DUMP_HEX_COLOR_SOURCES = \
@@ -2341,6 +2341,7 @@ RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(SRC)/Dialogs/Message.cpp \
+	$(SRC)/Dialogs/Error.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \

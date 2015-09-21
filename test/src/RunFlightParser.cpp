@@ -25,6 +25,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Logger/FlightParser.hpp"
 #include "FlightInfo.hpp"
+#include "Util/Error.hxx"
 
 static void
 Print(const FlightInfo &flight)
@@ -55,9 +56,10 @@ main(int argc, char **argv)
   const tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
-  FileLineReaderA file(path.c_str());
+  Error error;
+  FileLineReaderA file(path.c_str(), error);
   if (file.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path.c_str());
+    fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
   }
 

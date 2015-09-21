@@ -32,9 +32,9 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 
 bool
-Profile::LoadFile(ProfileMap &map, const TCHAR *path)
+Profile::LoadFile(ProfileMap &map, const TCHAR *path, Error &error)
 {
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, error);
   if (reader.error())
     return false;
 

@@ -31,7 +31,7 @@ Copyright_License {
 #include <windef.h> // for MAX_PATH
 
 Source<char> *
-OpenDataFile(const TCHAR *name)
+OpenDataFile(const TCHAR *name, Error &error)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
@@ -39,10 +39,7 @@ OpenDataFile(const TCHAR *name)
   TCHAR buffer[MAX_PATH];
   const auto path = LocalPath(buffer, name);
 
-  FileSource *source = new FileSource(path);
-  if (source == nullptr)
-    return nullptr;
-
+  FileSource *source = new FileSource(path, error);
   if (source->error()) {
     delete source;
     return nullptr;
@@ -52,7 +49,7 @@ OpenDataFile(const TCHAR *name)
 }
 
 TLineReader *
-OpenDataTextFile(const TCHAR *name, Charset cs)
+OpenDataTextFile(const TCHAR *name, Error &error, Charset cs)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
@@ -60,10 +57,7 @@ OpenDataTextFile(const TCHAR *name, Charset cs)
   TCHAR buffer[MAX_PATH];
   const auto path = LocalPath(buffer, name);
 
-  FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == nullptr)
-    return nullptr;
-
+  FileLineReader *reader = new FileLineReader(path, error, cs);
   if (reader->error()) {
     delete reader;
     return nullptr;
@@ -73,7 +67,7 @@ OpenDataTextFile(const TCHAR *name, Charset cs)
 }
 
 NLineReader *
-OpenDataTextFileA(const TCHAR *name)
+OpenDataTextFileA(const TCHAR *name, Error &error)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
@@ -81,10 +75,7 @@ OpenDataTextFileA(const TCHAR *name)
   TCHAR buffer[MAX_PATH];
   const auto path = LocalPath(buffer, name);
 
-  FileLineReaderA *reader = new FileLineReaderA(path);
-  if (reader == nullptr)
-    return nullptr;
-
+  FileLineReaderA *reader = new FileLineReaderA(path, error);
   if (reader->error()) {
     delete reader;
     return nullptr;

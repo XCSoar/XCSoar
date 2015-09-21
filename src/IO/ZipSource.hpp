@@ -30,13 +30,14 @@ Copyright_License {
 
 struct zzip_file;
 struct zzip_dir;
+class Error;
 
 class ZipSource : public BufferedSource<char, 4096u> {
 private:
   struct zzip_file *file;
 
 public:
-  ZipSource(struct zzip_dir *dir, const char *path);
+  ZipSource(struct zzip_dir *dir, const char *path, Error &error);
 
   virtual ~ZipSource();
 

@@ -27,9 +27,10 @@ Copyright_License {
 #include <tchar.h>
 
 class ProfileMap;
+class Error;
 
 namespace Profile {
-  bool LoadFile(ProfileMap &map, const TCHAR *path);
+  bool LoadFile(ProfileMap &map, const TCHAR *path, Error &error);
   bool SaveFile(const ProfileMap &map, const TCHAR *path);
 }
 

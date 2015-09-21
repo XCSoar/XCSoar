@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
+#include "Util/Error.hxx"
 
 #include <cstdarg>
 #include <cstdio>
@@ -53,3 +54,15 @@ LogFormat(const TCHAR *fmt, ...)
 }
 
 #endif
+
+void
+LogError(const Error &error)
+{
+  LogFormat("%s\n", error.GetMessage());
+}
+
+void
+LogError(const char *msg, const Error &error)
+{
+  LogFormat("%s: %s", msg, error.GetMessage());
+}

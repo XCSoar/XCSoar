@@ -37,6 +37,7 @@ Copyright_License {
 #include "FlightInfo.hpp"
 #include "Logger/FlightParser.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Util/Error.hxx"
 
 #include <vector>
 
@@ -124,9 +125,10 @@ static void
 ParseCommandLine(Args &args)
 {
   tstring path = args.ExpectNextT();
-  FileLineReaderA file(path.c_str());
+  Error error;
+  FileLineReaderA file(path.c_str(), error);
   if (file.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path.c_str());
+    fprintf(stderr, "%s\n", error.GetMessage());
     return;
   }
 

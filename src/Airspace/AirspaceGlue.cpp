@@ -32,6 +32,7 @@ Copyright_License {
 #include "IO/ZipLineReader.hpp"
 #include "IO/MapFile.hpp"
 #include "Profile/Profile.hpp"
+#include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
@@ -43,9 +44,10 @@ static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)
 {
-  FileLineReader reader(path, Charset::AUTO);
+  Error error;
+  FileLineReader reader(path, error, Charset::AUTO);
   if (reader.error()) {
-    LogFormat(_T("Failed to open airspace file: %s"), path);
+    LogError("Failed to parse airspace file", error);
     return false;
   }
 
@@ -62,9 +64,10 @@ ParseAirspaceFile(AirspaceParser &parser,
                   struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
 {
-  ZipLineReader reader(dir, path, Charset::AUTO);
+  Error error;
+  ZipLineReader reader(dir, path, error, Charset::AUTO);
   if (reader.error()) {
-    LogFormat("Failed to open airspace file: %s", path);
+    LogError("Failed to parse airspace file", error);
     return false;
   }
 

@@ -33,6 +33,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
@@ -74,9 +75,10 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  ZipLineReaderA reader(dir, "topology.tpl");
+  Error error;
+  ZipLineReaderA reader(dir, "topology.tpl", error);
   if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", (const char *)path);
+    fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
   }
 

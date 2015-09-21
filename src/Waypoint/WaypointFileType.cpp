@@ -29,13 +29,14 @@ Copyright_License {
 
 #include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Util/Error.hxx"
 
 template<class R>
 gcc_pure
 static bool
 VerifyFormat(const TCHAR *path)
 {
-  FileLineReader reader(path, Charset::UTF8);
+  FileLineReader reader(path, IgnoreError(), Charset::UTF8);
   if (reader.error())
     return false;
 

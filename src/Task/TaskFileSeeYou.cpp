@@ -25,6 +25,7 @@
 #include "Util/ExtractParameters.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/Macros.hpp"
+#include "Util/Error.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
@@ -460,7 +461,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 {
   // Create FileReader for reading the task
-  FileLineReader reader(path, Charset::AUTO);
+  FileLineReader reader(path, IgnoreError(), Charset::AUTO);
   if (reader.error())
     return nullptr;
 
@@ -580,7 +581,7 @@ TaskFileSeeYou::Count()
   namesuffixes.clear();
 
   // Open the CUP file
-  FileLineReader reader(path, Charset::AUTO);
+  FileLineReader reader(path, IgnoreError(), Charset::AUTO);
   if (reader.error())
     return 0;
 

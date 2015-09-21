@@ -38,8 +38,8 @@ protected:
   LineSplitter splitter;
 
 public:
-  ZipLineReaderA(struct zzip_dir *dir, const char *path)
-    :zip(dir, path), splitter(zip) {}
+  ZipLineReaderA(struct zzip_dir *dir, const char *path, Error &error)
+    :zip(dir, path, error), splitter(zip) {}
 
   bool error() const {
     return zip.error();
@@ -63,9 +63,9 @@ protected:
   ConvertLineReader convert;
 
 public:
-  ZipLineReader(struct zzip_dir *dir, const char *path,
+  ZipLineReader(struct zzip_dir *dir, const char *path, Error &error,
                 Charset cs=Charset::UTF8)
-    :zip(dir, path), splitter(zip), convert(splitter, cs) {}
+    :zip(dir, path, error), splitter(zip), convert(splitter, cs) {}
 
   bool error() const {
     return zip.error();

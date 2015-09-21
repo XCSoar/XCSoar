@@ -40,6 +40,7 @@ Copyright_License {
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Error.hxx"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
@@ -177,7 +178,9 @@ SelectProfile(const TCHAR *path)
   if (StringIsEmpty(path))
     return true;
 
-  if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
+  Error error;
+  if (!CheckProfilePasswordResult(CheckProfileFilePassword(path, error),
+                                  error))
     return false;
 
   Profile::SetFiles(path);

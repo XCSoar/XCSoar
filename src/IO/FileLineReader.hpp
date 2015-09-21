@@ -38,11 +38,11 @@ protected:
   LineSplitter splitter;
 
 public:
-  FileLineReaderA(const char *path)
-    :file(path), splitter(file) {}
+  FileLineReaderA(const char *path, Error &error)
+    :file(path, error), splitter(file) {}
 #ifdef _UNICODE
-  FileLineReaderA(const TCHAR *path)
-    :file(path), splitter(file) {}
+  FileLineReaderA(const TCHAR *path, Error &error)
+    :file(path, error), splitter(file) {}
 #endif
 
   bool error() const {
@@ -78,14 +78,14 @@ protected:
   ConvertLineReader convert;
 
 public:
-  FileLineReader(const char *path,
+  FileLineReader(const char *path, Error &error,
                  Charset cs=Charset::UTF8)
-    :file(path), splitter(file), convert(splitter, cs) {}
+    :file(path, error), splitter(file), convert(splitter, cs) {}
 
 #ifdef _UNICODE
-  FileLineReader(const TCHAR *path,
+  FileLineReader(const TCHAR *path, Error &error,
                  Charset cs=Charset::UTF8)
-    :file(path), splitter(file), convert(splitter, cs) {}
+    :file(path, error), splitter(file), convert(splitter, cs) {}
 #endif
 
   bool error() const {

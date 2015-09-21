@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "BufferedSource.hpp"
 
+class Error;
+
 #ifdef HAVE_POSIX
 
 #include "OS/UniqueFileDescriptor.hxx"
@@ -35,7 +37,7 @@ private:
   UniqueFileDescriptor fd;
 
 public:
-  PosixFileSource(const char *path);
+  PosixFileSource(const char *path, Error &error);
 
   bool error() const {
     return !fd.IsDefined();
@@ -69,11 +71,11 @@ private:
   HANDLE handle;
 
 public:
-  WindowsFileSource(const char *path);
+  WindowsFileSource(const char *path, Error &error);
   virtual ~WindowsFileSource();
 
 #ifdef _UNICODE
-  WindowsFileSource(const TCHAR *path);
+  WindowsFileSource(const TCHAR *path, Error &error);
 #endif
 
   bool error() const {
@@ -101,16 +103,16 @@ protected:
 #if defined(WIN32) && !defined(__CYGWIN__)
 class FileSource : public WindowsFileSource {
 public:
-  FileSource(const char *path):WindowsFileSource(path) {}
+  FileSource(const char *path, Error &error):WindowsFileSource(path, error) {}
 
 #ifdef _UNICODE
-  FileSource(const TCHAR *path):WindowsFileSource(path) {}
+  FileSource(const TCHAR *path, Error &error):WindowsFileSource(path, error) {}
 #endif
 };
 #else
 class FileSource : public PosixFileSource {
 public:
-  FileSource(const char *path):PosixFileSource(path) {}
+  FileSource(const char *path, Error &error):PosixFileSource(path, error) {}
 };
 #endif
 

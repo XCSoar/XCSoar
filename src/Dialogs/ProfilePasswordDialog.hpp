@@ -28,7 +28,15 @@ Copyright_License {
 
 #include <tchar.h>
 
+#ifdef WIN32
+#include <windows.h>
+#ifdef ERROR
+#undef ERROR
+#endif
+#endif
+
 class ProfileMap;
+class Error;
 
 gcc_pure
 bool
@@ -55,16 +63,21 @@ enum class ProfilePasswordResult {
    * The user has cancelled the password dialog.
    */
   CANCEL,
+
+  /**
+   * An error has occurred.
+   */
+  ERROR,
 };
 
 ProfilePasswordResult
 CheckProfilePassword(const ProfileMap &map);
 
 ProfilePasswordResult
-CheckProfileFilePassword(const TCHAR *path);
+CheckProfileFilePassword(const TCHAR *path, Error &error);
 
 bool
-CheckProfilePasswordResult(ProfilePasswordResult result);
+CheckProfilePasswordResult(ProfilePasswordResult result, const Error &error);
 
 bool
 SetProfilePasswordDialog(ProfileMap &map);

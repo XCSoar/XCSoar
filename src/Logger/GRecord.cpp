@@ -26,9 +26,13 @@
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Error.hxx"
+#include "Util/Domain.hxx"
 
 #include <tchar.h>
 #include <string.h>
+
+static constexpr Domain grecord_domain("grecord");
 
 /**
  * Security theater.
@@ -130,9 +134,9 @@ GRecord::IncludeRecordInGCalc(const char *in)
 }
 
 bool
-GRecord::LoadFileToBuffer(const TCHAR *filename)
+GRecord::LoadFileToBuffer(const TCHAR *filename, Error &error)
 {
-  FileLineReaderA reader(filename);
+  FileLineReaderA reader(filename, error);
   if (reader.error())
     return false;
 
@@ -174,9 +178,10 @@ GRecord::AppendGRecordToFile(const TCHAR *filename)
 
 bool
 GRecord::ReadGRecordFromFile(const TCHAR *filename,
-                             char *output, size_t max_length)
+                             char *output, size_t max_length,
+                             Error &error)
 {
-  FileLineReaderA reader(filename);
+  FileLineReaderA reader(filename, error);
   if (reader.error())
     return false;
 
@@ -188,9 +193,10 @@ GRecord::ReadGRecordFromFile(const TCHAR *filename,
 
     for (const char *p = data + 1; *p != '\0'; ++p) {
       output[digest_length++] = *p;
-      if (digest_length >= max_length)
-        /* G record too large */
+      if (digest_length >= max_length) {
+        error.Set(grecord_domain, "G record too large");
         return false;
+      }
     }
   }
 
@@ -199,15 +205,16 @@ GRecord::ReadGRecordFromFile(const TCHAR *filename,
 }
 
 bool
-GRecord::VerifyGRecordInFile(const TCHAR *path)
+GRecord::VerifyGRecordInFile(const TCHAR *path, Error &error)
 {
   // assumes FileName member is set
   // Load File into Buffer (assume name is already set)
-  LoadFileToBuffer(path);
+  if (!LoadFileToBuffer(path, error))
+    return false;
 
   // load Existing Digest "old"
   char old_g_record[DIGEST_LENGTH + 1];
-  if (!ReadGRecordFromFile(path, old_g_record, ARRAY_SIZE(old_g_record)))
+  if (!ReadGRecordFromFile(path, old_g_record, ARRAY_SIZE(old_g_record), error))
     return false;
 
   // recalculate digest from buffer
@@ -216,5 +223,10 @@ GRecord::VerifyGRecordInFile(const TCHAR *path)
   char new_g_record[DIGEST_LENGTH + 1];
   GetDigest(new_g_record);
 
-  return strcmp(old_g_record, new_g_record) == 0;
+  if (strcmp(old_g_record, new_g_record) != 0) {
+    error.Set(grecord_domain, "Invalid G record");
+    return false;
+  }
+
+  return true;
 }

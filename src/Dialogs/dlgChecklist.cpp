@@ -28,6 +28,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Error.hxx"
 #include "IO/DataFile.hpp"
 #include "IO/LineReader.hpp"
 #include "Language/Language.hpp"
@@ -83,7 +84,7 @@ LoadChecklist()
   free(ChecklistTitle[0]);
   ChecklistTitle[0] = NULL;
 
-  TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST));
+  TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST), IgnoreError());
   if (reader == NULL)
     return;
 

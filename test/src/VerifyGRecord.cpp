@@ -22,6 +22,7 @@
 
 #include "Logger/GRecord.hpp"
 #include "OS/Args.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 
@@ -35,11 +36,12 @@ main(int argc, char **argv)
   GRecord g;
   g.Initialize();
 
-  if (g.VerifyGRecordInFile(path.c_str())) {
+  Error error;
+  if (g.VerifyGRecordInFile(path.c_str(), error)) {
     fprintf(stderr, "G record is ok\n");
     return 0;
   } else {
-    fprintf(stderr, "G record is NOT ok\n");
-    return 2;
+    fprintf(stderr, "%s\n", error.GetMessage());
+    return EXIT_FAILURE;
   }
 }

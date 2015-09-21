@@ -29,6 +29,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "IO/MapFile.hpp"
 #include "IO/ZipLineReader.hpp"
+#include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
@@ -44,7 +45,7 @@ LoadConfiguredTopographyZip(TopographyStore &store,
   if (dir == nullptr)
     return false;
 
-  ZipLineReaderA reader(dir, "topology.tpl");
+  ZipLineReaderA reader(dir, "topology.tpl", IgnoreError());
   if (reader.error()) {
     zzip_dir_close(dir);
     LogFormat(_T("No topography in map file"));

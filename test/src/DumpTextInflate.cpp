@@ -24,6 +24,7 @@ Copyright_License {
 #include "IO/InflateLineReader.hpp"
 #include "IO/FileSource.hpp"
 #include "OS/Args.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 
@@ -33,9 +34,10 @@ int main(int argc, char **argv)
   const char *path = args.ExpectNext();
   args.ExpectEnd();
 
-  FileSource file(path);
+  Error error;
+  FileSource file(path, error);
   if (file.error()) {
-    fprintf(stderr, "Failed to open %s\n", path);
+    fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
   }
 

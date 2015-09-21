@@ -25,6 +25,7 @@ Copyright_License {
 #include "Repository/FileRepository.hpp"
 #include "IO/FileLineReader.hpp"
 #include "OS/Args.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,9 +37,10 @@ main(int argc, char **argv)
   const char *path = args.ExpectNext();
   args.ExpectEnd();
 
-  FileLineReaderA reader(path);
+  Error error;
+  FileLineReaderA reader(path, error);
   if (reader.error()) {
-    fprintf(stderr, "Failed to open file\n");
+    fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
   }
 

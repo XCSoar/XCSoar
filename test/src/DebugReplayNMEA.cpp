@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Port/NullPort.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Config.hpp"
+#include "Util/Error.hxx"
 
 static DeviceConfig config;
 static NullPort port;
@@ -50,10 +51,11 @@ DebugReplayNMEA::Create(const char *input_file, const tstring &driver_name) {
     return nullptr;
   }
 
-  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  Error error;
+  FileLineReaderA *reader = new FileLineReaderA(input_file, error);
   if (reader->error()) {
     delete reader;
-    fprintf(stderr, "Failed to open %s\n", input_file);
+    fprintf(stderr, "%s\n", error.GetMessage());
     return nullptr;
   }
 

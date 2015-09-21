@@ -28,6 +28,7 @@
 #include "OS/ConvertPathName.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 #include <string.h>
@@ -63,7 +64,7 @@ ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
   eStatus = eValidationFailed;
 
   oGRecord.Initialize();
-  if (oGRecord.VerifyGRecordInFile(FileName))
+  if (oGRecord.VerifyGRecordInFile(FileName, IgnoreError()))
     eStatus = eValidationPassed;
 
   return eStatus;

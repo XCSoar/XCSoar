@@ -25,6 +25,7 @@
 #include "TestUtil.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StaticString.hxx"
+#include "Util/Error.hxx"
 
 static void
 TestMap()
@@ -86,9 +87,10 @@ TestWriter()
 
   Profile::SaveFile(_T("output/TestProfileWriter.prf"));
 
-  FileLineReader reader(_T("output/TestProfileWriter.prf"));
+  Error error;
+  FileLineReader reader(_T("output/TestProfileWriter.prf"), error);
   if (reader.error()) {
-    skip(3, 0, "read error");
+    skip(3, 0, error.GetMessage());
     return;
   }
 

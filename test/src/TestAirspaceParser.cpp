@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/Error.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
@@ -44,10 +45,11 @@ struct AirspaceClassTestCouple
 static bool
 ParseFile(const TCHAR *path, Airspaces &airspaces)
 {
-  FileLineReader reader(path, Charset::AUTO);
+  Error error;
+  FileLineReader reader(path, error, Charset::AUTO);
 
   if (!ok1(!reader.error())) {
-    skip(1, 0, "Failed to read input file");
+    skip(1, 0, error.GetMessage());
     return false;
   }
 

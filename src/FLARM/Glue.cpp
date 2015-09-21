@@ -34,6 +34,7 @@ Copyright_License {
 #include "Profile/FlarmProfile.hpp"
 #include "Profile/Current.hpp"
 #include "LogFile.hpp"
+#include "Util/Error.hxx"
 
 /**
  * Loads the FLARMnet file
@@ -41,7 +42,7 @@ Copyright_License {
 static void
 LoadFLARMnet(FlarmNetDatabase &db)
 {
-  NLineReader *reader = OpenDataTextFileA(_T("data.fln"));
+  NLineReader *reader = OpenDataTextFileA(_T("data.fln"), IgnoreError());
   if (reader == NULL)
     return;
 
@@ -62,7 +63,8 @@ LoadSecondary(FlarmNameDatabase &db)
 {
   LogFormat("OpenFLARMDetails");
 
-  TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
+  TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"),
+                                         IgnoreError());
   if (reader != NULL) {
     LoadFlarmNameFile(*reader, db);
     delete reader;

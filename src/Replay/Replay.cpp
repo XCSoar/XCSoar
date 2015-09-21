@@ -58,7 +58,7 @@ Replay::Stop()
 }
 
 bool
-Replay::Start(const TCHAR *_path)
+Replay::Start(const TCHAR *_path, Error &error)
 {
   assert(_path != nullptr);
 
@@ -71,7 +71,7 @@ Replay::Start(const TCHAR *_path)
   if (StringIsEmpty(path)) {
     replay = new DemoReplayGlue(task_manager);
   } else if (MatchesExtension(path, _T(".igc"))) {
-    auto reader = new FileLineReaderA(path);
+    auto reader = new FileLineReaderA(path, error);
     if (reader->error()) {
       delete reader;
       return false;
@@ -82,7 +82,7 @@ Replay::Start(const TCHAR *_path)
     cli = new CatmullRomInterpolator(fixed(0.98));
     cli->Reset();
   } else {
-    auto reader = new FileLineReaderA(path);
+    auto reader = new FileLineReaderA(path, error);
     if (reader->error()) {
       delete reader;
       return false;

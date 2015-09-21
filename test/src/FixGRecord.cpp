@@ -25,6 +25,7 @@
 #include "IO/FileTransaction.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
+#include "Util/Error.hxx"
 
 #include <string.h>
 #include <stdio.h>
@@ -91,8 +92,9 @@ main(int argc, char **argv)
     GRecord grecord;
     grecord.Initialize();
 
-    if (!grecord.VerifyGRecordInFile(path.c_str())) {
-      fprintf(stderr, "Invalid G record\n");
+    Error error;
+    if (!grecord.VerifyGRecordInFile(path.c_str(), error)) {
+      fprintf(stderr, "%s\n", error.GetMessage());
       return EXIT_FAILURE;
     }
   }
@@ -102,9 +104,10 @@ main(int argc, char **argv)
   FileTransaction transaction(path.c_str());
 
   {
-    FileLineReaderA reader(path.c_str());
+    Error error;
+    FileLineReaderA reader(path.c_str(), error);
     if (reader.error()) {
-      fprintf(stderr, "Failed to open input file\n");
+      fprintf(stderr, "%s\n", error.GetMessage());
       return EXIT_FAILURE;
     }
 

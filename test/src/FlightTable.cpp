@@ -26,6 +26,7 @@
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/Error.hxx"
 #include "Compiler.h"
 
 #include <cstdio>
@@ -125,9 +126,10 @@ class IGCFileVisitor : public File::Visitor {
 void
 IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
 {
-  FileLineReaderA reader(path);
+  Error error;
+  FileLineReaderA reader(path, error);
   if (reader.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path);
+    fprintf(stderr, "%s\n", error.GetMessage());
     return;
   }
 

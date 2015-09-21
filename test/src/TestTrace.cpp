@@ -28,6 +28,7 @@
 #include "Engine/Trace/Vector.hpp"
 #include "Printing.hpp"
 #include "TestUtil.hpp"
+#include "Util/Error.hxx"
 
 #include <windef.h>
 #include <assert.h>
@@ -51,9 +52,10 @@ OnAdvance(Trace &trace, const GeoPoint &loc, const fixed alt, const fixed t)
 static bool
 TestTrace(const char *filename, unsigned ntrace, bool output=false)
 {
-  FileLineReaderA reader(filename);
+  Error error;
+  FileLineReaderA reader(filename, error);
   if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", filename);
+    fprintf(stderr, "%s\n", error.GetMessage());
     return false;
   }
 

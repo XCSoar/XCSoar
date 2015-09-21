@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "FileSource.hpp"
+#include "Util/Error.hxx"
 
 #ifdef HAVE_POSIX
 
@@ -30,9 +31,10 @@ Copyright_License {
 #include <fcntl.h>
 #include <unistd.h>
 
-PosixFileSource::PosixFileSource(const char *path)
+PosixFileSource::PosixFileSource(const char *path, Error &error)
 {
-  fd.OpenReadOnly(path);
+  if (!fd.OpenReadOnly(path))
+    error.FormatErrno("Failed to open %s", path);
 }
 
 long
@@ -52,17 +54,24 @@ PosixFileSource::Read(char *p, unsigned n)
 
 #ifdef WIN32
 
-WindowsFileSource::WindowsFileSource(const char *path)
+WindowsFileSource::WindowsFileSource(const char *path, Error &error)
 {
   handle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+  if (handle == INVALID_HANDLE_VALUE)
+    error.FormatLastError("Failed to open %s", path);
 }
 
 #ifdef _UNICODE
-WindowsFileSource::WindowsFileSource(const TCHAR *path)
+#include "Util/ConvertString.hpp"
+
+WindowsFileSource::WindowsFileSource(const TCHAR *path, Error &error)
 {
   handle = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+  if (handle == INVALID_HANDLE_VALUE)
+    error.FormatLastError("Failed to open %s",
+                          (const char *)WideToUTF8Converter(path));
 }
 #endif
 

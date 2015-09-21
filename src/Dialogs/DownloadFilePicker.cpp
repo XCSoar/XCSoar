@@ -46,6 +46,7 @@ Copyright_License {
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/tstring.hpp"
+#include "Util/Error.hxx"
 
 #include <vector>
 
@@ -266,7 +267,7 @@ DownloadFilePickerWidget::RefreshList()
 
   TCHAR buffer[MAX_PATH];
   const auto path = LocalPath(buffer, _T("repository"));
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, IgnoreError());
   if (!reader.error()) {
     ParseFileRepository(repository, reader);
 

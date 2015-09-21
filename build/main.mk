@@ -7,6 +7,7 @@ endif
 DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/Message.cpp \
+	$(SRC)/Dialogs/Error.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \

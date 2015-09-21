@@ -30,6 +30,7 @@
 #define XCSOAR_IGC_CODE "XCS"
 
 class TextWriter;
+class Error;
 
 class GRecord
 {
@@ -75,7 +76,7 @@ public:
   void GetDigest(char *buffer) const;
 
   /** loads a file into the data buffer */
-  bool LoadFileToBuffer(const TCHAR *path);
+  bool LoadFileToBuffer(const TCHAR *path, Error &error);
 
   void WriteTo(TextWriter &writer) const;
 
@@ -85,10 +86,11 @@ public:
    * returns in szOutput the G Record from the file
    */
   static bool ReadGRecordFromFile(const TCHAR *path,
-                                  char *buffer, size_t max_length);
+                                  char *buffer, size_t max_length,
+                                  Error &error);
 
   /// returns 0 if false, 1 if true
-  bool VerifyGRecordInFile(const TCHAR *path);
+  bool VerifyGRecordInFile(const TCHAR *path, Error &error);
 
 private:
   void AppendStringToBuffer(const char *szIn);

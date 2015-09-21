@@ -22,6 +22,7 @@
 
 #include "Logger/GRecord.hpp"
 #include "OS/Args.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 
@@ -35,8 +36,9 @@ main(int argc, char **argv)
   GRecord g;
   g.Initialize();
 
-  if (!g.LoadFileToBuffer(path.c_str())) {
-    fprintf(stderr, "Failed to read file\n");
+  Error error;
+  if (!g.LoadFileToBuffer(path.c_str(), error)) {
+    fprintf(stderr, "%s\n", error.GetMessage());
     return 2;
   }
 

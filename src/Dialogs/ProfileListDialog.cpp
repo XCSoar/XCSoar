@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProfileListDialog.hpp"
 #include "ProfilePasswordDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -38,6 +39,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
+#include "Util/Error.hxx"
 
 #include <vector>
 
@@ -250,14 +252,14 @@ ProfileListWidget::PasswordClicked()
 
   const auto &item = list[GetList().GetCursorIndex()];
 
+  Error error;
   ProfileMap data;
-  if (!Profile::LoadFile(data, item.path)) {
-    ShowMessageBox(item.name, _("Failed to load file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+  if (!Profile::LoadFile(data, item.path, error)) {
+    ShowError(error, _("Failed to load file."));
     return;
   }
 
-  if (!CheckProfilePasswordResult(CheckProfilePassword(data)) ||
+  if (!CheckProfilePasswordResult(CheckProfilePassword(data), error) ||
       !SetProfilePasswordDialog(data))
     return;
 
@@ -273,16 +275,15 @@ ProfileListWidget::CopyClicked()
 
   const auto &item = list[GetList().GetCursorIndex()];
   const TCHAR *old_path = item.path;
-  const TCHAR *old_filename = item.name;
 
+  Error error;
   ProfileMap data;
-  if (!Profile::LoadFile(data, old_path)) {
-    ShowMessageBox(old_filename, _("Failed to load file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+  if (!Profile::LoadFile(data, old_path, error)) {
+    ShowError(error, _("Failed to load file."));
     return;
   }
 
-  if (!CheckProfilePasswordResult(CheckProfilePassword(data)))
+  if (!CheckProfilePasswordResult(CheckProfilePassword(data), error))
     return;
 
   StaticString<64> new_name;
@@ -333,7 +334,8 @@ ProfileListWidget::DeleteClicked()
 
   const auto &item = list[GetList().GetCursorIndex()];
 
-  const auto password_result = CheckProfileFilePassword(item.path);
+  Error error;
+  const auto password_result = CheckProfileFilePassword(item.path, error);
   switch (password_result) {
   case ProfilePasswordResult::UNPROTECTED:
     if (!ConfirmDeleteProfile(item.name))
@@ -346,7 +348,8 @@ ProfileListWidget::DeleteClicked()
 
   case ProfilePasswordResult::MISMATCH:
   case ProfilePasswordResult::CANCEL:
-    CheckProfilePasswordResult(password_result);
+  case ProfilePasswordResult::ERROR:
+    CheckProfilePasswordResult(password_result, error);
     return;
   }
 

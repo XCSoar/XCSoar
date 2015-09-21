@@ -21,44 +21,14 @@ Copyright_License {
 }
 */
 
-#include "ZipSource.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/Error.hxx"
-#include "Util/Domain.hxx"
+#ifndef XCSOAR_DIALOGS_ERROR_MESSAGE_HPP
+#define XCSOAR_DIALOGS_ERROR_MESSAGE_HPP
 
-#include <zzip/util.h>
+#include <tchar.h>
 
-static constexpr Domain zzip_domain("zzip");
+class Error;
 
-ZipSource::ZipSource(struct zzip_dir *dir, const char *path, Error &error)
-{
-  file = zzip_open_rb(dir, path);
-  if (file == nullptr)
-    /* TODO: re-enable zziplib's error reporting, and improve this
-       error message */
-    error.Format(zzip_domain, "Failed to open '%s' from ZIP file", path);
-}
+void
+ShowError(const Error &error, const TCHAR *caption);
 
-ZipSource::~ZipSource()
-{
-  if (file != nullptr)
-    zzip_file_close(file);
-}
-
-long
-ZipSource::GetSize() const
-{
-  ZZIP_STAT st;
-  return zzip_file_stat(file, &st) >= 0
-    ? (long)st.st_size
-    : -1l;
-}
-
-unsigned
-ZipSource::Read(char *p, unsigned n)
-{
-  zzip_ssize_t nbytes = zzip_file_read(file, p, n);
-  return nbytes >= 0
-    ? (unsigned)nbytes
-    : 0;
-}
+#endif

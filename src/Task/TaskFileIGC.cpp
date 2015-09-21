@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Util/Error.hxx"
 
 #include <list>
 #include <assert.h>
@@ -40,7 +41,7 @@ ReadIGCDeclaration(const TCHAR *path, IGCDeclarationHeader &header,
                    std::list<IGCDeclarationTurnpoint> &turnpoints)
 {
   // Create FileReader for reading the task
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, IgnoreError());
   if (reader.error())
     return false;
 
@@ -139,7 +140,7 @@ unsigned
 TaskFileIGC::Count()
 {
   // Open the IGC file
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, IgnoreError());
   if (reader.error())
     return 0;
 

@@ -43,6 +43,7 @@ Copyright_License {
 #include "Net/HTTP/Features.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Error.hxx"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
@@ -360,7 +361,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("repository"));
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, IgnoreError());
   if (reader.error())
     return;
 

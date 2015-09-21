@@ -43,6 +43,7 @@
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Error.hxx"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -186,7 +187,7 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
   strcpy(header.id, "000");
   header.flight = 0;
 
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, IgnoreError());
   if (reader.error()) {
     date = BrokenDate::TodayUTC();
     return;

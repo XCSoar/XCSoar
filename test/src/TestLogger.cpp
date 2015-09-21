@@ -25,6 +25,7 @@
 #include "NMEA/Info.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
+#include "Util/Error.hxx"
 
 #include <assert.h>
 #include <cstdio>
@@ -32,7 +33,7 @@
 static void
 CheckTextFile(const TCHAR *path, const char *const* expect)
 {
-  FileLineReaderA reader(path);
+  FileLineReaderA reader(path, IgnoreError());
   ok1(!reader.error());
 
   const char *line;
@@ -166,7 +167,7 @@ int main(int argc, char **argv)
 
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(path));
+  ok1(grecord.VerifyGRecordInFile(path, IgnoreError()));
 
   return exit_status();
 }

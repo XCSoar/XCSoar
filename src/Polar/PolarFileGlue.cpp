@@ -38,12 +38,9 @@ PolarGlue::LoadFromFile(PolarInfo &polar, NLineReader &reader)
 }
 
 bool
-PolarGlue::LoadFromFile(PolarInfo &polar, const TCHAR* path)
+PolarGlue::LoadFromFile(PolarInfo &polar, const TCHAR *path, Error &error)
 {
-  FileLineReaderA *reader = new FileLineReaderA(path);
-  if (reader == nullptr)
-    return false;
-
+  FileLineReaderA *reader = new FileLineReaderA(path, error);
   if (reader->error()) {
     delete reader;
     return false;

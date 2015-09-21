@@ -13,6 +13,7 @@
 #include "Task/LoadFile.hpp"
 #include "NMEA/Info.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Util/Error.hxx"
 
 #include <fstream>
 
@@ -103,9 +104,11 @@ test_replay()
 
   // task_manager.get_task_advance().get_advance_state() = TaskAdvance::AUTO;
 
-  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
+  Error error;
+  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str(), error);
   if (reader->error()) {
     delete reader;
+    fprintf(stderr, "%s\n", error.GetMessage());
     return false;
   }
 

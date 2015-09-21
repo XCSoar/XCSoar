@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "IO/ZipLineReader.hpp"
 #include "OS/Args.hpp"
+#include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
@@ -41,10 +42,11 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  ZipLineReader reader(dir, filename);
+  Error error;
+  ZipLineReader reader(dir, filename, error);
   zzip_dir_close(dir);
   if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", filename);
+    fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
   }
 

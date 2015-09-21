@@ -25,6 +25,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/Error.hxx"
 
 #include <algorithm>
 
@@ -84,7 +85,7 @@ ReadWorldFile(NLineReader &reader, WorldFileData &data)
 static bool
 ReadWorldFile(struct zzip_dir *dir, const char *path, WorldFileData &data)
 {
-  ZipLineReaderA reader(dir, path);
+  ZipLineReaderA reader(dir, path, IgnoreError());
   return !reader.error() && ReadWorldFile(reader, data);
 }
 

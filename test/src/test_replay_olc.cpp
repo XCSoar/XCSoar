@@ -10,6 +10,7 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "test_debug.hpp"
+#include "Util/Error.hxx"
 
 #include <fstream>
 
@@ -112,9 +113,11 @@ test_replay(const Contest olc_type,
 
   GlidePolar glide_polar(fixed(2));
 
-  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
+  Error error;
+  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str(), error);
   if (reader->error()) {
     delete reader;
+    fprintf(stderr, "%s\n", error.GetMessage());
     return false;
   }
 

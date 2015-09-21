@@ -32,6 +32,7 @@ Copyright_License {
 class TLineReader;
 class NLineReader;
 class TextWriter;
+class Error;
 
 /**
  * Opens a file from the data directory.
@@ -41,7 +42,7 @@ class TextWriter;
  * error occurred opening the file
  */
 Source<char> *
-OpenDataFile(const TCHAR *name);
+OpenDataFile(const TCHAR *name, Error &error);
 
 /**
  * Opens a text file from the data directory.
@@ -52,7 +53,7 @@ OpenDataFile(const TCHAR *name);
  * an error occurred opening the file
  */
 TLineReader *
-OpenDataTextFile(const TCHAR *name,
+OpenDataTextFile(const TCHAR *name, Error &error,
                  Charset cs=Charset::UTF8);
 
 /**
@@ -63,7 +64,7 @@ OpenDataTextFile(const TCHAR *name,
  * an error occurred opening the file
  */
 NLineReader *
-OpenDataTextFileA(const TCHAR *name);
+OpenDataTextFileA(const TCHAR *name, Error &error);
 
 /**
  * Creates a text file in the data directory.  If the file already

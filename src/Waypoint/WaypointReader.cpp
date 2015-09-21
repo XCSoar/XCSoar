@@ -32,6 +32,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Util/Error.hxx"
 
 #include <string.h>
 
@@ -75,7 +76,7 @@ ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
 
   bool success = false;
 
-  FileLineReader line_reader(path, Charset::AUTO);
+  FileLineReader line_reader(path, IgnoreError(), Charset::AUTO);
   if (!line_reader.error()) {
     reader->Parse(way_points, line_reader, operation);
     success = true;
@@ -104,7 +105,7 @@ ReadWaypointFile(struct zzip_dir *dir, const char *path,
 
   bool success = false;
 
-  ZipLineReader line_reader(dir, path, Charset::AUTO);
+  ZipLineReader line_reader(dir, path, IgnoreError(), Charset::AUTO);
   if (!line_reader.error()) {
     reader->Parse(way_points, line_reader, operation);
     success = true;

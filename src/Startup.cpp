@@ -93,6 +93,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Thread/Debug.hpp"
+#include "Util/Error.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
@@ -296,8 +297,11 @@ Startup()
   replay = new Replay(logger, *protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
-  if (CommandLine::replay_path != nullptr)
-    replay->Start(CommandLine::replay_path);
+  if (CommandLine::replay_path != nullptr) {
+    Error error;
+    if (!replay->Start(CommandLine::replay_path, error))
+      LogError(error);
+  }
 #endif
 
 

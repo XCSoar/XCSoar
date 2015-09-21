@@ -29,10 +29,11 @@ Copyright_License {
 struct PolarInfo;
 class NLineReader;
 class TextWriter;
+class Error;
 
 namespace PolarGlue
 {
-  bool LoadFromFile(PolarInfo &polar, const TCHAR* path);
+  bool LoadFromFile(PolarInfo &polar, const TCHAR *path, Error &error);
   bool SaveToFile(const PolarInfo &polar, const TCHAR* path);
   bool LoadFromFile(PolarInfo &polar, NLineReader &reader);
   bool SaveToFile(const PolarInfo &polar, TextWriter &writer);

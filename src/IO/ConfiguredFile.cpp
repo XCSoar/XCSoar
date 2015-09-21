@@ -26,6 +26,8 @@ Copyright_License {
 #include "FileLineReader.hpp"
 #include "ZipLineReader.hpp"
 #include "Profile/Profile.hpp"
+#include "LogFile.hpp"
+#include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
@@ -42,9 +44,11 @@ OpenConfiguredTextFileA(const char *profile_key)
   if (!Profile::GetPath(profile_key, path))
     return nullptr;
 
-  FileLineReaderA *reader = new FileLineReaderA(path);
+  Error error;
+  FileLineReaderA *reader = new FileLineReaderA(path, error);
   if (reader->error()) {
     delete reader;
+    LogError(error);
     return nullptr;
   }
 
@@ -60,9 +64,12 @@ OpenConfiguredTextFile(const char *profile_key, Charset cs)
   if (!Profile::GetPath(profile_key, path))
     return nullptr;
 
-  FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == nullptr)
+  Error error;
+  FileLineReader *reader = new FileLineReader(path, error, cs);
+  if (reader == nullptr) {
+    LogError(error);
     return nullptr;
+  }
 
   if (reader->error()) {
     delete reader;
@@ -81,10 +88,13 @@ OpenMapTextFile(const char *in_map_file, Charset cs)
   if (dir == nullptr)
     return nullptr;
 
-  ZipLineReader *reader = new ZipLineReader(dir, in_map_file, cs);
+  Error error;
+  ZipLineReader *reader = new ZipLineReader(dir, in_map_file, error, cs);
   zzip_dir_close(dir);
-  if (reader == nullptr)
+  if (reader == nullptr) {
+    LogError(error);
     return nullptr;
+  }
 
   if (reader->error()) {
     delete reader;

@@ -24,17 +24,20 @@ Copyright_License {
 #include "ProfilePasswordDialog.hpp"
 #include "TextEntry.hpp"
 #include "Message.hpp"
+#include "Error.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/Error.hxx"
 
 bool
 ProfileFileHasPassword(const TCHAR *path)
 {
   ProfileMap map;
-  return Profile::LoadFile(map, path) && map.Exists(ProfileKeys::Password);
+  return Profile::LoadFile(map, path, IgnoreError()) &&
+    map.Exists(ProfileKeys::Password);
 }
 
 ProfilePasswordResult
@@ -58,17 +61,17 @@ CheckProfilePassword(const ProfileMap &map)
 }
 
 ProfilePasswordResult
-CheckProfileFilePassword(const TCHAR *path)
+CheckProfileFilePassword(const TCHAR *path, Error &error)
 {
   ProfileMap map;
-  if (!Profile::LoadFile(map, path))
-    return ProfilePasswordResult::UNPROTECTED;
+  if (!Profile::LoadFile(map, path, error))
+    return ProfilePasswordResult::ERROR;
 
   return CheckProfilePassword(map);
 }
 
 bool
-CheckProfilePasswordResult(ProfilePasswordResult result)
+CheckProfilePasswordResult(ProfilePasswordResult result, const Error &error)
 {
   switch (result) {
   case ProfilePasswordResult::UNPROTECTED:
@@ -80,6 +83,10 @@ CheckProfilePasswordResult(ProfilePasswordResult result)
     return false;
 
   case ProfilePasswordResult::CANCEL:
+    return false;
+
+  case ProfilePasswordResult::ERROR:
+    ShowError(error, _("Password"));
     return false;
   }
 

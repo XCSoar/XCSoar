@@ -29,6 +29,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/Error.hxx"
 #include "LogFile.hpp"
 
 static bool
@@ -140,9 +141,10 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 bool
 PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
 {
-  FileLineReaderA reader(path);
+  Error error;
+  FileLineReaderA reader(path, error);
   if (reader.error()) {
-    LogFormat(_T("Failed to open plane file: %s"), path);
+    LogError("Failed to parse plane file", error);
     return false;
   }
 

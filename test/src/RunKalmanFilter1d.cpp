@@ -24,6 +24,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Math/KalmanFilter1d.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 
@@ -33,9 +34,10 @@ int main(int argc, char **argv)
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
-  FileLineReaderA reader(path.c_str());
+  Error error;
+  FileLineReaderA reader(path.c_str(), error);
   if (reader.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path.c_str());
+    fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
   }
 

@@ -28,6 +28,7 @@
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/Error.hxx"
 
 static void
 TestReader()
@@ -81,7 +82,7 @@ TestWriter()
 
   PlaneGlue::WriteFile(plane, _T("output/D-4449.xcp"));
 
-  FileLineReader reader(_T("output/D-4449.xcp"));
+  FileLineReader reader(_T("output/D-4449.xcp"), IgnoreError());
   if (reader.error())
     return;
 

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ReplayDialog.hpp"
-#include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
@@ -33,6 +33,7 @@ Copyright_License {
 #include "Form/DataField/File.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Language/Language.hpp"
+#include "Util/Error.hxx"
 
 enum Buttons {
   START,
@@ -106,9 +107,9 @@ ReplayControlWidget::OnStartClicked()
 {
   const auto &df = (const FileDataField &)GetDataField(FILE);
   const TCHAR *path = df.GetPathFile();
-  if (!replay->Start(path))
-    ShowMessageBox(_("Could not open IGC file!"),
-                   _("Replay"), MB_OK | MB_ICONINFORMATION);
+  Error error;
+  if (!replay->Start(path, error))
+    ShowError(error, _("Replay"));
 }
 
 void

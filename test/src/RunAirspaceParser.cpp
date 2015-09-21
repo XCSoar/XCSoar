@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -36,9 +37,10 @@ int main(int argc, char **argv)
   const char *path = args.ExpectNext();
   args.ExpectEnd();
 
-  FileLineReader reader(path, Charset::AUTO);
+  Error error;
+  FileLineReader reader(path, error, Charset::AUTO);
   if (reader.error()) {
-    fprintf(stderr, "Failed to open input file\n");
+    fprintf(stderr, "%s\n", error.GetMessage());
     return 1;
   }
 

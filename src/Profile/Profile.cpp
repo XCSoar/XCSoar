@@ -30,6 +30,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/Error.hxx"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 
@@ -60,8 +61,11 @@ Profile::LoadFile(const TCHAR *szFile)
   if (StringIsEmpty(szFile))
     return;
 
-  if (LoadFile(map, szFile))
+  Error error;
+  if (LoadFile(map, szFile, error))
     LogFormat(_T("Loaded profile from %s"), szFile);
+  else
+    LogError("Failed to load profile", error);
 }
 
 void

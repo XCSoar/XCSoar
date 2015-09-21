@@ -36,6 +36,7 @@ class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
 class CatmullRomInterpolator;
+class Error;
 
 class Replay final
   : private Timer
@@ -97,7 +98,7 @@ private:
 
 public:
   void Stop();
-  bool Start(const TCHAR *_path);
+  bool Start(const TCHAR *_path, Error &error);
 
   const TCHAR *GetFilename() const {
     return path;

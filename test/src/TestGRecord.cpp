@@ -22,13 +22,14 @@
 
 #include "Logger/GRecord.hpp"
 #include "TestUtil.hpp"
+#include "Util/Error.hxx"
 
 static void
 CheckGRecord(const TCHAR *path)
 {
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(path));
+  ok1(grecord.VerifyGRecordInFile(path, IgnoreError()));
 }
 
 int main(int argc, char **argv)
