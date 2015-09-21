@@ -37,10 +37,6 @@ private:
 
 public:
   ZipSource(struct zzip_dir *dir, const char *path);
-  ZipSource(const char *path);
-#ifdef _UNICODE
-  ZipSource(const TCHAR *path);
-#endif
 
   virtual ~ZipSource();
 

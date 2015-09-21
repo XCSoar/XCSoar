@@ -31,24 +31,6 @@ ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
   file = zzip_open_rb(dir, path);
 }
 
-ZipSource::ZipSource(const char *path)
-{
-  file = zzip_fopen(path, "rb");
-}
-
-#ifdef _UNICODE
-ZipSource::ZipSource(const TCHAR *path)
-  :file(nullptr)
-{
-  auto *narrow_path = ConvertWideToACP(path);
-  if (narrow_path == nullptr)
-    return;
-
-  file = zzip_fopen(narrow_path, "rb");
-  delete[] narrow_path;
-}
-#endif
-
 ZipSource::~ZipSource()
 {
   if (file != nullptr)

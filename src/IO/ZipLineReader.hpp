@@ -40,12 +40,6 @@ protected:
 public:
   ZipLineReaderA(struct zzip_dir *dir, const char *path)
     :zip(dir, path), splitter(zip) {}
-  ZipLineReaderA(const char *path)
-    :zip(path), splitter(zip) {}
-#ifdef _UNICODE
-  ZipLineReaderA(const TCHAR *path)
-    :zip(path), splitter(zip) {}
-#endif
 
   bool error() const {
     return zip.error();
@@ -72,14 +66,6 @@ public:
   ZipLineReader(struct zzip_dir *dir, const char *path,
                 Charset cs=Charset::UTF8)
     :zip(dir, path), splitter(zip), convert(splitter, cs) {}
-  ZipLineReader(const char *path,
-                Charset cs=Charset::UTF8)
-    :zip(path), splitter(zip), convert(splitter, cs) {}
-#ifdef _UNICODE
-  ZipLineReader(const TCHAR *path,
-                Charset cs=Charset::UTF8)
-    :zip(path), splitter(zip), convert(splitter, cs) {}
-#endif
 
   bool error() const {
     return zip.error();
