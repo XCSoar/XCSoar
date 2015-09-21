@@ -69,6 +69,9 @@ protected:
   ConvertLineReader convert;
 
 public:
+  ZipLineReader(struct zzip_dir *dir, const char *path,
+                Charset cs=Charset::UTF8)
+    :zip(dir, path), splitter(zip), convert(splitter, cs) {}
   ZipLineReader(const char *path,
                 Charset cs=Charset::UTF8)
     :zip(path), splitter(zip), convert(splitter, cs) {}
