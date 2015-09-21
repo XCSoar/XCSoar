@@ -27,12 +27,10 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
+#include "IO/MapFile.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "OS/ConvertPathName.hpp"
 
 #include <zzip/zzip.h>
-
-#include <windef.h> /* for MAX_PATH */
 
 /**
  * Load topography from the map file (ZIP), load the other files from
@@ -42,18 +40,14 @@ static bool
 LoadConfiguredTopographyZip(TopographyStore &store,
                             OperationEnvironment &operation)
 {
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(ProfileKeys::MapFile, path))
-    return false;
-
-  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), nullptr);
+  auto dir = OpenMapFile();
   if (dir == nullptr)
     return false;
 
   ZipLineReaderA reader(dir, "topology.tpl");
   if (reader.error()) {
     zzip_dir_close(dir);
-    LogFormat(_T("No topography in map file: %s"), path);
+    LogFormat(_T("No topography in map file"));
     return false;
   }
 
