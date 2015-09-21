@@ -22,9 +22,12 @@ Copyright_License {
 */
 
 #include "ConfiguredFile.hpp"
+#include "MapFile.hpp"
 #include "FileLineReader.hpp"
 #include "ZipLineReader.hpp"
 #include "Profile/Profile.hpp"
+
+#include <zzip/zzip.h>
 
 #include <assert.h>
 #include <string.h>
@@ -70,18 +73,16 @@ OpenConfiguredTextFile(const char *profile_key, Charset cs)
 }
 
 static TLineReader *
-OpenMapTextFile(const TCHAR *in_map_file, Charset cs)
+OpenMapTextFile(const char *in_map_file, Charset cs)
 {
   assert(in_map_file != nullptr);
 
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(ProfileKeys::MapFile, path))
+  auto dir = OpenMapFile();
+  if (dir == nullptr)
     return nullptr;
 
-  _tcscat(path, _T("/"));
-  _tcscat(path, in_map_file);
-
-  ZipLineReader *reader = new ZipLineReader(path, cs);
+  ZipLineReader *reader = new ZipLineReader(dir, in_map_file, cs);
+  zzip_dir_close(dir);
   if (reader == nullptr)
     return nullptr;
 
@@ -94,7 +95,7 @@ OpenMapTextFile(const TCHAR *in_map_file, Charset cs)
 }
 
 TLineReader *
-OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
+OpenConfiguredTextFile(const char *profile_key, const char *in_map_file,
                        Charset cs)
 {
   assert(profile_key != nullptr);

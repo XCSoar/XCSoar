@@ -69,7 +69,7 @@ OpenConfiguredTextFile(const char *profile_key,
  * there is no such setting, or if an error occurred opening the file
  */
 TLineReader *
-OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
+OpenConfiguredTextFile(const char *profile_key, const char *in_map_file,
                        Charset cs=Charset::UTF8);
 
 #endif
