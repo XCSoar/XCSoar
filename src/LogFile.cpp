@@ -28,6 +28,7 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "OS/FileUtil.hpp"
+#include "Util/Error.hxx"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -133,3 +134,15 @@ LogFormat(const TCHAR *Str, ...)
 }
 
 #endif
+
+void
+LogError(const Error &error)
+{
+  LogString(error.GetMessage());
+}
+
+void
+LogError(const char *msg, const Error &error)
+{
+  LogFormat("%s: %s", msg, error.GetMessage());
+}

@@ -30,6 +30,8 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
+class Error;
+
 /**
  * Write a formatted line to the log file.
  *
@@ -56,5 +58,11 @@ LogFormat(const TCHAR *fmt, ...);
 #define LogDebug(...)
 
 #endif /* NDEBUG */
+
+void
+LogError(const Error &error);
+
+void
+LogError(const char *msg, const Error &error);
 
 #endif
