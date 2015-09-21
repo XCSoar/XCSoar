@@ -3,6 +3,7 @@
 UTIL_SRC_DIR = $(SRC)/Util
 
 UTIL_SOURCES = \
+	$(UTIL_SRC_DIR)/Error.cxx \
 	$(UTIL_SRC_DIR)/CRC.cpp \
 	$(UTIL_SRC_DIR)/tstring.cpp \
 	$(UTIL_SRC_DIR)/UTF8.cpp \
