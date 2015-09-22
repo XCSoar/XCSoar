@@ -116,21 +116,6 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
 #endif
 #endif
 
-static char *
-last_slash(const zzip_char_t* name)
-{
-    register char *n = strrchr(name, '/');
-
-    if (ZZIP_BACKSLASH_DIRSEP)
-    {
-        register char *m = strrchr(name, '\\');
-        if (!n || (m && n < m))
-            return m;
-    }
-
-    return n;
-}
-
 static zzip_char_t*
 strrchr_basename(zzip_char_t* name)
 {
@@ -874,8 +859,7 @@ zzip_open_shared_io(ZZIP_FILE * stream,
             zzip_size_t len = strlen(stream->dir->realname);
 
             if (! memcmp(filename, stream->dir->realname, len) &&
-	      ((filename[len] == '/') || (filename[len] == '\\'))
-               && filename[len+1])
+                filename[len] == '/' && filename[len + 1])
             {
                 ZZIP_FILE *fp =
                     zzip_file_open(stream->dir, filename + len + 1, o_modes);
@@ -888,7 +872,7 @@ zzip_open_shared_io(ZZIP_FILE * stream,
         }
 
         /* per each slash in filename, check if it there is a zzip around */
-        while ((p = last_slash(basename)))
+        while ((p = strrchr(basename, '/')))
         {
             zzip_error_t e = 0;
             ZZIP_DIR *dir;
