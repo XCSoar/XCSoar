@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "WaypointGlue.hpp"
 #include "Factory.hpp"
+#include "WaypointFileType.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -32,6 +33,22 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 
 #include <windef.h> /* for MAX_PATH */
+
+static bool
+LoadWaypointFile(Waypoints &waypoints, const TCHAR *path,
+                 WaypointFileType file_type,
+                 WaypointOrigin origin,
+                 const RasterTerrain *terrain, OperationEnvironment &operation)
+{
+  if (!ReadWaypointFile(path, file_type, waypoints,
+                        WaypointFactory(origin, terrain),
+                        operation)) {
+    LogFormat(_T("Failed to read waypoint file: %s"), path);
+    return false;
+  }
+
+  return true;
+}
 
 static bool
 LoadWaypointFile(Waypoints &waypoints, const TCHAR *path,
@@ -63,6 +80,7 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   TCHAR path[MAX_PATH];
 
   LoadWaypointFile(way_points, LocalPath(path, _T("user.cup")),
+                   WaypointFileType::SEEYOU,
                    WaypointOrigin::USER, terrain, operation);
 
   // ### FIRST FILE ###
@@ -87,11 +105,15 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
     TCHAR *tail = path + _tcslen(path);
 
     _tcscpy(tail, _T("/waypoints.xcw"));
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::MAP,
+    found |= LoadWaypointFile(way_points, path,
+                              WaypointFileType::WINPILOT,
+                              WaypointOrigin::MAP,
                               terrain, operation);
 
     _tcscpy(tail, _T("/waypoints.cup"));
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::MAP,
+    found |= LoadWaypointFile(way_points, path,
+                              WaypointFileType::SEEYOU,
+                              WaypointOrigin::MAP,
                               terrain, operation);
   }
 
