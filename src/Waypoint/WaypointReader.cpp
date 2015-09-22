@@ -37,9 +37,9 @@ Copyright_License {
 #include <string.h>
 
 static WaypointReaderBase *
-CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
+CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
 {
-  switch (DetermineWaypointFileType(path)) {
+  switch (type) {
   case WaypointFileType::UNKNOWN:
     break;
 
@@ -63,6 +63,12 @@ CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
   }
 
   return nullptr;
+}
+
+static WaypointReaderBase *
+CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
+{
+  return CreateWaypointReader(DetermineWaypointFileType(path), factory);
 }
 
 bool
