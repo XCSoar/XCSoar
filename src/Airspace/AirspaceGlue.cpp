@@ -28,8 +28,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
-#include "IO/TextFile.hpp"
-#include "IO/LineReader.hpp"
+#include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/MapFile.hpp"
 #include "Profile/Profile.hpp"
@@ -37,7 +36,6 @@ Copyright_License {
 #include <zzip/zzip.h>
 
 #include <windef.h> /* for MAX_PATH */
-#include <memory>
 
 #include <string.h>
 
@@ -45,13 +43,13 @@ static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)
 {
-  std::unique_ptr<TLineReader> reader(OpenTextFile(path, Charset::AUTO));
-  if (!reader) {
+  FileLineReader reader(path, Charset::AUTO);
+  if (reader.error()) {
     LogFormat(_T("Failed to open airspace file: %s"), path);
     return false;
   }
 
-  if (!parser.Parse(*reader, operation)) {
+  if (!parser.Parse(reader, operation)) {
     LogFormat(_T("Failed to parse airspace file: %s"), path);
     return false;
   }

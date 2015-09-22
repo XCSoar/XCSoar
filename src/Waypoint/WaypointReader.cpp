@@ -31,8 +31,7 @@ Copyright_License {
 #include "WaypointFileType.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "IO/TextFile.hpp"
-#include "IO/LineReader.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <string.h>
 
@@ -76,10 +75,9 @@ ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
 
   bool success = false;
 
-  auto *line_reader = OpenTextFile(path, Charset::AUTO);
-  if (line_reader != nullptr) {
-    reader->Parse(way_points, *line_reader, operation);
-    delete line_reader;
+  FileLineReader line_reader(path, Charset::AUTO);
+  if (!line_reader.error()) {
+    reader->Parse(way_points, line_reader, operation);
     success = true;
   }
 
