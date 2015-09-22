@@ -30,7 +30,11 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "IO/TextFile.hpp"
 #include "IO/LineReader.hpp"
+#include "IO/ZipLineReader.hpp"
+#include "IO/MapFile.hpp"
 #include "Profile/Profile.hpp"
+
+#include <zzip/zzip.h>
 
 #include <windef.h> /* for MAX_PATH */
 #include <memory>
@@ -49,6 +53,25 @@ ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
 
   if (!parser.Parse(*reader, operation)) {
     LogFormat(_T("Failed to parse airspace file: %s"), path);
+    return false;
+  }
+
+  return true;
+}
+
+static bool
+ParseAirspaceFile(AirspaceParser &parser,
+                  struct zzip_dir *dir, const char *path,
+                  OperationEnvironment &operation)
+{
+  ZipLineReader reader(dir, path, Charset::AUTO);
+  if (reader.error()) {
+    LogFormat("Failed to open airspace file: %s", path);
+    return false;
+  }
+
+  if (!parser.Parse(reader, operation)) {
+    LogFormat("Failed to parse airspace file: %s", path);
     return false;
   }
 
@@ -76,9 +99,10 @@ ReadAirspace(Airspaces &airspaces,
   if (Profile::GetPath(ProfileKeys::AdditionalAirspaceFile, path))
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  if (Profile::GetPath(ProfileKeys::MapFile, path)) {
-    _tcscat(path, _T("/airspace.txt"));
-    airspace_ok |= ParseAirspaceFile(parser, path, operation);
+  auto dir = OpenMapFile();
+  if (dir != nullptr) {
+    airspace_ok |= ParseAirspaceFile(parser, dir, "airspace.txt", operation);
+    zzip_dir_close(dir);
   }
 
   if (airspace_ok) {
