@@ -590,8 +590,6 @@ zzip_get_default_ext(void)
     static zzip_strings_t ext[] = {
 	/* *INDENT-OFF* */
        ".zip", ".ZIP", /* common extension */
-       ".xcm", ".XCM", // XCSoar map files
-       "", // JMW, allow paths like fred.zip/FOO
 #     ifdef ZZIP_USE_ZIPLIKES
        ".pk3", ".PK3", /* ID Software's Quake3 zipfiles */
        ".jar", ".JAR", /* Java zipfiles */
