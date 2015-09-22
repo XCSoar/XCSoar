@@ -65,17 +65,12 @@ CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
   return nullptr;
 }
 
-static WaypointReaderBase *
-CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
-{
-  return CreateWaypointReader(DetermineWaypointFileType(path), factory);
-}
-
 bool
-ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
+                 Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
 {
-  auto *reader = CreateWaypointReader(path, factory);
+  auto *reader = CreateWaypointReader(file_type, factory);
   if (reader == nullptr)
     return false;
 
@@ -90,4 +85,12 @@ ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
 
   delete reader;
   return success;
+}
+
+bool
+ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation)
+{
+  return ReadWaypointFile(path, DetermineWaypointFileType(path),
+                          way_points, factory, operation);
 }

@@ -26,10 +26,17 @@ Copyright_License {
 #define WAYPOINT_READER_HPP
 
 #include <tchar.h>
+#include <stdint.h>
 
+enum class WaypointFileType: uint8_t;
 class Waypoints;
 class WaypointFactory;
 class OperationEnvironment;
+
+bool
+ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
+                 Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation);
 
 bool
 ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
