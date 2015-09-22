@@ -31,6 +31,9 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Operation/Operation.hpp"
+#include "IO/MapFile.hpp"
+
+#include <zzip/zzip.h>
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -58,6 +61,22 @@ LoadWaypointFile(Waypoints &waypoints, const TCHAR *path,
   if (!ReadWaypointFile(path, waypoints, WaypointFactory(origin, terrain),
                         operation)) {
     LogFormat(_T("Failed to read waypoint file: %s"), path);
+    return false;
+  }
+
+  return true;
+}
+
+static bool
+LoadWaypointFile(Waypoints &waypoints, struct zzip_dir *dir, const char *path,
+                 WaypointFileType file_type,
+                 WaypointOrigin origin,
+                 const RasterTerrain *terrain, OperationEnvironment &operation)
+{
+  if (!ReadWaypointFile(dir, path, file_type, waypoints,
+                        WaypointFactory(origin, terrain),
+                        operation)) {
+    LogFormat("Failed to read waypoint file: %s", path);
     return false;
   }
 
@@ -101,20 +120,21 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
-  if (!found && Profile::GetPath(ProfileKeys::MapFile, path)) {
-    TCHAR *tail = path + _tcslen(path);
+  if (!found) {
+    auto dir = OpenMapFile();
+    if (dir != nullptr) {
+      found |= LoadWaypointFile(way_points, dir, "waypoints.xcw",
+                                WaypointFileType::WINPILOT,
+                                WaypointOrigin::MAP,
+                                terrain, operation);
 
-    _tcscpy(tail, _T("/waypoints.xcw"));
-    found |= LoadWaypointFile(way_points, path,
-                              WaypointFileType::WINPILOT,
-                              WaypointOrigin::MAP,
-                              terrain, operation);
+      found |= LoadWaypointFile(way_points, dir, "waypoints.cup",
+                                WaypointFileType::SEEYOU,
+                                WaypointOrigin::MAP,
+                                terrain, operation);
 
-    _tcscpy(tail, _T("/waypoints.cup"));
-    found |= LoadWaypointFile(way_points, path,
-                              WaypointFileType::SEEYOU,
-                              WaypointOrigin::MAP,
-                              terrain, operation);
+      zzip_dir_close(dir);
+    }
   }
 
   // Optimise the waypoint list after attaching new waypoints

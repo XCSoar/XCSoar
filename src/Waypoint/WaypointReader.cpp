@@ -30,7 +30,7 @@ Copyright_License {
 #include "WaypointReaderCompeGPS.hpp"
 #include "WaypointFileType.hpp"
 #include "OS/FileUtil.hpp"
-#include "IO/ZipSource.hpp"
+#include "IO/ZipLineReader.hpp"
 #include "IO/TextFile.hpp"
 #include "IO/LineReader.hpp"
 
@@ -93,4 +93,25 @@ ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
 {
   return ReadWaypointFile(path, DetermineWaypointFileType(path),
                           way_points, factory, operation);
+}
+
+bool
+ReadWaypointFile(struct zzip_dir *dir, const char *path,
+                 WaypointFileType file_type, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation)
+{
+  auto *reader = CreateWaypointReader(file_type, factory);
+  if (reader == nullptr)
+    return false;
+
+  bool success = false;
+
+  ZipLineReader line_reader(dir, path, Charset::AUTO);
+  if (!line_reader.error()) {
+    reader->Parse(way_points, line_reader, operation);
+    success = true;
+  }
+
+  delete reader;
+  return success;
 }

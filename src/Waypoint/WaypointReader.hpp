@@ -29,6 +29,7 @@ Copyright_License {
 #include <stdint.h>
 
 enum class WaypointFileType: uint8_t;
+struct zzip_dir;
 class Waypoints;
 class WaypointFactory;
 class OperationEnvironment;
@@ -40,6 +41,11 @@ ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
 
 bool
 ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation);
+
+bool
+ReadWaypointFile(struct zzip_dir *dir, const char *path,
+                 WaypointFileType file_type, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation);
 
 #endif
