@@ -24,18 +24,28 @@ Copyright_License {
 #include "IO/ZipLineReader.hpp"
 #include "OS/Args.hpp"
 
+#include <zzip/zzip.h>
+
 #include <stdio.h>
 
 int main(int argc, char **argv)
 {
-  Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+  Args args(argc, argv, "ZIPFILE FILENAME");
+  const char *zip_path = args.ExpectNext();
+  const char *filename = args.ExpectNext();
   args.ExpectEnd();
 
-  ZipLineReader reader(path);
+  auto dir = zzip_dir_open(zip_path, nullptr);
+  if (dir == nullptr) {
+    fprintf(stderr, "Failed to open %s\n", zip_path);
+    return EXIT_FAILURE;
+  }
+
+  ZipLineReader reader(dir, filename);
+  zzip_dir_close(dir);
   if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", path);
-    return 1;
+    fprintf(stderr, "Failed to open %s\n", filename);
+    return EXIT_FAILURE;
   }
 
   TCHAR *line;
