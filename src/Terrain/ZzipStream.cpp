@@ -52,7 +52,7 @@ jas_zzip_close(jas_stream_obj_t *obj)
 {
   const auto f = (struct zzip_file *)obj;
 
-  return zzip_fclose(f);
+  return zzip_file_close(f);
 }
 
 static constexpr jas_stream_ops_t zzip_stream_ops = {
@@ -71,7 +71,7 @@ OpenJasperZzipStream(struct zzip_dir *dir, const char *path)
 
   jas_stream_t *stream = jas_stream_create();
   if (stream == nullptr) {
-    zzip_fclose(f);
+    zzip_file_close(f);
     return nullptr;
   }
 

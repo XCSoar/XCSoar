@@ -34,7 +34,7 @@ ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
 ZipSource::~ZipSource()
 {
   if (file != nullptr)
-    zzip_fclose(file);
+    zzip_file_close(file);
 }
 
 long
@@ -49,7 +49,7 @@ ZipSource::GetSize() const
 unsigned
 ZipSource::Read(char *p, unsigned n)
 {
-  zzip_ssize_t nbytes = zzip_read(file, p, n);
+  zzip_ssize_t nbytes = zzip_file_read(file, p, n);
   return nbytes >= 0
     ? (unsigned)nbytes
     : 0;
