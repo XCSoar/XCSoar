@@ -91,6 +91,10 @@ public:
   ComboList(const ComboList &other) = delete;
   ComboList &operator=(const ComboList &other) = delete;
 
+  bool empty() const {
+    return items.empty();
+  }
+
   unsigned size() const {
     return items.size();
   }
