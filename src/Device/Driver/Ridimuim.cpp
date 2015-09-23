@@ -79,6 +79,23 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
+static bool
+PLKAS(NMEAInputLine &line, NMEAInfo &info)
+{
+/*
+New PLKAS   NMEA sentence.
+    The syntax is:
+    $PLKAS,nnn,*checksum
+    where nnn is the Indicated Air Speed in m/s *10
+    and checksum is the NMEA checksum
+    Example for nnn  346 = 34.6 m/s  which is = 124.56 km/h
+    This sentence can be sent anytime, with any device connected.
+    It is normally a sub sentence of the LK8EX1 device.
+*/
+  int air_speed;
+  if (line.ReadChecked(air_speed) && air_speed != 999)
+      info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(air_speed)*0.36, Unit::KILOMETER_PER_HOUR));
+}
 bool
 RidimuimDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
@@ -91,6 +108,8 @@ RidimuimDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (StringIsEqual(type, "$LK8EX1"))
     return LK8EX1(line, info);
+  else if (StringIsEqual(type, "PLKAS"))
+    return PLKAS(line, info);          
   
   return false;
 }
