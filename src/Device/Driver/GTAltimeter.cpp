@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 class GTAltimeterDevice : public AbstractDevice {
 public:
@@ -54,7 +55,7 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 
   int temperature;
   if (line.ReadChecked(temperature) && temperature != 99) {
-    info.temperature = fixed(temperature);
+    info.temperature = CelsiusToKelvin(fixed(temperature));
     info.temperature_available = true;
   }
 
