@@ -60,7 +60,7 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 
   int temperature;
   if (line.ReadChecked(temperature) && temperature != 99) {
-    info.temperature = fixed(temperature);
+    info.temperature = CelsiusToKelvin(fixed(temperature));
     info.temperature_available = true;
   }
 
