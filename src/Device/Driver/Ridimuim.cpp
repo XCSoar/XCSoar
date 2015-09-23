@@ -28,6 +28,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 
 #include <stdlib.h>
@@ -50,7 +51,7 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 
   unsigned altitude;
   bool altitude_available = (line.ReadChecked(altitude) && altitude != 99999);
-
+   
   if (altitude_available && !pressure_available)
     info.ProvidePressureAltitude(fixed(altitude));
 
@@ -95,6 +96,8 @@ New PLKAS   NMEA sentence.
   int air_speed;
   if (line.ReadChecked(air_speed) && air_speed != 999)
       info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(air_speed)*0.36, Unit::KILOMETER_PER_HOUR));
+  
+  return true;
 }
 bool
 RidimuimDevice::ParseNMEA(const char *String, NMEAInfo &info)
