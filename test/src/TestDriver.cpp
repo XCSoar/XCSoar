@@ -47,6 +47,7 @@
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver/Westerboer.hpp"
+#include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
 #include "Device/RecordedFlight.hpp"
@@ -1421,6 +1422,95 @@ TestVaulter()
   delete device;
 }
 
+static void
+TestXCTracer()
+{
+  NullPort null;
+  Device *device = xctracer_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = 1;
+
+  /* empty sentence */
+  ok1(device->ParseNMEA("$LXWP0,N,,,,,,,,,,,*6d", nmea_info));
+  ok1(!nmea_info.pressure_altitude_available);
+  ok1(!nmea_info.baro_altitude_available);
+  ok1(!nmea_info.airspeed_available);
+  ok1(!nmea_info.total_energy_vario_available);
+  ok1(!nmea_info.external_wind_available);
+
+  /* bad checksum */
+  ok1(!device->ParseNMEA("$XCTRC*6d", nmea_info));
+
+  nmea_info.Reset();
+  nmea_info.clock = 1;
+
+  /* altitude and !wind */
+  ok1(device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", nmea_info));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(!nmea_info.baro_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 1266.5));
+
+  ok1(!nmea_info.airspeed_available);
+  ok1(!nmea_info.total_energy_vario_available);
+  ok1(!nmea_info.external_wind_available);
+
+  nmea_info.Reset();
+  nmea_info.clock = 1;
+
+  /* !airspeed and vario available */
+  ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",nmea_info));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(!nmea_info.baro_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude,1665.5));
+  ok1(!nmea_info.airspeed_available);
+
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 1.71));
+
+  ok1(!nmea_info.external_wind_available);
+
+  /* the XCTRC sentence */
+  ok1(device->ParseNMEA("$XCTRC,2015,8,11,10,56,23,80,48.62825,8.104885,"
+      "129.4,11.01,322.76,-5.05,,,,997.79,77*53",nmea_info));
+
+  /* invalid date and time must be ignored */
+  ok1(device->ParseNMEA("$XCTRC,3015,13,33*77",nmea_info));
+  ok1(device->ParseNMEA("$XCTRC,,,,25,-1,99,33*69",nmea_info));
+
+  /* now check the correct values */
+  ok1(nmea_info.date_time_utc.year == 2015);
+  ok1(nmea_info.date_time_utc.month == 8);
+  ok1(nmea_info.date_time_utc.day == 11);
+  ok1(nmea_info.date_time_utc.hour == 10);
+  ok1(nmea_info.date_time_utc.minute == 56);
+  ok1(nmea_info.date_time_utc.second == 23);
+  ok1(equals(nmea_info.time, 10 * 3600 + 56 * 60 + 23.80));
+
+  ok1(nmea_info.location_available);
+  ok1(equals(nmea_info.location.longitude, 8.104885));
+  ok1(equals(nmea_info.location.latitude, 48.62825));
+
+  ok1(nmea_info.gps_altitude_available);
+  ok1(equals(nmea_info.gps_altitude, 129.4));
+
+  ok1(nmea_info.ground_speed_available);
+  ok1(equals(nmea_info.ground_speed, 11.01));
+
+  ok1(nmea_info.track_available);
+  ok1(equals(nmea_info.track,Angle::Degrees(322.76)));
+
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, -5.05));
+
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level,77));
+
+  delete device;
+}
+
 
 static void
 TestDeclare(const struct DeviceRegister &driver)
@@ -1491,7 +1581,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(783);
+  plan_tests(829);
 
   TestGeneric();
   TestTasman();
@@ -1517,6 +1607,7 @@ int main(int argc, char **argv)
   TestZander();
   TestFlyNet();
   TestVaulter();
+  TestXCTracer();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */

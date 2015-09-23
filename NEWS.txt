@@ -1,6 +1,8 @@
 Version 7.0 - not yet released
 * data files
   - optimise the terrain loader
+* devices
+  - driver for XC Tracer Vario
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later
