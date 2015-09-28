@@ -37,6 +37,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Resources.hpp"
 #include "Model.hpp"
+#include "Util/Error.hxx"
 
 #include <algorithm>
 #include <stdio.h>
@@ -93,7 +94,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
 static void
 DrawFlights(Canvas &canvas, const PixelRect &rc)
 {
-  FileLineReaderA file("/mnt/onboard/XCSoarData/flights.log");
+  FileLineReaderA file("/mnt/onboard/XCSoarData/flights.log", IgnoreError());
   if (file.error())
     return;
 

@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "IO/FileSource.hpp"
 #include "IO/InflateLineReader.hpp"
+#include "Util/Error.hxx"
 
 #include <fcntl.h>
 #include <string.h>
@@ -106,7 +107,7 @@ bool
 IsKoboOTGKernel()
 {
 #ifdef KOBO
-  FileSource file("/proc/config.gz");
+  FileSource file("/proc/config.gz", IgnoreError());
   if (file.error())
     return false;
 
