@@ -153,7 +153,7 @@ Now, you should start the Android manager with the \texttt{android} command, and
 
 Finally, for the \texttt{adb} debugger interface to work, most distributions require manual fixing of the \texttt{udev} rules. This can be done in the following way:
 
-\begin{addmargin}{-5 cm}
+\begin{maxipage}
 \begin{verbatim}
 #Create etc/udev/rules.d/99-android.rules file
 
@@ -216,7 +216,7 @@ echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="19D2", MODE="0666"" >> 99-android.rule
 sudo mv -f 99-android.rules /etc/udev/rules.d/
 sudo chmod a+r /etc/udev/rules.d/99-android.rules
 \end{verbatim}
-\end{addmargin}
+\end{maxipage}
 
 \section{Optional: Eclipse IDE}
 The standard IDE for Android development (directly suppoerted by Google) is Eclipse. It is not limited to Android, and can be used for all targets, of course. It is not required for \xc, but its installation including the extensions for Android development is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
