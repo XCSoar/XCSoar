@@ -76,10 +76,6 @@ class IOLoop final {
         return a.fd.Get() < b.Get();
       }
     };
-
-    static void Dispose(File *f) {
-      delete f;
-    }
   };
 
   Poll poll;

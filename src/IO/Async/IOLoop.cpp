@@ -23,10 +23,11 @@ Copyright_License {
 
 #include "IOLoop.hpp"
 #include "FileEventHandler.hpp"
+#include "Util/DeleteDisposer.hxx"
 
 IOLoop::~IOLoop()
 {
-  files.clear_and_dispose(File::Dispose);
+  files.clear_and_dispose(DeleteDisposer());
 }
 
 void
@@ -95,7 +96,7 @@ IOLoop::Update()
 
     poll.SetMask(file.fd.Get(), file.mask);
     if (file.mask == 0)
-      i = files.erase_and_dispose(i, File::Dispose);
+      i = files.erase_and_dispose(i, DeleteDisposer());
     else
       ++i;
   }
