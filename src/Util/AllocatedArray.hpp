@@ -49,7 +49,7 @@ public:
   typedef typename Buffer::const_iterator const_iterator;
 
 protected:
-  Buffer buffer = nullptr;
+  Buffer buffer{nullptr};
 
 public:
   constexpr AllocatedArray() = default;
