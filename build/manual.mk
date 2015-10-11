@@ -76,8 +76,8 @@ TEX_INCLUDES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/*.sty)
 FIGURES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/figures/*.png)
 
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/en:"
-TEX_FLAGS = -halt-on-error -interaction=nonstopmode
-TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
+TEX_FLAGS = --interaction=nonstopmode --no-shell-escape --output-format=pdf
+TEX_RUN = $(TEX_VARS) lualatex $(TEX_FLAGS) --output-directory=$(@D)
 IDX_RUN = makeindex -q 
 
 LATEX2HTML = latex2html
