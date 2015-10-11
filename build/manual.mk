@@ -78,7 +78,6 @@ FIGURES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/figures/*.png)
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/en:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
-XETEX_RUN = $(TEX_VARS) xetex $(TEX_FLAGS) -no-pdf -output-directory $(@D)
 IDX_RUN = makeindex -q 
 
 LATEX2HTML = latex2html
