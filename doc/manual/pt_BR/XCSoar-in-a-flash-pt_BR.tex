@@ -1,11 +1,9 @@
 \documentclass[a4paper,12pt]{scrreprt}
+\input{xcsoar.sty}
 \usepackage[portuguese]{babel}
-\usepackage[utf8]{luainputenc}
 \usepackage{wasysym}
-\usepackage[rgb]{xcolor}     % colour support, rgb = definite colour space
 \usepackage{graphicx}        % -> includegraphics
 \usepackage{paralist}
-\usepackage[colorlinks]{hyperref}
 \hypersetup{
     %bookmarks=true,
     unicode=true,
@@ -40,10 +38,6 @@
 \renewcommand{\familydefault}{\sfdefault}
 \fontfamily{phv}\selectfont
 %
-%##############  Include the XC commons ##############
-%
-\input{buttons.sty}
-%
 %##############  Colour, Background, Border ##############
 %
 \fboxrule0.4mm               % width Fbox-border
@@ -54,7 +48,7 @@
 %
 \newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
 \newcommand{\display}[3]{\bmenut{Mostrar}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
-\newcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
+\renewcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
 \newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
 %
 %

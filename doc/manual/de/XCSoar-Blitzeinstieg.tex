@@ -1,14 +1,12 @@
 \documentclass[german,a4paper,12pt]{scrreprt}
-\usepackage[utf8]{luainputenc}
+\input{xcsoar.sty}
 \usepackage[german]{babel}
 \usepackage{wasysym}
-\usepackage{xcolor}               % Farbunterstützung
 \usepackage{graphicx}                      % Anleitung hierzu  in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
 \usepackage{paralist}
 % Wir wollen einen Index:
 \usepackage{makeidx}\makeindex
 % Wir wollen aktive Links und einige Dokumentinformationen:
-\usepackage[colorlinks]{hyperref}
 \hypersetup{
     bookmarks=true,
     unicode=true,
@@ -32,7 +30,6 @@
 }
 \usepackage[right]{eurosym}% Eurosymbol, rechts neben Text mit \EUR{427,45}, symbol alleine mit\eur{}
 \parindent0mm%kein Einzug-häßlich
-\textwidth=170mm
 \setlength{\baselineskip}{1em}
 
 % Set the page title
@@ -49,7 +46,6 @@
 %
 %##############  Makros und  Menus ..##############
 %
-\input{buttons.sty}
 \newcommand{\bc}{\begin{center}}
 \newcommand{\ec}{\end{center}}
 %
@@ -80,8 +76,6 @@
         {\footnotesize\sf{Einstellung}}
         \end{tabular} } }
 }
-%Abkürzungen
-\newcommand{\xc}{{\textsf XCSoar}}
 %
 %##############  Titelseite des Blitzes .##############
 %
