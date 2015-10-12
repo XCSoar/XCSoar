@@ -399,11 +399,17 @@ ReadNonNegativeAngle(const TCHAR *p, TCHAR **endptr_r)
   if (*endptr == ':') {
     p = endptr + 1;
     double minutes = ParseDouble(p, &endptr);
+    if (endptr == p)
+      return Angle::Native(fixed(-1));
+
     degrees += minutes / 60;
 
     if (*endptr == ':') {
       p = endptr + 1;
       double seconds = ParseDouble(p, &endptr);
+      if (endptr == p)
+        return Angle::Native(fixed(-1));
+
       degrees += seconds / 3600;
     }
   }
