@@ -35,29 +35,35 @@
 #define INDENTCHAR '\t'
 
 static void
+WriteXMLChar(TextWriter &writer, TCHAR ch)
+{
+  switch (ch) {
+  case '<':
+    writer.Write("&lt;");
+    break;
+  case '>':
+    writer.Write("&gt;");
+    break;
+  case '&':
+    writer.Write("&amp;");
+    break;
+  case '\'':
+    writer.Write("&apos;");
+    break;
+  case '"':
+    writer.Write("&quot;");
+    break;
+  default:
+    writer.Write(ch);
+    break;
+  }
+}
+
+static void
 WriteXMLString(TextWriter &writer, const TCHAR *source)
 {
   while (*source) {
-    switch (*source) {
-    case '<':
-      writer.Write("&lt;");
-      break;
-    case '>':
-      writer.Write("&gt;");
-      break;
-    case '&':
-      writer.Write("&amp;");
-      break;
-    case '\'':
-      writer.Write("&apos;");
-      break;
-    case '"':
-      writer.Write("&quot;");
-      break;
-    default:
-      writer.Write(*source);
-      break;
-    }
+    WriteXMLChar(writer, *source);
     source++;
   }
 }
