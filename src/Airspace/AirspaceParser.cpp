@@ -388,18 +388,18 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
  * @return the non-negative angle or a negative value on error
  */
 static Angle
-ReadNonNegativeAngle(const TCHAR *p, TCHAR **endptr_r)
+ReadNonNegativeAngle(const TCHAR *p, double max_degrees, TCHAR **endptr_r)
 {
   TCHAR *endptr;
 
   double degrees = ParseDouble(p, &endptr);
-  if (endptr == p)
+  if (endptr == p || degrees < 0 || degrees > max_degrees)
     return Angle::Native(fixed(-1));
 
   if (*endptr == ':') {
     p = endptr + 1;
     double minutes = ParseDouble(p, &endptr);
-    if (endptr == p)
+    if (endptr == p || minutes < 0 || minutes > 60)
       return Angle::Native(fixed(-1));
 
     degrees += minutes / 60;
@@ -407,7 +407,7 @@ ReadNonNegativeAngle(const TCHAR *p, TCHAR **endptr_r)
     if (*endptr == ':') {
       p = endptr + 1;
       double seconds = ParseDouble(p, &endptr);
-      if (endptr == p)
+      if (endptr == p || seconds < 0 || seconds > 60)
         return Angle::Native(fixed(-1));
 
       degrees += seconds / 3600;
@@ -426,9 +426,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
 
   TCHAR *endptr;
 
-  // ToDo, add more error checking and making it more tolerant/robust
-
-  auto angle = ReadNonNegativeAngle(buffer, &endptr);
+  auto angle = ReadNonNegativeAngle(buffer, 91, &endptr);
   if (negative(angle.Native()))
     return false;
 
@@ -448,7 +446,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
     return false;
 
   buffer = endptr;
-  angle = ReadNonNegativeAngle(buffer, &endptr);
+  angle = ReadNonNegativeAngle(buffer, 181, &endptr);
   if (negative(angle.Native()))
     return false;
 
