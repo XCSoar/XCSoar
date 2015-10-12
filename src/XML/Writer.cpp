@@ -28,6 +28,7 @@
 
 #include "Node.hpp"
 #include "IO/TextWriter.hpp"
+#include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <assert.h>
@@ -54,6 +55,9 @@ WriteXMLChar(TextWriter &writer, TCHAR ch)
     writer.Write("&quot;");
     break;
   default:
+    if (IsWhitespaceOrNull(ch))
+      ch = ' ';
+
     writer.Write(ch);
     break;
   }
