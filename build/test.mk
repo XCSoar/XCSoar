@@ -1108,6 +1108,7 @@ RUN_INPUT_PARSER_SOURCES = \
 	$(SRC)/Menu/MenuData.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunInputParser.cpp
+RUN_INPUT_PARSER_CPPFLAGS = $(SCREEN_CPPFLAGS)
 RUN_INPUT_PARSER_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 
