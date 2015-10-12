@@ -30,6 +30,7 @@
 #include "Node.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/Error.hxx"
 #include "IO/FileLineReader.hpp"
@@ -441,24 +442,6 @@ XML::GetErrorMessage(Error error)
 }
 
 /**
- * Trim the end of the text to remove white space characters.
- */
-gcc_pure
-static size_t
-FindEndOfText(const TCHAR *token, size_t length)
-{
-  assert(token != nullptr);
-
-  --length;
-  while (1) {
-    if (IsWhitespaceOrNull(token[length]))
-      return length + 1;
-
-    --length;
-  }
-}
-
-/**
  * Recursively parse an XML element.
  */
 static bool
@@ -516,7 +499,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = FindEndOfText(text, token.pStr - text);
+          size_t length = StripRight(text, token.pStr - text);
           node.AddText(text, length);
           text = nullptr;
         }
@@ -581,7 +564,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = FindEndOfText(text, token.pStr - text);
+          size_t length = StripRight(text, token.pStr - text);
           TCHAR *text2 = FromXMLString(text, length);
           if (text2 == nullptr) {
             pXML->error = eXMLErrorUnexpectedToken;
