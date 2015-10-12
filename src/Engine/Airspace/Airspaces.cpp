@@ -176,6 +176,10 @@ Airspaces::FindInside(const AircraftState &state,
 void
 Airspaces::Optimise()
 {
+  if (IsEmpty())
+    /* avoid assertion failure in uninitialised task_projection */
+    return;
+
   if (!owns_children || task_projection.Update()) {
     // dont update task_projection if not owner!
 
