@@ -60,12 +60,10 @@ WriteXMLChar(TextWriter &writer, TCHAR ch)
 }
 
 static void
-WriteXMLString(TextWriter &writer, const TCHAR *source)
+WriteXMLString(TextWriter &writer, const tstring &source)
 {
-  while (*source) {
-    WriteXMLChar(writer, *source);
-    source++;
-  }
+  for (auto ch : source)
+    WriteXMLChar(writer, ch);
 }
 
 static void
@@ -99,7 +97,7 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
       writer.Write(pAttr->name.c_str());
       writer.Write('=');
       writer.Write('"');
-      WriteXMLString(writer, pAttr->value.c_str());
+      WriteXMLString(writer, pAttr->value);
       writer.Write('"');
       pAttr++;
     }
@@ -137,10 +135,10 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
   if (!data.text.empty()) {
     if (format != -1) {
       WriteIndent(writer, format + 1);
-      WriteXMLString(writer, data.text.c_str());
+      WriteXMLString(writer, data.text);
       writer.NewLine();
     } else {
-      WriteXMLString(writer, data.text.c_str());
+      WriteXMLString(writer, data.text);
     }
   }
 
