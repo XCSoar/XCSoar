@@ -384,6 +384,34 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
   }
 }
 
+/**
+ * @return the non-negative angle or a negative value on error
+ */
+static Angle
+ReadNonNegativeAngle(const TCHAR *p, TCHAR **endptr_r)
+{
+  TCHAR *endptr;
+
+  double degrees = ParseDouble(p, &endptr);
+  if (endptr == p)
+    return Angle::Native(-1);
+
+  if (*endptr == ':') {
+    p = endptr + 1;
+    double minutes = ParseDouble(p, &endptr);
+    degrees += minutes / 60;
+
+    if (*endptr == ':') {
+      p = endptr + 1;
+      double seconds = ParseDouble(p, &endptr);
+      degrees += seconds / 3600;
+    }
+  }
+
+  *endptr_r = endptr;
+  return Angle::Degrees(degrees);
+}
+
 static bool
 ReadCoords(const TCHAR *buffer, GeoPoint &point)
 {
@@ -394,31 +422,11 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
 
   // ToDo, add more error checking and making it more tolerant/robust
 
-  double deg = ParseDouble(buffer, &endptr);
-  if ((buffer == endptr) || (*endptr == '\0'))
+  auto angle = ReadNonNegativeAngle(buffer, &endptr);
+  if (angle.IsNegative())
     return false;
 
-  if (*endptr == ':') {
-    endptr++;
-
-    double min = ParseDouble(endptr, &endptr);
-    if (*endptr == '\0')
-      return false;
-
-    deg += min / 60;
-
-    if (*endptr == ':') {
-      endptr++;
-
-      double sec = ParseDouble(endptr, &endptr);
-      if (*endptr == '\0')
-        return false;
-
-      deg += sec / 3600;
-    }
-  }
-
-  point.latitude = Angle::Degrees(deg);
+  point.latitude = angle;
 
   if (*endptr == ' ')
     endptr++;
@@ -433,31 +441,12 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
   if (*endptr == '\0')
     return false;
 
-  deg = ParseDouble(endptr, &endptr);
-  if ((buffer == endptr) || (*endptr == '\0'))
+  buffer = endptr;
+  angle = ReadNonNegativeAngle(buffer, &endptr);
+  if (angle.IsNegative())
     return false;
 
-  if (*endptr == ':') {
-    endptr++;
-
-    double min = ParseDouble(endptr, &endptr);
-    if (*endptr == '\0')
-      return false;
-
-    deg += min / 60;
-
-    if (*endptr == ':') {
-      endptr++;
-
-      double sec = ParseDouble(endptr, &endptr);
-      if (*endptr == '\0')
-        return false;
-
-      deg += sec / 3600;
-    }
-  }
-
-  point.longitude = Angle::Degrees(deg);
+  point.longitude = angle;
 
   if (*endptr == ' ')
     endptr++;
