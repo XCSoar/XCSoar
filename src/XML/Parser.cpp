@@ -758,6 +758,11 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
           {
             TCHAR *value = FromXMLString(token.pStr, token.length);
+            if (value == nullptr) {
+              pXML->error = eXMLErrorUnexpectedToken;
+              return false;
+            }
+
             node.AddAttribute(std::move(attribute_name),
                               value, _tcslen(value));
             free(value);
