@@ -31,6 +31,10 @@
 \textwidth=170mm             %match print and screen
 \setlength{\headheight}{33pt}%increasing headheight for logo
 \setlength{\baselineskip}{1em}
+
+\pagestyle{fancy}
+\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
+
 % Font selection
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
@@ -92,7 +96,7 @@
 %
 %
 %##############  Titlepage of flash ##############
-\pagestyle{empty}
+\thispagestyle{empty}
 \begin{center}
 \fontsize{34}{0}
 \selectfont\textbf{XCSoar in a flash}
@@ -111,8 +115,6 @@
 
 %##############  XCSoar Checklist of flash ##############
 \newpage
-\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
-\pagestyle{fancy}
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
