@@ -4,7 +4,6 @@
 \usepackage{wasysym}
 \usepackage{xcolor}               % Farbunterstützung
 \usepackage{graphicx}                      % Anleitung hierzu  in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
-\usepackage{fancyhdr}
 \usepackage{paralist}
 % Wir wollen einen Index:
 \usepackage{makeidx}\makeindex
@@ -36,8 +35,9 @@
 \textwidth=170mm
 \setlength{\baselineskip}{1em}
 
-\pagestyle{fancy}
-\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
+% Set the page title
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar Blitzeinstieg}
 
 %
 %##############  Font selection ##############

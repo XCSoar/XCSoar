@@ -3,7 +3,6 @@
 \usepackage{wasysym}
 \usepackage[rgb]{xcolor}     % colour support, rgb = definite colour space
 \usepackage{graphicx}        % -> includegraphics
-\usepackage{fancyhdr}
 \usepackage{paralist}
 \usepackage[colorlinks]{hyperref}
 \hypersetup{
@@ -29,11 +28,11 @@
 }
 \parindent0mm                %no indent
 \textwidth=170mm             %match print and screen
-\setlength{\headheight}{33pt}%increasing headheight for logo
 \setlength{\baselineskip}{1em}
 
-\pagestyle{fancy}
-\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
+% Set the page title
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar in a flash}
 
 % Font selection
 \usepackage{helvet}
