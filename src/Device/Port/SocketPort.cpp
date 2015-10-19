@@ -155,6 +155,6 @@ SocketPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
     return false;
   }
 
-  handler.DataReceived(buffer, nbytes);
+  DataReceived(buffer, nbytes);
   return true;
 }
