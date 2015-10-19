@@ -58,17 +58,11 @@ class AirspaceLabelRenderer
    * again and again each frame when nothing has changed.
    */
   TransparentRendererCache fill_cache;
-
-  unsigned last_warning_serial;
 #endif
 
 public:
   AirspaceLabelRenderer(const AirspaceLook &_look)
-    :look(_look), airspaces(nullptr), warning_manager(nullptr)
-#ifndef ENABLE_OPENGL
-    , last_warning_serial(0)
-#endif
-  {}
+    :look(_look), airspaces(nullptr), warning_manager(nullptr) {}
 
   const AirspaceLook &GetLook() const {
     return look;
