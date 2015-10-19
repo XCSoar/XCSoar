@@ -49,6 +49,7 @@ Copyright_License {
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
 #import <AppKit/AppKit.h>
+#include <alloca.h>
 #endif
 #endif
 
@@ -161,15 +162,17 @@ TopCanvas::Create(PixelSize new_size,
   }
 
 #if defined(__MACOSX__) && __MACOSX__
-  SDL_SysWMinfo wm_info;
-  SDL_VERSION(&wm_info.version);
-  if ((SDL_GetWindowWMInfo(window, &wm_info)) &&
-      (wm_info.subsystem == SDL_SYSWM_COCOA)) {
+  SDL_SysWMinfo *wm_info =
+      reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
+  SDL_VERSION(&wm_info->version);
+  if ((SDL_GetWindowWMInfo(window, wm_info)) &&
+      (wm_info->subsystem == SDL_SYSWM_COCOA)) {
     if (resizable) {
-      [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+      [wm_info->info.cocoa.window
+          setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
     }
     if (full_screen) {
-      [wm_info.info.cocoa.window toggleFullScreen: nil];
+      [wm_info->info.cocoa.window toggleFullScreen: nil];
     }
   }
 #endif

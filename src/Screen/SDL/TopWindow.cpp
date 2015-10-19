@@ -36,6 +36,7 @@ Copyright_License {
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
 #import <AppKit/AppKit.h>
+#include <alloca.h>
 #endif
 #endif
 
@@ -242,11 +243,14 @@ TopWindow::OnEvent(const SDL_Event &event)
           }
 
 #if defined(__MACOSX__) && __MACOSX__
-          SDL_SysWMinfo wm_info;
-          SDL_VERSION(&wm_info.version);
-          if ((SDL_GetWindowWMInfo(event_window, &wm_info)) &&
-              (wm_info.subsystem == SDL_SYSWM_COCOA)) {
-            [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+          SDL_SysWMinfo *wm_info =
+              reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
+          SDL_VERSION(&wm_info->version);
+          if ((SDL_GetWindowWMInfo(event_window, wm_info)) &&
+              (wm_info->subsystem == SDL_SYSWM_COCOA)) {
+            [wm_info->info.cocoa.window
+                setCollectionBehavior:
+                    NSWindowCollectionBehaviorFullScreenPrimary];
           }
           Invalidate();
 #endif
