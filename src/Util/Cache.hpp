@@ -30,7 +30,7 @@
 #ifndef CACHE_HPP
 #define CACHE_HPP
 
-#include "Manual.hpp"
+#include "Manual.hxx"
 #include "Compiler.h"
 
 #include <boost/intrusive/list.hpp>

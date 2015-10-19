@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_FALLBACK_BUFFER_HPP
 
 #include "Buffer.hpp"
-#include "Util/Manual.hpp"
+#include "Util/Manual.hxx"
 #include "Util/WritableBuffer.hxx"
 
 #include <assert.h>

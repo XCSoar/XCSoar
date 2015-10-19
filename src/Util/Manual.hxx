@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MANUAL_HPP
-#define MANUAL_HPP
+#ifndef MANUAL_HXX
+#define MANUAL_HXX
 
 #include <new>
 #include <utility>
@@ -48,73 +48,73 @@
  */
 template<class T>
 class Manual {
-  alignas(T)
-  char data[sizeof(T)];
+	alignas(T)
+	char data[sizeof(T)];
 
 #ifndef NDEBUG
-  bool initialized;
+	bool initialized;
 #endif
 
 public:
 #ifndef NDEBUG
-  Manual():initialized(false) {}
-  ~Manual() {
-    assert(!initialized);
-  }
+	Manual():initialized(false) {}
+	~Manual() {
+		assert(!initialized);
+	}
 #endif
 
-  template<typename... Args>
-  void Construct(Args&&... args) {
-    assert(!initialized);
+	template<typename... Args>
+	void Construct(Args&&... args) {
+		assert(!initialized);
 
-    void *p = data;
-    new(p) T(std::forward<Args>(args)...);
+		void *p = data;
+		new(p) T(std::forward<Args>(args)...);
 
 #ifndef NDEBUG
-    initialized = true;
+		initialized = true;
 #endif
-  }
+	}
 
-  void Destruct() {
-    assert(initialized);
+	void Destruct() {
+		assert(initialized);
 
-    T &t = Get();
-    t.T::~T();
+		T &t = Get();
+		t.T::~T();
 
 #ifndef NDEBUG
-    initialized = false;
+		initialized = false;
 #endif
-  }
+	}
 
-  T &Get() {
-    assert(initialized);
+	T &Get() {
+		assert(initialized);
 
-    void *p = static_cast<void *>(data);
-    return *static_cast<T *>(p);
-  }
+		void *p = static_cast<void *>(data);
+		return *static_cast<T *>(p);
+	}
 
-  const T &Get() const {
-    assert(initialized);
+	const T &Get() const {
+		assert(initialized);
 
-    const void *p = static_cast<const void *>(data);
-    return *static_cast<const T *>(p);
-  }
+		const void *p = static_cast<const void *>(data);
+		return *static_cast<const T *>(p);
+	}
 
-  operator T &() {
-    return Get();
-  }
+	operator T &() {
+		return Get();
+	}
 
-  operator const T &() const {
-    return Get();
-  }
+	operator const T &() const {
+		return Get();
+	}
 
-  T *operator->() {
-    return &Get();
-  }
+	T *operator->() {
+		return &Get();
+	}
 
-  const T *operator->() const {
-    return &Get();
-  }
+	const T *operator->() const {
+		return &Get();
+	}
 };
 
 #if defined(__GNUC__) || defined(__clang__)
