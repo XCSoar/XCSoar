@@ -6,16 +6,12 @@ TARGETS = PC WIN64 \
 	ANDROIDAARCH64 ANDROIDX64 ANDROIDMIPS64 \
 	ANDROIDFAT \
 	CYGWIN \
-	OSX32 OSX64 IOS32 IOS64
+	OSX64 IOS32 IOS64
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
     ifeq ($(HOST_IS_DARWIN),y)
-      ifeq ($(HOST_IS_X86_32),y)
-        TARGET = OSX32
-      else
-        TARGET = OSX64
-      endif
+      TARGET = OSX64
     else
       TARGET = UNIX
     endif
@@ -235,27 +231,6 @@ ifeq ($(TARGET),NEON)
   TARGET_IS_ARMHF = y
   ARMV7 := y
   NEON := y
-endif
-
-ifeq ($(TARGET),OSX32)
-  override TARGET = UNIX
-  TARGET_IS_DARWIN = y
-  TARGET_IS_OSX = y
-  DARWIN_SDK_VERSION = 10.10
-  OSX_MIN_SUPPORTED_VERSION = 10.7
-  ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
-    LLVM_TARGET = i386-apple-darwin
-  else
-    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
-    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
-    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/i386-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/i386-apple-darwin-
-    LLVM_PREFIX = $(TCPREFIX)
-  endif
-  LIBCXX = y
-  CLANG = y
-  TARGET_ARCH += -march=i686 -msse2 -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
 endif
 
 ifeq ($(TARGET),OSX64)
