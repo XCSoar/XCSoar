@@ -237,12 +237,11 @@ ifeq ($(TARGET),OSX64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
-  DARWIN_SDK_VERSION = 10.10
   OSX_MIN_SUPPORTED_VERSION = 10.7
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${DARWIN_SDK_VERSION}.sdk
     LLVM_TARGET = x86_64-apple-darwin
   else
+    DARWIN_SDK_VERSION = 10.10
     DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
     DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
     DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/x86_64-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
