@@ -42,6 +42,8 @@ UISettings::SetDefaults()
 
   haptic_feedback = HapticFeedback::DEFAULT;
 
+  show_menu_button = true;
+
   format.SetDefaults();
   map.SetDefaults();
   info_boxes.SetDefaults();

@@ -57,6 +57,9 @@ struct UISettings {
   /** Enable warning dialog */
   bool enable_airspace_warning_dialog;
 
+  /** Show Menubutton */
+  bool show_menu_button;
+
   enum class PopupMessagePosition : uint8_t {
     CENTER,
     TOP_LEFT,

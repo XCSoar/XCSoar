@@ -128,6 +128,7 @@ const char AppDialogStyle[] = "AppDialogStyle";
 const char AppInfoBoxColors[] = "AppInfoBoxColors";
 const char TeamcodeRefWaypoint[] = "TeamcodeRefWaypoint";
 const char AppInfoBoxBorder[] = "AppInfoBoxBorder";
+const char ShowMenuButton[] = "ShowMenuButton";
 
 const char AppInfoBoxModel[] = "AppInfoBoxModel"; // VENTA-ADDON MODEL CONFIG
 

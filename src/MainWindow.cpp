@@ -56,6 +56,8 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "UIReceiveBlackboard.hpp"
 #include "Event/Idle.hpp"
+#include "UISettings.hpp"
+#include "Interface.hpp"
 
 #ifdef ANDROID
 #include "Dialogs/Message.hpp"
@@ -246,8 +248,11 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
 #ifdef HAVE_SHOW_MENU_BUTTON
-  show_menu_button = new ShowMenuButton();
-  show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
+  const UISettings &settings = CommonInterface::GetUISettings();
+  if (settings.show_menu_button){
+    show_menu_button = new ShowMenuButton();
+    show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
+  }
 #endif
 
   map = new GlueMapWindow(*look);

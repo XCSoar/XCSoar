@@ -34,6 +34,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
 #include "Asset.hpp"
+#include "Menu/ShowMenuButton.hpp"
 
 #ifdef KOBO
 #include "Event/Globals.hpp"
@@ -48,7 +49,8 @@ enum ControlIndex {
   AppStatusMessageAlignment,
   AppInverseInfoBox,
   AppInfoBoxColors,
-  AppInfoBoxBorder
+  AppInfoBoxBorder,
+  ShowMenuButton,
 };
 
 static constexpr StaticEnumChoice display_orientation_list[] = {
@@ -199,6 +201,13 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("InfoBox border"), nullptr, infobox_border_list,
           unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
+
+#ifdef KOBO
+  AddBoolean(_("Show Menubutton"), _("Show the Menubutton"),
+             ui_settings.show_menu_button);
+  SetExpertRow(ShowMenuButton);
+#endif
+
 }
 
 bool
@@ -242,6 +251,9 @@ LayoutConfigPanel::Save(bool &_changed)
   if (HasColors() &&
       SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
                 ui_settings.info_boxes.use_colors))
+    require_restart = changed = true;
+
+  if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
     require_restart = changed = true;
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
