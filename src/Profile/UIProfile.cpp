@@ -130,6 +130,8 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
 
   map.GetEnum(ProfileKeys::HapticFeedback, settings.haptic_feedback);
 
+  map.Get(ProfileKeys::ShowMenuButton, settings.show_menu_button);
+
   Load(map, settings.format);
   Load(map, settings.map);
   Load(map, settings.info_boxes);

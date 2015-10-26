@@ -150,6 +150,13 @@ namespace CommonInterface {
     return Private::blackboard.SetUISettings();
   }
 
+  gcc_const
+  static inline const DisplaySettings& GetDisplaySettings() {
+    assert(InMainThread());
+
+    return GetUISettings().display;
+  }
+
   /**
    * Returns the InterfaceBlackboard.MapSettings (read-write)
    * @return The InterfaceBlackboard.MapSettings
