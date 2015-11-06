@@ -27,7 +27,7 @@ Copyright_License {
 #include "Task/TaskFileIGC.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <stdlib.h>
 #include <memory>

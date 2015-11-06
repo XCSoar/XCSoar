@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
 #include "Util/Cache.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 
 #ifdef ENABLE_OPENGL

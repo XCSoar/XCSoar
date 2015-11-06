@@ -12,10 +12,13 @@ UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/ConvertString.cpp \
 	$(UTIL_SRC_DIR)/StaticString.cxx \
 	$(UTIL_SRC_DIR)/AllocatedString.cxx \
+	$(UTIL_SRC_DIR)/StringCompare.cxx \
 	$(UTIL_SRC_DIR)/StringUtil.cpp
 
 ifeq ($(HAVE_MSVCRT),y)
-UTIL_SOURCES += $(UTIL_SRC_DIR)/WStringUtil.cpp
+UTIL_SOURCES += \
+	$(UTIL_SRC_DIR)/WStringCompare.cpp \
+	$(UTIL_SRC_DIR)/WStringUtil.cpp
 endif
 
 $(eval $(call link-library,util,UTIL))

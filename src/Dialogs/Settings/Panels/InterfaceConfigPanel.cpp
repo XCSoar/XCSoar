@@ -26,7 +26,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Interface.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Asset.hpp"

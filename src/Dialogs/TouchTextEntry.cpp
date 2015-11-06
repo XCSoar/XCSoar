@@ -30,7 +30,7 @@ Copyright_License {
 #include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 

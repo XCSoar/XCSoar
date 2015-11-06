@@ -29,43 +29,6 @@ Copyright_License {
 #include <assert.h>
 #include <wchar.h>
 
-static inline bool
-StringIsEmpty(const wchar_t *string)
-{
-  return *string == 0;
-}
-
-gcc_pure
-bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle);
-
-gcc_pure
-bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle);
-
-gcc_pure
-bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
-
-/**
- * Returns the portion of the string after a prefix.  If the string
- * does not begin with the specified prefix, this function returns
- * nullptr.
- */
-gcc_nonnull_all
-const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix);
-
-/**
- * Returns the portion of the string after a prefix.  If the string
- * does not begin with the specified prefix, this function returns
- * nullptr.
- * This function is case-independent.
- */
-gcc_nonnull_all
-const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix);
-
 /**
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
@@ -137,10 +100,6 @@ StripRight(wchar_t *p);
 gcc_nonnull_all
 wchar_t *
 NormalizeSearchString(wchar_t *dest, const wchar_t *src);
-
-gcc_pure
-bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
 
 gcc_malloc gcc_nonnull_all
 wchar_t *

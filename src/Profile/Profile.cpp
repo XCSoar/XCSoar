@@ -29,6 +29,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/Error.hxx"
 #include "OS/FileUtil.hpp"

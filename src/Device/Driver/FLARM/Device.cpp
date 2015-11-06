@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
 
 void

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/CharUtil.hpp"
 

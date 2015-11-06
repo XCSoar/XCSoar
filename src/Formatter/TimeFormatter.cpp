@@ -24,7 +24,7 @@ Copyright_License {
 #include "TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Math/Util.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StaticString.hxx"
 
 #include <stdio.h>

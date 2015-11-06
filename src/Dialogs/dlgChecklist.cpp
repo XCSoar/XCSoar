@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget/LargeTextWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/Error.hxx"
 #include "IO/DataFile.hpp"
 #include "IO/LineReader.hpp"

@@ -33,7 +33,7 @@ Copyright_License {
 #include "Main.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Util/NumberParser.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "ResourceId.hpp"
 
 static tstring path;

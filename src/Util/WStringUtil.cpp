@@ -23,63 +23,13 @@ Copyright_License {
 
 #include "WStringUtil.hpp"
 #include "WStringAPI.hxx"
+#include "WStringCompare.hxx"
 #include "WCharUtil.hpp"
 
 #include <algorithm>
 
 #include <string.h>
 #include <stdlib.h>
-
-bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle)
-{
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
-
-bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
-{
-  const size_t haystack_length = StringLength(haystack);
-  const size_t needle_length = StringLength(needle);
-
-  return haystack_length >= needle_length &&
-    StringIsEqual(haystack + haystack_length - needle_length, needle);
-}
-
-bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
-{
-  const size_t haystack_length = StringLength(haystack);
-  const size_t needle_length = StringLength(needle);
-
-  return haystack_length >= needle_length &&
-    StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
-                            needle);
-}
-
-const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix)
-{
-  assert(string != nullptr);
-  assert(prefix != nullptr);
-
-  size_t prefix_length = StringLength(prefix);
-  return StringIsEqual(string, prefix, prefix_length)
-    ? string + prefix_length
-    : nullptr;
-}
-
-const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix)
-{
-  assert(string != nullptr);
-  assert(prefix != nullptr);
-
-  size_t prefix_length = StringLength(prefix);
-  return StringIsEqual(string, prefix, prefix_length)
-    ? string + prefix_length
-    : nullptr;
-}
 
 wchar_t *
 CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
@@ -222,13 +172,6 @@ NormalizeSearchString(wchar_t *gcc_restrict dest,
   *dest = L'\0';
 
   return retval;
-}
-
-bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
-{
-  return StringIsEqualIgnoreCase(haystack, needle,
-                                 StringLength(needle));
 }
 
 wchar_t *

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 #include "Android/TextUtil.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <assert.h>
 

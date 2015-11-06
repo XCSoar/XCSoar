@@ -38,8 +38,6 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
-#include "Util/StringUtil.hpp"
-#include "Compiler.h"
 #include "Formatter/Units.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
 #include "Renderer/GlidePolarRenderer.hpp"
@@ -53,6 +51,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
 #include "Event/Timer.hpp"
+#include "Util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

@@ -22,12 +22,12 @@
 */
 
 #include "IGCFileCleanup.hpp"
-
 #include "Util/StaticString.hxx"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "UtilsSystem.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <tchar.h>
 #include <time.h>

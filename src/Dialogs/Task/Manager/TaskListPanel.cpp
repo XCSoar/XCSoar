@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <assert.h>
 #include <windef.h>

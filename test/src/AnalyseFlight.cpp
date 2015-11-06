@@ -33,6 +33,7 @@
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
 #include "Computer/Settings.hpp"
+#include "Util/StringCompare.hxx"
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;

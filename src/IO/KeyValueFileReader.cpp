@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "KeyValueFileReader.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "LineReader.hpp"
 
 #include <string.h>

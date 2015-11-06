@@ -49,7 +49,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Util/StringBuilder.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"

@@ -32,6 +32,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <stdlib.h>
 

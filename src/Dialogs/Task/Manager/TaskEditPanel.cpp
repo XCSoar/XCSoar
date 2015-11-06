@@ -50,6 +50,7 @@ Copyright_License {
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 
 #include <assert.h>

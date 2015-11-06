@@ -24,8 +24,8 @@ Copyright_License {
 #include "DataFile.hpp"
 #include "FileLineReader.hpp"
 #include "TextWriter.hpp"
-#include "Util/StringUtil.hpp"
 #include "LocalPath.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <assert.h>
 #include <windef.h> // for MAX_PATH

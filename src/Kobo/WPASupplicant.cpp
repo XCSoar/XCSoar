@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/StringCompare.hxx"
 
 #include <string.h>
 #include <stdlib.h>

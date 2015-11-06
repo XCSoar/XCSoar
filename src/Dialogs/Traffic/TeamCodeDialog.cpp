@@ -39,6 +39,7 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "TeamActions.hpp"
+#include "Util/StringCompare.hxx"
 
 class TeamCodeWidget final
   : public RowFormWidget, NullBlackboardListener, ActionListener {

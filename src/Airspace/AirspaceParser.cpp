@@ -28,7 +28,6 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StringParser.hxx"
 #include "Util/Macros.hpp"
@@ -39,6 +38,7 @@ Copyright_License {
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/StringCompare.hxx"
 
 #include <tchar.h>
 #include <stdio.h>

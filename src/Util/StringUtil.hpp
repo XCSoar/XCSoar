@@ -32,42 +32,6 @@ Copyright_License {
 #include "WStringUtil.hpp"
 #endif
 
-static inline bool
-StringIsEmpty(const char *string)
-{
-  return *string == 0;
-}
-
-gcc_pure
-bool
-StringStartsWith(const char *haystack, const char *needle);
-
-bool
-StringEndsWith(const char *haystack, const char *needle);
-
-gcc_pure
-bool
-StringEndsWithIgnoreCase(const char *haystack, const char *needle);
-
-/**
- * Returns the portion of the string after a prefix.  If the string
- * does not begin with the specified prefix, this function returns
- * nullptr.
- */
-gcc_nonnull_all
-const char *
-StringAfterPrefix(const char *string, const char *prefix);
-
-/**
- * Returns the portion of the string after a prefix.  If the string
- * does not begin with the specified prefix, this function returns
- * nullptr.
- * This function is case-independent.
- */
-gcc_nonnull_all
-const char *
-StringAfterPrefixCI(const char *string, const char *prefix);
-
 /**
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
@@ -166,10 +130,6 @@ StripRight(char *p);
 gcc_nonnull_all
 char *
 NormalizeSearchString(char *dest, const char *src);
-
-gcc_pure
-bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle);
 
 /**
  * Copy a portion of the string to a new allocation.  The given length

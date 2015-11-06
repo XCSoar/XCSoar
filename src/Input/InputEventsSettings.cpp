@@ -38,6 +38,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "Util/StringCompare.hxx"
 
 void
 InputEvents::eventSounds(const TCHAR *misc)

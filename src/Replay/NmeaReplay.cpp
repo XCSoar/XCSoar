@@ -28,8 +28,7 @@
 #include "Device/Register.hpp"
 #include "Device/Config.hpp"
 #include "NMEA/Info.hpp"
-
-#include <string.h>
+#include "Util/StringCompare.hxx"
 
 NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
   :reader(_reader),

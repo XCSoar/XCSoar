@@ -21,7 +21,7 @@
 */
 
 #include "Util/StringAPI.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "TestUtil.hpp"
 
 #include <tchar.h>

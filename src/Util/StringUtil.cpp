@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "StringUtil.hpp"
 #include "StringAPI.hxx"
+#include "StringCompare.hxx"
 #include "CharUtil.hpp"
 
 #include <algorithm>
@@ -30,63 +31,6 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
-
-bool
-StringStartsWith(const char *haystack, const char *needle)
-{
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
-
-bool
-StringEndsWith(const char *haystack, const char *needle)
-{
-  const size_t haystack_length = StringLength(haystack);
-  const size_t needle_length = StringLength(needle);
-
-  return haystack_length >= needle_length &&
-    StringIsEqual(haystack + haystack_length - needle_length, needle);
-}
-
-bool
-StringEndsWithIgnoreCase(const char *haystack, const char *needle)
-{
-  const size_t haystack_length = StringLength(haystack);
-  const size_t needle_length = StringLength(needle);
-
-  return haystack_length >= needle_length &&
-    StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
-                            needle);
-}
-
-const char *
-StringAfterPrefix(const char *string, const char *prefix)
-{
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(string != nullptr);
-  assert(prefix != nullptr);
-#endif
-
-  size_t prefix_length = strlen(prefix);
-  return StringIsEqual(string, prefix, prefix_length)
-    ? string + prefix_length
-    : nullptr;
-}
-
-const char *
-StringAfterPrefixCI(const char *string, const char *prefix)
-{
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(string != nullptr);
-  assert(prefix != nullptr);
-#endif
-
-  size_t prefix_length = StringLength(prefix);
-  return strncasecmp(string, prefix, prefix_length) == 0
-    ? string + prefix_length
-    : nullptr;
-}
 
 char *
 CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
@@ -191,13 +135,6 @@ NormalizeSearchString(char *gcc_restrict dest,
   *dest = '\0';
 
   return retval;
-}
-
-bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle)
-{
-  return StringIsEqualIgnoreCase(haystack, needle,
-                                 StringLength(needle) * sizeof(needle[0]));
 }
 
 char *

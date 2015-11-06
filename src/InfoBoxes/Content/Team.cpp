@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Widget/CallbackWidget.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <tchar.h>
 #include <stdio.h>

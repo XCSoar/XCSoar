@@ -28,7 +28,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 
 #ifdef HAVE_NATIVE_GETTEXT

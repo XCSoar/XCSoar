@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Util/StringAPI.hxx"
+#include "Util/StringCompare.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"

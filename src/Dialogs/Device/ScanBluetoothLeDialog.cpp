@@ -36,7 +36,7 @@
 #include "Language/Language.hpp"
 #include "Thread/Mutex.hpp"
 #include "Event/Notify.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <string>
 #include <vector>

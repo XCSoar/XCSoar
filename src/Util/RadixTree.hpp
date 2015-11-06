@@ -31,7 +31,7 @@
 #define RADIX_TREE_HPP
 
 #include "Util/StaticString.hxx"
-#include "StringUtil.hpp"
+#include "StringCompare.hxx"
 #include "tstring.hpp"
 
 #include <algorithm>

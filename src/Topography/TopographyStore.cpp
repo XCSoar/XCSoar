@@ -24,7 +24,7 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Util/StringAPI.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/ConvertString.hpp"
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"

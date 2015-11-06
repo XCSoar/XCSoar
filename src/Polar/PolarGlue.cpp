@@ -32,7 +32,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringAPI.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <memory>
 

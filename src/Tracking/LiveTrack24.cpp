@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "LiveTrack24.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/ConvertString.hpp"
 #include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/Request.hpp"

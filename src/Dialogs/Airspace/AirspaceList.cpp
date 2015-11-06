@@ -49,6 +49,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Blackboard/ScopeGPSListener.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <assert.h>
 #include <stdlib.h>

@@ -39,7 +39,7 @@ Copyright_License {
 #include "Dialogs/Task/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Util/StaticString.hxx"
 #include "Terrain/RasterBuffer.hpp"

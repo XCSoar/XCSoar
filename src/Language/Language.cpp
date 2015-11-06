@@ -23,7 +23,7 @@ Copyright_License {
 */
 
 #include "Language/Language.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/UTF8.hpp"
 #include "Util/Macros.hpp"
 

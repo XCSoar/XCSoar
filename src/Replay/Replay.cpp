@@ -25,7 +25,7 @@
 #include "IgcReplay.hpp"
 #include "NmeaReplay.hpp"
 #include "DemoReplayGlue.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/Clamp.hpp"
 #include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"

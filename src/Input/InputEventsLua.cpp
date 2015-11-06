@@ -35,7 +35,7 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 #include "Util/Error.hxx"
 #include "Util/StringFormat.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 
 extern "C" {

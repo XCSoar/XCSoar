@@ -24,6 +24,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Engine/Trace/Trace.hpp"
+#include "Util/StringCompare.hxx"
 
 int main(int argc, char **argv)
 {

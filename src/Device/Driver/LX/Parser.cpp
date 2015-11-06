@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringCompare.hxx"
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
