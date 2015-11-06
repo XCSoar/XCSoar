@@ -4,6 +4,7 @@ Version 7.0 - not yet released
   - optimise the terrain loader
 * devices
   - driver for XC Tracer Vario
+  - driver for KRT2 radio
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later
