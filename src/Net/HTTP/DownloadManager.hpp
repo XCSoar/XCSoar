@@ -30,6 +30,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdint.h>
 
+class Path;
+
 namespace Net {
   class DownloadListener {
   public:
@@ -42,10 +44,10 @@ namespace Net {
      * @param position the number of bytes already downloaded; -1 if
      * the download is queued, but has not been started yet
      */
-    virtual void OnDownloadAdded(const TCHAR *path_relative,
+    virtual void OnDownloadAdded(Path path_relative,
                                  int64_t size, int64_t position) = 0;
 
-    virtual void OnDownloadComplete(const TCHAR *path_relative,
+    virtual void OnDownloadComplete(Path path_relative,
                                     bool success) = 0;
   };
 }
@@ -69,13 +71,13 @@ namespace Net {
      */
     void Enumerate(DownloadListener &listener);
 
-    void Enqueue(const char *uri, const TCHAR *relative_path);
+    void Enqueue(const char *uri, Path relative_path);
 
     /**
      * Cancel the download.  The download may however be already
      * finished before this function attempts the cancellation.
      */
-    void Cancel(const TCHAR *relative_path);
+    void Cancel(Path relative_path);
 #else
 
     static inline bool IsAvailable() {

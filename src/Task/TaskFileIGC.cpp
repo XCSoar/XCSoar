@@ -37,7 +37,7 @@ Copyright_License {
 #include <assert.h>
 
 static bool
-ReadIGCDeclaration(const TCHAR *path, IGCDeclarationHeader &header,
+ReadIGCDeclaration(Path path, IGCDeclarationHeader &header,
                    std::list<IGCDeclarationTurnpoint> &turnpoints)
 {
   // Create FileReader for reading the task

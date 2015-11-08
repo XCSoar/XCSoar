@@ -269,8 +269,8 @@ TaskListPanel::DeleteTask()
   if (cursor_index >= task_store->Size())
     return;
 
-  const TCHAR *path = task_store->GetPath(cursor_index);
-  if (StringEndsWithIgnoreCase(path, _T(".cup"))) {
+  const auto path = task_store->GetPath(cursor_index);
+  if (StringEndsWithIgnoreCase(path.c_str(), _T(".cup"))) {
     ShowMessageBox(_("Can't delete .CUP files"), _("Error"),
                    MB_OK | MB_ICONEXCLAMATION);
     return;
@@ -329,10 +329,11 @@ TaskListPanel::RenameTask()
 
   newname.append(_T(".tsk"));
 
-  TCHAR buffer[MAX_PATH];
-  Directory::Create(LocalPath(buffer, _T("tasks")));
+  const auto tasks_path = LocalPath(_T("tasks"));
+  Directory::Create(tasks_path);
+
   File::Rename(task_store->GetPath(cursor_index),
-               LocalPath(buffer, _T("tasks"), newname.c_str()));
+               AllocatedPath::Build(tasks_path, newname));
 
   task_store->Scan(more);
   RefreshView();

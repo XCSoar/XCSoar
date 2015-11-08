@@ -128,7 +128,7 @@ Display::Rotate(DisplayOrientation orientation)
     break;
   };
 
-  return File::WriteExisting("/sys/class/graphics/fb0/rotate", rotate);
+  return File::WriteExisting(Path("/sys/class/graphics/fb0/rotate"), rotate);
 #elif defined(SOFTWARE_ROTATE_DISPLAY)
   if (!RotateSupported())
     return false;

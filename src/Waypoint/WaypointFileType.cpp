@@ -26,15 +26,14 @@ Copyright_License {
 #include "WaypointReaderFS.hpp"
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
-
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Util/Error.hxx"
 
 template<class R>
 gcc_pure
 static bool
-VerifyFormat(const TCHAR *path)
+VerifyFormat(Path path)
 {
   FileLineReader reader(path, IgnoreError(), Charset::UTF8);
   if (reader.error())
@@ -44,23 +43,23 @@ VerifyFormat(const TCHAR *path)
 }
 
 WaypointFileType
-DetermineWaypointFileType(const TCHAR *path)
+DetermineWaypointFileType(Path path)
 {
   // If WinPilot waypoint file -> save type and return true
-  if (MatchesExtension(path, _T(".dat")) ||
-      MatchesExtension(path, _T(".xcw")))
+  if (path.MatchesExtension(_T(".dat")) ||
+      path.MatchesExtension(_T(".xcw")))
     return WaypointFileType::WINPILOT;
 
   // If SeeYou waypoint file -> save type and return true
-  if (MatchesExtension(path, _T(".cup")))
+  if (path.MatchesExtension(_T(".cup")))
     return WaypointFileType::SEEYOU;
 
   // If Zander waypoint file -> save type and return true
-  if (MatchesExtension(path, _T(".wpz")))
+  if (path.MatchesExtension(_T(".wpz")))
     return WaypointFileType::ZANDER;
 
   // If FS waypoint file -> save type and return true
-  if (MatchesExtension(path, _T(".wpt"))) {
+  if (path.MatchesExtension(_T(".wpt"))) {
     if (VerifyFormat<WaypointReaderFS>(path))
       return WaypointFileType::FS;
 

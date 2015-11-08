@@ -27,6 +27,7 @@
 #include "Device/Util/NMEAWriter.hpp"
 #include "Device/Util/NMEAReader.hpp"
 #include "Operation/Operation.hpp"
+#include "OS/Path.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
 
@@ -355,11 +356,11 @@ DownloadFlightInner(Port &port, const char *filename, FILE *file,
 
 bool
 Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
-                     const TCHAR *path, OperationEnvironment &env)
+                     Path path, OperationEnvironment &env)
 {
   port.StopRxThread();
 
-  FILE *file = _tfopen(path, _T("wb"));
+  FILE *file = _tfopen(path.c_str(), _T("wb"));
   if (file == nullptr)
     return false;
 

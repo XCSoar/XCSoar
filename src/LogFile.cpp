@@ -27,6 +27,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/Error.hxx"
 
@@ -43,27 +44,24 @@ static TextWriter
 OpenLog()
 {
   static bool initialised = false;
-  static TCHAR path[MAX_PATH];
+  static AllocatedPath path = nullptr;
 
   const bool append = initialised;
   if (!initialised) {
     initialised = true;
 
     /* delete the obsolete log file */
-    File::Delete(LocalPath(path, _T("xcsoar-startup.log")));
+    File::Delete(LocalPath(_T("xcsoar-startup.log")));
 
-    LocalPath(path, _T("xcsoar.log"));
+    path = LocalPath(_T("xcsoar.log"));
 
-    {
-      TCHAR buffer2[MAX_PATH];
-      File::Replace(path, LocalPath(buffer2, _T("xcsoar-old.log")));
-    }
+    File::Replace(path, LocalPath(_T("xcsoar-old.log")));
 
 #ifdef ANDROID
     /* redirect stdout/stderr to xcsoar-startup.log on Android so we
        get debug logs from libraries and output from child processes
        there */
-    int fd = open(path, O_APPEND|O_CREAT|O_WRONLY, 0666);
+    int fd = open(path.c_str(), O_APPEND|O_CREAT|O_WRONLY, 0666);
     if (fd >= 0) {
       dup2(fd, 1);
       dup2(fd, 2);

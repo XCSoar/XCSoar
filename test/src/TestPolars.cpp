@@ -24,6 +24,7 @@
 
 #include "GlideSolvers/GlidePolar.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "OS/Path.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/Parser.hpp"
@@ -81,7 +82,7 @@ TestFileImport()
 {
   // Test LoadFromFile()
   PolarInfo polar;
-  PolarGlue::LoadFromFile(polar, _T("test/data/test.plr"), IgnoreError());
+  PolarGlue::LoadFromFile(polar, Path(_T("test/data/test.plr")), IgnoreError());
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.shape[0].v), 22.2222222));

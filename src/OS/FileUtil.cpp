@@ -43,26 +43,26 @@ Copyright_License {
 #endif
 
 void
-Directory::Create(const TCHAR* path)
+Directory::Create(Path path)
 {
 #ifdef HAVE_POSIX
-  mkdir(path, 0777);
+  mkdir(path.c_str(), 0777);
 #else /* !HAVE_POSIX */
-  CreateDirectory(path, nullptr);
+  CreateDirectory(path.c_str(), nullptr);
 #endif /* !HAVE_POSIX */
 }
 
 bool
-Directory::Exists(const TCHAR* path)
+Directory::Exists(Path path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) != 0)
+  if (stat(path.c_str(), &st) != 0)
     return false;
 
   return S_ISDIR(st.st_mode);
 #else
-  DWORD attributes = GetFileAttributes(path);
+  DWORD attributes = GetFileAttributes(path.c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 #endif
@@ -97,15 +97,15 @@ checkFilter(const TCHAR *filename, const TCHAR *filter)
 }
 
 static bool
-ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
+ScanFiles(File::Visitor &visitor, Path sPath,
           const TCHAR* filter = _T("*"))
 {
   TCHAR DirPath[MAX_PATH];
   TCHAR FileName[MAX_PATH];
 
-  if (sPath)
+  if (sPath != nullptr)
     // e.g. "/test/data/something"
-    _tcscpy(DirPath, sPath);
+    _tcscpy(DirPath, sPath.c_str());
   else
     DirPath[0] = 0;
 
@@ -134,7 +134,7 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
       // "/test/data/something/blubb.txt"
       _tcscat(FileName, FindFileData.cFileName);
       // Call visitor with the file that was found
-      visitor.Visit(FileName, FindFileData.cFileName);
+      visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
     }
 
     // Look for next matching file
@@ -160,15 +160,15 @@ ScanFiles(File::Visitor &visitor, const TCHAR* sPath,
 
 static bool
 ScanDirectories(File::Visitor &visitor, bool recursive,
-                const TCHAR* sPath, const TCHAR* filter = _T("*"))
+                Path sPath, const TCHAR* filter = _T("*"))
 {
 #ifdef HAVE_POSIX
-  DIR *dir = opendir(sPath);
+  DIR *dir = opendir(sPath.c_str());
   if (dir == nullptr)
     return false;
 
   TCHAR FileName[MAX_PATH];
-  _tcscpy(FileName, sPath);
+  _tcscpy(FileName, sPath.c_str());
   size_t FileNameLength = _tcslen(FileName);
   FileName[FileNameLength++] = '/';
 
@@ -185,14 +185,14 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
       continue;
 
     if (S_ISDIR(st.st_mode) && recursive)
-      ScanDirectories(visitor, true, FileName, filter);
+      ScanDirectories(visitor, true, Path(FileName), filter);
     else {
       int flags = 0;
 #ifdef FNM_CASEFOLD
       flags = FNM_CASEFOLD;
 #endif
       if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, flags) == 0)
-        visitor.Visit(FileName, ent->d_name);
+        visitor.Visit(Path(FileName), Path(ent->d_name));
     }
   }
 
@@ -201,17 +201,17 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   TCHAR DirPath[MAX_PATH];
   TCHAR FileName[MAX_PATH];
 
-  if (sPath) {
+  if (sPath != nullptr) {
     // e.g. "/test/data/something"
-    _tcscpy(DirPath, sPath);
-    _tcscpy(FileName, sPath);
+    _tcscpy(DirPath, sPath.c_str());
+    _tcscpy(FileName, sPath.c_str());
   } else {
     DirPath[0] = 0;
     FileName[0] = 0;
   }
 
   // Scan for files in "/test/data/something"
-  ScanFiles(visitor, FileName, filter);
+  ScanFiles(visitor, Path(FileName), filter);
 
   // If we are not scanning recursive we are done now
   if (!recursive)
@@ -239,7 +239,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
       // "test/data/something/SUBFOLDER"
       _tcscat(FileName, FindFileData.cFileName);
       // Scan subfolder for matching files too
-      ScanDirectories(visitor, true, FileName, filter);
+      ScanDirectories(visitor, true, Path(FileName), filter);
     }
 
     // Look for next file/folder
@@ -265,40 +265,40 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 }
 
 void
-Directory::VisitFiles(const TCHAR* path, File::Visitor &visitor, bool recursive)
+Directory::VisitFiles(Path path, File::Visitor &visitor, bool recursive)
 {
   ScanDirectories(visitor, recursive, path);
 }
 
 void
-Directory::VisitSpecificFiles(const TCHAR* path, const TCHAR* filter,
+Directory::VisitSpecificFiles(Path path, const TCHAR* filter,
                               File::Visitor &visitor, bool recursive)
 {
   ScanDirectories(visitor, recursive, path, filter);
 }
 
 bool
-File::ExistsAny(const TCHAR *path)
+File::ExistsAny(Path path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  return stat(path, &st) == 0;
+  return stat(path.c_str(), &st) == 0;
 #else
-  return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
+  return GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES;
 #endif
 }
 
 bool
-File::Exists(const TCHAR* path)
+File::Exists(Path path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) != 0)
+  if (stat(path.c_str(), &st) != 0)
     return false;
 
   return (st.st_mode & S_IFREG);
 #else
-  DWORD attributes = GetFileAttributes(path);
+  DWORD attributes = GetFileAttributes(path.c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
 #endif
@@ -317,17 +317,17 @@ File::Exists(const char *path)
 #endif
 
 uint64_t
-File::GetSize(const TCHAR *path)
+File::GetSize(Path path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path.c_str(), &st) << 0 || !S_ISREG(st.st_mode))
     return 0;
 
   return st.st_size;
 #else
   WIN32_FILE_ATTRIBUTE_DATA data;
-  if (!GetFileAttributesEx(path, GetFileExInfoStandard, &data) ||
+  if (!GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &data) ||
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return 0;
 
@@ -337,17 +337,17 @@ File::GetSize(const TCHAR *path)
 }
 
 uint64_t
-File::GetLastModification(const TCHAR *path)
+File::GetLastModification(Path path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path.c_str(), &st) << 0 || !S_ISREG(st.st_mode))
     return 0;
 
   return st.st_mtime;
 #else
   WIN32_FILE_ATTRIBUTE_DATA data;
-  if (!GetFileAttributesEx(path, GetFileExInfoStandard, &data) ||
+  if (!GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &data) ||
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return 0;
 
@@ -357,15 +357,15 @@ File::GetLastModification(const TCHAR *path)
 }
 
 bool
-File::Touch(const TCHAR *path)
+File::Touch(Path path)
 {
 #ifdef HAVE_POSIX
-  return utime(path, nullptr) == 0;
+  return utime(path.c_str(), nullptr) == 0;
 #else
   /// @see http://msdn.microsoft.com/en-us/library/windows/desktop/ms724205(v=vs.85).aspx
 
   // Create a file handle
-  HANDLE handle = ::CreateFile(path, GENERIC_WRITE, 0, nullptr,
+  HANDLE handle = ::CreateFile(path.c_str(), GENERIC_WRITE, 0, nullptr,
                                OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
   if (handle == INVALID_HANDLE_VALUE)
@@ -390,7 +390,7 @@ File::Touch(const TCHAR *path)
 }
 
 bool
-File::ReadString(const TCHAR *path, char *buffer, size_t size)
+File::ReadString(Path path, char *buffer, size_t size)
 {
   assert(path != nullptr);
   assert(buffer != nullptr);
@@ -404,7 +404,7 @@ File::ReadString(const TCHAR *path, char *buffer, size_t size)
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = _topen(path, flags);
+  int fd = _topen(path.c_str(), flags);
   if (fd < 0)
     return false;
 
@@ -418,7 +418,7 @@ File::ReadString(const TCHAR *path, char *buffer, size_t size)
 }
 
 bool
-File::WriteExisting(const TCHAR *path, const char *value)
+File::WriteExisting(Path path, const char *value)
 {
   assert(path != nullptr);
   assert(value != nullptr);
@@ -431,7 +431,7 @@ File::WriteExisting(const TCHAR *path, const char *value)
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = _topen(path, flags);
+  int fd = _topen(path.c_str(), flags);
   if (fd < 0)
     return false;
 
@@ -441,7 +441,7 @@ File::WriteExisting(const TCHAR *path, const char *value)
 }
 
 bool
-File::CreateExclusive(const TCHAR *path)
+File::CreateExclusive(Path path)
 {
   assert(path != nullptr);
 
@@ -453,7 +453,7 @@ File::CreateExclusive(const TCHAR *path)
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = _topen(path, flags, 0666);
+  int fd = _topen(path.c_str(), flags, 0666);
   if (fd < 0)
     return false;
 

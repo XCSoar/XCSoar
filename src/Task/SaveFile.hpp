@@ -23,11 +23,10 @@
 #ifndef TASK_SAVE_FILE_HPP
 #define TASK_SAVE_FILE_HPP
 
-#include <tchar.h>
-
+class Path;
 class OrderedTask;
 
 bool
-SaveTask(const TCHAR *path, const OrderedTask &task);
+SaveTask(Path path, const OrderedTask &task);
 
 #endif

@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_LIBJPEG_HPP
 #define XCSOAR_LIBJPEG_HPP
 
-#include <tchar.h>
-
+class Path;
 class UncompressedImage;
 
 UncompressedImage
-LoadJPEGFile(const TCHAR *path);
+LoadJPEGFile(Path path);
 
 #endif

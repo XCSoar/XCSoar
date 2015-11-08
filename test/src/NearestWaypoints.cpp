@@ -34,12 +34,11 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-LoadWaypoints(const char *_path, Waypoints &waypoints)
+LoadWaypoints(Path path, Waypoints &waypoints)
 {
-  PathName path(_path);
-
   NullOperationEnvironment operation;
-  if (!ReadWaypointFile(path, waypoints, WaypointFactory(WaypointOrigin::NONE),
+  if (!ReadWaypointFile(path, waypoints,
+                        WaypointFactory(WaypointOrigin::NONE),
                         operation)) {
     fprintf(stderr, "ReadWaypointFile() failed\n");
     return false;
@@ -161,7 +160,7 @@ int main(int argc, char **argv)
     }
   }
 
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   Waypoints waypoints;

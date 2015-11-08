@@ -59,7 +59,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   bool retval= true;
 
   {
-    Directory::Create(_T("output/results"));
+    Directory::Create(Path(_T("output/results")));
     std::ofstream fout ("output/results/terrain.txt");
     unsigned nx = 100;
     unsigned ny = 100;

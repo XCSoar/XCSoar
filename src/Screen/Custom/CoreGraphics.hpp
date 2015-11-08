@@ -25,12 +25,12 @@ Copyright_License {
 #define XCSOAR_COREGRAPHICS_HPP
 
 #include <stddef.h>
-#include <tchar.h>
 
+class Path;
 class UncompressedImage;
 
 UncompressedImage
-LoadJPEGFile(const TCHAR *path);
+LoadJPEGFile(Path path);
 
 UncompressedImage
 LoadPNG(const void *data, size_t size);

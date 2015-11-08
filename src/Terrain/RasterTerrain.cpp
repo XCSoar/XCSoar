@@ -42,7 +42,7 @@ RasterTerrain::~RasterTerrain()
 }
 
 inline bool
-RasterTerrain::LoadCache(FileCache &cache, const TCHAR *path)
+RasterTerrain::LoadCache(FileCache &cache, Path path)
 {
   bool success = false;
 
@@ -56,7 +56,7 @@ RasterTerrain::LoadCache(FileCache &cache, const TCHAR *path)
 }
 
 inline bool
-RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
+RasterTerrain::SaveCache(FileCache &cache, Path path) const
 {
   bool success = false;
 
@@ -73,7 +73,7 @@ RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
 }
 
 inline bool
-RasterTerrain::Load(const TCHAR *path, FileCache *cache,
+RasterTerrain::Load(Path path, FileCache *cache,
                     OperationEnvironment &operation)
 {
   if (LoadCache(cache, path))
@@ -93,8 +93,8 @@ RasterTerrain::Load(const TCHAR *path, FileCache *cache,
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 {
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(ProfileKeys::MapFile, path))
+  const auto path = Profile::GetPath(ProfileKeys::MapFile);
+  if (path.IsNull())
     return nullptr;
 
   ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), nullptr);

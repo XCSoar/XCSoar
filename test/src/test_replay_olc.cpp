@@ -4,7 +4,7 @@
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/Contest/ContestManager.hpp"
 #include "Computer/Settings.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "NMEA/MoreData.hpp"
@@ -65,13 +65,13 @@ inline void load_score_file(std::ifstream& fscore,
 
 inline void load_scores(unsigned &contest_handicap) {
   // replay_file
-  int index = replay_file.find_last_of(".");
-  std::string score_file = replay_file.substr(0, index) + ".txt";
+  const auto score_file = replay_file.WithExtension(_T(".txt"));
   if (verbose) {
     std::cout << "# replay file: " << replay_file << "\n";
     std::cout << "# score file: " << score_file << "\n";
   }
-  std::ifstream fscore(score_file.c_str());
+  const NarrowPathName score_file2(score_file);
+  std::ifstream fscore(score_file2);
   double tmp;
   fscore >> tmp; official_index = (fixed)tmp;
   load_score_file(fscore, official_score_classic);
@@ -108,13 +108,13 @@ static bool
 test_replay(const Contest olc_type,
             const ContestResult &official_score)
 {
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(fixed(2));
 
   Error error;
-  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str(), error);
+  FileLineReaderA *reader = new FileLineReaderA(replay_file, error);
   if (reader->error()) {
     delete reader;
     fprintf(stderr, "%s\n", error.GetMessage());

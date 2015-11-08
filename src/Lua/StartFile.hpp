@@ -27,6 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 class Error;
+class Path;
 
 namespace Lua {
   /**
@@ -34,7 +35,7 @@ namespace Lua {
    * "persistent" as determined by Lua::IsPersistent(), move it to
    * background it using Lua::AddBackground().
    */
-  bool StartFile(const TCHAR *path, Error &error);
+  bool StartFile(Path path, Error &error);
 }
 
 #endif

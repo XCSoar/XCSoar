@@ -32,17 +32,18 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/Error.hxx"
+#include "Util/tstring.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
 #define XCSPROFILE "default.prf"
 #define OLDXCSPROFILE "xcsoar-registry.prf"
 
-static TCHAR startProfileFile[MAX_PATH];
+static AllocatedPath startProfileFile = nullptr;
 
-const TCHAR *
+Path
 Profile::GetPath()
 {
   return startProfileFile;
@@ -51,17 +52,19 @@ Profile::GetPath()
 void
 Profile::Load()
 {
+  assert(!startProfileFile.IsNull());
+
   LogFormat("Loading profiles");
   LoadFile(startProfileFile);
   SetModified(false);
 }
 
 void
-Profile::LoadFile(const TCHAR *szFile)
+Profile::LoadFile(Path path)
 {
   Error error;
-  if (LoadFile(map, szFile, error))
-    LogFormat(_T("Loaded profile from %s"), szFile);
+  if (LoadFile(map, path, error))
+    LogFormat(_T("Loaded profile from %s"), path.c_str());
   else
     LogError("Failed to load profile", error);
 }
@@ -73,54 +76,59 @@ Profile::Save()
     return;
 
   LogFormat("Saving profiles");
-  if (StringIsEmpty(startProfileFile))
+  if (startProfileFile.IsNull())
     SetFiles(nullptr);
+
+  assert(!startProfileFile.IsNull());
   SaveFile(startProfileFile);
 }
 
 void
-Profile::SaveFile(const TCHAR *szFile)
+Profile::SaveFile(Path path)
 {
-  LogFormat(_T("Saving profile to %s"), szFile);
-  SaveFile(map, szFile);
+  LogFormat(_T("Saving profile to %s"), path.c_str());
+  SaveFile(map, path);
 }
 
 void
-Profile::SetFiles(const TCHAR *override_path)
+Profile::SetFiles(Path override_path)
 {
   /* set the "modified" flag, because we are potentially saving to a
      new file now */
   SetModified(true);
 
-  if (override_path != nullptr) {
-    if (IsBaseName(override_path)) {
-      LocalPath(startProfileFile, override_path);
-
-      if (StringFind(override_path, '.') == nullptr)
-        _tcscat(startProfileFile, _T(".prf"));
+  if (!override_path.IsNull()) {
+    if (override_path.IsBase()) {
+      if (StringFind(override_path.c_str(), '.') == nullptr)
+        startProfileFile = LocalPath(override_path);
+      else {
+        tstring t(override_path.c_str());
+        t += _T(".prf");
+        startProfileFile = LocalPath(t.c_str());
+      }
     } else
-      CopyString(startProfileFile, override_path, MAX_PATH);
+      startProfileFile = Path(override_path);
     return;
   }
 
   // Set the default profile file
-  LocalPath(startProfileFile, _T(XCSPROFILE));
+  startProfileFile = LocalPath(_T(XCSPROFILE));
 }
 
-bool
-Profile::GetPath(const char *key, TCHAR *value)
+AllocatedPath
+Profile::GetPath(const char *key)
 {
-  return map.GetPath(key, value);
+  return map.GetPath(key);
 }
 
 bool
-Profile::GetPathIsEqual(const char *key, const TCHAR *value)
+Profile::GetPathIsEqual(const char *key, Path value)
 {
   return map.GetPathIsEqual(key, value);
 }
 
 void
-Profile::SetPath(const char *key, const TCHAR *value)
+Profile::SetPath(const char *key, Path value)
 {
   map.SetPath(key, value);
 }

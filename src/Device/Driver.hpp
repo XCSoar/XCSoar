@@ -36,6 +36,7 @@ struct DerivedInfo;
 struct DeviceConfig;
 struct Declaration;
 struct Waypoint;
+class Path;
 class Port;
 class AtmosphericPressure;
 class RadioFrequency;
@@ -179,7 +180,7 @@ public:
    * @return true on success
    */
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path,
+                              Path path,
                               OperationEnvironment &env) = 0;
 
   /**
@@ -262,7 +263,7 @@ public:
                       OperationEnvironment &env) override;
 
   bool DownloadFlight(const RecordedFlightInfo &flight,
-                      const TCHAR *path,
+                      Path path,
                       OperationEnvironment &env) override;
 
   void OnSysTicker() override;

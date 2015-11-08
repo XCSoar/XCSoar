@@ -25,12 +25,13 @@
 #include "XML/DataNodeXML.hpp"
 #include "XML/Parser.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <memory>
 
 OrderedTask *
-LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints)
 {
   // Load root node

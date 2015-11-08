@@ -25,6 +25,7 @@
 #include "IGC/IGCString.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
+#include "OS/Path.hpp"
 #include "Util/Macros.hpp"
 #include "Util/Error.hxx"
 #include "Util/Domain.hxx"
@@ -134,9 +135,9 @@ GRecord::IncludeRecordInGCalc(const char *in)
 }
 
 bool
-GRecord::LoadFileToBuffer(const TCHAR *filename, Error &error)
+GRecord::LoadFileToBuffer(Path path, Error &error)
 {
-  FileLineReaderA reader(filename, error);
+  FileLineReaderA reader(path, error);
   if (reader.error())
     return false;
 
@@ -166,9 +167,9 @@ GRecord::WriteTo(TextWriter &writer) const
 }
 
 bool
-GRecord::AppendGRecordToFile(const TCHAR *filename)
+GRecord::AppendGRecordToFile(Path path)
 {
-  TextWriter writer(filename, true);
+  TextWriter writer(path, true);
   if (!writer.IsOpen())
     return false;
 
@@ -177,11 +178,11 @@ GRecord::AppendGRecordToFile(const TCHAR *filename)
 }
 
 bool
-GRecord::ReadGRecordFromFile(const TCHAR *filename,
+GRecord::ReadGRecordFromFile(Path path,
                              char *output, size_t max_length,
                              Error &error)
 {
-  FileLineReaderA reader(filename, error);
+  FileLineReaderA reader(path, error);
   if (reader.error())
     return false;
 
@@ -205,7 +206,7 @@ GRecord::ReadGRecordFromFile(const TCHAR *filename,
 }
 
 bool
-GRecord::VerifyGRecordInFile(const TCHAR *path, Error &error)
+GRecord::VerifyGRecordInFile(Path path, Error &error)
 {
   // assumes FileName member is set
   // Load File into Buffer (assume name is already set)

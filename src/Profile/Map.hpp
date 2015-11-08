@@ -36,6 +36,8 @@ Copyright_License {
 
 struct GeoPoint;
 class RGB8Color;
+class Path;
+class AllocatedPath;
 template<typename T> class StringPointer;
 template<typename T> class AllocatedString;
 
@@ -143,10 +145,10 @@ public:
 
   // path values
 
-  bool GetPath(const char *key, TCHAR *value) const;
+  AllocatedPath GetPath(const char *key) const;
 
   gcc_pure
-  bool GetPathIsEqual(const char *key, const TCHAR *value) const;
+  bool GetPathIsEqual(const char *key, Path value) const;
 
   /**
    * Gets a path from the profile and return its base name only.
@@ -158,7 +160,7 @@ public:
   StringPointer<TCHAR> GetPathBase(const char *key) const;
 #endif
 
-  void SetPath(const char *key, const TCHAR *value);
+  void SetPath(const char *key, Path value);
 
   // geo value
 

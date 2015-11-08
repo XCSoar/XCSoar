@@ -29,11 +29,11 @@
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   FlarmNetDatabase database;
-  FlarmNetReader::LoadFile(path.c_str(), database);
+  FlarmNetReader::LoadFile(path, database);
 
   for (auto i = database.begin(), end = database.end(); i != end; ++i) {
     const FlarmNetRecord &record = i->second;

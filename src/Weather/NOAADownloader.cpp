@@ -26,7 +26,6 @@ Copyright_License {
 #include "TAF.hpp"
 #include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/ToBuffer.hpp"
-#include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
 #include "Job/Runner.hpp"
 

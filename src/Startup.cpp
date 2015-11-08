@@ -116,7 +116,7 @@ static GlideComputerTaskEvents *task_events;
 static bool
 LoadProfile()
 {
-  if (StringIsEmpty(Profile::GetPath()) &&
+  if (Profile::GetPath().IsNull() &&
       !dlgStartupShowModal())
     return false;
 
@@ -137,8 +137,8 @@ AfterStartup()
 #ifdef USE_LUA
   {
     Error error;
-    TCHAR buffer[PATH_MAX];
-    if (!Lua::StartFile(LocalPath(buffer, _T("lua"), _T("init.lua")), error))
+    const auto lua_path = LocalPath(_T("lua"));
+    if (!Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")), error))
       LogError(error);
   }
 #endif
@@ -272,8 +272,7 @@ Startup()
   main_window->InitialiseConfigured();
 
   {
-    TCHAR buffer[MAX_PATH];
-    file_cache = new FileCache(LocalPath(buffer, _T("cache")));
+    file_cache = new FileCache(LocalPath(_T("cache")));
   }
 
   ReadLanguageFile();
@@ -314,7 +313,7 @@ Startup()
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
     Error error;
-    if (!replay->Start(CommandLine::replay_path, error))
+    if (!replay->Start(Path(CommandLine::replay_path), error))
       LogError(error);
   }
 #endif
@@ -434,8 +433,7 @@ Startup()
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
-    TCHAR buffer[MAX_PATH];
-    flight_logger->SetPath(LocalPath(buffer, _T("flights.log")));
+    flight_logger->SetPath(LocalPath(_T("flights.log")));
   }
 
   if (computer_settings.logger.enable_nmea_logger)

@@ -32,17 +32,17 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  XMLNode *node = XML::ParseFile(path.c_str());
+  XMLNode *node = XML::ParseFile(path);
   if (node == NULL) {
     fprintf(stderr, "XML parser failed\n");
     return EXIT_FAILURE;
   }
 
 #ifndef WIN32
-  TextWriter writer("/dev/stdout");
+  TextWriter writer(Path("/dev/stdout"));
   node->Serialise(writer, true);
 #endif
   delete node;

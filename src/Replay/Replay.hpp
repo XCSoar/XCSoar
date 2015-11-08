@@ -28,9 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "NMEA/Info.hpp"
 #include "Time/PeriodClock.hpp"
-
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
+#include "OS/Path.hpp"
 
 class Logger;
 class ProtectedTaskManager;
@@ -48,7 +46,7 @@ class Replay final
   Logger *logger;
   ProtectedTaskManager &task_manager;
 
-  TCHAR path[MAX_PATH];
+  AllocatedPath path = nullptr;
 
   /**
    * The time of day according to replay input.  This is negative if
@@ -82,7 +80,6 @@ public:
   Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
     :time_scale(fixed(1)), replay(nullptr),
      logger(_logger), task_manager(_task_manager), cli(nullptr) {
-    path[0] = _T('\0');
   }
 
   ~Replay() {
@@ -98,9 +95,9 @@ private:
 
 public:
   void Stop();
-  bool Start(const TCHAR *_path, Error &error);
+  bool Start(Path _path, Error &error);
 
-  const TCHAR *GetFilename() const {
+  Path GetFilename() const {
     return path;
   }
 

@@ -42,7 +42,6 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/Error.hxx"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "Compiler.h"
 
@@ -155,10 +154,10 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
   FileDataField &df = (FileDataField &)_df;
 
   const auto path = SelectProfileDialog(df.GetPathFile());
-  if (path.empty())
+  if (path.IsNull())
     return false;
 
-  df.ForceModify(path.c_str());
+  df.ForceModify(path);
   return true;
 }
 
@@ -173,7 +172,7 @@ StartupWidget::Prepare(ContainerWindow &parent,
 }
 
 static bool
-SelectProfile(const TCHAR *path)
+SelectProfile(Path path)
 {
   Error error;
   if (!CheckProfilePasswordResult(CheckProfileFilePassword(path, error),
@@ -182,12 +181,10 @@ SelectProfile(const TCHAR *path)
 
   Profile::SetFiles(path);
 
-  if (RelativePath(path) == nullptr) {
+  if (RelativePath(path) == nullptr)
     /* When a profile from a secondary data path is used, this path
        becomes the primary data path */
-    TCHAR temp[MAX_PATH];
-    SetPrimaryDataPath(DirName(path, temp));
-  }
+    SetPrimaryDataPath(path.GetParent());
 
   File::Touch(path);
   return true;
@@ -216,7 +213,7 @@ dlgStartupShowModal()
 
   /* skip this dialog if there is only one (or none) */
   if (dff->GetNumFiles() <= 1) {
-    const TCHAR *path = dff->GetPathFile();
+    const auto path = dff->GetPathFile();
     if (!ProfileFileHasPassword(path)) {
       SelectProfile(path);
       delete dff;
@@ -230,7 +227,7 @@ dlgStartupShowModal()
   unsigned length = dff->size();
 
   for (unsigned i = 0; i < length; ++i) {
-    const TCHAR *path = dff->GetItem(i);
+    const auto path = dff->GetItem(i);
     uint64_t timestamp = File::GetLastModification(path);
     if (timestamp > best_timestamp) {
       best_timestamp = timestamp;

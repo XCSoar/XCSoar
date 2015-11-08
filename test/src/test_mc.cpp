@@ -270,7 +270,7 @@ int main() {
 
   plan_tests(3);
 
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
 
   ok(test_mc(),"mc output",0);
   ok(test_stf(),"mc stf",0);

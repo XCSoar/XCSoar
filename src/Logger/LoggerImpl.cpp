@@ -77,9 +77,8 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 }
 
 LoggerImpl::LoggerImpl()
-  :writer(nullptr)
+  :filename(nullptr), writer(nullptr)
 {
-  filename[0] = 0;
 }
 
 LoggerImpl::~LoggerImpl()
@@ -99,7 +98,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (!simulator)
     writer->Sign();
 
-  LogFormat(_T("Logger stopped: %s"), filename);
+  LogFormat(_T("Logger stopped: %s"), filename.c_str());
 
   // Logger off
   delete writer;
@@ -234,7 +233,8 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   assert(writer == nullptr);
 
-  Directory::Create(LocalPath(filename, _T("logs")));
+  const auto logs_path = LocalPath(_T("logs"));
+  Directory::Create(logs_path);
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? (const BrokenDate &)gps_info.date_time_utc
@@ -244,7 +244,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   for (int i = 1; i < 99; i++) {
     FormatIGCFilenameLong(name.buffer(), today, "XCS", logger_id, i);
 
-    LocalPath(filename, _T("logs"), name);
+    filename = AllocatedPath::Build(logs_path, name);
     if (!File::Exists(filename))
       break;  // file not exist, we'll use this name
   }
@@ -252,13 +252,13 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   frecord.Reset();
   writer = new IGCWriter(filename);
   if (!writer->IsOpen()) {
-    LogFormat(_T("Failed to create file %s"), filename);
+    LogFormat(_T("Failed to create file %s"), filename.c_str());
     delete writer;
     writer = nullptr;
     return false;
   }
 
-  LogFormat(_T("Logger Started: %s"), filename);
+  LogFormat(_T("Logger Started: %s"), filename.c_str());
   return true;
 }
 

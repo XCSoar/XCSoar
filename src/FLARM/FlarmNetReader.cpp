@@ -144,7 +144,7 @@ FlarmNetReader::LoadFile(NLineReader &reader, FlarmNetDatabase &database)
 }
 
 unsigned
-FlarmNetReader::LoadFile(const TCHAR *path, FlarmNetDatabase &database)
+FlarmNetReader::LoadFile(Path path, FlarmNetDatabase &database)
 {
   FileLineReaderA file(path, IgnoreError());
   if (file.error())

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "MOFile.hpp"
 #include "OS/FileMapping.hpp"
+#include "OS/Path.hpp"
 
 /**
  * Loader for GNU gettext *.mo files.
@@ -38,7 +39,7 @@ public:
   MOLoader(const void *data, size_t size)
     :mapping(NULL), file(new MOFile(data, size)) {}
 
-  MOLoader(const TCHAR *path)
+  explicit MOLoader(Path path)
     :mapping(new FileMapping(path)),
      file(mapping->error()
           ? NULL : new MOFile(mapping->data(), mapping->size())) {

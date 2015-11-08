@@ -29,11 +29,12 @@ Copyright_License {
 #include "Profile/File.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/Error.hxx"
 
 bool
-ProfileFileHasPassword(const TCHAR *path)
+ProfileFileHasPassword(Path path)
 {
   ProfileMap map;
   return Profile::LoadFile(map, path, IgnoreError()) &&
@@ -61,7 +62,7 @@ CheckProfilePassword(const ProfileMap &map)
 }
 
 ProfilePasswordResult
-CheckProfileFilePassword(const TCHAR *path, Error &error)
+CheckProfileFilePassword(Path path, Error &error)
 {
   ProfileMap map;
   if (!Profile::LoadFile(map, path, error))

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "CoreGraphics.hpp"
 #include "UncompressedImage.hpp"
+#include "OS/Path.hpp"
 
 #import <CoreGraphics/CoreGraphics.h>
 
@@ -87,9 +88,9 @@ CGImageToUncompressedImage(CGImageRef image)
 }
 
 UncompressedImage
-LoadJPEGFile(const TCHAR *path)
+LoadJPEGFile(Path path)
 {
-  CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path);
+  CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
     return UncompressedImage::Invalid();
   

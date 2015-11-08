@@ -27,7 +27,6 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/ConvertString.hpp"
 #include "IO/LineReader.hpp"
-#include "OS/PathName.hpp"
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "Asset.hpp"

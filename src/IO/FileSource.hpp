@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_FILE_SOURCE_HPP
 
 #include "BufferedSource.hpp"
+#include "OS/Path.hpp"
 
 class Error;
 
@@ -37,7 +38,7 @@ private:
   UniqueFileDescriptor fd;
 
 public:
-  PosixFileSource(const char *path, Error &error);
+  PosixFileSource(Path path, Error &error);
 
   bool error() const {
     return !fd.IsDefined();
@@ -71,12 +72,8 @@ private:
   HANDLE handle;
 
 public:
-  WindowsFileSource(const char *path, Error &error);
+  WindowsFileSource(Path path, Error &error);
   virtual ~WindowsFileSource();
-
-#ifdef _UNICODE
-  WindowsFileSource(const TCHAR *path, Error &error);
-#endif
 
   bool error() const {
     return handle == INVALID_HANDLE_VALUE;
@@ -103,16 +100,12 @@ protected:
 #if defined(WIN32) && !defined(__CYGWIN__)
 class FileSource : public WindowsFileSource {
 public:
-  FileSource(const char *path, Error &error):WindowsFileSource(path, error) {}
-
-#ifdef _UNICODE
-  FileSource(const TCHAR *path, Error &error):WindowsFileSource(path, error) {}
-#endif
+  FileSource(Path path, Error &error):WindowsFileSource(path, error) {}
 };
 #else
 class FileSource : public PosixFileSource {
 public:
-  FileSource(const char *path, Error &error):PosixFileSource(path, error) {}
+  FileSource(Path path, Error &error):PosixFileSource(path, error) {}
 };
 #endif
 

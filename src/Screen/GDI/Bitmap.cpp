@@ -23,11 +23,12 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
+#include "OS/Path.hpp"
 
 #include <assert.h>
 
 bool
-Bitmap::LoadFile(const TCHAR *path)
+Bitmap::LoadFile(Path path)
 {
   return false;
 }

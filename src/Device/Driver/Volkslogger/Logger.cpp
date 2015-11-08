@@ -25,6 +25,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Port/Port.hpp"
+#include "OS/Path.hpp"
 #include "Operation/Operation.hpp"
 #include "vlconv.h"
 #include "grecord.h"
@@ -99,7 +100,7 @@ ReadFlightListInner(Port &port,
 static bool
 DownloadFlightInner(Port &port, unsigned bulkrate,
                     const RecordedFlightInfo &flight,
-                    const TCHAR *path,
+                    Path path,
                     OperationEnvironment &env)
 {
   if (!Volkslogger::ConnectAndFlush(port, env, 20000))
@@ -113,7 +114,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
   if (length == 0)
     return false;
 
-  FILE *outfile = _tfopen(path, _T("wt"));
+  FILE *outfile = _tfopen(path.c_str(), _T("wt"));
   if (outfile == nullptr)
     return false;
 
@@ -155,7 +156,7 @@ VolksloggerDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 VolksloggerDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                                  const TCHAR *path,
+                                  Path path,
                                   OperationEnvironment &env)
 {
   port.StopRxThread();

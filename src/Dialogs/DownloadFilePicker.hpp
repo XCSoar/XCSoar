@@ -25,9 +25,10 @@ Copyright_License {
 #define XCSOAR_DOWNLOAD_FILE_PICKER_HPP
 
 #include "Repository/FileType.hpp"
-#include "Util/tstring.hpp"
 
-tstring
+class AllocatedPath;
+
+AllocatedPath
 DownloadFilePicker(FileType file_type);
 
 #endif

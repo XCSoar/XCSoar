@@ -24,6 +24,7 @@
 #include "IGC/IGCFix.hpp"
 #include "IGC/IGCExtensions.hpp"
 #include "IO/FileLineReader.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Trace/Vector.hpp"
 #include "Printing.hpp"
@@ -50,7 +51,7 @@ OnAdvance(Trace &trace, const GeoPoint &loc, const fixed alt, const fixed t)
 }
 
 static bool
-TestTrace(const char *filename, unsigned ntrace, bool output=false)
+TestTrace(Path filename, unsigned ntrace, bool output=false)
 {
   Error error;
   FileLineReaderA reader(filename, error);
@@ -95,7 +96,7 @@ int main(int argc, char **argv)
     if (argc > 1) {
       n = atoi(argv[1]);
     }
-    TestTrace("test/data/09kc3ov3.igc", n);
+    TestTrace(Path(_T("test/data/09kc3ov3.igc")), n);
   } else {
     assert(argc >= 3);
     unsigned n = atoi(argv[2]);
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
       unsigned nt = pow(2,i);
       char buf[100];
       sprintf(buf," trace size %d", nt);
-      ok(TestTrace(argv[1], nt),buf, 0);
+      ok(TestTrace(PathName(argv[1]), nt),buf, 0);
     }
   }
   return 0;

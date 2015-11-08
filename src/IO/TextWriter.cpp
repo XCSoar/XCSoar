@@ -22,21 +22,17 @@ Copyright_License {
 */
 
 #include "TextWriter.hpp"
+#include "OS/Path.hpp"
 
 #ifdef _UNICODE
 #include "Util/StringAPI.hxx"
 #include <windows.h>
 #endif
 
-TextWriter::TextWriter(const char *path, bool append)
-  :file(path, append ? "ab" : "wb") {}
+#include <tchar.h>
 
-#ifdef _UNICODE
-
-TextWriter::TextWriter(const TCHAR *path, bool append)
+TextWriter::TextWriter(Path path, bool append)
   :file(path, append ? _T("ab") : _T("wb")) {}
-
-#endif
 
 #ifdef _UNICODE
 

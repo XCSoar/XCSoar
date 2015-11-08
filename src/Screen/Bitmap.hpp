@@ -41,8 +41,8 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-#include <tchar.h>
 
+class Path;
 class ResourceId;
 class UncompressedImage;
 template<typename T> struct ConstBuffer;
@@ -168,7 +168,7 @@ public:
    */
   bool LoadStretch(ResourceId id, unsigned zoom);
 
-  bool LoadFile(const TCHAR *path);
+  bool LoadFile(Path path);
 
   void Reset();
 

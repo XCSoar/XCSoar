@@ -25,10 +25,10 @@ Copyright_License {
 #include "FileLineReader.hpp"
 #include "TextWriter.hpp"
 #include "LocalPath.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
 
 #include <assert.h>
-#include <windef.h> // for MAX_PATH
 
 Source<char> *
 OpenDataFile(const TCHAR *name, Error &error)
@@ -36,8 +36,7 @@ OpenDataFile(const TCHAR *name, Error &error)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, name);
+  const auto path = LocalPath(name);
 
   FileSource *source = new FileSource(path, error);
   if (source->error()) {
@@ -54,8 +53,7 @@ OpenDataTextFile(const TCHAR *name, Error &error, Charset cs)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, name);
+  const auto path = LocalPath(name);
 
   FileLineReader *reader = new FileLineReader(path, error, cs);
   if (reader->error()) {
@@ -72,8 +70,7 @@ OpenDataTextFileA(const TCHAR *name, Error &error)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, name);
+  const auto path = LocalPath(name);
 
   FileLineReaderA *reader = new FileLineReaderA(path, error);
   if (reader->error()) {
@@ -90,8 +87,7 @@ CreateDataTextFile(const TCHAR *name, bool append)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, name);
+  const auto path = LocalPath(name);
 
   TextWriter *writer = new TextWriter(path, append);
   if (writer == nullptr)

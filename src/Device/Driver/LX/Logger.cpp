@@ -29,6 +29,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
+#include "OS/Path.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -219,7 +220,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
 bool
 LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                         const TCHAR *path,
+                         Path path,
                          OperationEnvironment &env)
 {
   if (flight.internal.lx.nano_filename[0] != 0) {
@@ -234,7 +235,7 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (!EnableCommandMode(env))
     return false;
 
-  FILE *file = _tfopen(path, _T("wb"));
+  FILE *file = _tfopen(path.c_str(), _T("wb"));
   if (file == nullptr)
     return false;
 

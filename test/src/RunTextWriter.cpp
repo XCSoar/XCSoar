@@ -31,12 +31,12 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   TextWriter writer(path);
   if (!writer.IsOpen()) {
-    fprintf(stderr, "Failed to open %s\n", path);
+    fprintf(stderr, "Failed to open file\n");
     return 1;
   }
 

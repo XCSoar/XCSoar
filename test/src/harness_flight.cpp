@@ -115,7 +115,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   autopilot.SetSpeedFactor(fixed(speed_factor));
 
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream f4("output/results/res-sample.txt");
   std::ofstream f5("output/results/res-sample-filtered.txt");
 

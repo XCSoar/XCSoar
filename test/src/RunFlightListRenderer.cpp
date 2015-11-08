@@ -124,9 +124,9 @@ protected:
 static void
 ParseCommandLine(Args &args)
 {
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   Error error;
-  FileLineReaderA file(path.c_str(), error);
+  FileLineReaderA file(path, error);
   if (file.error()) {
     fprintf(stderr, "%s\n", error.GetMessage());
     return;

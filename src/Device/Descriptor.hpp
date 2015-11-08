@@ -47,6 +47,7 @@ struct MoreData;
 struct DerivedInfo;
 struct Declaration;
 struct Waypoint;
+class Path;
 class Port;
 class DumpPort;
 class Device;
@@ -485,7 +486,7 @@ public:
   /**
    * Caller is responsible for calling Borrow() and Return().
    */
-  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+  bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env);
 
   void OnSysTicker();

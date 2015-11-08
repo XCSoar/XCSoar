@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream fw("output/results/res-tree-wp.txt");
 
   plan_tests(2);

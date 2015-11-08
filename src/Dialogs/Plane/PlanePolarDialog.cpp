@@ -36,7 +36,6 @@ Copyright_License {
 #include "Polar/PolarFileGlue.hpp"
 #include "Plane/Plane.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -223,8 +222,8 @@ inline void
 PlanePolarWidget::ImportClicked()
 {
   // let the user select
-  TCHAR path[MAX_PATH];
-  if (!FilePicker(_("Load Polar From File"), _T("*.plr\0"), path))
+  const auto path = FilePicker(_("Load Polar From File"), _T("*.plr\0"));
+  if (path == nullptr)
     return;
 
   PolarInfo polar;
@@ -242,7 +241,7 @@ PlanePolarWidget::ImportClicked()
 
   plane.polar_shape = polar.shape;
 
-  plane.polar_name = BaseName(path);
+  plane.polar_name = path.GetBase().c_str();
 
   Update();
 }
@@ -291,4 +290,3 @@ dlgPlanePolarShowModal(Plane &_plane)
   _plane = widget.GetValue();
   return true;
 }
-

@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_OS_FILEUTIL_HPP
 
 #include "Compiler.h"
+#include "Path.hpp"
 
 #include <stdint.h>
 #include <tchar.h>
@@ -49,7 +50,7 @@ namespace File
      * @param path Complete path of the file (e.g. "xyz/abc/bla.txt")
      * @param filename Base name of the file (e.g. "bla.txt")
      */
-    virtual void Visit(const TCHAR* path, const TCHAR* filename) = 0;
+    virtual void Visit(Path path, Path filename) = 0;
   };
 }
 
@@ -61,13 +62,13 @@ namespace Directory
    * @return True if the folder exists
    */
   gcc_pure
-  bool Exists(const TCHAR* path);
+  bool Exists(Path path);
 
   /**
    * Creates a new folder at the given path
    * @param path Path to the folder that should be created
    */
-  void Create(const TCHAR* path);
+  void Create(Path path);
 
   /**
    * Visit all the files of a specific directory with the given visitor
@@ -75,8 +76,9 @@ namespace Directory
    * @param visitor Visitor that should be used
    * @param recursive If true all subfolders will be visited too
    */
-  void VisitFiles(const TCHAR* path, File::Visitor &visitor,
+  void VisitFiles(Path path, File::Visitor &visitor,
                   bool recursive = false);
+
   /**
    * Visit all the files of a specific directory that match the given
    * filename pattern with the given visitor
@@ -85,7 +87,7 @@ namespace Directory
    * @param visitor Visitor that should be used
    * @param recursive If true all subfolders will be visited too
    */
-  void VisitSpecificFiles(const TCHAR* path, const TCHAR* filter,
+  void VisitSpecificFiles(Path path, const TCHAR *filter,
                           File::Visitor &visitor, bool recursive = false);
 }
 
@@ -96,7 +98,7 @@ namespace File
    * with the specified name exists.
    */
   gcc_pure
-  bool ExistsAny(const TCHAR *path);
+  bool ExistsAny(Path path);
 
   /**
    * Returns whether the given file exists and is a file (not a folder)
@@ -104,7 +106,7 @@ namespace File
    * @return True if the file exists
    */
   gcc_pure
-  bool Exists(const TCHAR* path);
+  bool Exists(Path path);
 
 #if defined(WIN32) && defined(UNICODE)
   gcc_pure
@@ -117,24 +119,24 @@ namespace File
    * @return True if the file was successfully deleted
    */
   static inline bool
-  Delete(const TCHAR *path)
+  Delete(Path path)
   {
 #ifdef HAVE_POSIX
-    return unlink(path) == 0;
+    return unlink(path.c_str()) == 0;
 #else
-    return DeleteFile(path);
+    return DeleteFile(path.c_str());
 #endif
   }
 
   static inline bool
-  Rename(const TCHAR *oldpath, const TCHAR *newpath)
+  Rename(Path oldpath, Path newpath)
   {
 #ifdef HAVE_POSIX
     /* XXX handle EXDEV; cross-filesystem moves are not supported by
        rename() */
-    return rename(oldpath, newpath) == 0;
+    return rename(oldpath.c_str(), newpath.c_str()) == 0;
 #else
-    return MoveFile(oldpath, newpath) != 0;
+    return MoveFile(oldpath.c_str(), newpath.c_str()) != 0;
 #endif
   }
 
@@ -145,12 +147,13 @@ namespace File
    * CE.
    */
   static inline bool
-  Replace(const TCHAR *oldpath, const TCHAR *newpath)
+  Replace(Path oldpath, Path newpath)
   {
 #ifdef HAVE_POSIX
-    return rename(oldpath, newpath) == 0;
+    return rename(oldpath.c_str(), newpath.c_str()) == 0;
 #else
-    return MoveFileEx(oldpath, newpath, MOVEFILE_REPLACE_EXISTING) != 0;
+    return MoveFileEx(oldpath.c_str(), newpath.c_str(),
+                      MOVEFILE_REPLACE_EXISTING) != 0;
 #endif
   }
 
@@ -158,7 +161,7 @@ namespace File
    * Returns the size of a regular file in bytes.
    */
   gcc_pure
-  uint64_t GetSize(const TCHAR *path);
+  uint64_t GetSize(Path path);
 
   /**
    * Get a timestamp of last modification that can be used to compare
@@ -167,14 +170,14 @@ namespace File
    * @return 0 in case of failure or a timestamp for comparison
    */
   gcc_pure
-  uint64_t GetLastModification(const TCHAR *path);
+  uint64_t GetLastModification(Path path);
 
   /**
    * Sets the modification timestamp of the file to the current system time
    * @param path Path to the file
    * @return True in case of success, False otherwise
    */
-  bool Touch(const TCHAR *path);
+  bool Touch(Path path);
 
   /**
    * Read data from a file and null-terminate it.
@@ -183,14 +186,14 @@ namespace File
    * terminator
    * @return false on error
    */
-  bool ReadString(const TCHAR *path, char *buffer, size_t size);
+  bool ReadString(Path path, char *buffer, size_t size);
 
   /**
    * Write a string to an existing file.  It will never create a new
    * file or truncate the existing file.  This function may be useful
    * for writing sysfs files.
    */
-  bool WriteExisting(const TCHAR *path, const char *value);
+  bool WriteExisting(Path path, const char *value);
 
   /**
    * Create a file with the given name, and leave it empty.
@@ -198,7 +201,7 @@ namespace File
    * @return true on success, false on error or if the file already
    * exists
    */
-  bool CreateExclusive(const TCHAR *path);
+  bool CreateExclusive(Path path);
 }
 
 #endif

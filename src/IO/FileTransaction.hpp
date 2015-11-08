@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_FILE_TRANSACTION_HPP
 #define XCSOAR_FILE_TRANSACTION_HPP
 
-#include "Util/StaticString.hxx"
+#include "OS/Path.hpp"
 #include "Compiler.h"
 
-#include <windef.h> /* for MAX_PATH */
 #include <tchar.h>
 
 /**
@@ -41,11 +40,11 @@ Copyright_License {
  * file if you decide not to call Commit().
  */
 class FileTransaction {
-  StaticString<MAX_PATH> final_path;
-  StaticString<MAX_PATH> temporary_path;
+  AllocatedPath final_path;
+  AllocatedPath temporary_path;
 
 public:
-  FileTransaction(const TCHAR *_path);
+  FileTransaction(Path _path);
 
   /**
    * The destructor auto-rolls back the transaction (i.e. deletes the
@@ -57,8 +56,8 @@ public:
    * Returns the temporary path.  This is the path that shall be used
    * by the caller to write the file.
    */
-  const TCHAR *GetTemporaryPath() const {
-    return temporary_path.c_str();
+  Path GetTemporaryPath() const {
+    return temporary_path;
   }
 
   /**

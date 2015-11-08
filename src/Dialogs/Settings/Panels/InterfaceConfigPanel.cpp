@@ -32,7 +32,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "UtilsSettings.hpp"
 #include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
@@ -72,11 +72,9 @@ private:
 public:
   LanguageFileVisitor(DataFieldEnum &_df): df(_df) {}
 
-  void
-  Visit(const TCHAR *path, const TCHAR *filename)
-  {
-    if (filename != nullptr && !df.Exists(filename))
-      df.addEnumText(filename);
+  void Visit(Path path, Path filename) override {
+    if (!df.Exists(filename.c_str()))
+      df.addEnumText(filename.c_str());
   }
 };
 
@@ -125,16 +123,17 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     df.Sort(2);
 
-    TCHAR value[MAX_PATH];
-    if (!Profile::GetPath(ProfileKeys::LanguageFile, value))
-      value[0] = _T('\0');
+    auto value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
+    Path value = value_buffer;
+    if (value.IsNull())
+      value = Path(_T(""));
 
-    if (StringIsEqual(value, _T("none")))
+    if (value == Path(_T("none")))
       df.Set(1);
-    else if (!StringIsEmpty(value) && !StringIsEqual(value, _T("auto"))) {
-      const TCHAR *base = BaseName(value);
+    else if (!value.IsEmpty() && value != Path(_T("auto"))) {
+      const Path base = value.GetBase();
       if (base != nullptr)
-        df.Set(base);
+        df.Set(base.c_str());
     }
     wp->RefreshDisplay();
   }
@@ -196,15 +195,16 @@ InterfaceConfigPanel::Save(bool &_changed)
   if (wp != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
-    TCHAR old_value[MAX_PATH];
-    if (!Profile::GetPath(ProfileKeys::LanguageFile, old_value))
-      old_value[0] = _T('\0');
+    const auto old_value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
+    Path old_value = old_value_buffer;
+    if (old_value == nullptr)
+      old_value = Path(_T(""));
 
-    const TCHAR *old_base = BaseName(old_value);
+    auto old_base = old_value.GetBase();
     if (old_base == nullptr)
       old_base = old_value;
 
-    TCHAR buffer[MAX_PATH];
+    AllocatedPath buffer = nullptr;
     const TCHAR *new_value, *new_base;
 
     switch (df.GetValue()) {
@@ -217,17 +217,18 @@ InterfaceConfigPanel::Save(bool &_changed)
       break;
 
     default:
-      _tcscpy(buffer, df.GetAsString());
-      ContractLocalPath(buffer);
-      new_value = buffer;
-      new_base = BaseName(new_value);
+      new_value = df.GetAsString();
+      buffer = ContractLocalPath(Path(new_value));
+      if (!buffer.IsNull())
+        new_value = buffer.c_str();
+      new_base = Path(new_value).GetBase().c_str();
       if (new_base == nullptr)
         new_base = new_value;
       break;
     }
 
-    if (!StringIsEqual(old_value, new_value) &&
-        !StringIsEqual(old_base, new_base)) {
+    if (old_value != Path(new_value) &&
+        old_base != Path(new_base)) {
       Profile::Set(ProfileKeys::LanguageFile, new_value);
       LanguageChanged = changed = true;
     }

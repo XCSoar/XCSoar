@@ -27,6 +27,7 @@ Copyright_License {
 #include "Android/Bitmap.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
+#include "OS/Path.hpp"
 #include "ResourceId.hpp"
 #include "android_drawable.h"
 
@@ -122,13 +123,13 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
 }
 
 bool
-Bitmap::LoadFile(const TCHAR *path)
+Bitmap::LoadFile(Path path)
 {
-  assert(path != nullptr && *path != _T('\0'));
+  assert(path != nullptr && !path.IsEmpty());
 
   Reset();
 
-  auto *new_bmp = native_view->loadFileBitmap(path);
+  auto *new_bmp = native_view->loadFileBitmap(path.c_str());
   if (new_bmp == nullptr)
     return false;
 

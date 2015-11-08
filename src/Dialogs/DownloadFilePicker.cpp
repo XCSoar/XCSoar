@@ -34,7 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Repository/Glue.hpp"
 #include "Repository/FileRepository.hpp"
@@ -45,7 +45,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "Util/ConvertString.hpp"
-#include "Util/tstring.hpp"
 #include "Util/Error.hxx"
 
 #include <vector>
@@ -59,13 +58,13 @@ Copyright_License {
 class DownloadProgress final : Timer, Net::DownloadListener, Notify {
   ProgressDialog &dialog;
   ThreadedOperationEnvironment env;
-  const TCHAR *const path_relative;
+  const Path path_relative;
 
   bool got_size, complete, success;
 
 public:
   DownloadProgress(ProgressDialog &_dialog,
-                   const TCHAR *_path_relative)
+                   const Path _path_relative)
     :dialog(_dialog), env(_dialog), path_relative(_path_relative),
      got_size(false), complete(false) {
     Timer::Schedule(1000);
@@ -84,9 +83,9 @@ private:
   }
 
   /* virtual methods from class Net::DownloadListener */
-  void OnDownloadAdded(const TCHAR *_path_relative,
+  void OnDownloadAdded(Path _path_relative,
                        int64_t size, int64_t position) override {
-    if (!complete && StringIsEqual(path_relative, _path_relative)) {
+    if (!complete && path_relative == _path_relative) {
       if (!got_size && size >= 0) {
         got_size = true;
         env.SetProgressRange(uint64_t(size) / 1024u);
@@ -97,9 +96,9 @@ private:
     }
   }
 
-  void OnDownloadComplete(const TCHAR *_path_relative,
+  void OnDownloadComplete(Path _path_relative,
                           bool _success) override {
-    if (!complete && StringIsEqual(path_relative, _path_relative)) {
+    if (!complete && path_relative == _path_relative) {
       complete = true;
       success = _success;
       Notify::SendNotification();
@@ -113,14 +112,14 @@ private:
   }
 };
 
-static tstring
+static AllocatedPath
 DownloadFile(const char *uri, const char *_base)
 {
   assert(Net::DownloadManager::IsAvailable());
 
   const UTF8ToWideConverter base(_base);
   if (!base.IsValid())
-    return tstring();
+    return nullptr;
 
   ProgressDialog dialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                         _("Download"));
@@ -128,18 +127,17 @@ DownloadFile(const char *uri, const char *_base)
 
   dialog.AddCancelButton([&dialog](){ dialog.SetModalResult(mrCancel); });
 
-  const DownloadProgress dp(dialog, base);
+  const DownloadProgress dp(dialog, Path(base));
 
-  Net::DownloadManager::Enqueue(uri, base);
+  Net::DownloadManager::Enqueue(uri, Path(base));
 
   int result = dialog.ShowModal();
   if (result != mrOK) {
-    Net::DownloadManager::Cancel(base);
-    return tstring();
+    Net::DownloadManager::Cancel(Path(base));
+    return nullptr;
   }
 
-  TCHAR buffer[MAX_PATH];
-  return LocalPath(buffer, base);
+  return LocalPath(base);
 }
 
 class DownloadFilePickerWidget final
@@ -176,13 +174,13 @@ class DownloadFilePickerWidget final
    */
   bool repository_failed;
 
-  tstring path;
+  AllocatedPath path = AllocatedPath(nullptr);
 
 public:
   DownloadFilePickerWidget(WidgetDialog &_dialog, FileType _file_type)
     :dialog(_dialog), file_type(_file_type) {}
 
-  tstring &&GetPath() {
+  AllocatedPath &&GetPath() {
     return std::move(path);
   }
 
@@ -219,9 +217,9 @@ public:
   void OnAction(int id) override;
 
   /* virtual methods from class Net::DownloadListener */
-  void OnDownloadAdded(const TCHAR *path_relative,
+  void OnDownloadAdded(Path path_relative,
                        int64_t size, int64_t position) override;
-  void OnDownloadComplete(const TCHAR *path_relative, bool success) override;
+  void OnDownloadComplete(Path path_relative, bool success) override;
 
   /* virtual methods from class Notify */
   void OnNotification() override;
@@ -265,8 +263,7 @@ DownloadFilePickerWidget::RefreshList()
 
   FileRepository repository;
 
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, _T("repository"));
+  const auto path = LocalPath(_T("repository"));
   FileLineReaderA reader(path, IgnoreError());
   if (!reader.error()) {
     ParseFileRepository(repository, reader);
@@ -312,7 +309,7 @@ DownloadFilePickerWidget::Download()
   const auto &file = items[current];
 
   path = DownloadFile(file.GetURI(), file.GetName());
-  if (!path.empty())
+  if (path.IsNull())
     dialog.SetModalResult(mrOK);
 }
 
@@ -327,22 +324,22 @@ DownloadFilePickerWidget::OnAction(int id)
 }
 
 void
-DownloadFilePickerWidget::OnDownloadAdded(const TCHAR *path_relative,
+DownloadFilePickerWidget::OnDownloadAdded(Path path_relative,
                                           int64_t size, int64_t position)
 {
 }
 
 void
-DownloadFilePickerWidget::OnDownloadComplete(const TCHAR *path_relative,
+DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
                                              bool success)
 {
-  const TCHAR *name = BaseName(path_relative);
+  const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
   mutex.Lock();
 
-  if (StringIsEqual(name, _T("repository"))) {
+  if (name == Path(_T("repository"))) {
     repository_failed = !success;
     if (success)
       repository_modified = true;
@@ -372,14 +369,14 @@ DownloadFilePickerWidget::OnNotification()
   }
 }
 
-tstring
+AllocatedPath
 DownloadFilePicker(FileType file_type)
 {
   if (!Net::DownloadManager::IsAvailable()) {
     const TCHAR *message =
       _("The file manager is not available on this device.");
     ShowMessageBox(message, _("File Manager"), MB_OK);
-    return tstring();
+    return nullptr;
   }
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());

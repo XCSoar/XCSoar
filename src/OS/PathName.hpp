@@ -28,34 +28,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-gcc_pure gcc_nonnull_all
-bool
-IsAbsolutePath(const TCHAR *path);
-
-/**
- * Is this path a "base name", i.e. is there no path separate?
- * Behaviour is undefined when the string is empty.
- */
-gcc_pure
-bool
-IsBaseName(const TCHAR *path);
-
-/**
- * Returns the base name of the specified path, i.e. the part after
- * the last separator.  May return nullptr if there is no base name.
- */
-gcc_pure
-const TCHAR *
-BaseName(const TCHAR *path);
-
-/**
- * Returns the directory name of the specified path, i.e. the part
- * before the last separator.  Returns "." if there is no directory
- * name.
- */
-const TCHAR *
-DirName(const TCHAR *path, TCHAR *buffer);
-
 /**
  * Replaces the "base name" of the specified path, i.e. the portion
  * after the last path separator.  If the input path does not contain

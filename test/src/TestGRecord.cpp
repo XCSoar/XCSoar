@@ -22,6 +22,7 @@
 
 #include "Logger/GRecord.hpp"
 #include "TestUtil.hpp"
+#include "OS/Path.hpp"
 #include "Util/Error.hxx"
 
 static void
@@ -29,7 +30,7 @@ CheckGRecord(const TCHAR *path)
 {
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(path, IgnoreError()));
+  ok1(grecord.VerifyGRecordInFile(Path(path), IgnoreError()));
 }
 
 int main(int argc, char **argv)

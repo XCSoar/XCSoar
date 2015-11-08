@@ -27,13 +27,14 @@ Copyright_License {
 #include <tchar.h>
 
 struct lua_State;
+class Path;
 class Error;
 
 namespace Lua {
   /**
    * Load, compile and run the specified file.
    */
-  bool RunFile(lua_State *L, const TCHAR *path, Error &error);
+  bool RunFile(lua_State *L, Path path, Error &error);
 }
 
 #endif

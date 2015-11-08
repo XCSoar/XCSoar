@@ -44,6 +44,8 @@ Copyright_License {
 
 #include <stdlib.h>
 
+#include <windef.h> /* for MAX_PATH */
+
 /**
  * Replaces ToReplace with ReplaceWith in String
  * @param String Buffer string

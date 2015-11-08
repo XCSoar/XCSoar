@@ -26,6 +26,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Components.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
 
@@ -41,7 +42,7 @@ public:
   TaskFileVisitor(TaskStore::ItemVector &_store):
     store(_store) {}
 
-  void Visit(const TCHAR *path, const TCHAR *base_name) override {
+  void Visit(Path path, Path base_name) override {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
     std::unique_ptr<TaskFile> task_file(TaskFile::Create(path));
@@ -53,7 +54,7 @@ public:
     // For each task in the task file
     for (unsigned i = 0; i < count; i++) {
       // Copy base name of the file into task name
-      StaticString<256> name(base_name);
+      StaticString<256> name(base_name.c_str());
 
       // If the task file holds more than one task
       const TCHAR *saved_name = task_file->GetName(i);
@@ -66,7 +67,7 @@ public:
       }
 
       // Add the task to the TaskStore
-      store.emplace_back(path, name.empty() ? path : name, i);
+      store.emplace_back(path, name.empty() ? path.c_str() : name, i);
     }
   }
 };
@@ -97,7 +98,7 @@ TaskStore::Scan(bool extra)
 
 TaskStore::Item::~Item()
 {
-  if (!filename.empty())
+  if (!filename.IsNull())
     delete task;
 }
 
@@ -108,7 +109,7 @@ TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
     return task;
 
   if (valid)
-    task = TaskFile::GetTask(filename.c_str(), task_behaviour,
+    task = TaskFile::GetTask(filename, task_behaviour,
                              &way_points, task_index);
 
   if (task == nullptr)
@@ -125,7 +126,7 @@ TaskStore::GetName(unsigned index) const
   return store[index].GetName();
 }
 
-const TCHAR *
+Path
 TaskStore::GetPath(unsigned index) const
 {
   return store[index].GetPath();

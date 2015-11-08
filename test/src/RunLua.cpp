@@ -43,7 +43,7 @@ l_alert(lua_State *L)
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE.lua");
-  const auto path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   int result = EXIT_SUCCESS;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
   lua_register(L, "alert", l_alert);
 
   Error error;
-  if (!Lua::RunFile(L, path.c_str(), error)) {
+  if (!Lua::RunFile(L, path, error)) {
     fprintf(stderr, "%s\n", error.GetMessage());
     result = EXIT_FAILURE;
   }

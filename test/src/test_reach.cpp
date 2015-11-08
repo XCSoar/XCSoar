@@ -72,7 +72,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
                 origin.latitude-Angle::Degrees(0.02));
 
   {
-    Directory::Create(_T("output/results"));
+    Directory::Create(Path(_T("output/results")));
     std::ofstream fout("output/results/terrain.txt");
     unsigned nx = 100;
     unsigned ny = 100;

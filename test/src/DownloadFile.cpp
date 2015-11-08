@@ -34,7 +34,7 @@ Copyright_License {
 using namespace std;
 
 static bool
-Download(const char *url, const TCHAR *path)
+Download(const char *url, Path path)
 {
   cout << "Creating Session ... ";
   Net::Session session;
@@ -54,7 +54,7 @@ Download(const char *url, const TCHAR *path)
   cout << "Reading Response:" << endl;
   cout << "-------------------------------------------------" << endl;
 
-  FILE *file = path ? _tfopen(path, _T("wb")) : NULL;
+  FILE *file = path != nullptr ? _tfopen(path.c_str(), _T("wb")) : nullptr;
 
   char buffer[256];
   while (request.Read(buffer, sizeof(buffer))) {
@@ -86,7 +86,7 @@ main(int argc, char *argv[])
   Net::Initialise();
 
   const char *url = argv[1];
-  Download(url, argc > 2 ? (const TCHAR *)PathName(argv[2]) : NULL);
+  Download(url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
 
   Net::Deinitialise();
 

@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "OS/FileMapping.hpp"
+#include "FileMapping.hpp"
+#include "Path.hpp"
 #include "Compiler.h"
 
 #ifdef HAVE_POSIX
@@ -33,7 +34,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-FileMapping::FileMapping(const TCHAR *path)
+FileMapping::FileMapping(Path path)
   :m_data(nullptr)
 #ifndef HAVE_POSIX
   , hMapping(nullptr)
@@ -48,7 +49,7 @@ FileMapping::FileMapping(const TCHAR *path)
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = open(path, flags);
+  int fd = open(path.c_str(), flags);
   if (fd < 0)
     return;
 
@@ -72,7 +73,7 @@ FileMapping::FileMapping(const TCHAR *path)
 
   madvise(m_data, m_size, MADV_WILLNEED);
 #else /* !HAVE_POSIX */
-  hFile = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ,
+  hFile = ::CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ,
                        nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
   if (gcc_unlikely(hFile == INVALID_HANDLE_VALUE))
     return;

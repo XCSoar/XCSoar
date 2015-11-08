@@ -28,11 +28,12 @@ Copyright_License {
 #include "IO/FileTransaction.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/KeyValueFileWriter.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 
 bool
-Profile::LoadFile(ProfileMap &map, const TCHAR *path, Error &error)
+Profile::LoadFile(ProfileMap &map, Path path, Error &error)
 {
   FileLineReaderA reader(path, error);
   if (reader.error())
@@ -72,7 +73,7 @@ Profile::SaveFile(const ProfileMap &map,
 }
 
 bool
-Profile::SaveFile(const ProfileMap &map, const TCHAR *path)
+Profile::SaveFile(const ProfileMap &map, Path path)
 {
   FileTransaction transaction(path);
   return SaveFile(map, transaction) && transaction.Commit();

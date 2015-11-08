@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Util/tstring.hpp"
 #include "Util/NumberParser.hpp"
+#include "OS/Path.hpp"
 
 #ifdef _UNICODE
 #include "OS/ConvertPathName.hpp"
@@ -120,7 +121,7 @@ public:
 
 #ifdef _UNICODE
   void ParseCommandLine(const TCHAR *_cmdline) {
-    NarrowPathName convert(_cmdline);
+    WideToACPConverter convert(_cmdline);
     ParseCommandLine(convert);
   }
 #endif
@@ -194,11 +195,27 @@ public:
 
 #ifdef _UNICODE
     PathName convert(p);
-    return tstring(convert);
+    return tstring(((Path)convert).c_str());
 #else
     return tstring(p);
 #endif
   }
+
+#ifdef _UNICODE
+  AllocatedPath ExpectNextPath() {
+    const char *p = ExpectNext();
+    assert(p != nullptr);
+
+    return AllocatedPath(PathName(p));
+  }
+#else
+  Path ExpectNextPath() {
+    const char *p = ExpectNext();
+    assert(p != nullptr);
+
+    return Path(p);
+  }
+#endif
 
   void ExpectEnd() {
     if (!IsEmpty())

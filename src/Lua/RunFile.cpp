@@ -24,13 +24,14 @@ Copyright_License {
 #include "RunFile.hpp"
 #include "Error.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "OS/Path.hpp"
 
 extern "C" {
 #include <lauxlib.h>
 }
 
 bool
-Lua::RunFile(lua_State *L, const TCHAR *path, Error &error)
+Lua::RunFile(lua_State *L, Path path, Error &error)
 {
   if (luaL_loadfile(L, NarrowPathName(path)) || lua_pcall(L, 0, 0, 0)) {
     PopError(L, error);

@@ -31,6 +31,8 @@ Copyright_License {
 #include <tchar.h>
 
 struct GeoPoint;
+class Path;
+class AllocatedPath;
 template<typename T> class StringPointer;
 template<typename T> class AllocatedString;
 
@@ -40,7 +42,7 @@ namespace Profile
    * Returns the absolute path of the current profile file.
    */
   gcc_pure
-  const TCHAR *GetPath();
+  Path GetPath();
 
   /**
    * Loads the profile files
@@ -49,7 +51,7 @@ namespace Profile
   /**
    * Loads the given profile file
    */
-  void LoadFile(const TCHAR *szFile);
+  void LoadFile(Path path);
 
   /**
    * Saves the profile into the profile files
@@ -58,13 +60,13 @@ namespace Profile
   /**
    * Saves the profile into the given profile file
    */
-  void SaveFile(const TCHAR *szFile);
+  void SaveFile(Path path);
 
   /**
    * Sets the profile files to load when calling Load()
    * @param override nullptr or file to load when calling Load()
    */
-  void SetFiles(const TCHAR *override_path);
+  void SetFiles(Path override_path);
 
   /**
    * Reads a configured path from the profile, and expands it with
@@ -73,9 +75,13 @@ namespace Profile
    * @param value a buffer which can store at least MAX_PATH
    * characters
    */
-  bool GetPath(const char *key, TCHAR *value);
-  void SetPath(const char *key, const TCHAR *value);
-  bool GetPathIsEqual(const char *key, const TCHAR *value);
+  gcc_pure
+  AllocatedPath GetPath(const char *key);
+
+  void SetPath(const char *key, Path value);
+
+  gcc_pure
+  bool GetPathIsEqual(const char *key, Path value);
 };
 
 #endif

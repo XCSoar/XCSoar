@@ -42,7 +42,7 @@ private:
 public:
   virtual bool Next();
 
-  static DebugReplay* Create(const char *input_file);
+  static DebugReplay *Create(Path input_file);
 
 protected:
   void CopyFromFix(const IGCFix &fix);

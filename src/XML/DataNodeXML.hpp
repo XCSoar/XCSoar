@@ -68,15 +68,6 @@ public:
   explicit WritableDataNodeXML(XMLNode &_node)
     :node(_node) {}
 
-  /**
-   * Save tree canonically to file
-   *
-   * @param path Path of file to save to
-   *
-   * @return True on success
-   */
-  bool Save(const TCHAR* path);
-
   /* virtual methods from WritableDataNode */
   WritableDataNode *AppendChild(const TCHAR *name) override;
   void SetAttribute(const TCHAR *name, const TCHAR *value) override;

@@ -22,37 +22,8 @@ Copyright_License {
 */
 
 #include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
-#include "Util/CharUtil.hpp"
-
-#include <assert.h>
-#include <string.h>
-#include <algorithm>
-
-#ifdef WIN32
-
-gcc_pure gcc_nonnull_all
-static constexpr bool
-IsDrive(const TCHAR *p)
-{
-  return IsAlphaASCII(p[0]) && p[1] == ':';
-}
-
-#endif
-
-bool
-IsAbsolutePath(const TCHAR *p)
-{
-#ifdef WIN32
-  if (IsDrive(p) && IsDirSeparator(p[2]))
-    return true;
-#endif
-
-  return IsDirSeparator(*p);
-
-}
 
 gcc_pure
 static const TCHAR *
@@ -72,43 +43,6 @@ static TCHAR *
 LastSeparator(TCHAR *path)
 {
   return const_cast<TCHAR *>(LastSeparator((const TCHAR *)path));
-}
-
-bool
-IsBaseName(const TCHAR *path)
-{
-  assert(path != nullptr);
-
-#ifdef WIN32
-  return _tcspbrk(path, _T("/\\")) == nullptr;
-#else
-  return StringFind(path, _T('/')) == nullptr;
-#endif
-}
-
-const TCHAR *
-BaseName(const TCHAR *path)
-{
-  const TCHAR *p = LastSeparator(path);
-  if (p != nullptr)
-    path = p + 1;
-
-  if (StringIsEmpty(path))
-    return nullptr;
-
-  return path;
-}
-
-const TCHAR *
-DirName(const TCHAR *gcc_restrict path, TCHAR *gcc_restrict buffer)
-{
-  const TCHAR *p = LastSeparator(path);
-  if (p == nullptr || p == path)
-    return _T(".");
-
-  TCHAR *end = std::copy(path, p, buffer);
-  *end = _T('\0');
-  return buffer;
 }
 
 void

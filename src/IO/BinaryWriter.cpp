@@ -23,14 +23,5 @@ Copyright_License {
 
 #include "BinaryWriter.hpp"
 
-#include <assert.h>
-
-BinaryWriter::BinaryWriter(const char *path, bool append)
-  :file(path, append ? "ab" : "wb") {}
-
-#ifdef _UNICODE
-
-BinaryWriter::BinaryWriter(const TCHAR *path, bool append)
+BinaryWriter::BinaryWriter(Path path, bool append)
   :file(path, append ? _T("ab") : _T("wb")) {}
-
-#endif

@@ -35,7 +35,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -68,15 +68,14 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
-static bool
-LocalPath(TCHAR *buffer, const AvailableFile &file)
+static AllocatedPath
+LocalPath(const AvailableFile &file)
 {
   const UTF8ToWideConverter base(file.GetName());
   if (!base.IsValid())
-    return false;
+    return nullptr;
 
-  ::LocalPath(buffer, base);
-  return true;
+  return LocalPath(base);
 }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -139,8 +138,7 @@ class ManagedFileListWidget
              bool _failed) {
       name = _name;
 
-      TCHAR path[MAX_PATH];
-      LocalPath(path, name);
+      const auto path = LocalPath(name);
 
       if (File::Exists(path)) {
         FormatByteSize(size.buffer(), size.capacity(),
@@ -289,9 +287,9 @@ public:
   virtual void OnTimer() override;
 
   /* virtual methods from class Net::DownloadListener */
-  virtual void OnDownloadAdded(const TCHAR *path_relative,
+  virtual void OnDownloadAdded(Path path_relative,
                                int64_t size, int64_t position) override;
-  virtual void OnDownloadComplete(const TCHAR *path_relative,
+  virtual void OnDownloadComplete(Path path_relative,
                                   bool success) override;
 
   /* virtual methods from class Notify */
@@ -359,8 +357,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 
   repository.Clear();
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("repository"));
+  const auto path = LocalPath(_T("repository"));
   FileLineReaderA reader(path, IgnoreError());
   if (reader.error())
     return;
@@ -379,11 +376,16 @@ ManagedFileListWidget::RefreshList()
     DownloadStatus download_status;
     const bool is_downloading = IsDownloading(remote_file, download_status);
 
-    TCHAR path[MAX_PATH];
-    if (LocalPath(path, remote_file) &&
+    const auto path = LocalPath(remote_file);
+    if (!path.IsNull() &&
         (is_downloading || File::Exists(path))) {
       download_active |= is_downloading;
-      items.append().Set(BaseName(path),
+
+      const Path base = path.GetBase();
+      if (base.IsNull())
+        continue;
+
+      items.append().Set(base.c_str(),
                          is_downloading ? &download_status : nullptr,
                          HasFailed(remote_file));
     }
@@ -489,7 +491,7 @@ ManagedFileListWidget::Download()
   if (!base.IsValid())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), base);
+  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), Path(base));
 #endif
 }
 
@@ -564,7 +566,7 @@ ManagedFileListWidget::Add()
   if (!base.IsValid())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.GetURI(), base);
+  Net::DownloadManager::Enqueue(remote_file.GetURI(), Path(base));
 #endif
 }
 
@@ -581,7 +583,7 @@ ManagedFileListWidget::Cancel()
   assert(current < items.size());
 
   const FileItem &item = items[current];
-  Net::DownloadManager::Cancel(item.name);
+  Net::DownloadManager::Cancel(Path(item.name));
 #endif
 }
 
@@ -621,14 +623,14 @@ ManagedFileListWidget::OnTimer()
 }
 
 void
-ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
+ManagedFileListWidget::OnDownloadAdded(Path path_relative,
                                        int64_t size, int64_t position)
 {
-  const TCHAR *name = BaseName(path_relative);
+  const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
-  const WideToUTF8Converter name2(name);
+  const WideToUTF8Converter name2(name.c_str());
   if (!name2.IsValid())
     return;
 
@@ -643,14 +645,14 @@ ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
 }
 
 void
-ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
+ManagedFileListWidget::OnDownloadComplete(Path path_relative,
                                           bool success)
 {
-  const TCHAR *name = BaseName(path_relative);
+  const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
-  const WideToUTF8Converter name2(name);
+  const WideToUTF8Converter name2(name.c_str());
   if (!name2.IsValid())
     return;
 

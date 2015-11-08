@@ -24,9 +24,10 @@
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "IO/TextWriter.hpp"
+#include "OS/Path.hpp"
 
 bool
-SaveTask(const TCHAR *path, const OrderedTask &task)
+SaveTask(Path path, const OrderedTask &task)
 {
   XMLNode root_node = XMLNode::CreateRoot(_T("Task"));
 

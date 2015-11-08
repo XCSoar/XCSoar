@@ -31,11 +31,11 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   Error error;
-  FileLineReaderA reader(path.c_str(), error);
+  FileLineReaderA reader(path, error);
   if (reader.error()) {
     fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;

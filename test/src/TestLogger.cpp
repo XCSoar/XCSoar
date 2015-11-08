@@ -31,7 +31,7 @@
 #include <cstdio>
 
 static void
-CheckTextFile(const TCHAR *path, const char *const* expect)
+CheckTextFile(Path path, const char *const* expect)
 {
   FileLineReaderA reader(path, IgnoreError());
   ok1(!reader.error());
@@ -148,7 +148,7 @@ Run(IGCWriter &writer)
 }
 
 static void
-Run(const TCHAR *path)
+Run(Path path)
 {
   IGCWriter writer(path);
   Run(writer);
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 {
   plan_tests(51);
 
-  const TCHAR *path = _T("output/test/test.igc");
+  const Path path(_T("output/test/test.igc"));
   File::Delete(path);
 
   Run(path);

@@ -372,7 +372,7 @@ int main(int argc, char **argv)
   const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
   const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
 
-  TextWriter writer("/dev/stdout", true);
+  TextWriter writer(Path(_T("/dev/stdout")), true);
 
   {
     JSON::ObjectWriter root(writer);

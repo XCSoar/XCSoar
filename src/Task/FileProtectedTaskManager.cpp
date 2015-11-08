@@ -26,11 +26,12 @@ Copyright_License {
 #include "SaveFile.hpp"
 #include "LocalPath.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "OS/Path.hpp"
 
 #include <windef.h> // for MAX_PATH
 
 bool
-ProtectedTaskManager::TaskSave(const TCHAR* path)
+ProtectedTaskManager::TaskSave(Path path)
 {
   OrderedTask* task = TaskClone();
   bool retval = SaveTask(path, *task);
@@ -41,7 +42,6 @@ ProtectedTaskManager::TaskSave(const TCHAR* path)
 bool
 ProtectedTaskManager::TaskSaveDefault()
 {
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, default_task_path);
+  const auto path = LocalPath(default_task_path);
   return TaskSave(path);
 }

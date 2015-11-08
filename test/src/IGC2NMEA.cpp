@@ -95,7 +95,7 @@ main(int argc, char **argv)
   if (replay == NULL)
     return EXIT_FAILURE;
 
-  const char *output_file = args.ExpectNext();
+  const auto output_file = args.ExpectNextPath();
   args.ExpectEnd();
 
   TextWriter writer(output_file);

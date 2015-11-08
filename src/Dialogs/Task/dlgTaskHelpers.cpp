@@ -39,6 +39,7 @@ Copyright_License {
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -245,11 +246,11 @@ OrderedTaskSave(OrderedTask &task)
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 
-  TCHAR buffer[MAX_PATH];
-  Directory::Create(LocalPath(buffer, _T("tasks")));
+  const auto tasks_path = LocalPath(_T("tasks"));
+  Directory::Create(tasks_path);
 
   _tcscat(fname, _T(".tsk"));
   task.SetName(StaticString<64>(fname));
-  SaveTask(LocalPath(buffer, _T("tasks"), fname), task);
+  SaveTask(AllocatedPath::Build(tasks_path, fname), task);
   return true;
 }

@@ -30,21 +30,21 @@ int
 main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   GRecord g;
   g.Initialize();
 
   Error error;
-  if (!g.LoadFileToBuffer(path.c_str(), error)) {
+  if (!g.LoadFileToBuffer(path, error)) {
     fprintf(stderr, "%s\n", error.GetMessage());
     return 2;
   }
 
   g.FinalizeBuffer();
 
-  if (!g.AppendGRecordToFile(path.c_str())) {
+  if (!g.AppendGRecordToFile(path)) {
     fprintf(stderr, "Failed to write file\n");
     return 2;
   }

@@ -120,11 +120,11 @@ FlightCheck::finish()
 }
 
 class IGCFileVisitor : public File::Visitor {
-  void Visit(const TCHAR *path, const TCHAR *filename) override;
+  void Visit(Path path, Path filename) override;
 };
 
 void
-IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
+IGCFileVisitor::Visit(Path path, Path filename)
 {
   Error error;
   FileLineReaderA reader(path, error);
@@ -136,7 +136,7 @@ IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
   IGCExtensions extensions;
   extensions.clear();
 
-  FlightCheck flight(filename);
+  FlightCheck flight(filename.c_str());
   char *line;
   while ((line = reader.ReadLine()) != NULL) {
     unsigned day, month, year;
@@ -161,6 +161,6 @@ IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
 int main(gcc_unused int argc, gcc_unused char **argv)
 {
   IGCFileVisitor visitor;
-  Directory::VisitSpecificFiles(_T("."), _T("*.igc"), visitor);
+  Directory::VisitSpecificFiles(Path(_T(".")), _T("*.igc"), visitor);
   return 0;
 }

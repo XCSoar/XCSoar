@@ -40,7 +40,7 @@ FlightLogger::LogEvent(const BrokenDateTime &date_time, const char *type)
 {
   assert(type != nullptr);
 
-  TextWriter writer(path.c_str(), true);
+  TextWriter writer(path, true);
   if (!writer.IsOpen())
     /* Shall we log this error?  Not sure, because when this happens,
        usually the log file cannot be written either .. */
@@ -98,7 +98,7 @@ FlightLogger::TickInternal(const MoreData &basic,
 void
 FlightLogger::Tick(const MoreData &basic, const DerivedInfo &calculated)
 {
-  assert(!path.empty());
+  assert(!path.IsNull());
 
   if (basic.gps.replay || basic.gps.simulator)
     return;

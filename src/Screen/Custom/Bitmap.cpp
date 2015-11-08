@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
+#include "OS/Path.hpp"
 
 #ifdef ENABLE_COREGRAPHICS
 #include "CoreGraphics.hpp"
@@ -56,7 +57,7 @@ Bitmap::Load(ConstBuffer<void> buffer, Type type)
 }
 
 bool
-Bitmap::LoadFile(const TCHAR *path)
+Bitmap::LoadFile(Path path)
 {
   const UncompressedImage uncompressed = LoadJPEGFile(path);
   return Load(uncompressed);

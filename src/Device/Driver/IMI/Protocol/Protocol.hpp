@@ -26,8 +26,7 @@ Copyright_License {
 
 #include "Types.hpp"
 
-#include <tchar.h>
-
+class Path;
 class Port;
 struct Declaration;
 class RecordedFlightList;
@@ -67,7 +66,7 @@ namespace IMI
                       OperationEnvironment &env);
 
   bool FlightDownload(Port &port, const RecordedFlightInfo &flight,
-                      const TCHAR *path, OperationEnvironment &env);
+                      Path path, OperationEnvironment &env);
   /**
    * @brief Disconnects from the device
    *

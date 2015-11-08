@@ -23,65 +23,46 @@ Copyright_License {
 
 #include "FileTransaction.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 #include "Util/StringAPI.hxx"
 
 #include <assert.h>
 
-static void
-MakeTemporaryPath(TCHAR *path)
+static AllocatedPath
+MakeTemporaryPath(Path path)
 {
   assert(path != nullptr);
 
 #ifdef HAVE_POSIX
-  _tcscat(path, _T(".tmp"));
+  return path + _T(".tmp");
 #else
-  TCHAR *base = const_cast<TCHAR *>(BaseName(path));
-  if (base == nullptr) {
-    /* dirty fallback */
-    _tcscat(path, _T(DIR_SEPARATOR_S "tmp.tmp"));
-    return;
-  }
-
-  auto *dot = StringFindLast(base, '.');
-  if (dot != nullptr)
-    /* replace existing file name extension */
-    _tcscpy(dot + 1, _T("tmp"));
-  else
-    /* append file name extension */
-    _tcscat(base, _T(".tmp"));
+  return path.WithExtension(_T(".tmp"));
 #endif
 }
 
-FileTransaction::FileTransaction(const TCHAR *_path)
-  :final_path(_path), temporary_path(_path)
+FileTransaction::FileTransaction(Path _path)
+  :final_path(_path), temporary_path(MakeTemporaryPath(_path))
 {
-  assert(_path != nullptr);
-
-  MakeTemporaryPath(temporary_path.buffer());
-
   /* ensure the temporary file doesn't exist already */
-  File::Delete(temporary_path.c_str());
+  File::Delete(temporary_path);
 }
 
 FileTransaction::~FileTransaction()
 {
-  if (!temporary_path.empty())
+  if (!temporary_path.IsNull())
     /* cancel the transaction */
-    File::Delete(temporary_path.c_str());
+    File::Delete(temporary_path);
 }
 
 bool
 FileTransaction::Commit()
 {
-  assert(!temporary_path.empty());
+  assert(!temporary_path.IsNull());
 
-  bool success = File::Replace(temporary_path.c_str(), final_path.c_str());
+  bool success = File::Replace(temporary_path, final_path);
   if (success)
     /* mark the transaction as "finished" to avoid deletion in the
        destructor */
-    temporary_path.clear();
+    temporary_path = nullptr;
 
   return success;
 }
@@ -89,6 +70,7 @@ FileTransaction::Commit()
 void
 FileTransaction::Abandon()
 {
-  assert(!temporary_path.empty());
-  temporary_path.clear();
+  assert(!temporary_path.IsNull());
+
+  temporary_path = nullptr;
 }

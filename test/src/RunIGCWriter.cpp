@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   if (replay == NULL)
     return EXIT_FAILURE;
 
-  const char *output_file = args.ExpectNext();
+  const auto output_file = args.ExpectNextPath();
   args.ExpectEnd();
 
   while (!replay->Basic().time_available)
@@ -45,8 +45,7 @@ int main(int argc, char **argv)
 
   const TCHAR *driver_name = _T("Unknown");
 
-  PathName igc_path(output_file);
-  IGCWriter writer(igc_path);
+  IGCWriter writer(output_file);
   writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"),
                      _T("Ventus"), _T("D-1234"),
                      _T("MM"), "FOO", driver_name, true);

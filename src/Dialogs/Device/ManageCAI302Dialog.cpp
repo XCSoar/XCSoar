@@ -98,8 +98,8 @@ EditUnits(const DialogLook &look, CAI302Device &device)
 static void
 UploadWaypoints(const DialogLook &look, CAI302Device &device)
 {
-  TCHAR path[MAX_PATH];
-  if (!FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS, path))
+  const auto path = FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS);
+  if (path == nullptr)
     return;
 
   CAI302WaypointUploader job(path, device);

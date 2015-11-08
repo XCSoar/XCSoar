@@ -22,6 +22,7 @@
 
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
+#include "OS/Path.hpp"
 #include "TestUtil.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StaticString.hxx"
@@ -85,10 +86,10 @@ TestWriter()
   Profile::Set("key1", 4);
   Profile::Set("key2", "value2");
 
-  Profile::SaveFile(_T("output/TestProfileWriter.prf"));
+  Profile::SaveFile(Path(_T("output/TestProfileWriter.prf")));
 
   Error error;
-  FileLineReader reader(_T("output/TestProfileWriter.prf"), error);
+  FileLineReader reader(Path(_T("output/TestProfileWriter.prf")), error);
   if (reader.error()) {
     skip(3, 0, error.GetMessage());
     return;
@@ -116,7 +117,7 @@ static void
 TestReader()
 {
   Profile::Clear();
-  Profile::LoadFile(_T("test/data/TestProfileReader.prf"));
+  Profile::LoadFile(Path(_T("test/data/TestProfileReader.prf")));
 
   {
     int value;

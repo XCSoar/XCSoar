@@ -33,6 +33,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "LocalPath.hpp"
 #include "Compatibility/path.h"
+#include "OS/Path.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <windef.h> // for MAX_PATH
@@ -51,10 +52,8 @@ Lua::NewFullState()
   InitLegacy(L);
 
   {
-    TCHAR buffer[MAX_PATH];
     SetPackagePath(L,
-                   WideToUTF8Converter(LocalPath(buffer,
-                                                 _T("lua" DIR_SEPARATOR_S "lib" DIR_SEPARATOR_S "?.lua"))));
+                   WideToUTF8Converter(LocalPath(_T("lua" DIR_SEPARATOR_S "lib" DIR_SEPARATOR_S "?.lua")).c_str()));
   }
 
   return L;

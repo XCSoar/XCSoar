@@ -66,7 +66,7 @@ CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
 }
 
 bool
-ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
+ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
 {
@@ -87,7 +87,7 @@ ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
 }
 
 bool
-ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+ReadWaypointFile(Path path, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
 {
   return ReadWaypointFile(path, DetermineWaypointFileType(path),

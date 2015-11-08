@@ -26,7 +26,6 @@ Copyright_License {
 #include "Task/TaskFileSeeYou.hpp"
 #include "Task/TaskFileIGC.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
 #include "Util/StringCompare.hxx"
 
 #include <stdlib.h>
@@ -38,18 +37,18 @@ TaskFile::~TaskFile()
     free ((TCHAR*)namesuffixes[i]);
 }
 TaskFile*
-TaskFile::Create(const TCHAR* path)
+TaskFile::Create(Path path)
 {
   // If XCSoar task file -> return new TaskFileXCSoar
-  if (MatchesExtension(path, _T(".tsk")))
+  if (path.MatchesExtension(_T(".tsk")))
     return new TaskFileXCSoar(path);
 
   // If SeeYou task file -> return new TaskFileSeeYou
-  if (MatchesExtension(path, _T(".cup")))
+  if (path.MatchesExtension(_T(".cup")))
     return new TaskFileSeeYou(path);
 
   // If IGC file -> return new TaskFileIGC
-  if (MatchesExtension(path, _T(".igc")))
+  if (path.MatchesExtension(_T(".igc")))
     return new TaskFileIGC(path);
 
   // unknown task file type
@@ -57,7 +56,7 @@ TaskFile::Create(const TCHAR* path)
 }
 
 OrderedTask *
-TaskFile::GetTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+TaskFile::GetTask(Path path, const TaskBehaviour &task_behaviour,
                   const Waypoints *waypoints, unsigned index)
 {
   std::unique_ptr<TaskFile> file(TaskFile::Create(path));

@@ -37,6 +37,8 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
+class Path;
+
 /**
  * Writer for an UTF-8 text file with native line endings.  All "const
  * char *" arguments must be either valid UTF-8 or 7 bit ASCII.
@@ -59,11 +61,7 @@ public:
    * Creates a new text file.  Truncates the old file if it exists,
    * unless the parameter "append" is true.
    */
-  TextWriter(const char *path, bool append=false);
-
-#ifdef _UNICODE
-  TextWriter(const TCHAR *path, bool append=false);
-#endif
+  TextWriter(Path path, bool append=false);
 
   TextWriter(TextWriter &&other)
     :file(std::move(other.file))

@@ -34,7 +34,7 @@ static void
 TestReader()
 {
   Plane plane;
-  PlaneGlue::ReadFile(plane, _T("test/data/D-4449.xcp"));
+  PlaneGlue::ReadFile(plane, Path(_T("test/data/D-4449.xcp")));
 
   ok1(plane.registration == _T("D-4449"));
   ok1(plane.competition_id == _T("TH"));
@@ -80,9 +80,9 @@ TestWriter()
   plane.max_speed = fixed(41.666);
   plane.wing_area = fixed(9.8);
 
-  PlaneGlue::WriteFile(plane, _T("output/D-4449.xcp"));
+  PlaneGlue::WriteFile(plane, Path(_T("output/D-4449.xcp")));
 
-  FileLineReader reader(_T("output/D-4449.xcp"), IgnoreError());
+  FileLineReader reader(Path(_T("output/D-4449.xcp")), IgnoreError());
   if (reader.error())
     return;
 

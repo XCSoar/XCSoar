@@ -85,7 +85,7 @@ ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
             nullptr,
             _T("*.nmea\0*.igc\0"),
             true);
-  ((FileDataField *)file->GetDataField())->Lookup(replay->GetFilename());
+  ((FileDataField *)file->GetDataField())->Lookup(Path(replay->GetFilename()));
   file->RefreshDisplay();
 
   AddFloat(_("Rate"),
@@ -106,7 +106,7 @@ inline void
 ReplayControlWidget::OnStartClicked()
 {
   const auto &df = (const FileDataField &)GetDataField(FILE);
-  const TCHAR *path = df.GetPathFile();
+  const Path path = df.GetPathFile();
   Error error;
   if (!replay->Start(path, error))
     ShowError(error, _("Replay"));

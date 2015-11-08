@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/RecordedFlight.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
+#include "OS/Path.hpp"
 #include "IO/BinaryWriter.hpp"
 
 #include <stdlib.h>
@@ -105,7 +106,7 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
 
 static bool
 DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
-                    const TCHAR *path, OperationEnvironment &env)
+                    Path path, OperationEnvironment &env)
 {
   assert(flight.internal.cai302 < 64);
 
@@ -170,7 +171,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
 bool
 CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
-                             const TCHAR *path,
+                             Path path,
                              OperationEnvironment &env)
 {
   assert(flight.internal.cai302 < 64);

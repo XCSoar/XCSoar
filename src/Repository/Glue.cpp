@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Glue.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
+#include "OS/Path.hpp"
 
 #define REPOSITORY_URI "http://download.xcsoar.org/repository"
 
@@ -35,5 +36,5 @@ EnqueueRepositoryDownload(bool force)
     return;
 
   repository_downloaded = true;
-  Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
+  Net::DownloadManager::Enqueue(REPOSITORY_URI, Path(_T("repository")));
 }

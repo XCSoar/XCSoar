@@ -24,6 +24,7 @@ Copyright_License {
 #include "MapFile.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "OS/Path.hpp"
 
 #include <zzip/zzip.h>
 
@@ -32,8 +33,8 @@ Copyright_License {
 struct zzip_dir *
 OpenMapFile()
 {
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(ProfileKeys::MapFile, path))
+  auto path = Profile::GetPath(ProfileKeys::MapFile);
+  if (!path.IsNull())
     return nullptr;
 
   return zzip_dir_open(NarrowPathName(path), nullptr);

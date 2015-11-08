@@ -34,7 +34,7 @@ class TestWindow : public SingleWindow {
   Bitmap bitmap;
 
 public:
-  bool LoadFile(const TCHAR *path) {
+  bool LoadFile(Path path) {
     Invalidate();
     return bitmap.LoadFile(path);
   }
@@ -48,12 +48,12 @@ protected:
   }
 };
 
-static tstring path;
+static AllocatedPath path = nullptr;
 
 static void
 ParseCommandLine(Args &args)
 {
-  path = args.ExpectNextT();
+  path = args.ExpectNextPath();
 }
 
 static void
@@ -61,7 +61,7 @@ Main()
 {
   TestWindow window;
   window.Create(_T("ViewImage"), {640, 480});
-  if (window.LoadFile(path.c_str()))
+  if (window.LoadFile(path))
     window.RunEventLoop();
   else
     fprintf(stderr, "Failed to load file\n");

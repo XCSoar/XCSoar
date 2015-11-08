@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Util/tstring.hpp"
+#include "OS/Path.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -41,7 +41,7 @@ struct DerivedInfo;
  * Depends on #FlyingComputer.
  */
 class FlightLogger {
-  tstring path;
+  AllocatedPath path = nullptr;
 
   fixed last_time;
   bool seen_on_ground, seen_flying;
@@ -62,7 +62,7 @@ public:
   /**
    * Call this before Tick().
    */
-  void SetPath(tstring::const_pointer _path) {
+  void SetPath(Path _path) {
     path = _path;
   }
 

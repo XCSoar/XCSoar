@@ -33,7 +33,7 @@ static bool
 SetCPUFrequencyGovernor(const char *governor)
 {
 #ifdef __linux__
-  return File::WriteExisting("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor",
+  return File::WriteExisting(Path("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"),
                              governor);
 #else
   return false;

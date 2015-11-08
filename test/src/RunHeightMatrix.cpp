@@ -27,8 +27,6 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "OS/Args.hpp"
-#include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
 
 #include <zzip/zzip.h>

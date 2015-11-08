@@ -29,17 +29,18 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
+#include "OS/Path.hpp"
 #include "Util/Clamp.hpp"
-
-#include <windef.h> /* for MAX_PATH */
 
 void
 PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 {
-  StaticString<MAX_PATH> plane_path;
-  if (profile.GetPath("PlanePath", plane_path.buffer()) &&
-      PlaneGlue::ReadFile(plane, plane_path.c_str()))
-    return;
+  {
+    auto plane_path = profile.GetPath("PlanePath");
+    if (!plane_path.IsNull() &&
+        PlaneGlue::ReadFile(plane, plane_path))
+      return;
+  }
 
   /* the following is just here to load a pre-6.7 profile */
 

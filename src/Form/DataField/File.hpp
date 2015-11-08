@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Repository/FileType.hpp"
+#include "OS/Path.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/StaticString.hxx"
 
@@ -43,19 +44,18 @@ public:
   /** FileList item */
   struct Item {
     /** Filename */
-    const TCHAR *filename;
+    Path filename;
     /** Path including Filename */
-    TCHAR *path;
+    AllocatedPath path;
 
     Item():filename(nullptr), path(nullptr) {}
 
-    Item(Item &&src):filename(src.filename), path(src.path) {
-      src.filename = src.path = nullptr;
+    Item(Item &&src):filename(src.filename), path(std::move(src.path)) {
+      src.filename = nullptr;
+      src.path = nullptr;
     }
 
     Item(const Item &) = delete;
-
-    ~Item();
 
     Item &operator=(Item &&src) {
       std::swap(filename, src.filename);
@@ -63,7 +63,7 @@ public:
       return *this;
     }
 
-    void Set(const TCHAR *_path);
+    void Set(Path _path);
   };
 
 private:
@@ -92,7 +92,7 @@ private:
   /**
    * Used to store the value while !loaded.
    */
-  StaticString<512> postponed_value;
+  AllocatedPath postponed_value;
 
   /**
    * Stores the patterns while !loaded.
@@ -116,9 +116,8 @@ public:
 
   /**
    * Adds a filename/filepath couple to the filelist
-   * @param fpname The filepath
    */
-  void AddFile(const TCHAR *fpname);
+  void AddFile(Path path);
 
   /**
    * Adds an empty row to the filelist
@@ -133,7 +132,7 @@ public:
   unsigned GetNumFiles() const;
 
   gcc_pure
-  int Find(const TCHAR *text) const;
+  int Find(Path path) const;
 
   /**
    * Iterates through the file list and tries to find an item where the path
@@ -141,21 +140,21 @@ public:
    * that item
    * @param text PathFile to search for
    */
-  void Lookup(const TCHAR *text);
+  void Lookup(Path text);
 
   /**
    * Force the value to the given path.  If the path is not in the
    * file list, add it.  This method does not check whether the file
    * really exists.
    */
-  void ForceModify(const TCHAR *path);
+  void ForceModify(Path path);
 
   /**
    * Returns the PathFile of the currently selected item
    * @return The PathFile of the currently selected item
    */
   gcc_pure
-  const TCHAR *GetPathFile() const;
+  Path GetPathFile() const;
 
   /**
    * Sets the selection to the given index
@@ -178,7 +177,7 @@ public:
   unsigned size() const;
 
   gcc_pure
-  const TCHAR *GetItem(unsigned index) const;
+  Path GetItem(unsigned index) const;
 
   /* virtual methods from class DataField */
   void Inc() override;

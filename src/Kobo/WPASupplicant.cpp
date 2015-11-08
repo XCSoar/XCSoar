@@ -53,7 +53,7 @@ void
 WPASupplicant::Close()
 {
   if (!StringIsEmpty(local_path)) {
-    File::Delete(local_path);
+    File::Delete(Path(local_path));
     local_path[0] = 0;
   }
 

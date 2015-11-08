@@ -25,6 +25,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "IO/BinaryWriter.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "Operation/Operation.hpp"
 
 #include <cstdlib>
@@ -301,7 +302,7 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 }
 
 bool
-FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
+FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 {
   BinaryWriter writer(path);
   if (writer.HasError() || env.IsCancelled())
@@ -353,7 +354,7 @@ FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
 
 bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                            const TCHAR *path, OperationEnvironment &env)
+                            Path path, OperationEnvironment &env)
 {
   if (!BinaryMode(env))
     return false;

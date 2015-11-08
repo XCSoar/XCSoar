@@ -27,6 +27,7 @@
 
 #include "Math/fixed.hpp"
 #include "Replay/TaskAutoPilot.hpp"
+#include "OS/Path.hpp"
 
 extern "C" {
 #include "tap.h"
@@ -47,9 +48,9 @@ extern AutopilotParameters autopilot_parms;
 
 extern int terrain_height;
 const char* GetTestName(const char* in, int task_num, int wind_num);
-extern std::string replay_file;
-extern std::string task_file;
-extern std::string waypoint_file;
+extern AllocatedPath replay_file;
+extern AllocatedPath task_file;
+extern AllocatedPath waypoint_file;
 extern fixed range_threshold;
 
 bool ParseArgs(int argc, char** argv);

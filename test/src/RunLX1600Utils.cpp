@@ -29,7 +29,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Config.hpp"
 #include "Device/Driver/LX/LX1600.hpp"
-#include "OS/PathName.hpp"
 #include "OS/Args.hpp"
 #include "Util/StringUtil.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"

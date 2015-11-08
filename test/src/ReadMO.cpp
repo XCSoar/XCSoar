@@ -21,7 +21,6 @@
 */
 
 #include "Language/MOLoader.hpp"
-#include "OS/PathName.hpp"
 #include "OS/Args.hpp"
 
 #include <stdio.h>
@@ -29,11 +28,11 @@
 int main(int argc, char **argv) {
   Args args(argc, argv, "FILE.igc STRING");
   const char *narrow_path = args.PeekNext();
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   const char *original = args.ExpectNext();
   args.ExpectEnd();
 
-  MOLoader mo(path.c_str());
+  const MOLoader mo(path);
   if (mo.error()) {
     fprintf(stderr, "Failed to load %s\n", narrow_path);
     return 2;

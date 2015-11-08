@@ -23,11 +23,13 @@ Copyright_License {
 
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
+#include "OS/Path.hpp"
 #include "Util/ContainerCast.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
 
+#include <tchar.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -61,9 +63,9 @@ struct JPEGErrorManager {
 };
 
 UncompressedImage
-LoadJPEGFile(const TCHAR *path)
+LoadJPEGFile(Path path)
 {
-  FILE *file = _tfopen(path, _T("rb"));
+  FILE *file = _tfopen(path.c_str(), _T("rb"));
   if (file == nullptr)
     return UncompressedImage::Invalid();
 

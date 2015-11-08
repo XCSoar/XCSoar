@@ -26,9 +26,7 @@ Copyright_License {
 
 #include "FileHandle.hpp"
 
-#ifdef _UNICODE
-#include <tchar.h>
-#endif
+class Path;
 
 class BinaryWriter {
 protected:
@@ -39,11 +37,7 @@ public:
    * Creates a new file. 
    * Truncates the old file if it exists, unless the parameter "append" is true.
    */
-  BinaryWriter(const char *path, bool append = false);
-
-#ifdef _UNICODE
-  BinaryWriter(const TCHAR *path, bool append = false);
-#endif
+  BinaryWriter(Path path, bool append = false);
 
   /**
    * Returns true if opening the file has failed.  This must be

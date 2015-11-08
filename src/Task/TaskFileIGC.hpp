@@ -24,12 +24,12 @@
 #define XCSOAR_TASK_FILE_IGC_HPP
 
 #include "TaskFile.hpp"
+#include "OS/Path.hpp"
 
 class TaskFileIGC: public TaskFile
 {
 public:
-  TaskFileIGC(const TCHAR* _path):
-    TaskFile(_path) {}
+  explicit TaskFileIGC(Path _path):TaskFile(_path) {}
 
   virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
                                const Waypoints *waypoints,

@@ -32,6 +32,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
+class Path;
 class RasterMap;
 class OperationEnvironment;
 struct GeoPoint;
@@ -132,12 +133,12 @@ public:
 
   static struct zzip_dir *OpenArchive();
 
-  static bool NarrowWeatherFilename(char *filename, const TCHAR *name,
+  static bool NarrowWeatherFilename(char *filename, Path name,
                                     unsigned time_index);
 
 private:
   gcc_pure
-  static bool ExistsItem(struct zzip_dir *dir, const TCHAR *name,
+  static bool ExistsItem(struct zzip_dir *dir, Path name,
                          unsigned time_index);
 
   static bool ScanMapItem(struct zzip_dir *dir, MapItem &item);

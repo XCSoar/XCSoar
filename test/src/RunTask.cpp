@@ -119,7 +119,7 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "TASKFILE REPLAYFILE");
-  tstring task_path = args.ExpectNextT();
+  const auto task_path = args.ExpectNextPath();
   DebugReplay *replay = CreateDebugReplay(args);
   if (replay == NULL)
     return EXIT_FAILURE;
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
 
-  OrderedTask *task = TaskFile::GetTask(task_path.c_str(), task_behaviour,
+  OrderedTask *task = TaskFile::GetTask(task_path, task_behaviour,
                                         NULL, 0);
   if (task == NULL) {
     fprintf(stderr, "Failed to load task\n");

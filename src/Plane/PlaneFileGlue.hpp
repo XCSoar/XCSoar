@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef PLANE_FILE_GLUE_HPP
 #define PLANE_FILE_GLUE_HPP
 
-#include <tchar.h>
-
+class Path;
 struct Plane;
 class KeyValueFileReader;
 class KeyValueFileWriter;
@@ -33,9 +32,9 @@ class KeyValueFileWriter;
 namespace PlaneGlue
 {
   bool Read(Plane &plane, KeyValueFileReader &reader);
-  bool ReadFile(Plane &plane, const TCHAR *path);
+  bool ReadFile(Plane &plane, Path path);
   void Write(const Plane &plane, KeyValueFileWriter &writer);
-  bool WriteFile(const Plane &plane, const TCHAR *path);
+  bool WriteFile(const Plane &plane, Path path);
 }
 
 #endif

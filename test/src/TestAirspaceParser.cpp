@@ -43,7 +43,7 @@ struct AirspaceClassTestCouple
 };
 
 static bool
-ParseFile(const TCHAR *path, Airspaces &airspaces)
+ParseFile(Path path, Airspaces &airspaces)
 {
   Error error;
   FileLineReader reader(path, error, Charset::AUTO);
@@ -67,7 +67,7 @@ static void
 TestOpenAir()
 {
   Airspaces airspaces;
-  if (!ParseFile(_T("test/data/airspace/openair.txt"), airspaces)) {
+  if (!ParseFile(Path(_T("test/data/airspace/openair.txt")), airspaces)) {
     skip(3, 0, "Failed to parse input file");
     return;
   }
@@ -174,7 +174,7 @@ static void
 TestTNP()
 {
   Airspaces airspaces;
-  if (!ParseFile(_T("test/data/airspace/tnp.sua"), airspaces)) {
+  if (!ParseFile(Path(_T("test/data/airspace/tnp.sua")), airspaces)) {
     skip(3, 0, "Failed to parse input file");
     return;
   }

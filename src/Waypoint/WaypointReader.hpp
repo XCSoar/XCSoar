@@ -25,22 +25,22 @@ Copyright_License {
 #ifndef WAYPOINT_READER_HPP
 #define WAYPOINT_READER_HPP
 
-#include <tchar.h>
 #include <stdint.h>
 
 enum class WaypointFileType: uint8_t;
 struct zzip_dir;
+class Path;
 class Waypoints;
 class WaypointFactory;
 class OperationEnvironment;
 
 bool
-ReadWaypointFile(const TCHAR *path, WaypointFileType file_type,
+ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation);
 
 bool
-ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+ReadWaypointFile(Path path, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation);
 
 bool

@@ -26,6 +26,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Screen/Point.hpp"
+#include "OS/Path.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -81,7 +82,7 @@ unsigned long FindFreeSpace(const TCHAR *path) {
 void
 StartupLogFreeRamAndStorage()
 {
-  unsigned long freestorage = FindFreeSpace(GetPrimaryDataPath());
+  unsigned long freestorage = FindFreeSpace(GetPrimaryDataPath().c_str());
   LogFormat("Free storage %lu KB", freestorage);
 }
 

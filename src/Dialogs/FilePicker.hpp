@@ -26,6 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+class AllocatedPath;
 class FileDataField;
 
 bool
@@ -37,11 +38,10 @@ FilePicker(const TCHAR *caption, FileDataField &df,
  *
  * @param patterns a list of shell patterns (such as "*.xcm")
  * separated by null bytes and terminated by an empty string
- * @return true if the buffer now contains an absolute fil name, or
- * false if the user has cancelled the dialog or if there are no
- * matching files
+ * @return an absolute file name, or nullptr false if the user has
+ * cancelled the dialog or if there are no matching files
  */
-bool
-FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer);
+AllocatedPath
+FilePicker(const TCHAR *caption, const TCHAR *patterns);
 
 #endif

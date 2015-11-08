@@ -27,6 +27,7 @@ Copyright_License {
 #include "RasterMap.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Thread/Guard.hpp"
+#include "OS/Path.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -107,15 +108,15 @@ public:
   bool UpdateTiles(const GeoPoint &location, fixed radius);
 
 private:
-  bool LoadCache(FileCache &cache, const TCHAR *path);
+  bool LoadCache(FileCache &cache, Path path);
 
-  bool LoadCache(FileCache *cache, const TCHAR *path) {
+  bool LoadCache(FileCache *cache, Path path) {
     return cache != nullptr && LoadCache(*cache, path);
   }
 
-  bool SaveCache(FileCache &cache, const TCHAR *path) const;
+  bool SaveCache(FileCache &cache, Path path) const;
 
-  bool Load(const TCHAR *path, FileCache *cache,
+  bool Load(Path path, FileCache *cache,
             OperationEnvironment &operation);
 };
 

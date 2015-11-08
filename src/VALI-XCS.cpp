@@ -50,12 +50,12 @@ static const char szFail[] = "Validation check failed.  G Record is invalid";
 static const char szNoFile[] = "Validation check failed.  File not found";
 
 static STATUS_t
-ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
+ValidateXCS(Path path, GRecord &oGRecord)
 {
   STATUS_t eStatus = eValidationFileNotFound;
 
   FILE *inFile = nullptr;
-  inFile = _tfopen(FileName, _T("r"));
+  inFile = _tfopen(path.c_str(), _T("r"));
   if (inFile == nullptr)
     return eStatus;
 
@@ -64,14 +64,14 @@ ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
   eStatus = eValidationFailed;
 
   oGRecord.Initialize();
-  if (oGRecord.VerifyGRecordInFile(FileName, IgnoreError()))
+  if (oGRecord.VerifyGRecordInFile(path, IgnoreError()))
     eStatus = eValidationPassed;
 
   return eStatus;
 }
 
 static int
-RunValidate(const TCHAR *path)
+RunValidate(Path path)
 {
   GRecord oGRecord;
   STATUS_t eStatus = ValidateXCS(path, oGRecord);

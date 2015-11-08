@@ -290,7 +290,7 @@ private:
    * @param path Path to the IGC file to write into
    * @return True if received and written successfully, otherwise False
    */
-  bool DownloadFlight(const TCHAR *path, OperationEnvironment &env);
+  bool DownloadFlight(Path path, OperationEnvironment &env);
 
 public:
   /**
@@ -307,7 +307,7 @@ public:
    * @param path Path to the IGC file to write into
    * @return True if received and written successfully, otherwise False
    */
-  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+  bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env) override;
 };
 

@@ -30,6 +30,7 @@
 
 #include <tchar.h>
 
+class Path;
 class GlidePolar;
 class RoutePlannerGlue;
 struct RangeAndRadial;
@@ -87,7 +88,7 @@ public:
    */
   bool TaskCommit(const OrderedTask& that);
 
-  bool TaskSave(const TCHAR *path);
+  bool TaskSave(Path path);
 
   bool TaskSaveDefault();
 

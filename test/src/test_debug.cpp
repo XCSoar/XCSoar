@@ -24,6 +24,7 @@
 #include "harness_task.hpp"
 #include "harness_flight.hpp"
 #include "Contest/Solvers/ContestDijkstra.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "test_debug.hpp"
 
 #include <stdlib.h>
@@ -37,9 +38,9 @@ int output_skip = 5;
 AutopilotParameters autopilot_parms;
 
 int terrain_height = 1;
-std::string replay_file = "test/data/0asljd01.igc";
-std::string waypoint_file = "test/data/waypoints_geo.wpt";
-std::string task_file = "";
+AllocatedPath replay_file = Path(_T("test/data/0asljd01.igc"));
+AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
+AllocatedPath task_file = nullptr;
 fixed range_threshold = fixed(15000);
 
 #ifdef INSTRUMENT_TASK
@@ -155,13 +156,13 @@ ParseArgs(int argc, char** argv)
       printf ("\n");
       break;
     case 'f':
-      replay_file = optarg;
+      replay_file = PathName(optarg);
       break;
     case 'w':
-      waypoint_file = optarg;
+      waypoint_file = PathName(optarg);
       break;
     case 'x':
-      task_file = optarg;
+      task_file = PathName(optarg);
       break;
     case 'd':
       range_threshold = (fixed)atof(optarg);

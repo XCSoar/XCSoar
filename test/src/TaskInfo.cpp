@@ -2,8 +2,10 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Task/LoadFile.hpp"
 
+#include <tchar.h>
+
 static OrderedTask *
-LoadTask2(const TCHAR *path, const TaskBehaviour &task_behaviour)
+LoadTask2(Path path, const TaskBehaviour &task_behaviour)
 {
   OrderedTask *task = LoadTask(path, task_behaviour);
   if (task == nullptr) {
@@ -48,8 +50,8 @@ main(int argc, char **argv)
   int result = EXIT_SUCCESS;
 
   do {
-    tstring path = args.ExpectNextT();
-    OrderedTask *task = LoadTask2(path.c_str(), task_behaviour);
+    const auto path = args.ExpectNextPath();
+    OrderedTask *task = LoadTask2(path, task_behaviour);
     if (task != NULL) {
       Print(*task);
       delete task;

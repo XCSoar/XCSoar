@@ -44,13 +44,13 @@ public:
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "PATH\n");
-  const tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   Waypoints way_points;
 
   NullOperationEnvironment operation;
-  if (!ReadWaypointFile(path.c_str(), way_points,
+  if (!ReadWaypointFile(path, way_points,
                         WaypointFactory(WaypointOrigin::NONE),
                         operation)) {
     fprintf(stderr, "ReadWaypointFile() has failed\n");

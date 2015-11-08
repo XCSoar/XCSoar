@@ -26,10 +26,10 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Thread/Mutex.hpp"
+#include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hxx"
 
-#include <windef.h> // for MAX_PATH
 #include <stdio.h>
 
 namespace NMEALogger
@@ -56,10 +56,10 @@ NMEALogger::Start()
               dt.year, dt.month, dt.day,
               dt.hour, dt.minute);
 
-  TCHAR buffer[MAX_PATH];
-  Directory::Create(LocalPath(buffer, _T("logs")));
+  const auto logs_path = LocalPath(_T("logs"));
+  Directory::Create(logs_path);
 
-  const auto path = LocalPath(buffer, _T("logs"), name);
+  const auto path = AllocatedPath::Build(logs_path, name);
   writer = new TextWriter(path, false);
   return writer != nullptr;
 }

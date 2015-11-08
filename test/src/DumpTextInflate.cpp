@@ -31,7 +31,7 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   Error error;
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 
   InflateLineReader reader(file);
   if (reader.HasFailed()) {
-    fprintf(stderr, "Failed to inflate %s\n", path);
+    fprintf(stderr, "Failed to inflate file\n");
     return EXIT_FAILURE;
   }
 

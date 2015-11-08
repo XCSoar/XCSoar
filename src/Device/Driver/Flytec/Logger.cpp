@@ -30,6 +30,7 @@ Copyright_License {
 #include "Time/TimeoutClock.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
+#include "OS/Path.hpp"
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
 #include "Util/StringCompare.hxx"
@@ -250,7 +251,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                             const TCHAR *path, OperationEnvironment &env)
+                             Path path, OperationEnvironment &env)
 {
   port.StopRxThread();
 

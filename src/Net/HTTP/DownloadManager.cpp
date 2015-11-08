@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DownloadManager.hpp"
+#include "OS/Path.hpp"
 
 #ifdef ANDROID
 
@@ -86,7 +87,7 @@ Net::DownloadManager::Enumerate(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
+Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 {
   assert(download_manager != NULL);
 
@@ -94,7 +95,7 @@ Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
 }
 
 void
-Net::DownloadManager::Cancel(const TCHAR *relative_path)
+Net::DownloadManager::Cancel(Path relative_path)
 {
   assert(download_manager != NULL);
 
@@ -106,11 +107,11 @@ Net::DownloadManager::Cancel(const TCHAR *relative_path)
 #include "ToFile.hpp"
 #include "Session.hpp"
 #include "Thread/StandbyThread.hpp"
-#include "Util/tstring.hpp"
 #include "Operation/Operation.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileTransaction.hpp"
 
+#include <string>
 #include <list>
 #include <algorithm>
 
@@ -121,7 +122,7 @@ class DownloadManagerThread final
   : protected StandbyThread, private QuietOperationEnvironment {
   struct Item {
     std::string uri;
-    tstring path_relative;
+    AllocatedPath path_relative;
 
     Item(const Item &other) = delete;
 
@@ -129,14 +130,14 @@ class DownloadManagerThread final
       :uri(std::move(other.uri)),
        path_relative(std::move(other.path_relative)) {}
 
-    Item(const char *_uri, const TCHAR *_path_relative)
+    Item(const char *_uri, Path _path_relative)
       :uri(_uri), path_relative(_path_relative) {}
 
     Item &operator=(const Item &other) = delete;
 
     gcc_pure
-    bool operator==(const TCHAR *relative_path) const {
-      return path_relative.compare(relative_path) == 0;
+    bool operator==(Path other) const {
+      return path_relative == other;
     }
   };
 
@@ -194,11 +195,11 @@ public:
         position = current_position;
       }
 
-      listener.OnDownloadAdded(item.path_relative.c_str(), size, position);
+      listener.OnDownloadAdded(item.path_relative, size, position);
     }
   }
 
-  void Enqueue(const char *uri, const TCHAR *path_relative) {
+  void Enqueue(const char *uri, Path path_relative) {
     ScopeLock protect(mutex);
     queue.emplace_back(uri, path_relative);
 
@@ -209,7 +210,7 @@ public:
       Trigger();
   }
 
-  void Cancel(const TCHAR *relative_path) {
+  void Cancel(Path relative_path) {
     ScopeLock protect(mutex);
 
     auto i = std::find(queue.begin(), queue.end(), relative_path);
@@ -259,7 +260,7 @@ private:
 
 static bool
 DownloadToFileTransaction(Net::Session &session,
-                          const char *url, const TCHAR *path,
+                          const char *url, Path path,
                           char *md5_digest, OperationEnvironment &env)
 {
   FileTransaction transaction(path);
@@ -281,11 +282,8 @@ DownloadManagerThread::Tick()
     current_position = 0;
     mutex.Unlock();
 
-    TCHAR buffer[MAX_PATH];
-
     bool success = DownloadToFileTransaction(session, item.uri.c_str(),
-                                             LocalPath(buffer,
-                                                       item.path_relative.c_str()),
+                                             LocalPath(item.path_relative.c_str()),
                                              nullptr, *this);
 
     mutex.Lock();
@@ -293,7 +291,7 @@ DownloadManagerThread::Tick()
     const Item copy(std::move(queue.front()));
     queue.pop_front();
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadComplete(copy.path_relative.c_str(), success);
+      (*i)->OnDownloadComplete(copy.path_relative, success);
   }
 }
 
@@ -358,7 +356,7 @@ Net::DownloadManager::Enumerate(DownloadListener &listener)
 }
 
 void
-Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
+Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 {
   assert(thread != NULL);
 
@@ -366,7 +364,7 @@ Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
 }
 
 void
-Net::DownloadManager::Cancel(const TCHAR *relative_path)
+Net::DownloadManager::Cancel(Path relative_path)
 {
   assert(thread != NULL);
 

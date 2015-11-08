@@ -25,7 +25,7 @@ Copyright_License {
 #include "LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/StringCompare.hxx"
@@ -396,20 +396,20 @@ AutoDetectLanguage()
 }
 
 static bool
-LoadLanguageFile(const TCHAR *path)
+LoadLanguageFile(Path path)
 {
-  LogFormat(_T("Language: loading file '%s'"), path);
+  LogFormat(_T("Language: loading file '%s'"), path.c_str());
 
   delete mo_loader;
   mo_loader = new MOLoader(path);
   if (mo_loader->error()) {
-    LogFormat(_T("Language: could not load file '%s'"), path);
+    LogFormat(_T("Language: could not load file '%s'"), path.c_str());
     delete mo_loader;
     mo_loader = NULL;
     return false;
   }
 
-  LogFormat(_T("Loaded translations from file '%s'"), path);
+  LogFormat(_T("Loaded translations from file '%s'"), path.c_str());
 
   mo_file = &mo_loader->get();
   return true;
@@ -448,26 +448,24 @@ ReadLanguageFile()
 
   LogFormat("Loading language file");
 
-  TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
-  const TCHAR *value = Profile::GetPath(ProfileKeys::LanguageFile, buffer)
-    ? buffer : _T("");
+  auto value = Profile::GetPath(ProfileKeys::LanguageFile);
 
-  if (StringIsEqual(value, _T("none")))
-    return;
-
-  if (StringIsEmpty(value) || StringIsEqual(value, _T("auto"))) {
+  if (value == nullptr || value.IsEmpty() || value == Path(_T("auto"))) {
     AutoDetectLanguage();
     return;
   }
 
-  const TCHAR *base = BaseName(value);
-  if (base == NULL)
+  if (value == Path(_T("none")))
+    return;
+
+  Path base = value.GetBase();
+  if (base == nullptr)
     base = value;
 
   if (base == value)
-    value = LocalPath(second_buffer, value);
+    value = LocalPath(value);
 
-  if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
+  if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base.c_str()))
     AutoDetectLanguage();
 #endif
 }

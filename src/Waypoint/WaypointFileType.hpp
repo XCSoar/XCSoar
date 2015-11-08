@@ -27,7 +27,8 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <stdint.h>
-#include <tchar.h>
+
+class Path;
 
 enum class WaypointFileType: uint8_t {
   UNKNOWN,
@@ -40,6 +41,7 @@ enum class WaypointFileType: uint8_t {
 };
 
 gcc_pure
-WaypointFileType DetermineWaypointFileType(const TCHAR *path);
+WaypointFileType
+DetermineWaypointFileType(Path path);
 
 #endif

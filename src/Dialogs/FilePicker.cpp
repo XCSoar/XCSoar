@@ -53,10 +53,10 @@ FilePicker(const TCHAR *caption, FileDataField &df,
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (i == -2) {
     const auto path = DownloadFilePicker(df.GetFileType());
-    if (path.empty())
+    if (path.IsNull())
       return false;
 
-    df.ForceModify(path.c_str());
+    df.ForceModify(path);
     return true;
   }
 #endif
@@ -69,16 +69,14 @@ FilePicker(const TCHAR *caption, FileDataField &df,
   return true;
 }
 
-bool
-FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
+AllocatedPath
+FilePicker(const TCHAR *caption, const TCHAR *patterns)
 {
   assert(patterns != nullptr);
 
   FileDataField df;
   df.ScanMultiplePatterns(patterns);
-  if (!FilePicker(caption, df))
-    return false;
-
-  _tcscpy(buffer, df.GetAsString());
-  return true;
+  return FilePicker(caption, df)
+    ? df.GetPathFile()
+    : nullptr;
 }

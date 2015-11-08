@@ -139,7 +139,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 }
 
 bool
-PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
+PlaneGlue::ReadFile(Plane &plane, Path path)
 {
   Error error;
   FileLineReaderA reader(path, error);
@@ -184,7 +184,7 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 }
 
 bool
-PlaneGlue::WriteFile(const Plane &plane, const TCHAR *path)
+PlaneGlue::WriteFile(const Plane &plane, Path path)
 {
   TextWriter writer(path);
   if (!writer.IsOpen())

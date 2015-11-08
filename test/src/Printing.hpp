@@ -27,6 +27,7 @@
 
 #include <iostream>
 
+class Path;
 class TaskManager;
 class AbortTask;
 class GotoTask;
@@ -50,6 +51,7 @@ class FlatTriangleFan;
 struct Waypoint;
 struct AirspaceAltitude;
 
+std::ostream &operator<<(std::ostream &f, Path path);
 std::ostream &operator<< (std::ostream &f, const Waypoint &wp);
 
 class PrintHelper {

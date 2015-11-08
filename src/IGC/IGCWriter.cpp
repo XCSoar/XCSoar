@@ -26,10 +26,11 @@ Copyright_License {
 #include "Generator.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
+#include "OS/Path.hpp"
 
 #include <assert.h>
 
-IGCWriter::IGCWriter(const TCHAR *path)
+IGCWriter::IGCWriter(Path path)
   :file(path)
 {
   fix.Clear();

@@ -25,17 +25,18 @@ Copyright_License {
 #define XCSOAR_CAI302_WAYPOINT_UPLOADER_HPP
 
 #include "Job/Job.hpp"
+#include "OS/Path.hpp"
 
 #include <tchar.h>
 
 class CAI302Device;
 
 class CAI302WaypointUploader : public Job {
-  const TCHAR *const path;
+  const Path path;
   CAI302Device &device;
 
 public:
-  CAI302WaypointUploader(const TCHAR *_path, CAI302Device &_device)
+  CAI302WaypointUploader(Path _path, CAI302Device &_device)
     :path(_path), device(_device) {}
 
   virtual void Run(OperationEnvironment &env);

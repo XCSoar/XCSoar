@@ -24,30 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_IO_FILE_HANDLE_HPP
 #define XCSOAR_IO_FILE_HANDLE_HPP
 
+#include "OS/Path.hpp"
+
 #include <algorithm>
 
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef _UNICODE
 #include <tchar.h>
-#endif
 
 class FileHandle {
 private:
   FILE *file;
 
 public:
-  FileHandle(const char *path, const char *mode) {
-    file = fopen(path, mode);
+  FileHandle(Path path, const TCHAR *mode) {
+    file = _tfopen(path.c_str(), mode);
   }
-
-#ifdef _UNICODE
-  FileHandle(const TCHAR *path, const TCHAR *mode) {
-    file = _tfopen(path, mode);
-  }
-#endif
 
   FileHandle(const FileHandle &other) = delete;
 

@@ -23,7 +23,7 @@
 #ifndef XCSOAR_TASK_FILE_HPP
 #define XCSOAR_TASK_FILE_HPP
 
-#include "Util/StaticString.hxx"
+#include "OS/Path.hpp"
 #include "Util/StaticArray.hpp"
 
 #include <windef.h> // for MAX_PATH
@@ -36,11 +36,11 @@ class OrderedTask;
 class TaskFile
 {
 protected:
-  StaticString<MAX_PATH> path;
+  AllocatedPath path;
   StaticArray<TCHAR *, 64> namesuffixes;
 
 protected:
-  TaskFile(const TCHAR *_path)
+  TaskFile(Path _path)
     :path(_path) {}
 
 public:
@@ -51,9 +51,9 @@ public:
    * @param filename The filepath
    * @return TaskFile instance
    */
-  static TaskFile* Create(const TCHAR* path);
+  static TaskFile *Create(Path path);
 
-  static OrderedTask *GetTask(const TCHAR *path,
+  static OrderedTask *GetTask(Path path,
                               const TaskBehaviour &task_behaviour,
                               const Waypoints *waypoints,
                               unsigned index);

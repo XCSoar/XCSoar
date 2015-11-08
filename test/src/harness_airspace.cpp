@@ -64,7 +64,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
   std::ofstream *fin = NULL;
 
   if (verbose) {
-    Directory::Create(_T("output/results"));
+    Directory::Create(Path(_T("output/results")));
     fin = new std::ofstream("output/results/res-bb-in.txt");
   }
 
@@ -270,7 +270,7 @@ void scan_airspaces(const AircraftState state,
 {
   const fixed range(20000.0);
 
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
 
   {
     AirspaceVisitorPrint pvisitor("output/results/res-bb-range.txt",

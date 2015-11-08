@@ -33,6 +33,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "OS/Clock.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "Time/BrokenDateTime.hpp"
 
 #include <cstdio>
@@ -190,7 +191,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 
 bool
 IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
-                    const TCHAR *path, OperationEnvironment &env)
+                    Path path, OperationEnvironment &env)
 {
   if (!_connected)
     return false;
@@ -201,7 +202,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight), env))
     return false;
 
-  FILE *fileIGC = _tfopen(path, _T("w+b"));
+  FILE *fileIGC = _tfopen(path.c_str(), _T("w+b"));
   if (fileIGC == nullptr)
     return false;
 
@@ -251,7 +252,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   fclose(fileIGC);
 
   if (!ok)
-    File::Delete(path);
+    File::Delete(Path(path));
 
   return ok;
 }

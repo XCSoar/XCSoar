@@ -62,7 +62,7 @@ void
 SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WndProperty *wp = Add(_T(""), 0, true);
-  wp->SetText(GetPrimaryDataPath());
+  wp->SetText(GetPrimaryDataPath().c_str());
   wp->SetEnabled(false);
 
   AddFile(_("Map database"),

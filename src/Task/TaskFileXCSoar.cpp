@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Task/TaskFileXCSoar.hpp"
 #include "LoadFile.hpp"
+#include "OS/Path.hpp"
 
 #include <assert.h>
 

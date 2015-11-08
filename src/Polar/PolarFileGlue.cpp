@@ -38,7 +38,7 @@ PolarGlue::LoadFromFile(PolarInfo &polar, NLineReader &reader)
 }
 
 bool
-PolarGlue::LoadFromFile(PolarInfo &polar, const TCHAR *path, Error &error)
+PolarGlue::LoadFromFile(PolarInfo &polar, Path path, Error &error)
 {
   FileLineReaderA *reader = new FileLineReaderA(path, error);
   if (reader->error()) {
@@ -60,7 +60,7 @@ PolarGlue::SaveToFile(const PolarInfo &polar, TextWriter &writer)
 }
 
 bool
-PolarGlue::SaveToFile(const PolarInfo &polar, const TCHAR* path)
+PolarGlue::SaveToFile(const PolarInfo &polar, Path path)
 {
   TextWriter writer(path);
   if (!writer.IsOpen())

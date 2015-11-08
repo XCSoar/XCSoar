@@ -94,7 +94,7 @@ int main(int argc, char **argv)
   tstring driver_name = args.ExpectNextT();
   const DeviceConfig config = ParsePortArgs(args);
 
-  PathName path(args.ExpectNext());
+  const auto path = args.ExpectNextPath();
 
   unsigned flight_id = args.IsEmpty() ? 0 : atoi(args.GetNext());
   args.ExpectEnd();

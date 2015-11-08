@@ -26,10 +26,12 @@ Copyright_License {
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
 #include "Units/System.hpp"
+#include "OS/Path.hpp"
 #include "Util/Error.hxx"
 
 DebugReplay*
-DebugReplayIGC::Create(const char *input_file) {
+DebugReplayIGC::Create(Path input_file)
+{
   Error error;
   FileLineReaderA *reader = new FileLineReaderA(input_file, error);
   if (reader->error()) {

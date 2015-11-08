@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "RadioFrequency.hpp"
+#include "OS/Path.hpp"
 
 Device::~Device() {}
 
@@ -118,7 +119,7 @@ AbstractDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 AbstractDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                               const TCHAR *path, OperationEnvironment &env)
+                               Path path, OperationEnvironment &env)
 {
   return false;
 }

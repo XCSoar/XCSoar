@@ -25,6 +25,7 @@ Copyright_License {
 #define NET_TO_FILE_HPP
 
 #include "Job/Job.hpp"
+#include "OS/Path.hpp"
 
 #include <tchar.h>
 
@@ -40,19 +41,19 @@ namespace Net {
    * which will contain the hex MD5 digest after returning
    * @return true on success, false on error
    */
-  bool DownloadToFile(Session &session, const char *url, const TCHAR *path,
+  bool DownloadToFile(Session &session, const char *url, Path path,
                       char *md5_digest,
                       OperationEnvironment &env);
 
   class DownloadToFileJob : public Job {
     Session &session;
     const char *url;
-    const TCHAR *path;
+    const Path path;
     char md5_digest[33];
     bool success;
 
   public:
-    DownloadToFileJob(Session &_session, const char *_url, const TCHAR *_path)
+    DownloadToFileJob(Session &_session, const char *_url, Path _path)
       :session(_session), url(_url), path(_path), success(false) {}
 
     bool WasSuccessful() const {

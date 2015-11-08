@@ -79,7 +79,7 @@ unsigned
 SystemLoadCPU()
 {
   char line[256];
-  if (!File::ReadString("/proc/stat", line, sizeof(line)))
+  if (!File::ReadString(Path("/proc/stat"), line, sizeof(line)))
     return (unsigned)-1;
 
   static constexpr unsigned HISTORY_LENGTH = 5;

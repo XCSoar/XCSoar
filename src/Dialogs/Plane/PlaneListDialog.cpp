@@ -31,7 +31,7 @@ Copyright_License {
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "Compatibility/path.h"
 #include "LocalPath.hpp"
 #include "Components.hpp"
@@ -57,9 +57,9 @@ class PlaneListWidget final
 
   struct ListItem {
     StaticString<32> name;
-    StaticString<MAX_PATH> path;
+    AllocatedPath path;
 
-    ListItem(const TCHAR *_name, const TCHAR *_path)
+    ListItem(const TCHAR *_name, Path _path)
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const {
@@ -74,8 +74,8 @@ class PlaneListWidget final
   public:
     PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
-    void Visit(const TCHAR *path, const TCHAR *filename) override {
-      list.emplace_back(filename, path);
+    void Visit(Path path, Path filename) override {
+      list.emplace_back(filename.c_str(), path);
     }
   };
 
@@ -189,11 +189,11 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   } else
     row_renderer.DrawFirstRow(canvas, rc, list[i].name);
 
-  row_renderer.DrawSecondRow(canvas, rc, list[i].path);
+  row_renderer.DrawSecondRow(canvas, rc, list[i].path.c_str());
 }
 
 static bool
-LoadFile(const TCHAR *path)
+LoadFile(Path path)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
@@ -254,8 +254,7 @@ PlaneListWidget::NewClicked()
     StaticString<42> filename(plane.registration);
     filename += _T(".xcp");
 
-    StaticString<MAX_PATH> buffer;
-    const auto path = LocalPath(buffer.buffer(), filename);
+    const auto path = LocalPath(filename);
 
     if (File::Exists(path)) {
       StaticString<256> tmp;
@@ -278,7 +277,7 @@ PlaneListWidget::EditClicked()
   assert(GetList().GetCursorIndex() < list.size());
 
   const unsigned index = GetList().GetCursorIndex();
-  const TCHAR *old_path = list[index].path;
+  const Path old_path = list[index].path;
   const TCHAR *old_filename = list[index].name;
 
   Plane plane;
@@ -295,10 +294,8 @@ PlaneListWidget::EditClicked()
     filename += _T(".xcp");
 
     if (filename != old_filename) {
-      StaticString<MAX_PATH> path;
-      DirName(old_path, path.buffer());
-      path += _T(DIR_SEPARATOR_S);
-      path += filename;
+      const auto path = AllocatedPath::Build(old_path.GetParent(),
+                                             filename);
 
       if (File::Exists(path)) {
         StaticString<256> tmp;
@@ -312,7 +309,7 @@ PlaneListWidget::EditClicked()
       File::Delete(old_path);
       PlaneGlue::WriteFile(plane, path);
       if (Profile::GetPathIsEqual("PlanePath", old_path)) {
-        list[index].path = path;
+        list[index].path = Path(path);
         list[index].name = filename;
         Load(index);
       }

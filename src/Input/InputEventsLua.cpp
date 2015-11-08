@@ -30,7 +30,7 @@ Copyright_License {
 #include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Util/Error.hxx"
@@ -42,25 +42,25 @@ extern "C" {
 #include <lua.h>
 }
 
-#include <windef.h> // for MAX_PATH
+#include <windef.h> /* for MAX_PATH */
 
 class LuaFileVisitor final : public File::Visitor {
 public:
   ComboList combo_list;
 
-  void Visit(const TCHAR *path, const TCHAR *filename) override {
-    combo_list.Append(combo_list.size(), path, filename);
+  void Visit(Path path, Path filename) override {
+    combo_list.Append(combo_list.size(), path.c_str(), filename.c_str());
   }
 };
 
-static const TCHAR *
-SelectLuaFile(TCHAR *buffer, const TCHAR *path)
+static AllocatedPath
+SelectLuaFile(const TCHAR *path)
 {
   if (StringIsEmpty(path)) {
     /* no parameter: let user select a *.lua file */
     LuaFileVisitor visitor;
 
-    Directory::VisitSpecificFiles(LocalPath(buffer, _T("lua")), _T("*.lua"),
+    Directory::VisitSpecificFiles(LocalPath(_T("lua")), _T("*.lua"),
                                   visitor, true);
     if (visitor.combo_list.empty()) {
       ShowMessageBox(_("Not found"), _T("RunLuaFile"),
@@ -72,13 +72,12 @@ SelectLuaFile(TCHAR *buffer, const TCHAR *path)
     if (i < 0)
       return nullptr;
 
-    UnsafeCopyString(buffer, visitor.combo_list[i].string_value);
-    return buffer;
+    return Path(visitor.combo_list[i].string_value);
   } else if (StringEndsWith(path, _T(".lua"))) {
     /* *.lua file specified: run this file */
-    return IsAbsolutePath(path)
-      ? path
-      : LocalPath(buffer, _T("lua"), path);
+    return Path(path).IsAbsolute()
+      ? AllocatedPath(Path(path))
+      : AllocatedPath::Build(LocalPath(_T("lua")), path);
   } else {
     ShowMessageBox(_T("RunLuaFile expects *.lua parameter"),
                    _T("RunLuaFile"), MB_OK|MB_ICONINFORMATION);
@@ -92,13 +91,13 @@ void
 InputEvents::eventRunLuaFile(const TCHAR *misc)
 {
 #ifdef USE_LUA
-  TCHAR buffer[MAX_PATH];
-  const TCHAR *path = SelectLuaFile(buffer, misc);
-  if (path == nullptr)
+  const auto path = SelectLuaFile(misc);
+  if (path.IsNull())
     return;
 
   Error error;
   if (!Lua::StartFile(path, error)) {
+    TCHAR buffer[MAX_PATH];
     StringFormat(buffer, MAX_PATH, _T("RunLuaFile %s"), misc);
     ShowError(error, buffer);
   }

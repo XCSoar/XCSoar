@@ -25,6 +25,7 @@ Copyright_License {
 #define TASK_STORE_HPP
 
 #include "Compiler.h"
+#include "OS/Path.hpp"
 #include "Util/tstring.hpp"
 
 #include <vector>
@@ -41,12 +42,12 @@ public:
   struct Item
   {
     tstring task_name;
-    tstring filename;
+    AllocatedPath filename;
     unsigned task_index;
     OrderedTask* task;
     bool valid;
 
-    Item(tstring::const_pointer the_filename,
+    Item(Path the_filename,
          tstring::const_pointer _task_name,
          unsigned _task_index = 0)
       :task_name(_task_name),
@@ -57,14 +58,17 @@ public:
 
     ~Item();
 
+    Item(Item &&) = default;
+    Item &operator=(Item &&) = default;
+
     gcc_pure
     tstring::const_pointer GetName() const {
       return task_name.c_str();
     }
 
     gcc_pure
-    tstring::const_pointer GetPath() const {
-      return filename.c_str();
+    Path GetPath() const {
+      return filename;
     }
 
     const OrderedTask *GetTask(const TaskBehaviour &task_behaviour);
@@ -122,7 +126,7 @@ public:
    * @return pathname of the task defined by the given index
    */
   gcc_pure
-  tstring::const_pointer GetPath(unsigned index) const;
+  Path GetPath(unsigned index) const;
 
   /**
    * Return the task defined by the given index

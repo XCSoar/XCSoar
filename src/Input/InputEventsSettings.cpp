@@ -38,6 +38,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
 
 void
@@ -256,7 +257,7 @@ void
 InputEvents::eventProfileLoad(const TCHAR *misc)
 {
   if (!StringIsEmpty(misc)) {
-    Profile::LoadFile(misc);
+    Profile::LoadFile(Path(misc));
 
     MapFileChanged = true;
     WaypointFileChanged = true;
@@ -274,7 +275,7 @@ void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
   if (!StringIsEmpty(misc))
-    Profile::SaveFile(misc);
+    Profile::SaveFile(Path(misc));
 }
 
 // AdjustForecastTemperature

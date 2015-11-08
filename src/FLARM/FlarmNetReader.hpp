@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NET_READER_HPP
 #define XCSOAR_FLARM_NET_READER_HPP
 
-#include <tchar.h>
-
+class Path;
 class FlarmNetDatabase;
 class NLineReader;
 
@@ -48,7 +47,7 @@ namespace FlarmNetReader
    * @param path the path of the file
    * @return the number of records read from the file
    */
-  unsigned LoadFile(const TCHAR *path, FlarmNetDatabase &database);
+  unsigned LoadFile(Path path, FlarmNetDatabase &database);
 };
 
 #endif

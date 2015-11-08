@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "LocalPath.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
@@ -56,9 +57,9 @@ class ProfileListWidget final
 
   struct ListItem {
     StaticString<32> name;
-    StaticString<MAX_PATH> path;
+    AllocatedPath path;
 
-    ListItem(const TCHAR *_name, const TCHAR *_path)
+    ListItem(const TCHAR *_name, Path _path)
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const {
@@ -73,8 +74,8 @@ class ProfileListWidget final
   public:
     ProfileFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
-    void Visit(const TCHAR *path, const TCHAR *filename) override {
-      list.emplace_back(filename, path);
+    void Visit(Path path, Path filename) override {
+      list.emplace_back(filename.c_str(), path);
     }
   };
 
@@ -101,20 +102,20 @@ public:
   void CreateButtons(WidgetDialog &dialog);
 
   gcc_pure
-  tstring::const_pointer GetSelectedPath() const {
+  Path GetSelectedPath() const {
     if (list.empty())
       return nullptr;
 
     return list[GetList().GetCursorIndex()].path;
   }
 
-  void SelectPath(const TCHAR *path);
+  void SelectPath(Path path);
 
 private:
   void UpdateList();
 
   gcc_pure
-  int FindPath(const TCHAR *path) const;
+  int FindPath(Path path) const;
 
   void NewClicked();
   void PasswordClicked();
@@ -170,17 +171,17 @@ ProfileListWidget::UpdateList()
 }
 
 int
-ProfileListWidget::FindPath(const TCHAR *path) const
+ProfileListWidget::FindPath(Path path) const
 {
   for (unsigned n = list.size(), i = 0u; i < n; ++i)
-    if (StringIsEqual(path, list[i].path))
+    if (path == list[i].path)
       return i;
 
   return -1;
 }
 
 void
-ProfileListWidget::SelectPath(const TCHAR *path)
+ProfileListWidget::SelectPath(Path path)
 {
   auto i = FindPath(path);
   if (i >= 0)
@@ -233,9 +234,7 @@ ProfileListWidget::NewClicked()
   filename = name;
   filename += _T(".prf");
 
-  StaticString<MAX_PATH> buffer;
-  const auto path = LocalPath(buffer.buffer(), filename);
-
+  const auto path = LocalPath(filename);
   if (!File::CreateExclusive(path)) {
     ShowMessageBox(name, _("File exists already."), MB_OK|MB_ICONEXCLAMATION);
     return;
@@ -274,7 +273,7 @@ ProfileListWidget::CopyClicked()
   assert(GetList().GetCursorIndex() < list.size());
 
   const auto &item = list[GetList().GetCursorIndex()];
-  const TCHAR *old_path = item.path;
+  const Path old_path = item.path;
 
   Error error;
   ProfileMap data;
@@ -295,8 +294,7 @@ ProfileListWidget::CopyClicked()
   new_filename = new_name;
   new_filename += _T(".prf");
 
-  StaticString<MAX_PATH> buffer;
-  const auto new_path = LocalPath(buffer.buffer(), new_filename);
+  const auto new_path = LocalPath(new_filename);
 
   if (File::ExistsAny(new_path)) {
     ShowMessageBox(new_name, _("File exists already."),
@@ -393,8 +391,8 @@ ProfileListDialog()
   dialog.StealWidget();
 }
 
-tstring
-SelectProfileDialog(tstring::const_pointer selected_path)
+AllocatedPath
+SelectProfileDialog(Path selected_path)
 {
   ProfileListWidget widget(true);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
@@ -404,7 +402,7 @@ SelectProfileDialog(tstring::const_pointer selected_path)
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
 
-  if (selected_path != nullptr) {
+  if (!selected_path.IsNull()) {
     dialog.PrepareWidget();
     widget.SelectPath(selected_path);
   }
@@ -415,9 +413,6 @@ SelectProfileDialog(tstring::const_pointer selected_path)
     ? widget.GetSelectedPath()
     : nullptr;
   dialog.StealWidget();
-
-  if (selected_path == nullptr)
-    return tstring();
 
   return selected_path;
 }

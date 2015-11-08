@@ -49,8 +49,8 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
   df->ScanMultiplePatterns(filters);
 
   if (registry_key != nullptr) {
-    TCHAR path[MAX_PATH];
-    if (Profile::GetPath(registry_key, path))
+    const auto path = Profile::GetPath(registry_key);
+    if (!path.IsNull())
       df->Lookup(path);
   }
 
@@ -129,11 +129,9 @@ bool
 RowFormWidget::SaveValueFileReader(unsigned i, const char *registry_key)
 {
   const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
-  TCHAR new_value[MAX_PATH];
-  _tcscpy(new_value, dfe->GetPathFile());
-  ContractLocalPath(new_value);
+  const auto new_value = ContractLocalPath(dfe->GetPathFile());
 
-  const WideToUTF8Converter new_value2(new_value);
+  const WideToUTF8Converter new_value2(new_value.c_str());
   if (!new_value2.IsValid())
     return false;
 

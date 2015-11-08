@@ -27,21 +27,21 @@ Copyright_License {
 #include "ZipLineReader.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
+#include "OS/Path.hpp"
 #include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
 #include <assert.h>
 #include <string.h>
-#include <windef.h> /* for MAX_PATH */
 
 NLineReader *
 OpenConfiguredTextFileA(const char *profile_key)
 {
   assert(profile_key != nullptr);
 
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(profile_key, path))
+  const auto path = Profile::GetPath(profile_key);
+  if (path.IsNull())
     return nullptr;
 
   Error error;
@@ -60,8 +60,8 @@ OpenConfiguredTextFile(const char *profile_key, Charset cs)
 {
   assert(profile_key != nullptr);
 
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(profile_key, path))
+  const auto path = Profile::GetPath(profile_key);
+  if (path.IsNull())
     return nullptr;
 
   Error error;

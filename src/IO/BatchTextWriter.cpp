@@ -40,7 +40,7 @@ BatchTextWriter::Flush()
   if (buffer.IsEmpty())
     return true;
 
-  TextWriter writer(path.c_str(), append);
+  TextWriter writer(path, append);
   if (!writer.IsOpen())
     return false;
 

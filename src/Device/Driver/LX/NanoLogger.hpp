@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_LX_NANO_LOGGER_HPP
 #define XCSOAR_DEVICE_DRIVER_LX_NANO_LOGGER_HPP
 
-#include <tchar.h>
-
+class Path;
 class Port;
 class RecordedFlightList;
 struct RecordedFlightInfo;
@@ -36,7 +35,7 @@ namespace Nano {
                       OperationEnvironment &env);
 
   bool DownloadFlight(Port &port, const RecordedFlightInfo &flight,
-                      const TCHAR *path, OperationEnvironment &env);
+                      Path path, OperationEnvironment &env);
 }
 
 #endif

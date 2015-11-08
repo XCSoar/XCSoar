@@ -31,6 +31,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+class Path;
 struct GPSState;
 struct BrokenDateTime;
 struct NMEAInfo;
@@ -53,7 +54,7 @@ public:
   /**
    * Create a new IGC file.  The caller must check IsOpen().
    */
-  IGCWriter(const TCHAR *path);
+  explicit IGCWriter(Path path);
 
   bool IsOpen() const {
     return file.IsOpen();

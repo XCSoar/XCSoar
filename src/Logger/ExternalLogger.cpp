@@ -36,6 +36,7 @@
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Job/TriStateJob.hpp"
+#include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IGC/IGCParser.hpp"
@@ -158,11 +159,11 @@ DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 class DownloadFlightJob {
   DeviceDescriptor &device;
   const RecordedFlightInfo &flight;
-  const TCHAR *path;
+  const Path path;
 
 public:
   DownloadFlightJob(DeviceDescriptor &_device,
-                    const RecordedFlightInfo &_flight, const TCHAR *_path)
+                    const RecordedFlightInfo &_flight, const Path _path)
     :device(_device), flight(_flight), path(_path) {}
 
   bool Run(OperationEnvironment &env) {
@@ -172,7 +173,7 @@ public:
 
 static TriStateJobResult
 DoDownloadFlight(DeviceDescriptor &device,
-                 const RecordedFlightInfo &flight, const TCHAR *path)
+                 const RecordedFlightInfo &flight, Path path)
 {
   TriStateJob<DownloadFlightJob> job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
@@ -181,7 +182,7 @@ DoDownloadFlight(DeviceDescriptor &device,
 }
 
 static void
-ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
+ReadIGCMetaData(Path path, IGCHeader &header, BrokenDate &date)
 {
   strcpy(header.manufacturer, "XXX");
   strcpy(header.id, "000");
@@ -278,10 +279,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  {
-    TCHAR buffer[MAX_PATH];
-    Directory::Create(LocalPath(buffer, _T("logs")));
-  }
+  const auto logs_path = LocalPath(_T("logs"));
+  Directory::Create(logs_path);
 
   while (true) {
     // Show list of the flights
@@ -290,10 +289,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       break;
 
     // Download chosen IGC file into temporary file
-    TCHAR buffer[MAX_PATH];
-    Directory::Create(LocalPath(buffer, _T("logs")));
-
-    const auto path = LocalPath(buffer, _T("logs"), _T("temp.igc"));
+    const auto path = AllocatedPath::Build(logs_path, _T("temp.igc"));
     switch (DoDownloadFlight(device, *flight, path)) {
     case TriStateJobResult::SUCCESS:
       break;
@@ -323,8 +319,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    TCHAR buffer2[MAX_PATH];
-    const auto final_path = LocalPath(buffer2, _T("logs"), name);
+    const auto final_path = AllocatedPath::Build(logs_path, name);
 
     // Remove a file with the same name if it exists
     if (File::Exists(final_path))

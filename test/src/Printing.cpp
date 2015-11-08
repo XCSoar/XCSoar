@@ -28,6 +28,13 @@
 #include <fstream>
 
 std::ostream &
+operator<<(std::ostream &f, Path path)
+{
+  f << path.c_str();
+  return f;
+}
+
+std::ostream &
 operator<< (std::ostream& f, const Waypoint& wp)
 {
   f << wp.location.longitude << " " << wp.location.latitude << "\n";
@@ -91,7 +98,7 @@ PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 void
 PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 {
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream fs("output/results/res-trace.txt");
 
   for (auto it = trace.begin(); it != trace.end(); ++it)

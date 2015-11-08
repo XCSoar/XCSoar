@@ -24,6 +24,7 @@
 #include "FLARM/FlarmNetReader.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/FlarmId.hpp"
+#include "OS/Path.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)
@@ -31,7 +32,8 @@ int main(int argc, char **argv)
   plan_tests(15);
 
   FlarmNetDatabase db;
-  int count = FlarmNetReader::LoadFile(_T("test/data/flarmnet/data.fln"), db);
+  int count = FlarmNetReader::LoadFile(Path(_T("test/data/flarmnet/data.fln")),
+                                       db);
   ok1(count == 6);
 
   FlarmId id = FlarmId::Parse("DDA85C", NULL);

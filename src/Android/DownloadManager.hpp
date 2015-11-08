@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <list>
 
+class Path;
 class Context;
 
 namespace Net {
@@ -58,11 +59,11 @@ public:
 
   void AddListener(Net::DownloadListener &listener);
   void RemoveListener(Net::DownloadListener &listener);
-  void OnDownloadComplete(const char *path_relative, bool success);
+  void OnDownloadComplete(Path path_relative, bool success);
 
   void Enumerate(JNIEnv *env, Net::DownloadListener &listener);
-  void Enqueue(JNIEnv *env, const char *uri, const char *path_relative);
-  void Cancel(JNIEnv *env, const char *path_relative);
+  void Enqueue(JNIEnv *env, const char *uri, Path path_relative);
+  void Cancel(JNIEnv *env, Path path_relative);
 };
 
 #endif

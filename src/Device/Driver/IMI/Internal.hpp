@@ -40,7 +40,7 @@ public:
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
   bool DownloadFlight(const RecordedFlightInfo &flight,
-                      const TCHAR *path, OperationEnvironment &env) override;
+                      Path path, OperationEnvironment &env) override;
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef OS_CONVERT_PATH_NAME_HPP
 #define OS_CONVERT_PATH_NAME_HPP
 
+#include "Path.hpp"
 #include "Compiler.h"
 
 #ifdef _UNICODE
@@ -64,8 +65,8 @@ public:
     return !value.IsNull();
   }
 
-  operator Value::const_pointer() const {
-    return value.c_str();
+  operator Path() const {
+    return Path(value.c_str());
   }
 };
 
@@ -84,12 +85,12 @@ class NarrowPathName {
   Value value;
 
 public:
-  explicit NarrowPathName(Value::const_pointer _value)
-    :value(_value) {}
-
 #ifdef _UNICODE
-  explicit NarrowPathName(const TCHAR *_value)
-    :value(Value::Donate(ConvertWideToACP(_value))) {}
+  explicit NarrowPathName(Path _value)
+    :value(Value::Donate(ConvertWideToACP(_value.c_str()))) {}
+#else
+  explicit NarrowPathName(Path _value)
+    :value(_value.c_str()) {}
 #endif
 
 public:

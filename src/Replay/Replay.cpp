@@ -27,7 +27,6 @@
 #include "DemoReplayGlue.hpp"
 #include "Util/StringCompare.hxx"
 #include "Util/Clamp.hpp"
-#include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Logger/Logger.hpp"
@@ -58,7 +57,7 @@ Replay::Stop()
 }
 
 bool
-Replay::Start(const TCHAR *_path, Error &error)
+Replay::Start(Path _path, Error &error)
 {
   assert(_path != nullptr);
 
@@ -66,11 +65,11 @@ Replay::Start(const TCHAR *_path, Error &error)
      creating a new one */
   Stop();
 
-  _tcscpy(path, _path);
+  path = _path;
 
-  if (StringIsEmpty(path)) {
+  if (path.IsNull() || path.IsEmpty()) {
     replay = new DemoReplayGlue(task_manager);
-  } else if (MatchesExtension(path, _T(".igc"))) {
+  } else if (path.MatchesExtension(_T(".igc"))) {
     auto reader = new FileLineReaderA(path, error);
     if (reader->error()) {
       delete reader;

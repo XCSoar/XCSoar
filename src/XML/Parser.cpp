@@ -888,7 +888,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 }
 
 static bool
-ReadTextFile(const TCHAR *path, tstring &buffer)
+ReadTextFile(Path path, tstring &buffer)
 {
   /* auto-detect the character encoding, to be able to parse XCSoar
      6.0 task files */
@@ -926,7 +926,7 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
  * @return The main XMLNode or an empty node on error
  */
 XMLNode *
-XML::ParseFile(const TCHAR *filename, Results *pResults)
+XML::ParseFile(Path filename, Results *pResults)
 {
   // Open the file for reading
   tstring buffer;

@@ -23,14 +23,13 @@
 #ifndef TASK_LOAD_FILE_HPP
 #define TASK_LOAD_FILE_HPP
 
-#include <tchar.h>
-
+class Path;
 class OrderedTask;
 class Waypoints;
 struct TaskBehaviour;
 
 OrderedTask *
-LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints=nullptr);
 
 #endif

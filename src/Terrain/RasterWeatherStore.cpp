@@ -28,6 +28,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Util/tstring.hpp"
@@ -115,7 +116,7 @@ RasterWeatherStore::IndexToTime(unsigned index)
 }
 
 bool
-RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
+RasterWeatherStore::NarrowWeatherFilename(char *filename, Path name,
                                           unsigned time_index)
 {
   const NarrowPathName narrow_name(name);
@@ -131,8 +132,7 @@ RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
 struct zzip_dir *
 RasterWeatherStore::OpenArchive()
 {
-  TCHAR buffer[MAX_PATH];
-  const auto path = LocalPath(buffer, _T(RASP_FILENAME));
+  const auto path = LocalPath(_T(RASP_FILENAME));
 
   NarrowPathName narrow_path(path);
   if (!narrow_path.IsDefined())
@@ -142,7 +142,7 @@ RasterWeatherStore::OpenArchive()
 }
 
 bool
-RasterWeatherStore::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
+RasterWeatherStore::ExistsItem(struct zzip_dir *dir, Path name,
                                unsigned time_index)
 {
   char filename[MAX_PATH];
@@ -158,7 +158,7 @@ RasterWeatherStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
 {
   bool found = false;
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
-    if (ExistsItem(dir, item.name, i))
+    if (ExistsItem(dir, Path(item.name), i))
       found = item.times[i] = true;
 
   return found;

@@ -27,6 +27,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/Async/IOThread.hpp"
 #include "OS/FileDescriptor.hxx"
+#include "OS/FileUtil.hpp"
 
 #include <atomic>
 #include <string>
@@ -81,13 +82,13 @@ SaveCrash(int pid, const char *data, size_t length)
   strftime(name, sizeof(name),
            "crash/crash-%Y-%m-%d-%H-%M-%S", gmtime_r(&t, &tm));
 
-  char buffer[1024];
-  const auto path = LocalPath(buffer, name);
-  unlink(path);
+  const auto path = LocalPath(name);
+  File::Delete(path);
 
-  LogFormat("Saving logcat to %s", path);
+  LogFormat("Saving logcat to %s", path.c_str());
 
-  const int fd = open(path, O_CREAT|O_EXCL|O_CLOEXEC|O_NOFOLLOW|O_WRONLY,
+  const int fd = open(path.c_str(),
+                      O_CREAT|O_EXCL|O_CLOEXEC|O_NOFOLLOW|O_WRONLY,
                       0777);
   if (fd < 0)
     return;

@@ -54,6 +54,7 @@ Copyright_License {
 #include "Profile/Map.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "OS/RunFile.hpp"
+#include "OS/Path.hpp"
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"
 
@@ -88,8 +89,7 @@ WaypointExternalFileListHandler::OnActivateItem(unsigned i)
   auto file = waypoint.files_external.begin();
   std::advance(file, i);
 
-  TCHAR buffer[MAX_PATH];
-  RunFile(LocalPath(buffer, file->c_str()));
+  RunFile(LocalPath(file->c_str()).c_str());
 }
 
 void
@@ -415,8 +415,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (images.full())
       break;
 
-    TCHAR buffer[MAX_PATH];
-    if (!images.append().LoadFile(LocalPath(buffer, i.c_str())))
+    if (!images.append().LoadFile(LocalPath(i.c_str())))
       images.shrink(images.size() - 1);
   }
 

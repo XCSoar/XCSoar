@@ -75,7 +75,7 @@ FixGRecord(NLineReader &reader, TextWriter &writer)
 }
 
 static bool
-FixGRecord(NLineReader &reader, const TCHAR *dest_path)
+FixGRecord(NLineReader &reader, Path dest_path)
 {
   TextWriter writer(dest_path);
   return writer.IsOpen() && FixGRecord(reader, writer) && writer.Flush();
@@ -85,7 +85,7 @@ int
 main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   {
@@ -93,7 +93,7 @@ main(int argc, char **argv)
     grecord.Initialize();
 
     Error error;
-    if (!grecord.VerifyGRecordInFile(path.c_str(), error)) {
+    if (!grecord.VerifyGRecordInFile(path, error)) {
       fprintf(stderr, "%s\n", error.GetMessage());
       return EXIT_FAILURE;
     }
@@ -101,11 +101,11 @@ main(int argc, char **argv)
 
   printf("Valid G record found\n");
 
-  FileTransaction transaction(path.c_str());
+  FileTransaction transaction(path);
 
   {
     Error error;
-    FileLineReaderA reader(path.c_str(), error);
+    FileLineReaderA reader(path, error);
     if (reader.error()) {
       fprintf(stderr, "%s\n", error.GetMessage());
       return EXIT_FAILURE;

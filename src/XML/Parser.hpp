@@ -34,6 +34,7 @@
 #include <tchar.h>
 
 class XMLNode;
+class Path;
 
 namespace XML {
   /** Enumeration for XML parse errors. */
@@ -58,7 +59,7 @@ namespace XML {
   };
 
   XMLNode *ParseString(const TCHAR *xml_string, Results *pResults=nullptr);
-  XMLNode *ParseFile(const TCHAR *path, Results *pResults=nullptr);
+  XMLNode *ParseFile(Path path, Results *pResults=nullptr);
 
   /**
    * Parse XML errors into a user friendly string.

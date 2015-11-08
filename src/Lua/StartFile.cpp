@@ -27,13 +27,14 @@ Copyright_License {
 #include "Persistent.hpp"
 #include "Background.hpp"
 #include "Error.hpp"
+#include "OS/Path.hpp"
 
 extern "C" {
 #include <lauxlib.h>
 }
 
 bool
-Lua::StartFile(const TCHAR *path, Error &error)
+Lua::StartFile(Path path, Error &error)
 {
   lua_State *L = Lua::NewFullState();
   if (!RunFile(L, path, error)) {

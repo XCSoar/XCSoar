@@ -24,17 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_FILE_GLUE_HPP
 #define XCSOAR_POLAR_FILE_GLUE_HPP
 
-#include <tchar.h>
-
 struct PolarInfo;
+class Path;
 class NLineReader;
 class TextWriter;
 class Error;
 
 namespace PolarGlue
 {
-  bool LoadFromFile(PolarInfo &polar, const TCHAR *path, Error &error);
-  bool SaveToFile(const PolarInfo &polar, const TCHAR* path);
+  bool LoadFromFile(PolarInfo &polar, Path path, Error &error);
+  bool SaveToFile(const PolarInfo &polar, Path path);
   bool LoadFromFile(PolarInfo &polar, NLineReader &reader);
   bool SaveToFile(const PolarInfo &polar, TextWriter &writer);
 }

@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BATCH_TEXT_WRITER_HPP
 #define XCSOAR_BATCH_TEXT_WRITER_HPP
 
+#include "OS/Path.hpp"
 #include "Util/BatchBuffer.hpp"
-#include "Util/tstring.hpp"
 
 #include <string>
 
@@ -34,12 +34,12 @@ Copyright_License {
  * in a one batch.
  */
 class BatchTextWriter {
-  tstring path;
+  AllocatedPath path;
   bool append;
   BatchBuffer<std::string,256> buffer;
 
 public:
-  BatchTextWriter(tstring::const_pointer _path, bool _append=false)
+  explicit BatchTextWriter(Path _path, bool _append=false)
     :path(_path), append(_append) {}
   ~BatchTextWriter() {
     Flush();

@@ -34,11 +34,11 @@ int main(int argc, char **argv)
   if (replay == NULL)
     return EXIT_FAILURE;
 
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   FlightLogger logger;
-  logger.SetPath(path.c_str());
+  logger.SetPath(path);
   logger.Reset();
 
   while (replay->Next())

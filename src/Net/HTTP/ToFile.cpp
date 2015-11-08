@@ -83,7 +83,7 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
 }
 
 bool
-Net::DownloadToFile(Session &session, const char *url, const TCHAR *path,
+Net::DownloadToFile(Session &session, const char *url, Path path,
                     char *md5_digest,
                     OperationEnvironment &env)
 {
@@ -96,7 +96,7 @@ Net::DownloadToFile(Session &session, const char *url, const TCHAR *path,
     return false;
 
   /* now create the new file */
-  FILE *file = _tfopen(path, _T("wb"));
+  FILE *file = _tfopen(path.c_str(), _T("wb"));
   if (file == NULL)
     return false;
 

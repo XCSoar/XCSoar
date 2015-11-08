@@ -36,7 +36,7 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "ResourceId.hpp"
 
-static tstring path;
+static AllocatedPath path = nullptr;
 
 #ifdef USE_GDI
 static ResourceId id = ResourceId::Null();
@@ -45,7 +45,7 @@ static ResourceId id = ResourceId::Null();
 static void
 ParseCommandLine(Args &args)
 {
-  path = args.ExpectNextT();
+  path = args.ExpectNextPath();
 
 #ifdef USE_GDI
   TCHAR *endptr;
@@ -65,7 +65,7 @@ Main()
     ? bitmap.Load(id)
     :
 #endif
-    bitmap.LoadFile(path.c_str());
+    bitmap.LoadFile(path);
   if (!success)
     fprintf(stderr, "Failed to load image\n");
 }

@@ -27,10 +27,10 @@ Copyright_License {
 #include "LoggerFRecord.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "OS/Path.hpp"
 #include "Util/OverwritingRingBuffer.hpp"
 
 #include <tchar.h>
-#include <windef.h>
 
 struct NMEAInfo;
 struct LoggerSettings;
@@ -91,7 +91,7 @@ public:
   };
 
 private:
-  TCHAR filename[MAX_PATH];
+  AllocatedPath filename;
   IGCWriter *writer;
 
   OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;

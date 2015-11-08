@@ -75,7 +75,7 @@ public:
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env) override;
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path,
+                              Path path,
                               OperationEnvironment &env) override;
 
 public:

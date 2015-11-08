@@ -48,7 +48,7 @@ private:
 public:
   virtual bool Next();
 
-  static DebugReplay* Create(const char *input_file, const tstring &driver_name);
+  static DebugReplay *Create(Path input_file, const tstring &driver_name);
 };
 
 #endif

@@ -35,19 +35,19 @@ static char cmd_set_charge_100[] = "su -c 'echo 100000 > /sys/class/regulator/re
 bool
 Nook::EnterFastMode()
 {
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "0");
   Sleep(1000);
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
-  return File::WriteExisting("/sys/class/graphics/fb0/fmode", "1");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "1");
+  return File::WriteExisting(Path("/sys/class/graphics/fb0/fmode"), "1");
 }
 
 void
 Nook::ExitFastMode()
 {
-  File::WriteExisting("/sys/class/graphics/fb0/fmode", "0");
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/fmode"), "0");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "0");
   Sleep(500);
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "1");
 }
 
 void

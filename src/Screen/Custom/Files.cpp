@@ -23,8 +23,7 @@ Copyright_License {
 
 #include "Files.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
-#include "Compatibility/path.h"
+#include "OS/Path.hpp"
 #include "Util/StringAPI.hxx"
 #include "Compiler.h"
 
@@ -274,59 +273,33 @@ static const char *const all_monospace_font_paths[] = {
   nullptr
 };
 
-gcc_malloc gcc_nonnull_all
-static char *
-DupString(const char *src)
+gcc_nonnull_all
+static AllocatedPath
+FindInSearchPaths(Path suffix)
 {
-  const auto size = StringLength(src) + 1;
-  auto *dest = new char[size];
-  std::copy_n(src, size, dest);
-  return dest;
-}
-
-gcc_malloc gcc_nonnull_all
-static char *
-JoinPath(const char *prefix, const char *suffix, size_t suffix_length)
-{
-  const auto prefix_length = StringLength(prefix);
-  auto *dest = new char[prefix_length + 1 + suffix_length + 1];
-  auto *p = std::copy_n(prefix, prefix_length, dest);
-  *p++ = DIR_SEPARATOR;
-  std::copy_n(suffix, suffix_length +1, p);
-  return dest;
-}
-
-gcc_malloc gcc_nonnull_all
-static char *
-FindInSearchPaths(const char *suffix)
-{
-  const auto suffix_length = StringLength(suffix);
-
   for (const char *const* i = font_search_paths; *i != nullptr; ++i) {
-    const char *path = *i;
+    const Path path(*i);
 
-    auto *full_path = JoinPath(path, suffix, suffix_length);
+    auto full_path = AllocatedPath::Build(path, suffix);
     if (File::Exists(full_path))
       return full_path;
-
-    delete[] full_path;
   }
 
   return nullptr;
 }
 
 gcc_const
-static char *
+static AllocatedPath
 FindFile(const char *const*list)
 {
   for (const char *const* i = list; *i != nullptr; ++i) {
-    const char *path = *i;
+    const Path path(*i);
 
-    if (IsAbsolutePath(path)) {
+    if (path.IsAbsolute()) {
       if (File::Exists(path))
-        return DupString(path);
+        return path;
     } else {
-      auto *result = FindInSearchPaths(path);
+      auto result = FindInSearchPaths(path);
       if (result != nullptr)
         return result;
     }
@@ -335,31 +308,31 @@ FindFile(const char *const*list)
   return nullptr;
 }
 
-char *
+AllocatedPath
 FindDefaultFont()
 {
   return FindFile(all_font_paths);
 }
 
-char *
+AllocatedPath
 FindDefaultBoldFont()
 {
   return FindFile(all_bold_font_paths);
 }
 
-char *
+AllocatedPath
 FindDefaultItalicFont()
 {
   return FindFile(all_italic_font_paths);
 }
 
-char *
+AllocatedPath
 FindDefaultBoldItalicFont()
 {
   return FindFile(all_bold_italic_font_paths);
 }
 
-char *
+AllocatedPath
 FindDefaultMonospaceFont()
 {
   return FindFile(all_monospace_font_paths);

@@ -35,12 +35,13 @@ Copyright_License {
 #endif
 #endif
 
+class Path;
 class ProfileMap;
 class Error;
 
 gcc_pure
 bool
-ProfileFileHasPassword(const TCHAR *path);
+ProfileFileHasPassword(Path path);
 
 enum class ProfilePasswordResult {
   /**
@@ -74,7 +75,7 @@ ProfilePasswordResult
 CheckProfilePassword(const ProfileMap &map);
 
 ProfilePasswordResult
-CheckProfileFilePassword(const TCHAR *path, Error &error);
+CheckProfileFilePassword(Path path, Error &error);
 
 bool
 CheckProfilePasswordResult(ProfilePasswordResult result, const Error &error);

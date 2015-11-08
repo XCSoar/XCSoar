@@ -31,7 +31,7 @@ int
 main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   GRecord g;
@@ -39,7 +39,7 @@ main(int argc, char **argv)
 
   Error error;
   char data[1024];
-  if (!g.ReadGRecordFromFile(path.c_str(), data, ARRAY_SIZE(data), error)) {
+  if (!g.ReadGRecordFromFile(path, data, ARRAY_SIZE(data), error)) {
     fprintf(stderr, "%s\n", error.GetMessage());
     return 2;
   }

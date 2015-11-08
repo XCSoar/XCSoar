@@ -40,6 +40,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/Clock.hpp"
+#include "OS/Path.hpp"
 #include "../Simulator.hpp"
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
@@ -1023,7 +1024,7 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
-                                 const TCHAR *path,
+                                 Path path,
                                  OperationEnvironment &env)
 {
   assert(borrowed);

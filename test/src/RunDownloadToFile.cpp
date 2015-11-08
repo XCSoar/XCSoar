@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 {
   Args args(argc, argv, "URL PATH");
   const char *url = args.ExpectNext();
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   char md5_digest[33];
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   ConsoleOperationEnvironment env;
 
   Net::Session session;
-  if (!Net::DownloadToFile(session, url, path.c_str(),
+  if (!Net::DownloadToFile(session, url, path,
                            md5_digest, env)) {
     fprintf(stderr, "Error\n");
     return EXIT_FAILURE;

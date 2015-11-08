@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_OS_FILE_MAPPING_HPP
 #define XCSOAR_OS_FILE_MAPPING_HPP
 
-#include <tchar.h>
 #include <stddef.h>
 
 #ifndef HAVE_POSIX
 #include <windef.h>
 #endif
+
+class Path;
 
 /**
  * Maps a file into the address space of this process.
@@ -43,7 +44,7 @@ class FileMapping {
 #endif
 
 public:
-  FileMapping(const TCHAR *path);
+  FileMapping(Path path);
   ~FileMapping();
 
   /**

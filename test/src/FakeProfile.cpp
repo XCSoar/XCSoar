@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "OS/Path.hpp"
 
 void
 Profile::Save()
@@ -30,7 +31,7 @@ Profile::Save()
 }
 
 void
-Profile::SetFiles(const TCHAR* override)
+Profile::SetFiles(Path override_path)
 {
 }
 
@@ -52,9 +53,8 @@ Profile::Set(const char *key, const char *value)
 {
 }
 
-bool
-Profile::GetPath(const char *key, TCHAR *value)
+AllocatedPath
+Profile::GetPath(const char *key)
 {
-  *value = _T('\0');
-  return false;
+  return nullptr;
 }

@@ -24,12 +24,12 @@
 #define XCSOAR_TASK_FILE_SEEYOU_HPP
 
 #include "TaskFile.hpp"
+#include "OS/Path.hpp"
 
 class TaskFileSeeYou: public TaskFile
 {
 public:
-  TaskFileSeeYou(const TCHAR* _path):
-    TaskFile(_path) {}
+  explicit TaskFileSeeYou(Path _path):TaskFile(_path) {}
 
   virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
                                const Waypoints *waypoints,

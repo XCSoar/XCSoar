@@ -20,9 +20,7 @@
 static OrderedTask *
 task_load(const TaskBehaviour &task_behaviour)
 {
-  PathName szFilename(task_file.c_str());
-
-  auto *task = LoadTask(szFilename, task_behaviour);
+  auto *task = LoadTask(task_file, task_behaviour);
   if (task != nullptr) {
     task->UpdateStatsGeometry();
     if (!task->CheckTask()) {
@@ -73,7 +71,7 @@ protected:
 static bool
 test_replay()
 {
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(fixed(4.0));
@@ -105,7 +103,7 @@ test_replay()
   // task_manager.get_task_advance().get_advance_state() = TaskAdvance::AUTO;
 
   Error error;
-  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str(), error);
+  FileLineReaderA *reader = new FileLineReaderA(replay_file, error);
   if (reader->error()) {
     delete reader;
     fprintf(stderr, "%s\n", error.GetMessage());
@@ -189,8 +187,8 @@ int main(int argc, char** argv)
 {
   output_skip = 60;
 
-  replay_file = "test/data/apf-bug554.igc";
-  task_file = "test/data/apf-bug554.tsk";
+  replay_file = Path(_T("test/data/apf-bug554.igc"));
+  task_file = Path(_T("test/data/apf-bug554.tsk"));
 
   if (!ParseArgs(argc,argv)) {
     return 0;

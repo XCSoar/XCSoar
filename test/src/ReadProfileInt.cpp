@@ -23,6 +23,7 @@
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
 #include "OS/Args.hpp"
+#include "OS/Path.hpp"
 
 #include <stdio.h>
 

@@ -24,26 +24,28 @@ Copyright_License {
 #ifndef XCSOAR_FILE_CACHE_HPP
 #define XCSOAR_FILE_CACHE_HPP
 
+#include "OS/Path.hpp"
+
 #include <stdio.h>
 #include <tchar.h>
 
 class FileCache {
-  TCHAR *cache_path;
-  size_t cache_path_length;
+  AllocatedPath cache_path;
 
 public:
-  FileCache(const TCHAR *_cache_path);
-  ~FileCache();
+  FileCache(AllocatedPath &&_cache_path);
 
 protected:
-  size_t PathBufferSize(const TCHAR *name) const;
-  const TCHAR *MakeCachePath(TCHAR *buffer, const TCHAR *name) const;
+  gcc_pure
+  AllocatedPath MakeCachePath(const TCHAR *name) const {
+    return AllocatedPath::Build(cache_path, name);
+  }
 
 public:
   void Flush(const TCHAR *name);
-  FILE *Load(const TCHAR *name, const TCHAR *original_path);
+  FILE *Load(const TCHAR *name, Path original_path);
 
-  FILE *Save(const TCHAR *name, const TCHAR *original_path);
+  FILE *Save(const TCHAR *name, Path original_path);
   bool Commit(const TCHAR *name, FILE *file);
   void Cancel(const TCHAR *name, FILE *file);
 };

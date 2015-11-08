@@ -27,6 +27,7 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "Init.hpp"
 #include "Asset.hpp"
+#include "OS/Path.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Thread/Mutex.hpp"
@@ -60,11 +61,11 @@ static Mutex freetype_mutex;
 static FT_Int32 load_flags = FT_LOAD_DEFAULT;
 static FT_Render_Mode render_mode = FT_RENDER_MODE_NORMAL;
 
-static const char *font_path;
-static const char *bold_font_path;
-static const char *italic_font_path;
-static const char *bold_italic_font_path;
-static const char *monospace_font_path;
+static AllocatedPath font_path = nullptr;
+static AllocatedPath bold_font_path = nullptr;
+static AllocatedPath italic_font_path = nullptr;
+static AllocatedPath bold_italic_font_path = nullptr;
+static AllocatedPath monospace_font_path = nullptr;
 
 gcc_const
 static inline bool
@@ -123,12 +124,6 @@ Font::Initialise()
 void
 Font::Deinitialise()
 {
-  delete[] font_path;
-  delete[] bold_font_path;
-  delete[] italic_font_path;
-  delete[] bold_italic_font_path;
-  delete[] monospace_font_path;
-
   FreeType::Deinitialise();
 }
 
@@ -190,7 +185,7 @@ Font::Load(const FontDescription &d)
 
   bool bold = d.IsBold();
   bool italic = d.IsItalic();
-  const char *path = nullptr;
+  Path path = nullptr;
 
   /* check for presence of "real" font and clear the bold or italic
    * flags if found so that freetype does not apply them again to
@@ -214,7 +209,7 @@ Font::Load(const FontDescription &d)
   if (path == nullptr)
     return false;
 
-  return LoadFile(path, d.GetHeight(), bold, italic);
+  return LoadFile(path.c_str(), d.GetHeight(), bold, italic);
 }
 
 void

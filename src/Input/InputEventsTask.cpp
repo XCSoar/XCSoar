@@ -42,8 +42,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-
-#include <windef.h> /* for MAX_PATH */
+#include "OS/Path.hpp"
 
 static void
 trigger_redraw()
@@ -274,9 +273,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     return;
 
   if (!StringIsEmpty(misc)) {
-    TCHAR buffer[MAX_PATH];
-
-    OrderedTask *task = TaskFile::GetTask(LocalPath(buffer, misc),
+    OrderedTask *task = TaskFile::GetTask(LocalPath(misc),
                                           CommonInterface::GetComputerSettings().task,
                                           &way_points, 0);
     if (task) {
@@ -303,8 +300,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
     return;
 
   if (!StringIsEmpty(misc)) {
-    TCHAR buffer[MAX_PATH];
-    protected_task_manager->TaskSave(LocalPath(buffer, misc));
+    protected_task_manager->TaskSave(LocalPath(misc));
   }
 }
 

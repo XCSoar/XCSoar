@@ -25,6 +25,7 @@ Copyright_License {
 #include "Protocol/Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
+#include "OS/Path.hpp"
 
 bool
 IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
@@ -42,7 +43,7 @@ IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
 }
 
 bool
-IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, Path path,
                           OperationEnvironment &env)
 {
   port.StopRxThread();

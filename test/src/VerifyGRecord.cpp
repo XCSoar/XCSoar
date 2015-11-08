@@ -30,14 +30,14 @@ int
 main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   GRecord g;
   g.Initialize();
 
   Error error;
-  if (g.VerifyGRecordInFile(path.c_str(), error)) {
+  if (g.VerifyGRecordInFile(path, error)) {
     fprintf(stderr, "G record is ok\n");
     return 0;
   } else {

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
+#include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/MapFile.hpp"
@@ -36,12 +37,10 @@ Copyright_License {
 
 #include <zzip/zzip.h>
 
-#include <windef.h> /* for MAX_PATH */
-
 #include <string.h>
 
 static bool
-ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
+ParseAirspaceFile(AirspaceParser &parser, Path path,
                   OperationEnvironment &operation)
 {
   Error error;
@@ -52,7 +51,7 @@ ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
   }
 
   if (!parser.Parse(reader, operation)) {
-    LogFormat(_T("Failed to parse airspace file: %s"), path);
+    LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
     return false;
   }
 
@@ -93,11 +92,12 @@ ReadAirspace(Airspaces &airspaces,
   AirspaceParser parser(airspaces);
 
   // Read the airspace filenames from the registry
-  TCHAR path[MAX_PATH];
-  if (Profile::GetPath(ProfileKeys::AirspaceFile, path))
+  auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
+  if (!path.IsNull())
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  if (Profile::GetPath(ProfileKeys::AdditionalAirspaceFile, path))
+  path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
+  if (!path.IsNull())
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
   auto dir = OpenMapFile();
