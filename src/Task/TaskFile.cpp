@@ -40,10 +40,6 @@ TaskFile::~TaskFile()
 TaskFile*
 TaskFile::Create(const TCHAR* path)
 {
-  // If filename is empty or file does not exist
-  if (StringIsEmpty(path) || !File::Exists(path))
-    return nullptr;
-
   // If XCSoar task file -> return new TaskFileXCSoar
   if (MatchesExtension(path, _T(".tsk")))
     return new TaskFileXCSoar(path);
