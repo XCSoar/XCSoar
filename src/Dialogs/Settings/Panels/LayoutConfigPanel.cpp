@@ -50,7 +50,9 @@ enum ControlIndex {
   AppInverseInfoBox,
   AppInfoBoxColors,
   AppInfoBoxBorder,
+#ifdef KOBO
   ShowMenuButton,
+#endif
 };
 
 static constexpr StaticEnumChoice display_orientation_list[] = {
