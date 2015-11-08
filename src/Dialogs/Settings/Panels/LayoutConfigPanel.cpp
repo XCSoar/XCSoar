@@ -253,8 +253,10 @@ LayoutConfigPanel::Save(bool &_changed)
                 ui_settings.info_boxes.use_colors))
     require_restart = changed = true;
 
+#ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
     require_restart = changed = true;
+#endif
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
