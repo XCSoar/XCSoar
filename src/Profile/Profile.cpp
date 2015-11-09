@@ -77,7 +77,7 @@ Profile::Save()
 
   LogFormat("Saving profiles");
   if (StringIsEmpty(startProfileFile))
-    SetFiles(_T(""));
+    SetFiles(nullptr);
   SaveFile(startProfileFile);
 }
 
@@ -95,7 +95,7 @@ Profile::SetFiles(const TCHAR *override_path)
      new file now */
   SetModified(true);
 
-  if (!StringIsEmpty(override_path)) {
+  if (override_path != nullptr) {
     if (IsBaseName(override_path)) {
       LocalPath(startProfileFile, override_path);
 

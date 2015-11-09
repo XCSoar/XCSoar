@@ -62,7 +62,7 @@ namespace Profile
 
   /**
    * Sets the profile files to load when calling Load()
-   * @param override NULL or file to load when calling Load()
+   * @param override nullptr or file to load when calling Load()
    */
   void SetFiles(const TCHAR *override_path);
 

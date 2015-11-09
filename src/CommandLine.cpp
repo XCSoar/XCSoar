@@ -29,7 +29,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/NumberParser.hpp"
 #include "Asset.hpp"
@@ -71,6 +71,10 @@ CommandLine::Parse(Args &args)
 
     if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;
+
+      if (StringIsEmpty(s))
+        args.UsageError();
+
       PathName convert(s);
       Profile::SetFiles(convert);
     } else if (StringIsEqual(s, "-datapath=", 10)) {

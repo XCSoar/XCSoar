@@ -267,7 +267,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 #ifdef ENABLE_PROFILE
-  Profile::SetFiles(_T(""));
+  Profile::SetFiles(nullptr);
   Profile::Load();
 #endif
 

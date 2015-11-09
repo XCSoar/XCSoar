@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
   args.ExpectEnd();
 
   InitialiseDataPath();
-  Profile::SetFiles(_T(""));
+  Profile::SetFiles(nullptr);
   Profile::Load();
   DeinitialiseDataPath();
 
