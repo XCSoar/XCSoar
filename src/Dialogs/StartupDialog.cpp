@@ -175,9 +175,6 @@ StartupWidget::Prepare(ContainerWindow &parent,
 static bool
 SelectProfile(const TCHAR *path)
 {
-  if (StringIsEmpty(path))
-    return true;
-
   Error error;
   if (!CheckProfilePasswordResult(CheckProfileFilePassword(path, error),
                                   error))
