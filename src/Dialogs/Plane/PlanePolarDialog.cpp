@@ -223,7 +223,7 @@ private:
 public:
   PolarFileVisitor(ComboList &_list): list(_list) {}
 
-  void Visit(const TCHAR* path, const TCHAR* filename) {
+  void Visit(const TCHAR *path, const TCHAR *filename) override {
     list.Append(0, path, filename);
   }
 };

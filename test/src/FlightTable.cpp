@@ -120,7 +120,7 @@ FlightCheck::finish()
 }
 
 class IGCFileVisitor : public File::Visitor {
-  virtual void Visit(const TCHAR *path, const TCHAR *filename);
+  void Visit(const TCHAR *path, const TCHAR *filename) override;
 };
 
 void

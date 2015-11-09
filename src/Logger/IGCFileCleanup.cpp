@@ -120,7 +120,7 @@ public:
     oldest_path.clear();
   }
 
-  virtual void Visit(const TCHAR* path, const TCHAR* filename) {
+  void Visit(const TCHAR *path, const TCHAR *filename) override {
     time_t this_time = LogFileDate(current_year, filename);
     if (oldest_path.empty() || oldest_time > this_time) {
       oldest_time = this_time;

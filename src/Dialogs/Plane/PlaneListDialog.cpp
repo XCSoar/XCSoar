@@ -74,7 +74,7 @@ class PlaneListWidget final
   public:
     PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
-    void Visit(const TCHAR* path, const TCHAR* filename) {
+    void Visit(const TCHAR *path, const TCHAR *filename) override {
       list.emplace_back(filename, path);
     }
   };

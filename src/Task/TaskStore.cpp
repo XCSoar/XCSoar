@@ -41,7 +41,7 @@ public:
   TaskFileVisitor(TaskStore::ItemVector &_store):
     store(_store) {}
 
-  void Visit(const TCHAR *path, const TCHAR *base_name) {
+  void Visit(const TCHAR *path, const TCHAR *base_name) override {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
     std::unique_ptr<TaskFile> task_file(TaskFile::Create(path));

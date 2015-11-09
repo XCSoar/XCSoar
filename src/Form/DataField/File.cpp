@@ -71,9 +71,7 @@ private:
 public:
   FileVisitor(FileDataField &_datafield) : datafield(_datafield) {}
 
-  void
-  Visit(const TCHAR* path, const TCHAR* filename)
-  {
+  void Visit(const TCHAR *path, const TCHAR *filename) override {
     if (!IsInternalFile(filename))
       datafield.AddFile(path);
   }
