@@ -132,7 +132,7 @@ public:
 
   static struct zzip_dir *OpenArchive();
 
-  static void NarrowWeatherFilename(char *filename, const TCHAR *name,
+  static bool NarrowWeatherFilename(char *filename, const TCHAR *name,
                                     unsigned time_index);
 
 private:

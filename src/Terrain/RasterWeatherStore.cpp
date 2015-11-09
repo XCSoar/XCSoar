@@ -27,8 +27,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Util/StringCompare.hxx"
-#include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
 #include "Util/tstring.hpp"
 #include "Operation/Operation.hpp"
@@ -114,14 +114,18 @@ RasterWeatherStore::IndexToTime(unsigned index)
   return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
 }
 
-void
+bool
 RasterWeatherStore::NarrowWeatherFilename(char *filename, const TCHAR *name,
                                           unsigned time_index)
 {
-  const WideToACPConverter narrow_name(name);
+  const NarrowPathName narrow_name(name);
+  if (!narrow_name.IsDefined())
+    return false;
+
   const BrokenTime t = IndexToTime(time_index);
   sprintf(filename, RASP_FORMAT,
           (const char *)narrow_name, t.hour, t.minute);
+  return true;
 }
 
 struct zzip_dir *
@@ -130,7 +134,10 @@ RasterWeatherStore::OpenArchive()
   TCHAR buffer[MAX_PATH];
   const auto path = LocalPath(buffer, _T(RASP_FILENAME));
 
-  const WideToACPConverter narrow_path(path);
+  NarrowPathName narrow_path(path);
+  if (!narrow_path.IsDefined())
+    return nullptr;
+
   return zzip_dir_open(narrow_path, nullptr);
 }
 
@@ -139,7 +146,8 @@ RasterWeatherStore::ExistsItem(struct zzip_dir *dir, const TCHAR *name,
                                unsigned time_index)
 {
   char filename[MAX_PATH];
-  NarrowWeatherFilename(filename, name, time_index);
+  if (!NarrowWeatherFilename(filename, name, time_index))
+    return false;
 
   ZZIP_STAT st;
   return zzip_dir_stat(dir, filename, &st, 0) == 0;
