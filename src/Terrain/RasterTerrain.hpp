@@ -57,7 +57,7 @@ private:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  explicit RasterTerrain(struct zzip_dir *_dir, const TCHAR *_path)
+  explicit RasterTerrain(struct zzip_dir *_dir)
     :Guard<RasterMap>(map), dir(_dir) {}
 
 public:

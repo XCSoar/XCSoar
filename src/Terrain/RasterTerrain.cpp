@@ -101,7 +101,7 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
   if (dir == nullptr)
     return nullptr;
 
-  RasterTerrain *rt = new RasterTerrain(dir, path);
+  RasterTerrain *rt = new RasterTerrain(dir);
   if (!rt->Load(path, cache, operation)) {
     delete rt;
     return nullptr;
