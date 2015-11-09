@@ -288,7 +288,7 @@ ProfileListWidget::CopyClicked()
 
   StaticString<64> new_name;
   new_name.clear();
-  if (!TextEntryDialog(new_name, _("Profile name")))
+  if (!TextEntryDialog(new_name, _("Profile name")) || new_name.empty())
       return;
 
   StaticString<80> new_filename;
