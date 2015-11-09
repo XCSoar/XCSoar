@@ -84,9 +84,6 @@ Profile::Save()
 void
 Profile::SaveFile(const TCHAR *szFile)
 {
-  if (StringIsEmpty(szFile))
-    return;
-
   LogFormat(_T("Saving profile to %s"), szFile);
   SaveFile(map, szFile);
 }
