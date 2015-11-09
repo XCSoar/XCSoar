@@ -59,9 +59,6 @@ Profile::Load()
 void
 Profile::LoadFile(const TCHAR *szFile)
 {
-  if (StringIsEmpty(szFile))
-    return;
-
   Error error;
   if (LoadFile(map, szFile, error))
     LogFormat(_T("Loaded profile from %s"), szFile);
