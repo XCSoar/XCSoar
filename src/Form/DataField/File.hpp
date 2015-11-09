@@ -116,10 +116,9 @@ public:
 
   /**
    * Adds a filename/filepath couple to the filelist
-   * @param fname The filename
    * @param fpname The filepath
    */
-  void AddFile(const TCHAR *fname, const TCHAR *fpname);
+  void AddFile(const TCHAR *fpname);
 
   /**
    * Adds an empty row to the filelist

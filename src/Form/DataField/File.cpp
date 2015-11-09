@@ -75,7 +75,7 @@ public:
   Visit(const TCHAR* path, const TCHAR* filename)
   {
     if (!IsInternalFile(filename))
-      datafield.AddFile(filename, path);
+      datafield.AddFile(path);
   }
 };
 
@@ -212,7 +212,7 @@ FileDataField::GetPathFile() const
 }
 
 void
-FileDataField::AddFile(const TCHAR *filename, const TCHAR *path)
+FileDataField::AddFile(const TCHAR *path)
 {
   assert(loaded);
 
