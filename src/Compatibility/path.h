@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_COMPATIBILITY_PATH_H
 #define XCSOAR_COMPATIBILITY_PATH_H
 
+#include <tchar.h>
+
 #ifdef WIN32
 
 #define DIR_SEPARATOR '\\'
