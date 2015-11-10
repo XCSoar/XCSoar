@@ -109,7 +109,7 @@ Net::DownloadManager::Cancel(const TCHAR *relative_path)
 #include "Util/tstring.hpp"
 #include "Operation/Operation.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
+#include "IO/FileTransaction.hpp"
 
 #include <list>
 #include <algorithm>
@@ -257,6 +257,17 @@ private:
   }
 };
 
+static bool
+DownloadToFileTransaction(Net::Session &session,
+                          const char *url, const TCHAR *path,
+                          char *md5_digest, OperationEnvironment &env)
+{
+  FileTransaction transaction(path);
+  return DownloadToFile(session, url, transaction.GetTemporaryPath(),
+                        md5_digest, env) &&
+    transaction.Commit();
+}
+
 void
 DownloadManagerThread::Tick()
 {
@@ -271,15 +282,11 @@ DownloadManagerThread::Tick()
     mutex.Unlock();
 
     TCHAR buffer[MAX_PATH];
-    const auto path = LocalPath(buffer, item.path_relative.c_str());
 
-    TCHAR tmp[MAX_PATH];
-    _tcscpy(tmp, path);
-    _tcscat(tmp, _T(".tmp"));
-    File::Delete(tmp);
-    bool success =
-      DownloadToFile(session, item.uri.c_str(), tmp, NULL, *this) &&
-      File::Replace(tmp, path);
+    bool success = DownloadToFileTransaction(session, item.uri.c_str(),
+                                             LocalPath(buffer,
+                                                       item.path_relative.c_str()),
+                                             nullptr, *this);
 
     mutex.Lock();
     current_size = current_position = -1;
