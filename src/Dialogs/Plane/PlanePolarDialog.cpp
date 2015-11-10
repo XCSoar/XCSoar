@@ -24,6 +24,7 @@ Copyright_License {
 #include "PlaneDialogs.hpp"
 #include "PolarShapeEditWidget.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/FilePicker.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -35,11 +36,14 @@ Copyright_License {
 #include "Polar/PolarFileGlue.hpp"
 #include "Plane/Plane.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Util/Error.hxx"
+
+#include <windef.h> // for MAX_PATH
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener, ActionListener {
@@ -215,39 +219,15 @@ PlanePolarWidget::ListClicked()
   Update();
 }
 
-class PolarFileVisitor: public File::Visitor
-{
-private:
-  ComboList &list;
-
-public:
-  PolarFileVisitor(ComboList &_list): list(_list) {}
-
-  void Visit(const TCHAR *path, const TCHAR *filename) override {
-    list.Append(0, path, filename);
-  }
-};
-
 inline void
 PlanePolarWidget::ImportClicked()
 {
-  ComboList list;
-  PolarFileVisitor fv(list);
-
-  // Fill list
-  VisitDataFiles(_T("*.plr"), fv);
-
-  list.Sort();
-
   // let the user select
-  int result = ComboPicker(_("Load Polar From File"), list, NULL);
-  if (result < 0)
+  TCHAR path[MAX_PATH];
+  if (!FilePicker(_("Load Polar From File"), _T("*.plr\0"), path))
     return;
 
-  assert((unsigned)result < list.size());
-
   PolarInfo polar;
-  const TCHAR* path = list[result].string_value;
   PolarGlue::LoadFromFile(polar, path, IgnoreError());
 
   plane.reference_mass = polar.reference_mass;
@@ -262,7 +242,7 @@ PlanePolarWidget::ImportClicked()
 
   plane.polar_shape = polar.shape;
 
-  plane.polar_name = list[result].display_string;
+  plane.polar_name = BaseName(path);
 
   Update();
 }
