@@ -12,6 +12,11 @@ if len(sys.argv) != 7:
 
 target_output_dir, host_arch, cc, cxx, ar, strip = sys.argv[1:]
 
+# the path to the XCSoar sources
+xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
+sys.path[0] = os.path.join(xcsoar_path, 'build/python')
+
+# output directories
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
 src_path = os.path.join(output_path, 'src')
@@ -51,43 +56,8 @@ class KoboToolchain:
         # default one on the build host
         self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
 
-def file_md5(path):
-    """Calculate the MD5 checksum of a file and return it in hexadecimal notation."""
-
-    with open(path, 'rb') as f:
-        m = hashlib.md5()
-        while True:
-            data = f.read(65536)
-            if len(data) == 0:
-                # end of file
-                return m.hexdigest()
-            m.update(data)
-
-def download_tarball(url, md5):
-    """Download a tarball, verify its MD5 checksum and return the local path."""
-
-    global tarball_path
-    os.makedirs(tarball_path, exist_ok=True)
-    path = os.path.join(tarball_path, os.path.basename(url))
-
-    try:
-        calculated_md5 = file_md5(path)
-        if md5 == calculated_md5: return path
-        os.unlink(path)
-    except FileNotFoundError:
-        pass
-
-    tmp_path = path + '.tmp'
-
-    print("download", url)
-    urllib.request.urlretrieve(url, tmp_path)
-    calculated_md5 = file_md5(tmp_path)
-    if calculated_md5 != md5:
-        os.unlink(tmp_path)
-        raise "MD5 mismatch"
-
-    os.rename(tmp_path, path)
-    return path
+from build.download import download_and_verify
+from build.tar import untar
 
 class Project:
     def __init__(self, url, md5, installed, name=None, version=None,
@@ -117,7 +87,7 @@ class Project:
         self.use_clang = use_clang
 
     def download(self):
-        return download_tarball(self.url, self.md5)
+        return download_and_verify(self.url, self.md5, tarball_path)
 
     def is_installed(self, toolchain):
         tarball = self.download()
@@ -128,21 +98,9 @@ class Project:
         except FileNotFoundError:
             return False
 
-    def unpack(self, out_of_tree=True):
-        global src_path, build_path
-        tarball = self.download()
-        if out_of_tree:
-            parent_path = src_path
-        else:
-            parent_path = build_path
-        path = os.path.join(parent_path, self.base)
-        try:
-            shutil.rmtree(path)
-        except FileNotFoundError:
-            pass
-        os.makedirs(parent_path, exist_ok=True)
-        subprocess.check_call(['/bin/tar', 'xfC', tarball, parent_path])
-        return path
+    def unpack(self):
+        global src_path
+        return untar(self.download(), src_path, self.base)
 
     def make_build_path(self):
         path = os.path.join(build_path, self.base)
