@@ -288,8 +288,8 @@ thirdparty_libs = [
     ),
 
     AutotoolsProject(
-        'http://netcologne.dl.sourceforge.net/project/libjpeg-turbo/1.4.1/libjpeg-turbo-1.4.1.tar.gz',
-        'b1f6b84859a16b8ebdcda951fa07c3f2',
+        'http://downloads.sourceforge.net/project/libjpeg-turbo/1.4.2/libjpeg-turbo-1.4.2.tar.gz',
+        '86b0d5f7507c2e6c21c00219162c3c44',
         'lib/libjpeg.a',
         [
             '--disable-shared', '--enable-static',
