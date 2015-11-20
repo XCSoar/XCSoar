@@ -1,10 +1,19 @@
+ifeq ($(TARGET_IS_KOBO),y)
+LUA = y
+else
 # Lua scripting is off by default for now, until we have a
 # cross-platform build script for the Lua interpreter.
 LUA = n
+endif
 
 ifeq ($(LUA),y)
 
+ifeq ($(TARGET_IS_KOBO),y)
+LUA_LDLIBS = -llua
+LUA_CPPFLAGS =
+else
 $(eval $(call pkg-config-library,LUA,lua5.2))
+endif
 
 LUA_SOURCES = \
 	$(SRC)/Lua/Error.cpp \

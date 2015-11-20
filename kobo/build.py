@@ -60,6 +60,7 @@ from build.project import Project
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
+from build.lua import LuaProject
 
 # a list of third-party libraries to be used by XCSoar
 thirdparty_libs = [
@@ -121,6 +122,12 @@ thirdparty_libs = [
             '--disable-shared', '--enable-static',
             '--enable-arm-neon',
         ]
+    ),
+
+    LuaProject(
+        'http://www.lua.org/ftp/lua-5.3.1.tar.gz',
+        '797adacada8d85761c079390ff1d9961',
+        'lib/liblua.a',
     ),
 ]
 
