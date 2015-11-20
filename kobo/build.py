@@ -16,29 +16,40 @@ output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
 src_path = os.path.join(output_path, 'src')
 target_output_dir = os.path.abspath(target_output_dir)
-target_root = os.path.join(target_output_dir, 'root')
 
 lib_path = os.path.join(target_output_dir, 'lib')
 arch_path = os.path.join(lib_path, host_arch)
 build_path = os.path.join(arch_path, 'build')
-root_path = os.path.join(arch_path, 'root')
-
-target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
-common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + target_arch
-cflags = common_flags
-cxxflags = common_flags
-cppflags = '-isystem ' + os.path.join(root_path, 'include') + ' -DNDEBUG'
-ldflags = '-L' + os.path.join(root_path, 'lib')
-libs = ''
-
-# redirect pkg-config to use our root directory instead of the default
-# one on the build host
-os.environ['PKG_CONFIG_LIBDIR'] = os.path.join(root_path, 'lib/pkgconfig')
+install_prefix = os.path.join(arch_path, 'root')
 
 if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
     # which breaks the zlib Makefile (and maybe others)
     del os.environ['MAKEFLAGS']
+
+class KoboToolchain:
+    def __init__(self, install_prefix, arch, cc, cxx, ar, strip):
+        self.arch = arch
+        self.install_prefix = install_prefix
+
+        self.cc = cc
+        self.cxx = cxx
+        self.ar = ar
+        self.strip = strip
+
+        arch_flags = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
+        common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + arch_flags
+        self.cflags = common_flags
+        self.cxxflags = common_flags
+        self.cppflags = '-isystem ' + os.path.join(install_prefix, 'include') + ' -DNDEBUG'
+        self.ldflags = '-L' + os.path.join(install_prefix, 'lib')
+        self.libs = ''
+
+        self.env = dict(os.environ)
+
+        # redirect pkg-config to use our root directory instead of the
+        # default one on the build host
+        self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
 
 def file_md5(path):
     """Calculate the MD5 checksum of a file and return it in hexadecimal notation."""
@@ -108,10 +119,9 @@ class Project:
     def download(self):
         return download_tarball(self.url, self.md5)
 
-    def is_installed(self):
-        global root_path
+    def is_installed(self, toolchain):
         tarball = self.download()
-        installed = os.path.join(root_path, self.installed)
+        installed = os.path.join(toolchain.install_prefix, self.installed)
         tarball_mtime = os.path.getmtime(tarball)
         try:
             return os.path.getmtime(installed) >= tarball_mtime
@@ -148,17 +158,18 @@ class ZlibProject(Project):
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
 
-    def build(self):
+    def build(self, toolchain):
         src = self.unpack(out_of_tree=False)
 
-        subprocess.check_call(['./configure', '--prefix=' + root_path, '--static'], cwd=src)
+        subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
+                              cwd=src, env=toolchain.env)
         subprocess.check_call(['/usr/bin/make', '--quiet',
-                               'CC=' + cc,
-                               'CPP=' + cc + ' -E',
-                               'AR=' + ar,
-                               'LDSHARED=' + cc + ' -shared',
+                               'CC=' + toolchain.cc,
+                               'CPP=' + toolchain.cc + ' -E',
+                               'AR=' + toolchain.ar,
+                               'LDSHARED=' + toolchain.cc + ' -shared',
                                'install'],
-                              cwd=src)
+                              cwd=src, env=toolchain.env)
 
 class AutotoolsProject(Project):
     def __init__(self, url, md5, installed, configure_args=[],
@@ -170,7 +181,7 @@ class AutotoolsProject(Project):
         self.autogen = autogen
         self.cppflags = cppflags
 
-    def configure(self):
+    def configure(self, toolchain):
         src = self.unpack()
         if self.autogen:
             subprocess.check_call(['/usr/bin/aclocal'], cwd=src)
@@ -182,32 +193,34 @@ class AutotoolsProject(Project):
 
         configure = [
             os.path.join(src, 'configure'),
-            'CC=' + cc,
-            'CXX=' + cxx,
-            'CFLAGS=' + cflags,
-            'CXXFLAGS=' + cxxflags,
-            'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
-            'LDFLAGS=' + ldflags,
-            'LIBS=' + libs,
-            'AR=' + ar,
-            'STRIP=' + strip,
-            '--host=' + host_arch,
-            '--prefix=' + root_path,
+            'CC=' + toolchain.cc,
+            'CXX=' + toolchain.cxx,
+            'CFLAGS=' + toolchain.cflags,
+            'CXXFLAGS=' + toolchain.cxxflags,
+            'CPPFLAGS=' + toolchain.cppflags + ' ' + self.cppflags,
+            'LDFLAGS=' + toolchain.ldflags,
+            'LIBS=' + toolchain.libs,
+            'AR=' + toolchain.ar,
+            'STRIP=' + toolchain.strip,
+            '--host=' + toolchain.arch,
+            '--prefix=' + toolchain.install_prefix,
             '--enable-silent-rules',
         ] + self.configure_args
 
-        subprocess.check_call(configure, cwd=build)
+        subprocess.check_call(configure, cwd=build, env=toolchain.env)
         return build
 
-    def build(self):
-        build = self.configure()
+    def build(self, toolchain):
+        build = self.configure(toolchain)
 
-        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'], cwd=build)
-        subprocess.check_call(['/usr/bin/make', '--quiet', 'install'], cwd=build)
+        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'],
+                              cwd=build, env=toolchain.env)
+        subprocess.check_call(['/usr/bin/make', '--quiet', 'install'],
+                              cwd=build, env=toolchain.env)
 
 class FreeTypeProject(AutotoolsProject):
-    def configure(self):
-        build = AutotoolsProject.configure(self)
+    def configure(self, toolchain):
+        build = AutotoolsProject.configure(self, toolchain)
 
         comment_re = re.compile(r'^\w+_MODULES\s*\+=\s*(?:type1|cff|cid|pfr|type42|winfonts|pcf|bdf|lzw|bzip2|psaux|psnames)\s*$')
         modules_cfg = os.path.join(build, 'modules.cfg')
@@ -286,6 +299,7 @@ thirdparty_libs = [
 ]
 
 # build the third-party libraries
+toolchain = KoboToolchain(install_prefix, host_arch, cc, cxx, ar, strip)
 for x in thirdparty_libs:
-    if not x.is_installed():
-        x.build()
+    if not x.is_installed(toolchain):
+        x.build(toolchain)
