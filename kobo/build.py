@@ -33,9 +33,12 @@ if 'MAKEFLAGS' in os.environ:
     del os.environ['MAKEFLAGS']
 
 class KoboToolchain:
-    def __init__(self, install_prefix, arch, cc, cxx, ar, strip):
-        self.arch = arch
+    def __init__(self, tarball_path, src_path, build_path, install_prefix, arch, cc, cxx, ar, strip):
+        self.tarball_path = tarball_path
+        self.src_path = src_path
+        self.build_path = build_path
         self.install_prefix = install_prefix
+        self.arch = arch
 
         self.cc = cc
         self.cxx = cxx
@@ -86,11 +89,11 @@ class Project:
         self.use_cxx = use_cxx
         self.use_clang = use_clang
 
-    def download(self):
-        return download_and_verify(self.url, self.md5, tarball_path)
+    def download(self, toolchain):
+        return download_and_verify(self.url, self.md5, toolchain.tarball_path)
 
     def is_installed(self, toolchain):
-        tarball = self.download()
+        tarball = self.download(toolchain)
         installed = os.path.join(toolchain.install_prefix, self.installed)
         tarball_mtime = os.path.getmtime(tarball)
         try:
@@ -98,16 +101,15 @@ class Project:
         except FileNotFoundError:
             return False
 
-    def unpack(self, out_of_tree=True):
-        global src_path, build_path
+    def unpack(self, toolchain, out_of_tree=True):
         if out_of_tree:
-            parent_path = src_path
+            parent_path = toolchain.src_path
         else:
-            parent_path = build_path
-        return untar(self.download(), parent_path, self.base)
+            parent_path = toolchain.build_path
+        return untar(self.download(toolchain), parent_path, self.base)
 
-    def make_build_path(self):
-        path = os.path.join(build_path, self.base)
+    def make_build_path(self, toolchain):
+        path = os.path.join(toolchain.build_path, self.base)
         try:
             shutil.rmtree(path)
         except FileNotFoundError:
@@ -121,7 +123,7 @@ class ZlibProject(Project):
         Project.__init__(self, url, md5, installed, **kwargs)
 
     def build(self, toolchain):
-        src = self.unpack(out_of_tree=False)
+        src = self.unpack(toolchain, out_of_tree=False)
 
         subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
                               cwd=src, env=toolchain.env)
@@ -144,14 +146,14 @@ class AutotoolsProject(Project):
         self.cppflags = cppflags
 
     def configure(self, toolchain):
-        src = self.unpack()
+        src = self.unpack(toolchain)
         if self.autogen:
             subprocess.check_call(['/usr/bin/aclocal'], cwd=src)
             subprocess.check_call(['/usr/bin/automake', '--add-missing', '--force-missing', '--foreign'], cwd=src)
             subprocess.check_call(['/usr/bin/autoconf'], cwd=src)
             subprocess.check_call(['/usr/bin/libtoolize', '--force'], cwd=src)
 
-        build = self.make_build_path()
+        build = self.make_build_path(toolchain)
 
         configure = [
             os.path.join(src, 'configure'),
@@ -261,7 +263,8 @@ thirdparty_libs = [
 ]
 
 # build the third-party libraries
-toolchain = KoboToolchain(install_prefix, host_arch, cc, cxx, ar, strip)
+toolchain = KoboToolchain(tarball_path, src_path, build_path, install_prefix,
+                          host_arch, cc, cxx, ar, strip)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):
         x.build(toolchain)
