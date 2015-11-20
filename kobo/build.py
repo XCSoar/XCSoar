@@ -2,8 +2,6 @@
 
 import os, os.path
 import sys, shutil, subprocess
-import urllib.request
-import hashlib
 import re
 
 if len(sys.argv) != 7:
