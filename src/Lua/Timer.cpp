@@ -40,7 +40,7 @@ class LuaTimer final : public Timer {
 public:
   static constexpr const char *registry_table = "xcsoar.timers";
 
-  explicit LuaTimer(lua_State *_L, int callback_idx):L(_L) {
+  explicit LuaTimer(lua_State *_l, int callback_idx):L(_l) {
     auto d = (LuaTimer **)lua_newuserdata(L, sizeof(LuaTimer **));
     *d = this;
 
