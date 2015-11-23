@@ -56,14 +56,20 @@ class Toolchain:
 
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
-thirdparty_libs = [
-    zlib,
-    freetype,
-    curl,
-    libpng,
-    libjpeg,
-    lua,
-]
+
+if 'mingw32' in host_triplet:
+    thirdparty_libs = [
+        lua,
+    ]
+else:
+    thirdparty_libs = [
+        zlib,
+        freetype,
+        curl,
+        libpng,
+        libjpeg,
+        lua,
+    ]
 
 # build the third-party libraries
 toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
