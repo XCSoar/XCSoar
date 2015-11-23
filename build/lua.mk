@@ -1,4 +1,4 @@
-ifeq ($(TARGET_IS_KOBO),y)
+ifeq ($(USE_THIRDARTY_LIBS),y)
 LUA = y
 else
 # Lua scripting is off by default for now, until we have a
@@ -8,7 +8,7 @@ endif
 
 ifeq ($(LUA),y)
 
-ifeq ($(TARGET_IS_KOBO),y)
+ifeq ($(USE_THIRDARTY_LIBS),y)
 LUA_LDLIBS = -llua
 LUA_CPPFLAGS =
 else

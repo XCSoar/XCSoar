@@ -564,7 +564,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
-  TARGET_CPPFLAGS += -isystem $(KOBO)/include
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -646,7 +645,6 @@ ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-  TARGET_LDFLAGS += -L$(KOBO)/lib
   TARGET_LDFLAGS += -static-libstdc++
 
   # use our glibc version and its ld.so on the Kobo, not the one from
