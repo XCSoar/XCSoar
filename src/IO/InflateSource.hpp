@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "BufferedSource.hpp"
 
-#include <zlib/zlib.h>
+#include <zlib.h>
 
 struct zzip_file;
 struct zzip_dir;
