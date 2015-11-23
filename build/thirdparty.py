@@ -3,11 +3,11 @@
 import os, os.path
 import sys
 
-if len(sys.argv) != 8:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET ARCH_CFLAGS CC CXX AR STRIP", file=sys.stderr)
+if len(sys.argv) != 9:
+    print("Usage: build.py TARGET_OUTPUT_DIR TARGET HOST_TRIPLET ARCH_CFLAGS CC CXX AR STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_triplet, arch_flags, cc, cxx, ar, strip = sys.argv[1:]
+target_output_dir, target, host_triplet, arch_flags, cc, cxx, ar, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))

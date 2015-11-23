@@ -4,4 +4,4 @@ endif
 
 .PHONY: libs
 libs:
-	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(HOST_TRIPLET) "$(TARGET_ARCH)" $(CC) $(CXX) $(AR) $(STRIP)
+	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) "$(TARGET_ARCH)" $(CC) $(CXX) $(AR) $(STRIP)
