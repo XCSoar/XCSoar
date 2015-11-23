@@ -47,14 +47,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
 
-ifeq ($(MAKECMDGOALS),kobo-libs)
-$(error Target "kobo-libs" is obsolete, please use "libs" instead)
-endif
-
-.PHONY: libs
-libs:
-	./kobo/build.py $(TARGET_OUTPUT_DIR) $(HOST_TRIPLET) "$(TARGET_ARCH)" $(CC) $(CXX) $(AR) $(STRIP)
-
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \

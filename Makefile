@@ -76,6 +76,7 @@ include $(topdir)/build/languages.mk
 include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
+include $(topdir)/build/thirdparty.mk
 include $(topdir)/build/libintl.mk
 
 ifeq ($(HEADLESS),y)
