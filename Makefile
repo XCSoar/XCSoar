@@ -112,7 +112,7 @@ include $(topdir)/build/manual.mk
 include $(topdir)/build/libboost.mk
 INCLUDES += $(BOOST_CPPFLAGS)
 
-ifneq ($(MAKECMDGOALS),kobo-libs) # kludge to allow bootstrapping kobo-libs
+ifneq ($(MAKECMDGOALS),libs) # kludge to allow bootstrapping thirdparty libraries
 
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libresource.mk
