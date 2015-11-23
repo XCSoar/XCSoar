@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "Inflate.hpp"
 
-#include <zlib/zlib.h>
+#include <zlib.h>
+
 #include <assert.h>
 #include <limits.h>
 #include <stdint.h>
