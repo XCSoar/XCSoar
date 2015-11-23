@@ -60,7 +60,6 @@ libjpeg = AutotoolsProject(
     'lib/libjpeg.a',
     [
         '--disable-shared', '--enable-static',
-        '--enable-arm-neon',
     ]
 )
 
