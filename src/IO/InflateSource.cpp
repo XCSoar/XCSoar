@@ -27,7 +27,9 @@ InflateSource::InflateSource(Source<char> &_src)
   :src(_src)
 {
   auto compressed = src.Read();
-  strm.next_in = reinterpret_cast<const Bytef *>(compressed.data);
+  /* we need the const_cast because Android NDK r10e contains ZLib
+     1.2.3 headers without ZLIB_CONST support */
+  strm.next_in = const_cast<Bytef *>(reinterpret_cast<const Bytef *>(compressed.data));
   strm.avail_in = compressed.size;
   strm.zalloc = nullptr;
   strm.zfree = nullptr;
@@ -52,7 +54,9 @@ InflateSource::Read(char *p, unsigned n)
     if (compressed.IsEmpty())
       return 0;
 
-    strm.next_in = reinterpret_cast<const Bytef *>(compressed.data);
+    /* we need the const_cast because Android NDK r10e contains ZLib
+       1.2.3 headers without ZLIB_CONST support */
+    strm.next_in = const_cast<Bytef *>(reinterpret_cast<const Bytef *>(compressed.data));
     strm.avail_in = compressed.size;
     strm.next_out = reinterpret_cast<Bytef *>(p);
     strm.avail_out = n;
