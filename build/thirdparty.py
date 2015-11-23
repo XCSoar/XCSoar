@@ -61,6 +61,10 @@ if 'mingw32' in host_triplet:
     thirdparty_libs = [
         lua,
     ]
+elif target == 'ANDROID':
+    thirdparty_libs = [
+        lua,
+    ]
 else:
     thirdparty_libs = [
         zlib,
