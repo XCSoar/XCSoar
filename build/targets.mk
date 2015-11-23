@@ -225,7 +225,7 @@ ifeq ($(TARGET),NEON)
     HOST_TRIPLET = arm-linux-gnueabihf
   endif
   TCPREFIX = $(HOST_TRIPLET)-
-  ifeq ($(CLANG),n)
+  ifneq ($(CLANG),y)
     TARGET_ARCH += -mcpu=cortex-a8
   endif
   TARGET_IS_ARM = y
