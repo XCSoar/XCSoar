@@ -4,10 +4,10 @@ import os, os.path
 import sys
 
 if len(sys.argv) != 7:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR STRIP", file=sys.stderr)
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET CC CXX AR STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_arch, cc, cxx, ar, strip = sys.argv[1:]
+target_output_dir, host_triplet, cc, cxx, ar, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -19,7 +19,7 @@ from build.dirs import tarball_path, src_path
 target_output_dir = os.path.abspath(target_output_dir)
 
 lib_path = os.path.join(target_output_dir, 'lib')
-arch_path = os.path.join(lib_path, host_arch)
+arch_path = os.path.join(lib_path, host_triplet)
 build_path = os.path.join(arch_path, 'build')
 install_prefix = os.path.join(arch_path, 'root')
 
@@ -68,7 +68,7 @@ thirdparty_libs = [
 
 # build the third-party libraries
 toolchain = KoboToolchain(tarball_path, src_path, build_path, install_prefix,
-                          host_arch, cc, cxx, ar, strip)
+                          host_triplet, cc, cxx, ar, strip)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):
         x.build(toolchain)

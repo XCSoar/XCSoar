@@ -49,7 +49,7 @@ ifeq ($(TARGET_IS_KOBO),y)
 
 .PHONY: kobo-libs
 kobo-libs:
-	./kobo/build.py $(TARGET_OUTPUT_DIR) $(HOST_ARCH) $(CC) $(CXX) $(AR) $(STRIP)
+	./kobo/build.py $(TARGET_OUTPUT_DIR) $(HOST_TRIPLET) $(CC) $(CXX) $(AR) $(STRIP)
 
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
