@@ -10,11 +10,18 @@ class LuaProject(Project):
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
 
+        cflags = toolchain.cflags + ' ' + toolchain.cppflags
+
+        # hard-code lua_getlocaledecpoint() because
+        # localeconv()->decimal_point is not available on the Bionic
+        # version we're depnding on
+        cflags += " \"-Dlua_getlocaledecpoint()='.'\""
+
         subprocess.check_call(['/usr/bin/make', '-j12',
                                'CC=' + toolchain.cc,
                                'AR=' + toolchain.ar + ' rcu',
                                'RANLIB=true',
-                               'MYCFLAGS=' + toolchain.cflags + ' ' + toolchain.cppflags,
+                               'MYCFLAGS=' + cflags,
                                'MYLDFLAGS=' + toolchain.ldflags,
                                'liblua.a'],
                               cwd=os.path.join(src, 'src'), env=toolchain.env)
