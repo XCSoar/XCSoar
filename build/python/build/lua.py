@@ -14,7 +14,7 @@ class LuaProject(Project):
                                'CC=' + toolchain.cc,
                                'AR=' + toolchain.ar + ' rcu',
                                'RANLIB=true',
-                               'MYCFLAGS=' + toolchain.cflags,
+                               'MYCFLAGS=' + toolchain.cflags + ' ' + toolchain.cppflags,
                                'MYLDFLAGS=' + toolchain.ldflags,
                                'liblua.a'],
                               cwd=os.path.join(src, 'src'), env=toolchain.env)
