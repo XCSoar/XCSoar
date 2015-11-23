@@ -28,7 +28,7 @@ if 'MAKEFLAGS' in os.environ:
     # which breaks the zlib Makefile (and maybe others)
     del os.environ['MAKEFLAGS']
 
-class KoboToolchain:
+class Toolchain:
     def __init__(self, tarball_path, src_path, build_path, install_prefix, arch, arch_flags, cc, cxx, ar, strip):
         self.tarball_path = tarball_path
         self.src_path = src_path
@@ -66,8 +66,8 @@ thirdparty_libs = [
 ]
 
 # build the third-party libraries
-toolchain = KoboToolchain(tarball_path, src_path, build_path, install_prefix,
-                          host_triplet, arch_flags, cc, cxx, ar, strip)
+toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
+                      host_triplet, arch_flags, cc, cxx, ar, strip)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):
         x.build(toolchain)
