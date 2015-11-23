@@ -156,6 +156,12 @@ that the supporting 32-bit libraries are missing, which can be fixed through the
 sudo apt-get install ia32-libs
 \end{verbatim*}
 
+First build the third-party libraries:
+
+\begin{verbatim*}
+make TARGET=ANDROID libs
+\end{verbatim*}
+
 To compile, run:
 
 \begin{verbatim*}
@@ -188,6 +194,12 @@ To cross-compile to (desktop) Windows, you need the mingw-w64 version
 of gcc:
 
  http://mingw-w64.sourceforge.net/
+
+First build the third-party libraries:
+
+\begin{verbatim*}
+make TARGET=PC libs
+\end{verbatim*}
 
 To compile, run one of the following:
 
