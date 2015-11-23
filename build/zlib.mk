@@ -25,6 +25,13 @@ ZLIB_CPPFLAGS =
 ZLIB_LDADD =
 ZLIB_LDLIBS = -lz
 
+else ifeq ($(TARGET),PC)
+
+ZLIB_LDADD =
+ZLIB_LDLIBS = -lz
+
+ZLIB_CPPFLAGS =
+
 else
 
 ZLIB_SRC_DIR = $(SRC)/zlib

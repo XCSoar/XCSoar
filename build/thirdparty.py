@@ -61,6 +61,7 @@ from build.libs import *
 
 if 'mingw32' in host_triplet:
     thirdparty_libs = [
+        zlib,
         lua,
     ]
 elif target == 'ANDROID':
