@@ -14,9 +14,8 @@ xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', 
 sys.path[0] = os.path.join(xcsoar_path, 'build/python')
 
 # output directories
-output_path = os.path.abspath('output')
-tarball_path = os.path.join(output_path, 'download')
-src_path = os.path.join(output_path, 'src')
+from build.dirs import tarball_path, src_path
+
 target_output_dir = os.path.abspath(target_output_dir)
 
 lib_path = os.path.join(target_output_dir, 'lib')
