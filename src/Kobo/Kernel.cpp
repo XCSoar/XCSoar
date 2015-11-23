@@ -107,7 +107,7 @@ bool
 IsKoboOTGKernel()
 {
 #ifdef KOBO
-  FileSource file("/proc/config.gz", IgnoreError());
+  FileSource file(Path("/proc/config.gz"), IgnoreError());
   if (file.error())
     return false;
 

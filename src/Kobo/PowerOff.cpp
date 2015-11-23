@@ -94,7 +94,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
 static void
 DrawFlights(Canvas &canvas, const PixelRect &rc)
 {
-  FileLineReaderA file("/mnt/onboard/XCSoarData/flights.log", IgnoreError());
+  FileLineReaderA file(Path("/mnt/onboard/XCSoarData/flights.log"), IgnoreError());
   if (file.error())
     return;
 

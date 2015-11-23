@@ -160,7 +160,7 @@ bool
 IsKoboWifiOn()
 {
 #ifdef KOBO
-  return Directory::Exists("/sys/class/net/eth0");
+  return Directory::Exists(Path("/sys/class/net/eth0"));
 #else
   return false;
 #endif
@@ -232,7 +232,7 @@ KoboExecNickel()
      exists */
   mkdir("/mnt/onboard/XCSoarData", 0777);
   mkdir("/mnt/onboard/XCSoarData/kobo", 0777);
-  File::CreateExclusive("/mnt/onboard/XCSoarData/kobo/start_nickel");
+  File::CreateExclusive(Path("/mnt/onboard/XCSoarData/kobo/start_nickel"));
 
   /* unfortunately, a bug in the Kobo applications forces us to reboot
      the Kobo at this point */
