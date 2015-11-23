@@ -418,9 +418,7 @@ RealPath(Path path)
 {
   char buffer[4096];
   char *result = realpath(path.c_str(), buffer);
-  AllocatedPath result2(result);
-  free(result);
-  return result2;
+  return AllocatedPath(result);
 }
 #endif
 
