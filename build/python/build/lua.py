@@ -1,6 +1,7 @@
 import os.path, subprocess, shutil
 
 from build.project import Project
+from build.quilt import push_all
 
 class LuaProject(Project):
     def __init__(self, url, md5, installed,
@@ -9,6 +10,8 @@ class LuaProject(Project):
 
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
+
+        push_all(toolchain, src, os.path.abspath('lib/lua/patches'))
 
         cflags = toolchain.cflags + ' ' + toolchain.cppflags
 
