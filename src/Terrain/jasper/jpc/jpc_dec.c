@@ -1562,10 +1562,6 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 {
 	const jpc_com_t *com = &ms->parms.com;
 
-	/* Eliminate compiler warnings about unused variables. */
-	dec = 0;
-	ms = 0;
-
 	jas_rtc_ProcessComment(dec->loader,
 			       (const char *)com->data, com->len);
 
