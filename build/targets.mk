@@ -120,12 +120,13 @@ endif
 
 ifeq ($(TARGET),PC)
   ifeq ($(X64),y)
-    TCPREFIX := x86_64-w64-mingw32-
+    HOST_TRIPLET = x86_64-w64-mingw32
     TARGET_ARCH += -m64
   else
-    TCPREFIX := i686-w64-mingw32-
+    HOST_TRIPLET = i686-w64-mingw32
     TARGET_ARCH += -march=i586
   endif
+  TCPREFIX = $(HOST_TRIPLET)-
 
   ifneq ($(MINGWPATH),)
     TCPREFIX := $(MINGWPATH)
