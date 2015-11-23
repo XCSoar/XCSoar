@@ -4,11 +4,10 @@ import os, os.path
 import sys
 
 if len(sys.argv) != 8:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR RANLIB STRIP", file=sys.stderr)
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET CC CXX AR RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_arch, cc, cxx, ar, ranlib, strip = sys.argv[1:]
-host_triplet = 'arm-linux-gnueabihf'
+target_output_dir, host_triplet, cc, cxx, ar, ranlib, strip = sys.argv[1:]
 arch_ldflags = ''
 
 # the path to the XCSoar sources
@@ -21,7 +20,7 @@ from build.dirs import tarball_path, src_path
 target_output_dir = os.path.abspath(target_output_dir)
 
 lib_path = os.path.join(target_output_dir, 'lib')
-arch_path = os.path.join(lib_path, host_arch)
+arch_path = os.path.join(lib_path, host_triplet)
 build_path = os.path.join(arch_path, 'build')
 root_path = os.path.join(arch_path, 'root')
 

@@ -276,7 +276,7 @@ endif
 ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
-  KOBO = $(TARGET_OUTPUT_DIR)/lib/$(HOST_ARCH)/root
+  KOBO = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
   TARGET_IS_KOBO = y
 endif
 
@@ -284,11 +284,11 @@ ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON
   override TARGET = UNIX
   ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_ARCH = arm-unknown-linux-gnueabihf
+    HOST_TRIPLET = arm-unknown-linux-gnueabihf
   else
-    HOST_ARCH = arm-linux-gnueabihf
+    HOST_TRIPLET = arm-linux-gnueabihf
   endif
-  TCPREFIX = $(HOST_ARCH)-
+  TCPREFIX = $(HOST_TRIPLET)-
   ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
   endif
