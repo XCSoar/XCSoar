@@ -103,25 +103,25 @@ LoadJPEGFile(Path path)
   const size_t row_buffer_size = row_size;
   /* allocate a buffer that holds the uncompressed image plus a row
      buffer with packed 24 bit samples (for libjpeg) */
-  uint8_t *const image_buffer =
-    new uint8_t[image_buffer_size + row_buffer_size];
+  std::unique_ptr<uint8_t[]> image_buffer(new uint8_t[image_buffer_size
+                                                      + row_buffer_size]);
   if (image_buffer == nullptr) {
     jpeg_destroy_decompress(&cinfo);
     fclose(file);
     return UncompressedImage::Invalid();
   }
 
-  uint8_t *const row = image_buffer + image_buffer_size;
+  uint8_t *const row = image_buffer.get() + image_buffer_size;
   JSAMPROW rowptr[1] = { row };
 
-  uint8_t *p = image_buffer;
+  uint8_t *p = image_buffer.get();
   while (cinfo.output_scanline < height) {
     jpeg_read_scanlines(&cinfo, rowptr, (JDIMENSION)1);
 
     p = std::copy_n(row, row_size, p);
   }
 
-  assert(p == image_buffer + image_buffer_size);
+  assert(p == image_buffer.get() + image_buffer_size);
 
   jpeg_finish_decompress(&cinfo);
   jpeg_destroy_decompress(&cinfo);
@@ -130,5 +130,5 @@ LoadJPEGFile(Path path)
 
   return UncompressedImage(UncompressedImage::Format::RGB,
                            row_size, width, height,
-                           image_buffer);
+                           std::move(image_buffer));
 }

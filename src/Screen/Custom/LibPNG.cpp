@@ -104,25 +104,24 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
   const unsigned num_channels = png_get_channels(png_ptr, info_ptr);
   const unsigned pitch = (num_channels * bit_depth) / 8 * width;
 
-  uint8_t *uncompressed = new uint8_t[pitch * height];
+  std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[pitch * height]);
   if (uncompressed == nullptr)
     return UncompressedImage::Invalid();
 
   png_bytep *rows = new png_bytep[height];
-  if (rows == nullptr) {
-    delete[] uncompressed;
+  if (rows == nullptr)
     return UncompressedImage::Invalid();
-  }
 
   for (unsigned i = 0; i < height; ++i)
-    rows[i] = uncompressed + i * pitch;
+    rows[i] = uncompressed.get() + i * pitch;
 
   /* uncompress and import into an OpenGL texture */
 
   png_read_image(png_ptr, rows);
   delete[] rows;
 
-  return UncompressedImage(format, pitch, width, height, uncompressed);
+  return UncompressedImage(format, pitch, width, height,
+                           std::move(uncompressed));
 }
 
 UncompressedImage

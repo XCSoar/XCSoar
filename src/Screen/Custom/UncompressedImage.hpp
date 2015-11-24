@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_UNCOMPRESSED_IMAGE_HPP
 
+#include <memory>
+
 #include <stdint.h>
 
 class UncompressedImage {
@@ -52,28 +54,18 @@ private:
 
   unsigned pitch, width, height;
 
-  uint8_t *data;
+  std::unique_ptr<uint8_t[]> data;
 
 public:
   UncompressedImage(Format _format, unsigned _pitch,
                     unsigned _width, unsigned _height,
-                    uint8_t *_data)
+                    std::unique_ptr<uint8_t[]> &&_data)
     :format(_format),
      pitch(_pitch), width(_width), height(_height),
-     data(_data) {}
+     data(std::move(_data)) {}
 
-  UncompressedImage(UncompressedImage &&other)
-    :format(other.format), pitch(other.pitch),
-     width(other.width), height(other.height),
-     data(other.data) {
-    other.data = nullptr;
-  }
-
+  UncompressedImage(UncompressedImage &&other) = default;
   UncompressedImage(const UncompressedImage &other) = delete;
-
-  ~UncompressedImage() {
-    delete[] data;
-  }
 
   UncompressedImage &operator=(const UncompressedImage &other) = delete;
 
@@ -102,7 +94,7 @@ public:
   }
 
   const void *GetData() const {
-    return data;
+    return data.get();
   }
 };
 
