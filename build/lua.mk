@@ -1,10 +1,4 @@
-ifeq ($(USE_THIRDARTY_LIBS),y)
 LUA = y
-else
-# Lua scripting is off by default for now, until we have a
-# cross-platform build script for the Lua interpreter.
-LUA = n
-endif
 
 ifeq ($(LUA),y)
 
