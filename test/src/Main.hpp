@@ -73,6 +73,10 @@
 #include <windows.h>
 #endif
 
+#include <stdexcept>
+
+#include <stdio.h>
+
 #ifdef ENABLE_CMDLINE
 static void
 ParseCommandLine(Args &args);
@@ -276,7 +280,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.Show();
 #endif
 
-  Main();
+  int result = EXIT_SUCCESS;
+  try {
+    Main();
+  } catch (const std::exception &e) {
+    fprintf(stderr, "%s\n", e.what());
+    result = EXIT_FAILURE;
+  }
 
 #ifdef ENABLE_MAIN_WINDOW
   main_window.Destroy();
@@ -298,5 +308,5 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   DeinitialiseFonts();
 #endif
 
-  return 0;
+  return result;
 }
