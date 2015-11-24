@@ -181,7 +181,7 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
 {
   assert(indices[thinning_level] == nullptr);
 
-  unsigned short *idx, *idx_count;
+  uint16_t *idx, *idx_count;
   unsigned num_points = 0;
 
   for (unsigned i=0; i < num_lines; i++)
@@ -194,16 +194,16 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
       new GLushort[num_lines + num_points];
     indices[thinning_level] = idx = idx_count + num_lines;
 
-    const unsigned short *end_l = lines + num_lines;
+    const uint16_t *end_l = lines + num_lines;
     const ShapePoint *p = points;
     unsigned i = 0;
-    for (const unsigned short *l = lines; l < end_l; l++) {
+    for (const uint16_t *l = lines; l < end_l; l++) {
       assert(*l >= 2);
       const ShapePoint *end_p = p + *l - 1;
       // always add first point
       *idx++ = i;
       p++; i++;
-      const unsigned short *after_first_idx = idx;
+      const uint16_t *after_first_idx = idx;
       // add points if they are not too close to the previous point
       for (; p < end_p; p++, i++)
         if (ManhattanDistance(points[idx[-1]], *p) >= min_distance)
@@ -246,9 +246,9 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
   }
 }
 
-const unsigned short *
+const uint16_t *
 XShape::GetIndices(int thinning_level, ShapeScalar min_distance,
-                   const unsigned short *&count) const
+                   const uint16_t *&count) const
 {
   if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);

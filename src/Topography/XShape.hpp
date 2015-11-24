@@ -46,19 +46,19 @@ class XShape {
 
   GeoBounds bounds;
 
-  unsigned char type;
+  uint8_t type;
 
   /**
    * The number of elements in the "lines" array.
    */
-  unsigned char num_lines;
+  uint8_t num_lines;
 
   /**
    * An array which stores the number of points of each line.  This is
    * a fixed-size array to reduce the number of allocations at
    * runtime.
    */
-  unsigned short lines[MAX_LINES];
+  uint16_t lines[MAX_LINES];
 
   /**
    * All points of all lines.
@@ -69,7 +69,7 @@ class XShape {
   /**
    * Indices of polygon triangles or lines with reduced number of vertices.
    */
-  unsigned short *indices[THINNING_LEVELS];
+  uint16_t *indices[THINNING_LEVELS];
 
   /**
    * For polygons this will contain the total number of triangle vertices
@@ -77,7 +77,7 @@ class XShape {
    * For lines there will be an array of size num_lines for each thinning
    * level, which contains the number of points for each line.
    */
-  unsigned short *index_count[THINNING_LEVELS];
+  uint16_t *index_count[THINNING_LEVELS];
 
   /**
    * The start offset in the #GLArrayBuffer (vertex buffer object).
@@ -111,9 +111,9 @@ protected:
   bool BuildIndices(unsigned thinning_level, ShapeScalar min_distance);
 
 public:
-  const unsigned short *GetIndices(int thinning_level,
-                                   ShapeScalar min_distance,
-                                   const unsigned short *&count) const;
+  const uint16_t *GetIndices(int thinning_level,
+                             ShapeScalar min_distance,
+                             const uint16_t *&count) const;
 #endif
 
   const GeoBounds &get_bounds() const {
@@ -124,7 +124,7 @@ public:
     return (MS_SHAPE_TYPE)type;
   }
 
-  ConstBuffer<unsigned short> GetLines() const {
+  ConstBuffer<uint16_t> GetLines() const {
     return { lines, num_lines };
   }
 
