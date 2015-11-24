@@ -280,8 +280,6 @@ struct IGCHEADER
   char A[10], DTE[10], FXA[10], PLT[80], GTY[50], GID[50], RFW[10], RHW[10],
        FTY[50], DTM[10], CID[50], CCL[50], TZN[20];
 
-  FILE *ausgabe;
-
   /** Constructor */
   IGCHEADER(void)
   {
@@ -298,14 +296,6 @@ struct IGCHEADER
     CID[0] = 0;
     CCL[0] = 0;
     TZN[0] = 0;
-    ausgabe = stderr;
-  }
-
-  /** Setting the output stream for IGC files */
-  void
-  redirect(FILE *opf)
-  {
-    ausgabe = opf;
   }
 
   /**
@@ -313,7 +303,7 @@ struct IGCHEADER
    * Unused field will be prepared as HO fields.
    */
   void
-  output(int version, bool oo_fillin)
+  output(FILE *ausgabe, int version, bool oo_fillin)
   {
     igc_filter(PLT);
     igc_filter(GTY);
@@ -524,7 +514,6 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
   igcfix.lat = 0;
   igcfix.lon = 0;
 
-  igcheader.redirect(Ausgabedatei);
   decl_time = -1;
 
   ende = 0;
@@ -882,7 +871,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
 
   snprintf(igcheader.DTE, sizeof(igcheader.DTE), "%02u%02u%02u",
            firsttime.day, firsttime.month, firsttime.year % 100);
-  igcheader.output(igcfile_version, oo_fillin);
+  igcheader.output(Ausgabedatei, igcfile_version, oo_fillin);
 
   if (igcfile_version >= 414 || (task.STA.koord.lat != 0)
       || (task.STA.koord.lon != 0)) {
