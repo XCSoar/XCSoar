@@ -39,6 +39,7 @@
 #include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/FileTransaction.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
@@ -289,21 +290,18 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       break;
 
     // Download chosen IGC file into temporary file
-    const auto path = AllocatedPath::Build(logs_path, _T("temp.igc"));
-    switch (DoDownloadFlight(device, *flight, path)) {
+    FileTransaction transaction(AllocatedPath::Build(logs_path,
+                                                     _T("temp.igc")));
+    switch (DoDownloadFlight(device, *flight, transaction.GetTemporaryPath())) {
     case TriStateJobResult::SUCCESS:
       break;
 
     case TriStateJobResult::ERROR:
-      // Delete temporary file
-      File::Delete(path);
       ShowMessageBox(_("Failed to download flight."),
                   _("Download flight"), MB_OK | MB_ICONERROR);
       continue;
 
     case TriStateJobResult::CANCELLED:
-      // Delete temporary file
-      File::Delete(path);
       continue;
     }
 
@@ -311,7 +309,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
     IGCHeader header;
     BrokenDate date;
-    ReadIGCMetaData(path, header, date);
+    ReadIGCMetaData(transaction.GetTemporaryPath(), header, date);
     if (header.flight == 0)
       header.flight = GetFlightNumber(flight_list, *flight);
 
@@ -319,14 +317,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    const auto final_path = AllocatedPath::Build(logs_path, name);
-
-    // Remove a file with the same name if it exists
-    if (File::Exists(final_path))
-      File::Delete(final_path);
-
-    // Rename the temporary file to the actual filename
-    File::Rename(path, final_path);
+    transaction.SetPath(AllocatedPath::Build(logs_path, name));
+    transaction.Commit();
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
                     _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
