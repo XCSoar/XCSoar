@@ -27,6 +27,8 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Compiler.h"
 
+#include <utility>
+
 #include <tchar.h>
 
 /**
@@ -51,6 +53,11 @@ public:
    * temporary file) unless Commit() has been called.
    */
   ~FileTransaction();
+
+  template<typename P>
+  void SetPath(P &&_path) {
+    final_path = std::forward<P>(_path);
+  }
 
   /**
    * Returns the temporary path.  This is the path that shall be used
