@@ -32,8 +32,14 @@ Copyright_License {
 #include "LibJPEG.hpp"
 #endif
 
+#ifdef USE_LIBTIFF
+#include "LibTiff.hpp"
+#endif
+
 #include "UncompressedImage.hpp"
 #include "Util/ConstBuffer.hxx"
+
+#include <tchar.h>
 
 Bitmap::Bitmap(ConstBuffer<void> _buffer)
   :
@@ -59,6 +65,13 @@ Bitmap::Load(ConstBuffer<void> buffer, Type type)
 bool
 Bitmap::LoadFile(Path path)
 {
-  const UncompressedImage uncompressed = LoadJPEGFile(path);
+  const UncompressedImage uncompressed =
+#ifdef USE_LIBTIFF
+    path.MatchesExtension(_T(".tif")) ||
+    path.MatchesExtension(_T(".tiff"))
+    ? LoadTiff(path)
+    :
+#endif
+    LoadJPEGFile(path);
   return Load(uncompressed);
 }

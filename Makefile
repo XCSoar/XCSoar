@@ -147,6 +147,7 @@ include $(topdir)/build/libevent.mk
 include $(topdir)/build/freetype.mk
 include $(topdir)/build/libpng.mk
 include $(topdir)/build/libjpeg.mk
+include $(topdir)/build/libtiff.mk
 include $(topdir)/build/coregraphics.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/libthread.mk
