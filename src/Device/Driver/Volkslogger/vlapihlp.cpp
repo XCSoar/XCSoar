@@ -16,7 +16,6 @@
 ***********************************************************************/
 
 #include "vlapihlp.h"
-#include "utils.h"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 
@@ -52,18 +51,11 @@ char *igc_filter(char *st) {
 void
 wordtoserno(char *Seriennummer, unsigned Binaer)
 {
- char SerNStr[4];
-  // limitation
-  if (Binaer > 46655L)
-    Binaer = 46655L;
-  utoa(Binaer,SerNStr,36);
-  sprintf(Seriennummer,"%3s",SerNStr);
-  // generate leading zeroes
-  const size_t l = strlen(Seriennummer);
-  for (size_t i=0; i<l; i++) {
-    if (Seriennummer[i] == ' ')
-      Seriennummer[i] = '0';
-  };
+  static constexpr char base36[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  Seriennummer[0] = base36[(Binaer / 36 / 36) % 36];
+  Seriennummer[1] = base36[(Binaer / 36) % 36];
+  Seriennummer[2] = base36[Binaer % 36];
+  Seriennummer[3] = 0;
 }
 
 
