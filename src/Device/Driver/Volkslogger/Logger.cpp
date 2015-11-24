@@ -118,7 +118,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
   if (outfile == nullptr)
     return false;
 
-  size_t r = convert_gcs(0, outfile, logbuffer, length, true);
+  size_t r = convert_gcs(outfile, logbuffer, length, true);
   if (r == 0) {
     fclose(outfile);
     return false;

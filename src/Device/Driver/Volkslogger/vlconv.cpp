@@ -454,10 +454,10 @@ Parameter
     Position, an der die Signatur in der Binärdatei liegt
 */
 
-const int actual_conv_version = 424;
+static constexpr int igcfile_version = 424;
 
 size_t
-convert_gcs(int igcfile_version, FILE *Ausgabedatei,
+convert_gcs(FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
             bool oo_fillin)
 {
@@ -503,9 +503,6 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
   int tzset = 0;
 
   // long ggtz = timezone;
-
-  if (igcfile_version == 0)
-    igcfile_version = actual_conv_version;
 
   igcfix.lat = 0;
   igcfix.lon = 0;
