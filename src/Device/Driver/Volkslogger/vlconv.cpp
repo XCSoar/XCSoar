@@ -32,14 +32,10 @@
 #include "vlconv.h"
 #include "vlapihlp.h"
 
-// redeclaration of itoa()
-#include "utils.h"
-
 // C-Includes
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <memory.h>
 #include <assert.h>
 
 // Conversion-Constants

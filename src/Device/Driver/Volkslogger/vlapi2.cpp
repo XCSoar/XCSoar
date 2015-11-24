@@ -19,7 +19,6 @@
 #include "vlconv.h"
 #include "dbbconv.h"
 #include "grecord.h"
-#include "utils.h"
 #include "Database.hpp"
 #include "Device/Port/Port.hpp"
 #include "Util.hpp"
