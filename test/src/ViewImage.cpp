@@ -61,8 +61,10 @@ Main()
 {
   TestWindow window;
   window.Create(_T("ViewImage"), {640, 480});
-  if (window.LoadFile(path))
-    window.RunEventLoop();
-  else
+  if (!window.LoadFile(path)) {
     fprintf(stderr, "Failed to load file\n");
+    exit(EXIT_FAILURE);
+  }
+
+  window.RunEventLoop();
 }
