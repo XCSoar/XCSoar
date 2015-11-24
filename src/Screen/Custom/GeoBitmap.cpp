@@ -21,27 +21,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LIBTIFF_HPP
-#define XCSOAR_LIBTIFF_HPP
+#include "Screen/Bitmap.hpp"
+#include "UncompressedImage.hpp"
+#include "Geo/Quadrilateral.hpp"
+#include "OS/Path.hpp"
 
-#include <utility>
-
-class Path;
-class UncompressedImage;
-struct GeoQuadrilateral;
-
-/**
- * Load a TIFF file.  Throws a std::runtime_error on error.
- */
-UncompressedImage
-LoadTiff(Path path);
-
-/**
- * Load a GeoTIFF file.  Throws a std::runtime_error on error.
- *
- * @return the image and its geographic bounds
- */
-std::pair<UncompressedImage, GeoQuadrilateral>
-LoadGeoTiff(Path path);
-
+#ifdef USE_GEOTIFF
+#include "LibTiff.hpp"
 #endif
+
+#include <stdexcept>
+
+#include <tchar.h>
+
+#if !defined(USE_GEOTIFF) && GCC_CHECK_VERSION(4,9)
+#pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
+#endif
+
+GeoQuadrilateral
+Bitmap::LoadGeoFile(Path path)
+{
+#ifdef USE_GEOTIFF
+  if (path.MatchesExtension(_T(".tif")) ||
+      path.MatchesExtension(_T(".tiff"))) {
+    auto result = LoadGeoTiff(path);
+    if (!Load(result.first))
+      throw std::runtime_error("Failed to use geo image file");
+
+    return result.second;
+  }
+#endif
+
+  throw std::runtime_error("Unsupported geo image file");
+}

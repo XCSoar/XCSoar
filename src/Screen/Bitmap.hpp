@@ -45,6 +45,7 @@ Copyright_License {
 class Path;
 class ResourceId;
 class UncompressedImage;
+struct GeoQuadrilateral;
 template<typename T> struct ConstBuffer;
 
 #ifdef ENABLE_OPENGL
@@ -179,6 +180,12 @@ public:
   bool LoadStretch(ResourceId id, unsigned zoom);
 
   bool LoadFile(Path path);
+
+  /**
+   * Load a georeferenced image (e.g. GeoTIFF) and return its bounds.
+   * Throws a std::runtime_error on error.
+   */
+  GeoQuadrilateral LoadGeoFile(Path path);
 
   void Reset();
 
