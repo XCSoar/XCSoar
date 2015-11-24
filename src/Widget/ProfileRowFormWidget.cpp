@@ -129,7 +129,10 @@ bool
 RowFormWidget::SaveValueFileReader(unsigned i, const char *registry_key)
 {
   const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
-  const auto new_value = ContractLocalPath(dfe->GetPathFile());
+  Path new_value = dfe->GetPathFile();
+  const auto contracted = ContractLocalPath(new_value);
+  if (contracted != nullptr)
+    new_value = contracted;
 
   const WideToUTF8Converter new_value2(new_value.c_str());
   if (!new_value2.IsValid())

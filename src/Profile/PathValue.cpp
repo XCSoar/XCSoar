@@ -107,6 +107,11 @@ ProfileMap::SetPath(const char *key, Path value)
 {
   if (value.IsNull() || StringIsEmpty(value.c_str()))
     Set(key, _T(""));
-  else
-    Set(key, ContractLocalPath(value).c_str());
+  else {
+    const auto contracted = ContractLocalPath(value);
+    if (contracted != nullptr)
+      value = contracted;
+
+    Set(key, value.c_str());
+  }
 }
