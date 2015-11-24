@@ -24,6 +24,7 @@ Copyright_License {
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
 #include "Util/ContainerCast.hxx"
+#include "Util/ScopeExit.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
@@ -67,13 +68,14 @@ LoadJPEGFile(const TCHAR *path)
   if (file == nullptr)
     return UncompressedImage::Invalid();
 
+  AtScopeExit(file) { fclose(file); };
+
   struct jpeg_decompress_struct cinfo;
 
   JPEGErrorManager err;
   cinfo.err = &err.base;
   if (setjmp(err.setjmp_buffer)) {
     jpeg_destroy_decompress(&cinfo);
-    fclose(file);
     return UncompressedImage::Invalid();
   }
 
@@ -83,7 +85,6 @@ LoadJPEGFile(const TCHAR *path)
 
   if (cinfo.num_components != 3) {
     jpeg_destroy_decompress(&cinfo);
-    fclose(file);
     return UncompressedImage::Invalid();
   }
 
@@ -105,7 +106,6 @@ LoadJPEGFile(const TCHAR *path)
     new uint8_t[image_buffer_size + row_buffer_size];
   if (image_buffer == nullptr) {
     jpeg_destroy_decompress(&cinfo);
-    fclose(file);
     return UncompressedImage::Invalid();
   }
 
@@ -123,8 +123,6 @@ LoadJPEGFile(const TCHAR *path)
 
   jpeg_finish_decompress(&cinfo);
   jpeg_destroy_decompress(&cinfo);
-
-  fclose(file);
 
   return UncompressedImage(UncompressedImage::Format::RGB,
                            row_size, width, height,
