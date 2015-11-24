@@ -103,6 +103,16 @@ struct GeoPoint {
   }
 
   /**
+   * Check if both longitude and latitude are in the allowed range.
+   */
+  constexpr bool Check() const {
+    return longitude >= -Angle::HalfCircle() &&
+      longitude <= Angle::HalfCircle() &&
+      latitude >= -Angle::QuarterCircle() &&
+      latitude <= Angle::QuarterCircle();
+  }
+
+  /**
    * Normalize the values, so this object can be used properly in
    * calculations, without unintended side effects (such as -1 degrees
    * vs 359 degrees).  This modification is in-place.
