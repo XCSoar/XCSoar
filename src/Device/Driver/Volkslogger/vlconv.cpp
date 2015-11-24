@@ -260,28 +260,6 @@ public:
     }
   }
 
-  /*
-  // Initialisierung der Membervariablen
-  void
-  init(void)
-  {
-    int i;
-    NTP = 0;
-    TID = 0;
-    memset(&T_FDT, 0, sizeof T_FDT);
-    zz_min = 0;
-    memset(&TDECL, 0, sizeof TDECL);
-    strcpy(sTDECL, "            ");
-    memset(FDT, 0, sizeof FDT);
-    TKF.init();
-    STA.init();
-    FIN.init();
-    LDG.init();
-    for (i = 0; i < 12; i++)
-      TP[i].init();
-  }
-  */
-
   C_RECORD()
   {
     NTP = 0;
@@ -291,7 +269,6 @@ public:
     TDECL = BrokenDateTime::Invalid();
     strcpy(sTDECL, "            ");
     memset(FDT, 0, sizeof FDT);
-    //init();
   }
 };
 
@@ -304,22 +281,6 @@ struct IGCHEADER
        FTY[50], DTM[10], CID[50], CCL[50], TZN[20];
 
   FILE *ausgabe;
-
-  // Initialisierungsroutine
-  //void init(void) {
-  //  DTE[0] = 0;
-  //  FXA[0] = 0;
-  //  PLT[0] = 0;
-  //  GTY[0] = 0;
-  //  GID[0] = 0;
-  //  RFW[0] = 0;
-  //  RHW[0] = 0;
-  //  FTY[0] = 0;
-  //  DTM[0] = 0;
-  //  CID[0] = 0;
-  //  CCL[0] = 0;
-  //  TZN[0] = 0;
-  //}
 
   /** Constructor */
   IGCHEADER(void)
@@ -337,7 +298,6 @@ struct IGCHEADER
     CID[0] = 0;
     CCL[0] = 0;
     TZN[0] = 0;
-    //init();
     ausgabe = stderr;
   }
 
@@ -564,9 +524,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
   igcfix.lat = 0;
   igcfix.lon = 0;
 
-  //igcfile_version = 0;
   igcheader.redirect(Ausgabedatei);
-  //task.init();
   decl_time = -1;
 
   ende = 0;
