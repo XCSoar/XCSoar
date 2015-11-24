@@ -20,11 +20,14 @@ LUA_SOURCES = \
 	$(SRC)/Lua/Log.cpp \
 	$(SRC)/Lua/Timer.cpp \
 	$(SRC)/Lua/Geo.cpp \
+	$(SRC)/Lua/Map.cpp \
 	$(SRC)/Lua/Blackboard.cpp \
 	$(SRC)/Lua/Dialogs.cpp \
 	$(SRC)/Lua/Legacy.cpp \
 	$(SRC)/Lua/Full.cpp \
 	$(SRC)/Lua/Basic.cpp
+
+LUA_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
 $(eval $(call link-library,liblua,LUA))
 

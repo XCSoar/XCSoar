@@ -118,6 +118,8 @@ contains the following names:
   \hline
   \verb|blackboard| & Access to sensor data. \\
   \hline
+  \verb|map| & The map view. \\
+  \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
 \end{tabular}
 \end{maxipage}
@@ -155,6 +157,28 @@ $[{m \over s}]$. \\
 
 Any of these may be \verb|nil| if its value is not known, e.g. if
 there is no GPS fix.
+
+\subsection{The Map}
+
+The map provides access to XCSoar's map view.
+
+The following attributes are provided by \verb|xcsoar.map|:
+
+\begin{maxipage}
+\begin{tabular}{l|p{12cm}}
+Name & Description \\
+\hline\hline
+
+\verb|location| & The current reference location (may be aircraft location or
+pan location). \\
+
+\hline
+
+\verb|show()| & Show the map; disable thermal assistant or other
+widgets replacing the map view. \\
+
+\end{tabular}
+\end{maxipage}
 
 \subsection{Timers}
 
