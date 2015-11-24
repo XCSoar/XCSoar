@@ -24,44 +24,28 @@ Copyright_License {
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
 #include "OS/Path.hpp"
-#include "Util/ContainerCast.hxx"
 #include "Util/ScopeExit.hxx"
-#include "Compiler.h"
 
 #include <algorithm>
+#include <stdexcept>
 
 #include <tchar.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stddef.h>
-#include <setjmp.h>
 
 extern "C" {
 #include <jpeglib.h>
 }
 
-struct JPEGErrorManager {
-  struct jpeg_error_mgr base;
-
-  jmp_buf setjmp_buffer;
-
-  JPEGErrorManager() {
-    jpeg_std_error(&base);
-    base.error_exit = ErrorExit;
-  }
-
-  gcc_noreturn
-  void ErrorExit() {
-    longjmp(setjmp_buffer, 1);
-  }
-
-  gcc_noreturn
-  static void ErrorExit(j_common_ptr _cinfo) {
-    JPEGErrorManager &err = ContainerCast(*_cinfo->err,
-                                          &JPEGErrorManager::base);
-    err.ErrorExit();
-  }
-};
+[[noreturn]]
+static void
+JpegErrorExit(j_common_ptr cinfo)
+{
+  char msg[JMSG_LENGTH_MAX];
+  cinfo->err->format_message(cinfo, msg);
+  throw std::runtime_error(msg);
+}
 
 UncompressedImage
 LoadJPEGFile(Path path)
@@ -74,21 +58,19 @@ LoadJPEGFile(Path path)
 
   struct jpeg_decompress_struct cinfo;
 
-  JPEGErrorManager err;
-  cinfo.err = &err.base;
-  if (setjmp(err.setjmp_buffer)) {
-    jpeg_destroy_decompress(&cinfo);
-    return UncompressedImage::Invalid();
-  }
+  struct jpeg_error_mgr err;
+  cinfo.err = jpeg_std_error(&err);
+  err.error_exit = JpegErrorExit;
 
   jpeg_create_decompress(&cinfo);
+
+  AtScopeExit(&cinfo) { jpeg_destroy_decompress(&cinfo); };
+
   jpeg_stdio_src(&cinfo, file);
   jpeg_read_header(&cinfo, (boolean)true);
 
-  if (cinfo.num_components != 3) {
-    jpeg_destroy_decompress(&cinfo);
+  if (cinfo.num_components != 3)
     return UncompressedImage::Invalid();
-  }
 
   cinfo.out_color_space = JCS_RGB;
   cinfo.quantize_colors = (boolean)false;
@@ -106,10 +88,6 @@ LoadJPEGFile(Path path)
      buffer with packed 24 bit samples (for libjpeg) */
   std::unique_ptr<uint8_t[]> image_buffer(new uint8_t[image_buffer_size
                                                       + row_buffer_size]);
-  if (image_buffer == nullptr) {
-    jpeg_destroy_decompress(&cinfo);
-    return UncompressedImage::Invalid();
-  }
 
   uint8_t *const row = image_buffer.get() + image_buffer_size;
   JSAMPROW rowptr[1] = { row };
@@ -124,7 +102,6 @@ LoadJPEGFile(Path path)
   assert(p == image_buffer.get() + image_buffer_size);
 
   jpeg_finish_decompress(&cinfo);
-  jpeg_destroy_decompress(&cinfo);
 
   return UncompressedImage(UncompressedImage::Format::RGB,
                            row_size, width, height,

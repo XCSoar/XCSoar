@@ -55,6 +55,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "OS/RunFile.hpp"
 #include "OS/Path.hpp"
+#include "OS/ConvertPathName.hpp"
+#include "LogFile.hpp"
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"
 
@@ -415,8 +417,15 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (images.full())
       break;
 
-    if (!images.append().LoadFile(LocalPath(i.c_str())))
+    try {
+      if (!images.append().LoadFile(LocalPath(i.c_str())))
+        images.shrink(images.size() - 1);
+    } catch (const std::exception &e) {
+      LogFormat("Failed to load %s: %s",
+                (const char *)NarrowPathName(Path(i.c_str())),
+                e.what());
       images.shrink(images.size() - 1);
+    }
   }
 
   const Layout layout(rc, waypoint);
