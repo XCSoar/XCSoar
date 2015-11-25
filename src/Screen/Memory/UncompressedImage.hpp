@@ -27,54 +27,45 @@ Copyright_License {
 #include "Buffer.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
 
-template<typename PixelTraits>
-static inline void
-ConvertFromRGB(typename PixelTraits::rpointer_type dest,
-               const uint8_t *src, unsigned n)
-{
-  for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1)) {
-    const uint8_t r = *src++, g = *src++, b = *src++;
-    typename PixelTraits::color_type color(r, g, b);
-    PixelTraits::WritePixel(dest, color);
+struct RGBPixelReader {
+  const uint8_t *p;
+
+  template<typename PixelTraits>
+  typename PixelTraits::color_type Read(PixelTraits) {
+    const uint8_t r = *p++, g = *p++, b = *p++;
+    return typename PixelTraits::color_type(r, g, b);
   }
+};
+
+struct GrayPixelReader {
+  const uint8_t *p;
+
+  template<typename PixelTraits>
+  typename PixelTraits::color_type Read(PixelTraits) {
+    const uint8_t l = *p++;
+    return typename PixelTraits::color_type(l, l, l);
+  }
+};
+
+template<typename PixelTraits, typename Reader>
+static inline void
+ConvertLine(typename PixelTraits::rpointer_type dest, Reader src, unsigned n)
+{
+  for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1))
+    PixelTraits::WritePixel(dest, src.Read(PixelTraits()));
 }
 
-template<typename PixelTraits>
+template<typename PixelTraits, typename Format>
 static inline void
-ConvertFromRGB(WritableImageBuffer<PixelTraits> buffer,
-               const uint8_t *src, unsigned src_pitch)
+ConvertImage(WritableImageBuffer<PixelTraits> buffer,
+             const uint8_t *src, unsigned src_pitch)
 {
   typename PixelTraits::rpointer_type dest = buffer.data;
 
   for (unsigned i = 0; i < buffer.height; ++i,
          dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
          src += src_pitch)
-    ConvertFromRGB<PixelTraits>(dest, src, buffer.width);
-}
-
-template<typename PixelTraits>
-static inline void
-ConvertFromGray(typename PixelTraits::rpointer_type dest,
-                const uint8_t *src, unsigned n)
-{
-  for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1)) {
-    const uint8_t l = *src++;
-    typename PixelTraits::color_type color(l, l, l);
-    PixelTraits::WritePixel(dest, color);
-  }
-}
-
-template<typename PixelTraits>
-static inline void
-ConvertFromGray(WritableImageBuffer<PixelTraits> buffer,
-                const uint8_t *src, unsigned src_pitch)
-{
-  typename PixelTraits::rpointer_type dest = buffer.data;
-
-  for (unsigned i = 0; i < buffer.height; ++i,
-         dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
-         src += src_pitch)
-    ConvertFromGray<PixelTraits>(dest, src, buffer.width);
+    ConvertLine<PixelTraits>(dest, Format{src}, buffer.width);
 }
 
 /**
@@ -96,15 +87,17 @@ ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
 
   case UncompressedImage::Format::RGB:
   case UncompressedImage::Format::RGBA:
-    ConvertFromRGB<PixelTraits>(buffer,
-                                (const uint8_t *)uncompressed.GetData(),
-                                uncompressed.GetPitch());
+    ConvertImage<PixelTraits,
+                 RGBPixelReader>(buffer,
+                                 (const uint8_t *)uncompressed.GetData(),
+                                 uncompressed.GetPitch());
     break;
 
   case UncompressedImage::Format::GRAY:
-    ConvertFromGray<PixelTraits>(buffer,
-                                 (const uint8_t *)uncompressed.GetData(),
-                                 uncompressed.GetPitch());
+    ConvertImage<PixelTraits,
+                 GrayPixelReader>(buffer,
+                                  (const uint8_t *)uncompressed.GetData(),
+                                  uncompressed.GetPitch());
     break;
   }
 }
