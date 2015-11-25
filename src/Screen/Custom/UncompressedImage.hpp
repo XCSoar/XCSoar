@@ -52,6 +52,12 @@ public:
 private:
   Format format;
 
+  /**
+   * Flip up/down?  Some image formats (such as BMP and TIFF) store
+   * the bottom-most row first.
+   */
+  bool flipped;
+
   unsigned pitch, width, height;
 
   std::unique_ptr<uint8_t[]> data;
@@ -59,8 +65,9 @@ private:
 public:
   UncompressedImage(Format _format, unsigned _pitch,
                     unsigned _width, unsigned _height,
-                    std::unique_ptr<uint8_t[]> &&_data)
-    :format(_format),
+                    std::unique_ptr<uint8_t[]> &&_data,
+                    bool _flipped=false)
+    :format(_format), flipped(_flipped),
      pitch(_pitch), width(_width), height(_height),
      data(std::move(_data)) {}
 
@@ -79,6 +86,10 @@ public:
 
   Format GetFormat() const {
     return format;
+  }
+
+  bool IsFlipped() const {
+    return flipped;
   }
 
   unsigned GetPitch() const {

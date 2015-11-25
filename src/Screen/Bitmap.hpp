@@ -91,6 +91,12 @@ protected:
   PixelSize size;
 
   bool interpolation = false;
+
+  /**
+   * Flip up/down?  Some image formats (such as BMP and TIFF) store
+   * the bottom-most row first.
+   */
+  bool flipped = false;
 #elif defined(USE_MEMORY_CANVAS)
   WritableImageBuffer<BitmapPixelTraits> buffer = WritableImageBuffer<BitmapPixelTraits>::Empty();
 #else
@@ -131,6 +137,10 @@ public:
 
   unsigned GetHeight() const {
     return size.cy;
+  }
+
+  bool IsFlipped() const {
+    return flipped;
   }
 #elif defined(USE_MEMORY_CANVAS)
   unsigned GetWidth() const {

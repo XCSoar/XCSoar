@@ -54,6 +54,7 @@ Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
     texture->EnableInterpolation();
 
   size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
+  flipped = uncompressed.IsFlipped();
   return true;
 }
 

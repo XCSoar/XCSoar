@@ -58,9 +58,14 @@ ConvertLine(typename PixelTraits::rpointer_type dest, Reader src, unsigned n)
 template<typename PixelTraits, typename Format>
 static inline void
 ConvertImage(WritableImageBuffer<PixelTraits> buffer,
-             const uint8_t *src, unsigned src_pitch)
+             const uint8_t *src, int src_pitch, bool flipped)
 {
   typename PixelTraits::rpointer_type dest = buffer.data;
+
+  if (flipped) {
+    src += src_pitch * (buffer.height - 1);
+    src_pitch = -src_pitch;
+  }
 
   for (unsigned i = 0; i < buffer.height; ++i,
          dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
@@ -90,14 +95,16 @@ ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
     ConvertImage<PixelTraits,
                  RGBPixelReader>(buffer,
                                  (const uint8_t *)uncompressed.GetData(),
-                                 uncompressed.GetPitch());
+                                 uncompressed.GetPitch(),
+                                 uncompressed.IsFlipped());
     break;
 
   case UncompressedImage::Format::GRAY:
     ConvertImage<PixelTraits,
                  GrayPixelReader>(buffer,
                                   (const uint8_t *)uncompressed.GetData(),
-                                  uncompressed.GetPitch());
+                                  uncompressed.GetPitch(),
+                                  uncompressed.IsFlipped());
     break;
   }
 }
