@@ -112,16 +112,16 @@ class NativeView extends SurfaceView
     if (display == EGL10.EGL_NO_DISPLAY)
       throw new EGLException("eglGetDisplay() failed");
 
+    int[] version = new int[2];
+    if (!egl.eglInitialize(display, version))
+      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
+
     Log.d(TAG, "EGL vendor: " +
           egl.eglQueryString(display, EGL10.EGL_VENDOR));
     Log.d(TAG, "EGL version: " +
           egl.eglQueryString(display, EGL10.EGL_VERSION));
     Log.d(TAG, "EGL extensions: " +
           egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
-
-    int[] version = new int[2];
-    if (!egl.eglInitialize(display, version))
-      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
 
     /* choose a configuration */
 
