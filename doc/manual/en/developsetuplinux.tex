@@ -45,35 +45,6 @@ sudo apt-get install make g++ \
   fonts-dejavu
 \end{verbatim}
 
-\section{For Windows Mobile (Windows CE) builds}
-
-\xc requires a special version of mingw32 \texttt{cegcc} compiler which was patched to enable compilation of the source. Download at: \href{http://max.kellermann.name/projects/cegcc/}{http://max.kellermann.name/projects/cegcc/}. We are using \texttt{mingw32ce-mk-2013-04-03-i386.tar.xz}.
-
-The compiler is installed locally in the user directory:
-
-\begin{verbatim}
-cd ~/opt/
-unxz mingw32ce-mk-2013-04-03-i386.tar.xz 
-tar xvf mingw32ce-mk-2013-04-03-i386.tar
-ln -s  mingw32ce-mk-2013-04-03-i386 mingw32ce
-\end{verbatim}
-
-The compiler needs to be added to the path in \texttt{.profile} and \texttt{.bashrc} with \emph{absolute} path. (so do not use \texttt{~/opt/mingw32ce/bin}), otherwise \texttt{cegcc} is not executed by \texttt{make} for some reason.
-
-\begin{verbatim}
-export PATH="$PATH:/home/USERNAME/opt/mingw32ce/bin"
-\end{verbatim}
-
-We need  libmpc.2, which is no longer provided in some distributions, such as Ubuntu 14.04. So we need to go back one version:
-
-
-\hspace{-3cm}\begin{verbatim}
-wget 'http://ubuntu.mirrors.tds.net/ubuntu/pool/
-universe/m/mpclib/libmpc2_0.9-4build1_i386.deb'
-sudo dpkg -i libmpc2_0.9-4build1_i386.deb
-\end{verbatim}
-
-
 \section{For Android  builds}
 \subsection{Install JDK}
 First of all, we need Java to work with Android. Officially, Android requires the Oracle JDK. For licensing reasons, this is not included in linux distributions, therefore it needs to be installed seperately.  However, for \xc development OpenJDK seems to be working perfectly. We describe both methods in the following, you can only install one JDK.
