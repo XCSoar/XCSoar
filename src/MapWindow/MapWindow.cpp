@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -70,6 +71,16 @@ MapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
   buffer_projection = visible_projection;
 #endif
 }
+
+#ifdef ENABLE_OPENGL
+
+void
+MapWindow::SetOverlayBitmap(std::unique_ptr<MapOverlayBitmap> &&_overlay_bitmap)
+{
+  overlay_bitmap = std::move(_overlay_bitmap);
+}
+
+#endif
 
 void
 MapWindow::SetGlideComputer(GlideComputer *_gc)

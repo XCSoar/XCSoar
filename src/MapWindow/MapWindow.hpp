@@ -41,6 +41,12 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "OverlayBitmap.hpp"
+#endif
+
+#include <memory>
+
 struct MapLook;
 struct TrafficLook;
 class TopographyStore;
@@ -48,6 +54,7 @@ class CachedTopographyRenderer;
 class RasterTerrain;
 class RasterWeatherStore;
 class RasterWeatherCache;
+class MapOverlayBitmap;
 class Waypoints;
 class Airspaces;
 class ProtectedTaskManager;
@@ -120,6 +127,10 @@ protected:
   RasterTerrain *terrain = nullptr;
 
   RasterWeatherCache *weather = nullptr;
+
+#ifdef ENABLE_OPENGL
+  std::unique_ptr<MapOverlayBitmap> overlay_bitmap;
+#endif
 
   const TrafficLook &traffic_look;
 
@@ -210,6 +221,10 @@ public:
   void SetTopography(TopographyStore *_topography);
   void SetTerrain(RasterTerrain *_terrain);
   void SetWeather(const RasterWeatherStore *_weather);
+
+#ifdef ENABLE_OPENGL
+  void SetOverlayBitmap(std::unique_ptr<MapOverlayBitmap> &&_overlay_bitmap);
+#endif
 
 #ifdef HAVE_NOAA
   void SetNOAAStore(NOAAStore *_noaa_store) {
@@ -334,6 +349,9 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderTopographyLabels(Canvas &canvas);
+
+  void RenderOverlayBitmaps(Canvas &canvas);
+
   /**
    * Renders the final glide shading
    * @param canvas The drawing canvas

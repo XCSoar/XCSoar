@@ -1858,6 +1858,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 
+ifeq ($(OPENGL),y)
+RUN_MAP_WINDOW_SOURCES += \
+	$(SRC)/MapWindow/OverlayBitmap.cpp
+endif
+
 ifeq ($(HAVE_HTTP),y)
 RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Weather/NOAAGlue.cpp \

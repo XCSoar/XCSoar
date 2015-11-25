@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -58,6 +59,15 @@ MapWindow::RenderTopographyLabels(Canvas &canvas)
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, render_projection, label_block);
+}
+
+inline void
+MapWindow::RenderOverlayBitmaps(Canvas &canvas)
+{
+#ifdef ENABLE_OPENGL
+  if (overlay_bitmap)
+    overlay_bitmap->Draw(canvas, render_projection);
+#endif
 }
 
 void
@@ -148,6 +158,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   draw_sw.Mark("RenderTopography");
   RenderTopography(canvas);
+
+  draw_sw.Mark("RenderOverlayBitmaps");
+  RenderOverlayBitmaps(canvas);
 
   draw_sw.Mark("RenderFinalGlideShading");
   RenderFinalGlideShading(canvas);

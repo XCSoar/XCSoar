@@ -667,6 +667,11 @@ XCSOAR_SOURCES := \
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
+ifeq ($(OPENGL),y)
+XCSOAR_SOURCES += \
+	$(SRC)/MapWindow/OverlayBitmap.cpp
+endif
+
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Apple/InternalSensors.cpp
