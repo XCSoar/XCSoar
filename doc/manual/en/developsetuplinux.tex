@@ -1,4 +1,4 @@
-This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It was last tested in Ubuntu 14.04 LTS in September 2014, last update Nov. 11, 2014.
+This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It is tested with Ubuntu 14.04 LTS, and was last updated Nov. 25, 2015.
 
 \section{Install base system}
 The procedure uses the standard install, during/after which you should update all packages to the current level using
@@ -183,6 +183,10 @@ echo "#Philips" >> 99-android.rules
 echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0471", MODE="0666"" >> 99-android.rules
 echo "#PMC-Sierra" >> 99-android.rules
 echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04da", MODE="0666"" >> 99-android.rules
+\end{verbatim}
+\end{maxipage}
+\begin{maxipage}
+\begin{verbatim}
 echo "#Qualcomm" >> 99-android.rules
 echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="05c6", MODE="0666"" >> 99-android.rules
 echo "#SK Telesys" >> 99-android.rules
