@@ -99,7 +99,7 @@ Profile::SetFiles(Path override_path)
 
   if (!override_path.IsNull()) {
     if (override_path.IsBase()) {
-      if (StringFind(override_path.c_str(), '.') == nullptr)
+      if (StringFind(override_path.c_str(), '.') != nullptr)
         startProfileFile = LocalPath(override_path);
       else {
         tstring t(override_path.c_str());
