@@ -34,7 +34,7 @@ struct zzip_dir *
 OpenMapFile()
 {
   auto path = Profile::GetPath(ProfileKeys::MapFile);
-  if (!path.IsNull())
+  if (path.IsNull())
     return nullptr;
 
   return zzip_dir_open(NarrowPathName(path), nullptr);
