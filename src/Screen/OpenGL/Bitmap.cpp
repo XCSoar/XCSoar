@@ -38,8 +38,6 @@ Bitmap::EnableInterpolation()
   }
 }
 
-#ifndef ANDROID
-
 bool
 Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
 {
@@ -57,6 +55,8 @@ Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
   flipped = uncompressed.IsFlipped();
   return true;
 }
+
+#ifndef ANDROID
 
 void
 Bitmap::Reset()

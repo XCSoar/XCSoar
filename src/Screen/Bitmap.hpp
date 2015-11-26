@@ -167,9 +167,11 @@ public:
   void EnableInterpolation() {}
 #endif
 
-#if !defined(USE_GDI) && !defined(ANDROID)
+#ifndef USE_GDI
   bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
+#ifndef ANDROID
   bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
+#endif
 #endif
 
   bool Load(ResourceId id, Type type=Type::STANDARD);
