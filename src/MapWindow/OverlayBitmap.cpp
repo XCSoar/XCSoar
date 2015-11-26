@@ -29,17 +29,100 @@ Copyright_License {
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Math/Point2D.hpp"
+#include "Math/Quadrilateral.hpp"
+#include "Math/Boost/Point.hpp"
 #include "OS/Path.hpp"
+#include "Util/StaticArray.hxx"
 
 #ifdef USE_GLSL
 #include "Screen/OpenGL/Shaders.hpp"
 #include "Screen/OpenGL/Program.hpp"
 #endif
 
+#include <boost/geometry/geometries/register/ring.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/multi/geometries/multi_polygon.hpp>
+#include <boost/geometry/algorithms/intersection.hpp>
+#include <boost/geometry/strategies/strategies.hpp>
+
+using ArrayQuadrilateral = StaticArray<DoublePoint2D, 5>;
+BOOST_GEOMETRY_REGISTER_RING(ArrayQuadrilateral);
+
+using ClippedPolygon = boost::geometry::model::polygon<DoublePoint2D>;
+
+using ClippedMultiPolygon =
+  boost::geometry::model::multi_polygon<ClippedPolygon>;
+
 MapOverlayBitmap::MapOverlayBitmap(Path path) throw(std::runtime_error)
 {
   bounds = bitmap.LoadGeoFile(path);
   simple_bounds = bounds.GetBounds();
+}
+
+/**
+ * Convert a GeoPoint to a "fake" flat DoublePoint2D.  This conversion
+ * is flawed in many ways, but good enough for clipping polygons.
+ */
+static inline constexpr DoublePoint2D
+GeoTo2D(GeoPoint p)
+{
+  return {p.longitude.Native(), p.latitude.Native()};
+}
+
+/**
+ * Inverse of GeoTo2D().
+ */
+static inline constexpr GeoPoint
+GeoFrom2D(DoublePoint2D p)
+{
+  return {Angle::Native(p.x), Angle::Native(p.y)};
+}
+
+/**
+ * Convert a #GeoBounds instance to a boost::geometry box.
+ */
+gcc_const
+static boost::geometry::model::box<DoublePoint2D>
+ToBox(const GeoBounds b)
+{
+  return {GeoTo2D(b.GetSouthWest()), GeoTo2D(b.GetNorthEast())};
+}
+
+/**
+ * Convert a #GeoQuadrilateral instance to a boost::geometry ring.
+ */
+gcc_const
+static ArrayQuadrilateral
+ToArrayQuadrilateral(const GeoQuadrilateral q)
+{
+  return {GeoTo2D(q.top_left), GeoTo2D(q.top_right),
+      GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
+      /* close the ring: */
+      GeoTo2D(q.top_left) };
+}
+
+/**
+ * Clip the quadrilateral inside the screen bounds.
+ */
+gcc_pure
+static ClippedMultiPolygon
+Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds)
+{
+  const auto geo = ToArrayQuadrilateral(_geo);
+  const auto bounds = ToBox(_bounds);
+
+  ClippedMultiPolygon clipped;
+  boost::geometry::intersection(geo, bounds, clipped);
+  return clipped;
+}
+
+gcc_pure
+static DoublePoint2D
+MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p)
+{
+  return MapInQuadrilateral(GeoTo2D(q.top_left), GeoTo2D(q.top_right),
+                            GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
+                            GeoTo2D(p));
 }
 
 void
@@ -50,39 +133,21 @@ MapOverlayBitmap::Draw(Canvas &canvas,
     /* not visible, outside of screen area */
     return;
 
-  const RasterPoint vertices[] = {
-    projection.GeoToScreen(bounds.top_left),
-    projection.GeoToScreen(bounds.top_right),
-    projection.GeoToScreen(bounds.bottom_left),
-    projection.GeoToScreen(bounds.bottom_right),
-  };
+  auto clipped = Clip(bounds, projection.GetScreenBounds());
+  if (clipped.empty())
+    return;
+
+  GLTexture &texture = *bitmap.GetNative();
+  const PixelSize allocated = texture.GetAllocatedSize();
+  const double x_factor = double(texture.GetWidth()) / allocated.cx;
+  const double y_factor = double(texture.GetHeight()) / allocated.cy;
+
+  Point2D<GLfloat> coord[16];
+  RasterPoint vertices[16];
 
   const ScopeVertexPointer vp(vertices);
 
-  GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-
-  const PixelSize allocated = texture.GetAllocatedSize();
-  const unsigned src_x = 0, src_y = 0;
-  const unsigned src_width = texture.GetWidth();
-  const unsigned src_height = texture.GetHeight();
-
-  GLfloat x0 = (GLfloat)src_x / allocated.cx;
-  GLfloat y0 = (GLfloat)src_y / allocated.cy;
-  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated.cx;
-  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated.cy;
-
-  if (bitmap.IsFlipped()) {
-    y0 = 1 - y0;
-    y1 = 1 - y1;
-  }
-
-  const Point2D<GLfloat> coord[] = {
-    {x0, y0},
-    {x1, y0},
-    {x0, y1},
-    {x1, y1},
-  };
 
   const ScopeTextureConstantAlpha blend(alpha);
 
@@ -97,7 +162,28 @@ MapOverlayBitmap::Draw(Canvas &canvas,
   glTexCoordPointer(2, GL_FLOAT, 0, coord);
 #endif
 
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  for (const auto &polygon : clipped) {
+    const auto &ring = polygon.outer();
+
+    size_t n = ring.size();
+    if (ring.front() == ring.back())
+      --n;
+
+    for (size_t i = 0; i < n; ++i) {
+      const auto v = GeoFrom2D(ring[i]);
+
+      auto p = MapInQuadrilateral(bounds, v);
+      coord[i].x = p.x * x_factor;
+      coord[i].y = p.y * y_factor;
+
+      if (bitmap.IsFlipped())
+        coord[i].y = 1 - coord[i].y;
+
+      vertices[i] = projection.GeoToScreen(v);
+    }
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, n);
+  }
 
 #ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);

@@ -6,6 +6,7 @@ HOT_SOURCES = \
 	$(MATH_SOURCES) \
 	$(GEO_SOURCES) \
 	$(JASPER_SOURCES) \
+	$(SRC)/MapWindow/OverlayBitmap.cpp \
 	$(SRC)/Topography/TopographyFileRenderer.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
