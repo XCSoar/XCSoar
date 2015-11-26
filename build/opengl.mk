@@ -55,7 +55,7 @@ else
 OPENGL_LDLIBS = -lGLESv2 -ldl
 endif
 else ifeq ($(GLES),y)
-OPENGL_CPPFLAGS += -DHAVE_GLES
+OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES1
 OPENGL_LDLIBS = -lGLESv1_CM -ldl
 else ifeq ($(TARGET_IS_DARWIN),y)
 OPENGL_LDLIBS = -framework OpenGL
