@@ -1,7 +1,5 @@
 import os.path, subprocess, shutil
 
-from build.project import Project
-
 def run_quilt(toolchain, cwd, patches_path, *args):
     env = dict(toolchain.env)
     env['QUILT_PATCHES'] = patches_path
