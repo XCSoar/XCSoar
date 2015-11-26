@@ -39,7 +39,7 @@ PolygonRotatesLeft(const PT *points, unsigned num_points)
   typename PT::product_type area = 0;
 
   for (unsigned a = num_points - 1, b = 0; b < num_points; a = b++)
-    area += CrossProduct<PT, typename PT::product_type>(points[a], points[b]);
+    area += CrossProduct(points[a], points[b]);
 
   // we actually calculated area * 2
   return area > 0;
@@ -60,7 +60,7 @@ PointLeftOfLine(const PT &p, const PT &a, const PT &b)
   const PT ap = p - a;
 
   // almost distance point from line (normal has to be normalized for that)
-  return DotProduct<PT, typename PT::product_type>(normal, ap);
+  return DotProduct(normal, ap);
 }
 
 /**
@@ -88,7 +88,7 @@ LeftBend(const PT &a, const PT &b, const PT &c)
   const PT ab = b - a;
   const PT bc = c - b;
 
-  return CrossProduct<PT, typename PT::product_type>(ab, bc);
+  return CrossProduct(ab, bc);
 }
 
 /**

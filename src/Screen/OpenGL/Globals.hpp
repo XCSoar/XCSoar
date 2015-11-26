@@ -31,6 +31,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 #define XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 
+#include "Math/Point2D.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "System.hpp"
 
@@ -43,7 +44,6 @@ Copyright_License {
 enum class DisplayOrientation : uint8_t;
 #endif
 
-template<typename T> struct Point2D;
 struct RasterPoint;
 
 namespace OpenGL {
