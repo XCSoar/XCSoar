@@ -48,7 +48,7 @@ public:
     ::glBlendFunc(sfactor, dfactor);
   }
 
-#ifndef HAVE_GLES
+#ifndef HAVE_GLES1
   GLBlend(GLclampf alpha) {
     ::glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
     ::glBlendColor(0, 0, 0, alpha);
