@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Screen/OpenGL/Compatibility.hpp"
 #include "Projection/Projection.hpp"
+#include "Math/Point2D.hpp"
 #include "OS/Path.hpp"
 
 MapOverlayBitmap::MapOverlayBitmap(Path path) throw(std::runtime_error)
@@ -66,11 +67,11 @@ MapOverlayBitmap::Draw(Canvas &canvas, const Projection &projection) noexcept
     y1 = 1 - y1;
   }
 
-  const GLfloat coord[] = {
-    x0, y0,
-    x1, y0,
-    x0, y1,
-    x1, y1,
+  const Point2D<GLfloat> coord[] = {
+    {x0, y0},
+    {x1, y0},
+    {x0, y1},
+    {x1, y1},
   };
 
   const ScopeTextureConstantAlpha blend(alpha);
