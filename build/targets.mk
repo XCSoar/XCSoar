@@ -212,7 +212,6 @@ endif
 ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
-  KOBO = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
   TARGET_IS_KOBO = y
 endif
 
