@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/ConstantAlpha.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Compatibility.hpp"
 #include "Projection/Projection.hpp"
 #include "Math/Point2D.hpp"
 #include "OS/Path.hpp"
