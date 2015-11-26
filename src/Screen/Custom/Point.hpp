@@ -28,20 +28,14 @@ Copyright_License {
 
 struct PixelSize;
 
-struct RasterPoint : Point2D<PixelScalar> {
-  /**
-   * Type to be used by vector math, where a range of
-   * max(GLvalue)*max(GLvalue) is needed.
-   */
-  typedef int product_type;
-
+struct RasterPoint : Point2D<PixelScalar, int> {
   RasterPoint() = default;
 
   template<typename... Args>
   constexpr RasterPoint(Args&&... args)
-    :Point2D<PixelScalar>(args...) {}
+    :Point2D<PixelScalar, int>(args...) {}
 
-  using Point2D<PixelScalar>::operator+;
+  using Point2D<PixelScalar, int>::operator+;
   constexpr RasterPoint operator+(PixelSize size) const;
 };
 
