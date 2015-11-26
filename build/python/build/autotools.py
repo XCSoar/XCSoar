@@ -6,11 +6,13 @@ class AutotoolsProject(Project):
     def __init__(self, url, md5, installed, configure_args=[],
                  autogen=False,
                  cppflags='',
+                 libs='',
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.autogen = autogen
         self.cppflags = cppflags
+        self.libs = libs
 
     def configure(self, toolchain):
         src = self.unpack(toolchain)
@@ -30,7 +32,7 @@ class AutotoolsProject(Project):
             'CXXFLAGS=' + toolchain.cxxflags,
             'CPPFLAGS=' + toolchain.cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags,
-            'LIBS=' + toolchain.libs,
+            'LIBS=' + toolchain.libs + ' ' + self.libs,
             'AR=' + toolchain.ar,
             'STRIP=' + toolchain.strip,
             '--host=' + toolchain.arch,
