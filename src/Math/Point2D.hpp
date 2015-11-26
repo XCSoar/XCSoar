@@ -79,46 +79,46 @@ struct FloatPoint : Point2D<float> {
   constexpr FloatPoint(Args&&... args):Point2D<float>(args...) {}
 };
 
-template<typename P, typename RT=typename P::scalar_type>
+template<typename P>
+struct IsPoint2D : std::is_base_of<Point2D<typename P::scalar_type>, P> {
+};
+
+template<typename P>
+struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
+};
+
+template<typename P, typename RT=typename P::scalar_type,
+         typename=typename EnableIfPoint2D<P>::type>
 static constexpr inline RT
 DotProduct(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
 
-template<typename P, typename RT=typename P::scalar_type>
+template<typename P, typename RT=typename P::scalar_type,
+         typename=typename EnableIfPoint2D<P>::type>
 static constexpr inline RT
 CrossProduct(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
 
-template<typename P>
+template<typename P,
+         typename=typename EnableIfPoint2D<P>::type>
 static constexpr inline P
 Normal(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return P(a.y - b.y, b.x - a.x);
 }
 
 /**
  * Calculates the "manhattan distance" or "taxicab distance".
  */
-template<typename P, typename RT=typename P::scalar_type>
+template<typename P, typename RT=typename P::scalar_type,
+         typename=typename EnableIfPoint2D<P>::type>
 static inline RT
 ManhattanDistance(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 
