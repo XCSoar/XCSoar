@@ -24,16 +24,16 @@
 #define FLATLINE_HPP
 
 #include "FlatPoint.hpp"
+#include "Math/Line2D.hpp"
 #include "Compiler.h"
 
 /**
  * Defines an infinite line in real-valued cartesian coordinates,
  * with intersection methods.
  */
-class FlatLine 
+class FlatLine : public Line2D<FlatPoint>
 {
-  FlatPoint p1;
-  FlatPoint p2;
+  typedef Line2D<FlatPoint> Base;
 
 public:
   /**
@@ -45,7 +45,7 @@ public:
    * @return Initialised object
    */
   constexpr
-  FlatLine(const FlatPoint _p1, const FlatPoint _p2):p1(_p1),p2(_p2) {}
+  FlatLine(const FlatPoint _p1, const FlatPoint _p2):Base(_p1, _p2) {}
 
   /**
    * Constructor default
@@ -80,14 +80,7 @@ public:
   bool IntersectCircle(double r, FlatPoint c,
                        FlatPoint &i1, FlatPoint &i2) const;
 
-  /**
-   * Find center point of this line
-   *
-   * @return Center point
-   */
-  constexpr FlatPoint GetMiddle() const {
-    return (p1 + p2).Half();
-  }
+  using Base::GetMiddle;
 
   /**
    * Find angle of this line starting from the x-axis counter-clockwise
@@ -97,13 +90,7 @@ public:
   gcc_pure
   Angle GetAngle() const;
 
-  /**
-   * Calculate squared length of line
-   *
-   * @return Squared length
-   */
-  gcc_pure
-  double GetSquaredDistance() const;
+  using Base::GetSquaredDistance;
 
   /**
    * Calculate length of line
@@ -115,34 +102,12 @@ public:
     return hypot(dx(), dy());
   }
 
-  /**
-   * Subtract a delta from the line (both start and end points)
-   *
-   * @param p Point to subtract
-   */
-  FlatLine &operator-=(const FlatPoint p) {
-    p1 -= p;
-    p2 -= p;
-    return *this;
-  }
-
-  /**
-   * Add a delta to the line (both start and end points)
-   *
-   * @param p Point to add
-   */
-  FlatLine &operator+=(const FlatPoint p) {
-    p1 += p;
-    p2 += p;
-    return *this;
-  }
-
   constexpr FlatLine operator+(FlatPoint delta) const {
-    return {p1 + delta, p2 + delta};
+    return {a + delta, b + delta};
   }
 
   constexpr FlatLine operator-(FlatPoint delta) const {
-    return {p1 - delta, p2 - delta};
+    return {a - delta, b - delta};
   }
 
   /**
@@ -154,33 +119,21 @@ public:
 
   /**
    * Scale line in Y direction
-   *
-   * @param a Scale ratio
    */
-  void MultiplyY(const double a) {
-    p1.MultiplyY(a);
-    p2.MultiplyY(a);
+  void MultiplyY(const double factor) {
+    a.MultiplyY(factor);
+    b.MultiplyY(factor);
   }
 
-  /**
-   * Return dot product of two lines (vectors)
-   * @param that other line to take dot product of
-   * @return Dot product
-   */
-  gcc_pure
-  double DotProduct(const FlatLine& that) const;
+  using Base::DotProduct;
 
 private:
   constexpr double dx() const {
-    return p2.x - p1.x;
+    return b.x - a.x;
   }
 
   constexpr double dy() const {
-    return p2.y - p1.y;
-  }
-
-  constexpr double CrossProduct() const {
-    return p1.CrossProduct(p2);
+    return b.y - a.y;
   }
 };
 

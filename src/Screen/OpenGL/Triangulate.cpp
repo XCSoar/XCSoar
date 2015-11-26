@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Screen/Point.hpp"
+#include "Math/Line2D.hpp"
 #include "Util/AllocatedArray.hpp"
 
 #include <algorithm>
@@ -54,13 +55,7 @@ template <typename PT>
 static inline typename PT::product_type
 PointLeftOfLine(const PT &p, const PT &a, const PT &b)
 {
-  // normal vector of the line
-  const PT normal = Normal(a, b);
-  // vector ap
-  const PT ap = p - a;
-
-  // almost distance point from line (normal has to be normalized for that)
-  return DotProduct(normal, ap);
+  return Line2D<PT>(a, b).LocatePoint(p);
 }
 
 /**

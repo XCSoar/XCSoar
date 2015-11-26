@@ -165,14 +165,6 @@ CrossProduct(P a, P b)
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
 
-template<typename P,
-         typename=typename EnableIfPoint2D<P>::type>
-static constexpr inline P
-Normal(P a, P b)
-{
-  return P(a.y - b.y, b.x - a.x);
-}
-
 /**
  * Calculates the "manhattan distance" or "taxicab distance".
  */

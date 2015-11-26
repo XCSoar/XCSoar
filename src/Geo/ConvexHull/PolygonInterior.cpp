@@ -19,7 +19,15 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "PolygonInterior.hpp"
+#include "Math/Line2D.hpp"
+
+static constexpr Point2D<double>
+GeoTo2D(GeoPoint p)
+{
+  return {p.longitude.Native(), p.latitude.Native()};
+}
 
 // Copyright 2001, softSurfer (www.softsurfer.com)
 // This code may be freely used and modified for any purpose
@@ -40,20 +48,13 @@
 inline static double
 isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
-  const auto delta_a = P1 - P0;
-  const auto delta_b = P2 - P0;
-
-  return delta_a.longitude.Native() * delta_b.latitude.Native()
-    - delta_b.longitude.Native() * delta_a.latitude.Native();
+  return Line2D<Point2D<double>>(GeoTo2D(P0), GeoTo2D(P1)).LocatePoint(GeoTo2D(P2));
 }
 
 inline static int
 isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 {
-  const auto delta_a = P1 - P0;
-  const auto delta_b = P2 - P0;
-
-  return delta_a.x * delta_b.y - delta_b.x * delta_a.y;
+  return Line2D<FlatGeoPoint>(P0, P1).LocatePoint(P2);
 }
 
 //===================================================================

@@ -24,12 +24,6 @@
 #include "Math/Util.hpp"
 #include "Math/Angle.hpp"
 
-double
-FlatLine::GetSquaredDistance() const
-{
-  return Square(dx()) + Square(dy());
-}
-
 Angle
 FlatLine::GetAngle() const
 {
@@ -39,8 +33,8 @@ FlatLine::GetAngle() const
 void
 FlatLine::Rotate(const Angle theta)
 {
-  p1.Rotate(theta);
-  p2.Rotate(theta);
+  a.Rotate(theta);
+  b.Rotate(theta);
 }
 
 bool
@@ -78,10 +72,4 @@ FlatLine::IntersectCircle(const double r, const FlatPoint c,
   }
 
   return false;
-}
-
-double
-FlatLine::DotProduct(const FlatLine& that) const
-{
-  return (p2 - p1).DotProduct(that.p2 - that.p1);
 }
