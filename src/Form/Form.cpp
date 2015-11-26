@@ -442,7 +442,7 @@ WndForm::OnPaint(Canvas &canvas)
 #ifdef ENABLE_OPENGL
   if (!IsDithered() && !IsMaximised() && is_active) {
     /* draw a shade around the current dialog to emphasise it */
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     const PixelRect rc = GetClientRect();
     const PixelScalar size = Layout::VptScale(4);
@@ -538,7 +538,7 @@ WndForm::OnPaint(Canvas &canvas)
 
   if (dragging) {
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)

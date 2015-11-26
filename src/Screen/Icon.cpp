@@ -119,7 +119,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
@@ -173,7 +173,7 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();

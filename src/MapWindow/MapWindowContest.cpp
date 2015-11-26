@@ -54,7 +54,7 @@ MapWindow::DrawContest(Canvas &canvas)
     static constexpr Color fill_color = COLOR_YELLOW;
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Select(Brush(fill_color.WithAlpha(60)));
     canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(90)));

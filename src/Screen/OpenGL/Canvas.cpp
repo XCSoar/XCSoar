@@ -123,7 +123,7 @@ Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
 void
 Canvas::FadeToWhite(GLubyte alpha)
 {
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
   const Color color(0xff, 0xff, 0xff, alpha);
   Clear(color);
 }
@@ -131,7 +131,7 @@ Canvas::FadeToWhite(GLubyte alpha)
 void
 Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
 {
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
   const Color color(0xff, 0xff, 0xff, alpha);
   DrawFilledRectangle(rc.left, rc.right, rc.right, rc.bottom, color);
 }
@@ -663,7 +663,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   const GLEnable<GL_TEXTURE_2D> scope;
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
   texture->Draw(x, y);
@@ -697,7 +697,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   const GLEnable<GL_TEXTURE_2D> scope;
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
   texture->Draw(x, y);
@@ -738,7 +738,7 @@ Canvas::DrawClippedText(int x, int y,
   const GLEnable<GL_TEXTURE_2D> scope;
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
   texture->Draw(x, y, width, height, 0, 0, width, height);
@@ -897,7 +897,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();

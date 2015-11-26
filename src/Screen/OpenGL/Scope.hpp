@@ -56,6 +56,15 @@ public:
 #endif
 };
 
+/**
+ * Enable alpha blending with source's alpha value (the most common
+ * variant of GL_BLEND).
+ */
+class ScopeAlphaBlend : GLBlend {
+public:
+  ScopeAlphaBlend():GLBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) {}
+};
+
 class GLScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
   GLScissor(GLint x, GLint y, GLsizei width, GLsizei height) {

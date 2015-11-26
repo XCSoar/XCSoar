@@ -41,7 +41,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const bool final_glide_bar_mc0_enabled) const
 {
 #ifdef ENABLE_OPENGL
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 #endif
 
   RasterPoint GlideBar[6] = {

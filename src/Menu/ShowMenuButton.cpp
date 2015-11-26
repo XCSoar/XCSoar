@@ -81,7 +81,7 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));
 #else
     canvas.InvertRectangle(rc);

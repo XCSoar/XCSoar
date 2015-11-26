@@ -138,7 +138,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
     if (!is_infobox) {
 #ifdef ENABLE_OPENGL
-      const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      const ScopeAlphaBlend alpha_blend;
 #endif
       chart.DrawFilledY(thermal_profile, look.brush, fpen);
     } else

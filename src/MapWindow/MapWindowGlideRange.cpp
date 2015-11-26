@@ -298,7 +298,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     canvas.Clear(Color(255, 255, 255, 77));
 

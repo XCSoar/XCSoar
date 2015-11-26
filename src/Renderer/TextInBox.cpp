@@ -135,7 +135,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
 
     {
 #ifdef ENABLE_OPENGL
-      const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      const ScopeAlphaBlend alpha_blend;
       canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xa0)));
 #else
       canvas.SelectWhiteBrush();

@@ -42,7 +42,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const bool vario_bar_avg_enabled) const
 {
 #ifdef ENABLE_OPENGL
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 #endif
 
   RasterPoint VarioBar[6] = {

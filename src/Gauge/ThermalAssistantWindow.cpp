@@ -66,7 +66,7 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (transparent) {
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     canvas.SelectBlackPen();
     canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xd0)));
