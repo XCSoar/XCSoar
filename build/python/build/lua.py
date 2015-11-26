@@ -11,8 +11,6 @@ class LuaProject(Project):
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
 
-        push_all(toolchain, src, os.path.abspath('lib/lua/patches'))
-
         cflags = toolchain.cflags + ' ' + toolchain.cppflags
 
         # hard-code lua_getlocaledecpoint() because

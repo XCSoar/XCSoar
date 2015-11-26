@@ -3,10 +3,12 @@ import re
 
 from build.download import download_and_verify
 from build.tar import untar
+from build.quilt import push_all
 
 class Project:
     def __init__(self, url, md5, installed, name=None, version=None,
                  base=None,
+                 patches=None,
                  use_cxx=False, use_clang=False):
         if base is None:
             basename = os.path.basename(url)
@@ -28,6 +30,8 @@ class Project:
         self.md5 = md5
         self.installed = installed
 
+        self.patches = patches
+
         self.use_cxx = use_cxx
         self.use_clang = use_clang
 
@@ -48,7 +52,10 @@ class Project:
             parent_path = toolchain.src_path
         else:
             parent_path = toolchain.build_path
-        return untar(self.download(toolchain), parent_path, self.base)
+        path = untar(self.download(toolchain), parent_path, self.base)
+        if self.patches is not None:
+            push_all(toolchain, path, self.patches)
+        return path
 
     def make_build_path(self, toolchain):
         path = os.path.join(toolchain.build_path, self.base)

@@ -1,3 +1,5 @@
+from os.path import abspath
+
 from build.project import Project
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
@@ -67,4 +69,5 @@ lua = LuaProject(
     'http://www.lua.org/ftp/lua-5.3.1.tar.gz',
     '797adacada8d85761c079390ff1d9961',
     'lib/liblua.a',
+    patches=abspath('lib/lua/patches'),
 )
