@@ -31,6 +31,11 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 #include "OS/Path.hpp"
 
+#ifdef USE_GLSL
+#include "Screen/OpenGL/Shaders.hpp"
+#include "Screen/OpenGL/Program.hpp"
+#endif
+
 MapOverlayBitmap::MapOverlayBitmap(Path path) throw(std::runtime_error)
 {
   bounds = bitmap.LoadGeoFile(path);
