@@ -67,6 +67,9 @@ if 'mingw32' in host_triplet:
 elif target == 'ANDROID':
     thirdparty_libs = [
         lua,
+        proj,
+        libtiff,
+        libgeotiff,
     ]
 else:
     thirdparty_libs = [

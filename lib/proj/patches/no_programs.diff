@@ -1,0 +1,14 @@
+Index: proj-4.9.2/src/Makefile.am
+===================================================================
+--- proj-4.9.2.orig/src/Makefile.am
++++ proj-4.9.2/src/Makefile.am
+@@ -1,7 +1,7 @@
+ AM_CFLAGS = @C_WFLAGS@
+ 
+-bin_PROGRAMS =	proj nad2bin geod cs2cs
+-EXTRA_PROGRAMS = multistresstest test228
++#bin_PROGRAMS =	proj nad2bin geod cs2cs
++#EXTRA_PROGRAMS = multistresstest test228
+ 
+ INCLUDES =	-DPROJ_LIB=\"$(pkgdatadir)\" \
+ 		-DMUTEX_@MUTEX_SETTING@ @JNI_INCLUDE@

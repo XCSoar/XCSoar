@@ -1,0 +1,10 @@
+Index: libgeotiff-1.4.1/Makefile.am
+===================================================================
+--- libgeotiff-1.4.1.orig/Makefile.am
++++ libgeotiff-1.4.1/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = libxtiff . bin man cmake
++SUBDIRS = libxtiff
+ 
+ AUTOMAKE_OPTIONS =	dist-zip
+ ACLOCAL_AMFLAGS = -I m4

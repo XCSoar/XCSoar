@@ -46,6 +46,18 @@ curl = AutotoolsProject(
     use_clang=True,
 )
 
+proj = AutotoolsProject(
+    'http://download.osgeo.org/proj/proj-4.9.2.tar.gz',
+    '9843131676e31bbd903d60ae7dc76cf9',
+    'lib/libproj.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--without-mutex',
+    ],
+    patches=abspath('lib/proj/patches'),
+    autogen=True,
+)
+
 libpng = AutotoolsProject(
     'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.19.tar.xz',
     '1e6a458429e850fc93c1f3b6dc00a48f',
@@ -63,6 +75,50 @@ libjpeg = AutotoolsProject(
     [
         '--disable-shared', '--enable-static',
     ]
+)
+
+libtiff = AutotoolsProject(
+    'http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz',
+    'd1d2e940dea0b5ad435f21f03d96dd72',
+    'lib/libtiff.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--disable-largefile',
+        '--disable-cxx',
+        '--disable-ccitt',
+        '--disable-packbits',
+        '--disable-lzw',
+        '--disable-thunder',
+        '--disable-next',
+        '--disable-logluv',
+        '--disable-mdi',
+        '--disable-pixarlog',
+        '--disable-jpeg',
+        '--disable-old-jpeg',
+        '--disable-jbig',
+        '--disable-lzma',
+        '--disable-strip-chopping',
+        '--disable-extrasample-as-alpha',
+    ],
+    base='tiff-4.0.6',
+    patches=abspath('lib/libtiff/patches'),
+    autogen=True,
+)
+
+libgeotiff = AutotoolsProject(
+    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.1.tar.gz',
+    '48bdf817e6e7a37671cc1f41b01e10fc',
+    'lib/libgeotiff.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--disable-doxygen-doc',
+        '--disable-doxygen-dot',
+        '--disable-doxygen-man',
+        '--disable-doxygen-html',
+    ],
+    patches=abspath('lib/libgeotiff/patches'),
+    autogen=True,
+    libs='-lz',
 )
 
 lua = LuaProject(

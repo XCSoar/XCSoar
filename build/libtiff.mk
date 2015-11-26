@@ -1,6 +1,8 @@
 # Experimental feature - only enabled on Linux for now
 ifeq ($(TARGET)$(TARGET_IS_KOBO),UNIXn)
 GEOTIFF ?= y
+else ifeq ($(TARGET),ANDROID)
+GEOTIFF ?= y
 else
 GEOTIFF ?= n
 endif
@@ -13,8 +15,17 @@ $(eval $(call pkg-config-library,LIBTIFF,libtiff-4))
 LIBTIFF_CPPFLAGS := $(patsubst -I%,-isystem %,$(LIBTIFF_CPPFLAGS)) -DUSE_LIBTIFF
 
 ifeq ($(GEOTIFF),y)
-LIBTIFF_CPPFLAGS += -isystem /usr/include/geotiff -DUSE_GEOTIFF
+LIBTIFF_CPPFLAGS += -DUSE_GEOTIFF
+ifneq ($(USE_THIRDARTY_LIBS),y)
+LIBTIFF_CPPFLAGS += -isystem /usr/include/geotiff
+endif
 LIBTIFF_LDLIBS += -lgeotiff
+endif
+
+ifeq ($(GEOTIFF)$(USE_THIRDARTY_LIBS),yy)
+$(eval $(call pkg-config-library,PROJ,proj))
+LIBTIFF_CPPFLAGS += $(PROJ_CPPFLAGS)
+LIBTIFF_LDLIBS += $(PROJ_LDLIBS)
 endif
 
 endif
