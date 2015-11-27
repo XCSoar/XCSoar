@@ -55,8 +55,7 @@ struct FlatPoint : Point2D<double>
    *
    * @return Cross product
    */
-  gcc_pure
-  double CrossProduct(const FlatPoint &p2) const {
+  constexpr double CrossProduct(const FlatPoint &p2) const {
     return ::CrossProduct(*this, p2);
   }
 
@@ -111,8 +110,7 @@ struct FlatPoint : Point2D<double>
    *
    * @return Dot product
    */
-  gcc_pure
-  double DotProduct(FlatPoint other) const {
+  constexpr double DotProduct(FlatPoint other) const {
     return ::DotProduct(*this, other);
   }
 
@@ -123,9 +121,7 @@ struct FlatPoint : Point2D<double>
    *
    * @return Scaled point
    */
-  gcc_pure
-  FlatPoint operator*(double p) const
-  {
+  constexpr FlatPoint operator*(double p) const {
     return { x * p, y * p };
   }
 

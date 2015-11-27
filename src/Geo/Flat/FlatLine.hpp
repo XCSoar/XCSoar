@@ -179,8 +179,7 @@ private:
     return p2.y - p1.y;
   }
 
-  gcc_pure
-  double CrossProduct() const {
+  constexpr double CrossProduct() const {
     return p1.CrossProduct(p2);
   }
 };
