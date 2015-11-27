@@ -80,7 +80,7 @@ struct ScopeVertexPointer {
     Update(GL_EXACT, p);
   }
 
-  void Update(const FloatPoint *p) {
+  void Update(const FloatPoint2D *p) {
     Update(GL_FLOAT, p);
   }
 };

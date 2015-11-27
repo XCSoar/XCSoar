@@ -400,7 +400,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
       ? OpenGL::SMALL_CIRCLE_SIZE
       : OpenGL::CIRCLE_SIZE;
 
-    const FloatPoint *const points = (const FloatPoint *)buffer.BeginRead();
+    const auto points = (const FloatPoint2D *)buffer.BeginRead();
     const ScopeVertexPointer vp(points);
 
 #ifdef USE_GLSL

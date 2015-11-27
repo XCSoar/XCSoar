@@ -27,7 +27,7 @@ Copyright_License {
 #include "System.hpp"
 
 struct RasterPoint;
-struct FloatPoint;
+struct FloatPoint2D;
 template<class T> class AllocatedArray;
 
 /**
@@ -48,7 +48,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
                    AllocatedArray<GLushort> &triangles,
                    unsigned min_distance=1);
 unsigned
-PolygonToTriangles(const FloatPoint *points, unsigned num_points,
+PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
                    GLushort *triangles, float min_distance=1);
 
 /**

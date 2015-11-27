@@ -274,7 +274,7 @@ PolygonToTriangles(const RasterPoint *points, unsigned num_points,
 }
 
 unsigned
-PolygonToTriangles(const FloatPoint *points, unsigned num_points,
+PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
                    GLushort *triangles, float min_distance)
 {
   return _PolygonToTriangles(points, num_points, triangles, min_distance);
