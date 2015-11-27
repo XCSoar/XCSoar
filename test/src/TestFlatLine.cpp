@@ -37,66 +37,66 @@ int main(int argc, char **argv)
   FlatLine l2(p1, p3); // 2, 9
   FlatLine l3(p2, p3); // 2, 8
 
-  // test ave()
+  // test GetMiddle()
   FlatPoint av;
-  av = l1.ave();
+  av = l1.GetMiddle();
   ok1(equals(av.x, 1));
   ok1(equals(av.y, 1.5));
-  av = l2.ave();
+  av = l2.GetMiddle();
   ok1(equals(av.x, 2));
   ok1(equals(av.y, 5.5));
-  av = l3.ave();
+  av = l3.GetMiddle();
   ok1(equals(av.x, 2));
   ok1(equals(av.y, 6));
 
-  // test angle()
-  ok1(equals(l1.angle(), 90));
-  ok1(equals(l2.angle(), 77.47119229084848923132012643871));
-  ok1(equals(l3.angle(), 75.963756532073521417107679840837));
+  // test GetAngle()
+  ok1(equals(l1.GetAngle(), 90));
+  ok1(equals(l2.GetAngle(), 77.47119229084848923132012643871));
+  ok1(equals(l3.GetAngle(), 75.963756532073521417107679840837));
 
-  // test dsq()
-  ok1(equals(l1.dsq(), 1));
-  ok1(equals(l2.dsq(), 85));
-  ok1(equals(l3.dsq(), 68));
+  // test GetSquaredDistance()
+  ok1(equals(l1.GetSquaredDistance(), 1));
+  ok1(equals(l2.GetSquaredDistance(), 85));
+  ok1(equals(l3.GetSquaredDistance(), 68));
 
-  // test d()
-  ok1(equals(l1.d(), 1));
-  ok1(equals(l2.d(), 9.2195444572928873100022742817628));
-  ok1(equals(l3.d(), 8.2462112512353210996428197119482));
+  // test GetDistance()
+  ok1(equals(l1.GetDistance(), 1));
+  ok1(equals(l2.GetDistance(), 9.2195444572928873100022742817628));
+  ok1(equals(l3.GetDistance(), 8.2462112512353210996428197119482));
 
-  // test dot()
-  ok1(equals(l1.dot(l2), 9));
-  ok1(equals(l1.dot(l3), 8));
-  ok1(equals(l2.dot(l3), 76));
+  // test DotProduct()
+  ok1(equals(l1.DotProduct(l2), 9));
+  ok1(equals(l1.DotProduct(l3), 8));
+  ok1(equals(l2.DotProduct(l3), 76));
 
   // sub(), add(), rotate() and mul_y() not directly testable right
   // now because p1 and p2 are private
 
-  // test intersect_czero()
+  // test IntersectOriginCircle()
   FlatPoint i1, i2;
-  ok1(!l1.intersect_czero(fixed(0.9), i1, i2));
+  ok1(!l1.IntersectOriginCircle(fixed(0.9), i1, i2));
 
-  ok1(l1.intersect_czero(fixed(1.8027756377319946465596106337352), i1, i2));
+  ok1(l1.IntersectOriginCircle(fixed(1.8027756377319946465596106337352), i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 1.5));
   ok1(equals(i2.x, 1));
   ok1(equals(i2.y, -1.5));
 
-  ok1(l2.intersect_czero(fixed(5.8523499553598125545510491371143), i1, i2));
+  ok1(l2.IntersectOriginCircle(fixed(5.8523499553598125545510491371143), i1, i2));
   ok1(equals(i1.x, 2));
   ok1(equals(i1.y, 5.5));
   ok1(equals(i2.x, -0.517647));
   ok1(equals(i2.y, -5.829411));
 
-  // test intersect_circle()
+  // test IntersectCircle()
   FlatPoint c(fixed(1), fixed(1.5));
-  ok1(l1.intersect_circle(fixed(0.25), c, i1, i2));
+  ok1(l1.IntersectCircle(fixed(0.25), c, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 1.75));
   ok1(equals(i2.x, 1));
   ok1(equals(i2.y, 1.25));
 
-  ok1(l1.intersect_circle(fixed(1), c, i1, i2));
+  ok1(l1.IntersectCircle(fixed(1), c, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 2.5));
   ok1(equals(i2.x, 1));

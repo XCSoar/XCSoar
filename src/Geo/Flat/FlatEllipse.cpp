@@ -35,9 +35,9 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   :f1(_f1),f2(_f2),ap(_ap)
 {
   const FlatLine f12(f1, f2);
-  p = f12.ave();
-  theta = f12.angle();
-  const auto csq = f12.dsq();
+  p = f12.GetMiddle();
+  theta = f12.GetAngle();
+  const auto csq = f12.GetSquaredDistance();
   a = (f1.Distance(ap) + f2.Distance(ap));
 
   assert(Square(a) >= csq);
@@ -68,17 +68,16 @@ FlatEllipse::Parametric(const double t) const
 }
 
 bool 
-
 FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
 {
   const double er = ab();
   const double ier = ba();
   FlatLine s_line = line - p;
 
-  s_line.rotate(theta.Reciprocal());
-  s_line.mul_y(er);
+  s_line.Rotate(theta.Reciprocal());
+  s_line.MultiplyY(er);
 
-  if (s_line.intersect_czero(a, i1, i2)) {
+  if (s_line.IntersectOriginCircle(a, i1, i2)) {
     i1.MultiplyY(ier);
     i1.Rotate(theta);
     i1 += p;
@@ -99,9 +98,9 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
 {
   const FlatLine l_f1p(f1, pe);
   const FlatLine l_pf2(pe, f2);
-  const Angle ang = l_f1p.angle();
+  const Angle ang = l_f1p.GetAngle();
 
-  const double d = l_pf2.d() + std::max(a, b); // max line length
+  const double d = l_pf2.GetDistance() + std::max(a, b); // max line length
 
   const auto sc = ang.SinCos();
   double san = sc.first, can = sc.second;

@@ -64,7 +64,7 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_czero(double r, FlatPoint &i1, FlatPoint &i2) const;
+  bool IntersectOriginCircle(double r, FlatPoint &i1, FlatPoint &i2) const;
 
   /** 
    * Calculate intersections between this line
@@ -77,15 +77,15 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_circle(double r, FlatPoint c,
-                        FlatPoint &i1, FlatPoint &i2) const;
+  bool IntersectCircle(double r, FlatPoint c,
+                       FlatPoint &i1, FlatPoint &i2) const;
 
   /**
    * Find center point of this line
    *
    * @return Center point
    */
-  constexpr FlatPoint ave() const {
+  constexpr FlatPoint GetMiddle() const {
     return (p1 + p2).Half();
   }
 
@@ -95,7 +95,7 @@ public:
    * @return Angle (deg)
    */
   gcc_pure
-  Angle angle() const;
+  Angle GetAngle() const;
 
   /**
    * Calculate squared length of line
@@ -103,7 +103,7 @@ public:
    * @return Squared length
    */
   gcc_pure
-  double dsq() const;
+  double GetSquaredDistance() const;
 
   /**
    * Calculate length of line
@@ -111,7 +111,7 @@ public:
    * @return Length
    */
   gcc_pure
-  double d() const {
+  double GetDistance() const {
     return hypot(dx(), dy());
   }
 
@@ -150,14 +150,14 @@ public:
    *
    * @param angle Angle (deg) to rotate line clockwise
    */
-  void rotate(const Angle angle);
+  void Rotate(const Angle angle);
 
   /**
    * Scale line in Y direction
    *
    * @param a Scale ratio
    */
-  void mul_y(const double a) {
+  void MultiplyY(const double a) {
     p1.MultiplyY(a);
     p2.MultiplyY(a);
   }
@@ -168,7 +168,7 @@ public:
    * @return Dot product
    */
   gcc_pure
-  double dot(const FlatLine& that) const;
+  double DotProduct(const FlatLine& that) const;
 
 private:
   constexpr double dx() const {
@@ -180,7 +180,7 @@ private:
   }
 
   gcc_pure
-  double cross() const {
+  double CrossProduct() const {
     return p1.CrossProduct(p2);
   }
 };

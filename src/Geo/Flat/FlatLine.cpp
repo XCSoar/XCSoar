@@ -25,31 +25,32 @@
 #include "Math/Angle.hpp"
 
 double
-FlatLine::dsq() const
+FlatLine::GetSquaredDistance() const
 {
   return Square(dx()) + Square(dy());
 }
 
 Angle
-FlatLine::angle() const
+FlatLine::GetAngle() const
 {
   return Angle::FromXY(dx(), dy());
 }
 
 void
-FlatLine::rotate(const Angle theta)
+FlatLine::Rotate(const Angle theta)
 {
   p1.Rotate(theta);
   p2.Rotate(theta);
 }
 
 bool
-FlatLine::intersect_czero(const double r, FlatPoint &i1, FlatPoint &i2) const
+FlatLine::IntersectOriginCircle(const double r,
+                                FlatPoint &i1, FlatPoint &i2) const
 {
   const auto _dx = dx();
   const auto _dy = dy();
-  const auto dr = dsq();
-  const auto D = cross();
+  const auto dr = GetSquaredDistance();
+  const auto D = CrossProduct();
 
   auto det = Square(r) * dr - Square(D);
   if (det < 0)
@@ -66,11 +67,11 @@ FlatLine::intersect_czero(const double r, FlatPoint &i1, FlatPoint &i2) const
 }
 
 bool
-FlatLine::intersect_circle(const double r, const FlatPoint c,
-                           FlatPoint &i1, FlatPoint &i2) const
+FlatLine::IntersectCircle(const double r, const FlatPoint c,
+                          FlatPoint &i1, FlatPoint &i2) const
 {
   const FlatLine that = *this - c;
-  if (that.intersect_czero(r, i1, i2)) {
+  if (that.IntersectOriginCircle(r, i1, i2)) {
     i1 = i1 + c;
     i2 = i2 + c;
     return true;
@@ -80,7 +81,7 @@ FlatLine::intersect_circle(const double r, const FlatPoint c,
 }
 
 double
-FlatLine::dot(const FlatLine& that) const
+FlatLine::DotProduct(const FlatLine& that) const
 {
   return (p2 - p1).DotProduct(that.p2 - that.p1);
 }

@@ -176,9 +176,9 @@ AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
                          proj.ProjectFloat(negative(rar.range)
                                            ? GetLocationMin()
                                            : GetLocationMax()));
-  const auto radius = fradius.d() * fabs(rar.range);
+  const auto radius = fradius.GetDistance() * fabs(rar.range);
 
-  const auto angle = rar.radial - flb.angle();
+  const auto angle = rar.radial - flb.GetAngle();
 
   const FlatPoint ftarget1(radius * angle.cos(),
                            radius * -(angle).sin());

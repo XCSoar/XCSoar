@@ -61,18 +61,18 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
   const FlatLine line(f_start, f_end);
 
   FlatPoint f_p1, f_p2;
-  if (!line.intersect_circle(f_radius, f_center, f_p1, f_p2))
+  if (!line.IntersectCircle(f_radius, f_center, f_p1, f_p2))
     return AirspaceIntersectionVector();
 
-  const auto mag = line.dsq();
+  const auto mag = line.GetSquaredDistance();
   if (!positive(mag))
     return AirspaceIntersectionVector();
 
   const auto inv_mag = fixed(1) / mag;
-  const auto t1 = FlatLine(f_start, f_p1).dot(line);
+  const auto t1 = FlatLine(f_start, f_p1).DotProduct(line);
   const auto t2 = f_p1 == f_p2
     ? fixed(-1)
-    : FlatLine(f_start, f_p2).dot(line);
+    : FlatLine(f_start, f_p2).DotProduct(line);
 
   const bool in_range = (t1 < mag) || (t2 < mag);
   // if at least one point is within range, capture both points
