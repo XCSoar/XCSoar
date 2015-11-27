@@ -79,30 +79,6 @@ struct FlatGeoPoint : Point2D<int> {
   unsigned DistanceSquared(const FlatGeoPoint &sp) const;
 
   /**
-   * Add one point to another
-   *
-   * @param p2 Point to add
-   *
-   * @return Added value
-   */
-  constexpr
-  FlatGeoPoint operator+(const FlatGeoPoint other) const {
-    return FlatGeoPoint(x + other.x, y + other.y);
-  }
-
-  /**
-   * Subtract one point from another
-   *
-   * @param p2 Point to subtract
-   *
-   * @return Subtracted value
-   */
-  constexpr
-  FlatGeoPoint operator-(const FlatGeoPoint other) const {
-    return FlatGeoPoint(x - other.x, y - other.y);
-  }
-
-  /**
    * Multiply point by a constant
    *
    * @param t Value to multiply

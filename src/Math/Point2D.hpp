@@ -99,6 +99,22 @@ struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
 
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
+static constexpr inline P
+operator+(P a, P b)
+{
+  return P(a.x + b.x, a.y + b.y);
+}
+
+template<typename P, typename RT=typename P::product_type,
+         typename=typename EnableIfPoint2D<P>::type>
+static constexpr inline P
+operator-(P a, P b)
+{
+  return P(a.x - b.x, a.y - b.y);
+}
+
+template<typename P, typename RT=typename P::product_type,
+         typename=typename EnableIfPoint2D<P>::type>
 static constexpr inline RT
 DotProduct(P a, P b)
 {

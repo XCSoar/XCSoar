@@ -125,30 +125,6 @@ struct FlatPoint : DoublePoint2D
     return { x * p, y * p };
   }
 
-  /**
-   * Add one point to another
-   *
-   * @param p2 Point to add
-   *
-   * @return Added value
-   */
-  constexpr FlatPoint operator+(FlatPoint other) const
-  {
-    return { x + other.x, y + other.y };
-  }
-
-  /**
-   * Subtract one point from another
-   *
-   * @param p2 Point to subtract
-   *
-   * @return Subtracted value
-   */
-  constexpr FlatPoint operator-(const FlatPoint other) const
-  {
-    return { x - other.x, y - other.y };
-  }
-
   constexpr
   FlatPoint Half() const {
     return FlatPoint(x / 2, y / 2);

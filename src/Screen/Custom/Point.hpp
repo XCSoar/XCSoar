@@ -34,9 +34,6 @@ struct RasterPoint : Point2D<PixelScalar, int> {
   template<typename... Args>
   constexpr RasterPoint(Args&&... args)
     :Point2D<PixelScalar, int>(args...) {}
-
-  using Point2D<PixelScalar, int>::operator+;
-  constexpr RasterPoint operator+(PixelSize size) const;
 };
 
 struct PixelSize {
@@ -60,8 +57,9 @@ struct PixelSize {
 };
 
 inline constexpr RasterPoint
-RasterPoint::operator+(PixelSize size) const {
-  return { x + size.cx, y + size.cy };
+operator+(RasterPoint p, PixelSize size)
+{
+  return { p.x + size.cx, p.y + size.cy };
 }
 
 /**
