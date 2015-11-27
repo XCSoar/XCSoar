@@ -132,7 +132,7 @@ operator-(P a, P b)
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type,
          typename Z,
-         typename=typename std::is_arithmetic<Z>::value>
+         typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
 static constexpr inline P
 operator*(P a, Z z)
 {
@@ -142,7 +142,7 @@ operator*(P a, Z z)
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type,
          typename Z,
-         typename=typename std::is_arithmetic<Z>::value>
+         typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
 static constexpr inline P
 operator/(P a, Z z)
 {
