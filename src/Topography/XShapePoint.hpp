@@ -27,11 +27,11 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-struct ShapePoint : FloatPoint {
+struct ShapePoint : FloatPoint2D {
   ShapePoint() = default;
 
   template<typename... Args>
-  constexpr ShapePoint(Args&&... args):FloatPoint(args...) {}
+  constexpr ShapePoint(Args&&... args):FloatPoint2D(args...) {}
 };
 
 typedef ShapePoint::scalar_type ShapeScalar;

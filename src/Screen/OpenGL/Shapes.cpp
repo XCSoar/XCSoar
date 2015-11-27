@@ -39,8 +39,8 @@ MakeCircleBuffer(unsigned n)
 
   auto buffer = new GLFallbackArrayBuffer();
 
-  FloatPoint *const p0 = (FloatPoint *)buffer->BeginWrite(sizeof(*p0) * n);
-  FloatPoint *p = p0, *p2 = p + n / 2;
+  FloatPoint2D *const p0 = (FloatPoint2D *)buffer->BeginWrite(sizeof(*p0) * n);
+  auto *p = p0, *p2 = p + n / 2;
 
   for (unsigned i = 0; i < n / 2; ++i, ++p, ++p2) {
     float x = ISINETABLE[(i * (4096 / n) + 1024) & 0xfff] / 1024.;

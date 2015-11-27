@@ -72,11 +72,11 @@ struct Point2D {
   }
 };
 
-struct FloatPoint : Point2D<float> {
-  FloatPoint() = default;
+struct FloatPoint2D : Point2D<float> {
+  FloatPoint2D() = default;
 
   template<typename... Args>
-  constexpr FloatPoint(Args&&... args):Point2D<float>(args...) {}
+  constexpr FloatPoint2D(Args&&... args):Point2D<float>(args...) {}
 };
 
 template<typename P>
