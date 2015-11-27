@@ -61,11 +61,13 @@ from build.libs import *
 
 if 'mingw32' in host_triplet:
     thirdparty_libs = [
+        boost,
         zlib,
         lua,
     ]
 elif target == 'ANDROID':
     thirdparty_libs = [
+        boost,
         lua,
         proj,
         libtiff,
@@ -73,6 +75,7 @@ elif target == 'ANDROID':
     ]
 else:
     thirdparty_libs = [
+        boost,
         zlib,
         freetype,
         curl,

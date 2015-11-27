@@ -1,48 +1,6 @@
 [submodule "android/ioio"]
 	path = android/ioio
 	url = git://git.xcsoar.org/xcsoar/master/ioio.git
-[submodule "lib/boost/config"]
-	path = lib/boost/config
-	url = git://github.com/boostorg/config.git
-[submodule "lib/boost/intrusive"]
-	path = lib/boost/intrusive
-	url = git://github.com/boostorg/intrusive.git
-[submodule "lib/boost/assert"]
-	path = lib/boost/assert
-	url = git://github.com/boostorg/assert.git
-[submodule "lib/boost/preprocessor"]
-	path = lib/boost/preprocessor
-	url = git://github.com/boostorg/preprocessor.git
-[submodule "lib/boost/static_assert"]
-	path = lib/boost/static_assert
-	url = git://github.com/boostorg/static_assert.git
-[submodule "lib/boost/move"]
-	path = lib/boost/move
-	url = git://github.com/boostorg/move.git
-[submodule "lib/boost/type_traits"]
-	path = lib/boost/type_traits
-	url = git://github.com/boostorg/type_traits.git
-[submodule "lib/boost/mpl"]
-	path = lib/boost/mpl
-	url = git://github.com/boostorg/mpl.git
-[submodule "lib/boost/core"]
-	path = lib/boost/core
-	url = git://github.com/boostorg/core.git
-[submodule "lib/boost/functional"]
-	path = lib/boost/functional
-	url = git://github.com/boostorg/functional.git
-[submodule "lib/boost/integer"]
-	path = lib/boost/integer
-	url = git://github.com/boostorg/integer.git
-[submodule "lib/boost/detail"]
-	path = lib/boost/detail
-	url = git://github.com/boostorg/detail.git
-[submodule "lib/boost/tti"]
-	path = lib/boost/tti
-	url = git://github.com/boostorg/tti.git
-[submodule "lib/boost/function_types"]
-	path = lib/boost/function_types
-	url = git://github.com/boostorg/function_types.git
 [submodule "lib/glm"]
 	path = lib/glm
 	url = git://github.com/g-truc/glm

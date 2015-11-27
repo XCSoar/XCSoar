@@ -1,10 +1,16 @@
 from os.path import abspath
 
-from build.project import Project
+from build.boost import BoostProject
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
 from build.lua import LuaProject
+
+boost = BoostProject(
+    'http://netcologne.dl.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.bz2',
+    '6aa9a5c6a4ca1016edd0ed1178e3cb87',
+    'include/boost/version.hpp',
+)
 
 zlib = ZlibProject(
     'http://zlib.net/zlib-1.2.8.tar.xz',
