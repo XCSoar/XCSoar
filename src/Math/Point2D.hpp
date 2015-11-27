@@ -75,9 +75,10 @@ struct Point2D {
 struct FloatPoint2D : Point2D<float> {
   FloatPoint2D() = default;
 
-  template<typename... Args>
-  constexpr FloatPoint2D(Args&&... args):Point2D<float>(args...) {}
+  constexpr FloatPoint2D(float _x, float _y):Point2D<float>(_x, _y) {}
 };
+
+static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
 
 template<typename P>
 struct IsPoint2D : std::is_base_of<Point2D<typename P::scalar_type,
