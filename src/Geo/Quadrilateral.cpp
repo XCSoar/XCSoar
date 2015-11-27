@@ -21,38 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GEO_QUADRILATERAL_HPP
-#define XCSOAR_GEO_QUADRILATERAL_HPP
+#include "Quadrilateral.hpp"
+#include "GeoBounds.hpp"
 
-#include "GeoPoint.hpp"
+#include <algorithm>
 
-class GeoBounds;
+GeoBounds
+GeoQuadrilateral::GetBounds() const
+{
+  const auto longitude = std::minmax({top_left.longitude, top_right.longitude, bottom_left.longitude, bottom_right.longitude});
+  const auto latitude = std::minmax({top_left.latitude, top_right.latitude, bottom_left.latitude, bottom_right.latitude});
 
-/**
- * A quadrilateral on earth's surface.
- *
- * The four vertices describe the location of a planar rectangle
- * (e.g. a #Bitmap) on earth's surface.
- */
-struct GeoQuadrilateral {
-  GeoPoint top_left, top_right, bottom_left, bottom_right;
-
-  static constexpr GeoQuadrilateral Undefined() {
-    return {GeoPoint::Invalid(), GeoPoint::Invalid(),
-        GeoPoint::Invalid(), GeoPoint::Invalid()};
-  }
-
-  constexpr bool IsDefined() const {
-    return top_left.IsValid();
-  }
-
-  constexpr bool Check() const {
-    return top_left.Check() && top_right.Check() &&
-      bottom_left.Check() && bottom_right.Check();
-  }
-
-  gcc_pure
-  GeoBounds GetBounds() const;
-};
-
-#endif
+  return GeoBounds(GeoPoint(longitude.first, latitude.second),
+                   GeoPoint(longitude.second, latitude.first));
+}
