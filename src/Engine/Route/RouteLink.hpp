@@ -102,7 +102,7 @@ struct RouteLinkBase {
 
 private:
   FlatGeoPoint GetDelta() const {
-    return second - first;
+    return FlatGeoPoint(second) - FlatGeoPoint(first);
   }
 };
 

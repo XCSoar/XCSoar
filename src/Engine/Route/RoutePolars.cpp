@@ -145,7 +145,7 @@ RouteLink
 RoutePolars::NeighbourLink(const RoutePoint &start, const RoutePoint &end,
                            const FlatProjection &proj, const int sign) const
 {
-  const FlatGeoPoint d = end - start;
+  const FlatGeoPoint d = FlatGeoPoint(end) - FlatGeoPoint(start);
 
   // table of rotations for different maximum lengths.  these are calculated so
   // there is sufficient rotation as lengths get small for deltas to not
@@ -169,7 +169,7 @@ RoutePolars::NeighbourLink(const RoutePoint &start, const RoutePoint &end,
 
   FlatGeoPoint dr((d.x * cosa[index] - d.y * sina[index] * sign) >> 8,
                   (d.x * sina[index] * sign + d.y * cosa[index]) >> 8);
-  RoutePoint pd(start + dr, start.altitude);
+  RoutePoint pd(FlatGeoPoint(start) + dr, start.altitude);
   pd.RoundLocation();
   return GenerateIntermediate(start, pd, proj);
 }
