@@ -36,7 +36,7 @@ class FastRotation {
   double cost, sint;
 
 public:
-  typedef Point2D<double> Point;
+  typedef DoublePoint2D Point;
 
   FastRotation()
     :angle(Angle::Zero()), cost(1), sint(0) {}

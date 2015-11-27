@@ -275,8 +275,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      unsigned i)
 {
   // Save relative East/North
-  Point2D<fixed> p(traffic.relative_east,
-                   -traffic.relative_north);
+  DoublePoint2D p(traffic.relative_east, -traffic.relative_north);
 
   // Calculate the distance in pixels
   fixed scale = RangeScale(traffic.distance);
@@ -617,7 +616,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  Point2D<fixed> p(fixed(0), fixed(-1));
+  DoublePoint2D p(fixed(0), fixed(-1));
   if (!enable_north_up) {
     p = fr.Rotate(p);
   }

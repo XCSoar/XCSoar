@@ -30,10 +30,10 @@ Copyright_License {
 
 #include <math.h>
 
-struct Vector : Point2D<double> {
+struct Vector : DoublePoint2D {
   Vector() = default;
 
-  constexpr Vector(double _x, double _y):Point2D<double>(_x, _y) {}
+  constexpr Vector(double _x, double _y):DoublePoint2D(_x, _y) {}
 
   Vector(Angle bearing, double norm) {
     auto sc = bearing.SinCos();

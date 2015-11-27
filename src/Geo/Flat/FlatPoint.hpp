@@ -30,7 +30,7 @@ class Angle;
 /**
  * 2-d Cartesian projected real-valued point
  */
-struct FlatPoint : Point2D<double>
+struct FlatPoint : DoublePoint2D
 {
   /**
    * Non-initialising default constructor.
@@ -46,7 +46,7 @@ struct FlatPoint : Point2D<double>
    * @return Initialised object
    */
   constexpr
-  FlatPoint(const double _x, const double _y):Point2D<double>(_x, _y) {}
+  FlatPoint(const double _x, const double _y):DoublePoint2D(_x, _y) {}
 
   /**
    * Calculate cross product of two points
