@@ -130,6 +130,26 @@ operator-(P a, P b)
 }
 
 template<typename P, typename RT=typename P::product_type,
+         typename=typename EnableIfPoint2D<P>::type,
+         typename Z,
+         typename=typename std::is_arithmetic<Z>::value>
+static constexpr inline P
+operator*(P a, Z z)
+{
+  return P(a.x * z, a.y * z);
+}
+
+template<typename P, typename RT=typename P::product_type,
+         typename=typename EnableIfPoint2D<P>::type,
+         typename Z,
+         typename=typename std::is_arithmetic<Z>::value>
+static constexpr inline P
+operator/(P a, Z z)
+{
+  return P(a.x / z, a.y / z);
+}
+
+template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
 static constexpr inline RT
 DotProduct(P a, P b)
