@@ -36,7 +36,7 @@ TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
 #endif
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 }
 
@@ -46,7 +46,7 @@ TopCanvas::OnResize(PixelSize new_size)
   if (new_size == GetSize())
     return;
 
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 }
 

@@ -229,10 +229,10 @@ TopCanvas::Create(PixelSize new_size,
 #ifdef HAVE_HIGHDPI_SUPPORT
   int gl_width, gl_height;
   SDL_GL_GetDrawableSize(window, &gl_width, &gl_height);
-  OpenGL::SetupViewport(Point2D<unsigned>(gl_width, gl_height));
+  OpenGL::SetupViewport(UnsignedPoint2D(gl_width, gl_height));
   Canvas::Create(PixelSize(gl_width, gl_height));
 #else
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 #endif
 #elif (SDL_MAJOR_VERSION < 2)
@@ -303,7 +303,7 @@ TopCanvas::OnResize(PixelSize new_size)
 #endif
 
 #ifdef ENABLE_OPENGL
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 #else
 #if (SDL_MAJOR_VERSION >= 2)

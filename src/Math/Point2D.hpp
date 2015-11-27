@@ -72,6 +72,14 @@ struct Point2D {
   }
 };
 
+struct UnsignedPoint2D : Point2D<unsigned> {
+  UnsignedPoint2D() = default;
+
+  constexpr UnsignedPoint2D(unsigned _x, unsigned _y):Point2D<unsigned>(_x, _y) {}
+};
+
+static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
+
 struct IntPoint2D : Point2D<int> {
   IntPoint2D() = default;
 

@@ -274,8 +274,8 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   }
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(Point2D<unsigned>(effective_size.cx,
-                                          effective_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(effective_size.cx,
+                                        effective_size.cy));
   Canvas::Create(effective_size);
 }
 
@@ -308,7 +308,7 @@ TopCanvas::OnResize(PixelSize new_size)
   if (new_size == size)
     return;
 
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 }
 
@@ -320,7 +320,7 @@ TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
       !eglQuerySurface(display, surface, EGL_HEIGHT, &egl_height))
     return;
 
-  Point2D<unsigned> new_size(egl_width, egl_height);
+  UnsignedPoint2D new_size(egl_width, egl_height);
   OpenGL::SetupViewport(new_size, orientation);
   Canvas::Create(PixelSize(new_size.x, new_size.y));
 }

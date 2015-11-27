@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_INIT_HPP
 #define XCSOAR_SCREEN_OPENGL_INIT_HPP
 
-#include "Math/Point2D.hpp"
-
 #include <stdint.h>
 
+struct UnsignedPoint2D;
 enum class DisplayOrientation : uint8_t;
 
 namespace OpenGL {
@@ -45,7 +44,7 @@ namespace OpenGL {
   /**
    * Set up the viewport and the matrices for 2D drawing.
    */
-  void SetupViewport(Point2D<unsigned> size);
+  void SetupViewport(UnsignedPoint2D size);
 
   /**
    * Set up the viewport and the matrices for 2D drawing.  Apply the
@@ -54,7 +53,7 @@ namespace OpenGL {
    * @param size the screen size in pixels; may be edited by the
    * function to apply the #DisplayOrientation
    */
-  void SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation);
+  void SetupViewport(UnsignedPoint2D &size, DisplayOrientation orientation);
 
   /**
    * Deinitialize our OpenGL library.  Call before shutdown.

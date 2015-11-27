@@ -56,7 +56,7 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
 #endif
 
   RasterPoint old_translate;
-  Point2D<unsigned> old_size;
+  UnsignedPoint2D old_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   DisplayOrientation old_orientation;

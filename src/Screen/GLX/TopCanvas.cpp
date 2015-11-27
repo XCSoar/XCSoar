@@ -59,8 +59,8 @@ TopCanvas::CreateGLX(_XDisplay *_x_display,
   const PixelSize effective_size = { glx_width, glx_height };
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(Point2D<unsigned>(effective_size.cx,
-                                          effective_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(effective_size.cx,
+                                        effective_size.cy));
   Canvas::Create(effective_size);
 }
 
@@ -77,7 +77,7 @@ TopCanvas::OnResize(PixelSize new_size)
   if (new_size == size)
     return;
 
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
   Canvas::Create(new_size);
 }
 

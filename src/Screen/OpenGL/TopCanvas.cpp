@@ -29,5 +29,5 @@ void
 TopCanvas::Resume()
 {
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(Point2D<unsigned>(size.cx, size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(size.cx, size.cy));
 }

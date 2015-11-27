@@ -302,7 +302,7 @@ OpenGL::SetupContext()
 }
 
 void
-OpenGL::SetupViewport(Point2D<unsigned> size)
+OpenGL::SetupViewport(UnsignedPoint2D size)
 {
   window_size = size;
   viewport_size = size;
@@ -357,7 +357,7 @@ OrientationToRotation(DisplayOrientation orientation)
  * Swap x and y if the given orientation specifies it.
  */
 static void
-OrientationSwap(Point2D<unsigned> &p, DisplayOrientation orientation)
+OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
 {
   switch (orientation) {
   case DisplayOrientation::DEFAULT:
@@ -373,7 +373,7 @@ OrientationSwap(Point2D<unsigned> &p, DisplayOrientation orientation)
 }
 
 void
-OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
+OpenGL::SetupViewport(UnsignedPoint2D &size, DisplayOrientation orientation)
 {
   window_size = size;
 

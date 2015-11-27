@@ -44,7 +44,7 @@ namespace OpenGL {
 
   GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
-  Point2D<unsigned> window_size, viewport_size;
+  UnsignedPoint2D window_size, viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   DisplayOrientation display_orientation;

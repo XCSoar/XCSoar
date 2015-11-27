@@ -40,7 +40,7 @@ class WindowProjection:
   bool screen_size_initialised;
 #endif
 
-  Point2D<unsigned> screen_size;
+  UnsignedPoint2D screen_size;
 
   /**
    * Geographical representation of the screen boundaries.
