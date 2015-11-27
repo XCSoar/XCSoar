@@ -73,9 +73,8 @@ FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
 {
   const double er = ab();
   const double ier = ba();
-  FlatLine s_line = line;
+  FlatLine s_line = line - p;
 
-  s_line.sub(p);
   s_line.rotate(theta.Reciprocal());
   s_line.mul_y(er);
 

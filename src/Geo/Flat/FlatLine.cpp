@@ -69,8 +69,7 @@ bool
 FlatLine::intersect_circle(const double r, const FlatPoint c,
                            FlatPoint &i1, FlatPoint &i2) const
 {
-  FlatLine that = *this;
-  that.sub(c);
+  const FlatLine that = *this - c;
   if (that.intersect_czero(r, i1, i2)) {
     i1 = i1 + c;
     i2 = i2 + c;

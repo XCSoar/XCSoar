@@ -120,9 +120,10 @@ public:
    *
    * @param p Point to subtract
    */
-  void sub(const FlatPoint p) {
+  FlatLine &operator-=(const FlatPoint p) {
     p1 -= p;
     p2 -= p;
+    return *this;
   }
 
   /**
@@ -130,9 +131,18 @@ public:
    *
    * @param p Point to add
    */
-  void add(const FlatPoint p) {
+  FlatLine &operator+=(const FlatPoint p) {
     p1 += p;
     p2 += p;
+    return *this;
+  }
+
+  constexpr FlatLine operator+(FlatPoint delta) const {
+    return {p1 + delta, p2 + delta};
+  }
+
+  constexpr FlatLine operator-(FlatPoint delta) const {
+    return {p1 - delta, p2 - delta};
   }
 
   /**
