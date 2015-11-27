@@ -47,7 +47,7 @@ class WaylandEventQueue final : FileEventHandler {
   struct wl_pointer *pointer = nullptr;
   struct wl_shell *shell = nullptr;
 
-  Point2D<int> pointer_position = {0, 0};
+  IntPoint2D pointer_position = {0, 0};
 
 public:
   /**
@@ -85,7 +85,7 @@ public:
   void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch);
 
   void Push(const Event &event);
-  void PointerMotion(Point2D<int> new_pointer_position);
+  void PointerMotion(IntPoint2D new_pointer_position);
   void PointerButton(bool pressed);
 
 private:

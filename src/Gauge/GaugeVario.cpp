@@ -174,7 +174,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
 gcc_const
 static RasterPoint
-TransformRotatedPoint(Point2D<int> pt, Point2D<int> offset)
+TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset)
 {
   return { pt.x + offset.x, (pt.y * 112 / 100) + offset.y + 1 };
 }

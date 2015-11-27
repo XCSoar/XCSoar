@@ -573,9 +573,9 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  Point2D<int> p1(Layout::FastScale(small ? 5 : 10),
-                  -Layout::FastScale(small ? 1 : 2));
-  Point2D<int> p2(-p1.x, p1.y);
+  IntPoint2D p1(Layout::FastScale(small ? 5 : 10),
+                -Layout::FastScale(small ? 1 : 2));
+  IntPoint2D p2(-p1.x, p1.y);
 
   if (enable_north_up) {
     p1 = fir.Rotate(p1);

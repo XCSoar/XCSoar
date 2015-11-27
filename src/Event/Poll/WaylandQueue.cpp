@@ -73,8 +73,8 @@ WaylandPointerEnter(void *data, struct wl_pointer *wl_pointer, uint32_t serial,
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  queue.PointerMotion(Point2D<int>(wl_fixed_to_int(surface_x),
-                                   wl_fixed_to_int(surface_y)));
+  queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
+                                 wl_fixed_to_int(surface_y)));
 }
 
 static void
@@ -89,8 +89,8 @@ WaylandPointerMotion(void *data, struct wl_pointer *wl_pointer, uint32_t time,
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  queue.PointerMotion(Point2D<int>(wl_fixed_to_int(surface_x),
-                                   wl_fixed_to_int(surface_y)));
+  queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
+                                 wl_fixed_to_int(surface_y)));
 }
 
 static void
@@ -218,7 +218,7 @@ WaylandEventQueue::Push(const Event &event)
 }
 
 inline void
-WaylandEventQueue::PointerMotion(Point2D<int> new_pointer_position)
+WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
 {
   if (new_pointer_position == pointer_position)
     return;

@@ -63,7 +63,7 @@ class GaugeVario : public AntiFlickerWindow
 private:
   const unsigned nlength0, nlength1, nwidth, nline;
 
-  Point2D<int> offset;
+  IntPoint2D offset;
 
   bool dirty;
 

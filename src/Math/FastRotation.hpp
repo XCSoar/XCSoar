@@ -84,7 +84,7 @@ class FastIntegerRotation {
   friend class FastRowRotation;
 
 public:
-  typedef Point2D<int> Point;
+  typedef IntPoint2D Point;
 
   FastIntegerRotation()
  :angle(Angle::Zero()), cost(1024), sint(0) {}
@@ -125,7 +125,7 @@ class FastRowRotation {
   const int cost, sint, y_cost, y_sint;
 
 public:
-  typedef Point2D<int> Point;
+  typedef IntPoint2D Point;
 
   FastRowRotation(const FastIntegerRotation &fir, int y)
     :cost(fir.cost), sint(fir.sint),

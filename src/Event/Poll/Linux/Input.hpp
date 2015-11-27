@@ -37,7 +37,7 @@ struct Event;
  * A driver for Linux input devices (/dev/input/event*).
  */
 class LinuxInputDevice final : private FileEventHandler {
-  typedef Point2D<int> Position;
+  typedef IntPoint2D Position;
 
   IOLoop &io_loop;
 
