@@ -65,6 +65,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.acceleration.available, basic.acceleration.g_load);
   else if (StringIsEqual(name, "static_pressure"))
     Lua::PushOptional(L, basic.static_pressure_available, basic.static_pressure.GetPascal());
+  else if (StringIsEqual(name, "pitot_pressure"))
+    Lua::PushOptional(L, basic.pitot_pressure_available, basic.pitot_pressure.GetPascal());
   else
     return 0;
 
