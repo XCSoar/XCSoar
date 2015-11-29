@@ -53,6 +53,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.track_available, basic.track);
   else if (StringIsEqual(name, "ground_speed"))
     Lua::PushOptional(L, basic.ground_speed_available, basic.ground_speed);
+  else if (StringIsEqual(name, "air_speed"))
+    Lua::PushOptional(L, basic.airspeed_available, basic.true_airspeed);
   else
     return 0;
 
