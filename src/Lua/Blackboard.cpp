@@ -77,6 +77,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.voltage_available, basic.voltage);
   else if (StringIsEqual(name, "battery_level"))
     Lua::PushOptional(L, basic.battery_level_available, basic.battery_level);
+  else if (StringIsEqual(name, "noncomp_vario"))
+    Lua::PushOptional(L, basic.noncomp_vario_available, basic.noncomp_vario);
   else
     return 0;
 
