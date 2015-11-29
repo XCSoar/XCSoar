@@ -55,6 +55,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.ground_speed_available, basic.ground_speed);
   else if (StringIsEqual(name, "air_speed"))
     Lua::PushOptional(L, basic.airspeed_available, basic.true_airspeed);
+  else if (StringIsEqual(name, "bank_angle"))
+    Lua::PushOptional(L, basic.attitude.IsBankAngleUseable(), basic.attitude.bank_angle);
   else
     return 0;
 
