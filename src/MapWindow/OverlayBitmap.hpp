@@ -26,11 +26,12 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
+#include "Geo/GeoBounds.hpp"
 
 #include <stdexcept>
 
 class Canvas;
-class Projection;
+class WindowProjection;
 
 /**
  * A georeferenced bitmap that can be rendered in the #MapWindow.
@@ -42,6 +43,8 @@ class MapOverlayBitmap {
 
   GeoQuadrilateral bounds;
 
+  GeoBounds simple_bounds;
+
   float alpha = 1;
 
 public:
@@ -51,7 +54,7 @@ public:
     alpha = _alpha;
   }
 
-  void Draw(Canvas &canvas, const Projection &projection) noexcept;
+  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
 };
 
 #endif

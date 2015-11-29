@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/ConstantAlpha.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
-#include "Projection/Projection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Math/Point2D.hpp"
 #include "OS/Path.hpp"
 
@@ -39,11 +39,17 @@ Copyright_License {
 MapOverlayBitmap::MapOverlayBitmap(Path path) throw(std::runtime_error)
 {
   bounds = bitmap.LoadGeoFile(path);
+  simple_bounds = bounds.GetBounds();
 }
 
 void
-MapOverlayBitmap::Draw(Canvas &canvas, const Projection &projection) noexcept
+MapOverlayBitmap::Draw(Canvas &canvas,
+                       const WindowProjection &projection) noexcept
 {
+  if (!simple_bounds.Overlaps(projection.GetScreenBounds()))
+    /* not visible, outside of screen area */
+    return;
+
   const RasterPoint vertices[] = {
     projection.GeoToScreen(bounds.top_left),
     projection.GeoToScreen(bounds.top_right),
