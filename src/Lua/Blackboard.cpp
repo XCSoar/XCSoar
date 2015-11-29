@@ -73,6 +73,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.temperature_available, basic.temperature);
   else if (StringIsEqual(name, "humidity"))
     Lua::PushOptional(L, basic.humidity_available, basic.humidity);
+  else if (StringIsEqual(name, "voltage"))
+    Lua::PushOptional(L, basic.voltage_available, basic.voltage);
   else
     return 0;
 
