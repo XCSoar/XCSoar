@@ -59,6 +59,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.attitude.IsBankAngleUseable(), basic.attitude.bank_angle);
   else if (StringIsEqual(name, "pitch_angle"))
     Lua::PushOptional(L, basic.attitude.IsPitchAngleUseable(), basic.attitude.pitch_angle); 
+  else if (StringIsEqual(name, "heading"))
+    Lua::PushOptional(L, basic.attitude.IsHeadingUseable(), basic.attitude.heading);
   else
     return 0;
 
