@@ -31,6 +31,7 @@
 #define TRIVIAL_ARRAY_HXX
 
 #include <array>
+#include <initializer_list>
 #include <algorithm>
 
 #include <assert.h>
@@ -75,6 +76,11 @@ public:
 	TrivialArray(I _begin, I _end):the_size(0) {
 		for (I i = _begin; i != _end; ++i)
 			push_back(*i);
+	}
+
+	template<typename U>
+	TrivialArray(std::initializer_list<U> l):the_size(l.size()) {
+		std::move(l.begin(), l.end(), data.begin());
 	}
 
 	constexpr
