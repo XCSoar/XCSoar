@@ -33,7 +33,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
 #include "Event/KeyCode.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"

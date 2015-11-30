@@ -27,7 +27,7 @@ Copyright_License {
 #include "Base.hpp"
 #include "Repository/FileType.hpp"
 #include "OS/Path.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Util/StaticString.hxx"
 
 #include <utility>

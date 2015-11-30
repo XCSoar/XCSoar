@@ -32,7 +32,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Language/Language.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <assert.h>
 

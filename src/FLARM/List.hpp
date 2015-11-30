@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Traffic.hpp"
 #include "NMEA/Validity.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <type_traits>
 

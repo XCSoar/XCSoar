@@ -27,7 +27,7 @@ Copyright_License {
 #include "TabMenuData.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/TabRenderer.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 struct DialogLook;
 class ContainerWindow;

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CIRCLING_WIND_HPP
 
 #include "Geo/SpeedVector.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "NMEA/Validity.hpp"
 
 struct MoreData;

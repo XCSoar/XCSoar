@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,10 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STATIC_ARRAY_HPP
-#define STATIC_ARRAY_HPP
+#ifndef STATIC_ARRAY_HXX
+#define STATIC_ARRAY_HXX
 
-#include "TrivialArray.hpp"
+#include "TrivialArray.hxx"
 
 /**
  * An array with a maximum size known at compile time.  It keeps track
@@ -39,15 +39,15 @@
 template<class T, unsigned max>
 class StaticArray: public TrivialArray<T, max> {
 public:
-  constexpr
-  StaticArray(): TrivialArray<T, max>(0) {}
+	constexpr
+	StaticArray(): TrivialArray<T, max>(0) {}
 
-  StaticArray(typename TrivialArray<T, max>::size_type _size, const T &value)
-    :TrivialArray<T, max>(_size, value) {}
+	StaticArray(typename TrivialArray<T, max>::size_type _size, const T &value)
+		:TrivialArray<T, max>(_size, value) {}
 
-  template<typename I>
-  StaticArray(I _begin, I _end)
-    :TrivialArray<T, max>(_begin, _end) {}
+	template<typename I>
+	StaticArray(I _begin, I _end)
+		:TrivialArray<T, max>(_begin, _end) {}
 };
 
 #endif

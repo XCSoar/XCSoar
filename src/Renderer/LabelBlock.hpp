@@ -25,7 +25,7 @@ Copyright_License {
 #define SCREEN_LABELBLOCK_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Compiler.h"
 
 /**

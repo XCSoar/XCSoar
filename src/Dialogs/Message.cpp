@@ -29,7 +29,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "UIGlobals.hpp"
 
 #include <assert.h>

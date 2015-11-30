@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_ENUM_HPP
 
 #include "Base.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 #include <utility>
 

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Compiler.h"
 
 #include <tchar.h>

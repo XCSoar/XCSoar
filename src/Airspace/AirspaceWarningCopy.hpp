@@ -27,7 +27,7 @@ Copyright_License {
 #include "ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
 class AirspaceWarningCopy

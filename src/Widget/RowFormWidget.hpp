@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Repository/FileType.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Util/EnumCast.hpp"
 #include "Units/Group.hpp"
 #include "Math/fixed.hpp"

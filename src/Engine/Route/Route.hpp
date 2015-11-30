@@ -24,7 +24,7 @@
 #define XCSOAR_ROUTE_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <vector>
 

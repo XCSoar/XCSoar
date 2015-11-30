@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_REFERENCE_HPP
 #define XCSOAR_SCREEN_SDL_REFERENCE_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 #include <cassert>
 

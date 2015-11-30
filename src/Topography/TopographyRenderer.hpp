@@ -25,7 +25,7 @@ Copyright_License {
 #define TOPOGRAPHY_RENDERER_HPP
 
 #include "Topography/TopographyStore.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 class Canvas;
 class WindowProjection;

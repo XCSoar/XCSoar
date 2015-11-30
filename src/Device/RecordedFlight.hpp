@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_RECORDED_FLIGHT_HPP
 #define XCSOAR_DEVICE_RECORDED_FLIGHT_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "FlightInfo.hpp"
 
 #include <stdint.h>

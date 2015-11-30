@@ -42,7 +42,7 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Screen/Canvas.hpp"
 #include "Units/Units.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Route/ReachResult.hpp"

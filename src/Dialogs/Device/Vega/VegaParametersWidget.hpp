@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Base.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 class VegaDevice;
 

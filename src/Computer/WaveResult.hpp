@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 struct WaveInfo {
   GeoPoint location;

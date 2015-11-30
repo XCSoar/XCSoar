@@ -28,7 +28,7 @@ Copyright_License {
 #include "Renderer/TextInBox.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Sizes.h" /* for NAME_SIZE */
 
 #include <tchar.h>

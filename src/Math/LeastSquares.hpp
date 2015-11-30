@@ -48,7 +48,7 @@ Copyright_License {
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <type_traits>
 

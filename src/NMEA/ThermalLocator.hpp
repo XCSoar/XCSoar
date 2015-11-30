@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_NMEA_THERMAL_LOCATOR_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <type_traits>
 

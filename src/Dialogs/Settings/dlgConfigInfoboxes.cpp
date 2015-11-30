@@ -41,7 +41,7 @@ Copyright_License {
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringAPI.hxx"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Compiler.h"
 
 #include <assert.h>

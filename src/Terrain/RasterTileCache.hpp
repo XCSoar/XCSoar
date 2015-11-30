@@ -27,7 +27,7 @@ Copyright_License {
 #include "RasterTile.hpp"
 #include "RasterLocation.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Util/Serial.hpp"
 
 #include <assert.h>

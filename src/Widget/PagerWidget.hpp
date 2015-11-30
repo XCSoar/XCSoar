@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_PAGER_WIDGET_HPP
 
 #include "Widget.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Screen/Point.hpp"
 
 #include <functional>

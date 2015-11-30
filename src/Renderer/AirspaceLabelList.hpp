@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 struct AirspaceWarningConfig;
 class AbstractAirspace;

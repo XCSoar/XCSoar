@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IGC_EXTENSION_HPP
 #define XCSOAR_IGC_EXTENSION_HPP
 
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <stdint.h>
 

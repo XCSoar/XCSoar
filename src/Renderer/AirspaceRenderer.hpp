@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_RENDERER_HPP
 #define XCSOAR_AIRSPACE_RENDERER_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
 #ifndef ENABLE_OPENGL

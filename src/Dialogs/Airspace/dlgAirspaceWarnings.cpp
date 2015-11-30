@@ -35,7 +35,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"

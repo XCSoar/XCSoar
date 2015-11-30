@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 #include <stdio.h>
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 typedef std::vector<RasterPoint> RasterPointVector;
 

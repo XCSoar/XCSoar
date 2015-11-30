@@ -26,7 +26,7 @@
 #include "Renderer/ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 void
 TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short *elevations) const

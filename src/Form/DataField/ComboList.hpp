@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 #include <utility>
 

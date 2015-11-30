@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef STOP_WATCH
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "LogFile.hpp"
 
 #ifdef HAVE_POSIX

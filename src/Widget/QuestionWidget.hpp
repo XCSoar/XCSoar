@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_QUESTION_WIDGET_HPP
 
 #include "SolidWidget.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 #include <tchar.h>
 

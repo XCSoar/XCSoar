@@ -25,7 +25,7 @@
 #include "harness_waypoints.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 static TaskPointFactoryType
 GetRandomType(const LegalPointSet &l)
