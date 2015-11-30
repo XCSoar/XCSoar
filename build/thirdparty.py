@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os, os.path
+import re
 import sys
 
 if len(sys.argv) != 10:
@@ -64,6 +65,27 @@ if 'mingw32' in host_triplet:
         boost,
         zlib,
         lua,
+    ]
+elif re.match('(arm.*|aarch64)-apple-darwin', host_triplet) is not None:
+    thirdparty_libs = [
+        boost,
+        freetype,
+        curl,
+        lua,
+        proj,
+        libtiff,
+        libgeotiff,
+        sdl2
+    ]
+elif 'apple-darwin' in host_triplet:
+    thirdparty_libs = [
+        boost,
+        freetype,
+        lua,
+        proj,
+        libtiff,
+        libgeotiff,
+        sdl2
     ]
 elif target == 'ANDROID':
     thirdparty_libs = [

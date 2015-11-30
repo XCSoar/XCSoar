@@ -8,6 +8,8 @@ else ifeq ($(TARGET),PC)
 USE_THIRDARTY_LIBS = y
 else ifeq ($(TARGET),ANDROID)
 USE_THIRDARTY_LIBS = y
+else ifeq ($(TARGET_IS_DARWIN),y)
+USE_THIRDARTY_LIBS = y
 else
 USE_THIRDARTY_LIBS = n
 endif
