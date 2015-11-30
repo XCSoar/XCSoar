@@ -162,7 +162,7 @@ Dump(const NMEAInfo &basic)
     printf("FLARM rx=%u tx=%u\n", flarm.status.rx, flarm.status.tx);
     printf("FLARM gps=%u\n", (unsigned)flarm.status.gps);
     printf("FLARM alarm=%u\n", (unsigned)flarm.status.alarm_level);
-    printf("FLARM traffic=%u\n", flarm.traffic.list.size());
+    printf("FLARM traffic=%zu\n", flarm.traffic.list.size());
   }
 
   if (basic.engine_noise_level_available)
