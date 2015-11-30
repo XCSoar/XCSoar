@@ -71,12 +71,12 @@ include $(topdir)/build/verbose.mk
 include $(topdir)/build/util.mk
 include $(topdir)/build/detect.mk
 include $(topdir)/build/targets.mk
+include $(topdir)/build/thirdparty.mk
 include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/languages.mk
 include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
-include $(topdir)/build/thirdparty.mk
 include $(topdir)/build/libintl.mk
 
 ifeq ($(HEADLESS),y)
