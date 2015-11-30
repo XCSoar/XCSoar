@@ -226,14 +226,7 @@ Use one of the following targets:
 
 \subsection{Compiling for iOS and OS X}
 
-For iOS and OS X, you can use the
-\href{https://github.com/felixhaedicke/DarwinToolchainBuilder}{DarwinToolchainBuilder}
-toolset. This toolset can be used regardless of whether compiling on OS X or on
-any other operaing system. The installation instructions for these the tools
-can be found in its
-\href{https://github.com/felixhaedicke/DarwinToolchainBuilder/blob/master/README.md}{README.md}.
-
-Furthermore, the following tools are required:
+On OS X, the following tools are required:
 \begin{itemize}
 \item png2icns from \href{http://icns.sourceforge.net}{libicns} to build for
   OS X
@@ -260,13 +253,6 @@ To compile for OS X / x86\_64, run:
 \begin{verbatim*}
 make TARGET=OSX64 dmg
 \end{verbatim*}
-
-The \texttt{Makefile} assumes that the Darwin toolchain is installed in
-\verb|~/opt/darwin-toolchain| (only relevant if you are not compiling on OS X).
-You can use the option \verb|DARWIN_TOOLCHAIN| to override this path.
-To compile on Mac OS X, the directory where the library set (built with
-DarwinToolchainBuilder) for the current target is installed needs to be
-specified using the \verb|DARWIN_LIBS| option.
 
 \subsection{Compiling for the Raspberry Pi}
 
