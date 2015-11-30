@@ -16,7 +16,6 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/ZipLineReader.cpp \
 	$(IO_SRC_DIR)/InflateLineReader.cpp \
 	$(IO_SRC_DIR)/CSVLine.cpp \
-	$(IO_SRC_DIR)/BatchTextWriter.cpp \
 	$(IO_SRC_DIR)/BinaryWriter.cpp \
 	$(IO_SRC_DIR)/TextWriter.cpp
 
