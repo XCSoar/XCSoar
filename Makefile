@@ -88,7 +88,6 @@ include $(topdir)/build/wayland.mk
 include $(topdir)/build/egl.mk
 include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
-include $(topdir)/build/sdl.mk
 endif
 
 include $(topdir)/build/flags.mk
@@ -126,6 +125,7 @@ include $(topdir)/build/libos.mk
 include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
+include $(topdir)/build/sdl.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
