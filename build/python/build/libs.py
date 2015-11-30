@@ -4,6 +4,7 @@ from build.boost import BoostProject
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
+from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
 boost = BoostProject(
@@ -125,6 +126,15 @@ libgeotiff = AutotoolsProject(
     patches=abspath('lib/libgeotiff/patches'),
     autogen=True,
     libs='-lz',
+)
+
+sdl2 = SDL2Project(
+    'http://www.libsdl.org/tmp/release/SDL2-2.0.4.tar.gz',
+    '20d214724eb991787e34f43a6c822f67',
+    'lib/libSDL2.a',
+    [
+        '--disable-shared', '--enable-static',
+    ]
 )
 
 lua = LuaProject(
