@@ -238,16 +238,7 @@ ifeq ($(TARGET),OSX64)
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
   OSX_MIN_SUPPORTED_VERSION = 10.7
-  ifeq ($(HOST_IS_DARWIN),y)
-    LLVM_TARGET = x86_64-apple-darwin
-  else
-    DARWIN_SDK_VERSION = 10.11
-    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
-    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/MacOSX$(DARWIN_SDK_VERSION).sdk
-    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/x86_64-MacOSX-$(OSX_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/x86_64-apple-darwin-
-    LLVM_PREFIX = $(TCPREFIX)
-  endif
+  LLVM_TARGET = x86_64-apple-darwin
   LIBCXX = y
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
@@ -257,17 +248,11 @@ ifeq ($(TARGET),IOS32)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  DARWIN_SDK_VERSION = 9.1
   IOS_MIN_SUPPORTED_VERSION = 5.1
+  LLVM_TARGET = armv7-apple-darwin
   ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK_VERSION = 9.1
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
-    LLVM_TARGET = armv7-apple-darwin
-  else
-    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
-    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/iPhoneOS$(DARWIN_SDK_VERSION).sdk
-    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/armv7-iOS-$(IOS_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/armv7-apple-darwin-
-    LLVM_PREFIX = $(TCPREFIX)
   endif
   LIBCXX = y
   CLANG = y
@@ -278,17 +263,11 @@ ifeq ($(TARGET),IOS64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  DARWIN_SDK_VERSION = 9.1
   IOS_MIN_SUPPORTED_VERSION = 7.0
+  LLVM_TARGET = aarch64-apple-darwin
   ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK_VERSION = 9.1
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
-    LLVM_TARGET = aarch64-apple-darwin
-  else
-    DARWIN_TOOLCHAIN ?= $(HOME)/opt/darwin-toolchain
-    DARWIN_SDK ?= $(DARWIN_TOOLCHAIN)/lib/SDKs/iPhoneOS$(DARWIN_SDK_VERSION).sdk
-    DARWIN_LIBS ?= $(DARWIN_TOOLCHAIN)/lib/arm64-iOS-$(IOS_MIN_SUPPORTED_VERSION)-SDK$(DARWIN_SDK_VERSION).sdk
-    TCPREFIX = $(DARWIN_TOOLCHAIN)/bin/aarch64-apple-darwin-
-    LLVM_PREFIX = $(TCPREFIX)
   endif
   LIBCXX = y
   CLANG = y
