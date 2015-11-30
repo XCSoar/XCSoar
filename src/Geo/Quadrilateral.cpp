@@ -29,6 +29,8 @@ Copyright_License {
 GeoBounds
 GeoQuadrilateral::GetBounds() const
 {
+  // TODO: not wraparound-safe
+
   const auto longitude = std::minmax({top_left.longitude, top_right.longitude, bottom_left.longitude, bottom_right.longitude});
   const auto latitude = std::minmax({top_left.latitude, top_right.latitude, bottom_left.latitude, bottom_right.latitude});
 
