@@ -21,6 +21,9 @@ Copyright_License {
 }
 */
 
+#include <memory>
+#include <utility>
+
 #include "CoreGraphics.hpp"
 #include "UncompressedImage.hpp"
 #include "OS/Path.hpp"
@@ -71,20 +74,20 @@ CGImageToUncompressedImage(CGImageRef image)
     }
   }
   
-  uint8_t *const uncompressed = new uint8_t[height * row_size]();
+  std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[height * row_size]);
   
-  CGContextRef bitmap = CGBitmapContextCreate(uncompressed, width, height,
+  CGContextRef bitmap = CGBitmapContextCreate(uncompressed.get(), width, height,
                                               8, row_size, bitmap_colorspace,
                                               bitmap_info);
   if (nullptr == bitmap) {
-    delete[] uncompressed;
     return UncompressedImage::Invalid();
   }
   CGContextDrawImage(bitmap, CGRectMake(0, 0, width, height), image);
   
   CFRelease(bitmap);
   
-  return UncompressedImage(format, row_size, width, height, uncompressed);
+  return UncompressedImage(format, row_size, width, height,
+                           std::move(uncompressed));
 }
 
 UncompressedImage
