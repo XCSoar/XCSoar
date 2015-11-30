@@ -238,7 +238,8 @@ ifeq ($(TARGET),OSX64)
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
   OSX_MIN_SUPPORTED_VERSION = 10.7
-  LLVM_TARGET = x86_64-apple-darwin
+  HOST_TRIPLET = x86_64-apple-darwin
+  LLVM_TARGET = $(HOST_TRIPLET)
   LIBCXX = y
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
@@ -249,7 +250,8 @@ ifeq ($(TARGET),IOS32)
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
   IOS_MIN_SUPPORTED_VERSION = 5.1
-  LLVM_TARGET = armv7-apple-darwin
+  HOST_TRIPLET = armv7-apple-darwin
+  LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK_VERSION = 9.1
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
@@ -264,7 +266,8 @@ ifeq ($(TARGET),IOS64)
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
   IOS_MIN_SUPPORTED_VERSION = 7.0
-  LLVM_TARGET = aarch64-apple-darwin
+  HOST_TRIPLET = aarch64-apple-darwin
+  LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
     DARWIN_SDK_VERSION = 9.1
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
