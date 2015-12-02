@@ -28,6 +28,19 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Debug.hpp"
 
+#ifndef ANDROID
+
+Bitmap::Bitmap(Bitmap &&src)
+  :texture(src.texture),
+   size(src.size),
+   interpolation(src.interpolation),
+   flipped(src.flipped)
+{
+  src.texture = nullptr;
+}
+
+#endif /* !ANDROID */
+
 void
 Bitmap::EnableInterpolation()
 {

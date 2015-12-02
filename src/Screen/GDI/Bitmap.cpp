@@ -27,6 +27,12 @@ Copyright_License {
 
 #include <assert.h>
 
+Bitmap::Bitmap(Bitmap &&src)
+  :bitmap(src.bitmap)
+{
+  src.bitmap = nullptr;
+}
+
 bool
 Bitmap::LoadFile(Path path)
 {

@@ -112,6 +112,12 @@ public:
   Bitmap(ConstBuffer<void> buffer);
 #endif
 
+#ifdef USE_MEMORY_CANVAS
+  Bitmap(Bitmap &&src) = default;
+#else
+  Bitmap(Bitmap &&src);
+#endif
+
   ~Bitmap() {
     Reset();
   }

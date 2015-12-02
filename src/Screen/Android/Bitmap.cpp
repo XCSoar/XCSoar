@@ -37,6 +37,23 @@ Bitmap::Bitmap(ResourceId id)
   Load(id);
 }
 
+Bitmap::Bitmap(Bitmap &&src)
+  :bmp(src.bmp),
+   type(src.type),
+   texture(src.texture),
+   size(src.size),
+   interpolation(src.interpolation),
+   flipped(src.flipped)
+{
+  src.bmp = nullptr;
+  src.texture = nullptr;
+
+  if (IsDefined()) {
+    RemoveSurfaceListener(src);
+    AddSurfaceListener(*this);
+  }
+}
+
 static const char *
 find_resource_name(unsigned id)
 {
