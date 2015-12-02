@@ -19,4 +19,5 @@ class BoostProject(Project):
         # (because right now, we only use header-only libraries)
         includedir = os.path.join(toolchain.install_prefix, 'include')
         dest = os.path.join(includedir, 'boost')
+        shutil.rmtree(dest, ignore_errors=True)
         shutil.copytree(os.path.join(src, 'boost'), dest)
