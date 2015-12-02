@@ -50,6 +50,10 @@ class MapOverlayBitmap {
 public:
   MapOverlayBitmap(Path path) throw(std::runtime_error);
 
+  MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds) noexcept
+    :bitmap(std::move(_bitmap)), bounds(_bounds),
+     simple_bounds(bounds.GetBounds()) {}
+
   void SetAlpha(float _alpha) {
     alpha = _alpha;
   }
