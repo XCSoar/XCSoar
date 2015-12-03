@@ -27,8 +27,6 @@ Copyright_License {
 #include "Util/AllocatedString.hxx"
 #include "Util/StaticArray.hxx"
 
-#include <utility>
-
 #include <tchar.h>
 
 class ComboList {
@@ -51,13 +49,6 @@ public:
 
     Item(Item &&src) = default;
     Item &operator=(Item &&src) = default;
-
-    friend void swap(Item &a, Item &b) {
-      std::swap(a.int_value, b.int_value);
-      std::swap(a.string_value, b.string_value);
-      std::swap(a.display_string, b.display_string);
-      std::swap(a.help_text, b.help_text);
-    }
   };
 
   static constexpr unsigned MAX_SIZE = 512;
