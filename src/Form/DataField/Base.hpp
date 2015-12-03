@@ -113,8 +113,8 @@ public:
   gcc_pure
   virtual ComboList CreateComboList(const TCHAR *reference) const;
 
-  virtual void
-  SetFromCombo(int iDataFieldIndex, gcc_unused TCHAR *sValue)
+  virtual void SetFromCombo(int iDataFieldIndex,
+                            gcc_unused const TCHAR *sValue)
   {
     SetAsInteger(iDataFieldIndex);
   }

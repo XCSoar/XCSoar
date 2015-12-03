@@ -93,7 +93,7 @@ public:
   void SetAsInteger(int value) override;
   void SetAsString(const TCHAR *value) override;
   ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int iDataFieldIndex, TCHAR *sValue) override;
+  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, fixed value) const;

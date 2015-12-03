@@ -97,7 +97,7 @@ public:
   }
 
   ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int data_field_index, TCHAR *value_string) override;
+  void SetFromCombo(int data_field_index, const TCHAR *value_string) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

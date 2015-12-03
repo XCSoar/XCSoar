@@ -178,7 +178,7 @@ DataFieldInteger::CreateComboList(const TCHAR *reference_string) const
 }
 
 void
-DataFieldInteger::SetFromCombo(int index, TCHAR *value)
+DataFieldInteger::SetFromCombo(gcc_unused int index, const TCHAR *value)
 {
   SetAsString(value);
 }

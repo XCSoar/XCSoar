@@ -118,7 +118,7 @@ AngleDataField::Dec()
 }
 
 void
-AngleDataField::SetFromCombo(int i, TCHAR *s)
+AngleDataField::SetFromCombo(int i, gcc_unused const TCHAR *s)
 {
   assert(i >= 0);
   assert(unsigned(i) < MAX);

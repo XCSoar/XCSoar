@@ -83,7 +83,8 @@ DataFieldTime::SpeedUp(bool key_up)
 }
 
 void
-DataFieldTime::SetFromCombo(int data_field_index, TCHAR *value_string)
+DataFieldTime::SetFromCombo(int data_field_index,
+                            gcc_unused const TCHAR *value_string)
 {
   SetValue(data_field_index);
 }

@@ -130,7 +130,7 @@ DataFieldFloat::SpeedUp(bool keyup)
 }
 
 void
-DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+DataFieldFloat::SetFromCombo(int iDataFieldIndex, const TCHAR *sValue)
 {
   SetAsString(sValue);
 }

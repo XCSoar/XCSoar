@@ -107,7 +107,7 @@ public:
   void Dec() override;
 
   ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int i, TCHAR *s) override;
+  void SetFromCombo(int i, const TCHAR *s) override;
 };
 
 #endif
