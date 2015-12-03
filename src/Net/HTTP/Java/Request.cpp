@@ -38,16 +38,16 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   Java::String j_url(env, url);
   jobject url_object = Java::URL::Create(env, j_url);
   if (Java::DiscardException(env)) {
-    connection = NULL;
-    input_stream = NULL;
+    connection = nullptr;
+    input_stream = nullptr;
     return;
   }
 
   connection = Java::URL::openConnection(env, url_object);
   env->DeleteLocalRef(url_object);
   if (Java::DiscardException(env)) {
-    connection = NULL;
-    input_stream = NULL;
+    connection = nullptr;
+    input_stream = nullptr;
     return;
   }
 
@@ -57,18 +57,18 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   input_stream = Java::URLConnection::getInputStream(env, connection);
   if (Java::DiscardException(env)) {
     env->DeleteLocalRef(connection);
-    connection = NULL;
-    input_stream = NULL;
+    connection = nullptr;
+    input_stream = nullptr;
     return;
   }
 }
 
 Net::Request::~Request()
 {
-  if (connection != NULL)
+  if (connection != nullptr)
     env->DeleteLocalRef(connection);
 
-  if (input_stream != NULL) {
+  if (input_stream != nullptr) {
     Java::InputStream::close(env, input_stream);
     env->ExceptionClear();
 
@@ -79,14 +79,14 @@ Net::Request::~Request()
 bool
 Net::Request::Send(unsigned _timeout_ms)
 {
-  return input_stream != NULL;
+  return input_stream != nullptr;
 }
 
 int64_t
 Net::Request::GetLength() const
 {
-  assert(connection != NULL);
-  assert(input_stream != NULL);
+  assert(connection != nullptr);
+  assert(input_stream != nullptr);
 
   return Java::URLConnection::getContentLength(env, connection);
 }
@@ -94,8 +94,8 @@ Net::Request::GetLength() const
 ssize_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
-  assert(connection != NULL);
-  assert(input_stream != NULL);
+  assert(connection != nullptr);
+  assert(input_stream != nullptr);
 
   Java::URLConnection::setReadTimeout(env, connection, (jint)timeout_ms);
 
