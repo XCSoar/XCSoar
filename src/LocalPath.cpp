@@ -118,6 +118,14 @@ LocalPath(const TCHAR *file)
   return LocalPath(Path(file));
 }
 
+AllocatedPath
+MakeLocalPath(const TCHAR *name)
+{
+  auto path = LocalPath(name);
+  Directory::Create(path);
+  return path;
+}
+
 Path
 RelativePath(Path path)
 {

@@ -37,7 +37,6 @@
 #include "Dialogs/JobDialog.hpp"
 #include "Job/TriStateJob.hpp"
 #include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/FileTransaction.hpp"
 #include "IGC/IGCParser.hpp"
@@ -280,8 +279,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  const auto logs_path = LocalPath(_T("logs"));
-  Directory::Create(logs_path);
+  const auto logs_path = MakeLocalPath(_T("logs"));
 
   while (true) {
     // Show list of the flights

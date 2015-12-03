@@ -27,7 +27,6 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
 #include "Util/StaticString.hxx"
 
 #include <stdio.h>
@@ -56,8 +55,7 @@ NMEALogger::Start()
               dt.year, dt.month, dt.day,
               dt.hour, dt.minute);
 
-  const auto logs_path = LocalPath(_T("logs"));
-  Directory::Create(logs_path);
+  const auto logs_path = MakeLocalPath(_T("logs"));
 
   const auto path = AllocatedPath::Build(logs_path, name);
   writer = new TextWriter(path, false);

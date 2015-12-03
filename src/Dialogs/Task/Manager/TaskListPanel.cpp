@@ -329,8 +329,7 @@ TaskListPanel::RenameTask()
 
   newname.append(_T(".tsk"));
 
-  const auto tasks_path = LocalPath(_T("tasks"));
-  Directory::Create(tasks_path);
+  const auto tasks_path = MakeLocalPath(_T("tasks"));
 
   File::Rename(task_store->GetPath(cursor_index),
                AllocatedPath::Build(tasks_path, newname));

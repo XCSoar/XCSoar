@@ -80,6 +80,12 @@ AllocatedPath
 LocalPath(const TCHAR *file);
 
 /**
+ * Create a subdirectory of XCSoarData and return its absolute path.
+ */
+AllocatedPath
+MakeLocalPath(const TCHAR *name);
+
+/**
  * Return the portion of the specified path that is relative to the
  * primary data path.  Returns nullptr on failure (if the path is not
  * inside the primary data path).
