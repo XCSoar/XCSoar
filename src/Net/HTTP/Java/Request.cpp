@@ -53,14 +53,6 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 
   Java::URLConnection::setConnectTimeout(env, connection, (jint)timeout_ms);
   Java::URLConnection::setReadTimeout(env, connection, (jint)timeout_ms);
-
-  input_stream = Java::URLConnection::getInputStream(env, connection);
-  if (Java::DiscardException(env)) {
-    env->DeleteLocalRef(connection);
-    connection = nullptr;
-    input_stream = nullptr;
-    return;
-  }
 }
 
 Net::Request::~Request()
@@ -79,6 +71,16 @@ Net::Request::~Request()
 bool
 Net::Request::Send(unsigned _timeout_ms)
 {
+  if (connection == nullptr)
+    return false;
+
+  input_stream = Java::URLConnection::getInputStream(env, connection);
+  if (Java::DiscardException(env)) {
+    env->DeleteLocalRef(connection);
+    connection = nullptr;
+    input_stream = nullptr;
+  }
+
   return input_stream != nullptr;
 }
 
