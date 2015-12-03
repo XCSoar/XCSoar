@@ -60,6 +60,14 @@ Net::Request::~Request()
     session.Remove(handle.GetHandle());
 }
 
+void
+Net::Request::SetBasicAuth(const char *username, const char *password)
+{
+  char buffer[256];
+  snprintf(buffer, sizeof(buffer), "%s:%s", username, password);
+  handle.SetBasicAuth(buffer);
+}
+
 size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {

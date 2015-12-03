@@ -48,6 +48,13 @@ Net::Request::Request(Session &session, const char *url,
     opened_event.Wait(timeout_ms);
 }
 
+void
+Net::Request::SetBasicAuth(const char *username, const char *password)
+{
+  if (handle.IsDefined())
+    handle.SetBasicAuth(username, password);
+}
+
 bool
 Net::Request::Send(unsigned timeout_ms)
 {

@@ -28,8 +28,11 @@ Copyright_License {
 #include "Java/InputStream.hxx"
 #include "Java/URL.hxx"
 #include "Java/Exception.hxx"
+#include "Util/ConstBuffer.hxx"
+#include "Util/StringAPI.hxx"
 
 #include <assert.h>
+#include <stdio.h>
 
 Net::Request::Request(Session &_session, const TCHAR *url,
                       unsigned timeout_ms)
@@ -66,6 +69,58 @@ Net::Request::~Request()
 
     env->DeleteLocalRef(input_stream);
   }
+}
+
+static char *
+Base64(char *dest, uint8_t a, uint8_t b, uint8_t c)
+{
+  static constexpr char base64[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  *dest++ = base64[a >> 2];
+  *dest++ = base64[((a & 0x03) << 4) | (b >> 4)];
+  *dest++ = base64[((b & 0x0f) << 2) | (c >> 6)];
+  *dest++ = base64[c & 0x3f];
+  return dest;
+}
+
+static char *
+Base64(char *dest, ConstBuffer<uint8_t> src)
+{
+  while (src.size >= 3) {
+    dest = Base64(dest, src[0], src[1], src[2]);
+    src.skip_front(3);
+  }
+
+  if (src.size == 2) {
+    dest = Base64(dest, src[0], src[1], 0);
+    dest[-1] = '=';
+  } else if (src.size == 1) {
+    dest = Base64(dest, src[0], 0, 0);
+    dest[-2] = '=';
+    dest[-1] = '=';
+  }
+
+  return dest;
+}
+
+void
+Net::Request::SetBasicAuth(const char *username, const char *password)
+{
+  if (connection == nullptr)
+    return;
+
+  char buffer[256];
+  snprintf(buffer, sizeof(buffer), "%s:%s", username, password);
+
+  char value[512];
+  char *p = UnsafeCopyStringP(value, "Basic ");
+  p = Base64(p, {(const uint8_t *)buffer, strlen(buffer)});
+  *p = 0;
+
+  Java::String j_name(env, "Authorization");
+  Java::String j_value(env, value);
+
+  Java::URLConnection::addRequestProperty(env, connection, j_name, j_value);
 }
 
 bool

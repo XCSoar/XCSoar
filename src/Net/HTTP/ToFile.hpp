@@ -41,13 +41,24 @@ namespace Net {
    * which will contain the hex MD5 digest after returning
    * @return true on success, false on error
    */
-  bool DownloadToFile(Session &session, const char *url, Path path,
-                      char *md5_digest,
+  bool DownloadToFile(Session &session, const char *url,
+                      const char *username, const char *password,
+                      Path path, char *md5_digest,
                       OperationEnvironment &env);
+
+  static inline bool
+  DownloadToFile(Session &session, const char *url,
+                 Path path, char *md5_digest,
+                 OperationEnvironment &env)
+  {
+    return DownloadToFile(session, url, nullptr, nullptr,
+                          path, md5_digest, env);
+  }
 
   class DownloadToFileJob : public Job {
     Session &session;
     const char *url;
+    const char *username = nullptr, *password = nullptr;
     const Path path;
     char md5_digest[33];
     bool success;
@@ -55,6 +66,11 @@ namespace Net {
   public:
     DownloadToFileJob(Session &_session, const char *_url, Path _path)
       :session(_session), url(_url), path(_path), success(false) {}
+
+    void SetBasicAuth(const char *_username, const char *_password) {
+      username = _username;
+      password = _password;
+    }
 
     bool WasSuccessful() const {
       return success;

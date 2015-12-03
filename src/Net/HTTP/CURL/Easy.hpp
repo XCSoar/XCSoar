@@ -81,6 +81,10 @@ namespace Net {
       return SetOption(CURLOPT_USERAGENT, value);
     }
 
+    bool SetBasicAuth(const char *userpwd) {
+      return SetOption(CURLOPT_USERPWD, userpwd);
+    }
+
     bool SetFailOnError(bool value) {
       return SetOption(CURLOPT_FAILONERROR, value);
     }

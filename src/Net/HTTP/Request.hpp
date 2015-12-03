@@ -98,6 +98,8 @@ namespace Net {
     ~Request();
 #endif
 
+    void SetBasicAuth(const char *username, const char *password);
+
 #ifdef HAVE_CURL
   protected:
     size_t ResponseData(const uint8_t *ptr, size_t size);

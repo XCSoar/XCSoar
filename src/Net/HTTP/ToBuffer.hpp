@@ -40,12 +40,21 @@ namespace Net {
    * @return the number of bytes written, or -1 on error
    */
   int DownloadToBuffer(Session &session, const char *url,
+                       const char *username, const char *password,
                        void *buffer, size_t max_length,
                        OperationEnvironment &env);
+
+  static inline int DownloadToBuffer(Session &session, const char *url,
+                                     void *buffer, size_t max_length,
+                                     OperationEnvironment &env) {
+    return DownloadToBuffer(session, url, nullptr, nullptr,
+                            buffer, max_length, env);
+  }
 
   class DownloadToBufferJob : public Job {
     Session &session;
     const char *url;
+    const char *username = nullptr, *password = nullptr;
     void *buffer;
     size_t max_length;
     int length;
@@ -56,6 +65,11 @@ namespace Net {
       :session(_session), url(_url),
        buffer(_buffer), max_length(_max_length),
        length(-1) {}
+
+    void SetBasicAuth(const char *_username, const char *_password) {
+      username = _username;
+      password = _password;
+    }
 
     int GetLength() const {
       return length;

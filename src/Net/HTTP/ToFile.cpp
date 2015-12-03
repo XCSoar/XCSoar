@@ -32,14 +32,17 @@ Copyright_License {
 #include <stdio.h>
 
 static bool
-DownloadToFile(Net::Session &session, const char *url, FILE *file,
-               char *md5_digest,
+DownloadToFile(Net::Session &session, const char *url,
+               const char *username, const char *password,
+               FILE *file, char *md5_digest,
                OperationEnvironment &env)
 {
   assert(url != NULL);
   assert(file != NULL);
 
   Net::Request request(session, url, 10000);
+  if (username != nullptr)
+    request.SetBasicAuth(username, password);
   if (!request.Send(10000))
     return false;
 
@@ -83,8 +86,9 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
 }
 
 bool
-Net::DownloadToFile(Session &session, const char *url, Path path,
-                    char *md5_digest,
+Net::DownloadToFile(Session &session, const char *url,
+                    const char *username, const char *password,
+                    Path path, char *md5_digest,
                     OperationEnvironment &env)
 {
   assert(url != NULL);
@@ -100,7 +104,8 @@ Net::DownloadToFile(Session &session, const char *url, Path path,
   if (file == NULL)
     return false;
 
-  bool success = ::DownloadToFile(session, url, file, md5_digest, env);
+  bool success = ::DownloadToFile(session, url, username, password,
+                                  file, md5_digest, env);
   success &= fclose(file) == 0;
 
   if (!success)
@@ -113,5 +118,6 @@ Net::DownloadToFile(Session &session, const char *url, Path path,
 void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
-  success = DownloadToFile(session, url, path, md5_digest,env);
+  success = DownloadToFile(session, url, username, password,
+                           path, md5_digest,env);
 }

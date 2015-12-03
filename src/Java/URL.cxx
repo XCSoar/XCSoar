@@ -57,6 +57,7 @@ Java::URL::Deinitialise(JNIEnv *env)
 
 jmethodID Java::URLConnection::setConnectTimeout_method;
 jmethodID Java::URLConnection::setReadTimeout_method;
+jmethodID Java::URLConnection::addRequestProperty_method;
 jmethodID Java::URLConnection::getContentLength_method;
 jmethodID Java::URLConnection::getInputStream_method;
 
@@ -72,6 +73,10 @@ Java::URLConnection::Initialise(JNIEnv *env)
 	setReadTimeout_method = env->GetMethodID(cls, "setReadTimeout",
 						 "(I)V");
 	assert(setReadTimeout_method != nullptr);
+
+	addRequestProperty_method = env->GetMethodID(cls, "addRequestProperty",
+						     "(Ljava/lang/String;Ljava/lang/String;)V");
+	assert(addRequestProperty_method != nullptr);
 
 	getContentLength_method = env->GetMethodID(cls, "getContentLength",
 						   "()I");

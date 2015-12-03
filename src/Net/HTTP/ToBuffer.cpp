@@ -30,10 +30,13 @@ Copyright_License {
 
 int
 Net::DownloadToBuffer(Session &session, const char *url,
+                      const char *username, const char *password,
                       void *_buffer, size_t max_length,
                       OperationEnvironment &env)
 {
   Request request(session, url, 10000);
+  if (username != nullptr)
+    request.SetBasicAuth(username, password);
   if (!request.Send(10000))
     return -1;
 
@@ -65,5 +68,6 @@ Net::DownloadToBuffer(Session &session, const char *url,
 void
 Net::DownloadToBufferJob::Run(OperationEnvironment &env)
 {
-  length = DownloadToBuffer(session, url, buffer, max_length, env);
+  length = DownloadToBuffer(session, url, username, password,
+                            buffer, max_length, env);
 }
