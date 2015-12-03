@@ -71,6 +71,18 @@ Net::Request::~Request()
   }
 }
 
+void
+Net::Request::AddHeader(const char *name, const char *value)
+{
+  if (connection == nullptr)
+    return;
+
+  Java::String j_name(env, name);
+  Java::String j_value(env, value);
+
+  Java::URLConnection::addRequestProperty(env, connection, j_name, j_value);
+}
+
 static char *
 Base64(char *dest, uint8_t a, uint8_t b, uint8_t c)
 {
@@ -117,10 +129,7 @@ Net::Request::SetBasicAuth(const char *username, const char *password)
   p = Base64(p, {(const uint8_t *)buffer, strlen(buffer)});
   *p = 0;
 
-  Java::String j_name(env, "Authorization");
-  Java::String j_value(env, value);
-
-  Java::URLConnection::addRequestProperty(env, connection, j_name, j_value);
+  AddHeader("Authorization", value);
 }
 
 bool

@@ -58,6 +58,19 @@ Net::Request::~Request()
 {
   if (handle.IsDefined())
     session.Remove(handle.GetHandle());
+
+  curl_slist_free_all(request_headers);
+}
+
+void
+Net::Request::AddHeader(const char *name, const char *value)
+{
+  if (!handle.IsDefined())
+    return;
+
+  char buffer[4096];
+  snprintf(buffer, sizeof(buffer), "%s: %s", name, value);
+  request_headers = curl_slist_append(request_headers, buffer);
 }
 
 void
@@ -98,6 +111,9 @@ Net::Request::Send(unsigned _timeout_ms)
 {
   if (!handle.IsDefined())
     return false;
+
+  if (request_headers != nullptr)
+    handle.SetHeaders(request_headers);
 
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 

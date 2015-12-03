@@ -27,6 +27,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdint.h>
+#include <stdio.h>
 
 Net::Request::Request(Session &session, const char *url,
                       unsigned timeout_ms)
@@ -46,6 +47,19 @@ Net::Request::Request(Session &session, const char *url,
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
     opened_event.Wait(timeout_ms);
+}
+
+void
+Net::Request::AddHeader(const char *name, const char *value)
+{
+  if (!handle.IsDefined())
+    return;
+
+  char buffer[4096];
+  unsigned length = snprintf(buffer, sizeof(buffer), "%s: %s\r\n",
+                             name, value);
+  if (length < sizeof(buffer))
+    handle.AddRequestHeaders(buffer, length);
 }
 
 void

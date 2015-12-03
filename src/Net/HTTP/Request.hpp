@@ -74,6 +74,8 @@ namespace Net {
 
     CurlEasy handle;
 
+    struct curl_slist *request_headers = nullptr;
+
     typedef StaticFifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
     Buffer buffer;
 #endif
@@ -97,6 +99,8 @@ namespace Net {
 #if defined(HAVE_CURL) || defined(HAVE_JAVA_NET)
     ~Request();
 #endif
+
+    void AddHeader(const char *name, const char *value);
 
     void SetBasicAuth(const char *username, const char *password);
 

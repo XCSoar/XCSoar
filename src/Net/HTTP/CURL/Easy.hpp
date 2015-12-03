@@ -81,6 +81,10 @@ namespace Net {
       return SetOption(CURLOPT_USERAGENT, value);
     }
 
+    bool SetHeaders(struct curl_slist *headers) {
+      return SetOption(CURLOPT_HTTPHEADER, headers);
+    }
+
     bool SetBasicAuth(const char *userpwd) {
       return SetOption(CURLOPT_USERPWD, userpwd);
     }

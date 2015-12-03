@@ -191,6 +191,10 @@ namespace WinINet {
     HttpRequestHandle() {}
     HttpRequestHandle(HINTERNET handle):RequestHandle(handle) {}
 
+    bool AddRequestHeaders(const char *headers, DWORD length) {
+      return HttpAddRequestHeadersA(Get(), headers, length, 0);
+    }
+
     void SetBasicAuth(const char *username, const char *password) {
       InternetSetOption(Get(), INTERNET_OPTION_USERNAME,
                         const_cast<char *>(username), strlen(username));
