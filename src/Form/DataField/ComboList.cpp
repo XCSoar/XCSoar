@@ -26,8 +26,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <stdlib.h>
-
 ComboList::Item::Item(int _int_value,
                       const TCHAR *_string_value,
                       const TCHAR *_display_string,
@@ -41,36 +39,12 @@ ComboList::Item::Item(int _int_value,
 {
 }
 
-ComboList::ComboList(ComboList &&other)
-  :current_index(other.current_index),
-   items(other.items)
-{
-  std::fill(other.items.begin(), other.items.end(), nullptr);
-}
-
-void
-ComboList::Clear()
-{
-  for (auto i : items)
-    delete i;
-
-  items.clear();
-}
-
-unsigned
-ComboList::Append(ComboList::Item *item)
-{
-  unsigned i = items.size();
-  items.append(item);
-  return i;
-}
-
 void
 ComboList::Sort()
 {
-  std::sort(items.begin(), items.end(), [](const Item *a, const Item *b){
-      return StringCollate(a->display_string.c_str(),
-                           b->display_string.c_str()) < 0;
+  std::sort(items.begin(), items.end(), [](const Item &a, const Item &b){
+      return StringCollate(a.display_string.c_str(),
+                           b.display_string.c_str()) < 0;
     });
 }
 
@@ -78,7 +52,7 @@ unsigned
 ComboList::LookUp(int int_value)
 {
   for (unsigned i = 0; i < items.size(); i++)
-    if (items[i]->int_value == int_value)
+    if (items[i].int_value == int_value)
       return i;
 
   return 0;

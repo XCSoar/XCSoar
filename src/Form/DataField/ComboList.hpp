@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
 #include "Util/AllocatedString.hxx"
-#include "Util/StaticArray.hxx"
+
+#include <vector>
 
 #include <tchar.h>
 
@@ -56,17 +57,13 @@ public:
   int current_index;
 
 private:
-  StaticArray<Item*, MAX_SIZE> items;
+  std::vector<Item> items;
 
 public:
   ComboList()
     :current_index(0) {}
 
-  ComboList(ComboList &&other);
-
-  ~ComboList() {
-    Clear();
-  }
+  ComboList(ComboList &&other) = default;
 
   ComboList(const ComboList &other) = delete;
   ComboList &operator=(const ComboList &other) = delete;
@@ -80,19 +77,21 @@ public:
   }
 
   const Item& operator[](unsigned i) const {
-    return *items[i];
+    return items[i];
   }
 
-  void Clear();
-
-  unsigned Append(Item *item);
+  void Clear() {
+    items.clear();
+  }
 
   unsigned Append(int int_value,
                   const TCHAR *string_value,
                   const TCHAR *display_string,
                   const TCHAR *help_text = nullptr) {
-    return Append(new Item(int_value,
-                           string_value, display_string, help_text));
+    unsigned i = items.size();
+    items.emplace_back(int_value,
+                       string_value, display_string, help_text);
+    return i;
   }
 
   unsigned Append(int int_value, const TCHAR *string_value) {
