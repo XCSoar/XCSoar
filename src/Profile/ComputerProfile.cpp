@@ -25,6 +25,7 @@ Copyright_License {
 #include "AirspaceConfig.hpp"
 #include "TaskProfile.hpp"
 #include "TrackingProfile.hpp"
+#include "WeatherProfile.hpp"
 #include "ProfileKeys.hpp"
 #include "ContestProfile.hpp"
 #include "Map.hpp"
@@ -182,4 +183,6 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
 #ifdef HAVE_TRACKING
   Load(map, settings.tracking);
 #endif
+
+  Load(map, settings.weather);
 }

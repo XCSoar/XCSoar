@@ -5,6 +5,8 @@ Version 7.0 - not yet released
 * devices
   - driver for XC Tracer Vario
   - driver for KRT2 radio
+* weather
+  - show satellite images from pc_met (Deutscher Wetterdienst)
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later

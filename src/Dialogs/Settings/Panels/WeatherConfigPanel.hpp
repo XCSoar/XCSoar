@@ -21,21 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#ifndef WEATHER_CONFIGPANEL_HPP
+#define WEATHER_CONFIGPANEL_HPP
 
-#include "Weather/NOAAStore.hpp"
+class Widget;
 
-void
-dlgWeatherShowModal();
-
-void
-dlgNOAAListShowModal();
-
-void
-dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
-
-void
-ShowPCMetDialog();
+Widget *
+CreateWeatherConfigPanel();
 
 #endif

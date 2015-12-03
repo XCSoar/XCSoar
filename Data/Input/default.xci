@@ -877,10 +877,18 @@ location=6
 
 mode=Info3
 type=key
-data=0
+data=8
 event=RepeatStatusMessage
 label=Message\nRepeat
 location=7
+
+mode=Info3
+type=key
+data=9
+event=Weather pc_met
+event=Mode default
+label=pc_met
+location=8
 
 # -------------
 # mode=Menu

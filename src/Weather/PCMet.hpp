@@ -21,21 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#ifndef XCSOAR_PCMET_HPP
+#define XCSOAR_PCMET_HPP
 
-#include "Weather/NOAAStore.hpp"
+#include <tchar.h>
 
-void
-dlgWeatherShowModal();
+struct PCMetSettings;
+class JobRunner;
+class Bitmap;
 
-void
-dlgNOAAListShowModal();
+namespace PCMet {
+  struct ImageArea {
+    const char *name;
+    const TCHAR *display_name;
+  };
 
-void
-dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
+  struct ImageType {
+    const char *uri;
+    const TCHAR *display_name;
 
-void
-ShowPCMetDialog();
+    const ImageArea *areas;
+  };
+
+  extern const ImageType image_types[];
+
+  Bitmap DownloadLatestImage(const char *type, const char *area,
+                             const PCMetSettings &settings,
+                             JobRunner &runner);
+};
 
 #endif

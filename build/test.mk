@@ -1824,6 +1824,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/ContestProfile.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
+	$(SRC)/Profile/WeatherProfile.cpp \
 	$(SRC)/Profile/MapProfile.cpp \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/Screen.cpp \

@@ -255,6 +255,9 @@ const char LiveTrack24Server[] = "LiveTrack24Server";
 const char LiveTrack24Username[] = "LiveTrack24Username";
 const char LiveTrack24Password[] = "LiveTrack24Password";
 
+const char PCMetUsername[] = "PCMetUsername";
+const char PCMetPassword[] = "PCMetPassword";
+
 const char EnableLocationMapItem[] = "EnableLocationMapItem";
 const char EnableArrivalAltitudeMapItem[] = "EnableArrivalAltitudeMapItem";
 

@@ -661,8 +661,17 @@ void
 InputEvents::eventWeather(const TCHAR *misc)
 {
 #ifdef HAVE_NOAA
-  if (StringIsEqual(misc, _T("list")))
+  if (StringIsEqual(misc, _T("list"))) {
     dlgNOAAListShowModal();
+    return;
+  }
+#endif
+
+#ifdef HAVE_PCMET
+  if (StringIsEqual(misc, _T("pc_met"))) {
+    ShowPCMetDialog();
+    return;
+  }
 #endif
 }
 

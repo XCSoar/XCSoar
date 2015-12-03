@@ -21,21 +21,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#ifndef XCSOAR_WEATHER_SETTINGS_HPP
+#define XCSOAR_WEATHER_SETTINGS_HPP
 
-#include "Weather/NOAAStore.hpp"
+#include "Weather/Features.hpp"
 
-void
-dlgWeatherShowModal();
+#ifdef HAVE_PCMET
 
-void
-dlgNOAAListShowModal();
+#include "Util/StaticString.hxx"
 
-void
-dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
+struct PCMetSettings {
+  StaticString<64> username;
+  StaticString<64> password;
 
-void
-ShowPCMetDialog();
+  void SetDefaults() {
+    username.clear();
+    password.clear();
+  }
+};
+
+#endif
+
+struct WeatherSettings {
+#ifdef HAVE_PCMET
+  PCMetSettings pcmet;
+#endif
+
+  void SetDefaults() {
+#ifdef HAVE_PCMET
+    pcmet.SetDefaults();
+#endif
+  }
+};
 
 #endif

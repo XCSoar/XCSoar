@@ -86,4 +86,5 @@ ComputerSettings::SetDefaults()
 #ifdef HAVE_TRACKING
   tracking.SetDefaults();
 #endif
+  weather.SetDefaults();
 }

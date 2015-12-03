@@ -21,21 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#include "WeatherProfile.hpp"
+#include "Map.hpp"
+#include "ProfileKeys.hpp"
+#include "Weather/Settings.hpp"
 
-#include "Weather/NOAAStore.hpp"
+#ifdef HAVE_PCMET
 
-void
-dlgWeatherShowModal();
-
-void
-dlgNOAAListShowModal();
-
-void
-dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
-
-void
-ShowPCMetDialog();
+namespace Profile {
+  static void Load(const ProfileMap &map, PCMetSettings &settings) {
+    map.Get(ProfileKeys::PCMetUsername, settings.username);
+    map.Get(ProfileKeys::PCMetPassword, settings.password);
+  }
+}
 
 #endif
+
+void
+Profile::Load(const ProfileMap &map, WeatherSettings &settings)
+{
+#ifdef HAVE_PCMET
+  Load(map, settings.pcmet);
+#endif
+}

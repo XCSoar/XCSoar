@@ -74,6 +74,10 @@ Copyright_License {
 #include "Panels/TrackingConfigPanel.hpp"
 #endif
 
+#ifdef HAVE_PCMET
+#include "Panels/WeatherConfigPanel.hpp"
+#endif
+
 #include <assert.h>
 
 static unsigned current_page;
@@ -136,6 +140,9 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
+#endif
+#ifdef HAVE_PCMET
+  { _T("Weather"), CreateWeatherConfigPanel },
 #endif
   { nullptr, nullptr }
 };

@@ -108,6 +108,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/WeatherConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
@@ -145,6 +146,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Weather/PCMetDialog.cpp \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp
 endif
@@ -581,6 +583,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Screen.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
+	$(SRC)/Profile/WeatherProfile.cpp \
 	$(SRC)/Profile/SystemProfile.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/RouteProfile.cpp \
@@ -739,6 +742,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Repository/Glue.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
+	$(SRC)/Weather/PCMet.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAAFormatter.cpp \

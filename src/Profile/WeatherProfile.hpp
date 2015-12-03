@@ -21,21 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#ifndef XCSOAR_WEATHER_PROFILE_HPP
+#define XCSOAR_WEATHER_PROFILE_HPP
 
-#include "Weather/NOAAStore.hpp"
+struct WeatherSettings;
+class ProfileMap;
 
-void
-dlgWeatherShowModal();
-
-void
-dlgNOAAListShowModal();
-
-void
-dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
-
-void
-ShowPCMetDialog();
+namespace Profile {
+  void Load(const ProfileMap &map, WeatherSettings &settings);
+};
 
 #endif

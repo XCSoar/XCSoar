@@ -30,6 +30,7 @@ Copyright_License {
 #include "Engine/Contest/Settings.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
+#include "Weather/Settings.hpp"
 #include "NMEA/Validity.hpp"
 #include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
@@ -207,6 +208,8 @@ struct ComputerSettings {
 #ifdef HAVE_TRACKING
   TrackingSettings tracking;
 #endif
+
+  WeatherSettings weather;
 
   void SetDefaults();
 };
