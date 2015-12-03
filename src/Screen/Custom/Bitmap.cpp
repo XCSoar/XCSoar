@@ -62,16 +62,20 @@ Bitmap::Load(ConstBuffer<void> buffer, Type type)
   return Load(uncompressed, type);
 }
 
+static UncompressedImage
+DecompressImageFile(Path path)
+{
+#ifdef USE_LIBTIFF
+  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff")))
+    return LoadTiff(path);
+#endif
+
+  return LoadJPEGFile(path);
+}
+
 bool
 Bitmap::LoadFile(Path path)
 {
-  const UncompressedImage uncompressed =
-#ifdef USE_LIBTIFF
-    path.MatchesExtension(_T(".tif")) ||
-    path.MatchesExtension(_T(".tiff"))
-    ? LoadTiff(path)
-    :
-#endif
-    LoadJPEGFile(path);
-  return Load(uncompressed);
+  const UncompressedImage uncompressed = DecompressImageFile(path);
+  return uncompressed.IsVisible() && Load(uncompressed);
 }
