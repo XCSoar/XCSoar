@@ -22,6 +22,7 @@ LUA_SOURCES = \
 	$(SRC)/Lua/Geo.cpp \
 	$(SRC)/Lua/Map.cpp \
 	$(SRC)/Lua/Blackboard.cpp \
+	$(SRC)/Lua/Airspace.cpp \
 	$(SRC)/Lua/Dialogs.cpp \
 	$(SRC)/Lua/Legacy.cpp \
 	$(SRC)/Lua/Full.cpp \

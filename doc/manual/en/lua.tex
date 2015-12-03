@@ -120,6 +120,8 @@ contains the following names:
   \hline
   \verb|map| & The map view. \\
   \hline
+  \verb|airspace| & Access to airspace data. \\
+  \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
 \end{tabular}
 \end{maxipage}
@@ -244,6 +246,37 @@ pan location). \\
 
 \verb|show()| & Show the map; disable thermal assistant or other
 widgets replacing the map view. \\
+
+\end{tabular}
+\end{maxipage}
+
+\subsection{Airspace}
+
+The Airspace provides access to airspace data, such as name / distance
+to the next airspace.
+
+The following attributes are provided by \verb|xcsoar.airspace|:
+
+\begin{maxipage}
+\begin{tabular}{l|p{12cm}}
+Name & Description \\
+\hline\hline
+
+\verb|nearest_vertical_distance| & The vertical distance to the next airspace
+$[{m}]$.\\
+
+\hline
+
+\verb|nearest_vertical_name| & The name of the next vertical airspace. \\
+
+\hline
+
+\verb|nearest_horizontal_distance| & The horizontal distance to the next airspace 
+$[{m}]$. \\
+
+\hline
+
+\verb|nearest_horizontal_name| & The name of the next horizontal airspace. \\
 
 \end{tabular}
 \end{maxipage}
