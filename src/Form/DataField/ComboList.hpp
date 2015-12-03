@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
+#include "Util/AllocatedString.hxx"
 #include "Util/StaticArray.hxx"
 
 #include <utility>
@@ -38,30 +39,18 @@ public:
     static constexpr int DOWNLOAD = -800003;
 
     int int_value;
-    TCHAR *string_value;
-    TCHAR *display_string;
-    TCHAR *help_text;
+    AllocatedString<TCHAR> string_value;
+    AllocatedString<TCHAR> display_string;
+    AllocatedString<TCHAR> help_text;
 
     Item(int _int_value, const TCHAR *_string_value,
          const TCHAR *_display_string, const TCHAR *_help_text = nullptr);
-    ~Item();
 
     Item(const Item &other) = delete;
     Item &operator=(const Item &other) = delete;
 
-    Item(Item &&src)
-      :int_value(src.int_value), string_value(src.string_value),
-       display_string(src.display_string), help_text(src.help_text) {
-      src.string_value = src.display_string = src.help_text = nullptr;
-    }
-
-    Item &operator=(Item &&src) {
-      int_value = src.int_value;
-      std::swap(string_value, src.string_value);
-      std::swap(display_string, src.display_string);
-      std::swap(help_text, src.help_text);
-      return *this;
-    }
+    Item(Item &&src) = default;
+    Item &operator=(Item &&src) = default;
 
     friend void swap(Item &a, Item &b) {
       std::swap(a.int_value, b.int_value);

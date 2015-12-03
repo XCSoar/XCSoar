@@ -72,7 +72,7 @@ SelectLuaFile(const TCHAR *path)
     if (i < 0)
       return nullptr;
 
-    return Path(visitor.combo_list[i].string_value);
+    return Path(visitor.combo_list[i].string_value.c_str());
   } else if (StringEndsWith(path, _T(".lua"))) {
     /* *.lua file specified: run this file */
     return Path(path).IsAbsolute()

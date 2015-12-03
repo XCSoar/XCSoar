@@ -376,7 +376,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
   }
 #endif
 
-  df.SetFromCombo(item.int_value, item.string_value);
+  df.SetFromCombo(item.int_value, item.string_value.c_str());
   return true;
 }
 

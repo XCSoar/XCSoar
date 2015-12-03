@@ -47,15 +47,15 @@ public:
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned i) override {
-    row_renderer.DrawTextRow(canvas, rc, combo_list[i].display_string);
+    row_renderer.DrawTextRow(canvas, rc, combo_list[i].display_string.c_str());
   }
 };
 
 static const TCHAR*
 OnItemHelp(unsigned i)
 {
-  if ((*ComboListPopup)[i].help_text)
-    return (*ComboListPopup)[i].help_text;
+  if (!(*ComboListPopup)[i].help_text.IsNull())
+    return (*ComboListPopup)[i].help_text.c_str();
 
   return _T("");
 }
@@ -102,12 +102,12 @@ ComboPicker(const TCHAR *caption, DataField &df,
     if (item.int_value == ComboList::Item::NEXT_PAGE) {
       // we're last in list and the want more past end of list so select last real list item and reopen
       // we'll reopen, so don't call xcsoar data changed routine yet
-      reference = buffer = combo_list[idx - 1].string_value;
+      reference = buffer = combo_list[idx - 1].string_value.c_str();
     } else if (item.int_value == ComboList::Item::PREVIOUS_PAGE) {
       // same as above but lower items needed
-      reference = buffer = combo_list[idx + 1].string_value;
+      reference = buffer = combo_list[idx + 1].string_value.c_str();
     } else {
-      df.SetFromCombo(item.int_value, item.string_value);
+      df.SetFromCombo(item.int_value, item.string_value.c_str());
       return true;
     }
   } // loop reopen combo if <<More>>  or <<Less>> picked

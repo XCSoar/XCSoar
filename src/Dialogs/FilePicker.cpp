@@ -65,7 +65,7 @@ FilePicker(const TCHAR *caption, FileDataField &df,
     return false;
 
   const ComboList::Item &item = combo_list[i];
-  df.SetFromCombo(item.int_value, item.string_value);
+  df.SetFromCombo(item.int_value, item.string_value.c_str());
   return true;
 }
 

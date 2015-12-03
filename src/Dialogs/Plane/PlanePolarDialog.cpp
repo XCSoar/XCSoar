@@ -210,7 +210,7 @@ PlanePolarWidget::ListClicked()
 
   plane.polar_shape = item.ToPolarShape();
 
-  plane.polar_name = list[result].string_value;
+  plane.polar_name = list[result].string_value.c_str();
 
   if (item.contest_handicap > 0)
     plane.handicap = item.contest_handicap;
