@@ -27,8 +27,12 @@ Copyright_License {
 #include <stddef.h>
 
 class UncompressedImage;
+class Path;
 
 UncompressedImage
 LoadPNG(const void *data, size_t size);
+
+UncompressedImage
+LoadPNG(Path path);
 
 #endif

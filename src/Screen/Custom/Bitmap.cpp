@@ -70,6 +70,9 @@ DecompressImageFile(Path path)
     return LoadTiff(path);
 #endif
 
+  if (path.MatchesExtension(_T(".png")))
+    return LoadPNG(path);
+
   return LoadJPEGFile(path);
 }
 

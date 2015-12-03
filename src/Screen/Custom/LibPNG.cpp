@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "LibPNG.hpp"
 #include "UncompressedImage.hpp"
+#include "OS/Path.hpp"
+#include "OS/FileMapping.hpp"
 
 #include <png.h>
 
@@ -142,4 +144,14 @@ LoadPNG(const void *data, size_t size)
   png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 
   return result;
+}
+
+UncompressedImage
+LoadPNG(Path path)
+{
+  FileMapping map(path);
+  if (map.error())
+    return UncompressedImage::Invalid();
+
+  return LoadPNG(map.data(), map.size());
 }
