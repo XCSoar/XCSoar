@@ -141,7 +141,7 @@ DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
   TCHAR a[edit_format.capacity()], b[display_format.capacity()];
   _stprintf(a, edit_format, (double)value);
   _stprintf(b, display_format, (double)value, unit.c_str());
-  combo_list.Append(combo_list.size(), a, b);
+  combo_list.Append(a, b);
 }
 
 ComboList

@@ -343,7 +343,7 @@ FileDataField::CreateComboList(const TCHAR *reference) const
       display_string = buffer;
     }
 
-    combo_list.Append(i, display_string);
+    combo_list.Append(display_string);
   }
 
   combo_list.current_index = current_index;

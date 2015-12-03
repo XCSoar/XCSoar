@@ -49,7 +49,7 @@ public:
   ComboList combo_list;
 
   void Visit(Path path, Path filename) override {
-    combo_list.Append(combo_list.size(), path.c_str(), filename.c_str());
+    combo_list.Append(path.c_str(), filename.c_str());
   }
 };
 

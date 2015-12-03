@@ -94,8 +94,18 @@ public:
     return i;
   }
 
+  unsigned Append(const TCHAR *string_value,
+                  const TCHAR *display_string,
+                  const TCHAR *help_text = nullptr) {
+    return Append(items.size(), string_value, display_string, help_text);
+  }
+
   unsigned Append(int int_value, const TCHAR *string_value) {
     return Append(int_value, string_value, string_value);
+  }
+
+  unsigned Append(const TCHAR *string_value) {
+    return Append(string_value, string_value);
   }
 
   void Sort();
