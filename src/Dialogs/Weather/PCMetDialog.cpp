@@ -61,8 +61,11 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
 
   Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
                                              settings, runner);
-  if (!bitmap.IsDefined())
+  if (!bitmap.IsDefined()) {
+    ShowMessageBox(_("Failed to download file."),
+                   _T("pc_met"), MB_OK);
     return;
+  }
 
   BitmapDialog(bitmap);
 }
