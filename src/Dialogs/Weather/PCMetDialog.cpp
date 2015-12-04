@@ -51,6 +51,23 @@ BitmapDialog(const Bitmap &bitmap)
   dialog.StealWidget();
 }
 
+static void
+BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
+{
+  const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
+
+  DialogJobRunner runner(UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
+                         _("Download"), true);
+
+  Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
+                                             settings, runner);
+  if (!bitmap.IsDefined())
+    return;
+
+  BitmapDialog(bitmap);
+}
+
 static const PCMet::ImageType *
 PickImageType()
 {
@@ -95,16 +112,7 @@ ShowPCMetDialog()
   if (image_area == nullptr)
     return;
 
-  DialogJobRunner runner(UIGlobals::GetMainWindow(),
-                         UIGlobals::GetDialogLook(),
-                         _("Download"), true);
-
-  Bitmap bitmap = PCMet::DownloadLatestImage(image_type->uri, image_area->name,
-                                             settings, runner);
-  if (!bitmap.IsDefined())
-    return;
-
-  BitmapDialog(bitmap);
+  BitmapDialog(*image_type, *image_area);
 }
 
 #else
