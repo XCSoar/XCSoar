@@ -27,8 +27,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/ListWidget.hpp"
-#include "Renderer/TextRowRenderer.hpp"
+#include "Widget/TextListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -53,7 +52,7 @@ Copyright_License {
 #endif
 
 class ProfileListWidget final
-  : public ListWidget, private ActionListener {
+  : public TextListWidget, private ActionListener {
 
   struct ListItem {
     StaticString<32> name;
@@ -94,8 +93,6 @@ class ProfileListWidget final
 
   std::vector<ListItem> list;
 
-  TextRowRenderer row_renderer;
-
 public:
   ProfileListWidget(bool _select=false):select(_select) {}
 
@@ -126,12 +123,12 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
 
 protected:
-  /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  /* virtual methods from TextListWidget */
+  const TCHAR *GetRowText(unsigned i) const override {
+    return list[i].name;
+  }
 
   /* virtual methods from ListCursorHandler */
   virtual bool CanActivateItem(unsigned index) const override {
@@ -202,24 +199,8 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
 void
 ProfileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc,
-             row_renderer.CalculateLayout(*look.list.font));
+  TextListWidget::Prepare(parent, rc);
   UpdateList();
-}
-
-void
-ProfileListWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
-void
-ProfileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
-{
-  assert(i < list.size());
-
-  row_renderer.DrawTextRow(canvas, rc, list[i].name);
 }
 
 inline void
