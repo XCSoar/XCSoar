@@ -36,55 +36,9 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
-#include "Widget/WindowWidget.hpp"
+#include "Widget/ViewImageWidget.hpp"
 #include "Weather/PCMet.hpp"
 #include "Interface.hpp"
-
-class ViewImageWidget : public WindowWidget {
-  const Bitmap &bitmap;
-  WndOwnerDrawFrame view;
-
-public:
-  explicit ViewImageWidget(const Bitmap &_bitmap)
-    :bitmap(_bitmap) {}
-
-protected:
-  /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
-    WindowStyle hidden;
-    hidden.Hide();
-
-    view.Create(parent, rc, hidden,
-                [this](Canvas &canvas, const PixelRect &rc){
-                  OnImagePaint(canvas, rc);
-                });
-    SetWindow(&view);
-  }
-
-  void Unprepare() override {
-    view.Destroy();
-  }
-
-private:
-  void OnImagePaint(Canvas &canvas, const PixelRect &rc) {
-    canvas.ClearWhite();
-
-    const PixelSize bitmap_size = bitmap.GetSize();
-    const PixelSize window_size(rc.right - rc.left, rc.bottom - rc.top);
-
-    PixelSize fit_size(window_size.cx,
-                       window_size.cx * bitmap_size.cy / bitmap_size.cx);
-    if (fit_size.cy > window_size.cy) {
-      fit_size.cy = window_size.cy;
-      fit_size.cx = window_size.cy * bitmap_size.cx / bitmap_size.cy;
-    }
-
-    canvas.Stretch((rc.left + rc.right - fit_size.cx) / 2,
-                   (rc.top + rc.bottom - fit_size.cy) / 2,
-                   fit_size.cx, fit_size.cy,
-                   bitmap);
-  }
-};
 
 static void
 BitmapDialog(const Bitmap &bitmap)
