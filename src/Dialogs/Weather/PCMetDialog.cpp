@@ -29,13 +29,12 @@ Copyright_License {
 #ifdef HAVE_PCMET
 
 #include "UIGlobals.hpp"
-#include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/JobDialog.hpp"
-#include "Form/Draw.hpp"
-#include "Form/DataField/ComboList.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/TextListWidget.hpp"
 #include "Widget/ViewImageWidget.hpp"
 #include "Weather/PCMet.hpp"
 #include "Interface.hpp"
@@ -68,31 +67,85 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
   BitmapDialog(bitmap);
 }
 
-static const PCMet::ImageType *
-PickImageType()
-{
-  ComboList combo_list;
-  for (const auto *i = PCMet::image_types; i->uri != nullptr; ++i)
-    combo_list.Append(i->display_name);
+class ImageAreaListWidget final : public TextListWidget {
+  const PCMet::ImageType *type = nullptr;
+  const PCMet::ImageArea *areas = nullptr;
 
-  int i = ComboPicker(_T("Pick an image type"), combo_list);
-  return i >= 0
-    ? &PCMet::image_types[i]
-    : nullptr;
-}
+public:
+  void SetType(const PCMet::ImageType *_type) {
+    if (_type == type)
+      return;
 
-static const PCMet::ImageArea *
-PickImageArea(const PCMet::ImageType &type)
-{
-  ComboList combo_list;
-  for (const auto *i = type.areas; i->name != nullptr; ++i)
-    combo_list.Append(i->display_name);
+    type = _type;
+    areas = type != nullptr ? type->areas : nullptr;
 
-  int i = ComboPicker(_T("Pick an area"), combo_list);
-  return i >= 0
-    ? &type.areas[i]
-    : nullptr;
-}
+    unsigned n = 0;
+    if (areas != nullptr)
+      while (areas[n].name != nullptr)
+        ++n;
+
+    auto &list_control = GetList();
+    list_control.SetLength(n);
+    list_control.Invalidate();
+  }
+
+protected:
+  /* virtual methods from TextListWidget */
+  const TCHAR *GetRowText(unsigned i) const override {
+    return areas[i].display_name;
+  }
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) override {
+    BitmapDialog(*type, areas[index]);
+  }
+};
+
+class ImageTypeListWidget final : public TextListWidget {
+  ImageAreaListWidget &area_list;
+
+public:
+  explicit ImageTypeListWidget(ImageAreaListWidget &_area_list)
+    :area_list(_area_list) {}
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
+      TextListWidget::Prepare(parent, rc);
+
+      unsigned n = 0;
+      while (PCMet::image_types[n].uri != nullptr)
+        ++n;
+      GetList().SetLength(n);
+  }
+
+  void Show(const PixelRect &rc) override {
+    TextListWidget::Show(rc);
+    area_list.SetType(&PCMet::image_types[GetList().GetCursorIndex()]);
+  }
+
+protected:
+  /* virtual methods from TextListWidget */
+  const TCHAR *GetRowText(unsigned i) const override {
+    return PCMet::image_types[i].display_name;
+  }
+
+  /* virtual methods from ListCursorHandler */
+  virtual void OnCursorMoved(unsigned index) {
+    area_list.SetType(&PCMet::image_types[index]);
+  }
+
+  virtual bool CanActivateItem(unsigned index) const override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) override {
+    area_list.SetFocus();
+  }
+};
 
 void
 ShowPCMetDialog()
@@ -104,15 +157,16 @@ ShowPCMetDialog()
     return;
   }
 
-  const auto *image_type = PickImageType();
-  if (image_type == nullptr)
-    return;
+  auto *area_widget = new ImageAreaListWidget();
+  auto *type_widget = new ImageTypeListWidget(*area_widget);
 
-  const auto *image_area = PickImageArea(*image_type);
-  if (image_area == nullptr)
-    return;
+  TwoWidgets widget(type_widget, area_widget, false);
 
-  BitmapDialog(*image_type, *image_area);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _T("pc_met"), &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
 
 #else
