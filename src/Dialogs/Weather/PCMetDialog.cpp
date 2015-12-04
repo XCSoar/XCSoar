@@ -137,7 +137,7 @@ protected:
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) {
+  void OnCursorMoved(unsigned index) override {
     area_list.SetType(&PCMet::image_types[index]);
   }
 
