@@ -26,16 +26,22 @@
 
 #include <algorithm>
 
+static constexpr inline unsigned
+Distance1D(int a1, int a2, int b1, int b2)
+{
+  return std::max(0, std::min(b1 - a2, a1 - b2));
+}
+
 unsigned
 FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 {
   if (Overlaps(f))
     return 0;
 
-  int dx = std::max(0, std::min(f.lower_left.x - upper_right.x,
-                                lower_left.x - f.upper_right.x));
-  int dy = std::max(0, std::min(f.lower_left.y - upper_right.y,
-                                lower_left.y - f.upper_right.y));
+  unsigned dx = Distance1D(lower_left.x, upper_right.x,
+                           f.lower_left.x, f.upper_right.x);
+  unsigned dy = Distance1D(lower_left.y, upper_right.y,
+                           f.lower_left.y, f.upper_right.y);
 
   return ihypot(dx, dy);
 }
