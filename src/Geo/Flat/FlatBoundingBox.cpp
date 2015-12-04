@@ -23,6 +23,7 @@
 #include "FlatBoundingBox.hpp"
 #include "FlatRay.hpp"
 #include "Math/FastMath.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 
@@ -34,6 +35,17 @@ Distance1D(int a1, int a2, int b1, int b2)
     : (a1 >= b2
        ? a1 - b2 /* A is right of B */
        : 0); /* A and B overlap */
+}
+
+unsigned
+FlatBoundingBox::SquareDistanceTo(FlatGeoPoint p) const
+{
+  if (IsInside(p))
+    return 0;
+
+  unsigned dx = Distance1D(lower_left.x, upper_right.x, p.x, p.x);
+  unsigned dy = Distance1D(lower_left.y, upper_right.y, p.y, p.y);
+  return Square(dx) + Square(dy);
 }
 
 unsigned

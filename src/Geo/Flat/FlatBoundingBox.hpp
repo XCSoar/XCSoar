@@ -104,6 +104,9 @@ struct FlatBoundingBox
     return GetTop() - GetBottom();
   }
 
+  gcc_pure
+  unsigned SquareDistanceTo(FlatGeoPoint p) const;
+
   /**
    * Calculate non-overlapping distance from one box to another.
    *
