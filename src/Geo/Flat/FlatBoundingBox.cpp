@@ -29,15 +29,16 @@
 static constexpr inline unsigned
 Distance1D(int a1, int a2, int b1, int b2)
 {
-  return std::max(0, std::min(b1 - a2, a1 - b2));
+  return a2 < b1
+    ? b1 - a2 /* A is left of B */
+    : (a1 >= b2
+       ? a1 - b2 /* A is right of B */
+       : 0); /* A and B overlap */
 }
 
 unsigned
 FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 {
-  if (Overlaps(f))
-    return 0;
-
   unsigned dx = Distance1D(lower_left.x, upper_right.x,
                            f.lower_left.x, f.upper_right.x);
   unsigned dy = Distance1D(lower_left.y, upper_right.y,
