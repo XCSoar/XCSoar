@@ -42,7 +42,7 @@ struct AltitudeState;
 class AtmosphericPressure;
 class AirspaceAircraftPerformance;
 struct AirspaceInterceptSolution;
-class FlatBoundingBox;
+struct FlatBoundingBox;
 class FlatProjection;
 class AirspaceIntersectionVector;
 

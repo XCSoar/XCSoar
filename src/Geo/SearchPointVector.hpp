@@ -28,7 +28,7 @@
 #include <vector>
 
 class FlatRay;
-class FlatBoundingBox;
+struct FlatBoundingBox;
 class GeoBounds;
 
 class SearchPointVector: public std::vector<SearchPoint> {

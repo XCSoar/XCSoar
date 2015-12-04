@@ -43,7 +43,7 @@ class TaskDijkstraMax;
 struct Waypoint;
 class Waypoints;
 class AATPoint;
-class FlatBoundingBox;
+struct FlatBoundingBox;
 class GeoBounds;
 struct TaskSummary;
 struct TaskFactoryConstraints;

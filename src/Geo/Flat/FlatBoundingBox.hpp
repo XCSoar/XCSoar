@@ -34,12 +34,11 @@ class FlatRay;
  * a lower left and upper right bounding box.
  * For use in kd-tree storage of 2-d objects.
  */
-class FlatBoundingBox
+struct FlatBoundingBox
 {
-  FlatGeoPoint bb_ll;
-  FlatGeoPoint bb_ur;
+  FlatGeoPoint lower_left;
+  FlatGeoPoint upper_right;
 
-public:
   /** Non-initialising constructor. */
   FlatBoundingBox() = default;
 
@@ -51,7 +50,7 @@ public:
    */
   constexpr
   FlatBoundingBox(const FlatGeoPoint ll, const FlatGeoPoint ur)
-    :bb_ll(ll.x, ll.y), bb_ur(ur.x, ur.y) {}
+    :lower_left(ll.x, ll.y), upper_right(ur.x, ur.y) {}
 
   /**
    * Constructor given center point and radius
@@ -62,31 +61,31 @@ public:
    */
   constexpr
   FlatBoundingBox(const FlatGeoPoint loc, const unsigned range = 0)
-    :bb_ll(loc.x - range, loc.y - range),
-    bb_ur(loc.x + range, loc.y + range) {}
+    :lower_left(loc.x - range, loc.y - range),
+    upper_right(loc.x + range, loc.y + range) {}
 
   constexpr const FlatGeoPoint &GetLowerLeft() const {
-    return bb_ll;
+    return lower_left;
   }
 
   constexpr const FlatGeoPoint &GetUpperRight() const {
-    return bb_ur;
+    return upper_right;
   }
 
   constexpr int GetLeft() const {
-    return bb_ll.x;
+    return lower_left.x;
   }
 
   constexpr int GetTop() const {
-    return bb_ur.y;
+    return upper_right.y;
   }
 
   constexpr int GetRight() const {
-    return bb_ur.x;
+    return upper_right.x;
   }
 
   constexpr int GetBottom() const {
-    return bb_ll.y;
+    return lower_left.y;
   }
 
   constexpr FlatGeoPoint GetTopLeft() const {
@@ -153,35 +152,35 @@ public:
    * Expand the bounding box to include this point
    */
   void Expand(const FlatGeoPoint& p) {
-    bb_ll.x = std::min(bb_ll.x, p.x);
-    bb_ur.x = std::max(bb_ur.x, p.x);
-    bb_ll.y = std::min(bb_ll.y, p.y);
-    bb_ur.y = std::max(bb_ur.y, p.y);
+    lower_left.x = std::min(lower_left.x, p.x);
+    upper_right.x = std::max(upper_right.x, p.x);
+    lower_left.y = std::min(lower_left.y, p.y);
+    upper_right.y = std::max(upper_right.y, p.y);
   }
 
   /**
    * Expand the bounding box to include this bounding box
    */
   void Merge(const FlatBoundingBox& p) {
-    bb_ll.x = std::min(bb_ll.x, p.bb_ll.x);
-    bb_ur.x = std::max(bb_ur.x, p.bb_ur.x);
-    bb_ll.y = std::min(bb_ll.y, p.bb_ll.y);
-    bb_ur.y = std::max(bb_ur.y, p.bb_ur.y);
+    lower_left.x = std::min(lower_left.x, p.lower_left.x);
+    upper_right.x = std::max(upper_right.x, p.upper_right.x);
+    lower_left.y = std::min(lower_left.y, p.lower_left.y);
+    upper_right.y = std::max(upper_right.y, p.upper_right.y);
   }
 
   /**
    * Shift the bounding box by an offset p
    */
   void Shift(const FlatGeoPoint &offset) {
-    bb_ll = bb_ll + offset;
-    bb_ur = bb_ur + offset;
+    lower_left = lower_left + offset;
+    upper_right = upper_right + offset;
   }
 
   FlatBoundingBox &Grow(int delta) {
-    bb_ll.x -= delta;
-    bb_ll.y -= delta;
-    bb_ur.x += delta;
-    bb_ur.y += delta;
+    lower_left.x -= delta;
+    lower_left.y -= delta;
+    upper_right.x += delta;
+    upper_right.y += delta;
     return *this;
   }
 
@@ -189,10 +188,10 @@ public:
    * Expand the border by x amount
    */
   void ExpandByOne() {
-    --bb_ll.x;
-    ++bb_ur.x;
-    --bb_ll.y;
-    ++bb_ur.y;
+    --lower_left.x;
+    ++upper_right.x;
+    --lower_left.y;
+    ++upper_right.y;
   }
 };
 

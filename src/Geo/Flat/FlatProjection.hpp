@@ -30,7 +30,7 @@
 
 struct FlatPoint;
 struct FlatGeoPoint;
-class FlatBoundingBox;
+struct FlatBoundingBox;
 class GeoBounds;
 
 /**
