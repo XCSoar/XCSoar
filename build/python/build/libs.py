@@ -139,7 +139,7 @@ sdl2 = SDL2Project(
 
 lua = LuaProject(
     'http://www.lua.org/ftp/lua-5.3.2.tar.gz',
-    '797adacada8d85761c079390ff1d9961',
+    '33278c2ab5ee3c1a875be8d55c1ca2a1',
     'lib/liblua.a',
     patches=abspath('lib/lua/patches'),
 )
