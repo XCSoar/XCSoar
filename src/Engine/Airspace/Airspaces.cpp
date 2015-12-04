@@ -29,6 +29,8 @@
 #include "Geo/Flat/FlatRay.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
+#include <boost/geometry/geometries/linestring.hpp>
+
 #include <functional>
 
 #ifdef INSTRUMENT_TASK
@@ -36,19 +38,13 @@ extern unsigned n_queries;
 extern long count_intersections;
 #endif
 
-class AirspacePredicateVisitorAdapter {
-  const AirspacePredicate *predicate;
-  AirspaceVisitor *visitor;
+namespace bgi = boost::geometry::index;
 
-public:
-  AirspacePredicateVisitorAdapter(const AirspacePredicate &_predicate,
-                                  AirspaceVisitor &_visitor)
-    :predicate(&_predicate), visitor(&_visitor) {}
+struct AirspacePredicateAdapter {
+  const AirspacePredicate &predicate;
 
-  void operator()(Airspace as) {
-    AbstractAirspace &aas = as.GetAirspace();
-    if (predicate->operator()(aas))
-      visitor->Visit(aas);
+  bool operator()(const Airspace &as) const {
+    return predicate(as.GetAirspace());
   }
 };
 
@@ -61,10 +57,17 @@ Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
     // nothing to do
     return;
 
-  Airspace bb_target(location, task_projection);
+  const auto flat_location = task_projection.ProjectInteger(location);
   int projected_range = task_projection.ProjectRangeInteger(location, range);
-  AirspacePredicateVisitorAdapter adapter(predicate, visitor);
-  airspace_tree.visit_within_range(bb_target, -projected_range, adapter);
+  const FlatBoundingBox box(flat_location, projected_range);
+
+  const auto _begin =
+    airspace_tree.qbegin(bgi::intersects(box) &&
+                         bgi::satisfies(AirspacePredicateAdapter{predicate}));
+  const auto _end = airspace_tree.qend();
+
+  for (auto i = _begin; i != _end; ++i)
+    visitor.Visit(i->GetAirspace());
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -101,11 +104,19 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
     // nothing to do
     return;
 
-  const GeoPoint c = loc.Middle(end);
-  Airspace bb_target(c, task_projection);
-  int projected_range = task_projection.ProjectRangeInteger(c, loc.Distance(end) / 2);
+  // TODO: use StaticArray instead of std::vector
+  boost::geometry::model::linestring<FlatGeoPoint> line;
+  line.push_back(task_projection.ProjectInteger(loc));
+  line.push_back(task_projection.ProjectInteger(end));
+
   IntersectingAirspaceVisitorAdapter adapter(loc, end, task_projection, visitor);
-  airspace_tree.visit_within_range(bb_target, -projected_range, adapter);
+
+  const auto _begin =
+    airspace_tree.qbegin(bgi::intersects(line));
+  const auto _end = airspace_tree.qend();
+
+  for (auto i = _begin; i != _end; ++i)
+    adapter(*i);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -122,26 +133,24 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
     // nothing to do
     return AirspaceVector();
 
-  Airspace bb_target(location, task_projection);
-  int projected_range = task_projection.ProjectRangeInteger(location, range);
-
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
 
+  const auto flat_location = task_projection.ProjectInteger(location);
+  unsigned projected_range = task_projection.ProjectRangeInteger(location,
+                                                                 range);
+  const FlatBoundingBox box(flat_location, projected_range);
+
+  auto predicate = bgi::intersects(box) &&
+    bgi::satisfies(AirspacePredicateAdapter{condition}) &&
+    bgi::satisfies([&box, projected_range, &location, range](const Airspace &a){
+        return a.Distance(box) <= projected_range &&
+        (a.IsInside(location) || positive(range));
+      });
+
   AirspaceVector res;
-
-  std::function<void(const Airspace &)> visitor =
-    [&location, range, projected_range,
-     &condition, &bb_target, &res](const Airspace &v){
-    if (condition(v.GetAirspace()) &&
-        v.Distance(bb_target) <= unsigned(projected_range) &&
-        (v.IsInside(location) || positive(range)))
-      res.push_back(v);
-  };
-
-  airspace_tree.visit_within_range(bb_target, -projected_range, visitor);
-
+  airspace_tree.query(std::move(predicate), std::back_inserter(res));
   return res;
 }
 
@@ -149,7 +158,8 @@ Airspaces::AirspaceVector
 Airspaces::FindInside(const AircraftState &state,
                       const AirspacePredicate &condition) const
 {
-  Airspace bb_target(state.location, task_projection);
+  const auto flat_location = task_projection.ProjectInteger(state.location);
+  const FlatBoundingBox box(flat_location, flat_location);
 
   AirspaceVector vectors;
 
@@ -157,20 +167,13 @@ Airspaces::FindInside(const AircraftState &state,
   n_queries++;
 #endif
 
-  std::function<void(const Airspace &)> visitor =
-    [&state, &condition, &vectors](const Airspace &v){
+  auto predicate = bgi::intersects(box) &&
+    bgi::satisfies(AirspacePredicateAdapter{condition}) &&
+    bgi::satisfies([&state](const Airspace &a){
+        return a.IsInside(state);
+      });
 
-#ifdef INSTRUMENT_TASK
-    count_intersections++;
-#endif
-
-    if (condition(v.GetAirspace()) &&
-        v.IsInside(state))
-      vectors.push_back(v);
-  };
-
-  airspace_tree.visit_within_range(bb_target, 0, visitor);
-
+  airspace_tree.query(std::move(predicate), std::back_inserter(vectors));
   return vectors;
 }
 
@@ -187,7 +190,7 @@ Airspaces::Optimise()
     // task projection changed, so need to push items back onto stack
     // to re-build airspace envelopes
 
-    for (const auto &i : airspace_tree)
+    for (const auto &i : *this)
       tmp_as.push_back(&i.GetAirspace());
 
     airspace_tree.clear();
@@ -199,7 +202,6 @@ Airspaces::Optimise()
       airspace_tree.insert(as);
       tmp_as.pop_front();
     }
-    airspace_tree.optimise();
   }
 
   ++serial;
@@ -244,7 +246,7 @@ Airspaces::Clear()
 
   // delete items in the tree
   if (owns_children) {
-    for (const auto &i : airspace_tree) {
+    for (const auto &i : *this) {
       Airspace a = i;
       a.Destroy();
     }
@@ -272,7 +274,7 @@ Airspaces::SetFlightLevels(const AtmosphericPressure &press)
   if ((int)press.GetHectoPascal() != (int)qnh.GetHectoPascal()) {
     qnh = press;
 
-    for (auto &v : airspace_tree)
+    for (auto &v : *this)
       v.SetFlightLevel(press);
   }
 }
@@ -283,7 +285,7 @@ Airspaces::SetActivity(const AirspaceActivity mask)
   if (!mask.equals(activity_mask)) {
     activity_mask = mask;
 
-    for (auto &v : airspace_tree)
+    for (auto &v : *this)
       v.SetActivity(mask);
   }
 }
@@ -291,7 +293,7 @@ Airspaces::SetActivity(const AirspaceActivity mask)
 void
 Airspaces::ClearClearances()
 {
-  for (auto &v : airspace_tree)
+  for (auto &v : *this)
     v.ClearClearance();
 }
 
@@ -332,7 +334,7 @@ Airspaces::AsVector() const
   AirspaceVector v;
   v.reserve(airspace_tree.size());
 
-  for (const auto &i : airspace_tree)
+  for (const auto &i : *this)
     v.push_back(i);
 
   return v;
@@ -354,14 +356,12 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
   if (CompareSortedAirspaceVectors(contents_master, SortByPointer(AsVector())))
     return false;
 
-  for (auto &i : airspace_tree)
+  for (auto &i : *this)
     i.ClearClearance();
   airspace_tree.clear();
 
   for (const auto &i : contents_master)
     airspace_tree.insert(i);
-
-  airspace_tree.optimise();
 
   ++serial;
 
@@ -375,14 +375,16 @@ Airspaces::VisitInside(const GeoPoint &loc, AirspaceVisitor &visitor) const
     // nothing to do
     return;
 
-  Airspace bb_target(loc, task_projection);
+  const auto flat_location = task_projection.ProjectInteger(loc);
+  const FlatBoundingBox box(flat_location, flat_location);
 
-  std::function<void(const Airspace &)> visitor2 =
-    [&loc, &visitor](const Airspace &v){
-    const AbstractAirspace &as = v.GetAirspace();
-    if (as.Inside(loc))
-      visitor.Visit(as);
-  };
+  const auto _begin =
+    airspace_tree.qbegin(bgi::intersects(box) &&
+                         bgi::satisfies([&loc](const Airspace &as){
+                             return as.IsInside(loc);
+                           }));
+  const auto _end = airspace_tree.qend();
 
-  airspace_tree.visit_within_range(bb_target, 0, visitor2);
+  for (auto i = _begin; i != _end; ++i)
+    visitor.Visit(i->GetAirspace());
 }

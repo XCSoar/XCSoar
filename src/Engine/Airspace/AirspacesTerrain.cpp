@@ -26,7 +26,7 @@
 void 
 Airspaces::SetGroundLevels(const RasterTerrain &terrain)
 {
-  for (auto &v : airspace_tree) {
+  for (auto &v : *this) {
     // If we don't need the ground level we don't have to calculate it
     if (!v.NeedGroundLevel())
       continue;

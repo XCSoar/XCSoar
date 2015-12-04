@@ -26,9 +26,17 @@
 #include "Airspace.hpp"
 #include "Geo/Flat/BoundingBoxDistance.hpp"
 
-#include <kdtree++/kdtree.hpp>
+#include <boost/geometry/index/rtree.hpp>
+#include <boost/geometry/geometries/register/point.hpp>
+#include <boost/geometry/geometries/register/box.hpp>
 
 #include <assert.h>
+
+BOOST_GEOMETRY_REGISTER_POINT_2D(FlatGeoPoint, int,
+                                 boost::geometry::cs::cartesian, x, y)
+
+BOOST_GEOMETRY_REGISTER_BOX(FlatBoundingBox, FlatGeoPoint,
+                            lower_left, upper_right)
 
 /**
  * Abstract class for interface to #Airspaces database.
@@ -67,6 +75,14 @@ class AirspacesInterface {
     };
   };
 
+  struct AirspaceIndexable {
+    typedef FlatBoundingBox result_type;
+
+    result_type operator()(const Airspace &airspace) const {
+      return airspace;
+    }
+  };
+
   /**
    * Distance metric function object used by kd-tree.  This specialisation
    * allows for overlap; distance is zero with overlap, otherwise the minimum
@@ -97,12 +113,8 @@ public:
   /**
    * Type of KD-tree data structure for airspace container
    */
-  typedef KDTree::KDTree<4, 
-                         Airspace, 
-                         kd_get_bounds, kd_distance,
-                         std::less<kd_get_bounds::result_type>,
-                         SliceAllocator<KDTree::_Node<Airspace>, 256>
-                         > AirspaceTree;
+  typedef boost::geometry::index::rtree<Airspace, boost::geometry::index::rstar<16>,
+                                        AirspaceIndexable> AirspaceTree;
 };
 
 #endif

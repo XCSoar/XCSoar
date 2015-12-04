@@ -81,7 +81,7 @@ Main()
 
   LoadFiles(airspace_database);
 
-  Airspaces::AirspaceTree::const_iterator it = airspace_database.begin();
+  auto it = airspace_database.begin();
 
   AirspaceInterceptSolution ais;
   for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)

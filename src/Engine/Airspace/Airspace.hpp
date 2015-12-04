@@ -64,32 +64,6 @@ public:
            const FlatProjection &projection);
 
   /**
-   * Constructor for virtual airspaces for use in range-based
-   * intersection queries
-   *
-   * @param loc Location about which to create a virtual airspace envelope
-   * @param projection projection to be used for flat-earth representation
-   * @param range range in meters of virtual bounding box
-   *
-   * @return dummy airspace envelope
-   */
-  Airspace(const GeoPoint&loc, const FlatProjection &projection,
-           const fixed range=fixed(0));
-
-  /**
-   * Constructor for virtual airspaces for use in bounding-box
-   * specified intersection queries
-   *
-   * @param ll Lower left corner of bounding box
-   * @param ur Upper right corner of bounding box
-   * @param projection projection to be used for flat-earth representation
-   *
-   * @return dummy airspace envelope
-   */
-  Airspace(const GeoPoint &ll, const GeoPoint &ur,
-           const FlatProjection &projection);
-
-  /**
    * Checks whether an aircraft is inside the airspace.
    *
    * @param loc Location to check for enclosure

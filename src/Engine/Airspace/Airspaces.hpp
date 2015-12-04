@@ -40,28 +40,7 @@ class AirspaceIntersectionVisitor;
 /**
  * Container for airspaces using kd-tree representation internally for
  * fast geospatial lookups.
- *
- * Complexity analysis (with kdtree):
- *
- *    Find within range (k points found):
- *     O(n^(3/4) + k)
- *
- *    Find intersecting:
- *     O(n^(3/4) + k)
- *
- *    Find nearest:
- *     O(log(n))
- *
- *  Without kd-tree:
- *
- *    Find within range:
- *     O(n)
- *    Find intersecting:
- *     O(n)
- *    Find nearest:
- *     O(n)
  */
-
 class Airspaces : public AirspacesInterface {
   AtmosphericPressure qnh;
   AirspaceActivity activity_mask;
@@ -232,8 +211,8 @@ public:
    * @return First airspace in store
    */
   gcc_pure
-  AirspaceTree::const_iterator begin() const {
-    return airspace_tree.begin();
+  AirspaceTree::const_query_iterator begin() const {
+    return airspace_tree.qbegin(boost::geometry::index::satisfies([](const Airspace &){ return true; }));
   }
 
   /**
@@ -242,8 +221,8 @@ public:
    * @return End airspace in store
    */
   gcc_pure
-  AirspaceTree::const_iterator end() const {
-    return airspace_tree.end();
+  AirspaceTree::const_query_iterator end() const {
+    return airspace_tree.qend();
   }
 
   const FlatProjection &GetProjection() const {
