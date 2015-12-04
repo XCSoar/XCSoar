@@ -86,7 +86,7 @@ public:
      ray(projection->ProjectInteger(start), projection->ProjectInteger(end)),
      visitor(&_visitor) {}
 
-  void operator()(Airspace as) {
+  void operator()(const Airspace &as) {
     if (as.Intersects(ray) &&
         visitor->SetIntersections(as.Intersects(start, end, *projection)))
       visitor->Visit(as);
