@@ -132,9 +132,10 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
   AirspaceVector res;
 
   std::function<void(const Airspace &)> visitor =
-    [&location, range, &condition, &bb_target, &res](const Airspace &v){
+    [&location, range, projected_range,
+     &condition, &bb_target, &res](const Airspace &v){
     if (condition(v.GetAirspace()) &&
-        fixed(v.Distance(bb_target)) <= range &&
+        v.Distance(bb_target) <= unsigned(projected_range) &&
         (v.IsInside(location) || positive(range)))
       res.push_back(v);
   };
