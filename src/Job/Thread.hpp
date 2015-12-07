@@ -28,6 +28,7 @@ Copyright_License {
 #include "Operation/ThreadedOperationEnvironment.hpp"
 
 #include <atomic>
+#include <exception>
 
 class Job;
 
@@ -51,6 +52,8 @@ class JobThread : protected Thread, protected ThreadedOperationEnvironment {
    */
   bool was_running;
 
+  std::exception_ptr exception;
+
 public:
   JobThread(OperationEnvironment &_env, Job &_job)
     :ThreadedOperationEnvironment(_env), job(_job),
@@ -58,7 +61,12 @@ public:
 
   bool Start();
 
-  using Thread::Join;
+  /**
+   * Wait until the thread finishes and rethrow exceptions that may
+   * have occurred there.
+   */
+  void Join();
+
   using ThreadedOperationEnvironment::Cancel;
 
 protected:

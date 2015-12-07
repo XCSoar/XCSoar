@@ -40,7 +40,15 @@ JobThread::Run()
   assert(!running.load(std::memory_order_relaxed));
 
   running.store(true, std::memory_order_relaxed);
-  job.Run(*this);
+
+  try {
+    job.Run(*this);
+  } catch (...) {
+    /* an exception was thrown by the Job: remember it, rethrow it in
+       the calling thread in Join() */
+    exception = std::current_exception();
+  }
+
   running.store(false, std::memory_order_relaxed);
 
   SendNotification();
@@ -55,4 +63,15 @@ JobThread::OnNotification()
     OnComplete();
     was_running = false;
   }
+}
+
+void
+JobThread::Join()
+{
+  Thread::Join();
+
+  if (exception)
+    /* rethrow the exception that was thrown by Job::Run() in the
+       calling thread */
+    std::rethrow_exception(std::move(exception));
 }
