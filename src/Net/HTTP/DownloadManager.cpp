@@ -280,13 +280,15 @@ DownloadManagerThread::Tick()
 
     const Item &item = queue.front();
     current_position = 0;
-    mutex.Unlock();
 
-    bool success = DownloadToFileTransaction(session, item.uri.c_str(),
-                                             LocalPath(item.path_relative.c_str()),
-                                             nullptr, *this);
+    bool success;
+    {
+      const ScopeUnlock unlock(mutex);
+      success = DownloadToFileTransaction(session, item.uri.c_str(),
+                                          LocalPath(item.path_relative.c_str()),
+                                          nullptr, *this);
+    }
 
-    mutex.Lock();
     current_size = current_position = -1;
     const Item copy(std::move(queue.front()));
     queue.pop_front();
