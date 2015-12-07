@@ -49,9 +49,7 @@ namespace Net {
 #ifdef HAVE_WININET
     friend class Connection;
     friend class Request;
-#endif
 
-#ifndef HAVE_CURL
     /**
      * Opens a session that can be used for
      * connections and registers the necessary callback.

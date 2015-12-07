@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "../Session.hpp"
 
-Net::Session::Session() {}
-
 bool
 Net::Session::Error() const
 {
