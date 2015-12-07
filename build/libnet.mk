@@ -45,7 +45,6 @@ ifeq ($(TARGET),ANDROID)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/HTTP/Java/Session.cpp \
 	$(SRC)/Net/HTTP/Java/Request.cpp
 endif
 

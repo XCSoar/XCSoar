@@ -64,8 +64,6 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password)
 
   // Open download session
   Net::Session session;
-  if (session.Error())
-    return 0;
 
   // Request the file
   char buffer[1024];
@@ -183,8 +181,6 @@ LiveTrack24::SendRequest(const char *url)
 {
   // Open download session
   Net::Session session;
-  if (session.Error())
-    return false;
 
   // Request the file
   Net::Request request(session, url, 3000);

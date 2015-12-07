@@ -25,6 +25,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
+#include "LogFile.hpp"
 #include "Util/Macros.hpp"
 
 #ifdef HAVE_LIVETRACK24
@@ -178,55 +179,59 @@ TrackingGlue::Tick()
 
   const ScopeUnlock unlock(mutex);
 
-  if (!flying) {
-    if (last_flying && state.HasSession()) {
-      /* landing: end tracking session */
-      LiveTrack24::EndTracking(state.session_id, state.packet_id);
-      state.ResetSession();
-      last_timestamp = 0;
-    }
+  try {
+    if (!flying) {
+      if (last_flying && state.HasSession()) {
+        /* landing: end tracking session */
+        LiveTrack24::EndTracking(state.session_id, state.packet_id);
+        state.ResetSession();
+        last_timestamp = 0;
+      }
 
-    /* don't track if not flying */
-    return;
-  }
-
-  const int64_t current_timestamp = date_time.ToUnixTimeUTC();
-
-  if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
-    /* time warp: create a new session */
-    LiveTrack24::EndTracking(state.session_id, state.packet_id);
-    state.ResetSession();
-  }
-
-  last_timestamp = current_timestamp;
-
-  if (!state.HasSession()) {
-    LiveTrack24::UserID user_id = 0;
-    if (!copy.username.empty() && !copy.password.empty())
-      user_id = LiveTrack24::GetUserID(copy.username, copy.password);
-
-    if (user_id == 0) {
-      copy.username.clear();
-      copy.password.clear();
-      state.session_id = LiveTrack24::GenerateSessionID();
-    } else {
-      state.session_id = LiveTrack24::GenerateSessionID(user_id);
-    }
-
-    if (!LiveTrack24::StartTracking(state.session_id, copy.username,
-                                    copy.password, tracking_interval,
-                                    MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                    settings.vehicle_name)) {
-      state.ResetSession();
+      /* don't track if not flying */
       return;
     }
 
-    state.packet_id = 2;
-  }
+    const int64_t current_timestamp = date_time.ToUnixTimeUTC();
 
-  LiveTrack24::SendPosition(state.session_id, state.packet_id++,
-                            location, altitude, ground_speed, track,
-                            current_timestamp);
+    if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
+      /* time warp: create a new session */
+      LiveTrack24::EndTracking(state.session_id, state.packet_id);
+      state.ResetSession();
+    }
+
+    last_timestamp = current_timestamp;
+
+    if (!state.HasSession()) {
+      LiveTrack24::UserID user_id = 0;
+      if (!copy.username.empty() && !copy.password.empty())
+        user_id = LiveTrack24::GetUserID(copy.username, copy.password);
+
+      if (user_id == 0) {
+        copy.username.clear();
+        copy.password.clear();
+        state.session_id = LiveTrack24::GenerateSessionID();
+      } else {
+        state.session_id = LiveTrack24::GenerateSessionID(user_id);
+      }
+
+      if (!LiveTrack24::StartTracking(state.session_id, copy.username,
+                                      copy.password, tracking_interval,
+                                      MapVehicleTypeToLivetrack24(settings.vehicleType),
+                                      settings.vehicle_name)) {
+        state.ResetSession();
+        return;
+      }
+
+      state.packet_id = 2;
+    }
+
+    LiveTrack24::SendPosition(state.session_id, state.packet_id++,
+                              location, altitude, ground_speed, track,
+                              current_timestamp);
+  } catch (const std::exception &exception) {
+    LogError("LiveTrack24 error", exception);
+  }
 }
 
 #endif

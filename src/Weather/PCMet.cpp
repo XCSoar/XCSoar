@@ -112,8 +112,6 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
            type, area);
 
   Net::Session session;
-  if (session.Error())
-    return Bitmap();
 
   // download the HTML page
   char buffer[65536];

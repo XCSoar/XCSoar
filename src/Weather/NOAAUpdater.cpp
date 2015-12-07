@@ -25,6 +25,9 @@ Copyright_License {
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
 #include "Net/HTTP/Session.hpp"
+#include "LogFile.hpp"
+
+#include <exception>
 
 namespace NOAAUpdater {
   static bool Update(NOAAStore::Item &item,
@@ -55,23 +58,34 @@ NOAAUpdater::Update(NOAAStore::Item &item,
 bool
 NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
 {
-  Net::Session session;
-  if (session.Error())
+  try {
+    Net::Session session;
+
+    bool result = true;
+    for (auto &i : store) {
+      try {
+        result = Update(i, session, runner) && result;
+      } catch (const std::exception &exception) {
+        LogError(exception);
+        result = false;
+      }
+    }
+
+    return result;
+  } catch (const std::exception &exception) {
+    LogError(exception);
     return false;
-
-  bool result = true;
-  for (auto &i : store)
-    result = Update(i, session, runner) && result;
-
-  return result;
+  }
 }
 
 bool
 NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
 {
-  Net::Session session;
-  if (session.Error())
+  try {
+    Net::Session session;
+    return Update(item, session, runner);
+  } catch (const std::exception &exception) {
+    LogError(exception);
     return false;
-
-  return Update(item, session, runner);
+  }
 }

@@ -62,10 +62,6 @@ namespace Net {
      * @return True if session was created successfully
      */
 #ifdef HAVE_CURL
-    bool Error() const {
-      return !multi.IsDefined();
-    }
-
     bool Add(CURL *easy) {
       return multi.Add(easy);
     }
@@ -83,8 +79,6 @@ namespace Net {
     CURLcode InfoRead(const CURL *easy) {
       return multi.InfoRead(easy);
     }
-#else
-    bool Error() const;
 #endif
   };
 }

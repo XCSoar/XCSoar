@@ -26,6 +26,7 @@ Copyright_License {
 #include "Net/HTTP/Init.hpp"
 #include "OS/ConvertPathName.hpp"
 
+#include <exception>
 #include <iostream>
 #include <stdio.h>
 
@@ -38,9 +39,7 @@ Download(const char *url, Path path)
 {
   cout << "Creating Session ... ";
   Net::Session session;
-  cout << (session.Error() ? "failed" : "done") << endl;
-  if (session.Error())
-    return false;
+  cout << "done" << endl;
 
   cout << "Creating Request ... ";
   Net::Request request(session, url);
@@ -83,12 +82,17 @@ main(int argc, char *argv[])
     return 1;
   }
 
-  Net::Initialise();
+  try {
+    Net::Initialise();
 
-  const char *url = argv[1];
-  Download(url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
+    const char *url = argv[1];
+    Download(url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
 
-  Net::Deinitialise();
+    Net::Deinitialise();
+  } catch (const std::exception &exception) {
+    cerr << exception.what() << endl;
+    return EXIT_FAILURE;
+  }
 
   return 0;
 }

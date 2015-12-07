@@ -24,6 +24,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Util/Error.hxx"
 
+#include <exception>
 #include <cstdarg>
 #include <cstdio>
 
@@ -54,6 +55,18 @@ LogFormat(const TCHAR *fmt, ...)
 }
 
 #endif
+
+void
+LogError(const std::exception &exception)
+{
+  LogFormat("%s", exception.what());
+}
+
+void
+LogError(const char *msg, const std::exception &exception)
+{
+  LogFormat("%s: %s", msg, exception.what());
+}
 
 void
 LogError(const Error &error)

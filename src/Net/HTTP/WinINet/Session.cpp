@@ -24,6 +24,8 @@ Copyright_License {
 #include "../Session.hpp"
 #include "../Request.hpp"
 
+#include <system_error>
+
 static void CALLBACK
 StatusCallback(HINTERNET hInternet,
                DWORD_PTR dwContext,
@@ -44,14 +46,10 @@ Net::Session::Session()
   // Get session handle
   handle.Set(::InternetOpenA("XCSoar", INTERNET_OPEN_TYPE_PRECONFIG, NULL,
                              NULL, INTERNET_FLAG_ASYNC));
-  if (handle.IsDefined())
-    handle.SetStatusCallback(StatusCallback);
-}
+  if (!handle.IsDefined())
+    throw std::system_error(std::error_code(::GetLastError(),
+                                            std::system_category()),
+                            "InternetOpenA() failed");
 
-bool
-Net::Session::Error() const
-{
-  // Error occured if either no handle was retrieved in the constructor
-  // or if the callback wasn't setup correctly
-  return !handle.IsDefined();
+  handle.SetStatusCallback(StatusCallback);
 }

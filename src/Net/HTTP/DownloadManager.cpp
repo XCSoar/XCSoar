@@ -110,6 +110,7 @@ Net::DownloadManager::Cancel(Path relative_path)
 #include "Operation/Operation.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileTransaction.hpp"
+#include "LogFile.hpp"
 
 #include <string>
 #include <list>
@@ -236,6 +237,10 @@ public:
       listener->OnDownloadComplete(relative_path, false);
   }
 
+private:
+  void ProcessQueue(Net::Session &session);
+  void FailQueue();
+
 protected:
   /* methods from class StandbyThread */
   void Tick() override;
@@ -269,11 +274,9 @@ DownloadToFileTransaction(Net::Session &session,
     transaction.Commit();
 }
 
-void
-DownloadManagerThread::Tick()
+inline void
+DownloadManagerThread::ProcessQueue(Net::Session &session)
 {
-  Net::Session session;
-
   while (!queue.empty() && !StandbyThread::IsStopped()) {
     assert(current_size == -1);
     assert(current_position == -1);
@@ -281,7 +284,7 @@ DownloadManagerThread::Tick()
     const Item &item = queue.front();
     current_position = 0;
 
-    bool success;
+    bool success = false;
     {
       const ScopeUnlock unlock(mutex);
       success = DownloadToFileTransaction(session, item.uri.c_str(),
@@ -295,6 +298,30 @@ DownloadManagerThread::Tick()
 
     for (auto *listener : listeners)
       listener->OnDownloadComplete(path_relative, success);
+  }
+}
+
+inline void
+DownloadManagerThread::FailQueue()
+{
+  while (!queue.empty() && !StandbyThread::IsStopped()) {
+    const AllocatedPath path_relative(std::move(queue.front().path_relative));
+    queue.pop_front();
+
+    for (auto *listener : listeners)
+      listener->OnDownloadComplete(path_relative, false);
+  }
+}
+
+void
+DownloadManagerThread::Tick()
+{
+  try {
+    Net::Session session;
+    ProcessQueue(session);
+  } catch (const std::exception &exception) {
+    LogError(exception);
+    FailQueue();
   }
 }
 

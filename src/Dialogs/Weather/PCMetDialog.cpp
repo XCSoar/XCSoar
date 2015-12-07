@@ -31,6 +31,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -59,15 +60,19 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
                          UIGlobals::GetDialogLook(),
                          _("Download"), true);
 
-  Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
-                                             settings, runner);
-  if (!bitmap.IsDefined()) {
-    ShowMessageBox(_("Failed to download file."),
-                   _T("pc_met"), MB_OK);
-    return;
-  }
+  try {
+    Bitmap bitmap = PCMet::DownloadLatestImage(type.uri, area.name,
+                                               settings, runner);
+    if (!bitmap.IsDefined()) {
+      ShowMessageBox(_("Failed to download file."),
+                     _T("pc_met"), MB_OK);
+      return;
+    }
 
-  BitmapDialog(bitmap);
+    BitmapDialog(bitmap);
+  } catch (const std::exception &exception) {
+    ShowError(exception, _T("pc_met"));
+  }
 }
 
 class ImageAreaListWidget final : public TextListWidget {
