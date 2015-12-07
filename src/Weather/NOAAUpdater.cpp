@@ -29,8 +29,8 @@ bool
 NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
 {
   bool result = true;
-  for (auto i = store.begin(), e = store.end(); i != e; ++i)
-    result = Update(*i, runner) && result;
+  for (auto &i : store)
+    result = Update(i, runner) && result;
 
   return result;
 }
