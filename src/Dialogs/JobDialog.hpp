@@ -58,7 +58,7 @@ public:
     :parent(_parent), dialog_look(_dialog_look),
      caption(_caption), cancellable(_cancellable) {}
 
-  virtual bool Run(Job &job);
+  bool Run(Job &job) override;
 };
 
 #endif
