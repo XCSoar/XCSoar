@@ -60,13 +60,12 @@ class DownloadProgress final : Timer, Net::DownloadListener, Notify {
   ThreadedOperationEnvironment env;
   const Path path_relative;
 
-  bool got_size, complete, success;
+  bool got_size = false, complete = false, success;
 
 public:
   DownloadProgress(ProgressDialog &_dialog,
                    const Path _path_relative)
-    :dialog(_dialog), env(_dialog), path_relative(_path_relative),
-     got_size(false), complete(false) {
+    :dialog(_dialog), env(_dialog), path_relative(_path_relative) {
     Timer::Schedule(1000);
     Net::DownloadManager::AddListener(*this);
   }
