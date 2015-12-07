@@ -211,7 +211,6 @@ endef
 
 # Example: $(eval $(call generate-abi,xcsoar))
 define generate-all-abis
-$(eval $(call generate-abi,$(1),armeabi,ANDROID))
 $(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7))
 $(eval $(call generate-abi,$(1),x86,ANDROID86))
 $(eval $(call generate-abi,$(1),mips,ANDROIDMIPS))

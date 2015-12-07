@@ -65,13 +65,8 @@ ifeq ($(TARGET),WIN64)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_IS_ARM = y
-  ifeq ($(DEBUG),n)
-    ARMV6 = y
-  else
-    # ARMv5 in the debug build, to allow installation on the emulator
-    ARMV5 = y
-  endif
+  # The default Android ABI is armeabi-v7a (ARMv7)
+  override TARGET = ANDROID7
 endif
 
 ifeq ($(TARGET),ANDROID7NEON)
@@ -450,16 +445,6 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(MIPS),y)
     LLVM_TARGET = mipsel-none-linux-android
-  endif
-
-  ifeq ($(ARMV5),y)
-    LLVM_TARGET = armv5te-none-linux-androideabi
-    TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
-  endif
-
-  ifeq ($(ARMV6),y)
-    LLVM_TARGET = armv6-none-linux-androideabi
-    TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
   endif
 
   ifeq ($(ARMV7),y)
