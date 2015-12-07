@@ -108,7 +108,7 @@ The package/namespace \verb|xcsoar| provides access to \xc.  It
 contains the following names:
 
 \begin{maxipage}
-\begin{tabular}{l|p{13cm}}
+\begin{tabularx}{1.9\textwidth}{l|X}
   Name & Description \\
   \hline
   \hline
@@ -123,7 +123,7 @@ contains the following names:
   \verb|airspace| & Access to airspace data. \\
   \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
-\end{tabular}
+\end{tabularx}
 \end{maxipage}
 
 \subsection{The Blackboard}
@@ -133,7 +133,7 @@ The blackboard provides access to sensor data, such as GPS location.
 The following attributes are provided by \verb|xcsoar.blackboard|:
 
 \begin{maxipage}
-\begin{tabular}{l|p{12cm}}
+\begin{tabularx}{1.9\textwidth}{l|X}
 Name & Description \\
 \hline\hline
 
@@ -222,7 +222,7 @@ $[{m \over s}]$. \\
 \verb|netto_vario| & The netto variometer value
 $[{m \over s}]$. \\
 
-\end{tabular}
+\end{tabularx}
 \end{maxipage}
 
 Any of these may be \verb|nil| if its value is not known, e.g. if
@@ -235,7 +235,7 @@ The map provides access to XCSoar's map view.
 The following attributes are provided by \verb|xcsoar.map|:
 
 \begin{maxipage}
-\begin{tabular}{l|p{12cm}}
+\begin{tabularx}{1.9\textwidth}{l|X}
 Name & Description \\
 \hline\hline
 
@@ -247,7 +247,7 @@ pan location). \\
 \verb|show()| & Show the map; disable thermal assistant or other
 widgets replacing the map view. \\
 
-\end{tabular}
+\end{tabularx}
 \end{maxipage}
 
 \subsection{Airspace}
@@ -258,7 +258,7 @@ to the next airspace.
 The following attributes are provided by \verb|xcsoar.airspace|:
 
 \begin{maxipage}
-\begin{tabular}{l|p{12cm}}
+\begin{tabularx}{1.9\textwidth}{l|X}
 Name & Description \\
 \hline\hline
 
@@ -278,7 +278,7 @@ $[{m}]$. \\
 
 \verb|nearest_horizontal_name| & The name of the next horizontal airspace. \\
 
-\end{tabular}
+\end{tabularx}
 \end{maxipage}
 
 \subsection{Timers}
@@ -296,7 +296,7 @@ end)
 The following methods are available in \verb|xcsoar.timer|:
 
 \begin{maxipage}
-\begin{tabular}{l|p{10cm}}
+\begin{tabularx}{1.9\textwidth}{l|X}
 Method & Description \\
 \hline\hline
 
@@ -311,7 +311,7 @@ it.  The period is a numeric value in seconds. \\
 
 \verb|schedule(period)| & Reschedule the timer. \\
 
-\end{tabular}
+\end{tabularx}
 \end{maxipage}
 
 \subsection{Legacy}
