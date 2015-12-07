@@ -25,6 +25,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
+#include "Operation/Operation.hpp"
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
 
@@ -179,11 +180,13 @@ TrackingGlue::Tick()
 
   const ScopeUnlock unlock(mutex);
 
+  QuietOperationEnvironment env;
+
   try {
     if (!flying) {
       if (last_flying && state.HasSession()) {
         /* landing: end tracking session */
-        LiveTrack24::EndTracking(state.session_id, state.packet_id);
+        LiveTrack24::EndTracking(state.session_id, state.packet_id, env);
         state.ResetSession();
         last_timestamp = 0;
       }
@@ -196,7 +199,7 @@ TrackingGlue::Tick()
 
     if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
       /* time warp: create a new session */
-      LiveTrack24::EndTracking(state.session_id, state.packet_id);
+      LiveTrack24::EndTracking(state.session_id, state.packet_id, env);
       state.ResetSession();
     }
 
@@ -205,7 +208,7 @@ TrackingGlue::Tick()
     if (!state.HasSession()) {
       LiveTrack24::UserID user_id = 0;
       if (!copy.username.empty() && !copy.password.empty())
-        user_id = LiveTrack24::GetUserID(copy.username, copy.password);
+        user_id = LiveTrack24::GetUserID(copy.username, copy.password, env);
 
       if (user_id == 0) {
         copy.username.clear();
@@ -218,7 +221,8 @@ TrackingGlue::Tick()
       if (!LiveTrack24::StartTracking(state.session_id, copy.username,
                                       copy.password, tracking_interval,
                                       MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                      settings.vehicle_name)) {
+                                      settings.vehicle_name,
+                                      env)) {
         state.ResetSession();
         return;
       }
@@ -228,7 +232,8 @@ TrackingGlue::Tick()
 
     LiveTrack24::SendPosition(state.session_id, state.packet_id++,
                               location, altitude, ground_speed, track,
-                              current_timestamp);
+                              current_timestamp,
+                              env);
   } catch (const std::exception &exception) {
     LogError("LiveTrack24 error", exception);
   }

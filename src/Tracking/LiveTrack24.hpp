@@ -30,7 +30,7 @@ Copyright_License {
 class Angle;
 struct BrokenDateTime;
 struct GeoPoint;
-class JobRunner;
+class OperationEnvironment;
 
 /**
  * API for the LiveTrack24.com server.
@@ -92,7 +92,8 @@ namespace LiveTrack24
    * @param password Case-insensitive password
    * @return 0 if userdata are incorrect, or else the userID of the user
    */
-  UserID GetUserID(const TCHAR *username, const TCHAR *password);
+  UserID GetUserID(const TCHAR *username, const TCHAR *password,
+                   OperationEnvironment &env);
 
   /** Generates a random session id */
   SessionID GenerateSessionID();
@@ -102,7 +103,8 @@ namespace LiveTrack24
   /** Sends the "start of track" packet to the tracking server */
   bool StartTracking(SessionID session, const TCHAR *username,
                      const TCHAR *password, unsigned tracking_interval,
-                     VehicleType vtype, const TCHAR *vname);
+                     VehicleType vtype, const TCHAR *vname,
+                     OperationEnvironment &env);
 
   /**
    * Sends a "gps point" packet to the tracking server
@@ -111,10 +113,12 @@ namespace LiveTrack24
    */
   bool SendPosition(SessionID session, unsigned packet_id,
                     GeoPoint position, unsigned altitude, unsigned ground_speed,
-                    Angle track, int64_t timestamp_utc);
+                    Angle track, int64_t timestamp_utc,
+                    OperationEnvironment &env);
 
   /** Sends the "end of track" packet to the tracking server */
-  bool EndTracking(SessionID session, unsigned packet_id);
+  bool EndTracking(SessionID session, unsigned packet_id,
+                   OperationEnvironment &env);
 
   /**
    * Set the tracking server
