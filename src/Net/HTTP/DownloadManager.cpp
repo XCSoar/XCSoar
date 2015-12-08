@@ -290,10 +290,10 @@ DownloadManagerThread::Tick()
     }
 
     current_size = current_position = -1;
-    const Item copy(std::move(queue.front()));
+    const AllocatedPath path_relative(std::move(queue.front().path_relative));
     queue.pop_front();
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadComplete(copy.path_relative, success);
+      (*i)->OnDownloadComplete(path_relative, success);
   }
 }
 
