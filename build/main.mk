@@ -686,6 +686,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cxx \
 	$(SRC)/Java/Object.cxx \
 	$(SRC)/Java/String.cxx \
+	$(SRC)/Java/Exception.cxx \
 	$(SRC)/Java/File.cxx \
 	$(SRC)/Java/InputStream.cxx \
 	$(SRC)/Java/URL.cxx \
