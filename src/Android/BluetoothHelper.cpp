@@ -108,11 +108,10 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
   if (j_name == nullptr)
     return nullptr;
 
-  char name[256];
-  Java::String::CopyTo(env, j_name, name, sizeof(name));
-  env->DeleteLocalRef(j_name);
+  std::string name = Java::String(env, j_name).ToString();
 
-  auto j = address_to_name.insert(std::make_pair(x_address, name));
+  auto j = address_to_name.insert(std::make_pair(std::move(x_address),
+                                                 std::move(name)));
   return j.first->second.c_str();
 }
 

@@ -29,6 +29,7 @@
 
 #include "String.hxx"
 #include "Util/StringUtil.hpp"
+#include "Util/ScopeExit.hxx"
 
 char *
 Java::String::CopyTo(JNIEnv *env, jstring value,
@@ -41,4 +42,21 @@ Java::String::CopyTo(JNIEnv *env, jstring value,
 	char *result = CopyString(buffer, p, max_size);
 	env->ReleaseStringUTFChars(value, p);
 	return result;
+}
+
+std::string
+Java::String::ToString(JNIEnv *env, jstring s)
+{
+	assert(env != nullptr);
+	assert(s != nullptr);
+
+	const char *p = env->GetStringUTFChars(s, nullptr);
+	if (p == nullptr)
+		return std::string();
+
+	AtScopeExit(env, s, p) {
+		env->ReleaseStringUTFChars(s, p);
+	};
+
+	return std::string(p);
 }

@@ -34,6 +34,8 @@
 
 #include <jni.h>
 
+#include <string>
+
 #include <stddef.h>
 
 namespace Java {
@@ -65,6 +67,12 @@ namespace Java {
 		 */
 		char *CopyTo(char *buffer, size_t max_size) {
 			return CopyTo(GetEnv(), Get(), buffer, max_size);
+		}
+
+		static std::string ToString(JNIEnv *env, jstring s);
+
+		std::string ToString() const {
+			return ToString(GetEnv(), Get());
 		}
 	};
 }
