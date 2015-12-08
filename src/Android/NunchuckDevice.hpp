@@ -33,7 +33,7 @@ Copyright_License {
 
 class NunchuckDevice final : private NunchuckListener {
   unsigned index;
-  Java::Object obj;
+  Java::GlobalObject obj;
 
   /**
    * Kept as sample, not used.

@@ -37,7 +37,7 @@ namespace Net {
 }
 
 class AndroidDownloadManager {
-  Java::Object object;
+  Java::GlobalObject object;
 
   /**
    * Protects the #listeners attribute.

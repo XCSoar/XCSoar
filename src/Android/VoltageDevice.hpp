@@ -36,7 +36,7 @@ Copyright_License {
 
 class VoltageDevice final : private VoltageListener {
   unsigned index;
-  Java::Object obj;
+  Java::GlobalObject obj;
   fixed offset;
   fixed factor;
   WindowFilter<16> voltage_filter[NUMBER_OF_VOLTAGES];

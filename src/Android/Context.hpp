@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Java/Object.hxx"
 
-class Context : public Java::Object {
+class Context : public Java::GlobalObject {
 public:
-  Context(JNIEnv *env, jobject obj):Java::Object(env, obj) {
+  Context(JNIEnv *env, jobject obj):Java::GlobalObject(env, obj) {
   }
 
   jobject GetSystemService(JNIEnv *env, jstring name);

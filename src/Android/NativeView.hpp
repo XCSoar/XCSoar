@@ -36,7 +36,7 @@ Copyright_License {
 
 class NativeView {
   JNIEnv *env;
-  Java::Object obj;
+  Java::GlobalObject obj;
 
   unsigned width, height;
   unsigned xdpi, ydpi;

@@ -32,7 +32,7 @@ Copyright_License {
 struct PixelSize;
 class FontDescription;
 
-class TextUtil : protected Java::Object {
+class TextUtil : protected Java::GlobalObject {
   static JNIEnv *env;
   static jmethodID midTextUtil, midGetFontMetrics, midGetTextBounds;
   static jmethodID midGetTextTextureGL;

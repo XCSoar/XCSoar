@@ -34,7 +34,7 @@ Copyright_License {
 
 class I2CbaroDevice final : private I2CbaroListener {
   unsigned index;
-  Java::Object obj;
+  Java::GlobalObject obj;
   DeviceConfig::PressureUse press_use;
   fixed pitot_offset;
   /**

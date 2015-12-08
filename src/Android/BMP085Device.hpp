@@ -33,7 +33,7 @@ Copyright_License {
 
 class BMP085Device final : private BMP085Listener {
   unsigned index;
-  Java::Object obj;
+  Java::GlobalObject obj;
 
   /**
    * This Kalman filter is used to smooth the pressure input.

@@ -56,8 +56,8 @@ public:
 
  private:
   // Java objects working with the GPS and the other sensors respectively.
-  Java::Object obj_InternalGPS_;
-  Java::Object obj_NonGPSSensors_;
+  Java::GlobalObject obj_InternalGPS_;
+  Java::GlobalObject obj_NonGPSSensors_;
   std::vector<int> subscribable_sensors_;
 
   InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj);

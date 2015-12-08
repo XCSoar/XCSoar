@@ -29,7 +29,7 @@ Copyright_License {
 
 class PortBridge;
 
-class IOIOHelper : protected Java::Object {
+class IOIOHelper : protected Java::GlobalObject {
 private:
   static Java::TrivialClass cls;
   static jmethodID ctor;
@@ -52,7 +52,7 @@ public:
   }
 
   jobject GetHolder() {
-    return Java::Object::Get();
+    return Java::GlobalObject::Get();
   }
 
   /**

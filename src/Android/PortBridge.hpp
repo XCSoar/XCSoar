@@ -31,7 +31,7 @@ Copyright_License {
 class PortListener;
 class DataHandler;
 
-class PortBridge : protected Java::Object {
+class PortBridge : protected Java::GlobalObject {
   static jmethodID close_method;
   static jmethodID setListener_method;
   static jmethodID setInputListener_method;

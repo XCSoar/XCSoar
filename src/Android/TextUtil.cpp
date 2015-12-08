@@ -58,7 +58,7 @@ TextUtil::Deinitialise(JNIEnv *env)
 }
 
 TextUtil::TextUtil(jobject _obj)
-  :Java::Object(env, _obj) {
+  :Java::GlobalObject(env, _obj) {
   // get height, ascent_height and capital_height
   assert(midGetFontMetrics);
   jintArray metricsArray = env->NewIntArray(5);

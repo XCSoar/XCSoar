@@ -31,7 +31,7 @@ class Context;
 class Vibrator {
   static jmethodID cancel_method, vibrate_method;
 
-  Java::Object object;
+  Java::GlobalObject object;
 
 public:
   /**
