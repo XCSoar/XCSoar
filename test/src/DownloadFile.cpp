@@ -34,7 +34,7 @@ Copyright_License {
 
 using namespace std;
 
-static bool
+static void
 Download(const char *url, Path path)
 {
   cout << "Creating Session ... ";
@@ -43,10 +43,7 @@ Download(const char *url, Path path)
 
   cout << "Creating Request ... ";
   Net::Request request(session, url);
-  if (!request.Send()) {
-    cout << "failed" << endl;
-    return false;
-  }
+  request.Send();
 
   cout << "done" << endl;
 
@@ -67,8 +64,6 @@ Download(const char *url, Path path)
     fclose(file);
 
   cout << "-------------------------------------------------" << endl;
-
-  return true;
 }
 
 int

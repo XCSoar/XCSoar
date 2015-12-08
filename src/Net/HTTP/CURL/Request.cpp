@@ -33,9 +33,6 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 {
   // XXX implement timeout
 
-  if (!handle.IsDefined())
-    return;
-
   char user_agent[32];
   snprintf(user_agent, 32, "XCSoar/%s", XCSoar_Version);
 
@@ -43,21 +40,14 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   handle.SetFailOnError(true);
   handle.SetWriteFunction(WriteCallback, this);
 
-  if (!handle.SetURL(url)) {
-    handle.Destroy();
-    return;
-  }
+  handle.SetURL(url);
 
-  if (!session.Add(handle.GetHandle())) {
-    handle.Destroy();
-    return;
-  }
+  session.Add(handle.GetHandle());
 }
 
 Net::Request::~Request()
 {
-  if (handle.IsDefined())
-    session.Remove(handle.GetHandle());
+  session.Remove(handle.GetHandle());
 
   curl_slist_free_all(request_headers);
 }
@@ -65,9 +55,6 @@ Net::Request::~Request()
 void
 Net::Request::AddHeader(const char *name, const char *value)
 {
-  if (!handle.IsDefined())
-    return;
-
   char buffer[4096];
   snprintf(buffer, sizeof(buffer), "%s: %s", name, value);
   request_headers = curl_slist_append(request_headers, buffer);
@@ -106,12 +93,9 @@ Net::Request::WriteCallback(char *ptr, size_t size, size_t nmemb,
   return request->ResponseData((const uint8_t *)ptr, size * nmemb);
 }
 
-bool
+void
 Net::Request::Send(unsigned _timeout_ms)
 {
-  if (!handle.IsDefined())
-    return false;
-
   if (request_headers != nullptr)
     handle.SetHeaders(request_headers);
 
@@ -120,19 +104,19 @@ Net::Request::Send(unsigned _timeout_ms)
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (buffer.IsEmpty()) {
     CURLcode code = session.InfoRead(handle.GetHandle());
-    if (code != CURLE_AGAIN)
-      return code == CURLE_OK;
+    if (code != CURLE_AGAIN) {
+      if (code != CURLE_OK)
+        throw std::runtime_error(curl_easy_strerror(code));
+      return;
+    }
 
-    if (mcode != CURLM_CALL_MULTI_PERFORM &&
-        !session.Select(timeout_ms))
-      return false;
+    if (mcode != CURLM_CALL_MULTI_PERFORM)
+      session.Select(timeout_ms);
 
     mcode = session.Perform();
     if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM)
-      return false;
+      throw std::runtime_error(curl_multi_strerror(mcode));
   }
-
-  return true;
 }
 
 int64_t
@@ -141,11 +125,9 @@ Net::Request::GetLength() const
   return handle.GetContentLength();
 }
 
-ssize_t
+size_t
 Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
 {
-  assert(handle.IsDefined());
-
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
   Buffer::Range range;
@@ -156,16 +138,18 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
       break;
 
     CURLcode code = session.InfoRead(handle.GetHandle());
-    if (code != CURLE_AGAIN)
-      return code == CURLE_OK ? 0 : -1;
+    if (code != CURLE_AGAIN) {
+      if (code != CURLE_OK)
+        throw std::runtime_error(curl_easy_strerror(code));
+      return 0;
+    }
 
-    if (mcode != CURLM_CALL_MULTI_PERFORM &&
-        !session.Select(timeout_ms))
-      return -1;
+    if (mcode != CURLM_CALL_MULTI_PERFORM)
+      session.Select(timeout_ms);
 
     mcode = session.Perform();
     if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM)
-      return -1;
+      throw std::runtime_error(curl_multi_strerror(mcode));
   }
 
   --buffer_size;

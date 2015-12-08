@@ -37,16 +37,16 @@ namespace Net {
    * Download a URL into the specified buffer.  If the response is too
    * long, it is truncated.
    *
-   * @return the number of bytes written, or -1 on error
+   * @return the number of bytes written
    */
-  int DownloadToBuffer(Session &session, const char *url,
-                       const char *username, const char *password,
-                       void *buffer, size_t max_length,
-                       OperationEnvironment &env);
+  size_t DownloadToBuffer(Session &session, const char *url,
+                          const char *username, const char *password,
+                          void *buffer, size_t max_length,
+                          OperationEnvironment &env);
 
-  static inline int DownloadToBuffer(Session &session, const char *url,
-                                     void *buffer, size_t max_length,
-                                     OperationEnvironment &env) {
+  static inline size_t DownloadToBuffer(Session &session, const char *url,
+                                        void *buffer, size_t max_length,
+                                        OperationEnvironment &env) {
     return DownloadToBuffer(session, url, nullptr, nullptr,
                             buffer, max_length, env);
   }
@@ -57,7 +57,7 @@ namespace Net {
     const char *username = nullptr, *password = nullptr;
     void *buffer;
     size_t max_length;
-    int length;
+    size_t length;
 
   public:
     DownloadToBufferJob(Session &_session, const char *_url,
@@ -71,7 +71,7 @@ namespace Net {
       password = _password;
     }
 
-    int GetLength() const {
+    size_t GetLength() const {
       return length;
     }
 

@@ -25,6 +25,8 @@ Copyright_License {
 #include "../Session.hpp"
 #include "Util/ConvertString.hpp"
 
+#include <stdexcept>
+
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -69,26 +71,24 @@ Net::Request::SetBasicAuth(const char *username, const char *password)
     handle.SetBasicAuth(username, password);
 }
 
-bool
+void
 Net::Request::Send(unsigned timeout_ms)
 {
   if (!handle.IsDefined())
-    return false;
+    throw std::runtime_error("No INTERNET_STATUS_HANDLE_CREATED received");
 
   if (!completed_event.Wait(timeout_ms))
     /* response timeout */
-    return false;
+    throw std::runtime_error("HTTP timeout");
 
   if (last_error != ERROR_SUCCESS)
     /* I/O error */
-    return false;
+    throw std::runtime_error("HTTP I/O error");
 
   unsigned status = handle.GetStatusCode();
   if (status < 200 || status >= 300)
     /* unsuccessful HTTP status */
-    return false;
-
-  return true;
+    throw std::runtime_error("Unsuccessful HTTP status");
 }
 
 int64_t
@@ -99,7 +99,7 @@ Net::Request::GetLength() const
   return handle.GetContentLength();
 }
 
-ssize_t
+size_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
   INTERNET_BUFFERSA InetBuff;
@@ -111,12 +111,11 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
   completed_event.Reset();
   if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this)) {
     if (GetLastError() == ERROR_IO_PENDING) {
-      if (!completed_event.Wait(timeout_ms)) {
-        return -1;
-      }
+      if (!completed_event.Wait(timeout_ms))
+        throw std::runtime_error("HTTP timeout");
     } else {
       /* error */
-      return -1;
+      throw std::runtime_error("HTTP I/O error");
     }
   }
 

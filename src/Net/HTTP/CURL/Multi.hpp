@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <map>
+#include <stdexcept>
 
 #include <curl/curl.h>
 
@@ -51,16 +52,20 @@ namespace Net {
       return multi != nullptr;
     }
 
-    bool Add(CURL *easy) {
-      return ::curl_multi_add_handle(multi, easy) == CURLM_OK;
+    void Add(CURL *easy) {
+      CURLMcode code = curl_multi_add_handle(multi, easy);
+      if (code != CURLM_OK)
+        throw std::runtime_error(curl_multi_strerror(code));
     }
 
     void Remove(CURL *easy);
 
-    bool FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
+    void FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
                int *max_fd) const {
-      return ::curl_multi_fdset(multi, read_fd_set, write_fd_set, exc_fd_set,
-                                max_fd) == CURLM_OK;
+      CURLMcode code = curl_multi_fdset(multi, read_fd_set, write_fd_set,
+                                        exc_fd_set, max_fd);
+      if (code != CURLM_OK)
+        throw std::runtime_error(curl_multi_strerror(code));
     }
 
     gcc_pure

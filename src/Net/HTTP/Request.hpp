@@ -119,9 +119,8 @@ namespace Net {
      * or if the response status is not successful.
      *
      * @param timeout_ms Timeout used for sending the request
-     * @return true on success
      */
-    bool Send(unsigned timeout_ms=INFINITE);
+    void Send(unsigned timeout_ms=INFINITE);
 
     /**
      * Returns the total length of the response body.  Returns -1 if
@@ -135,10 +134,10 @@ namespace Net {
      * This function must not be called before Send() !
      * @param timeout_ms Timeout used for retrieving the data chunk
      * @return Number of bytes that were read from the server. 0 means
-     * EOF, -1 means error
+     * EOF.
      */
-    ssize_t Read(void *buffer, size_t buffer_size,
-                 unsigned timeout_ms=INFINITE);
+    size_t Read(void *buffer, size_t buffer_size,
+                unsigned timeout_ms=INFINITE);
 
 #ifdef HAVE_WININET
     /** Internal callback function. Don't use this manually! */

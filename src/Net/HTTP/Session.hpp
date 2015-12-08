@@ -62,15 +62,15 @@ namespace Net {
      * @return True if session was created successfully
      */
 #ifdef HAVE_CURL
-    bool Add(CURL *easy) {
-      return multi.Add(easy);
+    void Add(CURL *easy) {
+      multi.Add(easy);
     }
 
     void Remove(CURL *easy) {
-      return multi.Remove(easy);
+      multi.Remove(easy);
     }
 
-    bool Select(int timeout_ms);
+    void Select(int timeout_ms);
 
     CURLMcode Perform() {
       return multi.Perform();

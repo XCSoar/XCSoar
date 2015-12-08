@@ -39,8 +39,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   :env(Java::GetEnv())
 {
   connection = Java::URL::openConnection(env, url);
-  if (Java::DiscardException(env))
-    return;
+  Java::RethrowException(env);
 
   Java::URLConnection::setConnectTimeout(env, connection, (jint)timeout_ms);
   Java::URLConnection::setReadTimeout(env, connection, (jint)timeout_ms);
@@ -62,8 +61,7 @@ Net::Request::~Request()
 void
 Net::Request::AddHeader(const char *name, const char *value)
 {
-  if (connection == nullptr)
-    return;
+  assert(connection != nullptr);
 
   Java::String j_name(env, name);
   Java::String j_value(env, value);
@@ -106,8 +104,7 @@ Base64(char *dest, ConstBuffer<uint8_t> src)
 void
 Net::Request::SetBasicAuth(const char *username, const char *password)
 {
-  if (connection == nullptr)
-    return;
+  assert(connection != nullptr);
 
   char buffer[256];
   snprintf(buffer, sizeof(buffer), "%s:%s", username, password);
@@ -120,20 +117,13 @@ Net::Request::SetBasicAuth(const char *username, const char *password)
   AddHeader("Authorization", value);
 }
 
-bool
+void
 Net::Request::Send(unsigned _timeout_ms)
 {
-  if (connection == nullptr)
-    return false;
+  assert(connection != nullptr);
 
   input_stream = Java::URLConnection::getInputStream(env, connection);
-  if (Java::DiscardException(env)) {
-    env->DeleteLocalRef(connection);
-    connection = nullptr;
-    input_stream = nullptr;
-  }
-
-  return input_stream != nullptr;
+  Java::RethrowException(env);
 }
 
 int64_t
@@ -145,7 +135,7 @@ Net::Request::GetLength() const
   return Java::URLConnection::getContentLength(env, connection);
 }
 
-ssize_t
+size_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
   assert(connection != nullptr);
@@ -156,8 +146,7 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
   jint nbytes = Java::InputStream::read(env, input_stream, array.Get());
-  if (Java::DiscardException(env))
-    return -1;
+  Java::RethrowException(env);
 
   if (nbytes <= 0)
     return 0;

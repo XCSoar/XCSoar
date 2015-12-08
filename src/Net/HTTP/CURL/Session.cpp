@@ -23,9 +23,13 @@ Copyright_License {
 
 #include "../Session.hpp"
 
-#include <sys/select.h>
+#include <system_error>
+#include <stdexcept>
 
-bool
+#include <sys/select.h>
+#include <errno.h>
+
+void
 Net::Session::Select(int timeout_ms)
 {
   fd_set rfds, wfds, efds;
@@ -34,9 +38,7 @@ Net::Session::Select(int timeout_ms)
   FD_ZERO(&efds);
 
   int max_fd;
-
-  if (!multi.FdSet(&rfds, &wfds, &efds, &max_fd))
-    return false;
+  multi.FdSet(&rfds, &wfds, &efds, &max_fd);
 
   bool using_curl_timeout = false;
   long curl_timeout = multi.GetTimeout();
@@ -59,5 +61,11 @@ Net::Session::Select(int timeout_ms)
     timeout_p = NULL;
 
   int ret = select(max_fd + 1, &rfds, &wfds, &efds, timeout_p);
-  return ret > 0 || (using_curl_timeout && ret == 0);
+  if (ret < 0)
+    throw std::system_error(std::error_code(errno,
+                                            std::system_category()),
+                            "select() failed");
+
+  if (ret == 0 && !using_curl_timeout)
+    throw std::runtime_error("HTTP timeout");
 }

@@ -285,11 +285,13 @@ DownloadManagerThread::ProcessQueue(Net::Session &session)
     current_position = 0;
 
     bool success = false;
-    {
+    try {
       const ScopeUnlock unlock(mutex);
       success = DownloadToFileTransaction(session, item.uri.c_str(),
                                           LocalPath(item.path_relative.c_str()),
                                           nullptr, *this);
+    } catch (const std::exception &exception) {
+      LogError(exception);
     }
 
     current_size = current_position = -1;

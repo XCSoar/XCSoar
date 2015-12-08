@@ -117,7 +117,7 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
   char buffer[65536];
   Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
   job.SetBasicAuth(username, password);
-  if (!runner.Run(job) || job.GetLength() < 0)
+  if (!runner.Run(job))
     return Bitmap();
 
   buffer[job.GetLength()] = 0;

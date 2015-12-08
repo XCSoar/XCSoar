@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <stdint.h>
 
-int
+size_t
 Net::DownloadToBuffer(Session &session, const char *url,
                       const char *username, const char *password,
                       void *_buffer, size_t max_length,
@@ -37,8 +37,7 @@ Net::DownloadToBuffer(Session &session, const char *url,
   Request request(session, url, 10000);
   if (username != nullptr)
     request.SetBasicAuth(username, password);
-  if (!request.Send(10000))
-    return -1;
+  request.Send(10000);
 
   int64_t total = request.GetLength();
   if (total >= 0)
@@ -50,9 +49,7 @@ Net::DownloadToBuffer(Session &session, const char *url,
     if (env.IsCancelled())
       return -1;
 
-    ssize_t nbytes = request.Read(p, end - p, 5000);
-    if (nbytes < 0)
-      return -1;
+    size_t nbytes = request.Read(p, end - p, 5000);
     if (nbytes == 0)
       break;
 

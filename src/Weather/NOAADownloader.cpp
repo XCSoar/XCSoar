@@ -158,7 +158,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   // Request the file
   char buffer[4096];
   Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
-  if (!runner.Run(job) || job.GetLength() < 0)
+  if (!runner.Run(job))
     return false;
 
   buffer[job.GetLength()] = 0;
@@ -249,7 +249,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   // Request the file
   char buffer[4096];
   Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
-  if (!runner.Run(job) || job.GetLength() < 0)
+  if (!runner.Run(job))
     return false;
 
   buffer[job.GetLength()] = 0;

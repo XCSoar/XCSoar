@@ -43,8 +43,7 @@ DownloadToFile(Net::Session &session, const char *url,
   Net::Request request(session, url, 10000);
   if (username != nullptr)
     request.SetBasicAuth(username, password);
-  if (!request.Send(10000))
-    return false;
+  request.Send(10000);
 
   int64_t total = request.GetLength();
   if (total >= 0)
@@ -59,10 +58,7 @@ DownloadToFile(Net::Session &session, const char *url,
     if (env.IsCancelled())
       return false;
 
-    ssize_t nbytes = request.Read(buffer, sizeof(buffer), 5000);
-    if (nbytes < 0)
-      return false;
-
+    size_t nbytes = request.Read(buffer, sizeof(buffer), 5000);
     if (nbytes == 0)
       break;
 

@@ -28,6 +28,9 @@ Copyright_License {
 
 #include <curl/curl.h>
 
+#include <new>
+#include <stdexcept>
+
 #include <assert.h>
 #include <stdint.h>
 
@@ -39,71 +42,64 @@ namespace Net {
     CURL *handle;
 
   public:
-    CurlEasy():handle(::curl_easy_init()) {}
+    CurlEasy():handle(::curl_easy_init()) {
+      if (handle == nullptr)
+        throw std::bad_alloc();
+    }
+
     CurlEasy(const CurlEasy &other) = delete;
 
     ~CurlEasy() {
-      if (handle != nullptr)
-        ::curl_easy_cleanup(handle);
+      ::curl_easy_cleanup(handle);
     }
 
     CurlEasy &operator=(const CurlEasy &other) = delete;
 
-    bool IsDefined() const {
-      return handle != nullptr;
-    }
-
     CURL *GetHandle() {
-      assert(IsDefined());
-
       return handle;
     }
 
     void Destroy() {
-      assert(IsDefined());
-
       ::curl_easy_cleanup(handle);
       handle = nullptr;
     }
 
     template<typename T>
-    bool SetOption(CURLoption option, T value) {
-      assert(IsDefined());
-
-      return ::curl_easy_setopt(handle, option, value) == CURLE_OK;
+    void SetOption(CURLoption option, T value) {
+      CURLcode code = ::curl_easy_setopt(handle, option, value);
+      if (code != CURLE_OK)
+        throw std::runtime_error(curl_easy_strerror(code));
     }
 
-    bool SetURL(const char *value) {
-      return SetOption(CURLOPT_URL, value);
+    void SetURL(const char *value) {
+      SetOption(CURLOPT_URL, value);
     }
 
-    bool SetUserAgent(const char *value) {
-      return SetOption(CURLOPT_USERAGENT, value);
+    void SetUserAgent(const char *value) {
+      SetOption(CURLOPT_USERAGENT, value);
     }
 
-    bool SetHeaders(struct curl_slist *headers) {
-      return SetOption(CURLOPT_HTTPHEADER, headers);
+    void SetHeaders(struct curl_slist *headers) {
+      SetOption(CURLOPT_HTTPHEADER, headers);
     }
 
-    bool SetBasicAuth(const char *userpwd) {
-      return SetOption(CURLOPT_USERPWD, userpwd);
+    void SetBasicAuth(const char *userpwd) {
+      SetOption(CURLOPT_USERPWD, userpwd);
     }
 
-    bool SetFailOnError(bool value) {
-      return SetOption(CURLOPT_FAILONERROR, value);
+    void SetFailOnError(bool value) {
+      SetOption(CURLOPT_FAILONERROR, value);
     }
 
-    bool SetWriteFunction(size_t (*function)(char *ptr, size_t size,
+    void SetWriteFunction(size_t (*function)(char *ptr, size_t size,
                                              size_t nmemb, void *userdata),
                           void *userdata) {
-      return SetOption(CURLOPT_WRITEFUNCTION, function) &&
-        SetOption(CURLOPT_WRITEDATA, userdata);
+      SetOption(CURLOPT_WRITEFUNCTION, function);
+      SetOption(CURLOPT_WRITEDATA, userdata);
     }
 
     template<typename T>
     bool GetInfo(CURLINFO info, T value_r) const {
-      assert(IsDefined());
-
       return ::curl_easy_getinfo(handle, info, value_r) == CURLE_OK;
     }
 
@@ -116,8 +112,6 @@ namespace Net {
     }
 
     bool Unpause() {
-      assert(IsDefined());
-
       return ::curl_easy_pause(handle, CURLPAUSE_CONT) == CURLE_OK;
     }
   };
