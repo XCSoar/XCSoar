@@ -26,7 +26,14 @@ Copyright_License {
 
 #include <tchar.h>
 
+namespace std {
+  class exception;
+}
+
 class Error;
+
+void
+ShowError(const std::exception &exception, const TCHAR *caption);
 
 void
 ShowError(const Error &error, const TCHAR *caption);
