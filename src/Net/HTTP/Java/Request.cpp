@@ -39,11 +39,8 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   :env(Java::GetEnv())
 {
   connection = Java::URL::openConnection(env, url);
-  if (Java::DiscardException(env)) {
-    connection = nullptr;
-    input_stream = nullptr;
+  if (Java::DiscardException(env))
     return;
-  }
 
   Java::URLConnection::setConnectTimeout(env, connection, (jint)timeout_ms);
   Java::URLConnection::setReadTimeout(env, connection, (jint)timeout_ms);
