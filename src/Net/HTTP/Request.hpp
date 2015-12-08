@@ -81,7 +81,7 @@ namespace Net {
 #endif
 
 #ifdef HAVE_JAVA_NET
-    JNIEnv *env;
+    JNIEnv *const env;
 
     jobject connection = nullptr, input_stream = nullptr;
 #endif
