@@ -31,6 +31,8 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Util/Error.hxx"
 
+#include <exception>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <windef.h> // for MAX_PATH
@@ -132,6 +134,18 @@ LogFormat(const TCHAR *Str, ...)
 }
 
 #endif
+
+void
+LogError(const std::exception &exception)
+{
+  LogString(exception.what());
+}
+
+void
+LogError(const char *msg, const std::exception &exception)
+{
+  LogFormat("%s: %s", msg, exception.what());
+}
 
 void
 LogError(const Error &error)
