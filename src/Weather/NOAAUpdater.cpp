@@ -24,22 +24,19 @@ Copyright_License {
 #include "NOAAUpdater.hpp"
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
+#include "Net/HTTP/Session.hpp"
 
-bool
-NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
-{
-  bool result = true;
-  for (auto &i : store)
-    result = Update(i, runner) && result;
-
-  return result;
+namespace NOAAUpdater {
+  static bool Update(NOAAStore::Item &item,
+                     Net::Session &session, JobRunner &runner);
 }
 
 bool
-NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
+NOAAUpdater::Update(NOAAStore::Item &item,
+                    Net::Session &session, JobRunner &runner)
 {
   bool metar_downloaded = NOAADownloader::DownloadMETAR(item.code, item.metar,
-                                                        runner);
+                                                        session, runner);
   if (metar_downloaded) {
     item.metar_available = true;
 
@@ -47,9 +44,34 @@ NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
       item.parsed_metar_available = true;
   }
 
-  bool taf_downloaded = NOAADownloader::DownloadTAF(item.code, item.taf, runner);
+  bool taf_downloaded = NOAADownloader::DownloadTAF(item.code, item.taf,
+                                                    session, runner);
   if (taf_downloaded)
     item.taf_available = true;
 
   return metar_downloaded && taf_downloaded;
+}
+
+bool
+NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
+{
+  Net::Session session;
+  if (session.Error())
+    return false;
+
+  bool result = true;
+  for (auto &i : store)
+    result = Update(i, session, runner) && result;
+
+  return result;
+}
+
+bool
+NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
+{
+  Net::Session session;
+  if (session.Error())
+    return false;
+
+  return Update(item, session, runner);
 }
