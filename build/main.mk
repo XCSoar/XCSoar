@@ -684,6 +684,7 @@ ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Device/ScanBluetoothLeDialog.cpp \
 	$(SRC)/Java/Global.cxx \
+	$(SRC)/Java/Object.cxx \
 	$(SRC)/Java/String.cxx \
 	$(SRC)/Java/File.cxx \
 	$(SRC)/Java/InputStream.cxx \

@@ -132,10 +132,7 @@ AutoDetect()
   // Call function Locale.getLanguage() that
   // returns a two-letter language string
 
-  cid = env->GetMethodID(cls, "toString", "()Ljava/lang/String;");
-  assert(cid != nullptr);
-
-  jstring language = (jstring)env->CallObjectMethod(obj, cid);
+  jstring language = Java::Object::toString(env, obj);
   if (language == nullptr)
     return 0;
 

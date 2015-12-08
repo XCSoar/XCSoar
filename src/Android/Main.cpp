@@ -125,6 +125,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   InitialiseIOThread();
 
   Java::Init(env);
+  Java::Object::Initialise(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
   Java::URL::Initialise(env);
