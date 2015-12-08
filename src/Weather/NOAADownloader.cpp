@@ -24,7 +24,6 @@ Copyright_License {
 #include "NOAADownloader.hpp"
 #include "METAR.hpp"
 #include "TAF.hpp"
-#include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/ToBuffer.hpp"
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
@@ -142,7 +141,7 @@ NOAADownloader::ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest)
 
 bool
 NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
-                              JobRunner &runner)
+                              Net::Session &session, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -156,11 +155,6 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   snprintf(url, sizeof(url),
            "http://tgftp.nws.noaa.gov/data/observations/metar/decoded/%s.TXT",
            code);
-
-  // Open download session
-  Net::Session session;
-  if (session.Error())
-    return false;
 
   // Request the file
   char buffer[4096];
@@ -241,7 +235,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
 bool
 NOAADownloader::DownloadTAF(const char *code, TAF &taf,
-                            JobRunner &runner)
+                            Net::Session &session, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -255,11 +249,6 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   snprintf(url, sizeof(url),
            "http://tgftp.nws.noaa.gov/data/forecasts/taf/stations/%s.TXT",
            code);
-
-  // Open download session
-  Net::Session session;
-  if (session.Error())
-    return false;
 
   // Request the file
   char buffer[4096];

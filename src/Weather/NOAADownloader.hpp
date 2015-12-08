@@ -28,6 +28,10 @@ struct METAR;
 struct TAF;
 class JobRunner;
 
+namespace Net {
+  class Session;
+}
+
 namespace NOAADownloader
 {
   /**
@@ -38,7 +42,7 @@ namespace NOAADownloader
    * otherwise False
    */
   bool DownloadMETAR(const char *code, METAR &metar,
-                     JobRunner &runner);
+                     Net::Session &session, JobRunner &runner);
 
   /**
    * Downloads a METAR from the NOAA server
@@ -48,7 +52,7 @@ namespace NOAADownloader
    * otherwise False
    */
   bool DownloadTAF(const char *code, TAF &taf,
-                   JobRunner &runner);
+                   Net::Session &session, JobRunner &runner);
 };
 
 #endif
