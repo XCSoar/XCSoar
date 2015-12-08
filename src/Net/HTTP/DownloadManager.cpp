@@ -203,8 +203,8 @@ public:
     ScopeLock protect(mutex);
     queue.emplace_back(uri, path_relative);
 
-    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadAdded(path_relative, -1, -1);
+    for (auto *listener : listeners)
+      listener->OnDownloadAdded(path_relative, -1, -1);
 
     if (!IsBusy())
       Trigger();
@@ -232,8 +232,8 @@ public:
       queue.erase(i);
     }
 
-    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadComplete(relative_path, false);
+    for (auto *listener : listeners)
+      listener->OnDownloadComplete(relative_path, false);
   }
 
 protected:
@@ -292,8 +292,9 @@ DownloadManagerThread::Tick()
     current_size = current_position = -1;
     const AllocatedPath path_relative(std::move(queue.front().path_relative));
     queue.pop_front();
-    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadComplete(path_relative, success);
+
+    for (auto *listener : listeners)
+      listener->OnDownloadComplete(path_relative, success);
   }
 }
 
