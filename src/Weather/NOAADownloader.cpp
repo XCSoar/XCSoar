@@ -151,9 +151,10 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 #endif
 
   // Build file url
-  char url[256] = "http://weather.noaa.gov/pub/data/observations/metar/decoded/";
-  strcat(url, code);
-  strcat(url, ".TXT");
+  char url[256];
+  snprintf(url, sizeof(url),
+           "http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT",
+           code);
 
   // Open download session
   Net::Session session;
@@ -246,9 +247,10 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 #endif
 
   // Build file url
-  char url[256] = "http://weather.noaa.gov/pub/data/forecasts/taf/stations/";
-  strcat(url, code);
-  strcat(url, ".TXT");
+  char url[256];
+  snprintf(url, sizeof(url),
+           "http://weather.noaa.gov/pub/data/forecasts/taf/stations/%s.TXT",
+           code);
 
   // Open download session
   Net::Session session;
