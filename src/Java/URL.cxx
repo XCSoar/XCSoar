@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,6 +28,8 @@
  */
 
 #include "URL.hxx"
+#include "Object.hxx"
+#include "String.hxx"
 
 Java::TrivialClass Java::URL::cls;
 jmethodID Java::URL::ctor;
@@ -53,6 +55,24 @@ void
 Java::URL::Deinitialise(JNIEnv *env)
 {
 	cls.Clear(env);
+}
+
+jobject
+Java::URL::Create(JNIEnv *env, const char *url)
+{
+	return Java::URL::Create(env, String(env, url));
+}
+
+jobject
+Java::URL::openConnection(JNIEnv *env, const char *url)
+{
+	jobject _url_object = Java::URL::Create(env, url);
+	if (env->ExceptionCheck())
+		/* pass exception to caller */
+		return nullptr;
+
+	LocalObject url_object(env, _url_object);
+	return Java::URL::openConnection(env, url_object);
 }
 
 jmethodID Java::URLConnection::setConnectTimeout_method;

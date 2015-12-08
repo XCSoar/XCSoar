@@ -38,16 +38,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
                       unsigned timeout_ms)
   :env(Java::GetEnv())
 {
-  Java::String j_url(env, url);
-  jobject url_object = Java::URL::Create(env, j_url);
-  if (Java::DiscardException(env)) {
-    connection = nullptr;
-    input_stream = nullptr;
-    return;
-  }
-
-  connection = Java::URL::openConnection(env, url_object);
-  env->DeleteLocalRef(url_object);
+  connection = Java::URL::openConnection(env, url);
   if (Java::DiscardException(env)) {
     connection = nullptr;
     input_stream = nullptr;

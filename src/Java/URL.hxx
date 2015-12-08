@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,6 +55,8 @@ namespace Java {
 			return env->NewObject(cls, ctor, url);
 		}
 
+		static jobject Create(JNIEnv *env, const char *url);
+
 		static jobject openConnection(JNIEnv *env, jobject url) {
 			assert(env != nullptr);
 			assert(url != nullptr);
@@ -62,6 +64,8 @@ namespace Java {
 
 			return env->CallObjectMethod(url, openConnection_method);
 		}
+
+		static jobject openConnection(JNIEnv *env, const char *url);
 	};
 
 	/**
