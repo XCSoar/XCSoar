@@ -54,22 +54,28 @@ AirspaceFilterData::Match(const GeoPoint &location,
   return true;
 }
 
-class AirspaceFilterVisitor final : public AirspaceVisitor {
-  GeoPoint location;
+class AirspaceFilterPredicate final : public AirspacePredicate {
+  const GeoPoint location;
   const FlatProjection &projection;
   const AirspaceFilterData &filter;
 
 public:
-  AirspaceSelectInfoVector result;
-
-  AirspaceFilterVisitor(const GeoPoint &_location,
-                        const FlatProjection &_projection,
-                        const AirspaceFilterData &_filter)
+  AirspaceFilterPredicate(const GeoPoint &_location,
+                          const FlatProjection &_projection,
+                          const AirspaceFilterData &_filter)
     :location(_location), projection(_projection), filter(_filter) {}
 
+  bool operator()(const AbstractAirspace &as) const override {
+    return filter.Match(location, projection, as);
+  }
+};
+
+class AirspaceFilterVisitor final : public AirspaceVisitor {
+public:
+  AirspaceSelectInfoVector result;
+
   void Visit(const AbstractAirspace &as) override {
-    if (filter.Match(location, projection, as))
-      result.emplace_back(as);
+    result.emplace_back(as);
   }
 };
 
@@ -102,13 +108,16 @@ AirspaceSelectInfoVector
 FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
                 const AirspaceFilterData &filter)
 {
-  AirspaceFilterVisitor visitor(location, airspaces.GetProjection(), filter);
+  const AirspaceFilterPredicate predicate(location, airspaces.GetProjection(),
+                                          filter);
+  AirspaceFilterVisitor visitor;
 
   if (!negative(filter.distance))
-    airspaces.VisitWithinRange(location, filter.distance, visitor);
+    airspaces.VisitWithinRange(location, filter.distance, visitor, predicate);
   else
     for (const auto &i : airspaces)
-      visitor.Visit(i.GetAirspace());
+      if (predicate(i.GetAirspace()))
+        visitor.Visit(i.GetAirspace());
 
   if (filter.direction.IsNegative() && negative(filter.distance))
     SortByName(visitor.result);
