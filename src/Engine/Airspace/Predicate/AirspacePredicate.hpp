@@ -61,15 +61,22 @@ public:
  * #AirspacePredicate.
  */
 template<typename P>
-class WrapAirspacePredicate final : public AirspacePredicate, private P {
+class WrappedAirspacePredicate final : public AirspacePredicate, private P {
 public:
   template<typename... Args>
-  WrapAirspacePredicate(Args&&... args):P(args...) {}
+  WrappedAirspacePredicate(Args&&... args):P(args...) {}
 
   bool operator()(const AbstractAirspace& t) const override {
     return static_cast<const P &>(*this)(t);
   }
 };
+
+template<typename P>
+static inline WrappedAirspacePredicate<P>
+WrapAirspacePredicate(const P &p)
+{
+  return WrapAirspacePredicate<P>(p);
+}
 
 /**
  * A class that combines two #AirspacePredicate instances with logical

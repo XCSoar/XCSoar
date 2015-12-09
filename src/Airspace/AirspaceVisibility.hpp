@@ -44,6 +44,6 @@ public:
   bool operator()(const AbstractAirspace &airspace) const;
 };
 
-typedef WrapAirspacePredicate<AirspaceVisibility> AirspaceVisiblePredicate;
+typedef WrappedAirspacePredicate<AirspaceVisibility> AirspaceVisiblePredicate;
 
 #endif

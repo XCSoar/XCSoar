@@ -45,7 +45,8 @@ RoutePlannerGlue::Synchronise(const Airspaces &master,
                               const AGeoPoint &destination)
 {
   /* ignore acked airspaces (if we have an AirspaceWarningManager) */
-  WrapAirspacePredicate<ActiveAirspacePredicate> predicate(warnings);
+  const auto predicate =
+    WrapAirspacePredicate(ActiveAirspacePredicate(warnings));
 
   planner.Synchronise(master, predicate, origin, destination);
 }

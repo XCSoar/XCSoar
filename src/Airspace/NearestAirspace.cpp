@@ -81,15 +81,18 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
 
   /* find the nearest airspace */
   //consider only active airspaces
-  const WrapAirspacePredicate<ActiveAirspacePredicate> active_predicate(&airspace_warnings);
-  const WrapAirspacePredicate<OutsideAirspacePredicate> outside_predicate(AGeoPoint(basic.location, RoughAltitude(0)));
+  const auto active_predicate =
+    WrapAirspacePredicate(ActiveAirspacePredicate(&airspace_warnings));
+  const auto outside_predicate =
+    WrapAirspacePredicate(OutsideAirspacePredicate(AGeoPoint(basic.location, RoughAltitude(0))));
   const AndAirspacePredicate outside_and_active_predicate(active_predicate, outside_predicate);
 
   //if altitude is available, filter airspaces in same height as airplane
   if (basic.NavAltitudeAvailable()) {
     /* check altitude; hard-coded margin of 50m (for now) */
-    WrapAirspacePredicate<AirspacePredicateHeightRange> height_range_predicate(RoughAltitude(basic.nav_altitude-fixed(50)),
-                                                                               RoughAltitude(basic.nav_altitude+fixed(50)));
+    const auto height_range_predicate =
+      WrapAirspacePredicate(AirspacePredicateHeightRange(RoughAltitude(basic.nav_altitude - 50),
+                                                         RoughAltitude(basic.nav_altitude + 50)));
     AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
     return ::FindHorizontal(basic.location, airspace_database, and_predicate);
   } else //only filter outside and active
