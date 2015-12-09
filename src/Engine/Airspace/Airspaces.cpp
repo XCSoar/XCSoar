@@ -329,7 +329,7 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
         break;
       }
     }
-    if (!found && other.IsActive()) {
+    if (!found) {
       Add(&v.GetAirspace());
       changed = true;
     }
