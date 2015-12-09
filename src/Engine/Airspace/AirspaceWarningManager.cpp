@@ -244,10 +244,6 @@ public:
     Intersection(as);
   }
 
-  void Visit(const Airspace& a) {
-    AirspaceVisitor::Visit(a);
-  }
-
   /**
    * Determine whether intersections for this type were found (new or modified)
    *

@@ -48,7 +48,7 @@ public:
   void operator()(Airspace as) {
     AbstractAirspace &aas = as.GetAirspace();
     if (predicate->operator()(aas))
-      visitor->Visit(as);
+      visitor->Visit(aas);
   }
 };
 
@@ -89,7 +89,7 @@ public:
   void operator()(const Airspace &as) {
     if (as.Intersects(ray) &&
         visitor->SetIntersections(as.Intersects(start, end, *projection)))
-      visitor->Visit(as);
+      visitor->Visit(as.GetAirspace());
   }
 };
 
@@ -379,8 +379,9 @@ Airspaces::VisitInside(const GeoPoint &loc, AirspaceVisitor &visitor) const
 
   std::function<void(const Airspace &)> visitor2 =
     [&loc, &visitor](const Airspace &v){
-    if (v.IsInside(loc))
-      visitor.Visit(v);
+    const AbstractAirspace &as = v.GetAirspace();
+    if (as.Inside(loc))
+      visitor.Visit(as);
   };
 
   airspace_tree.visit_within_range(bb_target, 0, visitor2);

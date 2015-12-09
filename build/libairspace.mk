@@ -16,7 +16,6 @@ AIRSPACE_SOURCES = \
 	$(AIRSPACE_SRC_DIR)/Predicate/AirspacePredicateAircraftInside.cpp \
 	$(AIRSPACE_SRC_DIR)/Predicate/AirspacePredicateHeightRange.cpp \
 	$(AIRSPACE_SRC_DIR)/Predicate/OutsideAirspacePredicate.cpp \
-	$(AIRSPACE_SRC_DIR)/AirspaceVisitor.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspaceIntersectionVisitor.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspaceWarningConfig.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspaceWarningManager.cpp \

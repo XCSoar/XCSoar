@@ -31,8 +31,6 @@ class AbstractAirspace;
 class AirspaceVisitor {
 public:
   virtual void Visit(const AbstractAirspace &aa) = 0;
-
-  void Visit(const Airspace &as);
 };
 
 #endif
