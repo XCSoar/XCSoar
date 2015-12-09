@@ -341,8 +341,7 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
     gcc_unused bool found = false;
     for (auto t = airspace_tree.begin(); t != airspace_tree.end(); ) {
       if (&t->GetAirspace() == &v->GetAirspace()) {
-        AirspaceTree::const_iterator new_t = t;
-        ++new_t;
+        const auto new_t = std::next(t);
         airspace_tree.erase_exact(*t);
         t = new_t;
         found = true;
