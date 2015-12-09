@@ -81,10 +81,11 @@ Main()
 
   LoadFiles(airspace_database);
 
-  auto it = airspace_database.begin();
+  const auto range = airspace_database.QueryAll();
+  auto it = range.begin();
 
   AirspaceInterceptSolution ais;
-  for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)
+  for (unsigned i = 0; i < 5 && it != range.end(); ++i, ++it)
     airspace_warning.GetWarning(it->GetAirspace())
       .UpdateSolution((AirspaceWarning::State)i, ais);
 

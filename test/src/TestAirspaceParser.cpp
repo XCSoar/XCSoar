@@ -92,7 +92,8 @@ TestOpenAir()
 
   ok1(airspaces.GetSize() == 24);
 
-  for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
+  const auto range = airspaces.QueryAll();
+  for (auto it = range.begin(); it != range.end(); ++it) {
     const AbstractAirspace &airspace = it->GetAirspace();
     if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
@@ -199,7 +200,8 @@ TestTNP()
 
   ok1(airspaces.GetSize() == 24);
 
-  for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
+  const auto range = airspaces.QueryAll();
+  for (auto it = range.begin(); it != range.end(); ++it) {
     const AbstractAirspace &airspace = it->GetAirspace();
     if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))

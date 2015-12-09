@@ -144,8 +144,12 @@ public:
    */
   void SetActivity(const AirspaceActivity mask);
 
+  gcc_pure
   const_iterator_range QueryAll() const {
-    return {begin(), end()};
+    auto predicate = boost::geometry::index::satisfies([](const Airspace &){
+        return true;
+      });
+    return {airspace_tree.qbegin(predicate), airspace_tree.qend()};
   }
 
   /**
@@ -185,26 +189,6 @@ public:
    */
   gcc_pure
   const_iterator_range QueryInside(const AircraftState &aircraft) const;
-
-  /**
-   * Access first airspace in store, for use in iterators.
-   *
-   * @return First airspace in store
-   */
-  gcc_pure
-  const_iterator begin() const {
-    return airspace_tree.qbegin(boost::geometry::index::satisfies([](const Airspace &){ return true; }));
-  }
-
-  /**
-   * Access end airspace in store, for use in iterators as end point.
-   *
-   * @return End airspace in store
-   */
-  gcc_pure
-  const_iterator end() const {
-    return airspace_tree.qend();
-  }
 
   const FlatProjection &GetProjection() const {
     return task_projection;

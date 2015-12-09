@@ -108,7 +108,7 @@ Airspaces::Optimise()
     // task projection changed, so need to push items back onto stack
     // to re-build airspace envelopes
 
-    for (const auto &i : *this)
+    for (const auto &i : QueryAll())
       tmp_as.push_back(&i.GetAirspace());
 
     airspace_tree.clear();
@@ -164,7 +164,7 @@ Airspaces::Clear()
 
   // delete items in the tree
   if (owns_children) {
-    for (const auto &i : *this) {
+    for (const auto &i : QueryAll()) {
       Airspace a = i;
       a.Destroy();
     }
@@ -192,7 +192,7 @@ Airspaces::SetFlightLevels(const AtmosphericPressure &press)
   if ((int)press.GetHectoPascal() != (int)qnh.GetHectoPascal()) {
     qnh = press;
 
-    for (auto &v : *this)
+    for (auto &v : QueryAll())
       v.SetFlightLevel(press);
   }
 }
@@ -203,7 +203,7 @@ Airspaces::SetActivity(const AirspaceActivity mask)
   if (!mask.equals(activity_mask)) {
     activity_mask = mask;
 
-    for (auto &v : *this)
+    for (auto &v : QueryAll())
       v.SetActivity(mask);
   }
 }
@@ -211,7 +211,7 @@ Airspaces::SetActivity(const AirspaceActivity mask)
 void
 Airspaces::ClearClearances()
 {
-  for (auto &v : *this)
+  for (auto &v : QueryAll())
     v.ClearClearance();
 }
 
@@ -252,7 +252,7 @@ Airspaces::AsVector() const
   AirspaceVector v;
   v.reserve(airspace_tree.size());
 
-  for (const auto &i : *this)
+  for (const auto &i : QueryAll())
     v.push_back(i);
 
   return v;
@@ -277,7 +277,7 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
   if (CompareSortedAirspaceVectors(contents_master, SortByPointer(AsVector())))
     return false;
 
-  for (auto &i : *this)
+  for (auto &i : QueryAll())
     i.ClearClearance();
   airspace_tree.clear();
 
