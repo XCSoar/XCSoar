@@ -78,7 +78,7 @@ template<typename P>
 static inline WrappedAirspacePredicate<P>
 WrapAirspacePredicate(const P &p)
 {
-  return WrapAirspacePredicate<P>(p);
+  return WrappedAirspacePredicate<P>(p);
 }
 
 class AirspacePredicateRef {
