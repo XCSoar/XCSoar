@@ -209,9 +209,9 @@ public:
    * @return vector of airspaces intersecting search radius
    */
   gcc_pure
-  const AirspaceVector ScanRange(const GeoPoint &location, fixed range,
-                                 const AirspacePredicate &condition =
-                                       AirspacePredicate::always_true) const;
+  AirspaceVector ScanRange(const GeoPoint &location, fixed range,
+                           const AirspacePredicate &condition =
+                           AirspacePredicate::always_true) const;
 
   /**
    * Find airspaces the aircraft is inside (taking altitude into account)
@@ -222,9 +222,9 @@ public:
    * @return airspaces enclosing the aircraft
    */
   gcc_pure
-  const AirspaceVector FindInside(const AircraftState &state,
-                                  const AirspacePredicate &condition =
-                                        AirspacePredicate::always_true) const;
+  AirspaceVector FindInside(const AircraftState &state,
+                            const AirspacePredicate &condition =
+                            AirspacePredicate::always_true) const;
 
   /**
    * Access first airspace in store, for use in iterators.

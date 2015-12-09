@@ -114,7 +114,7 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 
 // SCAN METHODS
 
-const Airspaces::AirspaceVector
+Airspaces::AirspaceVector
 Airspaces::ScanRange(const GeoPoint &location, fixed range,
                      const AirspacePredicate &condition) const
 {
@@ -145,7 +145,7 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
   return res;
 }
 
-const Airspaces::AirspaceVector
+Airspaces::AirspaceVector
 Airspaces::FindInside(const AircraftState &state,
                       const AirspacePredicate &condition) const
 {
