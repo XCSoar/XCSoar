@@ -269,6 +269,10 @@ public:
                           const GeoPoint &location, fixed range,
                           const AirspacePredicate &condition =
                                 AirspacePredicate::always_true);
+
+private:
+  gcc_pure
+  AirspaceVector AsVector() const;
 };
 
 #endif

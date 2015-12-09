@@ -295,6 +295,48 @@ Airspaces::ClearClearances()
     v.ClearClearance();
 }
 
+gcc_pure
+static bool
+AirspacePointersLess(const Airspace &a, const Airspace &b)
+{
+  return &a.GetAirspace() < &b.GetAirspace();
+}
+
+gcc_pure
+static AirspacesInterface::AirspaceVector
+SortByPointer(AirspacesInterface::AirspaceVector &&v)
+{
+  std::sort(v.begin(), v.end(), AirspacePointersLess);
+  return v;
+}
+
+gcc_pure
+static bool
+AirspacePointersEquals(const Airspace &a, const Airspace &b)
+{
+  return &a.GetAirspace() == &b.GetAirspace();
+}
+
+gcc_pure
+static bool
+CompareSortedAirspaceVectors(const AirspacesInterface::AirspaceVector &a,
+                             const AirspacesInterface::AirspaceVector &b)
+{
+  return a.size() == b.size() &&
+    std::equal(a.begin(), a.end(), b.begin(), AirspacePointersEquals);
+}
+
+inline AirspacesInterface::AirspaceVector
+Airspaces::AsVector() const
+{
+  AirspaceVector v;
+  v.reserve(airspace_tree.size());
+
+  for (const auto &i : airspace_tree)
+    v.push_back(i);
+
+  return v;
+}
 
 bool
 Airspaces::SynchroniseInRange(const Airspaces &master,
@@ -306,55 +348,24 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
   activity_mask = master.activity_mask;
   task_projection = master.task_projection;
 
-  bool changed = false;
-  const AirspaceVector contents_master = master.ScanRange(location, range, condition);
-  AirspaceVector contents_self;
-  contents_self.reserve(std::max(airspace_tree.size(), contents_master.size()));
+  const AirspaceVector contents_master =
+    SortByPointer(master.ScanRange(location, range, condition));
 
-  for (const auto &v : airspace_tree)
-    contents_self.push_back(v);
+  if (CompareSortedAirspaceVectors(contents_master, SortByPointer(AsVector())))
+    return false;
 
-  // find items to add
-  for (const auto &v : contents_master) {
-    const AbstractAirspace &other = v.GetAirspace();
+  for (auto &i : airspace_tree)
+    i.ClearClearance();
+  airspace_tree.clear();
 
-    bool found = false;
-    for (auto s = contents_self.begin(); s != contents_self.end(); ++s) {
-      const AbstractAirspace &self = s->GetAirspace();
-      if (&self == &other) {
-        found = true;
-        contents_self.erase(s);
-        break;
-      }
-    }
-    if (!found) {
-      Add(&v.GetAirspace());
-      changed = true;
-    }
-  }
+  for (const auto &i : contents_master)
+    airspace_tree.insert(i);
 
-  // anything left in the self list are items that were not in the query,
-  // so delete them --- including the clearances!
-  for (auto v = contents_self.begin(); v != contents_self.end();) {
-    gcc_unused bool found = false;
-    for (auto t = airspace_tree.begin(); t != airspace_tree.end(); ) {
-      if (&t->GetAirspace() == &v->GetAirspace()) {
-        const auto new_t = std::next(t);
-        airspace_tree.erase_exact(*t);
-        t = new_t;
-        found = true;
-      } else {
-        ++t;
-      }
-    }
-    assert(found);
-    v->ClearClearance();
-    v = contents_self.erase(v);
-    changed = true;
-  }
-  if (changed)
-    Optimise();
-  return changed;
+  airspace_tree.optimise();
+
+  ++serial;
+
+  return true;
 }
 
 void
