@@ -27,7 +27,6 @@
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
-#include "Predicate/AirspacePredicateAircraftInside.hpp"
 
 #define CRUISE_FILTER_FACT fixed(0.5)
 
@@ -378,46 +377,60 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
 }
 
+class InsideWarningVisitor final : public AirspaceVisitor {
+  AirspaceWarningManager &wm;
+  const AircraftState &state;
+  const GlidePolar &glide_polar;
 
-bool 
+  bool found = false;
+
+public:
+  InsideWarningVisitor(AirspaceWarningManager &_wm,
+                       const AircraftState &_state,
+                       const GlidePolar &_glide_polar)
+    :wm(_wm), state(_state), glide_polar(_glide_polar) {}
+
+  bool WasFound() const {
+    return found;
+  }
+
+  void Visit(const AbstractAirspace &airspace) override {
+    const AltitudeState &altitude = state;
+
+    if (// ignore inactive airspaces
+        !airspace.IsActive() ||
+        !wm.GetConfig().IsClassEnabled(airspace.GetType()) ||
+        !airspace.Inside(altitude))
+      return;
+
+    AirspaceWarning *warning = wm.GetWarningPtr(airspace);
+
+    if (warning == nullptr ||
+        warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
+      GeoPoint c = airspace.ClosestPoint(state.location, wm.GetProjection());
+      const AirspaceAircraftPerformance perf_glide(glide_polar);
+      AirspaceInterceptSolution solution;
+      airspace.Intercept(state, c, wm.GetProjection(), perf_glide, solution);
+
+      if (warning == nullptr)
+        warning = wm.GetNewWarningPtr(airspace);
+
+      warning->UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
+      found = true;
+    }
+  }
+};
+
+bool
 AirspaceWarningManager::UpdateInside(const AircraftState& state,
                                      const GlidePolar &glide_polar)
 {
   if (!glide_polar.IsValid())
     return false;
 
-  bool found = false;
-
-  AirspacePredicateAircraftInside condition(state);
-
-  Airspaces::AirspaceVector results = airspaces.FindInside(state, condition);
-  for (const auto &i : results) {
-    const AbstractAirspace &airspace = i.GetAirspace();
-
-    if (!airspace.IsActive())
-      continue; // ignore inactive airspaces
-
-    if (!config.IsClassEnabled(airspace.GetType()))
-      continue;
-
-    AirspaceWarning *warning = GetWarningPtr(airspace);
-
-    if (warning == nullptr ||
-        warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
-      GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
-      const AirspaceAircraftPerformance perf_glide(glide_polar);
-      AirspaceInterceptSolution solution;
-      airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
-
-      if (warning == nullptr)
-        warning = GetNewWarningPtr(airspace);
-
-      warning->UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
-      found = true;
-    }
-  }
-
-  return found;
+  InsideWarningVisitor visitor(*this, state, glide_polar);
+  airspaces.VisitInside(state.location, visitor);
+  return visitor.WasFound();
 }
 
 void
