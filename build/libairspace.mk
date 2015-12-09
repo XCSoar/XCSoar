@@ -13,7 +13,6 @@ AIRSPACE_SOURCES = \
 	$(AIRSPACE_SRC_DIR)/AirspaceIntersectSort.cpp \
 	$(AIRSPACE_SRC_DIR)/SoonestAirspace.cpp \
 	$(AIRSPACE_SRC_DIR)/Predicate/AirspacePredicate.cpp \
-	$(AIRSPACE_SRC_DIR)/Predicate/AirspacePredicateAircraftInside.cpp \
 	$(AIRSPACE_SRC_DIR)/Predicate/AirspacePredicateHeightRange.cpp \
 	$(AIRSPACE_SRC_DIR)/Predicate/OutsideAirspacePredicate.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspaceIntersectionVisitor.cpp \
