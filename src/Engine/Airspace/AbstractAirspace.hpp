@@ -133,6 +133,12 @@ public:
   virtual bool Inside(const GeoPoint &loc) const = 0;
 
   /**
+   * Checks whether an observer is inside the airspace altitude range.
+   */
+  gcc_pure
+  bool Inside(const AltitudeState &state) const;
+
+  /**
    * Checks whether an observer is inside the airspace (altitude is taken into account)
    * This calls inside(state.location) so can be slow.
    *

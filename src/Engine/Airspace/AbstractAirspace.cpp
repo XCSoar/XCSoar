@@ -36,6 +36,12 @@
 AbstractAirspace::~AbstractAirspace() {}
 
 bool
+AbstractAirspace::Inside(const AltitudeState &state) const
+{
+  return altitude_base.IsBelow(state) && altitude_top.IsAbove(state);
+}
+
+bool
 AbstractAirspace::Inside(const AircraftState &state) const
 {
   return altitude_base.IsBelow(state) &&
