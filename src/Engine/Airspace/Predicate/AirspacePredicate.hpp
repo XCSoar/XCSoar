@@ -19,10 +19,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AIRSPACE_PREDICATE_HPP
 #define AIRSPACE_PREDICATE_HPP
 
 #include "Compiler.h"
+
+#include <utility>
 
 class AbstractAirspace;
 class AirspacePredicateTrue;
@@ -78,21 +81,39 @@ WrapAirspacePredicate(const P &p)
   return WrapAirspacePredicate<P>(p);
 }
 
-/**
- * A class that combines two #AirspacePredicate instances with logical
- * "and".
- */
-class AndAirspacePredicate final : public AirspacePredicate {
-  const AirspacePredicate &a, &b;
+class AirspacePredicateRef {
+  const AirspacePredicate &p;
 
- public:
-  AndAirspacePredicate(const AirspacePredicate &_a,
-                       const AirspacePredicate &_b)
-    :a(_a), b(_b) {}
+public:
+  explicit AirspacePredicateRef(const AirspacePredicate &_p):p(_p) {}
 
-  bool operator()(const AbstractAirspace &t) const override {
-    return a(t) && b(t);
+  bool operator()(const AbstractAirspace &t) const {
+    return p(t);
   }
 };
+
+/**
+ * A class that combines two unary functions with logical "and".
+ */
+template<typename A, typename B>
+class AndPredicate : A, B {
+public:
+  template<typename A_, typename B_>
+  constexpr AndPredicate(A_ &&a, B_ &&b)
+    :A(std::forward<A_>(a)), B(std::forward<B_>(b)) {}
+
+  template<typename T>
+  gcc_pure
+  bool operator()(const T &t) const {
+    return A::operator()(t) && B::operator()(t);
+  }
+};
+
+template<typename A, typename B>
+static inline AndPredicate<A, B>
+MakeAndPredicate(const A &a, const B &b)
+{
+  return AndPredicate<A, B>(a, b);
+}
 
 #endif

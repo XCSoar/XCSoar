@@ -227,11 +227,13 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo h_condition(h_min, h_max, origin, destination);
 
-  AndAirspacePredicate condition(h_condition, _condition);
+  const auto and_condition = MakeAndPredicate(h_condition,
+                                              AirspacePredicateRef(_condition));
+  const auto predicate = WrapAirspacePredicate(and_condition);
 
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
                                      Half(origin.Distance(destination)),
-                                     condition)) {
+                                     predicate)) {
     if (!m_airspaces.IsEmpty())
       dirty = true;
   }

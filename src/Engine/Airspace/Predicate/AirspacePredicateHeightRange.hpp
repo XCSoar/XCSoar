@@ -59,7 +59,7 @@ public:
  * Convenience predicate for height within a specified range, excluding
  * airspaces enclosing two points
  */
-class AirspacePredicateHeightRangeExcludeTwo : public AirspacePredicate
+class AirspacePredicateHeightRangeExcludeTwo
 {
   const AirspacePredicateHeightRange height_range;
   const OutsideAirspacePredicate outside1, outside2;

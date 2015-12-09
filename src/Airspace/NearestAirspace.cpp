@@ -81,23 +81,25 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
 
   /* find the nearest airspace */
   //consider only active airspaces
-  const auto active_predicate =
-    WrapAirspacePredicate(ActiveAirspacePredicate(&airspace_warnings));
-  const auto outside_predicate =
-    WrapAirspacePredicate(OutsideAirspacePredicate(AGeoPoint(basic.location, RoughAltitude(0))));
-  const AndAirspacePredicate outside_and_active_predicate(active_predicate, outside_predicate);
+  const auto outside_and_active =
+    MakeAndPredicate(ActiveAirspacePredicate(&airspace_warnings),
+                     OutsideAirspacePredicate(AGeoPoint(basic.location,
+                                                        RoughAltitude(0))));
 
   //if altitude is available, filter airspaces in same height as airplane
   if (basic.NavAltitudeAvailable()) {
     /* check altitude; hard-coded margin of 50m (for now) */
-    const auto height_range_predicate =
-      WrapAirspacePredicate(AirspacePredicateHeightRange(RoughAltitude(basic.nav_altitude - 50),
-                                                         RoughAltitude(basic.nav_altitude + 50)));
-    AndAirspacePredicate and_predicate(outside_and_active_predicate, height_range_predicate);
-    return ::FindHorizontal(basic.location, airspace_database, and_predicate);
-  } else //only filter outside and active
-    return ::FindHorizontal(basic.location, airspace_database,
-                            outside_and_active_predicate);
+    const auto outside_and_active_and_height =
+      MakeAndPredicate(outside_and_active,
+                       AirspacePredicateHeightRange(RoughAltitude(basic.nav_altitude - 50),
+                                                    RoughAltitude(basic.nav_altitude + 50)));
+    const auto predicate = WrapAirspacePredicate(outside_and_active_and_height);
+    return ::FindHorizontal(basic.location, airspace_database, predicate);
+  } else {
+    /* only filter outside and active */
+    const auto predicate = WrapAirspacePredicate(outside_and_active);
+    return ::FindHorizontal(basic.location, airspace_database, predicate);
+  }
 }
 
 /**
