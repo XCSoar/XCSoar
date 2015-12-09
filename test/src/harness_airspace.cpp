@@ -247,21 +247,6 @@ public:
   }
 };
 
-/**
- * Adapter between an AirspaceVisitor and a function class.
- */
-template<typename V>
-struct CallVisitor {
-  V &visitor;
-
-  CallVisitor(V &_visitor):visitor(_visitor) {}
-
-  template<typename T>
-  void operator()(const T &t) {
-    return visitor.Visit(t);
-  }
-};
-
 void scan_airspaces(const AircraftState state, 
                     const Airspaces& airspaces,
                     const AirspaceAircraftPerformance& perf,
@@ -288,7 +273,9 @@ void scan_airspaces(const AircraftState state,
     const std::vector<Airspace> vi = airspaces.FindInside(state);
     AirspaceVisitorPrint pvi("output/results/res-bb-inside.txt",
                              do_report);
-    std::for_each(vi.begin(), vi.end(), CallVisitor<AirspaceVisitor>(pvi));
+    std::for_each(vi.begin(), vi.end(), [&pvi](const Airspace &a){
+        pvi.Visit(a.GetAirspace());
+      });
   }
   
   {
