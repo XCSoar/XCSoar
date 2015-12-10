@@ -66,7 +66,12 @@ public:
    */
   bool IsValid() const {
     return !negative(elapsed_time);
-  };
+  }
+
+  bool IsEarlierThan(const AirspaceInterceptSolution &other) const {
+    return IsValid() && (!other.IsValid() ||
+                         elapsed_time < other.elapsed_time);
+  }
 };
 
 static_assert(std::is_trivial<AirspaceInterceptSolution>::value,

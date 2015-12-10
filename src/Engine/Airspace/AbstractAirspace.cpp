@@ -130,18 +130,14 @@ AbstractAirspace::Intercept(const AircraftState &state,
   if (!only_vertical) {
     solution_candidate = InterceptVertical(state, perf, distance_start);
     // search near wall
-    if (solution_candidate.IsValid() &&
-        ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
-         negative(solution_this.elapsed_time)))
+    if (solution_candidate.IsEarlierThan(solution_this))
       solution_this = solution_candidate;
 
 
     if (distance_end != distance_start) {
       // need to search far wall also
       solution_candidate = InterceptVertical(state, perf, distance_end);
-      if (solution_candidate.IsValid() &&
-          ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
-           negative(solution_this.elapsed_time)))
+      if (solution_candidate.IsEarlierThan(solution_this))
         solution_this = solution_candidate;
     }
   }
@@ -149,18 +145,14 @@ AbstractAirspace::Intercept(const AircraftState &state,
   solution_candidate = InterceptHorizontal(state, perf, distance_start,
                                            distance_end, false);
   // search top wall
-  if (solution_candidate.IsValid() &&
-      ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
-       negative(solution_this.elapsed_time)))
+  if (solution_candidate.IsEarlierThan(solution_this))
     solution_this = solution_candidate;
 
   // search bottom wall
   if (!altitude_base.IsTerrain()) {
     solution_candidate = InterceptHorizontal(state, perf, distance_start,
                                              distance_end, true);
-    if (solution_candidate.IsValid() &&
-        ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
-         negative(solution_this.elapsed_time)))
+    if (solution_candidate.IsEarlierThan(solution_this))
       solution_this = solution_candidate;
   }
 
