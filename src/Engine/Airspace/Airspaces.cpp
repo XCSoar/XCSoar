@@ -35,14 +35,6 @@
 
 namespace bgi = boost::geometry::index;
 
-struct AirspacePredicateAdapter {
-  const AirspacePredicate &predicate;
-
-  bool operator()(const Airspace &as) const {
-    return predicate(as.GetAirspace());
-  }
-};
-
 Airspaces::const_iterator_range
 Airspaces::QueryWithinRange(const GeoPoint &location, fixed range) const
 {
@@ -100,33 +92,6 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 
   for (auto i = _begin; i != _end; ++i)
     adapter(*i);
-}
-
-// SCAN METHODS
-
-Airspaces::AirspaceVector
-Airspaces::ScanRange(const GeoPoint &location, fixed range,
-                     const AirspacePredicate &condition) const
-{
-  if (IsEmpty())
-    // nothing to do
-    return AirspaceVector();
-
-  const auto flat_location = task_projection.ProjectInteger(location);
-  unsigned projected_range = task_projection.ProjectRangeInteger(location,
-                                                                 range);
-  const FlatBoundingBox box(flat_location, projected_range);
-
-  auto predicate = bgi::intersects(box) &&
-    bgi::satisfies(AirspacePredicateAdapter{condition}) &&
-    bgi::satisfies([&box, projected_range, &location, range](const Airspace &a){
-        return a.Distance(box) <= projected_range &&
-        (a.IsInside(location) || positive(range));
-      });
-
-  AirspaceVector res;
-  airspace_tree.query(std::move(predicate), std::back_inserter(res));
-  return res;
 }
 
 void
@@ -302,8 +267,11 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
   activity_mask = master.activity_mask;
   task_projection = master.task_projection;
 
-  const AirspaceVector contents_master =
-    SortByPointer(master.ScanRange(location, range, condition));
+  AirspaceVector contents_master;
+  for (const auto &i : master.QueryWithinRange(location, range))
+    if (condition(i.GetAirspace()))
+      contents_master.push_back(i);
+  contents_master = SortByPointer(std::move(contents_master));
 
   if (CompareSortedAirspaceVectors(contents_master, SortByPointer(AsVector())))
     return false;

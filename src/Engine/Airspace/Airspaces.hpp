@@ -188,20 +188,6 @@ public:
   const_iterator_range QueryInside(const AircraftState &aircraft) const;
 
   /**
-   * Search for airspaces within range of the aircraft.
-   *
-   * @param location location of aircraft, from which to search
-   * @param range distance in meters of search radius
-   * @param condition condition to be applied to matches
-   *
-   * @return vector of airspaces intersecting search radius
-   */
-  gcc_pure
-  AirspaceVector ScanRange(const GeoPoint &location, fixed range,
-                           const AirspacePredicate &condition =
-                           AirspacePredicate::always_true) const;
-
-  /**
    * Access first airspace in store, for use in iterators.
    *
    * @return First airspace in store
