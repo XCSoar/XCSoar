@@ -191,6 +191,23 @@ SkyLinesTracking::Client::OnUserNameReceived(const UserNameResponsePacket &packe
 }
 
 inline void
+SkyLinesTracking::Client::OnWaveReceived(const WaveResponsePacket &packet,
+                                         size_t length)
+{
+  if (length < sizeof(packet))
+    return;
+
+  const unsigned n = packet.wave_count;
+  ConstBuffer<Wave> waves((const Wave *)(&packet + 1), n);
+  if (length != sizeof(packet) + waves.size * sizeof(waves.front()))
+    return;
+
+  for (const auto &wave : waves)
+    handler->OnWave(FromBE32(wave.time),
+                    ImportGeoPoint(wave.a), ImportGeoPoint(wave.b));
+}
+
+inline void
 SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 {
   Header &header = *(Header *)data;
@@ -208,12 +225,15 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
   const TrafficResponsePacket &traffic = *(const TrafficResponsePacket *)data;
   const UserNameResponsePacket &user_name =
     *(const UserNameResponsePacket *)data;
+  const auto &wave = *(const WaveResponsePacket *)data;
 
   switch ((Type)FromBE16(header.type)) {
   case PING:
   case FIX:
   case TRAFFIC_REQUEST:
   case USER_NAME_REQUEST:
+  case WAVE_SUBMIT:
+  case WAVE_REQUEST:
     break;
 
   case ACK:
@@ -226,6 +246,10 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 
   case USER_NAME_RESPONSE:
     OnUserNameReceived(user_name, length);
+    break;
+
+  case WAVE_RESPONSE:
+    OnWaveReceived(wave, length);
     break;
   }
 }

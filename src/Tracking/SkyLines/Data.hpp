@@ -30,6 +30,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <map>
+#include <list>
 
 #include <stdint.h>
 
@@ -53,6 +54,25 @@ namespace SkyLinesTracking {
          location(_location), altitude(_altitude) {}
     };
 
+    struct Wave {
+      /**
+       * Millisecond of day.
+       *
+       * @see SkyLinesTracking::Wave::time
+       */
+      uint32_t time_of_day_ms;
+
+      /**
+       * Two points describing the wave line.  This is the same as the
+       * corresponding attributes in #WaveInfo.
+       */
+      GeoPoint a, b;
+
+      Wave() = default;
+      constexpr Wave(uint32_t _time, GeoPoint _a, GeoPoint _b)
+        :time_of_day_ms(_time), a(_a), b(_b) {}
+    };
+
     mutable Mutex mutex;
 
     std::map<uint32_t, Traffic> traffic;
@@ -62,6 +82,8 @@ namespace SkyLinesTracking {
      * the server has failed/refused to supply a name.
      */
     std::map<uint32_t, tstring> user_names;
+
+    std::list<Wave> waves;
 
     gcc_pure
     bool IsUserKnown(uint32_t id) const {

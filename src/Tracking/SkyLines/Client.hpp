@@ -37,6 +37,7 @@ class IOThread;
 namespace SkyLinesTracking {
   struct TrafficResponsePacket;
   struct UserNameResponsePacket;
+  struct WaveResponsePacket;
 
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -104,6 +105,7 @@ namespace SkyLinesTracking {
     void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
     void OnUserNameReceived(const UserNameResponsePacket &packet,
                             size_t length);
+    void OnWaveReceived(const WaveResponsePacket &packet, size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
     /* virtual methods from SocketEventHandler */

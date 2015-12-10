@@ -266,4 +266,17 @@ TrackingGlue::OnUserName(uint32_t user_id, const TCHAR *name)
   skylines_data.user_names[user_id] = name;
 }
 
+void
+TrackingGlue::OnWave(unsigned time_of_day_ms,
+                     const GeoPoint &a, const GeoPoint &b)
+{
+  /* garbage collection - hard-coded upper limit */
+  auto n = skylines_data.waves.size();
+  while (n-- >= 64)
+    skylines_data.waves.pop_front();
+
+  // TODO: replace existing item?
+  skylines_data.waves.emplace_back(time_of_day_ms, a, b);
+}
+
 #endif
