@@ -38,7 +38,6 @@ extern "C" {
 
 extern int n_samples;
 void PrintDistanceCounts();
-void PrintQueries(unsigned n, std::ostream &fout);
 char WaitPrompt();
 extern int interactive;
 extern int verbose;

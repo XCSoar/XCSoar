@@ -171,10 +171,6 @@ Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
   const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
   const auto found = waypoint_tree.FindNearest(bb_target, mrange);
 
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
-
   if (found.first == waypoint_tree.end())
     return nullptr;
 
@@ -204,10 +200,6 @@ Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
   bb_target.Project(task_projection);
   const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
   const auto found = waypoint_tree.FindNearestIf(bb_target, mrange, predicate);
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
 
   if (found.first == waypoint_tree.end())
     return nullptr;
@@ -285,10 +277,6 @@ Waypoints::VisitWithinRange(const GeoPoint &loc, const fixed range,
   WaypointEnvelopeVisitor wve(&visitor);
 
   waypoint_tree.VisitWithinRange(bb_target, mrange, wve);
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
 }
 
 void

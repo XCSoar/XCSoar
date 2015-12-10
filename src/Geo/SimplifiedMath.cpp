@@ -73,10 +73,6 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
       ? Angle::Zero()
       : Angle::FromXY(x, y).AsBearing();
   }
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
 }
 
 void

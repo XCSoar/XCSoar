@@ -33,11 +33,6 @@
 
 #include <functional>
 
-#ifdef INSTRUMENT_TASK
-extern unsigned n_queries;
-extern long count_intersections;
-#endif
-
 namespace bgi = boost::geometry::index;
 
 struct AirspacePredicateAdapter {
@@ -68,10 +63,6 @@ Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
 
   for (auto i = _begin; i != _end; ++i)
     visitor.Visit(i->GetAirspace());
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
 }
 
 class IntersectingAirspaceVisitorAdapter {
@@ -117,10 +108,6 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 
   for (auto i = _begin; i != _end; ++i)
     adapter(*i);
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
 }
 
 // SCAN METHODS
@@ -132,10 +119,6 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
   if (IsEmpty())
     // nothing to do
     return AirspaceVector();
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
 
   const auto flat_location = task_projection.ProjectInteger(location);
   unsigned projected_range = task_projection.ProjectRangeInteger(location,
@@ -162,10 +145,6 @@ Airspaces::FindInside(const AircraftState &state,
   const FlatBoundingBox box(flat_location, flat_location);
 
   AirspaceVector vectors;
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
 
   auto predicate = bgi::intersects(box) &&
     bgi::satisfies(AirspacePredicateAdapter{condition}) &&

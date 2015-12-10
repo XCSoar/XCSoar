@@ -31,11 +31,6 @@
 #include <algorithm>
 #include <assert.h>
 
-#ifdef INSTRUMENT_TASK
-// global, used for test harness
-long count_mc = 0;
-#endif
-
 MacCready::MacCready(const GlideSettings &_settings,
                      const GlidePolar &_glide_polar,
                      const double _cruise_efficiency)
@@ -105,9 +100,6 @@ GlideResult
 MacCready::Solve(const GlideSettings &settings, const GlidePolar &glide_polar,
                  const GlideState &task)
 {
-#ifdef INSTRUMENT_TASK
-  count_mc++;
-#endif
   const MacCready mac(settings, glide_polar);
   return mac.Solve(task);
 }
@@ -117,9 +109,6 @@ MacCready::SolveSink(const GlideSettings &settings,
                      const GlidePolar &glide_polar, const GlideState &task,
                      const double sink_rate)
 {
-#ifdef INSTRUMENT_TASK
-  count_mc++;
-#endif
   const MacCready mac(settings, glide_polar);
   return mac.SolveSink(task, sink_rate);
 }

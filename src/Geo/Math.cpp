@@ -32,11 +32,6 @@ Copyright_License {
 
 using namespace WGS84::Fixed;
 
-#ifdef INSTRUMENT_TASK
-// global, used for test harness
-unsigned count_distbearing = 0;
-#endif
-
 static inline Angle
 EarthASin(const fixed a)
 {
@@ -140,10 +135,6 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
   loc3.latitude = Angle::FromXY(hypot(x, y), z);
   loc3.longitude = Angle::FromXY(x, y);
   loc3.Normalize(); // ensure longitude is within -180:180
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
 
   return loc3;
 }
@@ -279,10 +270,6 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
   const Angle cross_track_distance =
     EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
 
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
-
 #ifdef USE_WGS84
   const auto sc = cross_track_distance.SinCos();
   const auto sinXTD = sc.first, cosXTD = sc.second;
@@ -344,10 +331,6 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   const Angle along_track_distance =
     EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
 
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
-
 #ifdef USE_WGS84
   auto projected = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
 
@@ -377,10 +360,6 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 
   const auto a12 = Square(s21) + cos_loc1_lat * cos_loc2_lat * Square(sl21);
   const auto a23 = Square(s32) + cos_loc2_lat * cos_loc3_lat * Square(sl32);
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
 
   return (2 * FAISphere::REARTH) *
     (EarthDistance(a12) + EarthDistance(a23)).Radians();
@@ -479,10 +458,6 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
 #endif
 
   loc_out.Normalize(); // ensure longitude is within -180:180
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
 
   return loc_out;
 }

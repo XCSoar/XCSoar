@@ -50,8 +50,6 @@ test_wp(const unsigned n, std::ostream &fo)
 
   AircraftState state;
 
-  PrintQueries(0, fo);
-
   for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
@@ -61,7 +59,6 @@ test_wp(const unsigned n, std::ostream &fo)
     WaypointVisitorPrint wvp;
     waypoints.VisitWithinRange(state.location, fixed(50000.0), wvp);
   }
-  PrintQueries(n, fo);
   fo.flush();
   return true;
 }
@@ -74,8 +71,6 @@ test_as(const unsigned n, std::ostream &fo)
   Airspaces airspaces;
   setup_airspaces(airspaces,GeoPoint(Angle::Zero(), Angle::Zero()), n);
 
-  PrintQueries(0, fo);
-
   for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
@@ -83,7 +78,6 @@ test_as(const unsigned n, std::ostream &fo)
     state.location.latitude = Angle::Degrees(fixed(y/1000.0));
     const AirspacesInterface::AirspaceVector vc = airspaces.FindInside(state);
   }
-  PrintQueries(n, fo);
   fo.flush();
 
   const AirspacesInterface::AirspaceVector vc =

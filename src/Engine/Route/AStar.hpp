@@ -29,10 +29,6 @@ Copyright_License {
 
 #include <unordered_map>
 
-#ifdef INSTRUMENT_TASK
-extern long count_astar_links;
-#endif
-
 struct AStarPriorityValue
 {
   static constexpr unsigned MINMAX_OFFSET = 134217727;
@@ -218,9 +214,6 @@ public:
    */
   void Link(const Node &node, const Node &parent,
             const AStarPriorityValue &edge_value) {
-#ifdef INSTRUMENT_TASK
-    count_astar_links++;
-#endif
     Push(node, parent, GetNodeValue(parent) + edge_value.Adjust<m_min>());
     // note order of + here is important!
   }

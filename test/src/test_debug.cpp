@@ -43,13 +43,6 @@ AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
 AllocatedPath task_file = nullptr;
 fixed range_threshold = fixed(15000);
 
-#ifdef INSTRUMENT_TASK
-extern long count_mc;
-long count_intersections;
-extern unsigned n_queries;
-extern unsigned count_distbearing;
-#endif
-
 #ifdef INSTRUMENT_ZERO
 extern unsigned long zero_skipped;
 extern unsigned long zero_total;
@@ -58,14 +51,6 @@ extern unsigned long zero_total;
 void PrintDistanceCounts() {
   if (n_samples) {
     printf("# Instrumentation\n");
-#ifdef INSTRUMENT_TASK
-    printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
-    printf("#     mc calcs/c %d\n",(int)(count_mc/n_samples));
-    if (n_queries>0) {
-      printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
-      printf("#    (total queries %d)\n\n",n_queries);
-    }
-#endif
     printf("#    (total cycles %d)\n#\n",n_samples);
 #ifdef INSTRUMENT_ZERO
     if (zero_total) {
@@ -75,25 +60,9 @@ void PrintDistanceCounts() {
 #endif
   }
   n_samples = 0;
-#ifdef INSTRUMENT_TASK
-  count_intersections = 0;
-  n_queries = 0;
-  count_distbearing = 0;
-  count_mc = 0;
-#endif
 #ifdef INSTRUMENT_ZERO
   zero_skipped = 0;
   zero_total = 0;
-#endif
-}
-
-void PrintQueries(unsigned n, std::ostream &fout) {
-#ifdef INSTRUMENT_TASK
-  if (n_queries>0) {
-    fout << n << " " << count_intersections/n_queries << "\n";
-  }
-  count_intersections = 0;
-  n_queries = 0;
 #endif
 }
 
