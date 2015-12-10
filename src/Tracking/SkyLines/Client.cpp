@@ -28,6 +28,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Net/StaticSocketAddress.hxx"
 #include "Util/CRC.hpp"
+#include "Util/ConstBuffer.hxx"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/IOThread.hpp"
@@ -158,18 +159,17 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
     return;
 
   const unsigned n = packet.traffic_count;
-  const TrafficResponsePacket::Traffic *traffic =
-    (const TrafficResponsePacket::Traffic *)(&packet + 1);
+  const ConstBuffer<TrafficResponsePacket::Traffic>
+    list((const TrafficResponsePacket::Traffic *)(&packet + 1), n);
 
-  if (length != sizeof(packet) + n * sizeof(*traffic))
+  if (length != sizeof(packet) + n * sizeof(list.front()))
     return;
 
-  const TrafficResponsePacket::Traffic *end = traffic + n;
-  for (; traffic != end; ++traffic)
-    handler->OnTraffic(FromBE32(traffic->pilot_id),
-                       FromBE32(traffic->time),
-                       ImportGeoPoint(traffic->location),
-                       (int16_t)FromBE16(traffic->altitude));
+  for (const auto &traffic : list)
+    handler->OnTraffic(FromBE32(traffic.pilot_id),
+                       FromBE32(traffic.time),
+                       ImportGeoPoint(traffic.location),
+                       (int16_t)FromBE16(traffic.altitude));
 }
 
 inline void
