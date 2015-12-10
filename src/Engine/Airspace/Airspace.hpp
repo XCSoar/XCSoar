@@ -92,7 +92,9 @@ public:
    * @return true if ray intersects or wholly enclosed by airspace
    */
   gcc_pure
-  bool Intersects(const FlatRay &ray) const;
+  bool Intersects(const FlatRay &ray) const {
+    return FlatBoundingBox::Intersects(ray);
+  }
 
   /**
    * Checks whether a line intersects with the airspace, by directing

@@ -53,13 +53,6 @@ Airspace::IsInside(const GeoPoint &loc) const
   return airspace->Inside(loc);
 }
 
-bool
-Airspace::Intersects(const FlatRay &ray) const
-{
-  return FlatBoundingBox::Intersects(ray);
-}
-
-
 AirspaceIntersectionVector
 Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
                      const FlatProjection &projection) const
