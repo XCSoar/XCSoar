@@ -267,7 +267,7 @@ PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *ar
         "location", Python::WriteLonLat(basic.location)));
     }
 
-    last_airspaces.swap(airspaces);
+    last_airspaces = std::move(airspaces);
   }
 
   delete replay;
