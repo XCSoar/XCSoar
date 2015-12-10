@@ -169,7 +169,7 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
     handler->OnTraffic(FromBE32(traffic->pilot_id),
                        FromBE32(traffic->time),
                        ImportGeoPoint(traffic->location),
-                       FromBE16(traffic->altitude));
+                       (int16_t)FromBE16(traffic->altitude));
 }
 
 inline void
