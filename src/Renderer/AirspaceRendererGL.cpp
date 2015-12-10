@@ -33,6 +33,7 @@ Copyright_License {
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 
 class AirspaceVisitorRenderer final

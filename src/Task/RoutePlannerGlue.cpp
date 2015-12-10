@@ -23,6 +23,7 @@
 #include "RoutePlannerGlue.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Airspace/ActivePredicate.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)

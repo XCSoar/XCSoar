@@ -24,6 +24,7 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceVisitor.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Geo/Flat/FlatRay.hpp"

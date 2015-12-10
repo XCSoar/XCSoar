@@ -25,7 +25,6 @@
 
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
-#include "Predicate/AirspacePredicate.hpp"
 #include "Util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -34,8 +33,8 @@
 #include <deque>
 
 class RasterTerrain;
-class AirspaceVisitor;
 class AirspaceIntersectionVisitor;
+class AirspacePredicate;
 
 /**
  * Container for airspaces using kd-tree representation internally for
@@ -228,8 +227,7 @@ public:
    */
   bool SynchroniseInRange(const Airspaces &master,
                           const GeoPoint &location, fixed range,
-                          const AirspacePredicate &condition =
-                                AirspacePredicate::always_true);
+                          const AirspacePredicate &condition);
 
 private:
   gcc_pure

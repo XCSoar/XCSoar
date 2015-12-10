@@ -26,6 +26,7 @@
 #include "test_debug.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/SoonestAirspace.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "OS/FileUtil.hpp"
