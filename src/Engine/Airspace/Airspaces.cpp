@@ -92,13 +92,12 @@ Airspaces::Optimise()
     airspace_tree.clear();
   }
 
-  if (!tmp_as.empty()) {
-    while (!tmp_as.empty()) {
-      Airspace as(*tmp_as.front(), task_projection);
-      airspace_tree.insert(as);
-      tmp_as.pop_front();
-    }
+  for (AbstractAirspace *i : tmp_as) {
+    Airspace as(*i, task_projection);
+    airspace_tree.insert(as);
   }
+
+  tmp_as.clear();
 
   ++serial;
 }
