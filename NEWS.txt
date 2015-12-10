@@ -6,6 +6,7 @@ Version 6.8.3 - not yet released
   - relax file format detection for OziExplorer files
 * fix crash in XML parser
 * fix crash in airspace parser
+* fix crash in SkyLines tracking
 
 Version 6.8.2 - 2015/09/19
 * Rubik R-26S polar

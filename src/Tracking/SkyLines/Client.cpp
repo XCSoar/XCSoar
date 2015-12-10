@@ -154,6 +154,9 @@ inline void
 SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
                                             size_t length)
 {
+  if (length < sizeof(packet))
+    return;
+
   const unsigned n = packet.traffic_count;
   const TrafficResponsePacket::Traffic *traffic =
     (const TrafficResponsePacket::Traffic *)(&packet + 1);
