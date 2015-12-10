@@ -223,9 +223,6 @@ Libraries and code segments are included from the following projects:
  JasPer
  http://www.ece.uvic.ca/~mdadams/jasper/
 
- libkdtree++
- http://libkdtree.alioth.debian.org/
-
  zziplib
  http://zziplib.sourceforge.net/
 
