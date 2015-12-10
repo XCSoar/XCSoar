@@ -29,10 +29,10 @@ Copyright_License {
 #include "Navigation/Aircraft.hpp"
 
 struct SoonestAirspace {
-  const AbstractAirspace *airspace;
-  fixed time;
+  const AbstractAirspace *airspace = nullptr;
+  double time = -1;
 
-  SoonestAirspace():airspace(nullptr) {}
+  SoonestAirspace() = default;
   SoonestAirspace(const AbstractAirspace &_airspace,
                   fixed _time)
     :airspace(&_airspace), time(_time) {}
