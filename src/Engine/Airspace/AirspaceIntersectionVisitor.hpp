@@ -51,7 +51,7 @@ public:
    * @return True if more than one intersection pair
    */
   bool SetIntersections(AirspaceIntersectionVector &&p) {
-    intersections.swap(p);
+    intersections = std::move(p);
     return !intersections.empty();
   }
 
