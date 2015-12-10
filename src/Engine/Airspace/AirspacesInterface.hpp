@@ -115,6 +115,8 @@ public:
    */
   typedef boost::geometry::index::rtree<Airspace, boost::geometry::index::rstar<16>,
                                         AirspaceIndexable> AirspaceTree;
+
+  typedef AirspaceTree::const_query_iterator const_iterator;
 };
 
 #endif

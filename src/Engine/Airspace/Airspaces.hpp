@@ -211,7 +211,7 @@ public:
    * @return First airspace in store
    */
   gcc_pure
-  AirspaceTree::const_query_iterator begin() const {
+  const_iterator begin() const {
     return airspace_tree.qbegin(boost::geometry::index::satisfies([](const Airspace &){ return true; }));
   }
 
@@ -221,7 +221,7 @@ public:
    * @return End airspace in store
    */
   gcc_pure
-  AirspaceTree::const_query_iterator end() const {
+  const_iterator end() const {
     return airspace_tree.qend();
   }
 
