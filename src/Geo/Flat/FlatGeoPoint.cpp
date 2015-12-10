@@ -31,13 +31,6 @@ FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
 }
 
 unsigned
-FlatGeoPoint::ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const
-{
-  const FlatGeoPoint delta = *this - sp;
-  return ShiftedIntegerHypot(delta.x, delta.y, bits);
-}
-
-unsigned
 FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
