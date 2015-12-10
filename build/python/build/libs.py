@@ -11,6 +11,7 @@ boost = BoostProject(
     'http://netcologne.dl.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.bz2',
     '6aa9a5c6a4ca1016edd0ed1178e3cb87',
     'include/boost/version.hpp',
+    patches=abspath('lib/boost/patches'),
 )
 
 zlib = ZlibProject(
