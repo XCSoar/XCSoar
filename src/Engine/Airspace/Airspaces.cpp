@@ -25,13 +25,9 @@
 #include "AirspaceVisitor.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Predicate/AirspacePredicate.hpp"
-#include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Geo/Flat/TaskProjection.hpp"
 
 #include <boost/geometry/geometries/linestring.hpp>
-
-#include <functional>
 
 namespace bgi = boost::geometry::index;
 
