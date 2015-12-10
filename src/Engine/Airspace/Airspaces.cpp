@@ -49,6 +49,21 @@ Airspaces::QueryWithinRange(const GeoPoint &location, fixed range) const
   return {airspace_tree.qbegin(bgi::intersects(box)), airspace_tree.qend()};
 }
 
+Airspaces::const_iterator_range
+Airspaces::QueryIntersecting(const GeoPoint &a, const GeoPoint &b) const
+{
+  if (IsEmpty())
+    // nothing to do
+    return {airspace_tree.qend(), airspace_tree.qend()};
+
+  // TODO: use StaticArray instead of std::vector
+  boost::geometry::model::linestring<FlatGeoPoint> line;
+  line.push_back(task_projection.ProjectInteger(a));
+  line.push_back(task_projection.ProjectInteger(b));
+
+  return {airspace_tree.qbegin(bgi::intersects(line)), airspace_tree.qend()};
+}
+
 class IntersectingAirspaceVisitorAdapter {
   GeoPoint start, end;
   const FlatProjection *projection;
@@ -72,23 +87,10 @@ void
 Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
                              AirspaceIntersectionVisitor &visitor) const
 {
-  if (IsEmpty())
-    // nothing to do
-    return;
-
-  // TODO: use StaticArray instead of std::vector
-  boost::geometry::model::linestring<FlatGeoPoint> line;
-  line.push_back(task_projection.ProjectInteger(loc));
-  line.push_back(task_projection.ProjectInteger(end));
-
   IntersectingAirspaceVisitorAdapter adapter(loc, end, task_projection, visitor);
 
-  const auto _begin =
-    airspace_tree.qbegin(bgi::intersects(line));
-  const auto _end = airspace_tree.qend();
-
-  for (auto i = _begin; i != _end; ++i)
-    adapter(*i);
+  for (const auto &i : QueryIntersecting(loc, end))
+    adapter(i);
 }
 
 void

@@ -163,6 +163,14 @@ public:
                                         fixed range) const;
 
   /**
+   * Query airspaces intersecting the vector (bounding box check
+   * only).  The result is in no specific order.
+   */
+  gcc_pure
+  const_iterator_range QueryIntersecting(const GeoPoint &a,
+                                         const GeoPoint &b) const;
+
+  /**
    * Call visitor class on airspaces intersected by vector.
    * Note that the visitor is not instantiated separately for each match
    *
