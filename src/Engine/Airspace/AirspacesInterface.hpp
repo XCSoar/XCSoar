@@ -23,19 +23,10 @@
 #define AIRSPACESINTERFACE_HPP
 
 #include "Airspace.hpp"
+#include "Geo/Flat/BoostFlatBoundingBox.hpp"
 
 #include <boost/geometry/index/rtree.hpp>
-#include <boost/geometry/geometries/register/point.hpp>
-#include <boost/geometry/geometries/register/box.hpp>
 #include <boost/range/iterator_range_core.hpp>
-
-#include <assert.h>
-
-BOOST_GEOMETRY_REGISTER_POINT_2D(FlatGeoPoint, int,
-                                 boost::geometry::cs::cartesian, x, y)
-
-BOOST_GEOMETRY_REGISTER_BOX(FlatBoundingBox, FlatGeoPoint,
-                            lower_left, upper_right)
 
 /**
  * Abstract class for interface to #Airspaces database.
