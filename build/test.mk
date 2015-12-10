@@ -20,7 +20,6 @@ TESTFAST = \
 	test_modes \
 	test_automc \
 	test_acfilter \
-	test_trees \
 	test_vopt
 
 TESTSLOW = \
