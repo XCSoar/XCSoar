@@ -195,21 +195,6 @@ Airspaces::ClearClearances()
 
 gcc_pure
 static bool
-AirspacePointersLess(const Airspace &a, const Airspace &b)
-{
-  return &a.GetAirspace() < &b.GetAirspace();
-}
-
-gcc_pure
-static AirspacesInterface::AirspaceVector
-SortByPointer(AirspacesInterface::AirspaceVector &&v)
-{
-  std::sort(v.begin(), v.end(), AirspacePointersLess);
-  return v;
-}
-
-gcc_pure
-static bool
 AirspacePointersEquals(const Airspace &a, const Airspace &b)
 {
   return &a.GetAirspace() == &b.GetAirspace();
@@ -217,11 +202,11 @@ AirspacePointersEquals(const Airspace &a, const Airspace &b)
 
 gcc_pure
 static bool
-CompareSortedAirspaceVectors(const AirspacesInterface::AirspaceVector &a,
-                             const AirspacesInterface::AirspaceVector &b)
+CompareAirspaceVectors(const AirspacesInterface::AirspaceVector &a,
+                       const AirspacesInterface::AirspaceVector &b)
 {
   return a.size() == b.size() &&
-    std::equal(a.begin(), a.end(), b.begin(), AirspacePointersEquals);
+    std::is_permutation(a.begin(), a.end(), b.begin(), AirspacePointersEquals);
 }
 
 inline AirspacesInterface::AirspaceVector
@@ -250,9 +235,8 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
   for (const auto &i : master.QueryWithinRange(location, range))
     if (condition(i.GetAirspace()))
       contents_master.push_back(i);
-  contents_master = SortByPointer(std::move(contents_master));
 
-  if (CompareSortedAirspaceVectors(contents_master, SortByPointer(AsVector())))
+  if (CompareAirspaceVectors(contents_master, AsVector()))
     return false;
 
   for (auto &i : QueryAll())
