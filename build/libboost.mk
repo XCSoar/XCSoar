@@ -3,4 +3,6 @@
 # compiler/linker flags.
 
 BOOST_LDLIBS =
-BOOST_CPPFLAGS =
+
+# reduce Boost header bloat a bit
+BOOST_CPPFLAGS = -DBOOST_NO_IOSTREAM -DBOOST_MATH_NO_LEXICAL_CAST
