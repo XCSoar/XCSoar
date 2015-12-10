@@ -40,6 +40,8 @@ namespace SkyLinesTracking {
     virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                            const ::GeoPoint &location, int altitude) {}
     virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
+    virtual void OnWave(unsigned time_of_day_ms,
+                        const ::GeoPoint &a, const ::GeoPoint &b) {}
   };
 }
 

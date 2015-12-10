@@ -70,6 +70,21 @@ namespace SkyLinesTracking {
     TRAFFIC_RESPONSE = 5,
     USER_NAME_REQUEST = 6,
     USER_NAME_RESPONSE = 7,
+
+    /**
+     * @see #WaveSubmitPacket
+     */
+    WAVE_SUBMIT = 8,
+
+    /**
+     * @see #WaveRequestPacket
+     */
+    WAVE_REQUEST = 9,
+
+    /**
+     * @see #WaveResponsePacket
+     */
+    WAVE_RESPONSE = 10,
   };
 
   /**
@@ -404,6 +419,97 @@ namespace SkyLinesTracking {
 #ifdef __cplusplus
   static_assert(sizeof(UserNameResponsePacket) == 40, "Wrong struct size");
 #endif
+
+  /**
+   * Packet fragment which describes one wave.
+   */
+  struct Wave {
+    /**
+     * Millisecond of day (UTC).  This is the time this wave was last
+     * seen.
+     */
+    uint32_t time;
+
+    /**
+     * This reserved field may one day become the reporter's user id.
+     */
+    uint32_t reserved1;
+
+    /**
+     * Two points describing the wave axis where lift was found.
+     */
+    GeoPoint a, b;
+
+    /**
+     * Approximate bottom altitude where this wave was found.  For
+     * example, this may be the altitude where the glider entered the
+     * wave.
+     *
+     * Note: this is unused currently.
+     */
+    int16_t bottom_altitude;
+
+    /**
+     * Approximate top altitude where this wave was found.  For
+     * example, this may be the altitude where the glider left the
+     * wave.
+     *
+     * Note: this is unused currently.
+     */
+    int16_t top_altitude;
+
+    /**
+     * Average lift m/256s.
+     *
+     * Note: this is unused currently.
+     */
+    uint16_t lift;
+
+    int16_t reserved2;
+  };
+
+  /**
+   * The client submits the location of a wave he detected.
+   */
+  struct WaveSubmitPacket {
+    Header header;
+
+    Wave wave;
+  };
+
+  /**
+   * The client wishes to receive wave information.  The server will
+   * send #WAVE_RESPONSE / #WaveResponsePacket.
+   */
+  struct WaveRequestPacket {
+    Header header;
+
+    /**
+     * Unused.
+     */
+    uint32_t flags;
+
+    uint32_t reserved1;
+  };
+
+  /**
+   * Reply to #WAVE_REQUEST / #WaveRequestPacket.
+   */
+  struct WaveResponsePacket {
+    Header header;
+
+    uint16_t reserved1;
+    uint8_t reserved2;
+
+    /**
+     * The number of #Wave instances following this struct.
+     */
+    uint8_t wave_count;
+
+    uint32_t reserved3;
+
+    /* followed by a number of #Wave instances */
+  };
 };
 
 #endif
