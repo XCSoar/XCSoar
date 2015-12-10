@@ -101,10 +101,9 @@ AbstractAirspace::InterceptHorizontal(const AircraftState &state,
   return solution;
 }
 
-bool
+AirspaceInterceptSolution
 AbstractAirspace::Intercept(const AircraftState &state,
                             const AirspaceAircraftPerformance &perf,
-                            AirspaceInterceptSolution &solution,
                             const GeoPoint &loc_start,
                             const GeoPoint &loc_end) const
 {
@@ -119,7 +118,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
     ? distance_start
     : (only_vertical ? fixed(0) : state.location.Distance(loc_end));
 
-  AirspaceInterceptSolution solution_this =
+  AirspaceInterceptSolution solution =
     AirspaceInterceptSolution::Invalid();
 
   // need to scan at least three sides, top, far, bottom (if not terrain)
@@ -130,34 +129,32 @@ AbstractAirspace::Intercept(const AircraftState &state,
   if (!only_vertical) {
     solution_candidate = InterceptVertical(state, perf, distance_start);
     // search near wall
-    if (solution_candidate.IsEarlierThan(solution_this))
-      solution_this = solution_candidate;
-
+    if (solution_candidate.IsEarlierThan(solution))
+      solution = solution_candidate;
 
     if (distance_end != distance_start) {
       // need to search far wall also
       solution_candidate = InterceptVertical(state, perf, distance_end);
-      if (solution_candidate.IsEarlierThan(solution_this))
-        solution_this = solution_candidate;
+      if (solution_candidate.IsEarlierThan(solution))
+        solution = solution_candidate;
     }
   }
 
   solution_candidate = InterceptHorizontal(state, perf, distance_start,
                                            distance_end, false);
   // search top wall
-  if (solution_candidate.IsEarlierThan(solution_this))
-    solution_this = solution_candidate;
+  if (solution_candidate.IsEarlierThan(solution))
+    solution = solution_candidate;
 
   // search bottom wall
   if (!altitude_base.IsTerrain()) {
     solution_candidate = InterceptHorizontal(state, perf, distance_start,
                                              distance_end, true);
-    if (solution_candidate.IsEarlierThan(solution_this))
-      solution_this = solution_candidate;
+    if (solution_candidate.IsEarlierThan(solution))
+      solution = solution_candidate;
   }
 
-  if (solution_this.IsValid()) {
-    solution = solution_this;
+  if (solution.IsValid()) {
     if (solution.distance == distance_start)
       solution.location = loc_start;
     else if (solution.distance == distance_end)
@@ -169,34 +166,25 @@ AbstractAirspace::Intercept(const AircraftState &state,
       solution.location = loc_start;
 
     assert(!negative(solution.distance));
-    return true;
   }
 
-  return false;
+  return solution;
 }
 
-bool
+AirspaceInterceptSolution
 AbstractAirspace::Intercept(const AircraftState &state,
                             const GeoPoint &end,
                             const FlatProjection &projection,
-                            const AirspaceAircraftPerformance &perf,
-                            AirspaceInterceptSolution &solution) const
+                            const AirspaceAircraftPerformance &perf) const
 {
-  AirspaceIntersectionVector vis = Intersects(state.location, end,
-                                              projection);
-  if (vis.empty())
-    return false;
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
+  for (const auto &i : Intersects(state.location, end, projection)) {
+    auto new_solution = Intercept(state, perf, i.first, i.second);
+    if (new_solution.IsEarlierThan(solution))
+      solution = new_solution;
+  }
 
-  AirspaceInterceptSolution this_solution =
-    AirspaceInterceptSolution::Invalid();
-  for (const auto &i : vis)
-    Intercept(state, perf, this_solution, i.first, i.second);
-
-  if (!this_solution.IsValid())
-    return false;
-
-  solution = this_solution;
-  return true;
+  return solution;
 }
 
 bool

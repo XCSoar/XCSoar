@@ -55,8 +55,8 @@ CalculateSoonestAirspace(const AircraftState &state,
   const auto closest = airspace.ClosestPoint(state.location, projection);
   assert(closest.IsValid());
 
-  auto solution = AirspaceInterceptSolution::Invalid();
-  if (!airspace.Intercept(state, perf, solution, closest, closest) ||
+  const auto solution = airspace.Intercept(state, perf, closest, closest);
+  if (!solution.IsValid() ||
       solution.elapsed_time > max_time)
     return SoonestAirspace();
 

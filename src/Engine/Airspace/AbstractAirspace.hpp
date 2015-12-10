@@ -290,11 +290,11 @@ public:
    * @param loc_end Location of last point on/in airspace to query (if provided)
    * @return True if intercept found
    */
-  bool Intercept(const AircraftState &state,
-                 const AirspaceAircraftPerformance &perf,
-                 AirspaceInterceptSolution &solution,
-                 const GeoPoint &loc_start,
-                 const GeoPoint &loc_end) const;
+  gcc_pure
+  AirspaceInterceptSolution Intercept(const AircraftState &state,
+                                      const AirspaceAircraftPerformance &perf,
+                                      const GeoPoint &loc_start,
+                                      const GeoPoint &loc_end) const;
 
   /**
    * Find time/distance/height to airspace from an observer given a
@@ -309,11 +309,11 @@ public:
    * @param solution Solution of intercept (set if intercept possible, else untouched)
    * @return True if intercept found
    */
-  bool Intercept(const AircraftState &state,
-                 const GeoPoint &end,
-                 const FlatProjection &projection,
-                 const AirspaceAircraftPerformance &perf,
-                 AirspaceInterceptSolution &solution) const;
+  gcc_pure
+  AirspaceInterceptSolution Intercept(const AircraftState &state,
+                                      const GeoPoint &end,
+                                      const FlatProjection &projection,
+                                      const AirspaceAircraftPerformance &perf) const;
 
 #ifdef DO_PRINT
   friend std::ostream &operator<<(std::ostream &f,

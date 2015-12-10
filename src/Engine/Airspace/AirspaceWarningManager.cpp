@@ -222,7 +222,8 @@ public:
       AirspaceInterceptSolution solution;
 
       if (mode_inside) {
-        airspace.Intercept(state, perf, solution, state.location, state.location);
+        solution = airspace.Intercept(state, perf,
+                                      state.location, state.location);
       } else {
         solution = Intercept(airspace, state, perf);
       }
@@ -406,8 +407,8 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
         warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
       const AirspaceAircraftPerformance perf_glide(glide_polar);
-      AirspaceInterceptSolution solution;
-      airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
+      const AirspaceInterceptSolution solution =
+        airspace.Intercept(state, c, GetProjection(), perf_glide);
 
       if (warning == nullptr)
         warning = GetNewWarningPtr(airspace);

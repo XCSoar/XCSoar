@@ -32,9 +32,12 @@ AirspaceIntersectionVisitor::Intercept(const AbstractAirspace &as,
   if (intersections.empty())
     return AirspaceInterceptSolution::Invalid();
 
-  AirspaceInterceptSolution solution;
-  for (const auto &i : intersections)
-    as.Intercept(state, perf, solution, i.first, i.second);
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
+  for (const auto &i : intersections) {
+    auto new_solution = as.Intercept(state, perf, i.first, i.second);
+    if (new_solution.IsEarlierThan(solution))
+      solution = new_solution;
+  }
 
   return solution;
 }

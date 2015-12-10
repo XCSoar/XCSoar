@@ -232,10 +232,11 @@ public:
       *fout << c.longitude << " " << c.latitude << " " << "\n";
       *fout << state.location.longitude << " " << state.location.latitude << " " << "\n\n";
     }
-    AirspaceInterceptSolution solution;
     GeoVector vec(state.location, c);
     vec.distance = fixed(20000); // set big distance (for testing)
-    if (as.Intercept(state, vec.EndPoint(state.location), projection, m_perf, solution)) {
+    const AirspaceInterceptSolution solution =
+      as.Intercept(state, vec.EndPoint(state.location), projection, m_perf);
+    if (solution.IsValid()) {
       if (fout) {
         *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
       }
