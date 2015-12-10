@@ -186,19 +186,7 @@ private:
     // calculate the minimal distance estimate between two TurnPointRanges
     gcc_pure
     unsigned GetMinDistance(const TurnPointRange &tp) const {
-      const unsigned d_lon = std::max(tp.bounding_box.GetLeft() - bounding_box.GetRight(),
-                                      bounding_box.GetLeft() - tp.bounding_box.GetRight()) < 0
-        ? 0
-        : std::min(abs(tp.bounding_box.GetLeft() - bounding_box.GetRight()),
-                   abs(tp.bounding_box.GetRight() - bounding_box.GetLeft()));
-
-      const unsigned d_lat = std::max(tp.bounding_box.GetBottom() - bounding_box.GetTop(),
-                                      bounding_box.GetBottom() - tp.bounding_box.GetTop()) < 0
-        ? 0
-        : std::min(abs(tp.bounding_box.GetBottom() - bounding_box.GetTop()),
-                   abs(tp.bounding_box.GetTop() - bounding_box.GetBottom()));
-
-      return hypot(d_lon, d_lat);
+      return bounding_box.Distance(tp.bounding_box);
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
