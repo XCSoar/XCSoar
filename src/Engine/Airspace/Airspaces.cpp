@@ -43,26 +43,18 @@ struct AirspacePredicateAdapter {
   }
 };
 
-void
-Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
-                            AirspaceVisitor &visitor,
-                            const AirspacePredicate &predicate) const
+Airspaces::const_iterator_range
+Airspaces::QueryWithinRange(const GeoPoint &location, fixed range) const
 {
   if (IsEmpty())
     // nothing to do
-    return;
+    return {airspace_tree.qend(), airspace_tree.qend()};
 
   const auto flat_location = task_projection.ProjectInteger(location);
   int projected_range = task_projection.ProjectRangeInteger(location, range);
   const FlatBoundingBox box(flat_location, projected_range);
 
-  const auto _begin =
-    airspace_tree.qbegin(bgi::intersects(box) &&
-                         bgi::satisfies(AirspacePredicateAdapter{predicate}));
-  const auto _end = airspace_tree.qend();
-
-  for (auto i = _begin; i != _end; ++i)
-    visitor.Visit(i->GetAirspace());
+  return {airspace_tree.qbegin(bgi::intersects(box)), airspace_tree.qend()};
 }
 
 class IntersectingAirspaceVisitorAdapter {
@@ -347,12 +339,12 @@ Airspaces::SynchroniseInRange(const Airspaces &master,
   return true;
 }
 
-void
-Airspaces::VisitInside(const GeoPoint &loc, AirspaceVisitor &visitor) const
+Airspaces::const_iterator_range
+Airspaces::QueryInside(const GeoPoint &loc) const
 {
   if (IsEmpty())
     // nothing to do
-    return;
+    return {airspace_tree.qend(), airspace_tree.qend()};
 
   const auto flat_location = task_projection.ProjectInteger(loc);
   const FlatBoundingBox box(flat_location, flat_location);
@@ -362,8 +354,6 @@ Airspaces::VisitInside(const GeoPoint &loc, AirspaceVisitor &visitor) const
                          bgi::satisfies([&loc](const Airspace &as){
                              return as.IsInside(loc);
                            }));
-  const auto _end = airspace_tree.qend();
 
-  for (auto i = _begin; i != _end; ++i)
-    visitor.Visit(i->GetAirspace());
+  return {_begin, airspace_tree.qend()};
 }

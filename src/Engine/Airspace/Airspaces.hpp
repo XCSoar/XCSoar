@@ -145,18 +145,19 @@ public:
    */
   void SetActivity(const AirspaceActivity mask);
 
+  const_iterator_range QueryAll() const {
+    return {begin(), end()};
+  }
+
   /**
-   * Call visitor class on airspaces within range of location.
-   * Note that the visitor is not instantiated separately for each match
+   * Query airspaces within range of location.
    *
    * @param loc location of origin of search
    * @param range distance in meters of search radius
-   * @param visitor visitor class to call on airspaces within range
    */
-  void VisitWithinRange(const GeoPoint &location, fixed range,
-                        AirspaceVisitor &visitor,
-                        const AirspacePredicate &predicate =
-                              AirspacePredicate::always_true) const;
+  gcc_pure
+  const_iterator_range QueryWithinRange(const GeoPoint &location,
+                                        fixed range) const;
 
   /**
    * Call visitor class on airspaces intersected by vector.
@@ -170,13 +171,12 @@ public:
                          AirspaceIntersectionVisitor &visitor) const;
 
   /**
-   * Call visitor class on airspaces this location is inside
-   * Note that the visitor is not instantiated separately for each match
+   * Query airspaces this location is inside.
    *
    * @param loc location of origin of search
-   * @param visitor visitor class to call on airspaces
    */
-  void VisitInside(const GeoPoint &location, AirspaceVisitor &visitor) const;
+  gcc_pure
+  const_iterator_range QueryInside(const GeoPoint &location) const;
 
   /**
    * Search for airspaces within range of the aircraft.

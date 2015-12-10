@@ -27,7 +27,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"
 #include "Airspace/ActivePredicate.hpp"

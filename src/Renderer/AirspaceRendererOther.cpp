@@ -33,7 +33,6 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
 #include "Asset.hpp"
@@ -46,7 +45,7 @@ Copyright_License {
  * of code overhead.
  */
 class AirspaceVisitorMap final
-  : public AirspaceVisitor, public StencilMapCanvas
+  : public StencilMapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warnings;
@@ -83,8 +82,8 @@ private:
     DrawSearchPointVector(airspace.GetPoints());
   }
 
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
+public:
+  void Visit(const AbstractAirspace &airspace) {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -151,7 +150,7 @@ private:
 };
 
 class AirspaceOutlineRenderer final
-  : public AirspaceVisitor, protected MapCanvas
+  : protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceRendererSettings &settings;
@@ -194,7 +193,7 @@ private:
   }
 
 public:
-  virtual void Visit(const AbstractAirspace &airspace) override {
+  void Visit(const AbstractAirspace &airspace) {
     if (!SetupCanvas(airspace))
       return;
 
@@ -225,9 +224,14 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        v, visible);
+  const auto range =
+    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                projection.GetScreenDistanceMeters());
+  for (const auto &i : range) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (visible(airspace))
+      v.Visit(airspace);
+  }
 
   return v.Commit();
 }
@@ -271,10 +275,16 @@ AirspaceRenderer::DrawOutline(Canvas &canvas,
                               const AirspaceRendererSettings &settings,
                               const AirspacePredicate &visible) const
 {
+  const auto range =
+    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                projection.GetScreenDistanceMeters());
+
   AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        outline_renderer, visible);
+  for (const auto &i : range) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (visible(airspace))
+      outline_renderer.Visit(airspace);
+  }
 }
 
 void

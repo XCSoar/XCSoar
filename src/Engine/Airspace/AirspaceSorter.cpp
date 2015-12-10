@@ -1,7 +1,6 @@
 #include "AirspaceSorter.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "AbstractAirspace.hpp"
-#include "AirspaceVisitor.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Util/StringAPI.hxx"
 
@@ -70,15 +69,6 @@ public:
   }
 };
 
-class AirspaceFilterVisitor final : public AirspaceVisitor {
-public:
-  AirspaceSelectInfoVector result;
-
-  void Visit(const AbstractAirspace &as) override {
-    result.emplace_back(as);
-  }
-};
-
 static void
 SortByDistance(AirspaceSelectInfoVector &vec, const GeoPoint &location,
                const FlatProjection &projection)
@@ -110,19 +100,19 @@ FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
 {
   const AirspaceFilterPredicate predicate(location, airspaces.GetProjection(),
                                           filter);
-  AirspaceFilterVisitor visitor;
+  AirspaceSelectInfoVector result;
 
-  if (!negative(filter.distance))
-    airspaces.VisitWithinRange(location, filter.distance, visitor, predicate);
-  else
-    for (const auto &i : airspaces)
-      if (predicate(i.GetAirspace()))
-        visitor.Visit(i.GetAirspace());
+  auto range = negative(filter.distance)
+    ? airspaces.QueryAll()
+    : airspaces.QueryWithinRange(location, filter.distance);
+  for (const auto &i : range)
+    if (predicate(i.GetAirspace()))
+      result.emplace_back(i.GetAirspace());
 
   if (filter.direction.IsNegative() && negative(filter.distance))
-    SortByName(visitor.result);
+    SortByName(result);
   else
-    SortByDistance(visitor.result, location, airspaces.GetProjection());
+    SortByDistance(result, location, airspaces.GetProjection());
 
-  return visitor.result;
+  return result;
 }

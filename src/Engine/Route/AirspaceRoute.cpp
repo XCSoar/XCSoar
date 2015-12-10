@@ -79,23 +79,6 @@ public:
   }
 };
 
-
-class AirspaceInsideOtherVisitor final : public AirspaceVisitor {
-  const AbstractAirspace *m_found;
-
-public:
-  AirspaceInsideOtherVisitor():m_found(nullptr) {};
-
-  const AbstractAirspace *GetFound() const {
-    return m_found;
-  }
-
-protected:
-  void Visit(const AbstractAirspace &as) override {
-    m_found = &as;
-  }
-};
-
 AirspaceRoute::RouteAirspaceIntersection
 AirspaceRoute::FirstIntersecting(const RouteLink &e) const
 {
@@ -111,10 +94,12 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const
 const AbstractAirspace *
 AirspaceRoute::InsideOthers(const AGeoPoint &origin) const
 {
-  AirspaceInsideOtherVisitor visitor;
-  m_airspaces.VisitWithinRange(origin, 1, visitor);
   ++count_airspace;
-  return visitor.GetFound();
+
+  for (const auto &i : m_airspaces.QueryWithinRange(origin, 1))
+    return &i.GetAirspace();
+
+  return nullptr;
 }
 
 

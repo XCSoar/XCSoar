@@ -29,6 +29,7 @@
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/register/box.hpp>
+#include <boost/range/iterator_range_core.hpp>
 
 #include <assert.h>
 
@@ -117,6 +118,8 @@ public:
                                         AirspaceIndexable> AirspaceTree;
 
   typedef AirspaceTree::const_query_iterator const_iterator;
+
+  typedef boost::iterator_range<const_iterator> const_iterator_range;
 };
 
 #endif

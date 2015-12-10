@@ -29,7 +29,6 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
-#include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
@@ -57,22 +56,6 @@ public:
     return visible_predicate(airspace) ||
       warnings.IsInside(airspace) ||
       warnings.HasWarning(airspace);
-  }
-};
-
-class AirspaceVisitorLabel final
-  : public AirspaceVisitor
-{
-  AirspaceLabelList &labels;
-
-public:
-  AirspaceVisitorLabel(AirspaceLabelList &_labels)
-    :labels(_labels) {}
-
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
-    labels.Add(airspace.GetCenter(), airspace.GetType(), airspace.GetBase(),
-               airspace.GetTop());
   }
 };
 
@@ -116,10 +99,13 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const AirspaceWarningConfig &config)
 {
   AirspaceLabelList labels;
-  AirspaceVisitorLabel visitor(labels);
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                              projection.GetScreenDistanceMeters(),
-                              visitor, visible);
+  for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                                   projection.GetScreenDistanceMeters())) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (visible(airspace))
+      labels.Add(airspace.GetCenter(), airspace.GetType(), airspace.GetBase(),
+                 airspace.GetTop());
+  }
 
   if(settings.label_selection == AirspaceRendererSettings::LabelSelection::ALL)
   {

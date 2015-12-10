@@ -298,7 +298,11 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
   visitor.SetMode(true);
-  airspaces.VisitInside(state.location, visitor);
+
+  for (const auto &i : airspaces.QueryInside(state.location)) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    visitor.Visit(airspace);
+  }
 
   return visitor.Found();
 }
@@ -377,50 +381,6 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
 }
 
-class InsideWarningVisitor final : public AirspaceVisitor {
-  AirspaceWarningManager &wm;
-  const AircraftState &state;
-  const GlidePolar &glide_polar;
-
-  bool found = false;
-
-public:
-  InsideWarningVisitor(AirspaceWarningManager &_wm,
-                       const AircraftState &_state,
-                       const GlidePolar &_glide_polar)
-    :wm(_wm), state(_state), glide_polar(_glide_polar) {}
-
-  bool WasFound() const {
-    return found;
-  }
-
-  void Visit(const AbstractAirspace &airspace) override {
-    const AltitudeState &altitude = state;
-
-    if (// ignore inactive airspaces
-        !airspace.IsActive() ||
-        !wm.GetConfig().IsClassEnabled(airspace.GetType()) ||
-        !airspace.Inside(altitude))
-      return;
-
-    AirspaceWarning *warning = wm.GetWarningPtr(airspace);
-
-    if (warning == nullptr ||
-        warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
-      GeoPoint c = airspace.ClosestPoint(state.location, wm.GetProjection());
-      const AirspaceAircraftPerformance perf_glide(glide_polar);
-      AirspaceInterceptSolution solution;
-      airspace.Intercept(state, c, wm.GetProjection(), perf_glide, solution);
-
-      if (warning == nullptr)
-        warning = wm.GetNewWarningPtr(airspace);
-
-      warning->UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
-      found = true;
-    }
-  }
-};
-
 bool
 AirspaceWarningManager::UpdateInside(const AircraftState& state,
                                      const GlidePolar &glide_polar)
@@ -428,9 +388,36 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
   if (!glide_polar.IsValid())
     return false;
 
-  InsideWarningVisitor visitor(*this, state, glide_polar);
-  airspaces.VisitInside(state.location, visitor);
-  return visitor.WasFound();
+  bool found = false;
+
+  for (const auto &i : airspaces.QueryInside(state.location)) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+
+    const AltitudeState &altitude = state;
+    if (// ignore inactive airspaces
+        !airspace.IsActive() ||
+        !config.IsClassEnabled(airspace.GetType()) ||
+        !airspace.Inside(altitude))
+      continue;
+
+    AirspaceWarning *warning = GetWarningPtr(airspace);
+
+    if (warning == nullptr ||
+        warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
+      GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
+      const AirspaceAircraftPerformance perf_glide(glide_polar);
+      AirspaceInterceptSolution solution;
+      airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
+
+      if (warning == nullptr)
+        warning = GetNewWarningPtr(airspace);
+
+      warning->UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
+      found = true;
+    }
+  }
+
+  return found;
 }
 
 void

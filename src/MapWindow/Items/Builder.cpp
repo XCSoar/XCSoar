@@ -25,7 +25,6 @@ Copyright_License {
 #include "MapItem.hpp"
 #include "List.hpp"
 #include "Util/StaticArray.hxx"
-#include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -99,22 +98,6 @@ public:
 
     return (visible_predicate(airspace) || warnings.Contains(airspace)) &&
       airspace.Inside(location);
-  }
-};
-
-/**
- * Class to display airspace details dialog
- */
-class AirspaceListBuilderVisitor final : public AirspaceVisitor
-{
-  MapItemList &list;
-
-public:
-  AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
-
-  virtual void Visit(const AbstractAirspace &airspace) override {
-    if (!list.full())
-      list.append(new AirspaceMapItem(airspace));
   }
 };
 
@@ -220,8 +203,14 @@ MapItemListBuilder::AddVisibleAirspace(
                                      aircraft,
                                      warnings, location);
 
-  AirspaceListBuilderVisitor builder(list);
-  airspaces.VisitWithinRange(location, fixed(100.0), builder, predicate);
+  for (const auto &i : airspaces.QueryWithinRange(location, 100)) {
+    if (list.full())
+      break;
+
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (predicate(airspace))
+      list.append(new AirspaceMapItem(airspace));
+  }
 }
 
 void

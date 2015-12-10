@@ -26,7 +26,6 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
-#include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 
 extern AirspaceWarningManager *airspace_warnings;

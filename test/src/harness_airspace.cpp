@@ -110,7 +110,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
 }
 
 
-class AirspaceVisitorPrint final : public AirspaceVisitor {
+class AirspaceVisitorPrint {
   std::ofstream *fout;
   const bool do_report;
 
@@ -129,7 +129,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) {
     if (do_report) {
       *fout << as;
       *fout << "# Name: " << as.GetName()
@@ -201,7 +201,7 @@ public:
 };
 
 
-class AirspaceVisitorClosest final : public AirspaceVisitor {
+class AirspaceVisitorClosest {
   std::ofstream *fout;
   const FlatProjection &projection;
   const AircraftState& state;
@@ -242,7 +242,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) {
     closest(as);
   }
 };
@@ -260,13 +260,19 @@ void scan_airspaces(const AircraftState state,
   {
     AirspaceVisitorPrint pvisitor("output/results/res-bb-range.txt",
                                   do_report);
-    airspaces.VisitWithinRange(state.location, range, pvisitor);
+    for (const auto &i : airspaces.QueryWithinRange(state.location, range)) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      pvisitor.Visit(airspace);
+    }
   }
 
   {
     AirspaceVisitorClosest pvisitor("output/results/res-bb-closest.txt",
                                     airspaces.GetProjection(), state, perf);
-    airspaces.VisitWithinRange(state.location, range, pvisitor);
+    for (const auto &i : airspaces.QueryWithinRange(state.location, range)) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      pvisitor.Visit(airspace);
+    }
   }
 
   {

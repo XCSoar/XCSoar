@@ -32,12 +32,11 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 
 class AirspaceVisitorRenderer final
-  : public AirspaceVisitor, protected MapCanvas
+  : protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
@@ -143,8 +142,8 @@ private:
       DrawPrepared();
   }
 
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
+public:
+  void Visit(const AbstractAirspace &airspace) {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -215,7 +214,7 @@ private:
 };
 
 class AirspaceFillRenderer final
-  : public AirspaceVisitor, protected MapCanvas
+  : protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
@@ -263,8 +262,8 @@ private:
       DrawPrepared();
   }
 
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
+public:
+  void Visit(const AbstractAirspace &airspace) {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -313,17 +312,25 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
                                const AirspaceWarningCopy &awc,
                                const AirspacePredicate &visible)
 {
+  const auto range =
+    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                projection.GetScreenDistanceMeters());
+
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL ||
       settings.fill_mode == AirspaceRendererSettings::FillMode::NONE) {
     AirspaceFillRenderer renderer(canvas, projection, look, awc, settings);
-    airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters(),
-                                renderer, visible);
+    for (const auto &i : range) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      if (visible(airspace))
+        renderer.Visit(airspace);
+    }
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings);
-    airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters(),
-                                renderer, visible);
+    for (const auto &i : range) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      if (visible(airspace))
+        renderer.Visit(airspace);
+    }
   }
 }
 
