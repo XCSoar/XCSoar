@@ -76,7 +76,7 @@ public:
     DebugReplay *replay;
 
     if (keep_flight) replay = DebugReplayVector::Create(*fixes);
-    else replay = DebugReplayIGC::Create(flight_file);
+    else replay = DebugReplayIGC::Create(Path(flight_file));
 
     if (qnh_available)
       replay->SetQNH(qnh);
