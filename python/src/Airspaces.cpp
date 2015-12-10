@@ -227,10 +227,10 @@ PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *ar
         !basic.NavAltitudeAvailable())
       continue;
 
-    Airspaces::AirspaceVector airspaces = self->airspace_database->FindInside(
-      ToAircraftState(basic, replay->Calculated())
-    );
-
+    const auto range =
+      self->airspace_database->QueryInside(ToAircraftState(basic,
+                                                           replay->Calculated()));
+    Airspaces::AirspaceVector airspaces(range.begin(), range.end());
     for (auto it = airspaces.begin(); it != airspaces.end(); it++) {
       PyObject *py_name = PyString_FromString((*it).GetAirspace().GetName());
       PyObject *py_airspace = nullptr,

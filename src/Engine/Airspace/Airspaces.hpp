@@ -179,6 +179,15 @@ public:
   const_iterator_range QueryInside(const GeoPoint &location) const;
 
   /**
+   * Query airspaces the aircraft is inside (taking altitude into
+   * account).
+   *
+   * @param loc location of origin of search
+   */
+  gcc_pure
+  const_iterator_range QueryInside(const AircraftState &aircraft) const;
+
+  /**
    * Search for airspaces within range of the aircraft.
    *
    * @param location location of aircraft, from which to search
@@ -191,19 +200,6 @@ public:
   AirspaceVector ScanRange(const GeoPoint &location, fixed range,
                            const AirspacePredicate &condition =
                            AirspacePredicate::always_true) const;
-
-  /**
-   * Find airspaces the aircraft is inside (taking altitude into account)
-   *
-   * @param state state of aircraft for which to search
-   * @param condition condition to be applied to matches
-   *
-   * @return airspaces enclosing the aircraft
-   */
-  gcc_pure
-  AirspaceVector FindInside(const AircraftState &state,
-                            const AirspacePredicate &condition =
-                            AirspacePredicate::always_true) const;
 
   /**
    * Access first airspace in store, for use in iterators.

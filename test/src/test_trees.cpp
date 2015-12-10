@@ -76,7 +76,7 @@ test_as(const unsigned n, std::ostream &fo)
     int y = rand()%1200-100;
     state.location.longitude = Angle::Degrees(fixed(x/1000.0));
     state.location.latitude = Angle::Degrees(fixed(y/1000.0));
-    const AirspacesInterface::AirspaceVector vc = airspaces.FindInside(state);
+    airspaces.QueryInside(state);
   }
   fo.flush();
 

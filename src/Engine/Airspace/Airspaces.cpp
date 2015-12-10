@@ -129,25 +129,6 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
   return res;
 }
 
-Airspaces::AirspaceVector
-Airspaces::FindInside(const AircraftState &state,
-                      const AirspacePredicate &condition) const
-{
-  const auto flat_location = task_projection.ProjectInteger(state.location);
-  const FlatBoundingBox box(flat_location, flat_location);
-
-  AirspaceVector vectors;
-
-  auto predicate = bgi::intersects(box) &&
-    bgi::satisfies(AirspacePredicateAdapter{condition}) &&
-    bgi::satisfies([&state](const Airspace &a){
-        return a.IsInside(state);
-      });
-
-  airspace_tree.query(std::move(predicate), std::back_inserter(vectors));
-  return vectors;
-}
-
 void
 Airspaces::Optimise()
 {
@@ -353,6 +334,25 @@ Airspaces::QueryInside(const GeoPoint &loc) const
     airspace_tree.qbegin(bgi::intersects(box) &&
                          bgi::satisfies([&loc](const Airspace &as){
                              return as.IsInside(loc);
+                           }));
+
+  return {_begin, airspace_tree.qend()};
+}
+
+Airspaces::const_iterator_range
+Airspaces::QueryInside(const AircraftState &aircraft) const
+{
+  if (IsEmpty())
+    // nothing to do
+    return {airspace_tree.qend(), airspace_tree.qend()};
+
+  const auto flat_location = task_projection.ProjectInteger(aircraft.location);
+  const FlatBoundingBox box(flat_location, flat_location);
+
+  const auto _begin =
+    airspace_tree.qbegin(bgi::intersects(box) &&
+                         bgi::satisfies([&aircraft](const Airspace &as){
+                             return as.IsInside(aircraft);
                            }));
 
   return {_begin, airspace_tree.qend()};

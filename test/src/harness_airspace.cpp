@@ -277,12 +277,10 @@ void scan_airspaces(const AircraftState state,
   }
 
   {
-    const std::vector<Airspace> vi = airspaces.FindInside(state);
     AirspaceVisitorPrint pvi("output/results/res-bb-inside.txt",
                              do_report);
-    std::for_each(vi.begin(), vi.end(), [&pvi](const Airspace &a){
-        pvi.Visit(a.GetAirspace());
-      });
+    for (const auto &a : airspaces.QueryInside(state))
+      pvi.Visit(a.GetAirspace());
   }
   
   {
