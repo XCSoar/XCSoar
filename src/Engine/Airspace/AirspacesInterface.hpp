@@ -23,7 +23,6 @@
 #define AIRSPACESINTERFACE_HPP
 
 #include "Airspace.hpp"
-#include "Geo/Flat/BoundingBoxDistance.hpp"
 
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
@@ -44,66 +43,11 @@ BOOST_GEOMETRY_REGISTER_BOX(FlatBoundingBox, FlatGeoPoint,
  * facade protected class where locking is required.
  */
 class AirspacesInterface {
-  /** Function object used by kd-tree to index coordinates */
-  struct kd_get_bounds
-  {
-    /** Used by kd-tree */
-    typedef int result_type;
-
-    /**
-     * Retrieve coordinate value given coordinate index and object
-     *
-     * @param d Object being stored in kd-tree
-     * @param k Index of coordinate
-     *
-     * @return Coordinate value
-     */
-    int operator()(const FlatBoundingBox &d, const unsigned k) const {
-      switch(k) {
-      case 0:
-        return d.GetLeft();
-      case 1:
-        return d.GetBottom();
-      case 2:
-        return d.GetRight();
-      case 3:
-        return d.GetTop();
-      default:
-        assert(false);
-        gcc_unreachable();
-      };
-    };
-  };
-
   struct AirspaceIndexable {
     typedef FlatBoundingBox result_type;
 
     result_type operator()(const Airspace &airspace) const {
       return airspace;
-    }
-  };
-
-  /**
-   * Distance metric function object used by kd-tree.  This specialisation
-   * allows for overlap; distance is zero with overlap, otherwise the minimum
-   * distance between two regions.
-   */
-  struct kd_distance
-  {
-    /** Distance operator for overlap functionality */
-    typedef BBDist distance_type;
-
-    /**
-     * \todo document this!
-     *
-     * @param a
-     * @param b
-     * @param dim
-     *
-     * @return Distance on axis
-     */
-    distance_type operator()(const int a, const int b, const size_t dim) const {
-      return BBDist(dim, std::max((dim < 2) ? (b - a) : (a - b), 0));
     }
   };
 
