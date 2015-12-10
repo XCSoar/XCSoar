@@ -27,7 +27,6 @@
 #include "Predicate/AirspacePredicate.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Geo/Flat/FlatRay.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
 #include <boost/geometry/geometries/linestring.hpp>
@@ -53,7 +52,6 @@ Airspaces::QueryWithinRange(const GeoPoint &location, fixed range) const
 class IntersectingAirspaceVisitorAdapter {
   GeoPoint start, end;
   const FlatProjection *projection;
-  FlatRay ray;
   AirspaceIntersectionVisitor *visitor;
 
 public:
@@ -62,12 +60,10 @@ public:
                                      const FlatProjection &_projection,
                                      AirspaceIntersectionVisitor &_visitor)
     :start(_loc), end(_end), projection(&_projection),
-     ray(projection->ProjectInteger(start), projection->ProjectInteger(end)),
      visitor(&_visitor) {}
 
   void operator()(const Airspace &as) {
-    if (as.Intersects(ray) &&
-        visitor->SetIntersections(as.Intersects(start, end, *projection)))
+    if (visitor->SetIntersections(as.Intersects(start, end, *projection)))
       visitor->Visit(as.GetAirspace());
   }
 };

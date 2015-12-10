@@ -84,19 +84,6 @@ public:
   bool IsInside(const GeoPoint &loc) const;
 
   /**
-   * Checks whether a flat-earth ray intersects with the airspace
-   * bounding box.
-   *
-   * @param ray Flat-earth ray to check for intersection
-   *
-   * @return true if ray intersects or wholly enclosed by airspace
-   */
-  gcc_pure
-  bool Intersects(const FlatRay &ray) const {
-    return FlatBoundingBox::Intersects(ray);
-  }
-
-  /**
    * Checks whether a line intersects with the airspace, by directing
    * the query to the enclosed concrete airspace.
    *
