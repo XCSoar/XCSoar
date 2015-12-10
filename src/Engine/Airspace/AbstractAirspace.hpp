@@ -100,8 +100,10 @@ public:
    *
    * @return Enclosing bounding box
    */
+  gcc_pure
   const FlatBoundingBox GetBoundingBox(const FlatProjection &projection);
 
+  gcc_pure
   GeoBounds GetGeoBounds() const;
 
   /**
