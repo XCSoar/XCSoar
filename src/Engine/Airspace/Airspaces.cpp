@@ -64,33 +64,13 @@ Airspaces::QueryIntersecting(const GeoPoint &a, const GeoPoint &b) const
   return {airspace_tree.qbegin(bgi::intersects(line)), airspace_tree.qend()};
 }
 
-class IntersectingAirspaceVisitorAdapter {
-  GeoPoint start, end;
-  const FlatProjection *projection;
-  AirspaceIntersectionVisitor *visitor;
-
-public:
-  IntersectingAirspaceVisitorAdapter(const GeoPoint &_loc,
-                                     const GeoPoint &_end,
-                                     const FlatProjection &_projection,
-                                     AirspaceIntersectionVisitor &_visitor)
-    :start(_loc), end(_end), projection(&_projection),
-     visitor(&_visitor) {}
-
-  void operator()(const Airspace &as) {
-    if (visitor->SetIntersections(as.Intersects(start, end, *projection)))
-      visitor->Visit(as.GetAirspace());
-  }
-};
-
 void
 Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
                              AirspaceIntersectionVisitor &visitor) const
 {
-  IntersectingAirspaceVisitorAdapter adapter(loc, end, task_projection, visitor);
-
   for (const auto &i : QueryIntersecting(loc, end))
-    adapter(i);
+    if (visitor.SetIntersections(i.Intersects(loc, end, task_projection)))
+      visitor.Visit(i.GetAirspace());
 }
 
 void
