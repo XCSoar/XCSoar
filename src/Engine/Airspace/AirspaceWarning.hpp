@@ -86,7 +86,8 @@ public:
    * @param solution Intercept vector (to outside if currently inside,
    * otherwise to inside)
    */
-  void UpdateSolution(const State state, AirspaceInterceptSolution &_solution);
+  void UpdateSolution(const State state,
+                      const AirspaceInterceptSolution &_solution);
 
   /**
    * Determine whether accepting a warning of the supplied state

@@ -50,7 +50,7 @@ void AirspaceWarning::SaveState()
 
 void
 AirspaceWarning::UpdateSolution(const State _state,
-                                AirspaceInterceptSolution &_solution)
+                                const AirspaceInterceptSolution &_solution)
 {
   if (IsStateAccepted(_state)) {
     state = _state;
