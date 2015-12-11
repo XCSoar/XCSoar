@@ -44,8 +44,8 @@ Retrospective::PruneCandidates()
   auto it_best = candidate_list.end();
   bool erase = false;
 
-  auto it1 = ++candidate_list.begin();
-  auto it2 = it1; it2++;
+  auto it1 = std::next(candidate_list.begin());
+  auto it2 = std::next(it1);
   for (; it2 != candidate_list.end(); ++it1, ++it2) {
     if (it1->bearing.CompareRoughly(it2->bearing, angle_tolerance)) {
       it_best = it1;
@@ -64,7 +64,7 @@ Retrospective::CalcDistances(fixed& d_ach, fixed& d_can)
 {
   d_ach = fixed(0);
   d_can = fixed(0);
-  for (auto it0 = ++candidate_list.begin(); it0 != candidate_list.end(); ++it0) {
+  for (auto it0 = std::next(candidate_list.begin()); it0 != candidate_list.end(); ++it0) {
     d_ach += it0->actual_in;
     d_can += it0->leg_in;
   }
@@ -121,7 +121,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
       // if we have a previous, we can see if this one is a better replacement
       // (replacing it makes a linear collapse of the intermediate point)
 
-      auto previous = ++candidate_list.rbegin();
+      auto previous = std::next(candidate_list.rbegin());
 
       // distance previous
       auto d_prev_back = previous->location.Distance(back.location);
