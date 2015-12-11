@@ -29,8 +29,8 @@ class DummyTaskWaypoint: public TaskWaypoint
 public:
   friend class TaskWaypointTest;
 
-  DummyTaskWaypoint(TaskPointType _type, const Waypoint & wp)
-    :TaskWaypoint(_type, wp) {}
+  DummyTaskWaypoint(TaskPointType _type, WaypointPtr &&wp)
+    :TaskWaypoint(_type, std::move(wp)) {}
 
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
     return GeoVector();
@@ -55,7 +55,7 @@ TaskWaypointTest::Run()
   wp.name = _T("Test");
   wp.elevation = fixed(42);
 
-  DummyTaskWaypoint tw(TaskPointType::AST, wp);
+  DummyTaskWaypoint tw(TaskPointType::AST, WaypointPtr(new Waypoint(wp)));
 
   const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == _T("Test"));

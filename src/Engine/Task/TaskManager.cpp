@@ -291,7 +291,7 @@ TaskManager::Update(const AircraftState &state,
   const GeoPoint *destination = &state.location;
 
   if (task_behaviour.abort_task_mode == AbortTaskMode::HOME) {
-    const Waypoint *home = abort_task->GetHome();
+    const auto home = abort_task->GetHome();
     if (home)
       destination = &home->location;
   } else if (task_behaviour.abort_task_mode == AbortTaskMode::TASK) {
@@ -341,9 +341,9 @@ TaskManager::GetStats() const
 }
 
 bool
-TaskManager::DoGoto(const Waypoint &wp)
+TaskManager::DoGoto(WaypointPtr &&wp)
 {
-  if (goto_task->DoGoto(wp)) {
+  if (goto_task->DoGoto(std::move(wp))) {
     SetMode(TaskType::GOTO);
     return true;
   }

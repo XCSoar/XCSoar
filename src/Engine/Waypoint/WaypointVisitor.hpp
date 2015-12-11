@@ -22,17 +22,19 @@
 #ifndef Waypoint_VISITOR_HPP
 #define Waypoint_VISITOR_HPP
 
-struct Waypoint;
+#include "Ptr.hpp"
+
+#include <utility>
 
 /**
  * Generic visitor for objects in the Waypoints container
  */
 class WaypointVisitor {
 public:
-  virtual void Visit(const Waypoint &wp) = 0;
+  virtual void Visit(WaypointPtr &&wp) = 0;
 
-  void operator()(const Waypoint &wp) {
-    Visit(wp);
+  void operator()(WaypointPtr &&wp) {
+    Visit(std::move(wp));
   }
 };
 

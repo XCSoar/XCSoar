@@ -41,12 +41,11 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GeoPoint &location,
                             double range)
 {
-  const Waypoint *way_point;
-  way_point = way_points.LookupLocation(location, fixed(range));
+  auto way_point = way_points.LookupLocation(location, fixed(range));
 
   if (way_point) {
     LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(*way_point);
+    dlgWaypointDetailsShowModal(way_point);
     return true;
   }
   return false;

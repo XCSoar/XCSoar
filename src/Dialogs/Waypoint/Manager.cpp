@@ -207,7 +207,7 @@ WaypointManagerWidget::OnWaypointNewClicked()
 inline void
 WaypointManagerWidget::OnWaypointImportClicked()
 {
-  const Waypoint *way_point =
+  const auto way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
@@ -220,7 +220,7 @@ WaypointManagerWidget::OnWaypointImportClicked()
 
       {
         ScopeSuspendAllThreads suspend;
-        way_points.Replace(*way_point, std::move(wp_copy));
+        way_points.Replace(way_point, std::move(wp_copy));
         way_points.Optimise();
       }
 
@@ -232,8 +232,8 @@ WaypointManagerWidget::OnWaypointImportClicked()
 inline void
 WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
 {
-  const Waypoint &wp = *items[i].waypoint;
-  Waypoint wp_copy = wp;
+  const WaypointPtr &wp = items[i].waypoint;
+  Waypoint wp_copy = *wp;
   if (dlgWaypointEditShowModal(wp_copy)) {
     modified = true;
 
@@ -263,15 +263,15 @@ WaypointManagerWidget::OnWaypointSaveClicked()
 inline void
 WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
 {
-  const Waypoint &wp = *items[i].waypoint;
+  WaypointPtr &&wp = std::move(items[i].waypoint);
 
-  if (ShowMessageBox(wp.name.c_str(), _("Delete waypoint?"),
+  if (ShowMessageBox(wp->name.c_str(), _("Delete waypoint?"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES) {
     modified = true;
 
     {
       ScopeSuspendAllThreads suspend;
-      way_points.Erase(wp);
+      way_points.Erase(std::move(wp));
       way_points.Optimise();
     }
 

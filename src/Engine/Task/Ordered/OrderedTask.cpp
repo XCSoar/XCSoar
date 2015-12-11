@@ -1275,11 +1275,10 @@ OrderedTask::CheckDuplicateWaypoints(Waypoints& waypoints,
 {
   for (auto begin = points.cbegin(), end = points.cend(), i = begin;
        i != end; ++i) {
-    const Waypoint &wp =
-      waypoints.CheckExistsOrAppend((*i)->GetWaypoint());
+    auto wp = waypoints.CheckExistsOrAppend((*i)->GetWaypointPtr());
 
     const OrderedTaskPoint *new_tp =
-      (*i)->Clone(task_behaviour, ordered_settings, &wp);
+      (*i)->Clone(task_behaviour, ordered_settings, std::move(wp));
     if (is_task)
       Replace(*new_tp, std::distance(begin, i));
     else
@@ -1355,28 +1354,29 @@ OrderedTask::Commit(const OrderedTask& that)
 }
 
 bool
-OrderedTask::RelocateOptionalStart(const unsigned position, const Waypoint& waypoint)
+OrderedTask::RelocateOptionalStart(const unsigned position,
+                                   WaypointPtr &&waypoint)
 {
   if (position >= optional_start_points.size())
     return false;
 
   OrderedTaskPoint *new_tp =
     optional_start_points[position]->Clone(task_behaviour, ordered_settings,
-                                           &waypoint);
+                                           std::move(waypoint));
   delete optional_start_points[position];
   optional_start_points[position]= new_tp;
   return true;
 }
 
 bool
-OrderedTask::Relocate(const unsigned position, const Waypoint& waypoint)
+OrderedTask::Relocate(const unsigned position, WaypointPtr &&waypoint)
 {
   if (position >= TaskSize())
     return false;
 
   OrderedTaskPoint *new_tp = task_points[position]->Clone(task_behaviour,
-                                                  ordered_settings,
-                                                  &waypoint);
+                                                          ordered_settings,
+                                                          std::move(waypoint));
   bool success = Replace(*new_tp, position);
   delete new_tp;
   return success;

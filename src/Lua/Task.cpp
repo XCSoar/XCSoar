@@ -70,7 +70,7 @@ l_task_index(lua_State *L)
      
       Lua::Push(L, vector_remaining.distance);
   } else if (StringIsEqual(name, "next_distance_nominal")) {
-      const Waypoint* way_point = protected_task_manager != NULL
+      const auto way_point = protected_task_manager != nullptr
           ? protected_task_manager->GetActiveWaypoint() : NULL;
 
       if (!way_point) return 0;

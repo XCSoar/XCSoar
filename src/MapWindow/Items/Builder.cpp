@@ -109,9 +109,9 @@ class WaypointListBuilderVisitor:
 public:
   WaypointListBuilderVisitor(MapItemList &_list):list(_list) {}
 
-  void Visit(const Waypoint &waypoint) {
+  void Visit(WaypointPtr &&waypoint) override {
     if (!list.full())
-      list.append(new WaypointMapItem(waypoint));
+      list.append(new WaypointMapItem(std::move(waypoint)));
   }
 };
 
@@ -235,7 +235,7 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
 
     const ObservationZonePoint &oz = task_point.GetObservationZone();
     list.append(new TaskOZMapItem(i, oz, task_point.GetType(),
-                                  task_point.GetWaypoint()));
+                                  task_point.GetWaypointPtr()));
   }
 }
 

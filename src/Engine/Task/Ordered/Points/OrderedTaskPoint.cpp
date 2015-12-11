@@ -36,11 +36,11 @@
 
 OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
                                    ObservationZonePoint *_oz,
-                                   const Waypoint &wp,
+                                   WaypointPtr &&wp,
                                    const bool b_scored)
   :TaskLeg(*this),
-   TaskWaypoint(_type, wp),
-   ScoredTaskPoint(wp.location, b_scored),
+   TaskWaypoint(_type, std::move(wp)),
+   ScoredTaskPoint(GetLocation(), b_scored),
    ObservationZoneClient(_oz),
    tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
@@ -148,33 +148,33 @@ OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
 OrderedTaskPoint *
 OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
                         const OrderedTaskSettings &ordered_task_settings,
-                        const Waypoint *waypoint) const
+                        WaypointPtr &&waypoint) const
 {
-  if (waypoint == NULL)
-    waypoint = &GetWaypoint();
+  if (!waypoint)
+    waypoint = GetWaypointPtr();
 
   switch (GetType()) {
   case TaskPointType::START:
     return new StartPoint(GetObservationZone().Clone(waypoint->location),
-                          *waypoint, task_behaviour,
+                          std::move(waypoint), task_behaviour,
                           ordered_task_settings.start_constraints);
 
   case TaskPointType::AST: {
     const ASTPoint &src = *(const ASTPoint *)this;
     ASTPoint *dest =
       new ASTPoint(GetObservationZone().Clone(waypoint->location),
-                   *waypoint, task_behaviour, IsBoundaryScored());
+                   std::move(waypoint), task_behaviour, IsBoundaryScored());
     dest->SetScoreExit(src.GetScoreExit());
     return dest;
   }
 
   case TaskPointType::AAT:
     return new AATPoint(GetObservationZone().Clone(waypoint->location),
-                        *waypoint, task_behaviour);
+                        std::move(waypoint), task_behaviour);
 
   case TaskPointType::FINISH:
     return new FinishPoint(GetObservationZone().Clone(waypoint->location),
-                           *waypoint, task_behaviour,
+                           std::move(waypoint), task_behaviour,
                            ordered_task_settings.finish_constraints,
                            IsBoundaryScored());
 

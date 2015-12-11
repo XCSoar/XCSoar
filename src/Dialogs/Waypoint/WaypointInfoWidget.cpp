@@ -103,43 +103,42 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   StaticString<64> buffer;
 
-  if (!waypoint.comment.empty())
-    AddMultiLine(waypoint.comment.c_str());
+  if (!waypoint->comment.empty())
+    AddMultiLine(waypoint->comment.c_str());
 
-  if (waypoint.radio_frequency.IsDefined() &&
-      waypoint.radio_frequency.Format(buffer.buffer(),
+  if (waypoint->radio_frequency.IsDefined() &&
+      waypoint->radio_frequency.Format(buffer.buffer(),
                                       buffer.capacity()) != nullptr) {
     buffer += _T(" MHz");
     AddReadOnly(_("Radio frequency"), nullptr, buffer);
   }
 
-  if (waypoint.runway.IsDirectionDefined())
-    buffer.UnsafeFormat(_T("%02u"), waypoint.runway.GetDirectionName());
+  if (waypoint->runway.IsDirectionDefined())
+    buffer.UnsafeFormat(_T("%02u"), waypoint->runway.GetDirectionName());
   else
     buffer.clear();
 
-  if (waypoint.runway.IsLengthDefined()) {
+  if (waypoint->runway.IsLengthDefined()) {
     if (!buffer.empty())
       buffer += _T("; ");
 
     TCHAR length_buffer[16];
-    FormatSmallUserDistance(length_buffer,
-                                   fixed(waypoint.runway.GetLength()));
+    FormatSmallUserDistance(length_buffer, waypoint->runway.GetLength());
     buffer += length_buffer;
   }
 
   if (!buffer.empty())
     AddReadOnly(_("Runway"), nullptr, buffer);
 
-  if (FormatGeoPoint(waypoint.location,
+  if (FormatGeoPoint(waypoint->location,
                      buffer.buffer(), buffer.capacity()) != nullptr)
     AddReadOnly(_("Location"), nullptr, buffer);
 
-  AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint.elevation));
+  AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint->elevation));
 
   if (basic.time_available && basic.date_time_utc.IsDatePlausible()) {
     const SunEphemeris::Result sun =
-      SunEphemeris::CalcSunTimes(waypoint.location, basic.date_time_utc,
+      SunEphemeris::CalcSunTimes(waypoint->location, basic.date_time_utc,
                                  settings.utc_offset);
 
     const BrokenTime sunrise = BreakHourOfDay(sun.time_of_sunrise);
@@ -152,7 +151,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   if (basic.location_available) {
-    const GeoVector vector = basic.location.DistanceBearing(waypoint.location);
+    const GeoVector vector = basic.location.DistanceBearing(waypoint->location);
 
     TCHAR distance_buffer[32];
     FormatUserDistanceSmart(vector.distance, distance_buffer,
@@ -165,8 +164,8 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   if (basic.location_available && basic.NavAltitudeAvailable() &&
       settings.polar.glide_polar_task.IsValid()) {
-    const GlideState glide_state(basic.location.DistanceBearing(waypoint.location),
-                                 waypoint.elevation + settings.task.safety_height_arrival,
+    const GlideState glide_state(basic.location.DistanceBearing(waypoint->location),
+                                 waypoint->elevation + settings.task.safety_height_arrival,
                                  basic.nav_altitude,
                                  calculated.GetWindOrZero());
 
@@ -192,10 +191,10 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       CommonInterface::GetComputerSettings().task;
 
     const auto safety_height = task_behaviour.safety_height_arrival;
-    const auto target_altitude = waypoint.elevation + safety_height;
+    const auto target_altitude = waypoint->elevation + safety_height;
     const auto delta_h = basic.nav_altitude - target_altitude;
     if (positive(delta_h)) {
-      const auto distance = basic.location.Distance(waypoint.location);
+      const auto distance = basic.location.Distance(waypoint->location);
       const auto gr = distance / delta_h;
       if (GradientValid(gr)) {
         buffer.UnsafeFormat(_T("%.1f"), (double)gr);

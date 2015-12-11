@@ -25,9 +25,9 @@
 #include "Geo/GeoVector.hpp"
 #include "Navigation/Aircraft.hpp"
 
-UnorderedTaskPoint::UnorderedTaskPoint(const Waypoint &wp,
+UnorderedTaskPoint::UnorderedTaskPoint(WaypointPtr &&wp,
                                        const TaskBehaviour &tb)
-  :TaskWaypoint(TaskPointType::UNORDERED, wp),
+  :TaskWaypoint(TaskPointType::UNORDERED, std::move(wp)),
    safety_height_arrival(tb.safety_height_arrival) {}
 
 void

@@ -70,12 +70,16 @@ public:
   const OrderedTaskSettings GetOrderedTaskSettings() const;
 
   gcc_pure
-  const Waypoint* GetActiveWaypoint() const;
+  WaypointPtr GetActiveWaypoint() const;
 
   void IncrementActiveTaskPoint(int offset);
   void IncrementActiveTaskPointArm(int offset);
 
-  bool DoGoto(const Waypoint &wp);
+  bool DoGoto(WaypointPtr &&wp);
+
+  bool DoGoto(const WaypointPtr &wp) {
+    return DoGoto(WaypointPtr(wp));
+  }
 
   gcc_malloc
   OrderedTask* TaskClone() const;

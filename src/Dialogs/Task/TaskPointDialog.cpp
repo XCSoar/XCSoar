@@ -505,7 +505,7 @@ inline void
 TaskPointWidget::OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task.GetPoint(active_index);
-  dlgWaypointDetailsShowModal(task_point.GetWaypoint(), false);
+  dlgWaypointDetailsShowModal(task_point.GetWaypointPtr(), false);
 }
 
 inline void
@@ -515,12 +515,11 @@ TaskPointWidget::OnRelocateClicked()
     ? ordered_task.GetPoint(active_index - 1).GetLocation()
     : CommonInterface::Basic().location;
 
-  const Waypoint *wp = ShowWaypointListDialog(gpBearing,
-                                              &ordered_task, active_index);
+  auto wp = ShowWaypointListDialog(gpBearing, &ordered_task, active_index);
   if (wp == nullptr)
     return;
 
-  ordered_task.GetFactory().Relocate(active_index, *wp);
+  ordered_task.GetFactory().Relocate(active_index, std::move(wp));
   ordered_task.ClearName();
   ordered_task.UpdateGeometry();
   task_modified = true;

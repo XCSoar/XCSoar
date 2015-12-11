@@ -30,6 +30,7 @@ Copyright_License {
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 #include "Util/StaticString.hxx"
@@ -43,7 +44,6 @@ Copyright_License {
 enum class TaskPointType : uint8_t;
 
 class AbstractAirspace;
-struct Waypoint;
 class ObservationZonePoint;
 
 struct MapItem
@@ -116,10 +116,10 @@ struct TaskOZMapItem: public MapItem
   int index;
   const ObservationZonePoint *oz;
   TaskPointType tp_type;
-  const Waypoint &waypoint;
+  WaypointPtr waypoint;
 
   TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
-                TaskPointType _tp_type, const Waypoint &_waypoint);
+                TaskPointType _tp_type, WaypointPtr &&_waypoint);
   virtual ~TaskOZMapItem();
 };
 
@@ -133,10 +133,10 @@ struct AirspaceMapItem: public MapItem
 
 struct WaypointMapItem: public MapItem
 {
-  const Waypoint &waypoint;
+  WaypointPtr waypoint;
 
-  WaypointMapItem(const Waypoint &_waypoint)
-    :MapItem(WAYPOINT), waypoint(_waypoint) {}
+  WaypointMapItem(WaypointPtr &&_waypoint)
+    :MapItem(WAYPOINT), waypoint(std::move(_waypoint)) {}
 };
 
 #ifdef HAVE_NOAA

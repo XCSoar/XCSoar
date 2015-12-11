@@ -79,7 +79,7 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 
   test_task(task_manager, waypoints, 1);
 
-  task_manager.DoGoto(*waypoints.LookupId(id));
+  task_manager.DoGoto(waypoints.LookupId(id));
   task_report(task_manager, "goto");
 
   waypoints.Clear(); // clear waypoints so abort wont do anything

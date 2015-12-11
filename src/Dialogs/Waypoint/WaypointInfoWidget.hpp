@@ -25,16 +25,17 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_INFO_WIDGET_HPP
 
 #include "Widget/RowFormWidget.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
 struct Waypoint;
 struct GlideResult;
 
 struct WaypointInfoWidget : public RowFormWidget {
-  const Waypoint &waypoint;
+  const WaypointPtr waypoint;
 
 public:
-  WaypointInfoWidget(const DialogLook &look, const Waypoint &_waypoint)
-    :RowFormWidget(look), waypoint(_waypoint) {}
+  WaypointInfoWidget(const DialogLook &look, WaypointPtr _waypoint)
+    :RowFormWidget(look), waypoint(std::move(_waypoint)) {}
 
   void AddGlideResult(const TCHAR *label, const GlideResult &result);
 

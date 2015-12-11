@@ -128,21 +128,21 @@ trigger_redraw()
  *
  * @return a reference to the #Waypoint stored in #Waypoints
  */
-static const Waypoint &
+static WaypointPtr
 SuspendAppendWaypoint(Waypoint &&wp)
 {
   ScopeSuspendAllThreads suspend;
-  auto &result = way_points.Append(std::move(wp));
+  auto ptr = way_points.Append(std::move(wp));
   way_points.Optimise();
-  return result;
+  return ptr;
 }
 
-static const Waypoint &
+static WaypointPtr
 SuspendAppendSaveWaypoint(Waypoint &&wp)
 {
-  auto &wp2 = SuspendAppendWaypoint(std::move(wp));
-  WaypointGlue::SaveWaypoint(wp2);
-  return wp2;
+  auto ptr = SuspendAppendWaypoint(std::move(wp));
+  WaypointGlue::SaveWaypoint(*ptr);
+  return ptr;
 }
 
 // -----------------------------------------------------------------------
@@ -315,7 +315,7 @@ void
 InputEvents::eventWaypointDetails(const TCHAR *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const Waypoint* wp = NULL;
+  WaypointPtr wp;
 
   if (StringIsEqual(misc, _T("current"))) {
     if (protected_task_manager == NULL)
@@ -330,7 +330,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(*wp);
+    dlgWaypointDetailsShowModal(std::move(wp));
 }
 
 void

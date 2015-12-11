@@ -70,10 +70,10 @@ public:
    * @return Partially-initialised object
    */
   AATPoint(ObservationZonePoint *_oz,
-           const Waypoint &wp,
+           WaypointPtr &&wp,
            const TaskBehaviour &tb)
-    :IntermediateTaskPoint(TaskPointType::AAT, _oz, wp, tb, true),
-     target_location(wp.location),
+    :IntermediateTaskPoint(TaskPointType::AAT, _oz, std::move(wp), tb, true),
+     target_location(GetLocation()),
      target_locked(false)
   {
   }

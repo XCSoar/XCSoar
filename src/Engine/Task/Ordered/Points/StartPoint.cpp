@@ -29,10 +29,10 @@
 #include <assert.h>
 
 StartPoint::StartPoint(ObservationZonePoint *_oz,
-                       const Waypoint &wp,
+                       WaypointPtr &&wp,
                        const TaskBehaviour &tb,
                        const StartConstraints &_constraints)
-  :OrderedTaskPoint(TaskPointType::START, _oz, wp, false),
+  :OrderedTaskPoint(TaskPointType::START, _oz, std::move(wp), false),
    safety_height(tb.safety_height_arrival),
    margins(tb.start_margins),
    constraints(_constraints)

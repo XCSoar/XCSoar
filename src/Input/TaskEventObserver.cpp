@@ -25,6 +25,7 @@ Copyright_License {
 #include "TaskEventObserver.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "InputQueue.hpp"
 
 static unsigned
@@ -33,7 +34,7 @@ GetBestAlternateID(const TaskManager &tm)
   const auto &alternates = tm.GetAlternates();
   return alternates.empty()
     ? unsigned(-1)
-    : alternates.front().waypoint.id;
+    : alternates.front().waypoint->id;
 }
 
 void

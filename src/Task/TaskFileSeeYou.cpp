@@ -335,12 +335,12 @@ CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
  */
 static ObservationZonePoint*
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
-         unsigned pos, unsigned size, const Waypoint *wps[],
+         unsigned pos, unsigned size, const WaypointPtr wps[],
          TaskFactoryType factType)
 {
   ObservationZonePoint* oz = nullptr;
   const bool is_intermediate = (pos > 0) && (pos < (size - 1));
-  const Waypoint *wp = wps[pos];
+  const Waypoint *wp = &*wps[pos];
 
   if (!turnpoint_infos.valid)
     return nullptr;
@@ -413,23 +413,31 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
  * @return The point
  */
 static OrderedTaskPoint*
-CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
+CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
     AbstractTaskFactory& fact, ObservationZonePoint* oz,
     const TaskFactoryType factType)
 {
   OrderedTaskPoint *pt = nullptr;
 
   if (pos == 0)
-    pt = (oz ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
+    pt = oz
+      ? fact.CreateStart(oz, std::move(wp))
+      : fact.CreateStart(std::move(wp));
 
   else if (pos == n_waypoints - 1)
-    pt = (oz ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
+    pt = oz
+      ? fact.CreateFinish(oz, std::move(wp))
+      : fact.CreateFinish(std::move(wp));
 
   else if (factType == TaskFactoryType::RACING)
-    pt = (oz ? fact.CreateASTPoint(oz, *wp) : fact.CreateIntermediate(*wp));
+    pt = oz
+      ? fact.CreateASTPoint(oz, std::move(wp))
+      : fact.CreateIntermediate(std::move(wp));
 
   else
-    pt = (oz ? fact.CreateAATPoint(oz, *wp) : fact.CreateIntermediate(*wp));
+    pt = oz
+      ? fact.CreateAATPoint(oz, std::move(wp))
+      : fact.CreateIntermediate(std::move(wp));
 
   return pt;
 }
@@ -504,7 +512,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
-  const Waypoint *waypoints_in_task[30];
+  WaypointPtr waypoints_in_task[30];
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
@@ -527,12 +535,12 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
-    const Waypoint* file_wp = file_waypoints.LookupName(wps[i + 2]);
+    auto file_wp = file_waypoints.LookupName(wps[i + 2]);
     if (file_wp == nullptr)
       return nullptr;
 
     // Try to find waypoint by name
-    const Waypoint* wp = waypoints->LookupName(file_wp->name);
+    auto wp = waypoints->LookupName(file_wp->name);
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != nullptr &&
@@ -563,7 +571,8 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], i, n_waypoints,
                                         waypoints_in_task, factType);
     assert(waypoints_in_task[i]);
-    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, waypoints_in_task[i],
+    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints,
+                                       WaypointPtr(waypoints_in_task[i]),
                                        fact, oz, factType);
 
     if (pt != nullptr)

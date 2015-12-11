@@ -68,11 +68,11 @@ Copyright_License {
 
 class WaypointExternalFileListHandler final
   : public ListItemRenderer, public ListCursorHandler {
-  const Waypoint &waypoint;
+  const WaypointPtr waypoint;
 
 public:
-  explicit WaypointExternalFileListHandler(const Waypoint &_waypoint)
-    :waypoint(_waypoint) {}
+  explicit WaypointExternalFileListHandler(WaypointPtr _waypoint)
+    :waypoint(std::move(_waypoint)) {}
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -88,7 +88,7 @@ public:
 void
 WaypointExternalFileListHandler::OnActivateItem(unsigned i)
 {
-  auto file = waypoint.files_external.begin();
+  auto file = waypoint->files_external.begin();
   std::advance(file, i);
 
   RunFile(LocalPath(file->c_str()).c_str());
@@ -99,7 +99,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
                                              const PixelRect paint_rc,
                                              unsigned i)
 {
-  auto file = waypoint.files_external.begin();
+  auto file = waypoint->files_external.begin();
   std::advance(file, i);
   canvas.DrawText(paint_rc.left + Layout::GetTextPadding(),
                   paint_rc.top + Layout::GetTextPadding(),
@@ -136,7 +136,7 @@ class WaypointDetailsWidget final
   WidgetDialog &dialog;
   const DialogLook &look;
 
-  const Waypoint &waypoint;
+  const WaypointPtr waypoint;
   const bool allow_navigation;
 
   Button goto_button;
@@ -164,15 +164,15 @@ class WaypointDetailsWidget final
   int zoom;
 
 public:
-  WaypointDetailsWidget(WidgetDialog &_dialog, const Waypoint &_waypoint,
+  WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
                         bool _allow_navigation,
                         ProtectedTaskManager *_task_manager)
     :dialog(_dialog), look(dialog.GetLook()),
-     waypoint(_waypoint),
+     waypoint(std::move(_waypoint)),
      allow_navigation(_allow_navigation),
      page(0), last_page(0),
-     info_widget(look, _waypoint),
-     commands_widget(look, &_dialog, _waypoint, _task_manager),
+     info_widget(look, waypoint),
+     commands_widget(look, &_dialog, waypoint, _task_manager),
 #ifdef HAVE_RUN_FILE
      file_list(look), file_list_handler(_waypoint),
 #endif
@@ -203,7 +203,7 @@ public:
   void Unprepare() override;
 
   void Show(const PixelRect &rc) override {
-    const Layout layout(rc, waypoint);
+    const Layout layout(rc, *waypoint);
 
     if (allow_navigation)
       goto_button.MoveAndShow(layout.goto_button);
@@ -224,7 +224,7 @@ public:
     details_panel.Move(layout.main);
     details_text.Move(layout.details_text);
 #ifdef HAVE_RUN_FILE
-    if (!waypoint.files_external.empty())
+    if (!waypoint->files_external.empty())
       file_list.Move(layout.file_list);
 #endif
 
@@ -261,7 +261,7 @@ public:
   }
 
   void Move(const PixelRect &rc) override {
-    const Layout layout(rc, waypoint);
+    const Layout layout(rc, *waypoint);
 
     if (allow_navigation)
       goto_button.Move(layout.goto_button);
@@ -282,7 +282,7 @@ public:
     details_panel.Move(layout.main);
     details_text.Move(layout.details_text);
 #ifdef HAVE_RUN_FILE
-    if (!waypoint.files_external.empty())
+    if (!waypoint->files_external.empty())
       file_list.Move(layout.file_list);
 #endif
     commands_dock.Move(layout.main);
@@ -413,7 +413,7 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 void
 WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  for (const auto &i : waypoint.files_embed) {
+  for (const auto &i : waypoint->files_embed) {
     if (images.full())
       break;
 
@@ -428,7 +428,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     }
   }
 
-  const Layout layout(rc, waypoint);
+  const Layout layout(rc, *waypoint);
 
   WindowStyle dock_style;
   dock_style.Hide();
@@ -469,11 +469,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
   details_text.SetFont(look.text_font);
-  details_text.SetText(waypoint.details.c_str());
+  details_text.SetText(waypoint->details.c_str());
 
 #ifdef HAVE_RUN_FILE
-  const unsigned num_files = std::distance(waypoint.files_external.begin(),
-                                           waypoint.files_external.end());
+  const unsigned num_files = std::distance(waypoint->files_external.begin(),
+                                           waypoint->files_external.end());
   if (num_files > 0) {
     file_list.Create(details_panel, layout.file_list,
                      WindowStyle(), layout.file_list_item_height);
@@ -538,9 +538,9 @@ WaypointDetailsWidget::NextPage(int step)
     // skip wDetails frame, if there are no details
   } while (page == 1 &&
 #ifdef HAVE_RUN_FILE
-           waypoint.files_external.empty() &&
+           waypoint->files_external.empty() &&
 #endif
-           waypoint.details.empty());
+           waypoint->details.empty());
 
   UpdatePage();
 
@@ -649,15 +649,15 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
 }
 
 static void
-UpdateCaption(WndForm *form, const Waypoint *waypoint)
+UpdateCaption(WndForm *form, const Waypoint &waypoint)
 {
   StaticString<256> buffer;
-  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
+  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint.name.c_str());
 
   const char *key = nullptr;
   const TCHAR *name = nullptr;
 
-  switch (waypoint->origin) {
+  switch (waypoint.origin) {
   case WaypointOrigin::NONE:
     break;
 
@@ -693,10 +693,10 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
 }
 
 void 
-dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
+dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
                             bool allow_navigation)
 {
-  LastUsedWaypoints::Add(_waypoint);
+  LastUsedWaypoints::Add(*_waypoint);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
@@ -704,7 +704,7 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
                                protected_task_manager);
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
 
-  UpdateCaption(&dialog, &_waypoint);
+  UpdateCaption(&dialog, *_waypoint);
 
   dialog.ShowModal();
   dialog.StealWidget();

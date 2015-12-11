@@ -42,8 +42,8 @@ public:
   WaypointPredicateCounter(const Predicate &_predicate)
     :predicate(_predicate), count(0) {}
 
-  virtual void Visit(const Waypoint &wp) {
-    if (predicate(wp))
+  void Visit(WaypointPtr &&wp) override {
+    if (predicate(*wp))
       count++;
   }
 
@@ -100,7 +100,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
 static void
 TestLookups(const Waypoints &waypoints, const GeoPoint &center)
 {
-  const Waypoint *waypoint;
+  WaypointPtr waypoint;
 
   ok1((waypoint = waypoints.LookupId(0)) == NULL);
   ok1((waypoint = waypoints.LookupId(1)) != NULL);
@@ -195,7 +195,7 @@ OriginalIDAbove5(const Waypoint &waypoint) {
 static void
 TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
 {
-  const Waypoint *waypoint;
+  WaypointPtr waypoint;
   GeoPoint near = GeoVector(fixed(250), Angle::Degrees(15)).EndPoint(center);
   GeoPoint far = GeoVector(fixed(750), Angle::Degrees(15)).EndPoint(center);
   GeoPoint further = GeoVector(fixed(4200), Angle::Degrees(48)).EndPoint(center);
@@ -246,7 +246,7 @@ TestIterator(const Waypoints &waypoints)
 static unsigned
 TestCopy(Waypoints& waypoints)
 {
-  const Waypoint *wp = waypoints.LookupId(5);
+  const WaypointPtr wp = waypoints.LookupId(5);
   if (!wp)
     return false;
 
@@ -263,12 +263,11 @@ static bool
 TestErase(Waypoints& waypoints, unsigned id)
 {
   waypoints.Optimise();
-  const Waypoint* wp;
-  wp = waypoints.LookupId(id);
+  auto wp = waypoints.LookupId(id);
   if (wp == NULL)
     return false;
 
-  waypoints.Erase(*wp);
+  waypoints.Erase(std::move(wp));
   waypoints.Optimise();
 
   wp = waypoints.LookupId(id);
@@ -278,8 +277,7 @@ TestErase(Waypoints& waypoints, unsigned id)
 static bool
 TestReplace(Waypoints& waypoints, unsigned id)
 {
-  const Waypoint* wp;
-  wp = waypoints.LookupId(id);
+  auto wp = waypoints.LookupId(id);
   if (wp == NULL)
     return false;
 
@@ -287,7 +285,7 @@ TestReplace(Waypoints& waypoints, unsigned id)
 
   Waypoint copy = *wp;
   copy.name = _T("Fred");
-  waypoints.Replace(*wp, copy);
+  waypoints.Replace(wp, std::move(copy));
   waypoints.Optimise();
 
   wp = waypoints.LookupId(id);

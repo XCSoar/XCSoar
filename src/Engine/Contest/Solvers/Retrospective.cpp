@@ -84,8 +84,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
   // retrospective task
 
-  const Waypoint *waypoint;
-  waypoint = waypoints.LookupLocation(aircraft_location, search_range);
+  auto waypoint = waypoints.LookupLocation(aircraft_location, search_range);
   // TODO actually need to find *all* in search range!
 
   // ignore if none found in search box
@@ -98,7 +97,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
   // initialise with first point found
   if (candidate_list.empty()) {
-    candidate_list.emplace_back(*waypoint, aircraft_location);
+    candidate_list.emplace_back(std::move(waypoint), aircraft_location);
     return true;
   }
 
@@ -109,7 +108,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
   // update current task point if improved
   changed |= back.update_location(aircraft_location);
 
-  if (back.waypoint.id != waypoint->id) {
+  if (back.waypoint->id != waypoint->id) {
 
     // printf("closest to %s\n", waypoint->name.c_str());
     // near new waypoint
@@ -129,15 +128,16 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
       if (d_prev_candidate > d_prev_back) {
         // replace back with new point
-        back = NearWaypoint(*waypoint, aircraft_location, *previous);
+        auto wp2 = waypoint;
+        back = NearWaypoint(std::move(wp2), aircraft_location, *previous);
         changed = true;
       }
 
     }
 
-    if ((dist_wpwp > search_range) && (back.waypoint.id != waypoint->id)) {
+    if (dist_wpwp > search_range && back.waypoint->id != waypoint->id) {
       // - far enough away (not overlapping) that can consider this a new point
-      candidate_list.emplace_back(*waypoint, aircraft_location,
+      candidate_list.emplace_back(std::move(waypoint), aircraft_location,
                                   candidate_list.back());
       changed = true;
     }

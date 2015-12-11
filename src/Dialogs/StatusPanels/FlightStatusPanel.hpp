@@ -25,15 +25,14 @@ Copyright_License {
 #define XCSOAR_FLIGHT_STATUS_PANEL_HPP
 
 #include "StatusPanel.hpp"
-
-struct Waypoint;
+#include "Engine/Waypoint/Ptr.hpp"
 
 class FlightStatusPanel : public StatusPanel {
-  const Waypoint *nearest_waypoint;
+  const WaypointPtr nearest_waypoint;
 
 public:
-  FlightStatusPanel(const DialogLook &look, const Waypoint *_waypoint)
-    :StatusPanel(look), nearest_waypoint(_waypoint) {}
+  FlightStatusPanel(const DialogLook &look, WaypointPtr &&_waypoint)
+    :StatusPanel(look), nearest_waypoint(std::move(_waypoint)) {}
 
   /* virtual methods from class StatusPanel */
   void Refresh() override;

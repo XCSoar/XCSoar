@@ -29,6 +29,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
@@ -76,7 +77,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     return;
   }
 
-  data.SetComment(alternate->waypoint.name.c_str());
+  data.SetComment(alternate->waypoint->name.c_str());
 
   // Set Value
   Angle Value = alternate->solution.vector.bearing -
@@ -122,7 +123,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
 
-  data.SetComment(alternate->waypoint.name.c_str());
+  data.SetComment(alternate->waypoint->name.c_str());
 
   fixed gradient =
     ::AngleToGradient(alternate->solution.DestinationAngleGround());

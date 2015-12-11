@@ -149,7 +149,7 @@ UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
 
   auto Value = basic.gps_altitude;
 
-  const Waypoint *home_waypoint = way_points.GetHome();
+  const auto home_waypoint = way_points.GetHome();
   if (home_waypoint)
     Value -= home_waypoint->elevation;
 

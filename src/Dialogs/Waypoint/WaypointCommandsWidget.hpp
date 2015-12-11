@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
 class WndForm;
-struct Waypoint;
 class ProtectedTaskManager;
 
 /**
@@ -38,16 +38,16 @@ class WaypointCommandsWidget final
   : public RowFormWidget, ActionListener {
   WndForm *form;
 
-  const Waypoint &waypoint;
+  const WaypointPtr waypoint;
 
   ProtectedTaskManager *task_manager;
 
 public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
-                         const Waypoint &_waypoint,
+                         WaypointPtr _waypoint,
                          ProtectedTaskManager *_task_manager)
     :RowFormWidget(look), form(_form),
-     waypoint(_waypoint), task_manager(_task_manager) {}
+     waypoint(std::move(_waypoint)), task_manager(_task_manager) {}
 
   /* methods from ActionListener */
   void OnAction(int id) override;

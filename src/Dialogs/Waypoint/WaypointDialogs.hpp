@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WAYPOINT_HPP
 #define XCSOAR_DIALOGS_WAYPOINT_HPP
 
+#include "Engine/Waypoint/Ptr.hpp"
+
 struct GeoPoint;
 struct Waypoint;
 class Waypoints;
 class OrderedTask;
 
-const Waypoint *
+WaypointPtr
 ShowWaypointListDialog(const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
@@ -41,7 +43,7 @@ bool
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void
-dlgWaypointDetailsShowModal(const Waypoint& waypoint,
+dlgWaypointDetailsShowModal(WaypointPtr waypoint,
                             bool allow_navigation = true);
 
 bool

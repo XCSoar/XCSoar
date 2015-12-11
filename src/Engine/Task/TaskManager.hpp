@@ -29,6 +29,7 @@
 #include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
+#include "Waypoint/Ptr.hpp"
 
 class AbstractTaskFactory;
 class TaskEvents;
@@ -41,7 +42,6 @@ class AlternateTask;
 class AlternateList;
 class TaskWaypoint;
 class AbortIntersectionTest;
-struct Waypoint;
 struct RangeAndRadial;
 
 /**
@@ -166,7 +166,7 @@ public:
    * @param wp Waypoint to go to
    * @return True if successful
    */
-  bool DoGoto(const Waypoint & wp);
+  bool DoGoto(WaypointPtr &&wp);
 
   /**
    * Updates internal state of task given new aircraft.

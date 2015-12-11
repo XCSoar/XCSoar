@@ -71,7 +71,7 @@ dlgStatusShowModal(int start_page)
   dialog.PrepareWidget();
 
   const NMEAInfo &basic = CommonInterface::Basic();
-  const Waypoint *nearest_waypoint = basic.location_available
+  auto nearest_waypoint = basic.location_available
     ? way_points.GetNearest(CommonInterface::Basic().location, fixed(100000))
     : nullptr;
 
@@ -88,7 +88,8 @@ dlgStatusShowModal(int start_page)
   const auto *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
   const auto *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
 
-  Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
+  Widget *flight_panel = new FlightStatusPanel(look,
+                                               std::move(nearest_waypoint));
   widget.AddTab(flight_panel, _("Flight"), FlightIcon);
 
   Widget *system_panel = new SystemStatusPanel(look);

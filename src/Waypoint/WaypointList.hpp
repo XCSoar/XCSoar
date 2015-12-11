@@ -25,18 +25,16 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_LIST_HPP
 
 #include "Geo/GeoVector.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
 #include <vector>
-
-struct Waypoint;
 
 /**
  * Structure to hold Waypoint sorting information
  */
 struct WaypointListItem
 {
-  /** Pointer to actual waypoint (unprotected!) */
-  const Waypoint* waypoint;
+  WaypointPtr waypoint;
 
 private:
   /** From observer to waypoint */
@@ -44,8 +42,8 @@ private:
 
 public:
   WaypointListItem() = default;
-  explicit WaypointListItem(const Waypoint &_waypoint):
-    waypoint(&_waypoint), vec(GeoVector::Invalid()) {}
+  explicit WaypointListItem(WaypointPtr &&_waypoint):
+    waypoint(std::move(_waypoint)), vec(GeoVector::Invalid()) {}
 
   void ResetVector();
   const GeoVector &GetVector(const GeoPoint &location) const;

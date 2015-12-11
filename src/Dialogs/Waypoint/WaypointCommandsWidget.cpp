@@ -54,9 +54,9 @@ enum Commands {
 
 static bool
 ReplaceInTask(ProtectedTaskManager &task_manager,
-              const Waypoint &waypoint)
+              WaypointPtr waypoint)
 {
-  switch (MapTaskManager::ReplaceInTask(waypoint)) {
+  switch (MapTaskManager::ReplaceInTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
     task_manager.TaskSaveDefault();
     return true;
@@ -86,9 +86,9 @@ ReplaceInTask(ProtectedTaskManager &task_manager,
 
 static bool
 InsertInTask(ProtectedTaskManager &task_manager,
-             const Waypoint &waypoint)
+             WaypointPtr waypoint)
 {
-  switch (MapTaskManager::InsertInTask(waypoint)) {
+  switch (MapTaskManager::InsertInTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
     task_manager.TaskSaveDefault();
     return true;
@@ -120,9 +120,9 @@ InsertInTask(ProtectedTaskManager &task_manager,
 
 static bool
 AppendToTask(ProtectedTaskManager &task_manager,
-             const Waypoint &waypoint)
+             WaypointPtr waypoint)
 {
-  switch (MapTaskManager::AppendToTask(waypoint)) {
+  switch (MapTaskManager::AppendToTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
     task_manager.TaskSaveDefault();
     return true;
@@ -228,34 +228,34 @@ WaypointCommandsWidget::OnAction(int id)
     break;
 
   case REMOVE_FROM_TASK:
-    if (RemoveFromTask(*task_manager, waypoint) && form != nullptr)
+    if (RemoveFromTask(*task_manager, *waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case SET_HOME:
-    SetHome(waypoint);
+    SetHome(*waypoint);
     if (form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case PAN:
-    if (ActivatePan(waypoint) && form != nullptr)
+    if (ActivatePan(*waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case SET_ACTIVE_FREQUENCY:
-    device_blackboard->SetActiveFrequency(waypoint.radio_frequency,
-                                          waypoint.name.c_str(), env);
+    device_blackboard->SetActiveFrequency(waypoint->radio_frequency,
+                                          waypoint->name.c_str(), env);
     break;
 
   case SET_STANDBY_FREQUENCY:
-    device_blackboard->SetStandbyFrequency(waypoint.radio_frequency,
-                                           waypoint.name.c_str(), env);
+    device_blackboard->SetStandbyFrequency(waypoint->radio_frequency,
+                                           waypoint->name.c_str(), env);
     break;
 
   case EDIT:
     {
-      Waypoint wp_copy = waypoint;
+      Waypoint wp_copy = *waypoint;
 
       /* move to user.cup */
       wp_copy.origin = WaypointOrigin::USER;
@@ -284,7 +284,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddButton(_("Insert in Task"), *this, INSERT_IN_TASK);
     AddButton(_("Append to Task"), *this, APPEND_TO_TASK);
 
-    if (MapTaskManager::GetIndexInTask(waypoint) >= 0)
+    if (MapTaskManager::GetIndexInTask(*waypoint) >= 0)
       AddButton(_("Remove from Task"), *this, REMOVE_FROM_TASK);
   }
 

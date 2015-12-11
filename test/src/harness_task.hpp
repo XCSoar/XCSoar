@@ -84,6 +84,6 @@ task_report(const TaskManager &task_manager, const char *text);
 
 const char* task_name(int test_num);
 
-const Waypoint* random_waypoint(const Waypoints &waypoints);
+WaypointPtr random_waypoint(const Waypoints &waypoints);
 
 #endif

@@ -23,22 +23,22 @@
 #ifndef XCSOAR_ALTERNATE_POINT_HPP
 #define XCSOAR_ALTERNATE_POINT_HPP
 
-#include "Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 
 struct AlternatePoint {
-  Waypoint waypoint;
+  WaypointPtr waypoint;
 
   GlideResult solution;
 
-  AlternatePoint(const Waypoint &_waypoint)
-    :waypoint(_waypoint)
+  AlternatePoint(WaypointPtr &&_waypoint)
+    :waypoint(std::move(_waypoint))
   {
     solution.Reset();
   }
 
-  AlternatePoint(const Waypoint &_waypoint, const GlideResult &_solution)
-    :waypoint(_waypoint), solution(_solution) {}
+  AlternatePoint(WaypointPtr &&_waypoint, const GlideResult &_solution)
+    :waypoint(std::move(_waypoint)), solution(_solution) {}
 };
 
 #endif

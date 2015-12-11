@@ -30,14 +30,14 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "LastUsed.hpp"
 
-const Waypoint *
+WaypointPtr
 WaypointGlue::FindHomeId(Waypoints &waypoints,
                          PlacesOfInterestSettings &settings)
 {
   if (settings.home_waypoint < 0)
     return nullptr;
 
-  const Waypoint *wp = waypoints.LookupId(settings.home_waypoint);
+  auto wp = waypoints.LookupId(settings.home_waypoint);
   if (wp == nullptr) {
     settings.home_waypoint = -1;
     return nullptr;
@@ -49,15 +49,15 @@ WaypointGlue::FindHomeId(Waypoints &waypoints,
   return wp;
 }
 
-const Waypoint *
+WaypointPtr
 WaypointGlue::FindHomeLocation(Waypoints &waypoints,
                                PlacesOfInterestSettings &settings)
 {
   if (!settings.home_location_available)
     return nullptr;
 
-  const Waypoint *wp = waypoints.LookupLocation(settings.home_location,
-                                                fixed(100));
+  auto wp = waypoints.LookupLocation(settings.home_location,
+                                     fixed(100));
   if (wp == nullptr || !wp->IsAirport()) {
     settings.home_location_available = false;
     return nullptr;
@@ -68,11 +68,11 @@ WaypointGlue::FindHomeLocation(Waypoints &waypoints,
   return wp;
 }
 
-const Waypoint *
+WaypointPtr
 WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
                               PlacesOfInterestSettings &settings)
 {
-  const Waypoint *wp = waypoints.FindHome();
+  auto wp = waypoints.FindHome();
   if (wp == nullptr)
     return nullptr;
 
@@ -91,7 +91,7 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     poi_settings.home_waypoint = -1;
 
   // check invalid home waypoint or forced reset due to file change
-  const Waypoint *wp = FindHomeId(way_points, poi_settings);
+  auto wp = FindHomeId(way_points, poi_settings);
   if (wp == nullptr) {
     /* fall back to HomeLocation, try to find it in the waypoint
        database */

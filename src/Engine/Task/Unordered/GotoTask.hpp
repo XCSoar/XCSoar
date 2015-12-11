@@ -24,9 +24,9 @@
 #define GOTOTASK_H
 
 #include "UnorderedTask.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 #include "Compiler.h"
 
-struct Waypoint;
 class Waypoints;
 class UnorderedTaskPoint;
 
@@ -62,7 +62,7 @@ public:
  * @param wp Waypoint to Go To
  * @return True if successful
  */
-  bool DoGoto(const Waypoint& wp);
+  bool DoGoto(WaypointPtr &&wp);
 
   /**
    * When called on takeoff, creates a default goto task

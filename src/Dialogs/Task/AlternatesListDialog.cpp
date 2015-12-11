@@ -83,7 +83,7 @@ public:
     assert(index < alternates.size());
 
     const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-    const Waypoint &waypoint = alternates[index].waypoint;
+    const Waypoint &waypoint = *alternates[index].waypoint;
     const GlideResult& solution = alternates[index].solution;
 
     WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,

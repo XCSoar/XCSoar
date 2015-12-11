@@ -118,9 +118,9 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  const Waypoint* wp = ShowWaypointListDialog(basic.location);
+  auto wp = ShowWaypointListDialog(basic.location);
   if (wp != NULL) {
-    protected_task_manager->DoGoto(*wp);
+    protected_task_manager->DoGoto(std::move(wp));
     trigger_redraw();
   }
 }

@@ -122,10 +122,10 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     canvas.SetBackgroundTransparent();
 
     for (const auto &i : retrospective.getNearWaypointList()) {
-      RasterPoint wp_pos = proj.GeoToScreen(i.waypoint.location);
+      RasterPoint wp_pos = proj.GeoToScreen(i.waypoint->location);
       canvas.DrawText(wp_pos.x,
                       wp_pos.y,
-                      i.waypoint.name.c_str());
+                      i.waypoint->name.c_str());
     }
   }
 

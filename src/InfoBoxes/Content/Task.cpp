@@ -47,11 +47,11 @@ ShowNextWaypointDetails()
   if (protected_task_manager == nullptr)
     return;
 
-  const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
+  auto wp = protected_task_manager->GetActiveWaypoint();
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(*wp);
+  dlgWaypointDetailsShowModal(std::move(wp));
 }
 
 static Widget *
@@ -125,9 +125,9 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  const Waypoint* way_point = protected_task_manager != NULL
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
-    : NULL;
+    : nullptr;
 
   if (!way_point) {
     data.SetTitle(_("Next"));
@@ -174,9 +174,9 @@ InfoBoxContentNextWaypoint::GetDialogContent()
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data)
 {
-  const Waypoint* way_point = protected_task_manager != NULL
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
-    : NULL;
+    : nullptr;
 
   // Set title
   if (!way_point)
@@ -208,9 +208,9 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 void
 UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
 {
-  const Waypoint* way_point = protected_task_manager != NULL
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
-    : NULL;
+    : nullptr;
 
   if (!way_point) {
     data.SetInvalid();
@@ -936,7 +936,7 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data)
   bool angle_valid = distance_valid && basic.track_available;
 
   // Set title. Use waypoint name if available.
-  const Waypoint *way_point = protected_task_manager != nullptr
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
     : nullptr;
   if (!way_point)

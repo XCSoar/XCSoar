@@ -54,20 +54,30 @@ MakeWaypoint(double longitude, double latitude, double altitude)
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude);
 }
 
-static const Waypoint wp1 = MakeWaypoint(0, 45, 50);
-static const Waypoint wp2 = MakeWaypoint(0, 45.3, 50);
-static const Waypoint wp3 = MakeWaypoint(0, 46, 50);
+template<typename... Args>
+static WaypointPtr
+MakeWaypointPtr(Args&&... args)
+{
+  return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
+}
+
+static const auto wp1 = MakeWaypointPtr(0, 45, 50);
+static const auto wp2 = MakeWaypointPtr(0, 45.3, 50);
+static const auto wp3 = MakeWaypointPtr(0, 46, 50);
 
 static void
 TestAATPoint()
 {
   OrderedTask task(task_behaviour);
-  task.Append(StartPoint(new CylinderZone(wp1.location, fixed(500)), wp1,
+  task.Append(StartPoint(new CylinderZone(wp1->location, fixed(500)),
+                         WaypointPtr(wp1),
                          task_behaviour,
                          ordered_task_settings.start_constraints));
-  task.Append(AATPoint(new CylinderZone(wp2.location, fixed(10000)), wp2,
+  task.Append(AATPoint(new CylinderZone(wp2->location, fixed(10000)),
+                       WaypointPtr(wp2),
                        task_behaviour));
-  task.Append(FinishPoint(new CylinderZone(wp3.location, fixed(500)), wp3,
+  task.Append(FinishPoint(new CylinderZone(wp3->location, fixed(500)),
+                          WaypointPtr(wp3),
                           task_behaviour,
                           ordered_task_settings.finish_constraints));
   task.SetActiveTaskPoint(1);
@@ -77,15 +87,15 @@ TestAATPoint()
   AATPoint &ap = (AATPoint &)task.GetPoint(1);
 
   ok1(!ap.IsTargetLocked());
-  ok1(equals(ap.GetTargetLocation(), wp2.location));
+  ok1(equals(ap.GetTargetLocation(), wp2->location));
   ap.LockTarget(true);
   ok1(ap.IsTargetLocked());
-  ok1(equals(ap.GetTargetLocation(), wp2.location));
+  ok1(equals(ap.GetTargetLocation(), wp2->location));
 
   GeoPoint target = MakeGeoPoint(0, 45.31);
   ap.SetTarget(target);
   ok1(ap.IsTargetLocked());
-  ok1(equals(ap.GetTargetLocation(), wp2.location));
+  ok1(equals(ap.GetTargetLocation(), wp2->location));
 
   ap.SetTarget(target, true);
   ok1(ap.IsTargetLocked());

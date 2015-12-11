@@ -321,13 +321,13 @@ void TaskEditPanel::ReverseTask()
 
   const unsigned start_index = 0;
   const unsigned finish_index = ordered_task->TaskSize() - 1;
-  const Waypoint start_wp = ordered_task->GetTaskPoint(start_index).GetWaypoint();
-  const Waypoint finish_wp = ordered_task->GetTaskPoint(finish_index).GetWaypoint();
+  auto start_wp = ordered_task->GetTaskPoint(start_index).GetWaypointPtr();
+  auto finish_wp = ordered_task->GetTaskPoint(finish_index).GetWaypointPtr();
 
-  if (start_wp.location != finish_wp.location) {
+  if (start_wp->location != finish_wp->location) {
     // swap start/finish TP if at different location but leave OZ type intact
-    ordered_task->Relocate(start_index, finish_wp);
-    ordered_task->Relocate(finish_index, start_wp);
+    ordered_task->Relocate(start_index, std::move(finish_wp));
+    ordered_task->Relocate(finish_index, std::move(start_wp));
 
     // remove optional start points
     while (ordered_task->HasOptionalStarts())
@@ -438,7 +438,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawSecondRow(canvas, text_rc, buffer);
 
   // Draw turnpoint name
-  OrderedTaskPointLabel(tp.GetType(), tp.GetWaypoint().name.c_str(),
+  OrderedTaskPointLabel(tp.GetType(), tp.GetWaypointPtr()->name.c_str(),
                         DrawListIndex, buffer);
   row_renderer.DrawFirstRow(canvas, text_rc, buffer);
 
@@ -479,7 +479,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 
     OrderedTaskPoint* point = nullptr;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
-    const Waypoint* way_point =
+    auto way_point =
       ShowWaypointListDialog(ordered_task->TaskSize() > 0
                              ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
                              : CommonInterface::Basic().location,
@@ -488,9 +488,9 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       return;
 
     if (ItemIndex == 0) {
-      point = factory.CreateStart(*way_point);
+      point = factory.CreateStart(std::move(way_point));
     } else {
-      point = factory.CreateIntermediate(*way_point);
+      point = factory.CreateIntermediate(std::move(way_point));
      }
     if (point == nullptr)
       return;

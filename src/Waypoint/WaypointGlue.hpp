@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_WAY_POINT_GLUE_HPP
 
 #include "Engine/Waypoint/Origin.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
-struct Waypoint;
 class Waypoints;
 class RasterTerrain;
 class OperationEnvironment;
@@ -48,8 +48,8 @@ namespace WaypointGlue {
    *
    * @return the home #Waypoint, or nullptr if it not found
    */
-  const Waypoint *FindHomeId(Waypoints &waypoints,
-                             PlacesOfInterestSettings &settings);
+  WaypointPtr FindHomeId(Waypoints &waypoints,
+                         PlacesOfInterestSettings &settings);
 
   /**
    * Find the configured home by id (in #PlacesOfInterestSettings) in
@@ -59,8 +59,8 @@ namespace WaypointGlue {
    *
    * @return the home #Waypoint, or nullptr if it not found
    */
-  const Waypoint *FindHomeLocation(Waypoints &waypoints,
-                                   PlacesOfInterestSettings &settings);
+  WaypointPtr FindHomeLocation(Waypoints &waypoints,
+                               PlacesOfInterestSettings &settings);
 
   /**
    * Find the waypoint flagged as "home" in the #Waypoints database,
@@ -69,8 +69,8 @@ namespace WaypointGlue {
    *
    * @return the home #Waypoint, or nullptr if it not found
    */
-  const Waypoint *FindFlaggedHome(Waypoints &waypoints,
-                                  PlacesOfInterestSettings &settings);
+  WaypointPtr FindFlaggedHome(Waypoints &waypoints,
+                              PlacesOfInterestSettings &settings);
 
   /**
    * This functions checks if the home and teamcode waypoint

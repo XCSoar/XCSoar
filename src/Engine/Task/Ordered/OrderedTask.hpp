@@ -26,6 +26,7 @@
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Task/AbstractTask.hpp"
 #include "SmartTaskAdvance.hpp"
+#include "Waypoint/Ptr.hpp"
 #include "Util/DereferenceIterator.hpp"
 #include "Util/StaticString.hxx"
 
@@ -40,7 +41,6 @@ class FinishPoint;
 class AbstractTaskFactory;
 class TaskDijkstraMin;
 class TaskDijkstraMax;
-struct Waypoint;
 class Waypoints;
 class AATPoint;
 struct FlatBoundingBox;
@@ -311,7 +311,7 @@ public:
    * @param waypoint
    * @return true if succeeded
    */
-  bool RelocateOptionalStart(const unsigned position, const Waypoint& waypoint);
+  bool RelocateOptionalStart(const unsigned position, WaypointPtr &&waypoint);
 
   /**
    * Relocate a task point to a new location
@@ -321,7 +321,7 @@ public:
    *
    * @return True on success
    */
-  bool Relocate(const unsigned position, const Waypoint& waypoint);
+  bool Relocate(const unsigned position, WaypointPtr &&waypoint);
 
  /**
   * returns pointer to AATPoint accessed via TPIndex if exist

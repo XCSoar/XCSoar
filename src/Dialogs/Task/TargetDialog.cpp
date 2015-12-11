@@ -715,7 +715,7 @@ TargetWidget::RefreshTargetPoint()
 inline void
 TargetWidget::OnNameClicked()
 {
-  Waypoint waypoint;
+  WaypointPtr waypoint;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -724,7 +724,7 @@ TargetWidget::OnNameClicked()
       return;
 
     const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
-    waypoint = tp.GetWaypoint();
+    waypoint = tp.GetWaypointPtr();
   }
 
   dlgWaypointDetailsShowModal(waypoint);

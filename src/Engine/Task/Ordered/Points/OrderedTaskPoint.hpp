@@ -86,7 +86,7 @@ public:
    * @return Partially initialised object
    */
   OrderedTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
-                   const Waypoint &wp,
+                   WaypointPtr &&wp,
                    const bool b_scored);
 
   virtual ~OrderedTaskPoint() {}
@@ -105,7 +105,7 @@ public:
   gcc_malloc
   OrderedTaskPoint *Clone(const TaskBehaviour &task_behaviour,
                           const OrderedTaskSettings &ordered_task_settings,
-                          const Waypoint* waypoint=NULL) const;
+                          WaypointPtr &&waypoint=WaypointPtr()) const;
 
   /**
    * Update observation zone geometry (or other internal data) when

@@ -70,7 +70,7 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
 
     env.SetProgressPosition(id);
 
-    if (!device.WriteNavpoint(id++, i, env)) {
+    if (!device.WriteNavpoint(id++, *i, env)) {
       if (!env.IsCancelled())
         env.SetErrorMessage(_("Failed to write waypoint."));
       break;

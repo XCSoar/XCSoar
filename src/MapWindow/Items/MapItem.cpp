@@ -25,9 +25,9 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
 
 TaskOZMapItem::TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
-                             TaskPointType _tp_type, const Waypoint &_waypoint)
+                             TaskPointType _tp_type, WaypointPtr &&_waypoint)
   :MapItem(TASK_OZ), index(_index), oz(_oz.Clone()),
-   tp_type(_tp_type), waypoint(_waypoint) {}
+   tp_type(_tp_type), waypoint(std::move(_waypoint)) {}
 
 TaskOZMapItem::~TaskOZMapItem()
 {

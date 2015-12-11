@@ -55,7 +55,7 @@ Copyright_License {
  * Metadata for a Waypoint that is about to be drawn.
  */
 struct VisibleWaypoint {
-  const Waypoint *waypoint;
+  WaypointPtr waypoint;
 
   RasterPoint point;
 
@@ -65,9 +65,9 @@ struct VisibleWaypoint {
 
   bool in_task;
 
-  void Set(const Waypoint &_waypoint, RasterPoint &_point,
+  void Set(WaypointPtr &&_waypoint, RasterPoint &_point,
            bool _in_task) {
-    waypoint = &_waypoint;
+    waypoint = std::move(_waypoint);
     point = _point;
     reach.Clear();
     reachable = WaypointRenderer::Unreachable;
@@ -340,37 +340,37 @@ protected:
                watchedWaypoint);
   }
 
-  void AddWaypoint(const Waypoint &way_point, bool in_task) {
+  void AddWaypoint(WaypointPtr &&way_point, bool in_task) {
     if (waypoints.full())
       return;
 
-    if (!projection.WaypointInScaleFilter(way_point) && !in_task)
+    if (!projection.WaypointInScaleFilter(*way_point) && !in_task)
       return;
 
     RasterPoint sc;
-    if (!projection.GeoToScreenIfVisible(way_point.location, sc))
+    if (!projection.GeoToScreenIfVisible(way_point->location, sc))
       return;
 
     VisibleWaypoint &vwp = waypoints.append();
-    vwp.Set(way_point, sc, in_task);
+    vwp.Set(std::move(way_point), sc, in_task);
   }
 
 public:
-  void Visit(const Waypoint& way_point) override {
-    AddWaypoint(way_point, false);
+  void Visit(WaypointPtr &&way_point) override {
+    AddWaypoint(std::move(way_point), false);
   }
 
   void Visit(const TaskPoint &tp) override {
     switch (tp.GetType()) {
     case TaskPointType::UNORDERED:
-      AddWaypoint(((const UnorderedTaskPoint &)tp).GetWaypoint(), true);
+      AddWaypoint(((const UnorderedTaskPoint &)tp).GetWaypointPtr(), true);
       break;
 
     case TaskPointType::START:
     case TaskPointType::AST:
     case TaskPointType::AAT:
     case TaskPointType::FINISH:
-      AddWaypoint(((const OrderedTaskPoint &)tp).GetWaypoint(), true);
+      AddWaypoint(((const OrderedTaskPoint &)tp).GetWaypointPtr(), true);
       break;
     }
   }

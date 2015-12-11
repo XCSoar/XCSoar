@@ -24,7 +24,8 @@
 #define RETROSPECTIVE_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
 
 #include <list>
@@ -36,27 +37,28 @@ public:
   Retrospective(const Waypoints &wps);
 
   struct NearWaypoint {
-    Waypoint waypoint;
+    WaypointPtr waypoint;
     GeoPoint location;
     fixed range;
     fixed leg_in;
     fixed actual_in;
     Angle bearing;
 
-    NearWaypoint(const Waypoint &_waypoint, const GeoPoint& _location)
-      :waypoint(_waypoint), location(_location), leg_in(0), actual_in(0) {
-      range = location.Distance(waypoint.location);
+    NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location)
+      :waypoint(std::move(_waypoint)),
+       location(_location), leg_in(0), actual_in(0) {
+      range = location.Distance(waypoint->location);
     }
 
-    NearWaypoint(const Waypoint &_waypoint, const GeoPoint& _location,
+    NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location,
                  const NearWaypoint& previous)
-      :waypoint(_waypoint), location(_location) {
-      range = location.Distance(waypoint.location);
+      :waypoint(std::move(_waypoint)), location(_location) {
+      range = location.Distance(waypoint->location);
       update_leg(previous);
     }
 
     bool update_location(const GeoPoint &location_now) {
-      auto range_now = location_now.Distance(waypoint.location);
+      auto range_now = location_now.Distance(waypoint->location);
       if (range_now < range) {
         range = range_now;
         location = location_now;
@@ -66,7 +68,7 @@ public:
       // TODO: or if distance from previous tp to here is greater than leg (and wasnt previously)
     }
     void update_leg(const NearWaypoint& previous) {
-      leg_in = previous.waypoint.location.Distance(waypoint.location);
+      leg_in = previous.waypoint->location.Distance(waypoint->location);
       actual_in = previous.location.Distance(location);
       bearing = previous.location.Bearing(location);
     }

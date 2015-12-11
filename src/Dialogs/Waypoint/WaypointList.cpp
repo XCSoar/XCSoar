@@ -160,7 +160,7 @@ public:
 
   void OnWaypointListEnter();
 
-  const Waypoint *GetCursorObject() const {
+  WaypointPtr GetCursorObject() const {
     return items.empty()
       ? nullptr
       : items[GetList().GetCursorIndex()].waypoint;
@@ -303,11 +303,11 @@ FillLastUsedList(WaypointList &list,
                  const Waypoints &waypoints)
 {
   for (auto it = last_used_ids.rbegin(); it != last_used_ids.rend(); it++) {
-    const Waypoint* waypoint = waypoints.LookupId(*it);
+    auto waypoint = waypoints.LookupId(*it);
     if (waypoint == nullptr)
       continue;
 
-    list.emplace_back(*waypoint);
+    list.emplace_back(std::move(waypoint));
   }
 }
 
@@ -514,7 +514,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
   }
 }
 
-const Waypoint*
+WaypointPtr
 ShowWaypointListDialog(const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {

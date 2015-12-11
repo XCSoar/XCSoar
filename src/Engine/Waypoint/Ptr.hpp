@@ -20,25 +20,13 @@
 }
  */
 
-#include "IntermediatePoint.hpp"
-#include "Task/TaskBehaviour.hpp"
+#ifndef WAYPOINT_PTR_HPP
+#define WAYPOINT_PTR_HPP
 
-IntermediateTaskPoint::IntermediateTaskPoint(TaskPointType _type,
-                                             ObservationZonePoint *_oz,
-                                             WaypointPtr &&wp,
-                                             const TaskBehaviour &tb,
-                                             const bool b_scored)
-  :OrderedTaskPoint(_type, _oz, std::move(wp), b_scored),
-   safety_height(tb.safety_height_arrival) {}
+#include <memory>
 
-void
-IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
-{
-  safety_height = tb.safety_height_arrival;
-}
+struct Waypoint;
 
-fixed
-IntermediateTaskPoint::GetElevation() const
-{
-  return GetBaseElevation() + safety_height;
-}
+typedef std::shared_ptr<const Waypoint> WaypointPtr;
+
+#endif

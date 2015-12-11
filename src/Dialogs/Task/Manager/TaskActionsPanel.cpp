@@ -100,7 +100,7 @@ TaskActionsPanel::OnDeclareClicked()
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   Declaration decl(settings.logger, settings.plane, *active_task);
-  ExternalLogger::Declare(decl, way_points.GetHome());
+  ExternalLogger::Declare(decl, way_points.GetHome().get());
 }
 
 void

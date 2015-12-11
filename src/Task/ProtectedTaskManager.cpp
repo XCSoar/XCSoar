@@ -53,13 +53,13 @@ ProtectedTaskManager::GetOrderedTaskSettings() const
   return lease->GetOrderedTask().GetOrderedTaskSettings();
 }
 
-const Waypoint* 
+WaypointPtr
 ProtectedTaskManager::GetActiveWaypoint() const
 {
   Lease lease(*this);
   const TaskWaypoint *tp = lease->GetActiveTaskPoint();
   if (tp)
-    return &tp->GetWaypoint();
+    return tp->GetWaypointPtr();
 
   return nullptr;
 }
@@ -109,10 +109,10 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 }
 
 bool 
-ProtectedTaskManager::DoGoto(const Waypoint &wp)
+ProtectedTaskManager::DoGoto(WaypointPtr &&wp)
 {
   ExclusiveLease lease(*this);
-  return lease->DoGoto(wp);
+  return lease->DoGoto(std::move(wp));
 }
 
 OrderedTask*

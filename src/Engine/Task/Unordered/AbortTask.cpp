@@ -151,12 +151,13 @@ AbortTask::FillReachable(const AircraftState &state,
   q.reserve(32);
 
   for (auto v = approx_waypoints.begin(); v != approx_waypoints.end();) {
-    if (only_airfield && !v->waypoint.IsAirport()) {
+    if (only_airfield && !v->waypoint->IsAirport()) {
       ++v;
       continue;
     }
 
-    UnorderedTaskPoint t(v->waypoint, task_behaviour);
+    auto wp = v->waypoint;
+    UnorderedTaskPoint t(std::move(wp), task_behaviour);
     GlideResult result =
         TaskSolution::GlideSolutionRemaining(t, state,
                                              task_behaviour.glide, polar);
@@ -167,10 +168,11 @@ AbortTask::FillReachable(const AircraftState &state,
 
       if (intersection_test && final_glide && is_reachable_final)
         intersects = intersection_test->Intersects(
-            AGeoPoint(v->waypoint.location, result.min_arrival_altitude));
+            AGeoPoint(v->waypoint->location, result.min_arrival_altitude));
 
       if (!intersects) {
-        q.push(AlternatePoint(v->waypoint, result));
+        wp = v->waypoint;
+        q.push(AlternatePoint(std::move(wp), result));
         // remove it since it's already in the list now      
         v = approx_waypoints.erase(v);
 
@@ -185,8 +187,9 @@ AbortTask::FillReachable(const AircraftState &state,
   }
 
   while (!q.empty() && !IsTaskFull()) {
-    const AlternatePoint top = q.top();
-    task_points.emplace_back(top.waypoint, task_behaviour, top.solution);
+    auto top = q.top();
+    task_points.emplace_back(std::move(top.waypoint), task_behaviour,
+                             top.solution);
 
     const int i = task_points.size() - 1;
     if (task_points[i].point.GetWaypoint().id == active_waypoint)
@@ -202,7 +205,7 @@ AbortTask::FillReachable(const AircraftState &state,
  * Class to build vector from visited waypoints.
  * Intended to be used temporarily.
  */
-class WaypointVisitorVector: public WaypointVisitor
+class WaypointVisitorVector final : public WaypointVisitor
 {
   AlternateList &vector;
 
@@ -221,9 +224,9 @@ public:
    *
    * @param wp Waypoint that is visited
    */
-  void Visit(const Waypoint& wp) {
-    if (wp.IsLandable())
-      vector.emplace_back(wp);
+  void Visit(WaypointPtr &&wp) override {
+    if (wp->IsLandable())
+      vector.emplace_back(std::move(wp));
   }
 };
 
@@ -311,7 +314,7 @@ AbortTask::Reset()
   UnorderedTask::Reset();
 }
 
-const Waypoint *
+WaypointPtr
 AbortTask::GetHome() const
 {
   return waypoints.GetHome();
@@ -320,7 +323,7 @@ AbortTask::GetHome() const
 GeoVector 
 AbortTask::GetHomeVector(const AircraftState &state) const
 {
-  const Waypoint *home_waypoint = GetHome();
+  const auto home_waypoint = GetHome();
   if (home_waypoint)
     return GeoVector(state.location, home_waypoint->location);
 

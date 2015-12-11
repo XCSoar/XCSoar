@@ -92,8 +92,8 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
     Directory::Create(Path(_T("output/results")));
     std::ofstream fin("output/results/res-wp-in.txt");
     for (unsigned i=1; i<=waypoints.size(); i++) {
-      const Waypoint *wpt = waypoints.LookupId(i);
-      if (wpt != NULL)
+      const auto wpt = waypoints.LookupId(i);
+      if (wpt)
         fin << *wpt;
     }
   }

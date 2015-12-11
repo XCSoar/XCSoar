@@ -194,10 +194,10 @@ TestWaypointFile(Path filename, Waypoints &way_points, unsigned num_wps)
   return true;
 }
 
-static const Waypoint*
+static WaypointPtr
 GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
 {
-  const Waypoint *wp = way_points.LookupName(org_wp.name);
+  const WaypointPtr wp = way_points.LookupName(org_wp.name);
   if (!ok1(wp != NULL)) {
     skip(2, 0, "waypoint not found");
     return NULL;
@@ -240,8 +240,8 @@ TestWinPilot(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const Waypoint *wp = GetWaypoint(*it, way_points);
-    TestWinPilotWaypoint(*it, wp);
+    const auto wp = GetWaypoint(*it, way_points);
+    TestWinPilotWaypoint(*it, wp.get());
   }
 }
 
@@ -280,8 +280,8 @@ TestSeeYou(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const Waypoint *wp = GetWaypoint(*it, way_points);
-    TestSeeYouWaypoint(*it, wp);
+    const auto wp = GetWaypoint(*it, way_points);
+    TestSeeYouWaypoint(*it, wp.get());
   }
 }
 
@@ -316,8 +316,8 @@ TestZander(wp_vector org_wp)
     if (it->name.length() > 12)
       it->name = it->name.erase(12);
     trim_inplace(it->name);
-    const Waypoint *wp = GetWaypoint(*it, way_points);
-    TestZanderWaypoint(*it, wp);
+    const auto wp = GetWaypoint(*it, way_points);
+    TestZanderWaypoint(*it, wp.get());
   }
 }
 
@@ -396,7 +396,7 @@ TestCompeGPS(wp_vector org_wp)
       it->name = it->name.erase(6);
 
     trim_inplace(it->name);
-    const Waypoint *wp = GetWaypoint(*it, way_points);
+    const auto wp = GetWaypoint(*it, way_points);
     ok1(wp->comment == it->comment);
   }
 }
@@ -421,7 +421,7 @@ TestCompeGPS_UTM(wp_vector org_wp)
       it->name = it->name.erase(6);
 
     trim_inplace(it->name);
-    const Waypoint *wp = GetWaypoint(*it, way_points);
+    const auto wp = GetWaypoint(*it, way_points);
     ok1(wp->comment == it->comment);
   }
 }

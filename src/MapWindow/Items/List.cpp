@@ -34,16 +34,16 @@ CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
     AIRPORT, LANDABLE, WAYPOINT,
   } type1, type2;
 
-  if (a->waypoint.IsAirport())
+  if (a->waypoint->IsAirport())
     type1 = AIRPORT;
-  else if (a->waypoint.IsLandable())
+  else if (a->waypoint->IsLandable())
     type1 = LANDABLE;
   else
     type1 = WAYPOINT;
 
-  if (b->waypoint.IsAirport())
+  if (b->waypoint->IsAirport())
     type2 = AIRPORT;
-  else if (b->waypoint.IsLandable())
+  else if (b->waypoint->IsLandable())
     type2 = LANDABLE;
   else
     type2 = WAYPOINT;
@@ -51,7 +51,7 @@ CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
   if (type1 != type2)
     return type1 < type2;
 
-  return a->waypoint.id < b->waypoint.id;
+  return a->waypoint->id < b->waypoint->id;
 }
 
 static bool
@@ -76,19 +76,19 @@ CompareMapItems(const MapItem *a, const MapItem *b)
     return false;
 
   if (a->type == MapItem::WAYPOINT && b->type != MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint.IsAirport())
+      ((const WaypointMapItem *)a)->waypoint->IsAirport())
     return true;
 
   if (a->type != MapItem::WAYPOINT && b->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint.IsAirport())
+      ((const WaypointMapItem *)b)->waypoint->IsAirport())
     return false;
 
   if (a->type == MapItem::WAYPOINT && b->type != MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint.IsLandable())
+      ((const WaypointMapItem *)a)->waypoint->IsLandable())
     return true;
 
   if (a->type != MapItem::WAYPOINT && b->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint.IsLandable())
+      ((const WaypointMapItem *)b)->waypoint->IsLandable())
     return false;
 
   if (a->type == MapItem::WAYPOINT && b->type == MapItem::WAYPOINT)

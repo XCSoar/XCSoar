@@ -234,7 +234,7 @@ Draw(Canvas &canvas, const PixelRect rc,
      const WaypointLook &look,
      const WaypointRendererSettings &renderer_settings)
 {
-  WaypointListRenderer::Draw(canvas, rc, item.waypoint,
+  WaypointListRenderer::Draw(canvas, rc, *item.waypoint,
                              row_renderer, look, renderer_settings);
 }
 
@@ -297,7 +297,7 @@ Draw(Canvas &canvas, PixelRect rc,
   const unsigned text_padding = Layout::GetTextPadding();
 
   const ObservationZonePoint &oz = *item.oz;
-  const Waypoint &waypoint = item.waypoint;
+  const Waypoint &waypoint = *item.waypoint;
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);

@@ -62,7 +62,7 @@ ATCReferencePanel::UpdateValues()
   const GeoPoint &location =
     CommonInterface::GetComputerSettings().poi.atc_reference;
 
-  const Waypoint *waypoint = location.IsValid()
+  const auto waypoint = location.IsValid()
     ? way_points.GetNearest(location, fixed(100))
     : nullptr;
 
@@ -100,15 +100,14 @@ ATCReferencePanel::OnAction(int id)
   GeoPoint &location =
     CommonInterface::SetComputerSettings().poi.atc_reference;
 
-  const Waypoint *waypoint;
-
   switch (id) {
-  case RELOCATE:
-    waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
+  case RELOCATE: {
+    auto waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
     if (waypoint != nullptr) {
       location = waypoint->location;
       UpdateValues();
     }
+  }
     break;
 
   case CLEAR:

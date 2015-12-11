@@ -63,7 +63,7 @@ public:
    * @return Partially-initialised object
    */
   StartPoint(ObservationZonePoint *_oz,
-             const Waypoint &wp,
+             WaypointPtr &&wp,
              const TaskBehaviour &tb,
              const StartConstraints &constraints);
 

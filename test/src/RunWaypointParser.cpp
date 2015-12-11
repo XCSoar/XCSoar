@@ -33,7 +33,8 @@ Copyright_License {
 
 class DumpVisitor : public WaypointVisitor {
 public:
-  void Visit(const Waypoint &wp) {
+  void Visit(WaypointPtr &&p) override {
+    const auto &wp = *p;
     _ftprintf(stdout, _T("%s, %f, %f, %.0fm\n"), wp.name.c_str(),
               (double)wp.location.latitude.Degrees(),
               (double)wp.location.longitude.Degrees(),

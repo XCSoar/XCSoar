@@ -425,8 +425,8 @@ TrafficListWidget::UpdateList()
             item.vector = GeoVector(CommonInterface::Basic().location,
                                     i.second.location);
 
-          const auto *wp = way_points.GetNearestLandable(i.second.location,
-                                                         fixed(20000));
+          const auto wp = way_points.GetNearestLandable(i.second.location,
+                                                        fixed(20000));
           if (wp != nullptr) {
             item.near_name = wp->name.c_str();
             item.near_distance = wp->location.DistanceS(i.second.location);

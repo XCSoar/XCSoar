@@ -179,17 +179,16 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
   const unsigned index_optional_starts = ItemIndex - 1;
 
   const GeoPoint &location = task.GetPoint(0).GetLocation();
-  const Waypoint* way_point =
-    ShowWaypointListDialog(location);
+  auto way_point = ShowWaypointListDialog(location);
   if (!way_point)
     return;
 
   if (index_optional_starts < task.GetOptionalStartPointCount()) {
-    if (task.RelocateOptionalStart(index_optional_starts, *way_point))
+    if (task.RelocateOptionalStart(index_optional_starts, std::move(way_point)))
       modified = true;
   } else {
     AbstractTaskFactory &factory = task.GetFactory();
-    if (factory.AppendOptionalStart(*way_point)) {
+    if (factory.AppendOptionalStart(std::move(way_point))) {
       modified = true;
     }
   }

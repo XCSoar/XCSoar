@@ -43,11 +43,11 @@ bool test_task_bad(TaskManager& task_manager,
   task_manager.SetFactory(TaskFactoryType::RACING);
   AbstractTaskFactory& fact = task_manager.GetFactory();
 
-  const Waypoint* wp = random_waypoint(waypoints);
+  const auto wp = random_waypoint(waypoints);
 
-  ok (!fact.CreateFinish((TaskPointFactoryType)20,*wp),"bad finish type",0);
-  ok (!fact.CreateStart((TaskPointFactoryType)20,*wp),"bad start type",0);
-  ok (!fact.CreateIntermediate((TaskPointFactoryType)20,*wp),"bad intermediate type",0);
+  ok (!fact.CreateFinish((TaskPointFactoryType)20, WaypointPtr(wp)),"bad finish type",0);
+  ok (!fact.CreateStart((TaskPointFactoryType)20, WaypointPtr(wp)),"bad start type",0);
+  ok (!fact.CreateIntermediate((TaskPointFactoryType)20, WaypointPtr(wp)),"bad intermediate type",0);
 
   // now create a taskpoint from FAI
 
@@ -59,7 +59,7 @@ bool test_task_bad(TaskManager& task_manager,
 
   AbstractTaskFactory& bfact = task_manager.GetFactory();
 
-  ok (!bfact.CreateIntermediate(s,*wp),"bad intermediate type (after task change)",0);
+  ok (!bfact.CreateIntermediate(s, WaypointPtr(wp)),"bad intermediate type (after task change)",0);
 
   bfact.Remove(1);
   bfact.UpdateStatsGeometry();

@@ -82,13 +82,13 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
 
   for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
     const TaskWaypoint &tp = i->point;
-    const Waypoint &wp = tp.GetWaypoint();
+    auto wp = tp.GetWaypointPtr();
 
     const auto diversion_distance =
-        ::DoubleDistance(state_now.location, wp.location, destination);
+        ::DoubleDistance(state_now.location, wp->location, destination);
     const auto delta = straight_distance - diversion_distance;
 
-    q.push(Divert(wp, i->solution, delta));
+    q.push(Divert(std::move(wp), i->solution, delta));
   }
 
   // now push results onto the list, best first.
@@ -97,7 +97,7 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
 
     // only add if not already in the list (from previous stage in two
     // stage process)
-    if (!IsWaypointInAlternates(top.waypoint))
+    if (!IsWaypointInAlternates(*top.waypoint))
       alternates.push_back(top);
 
     q.pop();
@@ -114,7 +114,7 @@ bool
 AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
 {
   for (auto it = alternates.begin(), end = alternates.end(); it != end; ++it)
-    if (it->waypoint == waypoint)
+    if (*it->waypoint == waypoint)
       return true;
 
   return false;

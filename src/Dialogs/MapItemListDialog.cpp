@@ -230,8 +230,8 @@ MapItemListWidget::OnGotoClicked()
 
   assert(item.type == MapItem::WAYPOINT);
 
-  auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
-  protected_task_manager->DoGoto(waypoint);
+  auto waypoint = ((const WaypointMapItem &)item).waypoint;
+  protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
 }
 

@@ -78,11 +78,11 @@ GotoTask::UpdateSample(gcc_unused const AircraftState &state,
 
 
 bool 
-GotoTask::DoGoto(const Waypoint & wp)
+GotoTask::DoGoto(WaypointPtr &&wp)
 {
-  if (task_behaviour.goto_nonlandable || wp.IsLandable()) {
+  if (task_behaviour.goto_nonlandable || wp->IsLandable()) {
     delete tp;
-    tp = new UnorderedTaskPoint(wp, task_behaviour);
+    tp = new UnorderedTaskPoint(std::move(wp), task_behaviour);
     stats.start.Reset();
     force_full_update = true;
     return true;
@@ -110,9 +110,10 @@ GotoTask::TakeoffAutotask(const GeoPoint& location, const fixed terrain_alt)
   if (tp)
     return false;
 
-  const Waypoint* wp = waypoints.GetNearestLandable(location, fixed(5000));
-  if (wp)
-    return DoGoto(*wp);
+  auto wp = waypoints.GetNearestLandable(location, fixed(5000));
+  if (!wp)
+    wp.reset(new Waypoint(waypoints.GenerateTakeoffPoint(location,
+                                                         terrain_alt)));
 
-  return DoGoto(waypoints.GenerateTakeoffPoint(location, terrain_alt));
+  return DoGoto(std::move(wp));
 }

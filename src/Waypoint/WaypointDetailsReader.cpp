@@ -34,10 +34,10 @@ Copyright_License {
 
 #include <vector>
 
-static const Waypoint *
+static WaypointPtr
 FindWaypoint(Waypoints &way_points, const TCHAR *name)
 {
-  const Waypoint *wp = way_points.LookupName(name);
+  auto wp = way_points.LookupName(name);
   if (wp != nullptr)
     return wp;
 
@@ -64,18 +64,17 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const std::vector<tstring> &files_external,
                    const std::vector<tstring> &files_embed)
 {
-  const Waypoint *wp = FindWaypoint(way_points, name);
+  auto wp = FindWaypoint(way_points, name);
   if (wp == nullptr)
     return;
 
-  Waypoint new_wp(*wp);
+  // TODO: eliminate this const_cast hack
+  Waypoint &new_wp = const_cast<Waypoint &>(*wp);
   new_wp.details = Details.c_str();
   new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
 #ifdef HAVE_RUN_FILE
   new_wp.files_external.assign(files_external.begin(), files_external.end());
 #endif
-  way_points.Replace(*wp, std::move(new_wp));
-  way_points.Optimise();
 }
 
 /**

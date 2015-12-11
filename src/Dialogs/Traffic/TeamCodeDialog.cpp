@@ -157,7 +157,7 @@ TeamCodeWidget::OnCalculatedUpdate(const MoreData &basic,
 inline void
 TeamCodeWidget::OnSetWaypointClicked()
 {
-  const Waypoint* wp =
+  const auto wp =
     ShowWaypointListDialog(CommonInterface::Basic().location);
   if (wp != nullptr) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;

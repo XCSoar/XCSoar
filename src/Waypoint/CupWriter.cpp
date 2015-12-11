@@ -169,7 +169,7 @@ WriteCup(TextWriter &writer, const Waypoints &waypoints,
   // the right file number to the TextWriter
   /// @todo JMW: iteration ordered by ID would be preferred
   for (auto it = waypoints.begin(); it != waypoints.end(); ++it) {
-    const Waypoint& wp = *it;
+    const Waypoint &wp = **it;
     if (wp.origin == origin)
       WriteCup(writer, wp);
   }

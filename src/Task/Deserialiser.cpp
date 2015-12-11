@@ -43,7 +43,7 @@ Deserialise(GeoPoint &data, const ConstDataNode &node)
   node.GetAttribute(_T("latitude"), data.latitude);
 }
 
-static Waypoint *
+static WaypointPtr
 DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 {
   std::unique_ptr<ConstDataNode> loc_node(node.GetChildNamed(_T("Location")));
@@ -60,13 +60,13 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 
   if (waypoints != nullptr) {
     // Try to find waypoint by name
-    const Waypoint *from_database = waypoints->LookupName(name);
+    auto from_database = waypoints->LookupName(name);
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != nullptr &&
         from_database->location.DistanceS(loc) <= fixed(10))
       // Use this waypoint for the task
-      return new Waypoint(*from_database);
+      return from_database;
 
     // Try finding the closest waypoint to the original one
     from_database = waypoints->GetNearest(loc, fixed(10));
@@ -75,7 +75,7 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
     if (from_database != nullptr &&
         from_database->location.DistanceS(loc) <= fixed(10))
       // Use this waypoint for the task
-      return new Waypoint(*from_database);
+      return from_database;
   }
 
   // Create a new waypoint from the original one
@@ -90,7 +90,7 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 
   node.GetAttribute(_T("altitude"), wp->elevation);
 
-  return wp;
+  return WaypointPtr(wp);
 }
 
 static ObservationZonePoint *
@@ -182,7 +182,7 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
   if (!wp_node)
     return;
 
-  std::unique_ptr<Waypoint> wp(DeserialiseWaypoint(*wp_node, waypoints));
+  auto wp = DeserialiseWaypoint(*wp_node, waypoints);
   if (!wp)
     return;
 
@@ -202,13 +202,13 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
 
   if (StringIsEqual(type, _T("Start"))) {
     pt.reset(oz != nullptr
-             ? fact.CreateStart(oz, *wp)
-             : fact.CreateStart(*wp));
+             ? fact.CreateStart(oz, std::move(wp))
+             : fact.CreateStart(std::move(wp)));
 
   } else if (StringIsEqual(type, _T("OptionalStart"))) {
     pt.reset(oz != nullptr
-             ? fact.CreateStart(oz, *wp)
-             : fact.CreateStart(*wp));
+             ? fact.CreateStart(oz, std::move(wp))
+             : fact.CreateStart(std::move(wp)));
     fact.AppendOptionalStart(*pt);
 
     // don't let generic code below add it
@@ -216,18 +216,18 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
 
   } else if (StringIsEqual(type, _T("Turn"))) {
     pt.reset(oz != nullptr
-             ? fact.CreateASTPoint(oz, *wp)
-             : fact.CreateIntermediate(*wp));
+             ? fact.CreateASTPoint(oz, std::move(wp))
+             : fact.CreateIntermediate(std::move(wp)));
 
   } else if (StringIsEqual(type, _T("Area"))) {
     pt.reset(oz != nullptr
-             ? fact.CreateAATPoint(oz, *wp)
-             : fact.CreateIntermediate(*wp));
+             ? fact.CreateAATPoint(oz, std::move(wp))
+             : fact.CreateIntermediate(std::move(wp)));
 
   } else if (StringIsEqual(type, _T("Finish"))) {
     pt.reset(oz != nullptr
-             ? fact.CreateFinish(oz, *wp)
-             : fact.CreateFinish(*wp));
+             ? fact.CreateFinish(oz, std::move(wp))
+             : fact.CreateFinish(std::move(wp)));
   } 
 
   if (!pt)

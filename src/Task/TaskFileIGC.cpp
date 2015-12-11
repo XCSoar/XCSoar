@@ -69,6 +69,19 @@ ReadIGCDeclaration(Path path, IGCDeclarationHeader &header,
   return header_found;
 }
 
+static WaypointPtr
+MakeWaypoint(GeoPoint location, const TCHAR *name)
+{
+  Waypoint *wp = new Waypoint(location);
+  wp->name = name;
+
+  /* we don't know the elevation, so we just set it to zero; this is
+     not correct, but better than leaving it uninitialised */
+  wp->elevation = fixed(0);
+
+  return WaypointPtr(wp);
+}
+
 OrderedTask*
 TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
                      const Waypoints *waypoints, unsigned index) const
@@ -109,21 +122,16 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
     else
       waypoint_name.Format(_T("%s #%u"), _T("Turnpoint"), i);
 
-    Waypoint wp(it.location);
-    wp.name = waypoint_name.c_str();
-
-    /* we don't know the elevation, so we just set it to zero; this is
-       not correct, but better than leaving it uninitialised */
-    wp.elevation = fixed(0);
+    auto wp = MakeWaypoint(it.location, waypoint_name.c_str());
 
     OrderedTaskPoint *tp;
 
     if (i == 0)
-      tp = fact.CreateStart(wp);
+      tp = fact.CreateStart(std::move(wp));
     else if (i == num_turnpoints - 1)
-      tp = fact.CreateFinish(wp);
+      tp = fact.CreateFinish(std::move(wp));
     else
-      tp = fact.CreateIntermediate(wp);
+      tp = fact.CreateIntermediate(std::move(wp));
 
     if (tp != nullptr) {
       fact.Append(*tp);

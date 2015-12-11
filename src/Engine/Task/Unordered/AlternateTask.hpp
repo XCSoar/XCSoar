@@ -38,9 +38,9 @@ public:
   struct Divert : public AlternatePoint {
     fixed delta;
 
-    Divert(const Waypoint &_waypoint, const GlideResult &_solution,
+    Divert(WaypointPtr &&_waypoint, const GlideResult &_solution,
            fixed _delta)
-      :AlternatePoint(_waypoint, _solution), delta(_delta) {}
+      :AlternatePoint(std::move(_waypoint), _solution), delta(_delta) {}
   };
 
   typedef std::vector<Divert> DivertVector;

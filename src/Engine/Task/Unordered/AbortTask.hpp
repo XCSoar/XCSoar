@@ -61,9 +61,9 @@ protected:
     UnorderedTaskPoint point;
     GlideResult solution;
 
-    AlternateTaskPoint(const Waypoint &waypoint, const TaskBehaviour &tb,
+    AlternateTaskPoint(WaypointPtr &&waypoint, const TaskBehaviour &tb,
                        const GlideResult &_solution)
-      :point(waypoint, tb), solution(_solution) {}
+      :point(std::move(waypoint), tb), solution(_solution) {}
   };
 
   typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
@@ -128,7 +128,7 @@ public:
    * @return Vector to home waypoint
    */
   GeoVector GetHomeVector(const AircraftState &state) const;
-  const Waypoint *GetHome() const;
+  WaypointPtr GetHome() const;
 
 protected:
   /**

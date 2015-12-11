@@ -94,7 +94,7 @@ IsAirport(const Waypoint &waypoint)
   return waypoint.IsAirport();
 }
 
-static const Waypoint *
+static WaypointPtr
 GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints,
                    fixed range, WaypointType type)
 {
@@ -174,9 +174,9 @@ int main(int argc, char **argv)
     if (!ParseGeopoint(line, location))
       continue;
 
-    const Waypoint *waypoint = GetNearestWaypoint(location, waypoints,
-                                                  range, type);
-    PrintWaypoint(waypoint);
+    const auto waypoint = GetNearestWaypoint(location, waypoints,
+                                             range, type);
+    PrintWaypoint(waypoint.get());
   }
 
   return EXIT_SUCCESS;

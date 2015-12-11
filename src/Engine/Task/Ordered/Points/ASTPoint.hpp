@@ -54,10 +54,11 @@ public:
    * @return Partially initialised object
    */
   ASTPoint(ObservationZonePoint *_oz,
-           const Waypoint &wp,
+           WaypointPtr &&wp,
            const TaskBehaviour &tb,
            bool boundary_scored=false)
-    :IntermediateTaskPoint(TaskPointType::AST, _oz, wp, tb, boundary_scored),
+    :IntermediateTaskPoint(TaskPointType::AST, _oz, std::move(wp),
+                           tb, boundary_scored),
      score_exit(false){}
 
   bool GetScoreExit() const {
