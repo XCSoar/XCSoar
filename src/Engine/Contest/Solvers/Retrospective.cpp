@@ -98,7 +98,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
   // initialise with first point found
   if (candidate_list.empty()) {
-    candidate_list.push_back(NearWaypoint(*waypoint, aircraft_location));
+    candidate_list.emplace_back(*waypoint, aircraft_location);
     return true;
   }
 
@@ -137,8 +137,8 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
     if ((dist_wpwp > search_range) && (back.waypoint.id != waypoint->id)) {
       // - far enough away (not overlapping) that can consider this a new point
-      candidate_list.push_back (NearWaypoint(*waypoint, aircraft_location,
-                                             candidate_list.back()));
+      candidate_list.emplace_back(*waypoint, aircraft_location,
+                                  candidate_list.back());
       changed = true;
     }
 
