@@ -23,8 +23,10 @@
 #include "Retrospective.hpp"
 #include "Waypoint/Waypoints.hpp"
 
-Retrospective::Retrospective(const Waypoints &wps):
-  waypoints(wps),search_range(fixed(15000)),angle_tolerance(Angle::Degrees(fixed(25)))
+Retrospective::Retrospective(const Waypoints &wps)
+  :waypoints(wps),
+   search_range(15000),
+   angle_tolerance(Angle::Degrees(25))
 {
 }
 
@@ -61,7 +63,7 @@ void
 Retrospective::CalcDistances(fixed& d_ach, fixed& d_can)
 {
   d_ach = fixed(0);
-  d_can = fixed(0);  
+  d_can = fixed(0);
   for (auto it0 = ++candidate_list.begin(); it0 != candidate_list.end(); ++it0) {
     d_ach += it0->actual_in;
     d_can += it0->leg_in;
@@ -70,7 +72,7 @@ Retrospective::CalcDistances(fixed& d_ach, fixed& d_can)
 }
 
 
-bool 
+bool
 Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 {
   assert(aircraft_location.IsValid());
@@ -78,7 +80,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
   // TODO:
   // - look for trivial loops e.g. A-B-A-B-C?
   // - only add candidate if greater distance to previous than tolerance radius
-  // - 
+  // -
 
   // retrospective task
 
@@ -120,23 +122,23 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
       // (replacing it makes a linear collapse of the intermediate point)
 
       auto previous = ++candidate_list.rbegin();
-	
+
       // distance previous
       auto d_prev_back = previous->location.Distance(back.location);
       auto d_prev_candidate = previous->location.Distance(waypoint->location);
-	
+
       if (d_prev_candidate > d_prev_back) {
-	// replace back with new point
-	back = NearWaypoint(*waypoint, aircraft_location, *previous);
-	changed = true;
+        // replace back with new point
+        back = NearWaypoint(*waypoint, aircraft_location, *previous);
+        changed = true;
       }
 
     }
 
     if ((dist_wpwp > search_range) && (back.waypoint.id != waypoint->id)) {
       // - far enough away (not overlapping) that can consider this a new point
-      candidate_list.push_back (NearWaypoint(*waypoint, aircraft_location, 
-					     candidate_list.back()));
+      candidate_list.push_back (NearWaypoint(*waypoint, aircraft_location,
+                                             candidate_list.back()));
       changed = true;
     }
 

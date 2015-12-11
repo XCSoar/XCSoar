@@ -19,15 +19,17 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef RETROSPECTIVE_H
-#define RETROSPECTIVE_H
 
-class Waypoints;
+#ifndef RETROSPECTIVE_HPP
+#define RETROSPECTIVE_HPP
 
 #include "Geo/GeoPoint.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include <list>
 #include "Math/Angle.hpp"
+
+#include <list>
+
+class Waypoints;
 
 class Retrospective {
 public:
@@ -47,7 +49,7 @@ public:
     }
 
     NearWaypoint(const Waypoint &_waypoint, const GeoPoint& _location,
-		 const NearWaypoint& previous):
+                 const NearWaypoint& previous):
       waypoint(_waypoint), location(_location) {
       range = location.Distance(waypoint.location);
       update_leg(previous);
@@ -56,9 +58,9 @@ public:
     bool update_location(const GeoPoint &location_now) {
       auto range_now = location_now.Distance(waypoint.location);
       if (range_now < range) {
-	range = range_now;
-	location = location_now;
-	return true;
+        range = range_now;
+        location = location_now;
+        return true;
       }
       return false;
       // TODO: or if distance from previous tp to here is greater than leg (and wasnt previously)
@@ -86,13 +88,13 @@ public:
 
   bool UpdateSample(const GeoPoint &aircraft_location);
   void Clear();
-  void Reset() { 
+  void Reset() {
     Clear();
   }
 
   void CalcDistances(fixed& d_ach, fixed& d_can);
 
-/** search range in m */
+  /** search range in m */
   fixed search_range;
   Angle angle_tolerance;
 };
