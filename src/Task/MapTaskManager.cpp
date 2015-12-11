@@ -24,7 +24,9 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/Points/StartPoint.hpp"
+#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
+#include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Interface.hpp"
 
@@ -53,8 +55,7 @@ AppendToTask(OrderedTask *task, const Waypoint &waypoint)
   }
 
   const AbstractTaskFactory &factory = task->GetFactory();
-  OrderedTaskPoint *task_point =
-      (OrderedTaskPoint *)factory.CreateIntermediate(waypoint);
+  auto *task_point = factory.CreateIntermediate(waypoint);
   if (task_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
@@ -75,8 +76,7 @@ MutateFromGoto(OrderedTask *task, const Waypoint &finish_waypoint,
                const Waypoint &start_waypoint)
 {
   const AbstractTaskFactory &factory = task->GetFactory();
-  OrderedTaskPoint *start_point =
-      (OrderedTaskPoint *)factory.CreateStart(start_waypoint);
+  auto *start_point = factory.CreateStart(start_waypoint);
   if (start_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
@@ -85,8 +85,7 @@ MutateFromGoto(OrderedTask *task, const Waypoint &finish_waypoint,
   if (!success)
     return MapTaskManager::UNMODIFIED;
 
-  OrderedTaskPoint *finish_point =
-      (OrderedTaskPoint *)factory.CreateFinish(finish_waypoint);
+  auto *finish_point = factory.CreateFinish(finish_waypoint);
   if (finish_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
@@ -159,8 +158,7 @@ InsertInTask(OrderedTask *task, const Waypoint &waypoint)
   }
 
   const AbstractTaskFactory &factory = task->GetFactory();
-  OrderedTaskPoint *task_point =
-      (OrderedTaskPoint *)factory.CreateIntermediate(waypoint);
+  auto *task_point = factory.CreateIntermediate(waypoint);
   if (task_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
