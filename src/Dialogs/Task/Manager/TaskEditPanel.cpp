@@ -44,7 +44,8 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/Points/StartPoint.hpp"
+#include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
@@ -494,9 +495,9 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       return;
 
     if (ItemIndex == 0) {
-      point = (OrderedTaskPoint*)factory.CreateStart(*way_point);
+      point = factory.CreateStart(*way_point);
     } else {
-      point = (OrderedTaskPoint*)factory.CreateIntermediate(*way_point);
+      point = factory.CreateIntermediate(*way_point);
      }
     if (point == nullptr)
       return;
