@@ -281,6 +281,209 @@ $[{m}]$. \\
 \end{tabularx}
 \end{maxipage}
 
+\subsection{Task}
+
+The Task provides access to task data such as distances / bearing to the 
+next waypoint.
+
+The following attributes are provided by \verb|xcsoar.task|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|bearing| & The true bearing to the next waypoint. 
+For AAT tasks, this is the true \newline bearing 
+to the target within the AAT sector. $[{degrees}]$\\
+
+\hline
+
+\verb|bearing_diff| & The difference between the glider's track bearing, 
+to the bearing of \newline the next waypoint, or for AAT tasks, to the bearing 
+to the target within \newline the AAT sector $[{degrees}]$.\\
+
+\hline
+
+\verb|radial| & The true bearing from the next waypoint 
+to your position. $[{degrees}]$. \\
+
+\hline
+
+\verb|next_distance| & The distance to the currently selected waypoint. 
+For AAT tasks, this \newline is the distance to the target within the AAT sector.
+$[{m}]$ \\
+
+\hline
+
+\verb|next_distance_nominal| & The distance to the currently selected waypoint. 
+For AAT tasks, this \newline is the distance to the origin of the AAT sector.
+$[{m}]$ \\
+
+\hline
+
+\verb|next_ete| &  Estimated time required to reach next waypoint, 
+assuming \newline performance of ideal MacCready cruise/climb cycle.\\
+
+\hline
+
+\verb|next_eta| & Estimated arrival local time at next waypoint, 
+assuming performance \newline of ideal MacCready cruise/climb cycle. \\
+
+\hline
+
+\verb|next_altitude_diff| & Arrival altitude at the next waypoint relative 
+to the safety arrival height. \\
+
+\hline
+
+\verb|nextmc0_altitude_diff| & Arrival altitude at the next waypoint with 
+MC 0 setting, relative to the \newline safety arrival height. \\
+
+\hline
+
+\verb|next_altitude_require| & Additional altitude required to reach the next
+turnpoint. \\
+
+\hline
+
+\verb|next_altitude_arrival| & Absolute arrival height at the next waypoint in 
+final glide. \\
+
+\hline
+
+\verb|next_gr| & The required glide ratio over ground to reach the next waypoint, 
+\newline given by the distance to the next waypoint divided by the height 
+\newline required to arrive at the safety arrival height. \\
+
+\hline
+
+\verb|final_distance| & Distance to finish around remaining turn points. \\
+
+\hline
+
+\verb|final_ete| & Estimated time required to complete task, 
+assuming performance \newline of ideal MacCready cruise/climb cycle. \\
+
+\hline
+
+\verb|final_eta| & Estimated arrival local time at task completion, 
+assuming performance \newline of ideal MacCready cruise/climb cycle. \\
+
+\hline
+
+\verb|final_altitude_diff| & Arrival altitude at the final task turn point
+relative to the safety arrival \newline height. \\
+
+\hline
+
+\verb|finalmc0_altitude_diff| & Arrival altitude at the final task turn point
+, with MC 0 setting, relative \newline to the safety arrival height. \\
+
+\hline
+
+\verb|final_altitude_require| & Additional altitude required to finish 
+the task. \\
+
+\hline
+
+\verb|task_speed| & Average cross country speed while on the current 
+task, \newline not compensated for altitude. \\
+
+\hline
+
+\verb|task_speed_achieved| & Achieved cross country speed while on the 
+current task, \newline compensated for altitude. Equivalent to 
+Pirker cross country \newline speed remaining. \\
+
+\hline
+
+\verb|task_speed_instant| & Instantaneous cross country speed while 
+on the current task, \newline  compensated for altitude. Equivalent 
+to instantaneous Pirker cross \newline country speed. \\
+
+\hline
+
+\verb|task_speed_hour| & Average cross country speed while on the 
+current task \newline over the last hour, not compensated for altitude. \\
+
+\end{tabularx}
+\end{maxipage}
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|final_gr| & The required glide ratio over the ground to finish 
+the task, given by \newline the distance to go divided by the height 
+required to arrive at the safety \newline arrival height. \\
+
+\hline
+
+\verb|aat_time| & Assigned Area Task time remaining. \\
+
+\hline
+
+\verb|aat_time_delta| & Difference between estimated task time and 
+AAT miminum time.\\
+
+\hline
+
+\verb|aat_distance| & Assigned Area Task distance around target points 
+for remainder of \newline task. \\
+
+\hline
+
+\verb|aat_distance_max| & Assigned Area Task maximum distance possible 
+for remainder of \newline task. \\
+
+\hline
+
+\verb|aat_distance_min| & Assigned Area Task minimum distance possible 
+for remainder of  \newline task\\
+
+\hline
+
+\verb|aat_speed| & Assigned Area Task average speed achievable around 
+target points \newline remaining in minimum AAT time. \\
+
+\hline
+
+\verb|aat_speed_max| & Assigned Area Task average speed achievable 
+if flying maximum \newline possible distance remaining in minimum 
+AAT time. \\
+
+\hline
+
+\verb|aat_speed_min| & Assigned Area Task average spped achievable 
+if flying minimum \newline possible distance remaining in minimum 
+AAT time.  \\
+
+\hline
+
+\verb|time_under_max_height| & The contiguous period the plane has 
+been below the task \newline start max. height. \\
+
+\hline
+
+\verb|next_etevmg| & Estimated time required to reach next waypoint, 
+assuming current \newline ground speed is maintained. \\
+
+\hline
+
+\verb|final_etevmg| & Estimated time required to complete task, 
+assuming current ground \newline speed is maintained. \\
+
+\hline
+
+\verb|cruise_efficiency| & Efficiency of cruse, 1 indicates perfect 
+MacCready performance \\
+
+
+\end{tabularx}
+\end{maxipage}
+
 \subsection{Timers}
 
 The class \verb|xcsoar.timer| implements a timer that calls a given

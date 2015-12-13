@@ -26,7 +26,8 @@ LUA_SOURCES = \
 	$(SRC)/Lua/Dialogs.cpp \
 	$(SRC)/Lua/Legacy.cpp \
 	$(SRC)/Lua/Full.cpp \
-	$(SRC)/Lua/Basic.cpp
+	$(SRC)/Lua/Basic.cpp \
+        $(SRC)/Lua/Task.cpp
 
 LUA_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
