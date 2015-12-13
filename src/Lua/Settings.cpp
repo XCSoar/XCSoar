@@ -21,48 +21,44 @@ Copyright_License {
 }
 */
 
-#include "Full.hpp"
-#include "Basic.hpp"
-#include "Util.hpp"
-#include "Log.hpp"
-#include "Persistent.hpp"
-#include "Timer.hpp"
-#include "Map.hpp"
-#include "Blackboard.hpp"
-#include "Dialogs.hpp"
-#include "Legacy.hpp"
-#include "Version.hpp"
-#include "LocalPath.hpp"
-#include "Compatibility/path.h"
-#include "OS/Path.hpp"
-#include "Util/ConvertString.hpp"
-#include "Airspace.hpp"
-#include "Task.hpp"
 #include "Settings.hpp"
+#include "Geo.hpp"
+#include "Util.hpp"
+#include "Util/StringAPI.hxx"
+#include "Interface.hpp"
+#include "Components.hpp"
+#include "Computer/GlideComputer.hpp"
+#include "../NMEA/ExternalSettings.hpp"
 
-#include <windef.h> // for MAX_PATH
-#include <assert.h>
-
-lua_State *
-Lua::NewFullState()
+static int
+l_settings_index(lua_State *L)
 {
-  lua_State *L = NewBasicState();
+  const char *name = lua_tostring(L, 2);
+  if (name == nullptr)
+    return 0;
+  else if (StringIsEqual(name, "mc")) {
+    const ComputerSettings &settings_computer =
+      CommonInterface::GetComputerSettings();
+    
+    Lua::Push(L, settings_computer.polar.glide_polar_task.GetMC());
+  } else
+    return 0;
 
-  InitLog(L);
-  InitPersistent(L);
-  InitTimer(L);
-  InitMap(L);
-  InitBlackboard(L);
-  InitDialogs(L);
-  InitLegacy(L);
-  InitAirspace(L);
-  InitTask(L);
-  InitSettings(L);
+  return 1;
+}
 
-  {
-    SetPackagePath(L,
-                   WideToUTF8Converter(LocalPath(_T("lua" DIR_SEPARATOR_S "lib" DIR_SEPARATOR_S "?.lua")).c_str()));
-  }
+void
+Lua::InitSettings(lua_State *L)
+{
+  lua_getglobal(L, "xcsoar");
 
-  return L;
+  lua_newtable(L);
+
+  lua_newtable(L);
+  SetField(L, -2, "__index", l_settings_index);
+  lua_setmetatable(L, -2);
+
+  lua_setfield(L, -2, "settings");
+
+  lua_pop(L, 1);
 }

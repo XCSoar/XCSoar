@@ -21,48 +21,16 @@ Copyright_License {
 }
 */
 
-#include "Full.hpp"
-#include "Basic.hpp"
-#include "Util.hpp"
-#include "Log.hpp"
-#include "Persistent.hpp"
-#include "Timer.hpp"
-#include "Map.hpp"
-#include "Blackboard.hpp"
-#include "Dialogs.hpp"
-#include "Legacy.hpp"
-#include "Version.hpp"
-#include "LocalPath.hpp"
-#include "Compatibility/path.h"
-#include "OS/Path.hpp"
-#include "Util/ConvertString.hpp"
-#include "Airspace.hpp"
-#include "Task.hpp"
-#include "Settings.hpp"
+#ifndef XCSOAR_LUA_SETTINGS_HPP
+#define XCSOAR_LUA_SETTINGS_HPP
 
-#include <windef.h> // for MAX_PATH
-#include <assert.h>
+struct lua_State;
 
-lua_State *
-Lua::NewFullState()
-{
-  lua_State *L = NewBasicState();
-
-  InitLog(L);
-  InitPersistent(L);
-  InitTimer(L);
-  InitMap(L);
-  InitBlackboard(L);
-  InitDialogs(L);
-  InitLegacy(L);
-  InitAirspace(L);
-  InitTask(L);
-  InitSettings(L);
-
-  {
-    SetPackagePath(L,
-                   WideToUTF8Converter(LocalPath(_T("lua" DIR_SEPARATOR_S "lib" DIR_SEPARATOR_S "?.lua")).c_str()));
-  }
-
-  return L;
+namespace Lua {
+  /**
+   * Provide the Lua table "xcsoar.airspace".
+   */
+  void InitSettings(lua_State *L);
 }
+
+#endif
