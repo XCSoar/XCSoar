@@ -43,10 +43,6 @@ TrafficDatabases::FindNameById(FlarmId id) const
 FlarmId
 TrafficDatabases::FindIdByName(const TCHAR *name) const
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(name != nullptr);
-#endif
   assert(!StringIsEmpty(name));
 
   // try to find flarm from userFile
@@ -66,11 +62,6 @@ unsigned
 TrafficDatabases::FindIdsByName(const TCHAR *name,
                                 FlarmId *buffer, unsigned max) const
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(name != nullptr);
-  assert(buffer != nullptr);
-#endif
   assert(!StringIsEmpty(name));
 
   unsigned n = flarm_names.Get(name, buffer, max);

@@ -27,7 +27,6 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 
 #include <algorithm>
-#include <assert.h>
 #include <string.h>
 
 Port::Port(PortListener *_listener, DataHandler &_handler)
@@ -212,11 +211,6 @@ bool
 Port::ExpectString(const char *token, OperationEnvironment &env,
                    unsigned timeout_ms)
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(token != nullptr);
-#endif
-
   const char *const token_end = token + strlen(token);
 
   const TimeoutClock timeout(timeout_ms);

@@ -227,10 +227,6 @@ DeviceDescriptor::CancelAsync()
 bool
 DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(_port != nullptr);
-#endif
   assert(port == nullptr);
   assert(device == nullptr);
   assert(second_device == nullptr);

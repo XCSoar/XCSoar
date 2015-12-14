@@ -56,12 +56,6 @@ CopyASCII(char *dest, const char *src)
 char *
 CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(dest != nullptr);
-  assert(src != nullptr);
-  assert(src_end != nullptr);
-#endif
   assert(dest_size > 0);
   assert(src_end >= src);
 
