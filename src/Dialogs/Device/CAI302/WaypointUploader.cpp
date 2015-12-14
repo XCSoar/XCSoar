@@ -64,14 +64,13 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
   }
 
   unsigned id = 1;
-  for (auto i = waypoints.begin(), end = waypoints.end();
-       i != end; ++i, ++id) {
+  for (const auto &i : waypoints) {
     if (env.IsCancelled())
       break;
 
     env.SetProgressPosition(id);
 
-    if (!device.WriteNavpoint(id, *i, env)) {
+    if (!device.WriteNavpoint(id++, i, env)) {
       if (!env.IsCancelled())
         env.SetErrorMessage(_("Failed to write waypoint."));
       break;
