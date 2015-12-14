@@ -130,7 +130,7 @@ public:
    * @param orig Waypoint that will be replaced
    * @param replacement New waypoint
    */
-  void Replace(const Waypoint &orig, const Waypoint &replacement);
+  void Replace(const Waypoint &orig, Waypoint &&replacement);
 
   /**
    * Create new waypoint (without appending it to the store),

@@ -328,24 +328,23 @@ Waypoints::EraseUserMarkers()
 }
 
 void
-Waypoints::Replace(const Waypoint &orig, const Waypoint &replacement)
+Waypoints::Replace(const Waypoint &orig, Waypoint &&replacement)
 {
   assert(!waypoint_tree.IsEmpty());
 
   name_tree.Remove(orig);
 
-  Waypoint new_waypoint(replacement);
-  new_waypoint.id = orig.id;
+  replacement.id = orig.id;
 
   if (waypoint_tree.HaveBounds()) {
-    new_waypoint.Project(task_projection);
-    if (!waypoint_tree.IsWithinBounds(new_waypoint))
+    replacement.Project(task_projection);
+    if (!waypoint_tree.IsWithinBounds(replacement))
       ScheduleOptimise();
   }
 
   const auto it = waypoint_tree.FindPointer(&orig);
   assert(it != waypoint_tree.end());
-  waypoint_tree.Replace(it, new_waypoint);
+  waypoint_tree.Replace(it, std::move(replacement));
 
   name_tree.Add(orig);
   ++serial;

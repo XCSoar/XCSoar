@@ -74,7 +74,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
 #ifdef HAVE_RUN_FILE
   new_wp.files_external.assign(files_external.begin(), files_external.end());
 #endif
-  way_points.Replace(*wp, new_wp);
+  way_points.Replace(*wp, std::move(new_wp));
   way_points.Optimise();
 }
 

@@ -220,7 +220,7 @@ WaypointManagerWidget::OnWaypointImportClicked()
 
       {
         ScopeSuspendAllThreads suspend;
-        way_points.Replace(*way_point, wp_copy);
+        way_points.Replace(*way_point, std::move(wp_copy));
         way_points.Optimise();
       }
 
@@ -238,7 +238,7 @@ WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
     modified = true;
 
     ScopeSuspendAllThreads suspend;
-    way_points.Replace(wp, wp_copy);
+    way_points.Replace(wp, std::move(wp_copy));
     way_points.Optimise();
   }
 }

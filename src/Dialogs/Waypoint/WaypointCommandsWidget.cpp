@@ -266,7 +266,7 @@ WaypointCommandsWidget::OnAction(int id)
         form->SetModalResult(mrOK);
 
         ScopeSuspendAllThreads suspend;
-        way_points.Replace(waypoint, wp_copy);
+        way_points.Replace(waypoint, std::move(wp_copy));
         way_points.Optimise();
       }
     }
