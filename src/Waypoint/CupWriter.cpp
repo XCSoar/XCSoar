@@ -168,8 +168,8 @@ WriteCup(TextWriter &writer, const Waypoints &waypoints,
   // Iterate through the waypoint list and save each waypoint with
   // the right file number to the TextWriter
   /// @todo JMW: iteration ordered by ID would be preferred
-  for (auto it = waypoints.begin(); it != waypoints.end(); ++it) {
-    const Waypoint &wp = **it;
+  for (auto i : waypoints) {
+    const Waypoint &wp = *i;
     if (wp.origin == origin)
       WriteCup(writer, wp);
   }
