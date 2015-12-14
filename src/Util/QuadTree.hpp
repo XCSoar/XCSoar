@@ -970,6 +970,15 @@ public:
   }
 
   /**
+   * Is the specified point within the current bounds?  If yes, then
+   * it may be added without a rescan.
+   */
+  constexpr
+  bool IsWithinBounds(Point position) const {
+    return bounds.IsInside(position);
+  }
+
+  /**
    * Is the specified value within the current bounds?  If yes, then
    * it may be added without a rescan.
    */
