@@ -166,10 +166,10 @@ Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
   if (IsEmpty())
     return nullptr;
 
-  Waypoint bb_target(loc);
-  bb_target.Project(task_projection);
+  const FlatGeoPoint flat_location = task_projection.ProjectInteger(loc);
+  const WaypointTree::Point point(flat_location.x, flat_location.y);
   const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
-  const auto found = waypoint_tree.FindNearest(bb_target, mrange);
+  const auto found = waypoint_tree.FindNearest(point, mrange);
 
   if (found.first == waypoint_tree.end())
     return nullptr;
@@ -196,10 +196,10 @@ Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
   if (IsEmpty())
     return nullptr;
 
-  Waypoint bb_target(loc);
-  bb_target.Project(task_projection);
+  const FlatGeoPoint flat_location = task_projection.ProjectInteger(loc);
+  const WaypointTree::Point point(flat_location.x, flat_location.y);
   const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
-  const auto found = waypoint_tree.FindNearestIf(bb_target, mrange, predicate);
+  const auto found = waypoint_tree.FindNearestIf(point, mrange, predicate);
 
   if (found.first == waypoint_tree.end())
     return nullptr;
@@ -270,13 +270,13 @@ Waypoints::VisitWithinRange(const GeoPoint &loc, const fixed range,
   if (IsEmpty())
     return; // nothing to do
 
-  Waypoint bb_target(loc);
-  bb_target.Project(task_projection);
+  const FlatGeoPoint flat_location = task_projection.ProjectInteger(loc);
+  const WaypointTree::Point point(flat_location.x, flat_location.y);
   const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
 
   WaypointEnvelopeVisitor wve(&visitor);
 
-  waypoint_tree.VisitWithinRange(bb_target, mrange, wve);
+  waypoint_tree.VisitWithinRange(point, mrange, wve);
 }
 
 void
