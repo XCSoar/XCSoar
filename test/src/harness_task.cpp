@@ -21,8 +21,6 @@
 */
 
 #include "harness_task.hpp"
-#include "test_debug.hpp"
-
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/Constraints.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -35,6 +33,7 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Util/StaticArray.hxx"
+#include "test_debug.hpp"
 
 #include "harness_waypoints.hpp"
 #include <string.h>

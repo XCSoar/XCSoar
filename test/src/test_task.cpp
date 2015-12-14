@@ -22,8 +22,8 @@
 
 #include "harness_task.hpp"
 #include "harness_waypoints.hpp"
-#include "test_debug.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "test_debug.hpp"
 
 int main(int argc, char** argv)
 {

@@ -22,9 +22,9 @@
 
 #include "Printing.hpp"
 #include "harness_waypoints.hpp"
-#include "test_debug.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/FileUtil.hpp"
+#include "test_debug.hpp"
 
 #include <fstream>
 #include <iostream>

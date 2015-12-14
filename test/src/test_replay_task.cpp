@@ -1,4 +1,3 @@
-#include "test_debug.hpp"
 #include "harness_aircraft.hpp"
 #include "TaskEventsPrint.hpp"
 #include "Replay/IgcReplay.hpp"
@@ -14,6 +13,7 @@
 #include "NMEA/Info.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Util/Error.hxx"
+#include "test_debug.hpp"
 
 #include <fstream>
 

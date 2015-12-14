@@ -20,11 +20,10 @@
 }
 */
 
-#include "test_debug.hpp"
-
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/GeoVector.hpp"
+#include "test_debug.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
