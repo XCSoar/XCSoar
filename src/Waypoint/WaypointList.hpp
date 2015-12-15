@@ -38,11 +38,11 @@ struct WaypointListItem
 
 private:
   /** From observer to waypoint */
-  mutable GeoVector vec;
+  mutable GeoVector vec = GeoVector::Invalid();
 
 public:
   explicit WaypointListItem(WaypointPtr &&_waypoint):
-    waypoint(std::move(_waypoint)), vec(GeoVector::Invalid()) {}
+    waypoint(std::move(_waypoint)) {}
 
   void ResetVector();
   const GeoVector &GetVector(const GeoPoint &location) const;
