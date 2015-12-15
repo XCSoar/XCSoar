@@ -135,8 +135,8 @@ struct WaypointMapItem: public MapItem
 {
   WaypointPtr waypoint;
 
-  WaypointMapItem(WaypointPtr &&_waypoint)
-    :MapItem(WAYPOINT), waypoint(std::move(_waypoint)) {}
+  WaypointMapItem(const WaypointPtr &_waypoint)
+    :MapItem(WAYPOINT), waypoint(_waypoint) {}
 };
 
 #ifdef HAVE_NOAA

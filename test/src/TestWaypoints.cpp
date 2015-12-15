@@ -41,7 +41,7 @@ public:
   WaypointPredicateCounter(const Predicate &_predicate)
     :predicate(_predicate), count(0) {}
 
-  void Visit(WaypointPtr &&wp) override {
+  void Visit(const WaypointPtr &wp) override {
     if (predicate(*wp))
       count++;
   }

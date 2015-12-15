@@ -41,8 +41,9 @@ private:
   mutable GeoVector vec = GeoVector::Invalid();
 
 public:
-  explicit WaypointListItem(WaypointPtr &&_waypoint):
-    waypoint(std::move(_waypoint)) {}
+  template<typename W>
+  explicit WaypointListItem(W &&_waypoint):
+    waypoint(std::forward<W>(_waypoint)) {}
 
   void ResetVector();
   const GeoVector &GetVector(const GeoPoint &location) const;

@@ -31,10 +31,10 @@
  */
 class WaypointVisitor {
 public:
-  virtual void Visit(WaypointPtr &&wp) = 0;
+  virtual void Visit(const WaypointPtr &wp) = 0;
 
-  void operator()(WaypointPtr &&wp) {
-    Visit(std::move(wp));
+  void operator()(const WaypointPtr &wp) {
+    Visit(wp);
   }
 };
 

@@ -224,9 +224,9 @@ public:
    *
    * @param wp Waypoint that is visited
    */
-  void Visit(WaypointPtr &&wp) override {
+  void Visit(const WaypointPtr &wp) override {
     if (wp->IsLandable())
-      vector.emplace_back(std::move(wp));
+      vector.emplace_back(wp);
   }
 };
 

@@ -31,14 +31,14 @@ struct AlternatePoint {
 
   GlideResult solution;
 
-  AlternatePoint(WaypointPtr &&_waypoint)
-    :waypoint(std::move(_waypoint))
+  explicit AlternatePoint(const WaypointPtr &_waypoint)
+    :waypoint(_waypoint)
   {
     solution.Reset();
   }
 
-  AlternatePoint(WaypointPtr &&_waypoint, const GlideResult &_solution)
-    :waypoint(std::move(_waypoint)), solution(_solution) {}
+  AlternatePoint(const WaypointPtr &_waypoint, const GlideResult &_solution)
+    :waypoint(_waypoint), solution(_solution) {}
 };
 
 #endif

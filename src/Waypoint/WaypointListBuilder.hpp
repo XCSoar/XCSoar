@@ -49,7 +49,7 @@ public:
   void Visit(const Waypoints &waypoints);
 
   /* virtual methods from class WaypointVisitor */
-  void Visit(WaypointPtr &&waypoint) override;
+  void Visit(const WaypointPtr &waypoint) override;
 };
 
 

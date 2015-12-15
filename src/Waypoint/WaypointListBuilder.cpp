@@ -34,8 +34,8 @@ void WaypointListBuilder::Visit(const Waypoints &waypoints) {
 }
 
 void
-WaypointListBuilder::Visit(WaypointPtr &&waypoint)
+WaypointListBuilder::Visit(const WaypointPtr &waypoint)
 {
   if (filter.Matches(*waypoint, location, triangle_validator))
-    list.emplace_back(std::move(waypoint));
+    list.emplace_back(waypoint);
 }

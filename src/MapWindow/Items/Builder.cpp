@@ -109,9 +109,9 @@ class WaypointListBuilderVisitor:
 public:
   WaypointListBuilderVisitor(MapItemList &_list):list(_list) {}
 
-  void Visit(WaypointPtr &&waypoint) override {
+  void Visit(const WaypointPtr &waypoint) override {
     if (!list.full())
-      list.append(new WaypointMapItem(std::move(waypoint)));
+      list.append(new WaypointMapItem(waypoint));
   }
 };
 

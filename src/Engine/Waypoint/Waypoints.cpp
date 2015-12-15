@@ -50,16 +50,16 @@ public:
   void
   operator()(const WaypointPtr &wp)
   {
-    Visit(std::move(wp));
+    Visit(wp);
   }
 
   /**
    * Visit item inside envelope
    */
   void
-  Visit(WaypointPtr wp)
+  Visit(const WaypointPtr &wp)
   {
-    waypoint_visitor->Visit(std::move(wp));
+    waypoint_visitor->Visit(wp);
   }
 };
 
