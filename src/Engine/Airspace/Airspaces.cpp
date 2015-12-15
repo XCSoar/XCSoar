@@ -38,10 +38,7 @@ Airspaces::QueryWithinRange(const GeoPoint &location, fixed range) const
     // nothing to do
     return {airspace_tree.qend(), airspace_tree.qend()};
 
-  const auto flat_location = task_projection.ProjectInteger(location);
-  int projected_range = task_projection.ProjectRangeInteger(location, range);
-  const FlatBoundingBox box(flat_location, projected_range);
-
+  const FlatBoundingBox box = task_projection.ProjectSquare(location, range);
   return {airspace_tree.qbegin(bgi::intersects(box)), airspace_tree.qend()};
 }
 

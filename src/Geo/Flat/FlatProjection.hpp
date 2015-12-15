@@ -107,6 +107,12 @@ public:
   FlatBoundingBox Project(const GeoBounds &bb) const;
 
   /**
+   * Project a square defined by its center and a radius.
+   */
+  gcc_pure
+  FlatBoundingBox ProjectSquare(const GeoPoint center, double radius) const;
+
+  /**
    * Projects an integer 2-d representation to a Geodetic point
    *
    * @param tp Point to project

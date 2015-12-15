@@ -125,3 +125,11 @@ FlatProjection::Project(const GeoBounds &bb) const
   return fb;
 }
 
+FlatBoundingBox
+FlatProjection::ProjectSquare(const GeoPoint center, double radius) const
+{
+  FlatGeoPoint flat_center = ProjectInteger(center);
+  int flat_radius = ProjectRangeInteger(center, radius);
+  return FlatBoundingBox(flat_center, flat_radius);
+}
+
