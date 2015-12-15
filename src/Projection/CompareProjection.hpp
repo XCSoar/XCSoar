@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_COMPARE_PROJECTION_HPP
 
 #include "Geo/GeoPoint.hpp"
+#include "Geo/Quadrilateral.hpp"
 
 class WindowProjection;
 
@@ -35,9 +36,7 @@ class WindowProjection;
  * they should be discarded.
  */
 class CompareProjection {
-  struct FourCorners {
-    GeoPoint top_left, top_right, bottom_left, bottom_right;
-
+  struct FourCorners : GeoQuadrilateral {
     FourCorners() = default;
     FourCorners(const WindowProjection &projection);
   };
