@@ -65,7 +65,7 @@ class Waypoints {
                                    TCHAR *dest, size_t max_length) const;
     void Add(WaypointPtr wp);
     void Remove(const WaypointPtr &wp);
-};
+  };
 
   /**
    * This gets incremented each time the object is modified.
