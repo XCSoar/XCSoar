@@ -59,9 +59,10 @@ public:
    * This does not update the projection itself.
    *
    * @param ref Point to check against bounds
+   * @return true if the bounds have been modified
    */
-  void Scan(const GeoPoint &ref) {
-    bounds.Extend(ref);
+  bool Scan(const GeoPoint &ref) {
+    return bounds.Extend(ref);
   }
 
   /**
