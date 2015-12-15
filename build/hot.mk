@@ -17,6 +17,8 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/Intersection.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Screen/Memory/Canvas.cpp \
+	$(ENGINE_SRC_DIR)/Waypoints/Waypoints.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
