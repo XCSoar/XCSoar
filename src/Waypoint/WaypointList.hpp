@@ -41,7 +41,6 @@ private:
   mutable GeoVector vec;
 
 public:
-  WaypointListItem() = default;
   explicit WaypointListItem(WaypointPtr &&_waypoint):
     waypoint(std::move(_waypoint)), vec(GeoVector::Invalid()) {}
 
