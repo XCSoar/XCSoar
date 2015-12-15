@@ -236,8 +236,10 @@ static void
 TestIterator(const Waypoints &waypoints)
 {
   unsigned count = 0;
-  for (const auto &i : waypoints)
+  for (const auto &i : waypoints) {
     count++;
+    (void)i;
+  }
 
   ok1(count == 151);
 }
