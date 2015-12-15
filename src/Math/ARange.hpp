@@ -87,8 +87,10 @@ struct AngleRange {
 
   /**
    * Extend this range so the specified value is deemed inside.
+   *
+   * @return true if the range has been modified
    */
-  void Extend(Angle value);
+  bool Extend(Angle value);
 
   /**
    * Set this object to the intersection of this and the other object.

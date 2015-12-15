@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ARange.hpp"
 
-void
+bool
 AngleRange::Extend(Angle value)
 {
   const Angle length = GetLength();
@@ -34,13 +34,15 @@ AngleRange::Extend(Angle value)
   Angle start_delta = (start - value).AsBearing();
   if (start_delta + length >= Angle::FullCircle())
     /* it's inside, no change required */
-    return;
+    return false;
 
   Angle end_delta = (value - end).AsBearing();
   if (start_delta < end_delta)
     start = value;
   else
     end = value;
+
+  return true;
 }
 
 bool
