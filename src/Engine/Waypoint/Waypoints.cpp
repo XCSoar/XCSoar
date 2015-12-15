@@ -67,8 +67,8 @@ struct VisitorAdapter {
   WaypointVisitor &visitor;
   VisitorAdapter(WaypointVisitor &_visitor):visitor(_visitor) {}
 
-  void operator()(WaypointPtr wp) {
-    visitor.Visit(std::move(wp));
+  void operator()(const WaypointPtr &wp) {
+    visitor.Visit(wp);
   }
 };
 
