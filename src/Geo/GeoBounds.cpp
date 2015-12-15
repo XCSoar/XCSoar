@@ -23,17 +23,19 @@ Copyright_License {
 
 #include "GeoBounds.hpp"
 
-void
+bool
 GeoBounds::Extend(const GeoPoint pt)
 {
   if (!pt.IsValid())
-    return;
+    return false;
 
   if (IsValid()) {
-    longitude.Extend(pt.longitude);
-    latitude.Extend(pt.latitude);
+    bool a = longitude.Extend(pt.longitude);
+    bool b = latitude.Extend(pt.latitude);
+    return a || b;
   } else {
     *this = GeoBounds(pt);
+    return true;
   }
 }
 

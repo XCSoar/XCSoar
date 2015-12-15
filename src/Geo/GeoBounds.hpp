@@ -151,7 +151,12 @@ public:
     return GetNorthWest().Distance(GetSouthWest());
   }
 
-  void Extend(const GeoPoint pt);
+  /**
+   * Extend the bounds so the given point is inside.
+   *
+   * @return true if the bounds have been modified
+   */
+  bool Extend(const GeoPoint pt);
 
   bool IsInside(Angle _longitude, Angle _latitude) const {
     return longitude.IsInside(_longitude) && latitude.IsInside(_latitude);
