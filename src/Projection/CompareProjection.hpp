@@ -38,7 +38,7 @@ class CompareProjection {
   struct FourCorners {
     GeoPoint top_left, top_right, bottom_left, bottom_right;
 
-    FourCorners() {}
+    FourCorners() = default;
     FourCorners(const WindowProjection &projection);
   };
 
