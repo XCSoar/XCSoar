@@ -43,7 +43,7 @@ class TopographyThread final : private StandbyThread {
   WindowProjection next_projection;
 
   GeoBounds last_bounds;
-  fixed scale_threshold;
+  double scale_threshold;
 
 public:
   TopographyThread(TopographyStore &_store, std::function<void()> &&_callback);

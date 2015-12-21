@@ -29,7 +29,6 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Util/Serial.hpp"
-#include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
 #include "ResourceId.hpp"
 #include "Thread/Mutex.hpp"
@@ -85,20 +84,20 @@ class TopographyFile {
    * The threshold value for the visibility check. If the current scale
    * is below this value the contents of this TopographyFile will be drawn.
    */
-  const fixed scale_threshold;
+  const double scale_threshold;
 
   /**
    * The threshold value for label rendering. If the current scale
    * is below this value no labels of this TopographyFile will be drawn.
    */
-  const fixed label_threshold;
+  const double label_threshold;
 
   /**
    * The threshold value for label rendering in important style . If the current
    * scale is below this value labels of this TopographyFile will be drawn
    * in standard style
    */
-  const fixed important_label_threshold;
+  const double important_label_threshold;
 
   /**
    * The current scope of the shape cache.  If the screen exceeds this
@@ -166,8 +165,8 @@ public:
    * @return
    */
   TopographyFile(zzip_dir *dir, const char *shpname,
-                 fixed threshold, fixed label_threshold,
-                 fixed important_label_threshold,
+                 double threshold, double label_threshold,
+                 double important_label_threshold,
                  const Color color,
                  int label_field=-1,
                  ResourceId icon=ResourceId::Null(),
@@ -195,11 +194,11 @@ public:
     return shapes.empty();
   }
 
-  bool IsVisible(fixed map_scale) const {
+  bool IsVisible(double map_scale) const {
     return map_scale <= scale_threshold;
   }
 
-  bool IsLabelVisible(fixed map_scale) const {
+  bool IsLabelVisible(double map_scale) const {
     return map_scale <= label_threshold;
   }
 
@@ -210,11 +209,11 @@ public:
    * have been reached already.
    */
   gcc_pure
-  fixed GetNextScaleThreshold(fixed map_scale) const {
+  double GetNextScaleThreshold(double map_scale) const {
     return map_scale <= scale_threshold
       ? (map_scale <= label_threshold
          /* both thresholds reached: not relevant */
-         ? fixed(-1)
+         ? -1.
          /* only label_threshold not yet reached */
          : label_threshold)
       /* scale_threshold not yet reached */
@@ -225,7 +224,7 @@ public:
          : std::max(scale_threshold, label_threshold));
   }
 
-  bool IsLabelImportant(fixed map_scale) const {
+  bool IsLabelImportant(double map_scale) const {
     return map_scale <= important_label_threshold;
   }
 
@@ -258,20 +257,20 @@ public:
   }
 
   gcc_pure
-  unsigned GetSkipSteps(fixed map_scale) const;
+  unsigned GetSkipSteps(double map_scale) const;
 
 #ifdef ENABLE_OPENGL
   gcc_pure
   GeoPoint ToGeoPoint(const ShapePoint &p) const {
-    return GeoPoint(center.longitude + Angle::Native(fixed(p.x)),
-                    center.latitude + Angle::Native(fixed(p.y)));
+    return GeoPoint(center.longitude + Angle::Native(p.x),
+                    center.latitude + Angle::Native(p.y));
   }
 
   /**
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */
   gcc_pure
-  unsigned GetThinningLevel(fixed map_scale) const;
+  unsigned GetThinningLevel(double map_scale) const;
 
   /**
    * @return minimum distance between points in ShapePoint coordinates

@@ -47,13 +47,13 @@ TopographyThread::Trigger(const WindowProjection &_projection)
        threshold for at least one file, which would mean we have to
        update a file which was not updated for the current cache
        bounds */
-    if (negative(scale_threshold) ||
+    if (scale_threshold < 0 ||
         _projection.GetMapScale() >= scale_threshold)
       /* the cache is still fresh */
       return;
   }
 
-  last_bounds = new_bounds.Scale(fixed(1.1));
+  last_bounds = new_bounds.Scale(1.1);
   scale_threshold = store.GetNextScaleThreshold(_projection.GetMapScale());
 
   {

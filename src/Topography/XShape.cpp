@@ -150,8 +150,8 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
       *p++ = ShapePoint(ShapeScalar(relative.longitude.Native()),
                         ShapeScalar(relative.latitude.Native()));
 #else
-      *p++ = GeoPoint(Angle::Degrees(fixed(src->x)),
-                      Angle::Degrees(fixed(src->y)));
+      *p++ = GeoPoint(Angle::Degrees(src->x),
+                      Angle::Degrees(src->y));
 #endif
     }
   }

@@ -29,10 +29,10 @@ Copyright_License {
 static inline constexpr GeoBounds
 ImportRect(const rectObj r)
 {
-  return GeoBounds(GeoPoint(Angle::Degrees(fixed(r.minx)),
-                            Angle::Degrees(fixed(r.maxy))),
-                   GeoPoint(Angle::Degrees(fixed(r.maxx)),
-                            Angle::Degrees(fixed(r.miny))));
+  return GeoBounds(GeoPoint(Angle::Degrees(r.minx),
+                            Angle::Degrees(r.maxy)),
+                   GeoPoint(Angle::Degrees(r.maxx),
+                            Angle::Degrees(r.miny)));
 }
 
 gcc_pure
@@ -40,10 +40,10 @@ static inline rectObj
 ConvertRect(const GeoBounds &br)
 {
   rectObj dest;
-  dest.minx = (double)br.GetWest().Degrees();
-  dest.maxx = (double)br.GetEast().Degrees();
-  dest.miny = (double)br.GetSouth().Degrees();
-  dest.maxy = (double)br.GetNorth().Degrees();
+  dest.minx = br.GetWest().Degrees();
+  dest.maxx = br.GetEast().Degrees();
+  dest.miny = br.GetSouth().Degrees();
+  dest.maxy = br.GetNorth().Degrees();
   return dest;
 }
 

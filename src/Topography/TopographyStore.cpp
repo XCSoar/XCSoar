@@ -92,12 +92,12 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { nullptr, ResourceId::Null(), ResourceId::Null() }
 };
 
-fixed
-TopographyStore::GetNextScaleThreshold(fixed map_scale) const
+double
+TopographyStore::GetNextScaleThreshold(double map_scale) const
 {
-  fixed result(-1);
+  double result(-1);
   for (auto *file : files) {
-    fixed threshold = file->GetNextScaleThreshold(map_scale);
+    double threshold = file->GetNextScaleThreshold(map_scale);
     if (threshold > result)
       result = threshold;
   }
@@ -200,7 +200,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     strcpy(shape_filename_end + (p - line), ".shp");
 
     // Parse shape range
-    auto shape_range = fixed(strtod(p + 1, &p)) * 1000;
+    auto shape_range = strtod(p + 1, &p) * 1000;
     if (*p != _T(','))
       continue;
 
@@ -256,12 +256,12 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     // Parse range for displaying labels
     auto label_range = shape_range;
     if (*p == _T(','))
-      label_range = fixed(strtod(p + 1, &p)) * 1000;
+      label_range = strtod(p + 1, &p) * 1000;
 
     // Parse range for displaying labels with "important" rendering style
-    fixed labelImportantRange = fixed(0);
+    double labelImportantRange = 0;
     if (*p == _T(','))
-      labelImportantRange = fixed(strtod(p + 1, &p)) * 1000;
+      labelImportantRange = strtod(p + 1, &p) * 1000;
 
     // Handle alpha component
     // If not present at all (i.e. v6.6 or earlier file), default to 100% opaque

@@ -87,12 +87,12 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 {
   if (file.GetSerial() == visible_serial &&
       visible_bounds.IsInside(projection.GetScreenBounds()) &&
-      projection.GetScreenBounds().Scale(fixed(2)).IsInside(visible_bounds))
+      projection.GetScreenBounds().Scale(2).IsInside(visible_bounds))
     /* cache is clean */
     return;
 
   visible_serial = file.GetSerial();
-  visible_bounds = projection.GetScreenBounds().Scale(fixed(1.2));
+  visible_bounds = projection.GetScreenBounds().Scale(1.2);
   visible_shapes.clear();
   visible_labels.clear();
 
@@ -255,7 +255,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   ApplyProjection(projection, file.GetCenter());
 #endif /* !USE_GLSL */
 #else // !ENABLE_OPENGL
-  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   AllocatedArray<GeoPoint> geo_points;
 
   int iskip = file.GetSkipSteps(map_scale);

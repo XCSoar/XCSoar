@@ -32,9 +32,9 @@ Copyright_License {
 #include <stdlib.h>
 
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
-                               fixed _threshold,
-                               fixed _label_threshold,
-                               fixed _important_label_threshold,
+                               double _threshold,
+                               double _label_threshold,
+                               double _important_label_threshold,
                                const Color _color,
                                int _label_field,
                                ResourceId _icon, ResourceId _big_icon,
@@ -114,7 +114,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
     /* the cache is still fresh */
     return false;
 
-  cache_bounds = screenRect.Scale(fixed(2));
+  cache_bounds = screenRect.Scale(2);
 
   rectObj deg_bounds = ConvertRect(cache_bounds);
 
@@ -204,13 +204,13 @@ TopographyFile::LoadAll()
 }
 
 unsigned
-TopographyFile::GetSkipSteps(fixed map_scale) const
+TopographyFile::GetSkipSteps(double map_scale) const
 {
-  if (Quadruple(map_scale) > scale_threshold * 3)
+  if (map_scale > scale_threshold * 0.75)
     return 4;
-  if (Double(map_scale) > scale_threshold)
+  if (2 * map_scale > scale_threshold)
     return 3;
-  if (Quadruple(map_scale) > scale_threshold)
+  if (4 * map_scale > scale_threshold)
     return 2;
   return 1;
 }
@@ -218,13 +218,13 @@ TopographyFile::GetSkipSteps(fixed map_scale) const
 #ifdef ENABLE_OPENGL
 
 unsigned
-TopographyFile::GetThinningLevel(fixed map_scale) const
+TopographyFile::GetThinningLevel(double map_scale) const
 {
-  if (Double(map_scale) > scale_threshold)
+  if (2 * map_scale > scale_threshold)
     return 3;
   if (map_scale * 3 > scale_threshold)
     return 2;
-  if (Quadruple(map_scale) > scale_threshold)
+  if (4 * map_scale > scale_threshold)
     return 1;
 
   return 0;
@@ -235,7 +235,7 @@ TopographyFile::GetMinimumPointDistance(unsigned level) const
 {
   switch (level) {
     case 1:
-      return (unsigned)(Quadruple(scale_threshold) / 30);
+      return (unsigned)(4 * scale_threshold / 30);
     case 2:
       return (unsigned)(6 * scale_threshold / 30);
     case 3:
