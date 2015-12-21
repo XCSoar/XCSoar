@@ -202,9 +202,9 @@ GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
     skip(2, 0, "waypoint not found");
     return NULL;
   }
-  if(!ok1(wp->location.Distance(org_wp.location) <= fixed(1000)))
+  if(!ok1(wp->location.Distance(org_wp.location) <= 1000))
     printf("%f %f\n", (double)wp->location.latitude.Degrees(), (double)wp->location.longitude.Degrees());
-  ok1(fabs(wp->elevation - org_wp.elevation) < fixed(0.5));
+  ok1(fabs(wp->elevation - org_wp.elevation) < 0.5);
 
   return wp;
 }
@@ -438,7 +438,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::Degrees(7.7061111111111114);
 
   Waypoint wp(loc);
-  wp.elevation = fixed(488);
+  wp.elevation = 488;
   wp.name = _T("Bergneustadt");
   wp.comment = _T("Rabbit holes, 20\" ditch south end of rwy");
   wp.runway.SetDirection(Angle::Degrees(40));
@@ -456,7 +456,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(70, 0, 42).Flipped();
 
   Waypoint wp2(loc);
-  wp2.elevation = fixed(6962);
+  wp2.elevation = 6962;
   wp2.name = _T("Aconcagua");
   wp2.comment = _T("Highest mountain in south-america");
 
@@ -472,7 +472,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(122, 28, 42).Flipped();
 
   Waypoint wp3(loc);
-  wp3.elevation = fixed(227);
+  wp3.elevation = 227;
   wp3.name = _T("Golden Gate Bridge");
   wp3.comment = _T("");
 
@@ -488,10 +488,10 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(37, 37, 12);
 
   Waypoint wp4(loc);
-  wp4.elevation = fixed(123);
+  wp4.elevation = 123;
   wp4.name = _T("Red Square");
   wp4.runway.SetDirection(Angle::Degrees(90));
-  wp4.runway.SetLength((unsigned)Units::ToSysUnit(fixed(0.01), Unit::STATUTE_MILES));
+  wp4.runway.SetLength((unsigned)Units::ToSysUnit(0.01, Unit::STATUTE_MILES));
 
   wp4.type = Waypoint::Type::OUTLANDING;
   wp4.flags.turn_point = true;
@@ -505,7 +505,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(151, 12, 55);
 
   Waypoint wp5(loc);
-  wp5.elevation = fixed(5);
+  wp5.elevation = 5;
   wp5.name = _T("Sydney Opera");
   wp5.comment = _T("");
 

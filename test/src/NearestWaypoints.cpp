@@ -96,7 +96,7 @@ IsAirport(const Waypoint &waypoint)
 
 static WaypointPtr
 GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints,
-                   fixed range, WaypointType type)
+                   double range, WaypointType type)
 {
   bool (*predicate)(const Waypoint &);
   switch (type) {
@@ -130,7 +130,7 @@ PrintWaypoint(const Waypoint *waypoint)
 int main(int argc, char **argv)
 {
   WaypointType type = WaypointType::ALL;
-  fixed range = fixed(100000);
+  double range = 100000;
 
   Args args(argc, argv,
             "PATH\n\nPATH is expected to be any compatible waypoint file.\n"
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
     if ((value = StringAfterPrefix(arg, "--range=")) != NULL) {
       double _range = strtod(value, NULL);
       if (_range > 0)
-        range = fixed(_range);
+        range = _range;
     } else if (StringStartsWith(arg, "--airports-only")) {
       type = WaypointType::AIRPORT;
     } else if (StringStartsWith(arg, "--landables-only")) {

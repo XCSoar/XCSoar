@@ -229,7 +229,7 @@ Waypoints::LookupLocation(const GeoPoint &loc, const double range) const
 
   if (wp->location == loc)
     return wp;
-  else if (positive(range) && (wp->IsCloseTo(loc, range)))
+  else if (range > 0 && wp->IsCloseTo(loc, range))
     return wp;
 
   return nullptr;
