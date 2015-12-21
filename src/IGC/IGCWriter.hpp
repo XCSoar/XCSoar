@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_IGC_WRITER_HPP
 
 #include "Logger/GRecord.hpp"
-#include "Math/fixed.hpp"
 #include "IGCFix.hpp"
 #include "IO/TextWriter.hpp"
 
@@ -90,7 +89,7 @@ private:
 
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
-  static fixed GetEPE(const GPSState &gps);
+  static double GetEPE(const GPSState &gps);
   /** Satellites in use if logger fix quality is a valid gps */
   static int GetSIU(const GPSState &gps);
 

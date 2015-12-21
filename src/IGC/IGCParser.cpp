@@ -307,13 +307,13 @@ IGCParseLocation(const char *buffer, GeoPoint &location)
       (lon_char != 'E' && lon_char != 'W'))
     return false;
 
-  location.latitude = Angle::Degrees(fixed(lat_degrees) +
-                                     fixed(lat_minutes) / 60000);
+  location.latitude = Angle::Degrees(lat_degrees +
+                                     lat_minutes / 60000.);
   if (lat_char == 'S')
     location.latitude.Flip();
 
-  location.longitude = Angle::Degrees(fixed(lon_degrees) +
-                                      fixed(lon_minutes) / 60000);
+  location.longitude = Angle::Degrees(lon_degrees +
+                                      lon_minutes / 60000.);
   if (lon_char == 'W')
     location.longitude.Flip();
 

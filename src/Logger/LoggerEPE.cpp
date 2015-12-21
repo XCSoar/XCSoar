@@ -144,7 +144,7 @@ IGCWriter::GetEPE(const GPSState &gps)
     return gps.hdop * 18.2;
 
   case FixQuality::DGPS:
-    return Quadruple(gps.hdop);
+    return gps.hdop * 4;
 
   default:
     return 0;
