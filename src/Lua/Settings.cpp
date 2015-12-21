@@ -104,6 +104,14 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.polar.degradation_factor);
+  } else if (StringIsEqual(name, "arrivalheight")) {
+      /* The height above terrain that the glider should arrive 
+         at for a safe landing. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.safety_height_arrival);
   } else
     return 0;
 
