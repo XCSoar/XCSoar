@@ -25,6 +25,7 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
+#include "Util/Macros.hpp"
 
 GlideResult
 RoutePolar::SolveTask(const GlideSettings &settings,
@@ -57,21 +58,63 @@ RoutePolar::Initialise(const GlideSettings &settings, const GlidePolar& polar,
   }
 }
 
+static constexpr FlatGeoPoint index_to_point[] = {
+  {128, 0},
+  {126, 16},
+  {123, 32},
+  {118, 48},
+  {111, 62},
+  {102, 76},
+  {91, 89},
+  {79, 100},
+  {66, 109},
+  {51, 117},
+  {36, 122},
+  {20, 126},
+  {4, 127},
+  {-12, 127},
+  {-28, 124},
+  {-44, 120},
+  {-59, 113},
+  {-73, 104},
+  {-86, 94},
+  {-97, 82},
+  {-107, 69},
+  {-115, 55},
+  {-121, 40},
+  {-125, 24},
+  {-127, 8},
+  {-127, -8},
+  {-125, -24},
+  {-121, -40},
+  {-115, -55},
+  {-107, -69},
+  {-97, -82},
+  {-86, -94},
+  {-73, -104},
+  {-59, -113},
+  {-44, -120},
+  {-28, -124},
+  {-12, -127},
+  {4, -127},
+  {20, -126},
+  {36, -122},
+  {51, -117},
+  {66, -109},
+  {79, -100},
+  {91, -89},
+  {102, -76},
+  {111, -62},
+  {118, -48},
+  {123, -32},
+  {126, -16},
+};
+
 FlatGeoPoint
 RoutePolar::IndexToDXDY(const int index)
 {
-  static constexpr int sx[ROUTEPOLAR_POINTS]= {
-    128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44,
-    -59, -73, -86, -97, -107, -115, -121, -125, -127, -127, -125, -121, -115,
-    -107, -97, -86, -73, -59, -44, -28, -12, 4, 20, 36, 51, 66, 79, 91, 102,
-    111, 118, 123, 126,
-  };
-  static constexpr int sy[ROUTEPOLAR_POINTS]= {
-    0, 16, 32, 48, 62, 76, 89, 100, 109, 117, 122, 126, 127, 127, 124, 120,
-    113, 104, 94, 82, 69, 55, 40, 24, 8, -8, -24, -40, -55, -69, -82, -94,
-    -104, -113, -120, -124, -127, -127, -126, -122, -117, -109, -100, -89,
-    -76, -62, -48, -32, -16,
-  };
+  static_assert(ARRAY_SIZE(index_to_point) == ROUTEPOLAR_POINTS,
+                "Wrong array size");
 
-  return {sx[index], sy[index]};
+  return index_to_point[index];
 }
