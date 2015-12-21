@@ -137,7 +137,7 @@ RasterWeatherCache::Close()
 }
 
 void
-RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
+RasterWeatherCache::SetViewCenter(const GeoPoint &location, double radius)
 {
   if (parameter == 0)
     // will be drawing terrain
@@ -147,7 +147,7 @@ RasterWeatherCache::SetViewCenter(const GeoPoint &location, fixed radius)
     return;
 
   /* only update the RasterMap if the center was moved far enough */
-  if (center.IsValid() && center.DistanceS(location) < fixed(1000))
+  if (center.IsValid() && center.DistanceS(location) < 1000)
     return;
 
   /* fake a mutex - weather data is only used in the DrawThread */

@@ -94,7 +94,7 @@ public:
    *
    * @see RasterProjection::CoarsePixelDistance()
    */
-  gcc_pure fixed
+  gcc_pure double
   PixelDistance(const GeoPoint &location, unsigned pixels) const {
     return projection.CoarsePixelDistance(location, pixels);
   }

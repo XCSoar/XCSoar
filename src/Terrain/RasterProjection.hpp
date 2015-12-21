@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Terrain/RasterLocation.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 class GeoBounds;
@@ -37,7 +36,7 @@ class GeoBounds;
  */
 class RasterProjection {
   int left, top;
-  fixed x_scale, y_scale;
+  double x_scale, y_scale;
 
 public:
   /**
@@ -50,13 +49,13 @@ public:
   void Set(const GeoBounds &bounds, unsigned width, unsigned height);
 
   gcc_pure
-  Angle WidthToAngle(fixed pixels) const {
-    return Angle::Native(fixed(pixels) / x_scale);
+  Angle WidthToAngle(double pixels) const {
+    return Angle::Native(pixels / x_scale);
   }
 
   gcc_pure
-  Angle HeightToAngle(fixed pixels) const {
-    return Angle::Native(fixed(pixels) / y_scale);
+  Angle HeightToAngle(double pixels) const {
+    return Angle::Native(pixels / y_scale);
   }
 
   gcc_pure
@@ -80,8 +79,8 @@ public:
   gcc_pure
   GeoPoint
   UnprojectFine(SignedRasterLocation coords) const {
-    const Angle x = WidthToAngle(fixed((int)coords.x + left));
-    const Angle y = HeightToAngle(fixed(top - (int)coords.y));
+    const Angle x = WidthToAngle((int)coords.x + left);
+    const Angle y = HeightToAngle(top - (int)coords.y);
     return GeoPoint(x, y);
   }
 
@@ -101,11 +100,11 @@ public:
    *
    * @param pixels the pixel distance between two pixels
    */
-  gcc_pure fixed
+  gcc_pure double
   FinePixelDistance(const GeoPoint &location, unsigned pixels) const;
 
   gcc_pure
-  fixed CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
+  double CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
     /* factor 256 because the caller should pass a physical pixel
        number, not interpolated */
     return FinePixelDistance(location, pixels << 8);
@@ -117,9 +116,9 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure unsigned
-  DistancePixelsFine(fixed distance) const;
+  DistancePixelsFine(double distance) const;
 
-  gcc_pure unsigned DistancePixelsCoarse(fixed distance) const {
+  gcc_pure unsigned DistancePixelsCoarse(double distance) const {
     return DistancePixelsFine(distance) >> 8;
   }
 };

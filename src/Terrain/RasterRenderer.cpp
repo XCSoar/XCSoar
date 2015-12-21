@@ -157,7 +157,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 
   // set resolution
 
-  if (pixel_size < fixed(3000)) {
+  if (pixel_size < 3000) {
     // Data point size of the (terrain) map in meters multiplied by 256
     auto map_pixel_size = map.PixelDistance(center, 1);
 
@@ -178,7 +178,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
     quantisation_effective = 0;
 
 #ifdef ENABLE_OPENGL
-  bounds = projection.GetScreenBounds().Scale(fixed(1.5));
+  bounds = projection.GetScreenBounds().Scale(1.5);
   height_matrix.Fill(map, bounds,
                      projection.GetScreenWidth() / quantisation_pixels,
                      projection.GetScreenHeight() / quantisation_pixels,
@@ -399,7 +399,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const unsigned dd2 = p20 * p31 * height_slope_factor;
         const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
         const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
-        const unsigned mag = (unsigned)sqrt((fixed)square_mag);
+        const unsigned mag = (unsigned)sqrt(square_mag);
         /* this is a workaround for a SIGFPE (division by zero)
            observed by our users on some Android devices (e.g. Nexus
            7), even though we did our best to make sure that the

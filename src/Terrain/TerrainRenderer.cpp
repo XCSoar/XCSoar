@@ -316,8 +316,8 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
   assert(a.IsValid());
   assert(b.IsValid());
 
-  return a.GetWidth().Native() > Double(b.GetWidth().Native()) ||
-    a.GetHeight().Native() > Double(b.GetHeight().Native());
+  return a.GetWidth().Native() > 2 * b.GetWidth().Native() ||
+    a.GetHeight().Native() > 2 * b.GetHeight().Native();
 }
 #endif
 

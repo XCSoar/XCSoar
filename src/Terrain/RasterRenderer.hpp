@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_RASTER_RENDERER_HPP
 
 #include "Terrain/HeightMatrix.hpp"
-#include "Math/fixed.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
@@ -77,7 +76,7 @@ class RasterRenderer {
 
   unsigned char *contour_column_base = nullptr;
 
-  fixed pixel_size;
+  double pixel_size;
 
   RawColor *color_table = nullptr;
 

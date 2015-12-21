@@ -41,10 +41,10 @@ class TerrainThread final : private StandbyThread {
   const std::function<void()> callback;
 
   GeoPoint last_center = GeoPoint::Invalid();
-  fixed last_radius;
+  double last_radius;
 
   GeoPoint next_center;
-  fixed next_radius;
+  double next_radius;
 
 public:
   TerrainThread(RasterTerrain &_terrain, std::function<void()> &&_callback);

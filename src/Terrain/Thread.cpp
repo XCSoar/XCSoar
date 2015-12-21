@@ -41,7 +41,7 @@ TerrainThread::Trigger(const WindowProjection &projection)
   GeoPoint center = projection.GetGeoScreenCenter();
   auto radius = projection.GetScreenWidthMeters() / 2;
   if (last_center.IsValid() && last_radius >= radius &&
-      last_center.DistanceS(center) < fixed(1000))
+      last_center.DistanceS(center) < 1000)
     return;
 
   next_center = center;

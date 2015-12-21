@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_TERRAIN_LOADER_HPP
 
 #include "Thread/SharedMutex.hpp"
-#include "Math/fixed.hpp"
 
 #include <tchar.h>
 
@@ -117,13 +116,13 @@ bool
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
-                   const GeoPoint &location, fixed radius);
+                   const GeoPoint &location, double radius);
 
 static inline bool
 UpdateTerrainTiles(struct zzip_dir *dir,
                    RasterTileCache &tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
-                   const GeoPoint &location, fixed radius)
+                   const GeoPoint &location, double radius)
 {
   return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
                             projection, location, radius);

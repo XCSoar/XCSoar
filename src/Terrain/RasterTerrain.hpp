@@ -105,7 +105,7 @@ public:
   /**
    * @return true if the method shall be called again
    */
-  bool UpdateTiles(const GeoPoint &location, fixed radius);
+  bool UpdateTiles(const GeoPoint &location, double radius);
 
 private:
   bool LoadCache(FileCache &cache, Path path);

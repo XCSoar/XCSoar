@@ -111,7 +111,7 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 }
 
 bool
-RasterTerrain::UpdateTiles(const GeoPoint &location, fixed radius)
+RasterTerrain::UpdateTiles(const GeoPoint &location, double radius)
 {
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())

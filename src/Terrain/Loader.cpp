@@ -334,7 +334,7 @@ bool
 UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
                    RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
-                   const GeoPoint &location, fixed radius)
+                   const GeoPoint &location, double radius)
 {
   const auto raster_location = projection.ProjectCoarse(location);
 

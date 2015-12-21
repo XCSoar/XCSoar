@@ -31,14 +31,14 @@ void
 RasterProjection::Set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
 {
-  x_scale = fixed(width) / bounds.GetWidth().Native();
+  x_scale = double(width) / bounds.GetWidth().Native();
   left = int(bounds.GetWest().Native() * x_scale);
 
-  y_scale = fixed(height) / bounds.GetHeight().Native();
+  y_scale = double(height) / bounds.GetHeight().Native();
   top = int(bounds.GetNorth().Native() * y_scale);
 }
 
-fixed
+double
 RasterProjection::FinePixelDistance(const GeoPoint &location,
                                     unsigned pixels) const
 {
@@ -63,7 +63,7 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
 }
 
 unsigned
-RasterProjection::DistancePixelsFine(fixed distance) const
+RasterProjection::DistancePixelsFine(double distance) const
 {
   Angle angle = Angle::Radians(distance / FAISphere::REARTH);
   return AngleToHeight(angle);

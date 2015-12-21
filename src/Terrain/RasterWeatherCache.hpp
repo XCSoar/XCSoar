@@ -71,7 +71,7 @@ public:
     return store;
   }
 
-  void SetViewCenter(const GeoPoint &location, fixed radius);
+  void SetViewCenter(const GeoPoint &location, double radius);
 
   /**
    * Wrapper for RasterMap::IsDirty().
