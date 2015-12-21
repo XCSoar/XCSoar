@@ -70,6 +70,13 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.pressure.GetPascal());
+  } else if (StringIsEqual(name, "max_temp")) {
+      /* The forecast ground temperature.  Used by 
+         convection estimator. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.forecast_temperature);
   } else
     return 0;
 
