@@ -130,6 +130,7 @@ public:
    *
    * @return link equivalent to this link flattened
    */
+  gcc_pure
   RouteLink Flat() const;
 
 private:
