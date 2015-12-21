@@ -52,6 +52,12 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.polar.bugs);
+  } else if (StringIsEqual(name, "wingload")) {
+      /* Current used wingload */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.glide_polar_task.GetWingLoading());
   } else
     return 0;
 
