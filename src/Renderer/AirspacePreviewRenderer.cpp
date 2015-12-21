@@ -50,7 +50,7 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
   projection.SetScreenSize({radius * 2, radius * 2});
   projection.SetScreenOrigin(pt.x, pt.y);
   projection.SetGeoLocation(center);
-  projection.SetScale(fixed(radius * 2) / geo_size);
+  projection.SetScale(radius * 2 / geo_size);
   projection.SetScreenAngle(Angle::Zero());
   projection.UpdateScreenBounds();
 

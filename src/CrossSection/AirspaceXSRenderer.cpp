@@ -151,7 +151,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   // Calculate top and bottom coordinate
   rcd.top = chart.ScreenY(as.GetTopAltitude(state));
   if (as.IsBaseTerrain())
-    rcd.bottom = chart.ScreenY(fixed(0));
+    rcd.bottom = chart.ScreenY(0);
   else
     rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 

@@ -36,13 +36,13 @@ void
 ChartRenderer::Axis::Reset()
 {
   unscaled = true;
-  scale = fixed(0);
-  min = fixed(0);
-  max = fixed(0);
+  scale = 0;
+  min = 0;
+  max = 0;
 }
 
 int
-ChartRenderer::Axis::ToScreen(fixed value) const
+ChartRenderer::Axis::ToScreen(double value) const
 {
   return int((value - min) * scale);
 }
@@ -84,12 +84,12 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
     y.max = std::max({y.max, y0, y1});
   }
 
-  if (fabs(y.max - y.min) > fixed(50)) {
+  if (fabs(y.max - y.min) > 50) {
     y.scale = (y.max - y.min);
-    if (positive(y.scale))
-      y.scale = fixed(rc.bottom - rc.top - padding_bottom) / y.scale;
+    if (y.scale > 0)
+      y.scale = (rc.bottom - rc.top - padding_bottom) / y.scale;
   } else {
-    y.scale = fixed(2000);
+    y.scale = 2000;
   }
 }
 
@@ -109,12 +109,12 @@ ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
   }
 
   x.scale = (x.max - x.min);
-  if (positive(x.scale))
-    x.scale = fixed(rc.right - rc.left - padding_left) / x.scale;
+  if (x.scale > 0)
+    x.scale = (rc.right - rc.left - padding_left) / x.scale;
 }
 
 void
-ChartRenderer::ScaleYFromValue(const fixed value)
+ChartRenderer::ScaleYFromValue(const double value)
 {
   if (y.unscaled) {
     y.min = value;
@@ -126,12 +126,12 @@ ChartRenderer::ScaleYFromValue(const fixed value)
   }
 
   y.scale = (y.max - y.min);
-  if (positive(y.scale))
-    y.scale = fixed(rc.bottom - rc.top - padding_bottom) / y.scale;
+  if (y.scale > 0)
+    y.scale = (rc.bottom - rc.top - padding_bottom) / y.scale;
 }
 
 void
-ChartRenderer::ScaleXFromValue(const fixed value)
+ChartRenderer::ScaleXFromValue(const double value)
 {
   if (x.unscaled) {
     x.min = value;
@@ -143,12 +143,12 @@ ChartRenderer::ScaleXFromValue(const fixed value)
   }
 
   x.scale = (x.max - x.min);
-  if (positive(x.scale))
-    x.scale = fixed(rc.right - rc.left - padding_left) / x.scale;
+  if (x.scale > 0)
+    x.scale = (rc.right - rc.left - padding_left) / x.scale;
 }
 
 void
-ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
+ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
 {
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
@@ -245,17 +245,17 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
   if (x.unscaled || y.unscaled)
     return;
 
-  auto xmin = fixed(0.5);
-  auto xmax = fixed(lsdata.GetCount()) + fixed(0.5);
-  auto ymin = lsdata.GetYAtMinX();
-  auto ymax = lsdata.GetYAtMaxX();
+  double xmin = 0.5;
+  double xmax = lsdata.GetCount() + 0.5;
+  double ymin = lsdata.GetYAtMinX();
+  double ymax = lsdata.GetYAtMaxX();
 
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
 
 void
-ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
-                        const fixed xmax, const fixed ymax, const Pen &pen)
+ChartRenderer::DrawLine(const double xmin, const double ymin,
+                        const double xmax, const double ymax, const Pen &pen)
 {
   if (x.unscaled || y.unscaled)
     return;
@@ -266,8 +266,8 @@ ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
 }
 
 void 
-ChartRenderer::DrawFilledLine(const fixed xmin, const fixed ymin,
-                              const fixed xmax, const fixed ymax,
+ChartRenderer::DrawFilledLine(const double xmin, const double ymin,
+                              const double xmax, const double ymax,
                               const Brush &brush)
 {
   RasterPoint line[4];
@@ -276,7 +276,7 @@ ChartRenderer::DrawFilledLine(const fixed xmin, const fixed ymin,
   line[1] = ToScreen(xmax, ymax);
 
   line[2].x = line[1].x;
-  line[2].y = ScreenY(fixed(0));
+  line[2].y = ScreenY(0);
   line[3].x = line[0].x;
   line[3].y = line[2].y;
 
@@ -286,8 +286,8 @@ ChartRenderer::DrawFilledLine(const fixed xmin, const fixed ymin,
 }
 
 void
-ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
-                        const fixed xmax, const fixed ymax,
+ChartRenderer::DrawLine(const double xmin, const double ymin,
+                        const double xmax, const double ymax,
                         ChartLook::Style style)
 {
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
@@ -304,11 +304,11 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
 
   const auto &slots = lsdata.GetSlots();
   for (unsigned i = 0, n = slots.size(); i != n; i++) {
-    int xmin((fixed(i) + fixed(1.2)) * x.scale
-             + fixed(rc.left + padding_left));
+    int xmin((i + 1.2) * x.scale
+             + (rc.left + padding_left));
     int ymin = ScreenY(y.min);
-    int xmax((fixed(i) + fixed(1.8)) * x.scale
-             + fixed(rc.left + padding_left));
+    int xmax((i + 1.8) * x.scale
+             + (rc.left + padding_left));
     int ymax = ScreenY(slots[i].y);
     canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
@@ -361,9 +361,9 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata,
 }
 
 void
-ChartRenderer::FormatTicText(TCHAR *text, const fixed val, const fixed step)
+ChartRenderer::FormatTicText(TCHAR *text, const double val, const double step)
 {
-  if (step < fixed(1)) {
+  if (step < 1) {
     _stprintf(text, _T("%.1f"), (double)val);
   } else {
     _stprintf(text, _T("%.0f"), (double)val);
@@ -371,17 +371,17 @@ ChartRenderer::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 }
 
 void
-ChartRenderer::DrawXGrid(const fixed tic_step, ChartLook::Style style,
-                         const fixed unit_step, bool draw_units)
+ChartRenderer::DrawXGrid(const double tic_step, ChartLook::Style style,
+                         const double unit_step, bool draw_units)
 {
   DrawXGrid(tic_step, look.GetPen(style), unit_step, draw_units);
 }
 
 void
-ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
-                         fixed unit_step, bool draw_units)
+ChartRenderer::DrawXGrid(double tic_step, const Pen &pen,
+                         double unit_step, bool draw_units)
 {
-  assert(positive(tic_step));
+  assert(tic_step > 0);
 
   canvas.Select(pen);
   canvas.Select(look.axis_value_font);
@@ -393,9 +393,9 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   int next_text = rc.left;
 
   /* increase tic step so graph not too crowded */
-  while ((x.max-x.min)/tic_step > fixed(10)) {
-    tic_step *= fixed(2);
-    unit_step *= fixed(2);
+  while ((x.max - x.min) / tic_step > 10) {
+    tic_step *= 2;
+    unit_step *= 2;
   }
   //  bool do_units = ((x.max-zero)/tic_step)<10;
 
@@ -428,17 +428,17 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
 }
 
 void
-ChartRenderer::DrawYGrid(const fixed tic_step, ChartLook::Style style,
-                         const fixed unit_step, bool draw_units)
+ChartRenderer::DrawYGrid(const double tic_step, ChartLook::Style style,
+                         const double unit_step, bool draw_units)
 {
   DrawYGrid(tic_step, look.GetPen(style), unit_step, draw_units);
 }
 
 void
-ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
-                         fixed unit_step, bool draw_units)
+ChartRenderer::DrawYGrid(double tic_step, const Pen &pen,
+                         double unit_step, bool draw_units)
 {
-  assert(positive(tic_step));
+  assert(tic_step > 0);
 
   canvas.Select(pen);
   canvas.Select(look.axis_value_font);
@@ -447,9 +447,9 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   RasterPoint line[2];
 
   /* increase tic step so graph not too crowded */
-  while ((y.max-y.min)/tic_step > fixed(10)) {
-    tic_step *= fixed(2);
-    unit_step *= fixed(2);
+  while ((y.max-y.min)/tic_step > 10) {
+    tic_step *= 2;
+    unit_step *= 2;
   }
 
   line[0].x = rc.left + padding_left;
@@ -478,19 +478,19 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
 }
 
 int
-ChartRenderer::ScreenX(fixed _x) const
+ChartRenderer::ScreenX(double _x) const
 {
   return rc.left + padding_left + x.ToScreen(_x);
 }
 
 int
-ChartRenderer::ScreenY(fixed _y) const
+ChartRenderer::ScreenY(double _y) const
 {
   return rc.bottom - padding_bottom - y.ToScreen(_y);
 }
 
 void
-ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
+ChartRenderer::DrawFilledY(const std::vector<std::pair<double, double>> &vals,
                            const Brush &brush, const Pen* pen)
 {
   if (vals.size()<2)
@@ -516,7 +516,7 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
 }
 
 void
-ChartRenderer::DrawDot(const fixed x, const fixed y, const unsigned _width)
+ChartRenderer::DrawDot(const double x, const double y, const unsigned _width)
 {
   RasterPoint p = ToScreen(x, y);
 

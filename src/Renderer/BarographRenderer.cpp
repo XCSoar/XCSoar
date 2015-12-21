@@ -43,17 +43,17 @@ BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
   } else if (fs.altitude_ceiling.GetCount() < 4) {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
                        _("Working band"),
-                       (double)Units::ToUserAltitude(fixed(fs.altitude_base.GetAverageY())),
-                       (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.GetAverageY())),
+                       (double)Units::ToUserAltitude(fs.altitude_base.GetAverageY()),
+                       (double)Units::ToUserAltitude(fs.altitude_ceiling.GetAverageY()),
                        Units::GetAltitudeName());
   } else {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
                        _("Working band"),
-                       (double)Units::ToUserAltitude(fixed(fs.altitude_base.GetAverageY())),
-                       (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.GetAverageY())),
+                       (double)Units::ToUserAltitude(fs.altitude_base.GetAverageY()),
+                       (double)Units::ToUserAltitude(fs.altitude_ceiling.GetAverageY()),
                        Units::GetAltitudeName(),
                        _("Ceiling trend"),
-                       (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.GetGradient())),
+                       (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
                        Units::GetAltitudeName());
   }
 }
@@ -163,7 +163,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleXFromData(fs.altitude);
   chart.ScaleYFromData(fs.altitude);
-  chart.ScaleYFromValue(fixed(0));
+  chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.altitude.GetMinX());
 
   if (_task != nullptr) {
@@ -178,10 +178,10 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   canvas.SelectWhitePen();
   canvas.SelectWhiteBrush();
 
-  chart.DrawXGrid(fixed(0.5),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(0.5), true);
-  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(1000), true);
+  chart.DrawXGrid(0.5,
+                  ChartLook::STYLE_THINDASHPAPER, 0.5, true);
+  chart.DrawYGrid(Units::ToSysAltitude(1000),
+                  ChartLook::STYLE_THINDASHPAPER, 1000, true);
   chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_MEDIUMBLACK);
 
   chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
@@ -208,15 +208,15 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleXFromData(fs.task_speed);
   chart.ScaleYFromData(fs.task_speed);
-  chart.ScaleYFromValue(fixed(0));
+  chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
 
   DrawLegs(chart, task, nmea_info, derived_info, true);
 
-  chart.DrawXGrid(fixed(0.5),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(0.5), true);
-  chart.DrawYGrid(Units::ToSysTaskSpeed(fixed(10)),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(10), true);
+  chart.DrawXGrid(0.5,
+                  ChartLook::STYLE_THINDASHPAPER, 0.5, true);
+  chart.DrawYGrid(Units::ToSysTaskSpeed(10),
+                  ChartLook::STYLE_THINDASHPAPER, 10, true);
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
 

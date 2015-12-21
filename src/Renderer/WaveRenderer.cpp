@@ -51,7 +51,7 @@ void
 WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
                    const WaveInfo &wave) const
 {
-  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   Draw(canvas, projection, clip, wave);
 }
 
@@ -62,7 +62,7 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
   if (result.waves.empty())
     return;
 
-  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   for (const auto &wave : result.waves)
     Draw(canvas, projection, clip, wave);
 }

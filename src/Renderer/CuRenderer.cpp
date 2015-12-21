@@ -66,8 +66,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  chart.ScaleYFromValue(fixed(hmin));
-  chart.ScaleYFromValue(fixed(hmax));
+  chart.ScaleYFromValue(hmin);
+  chart.ScaleYFromValue(hmax);
   chart.ScaleXFromValue(tmin);
   chart.ScaleXFromValue(tmax);
 
@@ -84,30 +84,30 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
     ipos++;
 
-    chart.DrawLine(cu_sonde.cslevels[i].tempDry, fixed(i),
-                   cu_sonde.cslevels[i + 1].tempDry, fixed(i + 1),
+    chart.DrawLine(cu_sonde.cslevels[i].tempDry, i,
+                   cu_sonde.cslevels[i + 1].tempDry, i + 1,
                    ChartLook::STYLE_REDTHICK);
 
-    chart.DrawLine(cu_sonde.cslevels[i].airTemp, fixed(i),
-                   cu_sonde.cslevels[i + 1].airTemp, fixed(i + 1),
+    chart.DrawLine(cu_sonde.cslevels[i].airTemp, i,
+                   cu_sonde.cslevels[i + 1].airTemp, i + 1,
                    ChartLook::STYLE_MEDIUMBLACK);
 
-    chart.DrawLine(cu_sonde.cslevels[i].dewpoint, fixed(i),
-                   cu_sonde.cslevels[i + 1].dewpoint, fixed(i + 1),
+    chart.DrawLine(cu_sonde.cslevels[i].dewpoint, i,
+                   cu_sonde.cslevels[i + 1].dewpoint, i + 1,
                    ChartLook::STYLE_BLUETHIN);
 
     if (ipos > 2) {
       if (!labelDry) {
         chart.DrawLabel(_T("DALR"),
-                        cu_sonde.cslevels[i + 1].tempDry, fixed(i));
+                        cu_sonde.cslevels[i + 1].tempDry, i);
         labelDry = true;
       } else if (!labelAir) {
         chart.DrawLabel(_T("Air"),
-                        cu_sonde.cslevels[i + 1].airTemp, fixed(i));
+                        cu_sonde.cslevels[i + 1].airTemp, i);
         labelAir = true;
       } else if (!labelDew) {
         chart.DrawLabel(_T("Dew"),
-                        cu_sonde.cslevels[i + 1].dewpoint, fixed(i));
+                        cu_sonde.cslevels[i + 1].dewpoint, i);
         labelDew = true;
       }
     }

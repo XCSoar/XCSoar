@@ -39,7 +39,7 @@ RenderFAISector(Canvas &canvas, const WindowProjection &projection,
 
   GeoPoint clipped[FAI_TRIANGLE_SECTOR_MAX * 3],
     *clipped_end = clipped +
-    GeoClip(projection.GetScreenBounds().Scale(fixed(1.1)))
+    GeoClip(projection.GetScreenBounds().Scale(1.1))
     .ClipPolygon(clipped, geo_points, geo_end - geo_points);
 
   RasterPoint points[FAI_TRIANGLE_SECTOR_MAX], *p = points;

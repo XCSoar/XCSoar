@@ -70,7 +70,7 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
 
 static void
 DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
-                 const fixed radius)
+                 const double radius)
 {
   int iradius = iround(radius);
   if (airport)
@@ -91,15 +91,15 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
 
 static void
 DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
-                   const Angle angle, fixed radius, fixed width)
+                   const Angle angle, double radius, double width)
 {
-  if (!positive(radius))
+  if (radius <= 0)
     return;
 
   const auto sc = angle.SinCos();
   const auto x = sc.first, y = sc.second;
-  int lx = iround(Double(x * radius)) & ~0x1;  // make it a even number
-  int ly = iround(Double(y * radius)) & ~0x1;
+  int lx = iround(2 * x * radius) & ~0x1;  // make it a even number
+  int ly = iround(2 * y * radius) & ~0x1;
   int wx = iround(-y * width);
   int wy = iround(x * width);
 
@@ -143,9 +143,9 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   }
 
   // SW rendering of landables
-  auto scale = fixed(std::max(Layout::VptScale(settings.landable_rendering_scale),
-                              110u)) / 177;
-  auto radius = 10 * scale;
+  double scale = std::max(Layout::VptScale(settings.landable_rendering_scale),
+                          110u) / 177.;
+  double radius = 10 * scale;
 
   canvas.SelectBlackPen();
 
@@ -156,8 +156,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
       canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
-      DrawLandableBase(canvas, point, waypoint.IsAirport(),
-                       radius + Half(radius));
+      DrawLandableBase(canvas, point, waypoint.IsAirport(), 1.5 * radius);
     }
     canvas.Select(look.magenta_brush);
     break;
@@ -188,16 +187,16 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   // Render runway indication
   const Runway &runway = waypoint.runway;
   if (runway.IsDirectionDefined()) {
-    fixed len;
+    double len;
     if (settings.scale_runway_length && runway.IsLengthDefined())
-      len = Half(radius) +
-        (((int) runway.GetLength() - 500) / 500) * Quarter(radius);
+      len = radius / 2. +
+        (((int) runway.GetLength() - 500) / 500) * radius / 4.;
     else
       len = radius;
-    len += Double(scale);
+    len += 2 * scale;
     Angle runwayDrawingAngle = runway.GetDirection() - screen_rotation;
     canvas.Select(look.white_brush);
-    DrawLandableRunway(canvas, point, runwayDrawingAngle, len, fixed(5) * scale);
+    DrawLandableRunway(canvas, point, runwayDrawingAngle, len, 5 * scale);
   }
 }
 

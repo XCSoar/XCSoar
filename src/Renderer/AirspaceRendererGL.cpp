@@ -49,7 +49,7 @@ public:
                           const AirspaceWarningCopy &_warnings,
                           const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().Scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(1.1)),
      look(_look), warning_manager(_warnings), settings(_settings)
   {
     glStencilMask(0xff);
@@ -227,7 +227,7 @@ public:
                        const AirspaceWarningCopy &_warnings,
                        const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().Scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(1.1)),
      look(_look), warning_manager(_warnings), settings(_settings)
   {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

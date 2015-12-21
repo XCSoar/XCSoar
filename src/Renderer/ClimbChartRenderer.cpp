@@ -40,15 +40,15 @@ ClimbChartCaption(TCHAR *sTmp,
   } else if (fs.thermal_average.GetCount() == 1) {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %3.1f %s"),
                        _("Avg. climb"),
-                       (double)Units::ToUserVSpeed(fixed(fs.thermal_average.GetAverageY())),
+                       (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
                        Units::GetVerticalSpeedName());
   } else {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
                        _("Avg. climb"),
-                       (double)Units::ToUserVSpeed(fixed(fs.thermal_average.GetAverageY())),
+                       (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
                        Units::GetVerticalSpeedName(),
                        _("Climb trend"),
-                       (double)Units::ToUserVSpeed(fixed(fs.thermal_average.GetGradient())),
+                       (double)Units::ToUserVSpeed(fs.thermal_average.GetGradient()),
                        Units::GetVerticalSpeedName());
   }
 }
@@ -69,23 +69,23 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   auto MACCREADY = glide_polar.GetMC();
 
   chart.ScaleYFromData(fs.thermal_average);
-  chart.ScaleYFromValue(MACCREADY + fixed(0.5));
-  chart.ScaleYFromValue(fixed(0));
+  chart.ScaleYFromValue(MACCREADY + 0.5);
+  chart.ScaleYFromValue(0);
 
-  chart.ScaleXFromValue(fixed(-1));
-  chart.ScaleXFromValue(fixed(fs.thermal_average.GetCount()));
+  chart.ScaleXFromValue(-1);
+  chart.ScaleXFromValue(fs.thermal_average.GetCount());
 
-  chart.DrawYGrid(Units::ToSysVSpeed(fixed(1)),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
+  chart.DrawYGrid(Units::ToSysVSpeed(1),
+                  ChartLook::STYLE_THINDASHPAPER, 1, true);
   chart.DrawBarChart(fs.thermal_average);
 
-  chart.DrawLine(fixed(0), MACCREADY,
-                 fixed(fs.thermal_average.GetCount()), MACCREADY,
+  chart.DrawLine(0, MACCREADY,
+                 fs.thermal_average.GetCount(), MACCREADY,
                  ChartLook::STYLE_REDTHICK);
 
   chart.DrawLabel(_T("MC"),
-                  std::max(fixed(0.5),
-                           fs.thermal_average.GetGradient() - fixed(1)),
+                  std::max(0.5,
+                           fs.thermal_average.GetGradient() - 1.),
                   MACCREADY);
 
   chart.DrawTrendN(fs.thermal_average, ChartLook::STYLE_BLUETHIN);

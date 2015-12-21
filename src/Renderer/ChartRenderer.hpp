@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_CHART_RENDERER_HPP
 
 #include "Util/ReusableArray.hpp"
-#include "Math/fixed.hpp"
 #include "Screen/Point.hpp"
 #include "Look/ChartLook.hpp"
 #include "Language/Language.hpp"
@@ -49,12 +48,12 @@ class ChartRenderer
   ReusableArray<RasterPoint> point_buffer;
 
   struct Axis {
-    fixed scale, min, max;
+    double scale, min, max;
     bool unscaled;
 
     void Reset();
 
-    int ToScreen(fixed value) const;
+    int ToScreen(double value) const;
   } x, y;
 
 public:
@@ -71,33 +70,33 @@ public:
   void DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style);
-  void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, const Pen &pen);
-  void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, ChartLook::Style style);
-  void DrawFilledLine(const fixed xmin, const fixed ymin,
-                      const fixed xmax, const fixed ymax,
+  void DrawLine(double xmin, double ymin,
+                double xmax, double ymax, const Pen &pen);
+  void DrawLine(double xmin, double ymin,
+                double xmax, double ymax, ChartLook::Style style);
+  void DrawFilledLine(double xmin, double ymin,
+                      double xmax, double ymax,
                       const Brush &brush);
-  void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
+  void DrawFilledY(const std::vector<std::pair<double, double>> &vals, const Brush &brush,
                    const Pen *pen=nullptr);
-  void DrawDot(const fixed x, const fixed y, const unsigned width);
+  void DrawDot(double x, double y, const unsigned width);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
-  void ScaleYFromValue(const fixed val);
-  void ScaleXFromValue(const fixed val);
+  void ScaleYFromValue(double val);
+  void ScaleXFromValue(double val);
 
   void ResetScale();
 
-  static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
-  void DrawXGrid(fixed tic_step, const Pen &pen,
-                 fixed unit_step, bool draw_units = false);
-  void DrawXGrid(const fixed tic_step, ChartLook::Style style,
-                 const fixed unit_step, bool draw_units = false);
-  void DrawYGrid(fixed tic_step, const Pen &pen,
-                 fixed unit_step, bool draw_units = false);
-  void DrawYGrid(const fixed tic_step, ChartLook::Style style,
-                 const fixed unit_step, bool draw_units = false);
+  static void FormatTicText(TCHAR *text, double val, double step);
+  void DrawXGrid(double tic_step, const Pen &pen,
+                 double unit_step, bool draw_units = false);
+  void DrawXGrid(double tic_step, ChartLook::Style style,
+                 double unit_step, bool draw_units = false);
+  void DrawYGrid(double tic_step, const Pen &pen,
+                 double unit_step, bool draw_units = false);
+  void DrawYGrid(double tic_step, ChartLook::Style style,
+                 double unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
   void DrawXLabel(const TCHAR *text, const TCHAR *unit);
@@ -105,22 +104,22 @@ public:
   void DrawYLabel(const TCHAR *text);
   void DrawYLabel(const TCHAR *text, const TCHAR *unit);
 
-  void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
+  void DrawLabel(const TCHAR *text, double xv, double yv);
   void DrawNoData(const TCHAR *text = _("No data"));
 
-  fixed GetYMin() const { return y.min; }
-  fixed GetYMax() const { return y.max; }
-  fixed GetXMin() const { return x.min; }
-  fixed GetXMax() const { return x.max; }
+  double GetYMin() const { return y.min; }
+  double GetYMax() const { return y.max; }
+  double GetXMin() const { return x.min; }
+  double GetXMax() const { return x.max; }
 
   gcc_pure
-  int ScreenX(fixed x) const;
+  int ScreenX(double x) const;
 
   gcc_pure
-  int ScreenY(fixed y) const;
+  int ScreenY(double y) const;
 
   gcc_pure
-  RasterPoint ToScreen(fixed x, fixed y) const {
+  RasterPoint ToScreen(double x, double y) const {
     return RasterPoint{ ScreenX(x), ScreenY(y) };
   }
 
