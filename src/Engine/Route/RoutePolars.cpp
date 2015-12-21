@@ -66,23 +66,25 @@ RoutePolars::CalcTime(const RouteLink& link) const
     // impossible, can't climb
     return UINT_MAX;
 
+  const auto &glide_polar_point = polar_glide.GetPoint(link.polar_index);
+  const auto &cruise_polar_point = polar_cruise.GetPoint(link.polar_index);
+
   // dh/d = gradient
   const auto rho = dh.IsPositive()
-    ? std::min(1., (dh * link.inv_d *
-                    polar_glide.GetPoint(link.polar_index).inv_gradient))
+    ? std::min(1., (dh * link.inv_d * glide_polar_point.inv_gradient))
     : 0.;
 
-  if (rho < 1 && !polar_cruise.GetPoint(link.polar_index).valid)
+  if (rho < 1 && !cruise_polar_point.valid)
     // impossible, can't cruise
     return UINT_MAX;
 
-  if (rho > 0 && !polar_glide.GetPoint(link.polar_index).valid)
+  if (rho > 0 && !glide_polar_point.valid)
     // impossible, can't glide
     return UINT_MAX;
 
   const int t_cruise = (int)(
-    link.d * (rho * polar_glide.GetPoint(link.polar_index).slowness +
-    (1 - rho) * polar_cruise.GetPoint(link.polar_index).slowness));
+    link.d * (rho * glide_polar_point.slowness +
+    (1 - rho) * cruise_polar_point.slowness));
 
   if (link.second.altitude > cruise_altitude) {
     // penalise any climbs required above cruise altitude
