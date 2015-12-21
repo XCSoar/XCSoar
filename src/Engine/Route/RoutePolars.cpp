@@ -251,5 +251,8 @@ RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
   const GeoPoint dest = proj.Unproject(flat_dest);
   const GeoPoint p = map->Intersection(m_origin, (short)altitude,
                                        (short)altitude, dest);
+  if (!p.IsValid())
+    return flat_dest;
+
   return proj.ProjectInteger(p);
 }
