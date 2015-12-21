@@ -86,6 +86,17 @@ l_settings_index(lua_State *L)
       const TaskBehaviour &task_behaviour = settings_computer.task;
     
       Lua::Push(L, task_behaviour.safety_mc);
+  } else if (StringIsEqual(name, "riskfactor")) {
+      /* The STF risk factor reduces the MacCready setting used to 
+         calculate speed to fly as the glider gets low, in order to 
+         compensate for risk. Set to 0.0 for no compensation, 
+         1.0 scales MC linearly with current height (with reference 
+         to height of the maximum climb). If considered, 0.3 is recommended. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.risk_gamma);
   } else
     return 0;
 
