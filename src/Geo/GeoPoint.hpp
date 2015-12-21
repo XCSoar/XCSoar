@@ -26,7 +26,6 @@ Copyright_License {
 #define XCSOAR_GeoPoint_HPP
 
 #include "Math/Angle.hpp"
-#include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -327,12 +326,12 @@ static_assert(std::is_trivial<GeoPoint>::value, "type is not trivial");
  */
 struct AGeoPoint: public GeoPoint {
   /**< Nav reference altitude (m) */
-  RoughAltitude altitude;
+  double altitude;
 
   AGeoPoint() = default;
 
   constexpr
-  AGeoPoint(const GeoPoint p, const RoughAltitude alt)
+  AGeoPoint(const GeoPoint p, const double alt)
     :GeoPoint(p),altitude(alt) {};
 };
 

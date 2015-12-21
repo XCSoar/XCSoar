@@ -58,12 +58,12 @@ test_reach(const RasterMap &map, double mwind, double mc)
 
   bool retval= true;
 
-  short horigin = map.GetHeight(origin)+1000;
-  AGeoPoint aorigin(origin, RoughAltitude(horigin));
+  int horigin = map.GetHeight(origin)+1000;
+  AGeoPoint aorigin(origin, horigin);
 
   RoutePlannerConfig config;
   config.SetDefaults();
-  retval = route.SolveReach(aorigin, config, RoughAltitude::Max());
+  retval = route.SolveReach(aorigin, config, INT_MAX);
 
   ok(retval, "reach solve", 0);
 
@@ -84,12 +84,12 @@ test_reach(const RasterMap &map, double mwind, double mc)
         GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
                    origin.latitude + Angle::Degrees(0.6 * fy));
         short h = map.GetInterpolatedHeight(x);
-        AGeoPoint adest(x, RoughAltitude(h));
+        AGeoPoint adest(x, h);
         ReachResult reach;
         route.FindPositiveArrival(adest, reach);
         if ((i % 5 == 0) && (j % 5 == 0)) {
-          AGeoPoint ao2(x, RoughAltitude(h + 1000));
-          route.SolveReach(ao2, config, RoughAltitude::Max());
+          AGeoPoint ao2(x, h + 1000);
+          route.SolveReach(ao2, config, INT_MAX);
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "

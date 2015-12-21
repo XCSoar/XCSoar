@@ -61,7 +61,7 @@ RoutePolars::RoundTime(const unsigned val)
 unsigned
 RoutePolars::CalcTime(const RouteLink& link) const
 {
-  const int dh = (int)link.second.altitude - (int)link.first.altitude;
+  const int dh = link.second.altitude - link.first.altitude;
   if (dh < 0 && inv_mc <= 0)
     // impossible, can't climb
     return UINT_MAX;
@@ -86,11 +86,11 @@ RoutePolars::CalcTime(const RouteLink& link) const
     link.d * (rho * glide_polar_point.slowness +
     (1 - rho) * cruise_polar_point.slowness));
 
-  if ((int)link.second.altitude > cruise_altitude) {
+  if (link.second.altitude > cruise_altitude) {
     // penalise any climbs required above cruise altitude
     const int h_penalty = std::max(
         0,
-        (int)link.second.altitude - std::max(cruise_altitude, (int)link.first.altitude));
+        link.second.altitude - std::max(cruise_altitude, link.first.altitude));
     return t_cruise + (int)(h_penalty * inv_mc);
   }
 
@@ -117,9 +117,9 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
 
   assert(map);
 
-  if (!map->FirstIntersection(start, (int)e.first.altitude, dest,
-                              (int)e.second.altitude, (int)CalcVHeight(e),
-                              (int)climb_ceiling, (int)GetSafetyHeight(),
+  if (!map->FirstIntersection(start, e.first.altitude, dest,
+                              e.second.altitude, CalcVHeight(e),
+                              climb_ceiling, GetSafetyHeight(),
                               int_x, int_h))
     return true;
 
@@ -133,9 +133,9 @@ RoutePolars::GenerateIntermediate(const RoutePoint& _dest,
                                    const FlatProjection &proj) const
 {
   RouteLink link(_dest, _origin, proj);
-  const int vh = CalcVHeight(link) + (int)_dest.altitude;
+  const int vh = CalcVHeight(link) + _dest.altitude;
   if (CanClimb())
-    link.second.altitude = std::max((int)_dest.altitude, std::min(vh, cruise_altitude));
+    link.second.altitude = std::max(_dest.altitude, std::min(vh, cruise_altitude));
   else
     link.second.altitude = vh;
   return link;
@@ -182,11 +182,11 @@ RoutePolars::IsAchievable(const RouteLink& link, const bool check_ceiling) const
 
   if (check_ceiling &&
       config.use_ceiling &&
-      (int)link.second.altitude > climb_ceiling)
+      link.second.altitude > climb_ceiling)
     return false;
 
-  return (int)link.second.altitude <= cruise_altitude &&
-    (int)link.second.altitude - (int)link.first.altitude >= CalcVHeight(link);
+  return link.second.altitude <= cruise_altitude &&
+    link.second.altitude - link.first.altitude >= CalcVHeight(link);
 }
 
 void
@@ -224,7 +224,7 @@ RoutePolars::Intersection(const AGeoPoint &origin,
     return GeoPoint::Invalid();
 
   return map->Intersection(origin,
-                           (int)origin.altitude - GetSafetyHeight(),
+                           origin.altitude - GetSafetyHeight(),
                            CalcVHeight(e), destination);
 }
 
@@ -234,7 +234,7 @@ RoutePolars::CalcGlideArrival(const AFlatGeoPoint& origin,
                               const FlatProjection &proj) const
 {
   const RouteLink e(RoutePoint(dest, 0), origin, proj);
-  return (int)origin.altitude - CalcVHeight(e);
+  return origin.altitude - CalcVHeight(e);
 }
 
 FlatGeoPoint
@@ -243,7 +243,7 @@ RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
                             const FlatProjection &proj) const
 {
   const bool valid = map && map->IsDefined();
-  const int altitude = (int)origin.altitude - GetSafetyHeight();
+  const int altitude = origin.altitude - GetSafetyHeight();
   const AGeoPoint m_origin((GeoPoint)origin, altitude);
   const FlatGeoPoint flat_dest = MSLIntercept(index, m_origin, proj);
   if (!valid)

@@ -25,7 +25,6 @@
 
 #include "Math/Util.hpp"
 #include "Math/Point2D.hpp"
-#include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -139,14 +138,14 @@ static_assert(std::is_trivial<FlatGeoPoint>::value, "type is not trivial");
  */
 struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
-  RoughAltitude altitude;
+  int altitude;
 
   constexpr
-  AFlatGeoPoint(const int x, const int y, const RoughAltitude alt):
+  AFlatGeoPoint(const int x, const int y, const int alt):
     FlatGeoPoint(x,y),altitude(alt) {};
 
   constexpr
-  AFlatGeoPoint(const FlatGeoPoint p, const RoughAltitude alt)
+  AFlatGeoPoint(const FlatGeoPoint p, const int alt)
     :FlatGeoPoint(p), altitude(alt) {};
 
   constexpr

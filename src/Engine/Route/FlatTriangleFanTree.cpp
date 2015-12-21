@@ -242,7 +242,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
 
   const auto f0 = e_short.d * e_long.inv_d;
   const int h_loss =
-    parms.rpolars.CalcGlideArrival(n, p_long, parms.projection) - (int)n.altitude;
+    parms.rpolars.CalcGlideArrival(n, p_long, parms.projection) - n.altitude;
 
   const FlatGeoPoint dp(p_long - FlatGeoPoint(n));
   // scan from n-p_long to perpendicular to n-p_long
@@ -263,7 +263,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     // find corner point
     const FlatGeoPoint px = (dp * f + FlatGeoPoint(n));
     // position x is length (n to p_short) along (n to p_long)
-    const int h = (int)n.altitude + f * h_loss;
+    const int h = n.altitude + f * h_loss;
 
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);

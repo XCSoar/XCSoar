@@ -84,14 +84,14 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
   for (double ang = 0; ang < M_2PI; ang += M_PI / 8) {
     GeoPoint dest = GeoVector(40000.0, Angle::Radians(ang)).EndPoint(origin);
 
-    short hdest = map.GetHeight(dest)+100;
+    int hdest = map.GetHeight(dest)+100;
 
     retval = route.Solve(AGeoPoint(origin,
-                                   RoughAltitude(map.GetHeight(origin) + 100)),
+                                   map.GetHeight(origin) + 100),
                          AGeoPoint(dest,
-                                   RoughAltitude(mc > 0
-                                                 ? hdest
-                                                 : std::max(hdest, (short)3200))),
+                                   mc > 0
+                                   ? hdest
+                                   : std::max(hdest, 3200)),
                          config, ceiling);
     char buffer[80];
     sprintf(buffer,"terrain route solve, dir=%g, wind=%g, mc=%g ceiling=%d",
@@ -139,9 +139,9 @@ int main(int argc, char** argv) {
   zzip_dir_close(dir);
 
   plan_tests(16*3);
-  test_troute(map, 0, 0.1, RoughAltitude(10000));
-  test_troute(map, 0, 0, RoughAltitude(10000));
-  test_troute(map, 5.0, 1, RoughAltitude(10000));
+  test_troute(map, 0, 0.1, 10000);
+  test_troute(map, 0, 0, 10000);
+  test_troute(map, 5.0, 1, 10000);
 
   return exit_status();
 }

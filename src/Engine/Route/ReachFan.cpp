@@ -47,11 +47,11 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
     : RasterBuffer::TERRAIN_INVALID;
   const int h2(RasterBuffer::IsSpecial(h) ? 0 : (int)h);
 
-  ReachFanParms parms(rpolars, projection, (int)terrain_base, terrain);
+  ReachFanParms parms(rpolars, projection, terrain_base, terrain);
   const AFlatGeoPoint ao(projection.ProjectInteger(origin), origin.altitude);
 
   if (!RasterBuffer::IsInvalid(h) &&
-      ((int)origin.altitude <= h2 + rpolars.GetSafetyHeight())) {
+      (origin.altitude <= h2 + rpolars.GetSafetyHeight())) {
     terrain_base = h2;
     root.DummyReach(ao);
     return false;
@@ -63,7 +63,7 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
     root.DummyReach(ao);
 
   if (!RasterBuffer::IsInvalid(h)) {
-    parms.terrain_base = (int)h2;
+    parms.terrain_base = h2;
     parms.terrain_counter = 1;
   } else {
     parms.terrain_base = 0;
@@ -96,7 +96,7 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
     return false;
 
   const FlatGeoPoint d(projection.ProjectInteger(dest));
-  const ReachFanParms parms(rpolars, projection, (int)terrain_base);
+  const ReachFanParms parms(rpolars, projection, terrain_base);
 
   result_r.Clear();
 
@@ -115,7 +115,7 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
   }
 
   // now calculate turning solution
-  result_r.terrain = (int)dest.altitude - 1;
+  result_r.terrain = dest.altitude - 1;
   result_r.terrain_valid = root.FindPositiveArrival(d, parms, result_r.terrain)
     ? ReachResult::Validity::VALID
     : ReachResult::Validity::UNREACHABLE;

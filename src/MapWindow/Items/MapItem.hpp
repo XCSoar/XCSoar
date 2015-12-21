@@ -33,6 +33,7 @@ Copyright_License {
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Tracking/SkyLines/Features.hpp"
+#include "Rough/RoughAltitude.hpp"
 #include "Util/StaticString.hxx"
 
 #ifdef HAVE_NOAA

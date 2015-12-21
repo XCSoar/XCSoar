@@ -64,8 +64,8 @@ public:
                                              link.second.altitude),
                                   proj);
 
-    if (l.second.altitude < RoughAltitude(as.GetBase().altitude) ||
-        l.second.altitude > RoughAltitude(as.GetTop().altitude))
+    if (l.second.altitude < as.GetBase().altitude ||
+        l.second.altitude > as.GetTop().altitude)
       return;
 
     if (min_distance < 0 || l.d < min_distance) {

@@ -125,8 +125,8 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   while (!planner.IsEmpty()) {
     const RoutePoint node = planner.Pop();
 
-    h_min = std::min(h_min, (int)node.altitude);
-    h_max = std::max(h_max, (int)node.altitude);
+    h_min = std::min(h_min, node.altitude);
+    h_max = std::max(h_max, node.altitude);
 
     bool is_final = (node == astar_goal);
     if (is_final) {
@@ -215,8 +215,8 @@ RoutePlanner::FindSolution(const RoutePoint &final_point,
       const RouteLink l(p, p_last, projection);
       const double vh = rpolars_route.CalcVHeight(l);
       assert(vh > 0);
-      if (vh > (int)p_last.altitude - (int)p.altitude) { // climb was cut off
-        const auto f = ((int)p_last.altitude - (int)p.altitude) / vh;
+      if (vh > p_last.altitude - p.altitude) { // climb was cut off
+        const auto f = (p_last.altitude - p.altitude) / vh;
         const auto gp = projection.Unproject(p);
         const auto gp_last = projection.Unproject(p_last);
         const AGeoPoint gp_int(gp.Interpolate(gp_last, f), p_last.altitude);
@@ -335,7 +335,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node)
   RoutePoint inx;
   const int vh = rpolars_route.CalcVHeight(r_shortcut);
   if (!rpolars_route.CanClimb())
-    r_shortcut.second.altitude = (int)r_shortcut.first.altitude + vh;
+    r_shortcut.second.altitude = r_shortcut.first.altitude + vh;
 
   if (CheckClearance(r_shortcut, inx))
     LinkCleared(r_shortcut);

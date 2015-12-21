@@ -71,8 +71,8 @@ struct ReachResult {
     if (terrain_valid != Validity::VALID)
       return false;
 
-    const int delta = abs((int)direct - (int)terrain);
-    return delta >= 10 && delta * 100 / (int)direct > 5;
+    const int delta = abs(direct - terrain);
+    return delta >= 10 && delta * 100 / direct > 5;
   }
 
   bool IsReachRelevant() const {

@@ -153,9 +153,9 @@ MapItemListBuilder::AddArrivalAltitudes(
     elevation = RasterBuffer::TERRAIN_INVALID;
 
   // Calculate target altitude
-  RoughAltitude safety_elevation(safety_height);
+  double safety_elevation(safety_height);
   if (!RasterBuffer::IsInvalid(elevation))
-    safety_elevation += RoughAltitude(elevation);
+    safety_elevation += elevation;
 
   // Save destination point incl. elevation and safety height
   const AGeoPoint destination(location, safety_elevation);
