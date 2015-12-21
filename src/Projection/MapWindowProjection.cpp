@@ -56,25 +56,25 @@ static constexpr unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
-  return (GetMapScale() <= (way_point.IsLandable() ? fixed(20000) : fixed(10000)));
+  return (GetMapScale() <= (way_point.IsLandable() ? 20000 : 10000));
 }
 
-fixed
+double
 MapWindowProjection::CalculateMapScale(unsigned scale) const
 {
   assert(scale < ScaleListCount);
-  return fixed(ScaleList[scale]) *
+  return double(ScaleList[scale]) *
     GetMapResolutionFactor() / Layout::Scale(GetScreenWidth());
 }
 
-fixed
-MapWindowProjection::LimitMapScale(const fixed value) const
+double
+MapWindowProjection::LimitMapScale(const double value) const
 {
   return HaveScaleList() ? CalculateMapScale(FindMapScale(value)) : value;
 }
 
-fixed
-MapWindowProjection::StepMapScale(const fixed scale, int Step) const
+double
+MapWindowProjection::StepMapScale(const double scale, int Step) const
 {
   int i = FindMapScale(scale) + Step;
   i = Clamp(i, 0, (int)ScaleListCount - 1);
@@ -82,7 +82,7 @@ MapWindowProjection::StepMapScale(const fixed scale, int Step) const
 }
 
 unsigned
-MapWindowProjection::FindMapScale(const fixed Value) const
+MapWindowProjection::FindMapScale(const double Value) const
 {
   unsigned DesiredScale(Value * Layout::Scale(GetScreenWidth())
                         / GetMapResolutionFactor());
@@ -101,13 +101,13 @@ MapWindowProjection::FindMapScale(const fixed Value) const
 }
 
 void
-MapWindowProjection::SetFreeMapScale(const fixed x)
+MapWindowProjection::SetFreeMapScale(const double x)
 {
-  SetScale(fixed(GetMapResolutionFactor()) / x);
+  SetScale(double(GetMapResolutionFactor()) / x);
 }
 
 void
-MapWindowProjection::SetMapScale(const fixed x)
+MapWindowProjection::SetMapScale(const double x)
 {
-  SetScale(fixed(GetMapResolutionFactor()) / LimitMapScale(x));
+  SetScale(double(GetMapResolutionFactor()) / LimitMapScale(x));
 }

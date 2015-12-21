@@ -39,7 +39,7 @@ public:
 
   explicit ChartProjection(const PixelRect &rc,
                            const TaskProjection &task_projection,
-                           fixed radius_factor=fixed(1.1)) {
+                           double radius_factor=1.1) {
     Set(rc, task_projection, radius_factor);
   }
 
@@ -54,7 +54,7 @@ public:
   }
 
   void Set(const PixelRect &rc, const TaskProjection &task_projection,
-           fixed radius_factor=fixed(1.1));
+           double radius_factor=1.1);
 
   void Set(const PixelRect &rc, const OrderedTask &task,
            const GeoPoint &fallback_loc);
@@ -63,5 +63,5 @@ public:
            const GeoPoint &fallback_loc);
 
 private:
-  void Set(const PixelRect &rc, const GeoPoint &center, const fixed radius);
+  void Set(const PixelRect &rc, const GeoPoint &center, double radius);
 };

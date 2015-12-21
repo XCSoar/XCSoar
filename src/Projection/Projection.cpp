@@ -31,7 +31,7 @@ Projection::Projection()
   :geo_location(GeoPoint::Invalid()),
    screen_rotation(Angle::Zero())
 {
-  SetScale(fixed(1));
+  SetScale(1);
   screen_origin.x = 0;
   screen_origin.y = 0;
 }
@@ -78,12 +78,12 @@ Projection::GeoToScreen(const GeoPoint &g) const
 }
 
 void 
-Projection::SetScale(const fixed _scale)
+Projection::SetScale(const double _scale)
 {
   scale = _scale;
 
   // Calculate earth radius in pixels
   draw_scale = FAISphere::REARTH * scale;
   // Save inverted value for faster calculations
-  inv_draw_scale = fixed(1) / draw_scale;
+  inv_draw_scale = 1. / draw_scale;
 }

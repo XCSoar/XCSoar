@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
 #include "WindowProjection.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 struct Waypoint;
@@ -38,9 +37,9 @@ public:
    * Sets a map scale which is not affected by the hard-coded scale
    * list.
    */
-  void SetFreeMapScale(const fixed x);
+  void SetFreeMapScale(double x);
 
-  void SetMapScale(const fixed x);
+  void SetMapScale(double x);
 
 public:
   bool HaveScaleList() const {
@@ -51,19 +50,19 @@ public:
    * Calculates a scale index.
    */
   gcc_pure
-  fixed CalculateMapScale(unsigned scale) const;
+  double CalculateMapScale(unsigned scale) const;
 
   gcc_pure
-  fixed StepMapScale(const fixed scale, int Step) const;
+  double StepMapScale(double scale, int Step) const;
 
   gcc_pure
   bool WaypointInScaleFilter(const Waypoint &way_point) const;
 
 private:
-  fixed LimitMapScale(const fixed value) const;
+  double LimitMapScale(double value) const;
 
   gcc_pure
-  unsigned FindMapScale(const fixed Value) const;
+  unsigned FindMapScale(double Value) const;
 };
 
 #endif

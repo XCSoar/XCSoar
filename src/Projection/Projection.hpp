@@ -71,12 +71,12 @@ class Projection
   FastIntegerRotation screen_rotation;
 
   /** The earth's radius in screen coordinates (px) */
-  fixed draw_scale;
+  double draw_scale;
   /** Inverted value of DrawScale for faster calculations */
-  fixed inv_draw_scale;
+  double inv_draw_scale;
 
   /** This is the scaling factor in px/m */
-  fixed scale;
+  double scale;
 
 public:
   Projection();
@@ -86,7 +86,7 @@ public:
   }
 
   gcc_pure
-  fixed GetScale() const {
+  double GetScale() const {
     return scale;
   }
 
@@ -94,18 +94,18 @@ public:
    * Sets the scaling factor
    * @param _scale New scale in px/m
    */
-  void SetScale(const fixed _scale);
+  void SetScale(const double _scale);
 
   /**
    * Convert a pixel distance to a physical length in meters.
    */
   gcc_pure
-  fixed DistancePixelsToMeters(const int x) const {
-    return fixed(x) / GetScale();
+  double DistancePixelsToMeters(const int x) const {
+    return double(x) / GetScale();
   }
 
   gcc_pure
-  fixed DistanceMetersToPixels(const fixed distance) const {
+  double DistanceMetersToPixels(const double distance) const {
     return distance * GetScale();
   }
 
@@ -121,7 +121,7 @@ public:
    * Convert a an angle on Earth's surface to a pixel distance.
    */
   gcc_pure
-  fixed AngleToPixels(Angle angle) const {
+  double AngleToPixels(Angle angle) const {
     return angle.Radians() * draw_scale;
   }
 
@@ -200,7 +200,7 @@ public:
    * @param x A geographical distance (m)
    * @return The converted distance in px
    */
-  unsigned GeoToScreenDistance(const fixed x) const {
+  unsigned GeoToScreenDistance(const double x) const {
     return iround(scale * x);
   }
 

@@ -97,13 +97,13 @@ public:
   }
 
   gcc_pure
-  fixed GetMapScale() const;
+  double GetMapScale() const;
 
   /**
    * Configure the scale so a centered circle with the specified
    * radius is visible.
    */
-  void SetScaleFromRadius(fixed radius);
+  void SetScaleFromRadius(double radius);
 
   /**
    * Returns the width of the map area in pixels.
@@ -139,7 +139,7 @@ public:
   /**
    * Returns the width of the map area in meters.
    */
-  fixed GetScreenWidthMeters() const {
+  double GetScreenWidthMeters() const {
     return DistancePixelsToMeters(GetScreenWidth());
   }
 
@@ -160,7 +160,7 @@ public:
   }
 
   gcc_pure
-  fixed GetScreenDistanceMeters() const;
+  double GetScreenDistanceMeters() const;
 
   /**
    * Returns the GeoPoint at the center of the screen.

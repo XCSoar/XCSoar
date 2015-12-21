@@ -32,9 +32,9 @@ CompareProjection::FourCorners::FourCorners(const WindowProjection &projection)
                            projection.GetScreenHeight())} {}
 
 gcc_pure
-static fixed
+static double
 SimpleDistance(const GeoPoint &a, const GeoPoint &b,
-               const fixed latitude_cos)
+               const double latitude_cos)
 {
   return hypot((a.longitude - b.longitude).AsDelta().Native(),
                (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
@@ -52,7 +52,7 @@ CompareProjection::CompareProjection(const WindowProjection &projection)
 bool
 CompareProjection::Compare(const CompareProjection &other) const
 {
-  return positive(max_delta) &&
+  return max_delta > 0 &&
     SimpleDistance(corners.top_left, other.corners.top_left,
                    latitude_cos) <= max_delta &&
     SimpleDistance(corners.top_right, other.corners.top_right,
