@@ -40,7 +40,7 @@ Flight::Flight(const char* _flight_file, bool _keep_flight)
 void Flight::ReadFlight() {
   fixes = new std::vector<IGCFixEnhanced>;
 
-  DebugReplay *replay = DebugReplayIGC::Create(flight_file);
+  DebugReplay *replay = DebugReplayIGC::Create(Path(flight_file));
 
   if (replay) {
     if (qnh_available)
