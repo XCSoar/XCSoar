@@ -210,9 +210,3 @@ MapWindow::SetWeather(const RasterWeatherStore *_weather)
     : nullptr;
   background.SetWeather(weather);
 }
-
-void
-MapWindow::SetMapScale(const fixed x)
-{
-  visible_projection.SetMapScale(x);
-}
