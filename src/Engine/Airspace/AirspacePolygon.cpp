@@ -98,7 +98,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
 
     const FlatRay r_seg(it->GetFlatLocation(), (it + 1)->GetFlatLocation());
     auto t = ray.DistinctIntersection(r_seg);
-    if (!negative(t))
+    if (t >= 0)
       sorter.add(t, projection.Unproject(ray.Parametric(t)));
   }
 

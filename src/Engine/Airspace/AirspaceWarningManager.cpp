@@ -259,7 +259,7 @@ public:
 
 private:
   bool ExcludeAltitude(const AbstractAirspace& airspace) {
-    if (!positive(max_alt))
+    if (max_alt <= 0)
       return false;
 
     return (airspace.GetBaseAltitude(state) > max_alt);

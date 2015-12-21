@@ -25,7 +25,7 @@
 
 #include <algorithm>
 
-#define fixed_big double(1000000)
+#define fixed_big 1000000.
 
 double
 AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
@@ -38,12 +38,12 @@ AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
   if (fabs(h_descent) < 1)
     return t_cruise;
 
-  if (positive(h_descent)) {
+  if (h_descent > 0) {
     // descend steeper than best glide
 
     auto mod_descent_rate = GetDescentRate() + vertical_tolerance;
 
-    if (!positive(mod_descent_rate))
+    if (mod_descent_rate <= 0)
       return fixed_big;
 
     const auto t_descent = h_descent / mod_descent_rate;
@@ -55,7 +55,7 @@ AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
 
   auto mod_climb_rate = GetClimbRate() + vertical_tolerance;
 
-  if (!positive(mod_climb_rate))
+  if (mod_climb_rate <= 0)
     return fixed_big;
 
   const auto t_climb = -h_descent / mod_climb_rate;
@@ -219,17 +219,15 @@ AirspaceAircraftPerformance::SolutionExists(double distance_max,
                                             double altitude,
                                             double h_min, double h_max) const
 {
-  if (positive(altitude - h_max) &&
-      !positive(std::max(GetCruiseDescent(), GetDescentRate())
-                + vertical_tolerance))
+  if (altitude - h_max > 0 &&
+      std::max(GetCruiseDescent(), GetDescentRate()) + vertical_tolerance <= 0)
     return false;
 
-  if (positive(h_min-altitude) &&
-      !positive(std::max(GetClimbRate(), -GetCruiseDescent())
-                + vertical_tolerance))
+  if (h_min-altitude > 0 &&
+      std::max(GetClimbRate(), -GetCruiseDescent()) + vertical_tolerance <= 0)
     return false;
 
-  if (positive(distance_max) && !positive(GetCruiseSpeed()))
+  if (distance_max > 0 && GetCruiseSpeed() <= 0)
     return false;
 
   return true;

@@ -116,19 +116,18 @@ public:
   AirspaceAircraftPerformance(const GlidePolar &polar,
                               const GlideResult &solution)
     :vertical_tolerance(0.001),
-     cruise_speed(positive(solution.time_elapsed)
+     cruise_speed(solution.time_elapsed > 0
                   ? solution.vector.distance / solution.time_elapsed
-                  : double(1)),
-     cruise_descent(positive(solution.time_elapsed)
-                    ? (positive(solution.height_climb)
+                  : 1.),
+     cruise_descent(solution.time_elapsed > 0
+                    ? (solution.height_climb > 0
                        ? -solution.height_climb
                        : solution.height_glide) / solution.time_elapsed
-                    : double(0)),
+                    : 0.),
      descent_rate(polar.GetSBestLD()),
-     climb_rate(positive(solution.time_elapsed) &&
-                positive(solution.height_climb)
+     climb_rate(solution.time_elapsed > 0 && solution.height_climb > 0
                 ? polar.GetMC()
-                : double(0)),
+                : 0.),
      max_speed(cruise_speed) {
     assert(polar.IsValid());
     assert(solution.IsOk());

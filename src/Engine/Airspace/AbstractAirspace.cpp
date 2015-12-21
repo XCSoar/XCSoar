@@ -159,13 +159,13 @@ AbstractAirspace::Intercept(const AircraftState &state,
       solution.location = loc_start;
     else if (solution.distance == distance_end)
       solution.location = loc_end;
-    else if (positive(distance_end))
+    else if (distance_end > 0)
       solution.location =
         state.location.Interpolate(loc_end, solution.distance / distance_end);
     else
       solution.location = loc_start;
 
-    assert(!negative(solution.distance));
+    assert(solution.distance >= 0);
   }
 
   return solution;

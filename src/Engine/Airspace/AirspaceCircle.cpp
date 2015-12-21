@@ -65,7 +65,7 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
     return AirspaceIntersectionVector();
 
   const auto mag = line.GetSquaredDistance();
-  if (!positive(mag))
+  if (mag <= 0)
     return AirspaceIntersectionVector();
 
   const auto inv_mag = 1. / mag;

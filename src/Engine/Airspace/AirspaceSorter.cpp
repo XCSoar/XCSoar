@@ -43,7 +43,7 @@ AirspaceFilterData::Match(const GeoPoint &location,
       return false;
   }
 
-  if (!negative(distance)) {
+  if (distance >= 0) {
     const auto closest = as.ClosestPoint(location, projection);
     const auto distance = location.Distance(closest);
     if (distance > distance)
@@ -102,14 +102,14 @@ FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
                                           filter);
   AirspaceSelectInfoVector result;
 
-  auto range = negative(filter.distance)
+  auto range = filter.distance < 0
     ? airspaces.QueryAll()
     : airspaces.QueryWithinRange(location, filter.distance);
   for (const auto &i : range)
     if (predicate(i.GetAirspace()))
       result.emplace_back(i.GetAirspace());
 
-  if (filter.direction.IsNegative() && negative(filter.distance))
+  if (filter.direction.IsNegative() && filter.distance < 0)
     SortByName(result);
   else
     SortByDistance(result, location, airspaces.GetProjection());
