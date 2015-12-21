@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_UNITS_FORMATTER_HPP
 
 #include "Units/Unit.hpp"
-#include "Math/fixed.hpp"
 
 #include <tchar.h>
 
@@ -39,8 +38,9 @@ class AtmosphericPressure;
  * @param unit the altitude unit (e.g. meters, feet, ...)
  * @param include_unit include the unit into the string?
  */
-void FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
-                    bool include_unit = true);
+void
+FormatAltitude(TCHAR *buffer, double value, Unit unit,
+               bool include_unit = true);
 
 /**
  * Converts a mass into a formatted string
@@ -50,8 +50,9 @@ void FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
  * @param unit the mass unit (e.g. kg, ft, ...)
  * @param include_unit include the unit into the string?
  */
-void FormatMass(TCHAR *buffer, fixed value, Unit unit,
-                bool include_unit = true);
+void
+FormatMass(TCHAR *buffer, double value, Unit unit,
+           bool include_unit = true);
 
 /**
  * Converts a wing loading into a formatted string
@@ -61,8 +62,9 @@ void FormatMass(TCHAR *buffer, fixed value, Unit unit,
  * @param unit the wing loading unit (e.g. kg/m2, ...)
  * @param include_unit include the unit into the string?
  */
-void FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
-                       bool include_unit = true);
+void
+FormatWingLoading(TCHAR *buffer, double value, Unit unit,
+                  bool include_unit = true);
 
 /**
  * Converts an signed/relative altitude into a formatted string
@@ -72,8 +74,9 @@ void FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
  * @param unit the altitude unit (e.g. meters, feet, ...)
  * @param include_unit include the unit into the string?
  */
-void FormatRelativeAltitude(TCHAR *buffer, fixed value, Unit unit,
-                            bool include_unit = true);
+void
+FormatRelativeAltitude(TCHAR *buffer, double value, Unit unit,
+                       bool include_unit = true);
 
 /**
  * Converts a distance into a formatted string
@@ -84,8 +87,9 @@ void FormatRelativeAltitude(TCHAR *buffer, fixed value, Unit unit,
  * @param include_unit include the unit into the string?
  * @param precision the number of decimal places
  */
-void FormatDistance(TCHAR *buffer, fixed value, const Unit unit,
-                    bool include_unit = true, int precision = 0);
+void
+FormatDistance(TCHAR *buffer, double value, const Unit unit,
+               bool include_unit = true, int precision = 0);
 
 /**
  * Converts a distance into a formatted string using the smaller version
@@ -98,8 +102,9 @@ void FormatDistance(TCHAR *buffer, fixed value, const Unit unit,
  * @param precision the number of decimal places
  * @return the unit used for output formatting
  */
-Unit FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
-                         bool include_unit = true, int precision = 0);
+Unit
+FormatSmallDistance(TCHAR *buffer, double value, Unit unit,
+                    bool include_unit = true, int precision = 0);
 
 /**
  * Converts a distance into a formatted string. Changes the unit if
@@ -111,10 +116,11 @@ Unit FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
  * @param include_unit include the unit into the string?
  * @return the unit used for output formatting
  */
-Unit FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
-                         bool include_unit = true,
-                         fixed small_unit_threshold = fixed(0),
-                         fixed precision_threshold = fixed(100));
+Unit
+FormatDistanceSmart(TCHAR *buffer, double value, Unit unit,
+                    bool include_unit = true,
+                    double small_unit_threshold = 0,
+                    double precision_threshold = 100);
 
 /**
  * Converts a speed into a formatted string
@@ -125,8 +131,9 @@ Unit FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
  * @param include_unit include the unit into the string?
  * @param precision if true shows one decimal place if the speed is low
  */
-void FormatSpeed(TCHAR *buffer, fixed value, const Unit unit,
-                 bool include_unit = true, bool precision = false);
+void
+FormatSpeed(TCHAR *buffer, double value, const Unit unit,
+            bool include_unit = true, bool precision = false);
 
 /**
  * Returns the proper format to display the vertical speed
@@ -143,7 +150,8 @@ const TCHAR* GetVerticalSpeedFormat(Unit unit, bool include_unit = false,
  * @param unit the pressure unit
  * @return the step size
  */
-fixed GetVerticalSpeedStep(Unit unit);
+double
+GetVerticalSpeedStep(Unit unit);
 
 /**
  * Converts a vertical speed into a formatted string
@@ -154,8 +162,9 @@ fixed GetVerticalSpeedStep(Unit unit);
  * @param include_unit include the unit into the string?
  * @param include_sign include the sign into the string?
  */
-void FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
-                         bool include_unit = true, bool include_sign = true);
+void
+FormatVerticalSpeed(TCHAR *buffer, double value, Unit unit,
+                    bool include_unit = true, bool include_sign = true);
 
 /**
  * Converts a temperature into a formatted string
@@ -165,8 +174,9 @@ void FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
  * @param unit the temperature unit
  * @param include_unit include the unit into the string?
  */
-void FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
-                       bool include_unit = true);
+void
+FormatTemperature(TCHAR *buffer, double value, Unit unit,
+                  bool include_unit = true);
 
 /**
  * Converts a pressure into a formatted string
@@ -191,6 +201,7 @@ const TCHAR* GetPressureFormat(Unit unit, bool include_unit = false);
  * @param unit the pressure unit
  * @return the step size
  */
-fixed GetPressureStep(Unit unit);
+double
+GetPressureStep(Unit unit);
 
 #endif

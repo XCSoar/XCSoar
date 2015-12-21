@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_UNITS_DESCRIPTOR_HPP
 
 #include "Unit.hpp"
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
 struct UnitDescriptor
 {
   const TCHAR *name;
-  fixed factor_to_user;
-  fixed offset_to_user;
+  double factor_to_user;
+  double offset_to_user;
 };
 
 /**

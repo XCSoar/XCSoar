@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ByteSizeFormatter.hpp"
-#include "Math/fixed.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringFormat.hpp"
 
@@ -37,20 +36,20 @@ FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
   static const TCHAR *const units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
   static const TCHAR *const simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
 
-  fixed value = fixed(bytes);
+  double value = bytes;
 
   unsigned i = 0;
-  for (; value >= fixed(1024) && i < ARRAY_SIZE(units)-1; i++, value /= 1024);
+  for (; value >= 1024 && i < ARRAY_SIZE(units)-1; i++, value /= 1024);
 
   const TCHAR *unit = simple ? simple_units[i] : units[i];
 
   const TCHAR *format;
-  if (value >= fixed(100) || i == 0)
+  if (value >= 100 || i == 0)
     format = simple ? _T("%.0f%s") : _T("%.0f %s");
-  else if (value >= fixed(10))
+  else if (value >= 10)
     format = simple ? _T("%.1f%s") : _T("%.1f %s");
   else
     format = simple ? _T("%.1f%s") : _T("%.2f %s");
 
-  StringFormat(buffer, size, format, (double)value, unit);
+  StringFormat(buffer, size, format, value, unit);
 }

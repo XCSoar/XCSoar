@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TIME_FORMATTER_HPP
 #define XCSOAR_TIME_FORMATTER_HPP
 
-#include "Math/fixed.hpp"
 #include "Util/StringBuffer.hxx"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -45,8 +45,11 @@ void
 FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp);
 #endif
 
-void FormatTime(TCHAR* buffer, fixed time);
-void FormatTimeLong(TCHAR* buffer, fixed time);
+void
+FormatTime(TCHAR *buffer, double time);
+
+void
+FormatTimeLong(TCHAR *buffer, double time);
 
 /**
  * precedes with "-" if time is negative

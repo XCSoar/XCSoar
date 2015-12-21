@@ -37,7 +37,7 @@ AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
 {
   switch (altitude.reference) {
   case AltitudeReference::AGL:
-    if (!positive(altitude.altitude_above_terrain))
+    if (altitude.altitude_above_terrain <= 0)
       _tcscpy(buffer, _T("GND"));
     else
       if (include_unit)
@@ -85,7 +85,7 @@ AirspaceFormatter::FormatAltitude(TCHAR *buffer,
                        Units::GetUnitName(Unit::FEET));
 
   if (altitude.reference != AltitudeReference::MSL &&
-      positive(altitude.altitude))
+      altitude.altitude > 0)
     StringFormatUnsafe(buffer + _tcslen(buffer), _T(" %d %s"),
                        iround(Units::ToUserAltitude(altitude.altitude)),
                        Units::GetAltitudeName());

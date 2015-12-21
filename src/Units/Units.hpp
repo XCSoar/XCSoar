@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Units/Settings.hpp"
 #include "Units/System.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -142,102 +141,102 @@ namespace Units
   gcc_pure
   const TCHAR *GetPressureName();
 
-  static inline fixed
-  ToUserAltitude(fixed value)
+  static inline double
+  ToUserAltitude(double value)
   {
     return ToUserUnit(value, current.altitude_unit);
   }
 
-  static inline fixed
-  ToSysAltitude(fixed value)
+  static inline double
+  ToSysAltitude(double value)
   {
     return ToSysUnit(value, current.altitude_unit);
   }
 
-  static inline fixed
-  ToUserTemperature(fixed value)
+  static inline double
+  ToUserTemperature(double value)
   {
     return ToUserUnit(value, current.temperature_unit);
   }
 
-  static inline fixed
-  ToSysTemperature(fixed value)
+  static inline double
+  ToSysTemperature(double value)
   {
     return ToSysUnit(value, current.temperature_unit);
   }
 
-  static inline fixed
-  ToUserDistance(fixed value)
+  static inline double
+  ToUserDistance(double value)
   {
     return ToUserUnit(value, current.distance_unit);
   }
 
-  static inline fixed
-  ToSysDistance(fixed value)
+  static inline double
+  ToSysDistance(double value)
   {
     return ToSysUnit(value, current.distance_unit);
   }
 
-  static inline fixed
-  ToUserSpeed(fixed value)
+  static inline double
+  ToUserSpeed(double value)
   {
     return ToUserUnit(value, current.speed_unit);
   }
 
-  static inline fixed
-  ToSysSpeed(fixed value)
+  static inline double
+  ToSysSpeed(double value)
   {
     return ToSysUnit(value, current.speed_unit);
   }
 
-  static inline fixed
-  ToUserVSpeed(fixed value)
+  static inline double
+  ToUserVSpeed(double value)
   {
     return ToUserUnit(value, current.vertical_speed_unit);
   }
 
-  static inline fixed
-  ToSysVSpeed(fixed value)
+  static inline double
+  ToSysVSpeed(double value)
   {
     return ToSysUnit(value, current.vertical_speed_unit);
   }
 
-  static inline fixed
-  ToUserTaskSpeed(fixed value)
+  static inline double
+  ToUserTaskSpeed(double value)
   {
     return ToUserUnit(value, current.task_speed_unit);
   }
 
-  static inline fixed
-  ToSysTaskSpeed(fixed value)
+  static inline double
+  ToSysTaskSpeed(double value)
   {
     return ToSysUnit(value, current.task_speed_unit);
   }
 
-  static inline fixed
-  ToUserWindSpeed(fixed value)
+  static inline double
+  ToUserWindSpeed(double value)
   {
     return ToUserUnit(value, current.wind_speed_unit);
   }
 
-  static inline fixed
-  ToSysWindSpeed(fixed value)
+  static inline double
+  ToSysWindSpeed(double value)
   {
     return ToSysUnit(value, current.wind_speed_unit);
   }
 
-  static inline fixed
-  ToUserPressure(fixed Value)
+  static inline double
+  ToUserPressure(double Value)
   {
     return ToUserUnit(Value, current.pressure_unit);
   }
 
   gcc_const
-  fixed
+  double
   ToUserPressure(AtmosphericPressure value);
 
-  static inline fixed
-  ToSysPressure(fixed Value)
+  static inline double
+  ToSysPressure(double Value)
   {
     return ToSysUnit(Value, current.pressure_unit);
   }
@@ -248,7 +247,7 @@ namespace Units
    */
   gcc_const
   AtmosphericPressure
-  FromUserPressure(fixed value);
+  FromUserPressure(double value);
 };
 
 #endif

@@ -49,9 +49,9 @@ FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
 #endif
 
 void
-FormatTime(TCHAR* buffer, fixed _time)
+FormatTime(TCHAR* buffer, double _time)
 {
-  if (negative(_time)) {
+  if (_time < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
@@ -62,15 +62,15 @@ FormatTime(TCHAR* buffer, fixed _time)
 }
 
 void
-FormatTimeLong(TCHAR* buffer, fixed _time)
+FormatTimeLong(TCHAR* buffer, double _time)
 {
-  if (negative(_time)) {
+  if (_time < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
 
   const BrokenTime time = BrokenTime::FromSecondOfDayChecked((unsigned)_time);
-  _time -= fixed((int)_time);
+  _time -= double((int)_time);
   unsigned millisecond = uround(_time * 1000);
 
   _stprintf(buffer, _T("%02u:%02u:%02u.%03u"),

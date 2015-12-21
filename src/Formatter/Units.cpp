@@ -30,7 +30,7 @@ Copyright_License {
 
 static void
 FormatInteger(TCHAR *buffer,
-              const fixed value, const Unit unit, bool include_unit,
+              const double value, const Unit unit, bool include_unit,
               bool include_sign)
 {
   const auto uvalue = Units::ToUserUnit(value, unit);
@@ -44,18 +44,18 @@ FormatInteger(TCHAR *buffer,
 }
 
 void
-FormatMass(TCHAR *buffer, fixed value, Unit unit,
+FormatMass(TCHAR *buffer, double value, Unit unit,
            bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, false);
 }
 
 void
-FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
+FormatWingLoading(TCHAR *buffer, double value, Unit unit,
                   bool include_unit)
 {
   const auto uvalue = Units::ToUserUnit(value, unit);
-  int precision = uvalue > fixed(20) ? 0 : 1;
+  int precision = uvalue > 20 ? 0 : 1;
 
     if (include_unit)
       _stprintf(buffer, _T("%.*f %s"), precision, (double)uvalue,
@@ -65,21 +65,21 @@ FormatWingLoading(TCHAR *buffer, fixed value, Unit unit,
 }
 
 void
-FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
+FormatAltitude(TCHAR *buffer, double value, Unit unit,
                bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, false);
 }
 
 void
-FormatRelativeAltitude(TCHAR *buffer, fixed value,
+FormatRelativeAltitude(TCHAR *buffer, double value,
                        Unit unit, bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, true);
 }
 
 void
-FormatDistance(TCHAR *buffer, fixed value, Unit unit,
+FormatDistance(TCHAR *buffer, double value, Unit unit,
                bool include_unit, int precision)
 {
   value = Units::ToUserUnit(value, unit);
@@ -109,7 +109,7 @@ GetSmallerDistanceUnit(Unit unit)
 }
 
 Unit
-FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
+FormatSmallDistance(TCHAR *buffer, double value, Unit unit,
                     bool include_unit, int precision)
 {
   unit = GetSmallerDistanceUnit(unit);
@@ -125,7 +125,7 @@ FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
 }
 
 static Unit
-GetBestDistanceUnit(fixed value, Unit unit, fixed threshold = fixed(2500))
+GetBestDistanceUnit(double value, Unit unit, double threshold = 2500)
 {
   Unit small_unit = GetSmallerDistanceUnit(unit);
   if (small_unit == unit)
@@ -136,7 +136,7 @@ GetBestDistanceUnit(fixed value, Unit unit, fixed threshold = fixed(2500))
 }
 
 static int
-GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
+GetBestDistancePrecision(double value, Unit unit, double threshold = 100)
 {
   value = Units::ToUserUnit(value, unit);
   if (value >= threshold)
@@ -148,9 +148,9 @@ GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
 }
 
 Unit
-FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
-                    bool include_unit, fixed small_unit_threshold,
-                    fixed precision_threshold)
+FormatDistanceSmart(TCHAR *buffer, double value, Unit unit,
+                    bool include_unit, double small_unit_threshold,
+                    double precision_threshold)
 {
   unit = GetBestDistanceUnit(value, unit, small_unit_threshold);
   int precision = GetBestDistancePrecision(value, unit, precision_threshold);
@@ -161,11 +161,11 @@ FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
 
 void
 FormatSpeed(TCHAR *buffer,
-            fixed value, const Unit unit, bool include_unit, bool precision)
+            double value, const Unit unit, bool include_unit, bool precision)
 {
   value = Units::ToUserUnit(value, unit);
 
-  const int prec = precision && value < fixed(100);
+  const int prec = precision && value < 100;
   if (include_unit)
     StringFormatUnsafe(buffer, _T("%.*f %s"), prec, (double)value,
                        Units::GetUnitName(unit));
@@ -188,21 +188,21 @@ GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
                [include_sign == true];
 }
 
-fixed
+double
 GetVerticalSpeedStep(Unit unit)
 {
   switch (unit) {
   case Unit::FEET_PER_MINUTE:
-    return fixed(10);
+    return 10;
   case Unit::KNOTS:
-    return fixed(0.2);
+    return 0.2;
   default:
-    return fixed(0.1);
+    return 0.1;
   }
 }
 
 void
-FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
+FormatVerticalSpeed(TCHAR *buffer, double value, Unit unit,
                     bool include_unit, bool include_sign)
 {
   value = Units::ToUserUnit(value, unit);
@@ -218,7 +218,7 @@ FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
 }
 
 void
-FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
+FormatTemperature(TCHAR *buffer, double value, Unit unit,
                   bool include_unit)
 {
   value = Units::ToUserUnit(value, unit);
@@ -254,8 +254,8 @@ GetPressureFormat(Unit unit, bool include_unit)
     return unit == Unit::INCH_MERCURY ? _T("%.2f") : _T("%.f");
 }
 
-fixed
+double
 GetPressureStep(Unit unit)
 {
-  return unit == Unit::INCH_MERCURY ? fixed(0.01) : fixed(1);
+  return unit == Unit::INCH_MERCURY ? 0.01 : 1.;
 }

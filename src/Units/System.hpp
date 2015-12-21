@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_UNITS_SYSTEM_HPP
 
 #include "Unit.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 namespace Units
@@ -37,7 +36,7 @@ namespace Units
    * @return The value in user-specified unit
    */
   gcc_const
-  fixed ToUserUnit(fixed value, Unit unit);
+  double ToUserUnit(double value, Unit unit);
 
   /**
    * Converts a value from the user-specified unit to the system unit
@@ -46,7 +45,7 @@ namespace Units
    * @return The value in system unit
    */
   gcc_const
-  fixed ToSysUnit(fixed value, Unit unit);
+  double ToSysUnit(double value, Unit unit);
 };
 
 #endif

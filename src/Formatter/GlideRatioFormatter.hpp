@@ -24,12 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_FORMATTER_HPP
 #define XCSOAR_GLIDE_RATIO_FORMATTER_HPP
 
-#include "Math/fixed.hpp"
-
 #include <tchar.h>
 #include <stddef.h>
 
 void
-FormatGlideRatio(TCHAR *buffer, size_t size, fixed gr);
+FormatGlideRatio(TCHAR *buffer, size_t size, double gr);
 
 #endif

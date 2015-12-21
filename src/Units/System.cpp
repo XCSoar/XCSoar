@@ -24,15 +24,15 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Units/Descriptor.hpp"
 
-fixed
-Units::ToUserUnit(fixed value, Unit unit)
+double
+Units::ToUserUnit(double value, Unit unit)
 {
   const UnitDescriptor *ud = &unit_descriptors[(unsigned)unit];
   return value * ud->factor_to_user + ud->offset_to_user;
 }
 
-fixed
-Units::ToSysUnit(fixed value, Unit unit)
+double
+Units::ToSysUnit(double value, Unit unit)
 {
   const UnitDescriptor *ud = &unit_descriptors[(unsigned)unit];
   return (value - ud->offset_to_user) / ud->factor_to_user;
