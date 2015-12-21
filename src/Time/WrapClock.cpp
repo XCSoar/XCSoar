@@ -24,8 +24,8 @@ Copyright_License {
 #include "WrapClock.hpp"
 #include "NMEA/Info.hpp"
 
-fixed
-WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
+double
+WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
 {
   constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
   constexpr unsigned SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
@@ -47,9 +47,9 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
         last_day += days;
         last_output_date = date;
 
-        if (days == 1 && last_stamp >= fixed(SECONDS_PER_DAY - 60) &&
+        if (days == 1 && last_stamp >= SECONDS_PER_DAY - 60 &&
             stamp >= last_stamp)
-          stamp = fixed(0);
+          stamp = 0;
       } else if (days < 0 && !last_input_date.IsPlausible())
         /* time warp after recovering from invalid input date */
         Reset();
@@ -61,8 +61,8 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
   if (stamp < last_stamp && days <= 0) {
     assert(!negative(last_stamp));
 
-    if (stamp < fixed(SECONDS_PER_HOUR) &&
-        last_stamp >= fixed(SECONDS_PER_DAY - SECONDS_PER_HOUR)) {
+    if (stamp < SECONDS_PER_HOUR &&
+        last_stamp >= SECONDS_PER_DAY - SECONDS_PER_HOUR) {
       /* wraparound, but no date changed: assume the date was not yet
          updated, and wrap to the next day */
       ++last_day;
@@ -72,7 +72,7 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
 
       if (last_output_date.IsPlausible())
         last_output_date.IncrementDay();
-    } else if (stamp + fixed(2) >= last_stamp) {
+    } else if (stamp + 2 >= last_stamp) {
       /* Ignore time warps of less than 2 seconds.
 
          This is used to reduce quirks when the time stamps in GPGGA
@@ -81,7 +81,7 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
          ignored most of the time */
 
       stamp = last_stamp;
-    } else if (stamp + fixed(12 * 3600) < last_stamp) {
+    } else if (stamp + 12 * 3600 < last_stamp) {
       /* big time warp */
       Reset();
     }
@@ -100,7 +100,7 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
 
   last_time = time;
 
-  return stamp + fixed(last_day * SECONDS_PER_DAY);
+  return stamp + last_day * SECONDS_PER_DAY;
 }
 
 void

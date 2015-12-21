@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
-#include "Math/fixed.hpp"
-
 /**
  * Class for GPS-time based time intervals
  */
@@ -37,7 +35,7 @@ class GPSClock {
    */
   static constexpr int RESET_VALUE = -99999;
 
-  fixed last;
+  double last;
 
 public:
   /**
@@ -52,13 +50,13 @@ public:
    * Resets the clock.
    */
   void Reset() {
-    last = fixed(RESET_VALUE);
+    last = RESET_VALUE;
   }
 
   /**
    * Updates the clock.
    */
-  void Update(fixed now) {
+  void Update(double now) {
     last = now;
   }
 
@@ -67,7 +65,7 @@ public:
    * @param now Current time
    * @return True if time has been reversed, False otherwise
    */
-  bool CheckReverse(const fixed now) {
+  bool CheckReverse(const double now) {
     if (now<last) {
       Update(now);
       return true;
@@ -83,7 +81,7 @@ public:
    * @param dt The timestep in seconds
    * @return
    */
-  bool CheckAdvance(const fixed now, const fixed dt) {
+  bool CheckAdvance(const double now, const double dt) {
     if (CheckReverse(now))
       return false;
 
@@ -92,10 +90,6 @@ public:
       return true;
     } else
       return false;
-  }
-
-  bool CheckAdvance(fixed now, unsigned dt) {
-    return CheckAdvance(now, fixed(dt));
   }
 };
 

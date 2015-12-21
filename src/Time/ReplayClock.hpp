@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_REPLAY_CLOCK_HPP
 #define XCSOAR_REPLAY_CLOCK_HPP
 
-#include "Math/fixed.hpp"
-
 /**
  * This class provides a synthetic clock value (for NMEAInfo::clock)
  * fed from a wall-clock time.  This is useful for providing good
@@ -34,14 +32,14 @@ Copyright_License {
  * Call Reset() before first use.
  */
 class ReplayClock {
-  fixed clock;
+  double clock;
 
-  fixed last_time;
+  double last_time;
 
 public:
   void Reset() {
-    clock = fixed(0);
-    last_time = fixed(-1);
+    clock = 0;
+    last_time = -1;
   }
 
   /**
@@ -49,12 +47,12 @@ public:
    *
    * @param time the wallclock time; -1 means unknown
    */
-  fixed NextClock(fixed time) {
-    fixed offset;
-    if (negative(time) || negative(last_time) || time < last_time)
+  double NextClock(double time) {
+    double offset;
+    if (time < 0 || last_time < 0 || time < last_time)
       /* we have no (usable) wall clock time (yet): fully synthesised
          clock; increment by one second on each iteration */
-      offset = fixed(1);
+      offset = 1;
     else if (time > last_time)
       /* apply the delta between the two wall clock times to the clock
          value */
@@ -62,7 +60,7 @@ public:
     else
       /* wall clock time was not updated: apply only a very small
          offset */
-      offset = fixed(0.01);
+      offset = 0.01;
 
     last_time = time;
     return clock += offset;

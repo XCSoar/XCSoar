@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DELTA_TIME_HPP
 #define XCSOAR_DELTA_TIME_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 /**
  * Calculates the time difference between two events, and detects time
@@ -35,16 +35,16 @@ class DeltaTime {
    * The time stamp of the previous call.  A negative value means
    * "unavailable".
    */
-  fixed last_time;
+  double last_time;
 
 public:
   void Reset() {
-    last_time = fixed(-1);
+    last_time = -1;
   }
 
   gcc_pure
   bool IsDefined() const {
-    return !negative(last_time);
+    return last_time >= 0;
   }
 
   /**
@@ -59,7 +59,7 @@ public:
    * @return the (non-negative) time stamp difference since the last
    * call, or 0 if difference is too small, or -1 on time warp
    */
-  fixed Update(fixed current_time, fixed min_delta, fixed warp_tolerance);
+  double Update(double current_time, double min_delta, double warp_tolerance);
 };
 
 #endif

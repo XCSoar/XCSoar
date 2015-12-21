@@ -25,18 +25,18 @@ Copyright_License {
 
 #include <assert.h>
 
-fixed
-DeltaTime::Update(fixed current_time, fixed min_delta, fixed warp_tolerance)
+double
+DeltaTime::Update(double current_time, double min_delta, double warp_tolerance)
 {
 
-  assert(!negative(current_time));
-  assert(!negative(min_delta));
-  assert(!negative(warp_tolerance));
+  assert(current_time >= 0);
+  assert(min_delta >= 0);
+  assert(warp_tolerance >= 0);
 
   if (!IsDefined()) {
     /* first call */
     last_time = current_time;
-    return fixed(0);
+    return 0;
   }
 
   if (current_time < last_time) {
@@ -44,21 +44,21 @@ DeltaTime::Update(fixed current_time, fixed min_delta, fixed warp_tolerance)
 
     const auto delta = last_time - current_time;
     last_time = current_time;
-    return delta < warp_tolerance ? fixed(0) : fixed(-1);
+    return delta < warp_tolerance ? 0 : -1;
   }
 
   const auto delta = current_time - last_time;
   if (delta < min_delta)
     /* difference too small, don't update "last" time stamp to let
        small differences add up eventually */
-    return fixed(0);
+    return 0;
 
   last_time = current_time;
 
-  if (delta > fixed(4 * 3600))
+  if (delta > 4 * 3600)
     /* after several hours without a signal, we can assume there was
        a time warp */
-    return fixed(-1);
+    return -1;
 
   return delta;
 }

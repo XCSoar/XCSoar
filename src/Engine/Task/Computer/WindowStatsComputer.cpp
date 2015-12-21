@@ -24,7 +24,7 @@
 #include "Task/Stats/TaskStats.hpp"
 
 void
-WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
+WindowStatsComputer::Compute(double time, const TaskStats &task_stats,
                              WindowStats &stats)
 {
   if (negative(time))
@@ -40,7 +40,7 @@ WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
   if (task_stats.task_finished)
     return;
 
-  const auto dt = minute_clock.Update(time, fixed(59), fixed(180));
+  const auto dt = minute_clock.Update(time, 59, 180);
   if (negative(dt)) {
     Reset();
     stats.Reset();

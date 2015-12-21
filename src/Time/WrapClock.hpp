@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WRAP_CLOCK_HPP
 #define XCSOAR_WRAP_CLOCK_HPP
 
-#include "Math/fixed.hpp"
 #include "BrokenDate.hpp"
 #include "BrokenTime.hpp"
 
@@ -50,7 +49,7 @@ class WrapClock {
    * The last time_of_day parameter.  This is negative if Normalise()
    * was never called since the most recent Reset() call.
    */
-  fixed last_stamp;
+  double last_stamp;
 
   /**
    * The last known input date.  Check IsPlausible() before using this
@@ -73,7 +72,7 @@ class WrapClock {
 public:
   void Reset() {
     last_day = 0;
-    last_stamp = fixed(-1);
+    last_stamp = -1;
     last_input_date = last_output_date = BrokenDate::Invalid();
     last_time = BrokenTime::Invalid();
   }
@@ -91,7 +90,7 @@ public:
    * @return a normalised time stamp [seconds] that is ascending and
    * linear (unless a "time warp" is observed)
    */
-  fixed Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time);
+  double Normalise(double stamp, BrokenDate &date, const BrokenTime &time);
 
   /**
    * Convenience wrapper that takes a #NMEAInfo and updates its "time"

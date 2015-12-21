@@ -40,7 +40,7 @@ public:
     minute_clock.Reset();
   }
 
-  void Compute(fixed time, const TaskStats &task_stats, WindowStats &stats);
+  void Compute(double time, const TaskStats &task_stats, WindowStats &stats);
 };
 
 #endif
