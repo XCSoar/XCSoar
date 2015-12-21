@@ -54,23 +54,23 @@ public:
     /** Location of fix */
     GeoPoint location;
     /** Barometric altitude (m STD) */
-    fixed pressure_altitude;
+    double pressure_altitude;
     /** GPS Altitude (m) */
-    fixed altitude_gps;
+    double altitude_gps;
     /** Date and time of fix */
     BrokenDateTime date_time_utc;
     /** IDs of satellites in fix */
     int satellite_ids[GPSState::MAXSATELLITES];
     bool satellite_ids_available;
     /** Time of fix (s) */
-    fixed time;
+    double time;
     /** GPS fix quality */
     FixQuality fix_quality;
     /** GPS fix state */
     int satellites_used;
     bool satellites_used_available;
     /** GPS Horizontal Dilution of precision */
-    fixed hdop;
+    double hdop;
 
     /**
      * Is the fix real? (no replay, no simulator)

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FLIGHT_LOGGER_HPP
 #define XCSOAR_FLIGHT_LOGGER_HPP
 
-#include "Math/fixed.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "OS/Path.hpp"
 
@@ -43,7 +42,7 @@ struct DerivedInfo;
 class FlightLogger {
   AllocatedPath path = nullptr;
 
-  fixed last_time;
+  double last_time;
   bool seen_on_ground, seen_flying;
 
   /**

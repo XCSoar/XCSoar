@@ -43,7 +43,7 @@ public:
    * Returns true if the IGCWriter is supposed to write a new F record to
    * the IGC file or false if no update is needed.
    */
-  bool Update(const GPSState &gps, fixed time, bool nav_warning);
+  bool Update(const GPSState &gps, double time, bool nav_warning);
 
   void Reset();
 

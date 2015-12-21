@@ -64,12 +64,12 @@ LoggerFRecord::CheckSatellitesChanged(const GPSState &gps) const
 }
 
 bool
-LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
+LoggerFRecord::Update(const GPSState &gps, double time, bool nav_warning)
 {
   // Accelerate to 30 seconds if bad signal
-  const auto period = IsBadSignal(gps) || nav_warning
-    ? fixed(ACCELERATED_UPDATE_TIME)
-    : fixed(DEFAULT_UPDATE_TIME);
+  const double period = IsBadSignal(gps) || nav_warning
+    ? ACCELERATED_UPDATE_TIME
+    : DEFAULT_UPDATE_TIME;
 
   // We need an update if
   // 1) the satellite information availability changed or

@@ -92,7 +92,7 @@ IGCWriter::GetIRecord()
   return "I023638FXA3940SIU";
 }
 
-fixed
+double
 IGCWriter::GetEPE(const GPSState &gps)
 {
   /*
@@ -141,13 +141,13 @@ IGCWriter::GetEPE(const GPSState &gps)
 
   switch (gps.fix_quality) {
   case FixQuality::GPS:
-    return gps.hdop * fixed(18.2);
+    return gps.hdop * 18.2;
 
   case FixQuality::DGPS:
     return Quadruple(gps.hdop);
 
   default:
-    return fixed(0);
+    return 0;
   }
 }
 

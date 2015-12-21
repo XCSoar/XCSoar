@@ -35,7 +35,7 @@ class LiveBlackboard;
 class GlueFlightLogger : public FlightLogger, private NullBlackboardListener {
   LiveBlackboard &blackboard;
 
-  fixed last_time;
+  double last_time;
   bool last_on_ground, last_flying;
 
   /**
