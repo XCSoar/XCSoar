@@ -27,7 +27,7 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
+AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const double _radius)
   :AbstractAirspace(Shape::CIRCLE), m_center(loc), m_radius(_radius)
 {
   is_convex = TriState::TRUE;
@@ -39,7 +39,7 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
   Angle angle = Angle::Zero();
   static constexpr Angle delta = Angle::FullCircle() / NUM_SEGMENTS;
   for (unsigned i = 0; i <= NUM_SEGMENTS; ++i, angle += delta) {
-    const GeoPoint p = GeoVector(m_radius * fixed(1.1), angle).EndPoint(m_center);
+    const GeoPoint p = GeoVector(m_radius * 1.1, angle).EndPoint(m_center);
     m_border.emplace_back(p);
   }
 }
@@ -68,20 +68,20 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
   if (!positive(mag))
     return AirspaceIntersectionVector();
 
-  const auto inv_mag = fixed(1) / mag;
+  const auto inv_mag = 1. / mag;
   const auto t1 = FlatLine(f_start, f_p1).DotProduct(line);
   const auto t2 = f_p1 == f_p2
-    ? fixed(-1)
+    ? double(-1)
     : FlatLine(f_start, f_p2).DotProduct(line);
 
   const bool in_range = (t1 < mag) || (t2 < mag);
   // if at least one point is within range, capture both points
 
   AirspaceIntersectSort sorter(start, *this);
-  if ((t1 >= fixed(0)) && in_range)
+  if (t1 >= 0 && in_range)
     sorter.add(t1 * inv_mag, projection.Unproject(f_p1));
 
-  if ((t2 >= fixed(0)) && in_range)
+  if (t2 >= 0 && in_range)
     sorter.add(t2 * inv_mag, projection.Unproject(f_p2));
 
   return sorter.all();

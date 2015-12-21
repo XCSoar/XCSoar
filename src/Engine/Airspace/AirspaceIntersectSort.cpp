@@ -25,9 +25,9 @@
 #include "AirspaceIntersectionVector.hpp"
 
 void 
-AirspaceIntersectSort::add(const fixed t, const GeoPoint &p)
+AirspaceIntersectSort::add(const double t, const GeoPoint &p)
 {
-  if (t >= fixed(0))
+  if (t >= 0)
     m_q.push(std::make_pair(t, p));
 }
 
@@ -67,7 +67,7 @@ AirspaceIntersectSort::all()
       res.emplace_back(p_last, p_this);
       waiting = false;
     } else {
-      if (m_q.top().first >= fixed(1))
+      if (m_q.top().first >= 1)
         // exit on reaching first point out of range
         break;
 

@@ -24,7 +24,6 @@
 #define AIRSPACE_INTERCEPT_SOLUTION_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Math/fixed.hpp"
 
 #include <type_traits>
 
@@ -37,26 +36,26 @@ struct AirspaceInterceptSolution
   /** Location of intercept point */
   GeoPoint location;
   /** Distance from observer to intercept point (m) */
-  fixed distance;
+  double distance;
   /** Altitude AMSL (m) of intercept point */
-  fixed altitude;
+  double altitude;
   /** Estimated time (s) for observer to reach intercept point */
-  fixed elapsed_time;
+  double elapsed_time;
 
   AirspaceInterceptSolution() = default;
 
 private:
-  AirspaceInterceptSolution(fixed _distance, fixed _elapsed_time)
+  AirspaceInterceptSolution(double _distance, double _elapsed_time)
     :distance(_distance), elapsed_time(_elapsed_time) {}
 
 public:
   static AirspaceInterceptSolution Invalid() {
-    return AirspaceInterceptSolution(fixed(-1), fixed(-1));
+    return AirspaceInterceptSolution(-1, -1);
   }
 
   void SetInvalid() {
-    distance = fixed(-1);
-    elapsed_time = fixed(-1);
+    distance = -1;
+    elapsed_time = -1;
   }
 
   /**
@@ -65,7 +64,7 @@ public:
    * @return True if solution is valid
    */
   bool IsValid() const {
-    return !negative(elapsed_time);
+    return elapsed_time >= 0;
   }
 
   bool IsEarlierThan(const AirspaceInterceptSolution &other) const {

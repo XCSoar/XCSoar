@@ -25,16 +25,17 @@
 
 #include <algorithm>
 
-#define fixed_big fixed(1000000)
+#define fixed_big double(1000000)
 
-fixed 
-AirspaceAircraftPerformance::SolutionGeneral(fixed distance, fixed dh) const
+double
+AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
 {
-  const auto t_cruise =
-      positive(distance) ? distance / GetCruiseSpeed() : fixed(0);
+  const auto t_cruise = distance > 0
+    ? distance / GetCruiseSpeed()
+    : double(0);
   const auto h_descent = dh - t_cruise * GetCruiseDescent();
 
-  if (fabs(h_descent) < fixed(1))
+  if (fabs(h_descent) < 1)
     return t_cruise;
 
   if (positive(h_descent)) {
@@ -79,13 +80,13 @@ public:
    * @return Initialised object
    */
   AirspaceAircraftInterceptVertical(const AirspaceAircraftPerformance &aap,
-                                    fixed distance, fixed alt,
-                                    fixed h_min, fixed h_max)
-    :ZeroFinder(h_min, h_max, fixed(1)),
+                                    double distance, double alt,
+                                    double h_min, double h_max)
+    :ZeroFinder(h_min, h_max, 1),
      m_perf(aap), m_distance(distance), m_alt(alt),
      m_h_min(h_min) {}
 
-  fixed f(const fixed h) {
+  double f(const double h) {
     return m_perf.SolutionGeneral(m_distance, m_alt-h);
   }
 
@@ -96,30 +97,30 @@ public:
    *
    * @return Time of arrival (or -1 if no solution found)
    */
-  fixed solve(fixed &h) {
+  double solve(double &h) {
     auto h_this = find_min(m_h_min);
     auto t = f(h_this);
     if (t < fixed_big) {
       h = h_this;
       return t;
     }
-    return fixed(-1);
+    return -1;
   }
 
 private:
   const AirspaceAircraftPerformance &m_perf;
-  const fixed m_distance;
-  const fixed m_alt;
-  const fixed m_h_min;
+  const double m_distance;
+  const double m_alt;
+  const double m_h_min;
 };
 
-fixed 
-AirspaceAircraftPerformance::SolutionVertical(fixed distance, fixed altitude,
-                                              fixed base, fixed top,
-                                              fixed &intercept_alt) const
+double
+AirspaceAircraftPerformance::SolutionVertical(double distance, double altitude,
+                                              double base, double top,
+                                              double &intercept_alt) const
 {
   if (!SolutionExists(distance, altitude, base, top))
-    return fixed(-1);
+    return -1;
 
   if (top <= base) {
     // unique solution
@@ -128,7 +129,7 @@ AirspaceAircraftPerformance::SolutionVertical(fixed distance, fixed altitude,
       intercept_alt = top;
       return t_this;
     }
-    return fixed(-1);
+    return -1;
   }
 
   AirspaceAircraftInterceptVertical aaiv(*this, distance, altitude, base, top);
@@ -152,12 +153,12 @@ public:
    * @return Initialised object
    */
   AirspaceAircraftInterceptHorizontal(const AirspaceAircraftPerformance &aap,
-                                      fixed distance_min, fixed distance_max,
-                                      fixed dh)
-    :ZeroFinder(distance_min, distance_max, fixed(1)),
+                                      double distance_min, double distance_max,
+                                      double dh)
+    :ZeroFinder(distance_min, distance_max, 1),
      m_perf(aap), m_d_min(distance_min), m_dh(dh) {}
 
-  fixed f(const fixed distance) {
+  double f(const double distance) {
     return m_perf.SolutionGeneral(distance, m_dh);
   }
 
@@ -168,30 +169,30 @@ public:
    *
    * @return Time of arrival (or -1 if no solution found)
    */
-  fixed solve(fixed &distance) {
+  double solve(double &distance) {
     auto distance_this = find_min(m_d_min);
     auto t = f(distance_this);
     if (t < fixed_big) {
       distance = distance_this;
       return t;
     }
-    return fixed(-1);
+    return -1;
   }
 
 private:
   const AirspaceAircraftPerformance &m_perf;
-  const fixed m_d_min;
-  const fixed m_dh;
+  const double m_d_min;
+  const double m_dh;
 };
 
-fixed 
-AirspaceAircraftPerformance::SolutionHorizontal(fixed distance_min,
-                                                fixed distance_max,
-                                                fixed altitude, fixed h,
-                                                fixed &intercept_distance) const
+double 
+AirspaceAircraftPerformance::SolutionHorizontal(double distance_min,
+                                                double distance_max,
+                                                double altitude, double h,
+                                                double &intercept_distance) const
 {
   if (!SolutionExists(distance_max, altitude, h, h))
-    return fixed(-1);
+    return -1;
 
   const auto dh = altitude - h;
 
@@ -202,7 +203,7 @@ AirspaceAircraftPerformance::SolutionHorizontal(fixed distance_min,
       intercept_distance = distance_max;
       return t_this;
     }
-    return fixed(-1);
+    return -1;
   }
   AirspaceAircraftInterceptHorizontal aaih(*this, distance_min, distance_max, dh);
   return aaih.solve(intercept_distance);
@@ -214,9 +215,9 @@ TODO: write a sorter/visitor so that we can visit airspaces in increasing
  */
 
 bool 
-AirspaceAircraftPerformance::SolutionExists(fixed distance_max,
-                                            fixed altitude,
-                                            fixed h_min, fixed h_max) const
+AirspaceAircraftPerformance::SolutionExists(double distance_max,
+                                            double altitude,
+                                            double h_min, double h_max) const
 {
   if (positive(altitude - h_max) &&
       !positive(std::max(GetCruiseDescent(), GetDescentRate())

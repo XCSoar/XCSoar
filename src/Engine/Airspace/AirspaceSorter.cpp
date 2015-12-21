@@ -39,7 +39,7 @@ AirspaceFilterData::Match(const GeoPoint &location,
     const auto closest = as.ClosestPoint(location, projection);
     const auto bearing = location.Bearing(closest);
     auto direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
-    if (direction_error > fixed(18))
+    if (direction_error > 18)
       return false;
   }
 

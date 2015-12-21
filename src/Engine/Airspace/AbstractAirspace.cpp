@@ -50,7 +50,7 @@ AbstractAirspace::Inside(const AircraftState &state) const
 }
 
 void
-AbstractAirspace::SetGroundLevel(const fixed alt)
+AbstractAirspace::SetGroundLevel(const double alt)
 {
   altitude_base.SetGroundLevel(alt);
   altitude_top.SetGroundLevel(alt);
@@ -66,7 +66,7 @@ AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press)
 AirspaceInterceptSolution
 AbstractAirspace::InterceptVertical(const AircraftState &state,
                                     const AirspaceAircraftPerformance &perf,
-                                    fixed distance) const
+                                    double distance) const
 {
   AirspaceInterceptSolution solution;
   solution.distance = distance;
@@ -81,8 +81,8 @@ AbstractAirspace::InterceptVertical(const AircraftState &state,
 AirspaceInterceptSolution
 AbstractAirspace::InterceptHorizontal(const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf,
-                                      fixed distance_start,
-                                      fixed distance_end,
+                                      double distance_start,
+                                      double distance_end,
                                       const bool lower) const
 {
   if (lower && altitude_base.IsTerrain())
@@ -111,12 +111,12 @@ AbstractAirspace::Intercept(const AircraftState &state,
     (loc_start == state.location);
 
   const auto distance_start = only_vertical
-    ? fixed(0)
+    ? double(0)
     : state.location.Distance(loc_start);
 
   const auto distance_end = loc_start == loc_end
     ? distance_start
-    : (only_vertical ? fixed(0) : state.location.Distance(loc_end));
+    : (only_vertical ? double(0) : state.location.Distance(loc_end));
 
   AirspaceInterceptSolution solution =
     AirspaceInterceptSolution::Invalid();
@@ -233,7 +233,7 @@ AbstractAirspace::GetClearance(const FlatProjection &projection) const
     FlatRay r(center, p);
     int mag = r.Magnitude();
     int mag_new = mag + RADIUS;
-    p = r.Parametric((fixed)mag_new / mag);
+    p = r.Parametric((double)mag_new / mag);
     i = SearchPoint(projection.Unproject(p), p);
   }
 

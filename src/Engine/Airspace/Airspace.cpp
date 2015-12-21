@@ -62,7 +62,7 @@ Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
 }
 
 void
-Airspace::SetGroundLevel(const fixed alt) const
+Airspace::SetGroundLevel(const double alt) const
 {
   assert(airspace != nullptr);
   airspace->SetGroundLevel(alt);

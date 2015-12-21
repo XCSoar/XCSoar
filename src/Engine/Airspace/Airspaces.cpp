@@ -32,7 +32,7 @@
 namespace bgi = boost::geometry::index;
 
 Airspaces::const_iterator_range
-Airspaces::QueryWithinRange(const GeoPoint &location, fixed range) const
+Airspaces::QueryWithinRange(const GeoPoint &location, double range) const
 {
   if (IsEmpty())
     // nothing to do
@@ -216,7 +216,7 @@ Airspaces::AsVector() const
 bool
 Airspaces::SynchroniseInRange(const Airspaces &master,
                               const GeoPoint &location,
-                              const fixed range,
+                              const double range,
                               const AirspacePredicate &condition)
 {
   qnh = master.qnh;

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef SOONEST_AIRSPACE_HPP
 #define SOONEST_AIRSPACE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 class AbstractAirspace;
@@ -39,6 +38,6 @@ FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
                     const AirspacePredicate &predicate,
-                    const fixed max_time = fixed(1.0e6));
+                    const double max_time = 1.0e6);
 
 #endif

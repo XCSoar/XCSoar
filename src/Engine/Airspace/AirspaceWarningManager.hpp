@@ -51,8 +51,8 @@ class AirspaceWarningManager {
 
   const Airspaces &airspaces;
 
-  fixed prediction_time_glide;
-  fixed prediction_time_filter;
+  double prediction_time_glide;
+  double prediction_time_filter;
 
   AircraftStateFilter cruise_filter;
   AircraftStateFilter circling_filter;
@@ -125,14 +125,14 @@ public:
    *
    * @param the_time New time (s)
    */
-  void SetPredictionTimeGlide(fixed time);
+  void SetPredictionTimeGlide(double time);
 
   /**
    * Adjust time of state predictor.  Also updates filter time constant
    *
    * @param the_time New time (s)
    */
-  void SetPredictionTimeFilter(fixed time);
+  void SetPredictionTimeFilter(double time);
 
   /**
    * Find corresponding airspace warning item in store for an airspace
@@ -270,7 +270,7 @@ private:
                        const GeoPoint &location_predicted,
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
-                       const fixed max_time);
+                       double max_time);
 };
 
 #endif

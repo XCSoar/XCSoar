@@ -181,7 +181,7 @@ public:
    *
    * @param alt Height above MSL of terrain (m) at center
    */
-  void SetGroundLevel(const fixed alt);
+  void SetGroundLevel(double alt);
 
   /**
    * Is it necessary to call SetGroundLevel() for this AbstractAirspace?
@@ -265,7 +265,7 @@ public:
    *
    * @return Altitude AMSL (m) of base
    */
-  fixed GetBaseAltitude(const AltitudeState &state) const {
+  double GetBaseAltitude(const AltitudeState &state) const {
     return altitude_base.GetAltitude(state);
   }
 
@@ -274,7 +274,7 @@ public:
    *
    * @return Altitude AMSL (m) of top
    */
-  fixed GetTopAltitude(const AltitudeState &state) const {
+  double GetTopAltitude(const AltitudeState &state) const {
     return altitude_top.GetAltitude(state);
   }
 
@@ -389,7 +389,7 @@ private:
   gcc_pure
   AirspaceInterceptSolution InterceptVertical(const AircraftState &state,
                                               const AirspaceAircraftPerformance &perf,
-                                              fixed distance) const;
+                                              double distance) const;
 
   /**
    * Find time/distance to specified horizontal boundary from an observer
@@ -407,8 +407,8 @@ private:
   gcc_pure
   AirspaceInterceptSolution InterceptHorizontal(const AircraftState &state,
                                                 const AirspaceAircraftPerformance &perf,
-                                                fixed distance_start,
-                                                fixed distance_end,
+                                                double distance_start,
+                                                double distance_end,
                                                 const bool lower = true) const;
 };
 

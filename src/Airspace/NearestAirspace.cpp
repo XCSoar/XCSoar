@@ -61,7 +61,7 @@ FindHorizontal(const GeoPoint &location,
                const AirspacePredicate &predicate)
 {
   const auto &projection = airspace_database.GetProjection();
-  return FindMinimum(airspace_database, location, fixed(30000), predicate,
+  return FindMinimum(airspace_database, location, 30000, predicate,
                      [&location, &projection](const AbstractAirspace &airspace){
                        return CalculateNearestAirspaceHorizontal(location, projection, airspace);
                      },
@@ -133,7 +133,7 @@ NearestAirspace::FindVertical(const MoreData &basic,
     /* check delta below */
     auto base = airspace.GetBase().GetAltitude(altitude);
     auto base_delta = base - altitude.altitude;
-    if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
+    if (base_delta >= 0 && base_delta < fabs(nearest_delta)) {
       nearest = &airspace;
       nearest_delta = base_delta;
     }
@@ -141,7 +141,7 @@ NearestAirspace::FindVertical(const MoreData &basic,
     /* check delta above */
     auto top = airspace.GetTop().GetAltitude(altitude);
     auto top_delta = altitude.altitude - top;
-    if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
+    if (top_delta >= 0 && top_delta < fabs(nearest_delta)) {
       nearest = &airspace;
       nearest_delta = -top_delta;
     }

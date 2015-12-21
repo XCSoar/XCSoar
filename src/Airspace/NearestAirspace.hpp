@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef NEAREST_AIRSPACE_HPP
 #define NEAREST_AIRSPACE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 struct MoreData;
@@ -42,10 +41,10 @@ public:
    * The horizontal or vertical distance [m], depending on which
    * function filled this object.
    */
-  fixed distance;
+  double distance;
 
   NearestAirspace():airspace(nullptr) {}
-  NearestAirspace(const AbstractAirspace &_airspace, fixed _distance)
+  NearestAirspace(const AbstractAirspace &_airspace, double _distance)
     :airspace(&_airspace), distance(_distance) {}
 
   bool IsDefined() const {

@@ -34,7 +34,7 @@ struct SoonestAirspace {
 
   SoonestAirspace() = default;
   SoonestAirspace(const AbstractAirspace &_airspace,
-                  fixed _time)
+                  double _time)
     :airspace(&_airspace), time(_time) {}
 
 
@@ -48,7 +48,7 @@ __attribute__((always_inline))
 static inline SoonestAirspace
 CalculateSoonestAirspace(const AircraftState &state,
                          const AirspaceAircraftPerformance &perf,
-                         const fixed max_time,
+                         const double max_time,
                          const FlatProjection &projection,
                          const AbstractAirspace &airspace)
 {
@@ -75,7 +75,7 @@ FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
                     const AirspacePredicate &predicate,
-                    const fixed max_time)
+                    const double max_time)
 {
   const auto &projection = airspaces.GetProjection();
   const auto range = perf.GetMaxSpeed() * max_time;

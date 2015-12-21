@@ -66,7 +66,7 @@ AirspacePolygon::GetCenter() const
 {
   assert(m_border.size() >= 3);
 
-  fixed lat(0), lon(0);
+  double lat(0), lon(0);
 
   for (const auto &pt : m_border) {
     lat += pt.GetLocation().latitude.Native();

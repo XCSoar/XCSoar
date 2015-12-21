@@ -160,7 +160,7 @@ public:
    */
   gcc_pure
   const_iterator_range QueryWithinRange(const GeoPoint &location,
-                                        fixed range) const;
+                                        double range) const;
 
   /**
    * Query airspaces intersecting the vector (bounding box check
@@ -218,7 +218,7 @@ public:
    * @return True on change
    */
   bool SynchroniseInRange(const Airspaces &master,
-                          const GeoPoint &location, fixed range,
+                          const GeoPoint &location, double range,
                           const AirspacePredicate &condition);
 
 private:

@@ -135,7 +135,7 @@ struct TempAirspaceType
 
   // Circle or Arc
   GeoPoint center;
-  fixed radius;
+  double radius;
 
   // Arc
   int rotation;
@@ -151,7 +151,7 @@ struct TempAirspaceType
     center.longitude = Angle::Zero();
     center.latitude = Angle::Zero();
     rotation = 1;
-    radius = fixed(0);
+    radius = 0;
   }
 
   void
@@ -162,7 +162,7 @@ struct TempAirspaceType
     center.longitude = Angle::Zero();
     center.latitude = Angle::Zero();
     rotation = 1;
-    radius = fixed(0);
+    radius = 0;
   }
 
   void
@@ -189,13 +189,13 @@ struct TempAirspaceType
   }
 
   static int
-  ArcStepWidth(fixed radius)
+  ArcStepWidth(double radius)
   {
-    if (radius > fixed(50000))
+    if (radius > 50000)
       return 1;
-    if (radius > fixed(25000))
+    if (radius > 25000)
       return 2;
-    if (radius > fixed(10000))
+    if (radius > 10000)
       return 3;
 
     return 5;
@@ -213,7 +213,7 @@ struct TempAirspaceType
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
     const auto step = Angle::Degrees(rotation * _step);
-    const auto threshold = _step * fixed(1.5);
+    const auto threshold = _step * 1.5;
 
     // Determine end bearing
     Angle end_bearing = center.Bearing(end);
@@ -245,7 +245,7 @@ struct TempAirspaceType
     // 5 or -5, depending on direction
     const auto _step = ArcStepWidth(radius);
     const auto step = Angle::Degrees(rotation * _step);
-    const auto threshold = _step * fixed(1.5);
+    const auto threshold = _step * 1.5;
 
     if (rotation > 0) {
       while (end < start)
@@ -284,7 +284,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 {
   auto unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
-  auto value = fixed(0);
+  double value = 0;
 
   while (true) {
     input.Strip();
@@ -326,15 +326,15 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
   case UNLIMITED:
     altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = fixed(50000);
+    altitude.altitude = 50000;
     return;
 
   case SFC:
     altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = fixed(-1);
+    altitude.altitude_above_terrain = -1;
 
     /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = fixed(0);
+    altitude.altitude = 0;
     return;
 
   default:

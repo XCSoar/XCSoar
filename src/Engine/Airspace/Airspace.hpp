@@ -120,7 +120,7 @@ public:
    *
    * @param alt Height above MSL of terrain (m) at center
    */
-  void SetGroundLevel(const fixed alt) const;
+  void SetGroundLevel(double alt) const;
 
   /**
    * Is it necessary to call SetGroundLevel() for this AbstractAirspace?

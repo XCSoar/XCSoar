@@ -35,7 +35,7 @@
  */
 class AirspaceCircle final : public AbstractAirspace {
   const GeoPoint m_center;
-  const fixed m_radius;
+  const double m_radius;
 
 public:
   /**
@@ -46,7 +46,7 @@ public:
    *
    * @return Initialised airspace object
    */
-  AirspaceCircle(const GeoPoint &loc, const fixed _radius);
+  AirspaceCircle(const GeoPoint &loc, const double _radius);
 
   /* virtual methods from class AbstractAirspace */
   const GeoPoint GetReferenceLocation() const override {
@@ -69,7 +69,7 @@ public:
    *
    * @return Radius of circle (m)
    */
-  const fixed &GetRadius() const {
+  const double &GetRadius() const {
     return m_radius;
   }
 

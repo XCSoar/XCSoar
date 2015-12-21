@@ -23,7 +23,6 @@
 #ifndef AIRSPACE_AIRCRAFT_PERFORMANCE_HPP
 #define AIRSPACE_AIRCRAFT_PERFORMANCE_HPP
 
-#include "Math/fixed.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "Util/AircraftStateFilter.hpp"
@@ -37,32 +36,32 @@
  */
 class AirspaceAircraftPerformance {
   /** Tolerance in vertical max speeds (m/s) */
-  fixed vertical_tolerance;
+  double vertical_tolerance;
 
   /**
    * Nominal cruise speed [m/s]
    */
-  fixed cruise_speed;
+  double cruise_speed;
 
   /**
    * Nominal descent speed (m/s, positive down)
    */
-  fixed cruise_descent;
+  double cruise_descent;
 
   /**
    * Max descent speed (m/s, positive down)
    */
-  fixed descent_rate;
+  double descent_rate;
 
   /**
    * Max climb rate (m/s, positive up)
    */
-  fixed climb_rate;
+  double climb_rate;
 
   /**
    * Maximum speed achievable by this model [m/s].
    */
-  fixed max_speed;
+  double max_speed;
 
 public:
   struct Simple {};
@@ -119,17 +118,17 @@ public:
     :vertical_tolerance(0.001),
      cruise_speed(positive(solution.time_elapsed)
                   ? solution.vector.distance / solution.time_elapsed
-                  : fixed(1)),
+                  : double(1)),
      cruise_descent(positive(solution.time_elapsed)
                     ? (positive(solution.height_climb)
                        ? -solution.height_climb
                        : solution.height_glide) / solution.time_elapsed
-                    : fixed(0)),
+                    : double(0)),
      descent_rate(polar.GetSBestLD()),
      climb_rate(positive(solution.time_elapsed) &&
                 positive(solution.height_climb)
                 ? polar.GetMC()
-                : fixed(0)),
+                : double(0)),
      max_speed(cruise_speed) {
     assert(polar.IsValid());
     assert(solution.IsOk());
@@ -141,7 +140,7 @@ public:
    *
    * @return Nominal cruise speed (m/s)
    */
-  fixed GetCruiseSpeed() const {
+  double GetCruiseSpeed() const {
     return cruise_speed;
   }
 
@@ -150,7 +149,7 @@ public:
    *
    * @return Nominal descent speed (m/s, positive down)
    */
-  fixed GetCruiseDescent() const {
+  double GetCruiseDescent() const {
     return cruise_descent;
   }
 
@@ -159,7 +158,7 @@ public:
    *
    * @return Max descent speed (m/s, positive down)
    */
-  fixed GetDescentRate() const {
+  double GetDescentRate() const {
     return descent_rate;
   }
 
@@ -168,7 +167,7 @@ public:
    *
    * @return Max climb rate (m/s, positive up)
    */
-  fixed GetClimbRate() const {
+  double GetClimbRate() const {
     return climb_rate;
   }
 
@@ -177,7 +176,7 @@ public:
    *
    * @return Speed (m/s)
    */
-  fixed GetMaxSpeed() const {
+  double GetMaxSpeed() const {
     return max_speed;
   }
 
@@ -190,7 +189,7 @@ public:
    * @return Time to intercept (s) or -1 if failed
    */
   gcc_pure
-  fixed SolutionGeneral(fixed distance, fixed dh) const;
+  double SolutionGeneral(double distance, double dh) const;
 
   /**
    * Find time to intercept a target with a height band, set distance
@@ -203,9 +202,9 @@ public:
    *
    * @return Time of intercept (s)
    */
-  fixed SolutionVertical(fixed distance, fixed altitude,
-                         fixed base, fixed top,
-                         fixed &intercept_alt) const;
+  double SolutionVertical(double distance, double altitude,
+                          double base, double top,
+                          double &intercept_alt) const;
 
   /**
    * Find time to intercept a target with a distance band, set height
@@ -218,14 +217,14 @@ public:
    *
    * @return Time of intercept (s)
    */
-  fixed SolutionHorizontal(fixed distance_min, fixed distance_max,
-                           fixed altitude, fixed h,
-                           fixed &intercept_distance) const;
+  double SolutionHorizontal(double distance_min, double distance_max,
+                            double altitude, double h,
+                            double &intercept_distance) const;
 
 private:
   gcc_pure
-  bool SolutionExists(fixed distance_min, fixed distance_max,
-                      fixed h_min, fixed h_max) const;
+  bool SolutionExists(double distance_min, double distance_max,
+                      double h_min, double h_max) const;
 };
 
 #endif

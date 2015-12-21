@@ -31,7 +31,7 @@ template<class Func,
          class Cmp=std::less<Result>>
 gcc_pure
 static inline Result
-FindMinimum(const Airspaces &airspaces, const GeoPoint &location, fixed range,
+FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
             const AirspacePredicate &predicate,
             Func &&func,
             Cmp &&cmp=Cmp())

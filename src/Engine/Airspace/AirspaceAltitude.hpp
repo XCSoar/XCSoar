@@ -23,7 +23,6 @@
 #ifndef AIRSPACE_ALTITUDE_HPP
 #define AIRSPACE_ALTITUDE_HPP
 
-#include "Math/fixed.hpp"
 #include "Geo/AltitudeReference.hpp"
 
 #include <stdint.h>
@@ -35,11 +34,11 @@ struct AltitudeState;
 struct AirspaceAltitude
 {
   /** Altitude AMSL (m) resolved from type */
-  fixed altitude;
+  double altitude;
   /** Flight level (100ft) for FL-referenced boundary */
-  fixed flight_level;
+  double flight_level;
   /** Height above terrain (m) for ground-referenced boundary */
-  fixed altitude_above_terrain;
+  double altitude_above_terrain;
 
   /** Type of airspace boundary */
   AltitudeReference reference;
@@ -50,9 +49,9 @@ struct AirspaceAltitude
    * @return Initialised blank object
    */
   AirspaceAltitude()
-    :altitude(fixed(0)),
-     flight_level(fixed(0)),
-     altitude_above_terrain(fixed(0)),
+    :altitude(0),
+     flight_level(0),
+     altitude_above_terrain(0),
      reference(AltitudeReference::NONE) {}
 
   /**
@@ -60,13 +59,13 @@ struct AirspaceAltitude
    * For AGL types, this assumes the terrain height
    * is the terrain height at the aircraft.
    */
-  fixed GetAltitude(const AltitudeState &state) const;
+  double GetAltitude(const AltitudeState &state) const;
 
   /** Is this altitude reference at or above the aircraft state? */
-  bool IsAbove(const AltitudeState &state, const fixed margin = fixed(0)) const;
+  bool IsAbove(const AltitudeState &state, const double margin = 0) const;
 
   /** Is this altitude reference at or below the aircraft state? */
-  bool IsBelow(const AltitudeState &state, const fixed margin = fixed(0)) const;
+  bool IsBelow(const AltitudeState &state, const double margin = 0) const;
 
   /**
    * Test whether airspace boundary is the terrain
@@ -74,7 +73,7 @@ struct AirspaceAltitude
    * @return True if this altitude limit is the terrain
    */
   bool IsTerrain() const {
-    return !positive(altitude_above_terrain) &&
+    return altitude_above_terrain <= 0 &&
       reference == AltitudeReference::AGL;
   }
 
@@ -85,7 +84,7 @@ struct AirspaceAltitude
    *
    * @param alt Height of terrain at airspace center
    */
-  void SetGroundLevel(const fixed alt);
+  void SetGroundLevel(double alt);
 
   /**
    * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
