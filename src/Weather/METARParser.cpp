@@ -170,9 +170,9 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
   wind_code -= bearing * 100;
 
   if (StringIsEqualIgnoreCase(endptr, _T("MPS")))
-    parsed.wind.norm = fixed(wind_code);
+    parsed.wind.norm = wind_code;
   else if (StringIsEqualIgnoreCase(endptr, _T("KT")))
-    parsed.wind.norm = Units::ToSysUnit(fixed(wind_code), Unit::KNOTS);
+    parsed.wind.norm = Units::ToSysUnit(wind_code, Unit::KNOTS);
   else
     return false;
 
@@ -248,7 +248,7 @@ DetectTemperaturesToken(const TCHAR *token)
 }
 
 static const TCHAR *
-ParseTemperature(const TCHAR *token, fixed &temperature)
+ParseTemperature(const TCHAR *token, double &temperature)
 {
   bool negative = (token[0] == _T('M') || token[0] == _T('m'));
   if (negative)
@@ -262,7 +262,7 @@ ParseTemperature(const TCHAR *token, fixed &temperature)
   if (negative)
     _temperature = -_temperature;
 
-  temperature = CelsiusToKelvin(fixed(_temperature));
+  temperature = CelsiusToKelvin(_temperature);
   return endptr;
 }
 
@@ -326,8 +326,8 @@ ParseAdditionalTemperatures(const TCHAR *token, ParsedMETAR &parsed)
   if (dew_point >= 1000)
     dew_point = -dew_point + 1000;
 
-  parsed.temperature = CelsiusToKelvin(fixed(temperature) / 10);
-  parsed.dew_point = CelsiusToKelvin(fixed(dew_point) / 10);
+  parsed.temperature = CelsiusToKelvin(temperature / 10.);
+  parsed.dew_point = CelsiusToKelvin(dew_point / 10.);
   parsed.temperatures_available = true;
   return true;
 }
@@ -363,7 +363,7 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
     if (endptr == NULL || endptr == token)
       return false;
 
-    parsed.qnh = AtmosphericPressure::HectoPascal(fixed(hpa));
+    parsed.qnh = AtmosphericPressure::HectoPascal(hpa);
     parsed.qnh_available = true;
     return true;
   }
@@ -377,7 +377,7 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
     if (endptr == NULL || endptr == token)
       return false;
 
-    parsed.qnh = AtmosphericPressure::HectoPascal(Units::ToSysUnit(fixed(inch_hg) / 100,
+    parsed.qnh = AtmosphericPressure::HectoPascal(Units::ToSysUnit(inch_hg / 100.,
                                                                    Unit::INCH_MERCURY));
     parsed.qnh_available = true;
     return true;

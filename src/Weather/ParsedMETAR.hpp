@@ -52,7 +52,7 @@ struct ParsedMETAR
   StaticString<128> name;
   AtmosphericPressure qnh;
   SpeedVector wind;
-  fixed temperature, dew_point;
+  double temperature, dew_point;
   unsigned visibility;
   GeoPoint location;
 

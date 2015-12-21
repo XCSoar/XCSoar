@@ -170,9 +170,9 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     } else {
       if (parsed.visibility >= 9999)
         buffer.AppendFormat(_("more than %s"),
-                            FormatUserDistanceSmart(fixed(10000)).c_str());
+                            FormatUserDistanceSmart(10000).c_str());
       else
-        buffer +=  FormatUserDistanceSmart(fixed(parsed.visibility));
+        buffer += FormatUserDistanceSmart(parsed.visibility);
     }
     output += buffer;
     output += '\n';
