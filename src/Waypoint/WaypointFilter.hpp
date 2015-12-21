@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_LIST_FILTER_HPP
 
 #include "Util/StaticString.hxx"
-#include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 
 #include <stdint.h>
@@ -57,14 +56,14 @@ struct WaypointFilter
 
   StaticString<NAME_LENGTH + 1> name;
 
-  fixed distance;
+  double distance;
   Angle direction;
   TypeFilter type_index;
 
   void Clear() {
     name.clear();
-    distance = fixed(0);
-    direction = Angle::Native(fixed(-1));
+    distance = 0;
+    direction = Angle::Native(-1);
     type_index = TypeFilter::ALL;
   }
 

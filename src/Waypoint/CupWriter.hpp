@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef WAYPOINT_WRITER_HPP
 #define WAYPOINT_WRITER_HPP
 
-#include "Math/fixed.hpp"
 #include "Engine/Waypoint/Origin.hpp"
 
 struct Waypoint;

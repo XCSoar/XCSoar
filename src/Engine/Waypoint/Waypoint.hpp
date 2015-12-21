@@ -103,7 +103,7 @@ struct Waypoint {
 #endif
 
   /** Height AMSL (m) of waypoint terrain */
-  fixed elevation;
+  double elevation;
 
   /** Main runway */
   Runway runway;
@@ -251,7 +251,7 @@ struct Waypoint {
    * @return True if close to reference location
    */
   bool
-  IsCloseTo(const GeoPoint &_location, const fixed range) const;
+  IsCloseTo(const GeoPoint &_location, double range) const;
 };
 
 #endif

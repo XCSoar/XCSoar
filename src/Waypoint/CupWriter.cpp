@@ -46,7 +46,7 @@ WriteAngleDMM(TextWriter &writer, const Angle angle, bool is_latitude)
 }
 
 static void
-WriteAltitude(TextWriter &writer, fixed altitude)
+WriteAltitude(TextWriter &writer, double altitude)
 {
   writer.Format("%dM", (int)altitude);
 }

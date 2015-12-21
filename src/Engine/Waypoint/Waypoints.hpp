@@ -205,14 +205,14 @@ public:
    * @return waypoint copy
    */
   Waypoint GenerateTakeoffPoint(const GeoPoint& location,
-                                const fixed terrain_alt) const;
+                                double terrain_alt) const;
 
   /**
    * Create a takeoff point or replaces previous.
    * This modifies the waypoint database.
    */
   void AddTakeoffPoint(const GeoPoint& location,
-                         const fixed terrain_alt);
+                       double terrain_alt);
 
   /**
    * Return the current home waypoint.  May be nullptr if none is
@@ -258,7 +258,7 @@ public:
    */
   gcc_pure
   WaypointPtr LookupLocation(const GeoPoint &loc,
-                             const fixed range = fixed(0)) const;
+                             const double range = 0) const;
 
   /**
    * Look up waypoint by name (returns first match)
@@ -294,8 +294,8 @@ public:
    * @param range Distance in meters of search radius
    * @param visitor Visitor to be called on waypoints within range
    */
-  void VisitWithinRange(const GeoPoint &loc, const fixed range,
-                          WaypointVisitor& visitor) const;
+  void VisitWithinRange(const GeoPoint &loc, double range,
+                        WaypointVisitor &visitor) const;
 
   /**
    * Call visitor function on waypoints with the specified name
@@ -323,7 +323,7 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   gcc_pure
-  WaypointPtr GetNearest(const GeoPoint &loc, fixed range) const;
+  WaypointPtr GetNearest(const GeoPoint &loc, double range) const;
 
   /**
    * Looks up nearest landable waypoint to the
@@ -336,7 +336,7 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   gcc_pure
-  WaypointPtr GetNearestLandable(const GeoPoint &loc, fixed range) const;
+  WaypointPtr GetNearestLandable(const GeoPoint &loc, double range) const;
 
   /**
    * Looks up nearest waypoint to the search location.
@@ -350,7 +350,7 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   gcc_pure
-  WaypointPtr GetNearestIf(const GeoPoint &loc, fixed range,
+  WaypointPtr GetNearestIf(const GeoPoint &loc, double range,
                            bool (*predicate)(const Waypoint &)) const;
 
   /**

@@ -56,8 +56,7 @@ WaypointGlue::FindHomeLocation(Waypoints &waypoints,
   if (!settings.home_location_available)
     return nullptr;
 
-  auto wp = waypoints.LookupLocation(settings.home_location,
-                                     fixed(100));
+  auto wp = waypoints.LookupLocation(settings.home_location, 100);
   if (wp == nullptr || !wp->IsAirport()) {
     settings.home_location_available = false;
     return nullptr;
@@ -120,7 +119,7 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       GeoPoint loc = terrain->GetTerrainCenter();
       LogFormat("Start at terrain center");
       device_blackboard->SetStartupLocation(loc,
-                                            fixed(terrain->GetTerrainHeightOr0(loc)));
+                                            terrain->GetTerrainHeightOr0(loc));
     }
   }
 }

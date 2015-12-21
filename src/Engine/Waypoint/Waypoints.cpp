@@ -165,7 +165,7 @@ Waypoints::Append(WaypointPtr wp)
 }
 
 WaypointPtr
-Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
+Waypoints::GetNearest(const GeoPoint &loc, double range) const
 {
   if (IsEmpty())
     return nullptr;
@@ -188,13 +188,13 @@ IsLandable(const Waypoint &wp)
 }
 
 WaypointPtr
-Waypoints::GetNearestLandable(const GeoPoint &loc, fixed range) const
+Waypoints::GetNearestLandable(const GeoPoint &loc, double range) const
 {
   return GetNearestIf(loc, range, IsLandable);
 }
 
 WaypointPtr
-Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
+Waypoints::GetNearestIf(const GeoPoint &loc, double range,
                         bool (*predicate)(const Waypoint &)) const
 {
   if (IsEmpty())
@@ -221,7 +221,7 @@ Waypoints::LookupName(const TCHAR *name) const
 }
 
 WaypointPtr
-Waypoints::LookupLocation(const GeoPoint &loc, const fixed range) const
+Waypoints::LookupLocation(const GeoPoint &loc, const double range) const
 {
   auto wp = GetNearest(loc, range);
   if (!wp)
@@ -271,7 +271,7 @@ Waypoints::LookupId(const unsigned id) const
 }
 
 void
-Waypoints::VisitWithinRange(const GeoPoint &loc, const fixed range,
+Waypoints::VisitWithinRange(const GeoPoint &loc, const double range,
     WaypointVisitor& visitor) const
 {
   if (IsEmpty())
@@ -384,7 +384,7 @@ WaypointPtr
 Waypoints::CheckExistsOrAppend(WaypointPtr waypoint)
 {
   auto found = LookupName(waypoint->name);
-  if (found && found->IsCloseTo(waypoint->location, fixed(100)))
+  if (found && found->IsCloseTo(waypoint->location, 100))
     return found;
 
   Append(waypoint);
@@ -393,7 +393,7 @@ Waypoints::CheckExistsOrAppend(WaypointPtr waypoint)
 
 Waypoint
 Waypoints::GenerateTakeoffPoint(const GeoPoint& location,
-                                const fixed terrain_alt) const
+                                const double terrain_alt) const
 {
   // fallback: create a takeoff point
   Waypoint to_point(location);
@@ -405,7 +405,7 @@ Waypoints::GenerateTakeoffPoint(const GeoPoint& location,
 
 void
 Waypoints::AddTakeoffPoint(const GeoPoint& location,
-                             const fixed terrain_alt)
+                           const double terrain_alt)
 {
   // remove old one first
   WaypointPtr old_takeoff_point = LookupName(_T("(takeoff)"));

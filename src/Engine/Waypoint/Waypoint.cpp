@@ -32,7 +32,7 @@ Waypoint::Waypoint(const GeoPoint &_location)
 }
 
 bool
-Waypoint::IsCloseTo(const GeoPoint &_location, const fixed range) const
+Waypoint::IsCloseTo(const GeoPoint &_location, const double range) const
 {
   return location.Distance(_location) <= range;
 }

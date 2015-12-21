@@ -51,29 +51,29 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
     return false;
 
   src = endptr + 1;
-  fixed sec;
+  double sec;
   if (*endptr == ':') {
     /* 00..59 */
     long l = _tcstol(src, &endptr, 10);
     if (endptr == src || l < 0 || l >= 60)
         return false;
 
-    sec = fixed(l) / 3600;
+    sec = l / 3600.;
   } else if (*endptr == '.') {
     /* 000..999 */
     long l = _tcstol(src, &endptr, 10);
     if (endptr == src + 1 && l >= 0 && l < 100)
-      sec = fixed(l) / (60 * 10);
+      sec = l / (60. * 10);
     else if (endptr == src + 2 && l >= 0 && l < 1000)
-      sec = fixed(l) / (60 * 100);
+      sec = l / (60. * 100);
     else if (endptr == src + 3 && l >= 0 && l < 10000)
-      sec = fixed(l) / (60 * 1000);
+      sec = l / (60. * 1000);
     else
       return false;
   } else
     return false;
 
-  auto value = fixed(deg) + fixed(min) / 60 + sec;
+  auto value = deg + min / 60. + sec;
 
   TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
@@ -122,7 +122,7 @@ ParseRunwayDirection(const TCHAR* src, Runway &dest)
 }
 
 static bool
-ParseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR *src, double &dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -130,7 +130,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
   if (endptr == src)
     return false;
 
-  dest = fixed(value);
+  dest = value;
 
   // Convert to system unit if necessary
   TCHAR unit = *endptr;

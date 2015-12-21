@@ -27,7 +27,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 
 void WaypointListBuilder::Visit(const Waypoints &waypoints) {
-  if (positive(filter.distance))
+  if (filter.distance > 0)
     waypoints.VisitWithinRange(location, filter.distance, *this);
   else
     waypoints.VisitNamePrefix(filter.name, *this);

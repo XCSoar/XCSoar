@@ -30,7 +30,7 @@ WaypointFactory::FallbackElevation(Waypoint &waypoint) const
     // Load waypoint altitude from terrain
     const short t_alt = terrain->GetTerrainHeight(waypoint.location);
     if (!RasterBuffer::IsSpecial(t_alt)) {
-      waypoint.elevation = (fixed)t_alt;
+      waypoint.elevation = t_alt;
       return true;
     }
   }

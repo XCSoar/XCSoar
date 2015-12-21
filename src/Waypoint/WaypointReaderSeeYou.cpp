@@ -52,7 +52,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
   if (endptr != src + 3 || l < 0 || l >= 1000)
     return false;
 
-  auto value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
+  auto value = deg + min / 60. + l / 60000.;
 
   TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
@@ -64,7 +64,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR *src, double &dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -72,7 +72,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
   if (endptr == src)
     return false;
 
-  dest = fixed(value);
+  dest = value;
 
   // Convert to system unit if necessary
   TCHAR unit = *endptr;
@@ -84,7 +84,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
 }
 
 static bool
-ParseDistance(const TCHAR* src, fixed& dest)
+ParseDistance(const TCHAR *src, double &dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -92,7 +92,7 @@ ParseDistance(const TCHAR* src, fixed& dest)
   if (endptr == src)
     return false;
 
-  dest = fixed(value);
+  dest = value;
 
   // Convert to system unit if necessary, assume m as default
   TCHAR* unit = endptr;
@@ -250,16 +250,16 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
       new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
-    fixed rwlen = fixed(-1);
+    double rwlen = -1;
     if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
-        positive(rwlen))
+        rwlen > 0)
       new_waypoint.runway.SetLength(uround(rwlen));
 
     if (iRWDir < n_params && *params[iRWDir]) {
       TCHAR *end;
       int direction =_tcstol(params[iRWDir], &end, 10);
       if (end == params[iRWDir] || direction < 0 || direction > 360 ||
-          (direction == 0 && !positive(rwlen)))
+          (direction == 0 && rwlen <= 0))
         direction = -1;
       else if (direction == 360)
         direction = 0;

@@ -114,7 +114,7 @@ WaypointReaderOzi::ParseLine(const TCHAR *line, Waypoints &way_points)
     return false;
 
   if (ParseNumber(params[14], value) && value != -777)
-    new_waypoint.elevation = Units::ToSysUnit(fixed(value), Unit::FEET);
+    new_waypoint.elevation = Units::ToSysUnit(value, Unit::FEET);
   else if (!factory.FallbackElevation(new_waypoint))
     return false;
 

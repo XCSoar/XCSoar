@@ -58,7 +58,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
   if (endptr == src || *endptr != _T(' '))
     return false;
 
-  auto value = fixed(deg + (double)min / 60 + sec / 3600);
+  auto value = deg + (double)min / 60 + sec / 3600;
   if (!is_positive)
     value = -value;
 
@@ -108,7 +108,7 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p)
   if (endptr == src || *endptr != _T(' '))
     return false;
 
-  UTM u(zone_number, zone_letter, fixed(easting), fixed(northing));
+  UTM u(zone_number, zone_letter, easting, northing);
   p = u.ToGeoPoint();
 
   // ensure longitude is within -180:180
@@ -118,14 +118,14 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, fixed &dest)
+ParseAltitude(const TCHAR *src, double &dest)
 {
   TCHAR *endptr;
   long alt = _tcstol(src, &endptr, 10);
   if (endptr == src)
     return false;
 
-  dest = fixed(alt);
+  dest = alt;
   return true;
 }
 

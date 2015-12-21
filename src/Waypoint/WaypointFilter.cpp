@@ -91,7 +91,7 @@ WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
   auto bearing = location.Bearing(waypoint.location);
   auto direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
 
-  return direction_error < fixed(18);
+  return direction_error < 18;
 }
 
 inline bool
@@ -118,6 +118,6 @@ WaypointFilter::Matches(const Waypoint &waypoint, GeoPoint location,
                         const FAITrianglePointValidator &triangle_validator) const
 {
   return CompareType(waypoint, triangle_validator) &&
-         (!positive(distance) || CompareName(waypoint)) &&
+         (distance <= 0 || CompareName(waypoint)) &&
          CompareDirection(waypoint, location);
 }
