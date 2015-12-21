@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_PASSWORD_DIALOG_HPP
 #define XCSOAR_PROFILE_PASSWORD_DIALOG_HPP
 
+#include "Util/TriState.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -40,7 +41,7 @@ class ProfileMap;
 class Error;
 
 gcc_pure
-bool
+TriState
 ProfileFileHasPassword(Path path);
 
 enum class ProfilePasswordResult {

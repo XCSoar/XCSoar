@@ -33,12 +33,16 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Util/Error.hxx"
 
-bool
+TriState
 ProfileFileHasPassword(Path path)
 {
   ProfileMap map;
-  return Profile::LoadFile(map, path, IgnoreError()) &&
-    map.Exists(ProfileKeys::Password);
+  if (!Profile::LoadFile(map, path, IgnoreError()))
+    return TriState::UNKNOWN;
+
+  return map.Exists(ProfileKeys::Password)
+    ? TriState::TRUE
+    : TriState::FALSE;
 }
 
 ProfilePasswordResult
