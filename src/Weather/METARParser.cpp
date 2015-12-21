@@ -523,12 +523,8 @@ ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
   end++;
 
   GeoPoint location;
-  location.latitude = Angle::Degrees(fixed(lat_deg) +
-                                     fixed(lat_min) / 60 +
-                                     fixed(lat_sec) / 3600);
-  location.longitude = Angle::Degrees(fixed(lon_deg) +
-                                      fixed(lon_min) / 60 +
-                                      fixed(lon_sec) / 3600);
+  location.latitude = Angle::DMS(lat_deg, lat_min, lat_sec);
+  location.longitude = Angle::DMS(lon_deg, lon_min, lon_sec);
 
   if (!north)
     location.latitude.Flip();
