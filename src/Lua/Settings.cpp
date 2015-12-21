@@ -55,10 +55,10 @@ l_settings_index(lua_State *L)
 static int
 l_settings_setmc(lua_State *L)
 {
-  if (lua_gettop(L) != 0)
+  if (lua_gettop(L) != 1)
     return luaL_error(L, "Invalid parameters");
 
-  ActionInterface::SetMacCready(1.0, false);
+  ActionInterface::SetMacCready(luaL_checknumber(L, 1), false);
   return 0;
 }
 
