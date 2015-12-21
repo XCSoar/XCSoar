@@ -112,6 +112,14 @@ l_settings_index(lua_State *L)
       const TaskBehaviour &task_behaviour = settings_computer.task;
     
       Lua::Push(L, task_behaviour.safety_height_arrival);
+  } else if (StringIsEqual(name, "terrainheight")) {
+      /* The height above terrain that the glider must clear during 
+         final glide. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.route_planner.safety_height_terrain);
   } else
     return 0;
 
