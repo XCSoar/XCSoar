@@ -33,27 +33,27 @@ bool
 ParsePolarShape(PolarShape &shape, const char *s)
 {
   char *p;
-  auto v1 = Units::ToSysUnit(fixed(ParseDouble(s, &p)), Unit::KILOMETER_PER_HOUR);
+  auto v1 = Units::ToSysUnit(ParseDouble(s, &p), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  auto w1 = fixed(ParseDouble(p + 1, &p));
+  auto w1 = ParseDouble(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  auto v2 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  auto v2 = Units::ToSysUnit(ParseDouble(p + 1, &p), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  auto w2 = fixed(ParseDouble(p + 1, &p));
+  auto w2 = ParseDouble(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  auto v3 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  auto v3 = Units::ToSysUnit(ParseDouble(p + 1, &p), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  auto w3 = fixed(ParseDouble(p + 1, &p));
+  auto w3 = ParseDouble(p + 1, &p);
   if (*p != '\0')
     return false;
 
@@ -79,37 +79,37 @@ ParsePolar(PolarInfo &polar_r, const char *s)
     return false;
 
   char *p;
-  polar.reference_mass = fixed(ParseDouble(s, &p));
+  polar.reference_mass = ParseDouble(s, &p);
   if (*p != _T(','))
     return false;
 
-  polar.max_ballast = fixed(ParseDouble(p + 1, &p));
+  polar.max_ballast = ParseDouble(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.shape[0].v = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[0].v = Units::ToSysUnit(ParseDouble(p + 1, &p), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.shape[0].w = fixed(ParseDouble(p + 1, &p));
+  polar.shape[0].w = ParseDouble(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.shape[1].v = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[1].v = Units::ToSysUnit(ParseDouble(p + 1, &p), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.shape[1].w = fixed(ParseDouble(p + 1, &p));
+  polar.shape[1].w = ParseDouble(p + 1, &p);
   if (*p != _T(','))
     return false;
 
-  polar.shape[2].v = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[2].v = Units::ToSysUnit(ParseDouble(p + 1, &p), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.shape[2].w = fixed(ParseDouble(p + 1, &p));
-  polar.wing_area = (*p != _T(',')) ? fixed(0) : fixed(ParseDouble(p + 1, &p));
-  polar.v_no = (*p != _T(',')) ? fixed(0) : fixed(ParseDouble(p + 1, &p));
+  polar.shape[2].w = ParseDouble(p + 1, &p);
+  polar.wing_area = (*p != _T(',')) ? 0. : ParseDouble(p + 1, &p);
+  polar.v_no = (*p != _T(',')) ? 0. : ParseDouble(p + 1, &p);
 
   polar_r = polar;
   return true;
@@ -118,7 +118,7 @@ ParsePolar(PolarInfo &polar_r, const char *s)
 void
 FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size)
 {
-  fixed v1, v2, v3;
+  double v1, v2, v3;
   v1 = Units::ToUserUnit(shape[0].v, Unit::KILOMETER_PER_HOUR);
   v2 = Units::ToUserUnit(shape[1].v, Unit::KILOMETER_PER_HOUR);
   v3 = Units::ToUserUnit(shape[2].v, Unit::KILOMETER_PER_HOUR);
@@ -133,7 +133,7 @@ void
 FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
             bool include_v_no)
 {
-  fixed v1, v2, v3;
+  double v1, v2, v3;
   v1 = Units::ToUserUnit(polar.shape[0].v, Unit::KILOMETER_PER_HOUR);
   v2 = Units::ToUserUnit(polar.shape[1].v, Unit::KILOMETER_PER_HOUR);
   v3 = Units::ToUserUnit(polar.shape[2].v, Unit::KILOMETER_PER_HOUR);

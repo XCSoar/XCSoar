@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_SHAPE_HPP
 #define XCSOAR_POLAR_SHAPE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <array>
@@ -35,12 +34,12 @@ struct PolarPoint {
   /**
    * Speed of point [m/s].
    */
-  fixed v;
+  double v;
 
   /**
    * Sink rate of point [m/s].  Must be negative.
    */
-  fixed w;
+  double w;
 };
 
 struct PolarShape {

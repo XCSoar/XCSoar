@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_POLAR_INFO_HPP
 
 #include "Shape.hpp"
-#include "Math/fixed.hpp"
 
 struct PolarCoefficients;
 
@@ -36,13 +35,13 @@ struct PolarInfo
 {
   // Using doubles here to simplify the code in PolarStore.cpp
   //
-  fixed reference_mass; /**< Reference Mass (kg) */
-  fixed max_ballast;  /**< Max water ballast (l) */
+  double reference_mass; /**< Reference Mass (kg) */
+  double max_ballast;  /**< Max water ballast (l) */
 
   PolarShape shape;
 
-  fixed wing_area;    /**< Reference wing area (m^2) */
-  fixed v_no;         /**< Maximum speed for normal operations (m/s) */
+  double wing_area;    /**< Reference wing area (m^2) */
+  double v_no;         /**< Maximum speed for normal operations (m/s) */
 
   gcc_pure
   PolarCoefficients CalculateCoefficients() const;
