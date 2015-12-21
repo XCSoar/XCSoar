@@ -40,7 +40,8 @@
 
 #include <string.h>
 
-static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
+static void
+test_reach(const RasterMap &map, double mwind, double mc)
 {
   GlideSettings settings;
   settings.SetDefaults();
@@ -52,7 +53,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 
   GeoPoint origin(map.GetMapCenter());
 
-  fixed pd = map.PixelDistance(origin, 1);
+  double pd = map.PixelDistance(origin, 1);
   printf("# pixel size %g\n", (double)pd);
 
   bool retval= true;
@@ -78,10 +79,10 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        fixed fy = (fixed)j / (ny - 1) * 2 - fixed(1);
-        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
-                   origin.latitude + Angle::Degrees(fixed(0.6) * fy));
+        double fx = (double)i / (nx - 1) * 2 - 1;
+        double fy = (double)j / (ny - 1) * 2 - 1;
+        GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
+                   origin.latitude + Angle::Degrees(0.6 * fy));
         short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, RoughAltitude(h));
         ReachResult reach;
@@ -128,12 +129,12 @@ int main(int argc, char** argv) {
   do {
     UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
                        map.GetProjection(),
-                       map.GetMapCenter(), fixed(50000));
+                       map.GetMapCenter(), 50000);
   } while (map.IsDirty());
   zzip_dir_close(dir);
 
   plan_tests(1);
-  test_reach(map, fixed(0), fixed(0.1));
+  test_reach(map, 0, 0.1);
 
   return exit_status();
 }

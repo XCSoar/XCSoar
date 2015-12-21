@@ -41,7 +41,7 @@
 #include <string.h>
 
 static void
-test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
+test_troute(const RasterMap &map, double mwind, double mc, RoughAltitude ceiling)
 {
   GlideSettings settings;
   settings.SetDefaults();
@@ -65,10 +65,10 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        auto fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        auto fy = (fixed)j / (ny - 1) * 2 - fixed(1);
-        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
-                   origin.latitude + Angle::Degrees(fixed(0.4) * fy));
+        auto fx = (double)i / (nx - 1) * 2 - 1;
+        auto fy = (double)j / (ny - 1) * 2 - 1;
+        GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
+                   origin.latitude + Angle::Degrees(0.4 * fy));
         short h = map.GetInterpolatedHeight(x);
         fout << x.longitude.Degrees() << " " << x.latitude.Degrees() << " " << h << "\n";
       }
@@ -81,15 +81,15 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   config.mode = RoutePlannerConfig::Mode::BOTH;
 
   unsigned i=0;
-  for (fixed ang = fixed(0); ang < M_2PI; ang += fixed(M_PI / 8)) {
-    GeoPoint dest = GeoVector(fixed(40000.0), Angle::Radians(ang)).EndPoint(origin);
+  for (double ang = 0; ang < M_2PI; ang += M_PI / 8) {
+    GeoPoint dest = GeoVector(40000.0, Angle::Radians(ang)).EndPoint(origin);
 
     short hdest = map.GetHeight(dest)+100;
 
     retval = route.Solve(AGeoPoint(origin,
                                    RoughAltitude(map.GetHeight(origin) + 100)),
                          AGeoPoint(dest,
-                                   RoughAltitude(positive(mc)
+                                   RoughAltitude(mc > 0
                                                  ? hdest
                                                  : std::max(hdest, (short)3200))),
                          config, ceiling);
@@ -101,7 +101,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
     i++;
   }
 
-  // polar.SetMC(fixed(0));
+  // polar.SetMC(0);
   // route.UpdatePolar(polar, wind);
 }
 
@@ -134,14 +134,14 @@ int main(int argc, char** argv) {
   do {
     UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
                        map.GetProjection(),
-                       map.GetMapCenter(), fixed(100000));
+                       map.GetMapCenter(), 100000);
   } while (map.IsDirty());
   zzip_dir_close(dir);
 
   plan_tests(16*3);
-  test_troute(map, fixed(0), fixed(0.1), RoughAltitude(10000));
-  test_troute(map, fixed(0), fixed(0), RoughAltitude(10000));
-  test_troute(map, fixed(5.0), fixed(1), RoughAltitude(10000));
+  test_troute(map, 0, 0.1, RoughAltitude(10000));
+  test_troute(map, 0, 0, RoughAltitude(10000));
+  test_troute(map, 5.0, 1, RoughAltitude(10000));
 
   return exit_status();
 }

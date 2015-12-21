@@ -67,14 +67,14 @@ int main(int argc, char **argv)
   ok1(!b.IsInside(Angle::Degrees(7), Angle::Degrees(1)));
   ok1(!b.IsInside(Angle::Degrees(9), Angle::Degrees(1)));
 
-  b = b.Scale(fixed(2));
+  b = b.Scale(2);
 
   ok1(equals(b.GetEast(), 11));
   ok1(equals(b.GetWest(), -1));
   ok1(equals(b.GetNorth(), 7));
   ok1(equals(b.GetSouth(), 3));
 
-  b = b.Scale(fixed(0.5));
+  b = b.Scale(0.5);
 
   ok1(equals(b.GetEast(), 8));
   ok1(equals(b.GetWest(), 2));

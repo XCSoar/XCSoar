@@ -29,9 +29,9 @@ int main(int argc, char **argv)
 {
   plan_tests(39);
 
-  FlatPoint p1(fixed(1), fixed(1));
-  FlatPoint p2(fixed(1), fixed(2));
-  FlatPoint p3(fixed(3), fixed(10));
+  FlatPoint p1(1, 1);
+  FlatPoint p2(1, 2);
+  FlatPoint p3(3, 10);
 
   FlatLine l1(p1, p2); // 0, 1
   FlatLine l2(p1, p3); // 2, 9
@@ -74,29 +74,29 @@ int main(int argc, char **argv)
 
   // test IntersectOriginCircle()
   FlatPoint i1, i2;
-  ok1(!l1.IntersectOriginCircle(fixed(0.9), i1, i2));
+  ok1(!l1.IntersectOriginCircle(0.9, i1, i2));
 
-  ok1(l1.IntersectOriginCircle(fixed(1.8027756377319946465596106337352), i1, i2));
+  ok1(l1.IntersectOriginCircle(1.8027756377319946465596106337352, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 1.5));
   ok1(equals(i2.x, 1));
   ok1(equals(i2.y, -1.5));
 
-  ok1(l2.IntersectOriginCircle(fixed(5.8523499553598125545510491371143), i1, i2));
+  ok1(l2.IntersectOriginCircle(5.8523499553598125545510491371143, i1, i2));
   ok1(equals(i1.x, 2));
   ok1(equals(i1.y, 5.5));
   ok1(equals(i2.x, -0.517647));
   ok1(equals(i2.y, -5.829411));
 
   // test IntersectCircle()
-  FlatPoint c(fixed(1), fixed(1.5));
-  ok1(l1.IntersectCircle(fixed(0.25), c, i1, i2));
+  FlatPoint c(1, 1.5);
+  ok1(l1.IntersectCircle(0.25, c, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 1.75));
   ok1(equals(i2.x, 1));
   ok1(equals(i2.y, 1.25));
 
-  ok1(l1.IntersectCircle(fixed(1), c, i1, i2));
+  ok1(l1.IntersectCircle(1, c, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 2.5));
   ok1(equals(i2.x, 1));

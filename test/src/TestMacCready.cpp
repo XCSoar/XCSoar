@@ -30,39 +30,39 @@
 #include "TestUtil.hpp"
 
 static GlideSettings glide_settings;
-static GlidePolar glide_polar(fixed(0));
+static GlidePolar glide_polar(0);
 
 static void
-Test(const fixed distance, const fixed altitude, const SpeedVector wind)
+Test(const double distance, const double altitude, const SpeedVector wind)
 {
   const GeoVector vector(distance, Angle::Zero());
   const GlideState state(vector,
-                         fixed(2000), fixed(2000) + altitude,
+                         2000, 2000 + altitude,
                          wind);
   const GlideResult result =
     MacCready::Solve(glide_settings, glide_polar, state);
 
-  const fixed ld_ground = glide_polar.GetLDOverGround(vector.bearing, wind);
+  const double ld_ground = glide_polar.GetLDOverGround(vector.bearing, wind);
 
-  const fixed mc = glide_polar.GetMC();
-  const fixed v_climb_progress = mc * ld_ground - state.head_wind;
+  const double mc = glide_polar.GetMC();
+  const double v_climb_progress = mc * ld_ground - state.head_wind;
 
-  const fixed initial_glide_distance = state.altitude_difference * ld_ground;
+  const double initial_glide_distance = state.altitude_difference * ld_ground;
   if (initial_glide_distance >= distance ||
-      (!positive(mc) && !positive(v_climb_progress))) {
+      (mc <= 0 && v_climb_progress <= 0)) {
     /* reachable by pure glide */
     ok1(result.validity == GlideResult::Validity::OK);
 
-    const fixed best_speed =
+    const double best_speed =
       glide_polar.GetBestGlideRatioSpeed(state.head_wind);
-    const fixed best_sink = glide_polar.SinkRate(best_speed);
-    const fixed ld_ground2 = positive(mc)
+    const double best_sink = glide_polar.SinkRate(best_speed);
+    const double ld_ground2 = mc > 0
       ? ld_ground
       : (best_speed - state.head_wind) / best_sink;
 
-    const fixed height_glide = distance / ld_ground2;
-    const fixed height_climb = fixed(0);
-    const fixed altitude_difference = altitude - height_glide;
+    const double height_glide = distance / ld_ground2;
+    const double height_climb = 0;
+    const double altitude_difference = altitude - height_glide;
 
     ok1(equals(result.head_wind, wind.norm));
     ok1(equals(result.vector.distance, distance));
@@ -72,33 +72,33 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
     return;
   }
 
-  if (!positive(v_climb_progress)) {
+  if (v_climb_progress <= 0) {
     /* excessive wind */
     ok1(result.validity == GlideResult::Validity::WIND_EXCESSIVE);
     return;
   }
 
   /*
-  const fixed drifted_distance = (distance - initial_glide_distance)
+  const double drifted_distance = (distance - initial_glide_distance)
     * state.head_wind / v_climb_progress;
     */
-  const fixed drifted_height_climb = (distance - initial_glide_distance)
+  const double drifted_height_climb = (distance - initial_glide_distance)
     * mc / v_climb_progress;
-  const fixed drifted_height_glide =
+  const double drifted_height_glide =
     drifted_height_climb + state.altitude_difference;
 
-  const fixed height_glide = drifted_height_glide;
-  const fixed altitude_difference = altitude - height_glide;
-  const fixed height_climb = drifted_height_climb;
+  const double height_glide = drifted_height_glide;
+  const double altitude_difference = altitude - height_glide;
+  const double height_climb = drifted_height_climb;
 
-  const fixed time_climb = height_climb / mc;
-  const fixed time_glide = height_glide / glide_polar.GetSBestLD();
-  const fixed time_elapsed = time_climb + time_glide;
+  const double time_climb = height_climb / mc;
+  const double time_glide = height_glide / glide_polar.GetSBestLD();
+  const double time_elapsed = time_climb + time_glide;
 
   /* more tolerance with strong wind because this unit test doesn't
      optimise pure glide */
-  const int accuracy = positive(altitude) && positive(wind.norm)
-    ? (wind.norm > fixed(5) ? 5 : 10)
+  const int accuracy = altitude > 0 && wind.norm > 0
+    ? (wind.norm > 5 ? 5 : 10)
     : ACCURACY;
 
   ok1(result.validity == GlideResult::Validity::OK);
@@ -113,30 +113,30 @@ Test(const fixed distance, const fixed altitude, const SpeedVector wind)
 static void
 TestWind(const SpeedVector &wind)
 {
-  Test(fixed(10000), fixed(-200), wind);
-  Test(fixed(10000), fixed(-100), wind);
-  Test(fixed(10000), fixed(0), wind);
-  Test(fixed(10000), fixed(100), wind);
-  Test(fixed(10000), fixed(200), wind);
+  Test(10000, -200, wind);
+  Test(10000, -100, wind);
+  Test(10000, 0, wind);
+  Test(10000, 100, wind);
+  Test(10000, 200, wind);
 
-  Test(fixed(1000), fixed(-500), wind);
-  Test(fixed(1000), fixed(-100), wind);
-  Test(fixed(1000), fixed(0), wind);
-  Test(fixed(1000), fixed(100), wind);
-  Test(fixed(1000), fixed(500), wind);
-  Test(fixed(100000), fixed(-1000), wind);
-  Test(fixed(100000), fixed(4000), wind);
+  Test(1000, -500, wind);
+  Test(1000, -100, wind);
+  Test(1000, 0, wind);
+  Test(1000, 100, wind);
+  Test(1000, 500, wind);
+  Test(100000, -1000, wind);
+  Test(100000, 4000, wind);
 }
 
 static void
 TestAll()
 {
-  TestWind(SpeedVector(Angle::Zero(), fixed(0)));
-  TestWind(SpeedVector(Angle::Zero(), fixed(2)));
-  TestWind(SpeedVector(Angle::Zero(), fixed(5)));
-  TestWind(SpeedVector(Angle::Zero(), fixed(10)));
-  TestWind(SpeedVector(Angle::Zero(), fixed(15)));
-  TestWind(SpeedVector(Angle::Zero(), fixed(30)));
+  TestWind(SpeedVector(Angle::Zero(), 0));
+  TestWind(SpeedVector(Angle::Zero(), 2));
+  TestWind(SpeedVector(Angle::Zero(), 5));
+  TestWind(SpeedVector(Angle::Zero(), 10));
+  TestWind(SpeedVector(Angle::Zero(), 15));
+  TestWind(SpeedVector(Angle::Zero(), 30));
 }
 
 int main(int argc, char **argv)
@@ -147,16 +147,16 @@ int main(int argc, char **argv)
 
   TestAll();
 
-  glide_polar.SetMC(fixed(0.1));
+  glide_polar.SetMC(0.1);
   TestAll();
 
-  glide_polar.SetMC(fixed(1));
+  glide_polar.SetMC(1);
   TestAll();
 
-  glide_polar.SetMC(fixed(4));
+  glide_polar.SetMC(4);
   TestAll();
 
-  glide_polar.SetMC(fixed(10));
+  glide_polar.SetMC(10);
   TestAll();
 
   return exit_status();

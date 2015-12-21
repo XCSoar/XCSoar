@@ -30,7 +30,7 @@ class TestProjection : public Projection {
 public:
   TestProjection() {
     SetScreenOrigin(0, 0);
-    SetScale(fixed(640) / (fixed(100) * 2));
+    SetScale(640. / (100 * 2));
     SetGeoLocation(GeoPoint(Angle::Degrees(7.7061111111111114),
                             Angle::Degrees(51.051944444444445)));
   }

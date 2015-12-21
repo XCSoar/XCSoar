@@ -37,7 +37,7 @@ operator<<(std::ostream &os, const AirspaceAltitude &aa)
     break;
 
   case AltitudeReference::AGL:
-    if (!positive(aa.altitude_above_terrain))
+    if (aa.altitude_above_terrain <= 0)
       os << "GND";
     else
       os << iround(aa.altitude_above_terrain) << " AGL";

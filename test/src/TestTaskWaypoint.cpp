@@ -36,8 +36,8 @@ public:
     return GeoVector();
   }
 
-  virtual fixed GetElevation() const {
-    return fixed(0);
+  double GetElevation() const override {
+    return 0;
   }
 };
 
@@ -53,7 +53,7 @@ TaskWaypointTest::Run()
   GeoPoint gp(Angle::Degrees(20), Angle::Degrees(50));
   Waypoint wp(gp);
   wp.name = _T("Test");
-  wp.elevation = fixed(42);
+  wp.elevation = 42;
 
   DummyTaskWaypoint tw(TaskPointType::AST, WaypointPtr(new Waypoint(wp)));
 

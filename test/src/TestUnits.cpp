@@ -30,27 +30,27 @@ int main(int argc, char **argv)
   UnitSetting &config = Units::current;
 
   config.distance_unit = Unit::METER;
-  ok1(equals(Units::ToUserDistance(fixed(1)), 1));
+  ok1(equals(Units::ToUserDistance(1), 1));
 
   config.distance_unit = Unit::KILOMETER;
-  ok1(equals(Units::ToUserDistance(fixed(1)), 0.001));
+  ok1(equals(Units::ToUserDistance(1), 0.001));
 
   config.temperature_unit = Unit::KELVIN;
-  ok1(equals(Units::ToUserTemperature(fixed(0)), fixed(0)));
-  ok1(equals(Units::ToSysTemperature(fixed(0)), fixed(0)));
+  ok1(equals(Units::ToUserTemperature(0), 0));
+  ok1(equals(Units::ToSysTemperature(0), 0));
 
   config.temperature_unit = Unit::DEGREES_CELCIUS;
-  ok1(equals(Units::ToUserTemperature(fixed(0)), -273.15));
-  ok1(equals(Units::ToUserTemperature(fixed(20)), -253.15));
-  ok1(equals(Units::ToSysTemperature(fixed(0)), 273.15));
-  ok1(equals(Units::ToSysTemperature(fixed(20)), 293.15));
+  ok1(equals(Units::ToUserTemperature(0), -273.15));
+  ok1(equals(Units::ToUserTemperature(20), -253.15));
+  ok1(equals(Units::ToSysTemperature(0), 273.15));
+  ok1(equals(Units::ToSysTemperature(20), 293.15));
 
   config.temperature_unit = Unit::DEGREES_FAHRENHEIT;
-  ok1(equals(Units::ToUserTemperature(fixed(0)), -459.67));
-  ok1(equals(Units::ToSysTemperature(fixed(0)), 255.37));
+  ok1(equals(Units::ToUserTemperature(0), -459.67));
+  ok1(equals(Units::ToSysTemperature(0), 255.37));
 
-  ok1(equals(Units::ToUserUnit(fixed(1013.25), Unit::TORR), 760));
-  ok1(equals(Units::ToUserUnit(fixed(1013.25), Unit::INCH_MERCURY), 29.92));
+  ok1(equals(Units::ToUserUnit(1013.25, Unit::TORR), 760));
+  ok1(equals(Units::ToUserUnit(1013.25, Unit::INCH_MERCURY), 29.92));
 
   return exit_status();
 }

@@ -36,8 +36,8 @@ public:
     return GeoVector();
   }
 
-  virtual fixed GetElevation() const {
-    return fixed(0);
+  double GetElevation() const override {
+    return 0;
   }
 };
 

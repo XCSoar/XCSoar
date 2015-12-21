@@ -63,11 +63,11 @@ int main(int argc, char **argv)
   do {
     UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
                        map.GetProjection(),
-                       map.GetMapCenter(), fixed(50000));
+                       map.GetMapCenter(), 50000);
   } while (map.IsDirty());
   zzip_dir_close(dir);
 
-  fixed radius = fixed(50000);
+  double radius = 50000;
   WindowProjection projection;
   projection.SetScreenSize({640, 480});
   projection.SetScaleFromRadius(radius);

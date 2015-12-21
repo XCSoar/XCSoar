@@ -45,23 +45,23 @@ void
 GlidePolarTest::Init()
 {
   // Polar 1 from PolarStore (206 Hornet)
-  polar.SetCoefficients(PolarCoefficients(fixed(0.0022032), fixed(-0.08784),
-                                          fixed(1.47)), false);
+  polar.SetCoefficients(PolarCoefficients(0.0022032, -0.08784,
+                                          1.47), false);
 
-  polar.SetReferenceMass(fixed(318), false);
-  polar.SetDryMass(fixed(318), false);
-  polar.SetBallastRatio(fixed(100) / polar.reference_mass);
+  polar.SetReferenceMass(318, false);
+  polar.SetDryMass(318, false);
+  polar.SetBallastRatio(100 / polar.reference_mass);
 
-  polar.SetWingArea(fixed(9.8));
+  polar.SetWingArea(9.8);
 
   // No ballast and no bugs on the wings
-  polar.ballast = fixed(0);
-  polar.bugs = fixed(1);
+  polar.ballast = 0;
+  polar.bugs = 1;
 
   // MC zero
-  polar.mc = fixed(0);
+  polar.mc = 0;
 
-  polar.SetVMax(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR), false);
+  polar.SetVMax(Units::ToSysUnit(200, Unit::KILOMETER_PER_HOUR), false);
 }
 
 void
@@ -73,9 +73,9 @@ GlidePolarTest::TestBasic()
   ok1(equals(polar.polar.b, polar.ideal_polar.b));
   ok1(equals(polar.polar.c, polar.ideal_polar.c));
 
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)), 0.606));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)), 0.99));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)), 1.918));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)), 0.606));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR)), 0.99));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(160, Unit::KILOMETER_PER_HOUR)), 1.918));
 
   ok1(equals(polar.GetSMax(), polar.SinkRate(polar.GetVMax())));
 
@@ -98,12 +98,12 @@ GlidePolarTest::TestBasic()
 void
 GlidePolarTest::TestBallast()
 {
-  polar.SetBallast(fixed(0.25));
+  polar.SetBallast(0.25);
 
   ok1(equals(polar.GetBallastLitres(), 25));
   ok1(equals(polar.GetBallast(), 0.25));
 
-  polar.SetBallastLitres(fixed(50));
+  polar.SetBallastLitres(50);
 
   ok1(equals(polar.GetBallastLitres(), 50));
   ok1(equals(polar.GetBallast(), 0.5));
@@ -111,55 +111,55 @@ GlidePolarTest::TestBallast()
   ok1(equals(polar.GetWingLoading(), 37.551020408));
   ok1(polar.HasBallast());
 
-  fixed loading_factor = sqrt(polar.GetTotalMass() / polar.reference_mass);
+  double loading_factor = sqrt(polar.GetTotalMass() / polar.reference_mass);
   ok1(equals(polar.polar.a, polar.ideal_polar.a / loading_factor));
   ok1(equals(polar.polar.b, polar.ideal_polar.b));
   ok1(equals(polar.polar.c, polar.ideal_polar.c * loading_factor));
 
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)),
              0.640739));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR)),
              0.928976));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(160, Unit::KILOMETER_PER_HOUR)),
              1.722908));
 
   ok1(equals(polar.GetVMin(), 21.44464));
   ok1(equals(polar.GetVBestLD(), 27.78703));
 
-  polar.SetBallast(fixed(0));
+  polar.SetBallast(0);
   ok1(!polar.HasBallast());
 }
 
 void
 GlidePolarTest::TestBugs()
 {
-  polar.SetBugs(fixed(0.75));
+  polar.SetBugs(0.75);
   ok1(equals(polar.GetBugs(), 0.75));
 
   ok1(equals(polar.polar.a, polar.ideal_polar.a * 4 / 3));
   ok1(equals(polar.polar.b, polar.ideal_polar.b * 4 / 3));
   ok1(equals(polar.polar.c, polar.ideal_polar.c * 4 / 3));
 
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)),
              0.808));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR)),
              1.32));
-  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)),
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(160, Unit::KILOMETER_PER_HOUR)),
              2.557333));
 
   ok1(equals(polar.GetVMin(), 19.93464));
   ok1(equals(polar.GetVBestLD(), 25.83043));
 
-  polar.SetBugs(fixed(1));
+  polar.SetBugs(1);
 }
 
 void
 GlidePolarTest::TestMC()
 {
-  polar.SetMC(fixed(1));
+  polar.SetMC(1);
   ok1(equals(polar.GetVBestLD(), 33.482780452));
 
-  polar.SetMC(fixed(0));
+  polar.SetMC(0);
   ok1(equals(polar.GetVBestLD(), 25.830434162));
 }
 

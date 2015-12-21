@@ -31,7 +31,7 @@ Copyright_License {
 
 static void
 AppendArc(std::vector<GeoPoint> &points, GeoPoint center,
-          fixed radius, fixed _step)
+          double radius, double _step)
 {
   Angle start = Angle::Zero();
   Angle end = Angle::HalfCircle();
@@ -53,7 +53,7 @@ AppendArc(std::vector<GeoPoint> &points, GeoPoint center,
 }
 
 static void
-TestApproximation(fixed radius, fixed step)
+TestApproximation(double radius, double step)
 {
   GeoPoint center(Angle::Degrees(7), Angle::Degrees(51));
 
@@ -62,11 +62,11 @@ TestApproximation(fixed radius, fixed step)
 
   printf("Number of points: %u\n\n", (unsigned)points.size());
 
-  fixed max_error = fixed(0);
+  double max_error = 0;
 
   for (auto it = points.begin(), it_last = it++, it_end = points.end();
       it != it_end; it_last = it++) {
-    for (fixed x = fixed(0); x < fixed(1); x += fixed(0.1)) {
+    for (double x = 0; x < 1; x += 0.1) {
       GeoPoint test_point = (*it_last).Interpolate(*it, x);
       auto distance = center.Distance(test_point);
       auto error = fabs(radius - distance);
@@ -82,8 +82,8 @@ int main(int argc, char **argv)
 {
   Args args(argc, argv, "RADIUS [DEGREE STEPWIDTH = 5]");
 
-  auto radius = fixed(args.ExpectNextInt());
-  auto step = args.IsEmpty() ? fixed(5) : args.ExpectNextDouble();
+  double radius = args.ExpectNextInt();
+  double step = args.IsEmpty() ? 5 : args.ExpectNextDouble();
 
   printf("Airspace Arc Approximation\n\nRadius: %.0f m\nDegree Stepwith: %f deg\n\n",
          (double)radius, (double)step);

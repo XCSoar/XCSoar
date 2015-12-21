@@ -29,12 +29,12 @@ int main(int argc, char **argv)
   plan_tests(3);
 
   GeoPoint location(Angle::Degrees(7), Angle::Degrees(45));
-  fixed altitude(1300);
-  fixed average(2.5);
-  SpeedVector wind(Angle::Degrees(60), fixed(20));
+  double altitude(1300);
+  double average(2.5);
+  SpeedVector wind(Angle::Degrees(60), 20);
 
   GeoPoint ground_location(Angle::Zero(), Angle::Zero());
-  fixed ground_alt;
+  double ground_alt;
 
   EstimateThermalBase(nullptr, location, altitude, average, wind,
                       ground_location, ground_alt);

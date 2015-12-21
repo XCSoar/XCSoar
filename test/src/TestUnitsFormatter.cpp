@@ -34,22 +34,22 @@ TestAltitude()
   TCHAR buffer[256];
 
   // Test FormatAltitude()
-  FormatAltitude(buffer, fixed(1234), Unit::METER);
+  FormatAltitude(buffer, 1234, Unit::METER);
   ok1(StringIsEqual(buffer, _T("1234 m")));
 
-  FormatAltitude(buffer, Units::ToSysUnit(fixed(1234), Unit::FEET), Unit::FEET);
+  FormatAltitude(buffer, Units::ToSysUnit(1234, Unit::FEET), Unit::FEET);
   ok1(StringIsEqual(buffer, _T("1234 ft")));
 
-  FormatAltitude(buffer, fixed(-1234), Unit::METER);
+  FormatAltitude(buffer, -1234, Unit::METER);
   ok1(StringIsEqual(buffer, _T("-1234 m")));
 
-  FormatAltitude(buffer, Units::ToSysUnit(fixed(-1234), Unit::FEET), Unit::FEET);
+  FormatAltitude(buffer, Units::ToSysUnit(-1234, Unit::FEET), Unit::FEET);
   ok1(StringIsEqual(buffer, _T("-1234 ft")));
 
-  FormatAltitude(buffer, fixed(1234), Unit::METER, false);
+  FormatAltitude(buffer, 1234, Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("1234")));
 
-  FormatAltitude(buffer, fixed(-1234), Unit::METER, false);
+  FormatAltitude(buffer, -1234, Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("-1234")));
 }
 
@@ -59,24 +59,24 @@ TestRelativeAltitude()
   TCHAR buffer[256];
 
   // Test FormatRelativeAltitude()
-  FormatRelativeAltitude(buffer, fixed(1234), Unit::METER);
+  FormatRelativeAltitude(buffer, 1234, Unit::METER);
   ok1(StringIsEqual(buffer, _T("+1234 m")));
 
-  FormatRelativeAltitude(buffer, Units::ToSysUnit(fixed(1234), Unit::FEET),
+  FormatRelativeAltitude(buffer, Units::ToSysUnit(1234, Unit::FEET),
                          Unit::FEET);
   ok1(StringIsEqual(buffer, _T("+1234 ft")));
 
-  FormatRelativeAltitude(buffer, fixed(-1234), Unit::METER);
+  FormatRelativeAltitude(buffer, -1234, Unit::METER);
   ok1(StringIsEqual(buffer, _T("-1234 m")));
 
-  FormatRelativeAltitude(buffer, Units::ToSysUnit(fixed(-1234), Unit::FEET),
+  FormatRelativeAltitude(buffer, Units::ToSysUnit(-1234, Unit::FEET),
                          Unit::FEET);
   ok1(StringIsEqual(buffer, _T("-1234 ft")));
 
-  FormatRelativeAltitude(buffer, fixed(1234), Unit::METER, false);
+  FormatRelativeAltitude(buffer, 1234, Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("+1234")));
 
-  FormatRelativeAltitude(buffer, fixed(-1234), Unit::METER, false);
+  FormatRelativeAltitude(buffer, -1234, Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("-1234")));
 }
 
@@ -86,69 +86,69 @@ TestDistance()
   TCHAR buffer[256];
 
   // Test FormatDistance()
-  FormatDistance(buffer, fixed(123.4), Unit::METER);
+  FormatDistance(buffer, 123.4, Unit::METER);
   ok1(StringIsEqual(buffer, _T("123 m")));
 
-  FormatDistance(buffer, fixed(123.4), Unit::METER, false);
+  FormatDistance(buffer, 123.4, Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatDistance(buffer, fixed(123.4), Unit::METER, true, 1);
+  FormatDistance(buffer, 123.4, Unit::METER, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 m")));
 
-  FormatDistance(buffer, fixed(123.4), Unit::METER, false, 1);
+  FormatDistance(buffer, 123.4, Unit::METER, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 
-  FormatDistance(buffer, fixed(123.4), Unit::METER, true, 2);
+  FormatDistance(buffer, 123.4, Unit::METER, true, 2);
   ok1(StringIsEqual(buffer, _T("123.40 m")));
 
-  FormatDistance(buffer, fixed(123.4), Unit::METER, false, 2);
+  FormatDistance(buffer, 123.4, Unit::METER, false, 2);
   ok1(StringIsEqual(buffer, _T("123.40")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::KILOMETER),
                  Unit::KILOMETER);
   ok1(StringIsEqual(buffer, _T("123 km")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::KILOMETER),
                  Unit::KILOMETER, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::KILOMETER),
                  Unit::KILOMETER, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 km")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::KILOMETER),
                  Unit::KILOMETER, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::NAUTICAL_MILES),
                  Unit::NAUTICAL_MILES);
   ok1(StringIsEqual(buffer, _T("123 NM")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::NAUTICAL_MILES),
                  Unit::NAUTICAL_MILES, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::NAUTICAL_MILES),
                  Unit::NAUTICAL_MILES, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 NM")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::NAUTICAL_MILES),
                  Unit::NAUTICAL_MILES, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::STATUTE_MILES),
                  Unit::STATUTE_MILES);
   ok1(StringIsEqual(buffer, _T("123 mi")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::STATUTE_MILES),
                  Unit::STATUTE_MILES, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::STATUTE_MILES),
                  Unit::STATUTE_MILES, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 mi")));
 
-  FormatDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+  FormatDistance(buffer, Units::ToSysUnit(123.4, Unit::STATUTE_MILES),
                  Unit::STATUTE_MILES, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 }
@@ -159,75 +159,75 @@ TestSmallDistance()
   TCHAR buffer[256];
 
   // Test FormatSmallDistance()
-  FormatSmallDistance(buffer, fixed(123.4), Unit::METER);
+  FormatSmallDistance(buffer, 123.4, Unit::METER);
   ok1(StringIsEqual(buffer, _T("123 m")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::METER, false);
+  FormatSmallDistance(buffer, 123.4, Unit::METER, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::METER, true, 1);
+  FormatSmallDistance(buffer, 123.4, Unit::METER, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 m")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::METER, false, 1);
+  FormatSmallDistance(buffer, 123.4, Unit::METER, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::METER, true, 2);
+  FormatSmallDistance(buffer, 123.4, Unit::METER, true, 2);
   ok1(StringIsEqual(buffer, _T("123.40 m")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::METER, false, 2);
+  FormatSmallDistance(buffer, 123.4, Unit::METER, false, 2);
   ok1(StringIsEqual(buffer, _T("123.40")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::KILOMETER);
+  FormatSmallDistance(buffer, 123.4, Unit::KILOMETER);
   ok1(StringIsEqual(buffer, _T("123 m")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::KILOMETER, false);
+  FormatSmallDistance(buffer, 123.4, Unit::KILOMETER, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::KILOMETER, true, 1);
+  FormatSmallDistance(buffer, 123.4, Unit::KILOMETER, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 m")));
 
-  FormatSmallDistance(buffer, fixed(123.4), Unit::KILOMETER, false, 1);
+  FormatSmallDistance(buffer, 123.4, Unit::KILOMETER, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::NAUTICAL_MILES);
   ok1(StringIsEqual(buffer, _T("123 ft")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::NAUTICAL_MILES, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::NAUTICAL_MILES, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 ft")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::NAUTICAL_MILES, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::STATUTE_MILES);
   ok1(StringIsEqual(buffer, _T("123 ft")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::STATUTE_MILES, false);
   ok1(StringIsEqual(buffer, _T("123")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::STATUTE_MILES, true, 1);
   ok1(StringIsEqual(buffer, _T("123.4 ft")));
 
-  FormatSmallDistance(buffer, Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  FormatSmallDistance(buffer, Units::ToSysUnit(123.4, Unit::FEET),
                       Unit::STATUTE_MILES, false, 1);
   ok1(StringIsEqual(buffer, _T("123.4")));
 }
 
 static void
-TestDistanceSmart(fixed value, Unit unit, Unit expected_unit,
+TestDistanceSmart(double value, Unit unit, Unit expected_unit,
                   const TCHAR *expected_output_with_unit,
                   const TCHAR *expected_output_without_unit,
-                  fixed small_unit_threshold = fixed(2500),
-                  fixed precision_threshold = fixed(100))
+                  double small_unit_threshold = 2500,
+                  double precision_threshold = 100)
 {
   TCHAR buffer[256];
 
@@ -246,114 +246,114 @@ TestDistanceSmart()
   // Test FormatDistanceSmart()
 
   // Test Meter
-  TestDistanceSmart(fixed(0.1234), Unit::METER, Unit::METER, _T("0.12 m"),
+  TestDistanceSmart(0.1234, Unit::METER, Unit::METER, _T("0.12 m"),
                     _T("0.12"));
 
-  TestDistanceSmart(fixed(1.234), Unit::METER, Unit::METER, _T("1.23 m"),
+  TestDistanceSmart(1.234, Unit::METER, Unit::METER, _T("1.23 m"),
                     _T("1.23"));
 
-  TestDistanceSmart(fixed(12.34), Unit::METER, Unit::METER, _T("12.3 m"),
+  TestDistanceSmart(12.34, Unit::METER, Unit::METER, _T("12.3 m"),
                     _T("12.3"));
 
-  TestDistanceSmart(fixed(123.4), Unit::METER, Unit::METER, _T("123 m"),
+  TestDistanceSmart(123.4, Unit::METER, Unit::METER, _T("123 m"),
                     _T("123"));
 
-  TestDistanceSmart(fixed(1234), Unit::METER, Unit::METER, _T("1234 m"),
+  TestDistanceSmart(1234, Unit::METER, Unit::METER, _T("1234 m"),
                     _T("1234"));
 
-  TestDistanceSmart(fixed(12345), Unit::METER, Unit::METER, _T("12345 m"),
+  TestDistanceSmart(12345, Unit::METER, Unit::METER, _T("12345 m"),
                     _T("12345"));
 
-  TestDistanceSmart(fixed(123456), Unit::METER, Unit::METER, _T("123456 m"),
+  TestDistanceSmart(123456, Unit::METER, Unit::METER, _T("123456 m"),
                     _T("123456"));
 
   // Test Kilometer
-  TestDistanceSmart(Units::ToSysUnit(fixed(0.1234), Unit::KILOMETER),
+  TestDistanceSmart(Units::ToSysUnit(0.1234, Unit::KILOMETER),
                     Unit::KILOMETER, Unit::METER, _T("123 m"), _T("123"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::KILOMETER),
+  TestDistanceSmart(Units::ToSysUnit(1.234, Unit::KILOMETER),
                     Unit::KILOMETER, Unit::METER, _T("1234 m"), _T("1234"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(2.345), Unit::KILOMETER),
+  TestDistanceSmart(Units::ToSysUnit(2.345, Unit::KILOMETER),
                     Unit::KILOMETER, Unit::METER, _T("2345 m"), _T("2345"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(2.634), Unit::KILOMETER),
+  TestDistanceSmart(Units::ToSysUnit(2.634, Unit::KILOMETER),
                     Unit::KILOMETER, Unit::KILOMETER, _T("2.63 km"),
                     _T("2.63"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::KILOMETER),
+  TestDistanceSmart(Units::ToSysUnit(12.34, Unit::KILOMETER),
                     Unit::KILOMETER, Unit::KILOMETER, _T("12.3 km"),
                     _T("12.3"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::KILOMETER),
+  TestDistanceSmart(Units::ToSysUnit(123.4, Unit::KILOMETER),
                     Unit::KILOMETER, Unit::KILOMETER, _T("123 km"), _T("123"));
 
   // Test Nautical Miles
-  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  TestDistanceSmart(Units::ToSysUnit(123.4, Unit::FEET),
                     Unit::NAUTICAL_MILES, Unit::FEET, _T("123 ft"), _T("123"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1234), Unit::FEET),
+  TestDistanceSmart(Units::ToSysUnit(1234, Unit::FEET),
                     Unit::NAUTICAL_MILES, Unit::FEET, _T("1234 ft"),
                     _T("1234"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(2345), Unit::FEET),
+  TestDistanceSmart(Units::ToSysUnit(2345, Unit::FEET),
                     Unit::NAUTICAL_MILES, Unit::FEET, _T("2345 ft"),
                     _T("2345"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(0.61), Unit::NAUTICAL_MILES),
+  TestDistanceSmart(Units::ToSysUnit(0.61, Unit::NAUTICAL_MILES),
                     Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("0.61 NM"),
                     _T("0.61"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::NAUTICAL_MILES),
+  TestDistanceSmart(Units::ToSysUnit(1.234, Unit::NAUTICAL_MILES),
                     Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("1.23 NM"),
                     _T("1.23"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::NAUTICAL_MILES),
+  TestDistanceSmart(Units::ToSysUnit(12.34, Unit::NAUTICAL_MILES),
                     Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("12.3 NM"),
                     _T("12.3"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::NAUTICAL_MILES),
+  TestDistanceSmart(Units::ToSysUnit(123.4, Unit::NAUTICAL_MILES),
                     Unit::NAUTICAL_MILES, Unit::NAUTICAL_MILES, _T("123 NM"),
                     _T("123"));
 
   // Test Statute Miles
-  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::FEET),
+  TestDistanceSmart(Units::ToSysUnit(123.4, Unit::FEET),
                     Unit::STATUTE_MILES, Unit::FEET, _T("123 ft"), _T("123"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1234), Unit::FEET),
+  TestDistanceSmart(Units::ToSysUnit(1234, Unit::FEET),
                     Unit::STATUTE_MILES, Unit::FEET, _T("1234 ft"), _T("1234"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(2345), Unit::FEET),
+  TestDistanceSmart(Units::ToSysUnit(2345, Unit::FEET),
                     Unit::STATUTE_MILES, Unit::FEET, _T("2345 ft"), _T("2345"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(0.71), Unit::STATUTE_MILES),
+  TestDistanceSmart(Units::ToSysUnit(0.71, Unit::STATUTE_MILES),
                     Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("0.71 mi"),
                     _T("0.71"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1.234), Unit::STATUTE_MILES),
+  TestDistanceSmart(Units::ToSysUnit(1.234, Unit::STATUTE_MILES),
                     Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("1.23 mi"),
                     _T("1.23"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(12.34), Unit::STATUTE_MILES),
+  TestDistanceSmart(Units::ToSysUnit(12.34, Unit::STATUTE_MILES),
                     Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("12.3 mi"),
                     _T("12.3"));
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(123.4), Unit::STATUTE_MILES),
+  TestDistanceSmart(Units::ToSysUnit(123.4, Unit::STATUTE_MILES),
                     Unit::STATUTE_MILES, Unit::STATUTE_MILES, _T("123 mi"),
                     _T("123"));
 
   // Test thresholds
-  TestDistanceSmart(Units::ToSysUnit(fixed(0.9), Unit::KILOMETER),
-                    Unit::KILOMETER, Unit::METER, _T("900 m"), _T("900"), fixed(1000));
+  TestDistanceSmart(Units::ToSysUnit(0.9, Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::METER, _T("900 m"), _T("900"), 1000);
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1.1), Unit::KILOMETER),
-                    Unit::KILOMETER, Unit::KILOMETER, _T("1.10 km"), _T("1.10"), fixed(1000));
+  TestDistanceSmart(Units::ToSysUnit(1.1, Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("1.10 km"), _T("1.10"), 1000);
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1.1), Unit::KILOMETER),
-                    Unit::KILOMETER, Unit::KILOMETER, _T("1.1 km"), _T("1.1"), fixed(1000), fixed(10));
+  TestDistanceSmart(Units::ToSysUnit(1.1, Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("1.1 km"), _T("1.1"), 1000, 10);
 
-  TestDistanceSmart(Units::ToSysUnit(fixed(1.1), Unit::KILOMETER),
-                    Unit::KILOMETER, Unit::KILOMETER, _T("1 km"), _T("1"), fixed(1000), fixed(1));
+  TestDistanceSmart(Units::ToSysUnit(1.1, Unit::KILOMETER),
+                    Unit::KILOMETER, Unit::KILOMETER, _T("1 km"), _T("1"), 1000, 1);
 
 }
 
@@ -363,54 +363,54 @@ TestSpeed()
   TCHAR buffer[256];
 
   // Test FormatSpeed()
-  FormatSpeed(buffer, fixed(23.46), Unit::METER_PER_SECOND);
+  FormatSpeed(buffer, 23.46, Unit::METER_PER_SECOND);
   ok1(StringIsEqual(buffer, _T("23 m/s")));
 
-  FormatSpeed(buffer, fixed(23.46), Unit::METER_PER_SECOND, true, true);
+  FormatSpeed(buffer, 23.46, Unit::METER_PER_SECOND, true, true);
   ok1(StringIsEqual(buffer, _T("23.5 m/s")));
 
-  FormatSpeed(buffer, fixed(23.46), Unit::METER_PER_SECOND, false);
+  FormatSpeed(buffer, 23.46, Unit::METER_PER_SECOND, false);
   ok1(StringIsEqual(buffer, _T("23")));
 
-  FormatSpeed(buffer, fixed(23.46), Unit::METER_PER_SECOND, false, true);
+  FormatSpeed(buffer, 23.46, Unit::METER_PER_SECOND, false, true);
   ok1(StringIsEqual(buffer, _T("23.5")));
 
-  FormatSpeed(buffer, Units::ToSysUnit(fixed(123.43), Unit::KILOMETER_PER_HOUR),
+  FormatSpeed(buffer, Units::ToSysUnit(123.43, Unit::KILOMETER_PER_HOUR),
               Unit::KILOMETER_PER_HOUR);
   ok1(StringIsEqual(buffer, _T("123 km/h")));
 
-  FormatSpeed(buffer, Units::ToSysUnit(fixed(123.43), Unit::KILOMETER_PER_HOUR),
+  FormatSpeed(buffer, Units::ToSysUnit(123.43, Unit::KILOMETER_PER_HOUR),
               Unit::KILOMETER_PER_HOUR, true, true);
   ok1(StringIsEqual(buffer, _T("123 km/h")));
 
-  FormatSpeed(buffer, Units::ToSysUnit(fixed(83.43), Unit::KILOMETER_PER_HOUR),
+  FormatSpeed(buffer, Units::ToSysUnit(83.43, Unit::KILOMETER_PER_HOUR),
               Unit::KILOMETER_PER_HOUR, true, true);
   ok1(StringIsEqual(buffer, _T("83.4 km/h")));
 
-  FormatSpeed(buffer, Units::ToSysUnit(fixed(123.43), Unit::KNOTS),
+  FormatSpeed(buffer, Units::ToSysUnit(123.43, Unit::KNOTS),
               Unit::KNOTS);
   ok1(StringIsEqual(buffer, _T("123 kt")));
 
-  FormatSpeed(buffer, Units::ToSysUnit(fixed(123.43), Unit::KNOTS), Unit::KNOTS,
+  FormatSpeed(buffer, Units::ToSysUnit(123.43, Unit::KNOTS), Unit::KNOTS,
               true, true);
   ok1(StringIsEqual(buffer, _T("123 kt")));
 
-  FormatSpeed(buffer, Units::ToSysUnit(fixed(83.43), Unit::KNOTS), Unit::KNOTS,
+  FormatSpeed(buffer, Units::ToSysUnit(83.43, Unit::KNOTS), Unit::KNOTS,
               true, true);
   ok1(StringIsEqual(buffer, _T("83.4 kt")));
 
   FormatSpeed(buffer,
-              Units::ToSysUnit(fixed(123.43), Unit::STATUTE_MILES_PER_HOUR),
+              Units::ToSysUnit(123.43, Unit::STATUTE_MILES_PER_HOUR),
               Unit::STATUTE_MILES_PER_HOUR);
   ok1(StringIsEqual(buffer, _T("123 mph")));
 
   FormatSpeed(buffer,
-              Units::ToSysUnit(fixed(123.43), Unit::STATUTE_MILES_PER_HOUR),
+              Units::ToSysUnit(123.43, Unit::STATUTE_MILES_PER_HOUR),
               Unit::STATUTE_MILES_PER_HOUR, true, true);
   ok1(StringIsEqual(buffer, _T("123 mph")));
 
   FormatSpeed(buffer,
-              Units::ToSysUnit(fixed(83.43), Unit::STATUTE_MILES_PER_HOUR),
+              Units::ToSysUnit(83.43, Unit::STATUTE_MILES_PER_HOUR),
               Unit::STATUTE_MILES_PER_HOUR, true, true);
   ok1(StringIsEqual(buffer, _T("83.4 mph")));
 }
@@ -421,27 +421,27 @@ TestVerticalSpeed()
   TCHAR buffer[256];
 
   // Test FormatVerticalSpeed()
-  FormatVerticalSpeed(buffer, fixed(1.42), Unit::METER_PER_SECOND);
+  FormatVerticalSpeed(buffer, 1.42, Unit::METER_PER_SECOND);
   ok1(StringIsEqual(buffer, _T("+1.4 m/s")));
 
-  FormatVerticalSpeed(buffer, fixed(1.42), Unit::METER_PER_SECOND, false);
+  FormatVerticalSpeed(buffer, 1.42, Unit::METER_PER_SECOND, false);
   ok1(StringIsEqual(buffer, _T("+1.4")));
 
-  FormatVerticalSpeed(buffer, Units::ToSysUnit(fixed(2.47), Unit::KNOTS),
+  FormatVerticalSpeed(buffer, Units::ToSysUnit(2.47, Unit::KNOTS),
                       Unit::KNOTS);
   ok1(StringIsEqual(buffer, _T("+2.5 kt")));
 
-  FormatVerticalSpeed(buffer, Units::ToSysUnit(fixed(2.47), Unit::KNOTS),
+  FormatVerticalSpeed(buffer, Units::ToSysUnit(2.47, Unit::KNOTS),
                       Unit::KNOTS, false);
   ok1(StringIsEqual(buffer, _T("+2.5")));
 
   FormatVerticalSpeed(buffer,
-                      Units::ToSysUnit(fixed(245.4), Unit::FEET_PER_MINUTE),
+                      Units::ToSysUnit(245.4, Unit::FEET_PER_MINUTE),
                       Unit::FEET_PER_MINUTE);
   ok1(StringIsEqual(buffer, _T("+245 fpm")));
 
   FormatVerticalSpeed(buffer,
-                      Units::ToSysUnit(fixed(245.4), Unit::FEET_PER_MINUTE),
+                      Units::ToSysUnit(245.4, Unit::FEET_PER_MINUTE),
                       Unit::FEET_PER_MINUTE, false);
   ok1(StringIsEqual(buffer, _T("+245")));
 }
@@ -452,29 +452,29 @@ TestTemperature()
   TCHAR buffer[256];
 
   // Test FormatTemperature()
-  FormatTemperature(buffer, fixed(293.93), Unit::KELVIN);
+  FormatTemperature(buffer, 293.93, Unit::KELVIN);
   ok1(StringIsEqual(buffer, _T("294 K")));
 
-  FormatTemperature(buffer, fixed(293.93), Unit::KELVIN, false);
+  FormatTemperature(buffer, 293.93, Unit::KELVIN, false);
   ok1(StringIsEqual(buffer, _T("294")));
 
   FormatTemperature(buffer,
-                    Units::ToSysUnit(fixed(13.4), Unit::DEGREES_CELCIUS),
+                    Units::ToSysUnit(13.4, Unit::DEGREES_CELCIUS),
                     Unit::DEGREES_CELCIUS);
   ok1(StringIsEqual(buffer, _T("13 " DEG "C")));
 
   FormatTemperature(buffer,
-                    Units::ToSysUnit(fixed(13.4), Unit::DEGREES_CELCIUS),
+                    Units::ToSysUnit(13.4, Unit::DEGREES_CELCIUS),
                     Unit::DEGREES_CELCIUS, false);
   ok1(StringIsEqual(buffer, _T("13")));
 
   FormatTemperature(buffer,
-                    Units::ToSysUnit(fixed(92.7), Unit::DEGREES_FAHRENHEIT),
+                    Units::ToSysUnit(92.7, Unit::DEGREES_FAHRENHEIT),
                     Unit::DEGREES_FAHRENHEIT);
   ok1(StringIsEqual(buffer, _T("93 " DEG "F")));
 
   FormatTemperature(buffer,
-                    Units::ToSysUnit(fixed(92.7), Unit::DEGREES_FAHRENHEIT),
+                    Units::ToSysUnit(92.7, Unit::DEGREES_FAHRENHEIT),
                     Unit::DEGREES_FAHRENHEIT, false);
   ok1(StringIsEqual(buffer, _T("93")));
 }
@@ -485,36 +485,36 @@ TestPressure()
   TCHAR buffer[256];
 
   // Test FormatPressure()
-  FormatPressure(buffer, AtmosphericPressure::HectoPascal(fixed(1013.25)),
+  FormatPressure(buffer, AtmosphericPressure::HectoPascal(1013.25),
                  Unit::HECTOPASCAL);
   ok1(StringIsEqual(buffer, _T("1013 hPa")));
 
-  FormatPressure(buffer, AtmosphericPressure::HectoPascal(fixed(1013.25)),
+  FormatPressure(buffer, AtmosphericPressure::HectoPascal(1013.25),
                  Unit::HECTOPASCAL, false);
   ok1(StringIsEqual(buffer, _T("1013")));
 
-  FormatPressure(buffer, AtmosphericPressure::HectoPascal(fixed(1013.25)),
+  FormatPressure(buffer, AtmosphericPressure::HectoPascal(1013.25),
                  Unit::MILLIBAR);
   ok1(StringIsEqual(buffer, _T("1013 mb")));
 
-  FormatPressure(buffer, AtmosphericPressure::HectoPascal(fixed(1013.25)),
+  FormatPressure(buffer, AtmosphericPressure::HectoPascal(1013.25),
                  Unit::MILLIBAR, false);
   ok1(StringIsEqual(buffer, _T("1013")));
 
   FormatPressure(buffer, AtmosphericPressure::HectoPascal(
-      Units::ToSysUnit(fixed(103), Unit::TORR)), Unit::TORR);
+      Units::ToSysUnit(103, Unit::TORR)), Unit::TORR);
   ok1(StringIsEqual(buffer, _T("103 mmHg")));
 
   FormatPressure(buffer, AtmosphericPressure::HectoPascal(
-      Units::ToSysUnit(fixed(103), Unit::TORR)), Unit::TORR, false);
+      Units::ToSysUnit(103, Unit::TORR)), Unit::TORR, false);
   ok1(StringIsEqual(buffer, _T("103")));
 
   FormatPressure(buffer, AtmosphericPressure::HectoPascal(
-      Units::ToSysUnit(fixed(29.92), Unit::INCH_MERCURY)), Unit::INCH_MERCURY);
+      Units::ToSysUnit(29.92, Unit::INCH_MERCURY)), Unit::INCH_MERCURY);
   ok1(StringIsEqual(buffer, _T("29.92 inHg")));
 
   FormatPressure(buffer, AtmosphericPressure::HectoPascal(
-      Units::ToSysUnit(fixed(29.92), Unit::INCH_MERCURY)),
+      Units::ToSysUnit(29.92, Unit::INCH_MERCURY)),
       Unit::INCH_MERCURY, false);
   ok1(StringIsEqual(buffer, _T("29.92")));
 }

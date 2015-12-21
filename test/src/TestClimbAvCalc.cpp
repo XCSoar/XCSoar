@@ -31,24 +31,24 @@ TestBasic()
   ClimbAverageCalculator c;
   c.Reset();
 
-  fixed av;
+  double av;
 
-  constexpr fixed AVERAGE_TIME = fixed(30);
+  constexpr double AVERAGE_TIME = 30;
 
   // Test normal behavior
-  c.GetAverage(fixed(0), fixed(0), AVERAGE_TIME);
+  c.GetAverage(0, 0, AVERAGE_TIME);
   for (unsigned i = 1; i <= 15; i++)
-    av = c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
+    av = c.GetAverage(i, i, AVERAGE_TIME);
 
   ok1(equals(av, 1.0));
 
   for (unsigned i = 1; i <= 15; i++)
-    av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
+    av = c.GetAverage(15 + i, 15 + i * 2, AVERAGE_TIME);
 
   ok1(equals(av, 1.5));
 
   for (unsigned i = 1; i <= 15; i++)
-    av = c.GetAverage(fixed(30 + i), fixed(45 + i * 2), AVERAGE_TIME);
+    av = c.GetAverage(30 + i, 45 + i * 2, AVERAGE_TIME);
 
   ok1(equals(av, 2.0));
 }
@@ -57,20 +57,20 @@ static void
 TestDuplicateTimestamps()
 {
   ClimbAverageCalculator c;
-  fixed av;
+  double av;
 
-  constexpr fixed AVERAGE_TIME = fixed(30);
+  constexpr double AVERAGE_TIME = 30;
 
   // Test time difference = zero behavior
   c.Reset();
-  c.GetAverage(fixed(0), fixed(0), AVERAGE_TIME);
+  c.GetAverage(0, 0, AVERAGE_TIME);
   for (unsigned i = 1; i <= 15; i++)
-    c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
+    c.GetAverage(i, i, AVERAGE_TIME);
 
   for (unsigned i = 1; i <= 15; i++) {
-    c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
-    c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
-    av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
+    c.GetAverage(15 + i, 15 + i * 2, AVERAGE_TIME);
+    c.GetAverage(15 + i, 15 + i * 2, AVERAGE_TIME);
+    av = c.GetAverage(15 + i, 15 + i * 2, AVERAGE_TIME);
   }
 
   ok1(equals(av, 1.5));
@@ -82,36 +82,36 @@ TestExpiration()
   ClimbAverageCalculator c;
   c.Reset();
 
-  constexpr fixed AVERAGE_TIME = fixed(30);
+  constexpr double AVERAGE_TIME = 30;
 
 
   // Test expiration for empty data
-  ok1(c.Expired(fixed(0), fixed(60)));
-  ok1(c.Expired(fixed(15), fixed(60)));
+  ok1(c.Expired(0, 60));
+  ok1(c.Expired(15, 60));
 
   // Add values and test non-expiration
   bool expired = false;
   for (unsigned i = 1; i <= 60; i++) {
-    c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
-    expired = expired || c.Expired(fixed(i), fixed(60));
+    c.GetAverage(i, i, AVERAGE_TIME);
+    expired = expired || c.Expired(i, 60);
   }
 
   ok1(!expired);
 
   // Test expiration with 30sec
-  ok1(!c.Expired(fixed(89), fixed(30)));
-  ok1(!c.Expired(fixed(90), fixed(30)));
-  ok1(c.Expired(fixed(91), fixed(30)));
+  ok1(!c.Expired(89, 30));
+  ok1(!c.Expired(90, 30));
+  ok1(c.Expired(91, 30));
 
   // Test expiration with 60sec
-  ok1(!c.Expired(fixed(119), fixed(60)));
-  ok1(!c.Expired(fixed(120), fixed(60)));
-  ok1(c.Expired(fixed(121), fixed(60)));
+  ok1(!c.Expired(119, 60));
+  ok1(!c.Expired(120, 60));
+  ok1(c.Expired(121, 60));
 
   // Time warp
-  ok1(c.Expired(fixed(59), fixed(60)));
-  ok1(!c.Expired(fixed(60), fixed(60)));
-  ok1(!c.Expired(fixed(61), fixed(60)));
+  ok1(c.Expired(59, 60));
+  ok1(!c.Expired(60, 60));
+  ok1(!c.Expired(61, 60));
 }
 
 int main(int argc, char **argv)

@@ -27,11 +27,11 @@
 #include "Time/WrapClock.hpp"
 #include "TestUtil.hpp"
 
-static fixed
+static double
 Normalise(WrapClock &w, BrokenDate &date,
           unsigned hour, unsigned minute, unsigned second=0)
 {
-  return w.Normalise(fixed(hour * 3600 + minute * 60 + second), date,
+  return w.Normalise(hour * 3600 + minute * 60 + second, date,
                      BrokenTime(hour, minute, second));
 }
 

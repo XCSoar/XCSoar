@@ -52,8 +52,8 @@ main(int argc, char **argv)
     ok1(equals(parsed.wind.norm, 7));
     ok1(equals(parsed.wind.bearing, 310));
     ok1(parsed.temperatures_available);
-    ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(23), Unit::DEGREES_CELCIUS)));
-    ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(18), Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.temperature, Units::ToSysUnit(23, Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(18, Unit::DEGREES_CELCIUS)));
     ok1(parsed.visibility_available);
     ok1(parsed.visibility == 9999);
     ok1(!parsed.cavok);
@@ -73,13 +73,13 @@ main(int argc, char **argv)
     ok1(parsed.minute == 53);
     ok1(parsed.qnh_available);
     ok1(equals(parsed.qnh.GetHectoPascal(),
-               Units::ToSysUnit(fixed(30.06), Unit::INCH_MERCURY)));
+               Units::ToSysUnit(30.06, Unit::INCH_MERCURY)));
     ok1(parsed.wind_available);
-    ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), Unit::KNOTS)));
+    ok1(equals(parsed.wind.norm, Units::ToSysUnit(11, Unit::KNOTS)));
     ok1(equals(parsed.wind.bearing, 40));
     ok1(parsed.temperatures_available);
-    ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-1.7), Unit::DEGREES_CELCIUS)));
-    ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-1.7), Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.temperature, Units::ToSysUnit(-1.7, Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(-1.7, Unit::DEGREES_CELCIUS)));
     ok1(!parsed.visibility_available);
     ok1(!parsed.cavok);
     ok1(parsed.location_available);
@@ -101,8 +101,8 @@ main(int argc, char **argv)
     ok1(equals(parsed.qnh.GetHectoPascal(), 1017));
     ok1(!parsed.wind_available);
     ok1(parsed.temperatures_available);
-    ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(21), Unit::DEGREES_CELCIUS)));
-    ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(17), Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.temperature, Units::ToSysUnit(21, Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(17, Unit::DEGREES_CELCIUS)));
     ok1(!parsed.visibility_available);
     ok1(parsed.cavok);
     ok1(parsed.location_available);

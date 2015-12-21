@@ -31,7 +31,7 @@ TestLinearDistance()
   for (unsigned i = 0; i < 180; i += 5) {
     const GeoPoint lon_end(lon_start.longitude + Angle::Degrees(i),
                            lon_start.latitude);
-    fixed distance = Distance(lon_start, lon_end);
+    double distance = Distance(lon_start, lon_end);
 
 #ifdef USE_WGS84
     double min = 111300 * i;
@@ -53,7 +53,7 @@ TestLinearDistance()
   for (unsigned i = 0; i < 90; i += 5) {
     const GeoPoint lat_end(lat_start.longitude,
                            lat_start.latitude + Angle::Degrees(i));
-    fixed distance = Distance(lat_start, lat_end);
+    double distance = Distance(lat_start, lat_end);
 
     double min = 111100 * i;
     double max = 111200 * i;
@@ -79,42 +79,42 @@ int main(int argc, char **argv)
   const GeoPoint c(Angle::Degrees(4.599444444444444),
                    Angle::Degrees(47.099444444444444));
 
-  fixed distance = Distance(a, b);
+  double distance = Distance(a, b);
 #ifdef USE_WGS84
-  ok1(distance > fixed(9150) && distance < fixed(9160));
+  ok1(distance > 9150 && distance < 9160);
 #else
-  ok1(distance > fixed(9130) && distance < fixed(9140));
+  ok1(distance > 9130 && distance < 9140);
 #endif
 
   Angle bearing = Bearing(a, b);
-  ok1(bearing.Degrees() > fixed(304));
-  ok1(bearing.Degrees() < fixed(306));
+  ok1(bearing.Degrees() > 304);
+  ok1(bearing.Degrees() < 306);
 
   bearing = Bearing(b, a);
-  ok1(bearing.Degrees() > fixed(124));
-  ok1(bearing.Degrees() < fixed(126));
+  ok1(bearing.Degrees() > 124);
+  ok1(bearing.Degrees() < 126);
 
   distance = ProjectedDistance(a, b, a);
   ok1(is_zero(distance));
   distance = ProjectedDistance(a, b, b);
 
 #ifdef USE_WGS84
-  ok1(distance > fixed(9150) && distance < fixed(9180));
+  ok1(distance > 9150 && distance < 9180);
 #else
-  ok1(distance > fixed(9120) && distance < fixed(9140));
+  ok1(distance > 9120 && distance < 9140);
 #endif
 
-  const GeoPoint middle(a.longitude.Fraction(b.longitude, fixed(0.5)),
-                        a.latitude.Fraction(b.latitude, fixed(0.5)));
+  const GeoPoint middle(a.longitude.Fraction(b.longitude, 0.5),
+                        a.latitude.Fraction(b.latitude, 0.5));
   distance = ProjectedDistance(a, b, middle);
 #ifdef USE_WGS84
-  ok1(distance > fixed(9150/2) && distance < fixed(9180/2));
+  ok1(distance > 9150/2 && distance < 9180/2);
 #else
-  ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
+  ok1(distance > 9100/2 && distance < 9140/2);
 #endif
 
-  fixed big_distance = Distance(a, c);
-  ok1(big_distance > fixed(494000) && big_distance < fixed(495000));
+  double big_distance = Distance(a, c);
+  ok1(big_distance > 494000 && big_distance < 495000);
 
   TestLinearDistance();
 

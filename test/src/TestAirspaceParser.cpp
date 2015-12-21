@@ -100,7 +100,7 @@ TestOpenAir()
         continue;
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
-      ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), Unit::NAUTICAL_MILES)));
+      ok1(equals(circle.GetRadius(), Units::ToSysUnit(5, Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
     } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
@@ -134,7 +134,7 @@ TestOpenAir()
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude,
-                 Units::ToSysUnit(fixed(2000), Unit::FEET)));
+                 Units::ToSysUnit(2000, Unit::FEET)));
     } else if (StringIsEqual(_T("Height-Test-2"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 0));
@@ -143,14 +143,14 @@ TestOpenAir()
     } else if (StringIsEqual(_T("Height-Test-3"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
-                 Units::ToSysUnit(fixed(100), Unit::FEET)));
+                 Units::ToSysUnit(100, Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
-      ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
+      ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
     } else if (StringIsEqual(_T("Height-Test-4"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
-      ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
+      ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
     } else if (StringIsEqual(_T("Height-Test-5"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude, 100));
@@ -159,7 +159,7 @@ TestOpenAir()
     } else if (StringIsEqual(_T("Height-Test-6"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
-                 Units::ToSysUnit(fixed(50), Unit::FEET)));
+                 Units::ToSysUnit(50, Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 50));
     } else {
@@ -208,7 +208,7 @@ TestTNP()
         continue;
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
-      ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), Unit::NAUTICAL_MILES)));
+      ok1(equals(circle.GetRadius(), Units::ToSysUnit(5, Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
     } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
@@ -242,7 +242,7 @@ TestTNP()
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude,
-                 Units::ToSysUnit(fixed(2000), Unit::FEET)));
+                 Units::ToSysUnit(2000, Unit::FEET)));
     } else if (StringIsEqual(_T("Height-Test-2"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 0));
@@ -251,14 +251,14 @@ TestTNP()
     } else if (StringIsEqual(_T("Height-Test-3"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
-                 Units::ToSysUnit(fixed(100), Unit::FEET)));
+                 Units::ToSysUnit(100, Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
-      ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
+      ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
     } else if (StringIsEqual(_T("Height-Test-4"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
-      ok1(airspace.GetTop().altitude > Units::ToSysUnit(fixed(30000), Unit::FEET));
+      ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
     } else if (StringIsEqual(_T("Height-Test-5"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude, 100));
@@ -267,7 +267,7 @@ TestTNP()
     } else if (StringIsEqual(_T("Height-Test-6"), airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
-                 Units::ToSysUnit(fixed(50), Unit::FEET)));
+                 Units::ToSysUnit(50, Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 50));
     } else {

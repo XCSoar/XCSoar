@@ -79,8 +79,7 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
     if (parsed.visibility >= 9999)
       _tcscpy(buffer, _T("unlimited"));
     else {
-      fixed visibility(parsed.visibility);
-      FormatUserDistanceSmart(visibility, buffer, ARRAY_SIZE(buffer));
+      FormatUserDistanceSmart(parsed.visibility, buffer, ARRAY_SIZE(buffer));
     }
     _tprintf(_T("Visibility: %s\n"), buffer);
   }
