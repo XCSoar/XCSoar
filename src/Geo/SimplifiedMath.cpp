@@ -34,7 +34,7 @@ EarthDistance(const double a)
   if (a <= 0)
     return Angle::Zero();
 
-  return Angle::acos(1 - Double(a));
+  return Angle::acos(1 - 2 * a);
 }
 
 void

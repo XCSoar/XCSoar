@@ -44,7 +44,7 @@ EarthDistance(const double a)
   if (a <= 0)
     return Angle::Zero();
 
-  return Angle::acos(1 - Double(a));
+  return Angle::acos(1 - 2 * a);
 }
 
 gcc_const
@@ -156,7 +156,7 @@ Middle(const GeoPoint &a, const GeoPoint &b)
 {
   // TODO: optimize this naive approach
   const auto distance = Distance(a, b);
-  return IntermediatePoint(a, b, Half(distance));
+  return IntermediatePoint(a, b, distance / 2);
 }
 
 void
@@ -205,7 +205,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
       lambda_p = lambda;
       lambda = lon21.Radians() + FLATTENING * inner_alpha * sigma;
     } else {
-      cos_2_sigma_m = cos_sigma - Double(sinu1 * sinu2 / cos_sq_alpha);
+      cos_2_sigma_m = cos_sigma - 2 * sinu1 * sinu2 / cos_sq_alpha;
 
       auto c = FLATTENING / 16 * cos_sq_alpha *
                 (4 + FLATTENING * (4 - 3 * cos_sq_alpha));
@@ -229,10 +229,10 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
 
     auto delta_sigma = B * sin_sigma * (
       cos_2_sigma_m +
-      Quarter(B) * (cos_sigma * (-1 + 2 * Square(cos_2_sigma_m)) -
-                    B / 6 * cos_2_sigma_m *
-                    (-3 + Quadruple(Square(sin_sigma))) *
-                    (-3 + Quadruple(Square(cos_2_sigma_m)))));
+      B / 4 * (cos_sigma * (-1 + 2 * Square(cos_2_sigma_m)) -
+               B / 6 * cos_2_sigma_m *
+               (-3 + 4 * Square(sin_sigma)) *
+               (-3 + 4 * Square(cos_2_sigma_m))));
 
     *distance = POLE_RADIUS * A * (sigma - delta_sigma);
   }
@@ -399,15 +399,15 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   double sin_sigma, cos_sigma, cos_2_sigma_m;
 
   do {
-    cos_2_sigma_m = cos(Double(sigma1) + sigma);
+    cos_2_sigma_m = cos(2 * sigma1 + sigma);
     sin_sigma = sin(sigma);
     cos_sigma = cos(sigma);
 
     auto delta_sigma = B * sin_sigma *
-      (cos_2_sigma_m + Quarter(B) *
+      (cos_2_sigma_m + B / 4 *
        (cos_sigma *
         (-1 + 2 * Square(cos_2_sigma_m)) - B / 6 * cos_2_sigma_m *
-        (-3 + 4 * Square(sin_sigma)) * (-3 + Quadruple(Square(cos_2_sigma_m)))));
+        (-3 + 4 * Square(sin_sigma)) * (-3 + 4 * Square(cos_2_sigma_m))));
 
     sigmaP = sigma;
     sigma = distance / (POLE_RADIUS * A) + delta_sigma;
