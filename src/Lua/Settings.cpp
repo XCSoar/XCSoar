@@ -46,6 +46,12 @@ l_settings_index(lua_State *L)
       CommonInterface::GetComputerSettings();
     
     Lua::Push(L, settings_computer.polar.glide_polar_task.GetMC());
+  } else if (StringIsEqual(name, "bugs")) {
+      /* How clean the glider is. */
+      const ComputerSettings &settings_computer = 
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.bugs);
   } else
     return 0;
 
