@@ -32,7 +32,7 @@ GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
 GeoPoint
 GeoVector::EndPoint(const GeoPoint &source) const
 {
-  if (!positive(distance))
+  if (distance <= 0)
     return source;
 
   return ::FindLatitudeLongitude(source, bearing, distance);
@@ -41,7 +41,7 @@ GeoVector::EndPoint(const GeoPoint &source) const
 GeoPoint
 GeoVector::MidPoint(const GeoPoint &source) const
 {
-  if (!positive(distance))
+  if (distance <= 0)
     return source;
 
   return ::FindLatitudeLongitude(source, bearing, Half(distance));

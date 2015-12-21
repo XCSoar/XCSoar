@@ -44,7 +44,7 @@ Sign(double value, double tolerance)
 
 static int
 Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-          fixed tolerance)
+          double tolerance)
 {
   //
   // In this program we frequently want to look at three consecutive
@@ -63,14 +63,14 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   const auto a = delta_a.longitude.Native() * delta_b.latitude.Native();
   const auto b = delta_b.longitude.Native() * delta_a.latitude.Native();
 
-  if (negative(tolerance))
+  if (tolerance < 0)
     /* auto-tolerance - this has been verified by experiment */
     tolerance = std::max(fabs(a), fabs(b)) / 10;
 
   return Sign(a - b, tolerance);
 }
 
-GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
+GrahamScan::GrahamScan(SearchPointVector& sps, const double sign_tolerance):
   raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size()),
   tolerance(sign_tolerance)
 {

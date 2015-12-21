@@ -33,7 +33,6 @@ Copyright_License {
 #ifndef XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 #define XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
@@ -52,6 +51,6 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 fixed *distance, Angle *bearing);
+                 double *distance, Angle *bearing);
 
 #endif

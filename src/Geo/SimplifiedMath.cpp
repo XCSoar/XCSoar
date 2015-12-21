@@ -29,12 +29,12 @@ Copyright_License {
 #include <assert.h>
 
 static inline Angle
-EarthDistance(const fixed a)
+EarthDistance(const double a)
 {
-  if (!positive(a))
+  if (a <= 0)
     return Angle::Zero();
 
-  return Angle::acos(fixed(1) - Double(a));
+  return Angle::acos(1 - Double(a));
 }
 
 void
@@ -62,14 +62,13 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   }
 
   if (bearing) {
-    // speedup for fixed since this is one call
     const auto sc = dlon.SinCos();
     const auto sin_dlon = sc.first, cos_dlon = sc.second;
 
     const auto y = sin_dlon * cos_lat2;
     const auto x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
-    *bearing = (x == fixed(0) && y == fixed(0))
+    *bearing = (x == 0 && y == 0)
       ? Angle::Zero()
       : Angle::FromXY(x, y).AsBearing();
   }
@@ -77,7 +76,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 fixed *distance, Angle *bearing)
+                 double *distance, Angle *bearing)
 {
   if (distance != nullptr) {
     Angle distance_angle;

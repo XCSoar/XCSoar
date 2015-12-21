@@ -26,7 +26,6 @@
 #include <list>
 
 #include "Util/NonCopyable.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <vector>
@@ -52,7 +51,7 @@ class GrahamScan: private NonCopyable
   std::vector<SearchPoint*> upper_hull;
   SearchPointVector &raw_vector;
   const unsigned size;
-  const fixed tolerance;
+  const double tolerance;
 
 public:
   /**
@@ -63,7 +62,7 @@ public:
    * @param sign_tolerance the tolerance for the direction sign; -1
    * for automatic tolerance
    */
-  GrahamScan(SearchPointVector& sps, const fixed sign_tolerance = fixed(-1));
+  GrahamScan(SearchPointVector& sps, const double sign_tolerance = -1);
 
   /**
    * Perform convex hull transformation

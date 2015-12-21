@@ -26,18 +26,18 @@
 #include "SimplifiedMath.hpp"
 
 GeoPoint 
-GeoPoint::Parametric(const GeoPoint &delta, const fixed t) const
+GeoPoint::Parametric(const GeoPoint &delta, const double t) const
 {
   return (*this) + delta * t;
 }
 
 GeoPoint 
-GeoPoint::Interpolate(const GeoPoint &end, const fixed t) const
+GeoPoint::Interpolate(const GeoPoint &end, const double t) const
 {
   return (*this) + (end - (*this)) * t;
 }
 
-fixed
+double
 GeoPoint::Distance(const GeoPoint &other) const
 {
   return ::Distance(*this, other);
@@ -57,15 +57,15 @@ GeoPoint::DistanceBearing(const GeoPoint &other) const
   return gv;
 }
 
-fixed
+double
 GeoPoint::DistanceS(const GeoPoint &other) const
 {
-  fixed distance;
+  double distance;
   ::DistanceBearingS(*this, other, &distance, nullptr);
   return distance;
 }
 
-fixed 
+double 
 GeoPoint::ProjectedDistance(const GeoPoint &from,
                              const GeoPoint &to) const
 {
@@ -91,7 +91,7 @@ GeoPoint::Sort(const GeoPoint &sp) const
 
 GeoPoint 
 GeoPoint::IntermediatePoint(const GeoPoint &destination, 
-                             const fixed distance) const
+                            const double distance) const
 {
   return ::IntermediatePoint(*this, destination, distance);
 }

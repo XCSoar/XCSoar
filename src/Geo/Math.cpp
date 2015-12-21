@@ -30,63 +30,61 @@ Copyright_License {
 
 #include <assert.h>
 
-using namespace WGS84::Fixed;
+using namespace WGS84;
 
 static inline Angle
-EarthASin(const fixed a)
+EarthASin(const double a)
 {
   return Angle::asin(a);
 }
 
 static inline Angle
-EarthDistance(const fixed a)
+EarthDistance(const double a)
 {
-  if (!positive(a))
+  if (a <= 0)
     return Angle::Zero();
 
-  return Angle::acos(fixed(1) - Double(a));
+  return Angle::acos(1 - Double(a));
 }
 
 gcc_const
-static fixed
-CalcUSquare(fixed cos_sq_alpha)
+static double
+CalcUSquare(double cos_sq_alpha)
 {
   static constexpr double EQUATOR_RADIUS_SQ =
     WGS84::EQUATOR_RADIUS * WGS84::EQUATOR_RADIUS;
   static constexpr double POLE_RADIUS_SQ =
     WGS84::POLE_RADIUS * WGS84::POLE_RADIUS;
-  static constexpr fixed factor((EQUATOR_RADIUS_SQ - POLE_RADIUS_SQ)
-                                / POLE_RADIUS_SQ);
+  static constexpr double factor((EQUATOR_RADIUS_SQ - POLE_RADIUS_SQ)
+                                 / POLE_RADIUS_SQ);
 
   return cos_sq_alpha * factor;
 }
 
 gcc_const
-static fixed
-CalcA(fixed u_sq)
+static double
+CalcA(double u_sq)
 {
-  const fixed A_16k = fixed(16384)
-    + u_sq * (fixed(4096) + u_sq *
-              (fixed(-768) + u_sq * (fixed(320) - 175 * u_sq)));
+  const double A_16k = 16384
+    + u_sq * (4096 + u_sq *
+              (-768 + u_sq * (320 - 175 * u_sq)));
   return A_16k / 16384;
 }
 
 gcc_const
-static fixed
-CalcB(fixed u_sq)
+static double
+CalcB(double u_sq)
 {
-  const auto B_1k = u_sq
-    * (fixed(256) + u_sq * (fixed(-128) +
-                            u_sq * (fixed(74) - 47 * u_sq)));
+  const auto B_1k = u_sq * (256 + u_sq * (-128 + u_sq * (74 - 47 * u_sq)));
   return B_1k / 1024;
 }
 
 gcc_const
-static fixed
-CalcC(fixed cos_sq_alpha)
+static double
+CalcC(double cos_sq_alpha)
 {
   return FLATTENING / 16 * cos_sq_alpha *
-    (fixed(4) + FLATTENING * (fixed(4) - 3 * cos_sq_alpha));
+    (4 + FLATTENING * (4 - 3 * cos_sq_alpha));
 }
 
 gcc_pure
@@ -141,7 +139,7 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
 
 GeoPoint
 IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
-                  const fixed dthis)
+                  const double dthis)
 {
   const auto dtotal = ::Distance(loc1, loc2);
 
@@ -163,13 +161,13 @@ Middle(const GeoPoint &a, const GeoPoint &b)
 
 void
 DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
-                fixed *distance, Angle *bearing)
+                double *distance, Angle *bearing)
 {
 #ifdef USE_WGS84
   const auto lon21 = loc2.longitude - loc1.longitude;
 
-  auto u1 = atan((fixed(1) - FLATTENING) * loc1.latitude.tan()),
-    u2 = atan((fixed(1) - FLATTENING) * loc2.latitude.tan());
+  auto u1 = atan((1 - FLATTENING) * loc1.latitude.tan()),
+    u2 = atan((1 - FLATTENING) * loc2.latitude.tan());
 
   auto sinu1 = sin(u1), cosu1 = cos(u1);
 
@@ -178,21 +176,18 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   auto lambda = lon21.Radians(), lambda_p = Angle::FullCircle().Radians();
 
   unsigned iterLimit = 20;
-  fixed cos_sq_alpha = fixed(0),
-        sin_sigma = fixed(0),
-        cos_sigma = fixed(0),
-        cos_2_sigma_m = fixed(0),
-        sigma = fixed(0);
+  double cos_sq_alpha = 0, sin_sigma = 0, cos_sigma = 0, cos_2_sigma_m = 0,
+    sigma = 0;
 
-  while (fabs(lambda - lambda_p) > fixed(1e-7) && --iterLimit) {
+  while (fabs(lambda - lambda_p) > 1e-7 && --iterLimit) {
     auto sin_lambda = sin(lambda), cos_lambda = cos(lambda);
 
     sin_sigma = hypot(cosu2 * sin_lambda,
                       cosu1 * sinu2 - sinu1 * cosu2 * cos_lambda);
 
-    if (sin_sigma == fixed(0)) {
+    if (sin_sigma == 0) {
       // coincident points...
-      if (distance != nullptr) *distance = fixed(0);
+      if (distance != nullptr) *distance = 0;
       if (bearing != nullptr) *bearing = Angle::Zero();
       return;
     }
@@ -201,24 +196,24 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
     sigma = atan2(sin_sigma, cos_sigma);
 
     auto inner_alpha = cosu1 * cosu2 * sin_lambda / sin_sigma;
-    cos_sq_alpha = fixed(1) - Square(inner_alpha);
+    cos_sq_alpha = 1 - Square(inner_alpha);
 
-    if (fabs(loc1.latitude.Radians()) < fixed(1e-7) &&
-        fabs(loc2.latitude.Radians()) < fixed(1e-7)) {
+    if (fabs(loc1.latitude.Radians()) < 1e-7 &&
+        fabs(loc2.latitude.Radians()) < 1e-7) {
       // both points are on equator.
-      cos_2_sigma_m = fixed(-1);
+      cos_2_sigma_m = -1;
       lambda_p = lambda;
       lambda = lon21.Radians() + FLATTENING * inner_alpha * sigma;
     } else {
       cos_2_sigma_m = cos_sigma - Double(sinu1 * sinu2 / cos_sq_alpha);
 
       auto c = FLATTENING / 16 * cos_sq_alpha *
-                (fixed(4) + FLATTENING * (fixed(4) - 3 * cos_sq_alpha));
+                (4 + FLATTENING * (4 - 3 * cos_sq_alpha));
 
       lambda_p = lambda;
-      lambda = lon21.Radians() + (fixed(1) - c) * FLATTENING * inner_alpha *
+      lambda = lon21.Radians() + (1 - c) * FLATTENING * inner_alpha *
         (sigma + c * sin_sigma * (cos_2_sigma_m + c * cos_sigma *
-                                  (fixed(-1) + 2 * Square(cos_2_sigma_m))));
+                                  (-1 + 2 * Square(cos_2_sigma_m))));
     }
   }
 
@@ -234,10 +229,10 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
 
     auto delta_sigma = B * sin_sigma * (
       cos_2_sigma_m +
-      Quarter(B) * (cos_sigma * (fixed(-1) + fixed(2) * Square(cos_2_sigma_m)) -
+      Quarter(B) * (cos_sigma * (-1 + 2 * Square(cos_2_sigma_m)) -
                     B / 6 * cos_2_sigma_m *
-                    (fixed(-3) + Quadruple(Square(sin_sigma))) *
-                    (fixed(-3) + Quadruple(Square(cos_2_sigma_m)))));
+                    (-3 + Quadruple(Square(sin_sigma))) *
+                    (-3 + Quadruple(Square(cos_2_sigma_m)))));
 
     *distance = POLE_RADIUS * A * (sigma - delta_sigma);
   }
@@ -251,7 +246,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
 #endif
 }
 
-fixed
+double
 CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
                 const GeoPoint &loc3, GeoPoint *loc4)
 {
@@ -299,7 +294,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
 #endif
 }
 
-fixed
+double
 ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                   const GeoPoint &loc3)
 {
@@ -308,14 +303,14 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   if (!dist_AD.IsPositive())
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
-    return fixed(0);
+    return 0;
 
   Angle dist_AB, crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
   if (!dist_AB.IsPositive())
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
-    return fixed(0);
+    return 0;
 
   // The "along track distance", along_track_distance, the distance from A along the
   // course towards B to the point abeam D
@@ -341,7 +336,7 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 }
 
 
-fixed
+double
 DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                const GeoPoint &loc3)
 {
@@ -367,12 +362,12 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 
 GeoPoint
 FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
-                      fixed distance)
+                      double distance)
 {
   assert(loc.IsValid());
+  assert(distance >= 0);
 
-  assert(!negative(distance));
-  if (!positive(distance))
+  if (distance <= 0)
     return loc;
 
   GeoPoint loc_out;
@@ -385,8 +380,8 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const auto sin_alpha1 = bearing.SinCos().first;
   const auto cos_alpha1 = bearing.SinCos().second;
 
-  const auto tan_u1 = (fixed(1) - FLATTENING) * tan(lat1);
-  const auto cos_u1 = fixed(1) / hypot(1, tan_u1);
+  const auto tan_u1 = (1 - FLATTENING) * tan(lat1);
+  const auto cos_u1 = 1 / hypot(1, tan_u1);
   const auto sin_u1 = tan_u1 * cos_u1;
 
   const auto sigma1 = atan2(tan_u1, cos_alpha1);
@@ -401,7 +396,7 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   auto sigma = distance / (POLE_RADIUS * A);
   auto sigmaP = M_2PI;
 
-  fixed sin_sigma, cos_sigma, cos_2_sigma_m;
+  double sin_sigma, cos_sigma, cos_2_sigma_m;
 
   do {
     cos_2_sigma_m = cos(Double(sigma1) + sigma);
@@ -411,26 +406,25 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
     auto delta_sigma = B * sin_sigma *
       (cos_2_sigma_m + Quarter(B) *
        (cos_sigma *
-        (fixed(-1) + 2 * Square(cos_2_sigma_m)) - B / 6 * cos_2_sigma_m *
-        (fixed(-3) + 4 * Square(sin_sigma)) * (fixed(-3) + Quadruple(Square(cos_2_sigma_m)))));
+        (-1 + 2 * Square(cos_2_sigma_m)) - B / 6 * cos_2_sigma_m *
+        (-3 + 4 * Square(sin_sigma)) * (-3 + Quadruple(Square(cos_2_sigma_m)))));
 
     sigmaP = sigma;
     sigma = distance / (POLE_RADIUS * A) + delta_sigma;
-  } while (fabs(sigma - sigmaP) > fixed(1e-7));
+  } while (fabs(sigma - sigmaP) > 1e-7);
 
   const auto tmp = sin_u1 * sin_sigma - cos_u1 * cos_sigma * cos_alpha1;
   const auto lat2 = atan2(sin_u1 * cos_sigma + cos_u1 * sin_sigma * cos_alpha1,
-                          (fixed(1) - FLATTENING) * hypot(sin_alpha, tmp));
+                          (1 - FLATTENING) * hypot(sin_alpha, tmp));
 
   const auto lambda = atan2(sin_sigma * sin_alpha1, cos_u1 * cos_sigma -
     sin_u1 * sin_sigma * cos_alpha1);
 
   const auto C = CalcC(cos_sq_alpha);
 
-  const auto L = lambda - (fixed(1) - C) * FLATTENING * sin_alpha *
+  const auto L = lambda - (1 - C) * FLATTENING * sin_alpha *
     (sigma + C * sin_sigma *
-     (cos_2_sigma_m + C * cos_sigma * (fixed(-1) +
-                                       2 * Square(cos_2_sigma_m))));
+     (cos_2_sigma_m + C * cos_sigma * (-1 + 2 * Square(cos_2_sigma_m))));
 
   loc_out.longitude = Angle::Radians(lon1 + L);
   loc_out.latitude = Angle::Radians(lat2);
@@ -462,10 +456,10 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   return loc_out;
 }
 
-fixed
+double
 Distance(const GeoPoint &loc1, const GeoPoint &loc2)
 {
-  fixed distance;
+  double distance;
   DistanceBearing(loc1, loc2, &distance, nullptr);
   return distance;
 }

@@ -37,7 +37,7 @@ SearchPointVector::PruneInterior()
 bool
 SearchPointVector::ThinToSize(const unsigned max_size)
 {
-  const fixed tolerance = fixed(1.0e-8);
+  static constexpr double tolerance = 1.0e-8;
   unsigned i = 2;
   bool retval = false;
   while (size() > max_size) {
@@ -61,19 +61,19 @@ NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
               const FlatGeoPoint &p3)
 {
   const FlatGeoPoint p12 = p2-p1;
-  const fixed rsq(p12.DotProduct(p12));
-  if (!positive(rsq)) {
+  const double rsq(p12.DotProduct(p12));
+  if (rsq <= 0)
     return p1;
-  }
+
   const FlatGeoPoint p13 = p3-p1;
-  const fixed numerator(p13.DotProduct(p12));
+  const double numerator(p13.DotProduct(p12));
   
-  if (!positive(numerator)) {
+  if (numerator <= 0) {
     return p1;
   } else if (numerator>= rsq) {
     return p2;
   } else {
-    fixed t = numerator/rsq;
+    double t = numerator/rsq;
     return p1+(p2-p1)*t;
   }
 }

@@ -32,7 +32,7 @@ GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
 }
 
 GeoPoint 
-GeoEllipse::Parametric(const fixed t) const
+GeoEllipse::Parametric(const double t) const
 {
   const FlatPoint fp = ell.Parametric(t);
   return projection.Unproject(fp);

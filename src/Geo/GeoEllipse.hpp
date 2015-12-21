@@ -57,7 +57,7 @@ public:
    * @return Location of point on ellipse
    */
   gcc_pure
-  GeoPoint Parametric(const fixed t) const;
+  GeoPoint Parametric(double t) const;
 
   /**
    * Calculate where a line from the first focus through a point p

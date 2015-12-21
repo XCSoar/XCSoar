@@ -56,15 +56,13 @@ GeoBounds::GetCenter() const
 }
 
 GeoBounds
-GeoBounds::Scale(fixed factor) const
+GeoBounds::Scale(double factor) const
 {
   if (!IsValid())
     return Invalid();
 
-  Angle diff_lat_half =
-    GetHeight() / 2 * (factor - fixed(1));
-  Angle diff_lon_half =
-    GetWidth() / 2 * (factor - fixed(1));
+  Angle diff_lat_half = GetHeight() / 2 * (factor - 1);
+  Angle diff_lon_half = GetWidth() / 2 * (factor - 1);
 
   GeoBounds br = *this;
   br.longitude.end += diff_lon_half;

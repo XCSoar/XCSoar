@@ -24,18 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_GEO_WGS84_HPP
 #define XCSOAR_GEO_WGS84_HPP
 
-#include "Math/fixed.hpp"
-
 namespace WGS84 {
   static constexpr double EQUATOR_RADIUS = 6378137;
   static constexpr double FLATTENING = 1 / 298.257223563;
   static constexpr double POLE_RADIUS = EQUATOR_RADIUS * (1 - FLATTENING);
-
-  namespace Fixed {
-    static constexpr fixed EQUATOR_RADIUS = fixed(WGS84::EQUATOR_RADIUS);
-    static constexpr fixed POLE_RADIUS = fixed(WGS84::POLE_RADIUS);
-    static constexpr fixed FLATTENING = fixed(WGS84::FLATTENING);
-  }
 }
 
 #endif

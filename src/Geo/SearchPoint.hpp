@@ -176,7 +176,7 @@ public:
   /**
    * distance from this to the reference
    */
-  fixed DistanceTo(const GeoPoint &ref) const {
+  double DistanceTo(const GeoPoint &ref) const {
     return location.Distance(ref);
   }
 };

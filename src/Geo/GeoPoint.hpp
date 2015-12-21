@@ -137,7 +137,7 @@ struct GeoPoint {
    * @return Location of point
    */
   gcc_pure
-  GeoPoint Parametric(const GeoPoint &delta, const fixed t) const;
+  GeoPoint Parametric(const GeoPoint &delta, double t) const;
 
   /**
    * Find location interpolated from this point towards end
@@ -148,7 +148,7 @@ struct GeoPoint {
    * @return Location of point
    */
   gcc_pure
-  GeoPoint Interpolate(const GeoPoint &end, const fixed t) const;
+  GeoPoint Interpolate(const GeoPoint &end, double t) const;
 
   /**
    * Multiply a point by a factor (used for deltas)
@@ -158,7 +158,7 @@ struct GeoPoint {
    * @return Modified point
    */
   gcc_pure
-  GeoPoint operator* (const fixed x) const {
+  GeoPoint operator* (const double x) const {
     GeoPoint res = *this;
     res.longitude *= x;
     res.latitude *= x;
@@ -216,7 +216,7 @@ struct GeoPoint {
    * @return Distance (m)
    */
   gcc_pure
-  fixed Distance(const GeoPoint &other) const;
+  double Distance(const GeoPoint &other) const;
 
   /**
    * Calculate great circle initial bearing from this to the other
@@ -239,7 +239,7 @@ struct GeoPoint {
    * less accurate.
    */
   gcc_pure
-  fixed DistanceS(const GeoPoint &other) const;
+  double DistanceS(const GeoPoint &other) const;
 
   /**
    * Find distance along a great-circle path that this point
@@ -251,7 +251,7 @@ struct GeoPoint {
    * @return Distance (m) along from-to line
    */
   gcc_pure
-  fixed ProjectedDistance(const GeoPoint &from, const GeoPoint &to) const;
+  double ProjectedDistance(const GeoPoint &from, const GeoPoint &to) const;
 
   /**
    * Find point a set distance along a great-circle path towards
@@ -264,7 +264,7 @@ struct GeoPoint {
    */
   gcc_pure
   GeoPoint IntermediatePoint(const GeoPoint &destination,
-                             const fixed distance) const;
+                             double distance) const;
 
   /**
    * Find the nearest great-circle middle point between this point and

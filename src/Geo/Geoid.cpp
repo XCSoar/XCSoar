@@ -36,7 +36,7 @@ Copyright_License {
 
 extern "C" const uint8_t egm96s_dem[];
 
-fixed
+double
 EGM96::LookupSeparation(const GeoPoint &pt)
 {
   int ilat, ilon;
@@ -45,9 +45,9 @@ EGM96::LookupSeparation(const GeoPoint &pt)
 
   int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)
-    return fixed(0);
+    return 0;
   if (offset < 0)
-    return fixed(0);
+    return 0;
 
-  return fixed((int)egm96s_dem[offset] - 127);
+  return (int)egm96s_dem[offset] - 127;
 }

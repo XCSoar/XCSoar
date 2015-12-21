@@ -136,7 +136,7 @@ public:
    * center in metres.
    */
   gcc_pure
-  fixed GetGeoWidth() const {
+  double GetGeoWidth() const {
     const Angle middle_latitude = latitude.GetMiddle();
     return GeoPoint(GetWest(), middle_latitude)
       .Distance(GeoPoint(GetEast(), middle_latitude));
@@ -147,7 +147,7 @@ public:
    * metres.
    */
   gcc_pure
-  fixed GetGeoHeight() const {
+  double GetGeoHeight() const {
     return GetNorthWest().Distance(GetSouthWest());
   }
 
@@ -198,7 +198,7 @@ public:
    * @return A scaled version of the GeoBounds
    */
   gcc_pure
-  GeoBounds Scale(fixed factor) const;
+  GeoBounds Scale(double factor) const;
 };
 
 #endif

@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef GEOID_H
 #define GEOID_H
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
+
 struct GeoPoint;
 
 namespace EGM96
@@ -37,7 +38,7 @@ namespace EGM96
    * @return The geoid separation
    */
   gcc_pure
-  fixed LookupSeparation(const GeoPoint &pt);
+  double LookupSeparation(const GeoPoint &pt);
 }
 
 #endif

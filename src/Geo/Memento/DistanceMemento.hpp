@@ -37,7 +37,7 @@ class DistanceMemento
   mutable GeoPoint destination;
 
   /** Distance in meters saved from previous query */
-  mutable fixed value;
+  mutable double value;
 
 public:
   /** Constructor, initialises to trigger update on first call. */
@@ -48,7 +48,7 @@ public:
    * from previously saved value if input arguments are identical. 
    */
   gcc_pure
-  fixed Distance(const GeoPoint& _origin, const GeoPoint& _destination) const;
+  double Distance(const GeoPoint& _origin, const GeoPoint& _destination) const;
 };
 
 #endif

@@ -22,11 +22,11 @@
 
 #include "DistanceMemento.hpp"
 
-fixed 
+double 
 DistanceMemento::Distance(const GeoPoint& _origin,
                           const GeoPoint& _destination) const
 {
-  if (negative(value) || _origin != origin || _destination != destination) {
+  if (value < 0 || _origin != origin || _destination != destination) {
     origin = _origin;
     destination = _destination;
     value = origin.Distance(destination);

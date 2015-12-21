@@ -38,7 +38,7 @@ static char
 CalculateZoneLetter(const Angle latitude)
 {
   static constexpr char letters[] = "CDEFGHJKLMNPQRSTUVWXX";
-  unsigned index = (unsigned)((latitude.Degrees() + fixed(80)) / 8);
+  unsigned index = (unsigned)((latitude.Degrees() + 80) / 8);
   return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
 }
 
@@ -65,14 +65,14 @@ CalculateZoneNumber(const GeoPoint &p)
       return 37;
   }
 
-  return (int)floor((p.longitude.Degrees() + fixed(180)) / 6) + 1;
+  return (int)floor((p.longitude.Degrees() + 180) / 6) + 1;
 }
 
 gcc_const
 static Angle
 GetCentralMeridian(unsigned zone_number)
 {
-  return Angle::Degrees(fixed(int(zone_number - 1) * 6 - 180 + 3));
+  return Angle::Degrees(int(zone_number - 1) * 6 - 180 + 3);
 }
 
 UTM
@@ -106,14 +106,15 @@ UTM::FromGeoPoint(GeoPoint p)
        (15 * e2 / 256 + 45 * e3 / 1024) * sin(4 * lat) -
        (35 * e3 / 3072) * sin(6 * lat));
 
-  utm.easting = fixed(k0 * n * (a + (1 - tan2 + c) * a3 / 6 +
-      (5 - 18 * tan2 + tan4 + 72 * c - 58 * e_p2) * a5 / 120) + 500000.0);
+  utm.easting = k0 * n * (a + (1 - tan2 + c) * a3 / 6 +
+                          (5 - 18 * tan2 + tan4 + 72 * c - 58 * e_p2) * a5 / 120)
+    + 500000;
 
-  utm.northing = fixed(k0 * (m + n * _tan *
-      (a2 / 2 +  a4 / 24 * (5 - tan2 + 9 * c + 4 * c * c) +
-       a6 / 720 * (61 - 58 * tan2 + tan4 + 600 * c - 330 * e_p2))));
+  utm.northing = k0 * (m + n * _tan *
+                       (a2 / 2 +  a4 / 24 * (5 - tan2 + 9 * c + 4 * c * c) +
+                        a6 / 720 * (61 - 58 * tan2 + tan4 + 600 * c - 330 * e_p2)));
   if (p.latitude.IsNegative())
-    utm.northing += fixed(10000000);
+    utm.northing += 10000000;
 
   return utm;
 }
@@ -138,11 +139,11 @@ UTM::ToGeoPoint() const
   double _e4 = _e * _e3;
   double _e5 = _e * _e4;
 
-  Angle phi1rad = Angle::Radians(fixed(mu +
+  Angle phi1rad = Angle::Radians(mu +
       (3. / 2 * _e - 27. / 32 * _e3 + 269. / 512 * _e5) * sin(2 * mu) +
       (21. / 16 * _e2 - 55. / 32 * _e4) * sin(4 * mu) +
       (151. / 96 * _e3 - 417. / 128 * _e5) * sin(6 * mu) +
-      (1097. / 512 * _e4) * sin(8 * mu)));
+      (1097. / 512 * _e4) * sin(8 * mu));
 
   double _sin = (double)phi1rad.sin();
   double sin2 = _sin * _sin;
@@ -173,6 +174,6 @@ UTM::ToGeoPoint() const
   double longitude = (d - d3 / 6 * (1 + 2 * tan2 + c) +
                       d5 / 120 * (5 - 2 * c + 28 * tan2 - 3 * c2 + 8 * e_p2 + 24 * tan4)) / _cos;
 
-  return GeoPoint(Angle::Radians(fixed(longitude)) + GetCentralMeridian(zone_number),
-                  Angle::Radians(fixed(latitude)));
+  return GeoPoint(Angle::Radians(longitude) + GetCentralMeridian(zone_number),
+                  Angle::Radians(latitude));
 }
