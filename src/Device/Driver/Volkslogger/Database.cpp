@@ -31,13 +31,13 @@ Volkslogger::Waypoint::GetLocation() const
 {
   uint32_t ll = ((latitude[0] & 0x7f) << 16) |
     (latitude[1] << 8) | latitude[2];
-  auto lat = fixed(ll) / 60000;
+  auto lat = ll / 60000.;
   if (latitude[0] & 0x80)
     lat = -lat;
 
   ll = (longitude[0] << 16) |
     (longitude[1] << 8) | longitude[2];
-  auto lon = fixed(ll) / 60000;
+  auto lon = ll / 60000.;
   if (type_and_longitude_sign & 0x80)
     lon = -lon;
 
