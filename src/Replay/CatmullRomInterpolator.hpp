@@ -24,7 +24,6 @@
 #ifndef XCSOAR_CATMULL_ROM_INTERPOLATOR_HPP
 #define XCSOAR_CATMULL_ROM_INTERPOLATOR_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Util.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
@@ -42,20 +41,19 @@ class CatmullRomInterpolator
 public:
   struct Record {
     GeoPoint location;
-    fixed gps_altitude;
-    fixed baro_altitude;
-    fixed time;
+    double gps_altitude;
+    double baro_altitude;
+    double time;
   };
 
 private:
-  const fixed time;
+  const double time;
 
   unsigned num;
   Record p[4];
 
 public:
-  CatmullRomInterpolator(fixed _time):
-    time(_time)
+  CatmullRomInterpolator(double _time):time(_time)
   {
     Reset();
   }
@@ -67,7 +65,7 @@ public:
   }
 
   void
-  Update(fixed t, GeoPoint location, fixed alt, fixed palt)
+  Update(double t, GeoPoint location, double alt, double palt)
   {
     if (num && (t <= p[3].time))
       return;
@@ -90,15 +88,15 @@ public:
   }
 
   GeoVector 
-  GetVector(fixed _time) const
+  GetVector(double _time) const
   {
     assert(Ready());
 
-    if (!positive(p[2].time-p[1].time))
-      return GeoVector(fixed(0), Angle::Zero());
+    if ((p[2].time - p[1].time) <= 0)
+      return GeoVector(0, Angle::Zero());
 
-    const Record r0 = Interpolate(_time - fixed(0.05));
-    const Record r1 = Interpolate(_time + fixed(0.05));
+    const Record r0 = Interpolate(_time - 0.05);
+    const Record r1 = Interpolate(_time + 0.05);
 
     auto speed = p[1].location.DistanceS(p[2].location) / (p[2].time - p[1].time);
     Angle bearing = r0.location.Bearing(r1.location);
@@ -108,7 +106,7 @@ public:
 
   gcc_pure
   Record
-  Interpolate(fixed _time) const
+  Interpolate(double _time) const
   {
     assert(Ready());
 
@@ -124,9 +122,9 @@ public:
 
     const auto u2 = Square(u);
     const auto u3 = u2 * u;
-    const fixed c[4]= {-time * u3 + 2 * time * u2 - time * u,
-                       (fixed(2) - time) * u3 + (time - fixed(3)) * u2 + fixed(1),
-                       (time - fixed(2)) * u3 + (fixed(3) - 2 * time) * u2 + time * u,
+    const double c[4]= {-time * u3 + 2 * time * u2 - time * u,
+                        (2 - time) * u3 + (time - 3) * u2 + 1,
+                        (time - 2) * u3 + (3 - 2 * time) * u2 + time * u,
                         time * u3 - time * u2};
 
     Record r;
@@ -151,7 +149,7 @@ public:
     return r;
   }
 
-  fixed
+  double
   GetMinTime() const
   {
     assert(Ready());
@@ -159,23 +157,23 @@ public:
     return p[0].time;
   }
 
-  fixed
+  double
   GetMaxTime() const
   {
     assert(Ready());
 
-    return std::max({fixed(0), p[0].time, p[1].time, p[2].time, p[3].time});
+    return std::max({0., p[0].time, p[1].time, p[2].time, p[3].time});
   }
 
   bool
-  NeedData(fixed t_simulation) const
+  NeedData(double t_simulation) const
   {
-    return !Ready() || (p[2].time <= t_simulation + fixed(0.1));
+    return !Ready() || (p[2].time <= t_simulation + 0.1);
   }
 
 private:
-  fixed
-  GetTimeFraction(const fixed time, bool limit_range = true) const
+  double
+  GetTimeFraction(const double time, bool limit_range = true) const
   {
     assert(Ready());
     assert(p[2].time > p[1].time);
@@ -183,7 +181,7 @@ private:
     const auto fraction = (time - p[1].time) / (p[2].time - p[1].time);
 
     if (limit_range)
-      return Clamp(fraction, fixed(0), fixed(1));
+      return Clamp(fraction, 0., 1.);
     else
       return fraction;
   }

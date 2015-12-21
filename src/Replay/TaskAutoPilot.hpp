@@ -22,7 +22,6 @@
 #ifndef TASK_AUTOPILOT_HPP
 #define TASK_AUTOPILOT_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Filter.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -30,12 +29,12 @@
 struct AircraftState;
 
 struct AutopilotParameters {
-  fixed bearing_noise;
-  fixed target_noise;
-  fixed turn_speed;
-  fixed sink_factor;
-  fixed climb_factor;
-  fixed start_alt;
+  double bearing_noise;
+  double target_noise;
+  double turn_speed;
+  double sink_factor;
+  double climb_factor;
+  double start_alt;
   bool enable_bestcruisetrack;
   bool goto_target;
 
@@ -89,8 +88,8 @@ protected:
 private:
   const AutopilotParameters &parms;
   Filter heading_filter;
-  fixed climb_rate;
-  fixed speed_factor;
+  double climb_rate;
+  double speed_factor;
   GeoPoint w[2];
 
 public:
@@ -101,7 +100,7 @@ public:
                           const AircraftState& state);
 
   virtual void UpdateState(const TaskAccessor& task,
-                           AircraftState& state, const fixed timestep=fixed(1));
+                           AircraftState &state, double timestep=1);
 
   bool UpdateAutopilot(TaskAccessor &task,
                        const AircraftState &state);
@@ -109,7 +108,7 @@ public:
   gcc_pure
   GeoPoint GetTarget(const TaskAccessor& task) const;
 
-  void SetSpeedFactor(fixed f) {
+  void SetSpeedFactor(double f) {
     speed_factor = f;
   }
 
@@ -129,9 +128,9 @@ private:
                                     bool previous = false);
 
   void UpdateCruiseBearing(const TaskAccessor& task, const AircraftState& state,
-                           const fixed timestep);
+                           double timestep);
 
-  fixed GetTargetHeight(const TaskAccessor& task) const;
+  double GetTargetHeight(const TaskAccessor &task) const;
   Angle GetHeadingDeviation();
   bool UpdateComputer(TaskAccessor &task, const AircraftState& state);
   bool IsFarFromTarget(const TaskAccessor& task,

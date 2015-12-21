@@ -25,7 +25,6 @@ Copyright_License {
 #define REPLAY_HPP
 
 #include "Event/Timer.hpp"
-#include "Math/fixed.hpp"
 #include "NMEA/Info.hpp"
 #include "Time/PeriodClock.hpp"
 #include "OS/Path.hpp"
@@ -39,7 +38,7 @@ class Error;
 class Replay final
   : private Timer
 {
-  fixed time_scale;
+  double time_scale;
 
   AbstractReplay *replay;
 
@@ -52,7 +51,7 @@ class Replay final
    * The time of day according to replay input.  This is negative if
    * unknown.
    */
-  fixed virtual_time;
+  double virtual_time;
 
   /**
    * If this value is not negative, then we're in fast-forward mode:
@@ -61,7 +60,7 @@ class Replay final
    * #virtual_time is negative, then this is the duration, and
    * #virtual_time will be added as soon as it is known.
    */
-  fixed fast_forward;
+  double fast_forward;
 
   /**
    * Keeps track of the wall-clock time between two Update() calls.
@@ -78,7 +77,7 @@ class Replay final
 
 public:
   Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
-    :time_scale(fixed(1)), replay(nullptr),
+    :time_scale(1), replay(nullptr),
      logger(_logger), task_manager(_task_manager), cli(nullptr) {
   }
 
@@ -101,11 +100,11 @@ public:
     return path;
   }
 
-  fixed GetTimeScale() const {
+  double GetTimeScale() const {
     return time_scale;
   }
 
-  void SetTimeScale(const fixed _time_scale) {
+  void SetTimeScale(const double _time_scale) {
     time_scale = _time_scale;
   }
 
@@ -114,12 +113,12 @@ public:
    * seconds.  This replays the given amount of time from the input
    * time as quickly as possible.
    */
-  void FastForward(fixed delta_s) {
+  void FastForward(double delta_s) {
     if (!IsActive())
       return;
 
     fast_forward = delta_s;
-    if (!negative(virtual_time))
+    if (virtual_time >= 0)
       fast_forward += virtual_time;
   }
 

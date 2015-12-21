@@ -78,7 +78,7 @@ Replay::Start(Path _path, Error &error)
 
     replay = new IgcReplay(reader);
 
-    cli = new CatmullRomInterpolator(fixed(0.98));
+    cli = new CatmullRomInterpolator(0.98);
     cli->Reset();
   } else {
     auto reader = new FileLineReaderA(path, error);
@@ -94,8 +94,8 @@ Replay::Start(Path _path, Error &error)
   if (logger != nullptr)
     logger->ClearBuffer();
 
-  virtual_time = fixed(-1);
-  fast_forward = fixed(-1);
+  virtual_time = -1;
+  fast_forward = -1;
   next_data.Reset();
 
   Timer::Schedule(100);
@@ -109,7 +109,7 @@ Replay::Update()
   if (replay == nullptr)
     return false;
 
-  if (!positive(time_scale)) {
+  if (time_scale <= 0) {
     /* replay is paused */
     /* to avoid a big fast-forward with the next
        PeriodClock::ElapsedUpdate() call below after unpausing, update
@@ -118,20 +118,20 @@ Replay::Update()
     return true;
   }
 
-  const fixed old_virtual_time = virtual_time;
+  const double old_virtual_time = virtual_time;
 
-  if (!negative(virtual_time)) {
+  if (virtual_time >= 0) {
     /* update the virtual time */
     assert(clock.IsDefined());
 
-    if (negative(fast_forward)) {
+    if (fast_forward < 0) {
       virtual_time += clock.ElapsedUpdate() * time_scale / 1000;
     } else {
       clock.Update();
 
-      virtual_time += fixed(1);
+      virtual_time += 1;
       if (virtual_time >= fast_forward)
-        fast_forward = fixed(-1);
+        fast_forward = -1;
     }
   } else {
     /* if we ever received a valid time from the AbstractReplay, then
@@ -139,7 +139,7 @@ Replay::Update()
     assert(!next_data.time_available);
   }
 
-  if (cli == nullptr || !negative(fast_forward)) {
+  if (cli == nullptr || fast_forward >= 0) {
     if (next_data.time_available && virtual_time < next_data.time)
       /* still not time to use next_data */
       return true;
@@ -159,9 +159,9 @@ Replay::Update()
       assert(!next_data.gps.real);
 
       if (next_data.time_available) {
-        if (negative(virtual_time)) {
+        if (virtual_time < 0) {
           virtual_time = next_data.time;
-          if (!negative(fast_forward))
+          if (fast_forward >= 0)
             fast_forward += virtual_time;
           clock.Update();
           break;
@@ -193,9 +193,9 @@ Replay::Update()
                     next_data.pressure_altitude);
     }
 
-    if (negative(virtual_time)) {
+    if (virtual_time < 0) {
       virtual_time = cli->GetMaxTime();
-      if (!negative(fast_forward))
+      if (fast_forward >= 0)
         fast_forward += virtual_time;
       clock.Update();
     }
@@ -235,16 +235,16 @@ Replay::OnTimer()
     return;
 
   unsigned schedule;
-  if (!positive(time_scale))
+  if (time_scale <= 0)
     schedule = 1000;
-  else if (!negative(fast_forward))
+  else if (fast_forward >= 0)
     schedule = 100;
-  else if (negative(virtual_time) || !next_data.time_available)
+  else if (virtual_time < 0 || !next_data.time_available)
     schedule = 500;
   else if (cli != nullptr)
     schedule = 1000;
   else {
-    fixed delta_s = (next_data.time - virtual_time) / time_scale;
+    double delta_s = (next_data.time - virtual_time) / time_scale;
     int delta_ms = int(delta_s * 1000);
     schedule = Clamp(delta_ms, 100, 3000);
   }

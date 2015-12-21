@@ -81,21 +81,21 @@ IgcReplay::Update(NMEAInfo &basic)
       break;
   }
 
-  basic.clock = fixed(fix.time.GetSecondOfDay());
+  basic.clock = fix.time.GetSecondOfDay();
   basic.alive.Update(basic.clock);
   basic.ProvideTime(basic.clock);
   basic.location = fix.location;
   basic.location_available.Update(basic.clock);
 
   if (fix.gps_altitude != 0) {
-    basic.gps_altitude = fixed(fix.gps_altitude);
+    basic.gps_altitude = fix.gps_altitude;
     basic.gps_altitude_available.Update(basic.clock);
   } else
     basic.gps_altitude_available.Clear();
 
   if (fix.pressure_altitude != 0) {
-    basic.ProvidePressureAltitude(fixed(fix.pressure_altitude));
-    basic.ProvideBaroAltitudeTrue(fixed(fix.pressure_altitude));
+    basic.ProvidePressureAltitude(fix.pressure_altitude);
+    basic.ProvideBaroAltitudeTrue(fix.pressure_altitude);
   } else {
     basic.pressure_altitude_available.Clear();
     basic.baro_altitude_available.Clear();
@@ -108,28 +108,28 @@ IgcReplay::Update(NMEAInfo &basic)
     basic.engine_noise_level_available.Clear();
 
   if (fix.trt >= 0) {
-    basic.track = Angle::Degrees(fixed(fix.trt));
+    basic.track = Angle::Degrees(fix.trt);
     basic.track_available.Update(basic.clock);
   } else
     basic.track_available.Clear();
 
   if (fix.gsp >= 0) {
-    basic.ground_speed = Units::ToSysUnit(fixed(fix.gsp),
+    basic.ground_speed = Units::ToSysUnit(fix.gsp,
                                           Unit::KILOMETER_PER_HOUR);
     basic.ground_speed_available.Update(basic.clock);
   } else
     basic.ground_speed_available.Clear();
 
   if (fix.ias >= 0) {
-    auto ias = Units::ToSysUnit(fixed(fix.ias), Unit::KILOMETER_PER_HOUR);
+    auto ias = Units::ToSysUnit(fix.ias, Unit::KILOMETER_PER_HOUR);
     if (fix.tas >= 0)
       basic.ProvideBothAirspeeds(ias,
-                                 Units::ToSysUnit(fixed(fix.tas),
+                                 Units::ToSysUnit(fix.tas,
                                                   Unit::KILOMETER_PER_HOUR));
     else
       basic.ProvideIndicatedAirspeedWithAltitude(ias, basic.pressure_altitude);
   } else if (fix.tas >= 0)
-    basic.ProvideTrueAirspeed(Units::ToSysUnit(fixed(fix.tas),
+    basic.ProvideTrueAirspeed(Units::ToSysUnit(fix.tas,
                                                Unit::KILOMETER_PER_HOUR));
 
   if (fix.siu >= 0) {

@@ -31,19 +31,19 @@
 void
 AutopilotParameters::SetIdeal()
 {
-  bearing_noise = fixed(0);
-  turn_speed = fixed(90.0);
+  bearing_noise = 0;
+  turn_speed = 90.0;
 }
 
 void
 AutopilotParameters::SetRealistic()
 {
-  bearing_noise = fixed(20.0);
-  turn_speed = fixed(12.0);
+  bearing_noise = 20;
+  turn_speed = 12;
 }
 
 TaskAutoPilot::TaskAutoPilot(const AutopilotParameters &_parms)
-  :parms(_parms), heading_filter(fixed(8)), climb_rate(2.0), speed_factor(1.0) {}
+  :parms(_parms), heading_filter(8), climb_rate(2.0), speed_factor(1.0) {}
 
 void
 TaskAutoPilot::Start(const TaskAccessor& task)
@@ -83,7 +83,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
 
   // reset the heading
   heading = Angle::Zero();
-  heading_filter.Reset(fixed(0));
+  heading_filter.Reset(0);
 
   acstate = Cruise;
 }
@@ -95,7 +95,7 @@ TaskAutoPilot::GetStartLocation(const TaskAccessor& task, bool previous)
     // set start location to 200 meters directly behind start
     // (otherwise start may fail to trigger)
     Angle brg = w[0].Bearing(w[1]);
-    return GeoVector(fixed(200), brg).EndPoint(w[1]);
+    return GeoVector(200, brg).EndPoint(w[1]);
   }
 
   return w[0];
@@ -125,12 +125,12 @@ TaskAutoPilot::GetHeadingDeviation()
   auto noise_mag = acstate == Climb
     ? Half(parms.bearing_noise)
     : parms.bearing_noise;
-  auto r = (fixed(2) * rand() / RAND_MAX) - fixed(1);
-  auto deviation = fixed(heading_filter.Update(noise_mag * r));
+  auto r = (2 * rand() / RAND_MAX) - 1;
+  auto deviation = heading_filter.Update(noise_mag * r);
   return Angle::Degrees(deviation).AsDelta();
 }
 
-fixed
+double
 TaskAutoPilot::GetTargetHeight(const TaskAccessor& task) const
 {
   return task.GetTargetHeight();
@@ -142,7 +142,7 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
   switch (acstate) {
   case Cruise:
     /* XXX this condition is probably broken */
-    if (awp > 0 && !negative(task.GetRemainingAltitudeDifference())) {
+    if (awp > 0 && task.GetRemainingAltitudeDifference() >= 0) {
       acstate = FinalGlide;
       OnModeChange();
     } else if (state.altitude <= GetTargetHeight(task)) {
@@ -151,17 +151,17 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
     }
     break;
   case FinalGlide:
-    if (task.GetRemainingAltitudeDifference() < -fixed(20)) {
+    if (task.GetRemainingAltitudeDifference() < -20) {
       acstate = Climb;
       OnModeChange();
     }
     break;
   case Climb:
     /* XXX this condition is probably broken */
-    if (awp > 0 && !negative(task.GetRemainingAltitudeDifference())) {
+    if (awp > 0 && task.GetRemainingAltitudeDifference() >= 0) {
       acstate = FinalGlide;
       OnModeChange();
-    } else if (state.altitude >= fixed(1500)) {
+    } else if (state.altitude >= 1500) {
       acstate = Cruise;
       OnModeChange();
     }
@@ -172,7 +172,7 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
 void
 TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
                                    const AircraftState& state,
-                                   const fixed timestep)
+                                   const double timestep)
 {
   const ElementStat &stat = task.GetLegStats();
   Angle bct = stat.solution_remaining.cruise_track_bearing;
@@ -182,16 +182,16 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
     bearing = stat.solution_remaining.vector.bearing;
 
     if (parms.enable_bestcruisetrack &&
-        stat.solution_remaining.vector.distance > fixed(1000))
+        stat.solution_remaining.vector.distance > 1000)
       bearing = bct;
 
   } else {
     bearing = state.location.Bearing(GetTarget(task));
   }
 
-  if (positive(state.wind.norm) && positive(state.true_airspeed)) {
+  if (state.wind.norm > 0 && state.true_airspeed > 0) {
     const auto sintheta = (state.wind.bearing - bearing).sin();
-    if (fabs(sintheta) > fixed(0.0001))
+    if (fabs(sintheta) > 0.0001)
       bearing +=
         Angle::asin(sintheta * state.wind.norm / state.true_airspeed);
   }
@@ -200,7 +200,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
   auto d = diff.Degrees();
   auto max_turn = parms.turn_speed * timestep;
   heading += Angle::Degrees(Clamp(d, -max_turn, max_turn));
-  if (positive(parms.bearing_noise))
+  if (parms.bearing_noise > 0)
     heading += GetHeadingDeviation() * timestep;
 
   heading = heading.AsBearing();
@@ -208,7 +208,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
 
 void
 TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
-                           const fixed timestep)
+                           const double timestep)
 {
   const GlidePolar &glide_polar = task.GetGlidePolar();
 
@@ -217,7 +217,7 @@ TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
   case FinalGlide:
   {
     const ElementStat &stat = task.GetLegStats();
-    if (positive(stat.solution_remaining.v_opt))
+    if (stat.solution_remaining.v_opt > 0)
       state.true_airspeed = stat.solution_remaining.v_opt * speed_factor;
     else
       state.true_airspeed = glide_polar.GetVBestLD();
@@ -229,10 +229,10 @@ TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
   case Climb: {
     state.true_airspeed = glide_polar.GetVMin();
     auto d = parms.turn_speed * timestep;
-    if (d < fixed(360))
+    if (d < 360)
       heading += Angle::Degrees(d);
 
-    if (positive(parms.bearing_noise))
+    if (parms.bearing_noise > 0)
       heading += GetHeadingDeviation() * timestep;
 
     heading = heading.AsBearing();
@@ -253,7 +253,7 @@ TaskAutoPilot::IsFarFromTarget(const TaskAccessor& task,
   if (task.IsEmpty() || !task.GetLegStats().remaining.IsDefined())
     return w[0].DistanceS(state.location) > state.ground_speed;
 
-  bool d_far = task.GetLegStats().remaining.GetDistance() > fixed(100);
+  bool d_far = task.GetLegStats().remaining.GetDistance() > 100;
 
   if (!task.IsOrdered())
     // cheat for non-ordered tasks

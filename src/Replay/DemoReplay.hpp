@@ -38,7 +38,7 @@ public:
 
 protected:
   void Start(const TaskAccessor& task, const GeoPoint& default_location);
-  bool Update(fixed time_scale, TaskAccessor& task);
+  bool Update(double time_scale, TaskAccessor& task);
 };
 
 #endif
