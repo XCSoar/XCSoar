@@ -64,6 +64,12 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.polar.glide_polar_task.GetBallast());
+  } else if (StringIsEqual(name, "qnh")) {
+      /* Area pressure for barometric altimeter calibration */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.pressure.GetPascal());
   } else
     return 0;
 
