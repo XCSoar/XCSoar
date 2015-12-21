@@ -53,14 +53,14 @@ struct SpeedState
    * @see TrueAirspeed
    * @see IndicatedAirspeed
    */
-  fixed ground_speed; 
+  double ground_speed;
 
   /**
    * True air speed (m/s)
    * @see Speed
    * @see IndicatedAirspeed
    */
-  fixed true_airspeed;
+  double true_airspeed;
 };
 
 /**
@@ -73,13 +73,13 @@ struct AltitudeState
   //##############
 
   /** Altitude used for navigation (GPS or Baro) */
-  fixed altitude;
+  double altitude;
 
   /** Fraction of working band height */
-  fixed working_band_fraction;
+  double working_band_fraction;
 
   /** Altitude over terrain */
-  fixed altitude_agl;
+  double altitude_agl;
 
   void Reset();
 };
@@ -93,13 +93,13 @@ struct VarioState
    * Rate of change of total energy of aircraft (m/s, up positive)
    * @see VarioAvailable
    */
-  fixed vario;
+  double vario;
 
   /**
    * Vertical speed of air mass (m/s, up positive)
    * @see NettoVarioAvailable
    */
-  fixed netto_vario;
+  double netto_vario;
 };
 
 /**
@@ -118,7 +118,7 @@ struct AircraftState:
    * Global time (seconds after UTC midnight).  A negative value means
    * "no time available", e.g. if no GPS fix was obtained yet.
    */
-  fixed time;
+  double time;
 
   //################
   //   Navigation
@@ -139,7 +139,7 @@ struct AircraftState:
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable
    */
-  fixed g_load;
+  double g_load;
 
   /** Wind speed, direction at aircraft */
   SpeedVector wind;
@@ -154,7 +154,7 @@ struct AircraftState:
    * @return Predicted aircraft state in in_time seconds
    */
   gcc_pure
-  AircraftState GetPredictedState(fixed in_time) const;
+  AircraftState GetPredictedState(double in_time) const;
 
   void Reset();
 };

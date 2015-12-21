@@ -24,7 +24,7 @@
 #include "Geo/GeoVector.hpp"
 
 AircraftState 
-AircraftState::GetPredictedState(fixed in_time) const
+AircraftState::GetPredictedState(double in_time) const
 {
   AircraftState state_next = *this;
   GeoVector vec(ground_speed * in_time, track);
@@ -38,7 +38,7 @@ AircraftState::Reset()
 {
   AltitudeState::Reset();
 
-  g_load = fixed(1);
+  g_load = 1;
   wind = SpeedVector::Zero();
   flying = false;
 }
@@ -46,7 +46,7 @@ AircraftState::Reset()
 void
 AltitudeState::Reset()
 {
-  altitude = fixed(0);
-  working_band_fraction = fixed(0);
-  altitude_agl = fixed(0);
+  altitude = 0;
+  working_band_fraction = 0;
+  altitude_agl = 0;
 }
