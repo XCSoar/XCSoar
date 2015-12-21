@@ -58,6 +58,12 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.polar.glide_polar_task.GetWingLoading());
+  } else if (StringIsEqual(name, "ballast")) {
+      /* Ballast of the glider */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.glide_polar_task.GetBallast());
   } else
     return 0;
 
