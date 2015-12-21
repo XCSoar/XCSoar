@@ -59,7 +59,7 @@ NMEAInfo::UpdateClock()
 BrokenDateTime
 NMEAInfo::GetDateTimeAt(double other_time) const
 {
-  if (negative(other_time))
+  if (other_time < 0)
     return BrokenDateTime::Invalid();
 
   if (!time_available || !date_time_utc.IsDatePlausible())
@@ -72,7 +72,7 @@ NMEAInfo::GetDateTimeAt(double other_time) const
 void
 NMEAInfo::ProvideTime(double _time)
 {
-  assert(!negative(_time));
+  assert(_time >= 0);
 
   time = _time;
   time_available.Update(clock);

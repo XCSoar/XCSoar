@@ -104,7 +104,7 @@ struct FlyingState
   void Reset();
 
   bool IsTowing() const {
-    return flying && negative(release_time);
+    return flying && release_time < 0;
   }
 
   /**

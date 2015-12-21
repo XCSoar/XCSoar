@@ -118,7 +118,7 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
 bool
 ExternalSettings::ProvideMacCready(double value, double time)
 {
-  if (negative(value) || value > 20)
+  if (value < 0 || value > 20)
     /* failed sanity check */
     return false;
 
@@ -133,7 +133,7 @@ ExternalSettings::ProvideMacCready(double value, double time)
 bool
 ExternalSettings::ProvideBallastFraction(double value, double time)
 {
-  if (negative(value) || value > 1)
+  if (value < 0 || value > 1)
     /* failed sanity check */
     return false;
 
