@@ -170,11 +170,23 @@ l_settings_setballast(lua_State *L)
   return 0;
 }
 
+static int
+l_settings_setmaxtemp(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  ComputerSettings &settings = CommonInterface::SetComputerSettings();
+  settings.forecast_temperature=luaL_checknumber(L, 1);
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"setmc", l_settings_setmc},
   {"setbugs", l_settings_setbugs},
   {"setqnh", l_settings_setqnh},
   {"setballast", l_settings_setballast},
+  {"setmaxtemp", l_settings_setmaxtemp},
   {nullptr, nullptr}
 };
 
