@@ -211,14 +211,18 @@ dlgStartupShowModal()
   auto *dff = new FileDataField();
   dff->ScanDirectoryTop(_T("*.prf"));
 
-  /* skip this dialog if there is only one (or none) */
-  if (dff->GetNumFiles() <= 1) {
+  if (dff->GetNumFiles() == 1) {
+    /* skip this dialog if there is only one */
     const auto path = dff->GetPathFile();
     if (ProfileFileHasPassword(path) == TriState::FALSE &&
         SelectProfile(path)) {
       delete dff;
       return true;
     }
+  } else if (dff->GetNumFiles() == 0) {
+    /* no profile exists yet: create default profile */
+    Profile::SetFiles(nullptr);
+    return true;
   }
 
   /* preselect the most recently used profile */
