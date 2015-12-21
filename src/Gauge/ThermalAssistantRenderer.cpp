@@ -68,24 +68,24 @@ ThermalAssistantRenderer::Update(const AttitudeState &attitude,
   vario = (VarioInfo)derived;
 }
 
-fixed
+double
 ThermalAssistantRenderer::CalculateMaxLift() const
 {
-  return std::max(fixed(1),
+  return std::max(1.,
                   *std::max_element(vario.lift_database.begin(),
                                     vario.lift_database.end()));
 }
 
 void
 ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
-                                            fixed max_lift) const
+                                              double max_lift) const
 {
   Angle angle = -direction;
   constexpr Angle delta = Angle::FullCircle() / unsigned(std::tuple_size<LiftDatabase>());
 
   for (unsigned i = 0; i < lift_points.size(); i++, angle += delta) {
     auto sincos = angle.SinCos();
-    auto scale = NormalizeLift(vario.lift_database[i], max_lift) * fixed(radius);
+    double scale = NormalizeLift(vario.lift_database[i], max_lift) * radius;
 
     lift_points[i].x = (int)(sincos.second * scale);
     lift_points[i].y = (int)(sincos.first * scale);
@@ -100,11 +100,11 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
   }
 }
 
-fixed
-ThermalAssistantRenderer::NormalizeLift(fixed lift, fixed max_lift)
+double
+ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift)
 {
   lift = (lift + max_lift) / Double(max_lift);
-  return Clamp(lift, fixed(0), fixed(1));
+  return Clamp(lift, 0., 1.);
 }
 
 void
@@ -129,7 +129,7 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 }
 
 void
-ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) const
+ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) const
 {
   canvas.SelectHollowBrush();
 
@@ -153,7 +153,7 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) c
                   mid.y + radius - s.cy * 0.75,
                   lift_string);
 
-  FormatUserVerticalSpeed(fixed(0), lift_string, ARRAY_SIZE(lift_string));
+  FormatUserVerticalSpeed(0, lift_string, ARRAY_SIZE(lift_string));
   s = canvas.CalcTextSize(lift_string);
   canvas.DrawText(mid.x - s.cx / 2,
                   mid.y + radius / 2 - s.cy * 0.75,
@@ -207,7 +207,7 @@ ThermalAssistantRenderer::UpdateLayout(const PixelRect &rc)
 void
 ThermalAssistantRenderer::Paint(Canvas &canvas)
 {
-  fixed max_lift = ceil(CalculateMaxLift());
+  double max_lift = ceil(CalculateMaxLift());
 
   PaintRadarBackground(canvas, max_lift);
   if (!circling.circling) {

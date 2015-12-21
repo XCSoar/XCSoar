@@ -90,7 +90,7 @@ public:
 
   void SetZoom(unsigned _zoom) {
     zoom = _zoom;
-    SetDistance(fixed(GetZoomDistance(_zoom)));
+    SetDistance(GetZoomDistance(_zoom));
   }
 
   void SetAutoZoom(bool enabled);
@@ -115,10 +115,10 @@ public:
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
-  void PaintClimbRate(Canvas &canvas, PixelRect rc, fixed climb_rate) const;
-  void PaintDistance(Canvas &canvas, PixelRect rc, fixed distance) const;
+  void PaintClimbRate(Canvas &canvas, PixelRect rc, double climb_rate) const;
+  void PaintDistance(Canvas &canvas, PixelRect rc, double distance) const;
   void PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                             fixed relative_altitude) const;
+                             double relative_altitude) const;
   void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
@@ -198,7 +198,7 @@ void
 FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
-  RoughDistance zoom_dist = fixed(0);
+  RoughDistance zoom_dist = 0;
 
   for (auto it = data.list.begin(), end = data.list.end();
       it != end; ++it) {
@@ -208,9 +208,9 @@ FlarmTrafficControl::CalcAutoZoom()
     zoom_dist = std::max(it->distance, zoom_dist);
   }
 
-  fixed zoom_dist2 = zoom_dist;
+  double zoom_dist2 = zoom_dist;
   for (unsigned i = 0; i <= 4; i++) {
-    if (i == 4 || fixed(GetZoomDistance(i)) >= zoom_dist2) {
+    if (i == 4 || GetZoomDistance(i) >= zoom_dist2) {
       SetZoom(i);
       break;
     }
@@ -299,7 +299,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 
 void
 FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
-                                    fixed climb_rate) const
+                                    double climb_rate) const
 {
   // Paint label
   canvas.Select(look.info_labels_font);
@@ -342,11 +342,11 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
 
 void
 FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
-                                   fixed distance) const
+                                   double distance) const
 {
   // Format distance
   TCHAR buffer[20];
-  Unit unit = FormatUserDistanceSmart(distance, buffer, false, fixed(1000));
+  Unit unit = FormatUserDistanceSmart(distance, buffer, false, 1000);
 
   // Calculate unit size
   canvas.Select(look.info_units_font);
@@ -384,7 +384,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
 
 void
 FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                                           fixed relative_altitude) const
+                                           double relative_altitude) const
 {
   // Format relative altitude
   TCHAR buffer[20];

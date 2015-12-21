@@ -213,11 +213,11 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
  */
-fixed
-FlarmTrafficWindow::RangeScale(fixed d) const
+double
+FlarmTrafficWindow::RangeScale(double d) const
 {
-  d = d / distance;
-  return std::min(d, fixed(1)) * radius;
+  d /= distance;
+  return std::min(d, 1.) * radius;
 }
 
 /**
@@ -278,10 +278,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   DoublePoint2D p(traffic.relative_east, -traffic.relative_north);
 
   // Calculate the distance in pixels
-  fixed scale = RangeScale(traffic.distance);
+  double scale = RangeScale(traffic.distance);
 
   // Don't display distracting, far away targets in WarningMode
-  if (WarningMode() && !traffic.HasAlarm() && scale == fixed(radius))
+  if (WarningMode() && !traffic.HasAlarm() && scale == radius)
     return;
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
@@ -289,8 +289,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     p.x /= traffic.distance;
     p.y /= traffic.distance;
   } else {
-    p.x = fixed(0);
-    p.y = fixed(0);
+    p.x = 0;
+    p.y = 0;
   }
 
   if (!enable_north_up) {
@@ -429,7 +429,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // if vertical speed to small or negative -> skip this one
   if (side_display_type == SIDE_INFO_VARIO &&
       (!traffic.climb_rate_avg30s_available ||
-       traffic.climb_rate_avg30s < fixed(0.5) ||
+       traffic.climb_rate_avg30s < 0.5 ||
        traffic.IsPowered()))
       return;
 
@@ -616,7 +616,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  DoublePoint2D p(fixed(0), fixed(-1));
+  DoublePoint2D p(0, -1);
   if (!enable_north_up) {
     p = fr.Rotate(p);
   }
@@ -661,13 +661,13 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 
   TCHAR distance_string[10];
   FormatUserDistanceSmart(distance, distance_string,
-                          ARRAY_SIZE(distance_string), fixed(1000));
+                          ARRAY_SIZE(distance_string), 1000);
   PixelSize s = canvas.CalcTextSize(distance_string);
   canvas.DrawText(radar_mid.x - s.cx / 2,
                   radar_mid.y + radius - s.cy * 0.75, distance_string);
 
   FormatUserDistanceSmart(distance / 2, distance_string,
-                          ARRAY_SIZE(distance_string), fixed(1000));
+                          ARRAY_SIZE(distance_string), 1000);
   s = canvas.CalcTextSize(distance_string);
   canvas.DrawText(radar_mid.x - s.cx / 2,
                   radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);

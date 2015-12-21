@@ -50,7 +50,7 @@ class GaugeVario : public AntiFlickerWindow
     bool initialised;
     PixelRect rc;
     RasterPoint text_position;
-    fixed last_value;
+    double last_value;
     TCHAR last_text[32];
     Unit last_unit;
   };
@@ -124,11 +124,11 @@ private:
   void RenderZero(Canvas &canvas);
   void RenderValue(Canvas &canvas, int x, int y,
                    DrawInfo *diValue, DrawInfo *diLabel,
-                   fixed Value, const TCHAR *Label);
+                   double Value, const TCHAR *Label);
   void RenderSpeedToFly(Canvas &canvas, int x, int y);
   void RenderBallast(Canvas &canvas);
   void RenderBugs(Canvas &canvas);
-  int  ValueToNeedlePos(fixed Value);
+  int  ValueToNeedlePos(double Value);
   void RenderNeedle(Canvas &canvas, int i, bool average, bool clear);
   void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear);
   void RenderClimb(Canvas &canvas);

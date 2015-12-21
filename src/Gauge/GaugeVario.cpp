@@ -33,8 +33,8 @@ Copyright_License {
 
 #include <algorithm>
 
-#define DELTA_V_STEP fixed(4)
-#define DELTA_V_LIMIT fixed(16)
+#define DELTA_V_STEP 4.
+#define DELTA_V_LIMIT 16.
 #define TEXT_BUG _T("Bug")
 #define TEXT_BALLAST _T("Bal")
 
@@ -124,7 +124,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   static int ival_last = 0;
 
   auto vval = Basic().brutto_vario;
-  ival = ValueToNeedlePos(fixed(vval));
+  ival = ValueToNeedlePos(vval);
   sval = ValueToNeedlePos(Calculated().sink_rate);
   if (Settings().show_average_needle) {
     if (!Calculated().circling)
@@ -161,7 +161,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   if (Settings().show_gross) {
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
-                              fixed(-99.9), fixed(99.9));
+                              -99.9, 99.9);
 
     RenderValue(canvas, middle_position.x, middle_position.y,
                 &value_middle, &label_middle,
@@ -241,10 +241,10 @@ GaugeVario::RenderZero(Canvas &canvas)
 }
 
 int
-GaugeVario::ValueToNeedlePos(fixed Value)
+GaugeVario::ValueToNeedlePos(double Value)
 {
-  constexpr fixed degrees_per_unit =
-    fixed(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
+  constexpr double degrees_per_unit =
+    double(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
 
   int i;
 
@@ -313,7 +313,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 void
 GaugeVario::RenderValue(Canvas &canvas, int x, int y,
                         DrawInfo *value_info, DrawInfo *label_info,
-                        fixed value, const TCHAR *label)
+                        double value, const TCHAR *label)
 {
   PixelSize tsize;
 
@@ -334,7 +334,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
                          + look.value_font.GetCapitalHeight()
                          - look.value_font.GetAscentHeight();
 
-    value_info->last_value = fixed(-9999);
+    value_info->last_value = -9999;
     value_info->last_text[0] = '\0';
     value_info->last_unit = Unit::UNDEFINED;
     value_info->initialised = true;
@@ -355,7 +355,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
-    label_info->last_value = fixed(-9999);
+    label_info->last_value = -9999;
     label_info->last_text[0] = '\0';
     label_info->initialised = true;
   }
@@ -418,8 +418,8 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
       !Basic().total_energy_vario_available)
     return;
 
-  static fixed last_v_diff;
-  fixed v_diff;
+  static double last_v_diff;
+  double v_diff;
 
   const unsigned arrow_y_size = Layout::Scale(3);
   const unsigned arrow_x_size = Layout::Scale(7);
@@ -442,7 +442,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     v_diff = Clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
     v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
   } else
-    v_diff = fixed(0);
+    v_diff = 0;
 
   if (!IsPersistent() || last_v_diff != v_diff || dirty) {
     last_v_diff = v_diff;
@@ -679,7 +679,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
     bugs_initialised = true;
   }
 
-  int bugs = iround((fixed(1) - GetComputerSettings().polar.bugs) * 100);
+  int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
   if (!IsPersistent() || bugs != last_bugs) {
 
     canvas.Select(*look.text_font);

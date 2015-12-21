@@ -44,7 +44,7 @@ protected:
   /**
    * The distance of the biggest circle in meters.
    */
-  fixed distance;
+  double distance;
 
   int selection;
   int warning;
@@ -106,7 +106,7 @@ public:
   void PrevTarget();
   bool SelectNearTarget(int x, int y, int max_distance);
 
-  void SetDistance(fixed _distance) {
+  void SetDistance(double _distance) {
     distance = _distance;
     Invalidate();
   }
@@ -114,7 +114,7 @@ public:
   void Paint(Canvas &canvas);
 
 protected:
-  fixed RangeScale(fixed d) const;
+  double RangeScale(double d) const;
 
   void UpdateSelector(const FlarmId id, const RasterPoint pt);
   void UpdateWarnings();

@@ -95,12 +95,12 @@ protected:
    * 0.5: lift = zero lift
    * 1.0: lift = max_lift
    */
-  static fixed NormalizeLift(fixed lift, fixed max_lift);
+  static double NormalizeLift(double lift, double max_lift);
 
-  void CalculateLiftPoints(LiftPoints &lift_points, fixed max_lift) const;
-  fixed CalculateMaxLift() const;
+  void CalculateLiftPoints(LiftPoints &lift_points, double max_lift) const;
+  double CalculateMaxLift() const;
   void PaintRadarPlane(Canvas &canvas) const;
-  void PaintRadarBackground(Canvas &canvas, fixed max_lift) const;
+  void PaintRadarBackground(Canvas &canvas, double max_lift) const;
   void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintNotCircling(Canvas &canvas) const;
