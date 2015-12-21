@@ -46,6 +46,80 @@ l_settings_index(lua_State *L)
       CommonInterface::GetComputerSettings();
     
     Lua::Push(L, settings_computer.polar.glide_polar_task.GetMC());
+  } else if (StringIsEqual(name, "bugs")) {
+      /* How clean the glider is. */
+      const ComputerSettings &settings_computer = 
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.bugs);
+  } else if (StringIsEqual(name, "wingload")) {
+      /* Current used wingload */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.glide_polar_task.GetWingLoading());
+  } else if (StringIsEqual(name, "ballast")) {
+      /* Ballast of the glider */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.glide_polar_task.GetBallast());
+  } else if (StringIsEqual(name, "qnh")) {
+      /* Area pressure for barometric altimeter calibration */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.pressure.GetPascal());
+  } else if (StringIsEqual(name, "max_temp")) {
+      /* The forecast ground temperature.  Used by 
+         convection estimator. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.forecast_temperature);
+  } else if (StringIsEqual(name, "safetymc")) {
+      /* The MacCready setting used, when safety MC is enabled 
+         for reach calculations, in task abort mode and for 
+         determining arrival altitude at airfields. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.safety_mc);
+  } else if (StringIsEqual(name, "riskfactor")) {
+      /* The STF risk factor reduces the MacCready setting used to 
+         calculate speed to fly as the glider gets low, in order to 
+         compensate for risk. Set to 0.0 for no compensation, 
+         1.0 scales MC linearly with current height (with reference 
+         to height of the maximum climb). If considered, 0.3 is recommended. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.risk_gamma);
+  } else if (StringIsEqual(name, "polardegradation")) {
+      /* A permanent polar degradation, 0% means no degradation, 
+         50% indicates the glider's sink rate is doubled. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.degradation_factor);
+  } else if (StringIsEqual(name, "arrivalheight")) {
+      /* The height above terrain that the glider should arrive 
+         at for a safe landing. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.safety_height_arrival);
+  } else if (StringIsEqual(name, "terrainheight")) {
+      /* The height above terrain that the glider must clear during 
+         final glide. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+    
+      Lua::Push(L, task_behaviour.route_planner.safety_height_terrain);
   } else
     return 0;
 
@@ -55,15 +129,64 @@ l_settings_index(lua_State *L)
 static int
 l_settings_setmc(lua_State *L)
 {
-  if (lua_gettop(L) != 0)
+  if (lua_gettop(L) != 1)
     return luaL_error(L, "Invalid parameters");
 
-  ActionInterface::SetMacCready(1.0, false);
+  ActionInterface::SetMacCready(luaL_checknumber(L, 1), false);
+  return 0;
+}
+
+static int
+l_settings_setbugs(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  ActionInterface::SetBugs(luaL_checknumber(L, 1));
+  return 0;
+}
+
+static int
+l_settings_setqnh(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  const NMEAInfo &basic = CommonInterface::Basic();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
+
+  settings_computer.pressure = AtmosphericPressure::Pascal(luaL_checknumber(L, 1));
+  settings_computer.pressure_available.Update(basic.clock);
+  return 0;
+}
+
+static int
+l_settings_setballast(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  ActionInterface::SetBallast(luaL_checknumber(L, 1));
+  return 0;
+}
+
+static int
+l_settings_setmaxtemp(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  ComputerSettings &settings = CommonInterface::SetComputerSettings();
+  settings.forecast_temperature=luaL_checknumber(L, 1);
   return 0;
 }
 
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"setmc", l_settings_setmc},
+  {"setbugs", l_settings_setbugs},
+  {"setqnh", l_settings_setqnh},
+  {"setballast", l_settings_setballast},
+  {"setmaxtemp", l_settings_setmaxtemp},
   {nullptr, nullptr}
 };
 
