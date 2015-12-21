@@ -55,7 +55,7 @@ public:
              const unsigned activeTaskPoint,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp,
-             const fixed _mc_min=fixed(0));
+             double _mc_min=0);
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -76,9 +76,9 @@ public:
    *
    * @return Best MC value found or default value if no solution
    */
-  fixed search(const fixed mc);
+  double search(double mc);
 
-  bool search(const fixed mc, fixed &result);
+  bool search(double mc, double &result);
 
 private:
 
@@ -90,10 +90,10 @@ private:
    * @return True if solution is valid
    */
   gcc_pure
-  bool valid(const fixed mc) const;
+  bool valid(double mc) const;
 
   /* virtual methods from class ZeroFinder */
-  virtual fixed f(const fixed mc) override;
+  virtual double f(double mc) override;
 };
 
 #endif

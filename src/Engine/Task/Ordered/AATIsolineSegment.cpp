@@ -28,15 +28,15 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
                                      const FlatProjection &projection)
   :AATIsoline(ap, projection)
 {
-  IsolineCrossingFinder icf_up(ap, ell, fixed(0), fixed(0.5));
-  IsolineCrossingFinder icf_down(ap, ell, -fixed(0.5), fixed(0));
+  IsolineCrossingFinder icf_up(ap, ell, 0, 0.5);
+  IsolineCrossingFinder icf_down(ap, ell, -0.5, 0);
 
   t_up = icf_up.solve();
   t_down = icf_down.solve();
 
-  if ((t_up < -fixed(0.5)) || (t_down < -fixed(0.5))) {
-    t_up = fixed(0);
-    t_down = fixed(0);
+  if (t_up < -0.5 || t_down < -0.5) {
+    t_up = 0;
+    t_down = 0;
     // single solution only
   }
 }
@@ -44,11 +44,11 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
 bool
 AATIsolineSegment::IsValid() const
 {
-  return t_up > t_down + fixed(TOLERANCE_ISOLINE_CROSSING) * 2;
+  return t_up > t_down + TOLERANCE_ISOLINE_CROSSING * 2;
 }
 
 GeoPoint
-AATIsolineSegment::Parametric(const fixed t) const
+AATIsolineSegment::Parametric(const double t) const
 {
   const auto r = t * (t_up - t_down) + t_down;
   return ell.Parametric(r);

@@ -34,7 +34,7 @@ public:
    * Generate boundary points for the arc described by the parameters.
    * This excludes the points at the start/end angle.
    */
-  void GenerateArcExcluding(const GeoPoint &center, fixed radius,
+  void GenerateArcExcluding(const GeoPoint &center, double radius,
                             Angle start_radial, Angle end_radial);
 };
 

@@ -36,8 +36,8 @@
  */
 class AATIsolineSegment: public AATIsoline
 {
-  fixed t_up;
-  fixed t_down;
+  double t_up;
+  double t_down;
 
 public:
   /**
@@ -64,7 +64,7 @@ public:
    *
    * @return Location of point on isoline segment
    */
-  GeoPoint Parametric(const fixed t) const;
+  GeoPoint Parametric(double t) const;
 };
 
 #endif

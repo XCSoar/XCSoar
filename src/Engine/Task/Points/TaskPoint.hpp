@@ -102,12 +102,12 @@ public:
    * @return Minimum allowable elevation of task point
    */
   gcc_pure
-  virtual fixed GetElevation() const = 0;
+  virtual double GetElevation() const = 0;
 
   /**
    * distance from this to the reference
    */
-  fixed Distance(const GeoPoint &ref) const {
+  double Distance(const GeoPoint &ref) const {
     return location.Distance(ref);
   }
 

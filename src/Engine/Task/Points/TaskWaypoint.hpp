@@ -68,7 +68,7 @@ protected:
   /**
    * Altitude (AMSL, m) of task point terrain.
    */
-  fixed GetBaseElevation() const {
+  double GetBaseElevation() const {
     return waypoint->elevation;
   }
 };

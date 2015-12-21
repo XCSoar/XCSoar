@@ -40,7 +40,7 @@
  * - enabled/disabled for multiple start points
  */
 class StartPoint final : public OrderedTaskPoint {
-  fixed safety_height;
+  double safety_height;
 
   TaskStartMargins margins;
 
@@ -84,7 +84,7 @@ public:
                        const FlatProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  fixed GetElevation() const override;
+  double GetElevation() const override;
 
   /* virtual methods from class ScoredTaskPoint */
   bool CheckExitTransition(const AircraftState &ref_now,

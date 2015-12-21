@@ -75,7 +75,7 @@ public:
    * @return Distance (m) of nominal task
    */
   gcc_pure
-  fixed ScanDistanceNominal() const;
+  double ScanDistanceNominal() const;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -85,7 +85,7 @@ public:
    * @return Distance (m) of planned task
    */
   gcc_pure
-  fixed ScanDistancePlanned();
+  double ScanDistancePlanned();
 
   /**
    * Calculate distance of maximum achievable task (sum of distances from
@@ -95,7 +95,7 @@ public:
    * @return Distance (m) of maximum achievable task
    */
   gcc_pure
-  fixed ScanDistanceMax() const;
+  double ScanDistanceMax() const;
 
   /**
    * Calculate distance of minimum achievable task (sum of distances from
@@ -104,7 +104,7 @@ public:
    *
    * @return Distance (m) of minimum achievable task
    */
-  fixed ScanDistanceMin() const;
+  double ScanDistanceMin() const;
 
   /**
    * Calculate distance of planned task (sum of distances from aircraft to
@@ -115,7 +115,7 @@ public:
    *
    * @return Distance (m) remaining in the planned task
    */
-  fixed ScanDistanceRemaining(const GeoPoint &ref);
+  double ScanDistanceRemaining(const GeoPoint &ref);
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -124,7 +124,7 @@ public:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  fixed ScanDistanceScored(const GeoPoint &ref) const;
+  double ScanDistanceScored(const GeoPoint &ref) const;
 
   /**
    * Calculate distance of achieved part of task.
@@ -136,7 +136,7 @@ public:
    *
    * @return Distance (m) achieved
    */
-  fixed ScanDistanceTravelled(const GeoPoint &ref);
+  double ScanDistanceTravelled(const GeoPoint &ref);
 
   /**
    * Retrieve maximum possible leg distance
@@ -144,7 +144,7 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed GetMaximumLegDistance() const;
+  double GetMaximumLegDistance() const;
   
   /**
    * Retrieve min possible leg distance
@@ -152,7 +152,7 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed GetMinimumLegDistance() const;
+  double GetMinimumLegDistance() const;
 
   /**
    * Retrieve nominal leg distance
@@ -160,7 +160,7 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed GetNominalLegDistance() const {
+  double GetNominalLegDistance() const {
     return GetNominalLegVector().distance;
   }
 
@@ -199,7 +199,7 @@ private:
   GeoVector GetRemainingVector(const GeoPoint &ref) const;
 
   gcc_pure
-  fixed GetScoredDistance(const GeoPoint &ref) const;
+  double GetScoredDistance(const GeoPoint &ref) const;
 
   gcc_pure
   const OrderedTaskPoint *GetOrigin() const;

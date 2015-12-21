@@ -29,7 +29,7 @@
 GlideResult
 TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
                                    const AircraftState &aircraft,
-                                   fixed minH) const
+                                   double minH) const
 {
   GlideState gs = GlideState::Remaining(tp, aircraft, minH);
 
@@ -37,7 +37,7 @@ TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
       tp.GetType() == TaskPointType::START &&
       !((const OrderedTaskPoint &)tp).HasEntered())
     /* ignore the travel to the start point */
-    gs.vector.distance = fixed(0);
+    gs.vector.distance = 0;
 
   return MacCready::Solve(settings, glide_polar, gs);
 }
@@ -72,7 +72,7 @@ TaskMacCreadyRemaining::has_targets() const
 }
 
 void
-TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
+TaskMacCreadyRemaining::set_range(const double tp, const bool force_current)
 {
   // first try to modify targets without regard to current inside (unless forced)
   bool modified = force_current;

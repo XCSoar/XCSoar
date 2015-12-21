@@ -32,7 +32,7 @@ struct RangeAndRadial {
    * Thesigned range [-1,1] from near point on perimeter through
    * center to far side of the oz perimeter.
    */
-  fixed range;
+  double range;
 
   /**
    * The bearing of the target.
@@ -40,7 +40,7 @@ struct RangeAndRadial {
   Angle radial;
 
   static constexpr RangeAndRadial Zero() {
-    return RangeAndRadial{fixed(0), Angle::Zero()};
+    return RangeAndRadial{0., Angle::Zero()};
   }
 };
 
@@ -118,7 +118,7 @@ public:
    * the target
    */
   gcc_pure
-  RangeAndRadial GetTargetRangeRadial(fixed old_range=fixed(0)) const;
+  RangeAndRadial GetTargetRangeRadial(double old_range=0) const;
 
   /**
    * Accessor to get target location
@@ -140,8 +140,7 @@ public:
    * threshold of target
    */
   gcc_pure
-  bool IsCloseToTarget(const AircraftState& state,
-                       const fixed threshold=fixed(0)) const;
+  bool IsCloseToTarget(const AircraftState& state, double threshold=0) const;
 
   /**
    * Set target to parametric value between min and max locations.
@@ -154,7 +153,7 @@ public:
    *
    * @return True if target was moved
    */
-  bool SetRange(const fixed p, bool force_if_current);
+  bool SetRange(double p, bool force_if_current);
 
   /**
    * If this TaskPoint has the capability to adjust the
@@ -210,8 +209,8 @@ public:
   const GeoPoint& GetLocationRemaining() const override;
 
   /* virtual methods from class ObservationZoneClient */
-  fixed ScoreAdjustment() const override {
-    return fixed(0);
+  double ScoreAdjustment() const override {
+    return 0;
   }
 
   /* virtual methods from class OrderedTaskPoint */

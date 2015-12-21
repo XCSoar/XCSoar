@@ -73,7 +73,7 @@ public:
                 const FlatProjection &projection,
                 StartPoint *_ts);
 
-  virtual fixed f(const fixed p);
+  virtual double f(double p);
 
   /**
    * Test validity of a solution given search parameter
@@ -82,7 +82,7 @@ public:
    *
    * @return True if solution is valid
    */
-  virtual bool valid(const fixed p);
+  virtual bool valid(double p);
 
   /**
    * Search for active task point's target isoline to minimise elapsed time
@@ -94,11 +94,11 @@ public:
    *
    * @return Isoline value for solution
    */
-  virtual fixed search(const fixed p);
+  virtual double search(double p);
 
 private:
   /** Sets target location along isoline */
-  void SetTarget(const fixed p);
+  void SetTarget(double p);
 };
 
 

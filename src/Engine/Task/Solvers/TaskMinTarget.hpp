@@ -44,7 +44,7 @@ class TaskMinTarget final : private ZeroFinder {
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
-  const fixed t_remaining;
+  const double t_remaining;
   StartPoint *tp_start;
   bool force_current;
 
@@ -63,11 +63,11 @@ public:
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
                 const GlideSettings &settings, const GlidePolar &_gp,
-                const fixed _t_remaining,
+                double _t_remaining,
                 StartPoint *_ts);
 
 private:
-  virtual fixed f(const fixed p);
+  virtual double f(double p);
 
   /**
    * Test validity of a solution given search parameter
@@ -76,7 +76,7 @@ private:
    *
    * @return True if solution is valid
    */
-  bool valid(const fixed p);
+  bool valid(double p);
 
 public:
   /**
@@ -89,10 +89,10 @@ public:
    *
    * @return Range value for solution
    */
-  fixed search(const fixed p);
+  double search(double p);
 
 private:
-  void set_range(const fixed p);
+  void set_range(double p);
 };
 
 #endif

@@ -62,7 +62,7 @@ public:
    * @return True if observation zone has been entered
    */
   bool HasEntered() const {
-    return positive(state_entered.time);
+    return state_entered.time > 0;
   }
 
   /**

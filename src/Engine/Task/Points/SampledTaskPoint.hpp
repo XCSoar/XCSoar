@@ -107,7 +107,7 @@ public:
   };
 
   gcc_pure
-  GeoPoint InterpolateLocationMinMax(fixed p) const {
+  GeoPoint InterpolateLocationMinMax(double p) const {
     return GetLocationMin().Interpolate(GetLocationMax(), p);
   }
 

@@ -25,7 +25,7 @@
 #include "Geo/GeoVector.hpp"
 
 void
-OZBoundary::GenerateArcExcluding(const GeoPoint &center, fixed radius,
+OZBoundary::GenerateArcExcluding(const GeoPoint &center, double radius,
                                  Angle start_radial, Angle end_radial)
 {
   const unsigned steps = 20;

@@ -46,7 +46,7 @@ StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
   margins = tb.start_margins;
 }
 
-fixed
+double
 StartPoint::GetElevation() const
 {
   return GetBaseElevation() + safety_height;

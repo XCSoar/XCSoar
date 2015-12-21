@@ -34,7 +34,7 @@ struct TaskBehaviour;
  *
  */
 class UnorderedTaskPoint final : public TaskWaypoint {
-  fixed safety_height_arrival;
+  double safety_height_arrival;
 
 public:
   /**
@@ -50,7 +50,7 @@ public:
 
   /* virtual methods from class TaskPoint */
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override;
-  virtual fixed GetElevation() const override;
+  virtual double GetElevation() const override;
 };
 
 #endif
