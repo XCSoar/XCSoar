@@ -54,7 +54,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   // if zoomed in too far out, dont draw traffic since it will be too close to
   // the glider and so will be meaningless (serves only to clutter, cant help
   // the pilot)
-  if (projection.GetMapScale() > fixed(7300))
+  if (projection.GetMapScale() > 7300)
     return;
 
   canvas.Select(*traffic_look.font);
@@ -100,7 +100,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         TextInBox(canvas, traffic.name, sc_name.x, sc_name.y,
                   mode, GetClientRect());
 
-      if (traffic.climb_rate_avg30s >= fixed(0.1)) {
+      if (traffic.climb_rate_avg30s >= 0.1) {
         // If average climb data available draw it to the canvas
         TCHAR label_avg[100];
         FormatUserVerticalSpeed(traffic.climb_rate_avg30s,

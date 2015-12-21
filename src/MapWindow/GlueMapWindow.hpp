@@ -282,7 +282,7 @@ public:
   void RestoreMapScale();
 
   void UpdateDisplayMode();
-  void SetMapScale(fixed scale);
+  void SetMapScale(double scale);
 
 protected:
   DisplayMode GetDisplayMode() const {

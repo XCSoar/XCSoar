@@ -30,7 +30,7 @@ static void
 DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
                    const WindowProjection &projection,
                    const T &sources,
-                   const fixed aircraft_altitude,
+                   const double aircraft_altitude,
                    const SpeedVector &wind)
 {
   for (const auto &source : sources) {
@@ -57,7 +57,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
   const DerivedInfo &calculated = Calculated();
   const ThermalLocatorInfo &thermal_locator = calculated.thermal_locator;
 
-  if (render_projection.GetMapScale() > fixed(4000))
+  if (render_projection.GetMapScale() > 4000)
     return;
 
   // draw only at close map scales in non-circling mode

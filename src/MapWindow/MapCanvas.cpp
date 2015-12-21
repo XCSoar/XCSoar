@@ -56,7 +56,7 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
 
 
 void
-MapCanvas::DrawCircle(const GeoPoint &center, fixed radius)
+MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 {
   RasterPoint screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);

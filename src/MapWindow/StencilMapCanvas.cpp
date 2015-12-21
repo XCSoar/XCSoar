@@ -32,7 +32,7 @@ Copyright_License {
 StencilMapCanvas::StencilMapCanvas(Canvas &_buffer, Canvas &_stencil,
                                    const WindowProjection &_proj,
                                    const AirspaceRendererSettings &_settings)
-  :clip(_proj.GetScreenBounds().Scale(fixed(1.1))),
+  :clip(_proj.GetScreenBounds().Scale(1.1)),
    buffer(_buffer),
    stencil(_stencil),
    proj(_proj),

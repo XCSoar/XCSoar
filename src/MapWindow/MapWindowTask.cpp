@@ -113,16 +113,16 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   const GeoPoint target = current_leg.location_remaining;
   GeoVector vec(Basic().location, target);
 
-  if ((Basic().track - vec.bearing).AsDelta().AbsoluteDegrees() < fixed(10))
+  if ((Basic().track - vec.bearing).AsDelta().AbsoluteDegrees() < 10)
     // insignificant error
     return;
 
   auto distance_max =
     std::min(vec.distance,
-             render_projection.GetScreenDistanceMeters() * fixed(0.7));
+             render_projection.GetScreenDistanceMeters() * 0.7);
 
   // too short to bother
-  if (distance_max < fixed(5000))
+  if (distance_max < 5000)
     return;
 
   GeoPoint start = Basic().location;
@@ -133,13 +133,13 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   
   GeoPoint dloc;
   int ilast = 0;
-  for (fixed d = fixed(1) / 4; d <= fixed(1); d += fixed(1) / 4) {
+  for (double d = 0.25; d <= 1; d += 0.25) {
     dloc = FindLatitudeLongitude(start, Basic().track, distance_max * d);
     
-    auto distance0 = start.DistanceS(dloc);
-    auto distance1 = target.DistanceS(dloc);
-    auto distance = (distance0 + distance1) / vec.distance;
-    int idist = iround((distance - fixed(1)) * 100);
+    double distance0 = start.DistanceS(dloc);
+    double distance1 = target.DistanceS(dloc);
+    double distance = (distance0 + distance1) / vec.distance;
+    int idist = iround((distance - 1) * 100);
     
     if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
       TCHAR Buffer[5];

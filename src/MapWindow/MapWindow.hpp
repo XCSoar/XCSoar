@@ -375,7 +375,7 @@ private:
   void RenderGlide(Canvas &canvas);
 
 public:
-  void SetMapScale(const fixed x) {
+  void SetMapScale(const double x) {
     visible_projection.SetMapScale(x);
   }
 };

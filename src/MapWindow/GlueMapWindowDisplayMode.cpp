@@ -127,7 +127,7 @@ GlueMapWindow::UpdateScreenBounds()
 }
 
 void
-GlueMapWindow::SetMapScale(fixed scale)
+GlueMapWindow::SetMapScale(double scale)
 {
   MapWindow::SetMapScale(scale);
   OnProjectionModified();
@@ -221,7 +221,7 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(Angle::Zero());
   else if (orientation == MapOrientation::WIND_UP &&
            calculated.wind_available &&
-           calculated.wind.norm >= fixed(0.5))
+           calculated.wind.norm >= 0.5)
     visible_projection.SetScreenAngle(calculated.wind.bearing);
   else
     // normal, glider forward
@@ -250,7 +250,7 @@ GlueMapWindow::UpdateMapScale()
     return;
 
   auto distance = calculated.auto_zoom_distance;
-  if (settings.auto_zoom_enabled && positive(distance)) {
+  if (settings.auto_zoom_enabled && distance > 0) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
     int auto_zoom_factor = circling
@@ -262,11 +262,11 @@ GlueMapWindow::UpdateMapScale()
     // Adjust to account for map scale units
     auto_zoom_factor *= 8;
 
-    distance /= fixed(auto_zoom_factor) / 100;
+    distance /= auto_zoom_factor / 100.;
 
     // Clip map auto zoom range to reasonable values
-    distance = Clamp(distance, fixed(525),
-                     settings.max_auto_zoom_distance / 10);
+    distance = Clamp(distance, 525.,
+                     settings.max_auto_zoom_distance / 10.);
 
     visible_projection.SetFreeMapScale(distance);
     settings.cruise_scale = visible_projection.GetScale();
@@ -294,7 +294,7 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location)
     visible_projection.GetGeoLocation().DistanceS(location);
   const auto distance_pixels =
     visible_projection.DistanceMetersToPixels(distance_meters);
-  if (distance_pixels > fixed(0.5))
+  if (distance_pixels > 0.5)
     SetLocation(location);
 }
 
@@ -320,13 +320,12 @@ GlueMapWindow::UpdateProjection()
     RasterPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
         settings_map.map_shift_bias != MapShiftBias::NONE) {
-      fixed x = fixed(0);
-      fixed y = fixed(0);
+      double x = 0, y = 0;
       if (settings_map.map_shift_bias == MapShiftBias::TRACK) {
         if (basic.track_available &&
             basic.ground_speed_available &&
              /* 8 m/s ~ 30 km/h */
-            basic.ground_speed > fixed(8)) {
+            basic.ground_speed > 8) {
           auto angle = basic.track.Reciprocal() - visible_projection.GetScreenAngle();
 
           const auto sc = angle.SinCos();
@@ -343,7 +342,7 @@ GlueMapWindow::UpdateProjection()
           y = sc.second;
         }
       }
-      auto position_factor = fixed(50 - settings_map.glider_screen_position) / 100;
+      double position_factor = (50. - settings_map.glider_screen_position) / 100.;
       offset.x = PixelScalar(x * (rc.right - rc.left) * position_factor);
       offset.y = PixelScalar(y * (rc.top - rc.bottom) * position_factor);
       offset_history.Add(offset);
@@ -358,7 +357,7 @@ GlueMapWindow::UpdateProjection()
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
     const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
-    if (!positive(d_t)) {
+    if (d_t <= 0) {
       SetLocationLazy(basic.location);
     } else {
       const auto d_max = Double(visible_projection.GetMapScale());

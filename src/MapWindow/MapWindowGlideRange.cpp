@@ -196,7 +196,7 @@ public:
 
   TriangleCompound(const MapWindowProjection& _proj)
     :proj(_proj),
-     clip(_proj.GetScreenBounds().Scale(fixed(1.1)))
+     clip(_proj.GetScreenBounds().Scale(1.1))
   {
   }
 
@@ -439,7 +439,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (!Calculated().flight.flying ||
       !Calculated().terrain_warning_location.IsValid() ||
-      Calculated().terrain_warning_location.DistanceS(Basic().location) < fixed(500.0))
+      Calculated().terrain_warning_location.DistanceS(Basic().location) < 500)
     return;
 
   RasterPoint sc;

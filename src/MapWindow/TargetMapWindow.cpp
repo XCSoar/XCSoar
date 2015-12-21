@@ -94,7 +94,7 @@ void
 TargetMapWindow::Create(ContainerWindow &parent, PixelRect rc,
                         WindowStyle style)
 {
-  projection.SetScale(fixed(0.01));
+  projection.SetScale(0.01);
 
   BufferWindow::Create(parent, rc, style);
 }
@@ -261,7 +261,8 @@ TargetMapWindow::SetTopograpgy(TopographyStore *topography)
     : nullptr;
 }
 
-static fixed
+gcc_pure
+static double
 GetRadius(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
@@ -281,10 +282,11 @@ GetRadius(const ObservationZonePoint &oz)
     return cz.GetRadius();
   }
 
-  return fixed(1);
+  return 1;
 }
 
-static fixed
+gcc_pure
+static double
 GetRadius(const OrderedTaskPoint &tp)
 {
   return GetRadius(tp.GetObservationZone());
@@ -294,7 +296,7 @@ void
 TargetMapWindow::SetTarget(unsigned index)
 {
   GeoPoint location;
-  fixed radius;
+  double radius;
 
   {
     ProtectedTaskManager::Lease lease(*task);
@@ -304,7 +306,7 @@ TargetMapWindow::SetTarget(unsigned index)
 
     const OrderedTaskPoint &tp = o_task.GetTaskPoint(index);
     location = tp.GetLocation();
-    radius = std::max(GetRadius(tp) * fixed(1.3), fixed(2000));
+    radius = std::max(GetRadius(tp) * 1.3, 2000.);
   }
 
   projection.SetGeoLocation(location);

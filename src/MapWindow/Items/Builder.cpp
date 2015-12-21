@@ -140,7 +140,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
 void
 MapItemListBuilder::AddArrivalAltitudes(
     const ProtectedRoutePlanner &route_planner,
-    const RasterTerrain *terrain, fixed safety_height)
+    const RasterTerrain *terrain, double safety_height)
 {
   if (list.full())
     return;

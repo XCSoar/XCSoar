@@ -112,7 +112,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
     if (!RasterBuffer::IsSpecial(elevation)) {
       StaticString<64> elevation_long;
       elevation_long = _("Elevation: ");
-      elevation_long += FormatUserAltitude(fixed(elevation));
+      elevation_long += FormatUserAltitude(elevation);
 
       TextInBox(canvas, elevation_long, x, y, mode,
                 render_projection.GetScreenWidth(),
@@ -244,8 +244,8 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
     if (!task_stats.task_valid || !solution.IsOk() || !solution_mc0.IsDefined())
       return;
 
-    if (solution_mc0.SelectAltitudeDifference(glide_settings) < fixed(-1000) &&
-        solution.SelectAltitudeDifference(glide_settings) < fixed(-1000))
+    if (solution_mc0.SelectAltitudeDifference(glide_settings) < -1000 &&
+        solution.SelectAltitudeDifference(glide_settings) < -1000)
       return;
   }
 
@@ -403,7 +403,7 @@ void
 GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 {
   if (Calculated().task_stats.total.solution_remaining.IsOk() &&
-      Calculated().task_stats.total.solution_remaining.altitude_difference > fixed(50)
+      Calculated().task_stats.total.solution_remaining.altitude_difference > 50
       && GetDisplayMode() == DisplayMode::FINAL_GLIDE)
     return;
 
@@ -440,7 +440,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
 {
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
-    auto s = Clamp(Basic().stall_ratio, fixed(0), fixed(1));
+    auto s = Clamp(Basic().stall_ratio, 0., 1.);
     PixelScalar m((rc.bottom - rc.top) * s * s);
 
     canvas.SelectBlackPen();

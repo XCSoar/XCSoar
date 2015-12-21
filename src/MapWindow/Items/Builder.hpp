@@ -47,15 +47,15 @@ class MapItemListBuilder
 {
   MapItemList &list;
   GeoPoint location;
-  fixed range;
+  double range;
 
 public:
-  MapItemListBuilder(MapItemList &_list, GeoPoint _location, fixed _range)
+  MapItemListBuilder(MapItemList &_list, GeoPoint _location, double _range)
     :list(_list), location(_location), range(_range) {}
 
   void AddLocation(const NMEAInfo &basic, const RasterTerrain *terrain);
   void AddArrivalAltitudes(const ProtectedRoutePlanner &route_planner,
-                     const RasterTerrain *terrain, fixed safety_height);
+                     const RasterTerrain *terrain, double safety_height);
   void AddSelfIfNear(const GeoPoint &self, Angle bearing);
   void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,

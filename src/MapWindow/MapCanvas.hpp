@@ -63,7 +63,7 @@ public:
 
   void DrawLine(GeoPoint a, GeoPoint b);
   void DrawLineWithOffset(GeoPoint a, GeoPoint b);
-  void DrawCircle(const GeoPoint &center, fixed radius);
+  void DrawCircle(const GeoPoint &center, double radius);
 
   /**
    * Projects all points of the #SearchPointVector to screen
