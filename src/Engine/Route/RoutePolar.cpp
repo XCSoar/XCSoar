@@ -24,6 +24,7 @@
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/MacCready.hpp"
+#include "Geo/Flat/FlatGeoPoint.hpp"
 
 GlideResult
 RoutePolar::SolveTask(const GlideSettings &settings,
@@ -56,8 +57,8 @@ RoutePolar::Initialise(const GlideSettings &settings, const GlidePolar& polar,
   }
 }
 
-void
-RoutePolar::IndexToDXDY(const int index, int& dx, int& dy)
+FlatGeoPoint
+RoutePolar::IndexToDXDY(const int index)
 {
   static constexpr int sx[ROUTEPOLAR_POINTS]= {
     128, 126, 123, 118, 111, 102, 91, 79, 66, 51, 36, 20, 4, -12, -28, -44,
@@ -72,6 +73,5 @@ RoutePolar::IndexToDXDY(const int index, int& dx, int& dy)
     -76, -62, -48, -32, -16,
   };
 
-  dx = sx[index];
-  dy = sy[index];
+  return {sx[index], sy[index]};
 }

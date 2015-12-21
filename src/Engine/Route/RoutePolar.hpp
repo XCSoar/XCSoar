@@ -22,11 +22,14 @@
 #ifndef ROUTEPOLAR_HPP
 #define ROUTEPOLAR_HPP
 
+#include "Compiler.h"
+
 class Angle;
 class GlidePolar;
 struct GlideSettings;
 struct GlideResult;
 struct SpeedVector;
+struct FlatGeoPoint;
 
 #define ROUTEPOLAR_Q0 (6)
 #define ROUTEPOLAR_Q1 (2*ROUTEPOLAR_Q0-1)
@@ -101,7 +104,8 @@ public:
    * @param dx X distance units
    * @param dy Y distance units
    */
-  static void IndexToDXDY(const int index, int& dx, int& dy);
+  gcc_const
+  static FlatGeoPoint IndexToDXDY(int index);
 
 private:
   GlideResult SolveTask(const GlideSettings &settings, const GlidePolar& polar,

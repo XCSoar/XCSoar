@@ -37,11 +37,10 @@ RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
   const auto d = p.altitude * polar_glide.GetPoint(safe_index).inv_gradient;
   const auto scale = proj.GetApproximateScale();
   const int steps = int(d / scale) + 1;
-  int dx, dy;
-  RoutePolar::IndexToDXDY(safe_index, dx, dy);
-  dx = (dx * steps) >> 7;
-  dy = (dy * steps) >> 7;
-  const FlatGeoPoint dp(fp.x + dx, fp.y + dy);
+  FlatGeoPoint dp = RoutePolar::IndexToDXDY(safe_index);
+  dp.x = (dp.x * steps) >> 7;
+  dp.y = (dp.y * steps) >> 7;
+  dp += fp;
   return proj.Unproject(dp);
 }
 
