@@ -55,7 +55,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     double dlat = basic.location.DistanceS(plat);
     double dlon = basic.location.DistanceS(plon);
 
-    if (positive(fabs(dlat)) && positive(fabs(dlon))) {
+    if (fabs(dlat) > 0 && fabs(dlon) > 0) {
       north_to_latitude = delta_lat.Degrees() / dlat;
       east_to_longitude = delta_lon.Degrees() / dlon;
     }
@@ -111,7 +111,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
 
     // Calculate the time difference between now and the last contact
     double dt = traffic.valid.GetTimeDifference(last_traffic->valid);
-    if (positive(dt)) {
+    if (dt > 0) {
       // Calculate the immediate climb rate
       if (!traffic.climb_rate_received)
         traffic.climb_rate =
@@ -123,7 +123,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
         traffic.climb_rate = last_traffic->climb_rate;
     }
 
-    if (positive(dt) &&
+    if (dt > 0 &&
         traffic.location_available &&
         last_traffic->location_available) {
       // Calculate the GeoVector between now and the last contact

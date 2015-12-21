@@ -62,8 +62,8 @@ struct FlarmStatus {
       *this = add;
   }
 
-  void Expire(fixed clock) {
-    available.Expire(clock, fixed(10));
+  void Expire(double clock) {
+    available.Expire(clock, 10);
   }
 };
 

@@ -61,7 +61,7 @@ struct FlarmData {
     traffic.Complement(add.traffic);
   }
 
-  void Expire(fixed clock) {
+  void Expire(double clock) {
     error.Expire(clock);
     version.Expire(clock);
     status.Expire(clock);

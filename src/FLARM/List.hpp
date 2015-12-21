@@ -63,8 +63,8 @@ struct TrafficList {
       *this = add;
   }
 
-  void Expire(fixed clock) {
-    new_traffic.Expire(clock, fixed(60));
+  void Expire(double clock) {
+    new_traffic.Expire(clock, 60);
 
     for (unsigned i = list.size(); i-- > 0;)
       if (!list[i].Refresh(clock))
