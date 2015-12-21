@@ -92,7 +92,7 @@ public:
 
   void FillReach(const AFlatGeoPoint &origin,
                  const int index_low, const int index_high,
-                 ReachFanParms &parms);
+                 const ReachFanParms &parms);
 
   bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms);
   void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms);

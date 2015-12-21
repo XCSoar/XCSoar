@@ -140,7 +140,8 @@ FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
 
 void
 FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
-                               const int index_high, ReachFanParms &parms)
+                               const int index_high,
+                               const ReachFanParms &parms)
 {
   const AGeoPoint ao(parms.projection.Unproject(origin), origin.altitude);
   height = origin.altitude;
