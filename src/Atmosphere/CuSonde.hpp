@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_CUSONDE_HPP
 #define XCSOAR_ATMOSPHERE_CUSONDE_HPP
 
-#include "Math/fixed.hpp"
-
 struct NMEAInfo;
 struct DerivedInfo;
 
@@ -42,24 +40,24 @@ public:
 
   struct Level {
     /** Environmental temperature in degrees C */
-    fixed airTemp;
+    double airTemp;
     /** DewPoint in degrees C */
-    fixed dewpoint;
+    double dewpoint;
     /** Dry temperature in degrees C */
-    fixed tempDry;
+    double tempDry;
     /** ThermalIndex in degrees C */
-    fixed thermalIndex;
+    double thermalIndex;
 
-    void UpdateTemps(fixed humidity, fixed temperature);
-    void UpdateThermalIndex(fixed h_agl, fixed max_ground_temperature);
+    void UpdateTemps(double humidity, double temperature);
+    void UpdateThermalIndex(double h_agl, double max_ground_temperature);
 
     /** Number of measurements */
     unsigned nmeasurements;
 
     /** Estimated ThermalHeight with data of this level */
-    fixed thermalHeight;
+    double thermalHeight;
     /** Estimated CloudBase with data of this level */
-    fixed cloudBase;
+    double cloudBase;
 
     bool empty() const {
       return nmeasurements == 0;
@@ -71,23 +69,23 @@ public:
   };
 
   /** Expected temperature maximum on the ground */
-  fixed maxGroundTemperature;
+  double maxGroundTemperature;
   /** Height of ground above MSL */
-  fixed hGround;
+  double hGround;
   unsigned short last_level;
   Level cslevels[NUM_LEVELS];
 
   /** Estimated ThermailHeight */
-  fixed thermalHeight;
+  double thermalHeight;
   /** Estimated CloudBase */
-  fixed cloudBase;
+  double cloudBase;
 
   void Reset();
 
   void UpdateMeasurements(const NMEAInfo &basic, const DerivedInfo &calculated);
   void FindCloudBase(unsigned short level);
   void FindThermalHeight(unsigned short level);
-  void SetForecastTemperature(fixed val);
+  void SetForecastTemperature(double val);
 };
 
 #endif

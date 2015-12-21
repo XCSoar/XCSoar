@@ -24,20 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_AIRDENSITY_H
 #define XCSOAR_ATMOSPHERE_AIRDENSITY_H
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 /**
  * Calculates the air density from a given QNH-based altitude
  * @param altitude QNH-based altitude (m)
  * @return Air density (kg/m^3)
  */
-fixed AirDensity(const fixed altitude);
+gcc_const
+double
+AirDensity(double altitude);
 
 /**
  * Divide TAS by this number to get IAS
  * @param altitude QNH-based altitude (m)
  * @return Ratio of TAS to IAS
  */
-fixed AirDensityRatio(const fixed altitude);
+gcc_const
+double
+AirDensityRatio(double altitude);
 
 #endif

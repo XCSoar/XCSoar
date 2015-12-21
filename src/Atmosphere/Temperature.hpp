@@ -24,19 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_TEMPERATURE_HPP
 #define XCSOAR_ATMOSPHERE_TEMPERATURE_HPP
 
-#include "Math/fixed.hpp"
-
 /**
  * The offset between 0 Kelvin and 0 degrees Celsius [K].
  */
-static constexpr fixed CELSIUS_OFFSET(273.15);
+static constexpr double CELSIUS_OFFSET(273.15);
 
 /**
  * Convert a temperature from Kelvin to degrees Celsius.
  */
 constexpr
-static inline fixed
-KelvinToCelsius(fixed kelvin)
+static inline double
+KelvinToCelsius(double kelvin)
 {
   return kelvin - CELSIUS_OFFSET;
 }
@@ -45,8 +43,8 @@ KelvinToCelsius(fixed kelvin)
  * Convert a temperature from degrees Celsius to Kelvin.
  */
 constexpr
-static inline fixed
-CelsiusToKelvin(fixed celsius)
+static inline double
+CelsiusToKelvin(double celsius)
 {
   return celsius + CELSIUS_OFFSET;
 }

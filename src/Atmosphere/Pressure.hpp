@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_PRESSURE_H
 #define XCSOAR_ATMOSPHERE_PRESSURE_H
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 /**
@@ -34,13 +33,13 @@ Copyright_License {
 class AtmosphericPressure 
 {
   /** Pressure in hPa */
-  fixed value;
+  double value;
 
   /**
    * @param value the pressure in hPa
    */
   explicit constexpr
-  AtmosphericPressure(fixed _value):value(_value) {}
+  AtmosphericPressure(double _value):value(_value) {}
 
 public:
   /**
@@ -56,7 +55,7 @@ public:
    */
   static constexpr
   AtmosphericPressure Zero() {
-    return AtmosphericPressure(fixed(0));
+    return AtmosphericPressure(0);
   }
 
   /**
@@ -65,16 +64,16 @@ public:
    */
   static constexpr
   AtmosphericPressure Standard() {
-    return AtmosphericPressure(fixed(1013.25));
+    return AtmosphericPressure(1013.25);
   }
 
   static constexpr
-  AtmosphericPressure Pascal(fixed value) {
+  AtmosphericPressure Pascal(double value) {
     return AtmosphericPressure(value / 100);
   }
 
   static constexpr
-  AtmosphericPressure HectoPascal(fixed value) {
+  AtmosphericPressure HectoPascal(double value) {
     return AtmosphericPressure(value);
   }
 
@@ -83,10 +82,10 @@ public:
    */
   constexpr
   bool IsPlausible() const {
-    return value > fixed(100) && value < fixed(1200);
+    return value > 100 && value < 1200;
   }
 
-  fixed GetPascal() const {
+  double GetPascal() const {
     return GetHectoPascal() * 100;
   }
 
@@ -95,7 +94,7 @@ public:
    *
    * @return QNH value (hPa)
    */
-  fixed GetHectoPascal() const {
+  double GetHectoPascal() const {
     return value;
   }
 
@@ -107,8 +106,8 @@ public:
    * @param alt_known Altitude of a known location (m)
    */
   gcc_const
-  static AtmosphericPressure FindQNHFromPressure(const AtmosphericPressure pressure,
-                                                 const fixed alt_known);
+  static AtmosphericPressure FindQNHFromPressure(AtmosphericPressure pressure,
+                                                 double alt_known);
 
   /**
    * Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
@@ -116,7 +115,7 @@ public:
    * @return QNH-based altitude (m)
    */
   gcc_pure
-  fixed PressureAltitudeToQNHAltitude(const fixed alt) const;
+  double PressureAltitudeToQNHAltitude(double alt) const;
 
   /**
    * Converts QNH adjusted altitude to pressure altitude (with QNH=1013.25 as reference)
@@ -124,7 +123,7 @@ public:
    * @return pressure altitude (m)
    */
   gcc_pure
-  fixed QNHAltitudeToPressureAltitude(const fixed alt) const;
+  double QNHAltitudeToPressureAltitude(double alt) const;
 
   /**
    * Converts a pressure value to the corresponding QNH-based altitude
@@ -138,7 +137,7 @@ public:
    * @return Altitude over QNH-based zero (m)
    */
   gcc_pure
-  fixed StaticPressureToQNHAltitude(const AtmosphericPressure ps) const;
+  double StaticPressureToQNHAltitude(const AtmosphericPressure ps) const;
 
   /**
    * Converts a QNH-based altitude to the corresponding pressure
@@ -152,7 +151,7 @@ public:
    * @return Air pressure at given altitude
    */
   gcc_pure
-  AtmosphericPressure QNHAltitudeToStaticPressure(const fixed alt) const;
+  AtmosphericPressure QNHAltitudeToStaticPressure(double alt) const;
 
   /**
    * Converts a pressure value to pressure altitude (with QNH=1013.25 as reference)
@@ -160,7 +159,7 @@ public:
    * @return pressure altitude (m)
    */
   gcc_const
-  static fixed StaticPressureToPressureAltitude(const AtmosphericPressure ps);
+  static double StaticPressureToPressureAltitude(const AtmosphericPressure ps);
 
   /**
    * Converts a 1013.25 hPa based altitude to the corresponding pressure
@@ -170,7 +169,7 @@ public:
    * @return Air pressure at given altitude
    */
   gcc_const
-  static AtmosphericPressure PressureAltitudeToStaticPressure(const fixed alt);
+  static AtmosphericPressure PressureAltitudeToStaticPressure(double alt);
 };
 
 #endif

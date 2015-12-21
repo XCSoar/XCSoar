@@ -25,19 +25,19 @@ Copyright_License {
 
 #include <math.h>
 
-#define isa_sea_level_density fixed(1.225)
-#define k4 fixed(44330.8)
-#define k6 fixed(1.0 / 42266.5)
-#define k7 fixed(1.0 / 0.234969)
+#define isa_sea_level_density 1.225
+#define k4 44330.8
+#define k6 1.0 / 42266.5
+#define k7 1.0 / 0.234969
 
-fixed
-AirDensity(const fixed altitude)
+double
+AirDensity(const double altitude)
 {
-  return fixed(pow((k4 - altitude) * k6, k7));
+  return pow((k4 - altitude) * k6, k7);
 }
 
-fixed
-AirDensityRatio(const fixed altitude)
+double
+AirDensityRatio(const double altitude)
 {
   return sqrt(isa_sea_level_density / AirDensity(altitude));
 }
