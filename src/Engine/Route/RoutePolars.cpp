@@ -28,7 +28,7 @@
 
 #define MC_CEILING_PENALTY_FACTOR 5.0
 
-GeoPoint
+inline GeoPoint
 RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
                           const FlatProjection &proj) const
 {

@@ -239,6 +239,7 @@ public:
                               const FlatProjection &proj) const;
 
 private:
+  gcc_pure
   GeoPoint MSLIntercept(const int index, const AGeoPoint &p,
                         const FlatProjection &proj) const;
 };
