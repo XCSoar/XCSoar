@@ -97,6 +97,13 @@ l_settings_index(lua_State *L)
       const TaskBehaviour &task_behaviour = settings_computer.task;
     
       Lua::Push(L, task_behaviour.risk_gamma);
+  } else if (StringIsEqual(name, "polardegradation")) {
+      /* A permanent polar degradation, 0% means no degradation, 
+         50% indicates the glider's sink rate is doubled. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+    
+      Lua::Push(L, settings_computer.polar.degradation_factor);
   } else
     return 0;
 
