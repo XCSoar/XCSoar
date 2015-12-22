@@ -217,7 +217,7 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   const auto predicate = WrapAirspacePredicate(and_condition);
 
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
-                                     Half(origin.Distance(destination)),
+                                     0.5 * origin.Distance(destination),
                                      predicate)) {
     if (!m_airspaces.IsEmpty())
       dirty = true;
