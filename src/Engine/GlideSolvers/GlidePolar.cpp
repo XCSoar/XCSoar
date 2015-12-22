@@ -58,7 +58,7 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs, const double _balla
 void
 GlidePolar::Update()
 {
-  assert(positive(bugs));
+  assert(bugs > 0);
 
   if (!ideal_polar.IsValid()) {
     Vmin = Vmax = 0;
@@ -141,9 +141,9 @@ double
 GlidePolar::SinkRate(const double V, const double n) const
 {
   const auto w0 = SinkRate(V);
-  const auto vl = VbestLD / std::max(Half(VbestLD), V);
+  const auto vl = VbestLD / std::max(VbestLD / 2, V);
   return std::max(0.,
-                  w0 + (V / Double(bestLD)) * (n * n - 1) * vl * vl);
+                  w0 + (0.5 * V / bestLD) * (n * n - 1) * vl * vl);
 }
 
 #if 0
@@ -193,7 +193,7 @@ GlidePolar::UpdateBestLD()
   VbestLD = gpvopt.find_min(VbestLD);
 #else
   assert(polar.IsValid());
-  assert(!negative(mc));
+  assert(mc >= 0);
 
   VbestLD = Clamp(sqrt((polar.c + mc) / polar.a), Vmin, Vmax);
   SbestLD = SinkRate(VbestLD);
@@ -241,7 +241,7 @@ GlidePolar::UpdateSMin()
 #else
   assert(polar.IsValid());
 
-  Vmin = std::min(Vmax, -polar.b / Double(polar.a));
+  Vmin = std::min(Vmax, -0.5 * polar.b / polar.a);
   Smin = SinkRate(Vmin);
 #endif
 
@@ -251,7 +251,7 @@ GlidePolar::UpdateSMin()
 bool 
 GlidePolar::IsGlidePossible(const GlideState &task) const
 {
-  if (!positive(task.altitude_difference))
+  if (task.altitude_difference <= 0)
     return false;
 
   // broad test assuming tailwind at best LD (best case)
@@ -335,7 +335,7 @@ GlidePolar::SpeedToFly(const AircraftState &state,
     // stop to climb
     V_stf = Vmin;
   } else {
-    const auto head_wind = !positive(GetMC()) && solution.IsDefined()
+    const auto head_wind = GetMC() <= 0 && solution.IsDefined()
       ? solution.head_wind
       : 0.;
     const auto stf_sink_rate = block_stf
@@ -373,7 +373,7 @@ GlidePolar::GetBallastLitres() const
 bool
 GlidePolar::IsBallastable() const
 {
-  return positive(ballast_ratio);
+  return ballast_ratio > 0;
 }
 
 static double
@@ -416,7 +416,7 @@ GlidePolar::GetBestGlideRatioSpeed(double head_wind) const
 double
 GlidePolar::GetVTakeoff() const
 {
-  return Half(GetVMin());
+  return GetVMin() / 2;
 }
 
 double
@@ -431,7 +431,7 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
      in relation to the polar's best L/D */
   const auto wind_ld = wind.norm / GetSBestLD();
 
-  Quadratic q(- Double(wind_ld * c_theta),
+  Quadratic q(-2 * wind_ld * c_theta,
               Square(wind_ld) - Square(bestLD));
 
   if (q.Check())
