@@ -71,7 +71,7 @@ struct ContestTracePoint {
     return location;
   }
 
-  fixed DistanceTo(const GeoPoint &other) const {
+  double DistanceTo(const GeoPoint &other) const {
     return location.Distance(other);
   }
 };

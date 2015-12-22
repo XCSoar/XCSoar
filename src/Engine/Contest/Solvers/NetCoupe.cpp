@@ -30,7 +30,7 @@ NetCoupe::CalculateResult() const
 {
   ContestResult result = ContestDijkstra::CalculateResult();
   // 0.8 factor for free distance and 1/1000 m -> km
-  result.score = ApplyHandicap(result.distance * fixed(0.0008));
+  result.score = ApplyHandicap(result.distance * 0.0008);
   return result;
 }
 

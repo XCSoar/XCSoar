@@ -33,7 +33,7 @@ XContestFree::CalculateResult() const
   ContestResult result = ContestDijkstra::CalculateResult();
   // DHV-XC: 1.5 points per km
   // XContest: 1.0 points per km
-  const auto score_factor = is_dhv ? fixed(0.0015) : fixed(0.0010);
+  const auto score_factor = is_dhv ? 0.0015 : 0.0010;
   result.score = ApplyHandicap(result.distance * score_factor);
   return result;
 }

@@ -60,10 +60,10 @@ Retrospective::PruneCandidates()
 }
 
 void
-Retrospective::CalcDistances(fixed& d_ach, fixed& d_can)
+Retrospective::CalcDistances(double &d_ach, double &d_can)
 {
-  d_ach = fixed(0);
-  d_can = fixed(0);
+  d_ach = 0;
+  d_can = 0;
   for (auto it0 = std::next(candidate_list.begin()); it0 != candidate_list.end(); ++it0) {
     d_ach += it0->actual_in;
     d_can += it0->leg_in;
@@ -151,8 +151,8 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
   }
 
   if (changed) {
-    fixed d_ach = fixed(0);
-    fixed d_can = fixed(0);
+    double d_ach = 0;
+    double d_can = 0;
     CalcDistances(d_ach, d_can);
   }
   return changed;

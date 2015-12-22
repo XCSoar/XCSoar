@@ -178,8 +178,8 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
   assert(num_stages <= MAX_STAGES);
 
   ContestResult result;
-  result.time = fixed(solution[num_stages - 1].DeltaTime(solution[0]));
-  result.distance = result.score = fixed(0);
+  result.time = solution[num_stages - 1].DeltaTime(solution[0]);
+  result.distance = result.score = 0;
 
   GeoPoint previous = solution[0].GetLocation();
   for (unsigned i = 1; i < num_stages; ++i) {
@@ -189,7 +189,7 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
     previous = current;
   }
 
-  #define fixed_fifth fixed(0.0002)
+  #define fixed_fifth 0.0002
   result.score *= fixed_fifth;
   result.score = ApplyHandicap(result.score);
 

@@ -108,7 +108,7 @@ ContestResult
 OLCSprint::CalculateResult() const
 {
   ContestResult result = ContestDijkstra::CalculateResult();
-  result.score = ApplyShiftedHandicap(result.distance / fixed(2500));
+  result.score = ApplyShiftedHandicap(result.distance / 2500.);
   return result;
 }
 

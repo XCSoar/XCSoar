@@ -55,7 +55,7 @@
  * now, we allow up to 5 km until this library has been implemented
  * properly.
  */
-static constexpr fixed max_distance(1000);
+static constexpr double max_distance(1000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict,
@@ -96,7 +96,7 @@ OLCTriangle::ResetBranchAndBound()
 }
 
 gcc_pure
-static fixed
+static double
 CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
 {
   // leg 0: 1-2
@@ -321,7 +321,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
   // Assume a maximum speed of 100 m/s
   const unsigned fastskiprange = GetPoint(to).DeltaTime(GetPoint(from)) * 100;
   const unsigned fastskiprange_flat =
-    trace_master.ProjectRange(GetPoint(from).GetLocation(), fixed(fastskiprange));
+    trace_master.ProjectRange(GetPoint(from).GetLocation(), fastskiprange);
 
   if (fastskiprange_flat < worst_d)
     return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
@@ -336,7 +336,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
   // note: this is _not_ the breakepoint between small and large triangles,
   // but a slightly lower value used for relaxed large triangle checking.
   const unsigned large_triangle_check =
-    trace_master.ProjectRange(GetPoint(from).GetLocation(), fixed(500000)) * 0.99;
+    trace_master.ProjectRange(GetPoint(from).GetLocation(), 500000) * 0.99;
 
   if (!running) {
     // initiate algorithm. otherwise continue unfinished run
@@ -493,19 +493,19 @@ OLCTriangle::CalculateResult() const
 {
   ContestResult result;
   result.time = (is_complete && is_closed)
-    ? fixed(solution[4].DeltaTime(solution[0]))
-    : fixed(0);
+    ? solution[4].DeltaTime(solution[0])
+    : 0.;
   result.distance = (is_complete && is_closed)
     ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
-    : fixed(0);
-  result.score = ApplyHandicap(result.distance * fixed(0.001));
+    : 0.;
+  result.score = ApplyHandicap(result.distance * 0.001);
   return result;
 }
 
 gcc_pure
 static bool
 IsInRange(const SearchPoint &a, const SearchPoint &b,
-          unsigned half_max_range_sq, fixed max_distance)
+          unsigned half_max_range_sq, double max_distance)
 {
   /* optimisation: if the flat distance is much smaller than the
      maximum range, we don't need to call the method

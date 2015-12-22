@@ -32,6 +32,6 @@ OLCFAI::CalculateResult() const
 {
   ContestResult result = OLCTriangle::CalculateResult();
   // 0.3 points per km
-  result.score = ApplyHandicap(result.distance * fixed(0.0003));
+  result.score = ApplyHandicap(result.distance * 0.0003);
   return result;
 }

@@ -23,38 +23,35 @@
 #ifndef CONTEST_RESULT_HPP
 #define CONTEST_RESULT_HPP
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 
 struct ContestResult
 {
   /** Score (pts) according to OLC rule */
-  fixed score;
+  double score;
   /** Optimum distance (m) travelled according to OLC rule */
-  fixed distance;
+  double distance;
   /** Time (s) of optimised OLC path */
-  fixed time;
+  double time;
 
   void Reset() {
-    score = fixed(0);
-    distance = fixed(0);
-    time = fixed(0);
+    score = 0;
+    distance = 0;
+    time = 0;
   }
 
-  bool IsDefined() const {
-    return positive(score);
+  constexpr bool IsDefined() const {
+    return score > 0;
   }
 
   /**
    * Returns the average speed on the optimised path [m/s].  Returns
    * zero if the result is invalid.
    */
-  gcc_pure
-  fixed GetSpeed() const {
-    return positive(time)
+  constexpr double GetSpeed() const {
+    return time > 0
       ? distance / time
-      : fixed(0);
+      : 0.;
   }
 };
 

@@ -39,9 +39,9 @@ public:
   struct NearWaypoint {
     WaypointPtr waypoint;
     GeoPoint location;
-    fixed range;
-    fixed leg_in;
-    fixed actual_in;
+    double range;
+    double leg_in;
+    double actual_in;
     Angle bearing;
 
     NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location)
@@ -94,10 +94,10 @@ public:
     Clear();
   }
 
-  void CalcDistances(fixed& d_ach, fixed& d_can);
+  void CalcDistances(double &d_ach, double &d_can);
 
   /** search range in m */
-  fixed search_range;
+  double search_range;
   Angle angle_tolerance;
 };
 
