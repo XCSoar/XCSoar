@@ -35,7 +35,7 @@
 #define REACH_MAX_VERTICES 2000
 
 static bool
-AlmostTheSame(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
+AlmostTheSame(const FlatGeoPoint p1, const FlatGeoPoint p2)
 {
   const FlatGeoPoint k = p1 - p2;
   const int dmax = std::max(abs(k.x), abs(k.y));
@@ -43,7 +43,7 @@ AlmostTheSame(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
 }
 
 static bool
-TooClose(const FlatGeoPoint &p1, const FlatGeoPoint &p2)
+TooClose(const FlatGeoPoint p1, const FlatGeoPoint p2)
 {
   const FlatGeoPoint k = p1 - p2;
   const int dmax = std::max(abs(k.x), abs(k.y));
@@ -64,7 +64,7 @@ FlatTriangleFanTree::CalcBB()
 }
 
 bool
-FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint &p,
+FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint p,
                                   const bool include_children) const
 {
   if (include_children) {
@@ -199,7 +199,7 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
 }
 
 void
-FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
+FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint o,
                                        ReachFanParms &parms)
 {
   if (!parms.terrain) {
@@ -287,7 +287,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
 }
 
 RoughAltitude
-FlatTriangleFanTree::DirectArrival(const FlatGeoPoint &dest,
+FlatTriangleFanTree::DirectArrival(FlatGeoPoint dest,
                                    const ReachFanParms &parms) const
 {
   assert(!vs.empty());
@@ -296,7 +296,7 @@ FlatTriangleFanTree::DirectArrival(const FlatGeoPoint &dest,
 }
 
 bool
-FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
+FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
                                          const ReachFanParms &parms,
                                          RoughAltitude &arrival_height) const
 {

@@ -72,7 +72,7 @@ public:
   void CalcBB();
 
   gcc_pure
-  bool IsInsideTree(const FlatGeoPoint &p,
+  bool IsInsideTree(FlatGeoPoint p,
                     const bool include_children = true) const;
 
   void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms);
@@ -98,7 +98,7 @@ public:
   bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
                 const RouteLink &e_2, ReachFanParms &parms);
 
-  bool FindPositiveArrival(const FlatGeoPoint &n,
+  bool FindPositiveArrival(FlatGeoPoint n,
                            const ReachFanParms &parms,
                            RoughAltitude &arrival_height) const;
 
@@ -106,10 +106,10 @@ public:
                      const FlatProjection &projection,
                      TriangleFanVisitor &visitor) const;
 
-  void UpdateTerrainBase(const FlatGeoPoint &origin, ReachFanParms &parms);
+  void UpdateTerrainBase(FlatGeoPoint origin, ReachFanParms &parms);
 
   gcc_pure
-  RoughAltitude DirectArrival(const FlatGeoPoint &dest,
+  RoughAltitude DirectArrival(FlatGeoPoint dest,
                               const ReachFanParms &parms) const;
 };
 

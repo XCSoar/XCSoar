@@ -41,10 +41,10 @@ public:
 
   void CalcBoundingBox();
 
-  void AddPoint(const FlatGeoPoint &p);
+  void AddPoint(FlatGeoPoint p);
 
   gcc_pure
-  bool IsInside(const FlatGeoPoint &p) const;
+  bool IsInside(FlatGeoPoint p) const;
 
   void Clear() {
     vs.clear();

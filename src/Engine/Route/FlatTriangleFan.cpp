@@ -36,7 +36,7 @@ FlatTriangleFan::CalcBoundingBox()
 }
 
 void
-FlatTriangleFan::AddPoint(const FlatGeoPoint &p)
+FlatTriangleFan::AddPoint(FlatGeoPoint p)
 {
   // avoid duplicates
   if (!vs.empty() && p == vs.back())
@@ -46,7 +46,7 @@ FlatTriangleFan::AddPoint(const FlatGeoPoint &p)
 }
 
 bool
-FlatTriangleFan::IsInside(const FlatGeoPoint &p) const
+FlatTriangleFan::IsInside(FlatGeoPoint p) const
 {
   if (!bounding_box.IsInside(p))
     return false;
