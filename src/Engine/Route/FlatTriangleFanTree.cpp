@@ -110,6 +110,9 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
 void
 FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao)
 {
+  assert(vs.empty());
+  assert(children.empty());
+
   AddPoint(ao);
   CalcBB();
   height = ao.altitude;
