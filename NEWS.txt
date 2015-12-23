@@ -4,6 +4,7 @@ Version 6.8.3 - not yet released
 * Waypoints
   - use correct "comment" field for OziExplorer files
   - relax file format detection for OziExplorer files
+  - fix bogus arrival heights on watched waypoints when GPS unavailable
 * fix crash in XML parser
 * fix crash in airspace parser
 * fix crash in SkyLines tracking
