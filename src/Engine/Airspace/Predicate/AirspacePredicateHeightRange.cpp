@@ -26,8 +26,8 @@
 bool
 AirspacePredicateHeightRange::operator()(const AbstractAirspace& t) const
 {
-  return RoughAltitude(t.GetTop().altitude) >= h_min &&
-    RoughAltitude(t.GetBase().altitude) <= h_max;
+  return t.GetTop().altitude >= h_min &&
+    t.GetBase().altitude <= h_max;
 }
 
 bool

@@ -25,7 +25,6 @@
 
 #include "AirspacePredicate.hpp"
 #include "OutsideAirspacePredicate.hpp"
-#include "Rough/RoughAltitude.hpp"
 
 class AbstractAirspace;
 
@@ -34,8 +33,8 @@ class AbstractAirspace;
  */
 class AirspacePredicateHeightRange
 {
-  const RoughAltitude h_min;
-  const RoughAltitude h_max;
+  const double h_min;
+  const double h_max;
 
 public:
   /**
@@ -47,8 +46,8 @@ public:
    * @return Initialised object
    */
   constexpr
-  AirspacePredicateHeightRange(const RoughAltitude _h_min,
-                               const RoughAltitude _h_max)
+  AirspacePredicateHeightRange(const double _h_min,
+                               const double _h_max)
     :h_min(_h_min), h_max(_h_max) {}
 
   gcc_pure
@@ -73,8 +72,8 @@ public:
    *
    * @return Initialised object
    */
-  AirspacePredicateHeightRangeExcludeTwo(const RoughAltitude _h_min,
-                                         const RoughAltitude _h_max,
+  AirspacePredicateHeightRangeExcludeTwo(const double _h_min,
+                                         const double _h_max,
                                          const AGeoPoint& _p1,
                                          const AGeoPoint& _p2)
     :height_range(_h_min, _h_max),
