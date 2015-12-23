@@ -52,7 +52,7 @@ FlatTriangleFan::IsInside(const FlatGeoPoint &p) const
     return false;
 
   bool inside = false;
-  for (auto i = vs.begin(), j = vs.end() - 1, end = vs.end();
+  for (auto i = vs.begin(), j = std::prev(vs.end()), end = vs.end();
        i != end; j = i++) {
     if ((i->y > p.y) == (j->y > p.y))
       continue;
