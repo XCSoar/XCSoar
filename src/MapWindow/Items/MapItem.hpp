@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Terrain/RasterBuffer.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
@@ -78,14 +77,28 @@ public:
 
 struct LocationMapItem: public MapItem
 {
-  GeoVector vector;
-  short elevation;
+  /**
+   * Magic value for "unknown elevation".
+   */
+  static constexpr double UNKNOWN_ELEVATION = -1e5;
 
-  LocationMapItem(const GeoVector &_vector, short _elevation)
+  /**
+   * All elevation values below this threshold are considered unknown.
+   */
+  static constexpr double UNKNOWN_ELEVATION_THRESHOLD = -1e4;
+
+  GeoVector vector;
+
+  /**
+   * Terrain elevation of the point.  If that is unknown, it is nan().
+   */
+  double elevation;
+
+  LocationMapItem(const GeoVector &_vector, double _elevation)
     :MapItem(LOCATION), vector(_vector), elevation(_elevation) {}
 
   bool HasElevation() const {
-    return !RasterBuffer::IsSpecial(elevation);
+    return elevation > UNKNOWN_ELEVATION_THRESHOLD;
   }
 };
 
@@ -95,22 +108,32 @@ struct LocationMapItem: public MapItem
  */
 struct ArrivalAltitudeMapItem: public MapItem
 {
-  /** Elevation of the point in MSL */
-  int elevation;
+  /**
+   * Magic value for "unknown elevation".
+   */
+  static constexpr double UNKNOWN_ELEVATION = -1e5;
+
+  /**
+   * All elevation values below this threshold are considered unknown.
+   */
+  static constexpr double UNKNOWN_ELEVATION_THRESHOLD = -1e4;
+
+  /**
+   * Terrain elevation of the point in MSL.  If that is unknown, it is
+   * nan().
+   */
+  double elevation;
 
   /** Arrival altitudes [m MSL] */
   ReachResult reach;
 
-  bool elevation_available;
-
-  ArrivalAltitudeMapItem(int _elevation, bool _elevation_available,
+  ArrivalAltitudeMapItem(double _elevation,
                          ReachResult _reach)
     :MapItem(ARRIVAL_ALTITUDE),
-     elevation(_elevation), reach(_reach),
-     elevation_available(_elevation_available) {}
+     elevation(_elevation), reach(_reach) {}
 
   bool HasElevation() const {
-    return elevation_available;
+    return elevation > UNKNOWN_ELEVATION_THRESHOLD;
   }
 };
 
