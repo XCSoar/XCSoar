@@ -211,6 +211,7 @@ protected:
 
   void
   FormatLabel(TCHAR *buffer, const Waypoint &way_point,
+              WaypointRenderer::Reachability reachable,
               const ReachResult &reach)
   {
     FormatTitle(buffer, way_point);
@@ -240,6 +241,9 @@ protected:
       StringFormatUnsafe(buffer + length, _T("%.1f"), (double) gr);
       return;
     }
+
+    if (reachable == WaypointRenderer::Unreachable)
+      return;
 
     if (!reach.IsReachableDirect() && !way_point.flags.watched)
       return;
@@ -326,7 +330,7 @@ protected:
     }
 
     TCHAR Buffer[NAME_SIZE+1];
-    FormatLabel(Buffer, way_point, vwp.reach);
+    FormatLabel(Buffer, way_point, vwp.reachable, vwp.reach);
 
     RasterPoint sc = vwp.point;
     if ((vwp.reachable != WaypointRenderer::Unreachable &&
