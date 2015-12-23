@@ -154,7 +154,7 @@ MapItemListBuilder::AddArrivalAltitudes(
 
   // Calculate target altitude
   double safety_elevation(safety_height);
-  if (!RasterBuffer::IsInvalid(elevation))
+  if (!RasterBuffer::IsSpecial(elevation))
     safety_elevation += elevation;
 
   // Save destination point incl. elevation and safety height
