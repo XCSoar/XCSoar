@@ -29,7 +29,6 @@
 #include <vector>
 
 class FlatTriangleFan {
-public:
   typedef std::vector<FlatGeoPoint> VertexVector;
 
 protected:

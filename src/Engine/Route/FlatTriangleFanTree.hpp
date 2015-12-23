@@ -48,10 +48,10 @@ class FlatTriangleFanTree: public FlatTriangleFan
 public:
   static constexpr unsigned REACH_MAX_FANS = 300;
 
+private:
   typedef std::list<FlatTriangleFanTree,
                     GlobalSliceAllocator<FlatTriangleFanTree, 128u> > LeafVector;
 
-protected:
   FlatBoundingBox bb_children;
   LeafVector children;
   unsigned char depth;
