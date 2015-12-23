@@ -33,7 +33,6 @@ Copyright_License {
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Tracking/SkyLines/Features.hpp"
-#include "Rough/RoughAltitude.hpp"
 #include "Util/StaticString.hxx"
 
 #ifdef HAVE_NOAA
@@ -92,15 +91,18 @@ struct LocationMapItem: public MapItem
 struct ArrivalAltitudeMapItem: public MapItem
 {
   /** Elevation of the point in MSL */
-  RoughAltitude elevation;
+  int elevation;
 
   /** Arrival altitudes [m MSL] */
   ReachResult reach;
 
-  ArrivalAltitudeMapItem(RoughAltitude _elevation,
+  bool elevation_available;
+
+  ArrivalAltitudeMapItem(int _elevation, bool _elevation_available,
                          ReachResult _reach)
     :MapItem(ARRIVAL_ALTITUDE),
-     elevation(_elevation), reach(_reach) {}
+     elevation(_elevation), reach(_reach),
+     elevation_available(_elevation_available) {}
 };
 
 struct SelfMapItem: public MapItem

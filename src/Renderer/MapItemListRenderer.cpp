@@ -101,21 +101,18 @@ Draw(Canvas &canvas, PixelRect rc,
 {
   const unsigned line_height = rc.bottom - rc.top;
 
-  bool elevation_available =
-      !RasterBuffer::IsSpecial((short)item.elevation);
-
   bool reach_relevant = item.reach.IsReachRelevant();
 
-  RoughAltitude arrival_altitude =
+  int arrival_altitude =
     item.reach.terrain_valid == ReachResult::Validity::VALID
     ? item.reach.terrain
     : item.reach.direct;
-  if (elevation_available)
+  if (item.elevation_available)
     arrival_altitude -= item.elevation;
 
   bool reachable =
     item.reach.terrain_valid != ReachResult::Validity::UNREACHABLE &&
-    arrival_altitude.IsPositive();
+    arrival_altitude >= 0;
 
   // Draw final glide arrow icon
 
@@ -146,11 +143,11 @@ Draw(Canvas &canvas, PixelRect rc,
   StaticString<256> buffer;
   buffer.clear();
 
-  if (elevation_available) {
-    RoughAltitude relative_arrival_altitude =
+  if (item.elevation_available) {
+    int relative_arrival_altitude =
       item.reach.direct - item.elevation;
 
-    FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
+    FormatRelativeUserAltitude(relative_arrival_altitude,
                                altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
@@ -169,11 +166,11 @@ Draw(Canvas &canvas, PixelRect rc,
   if (reach_relevant) {
     buffer.Format(_T("%s: "), _("around terrain"));
 
-    if (elevation_available) {
-      RoughAltitude relative_arrival_altitude =
+    if (item.elevation_available) {
+      int relative_arrival_altitude =
           item.reach.terrain - item.elevation;
 
-      FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
+      FormatRelativeUserAltitude(relative_arrival_altitude,
                                  altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
      buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
@@ -182,8 +179,8 @@ Draw(Canvas &canvas, PixelRect rc,
     buffer.AppendFormat(_T("%s %s, "),
                         FormatUserAltitude(fixed(item.reach.terrain)).c_str(),
                         _("MSL"));
-  } else if (elevation_available &&
-             (int)item.reach.direct >= (int)item.elevation &&
+  } else if (item.elevation_available &&
+             item.reach.direct >= item.elevation &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
     buffer.UnsafeFormat(_T("%s "), _("Unreachable due to terrain."));
   } else {

@@ -152,6 +152,8 @@ MapItemListBuilder::AddArrivalAltitudes(
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
 
+  bool elevation_available = !RasterBuffer::IsSpecial(elevation);
+
   // Calculate target altitude
   double safety_elevation(safety_height);
   if (!RasterBuffer::IsSpecial(elevation))
@@ -169,7 +171,8 @@ MapItemListBuilder::AddArrivalAltitudes(
 
   reach.Subtract(safety_height);
 
-  list.append(new ArrivalAltitudeMapItem(RoughAltitude(elevation), reach));
+  list.append(new ArrivalAltitudeMapItem(elevation, elevation_available,
+                                         reach));
 }
 
 void
