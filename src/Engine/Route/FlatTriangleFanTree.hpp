@@ -61,9 +61,7 @@ public:
   friend class PrintHelper;
 
   FlatTriangleFanTree(const unsigned char _depth = 0)
-    :FlatTriangleFan(),
-     bb_children(FlatGeoPoint(0,0)),
-     depth(_depth),
+    :depth(_depth),
      gaps_filled(false) {}
 
   void Clear() {

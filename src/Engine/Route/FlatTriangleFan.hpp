@@ -37,9 +37,6 @@ protected:
   RoughAltitude height;
 
 public:
-  FlatTriangleFan()
-    :bounding_box(FlatGeoPoint(0, 0)), height(0) {}
-
   friend class PrintHelper;
 
   void CalcBoundingBox();
