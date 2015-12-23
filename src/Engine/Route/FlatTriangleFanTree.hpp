@@ -54,7 +54,7 @@ private:
 
   FlatBoundingBox bb_children;
   LeafVector children;
-  unsigned char depth;
+  const unsigned char depth;
   bool gaps_filled;
 
 public:
