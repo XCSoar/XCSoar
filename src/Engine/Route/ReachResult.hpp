@@ -58,7 +58,6 @@ struct ReachResult {
   Validity terrain_valid;
 
   void Clear() {
-    direct = -1;
     terrain_valid = Validity::INVALID;
   }
 
