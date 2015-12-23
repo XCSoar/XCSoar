@@ -206,8 +206,8 @@ AirspaceRoute::Synchronise(const Airspaces &master,
 {
   // @todo: also synchronise with AirspaceWarningManager to filter out items that are
   // acknowledged.
-  h_min = std::min(origin.altitude, std::min(destination.altitude, h_min));
-  h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
+  h_min = std::min((int)origin.altitude, std::min((int)destination.altitude, h_min));
+  h_max = std::max((int)origin.altitude, std::max((int)destination.altitude, h_max));
 
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo h_condition(h_min, h_max, origin, destination);

@@ -34,7 +34,7 @@ class FlatTriangleFan {
 protected:
   VertexVector vs;
   FlatBoundingBox bounding_box;
-  RoughAltitude height;
+  int height;
 
 public:
   friend class PrintHelper;
@@ -55,7 +55,7 @@ public:
     return vs.empty();
   }
 
-  RoughAltitude GetHeight() const {
+  int GetHeight() const {
     return height;
   }
 };

@@ -167,7 +167,7 @@ MapItemListBuilder::AddArrivalAltitudes(
   if (!leased_route_planner->FindPositiveArrival(destination, reach))
     return;
 
-  reach.Subtract(RoughAltitude(safety_height));
+  reach.Subtract(safety_height);
 
   list.append(new ArrivalAltitudeMapItem(RoughAltitude(elevation), reach));
 }

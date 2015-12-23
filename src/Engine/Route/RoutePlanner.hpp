@@ -35,6 +35,8 @@
 #include <algorithm>
 #include <unordered_set>
 
+#include <limits.h>
+
 class GlidePolar;
 
 /**
@@ -110,9 +112,9 @@ protected:
   /** Terrain raster */
   const RasterMap *terrain;
   /** Minimum height scanned during solution (m) */
-  RoughAltitude h_min;
+  int h_min;
   /** Maxmimum height scanned during solution (m) */
-  RoughAltitude h_max;
+  int h_max;
 
 private:
   /** A* search algorithm */
@@ -194,7 +196,7 @@ public:
    */
   bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
-             const RoughAltitude h_ceiling = RoughAltitude::Max());
+             int h_ceiling = INT_MAX);
 
   /**
    * Solve reach footprint
@@ -205,7 +207,7 @@ public:
    * @return True if reach was scanned
    */
   bool SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  RoughAltitude h_ceiling, bool do_solve=true);
+                  int h_ceiling, bool do_solve=true);
 
   /** Visit reach */
   void AcceptInRange(const GeoBounds &bounds,
@@ -266,7 +268,7 @@ public:
     return reach.FindPositiveArrival(dest, rpolars_reach, result_r);
   }
 
-  RoughAltitude GetTerrainBase() const {
+  int GetTerrainBase() const {
     return reach.GetTerrainBase();
   }
 

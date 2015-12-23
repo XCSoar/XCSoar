@@ -41,7 +41,7 @@
 #include <string.h>
 
 static void
-test_troute(const RasterMap &map, double mwind, double mc, RoughAltitude ceiling)
+test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
 {
   GlideSettings settings;
   settings.SetDefaults();

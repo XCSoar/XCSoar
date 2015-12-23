@@ -25,7 +25,6 @@
 
 #include "Geo/Flat/FlatProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
-#include "Rough/RoughAltitude.hpp"
 
 class RoutePolars;
 class RasterMap;
@@ -36,7 +35,7 @@ class ReachFan
 {
   FlatProjection projection;
   FlatTriangleFanTree root;
-  RoughAltitude terrain_base;
+  int terrain_base;
 
 public:
   ReachFan():terrain_base(0) {}
@@ -60,7 +59,7 @@ public:
   void AcceptInRange(const GeoBounds& bounds,
                      TriangleFanVisitor& visitor) const;
 
-  RoughAltitude GetTerrainBase() const {
+  int GetTerrainBase() const {
     return terrain_base;
   }
 };

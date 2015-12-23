@@ -139,8 +139,8 @@ RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
 
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);
-  const RoughAltitude h_ceiling((short)std::max((int)basic.nav_altitude + 500,
-                                                (int)calculated.thermal_band.working_band_ceiling));
+  const int h_ceiling(std::max((int)basic.nav_altitude + 500,
+                               (int)calculated.thermal_band.working_band_ceiling));
 
   if (reach_clock.CheckAdvance(basic.time, PERIOD)) {
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);

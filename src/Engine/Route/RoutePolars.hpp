@@ -26,7 +26,8 @@
 #include "Config.hpp"
 #include "RoutePolar.hpp"
 #include "Point.hpp"
-#include "Rough/RoughAltitude.hpp"
+
+#include <limits.h>
 
 class GlidePolar;
 struct GlideSettings;
@@ -56,9 +57,9 @@ class RoutePolars
 
 public:
   /** Altitude (m) above which climbs become slow */
-  RoughAltitude cruise_altitude;
+  int cruise_altitude;
   /** Altitude (m) above which the aircraft cannot climb */
-  RoughAltitude climb_ceiling;
+  int climb_ceiling;
 
   /**
    * Re-initialise performance tables when polar or wind changes
@@ -130,7 +131,7 @@ public:
    *
    * @return Height of glide (m)
    */
-  RoughAltitude CalcVHeight(const RouteLink& link) const;
+  double CalcVHeight(const RouteLink &link) const;
 
   /**
    * Generate a link from the destination imposing constraints on the origin
@@ -170,8 +171,8 @@ public:
    * @param _ceiling_alt Ceiling altitude (m)
    */
   void SetConfig(const RoutePlannerConfig &_config,
-                 const RoughAltitude _cruise_alt = RoughAltitude::Max(),
-                 const RoughAltitude _ceiling_alt = RoughAltitude::Max());
+                 int _cruise_alt = INT_MAX,
+                 int _ceiling_alt = INT_MAX);
 
   /**
    * Check whether the configuration requires intersection tests with airspace.
@@ -226,12 +227,12 @@ public:
   /**
    * Calculate height of arrival at destination starting from origin
    */
-  RoughAltitude CalcGlideArrival(const AFlatGeoPoint& origin,
-                                 const FlatGeoPoint& dest,
-                                 const FlatProjection &proj) const;
+  int CalcGlideArrival(const AFlatGeoPoint& origin,
+                       const FlatGeoPoint& dest,
+                       const FlatProjection &proj) const;
 
-  RoughAltitude GetSafetyHeight() const {
-    return RoughAltitude(config.safety_height_terrain);
+  int GetSafetyHeight() const {
+    return config.safety_height_terrain;
   }
 
   FlatGeoPoint ReachIntercept(const int index, const AGeoPoint& p,

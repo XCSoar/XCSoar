@@ -26,7 +26,6 @@
 #include "Route/AirspaceRoute.hpp"
 
 struct GlideSettings;
-class RoughAltitude;
 class RasterTerrain;
 class ProtectedAirspaceWarningManager;
 
@@ -65,14 +64,14 @@ public:
 
   bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
-             const RoughAltitude h_ceiling);
+             int h_ceiling);
 
   const Route &GetSolution() const {
     return planner.GetSolution();
   }
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  RoughAltitude h_ceiling, bool do_solve);
+                  int h_ceiling, bool do_solve);
 
   bool FindPositiveArrival(const AGeoPoint &dest, ReachResult &result_r) const;
 
@@ -82,7 +81,7 @@ public:
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;
 
-  RoughAltitude GetTerrainBase() const;
+  int GetTerrainBase() const;
 };
 
 #endif

@@ -44,7 +44,7 @@ void
 ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const AGeoPoint &start,
                                   const RoutePlannerConfig &config,
-                                  const RoughAltitude h_ceiling)
+                                  const int h_ceiling)
 {
   ExclusiveLease lease(*this);
   lease->Synchronise(airspaces, warnings, dest, start);
@@ -62,7 +62,7 @@ ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
 void
 ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
                                   const RoutePlannerConfig &config,
-                                  const RoughAltitude h_ceiling,
+                                  const int h_ceiling,
                                   const bool do_solve)
 {
   ExclusiveLease lease(*this);
