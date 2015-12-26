@@ -217,6 +217,16 @@ l_map_next(lua_State *L)
   return 0;
 }
 
+static int
+l_map_prev(lua_State *L)
+{
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+
+  PageActions::Prev();
+  return 0;
+}
+
 static constexpr struct luaL_Reg map_funcs[] = {
   {"show", l_map_show},
   {"enterpan", l_map_enterpan},
@@ -226,6 +236,7 @@ static constexpr struct luaL_Reg map_funcs[] = {
   {"pancursor", l_map_pancursor},
   {"zoom", l_map_zoom},
   {"next", l_map_next},
+  {"prev", l_map_prev},
   {nullptr, nullptr}
 };
 
