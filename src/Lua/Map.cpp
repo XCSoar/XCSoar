@@ -112,12 +112,38 @@ l_map_panto(lua_State *L)
   return 0;
 }
 
+static int
+l_map_pancursor(lua_State *L)
+{
+  if (lua_gettop(L) != 2)
+    return luaL_error(L, "Invalid parameters");
+
+  int dx = luaL_checknumber(L, 1);
+  int dy = luaL_checknumber(L, 2);
+  GlueMapWindow *map_window = UIGlobals::GetMapIfActive();
+  if (map_window == NULL || !map_window->IsPanning())
+    return 0;
+
+  const WindowProjection &projection = map_window->VisibleProjection();
+  if (!projection.IsValid())
+    return 0;
+
+  RasterPoint pt = projection.GetScreenOrigin();
+  pt.x -= dx * int(projection.GetScreenWidth()) / 4;
+  pt.y -= dy * int(projection.GetScreenHeight()) / 4;
+  map_window->SetLocation(projection.ScreenToGeo(pt));
+
+  map_window->QuickRedraw();
+  return 0;
+}
+
 static constexpr struct luaL_Reg map_funcs[] = {
   {"show", l_map_show},
   {"enterpan", l_map_enterpan},
   {"leavepan", l_map_leavepan},
   {"disablepan", l_map_disablepan},
   {"panto", l_map_panto},
+  {"pancursor", l_map_pancursor},
   {nullptr, nullptr}
 };
 
