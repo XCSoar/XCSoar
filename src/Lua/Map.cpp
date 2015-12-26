@@ -65,8 +65,19 @@ l_map_show(lua_State *L)
   return 0;
 }
 
+static int
+l_map_enterpan(lua_State *L)
+{
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+
+  EnterPan();
+  return 0;
+}
+
 static constexpr struct luaL_Reg map_funcs[] = {
   {"show", l_map_show},
+  {"enterpan", l_map_enterpan},
   {nullptr, nullptr}
 };
 
