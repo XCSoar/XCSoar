@@ -28,6 +28,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "PageActions.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Pan.hpp"
 
 extern "C" {
 #include <lauxlib.h>
@@ -46,6 +47,8 @@ l_map_index(lua_State *L)
 
   if (StringIsEqual(name, "location"))
     Lua::Push(L, map->GetLocation());
+  else if (StringIsEqual(name, "is_panning"))
+    Lua::Push(L, IsPanning());
   else
     return 0;
 
