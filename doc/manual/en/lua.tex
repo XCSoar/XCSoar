@@ -122,6 +122,8 @@ contains the following names:
   \hline
   \verb|airspace| & Access to airspace data. \\
   \hline
+  \verb|wind| & Access to wind data and settings. \\
+  \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
 \end{tabularx}
 \end{maxipage}
@@ -568,6 +570,64 @@ of the maximum \newline ballst the glider can carry.\\
 \hline
 
 \verb|setmaxtemp(float value)| & Sets the maximum temperature $[{K}]$.\\
+
+\hline
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Wind}
+
+The Settings provides access to xcsoar wind data and settings.
+
+The following attributes are provided by \verb|xcsoar.wind|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|wind_mode| & Wind mode, 0: Manual, 1: Circling, 2: ZigZag, 3: Both.\\
+
+\hline
+
+\verb|setwindmode(int value)| & Sets wind mode $[0-3]$.\\
+
+\hline
+
+\verb|tail_drift| & Determines whether the snail trail is drifted with the 
+wind \newline when displayed in circling mode, 0: Off, 1: On. \\
+
+\hline
+
+\verb|settaildrift(bool value)| & Turns Taildrift Off / On $[{0,1}]$.\\
+
+\hline
+
+\verb|wind_source| & The Source of the current wind, 0: None, 1: Manual,
+\newline 2: Circling, 3: Both, 4: External.\\
+
+\hline
+
+\verb|wind_speed| & The current wind speed 
+$[{m/s}]$.\\
+
+\hline
+
+\verb|setwindspeed(float value)| & Sets manual the wind speed $[{m/s}]$.\\
+
+\hline
+
+\verb|wind_bearing| & The current wind bearing 
+$[{degrees}]$.\\
+
+\hline
+
+\verb|setwindbearing(float value)| & Sets manual the wind bearing $[{degrees}]$.\\
+
+\hline
+
+\verb|clear()| & Clears the wind settings and calculations.\\
 
 \hline
 

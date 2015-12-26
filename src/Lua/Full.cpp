@@ -39,6 +39,7 @@ Copyright_License {
 #include "Airspace.hpp"
 #include "Task.hpp"
 #include "Settings.hpp"
+#include "Wind.hpp"
 
 #include <windef.h> // for MAX_PATH
 #include <assert.h>
@@ -58,6 +59,7 @@ Lua::NewFullState()
   InitAirspace(L);
   InitTask(L);
   InitSettings(L);
+  InitWind(L);
 
   {
     SetPackagePath(L,
