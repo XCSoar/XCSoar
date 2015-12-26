@@ -29,6 +29,13 @@ Copyright_License {
 #include "PageActions.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Pan.hpp"
+#include "Language/Language.hpp"
+#include "Message.hpp"
+#include "Interface.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
+#include "Util/Clamp.hpp"
+
 
 extern "C" {
 #include <lauxlib.h>
@@ -137,6 +144,69 @@ l_map_pancursor(lua_State *L)
   return 0;
 }
 
+static int
+l_map_zoom(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  int factor = luaL_checknumber(L, 1);
+  GlueMapWindow *map_window = PageActions::ShowMap();
+  if (map_window == NULL)
+    return 0;
+
+  const MapWindowProjection &projection =
+      map_window->VisibleProjection();
+  if (!projection.IsValid())
+    return 0;
+
+  auto value = projection.GetMapScale();
+
+  if (projection.HaveScaleList()) {
+    value = projection.StepMapScale(value, -factor);
+  } else {
+    if (factor == 1)
+      // zoom in a little
+      value /= M_SQRT2;
+    else if (factor == -1)
+      // zoom out a little
+      value *= M_SQRT2;
+    else if (factor == 2)
+      // zoom in a lot
+      value /= 2;
+    else if (factor == -2)
+      // zoom out a lot
+      value *= 2;
+  }
+
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
+  if (map_window == NULL)
+    return 0;
+
+  const DisplayMode displayMode = CommonInterface::GetUIState().display_mode;
+  if (settings_map.auto_zoom_enabled &&
+      !(displayMode == DisplayMode::CIRCLING && settings_map.circle_zoom_enabled) &&
+      !IsPanning()) {
+    settings_map.auto_zoom_enabled = false;  // disable autozoom if user manually changes zoom
+    Profile::Set(ProfileKeys::AutoZoom, false);
+    Message::AddMessage(_("Auto. zoom off"));
+  }
+ 
+  auto vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
+  auto scale_2min_distance = vmin * 12;
+  const fixed scale_100m = fixed(10);
+  const fixed scale_1600km = fixed(1600*100);
+  auto minreasonable = displayMode == DisplayMode::CIRCLING
+    ? scale_100m
+    : std::max(scale_100m, scale_2min_distance);
+
+  value = Clamp(value, minreasonable, scale_1600km);
+  map_window->SetMapScale(value);
+  map_window->QuickRedraw();
+
+  return 0;
+}
+
 static constexpr struct luaL_Reg map_funcs[] = {
   {"show", l_map_show},
   {"enterpan", l_map_enterpan},
@@ -144,6 +214,7 @@ static constexpr struct luaL_Reg map_funcs[] = {
   {"disablepan", l_map_disablepan},
   {"panto", l_map_panto},
   {"pancursor", l_map_pancursor},
+  {"zoom", l_map_zoom},
   {nullptr, nullptr}
 };
 
