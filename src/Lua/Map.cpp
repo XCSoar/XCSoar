@@ -85,10 +85,25 @@ l_map_leavepan(lua_State *L)
   return 0;
 }
 
+static int
+l_map_disablepan(lua_State *L)
+{
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+  /**
+   * Low-level version of LeavePan().  It disables panning in the map
+   * and updates the input mode, but does not restore the page layout.
+   * Only to be used by the pages library.
+   */
+  DisablePan();
+  return 0;
+}
+
 static constexpr struct luaL_Reg map_funcs[] = {
   {"show", l_map_show},
   {"enterpan", l_map_enterpan},
   {"leavepan", l_map_leavepan},
+  {"disablepan", l_map_disablepan},
   {nullptr, nullptr}
 };
 
