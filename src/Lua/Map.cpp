@@ -99,11 +99,25 @@ l_map_disablepan(lua_State *L)
   return 0;
 }
 
+static int
+l_map_panto(lua_State *L)
+{
+  if (lua_gettop(L) != 2)
+    return luaL_error(L, "Invalid parameters");
+
+  GeoPoint location = GeoPoint(Angle::Degrees(luaL_checknumber(L, 2)),
+                  Angle::Degrees(luaL_checknumber(L, 1)));
+ 
+  PanTo(location);
+  return 0;
+}
+
 static constexpr struct luaL_Reg map_funcs[] = {
   {"show", l_map_show},
   {"enterpan", l_map_enterpan},
   {"leavepan", l_map_leavepan},
   {"disablepan", l_map_disablepan},
+  {"panto", l_map_panto},
   {nullptr, nullptr}
 };
 
