@@ -112,7 +112,7 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
                               effective_weather_time);
 
   RasterMap *new_map = new RasterMap();
-  if (!LoadTerrainOverview(dir, new_name, nullptr, new_map->GetTileCache(),
+  if (!LoadTerrainOverview(new_dir, new_name, nullptr, new_map->GetTileCache(),
                            operation)) {
     delete new_map;
     return;
