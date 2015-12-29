@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-03-05 18:46+0000\n"
+"PO-Revision-Date: 2015-11-21 09:28+0000\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-03-07 11:16+0000\n"
-"X-Generator: Launchpad (build 17383)\n"
+"X-Launchpad-Export-Date: 2015-12-29 19:04+0000\n"
+"X-Generator: Launchpad (build 17865)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -600,8 +600,7 @@ msgstr ""
 #: src/Dialogs/dlgBrightness.cpp:143 src/Dialogs/ProfileListDialog.cpp:386
 #: src/Dialogs/Plane/PlaneListDialog.cpp:390 src/Dialogs/HelpDialog.cpp:50
 #: src/Dialogs/dlgInfoBoxAccess.cpp:112 src/Dialogs/ReplayDialog.cpp:154
-#: src/Dialogs/dlgStatus.cpp:62
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
+#: src/Dialogs/dlgStatus.cpp:62 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
 #: src/Dialogs/Waypoint/Manager.cpp:317
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:150
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:107
@@ -1079,9 +1078,9 @@ msgid "Last thermal duration"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:257
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "Lokacija"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -1320,8 +1319,7 @@ msgstr ""
 msgid "Wind V"
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:421
-#: src/InfoBoxes/Content/Factory.cpp:1168
+#: src/InfoBoxes/Content/Factory.cpp:421 src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
@@ -2603,8 +2601,7 @@ msgstr ""
 msgid "Next radial"
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:1204
-#: src/Dialogs/Task/TargetDialog.cpp:463
+#: src/InfoBoxes/Content/Factory.cpp:1204 src/Dialogs/Task/TargetDialog.cpp:463
 #, no-c-format
 msgid "Radial"
 msgstr "Poluprečnik"
@@ -2730,9 +2727,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Strelica vjetra"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -2768,8 +2765,7 @@ msgstr ""
 msgid "Info"
 msgstr "INFO"
 
-#: src/InfoBoxes/Content/Altitude.cpp:55
-#: src/InfoBoxes/Content/MacCready.cpp:53
+#: src/InfoBoxes/Content/Altitude.cpp:55 src/InfoBoxes/Content/MacCready.cpp:53
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:90
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:84
@@ -2778,14 +2774,12 @@ msgstr "INFO"
 msgid "Setup"
 msgstr "Podesi"
 
-#: src/InfoBoxes/Content/Altitude.cpp:73
-#: src/InfoBoxes/Content/Altitude.cpp:175
+#: src/InfoBoxes/Content/Altitude.cpp:73 src/InfoBoxes/Content/Altitude.cpp:175
 #: src/InfoBoxes/Content/Altitude.cpp:241
 msgid "no QNH"
 msgstr ""
 
-#: src/InfoBoxes/Content/MacCready.cpp:52
-#: src/InfoBoxes/Content/Weather.cpp:108
+#: src/InfoBoxes/Content/MacCready.cpp:52 src/InfoBoxes/Content/Weather.cpp:108
 #: src/Dialogs/Device/DeviceListDialog.cpp:276
 #: src/Dialogs/Plane/PlaneListDialog.cpp:159
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:295
@@ -3065,7 +3059,7 @@ msgstr "Visina"
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:79
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Speed"
-msgstr "Brz"
+msgstr "Brzina"
 
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
@@ -3078,7 +3072,7 @@ msgstr "Brz"
 #: src/Dialogs/Weather/RASPDialog.cpp:132
 #, no-c-format
 msgid "Time"
-msgstr "Time"
+msgstr "Vrijeme"
 
 #: src/Input/InputEventsTask.cpp:334
 msgid "Task start"
@@ -3133,8 +3127,7 @@ msgstr ""
 msgid "Topography/Terrain"
 msgstr ""
 
-#: src/PageSettings.cpp:44
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
+#: src/PageSettings.cpp:44 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
 #, no-c-format
@@ -3457,8 +3450,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: src/Dialogs/Message.cpp:106
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
+#: src/Dialogs/Message.cpp:106 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:60
 msgid "Yes"
 msgstr "Da"
@@ -3543,8 +3535,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/Manager.cpp:250
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:273
 #: src/Dialogs/Weather/NOAAList.cpp:177 src/Dialogs/Weather/NOAAList.cpp:183
-#: src/Dialogs/Weather/NOAAList.cpp:290
-#: src/Dialogs/Weather/NOAADetails.cpp:168
+#: src/Dialogs/Weather/NOAAList.cpp:290 src/Dialogs/Weather/NOAADetails.cpp:168
 #: src/Dialogs/DownloadFilePicker.cpp:369
 msgid "Error"
 msgstr "Greška"
@@ -3923,9 +3914,9 @@ msgid "Volume"
 msgstr "Volumen"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Auto Mc mod"
+msgstr ""
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -4069,8 +4060,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:85
 #: src/Dialogs/Airspace/dlgAirspace.cpp:180
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
-#: src/Dialogs/dlgAnalysis.cpp:544
+#: src/Dialogs/Settings/dlgConfiguration.cpp:98 src/Dialogs/dlgAnalysis.cpp:544
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
 #: Data/Input/default.xci:521
 #, no-c-format
@@ -4423,9 +4413,8 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "POTV dan"
+msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -4910,9 +4899,8 @@ msgid "Delete"
 msgstr "Briši"
 
 #: src/Dialogs/ProfileListDialog.cpp:227 src/Dialogs/ProfileListDialog.cpp:290
-#, fuzzy
 msgid "Profile name"
-msgstr "Kratko ime datoteke"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:238 src/Dialogs/ProfileListDialog.cpp:301
 msgid "File exists already."
@@ -4923,19 +4911,17 @@ msgid "Failed to save file."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Briši"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:384 Data/Input/default.xci:589
-#, fuzzy
 msgid "Profiles"
-msgstr "Profil"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:398
-#, fuzzy
 msgid "Select profile"
-msgstr "Odabir točke"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:161
 msgid "Activate"
@@ -5463,9 +5449,8 @@ msgid "GoTo"
 msgstr "Idi na"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Nema aktivne točke!"
+msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -5662,9 +5647,8 @@ msgid "Enable/disable all airspace warnings."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "Upozorenja"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
@@ -8316,8 +8300,7 @@ msgid ""
 "station."
 msgstr ""
 
-#: src/Dialogs/Weather/NOAAList.cpp:216
-#: src/Dialogs/Weather/NOAADetails.cpp:114
+#: src/Dialogs/Weather/NOAAList.cpp:216 src/Dialogs/Weather/NOAADetails.cpp:114
 #, c-format
 msgid "Do you want to remove station %s?"
 msgstr ""
@@ -8327,20 +8310,17 @@ msgstr ""
 msgid "METAR and TAF"
 msgstr ""
 
-#: src/Dialogs/Weather/NOAAList.cpp:289
-#: src/Dialogs/Weather/NOAADetails.cpp:167
+#: src/Dialogs/Weather/NOAAList.cpp:289 src/Dialogs/Weather/NOAADetails.cpp:167
 msgid "This function is not available on your platform yet."
 msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "zračni prostor"
+msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr "zračni prostor"
+msgstr ""
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
@@ -9305,47 +9285,6 @@ msgstr ""
 #~ msgid "Start rules violated"
 #~ msgstr "Start pravilo prekršeno"
 
-#~ msgid "ACK Warn"
-#~ msgstr "POTV upoz"
-
-#~ msgid "ACK Space"
-#~ msgstr "POTV razmak"
-
-#, fuzzy
-#~ msgid "Normal"
-#~ msgstr "Termika"
-
-#, fuzzy
-#~ msgid "Large"
-#~ msgstr "Cilj"
-
-#~ msgid "Fonts"
-#~ msgstr "Fontovi"
-
-#~ msgid "Status message"
-#~ msgstr "Statusna poruka"
-
-#~ msgid "Customize fonts"
-#~ msgstr "Podesi fontove"
-
-#~ msgid "Height"
-#~ msgstr "Visina"
-
-#~ msgid "Italic"
-#~ msgstr "Podebljano"
-
-#~ msgid "Edit Font"
-#~ msgstr "Uredi Font"
-
-#~ msgid "MANUAL"
-#~ msgstr "Ručno"
-
-#~ msgid "Waypoint Info"
-#~ msgstr "Informacije o točki"
-
-#~ msgid "Calc"
-#~ msgstr "Izračun"
-
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Briši Točku?"
 
@@ -9355,8 +9294,14 @@ msgstr ""
 #~ msgid "Weather parameters"
 #~ msgstr "Parametri vremena"
 
+#~ msgid "Edit Font"
+#~ msgstr "Uredi Font"
+
 #~ msgid "V rough air"
 #~ msgstr "Manevarska brzina"
+
+#~ msgid "Waypoint Info"
+#~ msgstr "Informacije o točki"
 
 #~ msgid "Dump time"
 #~ msgstr "Vrijeme praž. balasta"
@@ -9364,11 +9309,29 @@ msgstr ""
 #~ msgid "Sunset"
 #~ msgstr "Zalazak sunca"
 
+#~ msgid "ACK Warn"
+#~ msgstr "POTV upoz"
+
 #~ msgid "Lookup"
 #~ msgstr "Pogledaj"
 
+#~ msgid "Fonts"
+#~ msgstr "Fontovi"
+
+#~ msgid "Calc"
+#~ msgstr "Izračun"
+
+#~ msgid "ACK Space"
+#~ msgstr "POTV razmak"
+
+#~ msgid "Short file name"
+#~ msgstr "Kratko ime datoteke"
+
 #~ msgid "Edit text"
 #~ msgstr "Uredi tekst"
+
+#~ msgid "MANUAL"
+#~ msgstr "Ručno"
 
 #~ msgid "Wind At Altitude"
 #~ msgstr "vjetar po visini"
@@ -9379,6 +9342,9 @@ msgstr ""
 #~ msgid "Insert In Task"
 #~ msgstr "Umetni u zadatak"
 
+#~ msgid "Customize fonts"
+#~ msgstr "Podesi fontove"
+
 #~ msgid "Remove From Task"
 #~ msgstr "Ukloni iz zadatka"
 
@@ -9388,11 +9354,28 @@ msgstr ""
 #~ msgid "Replace In Task"
 #~ msgstr "Zamjeni u zadatku"
 
+#~ msgid "Status message"
+#~ msgstr "Statusna poruka"
+
 #~ msgid "L/D average period"
 #~ msgstr "Prosječni L/D period"
 
+#~ msgid "Height"
+#~ msgstr "Visina"
+
 #~ msgid "My Sample"
 #~ msgstr "Moj uzorak"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Termika"
+
+#, fuzzy
+#~ msgid "Large"
+#~ msgstr "Cilj"
+
+#~ msgid "Italic"
+#~ msgstr "Podebljano"
 
 #, fuzzy
 #~ msgid "Next radial ATC"
