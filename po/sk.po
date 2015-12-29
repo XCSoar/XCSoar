@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-05-13 08:59+0000\n"
+"PO-Revision-Date: 2015-09-18 07:30+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-15 23:20+0000\n"
-"X-Generator: Launchpad (build 17493)\n"
+"X-Launchpad-Export-Date: 2015-12-29 19:04+0000\n"
+"X-Generator: Launchpad (build 17865)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -632,8 +632,7 @@ msgstr "Nekrúži sa"
 #: src/Dialogs/dlgBrightness.cpp:143 src/Dialogs/ProfileListDialog.cpp:386
 #: src/Dialogs/Plane/PlaneListDialog.cpp:390 src/Dialogs/HelpDialog.cpp:50
 #: src/Dialogs/dlgInfoBoxAccess.cpp:112 src/Dialogs/ReplayDialog.cpp:154
-#: src/Dialogs/dlgStatus.cpp:62
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
+#: src/Dialogs/dlgStatus.cpp:62 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
 #: src/Dialogs/Waypoint/Manager.cpp:317
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:150
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:107
@@ -1141,14 +1140,14 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Celkový zisk/strata výšky v poslednom stupáku."
 
 #: src/InfoBoxes/Content/Factory.cpp:256
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Zisk posledného stupáku"
+msgstr "Posledný stupák dĺžka"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "Čas let."
+msgstr "PS dĺžka"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -1409,8 +1408,7 @@ msgstr "Rýchlosť vetra"
 msgid "Wind V"
 msgstr "Rých. vetra"
 
-#: src/InfoBoxes/Content/Factory.cpp:421
-#: src/InfoBoxes/Content/Factory.cpp:1168
+#: src/InfoBoxes/Content/Factory.cpp:421 src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
@@ -2794,8 +2792,7 @@ msgstr ""
 msgid "Next radial"
 msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:1204
-#: src/Dialogs/Task/TargetDialog.cpp:463
+#: src/InfoBoxes/Content/Factory.cpp:1204 src/Dialogs/Task/TargetDialog.cpp:463
 #, no-c-format
 msgid "Radial"
 msgstr ""
@@ -2923,9 +2920,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Ukazovateľ severu*"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -2961,8 +2958,7 @@ msgstr "Simulátor"
 msgid "Info"
 msgstr "Info"
 
-#: src/InfoBoxes/Content/Altitude.cpp:55
-#: src/InfoBoxes/Content/MacCready.cpp:53
+#: src/InfoBoxes/Content/Altitude.cpp:55 src/InfoBoxes/Content/MacCready.cpp:53
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:90
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:84
@@ -2971,14 +2967,12 @@ msgstr "Info"
 msgid "Setup"
 msgstr "Nastavenie"
 
-#: src/InfoBoxes/Content/Altitude.cpp:73
-#: src/InfoBoxes/Content/Altitude.cpp:175
+#: src/InfoBoxes/Content/Altitude.cpp:73 src/InfoBoxes/Content/Altitude.cpp:175
 #: src/InfoBoxes/Content/Altitude.cpp:241
 msgid "no QNH"
 msgstr "žiadne QNH"
 
-#: src/InfoBoxes/Content/MacCready.cpp:52
-#: src/InfoBoxes/Content/Weather.cpp:108
+#: src/InfoBoxes/Content/MacCready.cpp:52 src/InfoBoxes/Content/Weather.cpp:108
 #: src/Dialogs/Device/DeviceListDialog.cpp:276
 #: src/Dialogs/Plane/PlaneListDialog.cpp:159
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:295
@@ -3326,8 +3320,7 @@ msgstr "Popis otočných bodov"
 msgid "Topography/Terrain"
 msgstr "Topografia/Terén"
 
-#: src/PageSettings.cpp:44
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
+#: src/PageSettings.cpp:44 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
 #, no-c-format
@@ -3652,8 +3645,7 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: src/Dialogs/Message.cpp:106
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
+#: src/Dialogs/Message.cpp:106 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:60
 msgid "Yes"
 msgstr "Áno"
@@ -3738,8 +3730,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/Manager.cpp:250
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:273
 #: src/Dialogs/Weather/NOAAList.cpp:177 src/Dialogs/Weather/NOAAList.cpp:183
-#: src/Dialogs/Weather/NOAAList.cpp:290
-#: src/Dialogs/Weather/NOAADetails.cpp:168
+#: src/Dialogs/Weather/NOAAList.cpp:290 src/Dialogs/Weather/NOAADetails.cpp:168
 #: src/Dialogs/DownloadFilePicker.cpp:369
 msgid "Error"
 msgstr "Chyba"
@@ -4118,9 +4109,9 @@ msgid "Volume"
 msgstr "Objem"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Mód automatického MC výpočtu"
+msgstr ""
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -4268,8 +4259,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:85
 #: src/Dialogs/Airspace/dlgAirspace.cpp:180
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
-#: src/Dialogs/dlgAnalysis.cpp:544
+#: src/Dialogs/Settings/dlgConfiguration.cpp:98 src/Dialogs/dlgAnalysis.cpp:544
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
 #: Data/Input/default.xci:521
 #, no-c-format
@@ -4622,9 +4612,8 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "Potvrď dnes"
+msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -5675,9 +5664,8 @@ msgid "GoTo"
 msgstr "Navigovať na"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Žiadny aktívny otočný bod!"
+msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -5810,9 +5798,9 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:86
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "Nezobrazí sa príetová výška."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
@@ -5846,9 +5834,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr "Nezobrazí sa príetová výška."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5875,14 +5862,12 @@ msgid "Enable/disable all airspace warnings."
 msgstr "Povoliť/zakázať všetky varovania vzdušných priestorov."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "Upozornenia"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Povoliť/zakázať všetky varovania vzdušných priestorov."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6225,9 +6210,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
-#, fuzzy
 msgid "Text size"
-msgstr "Text"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:105
 msgid "Auto. blank"
@@ -7838,14 +7822,12 @@ msgid "Units used for pressures."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
-#, fuzzy
 msgid "Units used for mass."
-msgstr "Jednotky použité pre rýchlosti úlohy."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
-#, fuzzy
 msgid "Units used for wing loading."
-msgstr "Jednotky pre zemepisnú výšku a šírku."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8131,9 +8113,8 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "Krátka stopa letu zapnutá"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
 msgid ""
@@ -8591,8 +8572,7 @@ msgid ""
 "station."
 msgstr ""
 
-#: src/Dialogs/Weather/NOAAList.cpp:216
-#: src/Dialogs/Weather/NOAADetails.cpp:114
+#: src/Dialogs/Weather/NOAAList.cpp:216 src/Dialogs/Weather/NOAADetails.cpp:114
 #, c-format
 msgid "Do you want to remove station %s?"
 msgstr ""
@@ -8602,20 +8582,17 @@ msgstr ""
 msgid "METAR and TAF"
 msgstr ""
 
-#: src/Dialogs/Weather/NOAAList.cpp:289
-#: src/Dialogs/Weather/NOAADetails.cpp:167
+#: src/Dialogs/Weather/NOAAList.cpp:289 src/Dialogs/Weather/NOAADetails.cpp:167
 msgid "This function is not available on your platform yet."
 msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "Vzdušný priestor"
+msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr "Najbližší vzduš. priestor"
+msgstr ""
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
@@ -9620,94 +9597,17 @@ msgid ""
 "Airspace"
 msgstr "Nastavenie vzduš. priestorov"
 
-#~ msgid ""
-#~ "Start rules slightly violated\n"
-#~ "but within margin"
-#~ msgstr ""
-#~ "Mierne porušenie pravidiel odletu,\n"
-#~ "ale v rámci tolerancie"
-
-#~ msgid "Start rules violated"
-#~ msgstr "Porušenie pravidiel odletu"
-
-#~ msgid "Last thermal time"
-#~ msgstr "Doba posledného stupáku"
-
-#~ msgid "TL Time"
-#~ msgstr "SP cas"
-
-#~ msgid "ACK Warn"
-#~ msgstr "Potvrď varov."
-
-#~ msgid "ACK Space"
-#~ msgstr "Potvrď priesor"
-
-#~ msgid "Waypoints not editable"
-#~ msgstr "Otočný bod sa nedá upraviť"
-
-#~ msgid "Normal"
-#~ msgstr "Normálny"
-
-#, fuzzy
-#~ msgid "Large"
-#~ msgstr "Cieľ"
-
-#~ msgid "Waypts."
-#~ msgstr "Tr.body"
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "Ak povolené, výpočet vetra externého zariadenia nahradí interný výpočet "
-#~ "XCSoaru."
+#~ msgid "Height GPS"
+#~ msgstr "Výška GPS"
 
 #~ msgid "Fonts"
 #~ msgstr "Písma"
 
-#~ msgid "Status message"
-#~ msgstr "Stavové správy"
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "Súbor stavov môže byť použitý na definovanie zvukov, ktoré sa majú "
-#~ "prehrať pri určitých udalostiach, a tiež ako dlho sa majú zobrazovať "
-#~ "informačné hlášky na obrazovke."
-
-#~ msgid "InfoBox titles"
-#~ msgstr "Titulky info-okien"
-
-#~ msgid "Customize fonts"
-#~ msgstr "Prispôsobenie písma"
-
-#~ msgid "Font not found."
-#~ msgstr "Písmo nenájdené."
-
-#~ msgid "Font face"
-#~ msgstr "Rez písma"
-
-#~ msgid "Height"
-#~ msgstr "Výška"
-
-#~ msgid "Bold"
-#~ msgstr "Tučné"
-
-#~ msgid "Italic"
-#~ msgstr "Kurzíva"
-
-#~ msgid "Edit Font"
-#~ msgstr "Upraviť písmo"
-
-#~ msgid "Reset"
-#~ msgstr "Zresetovať"
-
-#~ msgid "Height GPS"
-#~ msgstr "Výška GPS"
-
 #~ msgid "Line skipped."
 #~ msgstr "Riadok vynechaný."
+
+#~ msgid "Start rules violated"
+#~ msgstr "Porušenie pravidiel odletu"
 
 #~ msgid "QFE GPS"
 #~ msgstr "QFE GPS"
@@ -9748,6 +9648,9 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ msgid "Sunset"
 #~ msgstr "Západ slnka"
 
+#~ msgid "Height"
+#~ msgstr "Výška"
+
 #~ msgid "A+"
 #~ msgstr "A+"
 
@@ -9759,6 +9662,9 @@ msgstr "Nastavenie vzduš. priestorov"
 
 #~ msgid "Dump time"
 #~ msgstr "Doba vypúštania"
+
+#~ msgid "Reset"
+#~ msgstr "Zresetovať"
 
 #~ msgid "Short file name"
 #~ msgstr "Skrátený názov súboru"
@@ -9798,6 +9704,16 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ "Udáva navigačnú výšku mínus výšku terénu podľa súboru s terénom. Hodnota "
 #~ "je červená ak je vetroň pod bezpečnou výškou nad terénom."
 
+#~ msgid "TL Time"
+#~ msgstr "SP cas"
+
+#~ msgid ""
+#~ "Start rules slightly violated\n"
+#~ "but within margin"
+#~ msgstr ""
+#~ "Mierne porušenie pravidiel odletu,\n"
+#~ "ale v rámci tolerancie"
+
 #~ msgid "OLC"
 #~ msgstr "OLC"
 
@@ -9813,8 +9729,18 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ msgid "Filter..."
 #~ msgstr "Filter..."
 
+#~ msgid "Edit Font"
+#~ msgstr "Upraviť písmo"
+
 #~ msgid "The time in seconds to dump full ballast."
 #~ msgstr "Doba v sekundách potrebná na vypustenie celej príťaže."
+
+#~ msgid ""
+#~ "If enabled, then the wind vector received from external devices overrides "
+#~ "XCSoar's internal wind calculation."
+#~ msgstr ""
+#~ "Ak povolené, výpočet vetra externého zariadenia nahradí interný výpočet "
+#~ "XCSoaru."
 
 #~ msgid "Edit text"
 #~ msgstr "Upraviť text"
@@ -9833,6 +9759,9 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ msgstr ""
 #~ "Príklad textu\n"
 #~ "123"
+
+#~ msgid "Font not found."
+#~ msgstr "Písmo nenájdené."
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -9883,6 +9812,17 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ "Určuje, či čiara trajektórie lietadla bude počas módu krúženia posúvaná "
 #~ "vplyvom vetra."
 
+#~ msgid ""
+#~ "The status file can be used to define sounds to be played when certain "
+#~ "events occur, and how long various status messages will appear on screen."
+#~ msgstr ""
+#~ "Súbor stavov môže byť použitý na definovanie zvukov, ktoré sa majú "
+#~ "prehrať pri určitých udalostiach, a tiež ako dlho sa majú zobrazovať "
+#~ "informačné hlášky na obrazovke."
+
+#~ msgid "Waypts."
+#~ msgstr "Tr.body"
+
 #~ msgid "H GPS"
 #~ msgstr "GPS výška"
 
@@ -9898,8 +9838,20 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ msgid "Waypoint Info"
 #~ msgstr "Informácie o otočnom bode"
 
+#~ msgid "ACK Warn"
+#~ msgstr "Potvrď varov."
+
+#~ msgid "ACK Space"
+#~ msgstr "Potvrď priesor"
+
+#~ msgid "Last thermal time"
+#~ msgstr "Doba posledného stupáku"
+
 #~ msgid "Wind At Altitude"
 #~ msgstr "Vietor vo výške"
+
+#~ msgid "Waypoints not editable"
+#~ msgstr "Otočný bod sa nedá upraviť"
 
 #~ msgid "12 Right (Landscape)"
 #~ msgstr "12 Vpravo (na šírku)"
@@ -9910,8 +9862,14 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ msgid "Insert In Task"
 #~ msgstr "Vložiť do úlohy"
 
+#~ msgid "InfoBox titles"
+#~ msgstr "Titulky info-okien"
+
 #~ msgid "My Sample"
 #~ msgstr "Moja vzorka"
+
+#~ msgid "Customize fonts"
+#~ msgstr "Prispôsobenie písma"
 
 #~ msgid "Remove From Task"
 #~ msgstr "Odobrať z úlohy"
@@ -9921,6 +9879,9 @@ msgstr "Nastavenie vzduš. priestorov"
 
 #~ msgid "Replace In Task"
 #~ msgstr "Nahradiť v úlohe"
+
+#~ msgid "Font face"
+#~ msgstr "Rez písma"
 
 #~ msgid ""
 #~ "Graph of average circling climb rate (horizontal axis) as a function of "
@@ -9935,6 +9896,9 @@ msgstr "Nastavenie vzduš. priestorov"
 #~ msgid "Ignore checksum"
 #~ msgstr "Ignorovať kontrolný súčet"
 
+#~ msgid "Status message"
+#~ msgstr "Stavové správy"
+
 #~ msgid "L/D average period"
 #~ msgstr "Doba priemerovania kĺzavosti"
 
@@ -9946,6 +9910,24 @@ msgstr "Nastavenie vzduš. priestorov"
 
 #~ msgid "Choose the display size of dialogs."
 #~ msgstr "Určuje veľkosť zobrazenia dialógov."
+
+#~ msgid ""
+#~ "Determines what waypoint labels are displayed for each waypoint (space "
+#~ "permitting)."
+#~ msgstr "Nezobrazí sa príetová výška."
+
+#~ msgid "Normal"
+#~ msgstr "Normálny"
+
+#, fuzzy
+#~ msgid "Large"
+#~ msgstr "Cieľ"
+
+#~ msgid "Bold"
+#~ msgstr "Tučné"
+
+#~ msgid "Italic"
+#~ msgstr "Kurzíva"
 
 #, fuzzy
 #~ msgid "Next radial ATC"
