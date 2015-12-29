@@ -45,7 +45,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 #ifdef HAVE_NOAA
-#include "Dialogs/Weather/WeatherDialogs.hpp"
+#include "Dialogs/Weather/NOAADetails.hpp"
 #endif
 
 static bool

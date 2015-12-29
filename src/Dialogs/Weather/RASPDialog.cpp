@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WeatherDialogs.hpp"
+#include "RASPDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Terrain/RasterWeatherCache.hpp"

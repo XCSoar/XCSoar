@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "WeatherDialogs.hpp"
+#include "NOAAList.hpp"
+#include "NOAADetails.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Language/Language.hpp"

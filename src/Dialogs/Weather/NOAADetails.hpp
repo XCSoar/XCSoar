@@ -21,21 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#ifndef XCSOAR_DIALOGS_WEATHER_NOAA_DETAILS_HPP
+#define XCSOAR_DIALOGS_WEATHER_NOAA_DETAILS_HPP
 
 #include "Weather/NOAAStore.hpp"
 
 void
-dlgWeatherShowModal();
-
-void
-dlgNOAAListShowModal();
-
-void
 dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
-
-void
-ShowPCMetDialog();
 
 #endif

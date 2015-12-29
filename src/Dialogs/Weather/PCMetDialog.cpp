@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WeatherDialogs.hpp"
+#include "PCMetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
