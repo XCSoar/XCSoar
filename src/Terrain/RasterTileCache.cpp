@@ -60,9 +60,9 @@ RasterTileCache::PutOverviewTile(unsigned index,
     return;
 
   unsigned width = m.numcols_, height = m.numrows_;
-  if (start_x + ToOverview(width) > overview.GetWidth())
+  if (start_x + ToOverviewCeil(width) > overview.GetWidth())
     width = (overview.GetWidth() - start_x) << OVERVIEW_BITS;
-  if (start_y + ToOverview(height) > overview.GetHeight())
+  if (start_y + ToOverviewCeil(height) > overview.GetHeight())
     height = (overview.GetHeight() - start_y) << OVERVIEW_BITS;
 
   const unsigned skip = 1 << OVERVIEW_BITS;

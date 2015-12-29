@@ -62,6 +62,8 @@ class RasterTileCache {
    */
   static constexpr unsigned OVERVIEW_BITS = 4;
 
+  static constexpr unsigned OVERVIEW_MASK = (~0u) << OVERVIEW_BITS;
+
   /**
    * Target number of steps in intersection searches; total distance
    * is shifted by this number of bits
@@ -325,6 +327,13 @@ private:
    */
   static constexpr unsigned ToOverview(unsigned x) {
     return x >> OVERVIEW_BITS;
+  }
+
+  /**
+   * Convert a pixel size to an overview pixel size, rounding up.
+   */
+  static constexpr unsigned ToOverviewCeil(unsigned x) {
+    return ToOverview(x + ~OVERVIEW_MASK);
   }
 };
 
