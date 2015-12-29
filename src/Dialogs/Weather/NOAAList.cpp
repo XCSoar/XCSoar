@@ -46,17 +46,6 @@ Copyright_License {
 #include "Renderer/NOAAListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 
-struct NOAAListItem
-{
-  StaticString<5> code;
-  NOAAStore::iterator iterator;
-
-  gcc_pure
-  bool operator<(const NOAAListItem &i2) const {
-    return StringCollate(code, i2.code) < 0;
-  }
-};
-
 class NOAAListWidget final
   : public ListWidget, private ActionListener {
   enum Buttons {
@@ -68,7 +57,17 @@ class NOAAListWidget final
 
   Button *details_button, *add_button, *update_button, *remove_button;
 
-  TrivialArray<NOAAListItem, 20> stations;
+  struct ListItem {
+    StaticString<5> code;
+    NOAAStore::iterator iterator;
+
+    gcc_pure
+    bool operator<(const ListItem &i2) const {
+      return StringCollate(code, i2.code) < 0;
+    }
+  };
+
+  TrivialArray<ListItem, 20> stations;
 
   TwoTextRowsRenderer row_renderer;
 
@@ -138,7 +137,7 @@ NOAAListWidget::UpdateList()
   stations.clear();
 
   for (auto i = noaa_store->begin(), end = noaa_store->end(); i != end; ++i) {
-    NOAAListItem item;
+    ListItem item;
     item.code = i->GetCodeT();
     item.iterator = i;
     stations.push_back(item);
