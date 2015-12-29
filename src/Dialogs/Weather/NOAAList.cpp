@@ -32,10 +32,12 @@ Copyright_License {
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
@@ -55,6 +57,8 @@ class NOAAListWidget final
     REMOVE,
   };
 
+  ButtonPanelWidget *buttons_widget;
+
   Button *details_button, *add_button, *update_button, *remove_button;
 
   struct ListItem {
@@ -72,7 +76,11 @@ class NOAAListWidget final
   TwoTextRowsRenderer row_renderer;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+    buttons_widget = &_buttons;
+  }
+
+  void CreateButtons(ButtonPanel &buttons);
 
 private:
   void UpdateList();
@@ -107,17 +115,19 @@ private:
 };
 
 void
-NOAAListWidget::CreateButtons(WidgetDialog &dialog)
+NOAAListWidget::CreateButtons(ButtonPanel &buttons)
 {
-  details_button = dialog.AddButton(_("Details"), *this, DETAILS);
-  add_button = dialog.AddButton(_("Add"), *this, ADD);
-  update_button = dialog.AddButton(_("Update"), *this, UPDATE);
-  remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
+  details_button = buttons.Add(_("Details"), *this, DETAILS);
+  add_button = buttons.Add(_("Add"), *this, ADD);
+  update_button = buttons.Add(_("Update"), *this, UPDATE);
+  remove_button = buttons.Add(_("Remove"), *this, REMOVE);
 }
 
 void
 NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  CreateButtons(buttons_widget->GetButtonPanel());
+
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font_bold,
@@ -268,25 +278,14 @@ NOAAListWidget::OnAction(int id)
   }
 }
 
-void
-dlgNOAAListShowModal()
+Widget *
+CreateNOAAListWidget()
 {
-  NOAAListWidget widget;
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("METAR and TAF"), &widget);
-  dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
-  dialog.EnableCursorSelection();
-
-  dialog.ShowModal();
-  dialog.StealWidget();
+  NOAAListWidget *list = new NOAAListWidget();
+  ButtonPanelWidget *buttons =
+    new ButtonPanelWidget(list, ButtonPanelWidget::Alignment::BOTTOM);
+  list->SetButtonPanel(*buttons);
+  return buttons;
 }
 
-#else
-void
-dlgNOAAListShowModal()
-{
-  ShowMessageBox(_("This function is not available on your platform yet."),
-              _("Error"), MB_OK);
-}
 #endif

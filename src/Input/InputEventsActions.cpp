@@ -55,9 +55,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/Weather/NOAAList.hpp"
+#include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Dialogs/Weather/PCMetDialog.hpp"
-#include "Dialogs/Weather/RASPDialog.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
 #include "Dialogs/ProfileListDialog.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
@@ -513,7 +512,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Airspace")))
     dlgAirspaceShowModal(false);
   else if (StringIsEqual(misc, _T("Weather")))
-    dlgWeatherShowModal();
+    ShowWeatherDialog(_T("rasp"));
   else if (StringIsEqual(misc, _T("Replay"))) {
     if (!CommonInterface::MovementDetected())
       ShowReplayDialog();
@@ -662,19 +661,7 @@ eventSounds			- Include Task and Modes sounds along with Vario
 void
 InputEvents::eventWeather(const TCHAR *misc)
 {
-#ifdef HAVE_NOAA
-  if (StringIsEqual(misc, _T("list"))) {
-    dlgNOAAListShowModal();
-    return;
-  }
-#endif
-
-#ifdef HAVE_PCMET
-  if (StringIsEqual(misc, _T("pc_met"))) {
-    ShowPCMetDialog();
-    return;
-  }
-#endif
+  ShowWeatherDialog(misc);
 }
 
 void

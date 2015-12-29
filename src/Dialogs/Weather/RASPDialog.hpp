@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WEATHER_RASP_HPP
 #define XCSOAR_DIALOGS_WEATHER_RASP_HPP
 
-void
-dlgWeatherShowModal();
+class Widget;
+
+Widget *
+CreateRaspWidget();
 
 #endif

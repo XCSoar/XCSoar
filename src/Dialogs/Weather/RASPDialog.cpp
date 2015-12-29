@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "RASPDialog.hpp"
-#include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Widget/LargeTextWidget.hpp"
 #include "Terrain/RasterWeatherCache.hpp"
 #include "Terrain/RasterWeatherStore.hpp"
 #include "Form/Edit.hpp"
@@ -146,18 +146,14 @@ RASPSettingsPanel::Save(bool &_changed)
   return true;
 }
 
-void
-dlgWeatherShowModal()
+Widget *
+CreateRaspWidget()
 {
   if (rasp == nullptr || rasp->GetItemCount() == 0)
-    return;
+    return new LargeTextWidget(UIGlobals::GetDialogLook(),
+                               _T("No RASP data"));
 
-  RASPSettingsPanel *widget = new RASPSettingsPanel(*rasp);
-
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Weather Forecast"), widget);
-  dialog.AddButton(_("OK"), mrOK);
-  dialog.ShowModal();
+  return new RASPSettingsPanel(*rasp);
 }
 
 /*

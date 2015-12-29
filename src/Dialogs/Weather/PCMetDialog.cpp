@@ -37,6 +37,7 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/TextListWidget.hpp"
 #include "Widget/ViewImageWidget.hpp"
+#include "Widget/LargeTextWidget.hpp"
 #include "Weather/PCMet.hpp"
 #include "Interface.hpp"
 
@@ -155,33 +156,18 @@ protected:
   }
 };
 
-void
-ShowPCMetDialog()
+Widget *
+CreatePCMetWidget()
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
-  if (settings.username.empty() || settings.password.empty()) {
-    ShowMessageBox(_("No account was configured."),
-                   _T("pc_met"), MB_OK);
-    return;
-  }
+  if (settings.username.empty() || settings.password.empty())
+    return new LargeTextWidget(UIGlobals::GetDialogLook(),
+                               _T("No account was configured."));
 
   auto *area_widget = new ImageAreaListWidget();
   auto *type_widget = new ImageTypeListWidget(*area_widget);
 
-  TwoWidgets widget(type_widget, area_widget, false);
-
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _T("pc_met"), &widget);
-  dialog.AddButton(_("Close"), mrOK);
-  dialog.ShowModal();
-  dialog.StealWidget();
+  return new TwoWidgets(type_widget, area_widget, false);
 }
 
-#else
-void
-ShowPCMetDialog()
-{
-  ShowMessageBox(_("This function is not available on your platform yet."),
-                 _T("pc_met"), MB_OK);
-}
 #endif

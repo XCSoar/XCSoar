@@ -769,9 +769,9 @@ location=5
 mode=Info1
 type=key
 data=7
-event=Weather list
+event=Weather
 event=Mode default
-label=METAR\nTAF$(CheckNet)
+label=Weather
 location=6
 
 mode=Info1
@@ -815,14 +815,6 @@ event=Status all
 event=Mode default
 label=Status
 location=5
-
-mode=Info2
-type=key
-data=7
-event=Setup Weather
-event=Mode default
-label=Weather$(CheckWeather)
-location=6
 
 mode=Info2
 type=key
@@ -881,14 +873,6 @@ data=8
 event=RepeatStatusMessage
 label=Message\nRepeat
 location=7
-
-mode=Info3
-type=key
-data=9
-event=Weather pc_met
-event=Mode default
-label=pc_met
-location=8
 
 # -------------
 # mode=Menu
@@ -1184,9 +1168,9 @@ location=25
 mode=RemoteStick
 type=key
 data=0
-event=Weather list
+event=Weather
 event=Mode default
-label=METAR\nTAF$(CheckNet)
+label=Weather
 location=26
 
 mode=RemoteStick

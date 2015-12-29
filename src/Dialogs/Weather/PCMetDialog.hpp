@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WEATHER_PCMET_HPP
 #define XCSOAR_DIALOGS_WEATHER_PCMET_HPP
 
-void
-ShowPCMetDialog();
+class Widget;
+
+Widget *
+CreatePCMetWidget();
 
 #endif

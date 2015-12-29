@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_NOAA_LIST_HPP
-#define XCSOAR_DIALOGS_WEATHER_NOAA_LIST_HPP
+#ifndef XCSOAR_DIALOGS_WEATHER_HPP
+#define XCSOAR_DIALOGS_WEATHER_HPP
 
-class Widget;
+#include <tchar.h>
 
-Widget *
-CreateNOAAListWidget();
+void
+ShowWeatherDialog(const TCHAR *page);
 
 #endif
