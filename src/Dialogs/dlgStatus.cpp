@@ -55,10 +55,6 @@ dlgStatusShowModal(int start_page)
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
 
-  WindowStyle button_style;
-  button_style.Hide();
-  button_style.TabStop();
-
   auto *close_button = new ButtonWidget(look.button, _("Close"),
                                         dialog, mrOK);
 
