@@ -319,6 +319,13 @@ private:
   unsigned GetFineTileHeight() const {
     return tile_height << SUBPIXEL_BITS;
   }
+
+  /**
+   * Convert a pixel size to an overview pixel size, rounding down.
+   */
+  static constexpr unsigned ToOverview(unsigned x) {
+    return x >> OVERVIEW_BITS;
+  }
 };
 
 #endif

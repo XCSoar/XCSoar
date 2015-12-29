@@ -53,16 +53,16 @@ RasterTileCache::PutOverviewTile(unsigned index,
 
   const unsigned dest_pitch = overview.GetWidth();
 
-  start_x >>= OVERVIEW_BITS;
-  start_y >>= OVERVIEW_BITS;
+  start_x = ToOverview(start_x);
+  start_y = ToOverview(start_y);
 
   if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
     return;
 
   unsigned width = m.numcols_, height = m.numrows_;
-  if (start_x + (width >> OVERVIEW_BITS) > overview.GetWidth())
+  if (start_x + ToOverview(width) > overview.GetWidth())
     width = (overview.GetWidth() - start_x) << OVERVIEW_BITS;
-  if (start_y + (height >> OVERVIEW_BITS) > overview.GetHeight())
+  if (start_y + ToOverview(height) > overview.GetHeight())
     height = (overview.GetHeight() - start_y) << OVERVIEW_BITS;
 
   const unsigned skip = 1 << OVERVIEW_BITS;
@@ -192,8 +192,7 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(lx >> OVERVIEW_BITS,
-                                   ly >> OVERVIEW_BITS);
+  return overview.GetInterpolated(ToOverview(lx), ToOverview(ly));
 }
 
 void
@@ -206,7 +205,7 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height,
   tile_width = _tile_width;
   tile_height = _tile_height;
 
-  overview.Resize(width >> OVERVIEW_BITS, height >> OVERVIEW_BITS);
+  overview.Resize(ToOverview(width), ToOverview(height));
   overview_width_fine = width << SUBPIXEL_BITS;
   overview_height_fine = height << SUBPIXEL_BITS;
 
