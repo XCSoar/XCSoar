@@ -39,8 +39,8 @@ static void
 CopyOverviewRow(short *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
                 unsigned width, unsigned skip)
 {
-  for (unsigned x = 0; x < width; x += skip)
-    *dest++ = src[x];
+  for (unsigned x = 0; x < width; ++x, src += skip)
+    *dest++ = *src;
 }
 
 void
@@ -59,18 +59,19 @@ RasterTileCache::PutOverviewTile(unsigned index,
   if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
     return;
 
-  unsigned width = m.numcols_, height = m.numrows_;
-  if (start_x + ToOverviewCeil(width) > overview.GetWidth())
-    width = (overview.GetWidth() - start_x) << OVERVIEW_BITS;
-  if (start_y + ToOverviewCeil(height) > overview.GetHeight())
-    height = (overview.GetHeight() - start_y) << OVERVIEW_BITS;
+  unsigned width = ToOverviewCeil(m.numcols_);
+  if (start_x + width > overview.GetWidth())
+    width = overview.GetWidth() - start_x;
+  unsigned height = ToOverviewCeil(m.numrows_);
+  if (start_y + height > overview.GetHeight())
+    height = overview.GetHeight() - start_y;
 
   const unsigned skip = 1 << OVERVIEW_BITS;
 
   short *gcc_restrict dest = overview.GetData()
     + start_y * dest_pitch + start_x;
 
-  for (unsigned y = 0; y < height; y += skip, dest += dest_pitch)
+  for (unsigned i = 0, y = 0; i < height; ++i, y += skip, dest += dest_pitch)
     CopyOverviewRow(dest, m.rows_[y], width, skip);
 }
 
