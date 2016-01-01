@@ -49,6 +49,10 @@ l_tracking_index(lua_State *L)
       /* Track friends, downloads the position of your 
          friends live from the SkyLines server. */
       Lua::Push(L, settings.skylines.traffic_enabled);
+  } else if (StringIsEqual(name, "skylines_near_traffic_enabled")) {
+      /* Show nearby traffic, downloads the position 
+         of your nearby traffic live from the SkyLines server. */
+      Lua::Push(L, settings.skylines.near_traffic_enabled);
   } else
     return 0;
 
