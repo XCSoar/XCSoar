@@ -55,6 +55,8 @@ l_tracking_index(lua_State *L)
       Lua::Push(L, settings.skylines.near_traffic_enabled);
   } else if (StringIsEqual(name, "livetrack24_enabled")) {
       Lua::Push(L, settings.livetrack24.enabled);
+  } else if (StringIsEqual(name, "livetrack24_interval")) {
+      Lua::Push(L, (int)settings.interval);
   } else
     return 0;
 
