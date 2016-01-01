@@ -168,6 +168,19 @@ l_tracking_enable_livetrack24(lua_State *L)
   return 0;
 }
 
+static int
+l_tracking_disable_livetrack24(lua_State *L)
+{ 
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+
+  TrackingSettings &settings =
+    CommonInterface::SetComputerSettings().tracking;
+  settings.livetrack24.enabled = false;  
+  
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"enable_skylines", l_tracking_enable_skylines},
   {"disable_skylines", l_tracking_disable_skylines},
@@ -177,6 +190,7 @@ static constexpr struct luaL_Reg settings_funcs[] = {
   {"enable_skylines_near_traffic", l_tracking_enable_skylines_neartraffic},
   {"disable_skylines_near_traffic", l_tracking_disable_skylines_neartraffic},
   {"enable_livetrack24", l_tracking_enable_livetrack24},
+  {"disable_livetrack24", l_tracking_disable_livetrack24},
   {nullptr, nullptr}
 };
 
