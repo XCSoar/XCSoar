@@ -90,9 +90,23 @@ l_tracking_disable_skylines(lua_State *L)
   return 0;
 }
 
+static int
+l_tracking_set_skylines_interval(lua_State *L)
+{ 
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  TrackingSettings &settings =
+    CommonInterface::SetComputerSettings().tracking;
+  settings.skylines.interval = luaL_checknumber(L, 1); 
+  
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"enable_skylines", l_tracking_enable_skylines},
   {"disable_skylines", l_tracking_disable_skylines},
+  {"set_skylines_interval", l_tracking_set_skylines_interval},
   {nullptr, nullptr}
 };
 
