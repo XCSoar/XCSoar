@@ -41,6 +41,8 @@ l_tracking_index(lua_State *L)
     return 0;
   else if (StringIsEqual(name, "skylines_enabled")) {
     Lua::Push(L, settings.skylines.enabled);
+  } else if (StringIsEqual(name, "skylines_roaming")) {
+      Lua::Push(L, settings.skylines.roaming);
   } else
     return 0;
 
