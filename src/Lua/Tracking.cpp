@@ -45,6 +45,10 @@ l_tracking_index(lua_State *L)
       Lua::Push(L, settings.skylines.roaming);
   } else if (StringIsEqual(name, "skylines_interval")) {
       Lua::Push(L, (int)settings.skylines.interval);
+  } else if (StringIsEqual(name, "skylines_traffic_enabled")) {
+      /* Track friends, downloads the position of your 
+         friends live from the SkyLines server. */
+      Lua::Push(L, settings.skylines.traffic_enabled);
   } else
     return 0;
 
