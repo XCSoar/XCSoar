@@ -124,6 +124,8 @@ contains the following names:
   \hline
   \verb|wind| & Access to wind data and settings. \\
   \hline
+  \verb|logger| & Access to logger settings. \\
+  \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
 \end{tabularx}
 \end{maxipage}
@@ -666,6 +668,26 @@ $[{degrees}]$.\\
 \verb|clear()| & Clears the wind settings and calculations.\\
 
 \hline
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Logger}
+
+The Settings provides access to xcsoar Logger data and settings.
+
+The following attributes are provided by \verb|xcsoar.logger|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|pilot_name| & Gives back the set pilot name.\\
+
+\hline
+
+\verb|set_pilot_name(char* name)| &  Sets the pilot name.\\
 
 \end{tabularx}
 \end{maxipage}

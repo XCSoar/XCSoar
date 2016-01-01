@@ -29,7 +29,8 @@ LUA_SOURCES = \
 	$(SRC)/Lua/Basic.cpp \
         $(SRC)/Lua/Task.cpp \
         $(SRC)/Lua/Settings.cpp \
-        $(SRC)/Lua/Wind.cpp
+        $(SRC)/Lua/Wind.cpp \
+        $(SRC)/Lua/Logger.cpp
 
 LUA_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
