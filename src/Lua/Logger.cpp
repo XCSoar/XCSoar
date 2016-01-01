@@ -40,6 +40,9 @@ l_logger_index(lua_State *L)
     return 0;
   else if (StringIsEqual(name, "pilot_name")) { 
     Lua::Push(L, logger.pilot_name);
+  } else if (StringIsEqual(name, "time_step_cruise")) {
+      // The time interval between logged points when not circling.
+      Lua::Push(L, logger.time_step_cruise);
   } else
     return 0;
 
