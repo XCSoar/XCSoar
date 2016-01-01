@@ -1,7 +1,8 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2015 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -18,42 +19,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#ifndef XCSOAR_TASK_POINT_FACTORY_TYPE_HPP
-#define XCSOAR_TASK_POINT_FACTORY_TYPE_HPP
+#define USE_FREETYPE 1
+#define ENABLE_OPENGL 1
+#include "Screen/OpenGL/Canvas.hpp"
+#include "Math/Angle.hpp"
+#include "Math/FastTrig.hpp"
 
-#include <stdint.h>
+class Canvas;
 
-/**
- * Legal types of points with observation zones.
- */
-enum class TaskPointFactoryType : uint8_t {
-  START_SECTOR = 0,
-  START_LINE,
-  START_CYLINDER,
-  FAI_SECTOR,
-  KEYHOLE_SECTOR,
-  BGAFIXEDCOURSE_SECTOR,
-  BGAENHANCEDOPTION_SECTOR,
-  AST_CYLINDER,
-  MAT_CYLINDER,
-  AAT_CYLINDER,
-  AAT_SEGMENT,
-  FINISH_SECTOR,
-  FINISH_LINE,
-  FINISH_CYLINDER,
-  START_BGA,
-  AAT_ANNULAR_SECTOR,
-  AAT_AUSTRALIAN_KEYHOLE_SECTOR,
-  SYMMETRIC_QUADRANT,
-  AAT_KEYHOLE,
+#include <iostream>
 
-  /**
-   * This special value is used to determine the number of types
-   * above.
-   */
-  COUNT
-};
+void Test();
 
-#endif
+//------------------------------------------------------------------------------
+void
+Test()
+  {
+  Canvas c;
+
+  c.ClearWhite();
+  c.DrawKeyhole(0, 0, 5000, 10000, Angle::Degrees(350), Angle::Degrees(10));
+  }
+
+//------------------------------------------------------------------------------
+int
+main(int argc, const char *argv[])
+  {
+
+  Test();
+
+  return 0;
+  }

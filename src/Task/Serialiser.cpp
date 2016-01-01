@@ -29,6 +29,7 @@
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/SymmetricSectorZone.hpp"
+#include "Task/ObservationZones/AustralianKeyholeZone.hpp"
 #include "XML/DataNode.hpp"
 #include "Compiler.h"
 
@@ -111,6 +112,17 @@ Visit(WritableDataNode &node, const AnnularSectorZone &data)
   node.SetAttribute(_T("inner_radius"), data.GetInnerRadius());
 }
 
+//------------------------------------------------------------------------------
+static void
+Visit(WritableDataNode &node, const AustralianKeyholeZone &data)
+  {
+  node.SetAttribute(_T("type"),         _T("AustralianKeyholeZone"));
+  node.SetAttribute(_T("radius"),       data.GetRadius());
+  node.SetAttribute(_T("inner_radius"), data.GetInnerRadius());
+  node.SetAttribute(_T("start_radial"), data.GetStartRadial());
+  node.SetAttribute(_T("end_radial"),   data.GetEndRadial());
+  }
+
 static void
 Visit(WritableDataNode &node, const LineSectorZone &data)
 {
@@ -174,6 +186,10 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
 
   case ObservationZone::Shape::ANNULAR_SECTOR:
     Visit(node, (const AnnularSectorZone &)data);
+    break;
+
+  case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
+    Visit(node, (const AustralianKeyholeZone &)data);
     break;
 
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:

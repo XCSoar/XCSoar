@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "OZRenderer.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/AustralianKeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection/Projection.hpp"
@@ -63,7 +64,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 #endif /* !GDI */
 
     canvas.SelectNullPen();
-    
+
     return;
   }
 
@@ -168,6 +169,19 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
 
     break;
   }
+
+  case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
+    {
+    const AustralianKeyholeZone &oz = (const AustralianKeyholeZone &)_oz;
+    RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+    canvas.DrawKeyhole(p_center.x, p_center.y,
+                       projection.GeoToScreenDistance(oz.GetInnerRadius()),
+                       projection.GeoToScreenDistance(oz.GetRadius()),
+                       oz.GetStartRadial() - projection.GetScreenAngle(),
+                       oz.GetEndRadial() - projection.GetScreenAngle());
+
+
+    }
 
   case ObservationZone::Shape::ANNULAR_SECTOR: {
     const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;

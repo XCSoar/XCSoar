@@ -45,6 +45,7 @@ static constexpr LegalPointSet aat_im_types{
   TaskPointFactoryType::AAT_SEGMENT,
   TaskPointFactoryType::AAT_ANNULAR_SECTOR,
   TaskPointFactoryType::AAT_KEYHOLE,
+  TaskPointFactoryType::AAT_AUSTRALIAN_KEYHOLE_SECTOR,
 };
 
 static constexpr LegalPointSet aat_finish_types{
@@ -86,7 +87,7 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::FAI_SECTOR:
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     newtype = TaskPointFactoryType::AAT_CYLINDER;
-    //ToDo: create a 90 degree symmetric AAT sector
+    // TODO: create a 90 degree symmetric AAT sector
     break;
 
   case TaskPointFactoryType::AST_CYLINDER:
@@ -98,6 +99,7 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_CYLINDER:
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
   case TaskPointFactoryType::AAT_KEYHOLE:
+  case TaskPointFactoryType::AAT_AUSTRALIAN_KEYHOLE_SECTOR:
     break;
 
   case TaskPointFactoryType::COUNT:

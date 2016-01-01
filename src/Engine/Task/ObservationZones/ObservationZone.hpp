@@ -51,6 +51,7 @@ public:
     ANNULAR_SECTOR,
     SYMMETRIC_QUADRANT,
     CUSTOM_KEYHOLE,
+    AUSTRALIAN_KEYHOLE,
   };
 
 private:

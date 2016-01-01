@@ -177,7 +177,10 @@ void
 Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points)
 {
   if (brush.IsHollow() && !pen.IsDefined())
+    {
+    std::cerr << "Canvas::DrawPolygon: no brush" << std::endl;
     return;
+    }
 
 #ifdef USE_GLSL
   OpenGL::solid_shader->Use();

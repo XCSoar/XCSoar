@@ -109,6 +109,7 @@ FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
   case TaskPointFactoryType::AAT_SEGMENT:
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+  case TaskPointFactoryType::AAT_AUSTRALIAN_KEYHOLE_SECTOR:
     newtype = TaskPointFactoryType::FAI_SECTOR;
     break;
 

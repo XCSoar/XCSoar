@@ -787,7 +787,9 @@ DEBUG_PROGRAM_NAMES = \
 	IGC2NMEA \
 	NearestWaypoints \
 	RunKalmanFilter1d \
-	ArcApprox
+	ArcApprox \
+  CanvasKeyhole \
+  AustralianKeyholeZone
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
@@ -961,6 +963,16 @@ DOWNLOAD_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/DownloadFile.cpp
 DOWNLOAD_FILE_DEPENDS = LIBNET IO THREAD UTIL
 $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
+
+CANVAS_KEYHOLE_SOURCES = \
+  $(TEST_SRC_DIR)/CanvasKeyhole.cpp
+CANVAS_KEYHOLE_DEPENDS = SCREEN UTIL OS RESOURCE MATH
+$(eval $(call link-program,CanvasKeyhole,CANVAS_KEYHOLE))
+
+AUSTRALIAN_KEYHOLE_ZONE_SOURCES = \
+  $(TEST_SRC_DIR)/AustralianKeyholeZone.cpp
+AUSTRALIAN_KEYHOLE_ZONE_DEPENDS = SCREEN TASK GEO FORM OS MATH UTIL
+$(eval $(call link-program,AustralianKeyholeZone,AUSTRALIAN_KEYHOLE_ZONE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Version.cpp \

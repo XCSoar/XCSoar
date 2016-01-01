@@ -284,6 +284,7 @@ GetRadius(const ObservationZonePoint &oz)
   case ObservationZone::Shape::BGA_START:
   case ObservationZone::Shape::ANNULAR_SECTOR:
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
     const CylinderZone &cz = (const CylinderZone &)oz;
     return cz.GetRadius();
   }
