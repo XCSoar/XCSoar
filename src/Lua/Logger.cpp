@@ -52,6 +52,8 @@ l_logger_index(lua_State *L)
       Lua::Push(L, logger.enable_nmea_logger);
   } else if (StringIsEqual(name, "log_book")) {
       Lua::Push(L, logger.enable_flight_logger);
+  } else if (StringIsEqual(name, "logger_id")) {
+      Lua::Push(L, logger.logger_id);
   } else
     return 0;
 
