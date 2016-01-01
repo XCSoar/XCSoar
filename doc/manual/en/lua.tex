@@ -126,6 +126,8 @@ contains the following names:
   \hline
   \verb|logger| & Access to logger settings. \\
   \hline
+  \verb|tracking| & Access to tracking settings. \\
+  \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
 \end{tabularx}
 \end{maxipage}
@@ -750,6 +752,26 @@ points when circling $[s]$.\\
 \hline
 
 \verb|set_logger_id(char* id)| &  Sets the logger-id.\\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Tracking}
+
+The Settings provides access to xcsoar Tracking settings.
+
+The following attributes are provided by \verb|xcsoar.tracking|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|skylines_enabled| & States if skylines tracking is enabled.\\
+
+\hline
+
+\verb|enable_skylines()| & Enables skylines tracking.\\
 
 \end{tabularx}
 \end{maxipage}

@@ -41,6 +41,7 @@ Copyright_License {
 #include "Settings.hpp"
 #include "Wind.hpp"
 #include "Logger.hpp"
+#include "Tracking.hpp"
 
 #include <windef.h> // for MAX_PATH
 #include <assert.h>
@@ -62,6 +63,7 @@ Lua::NewFullState()
   InitSettings(L);
   InitWind(L);
   InitLogger(L);
+  InitTracking(L);
 
   {
     SetPackagePath(L,
