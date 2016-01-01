@@ -120,11 +120,26 @@ l_logger_setautologger(lua_State *L)
   return 0;
 }
 
+static int
+l_logger_enablenmea(lua_State *L)
+{
+ 
+  if (lua_gettop(L) != 0)
+    return luaL_error(L, "Invalid parameters");
+  
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
+  LoggerSettings &logger = settings_computer.logger;
+  logger.enable_nmea_logger = true;
+
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"set_pilot_name", l_logger_setpilotname},
   {"set_time_step_cruise", l_logger_settimestepcruise},
   {"set_time_step_circling", l_logger_settimestepcicrling},
   {"set_autologger", l_logger_setautologger},
+  {"enable_nmea", l_logger_enablenmea},
   {nullptr, nullptr}
 };
 
