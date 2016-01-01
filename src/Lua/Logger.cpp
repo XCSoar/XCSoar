@@ -48,6 +48,8 @@ l_logger_index(lua_State *L)
       Lua::Push(L, logger.time_step_circling);
   } else if (StringIsEqual(name, "auto_logger")) {
       Lua::Push(L, (int)logger.auto_logger);
+  } else if (StringIsEqual(name, "nmea_logger")) {
+      Lua::Push(L, logger.enable_nmea_logger);
   } else
     return 0;
 
