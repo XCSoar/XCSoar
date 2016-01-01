@@ -176,6 +176,20 @@ l_logger_disablelogbook(lua_State *L)
   return 0;
 }
 
+static int
+l_logger_setloggerid(lua_State *L)
+{
+ 
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
+  LoggerSettings &logger = settings_computer.logger;
+  logger.logger_id.SetUTF8(luaL_checkstring(L, 1));
+  
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"set_pilot_name", l_logger_setpilotname},
   {"set_time_step_cruise", l_logger_settimestepcruise},
@@ -185,6 +199,7 @@ static constexpr struct luaL_Reg settings_funcs[] = {
   {"disable_nmea", l_logger_disablenmea},
   {"enable_logbook", l_logger_enablelogbook},
   {"disable_logbook", l_logger_disablelogbook},
+  {"set_logger_id", l_logger_setloggerid},
   {nullptr, nullptr}
 };
 
