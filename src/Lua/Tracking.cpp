@@ -57,6 +57,8 @@ l_tracking_index(lua_State *L)
       Lua::Push(L, settings.livetrack24.enabled);
   } else if (StringIsEqual(name, "livetrack24_interval")) {
       Lua::Push(L, (int)settings.interval);
+  } else if (StringIsEqual(name, "livetrack24_vehicle_name")) { 
+      Lua::Push(L, settings.vehicle_name);
   } else
     return 0;
 
