@@ -74,8 +74,24 @@ l_logger_setpilotname(lua_State *L)
   return 0;
 }
 
+static int
+l_logger_settimestepcruise(lua_State *L)
+{
+  
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
+  LoggerSettings &logger = settings_computer.logger;
+  float time = luaL_checknumber(L, 1); 
+  logger.time_step_cruise = time;
+  
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"set_pilot_name", l_logger_setpilotname},
+  {"set_time_step_cruise", l_logger_settimestepcruise},
   {nullptr, nullptr}
 };
 
