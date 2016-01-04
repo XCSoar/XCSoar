@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Terrain/RasterBuffer.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
@@ -82,6 +83,10 @@ struct LocationMapItem: public MapItem
 
   LocationMapItem(const GeoVector &_vector, short _elevation)
     :MapItem(LOCATION), vector(_vector), elevation(_elevation) {}
+
+  bool HasElevation() const {
+    return !RasterBuffer::IsSpecial(elevation);
+  }
 };
 
 /**
@@ -103,6 +108,10 @@ struct ArrivalAltitudeMapItem: public MapItem
     :MapItem(ARRIVAL_ALTITUDE),
      elevation(_elevation), reach(_reach),
      elevation_available(_elevation_available) {}
+
+  bool HasElevation() const {
+    return elevation_available;
+  }
 };
 
 struct SelfMapItem: public MapItem

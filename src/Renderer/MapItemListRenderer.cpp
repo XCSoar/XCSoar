@@ -42,7 +42,6 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Util/StaticString.hxx"
-#include "Terrain/RasterBuffer.hpp"
 #include "MapSettings.hpp"
 #include "Math/Screen.hpp"
 #include "Look/TrafficLook.hpp"
@@ -87,9 +86,9 @@ Draw(Canvas &canvas, const PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, info_buffer);
 
   StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
-                     RasterBuffer::IsSpecial(item.elevation)
-                     ? _T("???")
-                     : FormatUserAltitude(fixed(item.elevation)).c_str());
+                     item.HasElevation()
+                     ? FormatUserAltitude(item.elevation).c_str()
+                     : _T("???"));
   row_renderer.DrawSecondRow(canvas, rc, info_buffer);
 }
 
@@ -107,7 +106,7 @@ Draw(Canvas &canvas, PixelRect rc,
     item.reach.terrain_valid == ReachResult::Validity::VALID
     ? item.reach.terrain
     : item.reach.direct;
-  if (item.elevation_available)
+  if (item.HasElevation())
     arrival_altitude -= item.elevation;
 
   bool reachable =
@@ -143,7 +142,7 @@ Draw(Canvas &canvas, PixelRect rc,
   StaticString<256> buffer;
   buffer.clear();
 
-  if (item.elevation_available) {
+  if (item.HasElevation()) {
     int relative_arrival_altitude =
       item.reach.direct - item.elevation;
 
@@ -166,7 +165,7 @@ Draw(Canvas &canvas, PixelRect rc,
   if (reach_relevant) {
     buffer.Format(_T("%s: "), _("around terrain"));
 
-    if (item.elevation_available) {
+    if (item.HasElevation()) {
       int relative_arrival_altitude =
           item.reach.terrain - item.elevation;
 
@@ -179,7 +178,7 @@ Draw(Canvas &canvas, PixelRect rc,
     buffer.AppendFormat(_T("%s %s, "),
                         FormatUserAltitude(fixed(item.reach.terrain)).c_str(),
                         _("MSL"));
-  } else if (item.elevation_available &&
+  } else if (item.HasElevation() &&
              item.reach.direct >= item.elevation &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
     buffer.UnsafeFormat(_T("%s "), _("Unreachable due to terrain."));
