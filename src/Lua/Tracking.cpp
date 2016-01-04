@@ -196,6 +196,19 @@ l_tracking_set_livetrack24_interval(lua_State *L)
   return 0;
 }
 
+static int
+l_tracking_set_livetrack24_vehiclename(lua_State *L)
+{ 
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  TrackingSettings &settings =
+    CommonInterface::SetComputerSettings().tracking;
+  settings.vehicle_name.SetUTF8(luaL_checkstring(L, 1)); 
+  
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"enable_skylines", l_tracking_enable_skylines},
   {"disable_skylines", l_tracking_disable_skylines},
@@ -207,6 +220,7 @@ static constexpr struct luaL_Reg settings_funcs[] = {
   {"enable_livetrack24", l_tracking_enable_livetrack24},
   {"disable_livetrack24", l_tracking_disable_livetrack24},
   {"set_livetrack24_interval", l_tracking_set_livetrack24_interval},
+  {"set_livetrack24_vehiclename", l_tracking_set_livetrack24_vehiclename},
   {nullptr, nullptr}
 };
 
