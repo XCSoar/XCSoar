@@ -36,11 +36,11 @@ extern "C" {
 #include <algorithm>
 
 static void
-CopyOverviewRow(short *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
+CopyOverviewRow(TerrainHeight *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
                 unsigned width, unsigned skip)
 {
   for (unsigned x = 0; x < width; ++x, src += skip)
-    *dest++ = *src;
+    *dest++ = TerrainHeight(*src);
 }
 
 void
@@ -68,7 +68,7 @@ RasterTileCache::PutOverviewTile(unsigned index,
 
   const unsigned skip = 1 << OVERVIEW_BITS;
 
-  short *gcc_restrict dest = overview.GetData()
+  auto *gcc_restrict dest = overview.GetData()
     + start_y * dest_pitch + start_x;
 
   for (unsigned i = 0, y = 0; i < height; ++i, y += skip, dest += dest_pitch)
@@ -161,12 +161,12 @@ RasterTileCache::PollTiles(int x, int y, unsigned radius)
   return num_activate > 0;
 }
 
-short
+TerrainHeight
 RasterTileCache::GetHeight(unsigned px, unsigned py) const
 {
   if (px >= width || py >= height)
     // outside overall bounds
-    return RasterBuffer::TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
   if (tile.IsEnabled())
@@ -177,12 +177,12 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
                                    py << (SUBPIXEL_BITS - OVERVIEW_BITS));
 }
 
-short
+TerrainHeight
 RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
 {
   if ((lx >= overview_width_fine) || (ly >= overview_height_fine))
     // outside overall bounds
-    return RasterBuffer::TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   unsigned px = lx, py = ly;
   const unsigned int ix = CombinedDivAndMod(px);

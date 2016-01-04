@@ -86,7 +86,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
-  short elevations[NUM_SLICES];
+  TerrainHeight elevations[NUM_SLICES];
   UpdateTerrain(elevations);
 
   if (airspace_database != nullptr) {
@@ -102,10 +102,10 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 }
 
 void
-CrossSectionRenderer::UpdateTerrain(short *elevations) const
+CrossSectionRenderer::UpdateTerrain(TerrainHeight *elevations) const
 {
   if (terrain == NULL) {
-    const auto invalid = RasterBuffer::TERRAIN_INVALID;
+    const auto invalid = TerrainHeight::Invalid();
     std::fill_n(elevations, NUM_SLICES, invalid);
     return;
   }

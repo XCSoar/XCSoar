@@ -28,9 +28,9 @@ WaypointFactory::FallbackElevation(Waypoint &waypoint) const
 {
   if (terrain != nullptr) {
     // Load waypoint altitude from terrain
-    const short t_alt = terrain->GetTerrainHeight(waypoint.location);
-    if (!RasterBuffer::IsSpecial(t_alt)) {
-      waypoint.elevation = t_alt;
+    const auto h = terrain->GetTerrainHeight(waypoint.location);
+    if (!h.IsSpecial()) {
+      waypoint.elevation = h.GetValue();
       return true;
     }
   }

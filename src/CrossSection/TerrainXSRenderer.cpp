@@ -29,7 +29,8 @@
 #include "Util/StaticArray.hxx"
 
 void
-TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short *elevations) const
+TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
+                        const TerrainHeight *elevations) const
 {
   const auto max_distance = chart.GetXMax();
 
@@ -37,7 +38,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
 
   canvas.SelectNullPen();
 
-  RasterBuffer::TerrainType last_type = RasterBuffer::TerrainType::UNKNOWN;
+  TerrainType last_type = TerrainType::UNKNOWN;
   fixed last_distance = fixed(0);
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
@@ -45,16 +46,13 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
         fixed(j) / (CrossSectionRenderer::NUM_SLICES - 1);
     const auto distance = distance_factor * max_distance;
 
-    short h = elevations[j];
-    RasterBuffer::TerrainType type = RasterBuffer::GetTerrainType(h);
-
-    if (type == RasterBuffer::TerrainType::WATER)
-      h = 0;
+    const TerrainHeight e = elevations[j];
+    const TerrainType type = e.GetType();
 
     // Close and paint polygon
     if (j != 0 &&
         type != last_type &&
-        last_type != RasterBuffer::TerrainType::UNKNOWN) {
+        last_type != TerrainType::UNKNOWN) {
       const auto center_distance = (distance + last_distance) / 2;
       points.append() = chart.ToScreen(center_distance, fixed(0));
       points.append() = chart.ToScreen(center_distance, fixed(-500));
@@ -62,7 +60,9 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
       DrawPolygon(canvas, last_type, points.begin(), points.size());
     }
 
-    if (type != RasterBuffer::TerrainType::UNKNOWN) {
+    if (type != TerrainType::UNKNOWN) {
+      const double h = e.GetValueOr0();
+
       if (j == 0) {
         // Start first polygon
         points.append() = chart.ToScreen(distance, fixed(-500));
@@ -94,13 +94,13 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
 }
 
 void
-TerrainXSRenderer::DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
+TerrainXSRenderer::DrawPolygon(Canvas &canvas, TerrainType type,
                                const RasterPoint *points,
                                unsigned num_points) const
 {
-  assert(type != RasterBuffer::TerrainType::UNKNOWN);
+  assert(type != TerrainType::UNKNOWN);
 
-  canvas.Select(type == RasterBuffer::TerrainType::WATER ?
+  canvas.Select(type == TerrainType::WATER ?
                 look.sea_brush : look.terrain_brush);
   canvas.DrawPolygon(points, num_points);
 }

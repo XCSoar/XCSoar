@@ -33,7 +33,7 @@ Airspaces::SetGroundLevels(const RasterTerrain &terrain)
 
     FlatGeoPoint c_flat = v.GetCenter();
     GeoPoint g = task_projection.Unproject(c_flat);
-    v.SetGroundLevel(terrain.GetTerrainHeightOr0(g));
+    v.SetGroundLevel(terrain.GetTerrainHeight(g).GetValueOr0());
   }
 }
 

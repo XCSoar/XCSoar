@@ -103,20 +103,20 @@ public:
    * Determine the non-interpolated height at the specified location.
    */
   gcc_pure
-  short GetHeight(const GeoPoint &location) const;
+  TerrainHeight GetHeight(const GeoPoint &location) const;
 
   /**
    * Determine the interpolated height at the specified location.
    */
   gcc_pure
-  short GetInterpolatedHeight(const GeoPoint &location) const;
+  TerrainHeight GetInterpolatedHeight(const GeoPoint &location) const;
 
   /**
    * Scan a straight line and fill the buffer with the specified
    * number of samples along the line.
    */
   void ScanLine(const GeoPoint &start, const GeoPoint &end,
-                short *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size, bool interpolate) const;
 
   gcc_pure
   bool FirstIntersection(const GeoPoint &origin, int h_origin,

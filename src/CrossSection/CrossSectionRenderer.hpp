@@ -138,7 +138,7 @@ public:
   }
 
 protected:
-  void UpdateTerrain(short *elevations) const;
+  void UpdateTerrain(TerrainHeight *elevations) const;
 
   void PaintGlide(ChartRenderer &chart) const;
   void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,

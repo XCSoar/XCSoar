@@ -210,14 +210,14 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint o,
   for (const auto &x : vs) {
     const FlatGeoPoint av = (o + x) * 0.5;
     const GeoPoint p = parms.projection.Unproject(av);
-    short h = parms.terrain->GetHeight(p);
+    const auto h = parms.terrain->GetHeight(p);
 
-    if (RasterBuffer::IsWater(h))
+    if (h.IsWater())
       /* water: assume 0m MSL */
       parms.terrain_counter++;
-    else if (!RasterBuffer::IsInvalid(h)) {
+    else if (!h.IsInvalid()) {
       parms.terrain_counter++;
-      parms.terrain_base += h;
+      parms.terrain_base += h.GetValue();
     }
   }
 

@@ -65,9 +65,9 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
         auto fy = (fixed)j / (ny - 1) * 2 - fixed(1);
         GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.2) + fixed(0.7) * fx),
                    origin.latitude + Angle::Degrees(fixed(0.9) * fy));
-        short h = map.GetInterpolatedHeight(x);
+        auto h = map.GetInterpolatedHeight(x);
         fout << x.longitude.Degrees() << " " << x.latitude.Degrees()
-             << " " << h << "\n";
+             << " " << h.GetValue() << "\n";
       }
 
       fout << "\n";
@@ -84,8 +84,8 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     GeoPoint p_dest(Angle::Degrees(0.8), Angle::Degrees(-0.7));
     p_dest += map.GetMapCenter();
 
-    AGeoPoint loc_start(p_start, map.GetHeight(p_start) + 100);
-    AGeoPoint loc_end(p_dest, map.GetHeight(p_dest) + 100);
+    AGeoPoint loc_start(p_start, map.GetHeight(p_start).GetValueOr0() + 100);
+    AGeoPoint loc_end(p_dest, map.GetHeight(p_dest).GetValueOr0() + 100);
 
     AircraftState state;
     GlidePolar glide_polar(fixed(0.1));
@@ -154,7 +154,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {
       loc_end.latitude += Angle::Degrees(0.1);
-      loc_end.altitude = map.GetHeight(loc_end) + 100;
+      loc_end.altitude = map.GetHeight(loc_end).GetValueOr0() + 100;
       route.Synchronise(airspaces, predicate, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {
         sol = true;

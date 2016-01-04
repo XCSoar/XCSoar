@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 #define XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 
+#include "Height.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
@@ -36,7 +37,7 @@ class WindowProjection;
 #endif
 
 class HeightMatrix {
-  AllocatedArray<short> data;
+  AllocatedArray<TerrainHeight> data;
   unsigned width, height;
 
 public:
@@ -73,15 +74,15 @@ public:
     return height;
   }
 
-  const short *GetData() const {
+  const TerrainHeight *GetData() const {
     return data.begin();
   }
 
-  const short *GetRow(unsigned y) const {
+  const TerrainHeight *GetRow(unsigned y) const {
     return data.begin() + y * width;
   }
 
-  const short *GetDataEnd() const {
+  const TerrainHeight *GetDataEnd() const {
     return GetRow(height);
   }
 };

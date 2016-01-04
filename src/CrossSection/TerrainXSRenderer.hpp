@@ -24,7 +24,7 @@
 #ifndef TERRAIN_CROSS_SECTION_RENDERER_HPP
 #define TERRAIN_CROSS_SECTION_RENDERER_HPP
 
-#include "Terrain/RasterBuffer.hpp"
+#include "Terrain/Height.hpp"
 
 class Canvas;
 class ChartRenderer;
@@ -42,10 +42,10 @@ public:
   TerrainXSRenderer(const CrossSectionLook &_look): look(_look) {}
 
   void Draw(Canvas &canvas, const ChartRenderer &chart,
-            const short *elevations) const;
+            const TerrainHeight *elevations) const;
 
 private:
-  void DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
+  void DrawPolygon(Canvas &canvas, TerrainType type,
                    const RasterPoint *points, unsigned num_points) const;
 };
 

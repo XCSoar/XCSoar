@@ -46,14 +46,14 @@ RasterMap::LoadCache(FILE *file)
   return success;
 }
 
-short
+TerrainHeight
 RasterMap::GetHeight(const GeoPoint &location) const
 {
   const auto pt = projection.ProjectCoarse(location);
   return raster_tile_cache.GetHeight(pt.x, pt.y);
 }
 
-short
+TerrainHeight
 RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 {
   const auto pt = projection.ProjectFine(location);
@@ -62,12 +62,13 @@ RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 
 void
 RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
-                    short *buffer, unsigned size, bool interpolate) const
+                    TerrainHeight *buffer, unsigned size,
+                    bool interpolate) const
 {
   assert(buffer != nullptr);
   assert(size > 0);
 
-  const short invalid = RasterBuffer::TERRAIN_INVALID;
+  constexpr TerrainHeight invalid = TerrainHeight::Invalid();
 
   const double total_distance = start.DistanceS(end);
   if (total_distance <= 0) {

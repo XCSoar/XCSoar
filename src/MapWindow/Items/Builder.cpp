@@ -129,13 +129,9 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
     vector.SetInvalid();
 
   double elevation = LocationMapItem::UNKNOWN_ELEVATION;
-  if (terrain != nullptr) {
-    short e = terrain->GetTerrainHeight(location);
-    if (!RasterBuffer::IsSpecial(e))
-      elevation = e;
-    else if (RasterBuffer::IsWater(e))
-      elevation = 0;
-  }
+  if (terrain != nullptr)
+    elevation = terrain->GetTerrainHeight(location)
+      .ToDouble(LocationMapItem::UNKNOWN_ELEVATION);
 
   list.append(new LocationMapItem(vector, elevation));
 }
@@ -149,14 +145,10 @@ MapItemListBuilder::AddArrivalAltitudes(
     return;
 
   // Calculate terrain elevation if possible
-  double elevation = ArrivalAltitudeMapItem::UNKNOWN_ELEVATION;
-  if (terrain != nullptr) {
-    short e = terrain->GetTerrainHeight(location);
-    if (!RasterBuffer::IsSpecial(e))
-      elevation = e;
-    else if (RasterBuffer::IsWater(e))
-      elevation = 0;
-  }
+  double elevation = LocationMapItem::UNKNOWN_ELEVATION;
+  if (terrain != nullptr)
+    elevation = terrain->GetTerrainHeight(location)
+      .ToDouble(LocationMapItem::UNKNOWN_ELEVATION);
 
   // Calculate target altitude
   double safety_elevation(safety_height);

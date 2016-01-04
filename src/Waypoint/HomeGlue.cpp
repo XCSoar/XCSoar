@@ -119,7 +119,7 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       GeoPoint loc = terrain->GetTerrainCenter();
       LogFormat("Start at terrain center");
       device_blackboard->SetStartupLocation(loc,
-                                            terrain->GetTerrainHeightOr0(loc));
+                                            terrain->GetTerrainHeight(loc).GetValueOr0());
     }
   }
 }

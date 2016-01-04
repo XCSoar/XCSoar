@@ -164,7 +164,8 @@ public:
 
 protected:
   void ScanTileLine(GridLocation start, GridLocation end,
-                    short *buffer, unsigned size, bool interpolate) const;
+                    TerrainHeight *buffer, unsigned size,
+                    bool interpolate) const;
 
 public:
   /**
@@ -175,7 +176,7 @@ public:
    * @param y the pixel row within the map; may be out of range
    */
   gcc_pure
-  short GetHeight(unsigned x, unsigned y) const;
+  TerrainHeight GetHeight(unsigned x, unsigned y) const;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
@@ -185,8 +186,8 @@ public:
    * @param ly the sub-pixel row within the map; may be out of range
    */
   gcc_pure
-  short GetInterpolatedHeight(unsigned int lx,
-                              unsigned int ly) const;
+  TerrainHeight GetInterpolatedHeight(unsigned lx,
+                                      unsigned ly) const;
 
   /**
    * Scan a straight line and fill the buffer with the specified
@@ -196,7 +197,7 @@ public:
    * @param end the sub-pixel end location
    */
   void ScanLine(const RasterLocation start, const RasterLocation end,
-                short *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size, bool interpolate) const;
 
   bool FirstIntersection(int origin_x, int origin_y,
                          int destination_x, int destination_y,
@@ -225,7 +226,7 @@ private:
    * value was loaded from a "fine" tile
    */
   gcc_pure
-  std::pair<short, bool> GetFieldDirect(unsigned px, unsigned py) const;
+  std::pair<TerrainHeight, bool> GetFieldDirect(unsigned px, unsigned py) const;
 
 public:
   bool SaveCache(FILE *file) const;
@@ -291,7 +292,7 @@ public:
   void FinishTileUpdate();
 
 public:
-  short GetMaxElevation() const {
+  TerrainHeight GetMaxElevation() const {
     return overview.GetMaximum();
   }
 

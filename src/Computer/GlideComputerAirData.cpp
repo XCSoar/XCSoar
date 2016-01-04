@@ -236,22 +236,17 @@ GlideComputerAirData::TerrainHeight(const MoreData &basic,
     return;
   }
 
-  short Alt = terrain->GetTerrainHeight(basic.location);
-  if (RasterBuffer::IsSpecial(Alt)) {
-    if (RasterBuffer::IsWater(Alt))
-      /* assume water is 0m MSL; that's the best guess */
-      Alt = 0;
-    else {
-      calculated.terrain_valid = false;
-      calculated.terrain_altitude = 0;
-      calculated.altitude_agl_valid = false;
-      calculated.altitude_agl = 0;
-      return;
-    }
+  const auto h = terrain->GetTerrainHeight(basic.location);
+  if (h.IsInvalid()) {
+    calculated.terrain_valid = false;
+    calculated.terrain_altitude = 0;
+    calculated.altitude_agl_valid = false;
+    calculated.altitude_agl = 0;
+    return;
   }
 
   calculated.terrain_valid = true;
-  calculated.terrain_altitude = Alt;
+  calculated.terrain_altitude = h.GetValueOr0();
 
   if (basic.NavAltitudeAvailable()) {
     calculated.altitude_agl = basic.nav_altitude - calculated.terrain_altitude;

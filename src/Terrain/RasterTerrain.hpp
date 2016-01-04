@@ -46,9 +46,6 @@ public:
   friend class ProtectedTaskManager; // for intersection
   friend class WaypointVisitorMap; // for intersection rendering
 
-  /** invalid value for terrain */
-  static constexpr short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
-
 private:
   struct zzip_dir *const dir;
 
@@ -75,27 +72,9 @@ public:
                                     OperationEnvironment &operation);
 
   gcc_pure
-  short GetTerrainHeight(const GeoPoint location) const {
+  TerrainHeight GetTerrainHeight(const GeoPoint location) const {
     Lease lease(*this);
     return lease->GetHeight(location);
-  }
-
-  /**
-   * Wrapper for GetTerrainHeight() that replaces "special" values
-   * with 0.  This is used when we need some "valid" value (and not
-   * some "magic" special value).  Sometimes, 0 is the best we can do.
-   *
-   * Use this function with care.  "0" is just a random value like any
-   * other.  Don't use it for calculations where the altitude matters
-   * (e.g. glide path calculations).
-   */
-  gcc_pure
-  short GetTerrainHeightOr0(const GeoPoint location) const {
-    short h = GetTerrainHeight(location);
-    if (RasterBuffer::IsSpecial(h))
-      /* apply fallback */
-      h = 0;
-    return h;
   }
 
   GeoPoint GetTerrainCenter() const {

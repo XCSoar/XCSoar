@@ -69,8 +69,9 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
         auto fy = (double)j / (ny - 1) * 2 - 1;
         GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
                    origin.latitude + Angle::Degrees(0.4 * fy));
-        short h = map.GetInterpolatedHeight(x);
-        fout << x.longitude.Degrees() << " " << x.latitude.Degrees() << " " << h << "\n";
+        TerrainHeight h = map.GetInterpolatedHeight(x);
+        fout << x.longitude.Degrees() << " " << x.latitude.Degrees()
+             << " " << h.GetValue() << "\n";
       }
       fout << "\n";
     }
@@ -84,10 +85,10 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
   for (double ang = 0; ang < M_2PI; ang += M_PI / 8) {
     GeoPoint dest = GeoVector(40000.0, Angle::Radians(ang)).EndPoint(origin);
 
-    int hdest = map.GetHeight(dest)+100;
+    int hdest = map.GetHeight(dest).GetValueOr0() + 100;
 
     retval = route.Solve(AGeoPoint(origin,
-                                   map.GetHeight(origin) + 100),
+                                   map.GetHeight(origin).GetValueOr0() + 100),
                          AGeoPoint(dest,
                                    mc > 0
                                    ? hdest

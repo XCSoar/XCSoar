@@ -58,7 +58,7 @@ test_reach(const RasterMap &map, double mwind, double mc)
 
   bool retval= true;
 
-  int horigin = map.GetHeight(origin)+1000;
+  int horigin = map.GetHeight(origin).GetValueOr0() + 1000;
   AGeoPoint aorigin(origin, horigin);
 
   RoutePlannerConfig config;
@@ -83,7 +83,7 @@ test_reach(const RasterMap &map, double mwind, double mc)
         double fy = (double)j / (ny - 1) * 2 - 1;
         GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
                    origin.latitude + Angle::Degrees(0.6 * fy));
-        short h = map.GetInterpolatedHeight(x);
+        int h = map.GetInterpolatedHeight(x).GetValueOr0();
         AGeoPoint adest(x, h);
         ReachResult reach;
         route.FindPositiveArrival(adest, reach);

@@ -60,7 +60,7 @@ RasterTile::CopyFrom(const struct jas_matrix &m)
 
   buffer.Resize(width, height);
 
-  short *gcc_restrict dest = buffer.GetData();
+  auto *gcc_restrict dest = buffer.GetData();
   assert(dest != nullptr);
 
   const unsigned width = m.numcols_, height = m.numrows_;
@@ -68,11 +68,12 @@ RasterTile::CopyFrom(const struct jas_matrix &m)
   for (unsigned y = 0; y != height; ++y) {
     const jas_seqent_t *gcc_restrict src = m.rows_[y];
 
-    dest = std::copy_n(src, width, dest);
+    for (unsigned i = 0; i < width; ++i)
+      *dest++ = TerrainHeight(src[i]);
   }
 }
 
-short
+TerrainHeight
 RasterTile::GetHeight(unsigned x, unsigned y) const
 {
   assert(IsEnabled());
@@ -86,7 +87,7 @@ RasterTile::GetHeight(unsigned x, unsigned y) const
   return buffer.Get(x, y);
 }
 
-short
+TerrainHeight
 RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
                                   unsigned ix, unsigned iy) const
 {
@@ -97,11 +98,11 @@ RasterTile::GetInterpolatedHeight(unsigned lx, unsigned ly,
 
   // check x in range
   if ((lx -= xstart) >= width)
-    return RasterBuffer::TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   // check y in range
   if ((ly -= ystart) >= height)
-    return RasterBuffer::TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   return buffer.GetInterpolated(lx, ly, ix, iy);
 }

@@ -33,16 +33,6 @@ Copyright_License {
 #include <stdio.h>
 #endif
 
-/**
- * Replaces "water" samples with 0.
- */
-constexpr
-static int
-ReplaceWater0(short h)
-{
-  return RasterBuffer::IsWater(h) ? 0 : h;
-}
-
 bool
 RasterTileCache::FirstIntersection(const int x0, const int y0,
                                    const int x1, const int y1,
@@ -58,15 +48,15 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
     // origin is outside overall bounds
     return false;
 
-  const short h_origin2 = GetFieldDirect(x0, y0).first;
-  if (RasterBuffer::IsInvalid(h_origin2)) {
+  const TerrainHeight h_origin2 = GetFieldDirect(x0, y0).first;
+  if (h_origin2.IsInvalid()) {
     _location = location;
     _h = h_origin;
     return true;
   }
 
-  if (!RasterBuffer::IsSpecial(h_origin2))
-    h_origin = std::max(h_origin, (int)h_origin2);
+  if (!h_origin2.IsSpecial())
+    h_origin = std::max(h_origin, (int)h_origin2.GetValue());
 
   h_dest = std::max(h_dest, h_origin);
 
@@ -127,10 +117,10 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
-      if (RasterBuffer::IsInvalid(field_direct.first))
+      if (field_direct.first.IsInvalid())
         break;
 
-      const int h_terrain = ReplaceWater0(field_direct.first) + h_safety;
+      const int h_terrain = field_direct.first.GetValueOr0() + h_safety;
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
@@ -235,7 +225,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
   return false;
 }
 
-inline std::pair<short, bool>
+inline std::pair<TerrainHeight, bool>
 RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 {
   assert(px < width);
@@ -315,10 +305,10 @@ RasterTileCache::Intersection(const int x0, const int y0,
         break;
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
-      if (RasterBuffer::IsInvalid(field_direct.first))
+      if (field_direct.first.IsInvalid())
         break;
 
-      const int h_terrain = ReplaceWater0(field_direct.first);
+      const int h_terrain = field_direct.first.GetValueOr0();
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far

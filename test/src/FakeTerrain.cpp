@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 
-short
+TerrainHeight
 RasterMap::GetHeight(const GeoPoint &location) const
 {
-  return RasterBuffer::TERRAIN_INVALID;
+  return TerrainHeight::Invalid();
 }
 
 GeoPoint

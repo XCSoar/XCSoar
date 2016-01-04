@@ -36,7 +36,7 @@ RasterBuffer::Resize(unsigned _width, unsigned _height)
   data.GrowDiscard(_width, _height);
 }
 
-short
+TerrainHeight
 RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
                                unsigned ix, unsigned iy) const
 {
@@ -49,30 +49,33 @@ RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
   // perform piecewise linear interpolation
   const unsigned int dx = (lx == GetWidth() - 1) ? 0 : 1;
   const unsigned int dy = (ly == GetHeight() - 1) ? 0 : GetWidth();
-  const short *tm = GetDataAt(lx, ly);
+  const TerrainHeight *tm = GetDataAt(lx, ly);
 
-  if (IsSpecial(*tm) || IsSpecial(tm[dx]) ||
-      IsSpecial(tm[dy]) || IsSpecial(tm[dx + dy]))
+  if (tm->IsSpecial() || tm[dx].IsSpecial() ||
+      tm[dy].IsSpecial() || tm[dx + dy].IsSpecial())
     return *tm;
 
   unsigned kx = 0x100 - ix;
   unsigned ky = 0x100 - iy;
 
-  return (*tm * kx * ky + tm[dx] * ix * ky + tm[dy] * kx * iy + tm[dx + dy] * ix * iy) >> 16;
+  return TerrainHeight((tm->GetValue() * kx * ky
+                        + tm[dx].GetValue() * ix * ky
+                        + tm[dy].GetValue() * kx * iy
+                        + tm[dx + dy].GetValue() * ix * iy) >> 16);
 }
 
-short
+TerrainHeight
 RasterBuffer::GetInterpolated(unsigned lx, unsigned ly) const
 {
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
   if (lx >= GetWidth())
-    return TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
   if (ly >= GetHeight())
-    return TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   return GetInterpolated(lx, ly, ix, iy);
 }
@@ -116,7 +119,7 @@ public:
 
 void
 RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
-                                 short *gcc_restrict buffer, unsigned size,
+                                 TerrainHeight *gcc_restrict buffer, unsigned size,
                                  bool interpolate) const
 {
   assert(ax < GetFineWidth());
@@ -151,10 +154,10 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else if (gcc_likely(dx > 0)) {
     /* no interpolation needed, forward scan */
 
-    const short *gcc_restrict src = GetDataAt(ax >> 8, y >> 8);
+    const TerrainHeight *gcc_restrict src = GetDataAt(ax >> 8, y >> 8);
 
     PixelIterator iterator(dx >> 8, size);
-    short *gcc_restrict end = buffer + size;
+    TerrainHeight *gcc_restrict end = buffer + size;
     while (true) {
       *buffer++ = *src;
       if (buffer >= end)
@@ -164,7 +167,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else {
     /* no interpolation needed */
 
-    const short *gcc_restrict src = GetDataAt(0, y >> 8);
+    const TerrainHeight *gcc_restrict src = GetDataAt(0, y >> 8);
 
     --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
@@ -177,7 +180,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
 
 void
 RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                       short *gcc_restrict buffer,
+                       TerrainHeight *gcc_restrict buffer,
                        unsigned size, bool interpolate) const
 {
   assert(ax < GetFineWidth());
@@ -230,7 +233,7 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
 void
 RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
                               unsigned bx, unsigned by,
-                              short *buffer, unsigned size,
+                              TerrainHeight *buffer, unsigned size,
                               bool interpolate) const
 {
   if (ax >= GetFineWidth())
@@ -248,8 +251,13 @@ RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
   ScanLine(ax, ay, bx, by, buffer, size, interpolate);
 }
 
-short
+TerrainHeight
 RasterBuffer::GetMaximum() const
 {
-  return IsDefined() ? *std::max_element(data.begin(), data.end()) : 0;
+  return IsDefined()
+    ? *std::max_element(data.begin(), data.end(),
+                        [](TerrainHeight a, TerrainHeight b) {
+                          return a.GetValue() < b.GetValue();
+                        })
+    : TerrainHeight(0);
 }
