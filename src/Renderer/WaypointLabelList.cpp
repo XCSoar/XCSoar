@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "WaypointLabelList.hpp"
-
-#include <string.h>
+#include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -82,7 +82,7 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
 
   auto &l = labels.append();
 
-  _tcscpy(l.Name, Name);
+  CopyString(l.Name, Name, ARRAY_SIZE(l.Name));
   l.Pos.x = X;
   l.Pos.y = Y;
   l.Mode = Mode;
