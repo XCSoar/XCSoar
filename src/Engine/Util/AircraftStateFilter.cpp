@@ -25,31 +25,31 @@
 
 #include <assert.h>
 
-AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength)
-  :x_diff_filter(fixed(0)), y_diff_filter(fixed(0)),
-   alt_diff_filter(fixed(0)),
+AircraftStateFilter::AircraftStateFilter(const double cutoff_wavelength)
+  :x_diff_filter(0), y_diff_filter(0),
+   alt_diff_filter(0),
    x_low_pass(cutoff_wavelength), y_low_pass(cutoff_wavelength),
    alt_low_pass(cutoff_wavelength),
-   x(fixed(0)), y(fixed(0)) {}
+   x(0), y(0) {}
 
 void
 AircraftStateFilter::Reset(const AircraftState &state)
 {
   last_state = state;
 
-  x = fixed(0);
-  y = fixed(0);
+  x = 0;
+  y = 0;
 
-  v_x = fixed(0);
-  v_y = fixed(0);
-  v_alt = fixed(0);
+  v_x = 0;
+  v_y = 0;
+  v_alt = 0;
 
-  x_low_pass.Reset(fixed(0));
-  y_low_pass.Reset(fixed(0));
-  alt_low_pass.Reset(fixed(0));
-  x_diff_filter.Reset(x, fixed(0));
-  y_diff_filter.Reset(y, fixed(0));
-  alt_diff_filter.Reset(state.altitude, fixed(0));
+  x_low_pass.Reset(0);
+  y_low_pass.Reset(0);
+  alt_low_pass.Reset(0);
+  x_diff_filter.Reset(x, 0);
+  y_diff_filter.Reset(y, 0);
+  alt_diff_filter.Reset(state.altitude, 0);
 }
 
 void
@@ -57,18 +57,18 @@ AircraftStateFilter::Update(const AircraftState &state)
 {
   auto dt = state.time - last_state.time;
 
-  if (negative(dt) || dt > fixed(60)) {
+  if (dt < 0 || dt > 60) {
     Reset(state);
     return;
   }
 
-  if (!positive(dt))
+  if (dt <= 0)
     return;
 
   GeoVector vec(last_state.location, state.location);
 
-  const fixed MACH_1 = fixed(343);
-  if (vec.distance > fixed(1000) || vec.distance / dt > MACH_1) {
+  constexpr double MACH_1 = 343;
+  if (vec.distance > 1000 || vec.distance / dt > MACH_1) {
     Reset(state);
     return;
   }
@@ -83,7 +83,7 @@ AircraftStateFilter::Update(const AircraftState &state)
   last_state = state;
 }
 
-fixed
+double
 AircraftStateFilter::GetSpeed() const
 {
   return hypot(v_x, v_y);
@@ -96,7 +96,7 @@ AircraftStateFilter::GetBearing() const
 }
 
 bool
-AircraftStateFilter::Design(const fixed cutoff_wavelength)
+AircraftStateFilter::Design(const double cutoff_wavelength)
 {
   bool ok = true;
   ok &= x_low_pass.Design(cutoff_wavelength);
@@ -107,7 +107,7 @@ AircraftStateFilter::Design(const fixed cutoff_wavelength)
 }
 
 AircraftState
-AircraftStateFilter::GetPredictedState(const fixed in_time) const
+AircraftStateFilter::GetPredictedState(const double in_time) const
 {
   AircraftState state_next = last_state;
   state_next.ground_speed = GetSpeed();

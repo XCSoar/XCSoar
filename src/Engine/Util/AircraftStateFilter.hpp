@@ -26,7 +26,6 @@
 #include "Math/Filter.hpp"
 #include "Math/DiffFilter.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Math/fixed.hpp"
 
 /**
  * Class for filtering aircraft state (location and altitude) 
@@ -36,8 +35,8 @@ class AircraftStateFilter {
   DiffFilter x_diff_filter, y_diff_filter, alt_diff_filter;
   Filter x_low_pass, y_low_pass, alt_low_pass;
   AircraftState last_state;
-  fixed x, y;
-  fixed v_x, v_y, v_alt;
+  double x, y;
+  double v_x, v_y, v_alt;
 
 public:
   /**
@@ -51,7 +50,7 @@ public:
    * 
    * @param cutoff_wavelength -3db cutoff wavelength (s) of filters
    */
-  AircraftStateFilter(const fixed cutoff_wavelength);
+  AircraftStateFilter(const double cutoff_wavelength);
 
   /**
    * Reset filters to initial state
@@ -77,14 +76,14 @@ public:
    *
    * @return True if design was successfull
    */
-  bool Design(const fixed cutoff_wavelength);
+  bool Design(const double cutoff_wavelength);
 
   /**
    * Return filtered speed
    *
    * @return Speed (m/s)
    */
-  fixed GetSpeed() const;
+  double GetSpeed() const;
 
   /**
    * Return filtered track bearing
@@ -98,7 +97,7 @@ public:
    *
    * @return Climb rate (m/s)
    */
-  inline fixed GetClimbRate() const {
+  inline double GetClimbRate() const {
     return v_alt;
   }
 
@@ -108,7 +107,7 @@ public:
    * @param in_time Time step for extrapolation (s)
    * @return Predicted aircraft state in in_time seconds
    */
-  AircraftState GetPredictedState(fixed in_time) const;
+  AircraftState GetPredictedState(double in_time) const;
 };
 
 #endif
