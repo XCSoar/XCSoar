@@ -25,8 +25,9 @@ Copyright_License {
 
 #if defined(HAVE_GLES) && !defined(HAVE_GLES2)
 
+#include "Function.hpp"
+
 #include <assert.h>
-#include <dlfcn.h>
 
 static PFNGLBINDRENDERBUFFEROESPROC _glBindRenderbuffer;
 static PFNGLDELETERENDERBUFFERSOESPROC _glDeleteRenderbuffers;
@@ -43,24 +44,24 @@ bool
 FBO::Initialise()
 {
   _glBindRenderbuffer = (PFNGLBINDRENDERBUFFEROESPROC)
-    dlsym(RTLD_DEFAULT, "glBindRenderbufferOES");
+    OpenGL::GetProcAddress("glBindRenderbufferOES");
   _glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSOESPROC)
-    dlsym(RTLD_DEFAULT, "glDeleteRenderbuffersOES");
+    OpenGL::GetProcAddress("glDeleteRenderbuffersOES");
   _glGenRenderbuffers = (PFNGLGENRENDERBUFFERSOESPROC)
-    dlsym(RTLD_DEFAULT, "glGenRenderbuffersOES");
+    OpenGL::GetProcAddress("glGenRenderbuffersOES");
   _glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEOESPROC)
-    dlsym(RTLD_DEFAULT, "glRenderbufferStorageOES");
+    OpenGL::GetProcAddress("glRenderbufferStorageOES");
 
   _glBindFramebuffer = (PFNGLBINDFRAMEBUFFEROESPROC)
-    dlsym(RTLD_DEFAULT, "glBindFramebufferOES");
+    OpenGL::GetProcAddress("glBindFramebufferOES");
   _glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSOESPROC)
-    dlsym(RTLD_DEFAULT, "glDeleteFramebuffersOES");
+    OpenGL::GetProcAddress("glDeleteFramebuffersOES");
   _glGenFramebuffers = (PFNGLGENFRAMEBUFFERSOESPROC)
-    dlsym(RTLD_DEFAULT, "glGenFramebuffersOES");
+    OpenGL::GetProcAddress("glGenFramebuffersOES");
   _glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFEROESPROC)
-    dlsym(RTLD_DEFAULT, "glFramebufferRenderbufferOES");
+    OpenGL::GetProcAddress("glFramebufferRenderbufferOES");
   _glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DOESPROC)
-    dlsym(RTLD_DEFAULT, "glFramebufferTexture2DOES");
+    OpenGL::GetProcAddress("glFramebufferTexture2DOES");
 
   return _glBindRenderbuffer != nullptr && _glDeleteRenderbuffers != nullptr &&
     _glGenRenderbuffers != nullptr && _glRenderbufferStorage != nullptr &&
