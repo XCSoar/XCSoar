@@ -97,8 +97,8 @@ struct VisibleWaypoint {
 
   void CalculateRouteArrival(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour) {
-    const RoughAltitude elevation(waypoint->elevation +
-                                  task_behaviour.safety_height_arrival);
+    const double elevation = waypoint->elevation +
+      task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->location, elevation);
     if (route_planner.FindPositiveArrival(p_dest, reach))
       reach.Subtract(elevation);
