@@ -188,7 +188,7 @@ gcc_pure
 static bool
 CheckLandingSpeed(double takeoff_speed, const NMEAInfo &basic)
 {
-  return !CheckTakeOffSpeed(Half(takeoff_speed), basic);
+  return !CheckTakeOffSpeed(takeoff_speed / 2, basic);
 }
 
 gcc_pure

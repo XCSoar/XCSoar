@@ -160,7 +160,7 @@ WaveComputer::Compute(const NMEAInfo &basic,
       projection.SetCenter(basic.location);
 
     auto flat = projection.ProjectFloat(basic.location);
-    ls.Update(flat.x, flat.y, vario - Half(threshold));
+    ls.Update(flat.x, flat.y, vario - threshold / 2);
   }
 
   if (vario < 0)

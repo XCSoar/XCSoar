@@ -187,7 +187,7 @@ CirclingWind::CalcWind()
   }
 
   // attempt to fit cycloid
-  const auto mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
+  const auto mag = (samples[jmax].vector.norm - samples[jmin].vector.norm) / 2;
   if (mag >= 30)
     // limit to reasonable values (60 knots), reject otherwise
     return Result(0);
