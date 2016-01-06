@@ -70,10 +70,6 @@ public:
   const Label *end() const {
     return labels.end();
   }
-
-  const Label &operator[](unsigned i) const {
-    return labels[i];
-  }
 };
 
 #endif
