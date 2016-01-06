@@ -58,8 +58,7 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
   const GlideResult &solution =
       calculated.task_stats.current_leg.solution_remaining;
 
-  if (!solution.IsOk() ||
-      solution.vector.distance < fixed(0.010))
+  if (!solution.IsOk() || solution.vector.distance < 0.01)
     return;
 
   BestCruiseArrowRenderer::Draw(canvas, look, screen_angle,

@@ -32,17 +32,17 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 static void
-DrawArrow(Canvas &canvas, RasterPoint point, const fixed mag, const Angle angle)
+DrawArrow(Canvas &canvas, RasterPoint point, const double mag, const Angle angle)
 {
   const FastRotation r(angle);
 
-  auto p = r.Rotate(mag, fixed(0));
+  auto p = r.Rotate(mag, 0);
   canvas.DrawLine(point, point + RasterPoint((int)p.x, (int)p.y));
 
-  p = r.Rotate(mag - fixed(5), fixed(-3));
+  p = r.Rotate(mag - 5, -3);
   canvas.DrawLine(point, point + RasterPoint((int)p.x, (int)p.y));
 
-  p = r.Rotate(mag - fixed(5), fixed(3));
+  p = r.Rotate(mag - 5, 3);
   canvas.DrawLine(point, point + RasterPoint((int)p.x, (int)p.y));
 }
 
@@ -62,7 +62,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
-  if (height <= fixed(10)) {
+  if (height <= 10) {
     chart.DrawNoData();
     return;
   }
@@ -79,15 +79,15 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   }
 
   chart.ScaleXFromData(windstats_mag);
-  chart.ScaleXFromValue(fixed(0));
-  chart.ScaleXFromValue(fixed(10));
+  chart.ScaleXFromValue(0);
+  chart.ScaleXFromValue(10);
 
   chart.ScaleYFromData(windstats_mag);
 
-  chart.DrawXGrid(Units::ToSysSpeed(fixed(5)),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(5), true);
-  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                  ChartLook::STYLE_THINDASHPAPER, fixed(1000), true);
+  chart.DrawXGrid(Units::ToSysSpeed(5),
+                  ChartLook::STYLE_THINDASHPAPER, 5, true);
+  chart.DrawYGrid(Units::ToSysAltitude(1000),
+                  ChartLook::STYLE_THINDASHPAPER, 1000, true);
   chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_MEDIUMBLACK);
 
 #define WINDVECTORMAG 25
@@ -98,17 +98,17 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   // draw direction vectors
   const auto x_max = std::max(windstats_mag.GetMaxX(),
-                              fixed(1)); // prevent /0 problems
-  fixed hfact;
+                              1.); // prevent /0 problems
+  double hfact;
   for (unsigned i = 0; i < numsteps; i++) {
-    hfact = fixed(i + 1) / (numsteps + 1);
+    hfact = double(i + 1) / (numsteps + 1);
     auto h = height * hfact + fs.altitude_base.GetMinY();
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
     wind.x /= x_max;
     wind.y /= x_max;
     auto mag = wind.Magnitude();
-    if (negative(mag))
+    if (mag < 0)
       continue;
 
     Angle angle = Angle::FromXY(wind.y, -wind.x);

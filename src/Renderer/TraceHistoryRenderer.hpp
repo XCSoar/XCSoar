@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef TRACE_HISTORY_RENDERER_HPP
 #define TRACE_HISTORY_RENDERER_HPP
 
-#include "Math/fixed.hpp"
-
 struct PixelRect;
 struct TraceHistoryLook;
 struct VarioLook;
@@ -49,7 +47,7 @@ public:
                    const PixelRect rc,
                    const TraceVariableHistory& var,
                    const bool centered = false,
-                   const fixed mc=fixed(0)) const;
+                   const double mc=0) const;
 
 private:
   void ScaleChart(ChartRenderer &chart,

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LIST_RENDERER_HPP
 #define XCSOAR_WAYPOINT_LIST_RENDERER_HPP
 
-#include "Math/fixed.hpp"
-
 class Canvas;
 class TwoTextRowsRenderer;
 struct PixelRect;
@@ -48,7 +46,7 @@ namespace WaypointListRenderer
             const WaypointRendererSettings &settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
-            fixed distance, fixed arrival_altitude,
+            double distance, double arrival_altitude,
             const TwoTextRowsRenderer &row_renderer,
             const WaypointLook &look,
             const WaypointRendererSettings &settings);

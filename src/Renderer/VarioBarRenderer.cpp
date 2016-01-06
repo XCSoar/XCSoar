@@ -72,7 +72,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
    * area). size_divisor is used to introduce a screen size dependent scaling.
    * That workaround is an ugly hack and needs a rework. */
   const auto size_divisor =
-    std::max((fixed) Layout::Scale(70 / (rc.bottom - rc.top)), fixed(0.15));
+    std::max((double) Layout::Scale(70 / (rc.bottom - rc.top)), 0.15);
 
   PixelScalar dy_variobar = 0;
   PixelScalar dy_variobar_av = 0;
@@ -91,15 +91,15 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   auto vario_avg = calculated.average;
 
   // cut vario_gross at +- 5 meters/s
-  if (vario_gross > fixed(5))
-    vario_gross = fixed(5);
-  if (vario_gross < fixed(-5))
-    vario_gross = fixed(-5);
+  if (vario_gross > 5)
+    vario_gross = 5;
+  if (vario_gross < -5)
+    vario_gross = -5;
 
   int Offset = (int)(vario_gross / size_divisor);
 
   Offset = Layout::Scale(Offset);
-  if (!positive(vario_gross)) {
+  if (vario_gross <= 0) {
     VarioBar[1].y = Layout::Scale(9);
     dy_variobar = text_size.cy + 2;
   } else {
@@ -113,15 +113,15 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   }
 
   // cut vario_avg at +- 5 meters/s
-  if (vario_avg > fixed(5))
-    vario_avg = fixed(5);
-  if (vario_avg < fixed(-5))
-    vario_avg = fixed(-5);
+  if (vario_avg > 5)
+    vario_avg = 5;
+  if (vario_avg < -5)
+    vario_avg = -5;
 
   int OffsetAvg = int(vario_avg / size_divisor);
 
   OffsetAvg = Layout::Scale(OffsetAvg);
-  if (!positive(vario_avg)) {
+  if (vario_avg <= 0) {
     VarioBarAvg[1].y = Layout::Scale(9);
     dy_variobar_av = text_size.cy + 2;
   } else {
@@ -136,9 +136,9 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   //clip MC Value
   auto mc_val = glide_polar.GetMC();
-  if (mc_val > fixed(5))
-    mc_val = fixed(5);
-  if (!positive(mc_val)) {
+  if (mc_val > 5)
+    mc_val = 5;
+  if (mc_val <= 0) {
     dy_variobar_mc = text_size.cy + 2;
   }else{
     dy_variobar_mc = -1;
@@ -186,7 +186,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   }
 
   // draw actual vario bar
-  if (!positive(vario_gross)) {
+  if (vario_gross <= 0) {
     canvas.Select(look.pen_sink);
     canvas.Select(look.brush_sink);
   } else {
@@ -197,11 +197,11 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.DrawPolygon(VarioBar, 6);
 
   // draw clipping arrow
-  if (vario_gross <= fixed(-5) || vario_gross >= fixed(5))
+  if (vario_gross <= -5 || vario_gross >= 5)
     canvas.DrawPolygon(clipping_arrow, 6);
 
   // draw avg vario bar
-  if (!positive(vario_avg) && vario_bar_avg_enabled) {
+  if (vario_avg <= 0 && vario_bar_avg_enabled) {
       canvas.Select(look.pen_sink);
       canvas.Select(look.brush_sink_avg);
   } else {
@@ -211,7 +211,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   canvas.DrawPolygon(VarioBarAvg, 4);
 
-  if (vario_avg <= fixed(-5.0) || vario_avg >= fixed(5.0))
+  if (vario_avg <= -5.0 || vario_avg >= 5.0)
       canvas.DrawPolygon(clipping_arrow_av, 4);
 
   //draw MC arrow

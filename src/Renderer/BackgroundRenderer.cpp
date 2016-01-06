@@ -104,7 +104,7 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
 {
   if (settings.slope_shading == SlopeShading::WIND &&
       calculated.wind_available &&
-      calculated.wind.norm >= fixed(0.5))
+      calculated.wind.norm >= 0.5)
     SetShadingAngle(projection, calculated.wind.bearing);
 
   else if (settings.slope_shading == SlopeShading::SUN &&

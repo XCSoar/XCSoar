@@ -63,47 +63,47 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
  */
 gcc_const
 static unsigned
-GetSnailColorIndex(fixed vario, fixed min_vario, fixed max_vario)
+GetSnailColorIndex(double vario, double min_vario, double max_vario)
 {
-  auto cv = negative(vario) ? -vario / min_vario : vario / max_vario;
+  auto cv = vario < 0 ? -vario / min_vario : vario / max_vario;
 
-  return Clamp((int)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS),
+  return Clamp((int)((cv + 1) / 2 * TrailLook::NUMSNAILCOLORS),
                0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
 gcc_const
 static unsigned
-GetAltitudeColorIndex(fixed alt, fixed min_alt, fixed max_alt)
+GetAltitudeColorIndex(double alt, double min_alt, double max_alt)
 {
   auto relative_altitude = (alt - min_alt) / (max_alt - min_alt);
   int _max = TrailLook::NUMSNAILCOLORS - 1;
   return Clamp((int)(relative_altitude * _max), 0, _max);
 }
 
-static std::pair<fixed, fixed>
+static std::pair<double, double>
 GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
 {
-  fixed value_min, value_max;
+  double value_min, value_max;
 
   if (type == TrailSettings::Type::ALTITUDE) {
-    value_max = fixed(1000);
-    value_min = fixed(500);
+    value_max = 1000;
+    value_min = 500;
 
     for (auto it = trace.begin(); it != trace.end(); ++it) {
       value_max = std::max(it->GetAltitude(), value_max);
       value_min = std::min(it->GetAltitude(), value_min);
     }
   } else {
-    value_max = fixed(0.75);
-    value_min = fixed(-2.0);
+    value_max = 0.75;
+    value_min = -2.0;
 
     for (auto it = trace.begin(); it != trace.end(); ++it) {
       value_max = std::max(it->GetVario(), value_max);
       value_min = std::min(it->GetVario(), value_min);
     }
 
-    value_max = std::min(fixed(7.5), value_max);
-    value_min = std::max(fixed(-5.0), value_min);
+    value_max = std::min(7.5, value_max);
+    value_min = std::max(-5.0, value_min);
   }
 
   return std::make_pair(value_min, value_max);
@@ -138,9 +138,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   auto value_max = minmax.second;
 
   bool scaled_trail = settings.scaling_enabled &&
-                      projection.GetMapScale() <= fixed(6000);
+                      projection.GetMapScale() <= 6000;
 
-  const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed(4));
+  const GeoBounds bounds = projection.GetScreenBounds().Scale(4);
 
   RasterPoint last_point = RasterPoint(0, 0);
   bool last_valid = false;
@@ -166,7 +166,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       } else {
         unsigned color_index = GetSnailColorIndex(it->GetVario(),
                                                   value_min, value_max);
-        if (negative(it->GetVario()) &&
+        if (it->GetVario() < 0 &&
             (settings.type == TrailSettings::Type::VARIO_1_DOTS ||
              settings.type == TrailSettings::Type::VARIO_2_DOTS ||
              settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES)) {

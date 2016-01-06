@@ -72,7 +72,7 @@ TrackLineRenderer::Draw(Canvas &canvas,
     return;
 
   if (settings.display_ground_track == DisplayGroundTrack::AUTO &&
-      (basic.track - basic.attitude.heading).AsDelta().AbsoluteDegrees() < fixed(5))
+      (basic.track - basic.attitude.heading).AsDelta().AbsoluteDegrees() < 5)
     return;
 
   TrackLineRenderer::Draw(canvas, projection.GetScreenAngle(), basic.track, pos);
@@ -86,7 +86,7 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
                                  const MapSettings &settings,
                                  bool wind_relative)
 {
-  // projection.GetMapScale() <= fixed(6000);
+  // projection.GetMapScale() <= 6000;
 
   GeoPoint traildrift;
 
@@ -96,7 +96,7 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
                                          calculated.wind.norm);
     traildrift = basic.location - tp1;
   } else {
-    traildrift = GeoPoint(Angle::Native(fixed(0)),Angle::Native(fixed(0)));
+    traildrift = GeoPoint(Angle::Zero(), Angle::Zero());
   }
 
   auto dt = ARC_SWEEP/ARC_STEPS/

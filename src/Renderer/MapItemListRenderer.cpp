@@ -153,7 +153,7 @@ Draw(Canvas &canvas, PixelRect rc,
   }
 
   buffer.AppendFormat(_T("%s %s"),
-                      FormatUserAltitude(fixed(item.reach.direct)).c_str(),
+                      FormatUserAltitude(item.reach.direct).c_str(),
                       _("MSL"));
 
   // Draw title row
@@ -176,7 +176,7 @@ Draw(Canvas &canvas, PixelRect rc,
     }
 
     buffer.AppendFormat(_T("%s %s, "),
-                        FormatUserAltitude(fixed(item.reach.terrain)).c_str(),
+                        FormatUserAltitude(item.reach.terrain).c_str(),
                         _("MSL"));
   } else if (item.HasElevation() &&
              item.reach.direct >= item.elevation &&
@@ -388,7 +388,7 @@ Draw(Canvas &canvas, PixelRect rc,
  */
 gcc_const
 static unsigned
-SinceInMinutes(fixed now_s, uint32_t past_ms)
+SinceInMinutes(double now_s, uint32_t past_ms)
 {
   const unsigned day_minutes = 24 * 60;
   unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;

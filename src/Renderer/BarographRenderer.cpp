@@ -100,7 +100,7 @@ DrawLegs(ChartRenderer &chart,
       continue;
 
     auto x = tp.GetEnteredState().time - start_time;
-    if (!negative(x)) {
+    if (x >= 0) {
       x /= 3600;
       chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
                      ChartLook::STYLE_REDTHICK);
@@ -128,7 +128,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleXFromData(fs.altitude);
   chart.ScaleYFromData(fs.altitude);
-  chart.ScaleYFromValue(fixed(0));
+  chart.ScaleYFromValue(0);
 
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);

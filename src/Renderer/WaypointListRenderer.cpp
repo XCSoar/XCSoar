@@ -117,8 +117,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
-                           const Waypoint &waypoint, fixed distance,
-                           fixed arrival_altitude,
+                           const Waypoint &waypoint, double distance,
+                           double arrival_altitude,
                            const TwoTextRowsRenderer &row_renderer,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
@@ -130,9 +130,9 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
 
-  WaypointIconRenderer::Reachability reachable =
-      positive(arrival_altitude) ?
-      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
+  WaypointIconRenderer::Reachability reachable = arrival_altitude > 0
+    ? WaypointIconRenderer::ReachableTerrain
+    : WaypointIconRenderer::Unreachable;
 
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt, reachable);

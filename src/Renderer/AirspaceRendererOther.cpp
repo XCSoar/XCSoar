@@ -161,7 +161,7 @@ public:
                           const AirspaceLook &_look,
                           const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().Scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(1.1)),
      look(_look), settings(_settings)
   {
     if (settings.black_outline)

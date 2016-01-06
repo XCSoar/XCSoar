@@ -115,7 +115,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   // don't bother drawing it if not significant
-  if (calculated.wind.norm < fixed(1))
+  if (calculated.wind.norm < 1)
     return;
 
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,

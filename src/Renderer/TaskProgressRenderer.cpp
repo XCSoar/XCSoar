@@ -40,13 +40,13 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
 
-  const Angle sweep = Angle::FullCircle() * fixed(0.97);
+  const Angle sweep = Angle::FullCircle() * 0.97;
 
-  if (summary.p_remaining < fixed(0.99)) {
+  if (summary.p_remaining < 0.99) {
     canvas.Select(look.hbGray);
     canvas.SelectNullPen();
     canvas.DrawSegment(center.x, center.y, radius, Angle::Zero(),
-                       sweep * (fixed(1) -  summary.p_remaining));
+                       sweep * (1 -  summary.p_remaining));
   }
 
   const Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);

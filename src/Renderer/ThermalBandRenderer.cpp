@@ -42,11 +42,11 @@ ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,
                                  const ComputerSettings &settings_computer,
                                  ChartRenderer &chart) const
 {
-  chart.ScaleYFromValue(fixed(0));
+  chart.ScaleYFromValue(0);
   chart.ScaleYFromValue(calculated.thermal_band.max_thermal_height);
 
-  chart.ScaleXFromValue(fixed(0));
-  chart.ScaleXFromValue(fixed(0.5));
+  chart.ScaleXFromValue(0);
+  chart.ScaleXFromValue(0.5);
   chart.ScaleXFromValue(settings_computer.polar.glide_polar_task.GetMC());
 }
 
@@ -66,21 +66,21 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   auto hoffset = task_props.route_planner.safety_height_terrain +
     calculated.GetTerrainBaseFallback();
 
-  fixed h = fixed(0);
+  double h = 0;
   if (basic.NavAltitudeAvailable()) {
     h = basic.nav_altitude - hoffset;
     chart.ScaleYFromValue(h);
   }
 
   bool draw_start_height = false;
-  fixed hstart = fixed(0);
+  double hstart = 0;
 
   draw_start_height = ordered_props
     && calculated.ordered_task_stats.task_valid
     && ordered_props->start_constraints.max_height != 0
     && calculated.terrain_valid;
   if (draw_start_height) {
-    hstart = fixed(ordered_props->start_constraints.max_height);
+    hstart = ordered_props->start_constraints.max_height;
     if (ordered_props->start_constraints.max_height_ref == AltitudeReference::AGL &&
         calculated.terrain_valid)
       hstart += calculated.terrain_altitude;
@@ -90,22 +90,22 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 
   // no thermalling has been done above safety height
-  if (!positive(calculated.thermal_band.max_thermal_height))
+  if (calculated.thermal_band.max_thermal_height <= 0)
     return;
 
   // calculate averages
   int numtherm = 0;
 
-  fixed Wmax = fixed(0);
-  fixed Wav = fixed(0);
-  fixed Wt[ThermalBandInfo::N_BUCKETS];
-  fixed ht[ThermalBandInfo::N_BUCKETS];
+  double Wmax = 0;
+  double Wav = 0;
+  double Wt[ThermalBandInfo::N_BUCKETS];
+  double ht[ThermalBandInfo::N_BUCKETS];
 
   for (unsigned i = 0; i < ThermalBandInfo::N_BUCKETS; ++i) {
     if (thermal_band.thermal_profile_n[i] < 6) 
       continue;
 
-    if (positive(thermal_band.thermal_profile_w[i])) {
+    if (thermal_band.thermal_profile_w[i] > 0) {
       // height of this thermal point [0,mth]
       // requires 5 items in bucket before displaying, to eliminate kinks
       auto wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
@@ -120,7 +120,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   chart.ScaleXFromValue(Wmax);
   if (!numtherm)
     return;
-  chart.ScaleXFromValue(fixed(1.5)*Wav/numtherm);
+  chart.ScaleXFromValue(1.5 * Wav / numtherm);
 
   if ((!draw_start_height) && (numtherm<=1))
     // don't display if insufficient statistics
@@ -131,7 +131,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
   // position of thermal band
   if (numtherm > 1) {
-    std::vector< std::pair<fixed, fixed> > thermal_profile;
+    std::vector<std::pair<double, double>> thermal_profile;
     thermal_profile.reserve(numtherm);
     for (int i = 0; i < numtherm; ++i)
       thermal_profile.emplace_back(Wt[i], ht[i]);
@@ -149,7 +149,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   if (basic.NavAltitudeAvailable()) {
     const Pen &pen = is_infobox && look.inverse
       ? look.white_pen : look.black_pen;
-    chart.DrawLine(fixed(0), h,
+    chart.DrawLine(0, h,
                    settings_computer.polar.glide_polar_task.GetMC(), h, pen);
 
     if (is_infobox && look.inverse)
@@ -181,11 +181,11 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                    chart, task_props, false, ordered_props);
 
   if (!is_map) {
-    chart.DrawXGrid(Units::ToSysVSpeed(fixed(1)),
-                    ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
-    chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
+    chart.DrawXGrid(Units::ToSysVSpeed(1),
+                    ChartLook::STYLE_THINDASHPAPER, 1, true);
+    chart.DrawYGrid(Units::ToSysAltitude(1000),
                     ChartLook::STYLE_THINDASHPAPER,
-                    fixed(1000), true);
+                    1000, true);
     chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());
     chart.DrawYLabel(_T("h AGL"), Units::GetAltitudeName());
   }

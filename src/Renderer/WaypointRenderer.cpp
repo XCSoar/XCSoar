@@ -91,7 +91,7 @@ struct VisibleWaypoint {
       return;
 
     reach.direct = result.pure_glide_altitude_difference;
-    if (positive(result.pure_glide_altitude_difference))
+    if (result.pure_glide_altitude_difference > 0)
       reachable = WaypointRenderer::ReachableTerrain;
   }
 
@@ -226,7 +226,7 @@ protected:
       const auto safety_height = task_behaviour.safety_height_arrival;
       const auto target_altitude = way_point.elevation + safety_height;
       const auto delta_h = basic.nav_altitude - target_altitude;
-      if (!positive(delta_h))
+      if (delta_h <= 0)
         /* no L/D if below waypoint */
         return;
 
@@ -252,8 +252,8 @@ protected:
       return;
 
     size_t length = _tcslen(buffer);
-    int uah_glide = (int)Units::ToUserAltitude(fixed(reach.direct));
-    int uah_terrain = (int)Units::ToUserAltitude(fixed(reach.terrain));
+    int uah_glide = (int)Units::ToUserAltitude(reach.direct);
+    int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
 
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN) {
       if (reach.IsReachableTerrain()) {
@@ -285,7 +285,7 @@ protected:
     bool watchedWaypoint = way_point.flags.watched;
 
     vwp.DrawSymbol(settings, look, canvas,
-                   projection.GetMapScale() > fixed(4000),
+                   projection.GetMapScale() > 4000,
                    projection.GetScreenAngle());
 
     // Determine whether to draw the waypoint label or not

@@ -40,17 +40,17 @@ TraceHistoryRenderer::ScaleChart(ChartRenderer &chart,
 {
   chart.padding_bottom = 0;
   chart.padding_left = 0;
-  chart.ScaleXFromValue(fixed(0));
-  chart.ScaleXFromValue(fixed(var.capacity()-1));
+  chart.ScaleXFromValue(0);
+  chart.ScaleXFromValue(var.capacity() - 1);
 
-  fixed vmin = fixed(0);
-  fixed vmax = fixed(0);
+  double vmin = 0;
+  double vmax = 0;
   for (auto it = var.begin(); it != var.end(); ++it) {
     vmin = std::min(*it, vmin);
     vmax = std::max(*it, vmax);
   }
   if (!(vmax>vmin)) {
-    vmax += fixed(1);
+    vmax += 1;
   }
   if (centered) {
     vmax = std::max(vmax, -vmin);
@@ -64,8 +64,8 @@ void
 TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
-  chart.DrawLine(fixed(0), fixed(0), 
-                 fixed(var.capacity()-1), fixed(0), 
+  chart.DrawLine(0, 0,
+                 var.capacity() - 1, 0,
                  look.axis_pen);
 }
 
@@ -73,27 +73,27 @@ void
 TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
 {
-  fixed x_last(fixed(0)), y_last(fixed(0));
+  double x_last(0), y_last(0);
   unsigned i=0;
   for (auto it = var.begin(); it != var.end(); ++it, ++i) {
-    fixed x= fixed(i);
-    fixed y= *it;
+    double x = i;
+    double y = *it;
     if (i) {
       if (y * y_last < 0) {
-        if (positive(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed(0.5), fixed(0),
+        if (y_last > 0)
+          chart.DrawFilledLine(x_last, y_last, x_last + 0.5, 0,
                                vario_look.lift_brush);
-        else if (negative(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed(0.5), fixed(0),
+        else if (y_last < 0)
+          chart.DrawFilledLine(x_last, y_last, x_last + 0.5, 0,
                                vario_look.sink_brush);
 
-        x_last = x-fixed(0.5);
-        y_last = fixed(0);
+        x_last = x - 0.5;
+        y_last = 0;
 
       }
-      if (positive(y) || positive(y_last))
+      if (y > 0 || y_last > 0)
         chart.DrawFilledLine(x_last, y_last, x, y, vario_look.lift_brush);
-      else if (negative(y) || negative(y_last))
+      else if (y < 0 || y_last < 0)
         chart.DrawFilledLine(x_last, y_last, x, y, vario_look.sink_brush);
     }
     x_last = x;
@@ -111,16 +111,16 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const PixelRect rc,
                                   const TraceVariableHistory& var,
                                   const bool centered,
-                                  const fixed mc) const
+                                  const double mc) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
   ScaleChart(chart, var, centered);
   chart.ScaleYFromValue(mc);
 
-  if (positive(mc)) {
+  if (mc > 0) {
     canvas.SetBackgroundTransparent();
-    chart.DrawLine(fixed(0), mc, 
-                   fixed(var.capacity()-1), mc, 
+    chart.DrawLine(0, mc,
+                   var.capacity() - 1, mc,
                    ChartLook::STYLE_DASHGREEN);
   }
 
