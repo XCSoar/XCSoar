@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/OpenGL/Extension.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
+#include "Function.hpp"
 #include "Dynamic.hpp"
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
@@ -55,7 +56,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
-#include <dlfcn.h>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -254,9 +254,9 @@ OpenGL::SetupContext()
 #ifdef HAVE_DYNAMIC_MAPBUFFER
   if (mapbuffer) {
     GLExt::map_buffer = (PFNGLMAPBUFFEROESPROC)
-      eglGetProcAddress("glMapBufferOES");
+      GetProcAddress("glMapBufferOES");
     GLExt::unmap_buffer = (PFNGLUNMAPBUFFEROESPROC)
-      eglGetProcAddress("glUnmapBufferOES");
+      GetProcAddress("glUnmapBufferOES");
     if (GLExt::map_buffer == nullptr || GLExt::unmap_buffer == nullptr)
       mapbuffer = false;
   }
@@ -265,9 +265,9 @@ OpenGL::SetupContext()
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   if (IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
     GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
-      dlsym(RTLD_DEFAULT, "glMultiDrawArraysEXT");
+      GetProcAddress("glMultiDrawArraysEXT");
     GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)
-      dlsym(RTLD_DEFAULT, "glMultiDrawElementsEXT");
+      GetProcAddress("glMultiDrawElementsEXT");
   } else {
     GLExt::multi_draw_arrays = nullptr;
     GLExt::multi_draw_elements = nullptr;
