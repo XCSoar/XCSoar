@@ -49,7 +49,6 @@ public:
 
 protected:
   UPixelScalar width, height;
-  PixelRect bounds;
 
   StaticArray<Label, 128u> labels;
 
