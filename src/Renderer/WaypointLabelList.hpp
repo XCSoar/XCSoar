@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LABEL_LIST_HPP
 #define XCSOAR_WAYPOINT_LABEL_LIST_HPP
 
-#include "Rough/RoughAltitude.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
@@ -39,7 +38,7 @@ public:
     TCHAR Name[NAME_SIZE+1];
     RasterPoint Pos;
     TextInBoxMode Mode;
-    RoughAltitude AltArivalAGL;
+    int AltArivalAGL;
     bool inTask;
     bool isLandable;
     bool isAirport;
@@ -58,7 +57,7 @@ public:
 
   void Add(const TCHAR *name, int x, int y,
            TextInBoxMode Mode, bool bold,
-           RoughAltitude AltArivalAGL,
+           int AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,
            bool isWatchedWaypoint);
   void Sort();
