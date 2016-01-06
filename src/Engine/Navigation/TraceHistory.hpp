@@ -24,11 +24,10 @@ Copyright_License {
 #define TRACEHISTORY_HPP
 
 #include "Util/OverwritingRingBuffer.hpp"
-#include "Math/fixed.hpp"
 
 #include <type_traits>
 
-class TraceVariableHistory: public TrivialOverwritingRingBuffer<fixed, 30> {};
+class TraceVariableHistory: public TrivialOverwritingRingBuffer<double, 30> {};
 
 struct MoreData;
 

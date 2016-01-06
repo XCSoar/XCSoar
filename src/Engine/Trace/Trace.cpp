@@ -428,7 +428,7 @@ Trace::SyncPoints(TracePointerVector &v) const
 
 void
 Trace::GetPoints(TracePointVector &v, unsigned min_time,
-                 const GeoPoint &location, fixed min_distance) const
+                 const GeoPoint &location, double min_distance) const
 {
   /* skip the trace points that are before min_time */
   Trace::const_iterator i = begin(), end = this->end();

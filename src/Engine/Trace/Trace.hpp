@@ -317,11 +317,11 @@ public:
    */
   void clear();
 
-  void EraseEarlierThan(fixed time) {
+  void EraseEarlierThan(double time) {
     EraseEarlierThan((unsigned)time);
   }
 
-  void EraseLaterThan(fixed time) {
+  void EraseLaterThan(double time) {
     EraseLaterThan((unsigned)time);
   }
 
@@ -395,7 +395,7 @@ public:
    * resolution #min_distance.
    */
   void GetPoints(TracePointVector &v, unsigned min_time,
-                 const GeoPoint &location, fixed resolution) const;
+                 const GeoPoint &location, double resolution) const;
 
   const TracePoint &front() const {
     assert(!empty());
@@ -519,7 +519,7 @@ public:
   }
 
   gcc_pure
-  unsigned ProjectRange(const GeoPoint &location, fixed distance) const {
+  unsigned ProjectRange(const GeoPoint &location, double distance) const {
     return task_projection.ProjectRangeInteger(location, distance);
   }
 };

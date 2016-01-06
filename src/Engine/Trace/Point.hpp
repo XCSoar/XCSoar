@@ -127,12 +127,12 @@ public:
     return time - previous.time;
   }
 
-  fixed CalculateDrift(fixed now) const {
-    const auto dt = now - fixed(time);
+  double CalculateDrift(double now) const {
+    const double dt = now - time;
     return dt * drift_factor / 256;
   }
 
-  fixed GetAltitude() const {
+  double GetAltitude() const {
     return altitude;
   }
 
@@ -148,7 +148,7 @@ public:
     return (int)altitude;
   }
 
-  fixed GetVario() const {
+  double GetVario() const {
     return vario;
   }
 };
