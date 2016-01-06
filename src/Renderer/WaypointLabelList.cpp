@@ -27,7 +27,7 @@ Copyright_License {
 
 #include <algorithm>
 
-static constexpr PixelScalar WPCIRCLESIZE = 2;
+static constexpr int WPCIRCLESIZE = 2;
 
 gcc_pure
 static bool
@@ -68,15 +68,13 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
 }
 
 void
-WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
+WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
                        TextInBoxMode Mode, bool bold,
                        RoughAltitude AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
-  if ((X < - WPCIRCLESIZE)
-      || X > PixelScalar(width + (WPCIRCLESIZE * 3))
-      || (Y < - WPCIRCLESIZE)
-      || Y > PixelScalar(height + WPCIRCLESIZE))
+  if (X < - WPCIRCLESIZE || X > (int)width + WPCIRCLESIZE * 3 ||
+      Y < - WPCIRCLESIZE || Y > (int)height + WPCIRCLESIZE)
     return;
 
   if (labels.full())

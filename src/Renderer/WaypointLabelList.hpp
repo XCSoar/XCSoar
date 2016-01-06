@@ -48,15 +48,15 @@ public:
   };
 
 protected:
-  UPixelScalar width, height;
+  const unsigned width, height;
 
   StaticArray<Label, 128u> labels;
 
 public:
-  WaypointLabelList(UPixelScalar _width, UPixelScalar _height)
+  WaypointLabelList(unsigned _width, unsigned _height)
     :width(_width), height(_height) {}
 
-  void Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
+  void Add(const TCHAR *name, int x, int y,
            TextInBoxMode Mode, bool bold,
            RoughAltitude AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,
