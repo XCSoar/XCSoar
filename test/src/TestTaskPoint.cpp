@@ -32,7 +32,7 @@ public:
   DummyTaskPoint(TaskPointType _type, const GeoPoint &_location)
     :TaskPoint(_type, _location) {}
 
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+  GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
     return GeoVector();
   }
 

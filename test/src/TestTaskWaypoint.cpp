@@ -32,7 +32,7 @@ public:
   DummyTaskWaypoint(TaskPointType _type, WaypointPtr &&wp)
     :TaskWaypoint(_type, std::move(wp)) {}
 
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+  GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
     return GeoVector();
   }
 
