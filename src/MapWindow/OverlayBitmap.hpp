@@ -41,23 +41,42 @@ class WindowProjection;
 class MapOverlayBitmap {
   Bitmap bitmap;
 
+  /**
+   * The geo reference for #bitmap.
+   */
   GeoQuadrilateral bounds;
 
+  /**
+   * The smallest rectangle that contains #bounds, for fast visibility
+   * checking in Draw().
+   */
   GeoBounds simple_bounds;
 
   float alpha = 1;
 
 public:
+  /**
+   * Load a GeoTIFF file.
+   */
   MapOverlayBitmap(Path path) throw(std::runtime_error);
 
+  /**
+   * Move an existing #Bitmap with a geo reference.
+   */
   MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds) noexcept
     :bitmap(std::move(_bitmap)), bounds(_bounds),
      simple_bounds(bounds.GetBounds()) {}
 
+  /**
+   * Apply a constant alpha value.
+   */
   void SetAlpha(float _alpha) {
     alpha = _alpha;
   }
 
+  /**
+   * Draw the bitmap to the given #Canvas.
+   */
   void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
 };
 
