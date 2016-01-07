@@ -10,7 +10,6 @@ EGL ?= y
 else ifneq ($(HAVE_WIN32)$(TARGET_IS_DARWIN)$(TARGET_IS_KOBO),nnn)
 # Windows uses GDI
 # Mac OS X and iOS use SDL
-# Android uses Java-EGL
 # Kobo uses software renderer on /dev/fb0
 EGL = n
 else ifeq ($(OPENGL),n)
@@ -22,6 +21,9 @@ EGL = n
 else ifeq ($(USE_SDL2),y)
 # no EGL if SDL was enabled explicitly
 EGL = n
+else ifeq ($(TARGET),ANDROID)
+# Android uses Java-EGL
+EGL ?= n
 else ifeq ($(GLES),y)
 # use EGL if GLES1 was chosen explicitly
 EGL = y
