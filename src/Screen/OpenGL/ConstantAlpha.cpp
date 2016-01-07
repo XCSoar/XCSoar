@@ -24,12 +24,19 @@ Copyright_License {
 #include "ConstantAlpha.hpp"
 #include "System.hpp"
 
-#ifndef USE_GLSL
+#ifdef USE_GLSL
+#include "Shaders.hpp"
+#include "Program.hpp"
+#else
 #include "Compatibility.hpp"
 #endif
 
 ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
 {
+#ifdef USE_GLSL
+  OpenGL::texture_shader->Use();
+#endif
+
   if (alpha >= 1.0f) {
     /* opaque: use plain GL_REPLACE, avoid the alpha blending
        overhead */
@@ -80,4 +87,9 @@ ScopeTextureConstantAlpha::~ScopeTextureConstantAlpha()
 {
   if (enabled)
     glDisable(GL_BLEND);
+
+#ifdef USE_GLSL
+  /* restore default shader */
+  OpenGL::solid_shader->Use();
+#endif
 }

@@ -34,11 +34,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Util/StaticArray.hxx"
 
-#ifdef USE_GLSL
-#include "Screen/OpenGL/Shaders.hpp"
-#include "Screen/OpenGL/Program.hpp"
-#endif
-
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/multi/geometries/multi_polygon.hpp>
@@ -152,7 +147,6 @@ MapOverlayBitmap::Draw(Canvas &canvas,
   const ScopeTextureConstantAlpha blend(alpha);
 
 #ifdef USE_GLSL
-  OpenGL::texture_shader->Use();
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
@@ -187,7 +181,6 @@ MapOverlayBitmap::Draw(Canvas &canvas,
 
 #ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  OpenGL::solid_shader->Use();
 #else
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 #endif
