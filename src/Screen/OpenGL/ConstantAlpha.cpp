@@ -32,12 +32,13 @@ Copyright_License {
 #endif
 
 ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
+  :enabled(alpha < 1.0f)
 {
 #ifdef USE_GLSL
   OpenGL::texture_shader->Use();
 #endif
 
-  if (alpha >= 1.0f) {
+  if (!enabled) {
     /* opaque: use plain GL_REPLACE, avoid the alpha blending
        overhead */
 #ifndef USE_GLSL
@@ -45,8 +46,6 @@ ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
 #endif
     return;
   }
-
-  enabled = true;
 
   glEnable(GL_BLEND);
 

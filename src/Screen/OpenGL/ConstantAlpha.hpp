@@ -28,7 +28,7 @@ Copyright_License {
  * Prepare for drawing a texture with a given constant alpha value.
  */
 class ScopeTextureConstantAlpha {
-  bool enabled = false;
+  const bool enabled;
 
 public:
   ScopeTextureConstantAlpha(float alpha);
