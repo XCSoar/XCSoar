@@ -34,7 +34,7 @@ Copyright_License {
 #include "Screen/OpenGL/VertexPointer.hpp"
 
 #ifdef USE_GLSL
-#include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Shaders.hpp"
 #include "Screen/OpenGL/Program.hpp"
 #else
 #include "Screen/OpenGL/Compatibility.hpp"
