@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Compute5r - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,44 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_SHADERS_HPP
-#define XCSOAR_SCREEN_OPENGL_SHADERS_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_ATTRIBUTE_HPP
+#define XCSOAR_SCREEN_OPENGL_ATTRIBUTE_HPP
 
 #include "System.hpp"
-#include "Attribute.hpp"
-
-class GLProgram;
 
 namespace OpenGL {
   /**
-   * A shader that draws a solid color (#Attribute::COLOR).
+   * GLSL attributes.
    */
-  extern GLProgram *solid_shader;
-  extern GLint solid_projection, solid_modelview;
-
-  /**
-   * A shader that copies the texture.
-   */
-  extern GLProgram *texture_shader;
-  extern GLint texture_projection, texture_texture;
-
-  /**
-   * A shader that copies the inverted texture.
-   */
-  extern GLProgram *invert_shader;
-  extern GLint invert_projection, invert_texture;
-
-  /**
-   * A shader that copies the texture's alpha channel, but replaces
-   * the color (#Attribute::COLOR).
-   */
-  extern GLProgram *alpha_shader;
-  extern GLint alpha_projection, alpha_texture;
-
-  void InitShaders();
-  void DeinitShaders();
-
-  void UpdateShaderProjectionMatrix();
+  namespace Attribute {
+    static constexpr GLuint TRANSLATE = 0;
+    static constexpr GLuint POSITION = 1;
+    static constexpr GLuint TEXCOORD = 2;
+    static constexpr GLuint COLOR = 3;
+  };
 };
 
 #endif

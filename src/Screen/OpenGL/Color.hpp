@@ -29,7 +29,7 @@ Copyright_License {
 #include "System.hpp"
 
 #ifdef USE_GLSL
-#include "Shaders.hpp"
+#include "Attribute.hpp"
 #endif
 
 #include <stdint.h>

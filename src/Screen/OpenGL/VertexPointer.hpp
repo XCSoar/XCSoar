@@ -28,7 +28,7 @@ Copyright_License {
 #include "Point.hpp"
 
 #ifdef USE_GLSL
-#include "Shaders.hpp"
+#include "Attribute.hpp"
 #endif
 
 struct ScopeVertexPointer {
