@@ -55,6 +55,12 @@ namespace OpenGL {
   extern GLProgram *alpha_shader;
   extern GLint alpha_projection, alpha_texture;
 
+  /**
+   * A shader that multiplies the texture with #Attribute::COLOR.
+   */
+  extern GLProgram *combine_texture_shader;
+  extern GLint combine_texture_projection, combine_texture_texture;
+
   void InitShaders();
   void DeinitShaders();
 

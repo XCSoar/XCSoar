@@ -41,6 +41,9 @@ namespace OpenGL {
 
   GLProgram *alpha_shader;
   GLint alpha_projection, alpha_texture;
+
+  GLProgram *combine_texture_shader;
+  GLint combine_texture_projection, combine_texture_texture;
 }
 
 #ifdef HAVE_GLES
@@ -116,6 +119,17 @@ static constexpr char alpha_fragment_shader[] =
   "varying vec2 texcoordvar;"
   "void main() {"
   "  gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);"
+  "}";
+
+static const char *const combine_texture_vertex_shader = texture_vertex_shader;
+static constexpr char combine_texture_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  "uniform sampler2D texture;"
+  "varying vec4 colorvar;"
+  "varying vec2 texcoordvar;"
+  "void main() {"
+  "  gl_FragColor = colorvar * texture2D(texture, texcoordvar);"
   "}";
 
 static void
@@ -218,6 +232,22 @@ OpenGL::InitShaders()
   alpha_shader->Use();
   glUniform1i(alpha_texture, 0);
 
+  combine_texture_shader = CompileProgram(combine_texture_vertex_shader,
+                                          combine_texture_fragment_shader);
+  combine_texture_shader->BindAttribLocation(Attribute::TRANSLATE, "translate");
+  combine_texture_shader->BindAttribLocation(Attribute::POSITION, "position");
+  combine_texture_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  combine_texture_shader->BindAttribLocation(Attribute::COLOR, "color");
+  LinkProgram(*combine_texture_shader);
+
+  combine_texture_projection =
+    combine_texture_shader->GetUniformLocation("projection");
+  combine_texture_texture =
+    combine_texture_shader->GetUniformLocation("texture");
+
+  combine_texture_shader->Use();
+  glUniform1i(combine_texture_texture, 0);
+
   glVertexAttrib4f(Attribute::TRANSLATE, 0, 0, 0, 0);
 }
 
@@ -245,5 +275,9 @@ OpenGL::UpdateShaderProjectionMatrix()
 
   solid_shader->Use();
   glUniformMatrix4fv(solid_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  combine_texture_shader->Use();
+  glUniformMatrix4fv(combine_texture_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
 }
