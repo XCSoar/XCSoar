@@ -94,6 +94,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Extension.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/FBO.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/ConstantAlpha.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \

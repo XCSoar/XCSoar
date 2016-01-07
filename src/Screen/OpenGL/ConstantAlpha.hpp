@@ -24,11 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CONSTANT_ALPHA_HPP
 #define XCSOAR_SCREEN_OPENGL_CONSTANT_ALPHA_HPP
 
-#include "System.hpp"
-#ifndef USE_GLSL
-#include "Compatibility.hpp"
-#endif
-
 /**
  * Prepare for drawing a texture with a given constant alpha value.
  */
@@ -36,57 +31,8 @@ class ScopeTextureConstantAlpha {
   bool enabled = false;
 
 public:
-  ScopeTextureConstantAlpha(GLclampf alpha) {
-    if (alpha >= 1.0f) {
-      /* opaque: use plain GL_REPLACE, avoid the alpha blending
-         overhead */
-#ifndef USE_GLSL
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
-      return;
-    }
-
-    enabled = true;
-
-    glEnable(GL_BLEND);
-
-#ifdef HAVE_GLES1
-    /* GLES1 doesn't support GL_CONSTANT_ALPHA; emulate it with
-       glTexEnv() */
-
-    /* configure a color with the given alpha value to be used as
-       GL_PREVIOUS by glTexEnv(); its RGB values are ignored */
-    glColor4f(0, 0, 0, alpha);
-
-    /* enable "combine" mode */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-
-    /* RGB = texture.RGB */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
-
-    /* A = glColor4f() */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_PREVIOUS);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#else
-#ifndef USE_GLSL
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
-
-    /* tell OpenGL to use our alpha value instead of the texture's */
-    glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
-    glBlendColor(0, 0, 0, alpha);
-#endif
-  }
-
-  ~ScopeTextureConstantAlpha() {
-    if (enabled)
-      glDisable(GL_BLEND);
-  }
+  ScopeTextureConstantAlpha(float alpha);
+  ~ScopeTextureConstantAlpha();
 };
 
 #endif
