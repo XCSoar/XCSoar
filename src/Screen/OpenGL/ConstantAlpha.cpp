@@ -31,6 +31,36 @@ Copyright_License {
 #include "Compatibility.hpp"
 #endif
 
+#ifdef HAVE_GLES1
+
+/**
+ * Emulate GL_CONSTANT_ALPHA on GLES1.
+ */
+static void
+EmulateConstantAlpha(float alpha)
+{
+  /* configure a color with the given alpha value to be used as
+     GL_PREVIOUS by glTexEnv(); its RGB values are ignored */
+  glColor4f(0, 0, 0, alpha);
+
+  /* enable "combine" mode */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+
+  /* RGB = texture.RGB */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+
+  /* A = glColor4f() */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_PREVIOUS);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
+
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+#endif
+
 ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
   :enabled(alpha < 1.0f)
 {
@@ -50,27 +80,7 @@ ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
   glEnable(GL_BLEND);
 
 #ifdef HAVE_GLES1
-  /* GLES1 doesn't support GL_CONSTANT_ALPHA; emulate it with
-     glTexEnv() */
-
-  /* configure a color with the given alpha value to be used as
-     GL_PREVIOUS by glTexEnv(); its RGB values are ignored */
-  glColor4f(0, 0, 0, alpha);
-
-  /* enable "combine" mode */
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-
-  /* RGB = texture.RGB */
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
-
-  /* A = glColor4f() */
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_PREVIOUS);
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
-
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  EmulateConstantAlpha(alpha);
 #else
 #ifndef USE_GLSL
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
