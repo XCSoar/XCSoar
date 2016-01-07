@@ -1,5 +1,7 @@
 Version 7.0 - not yet released
 * LUA scripting
+* user interface
+  - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
 * data files
   - optimise the terrain loader
 * devices

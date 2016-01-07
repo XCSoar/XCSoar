@@ -84,6 +84,8 @@ static constexpr StaticEnumChoice info_box_geometry_list[] = {
     N_("9 Right + Vario (Landscape)") },
   { (unsigned)InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
     N_("9 Left + Right + Vario (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO,
+    N_("12 Left + 3 Right Vario (Landscape)") },
   { (unsigned)InfoBoxSettings::Geometry::RIGHT_5,
     N_("5 Right (Square)") },
   { (unsigned)InfoBoxSettings::Geometry::BOTTOM_RIGHT_12,
