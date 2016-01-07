@@ -61,8 +61,40 @@ EmulateConstantAlpha(float alpha)
 
 #endif
 
-ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
-  :enabled(alpha < 1.0f)
+/**
+ * Combine texture alpha and constant alpha.
+ */
+static void
+CombineAlpha(float alpha)
+{
+#ifdef USE_GLSL
+  glVertexAttrib4f(OpenGL::Attribute::COLOR,
+                   1, 1, 1, alpha);
+
+  OpenGL::combine_texture_shader->Use();
+#else
+  glColor4f(0, 0, 0, alpha);
+
+  /* enable "combine" mode */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+
+  /* RGB = texture.RGB */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+
+  /* A = glColor4f() */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC1_ALPHA, GL_PREVIOUS);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_SRC_ALPHA);
+#endif
+}
+
+ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(bool use_texture_alpha,
+                                                     float alpha)
+  :enabled(use_texture_alpha || alpha < 1.0f)
 {
 #ifdef USE_GLSL
   OpenGL::texture_shader->Use();
@@ -79,17 +111,31 @@ ScopeTextureConstantAlpha::ScopeTextureConstantAlpha(float alpha)
 
   glEnable(GL_BLEND);
 
+  if (use_texture_alpha) {
+    if (alpha >= 1.0f) {
+      /* use only texture alpha */
+
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    } else {
+      /* combine texture alpha and constant alpha */
+
+      CombineAlpha(alpha);
+    }
+  } else {
+    /* use only constant alpha, ignore texture alpha */
+
 #ifdef HAVE_GLES1
-  EmulateConstantAlpha(alpha);
+    EmulateConstantAlpha(alpha);
 #else
 #ifndef USE_GLSL
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  /* tell OpenGL to use our alpha value instead of the texture's */
-  glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
-  glBlendColor(0, 0, 0, alpha);
+    /* tell OpenGL to use our alpha value instead of the texture's */
+    glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+    glBlendColor(0, 0, 0, alpha);
 #endif
+  }
 }
 
 ScopeTextureConstantAlpha::~ScopeTextureConstantAlpha()

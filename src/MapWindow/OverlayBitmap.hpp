@@ -52,6 +52,8 @@ class MapOverlayBitmap {
    */
   GeoBounds simple_bounds;
 
+  bool use_bitmap_alpha = true;
+
   float alpha = 1;
 
 public:
@@ -66,6 +68,14 @@ public:
   MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds) noexcept
     :bitmap(std::move(_bitmap)), bounds(_bounds),
      simple_bounds(bounds.GetBounds()) {}
+
+  /**
+   * By default, this class uses the bitmap's alpha channel.  This
+   * method disables the alpha channel.
+   */
+  void IgnoreBitmapAlpha() {
+    use_bitmap_alpha = false;
+  }
 
   /**
    * Apply a constant alpha value.

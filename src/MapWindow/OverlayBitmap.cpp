@@ -144,7 +144,7 @@ MapOverlayBitmap::Draw(Canvas &canvas,
 
   texture.Bind();
 
-  const ScopeTextureConstantAlpha blend(alpha);
+  const ScopeTextureConstantAlpha blend(use_bitmap_alpha, alpha);
 
 #ifdef USE_GLSL
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);

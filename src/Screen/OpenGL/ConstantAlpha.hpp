@@ -31,7 +31,7 @@ class ScopeTextureConstantAlpha {
   const bool enabled;
 
 public:
-  ScopeTextureConstantAlpha(float alpha);
+  ScopeTextureConstantAlpha(bool use_texture_alpha, float alpha);
   ~ScopeTextureConstantAlpha();
 
   ScopeTextureConstantAlpha(const ScopeTextureConstantAlpha &&) = delete;
