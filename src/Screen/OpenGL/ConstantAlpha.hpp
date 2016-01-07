@@ -33,6 +33,9 @@ class ScopeTextureConstantAlpha {
 public:
   ScopeTextureConstantAlpha(float alpha);
   ~ScopeTextureConstantAlpha();
+
+  ScopeTextureConstantAlpha(const ScopeTextureConstantAlpha &&) = delete;
+  ScopeTextureConstantAlpha &operator=(const ScopeTextureConstantAlpha &&) = delete;
 };
 
 #endif
