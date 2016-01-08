@@ -75,6 +75,11 @@ class IOLoop final {
       bool operator()(const File &a, FileDescriptor b) const {
         return a.fd.Get() < b.Get();
       }
+
+      gcc_pure
+      bool operator()(const File &a, const File &b) const {
+        return a.fd.Get() < b.fd.Get();
+      }
     };
   };
 
