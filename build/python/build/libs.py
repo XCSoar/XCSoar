@@ -8,8 +8,8 @@ from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
 boost = BoostProject(
-    'http://netcologne.dl.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.bz2',
-    '6aa9a5c6a4ca1016edd0ed1178e3cb87',
+    'http://netcologne.dl.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2',
+    '65a840e1a0b13a558ff19eeb2c4f0cbe',
     'include/boost/version.hpp',
     patches=abspath('lib/boost/patches'),
 )
