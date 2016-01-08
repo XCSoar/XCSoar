@@ -33,9 +33,11 @@ Copyright_License {
 
 class Context;
 
-// Consolidated class for handling Java objects that work with Android GPS
-// and sensor facilities. Public methods handle activation and deactivation of
-// specific sensors.
+/**
+ * Consolidated class for handling Java objects that work with Android GPS
+ * and sensor facilities. Public methods handle activation and deactivation of
+ * specific sensors.
+ */
 class InternalSensors {
   static Java::TrivialClass gps_cls, sensors_cls;
 
