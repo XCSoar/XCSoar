@@ -18,7 +18,7 @@ endif
 
 # Generates a pkg-config lookup for a library.
 #
-# Example: $(eval $(call CURL,libcurl >= 2.21))
+# Example: $(eval $(call pkg-config-library,CURL,libcurl >= 2.21))
 #
 # Arguments: PREFIX, SPEC
 #
