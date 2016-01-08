@@ -1,0 +1,242 @@
+Index: boost_1_59_0/boost/numeric/ublas/matrix.hpp
+===================================================================
+--- boost_1_59_0.orig/boost/numeric/ublas/matrix.hpp
++++ boost_1_59_0/boost/numeric/ublas/matrix.hpp
+@@ -18,9 +18,11 @@
+ #include <boost/numeric/ublas/vector.hpp>
+ #include <boost/numeric/ublas/matrix_expression.hpp>
+ #include <boost/numeric/ublas/detail/matrix_assign.hpp>
++#ifdef BOOST_UBLAS_SERIALIZATION
+ #include <boost/serialization/collection_size_type.hpp>
+ #include <boost/serialization/array.hpp>
+ #include <boost/serialization/nvp.hpp>
++#endif
+ 
+ // Iterators based on ideas of Jeremy Siek
+ 
+@@ -1156,6 +1158,7 @@ namespace boost { namespace numeric {
+             return reverse_iterator2 (begin2 ());
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+         // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -1176,6 +1179,7 @@ namespace boost { namespace numeric {
+             }
+             ar & serialization::make_nvp("data",data_);
+         }
++#endif
+ 
+     private:
+         size_type size1_;
+@@ -2238,11 +2242,13 @@ namespace boost { namespace numeric {
+             return reverse_iterator2 (begin2 ());
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+         // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+             ar & serialization::make_nvp("data",data_);
+         }
++#endif
+ 
+     private:
+         array_type data_;
+@@ -3389,6 +3395,7 @@ namespace boost { namespace numeric {
+             return reverse_iterator2 (begin2 ());
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+         // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -3409,6 +3416,7 @@ namespace boost { namespace numeric {
+             }
+             ar & serialization::make_nvp("data",data_);
+         }
++#endif
+ 
+     private:
+         size_type size1_;
+@@ -3862,6 +3870,7 @@ namespace boost { namespace numeric {
+             return rend2 ();
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+          // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -3881,6 +3890,7 @@ namespace boost { namespace numeric {
+                 size2_ = s2;
+             }
+         }
++#endif
+ 
+     private:
+         size_type size1_;
+@@ -4361,6 +4371,7 @@ namespace boost { namespace numeric {
+             return rend2 ();
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+          // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -4381,6 +4392,7 @@ namespace boost { namespace numeric {
+                 size_common_ = ((std::min)(size1_, size2_));
+             }
+         }
++#endif
+ 
+     private:
+         size_type size1_;
+@@ -4916,6 +4928,7 @@ namespace boost { namespace numeric {
+             return rend2 ();
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+          // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -4937,6 +4950,7 @@ namespace boost { namespace numeric {
+ 
+             ar & serialization::make_nvp("value", value_);
+         }
++#endif
+ 
+     private:
+         size_type size1_;
+@@ -5955,6 +5969,7 @@ namespace boost { namespace numeric {
+             return reverse_iterator2 (begin2 ());
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+          // Serialization
+         template<class Archive>
+         void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -5976,6 +5991,7 @@ namespace boost { namespace numeric {
+             // could probably use make_array( &(data[0][0]), N*M ) 
+             ar & serialization::make_array(data_, N);
+         }
++#endif
+ 
+     private:
+         size_type size1_;
+Index: boost_1_59_0/boost/numeric/ublas/vector.hpp
+===================================================================
+--- boost_1_59_0.orig/boost/numeric/ublas/vector.hpp
++++ boost_1_59_0/boost/numeric/ublas/vector.hpp
+@@ -18,11 +18,15 @@
+ #define _BOOST_UBLAS_VECTOR_
+ 
+ #include <boost/config.hpp>
++#ifdef BOOST_UBLAS_SERIALIZATION
+ #include <boost/numeric/ublas/storage.hpp>
++#endif
+ #include <boost/numeric/ublas/vector_expression.hpp>
+ #include <boost/numeric/ublas/detail/vector_assign.hpp>
++#ifdef BOOST_UBLAS_SERIALIZATION
+ #include <boost/serialization/collection_size_type.hpp>
+ #include <boost/serialization/nvp.hpp>
++#endif
+ 
+ #ifdef BOOST_UBLAS_CPP_GE_2011
+ #include <array>
+@@ -809,6 +813,7 @@ namespace boost { namespace numeric { na
+ 	        return reverse_iterator (begin ());
+ 	    }
+ 	
++#ifdef BOOST_UBLAS_SERIALIZATION
+ 	// -------------
+ 	    // Serialization
+ 	// -------------
+@@ -820,6 +825,7 @@ namespace boost { namespace numeric { na
+ 	     void serialize(Archive & ar, const unsigned int /* file_version */){
+ 	         ar & serialization::make_nvp("data",data_);
+ 	     }
++#endif
+ 
+ 	 private:
+ 	     array_type data_;
+@@ -1587,6 +1593,7 @@ namespace boost { namespace numeric { na
+             return reverse_iterator (begin ());
+         }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+     // -------------
+         // Serialization
+     // -------------
+@@ -1598,6 +1605,7 @@ namespace boost { namespace numeric { na
+          void serialize(Archive & ar, const unsigned int /* file_version */){
+              ar & serialization::make_nvp("data",data_);
+          }
++#endif
+ 
+      private:
+          array_type data_;
+@@ -1883,6 +1891,7 @@ namespace boost { namespace numeric { na
+              return rend ();
+          }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+ 	      // Serialization
+ 	     template<class Archive>
+ 	     void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -1892,6 +1901,7 @@ namespace boost { namespace numeric { na
+ 	             size_ = s;
+ 	         }
+ 	     }
++#endif
+ 
+ 	 private:
+ 	     size_type size_;
+@@ -2143,6 +2153,7 @@ namespace boost { namespace numeric { na
+              return rend ();
+          }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+ 	      // Serialization
+ 	     template<class Archive>
+ 	     void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -2153,6 +2164,7 @@ namespace boost { namespace numeric { na
+ 	         }
+ 	         ar & serialization::make_nvp("index", index_);
+ 	     }
++#endif
+ 
+ 	 private:
+ 	     size_type size_;
+@@ -2407,6 +2419,7 @@ namespace boost { namespace numeric { na
+              return rend ();
+          }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+ 	      // Serialization
+ 	     template<class Archive>
+ 	     void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -2417,6 +2430,7 @@ namespace boost { namespace numeric { na
+ 	         }
+ 	         ar & serialization::make_nvp("value", value_);
+ 	     }
++#endif
+ 
+ 	 private:
+ 	     size_type size_;
+@@ -2929,6 +2943,7 @@ namespace boost { namespace numeric { na
+ 	         return reverse_iterator (begin ());
+ 	     }
+ 
++#ifdef BOOST_UBLAS_SERIALIZATION
+ 	     // Serialization
+ 	     template<class Archive>
+ 	     void serialize(Archive & ar, const unsigned int /* file_version */){
+@@ -2943,6 +2958,7 @@ namespace boost { namespace numeric { na
+ 	         // ISSUE: this writes the full array
+ 	         ar & serialization::make_nvp("data",data_);
+ 	     }
++#endif
+ 
+ 	 private:
+ 	     size_type size_;
