@@ -185,5 +185,5 @@ RoundRect(Canvas &canvas, int left, int top,
 
   assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
-    canvas.DrawPolygon(pt, npoly);
+    canvas.DrawTriangleFan(pt, npoly);
 }
