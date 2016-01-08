@@ -129,7 +129,7 @@ Annulus(Canvas &canvas, int x, int y, unsigned radius,
   segment_poly(pt, x, y, radius, istart, iend, npoly);
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly, false);
 
-  assert(npoly < ARRAY_SIZE(pt));
+  assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
     canvas.DrawPolygon(pt, npoly);
 
@@ -153,7 +153,7 @@ KeyHole(Canvas &canvas, int x, int y, unsigned radius,
   segment_poly(pt, x, y, radius, istart, iend, npoly);
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly);
 
-  assert(npoly < ARRAY_SIZE(pt));
+  assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
     canvas.DrawPolygon(pt, npoly);
 
@@ -183,7 +183,7 @@ RoundRect(Canvas &canvas, int left, int top,
                INT_ANGLE_RANGE * 3 / 4 - 1,
                npoly);
 
-  assert(npoly < ARRAY_SIZE(pt));
+  assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
     canvas.DrawPolygon(pt, npoly);
 }
