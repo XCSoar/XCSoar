@@ -61,7 +61,7 @@ Display::RotateSupported()
   /* rotate supported via glRotatef() (OpenGL projection matrix) */
 
   /* we need FBO so BufferCanvas can avoid using Canvas::CopyToTexture() */
-  return OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil;
+  return true;
 #else
   return false;
 #endif
