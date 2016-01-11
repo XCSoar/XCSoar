@@ -164,11 +164,6 @@ TopWindow::OnEvent(const Event &event)
 
 #ifdef USE_X11
   case Event::RESIZE:
-    if (unsigned(event.point.x) == GetWidth() &&
-        unsigned(event.point.y) == GetHeight())
-      /* no-op */
-      return true;
-
     Resize(event.point.x, event.point.y);
     return true;
 
