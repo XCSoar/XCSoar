@@ -25,18 +25,17 @@ Copyright_License {
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/TextWindow.hpp"
 #include "Screen/ProgressBar.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/Brush.hpp"
+#include "Screen/Color.hpp"
 #include "Gauge/LogoView.hpp"
+#include "Util/StaticString.hxx"
 
 /**
  * The XCSoar splash screen with a progress bar.
  */
 class ProgressWindow : public ContainerWindow {
   Color background_color;
-  Brush background_brush;
 
   Bitmap bitmap_progress_border;
 
@@ -46,7 +45,7 @@ class ProgressWindow : public ContainerWindow {
 
   LogoView logo;
 
-  TextWindow message;
+  StaticString<128> message;
 
   ProgressBar progress_bar;
 
@@ -71,10 +70,6 @@ private:
 protected:
   virtual void OnResize(PixelSize new_size) override;
   virtual void OnPaint(Canvas &canvas) override;
-
-#ifdef USE_WINUSER
-  virtual const Brush *OnChildColor(Canvas &canvas) override;
-#endif
 };
 
 #endif

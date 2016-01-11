@@ -33,8 +33,7 @@ Copyright_License {
 #endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
-  :background_color(COLOR_WHITE),
-   background_brush(background_color)
+  :background_color(COLOR_WHITE)
 {
   PixelRect rc = parent.GetClientRect();
   WindowStyle style;
@@ -56,15 +55,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 #endif
 
   UpdateLayout(rc);
-
-  // Initialize message text field
-  TextWindowStyle message_style;
-  message_style.center();
-  message.Create(*this, nullptr, message_position, message_style);
-
-#ifndef USE_WINUSER
-  message.SetFont(font);
-#endif
 
   // Initialize progress bar
   progress_bar.Create(*this, progress_bar_position);
@@ -108,7 +98,8 @@ ProgressWindow::SetMessage(const TCHAR *text)
 {
   AssertThread();
 
-  message.set_text(text);
+  message = text;
+  Invalidate(message_position);
 }
 
 void
@@ -144,9 +135,6 @@ ProgressWindow::OnResize(PixelSize new_size)
 
   UpdateLayout(GetClientRect());
 
-  if (message.IsDefined())
-    message.Move(message_position);
-
   if (progress_bar.IsDefined())
     progress_bar.Move(progress_bar_position);
 
@@ -166,17 +154,15 @@ ProgressWindow::OnPaint(Canvas &canvas)
                  bottom_position.bottom - bottom_position.top,
                  bitmap_progress_border);
 
+#ifndef USE_WINUSER
+  canvas.Select(font);
+#endif
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.DrawText((message_position.left + message_position.right
+                   - canvas.CalcTextWidth(message.c_str())) / 2,
+                  message_position.top,
+                  message.c_str());
+
   ContainerWindow::OnPaint(canvas);
 }
-
-#ifdef USE_WINUSER
-
-const Brush *
-ProgressWindow::OnChildColor(Canvas &canvas)
-{
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.SetBackgroundColor(background_color);
-  return &background_brush;
-}
-
-#endif
