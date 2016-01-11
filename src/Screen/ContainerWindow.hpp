@@ -80,11 +80,6 @@ protected:
 
   void OnPaint(Canvas &canvas) override;
 #else /* USE_WINUSER */
-  virtual const Brush *OnChildColor(Canvas &canvas);
-
-  LRESULT OnMessage(HWND hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) override;
-
   virtual void OnPaint(gcc_unused Canvas &canvas) {}
 #endif
 

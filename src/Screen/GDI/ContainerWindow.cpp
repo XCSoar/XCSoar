@@ -58,30 +58,3 @@ ContainerWindow::FocusPreviousControl()
   ::SetFocus(hControl);
   return true;
 }
-
-const Brush *
-ContainerWindow::OnChildColor(Canvas &canvas)
-{
-  return nullptr;
-}
-
-LRESULT
-ContainerWindow::OnMessage(HWND hWnd, UINT message,
-                            WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-  case WM_CTLCOLORSTATIC:
-  case WM_CTLCOLORBTN:
-    {
-      Canvas canvas((HDC)wParam, {1, 1});
-      const Brush *brush = OnChildColor(canvas);
-      if (brush == nullptr)
-        break;
-
-      return (LRESULT)brush->Native();
-    }
-  };
-
-  return PaintWindow::OnMessage(hWnd, message, wParam, lParam);
-}
-
