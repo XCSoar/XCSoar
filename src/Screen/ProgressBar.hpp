@@ -31,6 +31,11 @@ class ProgressBar : public PaintWindow {
 
 public:
   void SetRange(unsigned min_value, unsigned max_value);
+
+  unsigned GetValue() const {
+    return value;
+  }
+
   void SetValue(unsigned value);
   void SetStep(unsigned size);
   void Step();
