@@ -44,6 +44,9 @@ ProgressBar::SetValue(unsigned value)
 {
   AssertThread();
 
+  if (value == this->value)
+    return;
+
   this->value = value;
   Invalidate();
 }
