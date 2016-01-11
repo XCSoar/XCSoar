@@ -27,7 +27,7 @@ Copyright_License {
 #include "Resources.hpp"
 
 #ifdef USE_WINUSER
-#include "Screen/VirtualCanvas.hpp"
+#include "Screen/AnyCanvas.hpp"
 #else
 #include "Screen/Canvas.hpp"
 #endif
@@ -51,7 +51,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   font.Load(FontDescription(Layout::FontScale(10)));
   text_height = font.GetHeight();
 #else
-  VirtualCanvas canvas({1, 1});
+  AnyCanvas canvas;
   text_height = canvas.GetFontHeight();
 #endif
 
