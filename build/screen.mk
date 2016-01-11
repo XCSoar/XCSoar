@@ -22,7 +22,6 @@ SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/GeoBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \
-	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Window.cpp \
 	$(SCREEN_SRC_DIR)/Custom/WList.cpp \
@@ -191,7 +190,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
-	$(SCREEN_SRC_DIR)/GDI/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
