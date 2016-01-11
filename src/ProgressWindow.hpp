@@ -51,7 +51,9 @@ class ProgressWindow : public ContainerWindow {
   ProgressBar progress_bar;
 
   unsigned text_height;
-  unsigned progress_border_height;
+
+  PixelRect logo_position, message_position;
+  PixelRect bottom_position, progress_bar_position;
 
 public:
   explicit ProgressWindow(ContainerWindow &parent);
@@ -62,6 +64,9 @@ public:
   void SetStep(unsigned size);
   void SetValue(unsigned value);
   void Step();
+
+private:
+  void UpdateLayout(PixelRect rc);
 
 protected:
   virtual void OnResize(PixelSize new_size) override;

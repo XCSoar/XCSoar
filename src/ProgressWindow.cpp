@@ -41,8 +41,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   style.Hide();
   Create(parent, rc, style);
 
-  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
-
   // Load progress bar background
   bitmap_progress_border.Load(IDB_PROGRESSBORDER);
 
@@ -57,30 +55,19 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   }
 #endif
 
-  // Make progress bar height proportional to window height
-  const unsigned progress_height = height / 20;
-  const unsigned progress_horizontal_border = progress_height / 2;
-  progress_border_height = progress_height * 2;
+  UpdateLayout(rc);
 
   // Initialize message text field
-  PixelRect message_rc = rc;
-  message_rc.bottom -= progress_border_height + height / 48;
-  message_rc.top = message_rc.bottom - text_height;
   TextWindowStyle message_style;
   message_style.center();
-  message.Create(*this, nullptr, message_rc, message_style);
+  message.Create(*this, nullptr, message_position, message_style);
 
 #ifndef USE_WINUSER
   message.SetFont(font);
 #endif
 
   // Initialize progress bar
-  PixelRect pb_rc;
-  pb_rc.left = progress_horizontal_border;
-  pb_rc.right = pb_rc.left + width - progress_height;
-  pb_rc.top = height - progress_border_height + progress_horizontal_border;
-  pb_rc.bottom = pb_rc.top + progress_height;
-  progress_bar.Create(*this, pb_rc);
+  progress_bar.Create(*this, progress_bar_position);
 
   // Set progress bar step size and range
   SetRange(0, 1000);
@@ -88,6 +75,32 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Show dialog
   ShowOnTop();
+}
+
+void
+ProgressWindow::UpdateLayout(PixelRect rc)
+{
+  const unsigned height = rc.bottom - rc.top;
+
+  // Make progress bar height proportional to window height
+  const unsigned progress_height = height / 20;
+  const unsigned progress_horizontal_border = progress_height / 2;
+  const unsigned progress_border_height = progress_height * 2;
+
+  logo_position = rc;
+  logo_position.bottom -= progress_border_height;
+
+  message_position = rc;
+  message_position.bottom -= progress_border_height + height / 48;
+  message_position.top = message_position.bottom - text_height;
+
+  bottom_position = rc;
+  bottom_position.top = bottom_position.bottom - progress_border_height;
+
+  progress_bar_position.left = bottom_position.left + progress_horizontal_border;
+  progress_bar_position.right = bottom_position.right - progress_horizontal_border;
+  progress_bar_position.top = bottom_position.top + progress_horizontal_border;
+  progress_bar_position.bottom = bottom_position.bottom - progress_horizontal_border;
 }
 
 void
@@ -129,21 +142,13 @@ ProgressWindow::OnResize(PixelSize new_size)
 {
   ContainerWindow::OnResize(new_size);
 
-  // Make progress bar height proportional to window height
-  const unsigned progress_height = new_size.cy / 20;
-  const unsigned progress_horizontal_border = progress_height / 2;
-  progress_border_height = progress_height * 2;
+  UpdateLayout(GetClientRect());
 
   if (message.IsDefined())
-    message.Move(0,
-                 new_size.cy - progress_border_height - text_height - (new_size.cy / 48),
-                 new_size.cx, text_height);
+    message.Move(message_position);
 
   if (progress_bar.IsDefined())
-    progress_bar.Move(progress_horizontal_border,
-                      new_size.cy - progress_border_height + progress_horizontal_border,
-                      new_size.cx - progress_height,
-                      progress_height);
+    progress_bar.Move(progress_bar_position);
 
   Invalidate();
 }
@@ -153,20 +158,12 @@ ProgressWindow::OnPaint(Canvas &canvas)
 {
   canvas.Clear(background_color);
 
-  // Determine window size
-  const unsigned window_width = canvas.GetWidth();
-  const unsigned window_height = canvas.GetHeight();
-
-  PixelRect logo_rect;
-  logo_rect.left = 0;
-  logo_rect.top = 0;
-  logo_rect.right = window_width;
-  logo_rect.bottom = window_height - progress_border_height;
-  logo.draw(canvas, logo_rect);
+  logo.draw(canvas, logo_position);
 
   // Draw progress bar background
-  canvas.Stretch(0, (window_height - progress_border_height),
-                 window_width, progress_border_height,
+  canvas.Stretch(bottom_position.left, bottom_position.top,
+                 bottom_position.right - bottom_position.left,
+                 bottom_position.bottom - bottom_position.top,
                  bitmap_progress_border);
 
   ContainerWindow::OnPaint(canvas);
