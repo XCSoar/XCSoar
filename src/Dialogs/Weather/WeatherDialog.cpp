@@ -25,6 +25,7 @@ Copyright_License {
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#include "MapOverlayWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
@@ -82,6 +83,14 @@ ShowWeatherDialog(const TCHAR *page)
     start_page = widget.GetSize();
 
   widget.AddTab(CreatePCMetWidget(), _T("pc_met"));
+#endif
+
+#ifdef ENABLE_OPENGL
+  if (page != nullptr && StringIsEqual(page, _T("overlay")))
+    start_page = widget.GetSize();
+
+  // TODO: better and translatable title?
+  widget.AddTab(CreateWeatherMapOverlayWidget(), _T("Overlay"));
 #endif
 
   /* restore previous page */

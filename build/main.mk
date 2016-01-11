@@ -673,6 +673,7 @@ $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
 ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \
+	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
 	$(SRC)/MapWindow/OverlayBitmap.cpp
 endif
 
