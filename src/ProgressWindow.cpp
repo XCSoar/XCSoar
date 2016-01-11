@@ -98,6 +98,9 @@ ProgressWindow::SetMessage(const TCHAR *text)
 {
   AssertThread();
 
+  if (text == nullptr)
+    text = _T("");
+
   message = text;
   Invalidate(message_position);
 }
