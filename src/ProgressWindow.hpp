@@ -49,7 +49,6 @@ class ProgressWindow : public ContainerWindow {
   TextWindow message;
 
   ProgressBar progress_bar;
-  unsigned position;
 
   unsigned text_height;
   unsigned progress_border_height;

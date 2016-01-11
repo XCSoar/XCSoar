@@ -34,8 +34,7 @@ Copyright_License {
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
   :background_color(COLOR_WHITE),
-   background_brush(background_color),
-   position(0)
+   background_brush(background_color)
 {
   PixelRect rc = parent.GetClientRect();
   WindowStyle style;
@@ -114,10 +113,6 @@ ProgressWindow::SetValue(unsigned value)
 {
   AssertThread();
 
-  if (value == position)
-    return;
-
-  position = value;
   progress_bar.SetValue(value);
 }
 
