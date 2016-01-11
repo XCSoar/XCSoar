@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_VIEW_IMAGE_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "Form/Draw.hpp"
 
 class Bitmap;
 
@@ -34,7 +33,6 @@ class Bitmap;
  */
 class ViewImageWidget : public WindowWidget {
   const Bitmap &bitmap;
-  WndOwnerDrawFrame view;
 
 public:
   explicit ViewImageWidget(const Bitmap &_bitmap)
@@ -44,9 +42,6 @@ protected:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   void Unprepare() override;
-
-private:
-  void OnImagePaint(Canvas &canvas, const PixelRect &rc);
 };
 
 #endif

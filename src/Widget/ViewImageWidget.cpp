@@ -24,6 +24,17 @@ Copyright_License {
 #include "ViewImageWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/PaintWindow.hpp"
+
+class ViewImageWindow final : public PaintWindow {
+  const Bitmap &bitmap;
+
+public:
+  explicit ViewImageWindow(const Bitmap &_bitmap):bitmap(_bitmap) {}
+
+  /* virtual methods from class PaintWindow */
+  void OnPaint(Canvas &canvas) override;
+};
 
 void
 ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -31,25 +42,24 @@ ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle hidden;
   hidden.Hide();
 
-  view.Create(parent, rc, hidden,
-              [this](Canvas &canvas, const PixelRect &rc){
-                OnImagePaint(canvas, rc);
-              });
-  SetWindow(&view);
+  auto *w = new ViewImageWindow(bitmap);
+  w->Create(parent, rc, hidden);
+  SetWindow(w);
 }
 
 void
 ViewImageWidget::Unprepare()
 {
-  view.Destroy();
+  DeleteWindow();
 }
 
 void
-ViewImageWidget::OnImagePaint(Canvas &canvas, const PixelRect &rc)
+ViewImageWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
   const PixelSize bitmap_size = bitmap.GetSize();
+  const PixelRect rc = GetClientRect();
   const PixelSize window_size = rc.GetSize();
 
   PixelSize fit_size(window_size.cx,
