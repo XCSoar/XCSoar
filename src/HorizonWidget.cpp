@@ -55,8 +55,7 @@ protected:
   void OnPaintBuffer(Canvas &canvas) override {
     canvas.ClearWhite();
 
-    if (!CommonInterface::Basic().attitude.IsBankAngleUseable() &&
-        !CommonInterface::Basic().attitude.IsPitchAngleUseable())
+    if (!attitude.IsBankAngleUseable() && !attitude.IsPitchAngleUseable())
       // TODO: paint "no data" hint
       return;
 
