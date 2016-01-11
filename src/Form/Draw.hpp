@@ -36,9 +36,6 @@ class ContainerWindow;
  */
 class WndOwnerDrawFrame : public PaintWindow {
 public:
-  typedef void (*OnPaintCallback_t)(Canvas &canvas, const PixelRect &rc);
-
-public:
   template<typename CB>
   void Create(ContainerWindow &parent,
               PixelRect rc, const WindowStyle style,
