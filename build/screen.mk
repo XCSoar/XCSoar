@@ -173,6 +173,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
+	$(SCREEN_SRC_DIR)/Memory/Export.cpp \
 	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
