@@ -205,14 +205,14 @@ TopCanvas::Create(PixelSize new_size,
   ioctl(fd, MXCFB_SET_UPDATE_SCHEME, UPDATE_SCHEME_QUEUE_AND_MERGE);
 #endif
 
-  const auto width = ::GetWidth(vinfo), height = ::GetHeight(vinfo);
+  new_size = ::GetSize(vinfo);
 #elif defined(USE_VFB)
-  const unsigned width = new_size.cx, height = new_size.cy;
+  /* allocate buffer as requested by caller */
 #else
 #error No implementation
 #endif
 
-  buffer.Allocate(width, height);
+  buffer.Allocate(new_size.cx, new_size.cy);
 }
 
 #ifdef USE_FB
