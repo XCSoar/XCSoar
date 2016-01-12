@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/OpenGL/Features.hpp"
 #include "Math/Point2D.hpp"
 #else
+#include "Screen/Memory/Export.hpp"
 #include "Screen/Canvas.hpp"
 #endif
 
@@ -322,46 +323,6 @@ TopCanvas::OnResize(PixelSize new_size)
 }
 
 #ifdef GREYSCALE
-
-#ifdef DITHER
-
-#else
-
-static uint32_t
-GreyscaleToRGB8(Luminosity8 luminosity)
-{
-  const unsigned value = luminosity.GetLuminosity();
-
-  return value | (value << 8) | (value << 16) | (value << 24);
-}
-
-static void
-CopyGreyscaleToRGB8(uint32_t *gcc_restrict dest,
-                     const Luminosity8 *gcc_restrict src,
-                     unsigned width)
-{
-  for (unsigned i = 0; i < width; ++i)
-    *dest++ = GreyscaleToRGB8(*src++);
-}
-
-static RGB565Color
-GreyscaleToRGB565(Luminosity8 luminosity)
-{
-  const unsigned value = luminosity.GetLuminosity();
-
-  return RGB565Color(value, value, value);
-}
-
-static void
-CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
-                      const Luminosity8 *gcc_restrict src,
-                      unsigned width)
-{
-  for (unsigned i = 0; i < width; ++i)
-    *dest++ = GreyscaleToRGB565(*src++);
-}
-
-#endif
 
 #if CLANG_OR_GCC_VERSION(4,8)
 #pragma GCC diagnostic push
