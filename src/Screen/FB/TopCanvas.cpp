@@ -71,6 +71,12 @@ GetHeight(const struct fb_var_screeninfo &vinfo)
   return TranslateDimension(vinfo.yres);
 }
 
+static PixelSize
+GetSize(const struct fb_var_screeninfo &vinfo)
+{
+  return PixelSize(GetWidth(vinfo), GetHeight(vinfo));
+}
+
 #endif
 
 void
@@ -211,15 +217,20 @@ TopCanvas::Create(PixelSize new_size,
 
 #ifdef USE_FB
 
+inline PixelSize
+TopCanvas::GetPhysicalSize() const
+{
+  struct fb_var_screeninfo vinfo;
+  ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
+  return ::GetSize(vinfo);
+}
+
 bool
 TopCanvas::CheckResize()
 {
   /* get new frame buffer dimensions and check if they have changed */
-  struct fb_var_screeninfo vinfo;
-  ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
-
-  const auto new_width = ::GetWidth(vinfo), new_height = ::GetHeight(vinfo);
-  if (new_width == buffer.width && new_height == buffer.height)
+  const auto new_size = GetPhysicalSize();
+  if (new_size == GetSize())
     return false;
 
   /* yes, they did change: update the size and allocate a new buffer */
@@ -230,7 +241,7 @@ TopCanvas::CheckResize()
   map_pitch = finfo.line_length;
 
   buffer.Free();
-  buffer.Allocate(new_width, new_height);
+  buffer.Allocate(new_size.cx, new_size.cy);
   return true;
 }
 

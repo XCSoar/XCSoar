@@ -256,6 +256,13 @@ public:
 
 #ifdef USE_FB
   /**
+   * Ask the kernel for the frame buffer's current physical size.
+   * This is used by CheckResize().
+   */
+  gcc_pure
+  PixelSize GetPhysicalSize() const;
+
+  /**
    * Check if the screen has been resized.
    *
    * @return true if the screen has been resized
