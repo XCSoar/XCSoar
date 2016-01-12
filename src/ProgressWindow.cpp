@@ -35,6 +35,8 @@ Copyright_License {
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
   :background_color(COLOR_WHITE)
 {
+  message.clear();
+
   PixelRect rc = parent.GetClientRect();
   WindowStyle style;
   style.Hide();
