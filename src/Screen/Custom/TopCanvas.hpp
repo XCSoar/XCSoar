@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Memory/PixelTraits.hpp"
 #include "Screen/Memory/ActivePixelTraits.hpp"
 #include "Screen/Memory/Buffer.hpp"
+#include "Screen/Point.hpp"
 #else
 #include "Screen/Canvas.hpp"
 #endif
@@ -264,16 +265,6 @@ public:
    * @return true if the screen has been resized
    */
   bool CheckResize();
-
-  gcc_pure
-  unsigned GetWidth() const {
-    return buffer.width;
-  }
-
-  gcc_pure
-  unsigned GetHeight() const {
-    return buffer.height;
-  }
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -286,6 +277,10 @@ public:
   void OnResize(PixelSize new_size);
 
 #ifdef USE_MEMORY_CANVAS
+  PixelSize GetSize() const {
+    return PixelSize(buffer.width, buffer.height);
+  }
+
   Canvas Lock();
   void Unlock();
 #endif

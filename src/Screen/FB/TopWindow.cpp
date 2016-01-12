@@ -45,7 +45,7 @@ TopWindow::CheckResize()
   assert(screen != nullptr);
 
   if (screen->CheckResize())
-    Resize(screen->GetWidth(), screen->GetHeight());
+    Resize(screen->GetSize());
 }
 
 #endif
