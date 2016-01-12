@@ -254,6 +254,17 @@ public:
               bool full_screen, bool resizable);
 #endif
 
+#ifdef USE_MEMORY_CANVAS
+  /**
+   * Check if the screen has been resized.
+   *
+   * @param new_physical_size the new screen size reported by the
+   * windowing system library
+   * @return true if the screen has been resized
+   */
+  bool CheckResize(PixelSize new_physical_size);
+#endif
+
 #ifdef USE_FB
   /**
    * Ask the kernel for the frame buffer's current physical size.

@@ -228,24 +228,32 @@ TopCanvas::GetPhysicalSize() const
 bool
 TopCanvas::CheckResize()
 {
-  /* get new frame buffer dimensions and check if they have changed */
-  const auto new_size = GetPhysicalSize();
+  CheckResize(GetPhysicalSize());
+}
+
+#endif
+
+bool
+TopCanvas::CheckResize(const PixelSize new_physical_size)
+{
+  const PixelSize new_size = new_physical_size;
   if (new_size == GetSize())
+    /* no change */
     return false;
 
-  /* yes, they did change: update the size and allocate a new buffer */
+  /* changed: update the size and allocate a new buffer */
 
+#ifdef USE_FB
   struct fb_fix_screeninfo finfo;
   ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
 
   map_pitch = finfo.line_length;
+#endif
 
   buffer.Free();
   buffer.Allocate(new_size.cx, new_size.cy);
   return true;
 }
-
-#endif
 
 void
 TopCanvas::OnResize(PixelSize new_size)
