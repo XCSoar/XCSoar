@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2015 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,14 +21,20 @@ Copyright_License {
 }
 */
 
-#include "GTAltimeter.hpp"
+#include "Device/Driver/Ridimuim.hpp"
 #include "Device/Driver.hpp"
-#include "NMEA/InputLine.hpp"
-#include "NMEA/Info.hpp"
+#include "Device/Parser.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
+#include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
+#include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 
-class GTAltimeterDevice : public AbstractDevice {
+#include <stdlib.h>
+#include <math.h>
+
+class RidimuimDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
@@ -45,7 +51,7 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 
   unsigned altitude;
   bool altitude_available = (line.ReadChecked(altitude) && altitude != 99999);
-
+   
   if (altitude_available && !pressure_available)
     info.ProvidePressureAltitude(fixed(altitude));
 
@@ -74,32 +80,52 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-bool
-GTAltimeterDevice::ParseNMEA(const char *_line, NMEAInfo &info)
+static bool
+PLKAS(NMEAInputLine &line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
+/*
+New PLKAS   NMEA sentence.
+    The syntax is:
+    $PLKAS,nnn,*checksum
+    where nnn is the Indicated Air Speed in m/s *10
+    and checksum is the NMEA checksum
+    Example for nnn  346 = 34.6 m/s  which is = 124.56 km/h
+    This sentence can be sent anytime, with any device connected.
+    It is normally a sub sentence of the LK8EX1 device.
+*/
+  int air_speed;
+  if (line.ReadChecked(air_speed) && air_speed != 999)
+      info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(air_speed)*0.36, Unit::KILOMETER_PER_HOUR));
+  
+  return true;
+}
+bool
+RidimuimDevice::ParseNMEA(const char *String, NMEAInfo &info)
+{
+  if (!VerifyNMEAChecksum(String))
     return false;
 
-  NMEAInputLine line(_line);
+  NMEAInputLine line(String);
   char type[16];
   line.Read(type, 16);
 
   if (StringIsEqual(type, "$LK8EX1"))
     return LK8EX1(line, info);
-
+  else if (StringIsEqual(type, "PLKAS"))
+    return PLKAS(line, info);          
+  
   return false;
 }
 
 static Device *
-GTAltimeterDeviceCreateOnPort(gcc_unused const DeviceConfig &config,
-                              gcc_unused Port &port)
+RidimuimCreateOnPort(gcc_unused const DeviceConfig &config, gcc_unused Port &port)
 {
-  return new GTAltimeterDevice();
+  return new RidimuimDevice();
 }
 
-const struct DeviceRegister gt_altimeter_driver = {
-  _T("GTAltimeter"),
-  _T("GT Altimeter (GliderTools)"),
+const struct DeviceRegister ridimuim_driver = {
+  _T("Ridimuim"),
+  _T("Ridimuim"),
   0,
-  GTAltimeterDeviceCreateOnPort,
+  RidimuimCreateOnPort,
 };

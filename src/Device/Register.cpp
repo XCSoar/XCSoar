@@ -41,6 +41,7 @@ Copyright_License {
 #include "Device/Driver/IMI.hpp"
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
+#include "Device/Driver/Ridimuim.hpp"
 #include "Device/Driver/XCOM760.hpp"
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver/Leonardo.hpp"
@@ -80,6 +81,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &lx_driver,
   &zander_driver,
   &flymaster_f1_driver,
+  &ridimuim_driver,
   &xcom760_driver,
   &condor_driver,
   &leonardo_driver,
