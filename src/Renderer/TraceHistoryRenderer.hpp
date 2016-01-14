@@ -32,6 +32,10 @@ class ChartRenderer;
 class Canvas;
 class TraceVariableHistory;
 
+/**
+ * (Vario) Trace History Renderer
+ * renders the variometer history graph for the vario trace Infobox
+ */
 class TraceHistoryRenderer {
   const TraceHistoryLook &look;
   const VarioLook &vario_look;

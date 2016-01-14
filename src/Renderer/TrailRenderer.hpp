@@ -41,6 +41,11 @@ struct NMEAInfo;
 struct DerivedInfo;
 struct TrailSettings;
 
+/**
+ * Trail renderer
+ * renders the trail of past position fixes on the map
+ * includes filter for coarse-graining trail in LoadTrace
+ */
 class TrailRenderer {
   const TrailLook &look;
 

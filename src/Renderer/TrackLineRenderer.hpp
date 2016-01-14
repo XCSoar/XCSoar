@@ -33,6 +33,11 @@ struct NMEAInfo;
 struct DerivedInfo;
 struct MapSettings;
 
+/**
+ * Renderer for the track line
+ * Renders line forward along the current ground track (not heading) in straight flight
+ * or curve using current rate of curve when curving / circling.
+ */
 class TrackLineRenderer {
   const MapLook &look;
 
