@@ -250,7 +250,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   GLint egl_width, egl_height;
   if (!eglQuerySurface(display, surface, EGL_WIDTH, &egl_width) ||
       !eglQuerySurface(display, surface, EGL_HEIGHT, &egl_height)) {
-    fprintf(stderr, "eglQuerySurface()\n");
+    fprintf(stderr, "eglQuerySurface() failed\n");
     exit(EXIT_FAILURE);
   }
 
