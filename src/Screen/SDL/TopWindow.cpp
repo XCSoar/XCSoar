@@ -187,10 +187,10 @@ TopWindow::OnEvent(const SDL_Event &event)
                               static_cast<float>(w);
             point_to_real_y = static_cast<float>(real_h) /
                               static_cast<float>(h);
-            Resize(real_w, real_h);
-#else
-            Resize(w, h);
+            w = real_w;
+            h = real_h;
 #endif
+            Resize(w, h);
           }
 
 #if defined(__MACOSX__) && __MACOSX__
