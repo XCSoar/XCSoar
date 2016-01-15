@@ -41,16 +41,6 @@ TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
 }
 
 void
-TopCanvas::OnResize(PixelSize new_size)
-{
-  if (new_size == GetSize())
-    return;
-
-  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
-}
-
-void
 TopCanvas::Flip()
 {
 #ifdef USE_EGL

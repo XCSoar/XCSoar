@@ -72,16 +72,6 @@ TopCanvas::Destroy()
 }
 
 void
-TopCanvas::OnResize(PixelSize new_size)
-{
-  if (new_size == size)
-    return;
-
-  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
-}
-
-void
 TopCanvas::Flip()
 {
   glXSwapBuffers(x_display, glx_window);

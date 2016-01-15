@@ -31,3 +31,17 @@ TopCanvas::Resume()
   OpenGL::SetupContext();
   OpenGL::SetupViewport(UnsignedPoint2D(size.cx, size.cy));
 }
+
+#ifndef ENABLE_SDL
+
+void
+TopCanvas::OnResize(PixelSize new_size)
+{
+  if (new_size == GetSize())
+    return;
+
+  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
+  Canvas::Create(new_size);
+}
+
+#endif
