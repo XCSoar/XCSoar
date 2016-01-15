@@ -249,7 +249,7 @@ public:
   PixelSize GetNativeSize() const;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
+#if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
   /**
    * Check if the screen has been resized.
    *

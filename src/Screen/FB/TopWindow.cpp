@@ -164,7 +164,8 @@ TopWindow::OnEvent(const Event &event)
 
 #ifdef USE_X11
   case Event::RESIZE:
-    Resize(event.point.x, event.point.y);
+    if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
+      Resize(screen->GetSize());
     return true;
 
   case Event::EXPOSE:

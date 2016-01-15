@@ -22,8 +22,9 @@ Copyright_License {
 */
 
 #include "Screen/Custom/TopCanvas.hpp"
-#include "Math/Point2D.hpp"
+#include "Globals.hpp"
 #include "Init.hpp"
+#include "Math/Point2D.hpp"
 
 void
 TopCanvas::Resume()
@@ -35,9 +36,17 @@ TopCanvas::Resume()
 void
 TopCanvas::OnResize(PixelSize new_size)
 {
-  if (new_size == GetSize())
-    return;
+}
 
-  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
+bool
+TopCanvas::CheckResize(PixelSize new_native_size)
+{
+  if ((unsigned)new_native_size.cx == OpenGL::window_size.x &&
+      (unsigned)new_native_size.cy == OpenGL::window_size.y)
+    return false;
+
+  OpenGL::SetupViewport(UnsignedPoint2D(new_native_size.cx,
+                                        new_native_size.cy));
+  Canvas::Create(new_native_size);
+  return true;
 }
