@@ -24,12 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_SDL_KEY_CODE_HPP
 #define XCSOAR_EVENT_SDL_KEY_CODE_HPP
 
-#include <SDL_version.h>
-#if SDL_VERSION_ATLEAST(1,3,0)
 #include <SDL_keyboard.h>
-#else
-#include <SDL_keysym.h>
-#endif
 
 enum {
   KEY_SPACE = SDLK_SPACE,

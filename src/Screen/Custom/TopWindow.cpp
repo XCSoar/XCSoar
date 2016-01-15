@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
-#if defined(UNICODE) && SDL_MAJOR_VERSION >= 2
+#if defined(ENABLE_SDL) && defined(UNICODE)
 #include "Util/ConvertString.hpp"
 #endif
 
@@ -51,7 +51,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   delete screen;
   screen = new TopCanvas();
 
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
@@ -75,10 +75,6 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   }
 
   ContainerWindow::Create(nullptr, screen->GetRect(), style);
-
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION < 2)
-  SetCaption(text);
-#endif
 }
 
 #ifdef SOFTWARE_ROTATE_DISPLAY

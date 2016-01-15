@@ -28,7 +28,6 @@ Copyright_License {
 #include "../Shared/TimerQueue.hpp"
 #include "Thread/Mutex.hpp"
 
-#include <SDL_version.h>
 #include <SDL_events.h>
 
 class Window;

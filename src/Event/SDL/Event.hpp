@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_SDL_HPP
 #define XCSOAR_EVENT_SDL_HPP
 
-#include <SDL_version.h>
-#include <SDL_events.h>
-
-#if SDL_MAJOR_VERSION >= 2
 #include "Util/UTF8.hpp"
-#endif
+
+#include <SDL_events.h>
 
 #include <assert.h>
 
@@ -62,7 +59,6 @@ struct Event {
     return event.key.keysym.sym;
   }
 
-#if SDL_MAJOR_VERSION >= 2
   size_t GetCharacterCount() const {
     return event.type == SDL_TEXTINPUT && *event.text.text ?
       LengthUTF8(event.text.text) : 0;
@@ -76,18 +72,6 @@ struct Event {
       next = NextUTF8(next.second);
     return next.first;
   }
-#else
-  size_t GetCharacterCount() const {
-    return (IsKeyDown() && event.key.keysym.unicode != 0) ? 1 : 0;
-  }
-
-  unsigned GetCharacter(size_t characterIdx) const {
-    assert(GetCharacterCount() == 1);
-    assert(characterIdx == 0);
-
-    return event.key.keysym.unicode;
-  }
-#endif
 
   bool IsMouseDown() const {
     return event.type == SDL_MOUSEBUTTONDOWN;

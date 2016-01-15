@@ -36,7 +36,7 @@ InputConfig::SetDefaults()
   modes[3] = _T("Menu");
 
   std::fill_n(&Key2Event[0][0], MAX_MODE*MAX_KEY, 0);
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
   std::fill_n(&Key2EventNonChar[0][0], MAX_MODE*MAX_KEY, 0);
 #endif
 #ifdef USE_X11

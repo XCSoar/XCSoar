@@ -24,14 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_FEATURES_HPP
 #define XCSOAR_SCREEN_SDL_FEATURES_HPP
 
-#include <SDL_version.h>
-
-#if SDL_MAJOR_VERSION >= 2
 #define HAVE_MULTI_TOUCH
 
 #if defined(__APPLE__) && defined(ENABLE_OPENGL)
 #define HAVE_HIGHDPI_SUPPORT
-#endif
 #endif
 
 #endif

@@ -70,10 +70,6 @@ struct _XDisplay;
 
 #include <stdint.h>
 
-#ifdef ENABLE_SDL
-#include <SDL_version.h>
-#endif
-
 #ifdef SOFTWARE_ROTATE_DISPLAY
 enum class DisplayOrientation : uint8_t;
 #endif
@@ -138,17 +134,11 @@ class TopCanvas
 #endif
 
 #ifdef ENABLE_SDL
-#if SDL_MAJOR_VERSION >= 2
   SDL_Window *window;
-#endif
 
 #ifdef USE_MEMORY_CANVAS
-#if SDL_MAJOR_VERSION >= 2
   SDL_Renderer *renderer;
   SDL_Texture *texture;
-#else
-  SDL_Surface *surface;
-#endif
 #endif
 #endif
 
@@ -219,11 +209,7 @@ public:
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
 #ifdef ENABLE_SDL
-#if SDL_MAJOR_VERSION >= 2
     return window != nullptr;
-#else
-    return surface != nullptr;
-#endif
 #elif defined(USE_VFB)
     return true;
 #else
@@ -235,7 +221,7 @@ public:
   PixelRect GetRect() const;
 #endif
 
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
   void Create(const char *text, PixelSize new_size,
               bool full_screen, bool resizable);
 #elif defined(USE_GLX)

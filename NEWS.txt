@@ -13,6 +13,8 @@ Version 7.0 - not yet released
   - drop support for Windows CE
   - require Windows Vista or later
   - allow starting multiple XCSoar instances
+* Linux
+  - drop support for SDL 1.2
 * Android
   - drop support for ARMv6 CPUs
 * Kobo

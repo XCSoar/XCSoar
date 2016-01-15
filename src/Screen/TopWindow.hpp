@@ -48,10 +48,6 @@ union SDL_Event;
 
 #include <tchar.h>
 
-#ifdef ENABLE_SDL
-#include <SDL_version.h>
-#endif
-
 #ifdef SOFTWARE_ROTATE_DISPLAY
 enum class DisplayOrientation : uint8_t;
 #endif
@@ -231,7 +227,7 @@ public:
   void CheckResize() {}
 #endif
 
-#if !defined(USE_WINUSER) && !(defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2))
+#if !defined(USE_WINUSER) && !defined(ENABLE_SDL)
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else

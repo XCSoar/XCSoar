@@ -29,25 +29,12 @@ Copyright_License {
 #include "Event/Queue.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
-
-#if SDL_MAJOR_VERSION >= 2
 #include "Util/UTF8.hpp"
 
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
 #import <AppKit/AppKit.h>
 #include <alloca.h>
-#endif
-#endif
-
-#if SDL_MAJOR_VERSION < 2
-void
-TopWindow::SetCaption(const TCHAR *caption)
-{
-  WideToUTF8Converter caption2(caption);
-  if (caption2.IsValid())
-    ::SDL_WM_SetCaption(caption2, nullptr);
-}
 #endif
 
 void
@@ -62,13 +49,6 @@ TopWindow::OnEvent(const SDL_Event &event)
   switch (event.type) {
     Window *w;
 
-#if SDL_MAJOR_VERSION < 2
-  case SDL_VIDEOEXPOSE:
-    invalidated = false;
-    Expose();
-    return true;
-#endif
-
   case SDL_KEYDOWN:
     w = GetFocusedWindow();
     if (w == nullptr)
@@ -77,15 +57,8 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
-#if SDL_MAJOR_VERSION >= 2
     return w->OnKeyDown(event.key.keysym.sym);
-#else
-    return w->OnKeyDown(event.key.keysym.sym) ||
-      (event.key.keysym.unicode != 0 &&
-       w->OnCharacter(event.key.keysym.unicode));
-#endif
 
-#if SDL_MAJOR_VERSION >= 2
   case SDL_TEXTINPUT:
     w = GetFocusedWindow();
     if (w == nullptr)
@@ -104,7 +77,6 @@ TopWindow::OnEvent(const SDL_Event &event)
       return handled;
     } else
       return false;
-#endif
 
   case SDL_KEYUP:
     w = GetFocusedWindow();
@@ -145,13 +117,6 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_MOUSEBUTTONDOWN:
     {
-#if SDL_MAJOR_VERSION < 2
-      if (event.button.button == SDL_BUTTON_WHEELUP)
-        return OnMouseWheel(event.button.x, event.button.y, 1);
-      else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-        return OnMouseWheel(event.button.x, event.button.y, -1);
-#endif
-
 #ifdef HAVE_HIGHDPI_SUPPORT
       auto x = event.button.x;
       auto y = event.button.y;
@@ -169,13 +134,6 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_MOUSEBUTTONUP:
     {
-#if SDL_MAJOR_VERSION < 2
-      if (event.button.button == SDL_BUTTON_WHEELUP ||
-          event.button.button == SDL_BUTTON_WHEELDOWN)
-        /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
-        return false;
-#endif
-
 #ifdef HAVE_HIGHDPI_SUPPORT
       auto x = event.button.x;
       auto y = event.button.y;
@@ -194,13 +152,6 @@ TopWindow::OnEvent(const SDL_Event &event)
   case SDL_QUIT:
     return OnClose();
 
-#if SDL_MAJOR_VERSION < 2
-  case SDL_VIDEORESIZE:
-    Resize(event.resize.w, event.resize.h);
-    return true;
-#endif
-
-#if SDL_MAJOR_VERSION >= 2
   case SDL_MOUSEWHEEL:
     {
       int x, y;
@@ -263,7 +214,6 @@ TopWindow::OnEvent(const SDL_Event &event)
       Expose();
       return true;
     }
-#endif
   }
 
   return false;
