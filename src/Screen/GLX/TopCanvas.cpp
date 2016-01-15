@@ -49,14 +49,11 @@ TopCanvas::CreateGLX(_XDisplay *_x_display,
     exit(EXIT_FAILURE);
   }
 
-  unsigned int glx_width = -1, glx_height = -1;
-  glXQueryDrawable(_x_display, glx_window, GLX_WIDTH, &glx_width);
-  glXQueryDrawable(_x_display, glx_window, GLX_HEIGHT, &glx_height);
-  if ((glx_width <= 0) || (glx_height <= 0)) {
+  const PixelSize effective_size = GetNativeSize();
+  if (effective_size.cx <= 0 || effective_size.cy <= 0) {
     fprintf(stderr, "Failed to query GLX drawable size\n");
     exit(EXIT_FAILURE);
   }
-  const PixelSize effective_size = { glx_width, glx_height };
 
   OpenGL::SetupContext();
   OpenGL::SetupViewport(UnsignedPoint2D(effective_size.cx,
@@ -69,6 +66,18 @@ TopCanvas::Destroy()
 {
   glXDestroyWindow(x_display, glx_window);
   glXDestroyContext(x_display, glx_context);
+}
+
+PixelSize
+TopCanvas::GetNativeSize() const
+{
+  unsigned w = 0, h = 0;
+  glXQueryDrawable(x_display, glx_window, GLX_WIDTH, &w);
+  glXQueryDrawable(x_display, glx_window, GLX_HEIGHT, &h);
+  if (w <= 0 || h <= 0)
+    return PixelSize(0, 0);
+
+  return PixelSize(w, h);
 }
 
 void

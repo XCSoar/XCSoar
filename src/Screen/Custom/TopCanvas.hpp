@@ -240,6 +240,15 @@ public:
               bool full_screen, bool resizable);
 #endif
 
+#if defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL))
+  /**
+   * Obtain the native (non-software-rotated) size of the OpenGL
+   * drawable.
+   */
+  gcc_pure
+  PixelSize GetNativeSize() const;
+#endif
+
 #ifdef USE_MEMORY_CANVAS
   /**
    * Check if the screen has been resized.

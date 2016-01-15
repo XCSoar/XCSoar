@@ -166,10 +166,11 @@ TopCanvas::Create(const char *text, PixelSize new_size,
   }
 
   OpenGL::SetupContext();
-  int gl_width, gl_height;
-  SDL_GL_GetDrawableSize(window, &gl_width, &gl_height);
-  OpenGL::SetupViewport(UnsignedPoint2D(gl_width, gl_height));
-  Canvas::Create(PixelSize(gl_width, gl_height));
+
+  const PixelSize drawable_size = GetNativeSize();
+  OpenGL::SetupViewport(UnsignedPoint2D(drawable_size.cx,
+                                        drawable_size.cy));
+  Canvas::Create(drawable_size);
 #endif
 
 #ifdef GREYSCALE
@@ -188,6 +189,18 @@ TopCanvas::Destroy()
   SDL_DestroyTexture(texture);
 #endif
 }
+
+#ifdef ENABLE_OPENGL
+
+PixelSize
+TopCanvas::GetNativeSize() const
+{
+  int w, h;
+  SDL_GL_GetDrawableSize(window, &w, &h);
+  return PixelSize(w, h);
+}
+
+#endif
 
 #ifdef USE_MEMORY_CANVAS
 
