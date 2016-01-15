@@ -166,15 +166,10 @@ TopCanvas::Create(const char *text, PixelSize new_size,
   }
 
   OpenGL::SetupContext();
-#ifdef HAVE_HIGHDPI_SUPPORT
   int gl_width, gl_height;
   SDL_GL_GetDrawableSize(window, &gl_width, &gl_height);
   OpenGL::SetupViewport(UnsignedPoint2D(gl_width, gl_height));
   Canvas::Create(PixelSize(gl_width, gl_height));
-#else
-  OpenGL::SetupViewport(UnsignedPoint2D(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
-#endif
 #endif
 
 #ifdef GREYSCALE
