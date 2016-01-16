@@ -316,8 +316,9 @@ TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
   if (native_size.cx <= 0 || native_size.cy <= 0)
     return;
 
-  UnsignedPoint2D new_size(native_size.cx, native_size.cy);
-  OpenGL::SetupViewport(new_size, orientation);
+  auto new_size = OpenGL::SetupViewport(UnsignedPoint2D(native_size.cx,
+                                                        native_size.cy),
+                                        orientation);
   Canvas::Create(PixelSize(new_size.x, new_size.y));
 }
 

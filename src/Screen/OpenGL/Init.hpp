@@ -50,10 +50,11 @@ namespace OpenGL {
    * Set up the viewport and the matrices for 2D drawing.  Apply the
    * #DisplayOrientation via glRotatef() (OpenGL projection matrix).
    *
-   * @param size the screen size in pixels; may be edited by the
-   * function to apply the #DisplayOrientation
+   * @param size the native screen size in pixels
+   * @return the logical screen size (after rotation)
    */
-  void SetupViewport(UnsignedPoint2D &size, DisplayOrientation orientation);
+  UnsignedPoint2D SetupViewport(UnsignedPoint2D native_size,
+                                DisplayOrientation orientation);
 
   /**
    * Deinitialize our OpenGL library.  Call before shutdown.

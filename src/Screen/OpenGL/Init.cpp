@@ -365,8 +365,8 @@ OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
     std::swap(p.x, p.y);
 }
 
-void
-OpenGL::SetupViewport(UnsignedPoint2D &size, DisplayOrientation orientation)
+UnsignedPoint2D
+OpenGL::SetupViewport(UnsignedPoint2D size, DisplayOrientation orientation)
 {
   window_size = size;
 
@@ -397,6 +397,7 @@ OpenGL::SetupViewport(UnsignedPoint2D &size, DisplayOrientation orientation)
   viewport_size = size;
 
   OpenGL::display_orientation = orientation;
+  return size;
 }
 
 #endif
