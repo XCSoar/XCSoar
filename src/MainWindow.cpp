@@ -159,7 +159,6 @@ MainWindow::~MainWindow()
 void
 MainWindow::Create(PixelSize size, TopWindowStyle style)
 {
-  style.EnableDoubleClicks();
   SingleWindow::Create(title, size, style);
 }
 

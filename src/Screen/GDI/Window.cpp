@@ -41,8 +41,6 @@ Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
   assert(rc.top <= rc.bottom);
   assert(rc.bottom - rc.top < 0x1000000);
 
-  double_clicks = window_style.double_clicks;
-
   DWORD style = window_style.style, ex_style = window_style.ex_style;
 
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
@@ -173,13 +171,6 @@ Window::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDBLCLK:
-    if (!double_clicks)
-      /* instead of disabling CS_DBLCLKS (which would affect all
-         instances of a window class), we just translate
-         WM_LBUTTONDBLCLK to WM_LBUTTONDOWN here; this even works for
-         built-in window class such as BUTTON */
-      return OnMessage(_hWnd, WM_LBUTTONDOWN, wParam, lParam);
-
     if (OnMouseDouble(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
       ResetUserIdle();

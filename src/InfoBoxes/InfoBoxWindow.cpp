@@ -54,7 +54,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
 {
   data.Clear();
 
-  style.EnableDoubleClicks();
   Create(parent, rc, style);
 }
 

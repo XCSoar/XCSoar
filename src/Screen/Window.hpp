@@ -55,13 +55,11 @@ protected:
   bool visible = true;
   bool enabled = true;
   bool tab_stop = false, control_parent = false;
-  bool double_clicks = false;
   bool has_border = false;
 
 #else /* USE_WINUSER */
   DWORD style = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
   DWORD ex_style = 0;
-  bool double_clicks = false;
 
 #endif /* USE_WINUSER */
 
@@ -144,10 +142,6 @@ public:
 #endif
   }
 
-  void EnableDoubleClicks() {
-    double_clicks = true;
-  }
-
   friend class Window;
 };
 
@@ -185,9 +179,6 @@ private:
 #else
   HWND hWnd = nullptr;
 #endif
-
-private:
-  bool double_clicks = false;
 
 public:
   Window() = default;

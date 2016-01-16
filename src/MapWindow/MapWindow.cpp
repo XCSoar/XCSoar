@@ -57,9 +57,7 @@ MapWindow::~MapWindow()
 void
 MapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
 {
-  WindowStyle style;
-  style.EnableDoubleClicks();
-  DoubleBufferWindow::Create(parent, rc, style);
+  DoubleBufferWindow::Create(parent, rc);
 
   // initialize other systems
   visible_projection.SetMapScale(5000);

@@ -295,7 +295,6 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
                       button_style, dialog, mrOK);
 
   WindowStyle preview_style;
-  preview_style.EnableDoubleClicks();
   preview_style.Hide();
 
   previews.resize(layout.info_boxes.count);

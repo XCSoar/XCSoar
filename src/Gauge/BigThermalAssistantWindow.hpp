@@ -37,12 +37,6 @@ public:
     :ThermalAssistantWindow(look, padding, false),
      dragging(false) {}
 
-  void Create(ContainerWindow &parent, PixelRect rc,
-           WindowStyle window_style=WindowStyle()) {
-    window_style.EnableDoubleClicks();
-    ThermalAssistantWindow::Create(parent, rc, window_style);
-  }
-
 private:
   void StopDragging() {
     if (!dragging)

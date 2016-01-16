@@ -166,12 +166,9 @@ Window::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 Window::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-#ifndef USE_WINUSER
-  if (!double_clicks)
-    return OnMouseDown(x, y);
-#endif
-
-  return false;
+  /* fall back to OnMouseDown() if the class didn't override
+     OnMouseDouble() */
+  return OnMouseDown(x, y);
 }
 
 bool

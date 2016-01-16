@@ -36,8 +36,6 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
   assert(rc.top <= rc.bottom);
   assert(rc.bottom - rc.top < 0x8000);
 
-  double_clicks = window_style.double_clicks;
-
   this->parent = parent;
   position = rc.GetOrigin();
   size = rc.GetSize();

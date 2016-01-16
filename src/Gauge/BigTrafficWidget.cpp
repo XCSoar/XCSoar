@@ -885,11 +885,8 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                             _("Close"), rc, WindowStyle(),
                             *this, CLOSE);
 
-  WindowStyle style;
-  style.EnableDoubleClicks();
-
   view = new FlarmTrafficControl(look.flarm_dialog);
-  view->Create(GetContainer(), rc, style);
+  view->Create(GetContainer(), rc);
 
   UpdateLayout();
 }
