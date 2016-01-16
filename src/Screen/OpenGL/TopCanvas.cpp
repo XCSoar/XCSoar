@@ -27,6 +27,14 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 
 void
+TopCanvas::SetupViewport(PixelSize native_size)
+{
+  OpenGL::SetupViewport(UnsignedPoint2D(native_size.cx,
+                                        native_size.cy));
+  Canvas::Create(native_size);
+}
+
+void
 TopCanvas::Resume()
 {
   OpenGL::SetupContext();

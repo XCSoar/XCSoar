@@ -105,10 +105,7 @@ TopCanvas::Create(SDL_Window *_window, PixelSize new_size)
 
   OpenGL::SetupContext();
 
-  const PixelSize drawable_size = GetNativeSize();
-  OpenGL::SetupViewport(UnsignedPoint2D(drawable_size.cx,
-                                        drawable_size.cy));
-  Canvas::Create(drawable_size);
+  SetupViewport(GetNativeSize());
 #endif
 
 #ifdef GREYSCALE

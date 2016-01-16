@@ -271,9 +271,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   }
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(UnsignedPoint2D(effective_size.cx,
-                                        effective_size.cy));
-  Canvas::Create(effective_size);
+  SetupViewport(effective_size);
 }
 
 void

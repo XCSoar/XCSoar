@@ -306,6 +306,10 @@ public:
 #endif
 
 private:
+#ifdef ENABLE_OPENGL
+  void SetupViewport(PixelSize native_size);
+#endif
+
 #ifdef USE_GLX
   void InitGLX(_XDisplay *x_display);
   void CreateGLX(_XDisplay *x_display,
