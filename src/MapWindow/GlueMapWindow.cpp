@@ -92,14 +92,6 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-GlueMapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
-{
-  MapWindow::Create(parent, rc);
-
-  visible_projection.SetScale(CommonInterface::GetMapSettings().cruise_scale);
-}
-
-void
 GlueMapWindow::SetMapSettings(const MapSettings &new_value)
 {
   AssertThreadOrUndefined();

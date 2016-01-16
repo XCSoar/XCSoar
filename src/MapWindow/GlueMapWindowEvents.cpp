@@ -45,6 +45,14 @@ Copyright_License {
 #endif
 
 void
+GlueMapWindow::OnCreate()
+{
+  MapWindow::OnCreate();
+
+  visible_projection.SetScale(CommonInterface::GetMapSettings().cruise_scale);
+}
+
+void
 GlueMapWindow::OnDestroy()
 {
   /* stop the TopographyThread and the TerrainThread */

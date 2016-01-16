@@ -184,8 +184,6 @@ public:
 
   bool Idle();
 
-  void Create(ContainerWindow &parent, const PixelRect &rc);
-
   void SetPan(bool enable);
   void TogglePan();
   void PanTo(const GeoPoint &location);
@@ -203,6 +201,7 @@ protected:
                                   const RasterPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
+  virtual void OnCreate() override;
   virtual void OnDestroy() override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
