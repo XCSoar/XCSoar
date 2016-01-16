@@ -301,31 +301,6 @@ OpenGL::SetupContext()
 #endif
 }
 
-void
-OpenGL::SetupViewport(UnsignedPoint2D size)
-{
-  window_size = size;
-  viewport_size = size;
-
-  glViewport(0, 0, size.x, size.y);
-
-#ifdef USE_GLSL
-  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
-  UpdateShaderProjectionMatrix();
-#else
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-#ifdef HAVE_GLES
-  glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
-#else
-  glOrtho(0, size.x, size.y, 0, -1, 1);
-#endif
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-#endif
-}
-
 #ifdef SOFTWARE_ROTATE_DISPLAY
 
 /**
@@ -365,25 +340,31 @@ OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
     std::swap(p.x, p.y);
 }
 
+#endif /* SOFTWARE_ROTATE_DISPLAY */
+
 UnsignedPoint2D
-OpenGL::SetupViewport(UnsignedPoint2D size, DisplayOrientation orientation)
+OpenGL::SetupViewport(UnsignedPoint2D size)
 {
   window_size = size;
 
   glViewport(0, 0, size.x, size.y);
 
 #ifdef USE_GLSL
+#ifdef SOFTWARE_ROTATE_DISPLAY
   projection_matrix = glm::rotate(glm::mat4(),
-                                  OrientationToRotation(orientation),
+                                  OrientationToRotation(display_orientation),
                                   glm::vec3(0, 0, 1));
   OrientationSwap(size, orientation);
+#endif
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
   UpdateShaderProjectionMatrix();
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glRotatef(OrientationToRotation(orientation), 0, 0, 1);
-  OrientationSwap(size, orientation);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  glRotatef(OrientationToRotation(display_orientation), 0, 0, 1);
+  OrientationSwap(size, display_orientation);
+#endif
 #ifdef HAVE_GLES
   glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
 #else
@@ -396,11 +377,8 @@ OpenGL::SetupViewport(UnsignedPoint2D size, DisplayOrientation orientation)
 
   viewport_size = size;
 
-  OpenGL::display_orientation = orientation;
   return size;
 }
-
-#endif
 
 void
 OpenGL::Deinitialise()

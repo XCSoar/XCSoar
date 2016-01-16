@@ -29,9 +29,9 @@ Copyright_License {
 void
 TopCanvas::SetupViewport(PixelSize native_size)
 {
-  OpenGL::SetupViewport(UnsignedPoint2D(native_size.cx,
-                                        native_size.cy));
-  Canvas::Create(native_size);
+  auto new_size = OpenGL::SetupViewport(UnsignedPoint2D(native_size.cx,
+                                                        native_size.cy));
+  Canvas::Create(PixelSize(new_size.x, new_size.y));
 }
 
 void
