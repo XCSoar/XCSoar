@@ -68,72 +68,10 @@ TopCanvas::GetRect() const
 
 #endif
 
-gcc_const
-static Uint32
-MakeSDLFlags(bool full_screen, bool resizable)
-{
-  Uint32 flags = 0;
-
-#ifdef ENABLE_OPENGL
-  flags |= SDL_WINDOW_OPENGL;
-#else /* !ENABLE_OPENGL */
-  flags |= SDL_SWSURFACE;
-#endif /* !ENABLE_OPENGL */
-
-#if !defined(__MACOSX__) || !(__MACOSX__)
-  if (full_screen)
-    flags |= SDL_WINDOW_FULLSCREEN;
-#endif
-
-  if (resizable)
-    flags |= SDL_WINDOW_RESIZABLE;
-
-#if defined(__IPHONEOS__) && __IPHONEOS__
-  /* Hide status bar on iOS devices */
-  flags |= SDL_WINDOW_BORDERLESS;
-#endif
-
-#ifdef HAVE_HIGHDPI_SUPPORT
-  flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-#endif
-
-  return flags;
-}
-
 void
-TopCanvas::Create(const char *text, PixelSize new_size,
-                  bool full_screen, bool resizable)
+TopCanvas::Create(SDL_Window *_window, PixelSize new_size)
 {
-  const Uint32 flags = MakeSDLFlags(full_screen, resizable);
-
-  window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, new_size.cx,
-                              new_size.cy, flags);
-  if (window == nullptr) {
-    fprintf(stderr,
-            "SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
-            text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
-            (unsigned) SDL_WINDOWPOS_UNDEFINED, (unsigned) new_size.cx,
-            (unsigned) new_size.cy, (unsigned)flags,
-            ::SDL_GetError());
-    return;
-  }
-
-#if defined(__MACOSX__) && __MACOSX__
-  SDL_SysWMinfo *wm_info =
-      reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
-  SDL_VERSION(&wm_info->version);
-  if ((SDL_GetWindowWMInfo(window, wm_info)) &&
-      (wm_info->subsystem == SDL_SYSWM_COCOA)) {
-    if (resizable) {
-      [wm_info->info.cocoa.window
-          setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
-    }
-    if (full_screen) {
-      [wm_info->info.cocoa.window toggleFullScreen: nil];
-    }
-  }
-#endif
+  window = _window;
 
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);

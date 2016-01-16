@@ -222,8 +222,7 @@ public:
 #endif
 
 #ifdef ENABLE_SDL
-  void Create(const char *text, PixelSize new_size,
-              bool full_screen, bool resizable);
+  void Create(SDL_Window *_window, PixelSize new_size);
 #elif defined(USE_GLX)
   void Create(_XDisplay *x_display,
               X11Window x_window,

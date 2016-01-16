@@ -44,6 +44,7 @@ struct Event;
 struct Event;
 #elif defined(ENABLE_SDL)
 union SDL_Event;
+struct SDL_Window;
 #endif
 
 #include <tchar.h>
@@ -138,6 +139,8 @@ class TopWindow : public ContainerWindow {
 #elif defined(USE_WAYLAND)
   struct wl_display *native_display;
   struct wl_egl_window *native_window;
+#elif defined(ENABLE_SDL)
+  SDL_Window *window;
 #endif
 
 #ifndef USE_WINUSER
@@ -199,7 +202,7 @@ public:
               TopWindowStyle style=TopWindowStyle());
 #endif
 
-#if defined(USE_X11) || defined(USE_WAYLAND)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(ENABLE_SDL)
 private:
   void CreateNative(const TCHAR *text, PixelSize size, TopWindowStyle style);
 

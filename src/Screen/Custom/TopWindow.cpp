@@ -29,10 +29,6 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
-#if defined(ENABLE_SDL) && defined(UNICODE)
-#include "Util/ConvertString.hpp"
-#endif
-
 TopWindow::~TopWindow()
 {
   delete screen;
@@ -44,7 +40,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 {
   invalidated = true;
 
-#if defined(USE_X11) || defined(USE_WAYLAND)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(ENABLE_SDL)
   CreateNative(text, size, style);
 #endif
 
@@ -52,12 +48,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen = new TopCanvas();
 
 #ifdef ENABLE_SDL
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
-  const char* text2 = text;
-#endif
-  screen->Create(text2, size, style.GetFullScreen(), style.GetResizable());
+  screen->Create(window, size);
 #elif defined(USE_GLX)
   screen->Create(x_display, x_window, fb_cfg);
 #elif defined(USE_X11)
