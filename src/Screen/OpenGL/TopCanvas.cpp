@@ -51,3 +51,18 @@ TopCanvas::CheckResize(PixelSize new_native_size)
   SetupViewport(new_native_size);
   return true;
 }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
+void
+TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
+{
+  const auto native_size = GetNativeSize();
+  if (native_size.cx <= 0 || native_size.cy <= 0)
+    return;
+
+  OpenGL::display_orientation = orientation;
+  SetupViewport(PixelSize(OpenGL::window_size.x, OpenGL::window_size.y));
+}
+
+#endif

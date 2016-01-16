@@ -53,7 +53,7 @@ Copyright_License {
 #define DRAW_MOUSE_CURSOR
 #endif
 
-#if defined(USE_EGL) && !defined(ANDROID)
+#if defined(ENABLE_OPENGL) && !defined(ANDROID) && !defined(TARGET_OS_IPHONE)
 /**
  * Support display rotation via glRotatef()?
  */

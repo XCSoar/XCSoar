@@ -15,6 +15,7 @@ Version 7.0 - not yet released
   - allow starting multiple XCSoar instances
 * Linux
   - drop support for SDL 1.2
+  - display rotation
 * Android
   - drop support for ARMv6 CPUs
 * Kobo
