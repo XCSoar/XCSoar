@@ -87,9 +87,6 @@ public:
     Java::String::CopyTo(env, _product, product, sizeof(product));
   }
 
-  unsigned GetWidth() const { return width; }
-  unsigned GetHeight() const { return height; }
-
 #ifndef NO_SCREEN
   PixelSize GetSize() const {
     return { width, height };
