@@ -240,7 +240,7 @@ public:
               bool full_screen, bool resizable);
 #endif
 
-#if defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL))
+#if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
   /**
    * Obtain the native (non-software-rotated) size of the OpenGL
    * drawable.
@@ -261,13 +261,6 @@ public:
 #endif
 
 #ifdef USE_FB
-  /**
-   * Ask the kernel for the frame buffer's current physical size.
-   * This is used by CheckResize().
-   */
-  gcc_pure
-  PixelSize GetPhysicalSize() const;
-
   /**
    * Check if the screen has been resized.
    *

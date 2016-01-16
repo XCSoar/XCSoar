@@ -218,7 +218,7 @@ TopCanvas::Create(PixelSize new_size,
 #ifdef USE_FB
 
 inline PixelSize
-TopCanvas::GetPhysicalSize() const
+TopCanvas::GetNativeSize() const
 {
   struct fb_var_screeninfo vinfo;
   ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
@@ -228,7 +228,7 @@ TopCanvas::GetPhysicalSize() const
 bool
 TopCanvas::CheckResize()
 {
-  CheckResize(GetPhysicalSize());
+  CheckResize(GetNativeSize());
 }
 
 #endif
