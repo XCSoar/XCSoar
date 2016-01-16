@@ -54,22 +54,6 @@ MapWindow::~MapWindow()
   delete weather;
 }
 
-void
-MapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
-{
-  DoubleBufferWindow::Create(parent, rc);
-
-  // initialize other systems
-  visible_projection.SetMapScale(5000);
-  visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
-                                     (rc.bottom + rc.top) / 2);
-  visible_projection.UpdateScreenBounds();
-
-#ifndef ENABLE_OPENGL
-  buffer_projection = visible_projection;
-#endif
-}
-
 #ifdef ENABLE_OPENGL
 
 void

@@ -55,6 +55,17 @@ MapWindow::OnCreate()
   WindowCanvas canvas(*this);
   buffer_canvas.Create(canvas);
 #endif
+
+  // initialize other systems
+  const PixelSize size = GetSize();
+  visible_projection.SetScreenSize(size);
+  visible_projection.SetMapScale(5000);
+  visible_projection.SetScreenOrigin(size.cx / 2, size.cy / 2);
+  visible_projection.UpdateScreenBounds();
+
+#ifndef ENABLE_OPENGL
+  buffer_projection = visible_projection;
+#endif
 }
 
 void
