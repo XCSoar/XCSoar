@@ -75,32 +75,20 @@ struct _XDisplay;
 
 class TopWindowStyle : public WindowStyle {
 #if defined(ENABLE_SDL) || defined(USE_X11)
-  bool full_screen;
+  bool full_screen = false;
 #endif
 #ifdef ENABLE_SDL
-  bool resizable;
+  bool resizable = false;
 #endif
 
 public:
   TopWindowStyle()
-#if defined(ENABLE_SDL) || defined(USE_X11)
-    :full_screen(false)
-#endif
-#ifdef ENABLE_SDL
-    , resizable(false)
-#endif
   {
     Popup();
   }
 
   TopWindowStyle(const WindowStyle other)
     :WindowStyle(other)
-#if defined(ENABLE_SDL) || defined(USE_X11)
-    , full_screen(false)
-#endif
-#ifdef ENABLE_SDL
-    , resizable(false)
-#endif
   {
     Popup();
   }
