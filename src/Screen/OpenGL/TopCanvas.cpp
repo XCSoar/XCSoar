@@ -48,8 +48,6 @@ TopCanvas::CheckResize(PixelSize new_native_size)
       (unsigned)new_native_size.cy == OpenGL::window_size.y)
     return false;
 
-  OpenGL::SetupViewport(UnsignedPoint2D(new_native_size.cx,
-                                        new_native_size.cy));
-  Canvas::Create(new_native_size);
+  SetupViewport(new_native_size);
   return true;
 }
