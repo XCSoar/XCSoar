@@ -253,11 +253,11 @@ public:
   /**
    * Check if the screen has been resized.
    *
-   * @param new_physical_size the new screen size reported by the
+   * @param new_native_size the new screen size reported by the
    * windowing system library
    * @return true if the screen has been resized
    */
-  bool CheckResize(PixelSize new_physical_size);
+  bool CheckResize(PixelSize new_native_size);
 #endif
 
 #ifdef USE_FB

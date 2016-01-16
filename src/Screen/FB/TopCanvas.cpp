@@ -234,9 +234,9 @@ TopCanvas::CheckResize()
 #endif
 
 bool
-TopCanvas::CheckResize(const PixelSize new_physical_size)
+TopCanvas::CheckResize(const PixelSize new_native_size)
 {
-  const PixelSize new_size = new_physical_size;
+  const PixelSize new_size = new_native_size;
   if (new_size == GetSize())
     /* no change */
     return false;
