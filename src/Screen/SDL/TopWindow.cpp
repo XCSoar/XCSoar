@@ -253,6 +253,7 @@ TopWindow::OnResize(PixelSize new_size)
 {
   ContainerWindow::OnResize(new_size);
 
+#ifdef USE_MEMORY_CANVAS
   screen->OnResize(new_size);
+#endif
 }
-

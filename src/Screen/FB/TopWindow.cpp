@@ -83,7 +83,6 @@ TopWindow::OnResize(PixelSize new_size)
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
 #endif
 
-  screen->OnResize(new_size);
   ContainerWindow::OnResize(new_size);
 }
 

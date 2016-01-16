@@ -33,11 +33,6 @@ TopCanvas::Resume()
   OpenGL::SetupViewport(UnsignedPoint2D(size.cx, size.cy));
 }
 
-void
-TopCanvas::OnResize(PixelSize new_size)
-{
-}
-
 bool
 TopCanvas::CheckResize(PixelSize new_native_size)
 {

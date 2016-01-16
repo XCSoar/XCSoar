@@ -255,12 +255,6 @@ TopCanvas::CheckResize(const PixelSize new_native_size)
   return true;
 }
 
-void
-TopCanvas::OnResize(PixelSize new_size)
-{
-  // TODO: is this even possible?
-}
-
 Canvas
 TopCanvas::Lock()
 {

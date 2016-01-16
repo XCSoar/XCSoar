@@ -276,7 +276,9 @@ public:
   void Resume();
 #endif
 
+#if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
   void OnResize(PixelSize new_size);
+#endif
 
 #ifdef USE_MEMORY_CANVAS
   PixelSize GetSize() const {
