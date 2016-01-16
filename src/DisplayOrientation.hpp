@@ -34,4 +34,21 @@ enum class DisplayOrientation : uint8_t {
   REVERSE_LANDSCAPE,
 };
 
+static inline bool
+AreAxesSwapped(DisplayOrientation orientation)
+{
+  switch (orientation) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    break;
+
+  case DisplayOrientation::PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    return true;
+  }
+
+  return false;
+}
+
 #endif

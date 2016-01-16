@@ -361,17 +361,8 @@ OrientationToRotation(DisplayOrientation orientation)
 static void
 OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
 {
-  switch (orientation) {
-  case DisplayOrientation::DEFAULT:
-  case DisplayOrientation::LANDSCAPE:
-  case DisplayOrientation::REVERSE_LANDSCAPE:
-    break;
-
-  case DisplayOrientation::PORTRAIT:
-  case DisplayOrientation::REVERSE_PORTRAIT:
+  if (AreAxesSwapped(orientation))
     std::swap(p.x, p.y);
-    break;
-  }
 }
 
 void
