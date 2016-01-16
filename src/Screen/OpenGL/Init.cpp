@@ -326,6 +326,8 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 #endif
 }
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
 /**
  * Determine the projection rotation angle (in degrees) of the
  * specified orientation.
@@ -403,10 +405,10 @@ OpenGL::SetupViewport(UnsignedPoint2D &size, DisplayOrientation orientation)
 
   viewport_size = size;
 
-#ifdef SOFTWARE_ROTATE_DISPLAY
   OpenGL::display_orientation = orientation;
-#endif
 }
+
+#endif
 
 void
 OpenGL::Deinitialise()
