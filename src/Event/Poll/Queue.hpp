@@ -119,10 +119,6 @@ public:
   }
 
 #ifndef USE_LIBINPUT
-  void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
-    input_queue.SetMouseRotation(swap, invert_x, invert_y);
-  }
-
   void SetMouseRotation(DisplayOrientation orientation) {
     input_queue.SetMouseRotation(orientation);
   }

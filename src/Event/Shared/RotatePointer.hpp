@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_ROTATE_POINTER_HPP
 
 #include "Screen/Point.hpp"
+#include "DisplayOrientation.hpp"
 
 #include <algorithm>
 
@@ -69,6 +70,29 @@ public:
   void SetInvert(bool _invert_x, bool _invert_y) {
     invert_x = _invert_x;
     invert_y = _invert_y;
+  }
+
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+    SetSwap(AreAxesSwapped(orientation));
+
+    switch (TranslateDefaultDisplayOrientation(orientation)) {
+    case DisplayOrientation::DEFAULT:
+    case DisplayOrientation::PORTRAIT:
+      SetInvert(true, false);
+      break;
+
+    case DisplayOrientation::LANDSCAPE:
+      SetInvert(false, false);
+      break;
+
+    case DisplayOrientation::REVERSE_PORTRAIT:
+      SetInvert(false, true);
+      break;
+
+    case DisplayOrientation::REVERSE_LANDSCAPE:
+      SetInvert(true, true);
+      break;
+    }
   }
 
   void DoRelative(int &x, int &y) {

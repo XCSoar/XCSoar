@@ -69,12 +69,8 @@ public:
 
   void SetScreenSize(unsigned width, unsigned height);
 
-  void SetSwap(bool _swap) {
-    rotate.SetSwap(_swap);
-  }
-
-  void SetInvert(bool _invert_x, bool _invert_y) {
-    rotate.SetInvert(_invert_x, _invert_y);
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+    rotate.SetDisplayOrientation(orientation);
   }
 
   void AddPointer() {

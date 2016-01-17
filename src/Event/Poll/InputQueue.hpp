@@ -76,12 +76,9 @@ public:
   }
 
 #ifndef USE_LIBINPUT
-  void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
-    merge_mouse.SetSwap(swap);
-    merge_mouse.SetInvert(invert_x, invert_y);
+  void SetMouseRotation(DisplayOrientation orientation) {
+    merge_mouse.SetDisplayOrientation(orientation);
   }
-
-  void SetMouseRotation(DisplayOrientation orientation);
 #endif
 
   bool HasPointer() const {

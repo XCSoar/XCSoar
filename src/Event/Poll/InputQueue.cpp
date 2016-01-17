@@ -62,33 +62,6 @@ InputEventQueue::~InputEventQueue()
 {
 }
 
-#ifndef USE_LIBINPUT
-
-void
-InputEventQueue::SetMouseRotation(DisplayOrientation orientation)
-{
-  switch (TranslateDefaultDisplayOrientation(orientation)) {
-  case DisplayOrientation::DEFAULT:
-  case DisplayOrientation::PORTRAIT:
-    SetMouseRotation(true, true, false);
-    break;
-
-  case DisplayOrientation::LANDSCAPE:
-    SetMouseRotation(false, false, false);
-    break;
-
-  case DisplayOrientation::REVERSE_PORTRAIT:
-    SetMouseRotation(true, false, true);
-    break;
-
-  case DisplayOrientation::REVERSE_LANDSCAPE:
-    SetMouseRotation(false, true, true);
-    break;
-  }
-}
-
-#endif
-
 bool
 InputEventQueue::Generate(Event &event)
 {
