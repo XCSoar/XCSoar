@@ -24,26 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_POINT_HPP
 #define XCSOAR_SCREEN_GDI_POINT_HPP
 
+#include "Math/Point2D.hpp"
+
 #include <windows.h>
 
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
 
-struct RasterPoint : public tagPOINT {
+struct RasterPoint : IntPoint2D {
   RasterPoint() = default;
 
-  constexpr RasterPoint(PixelScalar _x, PixelScalar _y)
-    :tagPOINT({_x, _y}) {}
-
-  explicit constexpr RasterPoint(const POINT &other):tagPOINT(other) {}
-
-  constexpr RasterPoint operator+(RasterPoint other) const {
-    return { x + other.x, y + other.y };
-  }
-
-  constexpr RasterPoint operator-(RasterPoint other) const {
-    return { x - other.x, y - other.y };
-  }
+  template<typename... Args>
+  constexpr RasterPoint(Args&&... args)
+    :IntPoint2D(args...) {}
 };
 
 struct PixelSize : public tagSIZE {

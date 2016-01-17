@@ -26,14 +26,12 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-struct PixelSize;
-
-struct RasterPoint : Point2D<PixelScalar, int> {
+struct RasterPoint : IntPoint2D {
   RasterPoint() = default;
 
   template<typename... Args>
   constexpr RasterPoint(Args&&... args)
-    :Point2D<PixelScalar, int>(args...) {}
+    :IntPoint2D(args...) {}
 };
 
 struct PixelSize {
