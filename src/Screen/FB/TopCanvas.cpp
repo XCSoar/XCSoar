@@ -228,7 +228,7 @@ TopCanvas::GetNativeSize() const
 bool
 TopCanvas::CheckResize()
 {
-  CheckResize(GetNativeSize());
+  return CheckResize(GetNativeSize());
 }
 
 #endif
