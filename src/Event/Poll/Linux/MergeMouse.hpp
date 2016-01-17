@@ -93,12 +93,8 @@ public:
     wheel += d;
   }
 
-  unsigned GetX() const {
-    return x;
-  }
-
-  unsigned GetY() const {
-    return y;
+  RasterPoint GetPosition() const {
+    return RasterPoint(x, y);
   }
 
   Event Generate();

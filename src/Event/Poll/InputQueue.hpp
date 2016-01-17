@@ -103,7 +103,7 @@ public:
 #ifdef USE_LIBINPUT
     return { int(libinput_handler.GetX()), int(libinput_handler.GetY()) };
 #else
-    return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
+    return merge_mouse.GetPosition();
 #endif
   }
 
