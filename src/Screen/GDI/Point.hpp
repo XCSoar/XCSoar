@@ -118,8 +118,8 @@ struct PixelRect : public tagRECT {
     return { (left + right) / 2, (top + bottom) / 2 };
   }
 
-  bool IsInside(RasterPoint pt) const {
-    return ::PtInRect(this, pt);
+  constexpr bool IsInside(RasterPoint pt) const {
+    return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 };
 
