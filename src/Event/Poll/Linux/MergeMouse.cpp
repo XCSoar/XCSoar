@@ -111,21 +111,21 @@ MergeMouse::Generate()
 {
   if (moved) {
     moved = false;
-    return Event(Event::MOUSE_MOTION, x, y);
+    return Event(Event::MOUSE_MOTION, PixelPoint(x, y));
   }
 
   if (pressed) {
     pressed = false;
-    return Event(Event::MOUSE_DOWN, x, y);
+    return Event(Event::MOUSE_DOWN, PixelPoint(x, y));
   }
 
   if (released) {
     released = false;
-    return Event(Event::MOUSE_UP, x, y);
+    return Event(Event::MOUSE_UP, PixelPoint(x, y));
   }
 
   if (wheel != 0) {
-    Event event(Event::MOUSE_WHEEL, x, y);
+    Event event(Event::MOUSE_WHEEL, PixelPoint(x, y));
     event.param = unsigned(wheel);
     wheel = 0;
     return event;

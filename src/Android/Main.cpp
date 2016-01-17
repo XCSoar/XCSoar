@@ -287,7 +287,7 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
 
   event_queue->Purge(Event::RESIZE);
 
-  Event event(Event::RESIZE, width, height);
+  Event event(Event::RESIZE, PixelPoint(width, height));
   event_queue->Push(event);
 }
 

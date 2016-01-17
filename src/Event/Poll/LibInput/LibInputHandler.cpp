@@ -169,7 +169,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       x = Clamp<double>(x, 0, width);
       y += libinput_event_pointer_get_dy(ptr_li_event);
       y = Clamp<double>(y, 0, height);
-      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_MOTION_ABSOLUTE:
@@ -180,7 +181,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
                                                             width);
       y = libinput_event_pointer_get_absolute_y_transformed(ptr_li_event,
                                                             height);
-      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_BUTTON:
@@ -192,7 +194,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       queue.Push(Event(btn_state == LIBINPUT_BUTTON_STATE_PRESSED
                        ? Event::MOUSE_DOWN
                        : Event::MOUSE_UP,
-                       (unsigned) x, (unsigned) y));
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_AXIS:
@@ -207,7 +209,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
           ptr_li_event, LIBINPUT_POINTER_AXIS_SCROLL_VERTICAL);
 #endif
       if (0 != axis_value) {
-        Event event(Event::MOUSE_WHEEL, (unsigned) x, (unsigned) y);
+        Event event(Event::MOUSE_WHEEL,
+                    PixelPoint((unsigned)x, (unsigned)y));
         event.param = unsigned((int) axis_value);
         queue.Push(event);
       }
@@ -219,12 +222,14 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
         libinput_event_get_touch_event(li_event);
       x = libinput_event_touch_get_x_transformed(touch_li_event, width);
       y = libinput_event_touch_get_y_transformed(touch_li_event, height);
-      queue.Push(Event(Event::MOUSE_DOWN, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_DOWN,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_TOUCH_UP:
     {
-      queue.Push(Event(Event::MOUSE_UP, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_UP,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_TOUCH_MOTION:
@@ -233,7 +238,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
         libinput_event_get_touch_event(li_event);
       x = libinput_event_touch_get_x_transformed(touch_li_event, width);
       y = libinput_event_touch_get_y_transformed(touch_li_event, height);
-      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   }

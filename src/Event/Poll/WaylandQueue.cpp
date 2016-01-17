@@ -224,12 +224,13 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
     return;
 
   pointer_position = new_pointer_position;
-  Push(Event(Event::MOUSE_MOTION, pointer_position.x, pointer_position.y));
+  Push(Event(Event::MOUSE_MOTION,
+             PixelPoint(pointer_position.x, pointer_position.y)));
 }
 
 inline void
 WaylandEventQueue::PointerButton(bool pressed)
 {
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
-             pointer_position.x, pointer_position.y));
+             PixelPoint(pointer_position.x, pointer_position.y)));
 }

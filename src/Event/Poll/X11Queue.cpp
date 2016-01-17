@@ -105,14 +105,16 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button2:
     case Button3:
       ctrl_click = event.xbutton.state & ControlMask;
-      queue.Push(Event(Event::MOUSE_DOWN, event.xbutton.x, event.xbutton.y));
+      queue.Push(Event(Event::MOUSE_DOWN,
+                       PixelPoint(event.xbutton.x, event.xbutton.y)));
       break;
 
     case Button4:
     case Button5:
       /* mouse wheel */
       {
-        Event e(Event::MOUSE_WHEEL, event.xbutton.x, event.xbutton.y);
+        Event e(Event::MOUSE_WHEEL,
+                PixelPoint(event.xbutton.x, event.xbutton.y));
         e.param = event.xbutton.button == Button4 ? 1u : unsigned(-1);
         queue.Push(e);
       }
@@ -125,12 +127,14 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button1:
     case Button2:
     case Button3:
-      queue.Push(Event(Event::MOUSE_UP, event.xbutton.x, event.xbutton.y));
+      queue.Push(Event(Event::MOUSE_UP,
+                       PixelPoint(event.xbutton.x, event.xbutton.y)));
     }
     break;
 
   case MotionNotify:
-    queue.Push(Event(Event::MOUSE_MOTION, event.xmotion.x, event.xmotion.y));
+    queue.Push(Event(Event::MOUSE_MOTION,
+                     PixelPoint(event.xmotion.x, event.xmotion.y)));
     break;
 
   case ClientMessage:
@@ -143,8 +147,9 @@ X11EventQueue::HandleEvent(_XEvent &event)
       break;
 
   case ConfigureNotify:
-    queue.Push(Event(Event::RESIZE, event.xconfigure.width,
-                     event.xconfigure.height));
+    queue.Push(Event(Event::RESIZE,
+                     PixelPoint(event.xconfigure.width,
+                                event.xconfigure.height)));
     break;
 
   case VisibilityNotify:
