@@ -51,7 +51,7 @@ MergeMouse::SetDown(bool new_down)
 void
 MergeMouse::MoveAbsolute(RasterPoint p)
 {
-  rotate.DoAbsolute(p);
+  p = rotate.DoAbsolute(p);
 
   const unsigned screen_width = rotate.GetWidth();
   if (screen_width > 0) {
@@ -103,9 +103,7 @@ MergeMouse::MoveAbsolute(int new_x, int new_y,
 void
 MergeMouse::MoveRelative(RasterPoint d)
 {
-  rotate.DoRelative(d);
-
-  MoveAbsolute(GetPosition() + d);
+  MoveAbsolute(GetPosition() + rotate.DoRelative(d));
 }
 
 Event

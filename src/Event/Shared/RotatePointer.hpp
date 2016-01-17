@@ -95,30 +95,25 @@ public:
     }
   }
 
-  void DoRelative(RasterPoint &p) {
+  gcc_pure
+  RasterPoint DoRelative(RasterPoint p) const {
     if (swap)
       std::swap(p.x, p.y);
+
+    return p;
   }
 
-  void DoAbsolute(RasterPoint &p) {
-    DoRelative(p);
+  gcc_pure
+  RasterPoint DoAbsolute(RasterPoint p) const {
+    p = DoRelative(p);
 
     if (invert_x)
       p.x = width - p.x;
 
     if (invert_y)
       p.y = height - p.y;
-  }
 
-  void Do(RasterPoint &p) {
-    if (swap)
-      std::swap(p.x, p.y);
-
-    if (invert_x)
-      p.x = width - p.x;
-
-    if (invert_y)
-      p.y = height - p.y;
+    return p;
   }
 };
 
