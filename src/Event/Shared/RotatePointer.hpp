@@ -36,23 +36,19 @@ class RotatePointer {
   /**
    * Swap x and y?
    */
-  bool swap;
+  bool swap = false;
 
   /**
    * Invert x or y?
    */
-  bool invert_x, invert_y;
+  bool invert_x = false, invert_y = false;
 
   /**
    * Screen dimensions in pixels.
    */
-  unsigned width, height;
+  unsigned width = 0, height = 0;
 
 public:
-  constexpr RotatePointer()
-    :swap(false), invert_x(false), invert_y(false),
-     width(0), height(0) {}
-
   constexpr unsigned GetWidth() const {
     return width;
   }
