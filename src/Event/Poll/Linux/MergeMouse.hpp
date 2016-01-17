@@ -39,28 +39,24 @@ struct Event;
 class MergeMouse final {
   RotatePointer rotate;
 
-  unsigned x, y;
+  unsigned x = 0, y = 0;
 
   /**
    * Relative mouse wheel movement since last Generate() call.
    */
-  int wheel;
+  int wheel = 0;
 
-  bool down;
+  bool down = false;
 
-  bool moved, pressed, released;
+  bool moved = false, pressed = false, released = false;
 
   /**
    * The number of pointer input devices.
    */
-  unsigned n_pointers;
+  unsigned n_pointers = 0;
 
 public:
-  MergeMouse()
-    :x(0), y(0), wheel(0),
-     down(false), moved(false), pressed(false), released(false),
-     n_pointers(0) {}
-
+  MergeMouse() = default;
   MergeMouse(const MergeMouse &) = delete;
 
   ~MergeMouse() {
