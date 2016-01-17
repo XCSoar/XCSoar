@@ -142,7 +142,6 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   canvas.SetBackgroundOpaque();
 
   // draw small arrow along task direction
-  RasterPoint p_p;
   RasterPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
 
   const RasterPoint p_start = m_proj.GeoToScreen(start);
@@ -151,7 +150,8 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   const Angle ang = Angle::FromXY(p_start.y - p_end.y,
                                   p_end.x - p_start.x).AsBearing();
 
-  ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(), &p_p, Layout::Scale(25));
+  const auto p_p = ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(),
+                                      Layout::Scale(25));
   PolygonRotateShift(Arrow, 2, p_p, ang);
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;

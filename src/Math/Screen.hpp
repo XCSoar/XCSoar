@@ -26,12 +26,15 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
+#include "Compiler.h"
+
 struct RasterPoint;
 class Angle;
 
-void
+gcc_pure
+RasterPoint
 ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                   const RasterPoint &p3, RasterPoint *p4, int offset);
+                   const RasterPoint &p3, int offset);
 
 /**
  * Shifts, rotates and scales the given polygon.

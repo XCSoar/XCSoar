@@ -30,9 +30,9 @@ Copyright_License {
 
 #include <algorithm>
 
-void
+RasterPoint
 ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                   const RasterPoint &p3, RasterPoint *p4, int offset)
+                   const RasterPoint &p3, int offset)
 {
   int v12x, v12y, v13x, v13y;
 
@@ -58,11 +58,10 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
 
     const auto f = Clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
-    p4->x = lround(v12x * f) + p1.x;
-    p4->y = lround(v12y * f) + p1.y;
+    return RasterPoint(lround(v12x * f) + p1.x,
+                       lround(v12y * f) + p1.y);
   } else {
-    p4->x = p1.x;
-    p4->y = p1.y;
+    return p1;
   }
 }
 

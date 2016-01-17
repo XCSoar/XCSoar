@@ -50,7 +50,7 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
   RasterPoint pts[3];
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
-  ScreenClosestPoint(pts[0], pts[1], pts[0], &pts[2], Layout::Scale(20));
+  pts[2] = ScreenClosestPoint(pts[0], pts[1], pts[0], Layout::Scale(20));
   canvas.DrawLine(pts[2], pts[1]);
 }
 
