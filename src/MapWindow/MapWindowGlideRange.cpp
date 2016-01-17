@@ -35,7 +35,7 @@ Copyright_License {
 #include <stdio.h>
 #include "Util/StaticArray.hxx"
 
-typedef std::vector<RasterPoint> RasterPointVector;
+typedef std::vector<BulkPixelPoint> BulkPixelPointVector;
 
 struct ProjectedFan {
   /**
@@ -51,7 +51,7 @@ struct ProjectedFan {
   }
 
 #ifdef ENABLE_OPENGL
-  void DrawFill(const RasterPoint *points, unsigned start) const {
+  void DrawFill(const BulkPixelPoint *points, unsigned start) const {
     /* triangulate the polygon */
     AllocatedArray<GLushort> triangle_buffer;
 
@@ -72,11 +72,11 @@ struct ProjectedFan {
     glDrawArrays(GL_LINE_LOOP, start, size);
   }
 #else
-  void DrawFill(Canvas &canvas, const RasterPoint *points) const {
+  void DrawFill(Canvas &canvas, const BulkPixelPoint *points) const {
     canvas.DrawPolygon(&points[0], size);
   }
 
-  void DrawOutline(Canvas &canvas, const RasterPoint *points) const {
+  void DrawOutline(Canvas &canvas, const BulkPixelPoint *points) const {
     canvas.DrawPolygon(&points[0], size);
   }
 #endif
@@ -92,7 +92,7 @@ struct ProjectedFans {
    * points[0], followed by the second one at points[fans[0].size],
    * etc.
    */
-  RasterPointVector points;
+  BulkPixelPointVector points;
 
 #ifndef NDEBUG
   unsigned remaining;
@@ -145,13 +145,13 @@ struct ProjectedFans {
 
 #ifdef ENABLE_OPENGL
     unsigned start = 0;
-    const RasterPoint *points = &this->points[0];
+    const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawFill(points, start);
       start += i->size;
     }
 #else
-    const RasterPoint *points = &this->points[0];
+    const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawFill(canvas, points);
       points += i->size;
@@ -169,7 +169,7 @@ struct ProjectedFans {
       start += i->size;
     }
 #else
-    const RasterPoint *points = &this->points[0];
+    const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawOutline(canvas, points);
       points += i->size;

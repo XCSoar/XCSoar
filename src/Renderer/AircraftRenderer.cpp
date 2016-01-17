@@ -32,11 +32,11 @@ Copyright_License {
 #include <algorithm>
 
 static void
-DrawMirroredPolygon(const RasterPoint *src, unsigned points,
+DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
                     Canvas &canvas, const Angle angle,
                     const RasterPoint pos)
 {
-  RasterPoint dst[64];
+  BulkPixelPoint dst[64];
   assert(2 * points <= ARRAY_SIZE(dst));
 
   std::copy_n(src, points, dst);
@@ -59,7 +59,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
                      const RasterPoint aircraft_pos)
 {
   {
-    static constexpr RasterPoint Aircraft[] = {
+    static constexpr BulkPixelPoint Aircraft[] = {
       {0, -10},
       {-2, -7},
       {-2, -2},
@@ -88,7 +88,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
   }
 
   {
-    static constexpr RasterPoint Canopy[] = {
+    static constexpr BulkPixelPoint Canopy[] = {
       {0, -7},
       {-1, -7},
       {-1, -2},
@@ -109,7 +109,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
                    const Angle angle,
                    const RasterPoint aircraft_pos, bool large)
 {
-  static constexpr RasterPoint AircraftLarge[] = {
+  static constexpr BulkPixelPoint AircraftLarge[] = {
     {1, -7},
     {1, -1},
     {17, -1},
@@ -128,7 +128,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
     {-1, -7},
   };
 
-  static constexpr RasterPoint AircraftSmall[] = {
+  static constexpr BulkPixelPoint AircraftSmall[] = {
     {1, -5},
     {1, 0},
     {14, 0},
@@ -150,7 +150,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   static constexpr unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
   static constexpr unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
 
-  const RasterPoint *Aircraft = large ? AircraftLarge : AircraftSmall;
+  const auto *Aircraft = large ? AircraftLarge : AircraftSmall;
   const unsigned AircraftPoints = large ?
                                   AIRCRAFT_POINTS_LARGE : AIRCRAFT_POINTS_SMALL;
 
@@ -169,7 +169,7 @@ static void
 DrawHangGlider(Canvas &canvas, const AircraftLook &look,
                const Angle angle, const RasterPoint aircraft_pos, bool inverse)
 {
-  static constexpr RasterPoint aircraft[] = {
+  static constexpr BulkPixelPoint aircraft[] = {
     {1, -3},
     {7, 0},
     {13, 4},
@@ -201,7 +201,7 @@ static void
 DrawParaGlider(Canvas &canvas, const AircraftLook &look,
                const Angle angle, const RasterPoint aircraft_pos, bool inverse)
 {
-  static constexpr RasterPoint aircraft[] = {
+  static constexpr BulkPixelPoint aircraft[] = {
     // Wing
     {-5, 3},
     {-11, 2},

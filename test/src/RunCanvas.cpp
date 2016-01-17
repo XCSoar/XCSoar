@@ -105,13 +105,13 @@ private:
     const int hmiddle = (rc.left + rc.right) / 2;
     const int vmiddle = (rc.top + rc.bottom) / 2;
 
-    RasterPoint p1[3] = {
+    BulkPixelPoint p1[3] = {
       { -100, vmiddle },
       { (width * 2) / 3, -100 },
       { hmiddle, height * 2 },
     };
 
-    RasterPoint p2[3] = {
+    BulkPixelPoint p2[3] = {
       { -2000, vmiddle },
       { width * 10, -3000 },
       { width * 5, 3000 },

@@ -151,7 +151,7 @@ CrossSectionRenderer::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
   canvas.Select(look.aircraft_brush);
   canvas.SelectNullPen();
 
-  RasterPoint line[4];
+  BulkPixelPoint line[4];
   line[0] = chart.ToScreen(fixed(0), gps_info.nav_altitude);
   line[1].x = rc.left;
   line[1].y = line[0].y;

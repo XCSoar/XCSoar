@@ -279,7 +279,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   canvas.Select(look.radar_pen);
   canvas.SelectHollowBrush();
 
-  RasterPoint triangle[4];
+  BulkPixelPoint triangle[4];
   triangle[0].x = 0;
   triangle[0].y = -radius / Layout::FastScale(1) + 15;
   triangle[1].x = 7;

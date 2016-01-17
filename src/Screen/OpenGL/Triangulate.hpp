@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "System.hpp"
 
-struct RasterPoint;
+struct BulkPixelPoint;
 struct FloatPoint2D;
 template<class T> class AllocatedArray;
 
@@ -44,7 +44,7 @@ template<class T> class AllocatedArray;
  *         3 to 3*(num_points-2): success
  */
 unsigned
-PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
                    AllocatedArray<GLushort> &triangles,
                    unsigned min_distance=1);
 unsigned
@@ -84,8 +84,8 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
  * @return Returns the number of triangle coordinates or 0 for failure
  */
 unsigned
-LineToTriangles(const RasterPoint *points, unsigned num_points,
-                AllocatedArray<RasterPoint> &strip,
+LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
+                AllocatedArray<BulkPixelPoint> &strip,
                 unsigned line_width, bool loop=false, bool tcap=false);
 
 #endif

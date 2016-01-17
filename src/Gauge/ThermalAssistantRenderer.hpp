@@ -27,6 +27,7 @@
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 
 #include <array>
 
@@ -37,7 +38,7 @@ class Canvas;
 
 class ThermalAssistantRenderer
 {
-  class LiftPoints: public std::array<RasterPoint,
+  class LiftPoints: public std::array<BulkPixelPoint,
                                       std::tuple_size<LiftDatabase>::value>
   {
   public:

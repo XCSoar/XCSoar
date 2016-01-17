@@ -28,6 +28,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
+struct BulkPixelPoint;
 struct RasterPoint;
 class Angle;
 
@@ -53,7 +54,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
  *        compatibility as the use of FastScale() is deprecated.
  */
 void
-PolygonRotateShift(RasterPoint *poly, int n, RasterPoint shift,
+PolygonRotateShift(BulkPixelPoint *poly, int n, RasterPoint shift,
                    Angle angle, int scale = 100,
                    bool use_fast_scale = true);
 

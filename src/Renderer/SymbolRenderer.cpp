@@ -34,7 +34,7 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
 
   PixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
   RasterPoint center = rc.GetCenter();
-  RasterPoint arrow[3];
+  BulkPixelPoint arrow[3];
 
   if (direction == LEFT || direction == RIGHT) {
     arrow[0].x = center.x + (direction == LEFT ? size : -size);

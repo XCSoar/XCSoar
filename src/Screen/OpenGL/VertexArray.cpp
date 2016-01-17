@@ -28,7 +28,7 @@ GLDonutVertices::GLDonutVertices(GLvalue center_x, GLvalue center_y,
                                  GLvalue radius_inner, GLvalue radius_outer)
 {
   static_assert(INT_ANGLE_RANGE % CIRCLE_SIZE == 0, "Wrong CIRCLE_SIZE");
-  RasterPoint *p = v, *p2 = v + CIRCLE_SIZE;
+  auto *p = v, *p2 = v + CIRCLE_SIZE;
 
   for (unsigned i = 0; i < CIRCLE_SIZE/2; ++i) {
     int cos = ISINETABLE[(i * (INT_ANGLE_RANGE / CIRCLE_SIZE) + 1024) & INT_ANGLE_MASK];

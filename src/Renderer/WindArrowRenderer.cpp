@@ -41,7 +41,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 {
   // Draw arrow
 
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
     { 0, -offset + 3 },
     { -6, -offset - 3 - int(length) },
     { 0, -offset + 3 - int(length) },
@@ -58,7 +58,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
   // Draw arrow tail
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
-    RasterPoint tail[] = {
+    BulkPixelPoint tail[] = {
       { 0, -offset + 3 },
       { 0, -offset - 3 - int(std::min(20u, length) * 3u) },
     };
@@ -90,7 +90,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.Select(*look.font);
 
   const unsigned offset = uround(M_SQRT2 * wind.norm);
-  RasterPoint label[] = {
+  BulkPixelPoint label[] = {
     { 18, -26 - int(offset) },
   };
   PolygonRotateShift(label, ARRAY_SIZE(label),

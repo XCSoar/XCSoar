@@ -182,8 +182,8 @@ TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset)
 void
 GaugeVario::MakePolygon(const int i)
 {
-  RasterPoint *bit = getPolygon(i);
-  RasterPoint *bline = &lines[i + gmax];
+  auto *bit = getPolygon(i);
+  auto *bline = &lines[i + gmax];
 
   const FastIntegerRotation r(Angle::Degrees(i));
 
@@ -198,7 +198,7 @@ GaugeVario::MakePolygon(const int i)
                                  offset);
 }
 
-RasterPoint *
+BulkPixelPoint *
 GaugeVario::getPolygon(int i)
 {
   return polys + (i + gmax) * 3;
@@ -491,7 +491,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
           canvas.Rectangle(x, y,
                            x + arrow_x_size * 2 + 1, y + arrow_y_size - 1);
         } else {
-          RasterPoint arrow[3];
+          BulkPixelPoint arrow[3];
           arrow[0].x = x;
           arrow[0].y = y;
           arrow[1].x = x + arrow_x_size;
@@ -513,7 +513,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
           canvas.Rectangle(x, y + 1,
                            x + arrow_x_size * 2 + 1, y - arrow_y_size + 2);
         } else {
-          RasterPoint arrow[3];
+          BulkPixelPoint arrow[3];
           arrow[0].x = x;
           arrow[0].y = y;
           arrow[1].x = x + arrow_x_size;

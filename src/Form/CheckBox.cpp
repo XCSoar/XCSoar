@@ -195,7 +195,7 @@ CheckBoxControl::OnPaint(Canvas &canvas)
     canvas.Select(state_look.check_brush);
     canvas.SelectNullPen();
 
-    RasterPoint check_mark[] = {
+    BulkPixelPoint check_mark[] = {
       {-8, -2},
       {-3, 6},
       {7, -9},

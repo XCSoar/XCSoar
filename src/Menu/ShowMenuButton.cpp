@@ -69,12 +69,12 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.DrawRoundRectangle(rc.left, rc.top, rc.right - 1, rc.bottom - 1,
                             Layout::VptScale(8), Layout::VptScale(8));
 
-  const RasterPoint m[] = {
-    RasterPoint(rc.left + padding, rc.bottom - padding),
-    RasterPoint(rc.left + padding, rc.top + padding),
-    RasterPoint((rc.left + rc.right) / 2, rc.bottom - 2 * padding),
-    RasterPoint(rc.right - padding, rc.top + padding),
-    RasterPoint(rc.right - padding, rc.bottom - padding),
+  const BulkPixelPoint m[] = {
+    BulkPixelPoint(rc.left + padding, rc.bottom - padding),
+    BulkPixelPoint(rc.left + padding, rc.top + padding),
+    BulkPixelPoint((rc.left + rc.right) / 2, rc.bottom - 2 * padding),
+    BulkPixelPoint(rc.right - padding, rc.top + padding),
+    BulkPixelPoint(rc.right - padding, rc.bottom - padding),
   };
 
   canvas.DrawPolyline(m, ARRAY_SIZE(m));

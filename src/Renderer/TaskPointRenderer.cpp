@@ -142,7 +142,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   canvas.SetBackgroundOpaque();
 
   // draw small arrow along task direction
-  RasterPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
+  BulkPixelPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
 
   const RasterPoint p_start = m_proj.GeoToScreen(start);
   const RasterPoint p_end = m_proj.GeoToScreen(end);
@@ -176,7 +176,7 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   if (m_proj.GeoToScreenDistance(start.DistanceS(end)) <= 2)
     return;
 
-  RasterPoint screen[21];
+  BulkPixelPoint screen[21];
   screen[0] = m_proj.GeoToScreen(start);
   screen[20] = m_proj.GeoToScreen(end);
 

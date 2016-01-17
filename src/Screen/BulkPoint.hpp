@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2016 The XCSoar Project
@@ -21,32 +21,17 @@
 }
 */
 
-#ifndef TERRAIN_CROSS_SECTION_RENDERER_HPP
-#define TERRAIN_CROSS_SECTION_RENDERER_HPP
+#ifndef XCSOAR_SCREEN_BULK_POINT_HPP
+#define XCSOAR_SCREEN_BULK_POINT_HPP
 
-#include "Terrain/Height.hpp"
-
-class Canvas;
-class ChartRenderer;
-struct CrossSectionLook;
-struct BulkPixelPoint;
-
-/**
- * A Window which renders a terrain and airspace cross-section
- */
-class TerrainXSRenderer
-{
-  const CrossSectionLook &look;
-
-public:
-  TerrainXSRenderer(const CrossSectionLook &_look): look(_look) {}
-
-  void Draw(Canvas &canvas, const ChartRenderer &chart,
-            const TerrainHeight *elevations) const;
-
-private:
-  void DrawPolygon(Canvas &canvas, TerrainType type,
-                   const BulkPixelPoint *points, unsigned num_points) const;
-};
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/BulkPoint.hpp"
+#elif defined(USE_MEMORY_CANVAS)
+#include "Screen/Memory/BulkPoint.hpp"
+#elif defined(USE_GDI)
+#include "Screen/GDI/BulkPoint.hpp"
+#else
+#error No Point implementation
+#endif
 
 #endif

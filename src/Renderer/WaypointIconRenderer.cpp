@@ -76,7 +76,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
   if (airport)
     canvas.DrawCircle(pt.x, pt.y, iradius);
   else {
-    RasterPoint diamond[4];
+    BulkPixelPoint diamond[4];
     diamond[0].x = pt.x + 0;
     diamond[0].y = pt.y - iradius;
     diamond[1].x = pt.x + iradius;
@@ -103,7 +103,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   int wx = iround(-y * width);
   int wy = iround(x * width);
 
-  RasterPoint runway[4];
+  BulkPixelPoint runway[4];
   runway[0].x = pt.x        - (lx / 2) + (wx / 2);
   runway[0].y = pt.y        + (ly / 2) - (wy / 2);
   runway[1].x = runway[0].x            - wx;

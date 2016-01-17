@@ -65,7 +65,7 @@ MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 
 void
 MapCanvas::Project(const Projection &projection,
-                   const SearchPointVector &points, RasterPoint *screen)
+                   const SearchPointVector &points, BulkPixelPoint *screen)
 {
   for (auto it = points.begin(); it != points.end(); ++it)
     *screen++ = projection.GeoToScreen(it->GetLocation());

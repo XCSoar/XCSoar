@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_CANVAS_HPP
 #define XCSOAR_MAP_CANVAS_HPP
 
-#include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Util/AllocatedArray.hpp"
 
@@ -52,7 +52,7 @@ public:
    * Cache a shape and draw it multiple times with prepare_*() and
    * draw_prepared().
    */
-  AllocatedArray<RasterPoint> raster_points;
+  AllocatedArray<BulkPixelPoint> raster_points;
   unsigned num_raster_points;
   unsigned screen_radius;
 
@@ -69,14 +69,14 @@ public:
    * Projects all points of the #SearchPointVector to screen
    * coordinates.
    *
-   * @param screen a RasterPoint array allocated by the caller, large enough
+   * @param screen a BulkPixelPoint array allocated by the caller, large enough
    * to hold all points of the #SearchPointVector
    */
   static void Project(const Projection &projection,
                       const SearchPointVector &points,
-                      RasterPoint *screen);
+                      BulkPixelPoint *screen);
 
-  void Project(const SearchPointVector &points, RasterPoint *screen) const {
+  void Project(const SearchPointVector &points, BulkPixelPoint *screen) const {
     Project(projection, points, screen);
   }
 

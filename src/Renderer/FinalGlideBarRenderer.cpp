@@ -44,16 +44,16 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   const ScopeAlphaBlend alpha_blend;
 #endif
 
-  RasterPoint GlideBar[6] = {
+  BulkPixelPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint GlideBar0[4] = {
+  BulkPixelPoint GlideBar0[4] = {
       { 0, 0 }, { 9, -9 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint clipping_arrow[6] = {
+  BulkPixelPoint clipping_arrow[6] = {
       { 0, 0 }, { 9, 9 }, { 18, 0 }, { 18, 6 }, { 9, 15 }, { 0, 6 }
   };
-  RasterPoint clipping_arrow0[4] = {
+  BulkPixelPoint clipping_arrow0[4] = {
       { 0, 0 }, { 9, 9 }, { 9, 15 }, { 0, 6 }
   };
 

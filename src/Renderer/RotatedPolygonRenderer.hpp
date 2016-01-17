@@ -40,14 +40,14 @@ Copyright_License {
 
 class RotatedPolygonRenderer {
 #ifdef ENABLE_OPENGL
-  const RasterPoint *points;
+  const BulkPixelPoint *points;
   CanvasRotateShift rotate_shift;
 #else
-  RasterPoint points[64];
+  BulkPixelPoint points[64];
 #endif
 
 public:
-  RotatedPolygonRenderer(const RasterPoint *src, unsigned n,
+  RotatedPolygonRenderer(const BulkPixelPoint *src, unsigned n,
                          const RasterPoint pos, const Angle angle,
                          const unsigned scale=100)
 #ifdef ENABLE_OPENGL

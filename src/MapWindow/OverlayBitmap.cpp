@@ -138,7 +138,7 @@ MapOverlayBitmap::Draw(Canvas &canvas,
   const double y_factor = double(texture.GetHeight()) / allocated.cy;
 
   Point2D<GLfloat> coord[16];
-  RasterPoint vertices[16];
+  BulkPixelPoint vertices[16];
 
   const ScopeVertexPointer vp(vertices);
 

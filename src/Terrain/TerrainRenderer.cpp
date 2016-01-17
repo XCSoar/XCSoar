@@ -393,7 +393,7 @@ TerrainRenderer::Draw(Canvas &canvas,
   const GeoBounds &bounds = raster_renderer.GetBounds();
   assert(bounds.IsValid());
 
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     map_projection.GeoToScreen(bounds.GetNorthWest()),
     map_projection.GeoToScreen(bounds.GetNorthEast()),
     map_projection.GeoToScreen(bounds.GetSouthWest()),

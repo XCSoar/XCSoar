@@ -57,7 +57,7 @@ Copyright_License {
 
 #include <assert.h>
 
-AllocatedArray<RasterPoint> Canvas::vertex_buffer;
+AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
 
 void
 Canvas::InvertRectangle(int left, int top, int right, int bottom){
@@ -92,7 +92,7 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
   color.Bind();
 
 #ifdef HAVE_GLES
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     { left, top },
     { right, top },
     { left, bottom },
@@ -156,7 +156,7 @@ Canvas::DrawRaisedEdge(PixelRect &rc)
 }
 
 void
-Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
+Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points)
 {
 #ifdef USE_GLSL
   OpenGL::solid_shader->Use();
@@ -171,7 +171,7 @@ Canvas::DrawPolyline(const RasterPoint *points, unsigned num_points)
 }
 
 void
-Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
+Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points)
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
@@ -212,7 +212,7 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
 }
 
 void
-Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
+Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points)
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
@@ -251,7 +251,7 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
 {
   color.Bind();
 
-  const RasterPoint v[] = {
+  const BulkPixelPoint v[] = {
     { GLvalue(x1), GLvalue(y) },
     { GLvalue(x2), GLvalue(y) },
   };
@@ -269,7 +269,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 
   pen.Bind();
 
-  const RasterPoint v[] = {
+  const BulkPixelPoint v[] = {
     { GLvalue(ax), GLvalue(ay) },
     { GLvalue(bx), GLvalue(by) },
   };
@@ -313,7 +313,7 @@ Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
 
   pen.Bind();
 
-  const RasterPoint v[] = { {a.x, a.y}, {b.x, b.y} };
+  const BulkPixelPoint v[] = { {a.x, a.y}, {b.x, b.y} };
   if (pen.GetWidth() > 2) {
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
@@ -338,7 +338,7 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 
   pen.Bind();
 
-  const RasterPoint v[] = {
+  const BulkPixelPoint v[] = {
     { GLvalue(ax), GLvalue(ay) },
     { GLvalue(bx), GLvalue(by) },
     { GLvalue(cx), GLvalue(cy) },

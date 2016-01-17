@@ -37,7 +37,7 @@ Copyright_License {
  * A helper class optimized for doing bulk draws on OpenGL.
  */
 class ShapeRenderer : private NonCopyable {
-  AllocatedArray<RasterPoint> points;
+  AllocatedArray<BulkPixelPoint> points;
   unsigned num_points;
 
   const Pen *pen;

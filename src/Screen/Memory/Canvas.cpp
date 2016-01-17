@@ -92,7 +92,7 @@ Canvas::InvertRectangle(int left, int top, int right, int bottom)
 template<typename Canvas, typename PixelOperations>
 static void
 DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
-             const RasterPoint *lppt, unsigned n_points,
+             const BulkPixelPoint *lppt, unsigned n_points,
              bool loop)
 {
   const unsigned thickness = pen.GetWidth();
@@ -105,7 +105,7 @@ DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
 }
 
 void
-Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
+Canvas::DrawPolyline(const BulkPixelPoint *p, unsigned cPoints)
 {
   SDLRasterCanvas canvas(buffer);
   ::DrawPolyline(canvas, ActivePixelTraits(), pen,
@@ -113,14 +113,14 @@ Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 }
 
 void
-Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
+Canvas::DrawPolygon(const BulkPixelPoint *lppt, unsigned cPoints)
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
   SDLRasterCanvas canvas(buffer);
 
-  static_assert(sizeof(RasterPoint) == sizeof(SDLRasterCanvas::Point),
+  static_assert(sizeof(BulkPixelPoint) == sizeof(SDLRasterCanvas::Point),
                 "Incompatible point types");
   const SDLRasterCanvas::Point *points =
     reinterpret_cast<const SDLRasterCanvas::Point *>(lppt);

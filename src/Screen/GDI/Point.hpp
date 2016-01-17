@@ -46,8 +46,6 @@ struct RasterPoint : public tagPOINT {
   }
 };
 
-static_assert(sizeof(RasterPoint) == sizeof(POINT), "not same size");
-
 struct PixelSize : public tagSIZE {
   PixelSize() = default;
 

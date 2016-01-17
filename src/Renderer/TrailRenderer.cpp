@@ -217,7 +217,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     Draw(canvas, projection);
 }
 
-RasterPoint *
+BulkPixelPoint *
 TrailRenderer::Prepare(unsigned n)
 {
   points.GrowDiscard(n);
@@ -245,7 +245,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const ContestTraceVector &trace)
 {
   const unsigned n = trace.size();
-  RasterPoint *p = Prepare(n);
+  auto *p = Prepare(n);
 
   for (const auto &i : trace)
     *p++ = projection.GeoToScreen(i.GetLocation());
@@ -261,7 +261,7 @@ TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
 
   const unsigned start = 1, n = 3;
 
-  RasterPoint *p = Prepare(n);
+  auto *p = Prepare(n);
 
   for (unsigned i = start; i < start + n; ++i)
     *p++ = projection.GeoToScreen(trace[i].GetLocation());
@@ -274,7 +274,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const TracePointVector &trace)
 {
   const unsigned n = trace.size();
-  RasterPoint *p = Prepare(n);
+  auto *p = Prepare(n);
 
   for (const auto &i : trace)
     *p++ = projection.GeoToScreen(i.GetLocation());

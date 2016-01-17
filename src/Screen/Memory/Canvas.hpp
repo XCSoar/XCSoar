@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Color.hpp"
 #include "Point.hpp"
+#include "BulkPoint.hpp"
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
@@ -241,10 +242,10 @@ public:
     --rc.bottom;
   }
 
-  void DrawPolyline(const RasterPoint *points, unsigned num_points);
-  void DrawPolygon(const RasterPoint *points, unsigned num_points);
+  void DrawPolyline(const BulkPixelPoint *points, unsigned num_points);
+  void DrawPolygon(const BulkPixelPoint *points, unsigned num_points);
 
-  void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
+  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) {
     DrawPolygon(points, num_points);
   }
 

@@ -37,7 +37,7 @@ CirclePoint(int x, int y, int radius, unsigned angle)
 }
 
 static void
-segment_poly(RasterPoint* pt, const int x, const int y,
+segment_poly(BulkPixelPoint *pt, const int x, const int y,
              const int radius, const unsigned istart, const unsigned iend,
              unsigned &npoly, const bool forward=true)
 {
@@ -94,7 +94,7 @@ Segment(Canvas &canvas, int x, int y, unsigned radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   unsigned npoly = 0;
-  RasterPoint pt[67];
+  BulkPixelPoint pt[67];
 
   // add center point
   if (!horizon) {
@@ -124,7 +124,7 @@ Annulus(Canvas &canvas, int x, int y, unsigned radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   unsigned npoly = 0;
-  RasterPoint pt[66*2];
+  BulkPixelPoint pt[66*2];
 
   segment_poly(pt, x, y, radius, istart, iend, npoly);
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly, false);
@@ -148,7 +148,7 @@ KeyHole(Canvas &canvas, int x, int y, unsigned radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   unsigned npoly = 0;
-  RasterPoint pt[66*2];
+  BulkPixelPoint pt[66*2];
 
   segment_poly(pt, x, y, radius, istart, iend, npoly);
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly);
@@ -165,7 +165,7 @@ RoundRect(Canvas &canvas, int left, int top,
           int right, int bottom, unsigned radius)
 {
   unsigned npoly = 0;
-  RasterPoint pt[66*4];
+  BulkPixelPoint pt[66*4];
 
   segment_poly(pt, left + radius, top + radius, radius,
                INT_ANGLE_RANGE * 3 / 4,

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Math/FastMath.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Util/Clamp.hpp"
 
 #include <algorithm>
@@ -80,7 +81,7 @@ roundshift(int x)
 }
 
 void
-PolygonRotateShift(RasterPoint *poly,
+PolygonRotateShift(BulkPixelPoint *poly,
                    const int n,
                    const RasterPoint shift,
                    Angle angle,
@@ -105,8 +106,8 @@ PolygonRotateShift(RasterPoint *poly,
   const int cost = angle.ifastcosine() * scale / 25;
   const int sint = angle.ifastsine() * scale / 25;
 
-  RasterPoint *p = poly;
-  const RasterPoint *pe = poly + n;
+  BulkPixelPoint *p = poly;
+  const BulkPixelPoint *pe = poly + n;
 
   while (p < pe) {
     int x = p->x;

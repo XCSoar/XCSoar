@@ -212,7 +212,7 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
   }
 #endif
 
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     { dest_x, dest_y },
     { dest_x + int(dest_width), dest_y },
     { dest_x, dest_y + int(dest_height) },
@@ -281,7 +281,7 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
   }
 #endif
 
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     dest.GetTopLeft(),
     dest.GetTopRight(),
     dest.GetBottomLeft(),

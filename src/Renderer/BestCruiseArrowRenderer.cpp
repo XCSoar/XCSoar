@@ -38,8 +38,16 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
   canvas.Select(look.best_cruise_track_pen);
   canvas.Select(look.best_cruise_track_brush);
 
-  RasterPoint arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
-                          {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
+  BulkPixelPoint arrow[] = {
+    { -1, -40 },
+    { -1, -62 },
+    { -6, -62 },
+    {  0, -70 },
+    {  6, -62 },
+    {  1, -62 },
+    {  1, -40 },
+    { -1, -40 },
+  };
 
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos,
                      best_cruise_angle - screen_angle);

@@ -85,7 +85,7 @@ MapWindow::DrawRoute(Canvas &canvas)
   const auto &route = Calculated().planned_route;
 
   const auto r_size = route.size();
-  RasterPoint p[r_size], *pp = &p[0];
+  BulkPixelPoint p[r_size], *pp = &p[0];
   for (auto i = route.begin(), end = route.end(); i != end; ++i, ++pp)
     *pp = render_projection.GeoToScreen(*i);
 

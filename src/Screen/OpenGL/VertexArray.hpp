@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
 #define XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
 
-#include "Screen/OpenGL/Point.hpp"
+#include "Screen/OpenGL/BulkPoint.hpp"
 #include "VertexPointer.hpp"
 #include "Compiler.h"
 
@@ -32,7 +32,7 @@ template<unsigned n>
 struct GLVertexArray {
   static constexpr unsigned SIZE = n;
 
-  RasterPoint v[SIZE];
+  BulkPixelPoint v[SIZE];
 
   void Bind(ScopeVertexPointer &vp) const {
     vp.Update(v);

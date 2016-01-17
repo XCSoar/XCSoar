@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "System.hpp"
 #include "Point.hpp"
+#include "BulkPoint.hpp"
 
 #ifdef USE_GLSL
 #include "Attribute.hpp"
@@ -72,7 +73,7 @@ struct ScopeVertexPointer {
     Update(type, 0, p);
   }
 
-  void Update(const RasterPoint *p) {
+  void Update(const BulkPixelPoint *p) {
     Update(GL_VALUE, p);
   }
 

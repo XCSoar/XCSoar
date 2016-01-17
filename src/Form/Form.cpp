@@ -440,7 +440,7 @@ WndForm::OnPaint(Canvas &canvas)
     const PixelRect rc = GetClientRect();
     const PixelScalar size = Layout::VptScale(4);
 
-    const RasterPoint vertices[8] = {
+    const BulkPixelPoint vertices[8] = {
       { rc.left, rc.top },
       { rc.right, rc.top },
       { rc.right, rc.bottom },

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/ReusableArray.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
@@ -45,7 +46,7 @@ class ChartRenderer
   Canvas &canvas;
   PixelRect rc;
 
-  ReusableArray<RasterPoint> point_buffer;
+  ReusableArray<BulkPixelPoint> point_buffer;
 
   struct Axis {
     double scale, min, max;

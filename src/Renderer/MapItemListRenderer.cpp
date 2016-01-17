@@ -117,7 +117,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
       { -7, -3 }, { 0, 4 }, { 7, -3 }
   };
 

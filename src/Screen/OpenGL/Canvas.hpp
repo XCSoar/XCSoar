@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Color.hpp"
 #include "Point.hpp"
+#include "BulkPoint.hpp"
 #include "Features.hpp"
 #include "System.hpp"
 #include "Screen/Brush.hpp"
@@ -79,7 +80,7 @@ protected:
   /**
    * static buffer to store vertices of wide lines.
    */
-  static AllocatedArray<RasterPoint> vertex_buffer;
+  static AllocatedArray<BulkPixelPoint> vertex_buffer;
 
 public:
   Canvas() = default;
@@ -271,15 +272,15 @@ public:
 
   void DrawRaisedEdge(PixelRect &rc);
 
-  void DrawPolyline(const RasterPoint *points, unsigned num_points);
+  void DrawPolyline(const BulkPixelPoint *points, unsigned num_points);
 
-  void DrawPolygon(const RasterPoint *points, unsigned num_points);
+  void DrawPolygon(const BulkPixelPoint *points, unsigned num_points);
 
   /**
    * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
    * origin of the fan.
    */
-  void DrawTriangleFan(const RasterPoint *points, unsigned num_points);
+  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points);
 
   /**
    * Draw a solid thin horizontal line.

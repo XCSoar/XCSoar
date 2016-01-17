@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Math/Line2D.hpp"
 #include "Util/AllocatedArray.hpp"
 
@@ -260,7 +261,7 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
 }
 
 unsigned
-PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
                    AllocatedArray<GLushort> &triangles, unsigned min_distance)
 {
   triangles.GrowDiscard(3 * (num_points - 2));
@@ -451,10 +452,10 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 }
 
 /**
- * Append a RasterPoint to the end of an array and advance the array pointer
+ * Append a BulkPixelPoint to the end of an array and advance the array pointer
  */
 static void
-AppendPoint(RasterPoint* &strip, PixelScalar x, PixelScalar y)
+AppendPoint(BulkPixelPoint *&strip, PixelScalar x, PixelScalar y)
 {
   strip->x = x;
   strip->y = y;
@@ -462,8 +463,8 @@ AppendPoint(RasterPoint* &strip, PixelScalar x, PixelScalar y)
 }
 
 unsigned
-LineToTriangles(const RasterPoint *points, unsigned num_points,
-                AllocatedArray<RasterPoint> &strip,
+LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
+                AllocatedArray<BulkPixelPoint> &strip,
                 unsigned line_width, bool loop, bool tcap)
 {
   // A line has to have at least two points
@@ -483,12 +484,12 @@ LineToTriangles(const RasterPoint *points, unsigned num_points,
 
   // strip will point to the start of the output array
   // s is the working pointer
-  RasterPoint *s = strip.begin();
+  auto *s = strip.begin();
 
   // a, b and c point to three consecutive points which are used to iterate
   // through the line given in 'points'. Where b is the current position,
   // a the previous point and c the next point.
-  const RasterPoint *a, *b, *c;
+  const BulkPixelPoint *a, *b, *c;
 
   // pointer to the end of the original points array
   // used for faster loop conditions

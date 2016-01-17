@@ -153,7 +153,7 @@ ScrollBar::Paint(Canvas &canvas) const
   canvas.SelectNullPen();
   canvas.SelectBlackBrush();
 
-  const RasterPoint up_arrow[3] = {
+  const BulkPixelPoint up_arrow[3] = {
     { (up_arrow_rect.left + rc.right) / 2,
       up_arrow_rect.top + arrow_padding },
     { up_arrow_rect.left + arrow_padding,
@@ -163,7 +163,7 @@ ScrollBar::Paint(Canvas &canvas) const
   };
   canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
 
-  const RasterPoint down_arrow[3] = {
+  const BulkPixelPoint down_arrow[3] = {
     { (down_arrow_rect.left + rc.right) / 2,
       down_arrow_rect.bottom - arrow_padding },
     { down_arrow_rect.left + arrow_padding,

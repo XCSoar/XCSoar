@@ -61,13 +61,13 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
     /* at 4 pixels or more, it's more efficient to draw a filled
        polygon */
 
-    const RasterPoint p1[] = {
-      RasterPoint(rc.left, rc.top),
-      RasterPoint(rc.right, rc.top),
-      RasterPoint(rc.right - margin, rc.top + margin),
-      RasterPoint(rc.left + margin, rc.top + margin),
-      RasterPoint(rc.left + margin, rc.bottom - margin),
-      RasterPoint(rc.left, rc.bottom),
+    const BulkPixelPoint p1[] = {
+      BulkPixelPoint(rc.left, rc.top),
+      BulkPixelPoint(rc.right, rc.top),
+      BulkPixelPoint(rc.right - margin, rc.top + margin),
+      BulkPixelPoint(rc.left + margin, rc.top + margin),
+      BulkPixelPoint(rc.left + margin, rc.bottom - margin),
+      BulkPixelPoint(rc.left, rc.bottom),
     };
 
     canvas.SelectNullPen();
@@ -76,13 +76,13 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
                   : _look.light_border_brush);
     canvas.DrawTriangleFan(p1, ARRAY_SIZE(p1));
 
-    const RasterPoint p2[] = {
-      RasterPoint(rc.right, rc.bottom),
-      RasterPoint(rc.right, rc.top),
-      RasterPoint(rc.right - margin, rc.top + margin),
-      RasterPoint(rc.right - margin, rc.bottom - margin),
-      RasterPoint(rc.left + margin, rc.bottom - margin),
-      RasterPoint(rc.left, rc.bottom),
+    const BulkPixelPoint p2[] = {
+      BulkPixelPoint(rc.right, rc.bottom),
+      BulkPixelPoint(rc.right, rc.top),
+      BulkPixelPoint(rc.right - margin, rc.top + margin),
+      BulkPixelPoint(rc.right - margin, rc.bottom - margin),
+      BulkPixelPoint(rc.left + margin, rc.bottom - margin),
+      BulkPixelPoint(rc.left, rc.bottom),
     };
 
     canvas.Select(pressed

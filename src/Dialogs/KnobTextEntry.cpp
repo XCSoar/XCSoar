@@ -160,7 +160,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
   PixelSize tsizec = canvas.CalcTextSize(buffer, cursor);
   PixelSize tsizea = canvas.CalcTextSize(buffer, cursor + 1);
 
-  RasterPoint p[5];
+  BulkPixelPoint p[5];
   p[0].x = 10;
   p[0].y = (rc.bottom - rc.top - tsize.cy - 5) / 2;
 

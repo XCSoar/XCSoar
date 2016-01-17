@@ -39,7 +39,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
   ::MoveToEx(dc, ax, ay, nullptr);
   ::LineTo(dc, bx, by);
 #else
-  RasterPoint p[2] = {{ax, ay}, {bx, by}};
+  BulkPixelPoint p[2] = {{ax, ay}, {bx, by}};
   DrawPolyline(p, 2);
 #endif
 }
@@ -54,7 +54,7 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
   ::LineTo(dc, bx, by);
   ::LineTo(dc, cx, cy);
 #else
-  RasterPoint p[2];
+  BulkPixelPoint p[2];
 
   p[0].x = ax;
   p[0].y = ay;

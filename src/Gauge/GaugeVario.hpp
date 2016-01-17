@@ -25,6 +25,7 @@ Copyright_License {
 #define GAUGE_VARIO_H
 
 #include "Screen/AntiFlickerWindow.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Math/Point2D.hpp"
 
@@ -83,8 +84,8 @@ private:
   DrawInfo label_middle;
   DrawInfo label_bottom;
 
-  RasterPoint polys[(gmax * 2 + 1) * 3];
-  RasterPoint lines[gmax * 2 + 1];
+  BulkPixelPoint polys[(gmax * 2 + 1) * 3];
+  BulkPixelPoint lines[gmax * 2 + 1];
 
 public:
   GaugeVario(const FullBlackboard &blackboard,
@@ -135,7 +136,7 @@ private:
 
   void MakePolygon(const int i);
   void MakeAllPolygons();
-  RasterPoint *getPolygon(const int i);
+  BulkPixelPoint *getPolygon(const int i);
 };
 
 #endif

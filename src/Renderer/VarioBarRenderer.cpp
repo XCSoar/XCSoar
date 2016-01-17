@@ -45,19 +45,19 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   const ScopeAlphaBlend alpha_blend;
 #endif
 
-  RasterPoint VarioBar[6] = {
+  BulkPixelPoint VarioBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint VarioBarAvg[4] = {
+  BulkPixelPoint VarioBarAvg[4] = {
       { 0, 0 }, { 9, -9 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint clipping_arrow[6] = {
+  BulkPixelPoint clipping_arrow[6] = {
       { 0, 0 }, { 9, 9 }, { 18, 0 }, { 18, 6 }, { 9, 15 }, { 0, 6 }
   };
-  RasterPoint clipping_arrow_av[4] = {
+  BulkPixelPoint clipping_arrow_av[4] = {
       { 0, 0 }, { 9, 9 }, { 9, 15 }, { 0, 6 }
   };
-  RasterPoint mc_arrow[6] = {
+  BulkPixelPoint mc_arrow[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, -2 }, { 9, -11 }, { 0, -2 }
   };
 

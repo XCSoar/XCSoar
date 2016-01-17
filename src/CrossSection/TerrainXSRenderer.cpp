@@ -34,7 +34,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 {
   const auto max_distance = chart.GetXMax();
 
-  StaticArray<RasterPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
+  StaticArray<BulkPixelPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
 
   canvas.SelectNullPen();
 
@@ -95,7 +95,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 
 void
 TerrainXSRenderer::DrawPolygon(Canvas &canvas, TerrainType type,
-                               const RasterPoint *points,
+                               const BulkPixelPoint *points,
                                unsigned num_points) const
 {
   assert(type != TerrainType::UNKNOWN);

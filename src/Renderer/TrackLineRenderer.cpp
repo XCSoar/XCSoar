@@ -105,7 +105,7 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
   Angle heading = basic.attitude.heading;
   GeoPoint loc = basic.location;
 
-  RasterPoint pts[ARC_STEPS+1];
+  BulkPixelPoint pts[ARC_STEPS+1];
   pts[0] = projection.GeoToScreen(loc);
   int i = 1;
 

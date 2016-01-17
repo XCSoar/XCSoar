@@ -375,7 +375,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Create an arrow polygon
-  RasterPoint Arrow[5];
+  BulkPixelPoint Arrow[5];
   if (small) {
     Arrow[0].x = -3;
     Arrow[0].y = 4;
@@ -495,7 +495,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   canvas.SelectNullPen();
 
   // Prepare the triangular polygon
-  RasterPoint triangle[4];
+  BulkPixelPoint triangle[4];
   triangle[0].x = 0;
   triangle[0].y = -4;
   triangle[1].x = 3;

@@ -102,7 +102,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
     canvas.Select(look.border_pen);
 
-    RasterPoint tab[8];
+    BulkPixelPoint tab[8];
     tab[0].x = tab[1].x = title_rect.left;
     tab[0].y = tab[7].y = ybottom;
     tab[2].x = title_rect.left + Layout::GetTextPadding();

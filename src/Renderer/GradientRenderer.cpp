@@ -36,7 +36,7 @@ DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
                      Color top_color, Color bottom_color, Color fallback_color)
 {
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     rc.GetTopLeft(),
     rc.GetTopRight(),
     rc.GetBottomLeft(),

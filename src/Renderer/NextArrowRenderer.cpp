@@ -59,7 +59,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
   static constexpr auto tail_len = head_len - tail_width / 2;
 
   // An array of the arrow corner coordinates.
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
     { 0, -head_len },
     { head_width, -head_base },
     { tail_width, -head_base },

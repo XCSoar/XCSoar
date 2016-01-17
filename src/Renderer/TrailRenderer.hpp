@@ -29,6 +29,7 @@ Copyright_License {
 #include "Engine/Trace/Vector.hpp"
 
 struct RasterPoint;
+struct BulkPixelPoint;
 class Canvas;
 class TraceComputer;
 class Projection;
@@ -44,7 +45,7 @@ class TrailRenderer {
   const TrailLook &look;
 
   TracePointVector trace;
-  AllocatedArray<RasterPoint> points;
+  AllocatedArray<BulkPixelPoint> points;
 
 public:
   TrailRenderer(const TrailLook &_look):look(_look) {}
@@ -78,7 +79,7 @@ public:
             const WindowProjection &projection, unsigned min_time);
 
   gcc_malloc
-  RasterPoint *Prepare(unsigned n);
+  BulkPixelPoint *Prepare(unsigned n);
 
   void DrawPreparedPolyline(Canvas &canvas, unsigned n);
   void DrawPreparedPolygon(Canvas &canvas, unsigned n);

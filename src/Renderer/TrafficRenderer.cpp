@@ -35,7 +35,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmColor color, const RasterPoint pt)
 {
   // Create point array that will form that arrow polygon
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
     { -4, 6 },
     { 0, -8 },
     { 4, 6 },

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -319,19 +320,19 @@ public:
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_RECT);
   }
 
-  void DrawPolyline(const RasterPoint *lppt, unsigned cPoints) {
+  void DrawPolyline(const BulkPixelPoint *lppt, unsigned cPoints) {
     assert(IsDefined());
 
     ::Polyline(dc, lppt, cPoints);
   }
 
-  void DrawPolygon(const RasterPoint *lppt, unsigned cPoints) {
+  void DrawPolygon(const BulkPixelPoint *lppt, unsigned cPoints) {
     assert(IsDefined());
 
     ::Polygon(dc, lppt, cPoints);
   }
 
-  void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
+  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) {
     DrawPolygon(points, num_points);
   }
 

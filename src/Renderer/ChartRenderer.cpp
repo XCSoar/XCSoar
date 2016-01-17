@@ -270,7 +270,7 @@ ChartRenderer::DrawFilledLine(const double xmin, const double ymin,
                               const double xmax, const double ymax,
                               const Brush &brush)
 {
-  RasterPoint line[4];
+  BulkPixelPoint line[4];
 
   line[0] = ToScreen(xmin, ymin);
   line[1] = ToScreen(xmax, ymax);
@@ -321,14 +321,14 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
   assert(slots.size() >= 2);
 
   const unsigned n = slots.size() + 2;
-  RasterPoint *points = point_buffer.get(n);
+  auto *points = point_buffer.get(n);
 
-  RasterPoint *p = points;
+  auto *p = points;
   for (const auto &i : slots)
     *p++ = ToScreen(i.x, i.y);
-  const RasterPoint &last = p[-1];
-  *p++ = RasterPoint{ last.x, rc.bottom - padding_bottom };
-  *p++ = RasterPoint{ points[0].x, rc.bottom - padding_bottom };
+  const auto &last = p[-1];
+  *p++ = BulkPixelPoint(last.x, rc.bottom - padding_bottom);
+  *p++ = BulkPixelPoint(points[0].x, rc.bottom - padding_bottom);
 
   assert(p == points + n);
 
@@ -342,9 +342,9 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
   assert(slots.size() >= 2);
 
   const unsigned n = slots.size();
-  RasterPoint *points = point_buffer.get(n);
+  auto *points = point_buffer.get(n);
 
-  RasterPoint *p = points;
+  auto *p = points;
   for (const auto &i : slots)
     *p++ = ToScreen(i.x, i.y);
   assert(p == points + n);
@@ -496,7 +496,7 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<double, double>> &vals,
   if (vals.size()<2)
     return;
   const unsigned fsize = vals.size()+2;
-  RasterPoint *line = point_buffer.get(fsize);
+  auto *line = point_buffer.get(fsize);
 
   for (unsigned i = 0; i < vals.size(); ++i)
     line[i + 2] = ToScreen(vals[i].first, vals[i].second);
@@ -521,10 +521,12 @@ ChartRenderer::DrawDot(const double x, const double y, const unsigned _width)
   RasterPoint p = ToScreen(x, y);
 
   const int width = _width;
-  RasterPoint line[4] = { { p.x, p.y - width },
-                          { p.x - width, p.y },
-                          { p.x, p.y + width },
-                          { p.x + width, p.y } };
+  const BulkPixelPoint line[4] = {
+    { p.x, p.y - width },
+    { p.x - width, p.y },
+    { p.x, p.y + width },
+    { p.x + width, p.y },
+  };
   canvas.SelectNullPen();
   canvas.DrawTriangleFan(line, 4);
 }

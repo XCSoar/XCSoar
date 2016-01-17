@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2016 The XCSoar Project
@@ -21,32 +21,28 @@
 }
 */
 
-#ifndef TERRAIN_CROSS_SECTION_RENDERER_HPP
-#define TERRAIN_CROSS_SECTION_RENDERER_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
+#define XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
 
-#include "Terrain/Height.hpp"
-
-class Canvas;
-class ChartRenderer;
-struct CrossSectionLook;
-struct BulkPixelPoint;
+#include "Point.hpp"
+#include "Math/Point2D.hpp"
 
 /**
- * A Window which renders a terrain and airspace cross-section
+ * A point structure to be used in arrays.
  */
-class TerrainXSRenderer
-{
-  const CrossSectionLook &look;
+struct BulkPixelPoint : IntPoint2D {
+  BulkPixelPoint() = default;
 
-public:
-  TerrainXSRenderer(const CrossSectionLook &_look): look(_look) {}
+  template<typename... Args>
+  constexpr BulkPixelPoint(Args&&... args)
+    :IntPoint2D(args...) {}
 
-  void Draw(Canvas &canvas, const ChartRenderer &chart,
-            const TerrainHeight *elevations) const;
+  constexpr BulkPixelPoint(RasterPoint src)
+    :IntPoint2D(src.x, src.y) {}
 
-private:
-  void DrawPolygon(Canvas &canvas, TerrainType type,
-                   const BulkPixelPoint *points, unsigned num_points) const;
+  constexpr operator RasterPoint() const {
+    return RasterPoint(x, y);
+  }
 };
 
 #endif
