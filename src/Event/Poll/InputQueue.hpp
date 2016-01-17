@@ -76,7 +76,7 @@ public:
   }
 
 #ifndef USE_LIBINPUT
-  void SetMouseRotation(DisplayOrientation orientation) {
+  void SetDisplayOrientation(DisplayOrientation orientation) {
     merge_mouse.SetDisplayOrientation(orientation);
   }
 #endif

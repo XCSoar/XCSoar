@@ -276,7 +276,7 @@ LayoutConfigPanel::Save(bool &_changed)
     }
 
 #ifdef KOBO
-    event_queue->SetMouseRotation(ui_settings.display.orientation);
+    event_queue->SetDisplayOrientation(ui_settings.display.orientation);
 #endif
 
     CommonInterface::main_window->CheckResize();

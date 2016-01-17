@@ -57,7 +57,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
   }
 
 #ifdef KOBO
-  event_queue->SetMouseRotation(orientation);
+  event_queue->SetDisplayOrientation(orientation);
 #endif
 
   LogFormat("Display rotated");
@@ -84,6 +84,6 @@ Display::RestoreOrientation()
   Display::RotateRestore();
 
 #ifdef KOBO
-  event_queue->SetMouseRotation(DisplayOrientation::DEFAULT);
+  event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
 #endif
 }

@@ -119,8 +119,8 @@ public:
   }
 
 #ifndef USE_LIBINPUT
-  void SetMouseRotation(DisplayOrientation orientation) {
-    input_queue.SetMouseRotation(orientation);
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+    input_queue.SetDisplayOrientation(orientation);
   }
 #endif
 
