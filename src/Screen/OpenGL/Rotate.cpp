@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "Globals.hpp"
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 #include "DisplayOrientation.hpp"
 #include "Compiler.h"
 

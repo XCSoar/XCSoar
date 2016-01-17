@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Debug.hpp"
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 
 namespace OpenGL {
   bool texture_non_power_of_two;

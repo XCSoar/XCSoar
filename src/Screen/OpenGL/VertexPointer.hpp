@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_VERTEX_POINTER_HPP
 
 #include "System.hpp"
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 #include "BulkPoint.hpp"
 
 #ifdef USE_GLSL

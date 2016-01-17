@@ -24,20 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_POINT_HPP
 #define XCSOAR_SCREEN_GDI_POINT_HPP
 
-#include "Math/Point2D.hpp"
-
 #include <windows.h>
 
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
-
-struct RasterPoint : IntPoint2D {
-  RasterPoint() = default;
-
-  template<typename... Args>
-  constexpr RasterPoint(Args&&... args)
-    :IntPoint2D(args...) {}
-};
 
 struct PixelSize : public tagSIZE {
   PixelSize() = default;

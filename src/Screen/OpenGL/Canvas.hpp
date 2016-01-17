@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 
 #include "Color.hpp"
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 #include "BulkPoint.hpp"
 #include "Features.hpp"
 #include "System.hpp"

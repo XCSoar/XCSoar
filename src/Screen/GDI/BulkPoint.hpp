@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_BULK_POINT_HPP
 #define XCSOAR_SCREEN_GDI_BULK_POINT_HPP
 
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 
 #include <windows.h>
 

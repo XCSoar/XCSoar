@@ -24,6 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_POINT_HPP
 #define XCSOAR_SCREEN_POINT_HPP
 
+#include "Math/Point2D.hpp"
+
+struct RasterPoint : IntPoint2D {
+  RasterPoint() = default;
+
+  template<typename... Args>
+  constexpr RasterPoint(Args&&... args)
+    :IntPoint2D(args...) {}
+};
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Point.hpp"
 #elif defined(USE_MEMORY_CANVAS)

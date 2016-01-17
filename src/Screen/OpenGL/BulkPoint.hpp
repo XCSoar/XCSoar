@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
 #define XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
 
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 #include "Math/Point2D.hpp"
 
 /**

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "System.hpp"
-#include "Screen/OpenGL/Point.hpp"
+#include "Screen/Point.hpp"
 #include "FBO.hpp"
 #include "Asset.hpp"
 
