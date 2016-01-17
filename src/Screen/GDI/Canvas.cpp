@@ -102,9 +102,9 @@ Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
   assert(IsDefined());
 
-  PixelSize size;
+  SIZE size;
   ::GetTextExtentPoint(dc, text, length, &size);
-  return size;
+  return PixelSize(size.cx, size.cy);
 }
 
 const PixelSize
