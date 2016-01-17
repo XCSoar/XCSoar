@@ -29,29 +29,6 @@ Copyright_License {
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
 
-struct PixelSize {
-  int cx, cy;
-
-  PixelSize() = default;
-
-  constexpr PixelSize(int _width, int _height)
-    :cx(_width), cy(_height) {}
-
-  constexpr PixelSize(unsigned _width, unsigned _height)
-    :cx(_width), cy(_height) {}
-
-  constexpr PixelSize(long _width, long _height)
-    :cx(_width), cy(_height) {}
-
-  bool operator==(const PixelSize &other) const {
-    return cx == other.cx && cy == other.cy;
-  }
-
-  bool operator!=(const PixelSize &other) const {
-    return !(*this == other);
-  }
-};
-
 /**
  * @brief PixelRect structure and operations
  *

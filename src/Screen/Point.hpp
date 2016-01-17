@@ -34,6 +34,35 @@ struct RasterPoint : IntPoint2D {
     :IntPoint2D(args...) {}
 };
 
+struct PixelSize {
+  int cx, cy;
+
+  PixelSize() = default;
+
+  constexpr PixelSize(int _width, int _height)
+    :cx(_width), cy(_height) {}
+
+  constexpr PixelSize(unsigned _width, unsigned _height)
+    :cx(_width), cy(_height) {}
+
+  constexpr PixelSize(long _width, long _height)
+    :cx(_width), cy(_height) {}
+
+  bool operator==(const PixelSize &other) const {
+    return cx == other.cx && cy == other.cy;
+  }
+
+  bool operator!=(const PixelSize &other) const {
+    return !(*this == other);
+  }
+};
+
+inline constexpr RasterPoint
+operator+(RasterPoint p, PixelSize size)
+{
+  return { p.x + size.cx, p.y + size.cy };
+}
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Point.hpp"
 #elif defined(USE_MEMORY_CANVAS)

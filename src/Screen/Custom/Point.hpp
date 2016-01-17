@@ -24,32 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CUSTOM_POINT_HPP
 #define XCSOAR_SCREEN_CUSTOM_POINT_HPP
 
-struct PixelSize {
-  PixelScalar cx, cy;
-
-  PixelSize() = default;
-
-  constexpr PixelSize(int _width, int _height)
-    :cx(_width), cy(_height) {}
-
-  constexpr PixelSize(unsigned _width, unsigned _height)
-    :cx(_width), cy(_height) {}
-
-  bool operator==(const PixelSize &other) const {
-    return cx == other.cx && cy == other.cy;
-  }
-
-  bool operator!=(const PixelSize &other) const {
-    return !(*this == other);
-  }
-};
-
-inline constexpr RasterPoint
-operator+(RasterPoint p, PixelSize size)
-{
-  return { p.x + size.cx, p.y + size.cy };
-}
-
 /**
  * @brief PixelRect structure and operations
  *
