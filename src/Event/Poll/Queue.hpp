@@ -112,18 +112,19 @@ public:
   }
 #endif
 
-#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
-
   void SetScreenSize(unsigned width, unsigned height) {
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetScreenSize(width, height);
-  }
-
-#ifndef USE_LIBINPUT
-  void SetDisplayOrientation(DisplayOrientation orientation) {
-    input_queue.SetDisplayOrientation(orientation);
-  }
 #endif
+  }
 
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(USE_LIBINPUT)
+    input_queue.SetDisplayOrientation(orientation);
+#endif
+  }
+
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
   bool HasPointer() const {
     return input_queue.HasPointer();
   }

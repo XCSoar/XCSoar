@@ -28,7 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
 #include "Event/Globals.hpp"
 #include "Event/Queue.hpp"
 #endif
@@ -56,7 +56,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
     return;
   }
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
   event_queue->SetDisplayOrientation(orientation);
 #endif
 
@@ -83,7 +83,7 @@ Display::RestoreOrientation()
 
   Display::RotateRestore();
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
   event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
 #endif
 }

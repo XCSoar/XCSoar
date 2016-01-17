@@ -36,7 +36,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Menu/ShowMenuButton.hpp"
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
 #include "Event/Globals.hpp"
 #include "Event/Queue.hpp"
 #endif
@@ -275,7 +275,7 @@ LayoutConfigPanel::Save(bool &_changed)
         LogFormat("Display rotation failed");
     }
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
     event_queue->SetDisplayOrientation(ui_settings.display.orientation);
 #endif
 
