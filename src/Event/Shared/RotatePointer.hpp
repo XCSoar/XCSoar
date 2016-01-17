@@ -95,19 +95,19 @@ public:
     }
   }
 
-  void DoRelative(int &x, int &y) {
+  void DoRelative(RasterPoint &p) {
     if (swap)
-      std::swap(x, y);
+      std::swap(p.x, p.y);
   }
 
-  void DoAbsolute(int &x, int &y) {
-    DoRelative(x, y);
+  void DoAbsolute(RasterPoint &p) {
+    DoRelative(p);
 
     if (invert_x)
-      x = width - x;
+      p.x = width - p.x;
 
     if (invert_y)
-      y = height - y;
+      p.y = height - p.y;
   }
 
   void Do(RasterPoint &p) {

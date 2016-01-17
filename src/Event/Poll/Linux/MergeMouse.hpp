@@ -84,10 +84,10 @@ public:
   }
 
   void SetDown(bool new_down);
-  void MoveAbsolute(int new_x, int new_y);
+  void MoveAbsolute(RasterPoint p);
   void MoveAbsolute(int new_x, int new_y,
                     int min_x, int max_x, int min_y, int max_y);
-  void MoveRelative(int dx, int dy);
+  void MoveRelative(RasterPoint d);
 
   void MoveWheel(int d) {
     wheel += d;

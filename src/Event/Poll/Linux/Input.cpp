@@ -169,7 +169,7 @@ LinuxInputDevice::Read()
           merge.MoveAbsolute(public_position.x, public_position.y,
                              min_x, max_x, min_y, max_y);
         } else if (rel_x != 0 || rel_y != 0) {
-          merge.MoveRelative(rel_x, rel_y);
+          merge.MoveRelative(RasterPoint(rel_x, rel_y));
           rel_x = rel_y = 0;
         }
 
