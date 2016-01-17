@@ -67,7 +67,7 @@ InputEventQueue::~InputEventQueue()
 void
 InputEventQueue::SetMouseRotation(DisplayOrientation orientation)
 {
-  switch (orientation) {
+  switch (TranslateDefaultDisplayOrientation(orientation)) {
   case DisplayOrientation::DEFAULT:
   case DisplayOrientation::PORTRAIT:
     SetMouseRotation(true, true, false);

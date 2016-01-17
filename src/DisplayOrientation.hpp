@@ -34,10 +34,28 @@ enum class DisplayOrientation : uint8_t {
   REVERSE_LANDSCAPE,
 };
 
+#ifdef KOBO
+/* Kobo defaults to portrait */
+static constexpr DisplayOrientation DEFAULT_DISPLAY_ORIENTATION =
+  DisplayOrientation::PORTRAIT;
+#else
+/* everything else defaults to landscape */
+static constexpr DisplayOrientation DEFAULT_DISPLAY_ORIENTATION =
+  DisplayOrientation::LANDSCAPE;
+#endif
+
+static constexpr inline DisplayOrientation
+TranslateDefaultDisplayOrientation(DisplayOrientation orientation)
+{
+  return orientation == DisplayOrientation::DEFAULT
+    ? DEFAULT_DISPLAY_ORIENTATION
+    : orientation;
+}
+
 static inline bool
 AreAxesSwapped(DisplayOrientation orientation)
 {
-  switch (orientation) {
+  switch (TranslateDefaultDisplayOrientation(orientation)) {
   case DisplayOrientation::DEFAULT:
   case DisplayOrientation::LANDSCAPE:
   case DisplayOrientation::REVERSE_LANDSCAPE:
