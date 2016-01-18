@@ -438,7 +438,7 @@ WndForm::OnPaint(Canvas &canvas)
     const ScopeAlphaBlend alpha_blend;
 
     const PixelRect rc = GetClientRect();
-    const PixelScalar size = Layout::VptScale(4);
+    const int size = Layout::VptScale(4);
 
     const BulkPixelPoint vertices[8] = {
       { rc.left, rc.top },
@@ -567,9 +567,9 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
     // reposition dialog to fit into TopWindow
     PixelRect rc = GetPosition();
 
-    if (rc.right > (PixelScalar)parent_width)
+    if (rc.right > (int)parent_width)
       rc.left = parent_width - (rc.right - rc.left);
-    if (rc.bottom > (PixelScalar)parent_height)
+    if (rc.bottom > (int)parent_height)
       rc.top = parent_height - (rc.bottom - rc.top);
 
 #ifdef USE_MEMORY_CANVAS

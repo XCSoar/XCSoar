@@ -66,7 +66,7 @@ ListControl::ListControl(const DialogLook &_look)
 
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
-                         UPixelScalar _item_height)
+                         unsigned _item_height)
   :look(_look),
    scroll_bar(look.button),
    length(0),
@@ -243,7 +243,7 @@ ListControl::DrawScrollBar(Canvas &canvas) {
 }
 
 void
-ListControl::SetItemHeight(UPixelScalar _item_height)
+ListControl::SetItemHeight(unsigned _item_height)
 {
   item_height = _item_height;
   items_visible = GetHeight() / item_height;
@@ -339,7 +339,7 @@ ListControl::MoveCursor(int delta)
 }
 
 void
-ListControl::SetPixelPan(UPixelScalar _pixel_pan)
+ListControl::SetPixelPan(unsigned _pixel_pan)
 {
   if (pixel_pan == _pixel_pan)
     return;

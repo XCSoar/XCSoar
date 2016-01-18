@@ -98,7 +98,7 @@ protected:
   ScrollBar scroll_bar;
 
   /** The height of one item on the screen, in pixels. */
-  UPixelScalar item_height;
+  unsigned item_height;
   /** The number of items in the list. */
   unsigned length;
   /** The index of the topmost item currently being displayed. */
@@ -108,7 +108,7 @@ protected:
    * Which pixel row of the "origin" item is being displayed at the
    * top of the Window?
    */
-  UPixelScalar pixel_pan;
+  unsigned pixel_pan;
 
   /** The number of items visible at a time. */
   unsigned items_visible;
@@ -165,7 +165,7 @@ public:
    */
   ListControl(ContainerWindow &parent, const DialogLook &look,
               PixelRect rc, const WindowStyle style,
-              UPixelScalar _item_height);
+              unsigned _item_height);
 
   virtual ~ListControl();
 
@@ -195,7 +195,7 @@ public:
     return item_height;
   }
 
-  void SetItemHeight(UPixelScalar _item_height);
+  void SetItemHeight(unsigned _item_height);
 
   bool IsEmpty() const {
     return length == 0;
@@ -246,7 +246,7 @@ public:
   /**
    * Pan the "origin item" to the specified pixel position.
    */
-  void SetPixelPan(UPixelScalar _pixel_pan);
+  void SetPixelPan(unsigned _pixel_pan);
 
   /**
    * Scrolls to the specified index.
