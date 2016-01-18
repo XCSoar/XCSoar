@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef WINUSER_H
 #define WINUSER_H
 
-#include "Screen/Point.hpp"
-
 enum {
   DT_LEFT = 0x2,
   DT_CENTER = 0x20,
