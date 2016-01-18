@@ -93,7 +93,7 @@ protected:
   }
 
   gcc_pure
-  PixelScalar CalculateSplit(const PixelRect &rc) const;
+  int CalculateSplit(const PixelRect &rc) const;
 
   gcc_pure
   std::pair<PixelRect,PixelRect> CalculateLayout(const PixelRect &rc) const;

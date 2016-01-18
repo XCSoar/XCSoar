@@ -63,13 +63,12 @@ CalculateSplit(int top, int bottom, unsigned min_a,
     return bottom - min_b;
   else {
     /* give the best for the rest */
-    const PixelScalar first_height =
-      std::min(min_a, height / 2);
+    const unsigned first_height = std::min(min_a, height / 2);
     return top + first_height;
   }
 }
 
-PixelScalar
+int
 TwoWidgets::CalculateSplit(const PixelRect &rc) const
 {
   const PixelSize min_a = first->GetMinimumSize();

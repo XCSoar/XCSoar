@@ -48,7 +48,7 @@ protected:
   }
 
   ListControl &CreateList(ContainerWindow &parent, const DialogLook &look,
-                          const PixelRect &rc, UPixelScalar row_height);
+                          const PixelRect &rc, unsigned row_height);
 
 public:
   PixelSize GetMinimumSize() const override;

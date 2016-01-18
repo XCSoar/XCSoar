@@ -42,7 +42,7 @@ ListWidget::GetMaximumSize() const
 
 ListControl &
 ListWidget::CreateList(ContainerWindow &parent, const DialogLook &look,
-                       const PixelRect &rc, UPixelScalar row_height)
+                       const PixelRect &rc, unsigned row_height)
 {
   WindowStyle list_style;
   list_style.Hide();

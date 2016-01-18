@@ -49,7 +49,7 @@ static PixelRect
 ToOrigin(PixelRect rc)
 {
   return {
-    0, 0, PixelScalar(rc.right - rc.left), PixelScalar(rc.bottom - rc.top)
+    0, 0, rc.right - rc.left, rc.bottom - rc.top
   };
 }
 

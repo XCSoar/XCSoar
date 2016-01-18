@@ -46,9 +46,9 @@ PixelSize
 TextWidget::GetMinimumSize() const
 {
   const Font &font = UIGlobals::GetDialogLook().text_font;
-  const PixelScalar height = 2 * Layout::GetTextPadding() + font.GetHeight();
+  const int height = 2 * Layout::GetTextPadding() + font.GetHeight();
 
-  return { PixelScalar(0), height };
+  return {0, height};
 }
 
 PixelSize
@@ -58,7 +58,7 @@ TextWidget::GetMaximumSize() const
 
   if (IsDefined()) {
     const WndFrame &w = (const WndFrame &)GetWindow();
-    PixelScalar text_height = w.GetTextHeight() + Layout::Scale(4);
+    int text_height = w.GetTextHeight() + Layout::Scale(4);
     if (text_height > size.cy)
       size.cy = text_height;
   }
