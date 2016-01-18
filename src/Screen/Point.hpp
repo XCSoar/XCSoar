@@ -75,17 +75,6 @@ operator+(RasterPoint p, PixelSize size)
 
 #include "Compiler.h"
 
-#include <stdlib.h>
-
-/**
- * Calculates the "manhattan distance" or "taxicab distance".
- */
-static inline unsigned
-manhattan_distance(RasterPoint a, RasterPoint b)
-{
-  return abs(a.x - b.x) + abs(a.y - b.y);
-}
-
 gcc_pure
 static inline bool
 OverlapsRect(const PixelRect &a, const PixelRect &b)

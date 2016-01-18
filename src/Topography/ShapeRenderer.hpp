@@ -73,7 +73,7 @@ public:
    void AddPointIfDistant(RasterPoint pt) {
     assert(num_points < points.size());
 
-    if (num_points == 0 || manhattan_distance(points[num_points - 1], pt) >= 8)
+    if (num_points == 0 || ManhattanDistance((RasterPoint)points[num_points - 1], pt) >= 8)
       AddPoint(pt);
   }
 

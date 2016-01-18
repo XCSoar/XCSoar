@@ -62,7 +62,7 @@ public:
    */
   void Moved(RasterPoint _location) {
     if (clock.IsDefined() &&
-        manhattan_distance(location, _location) > MAX_DISTANCE_PX)
+        (unsigned)ManhattanDistance(location, _location) > MAX_DISTANCE_PX)
       Reset();
   }
 
@@ -73,7 +73,7 @@ public:
    */
   bool Check(RasterPoint _location) {
     const bool result = !clock.CheckAlwaysUpdate(INTERVAL_MS) &&
-      manhattan_distance(location, _location) <= MAX_DISTANCE_PX;
+      (unsigned)ManhattanDistance(location, _location) <= MAX_DISTANCE_PX;
 
     location = _location;
     return result;
