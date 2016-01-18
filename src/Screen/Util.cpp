@@ -28,16 +28,23 @@ Copyright_License {
 
 gcc_const
 static PixelPoint
-CirclePoint(int x, int y, int radius, unsigned angle)
+CirclePoint(int radius, unsigned angle)
 {
   assert(angle < ARRAY_SIZE(ISINETABLE));
 
-  return PixelPoint(x + ISINETABLE[angle] * radius / 1024,
-                    y - ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
+  return PixelPoint(ISINETABLE[angle] * radius / 1024,
+                    -ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
+}
+
+gcc_const
+static PixelPoint
+CirclePoint(PixelPoint p, int radius, unsigned angle)
+{
+  return p + CirclePoint(radius, angle);
 }
 
 static void
-segment_poly(BulkPixelPoint *pt, const int x, const int y,
+segment_poly(BulkPixelPoint *pt, const PixelPoint center,
              const int radius, const unsigned istart, const unsigned iend,
              unsigned &npoly, const bool forward=true)
 {
@@ -45,7 +52,7 @@ segment_poly(BulkPixelPoint *pt, const int x, const int y,
   assert(iend < ARRAY_SIZE(ISINETABLE));
 
   // add start node
-  pt[npoly++] = CirclePoint(x, y, radius, istart);
+  pt[npoly++] = CirclePoint(center, radius, istart);
 
   // add intermediate nodes (if any)
   if (forward) {
@@ -53,7 +60,7 @@ segment_poly(BulkPixelPoint *pt, const int x, const int y,
     for (unsigned i = istart + INT_ANGLE_RANGE / 64; i < ilast;
          i += INT_ANGLE_RANGE / 64) {
       const unsigned angle = i & INT_ANGLE_MASK;
-      pt[npoly] = CirclePoint(x, y, radius, angle);
+      pt[npoly] = CirclePoint(center, radius, angle);
 
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
@@ -63,7 +70,7 @@ segment_poly(BulkPixelPoint *pt, const int x, const int y,
     for (int i = istart + INT_ANGLE_RANGE / 64; i > (int)ilast;
          i -= INT_ANGLE_RANGE / 64) {
       const unsigned angle = i & INT_ANGLE_MASK;
-      pt[npoly] = CirclePoint(x, y, radius, angle);
+      pt[npoly] = CirclePoint(center, radius, angle);
 
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
@@ -71,23 +78,23 @@ segment_poly(BulkPixelPoint *pt, const int x, const int y,
   }
 
   // and end node
-  pt[npoly++] = CirclePoint(x, y, radius, iend);
+  pt[npoly++] = CirclePoint(center, radius, iend);
 }
 
 gcc_pure
 static bool
-IsCircleVisible(const Canvas &canvas, int x, int y, unsigned radius)
+IsCircleVisible(const Canvas &canvas, PixelPoint center, unsigned radius)
 {
-  return int(x + radius) >= 0 && x < int(canvas.GetWidth() + radius) &&
-    int(y + radius) >= 0 && y < int(canvas.GetHeight() + radius);
+  return int(center.x + radius) >= 0 && center.x < int(canvas.GetWidth() + radius) &&
+    int(center.y + radius) >= 0 && center.y < int(canvas.GetHeight() + radius);
 }
 
 bool
-Segment(Canvas &canvas, int x, int y, unsigned radius,
+Segment(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, bool horizon)
 {
   // dont draw if out of view
-  if (!IsCircleVisible(canvas, x, y, radius))
+  if (!IsCircleVisible(canvas, center, radius))
     return false;
 
   const int istart = NATIVE_TO_INT(start.Native());
@@ -98,12 +105,11 @@ Segment(Canvas &canvas, int x, int y, unsigned radius,
 
   // add center point
   if (!horizon) {
-    pt[0].x = x;
-    pt[0].y = y;
+    pt[0] = center;
     npoly = 1;
   }
 
-  segment_poly(pt, x, y, radius, istart, iend, npoly);
+  segment_poly(pt, center, radius, istart, iend, npoly);
 
   assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
@@ -113,11 +119,11 @@ Segment(Canvas &canvas, int x, int y, unsigned radius,
 }
 
 bool
-Annulus(Canvas &canvas, int x, int y, unsigned radius,
+Annulus(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, unsigned inner_radius)
 {
   // dont draw if out of view
-  if (!IsCircleVisible(canvas, x, y, radius))
+  if (!IsCircleVisible(canvas, center, radius))
     return false;
 
   const int istart = NATIVE_TO_INT(start.Native());
@@ -126,8 +132,8 @@ Annulus(Canvas &canvas, int x, int y, unsigned radius,
   unsigned npoly = 0;
   BulkPixelPoint pt[66*2];
 
-  segment_poly(pt, x, y, radius, istart, iend, npoly);
-  segment_poly(pt, x, y, inner_radius, iend, istart, npoly, false);
+  segment_poly(pt, center, radius, istart, iend, npoly);
+  segment_poly(pt, center, inner_radius, iend, istart, npoly, false);
 
   assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
@@ -137,11 +143,11 @@ Annulus(Canvas &canvas, int x, int y, unsigned radius,
 }
 
 bool
-KeyHole(Canvas &canvas, int x, int y, unsigned radius,
+KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, unsigned inner_radius)
 {
   // dont draw if out of view
-  if (!IsCircleVisible(canvas, x, y, radius))
+  if (!IsCircleVisible(canvas, center, radius))
     return false;
 
   const int istart = NATIVE_TO_INT(start.Native());
@@ -150,8 +156,8 @@ KeyHole(Canvas &canvas, int x, int y, unsigned radius,
   unsigned npoly = 0;
   BulkPixelPoint pt[66*2];
 
-  segment_poly(pt, x, y, radius, istart, iend, npoly);
-  segment_poly(pt, x, y, inner_radius, iend, istart, npoly);
+  segment_poly(pt, center, radius, istart, iend, npoly);
+  segment_poly(pt, center, inner_radius, iend, istart, npoly);
 
   assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
@@ -167,18 +173,18 @@ RoundRect(Canvas &canvas, int left, int top,
   unsigned npoly = 0;
   BulkPixelPoint pt[66*4];
 
-  segment_poly(pt, left + radius, top + radius, radius,
+  segment_poly(pt, PixelPoint(left + radius, top + radius), radius,
                INT_ANGLE_RANGE * 3 / 4,
                INT_ANGLE_RANGE - 1,
                npoly);
-  segment_poly(pt, right - radius, top + radius, radius,
+  segment_poly(pt, PixelPoint(right - radius, top + radius), radius,
                0, INT_ANGLE_RANGE / 4 - 1,
                npoly);
-  segment_poly(pt, right - radius, bottom - radius, radius,
+  segment_poly(pt, PixelPoint(right - radius, bottom - radius), radius,
                INT_ANGLE_RANGE / 4,
                INT_ANGLE_RANGE / 2 - 1,
                npoly);
-  segment_poly(pt, left + radius, bottom - radius, radius,
+  segment_poly(pt, PixelPoint(left + radius, bottom - radius), radius,
                INT_ANGLE_RANGE / 2,
                INT_ANGLE_RANGE * 3 / 4 - 1,
                npoly);

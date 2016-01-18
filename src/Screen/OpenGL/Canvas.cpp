@@ -445,10 +445,10 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 }
 
 void
-Canvas::DrawSegment(int x, int y, unsigned radius,
+Canvas::DrawSegment(PixelPoint center, unsigned radius,
                     Angle start, Angle end, bool horizon)
 {
-  ::Segment(*this, x, y, radius, start, end, horizon);
+  ::Segment(*this, center, radius, start, end, horizon);
 }
 
 gcc_const
@@ -489,7 +489,7 @@ AngleToDonutVertices(Angle start, Angle end)
 }
 
 void
-Canvas::DrawAnnulus(int x, int y,
+Canvas::DrawAnnulus(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
@@ -498,12 +498,12 @@ Canvas::DrawAnnulus(int x, int y,
        TRAC #2221, caused by rounding error of start/end radial;
        should reimplement GLDonutVertices to use the exact start/end
        radial */
-    ::Annulus(*this, x, y, big_radius, start, end, small_radius);
+    ::Annulus(*this, center, big_radius, start, end, small_radius);
     return;
   }
 
   ScopeVertexPointer vp;
-  GLDonutVertices vertices(x, y, small_radius, big_radius);
+  GLDonutVertices vertices(center.x, center.y, small_radius, big_radius);
 
   const std::pair<unsigned,unsigned> i = AngleToDonutVertices(start, end);
   const unsigned istart = i.first;
@@ -559,11 +559,11 @@ Canvas::DrawAnnulus(int x, int y,
 }
 
 void
-Canvas::DrawKeyhole(int x, int y,
+Canvas::DrawKeyhole(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
-  ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
+  ::KeyHole(*this, center, big_radius, start, end, small_radius);
 }
 
 void

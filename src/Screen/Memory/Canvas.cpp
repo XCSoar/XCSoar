@@ -189,30 +189,30 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 }
 
 void
-Canvas::DrawSegment(int x, int y, unsigned radius,
+Canvas::DrawSegment(PixelPoint center, unsigned radius,
                     Angle start, Angle end, bool horizon)
 {
-  Segment(*this, x, y, radius, start, end, horizon);
+  Segment(*this, center, radius, start, end, horizon);
 }
 
 void
-Canvas::DrawAnnulus(int x, int y,
+Canvas::DrawAnnulus(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
   assert(IsDefined());
 
-  ::Annulus(*this, x, y, big_radius, start, end, small_radius);
+  ::Annulus(*this, center, big_radius, start, end, small_radius);
 }
 
 void
-Canvas::DrawKeyhole(int x, int y,
+Canvas::DrawKeyhole(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
   assert(IsDefined());
 
-  ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
+  ::KeyHole(*this, center, big_radius, start, end, small_radius);
 }
 
 const PixelSize

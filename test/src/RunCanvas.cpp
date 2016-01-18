@@ -104,6 +104,7 @@ private:
     const int height = rc.bottom - rc.top;
     const int hmiddle = (rc.left + rc.right) / 2;
     const int vmiddle = (rc.top + rc.bottom) / 2;
+    const PixelPoint center(hmiddle, vmiddle);
 
     BulkPixelPoint p1[3] = {
       { -100, vmiddle },
@@ -120,7 +121,7 @@ private:
     const TCHAR *label;
     switch (page) {
     case 0:
-      canvas.DrawSegment(hmiddle, vmiddle,
+      canvas.DrawSegment(center,
                          std::min(width, height) / 3,
                      Angle::Zero(), Angle::Degrees(90),
                      false);
@@ -128,7 +129,7 @@ private:
       break;
 
     case 1:
-      canvas.DrawSegment(hmiddle, vmiddle,
+      canvas.DrawSegment(center,
                          std::min(width, height) / 3,
                      Angle::Degrees(45), Angle::Degrees(180),
                      true);

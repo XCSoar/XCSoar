@@ -70,12 +70,12 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // draw sky part
   canvas.Select(look.sky_pen);
   canvas.Select(look.sky_brush);
-  canvas.DrawSegment(center.x, center.y, radius, alpha2, alpha1, true);
+  canvas.DrawSegment(center, radius, alpha2, alpha1, true);
 
   // draw ground part
   canvas.Select(look.terrain_pen);
   canvas.Select(look.terrain_brush);
-  canvas.DrawSegment(center.x, center.y, radius, alpha1, alpha2, true);
+  canvas.DrawSegment(center, radius, alpha1, alpha2, true);
 
   // draw aircraft symbol
   canvas.Select(look.aircraft_pen);

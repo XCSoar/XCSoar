@@ -319,14 +319,14 @@ public:
 
   void DrawCircle(int x, int y, unsigned radius);
 
-  void DrawSegment(int x, int y, unsigned radius,
+  void DrawSegment(PixelPoint center, unsigned radius,
                    Angle start, Angle end, bool horizon=false);
 
-  void DrawAnnulus(int x, int y, unsigned small_radius,
+  void DrawAnnulus(PixelPoint center, unsigned small_radius,
                    unsigned big_radius,
                    Angle start, Angle end);
 
-  void DrawKeyhole(int x, int y, unsigned small_radius,
+  void DrawKeyhole(PixelPoint center, unsigned small_radius,
                    unsigned big_radius,
                    Angle start, Angle end);
 

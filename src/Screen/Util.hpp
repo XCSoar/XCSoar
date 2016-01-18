@@ -30,20 +30,20 @@ Copyright_License {
 #define XCSOAR_SCREEN_UTIL_HPP
 
 #include "Math/Angle.hpp"
-#include "Screen/Point.hpp"
 
 class Canvas;
+struct PixelPoint;
 
 bool
-Segment(Canvas &canvas, int x, int y, unsigned radius,
+Segment(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, bool horizon=false);
 
 bool
-Annulus(Canvas &canvas, int x, int y, unsigned radius,
+Annulus(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, unsigned inner_radius);
 
 bool
-KeyHole(Canvas &canvas, int x, int y, unsigned radius,
+KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, unsigned inner_radius);
 
 void

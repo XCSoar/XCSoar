@@ -103,7 +103,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
 
     auto p_center = projection.GeoToScreen(oz.GetReference());
     if (layer != LAYER_ACTIVE)
-      canvas.DrawSegment(p_center.x, p_center.y,
+      canvas.DrawSegment(p_center,
                          projection.GeoToScreenDistance(oz.GetRadius()),
                          oz.GetStartRadial() - projection.GetScreenAngle(),
                          oz.GetEndRadial() - projection.GetScreenAngle());
@@ -138,7 +138,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     if (layer != LAYER_INACTIVE) {
       auto p_center = projection.GeoToScreen(oz.GetReference());
 
-      canvas.DrawSegment(p_center.x, p_center.y,
+      canvas.DrawSegment(p_center,
                          projection.GeoToScreenDistance(oz.GetRadius()),
                          oz.GetStartRadial() - projection.GetScreenAngle(),
                          oz.GetEndRadial() - projection.GetScreenAngle());
@@ -157,7 +157,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::BGAENHANCEDOPTION: {
     const KeyholeZone &oz = (const KeyholeZone &)_oz;
     auto p_center = projection.GeoToScreen(oz.GetReference());
-    canvas.DrawKeyhole(p_center.x, p_center.y,
+    canvas.DrawKeyhole(p_center,
                        projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),
                        oz.GetStartRadial() - projection.GetScreenAngle(),
@@ -169,7 +169,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::ANNULAR_SECTOR: {
     const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
     auto p_center = projection.GeoToScreen(oz.GetReference());
-    canvas.DrawAnnulus(p_center.x, p_center.y,
+    canvas.DrawAnnulus(p_center,
                        projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),
                        oz.GetStartRadial() - projection.GetScreenAngle(),
