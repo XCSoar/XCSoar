@@ -37,7 +37,7 @@ Copyright_License {
  * immediately outside the rectangle being specified.
  */
 struct PixelRect {
-  PixelScalar left, top, right, bottom;
+  int left, top, right, bottom;
 
   PixelRect() = default;
 
