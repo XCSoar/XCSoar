@@ -99,9 +99,7 @@ DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
   const unsigned mask = pen.GetMask();
   const auto color = canvas.Import(pen.GetColor());
 
-  const SDLRasterCanvas::Point *points =
-    reinterpret_cast<const SDLRasterCanvas::Point *>(lppt);
-  canvas.DrawPolyline(points, n_points, loop, color, thickness, mask);
+  canvas.DrawPolyline(lppt, n_points, loop, color, thickness, mask);
 }
 
 void
@@ -120,17 +118,12 @@ Canvas::DrawPolygon(const BulkPixelPoint *lppt, unsigned cPoints)
 
   SDLRasterCanvas canvas(buffer);
 
-  static_assert(sizeof(BulkPixelPoint) == sizeof(SDLRasterCanvas::Point),
-                "Incompatible point types");
-  const SDLRasterCanvas::Point *points =
-    reinterpret_cast<const SDLRasterCanvas::Point *>(lppt);
-
   if (!brush.IsHollow()) {
     const auto color = canvas.Import(brush.GetColor());
     if (brush.GetColor().IsOpaque())
-      canvas.FillPolygon(points, cPoints, color);
+      canvas.FillPolygon(lppt, cPoints, color);
     else
-      canvas.FillPolygon(points, cPoints, color,
+      canvas.FillPolygon(lppt, cPoints, color,
                          AlphaPixelOperations<ActivePixelTraits>(brush.GetColor().Alpha()));
   }
 

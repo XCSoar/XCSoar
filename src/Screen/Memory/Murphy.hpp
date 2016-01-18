@@ -164,7 +164,7 @@ public:
         canvas.DrawPixel(b.x, b.y, color);
       } while (b.Next());
 
-      const typename Canvas::Point p[4] = {
+      const PixelPoint p[4] = {
         { m1x, m1y },
         { m2x, m2y },
         { ml1bx, ml1by },

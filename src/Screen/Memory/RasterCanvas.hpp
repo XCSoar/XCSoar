@@ -27,6 +27,7 @@ Copyright_License {
 #include "Buffer.hpp"
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
+#include "Screen/Point.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
@@ -57,14 +58,6 @@ class RasterCanvas : private PixelTraits {
 
 public:
   using typename PixelTraits::color_type;
-
-  struct Point {
-    int x, y;
-
-    Point() = default;
-    constexpr Point(int _x, int _y):x(_x), y(_y) {}
-    constexpr Point(unsigned _x, unsigned _y):x(_x), y(_y) {}
-  };
 
 private:
   WritableImageBuffer<PixelTraits> buffer;
@@ -415,18 +408,18 @@ public:
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
   }
 
-  void DrawPolyline(const Point *points, unsigned n, bool loop,
+  void DrawPolyline(const PixelPoint *points, unsigned n, bool loop,
                     color_type color,
                     unsigned thickness,
                     unsigned line_mask=-1) {
 
-    Point p_last = points[loop? n-1 : 0];
+    auto p_last = points[loop? n-1 : 0];
     unsigned code2_orig;
     unsigned code2;
     bool last_visible = false;
 
     for (unsigned i= loop? 0: 1; i<n; ++i) {
-      Point p_this = points[i];
+      auto p_this = points[i];
       if (!last_visible) {
         // don't have a start point yet
         code2_orig = ClipEncode(p_last.x, p_last.y);
@@ -465,7 +458,7 @@ public:
   }
 
   template<typename PixelOperations>
-  void FillPolygonFast(const Point *points, unsigned n, color_type color,
+  void FillPolygonFast(const PixelPoint *points, unsigned n, color_type color,
                        PixelOperations operations) {
 
     assert(points != nullptr);
@@ -479,8 +472,8 @@ public:
     int miny = points[0].y;
     int maxy = points[0].y;
 
-    const Point* p_1 = points;
-    const Point* p_0 = points+n-1;
+    const auto *p_1 = points;
+    const auto *p_0 = points + n - 1;
     int n_edges = 0;
 
     while (p_1 < points+n) {
@@ -564,7 +557,7 @@ public:
   }
 
   template<typename PixelOperations>
-  void FillPolygon(const Point *points, unsigned n, color_type color,
+  void FillPolygon(const PixelPoint *points, unsigned n, color_type color,
                    PixelOperations operations) {
     assert(points != nullptr);
 
@@ -631,7 +624,7 @@ public:
     }
   }
 
-  void FillPolygon(const Point *points, unsigned n, color_type color) {
+  void FillPolygon(const PixelPoint *points, unsigned n, color_type color) {
     FillPolygonFast(points, n, color,
                     GetPixelTraits());
 //    FillPolygon(points, n, color,
