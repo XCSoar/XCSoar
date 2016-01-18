@@ -31,6 +31,7 @@ Copyright_License {
 #include "FallbackBuffer.hpp"
 #include "Features.hpp"
 #include "VertexPointer.hpp"
+#include "ExactPixelPoint.hpp"
 #include "Screen/Custom/Cache.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"

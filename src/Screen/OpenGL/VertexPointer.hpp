@@ -32,6 +32,8 @@ Copyright_License {
 #include "Attribute.hpp"
 #endif
 
+struct ExactPixelPoint;
+
 struct ScopeVertexPointer {
 #ifdef USE_GLSL
   ScopeVertexPointer() {

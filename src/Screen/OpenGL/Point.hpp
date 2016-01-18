@@ -25,19 +25,8 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_POINT_HPP
 
 #include "Screen/OpenGL/Types.hpp"
-#include "Math/Point2D.hpp"
 
 typedef GLvalue PixelScalar;
 typedef GLuvalue UPixelScalar;
-
-struct ExactPixelPoint : Point2D<GLexact> {
-  ExactPixelPoint() = default;
-
-  constexpr ExactPixelPoint(GLexact _x, GLexact _y)
-    :Point2D<GLexact>(_x, _y) {}
-
-  constexpr ExactPixelPoint(PixelPoint p)
-    :Point2D<GLexact>(ToGLexact(p.x), ToGLexact(p.y)) {}
-};
 
 #endif

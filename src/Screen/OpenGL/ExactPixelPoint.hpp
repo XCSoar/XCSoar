@@ -21,29 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
-#define XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_EXACT_PIXEL_POINT_HPP
+#define XCSOAR_SCREEN_OPENGL_EXACT_PIXEL_POINT_HPP
 
 #include "Types.hpp"
-#include "Screen/Point.hpp"
 #include "Math/Point2D.hpp"
 
-/**
- * A point structure to be used in arrays.
- */
-struct BulkPixelPoint : Point2D<GLvalue, int> {
-  BulkPixelPoint() = default;
+struct ExactPixelPoint : Point2D<GLexact> {
+  ExactPixelPoint() = default;
 
-  template<typename... Args>
-  constexpr BulkPixelPoint(Args&&... args)
-    :Point2D(args...) {}
+  constexpr ExactPixelPoint(GLexact _x, GLexact _y)
+    :Point2D<GLexact>(_x, _y) {}
 
-  constexpr BulkPixelPoint(PixelPoint src)
-    :Point2D(src.x, src.y) {}
-
-  constexpr operator PixelPoint() const {
-    return PixelPoint(x, y);
-  }
+  constexpr ExactPixelPoint(PixelPoint p)
+    :Point2D<GLexact>(ToGLexact(p.x), ToGLexact(p.y)) {}
 };
 
 #endif
