@@ -186,7 +186,7 @@ int
 TabDisplay::GetButtonIndexAt(PixelPoint p) const
 {
   for (unsigned i = 0; i < GetSize(); i++) {
-    if (buttons[i]->rc.IsInside(p))
+    if (buttons[i]->rc.Contains(p))
       return i;
   }
 
@@ -360,7 +360,7 @@ TabDisplay::OnMouseMove(PixelPoint p, unsigned keys)
 
   const PixelRect &rc = buttons[down_index]->rc;
 
-  bool not_on_button = !rc.IsInside(p);
+  bool not_on_button = !rc.Contains(p);
   if (drag_off_button != not_on_button) {
     drag_off_button = not_on_button;
     Invalidate(rc);

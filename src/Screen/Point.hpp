@@ -140,7 +140,7 @@ struct PixelRect {
     return { right, bottom };
   }
 
-  constexpr bool IsInside(PixelPoint pt) const {
+  constexpr bool Contains(PixelPoint pt) const {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 

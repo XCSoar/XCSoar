@@ -166,7 +166,7 @@ TabMenuDisplay::IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
-    if (GetMainMenuButtonSize(i).IsInside(Pos))
+    if (GetMainMenuButtonSize(i).Contains(Pos))
       return MenuTabIndex(i);
 
 
@@ -175,7 +175,7 @@ TabMenuDisplay::IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const
     const MainMenuButton &main_button = GetMainMenuButton(mainIndex);
     for (unsigned i = main_button.first_page_index;
          i <= main_button.last_page_index; ++i) {
-      if (GetSubMenuButtonSize(i).IsInside(Pos))
+      if (GetSubMenuButtonSize(i).Contains(Pos))
         return MenuTabIndex(mainIndex, i - main_button.first_page_index);
     }
   }
@@ -335,7 +335,7 @@ TabMenuDisplay::OnMouseMove(PixelPoint p, unsigned keys)
     return false;
 
   const PixelRect &rc = GetButtonPosition(down_index);
-  const bool tmp = !rc.IsInside(p);
+  const bool tmp = !rc.Contains(p);
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
     Invalidate(rc);

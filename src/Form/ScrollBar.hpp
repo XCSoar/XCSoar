@@ -102,7 +102,7 @@ public:
    * False otherwise
    */
   bool IsInside(const PixelPoint &pt) const {
-    return rc.IsInside(pt);
+    return rc.Contains(pt);
   }
 
   /**
@@ -112,7 +112,7 @@ public:
    * False otherwise
    */
   bool IsInsideSlider(const PixelPoint pt) const {
-    return rc_slider.IsInside(pt);
+    return rc_slider.Contains(pt);
   }
 
   /**
