@@ -48,7 +48,7 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   team_brush_yellow.Create(other.team_color_yellow);
   team_brush_magenta.Create(other.team_color_magenta);
 
-  UPixelScalar width = Layout::FastScale(small ? 1 : 2);
+  unsigned width = Layout::FastScale(small ? 1u : 2u);
   warning_pen.Create(width, warning_color);
   alarm_pen.Create(width, alarm_color);
   default_pen.Create(width, default_color);

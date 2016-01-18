@@ -94,8 +94,8 @@ GetColor(TrailSettings::Type type, short ramp_h)
 void
 TrailLook::Initialise(const TrailSettings &settings)
 {
-  UPixelScalar iwidth;
-  UPixelScalar minwidth = Layout::ScalePenWidth(2);
+  unsigned iwidth;
+  unsigned minwidth = Layout::ScalePenWidth(2);
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
@@ -106,8 +106,8 @@ TrailLook::Initialise(const TrailSettings &settings)
       iwidth = minwidth;
     else
       iwidth = std::max(minwidth,
-                        UPixelScalar((i - NUMSNAILCOLORS / 2) *
-                                     Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
+                        (i - NUMSNAILCOLORS / 2) *
+                        Layout::ScalePenWidth(16u) / NUMSNAILCOLORS);
 
     trail_widths[i] = iwidth;
     trail_brushes[i].Create(color);

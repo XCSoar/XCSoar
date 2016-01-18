@@ -24,7 +24,6 @@
 #ifndef XCSOAR_TRAIL_LOOK_HPP
 #define XCSOAR_TRAIL_LOOK_HPP
 
-#include "Screen/Point.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Pen.hpp"
 
@@ -33,7 +32,7 @@ struct TrailSettings;
 struct TrailLook {
   static constexpr unsigned NUMSNAILCOLORS = 15;
 
-  UPixelScalar trail_widths[NUMSNAILCOLORS];
+  unsigned trail_widths[NUMSNAILCOLORS];
   Brush trail_brushes[NUMSNAILCOLORS];
   Pen trail_pens[NUMSNAILCOLORS];
   Pen scaled_trail_pens[NUMSNAILCOLORS];
