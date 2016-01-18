@@ -92,7 +92,7 @@ TopWindow::OnPaint(Canvas &canvas)
 
   /* draw the mouse cursor */
 
-  const RasterPoint m = event_queue->GetMousePosition();
+  const auto m = event_queue->GetMousePosition();
   const BulkPixelPoint p[] = {
     { m.x, m.y },
     { m.x + Layout::Scale(4), m.y + Layout::Scale(4) },
