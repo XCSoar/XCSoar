@@ -32,8 +32,8 @@ gcc_pure
 static PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
 {
-  UPixelScalar hwidth = rc.right - rc.left;
-  UPixelScalar hheight = rc.bottom - rc.top;
+  unsigned hwidth = rc.right - rc.left;
+  unsigned hheight = rc.bottom - rc.top;
 
   if (hheight > hwidth) {
     // portrait
