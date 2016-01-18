@@ -164,14 +164,4 @@ struct PixelRect {
 #endif
 };
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Point.hpp"
-#elif defined(USE_MEMORY_CANVAS)
-#include "Screen/Memory/Point.hpp"
-#elif defined(USE_GDI)
-#include "Screen/GDI/Point.hpp"
-#else
-#error No Point implementation
-#endif
-
 #endif
