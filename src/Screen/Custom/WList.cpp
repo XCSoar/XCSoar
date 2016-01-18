@@ -228,7 +228,7 @@ WindowList::Paint(Canvas &canvas)
     if (!child.IsVisible())
       continue;
 
-    SubCanvas sub_canvas(canvas, { child.GetLeft(), child.GetTop() },
+    SubCanvas sub_canvas(canvas, child.GetTopLeft(),
                          child.GetSize());
 #ifdef USE_MEMORY_CANVAS
     if (sub_canvas.GetWidth() == 0 || sub_canvas.GetHeight() == 0)
