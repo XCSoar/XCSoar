@@ -101,13 +101,13 @@ GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
     return result;
   }
 
-  const UPixelScalar requested_height = bottom_widget->GetMinimumSize().cy;
-  UPixelScalar height;
+  const unsigned requested_height = bottom_widget->GetMinimumSize().cy;
+  unsigned height;
   if (requested_height > 0) {
-    const UPixelScalar max_height = (rc.bottom - rc.top) / 2;
+    const unsigned max_height = (rc.bottom - rc.top) / 2;
     height = std::min(max_height, requested_height);
   } else {
-    const UPixelScalar recommended_height = (rc.bottom - rc.top) / 3;
+    const unsigned recommended_height = (rc.bottom - rc.top) / 3;
     height = recommended_height;
   }
 
@@ -313,8 +313,8 @@ void
 MainWindow::ReinitialiseLayoutTA(PixelRect rc,
                                  const InfoBoxLayout::Layout &layout)
 {
-  UPixelScalar sz = std::min(layout.control_size.cy,
-                             layout.control_size.cx) * 2;
+  unsigned sz = std::min(layout.control_size.cy,
+                         layout.control_size.cx) * 2;
   rc.right = rc.left + sz;
   rc.top = rc.bottom - sz;
   thermal_assistant.Move(rc);
