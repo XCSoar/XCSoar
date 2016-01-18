@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_WINDOW_LIST_HPP
 #define XCSOAR_SCREEN_WINDOW_LIST_HPP
 
-#include "Screen/Point.hpp"
 #include "Screen/Window.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
 
+struct PixelPoint;
 class Window;
 class Canvas;
 
