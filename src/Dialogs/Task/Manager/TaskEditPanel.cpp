@@ -120,7 +120,7 @@ private:
   }
 
   Layout CalculateLayout(const PixelRect &rc) const {
-    const PixelScalar dx = (rc.right - rc.left) / 5;
+    const int dx = (rc.right - rc.left) / 5;
 
     return {
       { rc.left         , rc.top, rc.left +     dx, rc.bottom },

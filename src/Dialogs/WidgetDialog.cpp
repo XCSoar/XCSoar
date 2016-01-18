@@ -125,9 +125,9 @@ WidgetDialog::AutoSize()
   max_size.cy += GetTitleHeight();
 
   // Calculate sizes with one button row at the bottom
-  const PixelScalar min_height_with_buttons =
+  const int min_height_with_buttons =
     min_size.cy + Layout::GetMaximumControlHeight();
-  const PixelScalar max_height_with_buttons =
+  const int max_height_with_buttons =
     max_size.cy + Layout::GetMaximumControlHeight();
 
   if (/* need full dialog height even for minimum widget height? */

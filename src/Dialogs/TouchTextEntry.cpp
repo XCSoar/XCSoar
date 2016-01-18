@@ -152,44 +152,44 @@ TouchTextEntry(TCHAR *text, size_t width,
   ContainerWindow &client_area = form.GetClientAreaWindow();
   const PixelRect rc = client_area.GetClientRect();
 
-  const PixelScalar client_height = rc.bottom - rc.top;
+  const int client_height = rc.bottom - rc.top;
 
-  const PixelScalar padding = Layout::Scale(2);
-  const PixelScalar backspace_width = Layout::Scale(36);
-  const PixelScalar backspace_left = rc.right - padding - backspace_width;
-  const PixelScalar editor_height = Layout::Scale(22);
-  const PixelScalar editor_bottom = padding + editor_height;
-  const PixelScalar button_height = Layout::Scale(40);
+  const int padding = Layout::Scale(2);
+  const int backspace_width = Layout::Scale(36);
+  const int backspace_left = rc.right - padding - backspace_width;
+  const int editor_height = Layout::Scale(22);
+  const int editor_bottom = padding + editor_height;
+  const int button_height = Layout::Scale(40);
   constexpr unsigned keyboard_rows = 5;
-  const PixelScalar keyboard_top = editor_bottom + padding;
-  const PixelScalar keyboard_height = keyboard_rows * button_height;
-  const PixelScalar keyboard_bottom = keyboard_top + keyboard_height;
+  const int keyboard_top = editor_bottom + padding;
+  const int keyboard_height = keyboard_rows * button_height;
+  const int keyboard_bottom = keyboard_top + keyboard_height;
 
   const bool vertical = client_height >= keyboard_bottom + button_height;
 
-  const PixelScalar button_top = vertical
+  const int button_top = vertical
     ? rc.bottom - button_height
     : keyboard_bottom - button_height;
-  const PixelScalar button_bottom = vertical
+  const int button_bottom = vertical
     ? rc.bottom
     : keyboard_bottom;
 
-  const PixelScalar ok_left = vertical ? 0 : padding;
-  const PixelScalar ok_right = vertical
+  const int ok_left = vertical ? 0 : padding;
+  const int ok_right = vertical
     ? rc.right / 3
     : ok_left + Layout::Scale(80);
 
-  const PixelScalar cancel_left = vertical
+  const int cancel_left = vertical
     ? ok_right
     : Layout::Scale(175);
-  const PixelScalar cancel_right = vertical
+  const int cancel_right = vertical
     ? rc.right * 2 / 3
     : cancel_left + Layout::Scale(60);
 
-  const PixelScalar clear_left = vertical
+  const int clear_left = vertical
     ? cancel_right
     : Layout::Scale(235);
-  const PixelScalar clear_right = vertical
+  const int clear_right = vertical
     ? rc.right
     : clear_left + Layout::Scale(50);
 

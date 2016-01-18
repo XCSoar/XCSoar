@@ -76,7 +76,7 @@ class DeviceListWidget final
 
   const DialogLook &look;
 
-  UPixelScalar font_height;
+  unsigned font_height;
 
   struct Flags {
     bool duplicate:1;
@@ -237,7 +237,7 @@ void
 DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
   CreateList(parent, look, rc, 3 * margin + font_height +
              look.small_font.GetHeight()).SetLength(NUMDEV);
@@ -327,7 +327,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     CommonInterface::SetSystemSettings().devices[idx];
   const Flags flags(*items[idx]);
 
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
 
   TCHAR port_name_buffer[128];
   const TCHAR *port_name =
