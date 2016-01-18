@@ -412,6 +412,7 @@ public:
   }
 
   unsigned DrawFormattedText(RECT rc, const TCHAR *text, unsigned format) {
+    format |= DT_NOPREFIX | DT_WORDBREAK;
     ::DrawText(dc, text, -1, &rc, format);
     return rc.bottom - rc.top;
   }
