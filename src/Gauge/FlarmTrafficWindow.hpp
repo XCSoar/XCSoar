@@ -104,7 +104,7 @@ public:
 
   void NextTarget();
   void PrevTarget();
-  bool SelectNearTarget(int x, int y, int max_distance);
+  bool SelectNearTarget(PixelPoint p, int max_distance);
 
   void SetDistance(double _distance) {
     distance = _distance;

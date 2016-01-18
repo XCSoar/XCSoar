@@ -57,10 +57,9 @@ private:
 
 protected:
   virtual void OnCancelMode() override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
   virtual void OnPaint(Canvas &canvas) override;
 };
 
@@ -78,7 +77,7 @@ GaugeThermalAssistantWindow::OnCancelMode()
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+GaugeThermalAssistantWindow::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
@@ -92,7 +91,7 @@ GaugeThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+GaugeThermalAssistantWindow::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -113,11 +112,10 @@ GaugeThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseMove(PixelScalar x, PixelScalar y,
-                                         unsigned keys)
+GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     return true;
   }
 

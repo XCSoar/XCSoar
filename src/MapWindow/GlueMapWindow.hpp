@@ -203,11 +203,11 @@ protected:
   /* virtual methods from class Window */
   virtual void OnCreate() override;
   virtual void OnDestroy() override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
+  bool OnMouseDouble(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseWheel(PixelPoint p, int delta) override;
 
 #ifdef HAVE_MULTI_TOUCH
   virtual bool OnMultiTouchDown() override;

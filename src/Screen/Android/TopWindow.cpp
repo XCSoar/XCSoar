@@ -189,20 +189,20 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::MOUSE_MOTION:
     // XXX keys
-    return OnMouseMove(event.point.x, event.point.y, 0);
+    return OnMouseMove(event.point, 0);
 
   case Event::MOUSE_DOWN:
     return double_click.Check(event.point)
-      ? OnMouseDouble(event.point.x, event.point.y)
-      : OnMouseDown(event.point.x, event.point.y);
+      ? OnMouseDouble(event.point)
+      : OnMouseDown(event.point);
 
   case Event::MOUSE_UP:
     double_click.Moved(event.point);
 
-    return OnMouseUp(event.point.x, event.point.y);
+    return OnMouseUp(event.point);
 
   case Event::MOUSE_WHEEL:
-    return OnMouseWheel(event.point.x, event.point.y, (int)event.param);
+    return OnMouseWheel(event.point, (int)event.param);
 
   case Event::POINTER_DOWN:
     return OnMultiTouchDown();

@@ -135,10 +135,10 @@ protected:
 
   /* virtual methods from class Window */
   virtual void OnCreate() override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual void OnCancelMode() override;
 
@@ -679,29 +679,28 @@ TrafficWidget::Update()
 }
 
 bool
-FlarmTrafficControl::OnMouseMove(PixelScalar x, PixelScalar y,
-                                 gcc_unused unsigned keys)
+FlarmTrafficControl::OnMouseMove(PixelPoint p, gcc_unused unsigned keys)
 {
   if (dragging)
-    gestures.Update(x, y);
+    gestures.Update(p);
 
   return true;
 }
 
 bool
-FlarmTrafficControl::OnMouseDown(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
     SetCapture();
-    gestures.Start(x, y, Layout::Scale(20));
+    gestures.Start(p, Layout::Scale(20));
   }
 
   return true;
 }
 
 bool
-FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     StopDragging();
@@ -712,13 +711,13 @@ FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (!WarningMode())
-    SelectNearTarget(x, y, Layout::Scale(15));
+    SelectNearTarget(p, Layout::Scale(15));
 
   return true;
 }
 
 bool
-FlarmTrafficControl::OnMouseDouble(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDouble(PixelPoint p)
 {
   StopDragging();
   InputEvents::ShowMenu();

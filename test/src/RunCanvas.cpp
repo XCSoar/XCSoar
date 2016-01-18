@@ -191,8 +191,8 @@ private:
   }
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override {
-    if (SingleWindow::OnMouseDown(x, y))
+  bool OnMouseDown(PixelPoint p) override {
+    if (SingleWindow::OnMouseDown(p))
       return true;
 
     page = (page + 1) % 7;

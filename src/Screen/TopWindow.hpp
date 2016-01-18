@@ -339,14 +339,14 @@ public:
   void SetDisplayOrientation(DisplayOrientation orientation);
 #endif
 
-#ifdef HAVE_HIGHDPI_SUPPORT
 protected:
-  template<typename T>
-  void PointToReal(T& x, T& y) const {
-    x = static_cast<T>(static_cast<float>(x) * point_to_real_x);
-    y = static_cast<T>(static_cast<float>(y) * point_to_real_y);
-  }
+  PixelPoint PointToReal(PixelPoint p) const {
+#ifdef HAVE_HIGHDPI_SUPPORT
+    p.x = int(static_cast<float>(p.x) * point_to_real_x);
+    p.y = int(static_cast<float>(p.y) * point_to_real_y);
 #endif
+    return p;
+  }
 
 protected:
   virtual bool OnActivate();

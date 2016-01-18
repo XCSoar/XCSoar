@@ -84,11 +84,11 @@ protected:
     projection.UpdateScreenBounds();
   }
 
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override {
+  bool OnMouseDown(PixelPoint p) override {
     if (drag_mode != DragMode::NONE)
       return false;
 
-    const GeoPoint gp = projection.ScreenToGeo(x, y);
+    const GeoPoint gp = projection.ScreenToGeo(p);
 
     if (projection.GeoToScreenDistance(gp.Distance(a)) < Layout::GetHitRadius()) {
       drag_mode = DragMode::A;
@@ -105,7 +105,7 @@ protected:
     return false;
   }
 
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override {
+  bool OnMouseUp(PixelPoint p) override {
     if (drag_mode != DragMode::NONE) {
       drag_mode = DragMode::NONE;
       ReleaseCapture();
@@ -115,8 +115,8 @@ protected:
     return false;
   }
 
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override {
-    const GeoPoint gp = projection.ScreenToGeo(x, y);
+  bool OnMouseMove(PixelPoint p, unsigned keys) override {
+    const GeoPoint gp = projection.ScreenToGeo(p);
     switch (drag_mode) {
     case DragMode::NONE:
       return false;

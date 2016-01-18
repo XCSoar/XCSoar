@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 bool
-BigThermalAssistantWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
+BigThermalAssistantWindow::OnMouseDouble(PixelPoint p)
 {
   StopDragging();
   InputEvents::ShowMenu();
@@ -34,19 +34,19 @@ BigThermalAssistantWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 }
 
 bool
-BigThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+BigThermalAssistantWindow::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
     SetCapture();
-    gestures.Start(x, y, Layout::Scale(20));
+    gestures.Start(p, Layout::Scale(20));
   }
 
   return true;
 }
 
 bool
-BigThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+BigThermalAssistantWindow::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     StopDragging();
@@ -60,11 +60,10 @@ BigThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-BigThermalAssistantWindow::OnMouseMove(PixelScalar x, PixelScalar y,
-                                       gcc_unused unsigned keys)
+BigThermalAssistantWindow::OnMouseMove(PixelPoint p, gcc_unused unsigned keys)
 {
   if (dragging)
-    gestures.Update(x, y);
+    gestures.Update(p);
 
   return true;
 }

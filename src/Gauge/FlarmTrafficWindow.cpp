@@ -162,7 +162,7 @@ FlarmTrafficWindow::UpdateSelector(const FlarmId id, const PixelPoint pt)
   // on the internal list
   if (selection < 0 && (
       pt.x < 0 || pt.y < 0 ||
-      !SelectNearTarget(pt.x, pt.y, radius * 2)) )
+      !SelectNearTarget(pt, radius * 2)) )
     NextTarget();
 }
 
@@ -717,7 +717,7 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas)
 }
 
 bool
-FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
+FlarmTrafficWindow::SelectNearTarget(PixelPoint p, int max_distance)
 {
   int min_distance = 99999;
   int min_id = -1;
@@ -727,8 +727,8 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
     if (!data.list[i].IsDefined())
       continue;
 
-    int distance_sq = (x - sc[i].x) * (x - sc[i].x) +
-                      (y - sc[i].y) * (y - sc[i].y);
+    int distance_sq = (p.x - sc[i].x) * (p.x - sc[i].x) +
+                      (p.y - sc[i].y) * (p.y - sc[i].y);
 
     if (distance_sq > min_distance
         || distance_sq > max_distance * max_distance)

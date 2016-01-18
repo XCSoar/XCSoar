@@ -250,6 +250,12 @@ public:
   }
 
 #ifndef USE_WINUSER
+  PixelPoint GetTopLeft() const {
+    assert(IsDefined());
+
+    return position;
+  }
+
   PixelScalar GetTop() const {
     assert(IsDefined());
 
@@ -770,16 +776,12 @@ public:
    * client area.
    */
   gcc_pure
-  bool IsInside(int x, int y) const {
+  bool IsInside(PixelPoint p) const {
     assert(IsDefined());
 
     const PixelSize size = GetSize();
-    return unsigned(x) < unsigned(size.cx) && unsigned(y) < unsigned(size.cy);
-  }
-
-  gcc_pure
-  bool IsInside(PixelPoint pt) const {
-    return IsInside(pt.x, pt.y);
+    return unsigned(p.x) < unsigned(size.cx) &&
+        unsigned(p.y) < unsigned(size.cy);
   }
 
   /**
@@ -898,11 +900,11 @@ public:
   virtual void OnCreate();
   virtual void OnDestroy();
   virtual void OnResize(PixelSize new_size);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
+  virtual bool OnMouseMove(PixelPoint p, unsigned keys);
+  virtual bool OnMouseDown(PixelPoint p);
+  virtual bool OnMouseUp(PixelPoint p);
+  virtual bool OnMouseDouble(PixelPoint p);
+  virtual bool OnMouseWheel(PixelPoint p, int delta);
 
 #ifdef HAVE_MULTI_TOUCH
   /**

@@ -145,34 +145,34 @@ Window::OnResize(PixelSize new_size)
 }
 
 bool
-Window::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+Window::OnMouseMove(PixelPoint p, unsigned keys)
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::OnMouseDown(PixelScalar x, PixelScalar y)
+Window::OnMouseDown(PixelPoint p)
 {
   return false;
 }
 
 bool
-Window::OnMouseUp(PixelScalar x, PixelScalar y)
+Window::OnMouseUp(PixelPoint p)
 {
   return false;
 }
 
 bool
-Window::OnMouseDouble(PixelScalar x, PixelScalar y)
+Window::OnMouseDouble(PixelPoint p)
 {
   /* fall back to OnMouseDown() if the class didn't override
      OnMouseDouble() */
-  return OnMouseDown(x, y);
+  return OnMouseDown(p);
 }
 
 bool
-Window::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
+Window::OnMouseWheel(PixelPoint p, int delta)
 {
   return false;
 }

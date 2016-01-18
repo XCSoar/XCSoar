@@ -63,8 +63,8 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
 
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;
@@ -391,14 +391,14 @@ InfoBoxesConfigWidget::SetCurrentInfoBox(unsigned _current_preview)
 }
 
 bool
-InfoBoxPreview::OnMouseDown(PixelScalar x, PixelScalar y)
+InfoBoxPreview::OnMouseDown(PixelPoint p)
 {
   parent->SetCurrentInfoBox(i);
   return true;
 }
 
 bool
-InfoBoxPreview::OnMouseDouble(PixelScalar x, PixelScalar y)
+InfoBoxPreview::OnMouseDouble(PixelPoint p)
 {
   parent->BeginEditing();
   return true;

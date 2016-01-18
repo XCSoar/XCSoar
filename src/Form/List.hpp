@@ -318,10 +318,10 @@ protected:
   void OnSetFocus() override;
   void OnKillFocus() override;
 
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseWheel(PixelPoint p, int delta) override;
 
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;

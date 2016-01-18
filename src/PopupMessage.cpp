@@ -118,7 +118,7 @@ PopupMessage::Create(const PixelRect _rc)
 }
 
 bool
-PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
+PopupMessage::OnMouseDown(PixelPoint p)
 {
   // acknowledge with click/touch
   Acknowledge(MSG_UNKNOWN);

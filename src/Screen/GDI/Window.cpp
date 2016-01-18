@@ -150,12 +150,13 @@ Window::OnMessage(HWND _hWnd, UINT message,
     return 0;
 
   case WM_MOUSEMOVE:
-    if (OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), wParam))
+    if (OnMouseMove(PixelPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)),
+                    wParam))
       return 0;
     break;
 
   case WM_LBUTTONDOWN:
-    if (OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (OnMouseDown(PixelPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)))) {
       /* true returned: message was handled */
       ResetUserIdle();
       return 0;
@@ -163,7 +164,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONUP:
-    if (OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (OnMouseUp(PixelPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)))) {
       /* true returned: message was handled */
       ResetUserIdle();
       return 0;
@@ -171,7 +172,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_LBUTTONDBLCLK:
-    if (OnMouseDouble(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
+    if (OnMouseDouble(PixelPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)))) {
       /* true returned: message was handled */
       ResetUserIdle();
       return 0;
@@ -181,8 +182,8 @@ Window::OnMessage(HWND _hWnd, UINT message,
 
 #ifdef WM_MOUSEWHEEL
   case WM_MOUSEWHEEL:
-    if (OnMouseWheel(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam),
-                       GET_WHEEL_DELTA_WPARAM(wParam))) {
+    if (OnMouseWheel(PixelPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)),
+                     GET_WHEEL_DELTA_WPARAM(wParam))) {
       /* true returned: message was handled */
       ResetUserIdle();
       return 0;

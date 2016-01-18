@@ -272,7 +272,7 @@ private:
 protected:
   void OnSetFocus() override;
   void OnKillFocus() override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
   void OnPaint(Canvas &canvas) override;

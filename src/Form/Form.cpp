@@ -156,17 +156,17 @@ WndForm::OnDestroy()
 }
 
 bool
-WndForm::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+WndForm::OnMouseMove(PixelPoint p, unsigned keys)
 {
-  if (ContainerWindow::OnMouseMove(x, y, keys))
+  if (ContainerWindow::OnMouseMove(p, keys))
     return true;
 
   if (dragging) {
     const PixelRect position = GetPosition();
-    const int dx = position.left + x - last_drag.x;
-    const int dy = position.top + y - last_drag.y;
-    last_drag.x = position.left + x;
-    last_drag.y = position.top + y;
+    const int dx = position.left + p.x - last_drag.x;
+    const int dy = position.top + p.y - last_drag.y;
+    last_drag.x = position.left + p.x;
+    last_drag.y = position.top + p.y;
 
     PixelRect parent = GetParentClientRect();
     parent.Grow(-client_rect.top);
@@ -205,9 +205,9 @@ WndForm::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 }
 
 bool
-WndForm::OnMouseDown(PixelScalar x, PixelScalar y)
+WndForm::OnMouseDown(PixelPoint p)
 {
-  if (ContainerWindow::OnMouseDown(x, y))
+  if (ContainerWindow::OnMouseDown(p))
     return true;
 
   if (!dragging && !IsMaximised()) {
@@ -215,8 +215,8 @@ WndForm::OnMouseDown(PixelScalar x, PixelScalar y)
     Invalidate();
 
     const PixelRect position = GetPosition();
-    last_drag.x = position.left + x;
-    last_drag.y = position.top + y;
+    last_drag.x = position.left + p.x;
+    last_drag.y = position.top + p.y;
     SetCapture();
     return true;
   }
@@ -225,9 +225,9 @@ WndForm::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndForm::OnMouseUp(PixelScalar x, PixelScalar y)
+WndForm::OnMouseUp(PixelPoint p)
 {
-  if (ContainerWindow::OnMouseUp(x, y))
+  if (ContainerWindow::OnMouseUp(p))
     return true;
 
   if (dragging) {

@@ -67,11 +67,11 @@ protected:
 #ifndef USE_WINUSER
   void OnDestroy() override;
   void OnCancelMode() override;
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
-  bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
+  bool OnMouseWheel(PixelPoint p, int delta) override;
 
 #ifdef HAVE_MULTI_TOUCH
   bool OnMultiTouchDown() override;
@@ -113,8 +113,8 @@ public:
    * Locate a child window by its relative coordinates.
    */
   gcc_pure
-  Window *ChildAt(PixelScalar x, PixelScalar y) {
-    return children.FindAt(x, y);
+  Window *ChildAt(PixelPoint p) {
+    return children.FindAt(p);
   }
 
   /**
@@ -122,7 +122,7 @@ public:
    * captured child.
    */
   gcc_pure
-  Window *EventChildAt(PixelScalar x, PixelScalar y);
+  Window *EventChildAt(PixelPoint p);
 
   void SetActiveChild(Window &child);
   void SetFocus() override;

@@ -43,11 +43,11 @@ TargetMapWindow::TargetPaintDrag(Canvas &canvas, const PixelPoint drag_last)
 }
 
 bool
-TargetMapWindow::TargetDragged(const int x, const int y)
+TargetMapWindow::TargetDragged(PixelPoint p)
 {
   assert(task != nullptr);
 
-  GeoPoint gp = projection.ScreenToGeo(x, y);
+  GeoPoint gp = projection.ScreenToGeo(p);
 
   {
     ProtectedTaskManager::ExclusiveLease task_manager(*task);
@@ -80,11 +80,11 @@ TargetMapWindow::isClickOnTarget(const PixelPoint pc) const
 }
 
 bool
-TargetMapWindow::isInSector(const int x, const int y)
+TargetMapWindow::isInSector(PixelPoint pt)
 {
   assert(task != nullptr);
 
-  GeoPoint gp = projection.ScreenToGeo(x, y);
+  GeoPoint gp = projection.ScreenToGeo(pt);
 
   ProtectedTaskManager::Lease lease(*task);
   AATPoint *p = lease->GetOrderedTask().GetAATTaskPoint(target_index);

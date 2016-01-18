@@ -85,7 +85,7 @@ public:
    * Locate a window by its relative coordinates.
    */
   gcc_pure
-  Window *FindAt(PixelScalar x, PixelScalar y);
+  Window *FindAt(PixelPoint p);
 
   gcc_pure
   static Window *FindControl(List::iterator i, List::iterator end);

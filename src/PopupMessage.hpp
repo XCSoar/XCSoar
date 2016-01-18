@@ -162,7 +162,7 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
 
   /* virtual methods from class PaintWindow */
   void OnPaint(Canvas &canvas) override;

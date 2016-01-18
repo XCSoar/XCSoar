@@ -839,22 +839,22 @@ DigitEntry::GetAngleValue() const
 }
 
 bool
-DigitEntry::OnMouseDown(PixelScalar x, PixelScalar y)
+DigitEntry::OnMouseDown(PixelPoint p)
 {
-  int i = FindColumnAt(x);
+  int i = FindColumnAt(p.x);
   if (i >= 0 && columns[i].IsEditable()) {
     SetCursor(i);
     SetFocus();
 
-    if (y < int(top))
+    if (p.y < int(top))
       IncrementColumn(i);
-    else if (unsigned(y) > bottom)
+    else if (unsigned(p.y) > bottom)
       DecrementColumn(i);
 
     return true;
   }
 
-  return PaintWindow::OnMouseDown(x, y);
+  return PaintWindow::OnMouseDown(p);
 }
 
 bool

@@ -199,7 +199,7 @@ private:
    *
    * @return true if location is in OZ
    */
-  bool isInSector(const int x, const int y);
+  bool isInSector(PixelPoint p);
 
   /**
    * If PanTarget, updates task with new target
@@ -210,7 +210,7 @@ private:
    *
    * @return true if successful
    */
-  bool TargetDragged(const int x, const int y);
+  bool TargetDragged(PixelPoint p);
 
 protected:
   virtual void OnTaskModified();
@@ -226,10 +226,9 @@ protected:
 
   virtual void OnCancelMode() override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
 };
 
 #endif

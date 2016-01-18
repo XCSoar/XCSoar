@@ -287,10 +287,9 @@ private:
 protected:
   void OnResize(PixelSize new_size) override;
 
-  bool OnMouseMove(PixelScalar x, PixelScalar y,
-                   unsigned keys) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDown(PixelPoint p) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
 

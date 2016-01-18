@@ -431,7 +431,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 }
 
 bool
-InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseDown(PixelPoint p)
 {
   dialog_timer.Cancel();
 
@@ -450,7 +450,7 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseUp(PixelPoint p)
 {
   dialog_timer.Cancel();
 
@@ -478,7 +478,7 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseDouble(PixelPoint p)
 {
   dialog_timer.Cancel();
   InputEvents::ShowMenu();
@@ -486,10 +486,10 @@ InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 }
 
 bool
-InfoBoxWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+InfoBoxWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     if (!pressed)
       dialog_timer.Cancel();
     return true;

@@ -67,7 +67,7 @@ protected:
   }
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override {
+  bool OnMouseDown(PixelPoint p) override {
     SetFocus();
     return true;
   }

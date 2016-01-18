@@ -177,9 +177,9 @@ public:
   void OnResize(PixelSize new_size) override;
   void OnDestroy() override;
 
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
   void OnCancelMode() override;
 
 #ifdef WIN32

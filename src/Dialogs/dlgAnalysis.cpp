@@ -110,9 +110,9 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
 
   void OnCancelMode() override {
     PaintWindow::OnCancelMode();
@@ -584,24 +584,24 @@ AnalysisWidget::OnGesture(const TCHAR *gesture)
 }
 
 bool
-ChartControl::OnMouseDown(PixelScalar x, PixelScalar y)
+ChartControl::OnMouseDown(PixelPoint p)
 {
   dragging = true;
   SetCapture();
-  gestures.Start(x, y, Layout::Scale(20));
+  gestures.Start(p, Layout::Scale(20));
   return true;
 }
 
 bool
-ChartControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+ChartControl::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging)
-    gestures.Update(x, y);
+    gestures.Update(p);
   return true;
 }
 
 bool
-ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
+ChartControl::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     dragging = false;

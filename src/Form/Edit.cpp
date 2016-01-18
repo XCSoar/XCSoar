@@ -198,7 +198,7 @@ WndProperty::OnResize(PixelSize new_size)
 }
 
 bool
-WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
+WndProperty::OnMouseDown(PixelPoint p)
 {
   if (!IsReadOnly() || HasHelp()) {
     dragging = true;
@@ -212,7 +212,7 @@ WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
+WndProperty::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     dragging = false;
@@ -231,10 +231,10 @@ WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndProperty::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+WndProperty::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    const bool inside = IsInside(x, y);
+    const bool inside = IsInside(p);
     if (inside != pressed) {
       pressed = inside;
       Invalidate();

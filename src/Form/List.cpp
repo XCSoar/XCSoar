@@ -491,7 +491,7 @@ ListControl::OnKeyDown(unsigned key_code)
 }
 
 bool
-ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
+ListControl::OnMouseUp(PixelPoint p)
 {
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
@@ -499,7 +499,7 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      x >= 0 && x <= ((PixelScalar)GetWidth() - scroll_bar.GetWidth())) {
+      p.x >= 0 && p.x <= ((int)GetWidth() - scroll_bar.GetWidth())) {
     drag_end();
     ActivateItem();
     return true;
@@ -517,7 +517,7 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
 
     return true;
   } else
-    return PaintWindow::OnMouseUp(x, y);
+    return PaintWindow::OnMouseUp(p);
 }
 
 void
@@ -533,19 +533,20 @@ ListControl::drag_end()
 }
 
 bool
-ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+ListControl::OnMouseMove(PixelPoint p, unsigned keys)
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
     if (UsePixelPan())
-      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(), y));
+      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(),
+                                         p.y));
     else
-      SetOrigin(scroll_bar.DragMove(length, items_visible, y));
+      SetOrigin(scroll_bar.DragMove(length, items_visible, p.y));
 
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
-    if (abs(y - drag_y_window) > ((int)item_height / 5)) {
+    if (abs(p.y - drag_y_window) > ((int)item_height / 5)) {
       drag_mode = DragMode::SCROLL;
       Invalidate_item(cursor);
     } else
@@ -553,26 +554,24 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   }
 
   if (drag_mode == DragMode::SCROLL) {
-    int new_origin = drag_y - y;
+    int new_origin = drag_y - p.y;
     SetPixelOrigin(new_origin);
     if (UsePixelPan())
       kinetic.MouseMove(GetPixelOrigin());
     return true;
   }
 
-  return PaintWindow::OnMouseMove(x, y, keys);
+  return PaintWindow::OnMouseMove(p, keys);
 }
 
 bool
-ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
+ListControl::OnMouseDown(PixelPoint Pos)
 {
   // End any previous drag
   scroll_bar.DragEnd(this);
   drag_end();
 
   kinetic_timer.Cancel();
-
-  const PixelPoint Pos(x, y);
 
   // If possible -> Give focus to the Control
   const bool had_focus = !HasCursorKeys() || HasFocus();
@@ -601,13 +600,13 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
     // if click in ListBox area
     // -> select appropriate item
 
-    int index = ItemIndexAt(y);
+    int index = ItemIndexAt(Pos.y);
     // If mouse was clicked outside the list items -> cancel
     if (index < 0)
       return false;
 
-    drag_y = GetPixelOrigin() + y;
-    drag_y_window = y;
+    drag_y = GetPixelOrigin() + Pos.y;
+    drag_y_window = Pos.y;
 
     if (had_focus && (unsigned)index == GetCursorIndex() &&
         CanActivateItem()) {
@@ -628,7 +627,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-ListControl::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
+ListControl::OnMouseWheel(PixelPoint p, int delta)
 {
   scroll_bar.DragEnd(this);
   drag_end();

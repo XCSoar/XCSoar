@@ -47,22 +47,20 @@ getDirection(int dx, int dy)
 }
 
 bool
-GestureManager::Update(PixelScalar x, PixelScalar y)
+GestureManager::Update(PixelPoint p)
 {
   // Calculate deltas
-  int dx = x - drag_last.x;
-  int dy = y - drag_last.y;
+  auto d = p - drag_last;
 
   // See if we've reached the threshold already
-  if (compare_squared(dx, dy, threshold) != 1)
+  if (compare_squared(d.x, d.y, threshold) != 1)
     return false;
 
   // Save position for next call
-  drag_last.x = x;
-  drag_last.y = y;
+  drag_last = p;
 
   // Get current dragging direction
-  TCHAR direction = getDirection(dx, dy);
+  TCHAR direction = getDirection(d.x, d.y);
 
   // Return if we are in an unclear direction
   if (direction == '\0')
@@ -76,11 +74,10 @@ GestureManager::Update(PixelScalar x, PixelScalar y)
 }
 
 void
-GestureManager::Start(PixelScalar x, PixelScalar y, int _threshold)
+GestureManager::Start(PixelPoint p, int _threshold)
 {
   // Reset last position
-  drag_last.x = x;
-  drag_last.y = y;
+  drag_last = p;
 
   // Reset gesture
   gesture.clear();

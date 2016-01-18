@@ -185,49 +185,22 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_MOUSEMOTION:
     // XXX keys
-#ifdef HAVE_HIGHDPI_SUPPORT
-    {
-      auto x = event.motion.x;
-      auto y = event.motion.y;
-      PointToReal(x, y);
-      return OnMouseMove(x, y, 0);
-    }
-#else
-    return OnMouseMove(event.motion.x, event.motion.y, 0);
-#endif
+    return OnMouseMove(PointToReal(PixelPoint(event.motion.x, event.motion.y)),
+                       0);
 
   case SDL_MOUSEBUTTONDOWN:
     {
-#ifdef HAVE_HIGHDPI_SUPPORT
-      auto x = event.button.x;
-      auto y = event.button.y;
-      PointToReal(x, y);
-
-      return double_click.Check(PixelPoint(x, y))
-        ? OnMouseDouble(x, y)
-        : OnMouseDown(x, y);
-#else
-      return double_click.Check(PixelPoint(event.button.x, event.button.y))
-        ? OnMouseDouble(event.button.x, event.button.y)
-        : OnMouseDown(event.button.x, event.button.y);
-#endif
+      const auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
+      return double_click.Check(p)
+        ? OnMouseDouble(p)
+        : OnMouseDown(p);
     }
 
   case SDL_MOUSEBUTTONUP:
     {
-#ifdef HAVE_HIGHDPI_SUPPORT
-      auto x = event.button.x;
-      auto y = event.button.y;
-      PointToReal(x, y);
-
-      double_click.Moved(PixelPoint(x, y));
-
-      return OnMouseUp(x, y);
-#else
-      double_click.Moved(PixelPoint(event.button.x, event.button.y));
-
-      return OnMouseUp(event.button.x, event.button.y);
-#endif
+      const auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
+      double_click.Moved(p);
+      return OnMouseUp(p);
     }
 
   case SDL_QUIT:
@@ -235,12 +208,12 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_MOUSEWHEEL:
     {
-      int x, y;
-      SDL_GetMouseState(&x, &y);
+      PixelPoint p;
+      SDL_GetMouseState(&p.x, &p.y);
 #ifdef HAVE_HIGHDPI_SUPPORT
-      PointToReal(x, y);
+      p = PointToReal(p);
 #endif
-      return OnMouseWheel(x, y, event.wheel.y);
+      return OnMouseWheel(p, event.wheel.y);
     }
 
   case SDL_WINDOWEVENT:

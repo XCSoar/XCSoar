@@ -97,18 +97,18 @@ WindowList::BringToBottom(Window &w)
 
 gcc_pure
 static bool
-IsAt(Window &w, PixelScalar x, PixelScalar y)
+IsAt(Window &w, PixelPoint p)
 {
   return w.IsVisible() &&
-    x >= w.GetLeft() && x < w.GetRight() &&
-    y >= w.GetTop() && y < w.GetBottom();
+    p.x >= w.GetLeft() && p.x < w.GetRight() &&
+    p.y >= w.GetTop() && p.y < w.GetBottom();
 }
 
 Window *
-WindowList::FindAt(PixelScalar x, PixelScalar y)
+WindowList::FindAt(PixelPoint p)
 {
   for (Window &w : list)
-    if (w.IsEnabled() && IsAt(w, x, y))
+    if (w.IsEnabled() && IsAt(w, p))
       return &w;
 
   return nullptr;

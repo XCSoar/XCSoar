@@ -106,7 +106,7 @@ protected:
     return true;
   }
 
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override {
+  bool OnMouseUp(PixelPoint p) override {
     Close();
     return true;
   }

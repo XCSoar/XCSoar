@@ -277,10 +277,9 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 }
 
 bool
-TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
+TabMenuDisplay::OnMouseDown(PixelPoint Pos)
 {
   DragEnd();
-  const PixelPoint Pos(x, y);
 
   // If possible -> Give focus to the Control
   SetFocus();
@@ -294,14 +293,12 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
     InvalidateButton(down_index);
     return true;
   }
-  return PaintWindow::OnMouseDown(x, y);
+  return PaintWindow::OnMouseDown(Pos);
 }
 
 bool
-TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
+TabMenuDisplay::OnMouseUp(PixelPoint Pos)
 {
-  const PixelPoint Pos(x, y);
-
   if (dragging) {
     DragEnd();
 
@@ -327,18 +324,18 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 
     return true;
   } else {
-    return PaintWindow::OnMouseUp(x, y);
+    return PaintWindow::OnMouseUp(Pos);
   }
 }
 
 bool
-TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+TabMenuDisplay::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (down_index.IsNone())
     return false;
 
   const PixelRect &rc = GetButtonPosition(down_index);
-  const bool tmp = !rc.IsInside({x, y});
+  const bool tmp = !rc.IsInside(p);
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
     Invalidate(rc);

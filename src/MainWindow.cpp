@@ -566,24 +566,24 @@ MainWindow::OnCancelMode()
 }
 
 bool
-MainWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+MainWindow::OnMouseDown(PixelPoint p)
 {
-  if (SingleWindow::OnMouseDown(x, y))
+  if (SingleWindow::OnMouseDown(p))
     return true;
 
   if (!dragging && !HasDialog()) {
     dragging = true;
     SetCapture();
-    gestures.Start(x, y, Layout::Scale(20));
+    gestures.Start(p, Layout::Scale(20));
   }
 
   return true;
 }
 
 bool
-MainWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+MainWindow::OnMouseUp(PixelPoint p)
 {
-  if (SingleWindow::OnMouseUp(x, y))
+  if (SingleWindow::OnMouseUp(p))
     return true;
 
   if (dragging) {
@@ -598,9 +598,9 @@ MainWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-MainWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
+MainWindow::OnMouseDouble(PixelPoint p)
 {
-  if (SingleWindow::OnMouseDouble(x, y))
+  if (SingleWindow::OnMouseDouble(p))
     return true;
 
   StopDragging();
@@ -611,13 +611,13 @@ MainWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 }
 
 bool
-MainWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+MainWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
-  if (SingleWindow::OnMouseMove(x, y, keys))
+  if (SingleWindow::OnMouseMove(p, keys))
     return true;
 
   if (dragging)
-    gestures.Update(x, y);
+    gestures.Update(p);
 
   return true;
 }

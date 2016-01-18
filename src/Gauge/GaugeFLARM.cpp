@@ -54,10 +54,9 @@ private:
 
 protected:
   virtual void OnCancelMode() override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
   virtual void OnPaint(Canvas &canvas) override;
 };
 
@@ -92,7 +91,7 @@ SmallTrafficWindow::OnCancelMode()
 }
 
 bool
-SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+SmallTrafficWindow::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
@@ -106,7 +105,7 @@ SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-SmallTrafficWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+SmallTrafficWindow::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -127,10 +126,10 @@ SmallTrafficWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-SmallTrafficWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+SmallTrafficWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     return true;
   }
 

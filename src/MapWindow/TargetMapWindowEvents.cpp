@@ -36,7 +36,7 @@ TargetMapWindow::OnCancelMode()
 }
 
 bool
-TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+TargetMapWindow::OnMouseDown(PixelPoint p)
 {
   // Ignore single click event if double click detected
   if (drag_mode != DRAG_NONE)
@@ -44,19 +44,18 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 
   SetFocus();
 
-  drag_start.x = x;
-  drag_start.y = y;
+  drag_start = p;
   drag_last = drag_start;
 
   if (isClickOnTarget(drag_start)) {
-    drag_mode = isInSector(x, y)
+    drag_mode = isInSector(p)
       ? DRAG_TARGET
       : DRAG_TARGET_OUTSIDE;
 
     SetCapture();
     PaintWindow::Invalidate();
     return true;
-  } else if (isInSector(x, y)) {
+  } else if (isInSector(p)) {
     drag_mode = DRAG_OZ;
     SetCapture();
     PaintWindow::Invalidate();
@@ -67,7 +66,7 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+TargetMapWindow::OnMouseUp(PixelPoint p)
 {
   DragMode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;
@@ -83,11 +82,11 @@ TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     break;
 
   case DRAG_TARGET:
-    TargetDragged(drag_last.x, drag_last.y);
+    TargetDragged(drag_last);
     return true;
 
   case DRAG_OZ:
-    TargetDragged(drag_last.x, drag_last.y);
+    TargetDragged(drag_last);
     return true;
   }
 
@@ -95,7 +94,7 @@ TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+TargetMapWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   switch (drag_mode) {
   case DRAG_NONE:
@@ -103,9 +102,8 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
   case DRAG_TARGET:
   case DRAG_TARGET_OUTSIDE:
-    if (isInSector(x, y)) {
-      drag_last.x = x;
-      drag_last.y = y;
+    if (isInSector(p)) {
+      drag_last = p;
       drag_mode = DRAG_TARGET;
 
       /* no full repaint: copy the map from the buffer, draw dragged
@@ -115,7 +113,7 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     return true;
 
   case DRAG_OZ:
-    if ((unsigned)ManhattanDistance(drag_last, PixelPoint{x,y}) > Layout::GetHitRadius()) {
+    if ((unsigned)ManhattanDistance(drag_last, p) > Layout::GetHitRadius()) {
       /* cancel the target move click when the finger has moved too
          far since it was pressed down */
       ReleaseCapture();
