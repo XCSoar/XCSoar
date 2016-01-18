@@ -455,7 +455,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
  * Append a BulkPixelPoint to the end of an array and advance the array pointer
  */
 static void
-AppendPoint(BulkPixelPoint *&strip, PixelScalar x, PixelScalar y)
+AppendPoint(BulkPixelPoint *&strip, int x, int y)
 {
   strip->x = x;
   strip->y = y;

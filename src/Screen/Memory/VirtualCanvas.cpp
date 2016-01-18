@@ -38,8 +38,8 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
 void
 VirtualCanvas::Create(PixelSize new_size)
 {
-  assert((PixelScalar)new_size.cx >= 0);
-  assert((PixelScalar)new_size.cy >= 0);
+  assert((int)new_size.cx >= 0);
+  assert((int)new_size.cy >= 0);
 
   Destroy();
 

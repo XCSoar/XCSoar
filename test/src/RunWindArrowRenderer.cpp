@@ -54,10 +54,7 @@ protected:
     canvas.ClearWhite();
 
     const PixelRect rc = canvas.GetRect();
-
-    PixelPoint pt = {
-      (PixelScalar)(rc.right / 2), (PixelScalar)(rc.bottom / 2)
-    };
+    PixelPoint pt = rc.GetCenter();
 
     canvas.SelectBlackPen();
     canvas.SelectHollowBrush();

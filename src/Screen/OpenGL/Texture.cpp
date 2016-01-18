@@ -51,18 +51,18 @@ unsigned num_textures;
 #endif
 
 gcc_const gcc_unused
-static GLsizei
-NextPowerOfTwo(GLsizei i)
+static unsigned
+NextPowerOfTwo(unsigned i)
 {
-  GLsizei p = 1;
+  unsigned p = 1;
   while (p < i)
     p <<= 1;
   return p;
 }
 
 gcc_const
-static inline GLsizei
-ValidateTextureSize(GLsizei i)
+static inline unsigned
+ValidateTextureSize(unsigned i)
 {
   return OpenGL::texture_non_power_of_two ? i : NextPowerOfTwo(i);
 }
@@ -80,13 +80,13 @@ ValidateTextureSize(PixelSize size)
  */
 static void
 LoadTextureAutoAlign(GLint internal_format,
-                     GLsizei width, GLsizei height,
+                     unsigned width, unsigned height,
                      GLenum format, GLenum type, const GLvoid *pixels)
 {
   assert(pixels != nullptr);
 
-  GLsizei width2 = ValidateTextureSize(width);
-  GLsizei height2 = ValidateTextureSize(height);
+  unsigned width2 = ValidateTextureSize(width);
+  unsigned height2 = ValidateTextureSize(height);
 
   if (width2 == width && height2 == height)
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
@@ -99,7 +99,7 @@ LoadTextureAutoAlign(GLint internal_format,
   }
 }
 
-GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
+GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height),
    allocated_width(ValidateTextureSize(_width)),
    allocated_height(ValidateTextureSize(_height))
@@ -111,7 +111,7 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
                0, GL_RGB, GetType(), nullptr);
 }
 
-GLTexture::GLTexture(GLint internal_format, GLsizei _width, GLsizei _height,
+GLTexture::GLTexture(GLint internal_format, unsigned _width, unsigned _height,
                      GLenum format, GLenum type, const GLvoid *data)
   :width(_width), height(_height),
    allocated_width(ValidateTextureSize(_width)),
@@ -179,14 +179,17 @@ GLTexture::EnableInterpolation()
 #ifdef HAVE_OES_DRAW_TEXTURE
 
 inline void
-GLTexture::DrawOES(PixelScalar dest_x, PixelScalar dest_y,
-                   UPixelScalar dest_width, UPixelScalar dest_height,
-                   PixelScalar src_x, PixelScalar src_y,
-                   UPixelScalar src_width, UPixelScalar src_height) const
+GLTexture::DrawOES(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height) const
 {
-  const GLint rect[4] = { src_x, src_y + src_height, src_width,
-                          /* negative height to flip the texture */
-                          -(int)src_height };
+  const GLint rect[4] = {
+    src_x, int(src_y + src_height), int(src_width),
+    /* negative height to flip the texture */
+    -(int)src_height
+  };
+
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
@@ -199,10 +202,10 @@ GLTexture::DrawOES(PixelScalar dest_x, PixelScalar dest_y,
 #endif
 
 void
-GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height) const
+GLTexture::Draw(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height) const
 {
 #ifdef HAVE_OES_DRAW_TEXTURE
   if (OpenGL::oes_draw_texture) {

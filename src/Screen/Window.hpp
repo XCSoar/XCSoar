@@ -256,43 +256,43 @@ public:
     return position;
   }
 
-  PixelScalar GetTop() const {
+  int GetTop() const {
     assert(IsDefined());
 
     return position.y;
   }
 
-  PixelScalar GetLeft() const {
+  int GetLeft() const {
     assert(IsDefined());
 
     return position.x;
   }
 
-  UPixelScalar GetWidth() const {
+  unsigned GetWidth() const {
     assert(IsDefined());
 
     return size.cx;
   }
 
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     assert(IsDefined());
 
     return size.cy;
   }
 
-  PixelScalar GetRight() const {
+  int GetRight() const {
     return GetLeft() + GetWidth();
   }
 
-  PixelScalar GetBottom() const {
+  int GetBottom() const {
     return GetTop() + GetHeight();
   }
 #else /* USE_WINUSER */
-  UPixelScalar GetWidth() const {
+  unsigned GetWidth() const {
     return GetSize().cx;
   }
 
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     return GetSize().cy;
   }
 #endif
@@ -332,7 +332,7 @@ public:
   gcc_pure
   bool IsMaximised() const;
 
-  void Move(PixelScalar left, PixelScalar top) {
+  void Move(int left, int top) {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -345,8 +345,8 @@ public:
 #endif
   }
 
-  void Move(PixelScalar left, PixelScalar top,
-            UPixelScalar width, UPixelScalar height) {
+  void Move(int left, int top,
+            unsigned width, unsigned height) {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -369,8 +369,8 @@ public:
   void MoveToCenter() {
     const PixelSize window_size = GetSize();
     const PixelSize parent_size = GetParentClientRect().GetSize();
-    PixelScalar dialog_x = (parent_size.cx - window_size.cx) / 2;
-    PixelScalar dialog_y = (parent_size.cy - window_size.cy) / 2;
+    int dialog_x = (parent_size.cx - window_size.cx) / 2;
+    int dialog_y = (parent_size.cy - window_size.cy) / 2;
     Move(dialog_x, dialog_y);
   }
 
@@ -378,8 +378,8 @@ public:
    * Like move(), but does not trigger a synchronous redraw.  The
    * caller is responsible for redrawing.
    */
-  void FastMove(PixelScalar left, PixelScalar top,
-                UPixelScalar width, UPixelScalar height) {
+  void FastMove(int left, int top,
+                unsigned width, unsigned height) {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -413,7 +413,7 @@ public:
 #endif
   }
 
-  void Resize(UPixelScalar width, UPixelScalar height) {
+  void Resize(unsigned width, unsigned height) {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -819,7 +819,7 @@ public:
     ::EndPaint(hWnd, ps);
   }
 
-  void Scroll(PixelScalar dx, PixelScalar dy, const PixelRect &_rc) {
+  void Scroll(int dx, int dy, const PixelRect &_rc) {
     assert(IsDefined());
 
     const RECT rc = _rc;

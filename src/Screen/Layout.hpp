@@ -130,21 +130,15 @@ namespace Layout
     return (x * scale_1024) >> 10;
   }
 
-#ifdef USE_GDI
   gcc_const
-  static inline int
-  Scale(PixelScalar x)
+  static inline long
+  Scale(long x)
   {
-    return Scale(int(x));
-  }
+    if (!ScaleSupported())
+      return x;
 
-  gcc_const
-  static inline int
-  Scale(UPixelScalar x)
-  {
-    return Scale(unsigned(x));
+    return (x * long(scale_1024)) >> 10;
   }
-#endif
 
   gcc_const
   static inline int
@@ -166,21 +160,15 @@ namespace Layout
     return x * scale;
   }
 
-#ifdef USE_GDI
   gcc_const
-  static inline int
-  FastScale(PixelScalar x)
+  static inline long
+  FastScale(long x)
   {
-    return FastScale(int(x));
-  }
+    if (!ScaleSupported())
+      return x;
 
-  gcc_const
-  static inline int
-  FastScale(UPixelScalar x)
-  {
-    return FastScale(unsigned(x));
+    return x * (long)scale;
   }
-#endif
 
   gcc_const
   static inline int

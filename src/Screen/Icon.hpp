@@ -57,7 +57,7 @@ public:
     bitmap.Reset();
   }
 
-  void Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
+  void Draw(Canvas &canvas, int x, int y) const;
   void Draw(Canvas &canvas, PixelPoint pt) const {
     Draw(canvas, pt.x, pt.y);
   }

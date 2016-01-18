@@ -134,13 +134,13 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
   const PixelRect cell_dirty = {
     p_dirty.left / cell_size.cx,
     p_dirty.top / cell_size.cy,
-    std::min(PixelScalar(p_dirty.right / cell_size.cx + 1),
-             PixelScalar(data.GetWidth())),
-    std::min(PixelScalar(p_dirty.bottom / cell_size.cy + 1),
-             PixelScalar(data.GetHeight())),
+    std::min(p_dirty.right / cell_size.cx + 1,
+             int(data.GetWidth())),
+    std::min(p_dirty.bottom / cell_size.cy + 1,
+             int(data.GetHeight())),
   };
 
-  const PixelScalar x(cell_dirty.left * cell_size.cx);
+  const int x(cell_dirty.left * cell_size.cx);
   const size_t length = cell_dirty.right - cell_dirty.left;
 
   auto text = data.GetPointerAt(cell_dirty.left, cell_dirty.top);
@@ -153,7 +153,7 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
     canvas.DrawText(x, p_y, text, length);
   }
 
-  PixelScalar cell_bottom_y(cell_dirty.bottom * cell_size.cy);
+  int cell_bottom_y(cell_dirty.bottom * cell_size.cy);
   if (cell_bottom_y < p_dirty.bottom)
     canvas.DrawFilledRectangle(p_dirty.left, cell_bottom_y,
                           p_dirty.right, p_dirty.bottom,

@@ -107,7 +107,7 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 }
 
 void
-MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
+MaskedIcon::Draw(Canvas &canvas, int x, int y) const
 {
   assert(IsDefined());
 

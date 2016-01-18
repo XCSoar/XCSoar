@@ -87,7 +87,7 @@ public:
   gcc_pure
   PixelSize GetScreenSize() const;
 
-  void Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
+  void Draw(Canvas &canvas, int x, int y,
             Color bg_color, Color text_color) const;
 };
 

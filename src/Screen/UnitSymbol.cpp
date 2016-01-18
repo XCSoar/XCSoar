@@ -69,7 +69,7 @@ UnitSymbol::Load(ResourceId id)
 }
 
 void 
-UnitSymbol::Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
+UnitSymbol::Draw(Canvas &canvas, int x, int y,
                  Color bg_color, Color text_color) const
 {
   assert(IsDefined());
