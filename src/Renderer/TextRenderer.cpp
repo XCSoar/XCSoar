@@ -33,9 +33,8 @@ unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         const TCHAR *text) const
 {
-  canvas.DrawFormattedText(&rc, text,
-                           DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
-  return rc.bottom - rc.top;
+  return canvas.DrawFormattedText(rc, text,
+                                  DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
 }
 
 unsigned
@@ -58,8 +57,6 @@ void
 TextRenderer::Draw(Canvas &canvas, PixelRect rc,
                    const TCHAR *text) const
 {
-  PixelRect rc = _rc;
-
   unsigned format = DT_WORDBREAK | (center ? DT_CENTER : DT_LEFT);
 
 #ifdef USE_GDI
@@ -80,5 +77,5 @@ TextRenderer::Draw(Canvas &canvas, PixelRect rc,
     format |= DT_UNDERLINE;
 #endif
 
-  canvas.DrawFormattedText(&rc, text, format);
+  canvas.DrawFormattedText(rc, text, format);
 }

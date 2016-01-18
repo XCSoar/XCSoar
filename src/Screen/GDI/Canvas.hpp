@@ -411,8 +411,9 @@ public:
     DrawText(x, y, t);
   }
 
-  void DrawFormattedText(RECT *rc, const TCHAR *text, unsigned format) {
-    ::DrawText(dc, text, -1, rc, format);
+  unsigned DrawFormattedText(RECT rc, const TCHAR *text, unsigned format) {
+    ::DrawText(dc, text, -1, &rc, format);
+    return rc.bottom - rc.top;
   }
 
   void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,

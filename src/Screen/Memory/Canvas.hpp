@@ -335,7 +335,12 @@ public:
     DrawText(x, y, t);
   }
 
-  void DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format);
+  /**
+   * Render multi-line text.
+   *
+   * @return the resulting text height
+   */
+  unsigned DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format);
 
   void Copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,

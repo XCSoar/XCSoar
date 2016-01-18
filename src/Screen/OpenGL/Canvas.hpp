@@ -377,7 +377,12 @@ public:
       DrawClippedText(x, y, GetWidth() - x, GetHeight() - y, t);
   }
 
-  void DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format);
+  /**
+   * Render multi-line text.
+   *
+   * @return the resulting text height
+   */
+  unsigned DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format);
 
   /**
    * Draws a texture.  The caller is responsible for binding it and
