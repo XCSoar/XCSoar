@@ -97,10 +97,10 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   const Font &font = *look.overlay_font;
   canvas.Select(font);
 
-  UPixelScalar padding = Layout::FastScale(4);
-  UPixelScalar height = font.GetHeight();
-  PixelScalar y = 0 + padding;
-  PixelScalar x = render_projection.GetScreenWidth() - padding;
+  unsigned padding = Layout::FastScale(4);
+  unsigned height = font.GetHeight();
+  int y = 0 + padding;
+  int x = render_projection.GetScreenWidth() - padding;
 
   if (compass_visible)
     /* don't obscure the north arrow */
@@ -161,8 +161,8 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
     // early exit
     return;
 
-  PixelScalar x = rc.left + Layout::FastScale(2);
-  PixelScalar y = rc.bottom - Layout::FastScale(35);
+  int x = rc.left + Layout::FastScale(2);
+  int y = rc.bottom - Layout::FastScale(35);
   icon->Draw(canvas, x, y);
 
   x += icon->GetSize().cx + Layout::FastScale(4);
@@ -179,7 +179,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
 void
 GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 {
-  PixelScalar offset = 0;
+  int offset = 0;
 
   // draw flight mode
   const MaskedIcon *bmp;
@@ -281,11 +281,11 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   FormatUserMapScale(map_width, buffer.buffer(), true);
   PixelSize text_size = canvas.CalcTextSize(buffer);
 
-  const PixelScalar text_padding_x = Layout::GetTextPadding();
-  const PixelScalar height = font.GetCapitalHeight()
+  const int text_padding_x = Layout::GetTextPadding();
+  const unsigned height = font.GetCapitalHeight()
     + Layout::GetTextPadding();
 
-  PixelScalar x = 0;
+  int x = 0;
   look.map_scale_left_icon.Draw(canvas, 0, rc.bottom - height);
 
   x += look.map_scale_left_icon.GetSize().cx;
@@ -441,7 +441,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
     auto s = Clamp(Basic().stall_ratio, 0., 1.);
-    PixelScalar m((rc.bottom - rc.top) * s * s);
+    int m((rc.bottom - rc.top) * s * s);
 
     canvas.SelectBlackPen();
     canvas.DrawLine(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
