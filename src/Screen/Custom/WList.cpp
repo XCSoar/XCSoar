@@ -96,9 +96,7 @@ gcc_pure
 static bool
 IsAt(Window &w, PixelPoint p)
 {
-  return w.IsVisible() &&
-    p.x >= w.GetLeft() && p.x < w.GetRight() &&
-    p.y >= w.GetTop() && p.y < w.GetBottom();
+  return w.IsVisible() && w.GetPosition().Contains(p);
 }
 
 Window *
