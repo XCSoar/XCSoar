@@ -109,11 +109,11 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 void
 Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
 {
-  const ExactRasterPoint vertices[] = {
-    RasterPoint{left, top},
-    RasterPoint{right, top},
-    RasterPoint{right, bottom},
-    RasterPoint{left, bottom},
+  const ExactPixelPoint vertices[] = {
+    PixelPoint{left, top},
+    PixelPoint{right, top},
+    PixelPoint{right, bottom},
+    PixelPoint{left, bottom},
   };
 
   const ScopeVertexPointer vp(vertices);
@@ -289,7 +289,7 @@ Canvas::DrawExactLine(int ax, int ay, int bx, int by)
 
   pen.Bind();
 
-  const ExactRasterPoint v[] = {
+  const ExactPixelPoint v[] = {
     { ToGLexact(ax), ToGLexact(ay) },
     { ToGLexact(bx), ToGLexact(by) },
   };
@@ -305,7 +305,7 @@ Canvas::DrawExactLine(int ax, int ay, int bx, int by)
  * gaps between consecutive lines.
  */
 void
-Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
+Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b)
 {
 #ifdef USE_GLSL
   OpenGL::solid_shader->Use();
@@ -359,7 +359,7 @@ Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 
   pen.Bind();
 
-  const ExactRasterPoint v[] = {
+  const ExactPixelPoint v[] = {
     { ToGLexact(ax), ToGLexact(ay) },
     { ToGLexact(bx), ToGLexact(by) },
     { ToGLexact(cx), ToGLexact(cy) },

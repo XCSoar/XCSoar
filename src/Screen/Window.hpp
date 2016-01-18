@@ -164,7 +164,7 @@ protected:
   ContainerWindow *parent = nullptr;
 
 private:
-  RasterPoint position;
+  PixelPoint position;
   PixelSize size = {0, 0};
 
 private:
@@ -781,7 +781,7 @@ public:
   }
 
   gcc_pure
-  bool IsInside(RasterPoint pt) const {
+  bool IsInside(PixelPoint pt) const {
     return IsInside(pt.x, pt.y);
   }
 

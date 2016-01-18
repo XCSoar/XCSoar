@@ -82,7 +82,7 @@ protected:
   KeyDownFunction key_down_function;
   CharacterFunction character_function;
 
-  RasterPoint last_drag;
+  PixelPoint last_drag;
 
   /**
    * The OnPaint event is called when the button needs to be drawn

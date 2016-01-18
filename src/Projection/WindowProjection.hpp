@@ -62,7 +62,7 @@ public:
    * @param sc Screen coordinate (output)
    * @return True if the location is within the bounds
    */
-  bool GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) const;
+  bool GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const;
 
   /**
    * Checks whether a geographical location is within the visible bounds
@@ -78,7 +78,7 @@ public:
    * @return True if the screen coordinate is within the bounds
    */
   gcc_pure
-  bool ScreenVisible(const RasterPoint &P) const;
+  bool ScreenVisible(const PixelPoint &P) const;
 
   void SetScreenSize(PixelSize new_size) {
     assert(new_size.cx > 0);
@@ -129,8 +129,8 @@ public:
    * Returns the raster coordinates at the center of the map.
    */
   gcc_pure
-  RasterPoint GetScreenCenter() const {
-    RasterPoint pt;
+  PixelPoint GetScreenCenter() const {
+    PixelPoint pt;
     pt.x = GetScreenWidth() / 2;
     pt.y = GetScreenHeight() / 2;
     return pt;

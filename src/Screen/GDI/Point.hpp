@@ -44,7 +44,7 @@ struct PixelRect : public tagRECT {
                       PixelScalar _right, PixelScalar _bottom)
     :tagRECT({_left, _top, _right, _bottom}) {}
 
-  constexpr PixelRect(RasterPoint origin, PixelSize size)
+  constexpr PixelRect(PixelPoint origin, PixelSize size)
     :tagRECT({origin.x, origin.y, origin.x + size.cx, origin.y + size.cy}) {}
 
   explicit constexpr PixelRect(PixelSize size)
@@ -72,11 +72,11 @@ struct PixelRect : public tagRECT {
     return { right - left, bottom - top };
   }
 
-  constexpr RasterPoint GetCenter() const {
+  constexpr PixelPoint GetCenter() const {
     return { (left + right) / 2, (top + bottom) / 2 };
   }
 
-  constexpr bool IsInside(RasterPoint pt) const {
+  constexpr bool IsInside(PixelPoint pt) const {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 };

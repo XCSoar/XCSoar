@@ -36,7 +36,7 @@ Copyright_License {
 static void
 GetPolygonPoints(std::vector<BulkPixelPoint> &pts,
                  const AirspacePolygon &airspace,
-                 const RasterPoint pt, unsigned radius)
+                 const PixelPoint pt, unsigned radius)
 {
   GeoBounds bounds = airspace.GetGeoBounds();
   GeoPoint center = bounds.GetCenter();
@@ -130,7 +130,7 @@ AirspacePreviewRenderer::PrepareOutline(
 }
 
 static void
-DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const RasterPoint pt,
+DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const PixelPoint pt,
           unsigned radius, const std::vector<BulkPixelPoint> &pts)
 {
   if (shape == AbstractAirspace::Shape::CIRCLE)
@@ -144,7 +144,7 @@ DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const RasterPoint pt,
 
 void
 AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
-                              const RasterPoint pt, unsigned radius,
+                              const PixelPoint pt, unsigned radius,
                               const AirspaceRendererSettings &settings,
                               const AirspaceLook &look)
 {

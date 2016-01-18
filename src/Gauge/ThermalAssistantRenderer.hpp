@@ -42,13 +42,13 @@ class ThermalAssistantRenderer
                                       std::tuple_size<LiftDatabase>::value>
   {
   public:
-    RasterPoint GetAverage() const;
+    PixelPoint GetAverage() const;
   };
 
 protected:
   const ThermalAssistantLook &look;
 
-  RasterPoint mid;
+  PixelPoint mid;
 
   /**
    * The minimum distance between the window boundary and the biggest
@@ -72,7 +72,7 @@ public:
                            unsigned _padding, bool _small = false);
 
 public:
-  const RasterPoint &GetMiddle() const {
+  const PixelPoint &GetMiddle() const {
     return mid;
   }
 

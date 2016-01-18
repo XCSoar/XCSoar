@@ -28,7 +28,7 @@ Copyright_License {
 #include "Shaders.hpp"
 #endif
 
-SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
+SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
   :relative(_offset)
 {
   assert(canvas.offset == OpenGL::translate);

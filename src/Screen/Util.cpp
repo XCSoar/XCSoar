@@ -27,13 +27,13 @@ Copyright_License {
 #include "Math/FastMath.hpp"
 
 gcc_const
-static RasterPoint
+static PixelPoint
 CirclePoint(int x, int y, int radius, unsigned angle)
 {
   assert(angle < ARRAY_SIZE(ISINETABLE));
 
-  return RasterPoint(x + ISINETABLE[angle] * radius / 1024,
-                     y - ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
+  return PixelPoint(x + ISINETABLE[angle] * radius / 1024,
+                    y - ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
 }
 
 static void

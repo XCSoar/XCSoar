@@ -49,7 +49,7 @@ class SimulatorPromptWindow final : public ContainerWindow {
   Bitmap fly_bitmap, sim_bitmap;
   Button fly_button, sim_button;
 
-  RasterPoint label_position;
+  PixelPoint label_position;
 
 public:
   enum Buttons {

@@ -44,7 +44,7 @@ class TerrainThread;
 class OffsetHistory
 {
   unsigned int pos;
-  std::array<RasterPoint, 30> offsets;
+  std::array<PixelPoint, 30> offsets;
 
 public:
   OffsetHistory():pos(0) {
@@ -52,8 +52,8 @@ public:
   }
 
   void Reset();
-  void Add(RasterPoint p);
-  RasterPoint GetAverage() const;
+  void Add(PixelPoint p);
+  PixelPoint GetAverage() const;
 };
 
 
@@ -96,7 +96,7 @@ class GlueMapWindow : public MapWindow {
   } drag_mode = DRAG_NONE;
 
   GeoPoint drag_start_geopoint;
-  RasterPoint drag_start;
+  PixelPoint drag_start;
   TrackingGestureManager gestures;
   bool ignore_single_click = false;
 
@@ -196,9 +196,9 @@ protected:
   virtual void Render(Canvas &canvas, const PixelRect &rc) override;
   virtual void DrawThermalEstimate(Canvas &canvas) const override;
   virtual void RenderTrail(Canvas &canvas,
-                           const RasterPoint aircraft_pos) override;
+                           const PixelPoint aircraft_pos) override;
   virtual void RenderTrackBearing(Canvas &canvas,
-                                  const RasterPoint aircraft_pos) override;
+                                  const PixelPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
   virtual void OnCreate() override;

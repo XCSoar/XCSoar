@@ -173,7 +173,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 }
 
 gcc_const
-static RasterPoint
+static PixelPoint
 TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset)
 {
   return { pt.x + offset.x, (pt.y * 112 / 100) + offset.y + 1 };
@@ -535,8 +535,8 @@ GaugeVario::RenderBallast(Canvas &canvas)
   static int last_ballast = -1;
   static PixelRect label_rect = {-1,-1,-1,-1};
   static PixelRect value_rect = {-1,-1,-1,-1};
-  static RasterPoint label_pos = {-1,-1};
-  static RasterPoint value_pos = {-1,-1};
+  static PixelPoint label_pos = {-1,-1};
+  static PixelPoint value_pos = {-1,-1};
 
   if (!ballast_initialised) { // ontime init, origin and background rect
     const PixelRect rc = GetClientRect();
@@ -636,8 +636,8 @@ GaugeVario::RenderBugs(Canvas &canvas)
   static int last_bugs = -1;
   static PixelRect label_rect = {-1,-1,-1,-1};
   static PixelRect value_rect = {-1,-1,-1,-1};
-  static RasterPoint label_pos = {-1,-1};
-  static RasterPoint value_pos = {-1,-1};
+  static PixelPoint label_pos = {-1,-1};
+  static PixelPoint value_pos = {-1,-1};
 
   if (!bugs_initialised) {
     const PixelRect rc = GetClientRect();

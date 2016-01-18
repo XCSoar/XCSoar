@@ -181,8 +181,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
      *       painting the task point with a different pen and brush,
      *       e.g. red, 4px wide
      */
-    RasterPoint pt = projection.GeoToScreen(task.GetPoint(highlight_index).
-                                            GetLocation());
+    auto pt = projection.GeoToScreen(task.GetPoint(highlight_index).
+                                     GetLocation());
     canvas.Select(task_look.highlight_pen);
     canvas.DrawLine(pt.x - 7, pt.y - 7, pt.x + 7, pt.y + 7);
     canvas.DrawLine(pt.x + 7, pt.y - 7, pt.x - 7, pt.y + 7);

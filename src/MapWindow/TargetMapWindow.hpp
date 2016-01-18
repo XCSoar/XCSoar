@@ -103,7 +103,7 @@ class TargetMapWindow : public BufferWindow {
     DRAG_OZ,
   } drag_mode;
 
-  RasterPoint drag_start, drag_last;
+  PixelPoint drag_start, drag_last;
 
 public:
   TargetMapWindow(const WaypointLook &waypoint_look,
@@ -176,7 +176,7 @@ private:
    * @param drag_last location of target
    * @param canvas
    */
-  void TargetPaintDrag(Canvas &canvas, const RasterPoint last_drag);
+  void TargetPaintDrag(Canvas &canvas, PixelPoint last_drag);
 
   /**
    * If PanTarget, tests if target is clicked
@@ -187,7 +187,7 @@ private:
    * @return true if click is near target
    */
   gcc_pure
-  bool isClickOnTarget(const RasterPoint drag_last) const;
+  bool isClickOnTarget(PixelPoint drag_last) const;
 
   /**
    * If PanTarget, tests if drag destination

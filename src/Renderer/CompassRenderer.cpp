@@ -33,16 +33,15 @@ void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                       const PixelRect rc)
 {
-  RasterPoint pos;
-  pos.y = Layout::Scale(19) + rc.top;
-  pos.x = rc.right - Layout::Scale(19);
+  PixelPoint pos(Layout::Scale(19) + rc.top,
+                 rc.right - Layout::Scale(19));
 
   Draw(canvas, screen_angle, pos);
 }
 
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                      const RasterPoint pos)
+                      const PixelPoint pos)
 {
   BulkPixelPoint arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
 

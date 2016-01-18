@@ -256,7 +256,7 @@ public:
 
   void DrawLine(int ax, int ay, int bx, int by);
 
-  void DrawLine(const RasterPoint a, const RasterPoint b) {
+  void DrawLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
@@ -264,11 +264,11 @@ public:
     DrawLine(ax, ay, bx, by);
   }
 
-  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+  void DrawExactLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
-  void DrawLinePiece(const RasterPoint a, const RasterPoint b) {
+  void DrawLinePiece(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
@@ -278,8 +278,8 @@ public:
     DrawLine(bx, by, cx, cy);
   }
 
-  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                 const RasterPoint c) {
+  void DrawTwoLines(const PixelPoint a, const PixelPoint b,
+                    const PixelPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 

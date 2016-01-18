@@ -40,7 +40,7 @@ struct PixelRect {
   constexpr PixelRect(int _left, int _top, int _right, int _bottom)
     :left(_left), top(_top), right(_right), bottom(_bottom) {}
 
-  constexpr PixelRect(RasterPoint origin, PixelSize size)
+  constexpr PixelRect(PixelPoint origin, PixelSize size)
     :left(origin.x), top(origin.y),
      right(origin.x + size.cx), bottom(origin.y + size.cy) {}
 
@@ -69,7 +69,7 @@ struct PixelRect {
     Grow(d, d);
   }
 
-  constexpr RasterPoint GetOrigin() const {
+  constexpr PixelPoint GetOrigin() const {
     return { left, top };
   }
 
@@ -77,27 +77,27 @@ struct PixelRect {
     return { right - left, bottom - top };
   }
 
-  constexpr RasterPoint GetCenter() const {
+  constexpr PixelPoint GetCenter() const {
     return { (left + right) / 2, (top + bottom) / 2 };
   }
 
-  constexpr RasterPoint GetTopLeft() const {
+  constexpr PixelPoint GetTopLeft() const {
     return { left, top };
   }
 
-  constexpr RasterPoint GetTopRight() const {
+  constexpr PixelPoint GetTopRight() const {
     return { right, top };
   }
 
-  constexpr RasterPoint GetBottomLeft() const {
+  constexpr PixelPoint GetBottomLeft() const {
     return { left, bottom };
   }
 
-  constexpr RasterPoint GetBottomRight() const {
+  constexpr PixelPoint GetBottomRight() const {
     return { right, bottom };
   }
 
-  constexpr bool IsInside(RasterPoint pt) const {
+  constexpr bool IsInside(PixelPoint pt) const {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 };

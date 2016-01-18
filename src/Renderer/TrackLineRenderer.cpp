@@ -37,12 +37,12 @@ static constexpr Angle MIN_RATE = Angle::Degrees(1.0); // degrees/s
 
 void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const Angle track_angle, const RasterPoint pos)
+                        const Angle track_angle, const PixelPoint pos)
 {
   const auto sc = (track_angle - screen_angle).SinCos();
   const auto x = sc.first, y = sc.second;
 
-  RasterPoint end;
+  PixelPoint end;
   end.x = pos.x + iround(x * 400);
   end.y = pos.y - iround(y * 400);
 
@@ -53,7 +53,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 void
 TrackLineRenderer::Draw(Canvas &canvas,
                         const WindowProjection &projection,
-                        const RasterPoint pos, const NMEAInfo &basic,
+                        const PixelPoint pos, const NMEAInfo &basic,
                         const DerivedInfo &calculated,
                         const MapSettings &settings,
                         bool wind_relative)

@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
-struct RasterPoint : IntPoint2D {
-  RasterPoint() = default;
+struct PixelPoint : IntPoint2D {
+  PixelPoint() = default;
 
   template<typename... Args>
-  constexpr RasterPoint(Args&&... args)
+  constexpr PixelPoint(Args&&... args)
     :IntPoint2D(args...) {}
 };
 
@@ -57,8 +57,8 @@ struct PixelSize {
   }
 };
 
-inline constexpr RasterPoint
-operator+(RasterPoint p, PixelSize size)
+inline constexpr PixelPoint
+operator+(PixelPoint p, PixelSize size)
 {
   return { p.x + size.cx, p.y + size.cy };
 }

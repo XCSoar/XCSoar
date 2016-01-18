@@ -50,7 +50,7 @@ namespace OpenGL {
   DisplayOrientation display_orientation;
 #endif
 
-  RasterPoint translate;
+  PixelPoint translate;
 
 #ifdef USE_GLSL
   glm::mat4 projection_matrix;

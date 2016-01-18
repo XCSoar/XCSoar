@@ -34,11 +34,7 @@ MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
   if (!clip.ClipLine(a, b))
     return;
 
-  RasterPoint pts[2];
-  pts[0] = projection.GeoToScreen(a);
-  pts[1] = projection.GeoToScreen(b);
-
-  canvas.DrawLine(pts[0], pts[1]);
+  canvas.DrawLine(projection.GeoToScreen(a), projection.GeoToScreen(b));
 }
 
 void
@@ -47,7 +43,7 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
   if (!clip.ClipLine(a, b))
     return;
 
-  RasterPoint pts[3];
+  PixelPoint pts[3];
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
   pts[2] = ScreenClosestPoint(pts[0], pts[1], pts[0], Layout::Scale(20));
@@ -58,7 +54,7 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
 void
 MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 {
-  RasterPoint screen_center = projection.GeoToScreen(center);
+  auto screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
   canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
 }

@@ -305,7 +305,7 @@ WndProperty::OnPaint(Canvas &canvas)
 
     PixelSize tsize = canvas.CalcTextSize(caption.c_str());
 
-    RasterPoint org;
+    PixelPoint org;
     if (caption_width < 0) {
       org.x = edit_rc.left;
       org.y = edit_rc.top - tsize.cy;

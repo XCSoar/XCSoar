@@ -93,7 +93,7 @@ public:
 #ifndef USE_WINUSER
 protected:
   gcc_pure
-  bool FilterMouseEvent(RasterPoint pt, Window *allowed) const;
+  bool FilterMouseEvent(PixelPoint pt, Window *allowed) const;
 #endif
 
 public:

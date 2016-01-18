@@ -99,7 +99,7 @@ struct Event {
 
   Callback callback;
 
-  RasterPoint point;
+  PixelPoint point;
 
 #ifdef USE_X11
   unsigned ch;

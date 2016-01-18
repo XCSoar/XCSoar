@@ -45,7 +45,7 @@ Copyright_License {
 class CanvasRotateShift
 {
 public:
-  CanvasRotateShift(const RasterPoint pos, Angle angle,
+  CanvasRotateShift(const PixelPoint pos, Angle angle,
                     const int scale = 100) {
 #ifdef USE_GLSL
     glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(),

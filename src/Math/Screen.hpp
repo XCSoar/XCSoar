@@ -29,13 +29,13 @@ Copyright_License {
 #include "Compiler.h"
 
 struct BulkPixelPoint;
-struct RasterPoint;
+struct PixelPoint;
 class Angle;
 
 gcc_pure
-RasterPoint
-ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                   const RasterPoint &p3, int offset);
+PixelPoint
+ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
+                   const PixelPoint &p3, int offset);
 
 /**
  * Shifts, rotates and scales the given polygon.
@@ -54,7 +54,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
  *        compatibility as the use of FastScale() is deprecated.
  */
 void
-PolygonRotateShift(BulkPixelPoint *poly, int n, RasterPoint shift,
+PolygonRotateShift(BulkPixelPoint *poly, int n, PixelPoint shift,
                    Angle angle, int scale = 100,
                    bool use_fast_scale = true);
 

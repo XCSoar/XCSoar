@@ -30,7 +30,7 @@ WindowProjection::GeoVisible(const GeoPoint &loc) const
 }
 
 bool
-WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) const
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const
 {
   if (GeoVisible(loc)) {
     sc = GeoToScreen(loc);
@@ -41,7 +41,7 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) con
 }
 
 bool
-WindowProjection::ScreenVisible(const RasterPoint &P) const
+WindowProjection::ScreenVisible(const PixelPoint &P) const
 {
   assert(screen_size_initialised);
 

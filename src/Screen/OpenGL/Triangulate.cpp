@@ -101,11 +101,11 @@ TriangleEmpty(const PT &a, const PT &b, const PT &c)
  * Scale vector v to a given length.
  */
 static inline void
-Normalize(RasterPoint *v, float length)
+Normalize(PixelPoint *v, float length)
 {
   // TODO: optimize!
-  double squared_length = v->x * (RasterPoint::product_type)v->x +
-                          v->y * (RasterPoint::product_type)v->y;
+  double squared_length = v->x * (PixelPoint::product_type)v->x +
+                          v->y * (PixelPoint::product_type)v->y;
   float scale = length / sqrt(squared_length);
   v->x = lround(v->x * scale);
   v->y = lround(v->y * scale);
@@ -530,7 +530,7 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
 
   if (!loop) {
     // add flat or triangle cap at beginning of line
-    RasterPoint ba = *a - *b;
+    PixelPoint ba = *a - *b;
     Normalize(&ba, half_line_width);
 
     if (tcap)
@@ -538,7 +538,7 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
       AppendPoint(s, a->x + ba.x, a->y + ba.y);
 
     // add flat cap coordinates to the output array
-    RasterPoint p;
+    PixelPoint p;
     p.x = ba.y;
     p.y = -ba.x;
     AppendPoint(s, a->x - p.x, a->y - p.y);
@@ -552,7 +552,7 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
       // skip zero or 180 degree bends
       // TODO: support 180 degree bends!
       if (!TriangleEmpty(*a, *b, *c)) {
-        RasterPoint g = *b - *a, h = *c - *b;
+        PixelPoint g = *b - *a, h = *c - *b;
         Normalize(&g, 1000.);
         Normalize(&h, 1000.);
         int bisector_x = -g.y - h.y;
@@ -599,10 +599,10 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
     }
   } else {
     // add flat or triangle cap at end of line
-    RasterPoint ab = *b - *a;
+    PixelPoint ab = *b - *a;
     Normalize(&ab, half_line_width);
 
-    RasterPoint p;
+    PixelPoint p;
     p.x = sign * -ab.y;
     p.y = sign * ab.x;
     AppendPoint(s, b->x - p.x, b->y - p.y);

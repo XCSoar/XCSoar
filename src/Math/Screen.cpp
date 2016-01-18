@@ -31,9 +31,9 @@ Copyright_License {
 
 #include <algorithm>
 
-RasterPoint
-ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                   const RasterPoint &p3, int offset)
+PixelPoint
+ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
+                   const PixelPoint &p3, int offset)
 {
   int v12x, v12y, v13x, v13y;
 
@@ -59,8 +59,8 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
 
     const auto f = Clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
-    return RasterPoint(lround(v12x * f) + p1.x,
-                       lround(v12y * f) + p1.y);
+    return PixelPoint(lround(v12x * f) + p1.x,
+                      lround(v12y * f) + p1.y);
   } else {
     return p1;
   }
@@ -83,7 +83,7 @@ roundshift(int x)
 void
 PolygonRotateShift(BulkPixelPoint *poly,
                    const int n,
-                   const RasterPoint shift,
+                   const PixelPoint shift,
                    Angle angle,
                    int scale,
                    const bool use_fast_scale)

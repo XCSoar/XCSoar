@@ -48,7 +48,7 @@ protected:
 
   int selection;
   int warning;
-  RasterPoint radar_mid;
+  PixelPoint radar_mid;
 
   /**
    * The minimum distance between the window boundary and the biggest
@@ -63,7 +63,7 @@ protected:
 
   bool small;
 
-  RasterPoint sc[TrafficList::MAX_COUNT];
+  PixelPoint sc[TrafficList::MAX_COUNT];
 
   bool enable_north_up;
   Angle heading;
@@ -116,7 +116,7 @@ public:
 protected:
   double RangeScale(double d) const;
 
-  void UpdateSelector(const FlarmId id, const RasterPoint pt);
+  void UpdateSelector(FlarmId id, PixelPoint pt);
   void UpdateWarnings();
   void Update(Angle new_direction, const TrafficList &new_data,
               const TeamCodeSettings &new_settings);

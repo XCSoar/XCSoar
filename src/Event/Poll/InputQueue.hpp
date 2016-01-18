@@ -99,9 +99,9 @@ public:
   }
 #endif
 
-  RasterPoint GetMousePosition() const {
+  PixelPoint GetMousePosition() const {
 #ifdef USE_LIBINPUT
-    return { int(libinput_handler.GetX()), int(libinput_handler.GetY()) };
+    return PixelPoint(libinput_handler.GetX(), libinput_handler.GetY());
 #else
     return merge_mouse.GetPosition();
 #endif

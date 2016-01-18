@@ -115,7 +115,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Draw final glide arrow icon
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
   BulkPixelPoint arrow[] = {
       { -7, -3 }, { 0, 4 }, { 7, -3 }
@@ -203,7 +203,7 @@ Draw(Canvas &canvas, PixelRect rc,
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 
   rc.left += line_height + text_padding;
@@ -258,8 +258,8 @@ Draw(Canvas &canvas, PixelRect rc,
 
   const ThermalSource &thermal = item.thermal;
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
 
   look.thermal_source_icon.Draw(canvas, pt);
 
@@ -295,8 +295,8 @@ Draw(Canvas &canvas, PixelRect rc,
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = *item.waypoint;
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
   const unsigned radius = line_height / 2 - text_padding;
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
@@ -330,7 +330,7 @@ Draw(Canvas &canvas, PixelRect rc,
     ? nullptr
     : traffic_list->FindTraffic(item.id);
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
   // Render the representation of the traffic icon
   if (traffic != nullptr)

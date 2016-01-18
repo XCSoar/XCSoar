@@ -336,7 +336,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           RasterPoint(rc.right - unit_width, y - unit_height),
+                           PixelPoint(rc.right - unit_width, y - unit_height),
                            unit, look.unit_fraction_pen);
 }
 
@@ -370,8 +370,8 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           RasterPoint(rc.left + value_width + space_width,
-                                       rc.bottom - unit_height),
+                           PixelPoint(rc.left + value_width + space_width,
+                                      rc.bottom - unit_height),
                            unit, look.unit_fraction_pen);
 
 
@@ -415,8 +415,8 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           RasterPoint(rc.right - unit_width,
-                                       rc.bottom - unit_height),
+                           PixelPoint(rc.right - unit_width,
+                                      rc.bottom - unit_height),
                            unit, look.unit_fraction_pen);
 
 

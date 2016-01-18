@@ -36,11 +36,11 @@ Copyright_License {
  */
 class SubCanvas : public Canvas {
 #ifdef ENABLE_OPENGL
-  RasterPoint relative;
+  PixelPoint relative;
 #endif
 
 public:
-  SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size);
+  SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size);
 
 #ifdef ENABLE_OPENGL
   ~SubCanvas();

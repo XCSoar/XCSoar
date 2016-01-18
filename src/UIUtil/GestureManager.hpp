@@ -42,7 +42,7 @@
 class GestureManager
 {
   /** Position of the last mouse_move event */
-  RasterPoint drag_last;
+  PixelPoint drag_last;
   /** The gesture string */
   StaticString<11> gesture;
 

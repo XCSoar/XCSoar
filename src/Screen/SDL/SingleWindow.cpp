@@ -45,10 +45,10 @@ SingleWindow::FilterEvent(const Event &_event, Window *allowed) const
       Sint32 x = event.button.x;
       Sint32 y = event.button.y;
       PointToReal(x, y);
-      return FilterMouseEvent(RasterPoint(x, y), allowed);
+      return FilterMouseEvent(PixelPoint(x, y), allowed);
     }
 #else
-    return FilterMouseEvent(RasterPoint(event.button.x, event.button.y),
+    return FilterMouseEvent(PixelPoint(event.button.x, event.button.y),
                             allowed);
 #endif
 

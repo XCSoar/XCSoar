@@ -212,7 +212,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
   const auto &info = CommonInterface::Calculated();
 
-  const RasterPoint pt = rc.GetCenter();
+  const auto pt = rc.GetCenter();
 
   const unsigned padding = Layout::FastScale(10u);
   unsigned size = std::min(rc.right - rc.left, rc.bottom - rc.top);

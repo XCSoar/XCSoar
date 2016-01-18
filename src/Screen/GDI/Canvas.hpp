@@ -117,7 +117,7 @@ public:
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect{RasterPoint{0, 0}, size};
+    return PixelRect{PixelPoint{0, 0}, size};
   }
 
   void Resize(PixelSize new_size) {
@@ -337,11 +337,11 @@ public:
   }
 
   void DrawLine(int ax, int ay, int bx, int by);
-  void DrawLine(const RasterPoint a, const RasterPoint b) {
+  void DrawLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
-  void DrawLinePiece(const RasterPoint a, const RasterPoint b) {
+  void DrawLinePiece(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
@@ -349,13 +349,13 @@ public:
     DrawLine(ax, ay, bx, by);
   }
 
-  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+  void DrawExactLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
   void DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy);
-  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                    const RasterPoint c) {
+  void DrawTwoLines(const PixelPoint a, const PixelPoint b,
+                    const PixelPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 

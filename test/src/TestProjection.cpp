@@ -27,7 +27,7 @@ static void
 TestGeoScreenCouple(const Projection prj, const GeoPoint geo,
                     long x, long y)
 {
-  RasterPoint tmp_pt = prj.GeoToScreen(geo);
+  auto tmp_pt = prj.GeoToScreen(geo);
   ok1(tmp_pt.x == x);
   ok1(tmp_pt.y == y);
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OZ_PREVIEW_RENDERER_HPP
 #define XCSOAR_OZ_PREVIEW_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 class ObservationZonePoint;
 struct TaskLook;
@@ -35,7 +35,7 @@ namespace OZPreviewRenderer
 {
   /** Draw a scaled preview of the given airspace */
   void Draw(Canvas &canvas, const ObservationZonePoint &oz,
-            const RasterPoint pt, unsigned radius,
+            PixelPoint pt, unsigned radius,
             const TaskLook &look,
             const AirspaceRendererSettings &airspace_settings,
             const AirspaceLook &airspace_look);

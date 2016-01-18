@@ -35,7 +35,7 @@ namespace UnitSymbolRenderer
 {
   PixelSize GetSize(const Canvas &canvas, const Unit unit);
   UPixelScalar GetAscentHeight(const Font &font, const Unit unit);
-  void Draw(Canvas &canvas, const RasterPoint pos, const Unit unit,
+  void Draw(Canvas &canvas, PixelPoint pos, Unit unit,
             const Pen &unit_fraction_pen);
 }
 

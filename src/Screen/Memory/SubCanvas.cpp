@@ -31,7 +31,7 @@ ClipMax(unsigned limit, int offset, unsigned size) {
                   unsigned(std::max(int(limit - offset), 0)));
 }
 
-SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
+SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
 {
   buffer = canvas.buffer;
   buffer.data = buffer.At(_offset.x, _offset.y);

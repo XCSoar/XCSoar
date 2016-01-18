@@ -139,7 +139,7 @@ public:
   }
 #endif
 
-  RasterPoint GetMousePosition() const {
+  PixelPoint GetMousePosition() const {
     return input_queue.GetMousePosition();
   }
 

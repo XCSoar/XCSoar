@@ -59,7 +59,7 @@ Projection::ScreenToGeo(int x, int y) const
   return g;
 }
 
-RasterPoint
+PixelPoint
 Projection::GeoToScreen(const GeoPoint &g) const
 {
   assert(IsValid());
@@ -71,7 +71,7 @@ Projection::GeoToScreen(const GeoPoint &g) const
                                AngleToPixels(d.longitude)),
                           (int)AngleToPixels(d.latitude));
 
-  RasterPoint sc;
+  PixelPoint sc;
   sc.x = screen_origin.x - p.x;
   sc.y = screen_origin.y + p.y;
   return sc;

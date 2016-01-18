@@ -33,7 +33,7 @@ void
 BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
                               const Angle screen_angle,
                               const Angle best_cruise_angle,
-                              const RasterPoint pos)
+                              const PixelPoint pos)
 {
   canvas.Select(look.best_cruise_track_pen);
   canvas.Select(look.best_cruise_track_brush);
@@ -56,7 +56,7 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
 
 void
 BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
-                              const Angle screen_angle, const RasterPoint pos,
+                              const Angle screen_angle, const PixelPoint pos,
                               const DerivedInfo &calculated)
 {
   if (calculated.turn_mode == CirclingMode::CLIMB ||

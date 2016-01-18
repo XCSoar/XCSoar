@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BEST_CRUISE_ARROW_RENDERER_HPP
 #define XCSOAR_BEST_CRUISE_ARROW_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 struct TaskLook;
 class Angle;
@@ -33,10 +33,10 @@ struct DerivedInfo;
 namespace BestCruiseArrowRenderer
 {
   void Draw(Canvas &canvas, const TaskLook &look, const Angle screen_angle,
-            const Angle best_cruise_angle, const RasterPoint pos);
+            Angle best_cruise_angle, PixelPoint pos);
 
   void Draw(Canvas &canvas, const TaskLook &look, const Angle screen_angle,
-            const RasterPoint pos, const DerivedInfo &calculated);
+            PixelPoint pos, const DerivedInfo &calculated);
 }
 
 #endif

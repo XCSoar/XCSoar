@@ -96,7 +96,7 @@ public:
   }
 
   gcc_pure
-  RasterPoint DoRelative(RasterPoint p) const {
+  PixelPoint DoRelative(PixelPoint p) const {
     if (swap)
       std::swap(p.x, p.y);
 
@@ -104,7 +104,7 @@ public:
   }
 
   gcc_pure
-  RasterPoint DoAbsolute(RasterPoint p) const {
+  PixelPoint DoAbsolute(PixelPoint p) const {
     p = DoRelative(p);
 
     if (invert_x)

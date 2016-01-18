@@ -48,7 +48,7 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
 
   const Color shadow = color.Shadow();
 
-  const RasterPoint center = rc.GetCenter();
+  const auto center = rc.GetCenter();
   const int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 4;
 
   const BulkPixelPoint vertices[] = {

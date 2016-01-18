@@ -57,7 +57,7 @@ Copyright_License {
 struct VisibleWaypoint {
   WaypointPtr waypoint;
 
-  RasterPoint point;
+  PixelPoint point;
 
   ReachResult reach;
 
@@ -65,7 +65,7 @@ struct VisibleWaypoint {
 
   bool in_task;
 
-  void Set(const WaypointPtr &_waypoint, RasterPoint &_point,
+  void Set(const WaypointPtr &_waypoint, PixelPoint &_point,
            bool _in_task) {
     waypoint = _waypoint;
     point = _point;
@@ -332,7 +332,7 @@ protected:
     TCHAR Buffer[NAME_SIZE+1];
     FormatLabel(Buffer, way_point, vwp.reachable, vwp.reach);
 
-    RasterPoint sc = vwp.point;
+    auto sc = vwp.point;
     if ((vwp.reachable != WaypointRenderer::Unreachable &&
          settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
         settings.vector_landable_rendering)
@@ -351,7 +351,7 @@ protected:
     if (!projection.WaypointInScaleFilter(*way_point) && !in_task)
       return;
 
-    RasterPoint sc;
+    PixelPoint sc;
     if (!projection.GeoToScreenIfVisible(way_point->location, sc))
       return;
 

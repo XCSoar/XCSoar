@@ -443,8 +443,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   row_renderer.DrawFirstRow(canvas, text_rc, buffer);
 
   // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
 
   const unsigned radius = line_height / 2 - padding;
   OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),

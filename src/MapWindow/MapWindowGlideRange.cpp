@@ -131,7 +131,7 @@ struct ProjectedFans {
     return fans.back();
   }
 
-  void Append(const RasterPoint &pt) {
+  void Append(const PixelPoint &pt) {
 #ifndef NDEBUG
     assert(remaining > 0);
     --remaining;
@@ -185,7 +185,7 @@ class TriangleCompound: public TriangleFanVisitor {
   StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
   /** Temporary container for TriangleFan clipping */
   GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
-  /** Projection to use for GeoPoint -> RasterPoint conversion */
+  /** Projection to use for GeoPoint -> PixelPoint conversion */
   const MapWindowProjection &proj;
   /** GeoClip instance used for TriangleFan clipping */
   const GeoClip clip;
@@ -231,10 +231,10 @@ public:
     if (size < 3)
       return;
 
-    // Work directly on the RasterPoints in the fans vector
+    // Work directly on the PixelPoints in the fans vector
     fans.Append(size);
 
-    // Convert GeoPoints to RasterPoints
+    // Convert GeoPoints to PixelPoints
     for (unsigned i = 0; i < size; ++i)
       fans.Append(proj.GeoToScreen(clipped[i]));
   }
@@ -442,7 +442,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
       Calculated().terrain_warning_location.DistanceS(Basic().location) < 500)
     return;
 
-  RasterPoint sc;
+  PixelPoint sc;
   if (render_projection.GeoToScreenIfVisible(Calculated().terrain_warning_location,
                                              sc))
     look.terrain_warning_icon.Draw(canvas, sc.x, sc.y);

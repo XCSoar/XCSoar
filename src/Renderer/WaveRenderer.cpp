@@ -40,8 +40,8 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
     /* outside of the visible map area */
     return;
 
-  const RasterPoint sa(projection.GeoToScreen(ga));
-  const RasterPoint sb(projection.GeoToScreen(gb));
+  const PixelPoint sa(projection.GeoToScreen(ga));
+  const PixelPoint sb(projection.GeoToScreen(gb));
 
   canvas.Select(look.pen);
   canvas.DrawLine(sa, sb);

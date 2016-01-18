@@ -39,11 +39,11 @@ struct BulkPixelPoint : public tagPOINT {
 
   explicit constexpr BulkPixelPoint(const POINT &other):tagPOINT(other) {}
 
-  constexpr BulkPixelPoint(RasterPoint src)
+  constexpr BulkPixelPoint(PixelPoint src)
     :tagPOINT({src.x, src.y}) {}
 
-  constexpr operator RasterPoint() const {
-    return RasterPoint(x, y);
+  constexpr operator PixelPoint() const {
+    return PixelPoint(x, y);
   }
 
   constexpr BulkPixelPoint operator+(BulkPixelPoint other) const {

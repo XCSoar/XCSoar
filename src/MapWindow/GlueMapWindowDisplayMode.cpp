@@ -33,17 +33,17 @@ Copyright_License {
 void
 OffsetHistory::Reset()
 {
-  offsets.fill(RasterPoint{0, 0});
+  offsets.fill(PixelPoint{0, 0});
 }
 
 inline void
-OffsetHistory::Add(RasterPoint p)
+OffsetHistory::Add(PixelPoint p)
 {
   offsets[pos] = p;
   pos = (pos + 1) % offsets.size();
 }
 
-inline RasterPoint
+inline PixelPoint
 OffsetHistory::GetAverage() const
 {
   int x = 0;
@@ -54,7 +54,7 @@ OffsetHistory::GetAverage() const
     y += i->y;
   }
 
-  RasterPoint avg;
+  PixelPoint avg;
   avg.x = x / (int) offsets.size();
   avg.y = y / (int) offsets.size();
 
@@ -311,13 +311,13 @@ GlueMapWindow::UpdateProjection()
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
-  const RasterPoint center = rc.GetCenter();
+  const auto center = rc.GetCenter();
 
   if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
            settings_map.cruise_orientation == MapOrientation::WIND_UP) {
-    RasterPoint offset{0, 0};
+    PixelPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
         settings_map.map_shift_bias != MapShiftBias::NONE) {
       double x = 0, y = 0;

@@ -49,7 +49,7 @@ MergeMouse::SetDown(bool new_down)
 }
 
 void
-MergeMouse::MoveAbsolute(RasterPoint p)
+MergeMouse::MoveAbsolute(PixelPoint p)
 {
   p = rotate.DoAbsolute(p);
 
@@ -97,11 +97,11 @@ MergeMouse::MoveAbsolute(int new_x, int new_y,
     new_y = new_y * int(rotate.GetHeight()) / (max_y - min_y);
 
   /* now call the "real" MoveAbsolute() */
-  MoveAbsolute(RasterPoint(new_x, new_y));
+  MoveAbsolute(PixelPoint(new_x, new_y));
 }
 
 void
-MergeMouse::MoveRelative(RasterPoint d)
+MergeMouse::MoveRelative(PixelPoint d)
 {
   MoveAbsolute(GetPosition() + rotate.DoRelative(d));
 }

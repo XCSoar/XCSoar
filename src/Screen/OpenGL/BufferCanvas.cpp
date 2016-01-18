@@ -190,7 +190,7 @@ BufferCanvas::Commit(Canvas &other)
 
     /* restore the old viewport */
 
-    assert(OpenGL::translate == RasterPoint(0, 0));
+    assert(OpenGL::translate == PixelPoint(0, 0));
 
 #ifdef HAVE_GLES
     /* there's no glPopAttrib() on GL/ES; emulate it */

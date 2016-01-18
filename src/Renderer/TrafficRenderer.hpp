@@ -26,7 +26,7 @@
 
 #include "FLARM/Color.hpp"
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 struct TrafficLook;
 struct FlarmTraffic;
@@ -37,7 +37,7 @@ namespace TrafficRenderer
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
      const FlarmTraffic &traffic, Angle angle,
-     const FlarmColor color, const RasterPoint pt);
+     FlarmColor color, PixelPoint pt);
 }
 
 #endif

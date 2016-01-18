@@ -36,7 +36,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
 {
   const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - 
                      Layout::Scale(3);
-  RasterPoint center;
+  PixelPoint center;
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
 

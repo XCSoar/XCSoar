@@ -84,17 +84,17 @@ public:
   }
 
   void SetDown(bool new_down);
-  void MoveAbsolute(RasterPoint p);
+  void MoveAbsolute(PixelPoint p);
   void MoveAbsolute(int new_x, int new_y,
                     int min_x, int max_x, int min_y, int max_y);
-  void MoveRelative(RasterPoint d);
+  void MoveRelative(PixelPoint d);
 
   void MoveWheel(int d) {
     wheel += d;
   }
 
-  RasterPoint GetPosition() const {
-    return RasterPoint(x, y);
+  PixelPoint GetPosition() const {
+    return PixelPoint(x, y);
   }
 
   Event Generate();

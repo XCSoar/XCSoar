@@ -77,7 +77,7 @@ struct ScopeVertexPointer {
     Update(GL_VALUE, p);
   }
 
-  void Update(const ExactRasterPoint *p) {
+  void Update(const ExactPixelPoint *p) {
     Update(GL_EXACT, p);
   }
 

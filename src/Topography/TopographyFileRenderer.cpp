@@ -155,7 +155,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
 
   // TODO: for now i assume there is only one point for point-XShapes
 
-  RasterPoint sc;
+  PixelPoint sc;
   if (!projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.GetPoints()[0]),
                                        sc))
     return;
@@ -186,7 +186,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   for (; lines < end_lines; ++lines) {
     const GeoPoint *end = points + *lines;
     for (; points < end; ++points) {
-      RasterPoint sc;
+      PixelPoint sc;
       if (projection.GeoToScreenIfVisible(*points, sc))
         icon.Draw(canvas, sc.x, sc.y);
     }
@@ -373,7 +373,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           unsigned msize = n / iskip;
 
           /* copy all polygon points into the geo_points array and
-             clip them, to avoid integer overflows (as RasterPoint may
+             clip them, to avoid integer overflows (as PixelPoint may
              store only 16 bit integers on some platforms) */
 
           geo_points.GrowDiscard(msize * 3);
@@ -498,9 +498,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 #endif
       for (; points < end; points += iskip) {
 #ifdef ENABLE_OPENGL
-        RasterPoint pt = projection.GeoToScreen(file.ToGeoPoint(*points));
+        auto pt = projection.GeoToScreen(file.ToGeoPoint(*points));
 #else
-        RasterPoint pt = projection.GeoToScreen(*points);
+        auto pt = projection.GeoToScreen(*points);
 #endif
 
         if (pt.x <= minx) {

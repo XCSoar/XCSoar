@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Engine/Airspace/AirspaceClass.hpp"
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 class AbstractAirspace;
 struct AirspaceRendererSettings;
@@ -46,7 +46,7 @@ namespace AirspacePreviewRenderer
 
   /** Draw a scaled preview of the given airspace */
   void Draw(Canvas &canvas, const AbstractAirspace &airspace,
-            const RasterPoint pt, unsigned radius,
+            const PixelPoint pt, unsigned radius,
             const AirspaceRendererSettings &settings,
             const AirspaceLook &look);
 }

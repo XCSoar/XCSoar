@@ -55,7 +55,7 @@ protected:
 
     const PixelRect rc = canvas.GetRect();
 
-    RasterPoint pt = {
+    PixelPoint pt = {
       (PixelScalar)(rc.right / 2), (PixelScalar)(rc.bottom / 2)
     };
 

@@ -153,8 +153,8 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
-  PixelSize tsize = canvas.CalcTextSize(text);
-  RasterPoint pt = ToScreen(xv, yv);
+  auto tsize = canvas.CalcTextSize(text);
+  auto pt = ToScreen(xv, yv);
   canvas.DrawText(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
 }
 
@@ -387,7 +387,7 @@ ChartRenderer::DrawXGrid(double tic_step, const Pen &pen,
   canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
-  RasterPoint line[2];
+  PixelPoint line[2];
 
   /** the minimum next position of the text, to avoid overlapping */
   int next_text = rc.left;
@@ -444,7 +444,7 @@ ChartRenderer::DrawYGrid(double tic_step, const Pen &pen,
   canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
-  RasterPoint line[2];
+  PixelPoint line[2];
 
   /* increase tic step so graph not too crowded */
   while ((y.max-y.min)/tic_step > 10) {
@@ -518,7 +518,7 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<double, double>> &vals,
 void
 ChartRenderer::DrawDot(const double x, const double y, const unsigned _width)
 {
-  RasterPoint p = ToScreen(x, y);
+  auto p = ToScreen(x, y);
 
   const int width = _width;
   const BulkPixelPoint line[4] = {

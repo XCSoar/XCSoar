@@ -280,7 +280,7 @@ private:
    * @return MenuTabIndex w/ location of item
    */
   gcc_pure
-  MenuTabIndex IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const;
+  MenuTabIndex IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const;
 
   void DragEnd();
 

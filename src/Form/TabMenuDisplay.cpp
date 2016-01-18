@@ -162,7 +162,7 @@ TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const
 }
 
 TabMenuDisplay::MenuTabIndex
-TabMenuDisplay::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
+TabMenuDisplay::IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
@@ -280,9 +280,7 @@ bool
 TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   DragEnd();
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
+  const PixelPoint Pos(x, y);
 
   // If possible -> Give focus to the Control
   SetFocus();
@@ -302,9 +300,7 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
+  const PixelPoint Pos(x, y);
 
   if (dragging) {
     DragEnd();

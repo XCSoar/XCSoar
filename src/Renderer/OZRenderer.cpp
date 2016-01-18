@@ -101,15 +101,15 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::FAI_SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 
-    RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+    auto p_center = projection.GeoToScreen(oz.GetReference());
     if (layer != LAYER_ACTIVE)
       canvas.DrawSegment(p_center.x, p_center.y,
                          projection.GeoToScreenDistance(oz.GetRadius()),
                          oz.GetStartRadial() - projection.GetScreenAngle(),
                          oz.GetEndRadial() - projection.GetScreenAngle());
     else {
-      RasterPoint p_start = projection.GeoToScreen(oz.GetSectorStart());
-      RasterPoint p_end = projection.GeoToScreen(oz.GetSectorEnd());
+      auto p_start = projection.GeoToScreen(oz.GetSectorStart());
+      auto p_end = projection.GeoToScreen(oz.GetSectorEnd());
 
       canvas.DrawTwoLines(p_start, p_center, p_end);
     }
@@ -122,7 +122,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     const CylinderZone &oz = (const CylinderZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
-      RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+      auto p_center = projection.GeoToScreen(oz.GetReference());
       canvas.DrawCircle(p_center.x, p_center.y,
                     projection.GeoToScreenDistance(oz.GetRadius()));
     }
@@ -136,15 +136,15 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     const SectorZone &oz = (const SectorZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
-      RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+      auto p_center = projection.GeoToScreen(oz.GetReference());
 
       canvas.DrawSegment(p_center.x, p_center.y,
                          projection.GeoToScreenDistance(oz.GetRadius()),
                          oz.GetStartRadial() - projection.GetScreenAngle(),
                          oz.GetEndRadial() - projection.GetScreenAngle());
 
-      RasterPoint p_start = projection.GeoToScreen(oz.GetSectorStart());
-      RasterPoint p_end = projection.GeoToScreen(oz.GetSectorEnd());
+      auto p_start = projection.GeoToScreen(oz.GetSectorStart());
+      auto p_end = projection.GeoToScreen(oz.GetSectorEnd());
       canvas.DrawTwoLines(p_start, p_center, p_end);
     }
 
@@ -156,7 +156,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::BGAFIXEDCOURSE:
   case ObservationZone::Shape::BGAENHANCEDOPTION: {
     const KeyholeZone &oz = (const KeyholeZone &)_oz;
-    RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+    auto p_center = projection.GeoToScreen(oz.GetReference());
     canvas.DrawKeyhole(p_center.x, p_center.y,
                        projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),
@@ -168,7 +168,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
 
   case ObservationZone::Shape::ANNULAR_SECTOR: {
     const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
-    RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+    auto p_center = projection.GeoToScreen(oz.GetReference());
     canvas.DrawAnnulus(p_center.x, p_center.y,
                        projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),

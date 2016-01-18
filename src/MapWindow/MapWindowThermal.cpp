@@ -44,7 +44,7 @@ DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
       : source.location;
 
     // draw if it is in the field of view
-    RasterPoint pt;
+    PixelPoint pt;
     if (projection.GeoToScreenIfVisible(location, pt))
       icon.Draw(canvas, pt);
   }

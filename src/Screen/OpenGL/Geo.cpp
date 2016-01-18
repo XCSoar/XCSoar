@@ -36,7 +36,7 @@ ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 {
   auto angle = projection.GetScreenAngle().Degrees();
   auto scale = projection.GetScale();
-  const RasterPoint &screen_origin = projection.GetScreenOrigin();
+  const PixelPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
@@ -67,7 +67,7 @@ ApplyProjection(const WindowProjection &projection, const GeoPoint &reference)
 {
   auto angle = projection.GetScreenAngle().Degrees();
   auto scale = projection.GetScale();
-  const RasterPoint &screen_origin = projection.GetScreenOrigin();
+  const PixelPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 

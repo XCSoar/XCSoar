@@ -36,10 +36,10 @@
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-RasterPoint
+PixelPoint
 ThermalAssistantRenderer::LiftPoints::GetAverage() const
 {
-  RasterPoint avg = { 0, 0 };
+  PixelPoint avg(0, 0);
 
   for (auto it = begin(), it_end = end(); it != it_end; ++it) {
     avg.x += it->x;

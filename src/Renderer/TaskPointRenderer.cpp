@@ -127,7 +127,7 @@ TaskPointRenderer::DrawTarget(const TaskPoint &tp)
   if (!IsTargetVisible(tp))
     return;
 
-  RasterPoint sc;
+  PixelPoint sc;
   if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
     task_look.target_icon.Draw(canvas, sc.x, sc.y);
 }
@@ -144,8 +144,8 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   // draw small arrow along task direction
   BulkPixelPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
 
-  const RasterPoint p_start = m_proj.GeoToScreen(start);
-  const RasterPoint p_end = m_proj.GeoToScreen(end);
+  const auto p_start = m_proj.GeoToScreen(start);
+  const auto p_end = m_proj.GeoToScreen(end);
 
   const Angle ang = Angle::FromXY(p_start.y - p_end.y,
                                   p_end.x - p_start.x).AsBearing();

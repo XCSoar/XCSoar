@@ -611,7 +611,7 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
   if (page >= 3 && page < 3 + (int)images.size()) {
     Bitmap &img = images[page-3];
     static constexpr int zoom_factors[] = { 1, 2, 4, 8, 16, 32 };
-    RasterPoint img_pos, screen_pos;
+    PixelPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();
     auto scale = std::min((fixed)canvas.GetWidth() / (fixed)img_size.cx,

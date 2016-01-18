@@ -29,7 +29,7 @@ Copyright_License {
 #include "Renderer/WindArrowRenderer.hpp"
 
 void
-MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
+MapWindow::DrawWind(Canvas &canvas, const PixelPoint &Start,
                     const PixelRect &rc) const
 {
   if (IsPanning())
@@ -51,7 +51,7 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
-MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) const
+MapWindow::DrawBestCruiseTrack(Canvas &canvas, const PixelPoint aircraft_pos) const
 {
   if (Basic().location_available)
     BestCruiseArrowRenderer::Draw(canvas, look.task,
@@ -60,7 +60,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 }
 
 void
-MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos, bool circling) const
+MapWindow::DrawTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos, bool circling) const
 {
   if (!Basic().location_available)
     return;

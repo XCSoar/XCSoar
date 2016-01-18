@@ -38,7 +38,7 @@ Copyright_License {
  */
 void
 MapWindow::DrawFLARMTraffic(Canvas &canvas,
-                            const RasterPoint aircraft_pos) const
+                            const PixelPoint aircraft_pos) const
 {
   // Return if FLARM icons on moving map are disabled
   if (!GetMapSettings().show_flarm_on_map)
@@ -71,7 +71,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     GeoPoint target_loc = traffic.location;
 
     // Points for the screen coordinates for the icon, name and average climb
-    RasterPoint sc, sc_name, sc_av;
+    PixelPoint sc, sc_name, sc_av;
 
     // If FLARM target not on the screen, move to the next one
     if (!projection.GeoToScreenIfVisible(target_loc, sc))
@@ -126,7 +126,7 @@ MapWindow::DrawTeammate(Canvas &canvas) const
   const TeamInfo &teamcode_info = Calculated();
 
   if (teamcode_info.teammate_available) {
-    RasterPoint sc;
+    PixelPoint sc;
     if (render_projection.GeoToScreenIfVisible(teamcode_info.teammate_location,
                                                  sc))
       traffic_look.teammate_icon.Draw(canvas, sc);
@@ -145,7 +145,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 
   ScopeLock protect(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {
-    RasterPoint pt;
+    PixelPoint pt;
     if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {
       traffic_look.teammate_icon.Draw(canvas, pt);
     }

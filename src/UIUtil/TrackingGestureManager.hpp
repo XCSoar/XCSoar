@@ -44,7 +44,7 @@
 class TrackingGestureManager: public GestureManager
 {
 public:
-  typedef std::vector<RasterPoint> PointVector;
+  typedef std::vector<PixelPoint> PointVector;
 
 private:
   PointVector points;

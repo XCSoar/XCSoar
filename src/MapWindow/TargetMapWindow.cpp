@@ -195,7 +195,7 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas)
 #endif
 
   // Calculate screen position of the aircraft
-  const RasterPoint aircraft_pos = projection.GeoToScreen(Basic().location);
+  const auto aircraft_pos = projection.GeoToScreen(Basic().location);
 
   // reset label over-write preventer
   label_block.reset();

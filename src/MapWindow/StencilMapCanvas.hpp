@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/GeoClip.hpp"
 #include "Util/AllocatedArray.hpp"
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 class Projection;
 class WindowProjection;
@@ -67,7 +67,7 @@ public:
 
   void DrawSearchPointVector(const SearchPointVector &points);
 
-  void DrawCircle(const RasterPoint &center, unsigned radius);
+  void DrawCircle(const PixelPoint &center, unsigned radius);
 
   void Begin();
 

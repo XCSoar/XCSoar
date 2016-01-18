@@ -107,9 +107,9 @@ MapWindow::OnPaint(Canvas &canvas)
     const int buffer_width = buffer_projection.GetScreenWidth();
     const int buffer_height = buffer_projection.GetScreenHeight();
 
-    const RasterPoint top_left =
+    const auto top_left =
       visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(0, 0));
-    RasterPoint bottom_right =
+    auto bottom_right =
       visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(buffer_width,
                                                                    buffer_height));
 

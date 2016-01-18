@@ -115,7 +115,7 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     return true;
 
   case DRAG_OZ:
-    if ((unsigned)ManhattanDistance(drag_last, RasterPoint{x,y}) > Layout::GetHitRadius()) {
+    if ((unsigned)ManhattanDistance(drag_last, PixelPoint{x,y}) > Layout::GetHitRadius()) {
       /* cancel the target move click when the finger has moved too
          far since it was pressed down */
       ReleaseCapture();

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 
-struct RasterPoint;
+struct PixelPoint;
 struct WaypointRendererSettings;
 struct WaypointLook;
 class Canvas;
@@ -56,11 +56,11 @@ public:
      canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}
 
-  void Draw(const Waypoint &waypoint, const RasterPoint &point,
+  void Draw(const Waypoint &waypoint, const PixelPoint &point,
             Reachability reachable = Unreachable, bool in_task = false);
 
 private:
-  void DrawLandable(const Waypoint &waypoint, const RasterPoint &point,
+  void DrawLandable(const Waypoint &waypoint, const PixelPoint &point,
                     Reachability reachable = Unreachable);
 };
 

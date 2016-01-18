@@ -133,7 +133,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       int labelHeight = topSize.cy + baseSize.cy;
 
       // box
-      RasterPoint pos = projection.GeoToScreen(label.pos);
+      const auto pos = projection.GeoToScreen(label.pos);
       PixelRect rect;
       rect.left = pos.x - labelWidth / 2;
       rect.top = pos.y;

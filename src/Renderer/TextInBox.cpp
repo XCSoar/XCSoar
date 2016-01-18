@@ -30,12 +30,10 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-static RasterPoint
+static PixelPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 {
-  RasterPoint offset;
-  offset.x = 0;
-  offset.y = 0;
+  PixelPoint offset(0, 0);
 
   // If label is above maprect
   if (map_rc.top > rc.top) {
@@ -118,7 +116,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
   rc.bottom = y + tsize.cy + 1;
 
   if (mode.move_in_view) {
-    RasterPoint offset = TextInBoxMoveInView(rc, map_rc);
+    auto offset = TextInBoxMoveInView(rc, map_rc);
     x += offset.x;
     y += offset.y;
   }

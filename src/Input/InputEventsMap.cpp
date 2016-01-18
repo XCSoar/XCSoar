@@ -161,7 +161,7 @@ InputEvents::sub_PanCursor(int dx, int dy)
   if (!projection.IsValid())
     return;
 
-  RasterPoint pt = projection.GetScreenOrigin();
+  auto pt = projection.GetScreenOrigin();
   pt.x -= dx * int(projection.GetScreenWidth()) / 4;
   pt.y -= dy * int(projection.GetScreenHeight()) / 4;
   map_window->SetLocation(projection.ScreenToGeo(pt));

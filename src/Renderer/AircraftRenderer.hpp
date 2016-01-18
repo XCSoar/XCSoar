@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRCRAFT_RENDERER_HPP
 #define XCSOAR_AIRCRAFT_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 struct MapSettings;
 struct AircraftLook;
 class Canvas;
@@ -34,7 +34,7 @@ namespace AircraftRenderer
 {
   void Draw(Canvas &canvas, const MapSettings &settings_map,
             const AircraftLook &look,
-            const Angle angle, const RasterPoint aircraft_pos);
+            Angle angle, PixelPoint aircraft_pos);
 }
 
 #endif

@@ -33,7 +33,7 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
 {
   hSavedFocus = nullptr;
 
-  const RasterPoint position(CW_USEDEFAULT, CW_USEDEFAULT);
+  const PixelPoint position(CW_USEDEFAULT, CW_USEDEFAULT);
   Window::Create(nullptr, cls, text, PixelRect(position, size), style);
 }
 

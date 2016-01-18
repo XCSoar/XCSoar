@@ -48,7 +48,7 @@ class RotatedPolygonRenderer {
 
 public:
   RotatedPolygonRenderer(const BulkPixelPoint *src, unsigned n,
-                         const RasterPoint pos, const Angle angle,
+                         const PixelPoint pos, const Angle angle,
                          const unsigned scale=100)
 #ifdef ENABLE_OPENGL
     :points(src), rotate_shift(pos, angle, scale)

@@ -62,7 +62,7 @@ class Projection
    * This is the point that the ScreenRotation will rotate around.
    * It is also the point that the GeoLocation points to.
    */
-  RasterPoint screen_origin;
+  PixelPoint screen_origin;
 
   /**
    * FastIntegerRotation instance for fast
@@ -139,7 +139,7 @@ public:
    * @param y y-Coordinate on the screen
    */
   gcc_pure
-  GeoPoint ScreenToGeo(const RasterPoint &pt) const {
+  GeoPoint ScreenToGeo(const PixelPoint &pt) const {
     return ScreenToGeo(pt.x, pt.y);
   }
 
@@ -148,13 +148,13 @@ public:
    * @param g GeoPoint to convert
    */
   gcc_pure
-  RasterPoint GeoToScreen(const GeoPoint &g) const;
+  PixelPoint GeoToScreen(const GeoPoint &g) const;
 
   /**
    * Returns the origin/rotation center in screen coordinates
    * @return The origin/rotation center in screen coordinates
    */
-  const RasterPoint &GetScreenOrigin() const {
+  const PixelPoint &GetScreenOrigin() const {
     return screen_origin;
   }
 
@@ -172,7 +172,7 @@ public:
    * Set the origin/rotation center to the given screen coordinates
    * @param pt Screen coordinate
    */
-  void SetScreenOrigin(RasterPoint pt) {
+  void SetScreenOrigin(PixelPoint pt) {
     screen_origin = pt;
   }
 

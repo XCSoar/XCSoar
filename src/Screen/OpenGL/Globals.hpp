@@ -44,7 +44,7 @@ enum class DisplayOrientation : uint8_t;
 #endif
 
 struct UnsignedPoint2D;
-struct RasterPoint;
+struct PixelPoint;
 
 namespace OpenGL {
   /**
@@ -120,7 +120,7 @@ namespace OpenGL {
   /**
    * The current SubCanvas translation in pixels.
    */
-  extern RasterPoint translate;
+  extern PixelPoint translate;
 
 #ifdef USE_GLSL
   extern glm::mat4 projection_matrix;

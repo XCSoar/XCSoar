@@ -35,7 +35,7 @@ Copyright_License {
 #include <tchar.h>
 
 void
-WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
+WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned length, WindArrowStyle arrow_style,
                              int offset)
 {
@@ -73,7 +73,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const SpeedVector wind, const RasterPoint pos,
+                        const SpeedVector wind, const PixelPoint pos,
                         const PixelRect rc, WindArrowStyle arrow_style)
 {
   // Draw arrow (and tail)
@@ -106,7 +106,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const RasterPoint pos, const PixelRect rc,
+                        const PixelPoint pos, const PixelRect rc,
                         const DerivedInfo &calculated,
                         const MapSettings &settings)
 {

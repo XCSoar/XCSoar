@@ -572,9 +572,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
 
   kinetic_timer.Cancel();
 
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
+  const PixelPoint Pos(x, y);
 
   // If possible -> Give focus to the Control
   const bool had_focus = !HasCursorKeys() || HasFocus();

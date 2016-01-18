@@ -66,7 +66,7 @@ class Canvas {
   friend class BufferCanvas;
 
 protected:
-  RasterPoint offset = {0, 0};
+  PixelPoint offset = {0, 0};
   PixelSize size = {0, 0};
 
   Pen pen;
@@ -289,7 +289,7 @@ public:
 
   void DrawLine(int ax, int ay, int bx, int by);
 
-  void DrawLine(const RasterPoint a, const RasterPoint b) {
+  void DrawLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
@@ -300,15 +300,15 @@ public:
    */
   void DrawExactLine(int ax, int ay, int bx, int by);
 
-  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+  void DrawExactLine(const PixelPoint a, const PixelPoint b) {
     DrawExactLine(a.x, a.y, b.x, b.y);
   }
 
-  void DrawLinePiece(const RasterPoint a, const RasterPoint b);
+  void DrawLinePiece(const PixelPoint a, const PixelPoint b);
 
   void DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy);
-  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                    const RasterPoint c) {
+  void DrawTwoLines(const PixelPoint a, const PixelPoint b,
+                    const PixelPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 

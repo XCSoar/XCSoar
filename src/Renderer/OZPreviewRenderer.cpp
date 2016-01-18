@@ -32,7 +32,7 @@ Copyright_License {
 
 void
 OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
-                        const RasterPoint pt, unsigned radius,
+                        const PixelPoint pt, unsigned radius,
                         const TaskLook &look,
                         const AirspaceRendererSettings &airspace_settings,
                         const AirspaceLook &airspace_look)

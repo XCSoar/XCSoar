@@ -37,11 +37,11 @@ struct BulkPixelPoint : Point2D<GLvalue, int> {
   constexpr BulkPixelPoint(Args&&... args)
     :Point2D(args...) {}
 
-  constexpr BulkPixelPoint(RasterPoint src)
+  constexpr BulkPixelPoint(PixelPoint src)
     :Point2D(src.x, src.y) {}
 
-  constexpr operator RasterPoint() const {
-    return RasterPoint(x, y);
+  constexpr operator PixelPoint() const {
+    return PixelPoint(x, y);
   }
 };
 

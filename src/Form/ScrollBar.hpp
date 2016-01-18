@@ -96,22 +96,22 @@ public:
   }
 
   /**
-   * Returns whether the given RasterPoint is in the ScrollBar area
-   * @param pt RasterPoint to check
-   * @return True if the given RasterPoint is in the ScrollBar area,
+   * Returns whether the given PixelPoint is in the ScrollBar area
+   * @param pt PixelPoint to check
+   * @return True if the given PixelPoint is in the ScrollBar area,
    * False otherwise
    */
-  bool IsInside(const RasterPoint &pt) const {
+  bool IsInside(const PixelPoint &pt) const {
     return rc.IsInside(pt);
   }
 
   /**
-   * Returns whether the given RasterPoint is in the slider area
-   * @param pt RasterPoint to check
-   * @return True if the given RasterPoint is in the slider area,
+   * Returns whether the given PixelPoint is in the slider area
+   * @param pt PixelPoint to check
+   * @return True if the given PixelPoint is in the slider area,
    * False otherwise
    */
-  bool IsInsideSlider(const RasterPoint &pt) const {
+  bool IsInsideSlider(const PixelPoint pt) const {
     return rc_slider.IsInside(pt);
   }
 

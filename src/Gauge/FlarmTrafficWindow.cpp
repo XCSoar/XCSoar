@@ -149,7 +149,7 @@ FlarmTrafficWindow::PrevTarget()
  * to select the next one
  */
 void
-FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
+FlarmTrafficWindow::UpdateSelector(const FlarmId id, const PixelPoint pt)
 {
   // Update #selection
   if (!id.IsDefined())
@@ -158,7 +158,7 @@ FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
     SetTarget(id);
 
   // If we don't have a valid selection and we can't find
-  // a target close to to the RasterPoint we select the next one
+  // a target close to to the PixelPoint we select the next one
   // on the internal list
   if (selection < 0 && (
       pt.x < 0 || pt.y < 0 ||
@@ -187,7 +187,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
                            const TeamCodeSettings &new_settings)
 {
   FlarmId selection_id;
-  RasterPoint pt;
+  PixelPoint pt;
   if (!small && selection >= 0) {
     selection_id = data.list[selection].id;
     pt = sc[selection];

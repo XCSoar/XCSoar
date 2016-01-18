@@ -133,7 +133,7 @@ public:
    * @return -1 if there is no button at the specified position
    */
   gcc_pure
-  int GetButtonIndexAt(RasterPoint p) const;
+  int GetButtonIndexAt(PixelPoint p) const;
 
 private:
   void CalculateLayout();

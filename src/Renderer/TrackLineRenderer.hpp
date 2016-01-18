@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACK_LINE_RENDERER_HPP
 #define XCSOAR_TRACK_LINE_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 class Angle;
 class WindowProjection;
@@ -40,11 +40,11 @@ public:
   TrackLineRenderer(const MapLook &_look):look(_look) {}
 
   void Draw(Canvas &canvas, const Angle screen_angle, const Angle track_angle,
-            const RasterPoint pos);
+            PixelPoint pos);
 
   void Draw(Canvas &canvas,
             const WindowProjection &projection,
-            const RasterPoint pos, const NMEAInfo &basic,
+            PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const MapSettings &settings,
             bool wind_relative);
 

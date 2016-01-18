@@ -31,13 +31,13 @@ typedef GLuvalue UPixelScalar;
 
 #include "Screen/Custom/Point.hpp"
 
-struct ExactRasterPoint : Point2D<GLexact> {
-  ExactRasterPoint() = default;
+struct ExactPixelPoint : Point2D<GLexact> {
+  ExactPixelPoint() = default;
 
-  constexpr ExactRasterPoint(GLexact _x, GLexact _y)
+  constexpr ExactPixelPoint(GLexact _x, GLexact _y)
     :Point2D<GLexact>(_x, _y) {}
 
-  constexpr ExactRasterPoint(RasterPoint p)
+  constexpr ExactPixelPoint(PixelPoint p)
     :Point2D<GLexact>(ToGLexact(p.x), ToGLexact(p.y)) {}
 };
 

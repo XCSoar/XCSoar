@@ -37,7 +37,7 @@ TargetMapWindow::OnTaskModified()
 }
 
 void
-TargetMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
+TargetMapWindow::TargetPaintDrag(Canvas &canvas, const PixelPoint drag_last)
 {
   task_look.target_icon.Draw(canvas, drag_last.x, drag_last.y);
 }
@@ -62,7 +62,7 @@ TargetMapWindow::TargetDragged(const int x, const int y)
 }
 
 bool
-TargetMapWindow::isClickOnTarget(const RasterPoint pc) const
+TargetMapWindow::isClickOnTarget(const PixelPoint pc) const
 {
   if (task == nullptr)
     return false;

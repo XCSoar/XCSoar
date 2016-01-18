@@ -55,7 +55,7 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
   glm::mat4 old_projection_matrix;
 #endif
 
-  RasterPoint old_translate;
+  PixelPoint old_translate;
   UnsignedPoint2D old_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY

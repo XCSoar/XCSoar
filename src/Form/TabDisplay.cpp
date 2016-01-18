@@ -183,7 +183,7 @@ TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon)
 }
 
 int
-TabDisplay::GetButtonIndexAt(RasterPoint p) const
+TabDisplay::GetButtonIndexAt(PixelPoint p) const
 {
   for (unsigned i = 0; i < GetSize(); i++) {
     if (buttons[i]->rc.IsInside(p))

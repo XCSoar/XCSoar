@@ -74,7 +74,7 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
   Pen dash_pen(Pen::DASH, 1, COLOR_DARK_GRAY);
   canvas.Select(dash_pen);
 
-  const RasterPoint center = render_projection.GetScreenOrigin();
+  const auto center = render_projection.GetScreenOrigin();
 
   canvas.DrawLine(center.x + 20, center.y,
               center.x - 20, center.y);
@@ -360,7 +360,7 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
     const MapWindowProjection &projection = render_projection;
     const ThermalLocatorInfo &thermal_locator = Calculated().thermal_locator;
     if (thermal_locator.estimate_valid) {
-      RasterPoint sc;
+      PixelPoint sc;
       if (projection.GeoToScreenIfVisible(thermal_locator.estimate_location, sc)) {
         look.thermal_source_icon.Draw(canvas, sc);
       }
@@ -371,7 +371,7 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 }
 
 void
-GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
+GlueMapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos)
 {
   unsigned min_time;
   switch(GetMapSettings().trail.length) {
@@ -394,7 +394,7 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 }
 
 void
-GlueMapWindow::RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos)
+GlueMapWindow::RenderTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos)
 {
   DrawTrackBearing(canvas, aircraft_pos, InCirclingMode());
 }

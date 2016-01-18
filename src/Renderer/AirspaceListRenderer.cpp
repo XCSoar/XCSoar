@@ -46,8 +46,8 @@ Draw(Canvas &canvas, PixelRect rc,
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.bottom - rc.top;
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
   const unsigned radius = line_height / 2 - padding;
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);

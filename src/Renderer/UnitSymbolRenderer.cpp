@@ -115,7 +115,7 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
 }
 
 void
-UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
+UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
                          const Unit unit, const Pen &unit_fraction_pen)
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));

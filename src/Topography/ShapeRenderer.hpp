@@ -60,7 +60,7 @@ public:
     points.GrowDiscard(((n - 1) | 0x3ff) + 1);
   }
 
-  void AddPoint(RasterPoint pt) {
+  void AddPoint(PixelPoint pt) {
     assert(num_points < points.size());
 
     points[num_points++] = pt;
@@ -70,10 +70,10 @@ public:
    * Adds the point only if it a few pixels distant from the previous
    * one.  Useful to reduce the complexity of small figures.
    */
-   void AddPointIfDistant(RasterPoint pt) {
+   void AddPointIfDistant(PixelPoint pt) {
     assert(num_points < points.size());
 
-    if (num_points == 0 || ManhattanDistance((RasterPoint)points[num_points - 1], pt) >= 8)
+    if (num_points == 0 || ManhattanDistance((PixelPoint)points[num_points - 1], pt) >= 8)
       AddPoint(pt);
   }
 

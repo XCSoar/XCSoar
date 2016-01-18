@@ -36,7 +36,7 @@ class WaypointLabelList : private NonCopyable {
 public:
   struct Label{
     TCHAR Name[NAME_SIZE+1];
-    RasterPoint Pos;
+    PixelPoint Pos;
     TextInBoxMode Mode;
     int AltArivalAGL;
     bool inTask;

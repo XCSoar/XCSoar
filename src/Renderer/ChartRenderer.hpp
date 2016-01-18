@@ -120,8 +120,8 @@ public:
   int ScreenY(double y) const;
 
   gcc_pure
-  RasterPoint ToScreen(double x, double y) const {
-    return RasterPoint{ ScreenX(x), ScreenY(y) };
+  PixelPoint ToScreen(double x, double y) const {
+    return PixelPoint{ ScreenX(x), ScreenY(y) };
   }
 
   Canvas& GetCanvas() { return canvas; }

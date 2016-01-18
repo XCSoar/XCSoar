@@ -28,7 +28,7 @@ Copyright_License {
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
 
-struct RasterPoint;
+struct PixelPoint;
 struct BulkPixelPoint;
 class Canvas;
 class TraceComputer;
@@ -67,7 +67,7 @@ public:
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,
-            bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
+            bool enable_traildrift, PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const TrailSettings &settings);
 
   /**

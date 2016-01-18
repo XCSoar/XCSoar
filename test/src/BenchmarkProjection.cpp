@@ -44,7 +44,7 @@ int main(int argc, char **argv)
                          Angle::Degrees(51.051944444444445));
   long x = 0, y = 0;
   for (unsigned i = 64 * 1024 * 1024; i-- > 0;) {
-    RasterPoint rp = projection.GeoToScreen(gp);
+    auto rp = projection.GeoToScreen(gp);
 
     /* prevent gcc from optimizing this loop away */
     x += rp.x;

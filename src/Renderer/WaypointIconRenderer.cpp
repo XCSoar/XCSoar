@@ -69,7 +69,7 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
 }
 
 static void
-DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
+DrawLandableBase(Canvas &canvas, const PixelPoint &pt, bool airport,
                  const double radius)
 {
   int iradius = iround(radius);
@@ -90,7 +90,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
 }
 
 static void
-DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
+DrawLandableRunway(Canvas &canvas, const PixelPoint &pt,
                    const Angle angle, double radius, double width)
 {
   if (radius <= 0)
@@ -118,7 +118,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
 void
 WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
-                                   const RasterPoint &point,
+                                   const PixelPoint &point,
                                    Reachability reachable)
 {
 
@@ -201,7 +201,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 }
 
 void
-WaypointIconRenderer::Draw(const Waypoint &waypoint, const RasterPoint &point,
+WaypointIconRenderer::Draw(const Waypoint &waypoint, const PixelPoint &point,
                            Reachability reachable, bool in_task)
 {
   if (waypoint.IsLandable())

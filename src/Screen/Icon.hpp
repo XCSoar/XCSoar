@@ -39,7 +39,7 @@ protected:
 
   PixelSize size;
 
-  RasterPoint origin;
+  PixelPoint origin;
 
 public:
   const PixelSize &GetSize() const {
@@ -58,7 +58,7 @@ public:
   }
 
   void Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
-  void Draw(Canvas &canvas, RasterPoint pt) const {
+  void Draw(Canvas &canvas, PixelPoint pt) const {
     Draw(canvas, pt.x, pt.y);
   }
 

@@ -40,7 +40,7 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
   canvas.SetBackgroundTransparent();
 
   if (flights.empty()) {
-    RasterPoint center = rc.GetCenter();
+    auto center = rc.GetCenter();
     const TCHAR *text = _T("No flights");
     PixelSize size = canvas.CalcTextSize(text);
     canvas.DrawText(center.x - size.cx / 2, center.y - size.cy / 2, text);

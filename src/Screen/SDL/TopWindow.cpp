@@ -203,11 +203,11 @@ TopWindow::OnEvent(const SDL_Event &event)
       auto y = event.button.y;
       PointToReal(x, y);
 
-      return double_click.Check(RasterPoint(x, y))
+      return double_click.Check(PixelPoint(x, y))
         ? OnMouseDouble(x, y)
         : OnMouseDown(x, y);
 #else
-      return double_click.Check(RasterPoint(event.button.x, event.button.y))
+      return double_click.Check(PixelPoint(event.button.x, event.button.y))
         ? OnMouseDouble(event.button.x, event.button.y)
         : OnMouseDown(event.button.x, event.button.y);
 #endif
@@ -220,11 +220,11 @@ TopWindow::OnEvent(const SDL_Event &event)
       auto y = event.button.y;
       PointToReal(x, y);
 
-      double_click.Moved(RasterPoint(x, y));
+      double_click.Moved(PixelPoint(x, y));
 
       return OnMouseUp(x, y);
 #else
-      double_click.Moved(RasterPoint(event.button.x, event.button.y));
+      double_click.Moved(PixelPoint(event.button.x, event.button.y));
 
       return OnMouseUp(event.button.x, event.button.y);
 #endif

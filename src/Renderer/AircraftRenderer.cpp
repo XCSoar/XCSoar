@@ -34,7 +34,7 @@ Copyright_License {
 static void
 DrawMirroredPolygon(const BulkPixelPoint *src, unsigned points,
                     Canvas &canvas, const Angle angle,
-                    const RasterPoint pos)
+                    const PixelPoint pos)
 {
   BulkPixelPoint dst[64];
   assert(2 * points <= ARRAY_SIZE(dst));
@@ -56,7 +56,7 @@ static void
 DrawDetailedAircraft(Canvas &canvas, bool inverse,
                      const AircraftLook &look,
                      const Angle angle,
-                     const RasterPoint aircraft_pos)
+                     const PixelPoint aircraft_pos)
 {
   {
     static constexpr BulkPixelPoint Aircraft[] = {
@@ -107,7 +107,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
 static void
 DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
                    const Angle angle,
-                   const RasterPoint aircraft_pos, bool large)
+                   const PixelPoint aircraft_pos, bool large)
 {
   static constexpr BulkPixelPoint AircraftLarge[] = {
     {1, -7},
@@ -167,7 +167,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
 
 static void
 DrawHangGlider(Canvas &canvas, const AircraftLook &look,
-               const Angle angle, const RasterPoint aircraft_pos, bool inverse)
+               const Angle angle, const PixelPoint aircraft_pos, bool inverse)
 {
   static constexpr BulkPixelPoint aircraft[] = {
     {1, -3},
@@ -199,7 +199,7 @@ DrawHangGlider(Canvas &canvas, const AircraftLook &look,
 
 static void
 DrawParaGlider(Canvas &canvas, const AircraftLook &look,
-               const Angle angle, const RasterPoint aircraft_pos, bool inverse)
+               const Angle angle, const PixelPoint aircraft_pos, bool inverse)
 {
   static constexpr BulkPixelPoint aircraft[] = {
     // Wing
@@ -247,7 +247,7 @@ DrawParaGlider(Canvas &canvas, const AircraftLook &look,
 void
 AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const AircraftLook &look,
-                       const Angle angle, const RasterPoint aircraft_pos)
+                       const Angle angle, const PixelPoint aircraft_pos)
 {
   const bool inverse = IsDithered() || !settings_map.terrain.enable;
 
