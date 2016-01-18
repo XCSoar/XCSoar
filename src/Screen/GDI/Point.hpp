@@ -29,6 +29,4 @@ Copyright_License {
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
 
-#include "Screen/Custom/Point.hpp"
-
 #endif

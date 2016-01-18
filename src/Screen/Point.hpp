@@ -26,6 +26,10 @@ Copyright_License {
 
 #include "Math/Point2D.hpp"
 
+#ifdef USE_WINUSER
+#include <windows.h>
+#endif
+
 struct PixelPoint : IntPoint2D {
   PixelPoint() = default;
 
@@ -62,6 +66,98 @@ operator+(PixelPoint p, PixelSize size)
 {
   return { p.x + size.cx, p.y + size.cy };
 }
+
+/**
+ * @brief PixelRect structure and operations
+ *
+ * Provides support for creating and manipulating PixelRect structures
+ *
+ * @note This structure follows the GDI convention of the {right, bottom} coordinates being
+ * immediately outside the rectangle being specified.
+ */
+struct PixelRect {
+  int left, top, right, bottom;
+
+  PixelRect() = default;
+
+  constexpr PixelRect(int _left, int _top, int _right, int _bottom)
+    :left(_left), top(_top), right(_right), bottom(_bottom) {}
+
+  constexpr PixelRect(PixelPoint origin, PixelSize size)
+    :left(origin.x), top(origin.y),
+     right(origin.x + size.cx), bottom(origin.y + size.cy) {}
+
+  explicit constexpr PixelRect(PixelSize size)
+    :left(0), top(0), right(size.cx), bottom(size.cy) {}
+
+  void SetEmpty() {
+    left = top = right = bottom = 0;
+  }
+
+  void Offset(int dx, int dy) {
+    left += dx;
+    top += dy;
+    right += dx;
+    bottom += dy;
+  }
+
+  void Grow(int dx, int dy) {
+    left -= dx;
+    top -= dy;
+    right += dx;
+    bottom += dy;
+  }
+
+  void Grow(int d) {
+    Grow(d, d);
+  }
+
+  constexpr PixelPoint GetOrigin() const {
+    return { left, top };
+  }
+
+  constexpr PixelSize GetSize() const {
+    return { right - left, bottom - top };
+  }
+
+  constexpr PixelPoint GetCenter() const {
+    return { (left + right) / 2, (top + bottom) / 2 };
+  }
+
+  constexpr PixelPoint GetTopLeft() const {
+    return { left, top };
+  }
+
+  constexpr PixelPoint GetTopRight() const {
+    return { right, top };
+  }
+
+  constexpr PixelPoint GetBottomLeft() const {
+    return { left, bottom };
+  }
+
+  constexpr PixelPoint GetBottomRight() const {
+    return { right, bottom };
+  }
+
+  constexpr bool IsInside(PixelPoint pt) const {
+    return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
+  }
+
+#ifdef USE_WINUSER
+  constexpr PixelRect(RECT src)
+    :left(src.left), top(src.top), right(src.right), bottom(src.bottom) {}
+
+  operator RECT() const {
+    RECT r;
+    r.left = left;
+    r.top = top;
+    r.right = right;
+    r.bottom = bottom;
+    return r;
+  }
+#endif
+};
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Point.hpp"
