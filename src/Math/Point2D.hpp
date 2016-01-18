@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
+#include "Compiler.h"
+
 #include <type_traits>
 #include <cmath>
 #include <cstdlib>
@@ -96,6 +98,11 @@ struct DoublePoint2D : Point2D<double> {
   DoublePoint2D() = default;
 
   constexpr DoublePoint2D(double _x, double _y):Point2D<double>(_x, _y) {}
+
+  gcc_pure
+  double Magnitude() const {
+    return hypot(x, y);
+  }
 };
 
 static_assert(std::is_trivial<DoublePoint2D>::value, "type is not trivial");
@@ -104,6 +111,11 @@ struct FloatPoint2D : Point2D<float> {
   FloatPoint2D() = default;
 
   constexpr FloatPoint2D(float _x, float _y):Point2D<float>(_x, _y) {}
+
+  gcc_pure
+  float Magnitude() const {
+    return hypotf(x, y);
+  }
 };
 
 static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
