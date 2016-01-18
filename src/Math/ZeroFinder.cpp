@@ -20,9 +20,10 @@
 }
  */
 #include "ZeroFinder.hpp"
-#include <math.h>
-#include <algorithm>
+
 #include <limits>
+
+#include <math.h>
 
 /** machine tolerance */
 static constexpr double epsilon = std::numeric_limits<double>::epsilon();

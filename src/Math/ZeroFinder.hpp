@@ -27,8 +27,6 @@
 
 #include <assert.h>
 
-#include <assert.h>
-
 /**
  * Zero finding and minimisation search algorithm
  *
