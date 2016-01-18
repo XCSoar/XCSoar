@@ -35,18 +35,14 @@ PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
                    const PixelPoint &p3, int offset)
 {
-  int v12x, v12y, v13x, v13y;
+  const PixelPoint v12 = p2 - p1;
+  const PixelPoint v13 = p3 - p1;
 
-  v12x = p2.x - p1.x;
-  v12y = p2.y - p1.y;
-  v13x = p3.x - p1.x;
-  v13y = p3.y - p1.y;
-
-  const int mag = v12x * v12x + v12y * v12y;
+  const int mag = v12.MagnitudeSquared();
   if (mag > 1) {
     const int mag12 = isqrt4(mag);
     // projection of v13 along v12 = v12.v13/|v12|
-    int proj = (v12x * v13x + v12y * v13y) / mag12;
+    int proj = DotProduct(v12, v13) / mag12;
     // fractional distance
     if (offset > 0) {
       if (offset * 2 < mag12) {
@@ -59,8 +55,8 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
 
     const auto f = Clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
-    return PixelPoint(lround(v12x * f) + p1.x,
-                      lround(v12y * f) + p1.y);
+    return PixelPoint(lround(v12.x * f) + p1.x,
+                      lround(v12.y * f) + p1.y);
   } else {
     return p1;
   }
