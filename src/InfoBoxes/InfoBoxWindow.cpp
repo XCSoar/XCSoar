@@ -86,18 +86,17 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.title);
 
-  PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
-  PixelScalar x = std::max(PixelScalar(1),
-                           PixelScalar(title_rect.left + halftextwidth));
-  PixelScalar y = title_rect.top;
+  int halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
+  int x = std::max(1, title_rect.left + halftextwidth);
+  int y = title_rect.top;
 
   canvas.TextAutoClipped(x, y, data.title);
 
   if (settings.border_style == InfoBoxSettings::BorderStyle::TAB &&
       halftextwidth > Layout::Scale(3)) {
-    PixelScalar ytop = title_rect.top + font.GetCapitalHeight() / 2;
-    PixelScalar ytopedge = ytop + Layout::GetTextPadding();
-    PixelScalar ybottom = title_rect.top + Layout::Scale(6)
+    int ytop = title_rect.top + font.GetCapitalHeight() / 2;
+    int ytopedge = ytop + Layout::GetTextPadding();
+    int ybottom = title_rect.top + Layout::Scale(6)
       + font.GetCapitalHeight();
 
     canvas.Select(look.border_pen);
@@ -129,7 +128,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
   // Do text-based unit rendering on higher resolutions
   if (look.unit_font.IsDefined()) {
     canvas.Select(look.unit_font);
-    PixelScalar unit_width =
+    int unit_width =
         UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
 
     canvas.Select(look.value_font);
@@ -142,11 +141,11 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
       value_size = canvas.CalcTextSize(data.value);
     }
 
-    PixelScalar x = std::max(PixelScalar(0),
-                             PixelScalar((value_rect.left + value_rect.right
-                                          - value_size.cx - unit_width) / 2));
+    int x = std::max(0,
+                     (value_rect.left + value_rect.right
+                      - value_size.cx - unit_width) / 2);
 
-    PixelScalar y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
+    int y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
 
     canvas.TextAutoClipped(x, y, data.value);
 
@@ -164,8 +163,8 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
   }
 
   canvas.Select(look.value_font);
-  UPixelScalar ascent_height = look.value_font.GetAscentHeight();
-  UPixelScalar capital_height = look.value_font.GetCapitalHeight();
+  unsigned ascent_height = look.value_font.GetAscentHeight();
+  unsigned capital_height = look.value_font.GetCapitalHeight();
 
   PixelSize unit_size;
   const UnitSymbol *unit_symbol = units_look.GetSymbol(data.value_unit);
@@ -184,12 +183,12 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
     value_size = canvas.CalcTextSize(data.value);
   }
 
-  PixelScalar x = std::max(PixelScalar(1),
-                           PixelScalar((value_rect.left + value_rect.right
-                                        - value_size.cx
-                                        - Layout::FastScale(unit_size.cx)) / 2));
+  int x = std::max(1,
+                   (value_rect.left + value_rect.right
+                    - value_size.cx
+                    - Layout::FastScale(unit_size.cx)) / 2);
 
-  PixelScalar y = value_rect.top + 1 - ascent_height +
+  int y = value_rect.top + 1 - ascent_height +
     (value_rect.bottom - value_rect.top + capital_height) / 2;
 
   canvas.TextAutoClipped(x, y, data.value);
@@ -221,10 +220,9 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.comment);
 
-  PixelScalar x = std::max(PixelScalar(1),
-                           PixelScalar((comment_rect.left + comment_rect.right
-                                        - tsize.cx) / 2));
-  PixelScalar y = comment_rect.top;
+  int x = std::max(1,
+                   (comment_rect.left + comment_rect.right - tsize.cx) / 2);
+  int y = comment_rect.top;
 
   canvas.TextAutoClipped(x, y, data.comment);
 }
@@ -260,7 +258,7 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (border_kind != 0) {
     canvas.Select(look.border_pen);
 
-    const UPixelScalar width = canvas.GetWidth(),
+    const unsigned width = canvas.GetWidth(),
       height = canvas.GetHeight();
 
     if (border_kind & BORDERTOP) {

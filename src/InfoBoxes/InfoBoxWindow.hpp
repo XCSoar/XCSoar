@@ -100,8 +100,8 @@ private:
   void Paint(Canvas &canvas);
 
 public:
-  void PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
-                 UPixelScalar width, UPixelScalar height);
+  void PaintInto(Canvas &dest, int xoff, int yoff,
+                 unsigned width, unsigned height);
 
   /**
    * Sets the InfoBox title to the given Value
