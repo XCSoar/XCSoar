@@ -58,7 +58,7 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
 void
 SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
 {
-  PixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+  unsigned size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
   auto center = rc.GetCenter();
 
   // Draw horizontal bar

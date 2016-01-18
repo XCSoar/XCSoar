@@ -78,16 +78,16 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   const int size_divisor =
     std::max((int) Layout::Scale(3000 / (rc.bottom - rc.top)), 4);
 
-  PixelScalar dy_glidebar = 0;
-  PixelScalar dy_glidebar0 = 0;
+  int dy_glidebar = 0;
+  int dy_glidebar0 = 0;
 
   FormatUserAltitude(solution.SelectAltitudeDifference(glide_settings),
                             Value, false);
   canvas.Select(*look.font);
   const PixelSize text_size = canvas.CalcTextSize(Value);
 
-  PixelScalar clipping_arrow_offset = Layout::Scale(4);
-  PixelScalar clipping_arrow0_offset = Layout::Scale(4);
+  int clipping_arrow_offset = Layout::Scale(4);
+  int clipping_arrow0_offset = Layout::Scale(4);
 
   // 468 meters is it's size. Will be divided by 9 to fit screen resolution.
   int altitude_difference = (int)

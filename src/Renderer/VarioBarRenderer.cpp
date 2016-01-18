@@ -74,13 +74,13 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   const auto size_divisor =
     std::max((double) Layout::Scale(70 / (rc.bottom - rc.top)), 0.15);
 
-  PixelScalar dy_variobar = 0;
-  PixelScalar dy_variobar_av = 0;
-  PixelScalar dy_variobar_mc = 0;
+  int dy_variobar = 0;
+  int dy_variobar_av = 0;
+  int dy_variobar_mc = 0;
 
-  PixelScalar clipping_arrow_offset = Layout::Scale(4);
-  PixelScalar clipping_arrow_av_offset = Layout::Scale(4);
-//  PixelScalar clipping_arrow_mc_offset = Layout::Scale(4);
+  int clipping_arrow_offset = Layout::Scale(4);
+  int clipping_arrow_av_offset = Layout::Scale(4);
+//  int clipping_arrow_mc_offset = Layout::Scale(4);
 
   auto vario_gross = basic.brutto_vario;
 

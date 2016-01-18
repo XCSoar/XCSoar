@@ -93,7 +93,7 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
   return size;
 }
 
-UPixelScalar
+unsigned
 UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
@@ -145,7 +145,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
     }
 
     canvas.DrawText(pos.x, pos.y, strings.line1);
-    PixelScalar x = pos.x + (size1.cx - size2.cx) / 2;
+    int x = pos.x + (size1.cx - size2.cx) / 2;
     canvas.DrawText(x, pos.y + size1.cy, strings.line2);
   } else {
     if (strings.is_fraction) {
@@ -153,7 +153,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
       canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
     }
 
-    PixelScalar x = pos.x + (size2.cx - size1.cx) / 2;
+    int x = pos.x + (size2.cx - size1.cx) / 2;
     canvas.DrawText(x, pos.y, strings.line1);
     canvas.DrawText(pos.x, pos.y + size1.cy, strings.line2);
   }

@@ -433,7 +433,7 @@ public:
 };
 
 static void
-MapWaypointLabelRender(Canvas &canvas, UPixelScalar width, UPixelScalar height,
+MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
                        LabelBlock &label_block,
                        WaypointLabelList &labels,
                        const WaypointLook &look)

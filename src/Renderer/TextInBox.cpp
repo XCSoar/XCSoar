@@ -38,7 +38,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
   // If label is above maprect
   if (map_rc.top > rc.top) {
     // Move label down into maprect
-    UPixelScalar d = map_rc.top - rc.top;
+    unsigned d = map_rc.top - rc.top;
     rc.top += d;
     rc.bottom += d;
     offset.y += d;
@@ -46,7 +46,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
   // If label is right of maprect
   if (map_rc.right < rc.right) {
-    UPixelScalar d = map_rc.right - rc.right;
+    unsigned d = map_rc.right - rc.right;
     rc.right += d;
     rc.left += d;
     offset.x += d;
@@ -54,7 +54,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
   // If label is below maprect
   if (map_rc.bottom < rc.bottom) {
-    UPixelScalar d = map_rc.bottom - rc.bottom;
+    unsigned d = map_rc.bottom - rc.bottom;
     rc.top += d;
     rc.bottom += d;
     offset.y += d;
@@ -62,7 +62,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
   // If label is left of maprect
   if (map_rc.left > rc.left) {
-    UPixelScalar d = map_rc.left - rc.left;
+    unsigned d = map_rc.left - rc.left;
     rc.right += d;
     rc.left += d;
     offset.x += d;
@@ -73,7 +73,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
 static void
 RenderShadowedText(Canvas &canvas, const TCHAR *text,
-                   PixelScalar x, PixelScalar y,
+                   int x, int y,
                    bool inverted)
 {
   canvas.SetBackgroundTransparent();
@@ -91,7 +91,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR *text,
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
+TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
           TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
   // landable waypoint label inside white box
@@ -164,9 +164,9 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
+TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
           TextInBoxMode mode,
-          UPixelScalar screen_width, UPixelScalar screen_height,
+          unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block)
 {
   PixelRect rc;
