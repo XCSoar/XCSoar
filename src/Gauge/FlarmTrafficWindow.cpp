@@ -727,8 +727,7 @@ FlarmTrafficWindow::SelectNearTarget(PixelPoint p, int max_distance)
     if (!data.list[i].IsDefined())
       continue;
 
-    int distance_sq = (p.x - sc[i].x) * (p.x - sc[i].x) +
-                      (p.y - sc[i].y) * (p.y - sc[i].y);
+    int distance_sq = (p - sc[i]).MagnitudeSquared();
 
     if (distance_sq > min_distance
         || distance_sq > max_distance * max_distance)

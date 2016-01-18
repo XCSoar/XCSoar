@@ -21,7 +21,6 @@
  */
 
 #include "FlatPoint.hpp"
-#include "Math/Util.hpp"
 #include "Math/Angle.hpp"
 
 void
@@ -33,10 +32,4 @@ FlatPoint::Rotate(const Angle angle)
   const auto sa = sc.first, ca = sc.second;
   x = _x * ca - _y * sa;
   y = _x * sa + _y * ca;
-}
-
-double
-FlatPoint::MagnitudeSquared() const
-{
-  return Square(x) + Square(y);
 }

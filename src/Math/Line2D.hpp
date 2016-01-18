@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LINE2D_HPP
 #define XCSOAR_LINE2D_HPP
 
-#include "Util.hpp"
-
 class Angle;
 
 /**
@@ -46,9 +44,8 @@ struct Line2D {
    *
    * @return Squared length
    */
-  gcc_pure
-  product_type GetSquaredDistance() const {
-    return Square<product_type>(b.x - a.x) + Square<product_type>(b.y - a.y);
+  constexpr product_type GetSquaredDistance() const {
+    return (b - a).MagnitudeSquared();
   }
 
   constexpr Point GetMiddle() const {

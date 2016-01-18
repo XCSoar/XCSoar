@@ -70,6 +70,10 @@ struct Point2D {
     y -= other.y;
     return *this;
   }
+
+  constexpr product_type MagnitudeSquared() const {
+    return PT(x) * PT(x) + PT(y) * PT(y);
+  }
 };
 
 struct UnsignedPoint2D : Point2D<unsigned> {

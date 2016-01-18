@@ -88,13 +88,6 @@ struct FlatPoint : DoublePoint2D
   }
 
   /**
-   * Find dx * dx + dy * dy
-   * @return Magnitude squared
-   */
-  gcc_pure
-  double MagnitudeSquared() const;
-
-  /**
    * Find sqrt(dx * dx + dy * dy)
    * @return Magnitude
    */
