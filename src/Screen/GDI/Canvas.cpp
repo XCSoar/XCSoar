@@ -141,20 +141,22 @@ Canvas::DrawText(int x, int y,
 }
 
 void
-Canvas::DrawOpaqueText(int x, int y, const PixelRect &rc,
+Canvas::DrawOpaqueText(int x, int y, const PixelRect &_rc,
                        const TCHAR *text)
 {
   assert(IsDefined());
 
+  RECT rc = _rc;
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), nullptr);
 }
 
 void
-Canvas::DrawClippedText(int x, int y, const PixelRect &rc,
+Canvas::DrawClippedText(int x, int y, const PixelRect &_rc,
                         const TCHAR *text)
 {
   assert(IsDefined());
 
+  RECT rc = _rc;
   ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
@@ -164,9 +166,9 @@ Canvas::DrawClippedText(int x, int y, unsigned width,
 {
   const PixelSize size = CalcTextSize(text);
 
-  PixelRect rc;
+  RECT rc;
   ::SetRect(&rc, x, y, x + std::min(width, unsigned(size.cx)), y + size.cy);
-  DrawClippedText(x, y, rc, text);
+  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
 void

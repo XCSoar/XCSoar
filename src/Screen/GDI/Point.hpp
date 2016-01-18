@@ -29,58 +29,6 @@ Copyright_License {
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
 
-/**
- * @brief PixelRect structure and operations
- *
- * Provides support for creating and manipulating PixelRect structures
- *
- * @note This structure follows the GDI convention of the {right, bottom} coordinates being
- * immediately outside the rectangle being specified.
- */
-struct PixelRect : public tagRECT {
-  PixelRect() = default;
-
-  constexpr PixelRect(PixelScalar _left, PixelScalar _top,
-                      PixelScalar _right, PixelScalar _bottom)
-    :tagRECT({_left, _top, _right, _bottom}) {}
-
-  constexpr PixelRect(PixelPoint origin, PixelSize size)
-    :tagRECT({origin.x, origin.y, origin.x + size.cx, origin.y + size.cy}) {}
-
-  explicit constexpr PixelRect(PixelSize size)
-    :tagRECT({0, 0, size.cx, size.cy}) {}
-
-  explicit constexpr PixelRect(const RECT &other):tagRECT(other) {}
-
-  void SetEmpty() {
-    ::SetRectEmpty(this);
-  }
-
-  void Offset(int dx, int dy) {
-    ::OffsetRect(this, dx, dy);
-  }
-
-  void Grow(int dx, int dy) {
-    InflateRect(this, dx, dy);
-  }
-
-  void Grow(int d) {
-    Grow(d, d);
-  }
-
-  constexpr PixelSize GetSize() const {
-    return { right - left, bottom - top };
-  }
-
-  constexpr PixelPoint GetCenter() const {
-    return { (left + right) / 2, (top + bottom) / 2 };
-  }
-
-  constexpr bool IsInside(PixelPoint pt) const {
-    return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
-  }
-};
-
-static_assert(sizeof(PixelRect) == sizeof(RECT), "not same size");
+#include "Screen/Custom/Point.hpp"
 
 #endif

@@ -695,11 +695,11 @@ public:
   {
     assert(IsDefined());
 
-    PixelRect rc;
 #ifndef USE_WINUSER
-    rc = GetPosition();
+    PixelRect rc = GetPosition();
     ToScreen(rc);
 #else
+    RECT rc;
     ::GetWindowRect(hWnd, &rc);
 #endif
     return rc;
@@ -746,7 +746,7 @@ public:
 #ifndef USE_WINUSER
     return PixelRect(size);
 #else
-    PixelRect rc;
+    RECT rc;
     ::GetClientRect(hWnd, &rc);
     return rc;
 #endif
@@ -758,11 +758,8 @@ public:
     assert(IsDefined());
 
 #ifdef USE_WINUSER
-    PixelRect rc = GetClientRect();
-    PixelSize s;
-    s.cx = rc.right;
-    s.cy = rc.bottom;
-    return s;
+    const auto rc = GetClientRect();
+    return PixelSize(rc.right, rc.bottom);
 #else
     return size;
 #endif
@@ -796,7 +793,7 @@ public:
     HWND hParent = ::GetParent(hWnd);
     assert(hParent != nullptr);
 
-    PixelRect rc;
+    RECT rc;
     ::GetClientRect(hParent, &rc);
     return rc;
   }
@@ -820,9 +817,10 @@ public:
     ::EndPaint(hWnd, ps);
   }
 
-  void Scroll(PixelScalar dx, PixelScalar dy, const PixelRect &rc) {
+  void Scroll(PixelScalar dx, PixelScalar dy, const PixelRect &_rc) {
     assert(IsDefined());
 
+    const RECT rc = _rc;
     ::ScrollWindowEx(hWnd, dx, dy, &rc, nullptr, nullptr, nullptr,
                      SW_INVALIDATE);
   }

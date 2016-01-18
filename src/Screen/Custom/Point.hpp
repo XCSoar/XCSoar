@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CUSTOM_POINT_HPP
 #define XCSOAR_SCREEN_CUSTOM_POINT_HPP
 
+#ifdef USE_WINUSER
+#include <windows.h>
+#endif
+
 /**
  * @brief PixelRect structure and operations
  *
@@ -100,6 +104,20 @@ struct PixelRect {
   constexpr bool IsInside(PixelPoint pt) const {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
+
+#ifdef USE_WINUSER
+  constexpr PixelRect(RECT src)
+    :left(src.left), top(src.top), right(src.right), bottom(src.bottom) {}
+
+  operator RECT() const {
+    RECT r;
+    r.left = left;
+    r.top = top;
+    r.right = right;
+    r.bottom = bottom;
+    return r;
+  }
+#endif
 };
 
 #endif

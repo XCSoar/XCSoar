@@ -101,7 +101,8 @@ public:
 #ifndef USE_WINUSER
     Invalidate();
 #else
-    ::InvalidateRect(hWnd, &rect, false);
+    const RECT r = rect;
+    ::InvalidateRect(hWnd, &r, false);
 #endif
   }
 

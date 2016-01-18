@@ -247,8 +247,10 @@ public:
     DrawFilledRectangle(left, top, right, bottom, map(color));
   }
 
-  void DrawFilledRectangle(const PixelRect &rc, const HWColor color) {
+  void DrawFilledRectangle(const PixelRect &_rc, const HWColor color) {
     assert(IsDefined());
+
+    const RECT rc = _rc;
 
     /* this hack allows filling a rectangle with a solid color,
        without the need to create a HBRUSH */
@@ -260,9 +262,10 @@ public:
     DrawFilledRectangle(rc, map(color));
   }
 
-  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
+  void DrawFilledRectangle(const PixelRect &_rc, const Brush &brush) {
     assert(IsDefined());
 
+    const RECT rc = _rc;
     ::FillRect(dc, &rc, brush.Native());
   }
 
@@ -276,8 +279,12 @@ public:
     DrawFilledRectangle(rc, brush);
   }
 
+  void InvertRectangle(const RECT r) {
+    ::InvertRect(dc, &r);
+  }
+
   void InvertRectangle(const PixelRect &rc) {
-    ::InvertRect(dc, &rc);
+    InvertRectangle((RECT)rc);
   }
 
   void Clear() {
@@ -310,10 +317,12 @@ public:
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
-  void DrawRaisedEdge(PixelRect &rc) {
+  void DrawRaisedEdge(PixelRect &_rc) {
     assert(IsDefined());
 
+    RECT rc = _rc;
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_RECT);
+    _rc = rc;
   }
 
   void DrawPolyline(const BulkPixelPoint *lppt, unsigned cPoints) {
@@ -374,9 +383,10 @@ public:
   void DrawKeyhole(PixelPoint center, unsigned small_radius,
                    unsigned big_radius, Angle start, Angle end);
 
-  void DrawFocusRectangle(const PixelRect &rc) {
+  void DrawFocusRectangle(const PixelRect &_rc) {
     assert(IsDefined());
 
+    const RECT rc = _rc;
     ::DrawFocusRect(dc, &rc);
   }
 
