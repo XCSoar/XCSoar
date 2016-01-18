@@ -60,7 +60,7 @@ TextRenderer::Draw(Canvas &canvas, PixelRect rc,
   unsigned format = DT_WORDBREAK | (center ? DT_CENTER : DT_LEFT);
 
 #ifdef USE_GDI
-  format |= DT_NOPREFIX | DT_NOCLIP;
+  format |= DT_NOPREFIX;
 
   if (vcenter) {
     const unsigned height = GetHeight(canvas, rc, text);
