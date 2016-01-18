@@ -60,7 +60,8 @@ Copyright_License {
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
 
 void
-Canvas::InvertRectangle(int left, int top, int right, int bottom){
+Canvas::InvertRectangle(PixelRect r)
+{
   /** Inverts rectangle using GL blending effects (hardware accelerated):
    *
    * Drawing white (Draw_color=1,1,1) rectangle over the image with GL_ONE_MINUS_DST_COLOR
@@ -75,7 +76,7 @@ Canvas::InvertRectangle(int left, int top, int right, int bottom){
 
   const Color cwhite(0xff, 0xff, 0xff); // Draw color white (source channel of blender)
 
-  DrawFilledRectangle(left, top, right, bottom, cwhite);
+  DrawFilledRectangle(r, cwhite);
 
   glDisable(GL_BLEND);
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);

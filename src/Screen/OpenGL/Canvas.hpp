@@ -186,11 +186,7 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void InvertRectangle(int left, int top, int right, int bottom);
-
-  void InvertRectangle(const PixelRect &rc) {
-    InvertRectangle(rc.left, rc.top, rc.right, rc.bottom);
-  }
+  void InvertRectangle(PixelRect r);
 
   void Rectangle(int left, int top, int right, int bottom) {
     DrawFilledRectangle(left, top, right, bottom, brush);

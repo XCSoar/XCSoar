@@ -80,13 +80,13 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 }
 
 void
-Canvas::InvertRectangle(int left, int top, int right, int bottom)
+Canvas::InvertRectangle(PixelRect r)
 {
-  if (left >= right || top >= bottom)
+  if (r.left >= r.right || r.top >= r.bottom)
     return;
 
-  CopyNot(left, top, right - left, bottom - top,
-          buffer, left, top);
+  CopyNot(r.left, r.top, r.right - r.left, r.bottom - r.top,
+          buffer, r.left, r.top);
 }
 
 template<typename Canvas, typename PixelOperations>
