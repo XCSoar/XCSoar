@@ -55,7 +55,7 @@ TextRenderer::GetHeight(const Font &font, unsigned width,
 }
 
 void
-TextRenderer::Draw(Canvas &canvas, const PixelRect &_rc,
+TextRenderer::Draw(Canvas &canvas, PixelRect rc,
                    const TCHAR *text) const
 {
   PixelRect rc = _rc;
@@ -66,12 +66,10 @@ TextRenderer::Draw(Canvas &canvas, const PixelRect &_rc,
   format |= DT_NOPREFIX | DT_NOCLIP;
 
   if (vcenter) {
-    canvas.DrawFormattedText(&rc, text, format | DT_CALCRECT);
-    rc.right = _rc.right;
-
-    int offset = _rc.bottom - rc.bottom;
-    if (offset > 0)
-      rc.top += offset / 2;
+    const unsigned height = GetHeight(canvas, rc, text);
+    int top = (rc.top + rc.bottom - height) / 2;
+    if (top > rc.top)
+      rc.top = top;
   }
 #else
   if (vcenter)

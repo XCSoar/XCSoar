@@ -76,7 +76,7 @@ public:
   unsigned GetHeight(const Font &font, unsigned width,
                      const TCHAR *text) const;
 
-  void Draw(Canvas &canvas, const PixelRect &rc, const TCHAR *text) const;
+  void Draw(Canvas &canvas, PixelRect rc, const TCHAR *text) const;
 };
 
 #endif
