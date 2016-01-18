@@ -68,10 +68,7 @@ WindowList::IsCovered(const Window &w) const
       return false;
 
     if (child.IsVisible() && !child.IsTransparent() &&
-        child.GetLeft() <= rc.left &&
-        child.GetRight() >= rc.right &&
-        child.GetTop() <= rc.top &&
-        child.GetBottom() >= rc.bottom)
+        child.GetPosition().Contains(rc))
       /* this sibling covers the specified window completely */
       return true;
   }
@@ -205,8 +202,7 @@ static bool
 IsFullWindow(const Window &w, int width, int height)
 {
   return w.IsVisible() &&
-    w.GetLeft() <= 0 && w.GetRight() >= (int)width &&
-    w.GetTop() <= 0 && w.GetBottom() >= (int)height;
+    w.GetPosition().Contains(PixelRect(0, 0, width, height));
 }
 
 void

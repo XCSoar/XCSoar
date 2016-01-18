@@ -144,6 +144,11 @@ struct PixelRect {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 
+  constexpr bool Contains(PixelRect other) const {
+    return left <= other.left && top <= other.top &&
+      right >= other.right && bottom >= other.bottom;
+  }
+
   constexpr bool OverlapsWith(PixelRect other) const {
     return left < other.right && other.left <= right &&
       top <= other.bottom && other.top <= bottom;
