@@ -112,7 +112,7 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  PixelScalar x = mid.x + (circling.TurningLeft() ? radius : -radius);
+  int x = mid.x + (circling.TurningLeft() ? radius : -radius);
 
   canvas.DrawLine(x + Layout::FastScale(small ? 5 : 10),
               mid.y - Layout::FastScale(small ? 1 : 2),

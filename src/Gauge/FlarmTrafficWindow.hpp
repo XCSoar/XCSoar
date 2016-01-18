@@ -54,7 +54,7 @@ protected:
    * The minimum distance between the window boundary and the biggest
    * circle in pixels.
    */
-  const UPixelScalar h_padding, v_padding;
+  const unsigned h_padding, v_padding;
 
   /**
    * The radius of the biggest circle in pixels.

@@ -33,7 +33,7 @@ class BigThermalAssistantWindow : public ThermalAssistantWindow {
 
 public:
   BigThermalAssistantWindow(const ThermalAssistantLook &look,
-                            UPixelScalar padding)
+                            unsigned padding)
     :ThermalAssistantWindow(look, padding, false),
      dragging(false) {}
 

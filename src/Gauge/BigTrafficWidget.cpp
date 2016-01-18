@@ -317,7 +317,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const unsigned unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
 
-  UPixelScalar space_width = unit_width / 3;
+  unsigned space_width = unit_width / 3;
 
   // Calculate value size
   canvas.Select(look.info_values_font);
@@ -792,9 +792,9 @@ TrafficWidget::UpdateLayout()
   const unsigned button_width = std::max(unsigned(rc.right / 6),
                                          button_height);
 
-  const PixelScalar x1 = rc.right / 2;
-  const PixelScalar x0 = x1 - button_width;
-  const PixelScalar x2 = x1 + button_width;
+  const int x1 = rc.right / 2;
+  const int x0 = x1 - button_width;
+  const int x2 = x1 + button_width;
 
   const int y0 = margin;
   const int y1 = y0 + button_height;

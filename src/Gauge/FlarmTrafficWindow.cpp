@@ -485,7 +485,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   // Calculate size of the output string
   PixelSize tsize = canvas.CalcTextSize(buffer);
 
-  UPixelScalar dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
+  unsigned dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
   // Draw string
   canvas.DrawText(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
