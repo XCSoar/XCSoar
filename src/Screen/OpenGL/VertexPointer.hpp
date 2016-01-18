@@ -25,13 +25,14 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_VERTEX_POINTER_HPP
 
 #include "System.hpp"
-#include "Screen/Point.hpp"
-#include "BulkPoint.hpp"
+#include "Types.hpp"
 
 #ifdef USE_GLSL
 #include "Attribute.hpp"
 #endif
 
+struct FloatPoint2D;
+struct BulkPixelPoint;
 struct ExactPixelPoint;
 
 struct ScopeVertexPointer {

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "VertexPointer.hpp"
+#include "BulkPoint.hpp"
 #include "Asset.hpp"
 #include "Scope.hpp"
 #include "Compiler.h"

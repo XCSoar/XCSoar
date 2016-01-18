@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
+#include "Screen/OpenGL/BulkPoint.hpp"
 
 #ifdef USE_GLSL
 #include "Screen/OpenGL/Shaders.hpp"
