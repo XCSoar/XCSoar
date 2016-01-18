@@ -167,11 +167,11 @@ class TopWindow : public ContainerWindow {
 
   /**
    * Was the application view resized while paused?  If true, then
-   * new_width and new_height contain the new display dimensions.
+   * new_size contains the new display dimensions.
    */
   bool resized = false;
 
-  UPixelScalar new_width, new_height;
+  PixelSize new_size;
 #endif
 
   DoubleClick double_click;
@@ -310,7 +310,7 @@ public:
    * that this has happened.  The caller should also submit the RESIZE
    * event to the event queue.  This method is thread-safe.
    */
-  void AnnounceResize(UPixelScalar width, UPixelScalar height);
+  void AnnounceResize(PixelSize _new_size);
 
   bool ResumeSurface();
 

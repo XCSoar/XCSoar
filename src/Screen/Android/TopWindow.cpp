@@ -39,12 +39,11 @@ TopWindow::Invalidate()
 }
 
 void
-TopWindow::AnnounceResize(UPixelScalar width, UPixelScalar height)
+TopWindow::AnnounceResize(PixelSize _new_size)
 {
   ScopeLock protect(paused_mutex);
   resized = true;
-  new_width = width;
-  new_height = height;
+  new_size = _new_size;
 }
 
 bool
@@ -82,7 +81,7 @@ TopWindow::CheckResumeSurface()
 void
 TopWindow::RefreshSize()
 {
-  UPixelScalar width, height;
+  PixelSize new_size_copy;
 
   {
     ScopeLock protect(paused_mutex);
@@ -90,12 +89,11 @@ TopWindow::RefreshSize()
       return;
 
     resized = false;
-    width = new_width;
-    height = new_height;
+    new_size_copy = new_size;
   }
 
-  if (screen->CheckResize(PixelSize(width, height)))
-    Resize(width, height);
+  if (screen->CheckResize(new_size_copy))
+    Resize(new_size_copy);
 }
 
 void
