@@ -144,6 +144,11 @@ struct PixelRect {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 
+  constexpr bool OverlapsWith(PixelRect other) const {
+    return left < other.right && other.left <= right &&
+      top <= other.bottom && other.top <= bottom;
+  }
+
 #ifdef USE_WINUSER
   constexpr PixelRect(RECT src)
     :left(src.left), top(src.top), right(src.right), bottom(src.bottom) {}
@@ -168,15 +173,5 @@ struct PixelRect {
 #else
 #error No Point implementation
 #endif
-
-#include "Compiler.h"
-
-gcc_pure
-static inline bool
-OverlapsRect(const PixelRect &a, const PixelRect &b)
-{
-  return a.left < b.right && b.left <= a.right &&
-    a.top <= b.bottom && b.top <= a.bottom;
-}
 
 #endif

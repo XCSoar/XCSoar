@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_BITMAP_HPP
 
 #include "Screen/Point.hpp"
+#include "Compiler.h"
 
 #ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/Buffer.hpp"
