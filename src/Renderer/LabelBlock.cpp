@@ -29,18 +29,11 @@ LabelBlock::Bucket::Clear()
   blocks.clear();
 }
 
-static gcc_pure bool
-CheckRectOverlap(const PixelRect& rc1, const PixelRect& rc2)
-{
-  return rc1.left < rc2.right && rc1.right > rc2.left &&
-    rc1.top < rc2.bottom && rc1.bottom > rc2.top;
-}
-
 bool
 LabelBlock::Bucket::Check(const PixelRect rc) const
 {
   for (auto i = blocks.begin(), end = blocks.end(); i != end; ++i)
-    if (CheckRectOverlap(*i, rc))
+    if (i->OverlapsWith(rc))
       return false;
 
   return true;
