@@ -90,6 +90,10 @@ struct PixelRect {
   explicit constexpr PixelRect(PixelSize size)
     :left(0), top(0), right(size.cx), bottom(size.cy) {}
 
+  bool IsEmpty() {
+    return left >= right || top >= bottom;
+  }
+
   void SetEmpty() {
     left = top = right = bottom = 0;
   }

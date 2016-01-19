@@ -82,7 +82,7 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 void
 Canvas::InvertRectangle(PixelRect r)
 {
-  if (r.left >= r.right || r.top >= r.bottom)
+  if (r.IsEmpty())
     return;
 
   CopyNot(r.left, r.top, r.right - r.left, r.bottom - r.top,
