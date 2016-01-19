@@ -72,7 +72,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 void
 ProgressWindow::UpdateLayout(PixelRect rc)
 {
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned height = rc.GetHeight();
 
   // Make progress bar height proportional to window height
   const unsigned progress_height = height / 20;
@@ -155,8 +155,8 @@ ProgressWindow::OnPaint(Canvas &canvas)
 
   // Draw progress bar background
   canvas.Stretch(bottom_position.left, bottom_position.top,
-                 bottom_position.right - bottom_position.left,
-                 bottom_position.bottom - bottom_position.top,
+                 bottom_position.GetWidth(),
+                 bottom_position.GetHeight(),
                  bitmap_progress_border);
 
 #ifndef USE_WINUSER

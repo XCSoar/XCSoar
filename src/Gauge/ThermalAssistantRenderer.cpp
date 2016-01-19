@@ -200,7 +200,7 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
 void
 ThermalAssistantRenderer::UpdateLayout(const PixelRect &rc)
 {
-  radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - padding;
+  radius = std::min(rc.GetWidth(), rc.GetHeight()) / 2 - padding;
   mid = rc.GetCenter();
 }
 

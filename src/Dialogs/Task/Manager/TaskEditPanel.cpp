@@ -120,7 +120,7 @@ private:
   }
 
   Layout CalculateLayout(const PixelRect &rc) const {
-    const int dx = (rc.right - rc.left) / 5;
+    const int dx = rc.GetWidth() / 5;
 
     return {
       { rc.left         , rc.top, rc.left +     dx, rc.bottom },
@@ -403,7 +403,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(DrawListIndex <= ordered_task->TaskSize());
 
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   TCHAR buffer[120];
 

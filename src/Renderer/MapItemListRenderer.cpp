@@ -98,7 +98,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const TwoTextRowsRenderer &row_renderer,
      const FinalGlideBarLook &look)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   bool reach_relevant = item.reach.IsReachRelevant();
 
@@ -200,7 +200,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const AircraftLook &look,
      const MapSettings &settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
@@ -253,7 +253,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const TwoTextRowsRenderer &row_renderer,
      const MapLook &look)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const ThermalSource &thermal = item.thermal;
@@ -289,7 +289,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const TaskLook &look, const AirspaceLook &airspace_look,
      const AirspaceRendererSettings &airspace_settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const ObservationZonePoint &oz = *item.oz;
@@ -323,7 +323,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const TrafficLook &traffic_look,
      const TrafficList *traffic_list)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const FlarmTraffic *traffic = traffic_list == nullptr

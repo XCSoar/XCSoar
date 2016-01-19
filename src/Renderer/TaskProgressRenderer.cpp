@@ -34,7 +34,7 @@ void
 TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
                            const PixelRect &rc, bool inverse)
 {
-  const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - 
+  const int radius = std::min(rc.GetWidth(), rc.GetHeight()) / 2 -
                      Layout::Scale(3);
   PixelPoint center;
   center.x = (rc.left + rc.right) / 2;

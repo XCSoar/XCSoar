@@ -49,7 +49,7 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   const auto center = rc.GetCenter();
 
-  const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2
+  const int radius = std::min(rc.GetWidth(), rc.GetHeight()) / 2
     - Layout::Scale(1);
 
   auto bank_degrees = attitude.IsBankAngleUseable()

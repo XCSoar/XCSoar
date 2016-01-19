@@ -44,7 +44,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const AirspaceRendererSettings &renderer_settings)
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   const PixelPoint pt(rc.left + line_height / 2,
                       rc.top + line_height / 2);

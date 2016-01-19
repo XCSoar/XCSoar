@@ -139,7 +139,7 @@ public:
   }
 
   unsigned GetTitleHeight() const {
-    return title_rect.bottom - title_rect.top;
+    return title_rect.GetHeight();
   }
 
   void SetForceOpen(bool _force) {

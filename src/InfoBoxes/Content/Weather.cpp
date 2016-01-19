@@ -215,7 +215,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
   const auto pt = rc.GetCenter();
 
   const unsigned padding = Layout::FastScale(10u);
-  unsigned size = std::min(rc.right - rc.left, rc.bottom - rc.top);
+  unsigned size = std::min(rc.GetWidth(), rc.GetHeight());
 
   if (size > padding)
     size -= padding;

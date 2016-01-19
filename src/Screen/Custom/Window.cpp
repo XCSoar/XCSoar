@@ -32,9 +32,9 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
 {
   assert(IsScreenInitialized());
   assert(rc.left <= rc.right);
-  assert(rc.right - rc.left < 0x8000);
+  assert(rc.GetWidth() < 0x8000);
   assert(rc.top <= rc.bottom);
-  assert(rc.bottom - rc.top < 0x8000);
+  assert(rc.GetHeight() < 0x8000);
 
   this->parent = parent;
   position = rc.GetOrigin();

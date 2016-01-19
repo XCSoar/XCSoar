@@ -141,7 +141,7 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
   };
 
   const int x(cell_dirty.left * cell_size.cx);
-  const size_t length = cell_dirty.right - cell_dirty.left;
+  const size_t length = cell_dirty.GetWidth();
 
   auto text = data.GetPointerAt(cell_dirty.left, cell_dirty.top);
   for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.cy;

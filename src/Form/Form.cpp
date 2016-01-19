@@ -510,8 +510,8 @@ WndForm::OnPaint(Canvas &canvas)
     if (!IsDithered() && is_active) {
       canvas.SetBackgroundTransparent();
       canvas.Stretch(title_rect.left, title_rect.top,
-                     title_rect.right - title_rect.left,
-                     title_rect.bottom - title_rect.top,
+                     title_rect.GetWidth(),
+                     title_rect.GetHeight(),
                      look.caption.background_bitmap);
 
       // Draw titlebar text
@@ -559,8 +559,8 @@ WndForm::SetCaption(const TCHAR *_caption)
 void
 WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
 {
-  const unsigned parent_width = parent_rc.right - parent_rc.left;
-  const unsigned parent_height = parent_rc.bottom - parent_rc.top;
+  const unsigned parent_width = parent_rc.GetWidth();
+  const unsigned parent_height = parent_rc.GetHeight();
 
   if (parent_width < GetWidth() || parent_height < GetHeight()) {
   } else {
@@ -568,9 +568,9 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
     PixelRect rc = GetPosition();
 
     if (rc.right > (int)parent_width)
-      rc.left = parent_width - (rc.right - rc.left);
+      rc.left = parent_width - rc.GetWidth();
     if (rc.bottom > (int)parent_height)
-      rc.top = parent_height - (rc.bottom - rc.top);
+      rc.top = parent_height - rc.GetHeight();
 
 #ifdef USE_MEMORY_CANVAS
     /* the RasterCanvas class doesn't clip negative window positions

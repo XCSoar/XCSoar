@@ -210,8 +210,8 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
     + font_height + button_height;
 
   const PixelRect waypoint_rc(padding, padding,
-                              waypoint_panel.right - waypoint_panel.left - padding,
-                              waypoint_panel.bottom - waypoint_panel.top - padding);
+                              waypoint_panel.GetWidth() - padding,
+                              waypoint_panel.GetHeight() - padding);
 
   waypoint_name = waypoint_rc;
   waypoint_name.bottom = waypoint_name.top + font_height + 2 * padding;
@@ -232,8 +232,8 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
   tp_panel.bottom -= padding;
 
   const PixelRect tp_rc(padding, padding,
-                        tp_panel.right - tp_panel.left - padding,
-                        tp_panel.bottom - tp_panel.top - padding);
+                        tp_panel.GetWidth() - padding,
+                        tp_panel.GetHeight() - padding);
 
   PixelRect type_rc = tp_rc;
   type_rc.bottom = type_rc.top + button_height;

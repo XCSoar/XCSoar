@@ -246,8 +246,7 @@ private:
 
 AnalysisWidget::Layout::Layout(const PixelRect rc)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;

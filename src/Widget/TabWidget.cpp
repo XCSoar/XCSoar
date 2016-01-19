@@ -39,7 +39,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
       unsigned extra_height = max_size.cy;
-      unsigned max_height = unsigned(rc.bottom - rc.top) / 2;
+      unsigned max_height = rc.GetHeight() / 2;
       if (extra_height > max_height)
         extra_height = max_height;
 
@@ -52,7 +52,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
       unsigned extra_width = max_size.cx;
-      unsigned max_width = unsigned(rc.right - rc.left) / 3;
+      unsigned max_width = rc.GetWidth() / 3;
       if (extra_width > max_width)
         extra_width = max_width;
 

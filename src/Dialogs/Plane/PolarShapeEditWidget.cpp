@@ -120,8 +120,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
-  const unsigned width = _rc.right - _rc.left;
-  const unsigned height = _rc.bottom - _rc.top;
+  const unsigned width = _rc.GetWidth(), height = _rc.GetHeight();
 
   const TCHAR *v_text = _("Polar V");
   const TCHAR *w_text = _("Polar W");

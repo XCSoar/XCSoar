@@ -32,8 +32,7 @@ gcc_pure
 static PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
 {
-  unsigned hwidth = rc.right - rc.left;
-  unsigned hheight = rc.bottom - rc.top;
+  unsigned hwidth = rc.GetWidth(), hheight = rc.GetHeight();
 
   if (hheight > hwidth) {
     // portrait

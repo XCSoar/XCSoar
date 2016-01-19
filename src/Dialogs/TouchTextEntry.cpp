@@ -152,7 +152,7 @@ TouchTextEntry(TCHAR *text, size_t width,
   ContainerWindow &client_area = form.GetClientAreaWindow();
   const PixelRect rc = client_area.GetClientRect();
 
-  const int client_height = rc.bottom - rc.top;
+  const int client_height = rc.GetHeight();
 
   const int padding = Layout::Scale(2);
   const int backspace_width = Layout::Scale(36);

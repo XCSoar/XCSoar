@@ -45,7 +45,7 @@ OffsetButtonsWidget::GetMaximumSize() const
 static void
 LayoutOffsetButtons(const PixelRect &total_rc, PixelRect buttons[4])
 {
-  const unsigned total_width = total_rc.right - total_rc.left;
+  const unsigned total_width = total_rc.GetWidth();
   PixelRect rc = { 0, total_rc.top, total_rc.left, total_rc.bottom };
 
   for (unsigned i = 0; i < 4; ++i) {

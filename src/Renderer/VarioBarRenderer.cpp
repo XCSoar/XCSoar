@@ -72,7 +72,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
    * area). size_divisor is used to introduce a screen size dependent scaling.
    * That workaround is an ugly hack and needs a rework. */
   const auto size_divisor =
-    std::max((double) Layout::Scale(70 / (rc.bottom - rc.top)), 0.15);
+    std::max((double) Layout::Scale(70u / rc.GetHeight()), 0.15);
 
   int dy_variobar = 0;
   int dy_variobar_av = 0;

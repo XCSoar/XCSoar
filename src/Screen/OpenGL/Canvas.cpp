@@ -918,8 +918,7 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                       OpenGL::translate.x + src_rc.left,
                       OpenGL::viewport_size.y - OpenGL::translate.y - src_rc.bottom,
-                      src_rc.right - src_rc.left,
-                      src_rc.bottom - src_rc.top);
+                      src_rc.GetWidth(), src_rc.GetHeight());
 
 }
 

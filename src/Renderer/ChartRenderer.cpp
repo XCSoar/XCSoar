@@ -87,7 +87,7 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
   if (fabs(y.max - y.min) > 50) {
     y.scale = (y.max - y.min);
     if (y.scale > 0)
-      y.scale = (rc.bottom - rc.top - padding_bottom) / y.scale;
+      y.scale = (rc.GetHeight() - padding_bottom) / y.scale;
   } else {
     y.scale = 2000;
   }
@@ -110,7 +110,7 @@ ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
 
   x.scale = (x.max - x.min);
   if (x.scale > 0)
-    x.scale = (rc.right - rc.left - padding_left) / x.scale;
+    x.scale = (rc.GetWidth() - padding_left) / x.scale;
 }
 
 void
@@ -127,7 +127,7 @@ ChartRenderer::ScaleYFromValue(const double value)
 
   y.scale = (y.max - y.min);
   if (y.scale > 0)
-    y.scale = (rc.bottom - rc.top - padding_bottom) / y.scale;
+    y.scale = (rc.GetHeight() - padding_bottom) / y.scale;
 }
 
 void
@@ -144,7 +144,7 @@ ChartRenderer::ScaleXFromValue(const double value)
 
   x.scale = (x.max - x.min);
   if (x.scale > 0)
-    x.scale = (rc.right - rc.left - padding_left) / x.scale;
+    x.scale = (rc.GetWidth() - padding_left) / x.scale;
 }
 
 void

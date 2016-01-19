@@ -441,7 +441,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
     auto s = Clamp(Basic().stall_ratio, 0., 1.);
-    int m((rc.bottom - rc.top) * s * s);
+    int m = rc.GetHeight() * s * s;
 
     canvas.SelectBlackPen();
     canvas.DrawLine(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);

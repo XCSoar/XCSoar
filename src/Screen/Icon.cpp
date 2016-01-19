@@ -144,8 +144,8 @@ MaskedIcon::Draw(Canvas &canvas, int x, int y) const
 void
 MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
 {
-  const int offsetx = (rc.right - rc.left - size.cx) / 2;
-  const int offsety = (rc.bottom - rc.top - size.cy) / 2;
+  const int offsetx = (rc.GetWidth() - size.cx) / 2;
+  const int offsety = (rc.GetHeight() - size.cy) / 2;
 
 #ifdef ENABLE_OPENGL
 #ifdef USE_GLSL

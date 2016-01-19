@@ -85,7 +85,7 @@ Canvas::InvertRectangle(PixelRect r)
   if (r.IsEmpty())
     return;
 
-  CopyNot(r.left, r.top, r.right - r.left, r.bottom - r.top,
+  CopyNot(r.left, r.top, r.GetWidth(), r.GetHeight(),
           buffer, r.left, r.top);
 }
 

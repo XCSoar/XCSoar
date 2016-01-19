@@ -94,7 +94,7 @@ class VegaConfigurationExtraButtons final
     PixelRect demo, save;
 
     Layout(const PixelRect &rc):demo(rc), save(rc) {
-      const unsigned height = rc.bottom - rc.top;
+      const unsigned height = rc.GetHeight();
       const unsigned max_v_height = 2 * ::Layout::GetMaximumControlHeight();
 
       if (height >= max_v_height) {

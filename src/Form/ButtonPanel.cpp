@@ -47,7 +47,7 @@ ButtonPanel::UpdateLayout(const PixelRect rc)
   if (buttons.empty())
     return rc;
 
-  const bool landscape = rc.right - rc.left > rc.bottom - rc.top;
+  const bool landscape = rc.GetWidth() > rc.GetHeight();
   return landscape
     ? LeftLayout(rc)
     : BottomLayout(rc);
@@ -122,7 +122,7 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end)
   assert(n > 0);
 
   const unsigned width = RangeMaxWidth(start, end);
-  const unsigned total_height = rc.bottom - rc.top;
+  const unsigned total_height = rc.GetHeight();
   const unsigned max_height = n * Layout::GetMaximumControlHeight();
   const unsigned row_height = std::min(total_height, max_height) / n;
 
@@ -145,8 +145,8 @@ ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
   const unsigned n = end - start;
   assert(n > 0);
 
-  const unsigned total_width = rc.right - rc.left;
-  const unsigned total_height = rc.bottom - rc.top;
+  const unsigned total_width = rc.GetWidth();
+  const unsigned total_height = rc.GetHeight();
   const unsigned max_row_height = Layout::GetMaximumControlHeight();
   const unsigned row_height = max_row_height < total_height / 2
     ? max_row_height
@@ -210,7 +210,7 @@ ButtonPanel::BottomLayout(PixelRect rc)
   assert(!buttons.empty());
 
   const unsigned n_buttons = buttons.size();
-  const unsigned total_width = rc.right - rc.left;
+  const unsigned total_width = rc.GetWidth();
 
   /* naive button distribution algorithm: distribute as many buttons
      as possible into each row; weakness: the last row may have only

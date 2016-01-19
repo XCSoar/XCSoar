@@ -135,7 +135,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
     int ascent_height = look.value_font.GetAscentHeight();
 
     PixelSize value_size = canvas.CalcTextSize(data.value);
-    if (value_size.cx + unit_width > value_rect.right - value_rect.left) {
+    if (unsigned(value_size.cx + unit_width) > value_rect.GetWidth()) {
       canvas.Select(look.small_value_font);
       ascent_height = look.small_value_font.GetAscentHeight();
       value_size = canvas.CalcTextSize(data.value);
@@ -176,7 +176,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
   }
 
   PixelSize value_size = canvas.CalcTextSize(data.value);
-  if (value_size.cx + unit_size.cx > value_rect.right - value_rect.left) {
+  if (unsigned(value_size.cx + unit_size.cx) > value_rect.GetWidth()) {
     canvas.Select(look.small_value_font);
     ascent_height = look.small_value_font.GetAscentHeight();
     capital_height = look.small_value_font.GetCapitalHeight();
@@ -189,7 +189,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
                     - Layout::FastScale(unit_size.cx)) / 2);
 
   int y = value_rect.top + 1 - ascent_height +
-    (value_rect.bottom - value_rect.top + capital_height) / 2;
+    (value_rect.GetHeight() + capital_height) / 2;
 
   canvas.TextAutoClipped(x, y, data.value);
 

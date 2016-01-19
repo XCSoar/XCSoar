@@ -66,7 +66,7 @@ Canvas::DrawFormattedText(const PixelRect r, const TCHAR *text,
 
   unsigned skip = font->GetLineSpacing();
   unsigned max_lines = (format & DT_CALCRECT) ? -1 :
-                       (r.bottom - r.top + skip - 1) / skip;
+    (r.GetHeight() + skip - 1) / skip;
 
   size_t len = _tcslen(text);
   TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
@@ -100,7 +100,7 @@ Canvas::DrawFormattedText(const PixelRect r, const TCHAR *text,
     TCHAR *prev_p = nullptr;
 
     // remove words from behind till line fits or no more space is found
-    while (sz.cx > r.right - r.left &&
+    while (unsigned(sz.cx) > r.GetWidth() &&
            (p = StringFindLast(duplicated + i, _T(' '))) != nullptr) {
       if (prev_p)
         *prev_p = _T(' ');

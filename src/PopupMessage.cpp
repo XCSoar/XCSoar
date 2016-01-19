@@ -154,7 +154,7 @@ PopupMessage::CalculateWidth() const
     // TODO code: this shouldn't be hard-coded
     return Layout::FastScale(206);
   else
-    return unsigned((rc.right - rc.left) * 0.9);
+    return unsigned(rc.GetWidth() * 0.9);
 }
 
 PixelRect

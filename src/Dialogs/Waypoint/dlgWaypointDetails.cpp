@@ -329,8 +329,7 @@ private:
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
                                       const Waypoint &waypoint)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;
@@ -394,8 +393,8 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 
   details_text.left = 0;
   details_text.top = 0;
-  details_text.right = main.right - main.left;
-  details_text.bottom = main.bottom - main.top;
+  details_text.right = main.GetWidth();
+  details_text.bottom = main.GetHeight();
 
 #ifdef HAVE_RUN_FILE
   const unsigned num_files = std::distance(waypoint.files_external.begin(),

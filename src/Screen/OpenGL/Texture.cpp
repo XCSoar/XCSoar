@@ -263,14 +263,14 @@ inline void
 GLTexture::DrawFlippedOES(PixelRect dest, PixelRect src) const
 {
   const GLint rect[4] = { src.left, src.top,
-                          src.right - src.left, src.bottom - src.top };
+                          (GLint)src.GetWidth(), (GLint)src.GetHeight() };
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
   glDrawTexiOES(OpenGL::translate.x + dest.left,
                 OpenGL::viewport_size.y - OpenGL::translate.y - dest.bottom,
-                0, dest.right - dest.left, dest.bottom - dest.top);
+                0, dest.GetWidth(), dest.GetHeight());
 }
 
 #endif

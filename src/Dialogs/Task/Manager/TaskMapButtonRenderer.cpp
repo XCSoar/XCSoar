@@ -55,8 +55,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     return;
   }
 
-  const PixelSize new_size(rc.right - rc.left,
-                           rc.bottom - rc.top);
+  const PixelSize new_size = rc.GetSize();
   if (!IsBufferValid(new_size)) {
     if (!buffer.IsDefined()) {
 #ifdef ENABLE_OPENGL

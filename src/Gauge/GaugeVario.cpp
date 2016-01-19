@@ -64,8 +64,7 @@ void
 GaugeVario::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
   if (!IsPersistent() || !layout_initialised) {
     unsigned value_height = 4 + look.value_font.GetCapitalHeight()

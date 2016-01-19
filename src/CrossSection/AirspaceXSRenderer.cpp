@@ -102,16 +102,16 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
     const auto &class_settings = settings.classes[type];
 
     // Draw thick brushed outlines
-    const int border_width = class_settings.fill_mode ==
+    const unsigned border_width = class_settings.fill_mode ==
       AirspaceClassRendererSettings::FillMode::PADDING
       ? Layout::ScalePenWidth(10)
       : 0;
 
     if (border_width > 0 &&
-        (rc.right - rc.left) > border_width * 2 &&
-        (rc.bottom - rc.top) > border_width * 2) {
+        rc.GetWidth() > border_width * 2 &&
+        rc.GetHeight() > border_width * 2) {
       PixelRect border = rc;
-      border.Grow(-border_width);
+      border.Grow(-(int)border_width);
 
       // Left border
       canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);

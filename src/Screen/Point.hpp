@@ -144,6 +144,14 @@ struct PixelRect {
     return { right, bottom };
   }
 
+  constexpr unsigned GetWidth() const {
+    return right - left;
+  }
+
+  constexpr unsigned GetHeight() const {
+    return bottom - top;
+  }
+
   constexpr bool Contains(PixelPoint pt) const {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }

@@ -53,7 +53,7 @@ Center(unsigned canvas_size, unsigned element_size)
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
-  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
   enum {
     LANDSCAPE, PORTRAIT, SQUARE,

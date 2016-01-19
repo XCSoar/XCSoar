@@ -64,7 +64,7 @@ Draw(Canvas &canvas, PixelRect rc,
      const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   // Draw icon
   const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
@@ -124,7 +124,7 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
                            const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   // Draw icon
   const PixelPoint pt(rc.left + line_height / 2,

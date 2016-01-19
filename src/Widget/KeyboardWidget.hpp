@@ -92,7 +92,7 @@ private:
 
   gcc_pure
   static bool IsLandscape(const PixelRect &rc) {
-    return rc.right - rc.left >= rc.bottom - rc.top;
+    return rc.GetWidth() >= rc.GetHeight();
   }
 
   /* updates UI based on value of shift_state property */

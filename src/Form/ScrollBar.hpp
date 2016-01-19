@@ -50,17 +50,17 @@ public:
 
   /** Returns the width of the ScrollBar */
   int GetWidth() const {
-    return rc.right - rc.left;
+    return rc.GetWidth();
   }
 
   /** Returns the height of the ScrollBar */
   int GetHeight() const {
-    return rc.bottom - rc.top;
+    return rc.GetHeight();
   }
 
   /** Returns the height of the slider */
   int GetSliderHeight() const {
-    return rc_slider.bottom - rc_slider.top;
+    return rc_slider.GetHeight();
   }
 
   /** Returns the height of the scrollable area of the ScrollBar */

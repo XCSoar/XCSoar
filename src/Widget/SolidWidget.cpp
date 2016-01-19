@@ -48,9 +48,7 @@ constexpr
 static PixelRect
 ToOrigin(PixelRect rc)
 {
-  return {
-    0, 0, rc.right - rc.left, rc.bottom - rc.top
-  };
+  return PixelRect(PixelPoint(0, 0), rc.GetSize());
 }
 
 void

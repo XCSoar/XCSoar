@@ -38,8 +38,7 @@ void
 GridView::RefreshLayout()
 {
   const PixelRect rc = GetClientRect();
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
   constexpr unsigned horizontal_spacing = 0;
   constexpr unsigned vertical_spacing = 0;

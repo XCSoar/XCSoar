@@ -343,8 +343,8 @@ GlueMapWindow::UpdateProjection()
         }
       }
       double position_factor = (50. - settings_map.glider_screen_position) / 100.;
-      offset.x = int(x * (rc.right - rc.left) * position_factor);
-      offset.y = int(y * (rc.top - rc.bottom) * position_factor);
+      offset.x = int(x * rc.GetWidth() * position_factor);
+      offset.y = int(y * rc.GetHeight() * position_factor);
       offset_history.Add(offset);
       offset = offset_history.GetAverage();
     }

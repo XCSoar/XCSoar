@@ -322,8 +322,7 @@ SplitRow(PixelRect &left)
 
 TargetWidget::Layout::Layout(PixelRect rc)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned min_control_height = ::Layout::GetMinimumControlHeight();
   const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 

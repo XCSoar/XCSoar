@@ -104,10 +104,10 @@ GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
   const unsigned requested_height = bottom_widget->GetMinimumSize().cy;
   unsigned height;
   if (requested_height > 0) {
-    const unsigned max_height = (rc.bottom - rc.top) / 2;
+    const unsigned max_height = rc.GetHeight() / 2;
     height = std::min(max_height, requested_height);
   } else {
-    const unsigned recommended_height = (rc.bottom - rc.top) / 3;
+    const unsigned recommended_height = rc.GetHeight() / 3;
     height = recommended_height;
   }
 

@@ -77,7 +77,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
    * in the range -50 to +50 to fill a square with the size of the 'scale'
    * argument.
    */
-  const auto size = std::min(rc.right - rc.left, rc.bottom - rc.top);
+  const auto size = std::min(rc.GetWidth(), rc.GetHeight());
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow),
                      rc.GetCenter(), angle,
                      size, false);

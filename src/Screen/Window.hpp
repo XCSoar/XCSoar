@@ -363,7 +363,7 @@ public:
     assert(rc.left < rc.right);
     assert(rc.top < rc.bottom);
 
-    Move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    Move(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
   }
 
   void MoveToCenter() {
@@ -392,7 +392,7 @@ public:
   }
 
   void FastMove(const PixelRect rc) {
-    FastMove(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    FastMove(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
   }
 
   /**
@@ -404,7 +404,7 @@ public:
 
 #ifdef USE_WINUSER
     ::SetWindowPos(hWnd, nullptr,
-                   rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+                   rc.left, rc.top, rc.GetWidth(), rc.GetHeight(),
                    SWP_SHOWWINDOW | SWP_NOACTIVATE |
                    SWP_NOZORDER | SWP_NOOWNERZORDER);
 #else

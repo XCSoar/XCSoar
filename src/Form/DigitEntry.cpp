@@ -68,7 +68,7 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
     digit.value = 0;
   }
 
-  max_width = rc.right - rc.left;
+  max_width = rc.GetWidth();
 
   CalculateLayout();
 
@@ -274,7 +274,7 @@ DigitEntry::CalculateLayout()
     last_right = 0;
     for (unsigned i = 0; i < length; ++i) {
       Column &digit = columns[i];
-      unsigned value_width = digit.right - digit.left;
+      unsigned value_width = digit.GetWidth();
       digit.left = last_right;
       last_right = digit.right = digit.left + value_width - width_adjust;
     }

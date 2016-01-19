@@ -100,8 +100,7 @@ private:
     Brush red_brush(COLOR_RED);
 
     const PixelRect rc = GetClientRect();
-    const int width = rc.right - rc.left;
-    const int height = rc.bottom - rc.top;
+    const int width = rc.GetWidth(), height = rc.GetHeight();
     const int hmiddle = (rc.left + rc.right) / 2;
     const int vmiddle = (rc.top + rc.bottom) / 2;
     const PixelPoint center(hmiddle, vmiddle);

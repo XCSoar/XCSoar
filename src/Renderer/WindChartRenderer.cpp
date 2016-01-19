@@ -92,7 +92,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
 #define WINDVECTORMAG 25
 
-  numsteps = (int)((rc.bottom - rc.top) / WINDVECTORMAG) - 1;
+  numsteps = (int)(rc.GetHeight() / WINDVECTORMAG) - 1;
 
   canvas.Select(chart_look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 

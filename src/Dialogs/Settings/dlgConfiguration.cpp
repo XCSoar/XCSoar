@@ -167,7 +167,7 @@ class ConfigurationExtraButtons final
     PixelRect expert, button2, button1;
 
     Layout(const PixelRect &rc):expert(rc), button2(rc), button1(rc) {
-      const unsigned height = rc.bottom - rc.top;
+      const unsigned height = rc.GetHeight();
       const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 
       if (height >= 3 * max_control_height) {

@@ -32,7 +32,7 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
   assert(direction == UP || direction == DOWN ||
          direction == LEFT || direction == RIGHT);
 
-  auto size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+  auto size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
   auto center = rc.GetCenter();
   BulkPixelPoint arrow[3];
 
@@ -58,7 +58,7 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
 void
 SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
 {
-  unsigned size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+  unsigned size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
   auto center = rc.GetCenter();
 
   // Draw horizontal bar

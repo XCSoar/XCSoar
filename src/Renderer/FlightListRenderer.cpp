@@ -47,7 +47,7 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
     return;
   }
 
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned height = rc.GetHeight();
 
   const unsigned padding = Layout::GetTextPadding();
   const unsigned font_height = font.GetHeight();

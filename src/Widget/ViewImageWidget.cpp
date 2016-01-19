@@ -50,7 +50,7 @@ ViewImageWidget::OnImagePaint(Canvas &canvas, const PixelRect &rc)
   canvas.ClearWhite();
 
   const PixelSize bitmap_size = bitmap.GetSize();
-  const PixelSize window_size(rc.right - rc.left, rc.bottom - rc.top);
+  const PixelSize window_size = rc.GetSize();
 
   PixelSize fit_size(window_size.cx,
                      window_size.cx * bitmap_size.cy / bitmap_size.cx);

@@ -76,7 +76,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
    * area). size_divisor is used to introduce a screen size dependent scaling.
    * That workaround is an ugly hack and needs a rework. */
   const int size_divisor =
-    std::max((int) Layout::Scale(3000 / (rc.bottom - rc.top)), 4);
+    std::max(Layout::Scale(3000u / rc.GetHeight()), 4u);
 
   int dy_glidebar = 0;
   int dy_glidebar0 = 0;

@@ -64,7 +64,7 @@ private:
         return false;
       }
 
-      return rc.right - rc.left > rc.bottom - rc.top;
+      return rc.GetWidth() > rc.GetHeight();
     }
   };
 

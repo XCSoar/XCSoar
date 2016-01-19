@@ -51,7 +51,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
 
-  const unsigned width = rc.right - rc.left;
+  const unsigned width = rc.GetWidth();
   int x = rc.left + Layout::FastScale(10);
   int y = rc.top + Layout::FastScale(10);
 
