@@ -1,6 +1,8 @@
 Version 6.8.3 - not yet released
 * Kobo
   - support Kobo Glo HD
+* Waypoints
+  - use correct "comment" field for OziExplorer files
 
 Version 6.8.2 - 2015/09/19
 * Rubik R-26S polar
