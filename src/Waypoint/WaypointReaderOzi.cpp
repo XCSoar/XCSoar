@@ -132,5 +132,5 @@ WaypointReaderOzi::VerifyFormat(TLineReader &reader)
   if (line == nullptr)
     return false;
 
-  return StringStartsWith(line, _T("OziExplorer Waypoint File"));
+  return StringStartsWith(StripLeft(line), _T("OziExplorer Waypoint File"));
 }
