@@ -27,14 +27,28 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 
 class ViewImageWindow final : public PaintWindow {
-  const Bitmap &bitmap;
+  const Bitmap *bitmap;
 
 public:
-  explicit ViewImageWindow(const Bitmap &_bitmap):bitmap(_bitmap) {}
+  explicit ViewImageWindow(const Bitmap *_bitmap):bitmap(_bitmap) {}
+
+  void SetBitmap(const Bitmap *_bitmap) {
+    bitmap = _bitmap;
+    Invalidate();
+  }
 
   /* virtual methods from class PaintWindow */
   void OnPaint(Canvas &canvas) override;
 };
+
+void
+ViewImageWidget::SetBitmap(const Bitmap *_bitmap)
+{
+  bitmap = _bitmap;
+
+  if (IsDefined())
+    ((ViewImageWindow &)GetWindow()).SetBitmap(_bitmap);
+}
 
 void
 ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -58,7 +72,10 @@ ViewImageWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
-  const PixelSize bitmap_size = bitmap.GetSize();
+  if (bitmap == nullptr)
+    return;
+
+  const PixelSize bitmap_size = bitmap->GetSize();
   const PixelRect rc = GetClientRect();
   const PixelSize window_size = rc.GetSize();
 
@@ -72,5 +89,5 @@ ViewImageWindow::OnPaint(Canvas &canvas)
   canvas.Stretch((rc.left + rc.right - fit_size.cx) / 2,
                  (rc.top + rc.bottom - fit_size.cy) / 2,
                  fit_size.cx, fit_size.cy,
-                 bitmap);
+                 *bitmap);
 }
