@@ -40,7 +40,7 @@ struct RouteLinkBase {
   /** Origin location */
   RoutePoint second;
 
-  RouteLinkBase(const RoutePoint& _dest, const RoutePoint& _origin)
+  constexpr RouteLinkBase(const RoutePoint _dest, const RoutePoint _origin)
     :first(_dest), second(_origin) {}
 
   /**
@@ -50,8 +50,7 @@ struct RouteLinkBase {
    *
    * @return true if origins and destinations are equal
    */
-  gcc_pure
-  bool operator==(const RouteLinkBase &o) const {
+  constexpr bool operator==(const RouteLinkBase o) const {
     return (first == o.first) && (second == o.second);
   }
 
@@ -82,8 +81,7 @@ struct RouteLinkBase {
    *
    * @return dot product of this object with second object
    */
-  gcc_pure
-  int DotProduct(const RouteLinkBase& o) const {
+  constexpr int DotProduct(const RouteLinkBase& o) const {
     return o.GetDelta().DotProduct(GetDelta());
   }
 
@@ -95,13 +93,12 @@ struct RouteLinkBase {
    *
    * @return cross product of this object with second object
    */
-  gcc_pure
-  int CrossProduct(const RouteLinkBase& o) const {
+  constexpr int CrossProduct(const RouteLinkBase& o) const {
     return o.GetDelta().CrossProduct(GetDelta());
   }
 
 private:
-  FlatGeoPoint GetDelta() const {
+  constexpr FlatGeoPoint GetDelta() const {
     return FlatGeoPoint(second) - FlatGeoPoint(first);
   }
 };
