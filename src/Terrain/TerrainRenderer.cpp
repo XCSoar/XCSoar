@@ -390,7 +390,8 @@ TerrainRenderer::Draw(Canvas &canvas,
 {
 #ifdef ENABLE_OPENGL
   const GeoBounds &bounds = raster_renderer.GetBounds();
-  assert(bounds.IsValid());
+  if (!bounds.IsValid())
+    return;
 
   const RasterPoint vertices[] = {
     map_projection.GeoToScreen(bounds.GetNorthWest()),
