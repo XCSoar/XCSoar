@@ -21,6 +21,19 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.3 - not yet released
+* Kobo
+  - support Kobo Glo HD
+* Waypoints
+  - use correct "comment" field for OziExplorer files
+  - relax file format detection for OziExplorer files
+  - fix bogus arrival heights on watched waypoints when GPS unavailable
+* devices
+  - GTAltimeter: remove unmaintained driver (#3661)
+* fix crash in XML parser
+* fix crash in airspace parser
+* fix crash in SkyLines tracking
+
 Version 6.8.2 - 2015/09/19
 * Rubik R-26S polar
 * user interface

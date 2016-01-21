@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef KOBO
 
 #include "OS/FileUtil.hpp"
+#include "Kobo/Model.hpp"
 
 #include <string.h>
 #include <stdlib.h>
@@ -54,42 +55,61 @@ UpdateBatteryInfo()
   Power::Battery::RemainingPercentValid = false;
   Power::Battery::Status = Power::Battery::UNKNOWN;
   Power::External::Status = Power::External::UNKNOWN;
-
-  // code shamelessly copied from OS/SystemLoad.cpp
   char line[256];
-  if (!File::ReadString(Path("/sys/bus/platform/drivers/pmic_battery/pmic_battery.1/power_supply/mc13892_bat/uevent"),
-                        line, sizeof(line)))
-    return;
 
-  char field[80], value[80];
-  int n;
-  char* ptr = line;
-  while (sscanf(ptr, "%[^=]=%[^\n]\n%n", field, value, &n)==2) {
-    ptr += n;
-    if (StringIsEqual(field,"POWER_SUPPLY_STATUS")) {
-      if (StringIsEqual(value,"Not charging") ||
-          StringIsEqual(value,"Charging")) {
-	Power::External::Status = Power::External::ON;
-      } else if (StringIsEqual(value,"Discharging")) {
-	Power::External::Status = Power::External::OFF;
-      }
-    } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
-      int rem = atoi(value);
+  if (DetectKoboModel() == KoboModel::GLO_HD) {
+    if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/status"),
+                         line, sizeof(line))) {
+      if (StringIsEqual(line,"Not charging\n") ||
+          StringIsEqual(line,"Charging\n"))
+        Power::External::Status = Power::External::ON;
+      else if (StringIsEqual(line,"Discharging\n"))
+        Power::External::Status = Power::External::OFF;
+    }
+
+    if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/capacity"),
+                         line, sizeof(line))) {
+      int rem = atoi(line);
       Power::Battery::RemainingPercentValid = true;
       Power::Battery::RemainingPercent = rem;
-      if (Power::External::Status == Power::External::OFF) {
-	if (rem>30) {
-	  Power::Battery::Status = Power::Battery::HIGH;
-	} else if (rem>10) {
-	  Power::Battery::Status = Power::Battery::LOW;
-	} else if (rem<10) {
-	  Power::Battery::Status = Power::Battery::CRITICAL;
-	}
-      } else {
-	Power::Battery::Status = Power::Battery::CHARGING;
+    }
+  } else {
+    // code shamelessly copied from OS/SystemLoad.cpp
+    if (!File::ReadString(Path("/sys/bus/platform/drivers/pmic_battery/pmic_battery.1/power_supply/mc13892_bat/uevent"),
+                          line, sizeof(line)))
+      return;
+
+    char field[80], value[80];
+    int n;
+    char* ptr = line;
+    while (sscanf(ptr, "%[^=]=%[^\n]\n%n", field, value, &n)==2) {
+      ptr += n;
+      if (StringIsEqual(field,"POWER_SUPPLY_STATUS")) {
+        if (StringIsEqual(value,"Not charging") ||
+            StringIsEqual(value,"Charging")) {
+          Power::External::Status = Power::External::ON;
+        } else if (StringIsEqual(value,"Discharging")) {
+          Power::External::Status = Power::External::OFF;
+        }
+      } else if (StringIsEqual(field,"POWER_SUPPLY_CAPACITY")) {
+        int rem = atoi(value);
+        Power::Battery::RemainingPercentValid = true;
+        Power::Battery::RemainingPercent = rem;
       }
     }
   }
+
+  if (Power::External::Status == Power::External::OFF) {
+    if (Power::Battery::RemainingPercentValid) {
+      if (Power::Battery::RemainingPercent>30)
+        Power::Battery::Status = Power::Battery::HIGH;
+      else if (Power::Battery::RemainingPercent>10)
+        Power::Battery::Status = Power::Battery::LOW;
+      else if (Power::Battery::RemainingPercent<10)
+        Power::Battery::Status = Power::Battery::CRITICAL;
+    }
+  } else if (Power::External::Status == Power::External::ON)
+    Power::Battery::Status = Power::Battery::CHARGING;
 }
 
 #endif

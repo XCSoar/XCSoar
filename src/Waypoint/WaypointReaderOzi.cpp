@@ -118,8 +118,8 @@ WaypointReaderOzi::ParseLine(const TCHAR *line, Waypoints &way_points)
   else if (!factory.FallbackElevation(new_waypoint))
     return false;
 
-  // Description (Characters 35-44)
-  ParseString(params[11], new_waypoint.comment);
+  // Description
+  ParseString(params[10], new_waypoint.comment);
 
   way_points.Append(std::move(new_waypoint));
   return true;
@@ -132,5 +132,5 @@ WaypointReaderOzi::VerifyFormat(TLineReader &reader)
   if (line == nullptr)
     return false;
 
-  return StringStartsWith(line, _T("OziExplorer Waypoint File"));
+  return StringStartsWith(StripLeft(line), _T("OziExplorer Waypoint File"));
 }
