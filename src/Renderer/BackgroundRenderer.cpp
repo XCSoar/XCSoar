@@ -70,16 +70,15 @@ BackgroundRenderer::Draw(Canvas& canvas,
                          const WindowProjection& proj,
                          const TerrainRendererSettings &terrain_settings)
 {
+  canvas.ClearWhite();
+
   if (terrain == nullptr) {
     // terrain may have been re-set, so may need new renderer
     Reset();
-    canvas.ClearWhite();
     return;
   }
-  if (!terrain_settings.enable) {
-    canvas.ClearWhite();
+  if (!terrain_settings.enable)
     return;
-  }
 
   if (!renderer) {
     // defer creation until first draw because
