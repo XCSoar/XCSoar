@@ -326,8 +326,15 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 {
 #ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
-  const GeoBounds &new_bounds = map_projection.GetScreenBounds();
+  GeoBounds new_bounds = map_projection.GetScreenBounds();
   assert(new_bounds.IsValid());
+
+  {
+    RasterTerrain::Lease map(terrain);
+    if (!new_bounds.IntersectWith(map->GetBounds()))
+      /* map is outside of visible screen area */
+      return;
+  }
 
   if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&

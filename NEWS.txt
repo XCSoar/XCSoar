@@ -1,4 +1,6 @@
 Version 6.8.3 - not yet released
+* map
+  - fix distorted terrain when zoomed out
 * data files
   - use correct "comment" field for OziExplorer files
   - relax file format detection for OziExplorer files

@@ -178,6 +178,8 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 
 #ifdef ENABLE_OPENGL
   bounds = projection.GetScreenBounds().Scale(fixed(1.5));
+  bounds.IntersectWith(map.GetBounds());
+
   height_matrix.Fill(map, bounds,
                      projection.GetScreenWidth() / quantisation_pixels,
                      projection.GetScreenHeight() / quantisation_pixels,
