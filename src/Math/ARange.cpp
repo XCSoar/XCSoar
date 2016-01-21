@@ -52,12 +52,14 @@ AngleRange:: IntersectWith(const AngleRange &other) {
   if (IsInside(other.start)) {
     start = other.start;
     result = true;
-  }
+  } else if (other.IsInside(start))
+    result = true;
 
   if (IsInside(other.end)) {
     end = other.end;
     result = true;
-  }
+  } else if (other.IsInside(end))
+    result = true;
 
   return result;
 }
