@@ -60,7 +60,7 @@ FlatTriangleFan::IsInside(FlatGeoPoint p) const
     const FlatGeoPoint ji = *j - *i;
     const FlatGeoPoint pi = p - *i;
 
-    if (pi.CrossProduct(ji) < 0)
+    if (0 < ji.x * pi.y / ji.y - pi.x)
       inside = !inside;
   }
 
