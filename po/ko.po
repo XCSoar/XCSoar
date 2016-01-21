@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-10-09 09:01+0000\n"
+"PO-Revision-Date: 2016-01-17 06:21+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-29 19:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
+"X-Launchpad-Export-Date: 2016-01-21 09:41+0000\n"
+"X-Generator: Launchpad (build 17886)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3859,7 +3859,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
 msgid "Second Driver"
-msgstr ""
+msgstr "두번째 드라이버"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:707
 msgid "Sync. from device"
@@ -4058,7 +4058,7 @@ msgstr "기압"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
 msgid "Sink tone"
-msgstr "シンクトーン"
+msgstr "하강음"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:255 src/Dialogs/ProfileListDialog.cpp:280
@@ -5232,7 +5232,7 @@ msgstr "건조중량(열기구)"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:147
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "기체의 건조중량"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:189
@@ -5841,7 +5841,7 @@ msgstr "웨이포인트 이름 표시"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
 msgid "Determines what labels are displayed."
-msgstr ""
+msgstr "라벨이 표시되는 것을 결정합니다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -5871,11 +5871,11 @@ msgstr "모든 공역 경보 켜기/끄기"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Warnings dialog"
-msgstr ""
+msgstr "경고다이얼로그"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr ""
+msgstr "공역의 경고 다이얼로그를 설정/해제합니다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
