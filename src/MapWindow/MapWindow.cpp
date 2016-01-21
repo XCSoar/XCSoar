@@ -55,9 +55,9 @@ MapWindow::~MapWindow()
 #ifdef ENABLE_OPENGL
 
 void
-MapWindow::SetOverlayBitmap(std::unique_ptr<MapOverlayBitmap> &&_overlay_bitmap)
+MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay)
 {
-  overlay_bitmap = std::move(_overlay_bitmap);
+  overlay = std::move(_overlay);
 }
 
 #endif

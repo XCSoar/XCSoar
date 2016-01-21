@@ -147,7 +147,7 @@ private:
   void DisableClicked() {
     auto *map = UIGlobals::GetMap();
     if (map != nullptr)
-      map->SetOverlayBitmap(nullptr);
+      map->SetOverlay(nullptr);
   }
 
   /* virtual methods from class ActionListener */
@@ -267,7 +267,7 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
 
   SetupOverlay(*bmp, path.GetBase().c_str());
 
-  map->SetOverlayBitmap(std::move(bmp));
+  map->SetOverlay(std::move(bmp));
 }
 
 void

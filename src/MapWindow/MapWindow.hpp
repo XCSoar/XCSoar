@@ -54,7 +54,7 @@ class CachedTopographyRenderer;
 class RasterTerrain;
 class RaspStore;
 class RaspRenderer;
-class MapOverlayBitmap;
+class MapOverlay;
 class Waypoints;
 class Airspaces;
 class ProtectedTaskManager;
@@ -131,7 +131,7 @@ protected:
   std::unique_ptr<RaspRenderer> rasp_renderer;
 
 #ifdef ENABLE_OPENGL
-  std::unique_ptr<MapOverlayBitmap> overlay_bitmap;
+  std::unique_ptr<MapOverlay> overlay;
 #endif
 
   const TrafficLook &traffic_look;
@@ -223,7 +223,7 @@ public:
   void SetWeather(const RaspStore *_weather);
 
 #ifdef ENABLE_OPENGL
-  void SetOverlayBitmap(std::unique_ptr<MapOverlayBitmap> &&_overlay_bitmap);
+  void SetOverlay(std::unique_ptr<MapOverlay> &&_overlay);
 #endif
 
 #ifdef HAVE_NOAA
@@ -346,7 +346,7 @@ private:
    */
   void RenderTopographyLabels(Canvas &canvas);
 
-  void RenderOverlayBitmaps(Canvas &canvas);
+  void RenderOverlays(Canvas &canvas);
 
   /**
    * Renders the final glide shading

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_OVERLAY_BITMAP_HPP
 #define XCSOAR_MAP_OVERLAY_BITMAP_HPP
 
+#include "Overlay.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
@@ -36,9 +37,9 @@ class WindowProjection;
 /**
  * A georeferenced bitmap that can be rendered in the #MapWindow.
  *
- * @see MapWindow:SetOverlayBitmap()
+ * @see MapWindow:SetOverlay()
  */
-class MapOverlayBitmap {
+class MapOverlayBitmap final : public MapOverlay {
   Bitmap bitmap;
 
   /**
@@ -84,10 +85,9 @@ public:
     alpha = _alpha;
   }
 
-  /**
-   * Draw the bitmap to the given #Canvas.
-   */
-  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
+  /* virtual methods from class MapOverlay */
+  void Draw(Canvas &canvas,
+            const WindowProjection &projection) noexcept override;
 };
 
 #endif

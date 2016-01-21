@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "OverlayBitmap.hpp"
+#include "Overlay.hpp"
 #include "Look/MapLook.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Weather/Rasp/RaspCache.hpp"
@@ -93,11 +93,11 @@ MapWindow::RenderTopographyLabels(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderOverlayBitmaps(Canvas &canvas)
+MapWindow::RenderOverlays(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
-  if (overlay_bitmap)
-    overlay_bitmap->Draw(canvas, render_projection);
+  if (overlay)
+    overlay->Draw(canvas, render_projection);
 #endif
 }
 
@@ -193,8 +193,8 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   draw_sw.Mark("RenderTopography");
   RenderTopography(canvas);
 
-  draw_sw.Mark("RenderOverlayBitmaps");
-  RenderOverlayBitmaps(canvas);
+  draw_sw.Mark("RenderOverlays");
+  RenderOverlays(canvas);
 
   draw_sw.Mark("RenderFinalGlideShading");
   RenderFinalGlideShading(canvas);
