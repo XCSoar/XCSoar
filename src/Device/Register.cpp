@@ -32,7 +32,6 @@ Copyright_License {
 #include "Device/Driver/Generic.hpp"
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/NmeaOut.hpp"
-#include "Device/Driver/GTAltimeter.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/Volkslogger.hpp"
@@ -87,7 +86,6 @@ static const struct DeviceRegister *const driver_list[] = {
   &imi_driver,
   &flarm_driver,
   &flynet_driver,
-  &gt_altimeter_driver,
   &c_probe_driver,
   &levil_driver,
   &eye_driver,
