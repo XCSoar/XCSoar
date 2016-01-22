@@ -47,7 +47,7 @@ ToHalfHours(BrokenTime t)
 }
 
 const TCHAR *
-RasterWeatherCache::GetMapName() const
+RaspCache::GetMapName() const
 {
   assert(!IsTerrain());
 
@@ -55,22 +55,22 @@ RasterWeatherCache::GetMapName() const
 }
 
 void
-RasterWeatherCache::SetTime(BrokenTime t)
+RaspCache::SetTime(BrokenTime t)
 {
   unsigned i = t.IsPlausible() ? ToHalfHours(t) : 0;
   weather_time = i;
 }
 
 BrokenTime
-RasterWeatherCache::GetTime() const
+RaspCache::GetTime() const
 {
   return weather_time == 0
     ? BrokenTime::Invalid()
-    : RasterWeatherStore::IndexToTime(weather_time);
+    : RaspStore::IndexToTime(weather_time);
 }
 
 void
-RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
+RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 {
   assert(time_local.IsPlausible());
 
@@ -82,7 +82,7 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
   if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
     effective_weather_time = ToHalfHours(time_local);
-    assert(effective_weather_time < RasterWeatherStore::MAX_WEATHER_TIMES);
+    assert(effective_weather_time < RaspStore::MAX_WEATHER_TIMES);
   }
 
   if (parameter == last_parameter && effective_weather_time == last_weather_time)
@@ -96,7 +96,7 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
   while (!store.IsTimeAvailable(parameter, effective_weather_time)) {
     ++effective_weather_time;
 
-    if (effective_weather_time >= RasterWeatherStore::MAX_WEATHER_TIMES)
+    if (effective_weather_time >= RaspStore::MAX_WEATHER_TIMES)
       // can't find valid time
       return;
   }
@@ -126,7 +126,7 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
 }
 
 void
-RasterWeatherCache::Close()
+RaspCache::Close()
 {
   delete weather_map;
   weather_map = nullptr;

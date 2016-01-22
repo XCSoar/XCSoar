@@ -30,17 +30,17 @@ Copyright_License {
 
 #include <tchar.h>
 
-class RasterWeatherStore;
+class RaspStore;
 class RasterMap;
 class OperationEnvironment;
 struct zzip_dir;
 
 /**
  * Class to manage the raster weather map, to be loaded/selected from
- * a #RasterWeatherStore instance.
+ * a #RaspStore instance.
  */
-class RasterWeatherCache {
-  const RasterWeatherStore &store;
+class RaspCache {
+  const RaspStore &store;
 
   unsigned parameter = 0;
   unsigned last_parameter = 0;
@@ -57,14 +57,14 @@ public:
   /** 
    * Default constructor
    */
-  explicit RasterWeatherCache(const RasterWeatherStore &_store)
+  explicit RaspCache(const RaspStore &_store)
     :store(_store), name("") {}
 
-  ~RasterWeatherCache() {
+  ~RaspCache() {
     Close();
   }
 
-  const RasterWeatherStore &GetStore() const {
+  const RaspStore &GetStore() const {
     return store;
   }
 

@@ -161,8 +161,8 @@ LookupWeatherTerrainStyle(const TCHAR *name)
 }
 
 bool
-WeatherTerrainRenderer::Generate(const WindowProjection &projection,
-                                 const TerrainRendererSettings &settings)
+RaspRenderer::Generate(const WindowProjection &projection,
+                       const TerrainRendererSettings &settings)
 {
   if (weather.IsTerrain())
     return false;

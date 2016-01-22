@@ -29,7 +29,7 @@ Copyright_License {
 class FileCache;
 class TopographyStore;
 class RasterTerrain;
-class RasterWeatherStore;
+class RaspStore;
 class GlideComputer;
 class DrawThread;
 class MultipleDevices;
@@ -53,7 +53,7 @@ extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
-extern RasterWeatherStore *rasp;
+extern RaspStore *rasp;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;

@@ -31,12 +31,12 @@ Copyright_License {
 #endif
 
 struct TerrainRendererSettings;
-class RasterWeatherCache;
+class RaspCache;
 
-class WeatherTerrainRenderer {
+class RaspRenderer {
   RasterRenderer raster_renderer;
 
-  const RasterWeatherCache &weather;
+  const RaspCache &weather;
 
 #ifndef ENABLE_OPENGL
   CompareProjection compare_projection;
@@ -45,7 +45,7 @@ class WeatherTerrainRenderer {
   const ColorRamp *last_color_ramp = nullptr;
 
 public:
-  explicit WeatherTerrainRenderer(const RasterWeatherCache &_weather)
+  explicit RaspRenderer(const RaspCache &_weather)
     :weather(_weather) {}
 
   /**

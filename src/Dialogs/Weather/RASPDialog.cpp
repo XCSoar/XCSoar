@@ -43,12 +43,12 @@ class RASPSettingsPanel final : public RowFormWidget, DataFieldListener {
     TIME,
   };
 
-  RasterWeatherStore &rasp;
+  RaspStore &rasp;
 
   BrokenTime time;
 
 public:
-  RASPSettingsPanel(RasterWeatherStore &_rasp)
+  explicit RASPSettingsPanel(RaspStore &_rasp)
     :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
 
 private:

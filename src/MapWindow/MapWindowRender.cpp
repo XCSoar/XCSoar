@@ -57,7 +57,7 @@ MapWindow::RenderRasp(Canvas &canvas)
   const auto &terrain_settings = GetMapSettings().terrain;
 
   if (!rasp_renderer)
-    rasp_renderer.reset(new WeatherTerrainRenderer(*weather));
+    rasp_renderer.reset(new RaspRenderer(*weather));
 
   if (rasp_renderer->Generate(render_projection, terrain_settings))
     rasp_renderer->Draw(canvas, render_projection);

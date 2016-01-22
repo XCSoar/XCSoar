@@ -52,9 +52,9 @@ struct TrafficLook;
 class TopographyStore;
 class CachedTopographyRenderer;
 class RasterTerrain;
-class RasterWeatherStore;
-class RasterWeatherCache;
-class WeatherTerrainRenderer;
+class RaspStore;
+class RaspCache;
+class RaspRenderer;
 class MapOverlayBitmap;
 class Waypoints;
 class Airspaces;
@@ -127,9 +127,9 @@ protected:
 
   RasterTerrain *terrain = nullptr;
 
-  RasterWeatherCache *weather = nullptr;
+  RaspCache *weather = nullptr;
 
-  std::unique_ptr<WeatherTerrainRenderer> rasp_renderer;
+  std::unique_ptr<RaspRenderer> rasp_renderer;
 
 #ifdef ENABLE_OPENGL
   std::unique_ptr<MapOverlayBitmap> overlay_bitmap;
@@ -221,7 +221,7 @@ public:
 
   void SetTopography(TopographyStore *_topography);
   void SetTerrain(RasterTerrain *_terrain);
-  void SetWeather(const RasterWeatherStore *_weather);
+  void SetWeather(const RaspStore *_weather);
 
 #ifdef ENABLE_OPENGL
   void SetOverlayBitmap(std::unique_ptr<MapOverlayBitmap> &&_overlay_bitmap);

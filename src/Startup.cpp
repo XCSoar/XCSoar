@@ -351,7 +351,7 @@ Startup()
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  rasp = new RasterWeatherStore();
+  rasp = new RaspStore();
   rasp->ScanAll(CommonInterface::Basic().location, operation);
 
   // Reads the airspace files

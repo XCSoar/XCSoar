@@ -184,11 +184,11 @@ MapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-MapWindow::SetWeather(const RasterWeatherStore *_weather)
+MapWindow::SetWeather(const RaspStore *_weather)
 {
   delete weather;
   weather = _weather != nullptr
-    ? new RasterWeatherCache(*_weather)
+    ? new RaspCache(*_weather)
     : nullptr;
   rasp_renderer.reset();
 }

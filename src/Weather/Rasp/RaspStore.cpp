@@ -44,7 +44,7 @@ Copyright_License {
 #define RASP_FILENAME "xcsoar-rasp.dat"
 #define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
 
-static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[] = {
+static constexpr RaspStore::MapInfo WeatherDescriptors[] = {
   {
     nullptr,
     N_("Terrain"),
@@ -102,20 +102,20 @@ static constexpr RasterWeatherStore::MapInfo WeatherDescriptors[] = {
   },
 };
 
-RasterWeatherStore::MapItem::MapItem(const TCHAR *_name)
+RaspStore::MapItem::MapItem(const TCHAR *_name)
   :name(_name)
 {
   std::fill_n(times, ARRAY_SIZE(times), false);
 }
 
 BrokenTime
-RasterWeatherStore::IndexToTime(unsigned index)
+RaspStore::IndexToTime(unsigned index)
 {
   return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
 }
 
 bool
-RasterWeatherStore::NarrowWeatherFilename(char *filename, Path name,
+RaspStore::NarrowWeatherFilename(char *filename, Path name,
                                           unsigned time_index)
 {
   const NarrowPathName narrow_name(name);
@@ -129,7 +129,7 @@ RasterWeatherStore::NarrowWeatherFilename(char *filename, Path name,
 }
 
 struct zzip_dir *
-RasterWeatherStore::OpenArchive()
+RaspStore::OpenArchive()
 {
   const auto path = LocalPath(_T(RASP_FILENAME));
 
@@ -141,8 +141,7 @@ RasterWeatherStore::OpenArchive()
 }
 
 bool
-RasterWeatherStore::ExistsItem(struct zzip_dir *dir, Path name,
-                               unsigned time_index)
+RaspStore::ExistsItem(struct zzip_dir *dir, Path name, unsigned time_index)
 {
   char filename[MAX_PATH];
   if (!NarrowWeatherFilename(filename, name, time_index))
@@ -153,7 +152,7 @@ RasterWeatherStore::ExistsItem(struct zzip_dir *dir, Path name,
 }
 
 bool
-RasterWeatherStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
+RaspStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
 {
   bool found = false;
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
@@ -164,8 +163,8 @@ RasterWeatherStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
 }
 
 void
-RasterWeatherStore::ScanAll(const GeoPoint &location,
-                            OperationEnvironment &operation)
+RaspStore::ScanAll(const GeoPoint &location,
+                   OperationEnvironment &operation)
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
