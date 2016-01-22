@@ -31,7 +31,6 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Util/tstring.hpp"
-#include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
 
 #include <set>
@@ -163,18 +162,14 @@ RaspStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
 }
 
 void
-RaspStore::ScanAll(OperationEnvironment &operation)
+RaspStore::ScanAll()
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
 
-  operation.SetText(_("Scanning weather forecast"));
-
   ZZIP_DIR *dir = OpenArchive();
   if (dir == nullptr)
     return;
-
-  operation.SetProgressRange(MAX_WEATHER_TIMES);
 
   maps.clear();
 

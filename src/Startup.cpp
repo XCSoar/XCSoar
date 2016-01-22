@@ -352,7 +352,7 @@ Startup()
   // Scan for weather forecast
   LogFormat("RASP load");
   rasp = new RaspStore();
-  rasp->ScanAll(operation);
+  rasp->ScanAll();
 
   // Reads the airspace files
   ReadAirspace(airspace_database, terrain, computer_settings.pressure,

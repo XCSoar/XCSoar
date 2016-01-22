@@ -34,7 +34,6 @@ Copyright_License {
 
 class Path;
 class RasterMap;
-class OperationEnvironment;
 struct GeoPoint;
 struct zzip_dir;
 
@@ -105,7 +104,7 @@ public:
   /**
    * Load a list of RASP maps from the file "xcsoar-rasp.dat".
    */
-  void ScanAll(OperationEnvironment &operation);
+  void ScanAll();
 
   bool IsTimeAvailable(unsigned item_index, unsigned time_index) const {
     assert(item_index < maps.size());
