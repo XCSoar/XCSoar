@@ -399,9 +399,9 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas)
   ExchangeBlackboard();
 
   EnterDrawThread();
+#endif
 
   Idle();
-#endif
 
   MapWindow::OnPaintBuffer(canvas);
 

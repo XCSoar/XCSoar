@@ -53,8 +53,6 @@ DrawThread::Run()
     const ScopeLockCPU cpu;
 #endif
 
-    map.Idle();
-
     // Get data from the DeviceBlackboard
     map.ExchangeBlackboard();
 
