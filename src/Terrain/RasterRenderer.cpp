@@ -502,7 +502,7 @@ RasterRenderer::Draw(Canvas &canvas,
                      const WindowProjection &projection) const
 {
 #ifdef ENABLE_OPENGL
-  if (bounds.IsValid())
+  if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
     DrawGeoBitmap(*image,
                   PixelSize(height_matrix.GetWidth(),
                             height_matrix.GetHeight()),
