@@ -65,6 +65,12 @@ RaspCache::GetTime() const
     : RaspStore::IndexToTime(time);
 }
 
+bool
+RaspCache::IsInside(GeoPoint p) const
+{
+  return map != nullptr && map->IsInside(p);
+}
+
 void
 RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 {

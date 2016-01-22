@@ -73,6 +73,11 @@ public:
     return cache.GetMapLabel();
   }
 
+  gcc_pure
+  bool IsInside(GeoPoint p) const {
+    return cache.IsInside(p);
+  }
+
   void SetTime(BrokenTime t) {
     cache.SetTime(t);
   }

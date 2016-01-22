@@ -29,6 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct BrokenTime;
+struct GeoPoint;
 class RaspStore;
 class RasterMap;
 class OperationEnvironment;
@@ -87,6 +88,9 @@ public:
   unsigned GetParameter() const {
     return parameter;
   }
+
+  gcc_pure
+  bool IsInside(GeoPoint p) const;
 
   /**
    * @param day_time the local time, in seconds since midnight
