@@ -41,10 +41,6 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "OverlayBitmap.hpp"
-#endif
-
 #include <memory>
 
 struct MapLook;
@@ -61,6 +57,7 @@ class ProtectedTaskManager;
 class GlideComputer;
 class ContainerWindow;
 class NOAAStore;
+class MapOverlay;
 
 namespace SkyLinesTracking {
   struct Data;
