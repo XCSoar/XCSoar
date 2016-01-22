@@ -125,6 +125,13 @@ public:
   }
 
   /**
+   * Find the nearest time index which is available.  If no time index
+   * is available, this method returns #MAX_WEATHER_TIMES.
+   */
+  gcc_pure
+  unsigned GetNearestTime(unsigned item_index, unsigned time_index) const;
+
+  /**
    * Converts a time index to a #BrokenTime.
    */
   gcc_const

@@ -96,14 +96,9 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
   last_parameter = parameter;
   last_time = effective_time;
 
-  // scan forward to next valid time
-  while (!store.IsTimeAvailable(parameter, effective_time)) {
-    ++effective_time;
-
-    if (effective_time >= RaspStore::MAX_WEATHER_TIMES)
-      // can't find valid time
-      return;
-  }
+  effective_time = store.GetNearestTime(parameter, effective_time);
+  if (effective_time == RaspStore::MAX_WEATHER_TIMES)
+    return;
 
   Close();
 

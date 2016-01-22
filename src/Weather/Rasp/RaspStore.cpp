@@ -113,6 +113,24 @@ RaspStore::IndexToTime(unsigned index)
   return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
 }
 
+unsigned
+RaspStore::GetNearestTime(unsigned item_index, unsigned time_index) const
+{
+  assert(item_index < maps.size());
+  assert(time_index < MAX_WEATHER_TIMES);
+
+  // scan forward to next valid time
+  while (!IsTimeAvailable(item_index, time_index)) {
+    ++time_index;
+
+    if (time_index >= MAX_WEATHER_TIMES)
+      // can't find valid time
+      break;
+  }
+
+  return time_index;
+}
+
 bool
 RaspStore::NarrowWeatherFilename(char *filename, Path name,
                                           unsigned time_index)
