@@ -107,8 +107,8 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   Close();
 
-  ZZIP_DIR *new_dir = store.OpenArchive();
-  if (new_dir == nullptr)
+  ZZIP_DIR *dir = store.OpenArchive();
+  if (dir == nullptr)
     return;
 
   char new_name[MAX_PATH];
@@ -116,15 +116,16 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
                               effective_weather_time);
 
   RasterMap *new_map = new RasterMap();
-  if (!LoadTerrainOverview(new_dir, new_name, nullptr, new_map->GetTileCache(),
-                           true, operation)) {
+  bool success = LoadTerrainOverview(dir, new_name, nullptr, new_map->GetTileCache(),
+                                     true, operation);
+  zzip_dir_close(dir);
+  if (!success) {
     delete new_map;
     return;
   }
 
   new_map->UpdateProjection();
 
-  dir = new_dir;
   weather_map = new_map;
 }
 
@@ -133,9 +134,4 @@ RaspCache::Close()
 {
   delete weather_map;
   weather_map = nullptr;
-
-  if (dir != nullptr) {
-    zzip_dir_close(dir);
-    dir = nullptr;
-  }
 }

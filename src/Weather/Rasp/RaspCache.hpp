@@ -32,7 +32,6 @@ struct BrokenTime;
 class RaspStore;
 class RasterMap;
 class OperationEnvironment;
-struct zzip_dir;
 
 /**
  * Class to manage the raster weather map, to be loaded/selected from
@@ -46,8 +45,6 @@ class RaspCache {
 
   unsigned weather_time = 0;
   unsigned last_weather_time = 0;
-
-  struct zzip_dir *dir = nullptr;
 
   RasterMap *weather_map = nullptr;
 
