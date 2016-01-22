@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Renderer/GeoBitmapRenderer.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/RawBitmap.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -398,59 +399,11 @@ TerrainRenderer::Draw(Canvas &canvas,
                       const WindowProjection &map_projection) const
 {
 #ifdef ENABLE_OPENGL
-  const GeoBounds &bounds = raster_renderer.GetBounds();
-  if (!bounds.IsValid())
-    return;
-
-  const BulkPixelPoint vertices[] = {
-    map_projection.GeoToScreen(bounds.GetNorthWest()),
-    map_projection.GeoToScreen(bounds.GetNorthEast()),
-    map_projection.GeoToScreen(bounds.GetSouthWest()),
-    map_projection.GeoToScreen(bounds.GetSouthEast()),
-  };
-
-  const ScopeVertexPointer vp(vertices);
-
-  const GLTexture &texture = raster_renderer.BindAndGetTexture();
-  const PixelSize allocated = texture.GetAllocatedSize();
-
-  const int src_x = 0, src_y = 0, src_width = raster_renderer.GetWidth(),
-    src_height = raster_renderer.GetHeight();
-
-  GLfloat x0 = (GLfloat)src_x / allocated.cx;
-  GLfloat y0 = (GLfloat)src_y / allocated.cy;
-  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated.cx;
-  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated.cy;
-
-  const GLfloat coord[] = {
-    x0, y0,
-    x1, y0,
-    x0, y1,
-    x1, y1,
-  };
-
-#ifdef USE_GLSL
-  OpenGL::texture_shader->Use();
-  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
-                        0, coord);
-#else
-  const GLEnable<GL_TEXTURE_2D> scope;
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer(2, GL_FLOAT, 0, coord);
-#endif
-
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-#ifdef USE_GLSL
-  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  OpenGL::solid_shader->Use();
-#else
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#endif
-
+  DrawGeoBitmap(raster_renderer.GetImage(),
+                PixelSize(raster_renderer.GetWidth(),
+                          raster_renderer.GetHeight()),
+                raster_renderer.GetBounds(),
+                map_projection);
 #else
   CopyTo(canvas, map_projection.GetScreenWidth(),
          map_projection.GetScreenHeight());
