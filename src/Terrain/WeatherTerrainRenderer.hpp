@@ -44,8 +44,6 @@ class WeatherTerrainRenderer {
 
   const ColorRamp *last_color_ramp = nullptr;
 
-  bool available = false;
-
 public:
   explicit WeatherTerrainRenderer(const RasterWeatherCache &_weather)
     :weather(_weather) {}
@@ -61,12 +59,15 @@ public:
 #endif
   }
 
-  void Generate(const WindowProjection &projection,
+  /**
+   * @return true if an image has been renderered and Draw() may be
+   * called
+   */
+  bool Generate(const WindowProjection &projection,
                 const TerrainRendererSettings &settings);
 
   void Draw(Canvas &canvas, const WindowProjection &projection) const {
-    if (available)
-      raster_renderer.Draw(canvas, projection);
+    raster_renderer.Draw(canvas, projection);
   }
 };
 

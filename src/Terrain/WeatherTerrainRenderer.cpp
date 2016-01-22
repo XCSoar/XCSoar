@@ -158,14 +158,12 @@ LookupWeatherTerrainStyle(const TCHAR *name)
   return *i;
 }
 
-void
+bool
 WeatherTerrainRenderer::Generate(const WindowProjection &projection,
                                  const TerrainRendererSettings &settings)
 {
-  if (weather.IsTerrain()) {
-    available = false;
-    return;
-  }
+  if (weather.IsTerrain())
+    return false;
 
   const auto &style = LookupWeatherTerrainStyle(weather.GetMapName());
   const bool do_water = style.do_water;
@@ -174,10 +172,8 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   const ColorRamp *color_ramp = style.color_ramp;
 
   const RasterMap *map = weather.GetMap();
-  if (map == nullptr) {
-    available = false;
-    return;
-  }
+  if (map == nullptr)
+    return false;
 
   if (color_ramp != last_color_ramp) {
     raster_renderer.PrepareColorTable(color_ramp, do_water,
@@ -190,6 +186,5 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   raster_renderer.GenerateImage(false, height_scale,
                                 settings.contrast, settings.brightness,
                                 Angle::Zero(), false);
-
-  available = true;
+  return true;
 }

@@ -79,8 +79,8 @@ BackgroundRenderer::Draw(Canvas& canvas,
     if (!rasp_renderer)
       rasp_renderer.reset(new WeatherTerrainRenderer(*weather));
 
-    rasp_renderer->Generate(proj, terrain_settings);
-    rasp_renderer->Draw(canvas, proj);
+    if (rasp_renderer->Generate(proj, terrain_settings))
+      rasp_renderer->Draw(canvas, proj);
   }
 }
 
