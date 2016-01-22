@@ -19,11 +19,11 @@
 #include "Screen/OpenGL/Features.hpp"
 #endif
 
-#include <memory>
-
 #ifdef USE_GDI
 #include <windef.h>
 #include <wingdi.h>
+#else
+#include <memory>
 #endif
 
 #include <stdint.h>
@@ -95,7 +95,11 @@ protected:
   const unsigned height;
   const unsigned corrected_width;
 
+#ifdef USE_GDI
+  RawColor *buffer;
+#else
   const std::unique_ptr<RawColor[]> buffer;
+#endif
 
 #ifdef ENABLE_OPENGL
   GLTexture *texture;
@@ -107,6 +111,8 @@ protected:
   mutable bool dirty = true;
 #elif defined(USE_GDI)
   BITMAPINFO bi;
+
+  HBITMAP bitmap;
 #endif
 
 public:
@@ -119,7 +125,7 @@ public:
    */
   RawBitmap(unsigned width, unsigned height);
 
-#ifdef ENABLE_OPENGL
+#if defined(ENABLE_OPENGL) || defined(USE_GDI)
   ~RawBitmap();
 #endif
 
@@ -128,11 +134,19 @@ public:
    * @return The Buffer as RawColor array
    */
   RawColor *GetBuffer() {
+#ifdef USE_GDI
+    return buffer;
+#else
     return buffer.get();
+#endif
   }
 
   const RawColor *GetBuffer() const {
+#ifdef USE_GDI
+    return buffer;
+#else
     return buffer.get();
+#endif
   }
 
   /**
