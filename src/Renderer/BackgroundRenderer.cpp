@@ -100,18 +100,21 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
                                     const TerrainRendererSettings &settings,
                                     const DerivedInfo &calculated)
 {
+  Angle angle;
+
   if (settings.slope_shading == SlopeShading::WIND &&
       calculated.wind_available &&
       calculated.wind.norm >= 0.5)
-    SetShadingAngle(projection, calculated.wind.bearing);
+    angle = calculated.wind.bearing;
 
   else if (settings.slope_shading == SlopeShading::SUN &&
            calculated.sun_data_available)
-    SetShadingAngle(projection, calculated.sun_azimuth);
+    angle = calculated.sun_azimuth;
 
   else
-    SetShadingAngle(projection, DEFAULT_SHADING_ANGLE);
+    angle = DEFAULT_SHADING_ANGLE;
 
+  SetShadingAngle(projection, angle);
 }
 
 void
