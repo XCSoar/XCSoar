@@ -29,7 +29,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
-#include "Weather/Rasp/RaspStore.hpp"
 #include "Weather/Rasp/RaspCache.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
@@ -334,9 +333,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
         _T("BALLAST %d LITERS "),
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
 
-  if (weather != nullptr && !weather->IsTerrain()) {
-    const RaspStore &ws = weather->GetStore();
-    const TCHAR *label = ws.GetItemInfo(weather->GetParameter()).label;
+  if (weather != nullptr) {
+    const TCHAR *label = weather->GetMapLabel();
     if (label != nullptr)
       buffer += gettext(label);
   }

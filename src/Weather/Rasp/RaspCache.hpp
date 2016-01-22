@@ -88,6 +88,13 @@ public:
   const TCHAR *GetMapName() const;
 
   /**
+   * Returns the human-readable name for the current RASP map, or
+   * nullptr if no RASP map is enabled.
+   */
+  gcc_pure
+  const TCHAR *GetMapLabel() const;
+
+  /**
    * Returns the index of the weather map being displayed.
    */
   gcc_pure

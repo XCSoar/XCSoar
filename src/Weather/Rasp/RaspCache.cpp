@@ -54,6 +54,15 @@ RaspCache::GetMapName() const
   return store.GetItemInfo(parameter).name;
 }
 
+const TCHAR *
+RaspCache::GetMapLabel() const
+{
+  if (IsTerrain())
+    return nullptr;
+
+  return gettext(store.GetItemInfo(parameter).label);
+}
+
 void
 RaspCache::SetTime(BrokenTime t)
 {
