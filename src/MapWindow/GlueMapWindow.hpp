@@ -171,8 +171,6 @@ public:
 
   void QuickRedraw();
 
-  void Idle();
-
   void SetPan(bool enable);
   void TogglePan();
   void PanTo(const GeoPoint &location);

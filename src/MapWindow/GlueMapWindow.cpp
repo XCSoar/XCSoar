@@ -209,15 +209,6 @@ GlueMapWindow::QuickRedraw()
 #endif
 }
 
-/**
- * This idle function allows progressive scanning of visibility etc
- */
-void
-GlueMapWindow::Idle()
-{
-  UpdateWeather();
-}
-
 bool
 GlueMapWindow::OnUser(unsigned id)
 {

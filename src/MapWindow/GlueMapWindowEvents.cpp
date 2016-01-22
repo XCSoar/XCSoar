@@ -401,7 +401,7 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas)
   EnterDrawThread();
 #endif
 
-  Idle();
+  UpdateWeather();
 
   MapWindow::OnPaintBuffer(canvas);
 
