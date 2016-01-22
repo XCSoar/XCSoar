@@ -128,7 +128,7 @@ MapWindow::UpdateTerrain()
 void
 MapWindow::UpdateWeather()
 {
-  if (weather == nullptr || !Calculated().date_time_local.IsTimePlausible())
+  if (weather == nullptr)
     return;
 
   const WeatherUIState &state = GetUIState().weather;

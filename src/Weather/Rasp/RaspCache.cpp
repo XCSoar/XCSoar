@@ -73,8 +73,6 @@ RaspCache::GetTime() const
 void
 RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 {
-  assert(time_local.IsPlausible());
-
   if (parameter == 0)
     // will be drawing terrain
     return;
@@ -82,6 +80,11 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
   unsigned effective_weather_time = weather_time;
   if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
+    if (!time_local.IsPlausible())
+      /* can't update to current time if we don't know the current
+         time */
+      return;
+
     effective_weather_time = ToHalfHours(time_local);
     assert(effective_weather_time < RaspStore::MAX_WEATHER_TIMES);
   }
