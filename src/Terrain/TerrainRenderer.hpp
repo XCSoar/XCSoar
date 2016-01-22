@@ -49,9 +49,9 @@ protected:
   CompareProjection compare_projection;
 #endif
 
-  Angle last_sun_azimuth;
+  Angle last_sun_azimuth = Angle::Zero();
 
-  const ColorRamp *last_color_ramp;
+  const ColorRamp *last_color_ramp = nullptr;
 
   RasterRenderer raster_renderer;
 

@@ -290,9 +290,7 @@ static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
 //
 // this is for TerrainInfo.StepSize = 0.0025;
 TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
-  :terrain(_terrain),
-   last_sun_azimuth(Angle::Zero()),
-   last_color_ramp(nullptr)
+  :terrain(_terrain)
 {
   settings.SetDefaults();
 }
