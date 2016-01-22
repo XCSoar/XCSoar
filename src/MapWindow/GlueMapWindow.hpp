@@ -66,17 +66,6 @@ class GlueMapWindow : public MapWindow {
 
   TerrainThread *terrain_thread = nullptr;
 
-#ifdef ENABLE_OPENGL
-  /**
-   * A timer that triggers a redraw periodically until all data files
-   * (terrain, topography, ...) have been loaded / updated.  This is
-   * necessary if there is no valid GPS input, and no other reason to
-   * redraw is present.  This timer will cease automatically once all
-   * data is loaded, i.e. Idle() returned false.
-   */
-  WindowTimer data_timer;
-#endif
-
   PeriodClock mouse_down_clock;
 
   enum DragMode {
@@ -182,7 +171,7 @@ public:
 
   void QuickRedraw();
 
-  bool Idle();
+  void Idle();
 
   void SetPan(bool enable);
   void TogglePan();

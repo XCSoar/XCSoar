@@ -309,10 +309,7 @@ protected:
    */
   bool UpdateTerrain();
 
-  /**
-   * @return true if UpdateWeather() should be called again
-   */
-  bool UpdateWeather();
+  void UpdateWeather();
 
   void UpdateAll() {
     UpdateTopography();

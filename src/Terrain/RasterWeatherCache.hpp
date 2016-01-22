@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 
 #include "Time/BrokenTime.hpp"
-#include "Geo/GeoPoint.hpp"
 #include "Util/StaticString.hxx"
 #include "Compiler.h"
 
@@ -42,8 +41,6 @@ struct zzip_dir;
  */
 class RasterWeatherCache {
   const RasterWeatherStore &store;
-
-  GeoPoint center = GeoPoint::Invalid();
 
   unsigned parameter = 0;
   unsigned last_parameter = 0;
@@ -70,14 +67,6 @@ public:
   const RasterWeatherStore &GetStore() const {
     return store;
   }
-
-  void SetViewCenter(const GeoPoint &location, double radius);
-
-  /**
-   * Wrapper for RasterMap::IsDirty().
-   */
-  gcc_pure
-  bool IsDirty() const;
 
   gcc_pure
   const RasterMap *GetMap() const {

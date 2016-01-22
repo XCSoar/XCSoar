@@ -32,7 +32,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Pan.hpp"
 #include "Util/Clamp.hpp"
-#include "Event/Idle.hpp"
 #include "Topography/Thread.hpp"
 
 #ifdef USE_X11
@@ -58,10 +57,6 @@ GlueMapWindow::OnDestroy()
   /* stop the TopographyThread and the TerrainThread */
   SetTopography(nullptr);
   SetTerrain(nullptr);
-
-#ifdef ENABLE_OPENGL
-  data_timer.Cancel();
-#endif
 
   MapWindow::OnDestroy();
 }
@@ -405,12 +400,7 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas)
 
   EnterDrawThread();
 
-  /* update terrain, topography, ... */
-  if (Idle())
-    /* still dirty: schedule a redraw to load more data */
-    data_timer.Schedule(500);
-  else
-    data_timer.Cancel();
+  Idle();
 #endif
 
   MapWindow::OnPaintBuffer(canvas);
@@ -450,13 +440,6 @@ GlueMapWindow::OnTimer(WindowTimer &timer)
     }
 
     return true;
-  } else if (timer == data_timer) {
-    if (!IsUserIdle(2500))
-      /* user is still active; try again later */
-      return true;
-
-    Invalidate();
-    return false;
 #endif
   } else
     return MapWindow::OnTimer(timer);

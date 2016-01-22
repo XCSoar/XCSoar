@@ -122,11 +122,11 @@ MapWindow::UpdateTerrain()
   return terrain->UpdateTiles(location, radius);
 }
 
-bool
+void
 MapWindow::UpdateWeather()
 {
   if (weather == nullptr || !Calculated().date_time_local.IsTimePlausible())
-    return false;
+    return;
 
   const WeatherUIState &state = GetUIState().weather;
   weather->SetParameter(state.map);
@@ -134,9 +134,6 @@ MapWindow::UpdateWeather()
 
   QuietOperationEnvironment operation;
   weather->Reload(Calculated().date_time_local, operation);
-  weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),
-                         visible_projection.GetScreenWidthMeters() / 2);
-  return weather->IsDirty();
 }
 
 /**

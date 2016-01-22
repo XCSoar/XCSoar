@@ -113,7 +113,7 @@ RasterWeatherCache::Reload(BrokenTime time_local, OperationEnvironment &operatio
 
   RasterMap *new_map = new RasterMap();
   if (!LoadTerrainOverview(new_dir, new_name, nullptr, new_map->GetTileCache(),
-                           false, operation)) {
+                           true, operation)) {
     delete new_map;
     return;
   }
@@ -130,45 +130,9 @@ RasterWeatherCache::Close()
 {
   delete weather_map;
   weather_map = nullptr;
-  center = GeoPoint::Invalid();
 
   if (dir != nullptr) {
     zzip_dir_close(dir);
     dir = nullptr;
   }
-}
-
-void
-RasterWeatherCache::SetViewCenter(const GeoPoint &location, double radius)
-{
-  if (parameter == 0)
-    // will be drawing terrain
-    return;
-
-  if (weather_map == nullptr)
-    return;
-
-  /* only update the RasterMap if the center was moved far enough */
-  if (center.IsValid() && center.DistanceS(location) < 1000)
-    return;
-
-  /* fake a mutex - weather data is only used in the DrawThread */
-  SharedMutex mutex;
-
-  UpdateTerrainTiles(dir, name, weather_map->GetTileCache(),
-                     mutex,
-                     weather_map->GetProjection(),
-                     location, radius);
-  if (!weather_map->IsDirty())
-    center = location;
-}
-
-bool
-RasterWeatherCache::IsDirty() const
-{
-  if (parameter == 0)
-    // will be drawing terrain
-    return false;
-
-  return weather_map != nullptr && weather_map->IsDirty();
 }
