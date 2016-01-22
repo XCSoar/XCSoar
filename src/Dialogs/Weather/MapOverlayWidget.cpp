@@ -73,6 +73,8 @@ class WeatherMapOverlayListWidget final
 
   std::vector<Item> items;
 
+  int active_index = -1;
+
 public:
   void SetPreview(ViewImageWidget &_preview_widget) {
     preview_widget = &_preview_widget;
@@ -85,6 +87,39 @@ public:
   void CreateButtons(ButtonPanel &buttons);
 
 private:
+  int FindItemByName(const TCHAR *name) const {
+    unsigned i = 0;
+    for (const auto &item : items) {
+      if (item.name == name)
+        return i;
+      ++i;
+    }
+
+    return -1;
+  }
+
+  int FindActiveIndex() const {
+    const auto *map = UIGlobals::GetMap();
+    if (map == nullptr)
+      return -1;
+
+    const MapOverlay *o = map->GetOverlay();
+    if (o == nullptr)
+      return -1;
+
+    const MapOverlayBitmap *ob = dynamic_cast<const MapOverlayBitmap *>(o);
+    if (ob == nullptr)
+      return -1;
+
+    return FindItemByName(ob->GetLabel());
+  }
+
+  void UpdateActiveIndex() {
+    active_index = FindActiveIndex();
+    disable_button->SetEnabled(active_index >= 0);
+    GetList().Invalidate();
+  }
+
   void UpdateList();
 
   void UpdatePreview(Path path) {
@@ -116,6 +151,10 @@ protected:
     CreateButtons(buttons_widget->GetButtonPanel());
     TextListWidget::Prepare(parent, rc);
     UpdateList();
+
+    if (active_index >= 0)
+      /* move cursor to active item */
+      GetList().SetCursorIndex(active_index);
   }
 
   void Show(const PixelRect &rc) override {
@@ -126,6 +165,16 @@ protected:
   /* virtual methods from TextListWidget */
   const TCHAR *GetRowText(unsigned i) const override {
     return items[i].name.c_str();
+  }
+
+  /* virtual methods from ListItemRenderer */
+  void OnPaintItem(Canvas &canvas, PixelRect rc, unsigned i) override {
+    if (int(i) == active_index) {
+      rc.left = row_renderer.DrawColumn(canvas, rc, _T(" > "));
+      rc.right = row_renderer.DrawRightColumn(canvas, rc, _T(" < "));
+    }
+
+    TextListWidget::OnPaintItem(canvas, rc, i);
   }
 
   /* virtual methods from ListCursorHandler */
@@ -148,6 +197,8 @@ private:
     auto *map = UIGlobals::GetMap();
     if (map != nullptr)
       map->SetOverlay(nullptr);
+
+    UpdateActiveIndex();
   }
 
   /* virtual methods from class ActionListener */
@@ -192,6 +243,8 @@ WeatherMapOverlayListWidget::UpdateList()
 
   const bool empty = items.empty();
   use_button->SetEnabled(!empty);
+
+  UpdateActiveIndex();
 }
 
 /**
@@ -251,6 +304,11 @@ SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
 void
 WeatherMapOverlayListWidget::UseClicked(unsigned i)
 {
+  if (int(i) == active_index) {
+    DisableClicked();
+    return;
+  }
+
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
     return;
@@ -268,6 +326,8 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
   SetupOverlay(*bmp, path.GetBase().c_str());
 
   map->SetOverlay(std::move(bmp));
+
+  UpdateActiveIndex();
 }
 
 void
