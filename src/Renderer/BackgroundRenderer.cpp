@@ -27,16 +27,9 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "NMEA/Derived.hpp"
 
-static constexpr Angle DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
+const Angle BackgroundRenderer::DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
 
-BackgroundRenderer::BackgroundRenderer()
-  :terrain(nullptr),
-   weather(nullptr),
-   renderer(nullptr),
-   shading_angle(DEFAULT_SHADING_ANGLE)
-{
-}
-
+BackgroundRenderer::BackgroundRenderer() {}
 BackgroundRenderer::~BackgroundRenderer() {}
 
 void

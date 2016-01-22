@@ -40,10 +40,12 @@ struct DerivedInfo;
  * Utility class to draw terrain, topography (not implemented yet)
  */
 class BackgroundRenderer {
-  const RasterTerrain *terrain;
-  const RasterWeatherCache *weather;
+  static const Angle DEFAULT_SHADING_ANGLE;
+
+  const RasterTerrain *terrain = nullptr;
+  const RasterWeatherCache *weather = nullptr;
   std::unique_ptr<TerrainRenderer> renderer;
-  Angle shading_angle;
+  Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
 public:
   BackgroundRenderer();
