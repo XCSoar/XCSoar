@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 
+#include <memory>
+
 class Canvas;
 class WindowProjection;
 struct TerrainRendererSettings;
@@ -40,15 +42,13 @@ struct DerivedInfo;
 class BackgroundRenderer {
   const RasterTerrain *terrain;
   const RasterWeatherCache *weather;
-  TerrainRenderer *renderer;
+  std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle;
 
 public:
   BackgroundRenderer();
 
-  ~BackgroundRenderer() {
-    Reset();
-  }
+  ~BackgroundRenderer();
 
   /**
    * Flush all caches.
@@ -62,7 +62,6 @@ public:
   void SetShadingAngle(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
                        const DerivedInfo &calculated);
-  void Reset();
   void SetTerrain(const RasterTerrain *terrain);
   void SetWeather(const RasterWeatherCache *weather);
 

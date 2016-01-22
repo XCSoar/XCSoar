@@ -37,12 +37,7 @@ BackgroundRenderer::BackgroundRenderer()
 {
 }
 
-void
-BackgroundRenderer::Reset()
-{
-  delete renderer;
-  renderer = nullptr;
-}
+BackgroundRenderer::~BackgroundRenderer() {}
 
 void
 BackgroundRenderer::Flush()
@@ -55,14 +50,14 @@ void
 BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  Reset();
+  renderer.reset();
 }
 
 void
 BackgroundRenderer::SetWeather(const RasterWeatherCache *_weather)
 {
   weather = _weather;
-  Reset();
+  renderer.reset();
 }
 
 void
@@ -84,9 +79,9 @@ BackgroundRenderer::Draw(Canvas& canvas,
     // the buffer size, smoothing etc is set by the
     // loaded terrain properties
     if (weather != nullptr) {
-      renderer = new WeatherTerrainRenderer(*terrain, *weather);
+      renderer.reset(new WeatherTerrainRenderer(*terrain, *weather));
     } else {
-      renderer = new TerrainRenderer(*terrain);
+      renderer.reset(new TerrainRenderer(*terrain));
     }
   }
 
