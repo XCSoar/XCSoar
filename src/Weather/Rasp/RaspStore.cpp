@@ -120,15 +120,15 @@ RaspStore::GetNearestTime(unsigned item_index, unsigned time_index) const
   assert(time_index < MAX_WEATHER_TIMES);
 
   // scan forward to next valid time
-  while (!IsTimeAvailable(item_index, time_index)) {
-    ++time_index;
+  for (unsigned t = time_index; t < MAX_WEATHER_TIMES; ++t)
+    if (IsTimeAvailable(item_index, t))
+      return t;
 
-    if (time_index >= MAX_WEATHER_TIMES)
-      // can't find valid time
-      break;
-  }
+  for (int t = time_index; t >= 0; --t)
+    if (IsTimeAvailable(item_index, t))
+      return t;
 
-  return time_index;
+  return MAX_WEATHER_TIMES;
 }
 
 bool
