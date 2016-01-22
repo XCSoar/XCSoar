@@ -46,7 +46,7 @@ class RaspCache {
   unsigned time = 0;
   unsigned last_time = 0;
 
-  RasterMap *weather_map = nullptr;
+  RasterMap *map = nullptr;
 
 public:
   /** 
@@ -65,7 +65,7 @@ public:
 
   gcc_pure
   const RasterMap *GetMap() const {
-    return weather_map;
+    return map;
   }
 
   /**

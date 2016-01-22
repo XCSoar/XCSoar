@@ -126,12 +126,12 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   new_map->UpdateProjection();
 
-  weather_map = new_map;
+  map = new_map;
 }
 
 void
 RaspCache::Close()
 {
-  delete weather_map;
-  weather_map = nullptr;
+  delete map;
+  map = nullptr;
 }
