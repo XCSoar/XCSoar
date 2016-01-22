@@ -59,7 +59,7 @@ protected:
   /**
    * This mutex protects the variable "current".
    */
-  Mutex mutex;
+  mutable Mutex mutex;
 
 private:
   /**
