@@ -26,7 +26,6 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Weather/Rasp/RaspCache.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
 
@@ -51,7 +50,6 @@ MapWindow::~MapWindow()
   Destroy();
 
   delete topography_renderer;
-  delete weather;
 }
 
 #ifdef ENABLE_OPENGL
@@ -169,11 +167,8 @@ MapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-MapWindow::SetWeather(const RaspStore *_weather)
+MapWindow::SetWeather(const RaspStore *_rasp_store)
 {
-  delete weather;
-  weather = _weather != nullptr
-    ? new RaspCache(*_weather)
-    : nullptr;
   rasp_renderer.reset();
+  rasp_store = _rasp_store;
 }

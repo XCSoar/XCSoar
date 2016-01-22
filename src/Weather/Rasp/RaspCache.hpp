@@ -40,8 +40,7 @@ class OperationEnvironment;
 class RaspCache {
   const RaspStore &store;
 
-  unsigned parameter = 0;
-  unsigned last_parameter = 0;
+  const unsigned parameter;
 
   unsigned time = 0;
   unsigned last_time = 0;
@@ -52,8 +51,8 @@ public:
   /** 
    * Default constructor
    */
-  explicit RaspCache(const RaspStore &_store)
-    :store(_store) {}
+  RaspCache(const RaspStore &_store, unsigned _parameter)
+    :store(_store), parameter(_parameter) {}
 
   ~RaspCache() {
     Close();
@@ -66,14 +65,6 @@ public:
   gcc_pure
   const RasterMap *GetMap() const {
     return map;
-  }
-
-  /**
-   * Are we currently displaying terrain instead of a RASP weather
-   * map?
-   */
-  bool IsTerrain() const {
-    return parameter == 0;
   }
 
   /**
@@ -95,13 +86,6 @@ public:
   gcc_pure
   unsigned GetParameter() const {
     return parameter;
-  }
-
-  /**
-   * Switches to another weather map.
-   */
-  void SetParameter(unsigned i) {
-    parameter = i;
   }
 
   /**

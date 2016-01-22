@@ -41,19 +41,10 @@ LookupWeatherTerrainStyle(const TCHAR *name)
   return *i;
 }
 
-const TCHAR *
-RaspRenderer::GetLabel() const
-{
-  return cache.GetMapLabel();
-}
-
 bool
 RaspRenderer::Generate(const WindowProjection &projection,
                        const TerrainRendererSettings &settings)
 {
-  if (cache.IsTerrain())
-    return false;
-
   const auto &style = LookupWeatherTerrainStyle(cache.GetMapName());
   const bool do_water = style.do_water;
   const unsigned height_scale = style.height_scale;

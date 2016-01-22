@@ -41,17 +41,12 @@ ToHalfHours(BrokenTime t)
 const TCHAR *
 RaspCache::GetMapName() const
 {
-  assert(!IsTerrain());
-
   return store.GetItemInfo(parameter).name;
 }
 
 const TCHAR *
 RaspCache::GetMapLabel() const
 {
-  if (IsTerrain())
-    return nullptr;
-
   return gettext(store.GetItemInfo(parameter).label);
 }
 
@@ -73,10 +68,6 @@ RaspCache::GetTime() const
 void
 RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 {
-  if (parameter == 0)
-    // will be drawing terrain
-    return;
-
   unsigned effective_time = time;
   if (effective_time == 0) {
     // "Now" time, so find time in half hours
@@ -89,11 +80,10 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
     assert(effective_time < RaspStore::MAX_WEATHER_TIMES);
   }
 
-  if (parameter == last_parameter && effective_time == last_time)
+  if (effective_time == last_time)
     // no change, quick exit.
     return;
 
-  last_parameter = parameter;
   last_time = effective_time;
 
   effective_time = store.GetNearestTime(parameter, effective_time);

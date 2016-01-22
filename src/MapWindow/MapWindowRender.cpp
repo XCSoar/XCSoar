@@ -53,23 +53,27 @@ MapWindow::RenderTerrain(Canvas &canvas)
 inline void
 MapWindow::RenderRasp(Canvas &canvas)
 {
-  if (weather == nullptr)
+  if (rasp_store == nullptr)
     return;
 
   const WeatherUIState &state = GetUIState().weather;
-  weather->SetParameter(state.map);
-  weather->SetTime(state.time);
+  if (rasp_renderer && state.map != rasp_renderer->GetParameter())
+    rasp_renderer.reset();
+
+  if (state.map == 0)
+    return;
+
+  if (!rasp_renderer)
+    rasp_renderer.reset(new RaspRenderer(*rasp_store, state.map));
+
+  rasp_renderer->SetTime(state.time);
 
   {
     QuietOperationEnvironment operation;
-    weather->Reload(Calculated().date_time_local, operation);
+    rasp_renderer->Update(Calculated().date_time_local, operation);
   }
 
   const auto &terrain_settings = GetMapSettings().terrain;
-
-  if (!rasp_renderer)
-    rasp_renderer.reset(new RaspRenderer(*weather));
-
   if (rasp_renderer->Generate(render_projection, terrain_settings))
     rasp_renderer->Draw(canvas, render_projection);
 }

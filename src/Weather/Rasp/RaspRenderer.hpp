@@ -24,19 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_RASP_RENDERER_HPP
 #define XCSOAR_WEATHER_RASP_RENDERER_HPP
 
+#include "RaspCache.hpp"
 #include "Terrain/RasterRenderer.hpp"
+#include "Time/BrokenTime.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"
 #endif
 
-#include <tchar.h>
-
 struct TerrainRendererSettings;
-class RaspCache;
 
 class RaspRenderer {
-  const RaspCache &cache;
+  RaspCache cache;
 
   RasterRenderer raster_renderer;
 
@@ -47,8 +46,8 @@ class RaspRenderer {
   const ColorRamp *last_color_ramp = nullptr;
 
 public:
-  explicit RaspRenderer(const RaspCache &_cache)
-    :cache(_cache) {}
+  RaspRenderer(const RaspStore &_store, unsigned parameter)
+    :cache(_store, parameter) {}
 
   /**
    * Flush the cache.
@@ -61,12 +60,26 @@ public:
 #endif
   }
 
+  unsigned GetParameter() const {
+    return cache.GetParameter();
+  }
+
   /**
    * Returns the human-readable name for the current RASP map, or
    * nullptr if no RASP map is enabled.
    */
   gcc_pure
-  const TCHAR *GetLabel() const;
+  const TCHAR *GetLabel() const {
+    return cache.GetMapLabel();
+  }
+
+  void SetTime(BrokenTime t) {
+    cache.SetTime(t);
+  }
+
+  void Update(BrokenTime time_local, OperationEnvironment &operation) {
+    cache.Reload(time_local, operation);
+  }
 
   /**
    * @return true if an image has been renderered and Draw() may be

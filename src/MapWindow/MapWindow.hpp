@@ -53,7 +53,6 @@ class TopographyStore;
 class CachedTopographyRenderer;
 class RasterTerrain;
 class RaspStore;
-class RaspCache;
 class RaspRenderer;
 class MapOverlayBitmap;
 class Waypoints;
@@ -127,7 +126,7 @@ protected:
 
   RasterTerrain *terrain = nullptr;
 
-  RaspCache *weather = nullptr;
+  const RaspStore *rasp_store = nullptr;
 
   std::unique_ptr<RaspRenderer> rasp_renderer;
 
