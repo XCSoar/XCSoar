@@ -130,7 +130,6 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
   new_map->UpdateProjection();
 
   dir = new_dir;
-  name = new_name;
   weather_map = new_map;
 }
 

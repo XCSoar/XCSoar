@@ -49,7 +49,6 @@ class RaspCache {
   unsigned last_weather_time = 0;
 
   struct zzip_dir *dir = nullptr;
-  NarrowString<32> name;
 
   RasterMap *weather_map = nullptr;
 
@@ -58,7 +57,7 @@ public:
    * Default constructor
    */
   explicit RaspCache(const RaspStore &_store)
-    :store(_store), name("") {}
+    :store(_store) {}
 
   ~RaspCache() {
     Close();
