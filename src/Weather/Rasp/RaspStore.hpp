@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TERRAIN_RASTER_WEATHER_STORE_HPP
-#define XCSOAR_TERRAIN_RASTER_WEATHER_STORE_HPP
+#ifndef XCSOAR_WEATHER_RASP_STORE_HPP
+#define XCSOAR_WEATHER_RASP_STORE_HPP
 
 #include "Util/StaticArray.hxx"
 #include "Util/StaticString.hxx"

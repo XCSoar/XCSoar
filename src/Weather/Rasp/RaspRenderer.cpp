@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Terrain/WeatherTerrainRenderer.hpp"
-#include "Terrain/RasterWeatherCache.hpp"
+#include "RaspRenderer.hpp"
+#include "RaspCache.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "TerrainSettings.hpp"
+#include "Terrain/TerrainSettings.hpp"
 #include "Screen/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Util/StringAPI.hxx"

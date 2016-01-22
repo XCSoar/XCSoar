@@ -11,12 +11,9 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/ScanLine.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/Thread.cpp \
-	$(SRC)/Terrain/RasterWeatherStore.cpp \
-	$(SRC)/Terrain/RasterWeatherCache.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
-	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp
 
 TERRAIN_CPPFLAGS_INTERNAL = $(JASPER_CPPFLAGS) $(SCREEN_CPPFLAGS)

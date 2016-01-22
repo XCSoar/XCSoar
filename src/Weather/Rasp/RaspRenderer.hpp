@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WEATHER_TERRAIN_RENDERER_HPP
-#define XCSOAR_WEATHER_TERRAIN_RENDERER_HPP
+#ifndef XCSOAR_WEATHER_RASP_RENDERER_HPP
+#define XCSOAR_WEATHER_RASP_RENDERER_HPP
 
-#include "RasterRenderer.hpp"
+#include "Terrain/RasterRenderer.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"

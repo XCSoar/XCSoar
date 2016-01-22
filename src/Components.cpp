@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Components.hpp"
-#include "Terrain/RasterWeatherStore.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Waypoint/Waypoints.hpp"

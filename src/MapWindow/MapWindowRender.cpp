@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
-#include "Terrain/WeatherTerrainRenderer.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"

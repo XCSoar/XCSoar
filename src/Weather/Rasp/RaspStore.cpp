@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#include "RasterWeatherStore.hpp"
-#include "RasterMap.hpp"
+#include "RaspStore.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"

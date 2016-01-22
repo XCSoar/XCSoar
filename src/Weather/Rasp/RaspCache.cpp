@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "RasterWeatherCache.hpp"
-#include "RasterWeatherStore.hpp"
-#include "RasterMap.hpp"
-#include "Loader.hpp"
+#include "RaspCache.hpp"
+#include "RaspStore.hpp"
+#include "Terrain/RasterMap.hpp"
+#include "Terrain/Loader.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"

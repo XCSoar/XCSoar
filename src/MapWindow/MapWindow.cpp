@@ -26,8 +26,8 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeatherCache.hpp"
-#include "Terrain/WeatherTerrainRenderer.hpp"
+#include "Weather/Rasp/RaspCache.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Operation/Operation.hpp"
 
