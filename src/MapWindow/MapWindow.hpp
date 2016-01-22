@@ -125,6 +125,11 @@ protected:
 
   const RaspStore *rasp_store = nullptr;
 
+  /**
+   * The current RASP renderer.  Modifications to this pointer (but
+   * not to the #RaspRenderer instance) are protected by
+   * #DoubleBufferWindow::mutex.
+   */
   std::unique_ptr<RaspRenderer> rasp_renderer;
 
 #ifdef ENABLE_OPENGL

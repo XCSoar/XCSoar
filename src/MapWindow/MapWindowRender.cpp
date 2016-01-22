@@ -57,14 +57,23 @@ MapWindow::RenderRasp(Canvas &canvas)
     return;
 
   const WeatherUIState &state = GetUIState().weather;
-  if (rasp_renderer && state.map != (int)rasp_renderer->GetParameter())
+  if (rasp_renderer && state.map != (int)rasp_renderer->GetParameter()) {
+#ifndef ENABLE_OPENGL
+    const ScopeLock protect(mutex);
+#endif
+
     rasp_renderer.reset();
+  }
 
   if (state.map < 0)
     return;
 
-  if (!rasp_renderer)
+  if (!rasp_renderer) {
+#ifndef ENABLE_OPENGL
+    const ScopeLock protect(mutex);
+#endif
     rasp_renderer.reset(new RaspRenderer(*rasp_store, state.map));
+  }
 
   rasp_renderer->SetTime(state.time);
 
