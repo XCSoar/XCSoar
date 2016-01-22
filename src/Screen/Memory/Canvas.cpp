@@ -427,6 +427,23 @@ Canvas::CopyTransparentWhite(int dest_x, int dest_y,
 }
 
 void
+Canvas::StretchTransparentWhite(int dest_x, int dest_y,
+                                unsigned dest_width, unsigned dest_height,
+                                ConstImageBuffer src, int src_x, int src_y,
+                                unsigned src_width, unsigned src_height)
+{
+  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
+      !Clip(dest_y, dest_height, GetHeight(), src_y))
+    return;
+
+  SDLRasterCanvas canvas(buffer);
+  TransparentPixelOperations<ActivePixelTraits> operations(canvas.Import(COLOR_WHITE));
+  canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
+                        src.At(src_x, src_y), src.pitch, src.width, src.height,
+                        operations);
+}
+
+void
 Canvas::StretchNot(const Bitmap &_src)
 {
   assert(_src.IsDefined());

@@ -109,7 +109,8 @@ RawBitmap::BindAndGetTexture() const
 void
 RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
-                     unsigned dest_width, unsigned dest_height) const
+                     unsigned dest_width, unsigned dest_height,
+                     gcc_unused bool transparent_white) const
 {
   GLTexture &texture = BindAndGetTexture();
 

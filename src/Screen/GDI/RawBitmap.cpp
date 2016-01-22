@@ -71,13 +71,19 @@ RawBitmap::~RawBitmap()
 void
 RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
-                     unsigned dest_width, unsigned dest_height) const
+                     unsigned dest_width, unsigned dest_height,
+                     bool transparent_white) const
 {
   HDC source_dc = ::CreateCompatibleDC(dest_canvas);
   ::SelectObject(source_dc, bitmap);
-  ::StretchBlt(dest_canvas, 0, 0,
-               dest_width, dest_height,
-               source_dc, 0, 0, width, height,
-               SRCCOPY);
+  if (transparent_white)
+    ::TransparentBlt(dest_canvas, 0, 0, dest_width, dest_height,
+                     source_dc, 0, 0, width, height,
+                     COLOR_WHITE);
+  else
+    ::StretchBlt(dest_canvas, 0, 0,
+                 dest_width, dest_height,
+                 source_dc, 0, 0, width, height,
+                 SRCCOPY);
   ::DeleteDC(source_dc);
 }

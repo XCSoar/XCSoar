@@ -367,6 +367,11 @@ public:
                             unsigned dest_width, unsigned dest_height,
                             const Canvas &src, int src_x, int src_y);
 
+  void StretchTransparentWhite(int dest_x, int dest_y,
+                               unsigned dest_width, unsigned dest_height,
+                               ConstImageBuffer src, int src_x, int src_y,
+                               unsigned src_width, unsigned src_height);
+
   void StretchNot(const Bitmap &src);
 
   void Stretch(int dest_x, int dest_y,

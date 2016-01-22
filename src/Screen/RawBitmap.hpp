@@ -214,7 +214,8 @@ public:
 #endif
 
   void StretchTo(unsigned width, unsigned height, Canvas &dest_canvas,
-                 unsigned dest_width, unsigned dest_height) const;
+                 unsigned dest_width, unsigned dest_height,
+                 bool transparent_white=false) const;
 
 #ifdef ENABLE_OPENGL
 private:
