@@ -36,9 +36,9 @@ struct TerrainRendererSettings;
 class RaspCache;
 
 class RaspRenderer {
-  RasterRenderer raster_renderer;
+  const RaspCache &cache;
 
-  const RaspCache &weather;
+  RasterRenderer raster_renderer;
 
 #ifndef ENABLE_OPENGL
   CompareProjection compare_projection;
@@ -47,8 +47,8 @@ class RaspRenderer {
   const ColorRamp *last_color_ramp = nullptr;
 
 public:
-  explicit RaspRenderer(const RaspCache &_weather)
-    :weather(_weather) {}
+  explicit RaspRenderer(const RaspCache &_cache)
+    :cache(_cache) {}
 
   /**
    * Flush the cache.

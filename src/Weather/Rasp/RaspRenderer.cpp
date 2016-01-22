@@ -44,23 +44,23 @@ LookupWeatherTerrainStyle(const TCHAR *name)
 const TCHAR *
 RaspRenderer::GetLabel() const
 {
-  return weather.GetMapLabel();
+  return cache.GetMapLabel();
 }
 
 bool
 RaspRenderer::Generate(const WindowProjection &projection,
                        const TerrainRendererSettings &settings)
 {
-  if (weather.IsTerrain())
+  if (cache.IsTerrain())
     return false;
 
-  const auto &style = LookupWeatherTerrainStyle(weather.GetMapName());
+  const auto &style = LookupWeatherTerrainStyle(cache.GetMapName());
   const bool do_water = style.do_water;
   const unsigned height_scale = style.height_scale;
   const int interp_levels = 5;
   const ColorRamp *color_ramp = style.color_ramp;
 
-  const RasterMap *map = weather.GetMap();
+  const RasterMap *map = cache.GetMap();
   if (map == nullptr)
     return false;
 
