@@ -39,7 +39,7 @@ class TerrainLoader {
 
   RasterTileCache &raster_tile_cache;
 
-  const bool scan_overview;
+  const bool scan_overview, scan_tiles;
 
   OperationEnvironment &env;
 
@@ -50,10 +50,12 @@ class TerrainLoader {
 
 public:
   TerrainLoader(SharedMutex &_mutex, RasterTileCache &_rtc,
-                bool _scan_overview,
+                bool _scan_overview, bool _scan_all,
                 OperationEnvironment &_env)
     :mutex(_mutex), raster_tile_cache(_rtc),
-     scan_overview(_scan_overview), env(_env) {}
+     scan_overview(_scan_overview),
+     scan_tiles(!_scan_overview || _scan_all),
+     env(_env) {}
 
   bool LoadOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file);
@@ -83,10 +85,16 @@ private:
   void ParseBounds(const char *data);
 };
 
+/**
+ * @param all load not only overview, but all tiles?  On large files,
+ * this is a very expensive operation.  This option was designed for
+ * small RASP files only.
+ */
 bool
 LoadTerrainOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
+                    bool all,
                     OperationEnvironment &env);
 
 static inline bool
@@ -95,7 +103,7 @@ LoadTerrainOverview(struct zzip_dir *dir,
                     OperationEnvironment &env)
 {
   return LoadTerrainOverview(dir, "terrain.jp2", "terrain.j2w",
-                             tile_cache, env);
+                             tile_cache, false, env);
 }
 
 bool

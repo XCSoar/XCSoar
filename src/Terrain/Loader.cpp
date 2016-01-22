@@ -175,7 +175,8 @@ TerrainLoader::PutTileData(unsigned index,
   if (scan_overview)
     raster_tile_cache.PutOverviewTile(index, start_x, start_y,
                                       end_x, end_y, m);
-  else {
+
+  if (scan_tiles) {
     const ScopeExclusiveLock lock(mutex);
     raster_tile_cache.PutTileData(index, m);
   }
@@ -293,12 +294,13 @@ bool
 LoadTerrainOverview(struct zzip_dir *dir,
                     const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
+                    bool all,
                     OperationEnvironment &env)
 {
   /* fake a mutex - we don't need it for LoadTerrainOverview() */
   SharedMutex mutex;
 
-  TerrainLoader loader(mutex, raster_tile_cache, true, env);
+  TerrainLoader loader(mutex, raster_tile_cache, true, all, env);
   return loader.LoadOverview(dir, path, world_file);
 }
 
@@ -326,7 +328,7 @@ UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
     return false;
 
   NullOperationEnvironment env;
-  TerrainLoader loader(mutex, raster_tile_cache, false, env);
+  TerrainLoader loader(mutex, raster_tile_cache, false, true, env);
   return loader.UpdateTiles(dir, path, x, y, radius);
 }
 
