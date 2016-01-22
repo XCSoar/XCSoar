@@ -160,6 +160,12 @@ LookupWeatherTerrainStyle(const TCHAR *name)
   return *i;
 }
 
+const TCHAR *
+RaspRenderer::GetLabel() const
+{
+  return weather.GetMapLabel();
+}
+
 bool
 RaspRenderer::Generate(const WindowProjection &projection,
                        const TerrainRendererSettings &settings)

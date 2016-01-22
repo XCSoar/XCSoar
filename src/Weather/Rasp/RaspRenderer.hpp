@@ -30,6 +30,8 @@ Copyright_License {
 #include "Projection/CompareProjection.hpp"
 #endif
 
+#include <tchar.h>
+
 struct TerrainRendererSettings;
 class RaspCache;
 
@@ -58,6 +60,13 @@ public:
     compare_projection.Clear();
 #endif
   }
+
+  /**
+   * Returns the human-readable name for the current RASP map, or
+   * nullptr if no RASP map is enabled.
+   */
+  gcc_pure
+  const TCHAR *GetLabel() const;
 
   /**
    * @return true if an image has been renderered and Draw() may be

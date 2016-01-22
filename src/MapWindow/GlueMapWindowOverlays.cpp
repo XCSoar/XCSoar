@@ -29,7 +29,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
-#include "Weather/Rasp/RaspCache.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "UIState.hpp"
@@ -333,8 +333,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
         _T("BALLAST %d LITERS "),
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
 
-  if (weather != nullptr) {
-    const TCHAR *label = weather->GetMapLabel();
+  if (rasp_renderer != nullptr) {
+    const TCHAR *label = rasp_renderer->GetLabel();
     if (label != nullptr)
       buffer += gettext(label);
   }
