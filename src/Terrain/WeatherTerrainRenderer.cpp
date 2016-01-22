@@ -23,8 +23,10 @@ Copyright_License {
 
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Terrain/RasterWeatherCache.hpp"
+#include "Terrain/RasterMap.hpp"
 #include "TerrainSettings.hpp"
 #include "Screen/Ramp.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Util/StringAPI.hxx"
 
 static constexpr ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
@@ -173,6 +175,10 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
 
   const RasterMap *map = weather.GetMap();
   if (map == nullptr)
+    return false;
+
+  if (!map->GetBounds().Overlaps(projection.GetScreenBounds()))
+    /* not visible */
     return false;
 
   if (color_ramp != last_color_ramp) {
