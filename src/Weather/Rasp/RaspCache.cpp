@@ -59,15 +59,15 @@ void
 RaspCache::SetTime(BrokenTime t)
 {
   unsigned i = t.IsPlausible() ? ToHalfHours(t) : 0;
-  weather_time = i;
+  time = i;
 }
 
 BrokenTime
 RaspCache::GetTime() const
 {
-  return weather_time == 0
+  return time == 0
     ? BrokenTime::Invalid()
-    : RaspStore::IndexToTime(weather_time);
+    : RaspStore::IndexToTime(time);
 }
 
 void
@@ -77,30 +77,30 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
     // will be drawing terrain
     return;
 
-  unsigned effective_weather_time = weather_time;
-  if (effective_weather_time == 0) {
+  unsigned effective_time = time;
+  if (effective_time == 0) {
     // "Now" time, so find time in half hours
     if (!time_local.IsPlausible())
       /* can't update to current time if we don't know the current
          time */
       return;
 
-    effective_weather_time = ToHalfHours(time_local);
-    assert(effective_weather_time < RaspStore::MAX_WEATHER_TIMES);
+    effective_time = ToHalfHours(time_local);
+    assert(effective_time < RaspStore::MAX_WEATHER_TIMES);
   }
 
-  if (parameter == last_parameter && effective_weather_time == last_weather_time)
+  if (parameter == last_parameter && effective_time == last_time)
     // no change, quick exit.
     return;
 
   last_parameter = parameter;
-  last_weather_time = effective_weather_time;
+  last_time = effective_time;
 
   // scan forward to next valid time
-  while (!store.IsTimeAvailable(parameter, effective_weather_time)) {
-    ++effective_weather_time;
+  while (!store.IsTimeAvailable(parameter, effective_time)) {
+    ++effective_time;
 
-    if (effective_weather_time >= RaspStore::MAX_WEATHER_TIMES)
+    if (effective_time >= RaspStore::MAX_WEATHER_TIMES)
       // can't find valid time
       return;
   }
@@ -113,7 +113,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   char new_name[MAX_PATH];
   store.NarrowWeatherFilename(new_name, Path(store.GetItemInfo(parameter).name),
-                              effective_weather_time);
+                              effective_time);
 
   RasterMap *new_map = new RasterMap();
   bool success = LoadTerrainOverview(dir, new_name, nullptr, new_map->GetTileCache(),

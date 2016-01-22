@@ -43,8 +43,8 @@ class RaspCache {
   unsigned parameter = 0;
   unsigned last_parameter = 0;
 
-  unsigned weather_time = 0;
-  unsigned last_weather_time = 0;
+  unsigned time = 0;
+  unsigned last_time = 0;
 
   RasterMap *weather_map = nullptr;
 
