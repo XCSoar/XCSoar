@@ -24,19 +24,50 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_TERRAIN_RENDERER_HPP
 #define XCSOAR_WEATHER_TERRAIN_RENDERER_HPP
 
-#include "TerrainRenderer.hpp"
+#include "RasterRenderer.hpp"
 
+#ifndef ENABLE_OPENGL
+#include "Projection/CompareProjection.hpp"
+#endif
+
+struct TerrainRendererSettings;
 class RasterWeatherCache;
 
-class WeatherTerrainRenderer: public TerrainRenderer {
+class WeatherTerrainRenderer {
+  RasterRenderer raster_renderer;
+
   const RasterWeatherCache &weather;
 
-public:
-  WeatherTerrainRenderer(const RasterTerrain &_terrain,
-                         const RasterWeatherCache &_weather);
+#ifndef ENABLE_OPENGL
+  CompareProjection compare_projection;
+#endif
 
-  virtual void Generate(const WindowProjection &map_projection,
-                        const Angle sunazimuth);
+  const ColorRamp *last_color_ramp = nullptr;
+
+  bool available = false;
+
+public:
+  explicit WeatherTerrainRenderer(const RasterWeatherCache &_weather)
+    :weather(_weather) {}
+
+  /**
+   * Flush the cache.
+   */
+  void Flush() {
+#ifdef ENABLE_OPENGL
+    raster_renderer.Invalidate();
+#else
+    compare_projection.Clear();
+#endif
+  }
+
+  void Generate(const WindowProjection &projection,
+                const TerrainRendererSettings &settings);
+
+  void Draw(Canvas &canvas, const WindowProjection &projection) const {
+    if (available)
+      raster_renderer.Draw(canvas, projection);
+  }
 };
 
 #endif

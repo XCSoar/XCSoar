@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Terrain/RasterWeatherCache.hpp"
+#include "TerrainSettings.hpp"
 #include "Screen/Ramp.hpp"
 #include "Util/StringAPI.hxx"
 
@@ -157,19 +158,12 @@ LookupWeatherTerrainStyle(const TCHAR *name)
   return *i;
 }
 
-WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
-                                               const RasterWeatherCache &_weather)
-  :TerrainRenderer(_terrain),
-   weather(_weather)
-{
-}
-
 void
 WeatherTerrainRenderer::Generate(const WindowProjection &projection,
-                                 const Angle sunazimuth)
+                                 const TerrainRendererSettings &settings)
 {
   if (weather.IsTerrain()) {
-    TerrainRenderer::Generate(projection, sunazimuth);
+    available = false;
     return;
   }
 
@@ -177,13 +171,11 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   const bool do_water = style.do_water;
   const unsigned height_scale = style.height_scale;
   const int interp_levels = 5;
-  const bool is_terrain = false;
-  const bool do_shading = is_terrain;
   const ColorRamp *color_ramp = style.color_ramp;
 
   const RasterMap *map = weather.GetMap();
   if (map == nullptr) {
-    TerrainRenderer::Generate(projection, sunazimuth);
+    available = false;
     return;
   }
 
@@ -195,7 +187,9 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
 
   raster_renderer.ScanMap(*map, projection);
 
-  raster_renderer.GenerateImage(do_shading, height_scale,
+  raster_renderer.GenerateImage(false, height_scale,
                                 settings.contrast, settings.brightness,
-                                sunazimuth, false);
+                                Angle::Zero(), false);
+
+  available = true;
 }

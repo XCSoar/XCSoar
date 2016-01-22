@@ -57,7 +57,7 @@ protected:
 
 public:
   TerrainRenderer(const RasterTerrain &_terrain);
-  virtual ~TerrainRenderer() {}
+  ~TerrainRenderer() {}
 
   TerrainRenderer(const TerrainRenderer &) = delete;
   TerrainRenderer &operator=(const TerrainRenderer &) = delete;
@@ -82,8 +82,8 @@ public:
     settings = _settings;
   }
 
-  virtual void Generate(const WindowProjection &map_projection,
-                        const Angle sunazimuth);
+  void Generate(const WindowProjection &map_projection,
+                const Angle sunazimuth);
 
   void Draw(Canvas &canvas, const WindowProjection &projection) const {
     raster_renderer.Draw(canvas, projection);

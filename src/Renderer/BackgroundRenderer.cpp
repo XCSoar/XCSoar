@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "BackgroundRenderer.hpp"
+#include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
@@ -37,6 +38,8 @@ BackgroundRenderer::Flush()
 {
   if (renderer != nullptr)
     renderer->Flush();
+  if (rasp_renderer != nullptr)
+    rasp_renderer->Flush();
 }
 
 void
@@ -50,7 +53,7 @@ void
 BackgroundRenderer::SetWeather(const RasterWeatherCache *_weather)
 {
   weather = _weather;
-  renderer.reset();
+  rasp_renderer.reset();
 }
 
 void
@@ -60,27 +63,25 @@ BackgroundRenderer::Draw(Canvas& canvas,
 {
   canvas.ClearWhite();
 
-  if (terrain == nullptr) {
-    assert(renderer == nullptr);
-    return;
-  }
-  if (!terrain_settings.enable)
-    return;
-
-  if (!renderer) {
-    // defer creation until first draw because
-    // the buffer size, smoothing etc is set by the
-    // loaded terrain properties
-    if (weather != nullptr) {
-      renderer.reset(new WeatherTerrainRenderer(*terrain, *weather));
-    } else {
+  if (terrain_settings.enable && terrain != nullptr) {
+    if (!renderer)
+      // defer creation until first draw because
+      // the buffer size, smoothing etc is set by the
+      // loaded terrain properties
       renderer.reset(new TerrainRenderer(*terrain));
-    }
+
+    renderer->SetSettings(terrain_settings);
+    renderer->Generate(proj, shading_angle);
+    renderer->Draw(canvas, proj);
   }
 
-  renderer->SetSettings(terrain_settings);
-  renderer->Generate(proj, shading_angle);
-  renderer->Draw(canvas, proj);
+  if (weather != nullptr) {
+    if (!rasp_renderer)
+      rasp_renderer.reset(new WeatherTerrainRenderer(*weather));
+
+    rasp_renderer->Generate(proj, terrain_settings);
+    rasp_renderer->Draw(canvas, proj);
+  }
 }
 
 void
