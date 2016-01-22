@@ -147,14 +147,14 @@ static constexpr WeatherTerrainStyle weather_terrain_styles[] = {
 };
 
 gcc_pure
-static const WeatherTerrainStyle *
+static const WeatherTerrainStyle &
 LookupWeatherTerrainStyle(const TCHAR *name)
 {
   const auto *i = weather_terrain_styles;
   while (i->name != nullptr && !StringIsEqual(i->name, name))
     ++i;
 
-  return i;
+  return *i;
 }
 
 WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain &_terrain,
@@ -173,19 +173,13 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
     return;
   }
 
-  const WeatherTerrainStyle *style = LookupWeatherTerrainStyle(weather.GetMapName());
-  if (style == nullptr) {
-    /* unknown map name */
-    TerrainRenderer::Generate(projection, sunazimuth);
-    return;
-  }
-
-  const bool do_water = style->do_water;
-  const unsigned height_scale = style->height_scale;
+  const auto &style = LookupWeatherTerrainStyle(weather.GetMapName());
+  const bool do_water = style.do_water;
+  const unsigned height_scale = style.height_scale;
   const int interp_levels = 5;
   const bool is_terrain = false;
   const bool do_shading = is_terrain;
-  const ColorRamp *color_ramp = style->color_ramp;
+  const ColorRamp *color_ramp = style.color_ramp;
 
   const RasterMap *map = weather.GetMap();
   if (map == nullptr) {
