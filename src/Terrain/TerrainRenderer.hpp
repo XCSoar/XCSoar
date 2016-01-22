@@ -82,7 +82,11 @@ public:
     settings = _settings;
   }
 
-  void Generate(const WindowProjection &map_projection,
+  /**
+   * @return true if an image has been renderered and Draw() may be
+   * called
+   */
+  bool Generate(const WindowProjection &map_projection,
                 const Angle sunazimuth);
 
   void Draw(Canvas &canvas, const WindowProjection &projection) const {

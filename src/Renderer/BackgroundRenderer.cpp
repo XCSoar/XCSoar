@@ -61,8 +61,8 @@ BackgroundRenderer::Draw(Canvas& canvas,
       renderer.reset(new TerrainRenderer(*terrain));
 
     renderer->SetSettings(terrain_settings);
-    renderer->Generate(proj, shading_angle);
-    renderer->Draw(canvas, proj);
+    if (renderer->Generate(proj, shading_angle))
+      renderer->Draw(canvas, proj);
   }
 }
 

@@ -312,7 +312,7 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
 }
 #endif
 
-void
+bool
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
@@ -325,7 +325,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     RasterTerrain::Lease map(terrain);
     if (!new_bounds.IntersectWith(map->GetBounds()))
       /* map is outside of visible screen area */
-      return;
+      return false;
   }
 
   if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
@@ -334,14 +334,14 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       sunazimuth.CompareRoughly(last_sun_azimuth) &&
       !raster_renderer.UpdateQuantisation())
     /* no change since previous frame */
-    return;
+    return true;
 
 #else
   if (compare_projection.Compare(map_projection) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth))
     /* no change since previous frame */
-    return;
+    return true;
 
   compare_projection = CompareProjection(map_projection);
 #endif
@@ -375,4 +375,5 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
                                 do_contour);
+  return true;
 }
