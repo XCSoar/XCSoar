@@ -70,6 +70,7 @@ HasDetails(const MapItem &item)
   case MapItem::WEATHER:
 #endif
   case MapItem::OVERLAY:
+  case MapItem::RASP:
     return true;
   }
 
@@ -323,6 +324,10 @@ ShowMapItemDialog(const MapItem &item,
 
   case MapItem::OVERLAY:
     ShowWeatherDialog(_T("overlay"));
+    break;
+
+  case MapItem::RASP:
+    ShowWeatherDialog(_T("rasp"));
     break;
   }
 }

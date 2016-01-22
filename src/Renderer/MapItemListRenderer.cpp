@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MapWindow/Items/MapItem.hpp"
 #include "MapWindow/Items/OverlayMapItem.hpp"
+#include "MapWindow/Items/RaspMapItem.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -436,6 +437,14 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
 }
 
+static void
+Draw(Canvas &canvas, PixelRect rc,
+     const RaspMapItem &item,
+     const TwoTextRowsRenderer &row_renderer)
+{
+  row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
+}
+
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const MapItem &item,
@@ -494,6 +503,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   case MapItem::OVERLAY:
     ::Draw(canvas, rc, (const OverlayMapItem &)item, row_renderer);
+    break;
+
+  case MapItem::RASP:
+    ::Draw(canvas, rc, (const RaspMapItem &)item, row_renderer);
     break;
   }
 }

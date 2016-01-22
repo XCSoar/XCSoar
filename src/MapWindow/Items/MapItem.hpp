@@ -64,6 +64,7 @@ struct MapItem
     SKYLINES_TRAFFIC,
 #endif
     OVERLAY,
+    RASP,
   } type;
 
 protected:

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Items/List.hpp"
 #include "Items/Builder.hpp"
 #include "Items/OverlayMapItem.hpp"
+#include "Items/RaspMapItem.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
@@ -32,6 +33,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Interface.hpp"
 #include "Overlay.hpp"
 
@@ -94,6 +96,15 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (!list.full() && overlay && overlay->IsInside(location))
     list.push_back(new OverlayMapItem(*overlay));
 #endif
+
+  if (!list.full()) {
+#ifndef ENABLE_OPENGL
+    const ScopeLock protect(mutex);
+#endif
+
+    if (rasp_renderer && rasp_renderer->IsInside(location))
+      list.push_back(new RaspMapItem(rasp_renderer->GetLabel()));
+  }
 
   // Sort the list of map items
   list.Sort();
