@@ -63,6 +63,7 @@ struct MapItem
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     SKYLINES_TRAFFIC,
 #endif
+    OVERLAY,
   } type;
 
 protected:

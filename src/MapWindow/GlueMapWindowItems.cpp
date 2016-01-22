@@ -24,6 +24,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Items/List.hpp"
 #include "Items/Builder.hpp"
+#include "Items/OverlayMapItem.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
@@ -32,6 +33,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 #include "Interface.hpp"
+#include "Overlay.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
@@ -86,6 +88,11 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   builder.AddSkyLinesTraffic();
+#endif
+
+#ifdef ENABLE_OPENGL
+  if (!list.full() && overlay && overlay->IsInside(location))
+    list.push_back(new OverlayMapItem(*overlay));
 #endif
 
   // Sort the list of map items

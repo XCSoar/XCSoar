@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
+#include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"
@@ -68,6 +69,7 @@ HasDetails(const MapItem &item)
 #ifdef HAVE_NOAA
   case MapItem::WEATHER:
 #endif
+  case MapItem::OVERLAY:
     return true;
   }
 
@@ -318,6 +320,10 @@ ShowMapItemDialog(const MapItem &item,
     dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);
     break;
 #endif
+
+  case MapItem::OVERLAY:
+    ShowWeatherDialog(_T("overlay"));
+    break;
   }
 }
 

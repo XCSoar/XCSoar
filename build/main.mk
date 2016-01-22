@@ -460,6 +460,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/WaveRenderer.cpp \
 	$(SRC)/Projection/ChartProjection.cpp \
 	$(SRC)/MapWindow/Items/MapItem.cpp \
+	$(SRC)/MapWindow/Items/OverlayMapItem.cpp \
 	$(SRC)/MapWindow/Items/List.cpp \
 	$(SRC)/MapWindow/Items/Builder.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \

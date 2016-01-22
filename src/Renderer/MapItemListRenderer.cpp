@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "MapWindow/Items/MapItem.hpp"
+#include "MapWindow/Items/OverlayMapItem.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -427,6 +428,14 @@ Draw(Canvas &canvas, PixelRect rc,
 
 #endif /* HAVE_SKYLINES_TRACKING_HANDLER */
 
+static void
+Draw(Canvas &canvas, PixelRect rc,
+     const OverlayMapItem &item,
+     const TwoTextRowsRenderer &row_renderer)
+{
+  row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
+}
+
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const MapItem &item,
@@ -481,6 +490,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   case MapItem::THERMAL:
     ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
            row_renderer, look);
+    break;
+
+  case MapItem::OVERLAY:
+    ::Draw(canvas, rc, (const OverlayMapItem &)item, row_renderer);
     break;
   }
 }
