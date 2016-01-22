@@ -24,8 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_MAP_OVERLAY_HPP
 #define XCSOAR_MAP_OVERLAY_HPP
 
+#include "Compiler.h"
+
+#include <tchar.h>
+
 class Canvas;
 class WindowProjection;
+struct GeoPoint;
 
 /**
  * An overlay that can be rendered in the #MapWindow.
@@ -34,6 +39,18 @@ class WindowProjection;
  */
 class MapOverlay {
 public:
+  /**
+   * Returns a human-readable name for this overlay.
+   */
+  gcc_pure
+  virtual const TCHAR *GetLabel() const = 0;
+
+  /**
+   * Check whether the given location is inside the overlay.
+   */
+  gcc_pure
+  virtual bool IsInside(GeoPoint p) const = 0;
+
   /**
    * Draw the overlay to the given #Canvas.
    */

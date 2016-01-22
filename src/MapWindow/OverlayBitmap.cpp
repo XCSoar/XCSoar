@@ -38,6 +38,7 @@ Copyright_License {
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/multi/geometries/multi_polygon.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
+#include <boost/geometry/algorithms/covered_by.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 
 using ArrayQuadrilateral = StaticArray<DoublePoint2D, 5>;
@@ -49,6 +50,7 @@ using ClippedMultiPolygon =
   boost::geometry::model::multi_polygon<ClippedPolygon>;
 
 MapOverlayBitmap::MapOverlayBitmap(Path path) throw(std::runtime_error)
+  :label((path.GetBase() != nullptr ? path.GetBase() : path).c_str())
 {
   bounds = bitmap.LoadGeoFile(path);
   simple_bounds = bounds.GetBounds();
@@ -118,6 +120,13 @@ MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p)
   return MapInQuadrilateral(GeoTo2D(q.top_left), GeoTo2D(q.top_right),
                             GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
                             GeoTo2D(p));
+}
+
+bool
+MapOverlayBitmap::IsInside(GeoPoint p) const
+{
+  return simple_bounds.IsInside(p) &&
+    boost::geometry::covered_by(GeoTo2D(p), ToArrayQuadrilateral(bounds));
 }
 
 void

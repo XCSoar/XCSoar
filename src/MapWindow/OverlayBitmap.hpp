@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "Util/tstring.hpp"
 
 #include <stdexcept>
 
@@ -57,6 +58,8 @@ class MapOverlayBitmap final : public MapOverlay {
 
   float alpha = 1;
 
+  tstring label;
+
 public:
   /**
    * Load a GeoTIFF file.
@@ -66,9 +69,11 @@ public:
   /**
    * Move an existing #Bitmap with a geo reference.
    */
-  MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds) noexcept
+  MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds,
+                   tstring::const_pointer _label) noexcept
     :bitmap(std::move(_bitmap)), bounds(_bounds),
-     simple_bounds(bounds.GetBounds()) {}
+     simple_bounds(bounds.GetBounds()),
+     label(_label) {}
 
   /**
    * By default, this class uses the bitmap's alpha channel.  This
@@ -86,6 +91,11 @@ public:
   }
 
   /* virtual methods from class MapOverlay */
+  const TCHAR *GetLabel() const override {
+    return label.c_str();
+  }
+
+  bool IsInside(GeoPoint p) const override;
   void Draw(Canvas &canvas,
             const WindowProjection &projection) noexcept override;
 };
