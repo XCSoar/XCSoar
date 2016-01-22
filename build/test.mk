@@ -1742,6 +1742,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Weather/Rasp/RaspStore.cpp \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
+	$(SRC)/Weather/Rasp/RaspStyle.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \

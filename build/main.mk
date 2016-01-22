@@ -489,6 +489,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspStore.cpp \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
+	$(SRC)/Weather/Rasp/RaspStyle.cpp \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/GroundSpeedComputer.cpp \
