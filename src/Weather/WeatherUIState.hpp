@@ -31,10 +31,10 @@ Copyright_License {
  */
 struct WeatherUIState {
   /**
-   * The map index being displayed.  0 means no weather map (normal
+   * The map index being displayed.  -1 means no weather map (normal
    * terrain display).
    */
-  unsigned map;
+  int map;
 
   /**
    * The weather forecast time that shall be displayed.
@@ -42,7 +42,7 @@ struct WeatherUIState {
   BrokenTime time;
 
   void Clear() {
-    map = 0;
+    map = -1;
     time = BrokenTime::Invalid();
   }
 };

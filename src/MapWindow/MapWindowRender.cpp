@@ -57,10 +57,10 @@ MapWindow::RenderRasp(Canvas &canvas)
     return;
 
   const WeatherUIState &state = GetUIState().weather;
-  if (rasp_renderer && state.map != rasp_renderer->GetParameter())
+  if (rasp_renderer && state.map != (int)rasp_renderer->GetParameter())
     rasp_renderer.reset();
 
-  if (state.map == 0)
+  if (state.map < 0)
     return;
 
   if (!rasp_renderer)

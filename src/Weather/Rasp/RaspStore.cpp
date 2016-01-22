@@ -45,11 +45,6 @@ Copyright_License {
 
 static constexpr RaspStore::MapInfo WeatherDescriptors[] = {
   {
-    nullptr,
-    N_("Terrain"),
-    N_("Display terrain on map, no weather data displayed."),
-  },
-  {
     _T("wstar"),
     N_("W*"),
     N_("Average dry thermal updraft strength near mid-BL height.  Subtract glider descent rate to get average vario reading for cloudless thermals.  Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\").  W* depends upon both the surface heating and the BL depth."),
@@ -194,26 +189,16 @@ RaspStore::ScanAll()
   std::set<tstring> names;
 
   for (const auto &i : WeatherDescriptors) {
-    if (i.name == nullptr) {
-      /* special case: 0 = terrain */
-      assert(maps.empty());
+    if (maps.full())
+      break;
 
-      auto &m = maps.append();
-      m.name.clear();
-      m.label = i.label;
-      m.help = i.help;
-    } else {
-      if (maps.full())
-        break;
+    MapItem item(i.name);
+    item.label = i.label;
+    item.help = i.help;
+    if (ScanMapItem(dir, item))
+      maps.push_back(item);
 
-      MapItem item(i.name);
-      item.label = i.label;
-      item.help = i.help;
-      if (ScanMapItem(dir, item))
-        maps.push_back(item);
-
-      names.insert(i.name);
-    }
+    names.insert(i.name);
   }
 
   ZZIP_DIRENT e;

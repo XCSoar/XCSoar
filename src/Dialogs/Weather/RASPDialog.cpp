@@ -73,10 +73,10 @@ RASPSettingsPanel::UpdateTimeControl()
 {
   const DataFieldEnum &item = (const DataFieldEnum &)GetDataField(ITEM);
 
-  const unsigned item_index = item.GetValue();
-  SetRowEnabled(TIME, item_index > 0);
+  const int item_index = item.GetValue();
+  SetRowEnabled(TIME, item_index >= 0);
 
-  if (item_index > 0) {
+  if (item_index >= 0) {
     DataFieldEnum &time_df = (DataFieldEnum &)GetDataField(TIME);
     time_df.ClearChoices();
     time_df.addEnumText(_("Now"));
@@ -96,8 +96,8 @@ RASPSettingsPanel::UpdateTimeControl()
 inline void
 RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df)
 {
-  const unsigned value = df.GetValue();
-  time = value == 0
+  const int value = df.GetValue();
+  time = value >= 0
     ? BrokenTime::Invalid()
     : BrokenTime::FromMinuteOfDay(value);
 }
@@ -113,6 +113,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Field"), nullptr, this);
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
+  dfe->AddChoice(-1, _T("none"), _T("none"), nullptr);
   for (unsigned i = 0; i < rasp.GetItemCount(); i++) {
     const auto &mi = rasp.GetItemInfo(i);
     const TCHAR *label = mi.label;
