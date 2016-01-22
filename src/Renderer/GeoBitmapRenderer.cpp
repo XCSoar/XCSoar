@@ -44,8 +44,7 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
               const GeoBounds &bounds,
               const Projection &projection)
 {
-  if (!bounds.IsValid())
-    return;
+  assert(bounds.IsValid());
 
   const BulkPixelPoint vertices[] = {
     projection.GeoToScreen(bounds.GetNorthWest()),
