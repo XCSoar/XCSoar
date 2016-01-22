@@ -105,7 +105,7 @@ public:
   /**
    * Load a list of RASP maps from the file "xcsoar-rasp.dat".
    */
-  void ScanAll(const GeoPoint &location, OperationEnvironment &operation);
+  void ScanAll(OperationEnvironment &operation);
 
   bool IsTimeAvailable(unsigned item_index, unsigned time_index) const {
     assert(item_index < maps.size());

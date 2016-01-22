@@ -163,8 +163,7 @@ RaspStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
 }
 
 void
-RaspStore::ScanAll(const GeoPoint &location,
-                   OperationEnvironment &operation)
+RaspStore::ScanAll(OperationEnvironment &operation)
 {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
