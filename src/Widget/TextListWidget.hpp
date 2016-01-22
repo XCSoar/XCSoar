@@ -31,9 +31,9 @@ Copyright_License {
  * A combination of #ListWidget and #TextRowRenderer.
  */
 class TextListWidget : public ListWidget {
+protected:
   TextRowRenderer row_renderer;
 
-protected:
   gcc_pure
   virtual const TCHAR *GetRowText(unsigned i) const = 0;
 
