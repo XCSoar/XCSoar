@@ -73,9 +73,6 @@ public:
 #endif
   }
 
-protected:
-  void CopyTo(Canvas &canvas, unsigned width, unsigned height) const;
-
 public:
   const TerrainRendererSettings &GetSettings() const {
     return settings;
@@ -88,7 +85,9 @@ public:
   virtual void Generate(const WindowProjection &map_projection,
                         const Angle sunazimuth);
 
-  void Draw(Canvas &canvas, const WindowProjection &map_projection) const;
+  void Draw(Canvas &canvas, const WindowProjection &projection) const {
+    raster_renderer.Draw(canvas, projection);
+  }
 };
 
 #endif

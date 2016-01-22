@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Renderer/GeoBitmapRenderer.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/RawBitmap.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -298,14 +297,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
   settings.SetDefaults();
 }
 
-void
-TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
-{
-  raster_renderer.GetImage().StretchTo(raster_renderer.GetWidth(),
-                                        raster_renderer.GetHeight(), canvas,
-                                        width, height);
-}
-
 #ifdef ENABLE_OPENGL
 /**
  * Checks if the size difference of any dimension is more than a
@@ -386,26 +377,4 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
                                 do_contour);
-}
-
-/**
- * Draws the terrain to the given canvas
- * @param canvas The drawing canvas
- * @param map_projection The Projection
- * @param sunazimuth Azimuth of the sun (for terrain shading)
- */
-void
-TerrainRenderer::Draw(Canvas &canvas,
-                      const WindowProjection &map_projection) const
-{
-#ifdef ENABLE_OPENGL
-  DrawGeoBitmap(raster_renderer.GetImage(),
-                PixelSize(raster_renderer.GetWidth(),
-                          raster_renderer.GetHeight()),
-                raster_renderer.GetBounds(),
-                map_projection);
-#else
-  CopyTo(canvas, map_projection.GetScreenWidth(),
-         map_projection.GetScreenHeight());
-#endif
 }
