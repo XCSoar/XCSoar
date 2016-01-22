@@ -25,9 +25,11 @@ Copyright_License {
 #include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
+#include "Weather/Rasp/RaspCache.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
+#include "Operation/Operation.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -53,6 +55,15 @@ MapWindow::RenderRasp(Canvas &canvas)
 {
   if (weather == nullptr)
     return;
+
+  const WeatherUIState &state = GetUIState().weather;
+  weather->SetParameter(state.map);
+  weather->SetTime(state.time);
+
+  {
+    QuietOperationEnvironment operation;
+    weather->Reload(Calculated().date_time_local, operation);
+  }
 
   const auto &terrain_settings = GetMapSettings().terrain;
 

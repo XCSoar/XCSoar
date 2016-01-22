@@ -401,8 +401,6 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas)
   EnterDrawThread();
 #endif
 
-  UpdateWeather();
-
   MapWindow::OnPaintBuffer(canvas);
 
   DrawMapScale(canvas, GetClientRect(), render_projection);

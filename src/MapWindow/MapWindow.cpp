@@ -29,7 +29,6 @@ Copyright_License {
 #include "Weather/Rasp/RaspCache.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Operation/Operation.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -123,20 +122,6 @@ MapWindow::UpdateTerrain()
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
   return terrain->UpdateTiles(location, radius);
-}
-
-void
-MapWindow::UpdateWeather()
-{
-  if (weather == nullptr)
-    return;
-
-  const WeatherUIState &state = GetUIState().weather;
-  weather->SetParameter(state.map);
-  weather->SetTime(state.time);
-
-  QuietOperationEnvironment operation;
-  weather->Reload(Calculated().date_time_local, operation);
 }
 
 /**

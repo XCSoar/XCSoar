@@ -312,12 +312,9 @@ protected:
    */
   bool UpdateTerrain();
 
-  void UpdateWeather();
-
   void UpdateAll() {
     UpdateTopography();
     UpdateTerrain();
-    UpdateWeather();
   }
 
 protected:
