@@ -98,8 +98,8 @@ RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df)
 {
   const int value = df.GetValue();
   time = value >= 0
-    ? BrokenTime::Invalid()
-    : BrokenTime::FromMinuteOfDay(value);
+    ? BrokenTime::FromMinuteOfDay(value)
+    : BrokenTime::Invalid();
 }
 
 void
