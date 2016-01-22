@@ -54,6 +54,7 @@ class CachedTopographyRenderer;
 class RasterTerrain;
 class RasterWeatherStore;
 class RasterWeatherCache;
+class WeatherTerrainRenderer;
 class MapOverlayBitmap;
 class Waypoints;
 class Airspaces;
@@ -127,6 +128,8 @@ protected:
   RasterTerrain *terrain = nullptr;
 
   RasterWeatherCache *weather = nullptr;
+
+  std::unique_ptr<WeatherTerrainRenderer> rasp_renderer;
 
 #ifdef ENABLE_OPENGL
   std::unique_ptr<MapOverlayBitmap> overlay_bitmap;
@@ -333,6 +336,9 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderTerrain(Canvas &canvas);
+
+  void RenderRasp(Canvas &canvas);
+
   /**
    * Renders the topography
    * @param canvas The drawing canvas

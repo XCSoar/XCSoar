@@ -27,6 +27,7 @@ Copyright_License {
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeatherCache.hpp"
+#include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Operation/Operation.hpp"
 
@@ -77,6 +78,8 @@ void
 MapWindow::FlushCaches()
 {
   background.Flush();
+  if (rasp_renderer)
+    rasp_renderer->Flush();
   airspace_renderer.Flush();
 }
 
@@ -187,5 +190,5 @@ MapWindow::SetWeather(const RasterWeatherStore *_weather)
   weather = _weather != nullptr
     ? new RasterWeatherCache(*_weather)
     : nullptr;
-  background.SetWeather(weather);
+  rasp_renderer.reset();
 }

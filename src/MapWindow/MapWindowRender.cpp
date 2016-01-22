@@ -24,6 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
+#include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
@@ -45,6 +46,21 @@ MapWindow::RenderTerrain(Canvas &canvas)
   background.SetShadingAngle(render_projection, GetMapSettings().terrain,
                              Calculated());
   background.Draw(canvas, render_projection, GetMapSettings().terrain);
+}
+
+inline void
+MapWindow::RenderRasp(Canvas &canvas)
+{
+  if (weather == nullptr)
+    return;
+
+  const auto &terrain_settings = GetMapSettings().terrain;
+
+  if (!rasp_renderer)
+    rasp_renderer.reset(new WeatherTerrainRenderer(*weather));
+
+  if (rasp_renderer->Generate(render_projection, terrain_settings))
+    rasp_renderer->Draw(canvas, render_projection);
 }
 
 void
@@ -155,6 +171,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   // Render terrain, groundline and topography
   draw_sw.Mark("RenderTerrain");
   RenderTerrain(canvas);
+
+  draw_sw.Mark("RenderRasp");
+  RenderRasp(canvas);
 
   draw_sw.Mark("RenderTopography");
   RenderTopography(canvas);

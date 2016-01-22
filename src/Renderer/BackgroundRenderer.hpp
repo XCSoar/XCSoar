@@ -32,9 +32,7 @@ class Canvas;
 class WindowProjection;
 struct TerrainRendererSettings;
 class TerrainRenderer;
-class WeatherTerrainRenderer;
 class RasterTerrain;
-class RasterWeatherCache;
 struct DerivedInfo;
 
 /**
@@ -44,9 +42,7 @@ class BackgroundRenderer {
   static const Angle DEFAULT_SHADING_ANGLE;
 
   const RasterTerrain *terrain = nullptr;
-  const RasterWeatherCache *weather = nullptr;
   std::unique_ptr<TerrainRenderer> renderer;
-  std::unique_ptr<WeatherTerrainRenderer> rasp_renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
 public:
@@ -67,7 +63,6 @@ public:
                        const TerrainRendererSettings &settings,
                        const DerivedInfo &calculated);
   void SetTerrain(const RasterTerrain *terrain);
-  void SetWeather(const RasterWeatherCache *weather);
 
 private:
   void SetShadingAngle(const WindowProjection& proj, Angle angle);
