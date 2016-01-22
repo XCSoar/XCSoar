@@ -221,6 +221,10 @@ public:
 
 #ifdef ENABLE_OPENGL
   void SetOverlay(std::unique_ptr<MapOverlay> &&_overlay);
+
+  const MapOverlay *GetOverlay() const {
+    return overlay.get();
+  }
 #endif
 
 #ifdef HAVE_NOAA
