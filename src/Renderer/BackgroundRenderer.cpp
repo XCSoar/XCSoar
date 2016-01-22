@@ -73,8 +73,7 @@ BackgroundRenderer::Draw(Canvas& canvas,
   canvas.ClearWhite();
 
   if (terrain == nullptr) {
-    // terrain may have been re-set, so may need new renderer
-    Reset();
+    assert(renderer == nullptr);
     return;
   }
   if (!terrain_settings.enable)
