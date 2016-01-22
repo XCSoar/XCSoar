@@ -59,6 +59,8 @@ public:
   explicit constexpr SelectOptimisedPixelOperations(Args... args)
     :Optimised(args...), Portable(args...) {}
 
+  using Portable::WritePixel;
+
   gcc_flatten gcc_nonnull_all
   void FillPixels(rpointer_type p, unsigned n, color_type c) const {
     const unsigned no = n & OPTIMISED_MASK;
