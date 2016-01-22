@@ -242,11 +242,8 @@ public:
       if (::GetWindowPlacement(hWnd, &placement) &&
           (placement.showCmd == SW_MINIMIZE ||
            placement.showCmd == SW_SHOWMINIMIZED)) {
-        placement.rcNormalPosition.right -= placement.rcNormalPosition.left;
-        placement.rcNormalPosition.bottom -= placement.rcNormalPosition.top;
-        placement.rcNormalPosition.left = 0;
-        placement.rcNormalPosition.top = 0;
-        return reinterpret_cast<const PixelRect &>(placement.rcNormalPosition);
+        const auto &r = placement.rcNormalPosition;
+        return PixelRect(0, 0, r.right - r.left, r.bottom - r.top);
       }
     }
 
