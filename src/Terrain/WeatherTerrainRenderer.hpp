@@ -67,7 +67,7 @@ public:
                 const TerrainRendererSettings &settings);
 
   void Draw(Canvas &canvas, const WindowProjection &projection) const {
-    raster_renderer.Draw(canvas, projection);
+    raster_renderer.Draw(canvas, projection, true);
   }
 };
 

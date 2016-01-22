@@ -499,7 +499,8 @@ RasterRenderer::ContourStart(const unsigned contour_height_scale)
 
 void
 RasterRenderer::Draw(Canvas &canvas,
-                     const WindowProjection &projection) const
+                     const WindowProjection &projection,
+                     bool transparent_white) const
 {
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
@@ -511,6 +512,7 @@ RasterRenderer::Draw(Canvas &canvas,
 #else
   image->StretchTo(height_matrix.GetWidth(), height_matrix.GetHeight(),
                    canvas, projection.GetScreenWidth(),
-                   projection.GetScreenHeight());
+                   projection.GetScreenHeight(),
+                   transparent_white);
 #endif
 }
