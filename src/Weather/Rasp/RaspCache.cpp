@@ -26,18 +26,10 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/Loader.hpp"
 #include "Language/Language.hpp"
-#include "Units/Units.hpp"
-#include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/Clamp.hpp"
-#include "Util/Macros.hpp"
-#include "Operation/Operation.hpp"
+#include "OS/Path.hpp"
 #include "zzip/zzip.h"
 
 #include <assert.h>
-#include <tchar.h>
-#include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
 static inline constexpr unsigned

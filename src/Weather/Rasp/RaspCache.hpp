@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_RASP_CACHE_HPP
 #define XCSOAR_WEATHER_RASP_CACHE_HPP
 
-#include "Time/BrokenTime.hpp"
-#include "Util/StaticString.hxx"
 #include "Compiler.h"
 
 #include <tchar.h>
 
+struct BrokenTime;
 class RaspStore;
 class RasterMap;
 class OperationEnvironment;
