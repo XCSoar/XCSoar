@@ -47,7 +47,10 @@ RaspCache::GetMapName() const
 const TCHAR *
 RaspCache::GetMapLabel() const
 {
-  return gettext(store.GetItemInfo(parameter).label);
+  const auto &info = store.GetItemInfo(parameter);
+  return info.label != nullptr
+    ? gettext(info.label)
+    : info.name.c_str();
 }
 
 void
