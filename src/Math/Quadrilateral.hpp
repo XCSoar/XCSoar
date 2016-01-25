@@ -33,7 +33,7 @@
  * Formula from
  * http://www.iquilezles.org/www/articles/ibilinear/ibilinear.htm
  */
-gcc_pure
+gcc_const
 static DoublePoint2D
 MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
                    const DoublePoint2D c, const DoublePoint2D d,
