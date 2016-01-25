@@ -32,7 +32,9 @@ CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,
                    DoublePoint2D e, DoublePoint2D g,
                    double v)
 {
-  return (h.x - f.x * v) / (e.x + g.x * v);
+  return e.x + g.x * v == 0
+          ? (h.y - f.y * v) / (e.y + g.y * v)
+          : (h.x - f.x * v) / (e.x + g.x * v);
 }
 
 /**
