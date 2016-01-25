@@ -48,6 +48,8 @@ Bitmap::LoadGeoFile(Path path)
     if (!Load(std::move(result.first)))
       throw std::runtime_error("Failed to use geo image file");
 
+    assert(IsDefined());
+
     return result.second;
   }
 #endif
