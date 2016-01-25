@@ -90,6 +90,7 @@ TEST_NAMES = \
 	TestDateTime TestRoughTime TestWrapClock \
 	TestMathTables \
 	TestAngle TestARange \
+	TestQuadrilateral \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestProfile \
 	TestAllocatedGrid \
@@ -352,6 +353,12 @@ TEST_ARANGE_SOURCES = \
 	$(TEST_SRC_DIR)/TestARange.cpp
 TEST_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestARange,TEST_ARANGE))
+
+TEST_QUADRILATERAL_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestQuadrilateral.cpp
+QUADRILATERAL_ARANGE_DEPENDS = MATH
+$(eval $(call link-program,TestQuadrilateral,TEST_QUADRILATERAL))
 
 TEST_CSV_LINE_SOURCES = \
 	$(SRC)/IO/CSVLine.cpp \
