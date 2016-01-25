@@ -52,7 +52,7 @@ MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
 {
   const DoublePoint2D e = b - a;
   const DoublePoint2D f = d - a;
-  const DoublePoint2D g = a - b + c - d;
+  const DoublePoint2D g = (a - b) + (c - d);
   const DoublePoint2D h = p - a;
 
   const double k2 = CrossProduct(g, f);
