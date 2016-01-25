@@ -26,6 +26,15 @@
 #include "Point2D.hpp"
 #include "Compiler.h"
 
+gcc_const
+static double
+CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,
+                   DoublePoint2D e, DoublePoint2D g,
+                   double v)
+{
+  return (h.x - f.x * v) / (e.x + g.x * v);
+}
+
 /**
  * Map a "global" point to a point inside the quadrilateral's frame of
  * reference.
@@ -54,17 +63,17 @@ MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
 
   if (k2 == 0) {
     const double v = -k0 / k1;
-    const double u = (h.x - f.x * v) / (e.x + g.x * v);
+    const double u = CalcQuadrilateralU(h, f, e, g, v);
     return {u, v};
   }
 
   w = sqrt(w);
 
   const double v1 = (-k1 - w) / (2 * k2);
-  const double u1 = (h.x - f.x * v1) / (e.x + g.x * v1);
+  const double u1 = CalcQuadrilateralU(h, f, e, g, v1);
 
   const double v2 = (-k1 + w) / (2 * k2);
-  const double u2 = (h.x - f.x * v2) / (e.x + g.x * v2);
+  const double u2 = CalcQuadrilateralU(h, f, e, g, v2);
 
   double u = u1;
   double v = v1;
