@@ -55,3 +55,9 @@ FLAGS_PROFILE := -pg
 else
 FLAGS_PROFILE :=
 endif
+
+ifeq ($(SANITIZE),y)
+SANITIZE_FLAGS := -fsanitize=address
+else
+SANITIZE_FLAGS :=
+endif

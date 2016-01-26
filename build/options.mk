@@ -21,6 +21,9 @@ endif
 
 ICF ?= n
 
+# enable gcc/clang sanitizers?
+SANITIZE ?= n
+
 # show map renderer times?
 STOP_WATCH ?= n
 ifeq ($(STOP_WATCH),y)
