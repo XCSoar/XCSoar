@@ -70,6 +70,7 @@ class Toolchain:
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 thirdparty_libs = [
+    glibc,
     zlib,
     freetype,
     curl,

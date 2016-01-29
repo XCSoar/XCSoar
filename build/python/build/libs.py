@@ -2,6 +2,21 @@ from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
 
+glibc = AutotoolsProject(
+    'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
+    'http://ftp.gnu.org/gnu/glibc/glibc-2.23.tar.xz',
+    '456995968f3acadbed39f5eba31678df',
+    'include/unistd.h',
+    [
+        '--enable-static-nss',
+        '--enable-kernel=2.6.35',
+        '--disable-werror',
+        '--disable-build-nscd',
+        '--disable-nscd',
+    ],
+    shared=True,
+)
+
 zlib = ZlibProject(
     'http://zlib.net/zlib-1.2.11.tar.xz',
     'http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.xz',

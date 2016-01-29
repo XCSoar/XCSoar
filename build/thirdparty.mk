@@ -6,7 +6,8 @@ endif
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
 
-THIRDPARTY_LDFLAGS_FILTER_OUT = -L%
+# -Wl,--gc-sections breaks the (Kobo) glibc build
+THIRDPARTY_LDFLAGS_FILTER_OUT = -L% -Wl,--gc-sections
 
 THIRDPARTY_LIBS_DIR = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)
 THIRDPARTY_LIBS_ROOT = $(THIRDPARTY_LIBS_DIR)/root
