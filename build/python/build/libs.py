@@ -7,6 +7,20 @@ from build.freetype import FreeTypeProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
+glibc = AutotoolsProject(
+    'http://mirror.netcologne.de/gnu/libc/glibc-2.22.tar.xz',
+    'e51e02bf552a0a1fbbdc948fb2f5e83c',
+    'include/unistd.h',
+    [
+        '--enable-static-nss',
+        '--enable-kernel=2.6.35',
+        '--disable-werror',
+        '--disable-build-nscd',
+        '--disable-nscd',
+    ],
+    shared=True,
+)
+
 boost = BoostProject(
     'http://netcologne.dl.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2',
     '65a840e1a0b13a558ff19eeb2c4f0cbe',

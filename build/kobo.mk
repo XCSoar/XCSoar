@@ -91,10 +91,10 @@ KOBO_SYS_LIB_NAMES = libc.so.6 libm.so.6 libpthread.so.0 librt.so.1 \
 	libresolv.so.2 libnss_dns.so.2 libnss_files.so.2 \
 	ld-linux-armhf.so.3
 
-# from Debian package libgcc1-armhf-cross
-KOBO_SYS_LIB_NAMES += libgcc_s.so.1
+KOBO_SYS_LIB_PATHS = $(addprefix $(THIRDARTY_LIBS_ROOT)/lib/,$(KOBO_SYS_LIB_NAMES))
 
-KOBO_SYS_LIB_PATHS = $(addprefix $(SYSROOT)/lib/,$(KOBO_SYS_LIB_NAMES))
+# from Debian package libgcc1-armhf-cross
+KOBO_SYS_LIB_PATHS += $(SYSROOT)/lib/libgcc_s.so.1
 
 KOBO_KERNEL_DIR = /opt/kobo/kernel
 
