@@ -53,14 +53,12 @@ struct TextCacheKey {
   const Font *font;
   const char *text;
   char *allocated;
-  size_t hash;
 
   TextCacheKey(const TextCacheKey &other) = delete;
 
   TextCacheKey(TextCacheKey &&other)
     :font(other.font),
-     text(other.text), allocated(other.allocated),
-     hash(other.hash) {
+     text(other.text), allocated(other.allocated) {
     other.allocated = nullptr;
   }
 
@@ -87,7 +85,6 @@ struct TextCacheKey {
     font = other.font;
     text = other.text;
     std::swap(allocated, other.allocated);
-    hash = other.hash;
     return *this;
   }
 
