@@ -44,7 +44,7 @@ ifeq ($$(TARGET)$$(ARMV7),ANDROIDy)
 # such as libtiff however hard-code "-lm" in their pkg-config file,
 # which causes serious math breakage; therefore, filter out all "-lm"
 # flags.
-$(1)_LDLIBS_GEN := $$(filter-out -lm,$$(value $(1)_LDLIBS_GEN))
+$(1)_LDLIBS_RAW_GEN := $$(filter-out -lm,$$(value $(1)_LDLIBS_RAW_GEN))
 endif
 
 endef
