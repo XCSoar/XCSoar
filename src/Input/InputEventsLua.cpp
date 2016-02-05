@@ -36,10 +36,6 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 
-extern "C" {
-#include <lua.h>
-}
-
 #include <windef.h> /* for MAX_PATH */
 
 class LuaFileVisitor final : public File::Visitor {
