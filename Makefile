@@ -64,6 +64,7 @@ topdir = .
 -include $(topdir)/build/local-config.mk
 
 include $(topdir)/build/make.mk
+include $(topdir)/build/thunk.mk
 include $(topdir)/build/bool.mk
 include $(topdir)/build/string.mk
 include $(topdir)/build/dirs.mk
