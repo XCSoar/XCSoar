@@ -21,3 +21,9 @@ class BoostProject(Project):
         dest = os.path.join(includedir, 'boost')
         shutil.rmtree(dest, ignore_errors=True)
         shutil.copytree(os.path.join(src, 'boost'), dest)
+
+        # since shutil.copytree() preserves time stamps, we need to
+        # "touch" the installed include/boost/version.hpp, so it has a
+        # newer time stamp than the tarball file
+        installed = os.path.join(toolchain.install_prefix, self.installed)
+        os.utime(installed)
