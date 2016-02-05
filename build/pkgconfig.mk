@@ -16,7 +16,11 @@ ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
   PKG_CONFIG := PKG_CONFIG_LIBDIR=$(CUBIE)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(CUBIE)/usr
 endif
 
-call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1))
+call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1) || echo ERROR)
+
+define assign-check-error
+$(1) = $$($(2))$$(if $$(filter ERROR,$$($(2))),$$(error $(3)))
+endef
 
 # Generates a pkg-config lookup for a library.
 #
@@ -32,13 +36,11 @@ call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1))
 #
 define pkg-config-library
 
-ifneq ($$(shell $$(PKG_CONFIG) --exists $(2) && echo ok),ok)
-$$(error library not found: $(2))
-endif
+$(1)_CPPFLAGS_RAW := $$(patsubst -I%,-isystem %,$$(call call-pkg-config,$(2),cflags))
+$(1)_LDLIBS_RAW := $$(call call-pkg-config,$(2),libs)
+$(1)_MODVERSION_RAW := $$(call call-pkg-config,$(2),modversion)
 
-$(1)_CPPFLAGS := $$(patsubst -I%,-isystem %,$$(call call-pkg-config,$(2),cflags))
-$(1)_LDLIBS := $$(call call-pkg-config,$(2),libs)
-$(1)_MODVERSION := $$(call call-pkg-config,$(2),modversion)
+$$(foreach i,CPPFLAGS LDLIBS MODVERSION,$$(eval $$(call assign-check-error,$(1)_$$(i),$(1)_$$(i)_RAW,library not found: $(2))))
 
 ifeq ($$(TARGET)$$(ARMV7),ANDROIDy)
 # Android-ARMv7 requires "-lm_hard" instead of "-lm"; some libraries
