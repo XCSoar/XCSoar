@@ -98,7 +98,6 @@ Copyright_License {
 #ifdef USE_LUA
 #include "Lua/StartFile.hpp"
 #include "Lua/Background.hpp"
-#include <windef.h> /* for MAX_PATH */
 #endif
 
 #ifdef ENABLE_OPENGL
