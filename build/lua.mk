@@ -37,6 +37,4 @@ LUA_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
 $(eval $(call link-library,liblua,LUA))
 
-LUA_CPPFLAGS += -DUSE_LUA
-
 endif

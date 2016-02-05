@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "Dialogs/Message.hpp"
-
-#ifdef USE_LUA
 #include "Lua/StartFile.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/ComboPicker.hpp"
@@ -85,12 +83,9 @@ SelectLuaFile(const TCHAR *path)
   }
 }
 
-#endif
-
 void
 InputEvents::eventRunLuaFile(const TCHAR *misc)
 {
-#ifdef USE_LUA
   const auto path = SelectLuaFile(misc);
   if (path.IsNull())
     return;
@@ -101,8 +96,4 @@ InputEvents::eventRunLuaFile(const TCHAR *misc)
     StringFormat(buffer, MAX_PATH, _T("RunLuaFile %s"), misc);
     ShowError(error, buffer);
   }
-#else
-  ShowMessageBox(_T("Lua is disabled."), _T("RunLuaFile"),
-                 MB_OK|MB_ICONWARNING);
-#endif
 }

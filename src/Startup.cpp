@@ -95,10 +95,8 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Util/Error.hxx"
 
-#ifdef USE_LUA
 #include "Lua/StartFile.hpp"
 #include "Lua/Background.hpp"
-#endif
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
@@ -133,14 +131,12 @@ AfterStartup()
 {
   StartupLogFreeRamAndStorage();
 
-#ifdef USE_LUA
   {
     Error error;
     const auto lua_path = LocalPath(_T("lua"));
     if (!Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")), error))
       LogError(error);
   }
-#endif
 
   if (is_simulator()) {
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
@@ -490,9 +486,7 @@ Shutdown()
 
   StartupLogFreeRamAndStorage();
 
-#ifdef USE_LUA
   Lua::StopAllBackground();
-#endif
 
   // Turn off all displays
   global_running = false;
