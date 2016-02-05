@@ -23,8 +23,6 @@ endif
 FREETYPE = y
 
 $(eval $(call pkg-config-library,SDL,sdl2))
-SDL_CPPFLAGS := $(patsubst -I%,-isystem %,$(SDL_CPPFLAGS))
-
 SDL_CPPFLAGS += -DENABLE_SDL
 
 endif

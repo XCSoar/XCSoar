@@ -65,7 +65,6 @@ endif
 
 ifeq ($(USE_LIBINPUT),y)
 $(eval $(call pkg-config-library,LIBINPUT,libinput))
-LIBINPUT_CPPFLAGS := $(patsubst -I%,-isystem %,$(LIBINPUT_CPPFLAGS))
 EVENT_CPPFLAGS_INTERNAL += $(UDEV_CPPFLAGS)
 ifeq ($(LIBINPUT_MODVERSION),0.6.0)
 EVENT_CPPFLAGS_INTERNAL += -DLIBINPUT_LEGACY_API
