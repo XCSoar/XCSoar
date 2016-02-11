@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 #define XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 #include "tchar.h"

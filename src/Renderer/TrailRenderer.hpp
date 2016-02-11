@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRAIL_RENDERER_HPP
 #define XCSOAR_TRAIL_RENDERER_HPP
 
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
 

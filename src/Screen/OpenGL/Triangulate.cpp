@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Screen/BulkPoint.hpp"
 #include "Math/Line2D.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 
 #include <algorithm>
 #include <math.h>

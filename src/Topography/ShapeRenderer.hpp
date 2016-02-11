@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Screen/Canvas.hpp"
 #include "Screen/Brush.hpp"
 

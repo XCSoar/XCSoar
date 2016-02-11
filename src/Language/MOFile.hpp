@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MO_FILE_HPP
 #define XCSOAR_MO_FILE_HPP
 
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 
 #include <stdint.h>
 

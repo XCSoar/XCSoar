@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/BulkPoint.hpp"
 #include "Geo/GeoClip.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 
 class Canvas;
 class Projection;

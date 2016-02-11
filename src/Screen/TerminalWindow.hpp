@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Point.hpp"
-#include "Util/AllocatedGrid.hpp"
+#include "Util/AllocatedGrid.hxx"
 
 #include <tchar.h>
 

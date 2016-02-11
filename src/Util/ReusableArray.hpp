@@ -30,7 +30,7 @@
 #ifndef REUSABLE_ARRAY_HPP
 #define REUSABLE_ARRAY_HPP
 
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 
 template<class T>
 class ReusableArray {

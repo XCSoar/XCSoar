@@ -35,7 +35,7 @@ Copyright_License {
 #include "Screen/Custom/Cache.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Util/Macros.hpp"
 
 #ifdef USE_GLSL

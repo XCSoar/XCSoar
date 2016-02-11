@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_RASTER_BUFFER_HPP
 
 #include "Height.hpp"
-#include "Util/AllocatedGrid.hpp"
+#include "Util/AllocatedGrid.hxx"
 #include "Compiler.h"
 
 class RasterBuffer {

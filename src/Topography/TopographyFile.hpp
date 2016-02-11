@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "shapelib/mapserver.h"
 #include "Geo/GeoBounds.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Util/Serial.hpp"
 #include "Screen/Color.hpp"
 #include "ResourceId.hpp"
