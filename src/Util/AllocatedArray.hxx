@@ -109,6 +109,22 @@ public:
 		return buffer.size;
 	}
 
+	reference_type front() {
+		return buffer.front();
+	}
+
+	const_reference_type front() const {
+		return buffer.front();
+	}
+
+	reference_type back() {
+		return buffer.back();
+	}
+
+	const_reference_type back() const {
+		return buffer.back();
+	}
+
 	/**
 	 * Returns one element.  No bounds checking.
 	 */
