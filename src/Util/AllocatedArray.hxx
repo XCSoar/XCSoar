@@ -45,6 +45,8 @@ class AllocatedArray {
 
 public:
 	typedef typename Buffer::size_type size_type;
+	typedef typename Buffer::reference_type reference_type;
+	typedef typename Buffer::const_reference_type const_reference_type;
 	typedef typename Buffer::iterator iterator;
 	typedef typename Buffer::const_iterator const_iterator;
 
@@ -110,7 +112,7 @@ public:
 	/**
 	 * Returns one element.  No bounds checking.
 	 */
-	T &operator[](size_type i) {
+	reference_type operator[](size_type i) {
 		assert(i < size());
 
 		return buffer.data[i];
@@ -119,7 +121,7 @@ public:
 	/**
 	 * Returns one constant element.  No bounds checking.
 	 */
-	const T &operator[](size_type i) const {
+	const_reference_type operator[](size_type i) const {
 		assert(i < size());
 
 		return buffer.data[i];

@@ -45,6 +45,8 @@ protected:
 	unsigned width = 0, height = 0;
 
 public:
+	typedef typename AllocatedArray<T>::reference_type reference_type;
+	typedef typename AllocatedArray<T>::const_reference_type const_reference_type;
 	typedef typename AllocatedArray<T>::iterator iterator;
 	typedef typename AllocatedArray<T>::const_iterator const_iterator;
 
@@ -68,27 +70,27 @@ public:
 		return width * height;
 	}
 
-	const T &Get(unsigned x, unsigned y) const {
+	const_reference_type Get(unsigned x, unsigned y) const {
 		assert(x < width);
 		assert(y < height);
 
 		return array[y * width + x];
 	}
 
-	T &Get(unsigned x, unsigned y) {
+	reference_type Get(unsigned x, unsigned y) {
 		assert(x < width);
 		assert(y < height);
 
 		return array[y * width + x];
 	}
 
-	const T &GetLinear(unsigned i) const {
+	const_reference_type GetLinear(unsigned i) const {
 		assert(i < GetSize());
 
 		return array[i];
 	}
 
-	T &GetLinear(unsigned i) {
+	reference_type GetLinear(unsigned i) {
 		assert(i < GetSize());
 
 		return array[i];
@@ -139,7 +141,8 @@ public:
 	 * Resize the grid, preserving as many old values as fit into the
 	 * new dimensions, and fill newly allocated array slots.
 	 */
-	void GrowPreserveFill(unsigned _width, unsigned _height, const T &fill=T()) {
+	void GrowPreserveFill(unsigned _width, unsigned _height,
+			      const_reference_type fill=T()) {
 		if (_width < width) {
 			const unsigned h = std::min(height, _height);
 			const auto end = array.begin() + h * width;
