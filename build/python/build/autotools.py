@@ -8,6 +8,7 @@ class AutotoolsProject(Project):
                  cppflags='',
                  libs='',
                  shared=False,
+                 install_prefix=None,
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args
@@ -15,6 +16,7 @@ class AutotoolsProject(Project):
         self.cppflags = cppflags
         self.libs = libs
         self.shared = shared
+        self.install_prefix = install_prefix
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -37,6 +39,10 @@ class AutotoolsProject(Project):
 
         build = self.make_build_path(toolchain)
 
+        install_prefix = self.install_prefix
+        if install_prefix is None:
+            install_prefix = toolchain.install_prefix
+
         configure = [
             os.path.join(src, 'configure'),
             'CC=' + toolchain.cc,
@@ -50,7 +56,7 @@ class AutotoolsProject(Project):
             'RANLIB=' + toolchain.ranlib,
             'STRIP=' + toolchain.strip,
             '--host=' + toolchain.arch,
-            '--prefix=' + toolchain.install_prefix,
+            '--prefix=' + install_prefix,
             '--enable-silent-rules',
         ] + self.configure_args
 
