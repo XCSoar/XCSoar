@@ -9,6 +9,7 @@ class AutotoolsProject(Project):
                  libs='',
                  shared=False,
                  install_prefix=None,
+                 use_destdir=False,
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args
@@ -17,6 +18,7 @@ class AutotoolsProject(Project):
         self.libs = libs
         self.shared = shared
         self.install_prefix = install_prefix
+        self.use_destdir = use_destdir
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -65,7 +67,11 @@ class AutotoolsProject(Project):
     def build(self, toolchain):
         build = self.configure(toolchain)
 
+        destdir = []
+        if self.use_destdir:
+            destdir = ['DESTDIR=' + toolchain.install_prefix]
+
         subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'],
                               cwd=build, env=toolchain.env)
-        subprocess.check_call(['/usr/bin/make', '--quiet', 'install'],
+        subprocess.check_call(['/usr/bin/make', '--quiet', 'install'] + destdir,
                               cwd=build, env=toolchain.env)
