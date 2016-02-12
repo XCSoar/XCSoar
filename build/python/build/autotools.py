@@ -6,6 +6,7 @@ class AutotoolsProject(Project):
     def __init__(self, url, md5, installed, configure_args=[],
                  autogen=False,
                  cppflags='',
+                 ldflags='',
                  libs='',
                  shared=False,
                  install_prefix=None,
@@ -15,6 +16,7 @@ class AutotoolsProject(Project):
         self.configure_args = configure_args
         self.autogen = autogen
         self.cppflags = cppflags
+        self.ldflags = ldflags
         self.libs = libs
         self.shared = shared
         self.install_prefix = install_prefix
@@ -52,7 +54,7 @@ class AutotoolsProject(Project):
             'CFLAGS=' + self._filter_cflags(toolchain.cflags),
             'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
             'CPPFLAGS=' + toolchain.cppflags + ' ' + self.cppflags,
-            'LDFLAGS=' + toolchain.ldflags,
+            'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
             'AR=' + toolchain.ar,
             'STRIP=' + toolchain.strip,
