@@ -241,6 +241,20 @@ struct GeoPoint {
   double DistanceS(const GeoPoint &other) const;
 
   /**
+   * Like Bearing(), but use a simplified faster formula that may be
+   * less accurate.
+   */
+  gcc_pure
+  Angle BearingS(const GeoPoint &other) const;
+
+  /**
+   * Like DistanceBearing(), but use a simplified faster formula that
+   * may be less accurate.
+   */
+  gcc_pure
+  GeoVector DistanceBearingS(const GeoPoint &other) const;
+
+  /**
    * Find distance along a great-circle path that this point
    * is projected to
    *

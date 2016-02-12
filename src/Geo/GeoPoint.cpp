@@ -65,6 +65,22 @@ GeoPoint::DistanceS(const GeoPoint &other) const
   return distance;
 }
 
+Angle
+GeoPoint::BearingS(const GeoPoint &other) const
+{
+  Angle angle;
+  ::DistanceBearingS(*this, other, (Angle *)nullptr, &angle);
+  return angle;
+}
+
+GeoVector
+GeoPoint::DistanceBearingS(const GeoPoint &other) const
+{
+  GeoVector gv;
+  ::DistanceBearingS(*this, other, &gv.distance, &gv.bearing);
+  return gv;
+}
+
 double 
 GeoPoint::ProjectedDistance(const GeoPoint &from,
                              const GeoPoint &to) const
