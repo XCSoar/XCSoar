@@ -30,7 +30,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(72);
+  plan_tests(92);
 
   // test constructor
   GeoPoint p1(Angle::Degrees(345.32), Angle::Degrees(-6.332));
@@ -110,7 +110,6 @@ int main(int argc, char **argv)
   // note: distance between p1 and p4 and between p3 and p4 is not
   // the same due to linear interpolation instead of real geographic
   // intermediate point calculation
-#ifdef USE_WGS84
   ok1(equals(p2.Distance(p6), 869146.334126));
   ok1(equals(p6.Distance(p2), 869146.334126));
   ok1(equals(p1.Distance(p5), 309506.275043));
@@ -119,23 +118,21 @@ int main(int argc, char **argv)
   ok1(equals(p3.Distance(p4), 620924.169000));
   ok1(equals(p1.Distance(p11), 1.561761));
   ok1(equals(p1.Distance(p12), 18599361.600));
-#else
-  ok1(equals(p2.Distance(p6), 869326.653160));
-  ok1(equals(p6.Distance(p2), 869326.653160));
-  ok1(equals(p1.Distance(p5), 309562.219016));
-  ok1(equals(p1.Distance(p4), 619603.149273));
-  ok1(equals(p1.Distance(p3), 1240649.267606));
-  ok1(equals(p3.Distance(p4), 621053.760625));
-  ok1(equals(p1.Distance(p11), 1.568588));
-  ok1(equals(p1.Distance(p12), 18602548.701));
-#endif
+
+  ok1(equals(p2.DistanceS(p6), 869326.653160));
+  ok1(equals(p6.DistanceS(p2), 869326.653160));
+  ok1(equals(p1.DistanceS(p5), 309562.219016));
+  ok1(equals(p1.DistanceS(p4), 619603.149273));
+  ok1(equals(p1.DistanceS(p3), 1240649.267606));
+  ok1(equals(p3.DistanceS(p4), 621053.760625));
+  ok1(equals(p1.DistanceS(p11), 1.568588));
+  ok1(equals(p1.DistanceS(p12), 18602548.701));
 
   // test bearing()
   //
   // note: the bearings p1 -> p5, p5 -> p4 and so on are not the same due to
   // linear interpolation instead of real geographic intermediate point
   // calculation
-#ifdef USE_WGS84
   ok1(equals(p2.Bearing(p6), 63.425773));
   ok1(equals(p6.Bearing(p2), 243.762198));
   ok1(equals(p1.Bearing(p5), 63.601900));
@@ -146,29 +143,27 @@ int main(int argc, char **argv)
   ok1(equals(p4.Bearing(p3), 63.694155));
   ok1(equals(p5.Bearing(p6), 66.126880));
   ok1(equals(p2.Bearing(p3), 250.886912));
-#else
-  ok1(equals(p2.Bearing(p6), 63.272424));
-  ok1(equals(p6.Bearing(p2), 243.608847));
-  ok1(equals(p1.Bearing(p5), 63.449343));
-  ok1(equals(p1.Bearing(p4), 63.582620));
-  ok1(equals(p1.Bearing(p3), 63.784526));
-  ok1(equals(p5.Bearing(p4), 63.466726));
-  ok1(equals(p5.Bearing(p3), 63.646072));
-  ok1(equals(p4.Bearing(p3), 63.540756));
-  ok1(equals(p5.Bearing(p6), 65.982854));
-  ok1(equals(p2.Bearing(p3), 250.786774));
-#endif
+
+  ok1(equals(p2.BearingS(p6), 63.272424));
+  ok1(equals(p6.BearingS(p2), 243.608847));
+  ok1(equals(p1.BearingS(p5), 63.449343));
+  ok1(equals(p1.BearingS(p4), 63.582620));
+  ok1(equals(p1.BearingS(p3), 63.784526));
+  ok1(equals(p5.BearingS(p4), 63.466726));
+  ok1(equals(p5.BearingS(p3), 63.646072));
+  ok1(equals(p4.BearingS(p3), 63.540756));
+  ok1(equals(p5.BearingS(p6), 65.982854));
+  ok1(equals(p2.BearingS(p3), 250.786774));
 
   // test distance_bearing()
   // note: should be the same output as bearing() and distance()
   GeoVector v = p2.DistanceBearing(p6);
-#ifdef USE_WGS84
   ok1(equals(v.distance, 869146.334126));
   ok1(equals(v.bearing, 63.425773));
-#else
+
+  v = p2.DistanceBearingS(p6);
   ok1(equals(v.distance, 869326.653160));
   ok1(equals(v.bearing, 63.272424));
-#endif
 
   // test intermediate_point()
   GeoPoint p7(Angle::Zero(), Angle::Zero());

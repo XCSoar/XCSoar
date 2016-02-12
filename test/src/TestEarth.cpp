@@ -21,6 +21,7 @@
 */
 
 #include "Geo/Math.hpp"
+#include "Geo/SimplifiedMath.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -33,18 +34,17 @@ TestLinearDistance()
                            lon_start.latitude);
     double distance = Distance(lon_start, lon_end);
 
-#ifdef USE_WGS84
     double min = 111300 * i;
     double max = 111340 * i;
-#else
-    double min = 111100 * i;
-    double max = 111200 * i;
-#endif
+    ok1(between(distance, min, max));
+
+    distance = lon_start.DistanceS(lon_end);
+    min = 111100 * i;
+    max = 111200 * i;
 
     ok1(between(distance, min, max));
   }
 
-#ifndef USE_WGS84
   /* Unfortunately this test doesn't make sense
    * on the earth ellipsoid...
    */
@@ -53,24 +53,19 @@ TestLinearDistance()
   for (unsigned i = 0; i < 90; i += 5) {
     const GeoPoint lat_end(lat_start.longitude,
                            lat_start.latitude + Angle::Degrees(i));
-    double distance = Distance(lat_start, lat_end);
+    double distance = lat_start.DistanceS(lat_end);
 
     double min = 111100 * i;
     double max = 111200 * i;
 
     ok1(between(distance, min, max));
   }
-#endif
 
 }
 
 int main(int argc, char **argv)
 {
-#ifdef USE_WGS84
-  plan_tests(9 + 36);
-#else
-  plan_tests(9 + 36 + 18);
-#endif
+  plan_tests(10 + 2 * 36 + 18);
 
   const GeoPoint a(Angle::Degrees(7.7061111111111114),
                    Angle::Degrees(51.051944444444445));
@@ -80,11 +75,10 @@ int main(int argc, char **argv)
                    Angle::Degrees(47.099444444444444));
 
   double distance = Distance(a, b);
-#ifdef USE_WGS84
   ok1(distance > 9150 && distance < 9160);
-#else
+
+  distance = a.DistanceS(b);
   ok1(distance > 9130 && distance < 9140);
-#endif
 
   Angle bearing = Bearing(a, b);
   ok1(bearing.Degrees() > 304);

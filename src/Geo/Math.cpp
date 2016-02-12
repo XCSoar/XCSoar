@@ -163,7 +163,6 @@ void
 DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
                 double *distance, Angle *bearing)
 {
-#ifdef USE_WGS84
   const auto lon21 = loc2.longitude - loc1.longitude;
 
   auto u1 = atan((1 - FLATTENING) * loc1.latitude.tan()),
@@ -240,10 +239,6 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   if (bearing != nullptr)
     *bearing = Angle::Radians(atan2(cosu2 * sin(lambda),
       cosu1 * sinu2 - sinu1 * cosu2 * cos(lambda))).AsBearing();
-
-#else
-  return DistanceBearingS(loc1, loc2, distance, bearing);
-#endif
 }
 
 double
