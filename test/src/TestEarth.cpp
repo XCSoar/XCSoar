@@ -92,20 +92,12 @@ int main(int argc, char **argv)
   ok1(is_zero(distance));
   distance = ProjectedDistance(a, b, b);
 
-#ifdef USE_WGS84
   ok1(distance > 9150 && distance < 9180);
-#else
-  ok1(distance > 9120 && distance < 9140);
-#endif
 
   const GeoPoint middle(a.longitude.Fraction(b.longitude, 0.5),
                         a.latitude.Fraction(b.latitude, 0.5));
   distance = ProjectedDistance(a, b, middle);
-#ifdef USE_WGS84
   ok1(distance > 9150/2 && distance < 9180/2);
-#else
-  ok1(distance > 9100/2 && distance < 9140/2);
-#endif
 
   double big_distance = Distance(a, c);
   ok1(big_distance > 494000 && big_distance < 495000);

@@ -170,26 +170,16 @@ int main(int argc, char **argv)
   ok1(p7.IsValid());
   GeoPoint p8 = p7.IntermediatePoint(p2, fixed(100000));
   ok1(p8.IsValid());
-#ifdef USE_WGS84
   ok1(equals(p8, 0.402361, 0.804516));
-#else
-  ok1(equals(p8, 0.402274, 0.804342));
-#endif
   ok1(equals(p8.Distance(p7), 100000));
   GeoPoint p9 = p7.IntermediatePoint(p2, fixed(100000000));
   ok1(p9.IsValid());
   ok1(equals(p9, p2));
 
   // test projected_distance()
-#ifdef USE_WGS84
   ok1(equals(p8.ProjectedDistance(p7, p2), 100000));
   ok1(equals(p4.ProjectedDistance(p1, p3), 619494.517917));
   ok1(equals((p2 * fixed(2)).ProjectedDistance(p2, p6), 248511.833322));
-#else
-  ok1(equals(p8.ProjectedDistance(p7, p2), 100000));
-  ok1(equals(p4.ProjectedDistance(p1, p3), 619599.304393));
-  ok1(equals((p2 * fixed(2)).ProjectedDistance(p2, p6), 248567.832772));
-#endif
 
   // Tests moved here from test_fixed.cpp
   GeoPoint l1(Angle::Zero(), Angle::Zero());

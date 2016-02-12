@@ -115,21 +115,13 @@ TestAATPoint()
   target = MakeGeoPoint(-0.05, 45.3);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
-#ifdef USE_WGS84
   ok1(equals(rar.range, 0.39217));
-#else
-  ok1(equals(rar.range, 0.39107));
-#endif
   ok1(equals(rar.radial.Degrees(), -89.98));
 
   target = MakeGeoPoint(0.05, 45.3);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
-#ifdef USE_WGS84
   ok1(equals(rar.range, 0.39217));
-#else
-  ok1(equals(rar.range, 0.39107));
-#endif
   ok1(equals(rar.radial.Degrees(), 89.98));
 
   for (int radial = -170; radial <= 170; radial += 10) {

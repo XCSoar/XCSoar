@@ -48,7 +48,3 @@ TESTING = y
 ifeq ($(TESTING),y)
   TARGET_CPPFLAGS += -DTESTING
 endif
-
-ifneq ($(WGS84),n)
-TARGET_CPPFLAGS += -DUSE_WGS84
-endif
