@@ -311,7 +311,6 @@ GeoPoint
 FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
                       double distance)
 {
-#ifdef USE_WGS84
   assert(loc.IsValid());
   assert(distance >= 0);
 
@@ -379,10 +378,6 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   loc_out.Normalize(); // ensure longitude is within -180:180
 
   return loc_out;
-
-#else
-  return FindLatitudeLongitudeS(loc, bearing, distance);
-#endif
 }
 
 double
