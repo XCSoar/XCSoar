@@ -85,3 +85,37 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   } else
     DistanceBearingS(loc1, loc2, (Angle *)nullptr, bearing);
 }
+
+GeoPoint
+FindLatitudeLongitudeS(const GeoPoint &loc, const Angle bearing,
+                       double distance)
+{
+  assert(loc.IsValid());
+  assert(distance >= 0);
+
+  if (distance <= 0)
+    return loc;
+
+  const Angle distance_angle = FAISphere::EarthDistanceToAngle(distance);
+
+  const auto scd = distance_angle.SinCos();
+  const auto sin_distance = scd.first, cos_distance = scd.second;
+
+  const auto scb = bearing.SinCos();
+  const auto sin_bearing = scb.first, cos_bearing = scb.second;
+
+  const auto scl = loc.latitude.SinCos();
+  const auto sin_latitude = scl.first, cos_latitude = scl.second;
+
+  GeoPoint loc_out;
+  loc_out.latitude = Angle::asin(sin_latitude * cos_distance
+                                 + cos_latitude * sin_distance * cos_bearing);
+
+  loc_out.longitude = loc.longitude +
+    Angle::FromXY(cos_distance - sin_latitude * loc_out.latitude.sin(),
+                  sin_bearing * sin_distance * cos_latitude);
+
+  loc_out.Normalize(); // ensure longitude is within -180:180
+
+  return loc_out;
+}

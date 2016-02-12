@@ -316,6 +316,7 @@ GeoPoint
 FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
                       double distance)
 {
+#ifdef USE_WGS84
   assert(loc.IsValid());
   assert(distance >= 0);
 
@@ -324,7 +325,6 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
 
   GeoPoint loc_out;
 
-#ifdef USE_WGS84
   const auto lon1 = loc.longitude.Radians();
   const auto lat1 = loc.latitude.Radians();
 
@@ -381,31 +381,13 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   loc_out.longitude = Angle::Radians(lon1 + L);
   loc_out.latitude = Angle::Radians(lat2);
 
-#else
-  const Angle distance_angle = FAISphere::EarthDistanceToAngle(distance);
-
-  const auto scd = distance_angle.SinCos();
-  const auto sin_distance = scd.first, cos_distance = scd.second;
-
-  const auto scb = bearing.SinCos();
-  const auto sin_bearing = scb.first, cos_bearing = scb.second;
-
-  const auto scl = loc.latitude.SinCos();
-  const auto sin_latitude = scl.first, cos_latitude = scl.second;
-
-  loc_out.latitude = EarthASin(SmallMult(sin_latitude, cos_distance)
-                               + SmallMult(cos_latitude, sin_distance,
-                                           cos_bearing));
-
-  loc_out.longitude = loc.longitude +
-    Angle::FromXY(cos_distance - SmallMult(sin_latitude,
-                                           loc_out.latitude.sin()),
-                  SmallMult(sin_bearing, sin_distance, cos_latitude));
-#endif
-
   loc_out.Normalize(); // ensure longitude is within -180:180
 
   return loc_out;
+
+#else
+  return FindLatitudeLongitudeS(loc, bearing, distance);
+#endif
 }
 
 double

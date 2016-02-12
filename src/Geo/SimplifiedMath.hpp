@@ -53,4 +53,11 @@ void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
                  double *distance, Angle *bearing);
 
+/**
+ * @see FindLatitudeLongitude()
+ */
+gcc_pure
+GeoPoint
+FindLatitudeLongitudeS(const GeoPoint &loc, Angle bearing, double distance);
+
 #endif
