@@ -46,10 +46,3 @@ GeoVector::MidPoint(const GeoPoint &source) const
 
   return ::FindLatitudeLongitude(source, bearing, distance / 2);
 }
-
-double
-GeoVector::MinimumDistance(const GeoPoint &source,
-                            const GeoPoint &ref) const
-{
-  return ::CrossTrackError(source, EndPoint(source), ref, nullptr);
-}

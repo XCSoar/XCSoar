@@ -88,17 +88,6 @@ struct GeoVector {
    */
   GeoPoint MidPoint(const GeoPoint &source) const;
 
-  /**
-   * Minimum distance from a point on the vector to the reference
-   *
-   * @param source Start of vector
-   * @param ref Point to test
-   *
-   * @return Distance (m)
-   */
-  gcc_pure
-  double MinimumDistance(const GeoPoint &source, const GeoPoint &ref) const;
-
   constexpr
   inline bool IsValid() const {
     return distance >= 0;
