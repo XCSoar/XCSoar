@@ -247,54 +247,6 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
 }
 
 double
-CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
-                const GeoPoint &loc3, GeoPoint *loc4)
-{
-  Angle dist_AD, crs_AD;
-  DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
-
-  Angle dist_AB, crs_AB;
-  DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
-
-  //  The "along track distance", ATD, the distance from A along the
-  //  course towards B to the point abeam D
-
-  const auto sindist_AD = dist_AD.sin();
-
-  // cross track distance
-  const Angle cross_track_distance =
-    EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
-
-#ifdef USE_WGS84
-  const auto sc = cross_track_distance.SinCos();
-  const auto sinXTD = sc.first, cosXTD = sc.second;
-
-  const Angle along_track_distance =
-    EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
-
-  auto loc4_tmp = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
-
-  if (loc4)
-    *loc4 = loc4_tmp;
-
-  return Distance(loc3, loc4_tmp);
-
-#else
-  if (loc4) {
-    const auto sc = cross_track_distance.SinCos();
-    const auto sinXTD = sc.first, cosXTD = sc.second;
-
-    const Angle along_track_distance =
-      EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
-
-    *loc4 = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
-  }
-
-  return FAISphere::AngleToEarthDistance(cross_track_distance);
-#endif
-}
-
-double
 ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                   const GeoPoint &loc3)
 {

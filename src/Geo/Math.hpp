@@ -37,14 +37,6 @@ struct GeoPoint;
 class Angle;
 
 /**
- * Finds cross track error in meters and closest point P4 between P3
- * and desired track P1-P2.  Very slow function!
- */
-double
-CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
-                const GeoPoint &loc3, GeoPoint *loc4);
-
-/**
  * Calculates projected distance from P3 along line P1-P2.
  */
 gcc_pure
