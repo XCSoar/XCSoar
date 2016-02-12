@@ -3,6 +3,7 @@ from os.path import abspath
 from build.boost import BoostProject
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
+from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
@@ -19,6 +20,40 @@ glibc = AutotoolsProject(
         '--disable-nscd',
     ],
     shared=True,
+)
+
+openssl = OpenSSLProject(
+    'https://openssl.org/source/openssl-1.0.2g.tar.gz',
+    'f3c710c045cdee5fd114feb69feba7aa',
+    'include/openssl/ossl_typ.h',
+)
+
+openssh = AutotoolsProject(
+    'http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz',
+    '13009a9156510d8f27e752659075cced',
+    'opt/openssh/sbin/sshd',
+    [
+        '--disable-etc-default-login',
+        '--disable-lastlog',
+        '--disable-utmp',
+        '--disable-utmpx',
+        '--disable-wtmp',
+        '--disable-wtmpx',
+        '--disable-libutil',
+        '--disable-pututline',
+        '--disable-pututxline',
+        '--without-openssl',
+        '--without-ssh1',
+        '--without-stackprotect',
+        '--without-hardening',
+        '--without-shadow',
+        '--without-sandbox',
+        '--without-selinux',
+    ],
+    ldflags='-static',
+    install_prefix='/opt/openssh',
+    install_target='install-nosysconf',
+    use_destdir=True,
 )
 
 boost = BoostProject(
