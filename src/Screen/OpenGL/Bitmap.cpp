@@ -54,6 +54,9 @@ Bitmap::EnableInterpolation()
 bool
 Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
 {
+  assert(IsScreenInitialized());
+  assert(uncompressed.IsVisible());
+
   delete texture;
   texture = type == Type::MONO
     ? ImportAlphaTexture(uncompressed)
