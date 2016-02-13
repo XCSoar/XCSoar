@@ -242,7 +242,7 @@ WritePoint(TextWriter &writer, const ContestTracePoint &point,
 
     if (duration > 0) {
       auto speed = distance / duration;
-      object.WriteElement("speed", JSON::WriteFixed, speed);
+      object.WriteElement("speed", JSON::WriteDouble, speed);
     }
   }
 }
@@ -265,10 +265,10 @@ WriteContest(TextWriter &writer,
 {
   JSON::ObjectWriter object(writer);
 
-  object.WriteElement("score", JSON::WriteFixed, result.score);
-  object.WriteElement("distance", JSON::WriteFixed, result.distance);
+  object.WriteElement("score", JSON::WriteDouble, result.score);
+  object.WriteElement("distance", JSON::WriteDouble, result.distance);
   object.WriteElement("duration", JSON::WriteUnsigned, (unsigned)result.time);
-  object.WriteElement("speed", JSON::WriteFixed, result.GetSpeed());
+  object.WriteElement("speed", JSON::WriteDouble, result.GetSpeed());
 
   object.WriteElement("turnpoints", WriteTrace, trace);
 }

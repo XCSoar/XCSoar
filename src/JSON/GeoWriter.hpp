@@ -29,14 +29,14 @@ Copyright_License {
 
 namespace JSON {
   /**
-   * Writer for a JSON floating/fixed point value.
+   * Writer for a JSON floating point value.
    */
-  static inline void WriteFixed(TextWriter &writer, fixed value) {
+  static inline void WriteDouble(TextWriter &writer, double value) {
     writer.Format("%f", (double)value);
   }
 
   static inline void WriteAngle(TextWriter &writer, Angle value) {
-    WriteFixed(writer, value.Degrees());
+    WriteDouble(writer, value.Degrees());
   }
 
   static inline void WriteGeoPointAttributes(JSON::ObjectWriter &object,

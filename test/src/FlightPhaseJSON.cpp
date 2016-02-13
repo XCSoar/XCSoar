@@ -75,9 +75,9 @@ WritePhase(TextWriter &writer, Phase &phase)
                       FormatCirclingDirection(phase.circling_direction));
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)phase.alt_diff);
   object.WriteElement("distance", JSON::WriteInteger, (int)phase.distance);
-  object.WriteElement("speed", JSON::WriteFixed, phase.GetSpeed());
-  object.WriteElement("vario", JSON::WriteFixed, phase.GetVario());
-  object.WriteElement("glide_rate", JSON::WriteFixed, phase.GetGlideRate());
+  object.WriteElement("speed", JSON::WriteDouble, phase.GetSpeed());
+  object.WriteElement("vario", JSON::WriteDouble, phase.GetVario());
+  object.WriteElement("glide_rate", JSON::WriteDouble, phase.GetGlideRate());
 }
 
 static void
@@ -86,8 +86,8 @@ WriteCirclingStats(TextWriter &writer, const Phase &stats)
   JSON::ObjectWriter object(writer);
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
   object.WriteElement("duration", JSON::WriteInteger, (int)stats.duration);
-  object.WriteElement("fraction", JSON::WriteFixed, stats.fraction);
-  object.WriteElement("vario", JSON::WriteFixed, stats.GetVario());
+  object.WriteElement("fraction", JSON::WriteDouble, stats.fraction);
+  object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
   object.WriteElement("count", JSON::WriteInteger, stats.merges);
 }
 
@@ -97,11 +97,11 @@ WriteCruiseStats(TextWriter &writer, const Phase &stats)
   JSON::ObjectWriter object(writer);
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
   object.WriteElement("duration", JSON::WriteInteger, (int)stats.duration);
-  object.WriteElement("fraction", JSON::WriteFixed, stats.fraction);
+  object.WriteElement("fraction", JSON::WriteDouble, stats.fraction);
   object.WriteElement("distance", JSON::WriteInteger, (int)stats.distance);
-  object.WriteElement("speed", JSON::WriteFixed, stats.GetSpeed());
-  object.WriteElement("vario", JSON::WriteFixed, stats.GetVario());
-  object.WriteElement("glide_rate", JSON::WriteFixed, stats.GetGlideRate());
+  object.WriteElement("speed", JSON::WriteDouble, stats.GetSpeed());
+  object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
+  object.WriteElement("glide_rate", JSON::WriteDouble, stats.GetGlideRate());
   object.WriteElement("count", JSON::WriteInteger, stats.merges);
 }
 
