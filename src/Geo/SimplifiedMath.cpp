@@ -119,3 +119,38 @@ FindLatitudeLongitudeS(const GeoPoint &loc, const Angle bearing,
 
   return loc_out;
 }
+
+double
+ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
+                   const GeoPoint &loc3)
+{
+  Angle dist_AD, crs_AD;
+  DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
+  if (!dist_AD.IsPositive())
+    /* workaround: new sine implementation may return small non-zero
+       values for sin(0) */
+    return 0;
+
+  Angle dist_AB, crs_AB;
+  DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
+  if (!dist_AB.IsPositive())
+    /* workaround: new sine implementation may return small non-zero
+       values for sin(0) */
+    return 0;
+
+  // The "along track distance", along_track_distance, the distance from A along the
+  // course towards B to the point abeam D
+
+  const auto sindist_AD = dist_AD.sin();
+  const auto cross_track_distance =
+    Angle::asin(sindist_AD * (crs_AD - crs_AB).sin());
+
+  const auto sc = cross_track_distance.SinCos();
+  const auto sinXTD = sc.first, cosXTD = sc.second;
+
+  // along track distance
+  const Angle along_track_distance =
+    Angle::asin(Cathetus(sindist_AD, sinXTD) / cosXTD);
+
+  return FAISphere::AngleToEarthDistance(along_track_distance);
+}

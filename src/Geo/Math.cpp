@@ -273,13 +273,9 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   const Angle along_track_distance =
     EarthASin(Cathetus(sindist_AD, sinXTD) / cosXTD);
 
-#ifdef USE_WGS84
   auto projected = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB);
 
   return Distance(loc1, projected);
-#else
-  return FAISphere::AngleToEarthDistance(along_track_distance);
-#endif
 }
 
 

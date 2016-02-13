@@ -60,4 +60,12 @@ gcc_pure
 GeoPoint
 FindLatitudeLongitudeS(const GeoPoint &loc, Angle bearing, double distance);
 
+/**
+ * @see ProjectedDistance()
+ */
+gcc_pure
+double
+ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
+                   const GeoPoint &loc3);
+
 #endif
