@@ -74,6 +74,7 @@ public:
   UncompressedImage(UncompressedImage &&other) = default;
   UncompressedImage(const UncompressedImage &other) = delete;
 
+  UncompressedImage &operator=(UncompressedImage &&src) = default;
   UncompressedImage &operator=(const UncompressedImage &other) = delete;
 
   static UncompressedImage Invalid() {
