@@ -219,14 +219,18 @@ public:
   }
 #endif
 
-#ifdef ANDROID
+#ifdef ENABLE_OPENGL
 private:
+  bool MakeTexture(const UncompressedImage &uncompressed, Type type);
+
+#ifdef ANDROID
   bool Set(JNIEnv *env, jobject _bmp, Type _type);
   bool MakeTexture(jobject _bmp, Type _type);
 
   /* from GLSurfaceListener */
   virtual void SurfaceCreated() override;
   virtual void SurfaceDestroyed() override;
+#endif
 #endif
 };
 

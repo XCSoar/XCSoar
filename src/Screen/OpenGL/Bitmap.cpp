@@ -52,12 +52,10 @@ Bitmap::EnableInterpolation()
 }
 
 bool
-Bitmap::Load(const UncompressedImage &uncompressed, Type type)
+Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsVisible());
-
-  Reset();
 
   texture = type == Type::MONO
     ? ImportAlphaTexture(uncompressed)
@@ -67,6 +65,20 @@ Bitmap::Load(const UncompressedImage &uncompressed, Type type)
 
   if (interpolation)
     texture->EnableInterpolation();
+
+  return true;
+}
+
+bool
+Bitmap::Load(const UncompressedImage &uncompressed, Type type)
+{
+  assert(IsScreenInitialized());
+  assert(uncompressed.IsVisible());
+
+  Reset();
+
+  if (!MakeTexture(uncompressed, type))
+    return false;
 
   size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
   flipped = uncompressed.IsFlipped();
