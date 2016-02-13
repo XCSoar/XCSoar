@@ -609,31 +609,31 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
     PixelPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();
-    auto scale = std::min((fixed)canvas.GetWidth() / (fixed)img_size.cx,
-                          (fixed)canvas.GetHeight() / (fixed)img_size.cy) *
+    double scale = std::min((double)canvas.GetWidth() / img_size.cx,
+                            (double)canvas.GetHeight() / img_size.cy) *
       zoom_factors[zoom];
 
     // centered image and optionally zoomed into the center of the image
-    auto scaled_size = img_size.cx * scale;
-    if (scaled_size <= (fixed)canvas.GetWidth()) {
+    double scaled_size = img_size.cx * scale;
+    if (scaled_size <= canvas.GetWidth()) {
       img_pos.x = 0;
-      screen_pos.x = (int) (((fixed)canvas.GetWidth() - scaled_size) / 2);
+      screen_pos.x = (int) ((canvas.GetWidth() - scaled_size) / 2);
       screen_size.cx = (int) scaled_size;
     } else {
-      scaled_size = (fixed)canvas.GetWidth() / scale;
-      img_pos.x = (int) (((fixed)img_size.cx - scaled_size) / 2);
+      scaled_size = canvas.GetWidth() / scale;
+      img_pos.x = (int) ((img_size.cx - scaled_size) / 2);
       img_size.cx = (int) scaled_size;
       screen_pos.x = 0;
       screen_size.cx = canvas.GetWidth();
     }
     scaled_size = img_size.cy * scale;
-    if (scaled_size <= (fixed)canvas.GetHeight()) {
+    if (scaled_size <= canvas.GetHeight()) {
       img_pos.y = 0;
-      screen_pos.y = (int) (((fixed)canvas.GetHeight() - scaled_size) / 2);
+      screen_pos.y = (int) ((canvas.GetHeight() - scaled_size) / 2);
       screen_size.cy = (int) scaled_size;
     } else {
-      scaled_size = (fixed)canvas.GetHeight() / scale;
-      img_pos.y = (int) (((fixed)img_size.cy - scaled_size) / 2);
+      scaled_size = canvas.GetHeight() / scale;
+      img_pos.y = (int) ((img_size.cy - scaled_size) / 2);
       img_size.cy = (int) scaled_size;
       screen_pos.y = 0;
       screen_size.cy = canvas.GetHeight();

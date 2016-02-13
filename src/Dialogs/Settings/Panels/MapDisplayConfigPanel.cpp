@@ -139,7 +139,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Max. auto zoom distance"),
            _("The upper limit for auto zoom distance."),
-           _T("%.0f %s"), _T("%.0f"), fixed(20), fixed(250), fixed(10), false,
+           _T("%.0f %s"), _T("%.0f"), 20, 250, 10, false,
            UnitGroup::DISTANCE, settings_map.max_auto_zoom_distance);
   SetExpertRow(MaxAutoZoomDistance);
 

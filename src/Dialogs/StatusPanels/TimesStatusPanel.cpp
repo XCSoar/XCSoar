@@ -53,9 +53,9 @@ TimesStatusPanel::Refresh()
                                  settings.utc_offset);
 
     const unsigned sunrisehours = (int)sun.time_of_sunrise;
-    const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
+    const unsigned sunrisemins = (int)((sun.time_of_sunrise - double(sunrisehours)) * 60);
     const unsigned sunsethours = (int)sun.time_of_sunset;
-    const unsigned sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
+    const unsigned sunsetmins = (int)((sun.time_of_sunset - double(sunsethours)) * 60);
 
     temp.Format(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunsethours, sunsetmins);
     SetText(Daylight, temp);
@@ -80,7 +80,7 @@ TimesStatusPanel::Refresh()
     ClearText(UTCDate);
   }
 
-  if (positive(flight.flight_time)) {
+  if (flight.flight_time > 0) {
     SetText(TakeoffTime,
             FormatLocalTimeHHMM((int)flight.takeoff_time,
                                 settings.utc_offset));
@@ -88,7 +88,7 @@ TimesStatusPanel::Refresh()
     ClearText(TakeoffTime);
   }
 
-  if (!flight.flying && positive(flight.flight_time)) {
+  if (!flight.flying && flight.flight_time > 0) {
     SetText(LandingTime,
             FormatLocalTimeHHMM(int(flight.takeoff_time + flight.flight_time),
                                 settings.utc_offset));
@@ -96,7 +96,7 @@ TimesStatusPanel::Refresh()
     ClearText(LandingTime);
   }
 
-  if (positive(flight.flight_time)) {
+  if (flight.flight_time > 0) {
     SetText(FlightTime, FormatSignedTimeHHMM((int)flight.flight_time));
   } else {
     ClearText(FlightTime);

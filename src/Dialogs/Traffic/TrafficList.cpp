@@ -114,7 +114,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     StaticString<20> near_name;
-    fixed near_distance;
+    double near_distance;
 
     int altitude;
 #endif
@@ -426,7 +426,7 @@ TrafficListWidget::UpdateList()
                                     i.second.location);
 
           const auto wp = way_points.GetNearestLandable(i.second.location,
-                                                        fixed(20000));
+                                                        20000);
           if (wp != nullptr) {
             item.near_name = wp->name.c_str();
             item.near_distance = wp->location.DistanceS(i.second.location);
@@ -552,7 +552,7 @@ TrafficListWidget::Prepare(ContainerWindow &parent,
  */
 gcc_const
 static unsigned
-SinceInMinutes(fixed now_s, uint32_t past_ms)
+SinceInMinutes(double now_s, uint32_t past_ms)
 {
   const unsigned day_minutes = 24 * 60;
   unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;
@@ -694,7 +694,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     if (!tmp.empty())
       tmp.append(_T("; "));
-    tmp.append(FormatUserAltitude(fixed(item.altitude)));
+    tmp.append(FormatUserAltitude(item.altitude));
 
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);

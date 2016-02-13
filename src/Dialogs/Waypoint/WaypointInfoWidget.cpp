@@ -74,13 +74,13 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
 
 gcc_const
 static BrokenTime
-BreakHourOfDay(fixed t)
+BreakHourOfDay(double t)
 {
   /* depending on the time zone, the SunEphemeris library may return a
      negative time of day; the following check catches this before we
      cast the value to "unsigned" */
-  if (negative(t))
-    t += fixed(24);
+  if (t < 0)
+    t += 24;
 
   unsigned i = uround(t * 3600);
 
@@ -170,7 +170,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                  calculated.GetWindOrZero());
 
     GlidePolar gp0 = settings.polar.glide_polar_task;
-    gp0.SetMC(fixed(0));
+    gp0.SetMC(0);
     AddGlideResult(_("Alt. diff. MC 0"),
                    MacCready::Solve(settings.task.glide,
                                     gp0, glide_state));
@@ -193,7 +193,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     const auto safety_height = task_behaviour.safety_height_arrival;
     const auto target_altitude = waypoint->elevation + safety_height;
     const auto delta_h = basic.nav_altitude - target_altitude;
-    if (positive(delta_h)) {
+    if (delta_h > 0) {
       const auto distance = basic.location.Distance(waypoint->location);
       const auto gr = distance / delta_h;
       if (GradientValid(gr)) {

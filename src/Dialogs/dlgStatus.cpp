@@ -68,7 +68,7 @@ dlgStatusShowModal(int start_page)
 
   const NMEAInfo &basic = CommonInterface::Basic();
   auto nearest_waypoint = basic.location_available
-    ? way_points.GetNearest(CommonInterface::Basic().location, fixed(100000))
+    ? way_points.GetNearest(CommonInterface::Basic().location, 100000)
     : nullptr;
 
   /* setup tabs */

@@ -53,7 +53,7 @@ public:
       AddFloat(N_("Volume"), nullptr,
              _T("%.2f"),
              _T("%.2f"),
-               fixed(0), fixed(1.0), fixed(0.1), true, fixed(0));
+               0, 1.0, 0.1, true, 0);
 
       static constexpr StaticEnumChoice modes[] = {
         { 0, _T("BlueFlyVario") },

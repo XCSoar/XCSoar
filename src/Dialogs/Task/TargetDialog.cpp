@@ -182,8 +182,8 @@ public:
   void OnNameClicked();
   void OnOptimized();
 
-  void OnRangeModified(fixed new_value);
-  void OnRadialModified(fixed new_value);
+  void OnRangeModified(double new_value);
+  void OnRadialModified(double new_value);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -430,14 +430,14 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   range.Create(parent, layout.range, _("Distance"), caption_width, style);
   range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
   range.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f %%"),
-                                        fixed(-100), fixed(100), fixed(0),
-                                        fixed(5), false, this));
+                                        -100, 100, 0,
+                                        5, false, this));
 
   radial.Create(parent, layout.radial, _("Radial"), caption_width, style);
   radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
   radial.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f" DEG),
-                                         fixed(-90), fixed(90), fixed(0),
-                                         fixed(5), false, this));
+                                         -90, 90, 0,
+                                         5, false, this));
 
   ete.Create(parent, layout.ete, _("ETE"), caption_width, style);
   ete.SetReadOnly();
@@ -496,7 +496,7 @@ TargetWidget::RefreshCalculator()
 {
   bool nodisplay = false;
   bool is_aat;
-  fixed aat_time;
+  double aat_time;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -608,16 +608,16 @@ TargetWidget::OnPrevClicked()
 }
 
 void
-TargetWidget::OnRangeModified(fixed new_value)
+TargetWidget::OnRangeModified(double new_value)
 {
   if (target_point < initial_active_task_point)
     return;
 
-  const auto new_range = new_value / fixed(100);
+  const auto new_range = new_value / 100.;
   if (new_range == range_and_radial.range)
     return;
 
-  if (negative(new_range) != negative(range_and_radial.range)) {
+  if ((new_range < 0) != (range_and_radial.range < 0)) {
     /* when the range gets flipped, flip the radial as well */
     if (range_and_radial.radial.IsNegative())
       range_and_radial.radial += Angle::HalfCircle();
@@ -643,7 +643,7 @@ TargetWidget::OnRangeModified(fixed new_value)
 }
 
 void
-TargetWidget::OnRadialModified(fixed new_value)
+TargetWidget::OnRadialModified(double new_value)
 {
   if (target_point < initial_active_task_point)
     return;

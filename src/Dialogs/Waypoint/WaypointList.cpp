@@ -110,12 +110,11 @@ struct WaypointListDialogState
   void ToFilter(WaypointFilter &filter, Angle heading) const {
     filter.name = name;
     filter.distance =
-      Units::ToSysDistance(fixed(distance_filter_items[distance_index]));
+      Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
 
     if (direction_index != 1)
-      filter.direction = Angle::Degrees(
-          fixed(direction_filter_items[direction_index]));
+      filter.direction = Angle::Degrees(direction_filter_items[direction_index]);
     else
       filter.direction = heading;
   }
@@ -289,7 +288,7 @@ FillList(WaypointList &list, const Waypoints &src,
                               ordered_task, ordered_task_index);
   builder.Visit(src);
 
-  if (positive(filter.distance) || !filter.direction.IsNegative())
+  if (filter.distance > 0 || !filter.direction.IsNegative())
     list.SortByDistance(location);
 }
 
@@ -358,7 +357,7 @@ CreateDistanceDataField(DataFieldListener *listener)
 
   TCHAR buffer[15];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-    FormatUserDistance(Units::ToSysDistance(fixed(distance_filter_items[i])),
+    FormatUserDistance(Units::ToSysDistance(distance_filter_items[i]),
                        buffer);
     df->addEnumText(buffer);
   }
@@ -502,7 +501,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
       !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
+    if (a.AsDelta().AbsoluteDegrees() >= 60) {
       last_heading = heading;
       filter_widget.Update(last_heading);
       UpdateList();

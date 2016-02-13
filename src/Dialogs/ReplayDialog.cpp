@@ -91,9 +91,7 @@ ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
            _T("%.0f x"), _T("%.0f"),
-           fixed(0), fixed(10), fixed(1), false,
-           replay->GetTimeScale(),
-           this);
+           0, 10, 1, false, replay->GetTimeScale(), this);
 }
 
 inline void
@@ -133,7 +131,7 @@ ReplayControlWidget::OnAction(int id)
 inline void
 ReplayControlWidget::OnFastForwardClicked()
 {
-  replay->FastForward(fixed(10 * 60));
+  replay->FastForward(10 * 60);
 }
 
 void

@@ -36,8 +36,8 @@ Copyright_License {
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Math/Util.hpp"
 
-static fixed VegaDemoW = fixed(0);
-static fixed VegaDemoV = fixed(0);
+static double VegaDemoW = 0;
+static double VegaDemoV = 0;
 static bool VegaDemoAudioClimb = true;
 
 static void
@@ -99,13 +99,13 @@ VegaDemoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("TE vario"),
            _("This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced."),
            _T("%.1f %s"), _T("%.1f"),
-           Units::ToUserVSpeed(fixed(-20)), Units::ToUserVSpeed(fixed(20)),
+           Units::ToUserVSpeed(-20), Units::ToUserVSpeed(20),
            GetUserVerticalSpeedStep(),
            false, UnitGroup::VERTICAL_SPEED, VegaDemoW, this);
 
   AddFloat(_("Airspeed"),
            _("This produces a fake airspeed.  It can be used when not in circling mode to demonstrate the speed command tones."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(200), fixed(2),
+           _T("%.0f %s"), _T("%.0f"), 0, 200, 2,
            false, UnitGroup::HORIZONTAL_SPEED, VegaDemoV, this);
 
   AddBoolean(_("Circling"),

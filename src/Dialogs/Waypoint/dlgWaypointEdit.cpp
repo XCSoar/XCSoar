@@ -73,7 +73,7 @@ WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
   Add(_("Location"), nullptr, new GeoPointDataField(value.location,UIGlobals::GetFormatSettings().coordinate_format));
   AddFloat(_("Altitude"), nullptr,
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(30000), fixed(5), false,
+           0, 30000, 5, false,
            UnitGroup::ALTITUDE, value.elevation);
   AddEnum(_("Type"), nullptr, waypoint_types,
           value.IsAirport() ? 1u : (value.IsLandable() ? 2u : 0u ));

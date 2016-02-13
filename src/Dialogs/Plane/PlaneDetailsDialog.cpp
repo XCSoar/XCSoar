@@ -118,18 +118,18 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              plane.handicap);
   AddFloat(_("Wing Area"), nullptr,
            _T("%.1f m²"), _T("%.1f"),
-           fixed(0), fixed(40), fixed(0.1),
+           0, 40, 0.1,
            false, plane.wing_area);
   AddFloat(_("Max. Ballast"), nullptr,
            _T("%.0f l"), _T("%.0f"),
-           fixed(0), fixed(500), fixed(5),
+           0, 500, 5,
            false, plane.max_ballast);
   AddInteger(_("Dump Time"), nullptr,
              _T("%u s"), _T("%u"),
              10, 300, 5,
              plane.dump_time);
   AddFloat(_("Max. Cruise Speed"), nullptr,
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5),
+           _T("%.0f %s"), _T("%.0f"), 0, 300, 5,
            false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
   UpdateCaption();

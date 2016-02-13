@@ -75,7 +75,7 @@ RulesStatusPanel::Refresh()
   }
 
   Temp[0] = _T('\0');
-  fixed finish_height(0);
+  double finish_height(0);
 
   if (protected_task_manager != nullptr) {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);

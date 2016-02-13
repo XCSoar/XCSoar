@@ -410,7 +410,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const OrderedTaskPoint &tp = ordered_task->GetTaskPoint(DrawListIndex);
   GeoVector leg = tp.GetNominalLegVector();
-  bool show_leg_info = leg.distance > fixed(0.01);
+  bool show_leg_info = leg.distance > 0.01;
 
   PixelRect text_rc = rc;
   text_rc.left += line_height + padding;

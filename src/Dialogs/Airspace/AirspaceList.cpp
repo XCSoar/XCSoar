@@ -195,12 +195,12 @@ static constexpr StaticEnumChoice type_filter_list[] = {
 
 struct AirspaceListWidgetState
 {
-  fixed distance;
+  double distance;
   unsigned direction;
   unsigned type;
 
   AirspaceListWidgetState()
-    :distance(fixed(-1)), direction(WILDCARD), type(WILDCARD) {}
+    :distance(-1), direction(WILDCARD), type(WILDCARD) {}
 };
 
 static AirspaceListWidgetState dialog_state;
@@ -253,7 +253,7 @@ AirspaceListWidget::UpdateList()
       : Angle::Degrees(dialog_state.direction);
   }
 
-  if (positive(dialog_state.distance))
+  if (dialog_state.distance > 0)
     data.distance = dialog_state.distance;
 
   items = FilterAirspaces(*airspaces,
@@ -278,7 +278,7 @@ inline void
 AirspaceListWidget::FilterMode(bool direction)
 {
   if (direction) {
-    dialog_state.distance = fixed(-1);
+    dialog_state.distance = -1;
     dialog_state.direction = WILDCARD;
 
     filter_widget.LoadValueEnum(DISTANCE, WILDCARD);
@@ -294,8 +294,8 @@ AirspaceListWidget::OnModified(DataField &df)
   if (filter_widget.IsDataField(DISTANCE, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
     dialog_state.distance = dfe.GetValue() != WILDCARD
-      ? Units::ToSysDistance(fixed(dfe.GetValue()))
-      : fixed(-1);
+      ? Units::ToSysDistance(dfe.GetValue())
+      : -1.;
 
   } else if (filter_widget.IsDataField(DIRECTION, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
@@ -351,7 +351,7 @@ AirspaceListWidget::OnGPSUpdate(const MoreData &basic)
   if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= fixed(10)) {
+    if (a.AsDelta().AbsoluteDegrees() >= 10) {
       last_heading = heading;
 
       UpdateList();

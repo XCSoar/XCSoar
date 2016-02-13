@@ -43,7 +43,7 @@ PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape,
   :shape(_shape), listener(_listener) {}
 
 static void
-LoadValue(WndProperty &e, fixed value, UnitGroup unit_group)
+LoadValue(WndProperty &e, double value, UnitGroup unit_group)
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
 
@@ -62,14 +62,14 @@ LoadPoint(PolarShapeEditWidget::PointEditor &pe, const PolarPoint &point)
   LoadValue(*pe.w, point.w, UnitGroup::VERTICAL_SPEED);
 }
 
-static fixed
+static double
 GetValue(WndProperty &e)
 {
   return ((DataFieldFloat *)e.GetDataField())->GetAsFixed();
 }
 
 static bool
-SaveValue(WndProperty &e, fixed &value_r, UnitGroup unit_group)
+SaveValue(WndProperty &e, double &value_r, UnitGroup unit_group)
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
 
@@ -148,8 +148,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
     points[i].v = new WndProperty(panel, look, _T(""),
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
-                                            fixed(0), fixed(300), fixed(0),
-                                            fixed(1), false,
+                                            0, 300, 0, 1, false,
                                             listener);
     points[i].v->SetDataField(df);
   }
@@ -164,16 +163,16 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   rc.right = rc.left + edit_width;
   rc.bottom = height;
 
-  auto step = fixed(0.05), min = fixed(-10);
+  double step = 0.05, min = -10;
   switch (Units::current.vertical_speed_unit) {
   case Unit::FEET_PER_MINUTE:
-    step = fixed(10);
-    min = fixed(-2000);
+    step = 10;
+    min = -2000;
     break;
 
   case Unit::KNOTS:
-    step = fixed(0.1);
-    min = fixed(-20);
+    step = 0.1;
+    min = -20;
     break;
 
   default:
@@ -185,8 +184,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
     points[i].w = new WndProperty(panel, look, _T(""),
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
-                                            min, fixed(0), fixed(0),
-                                            step, false,
+                                            min, 0, 0, step, false,
                                             listener);
 
     points[i].w->SetDataField(df);

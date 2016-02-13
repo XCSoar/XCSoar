@@ -141,12 +141,12 @@ PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Reference Mass"), _("Reference mass of the polar"),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(1000), fixed(5), false,
+           0, 1000, 5, false,
            UnitGroup::MASS, plane.reference_mass);
 
   AddFloat(_("Dry Mass"), _("Dry all-up flying mass of your plane"),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(1000), fixed(5), false,
+           0, 1000, 5, false,
            UnitGroup::MASS, plane.dry_mass);
 }
 
@@ -194,15 +194,15 @@ PlanePolarWidget::ListClicked()
 
   const PolarStore::Item &item = PolarStore::GetItem(list[result].int_value);
 
-  plane.reference_mass = fixed(item.reference_mass);
-  plane.dry_mass = fixed(item.reference_mass);
-  plane.max_ballast = fixed(item.max_ballast);
+  plane.reference_mass = item.reference_mass;
+  plane.dry_mass = item.reference_mass;
+  plane.max_ballast = item.max_ballast;
 
   if (item.wing_area > 0.0)
-    plane.wing_area = fixed(item.wing_area);
+    plane.wing_area = item.wing_area;
 
   if (item.v_no > 0.0)
-    plane.max_speed = fixed(item.v_no);
+    plane.max_speed = item.v_no;
 
   plane.polar_shape = item.ToPolarShape();
 
@@ -229,10 +229,10 @@ PlanePolarWidget::ImportClicked()
   plane.dry_mass = polar.reference_mass;
   plane.max_ballast = polar.max_ballast;
 
-  if (positive(polar.wing_area))
+  if (polar.wing_area > 0)
     plane.wing_area = polar.wing_area;
 
-  if (positive(polar.v_no))
+  if (polar.v_no > 0)
     plane.max_speed = polar.v_no;
 
   plane.polar_shape = polar.shape;
