@@ -121,32 +121,10 @@ static void test_hypot() {
 }
 
 int main(int argc, char** argv) {
-  plan_tests(19 + ARRAY_SIZE(Hypot_test_values)
+  plan_tests(2 + ARRAY_SIZE(Hypot_test_values)
              + ARRAY_SIZE(floor_ceil_tests) * 2
              + ARRAY_SIZE(uround_test_values)
              + 2 * ARRAY_SIZE(iround_test_values));
-
-  /* check the division operator */
-  ok((fixed(1) / fixed(1)) * fixed(1000) == fixed(1000), "1/1", 0);
-  ok((fixed(2) / fixed(2)) * fixed(1000) == fixed(1000), "2/2", 0);
-  ok((fixed(1) / fixed(2)) * fixed(1000) == fixed(500), "1/2", 0);
-  ok((fixed(1000) / fixed(100)) * fixed(1000) == fixed(10000), "1000/100", 0);
-  ok((fixed(100) / fixed(20)) * fixed(1000) == fixed(5000), "100/20", 0);
-  ok((fixed(1000000) / fixed(2)) * fixed(1000) == fixed(500000000), "1M/2", 0);
-  ok((fixed(-1) / fixed(1)) * fixed(1000) == -fixed(1000), "-1/1", 0);
-  ok((fixed(1) / fixed(-1)) * fixed(1000) == -fixed(1000), "1/-1", 0);
-  ok((fixed(-1) / fixed(-1)) * fixed(1000) == fixed(1000), "-1/-1", 0);
-  ok((fixed(-1000000) / fixed(2)) * fixed(1000) == -fixed(500000000), "-1M/2", 0);
-  ok((long)((fixed(1) / (fixed(1) / fixed(10))) * fixed(1000)) == (10000), "1/0.1", 0);
-  ok((long)((fixed(1) / (fixed(1) / fixed(-10))) * fixed(1000)) == -(10000) ||
-     (long)((fixed(1) / (fixed(1) / fixed(-10))) * fixed(1000)) == -(10001), "1/-0.1", 0);
-
-  ok(equals(fixed(1) / fixed(0.5), 2), "1/0.5", 0);
-  ok(equals(fixed(1000) / fixed(0.5), 2000), "1/0.5", 0);
-  ok(equals(fixed(1000) / (fixed(1) / 5), 5000), "1/0.5", 0);
-
-  ok(equals(fixed(1000000) / (fixed(1) / 5), 5000000), "1/0.5", 0);
-  ok(equals(fixed(10000000) / (fixed(1) / 5), 50000000), "1/0.5", 0);
 
   double da = 20.0;
   double dsina = sin(da);
