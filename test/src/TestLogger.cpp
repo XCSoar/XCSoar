@@ -95,8 +95,8 @@ Run(IGCWriter &writer)
                            Angle::Degrees(50.6322));
 
   static NMEAInfo i;
-  i.clock = fixed(1);
-  i.time = fixed(1);
+  i.clock = 1;
+  i.time = 1;
   i.time_available.Update(i.clock);
   i.date_time_utc.year = 2010;
   i.date_time_utc.month = 9;
@@ -106,10 +106,10 @@ Run(IGCWriter &writer)
   i.date_time_utc.second = 33;
   i.location = home;
   i.location_available.Update(i.clock);
-  i.gps_altitude = fixed(487);
+  i.gps_altitude = 487;
   i.gps_altitude_available.Update(i.clock);
-  i.ProvidePressureAltitude(fixed(490));
-  i.ProvideBaroAltitudeTrue(fixed(400));
+  i.ProvidePressureAltitude(490);
+  i.ProvideBaroAltitudeTrue(400);
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
                      _T("D-1234"), _T("34"), "FOO", _T("bar"), false);

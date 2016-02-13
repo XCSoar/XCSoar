@@ -36,10 +36,10 @@
 #include <cstdio>
 
 static void
-OnAdvance(Trace &trace, const GeoPoint &loc, const fixed alt, const fixed t)
+OnAdvance(Trace &trace, const GeoPoint &loc, const double alt, const double t)
 {
-  if (t>fixed(1)) {
-    const TracePoint point(loc, unsigned(t), alt, fixed(0), 0);
+  if (t>1) {
+    const TracePoint point(loc, unsigned(t), alt, 0, 0);
     trace.push_back(point);
   }
 // get the trace, just so it's included in timing
@@ -80,8 +80,8 @@ TestTrace(Path filename, unsigned ntrace, bool output=false)
 
     OnAdvance(trace,
                fix.location,
-               fixed(fix.gps_altitude),
-               fixed(fix.time.GetSecondOfDay()));
+               fix.gps_altitude,
+               fix.time.GetSecondOfDay());
   }
   putchar('\n');
   printf("# samples %d\n", i);

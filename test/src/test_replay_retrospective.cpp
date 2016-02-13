@@ -79,7 +79,7 @@ test_replay_retrospective()
     f.flush();
   };
 
-  fixed d_ach, d_can;
+  double d_ach, d_can;
   retro.CalcDistances(d_ach, d_can);
   printf("# distances %f %f\n", (double)d_ach, (double)d_can);
   printf("# size %d\n", retro.getNearWaypointList().size());

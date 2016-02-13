@@ -49,7 +49,7 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 
 void
-DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt) {}
 
 #ifndef NDEBUG
 
@@ -141,8 +141,8 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   DerivedInfo derived_info;
 
   nmea_info.Reset();
-  nmea_info.clock = fixed(1);
-  nmea_info.time = fixed(1297230000);
+  nmea_info.clock = 1;
+  nmea_info.time = 1297230000;
   nmea_info.alive.Update(nmea_info.clock);
 
   if (settings_computer.poi.home_location_available)
@@ -155,16 +155,16 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   nmea_info.location_available.Update(nmea_info.clock);
   nmea_info.track = Angle::Degrees(90);
   nmea_info.track_available.Update(nmea_info.clock);
-  nmea_info.ground_speed = fixed(50);
+  nmea_info.ground_speed = 50;
   nmea_info.ground_speed_available.Update(nmea_info.clock);
-  nmea_info.gps_altitude = fixed(1500);
+  nmea_info.gps_altitude = 1500;
   nmea_info.gps_altitude_available.Update(nmea_info.clock);
 
   derived_info.Reset();
   derived_info.terrain_valid = true;
 
   if (terrain != nullptr)
-    while (terrain->UpdateTiles(nmea_info.location, fixed(50000))) {}
+    while (terrain->UpdateTiles(nmea_info.location, 50000)) {}
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      settings_map);

@@ -77,7 +77,7 @@ TestFlightResult test_flight(int test_num, int n_wind,
 
 bool test_flight_times(int test_num, int n_wind);
 
-fixed
+double
 aat_min_time(int test_num);
 
 #endif

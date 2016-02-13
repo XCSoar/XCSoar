@@ -41,39 +41,39 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
   Waypoint wp = waypoints.Create(GeoPoint(Angle::Zero(),
                                           Angle::Zero()));
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed(0.25);
+  wp.elevation = 0.25;
   waypoints.Append(std::move(wp));
 
   wp = waypoints.Create(GeoPoint(Angle::Zero(),
                                  Angle::Degrees(1)));
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed(0.25);
+  wp.elevation = 0.25;
   waypoints.Append(std::move(wp));
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(1),
                                  Angle::Degrees(1)));
   wp.name = _T("Hello");
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed(0.5);
+  wp.elevation = 0.5;
   waypoints.Append(std::move(wp));
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(0.8),
                                  Angle::Degrees(0.5)));
   wp.name = _T("Unk");
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed(0.25);
+  wp.elevation = 0.25;
   waypoints.Append(std::move(wp));
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(1),
                                  Angle::Zero()));
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed(0.25);
+  wp.elevation = 0.25;
   waypoints.Append(std::move(wp));
 
   wp = waypoints.Create(GeoPoint(Angle::Zero(),
                                  Angle::Degrees(0.23)));
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed(0.25);
+  wp.elevation = 0.25;
   waypoints.Append(std::move(wp));
 
   for (unsigned i=0; i<(unsigned)std::max((int)n-6,0); i++) {
@@ -83,7 +83,7 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
     wp = waypoints.Create(GeoPoint(Angle::Degrees(x / 1000.0),
                                    Angle::Degrees(y / 1000.0)));
     wp.type = Waypoint::Type::NORMAL;
-    wp.elevation = fixed(z);
+    wp.elevation = z;
     waypoints.Append(std::move(wp));
   }
   waypoints.Optimise();

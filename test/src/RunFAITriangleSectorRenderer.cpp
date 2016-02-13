@@ -80,7 +80,7 @@ protected:
     projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
     projection.SetGeoLocation(a.Middle(b));
     projection.SetScreenSize(new_size);
-    projection.SetScaleFromRadius(fixed(400000));
+    projection.SetScaleFromRadius(400000);
     projection.UpdateScreenBounds();
   }
 

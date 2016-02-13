@@ -71,34 +71,34 @@ ChartWindow::OnPaint(Canvas &canvas)
 void
 ChartWindow::DrawChart(ChartRenderer &renderer)
 {
-  renderer.ScaleXFromValue(fixed(0));
-  renderer.ScaleXFromValue(fixed(100));
+  renderer.ScaleXFromValue(0);
+  renderer.ScaleXFromValue(100);
 
-  renderer.ScaleYFromValue(fixed(0));
-  renderer.ScaleYFromValue(fixed(100));
+  renderer.ScaleYFromValue(0);
+  renderer.ScaleYFromValue(100);
 
   if (chart == 0) {
-    renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(70),
+    renderer.DrawLine(0, 10, 100, 70,
                       look.GetPen(ChartLook::STYLE_BLUETHIN));
   } else if (chart == 1) {
-    renderer.ScaleXFromValue(fixed(-50));
-    renderer.ScaleXFromValue(fixed(110));
-    renderer.ScaleYFromValue(fixed(110));
+    renderer.ScaleXFromValue(-50);
+    renderer.ScaleXFromValue(110);
+    renderer.ScaleYFromValue(110);
 
-    renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(70),
+    renderer.DrawLine(0, 10, 100, 70,
                       look.GetPen(ChartLook::STYLE_BLUETHIN));
 
-    renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(80),
+    renderer.DrawLine(0, 10, 100, 80,
                       look.GetPen(ChartLook::STYLE_DASHGREEN));
 
-    renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(100),
+    renderer.DrawLine(0, 10, 100, 100,
                       look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 
-    renderer.DrawXGrid(fixed(20), look.GetPen(ChartLook::STYLE_THINDASHPAPER),
-                       fixed(20), true);
+    renderer.DrawXGrid(20, look.GetPen(ChartLook::STYLE_THINDASHPAPER),
+                       20, true);
 
-    renderer.DrawYGrid(fixed(20), look.GetPen(ChartLook::STYLE_THINDASHPAPER),
-                       fixed(20), true);
+    renderer.DrawYGrid(20, look.GetPen(ChartLook::STYLE_THINDASHPAPER),
+                       20, true);
 }
 }
 

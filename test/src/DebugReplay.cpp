@@ -29,7 +29,7 @@ Copyright_License {
 #include "Computer/Settings.hpp"
 
 DebugReplay::DebugReplay()
-  :glide_polar(fixed(1))
+  :glide_polar(1)
 {
   raw_basic.Reset();
   computed_basic.Reset();

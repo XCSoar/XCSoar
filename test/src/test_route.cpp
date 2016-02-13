@@ -61,10 +61,10 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     for (unsigned i = 0; i < nx; ++i) {
       for (unsigned j = 0; j < ny; ++j) {
-        auto fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        auto fy = (fixed)j / (ny - 1) * 2 - fixed(1);
-        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.2) + fixed(0.7) * fx),
-                   origin.latitude + Angle::Degrees(fixed(0.9) * fy));
+        auto fx = (double)i / (nx - 1) * 2 - 1;
+        auto fy = (double)j / (ny - 1) * 2 - 1;
+        GeoPoint x(origin.longitude + Angle::Degrees(0.2 + 0.7 * fx),
+                   origin.latitude + Angle::Degrees(0.9 * fy));
         auto h = map.GetInterpolatedHeight(x);
         fout << x.longitude.Degrees() << " " << x.latitude.Degrees()
              << " " << h.GetValue() << "\n";
@@ -88,11 +88,11 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     AGeoPoint loc_end(p_dest, map.GetHeight(p_dest).GetValueOr0() + 100);
 
     AircraftState state;
-    GlidePolar glide_polar(fixed(0.1));
+    GlidePolar glide_polar(0.1);
     const AirspaceAircraftPerformance perf(glide_polar);
 
     GeoVector vec(loc_start, loc_end);
-    auto range = fixed(10000) + vec.distance / 2;
+    auto range = 10000 + vec.distance / 2;
 
     state.location = loc_start;
     state.altitude = loc_start.altitude;
@@ -108,7 +108,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       if (verbose)
         printf("# route airspace size %d\n", size_1);
 
-      as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), fixed(1),
+      as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), 1,
                                   AirspacePredicateTrue());
       int size_2 = as_route.GetSize();
       if (verbose)
@@ -138,8 +138,8 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     }
 
     // try the solver
-    SpeedVector wind(Angle::Degrees(0), fixed(0));
-    GlidePolar polar(fixed(1));
+    SpeedVector wind(Angle::Degrees(0), 0);
+    GlidePolar polar(1);
 
     GlideSettings settings;
     settings.SetDefaults();
@@ -200,7 +200,7 @@ main(int argc, char** argv)
   do {
     UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
                        map.GetProjection(),
-                       map.GetMapCenter(), fixed(100000));
+                       map.GetMapCenter(), 100000);
   } while (map.IsDirty());
   zzip_dir_close(dir);
 

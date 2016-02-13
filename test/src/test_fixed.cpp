@@ -20,7 +20,6 @@
 }
 */
 
-#include "Math/fixed.hpp"
 #include "Math/FastMath.hpp"
 #include "Util/Macros.hpp"
 #include "TestUtil.hpp"
@@ -48,8 +47,8 @@ static void
 TestFloorCeil()
 {
   for (const auto &i : floor_ceil_tests) {
-    ok1(floor(fixed(i.input)) == fixed(i.floor));
-    ok1(ceil(fixed(i.input)) == fixed(i.ceil));
+    ok1(floor(i.input) == i.floor);
+    ok1(ceil(i.input) == i.ceil);
   }
 }
 
@@ -88,11 +87,11 @@ static void
 TestRound()
 {
   for (unsigned i = 0; i < ARRAY_SIZE(uround_test_values); ++i)
-    ok1(uround(fixed(uround_test_values[i].in)) == uround_test_values[i].out);
+    ok1(uround(uround_test_values[i].in) == uround_test_values[i].out);
 
   for (unsigned i = 0; i < ARRAY_SIZE(iround_test_values); ++i) {
-    ok1(iround(fixed(iround_test_values[i].in)) == iround_test_values[i].out);
-    ok1(iround(fixed(-iround_test_values[i].in)) == -iround_test_values[i].out);
+    ok1(iround(iround_test_values[i].in) == iround_test_values[i].out);
+    ok1(iround(-iround_test_values[i].in) == -iround_test_values[i].out);
   }
 }
 
@@ -112,11 +111,9 @@ static void test_hypot() {
     double dy = Hypot_test_values[i][1];
     double d = hypot(dx, dy);
 
-    fixed fdx(dx);
-    fixed fdy(dy);
-    fixed fd(hypot(fdx, fdy));
+    double fd(hypot(dx, dy));
 
-    ok(fabs(fd - fixed(d)) < fixed(1.0e-3), "hypot(dx, dy)", 0);
+    ok(fabs(fd - d) < 1.0e-3, "hypot(dx, dy)", 0);
   }
 }
 
@@ -129,20 +126,20 @@ int main(int argc, char** argv) {
   double da = 20.0;
   double dsina = sin(da);
 
-  fixed a(da);
-  fixed sina(sin(a));
+  double a(da);
+  double sina(sin(a));
 
-  ok(fabs(sina - fixed(dsina)) < fixed(1.0e-5), "sin(a)", 0);
+  ok(fabs(sina - dsina) < 1.0e-5, "sin(a)", 0);
 
   double dx = -0.3;
   double dy = 0.6;
   double dt = atan2(dy, dx);
 
-  fixed x(dx);
-  fixed y(dy);
-  fixed t(atan2(y, x));
+  double x(dx);
+  double y(dy);
+  double t(atan2(y, x));
 
-  ok(fabs(t - fixed(dt)) < fixed(1.0e-5), "atan(y,x)", 0);
+  ok(fabs(t - dt) < 1.0e-5, "atan(y,x)", 0);
 
   TestFloorCeil();
   TestRound();

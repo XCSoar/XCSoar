@@ -53,7 +53,7 @@ operator<<(std::ostream &f, const GlideResult &gl)
   f << "#    HeightGlide         " <<  gl.height_glide << " (m)\n";
   f << "#    TimeElapsed         " <<  gl.time_elapsed << " (s)\n";
   f << "#    TimeVirtual         " <<  gl.time_virtual << " (s)\n";
-  if (positive(gl.time_elapsed)) {
+  if (gl.time_elapsed > 0) {
     f << "#    Vave remaining      " <<  gl.vector.distance/gl.time_elapsed << " (m/s)\n";
   }
   f << "#    EffectiveWindSpeed  " <<  gl.effective_wind_speed << " (m/s)\n";
@@ -154,8 +154,8 @@ PrintHelper::aatpoint_print(std::ostream& f,
       bool filter_backtrack = true;
       if (seg.IsValid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GeoPoint ga = seg.Parametric(fixed(t));
-          fixed dthis = tp.GetPrevious()->GetLocationRemaining().Distance(ga);
+          GeoPoint ga = seg.Parametric(t);
+          double dthis = tp.GetPrevious()->GetLocationRemaining().Distance(ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {
@@ -164,7 +164,7 @@ PrintHelper::aatpoint_print(std::ostream& f,
           }
         }
       } else {
-        GeoPoint ga = seg.Parametric(fixed(0));
+        GeoPoint ga = seg.Parametric(0);
         f << ga.longitude << " " << ga.latitude << "\n";
       }
       f << "\n";
@@ -259,22 +259,22 @@ PrintHelper::abstracttask_print(const AbstractTask &task,
      << " " << stats.mc_best
      << " " << (stats.total.remaining_effective.IsDefined()
                 ? stats.total.remaining_effective.GetDistance()
-                : fixed(0))
+                : 0)
      << " " << stats.total.remaining.GetDistance()
      << " " << stats.cruise_efficiency
      << " " << stats.total.remaining.GetSpeed()
      << " " << stats.total.remaining.GetSpeedIncremental()
      << " " << (stats.total.remaining_effective.IsDefined()
                 ? stats.total.remaining_effective.GetSpeed()
-                : fixed(0))
+                : 0)
      << " " << (stats.total.remaining_effective.IsDefined()
                 ? stats.total.remaining_effective.GetSpeedIncremental()
-                : fixed(0))
+                : 0)
      << " " << stats.total.vario.get_value()
      << " " << stats.effective_mc
      << " " << (stats.total.pirker.IsDefined()
                 ? stats.get_pirker_speed()
-                : fixed(0))
+                : 0)
      << " " << stats.total.solution_remaining.altitude_difference
      << "\n";
   f6.flush();

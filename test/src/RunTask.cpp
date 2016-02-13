@@ -105,15 +105,15 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
 
   printf("task elapsed %ds\n", (int)task_stats.total.time_elapsed);
   printf("task speed %1.2f kph\n",
-         double(task_stats.total.travelled.GetSpeed() * fixed(3.6)));
+         double(task_stats.total.travelled.GetSpeed() * 3.6));
   printf("travelled distance %1.3f km\n",
          double(task_stats.total.travelled.GetDistance() / 1000));
   printf("scored distance %1.3f km\n",
          double(task_stats.distance_scored / 1000));
-  if (positive(task_stats.total.time_elapsed))
+  if (task_stats.total.time_elapsed > 0)
     printf("scored speed %1.2f kph\n",
            double(task_stats.distance_scored
-                  / task_stats.total.time_elapsed * fixed(3.6)));
+                  / task_stats.total.time_elapsed * 3.6));
 }
 
 int main(int argc, char **argv)
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 
   task->UpdateGeometry();
 
-  const GlidePolar glide_polar(fixed(1));
+  const GlidePolar glide_polar(1);
 
   Run(*replay, *task, glide_polar);
   delete task;

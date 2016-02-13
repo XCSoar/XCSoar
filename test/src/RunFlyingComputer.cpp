@@ -30,7 +30,7 @@ Copyright_License {
 #include <stdio.h>
 
 static void
-LogEvent(const TCHAR *event, fixed time, const GeoPoint &location)
+LogEvent(const TCHAR *event, double time, const GeoPoint &location)
 {
   TCHAR time_buffer[32];
   FormatTime(time_buffer, time);
@@ -58,15 +58,15 @@ int main(int argc, char **argv)
       LogEvent(_T("take-off"), flight.takeoff_time, flight.takeoff_location);
     else if (!flight.flying && last_flying)
       LogEvent(_T("landing"), flight.landing_time, flight.landing_location);
-    else if (!negative(flight.release_time) && !last_released)
+    else if (flight.release_time >= 0 && !last_released)
       LogEvent(_T("release"), flight.release_time, flight.release_location);
 
     last_flying = flight.flying;
-    last_released = !negative(flight.release_time);
+    last_released = flight.release_time >= 0;
   }
 
   const FlyingState &flight = replay->Calculated().flight;
-  if (!negative(flight.far_distance))
+  if (flight.far_distance >= 0)
     _tprintf(_T("far %u km at %s\n"), unsigned(flight.far_distance / 1000),
              FormatGeoPoint(flight.far_location,
                             CoordinateFormat::DDMMSS).c_str());

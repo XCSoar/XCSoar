@@ -18,7 +18,7 @@ ContestResult official_score_classic,
   official_score_sprint,
   official_score_fai,
   official_score_plus;
-fixed official_index;
+double official_index;
 
 inline void output_score(const char* header,
                          const ContestResult& score)
@@ -34,13 +34,13 @@ inline bool compare_scores(const ContestResult& official,
     output_score("#  Official:", official);
     output_score("#  Estimated:", estimated);
   }
-  if (!positive(official.score)) {
+  if (official.score <= 0) {
     return true;
   }
   auto e = fabs((official.score-estimated.score)/official.score);
   std::cout << "# Error (score) " << e << "\n";
-  if (positive(official.score)) {
-    return (e<fixed(0.01));
+  if (official.score > 0) {
+    return (e<0.01);
   } else {
     // nothing to compare with
     return true; 
@@ -51,15 +51,15 @@ inline void load_score_file(std::ifstream& fscore,
                             ContestResult& score)
 {
   double tmp;
-  fscore >> tmp; score.score = (fixed)tmp;
-  fscore >> tmp; score.distance = (fixed)tmp;
-  fscore >> tmp; fixed speed(tmp);
-  if (speed>fixed(0)) {
-    score.time = fixed(3600)*score.distance/speed;
+  fscore >> tmp; score.score = tmp;
+  fscore >> tmp; score.distance = tmp;
+  fscore >> tmp; double speed(tmp);
+  if (speed>0) {
+    score.time = 3600*score.distance/speed;
   } else {
-    score.time = fixed(0);
+    score.time = 0;
   }
-  score.distance *= fixed(1000);
+  score.distance *= 1000;
 }
 
 
@@ -73,7 +73,7 @@ inline void load_scores(unsigned &contest_handicap) {
   const NarrowPathName score_file2(score_file);
   std::ifstream fscore(score_file2);
   double tmp;
-  fscore >> tmp; official_index = (fixed)tmp;
+  fscore >> tmp; official_index = tmp;
   load_score_file(fscore, official_score_classic);
   load_score_file(fscore, official_score_sprint);
   load_score_file(fscore, official_score_fai);
@@ -111,7 +111,7 @@ test_replay(const Contest olc_type,
   Directory::Create(Path(_T("output/results")));
   std::ofstream f("output/results/res-sample.txt");
 
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
 
   Error error;
   FileLineReaderA *reader = new FileLineReaderA(replay_file, error);

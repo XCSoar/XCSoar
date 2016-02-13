@@ -54,15 +54,15 @@ protected:
   virtual void OnStop() {}
 
   void OnAdvance(const GeoPoint &loc,
-                  const fixed speed, const Angle bearing,
-                  const fixed alt, const fixed baroalt, const fixed t) {
+                 const double speed, const Angle bearing,
+                 const double alt, const double baroalt, const double t) {
 
     state.location = loc;
     state.ground_speed = speed;
     state.track = bearing;
     state.altitude = alt;
     state.time = t;
-    if (positive(t)) {
+    if (t > 0) {
       started = true;
     }
   }
@@ -74,7 +74,7 @@ test_replay()
   Directory::Create(Path(_T("output/results")));
   std::ofstream f("output/results/res-sample.txt");
 
-  GlidePolar glide_polar(fixed(4.0));
+  GlidePolar glide_polar(4.0);
   Waypoints waypoints;
   AircraftState state_last;
 
@@ -87,7 +87,7 @@ test_replay()
   TaskEventsPrint default_events(verbose);
   task_manager.SetTaskEvents(default_events);
 
-  glide_polar.SetBallast(fixed(1.0));
+  glide_polar.SetBallast(1.0);
 
   task_manager.SetGlidePolar(glide_polar);
 
@@ -111,7 +111,7 @@ test_replay()
   }
 
   ReplayLoggerSim sim(reader);
-  sim.state.netto_vario = fixed(0);
+  sim.state.netto_vario = 0;
 
   bool do_print = verbose;
   unsigned print_counter=0;
@@ -123,7 +123,7 @@ test_replay()
   }
   state_last = sim.state;
 
-  sim.state.wind.norm = fixed(7);
+  sim.state.wind.norm = 7;
   sim.state.wind.bearing = Angle::Degrees(330);
 
   auto time_last = sim.state.time;
@@ -149,7 +149,7 @@ test_replay()
 
       task_manager.Update(sim.state, state_last);
       task_manager.UpdateIdle(sim.state);
-      task_manager.UpdateAutoMC(sim.state, fixed(0));
+      task_manager.UpdateAutoMC(sim.state, 0);
       task_manager.SetTaskAdvance().SetArmed(true);
 
       state_last = sim.state;
@@ -174,7 +174,7 @@ test_replay()
            (double)task_manager.GetStats().total.travelled.GetDistance()/1000.0);
     printf("# scored distance %4.1f (km)\n", 
            (double)task_manager.GetStats().distance_scored/1000.0);
-    if (positive(task_manager.GetStats().total.time_elapsed)) {
+    if (task_manager.GetStats().total.time_elapsed > 0) {
       printf("# scored speed %3.1f (kph)\n", 
              (double)task_manager.GetStats().distance_scored/(double)task_manager.GetStats().total.time_elapsed*3.6);
     }

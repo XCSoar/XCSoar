@@ -116,7 +116,7 @@ main(int argc, char *argv[])
     NMEAInfo basic;
     basic.Reset();
     basic.UpdateClock();
-    basic.time = fixed(1);
+    basic.time = 1;
     basic.time_available.Update(basic.clock);
 
     return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;

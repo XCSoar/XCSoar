@@ -77,7 +77,7 @@ TestOLC(DebugReplay &replay)
         !basic.NavAltitudeAvailable())
       continue;
 
-    if (!released && !negative(replay.Calculated().flight.release_time)) {
+    if (!released && replay.Calculated().flight.release_time >= 0) {
       released = true;
 
       triangle_trace.EraseEarlierThan(replay.Calculated().flight.release_time);

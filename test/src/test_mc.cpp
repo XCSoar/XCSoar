@@ -34,10 +34,10 @@
 #include <string>
 #include <math.h>
 
-const fixed Vmin(5.0);
+const double Vmin(5.0);
 
 static void
-polar_mc(std::ofstream &ofile, const fixed mc)
+polar_mc(std::ofstream &ofile, const double mc)
 {
   GlidePolar polar(mc);
   ofile << (double)mc << " " 
@@ -50,7 +50,7 @@ polar_mc(std::ofstream &ofile, const fixed mc)
 }
 
 static void
-basic_polar(const fixed mc)
+basic_polar(const double mc)
 {
   char bname[100];
   sprintf(bname,"output/results/res-polar-%02d-best.txt",(int)(mc*10));
@@ -58,7 +58,7 @@ basic_polar(const fixed mc)
   std::ofstream mfile(bname);
 
   GlidePolar polar(mc);
-  for (fixed V= Vmin; V<= polar.GetVMax(); V+= fixed(0.25)) {
+  for (double V= Vmin; V<= polar.GetVMax(); V+= 0.25) {
     pfile << (double)mc << " " 
           << (double)V << " " 
           << -(double)polar.SinkRate(V) << " " 
@@ -80,26 +80,26 @@ basic_polar(const fixed mc)
 
 
 static void
-test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
+test_glide_alt(const double h, const double W, const double Wangle,
                std::ostream &hfile)
 {
   GlideSettings settings;
   settings.SetDefaults();
 
-  GlidePolar polar(fixed(0));
-  polar.SetMC(fixed(1));
+  GlidePolar polar(0);
+  polar.SetMC(1);
 
   AircraftState ac;
   ac.wind.norm = fabs(W);
-  if (negative(W)) {
-    ac.wind.bearing = Angle::Degrees(fixed(180)+Wangle);
+  if (W < 0) {
+    ac.wind.bearing = Angle::Degrees(180+Wangle);
   } else {
     ac.wind.bearing = Angle::Degrees(Wangle);
   }
   ac.altitude = h;
 
-  GeoVector vect(fixed(400.0), Angle::Zero());
-  GlideState gs(vect, fixed(0), ac.altitude, ac.wind);
+  GeoVector vect(400.0, Angle::Zero());
+  GlideState gs(vect, 0, ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(settings, polar, gs);
   hfile << (double)h << " " 
         << (double)gr.altitude_difference << " "
@@ -111,30 +111,30 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
 }
 
 static void
-test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
+test_glide_stf(const double h, const double W, const double Wangle, const double S,
                std::ostream &hfile)
 {
   GlideSettings settings;
   settings.SetDefaults();
 
-  GlidePolar polar(fixed(0));
-  polar.SetMC(fixed(1));
+  GlidePolar polar(0);
+  polar.SetMC(1);
 
   AircraftState ac;
   ac.wind.norm = fabs(W);
-  if (negative(W)) {
-    ac.wind.bearing = Angle::Degrees(fixed(180)+Wangle);
+  if (W < 0) {
+    ac.wind.bearing = Angle::Degrees(180+Wangle);
   } else {
     ac.wind.bearing = Angle::Degrees(Wangle);
   }
   ac.altitude = h;
   ac.netto_vario = S;
 
-  GeoVector vect(fixed(400.0), Angle::Zero());
-  GlideState gs(vect, fixed(0), ac.altitude, ac.wind);
+  GeoVector vect(400.0, Angle::Zero());
+  GlideState gs(vect, 0, ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(settings, polar, gs);
 
-  fixed Vstf = polar.SpeedToFly(ac, gr, false);
+  double Vstf = polar.SpeedToFly(ac, gr, false);
 
   hfile << (double)h << " " 
         << (double)gr.altitude_difference << " "
@@ -151,32 +151,32 @@ test_stf()
 {
   { // variation with height
     std::ofstream hfile("output/results/res-polar-s0.txt");
-    for (fixed h=fixed(0); h<fixed(40.0); h+= fixed(0.1)) {
-      test_glide_stf(h,fixed(0),fixed(0),fixed(0),hfile);
+    for (double h=0; h<40.0; h+= 0.1) {
+      test_glide_stf(h,0,0,0,hfile);
     }
   }
   { // variation with S, below FG
     std::ofstream hfile("output/results/res-polar-s1.txt");
-    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
-      test_glide_stf(fixed(0), fixed(0),fixed(0),S, hfile);
+    for (double S=-4.0; S<4.0; S+= 0.1) {
+      test_glide_stf(0, 0,0,S, hfile);
     }
   }
   { // variation with S, above FG
     std::ofstream hfile("output/results/res-polar-s2.txt");
-    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
-      test_glide_stf(fixed(40), fixed(0),fixed(0),S, hfile);
+    for (double S=-4.0; S<4.0; S+= 0.1) {
+      test_glide_stf(40, 0,0,S, hfile);
     }
   }
   { // variation with S, below FG, wind
     std::ofstream hfile("output/results/res-polar-s3.txt");
-    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
-      test_glide_stf(fixed(0), fixed(10.0), fixed(0),S, hfile);
+    for (double S=-4.0; S<4.0; S+= 0.1) {
+      test_glide_stf(0, 10.0, 0,S, hfile);
     }
   }
   { // variation with S, above FG, wind
     std::ofstream hfile("output/results/res-polar-s4.txt");
-    for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
-      test_glide_stf(fixed(40), fixed(10.0), fixed(0), S, hfile);
+    for (double S=-4.0; S<4.0; S+= 0.1) {
+      test_glide_stf(40, 10.0, 0, S, hfile);
     }
   }
   return true;
@@ -187,7 +187,7 @@ test_mc()
 {
   {
     std::ofstream ofile("output/results/res-polar-m.txt");
-    for (fixed mc=fixed(0); mc<fixed(5.0); mc+= fixed(0.1)) {
+    for (double mc=0; mc<5.0; mc+= 0.1) {
       basic_polar(mc);
       polar_mc(ofile, mc);
     }
@@ -195,54 +195,54 @@ test_mc()
 
   {
     std::ofstream hfile("output/results/res-polar-h-00.txt");
-    for (fixed h=fixed(0); h<fixed(40.0); h+= fixed(0.1)) {
-      test_glide_alt(h, fixed(0), fixed(0), hfile);
+    for (double h=0; h<40.0; h+= 0.1) {
+      test_glide_alt(h, 0, 0, hfile);
     }
   }
 
   {
     std::ofstream hfile("output/results/res-polar-h-50.txt");
-    for (fixed h=fixed(0); h<fixed(40.0); h+= fixed(0.1)) {
-      test_glide_alt(h, fixed(5.0), fixed(0), hfile);
+    for (double h=0; h<40.0; h+= 0.1) {
+      test_glide_alt(h, 5.0, 0, hfile);
     }
   }
 
   {
     std::ofstream hfile("output/results/res-polar-w.txt");
-    for (fixed w=fixed(-10.0); w<=fixed(10.0); w+= fixed(0.1)) {
-      test_glide_alt(fixed(50.0), w, fixed(0), hfile);
+    for (double w=-10.0; w<=10.0; w+= 0.1) {
+      test_glide_alt(50.0, w, 0, hfile);
     }
   }
 
   {
     std::ofstream hfile("output/results/res-polar-a.txt");
-    for (fixed a=fixed(0); a<=fixed(360.0); a+= fixed(10)) {
-      test_glide_alt(fixed(50.0), fixed(10.0), a, hfile);
+    for (double a=0; a<=360.0; a+= 10) {
+      test_glide_alt(50.0, 10.0, a, hfile);
     }
   }
   return true;
 }
 
 static void
-test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
+test_glide_cb(const double h, const double W, const double Wangle,
               std::ostream &hfile)
 {
   GlideSettings settings;
   settings.SetDefaults();
 
-  GlidePolar polar(fixed(1));
+  GlidePolar polar(1);
 
   AircraftState ac;
   ac.wind.norm = fabs(W);
-  if (negative(W)) {
-    ac.wind.bearing = Angle::Degrees(fixed(180)+Wangle);
+  if (W < 0) {
+    ac.wind.bearing = Angle::Degrees(180+Wangle);
   } else {
     ac.wind.bearing = Angle::Degrees(Wangle);
   }
   ac.altitude = h;
 
-  GeoVector vect(fixed(400.0), Angle::Zero());
-  GlideState gs (vect, fixed(0), ac.altitude, ac.wind);
+  GeoVector vect(400.0, Angle::Zero());
+  GlideState gs (vect, 0, ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(settings, polar, gs);
 
   gr.CalcDeferred();
@@ -259,8 +259,8 @@ test_cb()
 {
   {
     std::ofstream hfile("output/results/res-polar-cb.txt");
-    for (fixed a = fixed(0); a <= fixed(360.0); a+= fixed(10)) {
-      test_glide_cb(fixed(0), fixed(10.0), a, hfile);
+    for (double a = 0; a <= 360.0; a+= 10) {
+      test_glide_cb(0, 10.0, a, hfile);
     }
   }
   return true;

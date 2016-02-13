@@ -410,7 +410,7 @@ bool test_task_mixed(TaskManager& task_manager,
     tp = fact.CreateStart(TaskPointFactoryType::START_LINE, std::move(wp));
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
-      cz.SetRadius(fixed(5000.0));
+      cz.SetRadius(5000.0);
     }
     if (!fact.Append(*tp,false)) return false;
     delete tp;
@@ -439,7 +439,7 @@ bool test_task_mixed(TaskManager& task_manager,
                                  std::move(wp));
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
-      cz.SetRadius(fixed(30000.0));
+      cz.SetRadius(30000.0);
     }
     if (!fact.Append(*tp,false)) return false;
     delete tp;
@@ -465,7 +465,7 @@ bool test_task_mixed(TaskManager& task_manager,
                                  std::move(wp));
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
-      cz.SetRadius(fixed(30000.0));
+      cz.SetRadius(30000.0);
     }
     if (!fact.Append(*tp,false)) return false;
     delete tp;
@@ -588,7 +588,7 @@ bool test_task_aat(TaskManager& task_manager,
                                                    std::move(wp));
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
-      cz.SetRadius(fixed(30000.0));
+      cz.SetRadius(30000.0);
     }
     if (!fact.Append(*tp,false)) {
       return false;
@@ -603,7 +603,7 @@ bool test_task_aat(TaskManager& task_manager,
                                                    std::move(wp));
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
-      cz.SetRadius(fixed(40000.0));
+      cz.SetRadius(40000.0);
     }
     if (!fact.Append(*tp,false)) {
       return false;

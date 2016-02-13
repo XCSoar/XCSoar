@@ -31,9 +31,9 @@ Copyright_License {
 
 static void
 GenerateNMEA(TextWriter &writer,
-             const GeoPoint &loc, const fixed speed,
-             const Angle bearing, const fixed alt,
-             const fixed baroalt, const fixed t)
+             const GeoPoint &loc, const double speed,
+             const Angle bearing, const double alt,
+             const double baroalt, const double t)
 {
   unsigned time = (unsigned)t;
   unsigned hour = time / 3600;

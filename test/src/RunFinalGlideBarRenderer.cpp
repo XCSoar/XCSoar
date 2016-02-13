@@ -55,11 +55,11 @@ class FinalGlideBarWindow : public PaintWindow
 public:
   FinalGlideBarWindow(const FinalGlideBarLook &look, const TaskLook &task_look)
     :renderer(look, task_look),
-     state(GeoVector(fixed(100), Angle::Zero()),
-           fixed(1000), fixed(1000),
-           SpeedVector(Angle::Zero(), fixed(0)))
+     state(GeoVector(100, Angle::Zero()),
+           1000, 1000,
+           SpeedVector(Angle::Zero(), 0))
   {
-    glide_polar = GlidePolar(fixed(0));
+    glide_polar = GlidePolar(0);
 
     calculated.task_stats.total.solution_remaining =
       MacCready::Solve(glide_settings, glide_polar, state);
@@ -70,22 +70,22 @@ public:
     calculated.task_stats.task_valid = true;
   }
 
-  fixed GetAltitudeDifference() {
+  double GetAltitudeDifference() {
     return calculated.task_stats.total.solution_remaining.altitude_difference;
   }
 
-  fixed GetAltitudeDifference0() {
+  double GetAltitudeDifference0() {
     return calculated.task_stats.total.solution_mc0.altitude_difference;
   }
 
-  void SetAltitudeDifference(fixed altitude_difference) {
+  void SetAltitudeDifference(double altitude_difference) {
     state.altitude_difference = altitude_difference;
 
     calculated.task_stats.total.solution_remaining =
       MacCready::Solve(glide_settings, glide_polar, state);
   }
 
-  void SetAltitudeDifference0(fixed altitude_difference0) {
+  void SetAltitudeDifference0(double altitude_difference0) {
     state.altitude_difference = altitude_difference0;
 
     calculated.task_stats.total.solution_mc0 =
@@ -114,22 +114,22 @@ Main()
   final_glide.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(final_glide);
 
-  fixed step(10);
-  fixed mc_mc0_step(100);
+  double step(10);
+  double mc_mc0_step(100);
 
   auto timer = MakeLambdaTimer([&](){
-      fixed altitude_difference = final_glide.GetAltitudeDifference();
-      fixed altitude_difference0 = final_glide.GetAltitudeDifference0();
+      double altitude_difference = final_glide.GetAltitudeDifference();
+      double altitude_difference0 = final_glide.GetAltitudeDifference0();
 
-      if (altitude_difference >= fixed(600) ) {
-        step = fixed(-10);
-      } else if (altitude_difference <= fixed(-600)) {
-        step = fixed(10);
+      if (altitude_difference >= 600 ) {
+        step = -10;
+      } else if (altitude_difference <= -600) {
+        step = 10;
 
-        if (altitude_difference0 > fixed(600)) {
-          mc_mc0_step = fixed(-100);
+        if (altitude_difference0 > 600) {
+          mc_mc0_step = -100;
         } else if (altitude_difference0 <= altitude_difference) {
-          mc_mc0_step = fixed(100);
+          mc_mc0_step = 100;
         }
 
         altitude_difference0 += mc_mc0_step;

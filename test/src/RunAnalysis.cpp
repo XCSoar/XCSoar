@@ -153,7 +153,7 @@ Main()
 
   InterfaceBlackboard blackboard;
   blackboard.SetComputerSettings().SetDefaults();
-  blackboard.SetComputerSettings().polar.glide_polar_task = GlidePolar(fixed(1));
+  blackboard.SetComputerSettings().polar.glide_polar_task = GlidePolar(1);
   blackboard.SetUISettings().SetDefaults();
 
   TaskBehaviour task_behaviour;

@@ -36,13 +36,13 @@
 
 #include <fstream>
 
-fixed
+double
 aat_min_time(int test_num)
 {
   OrderedTaskSettings beh;
   switch (test_num) {
   case 2:
-    return fixed(3600 * 3.8);
+    return 3600 * 3.8;
   default:
     return beh.aat_min_time;
   }
@@ -50,8 +50,6 @@ aat_min_time(int test_num)
 
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
-
-#define fixed_300 fixed(300)
 
 class PrintTaskAutoPilot: public TaskAutoPilot
 {
@@ -103,7 +101,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   TestFlightResult result;
 
-  TaskAccessor ta(task_manager, fixed_300);
+  TaskAccessor ta(task_manager, 300);
   PrintTaskAutoPilot autopilot(parms);
   AircraftSim aircraft;
 
@@ -113,7 +111,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   if (n_wind)
     aircraft.SetWind(wind_to_mag(n_wind), wind_to_dir(n_wind));
 
-  autopilot.SetSpeedFactor(fixed(speed_factor));
+  autopilot.SetSpeedFactor(speed_factor);
 
   Directory::Create(Path(_T("output/results")));
   std::ofstream f4("output/results/res-sample.txt");
@@ -121,8 +119,6 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   bool do_print = verbose;
   bool first = true;
-
-  static const fixed fixed_10(10);
 
   const AirspaceAircraftPerformance perf(task_manager.GetGlidePolar());
 
@@ -144,7 +140,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   do {
 
     if ((task_manager.GetActiveTaskPointIndex() == 1) &&
-        first && (task_manager.GetStats().total.time_elapsed > fixed_10)) {
+        first && (task_manager.GetStats().total.time_elapsed > 10)) {
       result.time_remaining = (double)task_manager.GetStats().total.time_remaining_now;
       first = false;
 
@@ -209,7 +205,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
       const AircraftState state_last = aircraft.GetLastState();
       task_manager.Update(state, state_last);
       task_manager.UpdateIdle(state);
-      task_manager.UpdateAutoMC(state, fixed(0));
+      task_manager.UpdateAutoMC(state, 0);
     }
 
   } while (autopilot.UpdateAutopilot(ta, aircraft.GetState()));
@@ -257,7 +253,7 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
 {
   // multipurpose flight test
 
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 

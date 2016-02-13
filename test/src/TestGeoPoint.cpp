@@ -24,7 +24,6 @@
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
 #include "Math/Angle.hpp"
-#include "Math/fixed.hpp"
 
 #include "TestUtil.hpp"
 
@@ -44,22 +43,22 @@ int main(int argc, char **argv)
 
   // test parametric()
   GeoPoint p2(Angle::Degrees(2), Angle::Degrees(1));
-  GeoPoint p3 = p1.Parametric(p2, fixed(5));
+  GeoPoint p3 = p1.Parametric(p2, 5);
   ok1(p2.IsValid());
   ok1(p3.IsValid());
   ok1(equals(p3, -1.332, -4.68));
 
   // test interpolate
-  GeoPoint p4 = p1.Interpolate(p3, fixed(0.5));
+  GeoPoint p4 = p1.Interpolate(p3, 0.5);
   ok1(p4.IsValid());
   ok1(equals(p4, -3.832, -9.68));
 
-  GeoPoint p5 = p1.Interpolate(p3, fixed(0.25));
+  GeoPoint p5 = p1.Interpolate(p3, 0.25);
   ok1(p5.IsValid());
   ok1(equals(p5, -5.082, -12.18));
 
   // test *
-  GeoPoint p6 = p2 * fixed(3.5);
+  GeoPoint p6 = p2 * 3.5;
   ok1(p6.IsValid());
   ok1(equals(p6, 3.5, 7));
 
@@ -168,18 +167,18 @@ int main(int argc, char **argv)
   // test intermediate_point()
   GeoPoint p7(Angle::Zero(), Angle::Zero());
   ok1(p7.IsValid());
-  GeoPoint p8 = p7.IntermediatePoint(p2, fixed(100000));
+  GeoPoint p8 = p7.IntermediatePoint(p2, 100000);
   ok1(p8.IsValid());
   ok1(equals(p8, 0.402361, 0.804516));
   ok1(equals(p8.Distance(p7), 100000));
-  GeoPoint p9 = p7.IntermediatePoint(p2, fixed(100000000));
+  GeoPoint p9 = p7.IntermediatePoint(p2, 100000000);
   ok1(p9.IsValid());
   ok1(equals(p9, p2));
 
   // test projected_distance()
   ok1(equals(p8.ProjectedDistance(p7, p2), 100000));
   ok1(equals(p4.ProjectedDistance(p1, p3), 619494.517917));
-  ok1(equals((p2 * fixed(2)).ProjectedDistance(p2, p6), 248511.833322));
+  ok1(equals((p2 * 2).ProjectedDistance(p2, p6), 248511.833322));
 
   // Tests moved here from test_fixed.cpp
   GeoPoint l1(Angle::Zero(), Angle::Zero());
@@ -196,7 +195,7 @@ int main(int argc, char **argv)
   bool find_lat_lon_okay = true;
   for (Angle bearing = Angle::Zero(); bearing < Angle::FullCircle();
       bearing += Angle::Degrees(5)) {
-    GeoPoint p_test = FindLatitudeLongitude(p1, bearing, fixed(50000));
+    GeoPoint p_test = FindLatitudeLongitude(p1, bearing, 50000);
     find_lat_lon_okay = equals(p_test.Distance(p1), 50000) && find_lat_lon_okay;
   }
   ok1(find_lat_lon_okay);
@@ -205,7 +204,7 @@ int main(int argc, char **argv)
   // 116090 @ 343
 
   v = l1.DistanceBearing(l3);
-  ok(positive(v.distance) && v.distance < fixed(2), "earth distance short", 0);
+  ok(v.distance > 0 && v.distance < 2, "earth distance short", 0);
 
   GeoPoint p10(GeoPoint::Invalid());
   ok1(!p10.IsValid());

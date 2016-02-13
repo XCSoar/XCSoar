@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 
   AircraftState dummy;
   TestFlightComponents components;
-  components.aircraft_filter = new AircraftStateFilter(fixed(120));
+  components.aircraft_filter = new AircraftStateFilter(120);
   components.aircraft_filter->Reset(dummy);
 
   plan_tests(1);

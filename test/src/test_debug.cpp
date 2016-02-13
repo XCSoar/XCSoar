@@ -41,7 +41,7 @@ int terrain_height = 1;
 AllocatedPath replay_file = Path(_T("test/data/0asljd01.igc"));
 AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
 AllocatedPath task_file = nullptr;
-fixed range_threshold = fixed(15000);
+double range_threshold = 15000;
 
 #ifdef INSTRUMENT_ZERO
 extern unsigned long zero_skipped;
@@ -134,10 +134,10 @@ ParseArgs(int argc, char** argv)
       task_file = PathName(optarg);
       break;
     case 'd':
-      range_threshold = (fixed)atof(optarg);
+      range_threshold = atof(optarg);
       break;
     case 'a':
-      autopilot_parms.start_alt = (fixed)atof(optarg);
+      autopilot_parms.start_alt = atof(optarg);
       break;
     case 's':
       output_skip = atoi(optarg);
@@ -150,13 +150,13 @@ ParseArgs(int argc, char** argv)
       }
       break;
     case 'n':
-      autopilot_parms.bearing_noise = (fixed)atof(optarg);
+      autopilot_parms.bearing_noise = atof(optarg);
       break;
     case 't':
-      autopilot_parms.target_noise = (fixed)atof(optarg);
+      autopilot_parms.target_noise = atof(optarg);
       break;
     case 'r':
-      autopilot_parms.turn_speed = (fixed)atof(optarg);
+      autopilot_parms.turn_speed = atof(optarg);
       break;
     case 'i':
       if (optarg) {

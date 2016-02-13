@@ -67,7 +67,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   ok(ce0 > ce3, GetTestName("ce speed fast", test_num, n_wind), 0);
 
   // higher than expected cruise sink
-  autopilot_parms.sink_factor = fixed(1.2);
+  autopilot_parms.sink_factor = 1.2;
   result = test_flight(test_num, n_wind);
   ce4 = result.calc_cruise_efficiency;
   if (ce0 <= ce4 || verbose)
@@ -75,10 +75,10 @@ test_cruise_efficiency(int test_num, int n_wind)
 
   ok(ce0 > ce4, GetTestName("ce high sink", test_num, n_wind), 0);
   // cruise efficiency of this should be lower than nominal
-  autopilot_parms.sink_factor = fixed(1.0);
+  autopilot_parms.sink_factor = 1.0;
 
   // slower than expected climb
-  autopilot_parms.climb_factor = fixed(0.8);
+  autopilot_parms.climb_factor = 0.8;
   result = test_flight(test_num, n_wind);
   ce5 = result.calc_cruise_efficiency;
   if (ce0 <= ce5 || verbose)
@@ -86,10 +86,10 @@ test_cruise_efficiency(int test_num, int n_wind)
 
   ok(ce0 > ce5, GetTestName("ce slow climb", test_num, n_wind), 0);
   // cruise efficiency of this should be lower than nominal
-  autopilot_parms.climb_factor = fixed(1.0);
+  autopilot_parms.climb_factor = 1.0;
 
   // lower than expected cruise sink;
-  autopilot_parms.sink_factor = fixed(0.8);
+  autopilot_parms.sink_factor = 0.8;
   result = test_flight(test_num, n_wind);
   ce6 = result.calc_cruise_efficiency;
   if (ce0 >= ce6 || verbose)
@@ -97,7 +97,7 @@ test_cruise_efficiency(int test_num, int n_wind)
 
   ok(ce0 < ce6, GetTestName("ce low sink", test_num, n_wind), 0);
   // cruise efficiency of this should be greater than nominal
-  autopilot_parms.sink_factor = fixed(1.0);
+  autopilot_parms.sink_factor = 1.0;
 
   bool retval = (ce0 > ce1) && (ce0 > ce2) && (ce0 > ce3) && (ce0 > ce4)
       && (ce0 > ce5) && (ce0 < ce6);

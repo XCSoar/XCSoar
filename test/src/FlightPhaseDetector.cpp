@@ -25,8 +25,8 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-static constexpr fixed MIN_PHASE_TIME = fixed(30);
-static constexpr fixed FP_TOLERANCE = fixed(0.001);
+static constexpr double MIN_PHASE_TIME(30);
+static constexpr double FP_TOLERANCE(0.001);
 
 /**
  * Update circling directon for given phase with given new direction
@@ -101,26 +101,26 @@ CalcCirclingDirection(const DerivedInfo &calculated)
          Phase::CirclingDirection::LEFT : Phase::CirclingDirection::RIGHT;
 }
 
-fixed
+double
 Phase::GetSpeed() const {
   if (duration < FP_TOLERANCE) {
-    return fixed(0);
+    return 0;
   }
   return distance / duration;
 }
 
-fixed
+double
 Phase::GetVario() const {
   if (duration < FP_TOLERANCE) {
-    return fixed(0);
+    return 0;
   }
   return alt_diff / duration;
 }
 
-fixed
+double
 Phase::GetGlideRate() const {
   if (fabs(alt_diff) < FP_TOLERANCE) {
-    return fixed(0);
+    return 0;
   }
   return distance / -alt_diff;
 }
@@ -236,11 +236,11 @@ FlightPhaseDetector::Finish()
   auto total_circling = totals.total_circstats.duration;
   auto total_cruise = totals.total_cruisestats.duration;
   auto total_duration = total_circling + total_cruise;
-  if (total_duration > fixed(0)) {
+  if (total_duration > 0) {
       totals.total_circstats.fraction = total_circling / total_duration;
       totals.total_cruisestats.fraction = total_cruise / total_duration;
 
-      if (total_circling > fixed(0)) {
+      if (total_circling > 0) {
           totals.left_circstats.fraction =
               totals.left_circstats.duration / total_circling;
           totals.right_circstats.fraction =

@@ -24,7 +24,6 @@
 
 #include <list>
 
-#include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
 
@@ -60,36 +59,36 @@ struct Phase {
   /** Date and time in UTC when the phase ended */
   BrokenDateTime end_datetime;
   /** Seconds from midnight UTC when the phase started */
-  fixed start_time;
+  double start_time;
   /** Seconds from midnight UTC when the phase ended */
-  fixed end_time;
+  double end_time;
   /** Direction of circling (or NO_DIRECTION when not circling) */
   CirclingDirection circling_direction;
   /** Starting altitude of the phase */
-  fixed start_alt;
+  double start_alt;
   /** Ending altitude of the phase */
-  fixed end_alt;
+  double end_alt;
   /** Starting location of the phase */
   GeoPoint start_loc;
   /** Ending location of the phase */
   GeoPoint end_loc;
   /** Duration of the phase in seconds */
-  fixed duration;
+  double duration;
   /** Fraction of the phase duration compared to total flight time. */
-  fixed fraction;
+  double fraction;
   /** Altitude difference between start_alt and end_alt */
-  fixed alt_diff;
+  double alt_diff;
   /** Distance travelled during the phase, i.e. sum of distances between fixes. */
-  fixed distance;
+  double distance;
   /** Number of the phases of the same type, combined into this phase. */
   unsigned int merges;
 
   /** Average ground speed during the phase */
-  fixed GetSpeed() const;
+  double GetSpeed() const;
   /** Average vertical speed during the phase */
-  fixed GetVario() const;
+  double GetVario() const;
   /** Average glide rate during the phase */
-  fixed GetGlideRate() const;
+  double GetGlideRate() const;
 
   /**
    * Reinitialize phase
@@ -98,13 +97,13 @@ struct Phase {
     phase_type = NO_PHASE;
     start_datetime.Clear();
     end_datetime.Clear();
-    start_time = fixed(0);
-    end_time = fixed(0);
-    duration = fixed(0);
-    fraction = fixed(0);
+    start_time = 0;
+    end_time = 0;
+    duration = 0;
+    fraction = 0;
     circling_direction = NO_DIRECTION;
-    alt_diff = fixed(0);
-    distance = fixed(0);
+    alt_diff = 0;
+    distance = 0;
     merges = 0;
   }
 };

@@ -28,7 +28,7 @@
 static bool
 test_abort(int n_wind)
 {
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 
@@ -58,7 +58,7 @@ test_abort(int n_wind)
 static bool
 test_goto(int n_wind, unsigned id, bool auto_mc)
 {
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 
@@ -91,7 +91,7 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 static bool
 test_null()
 {
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 

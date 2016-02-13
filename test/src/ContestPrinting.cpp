@@ -77,7 +77,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
     return;
   }
 
-  if (positive(man.stats.result[0].time)) {
+  if (man.stats.result[0].time > 0) {
 
     for (auto it = man.stats.solution[0].begin();
          it != man.stats.solution[0].end(); ++it) {
@@ -92,7 +92,7 @@ void
 PrintHelper::print(const ContestResult& score)
 {
   std::cout << "#   score " << score.score << "\n";
-  std::cout << "#   distance " << score.distance/fixed(1000) << " (km)\n";
-  std::cout << "#   speed " << score.GetSpeed() * fixed(3.6) << " (kph)\n";
+  std::cout << "#   distance " << score.distance/1000. << " (km)\n";
+  std::cout << "#   speed " << score.GetSpeed() * 3.6 << " (kph)\n";
   std::cout << "#   time " << score.time << " (sec)\n";
 }

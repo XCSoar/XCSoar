@@ -32,7 +32,7 @@
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
-static GlidePolar glide_polar(fixed(0));
+static GlidePolar glide_polar(0);
 
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
@@ -44,7 +44,7 @@ MakeGeoPoint(double longitude, double latitude)
 static Waypoint
 MakeWaypoint(Waypoint wp, double altitude)
 {
-  wp.elevation = fixed(altitude);
+  wp.elevation = altitude;
   return wp;
 }
 
@@ -69,14 +69,14 @@ static void
 TestAATPoint()
 {
   OrderedTask task(task_behaviour);
-  task.Append(StartPoint(new CylinderZone(wp1->location, fixed(500)),
+  task.Append(StartPoint(new CylinderZone(wp1->location, 500),
                          WaypointPtr(wp1),
                          task_behaviour,
                          ordered_task_settings.start_constraints));
-  task.Append(AATPoint(new CylinderZone(wp2->location, fixed(10000)),
+  task.Append(AATPoint(new CylinderZone(wp2->location, 10000),
                        WaypointPtr(wp2),
                        task_behaviour));
-  task.Append(FinishPoint(new CylinderZone(wp3->location, fixed(500)),
+  task.Append(FinishPoint(new CylinderZone(wp3->location, 500),
                           WaypointPtr(wp3),
                           task_behaviour,
                           ordered_task_settings.finish_constraints));
@@ -102,15 +102,15 @@ TestAATPoint()
   ok1(equals(ap.GetTargetLocation(), target));
 
   RangeAndRadial rar = ap.GetTargetRangeRadial();
-  ok1(equals(rar.range, fixed(0.1112), 1000));
-  ok1(equals(rar.radial.Degrees(), fixed(0), 200));
+  ok1(equals(rar.range, 0.1112, 1000));
+  ok1(equals(rar.radial.Degrees(), 0, 200));
 
   target = MakeGeoPoint(0, 45.29);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
-  ok1(equals(rar.range, fixed(-0.1112), 1000));
-  ok1(equals(rar.radial.Degrees(), fixed(180), 200) ||
-      equals(rar.radial.Degrees(), fixed(-180), 200));
+  ok1(equals(rar.range, -0.1112, 1000));
+  ok1(equals(rar.radial.Degrees(), 180, 200) ||
+      equals(rar.radial.Degrees(), -180, 200));
 
   target = MakeGeoPoint(-0.05, 45.3);
   ap.SetTarget(target, true);
@@ -128,8 +128,8 @@ TestAATPoint()
     const Angle radial2 = Angle::Degrees(radial);
 
     for (int range = 10; range <= 100; range += 10) {
-      const fixed range2(fixed(radial >= -90 && radial <= 90
-                               ? range : -range) / 100);
+      const double range2((radial >= -90 && radial <= 90
+                           ? range : -range) / 100.);
 
       ap.SetTarget(RangeAndRadial{range2, radial2}, task.GetTaskProjection());
       rar = ap.GetTargetRangeRadial();

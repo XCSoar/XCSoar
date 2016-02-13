@@ -71,9 +71,9 @@ TestMap()
   }
 
   {
-    fixed value;
+    double value;
     ok1(!Profile::Get("key5", value));
-    Profile::Set("key5", fixed(1.337));
+    Profile::Set("key5", 1.337);
     ok1(Profile::Get("key5", value));
     ok1(equals(value, 1.337));
   }

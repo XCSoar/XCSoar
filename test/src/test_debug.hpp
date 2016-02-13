@@ -25,7 +25,6 @@
 
 #include "Printing.hpp"
 
-#include "Math/fixed.hpp"
 #include "Replay/TaskAutoPilot.hpp"
 #include "OS/Path.hpp"
 
@@ -50,7 +49,7 @@ const char* GetTestName(const char* in, int task_num, int wind_num);
 extern AllocatedPath replay_file;
 extern AllocatedPath task_file;
 extern AllocatedPath waypoint_file;
-extern fixed range_threshold;
+extern double range_threshold;
 
 bool ParseArgs(int argc, char** argv);
 

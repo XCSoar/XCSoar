@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
   printf("# time wind_bearing (deg) wind_speed (m/s)\n");
 
-  GlidePolar glide_polar(fixed(0));
+  GlidePolar glide_polar(0);
 
   CirclingSettings circling_settings;
 

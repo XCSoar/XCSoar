@@ -29,7 +29,6 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "Util/StaticString.hxx"
-#include "Math/fixed.hpp"
 #include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
 
@@ -66,18 +65,18 @@ int main(int argc, char **argv)
   PeriodClock pressure_clock;
   PeriodClock battery_clock;
 
-  fixed pressure = fixed(101300);
+  double pressure = 101300;
   unsigned battery_level = 11;
   while (true) {
     if (pressure_clock.CheckUpdate(48)) {
       NarrowString<16> sentence;
 
       int elapsed_ms = start_clock.Elapsed();
-      auto elapsed = fixed(elapsed_ms) / 1000;
+      auto elapsed = elapsed_ms / 1000.;
       auto vario = sin(elapsed / 3) * cos(elapsed / 10) *
-        cos(elapsed / 20 + fixed(2)) * 3;
+        cos(elapsed / 20 + 2) * 3;
 
-      auto pressure_vario = -vario * fixed(12.5);
+      auto pressure_vario = -vario * 12.5;
       auto delta_pressure = pressure_vario * 48 / 1000;
       pressure += delta_pressure;
 

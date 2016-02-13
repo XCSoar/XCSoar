@@ -41,8 +41,8 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceClass Type = (AirspaceClass)(rand()%14);
   AirspaceAltitude base;
   AirspaceAltitude top;
-  base.altitude = fixed(rand()%4000);
-  top.altitude = base.altitude+fixed(rand()%3000);
+  base.altitude = rand()%4000;
+  top.altitude = base.altitude+rand()%3000;
   as.SetProperties(_T("hello"), Type, base, top);
 }
 
@@ -73,9 +73,9 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
     AbstractAirspace* as;
     if (rand()%4!=0) {
       GeoPoint c;
-      c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
-      c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
-      fixed radius(10000.0*(0.2+(rand()%12)/12.0));
+      c.longitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.latitude;
+      double radius(10000.0*(0.2+(rand()%12)/12.0));
       as = new AirspaceCircle(c,radius);
     } else {
 
@@ -83,14 +83,14 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
       // random points
       const unsigned num = rand()%10+5;
       GeoPoint c;
-      c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
-      c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
+      c.longitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.latitude;
 
       std::vector<GeoPoint> pts;
       for (unsigned j=0; j<num; j++) {
         GeoPoint p=c;
-        p.longitude += Angle::Degrees(fixed((rand()%200)/1000.0));
-        p.latitude += Angle::Degrees(fixed((rand()%200)/1000.0));
+        p.longitude += Angle::Degrees(((rand()%200)/1000.0));
+        p.latitude += Angle::Degrees(((rand()%200)/1000.0));
         pts.push_back(p);
       }
       as = new AirspacePolygon(pts,true);
@@ -234,7 +234,7 @@ public:
       *fout << state.location.longitude << " " << state.location.latitude << " " << "\n\n";
     }
     GeoVector vec(state.location, c);
-    vec.distance = fixed(20000); // set big distance (for testing)
+    vec.distance = 20000; // set big distance (for testing)
     const AirspaceInterceptSolution solution =
       as.Intercept(state, vec.EndPoint(state.location), projection, m_perf);
     if (solution.IsValid()) {
@@ -255,7 +255,7 @@ void scan_airspaces(const AircraftState state,
                     bool do_report,
                     const GeoPoint &target) 
 {
-  const fixed range(20000.0);
+  const double range(20000.0);
 
   Directory::Create(Path(_T("output/results")));
 
