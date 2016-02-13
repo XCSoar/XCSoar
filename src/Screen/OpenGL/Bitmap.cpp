@@ -52,7 +52,7 @@ Bitmap::EnableInterpolation()
 }
 
 bool
-Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
+Bitmap::Load(const UncompressedImage &uncompressed, Type type)
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsVisible());

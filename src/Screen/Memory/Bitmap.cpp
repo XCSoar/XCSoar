@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Bitmap::Load(const UncompressedImage &uncompressed, Type type)
+Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsVisible());
