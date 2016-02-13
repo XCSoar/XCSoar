@@ -74,6 +74,12 @@ class NativeView extends SurfaceView
   EGLSurface surface = EGL10.EGL_NO_SURFACE;
 
   /**
+   * A 1x1 pbuffer surface that is used to activate the EGLContext
+   * while we have no real surface.
+   */
+  EGLSurface dummySurface = EGL10.EGL_NO_SURFACE;
+
+  /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
    * then textures can have any size, not just power of two.
    */
@@ -226,11 +232,25 @@ class NativeView extends SurfaceView
    */
   private void deinitSurface() {
     if (surface != EGL10.EGL_NO_SURFACE) {
-      egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE,
-                         EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+      if (dummySurface == EGL10.EGL_NO_SURFACE) {
+        int pbufferAttribs[] = {
+          EGL10.EGL_WIDTH, 1,
+          EGL10.EGL_HEIGHT, 1,
+          EGL10.EGL_NONE
+        };
+
+        dummySurface = egl.eglCreatePbufferSurface(display, config,
+                                                   pbufferAttribs);
+      }
+
+      egl.eglMakeCurrent(display, dummySurface, dummySurface, context);
       egl.eglDestroySurface(display, surface);
       surface = EGL10.EGL_NO_SURFACE;
     }
+  }
+
+  private void deinitEGL() {
+    deinitSurface();
 
     if (context != EGL10.EGL_NO_CONTEXT) {
       egl.eglDestroyContext(display, context);
@@ -268,7 +288,7 @@ class NativeView extends SurfaceView
     } catch (Exception e) {
       Log.e(TAG, "initGL error", e);
       errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
-      deinitSurface();
+      deinitEGL();
       return;
     }
 
