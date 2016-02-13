@@ -70,7 +70,7 @@ Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
 }
 
 bool
-Bitmap::Load(const UncompressedImage &uncompressed, Type type)
+Bitmap::Load(UncompressedImage &&uncompressed, Type type)
 {
   assert(IsScreenInitialized());
   assert(uncompressed.IsVisible());

@@ -49,8 +49,8 @@ Bitmap::Bitmap(ConstBuffer<void> _buffer)
 bool
 Bitmap::Load(ConstBuffer<void> buffer, Type type)
 {
-  const UncompressedImage uncompressed = LoadPNG(buffer.data, buffer.size);
-  return uncompressed.IsVisible() && Load(uncompressed, type);
+  auto uncompressed = LoadPNG(buffer.data, buffer.size);
+  return uncompressed.IsVisible() && Load(std::move(uncompressed), type);
 }
 
 static UncompressedImage
@@ -70,6 +70,6 @@ DecompressImageFile(Path path)
 bool
 Bitmap::LoadFile(Path path)
 {
-  const UncompressedImage uncompressed = DecompressImageFile(path);
-  return uncompressed.IsVisible() && Load(uncompressed);
+  auto uncompressed = DecompressImageFile(path);
+  return uncompressed.IsVisible() && Load(std::move(uncompressed));
 }

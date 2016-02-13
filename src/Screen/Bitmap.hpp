@@ -175,7 +175,7 @@ public:
 #endif
 
 #ifndef USE_GDI
-  bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
+  bool Load(UncompressedImage &&uncompressed, Type type=Type::STANDARD);
 #ifndef ANDROID
   bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
 #endif
