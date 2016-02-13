@@ -52,7 +52,7 @@ LoadJPEGFile(Path path)
 {
   FILE *file = _tfopen(path.c_str(), _T("rb"));
   if (file == nullptr)
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
 
   AtScopeExit(file) { fclose(file); };
 
@@ -70,7 +70,7 @@ LoadJPEGFile(Path path)
   jpeg_read_header(&cinfo, (boolean)true);
 
   if (cinfo.num_components != 3)
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
 
   cinfo.out_color_space = JCS_RGB;
   cinfo.quantize_colors = (boolean)false;

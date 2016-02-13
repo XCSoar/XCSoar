@@ -34,13 +34,13 @@ static UncompressedImage
 CGImageToUncompressedImage(CGImageRef image)
 {
   if (image == nullptr)
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
   
   size_t width = CGImageGetWidth(image);
   size_t height = CGImageGetHeight(image);
   
   if ((0 == width) || (0 == height))
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
   
   size_t bits_per_pixel = CGImageGetBitsPerPixel(image);
   size_t bits_per_component = CGImageGetBitsPerComponent(image);
@@ -80,7 +80,7 @@ CGImageToUncompressedImage(CGImageRef image)
                                               8, row_size, bitmap_colorspace,
                                               bitmap_info);
   if (nullptr == bitmap) {
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
   }
   CGContextDrawImage(bitmap, CGRectMake(0, 0, width, height), image);
   
@@ -95,7 +95,7 @@ LoadJPEGFile(Path path)
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
   
   CGImageRef image =  CGImageCreateWithJPEGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
@@ -115,7 +115,7 @@ LoadPNG(const void *data, size_t size)
   CGDataProviderRef data_provider = CGDataProviderCreateWithData(
       nullptr, data, size, nullptr);
   if (nullptr == data_provider)
-    return UncompressedImage::Invalid();
+    return UncompressedImage();
   
   CGImageRef image = CGImageCreateWithPNGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);

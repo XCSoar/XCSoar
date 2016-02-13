@@ -155,7 +155,7 @@ Bitmap::Reset()
 
     RemoveSurfaceListener(*this);
   } else if (uncompressed.IsDefined()) {
-    uncompressed = UncompressedImage::Invalid();
+    uncompressed = UncompressedImage();
     RemoveSurfaceListener(*this);
   }
 

@@ -86,7 +86,7 @@ protected:
 #ifdef ANDROID
   jobject bmp = nullptr;
 
-  UncompressedImage uncompressed = UncompressedImage::Invalid();
+  UncompressedImage uncompressed;
 
   Type type;
 #endif

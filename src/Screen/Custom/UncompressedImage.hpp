@@ -63,6 +63,8 @@ private:
   std::unique_ptr<uint8_t[]> data;
 
 public:
+  UncompressedImage() = default;
+
   UncompressedImage(Format _format, unsigned _pitch,
                     unsigned _width, unsigned _height,
                     std::unique_ptr<uint8_t[]> &&_data,
@@ -76,10 +78,6 @@ public:
 
   UncompressedImage &operator=(UncompressedImage &&src) = default;
   UncompressedImage &operator=(const UncompressedImage &other) = delete;
-
-  static UncompressedImage Invalid() {
-    return UncompressedImage(Format::INVALID, 0, 0, 0, nullptr);
-  }
 
   bool IsDefined() const {
     return !!data;
