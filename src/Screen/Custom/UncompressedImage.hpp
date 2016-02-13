@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_UNCOMPRESSED_IMAGE_HPP
 
+#include "Screen/Point.hpp"
+
 #include <memory>
 
 #include <stdint.h>
@@ -93,6 +95,10 @@ public:
 
   unsigned GetPitch() const {
     return pitch;
+  }
+
+  PixelSize GetSize() const {
+    return {width, height};
   }
 
   unsigned GetWidth() const {
