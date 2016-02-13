@@ -68,9 +68,9 @@ class NativeView extends SurfaceView
   final boolean hasKeyboard;
 
   EGL10 egl;
-  EGLDisplay display;
-  EGLSurface surface;
-  EGLContext context;
+  EGLDisplay display = EGL10.EGL_NO_DISPLAY;
+  EGLContext context = EGL10.EGL_NO_CONTEXT;
+  EGLSurface surface = EGL10.EGL_NO_SURFACE;
 
   /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
@@ -221,17 +221,17 @@ class NativeView extends SurfaceView
       egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE,
                          EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
       egl.eglDestroySurface(display, surface);
-      surface = null;
+      surface = EGL10.EGL_NO_SURFACE;
     }
 
     if (context != null) {
       egl.eglDestroyContext(display, context);
-      context = null;
+      context = EGL10.EGL_NO_CONTEXT;
     }
 
     if (display != null) {
       egl.eglTerminate(display);
-      display = null;
+      display = EGL10.EGL_NO_DISPLAY;
     }
   }
 
