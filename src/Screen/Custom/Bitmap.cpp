@@ -50,7 +50,7 @@ bool
 Bitmap::Load(ConstBuffer<void> buffer, Type type)
 {
   const UncompressedImage uncompressed = LoadPNG(buffer.data, buffer.size);
-  return Load(uncompressed, type);
+  return uncompressed.IsVisible() && Load(uncompressed, type);
 }
 
 static UncompressedImage
