@@ -149,7 +149,6 @@ class NativeView extends SurfaceView
     /* initialize display */
 
     if (display == EGL10.EGL_NO_DISPLAY) {
-      config = null;
       egl = (EGL10)EGLContext.getEGL();
       display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
       if (display == EGL10.EGL_NO_DISPLAY)
@@ -261,6 +260,8 @@ class NativeView extends SurfaceView
       egl.eglTerminate(display);
       display = EGL10.EGL_NO_DISPLAY;
     }
+
+    config = null;
   }
 
   private boolean setRequestedOrientation(int requestedOrientation) {
