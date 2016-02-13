@@ -39,14 +39,14 @@ ReadPolar(const char *string, Plane &plane)
 }
 
 static bool
-ReadFixed(const char *string, fixed &out)
+ReadDouble(const char *string, double &out)
 {
   char *endptr;
   double tmp = ParseDouble(string, &endptr);
   if (endptr == string)
     return false;
 
-  out = fixed(tmp);
+  out = tmp;
   return true;
 }
 
@@ -97,17 +97,17 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
     } else if (!has_polar && StringIsEqual(pair.key, "PolarInformation")) {
       has_polar = ReadPolar(pair.value, plane);
     } else if (!has_reference_mass && StringIsEqual(pair.key, "PolarReferenceMass")) {
-      has_reference_mass = ReadFixed(pair.value, plane.reference_mass);
+      has_reference_mass = ReadDouble(pair.value, plane.reference_mass);
     } else if (!has_dry_mass && StringIsEqual(pair.key, "PolarDryMass")) {
-      has_dry_mass = ReadFixed(pair.value, plane.dry_mass);
+      has_dry_mass = ReadDouble(pair.value, plane.dry_mass);
     } else if (!has_max_ballast && StringIsEqual(pair.key, "MaxBallast")) {
-      has_max_ballast = ReadFixed(pair.value, plane.max_ballast);
+      has_max_ballast = ReadDouble(pair.value, plane.max_ballast);
     } else if (!has_dump_time && StringIsEqual(pair.key, "DumpTime")) {
       has_dump_time = ReadUnsigned(pair.value, plane.dump_time);
     } else if (!has_max_speed && StringIsEqual(pair.key, "MaxSpeed")) {
-      has_max_speed = ReadFixed(pair.value, plane.max_speed);
+      has_max_speed = ReadDouble(pair.value, plane.max_speed);
     } else if (!has_wing_area && StringIsEqual(pair.key, "WingArea")) {
-      has_wing_area = ReadFixed(pair.value, plane.wing_area);
+      has_wing_area = ReadDouble(pair.value, plane.wing_area);
     }
   }
 
@@ -127,13 +127,13 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   if (!has_handicap)
     plane.handicap = 100;
   if (!has_max_ballast)
-    plane.max_ballast = fixed(0);
+    plane.max_ballast = 0;
   if (!has_dump_time)
     plane.dump_time = 0;
   if (!has_max_speed)
-    plane.max_speed = fixed(55.555);
+    plane.max_speed = 55.555;
   if (!has_wing_area)
-    plane.wing_area = fixed(0);
+    plane.wing_area = 0;
 
   return true;
 }

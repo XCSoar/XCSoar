@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Util/StaticString.hxx"
 #include "Polar/Shape.hpp"
-#include "Math/fixed.hpp"
 
 struct Plane
 {
@@ -38,11 +37,11 @@ struct Plane
 
   PolarShape polar_shape;
 
-  fixed reference_mass;
-  fixed dry_mass;
-  fixed max_ballast;
-  fixed max_speed;
-  fixed wing_area;
+  double reference_mass;
+  double dry_mass;
+  double max_ballast;
+  double max_speed;
+  double wing_area;
 
   /** Time to drain full ballast (s) */
   unsigned dump_time;

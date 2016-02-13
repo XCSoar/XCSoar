@@ -55,10 +55,10 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
   plane.max_ballast = polar.max_ballast;
   plane.wing_area = polar.wing_area;
 
-  if (positive(polar.v_no))
+  if (polar.v_no > 0)
     plane.max_speed = polar.v_no;
   else if (!profile.Get(ProfileKeys::SafteySpeed, plane.max_speed))
-    plane.max_speed = fixed(0);
+    plane.max_speed = 0;
 
   if (!profile.Get(ProfileKeys::DryMass, plane.dry_mass))
     plane.dry_mass = plane.reference_mass;
@@ -92,13 +92,13 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   gp.SetWingArea(plane.wing_area);
 
   // assure the polar is not invalid (because of VMin > VMax)
-  gp.SetVMax(fixed(75), false);
+  gp.SetVMax(75, false);
 
   gp.Update();
 
   // set VMax from settings but assure the range [VMin, VMax] is reasonable
-  if (positive(plane.max_speed))
-    gp.SetVMax(Clamp(plane.max_speed, gp.GetVMin() + fixed(10), fixed(75)));
+  if (plane.max_speed > 0)
+    gp.SetVMax(Clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
 
   settings.plane.competition_id = plane.competition_id;
   settings.plane.registration = plane.registration;
