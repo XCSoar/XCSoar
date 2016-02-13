@@ -41,4 +41,18 @@ class EGLUtil {
       ? mValue[0]
       : defaultValue;
   }
+
+  /**
+   * Produce a human-readable string describing the #EGLConfig (for
+   * debug log messages).
+   */
+  static String toString(EGL10 egl, EGLDisplay display, EGLConfig config) {
+    return "{rgba=" + getConfigAttrib(egl, display, config, EGL10.EGL_RED_SIZE, 0) +
+      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_GREEN_SIZE, 0) +
+      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_BLUE_SIZE, 0) +
+      "/" + getConfigAttrib(egl, display, config, EGL10.EGL_ALPHA_SIZE, 0) +
+      "; depth=" + getConfigAttrib(egl, display, config, EGL10.EGL_DEPTH_SIZE, 0) +
+      "; stencil=" + getConfigAttrib(egl, display, config, EGL10.EGL_STENCIL_SIZE, 0) +
+      "}";
+  }
 }
