@@ -669,7 +669,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
-  texture->Draw(x, y);
+  texture->Draw(PixelPoint(x, y));
 }
 
 void
@@ -703,7 +703,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
-  texture->Draw(x, y);
+  texture->Draw(PixelPoint(x, y));
 }
 
 void
@@ -744,7 +744,8 @@ Canvas::DrawClippedText(int x, int y,
   const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
-  texture->Draw(x, y, width, height, 0, 0, width, height);
+  texture->Draw(PixelRect(PixelPoint(x, y), PixelSize(width, height)),
+                PixelRect(0, 0, width, height));
 }
 
 void
@@ -762,8 +763,10 @@ Canvas::Stretch(int dest_x, int dest_y,
   OpenGL::texture_shader->Use();
 #endif
 
-  texture.Draw(dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height);
+  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
+                         PixelSize(dest_width, dest_height)),
+               PixelRect(PixelPoint(src_x, src_y),
+                         PixelSize(src_width, src_height)));
 }
 
 void
@@ -815,8 +818,7 @@ Canvas::StretchNot(const Bitmap &src)
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();
-  texture.Draw(0, 0, GetWidth(), GetHeight(),
-               0, 0, src.GetWidth(), src.GetHeight());
+  texture.Draw(GetRect(), PixelRect(src.GetSize()));
 }
 
 void
@@ -839,8 +841,10 @@ Canvas::Stretch(int dest_x, int dest_y,
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();
-  texture.Draw(dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height);
+  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
+                         PixelSize(dest_width, dest_height)),
+               PixelRect(PixelPoint(src_x, src_y),
+                         PixelSize(src_width, src_height)));
 }
 
 void
@@ -862,8 +866,10 @@ Canvas::Stretch(int dest_x, int dest_y,
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();
-  texture.Draw(dest_x, dest_y, dest_width, dest_height,
-               0, 0, src.GetWidth(), src.GetHeight());
+
+  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
+                         PixelSize(dest_width, dest_height)),
+               PixelRect(src.GetSize()));
 }
 
 void
@@ -904,8 +910,10 @@ Canvas::StretchMono(int dest_x, int dest_y,
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();
-  texture.Draw(dest_x, dest_y, dest_width, dest_height,
-               src_x, src_y, src_width, src_height);
+  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
+                         PixelSize(dest_width, dest_height)),
+               PixelRect(PixelPoint(src_x, src_y),
+                         PixelSize(src_width, src_height)));
 }
 
 void

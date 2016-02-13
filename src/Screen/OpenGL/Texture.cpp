@@ -180,56 +180,49 @@ GLTexture::EnableInterpolation()
 #ifdef HAVE_OES_DRAW_TEXTURE
 
 inline void
-GLTexture::DrawOES(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height) const
+GLTexture::DrawOES(PixelRect dest, PixelRect src) const
 {
   const GLint rect[4] = {
-    src_x, int(src_y + src_height), int(src_width),
+    src.left, int(src.bottom), int(src.GetWidth()),
     /* negative height to flip the texture */
-    -(int)src_height
+    -(int)src.GetHeight()
   };
 
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
-  glDrawTexiOES(OpenGL::translate.x + dest_x,
-                OpenGL::viewport_size.y - OpenGL::translate.y - dest_y - dest_height,
-                0, dest_width, dest_height);
+  glDrawTexiOES(OpenGL::translate.x + dest.left,
+                OpenGL::viewport_size.y - OpenGL::translate.y - dest.bottom,
+                0, dest.GetWidth(), dest.GetHeight());
 }
 
 #endif
 
 void
-GLTexture::Draw(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height) const
+GLTexture::Draw(PixelRect dest, PixelRect src) const
 {
 #ifdef HAVE_OES_DRAW_TEXTURE
   if (OpenGL::oes_draw_texture) {
-    DrawOES(dest_x, dest_y, dest_width, dest_height,
-            src_x, src_y, src_width, src_height);
+    DrawOES(dest, src);
     return;
   }
 #endif
 
   const BulkPixelPoint vertices[] = {
-    { dest_x, dest_y },
-    { dest_x + int(dest_width), dest_y },
-    { dest_x, dest_y + int(dest_height) },
-    { dest_x + int(dest_width), dest_y + int(dest_height) },
+    dest.GetTopLeft(),
+    dest.GetTopRight(),
+    dest.GetBottomLeft(),
+    dest.GetBottomRight(),
   };
 
   const ScopeVertexPointer vp(vertices);
 
   const PixelSize allocated = GetAllocatedSize();
-  GLfloat x0 = (GLfloat)src_x / allocated.cx;
-  GLfloat y0 = (GLfloat)src_y / allocated.cy;
-  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated.cx;
-  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated.cy;
+  GLfloat x0 = (GLfloat)src.left / allocated.cx;
+  GLfloat y0 = (GLfloat)src.top / allocated.cy;
+  GLfloat x1 = (GLfloat)src.right / allocated.cx;
+  GLfloat y1 = (GLfloat)src.bottom / allocated.cy;
 
   const GLfloat coord[] = {
     x0, y0,

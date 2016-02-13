@@ -125,8 +125,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(p.x, p.y, size.cx, size.cy,
-               0, 0, texture.GetWidth(), texture.GetHeight());
+  texture.Draw(PixelRect(p, size), texture.GetRect());
 #else
 
 #ifdef USE_GDI
@@ -178,8 +177,7 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(position.x, position.y, size.cx, size.cy,
-               0, 0, texture.GetWidth(), texture.GetHeight());
+  texture.Draw(PixelRect(position, size), texture.GetRect());
 #else
   if (inverse) // black background
     canvas.CopyNotOr(position.x, position.y, size.cx, size.cy,

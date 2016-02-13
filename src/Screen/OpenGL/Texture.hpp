@@ -109,6 +109,11 @@ public:
     return { width, height };
   }
 
+  gcc_pure
+  PixelRect GetRect() const {
+    return PixelRect(GetSize());
+  }
+
   /**
    * Returns the physical size of the texture.
    */
@@ -135,10 +140,7 @@ protected:
 
 #ifdef HAVE_OES_DRAW_TEXTURE
 private:
-  void DrawOES(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height) const;
+  void DrawOES(PixelRect dest, PixelRect src) const;
   void DrawFlippedOES(PixelRect dest, PixelRect src) const;
 #endif
 
@@ -152,14 +154,10 @@ public:
                               GL_TEXTURE_2D, id, 0);
   }
 
-  void Draw(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            int src_x, int src_y,
-            unsigned src_width, unsigned src_height) const;
+  void Draw(PixelRect dest, PixelRect src) const;
 
-  void Draw(int dest_x, int dest_y) const {
-    Draw(dest_x, dest_y, width, height,
-         0, 0, width, height);
+  void Draw(PixelPoint dest) const {
+    Draw(PixelRect(dest, GetSize()), GetRect());
   }
 
   /**

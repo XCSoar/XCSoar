@@ -121,5 +121,6 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  texture.Draw(0, 0, dest_width, dest_height, 0, 0, width, height);
+  texture.Draw(PixelRect(0, 0, dest_width, dest_height),
+               PixelRect(0, 0, width, height));
 }
