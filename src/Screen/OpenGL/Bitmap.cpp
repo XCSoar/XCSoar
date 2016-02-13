@@ -70,18 +70,36 @@ Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
 }
 
 bool
-Bitmap::Load(UncompressedImage &&uncompressed, Type type)
+Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
 {
   assert(IsScreenInitialized());
-  assert(uncompressed.IsVisible());
+  assert(_uncompressed.IsVisible());
 
   Reset();
 
-  if (!MakeTexture(uncompressed, type))
-    return false;
+  size = { _uncompressed.GetWidth(), _uncompressed.GetHeight() };
+  flipped = _uncompressed.IsFlipped();
 
-  size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
-  flipped = uncompressed.IsFlipped();
+#ifdef ANDROID
+  uncompressed = std::move(_uncompressed);
+  type = _type;
+
+  AddSurfaceListener(*this);
+
+  if (!surface_valid)
+    return true;
+
+  if (!MakeTexture(uncompressed, type)) {
+    Reset();
+    return false;
+  }
+#else
+  if (!MakeTexture(_uncompressed, _type)) {
+    Reset();
+    return false;
+  }
+#endif
+
   return true;
 }
 

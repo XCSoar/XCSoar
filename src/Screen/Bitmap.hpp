@@ -33,6 +33,7 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+#include "Screen/Custom/UncompressedImage.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 #include <jni.h>
 #endif
@@ -85,6 +86,8 @@ protected:
 #ifdef ANDROID
   jobject bmp = nullptr;
 
+  UncompressedImage uncompressed = UncompressedImage::Invalid();
+
   Type type;
 #endif
 
@@ -128,7 +131,7 @@ public:
 public:
   bool IsDefined() const {
 #ifdef ANDROID
-    return bmp != nullptr;
+    return bmp != nullptr || uncompressed.IsVisible();
 #elif defined(ENABLE_OPENGL)
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)

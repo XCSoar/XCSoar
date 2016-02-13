@@ -38,6 +38,7 @@ Bitmap::Bitmap(ResourceId id)
 
 Bitmap::Bitmap(Bitmap &&src)
   :bmp(src.bmp),
+   uncompressed(std::move(src.uncompressed)),
    type(src.type),
    texture(src.texture),
    size(src.size),
@@ -153,6 +154,9 @@ Bitmap::Reset()
     bmp = nullptr;
 
     RemoveSurfaceListener(*this);
+  } else if (uncompressed.IsVisible()) {
+    uncompressed = UncompressedImage::Invalid();
+    RemoveSurfaceListener(*this);
   }
 
   delete texture;
@@ -162,15 +166,18 @@ Bitmap::Reset()
 void
 Bitmap::SurfaceCreated()
 {
-  assert(bmp != nullptr);
+  assert(bmp != nullptr || uncompressed.IsVisible());
 
-  MakeTexture(bmp, type);
+  if (bmp != nullptr)
+    MakeTexture(bmp, type);
+  else if (uncompressed.IsVisible())
+    MakeTexture(uncompressed, type);
 }
 
 void
 Bitmap::SurfaceDestroyed()
 {
-  assert(bmp != nullptr);
+  assert(bmp != nullptr || uncompressed.IsVisible());
 
   delete texture;
   texture = nullptr;
