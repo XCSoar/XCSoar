@@ -31,7 +31,6 @@ LOOK_SOURCES := \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
-	$(SRC)/Look/UnitsLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \
 	$(SRC)/Look/WaveLook.cpp
 

@@ -27,7 +27,6 @@ Copyright_License {
 #include "DialogLook.hpp"
 #include "GestureLook.hpp"
 #include "TerminalLook.hpp"
-#include "UnitsLook.hpp"
 #include "VarioLook.hpp"
 #include "ChartLook.hpp"
 #include "ThermalBandLook.hpp"
@@ -50,7 +49,6 @@ struct Look {
   DialogLook dialog;
   GestureLook gesture;
   TerminalLook terminal;
-  UnitsLook units;
   VarioLook vario;
   ChartLook chart;
   ThermalBandLook thermal_band;
