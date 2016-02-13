@@ -462,8 +462,14 @@ ReadLanguageFile()
   if (base == nullptr)
     base = value;
 
-  if (base == value)
+  if (base == value) {
     value = LocalPath(value);
+
+    /* need to refresh "base" because the allocated string returned by
+       Profile::Path() has just been freed */
+    base = value.GetBase();
+    assert(base != nullptr);
+  }
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base.c_str()))
     AutoDetectLanguage();
