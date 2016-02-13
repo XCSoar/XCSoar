@@ -39,7 +39,7 @@ namespace ActionInterface {
    *
    * @param to_devices send the new settings to all devices?
    */
-  void SetBallast(fixed ballast, bool to_devices=true);
+  void SetBallast(double ballast, bool to_devices=true);
 
   /**
    * Configure a new Bugs setting in #ComputerSettings, and
@@ -47,7 +47,7 @@ namespace ActionInterface {
    *
    * @param to_devices send the new settings to all devices?
    */
-  void SetBugs(fixed mc, bool to_devices=true);
+  void SetBugs(double mc, bool to_devices=true);
 
   /**
    * Configure a new MacCready setting in #ComputerSettings, and
@@ -55,7 +55,7 @@ namespace ActionInterface {
    *
    * @param to_devices send the new settings to all devices?
    */
-  void SetMacCready(fixed mc, bool to_devices=true);
+  void SetMacCready(double mc, bool to_devices=true);
 
   /**
    * Configure a new MacCready setting in #ComputerSettings, and
@@ -64,13 +64,13 @@ namespace ActionInterface {
    *
    * @param to_devices send the new settings to all devices?
    */
-  void SetManualMacCready(fixed mc, bool to_devices=true);
+  void SetManualMacCready(double mc, bool to_devices=true);
 
   /**
    * Same as SetManualMacCready(), but adds the given value to the
    * current MacCready setting.  It performs bounds checking.
    */
-  void OffsetManualMacCready(fixed offset, bool to_devices=true);
+  void OffsetManualMacCready(double offset, bool to_devices=true);
 
   /**
    * Call this after MapSettings has been modified with
