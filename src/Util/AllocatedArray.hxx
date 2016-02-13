@@ -69,7 +69,7 @@ public:
 		std::copy_n(other.buffer.data, buffer.size, buffer.data);
 	}
 
-	explicit AllocatedArray(AllocatedArray &&other)
+	AllocatedArray(AllocatedArray &&other)
 		:buffer(other.buffer) {
 		other.buffer = Buffer::Null();
 	}
