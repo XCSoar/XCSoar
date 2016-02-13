@@ -23,7 +23,7 @@
 #ifndef DATANODE_HPP
 #define DATANODE_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <list>
 
@@ -95,7 +95,7 @@ public:
    *
    * @return True if attribute exists
    */
-  bool GetAttribute(const TCHAR *name, fixed &value) const;
+  bool GetAttribute(const TCHAR *name, double &value) const;
 
   bool GetAttribute(const TCHAR *name, Angle &value) const;
 
@@ -170,9 +170,9 @@ public:
    * Set named attribute value, with numeric to text conversion
    *
    * @param name Name of attribute
-   * @param value Value (fixed)
+   * @param value Value (double)
    */
-  void SetAttribute(const TCHAR *name, fixed value);
+  void SetAttribute(const TCHAR *name, double value);
 
   void SetAttribute(const TCHAR *name, Angle value);
 
