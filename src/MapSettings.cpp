@@ -43,7 +43,7 @@ void
 MapSettings::SetDefaults()
 {
   circle_zoom_enabled = true;
-  max_auto_zoom_distance = fixed(100000); /* 100 km */
+  max_auto_zoom_distance = 100000; /* 100 km */
   topography_enabled = true;
   terrain.SetDefaults();
   aircraft_symbol = AircraftSymbol::SIMPLE;
@@ -57,8 +57,8 @@ MapSettings::SetDefaults()
   map_shift_bias = MapShiftBias::NONE;
   circling_orientation = MapOrientation::NORTH_UP;
   cruise_orientation = MapOrientation::NORTH_UP;
-  circling_scale = fixed(1) / 2;
-  cruise_scale = fixed(1) / 60;
+  circling_scale = 0.5;
+  cruise_scale = 1 / 60.;
   show_flarm_on_map = true;
   show_flarm_alarm_level = true;
   show_thermal_profile = true;

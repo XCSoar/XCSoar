@@ -122,12 +122,12 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
     }
   }
 
-  fixed tmp;
+  double tmp;
   if (map.Get(ProfileKeys::ClimbMapScale, tmp))
-    settings.circling_scale = Clamp(tmp / 10000, fixed(0.0003), fixed(10));
+    settings.circling_scale = Clamp(tmp / 10000, 0.0003, 10.);
 
   if (map.Get(ProfileKeys::CruiseMapScale, tmp))
-    settings.cruise_scale = Clamp(tmp / 10000, fixed(0.0003), fixed(10));
+    settings.cruise_scale = Clamp(tmp / 10000, 0.0003, 10.);
 
   map.GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
   map.Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);

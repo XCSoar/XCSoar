@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Util/StaticString.hxx"
 #include "Units/Unit.hpp"
-#include "Math/fixed.hpp"
 
 #include <tchar.h>
 
@@ -92,7 +91,7 @@ struct InfoBoxData {
    */
   void SetValue(const TCHAR *value);
 
-  void SetValue(const TCHAR *format, fixed value);
+  void SetValue(const TCHAR *format, double value);
 
   /**
    * Sets the InfoBox value to the given angle.
@@ -104,27 +103,27 @@ struct InfoBoxData {
   /**
    * Set the InfoBox value to the specified glide ratio.
    */
-  void SetValueFromGlideRatio(fixed gr);
+  void SetValueFromGlideRatio(double gr);
 
   /**
    * Set the InfoBox value to the specified distance.
    */
-  void SetValueFromDistance(fixed value);
+  void SetValueFromDistance(double value);
 
   /**
    * Set the InfoBox value to the specified altitude.
    */
-  void SetValueFromAltitude(fixed value);
+  void SetValueFromAltitude(double value);
 
   /**
    * Set the InfoBox value to the specified arrival altitude.
    */
-  void SetValueFromArrival(fixed value);
+  void SetValueFromArrival(double value);
 
   /**
    * Set the InfoBox value to the specified horizontal speed.
    */
-  void SetValueFromSpeed(fixed value, bool precision=true);
+  void SetValueFromSpeed(double value, bool precision=true);
 
   /**
    * Sets the InfoBox comment to the given Value
@@ -137,25 +136,25 @@ struct InfoBoxData {
    */
   void SetComment(Angle comment, const TCHAR *suffix=_T(""));
 
-  void SetCommentFromDistance(fixed value);
+  void SetCommentFromDistance(double value);
 
   void SetCommentFromBearingDifference(Angle delta);
 
   /**
    * Set the InfoBox comment to the specified horizontal speed.
    */
-  void SetCommentFromSpeed(fixed value, bool precision=true);
+  void SetCommentFromSpeed(double value, bool precision=true);
 
   /**
    * Set the InfoBox value to the specified altitude in the alternate
    * altitude unit.
    */
-  void SetCommentFromAlternateAltitude(fixed value);
+  void SetCommentFromAlternateAltitude(double value);
 
   /**
    * Set the InfoBox comment value to the specified vertical speed.
    */
-  void SetCommentFromVerticalSpeed(fixed value, bool include_sign=true);
+  void SetCommentFromVerticalSpeed(double value, bool include_sign=true);
 
   template<typename... Args>
   void FormatTitle(const TCHAR *fmt, Args&&... args) {

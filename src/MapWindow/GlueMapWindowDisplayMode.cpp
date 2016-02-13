@@ -360,7 +360,7 @@ GlueMapWindow::UpdateProjection()
     if (d_t <= 0) {
       SetLocationLazy(basic.location);
     } else {
-      const auto d_max = Double(visible_projection.GetMapScale());
+      const auto d_max = 2 * visible_projection.GetMapScale();
       const auto t = std::min(d_t, d_max)/d_t;
       SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
                                                t));

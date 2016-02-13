@@ -68,13 +68,13 @@ UpdateInfoBoxGRAvg(InfoBoxData &data)
 {
   const auto average_gr = CommonInterface::Calculated().average_gr;
 
-  if (average_gr == fixed(0)) {
+  if (average_gr == 0) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  if (average_gr < fixed(0))
+  if (average_gr < 0)
     data.SetValue(_T("^^^"));
   else if (!::GradientValid(average_gr))
     data.SetValue(_T("+++"));

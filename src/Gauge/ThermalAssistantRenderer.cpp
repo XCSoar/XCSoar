@@ -103,7 +103,7 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
 double
 ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift)
 {
-  lift = (lift + max_lift) / Double(max_lift);
+  lift = (lift + max_lift) / (2 * max_lift);
   return Clamp(lift, 0., 1.);
 }
 

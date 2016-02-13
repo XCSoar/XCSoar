@@ -44,9 +44,9 @@ BallastProcessTimer()
   last_fraction = settings.ballast_fraction_available;
 
   if (settings.ballast_overload_available.Modified(last_overload) &&
-      settings.ballast_overload >= fixed(1) &&
-      positive(plane.max_ballast)) {
-    auto fraction = ((settings.ballast_overload - fixed(1)) *
+      settings.ballast_overload >= 1 &&
+      plane.max_ballast > 0) {
+    auto fraction = ((settings.ballast_overload - 1) *
                      plane.dry_mass) / plane.max_ballast;
     ActionInterface::SetBallast(fraction, false);
     modified = true;

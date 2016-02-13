@@ -34,7 +34,7 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-SetVSpeed(InfoBoxData &data, fixed value)
+SetVSpeed(InfoBoxData &data, double value)
 {
   TCHAR buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);

@@ -122,7 +122,7 @@ ActionInterface::SetBallast(double ballast, bool to_devices)
   // send to external devices
   if (to_devices) {
     const Plane &plane = GetComputerSettings().plane;
-    if (positive(plane.dry_mass)) {
+    if (plane.dry_mass > 0) {
       auto overload = (plane.dry_mass + ballast * plane.max_ballast) /
         plane.dry_mass;
 

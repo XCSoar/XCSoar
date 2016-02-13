@@ -465,7 +465,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     canvas.SelectNullPen();
 
     if (look.colors) {
-      if (positive(v_diff)) {
+      if (v_diff > 0) {
         // too slow
         canvas.Select(look.sink_brush);
       } else {
@@ -478,12 +478,12 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         canvas.SelectBlackBrush();
     }
 
-    if (positive(v_diff)) {
+    if (v_diff > 0) {
       // too slow
       y = ybottom;
       y += YOFFSET;
 
-      while (positive(v_diff)) {
+      while (v_diff > 0) {
         if (v_diff > DELTA_V_STEP) {
           canvas.Rectangle(x, y,
                            x + arrow_x_size * 2 + 1, y + arrow_y_size - 1);
@@ -500,12 +500,12 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         v_diff -= DELTA_V_STEP;
         y += arrow_y_size;
       }
-    } else if (negative(v_diff)) {
+    } else if (v_diff < 0) {
       // too fast
       y = ytop;
       y -= YOFFSET;
 
-      while (negative(v_diff)) {
+      while (v_diff < 0) {
         if (v_diff < -DELTA_V_STEP) {
           canvas.Rectangle(x, y + 1,
                            x + arrow_x_size * 2 + 1, y - arrow_y_size + 2);

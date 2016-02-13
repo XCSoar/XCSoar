@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_EVENTS_HPP
 #define XCSOAR_INPUT_EVENTS_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -110,7 +109,7 @@ namespace InputEvents
   void sub_PanCursor(int dx, int dy);
   void sub_AutoZoom(int vswitch);
   void sub_ScaleZoom(int vswitch);
-  void sub_SetZoom(fixed value);
+  void sub_SetZoom(double value);
 
   // -------
 

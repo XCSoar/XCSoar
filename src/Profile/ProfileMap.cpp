@@ -86,7 +86,7 @@ Profile::Get(const char *key, uint8_t &value)
 }
 
 bool
-Profile::Get(const char *key, fixed &value)
+Profile::Get(const char *key, double &value)
 {
   return map.Get(key, value);
 }
@@ -126,7 +126,7 @@ Profile::Set(const char *key, unsigned value)
 }
 
 void
-Profile::Set(const char *key, fixed value)
+Profile::Set(const char *key, double value)
 {
   map.Set(key, value);
 }

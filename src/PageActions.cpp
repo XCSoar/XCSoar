@@ -89,9 +89,9 @@ PageActions::RestoreMapZoom()
   if (settings.distinct_zoom) {
     MapSettings &map_settings = CommonInterface::SetMapSettings();
 
-    if (positive(page.cruise_scale))
+    if (page.cruise_scale > 0)
       map_settings.cruise_scale = page.cruise_scale;
-    if (positive(page.circling_scale))
+    if (page.circling_scale > 0)
       map_settings.circling_scale = page.circling_scale;
 
     GlueMapWindow *map = UIGlobals::GetMapIfActive();

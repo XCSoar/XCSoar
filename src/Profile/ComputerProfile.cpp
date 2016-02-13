@@ -53,9 +53,9 @@ Profile::Load(const ProfileMap &map, WindSettings &settings)
 void
 Profile::Load(const ProfileMap &map, PolarSettings &settings)
 {
-  fixed degradation;
+  double degradation;
   if (map.Get(ProfileKeys::PolarDegradation, degradation) &&
-      degradation >= fixed(0.5) && degradation <= fixed(1))
+      degradation >= 0.5 && degradation <= 1)
     settings.SetDegradationFactor(degradation);
 
   map.Get(ProfileKeys::AutoBugs, settings.auto_bugs);

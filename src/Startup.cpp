@@ -315,7 +315,7 @@ Startup()
 
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
-  gp = GlidePolar(fixed(0));
+  gp = GlidePolar(0);
   gp.SetMC(computer_settings.task.safety_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,

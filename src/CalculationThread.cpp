@@ -46,7 +46,7 @@ CalculationThread::SetComputerSettings(const ComputerSettings &new_value)
 }
 
 void
-CalculationThread::SetScreenDistanceMeters(fixed new_value)
+CalculationThread::SetScreenDistanceMeters(double new_value)
 {
   ScopeLock protect(mutex);
   screen_distance_meters = new_value;

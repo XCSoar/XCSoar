@@ -26,13 +26,12 @@ Copyright_License {
 
 #include "Number.hpp"
 #include "Time/PeriodClock.hpp"
-#include "Math/fixed.hpp"
 
 class DataFieldFloat final : public NumberDataField {
-  fixed mValue;
-  fixed mMin;
-  fixed mMax;
-  fixed mStep;
+  double mValue;
+  double mMin;
+  double mMax;
+  double mStep;
   PeriodClock last_step;
   uint8_t mSpeedup;
   bool mFine;
@@ -42,12 +41,12 @@ class DataFieldFloat final : public NumberDataField {
   mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
 protected:
-  fixed SpeedUp(bool keyup);
+  double SpeedUp(bool keyup);
 
 public:
   DataFieldFloat(const TCHAR *edit_format, const TCHAR *display_format,
-                 fixed _min, fixed _max, fixed _value,
-                 fixed _step, bool _fine,
+                 double _min, double _max, double _value,
+                 double _step, bool _fine,
                  DataFieldListener *listener=nullptr)
     :NumberDataField(Type::REAL, true, edit_format, display_format, listener),
      mValue(_value), mMin(_min), mMax(_max), mStep(_step),
@@ -58,31 +57,31 @@ public:
     unit = text;
   }
 
-  void Set(fixed _value) {
+  void Set(double _value) {
     mValue = _value;
   }
 
-  fixed GetAsFixed() const {
+  double GetAsFixed() const {
     return mValue;
   }
 
-  void SetMin(fixed v) {
+  void SetMin(double v) {
     mMin = v;
   }
 
-  void SetMax(fixed v) {
+  void SetMax(double v) {
     mMax = v;
   }
 
-  void SetStep(fixed v) {
+  void SetStep(double v) {
     mStep = v;
   }
 
-  fixed GetStep() const {
+  double GetStep() const {
     return mStep;
   }
 
-  void SetAsFloat(fixed Value);
+  void SetAsFloat(double Value);
 
   /* virtual methods from class DataField */
   void Inc() override;
@@ -96,7 +95,7 @@ public:
   void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) override;
 
 protected:
-  void AppendComboValue(ComboList &combo_list, fixed value) const;
+  void AppendComboValue(ComboList &combo_list, double value) const;
 };
 
 #endif

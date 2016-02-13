@@ -51,7 +51,7 @@ class CalculationThread final : public WorkerThread {
 
   ComputerSettings settings_computer;
 
-  fixed screen_distance_meters;
+  double screen_distance_meters;
 
   /** Pointer to the GlideComputer that should be used */
   GlideComputer &glide_computer;
@@ -60,7 +60,7 @@ public:
   CalculationThread(GlideComputer &_glide_computer);
 
   void SetComputerSettings(const ComputerSettings &new_value);
-  void SetScreenDistanceMeters(fixed new_value);
+  void SetScreenDistanceMeters(double new_value);
 
   bool Start(bool suspended=false) {
     if (!WorkerThread::Start(suspended))

@@ -71,7 +71,7 @@ UpdateInfoBoxTimeFlight(InfoBoxData &data)
 {
   const FlyingState &flight = CommonInterface::Calculated().flight;
 
-  if (!positive(flight.flight_time)) {
+  if (flight.flight_time <= 0) {
     data.SetInvalid();
     return;
   }

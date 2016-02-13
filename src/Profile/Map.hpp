@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP2_HPP
 #define XCSOAR_PROFILE_MAP2_HPP
 
-#include "Math/fixed.hpp"
 #include "Util/StringBuffer.hxx"
 #include "Compiler.h"
 
@@ -116,7 +115,7 @@ public:
   bool Get(const char *key, unsigned &value) const;
   bool Get(const char *key, uint16_t &value) const;
   bool Get(const char *key, uint8_t &value) const;
-  bool Get(const char *key, fixed &value) const;
+  bool Get(const char *key, double &value) const;
 
   void Set(const char *key, bool value) {
     Set(key, value ? "1" : "0");
@@ -125,7 +124,7 @@ public:
   void Set(const char *key, int value);
   void Set(const char *key, long value);
   void Set(const char *key, unsigned value);
-  void Set(const char *key, fixed value);
+  void Set(const char *key, double value);
 
   // enum values
 

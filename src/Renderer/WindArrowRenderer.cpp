@@ -77,7 +77,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 {
   // Draw arrow (and tail)
 
-  const unsigned length = uround(Quadruple(wind.norm));
+  const unsigned length = uround(4 * wind.norm);
   DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style);
 
   // Draw wind speed label

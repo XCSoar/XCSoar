@@ -185,17 +185,17 @@ InputEvents::eventBugs(const TCHAR *misc)
   auto oldBugs = BUGS;
 
   if (StringIsEqual(misc, _T("up"))) {
-    BUGS += fixed(1) / 10;
-    if (BUGS > fixed(1))
-      BUGS = fixed(1);
+    BUGS += 1 / 10.;
+    if (BUGS > 1)
+      BUGS = 1;
   } else if (StringIsEqual(misc, _T("down"))) {
-    BUGS -= fixed(1) / 10;
-    if (BUGS < fixed(0.5))
-      BUGS = fixed(0.5);
+    BUGS -= 1 / 10.;
+    if (BUGS < 0.5)
+      BUGS = 0.5;
   } else if (StringIsEqual(misc, _T("max")))
-    BUGS = fixed(1);
+    BUGS = 1;
   else if (StringIsEqual(misc, _T("min")))
-    BUGS = fixed(0.5);
+    BUGS = 0.5;
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
@@ -227,17 +227,17 @@ InputEvents::eventBallast(const TCHAR *misc)
   auto oldBallast = BALLAST;
 
   if (StringIsEqual(misc, _T("up"))) {
-    BALLAST += fixed(1) / 10;
-    if (BALLAST >= fixed(1))
-      BALLAST = fixed(1);
+    BALLAST += 1 / 10.;
+    if (BALLAST >= 1)
+      BALLAST = 1;
   } else if (StringIsEqual(misc, _T("down"))) {
-    BALLAST -= fixed(1) / 10;
-    if (BALLAST < fixed(0))
-      BALLAST = fixed(0);
+    BALLAST -= 1 / 10.;
+    if (BALLAST < 0)
+      BALLAST = 0;
   } else if (StringIsEqual(misc, _T("max")))
-    BALLAST = fixed(1);
+    BALLAST = 1;
   else if (StringIsEqual(misc, _T("min")))
-    BALLAST = fixed(0);
+    BALLAST = 0;
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
@@ -246,7 +246,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   }
 
   if (BALLAST != oldBallast) {
-    polar.SetBallast(fixed(BALLAST));
+    polar.SetBallast(BALLAST);
     protected_task_manager->SetGlidePolar(polar);
   }
 }
@@ -287,9 +287,9 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (StringIsEqual(misc, _T("+")))
-    CommonInterface::SetComputerSettings().forecast_temperature += fixed(1);
+    CommonInterface::SetComputerSettings().forecast_temperature += 1;
   else if (StringIsEqual(misc, _T("-")))
-    CommonInterface::SetComputerSettings().forecast_temperature -= fixed(1);
+    CommonInterface::SetComputerSettings().forecast_temperature -= 1;
   else if (StringIsEqual(misc, _T("show"))) {
     auto temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;

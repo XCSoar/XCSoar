@@ -63,7 +63,7 @@ MergeThread::Tick()
 
 #ifdef HAVE_PCM_PLAYER
   bool vario_available;
-  fixed vario;
+  double vario;
 #endif
 
   {
@@ -88,7 +88,7 @@ MergeThread::Tick()
 
 #ifdef HAVE_PCM_PLAYER
     vario_available = basic.brutto_vario_available;
-    vario = vario_available ? basic.brutto_vario : fixed(0);
+    vario = vario_available ? basic.brutto_vario : 0;
 #endif
 
     /* update last_any in every iteration */

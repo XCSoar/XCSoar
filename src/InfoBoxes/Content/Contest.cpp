@@ -78,7 +78,7 @@ InfoBoxContentOLC::Update(InfoBoxData &data)
   const ContestResult& result_olc =
     CommonInterface::Calculated().contest_stats.GetResult(result_index);
 
-  if (result_olc.score < fixed(1)) {
+  if (result_olc.score < 1) {
     data.SetInvalid();
     return;
   }
@@ -112,7 +112,7 @@ InfoBoxContentOLCSpeed::Update(InfoBoxData &data)
   const ContestResult& result_olc =
     CommonInterface::Calculated().contest_stats.GetResult(result_index);
 
-  if (result_olc.score < fixed(1)) {
+  if (result_olc.score < 1) {
     data.SetInvalid();
     return;
   }

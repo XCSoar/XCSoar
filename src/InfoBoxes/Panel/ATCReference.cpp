@@ -63,7 +63,7 @@ ATCReferencePanel::UpdateValues()
     CommonInterface::GetComputerSettings().poi.atc_reference;
 
   const auto waypoint = location.IsValid()
-    ? way_points.GetNearest(location, fixed(100))
+    ? way_points.GetNearest(location, 100)
     : nullptr;
 
   SetText(WAYPOINT, waypoint != nullptr ? waypoint->name.c_str() : _T("---"));

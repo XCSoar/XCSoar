@@ -26,7 +26,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -82,11 +81,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CommonInterface::SetComputerSettings().forecast_temperature += fixed(0.5);
+    CommonInterface::SetComputerSettings().forecast_temperature += 0.5;
     return true;
 
   case ibkDown:
-    CommonInterface::SetComputerSettings().forecast_temperature -= fixed(0.5);
+    CommonInterface::SetComputerSettings().forecast_temperature -= 0.5;
     return true;
 
   default:
@@ -227,7 +226,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
   const int length =
-    std::min(size, std::max(10u, uround(Quadruple(info.wind.norm))));
+    std::min(size, std::max(10u, uround(4 * info.wind.norm)));
 
   const int offset = -length / 2;
 

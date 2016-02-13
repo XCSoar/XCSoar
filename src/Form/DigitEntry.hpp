@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
-#include "Math/fixed.hpp"
 
 #include <assert.h>
 #include <stdint.h>
@@ -188,7 +187,7 @@ public:
 
   void SetValue(int value);
   void SetValue(unsigned value);
-  void SetValue(fixed value);
+  void SetValue(double value);
   void SetValue(RoughTime value);
   void SetValue(Angle value);
 
@@ -199,7 +198,7 @@ public:
   unsigned GetUnsignedValue() const;
 
   gcc_pure
-  fixed GetFixedValue() const;
+  double GetDoubleValue() const;
 
   gcc_pure
   RoughTime GetTimeValue() const;
@@ -258,7 +257,7 @@ protected:
   unsigned GetPositiveInteger() const;
 
   gcc_pure
-  fixed GetPositiveFractional() const;
+  double GetPositiveFractional() const;
 
   void IncrementColumn(unsigned i);
   void DecrementColumn(unsigned i);
@@ -267,7 +266,7 @@ protected:
   int FindColumnAt(unsigned x) const;
 
 private:
-  void SetDigits(fixed degrees, CoordinateFormat format, bool isLatitude);
+  void SetDigits(double degrees, CoordinateFormat format, bool isLatitude);
 
 protected:
   void OnSetFocus() override;

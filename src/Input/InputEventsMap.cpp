@@ -103,7 +103,7 @@ InputEvents::eventZoom(const TCHAR* misc)
     if (endptr == misc)
       return;
 
-    sub_SetZoom(Units::ToSysDistance(fixed(zoom)));
+    sub_SetZoom(Units::ToSysDistance(zoom));
   }
 
   XCSoarInterface::SendMapSettings(true);
@@ -190,7 +190,7 @@ InputEvents::sub_AutoZoom(int vswitch)
 }
 
 void
-InputEvents::sub_SetZoom(fixed value)
+InputEvents::sub_SetZoom(double value)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
   GlueMapWindow *map_window = PageActions::ShowMap();
@@ -208,8 +208,8 @@ InputEvents::sub_SetZoom(fixed value)
 
   auto vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
   auto scale_2min_distance = vmin * 12;
-  const fixed scale_100m = fixed(10);
-  const fixed scale_1600km = fixed(1600*100);
+  const double scale_100m = 10;
+  const double scale_1600km = 1600*100;
   auto minreasonable = displayMode == DisplayMode::CIRCLING
     ? scale_100m
     : std::max(scale_100m, scale_2min_distance);

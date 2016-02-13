@@ -38,11 +38,11 @@ public:
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  virtual void OnOffset(fixed offset) override;
+  virtual void OnOffset(double offset) override;
 };
 
 void
-AltitudeSimulatorOffsetButtons::OnOffset(const fixed step)
+AltitudeSimulatorOffsetButtons::OnOffset(const double step)
 {
   if (!is_simulator())
     return;
@@ -50,7 +50,7 @@ AltitudeSimulatorOffsetButtons::OnOffset(const fixed step)
   const NMEAInfo &basic = CommonInterface::Basic();
 
   device_blackboard->SetAltitude(basic.gps_altitude +
-                                 (fixed)Units::ToSysAltitude(step));
+                                 Units::ToSysAltitude(step));
 }
 
 Widget *
@@ -62,5 +62,5 @@ LoadAltitudeSimulatorPanel(unsigned id)
 
   return new AltitudeSimulatorOffsetButtons(UIGlobals::GetDialogLook().button,
                                             _T("%+.0f"),
-                                            fixed(10), fixed(100));
+                                            10, 100);
 }

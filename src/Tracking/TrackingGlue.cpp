@@ -148,7 +148,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 
   location = basic.location;
   /* XXX use nav_altitude? */
-  altitude = basic.NavAltitudeAvailable() && positive(basic.nav_altitude)
+  altitude = basic.NavAltitudeAvailable() && basic.nav_altitude > 0
     ? (unsigned)basic.nav_altitude
     : 0u;
   ground_speed = basic.ground_speed_available

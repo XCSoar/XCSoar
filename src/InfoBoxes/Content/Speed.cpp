@@ -51,18 +51,18 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 
-  const auto fixed_step = (fixed)Units::ToSysSpeed(fixed(10));
+  const double step = Units::ToSysSpeed(10);
   const auto a5 = Angle::Degrees(5);
 
   switch (keycode) {
   case ibkUp:
     device_blackboard->SetSpeed(
-        CommonInterface::Basic().ground_speed + fixed_step);
+        CommonInterface::Basic().ground_speed + step);
     return true;
 
   case ibkDown:
     device_blackboard->SetSpeed(fdim(CommonInterface::Basic().ground_speed,
-                                     fixed_step));
+                                     step));
     return true;
 
   case ibkLeft:

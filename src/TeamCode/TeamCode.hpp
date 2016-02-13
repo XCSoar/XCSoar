@@ -25,7 +25,6 @@ Copyright_License {
 #define	XCSOAR_TEAM_CODE_CALCULATION_HPP
 
 #include "Util/StaticString.hxx"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -76,14 +75,14 @@ public:
    * Returns the distance from the reference point to the team member
    * @return Distance from the reference point to the team member
    */
-  fixed GetRange() const;
+  double GetRange() const;
 
   /**
    * Updates the team code with the given parameters
    * @param bearing New bearing
    * @param range New range
    */
-  void Update(Angle bearing, fixed range);
+  void Update(Angle bearing, double range);
 
   /**
    * Updates the team code to the given code

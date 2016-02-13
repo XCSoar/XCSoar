@@ -180,7 +180,7 @@ FindMatTurnpoint()
   };
 
   auto wp = way_points.GetNearestIf(basic.location,
-                                    fixed(CylinderZone::MAT_RADIUS),
+                                    CylinderZone::MAT_RADIUS,
                                     turnpoint_predicate);
 
   if (wp == nullptr)

@@ -35,7 +35,7 @@ KineticManager::MouseDown(int x)
   steady = false;
   last = x;
   clock.Update();
-  v = fixed(0);
+  v = 0;
 }
 
 void
@@ -55,7 +55,7 @@ KineticManager::MouseMove(int x)
   int dx = x - last;
 
   // Calculate value-based velocity
-  v = fixed(dx) / dt;
+  v = double(dx) / dt;
 
   // Save value for next event
   last = x;

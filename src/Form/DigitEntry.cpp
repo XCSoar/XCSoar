@@ -382,7 +382,7 @@ DigitEntry::SetValue(unsigned value)
 }
 
 void
-DigitEntry::SetValue(fixed value)
+DigitEntry::SetValue(double value)
 {
   // XXX implement
   SetValue((int)value);
@@ -449,14 +449,14 @@ DigitEntry::GetPositiveInteger() const
   return value;
 }
 
-fixed
+double
 DigitEntry::GetPositiveFractional() const
 {
   const int dp = FindDecimalPoint();
   if (dp < 0)
-    return fixed(0);
+    return 0;
 
-  fixed value = fixed(0);
+  double value = 0;
   unsigned factor = 10;
 
   for (unsigned i = dp + 1; i < length; ++i) {
@@ -465,7 +465,7 @@ DigitEntry::GetPositiveFractional() const
       continue;
 
     assert(c.value < 10);
-    value += fixed(c.value) / factor;
+    value += double(c.value) / factor;
     factor *= 10;
   }
 
@@ -489,25 +489,25 @@ DigitEntry::GetTimeValue() const
 }
 
 void
-DigitEntry::SetDigits(fixed degrees, CoordinateFormat format, bool isLatitude)
+DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
 {
   // Calculate half the last digit so that we round to the nearest
-  fixed roundingAdjustment = fixed(0);
+  double roundingAdjustment = 0;
   switch (format) {
   case CoordinateFormat::DD_DDDDD:
-    roundingAdjustment = fixed(0.5 * (1.0 / 100000));
+    roundingAdjustment = 0.5 * (1.0 / 100000);
     break;
 
   case CoordinateFormat::DDMM_MMM:
-    roundingAdjustment = fixed(0.5 * ( (1.0/60) / 1000));
+    roundingAdjustment = 0.5 * ( (1.0/60) / 1000);
     break;
 
   case CoordinateFormat::DDMMSS_S:
-    roundingAdjustment = fixed(0.5 * ( (1.0/3600) / 10));
+    roundingAdjustment = 0.5 * ( (1.0/3600) / 10);
     break;
 
   case CoordinateFormat::DDMMSS:
-    roundingAdjustment = fixed(0.5 * ( (1.0/3600) / 1));
+    roundingAdjustment = 0.5 * ( (1.0/3600) / 1);
     break;
 
   default:
@@ -657,7 +657,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
   assert(columns[1].type == Column::Type::DIGIT ||
          columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
-  auto degrees = fixed(columns[1].value * 10 + columns[2].value);
+  auto degrees = columns[1].value * 10 + columns[2].value;
 
   // Read columns according to specified format
   /// \todo support UTM format
@@ -675,7 +675,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
                 columns[5].value * 1000 +
                 columns[6].value * 100 +
                 columns[7].value * 10  +
-                columns[8].value        ) * fixed(1 / 100000.);
+                columns[8].value        ) / 100000.;
     break;
 
   case CoordinateFormat::DDMM_MMM:
@@ -687,10 +687,10 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[8].type == Column::Type::DIGIT);
     assert(columns[9].type == Column::Type::DIGIT);
     // Read minute columns
-    degrees += (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
+    degrees += (columns[4].value * 10 + columns[5].value) / 60.
       +  (columns[7].value * 100 +
           columns[8].value * 10  +
-          columns[9].value        ) * fixed(1 / 60000.);
+          columns[9].value        ) / 60000.;
     break;
 
   case CoordinateFormat::DDMMSS_S:
@@ -702,9 +702,9 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[8].type == Column::Type::DIGIT);
     assert(columns[10].type == Column::Type::DIGIT);
     // Read minute and decimal second columns
-    degrees += (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
-      +  (columns[7].value * 10 + columns[8].value) * fixed(1 / 3600.)
-      +  (columns[10].value                       ) * fixed(1 / 36000.);
+    degrees += (columns[4].value * 10 + columns[5].value) / 60.
+      +  (columns[7].value * 10 + columns[8].value) / 3600.
+      +  (columns[10].value                       ) / 36000.;
     break;
 
   case CoordinateFormat::UTM: /// \todo support UTM format
@@ -716,8 +716,8 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[7].type == Column::Type::DIGIT6);
     assert(columns[8].type == Column::Type::DIGIT);
     // Read minute and second columns
-    degrees += (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
-      +  (columns[7].value * 10 + columns[8].value) * fixed(1 / 3600.);
+    degrees += (columns[4].value * 10 + columns[5].value) / 60.
+      +  (columns[7].value * 10 + columns[8].value) / 3600.;
     break;
   }
 
@@ -825,17 +825,17 @@ DigitEntry::GetUnsignedValue() const
   return GetPositiveInteger();
 }
 
-fixed
-DigitEntry::GetFixedValue() const
+double
+DigitEntry::GetDoubleValue() const
 {
-  fixed value = fixed(GetPositiveInteger()) + GetPositiveFractional();
+  double value = GetPositiveInteger() + GetPositiveFractional();
   return IsNegative() ? -value : value;
 }
 
 Angle
 DigitEntry::GetAngleValue() const
 {
-  return Angle::Degrees(GetFixedValue());
+  return Angle::Degrees(GetDoubleValue());
 }
 
 bool

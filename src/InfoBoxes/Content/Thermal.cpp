@@ -33,7 +33,7 @@ Copyright_License {
 #include <tchar.h>
 
 static void
-SetVSpeed(InfoBoxData &data, fixed value)
+SetVSpeed(InfoBoxData &data, double value)
 {
   TCHAR buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
@@ -59,7 +59,7 @@ UpdateInfoBoxThermal30s(InfoBoxData &data)
   SetVSpeed(data, CommonInterface::Calculated().average);
 
   // Set Color (red/black)
-  data.SetValueColor(Double(CommonInterface::Calculated().average) <
+  data.SetValueColor(2 * CommonInterface::Calculated().average <
       CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
@@ -108,7 +108,7 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data)
 void
 UpdateInfoBoxThermalAllAvg(InfoBoxData &data)
 {
-  if (!positive(CommonInterface::Calculated().time_climb)) {
+  if (CommonInterface::Calculated().time_climb <= 0) {
     data.SetInvalid();
     return;
   }
@@ -129,7 +129,7 @@ UpdateInfoBoxThermalAvg(InfoBoxData &data)
   SetVSpeed(data, thermal.lift_rate);
 
   // Set Color (red/black)
-  data.SetValueColor(thermal.lift_rate * fixed(1.5) <
+  data.SetValueColor(thermal.lift_rate * 1.5 <
       CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
@@ -150,7 +150,7 @@ UpdateInfoBoxThermalRatio(InfoBoxData &data)
 {
   // Set Value
 
-  if (negative(CommonInterface::Calculated().circling_percentage))
+  if (CommonInterface::Calculated().circling_percentage < 0)
     data.SetInvalid();
   else
     data.SetValue(_T("%2.0f%%"),
@@ -169,8 +169,7 @@ UpdateInfoBoxVarioDistance(InfoBoxData &data)
             CommonInterface::Calculated().task_stats.total.vario.get_value());
 
   // Set Color (red/black)
-  data.SetValueColor(negative(
-      CommonInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
+  data.SetValueColor(CommonInterface::Calculated().task_stats.total.vario.get_value() < 0 ? 1 : 0);
 }
 
 
@@ -178,7 +177,7 @@ void
 UpdateInfoBoxNextLegEqThermal(InfoBoxData &data)
 {
   const auto next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
-  if (negative(next_leg_eq_thermal)) {
+  if (next_leg_eq_thermal < 0) {
     data.SetInvalid();
     return;
   }
@@ -205,9 +204,9 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
 
   const auto circle_diameter = CommonInterface::Basic().true_airspeed
      / turn_rate.Radians()
-     * fixed(2); // convert turn rate to radians/s and double it to get estimated circle diameter
+     * 2; // convert turn rate to radians/s and double it to get estimated circle diameter
 
-  if (circle_diameter > fixed (2000)){ // arbitrary estimated that any diameter bigger than 2km will not be interesting
+  if (circle_diameter > 2000) { // arbitrary estimated that any diameter bigger than 2km will not be interesting
     data.SetInvalid();
     return;
   }

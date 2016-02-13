@@ -74,7 +74,7 @@ UpdateInfoBoxBearing(InfoBoxData &data)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-      vector_remaining.distance <= fixed(10)) {
+      vector_remaining.distance <= 10) {
     data.SetInvalid();
     return;
   }
@@ -91,7 +91,7 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!basic.track_available || !task_stats.task_valid ||
-      !vector_remaining.IsValid() || vector_remaining.distance <= fixed(10)) {
+      !vector_remaining.IsValid() || vector_remaining.distance <= 10) {
     data.SetInvalid();
     return;
   }
@@ -107,7 +107,7 @@ UpdateInfoBoxRadial(InfoBoxData &data)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-      vector_remaining.distance <= fixed(10)) {
+      vector_remaining.distance <= 10) {
     data.SetInvalid();
     return;
   }
@@ -248,7 +248,7 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.current_leg.time_remaining_now));
+  assert(task_stats.current_leg.time_remaining_now >= 0);
 
   TCHAR value[32];
   TCHAR comment[32];
@@ -364,7 +364,7 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
 
   auto gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
 
-  if (!positive(gradient)) {
+  if (gradient <= 0) {
     data.SetValue(_T("+++"));
     return;
   }
@@ -404,7 +404,7 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining_now));
+  assert(task_stats.total.time_remaining_now >= 0);
 
   TCHAR value[32];
   TCHAR comment[32];
@@ -524,7 +524,7 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
 {
   const WindowStats &window =
     CommonInterface::Calculated().task_stats.last_hour;
-  if (negative(window.duration)) {
+  if (window.duration < 0) {
     data.SetInvalid();
     return;
   }
@@ -544,7 +544,7 @@ UpdateInfoBoxFinalGR(InfoBoxData &data)
 
   auto gradient = task_stats.total.gradient;
 
-  if (!positive(gradient)) {
+  if (gradient <= 0) {
     data.SetValue(_T("+++"));
     return;
   }
@@ -572,9 +572,9 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
   FormatTimeTwoLines(value, comment,
                          abs((int) common_stats.aat_time_remaining));
 
-  data.UnsafeFormatValue(negative(common_stats.aat_time_remaining) ?
+  data.UnsafeFormatValue(common_stats.aat_time_remaining < 0 ?
                             _T("-%s") : _T("%s"), value);
-  data.SetValueColor(negative(common_stats.aat_time_remaining) ? 1 : 0);
+  data.SetValueColor(common_stats.aat_time_remaining < 0 ? 1 : 0);
 
   data.SetComment(comment);
 }
@@ -592,7 +592,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining_start));
+  assert(task_stats.total.time_remaining_start >= 0);
 
   auto diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
@@ -602,14 +602,14 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
   const int dd = abs((int)diff);
   FormatTimeTwoLines(value, comment, dd);
 
-  data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), value);
+  data.UnsafeFormatValue(diff < 0 ? _T("-%s") : _T("%s"), value);
 
   data.SetComment(comment);
 
   // Set Color (red/blue/black)
-  data.SetValueColor(negative(diff) ? 1 :
+  data.SetValueColor(diff < 0 ? 1 :
                    task_stats.total.time_remaining_start >
-                       common_stats.aat_time_remaining + fixed(5*60) ? 2 : 0);
+                       common_stats.aat_time_remaining + 5*60 ? 2 : 0);
 }
 
 void
@@ -665,7 +665,7 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!task_stats.has_targets || !positive(common_stats.aat_speed_target)) {
+  if (!task_stats.has_targets || common_stats.aat_speed_target <= 0) {
     data.SetInvalid();
     return;
   }
@@ -685,7 +685,7 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!task_stats.has_targets || !positive(common_stats.aat_speed_max)) {
+  if (!task_stats.has_targets || common_stats.aat_speed_max <= 0) {
     data.SetInvalid();
     return;
   }
@@ -706,7 +706,7 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
   const CommonStats &common_stats = calculated.common_stats;
 
   if (!task_stats.has_targets ||
-      !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
+      !task_stats.task_valid || common_stats.aat_speed_min <= 0) {
     data.SetInvalid();
     return;
   }
@@ -725,12 +725,11 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
   const auto &calculated = CommonInterface::Calculated();
   const auto &task_stats = calculated.ordered_task_stats;
   const auto &common_stats = calculated.common_stats;
-  const fixed maxheight = fixed(protected_task_manager->
-                                GetOrderedTaskSettings().start_constraints.max_height);
+  const double maxheight = protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
 
-  if (!task_stats.task_valid || !positive(maxheight)
+  if (!task_stats.task_valid || maxheight <= 0
       || !protected_task_manager
-      || !positive(common_stats.TimeUnderStartMaxHeight)) {
+      || common_stats.TimeUnderStartMaxHeight <= 0) {
     data.SetInvalid();
     return;
   }
@@ -762,8 +761,8 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
   const auto v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
-      !positive(d) ||
-      !positive(v)) {
+      d <= 0 ||
+      v <= 0) {
     data.SetInvalid();
     return;
   }
@@ -793,8 +792,8 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
   const auto v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
-      !positive(d) ||
-      !positive(v)) {
+      d <= 0 ||
+      v <= 0) {
     data.SetInvalid();
     return;
   }

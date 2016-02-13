@@ -123,16 +123,16 @@ TeamCode::GetBearing() const
   return (ANGLE_FACTOR * value).AsBearing();
 }
 
-fixed
+double
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
   unsigned value = GetValueFromTeamCode(code.begin() + 2, 3);
-  return fixed(value * 100);
+  return value * 100;
 }
 
 void
-TeamCode::Update(Angle bearing, fixed range)
+TeamCode::Update(Angle bearing, double range)
 {
   // Calculate bearing part of the teamcode
   ConvertBearingToTeamCode(bearing, code.buffer());

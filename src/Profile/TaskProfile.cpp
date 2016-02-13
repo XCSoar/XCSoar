@@ -94,10 +94,10 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
 
   unsigned Temp;
   if (map.Get(ProfileKeys::RiskGamma, Temp))
-    settings.risk_gamma = fixed(Temp) / 10;
+    settings.risk_gamma = Temp / 10.;
 
   if (map.Get(ProfileKeys::SafetyMacCready, Temp))
-    settings.safety_mc = fixed(Temp) / 10;
+    settings.safety_mc = Temp / 10.;
 
   map.Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
   map.GetEnum(ProfileKeys::TaskType, settings.task_type_default);

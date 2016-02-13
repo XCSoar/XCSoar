@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 void
-InfoBoxData::SetValue(const TCHAR *format, fixed value)
+InfoBoxData::SetValue(const TCHAR *format, double value)
 {
   UnsafeFormatValue(format, (double)value);
 }
@@ -47,7 +47,7 @@ InfoBoxData::SetValueFromBearingDifference(Angle delta)
 }
 
 void
-InfoBoxData::SetValueFromGlideRatio(fixed gr)
+InfoBoxData::SetValueFromGlideRatio(double gr)
 {
   FormatGlideRatio(value.buffer(), value.capacity(), gr);
 }

@@ -290,14 +290,14 @@ Profile::SetDeviceConfig(ProfileMap &map,
   map.SetEnum(buffer, config.press_use);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorOffset");
-  auto offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : fixed(0);
+  auto offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : 0;
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     offset = CommonInterface::Basic().sensor_calibration_offset;
   map.Set(buffer, offset);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
-  auto factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : fixed(0);
+  auto factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : 0;
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     factor = CommonInterface::Basic().sensor_calibration_factor;

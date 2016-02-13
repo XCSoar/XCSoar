@@ -36,11 +36,11 @@ public:
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  virtual void OnOffset(fixed offset) override;
+  virtual void OnOffset(double offset) override;
 };
 
 void
-MacCreadyOffsetButtons::OnOffset(fixed offset)
+MacCreadyOffsetButtons::OnOffset(double offset)
 {
   ActionInterface::OffsetManualMacCready(Units::ToSysVSpeed(offset));
 }
