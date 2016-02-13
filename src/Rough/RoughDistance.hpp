@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_DISTANCE_HPP
 #define XCSOAR_ROUGH_DISTANCE_HPP
 
-#include "Math/fixed.hpp"
-#include "Compiler.h"
-
 #include <type_traits>
 
 #include <stdint.h>
@@ -43,16 +40,16 @@ public:
   RoughDistance() = default;
 
   constexpr
-  RoughDistance(fixed _value):value(_value) {}
+  RoughDistance(double _value):value(_value) {}
 
-  RoughDistance &operator=(fixed other) {
+  RoughDistance &operator=(double other) {
     value = (uint32_t)other;
     return *this;
   }
 
   constexpr
-  operator fixed() const {
-    return fixed(value);
+  operator double() const {
+    return double(value);
   }
 
   constexpr

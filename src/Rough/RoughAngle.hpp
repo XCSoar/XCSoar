@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_ANGLE_HPP
 #define XCSOAR_ROUGH_ANGLE_HPP
 
-#include "Math/fixed.hpp"
-#include "Compiler.h"
-
 #include <type_traits>
 
 #include <stdint.h>
@@ -39,14 +36,12 @@ Copyright_License {
 class RoughAngle {
   int16_t value;
 
-  gcc_const
-  static int16_t Import(Angle x) {
+  static constexpr int16_t Import(Angle x) {
     return (int16_t)(x.Radians() * 4096);
   }
 
-  gcc_const
-  static Angle Export(int16_t x) {
-    return Angle::Radians(fixed(x) / 4096);
+  static constexpr Angle Export(int16_t x) {
+    return Angle::Radians(x / 4096.);
   }
 
   constexpr

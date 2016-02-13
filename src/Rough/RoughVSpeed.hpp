@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_VSPEED_HPP
 #define XCSOAR_ROUGH_VSPEED_HPP
 
-#include "Math/fixed.hpp"
-#include "Compiler.h"
-
 #include <type_traits>
 
 #include <stdint.h>
@@ -41,28 +38,28 @@ class RoughVSpeed {
   int16_t value;
 
   constexpr
-  static int16_t Import(fixed x) {
+  static int16_t Import(double x) {
     return (int16_t)(x * 256);
   }
 
   constexpr
-  static fixed Export(int16_t x) {
-    return fixed(x) / 256;
+  static double Export(int16_t x) {
+    return x / 256.;
   }
 
 public:
   RoughVSpeed() = default;
 
   constexpr
-  RoughVSpeed(fixed _value):value(Import(_value)) {}
+  RoughVSpeed(double _value):value(Import(_value)) {}
 
-  RoughVSpeed &operator=(fixed other) {
+  RoughVSpeed &operator=(double other) {
     value = Import(other);
     return *this;
   }
 
   constexpr
-  operator fixed() const {
+  operator double() const {
     return Export(value);
   }
 };

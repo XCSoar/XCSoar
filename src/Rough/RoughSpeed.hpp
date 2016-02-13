@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_SPEED_HPP
 #define XCSOAR_ROUGH_SPEED_HPP
 
-#include "Math/fixed.hpp"
-#include "Compiler.h"
-
 #include <type_traits>
 
 #include <stdint.h>
@@ -39,27 +36,24 @@ Copyright_License {
 class RoughSpeed {
   uint16_t value;
 
-  gcc_const
-  static uint16_t Import(fixed x) {
+  static constexpr uint16_t Import(double x) {
     return (uint16_t)(x * 512);
   }
 
-  gcc_const
-  static fixed Export(uint16_t x) {
-    return fixed(x) / 512;
+  static constexpr double Export(uint16_t x) {
+    return double(x) / 512;
   }
 
 public:
   RoughSpeed() = default;
-  RoughSpeed(fixed _value):value(Import(_value)) {}
+  RoughSpeed(double _value):value(Import(_value)) {}
 
-  RoughSpeed &operator=(fixed other) {
+  RoughSpeed &operator=(double other) {
     value = Import(other);
     return *this;
   }
 
-  gcc_pure
-  operator fixed() const {
+  constexpr operator double() const {
     return Export(value);
   }
 };

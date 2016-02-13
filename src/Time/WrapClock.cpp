@@ -30,7 +30,7 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
   constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
   constexpr unsigned SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
 
-  assert(!negative(stamp));
+  assert(stamp >= 0);
   assert(time.IsPlausible());
 
   int days = 0;
@@ -59,7 +59,7 @@ WrapClock::Normalise(double stamp, BrokenDate &date, const BrokenTime &time)
   last_input_date = date;
 
   if (stamp < last_stamp && days <= 0) {
-    assert(!negative(last_stamp));
+    assert(last_stamp >= 0);
 
     if (stamp < SECONDS_PER_HOUR &&
         last_stamp >= SECONDS_PER_DAY - SECONDS_PER_HOUR) {
