@@ -161,19 +161,19 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
     // early exit
     return;
 
-  int x = rc.left + Layout::FastScale(2);
-  int y = rc.bottom - Layout::FastScale(35);
-  icon->Draw(canvas, x, y);
+  PixelPoint p(rc.left + Layout::FastScale(2),
+               rc.bottom - Layout::FastScale(35));
+  icon->Draw(canvas, p);
 
-  x += icon->GetSize().cx + Layout::FastScale(4);
-  y = rc.bottom - Layout::FastScale(34);
+  p.x += icon->GetSize().cx + Layout::FastScale(4);
+  p.y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode mode;
   mode.shape = LabelShape::ROUNDED_BLACK;
 
   const Font &font = *look.overlay_font;
   canvas.Select(font);
-  TextInBox(canvas, txt, x, y, mode, rc, nullptr);
+  TextInBox(canvas, txt, p.x, p.y, mode, rc, nullptr);
 }
 
 void
@@ -195,8 +195,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   offset += bmp->GetSize().cx + Layout::Scale(6);
 
-  bmp->Draw(canvas, rc.right - offset,
-            rc.bottom - bmp->GetSize().cy - Layout::Scale(4));
+  bmp->Draw(canvas,
+            PixelPoint(rc.right - offset,
+                       rc.bottom - bmp->GetSize().cy - Layout::Scale(4)));
 
   // draw flarm status
   if (!GetMapSettings().show_flarm_alarm_level)
@@ -223,8 +224,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   offset += bmp->GetSize().cx + Layout::Scale(6);
 
-  bmp->Draw(canvas, rc.right - offset,
-            rc.bottom - bmp->GetSize().cy - Layout::Scale(2));
+  bmp->Draw(canvas,
+            PixelPoint(rc.right - offset,
+                       rc.bottom - bmp->GetSize().cy - Layout::Scale(2)));
 }
 
 void
@@ -286,7 +288,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     + Layout::GetTextPadding();
 
   int x = 0;
-  look.map_scale_left_icon.Draw(canvas, 0, rc.bottom - height);
+  look.map_scale_left_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 
   x += look.map_scale_left_icon.GetSize().cx;
   canvas.DrawFilledRectangle(x, rc.bottom - height,
@@ -301,7 +303,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                   buffer);
 
   x += text_padding_x + text_size.cx;
-  look.map_scale_right_icon.Draw(canvas, x, rc.bottom - height);
+  look.map_scale_right_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 
   buffer.clear();
   if (GetMapSettings().auto_zoom_enabled)

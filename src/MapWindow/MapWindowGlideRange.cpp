@@ -445,6 +445,6 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
   PixelPoint sc;
   if (render_projection.GeoToScreenIfVisible(Calculated().terrain_warning_location,
                                              sc))
-    look.terrain_warning_icon.Draw(canvas, sc.x, sc.y);
+    look.terrain_warning_icon.Draw(canvas, sc);
 }
 

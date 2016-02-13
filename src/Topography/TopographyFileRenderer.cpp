@@ -165,7 +165,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   glLoadMatrixf(opengl_matrix);
 #endif
 
-  icon.Draw(canvas, sc.x, sc.y);
+  icon.Draw(canvas, sc);
 #ifndef HAVE_GLES
   glPopMatrix();
 #endif
@@ -188,7 +188,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
     for (; points < end; ++points) {
       PixelPoint sc;
       if (projection.GeoToScreenIfVisible(*points, sc))
-        icon.Draw(canvas, sc.x, sc.y);
+        icon.Draw(canvas, sc);
     }
   }
 }

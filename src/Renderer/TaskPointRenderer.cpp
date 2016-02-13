@@ -129,7 +129,7 @@ TaskPointRenderer::DrawTarget(const TaskPoint &tp)
 
   PixelPoint sc;
   if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
-    task_look.target_icon.Draw(canvas, sc.x, sc.y);
+    task_look.target_icon.Draw(canvas, sc);
 }
 
 void

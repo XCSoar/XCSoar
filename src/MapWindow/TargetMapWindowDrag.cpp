@@ -40,7 +40,7 @@ TargetMapWindow::OnTaskModified()
 void
 TargetMapWindow::TargetPaintDrag(Canvas &canvas, const PixelPoint drag_last)
 {
-  task_look.target_icon.Draw(canvas, drag_last.x, drag_last.y);
+  task_look.target_icon.Draw(canvas, drag_last);
 }
 
 bool

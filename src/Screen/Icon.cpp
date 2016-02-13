@@ -107,9 +107,11 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 }
 
 void
-MaskedIcon::Draw(Canvas &canvas, int x, int y) const
+MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
 {
   assert(IsDefined());
+
+  p -= origin;
 
 #ifdef ENABLE_OPENGL
 #ifdef USE_GLSL
@@ -123,7 +125,7 @@ MaskedIcon::Draw(Canvas &canvas, int x, int y) const
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
+  texture.Draw(p.x, p.y, size.cx, size.cy,
                0, 0, texture.GetWidth(), texture.GetHeight());
 #else
 
@@ -134,9 +136,9 @@ MaskedIcon::Draw(Canvas &canvas, int x, int y) const
   canvas.SetBackgroundColor(COLOR_WHITE);
 #endif
 
-  canvas.CopyOr(x - origin.x, y - origin.y, size.cx, size.cy,
+  canvas.CopyOr(p.x, p.y, size.cx, size.cy,
                  bitmap, 0, 0);
-  canvas.CopyAnd(x - origin.x, y - origin.y, size.cx, size.cy,
+  canvas.CopyAnd(p.x, p.y, size.cx, size.cy,
                   bitmap, size.cx, 0);
 #endif
 }

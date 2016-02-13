@@ -57,10 +57,7 @@ public:
     bitmap.Reset();
   }
 
-  void Draw(Canvas &canvas, int x, int y) const;
-  void Draw(Canvas &canvas, PixelPoint pt) const {
-    Draw(canvas, pt.x, pt.y);
-  }
+  void Draw(Canvas &canvas, PixelPoint p) const;
 
   void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const;
 };
