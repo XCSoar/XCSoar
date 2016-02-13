@@ -44,9 +44,6 @@ Copyright_License {
 Bitmap::Bitmap(ConstBuffer<void> _buffer)
   :
 #ifdef ENABLE_OPENGL
-#ifdef ANDROID
-  id(0),
-#endif
   texture(nullptr), interpolation(false)
 #else
   buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
