@@ -141,21 +141,23 @@ class NativeView extends SurfaceView
   private void initGL(SurfaceHolder holder) throws EGLException {
     /* initialize display */
 
-    egl = (EGL10)EGLContext.getEGL();
-    display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-    if (display == EGL10.EGL_NO_DISPLAY)
-      throw new EGLException("eglGetDisplay() failed");
+    if (display == EGL10.EGL_NO_DISPLAY) {
+      egl = (EGL10)EGLContext.getEGL();
+      display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+      if (display == EGL10.EGL_NO_DISPLAY)
+        throw new EGLException("eglGetDisplay() failed");
 
-    int[] version = new int[2];
-    if (!egl.eglInitialize(display, version))
-      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
+      int[] version = new int[2];
+      if (!egl.eglInitialize(display, version))
+        throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
 
-    Log.d(TAG, "EGL vendor: " +
-          egl.eglQueryString(display, EGL10.EGL_VENDOR));
-    Log.d(TAG, "EGL version: " +
-          egl.eglQueryString(display, EGL10.EGL_VERSION));
-    Log.d(TAG, "EGL extensions: " +
-          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
+      Log.d(TAG, "EGL vendor: " +
+            egl.eglQueryString(display, EGL10.EGL_VENDOR));
+      Log.d(TAG, "EGL version: " +
+            egl.eglQueryString(display, EGL10.EGL_VERSION));
+      Log.d(TAG, "EGL extensions: " +
+            egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
+    }
 
     /* choose a configuration */
 
@@ -164,24 +166,26 @@ class NativeView extends SurfaceView
 
     /* initialize context and surface */
 
-    final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-    final int contextClientVersion = getEglContextClientVersion();
-    int[] contextAttribList = null;
-    if (contextClientVersion != 1)
-      /* the default EGL_CONTEXT_CLIENT_VERSION is 1, so we need to
-       * specify this only if using GLES2; some old Androids (e.g. HTC
-       * Magic) will fail eglCreateContext() with EGL_BAD_ATTRIBUTE if
-       * EGL_CONTEXT_CLIENT_VERSION is specified */
-      contextAttribList = new int[]{
-        EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
-        EGL10.EGL_NONE
-      };
+    if (context == EGL10.EGL_NO_CONTEXT) {
+      final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+      final int contextClientVersion = getEglContextClientVersion();
+      int[] contextAttribList = null;
+      if (contextClientVersion != 1)
+        /* the default EGL_CONTEXT_CLIENT_VERSION is 1, so we need to
+         * specify this only if using GLES2; some old Androids (e.g. HTC
+         * Magic) will fail eglCreateContext() with EGL_BAD_ATTRIBUTE if
+         * EGL_CONTEXT_CLIENT_VERSION is specified */
+        contextAttribList = new int[]{
+          EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
+          EGL10.EGL_NONE
+        };
 
-    context = egl.eglCreateContext(display, closestConfig,
-                                   EGL10.EGL_NO_CONTEXT, contextAttribList);
-    if (context == EGL10.EGL_NO_CONTEXT)
-      throw new EGLException("eglCreateContext() failed: " +
-                             egl.eglGetError());
+      context = egl.eglCreateContext(display, closestConfig,
+                                     EGL10.EGL_NO_CONTEXT, contextAttribList);
+      if (context == EGL10.EGL_NO_CONTEXT)
+        throw new EGLException("eglCreateContext() failed: " +
+                               egl.eglGetError());
+    }
 
     surface = egl.eglCreateWindowSurface(display, closestConfig,
                                          holder, null);
