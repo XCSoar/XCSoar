@@ -138,15 +138,15 @@ struct RenderedText {
 #ifdef USE_FREETYPE
   RenderedText(unsigned width, unsigned height, const uint8_t *buffer) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    texture = new GLTexture(GL_ALPHA, width, height,
+    texture = new GLTexture(GL_ALPHA, PixelSize(width, height),
                             GL_ALPHA, GL_UNSIGNED_BYTE,
                             buffer);
   }
 #elif defined(ANDROID)
   RenderedText(int id, unsigned width, unsigned height,
                unsigned allocated_width, unsigned allocated_height)
-    :texture(new GLTexture(id, width, height,
-                           allocated_width, allocated_height)) {}
+    :texture(new GLTexture(id, PixelSize(width, height),
+                           PixelSize(allocated_width, allocated_height))) {}
 #endif
 #else
   RenderedText(RenderedText &&other)

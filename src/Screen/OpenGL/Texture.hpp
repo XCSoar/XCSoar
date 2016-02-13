@@ -46,23 +46,22 @@ extern unsigned num_textures;
 class GLTexture {
 protected:
   GLuint id;
-  unsigned width, height;
+
+  PixelSize size;
 
   /**
    * The real dimensions of the texture.  This may differ when
    * ARB_texture_non_power_of_two is not available.
    */
-  unsigned allocated_width, allocated_height;
+  PixelSize allocated_size;
 
 public:
 #ifdef ANDROID
-  GLTexture(GLuint _id, unsigned _width, unsigned _height,
-            unsigned _allocated_width, unsigned _allocated_height)
-    :id(_id), width(_width), height(_height),
-     allocated_width(_allocated_width), allocated_height(_allocated_height) {
+  GLTexture(GLuint _id, PixelSize _size, PixelSize _allocated_size)
+    :id(_id), size(_size), allocated_size(_allocated_size) {
 #ifndef NDEBUG
-    assert(allocated_width >= width);
-    assert(allocated_height >= height);
+    assert(allocated_size.cx >= size.cx);
+    assert(allocated_size.cy >= size.cy);
 
     ++num_textures;
 #endif
@@ -72,9 +71,9 @@ public:
   /**
    * Create a texture with undefined content.
    */
-  GLTexture(unsigned _width, unsigned _height);
+  explicit GLTexture(PixelSize _size);
 
-  GLTexture(GLint internal_format, unsigned width, unsigned height,
+  GLTexture(GLint internal_format, PixelSize _size,
             GLenum format, GLenum type, const GLvoid *data);
 
   ~GLTexture() {
@@ -97,16 +96,16 @@ public:
   }
 
   unsigned GetWidth() const {
-    return width;
+    return size.cx;
   }
 
   unsigned GetHeight() const {
-    return height;
+    return size.cy;
   }
 
   gcc_pure
-  PixelSize GetSize() const {
-    return { width, height };
+  const PixelSize &GetSize() const {
+    return size;
   }
 
   gcc_pure
@@ -118,8 +117,8 @@ public:
    * Returns the physical size of the texture.
    */
   gcc_pure
-  PixelSize GetAllocatedSize() const {
-    return { allocated_width, allocated_height };
+  const PixelSize &GetAllocatedSize() const {
+    return allocated_size;
   }
 
   /**

@@ -107,7 +107,8 @@ Bitmap::MakeTexture(jobject _bmp, Type _type)
   if (!native_view->bitmapToTexture(_bmp, _type == Bitmap::Type::MONO, result))
     return false;
 
-  texture = new GLTexture(result[0], result[1], result[2], result[3], result[4]);
+  texture = new GLTexture(result[0], PixelSize(result[1], result[2]),
+                          PixelSize(result[3], result[4]));
   if (interpolation) {
     texture->Bind();
     texture->EnableInterpolation();

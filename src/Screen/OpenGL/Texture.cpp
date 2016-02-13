@@ -80,46 +80,41 @@ ValidateTextureSize(PixelSize size)
  * power of two if needed.
  */
 static void
-LoadTextureAutoAlign(GLint internal_format,
-                     unsigned width, unsigned height,
+LoadTextureAutoAlign(GLint internal_format, PixelSize size,
                      GLenum format, GLenum type, const GLvoid *pixels)
 {
   assert(pixels != nullptr);
 
-  unsigned width2 = ValidateTextureSize(width);
-  unsigned height2 = ValidateTextureSize(height);
+  PixelSize validated_size = ValidateTextureSize(size);
 
-  if (width2 == width && height2 == height)
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
+  if (validated_size == size)
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, size.cx, size.cy, 0,
                  format, type, pixels);
   else {
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width2, height2, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
+                 validated_size.cx, validated_size.cy, 0,
                  format, type, nullptr);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.cx, size.cy,
                     format, type, pixels);
   }
 }
 
-GLTexture::GLTexture(unsigned _width, unsigned _height)
-  :width(_width), height(_height),
-   allocated_width(ValidateTextureSize(_width)),
-   allocated_height(ValidateTextureSize(_height))
+GLTexture::GLTexture(PixelSize _size)
+  :size(_size), allocated_size(ValidateTextureSize(_size))
 {
   Initialise();
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-               ValidateTextureSize(width), ValidateTextureSize(height),
+               allocated_size.cx, allocated_size.cy,
                0, GL_RGB, GetType(), nullptr);
 }
 
-GLTexture::GLTexture(GLint internal_format, unsigned _width, unsigned _height,
+GLTexture::GLTexture(GLint internal_format, PixelSize _size,
                      GLenum format, GLenum type, const GLvoid *data)
-  :width(_width), height(_height),
-   allocated_width(ValidateTextureSize(_width)),
-   allocated_height(ValidateTextureSize(_height))
+  :size(_size), allocated_size(ValidateTextureSize(_size))
 {
   Initialise();
-  LoadTextureAutoAlign(internal_format, _width, _height, format, type, data);
+  LoadTextureAutoAlign(internal_format, size, format, type, data);
 }
 
 void
@@ -128,14 +123,12 @@ GLTexture::ResizeDiscard(PixelSize new_size)
   const PixelSize validated_size = ValidateTextureSize(new_size);
   const PixelSize old_size = GetAllocatedSize();
 
-  width = new_size.cx;
-  height = new_size.cy;
+  size = new_size;
 
   if (validated_size == old_size)
     return;
 
-  allocated_width = validated_size.cx;
-  allocated_height = validated_size.cy;
+  allocated_size = validated_size;
 
   Bind();
 

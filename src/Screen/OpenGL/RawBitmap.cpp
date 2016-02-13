@@ -49,7 +49,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
    buffer(new RawColor[corrected_width * height]),
-   texture(new GLTexture(corrected_width, nHeight))
+   texture(new GLTexture(PixelSize(corrected_width, nHeight)))
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -70,7 +70,7 @@ void
 RawBitmap::SurfaceCreated()
 {
   if (texture == nullptr) {
-    texture = new GLTexture(corrected_width, height);
+    texture = new GLTexture(PixelSize(corrected_width, height));
     texture->EnableInterpolation();
   }
 }
