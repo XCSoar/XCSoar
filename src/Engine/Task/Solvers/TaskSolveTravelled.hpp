@@ -50,11 +50,11 @@ public:
    * @param xmax Max value of search parameter
    */
   TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
-                     const unsigned activeTaskPoint,
+                     unsigned activeTaskPoint,
                      const AircraftState &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,
-                     const double xmin,
-                     const double xmax);
+                     double xmin,
+                     double xmax);
 
 protected:
   /**
@@ -72,7 +72,7 @@ public:
    *
    * @return Value producing same travelled time
    */
-  double search(const double ce);
+  double search(double ce);
 };
 
 #endif

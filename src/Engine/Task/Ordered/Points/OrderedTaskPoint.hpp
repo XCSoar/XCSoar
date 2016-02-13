@@ -284,7 +284,7 @@ protected:
    * @return Distance (m)
    */
   gcc_pure
-  fixed DoubleLegDistance(const GeoPoint &ref) const;
+  double DoubleLegDistance(const GeoPoint &ref) const;
 
 public:
   /* virtual methods from class TaskPoint */

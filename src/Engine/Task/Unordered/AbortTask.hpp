@@ -151,8 +151,8 @@ protected:
    * @return Distance (m) of approximate glide range of aircraft
    */
   gcc_pure
-  fixed GetAbortRange(const AircraftState &state_now,
-                      const GlidePolar &glide_polar) const;
+  double GetAbortRange(const AircraftState &state_now,
+                       const GlidePolar &glide_polar) const;
 
   /**
    * Fill abort task list with candidate waypoints given a list of

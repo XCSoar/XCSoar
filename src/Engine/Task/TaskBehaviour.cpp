@@ -26,17 +26,17 @@ void
 SectorDefaults::SetDefaults()
 {
   start_type = TaskPointFactoryType::START_CYLINDER;
-  start_radius = fixed(1000);
+  start_radius = 1000;
   turnpoint_type = TaskPointFactoryType::AST_CYLINDER;
-  turnpoint_radius = fixed(500);
+  turnpoint_radius = 500;
   finish_type = TaskPointFactoryType::FINISH_CYLINDER;
-  finish_radius = fixed(1000);
+  finish_radius = 1000;
 }
 
 void
 TaskStartMargins::SetDefaults()
 {
-  max_speed_margin = fixed(0);
+  max_speed_margin = 0;
   max_height_margin = 0u;
 }
 
@@ -54,9 +54,9 @@ TaskBehaviour::SetDefaults()
   calc_effective_mc = true;
   calc_glide_required = true;
   goto_nonlandable = true;
-  risk_gamma = fixed(0);
-  safety_mc = fixed(0.5);
-  safety_height_arrival = fixed(300);
+  risk_gamma = 0;
+  safety_mc = 0.5;
+  safety_height_arrival = 300;
   task_type_default = TaskFactoryType::RACING;
   start_margins.SetDefaults();
   sector_defaults.SetDefaults();

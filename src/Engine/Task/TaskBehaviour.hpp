@@ -48,22 +48,22 @@ struct SectorDefaults
   /** default start type for new tasks */
   TaskPointFactoryType start_type;
   /** default start radius or line length for new tasks */
-  fixed start_radius;
+  double start_radius;
   /** default intermediate type for new tasks */
   TaskPointFactoryType turnpoint_type;
   /** default intermediate point radius for new tasks */
-  fixed turnpoint_radius;
+  double turnpoint_radius;
   /** default finish type for new tasks */
   TaskPointFactoryType finish_type;
   /** default finish radius or line length for new tasks */
-  fixed finish_radius;
+  double finish_radius;
 
   void SetDefaults();
 };
 
 struct TaskStartMargins {
   /** Margin in maximum ground speed (m/s) allowed in start sector */
-  fixed max_speed_margin;
+  double max_speed_margin;
 
   /** Margin in maximum height (m) allowed in start sector */
   unsigned max_height_margin;
@@ -113,13 +113,13 @@ struct TaskBehaviour {
   bool goto_nonlandable;
 
   /** Compensation factor for risk at low altitude */
-  fixed risk_gamma;
+  double risk_gamma;
 
   /** Safety MacCready value (m/s) used by abort task */
-  fixed safety_mc;
+  double safety_mc;
 
   /** Minimum height above terrain for arrival height at landable waypoint (m) */
-  fixed safety_height_arrival;
+  double safety_height_arrival;
 
   /** Default task type to use for new tasks */
   TaskFactoryType task_type_default;

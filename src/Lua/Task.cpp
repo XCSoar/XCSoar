@@ -41,7 +41,7 @@ l_task_index(lua_State *L)
     const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
     const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
     if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-        vector_remaining.distance <= fixed(10)) {
+        vector_remaining.distance <= 10) {
       return 0;
     }
     Lua::Push(L, vector_remaining.bearing);
@@ -50,7 +50,7 @@ l_task_index(lua_State *L)
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
       const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
       if (!basic.track_available || !task_stats.task_valid ||
-          !vector_remaining.IsValid() || vector_remaining.distance <= fixed(10)) {
+          !vector_remaining.IsValid() || vector_remaining.distance <= 10) {
         return 0;
       }      
       Lua::Push(L, vector_remaining.bearing - basic.track);
@@ -58,7 +58,7 @@ l_task_index(lua_State *L)
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
       const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
       if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-          vector_remaining.distance <= fixed(10)) {
+          vector_remaining.distance <= 10) {
         return 0;
       }
       Lua::Push(L, vector_remaining.bearing.Reciprocal());
@@ -87,7 +87,7 @@ l_task_index(lua_State *L)
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
       if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) 
         return 0; 
-      assert(!negative(task_stats.current_leg.time_remaining_now));
+      assert(task_stats.current_leg.time_remaining_now >= 0);
 
       Lua::Push(L, task_stats.current_leg.time_remaining_now);
   } else if (StringIsEqual(name, "next_eta")) {
@@ -144,7 +144,7 @@ l_task_index(lua_State *L)
         return 0;
 
       auto gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
-      if (!positive(gradient)) 
+      if (gradient <= 0) 
         return 0;     
       if (::GradientValid(gradient)) 
         Lua::Push(L, gradient);
@@ -166,7 +166,7 @@ l_task_index(lua_State *L)
 
       if (!task_stats.task_valid || !task_stats.total.IsAchievable()) 
         return 0;
-      assert(!negative(task_stats.total.time_remaining_now));
+      assert(task_stats.total.time_remaining_now >= 0);
 
       Lua::Push(L, task_stats.total.time_remaining_now);
   } else if (StringIsEqual(name, "final_eta")) {
@@ -228,7 +228,7 @@ l_task_index(lua_State *L)
       Lua::Push(L, task_stats.get_pirker_speed());
   } else if (StringIsEqual(name, "task_speed_hour")) {
       const WindowStats &window = CommonInterface::Calculated().task_stats.last_hour;
-      if (negative(window.duration)) 
+      if (window.duration < 0)
         return 0;
 
       Lua::Push(L, window.speed);
@@ -239,7 +239,7 @@ l_task_index(lua_State *L)
 
       auto gradient = task_stats.total.gradient;
 
-      if (!positive(gradient))
+      if (gradient <= 0)
         return 0;
       if (::GradientValid(gradient))
         Lua::Push(L, gradient);
@@ -261,7 +261,7 @@ l_task_index(lua_State *L)
       if (!task_stats.has_targets || !task_stats.total.IsAchievable()) 
         return 0;
    
-      assert(!negative(task_stats.total.time_remaining_start));
+      assert(task_stats.total.time_remaining_start >= 0);
 
       auto diff = task_stats.total.time_remaining_start -
         common_stats.aat_time_remaining;
@@ -296,7 +296,7 @@ l_task_index(lua_State *L)
       const TaskStats &task_stats = calculated.ordered_task_stats;
       const CommonStats &common_stats = calculated.common_stats;
 
-      if (!task_stats.has_targets || !positive(common_stats.aat_speed_target)) 
+      if (!task_stats.has_targets || common_stats.aat_speed_target <= 0) 
         return 0;
 
       Lua::Push(L, common_stats.aat_speed_target);
@@ -305,7 +305,7 @@ l_task_index(lua_State *L)
       const TaskStats &task_stats = calculated.ordered_task_stats;
       const CommonStats &common_stats = calculated.common_stats;
 
-      if (!task_stats.has_targets || !positive(common_stats.aat_speed_max)) 
+      if (!task_stats.has_targets || common_stats.aat_speed_max <= 0) 
         return 0;
 
       Lua::Push(L, common_stats.aat_speed_max);
@@ -315,7 +315,7 @@ l_task_index(lua_State *L)
       const CommonStats &common_stats = calculated.common_stats;
 
       if (!task_stats.has_targets ||
-        !task_stats.task_valid || !positive(common_stats.aat_speed_min)) 
+        !task_stats.task_valid || common_stats.aat_speed_min <= 0) 
         return 0;
     
       Lua::Push(L, common_stats.aat_speed_min);
@@ -323,12 +323,11 @@ l_task_index(lua_State *L)
       const auto &calculated = CommonInterface::Calculated();
       const auto &task_stats = calculated.ordered_task_stats;
       const auto &common_stats = calculated.common_stats;
-      const fixed maxheight = fixed(protected_task_manager->
-                                GetOrderedTaskSettings().start_constraints.max_height);
+      const double maxheight = protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
 
-      if (!task_stats.task_valid || !positive(maxheight)
+      if (!task_stats.task_valid || maxheight <= 0
           || !protected_task_manager
-          || !positive(common_stats.TimeUnderStartMaxHeight)) {
+          || common_stats.TimeUnderStartMaxHeight <= 0) {
         return 0;
       }
       const int time = (int)(CommonInterface::Basic().time -
@@ -347,8 +346,8 @@ l_task_index(lua_State *L)
       const auto v = basic.ground_speed;
 
       if (!task_stats.task_valid ||
-          !positive(d) ||
-          !positive(v)) {
+          d <= 0 ||
+          v <= 0) {
         return 0;
       }
    
@@ -365,8 +364,8 @@ l_task_index(lua_State *L)
       const auto v = basic.ground_speed;
 
       if (!task_stats.task_valid ||
-          !positive(d) ||
-          !positive(v)) {
+          d <= 0 ||
+          v <= 0) {
         return 0;
       }
  

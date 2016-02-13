@@ -71,7 +71,7 @@ public:
    *
    * @return True if default task was created
    */
-  bool TakeoffAutotask(const GeoPoint& loc, const fixed terrain_alt);
+  bool TakeoffAutotask(const GeoPoint &loc, double terrain_alt);
 
 public:
   /* virtual methods from class TaskInterface */

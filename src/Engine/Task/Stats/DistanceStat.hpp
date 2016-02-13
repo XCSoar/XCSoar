@@ -22,8 +22,6 @@
 #ifndef DISTANCE_STAT_HPP
 #define DISTANCE_STAT_HPP
 
-#include "Math/fixed.hpp"
-
 #include <assert.h>
 
 /**
@@ -38,21 +36,21 @@ class DistanceStat
 
 protected:
   /** Distance (m) of metric */
-  fixed distance;
+  double distance;
   /** Speed (m/s) of metric */
-  fixed speed;
+  double speed;
   /** Incremental speed (m/s) of metric */
-  fixed speed_incremental;
+  double speed_incremental;
 
 public:
   void Reset() {
-    distance = fixed(-1);
-    speed = fixed(0);
-    speed_incremental = fixed(0);
+    distance = -1;
+    speed = 0;
+    speed_incremental = 0;
   }
 
   bool IsDefined() const {
-    return !negative(distance);
+    return distance >= 0;
   }
 
   /**
@@ -60,7 +58,7 @@ public:
    *
    * @param d Distance value (m)
    */
-  void SetDistance(const fixed d) {
+  void SetDistance(const double d) {
     distance = d;
   }
 
@@ -69,7 +67,7 @@ public:
    *
    * @return Distance value (m)
    */
-  fixed GetDistance() const {
+  double GetDistance() const {
     assert(IsDefined());
 
     return distance;
@@ -80,7 +78,7 @@ public:
    *
    * @return Speed (m/s)
    */
-  fixed GetSpeed() const {
+  double GetSpeed() const {
     assert(IsDefined());
 
     return speed;
@@ -92,7 +90,7 @@ public:
    *
    * @return Speed incremental (m/s)
    */
-  fixed GetSpeedIncremental() const {
+  double GetSpeedIncremental() const {
     assert(IsDefined());
 
     return speed_incremental;

@@ -29,23 +29,23 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tp
                                        const AircraftState &_aircraft,
                                        const GlideSettings &settings,
                                        const GlidePolar &gp,
-                                       const fixed _xmin,
-                                       const fixed _xmax)
-  :ZeroFinder(_xmin, _xmax, fixed(TOLERANCE_CRUISE_EFFICIENCY)),
+                                       const double _xmin,
+                                       const double _xmax)
+  :ZeroFinder(_xmin, _xmax, TOLERANCE_CRUISE_EFFICIENCY),
    aircraft(_aircraft),
    tm(tps.cbegin(), activeTaskPoint, settings, gp)
 {
   dt = aircraft.time - tps[0]->GetEnteredState().time;
-  if (positive(dt)) {
-    inv_dt = fixed(1) / dt;
+  if (dt > 0) {
+    inv_dt = 1. / dt;
   } else {
-    inv_dt = fixed(0); // error!
+    inv_dt = 0; // error!
   }
 }
 
 #define SOLVE_ZERO
 
-fixed
+double
 TaskSolveTravelled::time_error()
 {
   GlideResult res = tm.glide_solution(aircraft);
@@ -53,7 +53,7 @@ TaskSolveTravelled::time_error()
     /* what can we do if there's no solution?  This is an attempt to
        make ZeroFinder ignore this call, by returning a large value.
        I'm not sure if this kludge is correct. */
-    return fixed(999999);
+    return 999999;
 
 #ifdef SOLVE_ZERO
   auto d = res.time_elapsed - dt;
@@ -65,8 +65,8 @@ TaskSolveTravelled::time_error()
   return d * inv_dt;
 }
 
-fixed
-TaskSolveTravelled::search(const fixed ce)
+double
+TaskSolveTravelled::search(const double ce)
 {
 #ifdef SOLVE_ZERO
   return find_zero(ce);

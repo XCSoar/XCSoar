@@ -188,8 +188,8 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
     previous = current;
   }
 
-  #define fixed_fifth 0.0002
-  result.score *= fixed_fifth;
+  #define FIFTH 0.0002
+  result.score *= FIFTH;
   result.score = ApplyHandicap(result.score);
 
   return result;

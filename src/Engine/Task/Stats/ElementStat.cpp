@@ -29,9 +29,9 @@ ElementStat::Reset()
   vector_remaining = GeoVector::Invalid();
   next_leg_vector = GeoVector::Invalid();
 
-  time_started = fixed(-1);
-  time_elapsed = time_remaining_now = time_remaining_start = time_planned = fixed(0);
-  gradient = fixed(0);
+  time_started = -1;
+  time_elapsed = time_remaining_now = time_remaining_start = time_planned = 0;
+  gradient = 0;
 
   remaining_effective.Reset();
   remaining.Reset();
@@ -48,14 +48,14 @@ ElementStat::Reset()
 }
 
 void
-ElementStat::SetTimes(const fixed until_start_s, const fixed ts,
-                      const fixed time)
+ElementStat::SetTimes(const double until_start_s, const double ts,
+                      const double time)
 {
   time_started = ts;
 
-  if (negative(time_started) || negative(time))
+  if (time_started < 0 || time < 0)
     /* not yet started */
-    time_elapsed = fixed(0);
+    time_elapsed = 0;
   else
     time_elapsed = fdim(time, ts);
 
@@ -64,6 +64,6 @@ ElementStat::SetTimes(const fixed until_start_s, const fixed ts,
     time_remaining_start = fdim(time_remaining_now, until_start_s);
     time_planned = time_elapsed + time_remaining_start;
   } else {
-    time_remaining_now = time_remaining_start = time_planned = fixed(0);
+    time_remaining_now = time_remaining_start = time_planned = 0;
   }
 }

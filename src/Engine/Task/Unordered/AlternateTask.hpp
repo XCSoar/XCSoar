@@ -36,10 +36,10 @@ class AlternateTask final : public AbortTask
 {
 public:
   struct Divert : public AlternatePoint {
-    fixed delta;
+    double delta;
 
     Divert(WaypointPtr &&_waypoint, const GlideResult &_solution,
-           fixed _delta)
+           double _delta)
       :AlternatePoint(std::move(_waypoint), _solution), delta(_delta) {}
   };
 

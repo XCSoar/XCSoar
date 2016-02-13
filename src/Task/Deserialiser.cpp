@@ -64,16 +64,16 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != nullptr &&
-        from_database->location.DistanceS(loc) <= fixed(10))
+        from_database->location.DistanceS(loc) <= 10)
       // Use this waypoint for the task
       return from_database;
 
     // Try finding the closest waypoint to the original one
-    from_database = waypoints->GetNearest(loc, fixed(10));
+    from_database = waypoints->GetNearest(loc, 10);
 
     // If closest waypoint found and closer than 10m to the original
     if (from_database != nullptr &&
-        from_database->location.DistanceS(loc) <= fixed(10))
+        from_database->location.DistanceS(loc) <= 10)
       // Use this waypoint for the task
       return from_database;
   }
@@ -103,16 +103,16 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
   if (StringIsEqual(type, _T("Line"))) {
     LineSectorZone *ls = new LineSectorZone(wp.location);
 
-    fixed length;
-    if (node.GetAttribute(_T("length"), length) && positive(length))
+    double length;
+    if (node.GetAttribute(_T("length"), length) && length > 0)
       ls->SetLength(length);
 
     return ls;
   } else if (StringIsEqual(type, _T("Cylinder"))) {
     CylinderZone *ls = new CylinderZone(wp.location);
 
-    fixed radius;
-    if (node.GetAttribute(_T("radius"), radius) && positive(radius))
+    double radius;
+    if (node.GetAttribute(_T("radius"), radius) && radius > 0)
       ls->SetRadius(radius);
 
     return ls;
@@ -120,7 +120,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     return CylinderZone::CreateMatCylinderZone(wp.location);
   } else if (StringIsEqual(type, _T("Sector"))) {
 
-    fixed radius, inner_radius;
+    double radius, inner_radius;
     Angle start, end;
     SectorZone *ls;
 
@@ -131,7 +131,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     } else
       ls = new SectorZone(wp.location);
 
-    if (node.GetAttribute(_T("radius"), radius) && positive(radius))
+    if (node.GetAttribute(_T("radius"), radius) && radius > 0)
       ls->SetRadius(radius);
     if (node.GetAttribute(_T("start_radial"), start))
       ls->SetStartRadial(start);
@@ -142,14 +142,14 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
   } else if (StringIsEqual(type, _T("FAISector")))
     return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
   else if (StringIsEqual(type, _T("SymmetricQuadrant"))) {
-    fixed radius = fixed(10000);
+    double radius = 10000;
     node.GetAttribute(_T("radius"), radius);
 
     return new SymmetricSectorZone(wp.location, radius);
   } else if (StringIsEqual(type, _T("Keyhole")))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
   else if (StringIsEqual(type, _T("CustomKeyhole"))) {
-    fixed radius = fixed(10000), inner_radius = fixed(500);
+    double radius = 10000, inner_radius = 500;
     Angle angle = Angle::QuarterCircle();
 
     node.GetAttribute(_T("radius"), radius);

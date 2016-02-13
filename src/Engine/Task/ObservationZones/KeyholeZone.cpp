@@ -46,7 +46,7 @@ KeyholeZone::GetBoundary() const
   return boundary;
 }
 
-fixed
+double
 KeyholeZone::ScoreAdjustment() const
 {
   return GetInnerRadius();

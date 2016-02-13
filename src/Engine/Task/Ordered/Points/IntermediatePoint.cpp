@@ -37,7 +37,7 @@ IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
   safety_height = tb.safety_height_arrival;
 }
 
-fixed
+double
 IntermediateTaskPoint::GetElevation() const
 {
   return GetBaseElevation() + safety_height;

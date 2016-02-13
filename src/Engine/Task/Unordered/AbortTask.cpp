@@ -33,10 +33,10 @@
 #include "Util/Clamp.hpp"
 
 /** min search range in m */
-static constexpr fixed min_search_range = fixed(50000);
+static constexpr double min_search_range = 50000;
 
 /** max search range in m */
-static constexpr fixed max_search_range = fixed(100000);
+static constexpr double max_search_range = 100000;
 
 AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
                      const Waypoints &wps)
@@ -101,7 +101,7 @@ AbortTask::Clear()
   reachable_landable = false;
 }
 
-fixed
+double
 AbortTask::GetAbortRange(const AircraftState &state,
                          const GlidePolar &glide_polar) const
 {

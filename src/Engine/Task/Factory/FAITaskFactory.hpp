@@ -69,9 +69,9 @@ public:
   TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
 
   /**
-   * @param start_radius: either fixed(-1) or a valid value
-   * @param turnpoint_radius: either fixed(-1) or a valid value
-   * @param finish_radius: either fixed(-1) or a valid value
+   * @param start_radius: either -1 or a valid value
+   * @param turnpoint_radius: either -1 or a valid value
+   * @param finish_radius: either -1 or a valid value
    *
    * only affects start cylinder/line, finish cylinder/line and
    * turnpoint sector
@@ -80,9 +80,9 @@ public:
    * sets radiuses FAI defaults
    */
   void GetPointDefaultSizes(const TaskPointFactoryType type,
-                            fixed &start_radius,
-                            fixed &turnpoint_radius,
-                            fixed &finish_radius) const override;
+                            double &start_radius,
+                            double &turnpoint_radius,
+                            double &finish_radius) const override;
 };
 
 #endif

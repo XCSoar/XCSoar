@@ -105,12 +105,12 @@ GotoTask::TaskSize() const
 }
 
 bool 
-GotoTask::TakeoffAutotask(const GeoPoint& location, const fixed terrain_alt)
+GotoTask::TakeoffAutotask(const GeoPoint& location, const double terrain_alt)
 {
   if (tp)
     return false;
 
-  auto wp = waypoints.GetNearestLandable(location, fixed(5000));
+  auto wp = waypoints.GetNearestLandable(location, 5000);
   if (!wp)
     wp.reset(new Waypoint(waypoints.GenerateTakeoffPoint(location,
                                                          terrain_alt)));

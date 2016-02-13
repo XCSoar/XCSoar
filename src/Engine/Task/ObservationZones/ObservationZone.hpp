@@ -24,7 +24,6 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
@@ -126,7 +125,7 @@ public:
    * @return Distance (m) to subtract from score
    */
   gcc_pure
-  virtual fixed ScoreAdjustment() const = 0;
+  virtual double ScoreAdjustment() const = 0;
 };
 
 #endif

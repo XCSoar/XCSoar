@@ -50,7 +50,7 @@ public:
    *
    * @param time monotonic time of day in seconds
    */
-  void CalcSpeeds(ElementStat &data, fixed time);
+  void CalcSpeeds(ElementStat &data, double time);
 
   /**
    * Reset to uninitialised state, to supress calculation

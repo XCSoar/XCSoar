@@ -122,7 +122,7 @@ public:
     case ObservationZone::Shape::ANNULAR_SECTOR:
       oz = new AnnularSectorZone(location, radius,
                                  Angle::Degrees(0), Angle::Degrees(70),
-                                 Half(radius));
+                                 radius / 2.);
       break;
 
     case ObservationZone::Shape::FAI_SECTOR:

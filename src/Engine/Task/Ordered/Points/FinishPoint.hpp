@@ -39,7 +39,7 @@ struct FinishConstraints;
  */
 class FinishPoint final : public OrderedTaskPoint
 {
-  fixed safety_height;
+  double safety_height;
 
   /**
    * A copy of OrderedTaskSettings::finish_constraints, managed by
@@ -47,7 +47,7 @@ class FinishPoint final : public OrderedTaskPoint
    */
   FinishConstraints constraints;
 
-  fixed fai_finish_height;
+  double fai_finish_height;
 
 public:
   /**
@@ -71,10 +71,10 @@ public:
    *
    * @param height FAI finish height (m)
    */
-  void set_fai_finish_height(const fixed height);
+  void set_fai_finish_height(double height);
 
   /* virtual methods from class TaskPoint */
-  fixed GetElevation() const override;
+  double GetElevation() const override;
 
   /* virtual methods from class ScoredTaskPoint */
   void Reset() override;

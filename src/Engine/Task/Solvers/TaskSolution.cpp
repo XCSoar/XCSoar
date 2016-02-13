@@ -33,8 +33,8 @@
 GlideResult
 TaskSolution::GlideSolutionRemaining(const GeoPoint &location,
                                      const GeoPoint &target,
-                                     const fixed target_elevation,
-                                     const fixed altitude,
+                                     const double target_elevation,
+                                     const double altitude,
                                      const SpeedVector &wind,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar)
@@ -53,7 +53,7 @@ TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
                                      const AircraftState &ac,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
-                                     const fixed min_h)
+                                     const double min_h)
 {
   const GlideState gs = GlideState::Remaining(taskpoint, ac, min_h);
   return MacCready::Solve(settings, polar, gs);
@@ -64,7 +64,7 @@ TaskSolution::GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
                                    const AircraftState &ac,
                                    const GlideSettings &settings,
                                    const GlidePolar &polar,
-                                   const fixed min_h)
+                                   const double min_h)
 {
   assert(ac.location.IsValid());
 
@@ -79,7 +79,7 @@ TaskSolution::GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
                                      const AircraftState &ac,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
-                                     const fixed min_h)
+                                     const double min_h)
 {
   assert(ac.location.IsValid());
 
@@ -94,7 +94,7 @@ TaskSolution::GlideSolutionSink(const TaskPoint &taskpoint,
                                 const AircraftState &ac,
                                 const GlideSettings &settings,
                                 const GlidePolar &polar,
-                                const fixed s)
+                                const double s)
 {
   assert(ac.location.IsValid());
 

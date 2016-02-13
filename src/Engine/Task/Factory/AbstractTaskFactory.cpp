@@ -34,7 +34,7 @@
 
 #include <algorithm>
 
-static fixed
+static double
 GetOZSize(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
@@ -53,7 +53,7 @@ GetOZSize(const ObservationZonePoint &oz)
     return ((const AnnularSectorZone &)oz).GetRadius();
 
   default:
-    return fixed(-1);
+    return -1;
   }
 }
 
@@ -286,28 +286,28 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
 
 void
 AbstractTaskFactory::GetPointDefaultSizes(const TaskPointFactoryType type,
-                                          fixed &start_radius,
-                                          fixed &turnpoint_radius,
-                                          fixed &finish_radius) const
+                                          double &start_radius,
+                                          double &turnpoint_radius,
+                                          double &finish_radius) const
 {
   TaskBehaviour ob = this->behaviour;
 
-  if (start_radius < fixed(0))
+  if (start_radius < 0)
     start_radius = ob.sector_defaults.start_radius;
 
-  if (turnpoint_radius < fixed(0))
+  if (turnpoint_radius < 0)
     turnpoint_radius = ob.sector_defaults.turnpoint_radius;
 
-  if (finish_radius < fixed(0))
+  if (finish_radius < 0)
     finish_radius = ob.sector_defaults.finish_radius;
 }
 
 OrderedTaskPoint*
 AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                  WaypointPtr wp,
-                                 fixed start_radius,
-                                 fixed turnpoint_radius,
-                                 fixed finish_radius) const
+                                 double start_radius,
+                                 double turnpoint_radius,
+                                 double finish_radius) const
 {
   assert(wp);
 
@@ -791,12 +791,12 @@ AbstractTaskFactory::ValidateFAIOZs()
       break;
 
     case TaskPointFactoryType::START_SECTOR:
-      if (ozsize > fixed(1000.01))
+      if (ozsize > 1000.01)
         valid = false;
 
       break;
     case TaskPointFactoryType::START_LINE:
-      if (ozsize > fixed(2000.01))
+      if (ozsize > 2000.01)
         valid = false;
 
       break;
@@ -805,7 +805,7 @@ AbstractTaskFactory::ValidateFAIOZs()
       break;
 
     case TaskPointFactoryType::AST_CYLINDER:
-      if (ozsize > fixed(500.01))
+      if (ozsize > 500.01)
         valid = false;
 
       break;
@@ -825,7 +825,7 @@ AbstractTaskFactory::ValidateFAIOZs()
     case TaskPointFactoryType::FINISH_SECTOR:
       break;
     case TaskPointFactoryType::FINISH_LINE:
-      if (ozsize > fixed(2000.01))
+      if (ozsize > 2000.01)
         valid = false;
 
       break;

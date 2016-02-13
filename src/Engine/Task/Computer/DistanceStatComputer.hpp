@@ -44,7 +44,7 @@ public:
    *
    * @param es ElementStat (used for time access)
    */
-  void CalcSpeed(DistanceStat &data, fixed time);
+  void CalcSpeed(DistanceStat &data, double time);
 
   /**
    * Calculate incremental speed from previous step.
@@ -52,7 +52,7 @@ public:
    *
    * @param time monotonic time of day in seconds
    */
-  void CalcIncrementalSpeed(DistanceStat &data, const fixed time) {
+  void CalcIncrementalSpeed(DistanceStat &data, double time) {
     incremental_speed.Compute(data, time);
   }
 

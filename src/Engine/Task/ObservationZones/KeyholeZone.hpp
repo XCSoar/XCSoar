@@ -32,7 +32,7 @@
  */
 class KeyholeZone final : public SymmetricSectorZone
 {
-  fixed inner_radius;
+  double inner_radius;
 
 protected:
   /**
@@ -46,7 +46,7 @@ protected:
   KeyholeZone(Shape _shape, bool _can_start_through_top,
               bool _arc_boundary,
               const GeoPoint &loc,
-              const fixed radius = fixed(10000.0),
+              const double radius = 10000.0,
               const Angle angle = Angle::QuarterCircle())
     :SymmetricSectorZone(_shape, _can_start_through_top, _arc_boundary,
                          loc, radius, angle),
@@ -58,7 +58,7 @@ protected:
 
 public:
   static KeyholeZone *CreateCustomKeyholeZone(const GeoPoint &reference,
-                                              fixed radius,
+                                              double radius,
                                               Angle angle) {
     return new KeyholeZone(Shape::CUSTOM_KEYHOLE, true, true, reference,
                            radius, angle);
@@ -71,7 +71,7 @@ public:
    */
   static KeyholeZone *CreateDAeCKeyholeZone(const GeoPoint &reference) {
     return new KeyholeZone(Shape::DAEC_KEYHOLE, true, true, reference,
-                           fixed(10000),
+                           10000,
                            Angle::QuarterCircle());
   }
 
@@ -81,7 +81,7 @@ public:
    */
   static KeyholeZone *CreateBGAFixedCourseZone(const GeoPoint &reference) {
     return new KeyholeZone(Shape::BGAFIXEDCOURSE, true, true, reference,
-                           fixed(20000),
+                           20000,
                            Angle::QuarterCircle());
   }
 
@@ -91,25 +91,25 @@ public:
    */
   static KeyholeZone *CreateBGAEnhancedOptionZone(const GeoPoint &reference) {
     return new KeyholeZone(Shape::BGAENHANCEDOPTION, true, true, reference,
-                           fixed(10000),
+                           10000,
                            Angle::HalfCircle());
   }
 
   /**
    * Returns the radius of the small cylinder [m].
    */
-  fixed GetInnerRadius() const {
+  double GetInnerRadius() const {
     return inner_radius;
   }
 
-  void SetInnerRadius(fixed _radius) {
+  void SetInnerRadius(double _radius) {
     inner_radius = _radius;
   }
 
   /* virtual methods from class ObservationZone */
   bool IsInSector(const GeoPoint &location) const override;
   OZBoundary GetBoundary() const override;
-  fixed ScoreAdjustment() const override;
+  double ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
   ObservationZonePoint *Clone(const GeoPoint &_reference) const override {

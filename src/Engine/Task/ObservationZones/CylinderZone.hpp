@@ -35,7 +35,7 @@
 class CylinderZone : public ObservationZonePoint
 {
   /** radius (m) of OZ */
-  fixed radius;
+  double radius;
 
 public:
   static constexpr double MAT_RADIUS = 1609.344;
@@ -43,16 +43,16 @@ public:
 protected:
   CylinderZone(Shape _shape, bool _can_start_through_top,
                const GeoPoint &loc,
-               const fixed _radius = fixed(10000.0))
+               const double _radius = 10000.0)
     :ObservationZonePoint(_shape, _can_start_through_top, loc),
      radius(_radius) {
-    assert(positive(radius));
+    assert(radius > 0);
   }
 
   CylinderZone(const CylinderZone &other, const GeoPoint &reference)
     :ObservationZonePoint((const ObservationZonePoint &)other, reference),
      radius(other.radius) {
-    assert(positive(radius));
+    assert(radius > 0);
   }
 
 public:
@@ -64,13 +64,13 @@ public:
    *
    * @return Initialised object
    */
-  CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
+  CylinderZone(const GeoPoint &loc, const double _radius = 10000.0)
     :ObservationZonePoint(Shape::CYLINDER, true, loc), radius(_radius) {
-    assert(positive(radius));
+    assert(radius > 0);
   }
 
   static CylinderZone *CreateMatCylinderZone(const GeoPoint &loc) {
-    return new CylinderZone(Shape::MAT_CYLINDER, true, loc, fixed(MAT_RADIUS));
+    return new CylinderZone(Shape::MAT_CYLINDER, true, loc, MAT_RADIUS);
   }
 
   /**
@@ -78,8 +78,8 @@ public:
    *
    * @param new_radius Radius (m) of cylinder
    */
-  virtual void SetRadius(fixed new_radius) {
-    assert(positive(new_radius));
+  virtual void SetRadius(double new_radius) {
+    assert(new_radius > 0);
     radius = new_radius;
   }
 
@@ -88,7 +88,7 @@ public:
    *
    * @return Radius (m) of cylinder
    */
-  fixed GetRadius() const {
+  double GetRadius() const {
     return radius;
   }
 
@@ -103,11 +103,11 @@ public:
   }
 
   OZBoundary GetBoundary() const override;
-  fixed ScoreAdjustment() const override;
+  double ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
   bool Equals(const ObservationZonePoint &other) const override;
-  GeoPoint GetRandomPointInSector(const fixed mag) const override;
+  GeoPoint GetRandomPointInSector(const double mag) const override;
 
   ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new CylinderZone(*this, _reference);

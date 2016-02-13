@@ -27,7 +27,7 @@ void
 WindowStatsComputer::Compute(double time, const TaskStats &task_stats,
                              WindowStats &stats)
 {
-  if (negative(time))
+  if (time < 0)
     return;
 
   if (!task_stats.task_valid || !task_stats.start.task_started ||
@@ -41,19 +41,19 @@ WindowStatsComputer::Compute(double time, const TaskStats &task_stats,
     return;
 
   const auto dt = minute_clock.Update(time, 59, 180);
-  if (negative(dt)) {
+  if (dt < 0) {
     Reset();
     stats.Reset();
     return;
   }
 
-  if (!positive(dt))
+  if (dt <= 0)
     return;
 
   travelled_distance.Push(time, task_stats.total.travelled.GetDistance());
 
   stats.duration = travelled_distance.GetDeltaXChecked();
-  if (positive(stats.duration)) {
+  if (stats.duration > 0) {
     stats.distance = travelled_distance.GetDeltaY();
     stats.speed = stats.distance / stats.duration;
   }

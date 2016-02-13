@@ -59,27 +59,27 @@ struct ElementStat
    GeoVector next_leg_vector;
 
   /** Time (s) this element was started */
-  fixed time_started;
+  double time_started;
   /** Time (s) since element was started */
-  fixed time_elapsed;
+  double time_elapsed;
 
   /**
    * Time (s) remaining to element completion from now, including the
    * time to reach the start point (if task was not yet started).
    */
-  fixed time_remaining_now;
+  double time_remaining_now;
 
   /**
    * Time (s) remaining to element completion, counted from the start
    * of the task.
    */
-  fixed time_remaining_start;
+  double time_remaining_start;
 
   /** Time (s) of overall element */
-  fixed time_planned;
+  double time_planned;
 
   /** Gradient to element completion */
-  fixed gradient;
+  double gradient;
 
   /** Stats for effective remaining distance of element */
   DistanceStat remaining_effective;
@@ -115,7 +115,7 @@ struct ElementStat
    * @param ts Start time of this element (s)
    * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void SetTimes(fixed until_start_s, fixed ts, fixed time);
+  void SetTimes(double until_start_s, double ts, double time);
 
   /**
    * Determine whether the task (or subtask) is able to be finished

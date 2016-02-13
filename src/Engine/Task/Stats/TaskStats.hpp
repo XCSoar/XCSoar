@@ -40,22 +40,22 @@ public:
   ElementStat current_leg;
 
   /** Calculated glide angle required */
-  fixed glide_required;
+  double glide_required;
   /** Calculated cruise efficiency ratio */
-  fixed cruise_efficiency;
+  double cruise_efficiency;
   /** Calculated effective MC (m/s) */
-  fixed effective_mc;
+  double effective_mc;
   /** Best MacCready setting calculated for final glide (m/s) */
-  fixed mc_best;
+  double mc_best;
 
   /** Nominal task distance (m) */
-  fixed distance_nominal;
+  double distance_nominal;
   /** Maximum achievable task distance (m) */
-  fixed distance_max;
+  double distance_max;
   /** Minimum achievable task distance (m) */
-  fixed distance_min;
+  double distance_min;
   /** Scored distance (m) */
-  fixed distance_scored;
+  double distance_scored;
 
   /**
    * Index of the active task point.
@@ -97,7 +97,7 @@ public:
 
   WindowStats last_hour;
 
-  fixed GetEstimatedTotalTime() const {
+  double GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining_start;
   }
 
@@ -109,7 +109,7 @@ public:
   }
 
   /** Incremental task speed adjusted for mc, target changes */
-  fixed get_pirker_speed() const {
+  double get_pirker_speed() const {
     return total.pirker.GetSpeedIncremental();
   }
 

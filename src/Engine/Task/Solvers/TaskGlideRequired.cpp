@@ -29,34 +29,34 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint *> &tps,
                                      const AircraftState &_aircraft,
                                      const GlideSettings &settings,
                                      const GlidePolar &_gp)
-  :ZeroFinder(-fixed(10), fixed(10), fixed(TOLERANCE_GLIDE_REQUIRED)),
+  :ZeroFinder(-10, 10, TOLERANCE_GLIDE_REQUIRED),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
    aircraft(_aircraft)
 {
   // Vopt at mc=0
-  tm.set_mc(fixed(0));
+  tm.set_mc(0);
 }
 
 TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
                                      const AircraftState &_aircraft,
                                      const GlideSettings &settings,
                                      const GlidePolar &_gp)
-  :ZeroFinder(-fixed(10), fixed(10), fixed(TOLERANCE_GLIDE_REQUIRED)),
+  :ZeroFinder(-10, 10, TOLERANCE_GLIDE_REQUIRED),
    tm(tp, settings, _gp), // Vopt at mc=0
    aircraft(_aircraft)
 {
-  tm.set_mc(fixed(0));
+  tm.set_mc(0);
 }
 
-fixed
-TaskGlideRequired::f(const fixed S)
+double
+TaskGlideRequired::f(const double S)
 {
   res = tm.glide_sink(aircraft, S);
   return res.altitude_difference;
 }
 
-fixed
-TaskGlideRequired::search(const fixed S)
+double
+TaskGlideRequired::search(const double S)
 {
   auto a = find_zero(S);
   return a/res.v_opt;

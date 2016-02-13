@@ -29,15 +29,15 @@
 class AnnularSectorZone:
   public SectorZone
 {
-  fixed inner_radius;
+  double inner_radius;
 
 protected:
   AnnularSectorZone(Shape _shape, bool _can_start_through_top,
                     const GeoPoint &loc,
-                    const fixed _radiusOuter = fixed(10000.0),
+                    const double _radiusOuter = 10000.0,
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
-                    const fixed _inner_radius = fixed(0.0))
+                    const double _inner_radius = 0.0)
     :SectorZone(_shape, _can_start_through_top, true, loc, _radiusOuter,
                 _startRadial, _endRadial),
      inner_radius(_inner_radius) {}
@@ -58,10 +58,10 @@ public:
    * @return Initialised object
    */
   AnnularSectorZone(const GeoPoint &loc,
-                    const fixed _radiusOuter=fixed(10000.0),
+                    const double _radiusOuter=10000.0,
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
-                    const fixed _inner_radius = fixed(0.0))
+                    const double _inner_radius = 0.0)
     :SectorZone(Shape::ANNULAR_SECTOR, true, true, loc,
                 _radiusOuter, _startRadial, _endRadial),
      inner_radius(_inner_radius)
@@ -74,7 +74,7 @@ public:
    *
    * @param x Radius (m) of inner boundary
    */
-  void SetInnerRadius(const fixed new_radius) {
+  void SetInnerRadius(const double new_radius) {
     inner_radius = new_radius;
     if (new_radius > GetRadius())
       CylinderZone::SetRadius(new_radius);
@@ -86,7 +86,7 @@ public:
    *
    * @return Radius (m) of inner boundary
    */
-  fixed GetInnerRadius() const {
+  double GetInnerRadius() const {
     return inner_radius;
   }
 
@@ -101,7 +101,7 @@ public:
   }
 
   /* virtual methods from class CylinderZone */
-  void SetRadius(fixed new_radius) override {
+  void SetRadius(double new_radius) override {
     CylinderZone::SetRadius(new_radius);
     if (new_radius < inner_radius)
       inner_radius = new_radius;

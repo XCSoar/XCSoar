@@ -40,10 +40,10 @@ SectorZone::GetBoundary() const
   return boundary;
 }
 
-fixed
+double
 SectorZone::ScoreAdjustment() const
 {
-  return fixed(0);
+  return 0;
 }
 
 void 

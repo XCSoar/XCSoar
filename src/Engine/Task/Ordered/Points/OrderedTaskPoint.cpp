@@ -125,7 +125,7 @@ OrderedTaskPoint::CheckEnterTransition(const AircraftState &ref_now,
     TransitionConstraint(ref_now.location, ref_last.location);
 }
 
-fixed
+double
 OrderedTaskPoint::DoubleLegDistance(const GeoPoint &ref) const
 {
   assert(tp_previous);

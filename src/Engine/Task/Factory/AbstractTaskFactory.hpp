@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
-#include "Math/fixed.hpp"
 #include "TaskPointFactoryType.hpp"
 #include "ValidationError.hpp"
 #include "LegalPointSet.hpp"
@@ -257,15 +256,15 @@ public:
   }
 
   /**
-   * @param start_radius: either fixed(-1) or a valid value
-   * @param turnpoint_radius: either fixed(-1) or a valid value
-   * @param finish_radius: either fixed(-1) or a valid value
+   * @param start_radius: either -1 or a valid value
+   * @param turnpoint_radius: either -1 or a valid value
+   * @param finish_radius: either -1 or a valid value
    *
    * sets radiuses to the correct default for that task type or general defaults
    */
   virtual void
-  GetPointDefaultSizes(const TaskPointFactoryType type, fixed &start_radius,
-                       fixed &turnpoint_radius, fixed &finish_radius) const;
+  GetPointDefaultSizes(const TaskPointFactoryType type, double &start_radius,
+                       double &turnpoint_radius, double &finish_radius) const;
 
   /** 
    * Create a point of supplied type using default sector sizes
@@ -293,9 +292,9 @@ public:
   gcc_malloc
   OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
                                 WaypointPtr wp,
-                                const fixed start_radius,
-                                const fixed turnpoint_radius,
-                                const fixed finish_radius) const;
+                                double start_radius,
+                                double turnpoint_radius,
+                                double finish_radius) const;
 
   /**
    * Create start point of specified type

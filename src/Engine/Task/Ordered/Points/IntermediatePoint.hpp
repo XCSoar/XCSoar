@@ -36,7 +36,7 @@
 class IntermediateTaskPoint: 
   public OrderedTaskPoint 
 {
-  fixed safety_height;
+  double safety_height;
 
 public:    
   /**
@@ -60,7 +60,7 @@ public:
   }
 
   /* virtual methods from class TaskPoint */
-  fixed GetElevation() const override;
+  double GetElevation() const override;
 
   /* virtual methods from class OrderedTaskPoint */
   void SetTaskBehaviour(const TaskBehaviour &tb) override;

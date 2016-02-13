@@ -28,8 +28,8 @@ using namespace FAITriangleRules;
 
 gcc_const
 static bool
-IsSmallFAITriangle(const fixed d_total,
-                   const fixed d1, const fixed d2, const fixed d3)
+IsSmallFAITriangle(const double d_total,
+                   const double d1, const double d2, const double d3)
 {
   const auto d_min = d_total * SMALL_MIN_LEG;
   return d1 >= d_min && d2 >= d_min && d3 >= d_min;
@@ -37,9 +37,9 @@ IsSmallFAITriangle(const fixed d_total,
 
 gcc_const
 static bool
-IsLargeFAITriangle(const fixed d_total,
-                   const fixed d1, const fixed d2, const fixed d3,
-                   const fixed large_threshold)
+IsLargeFAITriangle(const double d_total,
+                   const double d1, const double d2, const double d3,
+                   const double large_threshold)
 {
   if (d_total < large_threshold)
     return false;
@@ -53,7 +53,7 @@ IsLargeFAITriangle(const fixed d_total,
 }
 
 bool
-FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3,
+FAITriangleRules::TestDistances(const double d1, const double d2, const double d3,
                                 const FAITriangleSettings &settings)
 {
   const auto d_wp = d1 + d2 + d3;

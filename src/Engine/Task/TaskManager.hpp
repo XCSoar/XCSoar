@@ -132,7 +132,7 @@ public:
    * @return Location of point
    */
   GeoPoint RandomPointInTask(const unsigned index,
-                             const fixed mag = fixed(1)) const;
+                             double mag = 1) const;
 
   /**
    * Retrieve a copy of the task alternates
@@ -200,7 +200,7 @@ public:
    * 
    * @return True if MC updated
    */
-  bool UpdateAutoMC(const AircraftState& state_now, const fixed fallback_mc);
+  bool UpdateAutoMC(const AircraftState& state_now, double fallback_mc);
 
   /**
    * Accessor for statistics of active task
@@ -447,7 +447,7 @@ public:
    * Caller is responsible for ensuring the waypoint database already has an
    * appropriate waypoint within 1000m of the takeoff location.
    */
-  void TakeoffAutotask(const GeoPoint &ref, const fixed terrain_alt);
+  void TakeoffAutotask(const GeoPoint &ref, double terrain_alt);
 
   void UpdateCommonStatsTask();
 

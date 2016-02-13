@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_RULES_HPP
 #define XCSOAR_FAI_TRIANGLE_RULES_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 struct GeoPoint;
 struct FAITriangleSettings;
@@ -34,14 +34,14 @@ namespace FAITriangleRules
   /**
    * The minimum leg percentage for "small FAI triangles".
    */
-  static constexpr fixed SMALL_MIN_LEG(0.28);
+  static constexpr double SMALL_MIN_LEG(0.28);
 
   /**
    * The maximum leg percentage for "small FAI triangles".  This is a
    * derived value, assuming the other two legs are as short as
    * possible.
    */
-  static constexpr fixed SMALL_MAX_LEG(fixed(1) - Double(SMALL_MIN_LEG));
+  static constexpr double SMALL_MAX_LEG(1 - 2 * SMALL_MIN_LEG);
 
   /**
    * The threshold which allows applying the "large FAI triangle"
@@ -52,7 +52,7 @@ namespace FAITriangleRules
    *
    * @see FAITriangleSettings::Threshold::FAI
    */
-  static constexpr fixed LARGE_THRESHOLD_FAI(750000);
+  static constexpr double LARGE_THRESHOLD_FAI(750000);
 
   /**
    * Relaxed threshold used by some contests such as OLC and DMSt.
@@ -62,24 +62,24 @@ namespace FAITriangleRules
    *
    * @see FAITriangleSettings::Threshold::KM500
    */
-  static constexpr fixed LARGE_THRESHOLD_500(500000);
+  static constexpr double LARGE_THRESHOLD_500(500000);
 
   /**
    * The minimum leg percentage for "large FAI triangles".
    */
-  static constexpr fixed LARGE_MIN_LEG(0.25);
+  static constexpr double LARGE_MIN_LEG(0.25);
 
   /**
    * The maximum leg percentage for "large FAI triangles".
    */
-  static constexpr fixed LARGE_MAX_LEG(0.45);
+  static constexpr double LARGE_MAX_LEG(0.45);
 
-  static constexpr inline fixed LargeMinLeg(fixed total) {
-    return Quarter(total);
+  static constexpr inline double LargeMinLeg(double total) {
+    return total / 4.;
   }
 
   gcc_pure
-  bool TestDistances(const fixed d1, const fixed d2, const fixed d3,
+  bool TestDistances(double d1, double d2, double d3,
                      const FAITriangleSettings &settings);
 
   gcc_pure

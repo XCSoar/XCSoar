@@ -50,7 +50,7 @@ protected:
   SectorZone(Shape _shape, bool _can_start_through_top,
              bool _arc_boundary,
              const GeoPoint &loc,
-             const fixed _radius = fixed(10000.0),
+             const double _radius = 10000.0,
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
     :CylinderZone(_shape, _can_start_through_top, loc, _radius),
@@ -74,7 +74,7 @@ public:
    *
    * @return Initialised object
    */
-  SectorZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0),
+  SectorZone(const GeoPoint &loc, const double _radius = 10000.0,
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
     :CylinderZone(Shape::SECTOR, true, loc, _radius),
@@ -156,7 +156,7 @@ public:
   /* virtual methods from class ObservationZone */
   bool IsInSector(const GeoPoint &location) const override;
   OZBoundary GetBoundary() const override;
-  fixed ScoreAdjustment() const override;
+  double ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
   bool Equals(const ObservationZonePoint &other) const override;
@@ -165,7 +165,7 @@ public:
   }
 
   /* virtual methods from class CylinderZone */
-  void SetRadius(fixed new_radius) override {
+  void SetRadius(double new_radius) override {
     CylinderZone::SetRadius(new_radius);
     UpdateSector();
   }

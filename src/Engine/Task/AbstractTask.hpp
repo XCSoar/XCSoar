@@ -140,7 +140,7 @@ public:
    * @return True if MC updated
    */
   bool UpdateAutoMC(GlidePolar &glide_polar, const AircraftState &state_now,
-                    const fixed fallback_mc);
+                    double fallback_mc);
 
   /**
    * Check if task is valid.  Calls task_event methods on failure.
@@ -189,7 +189,7 @@ protected:
    */
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
-                          fixed &best) const = 0;
+                          double &best) const = 0;
 
   /**
    * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -200,8 +200,8 @@ protected:
    *
    * @return Sink rate of aircraft (m/s)
    */
-  virtual fixed CalcRequiredGlide(const AircraftState &state_now,
-                                  const GlidePolar &glide_polar) const = 0;
+  virtual double CalcRequiredGlide(const AircraftState &state_now,
+                                   const GlidePolar &glide_polar) const = 0;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -219,8 +219,8 @@ protected:
   gcc_pure
   virtual bool CalcCruiseEfficiency(gcc_unused const AircraftState &state_now,
                                     gcc_unused const GlidePolar &glide_polar,
-                                    fixed &val) const {
-    val = fixed(1);
+                                    double &val) const {
+    val = 1;
     return true;
   }
 
@@ -238,7 +238,7 @@ protected:
   gcc_pure
   virtual bool CalcEffectiveMC(const AircraftState &state_now,
                                const GlidePolar &glide_polar,
-                               fixed &val) const;
+                               double &val) const;
 
   /**
    * Calculate angle from aircraft to destination of current leg
@@ -249,7 +249,7 @@ protected:
    * @return Gradient angle of remainder of task
    */
   gcc_pure
-  fixed CalcLegGradient(const AircraftState &state_now) const;
+  double CalcLegGradient(const AircraftState &state_now) const;
 
   /**
    * Calculate angle from aircraft to remainder of task
@@ -260,7 +260,7 @@ protected:
    * @return Gradient angle of remainder of task
    */
   gcc_pure
-  virtual fixed CalcGradient(const AircraftState &state_now) const = 0;
+  virtual double CalcGradient(const AircraftState &state_now) const = 0;
 
   /**
    * Calculate task start time.
@@ -268,7 +268,7 @@ protected:
    *
    * @return Time (s) of start of task or negative value if not available
    */
-  virtual fixed ScanTotalStartTime() = 0;
+  virtual double ScanTotalStartTime() = 0;
 
   /**
    * Calculate leg start time.
@@ -276,7 +276,7 @@ protected:
    *
    * @return Time (s) of start of leg or negative value if not available
    */
-  virtual fixed ScanLegStartTime() = 0;
+  virtual double ScanLegStartTime() = 0;
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -284,7 +284,7 @@ protected:
    *
    * @return Distance (m) of nominal task
    */
-  virtual fixed ScanDistanceNominal() = 0;
+  virtual double ScanDistanceNominal() = 0;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -293,7 +293,7 @@ protected:
    *
    * @return Distance (m) of planned task
    */
-  virtual fixed ScanDistancePlanned() = 0;
+  virtual double ScanDistancePlanned() = 0;
 
   /**
    * Calculate distance of planned task (sum of distances from aircraft to
@@ -304,7 +304,7 @@ protected:
    *
    * @return Distance (m) remaining in the planned task
    */
-  virtual fixed ScanDistanceRemaining(const GeoPoint &ref) = 0;
+  virtual double ScanDistanceRemaining(const GeoPoint &ref) = 0;
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -313,7 +313,7 @@ protected:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  virtual fixed ScanDistanceScored(const GeoPoint &ref) = 0;
+  virtual double ScanDistanceScored(const GeoPoint &ref) = 0;
 
   /**
    * Calculate distance of achieved part of task.
@@ -325,7 +325,7 @@ protected:
    *
    * @return Distance (m) achieved
    */
-  virtual fixed ScanDistanceTravelled(const GeoPoint &ref) = 0;
+  virtual double ScanDistanceTravelled(const GeoPoint &ref) = 0;
 
   /**
    * Calculate maximum and minimum distances for task, achievable
@@ -337,7 +337,7 @@ protected:
    * @param dmax Maximum distance (m) achievable of task
    */
   virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                                  fixed *dmin, fixed *dmax) = 0;
+                                  double *dmin, double *dmax) = 0;
 
   /**
    * Calculate glide result for remainder of task
@@ -406,8 +406,8 @@ private:
   /**
    * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void UpdateStatsTimes(fixed time);
-  void UpdateStatsSpeeds(fixed time);
+  void UpdateStatsTimes(double time);
+  void UpdateStatsSpeeds(double time);
   void UpdateStatsGlide(const AircraftState &state,
                         const GlidePolar &glide_polar);
   void UpdateFlightMode();

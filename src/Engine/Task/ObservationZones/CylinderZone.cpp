@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 
-fixed
+double
 CylinderZone::ScoreAdjustment() const
 {
   return radius;
@@ -56,14 +56,14 @@ CylinderZone::Equals(const ObservationZonePoint &other) const
 }
 
 GeoPoint
-CylinderZone::GetRandomPointInSector(const fixed mag) const
+CylinderZone::GetRandomPointInSector(const double mag) const
 {
   GeoPoint location;
 
   do {
-    auto dir = Angle::Degrees(fixed(rand() % 360));
-    auto dmag = std::max(std::min(radius, fixed(100.0)), radius * mag);
-    auto dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
+    auto dir = Angle::Degrees(rand() % 360);
+    double dmag = std::max(std::min(radius, 100.0), radius * mag);
+    double dis = (0.1 + (rand() % 90) / 100.0) * dmag;
     GeoVector vec(dis, dir);
     location = vec.EndPoint(GetReference());
   } while (!IsInSector(location));

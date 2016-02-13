@@ -67,7 +67,7 @@ IsolineCrossingFinder::valid(const double x)
 double
 IsolineCrossingFinder::solve()
 {
-  const auto sol = find_zero(Half(xmax + xmin));
+  const auto sol = find_zero((xmax + xmin) / 2.);
   if (valid(sol)) {
     return sol;
   } else {

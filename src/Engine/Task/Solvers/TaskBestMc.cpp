@@ -33,7 +33,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp,
                        const double _mc_min)
-  :ZeroFinder(_mc_min, double(10.0), double(TOLERANCE_BEST_MC)),
+  :ZeroFinder(_mc_min, 10.0, TOLERANCE_BEST_MC),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
    aircraft(_aircraft)
 {
@@ -48,12 +48,12 @@ TaskBestMc::TaskBestMc(TaskPoint *tp,
 {
 }
 
-#define fixed_tiny 0.001
+#define TINY 0.001
 
 double
 TaskBestMc::f(const double mc)
 {
-  tm.set_mc(std::max(fixed_tiny, mc));
+  tm.set_mc(std::max(TINY, mc));
   res = tm.glide_solution(aircraft);
 
   return res.altitude_difference;
@@ -63,7 +63,7 @@ bool
 TaskBestMc::valid(const double mc) const
 {
   return res.IsOk() &&
-    res.altitude_difference >= Double(-tolerance) * res.vector.distance;
+    res.altitude_difference >= -2 * tolerance * res.vector.distance;
 }
 
 double

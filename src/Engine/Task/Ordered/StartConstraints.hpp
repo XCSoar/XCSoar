@@ -23,7 +23,6 @@
 #ifndef XCSOAR_START_CONSTRAINTS_HPP
 #define XCSOAR_START_CONSTRAINTS_HPP
 
-#include "Math/fixed.hpp"
 #include "Time/RoughTime.hpp"
 #include "Geo/AltitudeReference.hpp"
 
@@ -37,7 +36,7 @@ struct StartConstraints {
   RoughTimeSpan open_time_span;
 
   /** Maximum ground speed (m/s) allowed in start sector */
-  fixed max_speed;
+  double max_speed;
 
   /** Maximum height (m) allowed in start sector */
   unsigned max_height;
@@ -70,7 +69,7 @@ struct StartConstraints {
    * @return True if within limits
    */
   gcc_pure
-  bool CheckSpeed(fixed ground_speed,
+  bool CheckSpeed(double ground_speed,
                   const TaskStartMargins *margins=nullptr) const;
 
   /**
@@ -85,7 +84,7 @@ struct StartConstraints {
    */
   gcc_pure
   bool CheckHeight(const AircraftState &state,
-                   const fixed start_elevation,
+                   double start_elevation,
                    const TaskStartMargins *margins=nullptr) const;
 };
 

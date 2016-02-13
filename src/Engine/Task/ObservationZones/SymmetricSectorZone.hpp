@@ -44,7 +44,7 @@ protected:
   SymmetricSectorZone(Shape _shape, bool _can_start_through_top,
                       bool _arc_boundary,
                       const GeoPoint &loc,
-                      const fixed radius=fixed(10000.0),
+                      const double radius=10000.0,
                       const Angle angle=Angle::QuarterCircle())
     :SectorZone(_shape, _can_start_through_top, _arc_boundary,
                 loc, radius),
@@ -57,7 +57,7 @@ protected:
 
 public:
   SymmetricSectorZone(const GeoPoint &loc,
-                      const fixed radius=fixed(10000.0))
+                      const double radius=10000.0)
     :SectorZone(Shape::SYMMETRIC_QUADRANT, true, true, loc, radius),
      sector_angle(Angle::QuarterCircle()) {
     UpdateSector();
@@ -73,7 +73,7 @@ public:
                                                   const bool _is_turnpoint = true) {
     auto *oz =
       new SymmetricSectorZone(Shape::FAI_SECTOR, true, false, loc,
-                              _is_turnpoint ? fixed(10000) : fixed(1000),
+                              _is_turnpoint ? 10000 : 1000,
                               Angle::QuarterCircle());
       oz->UpdateSector();
     return oz;
@@ -88,7 +88,7 @@ public:
   static SymmetricSectorZone *CreateBGAStartSectorZone(const GeoPoint &reference) {
     auto *oz =
       new SymmetricSectorZone(Shape::BGA_START, true, true, reference,
-                              fixed(5000),
+                              5000,
                               Angle::HalfCircle());
       oz->UpdateSector();
       return oz;

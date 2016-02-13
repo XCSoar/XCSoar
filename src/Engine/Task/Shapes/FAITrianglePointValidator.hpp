@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_POINT_VALIDATOR_HPP
 #define XCSOAR_FAI_TRIANGLE_POINT_VALIDATOR_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 class OrderedTask;
 struct GeoPoint;
@@ -40,9 +40,9 @@ class FAITrianglePointValidator
   OrderedTask *const task;
   const unsigned t_index;
   unsigned t_size;
-  fixed leg1;
-  fixed leg2;
-  fixed leg3;
+  double leg1;
+  double leg2;
+  double leg3;
 
   bool fai_triangle_point_invalid;
 
@@ -62,7 +62,7 @@ public:
 
 private:
   gcc_pure
-  static bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3,
+  static bool TestFAITriangle(double d1, double d2, double d3,
                               const FAITriangleSettings &settings);
 
   /**

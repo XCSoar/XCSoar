@@ -80,7 +80,7 @@ FAITaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
 {
   AbstractTaskFactory::UpdateOrderedTaskSettings(to);
 
-  to.start_constraints.max_speed = fixed(0);
+  to.start_constraints.max_speed = 0;
   to.start_constraints.max_height = 0;
   to.start_constraints.max_height_ref = AltitudeReference::AGL;
   to.finish_constraints.min_height = 0;
@@ -138,10 +138,10 @@ FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 
 void
 FAITaskFactory::GetPointDefaultSizes(const TaskPointFactoryType type,
-                                          fixed &start_radius,
-                                          fixed &turnpoint_radius,
-                                          fixed &finish_radius) const
+                                     double &start_radius,
+                                     double &turnpoint_radius,
+                                     double &finish_radius) const
 {
-  turnpoint_radius = fixed(500);
-  start_radius = finish_radius = fixed(1000);
+  turnpoint_radius = 500;
+  start_radius = finish_radius = 1000;
 }

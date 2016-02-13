@@ -52,7 +52,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
        of the current turn point, because we assume that the pilot
        will never progress to the next leg if he's too low */
     aircraft_predict.altitude = tp_min_height;
-    if (positive(gr.altitude_difference))
+    if (gr.altitude_difference > 0)
       /* .. but start higher if the last calculation allows it */
       aircraft_predict.altitude += gr.altitude_difference;
   }

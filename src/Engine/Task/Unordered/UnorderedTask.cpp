@@ -36,7 +36,7 @@ UnorderedTask::UnorderedTask(const TaskType _type,
 bool
 UnorderedTask::CalcBestMC(const AircraftState &aircraft,
                           const GlidePolar &glide_polar,
-                          fixed& best) const
+                          double& best) const
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (tp == nullptr || !aircraft.location.IsValid()) {
@@ -69,16 +69,16 @@ UnorderedTask::CheckTransitions(const AircraftState &state_now,
   return false;
 }
 
-fixed
+double
 UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
                                  const GlidePolar &glide_polar) const
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (tp == nullptr || !aircraft.location.IsValid())
-    return fixed(0);
+    return 0;
 
   TaskGlideRequired bgr(tp, aircraft, task_behaviour.glide, glide_polar);
-  return bgr.search(fixed(0));
+  return bgr.search(0);
 }
 
 void
@@ -137,67 +137,66 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
     leg_remaining_effective.Reset();
 }
 
-fixed
+double
 UnorderedTask::ScanTotalStartTime()
 {
-  return fixed(-1);
+  return -1;
 }
 
-fixed
+double
 UnorderedTask::ScanLegStartTime()
 {
-  return fixed(-1);
+  return -1;
 }
-
 
 void
 UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
-                                  fixed *dmin, fixed *dmax)
+                                  double *dmin, double *dmax)
 {
   *dmin = *dmax = stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
-    : fixed(0);
+    : 0;
 }
 
-fixed
+double
 UnorderedTask::ScanDistanceNominal()
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
-    : fixed(0);
+    : 0;
 }
 
-fixed
+double
 UnorderedTask::ScanDistancePlanned()
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
-    : fixed(0);
+    : 0;
 }
 
-fixed
+double
 UnorderedTask::ScanDistanceScored(const GeoPoint &location)
 {
-  return fixed(0);
+  return 0;
 }
 
-fixed
+double
 UnorderedTask::ScanDistanceTravelled(const GeoPoint &location)
 {
-  return fixed(0);
+  return 0;
 }
 
-fixed
+double
 UnorderedTask::ScanDistanceRemaining(const GeoPoint &location)
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (tp == nullptr || !location.IsValid())
-    return fixed(0);
+    return 0;
 
   return tp->Distance(location);
 }
 
-fixed
+double
 UnorderedTask::CalcGradient(const AircraftState &state) const
 {
   return CalcLegGradient(state);

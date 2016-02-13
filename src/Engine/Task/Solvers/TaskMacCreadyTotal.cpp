@@ -62,7 +62,7 @@ TaskMacCreadyTotal::effective_distance(const double time_remaining) const
   for (int i = points.size() - 1; i >= 0; i--) {
     const GlideResult &result = leg_solutions[i];
 
-    if (result.IsOk() && positive(result.time_elapsed)) {
+    if (result.IsOk() && result.time_elapsed > 0) {
       auto p = (time_remaining - t_total) / result.time_elapsed;
       if (p >= 0 && p <= 1) {
         return d_total + p * result.vector.distance;

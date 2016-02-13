@@ -73,7 +73,7 @@ AATPoint::CheckTarget(const AircraftState &state, const bool known_outside)
 }
 
 bool
-AATPoint::IsCloseToTarget(const AircraftState& state, const fixed threshold) const
+AATPoint::IsCloseToTarget(const AircraftState& state, const double threshold) const
 {
   if (!valid())
     return false;
@@ -91,8 +91,7 @@ AATPoint::CheckTargetInside(const AircraftState& state)
   if (!IsCloseToTarget(state))
     return false;
 
-  if (positive(DoubleLegDistance(state.location)
-               - DoubleLegDistance(GetLocationMax())))
+  if (DoubleLegDistance(state.location) > DoubleLegDistance(GetLocationMax()))
     // no improvement available
     return false;
 
@@ -133,7 +132,7 @@ AATPoint::CheckTargetOutside(const AircraftState& state)
 }
 
 bool
-AATPoint::SetRange(const fixed p, const bool force_if_current)
+AATPoint::SetRange(const double p, const bool force_if_current)
 {
   if (target_locked)
     return false;
@@ -173,7 +172,7 @@ AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
   const auto floc = proj.ProjectFloat(GetLocation());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius(floc,
-                         proj.ProjectFloat(negative(rar.range)
+                         proj.ProjectFloat(rar.range < 0
                                            ? GetLocationMin()
                                            : GetLocationMax()));
   const auto radius = fradius.GetDistance() * fabs(rar.range);
@@ -190,7 +189,7 @@ AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
 }
 
 RangeAndRadial
-AATPoint::GetTargetRangeRadial(fixed oldrange) const
+AATPoint::GetTargetRangeRadial(double oldrange) const
 {
   const auto fprev = GetPrevious()->GetLocationRemaining();
   const auto floc = GetLocation();
@@ -202,12 +201,12 @@ AATPoint::GetTargetRangeRadial(fixed oldrange) const
   if (radial < -Angle::QuarterCircle() || radial > Angle::QuarterCircle())
     d = -d;
 
-  const auto radius = negative(d)
+  const auto radius = d < 0
     ? floc.Distance(GetLocationMin())
     : floc.Distance(GetLocationMax());
-  const auto range = Clamp(d / radius, fixed(-1), fixed(1));
+  const auto range = Clamp(d / radius, -1., 1.);
 
-  if (oldrange == fixed(0) && range == fixed(0))
+  if (oldrange == 0 && range == 0)
     radial = Angle::Zero();
 
   return RangeAndRadial{ range, radial };

@@ -23,8 +23,8 @@
 #include "LineSectorZone.hpp"
 #include "Boundary.hpp"
 
-fixed
+double
 LineSectorZone::ScoreAdjustment() const
 {
-  return fixed(0);
+  return 0;
 }

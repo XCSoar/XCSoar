@@ -25,7 +25,7 @@
 
 #include <algorithm>
 
-#define fixed_big 1000000.
+#define BIG 1000000.
 
 double
 AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
@@ -44,7 +44,7 @@ AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
     auto mod_descent_rate = GetDescentRate() + vertical_tolerance;
 
     if (mod_descent_rate <= 0)
-      return fixed_big;
+      return BIG;
 
     const auto t_descent = h_descent / mod_descent_rate;
     return std::max(t_cruise, t_descent);
@@ -56,7 +56,7 @@ AirspaceAircraftPerformance::SolutionGeneral(double distance, double dh) const
   auto mod_climb_rate = GetClimbRate() + vertical_tolerance;
 
   if (mod_climb_rate <= 0)
-    return fixed_big;
+    return BIG;
 
   const auto t_climb = -h_descent / mod_climb_rate;
   return t_cruise + t_climb;
@@ -100,7 +100,7 @@ public:
   double solve(double &h) {
     auto h_this = find_min(m_h_min);
     auto t = f(h_this);
-    if (t < fixed_big) {
+    if (t < BIG) {
       h = h_this;
       return t;
     }
@@ -125,7 +125,7 @@ AirspaceAircraftPerformance::SolutionVertical(double distance, double altitude,
   if (top <= base) {
     // unique solution
     auto t_this = SolutionGeneral(distance, altitude - top);
-    if (t_this < fixed_big) {
+    if (t_this < BIG) {
       intercept_alt = top;
       return t_this;
     }
@@ -172,7 +172,7 @@ public:
   double solve(double &distance) {
     auto distance_this = find_min(m_d_min);
     auto t = f(distance_this);
-    if (t < fixed_big) {
+    if (t < BIG) {
       distance = distance_this;
       return t;
     }
@@ -199,7 +199,7 @@ AirspaceAircraftPerformance::SolutionHorizontal(double distance_min,
   if (distance_max <= distance_min) {
     // unique solution
     auto t_this = SolutionGeneral(distance_max, dh);
-    if (t_this != fixed_big) {
+    if (t_this != BIG) {
       intercept_distance = distance_max;
       return t_this;
     }

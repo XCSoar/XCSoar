@@ -23,7 +23,7 @@
 #ifndef OBSERVATIONZONECLIENT_HPP
 #define OBSERVATIONZONECLIENT_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 class ObservationZonePoint;
 class OZBoundary;
@@ -74,12 +74,12 @@ public:
   gcc_pure
   OZBoundary GetBoundary() const;
 
-  virtual fixed ScoreAdjustment() const;
+  virtual double ScoreAdjustment() const;
 
   void SetLegs(const TaskPoint *previous, const TaskPoint *next);
 
   gcc_pure
-  GeoPoint GetRandomPointInSector(const fixed mag) const;
+  GeoPoint GetRandomPointInSector(double mag) const;
 };
 
 

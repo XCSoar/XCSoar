@@ -32,14 +32,14 @@ TaskStats::reset()
   total.Reset();
   current_leg.Reset();
 
-  glide_required = fixed(0);
-  cruise_efficiency = fixed(1);
-  effective_mc = fixed(0);
-  mc_best = fixed(0);
-  distance_nominal = fixed(0);
-  distance_max = fixed(0);
-  distance_min = fixed(0);
-  distance_scored = fixed(0);
+  glide_required = 0;
+  cruise_efficiency = 1;
+  effective_mc = 0;
+  mc_best = 0;
+  distance_nominal = 0;
+  distance_max = 0;
+  distance_min = 0;
+  distance_scored = 0;
   active_index = 0;
   task_valid = false;
   has_targets = false;
@@ -68,7 +68,7 @@ TaskStats::calc_flight_mode(const TaskBehaviour &settings)
     : total.solution_remaining;
 
   const bool this_is_final = solution_remaining.IsOk() &&
-    positive(solution_remaining.altitude_difference + fixed(margin));
+    solution_remaining.altitude_difference + margin > 0;
 
   if (flight_mode_final_glide == this_is_final)
     return false;

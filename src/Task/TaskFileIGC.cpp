@@ -77,7 +77,7 @@ MakeWaypoint(GeoPoint location, const TCHAR *name)
 
   /* we don't know the elevation, so we just set it to zero; this is
      not correct, but better than leaving it uninitialised */
-  wp->elevation = fixed(0);
+  wp->elevation = 0;
 
   return WaypointPtr(wp);
 }

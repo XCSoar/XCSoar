@@ -38,7 +38,7 @@ public:
   /** Reset each element (for incremental speeds). */
   void reset(TaskStats &data);
 
-  void ComputeWindow(fixed time, TaskStats &data);
+  void ComputeWindow(double time, TaskStats &data);
 };
 
 #endif

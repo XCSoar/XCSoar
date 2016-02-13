@@ -23,7 +23,6 @@
 #ifndef XCSOAR_ORDERED_TASK_SETTINGS_HPP
 #define XCSOAR_ORDERED_TASK_SETTINGS_HPP
 
-#include "Math/fixed.hpp"
 #include "StartConstraints.hpp"
 #include "FinishConstraints.hpp"
 #include "Task/Shapes/FAITriangleSettings.hpp"
@@ -34,7 +33,7 @@
  */
 struct OrderedTaskSettings {
   /** Desired AAT minimum task time (s) */
-  fixed aat_min_time;
+  double aat_min_time;
 
   StartConstraints start_constraints;
   FinishConstraints finish_constraints;

@@ -23,22 +23,21 @@
 #define TASK_SUMMARY_HPP
 
 #include "Util/TrivialArray.hxx"
-#include "Math/fixed.hpp"
 
 #include <type_traits>
 
 struct TaskSummaryPoint {
   /** Distance planned to this point from previous, (m) */
-  fixed d_planned;
+  double d_planned;
   /** Proportion of total distance of this point [0-1] */
-  fixed p;
+  double p;
   /** Whether this task point has been achieved */
   bool achieved;
 };
 
 struct TaskSummary {
   /** Proportion of planned distance remaining, [0-1] */
-  fixed p_remaining;
+  double p_remaining;
   /** Index of active taskpoint */
   unsigned active;
 
@@ -49,19 +48,19 @@ struct TaskSummary {
 
   void clear() {
     active = 0;
-    p_remaining = fixed(1);
+    p_remaining = 1;
     pts.clear();
   }
   void append(const TaskSummaryPoint& tsp) {
     pts.push_back(tsp);
   }
 
-  void update(fixed d_remaining, fixed d_planned) {
-    if (!positive(d_planned))
+  void update(double d_remaining, double d_planned) {
+    if (d_planned <= 0)
       return;
 
     p_remaining = d_remaining/d_planned;
-    fixed p = fixed(0);
+    double p = 0;
     for (auto &i : pts) {
       p += i.d_planned / d_planned;
       i.p = p;

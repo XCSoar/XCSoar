@@ -47,9 +47,9 @@ public:
    *
    * @return Initialised object
    */
-  LineSectorZone(const GeoPoint loc, const fixed length = fixed(1000.0))
+  LineSectorZone(const GeoPoint loc, const double length = 1000.0)
     :SymmetricSectorZone(Shape::LINE, false, false, loc,
-                         Half(length), Angle::HalfCircle())
+                         length / 2, Angle::HalfCircle())
   {
     UpdateSector();
   }
@@ -59,8 +59,8 @@ public:
    *
    * @param new_length Length (m) of line
    */
-  void SetLength(const fixed new_length) {
-    SetRadius(Half(new_length));
+  void SetLength(const double new_length) {
+    SetRadius(new_length / 2);
   }
   
   /**
@@ -68,8 +68,8 @@ public:
    *
    * @return Length (m) of line
    */
-  fixed GetLength() const {
-    return Double(GetRadius());
+  double GetLength() const {
+    return 2 * GetRadius();
   }
 
   /* virtual methods from class ObservationZone */
@@ -79,7 +79,7 @@ public:
       CylinderZone::IsInSector(last_location);
   }
 
-  fixed ScoreAdjustment() const override;
+  double ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
   ObservationZonePoint *Clone(const GeoPoint &_reference) const override {

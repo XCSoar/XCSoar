@@ -37,11 +37,11 @@ ElementStatComputer::Reset(ElementStat &data)
 {
   initialised = false;
 
-  CalcSpeeds(data, fixed(-1));
+  CalcSpeeds(data, -1);
 }
 
 void 
-ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
+ElementStatComputer::CalcSpeeds(ElementStat &data, const double time)
 {
   remaining_effective.CalcSpeed(data.remaining_effective,
                                 data.time_remaining_start);
@@ -51,7 +51,7 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
   pirker.CalcSpeed(data.pirker, data.time_elapsed);
 
   if (!initialised) {
-    if (data.time_elapsed > fixed(15))
+    if (data.time_elapsed > 15)
       initialised = true;
 
     vario.reset(data.vario, data.solution_remaining);

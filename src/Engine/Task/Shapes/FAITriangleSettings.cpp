@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <assert.h>
 
-fixed
+double
 FAITriangleSettings::GetThreshold() const
 {
   switch (threshold) {

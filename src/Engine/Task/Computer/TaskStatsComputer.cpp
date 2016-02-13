@@ -34,7 +34,7 @@ TaskStatsComputer::reset(TaskStats &data)
 }
 
 void
-TaskStatsComputer::ComputeWindow(fixed time, TaskStats &data)
+TaskStatsComputer::ComputeWindow(double time, TaskStats &data)
 {
   window.Compute(time, data, data.last_hour);
 }

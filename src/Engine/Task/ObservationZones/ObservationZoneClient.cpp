@@ -42,12 +42,12 @@ ObservationZoneClient::CanStartThroughTop() const
 }
 
 GeoPoint
-ObservationZoneClient::GetRandomPointInSector(const fixed mag) const
+ObservationZoneClient::GetRandomPointInSector(const double mag) const
 {
   return oz_point->GetRandomPointInSector(mag);
 }
 
-fixed
+double
 ObservationZoneClient::ScoreAdjustment() const
 {
   return oz_point->ScoreAdjustment();

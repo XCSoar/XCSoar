@@ -29,9 +29,9 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const AircraftState &_aircraft,
                              const GlideSettings &settings,
                              const GlidePolar &_gp,
-                             const fixed _t_remaining,
+                             const double _t_remaining,
                              StartPoint *_ts)
-  :ZeroFinder(fixed(0), fixed(1), fixed(TOLERANCE_MIN_TARGET)),
+  :ZeroFinder(0, 1, TOLERANCE_MIN_TARGET),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
       /* ignore the travel to the start point */
       false),
@@ -43,8 +43,8 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
 
 }
 
-fixed
-TaskMinTarget::f(const fixed p)
+double
+TaskMinTarget::f(const double p)
 {
   // set task targets
   set_range(p);
@@ -55,14 +55,14 @@ TaskMinTarget::f(const fixed p)
 
 
 bool
-TaskMinTarget::valid(const fixed tp)
+TaskMinTarget::valid(const double tp)
 {
-  //  const fixed ff = f(tp);
-  return res.IsOk(); // && (ff>= -tolerance*fixed(2));
+  //  const double ff = f(tp);
+  return res.IsOk(); // && (ff>= -tolerance*2);
 }
 
-fixed
-TaskMinTarget::search(const fixed tp)
+double
+TaskMinTarget::search(const double tp)
 {
   if (!tm.has_targets())
     // don't bother if nothing to adjust
@@ -80,7 +80,7 @@ TaskMinTarget::search(const fixed tp)
 }
 
 void
-TaskMinTarget::set_range(const fixed p)
+TaskMinTarget::set_range(const double p)
 {
   tm.set_range(p, force_current);
   tp_start->ScanDistanceRemaining(aircraft.location);
