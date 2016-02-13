@@ -34,6 +34,7 @@ struct GeoPoint;
 struct RouteLink;
 struct AFlatGeoPoint;
 struct ReachFanParms;
+template<typename T> struct ConstBuffer;
 
 class TriangleFanVisitor
 {
@@ -41,6 +42,11 @@ public:
   virtual void StartFan() = 0;
   virtual void AddPoint(const GeoPoint &p) = 0;
   virtual void EndFan() = 0;
+};
+
+class FlatTriangleFanVisitor {
+public:
+  virtual void VisitFan(ConstBuffer<FlatGeoPoint> fan) = 0;
 };
 
 class FlatTriangleFanTree: public FlatTriangleFan
@@ -105,6 +111,9 @@ public:
   void AcceptInRange(const FlatBoundingBox &bb,
                      const FlatProjection &projection,
                      TriangleFanVisitor &visitor) const;
+
+  void AcceptInRange(const FlatBoundingBox &bb,
+                     FlatTriangleFanVisitor &visitor) const;
 
   void UpdateTerrainBase(FlatGeoPoint origin, ReachFanParms &parms);
 

@@ -63,6 +63,9 @@ public:
   void AcceptInRange(const GeoBounds& bounds,
                      TriangleFanVisitor& visitor) const;
 
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor) const;
+
   int GetTerrainBase() const {
     return terrain_base;
   }

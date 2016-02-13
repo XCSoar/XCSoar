@@ -25,6 +25,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
 #include "Util/GlobalSliceAllocator.hpp"
+#include "Util/ConstBuffer.hxx"
 #include "Geo/Flat/FlatProjection.hpp"
 
 #define REACH_BUFFER 1
@@ -342,4 +343,18 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
 
   for (const auto &child : children)
     child.AcceptInRange(bb, projection, visitor);
+}
+
+void
+FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
+                                   FlatTriangleFanVisitor &visitor) const
+{
+  if (!bb.Overlaps(bb_children))
+    return;
+
+  if (bb.Overlaps(bounding_box))
+    visitor.VisitFan({&vs.front(), vs.size()});
+
+  for (const auto &child : children)
+    child.AcceptInRange(bb, visitor);
 }

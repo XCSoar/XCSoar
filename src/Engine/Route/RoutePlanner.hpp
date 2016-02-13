@@ -218,6 +218,11 @@ public:
     reach.AcceptInRange(bounds, visitor);
   }
 
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor) const {
+    reach.AcceptInRange(bounds, visitor);
+  }
+
   /**
    * Retrieve current solution.  If solver failed previously,
    * direct flight from origin to destination is produced.

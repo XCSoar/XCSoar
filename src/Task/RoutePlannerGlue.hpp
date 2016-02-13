@@ -81,6 +81,11 @@ public:
 
   void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
 
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor) const {
+    planner.AcceptInRange(bounds, visitor);
+  }
+
   gcc_pure
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;

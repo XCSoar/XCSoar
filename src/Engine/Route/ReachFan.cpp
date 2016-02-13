@@ -132,3 +132,14 @@ ReachFan::AcceptInRange(const GeoBounds &bounds,
   const FlatBoundingBox bb = projection.Project(bounds);
   root.AcceptInRange(bb, projection, visitor);
 }
+
+void
+ReachFan::AcceptInRange(const GeoBounds &bounds,
+                        FlatTriangleFanVisitor &visitor) const
+{
+  if (root.IsEmpty())
+    return;
+
+  const FlatBoundingBox bb = projection.Project(bounds);
+  root.AcceptInRange(bb, visitor);
+}
