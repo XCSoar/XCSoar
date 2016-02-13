@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CANVAS_HPP
 #define XCSOAR_SCREEN_CANVAS_HPP
 
+// IWYU pragma: begin_exports
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Canvas.hpp"
 #elif defined(USE_MEMORY_CANVAS)
@@ -33,5 +35,7 @@ Copyright_License {
 #else
 #error No Canvas implementation
 #endif
+
+// IWYU pragma: end_exports
 
 #endif

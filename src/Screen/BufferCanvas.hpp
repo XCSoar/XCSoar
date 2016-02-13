@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUFFER_CANVAS_HPP
 #define XCSOAR_SCREEN_BUFFER_CANVAS_HPP
 
+// IWYU pragma: begin_exports
+
 #ifdef ENABLE_OPENGL
 #include "OpenGL/BufferCanvas.hpp"
 #elif defined(USE_MEMORY_CANVAS)
@@ -32,5 +34,7 @@ using BufferCanvas = VirtualCanvas;
 #else /* GDI */
 #include "GDI/BufferCanvas.hpp"
 #endif
+
+// IWYU pragma: end_exports
 
 #endif

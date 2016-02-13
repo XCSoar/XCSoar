@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_COLOR_HPP
 #define XCSOAR_SCREEN_COLOR_HPP
 
+// IWYU pragma: begin_exports
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Color.hpp"
 #elif defined(USE_MEMORY_CANVAS)
@@ -33,6 +34,7 @@ Copyright_License {
 #else
 #error No Color implementation
 #endif
+// IWYU pragma: end_exports
 
 #ifdef TESTING
 static constexpr Color COLOR_XCSOAR_LIGHT = Color(0xed, 0x90, 0x90);

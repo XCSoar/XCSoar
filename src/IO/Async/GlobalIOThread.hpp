@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef HAVE_POSIX
 #define HAVE_IO_THREAD
 
-#include "IOThread.hpp"
+#include "IOThread.hpp" // IWYU pragma: export
 
 extern IOThread *io_thread;
 

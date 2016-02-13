@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_KEY_CODE_HPP
 #define XCSOAR_EVENT_KEY_CODE_HPP
 
+// IWYU pragma: begin_exports
+
 #ifdef ANDROID
 #include "Android/KeyCode.hpp"
 #elif defined(USE_POLL_EVENT)
@@ -33,5 +35,7 @@ Copyright_License {
 #else
 #include "Windows/KeyCode.hpp"
 #endif
+
+// IWYU pragma: end_exports
 
 #endif

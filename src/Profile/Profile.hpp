@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_HPP
 #define XCSOAR_PROFILE_HPP
 
+// IWYU pragma: begin_exports
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ProfileMap.hpp"
+// IWYU pragma: end_exports
 
 class Path;
 class AllocatedPath;

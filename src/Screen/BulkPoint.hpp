@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BULK_POINT_HPP
 #define XCSOAR_SCREEN_BULK_POINT_HPP
 
+// IWYU pragma: begin_exports
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/BulkPoint.hpp"
 #elif defined(USE_MEMORY_CANVAS)
@@ -33,5 +35,7 @@ Copyright_License {
 #else
 #error No Point implementation
 #endif
+
+// IWYU pragma: end_exports
 
 #endif
