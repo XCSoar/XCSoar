@@ -64,8 +64,9 @@ CreateVoltageDevice(JNIEnv *env, jobject holder,
 }
 
 VoltageDevice::VoltageDevice(unsigned _index,
-                           JNIEnv *env, jobject holder,
-                           fixed _offset, fixed _factor, unsigned sample_rate)
+                             JNIEnv *env, jobject holder,
+                             double _offset, double _factor,
+                             unsigned sample_rate)
   :index(_index),
    obj(env, CreateVoltageDevice(env, holder,
                                sample_rate,
@@ -90,15 +91,16 @@ VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
   basic.alive.Update(basic.clock);
 
   // When no calibration data present, use defaults
-  if (factor == fixed(0)) {
+  if (factor == 0) {
     // Set default for temp sensor only when sensor present.
-    if (temp_adc >= 0 && offset == fixed(0)) offset = fixed(-130);
-    factor = fixed(0.01599561738);
+    if (temp_adc >= 0 && offset == 0)
+      offset = -130;
+    factor = 0.01599561738;
     basic.ProvideSensorCalibration(factor, offset);
   }
 
   if (temp_adc >= 0) {
-    auto v = CelsiusToKelvin(offset + fixed(temp_adc));
+    auto v = CelsiusToKelvin(offset + temp_adc);
     if (temperature_filter.Update(v))
       v = temperature_filter.Average();
     basic.temperature = v;

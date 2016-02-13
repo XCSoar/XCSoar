@@ -76,7 +76,7 @@ BMP085Device::BMP085Device(unsigned _index,
    obj(env, CreateBMP085Device(env, holder,
                                twi_num, eoc_pin, oversampling,
                                *this)),
-   kalman_filter(fixed(10), fixed(0.0075))
+   kalman_filter(10, 0.0075)
 {
 }
 
@@ -87,16 +87,16 @@ BMP085Device::~BMP085Device()
 }
 
 gcc_pure
-static inline
-fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
+static inline double
+ComputeNoncompVario(const double pressure, const double d_pressure)
 {
-  static constexpr fixed FACTOR(-2260.389548275485);
-  static constexpr fixed EXPONENT(-0.8097374740609689);
-  return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
+  static constexpr double FACTOR(-2260.389548275485);
+  static constexpr double EXPONENT(-0.8097374740609689);
+  return FACTOR * pow(pressure, EXPONENT) * d_pressure;
 }
 
 void
-BMP085Device::onBMP085Values(fixed temperature,
+BMP085Device::onBMP085Values(double temperature,
                              AtmosphericPressure pressure)
 {
   ScopeLock protect(device_blackboard->mutex);
@@ -109,7 +109,7 @@ BMP085Device::onBMP085Values(fixed temperature,
   basic.temperature_available = true;
 #endif
 
-  kalman_filter.Update(pressure.GetHectoPascal(), fixed(0.05));
+  kalman_filter.Update(pressure.GetHectoPascal(), 0.05);
 
   basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                 kalman_filter.GetXVel()));

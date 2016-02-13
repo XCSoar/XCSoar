@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_I2CBARO_LISTENER_HPP
 #define XCSOAR_ANDROID_I2CBARO_LISTENER_HPP
 
-#include "Math/fixed.hpp"
-
 class AtmosphericPressure;
 
 class I2CbaroListener {

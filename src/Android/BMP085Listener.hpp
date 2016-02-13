@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BMP085_LISTENER_HPP
 #define XCSOAR_ANDROID_BMP085_LISTENER_HPP
 
-#include "Math/fixed.hpp"
-
 class AtmosphericPressure;
 
 class BMP085Listener {
 public:
-  virtual void onBMP085Values(fixed temperature,
+  virtual void onBMP085Values(double temperature,
                               AtmosphericPressure pressure) = 0;
   virtual void onBMP085Error() = 0;
 };

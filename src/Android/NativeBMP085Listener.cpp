@@ -46,8 +46,8 @@ Java_org_xcsoar_NativeBMP085Listener_onBMP085Values(JNIEnv *env, jobject obj,
     return;
 
   BMP085Listener &listener = *(BMP085Listener *)(void *)ptr;
-  listener.onBMP085Values(CelsiusToKelvin(fixed(temperature)),
-                          AtmosphericPressure::Pascal(fixed(pressure)));
+  listener.onBMP085Values(CelsiusToKelvin(temperature),
+                          AtmosphericPressure::Pascal(pressure));
 }
 
 JNIEXPORT void JNICALL

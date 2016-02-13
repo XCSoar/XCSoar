@@ -70,7 +70,7 @@ NunchuckDevice::NunchuckDevice(unsigned _index,
    obj(env, CreateNunchuckDevice(env, holder,
                                twi_num, sample_rate,
                                *this)),
-   kalman_filter(fixed(10), fixed(0.3))
+   kalman_filter(10, 0.3)
 {
 }
 
@@ -93,7 +93,7 @@ NunchuckDevice::onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int
   // Nunchuck really connected  ?
   if (joy_x < 1000) {
 
-    basic.acceleration.ProvideGLoad(fixed(acc_z) / 1000, true);
+    basic.acceleration.ProvideGLoad(acc_z / 1000., true);
 
     device_blackboard->ScheduleMerge();
 

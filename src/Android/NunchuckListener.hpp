@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_NUNCHUCK_LISTENER_HPP
 #define XCSOAR_ANDROID_NUNCHUCK_LISTENER_HPP
 
-#include "Math/fixed.hpp"
-
 class NunchuckListener {
 public:
   virtual void onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int acc_z, int switches) = 0;

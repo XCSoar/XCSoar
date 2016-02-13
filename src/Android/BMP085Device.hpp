@@ -53,7 +53,7 @@ public:
 
 private:
   /* virtual methods from class BMP085Listener */
-  virtual void onBMP085Values(fixed temperature,
+  virtual void onBMP085Values(double temperature,
                               AtmosphericPressure pressure) override;
   virtual void onBMP085Error() override;
 };

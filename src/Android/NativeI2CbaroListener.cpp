@@ -45,7 +45,7 @@ Java_org_xcsoar_NativeI2CbaroListener_onI2CbaroValues(JNIEnv *env, jobject obj,
     return;
 
   I2CbaroListener &listener = *(I2CbaroListener *)(void *)ptr;
-  listener.onI2CbaroValues(sensor, AtmosphericPressure::Pascal(fixed(pressure)));
+  listener.onI2CbaroValues(sensor, AtmosphericPressure::Pascal(pressure));
 }
 
 JNIEXPORT void JNICALL

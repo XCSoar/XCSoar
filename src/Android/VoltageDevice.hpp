@@ -27,7 +27,6 @@ Copyright_License {
 #include "VoltageListener.hpp"
 #include "Java/Object.hxx"
 #include "Compiler.h"
-#include "Math/fixed.hpp"
 #include "Math/WindowFilter.hpp"
 
 #include <jni.h>
@@ -37,8 +36,8 @@ Copyright_License {
 class VoltageDevice final : private VoltageListener {
   unsigned index;
   Java::GlobalObject obj;
-  fixed offset;
-  fixed factor;
+  double offset;
+  double factor;
   WindowFilter<16> voltage_filter[NUMBER_OF_VOLTAGES];
   WindowFilter<64> temperature_filter;
 
@@ -48,7 +47,7 @@ public:
 
   VoltageDevice(unsigned index,
                JNIEnv *env, jobject holder,
-               fixed _offset, fixed _factor, unsigned sample_rate);
+               double _offset, double _factor, unsigned sample_rate);
 
   ~VoltageDevice();
 

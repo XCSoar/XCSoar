@@ -36,7 +36,7 @@ class I2CbaroDevice final : private I2CbaroListener {
   unsigned index;
   Java::GlobalObject obj;
   DeviceConfig::PressureUse press_use;
-  fixed pitot_offset;
+  double pitot_offset;
   /**
    * This Kalman filter is used to smooth the pressure input.
    */
@@ -49,7 +49,7 @@ public:
   I2CbaroDevice(unsigned index,
                JNIEnv *env, jobject holder,
                DeviceConfig::PressureUse press_use,
-               fixed pitot_offset,
+               double pitot_offset,
                unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags);
 
   ~I2CbaroDevice();
