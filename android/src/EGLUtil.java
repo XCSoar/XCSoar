@@ -56,6 +56,26 @@ class EGLUtil {
         Math.abs(d - want_depth) + Math.abs(s - want_stencil);
   }
 
+  static EGLConfig findClosestConfig(EGL10 egl, EGLDisplay display,
+                                     EGLConfig[] configs,
+                                     int want_r, int want_g, int want_b,
+                                     int want_a,
+                                     int want_depth, int want_stencil) {
+    EGLConfig closestConfig = null;
+    int closestDistance = 1000;
+    for (EGLConfig config : configs) {
+      int distance = configDistance(egl, display, config,
+                                    want_r, want_g, want_b, want_a,
+                                    want_depth, want_stencil);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestConfig = config;
+      }
+    }
+
+    return closestConfig;
+  }
+
   /**
    * Produce a human-readable string describing the #EGLConfig (for
    * debug log messages).

@@ -149,17 +149,8 @@ class NativeView extends SurfaceView
                              configs, numConfigs, num_config))
       throw new EGLException("eglChooseConfig() failed: " + egl.eglGetError());
 
-    EGLConfig closestConfig = null;
-    int closestDistance = 1000;
-    for (EGLConfig config : configs) {
-      int distance = EGLUtil.configDistance(egl, display, config,
-                                            4, 4, 4, 0, 0, 8);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestConfig = config;
-      }
-    }
-
+    EGLConfig closestConfig = EGLUtil.findClosestConfig(egl, display, configs,
+                                                        4, 4, 4, 0, 0, 8);
     if (closestConfig == null)
       throw new EGLException("eglChooseConfig() failed");
 
