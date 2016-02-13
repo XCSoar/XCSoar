@@ -30,7 +30,6 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 
 struct VarioLook;
-struct UnitsLook;
 class ContainerWindow;
 
 class GaugeVario : public AntiFlickerWindow
@@ -59,7 +58,6 @@ class GaugeVario : public AntiFlickerWindow
   const FullBlackboard &blackboard;
 
   const VarioLook &look;
-  const UnitsLook &units_look;
 
 private:
   const unsigned nlength0, nlength1, nwidth, nline;
@@ -90,7 +88,6 @@ private:
 public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, const VarioLook &look,
-             const UnitsLook &units_look,
              PixelRect rc, const WindowStyle style=WindowStyle());
 
 protected:

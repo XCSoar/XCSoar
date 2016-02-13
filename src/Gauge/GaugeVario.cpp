@@ -23,10 +23,9 @@ Copyright_License {
 
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
-#include "Look/UnitsLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
+#include "Renderer/UnitSymbolRenderer.hpp"
 #include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
 #include "Util/Clamp.hpp"
@@ -38,9 +37,8 @@ Copyright_License {
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
-                       const UnitsLook &_units_look,
                        PixelRect rc, const WindowStyle style)
-  :blackboard(_blackboard), look(_look), units_look(_units_look),
+  :blackboard(_blackboard), look(_look),
    nlength0(Layout::Scale(15)),
    nlength1(Layout::Scale(6)),
    nwidth(Layout::Scale(4)),
@@ -401,10 +399,18 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
 
   if (!IsPersistent() ||
       value_info->last_unit != Units::current.vertical_speed_unit) {
-    value_info->last_unit = Units::current.vertical_speed_unit;
-    const UnitSymbol *unit_symbol = units_look.GetSymbol(value_info->last_unit);
-    unit_symbol->Draw(canvas, x - Layout::Scale(5), value_info->rc.top,
-                      look.background_color, COLOR_GRAY);
+    auto unit = value_info->last_unit = Units::current.vertical_speed_unit;
+
+    const int ascent_height = look.value_font.GetAscentHeight();
+    const int unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.unit_font, unit);
+
+    canvas.Select(look.unit_font);
+    canvas.SetTextColor(COLOR_GRAY);
+    UnitSymbolRenderer::Draw(canvas,
+                             PixelPoint(x - Layout::Scale(5),
+                                        value_info->text_position.y + ascent_height - unit_height),
+                             unit, look.unit_fraction_pen);
   }
 }
 

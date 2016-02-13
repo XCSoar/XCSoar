@@ -294,7 +294,7 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
 
   if (!vario.IsDefined())
     vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
-                                 look->vario, look->units));
+                                 look->vario));
 
   vario.Move(layout.vario);
   vario.Show();

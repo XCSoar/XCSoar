@@ -27,6 +27,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Resources.hpp"
 
+#include <algorithm>
+
 void
 VarioLook::Initialise(bool _inverse, bool _colors,
                       const Font &_text_font)
@@ -63,5 +65,10 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 
   text_font = &_text_font;
 
-  value_font.Load(FontDescription(Layout::FontScale(10), false, false, true));
+  const unsigned value_font_height = Layout::FontScale(10);
+  value_font.Load(FontDescription(value_font_height, false, false, true));
+
+  unsigned unit_font_height = std::max(value_font_height * 2u / 5u, 7u);
+  unit_font.Load(FontDescription(unit_font_height));
+  unit_fraction_pen.Create(1, COLOR_GRAY);
 }

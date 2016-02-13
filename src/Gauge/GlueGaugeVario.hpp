@@ -28,7 +28,6 @@ Copyright_License {
 #include "Blackboard/BlackboardListener.hpp"
 
 struct VarioLook;
-struct UnitsLook;
 class LiveBlackboard;
 
 /**
@@ -39,12 +38,10 @@ class GlueGaugeVario final
   : public WindowWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const VarioLook &look;
-  const UnitsLook &units_look;
 
 public:
-  GlueGaugeVario(LiveBlackboard &_blackboard, const VarioLook &_look,
-                 const UnitsLook &_units_look)
-    :blackboard(_blackboard), look(_look), units_look(_units_look) {}
+  GlueGaugeVario(LiveBlackboard &_blackboard, const VarioLook &_look)
+    :blackboard(_blackboard), look(_look) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual void Unprepare() override;
