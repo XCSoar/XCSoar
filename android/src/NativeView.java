@@ -221,19 +221,19 @@ class NativeView extends SurfaceView
    * Deinitializes the OpenGL surface.
    */
   private void deinitSurface() {
-    if (surface != null) {
+    if (surface != EGL10.EGL_NO_SURFACE) {
       egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE,
                          EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
       egl.eglDestroySurface(display, surface);
       surface = EGL10.EGL_NO_SURFACE;
     }
 
-    if (context != null) {
+    if (context != EGL10.EGL_NO_CONTEXT) {
       egl.eglDestroyContext(display, context);
       context = EGL10.EGL_NO_CONTEXT;
     }
 
-    if (display != null) {
+    if (display != EGL10.EGL_NO_DISPLAY) {
       egl.eglTerminate(display);
       display = EGL10.EGL_NO_DISPLAY;
     }
