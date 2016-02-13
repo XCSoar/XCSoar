@@ -204,7 +204,7 @@ public:
   void Reset();
 
   gcc_pure
-  const PixelSize GetSize() const;
+  PixelSize GetSize() const;
 
 #ifdef ENABLE_OPENGL
   GLTexture *GetNative() const {
