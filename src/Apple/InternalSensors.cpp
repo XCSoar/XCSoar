@@ -25,7 +25,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Math/fixed.hpp"
 
 #include <TargetConditionals.h>
 
@@ -88,14 +87,14 @@ Copyright_License {
 
   basic.airspeed_available.Clear();
   if (location && (location.speed >= 0.0)) {
-    basic.ground_speed = fixed(location.speed);
+    basic.ground_speed = location.speed;
     basic.ground_speed_available.Update(basic.clock);
   } else {
     basic.ground_speed_available.Clear();
   }
 
   if (location && location.timestamp) {
-    basic.time = fixed([self getSecondsOfDay: location.timestamp]);
+    basic.time = [self getSecondsOfDay: location.timestamp];
     basic.time_available.Update(basic.clock);
     basic.date_time_utc = BrokenDateTime::FromUnixTimeUTC(
         [location.timestamp timeIntervalSince1970]);
@@ -104,7 +103,7 @@ Copyright_License {
   }
 
   if (location && (location.horizontalAccuracy >= 0.0)) {
-    basic.gps.hdop = fixed(location.horizontalAccuracy);
+    basic.gps.hdop = location.horizontalAccuracy;
     basic.gps.real = true;
     basic.location = GeoPoint(Angle::Degrees(location.coordinate.longitude),
                               Angle::Degrees(location.coordinate.latitude));
@@ -114,7 +113,7 @@ Copyright_License {
   }
 
   if (location && (location.verticalAccuracy >= 0.0)) {
-    basic.gps_altitude = fixed(location.altitude);
+    basic.gps_altitude = location.altitude;
     basic.gps_altitude_available.Update(basic.clock);
   } else {
     basic.gps_altitude_available.Clear();
