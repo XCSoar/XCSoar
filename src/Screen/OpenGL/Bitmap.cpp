@@ -57,7 +57,8 @@ Bitmap::Load(const UncompressedImage &uncompressed, Type type)
   assert(IsScreenInitialized());
   assert(uncompressed.IsVisible());
 
-  delete texture;
+  Reset();
+
   texture = type == Type::MONO
     ? ImportAlphaTexture(uncompressed)
     : ImportTexture(uncompressed);
