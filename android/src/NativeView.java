@@ -69,6 +69,7 @@ class NativeView extends SurfaceView
 
   EGL10 egl;
   EGLDisplay display = EGL10.EGL_NO_DISPLAY;
+  EGLConfig config;
   EGLContext context = EGL10.EGL_NO_CONTEXT;
   EGLSurface surface = EGL10.EGL_NO_SURFACE;
 
@@ -142,6 +143,7 @@ class NativeView extends SurfaceView
     /* initialize display */
 
     if (display == EGL10.EGL_NO_DISPLAY) {
+      config = null;
       egl = (EGL10)EGLContext.getEGL();
       display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
       if (display == EGL10.EGL_NO_DISPLAY)
@@ -161,8 +163,10 @@ class NativeView extends SurfaceView
 
     /* choose a configuration */
 
-    EGLConfig closestConfig = chooseEglConfig(egl, display);
-    Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, closestConfig));
+    if (config == null) {
+      config = chooseEglConfig(egl, display);
+      Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, config));
+    }
 
     /* initialize context and surface */
 
@@ -180,14 +184,14 @@ class NativeView extends SurfaceView
           EGL10.EGL_NONE
         };
 
-      context = egl.eglCreateContext(display, closestConfig,
+      context = egl.eglCreateContext(display, config,
                                      EGL10.EGL_NO_CONTEXT, contextAttribList);
       if (context == EGL10.EGL_NO_CONTEXT)
         throw new EGLException("eglCreateContext() failed: " +
                                egl.eglGetError());
     }
 
-    surface = egl.eglCreateWindowSurface(display, closestConfig,
+    surface = egl.eglCreateWindowSurface(display, config,
                                          holder, null);
     if (surface == EGL10.EGL_NO_SURFACE)
       throw new EGLException("eglCreateWindowSurface() failed: " +
