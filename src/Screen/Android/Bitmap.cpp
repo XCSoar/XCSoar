@@ -89,7 +89,7 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 
   AddSurfaceListener(*this);
 
-  if (surface_valid && !MakeTexture()) {
+  if (surface_valid && !MakeTexture(bmp, type)) {
     Reset();
     return false;
   }
@@ -98,12 +98,12 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 }
 
 bool
-Bitmap::MakeTexture()
+Bitmap::MakeTexture(jobject _bmp, Type _type)
 {
-  assert(bmp != nullptr);
+  assert(_bmp != nullptr);
 
   jint result[5];
-  if (!native_view->bitmapToTexture(bmp, type == Bitmap::Type::MONO, result))
+  if (!native_view->bitmapToTexture(_bmp, _type == Bitmap::Type::MONO, result))
     return false;
 
   texture = new GLTexture(result[0], result[1], result[2], result[3], result[4]);
@@ -164,7 +164,7 @@ Bitmap::SurfaceCreated()
 {
   assert(bmp != nullptr);
 
-  MakeTexture();
+  MakeTexture(bmp, type);
 }
 
 void

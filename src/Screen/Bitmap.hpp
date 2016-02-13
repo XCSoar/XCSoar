@@ -222,7 +222,7 @@ public:
 #ifdef ANDROID
 private:
   bool Set(JNIEnv *env, jobject _bmp, Type _type);
-  bool MakeTexture();
+  bool MakeTexture(jobject _bmp, Type _type);
 
   /* from GLSurfaceListener */
   virtual void SurfaceCreated() override;
