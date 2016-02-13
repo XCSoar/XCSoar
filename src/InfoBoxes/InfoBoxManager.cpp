@@ -144,7 +144,7 @@ InfoBoxManager::ProcessTimer()
 void
 InfoBoxManager::Create(ContainerWindow &parent,
                        const InfoBoxLayout::Layout &_layout,
-                       const InfoBoxLook &look, const UnitsLook &units_look)
+                       const InfoBoxLook &look)
 {
   const InfoBoxSettings &settings =
     CommonInterface::GetUISettings().info_boxes;
@@ -166,7 +166,7 @@ InfoBoxManager::Create(ContainerWindow &parent,
       : InfoBoxLayout::GetBorder(layout.geometry, layout.landscape, i);
 
     infoboxes[i] = new InfoBoxWindow(parent, rc,
-                                     Border, settings, look, units_look,
+                                     Border, settings, look,
                                      i, style);
   }
 

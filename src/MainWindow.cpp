@@ -222,7 +222,7 @@ MainWindow::InitialiseConfigured()
                              Fonts::map, Fonts::map_bold,
                              ib_layout.control_size.cx);
 
-  InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
+  InfoBoxManager::Create(*this, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
 
   ButtonLabel::CreateButtonLabels(*this, look->dialog.button);
@@ -339,7 +339,7 @@ MainWindow::ReinitialiseLayout()
 
   look->ReinitialiseLayout(ib_layout.control_size.cx);
 
-  InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
+  InfoBoxManager::Create(*this, ib_layout, look->info_box);
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 

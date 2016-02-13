@@ -84,11 +84,9 @@ InfoBoxLook::ReinitialiseLayout(unsigned width)
   AutoSizeFont(small_value_font_d, width, _T("12345m"));
   small_value_font.Load(small_value_font_d);
 
-  unsigned unit_font_height = value_font_d.GetHeight() * 2u / 5u;
-  if (unit_font_height >= 8)
-    unit_font.Load(FontDescription(unit_font_height));
-  else
-    unit_font.Destroy();
+  unsigned unit_font_height = std::max(value_font_d.GetHeight() * 2u / 5u, 7u);
+  unit_font.Load(FontDescription(unit_font_height));
+
 #ifdef HAVE_TEXT_CACHE
   TextCache::Flush();
 #endif

@@ -31,7 +31,6 @@ Copyright_License {
 
 struct InfoBoxSettings;
 struct InfoBoxLook;
-struct UnitsLook;
 class Color;
 
 class InfoBoxWindow : public PaintWindow
@@ -44,7 +43,6 @@ private:
 
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
-  const UnitsLook &units_look;
 
   const unsigned border_kind;
 
@@ -119,7 +117,6 @@ public:
    */
   InfoBoxWindow(ContainerWindow &parent, PixelRect rc, unsigned border_flags,
                 const InfoBoxSettings &settings, const InfoBoxLook &_look,
-                const UnitsLook &units_look,
                 unsigned id,
                 WindowStyle style=WindowStyle());
 

@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
 struct InfoBoxLook;
-struct UnitsLook;
 class ContainerWindow;
 
 namespace InfoBoxLayout {
@@ -40,7 +39,7 @@ namespace InfoBoxManager
   void SetDirty();
 
   void Create(ContainerWindow &parent, const InfoBoxLayout::Layout &layout,
-              const InfoBoxLook &look, const UnitsLook &units_look);
+              const InfoBoxLook &look);
   void Destroy();
   void Show();
   void Hide();

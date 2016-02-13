@@ -51,8 +51,7 @@ struct InfoBoxLook {
   Font value_font, small_value_font;
 
   /**
-   * The font for units.  Use unit symbol bitmaps if this font is not
-   * configured.
+   * The font for units.
    */
   Font unit_font;
 
