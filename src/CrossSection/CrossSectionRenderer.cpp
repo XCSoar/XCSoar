@@ -41,7 +41,7 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
   :look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
    terrain_renderer(look), terrain(NULL), airspace_database(NULL),
    start(GeoPoint::Invalid()),
-   vec(fixed(50000), Angle::Zero()) {}
+   vec(50000, Angle::Zero()) {}
 
 void
 CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
@@ -76,12 +76,12 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 
   const auto nav_altitude = gps_info.NavAltitudeAvailable()
     ? gps_info.nav_altitude
-    : fixed(0);
+    : 0.;
   auto hmin = fdim(nav_altitude, 3300);
-  auto hmax = std::max(fixed(3300), nav_altitude + fixed(1000));
+  auto hmax = std::max(3300., nav_altitude + 1000.);
 
   chart.ResetScale();
-  chart.ScaleXFromValue(fixed(0));
+  chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(vec.distance);
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
@@ -114,7 +114,7 @@ CrossSectionRenderer::UpdateTerrain(TerrainHeight *elevations) const
 
   RasterTerrain::Lease map(*terrain);
   for (unsigned i = 0; i < NUM_SLICES; ++i) {
-    const auto slice_distance_factor = fixed(i) / (NUM_SLICES - 1);
+    const auto slice_distance_factor = double(i) / (NUM_SLICES - 1);
     const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
     elevations[i] = map->GetHeight(slice_point);
@@ -130,13 +130,13 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
   const auto altitude = gps_info.nav_altitude;
 
   const MacCready mc(glide_settings, glide_polar);
-  const GlideState task(vec, fixed(0), altitude,
+  const GlideState task(vec, 0, altitude,
                         calculated_info.GetWindOrZero());
   const GlideResult result = mc.SolveStraight(task);
   if (!result.IsOk())
     return;
 
-  chart.DrawLine(fixed(0), altitude, result.vector.distance,
+  chart.DrawLine(0, altitude, result.vector.distance,
                  result.GetArrivalAltitude(),
                  ChartLook::STYLE_BLUETHIN);
 }
@@ -152,7 +152,7 @@ CrossSectionRenderer::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
   canvas.SelectNullPen();
 
   BulkPixelPoint line[4];
-  line[0] = chart.ToScreen(fixed(0), gps_info.nav_altitude);
+  line[0] = chart.ToScreen(0, gps_info.nav_altitude);
   line[1].x = rc.left;
   line[1].y = line[0].y;
   line[2].x = line[1].x;
@@ -167,10 +167,10 @@ CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 {
   canvas.SetTextColor(look.text_color);
 
-  chart.DrawXGrid(Units::ToSysDistance(fixed(5)),
-                  look.grid_pen, fixed(5), true);
-  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                  look.grid_pen, fixed(1000), true);
+  chart.DrawXGrid(Units::ToSysDistance(5),
+                  look.grid_pen, 5, true);
+  chart.DrawYGrid(Units::ToSysAltitude(1000),
+                  look.grid_pen, 1000, true);
 
   chart.DrawXLabel(_T("D"), Units::GetDistanceName());
   chart.DrawYLabel(_T("h"), Units::GetAltitudeName());

@@ -112,7 +112,7 @@ public:
    * Set CrossSection range
    * @param range Range to draw [m]
    */
-  void SetRange(fixed range) {
+  void SetRange(double range) {
     vec.distance = range;
   }
 

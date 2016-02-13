@@ -39,11 +39,11 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
   canvas.SelectNullPen();
 
   TerrainType last_type = TerrainType::UNKNOWN;
-  fixed last_distance = fixed(0);
+  double last_distance = 0;
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
     const auto distance_factor =
-        fixed(j) / (CrossSectionRenderer::NUM_SLICES - 1);
+        double(j) / (CrossSectionRenderer::NUM_SLICES - 1);
     const auto distance = distance_factor * max_distance;
 
     const TerrainHeight e = elevations[j];
@@ -54,8 +54,8 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
         type != last_type &&
         last_type != TerrainType::UNKNOWN) {
       const auto center_distance = (distance + last_distance) / 2;
-      points.append() = chart.ToScreen(center_distance, fixed(0));
-      points.append() = chart.ToScreen(center_distance, fixed(-500));
+      points.append() = chart.ToScreen(center_distance, 0);
+      points.append() = chart.ToScreen(center_distance, -500);
 
       DrawPolygon(canvas, last_type, points.begin(), points.size());
     }
@@ -65,26 +65,26 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 
       if (j == 0) {
         // Start first polygon
-        points.append() = chart.ToScreen(distance, fixed(-500));
-        points.append() = chart.ToScreen(distance, fixed(h));
+        points.append() = chart.ToScreen(distance, -500);
+        points.append() = chart.ToScreen(distance, h);
       } else if (type != last_type) {
         // Start new polygon
         points.clear();
 
         const auto center_distance = (distance + last_distance) / 2;
-        points.append() = chart.ToScreen(center_distance, fixed(-500));
-        points.append() = chart.ToScreen(center_distance, fixed(0));
+        points.append() = chart.ToScreen(center_distance, -500);
+        points.append() = chart.ToScreen(center_distance, 0);
       }
 
       if (j + 1 == CrossSectionRenderer::NUM_SLICES) {
         // Close and paint last polygon
-        points.append() = chart.ToScreen(distance, fixed(h));
-        points.append() = chart.ToScreen(distance, fixed(-500));
+        points.append() = chart.ToScreen(distance, h);
+        points.append() = chart.ToScreen(distance, -500);
 
         DrawPolygon(canvas, type, points.begin(), points.size());
       } else if (type == last_type && j != 0) {
         // Add single point to polygon
-        points.append() = chart.ToScreen(distance, fixed(h));
+        points.append() = chart.ToScreen(distance, h);
       }
     }
 

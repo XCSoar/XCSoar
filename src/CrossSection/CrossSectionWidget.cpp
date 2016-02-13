@@ -44,8 +44,8 @@ CrossSectionWidget::Update(const MoreData &basic,
   if (basic.location_available && basic.track_available) {
     w.SetStart(basic.location);
     w.SetDirection(basic.track);
-    w.SetRange(Clamp(fixed(w.GetWidth()) / settings.cruise_scale,
-               fixed(5000), fixed(200000)));
+    w.SetRange(Clamp(double(w.GetWidth()) / settings.cruise_scale,
+                     5000., 200000.));
   } else
     w.SetInvalid();
 
