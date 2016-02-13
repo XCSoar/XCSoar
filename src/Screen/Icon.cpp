@@ -144,8 +144,7 @@ MaskedIcon::Draw(Canvas &canvas, int x, int y) const
 void
 MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
 {
-  const int offsetx = (rc.GetWidth() - size.cx) / 2;
-  const int offsety = (rc.GetHeight() - size.cy) / 2;
+  const PixelPoint position = rc.CenteredTopLeft(size);
 
 #ifdef ENABLE_OPENGL
 #ifdef USE_GLSL
@@ -177,15 +176,15 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+  texture.Draw(position.x, position.y, size.cx, size.cy,
                0, 0, texture.GetWidth(), texture.GetHeight());
 #else
   if (inverse) // black background
-    canvas.CopyNotOr(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+    canvas.CopyNotOr(position.x, position.y, size.cx, size.cy,
                      bitmap, size.cx, 0);
 
   else
-    canvas.CopyAnd(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+    canvas.CopyAnd(position.x, position.y, size.cx, size.cy,
                    bitmap, size.cx, 0);
 #endif
 

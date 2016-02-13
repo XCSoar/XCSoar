@@ -166,6 +166,15 @@ struct PixelRect {
       top <= other.bottom && other.top <= bottom;
   }
 
+  /**
+   * Calculate the top-left point of a rectangle centered inside this
+   * one.
+   */
+  constexpr PixelPoint CenteredTopLeft(PixelSize size) const {
+    return PixelPoint((left + right - size.cx) / 2,
+                      (top + bottom - size.cy) / 2);
+  }
+
 #ifdef USE_WINUSER
   constexpr PixelRect(RECT src)
     :left(src.left), top(src.top), right(src.right), bottom(src.bottom) {}
