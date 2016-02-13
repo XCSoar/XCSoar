@@ -32,7 +32,7 @@ bool
 Bitmap::Load(UncompressedImage &&uncompressed, gcc_unused Type type)
 {
   assert(IsScreenInitialized());
-  assert(uncompressed.IsVisible());
+  assert(uncompressed.IsDefined());
 
   Reset();
 

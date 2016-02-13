@@ -55,7 +55,7 @@ bool
 Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
 {
   assert(IsScreenInitialized());
-  assert(uncompressed.IsVisible());
+  assert(uncompressed.IsDefined());
 
   texture = type == Type::MONO
     ? ImportAlphaTexture(uncompressed)
@@ -73,7 +73,7 @@ bool
 Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
 {
   assert(IsScreenInitialized());
-  assert(_uncompressed.IsVisible());
+  assert(_uncompressed.IsDefined());
 
   Reset();
 

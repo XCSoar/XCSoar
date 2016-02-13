@@ -131,7 +131,7 @@ public:
 public:
   bool IsDefined() const {
 #ifdef ANDROID
-    return bmp != nullptr || uncompressed.IsVisible();
+    return bmp != nullptr || uncompressed.IsDefined();
 #elif defined(ENABLE_OPENGL)
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)

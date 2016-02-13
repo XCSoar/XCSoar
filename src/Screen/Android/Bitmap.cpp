@@ -154,7 +154,7 @@ Bitmap::Reset()
     bmp = nullptr;
 
     RemoveSurfaceListener(*this);
-  } else if (uncompressed.IsVisible()) {
+  } else if (uncompressed.IsDefined()) {
     uncompressed = UncompressedImage::Invalid();
     RemoveSurfaceListener(*this);
   }
@@ -166,18 +166,18 @@ Bitmap::Reset()
 void
 Bitmap::SurfaceCreated()
 {
-  assert(bmp != nullptr || uncompressed.IsVisible());
+  assert(bmp != nullptr || uncompressed.IsDefined());
 
   if (bmp != nullptr)
     MakeTexture(bmp, type);
-  else if (uncompressed.IsVisible())
+  else if (uncompressed.IsDefined())
     MakeTexture(uncompressed, type);
 }
 
 void
 Bitmap::SurfaceDestroyed()
 {
-  assert(bmp != nullptr || uncompressed.IsVisible());
+  assert(bmp != nullptr || uncompressed.IsDefined());
 
   delete texture;
   texture = nullptr;

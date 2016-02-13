@@ -81,7 +81,7 @@ public:
     return UncompressedImage(Format::INVALID, 0, 0, 0, nullptr);
   }
 
-  bool IsVisible() const {
+  bool IsDefined() const {
     return format != Format::INVALID;
   }
 
