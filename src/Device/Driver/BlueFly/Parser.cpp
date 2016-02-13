@@ -37,11 +37,11 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
   do {
     // piecewise linear approximation
     if (mV > 3900) {
-      info.battery_level = 70 + (mV - 3900) / 10;
+      info.battery_level = 70 + (mV - 3900) / 10.;
       break;
     }
     if (mV > 3700) {
-      info.battery_level = 4 + (mV - 3700) / 3;
+      info.battery_level = 4 + (mV - 3700) / 3.;
       break;
     }
     if (mV > 3600) {

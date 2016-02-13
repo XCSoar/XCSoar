@@ -318,7 +318,7 @@ TestBlueFly()
   ok1(equals(nmea_info.battery_level, 50.0));
   ok1(device->ParseNMEA("BAT ED8", nmea_info)); //3.80V
   ok1(nmea_info.battery_level_available);
-  ok1(equals(nmea_info.battery_level, 37.0));
+  ok1(equals(nmea_info.battery_level, 37.3333));
 
   delete device;
 }
