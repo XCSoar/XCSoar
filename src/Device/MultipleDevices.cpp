@@ -60,21 +60,21 @@ MultipleDevices::AutoReopen(OperationEnvironment &env)
 }
 
 void
-MultipleDevices::PutMacCready(fixed mac_cready, OperationEnvironment &env)
+MultipleDevices::PutMacCready(double mac_cready, OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
     i->PutMacCready(mac_cready, env);
 }
 
 void
-MultipleDevices::PutBugs(fixed bugs, OperationEnvironment &env)
+MultipleDevices::PutBugs(double bugs, OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
     i->PutBugs(bugs, env);
 }
 
 void
-MultipleDevices::PutBallast(fixed fraction, fixed overload,
+MultipleDevices::PutBallast(double fraction, double overload,
                             OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)

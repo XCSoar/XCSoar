@@ -38,7 +38,7 @@ BlueFlyDevice::BlueFlySettings::Parse(const char *name, unsigned long value)
   assert(value <= UINT_MAX);
 
   if (StringIsEqual(name, VOLUME_NAME))
-    volume = (fixed)value / VOLUME_MULTIPLIER;
+    volume = double(value) / VOLUME_MULTIPLIER;
   else if (StringIsEqual(name, OUTPUT_MODE_NAME))
     output_mode = value;
 }

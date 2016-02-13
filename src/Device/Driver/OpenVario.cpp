@@ -69,7 +69,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
     if (type == '\0')
       break;
 
-    fixed value;
+    double value;
     if (!line.ReadChecked(value))
       break;
 

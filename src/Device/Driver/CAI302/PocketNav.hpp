@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_POCKET_NAV_HPP
 #define XCSOAR_CAI302_POCKET_NAV_HPP
 
-#include "Math/fixed.hpp"
-
 class Port;
 class OperationEnvironment;
 
 namespace CAI302 {
-  bool PutMacCready(Port &port, fixed mc, OperationEnvironment &env);
-  bool PutBugs(Port &port, fixed bugs, OperationEnvironment &env);
-  bool PutBallast(Port &port, fixed fraction, OperationEnvironment &env);
+  bool PutMacCready(Port &port, double mc, OperationEnvironment &env);
+  bool PutBugs(Port &port, double bugs, OperationEnvironment &env);
+  bool PutBallast(Port &port, double fraction, OperationEnvironment &env);
 }
 
 #endif

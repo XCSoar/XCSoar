@@ -38,7 +38,7 @@ public:
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed bearing, norm;
+  double bearing, norm;
 
   bool bearing_valid = line.ReadChecked(bearing);
   bool norm_valid = line.ReadChecked(norm);
@@ -74,10 +74,10 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip();
 
-  fixed airspeed;
+  double airspeed;
   bool tas_available = line.ReadChecked(airspeed);
 
-  fixed value;
+  double value;
   if (line.ReadChecked(value))
     info.ProvideBaroAltitudeTrue(value);
 

@@ -45,8 +45,8 @@ public:
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  bool PutMacCready(fixed mac_cready, OperationEnvironment &env) override;
-  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
+  bool PutMacCready(double mac_cready, OperationEnvironment &env) override;
+  bool PutBugs(double bugs, OperationEnvironment &env) override;
 };
 
 /**
@@ -60,44 +60,44 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
   line.Skip(); /* device */
 
   if (line.ReadChecked(i) && i >= -999 && i <= 999)
-    info.ProvideTotalEnergyVario(fixed(i) / 10);
+    info.ProvideTotalEnergyVario(i / 10.);
 
   line.Skip(); /* average vario */
 
   if (line.ReadChecked(i) && i >= -999 && i <= 999)
-    info.ProvideNettoVario(fixed(i) / 10);
+    info.ProvideNettoVario(i / 10.);
 
   line.Skip(); /* average netto vario */
   line.Skip(); /* speed to fly */
 
   unsigned altitude;
   if (line.ReadChecked(altitude) && altitude <= 99999)
-    info.ProvidePressureAltitude(fixed(altitude));
+    info.ProvidePressureAltitude(altitude);
 
   if (line.ReadChecked(altitude) && altitude <= 99999)
-    info.ProvideBaroAltitudeTrue(fixed(altitude));
+    info.ProvideBaroAltitudeTrue(altitude);
 
   unsigned ias, tas;
   bool have_ias = line.ReadChecked(ias) && ias <= 9999;
   bool have_tas = line.ReadChecked(tas) && tas <= 9999;
   if (have_ias && have_tas)
-    info.ProvideBothAirspeeds(Units::ToSysUnit(fixed(ias) / 10,
+    info.ProvideBothAirspeeds(Units::ToSysUnit(ias / 10.,
                                                Unit::KILOMETER_PER_HOUR),
-                              Units::ToSysUnit(fixed(tas) / 10,
+                              Units::ToSysUnit(tas / 10.,
                                                Unit::KILOMETER_PER_HOUR));
 
   else if (!have_ias && have_tas)
-    info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(tas) / 10,
+    info.ProvideTrueAirspeed(Units::ToSysUnit(tas / 10.,
                                               Unit::KILOMETER_PER_HOUR));
 
   unsigned voltage;
   if (line.ReadChecked(voltage) && voltage <= 999) {
-    info.voltage = fixed(voltage) / 10;
+    info.voltage = voltage / 10.;
     info.voltage_available.Update(info.clock);
   }
 
   if (line.ReadChecked(i) && i >= -999 && i <= 999) {
-    info.temperature = CelsiusToKelvin(fixed(i) / 10);
+    info.temperature = CelsiusToKelvin(i / 10.);
     info.temperature_available = true;
   }
 
@@ -114,7 +114,7 @@ PWES1(NMEAInputLine &line, NMEAInfo &info)
 
   int i;
   if (line.ReadChecked(i))
-    info.settings.ProvideMacCready(fixed(i) / 10, info.clock);
+    info.settings.ProvideMacCready(i / 10., info.clock);
 
   info.switch_state.flight_mode = SwitchState::FlightMode::UNKNOWN;
   if (line.ReadChecked(i)) {
@@ -127,10 +127,10 @@ PWES1(NMEAInputLine &line, NMEAInfo &info)
   line.Skip(3);
 
   if (line.ReadChecked(i))
-    info.settings.ProvideWingLoading(fixed(i) / 10, info.clock);
+    info.settings.ProvideWingLoading(i / 10., info.clock);
 
   if (line.ReadChecked(i))
-    info.settings.ProvideBugs(fixed(100 - i) / 100, info.clock);
+    info.settings.ProvideBugs((100 - i) / 100., info.clock);
 
   return true;
 }
@@ -155,7 +155,7 @@ WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 bool
-WesterboerDevice::PutMacCready(fixed _mac_cready, OperationEnvironment &env)
+WesterboerDevice::PutMacCready(double _mac_cready, OperationEnvironment &env)
 {
   /* 0 .. 60 -> 0.0 .. 6.0 m/s */
   unsigned mac_cready = std::min(uround(_mac_cready * 10), 60u);
@@ -170,7 +170,7 @@ WesterboerDevice::PutMacCready(fixed _mac_cready, OperationEnvironment &env)
 }
 
 bool
-WesterboerDevice::PutBugs(fixed _bugs, OperationEnvironment &env)
+WesterboerDevice::PutBugs(double _bugs, OperationEnvironment &env)
 {
   // Dirtyness from 0 until 20 %
   unsigned bugs = 100 - (unsigned)(_bugs * 100);

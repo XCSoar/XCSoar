@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_HPP
 #define XCSOAR_DEVICE_DRIVER_HPP
 
-#include "Math/fixed.hpp"
-
 #include <stddef.h>
 #include <tchar.h>
 
@@ -82,7 +80,7 @@ public:
    * @param mac_cready the new MacCready value [m/s]
    * @return true on success
    */
-  virtual bool PutMacCready(fixed mac_cready, OperationEnvironment &env) = 0;
+  virtual bool PutMacCready(double mac_cready, OperationEnvironment &env) = 0;
 
   /**
    * Send the new "bugs" value to the device (degradation of the
@@ -91,7 +89,7 @@ public:
    * @param bugs the new bugs value (XXX define this)
    * @return true on success
    */
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) = 0;
+  virtual bool PutBugs(double bugs, OperationEnvironment &env) = 0;
 
   /**
    * Send the new ballast value to the device.
@@ -100,7 +98,7 @@ public:
    * @param overload an alternative description of ballast value
    * @return true on success
    */
-  virtual bool PutBallast(fixed fraction, fixed overload,
+  virtual bool PutBallast(double fraction, double overload,
                           OperationEnvironment &env) = 0;
 
   /**
@@ -239,9 +237,9 @@ public:
 
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  bool PutMacCready(fixed MacCready, OperationEnvironment &env) override;
-  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
-  bool PutBallast(fixed fraction, fixed overload,
+  bool PutMacCready(double MacCready, OperationEnvironment &env) override;
+  bool PutBugs(double bugs, OperationEnvironment &env) override;
+  bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;

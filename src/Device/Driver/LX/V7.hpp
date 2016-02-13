@@ -76,10 +76,10 @@ namespace V7 {
    * @param mc in m/s
    */
   static inline bool
-  SetMacCready(Port &port, OperationEnvironment &env, fixed mc)
+  SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
     char buffer[32];
-    sprintf(buffer, "PLXV0,MC,W,%.1f", (double)mc);
+    sprintf(buffer, "PLXV0,MC,W,%.1f", mc);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -88,10 +88,10 @@ namespace V7 {
    * @param overload 1.0 - 1.4 (100 - 140%)
    */
   static inline bool
-  SetBallast(Port &port, OperationEnvironment &env, fixed overload)
+  SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
     char buffer[100];
-    sprintf(buffer, "PLXV0,BAL,W,%.2f", (double)overload);
+    sprintf(buffer, "PLXV0,BAL,W,%.2f", overload);
     return PortWriteNMEA(port, buffer, env);
   }
 

@@ -48,7 +48,7 @@ vl_PGCS1(NMEAInputLine &line, NMEAInfo &info)
          at QNH ~2000 hPa */
       altitude -= 65535;
 
-    info.ProvidePressureAltitude(fixed(altitude));
+    info.ProvidePressureAltitude(altitude);
   }
 
   // ExtractParameter(String,ctemp,3);

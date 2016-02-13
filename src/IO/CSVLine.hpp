@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_CSV_LINE_HPP
 
 #include "Util/Range.hpp"
-#include "Math/fixed.hpp"
 
 #include <stddef.h>
 
@@ -101,9 +100,9 @@ public:
   bool ReadHexChecked(unsigned &value_r);
 
   /**
-   * Read a #fixed only if the unit string which follows matches.
+   * Read a #double only if the unit string which follows matches.
    */
-  bool ReadCheckedCompare(fixed &value_r, const char *string);
+  bool ReadCheckedCompare(double &value_r, const char *string);
 };
 
 #endif

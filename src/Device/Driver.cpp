@@ -45,19 +45,19 @@ AbstractDevice::ParseNMEA(const char *line, struct NMEAInfo &info)
 }
 
 bool
-AbstractDevice::PutMacCready(fixed MacCready, OperationEnvironment &env)
+AbstractDevice::PutMacCready(double MacCready, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBugs(fixed bugs, OperationEnvironment &env)
+AbstractDevice::PutBugs(double bugs, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBallast(fixed fraction, fixed overload,
+AbstractDevice::PutBallast(double fraction, double overload,
                            OperationEnvironment &env)
 {
   return true;

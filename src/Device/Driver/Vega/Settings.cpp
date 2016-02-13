@@ -66,7 +66,7 @@ VegaDevice::GetSetting(const char *name) const
 }
 
 bool
-VegaDevice::PutMacCready(fixed _mc, OperationEnvironment &env)
+VegaDevice::PutMacCready(double _mc, OperationEnvironment &env)
 {
   volatile_data.mc = uround(_mc * 10);
   return volatile_data.SendTo(port, env);

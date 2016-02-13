@@ -42,13 +42,13 @@ NMEAParser::Reset()
 {
   real = true;
   use_geoid = true;
-  last_time = fixed(0);
+  last_time = 0;
 }
 
 bool
 NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 {
-  assert(positive(info.clock));
+  assert(info.clock > 0);
 
   if (string[0] != '$')
     return false;
@@ -132,11 +132,11 @@ NAVWarn(char c)
 static bool
 ReadBearing(NMEAInputLine &line, Angle &value_r)
 {
-  fixed value;
+  double value;
   if (!line.ReadChecked(value))
     return false;
 
-  if (negative(value) || value > fixed(360))
+  if (value < 0 || value > 360)
     return false;
 
   value_r = Angle::Degrees(value).AsBearing();
@@ -166,12 +166,12 @@ ReadGeoAngle(NMEAInputLine &line, Angle &a)
   if (y < 0 || y > 180 || endptr == buffer || *endptr != 0)
     return false;
 
-  a = Angle::Degrees(fixed(y) + fixed(x) / 60);
+  a = Angle::Degrees(y + x / 60.);
   return true;
 }
 
 static bool
-ReadFixedAndChar(NMEAInputLine &line, fixed &d, char &ch)
+ReadDoubleAndChar(NMEAInputLine &line, double &d, char &ch)
 {
   bool success = line.ReadChecked(d);
   ch = line.ReadFirstChar();
@@ -230,11 +230,11 @@ NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
  * Reads an altitude value, and the unit from a second volumn.
  */
 static bool
-ReadAltitude(NMEAInputLine &line, fixed &value_r)
+ReadAltitude(NMEAInputLine &line, double &value_r)
 {
-  fixed value;
+  double value;
   char format;
-  if (!ReadFixedAndChar(line, value, format))
+  if (!ReadDoubleAndChar(line, value, format))
     return false;
 
   if (format == 'f' || format == 'F')
@@ -245,31 +245,31 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(double this_time, NMEAInfo &info)
 {
   return TimeHasAdvanced(this_time, last_time, info);
 }
 
 gcc_const
 static bool
-IsMidnightWraparound(fixed this_time, fixed last_time)
+IsMidnightWraparound(double this_time, double last_time)
 {
   constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
   constexpr unsigned SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
 
-  return this_time < fixed(SECONDS_PER_HOUR) &&
-                     last_time >= fixed(SECONDS_PER_DAY - SECONDS_PER_HOUR);
+  return this_time < SECONDS_PER_HOUR &&
+    last_time >= SECONDS_PER_DAY - SECONDS_PER_HOUR;
 }
 
 gcc_const
 static bool
-TimeHasAdvanced(fixed this_time, fixed last_time)
+TimeHasAdvanced(double this_time, double last_time)
 {
   return this_time >= last_time || IsMidnightWraparound(this_time, last_time);
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(double this_time, double &last_time, NMEAInfo &info)
 {
   if (!::TimeHasAdvanced(this_time, last_time)) {
     last_time = this_time;
@@ -337,7 +337,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed this_time;
+  double this_time;
   if (!ReadTime(line, info.date_time_utc, this_time))
     return true;
 
@@ -388,9 +388,9 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 
 bool
 NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
-                     fixed &time_of_day_s)
+                     double &time_of_day_s)
 {
-  fixed value;
+  double value;
   if (!line.ReadChecked(value))
     return false;
 
@@ -400,15 +400,15 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
 
   // Calculate Minute
   auto mins = value / 100;
-  mins = mins - fixed(broken_time.hour) * 100;
+  mins = mins - broken_time.hour * 100.;
   broken_time.minute = (int)mins;
 
   // Calculate Second
-  auto secs = value - fixed(broken_time.hour * 10000 +
-                            broken_time.minute * 100);
+  auto secs = value - (broken_time.hour * 10000. +
+                       broken_time.minute * 100.);
   broken_time.second = (int)secs;
 
-  time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
+  time_of_day_s = secs + (broken_time.minute * 60. + broken_time.hour * 3600.);
   return true;
 }
 
@@ -419,7 +419,7 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
 static bool
 ReadVariation(NMEAInputLine &line, Angle &value_r)
 {
-  fixed value;
+  double value;
   if (!line.ReadChecked(value))
     return false;
   char ch = line.ReadOneChar();
@@ -454,7 +454,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
    * 13) Checksum
    */
 
-  fixed this_time;
+  double this_time;
   if (!ReadTime(line, info.date_time_utc, this_time))
     return true;
 
@@ -463,7 +463,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed speed;
+  double speed;
   bool ground_speed_available = line.ReadChecked(speed);
 
   Angle track;
@@ -578,7 +578,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
 
   GPSState &gps = info.gps;
 
-  fixed this_time;
+  double this_time;
   if (!ReadTime(line, info.date_time_utc, this_time))
     return true;
 
@@ -616,7 +616,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   info.gps.nonexpiring_internal_gps = false;
 #endif
 
-  gps.hdop = line.Read(fixed(0));
+  gps.hdop = line.Read(0.);
 
   bool altitude_available = ReadAltitude(line, info.gps_altitude);
   if (altitude_available)
@@ -624,7 +624,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   else
     info.gps_altitude_available.Clear();
 
-  fixed geoid_separation;
+  double geoid_separation;
   if (ReadAltitude(line, geoid_separation)) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
@@ -660,7 +660,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
 {
   //JMW?  RMZAltitude = info.pressure.PressureAltitudeToQNHAltitude(RMZAltitude);
 
-  fixed value;
+  double value;
   if (ReadAltitude(line, value)) {
     // JMW no in-built baro sources, so use this generic one
     if (info.flarm.IsDetected()) {
@@ -710,10 +710,10 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
    */
 
   // Parse current vario data
-  fixed vario;
+  double vario;
   if (line.ReadChecked(vario)) {
     // Properly convert to m/s
-    vario = Units::ToSysUnit((vario - fixed(200)) / 10, Unit::KNOTS);
+    vario = Units::ToSysUnit((vario - 200) / 10., Unit::KNOTS);
     info.ProvideTotalEnergyVario(vario);
   }
 
@@ -721,15 +721,15 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
   line.Skip();
 
   // Parse barometric altitude
-  fixed baro_altitude;
+  double baro_altitude;
   if (line.ReadChecked(baro_altitude)) {
     // Properly convert to meter
-    baro_altitude = Units::ToSysUnit(baro_altitude - fixed(2000), Unit::FEET);
+    baro_altitude = Units::ToSysUnit(baro_altitude - 2000, Unit::FEET);
     info.ProvidePressureAltitude(baro_altitude);
   }
 
   // Parse true airspeed
-  fixed vtas;
+  double vtas;
   if (line.ReadChecked(vtas))
     info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KNOTS));
 

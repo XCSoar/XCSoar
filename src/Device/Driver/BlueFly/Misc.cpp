@@ -35,7 +35,7 @@ BlueFlyDevice::BlueFlyDevice(Port &_port)
      settings({0}),
      settings_keys(nullptr)
 {
-  kalman_filter.SetAccelerationVariance(fixed(0.3));
+  kalman_filter.SetAccelerationVariance(0.3);
 }
 
 BlueFlyDevice::~BlueFlyDevice()

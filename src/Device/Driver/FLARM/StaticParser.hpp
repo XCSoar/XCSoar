@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_STATIC_PARSER_HPP
 #define XCSOAR_FLARM_STATIC_PARSER_HPP
 
-#include "Math/fixed.hpp"
-
 class NMEAInputLine;
 struct FlarmError;
 struct FlarmVersion;
@@ -36,13 +34,13 @@ struct TrafficList;
  * Parses a PFLAE sentence (self-test results).
  */
 void
-ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock);
+ParsePFLAE(NMEAInputLine &line, FlarmError &error, double clock);
 
 /**
  * Parses a PFLAV sentence (version information).
  */
 void
-ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock);
+ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, double clock);
 
 /**
  * Parses a PFLAU sentence
@@ -52,7 +50,7 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock);
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 void
-ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock);
+ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, double clock);
 
 /**
  * Parses a PFLAA sentence
@@ -62,6 +60,6 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock);
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock);
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, double clock);
 
 #endif

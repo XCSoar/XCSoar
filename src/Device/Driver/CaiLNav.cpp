@@ -140,7 +140,7 @@ FormatGPRMB(char *buffer, size_t buffer_size, const GeoPoint& here,
     return false;
 
   const GeoVector vector(here, destination);
-  const bool has_arrived = vector.distance < fixed(1000); // < 1km ?
+  const bool has_arrived = vector.distance < 1000; // < 1km ?
 
   snprintf(buffer, buffer_size, "GPRMB,%c,,,,,,,,,%06.1f,%04.1f,%c",
            here.IsValid() ? 'A' : 'V',

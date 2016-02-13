@@ -64,9 +64,9 @@ public:
   virtual bool EnableNMEA(OperationEnvironment &env) override;
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) override;
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) override;
-  virtual bool PutBallast(fixed fraction, fixed overload,
+  virtual bool PutMacCready(double mc, OperationEnvironment &env) override;
+  virtual bool PutBugs(double bugs, OperationEnvironment &env) override;
+  virtual bool PutBallast(double fraction, double overload,
                           OperationEnvironment &env) override;
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,

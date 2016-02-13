@@ -65,7 +65,7 @@ EyeDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 bool
 EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // Static pressure from aircraft pneumatic system [hPa] (i.e. 1015.5)
   if (line.ReadChecked(value))
@@ -119,7 +119,7 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 bool
 EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // Roll respect to Earth system - Phi [°] (i.e. +110)
   if (line.ReadChecked(value)) {
@@ -161,7 +161,7 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 bool
 EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed bearing, norm;
+  double bearing, norm;
 
   bool bearing_valid = line.ReadChecked(bearing);
   bool norm_valid = line.ReadChecked(norm);
@@ -177,7 +177,7 @@ EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 bool
 EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
 {
-  fixed x, y, z;
+  double x, y, z;
 
   bool x_valid = line.ReadChecked(x);
   bool y_valid = line.ReadChecked(y);

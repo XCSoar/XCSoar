@@ -85,12 +85,12 @@ namespace LX1600 {
    * @param mc in m/s
    */
   static inline bool
-  SetMacCready(Port &port, OperationEnvironment &env, fixed mc)
+  SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
-    assert(mc >= fixed(0.0) && mc <= fixed(5.0));
+    assert(mc >= 0.0 && mc <= 5.0);
 
     char buffer[32];
-    sprintf(buffer, "PFLX2,%1.1f,,,,,,", (double)mc);
+    sprintf(buffer, "PFLX2,%1.1f,,,,,,", mc);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -99,15 +99,15 @@ namespace LX1600 {
    * @param overload 1.0 - 1.5 (100 - 140%)
    */
   static inline bool
-  SetBallast(Port &port, OperationEnvironment &env, fixed overload)
+  SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
-    assert(overload >= fixed(1.0) && overload <= fixed(1.5));
+    assert(overload >= 1.0 && overload <= 1.5);
 
     // This is a copy of the routine done in LK8000 for LX MiniMap, realized
     // by Lx developers.
 
     char buffer[100];
-    sprintf(buffer, "PFLX2,,%.2f,,,,", (double)overload);
+    sprintf(buffer, "PFLX2,,%.2f,,,,", overload);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -133,10 +133,11 @@ namespace LX1600 {
    * @param altitude_offset offset necessary to set QNE in ft (default=0)
    */
   static inline bool
-  SetAltitudeOffset(Port &port, OperationEnvironment &env, fixed altitude_offset)
+  SetAltitudeOffset(Port &port, OperationEnvironment &env,
+                    double altitude_offset)
   {
     char buffer[100];
-    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset);
+    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -162,10 +163,10 @@ namespace LX1600 {
    * (i.e. for v=(km/h*100) and w=(m/s))
    */
   static inline bool
-  SetPolar(Port &port, OperationEnvironment &env, fixed a, fixed b, fixed c)
+  SetPolar(Port &port, OperationEnvironment &env, double a, double b, double c)
   {
     char buffer[100];
-    sprintf(buffer, "PFLX2,,,,%.2f,%.2f,%.2f,", (double)a, (double)b, (double)c);
+    sprintf(buffer, "PFLX2,,,,%.2f,%.2f,%.2f,", a, b, c);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -178,7 +179,7 @@ namespace LX1600 {
   {
     // Convert from m/s to (km/h)/100
     auto polar_a = polar.a * 10000 / Square(3.6);
-    auto polar_b = polar.b * 100 / fixed(3.6);
+    auto polar_b = polar.b * 100 / 3.6;
     auto polar_c = polar.c;
 
     return SetPolar(port, env, polar_a, polar_b, polar_c);
@@ -212,14 +213,14 @@ namespace LX1600 {
    */
   static inline bool
   SetFilters(Port &port, OperationEnvironment &env,
-             fixed vario_filter, fixed te_filter, unsigned te_level)
+             double vario_filter, double te_filter, unsigned te_level)
   {
-    assert(te_filter >= fixed(0.1) && te_filter <= fixed(2.0));
+    assert(te_filter >= 0.1 && te_filter <= 2.0);
     assert((te_level >= 50 && te_level <= 150) || te_level == 0);
 
     char buffer[100];
     sprintf(buffer, "PFLX3,,,%.1f,%.1f,%u",
-            (double)vario_filter, (double)te_filter, te_level);
+            vario_filter, te_filter, te_level);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -235,23 +236,23 @@ namespace LX1600 {
    */
   static inline bool
   SetSCSettings(Port &port, OperationEnvironment &env,
-                SCMode mode, fixed deadband, SCControlMode control_mode,
-                fixed threshold_speed = fixed(0))
+                SCMode mode, double deadband, SCControlMode control_mode,
+                double threshold_speed = 0)
   {
     assert((unsigned)mode <= (unsigned)SCMode::AUTO_IAS);
-    assert(deadband >= fixed(0) && deadband <= fixed(10));
+    assert(deadband >= 0 && deadband <= 10);
     assert((unsigned)control_mode <= (unsigned)SCControlMode::TASTER);
     assert(mode != SCMode::AUTO_IAS ||
-           (threshold_speed >= fixed(50) && threshold_speed <= fixed(150)));
+           (threshold_speed >= 50 && threshold_speed <= 150));
 
     char buffer[100];
     if (mode == SCMode::AUTO_IAS)
       sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u,%.0f",
-              (unsigned)mode, (double)deadband, (unsigned)control_mode,
-              (double)threshold_speed);
+              (unsigned)mode, deadband, (unsigned)control_mode,
+              threshold_speed);
     else
       sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u",
-              (unsigned)mode, (double)deadband, (unsigned)control_mode);
+              (unsigned)mode, deadband, (unsigned)control_mode);
 
     return PortWriteNMEA(port, buffer, env);
   }
@@ -265,13 +266,13 @@ namespace LX1600 {
    */
   static inline bool
   SetVarioSettings(Port &port, OperationEnvironment &env,
-                   unsigned avg_time, fixed range)
+                   unsigned avg_time, double range)
   {
     assert(avg_time >= 5 && avg_time <= 30);
-    assert(range >= fixed(2.5) && range <= fixed(10));
+    assert(range >= 2.5 && range <= 10);
 
     char buffer[100];
-    sprintf(buffer, "PFLX3,,,,,,%u,%.1f", avg_time, (double)range);
+    sprintf(buffer, "PFLX3,,,,,,%u,%.1f", avg_time, range);
 
     return PortWriteNMEA(port, buffer, env);
   }
@@ -281,10 +282,10 @@ namespace LX1600 {
    * @param filter filter setting in m/s^2
    */
   static inline bool
-  SetSmartDiffFilter(Port &port, OperationEnvironment &env, fixed filter)
+  SetSmartDiffFilter(Port &port, OperationEnvironment &env, double filter)
   {
     char buffer[100];
-    sprintf(buffer, "PFLX3,,,,,,,,,,,%.1f", (double)filter);
+    sprintf(buffer, "PFLX3,,,,,,,,,,,%.1f", filter);
 
     return PortWriteNMEA(port, buffer, env);
   }

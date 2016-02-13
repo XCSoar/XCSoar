@@ -37,35 +37,36 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
   do {
     // piecewise linear approximation
     if (mV > 3900) {
-      info.battery_level = fixed(70 + (mV - 3900)/10);
+      info.battery_level = 70 + (mV - 3900) / 10;
       break;
     }
     if (mV > 3700) {
-      info.battery_level = fixed(4 + (mV - 3700)/3);
+      info.battery_level = 4 + (mV - 3700) / 3;
       break;
     }
     if (mV > 3600) {
-      info.battery_level = fixed(0.04) * (mV - 3600);
+      info.battery_level = 0.04 * (mV - 3600);
       break;
     }
     // considered empty ...
-    info.battery_level = fixed(0);
+    info.battery_level = 0;
     break;
   }  while (0);
 
-  if (info.battery_level > fixed(100)) info.battery_level = fixed(100);
+  if (info.battery_level > 100)
+    info.battery_level = 100;
   info.battery_level_available.Update(info.clock);
 
   return true;
 }
 
 gcc_pure
-static inline
-fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
+static inline double
+ComputeNoncompVario(const double pressure, const double d_pressure)
 {
-  static constexpr fixed FACTOR(-2260.389548275485);
-  static constexpr fixed EXPONENT(-0.8097374740609689);
-  return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
+  static constexpr double FACTOR(-2260.389548275485);
+  static constexpr double EXPONENT(-0.8097374740609689);
+  return FACTOR * pow(pressure, EXPONENT) * d_pressure;
 }
 
 bool
@@ -76,9 +77,9 @@ BlueFlyDevice::ParsePRS(const char *content, NMEAInfo &info)
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    AtmosphericPressure pressure = AtmosphericPressure::Pascal(fixed(value));
+    AtmosphericPressure pressure = AtmosphericPressure::Pascal(value);
 
-    kalman_filter.Update(pressure.GetHectoPascal(), fixed(0.25), fixed(0.02));
+    kalman_filter.Update(pressure.GetHectoPascal(), 0.25, 0.02);
 
     info.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                  kalman_filter.GetXVel()));

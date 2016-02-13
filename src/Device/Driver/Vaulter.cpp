@@ -31,7 +31,7 @@ Copyright_License {
 static bool
 ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // bank angle [degrees, positive right]
   if (line.ReadChecked(value)) {
@@ -68,7 +68,7 @@ ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
 static bool
 ParsePITV4(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // TE vario [m/s]
   if (line.ReadChecked(value))
@@ -80,8 +80,8 @@ ParsePITV4(NMEAInputLine &line, NMEAInfo &info)
 static bool
 ParsePITV5(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
-  fixed norm, bearing;
+  double value;
+  double norm, bearing;
 
   // wind speed [m/s]
   bool norm_valid = line.ReadChecked(norm);
@@ -128,28 +128,28 @@ public:
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
-  bool PutBallast(fixed fraction, fixed overload,
+  bool PutMacCready(double mc, OperationEnvironment &env) override;
+  bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) override;
 };
 
 bool
-VaulterDevice::PutMacCready(fixed mc, OperationEnvironment &env)
+VaulterDevice::PutMacCready(double mc, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
   char buffer[30];
-  sprintf(buffer,"PITV1,MC=%0.2f", (double)mc);
+  sprintf(buffer,"PITV1,MC=%0.2f", mc);
   return PortWriteNMEA(port, buffer, env);
 }
 
 bool
-VaulterDevice::PutBallast(fixed fraction, fixed overload, OperationEnvironment &env)
+VaulterDevice::PutBallast(double fraction, double overload, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
   char buffer[30];
-  sprintf(buffer,"PITV1,WL=%0.2f", (double)overload);
+  sprintf(buffer,"PITV1,WL=%0.2f", overload);
   return PortWriteNMEA(port, buffer, env);
 }
 

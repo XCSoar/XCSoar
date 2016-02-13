@@ -37,10 +37,10 @@ class NMEAInputLine;
 class FlytecDevice : public AbstractDevice
 {
   Port &port;
-  fixed last_time;
+  double last_time;
 
 public:
-  FlytecDevice(Port &_port):port(_port), last_time(fixed(0)) {}
+  FlytecDevice(Port &_port):port(_port), last_time(0) {}
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;

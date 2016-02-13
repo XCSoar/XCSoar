@@ -53,13 +53,14 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 
 bool
 NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
-                     fixed &time_of_day_s)
+                     double &time_of_day_s)
 {
   return false;
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(double this_time, double &last_time,
+                            NMEAInfo &info)
 {
   return false;
 }

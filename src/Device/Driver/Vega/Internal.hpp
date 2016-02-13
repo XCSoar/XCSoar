@@ -78,7 +78,7 @@ public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure& pres,
               OperationEnvironment &env) override;
   void OnCalculatedUpdate(const MoreData &basic,

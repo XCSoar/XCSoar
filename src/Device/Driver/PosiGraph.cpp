@@ -51,7 +51,7 @@ GPWIN(NMEAInputLine &line, NMEAInfo &info)
 {
   line.Skip(2);
 
-  fixed value;
+  double value;
   if (line.ReadChecked(value))
     info.ProvidePressureAltitude(value / 10);
 

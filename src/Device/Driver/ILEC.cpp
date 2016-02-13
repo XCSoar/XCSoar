@@ -37,7 +37,7 @@ public:
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed norm, bearing;
+  double norm, bearing;
 
   bool bearing_valid = line.ReadChecked(bearing);
   bool norm_valid = line.ReadChecked(norm);
@@ -58,12 +58,12 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 static bool
 ParsePDA1(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // altitude [m]
   int altitude;
   if (line.ReadChecked(altitude))
-    info.ProvideBaroAltitudeTrue(fixed(altitude));
+    info.ProvideBaroAltitudeTrue(altitude);
 
   // total energy vario [m/s]
   if (line.ReadChecked(value))

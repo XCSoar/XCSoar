@@ -42,14 +42,14 @@ Copyright_License {
 #include <stdio.h>
 
 static bool
-ReadFixed(fixed &value)
+ReadDouble(double &value)
 {
   char buffer[64];
   if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0)
     return false;
 
   char *end_ptr;
-  value = fixed(strtod(buffer, &end_ptr));
+  value = strtod(buffer, &end_ptr);
   return end_ptr != buffer;
 }
 
@@ -73,10 +73,10 @@ PrintInputRequest(const char *setting)
 }
 
 static bool
-ReadFixed(const char *setting, fixed &value)
+ReadDouble(const char *setting, double &value)
 {
   PrintInputRequest(setting);
-  if (ReadFixed(value))
+  if (ReadDouble(value))
     return true;
 
   fprintf(stdout, "Invalid input\n");
@@ -97,8 +97,8 @@ ReadUnsigned(const char *setting, unsigned &value)
 static void
 SetMC(Port &port, OperationEnvironment &env)
 {
-  fixed mc;
-  if (!ReadFixed("the MC setting (0.0 - 5.0)", mc))
+  double mc;
+  if (!ReadDouble("the MC setting (0.0 - 5.0)", mc))
     return;
 
   fprintf(stdout, "Setting MC to \"%.1f\" ...\n", (double)mc);
@@ -112,8 +112,8 @@ SetMC(Port &port, OperationEnvironment &env)
 static void
 SetBallast(Port &port, OperationEnvironment &env)
 {
-  fixed ballast;
-  if (!ReadFixed("the Ballast setting (1.0 - 1.5)", ballast))
+  double ballast;
+  if (!ReadDouble("the Ballast setting (1.0 - 1.5)", ballast))
     return;
 
   fprintf(stdout, "Setting Ballast to \"%.1f\" ...\n", (double)ballast);
@@ -142,8 +142,8 @@ SetBugs(Port &port, OperationEnvironment &env)
 static void
 SetAltitudeOffset(Port &port, OperationEnvironment &env)
 {
-  fixed altitude_offset;
-  if (!ReadFixed("the altitude offset setting (m)", altitude_offset))
+  double altitude_offset;
+  if (!ReadDouble("the altitude offset setting (m)", altitude_offset))
     return;
 
   fprintf(stdout, "Setting altitude offset to \"%.1f m\" ...\n",
@@ -159,8 +159,8 @@ SetAltitudeOffset(Port &port, OperationEnvironment &env)
 static void
 SetQNH(Port &port, OperationEnvironment &env)
 {
-  fixed qnh;
-  if (!ReadFixed("the QNH setting (hPa)", qnh))
+  double qnh;
+  if (!ReadDouble("the QNH setting (hPa)", qnh))
     return;
 
   fprintf(stdout, "Setting QNH to \"%.1f hPa\" ...\n",
@@ -191,10 +191,10 @@ SetVolume(Port &port, OperationEnvironment &env)
 static void
 SetPolar(Port &port, OperationEnvironment &env)
 {
-  fixed a, b, c;
-  if (!ReadFixed("polar coefficient a", a) ||
-      !ReadFixed("polar coefficient b", b) ||
-      !ReadFixed("polar coefficient c", c))
+  double a, b, c;
+  if (!ReadDouble("polar coefficient a", a) ||
+      !ReadDouble("polar coefficient b", b) ||
+      !ReadDouble("polar coefficient c", c))
     return;
 
   if (LX1600::SetPolar(port, env, a, b, c))
@@ -207,10 +207,10 @@ SetPolar(Port &port, OperationEnvironment &env)
 static void
 SetFilters(Port &port, OperationEnvironment &env)
 {
-  fixed vario_filter, te_filter;
+  double vario_filter, te_filter;
   unsigned te_level;
-  if (!ReadFixed("the Vario filter (sec, default = 1)", vario_filter) ||
-      !ReadFixed("the TE filter (0.1 - 2.0, default = 1.5)", te_filter) ||
+  if (!ReadDouble("the Vario filter (sec, default = 1)", vario_filter) ||
+      !ReadDouble("the TE filter (0.1 - 2.0, default = 1.5)", te_filter) ||
       !ReadUnsigned("the TE level (50 - 150 %, default = 0 = off)", te_level))
     return;
 
@@ -225,16 +225,16 @@ static void
 SetSCSettings(Port &port, OperationEnvironment &env)
 {
   unsigned mode, control_mode;
-  fixed deadband, threshold_speed;
+  double deadband, threshold_speed;
 
   if (!ReadUnsigned("the SC Mode (EXTERNAL = 0, default = ON_CIRCLING = 1, AUTO_IAS = 2)", mode) ||
-      !ReadFixed("the SC deadband (0 - 10.0 m/s, default=1)", deadband) ||
+      !ReadDouble("the SC deadband (0 - 10.0 m/s, default=1)", deadband) ||
       !ReadUnsigned("the SC switch mode (NORMAL = 0, default = INVERTED = 1, TASTER = 2)", control_mode))
     return;
 
   if (mode != 2u)
-    threshold_speed = fixed(0);
-  else if (!ReadFixed("the SC threshold speed (50 - 150 km/h, default=110)", threshold_speed))
+    threshold_speed = 0;
+  else if (!ReadDouble("the SC threshold speed (50 - 150 km/h, default=110)", threshold_speed))
     return;
 
   if (LX1600::SetSCSettings(port, env, (LX1600::SCMode)mode, deadband,

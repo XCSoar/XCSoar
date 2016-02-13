@@ -37,7 +37,7 @@ public:
   struct BlueFlySettings {
     unsigned version;
 
-    fixed volume;
+    double volume;
     static const char VOLUME_NAME[];
     static constexpr unsigned VOLUME_MAX = 1000;
     static constexpr unsigned VOLUME_MULTIPLIER = 1000;
@@ -47,8 +47,8 @@ public:
     static constexpr unsigned OUTPUT_MODE_MAX = 3;
 
     gcc_const
-    static unsigned ExportVolume(fixed value) {
-      assert(!negative(value));
+    static unsigned ExportVolume(double value) {
+      assert(value >= 0);
       unsigned v = unsigned(value * VOLUME_MULTIPLIER);
 
       assert(v <= VOLUME_MAX);

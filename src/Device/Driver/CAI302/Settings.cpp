@@ -25,19 +25,19 @@ Copyright_License {
 #include "PocketNav.hpp"
 
 bool
-CAI302Device::PutMacCready(fixed MacCready, OperationEnvironment &env)
+CAI302Device::PutMacCready(double MacCready, OperationEnvironment &env)
 {
   return CAI302::PutMacCready(port, MacCready, env);
 }
 
 bool
-CAI302Device::PutBugs(fixed Bugs, OperationEnvironment &env)
+CAI302Device::PutBugs(double Bugs, OperationEnvironment &env)
 {
   return CAI302::PutBugs(port, Bugs, env);
 }
 
 bool
-CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload,
+CAI302Device::PutBallast(double fraction, gcc_unused double overload,
                          OperationEnvironment &env)
 {
   return CAI302::PutBallast(port, fraction, env);

@@ -37,7 +37,7 @@ public:
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed norm, bearing;
+  double norm, bearing;
 
   bool norm_valid = line.ReadChecked(norm);
   bool bearing_valid = line.ReadChecked(bearing);
@@ -58,7 +58,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 static bool
 LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // 0 = altitude [m]
   if (line.ReadChecked(value))
@@ -82,7 +82,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideNettoVario(value / 10);
 
   // 4 = temperature [deg C]
-  fixed oat;
+  double oat;
   info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
     info.temperature = CelsiusToKelvin(oat);
@@ -106,7 +106,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 static bool
 LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // 0 = vario [dm/s]
   if (line.ReadChecked(value))
@@ -130,7 +130,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 4 = temperature [deg C]
-  fixed oat;
+  double oat;
   info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
     info.temperature = CelsiusToKelvin(oat);
@@ -159,7 +159,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   //  Baro Altitude QNE(1013.25)     2025     meter        2025 mt
   if (line.ReadChecked(value))

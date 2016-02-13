@@ -82,28 +82,28 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
 
   for (unsigned i = 0; i < size; ++i) {
     int DegLat, DegLon;
-    fixed tmp, MinLat, MinLon;
+    double tmp, MinLat, MinLon;
     char NoS, EoW;
 
     tmp = declaration.GetLocation(i).latitude.Degrees();
-    if (negative(tmp)) {
+    if (tmp < 0) {
       NoS = 'S';
       tmp = -tmp;
     } else {
       NoS = 'N';
     }
     DegLat = (int)tmp;
-    MinLat = (tmp - fixed(DegLat)) * 60 * 1000;
+    MinLat = (tmp - DegLat) * 60 * 1000;
 
     tmp = declaration.GetLocation(i).longitude.Degrees();
-    if (negative(tmp)) {
+    if (tmp < 0) {
       EoW = 'W';
       tmp = -tmp;
     } else {
       EoW = 'E';
     }
     DegLon = (int)tmp;
-    MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
+    MinLon = (tmp - DegLon) * 60 * 1000;
 
     /*
      * We use the waypoint index here as name to get around the 192 byte

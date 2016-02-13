@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdio.h>
 
 bool
-CAI302::PutMacCready(Port &port, fixed mc, OperationEnvironment &env)
+CAI302::PutMacCready(Port &port, double mc, OperationEnvironment &env)
 {
   unsigned mac_cready = uround(Units::ToUserUnit(mc * 10, Unit::KNOTS));
 
@@ -39,7 +39,7 @@ CAI302::PutMacCready(Port &port, fixed mc, OperationEnvironment &env)
 }
 
 bool
-CAI302::PutBugs(Port &port, fixed bugs, OperationEnvironment &env)
+CAI302::PutBugs(Port &port, double bugs, OperationEnvironment &env)
 {
   unsigned bugs2 = uround(bugs * 100);
 
@@ -49,7 +49,7 @@ CAI302::PutBugs(Port &port, fixed bugs, OperationEnvironment &env)
 }
 
 bool
-CAI302::PutBallast(Port &port, fixed fraction, OperationEnvironment &env)
+CAI302::PutBallast(Port &port, double fraction, OperationEnvironment &env)
 {
   unsigned ballast = uround(fraction * 10);
 

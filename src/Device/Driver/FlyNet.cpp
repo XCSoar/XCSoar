@@ -50,7 +50,7 @@ FlyNetDevice::ParseBAT(const char *content, NMEAInfo &info)
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    info.battery_level = fixed(value) * 10;
+    info.battery_level = value * 10.;
     info.battery_level_available.Update(info.clock);
   }
 
@@ -63,12 +63,12 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
   // e.g. _PRS 00017CBA
 
   // The frequency at which the device sends _PRS sentences
-  static constexpr fixed frequency = fixed(1 / 0.048);
+  static constexpr double frequency = 1 / 0.048;
 
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    auto pressure = AtmosphericPressure::Pascal(fixed(value));
+    auto pressure = AtmosphericPressure::Pascal(value);
 
     if (info.static_pressure_available) {
       // Calculate non-compensated vario value

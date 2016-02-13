@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 
 void
-ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock)
+ParsePFLAE(NMEAInputLine &line, FlarmError &error, double clock)
 {
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
@@ -46,7 +46,7 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock)
 }
 
 void
-ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
+ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, double clock)
 {
   char type[2];
   line.Read(type, ARRAY_SIZE(type));
@@ -69,7 +69,7 @@ ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
 }
 
 void
-ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
+ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, double clock)
 {
   flarm.available.Update(clock);
 
@@ -91,11 +91,11 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
 static bool
 ReadBearing(NMEAInputLine &line, Angle &value_r)
 {
-  fixed value;
+  double value;
   if (!line.ReadChecked(value))
     return false;
 
-  if (negative(value) || value > fixed(360))
+  if (value < 0 || value > 360)
     return false;
 
   value_r = Angle::Degrees(value).AsBearing();
@@ -103,7 +103,7 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
 }
 
 void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, double clock)
 {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
@@ -111,7 +111,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   traffic.alarm_level = (FlarmTraffic::AlarmType)
     line.Read((int)FlarmTraffic::AlarmType::NONE);
 
-  fixed value;
+  double value;
   bool stealth = false;
 
   if (!line.ReadChecked(value))
@@ -148,7 +148,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   traffic.turn_rate_received = line.ReadChecked(value);
   if (!traffic.turn_rate_received) {
     // Field is empty in stealth mode
-    traffic.turn_rate = fixed(0);
+    traffic.turn_rate = 0;
   } else
     traffic.turn_rate = value;
 
@@ -156,7 +156,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   if (!traffic.speed_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.speed = fixed(0);
+    traffic.speed = 0;
   } else
     traffic.speed = value;
 
@@ -164,7 +164,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   if (!traffic.climb_rate_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.climb_rate = fixed(0);
+    traffic.climb_rate = 0;
   } else
     traffic.climb_rate = value;
 

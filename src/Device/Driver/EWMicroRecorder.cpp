@@ -60,9 +60,9 @@ public:
 };
 
 static bool
-ReadAltitude(NMEAInputLine &line, fixed &value_r)
+ReadAltitude(NMEAInputLine &line, double &value_r)
 {
-  fixed value;
+  double value;
   bool available = line.ReadChecked(value);
   char unit = line.ReadFirstChar();
   if (!available)
@@ -86,7 +86,7 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
   line.Read(type, 16);
 
   if (StringIsEqual(type, "$PGRMZ")) {
-    fixed value;
+    double value;
 
     /* The normal Garmin $PGRMZ line contains the "true" barometric
        altitude above MSL (corrected with QNH), but EWMicroRecorder

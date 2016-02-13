@@ -213,10 +213,10 @@ public:
 
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
-  bool PutBallast(fixed fraction, fixed overload,
+  bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) override;
-  bool PutBugs(fixed bugs, OperationEnvironment &env) override;
-  bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  bool PutBugs(double bugs, OperationEnvironment &env) override;
+  bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
 

@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DEVICE_CONFIG_HPP
 
 #include "Util/StaticString.hxx"
-#include "Math/fixed.hpp"
 
 #include <stdint.h>
 #include <tchar.h>
@@ -168,8 +167,8 @@ struct DeviceConfig {
   /**
    * sensor calibration data
    */
-  fixed sensor_offset;
-  fixed sensor_factor;
+  double sensor_offset;
+  double sensor_factor;
 
   /**
    * Name of the driver.

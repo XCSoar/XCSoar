@@ -30,7 +30,6 @@ Copyright_License {
 #define XCSOAR_DEVICE_LIST_HPP
 
 #include "Features.hpp"
-#include "Math/fixed.hpp"
 #include "Device/Port/Listener.hpp"
 #include "Thread/Mutex.hpp"
 
@@ -81,9 +80,9 @@ public:
   void Tick();
 
   void AutoReopen(OperationEnvironment &env);;
-  void PutMacCready(fixed mac_cready, OperationEnvironment &env);
-  void PutBugs(fixed bugs, OperationEnvironment &env);
-  void PutBallast(fixed fraction, fixed overload, OperationEnvironment &env);
+  void PutMacCready(double mac_cready, OperationEnvironment &env);
+  void PutBugs(double bugs, OperationEnvironment &env);
+  void PutBallast(double fraction, double overload, OperationEnvironment &env);
   void PutVolume(unsigned volume, OperationEnvironment &env);
   void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,
                           OperationEnvironment &env);

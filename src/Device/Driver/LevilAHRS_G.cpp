@@ -92,15 +92,15 @@ ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
   }
 
   info.attitude.bank_angle_available.Update(info.clock);
-  info.attitude.bank_angle = Angle::Degrees(fixed(roll) / 10);
+  info.attitude.bank_angle = Angle::Degrees(roll / 10.);
 
   info.attitude.pitch_angle_available.Update(info.clock);
-  info.attitude.pitch_angle = Angle::Degrees(fixed(pitch) / 10);
+  info.attitude.pitch_angle = Angle::Degrees(pitch / 10.);
 
   info.attitude.heading_available.Update(info.clock);
-  info.attitude.heading = Angle::Degrees(fixed(heading) / 10);
+  info.attitude.heading = Angle::Degrees(heading / 10.);
 
-  info.acceleration.ProvideGLoad(fixed(G) / 1000, true);
+  info.acceleration.ProvideGLoad(G / 1000., true);
 
   return true;
 }
@@ -124,9 +124,10 @@ ParseAPENV1(NMEAInputLine &line, NMEAInfo &info)
   int vs;
   if (!line.ReadChecked(vs)) return false;
 
-  auto sys_alt = Units::ToSysUnit(fixed(altitude), Unit::FEET);
+  auto sys_alt = Units::ToSysUnit(altitude, Unit::FEET);
   info.ProvidePressureAltitude(sys_alt);
-  info.ProvideIndicatedAirspeedWithAltitude(Units::ToSysUnit(fixed(ias), Unit::KNOTS), sys_alt);
+  info.ProvideIndicatedAirspeedWithAltitude(Units::ToSysUnit(ias, Unit::KNOTS),
+                                            sys_alt);
 
   return true;
 }
