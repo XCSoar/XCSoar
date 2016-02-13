@@ -142,6 +142,10 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
+  const PixelSize &GetSize() const {
+    return size;
+  }
+
   unsigned GetWidth() const {
     return size.cx;
   }
@@ -154,6 +158,10 @@ public:
     return flipped;
   }
 #elif defined(USE_MEMORY_CANVAS)
+  PixelSize GetSize() const {
+    return { buffer.width, buffer.height };
+  }
+
   unsigned GetWidth() const {
     return buffer.width;
   }
@@ -162,6 +170,9 @@ public:
     return buffer.height;
   }
 #else
+  gcc_pure
+  PixelSize GetSize() const;
+
   unsigned GetWidth() const {
     return GetSize().cx;
   }
@@ -202,9 +213,6 @@ public:
   GeoQuadrilateral LoadGeoFile(Path path);
 
   void Reset();
-
-  gcc_pure
-  PixelSize GetSize() const;
 
 #ifdef ENABLE_OPENGL
   GLTexture *GetNative() const {

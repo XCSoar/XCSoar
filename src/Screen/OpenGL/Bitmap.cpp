@@ -116,11 +116,3 @@ Bitmap::Reset()
 }
 
 #endif /* !ANDROID */
-
-PixelSize
-Bitmap::GetSize() const
-{
-  assert(IsDefined());
-
-  return size;
-}

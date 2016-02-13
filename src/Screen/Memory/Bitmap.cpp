@@ -47,11 +47,3 @@ Bitmap::Reset()
 
   buffer.Free();
 }
-
-PixelSize
-Bitmap::GetSize() const
-{
-  assert(IsDefined());
-
-  return { buffer.width, buffer.height };
-}
