@@ -32,7 +32,6 @@ Copyright_License {
 #include "android_drawable.h"
 
 Bitmap::Bitmap(ResourceId id)
-  :bmp(nullptr), texture(nullptr), interpolation(false)
 {
   Load(id);
 }

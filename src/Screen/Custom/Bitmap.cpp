@@ -42,12 +42,6 @@ Copyright_License {
 #include <tchar.h>
 
 Bitmap::Bitmap(ConstBuffer<void> _buffer)
-  :
-#ifdef ENABLE_OPENGL
-  texture(nullptr), interpolation(false)
-#else
-  buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
-#endif
 {
   Load(_buffer);
 }

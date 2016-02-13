@@ -28,7 +28,6 @@ Copyright_License {
 #include <assert.h>
 
 Bitmap::Bitmap(ResourceId id)
-  :bitmap(nullptr)
 {
   Load(id);
 }

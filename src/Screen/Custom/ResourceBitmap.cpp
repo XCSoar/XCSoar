@@ -29,7 +29,6 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 
 Bitmap::Bitmap(ResourceId id)
-  :texture(nullptr), interpolation(false)
 {
   Load(id);
 }
@@ -39,7 +38,6 @@ Bitmap::Bitmap(ResourceId id)
 #ifdef USE_MEMORY_CANVAS
 
 Bitmap::Bitmap(ResourceId id)
-  :buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
 {
   Load(id);
 }
