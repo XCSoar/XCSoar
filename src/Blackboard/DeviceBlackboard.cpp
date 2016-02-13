@@ -42,7 +42,7 @@ DeviceBlackboard::DeviceBlackboard()
   // Set GPS assumed time to system time
   gps_info.UpdateClock();
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
-  gps_info.time = fixed(gps_info.date_time_utc.GetSecondOfDay());
+  gps_info.time = gps_info.date_time_utc.GetSecondOfDay();
 
   std::fill_n(per_device_data, unsigned(NUMDEV), gps_info);
 
@@ -62,7 +62,7 @@ DeviceBlackboard::DeviceBlackboard()
  * @param alt New altitude
  */
 void
-DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
 {
   ScopeLock protect(mutex);
 
@@ -127,7 +127,7 @@ DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
  * @param val New speed
  */
 void
-DeviceBlackboard::SetSpeed(fixed val)
+DeviceBlackboard::SetSpeed(double val)
 {
   ScopeLock protect(mutex);
   NMEAInfo &basic = simulator_data;
@@ -161,7 +161,7 @@ DeviceBlackboard::SetTrack(Angle val)
  * @param val New altitude
  */
 void
-DeviceBlackboard::SetAltitude(fixed val)
+DeviceBlackboard::SetAltitude(double val)
 {
   ScopeLock protect(mutex);
   NMEAInfo &basic = simulator_data;
@@ -259,7 +259,7 @@ DeviceBlackboard::Merge()
 }
 
 void
-DeviceBlackboard::SetBallast(fixed fraction, fixed overload,
+DeviceBlackboard::SetBallast(double fraction, double overload,
                              OperationEnvironment &env)
 {
   if (devices != nullptr)
@@ -267,7 +267,7 @@ DeviceBlackboard::SetBallast(fixed fraction, fixed overload,
 }
 
 void
-DeviceBlackboard::SetBugs(fixed bugs, OperationEnvironment &env)
+DeviceBlackboard::SetBugs(double bugs, OperationEnvironment &env)
 {
   if (devices != nullptr)
     devices->PutBugs(bugs, env);
@@ -281,7 +281,7 @@ DeviceBlackboard::SetQNH(AtmosphericPressure qnh, OperationEnvironment &env)
 }
 
 void
-DeviceBlackboard::SetMC(fixed mc, OperationEnvironment &env)
+DeviceBlackboard::SetMC(double mc, OperationEnvironment &env)
 {
   if (devices != nullptr)
     devices->PutMacCready(mc, env);

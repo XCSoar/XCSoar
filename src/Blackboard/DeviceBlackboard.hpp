@@ -127,20 +127,20 @@ public:
     return RealState(i).flarm.IsDetected();
   }
 
-  void SetStartupLocation(const GeoPoint &loc, const fixed alt);
+  void SetStartupLocation(const GeoPoint &loc, double alt);
   void ProcessSimulation();
   void StopReplay();
 
   void SetSimulatorLocation(const GeoPoint &location);
   void SetTrack(Angle val);
-  void SetSpeed(fixed val);
-  void SetAltitude(fixed alt);
+  void SetSpeed(double val);
+  void SetAltitude(double alt);
 
-  void SetBallast(fixed fraction, fixed overload,
+  void SetBallast(double fraction, double overload,
                   OperationEnvironment &env);
-  void SetBugs(fixed bugs, OperationEnvironment &env);
+  void SetBugs(double bugs, OperationEnvironment &env);
   void SetQNH(AtmosphericPressure qnh, OperationEnvironment &env);
-  void SetMC(fixed mc, OperationEnvironment &env);
+  void SetMC(double mc, OperationEnvironment &env);
 
   void SetActiveFrequency(RadioFrequency frequency,
                           const TCHAR *name,
