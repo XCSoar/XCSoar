@@ -130,15 +130,6 @@ Bitmap::Load(ResourceId id, Type _type)
 }
 
 bool
-Bitmap::LoadStretch(ResourceId id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-
-bool
 Bitmap::LoadFile(Path path)
 {
   assert(path != nullptr && !path.IsEmpty());

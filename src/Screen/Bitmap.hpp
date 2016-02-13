@@ -183,10 +183,12 @@ public:
 
   bool Load(ResourceId id, Type type=Type::STANDARD);
 
+#ifndef ENABLE_OPENGL
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
    */
   bool LoadStretch(ResourceId id, unsigned zoom);
+#endif
 
   bool LoadFile(Path path);
 
