@@ -104,27 +104,8 @@ class NativeView extends SurfaceView
     thread.start();
   }
 
-  private void initGL(SurfaceHolder holder) throws EGLException {
-    /* initialize display */
-
-    egl = (EGL10)EGLContext.getEGL();
-    display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-    if (display == EGL10.EGL_NO_DISPLAY)
-      throw new EGLException("eglGetDisplay() failed");
-
-    int[] version = new int[2];
-    if (!egl.eglInitialize(display, version))
-      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
-
-    Log.d(TAG, "EGL vendor: " +
-          egl.eglQueryString(display, EGL10.EGL_VENDOR));
-    Log.d(TAG, "EGL version: " +
-          egl.eglQueryString(display, EGL10.EGL_VERSION));
-    Log.d(TAG, "EGL extensions: " +
-          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
-
-    /* choose a configuration */
-
+  private static EGLConfig chooseEglConfig(EGL10 egl, EGLDisplay display)
+    throws EGLException {
     int[] num_config = new int[1];
     int[] configSpec = new int[]{
       EGL10.EGL_STENCIL_SIZE, 1,  /* Don't change this position in array! */
@@ -154,6 +135,31 @@ class NativeView extends SurfaceView
     if (closestConfig == null)
       throw new EGLException("eglChooseConfig() failed");
 
+    return closestConfig;
+  }
+
+  private void initGL(SurfaceHolder holder) throws EGLException {
+    /* initialize display */
+
+    egl = (EGL10)EGLContext.getEGL();
+    display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+    if (display == EGL10.EGL_NO_DISPLAY)
+      throw new EGLException("eglGetDisplay() failed");
+
+    int[] version = new int[2];
+    if (!egl.eglInitialize(display, version))
+      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
+
+    Log.d(TAG, "EGL vendor: " +
+          egl.eglQueryString(display, EGL10.EGL_VENDOR));
+    Log.d(TAG, "EGL version: " +
+          egl.eglQueryString(display, EGL10.EGL_VERSION));
+    Log.d(TAG, "EGL extensions: " +
+          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
+
+    /* choose a configuration */
+
+    EGLConfig closestConfig = chooseEglConfig(egl, display);
     Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, closestConfig));
 
     /* initialize context and surface */
