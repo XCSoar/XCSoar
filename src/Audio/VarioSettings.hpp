@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_VARIO_SOUND_SETTINGS_HPP
 #define XCSOAR_VARIO_SOUND_SETTINGS_HPP
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 
 #include <stdint.h>
@@ -42,8 +40,8 @@ struct VarioSoundSettings {
   unsigned min_period_ms;
   unsigned max_period_ms;
 
-  fixed min_dead;
-  fixed max_dead;
+  double min_dead;
+  double max_dead;
 
   void SetDefaults();
 };

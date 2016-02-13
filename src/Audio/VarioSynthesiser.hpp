@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "ToneSynthesiser.hpp"
 #include "Thread/Mutex.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 /**
@@ -105,7 +104,7 @@ public:
    *
    * @param vario the current vario value [m/s]
    */
-  void SetVario(unsigned sample_rate, fixed vario);
+  void SetVario(unsigned sample_rate, double vario);
 
   /**
    * Produce silence from now on.
@@ -139,7 +138,7 @@ public:
   /**
    * Set the vario range of the "dead band" during which no sound is emitted
    */
-  void SetDeadBandRange(fixed min, fixed max) {
+  void SetDeadBandRange(double min, double max) {
     min_dead = (int)(min * 100);
     max_dead = (int)(max * 100);
   }

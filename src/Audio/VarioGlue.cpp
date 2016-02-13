@@ -100,7 +100,7 @@ AudioVarioGlue::Configure(const VarioSoundSettings &settings)
 }
 
 void
-AudioVarioGlue::SetValue(fixed vario)
+AudioVarioGlue::SetValue(double vario)
 {
 #ifdef ANDROID
   if (!have_sles)

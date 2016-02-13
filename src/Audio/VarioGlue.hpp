@@ -26,10 +26,6 @@ Copyright_License {
 
 #include "Features.hpp"
 
-#ifdef HAVE_PCM_PLAYER
-#include "Math/fixed.hpp"
-#endif
-
 struct VarioSoundSettings;
 
 namespace AudioVarioGlue {
@@ -56,7 +52,7 @@ namespace AudioVarioGlue {
    *
    * @param vario the current vario value [m/s]
    */
-  void SetValue(fixed vario);
+  void SetValue(double vario);
 
   /**
    * Declare that no vario value is known (e.g. when connection to all
@@ -75,7 +71,7 @@ namespace AudioVarioGlue {
   static inline void Initialise() {}
   static inline void Deinitialise() {}
   static inline void Configure(const VarioSoundSettings &settings) {}
-  static inline void SetValue(fixed vario) {}
+  static inline void SetValue(double vario) {}
   static inline void NoValue() {}
   static inline bool HaveAudioVario() { return false; }
 #endif

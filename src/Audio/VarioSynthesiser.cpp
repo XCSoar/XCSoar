@@ -42,7 +42,7 @@ VarioSynthesiser::VarioToFrequency(int ivario)
 }
 
 void
-VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
+VarioSynthesiser::SetVario(unsigned sample_rate, double vario)
 {
   const ScopeLock protect(mutex);
 
