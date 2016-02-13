@@ -144,8 +144,6 @@ GlideComputer::ProcessGPS(bool force)
   // Calculate the bearing and range of the teammate
   CalculateTeammateBearingRange();
 
-  vegavoice.Update(basic, Calculated(), GetComputerSettings().voice);
-
   // update basic trace history
   if (basic.time_available) {
     const auto dt = trace_history_time.Update(basic.time, 0.5, 30);

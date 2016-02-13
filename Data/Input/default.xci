@@ -674,13 +674,6 @@ location=5
 
 mode=Vario1
 type=key
-data=7
-event=Setup Voice
-label=Setup Audio
-location=6
-
-mode=Vario1
-type=key
 data=8
 event=AdjustVarioFilter xdemo
 label=Manual\nDemo

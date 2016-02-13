@@ -148,15 +148,6 @@ const char EnableThermalProfile[] = "EnableThermalProfile";
 const char GliderScreenPosition[] = "GliderScreenPosition";
 const char SetSystemTimeFromGPS[] = "SetSystemTimeFromGPS";
 
-const char VoiceClimbRate[] = "VoiceClimbRate";
-const char VoiceTerrain[] = "VoiceTerrain";
-const char VoiceWaypointDistance[] = "VoiceWaypointDistance";
-const char VoiceTaskAltitudeDifference[] = "VoiceTaskAltitudeDifference";
-const char VoiceMacCready[] = "VoiceMacCready";
-const char VoiceNewWaypoint[] = "VoiceNewWaypoint";
-const char VoiceInSector[] = "VoiceInSector";
-const char VoiceAirspace[] = "VoiceAirspace";
-
 const char FinishMinHeight[] = "FinishMinHeight";
 const char FinishHeightRef[] = "FinishHeightRef";
 const char StartMaxHeight[] = "StartMaxHeight";

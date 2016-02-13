@@ -49,7 +49,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UIState.hpp"
 #include "Computer/Settings.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Device/Vega/VoiceSettingsDialog.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
@@ -512,8 +511,6 @@ InputEvents::eventSetup(const TCHAR *misc)
       ShowReplayDialog();
   } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
-  else if (StringIsEqual(misc, _T("Voice")))
-    dlgVoiceShowModal();
   else if (StringIsEqual(misc, _T("Teamcode")))
     dlgTeamCodeShowModal();
   else if (StringIsEqual(misc, _T("Target")))

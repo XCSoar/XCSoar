@@ -65,7 +65,6 @@ ComputerSettings::SetDefaults()
   wind.SetDefaults();
   polar.SetDefaults();
   team_code.SetDefaults();
-  voice.SetDefaults();
   poi.SetDefaults();
   features.SetDefaults();
   circling.SetDefaults();

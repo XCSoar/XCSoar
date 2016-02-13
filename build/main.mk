@@ -29,7 +29,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Device/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Device/Vega/VegaDemoDialog.cpp \
-	$(SRC)/Dialogs/Device/Vega/VoiceSettingsDialog.cpp \
 	$(SRC)/Dialogs/Device/Vega/SwitchesDialog.cpp \
 	$(SRC)/Dialogs/Device/FLARM/ConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
@@ -585,8 +584,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
-	$(SRC)/Audio/VegaVoice.cpp \
-	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Screen.cpp \

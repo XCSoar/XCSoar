@@ -36,7 +36,6 @@ namespace Profile {
   static void Load(const ProfileMap &map, PolarSettings &settings);
   static void Load(const ProfileMap &map, LoggerSettings &settings);
   static void Load(const ProfileMap &map, TeamCodeSettings &settings);
-  static void Load(const ProfileMap &map, VoiceSettings &settings);
   static void Load(const ProfileMap &map, PlacesOfInterestSettings &settings);
   static void Load(const ProfileMap &map, FeaturesSettings &settings);
   static void Load(const ProfileMap &map, CirclingSettings &settings);
@@ -87,21 +86,6 @@ void
 Profile::Load(const ProfileMap &map, TeamCodeSettings &settings)
 {
   map.Get(ProfileKeys::TeamcodeRefWaypoint, settings.team_code_reference_waypoint);
-}
-
-void
-Profile::Load(const ProfileMap &map, VoiceSettings &settings)
-{
-  map.Get(ProfileKeys::VoiceClimbRate, settings.voice_climb_rate_enabled);
-  map.Get(ProfileKeys::VoiceTerrain, settings.voice_terrain_enabled);
-  map.Get(ProfileKeys::VoiceWaypointDistance,
-          settings.voice_waypoint_distance_enabled);
-  map.Get(ProfileKeys::VoiceTaskAltitudeDifference,
-          settings.voice_task_altitude_difference_enabled);
-  map.Get(ProfileKeys::VoiceMacCready, settings.voice_mac_cready_enabled);
-  map.Get(ProfileKeys::VoiceNewWaypoint, settings.voice_new_waypoint_enabled);
-  map.Get(ProfileKeys::VoiceInSector, settings.voice_in_sector_enabled);
-  map.Get(ProfileKeys::VoiceAirspace, settings.voice_airspace_enabled);
 }
 
 void
@@ -163,7 +147,6 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
   Load(map, settings.wind);
   Load(map, settings.polar);
   Load(map, settings.team_code);
-  Load(map, settings.voice);
   Load(map, settings.poi);
   Load(map, settings.features);
   Load(map, settings.airspace);

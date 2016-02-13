@@ -143,15 +143,6 @@ extern const char DisplayTrackBearing[];
 extern const char GliderScreenPosition[];
 extern const char SetSystemTimeFromGPS[];
 
-extern const char VoiceClimbRate[];
-extern const char VoiceTerrain[];
-extern const char VoiceWaypointDistance[];
-extern const char VoiceTaskAltitudeDifference[];
-extern const char VoiceMacCready[];
-extern const char VoiceNewWaypoint[];
-extern const char VoiceInSector[];
-extern const char VoiceAirspace[];
-
 extern const char FinishMinHeight[];
 extern const char FinishHeightRef[];
 extern const char StartMaxHeight[];

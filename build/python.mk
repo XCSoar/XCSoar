@@ -31,7 +31,6 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/Util.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \

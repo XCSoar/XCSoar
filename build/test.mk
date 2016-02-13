@@ -1805,7 +1805,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
-	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
@@ -2270,7 +2269,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
-	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/PageSettings.cpp \
@@ -2285,7 +2283,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
-	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Airspace/ActivePredicate.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \

@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "Audio/VegaVoice.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Time/DeltaTime.hpp"
 #include "GlideComputerAirData.hpp"
@@ -63,7 +62,6 @@ class GlideComputer : public GlideComputerBlackboard
   GeoPoint team_code_ref_location;
 
   PeriodClock idle_clock;
-  VegaVoice vegavoice;
 
   /**
    * This object is used to check whether to update

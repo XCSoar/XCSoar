@@ -37,7 +37,6 @@ Copyright_License {
 #include "TeamCode/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "Wind/Settings.hpp"
-#include "Audio/VegaVoiceSettings.hpp"
 #include "WaveSettings.hpp"
 
 #include <type_traits>
@@ -166,8 +165,6 @@ struct ComputerSettings {
   PolarSettings polar;
 
   TeamCodeSettings team_code;
-
-  VoiceSettings voice;
 
   PlacesOfInterestSettings poi;
 
