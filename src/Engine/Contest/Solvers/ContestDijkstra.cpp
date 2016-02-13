@@ -28,7 +28,6 @@ Copyright_License {
 
 #include <algorithm>
 #include <assert.h>
-#include <limits.h>
 
 // set size of reserved queue elements (may differ from Dijkstra default)
 static constexpr unsigned CONTEST_QUEUE_SIZE = 5000;

@@ -24,16 +24,18 @@
 #define XCSOAR_PROTECTED_TASK_MANAGER_HPP
 
 #include "Thread/Guard.hpp"
-#include "Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AbortIntersectionTest.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 #include "Compiler.h"
 
-#include <tchar.h>
-
+struct AGeoPoint;
+struct TaskBehaviour;
+struct OrderedTaskSettings;
 class Path;
 class GlidePolar;
 class RoutePlannerGlue;
-struct RangeAndRadial;
+class OrderedTask;
+class TaskManager;
 
 class ReachIntersectionTest: public AbortIntersectionTest {
   const RoutePlannerGlue *route;

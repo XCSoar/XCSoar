@@ -21,7 +21,6 @@
 #include "Geo/GeoPoint.hpp"
 
 #include <stdint.h>
-#include <tchar.h>
 
 class DBB;
 

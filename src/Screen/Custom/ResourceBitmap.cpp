@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "UncompressedImage.hpp"
 #include "ResourceLoader.hpp"
 #include "ResourceId.hpp"
 

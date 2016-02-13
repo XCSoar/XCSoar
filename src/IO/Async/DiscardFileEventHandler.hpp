@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DISCARD_FILE_EVENT_HANDLER_HPP
 
 #include "FileEventHandler.hpp"
-#include "Compiler.h"
 
 /**
  * A #FileEventHandler that reads and discards all data from the file

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LUA_RUN_FILE_HPP
 #define XCSOAR_LUA_RUN_FILE_HPP
 
-#include <tchar.h>
-
 struct lua_State;
 class Path;
 class Error;

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_WORLD_FILE_HPP
 #define XCSOAR_TERRAIN_WORLD_FILE_HPP
 
-#include <tchar.h>
-
 struct zzip_dir;
 class GeoBounds;
 

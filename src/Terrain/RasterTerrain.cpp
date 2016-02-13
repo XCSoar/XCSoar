@@ -25,14 +25,9 @@ Copyright_License {
 #include "Loader.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/FileCache.hpp"
-#include "Compatibility/path.h"
 #include "OS/ConvertPathName.hpp"
 
 #include <zzip/zzip.h>
-
-#include <windef.h> /* for MAX_PATH */
-
-#include <string.h>
 
 static const TCHAR *const terrain_cache_name = _T("terrain");
 

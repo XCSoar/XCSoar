@@ -21,7 +21,6 @@
  */
 
 #include "ReachFan.hpp"
-#include "Route/RoutePolar.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
 #include "ReachResult.hpp"

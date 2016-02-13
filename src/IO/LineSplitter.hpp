@@ -28,8 +28,6 @@ Copyright_License {
 #include "Source.hpp"
 #include "Util/ReusableArray.hpp"
 
-#include <utility>
-
 /**
  * An adapter for a Source object which reads line-by-line.  It is
  * limited to narrow characters, but may work with multi-byte

@@ -28,7 +28,6 @@ Copyright_License {
 #include "OS/FileDescriptor.hxx"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hxx"
-#include "FileEventHandler.hpp"
 
 #include <boost/intrusive/set.hpp>
 

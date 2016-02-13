@@ -30,8 +30,6 @@ extern "C" {
 
 #include <utility>
 
-#include <assert.h>
-
 static constexpr char catch_callback[] = "xcsoar.catch_callback";
 
 void

@@ -25,8 +25,6 @@
 
 #include <assert.h>
 
-#include <assert.h>
-
 KalmanFilter1d::KalmanFilter1d(const double var_x_accel)
   :var_x_accel_(var_x_accel)
 {

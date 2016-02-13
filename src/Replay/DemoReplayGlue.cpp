@@ -26,7 +26,6 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Task/TaskManager.hpp"
 #include "NMEA/Info.hpp"
 
 DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)

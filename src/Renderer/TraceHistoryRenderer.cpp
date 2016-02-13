@@ -31,8 +31,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
-
 void
 TraceHistoryRenderer::ScaleChart(ChartRenderer &chart,
                                   const TraceVariableHistory& var,

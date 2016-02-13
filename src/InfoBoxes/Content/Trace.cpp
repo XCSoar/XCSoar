@@ -35,7 +35,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"

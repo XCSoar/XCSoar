@@ -23,7 +23,6 @@
 #ifndef XCSOAR_TASK_VARIO_COMPUTER_HPP
 #define XCSOAR_TASK_VARIO_COMPUTER_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Filter.hpp"
 #include "Math/DiffFilter.hpp"
 

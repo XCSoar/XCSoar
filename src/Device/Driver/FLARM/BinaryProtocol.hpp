@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 #define XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 
-#include "Util/AllocatedArray.hxx"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
-#include "tchar.h"
-#include "Device/Driver.hpp"
 
 #include <type_traits>
 
 #include <stdint.h>
+#include <stddef.h>
 
 class Port;
 struct Declaration;

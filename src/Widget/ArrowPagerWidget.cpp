@@ -28,8 +28,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 
-#include <assert.h>
-
 ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   :main(rc)
 {

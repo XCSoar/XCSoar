@@ -28,6 +28,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"

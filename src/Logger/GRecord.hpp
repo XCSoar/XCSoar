@@ -25,8 +25,6 @@
 
 #include "Logger/MD5.hpp"
 
-#include <tchar.h>
-
 #define XCSOAR_IGC_CODE "XCS"
 
 class Path;

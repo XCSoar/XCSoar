@@ -26,11 +26,8 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Screen/Font.hpp"
 #include "Look/DialogLook.hpp"
-#include "Task/ProtectedTaskManager.hpp"
-#include "Components.hpp"
 #include "Language/Language.hpp"
 
 TaskClosePanel::Layout::Layout(PixelRect rc, const DialogLook &look)

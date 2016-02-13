@@ -26,7 +26,6 @@
 #include "OS/Path.hpp"
 #include "Util/StaticArray.hxx"
 
-#include <windef.h> // for MAX_PATH
 #include <tchar.h>
 
 struct TaskBehaviour;

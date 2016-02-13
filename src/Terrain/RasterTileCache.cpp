@@ -21,11 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Terrain/RasterTileCache.hpp"
-#include "Terrain/RasterLocation.hpp"
+#include "RasterTileCache.hpp"
 #include "Math/Angle.hpp"
-#include "IO/ZipLineReader.hpp"
-#include "Operation/Operation.hpp"
 #include "Math/FastMath.hpp"
 
 extern "C" {

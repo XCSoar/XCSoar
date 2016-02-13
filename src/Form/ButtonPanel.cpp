@@ -24,10 +24,8 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Look/ButtonLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
 #include "Event/KeyCode.hpp"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const ButtonLook &_look)

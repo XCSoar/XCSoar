@@ -25,10 +25,12 @@ Copyright_License {
 #include "Time/BrokenDate.hpp"
 #include "Util/StringFormat.hpp"
 
+#ifdef _UNICODE
+#include <algorithm>
+#endif
+
 #include <assert.h>
 #include <string.h>
-
-#include <algorithm>
 
 static TCHAR
 NumToIGCChar(unsigned num)

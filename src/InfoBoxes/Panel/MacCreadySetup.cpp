@@ -24,7 +24,6 @@ Copyright_License {
 #include "MacCreadySetup.hpp"
 #include "Screen/Layout.hpp"
 #include "Widget/WindowWidget.hpp"
-#include "Look/DialogLook.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/ActionListener.hpp"
 #include "Interface.hpp"

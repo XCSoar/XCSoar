@@ -24,7 +24,6 @@
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 #include <assert.h>
-#include <algorithm>
 
 inline const OrderedTaskPoint *
 TaskLeg::GetOrigin() const

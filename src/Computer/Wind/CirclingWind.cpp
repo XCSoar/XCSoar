@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "CirclingWind.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
+#include "NMEA/CirclingInfo.hpp"
 #include "Math/Util.hpp"
 
 #include <algorithm>

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProtectedTaskManager.hpp"
 #include "Task/RoutePlannerGlue.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Route/ReachResult.hpp"

@@ -25,7 +25,6 @@
 
 #include "UnorderedTask.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
-#include "Compiler.h"
 
 class Waypoints;
 class UnorderedTaskPoint;

@@ -24,8 +24,6 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "Thread/Handle.hpp"
 
-#include <assert.h>
-
 #ifndef NDEBUG
 
 #ifdef ANDROID

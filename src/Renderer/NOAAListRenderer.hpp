@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_NOAA_LIST_RENDERER_HPP
 #define XCSOAR_NOAA_LIST_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Weather/NOAAStore.hpp"
 
+struct PixelRect;
 class Canvas;
 class TwoTextRowsRenderer;
 struct NOAALook;

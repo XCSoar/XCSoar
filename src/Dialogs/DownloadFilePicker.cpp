@@ -33,7 +33,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Repository/Glue.hpp"
@@ -50,7 +49,6 @@ Copyright_License {
 #include <vector>
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 /**
  * This class tracks a download and updates a #ProgressDialog.

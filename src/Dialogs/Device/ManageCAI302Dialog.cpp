@@ -34,12 +34,7 @@ Copyright_License {
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
-#include "Util/Macros.hpp"
-#include "OS/ByteOrder.hpp"
 #include "Waypoint/Patterns.hpp"
-
-#include <vector>
-#include <windef.h> /* for MAX_PATH */
 
 class ManageCAI302Widget final
   : public RowFormWidget, private ActionListener {

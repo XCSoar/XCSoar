@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "BufferedSource.hpp"
 
-#include <tchar.h>
-
 struct zzip_file;
 struct zzip_dir;
 class Error;

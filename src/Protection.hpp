@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PROTECTION_HPP
 #define XCSOAR_PROTECTION_HPP
 
-#include "Thread/Mutex.hpp"
-
 /**
  * Notify the #MergeThread that new data has arrived in the
  * #DeviceBlackboard.

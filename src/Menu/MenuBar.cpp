@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MenuBar.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
 
 #include <assert.h>

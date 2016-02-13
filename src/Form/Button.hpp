@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include <tchar.h>
-
 struct ButtonLook;
 class ContainerWindow;
 class ActionListener;

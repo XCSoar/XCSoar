@@ -24,10 +24,8 @@ Copyright_License {
 #ifndef OLC_DIJKSTRA_HPP
 #define OLC_DIJKSTRA_HPP
 
-#include "Util/Serial.hpp"
 #include "AbstractContest.hpp"
 #include "PathSolvers/NavDijkstra.hpp"
-#include "Trace/Vector.hpp"
 #include "TraceManager.hpp"
 
 #include <assert.h>

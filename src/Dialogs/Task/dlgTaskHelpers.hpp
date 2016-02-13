@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef DIALOG_TASK_HELPERS_HPP
 #define DIALOG_TASK_HELPERS_HPP
 
-#include "Engine/Task/Factory/ValidationError.hpp"
-
 #include <tchar.h>
 #include <stdint.h>
 

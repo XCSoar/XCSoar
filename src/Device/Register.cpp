@@ -60,7 +60,6 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 
 #include <assert.h>
-#include <string.h>
 
 /** nullptr terminated array of available device drivers. */
 static const struct DeviceRegister *const driver_list[] = {

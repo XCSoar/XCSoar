@@ -30,7 +30,6 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"

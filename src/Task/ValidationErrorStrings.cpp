@@ -25,8 +25,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/Macros.hpp"
 
-#include <string.h>
 #include <windef.h> // for MAX_PATH
+#include <string.h>
 
 static const TCHAR *const validation_error_strings[] = {
   N_("No valid start"),

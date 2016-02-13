@@ -26,6 +26,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Solvers/TaskSolution.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Util/ReservablePriorityQueue.hpp"

@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_VIBRATOR_HPP
 #define XCSOAR_HARDWARE_VIBRATOR_HPP
 
-#include "Compiler.h"
-
 #ifdef ANDROID
+
+#include "Compiler.h"
 
 /**
  * This macro specifies whether this platform has support for a

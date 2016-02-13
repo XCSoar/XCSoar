@@ -40,7 +40,6 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/UTM.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/StringFormat.hpp"
 #include "Util/StringAPI.hxx"
 

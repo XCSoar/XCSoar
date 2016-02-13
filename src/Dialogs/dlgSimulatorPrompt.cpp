@@ -25,7 +25,6 @@ Copyright_License {
 #include "SimulatorPromptWindow.hpp"
 #include "WidgetDialog.hpp"
 #include "Widget/WindowWidget.hpp"
-#include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Simulator.hpp"
 

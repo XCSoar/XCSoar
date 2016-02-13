@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#include "assert.h"
-
 struct PixelSize;
 struct PixelRect;
 class ContainerWindow;

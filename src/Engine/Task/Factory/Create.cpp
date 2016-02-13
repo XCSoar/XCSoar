@@ -32,8 +32,6 @@ Copyright_License {
 #include "MixedTaskFactory.hpp"
 #include "TouringTaskFactory.hpp"
 
-#include <assert.h>
-
 AbstractTaskFactory *
 CreateTaskFactory(TaskFactoryType type, OrderedTask &task,
                   const TaskBehaviour &task_behaviour)

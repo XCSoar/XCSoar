@@ -27,8 +27,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#include <assert.h>
-
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
 };

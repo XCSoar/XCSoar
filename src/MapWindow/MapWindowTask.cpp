@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Icon.hpp"
 #include "Geo/Math.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"
@@ -32,8 +32,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include "Look/MapLook.hpp"
-
-#include <stdio.h>
 
 void
 MapWindow::DrawTask(Canvas &canvas)

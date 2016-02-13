@@ -25,11 +25,8 @@ Copyright_License {
 #define XCSOAR_FILE_TRANSACTION_HPP
 
 #include "OS/Path.hpp"
-#include "Compiler.h"
 
 #include <utility>
-
-#include <tchar.h>
 
 /**
  * Write to a temporary file, and then replace the old file

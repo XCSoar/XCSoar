@@ -28,8 +28,6 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
-#include <stdint.h>
-
 static bool
 ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
 {

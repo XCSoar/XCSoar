@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Engine/Task/TaskBehaviour.hpp"
+#include "Engine/Task/Factory/TaskFactoryType.hpp"
 
 class TaskManagerDialog;
 class OrderedTask;

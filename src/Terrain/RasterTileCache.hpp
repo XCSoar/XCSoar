@@ -31,8 +31,6 @@ Copyright_License {
 #include "Util/Serial.hpp"
 
 #include <assert.h>
-#include <tchar.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdint.h>
 
@@ -40,7 +38,6 @@ Copyright_License {
 
 struct jas_matrix;
 struct GridLocation;
-class OperationEnvironment;
 
 class RasterTileCache {
   static constexpr unsigned MAX_RTC_TILES = 4096;

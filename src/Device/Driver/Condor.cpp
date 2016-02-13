@@ -24,13 +24,10 @@ Copyright_License {
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver.hpp"
 #include "Units/System.hpp"
-#include "Device/Parser.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Compiler.h"
-
-#include <stdlib.h>
 
 class CondorDevice : public AbstractDevice {
 public:

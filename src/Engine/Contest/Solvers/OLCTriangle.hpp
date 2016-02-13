@@ -29,7 +29,6 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <map>
-#include <cstdlib>
 
 /**
  * Specialisation of AbstractContest for OLC Triangle (triangle) rules

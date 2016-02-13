@@ -22,7 +22,6 @@
 
 #include "OrderedTask.hpp"
 #include "Task/TaskEvents.hpp"
-#include "TaskAdvance.hpp"
 #include "Points/OrderedTaskPoint.hpp"
 #include "Points/StartPoint.hpp"
 #include "Points/FinishPoint.hpp"

@@ -23,11 +23,8 @@ Copyright_License {
 
 #include "JobDialog.hpp"
 #include "ProgressDialog.hpp"
-#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
-#include "ProgressWindow.hpp"
 #include "Job/Thread.hpp"
-#include "Language/Language.hpp"
 
 class DialogJobThread : public JobThread {
   WndForm &form;

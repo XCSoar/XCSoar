@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
-#include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
 #include "Util/Macros.hpp"
 #include "Util/CharUtil.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"

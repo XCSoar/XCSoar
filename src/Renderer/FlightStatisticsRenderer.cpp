@@ -23,10 +23,9 @@ Copyright_License {
 
 #include "FlightStatisticsRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
 #include "Look/MapLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -47,8 +46,6 @@ Copyright_License {
 #include "Computer/Settings.hpp"
 
 #include <algorithm>
-
-#include <stdio.h>
 
 using std::max;
 

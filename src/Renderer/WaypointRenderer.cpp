@@ -35,6 +35,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/AbstractTask.hpp"
 #include "Engine/Task/Unordered/UnorderedTaskPoint.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"

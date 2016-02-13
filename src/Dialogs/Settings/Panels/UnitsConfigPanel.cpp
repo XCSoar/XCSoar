@@ -22,15 +22,12 @@ Copyright_License {
 */
 
 #include "UnitsConfigPanel.hpp"
-#include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Form/Frame.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
-#include "Asset.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"

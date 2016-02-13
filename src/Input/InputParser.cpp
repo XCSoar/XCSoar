@@ -33,7 +33,6 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 #include "LogFile.hpp"
 
-#include <string.h>
 #include <tchar.h>
 #include <stdio.h>
 

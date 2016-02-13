@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "ButtonRenderer.hpp"
 #include "Screen/Color.hpp"
-#include "Compiler.h"
 
 /**
  * A #ButtonRenderer instance that renders a regular button frame

@@ -45,7 +45,6 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 struct WarningItem

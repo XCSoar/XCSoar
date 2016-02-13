@@ -24,8 +24,6 @@ Copyright_License {
 #include "ProfileMap.hpp"
 #include "Current.hpp"
 #include "Map.hpp"
-#include "IO/KeyValueFileWriter.hpp"
-#include "Util/StringUtil.hpp"
 
 bool
 Profile::IsModified()

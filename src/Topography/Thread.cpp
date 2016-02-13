@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Thread.hpp"
 #include "TopographyStore.hpp"
-#include "Thread/Util.hpp"
 
 TopographyThread::TopographyThread(TopographyStore &_store,
                                    std::function<void()> &&_callback)

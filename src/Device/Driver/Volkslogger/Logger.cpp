@@ -30,8 +30,6 @@ Copyright_License {
 #include "vlconv.h"
 #include "grecord.h"
 
-#include <algorithm>
-
 /**
  * Sizes of VL memory regions
  */

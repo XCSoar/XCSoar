@@ -22,8 +22,6 @@
 #ifndef DESERIALISER_HPP
 #define DESERIALISER_HPP
 
-#include <tchar.h>
-
 class ConstDataNode;
 class Waypoints;
 class OrderedTask;

@@ -23,16 +23,13 @@ Copyright_License {
 
 #include "TaskPropertiesPanel.hpp"
 #include "Internal.hpp"
-#include "Screen/Layout.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 
 enum Controls {

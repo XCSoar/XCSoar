@@ -29,7 +29,6 @@
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Geo/Math.hpp"
 
 #include <assert.h>

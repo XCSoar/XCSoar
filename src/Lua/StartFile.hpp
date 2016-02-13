@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LUA_START_FILE_HPP
 #define XCSOAR_LUA_START_FILE_HPP
 
-#include <tchar.h>
-
 class Error;
 class Path;
 

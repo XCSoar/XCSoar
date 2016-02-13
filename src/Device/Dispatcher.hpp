@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DEVICE_DISPATCHER_HPP
 
 #include "Device/Util/LineHandler.hpp"
-#include "Compiler.h"
 
 class MultipleDevices;
 

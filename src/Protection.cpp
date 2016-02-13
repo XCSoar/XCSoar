@@ -23,13 +23,11 @@ Copyright_License {
 
 #include "Protection.hpp"
 #include "MainWindow.hpp"
-#include "Gauge/GlueGaugeVario.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "CalculationThread.hpp"
 #include "MergeThread.hpp"
-#include "DrawThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 
 #include <assert.h>

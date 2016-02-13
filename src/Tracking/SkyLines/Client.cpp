@@ -25,8 +25,10 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "OS/ByteOrder.hpp"
-#include "NMEA/Info.hpp"
 #include "Net/StaticSocketAddress.hxx"
+#include "Math/Angle.hpp"
+#include "Math/fixed.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Util/CRC.hpp"
 #include "Util/ConstBuffer.hxx"
 

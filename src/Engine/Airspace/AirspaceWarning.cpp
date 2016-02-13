@@ -25,8 +25,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
-
 AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace)
   :airspace(_airspace),
    state(WARNING_CLEAR),

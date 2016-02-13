@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/Units.hpp"
-#include <stdint.h>
 
 static bool error_reported = false;
 

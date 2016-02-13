@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MatTaskFactory.hpp"
 #include "Constraints.hpp"
-#include "Util/Macros.hpp"
 
 static constexpr TaskFactoryConstraints mat_constraints = {
   true,

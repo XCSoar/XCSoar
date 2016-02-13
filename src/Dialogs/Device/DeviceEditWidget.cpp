@@ -26,7 +26,6 @@
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -36,7 +35,6 @@
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Features.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "Interface.hpp"
 
 #ifdef HAVE_POSIX
@@ -104,9 +102,6 @@ AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
 }
 
 #if defined(HAVE_POSIX)
-
-#include <dirent.h>
-#include <unistd.h>
 
 static bool
 DetectSerialPorts(DataFieldEnum &df)

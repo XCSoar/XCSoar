@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/DataField/RoughTime.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "ComboPicker.hpp"
-#include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/GeoPointEntry.hpp"

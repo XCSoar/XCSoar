@@ -30,7 +30,6 @@ Copyright_License {
 #include "IO/KeyValueFileWriter.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringAPI.hxx"
-#include "Util/StringUtil.hpp"
 
 bool
 Profile::LoadFile(ProfileMap &map, Path path, Error &error)

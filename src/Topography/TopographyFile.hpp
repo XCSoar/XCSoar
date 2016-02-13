@@ -37,8 +37,6 @@ Copyright_License {
 #include "XShapePoint.hpp"
 #endif
 
-#include <forward_list>
-
 #include <assert.h>
 
 class WindowProjection;

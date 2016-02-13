@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Widget/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
-#include "Compiler.h"
 
 class HorizonWidget final : public WindowWidget,
                             private NullBlackboardListener {

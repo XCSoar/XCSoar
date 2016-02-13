@@ -29,9 +29,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UTIL_HPP
 #define XCSOAR_SCREEN_UTIL_HPP
 
-#include "Math/Angle.hpp"
-
 class Canvas;
+class Angle;
 struct PixelPoint;
 
 bool

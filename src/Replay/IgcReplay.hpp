@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "AbstractReplay.hpp"
 #include "IGC/IGCExtensions.hpp"
-#include "Compiler.h"
 
 class NLineReader;
 struct IGCFix;

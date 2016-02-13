@@ -28,7 +28,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <stdint.h>
-#include <stddef.h>
 
 class OperationEnvironment;
 class Port;

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Components.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "Screen/OpenGL/Scope.hpp"
 #endif
 
 static void

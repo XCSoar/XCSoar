@@ -27,12 +27,10 @@ Copyright_License {
 #include "../dlgTaskHelpers.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Interface.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Form/Button.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
@@ -41,8 +39,6 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Look/DialogLook.hpp"
-#include "Look/TaskLook.hpp"
-#include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
@@ -55,7 +51,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 #include <assert.h>
-#include <stdio.h>
 
 enum Buttons {
   EDIT = 100,

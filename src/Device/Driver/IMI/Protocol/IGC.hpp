@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Types.hpp"
 
-#include <tchar.h>
 #include <cstdio>
 
 namespace IMI

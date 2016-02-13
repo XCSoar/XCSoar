@@ -24,8 +24,6 @@
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
 
-#include <stdio.h>
-
 void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 {

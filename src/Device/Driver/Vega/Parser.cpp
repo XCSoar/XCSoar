@@ -26,10 +26,8 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Compiler.h"
-#include "Util/Macros.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 #include <algorithm>
 
 #ifdef _UNICODE

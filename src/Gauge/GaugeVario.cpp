@@ -31,8 +31,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Util/Clamp.hpp"
 
-#include <algorithm>
-
 #define DELTA_V_STEP 4.
 #define DELTA_V_LIMIT 16.
 #define TEXT_BUG _T("Bug")

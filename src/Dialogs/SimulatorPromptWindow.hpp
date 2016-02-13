@@ -31,9 +31,9 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
-#include "Look/DialogLook.hpp"
 #include "Form/Button.hpp"
 
+struct DialogLook;
 class ActionListener;
 
 class SimulatorPromptWindow final : public ContainerWindow {

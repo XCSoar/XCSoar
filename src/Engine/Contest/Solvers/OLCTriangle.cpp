@@ -25,8 +25,6 @@
 #include "Trace/Trace.hpp"
 #include "Util/QuadTree.hpp"
 
-#include <limits>
-
 /*
  @todo potential to use 3d convex hull to speed search
 

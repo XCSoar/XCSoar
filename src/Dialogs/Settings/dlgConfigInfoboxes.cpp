@@ -30,10 +30,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Event/KeyCode.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/String.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -42,7 +39,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StaticArray.hxx"
-#include "Compiler.h"
 
 #include <assert.h>
 

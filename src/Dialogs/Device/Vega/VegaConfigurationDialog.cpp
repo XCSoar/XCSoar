@@ -43,10 +43,7 @@ Copyright_License {
 #include "Device/Driver/Vega/Internal.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Compiler.h"
 #include "Operation/MessageOperationEnvironment.hpp"
-
-#include <assert.h>
 
 static const TCHAR *const captions[] = {
   _T(" 1 Hardware"),

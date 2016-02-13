@@ -24,14 +24,11 @@ Copyright_License {
 #include "Files.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
-#include "Util/StringAPI.hxx"
 #include "Compiler.h"
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
-
-#include <algorithm>
 
 static const char *const font_search_paths[] = {
 #ifdef __APPLE__

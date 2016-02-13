@@ -22,12 +22,10 @@ Copyright_License {
 */
 
 #include "Airspace.hpp"
-#include "Geo.hpp"
 #include "Util.hpp"
 #include "Util/StringAPI.hxx"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"

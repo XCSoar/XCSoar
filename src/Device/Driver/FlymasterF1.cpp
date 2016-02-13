@@ -23,15 +23,11 @@ Copyright_License {
 
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Atmosphere/Temperature.hpp"
-
-#include <stdlib.h>
-#include <math.h>
 
 class FlymasterF1Device : public AbstractDevice {
   Port &port;

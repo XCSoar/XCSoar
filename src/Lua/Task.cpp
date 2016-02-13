@@ -27,8 +27,8 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Computer/GlideComputer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Util/Gradient.hpp"
 
 static int

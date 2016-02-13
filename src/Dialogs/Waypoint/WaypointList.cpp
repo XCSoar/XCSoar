@@ -39,9 +39,7 @@ Copyright_License {
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Components.hpp"
-#include "Compiler.h"
 #include "Form/DataField/Enum.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"
 #include "UIGlobals.hpp"
@@ -61,7 +59,6 @@ Copyright_License {
 #include <list>
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 enum Controls {
@@ -125,7 +122,6 @@ struct WaypointListDialogState
 };
 
 class WaypointFilterWidget;
-class WaypointListButtons;
 
 class WaypointListWidget final
   : public ListWidget, public DataFieldListener,

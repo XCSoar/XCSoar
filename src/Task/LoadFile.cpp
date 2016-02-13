@@ -22,13 +22,17 @@
 
 #include "LoadFile.hpp"
 #include "Deserialiser.hpp"
+#include "XML/Node.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "XML/Parser.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <memory>
+
+#include <tchar.h>
 
 OrderedTask *
 LoadTask(Path path, const TaskBehaviour &task_behaviour,

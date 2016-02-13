@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IMI_DEVIMI_HPP
 #define XCSOAR_IMI_DEVIMI_HPP
 
-#include "Types.hpp"
-
 class Path;
 class Port;
 struct Declaration;

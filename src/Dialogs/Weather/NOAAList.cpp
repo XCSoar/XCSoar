@@ -41,7 +41,6 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
-#include "Weather/METAR.hpp"
 #include "Util/TrivialArray.hxx"
 #include "Util/StringAPI.hxx"
 #include "Compiler.h"

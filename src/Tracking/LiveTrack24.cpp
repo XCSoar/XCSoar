@@ -26,13 +26,11 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/Request.hpp"
-#include "Net/HTTP/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Util/StaticString.hxx"
 #include "Version.hpp"
 
 #include <assert.h>
-#include <stdio.h>
 #include <cstdlib>
 
 namespace LiveTrack24

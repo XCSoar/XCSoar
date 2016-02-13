@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DRAW_THREAD_HPP
 
 #include "Thread/RecursivelySuspensibleThread.hpp"
-#include "Compiler.h"
 
 class GlueMapWindow;
 

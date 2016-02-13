@@ -25,8 +25,6 @@ Copyright_License {
 #include "FontSettings.hpp"
 #include "Screen/Font.hpp"
 
-#include <algorithm>
-
 /// text names on the map
 Font Fonts::map;
 /// menu buttons, waypoint selection, messages, etc.

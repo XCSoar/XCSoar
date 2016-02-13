@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ConfiguredPort.hpp"
-#include "NullPort.hpp"
 #include "SocketPort.hpp"
 #include "TCPPort.hpp"
 #include "K6BtPort.hpp"

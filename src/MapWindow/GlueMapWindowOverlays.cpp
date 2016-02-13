@@ -27,6 +27,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"

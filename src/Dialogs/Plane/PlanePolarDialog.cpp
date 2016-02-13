@@ -35,14 +35,10 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Plane/Plane.hpp"
-#include "OS/FileUtil.hpp"
-#include "LocalPath.hpp"
+#include "OS/Path.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "Units/Units.hpp"
 #include "Util/Error.hxx"
-
-#include <windef.h> // for MAX_PATH
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener, ActionListener {

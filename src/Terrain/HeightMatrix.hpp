@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Height.hpp"
 #include "Util/AllocatedArray.hxx"
-#include "Compiler.h"
 
 class RasterMap;
 

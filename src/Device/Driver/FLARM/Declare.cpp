@@ -22,11 +22,8 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-#include "TextProtocol.hpp"
-#include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/ConvertString.hpp"
 
 bool
 FlarmDevice::Declare(const Declaration &declaration,

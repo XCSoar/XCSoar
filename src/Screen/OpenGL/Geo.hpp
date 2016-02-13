@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_GEO_HPP
 #define XCSOAR_SCREEN_OPENGL_GEO_HPP
 
-#include "Compiler.h"
-
 struct GeoPoint;
 class WindowProjection;
 
 #ifdef USE_GLSL
+
+#include "Compiler.h"
 
 #include <glm/glm.hpp>
 

@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_IO_THREAD_HPP
 #define XCSOAR_IO_THREAD_HPP
 
+#include "FileEventHandler.hpp"
 #include "OS/EventPipe.hpp"
 #include "Thread/Thread.hpp"
 #include "IOLoop.hpp"
-
-#include <map>
 
 class FileEventHandler;
 

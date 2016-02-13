@@ -26,12 +26,10 @@ Copyright_License {
 
 #include "BinaryProtocol.hpp"
 #include "Util/AllocatedArray.hxx"
-#include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 #include "tchar.h"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
-#include "Thread/Mutex.hpp"
 
 #include <string>
 

@@ -22,9 +22,6 @@ Copyright_License {
 */
 
 #include "Math/FastRotation.hpp"
-#include "Math/FastMath.hpp"
-
-#include <math.h>
 
 void
 FastRotation::SetAngle(Angle _angle)

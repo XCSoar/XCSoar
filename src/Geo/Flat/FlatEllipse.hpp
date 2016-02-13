@@ -24,9 +24,10 @@
 #define FLATELLIPSE_HPP
 
 #include "FlatPoint.hpp"
-#include "FlatLine.hpp"
 #include "Math/Angle.hpp"
 #include "Compiler.h"
+
+class FlatLine;
 
 /**
  * 2-d ellipse in real-valued projected coordinates, with methods for

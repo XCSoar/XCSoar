@@ -28,7 +28,6 @@ Copyright_License {
 #include "Globals.hpp"
 #include "Screen/Point.hpp"
 #include "DisplayOrientation.hpp"
-#include "Compiler.h"
 
 #include <algorithm>
 

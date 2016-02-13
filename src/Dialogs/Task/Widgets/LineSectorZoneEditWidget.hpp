@@ -26,8 +26,6 @@
 
 #include "ObservationZoneEditWidget.hpp"
 
-#include <assert.h>
-
 class LineSectorZone;
 
 class LineSectorZoneEditWidget : public ObservationZoneEditWidget {

@@ -26,7 +26,6 @@ Copyright_License {
 #include "Math/Util.hpp"
 #include "Util/NumberParser.hpp"
 
-#include <stdlib.h>
 #include <stdio.h>
 
 static bool DataFieldKeyUp = false;

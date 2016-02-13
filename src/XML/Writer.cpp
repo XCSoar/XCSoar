@@ -29,9 +29,6 @@
 #include "Node.hpp"
 #include "IO/TextWriter.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StringUtil.hpp"
-
-#include <assert.h>
 
 #define INDENTCHAR '\t'
 

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "NMEA/InputLine.hpp"
+#include "CSVLine.hpp"
 #include "Util/StringAPI.hxx"
 
 #include <algorithm>

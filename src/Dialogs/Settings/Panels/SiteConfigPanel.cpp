@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
-#include "Dialogs/Dialogs.h"
 #include "LocalPath.hpp"
 #include "UtilsSettings.hpp"
 #include "ConfigPanel.hpp"
@@ -31,7 +30,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Patterns.hpp"
-#include "Form/DataField/File.hpp"
+#include "OS/Path.hpp"
 
 enum ControlIndex {
   DataPath,

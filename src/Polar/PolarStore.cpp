@@ -25,7 +25,6 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
-#include "Compiler.h"
 
 #include <assert.h>
 

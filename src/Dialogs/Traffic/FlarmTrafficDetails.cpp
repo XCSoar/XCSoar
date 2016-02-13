@@ -41,9 +41,6 @@
 #include "FLARM/Friends.hpp"
 #include "FLARM/Glue.hpp"
 #include "Renderer/ColorButtonRenderer.hpp"
-#include "Renderer/ColorButtonRenderer.hpp"
-#include "Screen/Layout.hpp"
-#include "Geo/Math.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -56,9 +53,6 @@
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "TeamActions.hpp"
-
-#include <math.h>
-#include <stdio.h>
 
 class FlarmTrafficDetailsWidget final
   : public RowFormWidget, ActionListener, NullBlackboardListener {

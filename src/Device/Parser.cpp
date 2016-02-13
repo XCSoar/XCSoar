@@ -29,7 +29,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Util/StringUtil.hpp"
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 

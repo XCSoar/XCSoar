@@ -2,14 +2,13 @@
 #define AIRSPACE_SORTER_HPP
 
 #include "Geo/GeoVector.hpp"
-#include "Geo/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
-#include "Predicate/AirspacePredicate.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
 #include <vector>
 
+struct GeoPoint;
 class AbstractAirspace;
 class Airspaces;
 class FlatProjection;

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/CharacterButton.hpp"
-#include "Look/ButtonLook.hpp"
 #include "Util/CharUtil.hpp"
 
 #ifndef _UNICODE

@@ -28,8 +28,6 @@ extern "C" {
 #include <lua.h>
 }
 
-#include <assert.h>
-
 static constexpr char persistent_table[] = "xcsoar.persistent_table";
 static constexpr char persistent_callback[] = "xcsoar.persistent_callback";
 

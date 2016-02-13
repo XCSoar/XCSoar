@@ -26,7 +26,6 @@ Copyright_License {
 #include "Widget/FixedWindowWidget.hpp"
 #include "Form/DigitEntry.hpp"
 #include "Form/LambdaActionListener.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Time/RoughTime.hpp"

@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol/Protocol.hpp"
-#include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
 
 bool
 IMIDevice::Connect(OperationEnvironment &env)

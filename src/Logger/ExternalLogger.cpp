@@ -28,7 +28,6 @@
 #include "Language/Language.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/MultipleDevices.hpp"
-#include "Device/Driver.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
@@ -43,10 +42,7 @@
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/Error.hxx"
-
-#include <windef.h> /* for MAX_PATH */
 
 class DeclareJob {
   DeviceDescriptor &device;

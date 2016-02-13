@@ -29,7 +29,6 @@ Copyright_License {
 #include <zzip/lib.h>
 
 #include <algorithm>
-#include <stdlib.h>
 
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                double _threshold,

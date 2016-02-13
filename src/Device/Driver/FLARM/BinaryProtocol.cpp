@@ -25,7 +25,6 @@ Copyright_License {
 #include "CRC16.hpp"
 #include "Device/Port/Port.hpp"
 #include "Time/TimeoutClock.hpp"
-#include "Operation/Operation.hpp"
 
 gcc_pure
 static const uint8_t *

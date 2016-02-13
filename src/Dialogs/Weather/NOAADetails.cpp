@@ -34,9 +34,7 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
-#include "Weather/METAR.hpp"
 #include "Weather/ParsedMETAR.hpp"
-#include "Weather/TAF.hpp"
 #include "Weather/NOAAFormatter.hpp"
 #include "UIGlobals.hpp"
 

@@ -34,12 +34,9 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
 #include "UtilsSettings.hpp"
-#include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
-
-#include <windef.h> /* for MAX_PATH */
 
 enum ControlIndex {
   UIScale,

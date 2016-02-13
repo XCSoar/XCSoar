@@ -23,8 +23,11 @@
 #include "SaveFile.hpp"
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
+#include "XML/Node.hpp"
 #include "IO/TextWriter.hpp"
 #include "OS/Path.hpp"
+
+#include <tchar.h>
 
 bool
 SaveTask(Path path, const OrderedTask &task)

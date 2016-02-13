@@ -25,7 +25,6 @@ Copyright_License {
 #include "TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Geo/GeoVector.hpp"
@@ -34,8 +33,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
-
-#include <cstdio>
 
 typedef StaticString<256u> Buffer;
 

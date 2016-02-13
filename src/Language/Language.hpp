@@ -27,7 +27,7 @@ Copyright_License {
 #if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
 #define USE_LIBINTL
 
-#include <libintl.h>
+#include <libintl.h> // IWYU pragma: export
 
 #define _(x) gettext(x)
 

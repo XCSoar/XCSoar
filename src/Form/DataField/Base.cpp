@@ -24,14 +24,9 @@ Copyright_License {
 #include "Base.hpp"
 #include "Listener.hpp"
 #include "ComboList.hpp"
-#include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
 #include <math.h>
-
-enum {
-  ComboPopupITEMMAX = 100
-};
 
 DataField::DataField(Type _type, bool _supports_combolist,
                      DataFieldListener *_listener)

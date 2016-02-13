@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Thread/Mutex.hpp"
-#include "Compiler.h"
 
 #include <tchar.h>
 

@@ -25,7 +25,6 @@
 
 #include "UnorderedTask.hpp"
 #include "UnorderedTaskPoint.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 
 #include <vector>
 

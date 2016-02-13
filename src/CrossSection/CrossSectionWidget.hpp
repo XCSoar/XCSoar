@@ -26,10 +26,8 @@
 
 #include "Widget/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
-#include "MapSettings.hpp"
-#include "Compiler.h"
 
-struct AirspaceRendererSettings;
+struct MapSettings;
 
 class CrossSectionWidget : public WindowWidget,
                            private NullBlackboardListener {

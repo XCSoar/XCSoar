@@ -26,8 +26,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
-#include "InfoBoxes/Content/Base.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Dialogs/ComboPicker.hpp"

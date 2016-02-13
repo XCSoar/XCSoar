@@ -16,7 +16,6 @@
 ***********************************************************************/
 
 #include "grecord.h"
-#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
 #include <string.h>

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"

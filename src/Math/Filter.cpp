@@ -25,7 +25,6 @@
 #include "Util.hpp"
 
 #include <assert.h>
-#include <stdio.h>
 
 bool
 Filter::Design(const double cutoff_wavelength, const bool bessel)

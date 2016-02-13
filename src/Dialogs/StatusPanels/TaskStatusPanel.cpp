@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TaskStatusPanel.hpp"
 #include "Form/DataField/Float.hpp"
-#include "Util/Macros.hpp"
 #include "ActionInterface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"

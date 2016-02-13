@@ -23,7 +23,6 @@
 
 #include "SectorZoneEditWidget.hpp"
 #include "Engine/Task/ObservationZones/SectorZone.hpp"
-#include "Engine/Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Language/Language.hpp"
 

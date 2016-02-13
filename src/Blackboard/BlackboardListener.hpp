@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_BLACKBOARD_LISTENER_HPP
 #define XCSOAR_BLACKBOARD_LISTENER_HPP
 
-#include "Compiler.h"
-
 struct MoreData;
 struct DerivedInfo;
 struct ComputerSettings;

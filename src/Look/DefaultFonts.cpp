@@ -24,17 +24,7 @@ Copyright_License {
 #include "DefaultFonts.hpp"
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
-#include "Hardware/DisplayDPI.hpp"
-#include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
-
-#ifdef HAVE_TEXT_CACHE
-#include "Screen/Custom/Cache.hpp"
-#endif
-
-#include <algorithm>
-
-#include <string.h>
 
 static void
 InitialiseLogFonts(FontSettings &settings)

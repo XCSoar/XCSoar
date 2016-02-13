@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_LUA_PERSISTENT_HPP
 #define XCSOAR_LUA_PERSISTENT_HPP
 
-#include "Compiler.h"
-
 struct lua_State;
 
 namespace Lua {

@@ -31,8 +31,6 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "Math/Util.hpp"
 
-#include <stdlib.h>
-
 class EyeDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */

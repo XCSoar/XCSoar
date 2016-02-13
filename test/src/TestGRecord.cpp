@@ -25,6 +25,8 @@
 #include "OS/Path.hpp"
 #include "Util/Error.hxx"
 
+#include <tchar.h>
+
 static void
 CheckGRecord(const TCHAR *path)
 {

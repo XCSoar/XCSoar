@@ -35,7 +35,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <algorithm>
-#include <assert.h>
 
 static WndProperty *editor;
 static KeyboardWidget *kb = NULL;

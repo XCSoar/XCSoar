@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
-#include "Util/StringUtil.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"

@@ -25,11 +25,9 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"
-#include "Airspace/ActivePredicate.hpp"
 
 void
 UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)

@@ -36,7 +36,6 @@ Copyright_License {
 #include "CURL/Easy.hpp"
 
 #include <curl/curl.h>
-#include <stdint.h>
 #endif
 
 #ifdef HAVE_JAVA_NET

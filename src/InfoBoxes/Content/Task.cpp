@@ -39,7 +39,6 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 static void
 ShowNextWaypointDetails()

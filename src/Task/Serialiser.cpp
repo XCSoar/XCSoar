@@ -24,14 +24,18 @@
 #include "Task/Ordered/Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/ASTPoint.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "XML/DataNode.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
 #include <memory>
+
+#include <assert.h>
+#include <tchar.h>
 
 gcc_const
 static const TCHAR *

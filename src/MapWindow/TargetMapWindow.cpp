@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "SocketPort.hpp"
 #include "Net/SocketError.hpp"
-#include "IO/DataHandler.hpp"
 
 #ifdef HAVE_POSIX
 #include "IO/Async/GlobalIOThread.hpp"

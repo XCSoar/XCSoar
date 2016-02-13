@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IO_MAP_FILE_HPP
 #define XCSOAR_IO_MAP_FILE_HPP
 
-struct zzip_dir;
-
 /**
  * Obtain the configured map file path from the profile and open it as
  * a ZIP file.

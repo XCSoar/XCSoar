@@ -18,18 +18,11 @@
 #include "vlapi2.h"
 #include "vlconv.h"
 #include "dbbconv.h"
-#include "grecord.h"
 #include "Database.hpp"
-#include "Device/Port/Port.hpp"
 #include "Util.hpp"
-#include "Protocol.hpp"
-#include "Operation/Operation.hpp"
 #include "Util/CharUtil.hpp"
 
-#include <memory.h>
 #include <string.h>
-#include <stdlib.h>
-#include <vector>
 
 // ------------------------------------------------------------
 //                          VLAPI

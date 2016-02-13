@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_FILE_HPP
 #define XCSOAR_PROFILE_FILE_HPP
 
-#include <tchar.h>
-
 class ProfileMap;
 class Path;
 class Error;

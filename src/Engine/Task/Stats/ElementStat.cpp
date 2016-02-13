@@ -21,8 +21,6 @@
  */
 
 #include "ElementStat.hpp"
-#include "Navigation/Aircraft.hpp"
-#include <algorithm>
 
 void
 ElementStat::Reset()

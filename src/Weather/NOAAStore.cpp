@@ -22,10 +22,9 @@ Copyright_License {
 */
 
 #include "NOAAStore.hpp"
-#include "ParsedMETAR.hpp"
-#include "Util/Macros.hpp"
 
 #ifdef _UNICODE
+#include "Util/Macros.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <windows.h>

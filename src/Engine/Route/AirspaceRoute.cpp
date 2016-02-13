@@ -25,6 +25,7 @@
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/Predicate/AirspacePredicateHeightRange.hpp"
+#include "Airspace/Predicate/AirspacePredicate.hpp"
 #include "Geo/Flat/FlatRay.hpp"
 
 // Airspace query helpers

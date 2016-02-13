@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ZipSource.hpp"
-#include "Util/ConvertString.hpp"
 #include "Util/Error.hxx"
 #include "Util/Domain.hxx"
 

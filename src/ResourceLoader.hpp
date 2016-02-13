@@ -31,8 +31,6 @@ Copyright_License {
 #endif
 
 #include <tchar.h>
-#include <stddef.h>
-#include <utility>
 
 class ResourceId;
 

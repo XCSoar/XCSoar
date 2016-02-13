@@ -24,7 +24,6 @@ Copyright_License {
 #include "AutoFont.hpp"
 #include "FontDescription.hpp"
 #include "Screen/Font.hpp"
-#include "Asset.hpp"
 
 #include <algorithm>
 

@@ -31,7 +31,6 @@ Copyright_License {
 struct WaypointFilter;
 class WaypointList;
 class Waypoints;
-struct Waypoint;
 
 class WaypointListBuilder final : public WaypointVisitor {
   const WaypointFilter &filter;

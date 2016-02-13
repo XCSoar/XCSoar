@@ -22,14 +22,7 @@ Copyright_License {
 */
 
 #include "K6BtPort.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language/Language.hpp"
-#include "Message.hpp"
-#include "Asset.hpp"
-#include "OS/Sleep.h"
 
-#include <assert.h>
-#include <tchar.h>
 #include <stdio.h>
 #include <string.h>
 

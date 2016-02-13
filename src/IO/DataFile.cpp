@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataFile.hpp"
+#include "FileSource.hpp"
 #include "FileLineReader.hpp"
 #include "TextWriter.hpp"
 #include "LocalPath.hpp"

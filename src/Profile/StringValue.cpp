@@ -24,9 +24,10 @@ Copyright_License {
 #include "Map.hpp"
 #include "Util/UTF8.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/Macros.hpp"
 
 #ifdef _UNICODE
+#include "Util/Macros.hpp"
+
 #include <windows.h>
 #endif
 

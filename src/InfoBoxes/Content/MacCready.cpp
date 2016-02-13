@@ -27,11 +27,9 @@ Copyright_License {
 #include "InfoBoxes/Panel/MacCreadyEdit.hpp"
 #include "InfoBoxes/Panel/MacCreadySetup.hpp"
 #include "Interface.hpp"
-#include "ActionInterface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
-#include "Profile/Profile.hpp"
 
 #include <tchar.h>
 

@@ -31,7 +31,6 @@ Copyright_License {
 #include "Blackboard.hpp"
 #include "Dialogs.hpp"
 #include "Legacy.hpp"
-#include "Version.hpp"
 #include "LocalPath.hpp"
 #include "Compatibility/path.h"
 #include "OS/Path.hpp"
@@ -42,9 +41,6 @@ Copyright_License {
 #include "Wind.hpp"
 #include "Logger.hpp"
 #include "Tracking.hpp"
-
-#include <windef.h> // for MAX_PATH
-#include <assert.h>
 
 lua_State *
 Lua::NewFullState()

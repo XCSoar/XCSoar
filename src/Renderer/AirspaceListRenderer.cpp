@@ -25,7 +25,6 @@ Copyright_License {
 #include "TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Util/StaticString.hxx"
-#include "Util/Macros.hpp"
 
 static void
 Draw(Canvas &canvas, PixelRect rc,

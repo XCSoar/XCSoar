@@ -24,8 +24,6 @@
 
 #include "Ptr.hpp"
 
-#include <utility>
-
 /**
  * Generic visitor for objects in the Waypoints container
  */

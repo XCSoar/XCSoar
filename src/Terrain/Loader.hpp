@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Thread/SharedMutex.hpp"
 
-#include <tchar.h>
-
 struct zzip_dir;
 struct GeoPoint;
 class RasterTileCache;

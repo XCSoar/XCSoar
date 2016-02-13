@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SubCanvas.hpp"
 
-#include <algorithm>
+#include <iterator>
 
 void
 WindowList::Clear()

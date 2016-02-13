@@ -30,12 +30,10 @@ Copyright_License {
 #include "Components.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
 #include "Engine/Airspace/SoonestAirspace.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
-#include "MainWindow.hpp"
 #include "NMEA/Aircraft.hpp"
 
 /*

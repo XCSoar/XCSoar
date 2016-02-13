@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "AircraftLook.hpp"
-#include "Screen/Layout.hpp"
 
 void
 AircraftLook::Initialise()

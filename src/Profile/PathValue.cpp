@@ -27,14 +27,14 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Util/StringAPI.hxx"
 #include "Util/StringCompare.hxx"
-#include "Util/StringUtil.hpp"
 #include "Util/StringPointer.hxx"
-#include "Util/AllocatedString.hxx"
 #include "Util/Macros.hpp"
 
-#include <windef.h> /* for MAX_PATH */
+#ifdef _UNICODE
+#include "Util/AllocatedString.hxx"
+#endif
 
-#include <algorithm>
+#include <windef.h> /* for MAX_PATH */
 
 AllocatedPath
 ProfileMap::GetPath(const char *key) const

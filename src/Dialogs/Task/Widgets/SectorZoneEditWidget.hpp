@@ -26,8 +26,6 @@
 
 #include "ObservationZoneEditWidget.hpp"
 
-#include <assert.h>
-
 class SectorZone;
 
 class SectorZoneEditWidget : public ObservationZoneEditWidget {

@@ -47,18 +47,15 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InputEvents.hpp"
 #include "InputConfig.hpp"
 #include "InputParser.hpp"
-#include "UIActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Asset.hpp"
 #include "Menu/MenuData.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "IO/LineReader.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Pan.hpp"
 
 #ifdef KOBO

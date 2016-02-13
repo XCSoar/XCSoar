@@ -41,7 +41,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/Timer.hpp"
-#include "Compiler.h"
 
 #include <math.h>
 

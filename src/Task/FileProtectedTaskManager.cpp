@@ -28,8 +28,6 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "OS/Path.hpp"
 
-#include <windef.h> // for MAX_PATH
-
 bool
 ProtectedTaskManager::TaskSave(Path path)
 {

@@ -26,11 +26,10 @@ Copyright_License {
 #include "Full.hpp"
 #include "Persistent.hpp"
 #include "Background.hpp"
-#include "Error.hpp"
 #include "OS/Path.hpp"
 
 extern "C" {
-#include <lauxlib.h>
+#include <lua.h>
 }
 
 bool

@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Time/RoughTime.hpp"
-#include "Compiler.h"
 
 /**
  * This #DataField implementation stores a UTC time of day with a

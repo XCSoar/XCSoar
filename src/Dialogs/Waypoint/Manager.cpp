@@ -32,7 +32,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Screen/Layout.hpp"
 #include "Components.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"

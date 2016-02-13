@@ -30,7 +30,6 @@
 #include "Util/Error.hxx"
 #include "Util/Domain.hxx"
 
-#include <tchar.h>
 #include <string.h>
 
 static constexpr Domain grecord_domain("grecord");

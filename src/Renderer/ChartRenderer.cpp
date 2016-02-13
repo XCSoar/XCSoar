@@ -24,12 +24,10 @@ Copyright_License {
 #include "ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Language/Language.hpp"
 #include "Math/LeastSquares.hpp"
 #include "Util/StaticString.hxx"
 
 #include <assert.h>
-#include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
 
 void

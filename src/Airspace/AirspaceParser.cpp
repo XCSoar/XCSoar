@@ -41,8 +41,6 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 
 #include <tchar.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 enum class AirspaceFileType {
   UNKNOWN,

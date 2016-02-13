@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "FileTransaction.hpp"
 #include "OS/FileUtil.hpp"
-#include "Util/StringAPI.hxx"
 
 #include <assert.h>
 

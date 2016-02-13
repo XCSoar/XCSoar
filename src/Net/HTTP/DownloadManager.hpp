@@ -27,7 +27,6 @@ Copyright_License {
 #include "Features.hpp"
 #include "Compiler.h"
 
-#include <tchar.h>
 #include <stdint.h>
 
 class Path;

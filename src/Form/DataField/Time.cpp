@@ -27,9 +27,6 @@ Copyright_License {
 #include "Util/StringFormat.hpp"
 #include "Util/NumberParser.hpp"
 
-#include <stdlib.h>
-#include <stdio.h>
-
 static bool data_field_key_up = false;
 
 const TCHAR *

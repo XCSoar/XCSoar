@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <algorithm>
 #include <assert.h>
-#include <string.h>
 
 void
 RasterMap::UpdateProjection()

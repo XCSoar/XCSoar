@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "IOThread.hpp"
-#include "FileEventHandler.hpp"
 
 bool
 IOThread::Start()

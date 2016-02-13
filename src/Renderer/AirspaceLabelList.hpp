@@ -27,12 +27,10 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hxx"
 
 struct AirspaceWarningConfig;
-class AbstractAirspace;
 
 class AirspaceLabelList : private NonCopyable {
 public:

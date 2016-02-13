@@ -23,7 +23,6 @@
 #include "Airspace.hpp"
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
-#include "Geo/Flat/FlatProjection.hpp"
 
 void
 Airspace::Destroy()

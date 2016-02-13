@@ -24,7 +24,8 @@
 #define DATANODE_XML_HPP
 
 #include "DataNode.hpp"
-#include "XML/Node.hpp"
+
+class XMLNode;
 
 /**
  * ConstDataNode implementation for XML files

@@ -29,8 +29,6 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-#include "Units/Unit.hpp"
-#include "LogFile.hpp"
 
 static void
 FormatLatitude(char *buffer, size_t buffer_size, Angle latitude )

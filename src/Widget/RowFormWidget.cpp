@@ -32,7 +32,6 @@ Copyright_License {
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Font.hpp"
 
-#include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 
 gcc_pure

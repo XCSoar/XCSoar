@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Timer.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
@@ -49,6 +48,7 @@ class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
+namespace InfoBoxLayout { struct Layout; }
 
 /**
  * The XCSoar main window.

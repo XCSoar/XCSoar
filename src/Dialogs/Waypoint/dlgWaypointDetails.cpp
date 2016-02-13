@@ -24,7 +24,6 @@ Copyright_License {
 #include "WaypointDialogs.hpp"
 #include "WaypointInfoWidget.hpp"
 #include "WaypointCommandsWidget.hpp"
-#include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -45,7 +44,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Compiler.h"
 #include "Language/Language.hpp"
@@ -61,8 +59,6 @@ Copyright_License {
 #include "Util/AllocatedString.hxx"
 
 #include <assert.h>
-#include <stdio.h>
-#include <windef.h> /* for MAX_PATH */
 
 #ifdef HAVE_RUN_FILE
 

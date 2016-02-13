@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_AREA_HPP
 #define XCSOAR_FAI_TRIANGLE_AREA_HPP
 
-#include "Compiler.h"
-
 struct GeoPoint;
 struct FAITriangleSettings;
 

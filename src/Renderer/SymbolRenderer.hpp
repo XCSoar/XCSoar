@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SYMBOL_RENDERER_HPP
 #define XCSOAR_SYMBOL_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 class Canvas;
 
 namespace SymbolRenderer

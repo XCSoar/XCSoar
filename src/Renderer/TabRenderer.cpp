@@ -26,8 +26,6 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Look/DialogLook.hpp"
 
-#include <algorithm>
-
 void
 TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                   const DialogLook &look,

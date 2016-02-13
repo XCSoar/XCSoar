@@ -22,7 +22,6 @@
 
 #include "MixedTaskFactory.hpp"
 #include "Constraints.hpp"
-#include "Util/Macros.hpp"
 
 static constexpr TaskFactoryConstraints mixed_constraints = {
   true,

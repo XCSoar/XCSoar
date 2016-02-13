@@ -33,6 +33,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Device/device.hpp"

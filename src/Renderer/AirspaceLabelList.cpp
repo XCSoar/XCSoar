@@ -23,10 +23,7 @@ Copyright_License {
 
 #include <algorithm>
 #include "AirspaceLabelList.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningConfig.hpp"
-#include "Engine/Airspace/AirspaceWarningManager.hpp"
 
 class AirspaceLabelListCompare {
   const AirspaceWarningConfig &config;

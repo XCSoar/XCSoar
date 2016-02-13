@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Charset.hpp"
 
-#include <tchar.h>
-
 class NLineReader;
 class TLineReader;
 

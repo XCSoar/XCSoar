@@ -23,8 +23,6 @@
 #include "TaskDijkstra.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-#include <algorithm>
-
 TaskDijkstra::TaskDijkstra(bool _is_min)
   :NavDijkstra(0),
    is_min(_is_min)

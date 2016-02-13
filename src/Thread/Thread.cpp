@@ -35,8 +35,6 @@ Copyright_License {
 #include <signal.h>
 #endif
 
-#include "LogFile.hpp"
-
 #ifndef NDEBUG
 #include "FastMutex.hpp"
 static FastMutex all_threads_mutex;

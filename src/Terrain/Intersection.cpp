@@ -24,7 +24,6 @@ Copyright_License {
 #include "RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
 
-#include <string.h>
 #include <stdlib.h>
 #include <algorithm>
 

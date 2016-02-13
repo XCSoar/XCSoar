@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "dlgTaskHelpers.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "Task/TypeStrings.hpp"
@@ -41,8 +40,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 
 #include <assert.h>
-#include <stdio.h>
-#include <windef.h> /* for MAX_PATH */
 
 /**
  *

@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Util/StaticString.hxx"
-#include "Compiler.h"
 
 class NumberDataField : public DataField {
 protected:

@@ -29,8 +29,6 @@ Copyright_License {
 
 #include <utility>
 
-#include <stdlib.h>
-
 /**
  * A struct that is used for static initialisation of the enum list.
  */

@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_LIST_RENDERER_HPP
 #define XCSOAR_AIRSPACE_LIST_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
 class Canvas;
 class AbstractAirspace;
 class TwoTextRowsRenderer;
+struct PixelRect;
 struct GeoVector;
 struct AirspaceLook;
 struct AirspaceRendererSettings;

@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TabMenuDisplay.hpp"
+#include "TabMenuData.hpp"
 #include "Widget/PagerWidget.hpp"
-#include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"

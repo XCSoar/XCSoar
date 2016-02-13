@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "OZRenderer.hpp"
-#include "AirspaceRendererSettings.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
@@ -30,6 +29,10 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
+
+#ifdef USE_GDI
+#include "AirspaceRendererSettings.hpp"
+#endif
 
 OZRenderer::OZRenderer(const TaskLook &_task_look,
                        const AirspaceLook &_airspace_look,

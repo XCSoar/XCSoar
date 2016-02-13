@@ -24,12 +24,11 @@ Copyright_License {
 #include "Communication.hpp"
 #include "Protocol.hpp"
 #include "Checksum.hpp"
-#include "Device/Declaration.hpp"
-#include "Device/Driver.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
-#include "OS/Clock.hpp"
 #include "Time/TimeoutClock.hpp"
+
+#include <string.h>
 
 namespace IMI
 {

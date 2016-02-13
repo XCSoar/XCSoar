@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_OPERATION_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Compiler.h"
 
 #include <tchar.h>
 

@@ -23,7 +23,6 @@
 #include "FAITaskFactory.hpp"
 #include "Constraints.hpp"
 #include "Task/Ordered/Settings.hpp"
-#include "Util/Macros.hpp"
 
 static constexpr TaskFactoryConstraints fai_constraints = {
   true,

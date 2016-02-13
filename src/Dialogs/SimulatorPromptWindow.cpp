@@ -27,7 +27,6 @@ Copyright_License {
 
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "Screen/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"

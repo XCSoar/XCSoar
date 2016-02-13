@@ -29,8 +29,6 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/StringAPI.hxx"
 
-#include <stdlib.h>
-
 class ZanderDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */

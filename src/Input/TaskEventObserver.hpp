@@ -25,8 +25,6 @@ Copyright_License {
 #ifndef XCSOAR_TASK_EVENT_OBSERVER_HPP
 #define XCSOAR_TASK_EVENT_OBSERVER_HPP
 
-#include "Compiler.h"
-
 class TaskManager;
 
 /**

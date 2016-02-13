@@ -25,7 +25,6 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
-#include "Operation/Operation.hpp"
 #include "vlapi2.h"
 #include "dbbconv.h"
 #include "Engine/Waypoint/Waypoint.hpp"

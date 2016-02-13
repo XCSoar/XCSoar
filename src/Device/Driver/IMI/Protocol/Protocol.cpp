@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Protocol.hpp"
-#include "Checksum.hpp"
 #include "Conversion.hpp"
 #include "IGC.hpp"
 #include "Communication.hpp"
@@ -31,7 +30,6 @@ Copyright_License {
 #include "Device/RecordedFlight.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
-#include "OS/Clock.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
 #include "Time/BrokenDateTime.hpp"

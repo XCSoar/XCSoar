@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_POLAR_PARSER_HPP
 
 #include <stddef.h>
-#include <tchar.h>
 
 struct PolarShape;
 struct PolarInfo;

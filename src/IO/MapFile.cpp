@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <zzip/zzip.h>
 
-#include <windef.h> /* for MAX_PATH */
-
 struct zzip_dir *
 OpenMapFile()
 {

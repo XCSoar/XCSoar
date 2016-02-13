@@ -29,12 +29,9 @@ Copyright_License {
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
 #include "WaypointFileType.hpp"
-#include "OS/FileUtil.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Util/Error.hxx"
-
-#include <string.h>
 
 static WaypointReaderBase *
 CreateWaypointReader(WaypointFileType type, WaypointFactory factory)

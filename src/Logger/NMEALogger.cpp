@@ -29,8 +29,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Util/StaticString.hxx"
 
-#include <stdio.h>
-
 namespace NMEALogger
 {
   static Mutex mutex;

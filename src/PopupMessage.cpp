@@ -34,7 +34,6 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 #include <algorithm>
 
 using std::min;

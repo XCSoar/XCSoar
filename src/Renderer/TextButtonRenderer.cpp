@@ -22,12 +22,9 @@ Copyright_License {
 */
 
 #include "TextButtonRenderer.hpp"
-#include "Screen/Color.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Pen.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
-#include "Asset.hpp"
 
 inline void
 TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,

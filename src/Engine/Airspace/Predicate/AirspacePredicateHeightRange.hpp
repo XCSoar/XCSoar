@@ -23,7 +23,6 @@
 #ifndef AIRSPACE_PREDICATE_HEIGHT_RANGE_HPP
 #define AIRSPACE_PREDICATE_HEIGHT_RANGE_HPP
 
-#include "AirspacePredicate.hpp"
 #include "OutsideAirspacePredicate.hpp"
 
 class AbstractAirspace;

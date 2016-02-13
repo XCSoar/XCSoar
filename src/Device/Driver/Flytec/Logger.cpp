@@ -25,17 +25,17 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Declaration.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Util/Macros.hpp"
-#include "IO/TextWriter.hpp"
 #include "OS/Path.hpp"
+#include "IO/FileHandle.hpp"
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
 #include "Util/StringCompare.hxx"
 
 #include <stdlib.h>
+#include <string.h>
 
 static bool
 ExpectXOff(Port &port, OperationEnvironment &env, unsigned timeout_ms)

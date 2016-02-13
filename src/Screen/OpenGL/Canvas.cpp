@@ -35,6 +35,7 @@ Copyright_License {
 #include "Screen/Custom/Cache.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
+#include "Math/Angle.hpp"
 #include "Util/AllocatedArray.hxx"
 #include "Util/Macros.hpp"
 

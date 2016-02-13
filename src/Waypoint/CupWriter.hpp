@@ -29,7 +29,6 @@ Copyright_License {
 struct Waypoint;
 class Waypoints;
 class TextWriter;
-class Angle;
 
 void
 WriteCup(TextWriter &writer, const Waypoint &wp);

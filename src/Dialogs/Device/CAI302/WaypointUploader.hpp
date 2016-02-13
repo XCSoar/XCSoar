@@ -27,8 +27,6 @@ Copyright_License {
 #include "Job/Job.hpp"
 #include "OS/Path.hpp"
 
-#include <tchar.h>
-
 class CAI302Device;
 
 class CAI302WaypointUploader : public Job {

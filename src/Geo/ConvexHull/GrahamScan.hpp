@@ -23,11 +23,9 @@
 #ifndef GRAHAM_SCAN_HPP
 #define GRAHAM_SCAN_HPP
 
-#include <list>
-
 #include "Util/NonCopyable.hpp"
-#include "Compiler.h"
 
+#include <list>
 #include <vector>
 
 class SearchPointVector;

@@ -30,8 +30,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Compiler.h"
 
-#include <tchar.h>
-
 struct zzip_dir;
 class FileCache;
 class OperationEnvironment;

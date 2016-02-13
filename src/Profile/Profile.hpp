@@ -27,14 +27,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ProfileMap.hpp"
 
-#include <stddef.h>
-#include <tchar.h>
-
-struct GeoPoint;
 class Path;
 class AllocatedPath;
-template<typename T> class StringPointer;
-template<typename T> class AllocatedString;
 
 namespace Profile
 {

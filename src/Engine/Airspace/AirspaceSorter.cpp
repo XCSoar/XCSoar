@@ -1,6 +1,7 @@
 #include "AirspaceSorter.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "AbstractAirspace.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Util/StringAPI.hxx"
 

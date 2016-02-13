@@ -32,9 +32,6 @@ Copyright_License {
 #include "IO/DataFile.hpp"
 #include "IO/LineReader.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
-
-#include <assert.h>
 
 #define XCSCHKLIST  "xcsoar-checklist.txt"
 

@@ -28,8 +28,6 @@ Copyright_License {
 #include "../Simulator.hpp"
 #include "Geo/Math.hpp"
 
-#include <stdio.h>
-
 void
 Simulator::Init(NMEAInfo &basic)
 {

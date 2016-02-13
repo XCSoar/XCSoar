@@ -29,9 +29,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct Waypoint;
 class Waypoints;
-class RasterTerrain;
 class TLineReader;
 class OperationEnvironment;
 
@@ -50,7 +48,6 @@ public:
   /**
    * Parses a waypoint file into the given waypoint list
    * @param way_points The waypoint list to fill
-   * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the waypoint file parsing was okay, False otherwise
    */
   void Parse(Waypoints &way_points, TLineReader &reader,
@@ -62,7 +59,6 @@ protected:
    * @param line The line to parse
    * @param linenum The line number in the file
    * @param way_points The waypoint list to fill
-   * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the line was parsed correctly or ignored, False if
    * parsing error occured
    */

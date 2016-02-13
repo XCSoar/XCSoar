@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "BlackboardListener.hpp"
 #include "LiveBlackboard.hpp"
-#include "Compiler.h"
 
 #include <functional>
 

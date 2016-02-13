@@ -23,17 +23,14 @@ Copyright_License {
 
 #include "FileCache.hpp"
 #include "OS/FileUtil.hpp"
-#include "Compatibility/path.h"
 #include "Compiler.h"
 
 #include <stdint.h>
 #include <string.h>
-#include <stdlib.h>
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <windef.h> /* for MAX_PATH */
 
 #ifndef HAVE_POSIX
 #include <windows.h>

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/Error.hpp"
 
 extern "C" {
-#include <lauxlib.h>
+#include <lua.h>
 }
 
 static int

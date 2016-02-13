@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Time/PeriodClock.hpp"
-#include "Math/fixed.hpp"
 
 class DataFieldTime final : public DataField {
 private:

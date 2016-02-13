@@ -31,7 +31,6 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 
 #include <tchar.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 /**

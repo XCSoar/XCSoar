@@ -23,7 +23,6 @@
 #include "UnorderedTaskPoint.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Navigation/Aircraft.hpp"
 
 UnorderedTaskPoint::UnorderedTaskPoint(WaypointPtr &&wp,
                                        const TaskBehaviour &tb)

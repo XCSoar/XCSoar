@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "NMEA/Derived.hpp"
+#include "Math/Util.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 #include <stdio.h>
 

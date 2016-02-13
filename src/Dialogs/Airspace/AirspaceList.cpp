@@ -33,26 +33,23 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
-#include "Blackboard/ScopeGPSListener.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringCompare.hxx"
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 enum Controls {

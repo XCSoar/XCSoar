@@ -25,7 +25,6 @@
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
 #include "WindowStats.hpp"
-#include "Task/Computer/WindowStatsComputer.hpp"
 
 #include <type_traits>
 

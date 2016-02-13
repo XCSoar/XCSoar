@@ -21,7 +21,6 @@
  */
 
 #include "ContestManager.hpp"
-#include "Trace/Trace.hpp"
 
 ContestManager::ContestManager(const Contest _contest,
                                const Trace &trace_full,

@@ -23,14 +23,11 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
-#include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/ByteOrder.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
-#include <assert.h>
 
 #ifdef _UNICODE
 #include <windows.h>

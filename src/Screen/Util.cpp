@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
 #include "Util/Macros.hpp"
-#include "Math/FastMath.hpp"
+#include "Math/Angle.hpp"
 
 gcc_const
 static PixelPoint

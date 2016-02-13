@@ -24,6 +24,7 @@
 // Circle radius r at (0,0)
 
 #include "FlatEllipse.hpp"
+#include "FlatLine.hpp"
 #include "Math/Util.hpp"
 
 #include <algorithm>

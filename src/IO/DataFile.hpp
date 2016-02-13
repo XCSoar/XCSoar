@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_IO_DATA_FILE_HPP
 #define XCSOAR_IO_DATA_FILE_HPP
 
-#include "Source.hpp"
 #include "Charset.hpp"
 
 #include <tchar.h>
 
+template<class T> class Source;
 class TLineReader;
 class NLineReader;
 class TextWriter;

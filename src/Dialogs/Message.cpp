@@ -33,7 +33,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 #include <assert.h>
-#include <limits.h>
 
 int
 ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)

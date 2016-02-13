@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DECLARATION_HPP
 #define XCSOAR_DEVICE_DECLARATION_HPP
 
-#include "Geo/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Util/StaticString.hxx"
 #include "Compiler.h"

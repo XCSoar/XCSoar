@@ -21,7 +21,6 @@
 */
 
 #include "OLCSISAT.hpp"
-#include "Trace/Trace.hpp"
 #include "Geo/SearchPointVector.hpp"
 
 OLCSISAT::OLCSISAT(const Trace &_trace)

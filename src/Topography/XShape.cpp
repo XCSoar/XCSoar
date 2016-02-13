@@ -30,7 +30,6 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
-#include "Geo/Math.hpp"
 #endif
 
 #ifdef _UNICODE

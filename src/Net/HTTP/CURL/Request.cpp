@@ -25,8 +25,6 @@ Copyright_License {
 #include "../Session.hpp"
 #include "Version.hpp"
 
-#include <assert.h>
-
 Net::Request::Request(Session &_session, const TCHAR *url,
                       unsigned timeout_ms)
   :session(_session)

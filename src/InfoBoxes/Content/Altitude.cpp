@@ -30,16 +30,13 @@ Copyright_License {
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Language/Language.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Simulator.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 /*
  * Subpart callback function pointers

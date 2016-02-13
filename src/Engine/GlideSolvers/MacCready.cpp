@@ -21,14 +21,12 @@
  */
 
 #include "MacCready.hpp"
-#include "GlideSettings.hpp"
 #include "GlideState.hpp"
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"
 #include "Math/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
-#include <algorithm>
 #include <assert.h>
 
 MacCready::MacCready(const GlideSettings &_settings,

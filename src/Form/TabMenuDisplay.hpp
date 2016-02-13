@@ -24,13 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TABMENU_DISPLAY_HPP
 #define XCSOAR_FORM_TABMENU_DISPLAY_HPP
 
-#include "TabMenuData.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/TabRenderer.hpp"
 #include "Util/StaticArray.hxx"
 
+struct TabMenuGroup;
 struct DialogLook;
-class ContainerWindow;
 class PagerWidget;
 
 class TabMenuDisplay final : public PaintWindow

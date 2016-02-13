@@ -22,10 +22,8 @@ Copyright_License {
 */
 
 #include "TimeConfigPanel.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
-#include "Time/LocalTime.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"

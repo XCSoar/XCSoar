@@ -46,7 +46,6 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "MapSettings.hpp"
 #include "Math/Screen.hpp"
-#include "Look/TrafficLook.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FlarmDetails.hpp"
@@ -59,8 +58,6 @@ Copyright_License {
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"
 #endif
-
-#include <cstdio>
 
 unsigned
 MapItemListRenderer::CalculateLayout(const DialogLook &dialog_look)

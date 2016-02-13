@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_BUILTIN_HPP
 #define XCSOAR_POLAR_BUILTIN_HPP
 
-#include "Compiler.h"
-
 #include <tchar.h>
 
 struct PolarShape;

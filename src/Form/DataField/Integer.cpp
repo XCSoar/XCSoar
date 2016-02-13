@@ -25,7 +25,6 @@ Copyright_License {
 #include "ComboList.hpp"
 #include "Util/NumberParser.hpp"
 
-#include <stdlib.h>
 #include <stdio.h>
 
 static bool datafield_key_up = false;

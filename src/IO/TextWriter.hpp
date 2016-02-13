@@ -25,15 +25,14 @@ Copyright_License {
 #define XCSOAR_IO_TEXT_WRITER_HPP
 
 #include "FileHandle.hpp"
-#include "Compiler.h"
-#include "Util/ReusableArray.hpp"
 
 #include <assert.h>
 #include <string.h>
 #include <stddef.h>
-#include <stdio.h>
 
 #ifdef _UNICODE
+#include "Util/ReusableArray.hpp"
+
 #include <tchar.h>
 #endif
 

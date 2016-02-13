@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "FileMapping.hpp"
 #include "Path.hpp"
-#include "Compiler.h"
 
 #ifdef HAVE_POSIX
 #include <fcntl.h>

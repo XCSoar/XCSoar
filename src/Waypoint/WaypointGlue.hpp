@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_GLUE_HPP
 #define XCSOAR_WAY_POINT_GLUE_HPP
 
-#include "Engine/Waypoint/Origin.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
 class Waypoints;

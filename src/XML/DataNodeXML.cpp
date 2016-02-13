@@ -21,7 +21,7 @@
  */
 
 #include "DataNodeXML.hpp"
-#include "XML/Parser.hpp"
+#include "Node.hpp"
 #include "Util/StringAPI.hxx"
 
 const TCHAR *

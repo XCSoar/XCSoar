@@ -23,9 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302/PocketNav.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -33,8 +31,6 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "Util/Clamp.hpp"
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 
 class B50Device : public AbstractDevice {

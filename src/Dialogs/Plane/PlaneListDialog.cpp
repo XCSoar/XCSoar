@@ -32,7 +32,6 @@ Copyright_License {
 #include "Plane/PlaneFileGlue.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
-#include "Compatibility/path.h"
 #include "LocalPath.hpp"
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
@@ -45,7 +44,6 @@ Copyright_License {
 
 #include <vector>
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE

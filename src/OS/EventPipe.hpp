@@ -32,8 +32,6 @@
 
 #include "UniqueFileDescriptor.hxx"
 
-#include <assert.h>
-
 /**
  * This class can be used to wake up a thread idling in select() or
  * poll().

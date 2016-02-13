@@ -117,7 +117,6 @@ Net::DownloadManager::Cancel(Path relative_path)
 #include <algorithm>
 
 #include <string.h>
-#include <windef.h> /* for MAX_PATH */
 
 class DownloadManagerThread final
   : protected StandbyThread, private QuietOperationEnvironment {

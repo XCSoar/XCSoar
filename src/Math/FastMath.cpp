@@ -22,13 +22,9 @@ Copyright_License {
 */
 
 #include "FastMath.hpp"
-#include "Util.hpp"
 #include "MathTables.h"
 
-#include <algorithm>
-
-#include <assert.h>
-#include <stdlib.h>
+#include <math.h>
 
 int
 compare_squared(int a, int b, int c)

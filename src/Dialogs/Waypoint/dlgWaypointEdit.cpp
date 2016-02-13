@@ -29,7 +29,7 @@ Copyright_License {
 #include "Form/DataField/GeoPoint.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Interface.hpp"
+#include "FormatSettings.hpp"
 #include "Language/Language.hpp"
 
 class WaypointEditWidget final : public RowFormWidget {

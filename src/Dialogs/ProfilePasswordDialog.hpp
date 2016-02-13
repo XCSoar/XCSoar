@@ -27,8 +27,6 @@ Copyright_License {
 #include "Util/TriState.hpp"
 #include "Compiler.h"
 
-#include <tchar.h>
-
 #ifdef WIN32
 #include <windows.h>
 #ifdef ERROR

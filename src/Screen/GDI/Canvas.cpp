@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
 #include "AlphaBlend.hpp"
+#include "Math/Angle.hpp"
 
 #include <algorithm>
 

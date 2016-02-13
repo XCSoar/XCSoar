@@ -23,14 +23,10 @@ Copyright_License {
 
 #include "BlueFlyDialogs.hpp"
 #include "Device/Driver/BlueFly/Internal.hpp"
-#include "Compiler.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/Message.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Look/DialogLook.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 

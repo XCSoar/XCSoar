@@ -26,8 +26,6 @@
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
-
 struct FlatPoint;
 struct FlatGeoPoint;
 struct FlatBoundingBox;

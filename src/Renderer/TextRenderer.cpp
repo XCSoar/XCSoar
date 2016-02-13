@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TextRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/AnyCanvas.hpp"
 #include "Asset.hpp"
 

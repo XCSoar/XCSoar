@@ -24,7 +24,6 @@ Copyright_License {
 #include "StartupDialog.hpp"
 #include "ProfilePasswordDialog.hpp"
 #include "ProfileListDialog.hpp"
-#include "Message.hpp"
 #include "WidgetDialog.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -39,13 +38,9 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
-#include "Util/StringCompare.hxx"
 #include "Util/Error.hxx"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "Compiler.h"
-
-#include <windef.h> /* for MAX_PATH */
 
 class LogoWindow final : public PaintWindow {
   LogoView logo;

@@ -22,13 +22,9 @@ Copyright_License {
 */
 
 #include "Settings.hpp"
-#include "Geo.hpp"
 #include "Util.hpp"
 #include "Util/StringAPI.hxx"
 #include "Interface.hpp"
-#include "Components.hpp"
-#include "Computer/GlideComputer.hpp"
-#include "../NMEA/ExternalSettings.hpp"
 #include "ActionInterface.hpp"
 
 extern "C" {

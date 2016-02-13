@@ -34,28 +34,20 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
-#include "Widget/ButtonWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Task/TaskStore.hpp"
 #include "Task/ValidationErrorStrings.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "Logger/Logger.hpp"
 #include "Protection.hpp"
-#include "Form/Button.hpp"
 #include "Widget/ButtonWidget.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-
-#include <assert.h>
 
 enum Buttons {
   MAP = 100,

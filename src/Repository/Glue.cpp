@@ -25,6 +25,8 @@ Copyright_License {
 #include "Net/HTTP/DownloadManager.hpp"
 #include "OS/Path.hpp"
 
+#include <tchar.h>
+
 #define REPOSITORY_URI "http://download.xcsoar.org/repository"
 
 static bool repository_downloaded = false;

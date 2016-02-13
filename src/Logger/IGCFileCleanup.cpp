@@ -27,11 +27,9 @@
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
 #include "UtilsSystem.hpp"
-#include "Util/StringCompare.hxx"
 
 #include <tchar.h>
 #include <time.h>
-#include <stdio.h>
 #include <windef.h>
 
 // JMW note: we want to clear up enough space to save the persistent

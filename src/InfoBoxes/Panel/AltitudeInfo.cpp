@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "AltitudeInfo.hpp"
-#include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"

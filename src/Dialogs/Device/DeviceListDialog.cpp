@@ -34,7 +34,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
-#include "Util/TrivialArray.hxx"
 #include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
 #include "Device/MultipleDevices.hpp"

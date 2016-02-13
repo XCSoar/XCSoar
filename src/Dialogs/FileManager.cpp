@@ -31,7 +31,6 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
@@ -66,7 +65,6 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 static AllocatedPath
 LocalPath(const AvailableFile &file)

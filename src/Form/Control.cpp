@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/Control.hpp"
-#include "Event/KeyCode.hpp"
 #include "Dialogs/HelpDialog.hpp"
 
 #include <stdlib.h>

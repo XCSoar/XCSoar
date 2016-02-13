@@ -29,22 +29,18 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TextListWidget.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
 #include "LocalPath.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
 #include "UIGlobals.hpp"
-#include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/Error.hxx"
 
 #include <vector>
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE

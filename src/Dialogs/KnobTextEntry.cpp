@@ -27,8 +27,6 @@ Copyright_License {
 #include "Widget/WindowWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Event/KeyCode.hpp"
-#include "Form/Button.hpp"
-#include "Asset.hpp"
 #include "Util/CharUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"

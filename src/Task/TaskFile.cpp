@@ -25,8 +25,6 @@ Copyright_License {
 #include "Task/TaskFileXCSoar.hpp"
 #include "Task/TaskFileSeeYou.hpp"
 #include "Task/TaskFileIGC.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/StringCompare.hxx"
 
 #include <stdlib.h>
 #include <memory>

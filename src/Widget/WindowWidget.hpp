@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Widget.hpp"
 
+#include <assert.h>
+
 class Window;
 
 /**

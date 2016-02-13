@@ -22,11 +22,6 @@ Copyright_License {
 */
 
 #include "Asset.hpp"
-#include "Util/Macros.hpp"
-#include "UtilsSystem.hpp"
-#include "LocalPath.hpp"
-#include "IO/FileHandle.hpp"
-#include "Util/CharUtil.hpp"
 
 #ifdef USE_CONSOLE
 #include "Event/Globals.hpp"

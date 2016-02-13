@@ -34,7 +34,6 @@ Copyright_License {
 #include "Util/Error.hxx"
 #include "Util/StringFormat.hpp"
 #include "Util/StringCompare.hxx"
-#include "Util/StringAPI.hxx"
 
 #include <windef.h> /* for MAX_PATH */
 

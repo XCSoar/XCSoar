@@ -32,7 +32,6 @@
 #include "ReachFan.hpp"
 
 #include <utility>
-#include <algorithm>
 #include <unordered_set>
 
 #include <limits.h>

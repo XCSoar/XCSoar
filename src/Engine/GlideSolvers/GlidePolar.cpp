@@ -23,7 +23,6 @@
 #include "GlidePolar.hpp"
 #include "GlideState.hpp"
 #include "GlideResult.hpp"
-#include "MacCready.hpp"
 #include "Math/ZeroFinder.hpp"
 #include "Math/Quadratic.hpp"
 #include "Math/Util.hpp"

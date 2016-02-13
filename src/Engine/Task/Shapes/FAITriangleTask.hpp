@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_TASK_HPP
 #define XCSOAR_FAI_TRIANGLE_TASK_HPP
 
-#include "Math/fixed.hpp"
-
 class OrderedTask;
 
 namespace FAITriangleValidator

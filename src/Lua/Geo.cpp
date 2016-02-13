@@ -28,7 +28,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 
 extern "C" {
-#include <lauxlib.h>
+#include <lua.h>
 }
 
 static int

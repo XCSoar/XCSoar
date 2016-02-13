@@ -24,14 +24,12 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/ContainerWindow.hpp"
 #include "Event/KeyCode.hpp"
 #include "Screen/Point.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
-#include "Screen/OpenGL/Globals.hpp"
 #elif defined(USE_GDI)
 #include "Screen/WindowCanvas.hpp"
 #endif
