@@ -85,7 +85,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
   }
 
   if (!IsConnected()) {
-    if (clock.CheckAdvance(basic.time, fixed(interval))) {
+    if (clock.CheckAdvance(basic.time, interval)) {
       /* queue the packet, send it later */
       if (queue == nullptr)
         queue = new Queue();
@@ -112,7 +112,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
     }
 
     return;
-  } else if (clock.CheckAdvance(basic.time, fixed(interval)))
+  } else if (clock.CheckAdvance(basic.time, interval))
     client.SendFix(basic);
 }
 
@@ -129,7 +129,7 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
   SendFixes(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, fixed(60)))
+  if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, 60))
     client.SendTrafficRequest(true, true, near_traffic_enabled);
 #endif
 }
