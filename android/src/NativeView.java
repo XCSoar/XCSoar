@@ -312,10 +312,8 @@ class NativeView extends SurfaceView
 
   private int findConfigAttrib(EGLConfig config, int attribute,
                                int defaultValue) {
-    int[] mValue = new int[1];
-    return egl.eglGetConfigAttrib(display, config, attribute, mValue)
-      ? mValue[0]
-      : defaultValue;
+    return EGLUtil.getConfigAttrib(egl, display, config,
+                                   attribute, defaultValue);
   }
 
   /**
