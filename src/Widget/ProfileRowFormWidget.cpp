@@ -112,7 +112,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         fixed &value) const
+                         double &value) const
 {
   if (!SaveValue(i, value))
     return false;
