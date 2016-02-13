@@ -82,7 +82,7 @@ public:
   }
 
   bool IsDefined() const {
-    return format != Format::INVALID;
+    return !!data;
   }
 
   Format GetFormat() const {
