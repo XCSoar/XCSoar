@@ -208,6 +208,10 @@ public:
   bool SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
                   int h_ceiling, bool do_solve=true);
 
+  const FlatProjection &GetReachProjection() const {
+    return reach.GetProjection();
+  }
+
   /** Visit reach */
   void AcceptInRange(const GeoBounds &bounds,
                      TriangleFanVisitor &visitor) const {

@@ -75,6 +75,10 @@ public:
 
   bool FindPositiveArrival(const AGeoPoint &dest, ReachResult &result_r) const;
 
+  const FlatProjection &GetReachProjection() const {
+    return planner.GetReachProjection();
+  }
+
   void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
 
   gcc_pure
