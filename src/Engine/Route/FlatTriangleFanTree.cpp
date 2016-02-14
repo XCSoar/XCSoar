@@ -147,13 +147,14 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
                                const int index_high,
                                const ReachFanParms &parms)
 {
-  const AGeoPoint ao(parms.projection.Unproject(origin), origin.altitude);
+  const GeoPoint geo_origin = parms.projection.Unproject(origin);
   height = origin.altitude;
 
   // fill vector
   if (depth) {
     const int index_mid = (index_high + index_low) / 2;
-    const FlatGeoPoint x_mid = parms.ReachIntercept(index_mid, ao);
+    const FlatGeoPoint x_mid = parms.ReachIntercept(index_mid, origin,
+                                                    geo_origin);
     if (TooClose(x_mid, origin))
       return;
   }
@@ -162,7 +163,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
   vs.reserve(index_high - index_low + 1);
   AddPoint(origin);
   for (int index = index_low; index < index_high; ++index) {
-    const FlatGeoPoint x = parms.ReachIntercept(index, ao);
+    const FlatGeoPoint x = parms.ReachIntercept(index, origin, geo_origin);
     /* hao: if ReachIntercept() did not find anything reasonable it returns
      *      a FlatGeoPoint that is almost the same as origin, but differs
      *      +/- 1 due to conversion errors. The resulting polygon can have

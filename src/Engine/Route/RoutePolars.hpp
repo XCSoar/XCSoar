@@ -236,7 +236,8 @@ public:
   }
 
   gcc_pure
-  FlatGeoPoint ReachIntercept(const int index, const AGeoPoint& p,
+  FlatGeoPoint ReachIntercept(int index, const AFlatGeoPoint &flat_origin,
+                              const GeoPoint &origin,
                               const RasterMap* map,
                               const FlatProjection &proj) const;
 

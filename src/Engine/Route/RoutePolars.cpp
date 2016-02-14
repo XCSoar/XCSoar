@@ -238,13 +238,13 @@ RoutePolars::CalcGlideArrival(const AFlatGeoPoint& origin,
 }
 
 FlatGeoPoint
-RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
+RoutePolars::ReachIntercept(const int index, const AFlatGeoPoint &flat_origin,
+                            const GeoPoint &origin,
                              const RasterMap* map,
                             const FlatProjection &proj) const
 {
   const bool valid = map && map->IsDefined();
-  const int altitude = origin.altitude - GetSafetyHeight();
-  const FlatGeoPoint flat_origin = proj.ProjectInteger(origin);
+  const int altitude = flat_origin.altitude - GetSafetyHeight();
   const FlatGeoPoint flat_dest = MSLIntercept(index, flat_origin,
                                               altitude, proj);
   if (!valid)
