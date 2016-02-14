@@ -256,5 +256,22 @@ RoutePolars::ReachIntercept(const int index, const AFlatGeoPoint &flat_origin,
   if (!p.IsValid())
     return flat_dest;
 
-  return proj.ProjectInteger(p);
+  FlatGeoPoint fp = proj.ProjectInteger(p);
+
+  /* when there's an obstacle very nearby and our intersection is
+     right next to our origin, the intersection may be deformed due to
+     terrain raster rounding errors; the following code applies
+     clipping to avoid degenerate polygons */
+  FlatGeoPoint delta1 = flat_dest - (FlatGeoPoint)flat_origin;
+  FlatGeoPoint delta2 = fp - (FlatGeoPoint)flat_origin;
+
+  if (delta1.x * delta2.x < 0)
+    /* intersection is on the wrong horizontal side */
+    fp.x = flat_origin.x;
+
+  if (delta1.y * delta2.y < 0)
+    /* intersection is on the wrong vertical side */
+    fp.x = flat_origin.y;
+
+  return fp;
 }
