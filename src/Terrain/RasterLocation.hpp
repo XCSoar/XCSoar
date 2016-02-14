@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_LOCATION_HPP
 #define XCSOAR_TERRAIN_RASTER_LOCATION_HPP
 
+#include "Math/Shift.hpp"
 #include "Compiler.h"
 
 #include <cstdlib>
@@ -51,6 +52,11 @@ struct RasterLocation {
 
   constexpr RasterLocation operator<<(unsigned bits) const {
     return RasterLocation(x << bits, y << bits);
+  }
+
+  constexpr RasterLocation RoundingRightShift(unsigned bits) const {
+    return RasterLocation(::RoundingRightShift(x, bits),
+                          ::RoundingRightShift(y, bits));
   }
 
   gcc_pure
@@ -87,6 +93,11 @@ struct SignedRasterLocation {
 
   constexpr SignedRasterLocation operator<<(int bits) const {
     return SignedRasterLocation(x << bits, y << bits);
+  }
+
+  constexpr SignedRasterLocation RoundingRightShift(unsigned bits) const {
+    return SignedRasterLocation(::RoundingRightShift(x, bits),
+                                ::RoundingRightShift(y, bits));
   }
 
   gcc_pure
