@@ -235,7 +235,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   if (e_short.d >= e_long.d)
     return false;
 
-  const FlatGeoPoint &p_long = (side ? e_1.first : e_2.first);
+  const FlatGeoPoint &p_long = e_long.first;
 
   // return true if this gap was caught (applicable) whether or not it generated
   // a change
