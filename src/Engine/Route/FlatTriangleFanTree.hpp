@@ -70,6 +70,10 @@ public:
     :depth(_depth),
      gaps_filled(false) {}
 
+  bool IsRoot() const {
+    return depth == 0;
+  }
+
   void Clear() {
     FlatTriangleFan::Clear();
     children.clear();

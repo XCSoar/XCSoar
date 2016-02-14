@@ -151,7 +151,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
   height = origin.altitude;
 
   // fill vector
-  if (depth) {
+  if (!IsRoot()) {
     const int index_mid = (index_high + index_low) / 2;
     const FlatGeoPoint x_mid = parms.ReachIntercept(index_mid, origin,
                                                     geo_origin);
@@ -352,7 +352,7 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
 
   if (bb.Overlaps(bounding_box)) {
     ConstBuffer<FlatGeoPoint> p(&vs.front(), vs.size());
-    if (depth == 0)
+    if (IsRoot())
       /* omit the origin in the top-most instance because this is the
          one that searched a full circle; including the center will
          cause a spike in the polygon */
