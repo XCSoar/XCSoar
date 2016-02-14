@@ -37,11 +37,11 @@ struct RasterLocation {
   RasterLocation() = default;
   constexpr RasterLocation(unsigned _x, unsigned _y):x(_x), y(_y) {}
 
-  constexpr bool operator==(const RasterLocation &other) const {
+  constexpr bool operator==(RasterLocation other) const {
     return x == other.x && y == other.y;
   }
 
-  constexpr bool operator!=(const RasterLocation &other) const {
+  constexpr bool operator!=(RasterLocation other) const {
     return !(*this == other);
   }
 
@@ -54,7 +54,7 @@ struct RasterLocation {
   }
 
   gcc_pure
-  unsigned ManhattanDistance(const RasterLocation &other) const {
+  unsigned ManhattanDistance(RasterLocation other) const {
     return std::abs((int)x - (int)other.x) +
       std::abs((int)y - (int)other.y);
   }
