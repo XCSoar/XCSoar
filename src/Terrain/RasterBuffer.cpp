@@ -129,7 +129,8 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   assert(size > 0);
 
   if (size == 1) {
-    *buffer = Get(ax >> 8, y >> 8);
+    *buffer = Get(ax >> RasterTraits::SUBPIXEL_BITS,
+                  y >> RasterTraits::SUBPIXEL_BITS);
     return;
   }
 
@@ -138,7 +139,8 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
      pixels in our buffer; the factor of two should account for the Y
      axis, which can have a different scale, making the factor some
      sort of ugly kludge to avoid horizontal shading stripes */
-  if (interpolate && (unsigned)abs(dx) < (2 * size << 8u)) {
+  if (interpolate &&
+      (unsigned)abs(dx) < (2 * size << RasterTraits::SUBPIXEL_BITS)) {
     /* interpolate */
 
     unsigned cy = y;
@@ -154,9 +156,11 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else if (gcc_likely(dx > 0)) {
     /* no interpolation needed, forward scan */
 
-    const TerrainHeight *gcc_restrict src = GetDataAt(ax >> 8, y >> 8);
+    const TerrainHeight *gcc_restrict src =
+      GetDataAt(ax >> RasterTraits::SUBPIXEL_BITS,
+                y >> RasterTraits::SUBPIXEL_BITS);
 
-    PixelIterator iterator(dx >> 8, size);
+    PixelIterator iterator(dx >> RasterTraits::SUBPIXEL_BITS, size);
     TerrainHeight *gcc_restrict end = buffer + size;
     while (true) {
       *buffer++ = *src;
@@ -167,13 +171,14 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else {
     /* no interpolation needed */
 
-    const TerrainHeight *gcc_restrict src = GetDataAt(0, y >> 8);
+    const TerrainHeight *gcc_restrict src =
+      GetDataAt(0, y >> RasterTraits::SUBPIXEL_BITS);
 
     --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
       unsigned cx = ax + (i * dx) / (int)size;
 
-      *buffer++ = src[cx >> 8];
+      *buffer++ = src[cx >> RasterTraits::SUBPIXEL_BITS];
     }
   }
 }
@@ -196,7 +201,8 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
   }
 
   if (size == 1) {
-    *buffer = Get(ax >> 8, ay >> 8);
+    *buffer = Get(ax >> RasterTraits::SUBPIXEL_BITS,
+                  ay >> RasterTraits::SUBPIXEL_BITS);
     return;
   }
 
@@ -206,7 +212,8 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
      pixels in our buffer; the factor of two should account for the Y
      axis, which can have a different scale, making the factor some
      sort of ugly kludge to avoid horizontal shading stripes */
-  if (interpolate && (unsigned)(abs(dx) + abs(dy)) < (2 * size << 8u)) {
+  if (interpolate &&
+      (unsigned)(abs(dx) + abs(dy)) < (2 * size << RasterTraits::SUBPIXEL_BITS)) {
     /* interpolate */
 
     for (int i = 0; (unsigned)i <= size; ++i) {
@@ -225,7 +232,8 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
       unsigned cx = ax + (i * dx) / (int)size;
       unsigned cy = ay + (i * dy) / (int)size;
 
-      *buffer++ = Get(cx >> 8, cy >> 8);
+      *buffer++ = Get(cx >> RasterTraits::SUBPIXEL_BITS,
+                      cy >> RasterTraits::SUBPIXEL_BITS);
     }
   }
 }
