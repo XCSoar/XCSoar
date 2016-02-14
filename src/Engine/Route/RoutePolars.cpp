@@ -244,13 +244,12 @@ RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
   const bool valid = map && map->IsDefined();
   const int altitude = origin.altitude - GetSafetyHeight();
   const AFlatGeoPoint flat_origin(proj.ProjectInteger(origin), altitude);
-  const AGeoPoint m_origin((GeoPoint)origin, altitude);
   const FlatGeoPoint flat_dest = MSLIntercept(index, flat_origin, proj);
   if (!valid)
     return flat_dest;
 
   const GeoPoint dest = proj.Unproject(flat_dest);
-  const GeoPoint p = map->Intersection(m_origin, altitude,
+  const GeoPoint p = map->Intersection(origin, altitude,
                                        altitude, dest);
   if (!p.IsValid())
     return flat_dest;
