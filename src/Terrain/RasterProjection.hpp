@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 #define XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 
-#include "Terrain/RasterLocation.hpp"
+#include "RasterTraits.hpp"
+#include "RasterLocation.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
@@ -86,13 +87,13 @@ public:
 
   gcc_pure SignedRasterLocation
   ProjectCoarse(const GeoPoint &location) const {
-    return ProjectFine(location) >> 8;
+    return ProjectFine(location) >> RasterTraits::SUBPIXEL_BITS;
   }
 
   gcc_pure
   GeoPoint
   UnprojectCoarse(SignedRasterLocation coords) const {
-    return UnprojectFine(coords << 8);
+    return UnprojectFine(coords << RasterTraits::SUBPIXEL_BITS);
   }
 
   /**
@@ -107,7 +108,7 @@ public:
   double CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
     /* factor 256 because the caller should pass a physical pixel
        number, not interpolated */
-    return FinePixelDistance(location, pixels << 8);
+    return FinePixelDistance(location, pixels << RasterTraits::SUBPIXEL_BITS);
   }
 
   /**
@@ -119,7 +120,7 @@ public:
   DistancePixelsFine(double distance) const;
 
   gcc_pure unsigned DistancePixelsCoarse(double distance) const {
-    return DistancePixelsFine(distance) >> 8;
+    return DistancePixelsFine(distance) >> RasterTraits::SUBPIXEL_BITS;
   }
 };
 
