@@ -148,8 +148,10 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 
   SDLRasterCanvas canvas(buffer);
   const auto color = canvas.Import(pen.GetColor());
+  unsigned mask_position = 0;
   if (thickness > 1)
-    canvas.DrawThickLine(ax, ay, bx, by, thickness, color, mask);
+    canvas.DrawThickLine(ax, ay, bx, by, thickness, color,
+                         mask, mask_position);
   else
     canvas.DrawLine(ax, ay, bx, by, color, mask);
 }

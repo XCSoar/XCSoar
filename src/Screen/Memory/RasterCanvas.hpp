@@ -347,7 +347,7 @@ public:
 
   void DrawLineDirect(const int x1, const int y1, const int x2, const int y2,
                       color_type c,
-                      unsigned line_mask=-1) {
+                      unsigned line_mask, unsigned &line_mask_position) {
     /* optimised Bresenham algorithm */
 
     int dx = x2 - x1;
@@ -368,8 +368,10 @@ public:
       std::swap(pixx, pixy);
     }
 
+    unsigned lmp = line_mask_position;
+
     for (int x = 0, y = 0; x < dx; x++, p = PixelTraits::NextByte(p, pixx)) {
-      if ((x | line_mask) == unsigned(-1))
+      if ((lmp++ | line_mask) == unsigned(-1))
         PixelTraits::WritePixel(p, c);
 
       y += dy;
@@ -378,6 +380,8 @@ public:
         p = PixelTraits::NextByte(p, pixy);
       }
     }
+
+    line_mask_position = lmp;
   }
 
   void DrawLine(int x1, int y1, int x2, int y2, color_type c,
@@ -387,12 +391,13 @@ public:
     if (!ClipLine(x1, y1, x2, y2))
       return;
 
-    DrawLineDirect(x1, y1, x2, y2, c, line_mask);
+    unsigned line_mask_position = 0;
+    DrawLineDirect(x1, y1, x2, y2, c, line_mask, line_mask_position);
   }
 
   void DrawThickLine(int x1, int y1, int x2, int y2,
                      unsigned thickness, color_type c,
-                     unsigned line_mask=-1) {
+                     unsigned line_mask, unsigned &line_mask_position) {
     if (thickness == 0)
       return;
 
@@ -403,9 +408,11 @@ public:
       return;
     }
 
-    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask);
+    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask,
+                                                     line_mask_position);
     murphy.Wideline(x1, y1, x2, y2, thickness, 0);
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
+    line_mask_position = murphy.GetLineMaskPosition();
   }
 
   void DrawPolyline(const PixelPoint *points, unsigned n, bool loop,
@@ -417,6 +424,10 @@ public:
     unsigned code2_orig;
     unsigned code2;
     bool last_visible = false;
+
+    /* this variable keeps track of the position on the line mask
+       across all line segments, for continuity */
+    unsigned line_mask_position = 0;
 
     for (unsigned i= loop? 0: 1; i<n; ++i) {
       auto p_this = points[i];
@@ -437,9 +448,11 @@ public:
       unsigned code1 = code1_orig;
       if (ClipIncremental(p_this.x, p_this.y, p_last.x, p_last.y, code1, code2)) {
         if (thickness > 1)
-          DrawThickLine(p_this.x, p_this.y, p_last.x, p_last.y, thickness, color, line_mask);
+          DrawThickLine(p_this.x, p_this.y, p_last.x, p_last.y, thickness, color,
+                        line_mask, line_mask_position);
         else
-          DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color, line_mask);
+          DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color,
+                         line_mask, line_mask_position);
         if (code1 == code1_orig) {
           last_visible = true;
           p_last = p_this;

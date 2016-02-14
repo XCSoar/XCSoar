@@ -40,6 +40,7 @@ struct MurphyIterator {
   Canvas &canvas;
   const typename Canvas::color_type color;
   const unsigned line_mask;
+  unsigned line_mask_position;
 
   /* delta x , delta y */
   int u, v;
@@ -55,14 +56,20 @@ struct MurphyIterator {
 
 public:
   MurphyIterator(Canvas &_canvas, typename Canvas::color_type _color,
-                 unsigned _line_mask)
-    :canvas(_canvas), color(_color), line_mask(_line_mask) {}
+                 unsigned _line_mask, unsigned _line_mask_position)
+    :canvas(_canvas), color(_color), line_mask(_line_mask),
+     line_mask_position(_line_mask_position) {}
+
+  unsigned GetLineMaskPosition() const {
+    return line_mask_position + u;
+  }
 
   void Paraline(int x, int y, int d1) {
     d1 = -d1;
 
+    unsigned lmp = line_mask_position;
     for (int p = 0; p <= u; p++) {
-      if ((p | line_mask) == unsigned(-1))
+      if ((lmp++ | line_mask) == unsigned(-1))
         canvas.DrawPixel(x, y, color);
 
       if (d1 <= kt) {
