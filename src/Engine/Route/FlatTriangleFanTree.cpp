@@ -182,15 +182,14 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
   if (vs.size() > 2 && parms.rpolars.IsTurningReachEnabled()) {
 
     // now check gaps
-    const RoutePoint o(origin, 0);
     RouteLink e_last(RoutePoint(vs.front(), 0),
-                     o, parms.projection);
+                     origin, parms.projection);
     for (auto x_last = vs.cbegin(), end = vs.cend(),
          x = x_last + 1; x != end; x_last = x++) {
       if (TooClose(*x, origin) || TooClose(*x_last, origin))
         continue;
 
-      const RouteLink e(RoutePoint(*x, 0), o, parms.projection);
+      const RouteLink e(RoutePoint(*x, 0), origin, parms.projection);
       // check if children need to be added
       CheckGap(origin, e_last, e, parms);
 
