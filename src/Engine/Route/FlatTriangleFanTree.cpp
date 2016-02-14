@@ -358,7 +358,7 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
          cause a spike in the polygon */
       p.pop_front();
 
-    visitor.VisitFan(p);
+    visitor.VisitFan(GetOrigin(), p);
   }
 
   for (const auto &child : children)

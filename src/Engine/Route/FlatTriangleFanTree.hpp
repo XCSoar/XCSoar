@@ -46,7 +46,8 @@ public:
 
 class FlatTriangleFanVisitor {
 public:
-  virtual void VisitFan(ConstBuffer<FlatGeoPoint> fan) = 0;
+  virtual void VisitFan(FlatGeoPoint origin,
+                        ConstBuffer<FlatGeoPoint> fan) = 0;
 };
 
 class FlatTriangleFanTree: public FlatTriangleFan
