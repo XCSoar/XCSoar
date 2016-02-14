@@ -31,7 +31,7 @@ class RasterMap;
 struct ReachFanParms {
   const RoutePolars &rpolars;
   const FlatProjection &projection;
-  const RasterMap* terrain;
+  const RasterMap *terrain;
   int terrain_base;
   unsigned terrain_counter;
   unsigned fan_counter;
@@ -41,15 +41,15 @@ struct ReachFanParms {
   ReachFanParms(const RoutePolars& _rpolars,
                 const FlatProjection &_projection,
                 const short _terrain_base,
-                const RasterMap* _terrain=NULL):
-    rpolars(_rpolars), projection(_projection), terrain(_terrain),
-    terrain_base(_terrain_base),
-    terrain_counter(0),
-    fan_counter(0),
-    vertex_counter(0),
-    set_depth(0) {};
+                const RasterMap *_terrain=nullptr)
+    :rpolars(_rpolars), projection(_projection), terrain(_terrain),
+     terrain_base(_terrain_base),
+     terrain_counter(0),
+     fan_counter(0),
+     vertex_counter(0),
+     set_depth(0) {}
 
-  FlatGeoPoint reach_intercept(const int index, const AGeoPoint& ao) const {
+  FlatGeoPoint ReachIntercept(int index, const AGeoPoint &ao) const {
     return rpolars.ReachIntercept(index, ao, terrain, projection);
   }
 };
