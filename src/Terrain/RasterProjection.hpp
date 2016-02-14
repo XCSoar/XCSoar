@@ -49,50 +49,37 @@ public:
    */
   void Set(const GeoBounds &bounds, unsigned width, unsigned height);
 
-  gcc_pure
-  Angle WidthToAngle(double pixels) const {
+  constexpr Angle WidthToAngle(double pixels) const {
     return Angle::Native(pixels / x_scale);
   }
 
-  gcc_pure
-  Angle HeightToAngle(double pixels) const {
+  constexpr Angle HeightToAngle(double pixels) const {
     return Angle::Native(pixels / y_scale);
   }
 
-  gcc_pure
-  int AngleToWidth(Angle angle) const {
+  constexpr int AngleToWidth(Angle angle) const {
     return (int)(angle.Native() * x_scale);
   }
 
-  gcc_pure
-  int AngleToHeight(Angle angle) const {
+  constexpr int AngleToHeight(Angle angle) const {
     return (int)(angle.Native() * y_scale);
   }
 
-  gcc_pure SignedRasterLocation
-  ProjectFine(const GeoPoint &location) const {
-    const int x = AngleToWidth(location.longitude) - left;
-    const int y = top - AngleToHeight(location.latitude);
-
-    return {x, y};
+  constexpr SignedRasterLocation ProjectFine(GeoPoint location) const {
+    return SignedRasterLocation(AngleToWidth(location.longitude) - left,
+                                top - AngleToHeight(location.latitude));
   }
 
-  gcc_pure
-  GeoPoint
-  UnprojectFine(SignedRasterLocation coords) const {
-    const Angle x = WidthToAngle((int)coords.x + left);
-    const Angle y = HeightToAngle(top - (int)coords.y);
-    return GeoPoint(x, y);
+  constexpr GeoPoint UnprojectFine(SignedRasterLocation coords) const {
+    return GeoPoint(WidthToAngle((int)coords.x + left),
+                    HeightToAngle(top - (int)coords.y));
   }
 
-  gcc_pure SignedRasterLocation
-  ProjectCoarse(const GeoPoint &location) const {
+  constexpr SignedRasterLocation ProjectCoarse(GeoPoint location) const {
     return ProjectFine(location) >> RasterTraits::SUBPIXEL_BITS;
   }
 
-  gcc_pure
-  GeoPoint
-  UnprojectCoarse(SignedRasterLocation coords) const {
+  constexpr GeoPoint UnprojectCoarse(SignedRasterLocation coords) const {
     return UnprojectFine(coords << RasterTraits::SUBPIXEL_BITS);
   }
 
