@@ -50,16 +50,16 @@ RasterTileCache::PutOverviewTile(unsigned index,
 
   const unsigned dest_pitch = overview.GetWidth();
 
-  start_x = ToOverview(start_x);
-  start_y = ToOverview(start_y);
+  start_x = RasterTraits::ToOverview(start_x);
+  start_y = RasterTraits::ToOverview(start_y);
 
   if (start_x >= overview.GetWidth() || start_y >= overview.GetHeight())
     return;
 
-  unsigned width = ToOverviewCeil(m.numcols_);
+  unsigned width = RasterTraits::ToOverviewCeil(m.numcols_);
   if (start_x + width > overview.GetWidth())
     width = overview.GetWidth() - start_x;
-  unsigned height = ToOverviewCeil(m.numrows_);
+  unsigned height = RasterTraits::ToOverviewCeil(m.numrows_);
   if (start_y + height > overview.GetHeight())
     height = overview.GetHeight() - start_y;
 
@@ -170,8 +170,8 @@ RasterTileCache::GetHeight(unsigned px, unsigned py) const
     return tile.GetHeight(px, py);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(px << (SUBPIXEL_BITS - OVERVIEW_BITS),
-                                   py << (SUBPIXEL_BITS - OVERVIEW_BITS));
+  return overview.GetInterpolated(px << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS),
+                                  py << (RasterTraits::SUBPIXEL_BITS - RasterTraits::OVERVIEW_BITS));
 }
 
 TerrainHeight
@@ -190,7 +190,8 @@ RasterTileCache::GetInterpolatedHeight(unsigned int lx, unsigned int ly) const
     return tile.GetInterpolatedHeight(px, py, ix, iy);
 
   // still not found, so go to overview
-  return overview.GetInterpolated(ToOverview(lx), ToOverview(ly));
+  return overview.GetInterpolated(RasterTraits::ToOverview(lx),
+                                  RasterTraits::ToOverview(ly));
 }
 
 void
@@ -203,9 +204,10 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height,
   tile_width = _tile_width;
   tile_height = _tile_height;
 
-  overview.Resize(ToOverview(width), ToOverview(height));
-  overview_width_fine = width << SUBPIXEL_BITS;
-  overview_height_fine = height << SUBPIXEL_BITS;
+  overview.Resize(RasterTraits::ToOverview(width),
+                  RasterTraits::ToOverview(height));
+  overview_width_fine = width << RasterTraits::SUBPIXEL_BITS;
+  overview_height_fine = height << RasterTraits::SUBPIXEL_BITS;
 
   tiles.GrowDiscard(tile_columns, tile_rows);
 }

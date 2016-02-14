@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RASTERTILE_CACHE_HPP
 #define XCSOAR_RASTERTILE_CACHE_HPP
 
+#include "RasterTraits.hpp"
 #include "RasterTile.hpp"
 #include "RasterLocation.hpp"
 #include "Geo/GeoBounds.hpp"
@@ -66,15 +67,6 @@ class RasterTileCache {
    * is shifted by this number of bits
    */
   static constexpr unsigned INTERSECT_BITS = 7;
-
-public:
-  /**
-   * The fixed-point fractional part of sub-pixel coordinates.
-   *
-   * Do not edit!  There are still some hard-coded code sections left,
-   * e.g. CombinedDivAndMod().
-   */
-  static constexpr unsigned SUBPIXEL_BITS = 8;
 
 protected:
   friend struct RTDistanceSort;
@@ -304,34 +296,20 @@ public:
   unsigned int GetHeight() const { return height; }
 
   unsigned GetFineWidth() const {
-    return width << SUBPIXEL_BITS;
+    return width << RasterTraits::SUBPIXEL_BITS;
   }
 
   unsigned GetFineHeight() const {
-    return height << SUBPIXEL_BITS;
+    return height << RasterTraits::SUBPIXEL_BITS;
   }
 
 private:
   unsigned GetFineTileWidth() const {
-    return tile_width << SUBPIXEL_BITS;
+    return tile_width << RasterTraits::SUBPIXEL_BITS;
   }
 
   unsigned GetFineTileHeight() const {
-    return tile_height << SUBPIXEL_BITS;
-  }
-
-  /**
-   * Convert a pixel size to an overview pixel size, rounding down.
-   */
-  static constexpr unsigned ToOverview(unsigned x) {
-    return x >> OVERVIEW_BITS;
-  }
-
-  /**
-   * Convert a pixel size to an overview pixel size, rounding up.
-   */
-  static constexpr unsigned ToOverviewCeil(unsigned x) {
-    return ToOverview(x + ~OVERVIEW_MASK);
+    return tile_height << RasterTraits::SUBPIXEL_BITS;
   }
 };
 
