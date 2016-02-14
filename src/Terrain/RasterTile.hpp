@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_RASTERTILE_HPP
 #define XCSOAR_RASTERTILE_HPP
 
-#include "Terrain/RasterBuffer.hpp"
+#include "RasterTraits.hpp"
+#include "RasterBuffer.hpp"
 
 #include <stdio.h>
 
@@ -141,8 +142,10 @@ public:
 
   void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
                 TerrainHeight *dest, unsigned size, bool interpolate) const {
-    buffer.ScanLine(ax - (xstart << 8), ay - (ystart << 8),
-                    bx - (xstart << 8), by - (ystart << 8),
+    buffer.ScanLine(ax - (xstart << RasterTraits::SUBPIXEL_BITS),
+                    ay - (ystart << RasterTraits::SUBPIXEL_BITS),
+                    bx - (xstart << RasterTraits::SUBPIXEL_BITS),
+                    by - (ystart << RasterTraits::SUBPIXEL_BITS),
                     dest, size, interpolate);
   }
 };
