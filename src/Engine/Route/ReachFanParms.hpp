@@ -33,21 +33,17 @@ struct ReachFanParms {
   const FlatProjection &projection;
   const RasterMap *terrain;
   int terrain_base;
-  unsigned terrain_counter;
-  unsigned fan_counter;
-  unsigned vertex_counter;
-  unsigned char set_depth;
+  unsigned terrain_counter = 0;
+  unsigned fan_counter = 0;
+  unsigned vertex_counter = 0;
+  unsigned char set_depth = 0;
 
   ReachFanParms(const RoutePolars& _rpolars,
                 const FlatProjection &_projection,
                 const short _terrain_base,
                 const RasterMap *_terrain=nullptr)
     :rpolars(_rpolars), projection(_projection), terrain(_terrain),
-     terrain_base(_terrain_base),
-     terrain_counter(0),
-     fan_counter(0),
-     vertex_counter(0),
-     set_depth(0) {}
+     terrain_base(_terrain_base) {}
 
   FlatGeoPoint ReachIntercept(int index, const AGeoPoint &ao) const {
     return rpolars.ReachIntercept(index, ao, terrain, projection);
