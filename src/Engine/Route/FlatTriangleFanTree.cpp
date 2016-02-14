@@ -349,8 +349,16 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
   if (!bb.Overlaps(bb_children))
     return;
 
-  if (bb.Overlaps(bounding_box))
-    visitor.VisitFan({&vs.front(), vs.size()});
+  if (bb.Overlaps(bounding_box)) {
+    ConstBuffer<FlatGeoPoint> p(&vs.front(), vs.size());
+    if (depth == 0)
+      /* omit the origin in the top-most instance because this is the
+         one that searched a full circle; including the center will
+         cause a spike in the polygon */
+      p.pop_front();
+
+    visitor.VisitFan(p);
+  }
 
   for (const auto &child : children)
     child.AcceptInRange(bb, visitor);
