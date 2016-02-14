@@ -242,7 +242,7 @@ public:
 
 private:
   gcc_pure
-  FlatGeoPoint MSLIntercept(const int index, const AGeoPoint &p,
+  FlatGeoPoint MSLIntercept(const int index, const AFlatGeoPoint &p,
                             const FlatProjection &proj) const;
 };
 

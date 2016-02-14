@@ -29,18 +29,17 @@
 #define MC_CEILING_PENALTY_FACTOR 5.0
 
 inline FlatGeoPoint
-RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
+RoutePolars::MSLIntercept(const int index, const AFlatGeoPoint &fp,
                           const FlatProjection &proj) const
 {
   const unsigned safe_index = ((unsigned)index) % ROUTEPOLAR_POINTS;
-  const FlatGeoPoint fp = proj.ProjectInteger(p);
-  const auto d = p.altitude * polar_glide.GetPoint(safe_index).inv_gradient;
+  const auto d = fp.altitude * polar_glide.GetPoint(safe_index).inv_gradient;
   const auto scale = proj.GetApproximateScale();
   const int steps = int(d / scale) + 1;
   FlatGeoPoint dp = RoutePolar::IndexToDXDY(safe_index);
   dp.x = (dp.x * steps) >> 7;
   dp.y = (dp.y * steps) >> 7;
-  return fp + dp;
+  return (FlatGeoPoint)fp + dp;
 }
 
 void
@@ -244,8 +243,9 @@ RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
 {
   const bool valid = map && map->IsDefined();
   const int altitude = origin.altitude - GetSafetyHeight();
+  const AFlatGeoPoint flat_origin(proj.ProjectInteger(origin), altitude);
   const AGeoPoint m_origin((GeoPoint)origin, altitude);
-  const FlatGeoPoint flat_dest = MSLIntercept(index, m_origin, proj);
+  const FlatGeoPoint flat_dest = MSLIntercept(index, flat_origin, proj);
   if (!valid)
     return flat_dest;
 
