@@ -83,6 +83,10 @@ public:
     return UnprojectFine(coords << RasterTraits::SUBPIXEL_BITS);
   }
 
+  constexpr SignedRasterLocation ProjectCoarseRound(GeoPoint location) const {
+    return ProjectFine(location).RoundingRightShift(RasterTraits::SUBPIXEL_BITS);
+  }
+
   /**
    * Determines the distance (in meters) of two raster pixels.
    *
