@@ -55,6 +55,10 @@ public:
     return vs.empty();
   }
 
+  AFlatGeoPoint GetOrigin() const {
+    return AFlatGeoPoint(vs.front(), height);
+  }
+
   int GetHeight() const {
     return height;
   }

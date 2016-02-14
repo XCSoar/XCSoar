@@ -291,8 +291,7 @@ FlatTriangleFanTree::DirectArrival(FlatGeoPoint dest,
                                    const ReachFanParms &parms) const
 {
   assert(!vs.empty());
-  const AFlatGeoPoint n(vs[0], height);
-  return parms.rpolars.CalcGlideArrival(n, dest, parms.projection);
+  return parms.rpolars.CalcGlideArrival(GetOrigin(), dest, parms.projection);
 }
 
 bool
@@ -307,9 +306,8 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
     return false; // not in scope
 
   if (IsInside(n)) { // found in this segment
-    const AFlatGeoPoint nn(vs[0], height);
     const int h =
-      parms.rpolars.CalcGlideArrival(nn, n, parms.projection);
+      parms.rpolars.CalcGlideArrival(GetOrigin(), n, parms.projection);
     if (h > arrival_height) {
       arrival_height = h;
       return true;
