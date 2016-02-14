@@ -235,6 +235,7 @@ public:
     return config.safety_height_terrain;
   }
 
+  gcc_pure
   FlatGeoPoint ReachIntercept(const int index, const AGeoPoint& p,
                               const RasterMap* map,
                               const FlatProjection &proj) const;
