@@ -88,6 +88,13 @@ struct Line2D {
   constexpr product_type LocatePoint(Point p) const {
     return ::CrossProduct(b - a, p - a);
   }
+
+  /**
+   * Is the given point on this (infinite) line?
+   */
+  constexpr bool Contains(Point p) const {
+    return LocatePoint(p) == product_type(0);
+  }
 };
 
 #endif
