@@ -33,8 +33,8 @@ Copyright_License {
 #endif
 
 bool
-RasterTileCache::FirstIntersection(const int x0, const int y0,
-                                   const int x1, const int y1,
+RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
+                                   const SignedRasterLocation destination,
                                    int h_origin,
                                    int h_dest,
                                    const int slope_fact, const int h_ceiling,
@@ -42,12 +42,12 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
                                    RasterLocation &_location, int &_h,
                                    const bool can_climb) const
 {
-  RasterLocation location(x0, y0);
+  RasterLocation location = origin;
   if (!IsInside(location))
     // origin is outside overall bounds
     return false;
 
-  const TerrainHeight h_origin2 = GetFieldDirect(x0, y0).first;
+  const TerrainHeight h_origin2 = GetFieldDirect(origin.x, origin.y).first;
   if (h_origin2.IsInvalid()) {
     _location = location;
     _h = h_origin;
@@ -60,11 +60,11 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
   h_dest = std::max(h_dest, h_origin);
 
   // line algorithm parameters
-  const int dx = abs(x1-x0);
-  const int dy = abs(y1-y0);
+  const int dx = abs(destination.x - origin.x);
+  const int dy = abs(destination.y - origin.y);
   int err = dx-dy;
-  const int sx = (x0 < x1)? 1: -1;
-  const int sy = (y0 < y1)? 1: -1;
+  const int sx = origin.x < destination.x ? 1 : -1;
+  const int sy = origin.y < destination.y ? 1 : -1;
 
   // max number of steps to walk
   const int max_steps = (dx+dy);
@@ -252,23 +252,23 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 }
 
 SignedRasterLocation
-RasterTileCache::Intersection(const int x0, const int y0,
-                              const int x1, const int y1,
+RasterTileCache::Intersection(const SignedRasterLocation origin,
+                              const SignedRasterLocation destination,
                               const int h_origin,
                               const int slope_fact) const
 {
-  SignedRasterLocation location(x0, y0);
+  SignedRasterLocation location = origin;
 
   if (!IsInside(location))
     // origin is outside overall bounds
     return {-1, -1};
 
   // line algorithm parameters
-  const int dx = abs(x1-x0);
-  const int dy = abs(y1-y0);
+  const int dx = abs(destination.x - origin.x);
+  const int dy = abs(destination.y - origin.y);
   int err = dx-dy;
-  const int sx = (x0 < x1)? 1: -1;
-  const int sy = (y0 < y1)? 1: -1;
+  const int sx = origin.x < destination.x ? 1 : -1;
+  const int sy = origin.y < destination.y ? 1 : -1;
 
   // max number of steps to walk
   const int max_steps = (dx+dy);
@@ -321,8 +321,8 @@ RasterTileCache::Intersection(const int x0, const int y0,
           return RasterLocation(last_clear_location.x, last_clear_location.y);
 
         // refine solution
-        return Intersection(last_clear_location.x, last_clear_location.y,
-                            location.x, location.y, last_clear_h, slope_fact);
+        return Intersection(last_clear_location, location,
+                            last_clear_h, slope_fact);
       }
 
       if (h_int <= 0) 
