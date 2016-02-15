@@ -163,15 +163,15 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
   vs.reserve(index_high - index_low + 1);
   AddPoint(origin);
   for (int index = index_low; index < index_high; ++index) {
-    const FlatGeoPoint x = parms.ReachIntercept(index, origin, geo_origin);
+    FlatGeoPoint x = parms.ReachIntercept(index, origin, geo_origin);
     /* if ReachIntercept() did not find anything reasonable it returns
        a FlatGeoPoint that is almost the same as origin, but differs
        +/- 1 due to conversion errors. The resulting polygon can have
        overlapping edges causing triangulation failures. */
     if (AlmostTheSame(origin, x))
-      AddPoint(origin);
-    else
-      AddPoint(x);
+      x = origin;
+
+    AddPoint(x);
   }
 }
 
