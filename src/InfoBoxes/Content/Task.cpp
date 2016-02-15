@@ -777,6 +777,38 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxNextETAVMG(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  if (!basic.ground_speed_available || !task_stats.task_valid ||
+      !task_stats.current_leg.remaining.IsDefined()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const auto d = task_stats.current_leg.remaining.GetDistance();
+  const auto v = basic.ground_speed;
+
+  if (!task_stats.task_valid ||
+      d <= 0 ||
+      v <= 0) {
+    data.SetInvalid();
+    return;
+  }
+
+  const int dd = (int)(d/v);
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+  if (now_local.IsPlausible()) {
+    const BrokenTime t = now_local + dd;
+    data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
+    data.UnsafeFormatComment(_T("%02u"), t.second);
+  }
+
+}
+
+void
 UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();

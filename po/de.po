@@ -2566,6 +2566,25 @@ msgstr ""
 "Geschätzte Zeit die benötigt wird den nächsten Wegpunkt zu erreichen, "
 "vorausgesetzt die aktuelle Flugleistung wird beibehalten."
 
+#: src/InfoBoxes/Content/Factory.cpp:854
+#, no-c-format
+msgid "Next waypoint arrival time (ground speed)"
+msgstr "Ankunftzeit am nächsten Wegpunkt (Geschw. ü. Gnd.)"
+
+#: src/InfoBoxes/Content/Factory.cpp:855
+#, no-c-format
+msgid "WP ETA VMG"
+msgstr "WP ETA VMG"
+
+#: src/InfoBoxes/Content/Factory.cpp:856
+#, no-c-format
+msgid ""
+"Estimated arrival time at next waypoint, assuming current ground "
+"speed is maintained."
+msgstr ""
+"Geschätzte Ankunftzeit am nächsten Wegpunkt, "
+"vorausgesetzt die aktuelle Flugleistung wird beibehalten."
+
 #: src/InfoBoxes/Content/Factory.cpp:1063
 #, no-c-format
 msgid "Attitude indicator"

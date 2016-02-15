@@ -135,6 +135,9 @@ void
 UpdateInfoBoxNextETEVMG(InfoBoxData &data);
 
 void
+UpdateInfoBoxNextETAVMG(InfoBoxData &data);
+
+void
 UpdateInfoBoxFinalETEVMG(InfoBoxData &data);
 
 void
