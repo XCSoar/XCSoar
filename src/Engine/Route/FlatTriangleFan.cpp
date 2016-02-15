@@ -21,6 +21,7 @@
  */
 
 #include "FlatTriangleFan.hpp"
+#include "Math/Line2D.hpp"
 
 #include <assert.h>
 
@@ -35,11 +36,21 @@ FlatTriangleFan::CalcBoundingBox()
     bounding_box.Expand(*it);
 }
 
+static constexpr bool
+IsSpike(FlatGeoPoint a, FlatGeoPoint b, FlatGeoPoint c)
+{
+  return Line2D<FlatGeoPoint>(a, b).Contains(c);
+}
+
 void
 FlatTriangleFan::AddPoint(FlatGeoPoint p)
 {
   // avoid duplicates
   if (!vs.empty() && p == vs.back())
+    return;
+
+  if (vs.size() >= 2 && IsSpike(vs[vs.size() - 2], vs.back(), p))
+    /* avoid spikes */
     return;
 
   vs.push_back(p);
