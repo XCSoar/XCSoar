@@ -101,6 +101,12 @@ manual: $(MANUAL_PDF)
 Handbuch: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
 
+manuel-fr:\
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
+
+priseenmain: \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf
+
 # Generate a redistributable ZIP file that allows manual editors
 # without the full XCSoar development chain to compile the XCSoar
 # manual.  It contains all generated files.
