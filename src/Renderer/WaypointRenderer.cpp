@@ -70,7 +70,7 @@ struct VisibleWaypoint {
     waypoint = &_waypoint;
     point = _point;
     reach.Clear();
-    reachable = WaypointRenderer::Unreachable;
+    reachable = WaypointRenderer::Invalid;
     in_task = _in_task;
   }
 
@@ -251,7 +251,7 @@ protected:
       return;
     }
 
-    if (reachable == WaypointRenderer::Unreachable)
+    if (reachable == WaypointRenderer::Invalid)
       return;
 
     if (!reach.IsReachableDirect() && !way_point.flags.watched)
