@@ -849,15 +849,6 @@ static constexpr MetaData meta_data[] = {
     next_waypoint_infobox_panels,
   },
 
-  // e_WP_ETA_VMG
-  {
-    N_("Next waypoint arrival time (ground speed)"),
-    N_("WP ETA VMG"),
-    N_("Estimated arrival time at next waypoint, assuming current ground speed is maintained."),
-    UpdateInfoBoxNextETAVMG,
-    next_waypoint_infobox_panels,
-  },
-
   // e_Horizon
   {
     N_("Attitude indicator"),
@@ -1042,6 +1033,16 @@ static constexpr MetaData meta_data[] = {
        "or the target within the AAT sector for AAT tasks."),
     IBFHelper<InfoBoxContentNextArrow>::Create,
   },
+
+  // e_WP_ETA_VMG
+  {
+    N_("Next waypoint arrival time (ground speed)"),
+    N_("WP ETA VMG"),
+    N_("Estimated arrival time at next waypoint, assuming current ground speed is maintained."),
+    UpdateInfoBoxNextETAVMG,
+    next_waypoint_infobox_panels,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
