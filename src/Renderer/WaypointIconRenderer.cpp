@@ -149,10 +149,12 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 
   canvas.SelectBlackPen();
 
+  const bool is_reachable = reachable != Invalid && reachable != Unreachable;
+
   switch (settings.landable_style) {
   case WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE:
     // Render landable with reachable state
-    if (reachable != Unreachable) {
+    if (is_reachable) {
       canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
@@ -163,7 +165,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
     break;
 
   case WaypointRendererSettings::LandableStyle::BW:
-    if (reachable != Unreachable)
+    if (is_reachable)
       canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
@@ -174,7 +176,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
     break;
 
   case WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS:
-    if (reachable != Unreachable)
+    if (is_reachable)
       canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.orange_brush);
