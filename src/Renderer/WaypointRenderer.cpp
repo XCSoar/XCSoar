@@ -100,19 +100,23 @@ struct VisibleWaypoint {
       reachable = WaypointRenderer::ReachableTerrain;
   }
 
-  void CalculateRouteArrival(const RoutePlannerGlue &route_planner,
+  bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour) {
     const RoughAltitude elevation(waypoint->elevation +
                                   task_behaviour.safety_height_arrival);
     const AGeoPoint p_dest (waypoint->location, elevation);
-    if (route_planner.FindPositiveArrival(p_dest, reach))
-      reach.Subtract(elevation);
+    if (!route_planner.FindPositiveArrival(p_dest, reach))
+      return false;
+
+    reach.Subtract(elevation);
+    return true;
   }
 
   void CalculateReachability(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour)
   {
-    CalculateRouteArrival(route_planner, task_behaviour);
+    if (!CalculateRouteArrival(route_planner, task_behaviour))
+      return;
 
     if (!reach.IsReachableDirect())
       reachable = WaypointRenderer::Unreachable;
