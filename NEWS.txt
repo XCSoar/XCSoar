@@ -26,6 +26,8 @@ Version 7.0 - not yet released
 Version 6.8.3 - not yet released
 * map
   - fix distorted terrain when zoomed out
+* calculations
+  - update SIS-AT to 2016 scoring rules
 * data files
   - use correct "comment" field for OziExplorer files
   - relax file format detection for OziExplorer files
@@ -35,7 +37,7 @@ Version 6.8.3 - not yet released
 * devices
   - GTAltimeter: remove unmaintained driver (#3661)
 * Kobo
-  - support Kobo Glo HD
+  - support Kobo Glo HD, Kobo Touch 2.0
 * fix crash in SkyLines tracking
 
 Version 6.8.2 - 2015/09/19

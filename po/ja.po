@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2015-07-06 09:33+0000\n"
+"PO-Revision-Date: 2016-02-12 18:52+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-07-22 05:20+0000\n"
-"X-Generator: Launchpad (build 17628)\n"
+"X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
+"X-Generator: Launchpad (build 17925)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -631,8 +631,7 @@ msgstr "旋回していません"
 #: src/Dialogs/dlgBrightness.cpp:143 src/Dialogs/ProfileListDialog.cpp:386
 #: src/Dialogs/Plane/PlaneListDialog.cpp:390 src/Dialogs/HelpDialog.cpp:50
 #: src/Dialogs/dlgInfoBoxAccess.cpp:112 src/Dialogs/ReplayDialog.cpp:154
-#: src/Dialogs/dlgStatus.cpp:62
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
+#: src/Dialogs/dlgStatus.cpp:62 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
 #: src/Dialogs/Waypoint/Manager.cpp:317
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:150
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:107
@@ -1135,14 +1134,14 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "前サーマル獲得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:256
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "前サーマル獲得高度"
+msgstr "前のサーマル"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "飛行時間"
+msgstr "前のサーマル"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -1406,8 +1405,7 @@ msgstr "風速"
 msgid "Wind V"
 msgstr "風速"
 
-#: src/InfoBoxes/Content/Factory.cpp:421
-#: src/InfoBoxes/Content/Factory.cpp:1168
+#: src/InfoBoxes/Content/Factory.cpp:421 src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
@@ -2828,8 +2826,7 @@ msgstr ""
 msgid "Next radial"
 msgstr "次のポイントからの方向"
 
-#: src/InfoBoxes/Content/Factory.cpp:1204
-#: src/Dialogs/Task/TargetDialog.cpp:463
+#: src/InfoBoxes/Content/Factory.cpp:1204 src/Dialogs/Task/TargetDialog.cpp:463
 #, no-c-format
 msgid "Radial"
 msgstr "放射状"
@@ -2963,9 +2960,9 @@ msgstr "最終ポイント到達高度（　マージンゼロ　MC0）"
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "次のスタート地点"
+msgstr "次のポイント"
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -2975,6 +2972,9 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"矢印は現在選択中のウエイポイントを示す　ウエイポイントの名前と、距離が表示さ"
+"れる　現在位置は現在選択されているタスク上のウエイポイントまたは選択された"
+"GOTPポイントあるいは　AATセクター内のターゲットから表示される"
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3001,8 +3001,7 @@ msgstr "シュミレーター"
 msgid "Info"
 msgstr "情報"
 
-#: src/InfoBoxes/Content/Altitude.cpp:55
-#: src/InfoBoxes/Content/MacCready.cpp:53
+#: src/InfoBoxes/Content/Altitude.cpp:55 src/InfoBoxes/Content/MacCready.cpp:53
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:90
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:84
@@ -3011,14 +3010,12 @@ msgstr "情報"
 msgid "Setup"
 msgstr "セットアップ"
 
-#: src/InfoBoxes/Content/Altitude.cpp:73
-#: src/InfoBoxes/Content/Altitude.cpp:175
+#: src/InfoBoxes/Content/Altitude.cpp:73 src/InfoBoxes/Content/Altitude.cpp:175
 #: src/InfoBoxes/Content/Altitude.cpp:241
 msgid "no QNH"
 msgstr "QNHではない"
 
-#: src/InfoBoxes/Content/MacCready.cpp:52
-#: src/InfoBoxes/Content/Weather.cpp:108
+#: src/InfoBoxes/Content/MacCready.cpp:52 src/InfoBoxes/Content/Weather.cpp:108
 #: src/Dialogs/Device/DeviceListDialog.cpp:276
 #: src/Dialogs/Plane/PlaneListDialog.cpp:159
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:295
@@ -3368,8 +3365,7 @@ msgstr "ウエイポイント　ラベル"
 msgid "Topography/Terrain"
 msgstr "地勢図/地形図"
 
-#: src/PageSettings.cpp:44
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
+#: src/PageSettings.cpp:44 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
 #, no-c-format
@@ -3694,8 +3690,7 @@ msgstr "内蔵GPSセンサー"
 msgid "OK"
 msgstr "はい"
 
-#: src/Dialogs/Message.cpp:106
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
+#: src/Dialogs/Message.cpp:106 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:60
 msgid "Yes"
 msgstr "はい"
@@ -3780,8 +3775,7 @@ msgstr "ダウンロード中"
 #: src/Dialogs/Waypoint/Manager.cpp:250
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:273
 #: src/Dialogs/Weather/NOAAList.cpp:177 src/Dialogs/Weather/NOAAList.cpp:183
-#: src/Dialogs/Weather/NOAAList.cpp:290
-#: src/Dialogs/Weather/NOAADetails.cpp:168
+#: src/Dialogs/Weather/NOAAList.cpp:290 src/Dialogs/Weather/NOAADetails.cpp:168
 #: src/Dialogs/DownloadFilePicker.cpp:369
 msgid "Error"
 msgstr "エラー"
@@ -3911,18 +3905,17 @@ msgstr "ドライバ"
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:693
 msgid "Passthrough device"
-msgstr ""
+msgstr "要デバイス　ドライバー"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:694
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
-msgstr ""
+msgstr "このデバイスはドライバーのインストールが必要です"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
-#, fuzzy
 msgid "Second Driver"
-msgstr "ドライバ"
+msgstr "代替ドライバー"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:707
 msgid "Sync. from device"
@@ -4118,9 +4111,8 @@ msgid "Pressure"
 msgstr "気圧"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
-#, fuzzy
 msgid "Sink tone"
-msgstr "砂岩"
+msgstr "沈下　トーン"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:255 src/Dialogs/ProfileListDialog.cpp:280
@@ -4321,8 +4313,7 @@ msgstr "グライダーがタスクのセクターに入ったとき音声案内
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:85
 #: src/Dialogs/Airspace/dlgAirspace.cpp:180
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
-#: src/Dialogs/dlgAnalysis.cpp:544
+#: src/Dialogs/Settings/dlgConfiguration.cpp:98 src/Dialogs/dlgAnalysis.cpp:544
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
 #: Data/Input/default.xci:521
 #, no-c-format
@@ -4682,9 +4673,8 @@ msgstr "空域を塗りつぶす色の設定"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "活動日"
+msgstr "ACK"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -5454,7 +5444,7 @@ msgstr "３D　捕捉"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:60
 #, no-c-format
 msgid "Roaming"
-msgstr ""
+msgstr "ローミング"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
@@ -5474,7 +5464,7 @@ msgstr "外部電源電圧"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "ネットワーク"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Assigned task time"
@@ -5746,9 +5736,8 @@ msgid "GoTo"
 msgstr "GoToポイントに行く"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "ウエイポイント消去失敗"
+msgstr "ウエイポイントの保存失敗"
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -7357,8 +7346,8 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"バリオ　スケール　点と線　オレンジから赤＝上昇　ブルーから濃いブルー　＝沈下"
-"　ゼロの場合＝　黄色の線"
+"バリオ　スケール　点と線　オレンジから赤＝上昇　ブルーから濃いブルー　＝沈"
+"下　ゼロの場合＝　黄色の線"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #, no-c-format
@@ -8020,14 +8009,12 @@ msgid "Units used for pressures."
 msgstr "圧力単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
-#, fuzzy
 msgid "Units used for mass."
-msgstr "タスク速度の単位"
+msgstr "表示単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
-#, fuzzy
 msgid "Units used for wing loading."
-msgstr "緯度および経度の単位"
+msgstr "翼面荷重の表示単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8334,15 +8321,13 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr "スカイラインサーバーから、友人の航跡をダウンロードする"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "航跡表示　短い"
+msgstr "近接トラフィックの表示"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
-#, fuzzy
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr "スカイラインサーバーから、友人の航跡をダウンロードする"
+msgstr "SkyLineから近接のトラフィックポジションをダウンロード"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
 msgid "Vehicle Type"
@@ -8802,8 +8787,7 @@ msgid ""
 "station."
 msgstr "レター　コードには特殊文字を使用しないでください"
 
-#: src/Dialogs/Weather/NOAAList.cpp:216
-#: src/Dialogs/Weather/NOAADetails.cpp:114
+#: src/Dialogs/Weather/NOAAList.cpp:216 src/Dialogs/Weather/NOAADetails.cpp:114
 #, c-format
 msgid "Do you want to remove station %s?"
 msgstr "この場所%sを削除しますか？"
@@ -8813,26 +8797,21 @@ msgstr "この場所%sを削除しますか？"
 msgid "METAR and TAF"
 msgstr "METAR　および　TAF"
 
-#: src/Dialogs/Weather/NOAAList.cpp:289
-#: src/Dialogs/Weather/NOAADetails.cpp:167
+#: src/Dialogs/Weather/NOAAList.cpp:289 src/Dialogs/Weather/NOAADetails.cpp:167
 msgid "This function is not available on your platform yet."
 msgstr "この機能はあなたのシステムでは使用できません"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "追加エアスペース"
+msgstr "空域の中です"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr ""
-"一番近い\n"
-"空域"
+msgstr "空域に近づいています"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "出発速度超過"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
@@ -9896,47 +9875,6 @@ msgstr ""
 "設定\n"
 "空域"
 
-#~ msgid ""
-#~ "Start rules slightly violated\n"
-#~ "but within margin"
-#~ msgstr "スタート　ルール違反　許容範囲内です"
-
-#~ msgid "Start rules violated"
-#~ msgstr "スタート　ルール違反"
-
-#~ msgid "Last thermal time"
-#~ msgstr "前サーマル所要時間"
-
-#~ msgid "TL Time"
-#~ msgstr "前サーマル時間"
-
-#~ msgid "Marker"
-#~ msgstr "マーカー"
-
-#~ msgid "dropped %s ago"
-#~ msgstr "投下%s 前"
-
-#~ msgid "ACK Warn"
-#~ msgstr "有効　警報"
-
-#~ msgid "ACK Space"
-#~ msgstr "アクティブ　スペース"
-
-#~ msgid "Waypoints not editable"
-#~ msgstr "ウエイポイントは編集できません"
-
-#~ msgid "Normal"
-#~ msgstr "標準"
-
-#~ msgid "Large"
-#~ msgstr "大"
-
-#~ msgid "Small"
-#~ msgstr "小"
-
-#~ msgid "Waypts."
-#~ msgstr "ウエイポイント"
-
 #~ msgid "English"
 #~ msgstr "英語"
 
@@ -9988,6 +9926,14 @@ msgstr ""
 #~ msgid "Aircraft reg."
 #~ msgstr "登録記号"
 
+#~ msgid ""
+#~ "Start rules slightly violated\n"
+#~ "but within margin"
+#~ msgstr "スタート　ルール違反　許容範囲内です"
+
+#~ msgid "Start rules violated"
+#~ msgstr "スタート　ルール違反"
+
 #~ msgid "Line skipped."
 #~ msgstr "リンク　解除されました"
 
@@ -10036,6 +9982,9 @@ msgstr ""
 #~ msgid "MANUAL"
 #~ msgstr "手動"
 
+#~ msgid "Marker"
+#~ msgstr "マーカー"
+
 #~ msgid ""
 #~ "Enable this if you would like to log the communication with the device."
 #~ msgstr "他のデバイスに接続する場合　ON にする"
@@ -10066,6 +10015,9 @@ msgstr ""
 
 #~ msgid "InfoBox Pages"
 #~ msgstr "インフォボックスのページ"
+
+#~ msgid "Waypoints not editable"
+#~ msgstr "ウエイポイントは編集できません"
 
 #~ msgid "Replace In Task"
 #~ msgstr "タスク入れ替え"
@@ -10129,6 +10081,9 @@ msgstr ""
 
 #~ msgid "H GPS"
 #~ msgstr "GPS高度"
+
+#~ msgid "Last thermal time"
+#~ msgstr "前サーマル所要時間"
 
 #~ msgid "Status message"
 #~ msgstr "メッセージの設定"
@@ -10411,6 +10366,9 @@ msgstr ""
 #~ "グライドコンピューターが過大な速度を表示しないよう\r\n"
 #~ "乱気流飛行速度をこのページで入力することができる"
 
+#~ msgid "Waypts."
+#~ msgstr "ウエイポイント"
+
 #~ msgid "Reference weight at which the given polar is valid."
 #~ msgstr "ポーラーカーブ設定重量"
 
@@ -10484,6 +10442,9 @@ msgstr ""
 #~ msgid "Font face"
 #~ msgstr "画面"
 
+#~ msgid "ACK Space"
+#~ msgstr "アクティブ　スペース"
+
 #~ msgid "Lookup"
 #~ msgstr "検索"
 
@@ -10510,6 +10471,15 @@ msgstr ""
 
 #~ msgid "left %s ago"
 #~ msgstr "%s 前離れた"
+
+#~ msgid "dropped %s ago"
+#~ msgstr "投下%s 前"
+
+#~ msgid "ACK Warn"
+#~ msgstr "有効　警報"
+
+#~ msgid "TL Time"
+#~ msgstr "前サーマル時間"
 
 #~ msgid "TC All"
 #~ msgstr "All TC平均"
@@ -10592,6 +10562,15 @@ msgstr ""
 
 #~ msgid "Deadband min. lift"
 #~ msgstr "最低制限空域"
+
+#~ msgid "Normal"
+#~ msgstr "標準"
+
+#~ msgid "Large"
+#~ msgstr "大"
+
+#~ msgid "Small"
+#~ msgstr "小"
 
 #~ msgid "InfoBox values"
 #~ msgstr "インフォボックス　数値"

@@ -43,6 +43,7 @@ class WaypointIconRenderer
 public:
   enum Reachability
   {
+    Invalid,
     Unreachable,
     ReachableStraight,
     ReachableTerrain,

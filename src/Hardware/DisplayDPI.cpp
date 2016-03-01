@@ -82,11 +82,17 @@ static unsigned
 GetDPI()
 {
 #ifdef KOBO
-  /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
-  if (DetectKoboModel() == KoboModel::GLO_HD)
+  switch (DetectKoboModel()) {
+  case KoboModel::GLO_HD:
     return 300;
-  else
+
+  case KoboModel::TOUCH2:
+    return 167;
+
+  default:
+    /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
     return 200;
+  }
 #elif defined(__APPLE__)
 #if TARGET_OS_IPHONE
   UIScreen *screen = [UIScreen mainScreen];

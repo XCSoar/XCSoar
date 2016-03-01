@@ -71,8 +71,13 @@ struct VisibleWaypoint {
     waypoint = _waypoint;
     point = _point;
     reach.Clear();
-    reachable = WaypointRenderer::Unreachable;
+    reachable = WaypointRenderer::Invalid;
     in_task = _in_task;
+  }
+
+  bool IsReachable() const {
+    return reachable == WaypointRenderer::ReachableStraight ||
+      reachable == WaypointRenderer::ReachableTerrain;
   }
 
   void CalculateReachabilityDirect(const MoreData &basic,
@@ -96,19 +101,23 @@ struct VisibleWaypoint {
       reachable = WaypointRenderer::ReachableTerrain;
   }
 
-  void CalculateRouteArrival(const RoutePlannerGlue &route_planner,
+  bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour) {
     const double elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->location, elevation);
-    if (route_planner.FindPositiveArrival(p_dest, reach))
-      reach.Subtract(elevation);
+    if (!route_planner.FindPositiveArrival(p_dest, reach))
+      return false;
+
+    reach.Subtract(elevation);
+    return true;
   }
 
   void CalculateReachability(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour)
   {
-    CalculateRouteArrival(route_planner, task_behaviour);
+    if (!CalculateRouteArrival(route_planner, task_behaviour))
+      return;
 
     if (!reach.IsReachableDirect())
       reachable = WaypointRenderer::Unreachable;
@@ -243,7 +252,7 @@ protected:
       return;
     }
 
-    if (reachable == WaypointRenderer::Unreachable)
+    if (reachable == WaypointRenderer::Invalid)
       return;
 
     if (!reach.IsReachableDirect() && !way_point.flags.watched)
@@ -317,8 +326,7 @@ protected:
 
     TextInBoxMode text_mode;
     bool bold = false;
-    if (vwp.reachable != WaypointRenderer::Unreachable &&
-        way_point.IsLandable()) {
+    if (vwp.IsReachable() && way_point.IsLandable()) {
       text_mode.shape = settings.landable_render_mode;
       bold = true;
       text_mode.move_in_view = true;
@@ -334,7 +342,7 @@ protected:
     FormatLabel(Buffer, way_point, vwp.reachable, vwp.reach);
 
     auto sc = vwp.point;
-    if ((vwp.reachable != WaypointRenderer::Unreachable &&
+    if ((vwp.IsReachable() &&
          settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
         settings.vector_landable_rendering)
       // make space for the green circle

@@ -50,6 +50,7 @@ class WaypointRenderer : private NonCopyable {
 public:
   enum Reachability
   {
+    Invalid,
     Unreachable,
     ReachableStraight,
     ReachableTerrain,
