@@ -86,6 +86,9 @@ GetDPI()
   case KoboModel::GLO_HD:
     return 300;
 
+  case KoboModel::TOUCH2:
+    return 167;
+
   default:
     /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
     return 200;

@@ -12,7 +12,7 @@ Version 6.8.3 - not yet released
 * devices
   - GTAltimeter: remove unmaintained driver (#3661)
 * Kobo
-  - support Kobo Glo HD
+  - support Kobo Glo HD, Kobo Touch 2.0
 * fix crash in SkyLines tracking
 
 Version 6.8.2 - 2015/09/19
