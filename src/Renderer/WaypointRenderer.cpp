@@ -74,6 +74,11 @@ struct VisibleWaypoint {
     in_task = _in_task;
   }
 
+  bool IsReachable() const {
+    return reachable == WaypointRenderer::ReachableStraight ||
+      reachable == WaypointRenderer::ReachableTerrain;
+  }
+
   void CalculateReachabilityDirect(const MoreData &basic,
                                    const SpeedVector &wind,
                                    const MacCready &mac_cready,
@@ -316,8 +321,7 @@ protected:
 
     TextInBoxMode text_mode;
     bool bold = false;
-    if (vwp.reachable != WaypointRenderer::Unreachable &&
-        way_point.IsLandable()) {
+    if (vwp.IsReachable() && way_point.IsLandable()) {
       text_mode.shape = settings.landable_render_mode;
       bold = true;
       text_mode.move_in_view = true;
@@ -333,7 +337,7 @@ protected:
     FormatLabel(Buffer, way_point, vwp.reachable, vwp.reach);
 
     RasterPoint sc = vwp.point;
-    if ((vwp.reachable != WaypointRenderer::Unreachable &&
+    if ((vwp.IsReachable() &&
          settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
         settings.vector_landable_rendering)
       // make space for the green circle
