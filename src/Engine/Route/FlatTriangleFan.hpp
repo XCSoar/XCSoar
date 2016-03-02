@@ -58,8 +58,12 @@ public:
    */
   bool CommitPoints(bool closed);
 
+  /**
+   * @param closed true if this is a closed shape and the origin is
+   * not part of the hull
+   */
   gcc_pure
-  bool IsInside(FlatGeoPoint p) const;
+  bool IsInside(FlatGeoPoint p, bool closed) const;
 
   void Clear() {
     vs.clear();

@@ -101,13 +101,14 @@ FlatTriangleFan::CommitPoints(bool closed)
 }
 
 bool
-FlatTriangleFan::IsInside(FlatGeoPoint p) const
+FlatTriangleFan::IsInside(FlatGeoPoint p, bool closed) const
 {
   if (!bounding_box.IsInside(p))
     return false;
 
   bool inside = false;
-  for (auto i = vs.begin(), j = std::prev(vs.end()), end = vs.end();
+  const auto hull = GetHull(closed);
+  for (auto i = hull.begin(), end = hull.end(), j = std::prev(end);
        i != end; j = i++) {
     if ((i->y > p.y) == (j->y > p.y))
       continue;

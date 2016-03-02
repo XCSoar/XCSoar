@@ -75,6 +75,11 @@ public:
   void CalcBB();
 
   gcc_pure
+  bool IsInside(FlatGeoPoint p) const {
+    return FlatTriangleFan::IsInside(p, IsRoot());
+  }
+
+  gcc_pure
   bool IsInsideTree(FlatGeoPoint p,
                     const bool include_children = true) const;
 
