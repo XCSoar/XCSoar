@@ -25,6 +25,7 @@
 
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
+#include "Util/ConstBuffer.hxx"
 
 #include <vector>
 
@@ -69,6 +70,22 @@ public:
 
   AFlatGeoPoint GetOrigin() const {
     return AFlatGeoPoint(vs.front(), height);
+  }
+
+  /**
+   * Returns a list of points describing the hull.
+   *
+   * @param closed true if this is a closed circle and the origin is
+   * not part of the hull
+   */
+  gcc_pure
+  ConstBuffer<FlatGeoPoint> GetHull(bool closed) const {
+    ConstBuffer<FlatGeoPoint> hull(&vs.front(), vs.size());
+    if (closed)
+      /* omit the origin, because it's not part of the hull in a
+         closed shape */
+      hull.pop_front();
+    return hull;
   }
 
   int GetHeight() const {

@@ -25,7 +25,6 @@
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
 #include "Util/GlobalSliceAllocator.hpp"
-#include "Util/ConstBuffer.hxx"
 #include "Geo/Flat/FlatProjection.hpp"
 
 #define REACH_BUFFER 1
@@ -318,16 +317,8 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
   if (!bb.Overlaps(bb_children))
     return;
 
-  if (bb.Overlaps(bounding_box)) {
-    ConstBuffer<FlatGeoPoint> p(&vs.front(), vs.size());
-    if (IsRoot())
-      /* omit the origin in the top-most instance because this is the
-         one that searched a full circle; including the center will
-         cause a spike in the polygon */
-      p.pop_front();
-
-    visitor.VisitFan(GetOrigin(), p);
-  }
+  if (bb.Overlaps(bounding_box))
+    visitor.VisitFan(GetOrigin(), GetHull(IsRoot()));
 
   for (const auto &child : children)
     child.AcceptInRange(bb, visitor);
