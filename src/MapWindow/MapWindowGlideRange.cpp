@@ -181,11 +181,6 @@ struct ProjectedFans {
 typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
 
 class TriangleCompound final : public FlatTriangleFanVisitor {
-  /** Temporary container for TriangleFan processing */
-  StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
-  /** Temporary container for TriangleFan clipping */
-  GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
-
   /**
    * A copy of ReachFan::projection.
    */
@@ -210,17 +205,17 @@ public:
   /* virtual methods from class FlatTriangleFanVisitor */
 
   void VisitFan(FlatGeoPoint origin, ConstBuffer<FlatGeoPoint> fan) override {
-    assert(fan.size < g.capacity());
 
     if (fan.size < 3 || fans.full())
       return;
 
-    g.clear();
-    for (const auto &i : fan)
-      g.push_back(flat_projection.Unproject(i));
+    GeoPoint g[ROUTEPOLAR_POINTS + 2];
+    for (size_t i = 0; i < fan.size; ++i)
+      g[i] = flat_projection.Unproject(fan[i]);
 
-    // Perform clipping on the GeoPointVector (Result: clipped)
-    unsigned size = clip.ClipPolygon(clipped, g.raw(), g.size());
+    // Perform clipping on the GeoPointVector
+    GeoPoint clipped[(ROUTEPOLAR_POINTS + 2) * 3];
+    unsigned size = clip.ClipPolygon(clipped, g, fan.size);
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
