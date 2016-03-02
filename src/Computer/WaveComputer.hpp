@@ -93,6 +93,11 @@ private:
    * Resets the internal state for calculating the current wave.
    */
   void ResetCurrent();
+
+  /**
+   * Remove old waves.
+   */
+  void Decay(double min_time);
 };
 
 #endif

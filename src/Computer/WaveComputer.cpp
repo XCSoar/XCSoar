@@ -103,6 +103,17 @@ GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
 }
 
 void
+WaveComputer::Decay(double min_time)
+{
+  for (auto i = waves.begin(), end = waves.end(); i != end;) {
+    if (i->time < min_time)
+      i = waves.erase(i);
+    else
+      ++i;
+  }
+}
+
+void
 WaveComputer::Compute(const NMEAInfo &basic,
                       const FlyingState &flight,
                       WaveResult &result,
@@ -186,6 +197,10 @@ WaveComputer::Compute(const NMEAInfo &basic,
 
     ls.Reset();
   }
+
+  if (basic.time_available)
+    /* forget all waves which are older than 8 hours */
+    Decay(basic.time - 8 * 3600);
 
   /* fill the #WaveResult */
 
