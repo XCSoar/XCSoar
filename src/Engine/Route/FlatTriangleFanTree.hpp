@@ -79,10 +79,6 @@ public:
     return FlatTriangleFan::IsInside(p, IsRoot());
   }
 
-  gcc_pure
-  bool IsInsideTree(FlatGeoPoint p,
-                    const bool include_children = true) const;
-
   void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms);
   void DummyReach(const AFlatGeoPoint &origin);
 

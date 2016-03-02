@@ -63,21 +63,6 @@ FlatTriangleFanTree::CalcBB()
   }
 }
 
-bool
-FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint p,
-                                  const bool include_children) const
-{
-  if (IsInside(p))
-    return true;
-
-  if (include_children && bb_children.IsInside(p))
-    for (const auto &child : children)
-      if (child.IsInsideTree(p, true))
-        return true;
-
-  return false;
-}
-
 void
 FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
                                ReachFanParms &parms)

@@ -77,17 +77,6 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
 }
 
 bool
-ReachFan::IsInside(const GeoPoint origin, const bool turning) const
-{
-  // no data? probably not solved yet
-  if (root.IsEmpty())
-    return false;
-
-  const FlatGeoPoint p = projection.ProjectInteger(origin);
-  return root.IsInsideTree(p, turning);
-}
-
-bool
 ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
                               ReachResult &result_r) const
 {

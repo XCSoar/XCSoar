@@ -58,8 +58,6 @@ public:
   bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
                            ReachResult &result_r) const;
 
-  bool IsInside(const GeoPoint origin, const bool turning = true) const;
-
   void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor) const;
 
