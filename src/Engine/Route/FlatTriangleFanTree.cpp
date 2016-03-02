@@ -289,6 +289,10 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
       arrival_height = h;
       return true;
     }
+
+    /* stop here; it is impossible for a child to find a positive
+       arrival height if this one didn't */
+    return false;
   }
 
   bool retval = false;
