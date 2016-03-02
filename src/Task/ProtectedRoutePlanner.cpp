@@ -76,3 +76,10 @@ ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
   Lease lease(*this);
   lease->AcceptInRange(bounds, visitor);
 }
+
+const FlatProjection
+ProtectedRoutePlanner::GetReachProjection() const
+{
+  Lease lease(*this);
+  return lease->GetReachProjection();
+}

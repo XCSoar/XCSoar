@@ -84,6 +84,9 @@ public:
 
   void AcceptInRange(const GeoBounds &bounds,
                      TriangleFanVisitor &visitor) const;
+
+  gcc_pure
+  const FlatProjection GetReachProjection() const;
 };
 
 #endif
