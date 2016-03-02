@@ -67,25 +67,14 @@ bool
 FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint p,
                                   const bool include_children) const
 {
-  if (include_children) {
-    if (!bb_children.IsInside(p))
-      return false;
-  } else {
-    if (!bounding_box.IsInside(p))
-      return false;
-  }
-
   if (IsInside(p))
     return true;
 
-  if (!include_children)
-    return false;
+  if (include_children && bb_children.IsInside(p))
+    for (const auto &child : children)
+      if (child.IsInsideTree(p, true))
+        return true;
 
-  for (const auto &child : children)
-    if (child.IsInsideTree(p, true))
-      return true;
-
-  // should never get here!
   return false;
 }
 
