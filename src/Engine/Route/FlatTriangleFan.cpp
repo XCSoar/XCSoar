@@ -91,6 +91,7 @@ FlatTriangleFan::CommitPoints(bool closed)
       return true;
 
     /* erase this spike */
+    vs.pop_back();
     hull.pop_back();
 
     /* .. and continue searching */
