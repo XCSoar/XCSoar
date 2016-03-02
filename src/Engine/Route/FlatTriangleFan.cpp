@@ -69,11 +69,35 @@ FlatTriangleFan::AddPoint(FlatGeoPoint p)
   vs.push_back(p);
 }
 
+/**
+ * Is there a spike wrapping around beginning and end of the
+ * container?
+ */
+static bool
+IsWrappedSpike(ConstBuffer<FlatGeoPoint> hull)
+{
+  return IsSpike(hull[hull.size - 2], hull[hull.size - 1], hull[0]) ||
+    IsSpike(hull[hull.size - 1], hull[0], hull[1]);
+}
+
 bool
 FlatTriangleFan::CommitPoints(bool closed)
 {
   auto hull = GetHull(closed);
-  return hull.size >= 3;
+
+  while (hull.size > 3) {
+    if (!IsWrappedSpike(hull))
+      /* no spikes left: success! */
+      return true;
+
+    /* erase this spike */
+    hull.pop_back();
+
+    /* .. and continue searching */
+  }
+
+  /* not enough points: fail */
+  return false;
 }
 
 bool
