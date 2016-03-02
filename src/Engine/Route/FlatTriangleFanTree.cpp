@@ -256,9 +256,6 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     index_right = e_long.polar_index + REACH_SWEEP;
   }
 
-  children.emplace_back(depth + 1);
-  FlatTriangleFanTree &child = children.back();
-
   for (auto f = f0; f < 0.9; f += 0.1) {
     // find corner point
     const FlatGeoPoint px = (dp * f + FlatGeoPoint(n));
@@ -268,20 +265,17 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);
 
+    FlatTriangleFanTree child(depth + 1);
     child.FillReach(x, index_left, index_right, parms);
 
     // prune child if empty or single spike
     if (child.vs.size() > 3) {
       parms.vertex_counter += child.vs.size();
       parms.fan_counter++;
+      children.emplace_back(std::move(child));
       return true;
     }
-
-    child.vs.clear();
   }
-
-  // don't need the child
-  children.pop_back();
 
   return false;
 }
