@@ -111,12 +111,10 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
 void
 FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao)
 {
-  assert(vs.empty());
   assert(children.empty());
 
-  AddPoint(ao);
+  AddOrigin(ao, 0);
   CalcBB();
-  height = ao.altitude;
 }
 
 bool
@@ -159,9 +157,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
       return false;
   }
 
-  assert(vs.empty());
-  vs.reserve(index_high - index_low + 1);
-  AddPoint(origin);
+  AddOrigin(origin, index_high - index_low);
   for (int index = index_low; index < index_high; ++index) {
     FlatGeoPoint x = parms.ReachIntercept(index, origin, geo_origin);
     /* if ReachIntercept() did not find anything reasonable it returns

@@ -41,6 +41,11 @@ public:
 
   void CalcBoundingBox();
 
+  /**
+   * Add the origin to an empty
+   */
+  void AddOrigin(const AFlatGeoPoint &origin, size_t reserve);
+
   void AddPoint(FlatGeoPoint p);
 
   gcc_pure

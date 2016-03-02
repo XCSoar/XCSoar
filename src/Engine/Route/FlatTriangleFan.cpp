@@ -43,10 +43,23 @@ IsSpike(FlatGeoPoint a, FlatGeoPoint b, FlatGeoPoint c)
 }
 
 void
+FlatTriangleFan::AddOrigin(const AFlatGeoPoint &origin, size_t reserve)
+{
+  assert(vs.empty());
+
+  height = origin.altitude;
+
+  vs.reserve(reserve + 1);
+  vs.push_back(origin);
+}
+
+void
 FlatTriangleFan::AddPoint(FlatGeoPoint p)
 {
+  assert(!vs.empty());
+
   // avoid duplicates
-  if (!vs.empty() && p == vs.back())
+  if (p == vs.back())
     return;
 
   if (vs.size() >= 2 && IsSpike(vs[vs.size() - 2], vs.back(), p))
