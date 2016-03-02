@@ -48,6 +48,13 @@ public:
 
   void AddPoint(FlatGeoPoint p);
 
+  /**
+   * Finish the point list.
+   *
+   * @return true if the fan is valid
+   */
+  bool CommitPoints();
+
   gcc_pure
   bool IsInside(FlatGeoPoint p) const;
 

@@ -170,7 +170,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
     AddPoint(x);
   }
 
-  return vs.size() >= 3;
+  return CommitPoints();
 }
 
 void

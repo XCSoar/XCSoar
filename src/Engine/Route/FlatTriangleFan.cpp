@@ -70,6 +70,12 @@ FlatTriangleFan::AddPoint(FlatGeoPoint p)
 }
 
 bool
+FlatTriangleFan::CommitPoints()
+{
+  return vs.size() >= 3;
+}
+
+bool
 FlatTriangleFan::IsInside(FlatGeoPoint p) const
 {
   if (!bounding_box.IsInside(p))
