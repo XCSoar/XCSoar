@@ -99,7 +99,11 @@ public:
     return vs.size() == 1 && children.empty();
   }
 
-  void FillReach(const AFlatGeoPoint &origin,
+  /**
+   * @return true if a valid fan has been filled, false to discard
+   * this object
+   */
+  bool FillReach(const AFlatGeoPoint &origin,
                  const int index_low, const int index_high,
                  const ReachFanParms &parms);
 

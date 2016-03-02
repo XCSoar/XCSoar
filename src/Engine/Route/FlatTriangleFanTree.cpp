@@ -142,7 +142,7 @@ FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
   return true;
 }
 
-void
+bool
 FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
                                const int index_high,
                                const ReachFanParms &parms)
@@ -156,7 +156,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
     const FlatGeoPoint x_mid = parms.ReachIntercept(index_mid, origin,
                                                     geo_origin);
     if (TooClose(x_mid, origin))
-      return;
+      return false;
   }
 
   assert(vs.empty());
@@ -173,6 +173,8 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
 
     AddPoint(x);
   }
+
+  return vs.size() >= 3;
 }
 
 void
@@ -266,10 +268,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     const AFlatGeoPoint x(px, h);
 
     FlatTriangleFanTree child(depth + 1);
-    child.FillReach(x, index_left, index_right, parms);
-
-    // prune child if empty or single spike
-    if (child.vs.size() > 3) {
+    if (child.FillReach(x, index_left, index_right, parms)) {
       parms.vertex_counter += child.vs.size();
       parms.fan_counter++;
       children.emplace_back(std::move(child));
