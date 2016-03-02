@@ -82,7 +82,8 @@ GetNettoVarioAvailable(const NMEAInfo &basic)
  */
 gcc_pure
 static WaveInfo
-GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection)
+GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
+            double time)
 {
   if (!ls.HasResult())
     return WaveInfo::Undefined();
@@ -98,7 +99,7 @@ GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection)
   Angle bearing = a.Bearing(b);
   Angle normal = (bearing + Angle::QuarterCircle()).AsBearing();
 
-  return {location, a, b, normal};
+  return {location, a, b, normal, time};
 }
 
 void
@@ -175,7 +176,8 @@ WaveComputer::Compute(const NMEAInfo &basic,
     if (ls.GetCount() > 30) {
       /* we've been lifting in the wave for some time; see if we
          really spotted a wave */
-      const WaveInfo wave = GetWaveInfo(ls, projection);
+      const WaveInfo wave = GetWaveInfo(ls, projection,
+                                        basic.time_available ? basic.time : 0);
       if (wave.IsDefined())
         /* yes, spotted a wave: copy it from the #LeastSquares
            instance to the list of waves */
@@ -191,7 +193,8 @@ WaveComputer::Compute(const NMEAInfo &basic,
 
   /* first copy the wave that is currently being calculated (partial
      data) */
-  WaveInfo wave = GetWaveInfo(ls, projection);
+  WaveInfo wave = GetWaveInfo(ls, projection,
+                              basic.time_available ? basic.time : 0);
   if (wave.IsDefined())
     result.waves.push_back(wave);
 

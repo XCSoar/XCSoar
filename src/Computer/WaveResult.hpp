@@ -34,6 +34,15 @@ struct WaveInfo {
   GeoPoint a, b;
   Angle normal;
 
+  /**
+   * The time (see NMEAInfo::time) when this wave was calculated.
+   * This is used to decay old waves.
+   *
+   * A negative value means a wallclock was not available at the time
+   * this wave was calculated.
+   */
+  double time;
+
   static WaveInfo Undefined() {
     WaveInfo result;
     result.location = GeoPoint::Invalid();
