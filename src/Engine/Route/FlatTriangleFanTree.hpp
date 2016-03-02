@@ -36,14 +36,6 @@ struct AFlatGeoPoint;
 struct ReachFanParms;
 template<typename T> struct ConstBuffer;
 
-class TriangleFanVisitor
-{
-public:
-  virtual void StartFan() = 0;
-  virtual void AddPoint(const GeoPoint &p) = 0;
-  virtual void EndFan() = 0;
-};
-
 class FlatTriangleFanVisitor {
 public:
   virtual void VisitFan(FlatGeoPoint origin,
@@ -116,10 +108,6 @@ public:
   bool FindPositiveArrival(FlatGeoPoint n,
                            const ReachFanParms &parms,
                            int &arrival_height) const;
-
-  void AcceptInRange(const FlatBoundingBox &bb,
-                     const FlatProjection &projection,
-                     TriangleFanVisitor &visitor) const;
 
   void AcceptInRange(const FlatBoundingBox &bb,
                      FlatTriangleFanVisitor &visitor) const;

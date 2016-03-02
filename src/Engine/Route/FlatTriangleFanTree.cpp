@@ -313,26 +313,6 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint n,
 
 void
 FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
-                                   const FlatProjection &projection,
-                                   TriangleFanVisitor &visitor) const
-{
-  if (!bb.Overlaps(bb_children))
-    return;
-
-  if (bb.Overlaps(bounding_box)) {
-    visitor.StartFan();
-    for (const auto &v : vs)
-      visitor.AddPoint(projection.Unproject(v));
-
-    visitor.EndFan();
-  }
-
-  for (const auto &child : children)
-    child.AcceptInRange(bb, projection, visitor);
-}
-
-void
-FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
                                    FlatTriangleFanVisitor &visitor) const
 {
   if (!bb.Overlaps(bb_children))

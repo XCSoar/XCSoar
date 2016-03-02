@@ -82,13 +82,6 @@ RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest,
   return planner.FindPositiveArrival(dest, result_r);
 }
 
-void
-RoutePlannerGlue::AcceptInRange(const GeoBounds &bounds,
-                                  TriangleFanVisitor &visitor) const
-{
-  planner.AcceptInRange(bounds, visitor);
-}
-
 GeoPoint
 RoutePlannerGlue::Intersection(const AGeoPoint &origin,
                                const AGeoPoint &destination) const

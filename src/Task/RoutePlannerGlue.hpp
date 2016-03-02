@@ -79,8 +79,6 @@ public:
     return planner.GetReachProjection();
   }
 
-  void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
-
   void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor) const {
     planner.AcceptInRange(bounds, visitor);

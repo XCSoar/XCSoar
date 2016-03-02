@@ -60,9 +60,6 @@ public:
 
   bool IsInside(const GeoPoint origin, const bool turning = true) const;
 
-  void AcceptInRange(const GeoBounds& bounds,
-                     TriangleFanVisitor& visitor) const;
-
   void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor) const;
 

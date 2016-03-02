@@ -214,11 +214,6 @@ public:
 
   /** Visit reach */
   void AcceptInRange(const GeoBounds &bounds,
-                     TriangleFanVisitor &visitor) const {
-    reach.AcceptInRange(bounds, visitor);
-  }
-
-  void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor) const {
     reach.AcceptInRange(bounds, visitor);
   }
