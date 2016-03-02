@@ -52,9 +52,11 @@ public:
   /**
    * Finish the point list.
    *
+   * @param closed true if this is a closed circle and the origin is
+   * not part of the hull
    * @return true if the fan is valid
    */
-  bool CommitPoints();
+  bool CommitPoints(bool closed);
 
   gcc_pure
   bool IsInside(FlatGeoPoint p) const;

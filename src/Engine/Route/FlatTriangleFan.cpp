@@ -70,9 +70,10 @@ FlatTriangleFan::AddPoint(FlatGeoPoint p)
 }
 
 bool
-FlatTriangleFan::CommitPoints()
+FlatTriangleFan::CommitPoints(bool closed)
 {
-  return vs.size() >= 3;
+  auto hull = GetHull(closed);
+  return hull.size >= 3;
 }
 
 bool
