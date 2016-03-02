@@ -26,6 +26,7 @@ Copyright_License {
 #include "Computer/WaveComputer.hpp"
 #include "Computer/WaveResult.hpp"
 #include "Computer/WaveSettings.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
 #include "Util/Macros.hpp"
 
@@ -57,8 +58,15 @@ int main(int argc, char **argv)
 
   delete replay;
 
-  for (const auto &w : result.waves)
-    _tprintf(_T("wave: location=%f,%f a=%f,%f b=%f,%f location=%s normal=%f\n"),
+  for (const auto &w : result.waves) {
+    TCHAR time_buffer[32];
+    if (w.time >= 0)
+      FormatTime(time_buffer, w.time);
+    else
+      _tcscpy(time_buffer, _T("?"));
+
+    _tprintf(_T("wave: t=%s location=%f,%f a=%f,%f b=%f,%f location=%s normal=%f\n"),
+             time_buffer,
              (double)w.location.longitude.Degrees(),
              (double)w.location.latitude.Degrees(),
              (double)w.a.longitude.Degrees(),
@@ -67,6 +75,7 @@ int main(int argc, char **argv)
              (double)w.b.latitude.Degrees(),
              FormatGeoPoint(w.location, CoordinateFormat::DDMMSS).c_str(),
              (double)w.normal.Degrees());
+  }
 
   return EXIT_SUCCESS;
 }
