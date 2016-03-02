@@ -76,6 +76,8 @@ FlatTriangleFan::AddPoint(FlatGeoPoint p)
 static bool
 IsWrappedSpike(ConstBuffer<FlatGeoPoint> hull)
 {
+  assert(hull.size > 3);
+
   return IsSpike(hull[hull.size - 2], hull[hull.size - 1], hull[0]) ||
     IsSpike(hull[hull.size - 1], hull[0], hull[1]);
 }
