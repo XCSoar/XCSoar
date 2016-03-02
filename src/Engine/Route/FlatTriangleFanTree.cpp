@@ -96,7 +96,7 @@ FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
 {
   gaps_filled = false;
 
-  FillReach(origin, 0, ROUTEPOLAR_POINTS + 1, parms);
+  FillReach(origin, 0, ROUTEPOLAR_POINTS, parms);
 
   for (parms.set_depth = 0; parms.set_depth < REACH_MAX_DEPTH;
       ++parms.set_depth)
