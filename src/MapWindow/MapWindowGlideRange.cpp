@@ -180,11 +180,17 @@ struct ProjectedFans {
 
 typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
 
-class TriangleCompound: public TriangleFanVisitor {
+class TriangleCompound final : public FlatTriangleFanVisitor {
   /** Temporary container for TriangleFan processing */
   StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
   /** Temporary container for TriangleFan clipping */
   GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
+
+  /**
+   * A copy of ReachFan::projection.
+   */
+  const FlatProjection flat_projection;
+
   /** Projection to use for GeoPoint -> PixelPoint conversion */
   const MapWindowProjection &proj;
   /** GeoClip instance used for TriangleFan clipping */
@@ -194,39 +200,27 @@ public:
   /** STL-Container of rasterized polygons */
   ProjectedFans fans;
 
-  TriangleCompound(const MapWindowProjection& _proj)
-    :proj(_proj),
+  TriangleCompound(const FlatProjection &_flat_projection,
+                   const MapWindowProjection& _proj)
+    :flat_projection(_flat_projection), proj(_proj),
      clip(_proj.GetScreenBounds().Scale(1.1))
   {
   }
 
-  /* virtual methods from class TriangleFanVisitor */
+  /* virtual methods from class FlatTriangleFanVisitor */
 
-  void StartFan() override {
-    // Clear the GeoPointVector for the next TriangleFan
+  void VisitFan(FlatGeoPoint origin, ConstBuffer<FlatGeoPoint> fan) override {
+    assert(fan.size < g.capacity());
+
+    if (fan.size < 3 || fans.full())
+      return;
+
     g.clear();
-  }
-
-  void AddPoint(const GeoPoint& p) override {
-    // Add a new GeoPoint to the current TriangleFan
-    g.append(p);
-  }
-
-  void EndFan() override {
-    if (fans.full())
-      return;
-
-    // remove unnecessary inclusion of origin if next and last points are identical
-    unsigned start = 0;
-    const size_t gsize = g.size();
-    if (gsize > 2 && g[gsize - 1] == g[1])
-      start = 1;
-
-    if (gsize < start + 3)
-      return;
+    for (const auto &i : fan)
+      g.push_back(flat_projection.Unproject(i));
 
     // Perform clipping on the GeoPointVector (Result: clipped)
-    unsigned size = clip.ClipPolygon(clipped, g.raw() + start, gsize - start);
+    unsigned size = clip.ClipPolygon(clipped, g.raw(), g.size());
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
@@ -262,10 +256,14 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     return;
 
   // Create a visitor for the Reach code
-  TriangleCompound visitor(render_projection);
+  TriangleCompound visitor(route_planner->GetReachProjection(),
+                           render_projection);
 
   // Fill the TriangleCompound with all TriangleFans in range
-  route_planner->AcceptInRange(render_projection.GetScreenBounds(), visitor);
+  {
+    const ProtectedRoutePlanner::Lease lease(*route_planner);
+    lease->AcceptInRange(render_projection.GetScreenBounds(), visitor);
+  }
 
   // Exit early if not fans found
   if (visitor.fans.empty())
