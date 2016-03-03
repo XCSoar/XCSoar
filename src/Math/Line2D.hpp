@@ -95,6 +95,39 @@ struct Line2D {
   constexpr bool Contains(Point p) const {
     return LocatePoint(p) == product_type(0);
   }
+
+  /**
+   * Calculate an interpolated point between #a and #b
+   *
+   * @param ratio the interpolation ratio where 0=#a and 1=#b
+   */
+  constexpr Point Interpolate(double ratio) const {
+    return Point(scalar_type(a.x * (1 - ratio) + b.x * ratio),
+                 scalar_type(a.y * (1 - ratio) + b.y * ratio));
+  }
+
+  /**
+   * Calculate the position of the projection of #p onto this line,
+   * expressed as ratio where 0=#a and 1=#b.
+   */
+  constexpr double ProjectedRatio(Point p) const {
+    return (double)::DotProduct(b - a, p - a) / (double)GetSquaredDistance();
+  }
+
+  /**
+   * Calculate the projection of #p into this line.
+   */
+  constexpr Point Project(Point p) const {
+    return Interpolate(ProjectedRatio(p));
+  }
+
+  /**
+   * Calculate the square distance from a point to the projected point
+   * on an infinite line.
+   */
+  constexpr product_type SquareDistanceTo(Point p) const {
+    return (p - Project(p)).MagnitudeSquared();
+  }
 };
 
 #endif
