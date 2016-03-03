@@ -422,6 +422,14 @@ public:
   }
 
   /**
+   * Return the positive difference between two angles.
+   */
+  gcc_pure
+  Angle fdim(const Angle x) const {
+    return Native(std::fdim(value, x.value));
+  }
+
+  /**
    * Is this angle between the other two values?  If "end" is smaller
    * than "start", then wraparound is calculated correctly.
    */
