@@ -11,6 +11,8 @@ Version 7.0 - not yet released
   - merge all weather data in one dialog
   - allow showing both terrain and RASP
   - show satellite images from pc_met (Deutscher Wetterdienst)
+* calculations
+  - merge redundant waves
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later
