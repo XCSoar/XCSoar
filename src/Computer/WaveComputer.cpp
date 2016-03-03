@@ -113,6 +113,12 @@ WaveComputer::Decay(double min_time)
   }
 }
 
+inline void
+WaveComputer::FoundWave(const WaveInfo &new_wave)
+{
+  waves.push_front(new_wave);
+}
+
 void
 WaveComputer::Compute(const NMEAInfo &basic,
                       const FlyingState &flight,
@@ -192,7 +198,7 @@ WaveComputer::Compute(const NMEAInfo &basic,
       if (wave.IsDefined())
         /* yes, spotted a wave: copy it from the #LeastSquares
            instance to the list of waves */
-        waves.push_front(wave);
+        FoundWave(wave);
     }
 
     ls.Reset();
