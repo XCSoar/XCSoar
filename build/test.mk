@@ -356,6 +356,7 @@ $(eval $(call link-program,TestARange,TEST_ARANGE))
 
 TEST_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLine2D.cpp \
 	$(TEST_SRC_DIR)/TestQuadrilateral.cpp \
 	$(TEST_SRC_DIR)/TestMath.cpp
 QUADRILATERAL_ARANGE_DEPENDS = MATH
