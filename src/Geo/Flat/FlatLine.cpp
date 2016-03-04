@@ -27,7 +27,8 @@
 Angle
 FlatLine::GetAngle() const
 {
-  return Angle::FromXY(dx(), dy());
+  const auto v = GetVector();
+  return Angle::FromXY(v.x, v.y);
 }
 
 void
@@ -41,8 +42,7 @@ bool
 FlatLine::IntersectOriginCircle(const double r,
                                 FlatPoint &i1, FlatPoint &i2) const
 {
-  const auto _dx = dx();
-  const auto _dy = dy();
+  const auto d = GetVector();
   const auto dr = GetSquaredDistance();
   const auto D = CrossProduct();
 
@@ -53,10 +53,10 @@ FlatLine::IntersectOriginCircle(const double r,
 
   det = sqrt(det);
   const auto inv_dr = 1. / dr;
-  i1.x = (D * _dy + copysign(_dx, _dy) * det) * inv_dr;
-  i2.x = (D * _dy - copysign(_dx, _dy) * det) * inv_dr;
-  i1.y = (-D * _dx + fabs(_dy) * det) * inv_dr;
-  i2.y = (-D * _dx - fabs(_dy) * det) * inv_dr;
+  i1.x = (D * d.y + copysign(d.x, d.y) * det) * inv_dr;
+  i2.x = (D * d.y - copysign(d.x, d.y) * det) * inv_dr;
+  i1.y = (-D * d.x + fabs(d.y) * det) * inv_dr;
+  i2.y = (-D * d.x - fabs(d.y) * det) * inv_dr;
   return true;
 }
 

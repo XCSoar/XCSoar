@@ -40,12 +40,19 @@ struct Line2D {
   constexpr Line2D(Point _a, Point _b):a(_a), b(_b) {}
 
   /**
+   * Returns the vector pointing from #a to #b.
+   */
+  constexpr Point GetVector() const {
+    return b - a;
+  }
+
+  /**
    * Calculate squared length of line
    *
    * @return Squared length
    */
   constexpr product_type GetSquaredDistance() const {
-    return (b - a).MagnitudeSquared();
+    return GetVector().MagnitudeSquared();
   }
 
   constexpr Point GetMiddle() const {
@@ -72,7 +79,7 @@ struct Line2D {
    * Return dot product of two lines (vectors)
    */
   constexpr product_type DotProduct(Line2D<P> other) const {
-    return (b - a).DotProduct(other.b - other.a);
+    return GetVector().DotProduct(other.GetVector());
   }
 
   constexpr product_type CrossProduct() const {
@@ -86,7 +93,7 @@ struct Line2D {
    * the line, negative if it is right of the line
    */
   constexpr product_type LocatePoint(Point p) const {
-    return ::CrossProduct(b - a, p - a);
+    return ::CrossProduct(GetVector(), p - a);
   }
 
   /**
@@ -111,7 +118,8 @@ struct Line2D {
    * expressed as ratio where 0=#a and 1=#b.
    */
   constexpr double ProjectedRatio(Point p) const {
-    return (double)::DotProduct(b - a, p - a) / (double)GetSquaredDistance();
+    return (double)::DotProduct(GetVector(), p - a)
+      / (double)GetSquaredDistance();
   }
 
   /**
