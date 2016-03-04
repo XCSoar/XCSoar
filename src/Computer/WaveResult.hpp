@@ -52,6 +52,10 @@ struct WaveInfo {
   bool IsDefined() const {
     return location.IsValid();
   }
+
+  double GetLength() const {
+    return a.DistanceS(b);
+  }
 };
 
 struct WaveResult {
