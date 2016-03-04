@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAVE_RENDERER_HPP
 #define XCSOAR_WAVE_RENDERER_HPP
 
+struct GeoPoint;
 struct WaveInfo;
 struct WaveResult;
 struct WaveLook;
@@ -36,6 +37,9 @@ class WaveRenderer {
 
 public:
   WaveRenderer(const WaveLook &_look):look(_look) {}
+
+  void Draw(Canvas &canvas, const WindowProjection &projection,
+            const GeoClip &clip, GeoPoint a, GeoPoint b) const;
 
   void Draw(Canvas &canvas, const WindowProjection &projection,
             const GeoClip &clip,

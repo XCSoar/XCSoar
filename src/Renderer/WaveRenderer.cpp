@@ -30,12 +30,11 @@ Copyright_License {
 
 void
 WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
-                   const GeoClip &clip,
-                   const WaveInfo &wave) const
+                   const GeoClip &clip, GeoPoint ga, GeoPoint gb) const
 {
-  assert(wave.IsDefined());
+  assert(ga.IsValid());
+  assert(gb.IsValid());
 
-  GeoPoint ga(wave.a), gb(wave.b);
   if (!clip.ClipLine(ga, gb))
     /* outside of the visible map area */
     return;
@@ -45,6 +44,16 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
 
   canvas.Select(look.pen);
   canvas.DrawLine(sa, sb);
+}
+
+void
+WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
+                   const GeoClip &clip,
+                   const WaveInfo &wave) const
+{
+  assert(wave.IsDefined());
+
+  Draw(canvas, projection, clip, wave.a, wave.b);
 }
 
 void
