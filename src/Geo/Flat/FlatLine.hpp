@@ -99,7 +99,7 @@ public:
    */
   gcc_pure
   double GetDistance() const {
-    return hypot(dx(), dy());
+    return a.Distance(b);
   }
 
   constexpr FlatLine operator+(FlatPoint delta) const {
