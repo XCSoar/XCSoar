@@ -30,6 +30,7 @@ Copyright_License {
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
 #include "Operation/Operation.hpp"
+#include "Tracking/SkyLines/Data.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -161,6 +162,14 @@ inline void
 MapWindow::DrawWaves(Canvas &canvas)
 {
   const WaveRenderer renderer(look.wave);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  if (skylines_data != nullptr) {
+    ScopeLock protect(skylines_data->mutex);
+    renderer.Draw(canvas, render_projection, *skylines_data);
+  }
+#endif
+
   renderer.Draw(canvas, render_projection, Calculated().wave);
 }
 
