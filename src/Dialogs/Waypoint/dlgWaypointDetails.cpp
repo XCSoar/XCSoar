@@ -170,7 +170,7 @@ public:
      info_widget(look, waypoint),
      commands_widget(look, &_dialog, waypoint, _task_manager),
 #ifdef HAVE_RUN_FILE
-     file_list(look), file_list_handler(_waypoint),
+     file_list(look), file_list_handler(waypoint),
 #endif
      zoom(0) {}
 
