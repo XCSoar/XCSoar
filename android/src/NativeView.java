@@ -80,6 +80,12 @@ class NativeView extends SurfaceView
   EGLSurface dummySurface = EGL10.EGL_NO_SURFACE;
 
   /**
+   * Is the EGLSurface currently valid?  This is modified by
+   * SurfaceHolder.Callback methods.
+   */
+  boolean haveSurface = false;
+
+  /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
    * then textures can have any size, not just power of two.
    */
@@ -216,6 +222,13 @@ class NativeView extends SurfaceView
    * Initializes the OpenGL surface.  Called by the native code.
    */
   private boolean initSurface() {
+    if (!haveSurface)
+      /* this is futile, and will only result in
+         "java.lang.IllegalArgumentException: Make sure the
+         SurfaceView or associated SurfaceHolder has a valid
+         Surface" */
+      return false;
+
     try {
       initGL(getHolder());
       return true;
@@ -270,10 +283,13 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceCreated(SurfaceHolder holder) {
+    haveSurface = true;
   }
 
   @Override public void surfaceChanged(SurfaceHolder holder, int format,
                                        int width, int height) {
+    haveSurface = true;
+
     if (thread == null || !thread.isAlive())
       start();
     else
@@ -281,6 +297,7 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
+    haveSurface = false;
   }
 
   @Override public void run() {
