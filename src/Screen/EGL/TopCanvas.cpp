@@ -313,7 +313,7 @@ void
 TopCanvas::Flip()
 {
   if (!eglSwapBuffers(display, surface)) {
-    fprintf(stderr, "eglSwapBuffers() failed\n");
+    fprintf(stderr, "eglSwapBuffers() failed: 0x%x\n", eglGetError());
     exit(EXIT_FAILURE);
   }
 
