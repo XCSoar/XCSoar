@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "LogFile.hpp"
 
 void
 TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
@@ -43,7 +44,8 @@ void
 TopCanvas::Flip()
 {
 #ifdef USE_EGL
-  eglSwapBuffers(display, surface);
+  if (!eglSwapBuffers(display, surface))
+    LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
 #else
   native_view->swap();
 #endif

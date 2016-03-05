@@ -435,7 +435,8 @@ class NativeView extends SurfaceView
   }
 
   private void swap() {
-    egl.eglSwapBuffers(display, surface);
+    if (!egl.eglSwapBuffers(display, surface))
+      Log.e(TAG, "eglSwapBuffers() failed: " + egl.eglGetError());
   }
 
   @Override public boolean onTouchEvent(final MotionEvent event)
