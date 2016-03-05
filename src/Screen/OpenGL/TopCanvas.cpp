@@ -37,6 +37,10 @@ TopCanvas::SetupViewport(PixelSize native_size)
 void
 TopCanvas::Resume()
 {
+#if defined(ANDROID) && defined(USE_EGL)
+  surface = eglGetCurrentSurface(EGL_DRAW);
+#endif
+
   OpenGL::SetupContext();
   OpenGL::SetupViewport(UnsignedPoint2D(size.cx, size.cy));
 }
