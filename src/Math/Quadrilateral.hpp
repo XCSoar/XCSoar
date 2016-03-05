@@ -63,7 +63,7 @@ MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
   if (w < 0.0)
     return {-1, -1};
 
-  if (k2 == 0) {
+  if (k2 > -1e-10 && k2 < 1e-10) {
     const double v = -k0 / k1;
     const double u = CalcQuadrilateralU(h, f, e, g, v);
     return {u, v};
