@@ -571,7 +571,7 @@ SinceInMinutes(double now_s, uint32_t past_ms)
 #endif
 
 void
-TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
                                unsigned index)
 {
   assert(index < items.size());
@@ -656,6 +656,16 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(small_font);
 
+  /* draw bearing and distance on the right */
+  if (item.vector.IsValid()) {
+    row_renderer.DrawRightFirstRow(canvas, rc,
+                                            FormatUserDistanceSmart(item.vector.distance).c_str());
+
+    // Draw leg bearing
+    rc.right = row_renderer.DrawRightSecondRow(canvas, rc,
+                                               FormatBearing(item.vector.bearing).c_str());
+  }
+
   if (record != nullptr) {
     tmp.clear();
 
@@ -699,16 +709,6 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);
 #endif
-  }
-
-  /* draw bearing and distance on the right */
-  if (item.vector.IsValid()) {
-    row_renderer.DrawRightFirstRow(canvas, rc,
-                                   FormatUserDistanceSmart(item.vector.distance).c_str());
-
-    // Draw leg bearing
-    row_renderer.DrawRightSecondRow(canvas, rc,
-                                    FormatBearing(item.vector.bearing).c_str());
   }
 }
 
