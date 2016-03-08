@@ -192,6 +192,10 @@ ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+OUTPUTS += $(KOBO_MENU_BIN)
+endif
+
 ifeq ($(HAVE_WIN32),y)
 OUTPUTS += $(LAUNCH_XCSOAR_BIN)
 endif
