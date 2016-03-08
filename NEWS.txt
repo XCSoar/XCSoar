@@ -9,6 +9,7 @@ Version 6.8.3 - not yet released
   - fix bogus arrival heights on watched waypoints when GPS unavailable
   - fix crash in airspace parser
   - fix crash in XML parser
+  - save user.cup after edit (#3701)
 * devices
   - GTAltimeter: remove unmaintained driver (#3661)
 * Kobo
