@@ -242,8 +242,8 @@ thirdparty_libs = [
     ),
 
     AutotoolsProject(
-        'http://curl.haxx.se/download/curl-7.46.0.tar.lzma',
-        'f845c513830d38c1b7ac39a98c1c2b11',
+        'http://curl.haxx.se/download/curl-7.47.1.tar.lzma',
+        '8242c073d8e5fc1c2a1aa946f1e903a4',
         'lib/libcurl.a',
         [
             '--disable-shared', '--enable-static',
