@@ -37,6 +37,9 @@ ShowWaypointListDialog(const GeoPoint &location,
 void
 dlgConfigWaypointsShowModal();
 
+/**
+ * @return true if the given #Waypoint was modified
+ */
 bool
 dlgWaypointEditShowModal(Waypoint &way_point);
 
