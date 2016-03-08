@@ -88,9 +88,9 @@ TimesStatusPanel::Refresh()
     ClearText(TakeoffTime);
   }
 
-  if (!flight.flying && positive(flight.flight_time)) {
+  if (!negative(flight.landing_time)) {
     SetText(LandingTime,
-            FormatLocalTimeHHMM(int(flight.takeoff_time + flight.flight_time),
+            FormatLocalTimeHHMM(int(flight.landing_time),
                                 settings.utc_offset));
   } else {
     ClearText(LandingTime);
