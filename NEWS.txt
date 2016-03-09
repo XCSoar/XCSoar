@@ -1,4 +1,4 @@
-Version 6.8.3 - not yet released
+Version 6.8.3 - 2016/03/09
 * map
   - fix distorted terrain when zoomed out
   - fix missing airspaces in cross section (#3537)
