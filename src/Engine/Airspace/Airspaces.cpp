@@ -73,6 +73,7 @@ Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
 
 class IntersectingAirspaceVisitorAdapter {
   GeoPoint start, end;
+  bool include_inside;
   const FlatProjection *projection;
   FlatRay ray;
   AirspaceIntersectionVisitor *visitor;
@@ -80,9 +81,11 @@ class IntersectingAirspaceVisitorAdapter {
 public:
   IntersectingAirspaceVisitorAdapter(const GeoPoint &_loc,
                                      const GeoPoint &_end,
+                                     bool _include_inside,
                                      const FlatProjection &_projection,
                                      AirspaceIntersectionVisitor &_visitor)
-    :start(_loc), end(_end), projection(&_projection),
+    :start(_loc), end(_end), include_inside(_include_inside),
+     projection(&_projection),
      ray(projection->ProjectInteger(start), projection->ProjectInteger(end)),
      visitor(&_visitor) {}
 
@@ -90,11 +93,22 @@ public:
     if (as.Intersects(ray) &&
         visitor->SetIntersections(as.Intersects(start, end, *projection)))
       visitor->Visit(as);
+    else if (include_inside && as.IsInside(start)) {
+      /* the vector is completely inside the airspace, and thus does
+         not intersect with airspace's outline: on caller's request,
+         report an intersection */
+      AirspaceIntersectionVector v;
+      v.reserve(1);
+      v.emplace_back(start, end);
+      visitor->SetIntersections(std::move(v));
+      visitor->Visit(as);
+    }
   }
 };
 
 void
 Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
+                             bool include_inside,
                              AirspaceIntersectionVisitor &visitor) const
 {
   if (IsEmpty())
@@ -104,7 +118,8 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
   const GeoPoint c = loc.Middle(end);
   Airspace bb_target(c, task_projection);
   int projected_range = task_projection.ProjectRangeInteger(c, loc.Distance(end) / 2);
-  IntersectingAirspaceVisitorAdapter adapter(loc, end, task_projection, visitor);
+  IntersectingAirspaceVisitorAdapter adapter(loc, end, include_inside,
+                                             task_projection, visitor);
   airspace_tree.visit_within_range(bb_target, -projected_range, adapter);
 
 #ifdef INSTRUMENT_TASK
