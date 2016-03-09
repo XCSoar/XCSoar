@@ -111,7 +111,7 @@ TaskStatusPanel::Refresh()
     fixed rMin = task_stats.distance_min;
 
     if (rMin < rMax) {
-      fixed range = Double((task_stats.total.remaining.GetDistance() - rMin) / (rMax - rMin)) - fixed(1);
+      fixed range = Double((task_stats.total.planned.GetDistance() - rMin) / (rMax - rMin)) - fixed(1);
       LoadValue(RANGE, range * 100);
     } else
       ClearValue(RANGE);

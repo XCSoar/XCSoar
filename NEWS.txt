@@ -4,6 +4,7 @@ Version 6.8.3 - not yet released
 * calculations
   - update SIS-AT to 2016 scoring rules
   - fix landing time display (#3690)
+  - fix AAT range display
 * data files
   - use correct "comment" field for OziExplorer files
   - relax file format detection for OziExplorer files
