@@ -58,11 +58,27 @@ Airspaces::QueryIntersecting(const GeoPoint &a, const GeoPoint &b) const
 
 void
 Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
+                             bool include_inside,
                              AirspaceIntersectionVisitor &visitor) const
 {
   for (const auto &i : QueryIntersecting(loc, end))
     if (visitor.SetIntersections(i.Intersects(loc, end, task_projection)))
       visitor.Visit(i.GetAirspace());
+
+  if (include_inside) {
+    for (const auto &i : QueryInside(loc)) {
+      if (i.IsInside(end)) {
+        /* the vector is completely inside the airspace, and thus does
+           not intersect with airspace's outline: on caller's request,
+           report an intersection */
+        AirspaceIntersectionVector v;
+        v.reserve(1);
+        v.emplace_back(loc, end);
+        visitor.SetIntersections(std::move(v));
+        visitor.Visit(i.GetAirspace());
+      }
+    }
+  }
 }
 
 void

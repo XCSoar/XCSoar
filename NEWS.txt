@@ -25,17 +25,21 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.3 - not yet released
+Version 6.8.3 - 2016/03/09
 * map
   - fix distorted terrain when zoomed out
+  - fix missing airspaces in cross section (#3537)
 * calculations
   - update SIS-AT to 2016 scoring rules
+  - fix landing time display (#3690)
+  - fix AAT range display
 * data files
   - use correct "comment" field for OziExplorer files
   - relax file format detection for OziExplorer files
   - fix bogus arrival heights on watched waypoints when GPS unavailable
   - fix crash in airspace parser
   - fix crash in XML parser
+  - save user.cup after edit (#3701)
 * devices
   - GTAltimeter: remove unmaintained driver (#3661)
 * Kobo

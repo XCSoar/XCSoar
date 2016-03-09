@@ -176,10 +176,18 @@ public:
    *
    * @param loc location of origin of search
    * @param end end of line along with to search for intersections
+   * @param include_inside visit airspaces if the vector is completely
+   * inside (i.e. no intersection with airspace outline)
    * @param visitor visitor class to call on airspaces intersected by line
    */
   void VisitIntersecting(const GeoPoint &location, const GeoPoint &end,
+                         bool include_inside,
                          AirspaceIntersectionVisitor &visitor) const;
+
+  void VisitIntersecting(const GeoPoint &location, const GeoPoint &end,
+                         AirspaceIntersectionVisitor &visitor) const {
+    VisitIntersecting(location, end, false, visitor);
+  }
 
   /**
    * Query airspaces this location is inside.

@@ -261,12 +261,16 @@ WaypointCommandsWidget::OnAction(int id)
 
       if (dlgWaypointEditShowModal(wp_copy)) {
         // TODO: refresh data instead of closing dialog?
-        // TODO: save user.cup?
         form->SetModalResult(mrOK);
 
-        ScopeSuspendAllThreads suspend;
-        way_points.Replace(waypoint, std::move(wp_copy));
-        way_points.Optimise();
+        {
+          ScopeSuspendAllThreads suspend;
+          way_points.Replace(waypoint, std::move(wp_copy));
+          way_points.Optimise();
+        }
+
+        if (!WaypointGlue::SaveWaypoints(way_points))
+          ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
       }
     }
     break;

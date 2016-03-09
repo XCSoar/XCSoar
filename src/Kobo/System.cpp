@@ -134,6 +134,7 @@ KoboExportUSBStorage()
                     "file=/dev/mmcblk0p3", "stall=0");
     break;
 
+  case KoboModel::TOUCH2:
   case KoboModel::GLO_HD:
     InsMod("/drivers/mx6sl-ntx/usb/gadget/arcotg_udc.ko");
     result = InsMod("/drivers/mx6sl-ntx/usb/gadget/g_file_storage.ko",
@@ -181,6 +182,7 @@ KoboWifiOn()
     InsMod("/drivers/ntx508/wifi/dhd.ko");
     break;
 
+  case KoboModel::TOUCH2:
   case KoboModel::GLO_HD:
     InsMod("/drivers/mx6sl-ntx/wifi/sdio_wifi_pwr.ko");
     InsMod("/drivers/mx6sl-ntx/wifi/dhd.ko");

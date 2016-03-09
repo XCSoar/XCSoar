@@ -80,7 +80,7 @@ TimesStatusPanel::Refresh()
     ClearText(UTCDate);
   }
 
-  if (flight.flight_time > 0) {
+  if (flight.flying) {
     SetText(TakeoffTime,
             FormatLocalTimeHHMM((int)flight.takeoff_time,
                                 settings.utc_offset));
@@ -88,9 +88,9 @@ TimesStatusPanel::Refresh()
     ClearText(TakeoffTime);
   }
 
-  if (!flight.flying && flight.flight_time > 0) {
+  if (flight.landing_time >= 0) {
     SetText(LandingTime,
-            FormatLocalTimeHHMM(int(flight.takeoff_time + flight.flight_time),
+            FormatLocalTimeHHMM(int(flight.landing_time),
                                 settings.utc_offset));
   } else {
     ClearText(LandingTime);
