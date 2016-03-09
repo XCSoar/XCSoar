@@ -1,6 +1,7 @@
 Version 6.8.3 - not yet released
 * map
   - fix distorted terrain when zoomed out
+  - fix missing airspaces in cross section (#3537)
 * calculations
   - update SIS-AT to 2016 scoring rules
   - fix landing time display (#3690)

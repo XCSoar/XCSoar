@@ -214,5 +214,5 @@ AirspaceXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
       canvas, chart, settings, look, start, state);
 
   // Call visitor with intersecting airspaces
-  database.VisitIntersecting(start, vec.EndPoint(start), ivisitor);
+  database.VisitIntersecting(start, vec.EndPoint(start), true, ivisitor);
 }
