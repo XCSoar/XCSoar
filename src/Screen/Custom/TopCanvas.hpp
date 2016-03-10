@@ -187,6 +187,12 @@ class TopCanvas
    * some situations.
    */
   bool enable_dither;
+
+  /**
+   * some kobo Device don't need to wait eInk update complet before send new update cmd
+   * this flag can be set true for don't wait eInk Update complete for faster responce time.
+   */
+  bool frame_sync = false;
 #endif
 
 public:
