@@ -129,6 +129,7 @@ KoboExportUSBStorage()
   case KoboModel::MINI:
   case KoboModel::TOUCH:
   case KoboModel::AURA:
+  case KoboModel::GLO: // TODO: is this correct?
     InsMod("/drivers/ntx508/usb/gadget/arcotg_udc.ko");
     result = InsMod("/drivers/ntx508/usb/gadget/g_file_storage.ko",
                     "file=/dev/mmcblk0p3", "stall=0");
@@ -178,6 +179,7 @@ KoboWifiOn()
   case KoboModel::MINI:
   case KoboModel::TOUCH:
   case KoboModel::AURA:
+  case KoboModel::GLO: // TODO: is this correct?
     InsMod("/drivers/ntx508/wifi/sdio_wifi_pwr.ko");
     InsMod("/drivers/ntx508/wifi/dhd.ko");
     break;
