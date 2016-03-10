@@ -451,7 +451,7 @@ TopCanvas::Flip()
       0, 0, buffer.width, buffer.height
     },
 
-    WAVEFORM_MODE_AUTO,
+    enable_dither ? WAVEFORM_MODE_A2 : WAVEFORM_MODE_AUTO,
     UPDATE_MODE_FULL, // PARTIAL
     epd_update_marker,
     TEMP_USE_AMBIENT,
