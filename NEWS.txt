@@ -25,6 +25,10 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.4 - not yet released
+* Kobo
+  - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
+
 Version 6.8.3 - 2016/03/09
 * map
   - fix distorted terrain when zoomed out
