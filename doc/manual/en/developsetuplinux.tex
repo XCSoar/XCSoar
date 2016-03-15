@@ -51,45 +51,13 @@ sudo apt-get install make g++ \
 
 \section{For Android  builds}
 \subsection{Install JDK}
-First of all, we need Java to work with Android. Officially, Android requires the Oracle JDK. For licensing reasons, this is not included in linux distributions, therefore it needs to be installed seperately.  However, for \xc development OpenJDK seems to be working perfectly. We describe both methods in the following, you can only install one JDK.
+First of all, we need Java to work with Android. We use OpenJDK, slated to replace the original Sun/Oracle JDK officially for Android. At this point, both JDKs work, but the Oracle one is more complicated to install.
 
-\subsubsection{Using OpenJDK}
-The OpenJDK alternative is easiest, as it is included in typical distributions, so we just install the package
+OpenJDK is installed via the packages
 \begin{verbatim}
 sudo apt-get install openjdk-7-jdk
 sudo apt-get install vorbis-tools  ant
 \end{verbatim}
-
-\subsubsection{Using the official Oracle JDK}
-For the Oracle JDK alternative, we use a repository set up to provide the Oracle JDK installer, and need to protect the JDK in order to avoid dependencies in other packages (for example of Apache Ant) overriding the Oracle installation with OpenJDK.
-
-\begin{verbatim}
-sudo add-apt-repository ppa:webupd8team/java
-sudo apt-get update
-sudo apt-get install oracle-java7-installer
-
-# To avoid Ant installation overriding the Oracle JDK
-
-sudo update-alternatives --install "/usr/bin/java" "java" \
-                "/usr/lib/jvm/java-7-oracle/bin/java" 2000
-sudo update-alternatives --install "/usr/bin/javac" "javac" \
-                "/usr/lib/jvm/java-7-oracle/bin/javac" 2000
-sudo update-alternatives --install "/usr/bin/javaws" "javaws"\
-                "/usr/lib/jvm/java-7-oracle/bin/javaws" 2000
-
-# Install Apache and and Vorbis tools
-sudo apt-get install vorbis-tools  ant
-
-# If you are using a 64bit environment, you also need to install:
-
-# For compiling:
-# sudo apt-get install libstdc++6:i386 libgcc1:i386 \
-               zlib1g:i386 libncurses5:i386
-
-# For running the emulator:
-# sudo apt-get install libsdl1.2debian:i386
-\end{verbatim}
-
 
 \subsection{Install Android SDK and NDK}
 
