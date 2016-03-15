@@ -187,5 +187,5 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
   assert(Thread::IsInside());
 
   const ScopeLock lock(mutex);
-  return WaitForStopped(timeout_ms);
+  return _WaitForStopped(timeout_ms);
 }
