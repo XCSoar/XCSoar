@@ -1,4 +1,4 @@
-This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It is tested with Ubuntu 14.04 LTS, and was last updated in November 2015.
+This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It is developed with Ubuntu 14.04 LTS, and was last changed in March 2016. At this time, we recommend you use a newer Linux version (such as Ubuntu 15.10) which includes gcc 4.9 or higher.
 
 \section{Install base system}
 The procedure uses the standard install, during/after which you should update all packages to the current level using
@@ -34,6 +34,11 @@ git submodule update
 
 
 \section{For Unix builds}
+
+Make sure your distribution contains a gcc compiler version 4.9 or higher. If you use Ubuntu 14.04 LTS (which has gcc 4.8.x), you will need to upgrade the compiler package.
+
+In addition, the following packages are needed:
+
 \begin{verbatim}
 sudo apt-get install make g++ \
   zlib1g-dev \
