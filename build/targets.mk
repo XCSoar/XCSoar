@@ -450,9 +450,6 @@ ifeq ($(TARGET),ANDROID)
   ifeq ($(ARMV7),y)
     LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1
-
-    # workaround for "... uses VFP register arguments, output does not"
-    TARGET_ARCH += -Wl,--no-warn-mismatch
   endif
 
   ifeq ($(ARMV7)$(NEON),yy)
@@ -633,6 +630,9 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(ARMV7),y)
     TARGET_LDFLAGS += -Wl,--fix-cortex-a8
+
+    # workaround for "... uses VFP register arguments, output does not"
+    TARGET_LDFLAGS += -Wl,--no-warn-mismatch
   endif
 endif
 
