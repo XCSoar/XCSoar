@@ -44,7 +44,14 @@ class Validity {
 
   gcc_const
   static uint32_t Import(double time) {
+#ifdef __BIONIC__
+    /* ldexp() is utterly broken on Bionic, but ldexpf() works - which
+       is good enough here */
+    // https://code.google.com/p/android/issues/detail?id=203996
+    return (uint32_t)ldexpf(time, BITS);
+#else
     return (uint32_t)ldexp(time, BITS);
+#endif
   }
 
   constexpr
@@ -54,7 +61,14 @@ class Validity {
 
   gcc_const
   static double Export(uint32_t i) {
+#ifdef __BIONIC__
+    /* ldexp() is utterly broken on Bionic, but ldexpf() works - which
+       is good enough here */
+    // https://code.google.com/p/android/issues/detail?id=203996
+    return ldexpf(i, -BITS);
+#else
     return ldexp(i, -BITS);
+#endif
   }
 
 public:
