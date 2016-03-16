@@ -23,6 +23,8 @@
 #include "SelfTimingKalmanFilter1d.hpp"
 #include "OS/Clock.hpp"
 
+#include <algorithm>
+
 SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const fixed max_dt,
                                                    const fixed var_x_accel)
     : filter_(var_x_accel), t_last_update_ms_(0) {
@@ -51,7 +53,11 @@ void
 SelfTimingKalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs)
 {
   const unsigned int t_ms = MonotonicClockMS();
-  const unsigned int dt_ms = t_ms - t_last_update_ms_;
+
+  /* if we're called too quickly (less than 1ms), round dt up to 1ms
+     to avoid problems in KalmanFilter1d::Update() */
+  const unsigned int dt_ms = std::max(t_ms - t_last_update_ms_, 1u);
+
   t_last_update_ms_ = t_ms;
 
   if (dt_ms > max_dt_ms_)
