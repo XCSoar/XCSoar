@@ -27,12 +27,11 @@
 
 SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt,
                                                    const double var_x_accel)
-    : filter_(var_x_accel), t_last_update_ms_(0) {
+    : filter_(var_x_accel) {
   SetMaxDt(max_dt);
 }
 
-SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt)
-    : t_last_update_ms_(0) {
+SelfTimingKalmanFilter1d::SelfTimingKalmanFilter1d(const double max_dt) {
   SetMaxDt(max_dt);
 }
 

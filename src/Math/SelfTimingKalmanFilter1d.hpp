@@ -42,7 +42,7 @@ class SelfTimingKalmanFilter1d {
   /**
    * Time of last update.
    */
-  unsigned int t_last_update_ms_;
+  unsigned int t_last_update_ms_ = 0;
 
 public:
   /**
