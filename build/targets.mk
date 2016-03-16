@@ -556,7 +556,6 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 TARGET_LDADD =
-TARGET_STATIC ?= n
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
@@ -645,10 +644,6 @@ ifeq ($(TARGET),ANDROID)
 
   TARGET_LDLIBS += -llog
   TARGET_LDLIBS += -lgcc
-endif
-
-ifeq ($(TARGET_STATIC),y)
-  TARGET_LDFLAGS += -static
 endif
 
 ######## output files
