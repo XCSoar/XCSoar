@@ -39,27 +39,27 @@ void
 SelfTimingKalmanFilter1d::SetMaxDt(const double max_dt)
 {
   // It's OK, albeit silly, to have a zero max_dt value. We just always reset.
-  max_dt_ms_ = max_dt < 0 ? 0u : unsigned(max_dt * 1000);
+  max_dt_us_ = max_dt < 0 ? 0u : unsigned(max_dt * 1e6);
 }
 
 double
 SelfTimingKalmanFilter1d::GetMaxDt() const
 {
-  return max_dt_ms_ / 1000.;
+  return max_dt_us_ / 1e6;
 }
 
 void
 SelfTimingKalmanFilter1d::Update(const double z_abs, const double var_z_abs)
 {
-  const unsigned int t_ms = MonotonicClockMS();
+  const unsigned int t_us = MonotonicClockUS();
 
-  /* if we're called too quickly (less than 1ms), round dt up to 1ms
+  /* if we're called too quickly (less than 1us), round dt up to 1us
      to avoid problems in KalmanFilter1d::Update() */
-  const unsigned int dt_ms = std::max(t_ms - t_last_update_ms_, 1u);
+  const unsigned int dt_us = std::max(t_us - t_last_update_us_, uint64_t(1));
 
-  t_last_update_ms_ = t_ms;
+  t_last_update_us_ = t_us;
 
-  if (dt_ms > max_dt_ms_)
+  if (dt_us > max_dt_us_)
     filter_.Reset();
-  filter_.Update(z_abs, var_z_abs, dt_ms / 1000.);
+  filter_.Update(z_abs, var_z_abs, dt_us / 1e6);
 }

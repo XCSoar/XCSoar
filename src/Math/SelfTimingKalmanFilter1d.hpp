@@ -25,6 +25,8 @@
 
 #include "KalmanFilter1d.hpp"
 
+#include <stdint.h>
+
 /**
  * Wraps KalmanFilter1d and does its own internal time bookkeeping so
  * that updates need provide only measurement information.
@@ -37,12 +39,12 @@ class SelfTimingKalmanFilter1d {
   /**
    * Reset if updates are less frequent than this.
    */
-  unsigned int max_dt_ms_;
+  uint64_t max_dt_us_;
 
   /**
    * Time of last update.
    */
-  unsigned int t_last_update_ms_ = 0;
+  uint64_t t_last_update_us_ = 0;
 
 public:
   /**
