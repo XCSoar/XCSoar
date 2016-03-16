@@ -81,7 +81,7 @@ curl = AutotoolsProject(
         '--disable-debug',
         '--enable-http',
         '--enable-ipv6',
-        '--disable-ftp', '--disable-file',
+        '--enable-ftp', '--disable-file',
         '--disable-ldap', '--disable-ldaps',
         '--disable-rtsp', '--disable-proxy', '--disable-dict', '--disable-telnet',
         '--disable-tftp', '--disable-pop3', '--disable-imap', '--disable-smb',
