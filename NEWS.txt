@@ -1,4 +1,7 @@
 Version 6.8.4 - not yet released
+* data files
+  - accept "Military Aerodrome Traffic Zone" (MATZ) airspaces in
+    OpenAir files (#3732)
 * Kobo
   - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
 
