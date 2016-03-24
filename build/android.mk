@@ -204,7 +204,7 @@ ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so
 $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/libs/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
-$$(OUT)/$(3)/bin/lib$(1).so:
+$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so:
 	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 endef
