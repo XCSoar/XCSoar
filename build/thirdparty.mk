@@ -16,7 +16,8 @@ endif
 
 ifeq ($(USE_THIRDARTY_LIBS),y)
 
-THIRDPARTY_LDFLAGS_FILTER_OUT = -L%
+# -Wl,--gc-sections breaks the (Kobo) glibc build
+THIRDPARTY_LDFLAGS_FILTER_OUT = -L% -Wl,--gc-sections
 
 .PHONY: libs
 libs:
