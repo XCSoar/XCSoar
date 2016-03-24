@@ -59,7 +59,7 @@ OBJ_SUFFIX = .o
 endif
 
 # Converts a list of source file names to *.o
-SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1))))))
+SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(ABI_OUTPUT_DIR)/,$(1))))))
 
 ####### dependency handling
 
@@ -74,19 +74,19 @@ cxx-flags-filter = $(filter-out $(FILTER_FLAGS),$(cxx-flags))
 #
 # Useful debugging targets - make preprocessed versions of the source
 #
-$(TARGET_OUTPUT_DIR)/%.i: %.cpp FORCE
+$(ABI_OUTPUT_DIR)/%.i: %.cpp FORCE
 	$(CXX) $< -E -o $@ $(cxx-flags)
 
-$(TARGET_OUTPUT_DIR)/%.s: %.cpp FORCE
+$(ABI_OUTPUT_DIR)/%.s: %.cpp FORCE
 	$(CXX) $< -S -o $@ $(cxx-flags)
 
-$(TARGET_OUTPUT_DIR)/%.i: %.cxx FORCE
+$(ABI_OUTPUT_DIR)/%.i: %.cxx FORCE
 	$(CXX) $< -E -o $@ $(cxx-flags)
 
-$(TARGET_OUTPUT_DIR)/%.s: %.cxx FORCE
+$(ABI_OUTPUT_DIR)/%.s: %.cxx FORCE
 	$(CXX) $< -S -o $@ $(cxx-flags)
 
-$(TARGET_OUTPUT_DIR)/%.i: %.c FORCE
+$(ABI_OUTPUT_DIR)/%.i: %.c FORCE
 	$(CC) $< -E -o $@ $(cc-flags)
 
 ####### build rules
@@ -98,18 +98,18 @@ $(TARGET_OUTPUT_DIR)/%.i: %.c FORCE
 WRAPPED_CC = $(CCACHE) $(CC)
 WRAPPED_CXX = $(CCACHE) $(CXX)
 
-$(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(ABI_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(WRAPPED_CC) $< -c -o $@ $(cc-flags)
 
-$(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(ABI_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
 
-$(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx $(TARGET_OUTPUT_DIR)/%/../dirstamp
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx $(ABI_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)

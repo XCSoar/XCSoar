@@ -141,10 +141,10 @@ ifeq ($$($(2)_NO_LIB_PREFIX),y)
 $(2)_LIB_PREFIX =
 endif
 
-$(2)_BIN = $$(TARGET_BIN_DIR)/$$($(2)_LIB_PREFIX)$(1).so
+$(2)_BIN = $$(ABI_BIN_DIR)/$$($(2)_LIB_PREFIX)$(1).so
 
 ifeq ($$($(2)_STRIP),y)
-$(2)_NOSTRIP = $$(TARGET_BIN_DIR)/$$($(2)_LIB_PREFIX)$(1)-ns.so
+$(2)_NOSTRIP = $$(ABI_BIN_DIR)/$$($(2)_LIB_PREFIX)$(1)-ns.so
 else
 $(2)_NOSTRIP = $$($(2)_BIN)
 endif
@@ -166,7 +166,7 @@ ifeq ($$(TARGET),ANDROID)
 $$($(2)_NOSTRIP): LDFLAGS += -nostdlib
 endif
 
-$$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
+$$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(ABI_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
 	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)
 
@@ -188,9 +188,9 @@ endef
 define link-library
 
 ifeq ($$(LLVM),y)
-$(2)_BIN = $$(TARGET_OUTPUT_DIR)/$(1).bc
+$(2)_BIN = $$(ABI_OUTPUT_DIR)/$(1).bc
 else
-$(2)_BIN = $$(TARGET_OUTPUT_DIR)/$(1).a
+$(2)_BIN = $$(ABI_OUTPUT_DIR)/$(1).a
 endif
 
 # Compile

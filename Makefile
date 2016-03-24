@@ -74,6 +74,7 @@ include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/languages.mk
 include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
+include $(topdir)/build/abi.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/libintl.mk
 
@@ -204,24 +205,24 @@ clean: FORCE
 
 .PHONY: FORCE
 
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/src/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/src/*.d)
 endif
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/src/*/*.d)
 endif
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*.d)
 endif
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*/*.d)
 endif
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*/*/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*/*/*.d)
 endif
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*/*/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/src/*/*/*/*/*/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*/*/*/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/src/*/*/*/*/*/*.d)
 endif
-ifneq ($(wildcard $(TARGET_OUTPUT_DIR)/test/src/*.d),)
-include $(wildcard $(TARGET_OUTPUT_DIR)/test/src/*.d)
+ifneq ($(wildcard $(ABI_OUTPUT_DIR)/test/src/*.d),)
+include $(wildcard $(ABI_OUTPUT_DIR)/test/src/*.d)
 endif
