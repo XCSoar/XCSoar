@@ -198,7 +198,7 @@ endif
 
 endif
 
-$(OUT)/include/resource.h: src/Resources.hpp $(OUT)/include/dirstamp
+$(OUT)/include/resource.h: src/Resources.hpp | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), (\d+)\);/;' $< >$@.tmp
 	$(Q)mv $@.tmp $@

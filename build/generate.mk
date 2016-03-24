@@ -32,7 +32,7 @@ XCI_HEADERS = $(patsubst %,$(OUT)/include/InputEvents_%.cpp,$(XCI_LIST))
 
 $(OUT)/include/InputEvents_default.cpp: $(topdir)/Data/Input/default.xci \
 	$(topdir)/tools/xci2cpp.pl \
-	$(OUT)/include/dirstamp
+	| $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/xci2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
@@ -41,7 +41,7 @@ $(call SRC_TO_OBJ,$(SRC)/Input/InputDefaults.cpp): $(XCI_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Input/InputLookup.cpp): $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
-	tools/xcs2cpp.pl $(OUT)/include/dirstamp
+	tools/xcs2cpp.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/xcs2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
