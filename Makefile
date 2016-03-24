@@ -180,7 +180,9 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 include $(topdir)/build/gettext.mk
 
+ifeq ($(FAT_BINARY),n)
 OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
+endif
 
 ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
