@@ -199,13 +199,13 @@ endif
 all: $(OUTPUTS)
 everything: $(OUTPUTS) $(OPTIONAL_OUTPUTS) debug build-check build-harness
 
-clean: FORCE
+clean:
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf build/local-config.mk
 	$(Q)rm -rf $(OUT)
 	$(RM) $(BUILDTESTS)
 
-.PHONY: FORCE
+.PHONY: all everything clean FORCE
 
 ifneq ($(wildcard $(ABI_OUTPUT_DIR)/src/*.d),)
 include $(wildcard $(ABI_OUTPUT_DIR)/src/*.d)
