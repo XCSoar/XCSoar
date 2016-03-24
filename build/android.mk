@@ -195,6 +195,7 @@ ifeq ($(FAT_BINARY),y)
 # generate a "fat" APK file with binaries for all ABIs
 
 ANDROID_LIB_BUILD =
+ANDROID_THIRDPARTY_STAMPS =
 
 # Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7))
 define generate-abi
@@ -204,7 +205,11 @@ ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so
 $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/libs/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
-$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so:
+ANDROID_THIRDPARTY_STAMPS += $$(OUT)/$(3)/thirdparty.stamp
+$$(OUT)/$(3)/thirdparty.stamp:
+	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
+
+$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
 	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 endef
@@ -220,6 +225,9 @@ $(eval $(call generate-abi,$(1),x86_64,ANDROIDX64))
 endef
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
+
+.PHONY: libs
+libs: $(ANDROID_THIRDPARTY_STAMPS)
 
 else # !FAT_BINARY
 
