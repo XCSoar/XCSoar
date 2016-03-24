@@ -1,6 +1,6 @@
 ifeq ($(MAKECMDGOALS),python)
 
-name-to-so = $(patsubst %,$(TARGET_BIN_DIR)/%.so,$(1))
+name-to-so = $(patsubst %,$(ABI_BIN_DIR)/%.so,$(1))
 
 python: $(call name-to-so,xcsoar)
 
