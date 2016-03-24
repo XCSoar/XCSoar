@@ -54,7 +54,7 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   CirclingComputer circling_computer;
   circling_computer.Reset();
 
-  GlidePolar glide_polar(fixed(0));
+  GlidePolar glide_polar(0);
 
   WindSettings wind_settings;
   wind_settings.SetDefaults();
