@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ButtonLook.hpp"
+#include "Colors.hpp"
 #include "Asset.hpp"
 
 void

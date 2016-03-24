@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "InfoBoxLook.hpp"
 #include "FontDescription.hpp"
+#include "Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "AutoFont.hpp"
 

@@ -21,33 +21,19 @@ Copyright_License {
 }
 */
 
-#include "CheckBoxLook.hpp"
-#include "Colors.hpp"
+#ifndef XCSOAR_LOOK_COLORS_HPP
+#define XCSOAR_LOOK_COLORS_HPP
 
-void
-CheckBoxLook::Initialise(const Font &_font)
-{
-  font = &_font;
+#include "Screen/Color.hpp"
 
-  focus_background_brush.Create(COLOR_XCSOAR_DARK);
+#ifdef TESTING
+static constexpr Color COLOR_XCSOAR_LIGHT = Color(0xed, 0x90, 0x90);
+static constexpr Color COLOR_XCSOAR = Color(0xd0, 0x17, 0x17);
+static constexpr Color COLOR_XCSOAR_DARK = Color(0x5d, 0x0a, 0x0a);
+#else
+static constexpr Color COLOR_XCSOAR_LIGHT = Color(0xaa, 0xc9, 0xe4);
+static constexpr Color COLOR_XCSOAR = Color(0x3f, 0x76, 0xa8);
+static constexpr Color COLOR_XCSOAR_DARK = Color(0x00, 0x31, 0x5e);
+#endif
 
-  standard.box_brush.Create(COLOR_WHITE);
-  standard.box_pen.Create(1, COLOR_BLACK);
-  standard.check_brush.Create(COLOR_BLACK);
-  standard.text_color = COLOR_BLACK;
-
-  focused.box_brush.Create(COLOR_WHITE);
-  focused.box_pen.Create(1, COLOR_BLACK);
-  focused.check_brush.Create(COLOR_BLACK);
-  focused.text_color = COLOR_WHITE;
-
-  pressed.box_brush.Create(COLOR_XCSOAR_LIGHT);
-  pressed.box_pen.Create(1, COLOR_BLACK);
-  pressed.check_brush.Create(COLOR_BLACK);
-  pressed.text_color = COLOR_WHITE;
-
-  disabled.box_brush.Create(COLOR_WHITE);
-  disabled.box_pen.Create(1, COLOR_GRAY);
-  disabled.check_brush.Create(COLOR_GRAY);
-  disabled.text_color = COLOR_GRAY;
-}
+#endif

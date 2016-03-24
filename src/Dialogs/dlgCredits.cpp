@@ -28,6 +28,7 @@ Copyright_License {
 #include "Widget/LargeTextWidget.hpp"
 #include "Look/FontDescription.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Colors.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"

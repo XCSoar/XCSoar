@@ -24,6 +24,7 @@ Copyright_License {
 #include "ProgressBar.hpp"
 #include "Canvas.hpp"
 #include "Features.hpp"
+#include "Look/Colors.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
 

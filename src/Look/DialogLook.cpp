@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "DialogLook.hpp"
 #include "FontDescription.hpp"
+#include "Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
