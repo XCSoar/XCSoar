@@ -125,6 +125,11 @@ TestGeneric()
 
   /* Magnetic Heading bad checksum */
   ok1(!parser.ParseLine("$HCHDM,182.7,M*26", nmea_info));
+
+  ok1(parser.ParseLine("$WIMWV,12.1,T,10.1,M,A*24", nmea_info));
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.bearing, 12.1));
+  ok1(nmea_info.external_wind.norm == 10.1);
 }
 
 static void
@@ -1542,7 +1547,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(807);
+  plan_tests(811);
 
   TestGeneric();
   TestTasman();

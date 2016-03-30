@@ -158,6 +158,15 @@ private:
    * @return Parsing success
    */
   static bool PTAS1(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
+   * Parses a MWV sentence (NMEA Wind information).
+   *
+   * @param line A NMEAInputLine instance that can be used for parsing
+   * @param info NMEA_INFO struct to parse into
+   * @return Parsing success
+   */
+  static bool MWV(NMEAInputLine &line, NMEAInfo &info);
 };
 
 #endif

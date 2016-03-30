@@ -5,6 +5,7 @@ Version 7.0 - not yet released
 * data files
   - optimise the terrain loader
 * devices
+  - parse wind from standard NMEA sentence WMV
   - driver for XC Tracer Vario
   - driver for KRT2 radio
 * weather
