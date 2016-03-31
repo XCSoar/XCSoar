@@ -378,6 +378,7 @@ void
 InfoBoxWindow::OnDestroy()
 {
   focus_timer.Cancel();
+  dialog_timer.Cancel();
   PaintWindow::OnDestroy();
 }
 
