@@ -148,7 +148,7 @@ UpdateBatteryInfo()
     }
   } else {
     // code shamelessly copied from OS/SystemLoad.cpp
-    if (!File::ReadString("/sys/bus/platform/drivers/pmic_battery/pmic_battery.1/power_supply/mc13892_bat/uevent",
+    if (!File::ReadString("/sys/class/power_supply/mc13892_bat/uevent",
                           line, sizeof(line)))
       return;
 

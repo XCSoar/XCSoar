@@ -6,6 +6,7 @@ Version 6.8.4 - not yet released
   - fix crash in NMEA logger
 * Kobo
   - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
+  - support battery status on Kobo Glo HD, Kobo Touch 2.0
 
 Version 6.8.3 - 2016/03/09
 * map
