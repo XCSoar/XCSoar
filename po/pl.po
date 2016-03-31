@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2016-03-08 00:24+0000\n"
+"PO-Revision-Date: 2016-03-29 08:33+0000\n"
 "Last-Translator: Staszek <rodacki.stanislaw@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-03-08 21:52+0000\n"
-"X-Generator: Launchpad (build 17936)\n"
+"X-Launchpad-Export-Date: 2016-03-31 16:44+0000\n"
+"X-Generator: Launchpad (build 17967)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1153,7 +1153,7 @@ msgstr "KOM dH: Łączna zmiana wysokości w ostatnim kominie."
 #: src/InfoBoxes/Content/Factory.cpp:256
 #, no-c-format
 msgid "Last thermal duration"
-msgstr ""
+msgstr "Czas w ostatnim kominie"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
@@ -5787,27 +5787,27 @@ msgstr "Usuń z trasy"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:283
 msgid "Replace in Task"
-msgstr "Zamień w zadaniu"
+msgstr "Zamień w Zadaniu"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:284
 msgid "Insert in Task"
-msgstr "Wstaw do zadania"
+msgstr "Wstaw do Zadania"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:285
 msgid "Append to Task"
-msgstr "Dodaj do zadania"
+msgstr "Dołącz do Zadania"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:288
 msgid "Remove from Task"
-msgstr "Usuń z zadania"
+msgstr "Usuń z Zadania"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:291
 msgid "Set as New Home"
-msgstr "Ustaw jako nowy Dom"
+msgstr "Ustaw jako Dom"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
 msgid "Pan to Waypoint"
-msgstr "Pokaż Punkt Trasy"
+msgstr "Przesuń do PT"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:293
 msgid "Set Active Frequency"
@@ -5823,7 +5823,7 @@ msgstr "Leć do"
 
 #: src/Dialogs/Waypoint/Manager.cpp:250
 msgid "Failed to save waypoints"
-msgstr ""
+msgstr "Nie zachowano PT"
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -5849,7 +5849,7 @@ msgstr "Punkt trasy"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Landable"
-msgstr ""
+msgstr "Lądowisko"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:72
 msgid "Comment"
@@ -6032,7 +6032,7 @@ msgstr "Włącza/wyłącza wszystkie ostrzeżenia o strefach."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Warnings dialog"
-msgstr ""
+msgstr "Okno z ostrzeżeniem"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
@@ -6406,7 +6406,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:117
 msgid "Wave assistant"
-msgstr ""
+msgstr "Asystent lotu na fali"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid "Use final glide mode"
@@ -6583,7 +6583,7 @@ msgstr "12 góra/po lewej"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
 msgid "16 Right (Landscape)"
-msgstr ""
+msgstr "16 Prawo (Poziomo)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -6988,7 +6988,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr ""
+msgstr "Pełny ekran (bez InfoBoxów)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:354
@@ -7005,12 +7005,14 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
+"Na przeskoku. Wyświetlane w trybie ‚Auto’, gdy jesteś poniżej minimalnej "
+"wysokości dolotowej."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
-msgstr ""
+msgstr "W krążeniu. Wyśwetlane w trybie ‚Auto’, gdy krążysz w kominie"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
@@ -7018,6 +7020,8 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
+"Na dolocie. Wyświetlane w trybie ‚Auto’, gdy jesteś na wysokości "
+"wystarczającej na dolot"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
@@ -8130,11 +8134,11 @@ msgstr "Jednostki dla ciśnienia."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 msgid "Units used for mass."
-msgstr ""
+msgstr "Jednostki do określenia masy."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
 msgid "Units used for wing loading."
-msgstr ""
+msgstr "Jednostki do obciążenia powierzchni nośnej."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8933,15 +8937,15 @@ msgstr "Ta funkcja nie jest jeszcze dostępna na Twoim urządzeniu."
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
 msgid "Inside airspace"
-msgstr ""
+msgstr "Wewnątrz strefy"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "Near airspace"
-msgstr ""
+msgstr "Blisko strefy"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "Przekroczono maks. prędkość startu lotnego"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
