@@ -58,6 +58,12 @@ GlueMapWindow::OnDestroy()
   SetTopography(nullptr);
   SetTerrain(nullptr);
 
+#ifdef ENABLE_OPENGL
+  kinetic_timer.Cancel();
+#endif
+
+  map_item_timer.Cancel();
+
   MapWindow::OnDestroy();
 }
 

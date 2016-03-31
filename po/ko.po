@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-18 07:31+0200\n"
-"PO-Revision-Date: 2016-01-17 06:21+0000\n"
+"PO-Revision-Date: 2016-03-14 08:59+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-21 09:41+0000\n"
-"X-Generator: Launchpad (build 17886)\n"
+"X-Launchpad-Export-Date: 2016-03-31 16:44+0000\n"
+"X-Generator: Launchpad (build 17967)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3849,13 +3849,13 @@ msgstr "드라이버"
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:693
 msgid "Passthrough device"
-msgstr ""
+msgstr "장치 무시"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:694
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
-msgstr ""
+msgstr "장치가 연결되었을때 기기에서 무시합니다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
 msgid "Second Driver"
@@ -7909,7 +7909,7 @@ msgstr "중량에 사용되는 단위입니다."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:240
 msgid "Units used for wing loading."
-msgstr ""
+msgstr "익면하중의 단위입니다."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:256
 msgid "Lat./Lon."
@@ -8634,7 +8634,7 @@ msgstr "잔여속도(V rem.)"
 
 #: src/Dialogs/Task/TargetDialog.cpp:481
 msgid "V ach"
-msgstr ""
+msgstr "표시속도(V ach)"
 
 #: src/Dialogs/Task/TargetDialog.cpp:483
 msgid ""

@@ -76,6 +76,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { _T("TMZ"), TMZ },
   { _T("G"), CLASSG },
   { _T("RMZ"), RMZ },
+  { _T("MATZ"), MATZ },
 };
 
 static constexpr AirspaceClassCharCouple airspace_tnp_class_chars[] = {

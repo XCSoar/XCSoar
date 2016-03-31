@@ -57,7 +57,16 @@ NMEALogger::Start()
 
   const auto path = AllocatedPath::Build(logs_path, name);
   writer = new TextWriter(path, false);
-  return writer != nullptr;
+  if (writer == nullptr)
+    return false;
+
+  if (!writer->IsOpen()) {
+    delete writer;
+    writer = nullptr;
+    return false;
+  }
+
+  return true;
 }
 
 void
