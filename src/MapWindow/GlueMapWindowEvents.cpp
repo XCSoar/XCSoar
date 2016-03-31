@@ -52,7 +52,10 @@ GlueMapWindow::OnDestroy()
 
 #ifdef ENABLE_OPENGL
   data_timer.Cancel();
+  kinetic_timer.Cancel();
 #endif
+
+  map_item_timer.Cancel();
 
   MapWindow::OnDestroy();
 }
