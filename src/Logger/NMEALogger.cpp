@@ -63,7 +63,16 @@ NMEALogger::Start()
   LocalPath(path, _T("logs"), name);
 
   writer = new TextWriter(path, false);
-  return writer != nullptr;
+  if (writer == nullptr)
+    return false;
+
+  if (!writer->IsOpen()) {
+    delete writer;
+    writer = nullptr;
+    return false;
+  }
+
+  return true;
 }
 
 void

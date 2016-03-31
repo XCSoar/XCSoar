@@ -2,6 +2,8 @@ Version 6.8.4 - not yet released
 * data files
   - accept "Military Aerodrome Traffic Zone" (MATZ) airspaces in
     OpenAir files (#3732)
+* logger
+  - fix crash in NMEA logger
 * Kobo
   - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
 
