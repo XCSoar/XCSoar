@@ -68,9 +68,6 @@ DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
 cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
 cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
 
-cc-flags-filter = $(filter-out $(FILTER_FLAGS),$(cc-flags))
-cxx-flags-filter = $(filter-out $(FILTER_FLAGS),$(cxx-flags))
-
 #
 # Useful debugging targets - make preprocessed versions of the source
 #

@@ -56,7 +56,6 @@ PYTHON_LDLIBS = $(shell python-config --ldflags)
 PYTHON_DEPENDS = CONTEST WAYPOINT UTIL ZZIP GEO MATH TIME
 PYTHON_CPPFLAGS = $(shell python-config --includes) \
 	-I$(TEST_SRC_DIR) -Wno-write-strings
-PYTHON_FILTER_FLAGS = -Wwrite-strings
 PYTHON_NO_LIB_PREFIX = y
 $(eval $(call link-shared-library,xcsoar,PYTHON))
 
