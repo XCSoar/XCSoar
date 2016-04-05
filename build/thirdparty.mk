@@ -24,7 +24,8 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 # -Wl,--gc-sections breaks the (Kobo) glibc build
 THIRDPARTY_LDFLAGS_FILTER_OUT = -L% -Wl,--gc-sections
 
-THIRDPARTY_LIBS_ROOT = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
+THIRDPARTY_LIBS_DIR = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)
+THIRDPARTY_LIBS_ROOT = $(THIRDPARTY_LIBS_DIR)/root
 
 .PHONY: libs
 libs: $(THIRDPARTY_LIBS_ROOT)/stamp
