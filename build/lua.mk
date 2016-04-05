@@ -2,7 +2,7 @@ LUA = y
 
 ifeq ($(LUA),y)
 
-ifeq ($(USE_THIRDARTY_LIBS),y)
+ifeq ($(USE_THIRDPARTY_LIBS),y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
 else

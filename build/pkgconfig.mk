@@ -1,7 +1,7 @@
 PKG_CONFIG = pkg-config
 
-ifeq ($(USE_THIRDARTY_LIBS),y)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+ifeq ($(USE_THIRDPARTY_LIBS),y)
+  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
 endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
