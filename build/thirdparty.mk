@@ -24,15 +24,16 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 # -Wl,--gc-sections breaks the (Kobo) glibc build
 THIRDPARTY_LDFLAGS_FILTER_OUT = -L% -Wl,--gc-sections
 
-.PHONY: libs
-libs: $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root/stamp
+THIRDPARTY_LIBS_ROOT = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
 
-compile-depends += $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root/stamp
-$(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root/stamp:
+.PHONY: libs
+libs: $(THIRDPARTY_LIBS_ROOT)/stamp
+
+compile-depends += $(THIRDPARTY_LIBS_ROOT)/stamp
+$(THIRDPARTY_LIBS_ROOT)/stamp:
 	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) $(STRIP)
 	touch $@
 
-THIRDPARTY_LIBS_ROOT = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
 TARGET_CPPFLAGS += -isystem $(THIRDPARTY_LIBS_ROOT)/include
 TARGET_LDFLAGS += -L$(THIRDPARTY_LIBS_ROOT)/lib
 
