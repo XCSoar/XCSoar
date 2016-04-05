@@ -1,6 +1,5 @@
 from os.path import abspath
 
-from build.boost import BoostProject
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.openssl import OpenSSLProject
@@ -54,13 +53,6 @@ openssh = AutotoolsProject(
     install_prefix='/opt/openssh',
     install_target='install-nosysconf',
     use_destdir=True,
-)
-
-boost = BoostProject(
-    'http://netcologne.dl.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2',
-    '65a840e1a0b13a558ff19eeb2c4f0cbe',
-    'include/boost/version.hpp',
-    patches=abspath('lib/boost/patches'),
 )
 
 zlib = ZlibProject(

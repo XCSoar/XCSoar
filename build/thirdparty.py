@@ -62,13 +62,11 @@ from build.libs import *
 
 if 'mingw32' in host_triplet:
     thirdparty_libs = [
-        boost,
         zlib,
         lua,
     ]
 elif re.match('(arm.*|aarch64)-apple-darwin', host_triplet) is not None:
     thirdparty_libs = [
-        boost,
         freetype,
         curl,
         lua,
@@ -79,7 +77,6 @@ elif re.match('(arm.*|aarch64)-apple-darwin', host_triplet) is not None:
     ]
 elif 'apple-darwin' in host_triplet:
     thirdparty_libs = [
-        boost,
         freetype,
         lua,
         proj,
@@ -89,7 +86,6 @@ elif 'apple-darwin' in host_triplet:
     ]
 elif target == 'ANDROID':
     thirdparty_libs = [
-        boost,
         lua,
         proj,
         libtiff,
@@ -98,7 +94,6 @@ elif target == 'ANDROID':
 else:
     thirdparty_libs = [
         glibc,
-        boost,
         zlib,
         freetype,
         curl,
