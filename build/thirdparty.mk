@@ -38,6 +38,6 @@ $(THIRDPARTY_LIBS_DIR)/stamp:
 TARGET_CPPFLAGS += -isystem $(THIRDPARTY_LIBS_ROOT)/include
 TARGET_LDFLAGS += -L$(THIRDPARTY_LIBS_ROOT)/lib
 
-compile-depends += boost
-
 endif
+
+compile-depends += boost

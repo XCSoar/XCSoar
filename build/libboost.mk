@@ -1,9 +1,3 @@
-# On Linux, we expect Boost to be installed already, and on all other
-# targets, it is installed by thirdparty.py.  Neither needs special
-# compiler/linker flags.
-
-ifeq ($(USE_THIRDPARTY_LIBS),y)
-
 BOOST_URL = http://netcologne.dl.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2
 BOOST_MD5 = 65a840e1a0b13a558ff19eeb2c4f0cbe
 
@@ -26,19 +20,14 @@ $(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCH
 	$(Q)cd $(BOOST_SRC) && QUILT_PATCHES=$(abspath $(BOOST_PATCHES_DIR)) quilt push -a -q
 	@touch $@
 
-BOOST_SYMLINK_STAMP = $(THIRDPARTY_LIBS_DIR)/stamp-boost
-$(BOOST_SYMLINK_STAMP): $(BOOST_UNTAR_STAMP)
-	$(Q)rm -rf $(THIRDPARTY_LIBS_ROOT)/include/boost
-	$(Q)ln -s $(abspath $(BOOST_SRC)/boost) $(THIRDPARTY_LIBS_ROOT)/include/boost
-	@touch $@
-
 .PHONY: boost
-boost: $(BOOST_SYMLINK_STAMP)
+boost: $(BOOST_UNTAR_STAMP)
 
-endif
-
+# We use only the header-only Boost libraries, so no linker flags
+# required.
 BOOST_LDLIBS =
 
 # reduce Boost header bloat a bit
-BOOST_CPPFLAGS = -DBOOST_NO_IOSTREAM -DBOOST_MATH_NO_LEXICAL_CAST
+BOOST_CPPFLAGS = -isystem $(OUT)/src/$(BOOST_BASE_NAME)
+BOOST_CPPFLAGS += -DBOOST_NO_IOSTREAM -DBOOST_MATH_NO_LEXICAL_CAST
 BOOST_CPPFLAGS += -DBOOST_UBLAS_NO_STD_CERR
