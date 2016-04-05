@@ -95,20 +95,24 @@ $(ABI_OUTPUT_DIR)/%.i: %.c FORCE
 WRAPPED_CC = $(CCACHE) $(CC)
 WRAPPED_CXX = $(CCACHE) $(CXX)
 
-$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $(ABI_OUTPUT_DIR)/%/../dirstamp
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(WRAPPED_CC) $< -c -o $@ $(cc-flags)
 
-$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp | $(ABI_OUTPUT_DIR)/%/../dirstamp
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
 
-$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx | $(ABI_OUTPUT_DIR)/%/../dirstamp
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
+
+# Note: $(compile-depends) contains a list of order-only targets which
+# must be finished before anything can be compiled.  It can be used to
+# prepare preprocessor includes.
