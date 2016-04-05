@@ -25,8 +25,12 @@ ifeq ($(USE_THIRDARTY_LIBS),y)
 THIRDPARTY_LDFLAGS_FILTER_OUT = -L% -Wl,--gc-sections
 
 .PHONY: libs
-libs:
+libs: $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root/stamp
+
+compile-depends += $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root/stamp
+$(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root/stamp:
 	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) $(STRIP)
+	touch $@
 
 THIRDARTY_LIBS_ROOT = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
 TARGET_CPPFLAGS += -isystem $(THIRDARTY_LIBS_ROOT)/include

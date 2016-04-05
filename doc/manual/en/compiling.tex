@@ -161,12 +161,6 @@ that the supporting 32-bit libraries are missing, which can be fixed through the
 sudo apt-get install ia32-libs
 \end{verbatim*}
 
-First build the third-party libraries:
-
-\begin{verbatim*}
-make TARGET=ANDROID libs
-\end{verbatim*}
-
 To compile, run:
 
 \begin{verbatim*}
@@ -199,12 +193,6 @@ To cross-compile to (desktop) Windows, you need the mingw-w64 version
 of gcc:
 
  http://mingw-w64.sourceforge.net/
-
-First build the third-party libraries:
-
-\begin{verbatim*}
-make TARGET=PC libs
-\end{verbatim*}
 
 To compile, run one of the following:
 
@@ -291,12 +279,6 @@ the Cubieboard.
 
 You need an ARM toolchain.  For example, you can use the Debian
 package \verb|g++-5-arm-linux-gnueabihf|.
-
-First build the third-party libraries:
-
-\begin{verbatim*}
-make TARGET=KOBO TCSUFFIX=-5 libs
-\end{verbatim*}
 
 To compile XCSoar, run:
 
