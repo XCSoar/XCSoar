@@ -24,6 +24,7 @@ Copyright_License {
 #include "../Request.hpp"
 #include "../Session.hpp"
 #include "Version.hpp"
+#include "Util/ConvertString.hpp"
 
 Net::Request::Request(Session &_session, const char *url,
                       unsigned timeout_ms)
@@ -32,7 +33,8 @@ Net::Request::Request(Session &_session, const char *url,
   // XXX implement timeout
 
   char user_agent[32];
-  snprintf(user_agent, 32, "XCSoar/%s", XCSoar_Version);
+  snprintf(user_agent, 32, "XCSoar/%s",
+           (const char *)WideToUTF8Converter(XCSoar_Version));
 
   handle.SetUserAgent(user_agent);
   handle.SetFailOnError(true);
