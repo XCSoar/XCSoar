@@ -932,7 +932,7 @@ $(eval $(call link-program,RunTextWriter,RUN_TEXT_WRITER))
 DOWNLOAD_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(TEST_SRC_DIR)/DownloadFile.cpp
-DOWNLOAD_FILE_DEPENDS = IO LIBNET UTIL
+DOWNLOAD_FILE_DEPENDS = LIBNET IO THREAD UTIL
 $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
