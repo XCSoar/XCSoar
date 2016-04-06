@@ -26,8 +26,13 @@ Copyright_License {
 #include <system_error>
 #include <stdexcept>
 
-#include <sys/select.h>
 #include <errno.h>
+
+#ifdef WIN32
+#include <winsock2.h>
+#else
+#include <sys/select.h>
+#endif
 
 void
 Net::Session::Select(int timeout_ms)

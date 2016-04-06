@@ -27,7 +27,7 @@ Copyright_License {
 #include "Features.hpp"
 
 namespace Net {
-#if defined(HAVE_HTTP) && !defined(WIN32)
+#if defined(HAVE_HTTP)
   /**
    * Global initialisation of the network library.
    */

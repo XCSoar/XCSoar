@@ -11,14 +11,16 @@ LIBNET_SOURCES = \
 HAVE_HTTP := n
 
 ifneq ($(findstring $(TARGET),PC CYGWIN),)
-HAVE_HTTP := y
-LIBNET_SOURCES += \
-	$(SRC)/Net/HTTP/WinINet/Session.cpp \
-	$(SRC)/Net/HTTP/WinINet/Request.cpp
-LIBNET_LDLIBS = -lwininet
+  HAVE_CURL = y
 endif
 
 ifeq ($(TARGET),UNIX)
+  HAVE_CURL = y
+endif
+
+HAVE_CURL ?= n
+
+ifeq ($(HAVE_CURL),y)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \

@@ -483,6 +483,11 @@ ifeq ($(HAVE_WIN32),y)
   ifeq ($(TARGET),CYGWIN)
   TARGET_CPPFLAGS += -DWIN32
   endif
+
+  # kludge for the CURL build, which fails if _WIN32_WINNT >= 0x0600,
+  # due to duplicate struct pollfd definition (winsock2.h and CURL's
+  # select.h)
+  TARGET_CPPFLAGS += -DHAVE_STRUCT_POLLFD
 endif
 
 ifeq ($(HAVE_POSIX),y)

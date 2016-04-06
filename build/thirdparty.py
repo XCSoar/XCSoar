@@ -63,6 +63,7 @@ from build.libs import *
 if 'mingw32' in host_triplet:
     thirdparty_libs = [
         zlib,
+        curl,
         lua,
     ]
 elif re.match('(arm.*|aarch64)-apple-darwin', host_triplet) is not None:

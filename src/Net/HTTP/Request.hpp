@@ -26,11 +26,6 @@ Copyright_License {
 
 #include "Features.hpp"
 
-#ifdef HAVE_WININET
-#include "Thread/Trigger.hpp"
-#include "WinINet/WinINet.hpp"
-#endif
-
 #ifdef HAVE_CURL
 #include "Util/StaticFifoBuffer.hpp"
 #include "CURL/Easy.hpp"
@@ -49,22 +44,10 @@ Copyright_License {
 namespace Net {
   class Session;
 
-#ifdef HAVE_WININET
-  class Connection;
-#endif
-
   class Request {
-#ifdef HAVE_WININET
-    /** Internal connection handle */
-    WinINet::HttpRequestHandle handle;
-
-    /** Event handles that are triggered in certain situations */
-    Trigger opened_event, completed_event;
-    /** The last error code that was retrieved by the Callback() function */
-    DWORD last_error;
-#elif defined(ANDROID)
+#ifdef ANDROID
     static constexpr unsigned INFINITE = 0;
-#else
+#elif !defined(WIN32)
     static constexpr unsigned INFINITE = (unsigned)-1;
 #endif
 
@@ -137,11 +120,6 @@ namespace Net {
      */
     size_t Read(void *buffer, size_t buffer_size,
                 unsigned timeout_ms=INFINITE);
-
-#ifdef HAVE_WININET
-    /** Internal callback function. Don't use this manually! */
-    void Callback(DWORD status, LPVOID info, DWORD info_length);
-#endif
   };
 }
 
