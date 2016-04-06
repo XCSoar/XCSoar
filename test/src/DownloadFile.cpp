@@ -25,6 +25,7 @@ Copyright_License {
 #include "Net/HTTP/Request.hpp"
 #include "Net/HTTP/Init.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "Util/PrintException.hxx"
 
 #include <exception>
 #include <iostream>
@@ -85,7 +86,7 @@ main(int argc, char *argv[])
 
     Net::Deinitialise();
   } catch (const std::exception &exception) {
-    cerr << exception.what() << endl;
+    PrintException(exception);
     return EXIT_FAILURE;
   }
 

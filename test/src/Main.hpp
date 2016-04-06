@@ -4,6 +4,8 @@
  *
  */
 
+#include "Util/PrintException.hxx"
+
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
 #include "OS/Args.hpp"
 #endif
@@ -284,7 +286,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   try {
     Main();
   } catch (const std::exception &e) {
-    fprintf(stderr, "%s\n", e.what());
+    PrintException(e);
     result = EXIT_FAILURE;
   }
 
