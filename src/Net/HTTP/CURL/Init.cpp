@@ -28,7 +28,7 @@ Copyright_License {
 void
 Net::Initialise()
 {
-  curl_global_init(CURL_GLOBAL_NOTHING);
+  curl_global_init(CURL_GLOBAL_WIN32);
 }
 
 void
