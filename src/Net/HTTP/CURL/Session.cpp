@@ -63,7 +63,7 @@ Net::Session::Select(int timeout_ms)
     timeout.tv_usec = (timeout_ms % 1000) * 1000;
     timeout_p = &timeout;
   } else
-    timeout_p = NULL;
+    timeout_p = nullptr;
 
   int ret = select(max_fd + 1, &rfds, &wfds, &efds, timeout_p);
   if (ret < 0)

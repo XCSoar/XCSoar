@@ -37,8 +37,8 @@ DownloadToFile(Net::Session &session, const char *url,
                FILE *file, char *md5_digest,
                OperationEnvironment &env)
 {
-  assert(url != NULL);
-  assert(file != NULL);
+  assert(url != nullptr);
+  assert(file != nullptr);
 
   Net::Request request(session, url, 10000);
   if (username != nullptr)
@@ -62,7 +62,7 @@ DownloadToFile(Net::Session &session, const char *url,
     if (nbytes == 0)
       break;
 
-    if (md5_digest != NULL)
+    if (md5_digest != nullptr)
       md5.Append(buffer, nbytes);
 
     size_t written = fwrite(buffer, 1, nbytes, file);
@@ -73,7 +73,7 @@ DownloadToFile(Net::Session &session, const char *url,
     env.SetProgressPosition(total);
   }
 
-  if (md5_digest != NULL) {
+  if (md5_digest != nullptr) {
     md5.Finalize();
     md5.GetDigest(md5_digest);
   }
@@ -87,8 +87,8 @@ Net::DownloadToFile(Session &session, const char *url,
                     Path path, char *md5_digest,
                     OperationEnvironment &env)
 {
-  assert(url != NULL);
-  assert(path != NULL);
+  assert(url != nullptr);
+  assert(path != nullptr);
 
   /* make sure we create a new file */
   if (!File::Delete(path) && File::ExistsAny(path))
@@ -97,7 +97,7 @@ Net::DownloadToFile(Session &session, const char *url,
 
   /* now create the new file */
   FILE *file = _tfopen(path.c_str(), _T("wb"));
-  if (file == NULL)
+  if (file == nullptr)
     return false;
 
   bool success = ::DownloadToFile(session, url, username, password,

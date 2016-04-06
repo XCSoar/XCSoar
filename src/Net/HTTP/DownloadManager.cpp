@@ -34,13 +34,13 @@ static AndroidDownloadManager *download_manager;
 bool
 Net::DownloadManager::Initialise()
 {
-  assert(download_manager == NULL);
+  assert(download_manager == nullptr);
 
   if (!AndroidDownloadManager::Initialise(Java::GetEnv()))
     return false;
 
   download_manager = AndroidDownloadManager::Create(Java::GetEnv(), *context);
-  return download_manager != NULL;
+  return download_manager != nullptr;
 }
 
 void
@@ -52,20 +52,20 @@ void
 Net::DownloadManager::Deinitialise()
 {
   delete download_manager;
-  download_manager = NULL;
+  download_manager = nullptr;
   AndroidDownloadManager::Deinitialise(Java::GetEnv());
 }
 
 bool
 Net::DownloadManager::IsAvailable()
 {
-  return download_manager != NULL;
+  return download_manager != nullptr;
 }
 
 void
 Net::DownloadManager::AddListener(DownloadListener &listener)
 {
-  assert(download_manager != NULL);
+  assert(download_manager != nullptr);
 
   download_manager->AddListener(listener);
 }
@@ -73,7 +73,7 @@ Net::DownloadManager::AddListener(DownloadListener &listener)
 void
 Net::DownloadManager::RemoveListener(DownloadListener &listener)
 {
-  assert(download_manager != NULL);
+  assert(download_manager != nullptr);
 
   download_manager->RemoveListener(listener);
 }
@@ -81,7 +81,7 @@ Net::DownloadManager::RemoveListener(DownloadListener &listener)
 void
 Net::DownloadManager::Enumerate(DownloadListener &listener)
 {
-  assert(download_manager != NULL);
+  assert(download_manager != nullptr);
 
   download_manager->Enumerate(Java::GetEnv(), listener);
 }
@@ -89,7 +89,7 @@ Net::DownloadManager::Enumerate(DownloadListener &listener)
 void
 Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 {
-  assert(download_manager != NULL);
+  assert(download_manager != nullptr);
 
   download_manager->Enqueue(Java::GetEnv(), uri, relative_path);
 }
@@ -97,7 +97,7 @@ Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 void
 Net::DownloadManager::Cancel(Path relative_path)
 {
-  assert(download_manager != NULL);
+  assert(download_manager != nullptr);
 
   download_manager->Cancel(Java::GetEnv(), relative_path);
 }
@@ -331,7 +331,7 @@ static DownloadManagerThread *thread;
 bool
 Net::DownloadManager::Initialise()
 {
-  assert(thread == NULL);
+  assert(thread == nullptr);
 
   thread = new DownloadManagerThread();
   return true;
@@ -340,7 +340,7 @@ Net::DownloadManager::Initialise()
 void
 Net::DownloadManager::BeginDeinitialise()
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->StopAsync();
 }
@@ -348,7 +348,7 @@ Net::DownloadManager::BeginDeinitialise()
 void
 Net::DownloadManager::Deinitialise()
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->WaitStopped();
   delete thread;
@@ -357,7 +357,7 @@ Net::DownloadManager::Deinitialise()
 bool
 Net::DownloadManager::IsAvailable()
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   return true;
 }
@@ -365,7 +365,7 @@ Net::DownloadManager::IsAvailable()
 void
 Net::DownloadManager::AddListener(DownloadListener &listener)
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->AddListener(listener);
 }
@@ -373,7 +373,7 @@ Net::DownloadManager::AddListener(DownloadListener &listener)
 void
 Net::DownloadManager::RemoveListener(DownloadListener &listener)
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->RemoveListener(listener);
 }
@@ -381,7 +381,7 @@ Net::DownloadManager::RemoveListener(DownloadListener &listener)
 void
 Net::DownloadManager::Enumerate(DownloadListener &listener)
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->Enumerate(listener);
 }
@@ -389,7 +389,7 @@ Net::DownloadManager::Enumerate(DownloadListener &listener)
 void
 Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->Enqueue(uri, relative_path);
 }
@@ -397,7 +397,7 @@ Net::DownloadManager::Enqueue(const char *uri, Path relative_path)
 void
 Net::DownloadManager::Cancel(Path relative_path)
 {
-  assert(thread != NULL);
+  assert(thread != nullptr);
 
   thread->Cancel(relative_path);
 }

@@ -34,7 +34,7 @@ Net::CurlMulti::~CurlMulti()
 {
   assert(results.empty());
 
-  if (multi != NULL)
+  if (multi != nullptr)
     curl_multi_cleanup(multi);
 }
 
@@ -57,7 +57,7 @@ Net::CurlMulti::InfoRead(const CURL *easy)
 
   const CURLMsg *msg;
   int msgs_in_queue;
-  while ((msg = curl_multi_info_read(multi, &msgs_in_queue)) != NULL) {
+  while ((msg = curl_multi_info_read(multi, &msgs_in_queue)) != nullptr) {
     if (msg->msg == CURLMSG_DONE) {
       if (msg->easy_handle == easy)
         return msg->data.result;

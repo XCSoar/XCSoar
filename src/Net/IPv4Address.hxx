@@ -133,7 +133,7 @@ public:
 	 *
 	 * @param buffer is the result buffer
 	 * @param buffer_size is the buffer size
-	 * @return IP address on success, else NULL
+	 * @return IP address on success, else nullptr
 	 */
 	gcc_pure
 	const char *ToString(char *buffer, size_t buffer_size) const;
