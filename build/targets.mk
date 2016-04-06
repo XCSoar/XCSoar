@@ -568,7 +568,7 @@ endif
 ifeq ($(HAVE_WIN32),y)
   ifneq ($(TARGET),CYGWIN)
     # link libstdc++-6.dll statically, so we don't have to distribute it
-    TARGET_LDFLAGS += -static-libstdc++
+    TARGET_LDFLAGS += -static-libstdc++ -static-libgcc
   endif
 endif
 
