@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ToFile.hpp"
-#include "Features.hpp"
 #include "Request.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"

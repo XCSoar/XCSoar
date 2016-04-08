@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef NET_REQUEST_HPP
 #define NET_REQUEST_HPP
 
-#include "Features.hpp"
 #include "Util/StaticFifoBuffer.hpp"
 #include "Easy.hpp"
 

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ToBuffer.hpp"
-#include "Features.hpp"
 #include "Request.hpp"
 #include "Operation/Operation.hpp"
 
