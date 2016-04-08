@@ -54,6 +54,8 @@ Net::Request::~Request()
 void
 Net::Request::AddHeader(const char *name, const char *value)
 {
+  assert(!submitted);
+
   char buffer[4096];
   snprintf(buffer, sizeof(buffer), "%s: %s", name, value);
   request_headers = curl_slist_append(request_headers, buffer);
@@ -62,6 +64,8 @@ Net::Request::AddHeader(const char *name, const char *value)
 void
 Net::Request::SetBasicAuth(const char *username, const char *password)
 {
+  assert(!submitted);
+
   char buffer[256];
   snprintf(buffer, sizeof(buffer), "%s:%s", username, password);
   handle.SetBasicAuth(buffer);
