@@ -38,9 +38,7 @@ namespace Net {
   class Session;
 
   class Request {
-#ifdef ANDROID
-    static constexpr unsigned INFINITE = 0;
-#elif !defined(WIN32)
+#ifndef WIN32
     static constexpr unsigned INFINITE = (unsigned)-1;
 #endif
 
