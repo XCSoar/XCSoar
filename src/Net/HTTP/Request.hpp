@@ -70,13 +70,6 @@ namespace Net {
 
     void SetBasicAuth(const char *username, const char *password);
 
-  protected:
-    size_t ResponseData(const uint8_t *ptr, size_t size);
-
-    static size_t WriteCallback(char *ptr, size_t size, size_t nmemb,
-                                void *userdata);
-
-  public:
     /**
      * Send the request to the server and receive response headers.
      * This function fails if the connection could not be established
@@ -105,7 +98,12 @@ namespace Net {
 
   private:
     void SubmitResponse();
-  };
+
+    size_t ResponseData(const uint8_t *ptr, size_t size);
+
+    static size_t WriteCallback(char *ptr, size_t size, size_t nmemb,
+                                void *userdata);
+};
 }
 
 #endif
