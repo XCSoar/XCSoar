@@ -8,18 +8,13 @@ LIBNET_SOURCES = \
 	$(SRC)/Net/SocketAddress.cxx \
 	$(SRC)/Net/SocketDescriptor.cpp
 
-HAVE_HTTP := n
-
-HAVE_CURL = y
-
-ifeq ($(HAVE_CURL),y)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/HTTP/CURL/Multi.cpp \
-	$(SRC)/Net/HTTP/CURL/Session.cpp \
-	$(SRC)/Net/HTTP/CURL/Request.cpp \
-	$(SRC)/Net/HTTP/CURL/Init.cpp
+	$(SRC)/Net/HTTP/Multi.cpp \
+	$(SRC)/Net/HTTP/Session.cpp \
+	$(SRC)/Net/HTTP/Request.cpp \
+	$(SRC)/Net/HTTP/Init.cpp
 
 ifeq ($(TARGET_IS_OSX),y)
 # We use the libcurl which is included in Mac OS X.
@@ -32,7 +27,6 @@ $(eval $(call pkg-config-library,CURL,libcurl))
 LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDADD = $(ZLIB_LDADD)
 LIBNET_LDLIBS = $(CURL_LDLIBS) $(ZLIB_LDLIBS)
-endif
 endif
 
 ifeq ($(HAVE_HTTP),y)

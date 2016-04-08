@@ -24,15 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NET_FEATURES_HPP
 #define XCSOAR_NET_FEATURES_HPP
 
-#if defined(WIN32) || (defined(HAVE_POSIX) && !defined(ANDROID))
 #define HAVE_HTTP
-#define HAVE_CURL
-#endif
-
-#ifdef ANDROID
-#define HAVE_HTTP
-#define HAVE_CURL
-#endif
 
 #ifdef HAVE_HTTP
 #define HAVE_DOWNLOAD_MANAGER

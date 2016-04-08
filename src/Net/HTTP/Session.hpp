@@ -25,23 +25,17 @@ Copyright_License {
 #define NET_SESSION_HPP
 
 #include "Features.hpp"
-
-#ifdef HAVE_CURL
-#include "CURL/Multi.hpp"
-#endif
+#include "Multi.hpp"
 
 namespace Net {
   class Session {
-#ifdef HAVE_CURL
     CurlMulti multi;
-#endif
 
   public:
     /**
      * Was the session created successfully
      * @return True if session was created successfully
      */
-#ifdef HAVE_CURL
     void Add(CURL *easy) {
       multi.Add(easy);
     }
@@ -59,7 +53,6 @@ namespace Net {
     CURLcode InfoRead(const CURL *easy) {
       return multi.InfoRead(easy);
     }
-#endif
   };
 }
 

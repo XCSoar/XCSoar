@@ -25,13 +25,10 @@ Copyright_License {
 #define NET_REQUEST_HPP
 
 #include "Features.hpp"
-
-#ifdef HAVE_CURL
 #include "Util/StaticFifoBuffer.hpp"
-#include "CURL/Easy.hpp"
+#include "Easy.hpp"
 
 #include <curl/curl.h>
-#endif
 
 #include <stddef.h>
 #include <stdint.h>
@@ -47,7 +44,6 @@ namespace Net {
     static constexpr unsigned INFINITE = (unsigned)-1;
 #endif
 
-#ifdef HAVE_CURL
     Session &session;
 
     CurlEasy handle;
@@ -56,7 +52,6 @@ namespace Net {
 
     typedef StaticFifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
     Buffer buffer;
-#endif
 
   public:
     /**
@@ -74,13 +69,11 @@ namespace Net {
 
     void SetBasicAuth(const char *username, const char *password);
 
-#ifdef HAVE_CURL
   protected:
     size_t ResponseData(const uint8_t *ptr, size_t size);
 
     static size_t WriteCallback(char *ptr, size_t size, size_t nmemb,
                                 void *userdata);
-#endif
 
   public:
     /**

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "../Request.hpp"
-#include "../Session.hpp"
+#include "Request.hpp"
+#include "Session.hpp"
 #include "Version.hpp"
 #include "Util/ConvertString.hpp"
 
