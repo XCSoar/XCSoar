@@ -24,17 +24,16 @@ Copyright_License {
 #ifndef NET_REQUEST_HPP
 #define NET_REQUEST_HPP
 
-#include "Util/StaticFifoBuffer.hpp"
 #include "Easy.hpp"
 
 #include <curl/curl.h>
 
 #include <stddef.h>
 #include <stdint.h>
-#include <sys/types.h>
 
 namespace Net {
   class Session;
+  class ResponseHandler;
 
   class Request {
 #ifndef WIN32
@@ -47,8 +46,13 @@ namespace Net {
 
     struct curl_slist *request_headers = nullptr;
 
-    typedef StaticFifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
-    Buffer buffer;
+    ResponseHandler &handler;
+
+    /**
+     * Was the response metadata already submitted to
+     * ResponseHandler::ResponseReceived().
+     */
+    bool submitted = false;
 
   public:
     /**
@@ -57,7 +61,8 @@ namespace Net {
      * @param url the absolute URL of the request
      * @param timeout_ms Timeout used for creating this request
      */
-    Request(Session &session, const char *url);
+    Request(Session &session, ResponseHandler &_handler,
+            const char *url);
 
     ~Request();
 
@@ -97,6 +102,9 @@ namespace Net {
      */
     size_t Read(void *buffer, size_t buffer_size,
                 unsigned timeout_ms=INFINITE);
+
+  private:
+    void SubmitResponse();
   };
 }
 

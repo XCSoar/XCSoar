@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/Request.hpp"
+#include "Net/HTTP/Handler.hpp"
 #include "Net/HTTP/Init.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "Util/PrintException.hxx"
@@ -35,6 +36,23 @@ Copyright_License {
 
 using namespace std;
 
+class MyResponseHandler final : public Net::ResponseHandler {
+  FILE *const file;
+
+public:
+  explicit MyResponseHandler(FILE *_file):file(_file) {}
+
+  void ResponseReceived(int64_t content_length) override {
+  }
+
+  void DataReceived(const void *data, size_t length) override {
+    fwrite(data, 1, length, stdout);
+
+    if (file != nullptr)
+      fwrite(data, 1, length, file);
+  }
+};
+
 static void
 Download(const char *url, Path path)
 {
@@ -43,28 +61,16 @@ Download(const char *url, Path path)
   cout << "done" << endl;
 
   cout << "Creating Request ... ";
-  Net::Request request(session, url);
-  request.Send();
-
-  cout << "done" << endl;
-
-  cout << "Reading Response:" << endl;
-  cout << "-------------------------------------------------" << endl;
 
   FILE *file = path != nullptr ? _tfopen(path.c_str(), _T("wb")) : nullptr;
+  MyResponseHandler handler(file);
+  Net::Request request(session, handler, url);
+  cout << "done" << endl;
 
-  char buffer[256];
-  while (request.Read(buffer, sizeof(buffer))) {
-    cout << buffer;
-
-    if (file != NULL)
-      fputs(buffer, file);
-  }
+  request.Send();
 
   if (file != NULL)
     fclose(file);
-
-  cout << "-------------------------------------------------" << endl;
 }
 
 int

@@ -23,11 +23,13 @@ Copyright_License {
 
 #include "Request.hpp"
 #include "Session.hpp"
+#include "Handler.hpp"
 #include "Version.hpp"
 #include "Util/ConvertString.hpp"
 
-Net::Request::Request(Session &_session, const char *url)
-  :session(_session)
+Net::Request::Request(Session &_session, ResponseHandler &_handler,
+                      const char *url)
+  :session(_session), handler(_handler)
 {
   char user_agent[32];
   snprintf(user_agent, 32, "XCSoar/%s",
@@ -68,17 +70,10 @@ Net::Request::SetBasicAuth(const char *username, const char *password)
 size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {
-  auto range = buffer.Write();
-  if (range.size < size) {
-    buffer.Shift();
-    range = buffer.Write();
-    if (range.size < size)
-      /* buffer is full, pause CURL */
-      return CURL_WRITEFUNC_PAUSE;
-  }
+  if (!submitted)
+    SubmitResponse();
 
-  std::copy_n(ptr, size, range.data);
-  buffer.Append(size);
+  handler.DataReceived(ptr, size);
   return size;
 }
 
@@ -99,46 +94,12 @@ Net::Request::Send(unsigned _timeout_ms)
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
-  while (buffer.IsEmpty()) {
-    CURLcode code = session.InfoRead(handle.GetHandle());
-    if (code != CURLE_AGAIN) {
-      if (code != CURLE_OK)
-        throw std::runtime_error(curl_easy_strerror(code));
-      return;
-    }
-
-    if (mcode != CURLM_CALL_MULTI_PERFORM)
-      session.Select(timeout_ms);
-
-    mcode = session.Perform();
-    if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM)
-      throw std::runtime_error(curl_multi_strerror(mcode));
-  }
-}
-
-int64_t
-Net::Request::GetLength() const
-{
-  return handle.GetContentLength();
-}
-
-size_t
-Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
-{
-  const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
-
-  Buffer::Range range;
-  CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (true) {
-    range = buffer.Read();
-    if (!range.IsEmpty())
-      break;
-
     CURLcode code = session.InfoRead(handle.GetHandle());
     if (code != CURLE_AGAIN) {
       if (code != CURLE_OK)
         throw std::runtime_error(curl_easy_strerror(code));
-      return 0;
+      break;
     }
 
     if (mcode != CURLM_CALL_MULTI_PERFORM)
@@ -149,16 +110,16 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
       throw std::runtime_error(curl_multi_strerror(mcode));
   }
 
-  --buffer_size;
-  if (buffer_size > range.size)
-    buffer_size = range.size;
+  if (!submitted)
+    SubmitResponse();
+}
 
-  uint8_t *p = (uint8_t *)_buffer;
-  std::copy_n(range.data, buffer_size, p);
-  p[buffer_size] = 0;
+void
+Net::Request::SubmitResponse()
+{
+  assert(!submitted);
 
-  buffer.Consume(buffer_size);
-  handle.Unpause();
+  submitted = true;
 
-  return buffer_size;
+  handler.ResponseReceived(handle.GetContentLength());
 }
