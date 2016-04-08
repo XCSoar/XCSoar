@@ -24,6 +24,7 @@ Copyright_License {
 #include "Request.hpp"
 #include "Session.hpp"
 #include "Handler.hpp"
+#include "FormData.hpp"
 #include "Version.hpp"
 #include "Util/ConvertString.hpp"
 
@@ -69,6 +70,12 @@ Net::Request::SetBasicAuth(const char *username, const char *password)
   char buffer[256];
   snprintf(buffer, sizeof(buffer), "%s:%s", username, password);
   handle.SetBasicAuth(buffer);
+}
+
+void
+Net::Request::SetRequestBody(const MultiPartFormData &body)
+{
+  handle.SetHttpPost(body.Get());
 }
 
 size_t

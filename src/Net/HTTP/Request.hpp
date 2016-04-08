@@ -34,6 +34,7 @@ Copyright_License {
 namespace Net {
   class Session;
   class ResponseHandler;
+  class MultiPartFormData;
 
   class Request {
 #ifndef WIN32
@@ -69,6 +70,12 @@ namespace Net {
     void AddHeader(const char *name, const char *value);
 
     void SetBasicAuth(const char *username, const char *password);
+
+    /**
+     * Change the method to POST and use the given request body.  It
+     * must not be destructed until Send() returns.
+     */
+    void SetRequestBody(const MultiPartFormData &body);
 
     /**
      * Send the request to the server and receive response headers.

@@ -14,6 +14,7 @@ LIBNET_SOURCES += \
 	$(SRC)/Net/HTTP/Multi.cpp \
 	$(SRC)/Net/HTTP/Session.cpp \
 	$(SRC)/Net/HTTP/Request.cpp \
+	$(SRC)/Net/HTTP/FormData.cpp \
 	$(SRC)/Net/HTTP/Init.cpp
 
 ifeq ($(TARGET_IS_OSX),y)
