@@ -31,7 +31,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #define HAVE_HTTP
-#define HAVE_JAVA_NET
+#define HAVE_CURL
 #endif
 
 #ifdef HAVE_HTTP

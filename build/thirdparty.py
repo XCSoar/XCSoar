@@ -87,6 +87,7 @@ elif 'apple-darwin' in host_triplet:
     ]
 elif target == 'ANDROID':
     thirdparty_libs = [
+        curl,
         lua,
         proj,
         libtiff,

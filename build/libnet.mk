@@ -10,15 +10,7 @@ LIBNET_SOURCES = \
 
 HAVE_HTTP := n
 
-ifneq ($(findstring $(TARGET),PC CYGWIN),)
-  HAVE_CURL = y
-endif
-
-ifeq ($(TARGET),UNIX)
-  HAVE_CURL = y
-endif
-
-HAVE_CURL ?= n
+HAVE_CURL = y
 
 ifeq ($(HAVE_CURL),y)
 HAVE_HTTP := y
@@ -41,13 +33,6 @@ LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDADD = $(ZLIB_LDADD)
 LIBNET_LDLIBS = $(CURL_LDLIBS) $(ZLIB_LDLIBS)
 endif
-endif
-
-ifeq ($(TARGET),ANDROID)
-HAVE_HTTP := y
-
-LIBNET_SOURCES += \
-	$(SRC)/Net/HTTP/Java/Request.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)

@@ -33,10 +33,6 @@ Copyright_License {
 #include <curl/curl.h>
 #endif
 
-#ifdef HAVE_JAVA_NET
-#include <jni.h>
-#endif
-
 #include <stddef.h>
 #include <stdint.h>
 #include <sys/types.h>
@@ -62,12 +58,6 @@ namespace Net {
     Buffer buffer;
 #endif
 
-#ifdef HAVE_JAVA_NET
-    JNIEnv *const env;
-
-    jobject connection = nullptr, input_stream = nullptr;
-#endif
-
   public:
     /**
      * Creates a Request that can be used to get data from a webserver.
@@ -78,9 +68,7 @@ namespace Net {
     Request(Session &session, const char *url,
             unsigned timeout_ms=INFINITE);
 
-#if defined(HAVE_CURL) || defined(HAVE_JAVA_NET)
     ~Request();
-#endif
 
     void AddHeader(const char *name, const char *value);
 
