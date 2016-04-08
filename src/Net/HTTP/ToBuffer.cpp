@@ -33,7 +33,7 @@ Net::DownloadToBuffer(Session &session, const char *url,
                       void *_buffer, size_t max_length,
                       OperationEnvironment &env)
 {
-  Request request(session, url, 10000);
+  Request request(session, url);
   if (username != nullptr)
     request.SetBasicAuth(username, password);
   request.Send(10000);

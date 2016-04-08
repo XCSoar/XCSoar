@@ -39,7 +39,7 @@ DownloadToFile(Net::Session &session, const char *url,
   assert(url != nullptr);
   assert(file != nullptr);
 
-  Net::Request request(session, url, 10000);
+  Net::Request request(session, url);
   if (username != nullptr)
     request.SetBasicAuth(username, password);
   request.Send(10000);

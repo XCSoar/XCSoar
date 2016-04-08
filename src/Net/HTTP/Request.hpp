@@ -57,8 +57,7 @@ namespace Net {
      * @param url the absolute URL of the request
      * @param timeout_ms Timeout used for creating this request
      */
-    Request(Session &session, const char *url,
-            unsigned timeout_ms=INFINITE);
+    Request(Session &session, const char *url);
 
     ~Request();
 
