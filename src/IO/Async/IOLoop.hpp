@@ -97,13 +97,12 @@ class IOLoop final {
                                 boost::intrusive::constant_time_size<false>> FileSet;
   FileSet files;
 
-  bool modified, running;
+  bool modified = false, running = false;
 
 public:
   static constexpr unsigned READ = Poll::READ;
   static constexpr unsigned WRITE = Poll::WRITE;
 
-  IOLoop():modified(false), running(false) {}
   ~IOLoop();
 
   gcc_pure
