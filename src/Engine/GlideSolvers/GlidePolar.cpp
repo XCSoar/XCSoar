@@ -247,7 +247,7 @@ GlidePolar::UpdateSMin()
   UpdateBestLD();
 }
 
-bool 
+bool
 GlidePolar::IsGlidePossible(const GlideState &task) const
 {
   if (task.altitude_difference <= 0)
@@ -320,6 +320,14 @@ public:
 };
 
 double
+GlidePolar::SpeedToFly(const double stf_sink_rate, const double head_wind) const
+{
+  assert(IsValid());
+  GlidePolarSpeedToFly gp_stf(*this, stf_sink_rate, head_wind, Vmin, Vmax);
+  return gp_stf.solve(Vmax);
+}
+
+double
 GlidePolar::SpeedToFly(const AircraftState &state,
                        const GlideResult &solution, const bool block_stf) const
 {
@@ -341,8 +349,7 @@ GlidePolar::SpeedToFly(const AircraftState &state,
       ? 0.
       : -state.netto_vario;
 
-    GlidePolarSpeedToFly gp_stf(*this, stf_sink_rate, head_wind, Vmin, Vmax);
-    V_stf = gp_stf.solve(Vmax);
+    V_stf = SpeedToFly(stf_sink_rate, head_wind);
   }
 
   return std::max(Vmin, V_stf * g_scaling);

@@ -440,11 +440,24 @@ public:
    * @param solution Solution for which Vopt is desired
    * @param block_stf Whether to use block speed to fly or dolphin
    *
-   * @return Speed to fly (true, m/s)
+   * @return Speed to fly (true, m/s)SpeedToFly
    */
   gcc_pure
   double SpeedToFly(const AircraftState &state, const GlideResult &solution,
                    const bool block_stf) const;
+
+  /**
+   * Calculate speed-to-fly according to MacCready dolphin theory
+   * with ring setting at current MC value, at specified netto sink rate
+   * and head wind.
+   *
+   * @param stf_sink_rate_vario Netto sink rate (m/s)
+   * @param head_wind Head wind component (m/s)
+   *
+   * @return Speed to fly (true, m/s)SpeedToFly
+   */
+  gcc_pure
+  double SpeedToFly(const double stf_sink_rate_vario, const double head_wind) const;
 
   /**
    * Compute MacCready ring setting to adjust speeds to incorporate
