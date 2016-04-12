@@ -30,7 +30,9 @@
 
 #include <stdint.h>
 
+struct AircraftState;
 struct GlideState;
+class GlidePolar;
 
 /**
  * Class used to represent a solution to a glide task
@@ -310,6 +312,16 @@ struct GlideResult {
 
   /** Reset/clear the solution */
   void Reset();
+
+  /**
+   * Calculate instantaneous task speed according to enhanced Pirker
+   * algorithm using ground speed along track and vario value.  See
+   * code in InstantSpeed.cpp for algorithm details.
+   *
+   * @return instantaneous speed (m/s)
+   */
+  double InstantSpeed(const AircraftState &aircraft, const GlideResult& leg,
+                      const GlidePolar& glide_polar);
 
 private:
   /**

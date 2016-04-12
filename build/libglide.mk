@@ -7,6 +7,7 @@ GLIDE_SOURCES = \
 	$(GLIDE_SRC_DIR)/GlidePolar.cpp \
 	$(GLIDE_SRC_DIR)/PolarCoefficients.cpp \
 	$(GLIDE_SRC_DIR)/GlideResult.cpp \
-	$(GLIDE_SRC_DIR)/MacCready.cpp
+	$(GLIDE_SRC_DIR)/MacCready.cpp \
+	$(GLIDE_SRC_DIR)/InstantSpeed.cpp
 
 $(eval $(call link-library,libglide,GLIDE))
