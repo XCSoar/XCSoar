@@ -70,9 +70,11 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   }
 
   Pen blue_pen(2, COLOR_BLUE);
+  const auto MACCREADY = glide_polar.GetMC();
+  const auto s_min = -glide_polar.GetSMax() * 1.1;
 
-  chart.ScaleYFromValue(0);
-  chart.ScaleYFromValue(-glide_polar.GetSMax() * 1.1);
+  chart.ScaleYFromValue(MACCREADY);
+  chart.ScaleYFromValue(s_min);
   chart.ScaleXFromValue(glide_polar.GetVMin() * 0.8);
   chart.ScaleXFromValue(glide_polar.GetVMax() + 2);
 
@@ -81,6 +83,27 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysVSpeed(1),
                   ChartLook::STYLE_THINDASHPAPER, 1, true);
 
+  // draw dolphin speed command
+  {
+    auto w = glide_polar.GetSMin()+MACCREADY;
+    bool inrange = true;
+    auto v_dolphin_last = glide_polar.GetVMin();
+    auto w_dolphin_last = MACCREADY;
+    do {
+      w += s_min*0.05;
+      auto v_dolphin = glide_polar.SpeedToFly(-w, 0);
+      auto w_dolphin = -glide_polar.SinkRate(v_dolphin)+w;
+      inrange = w_dolphin > s_min;
+      if ((v_dolphin > v_dolphin_last) && inrange) {
+        chart.DrawLine(v_dolphin_last, w_dolphin_last, v_dolphin, w_dolphin,
+                       ChartLook::STYLE_BLUETHIN);
+        v_dolphin_last = v_dolphin;
+        w_dolphin_last = w_dolphin;
+      }
+    } while (inrange);
+  }
+
+  // draw glide polar and climb rate history
   double v0 = 0;
   bool v0valid = false;
   unsigned i0 = 0;
@@ -105,7 +128,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  auto MACCREADY = glide_polar.GetMC();
+  // draw best L/D line
   auto sb = -glide_polar.GetSBestLD();
   auto ff = (sb - MACCREADY) / glide_polar.GetVBestLD();
 
@@ -113,6 +136,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                  MACCREADY + ff * glide_polar.GetVMax(),
                  ChartLook::STYLE_REDTHICK);
 
+  // draw labels and other overlays
   chart.DrawXLabel(_T("V"), Units::GetSpeedName());
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
