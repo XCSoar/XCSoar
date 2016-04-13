@@ -77,8 +77,6 @@ class LeastSquares
 {
   double sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
 
-  unsigned sum_n;
-
   /**
   * \f[
   *     m = \frac{n * \sum_0^{i-1} (x_i*y_i) - \sum_0^{i-1} x_i* \sum_0^{i-1} y_i}
@@ -97,12 +95,16 @@ class LeastSquares
   double rms_error;
   double max_error;
   double sum_weights;
+
+  double y_ave;
+
+protected:
   double y_max;
   double y_min;
   double x_min;
   double x_max;
 
-  double y_ave;
+  unsigned sum_n;
 
   struct Slot {
     double x, y;
@@ -204,7 +206,7 @@ public:
    */
   void Update(double x, double y, double weight=1);
 
-private:
+protected:
   /**
    * Calculate the least squares average.
    */
