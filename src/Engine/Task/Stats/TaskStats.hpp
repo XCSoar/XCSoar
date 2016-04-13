@@ -25,6 +25,7 @@
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
 #include "WindowStats.hpp"
+#include "Math/Filter.hpp"
 
 #include <type_traits>
 
@@ -56,6 +57,13 @@ public:
   double distance_min;
   /** Scored distance (m) */
   double distance_scored;
+
+  /** Calculated instantaneous speed (m/s) */
+  Filter filter_inst_speed_slow;
+  Filter filter_inst_speed_fast;
+
+  double inst_speed_slow;
+  double inst_speed_fast;
 
   /**
    * Index of the active task point.
@@ -99,18 +107,6 @@ public:
 
   double GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining_start;
-  }
-
-  /**
-   * Check whether get_pirker_speed() is available.
-   */
-  bool IsPirkerSpeedAvailable() const {
-    return total.pirker.IsDefined();
-  }
-
-  /** Incremental task speed adjusted for mc, target changes */
-  double get_pirker_speed() const {
-    return total.pirker.GetSpeedIncremental();
   }
 
   /** Reset each element (for incremental speeds). */

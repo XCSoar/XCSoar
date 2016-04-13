@@ -72,9 +72,9 @@ StatsComputer::DoLogging(const MoreData &basic,
       flightstats.AddAltitude(calculated.flight.flight_time,
                               basic.nav_altitude);
 
-    if (calculated.task_stats.IsPirkerSpeedAvailable())
+    if (calculated.task_stats.task_valid)
       flightstats.AddTaskSpeed(calculated.flight.flight_time,
-                               calculated.task_stats.get_pirker_speed());
+                               calculated.task_stats.inst_speed_slow);
   }
 
   return true;

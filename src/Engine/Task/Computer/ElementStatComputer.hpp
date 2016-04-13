@@ -35,7 +35,6 @@ public:
   DistanceStatComputer remaining;
   DistanceStatComputer planned;
   DistanceStatComputer travelled;
-  DistanceStatComputer pirker;
   TaskVarioComputer vario;
 
 private:

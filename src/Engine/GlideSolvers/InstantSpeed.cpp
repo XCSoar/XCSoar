@@ -24,6 +24,11 @@
 #include "Navigation/Aircraft.hpp"
 #include "GlidePolar.hpp"
 
+// Uncomment this if desired to have instantaneous speed revert to ground speed
+// projected to target if above final glide.
+//
+// #define PIRKER_FINAL_GLIDE
+
 double
 GlideResult::InstantSpeed(const AircraftState& aircraft,
                           const GlideResult& leg,
@@ -39,8 +44,10 @@ GlideResult::InstantSpeed(const AircraftState& aircraft,
   if (d_mc <= 0)
     return v_a;
 
+#ifdef PIRKER_FINAL_GLIDE
   if (altitude_difference> 0)
     return v_a;
+#endif
 
   // cruise speed for current MC (m/s)
   const auto d_v = glide_polar.GetVBestLD();

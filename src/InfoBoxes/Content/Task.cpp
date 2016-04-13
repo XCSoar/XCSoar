@@ -506,14 +506,14 @@ void
 UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.IsPirkerSpeedAvailable()) {
+  if (!task_stats.task_valid) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
   data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.get_pirker_speed()));
+                    Units::ToUserTaskSpeed(task_stats.inst_speed_fast));
 
   // Set Unit
   data.SetValueUnit(Units::current.task_speed_unit);
