@@ -79,21 +79,12 @@ return the maximum least squares error:
 void
 LeastSquares::Reset()
 {
-  sum_n = 0;
-  sum_xi = 0.;
-  sum_yi = 0.;
+  StoreReset();
   sum_xi_2 = 0.;
   sum_xi_yi = 0.;
   max_error = 0.;
   sum_error = 0.;
   rms_error = 0.;
-  sum_weights = 0.;
-  y_max = 0.;
-  y_min = 0.;
-  x_min = 0.;
-  x_max = 0.;
-  y_ave = 0.;
-  slots.clear();
 }
 
 void
@@ -141,63 +132,28 @@ LeastSquares::UpdateError()
 void
 LeastSquares::Add(double x, double y, double weight)
 {
-  // Update maximum/minimum values
-  if (IsEmpty() || y > y_max)
-    y_max = y;
+  StoreAdd(x, y, weight);
 
-  if (IsEmpty() || y < y_min)
-    y_min = y;
-
-  if (IsEmpty() || x > x_max)
-    x_max = x;
-
-  if (IsEmpty() || x < x_min)
-    x_min = x;
-
-  // Add point
-  // TODO code: really should have a circular buffer here
-  if (!slots.full())
-    slots.append() = Slot(x, y, weight);
-
-  ++sum_n;
-
-  // Add weighted point
-  sum_weights += weight;
-
-  auto xw = x * weight;
-  auto yw = y * weight;
-
-  sum_xi += xw;
-  sum_yi += yw;
-  sum_xi_2 += Square(xw);
-  sum_xi_yi += xw * yw;
+  sum_xi_2 += Square(x * weight);
+  sum_xi_yi += (x * y)*Square(weight);
 }
 
 void
 LeastSquares::Remove(const unsigned i)
 {
   assert(i< sum_n);
+
   const auto &pt = slots[i];
-
-  --sum_n;
-
   // Remove weighted point
   auto weight = 1;
 #ifdef LEASTSQS_WEIGHT_STORE
   weight = pt.weight;
 #endif
 
-  sum_weights -= weight;
+  sum_xi_2 -= Square(pt.x * weight);
+  sum_xi_yi -= (pt.x * pt.y)*Square(weight);
 
-  auto xw = pt.x * weight;
-  auto yw = pt.y * weight;
-
-  sum_xi -= xw;
-  sum_yi -= yw;
-  sum_xi_2 -= Square(xw);
-  sum_xi_yi -= xw * yw;
-
-  slots.remove(i);
+  StoreRemove(i);
 
   // Update calculation
   Compute();

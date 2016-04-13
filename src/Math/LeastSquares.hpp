@@ -48,9 +48,7 @@ Copyright_License {
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
-#include "Util/TrivialArray.hxx"
-
-#include <type_traits>
+#include "XYDataStore.hpp"
 
 /**
  * A solver for least squares problems
@@ -73,9 +71,9 @@ Copyright_License {
  *     (y_i - \hat{y}_i)^2
  * \f]
  */
-class LeastSquares
+class LeastSquares: public XYDataStore
 {
-  double sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
+  double sum_xi_2, sum_xi_yi;
 
   /**
   * \f[
@@ -90,55 +88,14 @@ class LeastSquares
   * \f]
   */
   double b;
-  double sum_error;
 
+  double sum_error;
   double rms_error;
   double max_error;
-  double sum_weights;
 
   double y_ave;
 
-protected:
-  double y_max;
-  double y_min;
-  double x_min;
-  double x_max;
-
-  unsigned sum_n;
-
-  struct Slot {
-    double x, y;
-
-#ifdef LEASTSQS_WEIGHT_STORE
-    double weight;
-#endif
-
-    Slot() = default;
-
-    constexpr
-    Slot(double _x, double _y, double _weight)
-      :x(_x), y(_y)
-#ifdef LEASTSQS_WEIGHT_STORE
-      , weight(_weight)
-#endif
-    {}
-  };
-
-  TrivialArray<Slot, 1000> slots;
-
 public:
-  bool IsEmpty() const {
-    return sum_n == 0;
-  }
-
-  bool HasResult() const {
-    return sum_n >= 2;
-  }
-
-  unsigned GetCount() const {
-    return sum_n;
-  }
-
   /**
    * Reset the LeastSquares calculator.
    */
@@ -146,26 +103,6 @@ public:
 
   double GetGradient() const {
     return m;
-  }
-
-  double GetMinX() const {
-    return x_min;
-  }
-
-  double GetMaxX() const {
-    return x_max;
-  }
-
-  double GetMiddleX() const {
-    return (x_min + x_max) / 2.;
-  }
-
-  double GetMinY() const {
-    return y_min;
-  }
-
-  double GetMaxY() const {
-    return y_max;
   }
 
   double GetAverageY() const {
@@ -182,10 +119,6 @@ public:
 
   double GetYAtMaxX() const {
     return GetYAt(GetMaxX());
-  }
-
-  const TrivialArray<Slot, 1000> &GetSlots() const {
-    return slots;
   }
 
   /**
