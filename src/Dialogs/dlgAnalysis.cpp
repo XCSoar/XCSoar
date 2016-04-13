@@ -45,6 +45,7 @@ Copyright_License {
 #include "Renderer/WindChartRenderer.hpp"
 #include "Renderer/CuRenderer.hpp"
 #include "Renderer/MacCreadyRenderer.hpp"
+#include "Renderer/VarioHistogramRenderer.hpp"
 #include "UIUtil/GestureManager.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
@@ -363,6 +364,11 @@ ChartControl::OnPaint(Canvas &canvas)
                      glide_computer.GetFlightStats(),
                      settings_computer.polar.glide_polar_task);
     break;
+  case AnalysisPage::VARIO_HISTOGRAM:
+    RenderVarioHistogram(canvas, rcgfx, chart_look,
+                         glide_computer.GetFlightStats(),
+                         settings_computer.polar.glide_polar_task);
+    break;
   case AnalysisPage::THERMAL_BAND:
   {
     OrderedTaskSettings otb;
@@ -483,6 +489,14 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
     info.SetText(sTmp);
+    SetCalcCaption(_T(""));
+    break;
+
+  case AnalysisPage::VARIO_HISTOGRAM:
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Vario Histogram"));
+    dialog.SetCaption(sTmp);
+    info.SetText(_T(""));
     SetCalcCaption(_T(""));
     break;
 
@@ -679,6 +693,7 @@ AnalysisWidget::OnCalcClicked()
     break;
 
   case AnalysisPage::THERMAL_BAND:
+  case AnalysisPage::VARIO_HISTOGRAM:
   case AnalysisPage::OLC:
   case AnalysisPage::COUNT:
     break;

@@ -539,6 +539,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
 	$(SRC)/Renderer/MacCreadyRenderer.cpp \
+    $(SRC)/Renderer/VarioHistogramRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \

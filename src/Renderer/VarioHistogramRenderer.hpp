@@ -21,38 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANALYSIS_DIALOG_HPP
-#define XCSOAR_ANALYSIS_DIALOG_HPP
+#ifndef VARIO_HISTOGRAM_RENDERER_HPP
+#define VARIO_HISTOGRAM_RENDERER_HPP
 
-struct Look;
-class SingleWindow;
-class FullBlackboard;
-class GlideComputer;
-class Airspaces;
-class RasterTerrain;
+#include <tchar.h>
 
-enum class AnalysisPage {
-  BAROGRAPH,
-  CLIMB,
-  THERMAL_BAND,
-  VARIO_HISTOGRAM,
-  TASK_SPEED,
-  WIND,
-  POLAR,
-  MACCREADY,
-  TEMPTRACE,
-  TASK,
-  OLC,
-  AIRSPACE,
-  COUNT
-};
+struct PixelRect;
+class Canvas;
+struct ChartLook;
+class GlidePolar;
+class FlightStatistics;
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
-                     const FullBlackboard &blackboard,
-                     GlideComputer &glide_computer,
-                     const Airspaces *airspaces,
-                     const RasterTerrain *terrain,
-                     AnalysisPage page=AnalysisPage::COUNT);
+RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
+                     const ChartLook &chart_look,
+                     const FlightStatistics &fs,
+                     const GlidePolar &glide_polar);
 
 #endif
