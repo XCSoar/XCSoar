@@ -34,6 +34,7 @@ Copyright_License {
 #include <tchar.h>
 #include <vector>
 
+class XYDataStore;
 class LeastSquares;
 class Canvas;
 class Brush;
@@ -65,10 +66,10 @@ public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
                 const PixelRect the_rc);
 
-  void DrawBarChart(const LeastSquares &lsdata);
-  void DrawFilledLineGraph(const LeastSquares &lsdata);
-  void DrawLineGraph(const LeastSquares &lsdata, const Pen &pen);
-  void DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style style);
+  void DrawBarChart(const XYDataStore &lsdata);
+  void DrawFilledLineGraph(const XYDataStore &lsdata);
+  void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen);
+  void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style);
   void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawLine(double xmin, double ymin,

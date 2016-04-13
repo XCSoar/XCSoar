@@ -292,7 +292,7 @@ ChartRenderer::DrawLine(const double xmin, const double ymin,
 }
 
 void
-ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
+ChartRenderer::DrawBarChart(const XYDataStore &lsdata)
 {
   if (x.unscaled || y.unscaled)
     return;
@@ -313,7 +313,7 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
 }
 
 void
-ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
+ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata)
 {
   const auto &slots = lsdata.GetSlots();
   assert(slots.size() >= 2);
@@ -334,7 +334,7 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 }
 
 void
-ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
+ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen)
 {
   const auto &slots = lsdata.GetSlots();
   assert(slots.size() >= 2);
@@ -352,7 +352,7 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 }
 
 void
-ChartRenderer::DrawLineGraph(const LeastSquares &lsdata,
+ChartRenderer::DrawLineGraph(const XYDataStore &lsdata,
                              ChartLook::Style style)
 {
   DrawLineGraph(lsdata, look.GetPen(style));
