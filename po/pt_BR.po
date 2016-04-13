@@ -5023,7 +5023,7 @@ msgid "Glide Polar"
 msgstr "Polar Planeio"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Registro temperatura"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

@@ -5193,7 +5193,7 @@ msgid "Glide Polar"
 msgstr "Polare"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Grafico Temperatura"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

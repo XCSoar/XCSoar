@@ -5179,7 +5179,7 @@ msgid "Glide Polar"
 msgstr "Biegunowa"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Wykres temperatury"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

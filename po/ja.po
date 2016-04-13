@@ -5099,7 +5099,7 @@ msgid "Glide Polar"
 msgstr "ポーラーカーブ"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "温度記録"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

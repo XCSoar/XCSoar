@@ -514,7 +514,7 @@ AnalysisWidget::Update()
 
   case AnalysisPage::TEMPTRACE:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
-                       _("Temp Trace"));
+                       _("Temperature Trace"));
     dialog.SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer.GetCuSonde());
     info.SetText(sTmp);

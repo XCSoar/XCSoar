@@ -5029,7 +5029,7 @@ msgid "Glide Polar"
 msgstr "Polára vetroňa"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Teplotná stopa"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

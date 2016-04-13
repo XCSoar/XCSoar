@@ -5103,7 +5103,7 @@ msgid "Glide Polar"
 msgstr "Polar de Planeo"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Traza Temporal"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

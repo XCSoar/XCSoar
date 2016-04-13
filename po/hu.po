@@ -5098,7 +5098,7 @@ msgid "Glide Polar"
 msgstr "Gép Poláris"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Hőmérséklet görbe"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

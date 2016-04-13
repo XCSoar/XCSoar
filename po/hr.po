@@ -4830,7 +4830,7 @@ msgid "Glide Polar"
 msgstr "polara"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "temperatura po visini"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

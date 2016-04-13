@@ -5120,7 +5120,7 @@ msgid "Glide Polar"
 msgstr "Поляра планера"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "График температуры"
 
 #: src/Dialogs/dlgAnalysis.cpp:517

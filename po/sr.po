@@ -4841,7 +4841,7 @@ msgid "Glide Polar"
 msgstr "Polarni klizač"
 
 #: src/Dialogs/dlgAnalysis.cpp:508
-msgid "Temp Trace"
+msgid "Temperature Trace"
 msgstr "Privr. trag"
 
 #: src/Dialogs/dlgAnalysis.cpp:517
