@@ -44,6 +44,7 @@ Copyright_License {
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/WindChartRenderer.hpp"
 #include "Renderer/CuRenderer.hpp"
+#include "Renderer/MacCreadyRenderer.hpp"
 #include "UIUtil/GestureManager.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
@@ -388,6 +389,10 @@ ChartControl::OnPaint(Canvas &canvas)
                      calculated.climb_history,
                      settings_computer.polar.glide_polar_task);
     break;
+    case AnalysisPage::MACCREADY:
+      RenderMacCready(canvas, rcgfx, chart_look,
+                      settings_computer.polar.glide_polar_task);
+    break;
   case AnalysisPage::TEMPTRACE:
     RenderTemperatureChart(canvas, rcgfx, chart_look,
                            glide_computer.GetCuSonde());
@@ -496,6 +501,14 @@ AnalysisWidget::Update()
     dialog.SetCaption(sTmp);
     GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
     info.SetText(sTmp);
+    SetCalcCaption(_("Settings"));
+    break;
+
+  case AnalysisPage::MACCREADY:
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("MacCready Speeds"));
+    dialog.SetCaption(sTmp);
+    info.SetText(_T(""));
     SetCalcCaption(_("Settings"));
     break;
 
@@ -654,6 +667,10 @@ AnalysisWidget::OnCalcClicked()
     break;
 
   case AnalysisPage::TEMPTRACE:
+    dlgBasicSettingsShowModal();
+    break;
+
+  case AnalysisPage::MACCREADY:
     dlgBasicSettingsShowModal();
     break;
 

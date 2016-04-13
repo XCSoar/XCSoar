@@ -21,37 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANALYSIS_DIALOG_HPP
-#define XCSOAR_ANALYSIS_DIALOG_HPP
+#ifndef XCSOAR_MACCREADY_RENDERER_HPP
+#define XCSOAR_MACCREADY_RENDERER_HPP
 
-struct Look;
-class SingleWindow;
-class FullBlackboard;
-class GlideComputer;
-class Airspaces;
-class RasterTerrain;
+#include <tchar.h>
 
-enum class AnalysisPage {
-  BAROGRAPH,
-  CLIMB,
-  THERMAL_BAND,
-  TASK_SPEED,
-  WIND,
-  POLAR,
-  MACCREADY,
-  TEMPTRACE,
-  TASK,
-  OLC,
-  AIRSPACE,
-  COUNT
-};
+struct PixelRect;
+class Canvas;
+struct ChartLook;
+class GlidePolar;
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
-                     const FullBlackboard &blackboard,
-                     GlideComputer &glide_computer,
-                     const Airspaces *airspaces,
-                     const RasterTerrain *terrain,
-                     AnalysisPage page=AnalysisPage::COUNT);
+RenderMacCready(Canvas &canvas, const PixelRect rc,
+                 const ChartLook &chart_look,
+                 const GlidePolar &glide_polar);
 
 #endif

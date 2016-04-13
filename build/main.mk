@@ -538,6 +538,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/GlidePolarRenderer.cpp \
 	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
+	$(SRC)/Renderer/MacCreadyRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
