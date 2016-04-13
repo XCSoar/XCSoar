@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/LeastSquares.hpp"
 #include "Math/ConvexFilter.hpp"
+#include "Math/Histogram.hpp"
 #include "Thread/Mutex.hpp"
 
 class FlightStatistics {
@@ -36,6 +37,8 @@ public:
   ConvexFilter altitude_ceiling;
   LeastSquares task_speed;
   LeastSquares altitude_terrain;
+  Histogram vario_circling_histogram;
+  Histogram vario_cruise_histogram;
   mutable Mutex mutex;
 
   void StartTask();
@@ -48,6 +51,7 @@ public:
   void AddClimbBase(double tflight, double alt);
   void AddClimbCeiling(double tflight, double alt);
   void AddThermalAverage(double v);
+  void AddClimbRate(double tflight, double vario, bool circling);
 
   void Reset();
 };

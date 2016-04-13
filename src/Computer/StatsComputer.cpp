@@ -78,6 +78,12 @@ StatsComputer::DoLogging(const MoreData &basic,
                                calculated.task_stats.inst_speed_slow);
   }
 
+  if (calculated.flight.flying) {
+    flightstats.AddClimbRate(calculated.flight.flight_time,
+                             calculated.average,
+                             calculated.turn_mode == CirclingMode::CLIMB);
+  }
+
   return true;
 }
 

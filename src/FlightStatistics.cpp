@@ -32,6 +32,8 @@ void FlightStatistics::Reset() {
   altitude_ceiling.Reset();
   task_speed.Reset();
   altitude_terrain.Reset();
+  vario_circling_histogram.Reset(-7.5,7.5);
+  vario_cruise_histogram.Reset(-7.5,7.5);
 }
 
 void
@@ -41,6 +43,8 @@ FlightStatistics::StartTask()
   // JMW clear thermal climb average on task start
   thermal_average.Reset();
   task_speed.Reset();
+  vario_circling_histogram.Clear();
+  vario_cruise_histogram.Clear();
 }
 
 void
@@ -124,4 +128,14 @@ FlightStatistics::AddThermalAverage(const double v)
 {
   ScopeLock lock(mutex);
   thermal_average.Update(v);
+}
+
+void
+FlightStatistics::AddClimbRate(const double tflight, const double vario, const bool circling)
+{
+  if (circling) {
+    vario_circling_histogram.UpdateHistogram(vario);
+  } else {
+    vario_cruise_histogram.UpdateHistogram(vario);
+  }
 }
