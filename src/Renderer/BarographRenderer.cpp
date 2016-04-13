@@ -39,7 +39,7 @@ void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
 {
   ScopeLock lock(fs.mutex);
-  if (!fs.altitude_ceiling.HasResult()) {
+  if (!fs.altitude_ceiling.HasResult() || fs.altitude_base.IsEmpty()) {
     sTmp[0] = _T('\0');
   } else if (fs.altitude_ceiling.GetCount() < 4) {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
@@ -166,6 +166,9 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.altitude.GetMinX());
+  if (!fs.altitude_ceiling.IsEmpty()) {
+    chart.ScaleYFromValue(fs.altitude_ceiling.GetMaxY());
+  }
 
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
@@ -183,10 +186,19 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
                   ChartLook::STYLE_THINDASHPAPER, 0.5, true);
   chart.DrawYGrid(Units::ToSysAltitude(1000),
                   ChartLook::STYLE_THINDASHPAPER, 1000, true);
-  chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_MEDIUMBLACK);
 
-  chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
-  chart.DrawTrend(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
+  if (fs.altitude_base.HasResult()) {
+    chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
+  } else if (!fs.altitude_base.IsEmpty()) {
+    chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
+  }
+  if (fs.altitude_ceiling.HasResult()) {
+    chart.DrawLineGraph(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
+  } else if (!fs.altitude_ceiling.IsEmpty()) {
+    chart.DrawTrend(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
+  }
+
+  chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_MEDIUMBLACK);
 
   chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("h"), Units::GetAltitudeName());

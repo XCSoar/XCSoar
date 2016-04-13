@@ -52,10 +52,21 @@ FlightStatistics::AddAltitudeTerrain(const double tflight, const double terraina
 }
 
 void
-FlightStatistics::AddAltitude(const double tflight, const double alt)
+FlightStatistics::AddAltitude(const double tflight, const double alt, const bool final_glide)
 {
   ScopeLock lock(mutex);
-  altitude.Update(std::max(0., tflight / 3600.), alt);
+
+  const double t = std::max(0., tflight / 3600);
+
+  altitude.Update(t, alt);
+
+  // update working ceiling immediately if above
+  if (!altitude_ceiling.IsEmpty() && (alt > altitude_ceiling.GetLastY()))
+    altitude_ceiling.UpdateConvexPositive(t, alt);
+
+  // update working base immediately if below and not in final glide
+  if (!altitude_base.IsEmpty() && (alt < altitude_base.GetLastY()) && !final_glide)
+    altitude_base.UpdateConvexNegative(t, alt);
 }
 
 double
@@ -90,17 +101,18 @@ FlightStatistics::AddClimbBase(const double tflight, const double alt)
 {
   ScopeLock lock(mutex);
 
-  if (!altitude_ceiling.IsEmpty())
-    // only update base if have already climbed, otherwise
-    // we will catch the takeoff height as the base.
-    altitude_base.Update(std::max(0., tflight) / 3600., alt);
+  // only add base after finished second climb, to avoid having the takeoff height
+  // as the base
+  //
+  if (altitude_ceiling.HasResult())
+    altitude_base.UpdateConvexNegative(std::max(0., tflight) / 3600, alt);
 }
 
 void
 FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
 {
   ScopeLock lock(mutex);
-  altitude_ceiling.Update(std::max(0., tflight) / 3600., alt);
+  altitude_ceiling.UpdateConvexPositive(std::max(0., tflight) / 3600, alt);
 }
 
 /**

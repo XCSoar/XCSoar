@@ -53,7 +53,7 @@ public:
   bool DoLogging(const MoreData &basic, const DerivedInfo &calculated);
 
 private:
-  void OnClimbBase(const DerivedInfo &calculated, double StartAlt);
+  void OnClimbBase(const DerivedInfo &calculated);
   void OnClimbCeiling(const DerivedInfo &calculated);
   void OnDepartedThermal(const DerivedInfo &calculated);
 
