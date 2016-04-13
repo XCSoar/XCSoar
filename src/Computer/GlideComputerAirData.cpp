@@ -365,6 +365,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   calculated.last_thermal.end_time = calculated.cruise_start_time;
   calculated.last_thermal.gain = gain;
   calculated.last_thermal.duration = duration;
+  calculated.last_thermal.start_altitude = calculated.climb_start_altitude_te + (basic.nav_altitude-basic.TE_altitude);
   calculated.last_thermal.CalculateLiftRate();
 
   if (!was_defined)

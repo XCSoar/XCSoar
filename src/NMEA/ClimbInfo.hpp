@@ -44,6 +44,9 @@ struct OneClimbInfo
   /** Altitude gained while in the thermal [m]. May be negative. */
   double gain;
 
+  /** Start altitude [m] */
+  double start_altitude;
+
   /** Average vertical speed in the thermal [m/s]. May be negative. */
   double lift_rate;
 
