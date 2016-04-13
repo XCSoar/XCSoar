@@ -74,6 +74,8 @@ WritePhase(TextWriter &writer, Phase &phase)
   object.WriteElement("circling_direction", JSON::WriteString,
                       FormatCirclingDirection(phase.circling_direction));
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)phase.alt_diff);
+  object.WriteElement("start_alt", JSON::WriteDouble, phase.start_alt);
+  object.WriteElement("end_alt", JSON::WriteDouble, phase.end_alt);
   object.WriteElement("distance", JSON::WriteInteger, (int)phase.distance);
   object.WriteElement("speed", JSON::WriteDouble, phase.GetSpeed());
   object.WriteElement("vario", JSON::WriteDouble, phase.GetVario());
@@ -102,6 +104,8 @@ WriteCruiseStats(TextWriter &writer, const Phase &stats)
   object.WriteElement("speed", JSON::WriteDouble, stats.GetSpeed());
   object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
   object.WriteElement("glide_rate", JSON::WriteDouble, stats.GetGlideRate());
+  object.WriteElement("start_alt", JSON::WriteDouble, stats.start_alt);
+  object.WriteElement("end_alt", JSON::WriteDouble, stats.end_alt);
   object.WriteElement("count", JSON::WriteInteger, stats.merges);
 }
 
