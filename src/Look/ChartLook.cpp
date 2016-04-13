@@ -37,6 +37,7 @@ ChartLook::Initialise()
   pens[STYLE_THINDASHPAPER].Create(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);
+  neg_brush.Create(COLOR_RED);
 
   int axis_label_size = std::max(8u, Layout::FontScale(6u));
   int axis_value_size = std::max(8u, Layout::FontScale(7u));

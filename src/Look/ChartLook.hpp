@@ -43,6 +43,7 @@ struct ChartLook {
   Pen pens[STYLE_COUNT];
 
   Brush bar_brush;
+  Brush neg_brush;
 
   /**
    * Font for miscellaneous labels in the chart.
