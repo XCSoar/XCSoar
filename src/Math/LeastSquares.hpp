@@ -223,6 +223,14 @@ private:
    * @param weight Weight of the new data point (optional)
    */
   void Add(double x, double y, double weight=1);
+
+  /**
+   * Remove data point to the values.
+   * This updates the least squares statistics but not x/y min/max.
+   * If weights aren't stored, this assumes weight = 1
+   */
+  void Remove(const unsigned i);
+
 };
 
 static_assert(std::is_trivial<LeastSquares>::value, "type is not trivial");

@@ -172,3 +172,33 @@ LeastSquares::Add(double x, double y, double weight)
   sum_xi_2 += Square(xw);
   sum_xi_yi += xw * yw;
 }
+
+void
+LeastSquares::Remove(const unsigned i)
+{
+  assert(i< sum_n);
+  const auto &pt = slots[i];
+
+  --sum_n;
+
+  // Remove weighted point
+  auto weight = 1;
+#ifdef LEASTSQS_WEIGHT_STORE
+  weight = pt.weight;
+#endif
+
+  sum_weights -= weight;
+
+  auto xw = pt.x * weight;
+  auto yw = pt.y * weight;
+
+  sum_xi -= xw;
+  sum_yi -= yw;
+  sum_xi_2 -= Square(xw);
+  sum_xi_yi -= xw * yw;
+
+  slots.remove(i);
+
+  // Update calculation
+  Compute();
+}
