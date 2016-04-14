@@ -33,9 +33,8 @@ void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                       const PixelRect rc)
 {
-  PixelPoint pos(Layout::Scale(19) + rc.top,
-                 rc.right - Layout::Scale(19));
-
+  PixelPoint pos(rc.right - Layout::Scale(19),
+                 Layout::Scale(19) + rc.top);
   Draw(canvas, screen_angle, pos);
 }
 
