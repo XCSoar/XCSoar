@@ -32,8 +32,7 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Task/TaskManager.hpp"
-#include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "TaskLegRenderer.hpp"
 
 void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
@@ -56,51 +55,6 @@ BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
                        _("Ceiling trend"),
                        (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
                        Units::GetAltitudeName());
-  }
-}
-
-static bool
-IsTaskLegVisible(const OrderedTaskPoint &tp)
-{
-  switch (tp.GetType()) {
-  case TaskPointType::START:
-    return tp.HasExited();
-
-  case TaskPointType::FINISH:
-  case TaskPointType::AAT:
-  case TaskPointType::AST:
-    return tp.HasEntered();
-
-  case TaskPointType::UNORDERED:
-    break;
-  }
-
-  gcc_unreachable();
-}
-
-static void
-DrawLegs(ChartRenderer &chart,
-         const TaskManager &task_manager,
-         const NMEAInfo& basic,
-         const DerivedInfo& calculated)
-{
-  const TaskStats &task_stats = calculated.ordered_task_stats;
-
-  if (!task_stats.start.task_started)
-    return;
-
-  const OrderedTask &task = task_manager.GetOrderedTask();
-  for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
-    const OrderedTaskPoint &tp = task.GetTaskPoint(i);
-    if (!IsTaskLegVisible(tp))
-      continue;
-
-    auto x = tp.GetEnteredState().time - calculated.flight.takeoff_time;
-    if (x >= 0) {
-      x /= 3600;
-      chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
-                     ChartLook::STYLE_REDTHICK);
-    }
   }
 }
 
@@ -129,7 +83,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
     canvas.SelectHollowBrush();
-    DrawLegs(chart, task, nmea_info, derived_info);
+    RenderTaskLegs(chart, task, nmea_info, derived_info);
   }
 
   canvas.SelectNullPen();
@@ -165,11 +119,6 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
     chart.ScaleYFromValue(fs.altitude_ceiling.GetMaxY());
   }
 
-  if (_task != nullptr) {
-    ProtectedTaskManager::Lease task(*_task);
-    DrawLegs(chart, task, nmea_info, derived_info);
-  }
-
   canvas.SelectNullPen();
   canvas.Select(cross_section_look.terrain_brush);
 
@@ -179,6 +128,11 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   chart.DrawXGrid(0.5, 0.5, true);
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
+
+  if (_task != nullptr) {
+    ProtectedTaskManager::Lease task(*_task);
+    RenderTaskLegs(chart, task, nmea_info, derived_info);
+  }
 
   if (fs.altitude_base.HasResult()) {
     chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
@@ -217,10 +171,11 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
 
-  DrawLegs(chart, task, nmea_info, derived_info);
-
   chart.DrawXGrid(0.5, 0.5, true);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, true);
+
+  RenderTaskLegs(chart, task, nmea_info, derived_info);
+
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
 

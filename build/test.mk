@@ -2245,6 +2245,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/GlidePolarInfoRenderer.cpp \
 	$(SRC)/Renderer/MacCreadyRenderer.cpp \
     $(SRC)/Renderer/VarioHistogramRenderer.cpp \
+	$(SRC)/Renderer/TaskLegRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
