@@ -132,6 +132,7 @@ FlightStatistics::AddThermalAverage(const double v)
 void
 FlightStatistics::AddClimbRate(const double tflight, const double vario, const bool circling)
 {
+  ScopeLock lock(mutex);
   if (circling) {
     vario_circling_histogram.UpdateHistogram(vario);
   } else {
