@@ -29,6 +29,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Util/StringFormat.hpp"
+#include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
+#include "Engine/Task/TaskManager.hpp"
+#include "TaskLegRenderer.hpp"
 
 void
 ClimbChartCaption(TCHAR *sTmp,
@@ -57,7 +61,10 @@ void
 RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  const ChartLook &chart_look,
                  const FlightStatistics &fs,
-                 const GlidePolar &glide_polar)
+                 const GlidePolar &glide_polar,
+                 const NMEAInfo &nmea_info,
+                 const DerivedInfo &derived_info,
+                 const TaskManager &task)
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
@@ -71,12 +78,16 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromData(fs.thermal_average);
   chart.ScaleYFromValue(MACCREADY + 0.5);
   chart.ScaleYFromValue(0);
+  chart.ScaleXFromData(fs.thermal_average);
 
-  chart.ScaleXFromValue(-1);
-  chart.ScaleXFromValue(fs.thermal_average.GetCount());
+  RenderTaskLegs(chart, task, nmea_info, derived_info);
 
+  chart.DrawXGrid(0.5, 0.5, true);
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, true);
-  chart.DrawBarChart(fs.thermal_average);
+
+  chart.DrawImpulseGraph(fs.thermal_average, ChartLook::STYLE_MEDIUMBLACK);
+
+  chart.DrawTrend(fs.thermal_average, ChartLook::STYLE_BLUETHIN);
 
   chart.DrawLine(0, MACCREADY,
                  fs.thermal_average.GetCount(), MACCREADY,
@@ -87,8 +98,6 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                            fs.thermal_average.GetGradient() - 1.),
                   MACCREADY);
 
-  chart.DrawTrendN(fs.thermal_average, ChartLook::STYLE_BLUETHIN);
-
-  chart.DrawXLabel(_T("n"));
+  chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 }

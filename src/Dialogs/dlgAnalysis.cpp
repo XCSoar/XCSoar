@@ -361,9 +361,13 @@ ChartControl::OnPaint(Canvas &canvas)
                     basic, calculated, protected_task_manager);
     break;
   case AnalysisPage::CLIMB:
-    RenderClimbChart(canvas, rcgfx, chart_look,
-                     glide_computer.GetFlightStats(),
-                     settings_computer.polar.glide_polar_task);
+    if (protected_task_manager != NULL) {
+      ProtectedTaskManager::Lease task(*protected_task_manager);
+      RenderClimbChart(canvas, rcgfx, chart_look,
+                       glide_computer.GetFlightStats(),
+                       settings_computer.polar.glide_polar_task,
+                       basic, calculated, task);
+    }
     break;
   case AnalysisPage::VARIO_HISTOGRAM:
     RenderVarioHistogram(canvas, rcgfx, chart_look,

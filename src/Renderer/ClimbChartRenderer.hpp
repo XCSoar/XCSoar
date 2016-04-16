@@ -31,6 +31,9 @@ class Canvas;
 struct ChartLook;
 class GlidePolar;
 class FlightStatistics;
+struct NMEAInfo;
+struct DerivedInfo;
+class TaskManager;
 
 void
 ClimbChartCaption(TCHAR *buffer,
@@ -40,6 +43,9 @@ void
 RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  const ChartLook &chart_look,
                  const FlightStatistics &fs,
-                 const GlidePolar &glide_polar);
+                 const GlidePolar &glide_polar,
+                 const NMEAInfo &nmea_info,
+                 const DerivedInfo &derived_info,
+                 const TaskManager &task);
 
 #endif

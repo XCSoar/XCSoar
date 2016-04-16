@@ -41,7 +41,7 @@ FlightStatistics::StartTask()
 {
   ScopeLock lock(mutex);
   // JMW clear thermal climb average on task start
-  thermal_average.Reset();
+  //  thermal_average.Reset();
   vario_circling_histogram.Clear();
   vario_cruise_histogram.Clear();
 }
@@ -127,7 +127,7 @@ FlightStatistics::AddThermalAverage(const double tflight_start,
                                     const double tflight_end, const double v)
 {
   ScopeLock lock(mutex);
-  thermal_average.Update(v);
+  thermal_average.Update(std::max(0., tflight_start) / 3600, v);
 }
 
 void
