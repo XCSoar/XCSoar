@@ -96,7 +96,7 @@ void
 FlightStatistics::AddTaskSpeed(const double tflight, const double val)
 {
   ScopeLock lock(mutex);
-  task_speed.Update(tflight / 3600, std::max(0., val));
+  task_speed.Update(tflight / 3600, val);
 }
 
 void
