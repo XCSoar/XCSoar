@@ -172,9 +172,14 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const OrderedTaskSettings *ordered_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
+
   if (is_map) {
     chart.padding_bottom = 0;
     chart.padding_left = 0;
+  } else if (calculated.thermal_band.max_thermal_height <= 0) {
+    // no climbs below safety height
+    chart.DrawNoData();
+    return;
   }
   ScaleChart(calculated, settings_computer, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
