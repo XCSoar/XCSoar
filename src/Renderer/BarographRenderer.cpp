@@ -119,6 +119,11 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
     chart.ScaleYFromValue(fs.altitude_ceiling.GetMaxY());
   }
 
+  if (_task != nullptr) {
+    ProtectedTaskManager::Lease task(*_task);
+    RenderTaskLegs(chart, task, nmea_info, derived_info);
+  }
+
   canvas.SelectNullPen();
   canvas.Select(cross_section_look.terrain_brush);
 
@@ -128,11 +133,6 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   chart.DrawXGrid(0.5, 0.5, true);
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
-
-  if (_task != nullptr) {
-    ProtectedTaskManager::Lease task(*_task);
-    RenderTaskLegs(chart, task, nmea_info, derived_info);
-  }
 
   if (fs.altitude_base.HasResult()) {
     chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_BLUETHIN);

@@ -52,10 +52,10 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
 
+  RenderTaskLegs(chart, task, nmea_info, derived_info);
+
   chart.DrawXGrid(0.5, 0.5, true);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, true);
-
-  RenderTaskLegs(chart, task, nmea_info, derived_info);
 
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
