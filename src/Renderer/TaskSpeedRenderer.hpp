@@ -21,41 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_BAROGRAPH_RENDERER_HPP
-#define XCSOAR_BAROGRAPH_RENDERER_HPP
-
-#include <tchar.h>
+#ifndef TASKSPEED_RENDERER_HPP
+#define TASKSPEED_RENDERER_HPP
 
 struct PixelRect;
 class Canvas;
 struct ChartLook;
-struct CrossSectionLook;
 class FlightStatistics;
 struct NMEAInfo;
 struct DerivedInfo;
-class ProtectedTaskManager;
 class TaskManager;
 
 void
-BarographCaption(TCHAR *buffer, const FlightStatistics &fs);
-
-void
-RenderBarographSpark(Canvas &canvas, const PixelRect rc,
-                     const ChartLook &chart_look,
-                     const CrossSectionLook &cross_section_look,
-                     bool inverse,
-                     const FlightStatistics &fs,
-                     const NMEAInfo &nmea_info,
-                     const DerivedInfo &derived_info,
-                     const ProtectedTaskManager *_task);
-
-void
-RenderBarograph(Canvas &canvas, const PixelRect rc,
-                const ChartLook &chart_look,
-                const CrossSectionLook &cross_section_look,
-                const FlightStatistics &fs,
-                const NMEAInfo &nmea_info,
-                const DerivedInfo &derived_info,
-                const ProtectedTaskManager *_task);
+RenderSpeed(Canvas &canvas, const PixelRect rc,
+            const ChartLook &chart_look,
+            const FlightStatistics &fs,
+            const NMEAInfo &nmea_info,
+            const DerivedInfo &derived_info,
+            const TaskManager &task);
 
 #endif

@@ -151,34 +151,3 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }
 
-void
-RenderSpeed(Canvas &canvas, const PixelRect rc,
-            const ChartLook &chart_look,
-            const FlightStatistics &fs,
-            const NMEAInfo &nmea_info,
-            const DerivedInfo &derived_info,
-            const TaskManager &task)
-{
-  ChartRenderer chart(chart_look, canvas, rc);
-
-  if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
-    chart.DrawNoData();
-    return;
-  }
-
-  chart.ScaleXFromData(fs.task_speed);
-  chart.ScaleYFromData(fs.task_speed);
-  chart.ScaleYFromValue(0);
-  chart.ScaleXFromValue(fs.task_speed.GetMinX());
-
-  chart.DrawXGrid(0.5, 0.5, true);
-  chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, true);
-
-  RenderTaskLegs(chart, task, nmea_info, derived_info);
-
-  chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
-  chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
-
-  chart.DrawXLabel(_T("t"), _T("hr"));
-  chart.DrawYLabel(_T("h"), Units::GetTaskSpeedName());
-}

@@ -542,6 +542,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/MacCreadyRenderer.cpp \
     $(SRC)/Renderer/VarioHistogramRenderer.cpp \
 	$(SRC)/Renderer/TaskLegRenderer.cpp \
+	$(SRC)/Renderer/TaskSpeedRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \

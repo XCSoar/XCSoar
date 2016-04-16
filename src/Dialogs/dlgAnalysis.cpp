@@ -46,6 +46,7 @@ Copyright_License {
 #include "Renderer/CuRenderer.hpp"
 #include "Renderer/MacCreadyRenderer.hpp"
 #include "Renderer/VarioHistogramRenderer.hpp"
+#include "Renderer/TaskSpeedRenderer.hpp"
 #include "UIUtil/GestureManager.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
