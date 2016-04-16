@@ -79,6 +79,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(MACCREADY + 0.5);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromData(fs.thermal_average);
+  chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
 
   RenderTaskLegs(chart, task, nmea_info, derived_info);
 

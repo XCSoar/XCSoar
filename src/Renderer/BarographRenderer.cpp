@@ -115,6 +115,8 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.altitude.GetMinX());
+  chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
+
   if (!fs.altitude_ceiling.IsEmpty()) {
     chart.ScaleYFromValue(fs.altitude_ceiling.GetMaxY());
   }
