@@ -51,7 +51,8 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromData(fs.task_speed);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
-  chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
+  if (derived_info.flight.flying)
+    chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
 
   RenderTaskLegs(chart, task, nmea_info, derived_info);
 

@@ -79,7 +79,8 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(MACCREADY + 0.5);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromData(fs.thermal_average);
-  chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
+  if (derived_info.flight.flying)
+    chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
 
   RenderTaskLegs(chart, task, nmea_info, derived_info);
 
@@ -94,6 +95,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  fs.thermal_average.GetCount(), MACCREADY,
                  ChartLook::STYLE_REDTHICK);
 
+  // JMW: fix location of this
   chart.DrawLabel(_T("MC"),
                   std::max(0.5,
                            fs.thermal_average.GetGradient() - 1.),
