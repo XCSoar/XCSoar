@@ -39,6 +39,7 @@ ChartLook::Initialise()
 
   bar_brush.Create(COLOR_GREEN);
   neg_brush.Create(COLOR_RED);
+  blank_brush.Create(Color(0xD0, 0xD0, 0xD0));
 
   int axis_label_size = std::max(8u, Layout::FontScale(6u));
   int axis_value_size = std::max(8u, Layout::FontScale(7u));

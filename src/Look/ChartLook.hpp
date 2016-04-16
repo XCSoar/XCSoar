@@ -45,6 +45,7 @@ struct ChartLook {
 
   Brush bar_brush;
   Brush neg_brush;
+  Brush blank_brush;
 
   /**
    * Font for miscellaneous labels in the chart.

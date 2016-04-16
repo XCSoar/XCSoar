@@ -104,6 +104,9 @@ public:
   void DrawLabel(const TCHAR *text, double xv, double yv);
   void DrawNoData(const TCHAR *text = _("No data"));
 
+  void DrawBlankRectangle(double x_min, double y_min,
+                          double x_max, double y_max);
+
   double GetYMin() const { return y.min; }
   double GetYMax() const { return y.max; }
   double GetXMin() const { return x.min; }

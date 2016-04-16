@@ -518,3 +518,13 @@ ChartRenderer::DrawDot(const double x, const double y, const unsigned _width)
   canvas.SelectNullPen();
   canvas.DrawTriangleFan(line, 4);
 }
+
+void
+ChartRenderer::DrawBlankRectangle(double x_min, double y_min,
+                                  double x_max, double y_max)
+{
+  if (x.unscaled || y.unscaled)
+    return;
+  canvas.Select(look.blank_brush);
+  canvas.Rectangle(ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max));
+}
