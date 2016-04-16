@@ -528,3 +528,24 @@ ChartRenderer::DrawBlankRectangle(double x_min, double y_min,
   canvas.Select(look.blank_brush);
   canvas.Rectangle(ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max));
 }
+
+void
+ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen)
+{
+  const auto &slots = lsdata.GetSlots();
+  assert(slots.size() >= 1);
+
+  canvas.Select(pen);
+  for (const auto &i : slots) {
+    auto pt_base = ToScreen(i.x, y.min);
+    auto pt_top = ToScreen(i.x, i.y);
+    canvas.DrawLine(pt_base, pt_top);
+  }
+}
+
+void
+ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata,
+                                ChartLook::Style style)
+{
+  DrawImpulseGraph(lsdata, look.GetPen(style));
+}

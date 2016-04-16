@@ -82,6 +82,8 @@ public:
   void DrawFilledY(const std::vector<std::pair<double, double>> &vals, const Brush &brush,
                    const Pen *pen=nullptr);
   void DrawDot(double x, double y, const unsigned width);
+  void DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen);
+  void DrawImpulseGraph(const XYDataStore &lsdata, ChartLook::Style style);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
