@@ -90,7 +90,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 
   // no thermalling has been done above safety height
-  if (calculated.thermal_band.max_thermal_height <= 0)
+  if (thermal_band.max_thermal_height <= 0)
     return;
 
   // calculate averages
@@ -109,7 +109,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
       // height of this thermal point [0,mth]
       // requires 5 items in bucket before displaying, to eliminate kinks
       auto wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
-      ht[numtherm] = i * calculated.thermal_band.max_thermal_height 
+      ht[numtherm] = i * thermal_band.max_thermal_height
         / ThermalBandInfo::N_BUCKETS;
       Wt[numtherm] = wthis;
       Wmax = std::max(Wmax, wthis);
