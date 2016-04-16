@@ -108,19 +108,20 @@ StatsComputer::OnDepartedThermal(const DerivedInfo &calculated)
 {
   assert(calculated.last_thermal.IsDefined());
 
-  flightstats.AddThermalAverage(calculated.last_thermal.lift_rate);
+  auto t_start = calculated.last_thermal.start_time - calculated.flight.takeoff_time;
+  auto t_end = calculated.last_thermal.end_time - calculated.flight.takeoff_time;
+
+  flightstats.AddThermalAverage(t_start, t_end, calculated.last_thermal.lift_rate);
 
   // ignore failed climbs
   if (calculated.last_thermal.gain<= 0)
     return;
 
-  flightstats.AddClimbCeiling(calculated.last_thermal.end_time -
-                              calculated.flight.takeoff_time,
-                              calculated.last_thermal.gain + calculated.last_thermal.start_altitude);
+  flightstats.AddClimbCeiling(t_end,
+                              calculated.last_thermal.gain
+                              + calculated.last_thermal.start_altitude);
 
-  flightstats.AddClimbBase(calculated.last_thermal.start_time -
-                           calculated.flight.takeoff_time,
-                           calculated.last_thermal.start_altitude);
+  flightstats.AddClimbBase(t_start, calculated.last_thermal.start_altitude);
 }
 
 void

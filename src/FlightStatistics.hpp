@@ -50,7 +50,7 @@ public:
   void AddTaskSpeed(double tflight, double val);
   void AddClimbBase(double tflight, double alt);
   void AddClimbCeiling(double tflight, double alt);
-  void AddThermalAverage(double v);
+  void AddThermalAverage(double tflight_start, double tflight_end, double v);
   void AddClimbRate(double tflight, double vario, bool circling);
 
   void Reset();

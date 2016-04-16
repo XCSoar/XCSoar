@@ -123,7 +123,8 @@ FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
  * @param v Average climb speed of the last thermal
  */
 void
-FlightStatistics::AddThermalAverage(const double v)
+FlightStatistics::AddThermalAverage(const double tflight_start,
+                                    const double tflight_end, const double v)
 {
   ScopeLock lock(mutex);
   thermal_average.Update(v);
