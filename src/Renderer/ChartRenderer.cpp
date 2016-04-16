@@ -373,7 +373,6 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, bool draw_units)
 {
   assert(tic_step > 0);
 
-  canvas.Select(look.GetPen(ChartLook::STYLE_THINDASHPAPER));
   canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
@@ -400,8 +399,12 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, bool draw_units)
     const int xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
-    // STYLE_THINDASHPAPER
     if (xmin >= rc.left + padding_left && xmin <= rc.right) {
+      if (xval == 0) {
+        canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
+      } else {
+        canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
+      }
       canvas.DrawLine(line[0], line[1]);
 
       if (draw_units && xmin >= next_text) {
@@ -422,7 +425,6 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, bool draw_units)
 {
   assert(tic_step > 0);
 
-  canvas.Select(look.GetPen(ChartLook::STYLE_THINDASHPAPER));
   canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
@@ -445,8 +447,12 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, bool draw_units)
     const int ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
-    // STYLE_THINDASHPAPER
     if (ymin >= rc.top && ymin <= rc.bottom - padding_bottom) {
+      if (yval == 0) {
+        canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
+      } else {
+        canvas.Select(look.GetPen(ChartLook::STYLE_GRID));
+      }
       canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
