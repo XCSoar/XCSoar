@@ -70,6 +70,13 @@ RenderTaskLegs(ChartRenderer &chart,
     auto x = tp.GetEnteredState().time - calculated.flight.takeoff_time;
     if (x >= 0) {
       x /= 3600;
+      if (i==0) {
+        chart.DrawBlankRectangle(chart.GetXMin(), chart.GetYMin(),
+                                 x, chart.GetYMax());
+      } else if (i+1 == task.TaskSize()) {
+        chart.DrawBlankRectangle(x, chart.GetYMin(),
+                                 chart.GetXMax(), chart.GetYMax());
+      }
       chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
                      ChartLook::STYLE_REDTHICK);
     }
