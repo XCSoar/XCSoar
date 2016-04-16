@@ -42,7 +42,6 @@ FlightStatistics::StartTask()
   ScopeLock lock(mutex);
   // JMW clear thermal climb average on task start
   thermal_average.Reset();
-  task_speed.Reset();
   vario_circling_histogram.Clear();
   vario_cruise_histogram.Clear();
 }

@@ -82,17 +82,12 @@ static void
 DrawLegs(ChartRenderer &chart,
          const TaskManager &task_manager,
          const NMEAInfo& basic,
-         const DerivedInfo& calculated,
-         const bool task_relative)
+         const DerivedInfo& calculated)
 {
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
   if (!task_stats.start.task_started)
     return;
-
-  const auto start_time = task_relative
-    ? basic.time - task_stats.total.time_elapsed
-    : calculated.flight.takeoff_time;
 
   const OrderedTask &task = task_manager.GetOrderedTask();
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
@@ -100,7 +95,7 @@ DrawLegs(ChartRenderer &chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    auto x = tp.GetEnteredState().time - start_time;
+    auto x = tp.GetEnteredState().time - calculated.flight.takeoff_time;
     if (x >= 0) {
       x /= 3600;
       chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
@@ -134,7 +129,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
     canvas.SelectHollowBrush();
-    DrawLegs(chart, task, nmea_info, derived_info, false);
+    DrawLegs(chart, task, nmea_info, derived_info);
   }
 
   canvas.SelectNullPen();
@@ -172,7 +167,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
-    DrawLegs(chart, task, nmea_info, derived_info, false);
+    DrawLegs(chart, task, nmea_info, derived_info);
   }
 
   canvas.SelectNullPen();
@@ -222,7 +217,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
 
-  DrawLegs(chart, task, nmea_info, derived_info, true);
+  DrawLegs(chart, task, nmea_info, derived_info);
 
   chart.DrawXGrid(0.5, 0.5, true);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, true);
