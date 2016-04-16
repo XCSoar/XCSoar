@@ -182,10 +182,8 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   canvas.SelectWhitePen();
   canvas.SelectWhiteBrush();
 
-  chart.DrawXGrid(0.5,
-                  ChartLook::STYLE_THINDASHPAPER, 0.5, true);
-  chart.DrawYGrid(Units::ToSysAltitude(1000),
-                  ChartLook::STYLE_THINDASHPAPER, 1000, true);
+  chart.DrawXGrid(0.5, 0.5, true);
+  chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
 
   if (fs.altitude_base.HasResult()) {
     chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
@@ -226,10 +224,8 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   DrawLegs(chart, task, nmea_info, derived_info, true);
 
-  chart.DrawXGrid(0.5,
-                  ChartLook::STYLE_THINDASHPAPER, 0.5, true);
-  chart.DrawYGrid(Units::ToSysTaskSpeed(10),
-                  ChartLook::STYLE_THINDASHPAPER, 10, true);
+  chart.DrawXGrid(0.5, 0.5, true);
+  chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, true);
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
 

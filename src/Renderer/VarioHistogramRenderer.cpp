@@ -77,8 +77,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawLine(s, 0, s, scale, ChartLook::STYLE_MEDIUMBLACK);
 
   // draw labels and other overlays
-  chart.DrawXGrid(Units::ToSysVSpeed(1),
-                  ChartLook::STYLE_THINDASHPAPER, 1, true);
+  chart.DrawXGrid(Units::ToSysVSpeed(1), 1, true);
 
   chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());
 

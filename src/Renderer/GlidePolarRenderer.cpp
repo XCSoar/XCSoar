@@ -79,10 +79,8 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromValue(glide_polar.GetVMin() * 0.8);
   chart.ScaleXFromValue(glide_polar.GetVMax() + 2);
 
-  chart.DrawXGrid(Units::ToSysSpeed(10),
-                  ChartLook::STYLE_THINDASHPAPER, 10, true);
-  chart.DrawYGrid(Units::ToSysVSpeed(1),
-                  ChartLook::STYLE_THINDASHPAPER, 1, true);
+  chart.DrawXGrid(Units::ToSysSpeed(10), 10, true);
+  chart.DrawYGrid(Units::ToSysVSpeed(1), 1, true);
 
   // draw dolphin speed command
   {

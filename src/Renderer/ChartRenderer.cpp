@@ -369,19 +369,11 @@ ChartRenderer::FormatTicText(TCHAR *text, const double val, const double step)
 }
 
 void
-ChartRenderer::DrawXGrid(const double tic_step, ChartLook::Style style,
-                         const double unit_step, bool draw_units)
-{
-  DrawXGrid(tic_step, look.GetPen(style), unit_step, draw_units);
-}
-
-void
-ChartRenderer::DrawXGrid(double tic_step, const Pen &pen,
-                         double unit_step, bool draw_units)
+ChartRenderer::DrawXGrid(double tic_step, double unit_step, bool draw_units)
 {
   assert(tic_step > 0);
 
-  canvas.Select(pen);
+  canvas.Select(look.GetPen(ChartLook::STYLE_THINDASHPAPER));
   canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
@@ -426,19 +418,11 @@ ChartRenderer::DrawXGrid(double tic_step, const Pen &pen,
 }
 
 void
-ChartRenderer::DrawYGrid(const double tic_step, ChartLook::Style style,
-                         const double unit_step, bool draw_units)
-{
-  DrawYGrid(tic_step, look.GetPen(style), unit_step, draw_units);
-}
-
-void
-ChartRenderer::DrawYGrid(double tic_step, const Pen &pen,
-                         double unit_step, bool draw_units)
+ChartRenderer::DrawYGrid(double tic_step, double unit_step, bool draw_units)
 {
   assert(tic_step > 0);
 
-  canvas.Select(pen);
+  canvas.Select(look.GetPen(ChartLook::STYLE_THINDASHPAPER));
   canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 

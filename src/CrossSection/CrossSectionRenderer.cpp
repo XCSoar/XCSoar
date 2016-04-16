@@ -167,10 +167,8 @@ CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 {
   canvas.SetTextColor(look.text_color);
 
-  chart.DrawXGrid(Units::ToSysDistance(5),
-                  look.grid_pen, 5, true);
-  chart.DrawYGrid(Units::ToSysAltitude(1000),
-                  look.grid_pen, 1000, true);
+  chart.DrawXGrid(Units::ToSysDistance(5),5, true);
+  chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
 
   chart.DrawXLabel(_T("D"), Units::GetDistanceName());
   chart.DrawYLabel(_T("h"), Units::GetAltitudeName());

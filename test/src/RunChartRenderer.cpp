@@ -94,12 +94,10 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
     renderer.DrawLine(0, 10, 100, 100,
                       look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 
-    renderer.DrawXGrid(20, look.GetPen(ChartLook::STYLE_THINDASHPAPER),
-                       20, true);
+    renderer.DrawXGrid(20, 20, true);
 
-    renderer.DrawYGrid(20, look.GetPen(ChartLook::STYLE_THINDASHPAPER),
-                       20, true);
-}
+    renderer.DrawYGrid(20, 20, true);
+  }
 }
 
 class TestWindow : public SingleWindow,

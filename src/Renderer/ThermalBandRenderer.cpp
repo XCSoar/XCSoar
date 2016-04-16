@@ -181,11 +181,8 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                    chart, task_props, false, ordered_props);
 
   if (!is_map) {
-    chart.DrawXGrid(Units::ToSysVSpeed(1),
-                    ChartLook::STYLE_THINDASHPAPER, 1, true);
-    chart.DrawYGrid(Units::ToSysAltitude(1000),
-                    ChartLook::STYLE_THINDASHPAPER,
-                    1000, true);
+    chart.DrawXGrid(Units::ToSysVSpeed(1), 1, true);
+    chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
     chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());
     chart.DrawYLabel(_T("h AGL"), Units::GetAltitudeName());
   }

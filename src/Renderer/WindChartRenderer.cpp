@@ -84,10 +84,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleYFromData(windstats_mag);
 
-  chart.DrawXGrid(Units::ToSysSpeed(5),
-                  ChartLook::STYLE_THINDASHPAPER, 5, true);
-  chart.DrawYGrid(Units::ToSysAltitude(1000),
-                  ChartLook::STYLE_THINDASHPAPER, 1000, true);
+  chart.DrawXGrid(Units::ToSysSpeed(5), 5, true);
+  chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
   chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_MEDIUMBLACK);
 
 #define WINDVECTORMAG 25

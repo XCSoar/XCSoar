@@ -75,8 +75,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromValue(-1);
   chart.ScaleXFromValue(fs.thermal_average.GetCount());
 
-  chart.DrawYGrid(Units::ToSysVSpeed(1),
-                  ChartLook::STYLE_THINDASHPAPER, 1, true);
+  chart.DrawYGrid(Units::ToSysVSpeed(1), 1, true);
   chart.DrawBarChart(fs.thermal_average);
 
   chart.DrawLine(0, MACCREADY,
