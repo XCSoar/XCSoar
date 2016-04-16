@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/ClimbHistory.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Util/StaticString.hxx"
+#include "GlidePolarInfoRenderer.hpp"
 
 #include <stdio.h>
 
@@ -140,27 +141,5 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawXLabel(_T("V"), Units::GetSpeedName());
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
-  canvas.Select(chart_look.label_font);
-
-  StaticString<80> text;
-  StaticString<20> value;
-  canvas.SetBackgroundTransparent();
-
-  FormatUserMass(glide_polar.GetTotalMass(), value.buffer(), true);
-
-  text.Format(_T("%s: %s"), _("Mass"), value.c_str());
-  canvas.DrawText(rc.left + Layout::Scale(30),
-                  rc.bottom - Layout::Scale(55),
-                  text);
-
-  double wl = glide_polar.GetWingLoading();
-  if (wl != 0) {
-    FormatUserWingLoading(wl, value.buffer(), true);
-
-    text.Format(_T("%s: %s"), _("Wing loading"), value.c_str());
-
-    canvas.DrawText(rc.left + Layout::Scale(30),
-                    rc.bottom - Layout::Scale(40),
-                    text);
-  }
+  RenderGlidePolarInfo(canvas, rc, chart_look, glide_polar);
 }

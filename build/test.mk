@@ -2242,6 +2242,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/BarographRenderer.cpp \
 	$(SRC)/Renderer/ClimbChartRenderer.cpp \
 	$(SRC)/Renderer/GlidePolarRenderer.cpp \
+	$(SRC)/Renderer/GlidePolarInfoRenderer.cpp \
 	$(SRC)/Renderer/MacCreadyRenderer.cpp \
     $(SRC)/Renderer/VarioHistogramRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \

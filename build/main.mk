@@ -536,6 +536,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/BarographRenderer.cpp \
 	$(SRC)/Renderer/ClimbChartRenderer.cpp \
 	$(SRC)/Renderer/GlidePolarRenderer.cpp \
+	$(SRC)/Renderer/GlidePolarInfoRenderer.cpp \
 	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
 	$(SRC)/Renderer/MacCreadyRenderer.cpp \

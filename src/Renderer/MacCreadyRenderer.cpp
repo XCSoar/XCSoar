@@ -30,6 +30,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Util/StaticString.hxx"
+#include "GlidePolarInfoRenderer.hpp"
 
 #define MAX_MACCREADY 5.2
 #define STEPS_MACCREADY 25
@@ -86,27 +87,5 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
   chart.DrawYLabel(_T("V"), Units::GetSpeedName());
   chart.DrawXLabel(_T("MC"), Units::GetVerticalSpeedName());
 
-  canvas.Select(chart_look.label_font);
-
-  StaticString<80> text;
-  StaticString<20> value;
-  canvas.SetBackgroundTransparent();
-
-  FormatUserMass(glide_polar.GetTotalMass(), value.buffer(), true);
-
-  text.Format(_T("%s: %s"), _("Mass"), value.c_str());
-  canvas.DrawText((rc.left + rc.right)/2,
-                  rc.bottom - Layout::Scale(55),
-                  text);
-
-  double wl = glide_polar.GetWingLoading();
-  if (wl != 0) {
-    FormatUserWingLoading(wl, value.buffer(), true);
-
-    text.Format(_T("%s: %s"), _("Wing loading"), value.c_str());
-
-    canvas.DrawText((rc.left + rc.right)/2,
-                    rc.bottom - Layout::Scale(40),
-                    text);
-  }
+  RenderGlidePolarInfo(canvas, rc, chart_look, glide_polar);
 }
