@@ -29,6 +29,7 @@ Copyright_License {
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Language/Language.hpp"
 
 
 static bool
@@ -61,6 +62,8 @@ RenderTaskLegs(ChartRenderer &chart,
   if (!task_stats.start.task_started)
     return;
 
+  TCHAR sTmp[5];
+
   const OrderedTask &task = task_manager.GetOrderedTask();
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
     const OrderedTaskPoint &tp = task.GetTaskPoint(i);
@@ -78,7 +81,10 @@ RenderTaskLegs(ChartRenderer &chart,
                                  chart.GetXMax(), chart.GetYMax());
       }
       chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
-                     ChartLook::STYLE_REDTHICK);
+                     ChartLook::STYLE_GRIDZERO);
+
+      StringFormatUnsafe(sTmp, _T("%d"), i);
+      chart.DrawLabel(sTmp, x, (chart.GetYMax() + chart.GetYMin())/2);
     }
   }
 }
