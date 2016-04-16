@@ -522,7 +522,8 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("MacCready Speeds"));
     dialog.SetCaption(sTmp);
-    info.SetText(_T(""));
+    MacCreadyCaption(sTmp, settings_computer.polar.glide_polar_task);
+    info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
 

@@ -32,6 +32,9 @@ struct ChartLook;
 class GlidePolar;
 
 void
+MacCreadyCaption(TCHAR *sTmp, const GlidePolar &glide_polar);
+
+void
 RenderMacCready(Canvas &canvas, const PixelRect rc,
                  const ChartLook &chart_look,
                  const GlidePolar &glide_polar);

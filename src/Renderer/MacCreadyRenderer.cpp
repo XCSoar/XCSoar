@@ -48,6 +48,25 @@ static double AverageSpeed(const GlidePolar &gp)
 }
 
 void
+MacCreadyCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
+{
+  if (!glide_polar.IsValid()) {
+    *sTmp = _T('\0');
+    return;
+  }
+
+  _stprintf(sTmp,
+            _T("%s: %d %s\r\n%s: %d %s"),
+            _("Vopt"),
+            (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
+            Units::GetSpeedName(),
+            _("Vave"),
+            (int)Units::ToUserTaskSpeed(AverageSpeed(glide_polar)),
+            Units::GetTaskSpeedName());
+}
+
+
+void
 RenderMacCready(Canvas &canvas, const PixelRect rc,
                  const ChartLook &chart_look,
                  const GlidePolar &glide_polar)
