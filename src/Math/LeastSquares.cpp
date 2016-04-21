@@ -170,7 +170,7 @@ LeastSquares::Remove(const unsigned i)
 
   const auto &pt = slots[i];
   // Remove weighted point
-  auto weight = 1;
+  double weight = 1;
 #ifdef LEASTSQS_WEIGHT_STORE
   weight = pt.weight;
 #endif
