@@ -33,6 +33,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
+#include "GradientRenderer.hpp"
 
 void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
@@ -109,6 +110,10 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
     chart.DrawNoData();
     return;
   }
+
+  DrawVerticalGradient(canvas, chart.GetChartRect(),
+                       cross_section_look.sky_color, cross_section_look.background_color,
+                       cross_section_look.background_color);
 
   chart.ScaleXFromData(fs.altitude);
   chart.ScaleYFromData(fs.altitude);
