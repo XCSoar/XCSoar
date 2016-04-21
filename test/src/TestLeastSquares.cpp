@@ -26,7 +26,9 @@
 #include <stdio.h>
 #include <math.h>
 
-void ellipse(const LeastSquares& ls) {
+static void
+ellipse(const LeastSquares& ls)
+{
   /*
     A = a b = cov(x,x)   cov(x,y)
     c d   cov(x,y)   cov(y,y)
@@ -88,7 +90,8 @@ void ellipse(const LeastSquares& ls) {
   printf("ellipse %g %g %g\n", angle, halfmajor, halfminor);
 }
 
-bool LSTest1(double w)
+static bool
+LSTest1(double w)
 {
   LeastSquares ls;
 
