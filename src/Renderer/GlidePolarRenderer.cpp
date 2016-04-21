@@ -85,24 +85,22 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
   // draw dolphin speed command
-  {
-    auto w = glide_polar.GetSMin()+MACCREADY;
-    bool inrange = true;
-    auto v_dolphin_last = vmin;
-    auto w_dolphin_last = MACCREADY;
-    do {
-      w += s_min*0.05;
-      auto v_dolphin = glide_polar.SpeedToFly(-w, 0);
-      auto w_dolphin = -glide_polar.SinkRate(v_dolphin)+w;
-      inrange = w_dolphin > s_min;
-      if ((v_dolphin > v_dolphin_last) && inrange) {
-        chart.DrawLine(v_dolphin_last, w_dolphin_last, v_dolphin, w_dolphin,
-                       ChartLook::STYLE_REDTHICK);
-        v_dolphin_last = v_dolphin;
-        w_dolphin_last = w_dolphin;
-      }
-    } while (inrange);
-  }
+  auto w = glide_polar.GetSMin()+MACCREADY;
+  bool inrange = true;
+  auto v_dolphin_last = vmin;
+  auto w_dolphin_last = MACCREADY;
+  do {
+    w += s_min*0.05;
+    auto v_dolphin = glide_polar.SpeedToFly(-w, 0);
+    auto w_dolphin = -glide_polar.SinkRate(v_dolphin)+w;
+    inrange = w_dolphin > s_min;
+    if ((v_dolphin > v_dolphin_last) && inrange) {
+      chart.DrawLine(v_dolphin_last, w_dolphin_last, v_dolphin, w_dolphin,
+                     ChartLook::STYLE_REDTHICK);
+      v_dolphin_last = v_dolphin;
+      w_dolphin_last = w_dolphin;
+    }
+  } while (inrange);
 
   // draw glide polar and climb rate history
   double v0 = 0;
@@ -137,6 +135,13 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                  ChartLook::STYLE_BLUETHIN);
 
   // draw labels and other overlays
+
+  double vv = 0.9*vmax+0.1*vmin;
+  chart.DrawLabel(_T("Polar"), vv, -glide_polar.SinkRate(vv));
+  vv = 0.8*vmax+0.2*vmin;
+  chart.DrawLabel(_T("Best glide"), vv, MACCREADY + slope * vv);
+  chart.DrawLabel(_T("Dolphin"), v_dolphin_last, w_dolphin_last);
+
   chart.DrawXLabel(_T("V"), Units::GetSpeedName());
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
