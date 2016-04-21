@@ -61,6 +61,7 @@ class ChartRenderer
 public:
   int padding_left;
   int padding_bottom;
+  int padding_text;
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
