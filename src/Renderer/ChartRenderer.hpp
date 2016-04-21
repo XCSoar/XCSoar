@@ -46,6 +46,7 @@ class ChartRenderer
 
   Canvas &canvas;
   PixelRect rc;
+  PixelRect rc_chart;
 
   ReusableArray<BulkPixelPoint> point_buffer;
 
@@ -59,9 +60,11 @@ class ChartRenderer
   } x, y;
 
 public:
-  int padding_left;
-  int padding_bottom;
   int padding_text;
+  void SetPadding(bool do_pad);
+  const PixelRect GetChartRect() const {
+    return rc_chart;
+  }
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,

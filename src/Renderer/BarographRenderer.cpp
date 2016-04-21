@@ -70,8 +70,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 {
   ScopeLock lock(fs.mutex);
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.padding_bottom = 0;
-  chart.padding_left = 0;
+  chart.SetPadding(false);
 
   if (!fs.altitude.HasResult())
     return;

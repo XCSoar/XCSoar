@@ -54,9 +54,21 @@ ChartRenderer::ResetScale()
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect the_rc)
-  :look(_look), canvas(the_canvas), rc(the_rc),
-   padding_left(30), padding_bottom(26), padding_text(2)
+  :look(_look), canvas(the_canvas), rc(the_rc), padding_text(2)
 {
+  SetPadding(true);
+}
+
+void
+ChartRenderer::SetPadding(bool do_pad)
+{
+  if (do_pad) {
+    rc_chart.left = rc.left+30;
+    rc_chart.right = rc.right;
+    rc_chart.top = rc.top;
+    rc_chart.bottom = rc.bottom-26;
+  } else
+    rc_chart = rc;
   ResetScale();
 }
 
@@ -85,7 +97,7 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
   if (fabs(y.max - y.min) > 50) {
     y.scale = (y.max - y.min);
     if (y.scale > 0)
-      y.scale = (rc.GetHeight() - padding_bottom) / y.scale;
+      y.scale = rc_chart.GetHeight() / y.scale;
   } else {
     y.scale = 2000;
   }
@@ -108,7 +120,7 @@ ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
 
   x.scale = (x.max - x.min);
   if (x.scale > 0)
-    x.scale = (rc.GetWidth() - padding_left) / x.scale;
+    x.scale = rc_chart.GetWidth() / x.scale;
 }
 
 void
@@ -125,7 +137,7 @@ ChartRenderer::ScaleYFromValue(const double value)
 
   y.scale = (y.max - y.min);
   if (y.scale > 0)
-    y.scale = (rc.GetHeight() - padding_bottom) / y.scale;
+    y.scale = rc_chart.GetHeight() / y.scale;
 }
 
 void
@@ -142,7 +154,7 @@ ChartRenderer::ScaleXFromValue(const double value)
 
   x.scale = (x.max - x.min);
   if (x.scale > 0)
-    x.scale = (rc.GetWidth() - padding_left) / x.scale;
+    x.scale = rc_chart.GetWidth() / x.scale;
 }
 
 void
@@ -302,11 +314,9 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata)
 
   const auto &slots = lsdata.GetSlots();
   for (unsigned i = 0, n = slots.size(); i != n; i++) {
-    int xmin((i + 1.2) * x.scale
-             + (rc.left + padding_left));
+    int xmin((i + 1.2) * x.scale + rc_chart.left);
     int ymin = ScreenY(y.min);
-    int xmax((i + 1.8) * x.scale
-             + (rc.left + padding_left));
+    int xmax((i + 1.8) * x.scale + rc_chart.left);
     int ymax = ScreenY(slots[i].y);
     canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
@@ -325,8 +335,8 @@ ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata)
   for (const auto &i : slots)
     *p++ = ToScreen(i.x, i.y);
   const auto &last = p[-1];
-  *p++ = BulkPixelPoint(last.x, rc.bottom - padding_bottom);
-  *p++ = BulkPixelPoint(points[0].x, rc.bottom - padding_bottom);
+  *p++ = BulkPixelPoint(last.x, rc_chart.bottom);
+  *p++ = BulkPixelPoint(points[0].x, rc_chart.bottom);
 
   assert(p == points + n);
 
@@ -388,8 +398,8 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, bool draw_units)
   }
   //  bool do_units = ((x.max-zero)/tic_step)<10;
 
-  line[0].y = rc.top;
-  line[1].y = rc.bottom - padding_bottom;
+  line[0].y = rc_chart.top;
+  line[1].y = rc_chart.bottom;
 
   const int y = line[1].y + padding_text;
 
@@ -399,7 +409,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, bool draw_units)
     int xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
-    if (xmin >= rc.left + padding_left && xmin <= rc.right) {
+    if (xmin >= rc_chart.left && xmin <= rc.right) {
       if (xval == 0) {
         canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
       } else {
@@ -437,8 +447,8 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, bool draw_units)
     unit_step *= 2;
   }
 
-  line[0].x = rc.left + padding_left;
-  line[1].x = rc.right;
+  line[0].x = rc_chart.left;
+  line[1].x = rc_chart.right;
 
   const int x = line[0].x - padding_text;
 
@@ -448,7 +458,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, bool draw_units)
     const int ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
-    if (ymin >= rc.top && ymin <= rc.bottom - padding_bottom) {
+    if (ymin >= rc.top && ymin <= rc_chart.bottom) {
       if (yval == 0) {
         canvas.Select(look.GetPen(ChartLook::STYLE_GRIDZERO));
       } else {
@@ -469,13 +479,13 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, bool draw_units)
 int
 ChartRenderer::ScreenX(double _x) const
 {
-  return rc.left + padding_left + x.ToScreen(_x);
+  return rc_chart.left + x.ToScreen(_x);
 }
 
 int
 ChartRenderer::ScreenY(double _y) const
 {
-  return rc.bottom - padding_bottom - y.ToScreen(_y);
+  return rc_chart.bottom - y.ToScreen(_y);
 }
 
 void
@@ -490,9 +500,9 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<double, double>> &vals,
   for (unsigned i = 0; i < vals.size(); ++i)
     line[i + 2] = ToScreen(vals[i].first, vals[i].second);
 
-  line[0].x = rc.left + padding_left;
+  line[0].x = rc_chart.left;
   line[0].y = line[fsize-1].y;
-  line[1].x = rc.left + padding_left;
+  line[1].x = rc_chart.left;
   line[1].y = line[2].y;
 
   canvas.Select(brush);

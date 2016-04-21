@@ -36,8 +36,7 @@ TraceHistoryRenderer::ScaleChart(ChartRenderer &chart,
                                   const TraceVariableHistory& var,
                                   const bool centered) const
 {
-  chart.padding_bottom = 0;
-  chart.padding_left = 0;
+  chart.SetPadding(false);
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(var.capacity() - 1);
 
