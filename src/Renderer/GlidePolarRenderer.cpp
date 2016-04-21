@@ -72,12 +72,14 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
 
   Pen blue_pen(2, COLOR_BLUE);
   const auto MACCREADY = glide_polar.GetMC();
-  const auto s_min = -glide_polar.GetSMax() * 1.1;
+  const auto s_min = -glide_polar.GetSMax();
+  const auto vmin = glide_polar.GetVMin();
+  const auto vmax = glide_polar.GetVMax();
 
   chart.ScaleYFromValue(MACCREADY);
   chart.ScaleYFromValue(s_min);
-  chart.ScaleXFromValue(glide_polar.GetVMin() * 0.8);
-  chart.ScaleXFromValue(glide_polar.GetVMax() + 2);
+  chart.ScaleXFromValue(vmin);
+  chart.ScaleXFromValue(vmax);
 
   chart.DrawXGrid(Units::ToSysSpeed(10), 10, true);
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, true);
@@ -86,7 +88,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   {
     auto w = glide_polar.GetSMin()+MACCREADY;
     bool inrange = true;
-    auto v_dolphin_last = glide_polar.GetVMin();
+    auto v_dolphin_last = vmin;
     auto w_dolphin_last = MACCREADY;
     do {
       w += s_min*0.05;
@@ -105,13 +107,12 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   // draw glide polar and climb rate history
   double v0 = 0;
   bool v0valid = false;
-  unsigned i0 = 0;
+  double i0 = 0;
 
-  const unsigned vmin = (unsigned)glide_polar.GetVMin();
-  const unsigned vmax = (unsigned)glide_polar.GetVMax();
-  for (unsigned i = vmin; i <= vmax; ++i) {
+  const auto dv = (vmax-vmin)/50;
+  for (auto i = vmin; i <= vmax; i+= dv) {
     auto sinkrate0 = -glide_polar.SinkRate(i);
-    auto sinkrate1 = -glide_polar.SinkRate(i + 1);
+    auto sinkrate1 = -glide_polar.SinkRate(i+dv);
     chart.DrawLine(i, sinkrate0, i + 1, sinkrate1,
                    ChartLook::STYLE_MEDIUMBLACK);
 
@@ -129,10 +130,10 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
 
   // draw best L/D line
   auto sb = -glide_polar.GetSBestLD();
-  auto ff = (sb - MACCREADY) / glide_polar.GetVBestLD();
+  auto slope = (sb - MACCREADY) / glide_polar.GetVBestLD();
 
-  chart.DrawLine(0, MACCREADY, glide_polar.GetVMax(),
-                 MACCREADY + ff * glide_polar.GetVMax(),
+  chart.DrawLine(vmin, MACCREADY + slope * vmin,
+                 vmax, MACCREADY + slope * vmax,
                  ChartLook::STYLE_REDTHICK);
 
   // draw labels and other overlays
