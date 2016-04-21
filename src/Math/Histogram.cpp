@@ -57,8 +57,8 @@ Histogram::UpdateHistogram(double x)
   n_pts++;
 
   // update range
-  x_min = std::min(x, x_min);
-  x_max = std::max(x, x_max);
+  x_min = std::min(x-1.5/m, x_min);
+  x_max = std::max(x+1.5/m, x_max);
 }
 
 void Histogram::Reset(double minx, double maxx)
