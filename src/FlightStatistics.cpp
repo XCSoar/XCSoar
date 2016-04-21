@@ -127,7 +127,8 @@ FlightStatistics::AddThermalAverage(const double tflight_start,
                                     const double tflight_end, const double v)
 {
   ScopeLock lock(mutex);
-  thermal_average.Update(std::max(0., tflight_start) / 3600, v);
+  thermal_average.Update(std::max(0., tflight_start) / 3600, v,
+                         (tflight_end-tflight_start)/3600);
 }
 
 void
