@@ -31,6 +31,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Util/StaticString.hxx"
+#include "GradientRenderer.hpp"
 
 void
 RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
@@ -50,35 +51,52 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
 
   const auto scale = std::max(fs.vario_cruise_histogram.GetMaxY(),
                               fs.vario_circling_histogram.GetMaxY()) * 1.2;
+  chart.ScaleXFromValue(0);
+  chart.ScaleXFromValue(scale);
 
-  chart.ScaleXFromValue(fs.vario_cruise_histogram.GetMinX()-0.5);
-  chart.ScaleXFromValue(fs.vario_cruise_histogram.GetMaxX()+0.5);
-  chart.ScaleYFromValue(0);
-  chart.ScaleYFromValue(scale);
   const auto s = -glide_polar.GetSBestLD();
   const auto mc = glide_polar.GetMC();
-  chart.ScaleXFromValue(s);
-  chart.ScaleXFromValue(mc);
+  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMinX());
+  chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX());
+  chart.ScaleYFromValue(s);
+  chart.ScaleYFromValue(mc);
+
+  // draw red area at higher than cruise sink rate, blue area above mc
+  {
+    PixelRect rc_upper = chart.GetChartRect();
+    rc_upper.bottom = chart.ScreenY(mc);
+
+    DrawVerticalGradient(canvas, rc_upper,
+                         chart_look.color_positive, COLOR_WHITE, COLOR_WHITE);
+  }
+  {
+    PixelRect rc_lower = chart.GetChartRect();
+    rc_lower.top = chart.ScreenY(s);
+
+    DrawVerticalGradient(canvas, rc_lower,
+                         COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
+  }
 
   Pen red_pen(2, COLOR_RED);
   Pen green_pen(2, COLOR_GREEN);
 
   canvas.SelectNullPen();
   canvas.Select(chart_look.bar_brush);
-  chart.DrawFilledLineGraph(fs.vario_circling_histogram);
+  chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
   canvas.Select(chart_look.neg_brush);
-  chart.DrawFilledLineGraph(fs.vario_cruise_histogram);
+  chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
 
-  chart.DrawLineGraph(fs.vario_cruise_histogram, red_pen);
-  chart.DrawLineGraph(fs.vario_circling_histogram, green_pen);
+  // draw these after shaded regions, so they overlay
+  chart.DrawLineGraph(fs.vario_cruise_histogram, red_pen, true);
+  chart.DrawLineGraph(fs.vario_circling_histogram, green_pen, true);
 
   // draw current MC setting
-  chart.DrawLine(mc, 0, mc, scale, ChartLook::STYLE_REDTHICK);
-  chart.DrawLine(s, 0, s, scale, ChartLook::STYLE_MEDIUMBLACK);
+  chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICK);
+  chart.DrawLine(0, s, scale, s, ChartLook::STYLE_BLUETHIN);
 
   // draw labels and other overlays
-  chart.DrawXGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
+  chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
-  chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());
+  chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
 }
