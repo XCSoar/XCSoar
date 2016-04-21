@@ -85,6 +85,8 @@ LeastSquares::Reset()
   max_error = 0.;
   sum_error = 0.;
   rms_error = 0.;
+
+  x_mean = y_mean = x_S = y_S = xy_C = x_var = y_var = xy_var = 0.;
 }
 
 void
@@ -99,7 +101,13 @@ LeastSquares::Compute()
   }
   b = (sum_yw - m * sum_xw) / sum_weights;
 
-  y_ave = GetYAt(GetMiddleX());
+  y_ave = sum_yw / sum_weights;
+
+  if (sum_n>1) {
+    x_var = x_S / (sum_n - 1);
+    y_var = y_S / (sum_n - 1);
+    xy_var = xy_C / (sum_n - 1);
+  }
 }
 
 void
@@ -137,6 +145,22 @@ LeastSquares::Add(double x, double y, double weight)
   sum_xxw += Square(x)*weight;
   sum_xyw += x * y * weight;
 
+  // See Knuth TAOCP vol 2, 3rd edition, page 232
+  if (sum_n == 1) {
+    x_mean = x;
+    y_mean = y;
+  } else {
+    auto dx = x-x_mean;
+    auto dy = y-y_mean;
+
+    x_mean += dx / sum_n;
+    x_S += dx * (x - x_mean);
+
+    y_mean += dy / sum_n;
+    y_S += dy * (y - y_mean);
+
+    xy_C += dx * (y - y_mean);
+  }
 }
 
 void
@@ -159,3 +183,27 @@ LeastSquares::Remove(const unsigned i)
   // Update calculation
   Compute();
 }
+
+
+/*
+ A = a b = cov(x,x)   cov(x,y)
+     c d   cov(x,y)   cov(y,y)
+
+ T = trace = a + d     = cov(x,x) + cov(y,y)
+ D = det = a*d - b*c   = cov(x,x) * cov(y,y) - cov(x,y)**2
+
+ eigenvalues are L1,2 = T/2 +/-  sqrt(T^2/4 -D)
+ if c is not zero, the eigenvectors are:
+     L1-d    L2-d
+      c       c
+ else if b is not zero then the eigenvectors are:
+      b       b
+     L1-a    L2-a
+
+ else the eigenvectors are
+      1       0
+      0       1
+
+ http://www.visiondummy.com/wp-content/uploads/2014/04/error_ellipse.cpp
+
+*/

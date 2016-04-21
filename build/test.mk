@@ -120,7 +120,9 @@ TEST_NAMES = \
 	TestByteSizeFormatter \
 	TestTimeFormatter \
 	TestIGCFilenameFormatter \
-	TestLXNToIGC
+	TestLXNToIGC \
+	TestLeastSquares \
+
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
@@ -129,6 +131,13 @@ TEST_CRC_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC.cpp
 $(eval $(call link-program,TestCRC,TEST_CRC))
+
+TEST_LEASTSQUARES_SOURCES = \
+	$(SRC)/Math/LeastSquares.cpp \
+	$(SRC)/Math/XYDataStore.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLeastSquares.cpp
+$(eval $(call link-program,TestLeastSquares,TEST_LEASTSQUARES))
 
 TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

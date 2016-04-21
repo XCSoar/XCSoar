@@ -95,6 +95,9 @@ class LeastSquares: public XYDataStore
 
   double y_ave;
 
+  double x_mean, y_mean, x_S, y_S, xy_C;
+  double x_var, y_var, xy_var;
+
 public:
   /**
    * Reset the LeastSquares calculator.
@@ -119,6 +122,26 @@ public:
 
   double GetYAtMaxX() const {
     return GetYAt(GetMaxX());
+  }
+
+  double GetMeanY() const {
+    return y_mean;
+  }
+
+  double GetMeanX() const {
+    return x_mean;
+  }
+
+  double GetVarX() const {
+    return x_var;
+  }
+
+  double GetVarY() const {
+    return y_var;
+  }
+
+  double GetCovXY() const {
+    return xy_var;
   }
 
   /**
