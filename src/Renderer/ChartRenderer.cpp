@@ -323,7 +323,7 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata)
 }
 
 void
-ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata)
+ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata, bool swap)
 {
   const auto &slots = lsdata.GetSlots();
   assert(slots.size() >= 2);
@@ -333,10 +333,15 @@ ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata)
 
   auto *p = points;
   for (const auto &i : slots)
-    *p++ = ToScreen(i.x, i.y);
+    *p++ = swap? ToScreen(i.y, i.x) : ToScreen(i.x, i.y);
   const auto &last = p[-1];
-  *p++ = BulkPixelPoint(last.x, rc_chart.bottom);
-  *p++ = BulkPixelPoint(points[0].x, rc_chart.bottom);
+  if (swap) {
+    *p++ = BulkPixelPoint(rc_chart.left, last.y);
+    *p++ = BulkPixelPoint(rc_chart.left, points[0].y);
+  } else {
+    *p++ = BulkPixelPoint(last.x, rc_chart.bottom);
+    *p++ = BulkPixelPoint(points[0].x, rc_chart.bottom);
+  }
 
   assert(p == points + n);
 
@@ -344,7 +349,7 @@ ChartRenderer::DrawFilledLineGraph(const XYDataStore &lsdata)
 }
 
 void
-ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen)
+ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen, bool swap)
 {
   const auto &slots = lsdata.GetSlots();
   assert(slots.size() >= 2);
@@ -354,7 +359,7 @@ ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen)
 
   auto *p = points;
   for (const auto &i : slots)
-    *p++ = ToScreen(i.x, i.y);
+    *p++ = swap? ToScreen(i.y, i.x) : ToScreen(i.x, i.y);
   assert(p == points + n);
 
   canvas.Select(pen);
@@ -363,9 +368,9 @@ ChartRenderer::DrawLineGraph(const XYDataStore &lsdata, const Pen &pen)
 
 void
 ChartRenderer::DrawLineGraph(const XYDataStore &lsdata,
-                             ChartLook::Style style)
+                             ChartLook::Style style, bool swap)
 {
-  DrawLineGraph(lsdata, look.GetPen(style));
+  DrawLineGraph(lsdata, look.GetPen(style), swap);
 }
 
 void
@@ -573,7 +578,6 @@ ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata)
 {
   const auto &slots = lsdata.GetSlots();
 
-  canvas.Select(look.bar_brush);
   canvas.SelectNullPen();
 
   for (const auto &i : slots) {

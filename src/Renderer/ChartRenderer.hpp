@@ -77,9 +77,9 @@ public:
                 const PixelRect the_rc);
 
   void DrawBarChart(const XYDataStore &lsdata);
-  void DrawFilledLineGraph(const XYDataStore &lsdata);
-  void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen);
-  void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style);
+  void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false);
+  void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen, bool swap=false);
+  void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style, bool swap=false);
   void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawLine(double xmin, double ymin,
