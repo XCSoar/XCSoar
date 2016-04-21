@@ -226,10 +226,10 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
   if (x.unscaled || y.unscaled)
     return;
 
-  auto xmin = lsdata.GetMinX();
-  auto xmax = lsdata.GetMaxX();
-  auto ymin = lsdata.GetYAtMinX();
-  auto ymax = lsdata.GetYAtMaxX();
+  auto xmin = x.min;
+  auto xmax = x.max;
+  auto ymin = lsdata.GetYAt(x.min);
+  auto ymax = lsdata.GetYAt(x.max);
 
   DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
