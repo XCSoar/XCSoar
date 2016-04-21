@@ -208,6 +208,27 @@ SkyLinesTracking::Client::OnWaveReceived(const WaveResponsePacket &packet,
 }
 
 inline void
+SkyLinesTracking::Client::OnThermalReceived(const ThermalResponsePacket &packet,
+                                            size_t length)
+{
+  if (length < sizeof(packet))
+    return;
+
+  const unsigned n = packet.thermal_count;
+  ConstBuffer<Thermal> thermals((const Thermal *)(&packet + 1), n);
+  if (length != sizeof(packet) + thermals.size * sizeof(thermals.front()))
+    return;
+
+  for (const auto &thermal : thermals)
+    handler->OnThermal(FromBE32(thermal.time),
+                       AGeoPoint(ImportGeoPoint(thermal.bottom_location),
+                                 fixed(FromBE16(thermal.bottom_altitude))),
+                       AGeoPoint(ImportGeoPoint(thermal.top_location),
+                                 fixed(FromBE16(thermal.top_altitude))),
+                       FromBE16(thermal.lift) / 256.);
+}
+
+inline void
 SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 {
   Header &header = *(Header *)data;
@@ -226,6 +247,7 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
   const UserNameResponsePacket &user_name =
     *(const UserNameResponsePacket *)data;
   const auto &wave = *(const WaveResponsePacket *)data;
+  const auto &thermal = *(const ThermalResponsePacket *)data;
 
   switch ((Type)FromBE16(header.type)) {
   case PING:
@@ -234,6 +256,8 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
   case USER_NAME_REQUEST:
   case WAVE_SUBMIT:
   case WAVE_REQUEST:
+  case THERMAL_SUBMIT:
+  case THERMAL_REQUEST:
     break;
 
   case ACK:
@@ -250,6 +274,10 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 
   case WAVE_RESPONSE:
     OnWaveReceived(wave, length);
+    break;
+
+  case THERMAL_RESPONSE:
+    OnThermalReceived(thermal, length);
     break;
   }
 }

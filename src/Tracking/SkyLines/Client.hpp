@@ -38,6 +38,7 @@ namespace SkyLinesTracking {
   struct TrafficResponsePacket;
   struct UserNameResponsePacket;
   struct WaveResponsePacket;
+  struct ThermalResponsePacket;
 
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -106,6 +107,7 @@ namespace SkyLinesTracking {
     void OnUserNameReceived(const UserNameResponsePacket &packet,
                             size_t length);
     void OnWaveReceived(const WaveResponsePacket &packet, size_t length);
+    void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
     /* virtual methods from SocketEventHandler */

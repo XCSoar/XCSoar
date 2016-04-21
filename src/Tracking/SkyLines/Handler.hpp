@@ -32,6 +32,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct GeoPoint;
+struct AGeoPoint;
 
 namespace SkyLinesTracking {
   class Handler {
@@ -42,6 +43,9 @@ namespace SkyLinesTracking {
     virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
     virtual void OnWave(unsigned time_of_day_ms,
                         const ::GeoPoint &a, const ::GeoPoint &b) {}
+    virtual void OnThermal(unsigned time_of_day_ms,
+                           const AGeoPoint &bottom, const AGeoPoint &top,
+                           double lift) {}
   };
 }
 
