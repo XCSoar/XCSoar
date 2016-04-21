@@ -96,7 +96,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
                          COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
   }
 
-  RenderTaskLegs(chart, task, nmea_info, derived_info);
+  RenderTaskLegs(chart, task, nmea_info, derived_info, 0.33);
 
   chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);

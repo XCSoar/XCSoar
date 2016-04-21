@@ -128,7 +128,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
-    RenderTaskLegs(chart, task, nmea_info, derived_info);
+    RenderTaskLegs(chart, task, nmea_info, derived_info, 0.33);
   }
 
   canvas.SelectNullPen();

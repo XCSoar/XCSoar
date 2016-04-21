@@ -33,6 +33,7 @@ void
 RenderTaskLegs(ChartRenderer &chart,
                const TaskManager &task_manager,
                const NMEAInfo& basic,
-               const DerivedInfo& calculated);
+               const DerivedInfo& calculated,
+               double y=0.5);
 
 #endif

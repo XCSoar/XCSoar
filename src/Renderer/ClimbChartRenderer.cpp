@@ -99,7 +99,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                          COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
   }
 
-  RenderTaskLegs(chart, task, nmea_info, derived_info);
+  RenderTaskLegs(chart, task, nmea_info, derived_info, 0.8);
 
   canvas.Select(chart_look.black_brush);
   chart.DrawWeightBarGraph(fs.thermal_average);

@@ -55,12 +55,15 @@ void
 RenderTaskLegs(ChartRenderer &chart,
                const TaskManager &task_manager,
                const NMEAInfo& basic,
-               const DerivedInfo& calculated)
+               const DerivedInfo& calculated,
+               const double y)
 {
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
   if (!task_stats.start.task_started)
     return;
+
+  assert((y>=0) && (y<=1));
 
   TCHAR sTmp[5];
 
@@ -84,7 +87,7 @@ RenderTaskLegs(ChartRenderer &chart,
                      ChartLook::STYLE_GRIDZERO);
 
       StringFormatUnsafe(sTmp, _T("%d"), i);
-      chart.DrawLabel(sTmp, x, (chart.GetYMax() + chart.GetYMin())/2);
+      chart.DrawLabel(sTmp, x, chart.GetYMax()*y + chart.GetYMin()*(1-y));
     }
   }
 }
