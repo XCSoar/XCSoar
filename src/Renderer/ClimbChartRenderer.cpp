@@ -47,7 +47,7 @@ ClimbChartCaption(TCHAR *sTmp,
                        (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
                        Units::GetVerticalSpeedName());
   } else {
-    StringFormatUnsafe(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
+    StringFormatUnsafe(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s/hr"),
                        _("Avg. climb"),
                        (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
                        Units::GetVerticalSpeedName(),
