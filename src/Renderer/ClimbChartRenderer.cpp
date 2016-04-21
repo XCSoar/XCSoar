@@ -113,10 +113,8 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  chart.GetXMax(), MACCREADY,
                  ChartLook::STYLE_REDTHICK);
 
-  // JMW: fix location of this
   chart.DrawLabel(_T("MC"),
-                  std::max(0.5,
-                           fs.thermal_average.GetGradient() - 1.),
+                  chart.GetXMin()*0.9+chart.GetXMax()*0.1,
                   MACCREADY);
 
   // draw labels and other overlays
