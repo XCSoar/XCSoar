@@ -80,8 +80,8 @@ void
 LeastSquares::Reset()
 {
   StoreReset();
-  sum_xi_2 = 0.;
-  sum_xi_yi = 0.;
+  sum_xxw = 0.;
+  sum_xyw = 0.;
   max_error = 0.;
   sum_error = 0.;
   rms_error = 0.;
@@ -90,14 +90,14 @@ LeastSquares::Reset()
 void
 LeastSquares::Compute()
 {
-  auto denom = (sum_weights * sum_xi_2 - sum_xi * sum_xi);
+  auto denom = (sum_weights * sum_xxw - sum_xw * sum_xw);
 
   if (fabs(denom) > 0) {
-    m = (sum_weights * sum_xi_yi - sum_xi * sum_yi) / denom;
+    m = (sum_weights * sum_xyw - sum_xw * sum_yw) / denom;
   } else {
     m = 0.;
   }
-  b = (sum_yi - m * sum_xi) / sum_weights;
+  b = (sum_yw - m * sum_xw) / sum_weights;
 
   y_ave = GetYAt(GetMiddleX());
 }
@@ -134,8 +134,9 @@ LeastSquares::Add(double x, double y, double weight)
 {
   StoreAdd(x, y, weight);
 
-  sum_xi_2 += Square(x * weight);
-  sum_xi_yi += (x * y)*Square(weight);
+  sum_xxw += Square(x)*weight;
+  sum_xyw += x * y * weight;
+
 }
 
 void
@@ -150,8 +151,8 @@ LeastSquares::Remove(const unsigned i)
   weight = pt.weight;
 #endif
 
-  sum_xi_2 -= Square(pt.x * weight);
-  sum_xi_yi -= (pt.x * pt.y)*Square(weight);
+  sum_xxw -= Square(pt.x)*pt.weight;
+  sum_xyw -= (pt.x * pt.y * pt.weight);
 
   StoreRemove(i);
 

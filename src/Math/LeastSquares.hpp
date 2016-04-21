@@ -73,7 +73,7 @@ Copyright_License {
  */
 class LeastSquares: public XYDataStore
 {
-  double sum_xi_2, sum_xi_yi;
+  double sum_xxw, sum_xyw;
 
   /**
   * \f[

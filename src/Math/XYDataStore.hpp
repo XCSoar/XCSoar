@@ -31,11 +31,12 @@ Copyright_License {
 #include "Util/TrivialArray.hxx"
 
 #include <type_traits>
+#define LEASTSQS_WEIGHT_STORE
 
 class XYDataStore
 {
 protected:
-  double sum_xi, sum_yi;
+  double sum_xw, sum_yw;
   double sum_weights;
 
   double y_max;

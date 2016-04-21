@@ -27,8 +27,8 @@ void
 XYDataStore::StoreReset()
 {
   sum_n = 0;
-  sum_xi = 0.;
-  sum_yi = 0.;
+  sum_xw = 0.;
+  sum_yw = 0.;
   sum_weights = 0.;
   y_max = 0.;
   y_min = 0.;
@@ -63,8 +63,8 @@ XYDataStore::StoreAdd(double x, double y, double weight)
   // Add weighted point
   sum_weights += weight;
 
-  sum_xi += x * weight;
-  sum_yi += y * weight;
+  sum_xw += x * weight;
+  sum_yw += y * weight;
 }
 
 void
@@ -81,8 +81,8 @@ XYDataStore::StoreRemove(const unsigned i)
 
   sum_weights -= weight;
 
-  sum_xi -= pt.x * weight;
-  sum_yi -= pt.y * weight;
+  sum_xw -= pt.x * weight;
+  sum_yw -= pt.y * weight;
 
   slots.remove(i);
   --sum_n;
