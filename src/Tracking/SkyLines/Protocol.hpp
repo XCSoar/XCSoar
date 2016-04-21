@@ -85,6 +85,21 @@ namespace SkyLinesTracking {
      * @see #WaveResponsePacket
      */
     WAVE_RESPONSE = 10,
+
+    /**
+     * @see #ThermalSubmitPacket
+     */
+    THERMAL_SUBMIT = 11,
+
+    /**
+     * @see #ThermalRequestPacket
+     */
+    THERMAL_REQUEST = 12,
+
+    /**
+     * @see #ThermalResponsePacket
+     */
+    THERMAL_RESPONSE = 13,
   };
 
   /**
@@ -509,6 +524,94 @@ namespace SkyLinesTracking {
     uint32_t reserved3;
 
     /* followed by a number of #Wave instances */
+  };
+
+  /**
+   * Packet fragment which describes one thermal.
+   */
+  struct Thermal {
+    /**
+     * Millisecond of day (UTC).  This is the time this thermal was
+     * last seen.
+     */
+    uint32_t time;
+
+    /**
+     * This reserved field may one day become the reporter's user id.
+     */
+    uint32_t reserved1;
+
+    /**
+     * The location of the glider at its bottom-most altitude.
+     * Usually, this is where the glider entered the thermal.
+     */
+    GeoPoint bottom_location;
+
+    /**
+     * The location of the glider at its top-most altitude.
+     * Usually, this is where the glider left the thermal.
+     */
+    GeoPoint top_location;
+
+    /**
+     * The bottom-most aircraft altitude inside this thermal.
+     */
+    int16_t bottom_altitude;
+
+    /**
+     * The top-most aircraft altitude inside this thermal.
+     */
+    int16_t top_altitude;
+
+    /**
+     * Average lift [m/256s].
+     */
+    uint16_t lift;
+
+    int16_t reserved2;
+  };
+
+  /**
+   * The client submits the location of a thermal he detected.
+   */
+  struct ThermalSubmitPacket {
+    Header header;
+
+    Thermal thermal;
+  };
+
+  /**
+   * The client wishes to receive thermal information.  The server will
+   * send #THERMAL_RESPONSE / #ThermalResponsePacket.
+   */
+  struct ThermalRequestPacket {
+    Header header;
+
+    /**
+     * Unused.
+     */
+    uint32_t flags;
+
+    uint32_t reserved1;
+  };
+
+  /**
+   * Reply to #THERMAL_REQUEST / #ThermalRequestPacket.
+   */
+  struct ThermalResponsePacket {
+    Header header;
+
+    uint16_t reserved1;
+    uint8_t reserved2;
+
+    /**
+     * The number of #Thermal instances following this struct.
+     */
+    uint8_t thermal_count;
+
+    uint32_t reserved3;
+
+    /* followed by a number of #Thermal instances */
   };
 };
 
