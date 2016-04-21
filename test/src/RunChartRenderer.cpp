@@ -97,6 +97,8 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
     renderer.DrawXGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
     renderer.DrawYGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
+
+    renderer.DrawLabel(_T("hello"), 50, 50);
   }
 }
 
