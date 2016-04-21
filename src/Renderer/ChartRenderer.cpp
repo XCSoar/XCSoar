@@ -165,6 +165,12 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
 
   auto tsize = canvas.CalcTextSize(text);
   auto pt = ToScreen(xv, yv);
+  canvas.SelectNullPen();
+  canvas.Select(look.blank_brush);
+  canvas.Rectangle(pt.x - tsize.cx / 2 - padding_text,
+                   pt.y - tsize.cy / 2 - padding_text,
+                   pt.x + tsize.cx / 2 + padding_text,
+                   pt.y + tsize.cy / 2 + padding_text);
   canvas.DrawText(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
 }
 
