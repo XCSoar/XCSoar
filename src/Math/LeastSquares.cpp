@@ -175,8 +175,8 @@ LeastSquares::Remove(const unsigned i)
   weight = pt.weight;
 #endif
 
-  sum_xxw -= Square(pt.x)*pt.weight;
-  sum_xyw -= (pt.x * pt.y * pt.weight);
+  sum_xxw -= Square(pt.x) * weight;
+  sum_xyw -= (pt.x * pt.y * weight);
 
   StoreRemove(i);
 
