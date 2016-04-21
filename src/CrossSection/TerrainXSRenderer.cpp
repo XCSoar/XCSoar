@@ -40,6 +40,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 
   TerrainType last_type = TerrainType::UNKNOWN;
   double last_distance = 0;
+  const double hmin = chart.GetYMin();
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
     const auto distance_factor =
@@ -65,21 +66,21 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 
       if (j == 0) {
         // Start first polygon
-        points.append() = chart.ToScreen(distance, -500);
+        points.append() = chart.ToScreen(distance, hmin);
         points.append() = chart.ToScreen(distance, h);
       } else if (type != last_type) {
         // Start new polygon
         points.clear();
 
         const auto center_distance = (distance + last_distance) / 2;
-        points.append() = chart.ToScreen(center_distance, -500);
+        points.append() = chart.ToScreen(center_distance, hmin);
         points.append() = chart.ToScreen(center_distance, 0);
       }
 
       if (j + 1 == CrossSectionRenderer::NUM_SLICES) {
         // Close and paint last polygon
         points.append() = chart.ToScreen(distance, h);
-        points.append() = chart.ToScreen(distance, -500);
+        points.append() = chart.ToScreen(distance, hmin);
 
         DrawPolygon(canvas, type, points.begin(), points.size());
       } else if (type == last_type && j != 0) {
