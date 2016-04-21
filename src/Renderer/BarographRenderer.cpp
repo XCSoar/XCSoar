@@ -133,8 +133,8 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   canvas.SelectWhitePen();
   canvas.SelectWhiteBrush();
 
-  chart.DrawXGrid(0.5, 0.5, true);
-  chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, true);
+  chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
+  chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
 
   if (fs.altitude_base.HasResult()) {
     chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_BLUETHIN);

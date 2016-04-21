@@ -86,8 +86,8 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
 
   chart.DrawWeightBarGraph(fs.thermal_average);
 
-  chart.DrawXGrid(0.5, 0.5, true);
-  chart.DrawYGrid(Units::ToSysVSpeed(1), 1, true);
+  chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
+  chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
   chart.DrawTrend(fs.thermal_average, ChartLook::STYLE_BLUETHIN);
 

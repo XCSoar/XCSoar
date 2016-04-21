@@ -85,8 +85,8 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(0);
   chart.ScaleYFromValue(glide_polar.GetVMax());
 
-  chart.DrawXGrid(Units::ToSysVSpeed(1), 1, true);
-  chart.DrawYGrid(Units::ToSysSpeed(10), 10, true);
+  chart.DrawXGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
+  chart.DrawYGrid(Units::ToSysSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);
 
   GlidePolar gp = glide_polar;
   double m = 0;

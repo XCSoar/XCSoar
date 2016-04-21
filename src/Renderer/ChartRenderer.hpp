@@ -66,6 +66,12 @@ public:
     return rc_chart;
   }
 
+  enum UnitFormat {
+    NONE,
+    NUMERIC,
+    TIME
+  };
+
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
                 const PixelRect the_rc);
@@ -97,10 +103,10 @@ public:
 
   void ResetScale();
 
-  static void FormatTicText(TCHAR *text, double val, double step);
+  static void FormatTicText(TCHAR *text, double val, double step, UnitFormat units);
 
-  void DrawXGrid(double tic_step, double unit_step, bool draw_units = false);
-  void DrawYGrid(double tic_step, double unit_step, bool draw_units = false);
+  void DrawXGrid(double tic_step, double unit_step, UnitFormat units = UnitFormat::NONE);
+  void DrawYGrid(double tic_step, double unit_step, UnitFormat units = UnitFormat::NONE);
 
   void DrawXLabel(const TCHAR *text);
   void DrawXLabel(const TCHAR *text, const TCHAR *unit);

@@ -56,8 +56,8 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   RenderTaskLegs(chart, task, nmea_info, derived_info);
 
-  chart.DrawXGrid(0.5, 0.5, true);
-  chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, true);
+  chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
+  chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);
 
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);

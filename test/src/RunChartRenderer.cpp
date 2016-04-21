@@ -94,9 +94,9 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
     renderer.DrawLine(0, 10, 100, 100,
                       look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 
-    renderer.DrawXGrid(20, 20, true);
+    renderer.DrawXGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
-    renderer.DrawYGrid(20, 20, true);
+    renderer.DrawYGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
   }
 }
 
