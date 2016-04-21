@@ -430,7 +430,8 @@ ChartControl::OnPaint(Canvas &canvas)
       ProtectedTaskManager::Lease task(*protected_task_manager);
       RenderSpeed(canvas, rcgfx, chart_look,
                   glide_computer.GetFlightStats(),
-                  basic, calculated, task);
+                  basic, calculated, task,
+                  settings_computer.polar.glide_polar_task);
     }
     break;
 
@@ -545,7 +546,9 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Task Speed"));
     dialog.SetCaption(sTmp);
-    info.SetText(_T(""));
+    TaskSpeedCaption(sTmp, glide_computer.GetFlightStats(),
+                     settings_computer.polar.glide_polar_task);
+    info.SetText(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
 

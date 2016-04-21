@@ -32,6 +32,27 @@ Copyright_License {
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
 #include "GradientRenderer.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+
+void
+TaskSpeedCaption(TCHAR *sTmp,
+                 const FlightStatistics &fs,
+                 const GlidePolar &glide_polar)
+{
+  if (!glide_polar.IsValid()) {
+    *sTmp = _T('\0');
+    return;
+  }
+
+  _stprintf(sTmp,
+            _T("%s: %d %s\r\n%s: %d %s"),
+            _("Vave"),
+            (int)Units::ToUserTaskSpeed(fs.task_speed.GetAverageY()),
+            Units::GetTaskSpeedName(),
+            _("Vest"),
+            (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
+            Units::GetTaskSpeedName());
+}
 
 void
 RenderSpeed(Canvas &canvas, const PixelRect rc,
@@ -39,7 +60,8 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
             const FlightStatistics &fs,
             const NMEAInfo &nmea_info,
             const DerivedInfo &derived_info,
-            const TaskManager &task)
+            const TaskManager &task,
+            const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
@@ -48,9 +70,12 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
     return;
   }
 
+  const float vref = glide_polar.GetAverageSpeed();
+
   chart.ScaleXFromData(fs.task_speed);
   chart.ScaleYFromData(fs.task_speed);
   chart.ScaleYFromValue(0);
+  chart.ScaleYFromValue(vref);
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
   if (derived_info.flight.flying)
     chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
@@ -58,14 +83,14 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   // draw red area below average speed, blue area above
   {
     PixelRect rc_upper = chart.GetChartRect();
-    rc_upper.bottom = chart.ScreenY(fs.task_speed.GetAverageY());
+    rc_upper.bottom = chart.ScreenY(vref);
 
     DrawVerticalGradient(canvas, rc_upper,
                          chart_look.color_positive, COLOR_WHITE, COLOR_WHITE);
   }
   {
     PixelRect rc_lower = chart.GetChartRect();
-    rc_lower.top = chart.ScreenY(fs.task_speed.GetAverageY());
+    rc_lower.top = chart.ScreenY(vref);
 
     DrawVerticalGradient(canvas, rc_lower,
                          COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
@@ -75,6 +100,10 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);
+
+  chart.DrawLine(chart.GetXMin(), vref,
+                 chart.GetXMax(), vref,
+                 ChartLook::STYLE_REDTHICK);
 
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
