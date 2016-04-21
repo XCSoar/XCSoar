@@ -97,6 +97,10 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   // draw labels and other overlays
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
+  const double tref = chart.GetXMin()*0.2+chart.GetXMax()*0.8;
+  chart.DrawLabel(_T("MC"), tref, mc);
+  chart.DrawLabel(_T("S cruise"), tref, s);
+
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
 }
