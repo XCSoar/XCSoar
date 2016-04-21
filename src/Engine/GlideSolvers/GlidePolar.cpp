@@ -471,3 +471,16 @@ GlidePolar::GetNextLegEqThermal(double current_wind, double next_wind) const
   const auto s_opt = v_opt * (v_opt * s_polar.a + s_polar.b) + s_polar.c;
   return no_wind_thermal + (s_opt + no_wind_thermal) / v_opt * next_wind;
 }
+
+
+double GlidePolar::GetAverageSpeed() const
+{
+  const double m = GetMC();
+  if (m>0) {
+    const double v = GetVBestLD();
+    const double d_s = GetSBestLD();
+    const double rho = d_s/m;
+    return v/(1+rho);
+  } else
+    return 0;
+}

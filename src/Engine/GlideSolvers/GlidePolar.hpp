@@ -572,6 +572,9 @@ public:
   /** Update glide polar coefficients and values depending on them */
   void Update();
 
+  /** Calculate average speed in still air */
+  double GetAverageSpeed() const;
+
 private:
   /** Update sink rate at max. cruise speed */
   void UpdateSMax();
