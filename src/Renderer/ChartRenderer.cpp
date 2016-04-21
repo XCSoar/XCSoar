@@ -549,3 +549,18 @@ ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata,
 {
   DrawImpulseGraph(lsdata, look.GetPen(style));
 }
+
+void
+ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata)
+{
+  const auto &slots = lsdata.GetSlots();
+
+  canvas.Select(look.bar_brush);
+  canvas.SelectNullPen();
+
+  for (const auto &i : slots) {
+    auto pt_base = ToScreen(i.x, y.min);
+    auto pt_top = ToScreen(i.x+i.weight, i.y);
+    canvas.Rectangle(pt_base.x, pt_base.y, pt_top.x, pt_top.y);
+  }
+}
