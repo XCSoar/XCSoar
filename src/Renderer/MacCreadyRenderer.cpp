@@ -35,18 +35,6 @@ Copyright_License {
 #define MAX_MACCREADY 5.2
 #define STEPS_MACCREADY 25
 
-static double AverageSpeed(const GlidePolar &gp)
-{
-  const double m = gp.GetMC();
-  if (m>0) {
-    const double v = gp.GetVBestLD();
-    const double d_s = gp.GetSBestLD();
-    const double rho = d_s/m;
-    return v/(1+rho);
-  } else
-    return 0;
-}
-
 void
 MacCreadyCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
 {
@@ -61,7 +49,7 @@ MacCreadyCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
             (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
             Units::GetSpeedName(),
             _("Vave"),
-            (int)Units::ToUserTaskSpeed(AverageSpeed(glide_polar)),
+            (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
             Units::GetTaskSpeedName());
 }
 
@@ -99,7 +87,7 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
     m+= MAX_MACCREADY/STEPS_MACCREADY;
     gp.SetMC(m);
     const double v = gp.GetVBestLD();
-    const double vav = AverageSpeed(gp);
+    const double vav = gp.GetAverageSpeed();
     chart.DrawLine(m_last, v_last, m, v, ChartLook::STYLE_MEDIUMBLACK);
     chart.DrawLine(m_last, vav_last, m, vav, ChartLook::STYLE_BLUETHIN);
     v_last = v;
