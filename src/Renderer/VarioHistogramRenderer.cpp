@@ -81,9 +81,9 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   Pen green_pen(2, COLOR_GREEN);
 
   canvas.SelectNullPen();
-  canvas.Select(chart_look.bar_brush);
+  canvas.Select(chart_look.black_brush);
   chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
-  canvas.Select(chart_look.neg_brush);
+  canvas.Select(chart_look.blank_brush);
   chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
 
   // draw these after shaded regions, so they overlay
