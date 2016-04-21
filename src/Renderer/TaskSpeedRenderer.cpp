@@ -108,6 +108,15 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
 
+  chart.DrawLabel(_T("Vest"),
+                  chart.GetXMin()*0.8+chart.GetXMax()*0.2,
+                  vref);
+
+  const double tref = chart.GetXMin()*0.3+chart.GetXMax()*0.7;
+  chart.DrawLabel(_T("Vave"),
+                  tref,
+                  fs.task_speed.GetYAt(tref));
+
   chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("h"), Units::GetTaskSpeedName());
 }
