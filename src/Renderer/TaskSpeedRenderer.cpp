@@ -31,6 +31,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
+#include "GradientRenderer.hpp"
 
 void
 RenderSpeed(Canvas &canvas, const PixelRect rc,
@@ -53,6 +54,22 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromValue(fs.task_speed.GetMinX());
   if (derived_info.flight.flying)
     chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
+
+  // draw red area below average speed, blue area above
+  {
+    PixelRect rc_upper = chart.GetChartRect();
+    rc_upper.bottom = chart.ScreenY(fs.task_speed.GetAverageY());
+
+    DrawVerticalGradient(canvas, rc_upper,
+                         chart_look.color_positive, COLOR_WHITE, COLOR_WHITE);
+  }
+  {
+    PixelRect rc_lower = chart.GetChartRect();
+    rc_lower.top = chart.ScreenY(fs.task_speed.GetAverageY());
+
+    DrawVerticalGradient(canvas, rc_lower,
+                         COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
+  }
 
   RenderTaskLegs(chart, task, nmea_info, derived_info);
 
