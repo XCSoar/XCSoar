@@ -40,6 +40,7 @@ ChartLook::Initialise()
   bar_brush.Create(COLOR_GREEN);
   neg_brush.Create(COLOR_RED);
   blank_brush.Create(Color(0xD0, 0xD0, 0xD0));
+  black_brush.Create(COLOR_BLACK);
 
   int axis_label_size = std::max(8u, Layout::FontScale(6u));
   int axis_value_size = std::max(8u, Layout::FontScale(7u));
@@ -47,4 +48,7 @@ ChartLook::Initialise()
   label_font.Load(FontDescription(Layout::FontScale(12)));
   axis_label_font.Load(FontDescription(axis_label_size, true));
   axis_value_font.Load(FontDescription(axis_value_size));
+
+  color_positive = Color(0xa0, 0xd0, 0xf3);
+  color_negative = Color(0xf3, 0xd0, 0xa0);
 }

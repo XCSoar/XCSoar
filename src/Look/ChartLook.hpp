@@ -46,6 +46,7 @@ struct ChartLook {
   Brush bar_brush;
   Brush neg_brush;
   Brush blank_brush;
+  Brush black_brush;
 
   /**
    * Font for miscellaneous labels in the chart.
@@ -61,6 +62,9 @@ struct ChartLook {
    * Font for tick values along the axis.
    */
   Font axis_value_font;
+
+  Color color_positive;
+  Color color_negative;
 
   void Initialise();
 
