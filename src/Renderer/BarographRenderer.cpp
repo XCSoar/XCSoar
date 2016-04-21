@@ -142,9 +142,9 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
 
   if (fs.altitude_base.HasResult()) {
-    chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
+    chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_REDTHICK);
   } else if (!fs.altitude_base.IsEmpty()) {
-    chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
+    chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_REDTHICK);
   }
   if (fs.altitude_ceiling.HasResult()) {
     chart.DrawLineGraph(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
