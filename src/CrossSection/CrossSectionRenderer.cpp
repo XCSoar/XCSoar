@@ -60,14 +60,14 @@ CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
 void
 CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
-  DrawVerticalGradient(canvas, rc,
+  canvas.Clear(COLOR_WHITE);
+  ChartRenderer chart(chart_look, canvas, rc);
+  DrawVerticalGradient(canvas, chart.GetChartRect(),
                        look.sky_color, look.background_color,
                        look.background_color);
 
   canvas.SetTextColor(look.text_color);
   canvas.Select(*look.grid_font);
-
-  ChartRenderer chart(chart_look, canvas, rc);
 
   if (!vec.IsValid() || !start.IsValid()) {
     chart.DrawNoData(_("Not moving"));
