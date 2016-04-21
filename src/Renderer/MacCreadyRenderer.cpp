@@ -99,6 +99,12 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
                  ChartLook::STYLE_REDTHICK);
 
   // draw labels and other overlays
+
+  gp.SetMC(0.9*MAX_MACCREADY);
+  chart.DrawLabel(_T("Vopt"), 0.9*MAX_MACCREADY, gp.GetVBestLD());
+  gp.SetMC(0.9*MAX_MACCREADY);
+  chart.DrawLabel(_T("Vave"), 0.9*MAX_MACCREADY, gp.GetAverageSpeed());
+
   chart.DrawYLabel(_T("V"), Units::GetSpeedName());
   chart.DrawXLabel(_T("MC"), Units::GetVerticalSpeedName());
 
