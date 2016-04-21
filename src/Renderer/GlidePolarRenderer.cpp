@@ -97,7 +97,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
       inrange = w_dolphin > s_min;
       if ((v_dolphin > v_dolphin_last) && inrange) {
         chart.DrawLine(v_dolphin_last, w_dolphin_last, v_dolphin, w_dolphin,
-                       ChartLook::STYLE_BLUETHIN);
+                       ChartLook::STYLE_REDTHICK);
         v_dolphin_last = v_dolphin;
         w_dolphin_last = w_dolphin;
       }
@@ -134,7 +134,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
 
   chart.DrawLine(vmin, MACCREADY + slope * vmin,
                  vmax, MACCREADY + slope * vmax,
-                 ChartLook::STYLE_REDTHICK);
+                 ChartLook::STYLE_BLUETHIN);
 
   // draw labels and other overlays
   chart.DrawXLabel(_T("V"), Units::GetSpeedName());
