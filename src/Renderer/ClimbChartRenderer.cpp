@@ -91,8 +91,8 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
 
   chart.DrawTrend(fs.thermal_average, ChartLook::STYLE_BLUETHIN);
 
-  chart.DrawLine(0, MACCREADY,
-                 fs.thermal_average.GetCount(), MACCREADY,
+  chart.DrawLine(chart.GetXMin(), MACCREADY,
+                 chart.GetXMax(), MACCREADY,
                  ChartLook::STYLE_REDTHICK);
 
   // JMW: fix location of this
@@ -101,6 +101,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                            fs.thermal_average.GetGradient() - 1.),
                   MACCREADY);
 
+  // draw labels and other overlays
   chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 }
