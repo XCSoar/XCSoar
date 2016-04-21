@@ -87,8 +87,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
 
   // draw these after shaded regions, so they overlay
-  chart.DrawLineGraph(fs.vario_cruise_histogram, red_pen, true);
-  chart.DrawLineGraph(fs.vario_circling_histogram, green_pen, true);
+  chart.DrawLineGraph(fs.vario_cruise_histogram, green_pen, true);
+  chart.DrawLineGraph(fs.vario_circling_histogram, red_pen, true);
 
   // draw current MC setting
   chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICK);
