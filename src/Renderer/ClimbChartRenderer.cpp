@@ -33,6 +33,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
+#include "GradientRenderer.hpp"
 
 void
 ClimbChartCaption(TCHAR *sTmp,
@@ -82,8 +83,25 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   if (derived_info.flight.flying)
     chart.ScaleXFromValue(derived_info.flight.flight_time/3600);
 
+  // draw red area below MC, blue area above
+  {
+    PixelRect rc_upper = chart.GetChartRect();
+    rc_upper.bottom = chart.ScreenY(MACCREADY);
+
+    DrawVerticalGradient(canvas, rc_upper,
+                         chart_look.color_positive, COLOR_WHITE, COLOR_WHITE);
+  }
+  {
+    PixelRect rc_lower = chart.GetChartRect();
+    rc_lower.top = chart.ScreenY(MACCREADY);
+
+    DrawVerticalGradient(canvas, rc_lower,
+                         COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
+  }
+
   RenderTaskLegs(chart, task, nmea_info, derived_info);
 
+  canvas.Select(chart_look.black_brush);
   chart.DrawWeightBarGraph(fs.thermal_average);
 
   chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
