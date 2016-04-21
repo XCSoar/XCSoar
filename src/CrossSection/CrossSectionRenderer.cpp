@@ -136,9 +136,23 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
   if (!result.IsOk())
     return;
 
-  chart.DrawLine(0, altitude, result.vector.distance,
-                 result.GetArrivalAltitude(),
-                 ChartLook::STYLE_BLUETHIN);
+  // draw glide line if above zero
+  if (result.GetArrivalAltitude()> 0.) {
+    chart.DrawLine(0, altitude, result.vector.distance,
+                   result.GetArrivalAltitude(),
+                   ChartLook::STYLE_BLUETHIN);
+  } else {
+    // draw glide line to zero
+    const auto dh = altitude - result.GetArrivalAltitude();
+    if (dh > 0.) {
+      // proportion of distance to intercept zero
+      const double p = altitude / dh;
+
+      chart.DrawLine(0, altitude,
+                     result.vector.distance * p, 0,
+                     ChartLook::STYLE_BLUETHIN);
+    }
+  }
 }
 
 void
