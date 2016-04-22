@@ -184,26 +184,60 @@ LeastSquares::Remove(const unsigned i)
   Compute();
 }
 
+ErrorEllipse
+LeastSquares::GetErrorEllipse() const
+{
+  /*
+    A = a b = cov(x,x)   cov(x,y)
+    c d   cov(x,y)   cov(y,y)
 
-/*
- A = a b = cov(x,x)   cov(x,y)
-     c d   cov(x,y)   cov(y,y)
+    T = trace = a + d     = cov(x,x) + cov(y,y)
+    D = det = a*d - b*c   = cov(x,x) * cov(y,y) - cov(x,y)**2
 
- T = trace = a + d     = cov(x,x) + cov(y,y)
- D = det = a*d - b*c   = cov(x,x) * cov(y,y) - cov(x,y)**2
+    eigenvalues are L1,2 = T/2 +/-  sqrt(T^2/4 -D)
+    if c is not zero, the eigenvectors are:
+    L1-d    L2-d
+    c       c
+    else if b is not zero then the eigenvectors are:
+    b       b
+    L1-a    L2-a
 
- eigenvalues are L1,2 = T/2 +/-  sqrt(T^2/4 -D)
- if c is not zero, the eigenvectors are:
-     L1-d    L2-d
-      c       c
- else if b is not zero then the eigenvectors are:
-      b       b
-     L1-a    L2-a
+    else the eigenvectors are
+    1       0
+    0       1
 
- else the eigenvectors are
-      1       0
-      0       1
+    http://www.visiondummy.com/wp-content/uploads/2014/04/error_ellipse.cpp
 
- http://www.visiondummy.com/wp-content/uploads/2014/04/error_ellipse.cpp
+  */
+  double a = GetVarX();
+  double b = GetCovXY();
+  double c = b;
+  double d = GetVarY();
 
-*/
+  double T = a + d;
+  double D = a*d - b*c;
+  double La = T/2;
+  double Lb = sqrt(T*T/4-D);
+
+  double L1 = La+Lb;
+  double L2 = La-Lb;
+
+  double v1x, v2x;
+  if (b == 0) {
+    v1x = 1;
+    v2x = 0;
+  } else {
+    v1x = L1- GetVarY();
+    v2x = L2- GetVarY();
+  }
+
+  ErrorEllipse ellipse;
+  ellipse.angle = Angle::FromXY(v2x, v1x);
+  ellipse.halfmajor = sqrt(L1);
+  ellipse.halfminor = sqrt(L2);
+  ellipse.x = x_mean;
+  ellipse.y = y_mean;
+
+  //double chisquare_val = 2.4477;
+  return ellipse;
+}

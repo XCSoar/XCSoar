@@ -49,6 +49,15 @@ Copyright_License {
 #define _LEASTSQS_H
 
 #include "XYDataStore.hpp"
+#include "Angle.hpp"
+
+struct ErrorEllipse {
+  double x;
+  double y;
+  double halfmajor;
+  double halfminor;
+  Angle angle;
+};
 
 /**
  * A solver for least squares problems
@@ -161,6 +170,11 @@ public:
    * @param weight Weight of the new data point (optional)
    */
   void Update(double x, double y, double weight=1);
+
+  /**
+   * Calculate the 1 std error ellipse fitting the data
+   */
+  ErrorEllipse GetErrorEllipse() const;
 
 protected:
   /**
