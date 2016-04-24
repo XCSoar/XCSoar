@@ -30,24 +30,21 @@ Copyright_License {
 void
 ChartLook::Initialise()
 {
-  pens[STYLE_BLUETHIN].Create(Pen::DASH, 2, Color(0, 50, 255));
-  pens[STYLE_REDTHICK].Create(Pen::DASH, 3, Color(200, 50, 50));
-  pens[STYLE_DASHGREEN].Create(Pen::DASH, 2, COLOR_GREEN);
-  pens[STYLE_MEDIUMBLACK].Create(2, COLOR_BLACK);
+  pens[STYLE_BLUETHIN].Create(Pen::DASH, Layout::ScalePenWidth(2), Color(0, 50, 255));
+  pens[STYLE_REDTHICK].Create(Pen::DASH, Layout::ScalePenWidth(3), Color(200, 50, 50));
+  pens[STYLE_DASHGREEN].Create(Pen::DASH, Layout::ScalePenWidth(2), COLOR_GREEN);
+  pens[STYLE_MEDIUMBLACK].Create(Layout::ScalePenWidth(2), COLOR_BLACK);
   pens[STYLE_GRID].Create(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
-  pens[STYLE_GRIDZERO].Create(2, Color(0xB0, 0xB0, 0xB0));
+  pens[STYLE_GRIDZERO].Create(Layout::ScalePenWidth(2), Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);
   neg_brush.Create(COLOR_RED);
   blank_brush.Create(Color(0xD0, 0xD0, 0xD0));
   black_brush.Create(COLOR_BLACK);
 
-  int axis_label_size = std::max(8u, Layout::FontScale(6u));
-  int axis_value_size = std::max(8u, Layout::FontScale(7u));
-
   label_font.Load(FontDescription(Layout::FontScale(12)));
-  axis_label_font.Load(FontDescription(axis_label_size, true));
-  axis_value_font.Load(FontDescription(axis_value_size));
+  axis_label_font.Load(FontDescription(Layout::FontScale(10), true));
+  axis_value_font.Load(FontDescription(Layout::FontScale(9)));
 
   color_positive = Color(0xa0, 0xd0, 0xf3);
   color_negative = Color(0xf3, 0xd0, 0xa0);
