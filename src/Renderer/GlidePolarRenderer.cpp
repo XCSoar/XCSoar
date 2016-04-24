@@ -111,7 +111,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   for (auto i = vmin; i <= vmax; i+= dv) {
     auto sinkrate0 = -glide_polar.SinkRate(i);
     auto sinkrate1 = -glide_polar.SinkRate(i+dv);
-    chart.DrawLine(i, sinkrate0, i + 1, sinkrate1,
+    chart.DrawLine(i, sinkrate0, i + dv, sinkrate1,
                    ChartLook::STYLE_MEDIUMBLACK);
 
     if (climb_history.Check(i)) {
