@@ -4,6 +4,8 @@ Version 6.8.4 - not yet released
     OpenAir files (#3732)
 * logger
   - fix crash in NMEA logger
+* user interface
+  - Australian units for weight are kg
 * Kobo
   - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
   - support battery status on Kobo Glo HD, Kobo Touch 2.0
