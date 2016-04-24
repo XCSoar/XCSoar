@@ -66,7 +66,7 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  Pen blue_pen(2, COLOR_BLUE);
+  Pen blue_pen(Layout::ScalePenWidth(2), COLOR_BLUE);
 
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(MAX_MACCREADY);

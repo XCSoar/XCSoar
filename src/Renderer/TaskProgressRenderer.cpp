@@ -49,7 +49,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
                        sweep * (1 -  summary.p_remaining));
   }
 
-  const Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
+  const Pen pen_f(Layout::ScalePenWidth(1), inverse ? COLOR_WHITE : COLOR_BLACK);
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
   canvas.DrawCircle(center.x, center.y, radius);

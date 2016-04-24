@@ -70,7 +70,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  Pen blue_pen(2, COLOR_BLUE);
+  Pen blue_pen(Layout::ScalePenWidth(2), COLOR_BLUE);
   const auto MACCREADY = glide_polar.GetMC();
   const auto s_min = -glide_polar.GetSMax();
   const auto vmin = glide_polar.GetVMin();

@@ -77,8 +77,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                          COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
   }
 
-  Pen red_pen(2, COLOR_RED);
-  Pen green_pen(2, COLOR_GREEN);
+  Pen red_pen(Layout::ScalePenWidth(2), COLOR_RED);
+  Pen green_pen(Layout::ScalePenWidth(2), COLOR_GREEN);
 
   canvas.SelectNullPen();
   canvas.Select(chart_look.black_brush);

@@ -25,6 +25,7 @@ Copyright_License {
 #include "ChartRenderer.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "NMEA/Info.hpp"
@@ -91,7 +92,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 
   chart.DrawFilledLineGraph(fs.altitude_terrain);
 
-  Pen pen(2, inverse ? COLOR_WHITE : COLOR_BLACK);
+  Pen pen(Layout::ScalePenWidth(2), inverse ? COLOR_WHITE : COLOR_BLACK);
   chart.DrawLineGraph(fs.altitude, pen);
 }
 
