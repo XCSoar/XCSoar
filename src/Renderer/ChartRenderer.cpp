@@ -54,7 +54,7 @@ ChartRenderer::ResetScale()
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect the_rc)
-  :look(_look), canvas(the_canvas), rc(the_rc), padding_text(2)
+  :look(_look), canvas(the_canvas), rc(the_rc), padding_text(Layout::GetTextPadding())
 {
   SetPadding(true);
 }
@@ -63,10 +63,10 @@ void
 ChartRenderer::SetPadding(bool do_pad)
 {
   if (do_pad) {
-    rc_chart.left = rc.left+30;
+    rc_chart.left = rc.left+Layout::VptScale(30);
     rc_chart.right = rc.right;
     rc_chart.top = rc.top;
-    rc_chart.bottom = rc.bottom-26;
+    rc_chart.bottom = rc.bottom-Layout::VptScale(26);
   } else
     rc_chart = rc;
   ResetScale();
