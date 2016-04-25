@@ -13,7 +13,7 @@ $(BOOST_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 	$(Q)./build/download.py $(BOOST_URL) $(BOOST_MD5) $(DOWNLOAD_DIR)
 
 BOOST_UNTAR_STAMP = $(OUT)/src/stamp-$(BOOST_BASE_NAME)
-$(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCHES)
+$(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCHES) | $(OUT)/src/dirstamp
 	@$(NQ)echo "  UNTAR   $(BOOST_TARBALL_NAME)"
 	$(Q)rm -rf $(BOOST_SRC)
 	$(Q)tar xjfC $< $(OUT)/src
