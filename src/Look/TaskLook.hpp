@@ -36,7 +36,8 @@ struct TaskLook {
 
   Pen leg_active_pen;
   Pen leg_inactive_pen;
-  Pen arrow_pen;
+  Pen arrow_active_pen;
+  Pen arrow_inactive_pen;
   Pen isoline_pen;
 
   Pen bearing_pen;

@@ -40,7 +40,8 @@ TaskLook::Initialise()
 
   leg_active_pen.Create(Pen::DASH, Layout::ScalePenWidth(2), task_color);
   leg_inactive_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), task_color);
-  arrow_pen.Create(Layout::ScalePenWidth(1), task_color);
+  arrow_active_pen.Create(Layout::ScalePenWidth(2), task_color);
+  arrow_inactive_pen.Create(Layout::ScalePenWidth(1), task_color);
 
   isoline_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
 

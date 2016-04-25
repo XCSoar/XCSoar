@@ -156,7 +156,8 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
 
-  canvas.Select(task_look.arrow_pen);
+  canvas.Select(LegActive() ? task_look.arrow_active_pen :
+                              task_look.arrow_inactive_pen);
   canvas.DrawPolyline(Arrow, 3);
 }
 
