@@ -77,9 +77,6 @@ MapLook::Initialise(const MapSettings &settings,
   traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
   traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
-  map_scale_left_icon.LoadResource(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
-  map_scale_right_icon.LoadResource(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
-
   cruise_mode_icon.LoadResource(IDB_CRUISE, IDB_CRUISE_HD, false);
   climb_mode_icon.LoadResource(IDB_CLIMB, IDB_CLIMB_HD, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
@@ -88,8 +85,8 @@ MapLook::Initialise(const MapSettings &settings,
   waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
   no_gps_icon.LoadResource(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
 
-  overlay_font = &bold_font;
-
   topography.Initialise();
   airspace.Initialise(settings.airspace, topography.important_label_font);
+
+  overlay.Initialise(font, bold_font);
 }

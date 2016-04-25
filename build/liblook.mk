@@ -12,6 +12,7 @@ LOOK_SOURCES := \
 	$(SRC)/Look/VarioLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/MapLook.cpp \
+	$(SRC)/Look/OverlayLook.cpp \
 	$(SRC)/Look/TopographyLook.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \

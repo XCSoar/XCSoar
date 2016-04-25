@@ -2259,6 +2259,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/WindChartRenderer.cpp \
 	$(SRC)/Renderer/CuRenderer.cpp \
+	$(SRC)/Renderer/MapScaleRenderer.cpp \
 	$(SRC)/Computer/ThermalLocator.cpp \
 	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/Computer/ThermalBandComputer.cpp \

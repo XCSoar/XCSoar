@@ -543,6 +543,7 @@ XCSOAR_SOURCES := \
     $(SRC)/Renderer/VarioHistogramRenderer.cpp \
 	$(SRC)/Renderer/TaskLegRenderer.cpp \
 	$(SRC)/Renderer/TaskSpeedRenderer.cpp \
+	$(SRC)/Renderer/MapScaleRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \

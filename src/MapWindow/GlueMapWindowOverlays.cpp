@@ -41,6 +41,7 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 
 #include <stdio.h>
 
@@ -94,7 +95,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   mode.shape = LabelShape::OUTLINED;
   mode.align = TextInBoxMode::Alignment::RIGHT;
 
-  const Font &font = *look.overlay_font;
+  const Font &font = *look.overlay.overlay_font;
   canvas.Select(font);
 
   unsigned padding = Layout::FastScale(4);
@@ -171,7 +172,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   TextInBoxMode mode;
   mode.shape = LabelShape::ROUNDED_BLACK;
 
-  const Font &font = *look.overlay_font;
+  const Font &font = *look.overlay.overlay_font;
   canvas.Select(font);
   TextInBox(canvas, txt, p.x, p.y, mode, rc, nullptr);
 }
@@ -271,41 +272,15 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
+  RenderMapScale(canvas, projection, rc, look.overlay);
+
   if (!projection.IsValid())
     return;
 
   StaticString<80> buffer;
 
-  auto map_width = projection.GetScreenWidthMeters();
-
-  const Font &font = *look.overlay_font;
-  canvas.Select(font);
-  FormatUserMapScale(map_width, buffer.buffer(), true);
-  PixelSize text_size = canvas.CalcTextSize(buffer);
-
-  const int text_padding_x = Layout::GetTextPadding();
-  const unsigned height = font.GetCapitalHeight()
-    + Layout::GetTextPadding();
-
-  int x = 0;
-  look.map_scale_left_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
-
-  x += look.map_scale_left_icon.GetSize().cx;
-  canvas.DrawFilledRectangle(x, rc.bottom - height,
-                             x + 2 * text_padding_x + text_size.cx,
-                             rc.bottom, COLOR_WHITE);
-
-  canvas.SetBackgroundTransparent();
-  canvas.SetTextColor(COLOR_BLACK);
-  x += text_padding_x;
-  canvas.DrawText(x,
-                  rc.bottom - font.GetAscentHeight() - Layout::Scale(1),
-                  buffer);
-
-  x += text_padding_x + text_size.cx;
-  look.map_scale_right_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
-
   buffer.clear();
+
   if (GetMapSettings().auto_zoom_enabled)
     buffer = _T("AUTO ");
 
@@ -343,6 +318,11 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   if (!buffer.empty()) {
+
+    const Font &font = *look.overlay.overlay_font;
+    canvas.Select(font);
+    const unsigned height = font.GetCapitalHeight()
+        + Layout::GetTextPadding();
     int y = rc.bottom - height;
 
     TextInBoxMode mode;
