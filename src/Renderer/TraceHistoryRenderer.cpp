@@ -118,7 +118,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
     canvas.SetBackgroundTransparent();
     chart.DrawLine(0, mc,
                    var.capacity() - 1, mc,
-                   ChartLook::STYLE_DASHGREEN);
+                   ChartLook::STYLE_GREENDASH);
   }
 
   render_filled_posneg(chart, var);

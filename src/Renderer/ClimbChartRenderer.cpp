@@ -107,11 +107,11 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
   chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
-  chart.DrawTrend(fs.thermal_average, ChartLook::STYLE_BLUETHIN);
+  chart.DrawTrend(fs.thermal_average, ChartLook::STYLE_BLUETHINDASH);
 
   chart.DrawLine(chart.GetXMin(), MACCREADY,
                  chart.GetXMax(), MACCREADY,
-                 ChartLook::STYLE_REDTHICK);
+                 ChartLook::STYLE_REDTHICKDASH);
 
   chart.DrawLabel(_T("MC"),
                   chart.GetXMin()*0.9+chart.GetXMax()*0.1,

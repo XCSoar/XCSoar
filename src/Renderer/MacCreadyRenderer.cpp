@@ -66,8 +66,6 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  Pen blue_pen(Layout::ScalePenWidth(2), COLOR_BLUE);
-
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(MAX_MACCREADY);
   chart.ScaleYFromValue(0);
@@ -88,15 +86,15 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
     gp.SetMC(m);
     const double v = gp.GetVBestLD();
     const double vav = gp.GetAverageSpeed();
-    chart.DrawLine(m_last, v_last, m, v, ChartLook::STYLE_MEDIUMBLACK);
-    chart.DrawLine(m_last, vav_last, m, vav, ChartLook::STYLE_BLUETHIN);
+    chart.DrawLine(m_last, v_last, m, v, ChartLook::STYLE_BLACK);
+    chart.DrawLine(m_last, vav_last, m, vav, ChartLook::STYLE_BLUETHINDASH);
     v_last = v;
     vav_last = vav;
   } while (m<MAX_MACCREADY);
 
   // draw current MC setting
   chart.DrawLine(glide_polar.GetMC(), 0, glide_polar.GetMC(), glide_polar.GetVMax(),
-                 ChartLook::STYLE_REDTHICK);
+                 ChartLook::STYLE_REDTHICKDASH);
 
   // draw labels and other overlays
 

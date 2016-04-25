@@ -86,13 +86,13 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   chart.DrawXGrid(Units::ToSysSpeed(5), 5, ChartRenderer::UnitFormat::NUMERIC);
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
-  chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_MEDIUMBLACK);
+  chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_BLACK);
 
 #define WINDVECTORMAG 25
 
   numsteps = (int)(rc.GetHeight() / WINDVECTORMAG) - 1;
 
-  canvas.Select(chart_look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
+  canvas.Select(chart_look.GetPen(ChartLook::STYLE_BLACK));
 
   // draw direction vectors
   const auto x_max = std::max(windstats_mag.GetMaxX(),

@@ -30,12 +30,24 @@ Copyright_License {
 void
 ChartLook::Initialise()
 {
-  pens[STYLE_BLUETHIN].Create(Pen::DASH, Layout::ScalePenWidth(2), Color(0, 50, 255));
-  pens[STYLE_REDTHICK].Create(Pen::DASH, Layout::ScalePenWidth(3), Color(200, 50, 50));
-  pens[STYLE_DASHGREEN].Create(Pen::DASH, Layout::ScalePenWidth(2), COLOR_GREEN);
-  pens[STYLE_MEDIUMBLACK].Create(Layout::ScalePenWidth(2), COLOR_BLACK);
+  const auto width_thin = Layout::ScalePenWidth(1);
+  const auto width_normal = Layout::ScalePenWidth(2);
+  const auto width_thick = Layout::ScalePenWidth(3);
+
+  pens[STYLE_BLUETHINDASH].Create(Pen::DASH, width_thin, Color(0, 50, 255));
+  pens[STYLE_BLUEDASH].Create(Pen::DASH, width_normal, Color(0, 50, 255));
+  pens[STYLE_BLUE].Create(width_normal, Color(0, 50, 255));
+
+  pens[STYLE_REDTHICKDASH].Create(Pen::DASH, width_thick, Color(200, 50, 50));
+  pens[STYLE_RED].Create(Pen::DASH, width_normal, Color(200, 50, 50));
+
+  pens[STYLE_GREENDASH].Create(Pen::DASH, width_normal, COLOR_GREEN);
+  pens[STYLE_GREEN].Create(width_normal, COLOR_GREEN);
+
+  pens[STYLE_BLACK].Create(width_normal, COLOR_BLACK);
+  pens[STYLE_WHITE].Create(width_normal, COLOR_WHITE);
   pens[STYLE_GRID].Create(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
-  pens[STYLE_GRIDZERO].Create(Layout::ScalePenWidth(2), Color(0xB0, 0xB0, 0xB0));
+  pens[STYLE_GRIDZERO].Create(width_normal, Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);
   neg_brush.Create(COLOR_RED);

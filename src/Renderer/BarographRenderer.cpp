@@ -92,8 +92,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 
   chart.DrawFilledLineGraph(fs.altitude_terrain);
 
-  Pen pen(Layout::ScalePenWidth(2), inverse ? COLOR_WHITE : COLOR_BLACK);
-  chart.DrawLineGraph(fs.altitude, pen);
+  chart.DrawLineGraph(fs.altitude, inverse? ChartLook::STYLE_WHITE: ChartLook::STYLE_BLACK);
 }
 
 void
@@ -143,17 +142,17 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
 
   if (fs.altitude_base.HasResult()) {
-    chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_REDTHICK);
+    chart.DrawLineGraph(fs.altitude_base, ChartLook::STYLE_REDTHICKDASH);
   } else if (!fs.altitude_base.IsEmpty()) {
-    chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_REDTHICK);
+    chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_REDTHICKDASH);
   }
   if (fs.altitude_ceiling.HasResult()) {
-    chart.DrawLineGraph(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
+    chart.DrawLineGraph(fs.altitude_ceiling, ChartLook::STYLE_BLUETHINDASH);
   } else if (!fs.altitude_ceiling.IsEmpty()) {
-    chart.DrawTrend(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
+    chart.DrawTrend(fs.altitude_ceiling, ChartLook::STYLE_BLUETHINDASH);
   }
 
-  chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_MEDIUMBLACK);
+  chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_BLACK);
 
   chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("h"), Units::GetAltitudeName());

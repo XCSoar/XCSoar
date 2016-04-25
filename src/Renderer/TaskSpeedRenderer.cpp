@@ -103,10 +103,10 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   chart.DrawLine(chart.GetXMin(), vref,
                  chart.GetXMax(), vref,
-                 ChartLook::STYLE_REDTHICK);
+                 ChartLook::STYLE_REDTHICKDASH);
 
-  chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
-  chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
+  chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_BLACK);
+  chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHINDASH);
 
   chart.DrawLabel(_T("Vest"),
                   chart.GetXMin()*0.9+chart.GetXMax()*0.1,

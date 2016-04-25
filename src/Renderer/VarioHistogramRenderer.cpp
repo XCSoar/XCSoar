@@ -77,9 +77,6 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                          COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
   }
 
-  Pen red_pen(Layout::ScalePenWidth(2), COLOR_RED);
-  Pen green_pen(Layout::ScalePenWidth(2), COLOR_GREEN);
-
   canvas.SelectNullPen();
   canvas.Select(chart_look.black_brush);
   chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
@@ -87,12 +84,12 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
 
   // draw these after shaded regions, so they overlay
-  chart.DrawLineGraph(fs.vario_cruise_histogram, green_pen, true);
-  chart.DrawLineGraph(fs.vario_circling_histogram, red_pen, true);
+  chart.DrawLineGraph(fs.vario_cruise_histogram, ChartLook::STYLE_GREEN, true);
+  chart.DrawLineGraph(fs.vario_circling_histogram, ChartLook::STYLE_RED, true);
 
   // draw current MC setting
-  chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICK);
-  chart.DrawLine(0, s, scale, s, ChartLook::STYLE_BLUETHIN);
+  chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICKDASH);
+  chart.DrawLine(0, s, scale, s, ChartLook::STYLE_BLUETHINDASH);
 
   // draw labels and other overlays
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);

@@ -86,15 +86,15 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
     chart.DrawLine(cu_sonde.cslevels[i].tempDry, i,
                    cu_sonde.cslevels[i + 1].tempDry, i + 1,
-                   ChartLook::STYLE_REDTHICK);
+                   ChartLook::STYLE_REDTHICKDASH);
 
     chart.DrawLine(cu_sonde.cslevels[i].airTemp, i,
                    cu_sonde.cslevels[i + 1].airTemp, i + 1,
-                   ChartLook::STYLE_MEDIUMBLACK);
+                   ChartLook::STYLE_BLACK);
 
     chart.DrawLine(cu_sonde.cslevels[i].dewpoint, i,
                    cu_sonde.cslevels[i + 1].dewpoint, i + 1,
-                   ChartLook::STYLE_BLUETHIN);
+                   ChartLook::STYLE_BLUETHINDASH);
 
     if (ipos > 2) {
       if (!labelDry) {
