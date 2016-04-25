@@ -42,6 +42,7 @@ Copyright_License {
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 #include "Computer/Settings.hpp"
 
@@ -161,6 +162,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     DrawContestTriangle(canvas, proj, contest, 1);
     break;
   }
+
+  RenderMapScale(canvas, proj, rc, map_look.overlay);
 }
 
 void
@@ -279,6 +282,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
                            nmea_info.attitude.heading, aircraft_pos);
   }
+
+  RenderMapScale(canvas, proj, rc, map_look.overlay);
 }
 
 void
